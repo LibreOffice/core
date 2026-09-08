@@ -14,7 +14,7 @@
 
 #include <cpo/uno/XInterface.hpp>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <utility>
 
 namespace apitest
@@ -31,7 +31,7 @@ public:
     {
     }
 
-    virtual css::uno::Reference<cpo::uno::XInterface> init() = 0;
+    virtual cpo::uno::Reference<cpo::uno::XInterface> init() = 0;
 
     void testGetCellByPosition();
     void testGetCellRangeByName();

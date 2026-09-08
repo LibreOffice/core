@@ -41,7 +41,7 @@
 #include <anminfo.hxx>
 
 using namespace ::sd;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::presentation;

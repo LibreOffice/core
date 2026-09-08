@@ -35,6 +35,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 ThumbnailViewAcc::ThumbnailViewAcc(ThumbnailView* pThumbnailView)
     : mpThumbnailView(pThumbnailView)

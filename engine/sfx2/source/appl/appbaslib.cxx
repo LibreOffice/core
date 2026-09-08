@@ -27,7 +27,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <cpo/uno/XComponentContext.hpp>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::embed;

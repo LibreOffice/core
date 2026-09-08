@@ -62,6 +62,7 @@
 #include <unotextbodyhf.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 static void disableScrollBars(uno::Reference< beans::XPropertySet > const & xViewProps,
     bool bEnableOnlineMode)

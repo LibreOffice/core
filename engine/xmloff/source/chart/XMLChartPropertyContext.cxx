@@ -26,6 +26,7 @@
 #include <xmloff/xmlprmap.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 XMLChartPropertyContext::XMLChartPropertyContext(
     SvXMLImport& rImport,
@@ -41,9 +42,9 @@ XMLChartPropertyContext::XMLChartPropertyContext(
 XMLChartPropertyContext::~XMLChartPropertyContext()
 {}
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLChartPropertyContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLChartPropertyContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
     ::std::vector< XMLPropertyState > &rProperties,
     const XMLPropertyState& rProp )
 {

@@ -20,7 +20,7 @@
 #include <MetaExportComponent.hxx>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Exception.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -39,10 +39,11 @@
 
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace ::xmloff::token;
 
 XMLMetaExportComponent::XMLMetaExportComponent(
-    const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
+    const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
     OUString const & implementationName, SvXMLExportFlags nFlags )
 :   SvXMLExport( xContext, implementationName, util::MeasureUnit::CM, XML_TEXT, nFlags )
 {
@@ -52,7 +53,7 @@ XMLMetaExportComponent::~XMLMetaExportComponent()
 {
 }
 
-void XMLMetaExportComponent::setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc )
+void XMLMetaExportComponent::setSourceDocument( const cpo::uno::Reference< css::lang::XComponent >& xDoc )
 {
     try
     {

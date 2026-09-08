@@ -39,6 +39,7 @@
 
 using namespace ::comphelper;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 DocxExportFilter::DocxExportFilter( const uno::Reference< cpo::uno::XComponentContext >& xContext )
     : oox::core::XmlFilterBase( xContext )

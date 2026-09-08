@@ -23,7 +23,7 @@
 #include <vcl/svapp.hxx>
 #include <comphelper/sequence.hxx>
 
-using css::uno::Reference;
+using cpo::uno::Reference;
 using cpo::uno::Sequence;
 using cpo::uno::Any;
 

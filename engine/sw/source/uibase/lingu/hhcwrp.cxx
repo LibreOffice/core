@@ -44,7 +44,8 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::i18n;
 
 //     Description: Turn off frame/object shell if applicable

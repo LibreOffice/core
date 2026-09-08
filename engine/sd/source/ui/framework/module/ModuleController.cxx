@@ -35,7 +35,7 @@
 #include <sal/log.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 namespace sd::framework {
 

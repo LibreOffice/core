@@ -47,6 +47,7 @@
 #include <viewdata.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 class ScUiCalcTest2 : public ScModelTestBase
 {
@@ -1068,7 +1069,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf118983)
     createScDoc("tdf118983.ods");
     ScDocument* pDoc = getScDoc();
 
-    css::uno::Reference<css::sheet::XGlobalSheetSettings> xGlobalSheetSettings
+    cpo::uno::Reference<css::sheet::XGlobalSheetSettings> xGlobalSheetSettings
         = css::sheet::GlobalSheetSettings::create(::comphelper::getProcessComponentContext());
     bool bOldValue = xGlobalSheetSettings->getExpandReferences();
 

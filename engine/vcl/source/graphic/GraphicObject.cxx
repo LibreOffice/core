@@ -39,9 +39,10 @@
 
 
 using namespace css;
-using com::sun::star::uno::Reference;
+using namespace ::cpo;
+using cpo::uno::Reference;
 using cpo::uno::XInterface;
-using com::sun::star::uno::UNO_QUERY;
+using cpo::uno::UNO_QUERY;
 using cpo::uno::Sequence;
 using com::sun::star::container::XNameContainer;
 using com::sun::star::beans::XPropertySet;

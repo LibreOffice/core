@@ -20,6 +20,7 @@
 #include <vcl/skia/SkiaHelper.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 class SdPNGExportTest : public UnoApiTest
 {

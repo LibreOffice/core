@@ -42,7 +42,7 @@
 #include <string_view>
 #include <unordered_map>
 
-namespace com::sun::star::uno { template <typename > class Reference; }
+namespace cpo::uno { template <typename > class Reference; }
 
 class SfxItemSet;
 class SfxViewShell;
@@ -550,7 +550,7 @@ class ScGlobal
 
     static std::unique_ptr<SvNumberFormatter> xEnglishFormatter;          // for UNO / XML export
 
-    static css::uno::Reference< css::i18n::XOrdinalSuffix> xOrdinalSuffix;
+    static cpo::uno::Reference< css::i18n::XOrdinalSuffix> xOrdinalSuffix;
     static std::optional<CalendarWrapper>    oCalendar;
     static std::atomic<CollatorWrapper*>     pCaseCollator;
     static std::atomic<CollatorWrapper*>     pCollator;

@@ -26,7 +26,7 @@ using namespace ::com::sun::star;
 
 
 
-XMLNumRulePropHdl::XMLNumRulePropHdl( css::uno::Reference< css::ucb::XAnyCompare > xNumRuleCompare )
+XMLNumRulePropHdl::XMLNumRulePropHdl( cpo::uno::Reference< css::ucb::XAnyCompare > xNumRuleCompare )
 : mxNumRuleCompare(std::move( xNumRuleCompare ))
 {
 }

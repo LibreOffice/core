@@ -112,7 +112,8 @@ namespace chart
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::chart2;
-using ::com::sun::star::uno::Reference;
+using namespace ::cpo;
+using ::cpo::uno::Reference;
 using ::cpo::uno::Sequence;
 
 ChartController::ChartController(uno::Reference<cpo::uno::XComponentContext> xContext) :
@@ -695,7 +696,7 @@ bool ChartController::suspend( bool bSuspend )
 
 // css::frame::XController2
 
-css::uno::Reference<css::awt::XWindow> ChartController::getComponentWindow()
+cpo::uno::Reference<css::awt::XWindow> ChartController::getComponentWindow()
 {
     // it is a special characteristic of ChartController
     // that it simultaneously provides the XWindow functionality
@@ -709,7 +710,7 @@ cpo::uno::Sequence<css::beans::PropertyValue> ChartController::getCreationArgume
     return {};
 }
 
-css::uno::Reference<css::ui::XSidebarProvider> ChartController::getSidebar() { return {}; }
+cpo::uno::Reference<css::ui::XSidebarProvider> ChartController::getSidebar() { return {}; }
 
 void ChartController::impl_createDrawViewController()
 {
@@ -1681,7 +1682,7 @@ void ChartController::executeDispatch_SourceData()
     if ( rModel.hasInternalDataProvider() )
     {
         // Check if we will able to create data provider later
-        css::uno::Reference< css::chart2::XDataProviderAccess > xCreatorDoc(
+        cpo::uno::Reference< css::chart2::XDataProviderAccess > xCreatorDoc(
             rModel.getParent(), uno::UNO_QUERY);
         if (!xCreatorDoc.is())
             return;

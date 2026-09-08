@@ -49,7 +49,7 @@ extern void execute_browser(const char* sUrl);
 using com::sun::star::system::XSystemShellExecute;
 using com::sun::star::system::SystemShellExecuteException;
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::system::SystemShellExecuteFlags;
@@ -94,7 +94,7 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
     static const char *pDesktopLaunch = getenv( "DESKTOP_LAUNCH" );
 
     // Check whether aCommand contains an absolute URI reference:
-    css::uno::Reference< css::uri::XUriReference > uri(
+    cpo::uno::Reference< css::uri::XUriReference > uri(
         css::uri::UriReferenceFactory::create(m_xContext)->parse(aCommand));
     if (uri.is() && uri->isAbsolute())
     {
@@ -270,7 +270,7 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
 #else // __EMSCRIPTEN__
     (void)nFlags;
 
-    css::uno::Reference< css::uri::XUriReference > uri(
+    cpo::uno::Reference< css::uri::XUriReference > uri(
         css::uri::UriReferenceFactory::create(m_xContext)->parse(aCommand));
     if (!uri.is() || !uri->isAbsolute())
         throw SystemShellExecuteException("Emscripten can just open absolute URIs.",

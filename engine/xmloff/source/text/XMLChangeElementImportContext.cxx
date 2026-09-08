@@ -20,14 +20,14 @@
 #include "XMLChangeElementImportContext.hxx"
 #include "XMLChangedRegionImportContext.hxx"
 #include "XMLChangeInfoContext.hxx"
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <utility>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
 
 
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::xmloff::token::XML_CHANGE_INFO;
 
 
@@ -43,9 +43,9 @@ XMLChangeElementImportContext::XMLChangeElementImportContext(
 {
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLChangeElementImportContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLChangeElementImportContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContextRef xContext;
 

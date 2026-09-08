@@ -35,7 +35,7 @@
 #include <tools/debug.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 namespace frm
@@ -140,7 +140,7 @@ void OGridControlModel::cloneColumns( const OGridControlModel* _pOriginalContain
         for (auto const& column : _pOriginalContainer->m_aItems)
         {
             // ask the col for a factory for the clone
-            xColCloneable.set(column, css::uno::UNO_QUERY);
+            xColCloneable.set(column, cpo::uno::UNO_QUERY);
             DBG_ASSERT( xColCloneable.is(), "OGridControlModel::cloneColumns: column is not cloneable!" );
             if ( xColCloneable.is() )
             {
@@ -220,7 +220,7 @@ void OGridControlModel::removeRowSetChangeListener( const Reference< XRowSetChan
 }
 
 // XChild
-void OGridControlModel::setParent( const css::uno::Reference<cpo::uno::XInterface>& i_Parent )
+void OGridControlModel::setParent( const cpo::uno::Reference<cpo::uno::XInterface>& i_Parent )
 {
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
     if ( i_Parent == getParent() )
@@ -267,13 +267,13 @@ bool OGridControlModel::select(const Any& rElement)
     Reference<XPropertySet> xSel;
     if (rElement.hasValue())
     {
-        xSel.set(rElement, css::uno::UNO_QUERY);
+        xSel.set(rElement, cpo::uno::UNO_QUERY);
         if (!xSel.is())
         {
             throw IllegalArgumentException();
         }
     }
-    css::uno::Reference<cpo::uno::XInterface> xMe = static_cast<XWeak*>(this);
+    cpo::uno::Reference<cpo::uno::XInterface> xMe = static_cast<XWeak*>(this);
     if (xSel.is())
     {
         Reference<XChild> xAsChild(xSel, UNO_QUERY);
@@ -709,7 +709,7 @@ void OGridControlModel::lostColumn(const Reference< XInterface >& _rxColumn)
         xBroadcaster->removeSQLErrorListener( this );
 }
 
-void OGridControlModel::implRemoved(const css::uno::Reference<cpo::uno::XInterface>& _rxObject)
+void OGridControlModel::implRemoved(const cpo::uno::Reference<cpo::uno::XInterface>& _rxObject)
 {
     OInterfaceContainer::implRemoved(_rxObject);
     lostColumn(_rxObject);
@@ -900,7 +900,7 @@ void OGridControlModel::read(const Reference<XObjectInputStream>& _rxInStream)
     // reading the attachment
     for (sal_Int32 i = 0; i < nLen; i++)
     {
-        css::uno::Reference<cpo::uno::XInterface>  xIfc(m_aItems[i], UNO_QUERY);
+        cpo::uno::Reference<cpo::uno::XInterface>  xIfc(m_aItems[i], UNO_QUERY);
         Reference<XPropertySet>  xSet(xIfc, UNO_QUERY);
         Any aHelper;
         aHelper <<= xSet;

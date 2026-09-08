@@ -91,9 +91,10 @@
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::uno::UNO_QUERY;
+using namespace ::cpo;
+using ::cpo::uno::Reference;
+using ::cpo::uno::UNO_QUERY_THROW;
+using ::cpo::uno::UNO_QUERY;
 
 /** Global application settings shared by all open workbooks. */
 struct ScVbaAppSettings
@@ -602,7 +603,7 @@ ScVbaApplication::Names( const cpo::uno::Any& aIndex )
     uno::Reference< sheet::XNamedRanges > xNamedRanges( xPropertySet->getPropertyValue(
         u"NamedRanges"_ustr ), uno::UNO_QUERY_THROW );
 
-    css::uno::Reference< excel::XNames > xNames ( new ScVbaNames( this , mxContext , xNamedRanges , xModel ) );
+    cpo::uno::Reference< excel::XNames > xNames ( new ScVbaNames( this , mxContext , xNamedRanges , xModel ) );
     if (  aIndex.getValueTypeClass() == cpo::uno::TypeClass_VOID )
     {
         return cpo::uno::Any( xNames );

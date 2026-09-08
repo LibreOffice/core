@@ -32,14 +32,14 @@ class WrapStreamForShare final : public cppu::WeakImplHelper < css::io::XInputSt
                                 public comphelper::ByteReader
 {
     rtl::Reference< comphelper::RefCountedMutex > m_xMutex;
-    css::uno::Reference < css::io::XInputStream > m_xInStream;
+    cpo::uno::Reference < css::io::XInputStream > m_xInStream;
     comphelper::ByteReader* mpByteReader;
-    css::uno::Reference < css::io::XSeekable > m_xSeekable;
+    cpo::uno::Reference < css::io::XSeekable > m_xSeekable;
 
     sal_Int64 m_nCurPos;
 
 public:
-    WrapStreamForShare( css::uno::Reference< css::io::XInputStream > xInStream,
+    WrapStreamForShare( cpo::uno::Reference< css::io::XInputStream > xInStream,
                         rtl::Reference< comphelper::RefCountedMutex > xMutexRef );
     virtual ~WrapStreamForShare() override;
 

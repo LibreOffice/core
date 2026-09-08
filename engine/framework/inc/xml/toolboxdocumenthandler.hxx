@@ -61,7 +61,7 @@ class OReadToolBoxDocumentHandler final : public OReadToolBoxDocumentHandler_Bas
             TB_NS_XLINK
         };
 
-        OReadToolBoxDocumentHandler( const css::uno::Reference< css::container::XIndexContainer >& rItemContainer );
+        OReadToolBoxDocumentHandler( const cpo::uno::Reference< css::container::XIndexContainer >& rItemContainer );
         virtual ~OReadToolBoxDocumentHandler() override;
 
         // XDocumentHandler
@@ -71,7 +71,7 @@ class OReadToolBoxDocumentHandler final : public OReadToolBoxDocumentHandler_Bas
 
         virtual void startElement(
             const OUString& aName,
-            const css::uno::Reference< css::xml::sax::XAttributeList > &xAttribs) override;
+            const cpo::uno::Reference< css::xml::sax::XAttributeList > &xAttribs) override;
 
         virtual void endElement(const OUString& aName) override;
 
@@ -83,7 +83,7 @@ class OReadToolBoxDocumentHandler final : public OReadToolBoxDocumentHandler_Bas
                                                     const OUString& aData) override;
 
         virtual void setDocumentLocator(
-            const css::uno::Reference< css::xml::sax::XLocator > &xLocator) override;
+            const cpo::uno::Reference< css::xml::sax::XLocator > &xLocator) override;
 
     private:
         OUString getErrorLineString();
@@ -94,8 +94,8 @@ class OReadToolBoxDocumentHandler final : public OReadToolBoxDocumentHandler_Bas
         bool                                                      m_bToolBarBreakStartFound : 1;
         bool                                                      m_bToolBarSeparatorStartFound : 1;
         std::unordered_map<OUString, ToolBox_XML_Entry>           m_aToolBoxMap;
-        css::uno::Reference< css::container::XIndexContainer >    m_rItemContainer;
-        css::uno::Reference< css::xml::sax::XLocator >            m_xLocator;
+        cpo::uno::Reference< css::container::XIndexContainer >    m_rItemContainer;
+        cpo::uno::Reference< css::xml::sax::XLocator >            m_xLocator;
 
         OUString                                                  m_aType;
         OUString                                                  m_aLabel;
@@ -108,8 +108,8 @@ class OWriteToolBoxDocumentHandler final
 {
     public:
             OWriteToolBoxDocumentHandler(
-                const css::uno::Reference< css::container::XIndexAccess >& rItemAccess,
-                css::uno::Reference< css::xml::sax::XDocumentHandler > const & rDocumentHandler );
+                const cpo::uno::Reference< css::container::XIndexAccess >& rItemAccess,
+                cpo::uno::Reference< css::xml::sax::XDocumentHandler > const & rDocumentHandler );
             ~OWriteToolBoxDocumentHandler();
 
         /// @throws css::xml::sax::SAXException
@@ -133,9 +133,9 @@ class OWriteToolBoxDocumentHandler final
         /// @throws cpo::uno::RuntimeException
         void WriteToolBoxSeparator();
 
-        css::uno::Reference< css::xml::sax::XDocumentHandler > m_xWriteDocumentHandler;
+        cpo::uno::Reference< css::xml::sax::XDocumentHandler > m_xWriteDocumentHandler;
         rtl::Reference< ::comphelper::AttributeList >          m_xEmptyList;
-        css::uno::Reference< css::container::XIndexAccess >    m_rItemAccess;
+        cpo::uno::Reference< css::container::XIndexAccess >    m_rItemAccess;
         OUString                                               m_aXMLToolbarNS;
         OUString                                               m_aXMLXlinkNS;
         OUString                                               m_aAttributeURL;

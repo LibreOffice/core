@@ -69,11 +69,11 @@ public:
     void setAlive(bool b);
 
     virtual void addChangesListener(
-        css::uno::Reference< css::util::XChangesListener >
+        cpo::uno::Reference< css::util::XChangesListener >
             const & aListener) override;
 
     virtual void removeChangesListener(
-        css::uno::Reference< css::util::XChangesListener >
+        cpo::uno::Reference< css::util::XChangesListener >
             const & aListener) override;
 
     virtual void commitChanges() override;
@@ -116,7 +116,7 @@ private:
 
     typedef
         std::multiset<
-            css::uno::Reference<
+            cpo::uno::Reference<
                 css::util::XChangesListener > >
         ChangesListeners;
 

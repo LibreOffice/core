@@ -54,12 +54,12 @@ class CWinClipboard final
 {
     friend CXNotifyingDataObject::~CXNotifyingDataObject();
 
-    css::uno::Reference<cpo::uno::XComponentContext> m_xContext;
+    cpo::uno::Reference<cpo::uno::XComponentContext> m_xContext;
     const OUString m_itsName;
     CMtaOleClipboard m_MtaOleClipboard;
     CXNotifyingDataObject* m_pNewOwnClipContent = nullptr; // until onClipboardContentChanged
     CXNotifyingDataObject* m_pCurrentOwnClipContent = nullptr;
-    css::uno::Reference<css::datatransfer::XTransferable> m_foreignContent;
+    cpo::uno::Reference<css::datatransfer::XTransferable> m_foreignContent;
     comphelper::OInterfaceContainerHelper4<css::datatransfer::clipboard::XClipboardListener>
         maClipboardListeners;
 
@@ -73,18 +73,18 @@ class CWinClipboard final
 
     static void WINAPI onClipboardContentChanged();
 
-    css::uno::Reference<css::datatransfer::XTransferable> getContents_noLock();
+    cpo::uno::Reference<css::datatransfer::XTransferable> getContents_noLock();
 
 public:
-    CWinClipboard(const css::uno::Reference<cpo::uno::XComponentContext>& rxContext,
+    CWinClipboard(const cpo::uno::Reference<cpo::uno::XComponentContext>& rxContext,
                   const OUString& aClipboardName);
     virtual ~CWinClipboard() override;
 
     // XClipboard
-    virtual css::uno::Reference<css::datatransfer::XTransferable> getContents() override;
+    virtual cpo::uno::Reference<css::datatransfer::XTransferable> getContents() override;
     virtual void setContents(
-        const css::uno::Reference<css::datatransfer::XTransferable>& xTransferable,
-        const css::uno::Reference<css::datatransfer::clipboard::XClipboardOwner>& xClipboardOwner)
+        const cpo::uno::Reference<css::datatransfer::XTransferable>& xTransferable,
+        const cpo::uno::Reference<css::datatransfer::clipboard::XClipboardOwner>& xClipboardOwner)
         override;
     virtual OUString getName() override;
 
@@ -96,10 +96,10 @@ public:
 
     // XClipboardNotifier
     virtual void addClipboardListener(
-        const css::uno::Reference<css::datatransfer::clipboard::XClipboardListener>& listener)
+        const cpo::uno::Reference<css::datatransfer::clipboard::XClipboardListener>& listener)
         override;
     virtual void removeClipboardListener(
-        const css::uno::Reference<css::datatransfer::clipboard::XClipboardListener>& listener)
+        const cpo::uno::Reference<css::datatransfer::clipboard::XClipboardListener>& listener)
         override;
 
     // XServiceInfo

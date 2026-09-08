@@ -42,6 +42,7 @@
 #include "olecomponent.hxx"
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 
 OleEmbeddedObject::OleEmbeddedObject( uno::Reference< cpo::uno::XComponentContext > xContext,
@@ -650,7 +651,7 @@ void OleEmbeddedObject::translateAccelerators(
 
 // XChild
 
-css::uno::Reference< cpo::uno::XInterface > OleEmbeddedObject::getParent()
+cpo::uno::Reference< cpo::uno::XInterface > OleEmbeddedObject::getParent()
 {
     // begin wrapping related part ====================
     uno::Reference< container::XChild > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
@@ -665,7 +666,7 @@ css::uno::Reference< cpo::uno::XInterface > OleEmbeddedObject::getParent()
 }
 
 
-void OleEmbeddedObject::setParent( const css::uno::Reference< cpo::uno::XInterface >& xParent )
+void OleEmbeddedObject::setParent( const cpo::uno::Reference< cpo::uno::XInterface >& xParent )
 {
     // begin wrapping related part ====================
     uno::Reference< container::XChild > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
@@ -680,12 +681,12 @@ void OleEmbeddedObject::setParent( const css::uno::Reference< cpo::uno::XInterfa
     m_xParent = xParent;
 }
 
-void OleEmbeddedObject::setStream(const css::uno::Reference<css::io::XStream>& xStream)
+void OleEmbeddedObject::setStream(const cpo::uno::Reference<css::io::XStream>& xStream)
 {
     m_xObjectStream = xStream;
 }
 
-css::uno::Reference<css::io::XStream> OleEmbeddedObject::getStream()
+cpo::uno::Reference<css::io::XStream> OleEmbeddedObject::getStream()
 {
     return m_xObjectStream;
 }

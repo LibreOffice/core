@@ -37,8 +37,9 @@
 #include <tools/color.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::cpo::uno::Sequence;
 
 namespace
@@ -332,7 +333,7 @@ void RangeHighlighter::fireSelectionEvent()
     {
         lang::EventObject aEvent( static_cast< lang::XComponent* >( this ) );
         maSelectionChangeListeners.forEach(g,
-            [&aEvent](const css::uno::Reference<view::XSelectionChangeListener>& xListener)
+            [&aEvent](const cpo::uno::Reference<view::XSelectionChangeListener>& xListener)
             {
                 xListener->selectionChanged(aEvent);
             }

@@ -125,6 +125,8 @@
 #include <translatehelper.hxx>
 #include <rootfrm.hxx>
 
+using namespace ::cpo;
+
 FlyMode SwBaseShell::s_eFrameMode = FLY_DRAG_END;
 
 // These variables keep the state of Gallery (slot SID_GALLERY_BG_BRUSH)
@@ -163,7 +165,7 @@ namespace
 }
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::frame;
 
 SFX_IMPL_SUPERCLASS_INTERFACE(SwBaseShell, SfxShell)

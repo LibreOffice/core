@@ -34,6 +34,7 @@
 #include <viewdata.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 class ScUiCalcTest : public ScModelTestBase
 {
@@ -589,7 +590,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf144308)
     createScDoc();
     ScDocument* pDoc = getScDoc();
 
-    css::uno::Reference<css::sheet::XGlobalSheetSettings> xGlobalSheetSettings
+    cpo::uno::Reference<css::sheet::XGlobalSheetSettings> xGlobalSheetSettings
         = css::sheet::GlobalSheetSettings::create(::comphelper::getProcessComponentContext());
     bool bOldValue = xGlobalSheetSettings->getDoAutoComplete();
 

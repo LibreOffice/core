@@ -32,16 +32,16 @@ class SdXMLShowsContext : public SvXMLImportContext
 public:
 
     SdXMLShowsContext( SdXMLImport& rImport,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList);
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList);
     virtual ~SdXMLShowsContext() override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
-                sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+                sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 private:
-    css::uno::Reference< css::lang::XSingleServiceFactory > mxShowFactory;
-    css::uno::Reference< css::container::XNameContainer > mxShows;
-    css::uno::Reference< css::beans::XPropertySet > mxPresProps;
-    css::uno::Reference< css::container::XNameAccess > mxPages;
+    cpo::uno::Reference< css::lang::XSingleServiceFactory > mxShowFactory;
+    cpo::uno::Reference< css::container::XNameContainer > mxShows;
+    cpo::uno::Reference< css::beans::XPropertySet > mxPresProps;
+    cpo::uno::Reference< css::container::XNameAccess > mxPages;
     OUString maCustomShowName;
 };
 

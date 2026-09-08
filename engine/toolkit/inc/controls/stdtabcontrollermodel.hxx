@@ -58,7 +58,7 @@ struct UnoControlModelEntry
     bool        bGroup;
     union
     {
-        css::uno::Reference< css::awt::XControlModel >* pxControl;
+        cpo::uno::Reference< css::awt::XControlModel >* pxControl;
         UnoControlModelEntryList*   pGroup;
     };
 };
@@ -77,9 +77,9 @@ class StdTabControllerModel final : public css::awt::XTabControllerModel,
 
     ::osl::Mutex&           GetMutex() { return maMutex; }
     sal_uInt32              ImplGetControlCount( const UnoControlModelEntryList& rList ) const;
-    void                    ImplGetControlModels( css::uno::Reference< css::awt::XControlModel > ** pRefs, const UnoControlModelEntryList& rList ) const;
-    static void             ImplSetControlModels( UnoControlModelEntryList& rList, const cpo::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& Controls );
-    static sal_uInt32       ImplGetControlPos( const css::uno::Reference< css::awt::XControlModel >& rCtrl, const UnoControlModelEntryList& rList );
+    void                    ImplGetControlModels( cpo::uno::Reference< css::awt::XControlModel > ** pRefs, const UnoControlModelEntryList& rList ) const;
+    static void             ImplSetControlModels( UnoControlModelEntryList& rList, const cpo::uno::Sequence< cpo::uno::Reference< css::awt::XControlModel > >& Controls );
+    static sal_uInt32       ImplGetControlPos( const cpo::uno::Reference< css::awt::XControlModel >& rCtrl, const UnoControlModelEntryList& rList );
 
 public:
                             StdTabControllerModel();
@@ -99,17 +99,17 @@ public:
     // css::awt::XTabControllerModel
     bool getGroupControl(  ) override;
     void setGroupControl( bool GroupControl ) override;
-    void setControlModels( const cpo::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& Controls ) override;
-    cpo::uno::Sequence< css::uno::Reference< css::awt::XControlModel > > getControlModels(  ) override;
-    void setGroup( const cpo::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& Group, const OUString& GroupName ) override;
+    void setControlModels( const cpo::uno::Sequence< cpo::uno::Reference< css::awt::XControlModel > >& Controls ) override;
+    cpo::uno::Sequence< cpo::uno::Reference< css::awt::XControlModel > > getControlModels(  ) override;
+    void setGroup( const cpo::uno::Sequence< cpo::uno::Reference< css::awt::XControlModel > >& Group, const OUString& GroupName ) override;
     sal_Int32 getGroupCount(  ) override;
-    void getGroup( sal_Int32 nGroup, cpo::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& Group, OUString& Name ) override;
-    void getGroupByName( const OUString& Name, cpo::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& Group ) override;
+    void getGroup( sal_Int32 nGroup, cpo::uno::Sequence< cpo::uno::Reference< css::awt::XControlModel > >& Group, OUString& Name ) override;
+    void getGroupByName( const OUString& Name, cpo::uno::Sequence< cpo::uno::Reference< css::awt::XControlModel > >& Group ) override;
 
     // css::io::XPersistObject
     OUString getServiceName(  ) override;
-    void write( const css::uno::Reference< css::io::XObjectOutputStream >& OutStream ) override;
-    void read( const css::uno::Reference< css::io::XObjectInputStream >& InStream ) override;
+    void write( const cpo::uno::Reference< css::io::XObjectOutputStream >& OutStream ) override;
+    void read( const cpo::uno::Reference< css::io::XObjectInputStream >& InStream ) override;
 
     // XServiceInfo
     OUString getImplementationName() override;

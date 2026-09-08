@@ -56,9 +56,10 @@
 #include <map>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace ::xmloff::token;
 
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::cpo::uno::Sequence;
 
 namespace
@@ -929,7 +930,7 @@ bool isDocumentGeneratedWithOpenOfficeOlderThan2_3( const uno::Reference< frame:
     return bResult;
 }
 
-bool isDocumentGeneratedWithOpenOfficeOlderThan2_0( const css::uno::Reference< css::frame::XModel >& xChartModel)
+bool isDocumentGeneratedWithOpenOfficeOlderThan2_0( const cpo::uno::Reference< css::frame::XModel >& xChartModel)
 {
     bool bResult = false;
     OUString aGenerator( lcl_getGeneratorFromModelOrItsParent(xChartModel) );

@@ -22,7 +22,7 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 using namespace ::com::sun::star;
 

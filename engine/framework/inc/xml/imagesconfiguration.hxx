@@ -48,13 +48,13 @@ class ImagesConfiguration
 {
     public:
         static bool LoadImages(
-            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
-            const css::uno::Reference< css::io::XInputStream >& rInputStream,
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+            const cpo::uno::Reference< css::io::XInputStream >& rInputStream,
             ImageItemDescriptorList& rItems );
 
         static bool StoreImages(
-            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
-            const css::uno::Reference< css::io::XOutputStream >& rOutputStream,
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+            const cpo::uno::Reference< css::io::XOutputStream >& rOutputStream,
             const ImageItemDescriptorList& rItems );
 };
 

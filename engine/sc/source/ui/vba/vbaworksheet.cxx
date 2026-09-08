@@ -83,6 +83,7 @@
 #define STANDARDHEIGHT 427
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace ooo::vba;
 
 static void getNewSpreadsheetName (OUString &aNewName, std::u16string_view aOldName, const uno::Reference <sheet::XSpreadsheetDocument>& xSpreadDoc )
@@ -204,7 +205,7 @@ ScVbaWorksheet::createSheetCopyInNewDoc(const OUString& aCurrSheetName)
     return uno::Reference< excel::XWorksheet >( getUnoDocModule( aCodeName, pShell ), uno::UNO_QUERY_THROW );
 }
 
-css::uno::Reference< ov::excel::XWorksheet >
+cpo::uno::Reference< ov::excel::XWorksheet >
 ScVbaWorksheet::createSheetCopy(uno::Reference<excel::XWorksheet> const & xSheet, bool bAfter)
 {
     OUString aCurrSheetName = getName();
@@ -759,7 +760,7 @@ ScVbaWorksheet::Hyperlinks( const cpo::uno::Any& aIndex )
 cpo::uno::Any SAL_CALL
 ScVbaWorksheet::Names( const cpo::uno::Any& aIndex )
 {
-    css::uno::Reference<css::beans::XPropertySet> xProps(getSheet(), css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::beans::XPropertySet> xProps(getSheet(), cpo::uno::UNO_QUERY_THROW);
     uno::Reference< sheet::XNamedRanges > xNamedRanges(  xProps->getPropertyValue(u"NamedRanges"_ustr), uno::UNO_QUERY_THROW );
     uno::Reference< XCollection > xNames( new ScVbaNames( this, mxContext, xNamedRanges, mxModel ) );
     if ( aIndex.hasValue() )

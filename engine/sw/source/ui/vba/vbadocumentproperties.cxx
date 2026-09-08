@@ -35,6 +35,7 @@
 
 using namespace ::ooo::vba;
 using namespace css;
+using namespace ::cpo;
 
 /// @throws lang::IllegalArgumentException
 static sal_Int8 lcl_toMSOPropType( const cpo::uno::Type& aType )

@@ -30,7 +30,7 @@
 namespace logging
 {
 using css::logging::LogRecord;
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 namespace

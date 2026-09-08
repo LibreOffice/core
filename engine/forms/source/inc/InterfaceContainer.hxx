@@ -49,9 +49,9 @@ namespace frm
     struct ElementDescription
     {
     public:
-        css::uno::Reference< cpo::uno::XInterface >       xInterface;
-        css::uno::Reference< css::beans::XPropertySet >   xPropertySet;
-        css::uno::Reference< css::container::XChild >     xChild;
+        cpo::uno::Reference< cpo::uno::XInterface >       xInterface;
+        cpo::uno::Reference< css::beans::XPropertySet >   xPropertySet;
+        cpo::uno::Reference< css::container::XChild >     xChild;
         cpo::uno::Any                                     aElementTypeInterface;
 
     public:
@@ -62,8 +62,8 @@ namespace frm
         ElementDescription& operator=( const ElementDescription& ) = delete;
     };
 
-typedef std::vector<css::uno::Reference<cpo::uno::XInterface>> OInterfaceArray;
-typedef std::unordered_multimap< OUString, css::uno::Reference<cpo::uno::XInterface> > OInterfaceMap;
+typedef std::vector<cpo::uno::Reference<cpo::uno::XInterface>> OInterfaceArray;
+typedef std::unordered_multimap< OUString, cpo::uno::Reference<cpo::uno::XInterface> > OInterfaceMap;
 
 
 // OInterfaceContainer
@@ -90,15 +90,15 @@ protected:
 
     const cpo::uno::Type                    m_aElementType;
 
-    css::uno::Reference< cpo::uno::XComponentContext>     m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext>     m_xContext;
 
 
     // EventManager
-    css::uno::Reference< css::script::XEventAttacherManager>  m_xEventAttacher;
+    cpo::uno::Reference< css::script::XEventAttacherManager>  m_xEventAttacher;
 
 public:
     OInterfaceContainer(
-        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory,
+        const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory,
         ::osl::Mutex& _rMutex,
         const cpo::uno::Type& _rElementType);
 
@@ -114,8 +114,8 @@ protected:
 public:
 // css::io::XPersistObject
     virtual OUString getServiceName(  ) override = 0;
-    virtual void write( const css::uno::Reference< css::io::XObjectOutputStream >& OutStream ) override;
-    virtual void read( const css::uno::Reference< css::io::XObjectInputStream >& InStream ) override;
+    virtual void write( const cpo::uno::Reference< css::io::XObjectOutputStream >& OutStream ) override;
+    virtual void read( const cpo::uno::Reference< css::io::XObjectInputStream >& InStream ) override;
 
 // css::lang::XEventListener
     virtual void disposing(const css::lang::EventObject& _rSource) override;
@@ -128,7 +128,7 @@ public:
     virtual bool hasElements() override;
 
 // css::container::XEnumerationAccess
-    virtual css::uno::Reference< css::container::XEnumeration> createEnumeration() override;
+    virtual cpo::uno::Reference< css::container::XEnumeration> createEnumeration() override;
 
 // css::container::XNameAccess
     virtual cpo::uno::Any getByName( const OUString& aName ) override;
@@ -154,8 +154,8 @@ public:
     virtual void removeByIndex(sal_Int32 _nIndex) override;
 
 // css::container::XContainer
-    virtual void addContainerListener(const css::uno::Reference< css::container::XContainerListener>& _rxListener) override;
-    virtual void removeContainerListener(const css::uno::Reference< css::container::XContainerListener>& _rxListener) override;
+    virtual void addContainerListener(const cpo::uno::Reference< css::container::XContainerListener>& _rxListener) override;
+    virtual void removeContainerListener(const cpo::uno::Reference< css::container::XContainerListener>& _rxListener) override;
 
 // css::script::XEventAttacherManager
     virtual void registerScriptEvent( sal_Int32 nIndex, const css::script::ScriptEventDescriptor& aScriptEvent ) override;
@@ -165,10 +165,10 @@ public:
     virtual void insertEntry( sal_Int32 nIndex ) override;
     virtual void removeEntry( sal_Int32 nIndex ) override;
     virtual cpo::uno::Sequence< css::script::ScriptEventDescriptor > getScriptEvents( sal_Int32 Index ) override;
-    virtual void attach( sal_Int32 nIndex, const css::uno::Reference< cpo::uno::XInterface >& xObject, const cpo::uno::Any& aHelper ) override;
-    virtual void detach( sal_Int32 nIndex, const css::uno::Reference< cpo::uno::XInterface >& xObject ) override;
-    virtual void addScriptListener( const css::uno::Reference< css::script::XScriptListener >& xListener ) override;
-    virtual void removeScriptListener( const css::uno::Reference< css::script::XScriptListener >& Listener ) override;
+    virtual void attach( sal_Int32 nIndex, const cpo::uno::Reference< cpo::uno::XInterface >& xObject, const cpo::uno::Any& aHelper ) override;
+    virtual void detach( sal_Int32 nIndex, const cpo::uno::Reference< cpo::uno::XInterface >& xObject ) override;
+    virtual void addScriptListener( const cpo::uno::Reference< css::script::XScriptListener >& xListener ) override;
+    virtual void removeScriptListener( const cpo::uno::Reference< css::script::XScriptListener >& Listener ) override;
 
 protected:
     // helper
@@ -181,7 +181,7 @@ protected:
         later on to implInserted/implReplaced.</p>
     */
     virtual void approveNewElement(
-                    const css::uno::Reference< css::beans::XPropertySet >& _rxObject,
+                    const cpo::uno::Reference< css::beans::XPropertySet >& _rxObject,
                     ElementDescription* _pElement
                 );
 
@@ -202,7 +202,7 @@ protected:
     */
             void implInsert(
                 sal_Int32 _nIndex,
-                const css::uno::Reference< css::beans::XPropertySet >& _rxObject,
+                const cpo::uno::Reference< css::beans::XPropertySet >& _rxObject,
                 bool _bEvents /* = true */,
                 ElementDescription* _pApprovalResult /* = NULL */ ,
                 bool _bFire /* = true */
@@ -211,7 +211,7 @@ protected:
     // called after the object is inserted, but before the "real listeners" are notified
     virtual void implInserted( const ElementDescription* _pElement );
     // called after the object is removed, but before the "real listeners" are notified
-    virtual void implRemoved(const css::uno::Reference<cpo::uno::XInterface>& _rxObject);
+    virtual void implRemoved(const cpo::uno::Reference<cpo::uno::XInterface>& _rxObject);
 
     /** called after an object was replaced. The default implementation notifies our listeners, after releasing
         the instance lock.
@@ -221,8 +221,8 @@ protected:
                     ::osl::ClearableMutexGuard& _rInstanceLock
                 );
 
-    void writeEvents(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream);
-    void readEvents(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream);
+    void writeEvents(const cpo::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream);
+    void readEvents(const cpo::uno::Reference< css::io::XObjectInputStream>& _rxInStream);
 
     /** replace an element, specified by position
 
@@ -269,10 +269,10 @@ class OFormComponents   :public ::cppu::OComponentHelper
 {
 protected:
     ::osl::Mutex                               m_aMutex;
-    css::uno::Reference<cpo::uno::XInterface>  m_xParent;
+    cpo::uno::Reference<cpo::uno::XInterface>  m_xParent;
 
 public:
-    OFormComponents(const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory);
+    OFormComponents(const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory);
     OFormComponents( const OFormComponents& _cloneSource );
     virtual ~OFormComponents() override;
 
@@ -285,8 +285,8 @@ public:
     virtual void disposing() override;
 
 // css::form::XFormComponent
-    virtual css::uno::Reference<cpo::uno::XInterface> getParent() override;
-    virtual void setParent(const css::uno::Reference<cpo::uno::XInterface>& Parent) override;
+    virtual cpo::uno::Reference<cpo::uno::XInterface> getParent() override;
+    virtual void setParent(const cpo::uno::Reference<cpo::uno::XInterface>& Parent) override;
 
     // XEventListener
     using OInterfaceContainer::disposing;

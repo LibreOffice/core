@@ -74,6 +74,7 @@
 #include <editeng/editids.hrc>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 EditDLL& EditDLL::Get()
 {

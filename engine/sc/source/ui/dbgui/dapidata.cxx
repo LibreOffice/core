@@ -33,6 +33,7 @@
 #include <dpsdbtab.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 //  entries in the "type" ListBox
 #define DP_TYPELIST_TABLE   0

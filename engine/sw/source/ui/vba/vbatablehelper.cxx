@@ -26,6 +26,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
+using namespace ::cpo;
 
 
 SwVbaTableHelper::SwVbaTableHelper( uno::Reference< text::XTextTable > xTextTable ) : mxTextTable(std::move( xTextTable ))

@@ -36,7 +36,7 @@
 
 using namespace connectivity;
 using namespace connectivity::ado;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
@@ -44,7 +44,7 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
 
 
-ODriver::ODriver(const css::uno::Reference< cpo::uno::XComponentContext >& _xORB)
+ODriver::ODriver(const cpo::uno::Reference< cpo::uno::XComponentContext >& _xORB)
     : ODriver_BASE(m_aMutex)
     ,m_xContext(_xORB)
     ,mnNbCallCoInitializeExForReinit(0)

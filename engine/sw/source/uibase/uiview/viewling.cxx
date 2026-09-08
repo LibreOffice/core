@@ -87,8 +87,8 @@
 using namespace sw::mark;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::linguistic2;
 
 // Lingu-Dispatcher
@@ -697,7 +697,7 @@ bool SwView::ExecSpellPopup(const Point& rPt, bool bIsMouseEvent)
                     //! 'custom made' menu... *sigh* (code copied from sfx2 and framework)
                     if (xMenu.is())
                     {
-                        css::uno::Reference<css::awt::XWindowPeer> xParent(aEvent.SourceWindow, css::uno::UNO_QUERY);
+                        cpo::uno::Reference<css::awt::XWindowPeer> xParent(aEvent.SourceWindow, cpo::uno::UNO_QUERY);
                         const sal_uInt16 nId = xMenu->execute(xParent, css::awt::Rectangle(aPixPos.X(), aPixPos.Y(), 1, 1),
                                                               css::awt::PopupMenuDirection::EXECUTE_DOWN);
                         OUString aCommand = xMenu->getCommand(nId);
@@ -774,10 +774,10 @@ void SwView::ExecSmartTagPopup( const Point& rPt )
         cpo::uno::Any(comphelper::makePropertyValue( u"CommandURL"_ustr, u".uno:OpenSmartTagMenuOnCursor"_ustr ))
     };
 
-    const css::uno::Reference< cpo::uno::XComponentContext >& xContext = comphelper::getProcessComponentContext();
-    css::uno::Reference< css::frame::XPopupMenuController > xPopupController(
+    const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext = comphelper::getProcessComponentContext();
+    cpo::uno::Reference< css::frame::XPopupMenuController > xPopupController(
         xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-        u"com.sun.star.comp.svx.SmartTagMenuController"_ustr, aArgs, xContext ), css::uno::UNO_QUERY );
+        u"com.sun.star.comp.svx.SmartTagMenuController"_ustr, aArgs, xContext ), cpo::uno::UNO_QUERY );
 
     rtl::Reference< VCLXPopupMenu > xPopupMenu( new VCLXPopupMenu() );
 
@@ -793,7 +793,7 @@ void SwView::ExecSmartTagPopup( const Point& rPt )
             xPopupMenu->execute( m_pEditWin->GetComponentInterface(),
                                  vcl::unohelper::ConvertToAWTRect( m_pEditWin->LogicToPixel( aToFill.SVRect() ) ), css::awt::PopupMenuDirection::EXECUTE_DOWN );
 
-        css::uno::Reference< css::lang::XComponent > xComponent( xPopupController, css::uno::UNO_QUERY );
+        cpo::uno::Reference< css::lang::XComponent > xComponent( xPopupController, cpo::uno::UNO_QUERY );
         if ( xComponent.is() )
             xComponent->dispose();
     }

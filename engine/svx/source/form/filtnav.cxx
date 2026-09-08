@@ -60,9 +60,9 @@ using namespace ::dbtools;
 
 namespace svxform
 {
-    using ::com::sun::star::uno::Reference;
+    using ::cpo::uno::Reference;
     using ::com::sun::star::container::XIndexAccess;
-    using ::com::sun::star::uno::UNO_QUERY;
+    using ::cpo::uno::UNO_QUERY;
     using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::form::runtime::XFormController;
     using ::com::sun::star::form::runtime::XFilterController;
@@ -80,8 +80,8 @@ namespace svxform
     using ::com::sun::star::lang::Locale;
     using ::com::sun::star::sdb::SQLContext;
     using ::cpo::uno::XInterface;
-    using ::com::sun::star::uno::UNO_QUERY_THROW;
-    using ::com::sun::star::uno::UNO_SET_THROW;
+    using ::cpo::uno::UNO_QUERY_THROW;
+    using ::cpo::uno::UNO_SET_THROW;
     using ::cpo::uno::Exception;
     using ::cpo::uno::Sequence;
 

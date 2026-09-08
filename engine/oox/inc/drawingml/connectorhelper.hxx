@@ -16,7 +16,7 @@
 #include <oox/drawingml/shape.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <rtl/ustring.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 

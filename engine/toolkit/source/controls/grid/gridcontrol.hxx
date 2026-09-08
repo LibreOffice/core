@@ -45,7 +45,7 @@ protected:
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
-    explicit UnoGridModel( const css::uno::Reference< cpo::uno::XComponentContext >& i_factory );
+    explicit UnoGridModel( const cpo::uno::Reference< cpo::uno::XComponentContext >& i_factory );
     UnoGridModel( const UnoGridModel& rModel );
 
     rtl::Reference<UnoControlModel> Clone() const override;
@@ -54,7 +54,7 @@ public:
     void dispose(  ) override;
 
     // css::beans::XMultiPropertySet
-    css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+    cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
 
     // css::io::XPersistObject
     OUString getServiceName() override;
@@ -92,8 +92,8 @@ public:
     void dispose(  ) override;
 
     // css::awt::XControl
-    void createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
-    bool setModel( const css::uno::Reference< css::awt::XControlModel >& rxModel ) override;
+    void createPeer( const cpo::uno::Reference< css::awt::XToolkit >& Toolkit, const cpo::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
+    bool setModel( const cpo::uno::Reference< css::awt::XControlModel >& rxModel ) override;
 
     // css::awt::grid::XGridControl
     virtual ::sal_Int32 getColumnAtPoint(::sal_Int32 x, ::sal_Int32 y) override;
@@ -110,8 +110,8 @@ public:
     virtual cpo::uno::Sequence< ::sal_Int32 > getSelectedRows() override;
     virtual bool hasSelectedRows() override;
     virtual bool isRowSelected(::sal_Int32 index) override;
-    virtual void addSelectionListener(const css::uno::Reference< css::awt::grid::XGridSelectionListener > & listener) override;
-    virtual void removeSelectionListener(const css::uno::Reference< css::awt::grid::XGridSelectionListener > & listener) override;
+    virtual void addSelectionListener(const cpo::uno::Reference< css::awt::grid::XGridSelectionListener > & listener) override;
+    virtual void removeSelectionListener(const cpo::uno::Reference< css::awt::grid::XGridSelectionListener > & listener) override;
 
     // css::lang::XServiceInfo
     OUString getImplementationName() override

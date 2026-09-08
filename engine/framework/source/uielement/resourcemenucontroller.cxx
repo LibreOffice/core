@@ -41,7 +41,7 @@ namespace {
 class ResourceMenuController : public cppu::ImplInheritanceHelper< svt::PopupMenuControllerBase, css::ui::XUIConfigurationListener >
 {
 public:
-    ResourceMenuController( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+    ResourceMenuController( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                             const cpo::uno::Sequence< cpo::uno::Any >& rxArgs, bool bToolbarContainer );
 
     // XPopupMenuController
@@ -73,17 +73,17 @@ private:
     bool m_bToolbarContainer;
     sal_uInt16 m_nNewMenuId;
     rtl::Reference< framework::MenuBarManager > m_xMenuBarManager;
-    css::uno::Reference< css::frame::XDispatchProvider > m_xDispatchProvider;
-    css::uno::Reference< css::container::XIndexAccess > m_xMenuContainer;
-    css::uno::Reference< css::ui::XUIConfigurationManager > m_xConfigManager, m_xModuleConfigManager;
+    cpo::uno::Reference< css::frame::XDispatchProvider > m_xDispatchProvider;
+    cpo::uno::Reference< css::container::XIndexAccess > m_xMenuContainer;
+    cpo::uno::Reference< css::ui::XUIConfigurationManager > m_xConfigManager, m_xModuleConfigManager;
     void addVerbs( const cpo::uno::Sequence< css::embed::VerbDescriptor >& rVerbs );
     virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
 protected:
-    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 };
 
-ResourceMenuController::ResourceMenuController( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+ResourceMenuController::ResourceMenuController( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                                                 const cpo::uno::Sequence< cpo::uno::Any >& rxArgs, bool bToolbarContainer ) :
     ImplInheritanceHelper( rxContext ),
     m_bContextMenu( false ),
@@ -137,7 +137,7 @@ void ResourceMenuController::updatePopupMenu()
     {
         try
         {
-            css::uno::Reference< css::frame::XModuleManager > xModuleManager( css::frame::ModuleManager::create( m_xContext ) );
+            cpo::uno::Reference< css::frame::XModuleManager > xModuleManager( css::frame::ModuleManager::create( m_xContext ) );
             m_aModuleName = xModuleManager->identify( m_xFrame );
         }
         catch( const cpo::uno::Exception& )
@@ -148,11 +148,11 @@ void ResourceMenuController::updatePopupMenu()
     {
         try
         {
-            css::uno::Reference< css::frame::XController > xController( m_xFrame->getController() );
-            css::uno::Reference< css::frame::XModel > xModel( xController->getModel() );
-            css::uno::Reference< css::ui::XUIConfigurationManagerSupplier > xSupplier( xModel, css::uno::UNO_QUERY_THROW );
+            cpo::uno::Reference< css::frame::XController > xController( m_xFrame->getController() );
+            cpo::uno::Reference< css::frame::XModel > xModel( xController->getModel() );
+            cpo::uno::Reference< css::ui::XUIConfigurationManagerSupplier > xSupplier( xModel, cpo::uno::UNO_QUERY_THROW );
             m_xConfigManager.set( xSupplier->getUIConfigurationManager() );
-            css::uno::Reference< css::ui::XUIConfiguration > xConfig( m_xConfigManager, css::uno::UNO_QUERY_THROW );
+            cpo::uno::Reference< css::ui::XUIConfiguration > xConfig( m_xConfigManager, cpo::uno::UNO_QUERY_THROW );
             xConfig->addConfigurationListener( this );
         }
         catch( const cpo::uno::RuntimeException& )
@@ -163,10 +163,10 @@ void ResourceMenuController::updatePopupMenu()
     {
         try
         {
-            css::uno::Reference< css::ui::XModuleUIConfigurationManagerSupplier > xModuleCfgMgrSupplier(
+            cpo::uno::Reference< css::ui::XModuleUIConfigurationManagerSupplier > xModuleCfgMgrSupplier(
                 css::ui::theModuleUIConfigurationManagerSupplier::get( m_xContext ) );
             m_xModuleConfigManager.set( xModuleCfgMgrSupplier->getUIConfigurationManager( m_aModuleName ) );
-            css::uno::Reference< css::ui::XUIConfiguration > xConfig( m_xModuleConfigManager, css::uno::UNO_QUERY_THROW );
+            cpo::uno::Reference< css::ui::XUIConfiguration > xConfig( m_xModuleConfigManager, cpo::uno::UNO_QUERY_THROW );
             xConfig->addConfigurationListener( this );
         }
         catch ( const css::container::NoSuchElementException& )
@@ -234,8 +234,8 @@ void ResourceMenuController::updatePopupMenu()
     css::util::URL aObjectMenuURL;
     aObjectMenuURL.Complete = u".uno:ObjectMenue"_ustr;
     m_xURLTransformer->parseStrict( aObjectMenuURL );
-    css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider( m_xFrame, css::uno::UNO_QUERY );
-    css::uno::Reference< css::frame::XDispatch > xDispatch( xDispatchProvider->queryDispatch( aObjectMenuURL, OUString(), 0 ) );
+    cpo::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider( m_xFrame, cpo::uno::UNO_QUERY );
+    cpo::uno::Reference< css::frame::XDispatch > xDispatch( xDispatchProvider->queryDispatch( aObjectMenuURL, OUString(), 0 ) );
     if ( xDispatch.is() )
     {
         xDispatch->addStatusListener( this, aObjectMenuURL );
@@ -253,10 +253,10 @@ void ResourceMenuController::statusChanged( const css::frame::FeatureStateEvent&
 void ResourceMenuController::addVerbs( const cpo::uno::Sequence< css::embed::VerbDescriptor >& rVerbs )
 {
     // Check if the document is read-only.
-    css::uno::Reference< css::frame::XController > xController( m_xFrame->getController() );
-    css::uno::Reference< css::frame::XStorable > xStorable;
+    cpo::uno::Reference< css::frame::XController > xController( m_xFrame->getController() );
+    cpo::uno::Reference< css::frame::XStorable > xStorable;
     if ( xController.is() )
-        xStorable.set( xController->getModel(), css::uno::UNO_QUERY );
+        xStorable.set( xController->getModel(), cpo::uno::UNO_QUERY );
 
     bool bReadOnly = xStorable.is() && xStorable->isReadonly();
     Menu* pVCLMenu = m_xPopupMenu->GetMenu();
@@ -327,11 +327,11 @@ void ResourceMenuController::disposing( const css::lang::EventObject& rEvent )
 
 void ResourceMenuController::disposing(std::unique_lock<std::mutex>& rGuard)
 {
-    css::uno::Reference< css::ui::XUIConfiguration > xConfig( m_xConfigManager, css::uno::UNO_QUERY );
+    cpo::uno::Reference< css::ui::XUIConfiguration > xConfig( m_xConfigManager, cpo::uno::UNO_QUERY );
     if ( xConfig.is() )
         xConfig->removeConfigurationListener( this );
 
-    css::uno::Reference< css::ui::XUIConfiguration > xModuleConfig( m_xModuleConfigManager, css::uno::UNO_QUERY );
+    cpo::uno::Reference< css::ui::XUIConfiguration > xModuleConfig( m_xModuleConfigManager, cpo::uno::UNO_QUERY );
     if ( xModuleConfig.is() )
         xModuleConfig->removeConfigurationListener( this );
 
@@ -367,7 +367,7 @@ cpo::uno::Sequence< OUString > ResourceMenuController::getSupportedServiceNames(
 class SaveAsMenuController : public ResourceMenuController
 {
 public:
-    SaveAsMenuController( const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
+    SaveAsMenuController( const cpo::uno::Reference< cpo::uno::XComponentContext >& rContext,
                           const cpo::uno::Sequence< cpo::uno::Any >& rArgs );
 
     // XServiceInfo
@@ -377,13 +377,13 @@ private:
     virtual void impl_setPopupMenu(std::unique_lock<std::mutex>& rGuard) override;
 };
 
-SaveAsMenuController::SaveAsMenuController( const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
+SaveAsMenuController::SaveAsMenuController( const cpo::uno::Reference< cpo::uno::XComponentContext >& rContext,
                                             const cpo::uno::Sequence< cpo::uno::Any >& rArgs )
     : ResourceMenuController( rContext, rArgs, false )
 {
 }
 
-void InsertItem(const css::uno::Reference<css::awt::XPopupMenu>& rPopupMenu,
+void InsertItem(const cpo::uno::Reference<css::awt::XPopupMenu>& rPopupMenu,
                 const OUString& rCommand)
 {
     sal_uInt16 nItemId = rPopupMenu->getItemCount() + 1;
@@ -411,7 +411,7 @@ OUString SaveAsMenuController::getImplementationName()
 class WindowListMenuController : public ResourceMenuController
 {
 public:
-    WindowListMenuController( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+    WindowListMenuController( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                               const cpo::uno::Sequence< cpo::uno::Any >& rxArgs )
         : ResourceMenuController(rxContext, rxArgs, false) {}
 
@@ -436,18 +436,18 @@ void WindowListMenuController::itemActivated( const css::awt::MenuEvent& rEvent 
     // update window list
     ::std::vector< OUString > aNewWindowListVector;
 
-    css::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create( m_xContext );
+    cpo::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create( m_xContext );
 
     sal_uInt16  nActiveItemId = 0;
     sal_uInt16  nItemId = START_ITEMID_WINDOWLIST;
 
-    css::uno::Reference< css::frame::XFrame > xCurrentFrame = xDesktop->getCurrentFrame();
-    css::uno::Reference< css::container::XIndexAccess > xList = xDesktop->getFrames();
+    cpo::uno::Reference< css::frame::XFrame > xCurrentFrame = xDesktop->getCurrentFrame();
+    cpo::uno::Reference< css::container::XIndexAccess > xList = xDesktop->getFrames();
     sal_Int32 nFrameCount = xList->getCount();
     aNewWindowListVector.reserve(nFrameCount);
     for (sal_Int32 i=0; i<nFrameCount; ++i )
     {
-        css::uno::Reference< css::frame::XFrame > xFrame;
+        cpo::uno::Reference< css::frame::XFrame > xFrame;
         xList->getByIndex(i) >>= xFrame;
 
         if (xFrame.is())
@@ -511,14 +511,14 @@ void WindowListMenuController::itemSelected( const css::awt::MenuEvent& rEvent )
         return;
 
     // window list menu item selected
-    css::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create( m_xContext );
+    cpo::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create( m_xContext );
 
     sal_uInt16 nTaskId = START_ITEMID_WINDOWLIST;
-    css::uno::Reference< css::container::XIndexAccess > xList = xDesktop->getFrames();
+    cpo::uno::Reference< css::container::XIndexAccess > xList = xDesktop->getFrames();
     sal_Int32 nCount = xList->getCount();
     for ( sal_Int32 i=0; i<nCount; ++i )
     {
-        css::uno::Reference< css::frame::XFrame > xFrame;
+        cpo::uno::Reference< css::frame::XFrame > xFrame;
         xList->getByIndex(i) >>= xFrame;
         if ( xFrame.is() && nTaskId == rEvent.MenuId )
         {

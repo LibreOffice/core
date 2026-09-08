@@ -20,7 +20,7 @@
 #pragma once
 
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XEmbeddedOleObject.hpp>
 #include <com/sun/star/embed/XInplaceObject.hpp>
@@ -131,26 +131,26 @@ class OleEmbeddedObject : public ::cppu::WeakImplHelper
     sal_Int32 m_nTargetState;
     sal_Int32 m_nUpdateMode;
 
-    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
     cpo::uno::Sequence< sal_Int8 > m_aClassID;
     OUString m_aClassName;
 
-    css::uno::Reference< css::embed::XEmbeddedClient > m_xClientSite;
+    cpo::uno::Reference< css::embed::XEmbeddedClient > m_xClientSite;
 
     OUString m_aContainerName;
 
-    css::uno::Reference< css::util::XCloseListener > m_xClosePreventer;
+    cpo::uno::Reference< css::util::XCloseListener > m_xClosePreventer;
 
     bool m_bWaitSaveCompleted;
     bool m_bNewVisReplInStream;
-    css::uno::Reference< css::io::XStream > m_xNewCachedVisRepl;
+    cpo::uno::Reference< css::io::XStream > m_xNewCachedVisRepl;
     OUString m_aNewEntryName;
-    css::uno::Reference< css::embed::XStorage > m_xNewParentStorage;
-    css::uno::Reference< css::io::XStream > m_xNewObjectStream;
+    cpo::uno::Reference< css::embed::XStorage > m_xNewParentStorage;
+    cpo::uno::Reference< css::io::XStream > m_xNewObjectStream;
     bool m_bStoreLoaded;
 
-    css::uno::Reference< css::io::XStream > m_xCachedVisualRepresentation;
+    cpo::uno::Reference< css::io::XStream > m_xCachedVisualRepresentation;
     bool m_bVisReplInitialized;
     bool m_bVisReplInStream;
     bool m_bStoreVisRepl;
@@ -175,8 +175,8 @@ class OleEmbeddedObject : public ::cppu::WeakImplHelper
 
     // embedded object related stuff
     OUString m_aEntryName;
-    css::uno::Reference< css::embed::XStorage > m_xParentStorage;
-    css::uno::Reference< css::io::XStream > m_xObjectStream;
+    cpo::uno::Reference< css::embed::XStorage > m_xParentStorage;
+    cpo::uno::Reference< css::io::XStream > m_xObjectStream;
 
     // link related stuff
     OUString m_aLinkURL; // ???
@@ -196,31 +196,31 @@ class OleEmbeddedObject : public ::cppu::WeakImplHelper
     VerbExecutionController m_aVerbExecutionController;
 
     // if the following member is set, the object works in wrapper mode
-    css::uno::Reference< css::embed::XEmbeddedObject > m_xWrappedObject;
+    cpo::uno::Reference< css::embed::XEmbeddedObject > m_xWrappedObject;
     bool m_bTriedConversion;
     OUString m_aFilterName; // if m_bTriedConversion, then the filter detected by that
 
-    css::uno::Reference< cpo::uno::XInterface > m_xParent;
+    cpo::uno::Reference< cpo::uno::XInterface > m_xParent;
 
     /// If it is allowed to modify entries in the stream of the OLE storage.
     bool m_bStreamReadOnly = false;
 
 protected:
     /// @throws cpo::uno::Exception
-    css::uno::Reference< css::io::XStream > TryToGetAcceptableFormat_Impl(
-                                    const css::uno::Reference< css::io::XStream >& xStream );
+    cpo::uno::Reference< css::io::XStream > TryToGetAcceptableFormat_Impl(
+                                    const cpo::uno::Reference< css::io::XStream >& xStream );
 
     /// @throws css::io::IOException
     /// @throws cpo::uno::RuntimeException
-    css::uno::Reference< css::io::XStream > GetNewFilledTempStream_Impl(
-                                    const css::uno::Reference< css::io::XInputStream >& xInStream );
+    cpo::uno::Reference< css::io::XStream > GetNewFilledTempStream_Impl(
+                                    const cpo::uno::Reference< css::io::XInputStream >& xInStream );
 #ifdef _WIN32
     void SwitchComponentToRunningState_Impl(osl::ResettableMutexGuard& guard);
 #endif
     void MakeEventListenerNotification_Impl( const OUString& aEventName, osl::ResettableMutexGuard& guard );
 #ifdef _WIN32
     void StateChangeNotification_Impl( bool bBeforeChange, sal_Int32 nOldState, sal_Int32 nNewState, osl::ResettableMutexGuard& guard );
-    css::uno::Reference< css::io::XOutputStream > GetStreamForSaving();
+    cpo::uno::Reference< css::io::XOutputStream > GetStreamForSaving();
 
 
     cpo::uno::Sequence< sal_Int32 > GetIntermediateVerbsSequence_Impl( sal_Int32 nNewState );
@@ -232,46 +232,46 @@ protected:
     void Dispose(osl::ResettableMutexGuard* guard = nullptr);
 
     void SwitchOwnPersistence(
-                const css::uno::Reference< css::embed::XStorage >& xNewParentStorage,
-                const css::uno::Reference< css::io::XStream >& xNewObjectStream,
+                const cpo::uno::Reference< css::embed::XStorage >& xNewParentStorage,
+                const cpo::uno::Reference< css::io::XStream >& xNewObjectStream,
                 const OUString& aNewName );
 
     void SwitchOwnPersistence(
-                const css::uno::Reference< css::embed::XStorage >& xNewParentStorage,
+                const cpo::uno::Reference< css::embed::XStorage >& xNewParentStorage,
                 const OUString& aNewName );
 
     void GetRidOfComponent(osl::ResettableMutexGuard* guard);
 
     /// @throws cpo::uno::Exception
     void StoreToLocation_Impl(
-                            const css::uno::Reference< css::embed::XStorage >& xStorage,
+                            const cpo::uno::Reference< css::embed::XStorage >& xStorage,
                             const OUString& sEntName,
                             const cpo::uno::Sequence< css::beans::PropertyValue >& lObjArgs,
                             bool bSaveAs,
                             osl::ResettableMutexGuard& rGuard);
 #ifdef _WIN32
     /// @throws cpo::uno::Exception
-    void StoreObjectToStream(css::uno::Reference<css::io::XOutputStream> const& xOutStream,
+    void StoreObjectToStream(cpo::uno::Reference<css::io::XOutputStream> const& xOutStream,
                              osl::ResettableMutexGuard& rGuard);
 #endif
     /// @throws cpo::uno::Exception
     void InsertVisualCache_Impl(
-            const css::uno::Reference< css::io::XStream >& xTargetStream,
-            const css::uno::Reference< css::io::XStream >& xCachedVisualRepresentation,
+            const cpo::uno::Reference< css::io::XStream >& xTargetStream,
+            const cpo::uno::Reference< css::io::XStream >& xCachedVisualRepresentation,
             osl::ResettableMutexGuard& rGuard);
 
     /// @throws cpo::uno::Exception
-    void RemoveVisualCache_Impl( const css::uno::Reference< css::io::XStream >& xTargetStream );
+    void RemoveVisualCache_Impl( const cpo::uno::Reference< css::io::XStream >& xTargetStream );
 
     void SetVisReplInStream( bool bExists );
     bool HasVisReplInStream();
 
     /// @throws cpo::uno::Exception
     css::embed::VisualRepresentation GetVisualRepresentationInNativeFormat_Impl(
-                    const css::uno::Reference< css::io::XStream >& xCachedVisRepr );
+                    const cpo::uno::Reference< css::io::XStream >& xCachedVisRepr );
 
-    css::uno::Reference< css::io::XStream > TryToRetrieveCachedVisualRepresentation_Impl(
-                    const css::uno::Reference< css::io::XStream >& xStream,
+    cpo::uno::Reference< css::io::XStream > TryToRetrieveCachedVisualRepresentation_Impl(
+                    const cpo::uno::Reference< css::io::XStream >& xStream,
                     osl::ResettableMutexGuard& rGuard,
                     bool bAllowRepair50 = false )
         noexcept;
@@ -288,23 +288,23 @@ protected:
 
     // the following 4 methods are related to switch to wrapping mode
     void MoveListeners();
-    css::uno::Reference< css::embed::XStorage > CreateTemporarySubstorage( OUString& o_aStorageName );
+    cpo::uno::Reference< css::embed::XStorage > CreateTemporarySubstorage( OUString& o_aStorageName );
     OUString MoveToTemporarySubstream();
-    bool TryToConvertToOOo( const css::uno::Reference< css::io::XStream >& xStream );
+    bool TryToConvertToOOo( const cpo::uno::Reference< css::io::XStream >& xStream );
 
 public:
     // in case a new object must be created the class ID must be specified
-    OleEmbeddedObject( css::uno::Reference< cpo::uno::XComponentContext > xContext,
+    OleEmbeddedObject( cpo::uno::Reference< cpo::uno::XComponentContext > xContext,
                         const cpo::uno::Sequence< sal_Int8 >& aClassID,
                         OUString  aClassName );
 
     // in case object will be loaded from a persistent entry or from a file the class ID will be detected on loading
     // factory can do it for OOo objects, but for OLE objects OS dependent code is required
-    OleEmbeddedObject( css::uno::Reference< cpo::uno::XComponentContext > xContext,
+    OleEmbeddedObject( cpo::uno::Reference< cpo::uno::XComponentContext > xContext,
                         bool bLink );
 #ifdef _WIN32
     // this constructor let object be initialized from clipboard
-    OleEmbeddedObject( const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
+    OleEmbeddedObject( const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext );
 #endif
 
     virtual ~OleEmbeddedObject() override;
@@ -328,9 +328,9 @@ public:
     virtual cpo::uno::Sequence< css::embed::VerbDescriptor > getSupportedVerbs() override;
 
     virtual void setClientSite(
-                const css::uno::Reference< css::embed::XEmbeddedClient >& xClient ) override;
+                const cpo::uno::Reference< css::embed::XEmbeddedClient >& xClient ) override;
 
-    virtual css::uno::Reference< css::embed::XEmbeddedClient > getClientSite() override;
+    virtual cpo::uno::Reference< css::embed::XEmbeddedClient > getClientSite() override;
 
     virtual void update() override;
 
@@ -355,16 +355,16 @@ public:
 // XEmbedPersist
 
     virtual void setPersistentEntry(
-                    const css::uno::Reference< css::embed::XStorage >& xStorage,
+                    const cpo::uno::Reference< css::embed::XStorage >& xStorage,
                     const OUString& sEntName,
                     sal_Int32 nEntryConnectionMode,
                     const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments,
                     const cpo::uno::Sequence< css::beans::PropertyValue >& lObjArgs ) override;
 
-    virtual void storeToEntry( const css::uno::Reference< css::embed::XStorage >& xStorage, const OUString& sEntName, const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments, const cpo::uno::Sequence< css::beans::PropertyValue >& lObjArgs ) override;
+    virtual void storeToEntry( const cpo::uno::Reference< css::embed::XStorage >& xStorage, const OUString& sEntName, const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments, const cpo::uno::Sequence< css::beans::PropertyValue >& lObjArgs ) override;
 
     virtual void storeAsEntry(
-                const css::uno::Reference< css::embed::XStorage >& xStorage,
+                const cpo::uno::Reference< css::embed::XStorage >& xStorage,
                 const OUString& sEntName,
                 const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments,
                 const cpo::uno::Sequence< css::beans::PropertyValue >& lObjArgs ) override;
@@ -377,7 +377,7 @@ public:
 
 // XLinkageSupport
 
-    virtual void breakLink( const css::uno::Reference< css::embed::XStorage >& xStorage,
+    virtual void breakLink( const cpo::uno::Reference< css::embed::XStorage >& xStorage,
                                      const OUString& sEntName ) override;
 
     virtual bool isLink() override;
@@ -403,30 +403,30 @@ public:
                 const cpo::uno::Sequence< sal_Int8 >& aClassID, const OUString& aClassName ) override;
 
 // XStateChangeBroadcaster
-    virtual void addStateChangeListener( const css::uno::Reference< css::embed::XStateChangeListener >& xListener ) override;
-    virtual void removeStateChangeListener( const css::uno::Reference< css::embed::XStateChangeListener >& xListener ) override;
+    virtual void addStateChangeListener( const cpo::uno::Reference< css::embed::XStateChangeListener >& xListener ) override;
+    virtual void removeStateChangeListener( const cpo::uno::Reference< css::embed::XStateChangeListener >& xListener ) override;
 
 
 // XComponentSupplier
 
-    virtual css::uno::Reference< css::util::XCloseable > getComponent() override;
+    virtual cpo::uno::Reference< css::util::XCloseable > getComponent() override;
 
 // XCloseable
 
     virtual void close( bool DeliverOwnership ) override;
 
     virtual void addCloseListener(
-                const css::uno::Reference< css::util::XCloseListener >& Listener ) override;
+                const cpo::uno::Reference< css::util::XCloseListener >& Listener ) override;
 
     virtual void removeCloseListener(
-                const css::uno::Reference< css::util::XCloseListener >& Listener ) override;
+                const cpo::uno::Reference< css::util::XCloseListener >& Listener ) override;
 
 // XEventBroadcaster
     virtual void addEventListener(
-                const css::uno::Reference< css::document::XEventListener >& Listener ) override;
+                const cpo::uno::Reference< css::document::XEventListener >& Listener ) override;
 
     virtual void removeEventListener(
-                const css::uno::Reference< css::document::XEventListener >& Listener ) override;
+                const cpo::uno::Reference< css::document::XEventListener >& Listener ) override;
 
 // XInplaceObject ( only for wrapping scenario here )
 
@@ -439,12 +439,12 @@ public:
                     const cpo::uno::Sequence< css::awt::KeyEvent >& aKeys ) override;
 
     // XChild ( only for wrapping scenario here )
-    virtual css::uno::Reference< cpo::uno::XInterface > getParent(  ) override;
-    virtual void setParent( const css::uno::Reference< cpo::uno::XInterface >& Parent ) override;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > getParent(  ) override;
+    virtual void setParent( const cpo::uno::Reference< cpo::uno::XInterface >& Parent ) override;
 
     // XActiveDataStreamer
-    void setStream(const css::uno::Reference<css::io::XStream>& xStream) override;
-    css::uno::Reference<css::io::XStream> getStream() override;
+    void setStream(const cpo::uno::Reference<css::io::XStream>& xStream) override;
+    cpo::uno::Reference<css::io::XStream> getStream() override;
 
     // XInitialization
     void initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments) override;

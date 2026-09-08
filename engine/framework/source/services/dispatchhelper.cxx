@@ -52,7 +52,7 @@ cpo::uno::Sequence<OUString> DispatchHelper::getSupportedServiceNames()
 
     @param xSMGR    the global uno service manager, which can be used to create own needed services.
 */
-DispatchHelper::DispatchHelper(css::uno::Reference<cpo::uno::XComponentContext> xContext)
+DispatchHelper::DispatchHelper(cpo::uno::Reference<cpo::uno::XComponentContext> xContext)
     : m_xContext(std::move(xContext))
     , m_aBlockFlag(false)
 {
@@ -82,7 +82,7 @@ DispatchHelper::~DispatchHelper() {}
     @return An Any which capsulate a possible result of the internal wrapped dispatch.
  */
 cpo::uno::Any DispatchHelper::executeDispatch(
-    const css::uno::Reference<css::frame::XDispatchProvider>& xDispatchProvider,
+    const cpo::uno::Reference<css::frame::XDispatchProvider>& xDispatchProvider,
     const OUString& sURL, const OUString& sTargetFrameName, sal_Int32 nSearchFlags,
     const cpo::uno::Sequence<css::beans::PropertyValue>& lArguments)
 {
@@ -93,7 +93,7 @@ cpo::uno::Any DispatchHelper::executeDispatch(
     }
 
     // parse given URL
-    css::uno::Reference<css::util::XURLTransformer> xParser;
+    cpo::uno::Reference<css::util::XURLTransformer> xParser;
     /* SAFE { */
     {
         std::scoped_lock aReadLock(m_mutex);
@@ -106,7 +106,7 @@ cpo::uno::Any DispatchHelper::executeDispatch(
     xParser->parseStrict(aURL);
 
     // search dispatcher
-    css::uno::Reference<css::frame::XDispatch> xDispatch
+    cpo::uno::Reference<css::frame::XDispatch> xDispatch
         = xDispatchProvider->queryDispatch(aURL, sTargetFrameName, nSearchFlags);
 
     comphelper::SequenceAsHashMap aDescriptor(lArguments);
@@ -122,20 +122,20 @@ cpo::uno::Any DispatchHelper::executeDispatch(
 }
 
 const cpo::uno::Any&
-DispatchHelper::executeDispatch(const css::uno::Reference<css::frame::XDispatch>& xDispatch,
+DispatchHelper::executeDispatch(const cpo::uno::Reference<css::frame::XDispatch>& xDispatch,
                                 const css::util::URL& aURL, bool SyncronFlag,
                                 const cpo::uno::Sequence<css::beans::PropertyValue>& lArguments)
 {
     comphelper::ProfileZone aZone("executeDispatch");
-    css::uno::Reference<cpo::uno::XInterface> xTHIS(static_cast<::cppu::OWeakObject*>(this),
-                                                    css::uno::UNO_QUERY);
+    cpo::uno::Reference<cpo::uno::XInterface> xTHIS(static_cast<::cppu::OWeakObject*>(this),
+                                                    cpo::uno::UNO_QUERY);
     m_aResult.clear();
 
     // check for valid parameters
     if (xDispatch.is())
     {
-        css::uno::Reference<css::frame::XNotifyingDispatch> xNotifyDispatch(xDispatch,
-                                                                            css::uno::UNO_QUERY);
+        cpo::uno::Reference<css::frame::XNotifyingDispatch> xNotifyDispatch(xDispatch,
+                                                                            cpo::uno::UNO_QUERY);
 
         // make sure that synchronous execution is used (if possible)
         cpo::uno::Sequence<css::beans::PropertyValue> aArguments(lArguments);
@@ -149,8 +149,8 @@ DispatchHelper::executeDispatch(const css::uno::Reference<css::frame::XDispatch>
         {
             // dispatch it with guaranteed notification
             // Here we can hope for a result ... instead of the normal dispatch.
-            css::uno::Reference<css::frame::XDispatchResultListener> xListener(xTHIS,
-                                                                               css::uno::UNO_QUERY);
+            cpo::uno::Reference<css::frame::XDispatchResultListener> xListener(xTHIS,
+                                                                               cpo::uno::UNO_QUERY);
             /* SAFE { */
             {
                 std::scoped_lock aWriteLock(m_mutex);

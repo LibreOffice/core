@@ -24,7 +24,7 @@
 #include <optional>
 #include <string_view>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include "dp_misc_api.hxx"
 
@@ -64,7 +64,7 @@ DESKTOP_DEPLOYMENTMISC_DLLPUBLIC OUString generateIdentifier(
    @throws cpo::uno::RuntimeException
 */
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC OUString getIdentifier(
-    css::uno::Reference< css::deployment::XPackage >
+    cpo::uno::Reference< css::deployment::XPackage >
         const & package);
 
 /**

@@ -61,7 +61,7 @@ class ManifestImport final : public cppu::WeakImplHelper < css::xml::sax::XDocum
 
 
     OUString PushNameAndNamespaces( const OUString& aName,
-                                           const css::uno::Reference< css::xml::sax::XAttributeList >& xAttribs,
+                                           const cpo::uno::Reference< css::xml::sax::XAttributeList >& xAttribs,
                                            StringHashMap& o_aConvertedAttribs );
     static OUString ConvertNameWithNamespace( const OUString& aName, const StringHashMap& aNamespaces );
     OUString ConvertName( const OUString& aName );
@@ -71,12 +71,12 @@ public:
     virtual ~ManifestImport() override;
     virtual void startDocument(  ) override;
     virtual void endDocument(  ) override;
-    virtual void startElement( const OUString& aName, const css::uno::Reference< css::xml::sax::XAttributeList >& xAttribs ) override;
+    virtual void startElement( const OUString& aName, const cpo::uno::Reference< css::xml::sax::XAttributeList >& xAttribs ) override;
     virtual void endElement( const OUString& aName ) override;
     virtual void characters( const OUString& aChars ) override;
     virtual void ignorableWhitespace( const OUString& aWhitespaces ) override;
     virtual void processingInstruction( const OUString& aTarget, const OUString& aData ) override;
-    virtual void setDocumentLocator( const css::uno::Reference< css::xml::sax::XLocator >& xLocator ) override;
+    virtual void setDocumentLocator( const cpo::uno::Reference< css::xml::sax::XLocator >& xLocator ) override;
 
 private:
     /// @throws cpo::uno::RuntimeException

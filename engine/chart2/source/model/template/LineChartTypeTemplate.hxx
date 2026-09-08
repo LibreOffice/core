@@ -32,7 +32,7 @@ class LineChartTypeTemplate :
 {
 public:
     explicit LineChartTypeTemplate(
-        css::uno::Reference< cpo::uno::XComponentContext > const & xContext,
+        cpo::uno::Reference< cpo::uno::XComponentContext > const & xContext,
         const OUString & rServiceName,
         StackMode eStackMode,
         bool bSymbols,
@@ -51,7 +51,7 @@ protected:
     virtual ::cppu::IPropertyArrayHelper & getInfoHelper() override;
 
     // ____ XPropertySet ____
-    virtual css::uno::Reference< css::beans::XPropertySetInfo >
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo >
         getPropertySetInfo() override;
 
     // ____ ChartTypeTemplate ____

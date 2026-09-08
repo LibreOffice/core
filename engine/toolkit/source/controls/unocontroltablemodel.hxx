@@ -84,8 +84,8 @@ namespace svt::table
         virtual ColumnSort  getCurrentSortOrder() const override;
 
         // column write access
-        void    appendColumn( css::uno::Reference< css::awt::grid::XGridColumn > const & i_column );
-        void    insertColumn( ColPos const i_position, css::uno::Reference< css::awt::grid::XGridColumn > const & i_column );
+        void    appendColumn( cpo::uno::Reference< css::awt::grid::XGridColumn > const & i_column );
+        void    insertColumn( ColPos const i_position, cpo::uno::Reference< css::awt::grid::XGridColumn > const & i_column );
         void    removeColumn( ColPos const i_position );
         void    removeAllColumns();
 
@@ -93,13 +93,13 @@ namespace svt::table
         void    setVerticalScrollbarVisibility( ScrollbarVisibility const i_visibility );
         void    setHorizontalScrollbarVisibility( ScrollbarVisibility const i_visibility );
 
-        void    setDataModel( css::uno::Reference< css::awt::grid::XGridDataModel > const & i_gridDataModel );
+        void    setDataModel( cpo::uno::Reference< css::awt::grid::XGridDataModel > const & i_gridDataModel );
         bool    hasDataModel() const;
-        css::uno::Reference< css::awt::grid::XGridDataModel >
+        cpo::uno::Reference< css::awt::grid::XGridDataModel >
                 getDataModel() const;
-        void    setColumnModel( css::uno::Reference< css::awt::grid::XGridColumnModel > const & i_gridColumnModel );
+        void    setColumnModel( cpo::uno::Reference< css::awt::grid::XGridColumnModel > const & i_gridColumnModel );
         bool    hasColumnModel() const;
-        css::uno::Reference< css::awt::grid::XGridColumnModel >
+        cpo::uno::Reference< css::awt::grid::XGridColumnModel >
                 getColumnModel() const;
 
         void    setRowHeaders(bool _bRowHeaders);

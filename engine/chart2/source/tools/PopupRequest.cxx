@@ -11,6 +11,7 @@
 #include <PopupRequest.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 namespace chart
 {

@@ -90,6 +90,7 @@
 #define MAX_INDENT_LEVEL 20
 
 using namespace css;
+using namespace ::cpo;
 
 static char sIndentTabs[MAX_INDENT_LEVEL+2] =
     "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t";

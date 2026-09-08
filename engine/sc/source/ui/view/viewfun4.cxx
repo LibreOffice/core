@@ -74,9 +74,10 @@
 #include <refundo.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
-                                const css::uno::Reference< css::datatransfer::XTransferable >& rxTransferable )
+                                const cpo::uno::Reference< css::datatransfer::XTransferable >& rxTransferable )
 {
     TransferableDataHelper aDataHelper( rxTransferable );
     if ( aDataHelper.HasFormat( SotClipboardFormatId::EDITENGINE_ODF_TEXT_FLAT ) )
@@ -680,7 +681,7 @@ bool ScViewFunc::PasteFile( const Point& rPos, const OUString& rFile, bool bLink
 }
 
 bool ScViewFunc::PasteBookmark( SotClipboardFormatId nFormatId,
-                                const css::uno::Reference< css::datatransfer::XTransferable >& rxTransferable,
+                                const cpo::uno::Reference< css::datatransfer::XTransferable >& rxTransferable,
                                 SCCOL nPosX, SCROW nPosY )
 {
     INetBookmark aBookmark;

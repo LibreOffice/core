@@ -87,12 +87,12 @@ class ScIndexEnumeration final : public cppu::WeakImplHelper<
                                 css::lang::XServiceInfo >
 {
 private:
-    css::uno::Reference<css::container::XIndexAccess> xIndex;
+    cpo::uno::Reference<css::container::XIndexAccess> xIndex;
     OUString                sServiceName;
     sal_Int32               nPos;
 
 public:
-                            ScIndexEnumeration(css::uno::Reference<
+                            ScIndexEnumeration(cpo::uno::Reference<
                                 css::container::XIndexAccess> xInd, OUString aServiceName);
     virtual                 ~ScIndexEnumeration() override;
 
@@ -112,12 +112,12 @@ class SC_DLLPUBLIC ScNameToIndexAccess final : public cppu::WeakImplHelper<
                                 css::lang::XServiceInfo >
 {
 private:
-    css::uno::Reference<css::container::XNameAccess> xNameAccess;
+    cpo::uno::Reference<css::container::XNameAccess> xNameAccess;
     cpo::uno::Sequence<OUString> aNames;
 
 public:
                             ScNameToIndexAccess(
-                                css::uno::Reference< css::container::XNameAccess> xNameObj );
+                                cpo::uno::Reference< css::container::XNameAccess> xNameObj );
     virtual                 ~ScNameToIndexAccess() override;
 
                             // XIndexAccess
@@ -137,19 +137,19 @@ public:
 class SC_DLLPUBLIC ScUnoHelpFunctions
 {
 public:
-    static bool             GetBoolProperty( const css::uno::Reference< css::beans::XPropertySet>& xProp,
+    static bool             GetBoolProperty( const cpo::uno::Reference< css::beans::XPropertySet>& xProp,
                                             const OUString& rName, bool bDefault = false );
-    static sal_Int16        GetShortProperty( const css::uno::Reference< css::beans::XPropertySet>& xProp,
+    static sal_Int16        GetShortProperty( const cpo::uno::Reference< css::beans::XPropertySet>& xProp,
                                             const OUString& rName, sal_Int16 nDefault );
-    static sal_Int32        GetLongProperty( const css::uno::Reference< css::beans::XPropertySet>& xProp,
+    static sal_Int32        GetLongProperty( const cpo::uno::Reference< css::beans::XPropertySet>& xProp,
                                             const OUString& rName );
     template<typename EnumT>
-    static EnumT            GetEnumProperty( const css::uno::Reference< css::beans::XPropertySet>& xProp,
+    static EnumT            GetEnumProperty( const cpo::uno::Reference< css::beans::XPropertySet>& xProp,
                                             const OUString& rName, EnumT nDefault )
     { return static_cast<EnumT>(GetEnumPropertyImpl(xProp, rName, static_cast<sal_Int32>(nDefault))); }
 
     static OUString  GetStringProperty(
-        const css::uno::Reference<css::beans::XPropertySet>& xProp,
+        const cpo::uno::Reference<css::beans::XPropertySet>& xProp,
         const OUString& rName, const OUString& rDefault );
 
     static bool        GetBoolFromAny( const cpo::uno::Any& aAny );
@@ -158,15 +158,15 @@ public:
     static sal_Int32        GetEnumFromAny( const cpo::uno::Any& aAny );
 
     static void             SetOptionalPropertyValue(
-        const css::uno::Reference< css::beans::XPropertySet >& rPropSet,
+        const cpo::uno::Reference< css::beans::XPropertySet >& rPropSet,
         const char* pPropName, const cpo::uno::Any& rVal );
     static void             SetOptionalPropertyValue(
-        const css::uno::Reference< css::beans::XPropertySet >& rPropSet,
+        const cpo::uno::Reference< css::beans::XPropertySet >& rPropSet,
         const OUString& rPropName, const cpo::uno::Any& rVal );
 
     template<typename ValueType>
     static void             SetOptionalPropertyValue(
-        const css::uno::Reference< css::beans::XPropertySet >& rPropSet,
+        const cpo::uno::Reference< css::beans::XPropertySet >& rPropSet,
         const char* pPropName, const ValueType& rVal )
     {
         cpo::uno::Any any;
@@ -175,7 +175,7 @@ public:
     }
     template<typename ValueType>
     static void             SetOptionalPropertyValue(
-        const css::uno::Reference< css::beans::XPropertySet >& rPropSet,
+        const cpo::uno::Reference< css::beans::XPropertySet >& rPropSet,
         const OUString& rPropName, const ValueType& rVal )
     {
         cpo::uno::Any any;
@@ -184,7 +184,7 @@ public:
     }
 
 private:
-    static sal_Int32        GetEnumPropertyImpl( const css::uno::Reference< css::beans::XPropertySet>& xProp,
+    static sal_Int32        GetEnumPropertyImpl( const cpo::uno::Reference< css::beans::XPropertySet>& xProp,
                                             const OUString& rName, sal_Int32 nDefault );
 };
 

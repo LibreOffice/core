@@ -373,7 +373,7 @@ void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream,
 bool WriteJPEG( JPEGWriter* pJPEGWriter, void* pOutputStream,
                 tools::Long nWidth, tools::Long nHeight, basegfx::B2DSize const & rPPI, bool bGreys,
                 tools::Long nQualityPercent, tools::Long aChromaSubsampling,
-                css::uno::Reference<css::task::XStatusIndicator> const & status )
+                cpo::uno::Reference<css::task::XStatusIndicator> const & status )
 {
     jpeg_compress_struct        cinfo;
     ErrorManagerStruct          jerr;

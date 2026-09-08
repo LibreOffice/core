@@ -28,7 +28,7 @@
 
 #include "fpicker.hxx"
 
-using css::uno::Reference;
+using cpo::uno::Reference;
 using cpo::uno::Sequence;
 
 /*

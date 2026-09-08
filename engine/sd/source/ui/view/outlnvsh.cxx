@@ -90,7 +90,7 @@ using namespace sd;
 #include <sdslots.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::linguistic2;
 
 namespace sd {

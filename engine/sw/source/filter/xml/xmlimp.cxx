@@ -86,8 +86,8 @@
 #include <unordered_set>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
@@ -106,8 +106,8 @@ public:
 
     SwXMLBodyContext_Impl( SwXMLImport& rImport );
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
-            sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+            sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 };
 
 }
@@ -141,9 +141,9 @@ SwXMLBodyContext_Impl::SwXMLBodyContext_Impl( SwXMLImport& rImport ) :
     }
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SwXMLBodyContext_Impl::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SwXMLBodyContext_Impl::createFastChildContext(
     sal_Int32 /*nElement*/,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
     return GetSwImport().CreateBodyContentContext();
 }
@@ -164,8 +164,8 @@ protected: // #i69629#
 public:
     SwXMLDocContext_Impl( SwXMLImport& rImport, sal_Int32 nElement );
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
 }
@@ -222,8 +222,8 @@ public:
     SwXMLOfficeDocContext_Impl( SwXMLImport& rImport, sal_Int32 nElement,
                 const Reference< document::XDocumentProperties >& xDocProps);
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
 };
 
 }
@@ -1973,7 +1973,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestPDFExportFODT(SvStream &rStream)
 
     if (ret)
     {
-        css::uno::Reference<css::frame::XController2> xController(xModel->createDefaultViewController(xTargetFrame), uno::UNO_SET_THROW);
+        cpo::uno::Reference<css::frame::XController2> xController(xModel->createDefaultViewController(xTargetFrame), uno::UNO_SET_THROW);
         utl::ConnectFrameControllerModel(xTargetFrame, xController, xModel);
 
         utl::TempFileFast aTempFile;
@@ -1998,7 +1998,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestPDFExportFODT(SvStream &rStream)
         xPDFFilter->filter(aDescriptor);
     }
 
-    css::uno::Reference<css::util::XCloseable> xClose(xModel, css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::util::XCloseable> xClose(xModel, cpo::uno::UNO_QUERY);
     xClose->close(false);
 
     return ret;

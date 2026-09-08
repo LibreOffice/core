@@ -28,13 +28,13 @@ typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XCell > SwVbaCell_BASE
 class SwVbaCell : public SwVbaCell_BASE
 {
 private:
-    css::uno::Reference< css::text::XTextTable > mxTextTable;
+    cpo::uno::Reference< css::text::XTextTable > mxTextTable;
     sal_Int32 mnColumn;
     sal_Int32 mnRow;
 
 public:
     /// @throws cpo::uno::RuntimeException
-    SwVbaCell( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< cpo::uno::XComponentContext >& rContext, css::uno::Reference< css::text::XTextTable >  xTextTable, sal_Int32 nColumn, sal_Int32 nRow );
+    SwVbaCell( const cpo::uno::Reference< ooo::vba::XHelperInterface >& rParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& rContext, cpo::uno::Reference< css::text::XTextTable >  xTextTable, sal_Int32 nColumn, sal_Int32 nRow );
     virtual ~SwVbaCell() override;
 
     // Attributes

@@ -29,7 +29,7 @@
 namespace oox::vml {
 
 using namespace ::com::sun::star::io;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::oox::core;
 
 DrawingFragment::DrawingFragment( XmlFilterBase& rFilter, const OUString& rFragmentPath, Drawing& rDrawing ) :

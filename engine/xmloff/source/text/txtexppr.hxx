@@ -60,7 +60,7 @@ private:
     virtual void ContextFilter(
             bool bEnableFoFontFamily,
             ::std::vector< XMLPropertyState >& rProperties,
-            const css::uno::Reference< css::beans::XPropertySet >& rPropSet ) const override;
+            const cpo::uno::Reference< css::beans::XPropertySet >& rPropSet ) const override;
     const SvXMLExport& GetExport() const { return rExport; }
 
 public:

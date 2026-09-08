@@ -45,10 +45,10 @@
 #include "pyuno_impl.hxx"
 
 using cpo::uno::Sequence;
-using com::sun::star::uno::Reference;
+using cpo::uno::Reference;
 using cpo::uno::XInterface;
 using cpo::uno::Any;
-using com::sun::star::uno::UNO_QUERY;
+using cpo::uno::UNO_QUERY;
 using cpo::uno::Type;
 using cpo::uno::TypeClass;
 using cpo::uno::TypeDescription;
@@ -1519,7 +1519,7 @@ static PyObject* PyUNO_cmp( PyObject *self, PyObject *that, int op )
                      that, getClass(u"cpo.uno.XInterface"_ustr, runtime).get()))
         {
             // `self` could be an Adapter of `that`:
-            if (css::uno::Reference<css::lang::XUnoTunnel> tunnel;
+            if (cpo::uno::Reference<css::lang::XUnoTunnel> tunnel;
                 reinterpret_cast<PyUNO *>(self)->members->wrappedObject >>= tunnel)
             {
                 if (auto const adapter = comphelper::getFromUnoTunnel<Adapter>(tunnel)) {
@@ -1727,7 +1727,7 @@ PyRef PyUNO_new (
     {
         PyThreadDetach antiguard;
         xInvocation.set(
-            ssf->createInstanceWithArguments( Sequence<Any>( &targetInterface, 1 ) ), css::uno::UNO_QUERY_THROW );
+            ssf->createInstanceWithArguments( Sequence<Any>( &targetInterface, 1 ) ), cpo::uno::UNO_QUERY_THROW );
 
         auto that = comphelper::getFromUnoTunnel<Adapter>(
             xInvocation->getIntrospection()->queryAdapter(cppu::UnoType<XUnoTunnel>::get()));

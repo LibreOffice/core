@@ -27,15 +27,15 @@
 class SdXMLLayerSetContext : public SvXMLImportContext
 {
 private:
-    css::uno::Reference< css::container::XNameAccess > mxLayerManager;
+    cpo::uno::Reference< css::container::XNameAccess > mxLayerManager;
 
 public:
     SdXMLLayerSetContext( SvXMLImport& rImport );
     virtual ~SdXMLLayerSetContext() override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

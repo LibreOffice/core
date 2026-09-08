@@ -12,6 +12,7 @@
 #include <unotest/bootstrapfixturebase.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 class TestOrdinalSuffix : public test::BootstrapFixtureBase
 {

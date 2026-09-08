@@ -29,6 +29,7 @@
 
 using namespace fileaccess;
 using namespace com::sun::star;
+using namespace ::cpo;
 
 /******************************************************************************/
 /*                                                                            */

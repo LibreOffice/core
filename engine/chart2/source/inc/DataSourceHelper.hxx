@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <cpo/uno/Sequence.h>
 #include <rtl/ref.hxx>
 
@@ -38,20 +38,20 @@ class LabeledDataSequence;
 class DataSourceHelper
 {
 public:
-        static css::uno::Reference< css::chart2::data::XDataSequence >
+        static cpo::uno::Reference< css::chart2::data::XDataSequence >
             createCachedDataSequence();
 
-        static css::uno::Reference< css::chart2::data::XDataSequence >
+        static cpo::uno::Reference< css::chart2::data::XDataSequence >
             createCachedDataSequence( const OUString & rSingleText );
 
         static rtl::Reference< LabeledDataSequence >
             createLabeledDataSequence(
-                const css::uno::Reference< css::chart2::data::XDataSequence >& xValues ,
-                const css::uno::Reference< css::chart2::data::XDataSequence >& xLabels );
+                const cpo::uno::Reference< css::chart2::data::XDataSequence >& xValues ,
+                const cpo::uno::Reference< css::chart2::data::XDataSequence >& xLabels );
 
         static rtl::Reference< LabeledDataSequence >
             createLabeledDataSequence(
-                const css::uno::Reference< css::chart2::data::XDataSequence >& xValues );
+                const cpo::uno::Reference< css::chart2::data::XDataSequence >& xValues );
 
         static rtl::Reference< LabeledDataSequence >
             createLabeledDataSequence();
@@ -108,13 +108,13 @@ public:
             const rtl::Reference<::chart::ChartModel>& xChartDocument );
 
         static std::vector< OUString > getRangesFromLabeledDataSequence(
-            const css::uno::Reference< css::chart2::data::XLabeledDataSequence > & xLSeq );
+            const cpo::uno::Reference< css::chart2::data::XLabeledDataSequence > & xLSeq );
 
         static OUString getRangeFromValues(
-            const css::uno::Reference< css::chart2::data::XLabeledDataSequence > & xLSeq );
+            const cpo::uno::Reference< css::chart2::data::XLabeledDataSequence > & xLSeq );
 
         static std::vector< OUString > getRangesFromDataSource(
-            const css::uno::Reference< css::chart2::data::XDataSource > & xSource );
+            const cpo::uno::Reference< css::chart2::data::XDataSource > & xSource );
 };
 
 } //namespace chart

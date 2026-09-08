@@ -81,7 +81,7 @@ public:
       * @param rDataSupplier is a supplier for the resultset data.
       */
     UCBHELPER_DLLPUBLIC ResultSet(
-            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
             const cpo::uno::Sequence< css::beans::Property >& rProperties,
             const rtl::Reference< ResultSetDataSupplier >& rDataSupplier );
     /**
@@ -95,10 +95,10 @@ public:
       *        ...
       */
     UCBHELPER_DLLPUBLIC ResultSet(
-            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
             const cpo::uno::Sequence< css::beans::Property >& rProperties,
             const rtl::Reference< ResultSetDataSupplier >& rDataSupplier,
-            const css::uno::Reference< css::ucb::XCommandEnvironment >& rxEnv );
+            const cpo::uno::Reference< css::ucb::XCommandEnvironment >& rxEnv );
     virtual ~ResultSet() override;
 
     // XServiceInfo
@@ -110,20 +110,20 @@ public:
     virtual void
     dispose() override;
     virtual void
-    addEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener ) override;
+    addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& Listener ) override;
     virtual void
-    removeEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener ) override;
+    removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& Listener ) override;
 
     // XContentAccess
     virtual OUString
     queryContentIdentifierString() override;
-    virtual css::uno::Reference< css::ucb::XContentIdentifier >
+    virtual cpo::uno::Reference< css::ucb::XContentIdentifier >
     queryContentIdentifier() override;
-    virtual css::uno::Reference< css::ucb::XContent >
+    virtual cpo::uno::Reference< css::ucb::XContent >
     queryContent() override;
 
     // XResultSetMetaDataSupplier
-    virtual css::uno::Reference< css::sdbc::XResultSetMetaData >
+    virtual cpo::uno::Reference< css::sdbc::XResultSetMetaData >
     getMetaData() override;
 
     // XResultSet
@@ -161,7 +161,7 @@ public:
     rowInserted() override;
     virtual bool
     rowDeleted() override;
-    virtual css::uno::Reference< cpo::uno::XInterface >
+    virtual cpo::uno::Reference< cpo::uno::XInterface >
     getStatement() override;
 
     // XRow
@@ -191,23 +191,23 @@ public:
     getTime( sal_Int32 columnIndex ) override;
     virtual css::util::DateTime
     getTimestamp( sal_Int32 columnIndex ) override;
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
                 css::io::XInputStream >
     getBinaryStream( sal_Int32 columnIndex ) override;
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
                 css::io::XInputStream >
     getCharacterStream( sal_Int32 columnIndex ) override;
     virtual cpo::uno::Any
     getObject( sal_Int32 columnIndex,
-               const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
-    virtual css::uno::Reference< css::sdbc::XRef >
+               const cpo::uno::Reference< css::container::XNameAccess >& typeMap ) override;
+    virtual cpo::uno::Reference< css::sdbc::XRef >
     getRef( sal_Int32 columnIndex ) override;
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
                 css::sdbc::XBlob >
     getBlob( sal_Int32 columnIndex ) override;
-    virtual css::uno::Reference< css::sdbc::XClob >
+    virtual cpo::uno::Reference< css::sdbc::XClob >
     getClob( sal_Int32 columnIndex ) override;
-    virtual css::uno::Reference< css::sdbc::XArray >
+    virtual cpo::uno::Reference< css::sdbc::XArray >
     getArray( sal_Int32 columnIndex ) override;
 
     // XCloseable
@@ -215,7 +215,7 @@ public:
     close() override;
 
     // XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo >
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo >
     getPropertySetInfo() override;
     virtual void
     setPropertyValue( const OUString& aPropertyName,
@@ -224,16 +224,16 @@ public:
     getPropertyValue( const OUString& PropertyName ) override;
     virtual void
     addPropertyChangeListener( const OUString& aPropertyName,
-                               const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
+                               const cpo::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
     virtual void
     removePropertyChangeListener( const OUString& aPropertyName,
-                                  const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
+                                  const cpo::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
     virtual void
     addVetoableChangeListener( const OUString& PropertyName,
-                               const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+                               const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
     virtual void
     removeVetoableChangeListener( const OUString& PropertyName,
-                                  const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+                                  const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
 
     // Non-interface methods.
@@ -278,7 +278,7 @@ public:
       *
       * @return an environment or an empty reference.
       */
-    UCBHELPER_DLLPUBLIC const css::uno::Reference< css::ucb::XCommandEnvironment >&
+    UCBHELPER_DLLPUBLIC const cpo::uno::Reference< css::ucb::XCommandEnvironment >&
     getEnvironment() const;
 };
 
@@ -323,7 +323,7 @@ public:
      *               of the supplier; must be non-negative.
      * @return the content's identifier.
      */
-    virtual css::uno::Reference< css::ucb::XContentIdentifier >
+    virtual cpo::uno::Reference< css::ucb::XContentIdentifier >
     queryContentIdentifier( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nIndex ) = 0;
 
     /**
@@ -333,7 +333,7 @@ public:
      *               of the supplier; must be non-negative.
      * @return the content.
      */
-    virtual css::uno::Reference< css::ucb::XContent >
+    virtual cpo::uno::Reference< css::ucb::XContent >
     queryContent( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nIndex ) = 0;
 
     /**
@@ -391,7 +391,7 @@ public:
      *               of the supplier.
      * @return the object for accessing the property values.
      */
-    virtual css::uno::Reference< css::sdbc::XRow >
+    virtual cpo::uno::Reference< css::sdbc::XRow >
     queryPropertyValues( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nIndex  ) = 0;
 
     /**

@@ -60,15 +60,15 @@ namespace pcr
         mutable ::osl::Mutex    m_aMutex;
 
         /// the service factory for creating services
-        css::uno::Reference< cpo::uno::XComponentContext >        m_xContext;
+        cpo::uno::Reference< cpo::uno::XComponentContext >        m_xContext;
         /// need this to keep alive as long as m_xComponent lives
-        css::uno::Reference< css::beans::XIntrospectionAccess >   m_xComponentIntrospectionAccess;
+        cpo::uno::Reference< css::beans::XIntrospectionAccess >   m_xComponentIntrospectionAccess;
         /// the properties of the object we're handling
-        css::uno::Reference< css::beans::XPropertySet >           m_xComponent;
+        cpo::uno::Reference< css::beans::XPropertySet >           m_xComponent;
         /// cached interface of ->m_xComponent
-        css::uno::Reference< css::beans::XPropertyState >         m_xPropertyState;
+        cpo::uno::Reference< css::beans::XPropertyState >         m_xPropertyState;
         /// type converter, needed on various occasions
-        css::uno::Reference< css::script::XTypeConverter >        m_xTypeConverter;
+        cpo::uno::Reference< css::script::XTypeConverter >        m_xTypeConverter;
         /// cache of our supported properties
         PropertyMap                                                                         m_aProperties;
         /// property change listeners
@@ -81,31 +81,31 @@ namespace pcr
 
     public:
         explicit GenericPropertyHandler(
-            const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxContext
         );
 
         virtual ~GenericPropertyHandler() override;
 
     private:
         // XPropertyHandler overridables
-        virtual void                                                inspect( const css::uno::Reference< cpo::uno::XInterface >& _rxIntrospectee ) override;
+        virtual void                                                inspect( const cpo::uno::Reference< cpo::uno::XInterface >& _rxIntrospectee ) override;
         virtual cpo::uno::Any                                       getPropertyValue( const OUString& _rPropertyName ) override;
         virtual void                                                setPropertyValue( const OUString& _rPropertyName, const cpo::uno::Any& _rValue ) override;
         virtual cpo::uno::Any                                       convertToPropertyValue( const OUString& _rPropertyName, const cpo::uno::Any& _rControlValue ) override;
         virtual cpo::uno::Any                                       convertToControlValue( const OUString& _rPropertyName, const cpo::uno::Any& _rPropertyValue, const cpo::uno::Type& _rControlValueType ) override;
         virtual css::beans::PropertyState                           getPropertyState( const OUString& _rPropertyName ) override;
-        virtual void                                                addPropertyChangeListener( const css::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener ) override;
-        virtual void                                                removePropertyChangeListener( const css::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener ) override;
+        virtual void                                                addPropertyChangeListener( const cpo::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener ) override;
+        virtual void                                                removePropertyChangeListener( const cpo::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener ) override;
         virtual cpo::uno::Sequence< css::beans::Property >
                                                                     getSupportedProperties() override;
         virtual cpo::uno::Sequence< OUString >
                                                                     getSupersededProperties() override;
         virtual cpo::uno::Sequence< OUString >                      getActuatingProperties() override;
-        virtual css::inspection::LineDescriptor                     describePropertyLine( const OUString& _rPropertyName, const css::uno::Reference< css::inspection::XPropertyControlFactory >& _rxControlFactory ) override;
+        virtual css::inspection::LineDescriptor                     describePropertyLine( const OUString& _rPropertyName, const cpo::uno::Reference< css::inspection::XPropertyControlFactory >& _rxControlFactory ) override;
         virtual bool                                            isComposable( const OUString& _rPropertyName ) override;
         virtual css::inspection::InteractiveSelectionResult
-                                                                    onInteractivePropertySelection( const OUString& _rPropertyName, bool _bPrimary, cpo::uno::Any& _rData, const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI ) override;
-        virtual void                                                actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const cpo::uno::Any& _rNewValue, const cpo::uno::Any& _rOldValue, const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI, bool _bFirstTimeInit ) override;
+                                                                    onInteractivePropertySelection( const OUString& _rPropertyName, bool _bPrimary, cpo::uno::Any& _rData, const cpo::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI ) override;
+        virtual void                                                actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const cpo::uno::Any& _rNewValue, const cpo::uno::Any& _rOldValue, const cpo::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI, bool _bFirstTimeInit ) override;
         virtual bool                                            suspend( bool _bSuspend ) override;
 
         // XComponent

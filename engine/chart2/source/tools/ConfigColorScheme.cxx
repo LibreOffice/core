@@ -22,8 +22,9 @@
 #include <unotools/configitem.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::cpo::uno::Sequence;
 
 namespace

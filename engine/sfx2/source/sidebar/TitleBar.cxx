@@ -67,7 +67,7 @@ bool TitleBar::GetVisible() const
     return mxTitlebar->get_visible();
 }
 
-void TitleBar::SetIcon(const css::uno::Reference<css::graphic::XGraphic>& rIcon)
+void TitleBar::SetIcon(const cpo::uno::Reference<css::graphic::XGraphic>& rIcon)
 {
     mxAddonImage->set_image(rIcon);
     mxAddonImage->set_visible(rIcon.is());

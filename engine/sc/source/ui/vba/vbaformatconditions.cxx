@@ -31,6 +31,7 @@
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 void SAL_CALL
 ScVbaFormatConditions::Delete(  )
@@ -120,7 +121,7 @@ public:
                 cpo::uno::Any a(cppu::getCaughtException());
                 throw css::lang::WrappedTargetException(
                     "wrapped Exception " + e.Message,
-                    css::uno::Reference<cpo::uno::XInterface>(), a);
+                    cpo::uno::Reference<cpo::uno::XInterface>(), a);
             }
             throw container::NoSuchElementException();
         }
@@ -135,7 +136,7 @@ ScVbaFormatConditions::Add( ::sal_Int32 _nType, const cpo::uno::Any& _aOperator,
 }
 
 rtl::Reference< ScVbaFormatCondition >
-ScVbaFormatConditions::Add( ::sal_Int32 _nType, const cpo::uno::Any& _aOperator, const cpo::uno::Any& _aFormula1, const cpo::uno::Any& _aFormula2, const css::uno::Reference< excel::XStyle >& _xStyle  )
+ScVbaFormatConditions::Add( ::sal_Int32 _nType, const cpo::uno::Any& _aOperator, const cpo::uno::Any& _aFormula1, const cpo::uno::Any& _aFormula2, const cpo::uno::Reference< excel::XStyle >& _xStyle  )
 {
     // #TODO
     // #FIXME

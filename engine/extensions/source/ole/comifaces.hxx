@@ -38,8 +38,8 @@ protected:
 MIDL_INTERFACE("7B5C3410-66FA-11d4-832A-005004526AB4")
 IUnoObjectWrapper: public IUnknown
 {
-    STDMETHOD( getWrapperXInterface)( css::uno::Reference<cpo::uno::XInterface>* pInt)=0;
-    STDMETHOD( getOriginalUnoObject)( css::uno::Reference<cpo::uno::XInterface>* pInt)=0;
+    STDMETHOD( getWrapperXInterface)( cpo::uno::Reference<cpo::uno::XInterface>* pInt)=0;
+    STDMETHOD( getOriginalUnoObject)( cpo::uno::Reference<cpo::uno::XInterface>* pInt)=0;
     STDMETHOD( getOriginalUnoStruct)( cpo::uno::Any * pStruct)=0;
 
 protected:

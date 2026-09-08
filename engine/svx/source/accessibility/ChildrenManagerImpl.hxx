@@ -96,7 +96,7 @@ public:
             listeners to be informed.
     */
     ChildrenManagerImpl(rtl::Reference<comphelper::OAccessible> pParent,
-                        css::uno::Reference<css::drawing::XShapes> xShapeList,
+                        cpo::uno::Reference<css::drawing::XShapes> xShapeList,
                         const AccessibleShapeTreeInfo& rShapeTreeInfo,
                         AccessibleContextBase& rContext);
 
@@ -118,7 +118,7 @@ public:
 
     /// @throws cpo::uno::RuntimeException
     /// @throws css::lang::IndexOutOfBoundsException
-    const css::uno::Reference<css::drawing::XShape>& GetChildShape(sal_Int64 nIndex);
+    const cpo::uno::Reference<css::drawing::XShape>& GetChildShape(sal_Int64 nIndex);
     /** Return the requested accessible child or throw and
         IndexOutOfBoundsException if the given index is invalid.
         @param nIndex
@@ -170,7 +170,7 @@ public:
         @param xShapeList
             The list of UNO shapes that replaces the old list.
     */
-    void SetShapeList (const css::uno::Reference<css::drawing::XShapes>& xShapeList);
+    void SetShapeList (const cpo::uno::Reference<css::drawing::XShapes>& xShapeList);
 
     /** Add an accessible shape.  This does not modify the list of UNO shapes
         or the list of visible shapes.  Accessible shapes are, at the
@@ -252,7 +252,7 @@ public:
     */
     virtual bool ReplaceChild (
         AccessibleShape* pCurrentChild,
-        const css::uno::Reference< css::drawing::XShape >& _rxShape,
+        const cpo::uno::Reference< css::drawing::XShape >& _rxShape,
         const tools::Long _nIndex,
         const AccessibleShapeTreeInfo& _rShapeTreeInfo
     ) override;
@@ -261,7 +261,7 @@ public:
     virtual AccessibleControlShape* GetAccControlShapeFromModel
         (css::beans::XPropertySet* pSet) override;
     virtual AccessibleShape*
-        GetAccessibleCaption (const css::uno::Reference<css::drawing::XShape>& xShape) override;
+        GetAccessibleCaption (const cpo::uno::Reference<css::drawing::XShape>& xShape) override;
 
 private:
     /** This list holds the descriptors of all currently visible shapes and
@@ -282,7 +282,7 @@ private:
         into the list of visible children
         <member>maVisibleChildren</member>.
     */
-    css::uno::Reference<css::drawing::XShapes> mxShapeList;
+    cpo::uno::Reference<css::drawing::XShapes> mxShapeList;
 
     /** This list of additional accessible shapes that can or shall not be
         created by the shape factory.
@@ -382,13 +382,13 @@ private:
         accordingly.  Use this method instead of <member>Update()</member>
         when only a single shape has been added.
     */
-    void AddShape (const css::uno::Reference<css::drawing::XShape>& xShape);
+    void AddShape (const cpo::uno::Reference<css::drawing::XShape>& xShape);
 
     /** Remove a single shape.  Update all relevant data structures
         accordingly.  Use this method instead of <member>Update()</member>
         when only a single shape has been removed.
     */
-    void RemoveShape (const css::uno::Reference<css::drawing::XShape>& xShape);
+    void RemoveShape (const cpo::uno::Reference<css::drawing::XShape>& xShape);
 
     /** Add the children manager as dispose listener at the given shape so
         that the associated accessible object can be disposed when the shape
@@ -396,13 +396,13 @@ private:
         @param xShape
             Register at this shape as dispose listener.
     */
-    void RegisterAsDisposeListener (const css::uno::Reference<css::drawing::XShape>& xShape);
+    void RegisterAsDisposeListener (const cpo::uno::Reference<css::drawing::XShape>& xShape);
 
     /** Remove the children manager as dispose listener at the given shape
         @param xShape
             Unregister at this shape as dispose listener.
     */
-    void UnregisterAsDisposeListener (const css::uno::Reference<css::drawing::XShape>& xShape);
+    void UnregisterAsDisposeListener (const cpo::uno::Reference<css::drawing::XShape>& xShape);
 };
 
 
@@ -421,7 +421,7 @@ class ChildDescriptor
 public:
     /** Reference to a (partially) visible shape.
     */
-    css::uno::Reference<css::drawing::XShape> mxShape;
+    cpo::uno::Reference<css::drawing::XShape> mxShape;
 
     /** The corresponding accessible object.  This reference is initially
         empty and only replaced by a reference to a new object when that is
@@ -455,7 +455,7 @@ public:
     /** Create a new descriptor for the specified shape with empty reference
         to accessible object.
     */
-    explicit ChildDescriptor (const css::uno::Reference<css::drawing::XShape>& xShape);
+    explicit ChildDescriptor (const cpo::uno::Reference<css::drawing::XShape>& xShape);
 
     /** Create a new descriptor for the specified shape with empty reference
         to the original shape.

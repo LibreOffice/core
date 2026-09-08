@@ -33,7 +33,7 @@
 #include "xmlfiltersettingsdialog.hxx"
 
 using namespace ::cppu;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
@@ -77,15 +77,15 @@ protected:
     virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
 private:
-    css::uno::Reference<css::awt::XWindow>   mxParent;  /// parent window
-    css::uno::Reference< XComponentContext > mxContext;
+    cpo::uno::Reference<css::awt::XWindow>   mxParent;  /// parent window
+    cpo::uno::Reference< XComponentContext > mxContext;
 
     std::shared_ptr<XMLFilterSettingsDialog> mxDialog;
 };
 
 }
 
-XMLFilterDialogComponent::XMLFilterDialogComponent(const css::uno::Reference< XComponentContext >& rxContext)
+XMLFilterDialogComponent::XMLFilterDialogComponent(const cpo::uno::Reference< XComponentContext >& rxContext)
     : mxContext(rxContext)
 {
     Reference< XDesktop2 > xDesktop = Desktop::create( rxContext );

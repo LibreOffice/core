@@ -54,8 +54,8 @@ public:
 
     virtual ~ScXMLDataPilotTablesContext() override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
 class ScXMLDataPilotTableContext : public ScXMLImportContext
@@ -122,8 +122,8 @@ public:
 
     virtual ~ScXMLDataPilotTableContext() override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
 
@@ -224,8 +224,8 @@ public:
 
     virtual ~ScXMLSourceCellRangeContext() override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
 struct ScXMLDataPilotGroup
@@ -267,8 +267,8 @@ public:
 
     virtual ~ScXMLDataPilotFieldContext() override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
 
@@ -320,8 +320,8 @@ public:
 
     virtual ~ScXMLDataPilotLevelContext() override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
 class ScXMLDataPilotDisplayInfoContext : public ScXMLImportContext
@@ -370,8 +370,8 @@ public:
 
     virtual ~ScXMLDataPilotSubTotalsContext() override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
     void AddFunction(ScGeneralFunction nFunction);
@@ -400,8 +400,8 @@ public:
 
     virtual ~ScXMLDataPilotMembersContext() override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
 class ScXMLDataPilotMemberContext : public ScXMLImportContext
@@ -437,8 +437,8 @@ public:
 
     virtual ~ScXMLDataPilotGroupsContext() override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
 class ScXMLDataPilotGroupContext : public ScXMLImportContext
@@ -456,8 +456,8 @@ public:
 
     virtual ~ScXMLDataPilotGroupContext() override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
 

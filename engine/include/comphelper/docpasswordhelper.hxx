@@ -30,7 +30,7 @@ namespace com::sun::star::task { class XInteractionHandler; }
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::beans { struct NamedValue; }
 namespace cpo::uno { template <class E> class Sequence; }
-namespace com::sun::star::uno { template <class interface_type> class Reference; }
+namespace cpo::uno { template <class interface_type> class Reference; }
 namespace comphelper { enum class DocPasswordRequestType; }
 
 namespace comphelper {
@@ -429,7 +429,7 @@ public:
                             IDocPasswordVerifier& rVerifier,
                             const cpo::uno::Sequence< css::beans::NamedValue >& rMediaEncData,
                             const OUString& rMediaPassword,
-                            const css::uno::Reference< css::task::XInteractionHandler >& rxInteractHandler,
+                            const cpo::uno::Reference< css::task::XInteractionHandler >& rxInteractHandler,
                             const OUString& rDocumentUrl,
                             DocPasswordRequestType eRequestType,
                             const ::std::vector< OUString >* pDefaultPasswords = nullptr,

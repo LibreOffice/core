@@ -19,6 +19,7 @@
 #include <com/sun/star/text/XTextFrame.hpp>
 
 using namespace css;
+using namespace ::cpo;
 
 namespace
 {

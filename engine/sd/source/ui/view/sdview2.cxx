@@ -73,6 +73,7 @@
 namespace sd {
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace {
 
@@ -90,7 +91,7 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
 
 }
 
-css::uno::Reference< css::datatransfer::XTransferable > View::CreateClipboardDataObject()
+cpo::uno::Reference< css::datatransfer::XTransferable > View::CreateClipboardDataObject()
 {
     // since SdTransferable::CopyToClipboard is called, this
     // dynamically created object is destroyed automatically
@@ -157,7 +158,7 @@ css::uno::Reference< css::datatransfer::XTransferable > View::CreateClipboardDat
     return pTransferable;
 }
 
-css::uno::Reference< css::datatransfer::XTransferable > View::CreateDragDataObject( View* pWorkView, vcl::Window& rWindow, const Point& rDragPos )
+cpo::uno::Reference< css::datatransfer::XTransferable > View::CreateDragDataObject( View* pWorkView, vcl::Window& rWindow, const Point& rDragPos )
 {
     rtl::Reference<SdTransferable> pTransferable = new SdTransferable( &mrDoc, pWorkView, false );
 
@@ -206,7 +207,7 @@ css::uno::Reference< css::datatransfer::XTransferable > View::CreateDragDataObje
     return pTransferable;
 }
 
-css::uno::Reference< css::datatransfer::XTransferable > View::CreateSelectionDataObject( View* pWorkView )
+cpo::uno::Reference< css::datatransfer::XTransferable > View::CreateSelectionDataObject( View* pWorkView )
 {
     rtl::Reference<SdTransferable> pTransferable = new SdTransferable( &mrDoc, pWorkView, true );
     std::unique_ptr<TransferableObjectDescriptor> pObjDesc(new TransferableObjectDescriptor);

@@ -36,6 +36,7 @@
 #include <scresid.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 size_t ScSolverCellHash::operator()( const css::table::CellAddress& rAddress ) const
 {

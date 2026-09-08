@@ -46,22 +46,22 @@ public:
     static rtl::Reference<SwXLineBreak> CreateXLineBreak(SwFormatLineBreak* pLineBreakFormat);
 
     // XPropertySet
-    css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
+    cpo::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
     void SAL_CALL setPropertyValue(const OUString& rPropertyName,
                                    const cpo::uno::Any& rValue) override;
     cpo::uno::Any SAL_CALL getPropertyValue(const OUString& rPropertyName) override;
     void SAL_CALL addPropertyChangeListener(
         const OUString& rPropertyName,
-        const css::uno::Reference<css::beans::XPropertyChangeListener>& xListener) override;
+        const cpo::uno::Reference<css::beans::XPropertyChangeListener>& xListener) override;
     void SAL_CALL removePropertyChangeListener(
         const OUString& rPropertyName,
-        const css::uno::Reference<css::beans::XPropertyChangeListener>& xListener) override;
+        const cpo::uno::Reference<css::beans::XPropertyChangeListener>& xListener) override;
     void SAL_CALL addVetoableChangeListener(
         const OUString& rPropertyName,
-        const css::uno::Reference<css::beans::XVetoableChangeListener>& xListener) override;
+        const cpo::uno::Reference<css::beans::XVetoableChangeListener>& xListener) override;
     void SAL_CALL removeVetoableChangeListener(
         const OUString& rPropertyName,
-        const css::uno::Reference<css::beans::XVetoableChangeListener>& xListener) override;
+        const cpo::uno::Reference<css::beans::XVetoableChangeListener>& xListener) override;
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override;
@@ -69,15 +69,15 @@ public:
     cpo::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XTextContent
-    void SAL_CALL attach(const css::uno::Reference<css::text::XTextRange>& xTextRange) override;
-    css::uno::Reference<css::text::XTextRange> SAL_CALL getAnchor() override;
+    void SAL_CALL attach(const cpo::uno::Reference<css::text::XTextRange>& xTextRange) override;
+    cpo::uno::Reference<css::text::XTextRange> SAL_CALL getAnchor() override;
 
     // XComponent, via XTextContent
     void SAL_CALL dispose() override;
     void SAL_CALL
-    addEventListener(const css::uno::Reference<css::lang::XEventListener>& xListener) override;
+    addEventListener(const cpo::uno::Reference<css::lang::XEventListener>& xListener) override;
     void SAL_CALL
-    removeEventListener(const css::uno::Reference<css::lang::XEventListener>& xListener) override;
+    removeEventListener(const cpo::uno::Reference<css::lang::XEventListener>& xListener) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

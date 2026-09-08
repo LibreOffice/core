@@ -149,34 +149,34 @@ public:
 
                                 // XDateFunctions
     virtual sal_Int32 SAL_CALL  getDiffWeeks(
-                                    const css::uno::Reference< css::beans::XPropertySet >& xOptions,
+                                    const cpo::uno::Reference< css::beans::XPropertySet >& xOptions,
                                     sal_Int32 nEndDate, sal_Int32 nStartDate,
                                     sal_Int32 nMode ) override;
 
     virtual sal_Int32 SAL_CALL  getDiffMonths(
-                                    const css::uno::Reference< css::beans::XPropertySet >& xOptions,
+                                    const cpo::uno::Reference< css::beans::XPropertySet >& xOptions,
                                     sal_Int32 nEndDate, sal_Int32 nStartDate,
                                     sal_Int32 nMode ) override;
 
     virtual sal_Int32 SAL_CALL  getDiffYears(
-                                    const css::uno::Reference< css::beans::XPropertySet >& xOptions,
+                                    const cpo::uno::Reference< css::beans::XPropertySet >& xOptions,
                                     sal_Int32 nEndDate, sal_Int32 nStartDate,
                                     sal_Int32 nMode ) override;
 
     virtual sal_Int32 SAL_CALL  getIsLeapYear(
-                                    const css::uno::Reference< css::beans::XPropertySet >& xOptions,
+                                    const cpo::uno::Reference< css::beans::XPropertySet >& xOptions,
                                     sal_Int32 nDate ) override;
 
     virtual sal_Int32 SAL_CALL  getDaysInMonth(
-                                    const css::uno::Reference< css::beans::XPropertySet >& xOptions,
+                                    const cpo::uno::Reference< css::beans::XPropertySet >& xOptions,
                                     sal_Int32 nDate ) override;
 
     virtual sal_Int32 SAL_CALL  getDaysInYear(
-                                    const css::uno::Reference< css::beans::XPropertySet >& xOptions,
+                                    const cpo::uno::Reference< css::beans::XPropertySet >& xOptions,
                                     sal_Int32 nDate ) override;
 
     virtual sal_Int32 SAL_CALL  getWeeksInYear(
-                                    const css::uno::Reference< css::beans::XPropertySet >& xOptions,
+                                    const cpo::uno::Reference< css::beans::XPropertySet >& xOptions,
                                     sal_Int32 nDate ) override;
 
                                 // XMiscFunctions

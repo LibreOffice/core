@@ -29,6 +29,7 @@
 
 using namespace fileaccess;
 using namespace com::sun::star;
+using namespace ::cpo;
 
 XInputStream_impl::XInputStream_impl( const OUString& aUncPath, bool bLock )
     : m_aFile( aUncPath ),

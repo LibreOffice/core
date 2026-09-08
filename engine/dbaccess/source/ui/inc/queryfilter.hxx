@@ -54,10 +54,10 @@ namespace dbaui
     private:
         std::vector<OUString>  m_aSTR_COMPARE_OPERATORS;
 
-        css::uno::Reference< css::sdb::XSingleSelectQueryComposer>    m_xQueryComposer;
-        css::uno::Reference< css::container::XNameAccess>             m_xColumns;
-        css::uno::Reference< css::sdbc::XConnection>                  m_xConnection;
-        css::uno::Reference< css::sdbc::XDatabaseMetaData>            m_xMetaData;
+        cpo::uno::Reference< css::sdb::XSingleSelectQueryComposer>    m_xQueryComposer;
+        cpo::uno::Reference< css::container::XNameAccess>             m_xColumns;
+        cpo::uno::Reference< css::sdbc::XConnection>                  m_xConnection;
+        cpo::uno::Reference< css::sdbc::XDatabaseMetaData>            m_xMetaData;
 
         ::dbtools::OPredicateInputController    m_aPredicateInput;
 
@@ -86,16 +86,16 @@ namespace dbaui
         bool            getCondition(const weld::ComboBox& _rField, const weld::ComboBox& _rComp, const weld::Entry& _rValue, css::beans::PropertyValue& _rFilter) const;
         void            fillLines(int &i, const cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > >& _aValues);
 
-        css::uno::Reference< css::beans::XPropertySet > getMatchingColumn( const weld::Entry& _rValueInput ) const;
-        css::uno::Reference< css::beans::XPropertySet > getColumn( const OUString& _rFieldName ) const;
-        css::uno::Reference< css::beans::XPropertySet > getQueryColumn( const OUString& _rFieldName ) const;
+        cpo::uno::Reference< css::beans::XPropertySet > getMatchingColumn( const weld::Entry& _rValueInput ) const;
+        cpo::uno::Reference< css::beans::XPropertySet > getColumn( const OUString& _rFieldName ) const;
+        cpo::uno::Reference< css::beans::XPropertySet > getQueryColumn( const OUString& _rFieldName ) const;
 
     public:
         DlgFilterCrit(weld::Window * pParent,
-                      const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
-                      const css::uno::Reference< css::sdbc::XConnection>& _rxConnection,
-                      const css::uno::Reference< css::sdb::XSingleSelectQueryComposer>& _rxComposer,
-                      const css::uno::Reference< css::container::XNameAccess>& _rxCols);
+                      const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+                      const cpo::uno::Reference< css::sdbc::XConnection>& _rxConnection,
+                      const cpo::uno::Reference< css::sdb::XSingleSelectQueryComposer>& _rxComposer,
+                      const cpo::uno::Reference< css::container::XNameAccess>& _rxCols);
         virtual ~DlgFilterCrit() override;
 
         void            BuildWherePart();

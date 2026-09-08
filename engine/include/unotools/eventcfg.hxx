@@ -67,7 +67,7 @@ class UNOTOOLS_DLLPUBLIC GlobalEventConfig final :
         GlobalEventConfig( );
         virtual ~GlobalEventConfig( ) override;
 
-        css::uno::Reference< css::container::XNameReplace > getEvents(  ) override;
+        cpo::uno::Reference< css::container::XNameReplace > getEvents(  ) override;
         void replaceByName( const OUString& aName, const cpo::uno::Any& aElement ) override;
         cpo::uno::Any getByName( const OUString& aName ) override;
         cpo::uno::Sequence< OUString > getElementNames(  ) override;

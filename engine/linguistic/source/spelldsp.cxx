@@ -19,7 +19,7 @@
 
 #include <sal/config.h>
 
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <com/sun/star/linguistic2/XLinguServiceEventBroadcaster.hpp>
 #include <com/sun/star/linguistic2/SpellFailure.hpp>
 #include <cpo/uno/XComponentContext.hpp>
@@ -42,8 +42,8 @@ using namespace osl;
 using namespace com::sun::star;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
-using namespace com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
@@ -235,7 +235,7 @@ static Reference< XDictionaryEntry > lcl_GetRulingDictionaryEntry(
     const OUString &rWord,
     LanguageType nLanguage,
     const Reference< XSearchableDictionaryList >& xDList,
-    std::map<LanguageType, std::vector<css::uno::Reference<css::linguistic2::XDictionary>>>& rDictionaryMap )
+    std::map<LanguageType, std::vector<cpo::uno::Reference<css::linguistic2::XDictionary>>>& rDictionaryMap )
 {
     Reference< XDictionaryEntry > xRes;
 

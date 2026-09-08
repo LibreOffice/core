@@ -81,6 +81,7 @@
 #include <vector>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 #if HAVE_FEATURE_DBCONNECTIVITY
 

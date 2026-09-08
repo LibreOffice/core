@@ -53,13 +53,13 @@ COMPHELPER_DLLPUBLIC void ModifyPropertyAttributes(cpo::uno::Sequence<css::beans
 
 /** check if the given set has the given property.
 */
-COMPHELPER_DLLPUBLIC bool hasProperty(const OUString& _rName, const css::uno::Reference<css::beans::XPropertySet>& _rxSet);
+COMPHELPER_DLLPUBLIC bool hasProperty(const OUString& _rName, const cpo::uno::Reference<css::beans::XPropertySet>& _rxSet);
 
 /** copy properties between property sets, in compliance with the property
     attributes of the target object
 */
-COMPHELPER_DLLPUBLIC void copyProperties(const css::uno::Reference<css::beans::XPropertySet>& _rxSource,
-                    const css::uno::Reference<css::beans::XPropertySet>& _rxDest);
+COMPHELPER_DLLPUBLIC void copyProperties(const cpo::uno::Reference<css::beans::XPropertySet>& _rxSource,
+                    const cpo::uno::Reference<css::beans::XPropertySet>& _rxDest);
 
 /** helper for implementing ::cppu::OPropertySetHelper::convertFastPropertyValue
     @param          _rConvertedValue    the conversion result (if successful)

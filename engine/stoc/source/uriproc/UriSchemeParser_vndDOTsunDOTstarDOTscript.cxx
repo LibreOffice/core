@@ -21,7 +21,7 @@
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uri/XUriSchemeParser.hpp>
 #include <com/sun/star/uri/XVndSunStarScriptUrlReference.hpp>
@@ -333,7 +333,7 @@ public:
     virtual cpo::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() override;
 
-    virtual css::uno::Reference< css::uri::XUriReference > SAL_CALL
+    virtual cpo::uno::Reference< css::uri::XUriReference > SAL_CALL
     parse(
         OUString const & scheme, OUString const & schemeSpecificPart) override;
 
@@ -356,7 +356,7 @@ cpo::uno::Sequence< OUString > Parser::getSupportedServiceNames()
     return { u"com.sun.star.uri.UriSchemeParser_vndDOTsunDOTstarDOTscript"_ustr };
 }
 
-css::uno::Reference< css::uri::XUriReference >
+cpo::uno::Reference< css::uri::XUriReference >
 Parser::parse(
     OUString const & scheme, OUString const & schemeSpecificPart)
 {

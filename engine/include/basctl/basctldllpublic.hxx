@@ -28,7 +28,7 @@ namespace com::sun::star::script
 {
 class XLibraryContainer;
 }
-namespace com::sun::star::uno
+namespace cpo::uno
 {
 template <class interface_type> class Reference;
 }
@@ -52,7 +52,7 @@ BASCTL_DLLPUBLIC bool QueryDelModule(std::u16string_view rName, weld::Widget* pP
 BASCTL_DLLPUBLIC bool QueryDelLib(std::u16string_view rName, bool bRef, weld::Widget* pParent);
 BASCTL_DLLPUBLIC bool
 QueryPassword(weld::Widget* pDialogParent,
-              const css::uno::Reference<css::script::XLibraryContainer>& xLibContainer,
+              const cpo::uno::Reference<css::script::XLibraryContainer>& xLibContainer,
               const OUString& rLibName, OUString& rPassword, bool bRepeat = false,
               bool bNewTitle = false);
 

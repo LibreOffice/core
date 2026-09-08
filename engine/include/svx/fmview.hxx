@@ -98,8 +98,8 @@ public:
 
     /** returns the form controller for a given form and a given device
     */
-    SVX_DLLPRIVATE css::uno::Reference< css::form::runtime::XFormController >
-            GetFormController( const css::uno::Reference< css::form::XForm >& _rxForm, const OutputDevice& _rDevice ) const;
+    SVX_DLLPRIVATE cpo::uno::Reference< css::form::runtime::XFormController >
+            GetFormController( const cpo::uno::Reference< css::form::XForm >& _rxForm, const OutputDevice& _rDevice ) const;
 
     // SdrView
     bool KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin) override;
@@ -120,15 +120,15 @@ public:
 
     struct ImplAccess { friend class FmXFormView; private: ImplAccess() { } };
     void SetMoveOutside( bool _bMoveOutside, ImplAccess ) { E3dView::SetMoveOutside( _bMoveOutside ); }
-     void InsertControlContainer(const css::uno::Reference< css::awt::XControlContainer >& xCC);
-     void RemoveControlContainer(const css::uno::Reference< css::awt::XControlContainer >& xCC);
+     void InsertControlContainer(const cpo::uno::Reference< css::awt::XControlContainer >& xCC);
+     void RemoveControlContainer(const cpo::uno::Reference< css::awt::XControlContainer >& xCC);
 
     virtual SdrPaintWindow* BeginCompleteRedraw(OutputDevice* pOut) override;
     virtual void EndCompleteRedraw(SdrPaintWindow& rPaintWindow, bool bPaintFormLayer,
         sdr::contact::ViewObjectContactRedirector* pRedirector = nullptr) override;
 
     SVX_DLLPRIVATE const OutputDevice* GetActualOutDev() const {return mpActualOutDev;}
-    SVX_DLLPRIVATE bool checkUnMarkAll(const css::uno::Reference< cpo::uno::XInterface >& _xSource);
+    SVX_DLLPRIVATE bool checkUnMarkAll(const cpo::uno::Reference< cpo::uno::XInterface >& _xSource);
 
 private:
     SVX_DLLPRIVATE FmFormObj* getMarkedGrid() const;

@@ -41,6 +41,7 @@
 #include <strings.hrc>
 
 using namespace css;
+using namespace ::cpo;
 
 namespace SwTranslateHelper
 {

@@ -38,7 +38,7 @@ void OpenCLZone::hardDisable()
     // Force synchronous config write
     auto xConfProvider
         = css::configuration::theDefaultProvider::get(comphelper::getProcessComponentContext());
-    css::uno::Reference<css::util::XFlushable> xFlushable(xConfProvider, css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::util::XFlushable> xFlushable(xConfProvider, cpo::uno::UNO_QUERY_THROW);
     xFlushable->flush();
 
     releaseOpenCLEnv(&openclwrapper::gpuEnv);

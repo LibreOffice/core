@@ -20,7 +20,7 @@
 #pragma once
 
 #include <xmloff/xmlictxt.hxx>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 
 #include <vector>
 
@@ -41,7 +41,7 @@ namespace com::sun::star {
 class XMLIndexTOCStylesContext : public SvXMLImportContext
 {
     /// XPropertySet of the index
-    css::uno::Reference<css::beans::XPropertySet> & rTOCPropertySet;
+    cpo::uno::Reference<css::beans::XPropertySet> & rTOCPropertySet;
 
     /// style names for this level
     ::std::vector< OUString > aStyleNames;
@@ -52,7 +52,7 @@ class XMLIndexTOCStylesContext : public SvXMLImportContext
 public:
     XMLIndexTOCStylesContext(
         SvXMLImport& rImport,
-        css::uno::Reference<css::beans::XPropertySet> & rPropSet );
+        cpo::uno::Reference<css::beans::XPropertySet> & rPropSet );
 
     virtual ~XMLIndexTOCStylesContext() override;
 
@@ -60,13 +60,13 @@ protected:
 
     virtual void startFastElement(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     virtual void endFastElement(sal_Int32 nElement) override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

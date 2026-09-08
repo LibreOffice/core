@@ -67,12 +67,12 @@ sfx2::SvBaseLink::UpdateResult ScWebServiceLink::DataChanged(const OUString&, co
         return ERROR_GENERAL;
     }
 
-    css::uno::Reference<css::ucb::XSimpleFileAccess3> xFileAccess
+    cpo::uno::Reference<css::ucb::XSimpleFileAccess3> xFileAccess
         = css::ucb::SimpleFileAccess::create(comphelper::getProcessComponentContext());
     if (!xFileAccess.is())
         return ERROR_GENERAL;
 
-    css::uno::Reference<css::io::XInputStream> xStream;
+    cpo::uno::Reference<css::io::XInputStream> xStream;
     try
     {
         xStream = xFileAccess->openFileRead(aURL);

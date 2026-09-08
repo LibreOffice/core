@@ -78,7 +78,7 @@ class VCL_DLLPUBLIC SalInstance
 private:
     rtl::Reference< vcl::DisplayConnectionDispatch > m_pEventInst;
     const std::unique_ptr<comphelper::SolarMutex> m_pYieldMutex;
-    css::uno::Reference<css::datatransfer::clipboard::XClipboard> m_clipboard;
+    cpo::uno::Reference<css::datatransfer::clipboard::XClipboard> m_clipboard;
     o3tl::sorted_vector<OUString> m_usedUI;
 
 protected:
@@ -176,7 +176,7 @@ public:
                                                 bool bAllowCycleFocusOut, sal_uInt64 nKitWindowId = 0);
     virtual std::unique_ptr<weld::MessageDialog> CreateMessageDialog(weld::Widget* pParent, VclMessageType eMessageType,
                                                      VclButtonsType eButtonType, const OUString& rPrimaryMessage);
-    virtual weld::Window* GetFrameWeld(const css::uno::Reference<css::awt::XWindow>& rWindow);
+    virtual weld::Window* GetFrameWeld(const cpo::uno::Reference<css::awt::XWindow>& rWindow);
 
     // methods for DisplayConnectionDispatch
 
@@ -186,23 +186,23 @@ public:
     bool CallEventCallback(const void* pEvent);
 
     // dtrans implementation
-    virtual css::uno::Reference<css::datatransfer::clipboard::XClipboard>
+    virtual cpo::uno::Reference<css::datatransfer::clipboard::XClipboard>
     CreateClipboard(const cpo::uno::Sequence<cpo::uno::Any>& i_rArguments);
-    virtual css::uno::Reference<css::datatransfer::dnd::XDragSource>
+    virtual cpo::uno::Reference<css::datatransfer::dnd::XDragSource>
     ImplCreateDragSource(const SystemEnvData& rSysEnv);
-    virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget>
+    virtual cpo::uno::Reference<css::datatransfer::dnd::XDropTarget>
     ImplCreateDropTarget(const SystemEnvData& rSysEnv);
-    css::uno::Reference<css::datatransfer::dnd::XDragSource>
+    cpo::uno::Reference<css::datatransfer::dnd::XDragSource>
     CreateDragSource(const SystemEnvData& rSysEnv);
-    css::uno::Reference<css::datatransfer::dnd::XDropTarget>
+    cpo::uno::Reference<css::datatransfer::dnd::XDropTarget>
     CreateDropTarget(const SystemEnvData& rSysEnv);
     virtual void            AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService) = 0;
 
     // if you override this, make sure to override hasNativeFileSelection too.
-    virtual css::uno::Reference< css::ui::dialogs::XFilePicker2 > createFilePicker( const css::uno::Reference< cpo::uno::XComponentContext >& )
-        { return css::uno::Reference< css::ui::dialogs::XFilePicker2 >(); }
-    virtual css::uno::Reference< css::ui::dialogs::XFolderPicker2 > createFolderPicker( const css::uno::Reference< cpo::uno::XComponentContext >& )
-        { return css::uno::Reference< css::ui::dialogs::XFolderPicker2 >(); }
+    virtual cpo::uno::Reference< css::ui::dialogs::XFilePicker2 > createFilePicker( const cpo::uno::Reference< cpo::uno::XComponentContext >& )
+        { return cpo::uno::Reference< css::ui::dialogs::XFilePicker2 >(); }
+    virtual cpo::uno::Reference< css::ui::dialogs::XFolderPicker2 > createFolderPicker( const cpo::uno::Reference< cpo::uno::XComponentContext >& )
+        { return cpo::uno::Reference< css::ui::dialogs::XFolderPicker2 >(); }
 
     // callbacks for printer updates
     virtual void            updatePrinterUpdate() {}

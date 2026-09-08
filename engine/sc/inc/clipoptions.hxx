@@ -10,7 +10,7 @@
 #pragma once
 
 #include "scdllapi.h"
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 
 namespace com::sun::star::document
 {
@@ -22,7 +22,7 @@ class SC_DLLPUBLIC ScClipOptions
 {
 public:
     /// Document properties.
-    css::uno::Reference<css::document::XDocumentProperties> m_xDocumentProperties;
+    cpo::uno::Reference<css::document::XDocumentProperties> m_xDocumentProperties;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -324,8 +324,8 @@
 #include <com/sun/star/text/XTextSection.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
-#include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.h>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/XComponentContext.hpp>
 #include <cpo/uno/XInterface.hpp>

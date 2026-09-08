@@ -28,18 +28,18 @@ class HelpDispatch_Impl : public ::cppu::WeakImplHelper< css::frame::XDispatch >
 {
 private:
     HelpInterceptor_Impl&       m_rInterceptor;
-    css::uno::Reference< css::frame::XDispatch >
+    cpo::uno::Reference< css::frame::XDispatch >
                                 m_xRealDispatch;
 
 public:
     HelpDispatch_Impl( HelpInterceptor_Impl& _rInterceptor,
-                       css::uno::Reference< css::frame::XDispatch > _xDisp );
+                       cpo::uno::Reference< css::frame::XDispatch > _xDisp );
     virtual ~HelpDispatch_Impl() override;
 
     // XDispatch
     virtual void   dispatch( const css::util::URL& aURL, const cpo::uno::Sequence< css::beans::PropertyValue >& aArgs ) override;
-    virtual void   addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xControl, const css::util::URL& aURL ) override;
-    virtual void   removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xControl, const css::util::URL& aURL ) override;
+    virtual void   addStatusListener( const cpo::uno::Reference< css::frame::XStatusListener >& xControl, const css::util::URL& aURL ) override;
+    virtual void   removeStatusListener( const cpo::uno::Reference< css::frame::XStatusListener >& xControl, const css::util::URL& aURL ) override;
 };
 
 #endif // INCLUDED_SFX2_SOURCE_APPL_HELPDISPATCH_HXX

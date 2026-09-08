@@ -65,7 +65,7 @@ class SwWrongArea
 {
 public:
     OUString maType;
-    css::uno::Reference< css::container::XStringKeyMap > mxPropertyBag;
+    cpo::uno::Reference< css::container::XStringKeyMap > mxPropertyBag;
     sal_Int32 mnPos;
     sal_Int32 mnLen;
     SwWrongList* mpSubList;
@@ -75,18 +75,18 @@ public:
 
     SwWrongArea( OUString aType,
                  WrongListType listType,
-                 css::uno::Reference< css::container::XStringKeyMap > const & xPropertyBag,
+                 cpo::uno::Reference< css::container::XStringKeyMap > const & xPropertyBag,
                  sal_Int32 nPos,
                  sal_Int32 nLen);
 
     SwWrongArea( OUString aType,
-                 css::uno::Reference< css::container::XStringKeyMap > const & xPropertyBag,
+                 cpo::uno::Reference< css::container::XStringKeyMap > const & xPropertyBag,
                  sal_Int32 nPos,
                  sal_Int32 nLen,
                  SwWrongList* pSubList);
 private:
 
-    static Color getGrammarColor ( css::uno::Reference< css::container::XStringKeyMap > const & xPropertyBag)
+    static Color getGrammarColor ( cpo::uno::Reference< css::container::XStringKeyMap > const & xPropertyBag)
     {
         try
         {
@@ -111,7 +111,7 @@ private:
         return SwViewOption::GetCurrentViewOptions().GetGrammarColor();
     }
 
-    static WrongAreaLineType getGrammarLineType( css::uno::Reference< css::container::XStringKeyMap > const & xPropertyBag )
+    static WrongAreaLineType getGrammarLineType( cpo::uno::Reference< css::container::XStringKeyMap > const & xPropertyBag )
     {
         try
         {
@@ -152,7 +152,7 @@ private:
         return WRONGAREA_WAVE;
     }
 
-    static Color getSmartColor ( css::uno::Reference< css::container::XStringKeyMap > const & xPropertyBag)
+    static Color getSmartColor ( cpo::uno::Reference< css::container::XStringKeyMap > const & xPropertyBag)
     {
         try
         {
@@ -177,7 +177,7 @@ private:
         return SwViewOption::GetCurrentViewOptions().GetSmarttagColor();
     }
 
-    static WrongAreaLineType getSmartLineType( css::uno::Reference< css::container::XStringKeyMap > const & xPropertyBag )
+    static WrongAreaLineType getSmartLineType( cpo::uno::Reference< css::container::XStringKeyMap > const & xPropertyBag )
     {
         try
         {
@@ -219,7 +219,7 @@ private:
     }
 
     static Color getWrongAreaColor(WrongListType listType,
-                            css::uno::Reference< css::container::XStringKeyMap > const & xPropertyBag )
+                            cpo::uno::Reference< css::container::XStringKeyMap > const & xPropertyBag )
     {
         if (WRONGLIST_SPELL == listType)
         {
@@ -238,7 +238,7 @@ private:
     }
 
     static WrongAreaLineType getWrongAreaLineType(WrongListType listType,
-                                           css::uno::Reference< css::container::XStringKeyMap > const & xPropertyBag )
+                                           cpo::uno::Reference< css::container::XStringKeyMap > const & xPropertyBag )
     {
         if (WRONGLIST_SPELL == listType)
         {
@@ -322,7 +322,7 @@ public:
     sal_uInt16 Count() const { return o3tl::narrowing<sal_uInt16>(maList.size()); }
 
     void Insert( const OUString& rType,
-                        css::uno::Reference< css::container::XStringKeyMap > const & xPropertyBag,
+                        cpo::uno::Reference< css::container::XStringKeyMap > const & xPropertyBag,
                         sal_Int32 nNewPos, sal_Int32 nNewLen, sal_uInt16 nWhere )
     {
         std::vector<SwWrongArea>::iterator i = maList.begin();
@@ -335,7 +335,7 @@ public:
     }
 
     void Insert( const OUString& rType,
-                 css::uno::Reference< css::container::XStringKeyMap > const & xPropertyBag,
+                 cpo::uno::Reference< css::container::XStringKeyMap > const & xPropertyBag,
                  sal_Int32 nNewPos, sal_Int32 nNewLen );
 
     SwWrongList* SubList( sal_uInt16 nIdx ) const

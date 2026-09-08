@@ -36,7 +36,7 @@
 #include <com/sun/star/text/XFootnote.hpp>
 
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::lang;
@@ -55,7 +55,7 @@ XMLFootnoteImportContext::XMLFootnoteImportContext(
 
 void XMLFootnoteImportContext::startFastElement(
     sal_Int32 /*nElement*/,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     // create footnote
     Reference<XMultiServiceFactory> xFactory(GetImport().GetModel(),
@@ -148,8 +148,8 @@ void XMLFootnoteImportContext::endFastElement(sal_Int32 )
     rHelper.PopListContext();
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLFootnoteImportContext::createFastChildContext(
-    sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLFootnoteImportContext::createFastChildContext(
+    sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     if (!mbIsValid)
         return {};

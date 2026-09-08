@@ -67,7 +67,7 @@ class SwXMLImport: public SvXMLImport
     SvXMLItemMapEntriesRef  m_xTableColItemMap;
     SvXMLItemMapEntriesRef  m_xTableRowItemMap;
     SvXMLItemMapEntriesRef  m_xTableCellItemMap;
-    css::uno::Reference< css::container::XNameContainer >
+    cpo::uno::Reference< css::container::XNameContainer >
                             m_xLateInitSettings;
 
     SfxStyleFamily      m_nStyleFamilyMask;// Mask of styles to load
@@ -91,7 +91,7 @@ class SwXMLImport: public SvXMLImport
     void                    UpdateTextCollConditions( SwDoc *pDoc );
 
     void         setTextInsertMode(
-                     const css::uno::Reference< css::text::XTextRange > & rInsertPos );
+                     const cpo::uno::Reference< css::text::XTextRange > & rInsertPos );
     void         setStyleInsertMode( SfxStyleFamily nFamilies,
                                      bool bOverwrite );
     SwDoc*       endDocAdjustNodes();
@@ -99,7 +99,7 @@ class SwXMLImport: public SvXMLImport
 protected:
 
     virtual SvXMLImportContext *CreateFastContext( sal_Int32 nElement,
-        const ::css::uno::Reference< ::css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const ::cpo::uno::Reference< ::css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     virtual XMLTextImportHelper* CreateTextImport() override;
 
@@ -107,7 +107,7 @@ protected:
 
 public:
     SwXMLImport(
-        const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& rContext,
         OUString const & implementationName, SvXMLImportFlags nImportFlags);
 
     virtual ~SwXMLImport() noexcept override;
@@ -140,7 +140,7 @@ public:
     inline const SvXMLImportItemMapper& GetTableItemMapper() const;
     inline       SvXMLImportItemMapper& GetTableItemMapper();
     SvXMLImportContext *CreateTableItemImportContext( sal_Int32 nElement,
-                const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
+                const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
                 XmlStyleFamily nSubFamily, SfxItemSet& rItemSet );
 
     bool FindAutomaticStyle( XmlStyleFamily nFamily,
@@ -159,7 +159,7 @@ public:
     virtual void initXForms() override;
 
     // get the document properties, but only if they actually need importing
-    css::uno::Reference<css::document::XDocumentProperties>
+    cpo::uno::Reference<css::document::XDocumentProperties>
             GetDocumentProperties() const;
 
     virtual void NotifyContainsEmbeddedFont() override;

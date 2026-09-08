@@ -25,7 +25,7 @@
 #include <svl/hint.hxx>
 #include <vcl/transfer.hxx>
 #include <svx/svdobj.hxx>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <svx/svxdllapi.h>
 #include <tools/date.hxx>
 #include <tools/time.hxx>
@@ -111,7 +111,7 @@ class GraphicFilter;
 
 class SVXCORE_DLLPUBLIC GalleryProgress
 {
-    css::uno::Reference< css::awt::XProgressBar > mxProgressBar;
+    cpo::uno::Reference< css::awt::XProgressBar > mxProgressBar;
 
     public:
 

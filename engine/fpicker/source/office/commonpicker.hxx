@@ -58,13 +58,13 @@ namespace svt
     private:
         // <properties>
         OUString                                                  m_sHelpURL;
-        css::uno::Reference< css::awt::XWindow >                  m_xWindow;
+        cpo::uno::Reference< css::awt::XWindow >                  m_xWindow;
         // </properties>
 
         ImplSVEvent *                   m_nCancelEvent;
         bool                            m_bExecuting;
 
-        css::uno::Reference< css::awt::XWindow >      m_xDialogParent;
+        cpo::uno::Reference< css::awt::XWindow >      m_xDialogParent;
 
         rtl::Reference< comphelper::OWeakEventListenerAdapter >  m_xWindowListenerAdapter;
         rtl::Reference< comphelper::OWeakEventListenerAdapter >  m_xParentListenerAdapter;
@@ -118,7 +118,7 @@ namespace svt
 
 
         // XPropertySet pure methods
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+        virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
         // OPropertySetHelper pure methods
         virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
         // OPropertyArrayUsageHelper pure methods

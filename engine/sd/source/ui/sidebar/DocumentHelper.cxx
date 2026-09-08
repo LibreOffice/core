@@ -40,6 +40,7 @@
 #include <sal/log.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace sd::sidebar {
 

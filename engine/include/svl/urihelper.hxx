@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVL_URIHELPER_HXX
 #define INCLUDED_SVL_URIHELPER_HXX
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <rtl/textenc.h>
 #include <svl/svldllapi.h>
 #include <tools/link.hxx>
@@ -82,9 +82,9 @@ SVL_DLLPUBLIC Link<OUString *, bool> const & GetMaybeFileHdl();
 
    @exception cpo::uno::RuntimeException if any error occurs
  */
-SVL_DLLPUBLIC css::uno::Reference< css::uri::XUriReference >
+SVL_DLLPUBLIC cpo::uno::Reference< css::uri::XUriReference >
 normalizedMakeRelative(
-    css::uno::Reference< cpo::uno::XComponentContext > const & context,
+    cpo::uno::Reference< cpo::uno::XComponentContext > const & context,
     OUString const & baseUriReference,
     OUString const & uriReference);
 

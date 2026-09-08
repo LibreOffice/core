@@ -30,13 +30,13 @@ namespace framework{
 
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::cppu;
 
 //  constructor
 
-OFrames::OFrames( const   css::uno::Reference< XFrame >&              xOwner          ,
+OFrames::OFrames( const   cpo::uno::Reference< XFrame >&              xOwner          ,
                             FrameContainer*                     pFrameContainer )
         :   m_xOwner                    ( xOwner                        )
         ,   m_pFrameContainer           ( pFrameContainer               )
@@ -57,7 +57,7 @@ OFrames::~OFrames()
 }
 
 //  XFrames
-void OFrames::append( const css::uno::Reference< XFrame >& xFrame )
+void OFrames::append( const cpo::uno::Reference< XFrame >& xFrame )
 {
     SolarMutexGuard g;
 
@@ -67,7 +67,7 @@ void OFrames::append( const css::uno::Reference< XFrame >& xFrame )
 
     // Do the follow only, if owner instance valid!
     // Lock owner for follow operations - make a "hard reference"!
-    css::uno::Reference< XFramesSupplier > xOwner( m_xOwner.get(), UNO_QUERY );
+    cpo::uno::Reference< XFramesSupplier > xOwner( m_xOwner.get(), UNO_QUERY );
     if ( xOwner.is() )
     {
         // Append frame to the end of the container ...
@@ -80,7 +80,7 @@ void OFrames::append( const css::uno::Reference< XFrame >& xFrame )
 }
 
 //  XFrames
-void OFrames::remove( const css::uno::Reference< XFrame >& xFrame )
+void OFrames::remove( const cpo::uno::Reference< XFrame >& xFrame )
 {
     SolarMutexGuard g;
 
@@ -90,7 +90,7 @@ void OFrames::remove( const css::uno::Reference< XFrame >& xFrame )
 
     // Do the follow only, if owner instance valid!
     // Lock owner for follow operations - make a "hard reference"!
-    css::uno::Reference< XFramesSupplier > xOwner( m_xOwner.get(), UNO_QUERY );
+    cpo::uno::Reference< XFramesSupplier > xOwner( m_xOwner.get(), UNO_QUERY );
     if ( xOwner.is() )
     {
         // Search frame and remove it from container ...
@@ -104,7 +104,7 @@ void OFrames::remove( const css::uno::Reference< XFrame >& xFrame )
 }
 
 //  XFrames
-Sequence< css::uno::Reference< XFrame > > OFrames::queryFrames( sal_Int32 nSearchFlags )
+Sequence< cpo::uno::Reference< XFrame > > OFrames::queryFrames( sal_Int32 nSearchFlags )
 {
     SolarMutexGuard g;
 
@@ -113,11 +113,11 @@ Sequence< css::uno::Reference< XFrame > > OFrames::queryFrames( sal_Int32 nSearc
     SAL_WARN_IF( !impldbg_checkParameter_queryFrames( nSearchFlags ), "fwk", "OFrames::queryFrames(): Invalid parameter detected!" );
 
     // Set default return value. (empty sequence)
-    std::vector< css::uno::Reference< XFrame > > seqFrames;
+    std::vector< cpo::uno::Reference< XFrame > > seqFrames;
 
     // Do the follow only, if owner instance valid.
     // Lock owner for follow operations - make a "hard reference"!
-    css::uno::Reference< XFrame > xOwner( m_xOwner.get(), UNO_QUERY );
+    cpo::uno::Reference< XFrame > xOwner( m_xOwner.get(), UNO_QUERY );
     if ( xOwner.is() )
     {
         // Work only, if search was not started here ...!
@@ -140,7 +140,7 @@ Sequence< css::uno::Reference< XFrame > > OFrames::queryFrames( sal_Int32 nSearc
             // Add parent to list ... if any exist!
             if( nSearchFlags & FrameSearchFlag::PARENT )
             {
-                css::uno::Reference< XFrame > xParent = xOwner->getCreator();
+                cpo::uno::Reference< XFrame > xParent = xOwner->getCreator();
                 if( xParent.is() )
                 {
                     seqFrames.insert(seqFrames.begin(), xParent);
@@ -160,7 +160,7 @@ Sequence< css::uno::Reference< XFrame > > OFrames::queryFrames( sal_Int32 nSearc
                 // Protect this instance against recursive calls from parents.
                 m_bRecursiveSearchProtection = true;
                 // Ask parent of my owner for frames and append results to return list.
-                css::uno::Reference< XFramesSupplier > xParent = xOwner->getCreator();
+                cpo::uno::Reference< XFramesSupplier > xParent = xOwner->getCreator();
                 // If a parent exist ...
                 if ( xParent.is() )
                 {
@@ -185,7 +185,7 @@ Sequence< css::uno::Reference< XFrame > > OFrames::queryFrames( sal_Int32 nSearc
                 {
                     // We don't must control this conversion.
                     // We have done this at append()!
-                    css::uno::Reference< XFramesSupplier > xItem( (*m_pFrameContainer)[nIndex], UNO_QUERY );
+                    cpo::uno::Reference< XFramesSupplier > xItem( (*m_pFrameContainer)[nIndex], UNO_QUERY );
                     auto frames = xItem->getFrames()->queryFrames(nChildSearchFlags);
                     seqFrames.insert(seqFrames.begin(), frames.begin(), frames.end());
                 }
@@ -209,7 +209,7 @@ sal_Int32 OFrames::getCount()
 
     // Do the follow only, if owner instance valid.
     // Lock owner for follow operations - make a "hard reference"!
-    css::uno::Reference< XFrame > xOwner( m_xOwner.get(), UNO_QUERY );
+    cpo::uno::Reference< XFrame > xOwner( m_xOwner.get(), UNO_QUERY );
     if ( xOwner.is() )
     {
         // Set CURRENT size of container for return.
@@ -236,7 +236,7 @@ Any OFrames::getByIndex( sal_Int32 nIndex )
 
     // Do the follow only, if owner instance valid.
     // Lock owner for follow operations - make a "hard reference"!
-    css::uno::Reference< XFrame > xOwner( m_xOwner.get(), UNO_QUERY );
+    cpo::uno::Reference< XFrame > xOwner( m_xOwner.get(), UNO_QUERY );
     if ( xOwner.is() )
     {
         // Get element form container.
@@ -264,7 +264,7 @@ bool OFrames::hasElements()
     bool bHasElements = false;
     // Do the follow only, if owner instance valid.
     // Lock owner for follow operations - make a "hard reference"!
-    css::uno::Reference< XFrame > xOwner( m_xOwner.get(), UNO_QUERY );
+    cpo::uno::Reference< XFrame > xOwner( m_xOwner.get(), UNO_QUERY );
     if ( xOwner.is() )
     {
         // If some elements exist ...

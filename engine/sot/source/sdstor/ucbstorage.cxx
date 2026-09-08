@@ -21,7 +21,7 @@
 #include <com/sun/star/io/BufferSizeExceededException.hpp>
 #include <cpo/uno/RuntimeException.hpp>
 #include <ucbhelper/content.hxx>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -72,7 +72,7 @@ namespace com::sun::star::ucb { class XCommandEnvironment; }
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::io;

@@ -28,7 +28,8 @@
 #include <miscuno.hxx>
 
 using namespace com::sun::star;
-using ::com::sun::star::uno::Reference;
+using namespace ::cpo;
+using ::cpo::uno::Reference;
 using ::cpo::uno::Any;
 
 SC_SIMPLE_SERVICE_INFO( ScNameToIndexAccess, u"ScNameToIndexAccess"_ustr, u"stardiv.unknown"_ustr )
@@ -51,7 +52,7 @@ bool ScUnoHelpFunctions::GetBoolProperty( const uno::Reference<beans::XPropertyS
     return bRet;
 }
 
-sal_Int16 ScUnoHelpFunctions::GetShortProperty( const css::uno::Reference< css::beans::XPropertySet>& xProp,
+sal_Int16 ScUnoHelpFunctions::GetShortProperty( const cpo::uno::Reference< css::beans::XPropertySet>& xProp,
                                                 const OUString& rName, sal_Int16 nDefault )
 {
     sal_Int16 nRet = nDefault;
@@ -238,7 +239,7 @@ cpo::uno::Sequence< OUString >
     return { sServiceName };
 }
 
-ScNameToIndexAccess::ScNameToIndexAccess( css::uno::Reference<
+ScNameToIndexAccess::ScNameToIndexAccess( cpo::uno::Reference<
                                             css::container::XNameAccess> xNameObj ) :
     xNameAccess(std::move( xNameObj ))
 {

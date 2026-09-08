@@ -51,8 +51,8 @@ class ODBExport : public SvXMLExport
 
         TDelimiter() : bUsed( false ) { }
     };
-    typedef std::map< css::uno::Reference<css::beans::XPropertySet> ,OUString >          TPropertyStyleMap;
-    typedef std::map< css::uno::Reference<css::beans::XPropertySet> ,css::uno::Reference<css::beans::XPropertySet> >  TTableColumnMap;
+    typedef std::map< cpo::uno::Reference<css::beans::XPropertySet> ,OUString >          TPropertyStyleMap;
+    typedef std::map< cpo::uno::Reference<css::beans::XPropertySet> ,cpo::uno::Reference<css::beans::XPropertySet> >  TTableColumnMap;
 
     struct TypedPropertyValue
     {
@@ -86,7 +86,7 @@ class ODBExport : public SvXMLExport
     mutable rtl::Reference < XMLPropertySetMapper >   m_xColumnStylesPropertySetMapper;
     mutable rtl::Reference < XMLPropertySetMapper >   m_xCellStylesPropertySetMapper;
 
-    css::uno::Reference<css::beans::XPropertySet>     m_xDataSource;
+    cpo::uno::Reference<css::beans::XPropertySet>     m_xDataSource;
     ::dbaccess::ODsnTypeCollection                  m_aTypeCollection;
     bool                                        m_bAllreadyFilled;
 
@@ -109,8 +109,8 @@ class ODBExport : public SvXMLExport
     void                    exportQueries(bool _bExportContext);
     void                    exportTables(bool _bExportContext);
     void                    exportStyleName(css::beans::XPropertySet* _xProp,comphelper::AttributeList& _rAtt);
-    void                    exportStyleName(const ::xmloff::token::XMLTokenEnum _eToken,const css::uno::Reference<css::beans::XPropertySet>& _xProp,comphelper::AttributeList& _rAtt,TPropertyStyleMap& _rMap);
-    void                    exportCollection(const css::uno::Reference< css::container::XNameAccess >& _xCollection
+    void                    exportStyleName(const ::xmloff::token::XMLTokenEnum _eToken,const cpo::uno::Reference<css::beans::XPropertySet>& _xProp,comphelper::AttributeList& _rAtt,TPropertyStyleMap& _rMap);
+    void                    exportCollection(const cpo::uno::Reference< css::container::XNameAccess >& _xCollection
                                             ,enum ::xmloff::token::XMLTokenEnum _eComponents
                                             ,enum ::xmloff::token::XMLTokenEnum _eSubComponents
                                             ,bool _bExportContext
@@ -124,7 +124,7 @@ class ODBExport : public SvXMLExport
                                         ,enum ::xmloff::token::XMLTokenEnum _eStatementType);
     void                    exportTableName(css::beans::XPropertySet* _xProp,bool _bUpdate);
     void                    exportAutoStyle(css::beans::XPropertySet* _xProp);
-    void                    exportColumns(const css::uno::Reference<css::sdbcx::XColumnsSupplier>& _xColSup);
+    void                    exportColumns(const cpo::uno::Reference<css::sdbcx::XColumnsSupplier>& _xColSup);
     void                    collectComponentStyles();
 
     static OUString         implConvertAny(const cpo::uno::Any& _rValue);
@@ -146,15 +146,15 @@ protected:
     virtual                 ~ODBExport() override {};
 public:
 
-    ODBExport(const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext, OUString const & implementationName, SvXMLExportFlags nExportFlag = SvXMLExportFlags::CONTENT | SvXMLExportFlags::AUTOSTYLES | SvXMLExportFlags::PRETTY | SvXMLExportFlags::FONTDECLS | SvXMLExportFlags::SCRIPTS );
+    ODBExport(const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxContext, OUString const & implementationName, SvXMLExportFlags nExportFlag = SvXMLExportFlags::CONTENT | SvXMLExportFlags::AUTOSTYLES | SvXMLExportFlags::PRETTY | SvXMLExportFlags::FONTDECLS | SvXMLExportFlags::SCRIPTS );
 
     rtl::Reference < XMLPropertySetMapper > const & GetColumnStylesPropertySetMapper() const;
     rtl::Reference < XMLPropertySetMapper > const & GetCellStylesPropertySetMapper() const;
 
     // XExporter
-    virtual void setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
+    virtual void setSourceDocument( const cpo::uno::Reference< css::lang::XComponent >& xDoc ) override;
 
-    const css::uno::Reference<css::beans::XPropertySet>& getDataSource() const { return m_xDataSource; }
+    const cpo::uno::Reference<css::beans::XPropertySet>& getDataSource() const { return m_xDataSource; }
 };
 
 } // dbaxml

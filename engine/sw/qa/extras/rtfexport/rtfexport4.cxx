@@ -30,6 +30,7 @@
 #include <wrtsh.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 /**
   Split these tests into their own file because they are really really slow

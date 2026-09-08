@@ -91,10 +91,10 @@ public:
                                    StreamMode nOpenMode,
                                    std::shared_ptr<const SfxFilter> pFilter = nullptr,
                                    const std::shared_ptr<SfxItemSet>& pSet = nullptr );
-                        SfxMedium( const css::uno::Reference< css::embed::XStorage >& xStorage,
+                        SfxMedium( const cpo::uno::Reference< css::embed::XStorage >& xStorage,
                                    const OUString& rBaseURL,
                                    const std::shared_ptr<SfxItemSet>& pSet = nullptr  );
-                        SfxMedium( const css::uno::Reference< css::embed::XStorage >& xStorage,
+                        SfxMedium( const cpo::uno::Reference< css::embed::XStorage >& xStorage,
                                    const OUString& rBaseURL,
                                    const OUString& rTypeName,
                                    const std::shared_ptr<SfxItemSet>& pSet = nullptr );
@@ -115,11 +115,11 @@ public:
     void CancelCheckEditableEntry(bool bRemoveEvent = true);
 
     void                UseInteractionHandler( bool );
-    css::uno::Reference< css::task::XInteractionHandler >
+    cpo::uno::Reference< css::task::XInteractionHandler >
                         GetInteractionHandler( bool bGetAlways = false );
 
     void setStreamToLoadFrom(
-        const css::uno::Reference<css::io::XInputStream>& xInputStream,
+        const cpo::uno::Reference<css::io::XInputStream>& xInputStream,
         bool bIsReadOnly);
 
     void                SetLoadTargetFrame(SfxFrame* pFrame );
@@ -151,7 +151,7 @@ public:
     // Clear a previously cached 'DateModified' cache.
     void ClearInitFileDateCache();
 
-    css::uno::Reference< css::ucb::XContent > GetContent() const;
+    cpo::uno::Reference< css::ucb::XContent > GetContent() const;
     const OUString& GetPhysicalName() const;
     [[nodiscard]] bool IsRemote() const;
     [[nodiscard]] bool IsOpen() const; // { return aStorage.Is() || pInStream; }
@@ -194,8 +194,8 @@ public:
     /// Lets Transfer_Impl() not fsync the output file.
     void DisableFileSync(bool bDisableFileSync);
 
-    css::uno::Reference< css::embed::XStorage > GetStorage( bool bCreateTempFile = true );
-    css::uno::Reference< css::embed::XStorage > GetOutputStorage();
+    cpo::uno::Reference< css::embed::XStorage > GetStorage( bool bCreateTempFile = true );
+    cpo::uno::Reference< css::embed::XStorage > GetOutputStorage();
     void                ResetError();
     [[nodiscard]] bool  IsExpired() const;
     void                SetName( const OUString& rName, bool bSetOrigURL = false );
@@ -226,7 +226,7 @@ public:
 
     [[nodiscard]] bool IsRepairPackage() const;
 
-    css::uno::Reference< css::io::XInputStream > const &  GetInputStream();
+    cpo::uno::Reference< css::io::XInputStream > const &  GetInputStream();
 
     void                CreateTempFile( bool bReplace = true );
     void                CreateTempFileNoCopy();
@@ -243,15 +243,15 @@ public:
     SAL_DLLPRIVATE void StorageBackup_Impl();
     SAL_DLLPRIVATE OUString const & GetBackup_Impl();
 
-    SAL_DLLPRIVATE css::uno::Reference< css::embed::XStorage > const & GetZipStorageToSign_Impl( bool bReadOnly = true );
-    SAL_DLLPRIVATE const css::uno::Reference<css::embed::XStorage> & GetScriptingStorageToSign_Impl();
+    SAL_DLLPRIVATE cpo::uno::Reference< css::embed::XStorage > const & GetZipStorageToSign_Impl( bool bReadOnly = true );
+    SAL_DLLPRIVATE const cpo::uno::Reference<css::embed::XStorage> & GetScriptingStorageToSign_Impl();
     SAL_DLLPRIVATE void CloseZipStorage_Impl();
 
     // the storage that will be returned by the medium on GetStorage request
-    SAL_DLLPRIVATE void SetStorage_Impl( const css::uno::Reference< css::embed::XStorage >& xNewStorage );
-    SAL_DLLPRIVATE void SetInnerStorage_Impl(const css::uno::Reference<css::embed::XStorage>& xStorage);
-    SAL_DLLPRIVATE css::uno::Reference<css::embed::XStorage>
-        TryEncryptedInnerPackage(const css::uno::Reference<css::embed::XStorage> & xStorage);
+    SAL_DLLPRIVATE void SetStorage_Impl( const cpo::uno::Reference< css::embed::XStorage >& xNewStorage );
+    SAL_DLLPRIVATE void SetInnerStorage_Impl(const cpo::uno::Reference<css::embed::XStorage>& xStorage);
+    SAL_DLLPRIVATE cpo::uno::Reference<css::embed::XStorage>
+        TryEncryptedInnerPackage(const cpo::uno::Reference<css::embed::XStorage> & xStorage);
 
     SAL_DLLPRIVATE void CloseAndReleaseStreams_Impl();
     SAL_DLLPRIVATE void AddVersion_Impl( css::util::RevisionTag& rVersion );
@@ -288,13 +288,13 @@ public:
                                                 const OUString& aDestDir );
 
     SAL_DLLPRIVATE bool UseBackupToRestore_Impl( ::ucbhelper::Content& aOriginalContent,
-                             const css::uno::Reference< css::ucb::XCommandEnvironment >& xComEnv );
+                             const cpo::uno::Reference< css::ucb::XCommandEnvironment >& xComEnv );
 
     SAL_DLLPRIVATE bool StorageCommit_Impl();
 
     SAL_DLLPRIVATE void TransactedTransferForFS_Impl( const INetURLObject& aSource,
                              const INetURLObject& aDest,
-                             const css::uno::Reference< css::ucb::XCommandEnvironment >& xComEnv );
+                             const cpo::uno::Reference< css::ucb::XCommandEnvironment >& xComEnv );
 
     SAL_DLLPRIVATE void
     SignContents_Impl(weld::Window* pDialogParent,
@@ -302,16 +302,16 @@ public:
                       SfxViewShell* pViewShell,
                       const std::function<void(bool)>& rCallback,
                       const OUString& aSignatureLineId = OUString(),
-                      const css::uno::Reference<css::security::XCertificate>& xCert
-                      = css::uno::Reference<css::security::XCertificate>(),
-                      const css::uno::Reference<css::graphic::XGraphic>& xValidGraphic
-                      = css::uno::Reference<css::graphic::XGraphic>(),
-                      const css::uno::Reference<css::graphic::XGraphic>& xInvalidGraphic
-                      = css::uno::Reference<css::graphic::XGraphic>(),
+                      const cpo::uno::Reference<css::security::XCertificate>& xCert
+                      = cpo::uno::Reference<css::security::XCertificate>(),
+                      const cpo::uno::Reference<css::graphic::XGraphic>& xValidGraphic
+                      = cpo::uno::Reference<css::graphic::XGraphic>(),
+                      const cpo::uno::Reference<css::graphic::XGraphic>& xInvalidGraphic
+                      = cpo::uno::Reference<css::graphic::XGraphic>(),
                       const OUString& aComment = OUString());
 
     SAL_DLLPRIVATE bool SignDocumentContentUsingCertificate(
-        const css::uno::Reference<css::frame::XModel>& xModel, bool bHasValidDocumentSignature,
+        const cpo::uno::Reference<css::frame::XModel>& xModel, bool bHasValidDocumentSignature,
         svl::crypto::SigningContext& rSigningContext);
 
     // the following two methods must be used and make sense only during saving currently
@@ -323,9 +323,9 @@ public:
     void SetHasEmbeddedObjects(bool bHasEmbeddedObjects);
 
     static cpo::uno::Sequence < css::util::RevisionTag > GetVersionList(
-                    const css::uno::Reference< css::embed::XStorage >& xStorage );
+                    const cpo::uno::Reference< css::embed::XStorage >& xStorage );
     static OUString CreateTempCopyWithExt( std::u16string_view aURL );
-    static bool CallApproveHandler(const css::uno::Reference< css::task::XInteractionHandler >& xHandler, const cpo::uno::Any& rRequest, bool bAllowAbort);
+    static bool CallApproveHandler(const cpo::uno::Reference< css::task::XInteractionHandler >& xHandler, const cpo::uno::Any& rRequest, bool bAllowAbort);
 
     static bool         SetWritableForUserOnly( const OUString& aURL );
     static sal_uInt32   CreatePasswordToModifyHash( std::u16string_view aPasswd, bool bWriter );

@@ -168,8 +168,8 @@ public:
     OStreamWrapper(SvStream* _pStream, bool _bOwner = false);
 
 // css::io::XStream
-    virtual css::uno::Reference< css::io::XInputStream > getInputStream(  ) override;
-    virtual css::uno::Reference< css::io::XOutputStream > getOutputStream(  ) override;
+    virtual cpo::uno::Reference< css::io::XInputStream > getInputStream(  ) override;
+    virtual cpo::uno::Reference< css::io::XOutputStream > getOutputStream(  ) override;
 
 // css::io::XOutputStream
     virtual void writeBytes(const cpo::uno::Sequence< sal_Int8 >& aData) override;

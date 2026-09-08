@@ -13,7 +13,7 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/xml/sax/XFastDocumentHandler.hpp>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <DocumentHandler.hxx>
@@ -29,7 +29,7 @@
 
 #include "WordPerfectImportFilter.hxx"
 
-using com::sun::star::uno::Reference;
+using cpo::uno::Reference;
 
 using com::sun::star::awt::XWindow;
 using com::sun::star::document::XImporter;
@@ -127,12 +127,12 @@ bool WordPerfectImportFilter::importImpl(
         = mxContext->getServiceManager()->createInstanceWithContext(
             u"com.sun.star.comp.Writer.XMLOasisImporter"_ustr, mxContext);
     assert(xInternalFilter);
-    css::uno::Reference<css::xml::sax::XFastDocumentHandler> xInternalHandler(xInternalFilter,
-                                                                              css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::xml::sax::XFastDocumentHandler> xInternalHandler(xInternalFilter,
+                                                                              cpo::uno::UNO_QUERY);
     assert(xInternalHandler);
 
     // The XImporter sets up an empty target document for XDocumentHandler to write to.
-    Reference<XImporter> xImporter(xInternalHandler, css::uno::UNO_QUERY);
+    Reference<XImporter> xImporter(xInternalHandler, cpo::uno::UNO_QUERY);
     xImporter->setTargetDocument(mxDoc);
 
     // OO Document Handler: abstract class to handle document SAX messages, concrete implementation here

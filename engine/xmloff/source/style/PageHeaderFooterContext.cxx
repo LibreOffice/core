@@ -47,9 +47,9 @@ PageHeaderFooterContext::~PageHeaderFooterContext()
 {
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > PageHeaderFooterContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > PageHeaderFooterContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     if( nElement == XML_ELEMENT(STYLE, XML_HEADER_FOOTER_PROPERTIES) )
     {

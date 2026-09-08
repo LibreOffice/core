@@ -58,8 +58,8 @@ namespace frm
         ~WindowStateGuard();
 
         void    attach(
-            const css::uno::Reference< css::awt::XWindow2 >& _rxWindow,
-            const css::uno::Reference< css::awt::XControlModel >& _rxModel
+            const cpo::uno::Reference< css::awt::XWindow2 >& _rxWindow,
+            const cpo::uno::Reference< css::awt::XControlModel >& _rxModel
         );
     };
 

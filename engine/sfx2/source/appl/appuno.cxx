@@ -55,8 +55,8 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::ucb;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::io;
@@ -1769,7 +1769,7 @@ bool RequestPackageReparation::isApproved() const
     return mxImpl->isApproved();
 }
 
-css::uno::Reference < task::XInteractionRequest > RequestPackageReparation::GetRequest() const
+cpo::uno::Reference < task::XInteractionRequest > RequestPackageReparation::GetRequest() const
 {
     return mxImpl;
 }
@@ -1814,7 +1814,7 @@ NotifyBrokenPackage::~NotifyBrokenPackage()
 {
 }
 
-css::uno::Reference < task::XInteractionRequest > NotifyBrokenPackage::GetRequest() const
+cpo::uno::Reference < task::XInteractionRequest > NotifyBrokenPackage::GetRequest() const
 {
     return mxImpl;
 }

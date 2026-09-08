@@ -23,7 +23,7 @@
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase.hxx>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/xml/crypto/XXMLSignatureTemplate.hpp>
@@ -38,9 +38,9 @@ class XMLSignatureTemplateImpl final : public ::cppu::WeakImplHelper<
     css::lang::XServiceInfo >
 {
     private:
-        css::uno::Reference< css::xml::wrapper::XXMLElementWrapper > m_xTemplate ;
-        std::vector< css::uno::Reference< css::xml::wrapper::XXMLElementWrapper > > targets;
-        css::uno::Reference< css::xml::crypto::XUriBinding > m_xUriBinding;
+        cpo::uno::Reference< css::xml::wrapper::XXMLElementWrapper > m_xTemplate ;
+        std::vector< cpo::uno::Reference< css::xml::wrapper::XXMLElementWrapper > > targets;
+        cpo::uno::Reference< css::xml::crypto::XUriBinding > m_xUriBinding;
         css::xml::crypto::SecurityOperationStatus m_nStatus;
 
     public:
@@ -49,22 +49,22 @@ class XMLSignatureTemplateImpl final : public ::cppu::WeakImplHelper<
 
         //Methods from XXMLSignatureTemplate
         virtual void SAL_CALL setTemplate(
-            const css::uno::Reference< css::xml::wrapper::XXMLElementWrapper >& aXmlElement
+            const cpo::uno::Reference< css::xml::wrapper::XXMLElementWrapper >& aXmlElement
             ) override;
 
-        virtual css::uno::Reference< css::xml::wrapper::XXMLElementWrapper > SAL_CALL getTemplate(
+        virtual cpo::uno::Reference< css::xml::wrapper::XXMLElementWrapper > SAL_CALL getTemplate(
         ) override;
 
         virtual void SAL_CALL setTarget(
-            const css::uno::Reference< css::xml::wrapper::XXMLElementWrapper >& aXmlElement
+            const cpo::uno::Reference< css::xml::wrapper::XXMLElementWrapper >& aXmlElement
         ) override;
 
-        virtual cpo::uno::Sequence< css::uno::Reference< css::xml::wrapper::XXMLElementWrapper > > SAL_CALL getTargets(
+        virtual cpo::uno::Sequence< cpo::uno::Reference< css::xml::wrapper::XXMLElementWrapper > > SAL_CALL getTargets(
         ) override;
 
         virtual void SAL_CALL setBinding(
-            const css::uno::Reference< css::xml::crypto::XUriBinding >& aUriBinding ) override;
-        virtual css::uno::Reference< css::xml::crypto::XUriBinding >
+            const cpo::uno::Reference< css::xml::crypto::XUriBinding >& aUriBinding ) override;
+        virtual cpo::uno::Reference< css::xml::crypto::XUriBinding >
             SAL_CALL getBinding(  ) override;
 
         virtual void SAL_CALL setStatus(
@@ -89,7 +89,7 @@ class XMLSignatureTemplateImpl final : public ::cppu::WeakImplHelper<
 
         //Helper for registry
         /// @throws cpo::uno::RuntimeException
-        static css::uno::Reference< cpo::uno::XInterface > impl_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& aServiceManager ) ;
+        static cpo::uno::Reference< cpo::uno::XInterface > impl_createInstance( const cpo::uno::Reference< css::lang::XMultiServiceFactory >& aServiceManager ) ;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

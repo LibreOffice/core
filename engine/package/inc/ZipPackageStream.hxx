@@ -57,7 +57,7 @@ class ZipPackageStream final : public cppu::ImplInheritanceHelper
 >
 {
 private:
-    css::uno::Reference < css::io::XInputStream > m_xStream;
+    cpo::uno::Reference < css::io::XInputStream > m_xStream;
     ZipPackage          &m_rZipPackage;
     bool                 m_bToBeCompressed, m_bToBeEncrypted, m_bHaveOwnKey, m_bIsEncrypted;
 
@@ -78,10 +78,10 @@ private:
     bool m_bRawStream;
 
     /// Check that m_xStream implements io::XSeekable and return it
-    css::uno::Reference< css::io::XInputStream > const & GetOwnSeekStream();
+    cpo::uno::Reference< css::io::XInputStream > const & GetOwnSeekStream();
     /// get raw data using unbuffered stream
     /// @throws cpo::uno::RuntimeException
-    css::uno::Reference< css::io::XInputStream > getRawData();
+    cpo::uno::Reference< css::io::XInputStream > getRawData();
 
 public:
     bool IsPackageMember () const { return m_nStreamMode == PACKAGE_STREAM_PACKAGEMEMBER;}
@@ -132,13 +132,13 @@ public:
     void setSize (const sal_Int64 nNewSize);
 
     ZipPackageStream( ZipPackage & rNewPackage,
-                      const css::uno::Reference < cpo::uno::XComponentContext >& xContext,
+                      const cpo::uno::Reference < cpo::uno::XComponentContext >& xContext,
                       sal_Int32 nFormat,
                       bool bAllowRemoveOnInsert );
     virtual ~ZipPackageStream() override;
 
-    css::uno::Reference< css::io::XInputStream > GetRawEncrStreamNoHeaderCopy();
-    css::uno::Reference< css::io::XInputStream > TryToGetRawFromDataStream(bool bAddHeaderForEncr );
+    cpo::uno::Reference< css::io::XInputStream > GetRawEncrStreamNoHeaderCopy();
+    cpo::uno::Reference< css::io::XInputStream > TryToGetRawFromDataStream(bool bAddHeaderForEncr );
 
     bool ParsePackageRawStream();
     virtual bool saveChild( const OUString &rPath,
@@ -152,17 +152,17 @@ public:
     void successfullyWritten( ZipEntry const *pEntry );
 
     // XActiveDataSink
-    virtual void setInputStream( const css::uno::Reference< css::io::XInputStream >& aStream ) override;
-    virtual css::uno::Reference< css::io::XInputStream > getInputStream(  ) override;
+    virtual void setInputStream( const cpo::uno::Reference< css::io::XInputStream >& aStream ) override;
+    virtual cpo::uno::Reference< css::io::XInputStream > getInputStream(  ) override;
 
     // XDataSinkEncrSupport
-    virtual css::uno::Reference< css::io::XInputStream > getDataStream() override;
-    virtual css::uno::Reference< css::io::XInputStream > getRawStream() override;
+    virtual cpo::uno::Reference< css::io::XInputStream > getDataStream() override;
+    virtual cpo::uno::Reference< css::io::XInputStream > getRawStream() override;
     virtual void setDataStream(
-                    const css::uno::Reference< css::io::XInputStream >& aStream ) override;
+                    const cpo::uno::Reference< css::io::XInputStream >& aStream ) override;
     virtual void setRawStream(
-                    const css::uno::Reference< css::io::XInputStream >& aStream ) override;
-    virtual css::uno::Reference< css::io::XInputStream > getPlainRawStream() override;
+                    const cpo::uno::Reference< css::io::XInputStream >& aStream ) override;
+    virtual cpo::uno::Reference< css::io::XInputStream > getPlainRawStream() override;
 
     // XPropertySet
     virtual void setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;

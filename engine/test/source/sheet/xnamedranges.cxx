@@ -22,15 +22,15 @@
 #include <com/sun/star/table/XCell.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <cppunit/TestAssert.h>
 
 #include <iostream>
 
 using namespace css;
-using namespace css::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 namespace apitest
 {

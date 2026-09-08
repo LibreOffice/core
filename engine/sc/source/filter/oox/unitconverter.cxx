@@ -41,7 +41,7 @@ namespace oox::xls {
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::awt;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 namespace {
 

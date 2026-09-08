@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
@@ -54,7 +54,7 @@ using namespace com::sun::star;
 
 static std::vector<SfxFrame*> gaFramesArr_Impl;
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::frame;
@@ -475,7 +475,7 @@ SfxUnoFrameItem::SfxUnoFrameItem()
 {
 }
 
-SfxUnoFrameItem::SfxUnoFrameItem( sal_uInt16 nWhichId, css::uno::Reference< css::frame::XFrame > i_xFrame )
+SfxUnoFrameItem::SfxUnoFrameItem( sal_uInt16 nWhichId, cpo::uno::Reference< css::frame::XFrame > i_xFrame )
     : SfxPoolItem( nWhichId )
     , m_xFrame(std::move( i_xFrame ))
 {
@@ -503,23 +503,23 @@ bool SfxUnoFrameItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 /*nMemberId
     return ( rVal >>= m_xFrame );
 }
 
-css::uno::Reference< css::frame::XController > SfxFrame::GetController() const
+cpo::uno::Reference< css::frame::XController > SfxFrame::GetController() const
 {
     if ( m_pImpl->pCurrentViewFrame && m_pImpl->pCurrentViewFrame->GetViewShell() )
         return m_pImpl->pCurrentViewFrame->GetViewShell()->GetController();
     else
-        return css::uno::Reference< css::frame::XController > ();
+        return cpo::uno::Reference< css::frame::XController > ();
 }
 
-const css::uno::Reference< css::frame::XFrame >&  SfxFrame::GetFrameInterface() const
+const cpo::uno::Reference< css::frame::XFrame >&  SfxFrame::GetFrameInterface() const
 {
     return m_pImpl->xFrame;
 }
 
-void SfxFrame::SetFrameInterface_Impl( const css::uno::Reference< css::frame::XFrame >& rFrame )
+void SfxFrame::SetFrameInterface_Impl( const cpo::uno::Reference< css::frame::XFrame >& rFrame )
 {
     m_pImpl->xFrame = rFrame;
-    css::uno::Reference< css::frame::XDispatchRecorder > xRecorder;
+    cpo::uno::Reference< css::frame::XDispatchRecorder > xRecorder;
     if ( !rFrame.is() && GetCurrentViewFrame() )
         GetCurrentViewFrame()->GetBindings().SetRecorder_Impl( xRecorder );
 }

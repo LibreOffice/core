@@ -30,15 +30,15 @@
 namespace dbaui
 {
 
-    using ::com::sun::star::uno::Reference;
+    using ::cpo::uno::Reference;
     using ::com::sun::star::sdbc::XConnection;
     using ::cpo::uno::Exception;
     using ::com::sun::star::container::XNameAccess;
     using ::com::sun::star::graphic::XGraphic;
     using ::com::sun::star::sdb::application::XTableUIProvider;
-    using ::com::sun::star::uno::UNO_QUERY;
+    using ::cpo::uno::UNO_QUERY;
     using ::com::sun::star::sdbcx::XViewsSupplier;
-    using ::com::sun::star::uno::UNO_SET_THROW;
+    using ::cpo::uno::UNO_SET_THROW;
 
     namespace GraphicColorMode = css::graphic::GraphicColorMode;
     namespace DatabaseObject = css::sdb::application::DatabaseObject;
@@ -46,7 +46,7 @@ namespace dbaui
     namespace
     {
         void lcl_getTableImageResourceID_nothrow(
-            const css::uno::Reference< css::container::XNameAccess >& _xViews,
+            const cpo::uno::Reference< css::container::XNameAccess >& _xViews,
             const OUString& _rName,
             OUString& _out_rResourceID)
         {

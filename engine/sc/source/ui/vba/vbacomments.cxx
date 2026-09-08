@@ -26,6 +26,7 @@
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 static cpo::uno::Any AnnotationToComment( const cpo::uno::Any& aSource, const uno::Reference< cpo::uno::XComponentContext > & xContext, const uno::Reference< frame::XModel >& xModel )
 {
@@ -42,7 +43,7 @@ namespace {
 
 class CommentEnumeration : public EnumerationHelperImpl
 {
-    css::uno::Reference< css::frame::XModel > mxModel;
+    cpo::uno::Reference< css::frame::XModel > mxModel;
 public:
     /// @throws uno::RuntimeException
     CommentEnumeration(

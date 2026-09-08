@@ -56,8 +56,8 @@
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 namespace {
 
@@ -143,7 +143,7 @@ LayoutManagerListener::~LayoutManagerListener()
 {
 }
 
-void LayoutManagerListener::setFrame( const css::uno::Reference< css::frame::XFrame >& xFrame )
+void LayoutManagerListener::setFrame( const cpo::uno::Reference< css::frame::XFrame >& xFrame )
 {
     SolarMutexGuard aGuard;
     if ( !m_pWrkWin || m_bHasFrame )
@@ -155,8 +155,8 @@ void LayoutManagerListener::setFrame( const css::uno::Reference< css::frame::XFr
     if ( !xFrame.is() )
         return;
 
-    css::uno::Reference< css::beans::XPropertySet > xPropSet( xFrame, UNO_QUERY );
-    css::uno::Reference< css::frame::XLayoutManagerEventBroadcaster > xLayoutManager;
+    cpo::uno::Reference< css::beans::XPropertySet > xPropSet( xFrame, UNO_QUERY );
+    cpo::uno::Reference< css::frame::XLayoutManagerEventBroadcaster > xLayoutManager;
     if ( !xPropSet.is() )
         return;
 
@@ -167,7 +167,7 @@ void LayoutManagerListener::setFrame( const css::uno::Reference< css::frame::XFr
 
         if ( xLayoutManager.is() )
             xLayoutManager->addLayoutManagerEventListener(
-                css::uno::Reference< css::frame::XLayoutManagerListener >(this) );
+                cpo::uno::Reference< css::frame::XLayoutManagerListener >(this) );
 
         xPropSet.set( xLayoutManager, UNO_QUERY );
         if ( xPropSet.is() )
@@ -192,13 +192,13 @@ void LayoutManagerListener::setFrame( const css::uno::Reference< css::frame::XFr
 //  XComponent
 
 void LayoutManagerListener::addEventListener(
-    const css::uno::Reference< css::lang::XEventListener >& )
+    const cpo::uno::Reference< css::lang::XEventListener >& )
 {
     // do nothing, only internal class
 }
 
 void LayoutManagerListener::removeEventListener(
-    const css::uno::Reference< css::lang::XEventListener >& )
+    const cpo::uno::Reference< css::lang::XEventListener >& )
 {
     // do nothing, only internal class
 }
@@ -210,15 +210,15 @@ void LayoutManagerListener::dispose()
     // reset member
     m_pWrkWin = nullptr;
 
-    css::uno::Reference< css::frame::XFrame > xFrame( m_xFrame.get(), css::uno::UNO_QUERY );
+    cpo::uno::Reference< css::frame::XFrame > xFrame( m_xFrame.get(), cpo::uno::UNO_QUERY );
     if ( !xFrame.is() )
         return;
 
     m_xFrame.clear();
     m_bHasFrame = false;
 
-    css::uno::Reference< css::beans::XPropertySet > xPropSet( xFrame, css::uno::UNO_QUERY );
-    css::uno::Reference< css::frame::XLayoutManagerEventBroadcaster > xLayoutManager;
+    cpo::uno::Reference< css::beans::XPropertySet > xPropSet( xFrame, cpo::uno::UNO_QUERY );
+    cpo::uno::Reference< css::frame::XLayoutManagerEventBroadcaster > xLayoutManager;
     if ( !xPropSet.is() )
         return;
 
@@ -230,7 +230,7 @@ void LayoutManagerListener::dispose()
         // remove as listener from layout manager
         if ( xLayoutManager.is() )
             xLayoutManager->removeLayoutManagerEventListener(
-                css::uno::Reference< css::frame::XLayoutManagerListener >(this) );
+                cpo::uno::Reference< css::frame::XLayoutManagerListener >(this) );
     }
     catch ( css::lang::DisposedException& )
     {
@@ -1141,9 +1141,9 @@ bool SfxWorkWindow::IsPluginMode( SfxObjectShell const * pObjShell )
 }
 
 
-css::uno::Reference< css::frame::XFrame > SfxWorkWindow::GetFrameInterface()
+cpo::uno::Reference< css::frame::XFrame > SfxWorkWindow::GetFrameInterface()
 {
-    css::uno::Reference< css::frame::XFrame > xFrame;
+    cpo::uno::Reference< css::frame::XFrame > xFrame;
 
     SfxDispatcher* pDispatcher( GetBindings().GetDispatcher() );
     if ( pDispatcher )

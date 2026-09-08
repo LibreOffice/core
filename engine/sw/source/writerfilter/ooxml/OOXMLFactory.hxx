@@ -87,11 +87,11 @@ class OOXMLFactory
 {
 public:
 
-    static css::uno::Reference< css::xml::sax::XFastContextHandler> createFastChildContext(OOXMLFastContextHandler * pHandler, Token_t Element);
+    static cpo::uno::Reference< css::xml::sax::XFastContextHandler> createFastChildContext(OOXMLFastContextHandler * pHandler, Token_t Element);
 
-    static css::uno::Reference< css::xml::sax::XFastContextHandler> createFastChildContextFromStart(OOXMLFastContextHandler * pHandler, Token_t Element);
+    static cpo::uno::Reference< css::xml::sax::XFastContextHandler> createFastChildContextFromStart(OOXMLFastContextHandler * pHandler, Token_t Element);
 
-    static void attributes(OOXMLFastContextHandler * pHandler, const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs);
+    static void attributes(OOXMLFastContextHandler * pHandler, const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs);
 
     static void characters(OOXMLFastContextHandler * pHandler, const OUString & rString);
 
@@ -102,7 +102,7 @@ private:
     OOXMLFactory() = delete;
     static OOXMLFactory_ns::Pointer_t getFactoryForNamespace(Id id);
 
-    static css::uno::Reference< css::xml::sax::XFastContextHandler> createFastChildContextFromFactory(OOXMLFastContextHandler * pHandler,
+    static cpo::uno::Reference< css::xml::sax::XFastContextHandler> createFastChildContextFromFactory(OOXMLFastContextHandler * pHandler,
             const OOXMLFactory_ns::Pointer_t& pFactory, Token_t Element);
 };
 

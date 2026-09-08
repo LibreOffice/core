@@ -32,8 +32,8 @@ typedef cppu::ImplInheritanceHelper< VbaDialogsBase, ov::word::XDialogs > SwVbaD
 class SwVbaDialogs : public SwVbaDialogs_BASE
 {
 public:
-    SwVbaDialogs( const css::uno::Reference< ov::XHelperInterface >& xParent,
-                  const css::uno::Reference< cpo::uno::XComponentContext > &xContext,
+    SwVbaDialogs( const cpo::uno::Reference< ov::XHelperInterface >& xParent,
+                  const cpo::uno::Reference< cpo::uno::XComponentContext > &xContext,
                   const rtl::Reference< SwXTextDocument >& xModel );
 
     // XCollection

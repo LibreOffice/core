@@ -29,7 +29,8 @@
 #include <IDocumentLayoutAccess.hxx>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 // tests should only be added to ww8IMPORT *if* they fail round-tripping in ww8EXPORT
 

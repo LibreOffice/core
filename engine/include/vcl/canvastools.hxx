@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_CANVASTOOLS_HXX
 #define INCLUDED_VCL_CANVASTOOLS_HXX
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/range/b2irectangle.hxx>

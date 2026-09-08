@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <sal/types.h>
 
@@ -38,7 +38,7 @@ class XMLTextListAutoStylePool;
 class XMLTextNumRuleInfo
 {
     // numbering rules instance and its name
-    css::uno::Reference < css::container::XIndexReplace > mxNumRules;
+    cpo::uno::Reference < css::container::XIndexReplace > mxNumRules;
     OUString            msNumRulesName;
 
     // paragraph's list attributes
@@ -65,7 +65,7 @@ public:
 
     inline XMLTextNumRuleInfo& operator=( const XMLTextNumRuleInfo& rInfo );
 
-    void Set( const css::uno::Reference < css::text::XTextContent > & rTextContent,
+    void Set( const cpo::uno::Reference < css::text::XTextContent > & rTextContent,
               bool bOutlineStyleAsNormalListStyle,
               const XMLTextListAutoStylePool& rListAutoPool,
               bool bExportTextNumberElement,

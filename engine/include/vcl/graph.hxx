@@ -26,7 +26,7 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/animate/Animation.hxx>
 #include <vcl/gfxlink.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <vcl/vectorgraphicdata.hxx>
 #include <basegfx/vector/b2dsize.hxx>
 #include <vcl/GraphicExternalLink.hxx>
@@ -97,7 +97,7 @@ public:
                     Graphic( const std::shared_ptr<VectorGraphicData>& rVectorGraphicDataPtr );
                     Graphic( const Animation& rAnimation );
                     Graphic( const GDIMetaFile& rMtf );
-                    Graphic( const css::uno::Reference< css::graphic::XGraphic >& rxGraphic );
+                    Graphic( const cpo::uno::Reference< css::graphic::XGraphic >& rxGraphic );
 
     Graphic&        operator=( const Graphic& rGraphic );
     Graphic&        operator=( Graphic&& rGraphic ) noexcept;
@@ -132,7 +132,7 @@ public:
     Animation       GetAnimation() const;
     const GDIMetaFile& GetGDIMetaFile() const;
 
-    css::uno::Reference< css::graphic::XGraphic > GetXGraphic() const;
+    cpo::uno::Reference< css::graphic::XGraphic > GetXGraphic() const;
 
     Size            GetPrefSize() const;
     void            SetPrefSize( const Size& rPrefSize );

@@ -30,10 +30,10 @@ public:
                                     );
     virtual                     ~ScXMLLabelRangesContext() override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
                                 createFastChildContext(
                                     sal_Int32 nElement,
-                                    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList
+                                    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList
                                     ) override;
 };
 

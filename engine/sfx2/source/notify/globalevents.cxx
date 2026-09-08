@@ -46,10 +46,11 @@
 #include <vector>
 
 using namespace css;
+using namespace ::cpo;
 
 namespace {
 
-typedef ::std::vector< css::uno::Reference< css::frame::XModel > > TModelList;
+typedef ::std::vector< cpo::uno::Reference< css::frame::XModel > > TModelList;
 
 
 //TODO: remove support of obsolete document::XEventBroadcaster/Listener
@@ -62,15 +63,15 @@ class SfxGlobalEvents_Impl : public ::cppu::WeakImplHelper< css::lang::XServiceI
 {
     std::mutex m_aLock;
     rtl::Reference< GlobalEventConfig > m_xEvents;
-    css::uno::Reference< css::document::XEventListener > m_xJobExecutorListener;
+    cpo::uno::Reference< css::document::XEventListener > m_xJobExecutorListener;
     ::comphelper::OInterfaceContainerHelper4<document::XEventListener> m_aLegacyListeners;
     ::comphelper::OInterfaceContainerHelper4<document::XDocumentEventListener> m_aDocumentListeners;
-    std::multiset<css::uno::Reference<css::lang::XEventListener>> m_disposeListeners;
+    std::multiset<cpo::uno::Reference<css::lang::XEventListener>> m_disposeListeners;
     TModelList m_lModels;
     bool m_disposed;
 
 public:
-    explicit SfxGlobalEvents_Impl(const css::uno::Reference < cpo::uno::XComponentContext >& rxContext);
+    explicit SfxGlobalEvents_Impl(const cpo::uno::Reference < cpo::uno::XComponentContext >& rxContext);
 
     virtual OUString getImplementationName() override
     {
@@ -89,16 +90,16 @@ public:
     }
 
     // css.document.XEventBroadcaster
-    virtual css::uno::Reference< css::container::XNameReplace > getEvents() override;
+    virtual cpo::uno::Reference< css::container::XNameReplace > getEvents() override;
 
-    virtual void addEventListener(const css::uno::Reference< css::document::XEventListener >& xListener) override;
+    virtual void addEventListener(const cpo::uno::Reference< css::document::XEventListener >& xListener) override;
 
-    virtual void removeEventListener( const css::uno::Reference< css::document::XEventListener >& xListener) override;
+    virtual void removeEventListener( const cpo::uno::Reference< css::document::XEventListener >& xListener) override;
 
     // css.document.XDocumentEventBroadcaster
-    virtual void addDocumentEventListener( const css::uno::Reference< css::document::XDocumentEventListener >& Listener ) override;
-    virtual void removeDocumentEventListener( const css::uno::Reference< css::document::XDocumentEventListener >& Listener ) override;
-    virtual void notifyDocumentEvent( const OUString& EventName, const css::uno::Reference< css::frame::XController2 >& ViewController, const cpo::uno::Any& Supplement ) override;
+    virtual void addDocumentEventListener( const cpo::uno::Reference< css::document::XDocumentEventListener >& Listener ) override;
+    virtual void removeDocumentEventListener( const cpo::uno::Reference< css::document::XDocumentEventListener >& Listener ) override;
+    virtual void notifyDocumentEvent( const OUString& EventName, const cpo::uno::Reference< css::frame::XController2 >& ViewController, const cpo::uno::Any& Supplement ) override;
 
     // css.document.XEventListener
     virtual void notifyEvent(const css::document::EventObject& aEvent) override;
@@ -114,7 +115,7 @@ public:
     virtual void remove(const cpo::uno::Any& aElement) override;
 
     // css.container.XEnumerationAccess
-    virtual css::uno::Reference< css::container::XEnumeration > createEnumeration() override;
+    virtual cpo::uno::Reference< css::container::XEnumeration > createEnumeration() override;
 
     // css.container.XElementAccess
     virtual cpo::uno::Type getElementType() override;
@@ -127,11 +128,11 @@ public:
     // css.lang.XComponent
     void dispose() override;
 
-    void addEventListener(css::uno::Reference<css::lang::XEventListener> const & xListener)
+    void addEventListener(cpo::uno::Reference<css::lang::XEventListener> const & xListener)
         override;
 
     void removeEventListener(
-        css::uno::Reference<css::lang::XEventListener> const & aListener) override;
+        cpo::uno::Reference<css::lang::XEventListener> const & aListener) override;
 
 private:
 
@@ -141,7 +142,7 @@ private:
     void implts_notifyListener(const css::document::DocumentEvent& aEvent);
 
     // not threadsafe
-    TModelList::iterator impl_searchDoc(const css::uno::Reference< css::frame::XModel >& xModel);
+    TModelList::iterator impl_searchDoc(const cpo::uno::Reference< css::frame::XModel >& xModel);
 };
 
 SfxGlobalEvents_Impl::SfxGlobalEvents_Impl( const uno::Reference < cpo::uno::XComponentContext >& rxContext)
@@ -240,7 +241,7 @@ void SfxGlobalEvents_Impl::disposing(const lang::EventObject& aEvent)
 }
 
 void SfxGlobalEvents_Impl::dispose() {
-    std::multiset<css::uno::Reference<css::lang::XEventListener>> listeners;
+    std::multiset<cpo::uno::Reference<css::lang::XEventListener>> listeners;
     {
         std::unique_lock g(m_aLock);
         if (m_disposed)
@@ -267,7 +268,7 @@ void SfxGlobalEvents_Impl::dispose() {
 }
 
 void SfxGlobalEvents_Impl::addEventListener(
-    css::uno::Reference<css::lang::XEventListener> const & xListener)
+    cpo::uno::Reference<css::lang::XEventListener> const & xListener)
 {
     if (!xListener.is()) {
         throw cpo::uno::RuntimeException(u"null listener"_ustr);
@@ -285,7 +286,7 @@ void SfxGlobalEvents_Impl::addEventListener(
 }
 
 void SfxGlobalEvents_Impl::removeEventListener(
-    css::uno::Reference<css::lang::XEventListener> const & aListener)
+    cpo::uno::Reference<css::lang::XEventListener> const & aListener)
 {
     std::scoped_lock g(m_aLock);
     auto const i = m_disposeListeners.find(aListener);
@@ -428,7 +429,7 @@ bool SfxGlobalEvents_Impl::hasElements()
 
 void SfxGlobalEvents_Impl::implts_notifyJobExecution(const document::EventObject& aEvent)
 {
-    css::uno::Reference<css::document::XEventListener> listener;
+    cpo::uno::Reference<css::document::XEventListener> listener;
     {
         std::scoped_lock g(m_aLock);
         listener = m_xJobExecutorListener;

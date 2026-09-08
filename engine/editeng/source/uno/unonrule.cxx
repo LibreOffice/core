@@ -50,8 +50,8 @@ using ::com::sun::star::ucb::XAnyCompare;
 
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 
@@ -474,7 +474,7 @@ const SvxNumRule& SvxGetNumRule( Reference< XIndexReplace > const & xRule )
     return pRule->getNumRule();
 }
 
-css::uno::Reference< css::container::XIndexReplace > SvxCreateNumRule(const SvxNumRule& rRule)
+cpo::uno::Reference< css::container::XIndexReplace > SvxCreateNumRule(const SvxNumRule& rRule)
 {
     return new SvxUnoNumberingRules( rRule );
 }
@@ -532,7 +532,7 @@ Reference< XAnyCompare > SvxCreateNumRuleCompare() noexcept
     return new SvxUnoNumberingRulesCompare;
 }
 
-css::uno::Reference< css::container::XIndexReplace > SvxCreateNumRule()
+cpo::uno::Reference< css::container::XIndexReplace > SvxCreateNumRule()
 {
     SvxNumRule aTempRule( SvxNumRuleFlags::NONE, 10, false );
     return SvxCreateNumRule( aTempRule );

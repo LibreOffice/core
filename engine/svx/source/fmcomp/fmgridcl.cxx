@@ -71,7 +71,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <memory>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::beans;
@@ -666,7 +666,7 @@ void FmGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, weld::Menu& rM
         sal_uInt16 nPos2 = GetModelColumnPos(nColId);
 
         Reference< css::container::XIndexContainer >  xColumns(static_cast<FmGridControl*>(GetParent())->GetPeer()->getColumns());
-        Reference< css::beans::XPropertySet>          xColumn( xColumns->getByIndex(nPos2), css::uno::UNO_QUERY);
+        Reference< css::beans::XPropertySet>          xColumn( xColumns->getByIndex(nPos2), cpo::uno::UNO_QUERY);
         Reference< css::view::XSelectionSupplier >    xSelSupplier(xColumns, UNO_QUERY);
         if (xSelSupplier.is())
             xSelSupplier->select(Any(xColumn));
@@ -693,7 +693,7 @@ void FmGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, weld::Menu& rM
 
     if (xCols.is() && nColId)
     {
-        Reference< css::beans::XPropertySet > xPropSet( xCols->getByIndex(nPos), css::uno::UNO_QUERY);
+        Reference< css::beans::XPropertySet > xPropSet( xCols->getByIndex(nPos), cpo::uno::UNO_QUERY);
 
         Reference< css::io::XPersistObject >  xServiceQuestion(xPropSet, UNO_QUERY);
         sal_Int32 nColType = xServiceQuestion.is() ? getColumnTypeByModelName(xServiceQuestion->getServiceName()) : 0;
@@ -759,7 +759,7 @@ void FmGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, weld::Menu& rM
         Any aHidden,aName;
         for (sal_Int32 i=0; i<xCols->getCount(); ++i)
         {
-            xCurCol.set(xCols->getByIndex(i), css::uno::UNO_QUERY);
+            xCurCol.set(xCols->getByIndex(i), cpo::uno::UNO_QUERY);
             DBG_ASSERT(xCurCol.is(), "FmGridHeader::PreExecuteColumnContextMenu : the Peer has invalid columns !");
             aHidden = xCurCol->getPropertyValue(FM_PROP_HIDDEN);
             DBG_ASSERT(aHidden.getValueTypeClass() == TypeClass_BOOLEAN,
@@ -826,13 +826,13 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const weld::M
     if (rExecutionResult == "delete")
     {
         Reference< XInterface > xCol(
-            xCols->getByIndex(nPos), css::uno::UNO_QUERY);
+            xCols->getByIndex(nPos), cpo::uno::UNO_QUERY);
         xCols->removeByIndex(nPos);
         ::comphelper::disposeComponent(xCol);
     }
     else if (rExecutionResult == "hide")
     {
-        Reference< css::beans::XPropertySet > xCurCol( xCols->getByIndex(nPos), css::uno::UNO_QUERY);
+        Reference< css::beans::XPropertySet > xCurCol( xCols->getByIndex(nPos), cpo::uno::UNO_QUERY);
         xCurCol->setPropertyValue(FM_PROP_HIDDEN, Any(true));
     }
     else if (rExecutionResult == "column")
@@ -912,7 +912,7 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const weld::M
         Reference< css::beans::XPropertySet >  xCurCol;
         for (sal_Int32 i=0; i<xCols->getCount(); ++i)
         {
-            xCurCol.set(xCols->getByIndex(i), css::uno::UNO_QUERY);
+            xCurCol.set(xCols->getByIndex(i), cpo::uno::UNO_QUERY);
             xCurCol->setPropertyValue(FM_PROP_HIDDEN, Any(false));
         }
         // TODO : there must be a more clever way to do this...
@@ -928,7 +928,7 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const weld::M
             Reference< css::beans::XPropertySet >  xCurCol;
             for (sal_Int32 i=0; i<xCols->getCount() && nExecutionResult; ++i)
             {
-                xCurCol.set(xCols->getByIndex(i), css::uno::UNO_QUERY);
+                xCurCol.set(xCols->getByIndex(i), cpo::uno::UNO_QUERY);
                 Any aHidden = xCurCol->getPropertyValue(FM_PROP_HIDDEN);
                 if (::comphelper::getBOOL(aHidden))
                     if (!--nExecutionResult)
@@ -1142,11 +1142,11 @@ void FmGridControl::SetDesignMode(bool bMode)
             Any aSelection = xSelSupplier->getSelection();
             Reference< css::beans::XPropertySet >  xColumn;
             if (aSelection.getValueTypeClass() == TypeClass_INTERFACE)
-                xColumn.set(aSelection, css::uno::UNO_QUERY);
+                xColumn.set(aSelection, cpo::uno::UNO_QUERY);
             Reference< XInterface >  xCurrent;
             for (sal_Int32 i=0; i<xColumns->getCount(); ++i)
             {
-                xCurrent.set(xColumns->getByIndex(i), css::uno::UNO_QUERY);
+                xCurrent.set(xColumns->getByIndex(i), cpo::uno::UNO_QUERY);
                 if (xCurrent == xColumn)
                 {
                     markColumn(GetColumnIdFromModelPos(i));
@@ -1572,7 +1572,7 @@ void FmGridControl::ColumnMoved(sal_uInt16 nId)
         Reference< XInterface > xCurrent;
         for (i = 0; !xCol.is() && i < xColumns->getCount(); i++)
         {
-            xCurrent.set(xColumns->getByIndex(i), css::uno::UNO_QUERY);
+            xCurrent.set(xColumns->getByIndex(i), cpo::uno::UNO_QUERY);
             if (xCurrent == pCol->getModel())
             {
                 xCol = pCol->getModel();
@@ -1615,7 +1615,7 @@ void FmGridControl::InitColumnsByModels(const Reference< css::container::XIndexC
     for (i = 0; i < xColumns->getCount(); ++i)
     {
         Reference< css::beans::XPropertySet > xCol(
-            xColumns->getByIndex(i), css::uno::UNO_QUERY);
+            xColumns->getByIndex(i), cpo::uno::UNO_QUERY);
 
         OUString aName(
             comphelper::getString(xCol->getPropertyValue(FM_PROP_LABEL)));
@@ -1637,7 +1637,7 @@ void FmGridControl::InitColumnsByModels(const Reference< css::container::XIndexC
     Any aHidden;
     for (i = 0; i < xColumns->getCount(); ++i)
     {
-        Reference< css::beans::XPropertySet > xCol( xColumns->getByIndex(i), css::uno::UNO_QUERY);
+        Reference< css::beans::XPropertySet > xCol( xColumns->getByIndex(i), cpo::uno::UNO_QUERY);
         aHidden = xCol->getPropertyValue(FM_PROP_HIDDEN);
         if (::comphelper::getBOOL(aHidden))
             HideColumn(GetColumnIdFromModelPos(static_cast<sal_uInt16>(i)));
@@ -1735,7 +1735,7 @@ void FmGridControl::InitColumnsByFields(const Reference< css::container::XIndexA
         if ( pCol )
         {
             Reference< XPropertySet > xColumnModel(
-                xColumns->getByIndex( i ), css::uno::UNO_QUERY);
+                xColumns->getByIndex( i ), cpo::uno::UNO_QUERY);
 
             InitColumnByField( pCol, xColumnModel, xFieldsAsNames, _rxFields );
         }
@@ -2028,7 +2028,7 @@ void FmGridControl::Select()
             {
                 Reference< XPropertySet >  xColumn(
                     xColumns->getByIndex(nSelectedColumn),
-                    css::uno::UNO_QUERY);
+                    cpo::uno::UNO_QUERY);
                 xSelSupplier->select(Any(xColumn));
             }
             else

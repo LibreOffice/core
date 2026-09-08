@@ -99,26 +99,26 @@ public:
     virtual void deleteDataPointForAllSequences( ::sal_Int32 nAtIndex ) override;
     virtual void swapDataPointWithNextOneForAllSequences( ::sal_Int32 nAtIndex ) override;
     virtual void registerDataSequenceForChanges(
-        const css::uno::Reference< css::chart2::data::XDataSequence >& xSeq ) override;
+        const cpo::uno::Reference< css::chart2::data::XDataSequence >& xSeq ) override;
     virtual void insertDataSeries( ::sal_Int32 nAfterIndex ) override;
 
     // ____ XDataProvider (base of XInternalDataProvider) ____
     virtual bool createDataSourcePossible(
         const cpo::uno::Sequence< css::beans::PropertyValue >& aArguments ) override;
-    virtual css::uno::Reference< css::chart2::data::XDataSource > createDataSource(
+    virtual cpo::uno::Reference< css::chart2::data::XDataSource > createDataSource(
         const cpo::uno::Sequence< css::beans::PropertyValue >& aArguments ) override;
     virtual cpo::uno::Sequence< css::beans::PropertyValue > detectArguments(
-        const css::uno::Reference< css::chart2::data::XDataSource >& xDataSource ) override;
+        const cpo::uno::Reference< css::chart2::data::XDataSource >& xDataSource ) override;
     virtual bool createDataSequenceByRangeRepresentationPossible(
         const OUString& aRangeRepresentation ) override;
-    virtual css::uno::Reference< css::chart2::data::XDataSequence > createDataSequenceByRangeRepresentation(
+    virtual cpo::uno::Reference< css::chart2::data::XDataSequence > createDataSequenceByRangeRepresentation(
         const OUString& aRangeRepresentation ) override;
 
-    virtual css::uno::Reference<css::chart2::data::XDataSequence>
+    virtual cpo::uno::Reference<css::chart2::data::XDataSequence>
         createDataSequenceByValueArray( const OUString& aRole, const OUString& aRangeRepresentation,
             const OUString& aRoleQualifier ) override;
 
-    virtual css::uno::Reference< css::sheet::XRangeSelection > getRangeSelection() override;
+    virtual cpo::uno::Reference< css::sheet::XRangeSelection > getRangeSelection() override;
 
     // ____ XRangeXMLConversion ____
     virtual OUString convertRangeToXML(
@@ -163,15 +163,15 @@ public:
 
     // ____ XChartData (base of XChartDataArray) ____
     virtual void addChartDataChangeEventListener(
-        const css::uno::Reference< css::chart::XChartDataChangeEventListener >& aListener ) override;
+        const cpo::uno::Reference< css::chart::XChartDataChangeEventListener >& aListener ) override;
     virtual void removeChartDataChangeEventListener(
-        const css::uno::Reference< css::chart::XChartDataChangeEventListener >& aListener ) override;
+        const cpo::uno::Reference< css::chart::XChartDataChangeEventListener >& aListener ) override;
     virtual double getNotANumber() override;
     virtual bool isNotANumber(
         double nNumber ) override;
 
     // ____ XCloneable ____
-    virtual css::uno::Reference< css::util::XCloneable > createClone() override;
+    virtual cpo::uno::Reference< css::util::XCloneable > createClone() override;
     // css::lang::XInitialization:
     virtual void initialize(const cpo::uno::Sequence< cpo::uno::Any > & aArguments) override;
 
@@ -180,9 +180,9 @@ public:
 private:
     void addDataSequenceToMap(
         const OUString & rRangeRepresentation,
-        const css::uno::Reference< css::chart2::data::XDataSequence > & xSequence );
+        const cpo::uno::Reference< css::chart2::data::XDataSequence > & xSequence );
 
-    css::uno::Reference< css::chart2::data::XDataSequence >
+    cpo::uno::Reference< css::chart2::data::XDataSequence >
         createDataSequenceAndAddToMap( const OUString & rRangeRepresentation,
                                        const OUString & rRole );
     rtl::Reference< UncachedDataSequence >

@@ -44,6 +44,7 @@
 
 using namespace comphelper;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 
 IMPL_LINK_NOARG(MacroSecurity, OkBtnHdl, weld::Button&, void)
@@ -54,7 +55,7 @@ IMPL_LINK_NOARG(MacroSecurity, OkBtnHdl, weld::Button&, void)
 }
 
 MacroSecurity::MacroSecurity(weld::Window* pParent,
-    css::uno::Reference<css::xml::crypto::XSecurityEnvironment> xSecurityEnvironment)
+    cpo::uno::Reference<css::xml::crypto::XSecurityEnvironment> xSecurityEnvironment)
     : GenericDialogController(pParent, u"xmlsec/ui/macrosecuritydialog.ui"_ustr, u"MacroSecurityDialog"_ustr)
     , m_xSecurityEnvironment(std::move(xSecurityEnvironment))
     , m_xTabCtrl(m_xBuilder->weld_notebook(u"tabcontrol"_ustr))

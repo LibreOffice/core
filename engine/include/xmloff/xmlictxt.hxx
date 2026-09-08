@@ -75,10 +75,10 @@ public:
 
     // css::xml::sax::XFastContextHandler:
     virtual void startFastElement (sal_Int32 Element,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs) override;
 
     virtual void startUnknownElement(const OUString & Namespace, const OUString & Name,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override;
 
     /** endFastElement is called before a context will be destructed, but
      * after an elements context has been parsed. It may be used for actions
@@ -87,12 +87,12 @@ public:
 
     virtual void endUnknownElement(const OUString & Namespace, const OUString & Name) override;
 
-    virtual css::uno::Reference< XFastContextHandler >  createFastChildContext(sal_Int32 Element,
-        const css::uno::Reference<css::xml::sax::XFastAttributeList>& Attribs) override;
+    virtual cpo::uno::Reference< XFastContextHandler >  createFastChildContext(sal_Int32 Element,
+        const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& Attribs) override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createUnknownChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createUnknownChildContext(
         const OUString & Namespace, const OUString & Name,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override;
 
     /** This method is called for all characters that are contained in the
      * current element. The default is to ignore them. */

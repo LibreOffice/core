@@ -44,7 +44,7 @@ class COMPHELPER_DLLPUBLIC AttributeList final :
 public:
     AttributeList();
     AttributeList(const AttributeList &r) = default;
-    AttributeList(const css::uno::Reference<css::xml::sax::XAttributeList>& rAttrList);
+    AttributeList(const cpo::uno::Reference<css::xml::sax::XAttributeList>& rAttrList);
     AttributeList(AttributeList&&) = delete;
 
     virtual ~AttributeList() override;
@@ -56,7 +56,7 @@ public:
         mAttributes.clear();
     }
     void RemoveAttribute(const OUString& sName);
-    void AppendAttributeList(const css::uno::Reference< css::xml::sax::XAttributeList >&);
+    void AppendAttributeList(const cpo::uno::Reference< css::xml::sax::XAttributeList >&);
     void SetValueByIndex(sal_Int16 i, const OUString& rValue);
     void RemoveAttributeByIndex(sal_Int16 i);
     void RenameAttributeByIndex(sal_Int16 i, const OUString& rNewName);
@@ -80,7 +80,7 @@ public:
     virtual OUString getValueByName(const OUString& aName) override;
 
     // css::util::XCloneable
-    virtual css::uno::Reference< XCloneable >
+    virtual cpo::uno::Reference< XCloneable >
         createClone() override;
 };
 

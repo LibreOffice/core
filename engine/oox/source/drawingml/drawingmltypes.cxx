@@ -30,7 +30,7 @@
 #include <sax/tools/converter.hxx>
 #include <oox/token/tokens.hxx>
 
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::com::sun::star::xml::sax::XFastAttributeList;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::drawing;

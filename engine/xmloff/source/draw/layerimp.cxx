@@ -37,7 +37,7 @@ using namespace ::xmloff::token;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::xml;
 using namespace ::com::sun::star::xml::sax;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::beans;
@@ -50,13 +50,13 @@ class SdXMLLayerContext : public SvXMLImportContext
 public:
     SdXMLLayerContext( SvXMLImport& rImport, const Reference< XFastAttributeList >& xAttrList, const Reference< XNameAccess >& xLayerManager );
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
     virtual void endFastElement(sal_Int32 nElement) override;
 
 private:
-    css::uno::Reference< css::container::XNameAccess > mxLayerManager;
+    cpo::uno::Reference< css::container::XNameAccess > mxLayerManager;
     OUString msName;
     OUStringBuffer sDescriptionBuffer;
     OUStringBuffer sTitleBuffer;
@@ -91,9 +91,9 @@ SdXMLLayerContext::SdXMLLayerContext( SvXMLImport& rImport, const Reference< XFa
 
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLLayerContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLLayerContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
     if( nElement == XML_ELEMENT(SVG, XML_TITLE) || nElement == XML_ELEMENT(SVG_COMPAT, XML_TITLE) )
     {
@@ -182,9 +182,9 @@ SdXMLLayerSetContext::~SdXMLLayerSetContext()
 {
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLLayerSetContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLLayerSetContext::createFastChildContext(
     sal_Int32 /*nElement*/,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     return new SdXMLLayerContext( GetImport(), xAttrList, mxLayerManager );
 }

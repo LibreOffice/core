@@ -62,7 +62,7 @@
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -77,6 +77,7 @@
 #include <comphelper/storagehelper.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace sd::slidesorter::controller {
 

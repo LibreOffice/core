@@ -512,7 +512,7 @@ void dumpType(std::ostream& out, rtl::Reference<TypeManager> const& manager,
             }
             break;
         case codemaker::UnoType::Sort::Interface:
-            out << "::com::sun::star::uno::Reference<";
+            out << "::cpo::uno::Reference<";
             out << cppName(n);
             out << ">";
             break;
@@ -682,7 +682,7 @@ void dumpWrapper(std::ostream& out, rtl::Reference<TypeManager> const& manager,
                  OUString const& interfaceName, unoidl::InterfaceTypeEntity::Method const& method,
                  std::list<OUString> const& baseTrail)
 {
-    out << "        .function(\"" << method.name << "\", +[](::com::sun::star::uno::Reference<"
+    out << "        .function(\"" << method.name << "\", +[](::cpo::uno::Reference<"
         << cppName(interfaceName);
     out << "> const & the_self";
     if (!method.parameters.empty())
@@ -1054,7 +1054,7 @@ SAL_IMPLEMENT_MAIN()
                   "#include <memory>\n"
                   "#include <emscripten/bind.h>\n"
                   "#include <cpo/uno/Any.hxx>\n"
-                  "#include <com/sun/star/uno/Reference.hxx>\n"
+                  "#include <cpo/uno/Reference.hxx>\n"
                   "#include <o3tl/unreachable.hxx>\n"
                   "#include <static/unoembindhelpers/PrimaryBindings.hxx>\n";
         for (auto const& enm : enums)
@@ -1183,17 +1183,17 @@ SAL_IMPLEMENT_MAIN()
                       "        .allow_subclass<the_wrappers"
                    << cppName(ifc) << ">(\"uno_Wrapper_" << jsName(ifc)
                    << "\")\n"
-                      "        .smart_ptr<::com::sun::star::uno::Reference<"
+                      "        .smart_ptr<::cpo::uno::Reference<"
                    << cppName(ifc) << ">>(\"uno_Reference_" << jsName(ifc)
                    << "\")\n"
                       "        .class_function(\"query\", "
-                      "+[](::com::sun::star::uno::Reference<::cpo::uno::XInterface> "
-                      "const & the_object) { return ::com::sun::star::uno::Reference<"
+                      "+[](::cpo::uno::Reference<::cpo::uno::XInterface> "
+                      "const & the_object) { return ::cpo::uno::Reference<"
                    << cppName(ifc)
-                   << ">(the_object, ::com::sun::star::uno::UNO_QUERY); })\n"
+                   << ">(the_object, ::cpo::uno::UNO_QUERY); })\n"
                       "        .class_function(\"reference\", +[]("
                    << cppName(ifc)
-                   << " * the_interface) { return ::com::sun::star::uno::Reference(the_interface); "
+                   << " * the_interface) { return ::cpo::uno::Reference(the_interface); "
                       "}, ::emscripten::allow_raw_pointers())\n";
             if (bases.size() > 1)
             {
@@ -1207,7 +1207,7 @@ SAL_IMPLEMENT_MAIN()
             dumpAttributes(cppOut, mgr, ifc, ifcEnt, {});
             dumpMethods(cppOut, mgr, ifc, ifcEnt, {});
             cppOut << "        ;\n"
-                      "    ::unoembindhelpers::registerUnoType<::com::sun::star::uno::Reference<"
+                      "    ::unoembindhelpers::registerUnoType<::cpo::uno::Reference<"
                    << cppName(ifc) << ">>();\n";
             dumpRegisterFunctionEpilog(cppOut, n);
             for (auto const& attr : ifcEnt->getDirectAttributes())

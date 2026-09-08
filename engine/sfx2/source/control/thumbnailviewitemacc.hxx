@@ -38,13 +38,13 @@ public:
 
     // XAccessibleContext
     virtual sal_Int64 getAccessibleChildCount(  ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleChild( sal_Int64 i ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleParent(  ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > getAccessibleChild( sal_Int64 i ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > getAccessibleParent(  ) override;
     virtual sal_Int64 getAccessibleIndexInParent(  ) override;
     virtual sal_Int16 getAccessibleRole(  ) override;
     virtual OUString getAccessibleDescription(  ) override;
     virtual OUString getAccessibleName(  ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > getAccessibleRelationSet(  ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessibleRelationSet > getAccessibleRelationSet(  ) override;
     virtual sal_Int64 getAccessibleStateSet(  ) override;
     virtual css::lang::Locale getLocale(  ) override;
 
@@ -52,7 +52,7 @@ public:
     virtual css::awt::Rectangle implGetBounds() override;
 
     // XAccessibleComponent
-    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
 
     virtual void grabFocus(  ) override;
     virtual sal_Int32 getForeground(  ) override;

@@ -14,12 +14,13 @@
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/table/XCell.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <cppunit/TestAssert.h>
 
 using namespace com::sun::star;
-using namespace com::sun::star::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 namespace apitest
 {

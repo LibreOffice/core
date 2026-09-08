@@ -46,7 +46,7 @@
 #include <array>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo::uno;
 
 /* Implementation of Filters test, volume 5*/
 

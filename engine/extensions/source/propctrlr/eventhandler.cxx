@@ -70,7 +70,7 @@
 namespace pcr
 {
 
-    using ::com::sun::star::uno::Reference;
+    using ::cpo::uno::Reference;
     using ::cpo::uno::XComponentContext;
     using ::cpo::uno::Any;
     using ::cpo::uno::TypeClass_STRING;
@@ -88,8 +88,8 @@ namespace pcr
     using ::com::sun::star::container::XChild;
     using ::com::sun::star::container::XIndexAccess;
     using ::com::sun::star::script::XEventAttacherManager;
-    using ::com::sun::star::uno::UNO_QUERY;
-    using ::com::sun::star::uno::UNO_QUERY_THROW;
+    using ::cpo::uno::UNO_QUERY;
+    using ::cpo::uno::UNO_QUERY_THROW;
     using ::cpo::uno::XInterface;
     using ::com::sun::star::beans::XIntrospection;
     using ::com::sun::star::beans::XIntrospectionAccess;
@@ -113,7 +113,7 @@ namespace pcr
     using ::com::sun::star::frame::XFrame;
     using ::com::sun::star::frame::XModel;
     using ::com::sun::star::frame::XController;
-    using ::com::sun::star::uno::UNO_SET_THROW;
+    using ::cpo::uno::UNO_SET_THROW;
     using com::sun::star::uri::UriReferenceFactory;
     using com::sun::star::uri::XUriReferenceFactory;
     using com::sun::star::uri::XVndSunStarScriptUrlReference;

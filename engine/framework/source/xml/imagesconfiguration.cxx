@@ -28,7 +28,7 @@
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::io;
@@ -36,8 +36,8 @@ using namespace ::com::sun::star::io;
 namespace framework
 {
 bool ImagesConfiguration::LoadImages(
-    const css::uno::Reference<cpo::uno::XComponentContext>& rxContext,
-    const css::uno::Reference<css::io::XInputStream>& rInputStream, ImageItemDescriptorList& rItems)
+    const cpo::uno::Reference<cpo::uno::XComponentContext>& rxContext,
+    const cpo::uno::Reference<css::io::XInputStream>& rInputStream, ImageItemDescriptorList& rItems)
 {
     Reference<XParser> xParser = Parser::create(rxContext);
 
@@ -73,8 +73,8 @@ bool ImagesConfiguration::LoadImages(
 }
 
 bool ImagesConfiguration::StoreImages(
-    const css::uno::Reference<cpo::uno::XComponentContext>& rxContext,
-    const css::uno::Reference<css::io::XOutputStream>& rOutputStream,
+    const cpo::uno::Reference<cpo::uno::XComponentContext>& rxContext,
+    const cpo::uno::Reference<css::io::XOutputStream>& rOutputStream,
     const ImageItemDescriptorList& rItems)
 {
     Reference<XWriter> xWriter = Writer::create(rxContext);

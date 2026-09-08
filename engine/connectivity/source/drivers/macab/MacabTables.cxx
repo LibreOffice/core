@@ -29,7 +29,7 @@ using namespace connectivity::macab;
 using namespace connectivity;
 using namespace ::comphelper;
 using namespace ::cppu;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbcx;
@@ -37,7 +37,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
-css::uno::Reference< css::beans::XPropertySet > MacabTables::createObject(const OUString& _rName)
+cpo::uno::Reference< css::beans::XPropertySet > MacabTables::createObject(const OUString& _rName)
 {
     OUString aName,aSchema;
     aSchema = u"%"_ustr;
@@ -47,7 +47,7 @@ css::uno::Reference< css::beans::XPropertySet > MacabTables::createObject(const 
 
     Reference< XResultSet > xResult = m_xMetaData->getTables(Any(), aSchema, aName, aTypes);
 
-    css::uno::Reference< css::beans::XPropertySet > xRet;
+    cpo::uno::Reference< css::beans::XPropertySet > xRet;
     if (xResult.is())
     {
         Reference< XRow > xRow(xResult, UNO_QUERY);

@@ -10,7 +10,7 @@
 #pragma once
 
 #include <librevenge-stream/librevenge-stream.h>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <tools/long.hxx>
 #include "writerperfectdllapi.h"
 #include <memory>
@@ -32,7 +32,7 @@ class SAL_DLLPUBLIC_RTTI WPXSvInputStream final : public librevenge::RVNGInputSt
 {
 public:
     WRITERPERFECT_DLLPUBLIC
-    WPXSvInputStream(css::uno::Reference<css::io::XInputStream> const& xStream);
+    WPXSvInputStream(cpo::uno::Reference<css::io::XInputStream> const& xStream);
     WRITERPERFECT_DLLPUBLIC virtual ~WPXSvInputStream() override;
 
     virtual bool isStructured() override;
@@ -59,10 +59,10 @@ private:
     static librevenge::RVNGInputStream*
     createWPXStream(const rtl::Reference<SotStorageStream>& rxStorage);
     static librevenge::RVNGInputStream*
-    createWPXStream(const css::uno::Reference<css::io::XInputStream>& rxStream);
+    createWPXStream(const cpo::uno::Reference<css::io::XInputStream>& rxStream);
 
-    css::uno::Reference<css::io::XInputStream> mxStream;
-    css::uno::Reference<css::io::XSeekable> mxSeekable;
+    cpo::uno::Reference<css::io::XInputStream> mxStream;
+    cpo::uno::Reference<css::io::XSeekable> mxSeekable;
     cpo::uno::Sequence<sal_Int8> maData;
     std::unique_ptr<OLEStorageImpl> mpOLEStorage;
     std::unique_ptr<ZipStorageImpl> mpZipStorage;

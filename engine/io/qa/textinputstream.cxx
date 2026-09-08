@@ -18,7 +18,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XTextInputStream2.hpp>
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppunit/TestAssert.h>
 #include <cppunit/extensions/HelperMacros.h>
@@ -117,7 +117,7 @@ private:
 };
 
 OUString Test::readFirstLine(char *inputData, int inputSize) {
-    css::uno::Reference<css::io::XTextInputStream2> s(
+    cpo::uno::Reference<css::io::XTextInputStream2> s(
         css::io::TextInputStream::create(getComponentContext()));
     s->setInputStream(new Input(inputData, inputSize));
     return s->readLine();
@@ -150,7 +150,7 @@ void Test::testReadLineEndChars() {
     l = readFirstLine(inputData.data(), inputData.size());
     CPPUNIT_ASSERT_EQUAL(u"abc"_ustr, l);
 
-    css::uno::Reference<css::io::XTextInputStream2> s(
+    cpo::uno::Reference<css::io::XTextInputStream2> s(
         css::io::TextInputStream::create(getComponentContext()));
     inputData = {'a', 'b', 'c', '\r', '\n', 'd', 'e', 'f'};
     s->setInputStream(new Input(inputData.data(), inputData.size()));

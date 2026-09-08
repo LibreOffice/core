@@ -77,6 +77,7 @@
 #define MAXWIDTH  28350
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 // General list of string pointer
 
@@ -939,7 +940,7 @@ bool HasCharUnit( bool bWeb)
     return SwModule::get()->GetUsrPref(bWeb)->IsApplyCharUnit();
 }
 
-bool ExecuteMenuCommand(const css::uno::Reference<css::awt::XPopupMenu>& rMenu, const SfxViewFrame& rViewFrame, sal_uInt16 nId)
+bool ExecuteMenuCommand(const cpo::uno::Reference<css::awt::XPopupMenu>& rMenu, const SfxViewFrame& rViewFrame, sal_uInt16 nId)
 {
     bool bRet = false;
     const sal_uInt16 nItemCount = rMenu->getItemCount();
@@ -947,7 +948,7 @@ bool ExecuteMenuCommand(const css::uno::Reference<css::awt::XPopupMenu>& rMenu, 
     for (sal_uInt16 nItem = 0; nItem < nItemCount; ++nItem)
     {
         sal_Int16 nItemId = rMenu->getItemId(nItem);
-        css::uno::Reference<css::awt::XPopupMenu> xPopup = rMenu->getPopupMenu(nItemId);
+        cpo::uno::Reference<css::awt::XPopupMenu> xPopup = rMenu->getPopupMenu(nItemId);
         if (xPopup.is())
         {
             sCommand = xPopup->getCommand(nId);

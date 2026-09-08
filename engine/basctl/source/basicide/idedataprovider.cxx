@@ -30,7 +30,7 @@ using namespace basic;
 
 namespace css = ::com::sun::star;
 using namespace css::container;
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace css::lang;
 using namespace css::reflection;
 using namespace cpo::uno;

@@ -35,6 +35,7 @@
 #include <vcl/wrkwin.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 namespace {
     const int WIDTH = 1000, HEIGHT = 800;

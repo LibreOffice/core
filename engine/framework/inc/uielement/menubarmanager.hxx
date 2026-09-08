@@ -66,10 +66,10 @@ class MenuBarManager final :
 {
     public:
         MenuBarManager(
-            const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
-            const css::uno::Reference< css::frame::XFrame >& rFrame,
-            const css::uno::Reference< css::util::XURLTransformer >& _xURLTransformer,
-            const css::uno::Reference< css::frame::XDispatchProvider >& rDispatchProvider,
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
+            const cpo::uno::Reference< css::frame::XFrame >& rFrame,
+            const cpo::uno::Reference< css::util::XURLTransformer >& _xURLTransformer,
+            const cpo::uno::Reference< css::frame::XDispatchProvider >& rDispatchProvider,
             const OUString& aModuleIdentifier,
             Menu* pMenu,
             bool bDelete,
@@ -101,20 +101,20 @@ class MenuBarManager final :
         // Configuration methods
         static void FillMenuWithConfiguration( sal_uInt16& nId, Menu* pMenu,
                                                const OUString& rModuleIdentifier,
-                                               const css::uno::Reference< css::container::XIndexAccess >& rItemContainer,
-                                               const css::uno::Reference< css::util::XURLTransformer >& rTransformer );
+                                               const cpo::uno::Reference< css::container::XIndexAccess >& rItemContainer,
+                                               const cpo::uno::Reference< css::util::XURLTransformer >& rTransformer );
         static void FillMenu( sal_uInt16& nId,
                               Menu* pMenu,
                               const OUString& rModuleIdentifier,
-                              const css::uno::Reference< css::container::XIndexAccess >& rItemContainer,
-                              const css::uno::Reference< css::frame::XDispatchProvider >& rDispatchProvider );
+                              const cpo::uno::Reference< css::container::XIndexAccess >& rItemContainer,
+                              const cpo::uno::Reference< css::frame::XDispatchProvider >& rDispatchProvider );
 
         void FillMenuManager( Menu* pMenu,
-                              const css::uno::Reference< css::frame::XFrame >& rFrame,
-                              const css::uno::Reference< css::frame::XDispatchProvider >& rDispatchProvider,
+                              const cpo::uno::Reference< css::frame::XFrame >& rFrame,
+                              const cpo::uno::Reference< css::frame::XDispatchProvider >& rDispatchProvider,
                               const OUString& rModuleIdentifier,
                               bool bDelete );
-        void SetItemContainer( const css::uno::Reference< css::container::XIndexAccess >& rItemContainer );
+        void SetItemContainer( const cpo::uno::Reference< css::container::XIndexAccess >& rItemContainer );
         void GetPopupController( PopupControllerCache& rPopupController );
 
     private:
@@ -126,14 +126,14 @@ class MenuBarManager final :
         void RemoveListener();
         void RequestImages();
         void RetrieveImageManagers();
-        static bool MustBeHidden( PopupMenu* pPopupMenu, const css::uno::Reference< css::util::XURLTransformer >& rTransformer );
+        static bool MustBeHidden( PopupMenu* pPopupMenu, const cpo::uno::Reference< css::util::XURLTransformer >& rTransformer );
         OUString RetrieveLabelFromCommand(const OUString& rCmdURL);
 
         struct MenuItemHandler
         {
             MenuItemHandler( sal_uInt16             aItemId,
                              rtl::Reference< MenuBarManager > xManager,
-                             css::uno::Reference< css::frame::XDispatch > xDispatch ) :
+                             cpo::uno::Reference< css::frame::XDispatch > xDispatch ) :
                              nItemId( aItemId ),
                              bMadeInvisible ( false ),
                              xSubMenuManager(std::move( xManager )),
@@ -145,23 +145,23 @@ class MenuBarManager final :
             OUString                                                          aMenuItemURL;
             OUString                                                          aParsedItemURL;
             rtl::Reference< MenuBarManager >                                  xSubMenuManager;
-            css::uno::Reference< css::frame::XDispatch >                      xMenuItemDispatch;
-            css::uno::Reference< css::frame::XPopupMenuController >           xPopupMenuController;
+            cpo::uno::Reference< css::frame::XDispatch >                      xMenuItemDispatch;
+            cpo::uno::Reference< css::frame::XPopupMenuController >           xPopupMenuController;
             rtl::Reference< VCLXPopupMenu >                                   xPopupMenu;
             vcl::KeyCode                                                      aKeyCode;
         };
 
         void             RetrieveShortcuts( std::vector< std::unique_ptr<MenuItemHandler> >& aMenuShortCuts );
         void SetAcceleratorKeys(Menu* pMenu);
-        static void      FillMenuImages( css::uno::Reference< css::frame::XFrame > const & xFrame, Menu* _pMenu, bool bShowMenuImages );
-        static void      impl_RetrieveShortcutsFromConfiguration( const css::uno::Reference< css::ui::XAcceleratorConfiguration >& rAccelCfg,
+        static void      FillMenuImages( cpo::uno::Reference< css::frame::XFrame > const & xFrame, Menu* _pMenu, bool bShowMenuImages );
+        static void      impl_RetrieveShortcutsFromConfiguration( const cpo::uno::Reference< css::ui::XAcceleratorConfiguration >& rAccelCfg,
                                                                   const cpo::uno::Sequence< OUString >& rCommands,
                                                                   std::vector< std::unique_ptr<MenuItemHandler> >& aMenuShortCuts );
         static void      MergeAddonMenus( Menu* pMenuBar, const MergeMenuInstructionContainer&, const OUString& aModuleIdentifier );
 
         MenuItemHandler* GetMenuItemHandler( sal_uInt16 nItemId );
         bool         CreatePopupMenuController( MenuItemHandler* pMenuItemHandler,
-                                                const css::uno::Reference< css::frame::XDispatchProvider >& rDispatchProvider,
+                                                const cpo::uno::Reference< css::frame::XDispatchProvider >& rDispatchProvider,
                                                 const OUString& rModuleIdentifier );
         void             AddMenu(MenuBarManager* pSubMenuManager,const OUString& _sItemCommand,sal_uInt16 _nItemId);
         static sal_uInt16 FillItemCommand(OUString& _rItemCommand, Menu* _pMenu,sal_uInt16 _nIndex);
@@ -175,18 +175,18 @@ class MenuBarManager final :
         bool                                                         m_bHasMenuBar;
         OUString                                                     m_aModuleIdentifier;
         VclPtr<Menu>                                                 m_pVCLMenu;
-        css::uno::Reference< css::frame::XFrame >                    m_xFrame;
-        css::uno::Reference< css::frame::XUIControllerFactory >      m_xPopupMenuControllerFactory;
+        cpo::uno::Reference< css::frame::XFrame >                    m_xFrame;
+        cpo::uno::Reference< css::frame::XUIControllerFactory >      m_xPopupMenuControllerFactory;
         ::std::vector< std::unique_ptr<MenuItemHandler> >            m_aMenuItemHandlerVector;
-        css::uno::Reference< css::frame::XDispatchProvider >         m_xDispatchProvider;
-        css::uno::Reference< css::ui::XImageManager >                m_xDocImageManager;
-        css::uno::Reference< css::ui::XImageManager >                m_xModuleImageManager;
-        css::uno::Reference< css::ui::XAcceleratorConfiguration >    m_xDocAcceleratorManager;
-        css::uno::Reference< css::ui::XAcceleratorConfiguration >    m_xModuleAcceleratorManager;
-        css::uno::Reference< css::ui::XAcceleratorConfiguration >    m_xGlobalAcceleratorManager;
-        css::uno::Reference< cpo::uno::XComponentContext >           m_xContext;
-        css::uno::Reference< css::util::XURLTransformer >            m_xURLTransformer;
-        css::uno::Reference< css::container::XIndexAccess >          m_xDeferredItemContainer;
+        cpo::uno::Reference< css::frame::XDispatchProvider >         m_xDispatchProvider;
+        cpo::uno::Reference< css::ui::XImageManager >                m_xDocImageManager;
+        cpo::uno::Reference< css::ui::XImageManager >                m_xModuleImageManager;
+        cpo::uno::Reference< css::ui::XAcceleratorConfiguration >    m_xDocAcceleratorManager;
+        cpo::uno::Reference< css::ui::XAcceleratorConfiguration >    m_xModuleAcceleratorManager;
+        cpo::uno::Reference< css::ui::XAcceleratorConfiguration >    m_xGlobalAcceleratorManager;
+        cpo::uno::Reference< cpo::uno::XComponentContext >           m_xContext;
+        cpo::uno::Reference< css::util::XURLTransformer >            m_xURLTransformer;
+        cpo::uno::Reference< css::container::XIndexAccess >          m_xDeferredItemContainer;
         OUString                                                     m_sIconTheme;
         Timer                                                        m_aAsyncSettingsTimer;
 };

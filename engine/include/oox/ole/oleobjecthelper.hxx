@@ -20,7 +20,7 @@
 #ifndef INCLUDED_OOX_OLE_OLEOBJECTHELPER_HXX
 #define INCLUDED_OOX_OLE_OLEOBJECTHELPER_HXX
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <oox/dllapi.h>
 #include <oox/helper/binarystreambase.hxx>
 #include <rtl/ustring.hxx>
@@ -58,8 +58,8 @@ class OleObjectHelper
 {
 public:
     explicit            OleObjectHelper(
-                            const css::uno::Reference<css::lang::XMultiServiceFactory>& rxModelFactory,
-                            css::uno::Reference<css::frame::XModel> xModel);
+                            const cpo::uno::Reference<css::lang::XMultiServiceFactory>& rxModelFactory,
+                            cpo::uno::Reference<css::frame::XModel> xModel);
                         ~OleObjectHelper();
 
     bool                importOleObject(
@@ -68,14 +68,14 @@ public:
                             const css::awt::Size& rObjSize );
 
 private:
-    css::uno::Reference<css::frame::XModel> m_xModel;
-    css::uno::Reference< css::document::XEmbeddedObjectResolver > mxResolver;
+    cpo::uno::Reference<css::frame::XModel> m_xModel;
+    cpo::uno::Reference< css::document::XEmbeddedObjectResolver > mxResolver;
     sal_Int32                                                     mnObjectId;
 };
 
 
 OOX_DLLPUBLIC void SaveInteropProperties(
-       css::uno::Reference<css::frame::XModel> const& xModel,
+       cpo::uno::Reference<css::frame::XModel> const& xModel,
        OUString const& rObjectName, OUString const* pOldObjectName,
        OUString const& rProgId);
 

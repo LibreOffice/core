@@ -55,7 +55,7 @@ inline bool isPackageSoundURL(const OUString& rURL)
 // user to allow it.
 inline cpo::uno::Any makeSoundSource(const OUString& rURL, bool bAllowed = false)
 {
-    return cpo::uno::Any(css::uno::Reference<css::presentation::XSoundReference>(
+    return cpo::uno::Any(cpo::uno::Reference<css::presentation::XSoundReference>(
         new SoundReference(rURL, bAllowed || isPackageSoundURL(rURL))));
 }
 
@@ -64,7 +64,7 @@ inline cpo::uno::Any makeSoundSource(const OUString& rURL, bool bAllowed = false
 // before it carried the allowed state, is returned as it is.
 inline OUString getSoundURL(const cpo::uno::Any& rSource)
 {
-    css::uno::Reference<css::presentation::XSoundReference> xSound;
+    cpo::uno::Reference<css::presentation::XSoundReference> xSound;
     if (rSource >>= xSound)
         return xSound.is() ? xSound->getURL() : OUString();
     OUString sURL;
@@ -79,7 +79,7 @@ inline OUString getSoundURL(const cpo::uno::Any& rSource)
 // is treated as not allowed, so an unaudited sound is gated like an external one.
 inline bool getSoundAllowed(const cpo::uno::Any& rSource)
 {
-    css::uno::Reference<css::presentation::XSoundReference> xSound;
+    cpo::uno::Reference<css::presentation::XSoundReference> xSound;
     if (rSource >>= xSound)
         return xSound.is() && xSound->getAllowed();
     return false;

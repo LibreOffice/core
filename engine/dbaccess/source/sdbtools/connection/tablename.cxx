@@ -31,7 +31,7 @@
 namespace sdbtools
 {
 
-    using ::com::sun::star::uno::Reference;
+    using ::cpo::uno::Reference;
     using ::com::sun::star::sdbc::XConnection;
     using ::cpo::uno::RuntimeException;
     using ::com::sun::star::lang::IllegalArgumentException;
@@ -39,10 +39,10 @@ namespace sdbtools
     using ::com::sun::star::container::NoSuchElementException;
     using ::com::sun::star::sdbcx::XTablesSupplier;
     using ::com::sun::star::container::XNameAccess;
-    using ::com::sun::star::uno::UNO_QUERY_THROW;
+    using ::cpo::uno::UNO_QUERY_THROW;
     using ::com::sun::star::lang::WrappedTargetException;
     using ::cpo::uno::Exception;
-    using ::com::sun::star::uno::UNO_QUERY;
+    using ::cpo::uno::UNO_QUERY;
     using ::com::sun::star::beans::XPropertySetInfo;
     using ::cpo::uno::XComponentContext;
 
@@ -108,7 +108,7 @@ namespace sdbtools
         EntryGuard aGuard( *this );
 
         Reference< XTablesSupplier > xSuppTables( getConnection(), UNO_QUERY_THROW );
-        Reference< XNameAccess > xTables( xSuppTables->getTables(), css::uno::UNO_SET_THROW );
+        Reference< XNameAccess > xTables( xSuppTables->getTables(), cpo::uno::UNO_SET_THROW );
 
         Reference< XPropertySet > xTable;
         try

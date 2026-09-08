@@ -50,8 +50,8 @@ namespace sdbtools
                 if _rxConnection is <NULL/>
         */
         TableName(
-            const css::uno::Reference< cpo::uno::XComponentContext >& _rContext,
-            const css::uno::Reference< css::sdbc::XConnection >& _rxConnection
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& _rContext,
+            const cpo::uno::Reference< css::sdbc::XConnection >& _rxConnection
         );
 
         // XTableName
@@ -62,8 +62,8 @@ namespace sdbtools
         virtual OUString getTableName() override;
         virtual void setTableName( const OUString& _tablename ) override;
         virtual OUString getNameForSelect() override;
-        virtual css::uno::Reference< css::beans::XPropertySet > getTable() override;
-        virtual void setTable( const css::uno::Reference< css::beans::XPropertySet >& _table ) override;
+        virtual cpo::uno::Reference< css::beans::XPropertySet > getTable() override;
+        virtual void setTable( const cpo::uno::Reference< css::beans::XPropertySet >& _table ) override;
         virtual OUString getComposedName( ::sal_Int32 Type, bool Quote ) override;
         virtual void setComposedName( const OUString& ComposedName, ::sal_Int32 Type ) override;
 

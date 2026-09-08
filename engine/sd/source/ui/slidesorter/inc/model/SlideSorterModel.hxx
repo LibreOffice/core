@@ -23,7 +23,7 @@
 #include <pres.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/region.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <vector>
 
 class SdDrawDocument;
@@ -113,7 +113,7 @@ public:
             Returns the index to the requested page descriptor or -1 when
             there is no such page descriptor.
     */
-    sal_Int32 GetIndex(const css::uno::Reference<css::drawing::XDrawPage>& rxSlide) const;
+    sal_Int32 GetIndex(const cpo::uno::Reference<css::drawing::XDrawPage>& rxSlide) const;
 
     /** Return a page descriptor for the given SdrPage.  Page descriptors
         are created on demand.  The page descriptor is found (or not found)
@@ -168,11 +168,11 @@ public:
             necessarily the same as the ones of the XModel of the
             XController (although it typically is a subset).
     */
-    void SetDocumentSlides(const css::uno::Reference<css::container::XIndexAccess>& rxSlides);
+    void SetDocumentSlides(const cpo::uno::Reference<css::container::XIndexAccess>& rxSlides);
 
     /** Return the set of pages that is currently displayed by the slide sorter.
     */
-    css::uno::Reference<css::container::XIndexAccess> GetDocumentSlides() const;
+    cpo::uno::Reference<css::container::XIndexAccess> GetDocumentSlides() const;
 
     /** This method is called when the edit mode has changed.  It calls
         SetDocumentSlides() with the set of slides or master pages obtained
@@ -206,7 +206,7 @@ public:
 private:
     mutable ::osl::Mutex maMutex;
     SlideSorter& mrSlideSorter;
-    css::uno::Reference<css::container::XIndexAccess> mxSlides;
+    cpo::uno::Reference<css::container::XIndexAccess> mxSlides;
     EditMode meEditMode;
     mutable ::std::vector<SharedPageDescriptor> maPageDescriptors;
 

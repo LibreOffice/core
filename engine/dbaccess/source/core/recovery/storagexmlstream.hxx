@@ -36,8 +36,8 @@ namespace dbaccess
     {
     public:
         StorageXMLOutputStream(
-            const css::uno::Reference< cpo::uno::XComponentContext >& i_rContext,
-            const css::uno::Reference< css::embed::XStorage >& i_rParentStorage,
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& i_rContext,
+            const cpo::uno::Reference< css::embed::XStorage >& i_rParentStorage,
             const OUString& i_rStreamName
         );
         virtual ~StorageXMLOutputStream() override;
@@ -57,7 +57,7 @@ namespace dbaccess
         StorageXMLOutputStream& operator=( const StorageXMLOutputStream& ) = delete;
 
     private:
-        css::uno::Reference< css::xml::sax::XDocumentHandler > mxHandler;
+        cpo::uno::Reference< css::xml::sax::XDocumentHandler > mxHandler;
         std::stack< OUString > maElements;
         ::rtl::Reference<comphelper::AttributeList> mxAttributes;
     };
@@ -66,22 +66,22 @@ namespace dbaccess
     {
     public:
         StorageXMLInputStream(
-            const css::uno::Reference< cpo::uno::XComponentContext >& i_rContext,
-            const css::uno::Reference< css::embed::XStorage >& i_rParentStorage,
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& i_rContext,
+            const cpo::uno::Reference< css::embed::XStorage >& i_rParentStorage,
             const OUString& i_rStreamName
         );
         ~StorageXMLInputStream();
 
         void    import(
-                    const css::uno::Reference< css::xml::sax::XDocumentHandler >& i_rHandler
+                    const cpo::uno::Reference< css::xml::sax::XDocumentHandler >& i_rHandler
                 );
 
         StorageXMLInputStream( const StorageXMLInputStream& ) = delete;
         StorageXMLInputStream& operator=( const StorageXMLInputStream& ) = delete;
 
     private:
-        css::uno::Reference< css::xml::sax::XParser >     m_xParser;
-        css::uno::Reference< css::io::XInputStream >      m_xInputStream;
+        cpo::uno::Reference< css::xml::sax::XParser >     m_xParser;
+        cpo::uno::Reference< css::io::XInputStream >      m_xInputStream;
     };
 
 } // namespace dbaccess

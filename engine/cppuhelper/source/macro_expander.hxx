@@ -21,7 +21,7 @@
 
 #include <sal/config.h>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 namespace com::sun::star::lang { class XSingleComponentFactory; }
 
@@ -46,7 +46,7 @@ namespace detail {
  */
 OUString expandMacros(OUString const & text);
 
-css::uno::Reference< css::lang::XSingleComponentFactory >
+cpo::uno::Reference< css::lang::XSingleComponentFactory >
 create_bootstrap_macro_expander_factory();
 
 }

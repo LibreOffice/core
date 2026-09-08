@@ -22,7 +22,7 @@
 
 #include <comphelper/comphelperdllapi.h>
 
-namespace com::sun::star::uno
+namespace cpo::uno
 {
 template <class interface_type> class Reference;
 }
@@ -38,7 +38,7 @@ class PropertySetInfo;
 
 namespace comphelper
 {
-COMPHELPER_DLLPUBLIC css::uno::Reference<css::beans::XPropertySet>
+COMPHELPER_DLLPUBLIC cpo::uno::Reference<css::beans::XPropertySet>
 GenericPropertySet_CreateInstance(PropertySetInfo* pInfo);
 }
 

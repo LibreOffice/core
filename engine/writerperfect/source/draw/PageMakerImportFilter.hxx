@@ -18,7 +18,7 @@ class PageMakerImportFilter : public writerperfect::ImportFilter<OdgGenerator>
 {
 public:
     explicit PageMakerImportFilter(
-        const css::uno::Reference<cpo::uno::XComponentContext>& rxContext)
+        const cpo::uno::Reference<cpo::uno::XComponentContext>& rxContext)
         : writerperfect::ImportFilter<OdgGenerator>(rxContext)
     {
     }

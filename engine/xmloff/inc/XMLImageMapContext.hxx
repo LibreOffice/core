@@ -20,7 +20,7 @@
 #pragma once
 
 #include <xmloff/xmlictxt.hxx>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 
 namespace com::sun::star {
     namespace container { class XIndexContainer; }
@@ -31,23 +31,23 @@ namespace com::sun::star {
 class XMLImageMapContext final : public SvXMLImportContext
 {
     /// the image map to be imported
-    css::uno::Reference< css::container::XIndexContainer> xImageMap;
+    cpo::uno::Reference< css::container::XIndexContainer> xImageMap;
 
     /// the property set from which to get and where eventually to set the
     /// image map
-    css::uno::Reference< css::beans::XPropertySet> xPropertySet;
+    cpo::uno::Reference< css::beans::XPropertySet> xPropertySet;
 
 public:
 
     XMLImageMapContext(
         SvXMLImport& rImport,
-        css::uno::Reference< css::beans::XPropertySet> const & rPropertySet);
+        cpo::uno::Reference< css::beans::XPropertySet> const & rPropertySet);
 
     virtual ~XMLImageMapContext() override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
     virtual void endFastElement(sal_Int32 nElement) override;
 };

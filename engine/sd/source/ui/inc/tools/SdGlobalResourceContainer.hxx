@@ -23,7 +23,7 @@
 #include <sal/types.h>
 #include <o3tl/deleter.hxx>
 
-namespace com::sun::star::uno
+namespace cpo::uno
 {
 template <class interface_type> class Reference;
 }
@@ -87,7 +87,7 @@ public:
         (when the sd modules is unloaded) is done by a) calling dispose()
         when the XComponent is supported and by b) releasing the reference.
     */
-    void AddResource(const css::uno::Reference<cpo::uno::XInterface>& rxResource);
+    void AddResource(const cpo::uno::Reference<cpo::uno::XInterface>& rxResource);
 
 private:
     friend class SdGlobalResourceContainerInstance;

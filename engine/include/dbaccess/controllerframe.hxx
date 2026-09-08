@@ -23,7 +23,7 @@
 #include <memory>
 
 #include <com/sun/star/frame/FrameAction.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 namespace com::sun::star {
     namespace frame { class XFrame; }
@@ -49,13 +49,13 @@ namespace dbaui
         ~ControllerFrame();
 
         /// attaches a new frame
-        const css::uno::Reference< css::frame::XFrame >&
+        const cpo::uno::Reference< css::frame::XFrame >&
                 attachFrame(
-                    const css::uno::Reference< css::frame::XFrame >& _rxFrame
+                    const cpo::uno::Reference< css::frame::XFrame >& _rxFrame
                 );
 
         // retrieves the current frame
-        const css::uno::Reference< css::frame::XFrame >&
+        const cpo::uno::Reference< css::frame::XFrame >&
                 getFrame() const;
 
         /** determines whether the frame is currently active

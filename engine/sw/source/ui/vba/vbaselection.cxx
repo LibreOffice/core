@@ -70,6 +70,7 @@
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 SwVbaSelection::SwVbaSelection( const uno::Reference< ooo::vba::XHelperInterface >& rParent,
                                 const uno::Reference< cpo::uno::XComponentContext >& rContext,

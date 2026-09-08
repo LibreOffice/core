@@ -37,6 +37,7 @@
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 
 using namespace css;
+using namespace ::cpo;
 
 typedef std::multimap<SwNodeOffset, const ::sw::mark::MarkBase*> SwBookmarkNodeTable;
 

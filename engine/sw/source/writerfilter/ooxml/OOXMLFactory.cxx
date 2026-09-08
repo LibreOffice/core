@@ -23,6 +23,7 @@
 namespace writerfilter::ooxml {
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 
 OOXMLFactory_ns::~OOXMLFactory_ns()

@@ -219,7 +219,7 @@ namespace sw::mark
         bool IsInUndo() const override;
         bool IsInContent() const override;
         void sendKitDeleteCallback();
-        css::uno::Reference< css::rdf::XMetadatable > MakeUnoObject() override;
+        cpo::uno::Reference< css::rdf::XMetadatable > MakeUnoObject() override;
 
     private:
         vcl::KeyCode m_aCode;

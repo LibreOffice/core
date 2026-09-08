@@ -69,7 +69,7 @@ namespace connectivity::mozab
         virtual OUString setCurrentProfile( css::mozilla::MozillaProductType product, const OUString& profileName ) override;
 
         // XProxyRunner
-        virtual ::sal_Int32 Run( const css::uno::Reference< css::mozilla::XCodeProxy >& aCode ) override;
+        virtual ::sal_Int32 Run( const cpo::uno::Reference< css::mozilla::XCodeProxy >& aCode ) override;
     };
 
 }

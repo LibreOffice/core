@@ -21,7 +21,7 @@
 #define INCLUDED_LINGUISTIC_MISC_HXX
 
 #include <cpo/uno/Sequence.h>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/lang/Locale.hpp>
@@ -125,7 +125,7 @@ LNG_DLLPUBLIC sal_Int32 GetPosInWordToCheck( std::u16string_view rTxt, sal_Int32
 rtl::Reference< HyphenatedWord >
             RebuildHyphensAndControlChars(
                 const OUString &rOrigWord,
-                css::uno::Reference< css::linguistic2::XHyphenatedWord > const &rxHyphWord );
+                cpo::uno::Reference< css::linguistic2::XHyphenatedWord > const &rxHyphWord );
 
 
 LNG_DLLPUBLIC bool        IsUpper( const OUString &rText, sal_Int32 nPos, sal_Int32 nLen, LanguageType nLanguage );
@@ -137,32 +137,32 @@ LNG_DLLPUBLIC bool      HasDigits( std::u16string_view rText );
 LNG_DLLPUBLIC bool      IsNumeric( std::u16string_view rText );
 
 
-LNG_DLLPUBLIC css::uno::Reference< css::linguistic2::XLinguProperties > GetLinguProperties();
-css::uno::Reference< css::linguistic2::XSearchableDictionaryList > GetDictionaryList();
-css::uno::Reference< css::linguistic2::XDictionary > GetIgnoreAllList();
+LNG_DLLPUBLIC cpo::uno::Reference< css::linguistic2::XLinguProperties > GetLinguProperties();
+cpo::uno::Reference< css::linguistic2::XSearchableDictionaryList > GetDictionaryList();
+cpo::uno::Reference< css::linguistic2::XDictionary > GetIgnoreAllList();
 
 
 bool IsUseDicList( const css::beans::PropertyValues &rProperties,
-        const css::uno::Reference< css::beans::XPropertySet > &rxPropSet );
+        const cpo::uno::Reference< css::beans::XPropertySet > &rxPropSet );
 
 bool IsIgnoreControlChars( const css::beans::PropertyValues &rProperties,
-        const css::uno::Reference< css::beans::XPropertySet > &rxPropSet );
+        const cpo::uno::Reference< css::beans::XPropertySet > &rxPropSet );
 
-css::uno::Reference<
+cpo::uno::Reference<
     css::linguistic2::XDictionaryEntry >
         SearchDicList(
-            const css::uno::Reference< css::linguistic2::XSearchableDictionaryList >& rDicList,
+            const cpo::uno::Reference< css::linguistic2::XSearchableDictionaryList >& rDicList,
             const OUString& rWord, LanguageType nLanguage,
             bool bSearchPosDics, bool bSearchSpellEntry,
-            std::map<LanguageType, std::vector<css::uno::Reference<css::linguistic2::XDictionary>>>& rDictionaryMap );
+            std::map<LanguageType, std::vector<cpo::uno::Reference<css::linguistic2::XDictionary>>>& rDictionaryMap );
 
 LNG_DLLPUBLIC DictionaryError AddEntryToDic(
-    css::uno::Reference< css::linguistic2::XDictionary > const &rxDic,
+    cpo::uno::Reference< css::linguistic2::XDictionary > const &rxDic,
     const OUString &rWord, bool bIsNeg,
     const OUString &rRplcTxt,
     bool bStripDot = true );
 
-LNG_DLLPUBLIC bool SaveDictionaries( const css::uno::Reference< css::linguistic2::XSearchableDictionaryList > &xDicList );
+LNG_DLLPUBLIC bool SaveDictionaries( const cpo::uno::Reference< css::linguistic2::XSearchableDictionaryList > &xDicList );
 
 // AppExitLstnr:
 // virtual base class that calls it AtExit function when the application
@@ -171,7 +171,7 @@ LNG_DLLPUBLIC bool SaveDictionaries( const css::uno::Reference< css::linguistic2
 class AppExitListener :
     public cppu::WeakImplHelper< css::frame::XTerminateListener >
 {
-    css::uno::Reference< css::frame::XDesktop2 >     xDesktop;
+    cpo::uno::Reference< css::frame::XDesktop2 >     xDesktop;
 
 public:
     AppExitListener();

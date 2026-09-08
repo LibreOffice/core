@@ -142,8 +142,8 @@ struct SignatureInformation
     /// The Id attribute of the <SignatureProperty> element that contains the <dc:description>.
     OUString ouDescriptionPropertyId;
     /// Valid and invalid signature line images
-    css::uno::Reference<css::graphic::XGraphic> aValidSignatureImage;
-    css::uno::Reference<css::graphic::XGraphic> aInvalidSignatureImage;
+    cpo::uno::Reference<css::graphic::XGraphic> aValidSignatureImage;
+    cpo::uno::Reference<css::graphic::XGraphic> aInvalidSignatureImage;
     /// Signature Line Id, used to map signatures to their respective signature line images.
     OUString ouSignatureLineId;
     /// A full OOXML signature for unchanged roundtrip, empty for ODF.

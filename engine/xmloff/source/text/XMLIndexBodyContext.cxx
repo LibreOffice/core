@@ -22,7 +22,7 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/txtimp.hxx>
 
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 
 
 XMLIndexBodyContext::XMLIndexBodyContext( SvXMLImport& rImport ) :
@@ -35,9 +35,9 @@ XMLIndexBodyContext::~XMLIndexBodyContext()
 {
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLIndexBodyContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLIndexBodyContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     // return text content (if possible)
     SvXMLImportContext* pContext = GetImport().GetTextImport()->CreateTextChildContext(

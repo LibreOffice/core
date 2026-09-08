@@ -47,6 +47,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace
 {

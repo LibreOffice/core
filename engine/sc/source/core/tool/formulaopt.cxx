@@ -20,7 +20,7 @@
 #include <utility>
 
 using namespace utl;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 namespace lang = ::com::sun::star::lang;
 

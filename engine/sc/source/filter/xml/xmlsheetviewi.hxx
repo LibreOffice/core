@@ -50,9 +50,9 @@ class ScXMLSheetViewsContext : public ScXMLImportContext
 public:
     explicit ScXMLSheetViewsContext(ScXMLImport& rImport);
 
-    virtual css::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
+    virtual cpo::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList) override;
+        const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList) override;
 };
 
 /** Reads one coext:sheet-view and hands it to the import once the element is complete. */
@@ -64,9 +64,9 @@ public:
     ScXMLSheetViewContext(ScXMLImport& rImport,
                           const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList);
 
-    virtual css::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
+    virtual cpo::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList) override;
+        const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList) override;
 
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 

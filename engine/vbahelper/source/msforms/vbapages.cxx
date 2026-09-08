@@ -20,6 +20,7 @@
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 ScVbaPages::ScVbaPages( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< cpo::uno::XComponentContext >& xContext, const uno::Reference< container::XIndexAccess >& xPages ) : ScVbaPages_BASE( xParent, xContext, xPages )
 {

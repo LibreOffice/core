@@ -50,7 +50,7 @@
 using ::cpo::uno::Sequence;
 using ::cpo::uno::XInterface;
 using ::cpo::uno::RuntimeException;
-using ::com::sun::star::uno::UNO_QUERY;
+using ::cpo::uno::UNO_QUERY;
 using ::cpo::uno::Any;
 using ::com::sun::star::graphic::XGraphic;
 using namespace ::com::sun::star;
@@ -61,6 +61,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::ui;
 using namespace ::cppu;
+using namespace ::cpo;
 
 constexpr OUString IMAGE_FOLDER = u"images"_ustr;
 constexpr OUString BITMAPS_FOLDER = u"Bitmaps"_ustr;
@@ -728,7 +729,7 @@ bool ImageManagerImpl::hasImage( ::sal_Int16 nImageType, const OUString& aComman
 
 namespace
 {
-    css::uno::Reference< css::graphic::XGraphic > GetXGraphic(const Image &rImage)
+    cpo::uno::Reference< css::graphic::XGraphic > GetXGraphic(const Image &rImage)
     {
         return Graphic(rImage).GetXGraphic();
     }

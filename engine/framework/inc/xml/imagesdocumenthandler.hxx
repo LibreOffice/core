@@ -70,7 +70,7 @@ class OReadImagesDocumentHandler final : public ::cppu::WeakImplHelper< css::xml
 
         virtual void startElement(
             const OUString& aName,
-            const css::uno::Reference< css::xml::sax::XAttributeList > &xAttribs) override;
+            const cpo::uno::Reference< css::xml::sax::XAttributeList > &xAttribs) override;
 
         virtual void endElement(const OUString& aName) override;
 
@@ -82,7 +82,7 @@ class OReadImagesDocumentHandler final : public ::cppu::WeakImplHelper< css::xml
                                                     const OUString& aData) override;
 
         virtual void setDocumentLocator(
-            const css::uno::Reference< css::xml::sax::XLocator > &xLocator) override;
+            const cpo::uno::Reference< css::xml::sax::XLocator > &xLocator) override;
 
     private:
         OUString getErrorLineString();
@@ -92,7 +92,7 @@ class OReadImagesDocumentHandler final : public ::cppu::WeakImplHelper< css::xml
         bool                                                m_bImagesStartFound;
         std::unordered_map< OUString, Image_XML_Entry >     m_aImageMap;
         ImageItemDescriptorList&                            m_rImageList;
-        css::uno::Reference< css::xml::sax::XLocator >      m_xLocator;
+        cpo::uno::Reference< css::xml::sax::XLocator >      m_xLocator;
 };
 
 class OWriteImagesDocumentHandler final
@@ -100,7 +100,7 @@ class OWriteImagesDocumentHandler final
     public:
         OWriteImagesDocumentHandler(
             const ImageItemDescriptorList& aItems,
-            css::uno::Reference< css::xml::sax::XDocumentHandler > const &
+            cpo::uno::Reference< css::xml::sax::XDocumentHandler > const &
                 rWriteDocumentHandler);
         ~OWriteImagesDocumentHandler();
 
@@ -118,7 +118,7 @@ class OWriteImagesDocumentHandler final
         void WriteImage( const ImageItemDescriptor* );
 
         const ImageItemDescriptorList&                            m_rImageItemList;
-        css::uno::Reference< css::xml::sax::XDocumentHandler >    m_xWriteDocumentHandler;
+        cpo::uno::Reference< css::xml::sax::XDocumentHandler >    m_xWriteDocumentHandler;
         OUString                                                  m_aXMLImageNS;
         OUString                                                  m_aAttributeXlinkType;
         OUString                                                  m_aAttributeValueSimple;

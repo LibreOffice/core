@@ -25,7 +25,7 @@
 #include <stack>
 
 #include <com/sun/star/awt/Rectangle.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <oox/helper/refmap.hxx>
 #include <oox/helper/refvector.hxx>
 #include <rtl/ustring.hxx>
@@ -104,7 +104,7 @@ public:
 
     /** Creates and inserts all UNO shapes into the passed container. */
     void                convertAndInsert(
-                            const css::uno::Reference< css::drawing::XShapes >& rxShapes,
+                            const cpo::uno::Reference< css::drawing::XShapes >& rxShapes,
                             const ShapeParentAnchor* pParentAnchor = nullptr ) const;
 
     const ShapeVector & getAllShapes() const { return maShapes; }

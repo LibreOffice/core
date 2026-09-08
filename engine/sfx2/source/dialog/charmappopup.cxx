@@ -20,7 +20,7 @@
 #include <charmapcontrol.hxx>
 #include <vcl/toolbox.hxx>
 
-CharmapPopup::CharmapPopup(const css::uno::Reference<cpo::uno::XComponentContext>& rContext)
+CharmapPopup::CharmapPopup(const cpo::uno::Reference<cpo::uno::XComponentContext>& rContext)
     : PopupWindowController(rContext, nullptr, OUString())
 {
 }

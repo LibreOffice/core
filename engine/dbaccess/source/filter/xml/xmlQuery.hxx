@@ -29,17 +29,17 @@ namespace dbaxml
         OUString m_sTable;
         bool        m_bEscapeProcessing;
     protected:
-        virtual void setProperties(css::uno::Reference< css::beans::XPropertySet > & _xProp) override;
+        virtual void setProperties(cpo::uno::Reference< css::beans::XPropertySet > & _xProp) override;
     public:
 
         OXMLQuery( ODBFilter& rImport
-                    ,const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList
-                    ,const css::uno::Reference< css::container::XNameAccess >& _xParentContainer
+                    ,const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList
+                    ,const cpo::uno::Reference< css::container::XNameAccess >& _xParentContainer
                     );
         virtual ~OXMLQuery() override;
 
-        virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
-            sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+        virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+            sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
     };
 } // namespace dbaxml
 

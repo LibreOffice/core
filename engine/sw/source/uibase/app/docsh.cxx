@@ -109,8 +109,8 @@
 #include <unotxdoc.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::container;
 
@@ -1328,7 +1328,7 @@ bool SwDocShell::HasUpdatableLinks() const
 uno::Reference< frame::XController >
                                 SwDocShell::GetController()
 {
-    css::uno::Reference< css::frame::XController > aRet;
+    cpo::uno::Reference< css::frame::XController > aRet;
     // #i82346# No view in page preview
     if ( GetView() )
         aRet = GetView()->GetController();
@@ -1479,7 +1479,7 @@ bool SwDocShell::GetProtectionHash( /*out*/ cpo::uno::Sequence< sal_Int8 > &rPas
     return bRes;
 }
 
-void SwDocShell::RegisterAutomationDocumentEventsCaller(css::uno::Reference< ooo::vba::XSinkCaller > const& xCaller)
+void SwDocShell::RegisterAutomationDocumentEventsCaller(cpo::uno::Reference< ooo::vba::XSinkCaller > const& xCaller)
 {
     mxAutomationDocumentEventsCaller = xCaller;
 }
@@ -1490,7 +1490,7 @@ void SwDocShell::CallAutomationDocumentEventSinks(const OUString& Method, cpo::u
         mxAutomationDocumentEventsCaller->CallSinks(Method, Arguments);
 }
 
-void SwDocShell::RegisterAutomationDocumentObject(css::uno::Reference< ooo::vba::word::XDocument > const& xDocument)
+void SwDocShell::RegisterAutomationDocumentObject(cpo::uno::Reference< ooo::vba::word::XDocument > const& xDocument)
 {
     mxAutomationDocumentObject = xDocument;
 }

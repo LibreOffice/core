@@ -43,6 +43,7 @@ typedef Point POINTL;
 #endif
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 // this struct conforms to the Microsoft
 // OBJECTDESCRIPTOR -> see oleidl.h

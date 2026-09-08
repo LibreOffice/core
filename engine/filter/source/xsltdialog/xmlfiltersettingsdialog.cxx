@@ -52,7 +52,7 @@
 
 using namespace osl;
 using namespace com::sun::star::lang;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::io;
 using namespace com::sun::star::container;
@@ -62,7 +62,7 @@ using namespace com::sun::star::util;
 using ::rtl::Uri;
 
 XMLFilterSettingsDialog::XMLFilterSettingsDialog(weld::Window* pParent,
-        const css::uno::Reference<cpo::uno::XComponentContext>& rxContext)
+        const cpo::uno::Reference<cpo::uno::XComponentContext>& rxContext)
     : GenericDialogController(pParent, u"filter/ui/xmlfiltersettings.ui"_ustr, u"XMLFilterSettingsDialog"_ustr)
     , mxContext( rxContext )
     , m_sTemplatePath(u"$(user)/template/"_ustr)

@@ -27,7 +27,7 @@
 #include <xmloff/xmlprmap.hxx>
 
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star;
 
 PagePropertySetContext::PagePropertySetContext(
@@ -48,9 +48,9 @@ PagePropertySetContext::~PagePropertySetContext()
 {
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > PagePropertySetContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > PagePropertySetContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
     ::std::vector< XMLPropertyState > &rProperties,
     const XMLPropertyState& rProp )
 {

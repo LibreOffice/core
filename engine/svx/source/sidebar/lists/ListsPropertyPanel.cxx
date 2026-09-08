@@ -20,13 +20,13 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo::uno;
 
 namespace svx::sidebar
 {
 std::unique_ptr<PanelLayout>
 ListsPropertyPanel::Create(weld::Widget* pParent,
-                           const css::uno::Reference<css::frame::XFrame>& rxFrame)
+                           const cpo::uno::Reference<css::frame::XFrame>& rxFrame)
 {
     if (pParent == nullptr)
         throw lang::IllegalArgumentException(
@@ -39,7 +39,7 @@ ListsPropertyPanel::Create(weld::Widget* pParent,
 }
 
 ListsPropertyPanel::ListsPropertyPanel(weld::Widget* pParent,
-                                       const css::uno::Reference<css::frame::XFrame>& rxFrame)
+                                       const cpo::uno::Reference<css::frame::XFrame>& rxFrame)
     : PanelLayout(pParent, u"ListsPropertyPanel"_ustr, u"svx/ui/sidebarlists.ui"_ustr)
     , mxTBxNumBullet(m_xBuilder->weld_toolbar(u"numberbullet"_ustr))
     , mxNumBulletDispatcher(new ToolbarUnoDispatcher(*mxTBxNumBullet, *m_xBuilder, rxFrame))

@@ -31,10 +31,11 @@
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 const sal_Int32 DEFAULT_PAGE_DISTANCE = 500;
 
-sal_Int32 SwVbaInformationHelper::handleWdActiveEndPageNumber( const css::uno::Reference< css::text::XTextViewCursor >& xTVCursor )
+sal_Int32 SwVbaInformationHelper::handleWdActiveEndPageNumber( const cpo::uno::Reference< css::text::XTextViewCursor >& xTVCursor )
 {
     uno::Reference< text::XPageCursor > xPageCursor( xTVCursor, uno::UNO_QUERY_THROW );
     return xPageCursor->getPage();
@@ -45,7 +46,7 @@ sal_Int32 SwVbaInformationHelper::handleWdNumberOfPagesInDocument( const rtl::Re
     return word::getPageCount( xModel );
 }
 
-double SwVbaInformationHelper::handleWdVerticalPositionRelativeToPage( const rtl::Reference< SwXTextDocument >& xModel, const css::uno::Reference< css::text::XTextViewCursor >& xTVCursor )
+double SwVbaInformationHelper::handleWdVerticalPositionRelativeToPage( const rtl::Reference< SwXTextDocument >& xModel, const cpo::uno::Reference< css::text::XTextViewCursor >& xTVCursor )
 {
     xTVCursor->collapseToStart();
     rtl::Reference< SwXBaseStyle > xStyleProps( word::getCurrentPageStyle( xModel ) );

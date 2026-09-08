@@ -71,22 +71,22 @@ namespace toolkit
     private:
 //        PropertyChangeListenerMultiplexer                 maPropertyListeners;
 
-        typedef ::std::vector< css::uno::Reference< XInterface > >    RoadmapItemHolderList;
+        typedef ::std::vector< cpo::uno::Reference< XInterface > >    RoadmapItemHolderList;
 
         ContainerListenerMultiplexer        maContainerListeners;
         RoadmapItemHolderList               maRoadmapItems;
 
-        void                                MakeRMItemValidation( sal_Int32 Index, const css::uno::Reference< XInterface >& xRoadmapItem );
-        css::container::ContainerEvent      GetContainerEvent(sal_Int32 Index, const css::uno::Reference< XInterface >& );
-        void                                SetRMItemDefaultProperties( const css::uno::Reference< XInterface >& );
-        static sal_Int16                    GetCurrentItemID( const css::uno::Reference< css::beans::XPropertySet >& xPropertySet );
+        void                                MakeRMItemValidation( sal_Int32 Index, const cpo::uno::Reference< XInterface >& xRoadmapItem );
+        css::container::ContainerEvent      GetContainerEvent(sal_Int32 Index, const cpo::uno::Reference< XInterface >& );
+        void                                SetRMItemDefaultProperties( const cpo::uno::Reference< XInterface >& );
+        static sal_Int16                    GetCurrentItemID( const cpo::uno::Reference< css::beans::XPropertySet >& xPropertySet );
         sal_Int32                           GetUniqueID();
 
         cpo::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
         ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
     public:
-        UnoControlRoadmapModel( const css::uno::Reference< cpo::uno::XComponentContext >& i_factory );
+        UnoControlRoadmapModel( const cpo::uno::Reference< cpo::uno::XComponentContext >& i_factory );
         UnoControlRoadmapModel( const UnoControlRoadmapModel& rModel ) :
             UnoControlRoadmapModel_Base( rModel ),
             UnoControlRoadmapModel_IBase( rModel ),
@@ -113,8 +113,8 @@ namespace toolkit
     virtual void removeByIndex( sal_Int32 Index ) override;
     virtual void replaceByIndex( sal_Int32 Index, const cpo::uno::Any & Element) override;
 
-    virtual void addContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) override;
-    virtual void removeContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) override;
+    virtual void addContainerListener( const cpo::uno::Reference< css::container::XContainerListener >& xListener ) override;
+    virtual void removeContainerListener( const cpo::uno::Reference< css::container::XContainerListener >& xListener ) override;
 
     cpo::uno::Any queryInterface( const cpo::uno::Type & rType ) override { return UnoControlRoadmapModel_Base::queryInterface(rType); }
     cpo::uno::Any queryAggregation( const cpo::uno::Type & rType ) override;
@@ -123,11 +123,11 @@ namespace toolkit
 
 
     // css::beans::XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
 
 
-    virtual css::uno::Reference< XInterface > createInstance(  ) override;
-    virtual css::uno::Reference< XInterface > createInstanceWithArguments( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    virtual cpo::uno::Reference< XInterface > createInstance(  ) override;
+    virtual cpo::uno::Reference< XInterface > createInstanceWithArguments( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     virtual cpo::uno::Type getElementType() override;
 
@@ -152,14 +152,14 @@ namespace toolkit
     void   dispose(  ) override;
 
 
-    bool setModel(const css::uno::Reference< css::awt::XControlModel >& Model) override;
+    bool setModel(const cpo::uno::Reference< css::awt::XControlModel >& Model) override;
 
     void elementInserted( const css::container::ContainerEvent& rEvent ) override;
     void elementRemoved( const css::container::ContainerEvent& rEvent ) override;
     void elementReplaced( const css::container::ContainerEvent& rEvent ) override;
 
-    virtual void addItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
-    virtual void removeItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
+    virtual void addItemListener( const cpo::uno::Reference< css::awt::XItemListener >& l ) override;
+    virtual void removeItemListener( const cpo::uno::Reference< css::awt::XItemListener >& l ) override;
 
 
     virtual void itemStateChanged( const css::awt::ItemEvent& rEvent ) override;

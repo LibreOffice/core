@@ -112,7 +112,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo;
 using namespace ::cpo::uno;
 
 namespace{
@@ -169,7 +169,7 @@ struct ScPasteJob
     ScCellShell* pCellShell;
     std::shared_ptr<SfxRequest> xRequest;
     const ScTransferObj* pOwnClip;
-    css::uno::Reference<css::datatransfer::XTransferable2> xTransferable;
+    cpo::uno::Reference<css::datatransfer::XTransferable2> xTransferable;
     ScTabViewShell* pTabViewShell;
     InsertDeleteFlags nFlags;
     ScPasteFunc nFunction;
@@ -1556,7 +1556,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                 if ( nFormat != SotClipboardFormatId::NONE )
                 {
-                    css::uno::Reference<css::datatransfer::XTransferable2> xTransferable(ScTabViewShell::GetClipData(GetViewData().GetActiveWin()));
+                    cpo::uno::Reference<css::datatransfer::XTransferable2> xTransferable(ScTabViewShell::GetClipData(GetViewData().GetActiveWin()));
                     bool bCells = ( ScTransferObj::GetOwnClipboard(xTransferable) != nullptr );
                     bool bDraw = ( ScDrawTransferObj::GetOwnClipboard(xTransferable) != nullptr );
                     bool bOle = ( nFormat == SotClipboardFormatId::EMBED_SOURCE );
@@ -1581,7 +1581,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 ScDocument& rDoc = GetViewData().GetDocument();
                 bool bOtherDoc = !rDoc.IsClipboardSource();
                 // keep a reference in case the clipboard is changed during dialog or PasteFromClip
-                css::uno::Reference<css::datatransfer::XTransferable2> xTransferable(
+                cpo::uno::Reference<css::datatransfer::XTransferable2> xTransferable(
                     ScTabViewShell::GetClipData(GetViewData().GetActiveWin()));
                 const ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard(xTransferable);
                 if ( pOwnClip )
@@ -1863,7 +1863,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             // this makes FID_INS_CELL_CONTENTS superfluous
             {
                 vcl::Window* pWin = GetViewData().GetActiveWin();
-                css::uno::Reference<css::datatransfer::XTransferable2> xTransferable(ScTabViewShell::GetClipData(pWin));
+                cpo::uno::Reference<css::datatransfer::XTransferable2> xTransferable(ScTabViewShell::GetClipData(pWin));
 
                 //  Clipboard-ID given as parameter? Basic "PasteSpecial(Format)"
                 const SfxPoolItem* pItem=nullptr;

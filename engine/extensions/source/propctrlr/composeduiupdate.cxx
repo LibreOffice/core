@@ -41,7 +41,7 @@ namespace pcr
     using ::com::sun::star::lang::DisposedException;
     using ::com::sun::star::lang::NullPointerException;
     using ::com::sun::star::inspection::XPropertyHandler;
-    using ::com::sun::star::uno::Reference;
+    using ::cpo::uno::Reference;
     using ::com::sun::star::inspection::XObjectInspectorUI;
     using ::com::sun::star::inspection::XPropertyControl;
     using ::com::sun::star::inspection::XPropertyControlObserver;

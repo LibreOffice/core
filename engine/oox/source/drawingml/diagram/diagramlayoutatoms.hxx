@@ -39,7 +39,7 @@ struct IteratorAttr
     IteratorAttr();
 
     // not sure this belong here, but wth
-    void loadFromXAttr( const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttributes );
+    void loadFromXAttr( const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttributes );
 
     std::vector<sal_Int32> maAxis;
     sal_Int32 mnCnt;
@@ -54,7 +54,7 @@ struct ConditionAttr
     ConditionAttr();
 
     // not sure this belong here, but wth
-    void loadFromXAttr( const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttributes );
+    void loadFromXAttr( const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttributes );
 
     OUString msVal;
     sal_Int32 mnFunc;
@@ -253,7 +253,7 @@ class ForEachAtom
     : public LayoutAtom
 {
 public:
-    explicit ForEachAtom(LayoutNode& rLayoutNode, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttributes);
+    explicit ForEachAtom(LayoutNode& rLayoutNode, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttributes);
 
     IteratorAttr & iterator()
         { return maIter; }
@@ -275,7 +275,7 @@ class ConditionAtom
     : public LayoutAtom
 {
 public:
-    explicit ConditionAtom(LayoutNode& rLayoutNode, bool isElse, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttributes);
+    explicit ConditionAtom(LayoutNode& rLayoutNode, bool isElse, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttributes);
     virtual void accept( LayoutAtomVisitor& ) override;
     bool getDecision(const SmartArtDiagram& rDgm,
                      const rtl::Reference<svx::diagram::Point>& rPresPoint) const;

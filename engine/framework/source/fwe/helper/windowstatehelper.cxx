@@ -20,7 +20,7 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <framework/windowstatehelper.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -54,7 +54,7 @@ OUString WindowStateHelper::GetFromWindow(vcl::Window* pWin)
 }
 
 // for use from application exports
-OUString WindowStateHelper::GetFromModel(const css::uno::Reference<css::frame::XModel>& xModel)
+OUString WindowStateHelper::GetFromModel(const cpo::uno::Reference<css::frame::XModel>& xModel)
 {
     if (!xModel)
         return {};

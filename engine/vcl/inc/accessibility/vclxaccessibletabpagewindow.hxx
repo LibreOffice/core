@@ -44,7 +44,7 @@ public:
     VCLXAccessibleTabPageWindow(vcl::Window* pWindow);
 
     // XAccessibleContext
-    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleParent(  ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > getAccessibleParent(  ) override;
     virtual sal_Int64 getAccessibleIndexInParent(  ) override;
 };
 

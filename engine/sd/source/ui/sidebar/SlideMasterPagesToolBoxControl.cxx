@@ -37,10 +37,10 @@ void SlideMasterPagesToolBoxControl::disposing(std::unique_lock<std::mutex>& rGu
     svt::ToolboxController::disposing(rGuard);
 }
 
-css::uno::Reference<css::awt::XWindow> SlideMasterPagesToolBoxControl::createItemWindow(
-    const css::uno::Reference<css::awt::XWindow>& rParent)
+cpo::uno::Reference<css::awt::XWindow> SlideMasterPagesToolBoxControl::createItemWindow(
+    const cpo::uno::Reference<css::awt::XWindow>& rParent)
 {
-    css::uno::Reference<css::awt::XWindow> xItemWindow;
+    cpo::uno::Reference<css::awt::XWindow> xItemWindow;
     SAL_INFO("sd", "createItemWindow called for SlideMasterPagesToolBoxControl");
 
     VclPtr<vcl::Window> pParent = VCLUnoHelper::GetWindow(rParent);

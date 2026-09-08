@@ -21,7 +21,7 @@
 
 #include <memory>
 #include <optional>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <com/sun/star/i18n/ForbiddenCharacters.hpp>
 #include <i18nlangtag/languagetag.hxx>
 #include <rtl/ref.hxx>
@@ -33,7 +33,7 @@ namespace cpo::uno { class XComponentContext; }
 
 class SW_DLLPUBLIC SwBreakIt
 {
-    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
     rtl::Reference<i18npool::BreakIterator> m_xBreak;
 
     std::unique_ptr<LanguageTag> m_xLanguageTag;   ///< language tag of the current locale
@@ -49,12 +49,12 @@ class SW_DLLPUBLIC SwBreakIt
     SwBreakIt& operator=(SwBreakIt const&) = delete;
 
     // private (see @ Create_, Delete_).
-    explicit SwBreakIt(css::uno::Reference<cpo::uno::XComponentContext> xContext);
+    explicit SwBreakIt(cpo::uno::Reference<cpo::uno::XComponentContext> xContext);
 
 public:
     // private (see @ source/core/bastyp/init.cxx).
     static void Create_(
-        const css::uno::Reference< cpo::uno::XComponentContext > & rxContext);
+        const cpo::uno::Reference< cpo::uno::XComponentContext > & rxContext);
     static void Delete_();
 
 public:

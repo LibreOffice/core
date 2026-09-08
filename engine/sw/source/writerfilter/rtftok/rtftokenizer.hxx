@@ -14,7 +14,7 @@
 #include <vector>
 #include <unordered_map>
 
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 
 #include <rtl/ustring.hxx>
 #include <tools/ref.hxx>
@@ -32,7 +32,7 @@ class RTFTokenizer final : public virtual SvRefBase
 {
 public:
     RTFTokenizer(RTFListener& rImport, SvStream* pInStream,
-                 css::uno::Reference<css::task::XStatusIndicator> const& xStatusIndicator);
+                 cpo::uno::Reference<css::task::XStatusIndicator> const& xStatusIndicator);
     ~RTFTokenizer() override;
 
     RTFError resolveParse();
@@ -56,7 +56,7 @@ private:
 
     RTFListener& m_rImport;
     SvStream* m_pInStream;
-    css::uno::Reference<css::task::XStatusIndicator> const& m_xStatusIndicator;
+    cpo::uno::Reference<css::task::XStatusIndicator> const& m_xStatusIndicator;
     /// Same as the size of the importer's states, except that this can be negative for invalid input.
     int m_nGroup;
     sal_Int32 m_nLineNumber;

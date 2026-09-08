@@ -37,7 +37,7 @@
 #include <xmloff/XMLTextShapeStyleContext.hxx>
 
 using namespace ::com::sun::star::document;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::style;
@@ -56,9 +56,9 @@ public:
         SvXMLImportPropertyMapper* pMap );
 
     using SvXMLPropertySetContext::createFastChildContext;
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
         ::std::vector< XMLPropertyState > &rProperties,
         const XMLPropertyState& rProp ) override;
 };
@@ -76,9 +76,9 @@ XMLTextShapePropertySetContext_Impl::XMLTextShapePropertySetContext_Impl(
 {
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextShapePropertySetContext_Impl::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextShapePropertySetContext_Impl::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
     ::std::vector< XMLPropertyState > &rProperties,
     const XMLPropertyState& rProp )
 {
@@ -148,9 +148,9 @@ XMLTextShapeStyleContext::~XMLTextShapeStyleContext()
 {
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextShapeStyleContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextShapeStyleContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     if( IsTokenInNamespace(nElement, XML_NAMESPACE_STYLE) ||
         IsTokenInNamespace(nElement, XML_NAMESPACE_LO_EXT) )

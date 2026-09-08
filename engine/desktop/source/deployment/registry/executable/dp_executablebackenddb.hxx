@@ -44,7 +44,7 @@ protected:
     virtual OUString getKeyElementName() override;
 
 public:
-    ExecutableBackendDb(css::uno::Reference<cpo::uno::XComponentContext> const& xContext,
+    ExecutableBackendDb(cpo::uno::Reference<cpo::uno::XComponentContext> const& xContext,
                         OUString const& url);
 };
 }

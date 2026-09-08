@@ -38,6 +38,7 @@
 #include <utility>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace svgio::svgreader
 {
@@ -201,7 +202,7 @@ svgio_XSvgParser_get_implementation(
 
 extern "C" bool TestImportSVG(SvStream& rStream)
 {
-    css::uno::Reference<css::io::XInputStream> xStream(new utl::OInputStreamWrapper(rStream));
+    cpo::uno::Reference<css::io::XInputStream> xStream(new utl::OInputStreamWrapper(rStream));
     rtl::Reference<svgio::svgreader::XSvgParser> xSvgParser(new svgio::svgreader::XSvgParser(comphelper::getProcessComponentContext()));
     return xSvgParser->getDecomposition(xStream, OUString()).getLength() != 0;
 }

@@ -20,9 +20,10 @@
 #include "vbaspinbutton.hxx"
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace ooo::vba;
 
-ScVbaSpinButton::ScVbaSpinButton(  const css::uno::Reference< ov::XHelperInterface >& xParent, const uno::Reference< cpo::uno::XComponentContext >& xContext, const uno::Reference< cpo::uno::XInterface >& xControl, const uno::Reference< frame::XModel >& xModel, std::unique_ptr<AbstractGeometryAttributes> pGeomHelper )
+ScVbaSpinButton::ScVbaSpinButton(  const cpo::uno::Reference< ov::XHelperInterface >& xParent, const uno::Reference< cpo::uno::XComponentContext >& xContext, const uno::Reference< cpo::uno::XInterface >& xControl, const uno::Reference< frame::XModel >& xModel, std::unique_ptr<AbstractGeometryAttributes> pGeomHelper )
     : SpinButtonImpl_BASE( xParent, xContext, xControl, xModel, std::move(pGeomHelper) )
 {
 }

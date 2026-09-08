@@ -41,10 +41,10 @@ canvas/inc/base/graphicdevicebase.hxx:239
     unsigned char canvas::GraphicDeviceBase::enterFullScreenMode(unsigned char,)
     0
 canvas/inc/base/graphicdevicebase.hxx:305
-    void canvas::GraphicDeviceBase::removePropertyChangeListener(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertyChangeListener> &,)
+    void canvas::GraphicDeviceBase::removePropertyChangeListener(const class rtl::OUString &,const class cpo::uno::Reference<class com::sun::star::beans::XPropertyChangeListener> &,)
     00
 canvas/inc/base/graphicdevicebase.hxx:318
-    void canvas::GraphicDeviceBase::removeVetoableChangeListener(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XVetoableChangeListener> &,)
+    void canvas::GraphicDeviceBase::removeVetoableChangeListener(const class rtl::OUString &,const class cpo::uno::Reference<class com::sun::star::beans::XVetoableChangeListener> &,)
     00
 canvas/inc/base/integerbitmapbase.hxx:57
     void canvas::IntegerBitmapBase::setData(const class cpo::uno::Sequence<signed char> &,const struct com::sun::star::rendering::IntegerBitmapLayout &,const struct com::sun::star::geometry::IntegerRectangle2D &,)
@@ -53,7 +53,7 @@ canvas/inc/base/integerbitmapbase.hxx:71
     void canvas::IntegerBitmapBase::setPixel(const class cpo::uno::Sequence<signed char> &,const struct com::sun::star::rendering::IntegerBitmapLayout &,const struct com::sun::star::geometry::IntegerPoint2D &,)
     011
 desktop/source/deployment/registry/inc/dp_backend.h:80
-    void dp_registry::backend::Package::processPackage_(class osl::ResettableGuard<class osl::Mutex> &,_Bool,_Bool,const class rtl::Reference<class dp_misc::AbortChannel> &,const class com::sun::star::uno::Reference<class com::sun::star::ucb::XCommandEnvironment> &,)
+    void dp_registry::backend::Package::processPackage_(class osl::ResettableGuard<class osl::Mutex> &,_Bool,_Bool,const class rtl::Reference<class dp_misc::AbortChannel> &,const class cpo::uno::Reference<class com::sun::star::ucb::XCommandEnvironment> &,)
     01111
 extensions/source/bibliography/loadlisteneradapter.hxx:109
     void bib::OLoadListener::_unloading(const struct com::sun::star::lang::EventObject &,)
@@ -89,13 +89,13 @@ include/oox/dump/oledumper.hxx:166
     void oox::dump::ComCtlObjectBase::implDumpCommonExtra(long,)
     0
 include/oox/export/shapes.hxx:139
-    class oox::drawingml::ShapeExport & oox::drawingml::ShapeExport::WriteNonVisualProperties(const class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> &,)
+    class oox::drawingml::ShapeExport & oox::drawingml::ShapeExport::WriteNonVisualProperties(const class cpo::uno::Reference<class com::sun::star::drawing::XShape> &,)
     0
 include/sfx2/stbitem.hxx:101
     _Bool SfxStatusBarControl::MouseButtonUp(const class MouseEvent &,)
     0
 include/svl/documentlockfile.hxx:50
-    void svt::GenDocumentLockFile::WriteEntryToStream(class std::unique_lock<class std::mutex> &,const class o3tl::enumarray<enum LockFileComponent, class rtl::OUString> &,const class com::sun::star::uno::Reference<class com::sun::star::io::XOutputStream> &,)
+    void svt::GenDocumentLockFile::WriteEntryToStream(class std::unique_lock<class std::mutex> &,const class o3tl::enumarray<enum LockFileComponent, class rtl::OUString> &,const class cpo::uno::Reference<class com::sun::star::io::XOutputStream> &,)
     011
 include/svl/svdde.hxx:227
     _Bool DdeGetPutItem::Put(const class DdeData *,)
@@ -116,7 +116,7 @@ include/svtools/editbrowsebox.hxx:102
     void svt::CellController::ActivatingMouseEvent(const class BrowserMouseEvent &,_Bool,)
     10
 include/svx/IAccessibleParent.hxx:81
-    _Bool accessibility::IAccessibleParent::ReplaceChild(class accessibility::AccessibleShape *,const class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> &,const long,const class accessibility::AccessibleShapeTreeInfo &,)
+    _Bool accessibility::IAccessibleParent::ReplaceChild(class accessibility::AccessibleShape *,const class cpo::uno::Reference<class com::sun::star::drawing::XShape> &,const long,const class accessibility::AccessibleShapeTreeInfo &,)
     1101
 include/svx/selectioncontroller.hxx:48
     _Bool sdr::SelectionController::onMouseButtonUp(const class MouseEvent &,class vcl::Window *,)
@@ -134,7 +134,7 @@ include/vcl/dndhelp.hxx:62
     void vcl::unohelper::DragAndDropClient::dragExit(const struct com::sun::star::datatransfer::dnd::DropTargetEvent &,)
     0
 include/xmloff/txtimp.hxx:108
-    class SvXMLImportContext * XMLTextImportHelper::CreateTableChildContext(class SvXMLImport &,int,const class com::sun::star::uno::Reference<class com::sun::star::xml::sax::XFastAttributeList> &,)
+    class SvXMLImportContext * XMLTextImportHelper::CreateTableChildContext(class SvXMLImport &,int,const class cpo::uno::Reference<class com::sun::star::xml::sax::XFastAttributeList> &,)
     101
 sc/inc/filter.hxx:81
     void ScFormatFilterPlugin::ScExportHTML(class SvStream &,const class rtl::OUString &,class ScDocument *,const class ScRange &,const unsigned short,_Bool,const class rtl::OUString &,class rtl::OUString &,const class rtl::OUString &,)
@@ -215,7 +215,7 @@ vcl/inc/font/PhysicalFontFace.hxx:198
     const class std::vector<struct hb_variation_t> & vcl::font::PhysicalFontFace::GetVariations(const class LogicalFontInstance &,)const
     0
 vcl/inc/salbmp.hxx:71
-    _Bool SalBitmap::Create(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XBitmapCanvas> &,class Size &,_Bool,)
+    _Bool SalBitmap::Create(const class cpo::uno::Reference<class com::sun::star::rendering::XBitmapCanvas> &,class Size &,_Bool,)
     000
 vcl/inc/salbmp.hxx:80
     _Bool SalBitmap::GetSystemData(struct BitmapSystemData &,)

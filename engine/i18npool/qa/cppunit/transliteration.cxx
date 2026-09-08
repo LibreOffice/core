@@ -16,7 +16,7 @@
 #include <com/sun/star/i18n/Transliteration.hpp>
 #include <com/sun/star/i18n/TransliterationModulesNew.hpp>
 #include <com/sun/star/i18n/XExtendedTransliteration.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cppuhelper/bootstrap.hxx>
 
 namespace
@@ -181,7 +181,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    css::uno::Reference<css::i18n::XExtendedTransliteration> transliteration_;
+    cpo::uno::Reference<css::i18n::XExtendedTransliteration> transliteration_;
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Transliteration);

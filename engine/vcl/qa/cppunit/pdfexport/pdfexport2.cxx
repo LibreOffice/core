@@ -67,6 +67,7 @@ static std::ostream& operator<<(std::ostream& rStream, const std::set<rtl::OStri
 #include <test/unoapi_test.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 #if !defined _WIN32
 static std::ostream& operator<<(std::ostream& rStream, const std::set<OString>& rSet)

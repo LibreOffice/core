@@ -31,17 +31,17 @@ namespace dbaccess
     {
     public:
         StorageOutputStream(
-            const css::uno::Reference< css::embed::XStorage >& i_rParentStorage,
+            const cpo::uno::Reference< css::embed::XStorage >& i_rParentStorage,
             const OUString& i_rStreamName
         );
         virtual ~StorageOutputStream();
 
     protected:
-        const css::uno::Reference< css::io::XOutputStream >&
+        const cpo::uno::Reference< css::io::XOutputStream >&
                                                 getOutputStream() const { return m_xOutputStream; }
 
     private:
-              css::uno::Reference< css::io::XOutputStream >
+              cpo::uno::Reference< css::io::XOutputStream >
                                                 m_xOutputStream;
     };
 

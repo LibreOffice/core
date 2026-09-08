@@ -86,7 +86,7 @@ private:
     std::unique_ptr<SdrOutliner>    mpOutliner;
     std::unique_ptr<SvxOutlinerForwarder> mpTextForwarder;
     std::unique_ptr<SvxDrawOutlinerViewForwarder> mpViewForwarder;    // if non-NULL, use GetViewModeTextForwarder text forwarder
-    css::uno::Reference< css::linguistic2::XLinguServiceManager2 > m_xLinguServiceManager;
+    cpo::uno::Reference< css::linguistic2::XLinguServiceManager2 > m_xLinguServiceManager;
     Point                           maTextOffset;
     bool                            mbDataValid;
     bool                            mbIsLocked;
@@ -507,11 +507,11 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
             {
                 if ( !m_xLinguServiceManager.is() )
                 {
-                    const css::uno::Reference< cpo::uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
+                    const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
                     m_xLinguServiceManager.set(css::linguistic2::LinguServiceManager::create(xContext));
                 }
 
-                css::uno::Reference< css::linguistic2::XHyphenator > xHyphenator = m_xLinguServiceManager->getHyphenator();
+                cpo::uno::Reference< css::linguistic2::XHyphenator > xHyphenator = m_xLinguServiceManager->getHyphenator();
                 if( xHyphenator.is() )
                     mpOutliner->SetHyphenator( xHyphenator );
             }

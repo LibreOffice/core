@@ -34,8 +34,8 @@
 
 namespace comphelper{
 
-StillReadWriteInteraction::StillReadWriteInteraction(const css::uno::Reference< css::task::XInteractionHandler >& xHandler,
-                                                     css::uno::Reference< css::task::XInteractionHandler > xAuxiliaryHandler)
+StillReadWriteInteraction::StillReadWriteInteraction(const cpo::uno::Reference< css::task::XInteractionHandler >& xHandler,
+                                                     cpo::uno::Reference< css::task::XInteractionHandler > xAuxiliaryHandler)
              : m_bUsed                    (false)
              , m_bHandledByMySelf         (false)
              , m_xAuxiliaryHandler(std::move(xAuxiliaryHandler))
@@ -81,7 +81,7 @@ void StillReadWriteInteraction::resetErrorStates()
 
 
 ucbhelper::InterceptedInteraction::EInterceptionState StillReadWriteInteraction::intercepted(const ::ucbhelper::InterceptedInteraction::InterceptedRequest&                         aRequest,
-                                                                  const css::uno::Reference< css::task::XInteractionRequest >& xRequest)
+                                                                  const cpo::uno::Reference< css::task::XInteractionRequest >& xRequest)
 {
     // we are used!
     m_bUsed = true;
@@ -135,7 +135,7 @@ ucbhelper::InterceptedInteraction::EInterceptionState StillReadWriteInteraction:
     if (bAbort)
     {
         m_bHandledByMySelf = true;
-        css::uno::Reference< css::task::XInteractionContinuation > xAbort = ::ucbhelper::InterceptedInteraction::extractContinuation(
+        cpo::uno::Reference< css::task::XInteractionContinuation > xAbort = ::ucbhelper::InterceptedInteraction::extractContinuation(
             xRequest->getContinuations(),
             cppu::UnoType<css::task::XInteractionAbort>::get() );
         if (!xAbort.is())

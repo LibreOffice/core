@@ -33,7 +33,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/sequence.hxx>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::xmloff::token;
 
@@ -108,9 +108,9 @@ void XMLIndexBibliographyConfigurationContext::SetAttribute(
     }
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLIndexBibliographyConfigurationContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLIndexBibliographyConfigurationContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     // process children here and use default context!
     if ( nElement == XML_ELEMENT(TEXT, XML_SORT_KEY) )

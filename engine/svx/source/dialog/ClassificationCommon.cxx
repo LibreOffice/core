@@ -17,6 +17,7 @@
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 
 using namespace css;
+using namespace ::cpo;
 
 namespace svx::classification
 {

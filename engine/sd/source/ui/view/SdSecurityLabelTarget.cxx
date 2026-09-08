@@ -46,7 +46,7 @@ void setFooterOnAllSlides(SdDrawDocument* pDoc, const OUString& rText, bool bVis
 }
 }
 
-uno::Reference<frame::XModel> SdSecurityLabelTarget::getModel() const
+cpo::uno::Reference<frame::XModel> SdSecurityLabelTarget::getModel() const
 {
     sd::DrawDocShell* pDocShell = m_rViewShell.GetDocSh();
     if (!pDocShell)

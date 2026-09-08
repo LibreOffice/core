@@ -72,7 +72,7 @@ class ObjectFormatter
 public:
     explicit            ObjectFormatter(
                             const ::oox::core::XmlFilterBase& rFilter,
-                            const css::uno::Reference< css::chart2::XChartDocument >& rxChartDoc,
+                            const cpo::uno::Reference< css::chart2::XChartDocument >& rxChartDoc,
                             const ChartSpaceModel& rChartSpace );
                         ~ObjectFormatter();
 

@@ -41,9 +41,9 @@ namespace dbtools
 
     class OOO_DLLPUBLIC_DBTOOLS OAutoConnectionDisposer final : public OAutoConnectionDisposer_Base
     {
-        css::uno::Reference< css::sdbc::XConnection >
+        cpo::uno::Reference< css::sdbc::XConnection >
                     m_xOriginalConnection;
-        css::uno::Reference< css::sdbc::XRowSet > m_xRowSet; // needed to add as listener
+        cpo::uno::Reference< css::sdbc::XRowSet > m_xRowSet; // needed to add as listener
         bool    m_bRSListening          : 1; // true when we're listening on rowset
         bool    m_bPropertyListening    : 1; // true when we're listening for property changes
 
@@ -54,8 +54,8 @@ namespace dbtools
             here) will be disposed.</p>
         */
         OAutoConnectionDisposer(
-            const css::uno::Reference< css::sdbc::XRowSet >& _rxRowSet,
-            const css::uno::Reference< css::sdbc::XConnection >& _rxConnection
+            const cpo::uno::Reference< css::sdbc::XRowSet >& _rxRowSet,
+            const cpo::uno::Reference< css::sdbc::XConnection >& _rxConnection
             );
 
     private:
@@ -76,8 +76,8 @@ namespace dbtools
         void        stopRowSetListening();
         bool        isRowSetListening() const { return m_bRSListening; }
 
-        void        startPropertyListening( const css::uno::Reference< css::beans::XPropertySet >& _rxProps );
-        void        stopPropertyListening( const css::uno::Reference< css::beans::XPropertySet >& _rxEventSource );
+        void        startPropertyListening( const cpo::uno::Reference< css::beans::XPropertySet >& _rxProps );
+        void        stopPropertyListening( const cpo::uno::Reference< css::beans::XPropertySet >& _rxEventSource );
     };
 
 

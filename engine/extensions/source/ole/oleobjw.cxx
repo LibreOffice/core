@@ -55,7 +55,7 @@ using namespace com::sun::star::bridge;
 using namespace com::sun::star::bridge::oleautomation;
 using namespace com::sun::star::bridge::ModelDependent;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::reflection;
 using namespace cpo::uno;

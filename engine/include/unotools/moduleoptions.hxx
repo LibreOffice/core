@@ -146,7 +146,7 @@ class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtModuleOptions final : public utl::de
 
             @return A suitable enum value. See EFactory above.
          */
-        static EFactory ClassifyFactoryByModel(const css::uno::Reference< css::frame::XModel >& xModel);
+        static EFactory ClassifyFactoryByModel(const cpo::uno::Reference< css::frame::XModel >& xModel);
 
         static OUString GetFactoryShortName(EFactory eFactory);
 

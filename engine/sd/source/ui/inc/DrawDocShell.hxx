@@ -78,15 +78,15 @@ public:
     void                    UpdateRefDevice();
     virtual void            Activate( bool bMDI ) override;
     virtual void            Deactivate( bool bMDI ) override;
-    virtual bool            InitNew( const css::uno::Reference< css::embed::XStorage >& xStorage ) override;
+    virtual bool            InitNew( const cpo::uno::Reference< css::embed::XStorage >& xStorage ) override;
     virtual bool            ImportFrom(SfxMedium &rMedium,
-            css::uno::Reference<css::text::XTextRange> const& xInsertPosition)
+            cpo::uno::Reference<css::text::XTextRange> const& xInsertPosition)
         override;
     virtual bool            ConvertFrom( SfxMedium &rMedium ) override;
     virtual bool            Save() override;
     virtual bool            SaveAsOwnFormat( SfxMedium& rMedium ) override;
     virtual bool            ConvertTo( SfxMedium &rMedium ) override;
-    virtual bool            SaveCompleted( const css::uno::Reference< css::embed::XStorage >& xStorage ) override;
+    virtual bool            SaveCompleted( const cpo::uno::Reference< css::embed::XStorage >& xStorage ) override;
 
     virtual bool            Load( SfxMedium &rMedium  ) override;
     virtual bool            LoadFrom( SfxMedium& rMedium ) override;

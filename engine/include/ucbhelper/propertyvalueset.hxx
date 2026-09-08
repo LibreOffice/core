@@ -59,15 +59,15 @@ class SAL_DLLPUBLIC_RTTI PropertyValueSet final :
                     css::sdbc::XRow,
                     css::sdbc::XColumnLocate>
 {
-    css::uno::Reference< cpo::uno::XComponentContext >   m_xContext;
-    css::uno::Reference< css::script::XTypeConverter >   m_xTypeConverter;
+    cpo::uno::Reference< cpo::uno::XComponentContext >   m_xContext;
+    cpo::uno::Reference< css::script::XTypeConverter >   m_xTypeConverter;
     std::mutex      m_aMutex;
     std::unique_ptr<PropertyValues>                      m_pValues;
     bool        m_bWasNull;
     bool        m_bTriedToGetTypeConverter;
 
 private:
-    const css::uno::Reference< css::script::XTypeConverter >&
+    const cpo::uno::Reference< css::script::XTypeConverter >&
     getTypeConverter(const std::unique_lock<std::mutex>& rGuard);
 
     template <class T, T ucbhelper_impl::PropertyValue::*_member_name_>
@@ -80,7 +80,7 @@ private:
 
 public:
     UCBHELPER_DLLPUBLIC PropertyValueSet(
-            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
     virtual ~PropertyValueSet() override;
 
     // XRow
@@ -110,26 +110,26 @@ public:
     getTime( sal_Int32 columnIndex ) override;
     virtual css::util::DateTime
     getTimestamp( sal_Int32 columnIndex ) override;
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
                 css::io::XInputStream >
     getBinaryStream( sal_Int32 columnIndex ) override;
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
                 css::io::XInputStream >
     getCharacterStream( sal_Int32 columnIndex ) override;
     virtual cpo::uno::Any
     getObject( sal_Int32 columnIndex,
-               const css::uno::Reference<
+               const cpo::uno::Reference<
                    css::container::XNameAccess >& typeMap ) override;
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
                 css::sdbc::XRef >
     getRef( sal_Int32 columnIndex ) override;
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
                 css::sdbc::XBlob >
     getBlob( sal_Int32 columnIndex ) override;
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
                 css::sdbc::XClob >
     getClob( sal_Int32 columnIndex ) override;
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
                 css::sdbc::XArray >
     getArray( sal_Int32 columnIndex ) override;
 
@@ -182,7 +182,7 @@ public:
       *
        *    @param  rSet is a property set containing the property values.
       */
-    UCBHELPER_DLLPUBLIC void appendPropertySet( const css::uno::Reference< css::beans::XPropertySet >& rSet );
+    UCBHELPER_DLLPUBLIC void appendPropertySet( const cpo::uno::Reference< css::beans::XPropertySet >& rSet );
 
     /** This method tries to append a single property value contained in a
       * property set to the value set.
@@ -194,7 +194,7 @@ public:
       *         given property pet. True, otherwise.
        */
     UCBHELPER_DLLPUBLIC bool appendPropertySetValue(
-                        const css::uno::Reference< css::beans::XPropertySet >& rSet,
+                        const cpo::uno::Reference< css::beans::XPropertySet >& rSet,
                         const css::beans::Property& rProperty );
 };
 

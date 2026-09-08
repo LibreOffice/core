@@ -26,7 +26,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/view/XRenderable.hpp>
 
@@ -37,10 +37,10 @@ class PDFExport
 {
 private:
 
-    css::uno::Reference< css::lang::XComponent > mxSrcDoc;
-    css::uno::Reference< cpo::uno::XComponentContext > mxContext;
-    css::uno::Reference< css::task::XStatusIndicator > mxStatusIndicator;
-    css::uno::Reference< css::task::XInteractionHandler > mxIH;
+    cpo::uno::Reference< css::lang::XComponent > mxSrcDoc;
+    cpo::uno::Reference< cpo::uno::XComponentContext > mxContext;
+    cpo::uno::Reference< css::task::XStatusIndicator > mxStatusIndicator;
+    cpo::uno::Reference< css::task::XInteractionHandler > mxIH;
 
     bool                mbUseLosslessCompression;
     bool                mbReduceImageResolution;
@@ -64,19 +64,19 @@ private:
 
     void                ImplWriteWatermark( vcl::pdf::PDFWriter& rWriter, const Size& rPageSize );
     void                ImplWriteTiledWatermark( vcl::pdf::PDFWriter& rWriter, const Size& rPageSize );
-    css::uno::Reference<css::security::XCertificate> GetCertificateFromSubjectName(std::u16string_view rSubjectName) const;
+    cpo::uno::Reference<css::security::XCertificate> GetCertificateFromSubjectName(std::u16string_view rSubjectName) const;
 
 
 public:
 
-                        PDFExport(  const css::uno::Reference< css::lang::XComponent >& rxSrcDoc,
-                                    const css::uno::Reference< css::task::XStatusIndicator >& xStatusIndicator,
-                                    const css::uno::Reference< css::task::XInteractionHandler >& xIH,
-                                    const css::uno::Reference< cpo::uno::XComponentContext >& xFact );
+                        PDFExport(  const cpo::uno::Reference< css::lang::XComponent >& rxSrcDoc,
+                                    const cpo::uno::Reference< css::task::XStatusIndicator >& xStatusIndicator,
+                                    const cpo::uno::Reference< css::task::XInteractionHandler >& xIH,
+                                    const cpo::uno::Reference< cpo::uno::XComponentContext >& xFact );
                         ~PDFExport();
 
     bool                ExportSelection( vcl::pdf::PDFWriter& rPDFWriter,
-                                    css::uno::Reference< css::view::XRenderable > const & rRenderable,
+                                    cpo::uno::Reference< css::view::XRenderable > const & rRenderable,
                                     const cpo::uno::Any& rSelection,
                                     const StringRangeEnumerator& rRangeEnum,
                                     cpo::uno::Sequence< css::beans::PropertyValue >& rRenderOptions,

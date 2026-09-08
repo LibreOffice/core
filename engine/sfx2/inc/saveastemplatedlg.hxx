@@ -33,7 +33,7 @@ private:
 
     SfxDocumentTemplates maDocTemplates;
 
-    css::uno::Reference<css::frame::XModel> m_xModel;
+    cpo::uno::Reference<css::frame::XModel> m_xModel;
 
 public:
     DECL_LINK(OkClickHdl, weld::Button&, void);
@@ -49,7 +49,7 @@ public:
     bool SaveTemplate();
 
 public:
-    SfxSaveAsTemplateDialog(weld::Window* pParent, css::uno::Reference<css::frame::XModel> xModel);
+    SfxSaveAsTemplateDialog(weld::Window* pParent, cpo::uno::Reference<css::frame::XModel> xModel);
 };
 
 #endif // INCLUDED_SFX2_INC_SAVEASTEMPLATEDLG_HXX

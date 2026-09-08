@@ -132,6 +132,7 @@
 #include <tools/lazydelete.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 
 SdrObjUserCall::~SdrObjUserCall()
@@ -3205,7 +3206,7 @@ SvxShape* SdrObject::getSvxShape()
     return mpSvxShape;
 }
 
-css::uno::Reference< css::drawing::XShape > SdrObject::getUnoShape()
+cpo::uno::Reference< css::drawing::XShape > SdrObject::getUnoShape()
 {
     // try weak reference first
     uno::Reference< css::drawing::XShape > xShape = maWeakUnoShape;

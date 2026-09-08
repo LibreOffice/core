@@ -31,7 +31,7 @@
 
 
 std::optional<OutlinerParaObject> TextChainingUtils::JuxtaposeParaObject(
-        css::uno::Reference< css::datatransfer::XTransferable > const & xOverflowingContent,
+        cpo::uno::Reference< css::datatransfer::XTransferable > const & xOverflowingContent,
         Outliner *pOutl,
         OutlinerParaObject const *pNextPObj)
 {
@@ -66,7 +66,7 @@ std::optional<OutlinerParaObject> TextChainingUtils::JuxtaposeParaObject(
 }
 
 std::optional<OutlinerParaObject> TextChainingUtils::DeeplyMergeParaObject(
-        css::uno::Reference< css::datatransfer::XTransferable > const & xOverflowingContent,
+        cpo::uno::Reference< css::datatransfer::XTransferable > const & xOverflowingContent,
         Outliner *pOutl,
         OutlinerParaObject const *pNextPObj)
 {
@@ -91,7 +91,7 @@ std::optional<OutlinerParaObject> TextChainingUtils::DeeplyMergeParaObject(
     return pOutl->CreateParaObject();
 }
 
-css::uno::Reference< css::datatransfer::XTransferable > TextChainingUtils::CreateTransferableFromText(Outliner const *pOutl)
+cpo::uno::Reference< css::datatransfer::XTransferable > TextChainingUtils::CreateTransferableFromText(Outliner const *pOutl)
 {
     EditEngine& rEditEngine = const_cast<EditEngine &>(pOutl->GetEditEngine());
     sal_Int32 nLastPara = pOutl->GetParagraphCount()-1;
@@ -102,7 +102,7 @@ css::uno::Reference< css::datatransfer::XTransferable > TextChainingUtils::Creat
 
 
 
-OverflowingText::OverflowingText(css::uno::Reference< css::datatransfer::XTransferable > xOverflowingContent) :
+OverflowingText::OverflowingText(cpo::uno::Reference< css::datatransfer::XTransferable > xOverflowingContent) :
         mxOverflowingContent(std::move(xOverflowingContent))
 {
 

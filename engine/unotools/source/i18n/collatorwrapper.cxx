@@ -24,6 +24,7 @@
 #include <com/sun/star/i18n/Collator.hpp>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 CollatorWrapper::CollatorWrapper ( const uno::Reference< cpo::uno::XComponentContext > &rxContext )
 {

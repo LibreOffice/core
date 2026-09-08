@@ -40,12 +40,12 @@ public:
     // XInitialization
     virtual void initialize(const cpo::uno::Sequence<cpo::uno::Any>& aArguments) override;
     // XToolbarController
-    virtual css::uno::Reference<css::awt::XWindow> createPopupWindow() override;
+    virtual cpo::uno::Reference<css::awt::XWindow> createPopupWindow() override;
     // XStatusListener
     virtual void statusChanged(const css::frame::FeatureStateEvent& rEvent) override;
 
 protected:
-    PopupMenuToolbarController(const css::uno::Reference<cpo::uno::XComponentContext>& rxContext,
+    PopupMenuToolbarController(const cpo::uno::Reference<cpo::uno::XComponentContext>& rxContext,
                                OUString aPopupCommand = OUString());
     virtual void functionExecuted(const OUString& rCommand);
     virtual ToolBoxItemBits getDropDownStyle() const;
@@ -57,14 +57,14 @@ protected:
     rtl::Reference<VCLXPopupMenu> m_xPopupMenu;
 
 private:
-    css::uno::Reference<css::frame::XUIControllerFactory> m_xPopupMenuFactory;
-    css::uno::Reference<css::frame::XPopupMenuController> m_xPopupMenuController;
+    cpo::uno::Reference<css::frame::XUIControllerFactory> m_xPopupMenuFactory;
+    cpo::uno::Reference<css::frame::XPopupMenuController> m_xPopupMenuController;
 };
 
 class GenericPopupToolbarController final : public PopupMenuToolbarController
 {
 public:
-    GenericPopupToolbarController(const css::uno::Reference<cpo::uno::XComponentContext>& rxContext,
+    GenericPopupToolbarController(const cpo::uno::Reference<cpo::uno::XComponentContext>& rxContext,
                                   const cpo::uno::Sequence<cpo::uno::Any>& rxArgs);
 
     // XInitialization

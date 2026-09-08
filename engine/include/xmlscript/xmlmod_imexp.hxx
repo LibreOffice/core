@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <rtl/ustring.hxx>
 #include <xmlscript/xmlscriptdllapi.h>
 
@@ -43,10 +43,10 @@ struct XMLSCRIPT_DLLPUBLIC ModuleDescriptor
 
 XMLSCRIPT_DLLPUBLIC void
 exportScriptModule(
-    css::uno::Reference< css::xml::sax::XWriter > const & xOut,
+    cpo::uno::Reference< css::xml::sax::XWriter > const & xOut,
     const ModuleDescriptor& rMod );
 
-XMLSCRIPT_DLLPUBLIC css::uno::Reference< css::xml::sax::XDocumentHandler >
+XMLSCRIPT_DLLPUBLIC cpo::uno::Reference< css::xml::sax::XDocumentHandler >
 importScriptModule( ModuleDescriptor& rMod );
 
 }

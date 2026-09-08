@@ -23,7 +23,7 @@
 #include <com/sun/star/sdb/TableDefinition.hpp>
 #include <com/sun/star/sdb/CommandDefinition.hpp>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::comphelper;

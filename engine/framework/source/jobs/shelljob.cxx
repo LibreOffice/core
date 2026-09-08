@@ -56,7 +56,7 @@ cpo::uno::Sequence< OUString > ShellJob::getSupportedServiceNames()
 }
 
 
-ShellJob::ShellJob(css::uno::Reference< cpo::uno::XComponentContext >  xContext)
+ShellJob::ShellJob(cpo::uno::Reference< cpo::uno::XComponentContext >  xContext)
     : m_xContext    (std::move(xContext))
 {
 }
@@ -110,7 +110,7 @@ OUString ShellJob::impl_substituteCommandVariables(const OUString& sCommand)
 {
     try
     {
-        css::uno::Reference< css::util::XStringSubstitution > xSubst(  css::util::PathSubstitution::create(m_xContext) );
+        cpo::uno::Reference< css::util::XStringSubstitution > xSubst(  css::util::PathSubstitution::create(m_xContext) );
         const bool                                      bSubstRequired   = true;
         const OUString                                 sCompleteCommand = xSubst->substituteVariables(sCommand, bSubstRequired);
 

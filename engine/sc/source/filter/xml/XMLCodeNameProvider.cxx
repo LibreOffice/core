@@ -25,6 +25,7 @@
 #include <comphelper/sequence.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 bool XMLCodeNameProvider::_getCodeName( const cpo::uno::Any& aAny, OUString& rCodeName )
 {

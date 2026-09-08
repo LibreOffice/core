@@ -44,7 +44,7 @@
 //  Defines
 
 using namespace ::com::sun::star;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::frame;
@@ -71,7 +71,7 @@ cpo::uno::Sequence< OUString > LanguageSelectionMenuController::getSupportedServ
 }
 
 
-LanguageSelectionMenuController::LanguageSelectionMenuController( const css::uno::Reference< cpo::uno::XComponentContext >& xContext )
+LanguageSelectionMenuController::LanguageSelectionMenuController( const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext )
     : svt::PopupMenuControllerBase(xContext)
     , m_bShowMenu(true)
     , m_nScriptType(SvtScriptType::LATIN | SvtScriptType::ASIAN | SvtScriptType::COMPLEX)

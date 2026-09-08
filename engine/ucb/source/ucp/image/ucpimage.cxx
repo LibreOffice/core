@@ -41,7 +41,7 @@ class Provider final:
 {
 public:
     explicit Provider(
-        css::uno::Reference<cpo::uno::XComponentContext> context):
+        cpo::uno::Reference<cpo::uno::XComponentContext> context):
         context_(std::move(context))
     {}
 
@@ -58,11 +58,11 @@ private:
             u"com.sun.star.ucb.ImageContentProvider"_ustr};
     }
 
-    css::uno::Reference<css::ucb::XContent> SAL_CALL queryContent(
-        css::uno::Reference<css::ucb::XContentIdentifier> const & Identifier)
+    cpo::uno::Reference<css::ucb::XContent> SAL_CALL queryContent(
+        cpo::uno::Reference<css::ucb::XContentIdentifier> const & Identifier)
         override
     {
-        css::uno::Reference<cpo::uno::XComponentContext> context;
+        cpo::uno::Reference<cpo::uno::XComponentContext> context;
         {
             std::unique_lock g(m_aMutex);
             context = context_;
@@ -132,14 +132,14 @@ private:
         ucbhelper::Content content;
         return
             ucbhelper::Content::create(
-                newUrl, css::uno::Reference<css::ucb::XCommandEnvironment>(),
+                newUrl, cpo::uno::Reference<css::ucb::XCommandEnvironment>(),
                 context, content)
-            ? content.get() : css::uno::Reference<css::ucb::XContent>();
+            ? content.get() : cpo::uno::Reference<css::ucb::XContent>();
     }
 
     sal_Int32 SAL_CALL compareContentIds(
-        css::uno::Reference<css::ucb::XContentIdentifier> const & Id1,
-        css::uno::Reference<css::ucb::XContentIdentifier> const & Id2) override
+        cpo::uno::Reference<css::ucb::XContentIdentifier> const & Id1,
+        cpo::uno::Reference<css::ucb::XContentIdentifier> const & Id2) override
     {
         return Id1->getContentIdentifier().compareTo(
             Id2->getContentIdentifier());
@@ -149,7 +149,7 @@ private:
         context_.clear();
     }
 
-    css::uno::Reference<cpo::uno::XComponentContext> context_;
+    cpo::uno::Reference<cpo::uno::XComponentContext> context_;
 };
 
 }

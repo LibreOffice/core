@@ -47,7 +47,7 @@ class SW_DLLPUBLIC SwOneExampleFrame final : public weld::CustomWidgetController
 {
     ScopedVclPtr<VirtualDevice> m_xVirDev;
     rtl::Reference< SwXTextDocument >         m_xModel;
-    css::uno::Reference< css::frame::XController >    m_xController;
+    cpo::uno::Reference< css::frame::XController >    m_xController;
     rtl::Reference< SwXTextCursor >                   m_xCursor;
 
     Idle            m_aLoadedIdle;

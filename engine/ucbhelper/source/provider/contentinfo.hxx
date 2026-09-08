@@ -44,7 +44,7 @@ class ContentImplHelper;
 class PropertySetInfo :
                 public cppu::WeakImplHelper<css::beans::XPropertySetInfo>
 {
-    css::uno::Reference< css::ucb::XCommandEnvironment >
+    cpo::uno::Reference< css::ucb::XCommandEnvironment >
                                 m_xEnv;
     std::optional<cpo::uno::Sequence< css::beans::Property >>
                                 m_xProps;
@@ -57,7 +57,7 @@ private:
     const cpo::uno::Sequence< css::beans::Property > & getPropertiesImpl();
 
 public:
-    PropertySetInfo( css::uno::Reference< css::ucb::XCommandEnvironment > xEnv,
+    PropertySetInfo( cpo::uno::Reference< css::ucb::XCommandEnvironment > xEnv,
                      ContentImplHelper* pContent );
     virtual ~PropertySetInfo() override;
 
@@ -81,7 +81,7 @@ public:
 class CommandProcessorInfo :
                 public cppu::WeakImplHelper<css::ucb::XCommandInfo>
 {
-    css::uno::Reference< css::ucb::XCommandEnvironment >
+    cpo::uno::Reference< css::ucb::XCommandEnvironment >
                                 m_xEnv;
     std::optional<cpo::uno::Sequence< css::ucb::CommandInfo >>
                                 m_xCommands;
@@ -96,7 +96,7 @@ private:
     const cpo::uno::Sequence< css::ucb::CommandInfo > & getCommandsImpl();
 
 public:
-    CommandProcessorInfo( css::uno::Reference< css::ucb::XCommandEnvironment > xEnv,
+    CommandProcessorInfo( cpo::uno::Reference< css::ucb::XCommandEnvironment > xEnv,
                          ContentImplHelper* pContent );
     virtual ~CommandProcessorInfo() override;
 

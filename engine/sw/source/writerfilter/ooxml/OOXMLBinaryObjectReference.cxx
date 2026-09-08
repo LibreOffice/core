@@ -25,6 +25,7 @@ namespace writerfilter::ooxml
 {
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 OOXMLBinaryObjectReference::OOXMLBinaryObjectReference
 (OOXMLStream::Pointer_t pStream)

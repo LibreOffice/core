@@ -46,7 +46,7 @@
 #include <cppuhelper/supportsservice.hxx>
 
 using namespace com::sun::star;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::lang;
 
@@ -209,7 +209,7 @@ class GenericDragSource : public ::comphelper::WeakComponentImplHelper<
             css::lang::XServiceInfo
             >
 {
-    css::uno::Reference<css::datatransfer::XTransferable> m_xTrans;
+    cpo::uno::Reference<css::datatransfer::XTransferable> m_xTrans;
 public:
     GenericDragSource() {}
 
@@ -367,7 +367,7 @@ SalInstance::CreateClipboard(const Sequence<Any>& arguments)
         // in non-COKit below we keep handing out one single instance; see also
         // <https://lists.freedesktop.org/archives/libreoffice/2020-April/084824.html> "Re: Linux
         // SAL_USE_VCLPLUGIN=svp and the clipboard"):
-        css::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipboard =
+        cpo::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipboard =
             css::datatransfer::clipboard::KitClipboard::create(
                 comphelper::getProcessComponentContext());
         return xClipboard;
@@ -380,13 +380,13 @@ SalInstance::CreateClipboard(const Sequence<Any>& arguments)
     return m_clipboard;
 }
 
-css::uno::Reference<css::datatransfer::dnd::XDragSource>
+cpo::uno::Reference<css::datatransfer::dnd::XDragSource>
 SalInstance::ImplCreateDragSource(const SystemEnvData&)
 {
     return nullptr;
 }
 
-css::uno::Reference<css::datatransfer::dnd::XDragSource>
+cpo::uno::Reference<css::datatransfer::dnd::XDragSource>
 SalInstance::CreateDragSource(const SystemEnvData& rSysEnv)
 {
     // We run unit tests in parallel, which is a problem when touching a shared resource
@@ -396,13 +396,13 @@ SalInstance::CreateDragSource(const SystemEnvData& rSysEnv)
     return ImplCreateDragSource(rSysEnv);
 }
 
-css::uno::Reference<css::datatransfer::dnd::XDropTarget>
+cpo::uno::Reference<css::datatransfer::dnd::XDropTarget>
 SalInstance::ImplCreateDropTarget(const SystemEnvData&)
 {
     return nullptr;
 }
 
-css::uno::Reference<css::datatransfer::dnd::XDropTarget>
+cpo::uno::Reference<css::datatransfer::dnd::XDropTarget>
 SalInstance::CreateDropTarget(const SystemEnvData& rSysEnv)
 {
     // see SalInstance::CreateDragSource

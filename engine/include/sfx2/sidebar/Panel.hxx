@@ -56,7 +56,7 @@ public:
     SAL_DLLPRIVATE Panel(const PanelDescriptor& rPanelDescriptor, weld::Widget* pParentWindow,
                          const bool bIsInitiallyExpanded, Deck* pDeck,
                          std::function<Context()> aContextAccess,
-                         const css::uno::Reference<css::frame::XFrame>& rxFrame);
+                         const cpo::uno::Reference<css::frame::XFrame>& rxFrame);
 
     SAL_DLLPRIVATE ~Panel();
 
@@ -65,13 +65,13 @@ public:
     SAL_DLLPRIVATE const weld::Box* GetContainer() const { return mxContainer.get(); }
     SAL_DLLPRIVATE void Show(bool bShow);
     bool IsTitleBarOptional() const { return mbIsTitleBarOptional; }
-    SAL_DLLPRIVATE void SetUIElement(const css::uno::Reference<css::ui::XUIElement>& rxElement);
-    const css::uno::Reference<css::ui::XSidebarPanel>& GetPanelComponent() const
+    SAL_DLLPRIVATE void SetUIElement(const cpo::uno::Reference<css::ui::XUIElement>& rxElement);
+    const cpo::uno::Reference<css::ui::XSidebarPanel>& GetPanelComponent() const
     {
         return mxPanelComponent;
     }
-    SAL_DLLPRIVATE const css::uno::Reference<css::awt::XWindow>& GetElementParentWindow();
-    SAL_DLLPRIVATE css::uno::Reference<css::awt::XWindow> GetElementWindow();
+    SAL_DLLPRIVATE const cpo::uno::Reference<css::awt::XWindow>& GetElementParentWindow();
+    SAL_DLLPRIVATE cpo::uno::Reference<css::awt::XWindow> GetElementWindow();
     SAL_DLLPRIVATE void SetExpanded(const bool bIsExpanded);
     bool IsExpanded() const { return mbIsExpanded; }
     SAL_DLLPRIVATE bool HasIdPredicate(std::u16string_view rsId) const;
@@ -101,18 +101,18 @@ private:
     const OUString msTitle;
     const bool mbIsTitleBarOptional;
     const bool mbWantsAWT;
-    css::uno::Reference<css::ui::XUIElement> mxElement;
-    css::uno::Reference<css::ui::XSidebarPanel> mxPanelComponent;
+    cpo::uno::Reference<css::ui::XUIElement> mxElement;
+    cpo::uno::Reference<css::ui::XSidebarPanel> mxPanelComponent;
     bool mbIsExpanded;
     bool mbLurking;
     const std::function<Context()> maContextAccess;
-    const css::uno::Reference<css::frame::XFrame>& mxFrame;
+    const cpo::uno::Reference<css::frame::XFrame>& mxFrame;
     weld::Widget* mpParentWindow;
     VclPtr<Deck> mxDeck;
     std::unique_ptr<weld::Box> mxContainer;
     std::unique_ptr<PanelTitleBar> mxTitleBar;
     std::unique_ptr<weld::Box> mxContents;
-    css::uno::Reference<css::awt::XWindow> mxXWindow;
+    cpo::uno::Reference<css::awt::XWindow> mxXWindow;
 
     DECL_DLLPRIVATE_LINK(DumpAsPropertyTreeHdl, tools::JsonWriter&, void);
 };

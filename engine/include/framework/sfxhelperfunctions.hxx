@@ -25,7 +25,7 @@
 #include <vcl/toolboxid.hxx>
 
 namespace com::sun::star::frame { class XFrame; }
-namespace com::sun::star::uno { template <typename > class Reference; }
+namespace cpo::uno { template <typename > class Reference; }
 namespace svt { class StatusbarController; }
 namespace svt { class ToolboxController; }
 
@@ -33,26 +33,26 @@ class StatusBar;
 class ToolBox;
 
 typedef rtl::Reference<svt::ToolboxController> ( *pfunc_setToolBoxControllerCreator)(
-    const css::uno::Reference< css::frame::XFrame >& rFrame,
+    const cpo::uno::Reference< css::frame::XFrame >& rFrame,
     ToolBox* pToolbox,
     ToolBoxItemId nID,
     const OUString& aCommandURL );
 
 typedef rtl::Reference<svt::StatusbarController> ( *pfunc_setStatusBarControllerCreator)(
-    const css::uno::Reference< css::frame::XFrame >& rFrame,
+    const cpo::uno::Reference< css::frame::XFrame >& rFrame,
     StatusBar* pStatusBar,
     unsigned short nID,
     const OUString& aCommandURL );
 
 typedef void ( *pfunc_getRefreshToolbars)(
-    css::uno::Reference< css::frame::XFrame > const & rFrame );
+    cpo::uno::Reference< css::frame::XFrame > const & rFrame );
 
 typedef void ( *pfunc_createDockingWindow)(
-    const css::uno::Reference< css::frame::XFrame >& rFrame,
+    const cpo::uno::Reference< css::frame::XFrame >& rFrame,
     std::u16string_view rResourceURL );
 
 typedef bool ( *pfunc_isDockingWindowVisible)(
-    const css::uno::Reference< css::frame::XFrame >& rFrame,
+    const cpo::uno::Reference< css::frame::XFrame >& rFrame,
     std::u16string_view rResourceURL );
 
 
@@ -60,30 +60,30 @@ namespace framework
 {
 FWK_DLLPUBLIC pfunc_setToolBoxControllerCreator SetToolBoxControllerCreator( pfunc_setToolBoxControllerCreator pSetToolBoxControllerCreator );
 FWK_DLLPUBLIC rtl::Reference<svt::ToolboxController> CreateToolBoxController(
-    const css::uno::Reference< css::frame::XFrame >& rFrame,
+    const cpo::uno::Reference< css::frame::XFrame >& rFrame,
     ToolBox* pToolbox,
     ToolBoxItemId nID,
     const OUString& aCommandURL );
 
 FWK_DLLPUBLIC pfunc_setStatusBarControllerCreator SetStatusBarControllerCreator( pfunc_setStatusBarControllerCreator pSetStatusBarControllerCreator );
 FWK_DLLPUBLIC rtl::Reference<svt::StatusbarController> CreateStatusBarController(
-    const css::uno::Reference< css::frame::XFrame >& rFrame,
+    const cpo::uno::Reference< css::frame::XFrame >& rFrame,
     StatusBar* pStatusBar,
     unsigned short nID,
      const OUString& aCommandURL );
 
 FWK_DLLPUBLIC pfunc_getRefreshToolbars SetRefreshToolbars( pfunc_getRefreshToolbars pRefreshToolbarsFunc );
 FWK_DLLPUBLIC void RefreshToolbars(
-     css::uno::Reference< css::frame::XFrame > const & rFrame );
+     cpo::uno::Reference< css::frame::XFrame > const & rFrame );
 
 FWK_DLLPUBLIC pfunc_createDockingWindow SetDockingWindowCreator( pfunc_createDockingWindow pCreateDockingWindow );
 FWK_DLLPUBLIC void CreateDockingWindow(
-    const css::uno::Reference< css::frame::XFrame >& rFrame,
+    const cpo::uno::Reference< css::frame::XFrame >& rFrame,
     std::u16string_view rResourceURL );
 
 FWK_DLLPUBLIC pfunc_isDockingWindowVisible SetIsDockingWindowVisible( pfunc_isDockingWindowVisible pIsDockingWindowVisible );
 FWK_DLLPUBLIC bool IsDockingWindowVisible(
-    const css::uno::Reference< css::frame::XFrame >& rFrame,
+    const cpo::uno::Reference< css::frame::XFrame >& rFrame,
     std::u16string_view rResourceURL );
 }
 

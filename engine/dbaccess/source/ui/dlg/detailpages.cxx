@@ -43,7 +43,7 @@
 namespace dbaui
 {
 
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
 
     OCommonBehaviourTabPage::OCommonBehaviourTabPage(weld::Container* pPage, weld::DialogController* pController,
         const OUString& rUIXMLDescription, const OUString& rId, const SfxItemSet& rCoreAttrs,

@@ -16,7 +16,7 @@ namespace writerfilter::dmapper
 class GraphicZOrderHelper
 {
 public:
-    void addItem(css::uno::Reference<css::beans::XPropertySet> const& props,
+    void addItem(cpo::uno::Reference<css::beans::XPropertySet> const& props,
                  sal_Int64 relativeHeight);
 
     // must run adjustRelativeHeight before findZOrder - to set zOrder priorities
@@ -25,7 +25,7 @@ public:
     sal_Int32 findZOrder(sal_Int64 relativeHeight, bool bOldStyle = false);
 
 private:
-    using Items = std::map<sal_Int64, css::uno::Reference<css::beans::XPropertySet>>;
+    using Items = std::map<sal_Int64, cpo::uno::Reference<css::beans::XPropertySet>>;
     Items m_items;
 };
 

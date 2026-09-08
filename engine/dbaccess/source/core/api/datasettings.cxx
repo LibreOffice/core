@@ -25,7 +25,7 @@
 #include <com/sun/star/awt/FontEmphasisMark.hpp>
 #include <com/sun/star/awt/FontRelief.hpp>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::beans;

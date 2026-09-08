@@ -47,7 +47,8 @@
 #include <com/sun/star/style/VerticalAlignment.hpp>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 class ScExportTest4 : public ScModelTestBase
 {
@@ -106,7 +107,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testRotatedImageODS)
 {
     // Error was, that the length values in shapes were not
     // written in the given unit into the file.
-    css::uno::Reference<css::sheet::XGlobalSheetSettings> xGlobalSheetSettings
+    cpo::uno::Reference<css::sheet::XGlobalSheetSettings> xGlobalSheetSettings
         = css::sheet::GlobalSheetSettings::create(comphelper::getProcessComponentContext());
     xGlobalSheetSettings->setMetric(static_cast<sal_Int16>(FieldUnit::MM));
 

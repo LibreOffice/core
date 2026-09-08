@@ -39,7 +39,7 @@ namespace pcr
 
     public:
         explicit XSDValidationPropertyHandler(
-            const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxContext
         );
 
     protected:
@@ -57,12 +57,12 @@ namespace pcr
         virtual cpo::uno::Sequence< OUString >
                                             getActuatingProperties( ) override;
         virtual css::inspection::LineDescriptor
-                                            describePropertyLine( const OUString& _rPropertyName, const css::uno::Reference< css::inspection::XPropertyControlFactory >& _rxControlFactory ) override;
+                                            describePropertyLine( const OUString& _rPropertyName, const cpo::uno::Reference< css::inspection::XPropertyControlFactory >& _rxControlFactory ) override;
         virtual css::inspection::InteractiveSelectionResult
-                                            onInteractivePropertySelection( const OUString& _rPropertyName, bool _bPrimary, cpo::uno::Any& _rData, const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI ) override;
-        virtual void                        actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const cpo::uno::Any& _rNewValue, const cpo::uno::Any& _rOldValue, const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI, bool ) override;
-        virtual void                        addPropertyChangeListener( const css::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener ) override;
-        virtual void                        removePropertyChangeListener( const css::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener ) override;
+                                            onInteractivePropertySelection( const OUString& _rPropertyName, bool _bPrimary, cpo::uno::Any& _rData, const cpo::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI ) override;
+        virtual void                        actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const cpo::uno::Any& _rNewValue, const cpo::uno::Any& _rOldValue, const cpo::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI, bool ) override;
+        virtual void                        addPropertyChangeListener( const cpo::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener ) override;
+        virtual void                        removePropertyChangeListener( const cpo::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener ) override;
 
         // PropertyHandler overridables
         virtual cpo::uno::Sequence< css::beans::Property >

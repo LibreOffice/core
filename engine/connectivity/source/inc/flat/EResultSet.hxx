@@ -54,7 +54,7 @@ namespace connectivity::flat
         //XTypeProvider
         virtual cpo::uno::Sequence< cpo::uno::Type > getTypes(  ) override;
         // XPropertySet
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+        virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
 
         // XRowLocate
         virtual cpo::uno::Any getBookmark(  ) override;

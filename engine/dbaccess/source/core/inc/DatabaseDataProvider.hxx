@@ -49,7 +49,7 @@ class DatabaseDataProvider: private ::cppu::BaseMutex,
                             public ::cppu::PropertySetMixin< css::chart2::data::XDatabaseDataProvider >
 {
 public:
-    explicit DatabaseDataProvider(css::uno::Reference< cpo::uno::XComponentContext > const & context);
+    explicit DatabaseDataProvider(cpo::uno::Reference< cpo::uno::XComponentContext > const & context);
 
 private:
     // cpo::uno::XInterface:
@@ -66,16 +66,16 @@ private:
 
     // css::chart2::data::XDataProvider:
     virtual bool createDataSourcePossible(const cpo::uno::Sequence< css::beans::PropertyValue > & aArguments) override;
-    virtual css::uno::Reference< css::chart2::data::XDataSource > createDataSource(const cpo::uno::Sequence< css::beans::PropertyValue > & aArguments) override;
-    virtual cpo::uno::Sequence< css::beans::PropertyValue > detectArguments(const css::uno::Reference< css::chart2::data::XDataSource > & xDataSource) override;
+    virtual cpo::uno::Reference< css::chart2::data::XDataSource > createDataSource(const cpo::uno::Sequence< css::beans::PropertyValue > & aArguments) override;
+    virtual cpo::uno::Sequence< css::beans::PropertyValue > detectArguments(const cpo::uno::Reference< css::chart2::data::XDataSource > & xDataSource) override;
     virtual bool createDataSequenceByRangeRepresentationPossible(const OUString & aRangeRepresentation) override;
-    virtual css::uno::Reference< css::chart2::data::XDataSequence > createDataSequenceByRangeRepresentation(const OUString & aRangeRepresentation) override;
+    virtual cpo::uno::Reference< css::chart2::data::XDataSequence > createDataSequenceByRangeRepresentation(const OUString & aRangeRepresentation) override;
 
-    virtual css::uno::Reference<css::chart2::data::XDataSequence>
+    virtual cpo::uno::Reference<css::chart2::data::XDataSequence>
         createDataSequenceByValueArray(
             const OUString& aRole, const OUString & aRangeRepresentation, const OUString& aRoleQualifier) override;
 
-    virtual css::uno::Reference< css::sheet::XRangeSelection > getRangeSelection() override;
+    virtual cpo::uno::Reference< css::sheet::XRangeSelection > getRangeSelection() override;
 
     // css::chart2::data::XRangeXMLConversion:
     virtual OUString convertRangeToXML(const OUString & aRangeRepresentation) override;
@@ -85,13 +85,13 @@ private:
     virtual void initialize(const cpo::uno::Sequence< cpo::uno::Any > & aArguments) override;
 
     // css::beans::XPropertySet:
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo() override;
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo() override;
     virtual void setPropertyValue(const OUString & aPropertyName, const cpo::uno::Any & aValue) override;
     virtual cpo::uno::Any getPropertyValue(const OUString & PropertyName) override;
-    virtual void addPropertyChangeListener(const OUString & aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener > & xListener) override;
-    virtual void removePropertyChangeListener(const OUString & aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener > & aListener) override;
-    virtual void addVetoableChangeListener(const OUString & PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener > & aListener) override;
-    virtual void removeVetoableChangeListener(const OUString & PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener > & aListener) override;
+    virtual void addPropertyChangeListener(const OUString & aPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener > & xListener) override;
+    virtual void removePropertyChangeListener(const OUString & aPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener > & aListener) override;
+    virtual void addVetoableChangeListener(const OUString & PropertyName, const cpo::uno::Reference< css::beans::XVetoableChangeListener > & aListener) override;
+    virtual void removeVetoableChangeListener(const OUString & PropertyName, const cpo::uno::Reference< css::beans::XVetoableChangeListener > & aListener) override;
 
     // css::chart2::data::XDatabaseDataProvider:
     virtual cpo::uno::Sequence< OUString > getMasterFields() override;
@@ -116,8 +116,8 @@ private:
     virtual void setEscapeProcessing(bool the_value) override;
     virtual ::sal_Int32 getRowLimit() override;
     virtual void setRowLimit( ::sal_Int32 _rowlimit ) override;
-    virtual css::uno::Reference< css::sdbc::XConnection > getActiveConnection() override;
-    virtual void setActiveConnection(const css::uno::Reference< css::sdbc::XConnection > & the_value) override;
+    virtual cpo::uno::Reference< css::sdbc::XConnection > getActiveConnection() override;
+    virtual void setActiveConnection(const cpo::uno::Reference< css::sdbc::XConnection > & the_value) override;
     virtual OUString getDataSourceName() override;
     virtual void setDataSourceName( const OUString& _datasourcename ) override;
 
@@ -136,20 +136,20 @@ private:
     virtual void setDate(sal_Int32 parameterIndex, const css::util::Date& x) override;
     virtual void setTime(sal_Int32 parameterIndex, const css::util::Time& x) override;
     virtual void setTimestamp(sal_Int32 parameterIndex, const css::util::DateTime& x) override;
-    virtual void setBinaryStream(sal_Int32 parameterIndex, const css::uno::Reference< css::io::XInputStream>& x, sal_Int32 length) override;
-    virtual void setCharacterStream(sal_Int32 parameterIndex, const css::uno::Reference< css::io::XInputStream>& x, sal_Int32 length) override;
+    virtual void setBinaryStream(sal_Int32 parameterIndex, const cpo::uno::Reference< css::io::XInputStream>& x, sal_Int32 length) override;
+    virtual void setCharacterStream(sal_Int32 parameterIndex, const cpo::uno::Reference< css::io::XInputStream>& x, sal_Int32 length) override;
     virtual void setObject(sal_Int32 parameterIndex, const cpo::uno::Any& x) override;
     virtual void setObjectWithInfo(sal_Int32 parameterIndex, const cpo::uno::Any& x, sal_Int32 targetSqlType, sal_Int32 scale) override;
-    virtual void setRef(sal_Int32 parameterIndex, const css::uno::Reference< css::sdbc::XRef>& x) override;
-    virtual void setBlob(sal_Int32 parameterIndex, const css::uno::Reference< css::sdbc::XBlob>& x) override;
-    virtual void setClob(sal_Int32 parameterIndex, const css::uno::Reference< css::sdbc::XClob>& x) override;
-    virtual void setArray(sal_Int32 parameterIndex, const css::uno::Reference< css::sdbc::XArray>& x) override;
+    virtual void setRef(sal_Int32 parameterIndex, const cpo::uno::Reference< css::sdbc::XRef>& x) override;
+    virtual void setBlob(sal_Int32 parameterIndex, const cpo::uno::Reference< css::sdbc::XBlob>& x) override;
+    virtual void setClob(sal_Int32 parameterIndex, const cpo::uno::Reference< css::sdbc::XClob>& x) override;
+    virtual void setArray(sal_Int32 parameterIndex, const cpo::uno::Reference< css::sdbc::XArray>& x) override;
     virtual void clearParameters() override;
 
     // css::sdbc::XRowSet
     virtual void execute() override;
-    virtual void addRowSetListener(const css::uno::Reference< css::sdbc::XRowSetListener>& _rxListener) override;
-    virtual void removeRowSetListener(const css::uno::Reference< css::sdbc::XRowSetListener>& _rxListener) override;
+    virtual void addRowSetListener(const cpo::uno::Reference< css::sdbc::XRowSetListener>& _rxListener) override;
+    virtual void removeRowSetListener(const cpo::uno::Reference< css::sdbc::XRowSetListener>& _rxListener) override;
 
     // css::sdbc::XResultSet
     virtual bool next() override;
@@ -169,11 +169,11 @@ private:
     virtual bool rowUpdated() override;
     virtual bool rowInserted() override;
     virtual bool rowDeleted() override;
-    virtual css::uno::Reference< cpo::uno::XInterface > getStatement() override;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > getStatement() override;
 
     // container::XChild
-    virtual css::uno::Reference< cpo::uno::XInterface > getParent(  ) override;
-    virtual void setParent( const css::uno::Reference< cpo::uno::XInterface >& Parent ) override;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > getParent(  ) override;
+    virtual void setParent( const cpo::uno::Reference< cpo::uno::XInterface >& Parent ) override;
 
     // ____ XComplexDescriptionAccess ____
     virtual cpo::uno::Sequence< cpo::uno::Sequence< OUString > >        getComplexRowDescriptions() override;
@@ -190,8 +190,8 @@ private:
     virtual void setColumnDescriptions(        const cpo::uno::Sequence< OUString >& aColumnDescriptions ) override;
 
     // ____ XChartData (base of XChartDataArray) ____
-    virtual void addChartDataChangeEventListener(const css::uno::Reference< css::chart::XChartDataChangeEventListener >& aListener ) override;
-    virtual void removeChartDataChangeEventListener(const css::uno::Reference< css::chart::XChartDataChangeEventListener >& aListener ) override;
+    virtual void addChartDataChangeEventListener(const cpo::uno::Reference< css::chart::XChartDataChangeEventListener >& aListener ) override;
+    virtual void removeChartDataChangeEventListener(const cpo::uno::Reference< css::chart::XChartDataChangeEventListener >& aListener ) override;
     virtual double getNotANumber() override;
     virtual bool isNotANumber(double nNumber ) override;
 private:
@@ -231,17 +231,17 @@ private:
     ::dbtools::FilterManager    m_aFilterManager;
     std::map< OUString, cpo::uno::Any>                          m_aNumberFormats;
 
-    css::uno::Reference< cpo::uno::XComponentContext >            m_xContext;
-    css::uno::Reference< css::sdbc::XConnection >                 m_xActiveConnection;
-    css::uno::Reference< css::sdbc::XRowSet >                     m_xRowSet;
-    css::uno::Reference< css::chart2::XInternalDataProvider >     m_xInternal;
-    css::uno::Reference< css::chart::XComplexDescriptionAccess >  m_xComplexDescriptionAccess;
-    css::uno::Reference< css::chart2::data::XRangeXMLConversion>  m_xRangeConversion;
-    css::uno::Reference< css::task::XInteractionHandler>          m_xHandler;
+    cpo::uno::Reference< cpo::uno::XComponentContext >            m_xContext;
+    cpo::uno::Reference< css::sdbc::XConnection >                 m_xActiveConnection;
+    cpo::uno::Reference< css::sdbc::XRowSet >                     m_xRowSet;
+    cpo::uno::Reference< css::chart2::XInternalDataProvider >     m_xInternal;
+    cpo::uno::Reference< css::chart::XComplexDescriptionAccess >  m_xComplexDescriptionAccess;
+    cpo::uno::Reference< css::chart2::data::XRangeXMLConversion>  m_xRangeConversion;
+    cpo::uno::Reference< css::task::XInteractionHandler>          m_xHandler;
     // the object doin' most of the work - an SDB-rowset
-    css::uno::Reference< cpo::uno::XAggregation>                  m_xAggregate;
-    css::uno::Reference< css::beans::XPropertySet>                m_xAggregateSet;
-    css::uno::Reference< cpo::uno::XInterface>                    m_xParent;
+    cpo::uno::Reference< cpo::uno::XAggregation>                  m_xAggregate;
+    cpo::uno::Reference< css::beans::XPropertySet>                m_xAggregateSet;
+    cpo::uno::Reference< cpo::uno::XInterface>                    m_xParent;
     cpo::uno::Sequence< OUString >                                m_MasterFields;
     cpo::uno::Sequence< OUString >                                m_DetailFields;
 

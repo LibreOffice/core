@@ -27,14 +27,14 @@
 #include <com/sun/star/container/XIndexContainer.hpp>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::presentation;
 using namespace ::cpo::uno;
 
-void PageCollector::CollectCustomShowPages( const css::uno::Reference< css::frame::XModel >& rxModel, std::u16string_view rCustomShowName, std::vector< Reference< XDrawPage > >& rUsedPageList )
+void PageCollector::CollectCustomShowPages( const cpo::uno::Reference< css::frame::XModel >& rxModel, std::u16string_view rCustomShowName, std::vector< Reference< XDrawPage > >& rUsedPageList )
 {
     try
     {
@@ -67,7 +67,7 @@ void PageCollector::CollectCustomShowPages( const css::uno::Reference< css::fram
     }
 }
 
-void PageCollector::CollectNonCustomShowPages( const css::uno::Reference< css::frame::XModel >& rxModel, std::u16string_view rCustomShowName, std::vector< Reference< XDrawPage > >& rNonUsedPageList )
+void PageCollector::CollectNonCustomShowPages( const cpo::uno::Reference< css::frame::XModel >& rxModel, std::u16string_view rCustomShowName, std::vector< Reference< XDrawPage > >& rNonUsedPageList )
 {
     try
     {

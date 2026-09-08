@@ -42,7 +42,7 @@ class WeakSelectionChangeListenerAdapter final :
 {
 public:
     explicit WeakSelectionChangeListenerAdapter(
-        const css::uno::Reference< css::view::XSelectionChangeListener > & xListener )
+        const cpo::uno::Reference< css::view::XSelectionChangeListener > & xListener )
             : m_xListener( xListener ) {}
     virtual ~WeakSelectionChangeListenerAdapter() override;
 
@@ -55,7 +55,7 @@ protected:
     virtual void disposing(
         const css::lang::EventObject& Source ) override
     {
-        css::uno::Reference< css::view::XSelectionChangeListener > xEventListener( m_xListener );
+        cpo::uno::Reference< css::view::XSelectionChangeListener > xEventListener( m_xListener );
         if( xEventListener.is())
             xEventListener->disposing( Source );
     }

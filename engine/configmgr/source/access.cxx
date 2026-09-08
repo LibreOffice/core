@@ -59,7 +59,7 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Type.hxx>
@@ -304,7 +304,7 @@ void Access::dispose() {
 }
 
 void Access::addEventListener(
-    css::uno::Reference< css::lang::XEventListener > const & xListener)
+    cpo::uno::Reference< css::lang::XEventListener > const & xListener)
 {
     assert(thisIs(IS_ANY));
     {
@@ -326,7 +326,7 @@ void Access::addEventListener(
 }
 
 void Access::removeEventListener(
-    css::uno::Reference< css::lang::XEventListener > const & aListener)
+    cpo::uno::Reference< css::lang::XEventListener > const & aListener)
 {
     assert(thisIs(IS_ANY));
     osl::MutexGuard g(*lock_);
@@ -558,7 +558,7 @@ void Access::replaceByHierarchicalName(
 }
 
 void Access::addContainerListener(
-    css::uno::Reference< css::container::XContainerListener > const & xListener)
+    cpo::uno::Reference< css::container::XContainerListener > const & xListener)
 {
     assert(thisIs(IS_ANY));
     {
@@ -580,7 +580,7 @@ void Access::addContainerListener(
 }
 
 void Access::removeContainerListener(
-    css::uno::Reference< css::container::XContainerListener > const & xListener)
+    cpo::uno::Reference< css::container::XContainerListener > const & xListener)
 {
     assert(thisIs(IS_ANY));
     osl::MutexGuard g(*lock_);
@@ -753,7 +753,7 @@ css::beans::Property Access::getAsProperty()
     return asProperty();
 }
 
-css::uno::Reference< css::beans::XPropertySetInfo > Access::getPropertySetInfo()
+cpo::uno::Reference< css::beans::XPropertySetInfo > Access::getPropertySetInfo()
 {
     assert(thisIs(IS_GROUP));
     return this;
@@ -795,7 +795,7 @@ cpo::uno::Any Access::getPropertyValue(OUString const & PropertyName)
 
 void Access::addPropertyChangeListener(
     OUString const & aPropertyName,
-    css::uno::Reference< css::beans::XPropertyChangeListener > const &
+    cpo::uno::Reference< css::beans::XPropertyChangeListener > const &
         xListener)
 {
     assert(thisIs(IS_GROUP));
@@ -819,7 +819,7 @@ void Access::addPropertyChangeListener(
 
 void Access::removePropertyChangeListener(
     OUString const & aPropertyName,
-    css::uno::Reference< css::beans::XPropertyChangeListener > const &
+    cpo::uno::Reference< css::beans::XPropertyChangeListener > const &
         aListener)
 {
     assert(thisIs(IS_GROUP));
@@ -840,7 +840,7 @@ void Access::removePropertyChangeListener(
 
 void Access::addVetoableChangeListener(
     OUString const & PropertyName,
-    css::uno::Reference< css::beans::XVetoableChangeListener > const &
+    cpo::uno::Reference< css::beans::XVetoableChangeListener > const &
         aListener)
 {
     assert(thisIs(IS_GROUP));
@@ -865,7 +865,7 @@ void Access::addVetoableChangeListener(
 
 void Access::removeVetoableChangeListener(
     OUString const & PropertyName,
-    css::uno::Reference< css::beans::XVetoableChangeListener > const &
+    cpo::uno::Reference< css::beans::XVetoableChangeListener > const &
         aListener)
 {
     assert(thisIs(IS_GROUP));
@@ -936,7 +936,7 @@ cpo::uno::Sequence< cpo::uno::Any > Access::getPropertyValues(
 
 void Access::addPropertiesChangeListener(
     cpo::uno::Sequence< OUString > const &,
-    css::uno::Reference< css::beans::XPropertiesChangeListener > const &
+    cpo::uno::Reference< css::beans::XPropertiesChangeListener > const &
         xListener)
 {
     assert(thisIs(IS_GROUP));
@@ -958,7 +958,7 @@ void Access::addPropertiesChangeListener(
 }
 
 void Access::removePropertiesChangeListener(
-    css::uno::Reference< css::beans::XPropertiesChangeListener > const &
+    cpo::uno::Reference< css::beans::XPropertiesChangeListener > const &
         xListener)
 {
     assert(thisIs(IS_GROUP));
@@ -971,7 +971,7 @@ void Access::removePropertiesChangeListener(
 
 void Access::firePropertiesChangeEvent(
     cpo::uno::Sequence< OUString > const & aPropertyNames,
-    css::uno::Reference< css::beans::XPropertiesChangeListener > const &
+    cpo::uno::Reference< css::beans::XPropertiesChangeListener > const &
         xListener)
 {
     assert(thisIs(IS_GROUP));
@@ -987,7 +987,7 @@ void Access::firePropertiesChangeEvent(
     xListener->propertiesChange(events);
 }
 
-css::uno::Reference< css::beans::XHierarchicalPropertySetInfo >
+cpo::uno::Reference< css::beans::XHierarchicalPropertySetInfo >
 Access::getHierarchicalPropertySetInfo() {
     assert(thisIs(IS_GROUP));
     return this;
@@ -1249,7 +1249,7 @@ void Access::removeByName(OUString const & aName)
     bc.send();
 }
 
-css::uno::Reference< cpo::uno::XInterface > Access::createInstance()
+cpo::uno::Reference< cpo::uno::XInterface > Access::createInstance()
 {
     assert(thisIs(IS_SET|IS_UPDATE));
     OUString tmplName(
@@ -1267,7 +1267,7 @@ css::uno::Reference< cpo::uno::XInterface > Access::createInstance()
         new ChildAccess(components_, getRootAccess(), node));
 }
 
-css::uno::Reference< cpo::uno::XInterface > Access::createInstanceWithArguments(
+cpo::uno::Reference< cpo::uno::XInterface > Access::createInstanceWithArguments(
     cpo::uno::Sequence< cpo::uno::Any > const & aArguments)
 {
     assert(thisIs(IS_SET|IS_UPDATE));
@@ -2264,7 +2264,7 @@ void Access::checkKnownProperty(OUString const & descriptor) {
 rtl::Reference< ChildAccess > Access::getFreeSetMember(
     cpo::uno::Any const & value)
 {
-    css::uno::Reference<XInterface> xTmp;
+    cpo::uno::Reference<XInterface> xTmp;
     value >>= xTmp;
     rtl::Reference< ChildAccess > freeAcc = dynamic_cast<ChildAccess*>(xTmp.get());
     if (!freeAcc.is() || freeAcc->getParentAccess().is() ||

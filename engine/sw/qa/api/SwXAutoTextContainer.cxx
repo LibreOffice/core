@@ -23,7 +23,7 @@
 #include <i18nlangtag/languagetag.hxx>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace ::cpo::uno;
 
 namespace

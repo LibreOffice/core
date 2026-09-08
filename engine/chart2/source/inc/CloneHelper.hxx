@@ -30,13 +30,13 @@ namespace chart::CloneHelper
 template< class Interface >
     struct CreateRefClone
 {
-    css::uno::Reference<Interface> operator() ( const css::uno::Reference<Interface> & xOther )
+    cpo::uno::Reference<Interface> operator() ( const cpo::uno::Reference<Interface> & xOther )
     {
-        css::uno::Reference<Interface> xResult;
-        css::uno::Reference< css::util::XCloneable >
-              xCloneable( xOther, css::uno::UNO_QUERY );
+        cpo::uno::Reference<Interface> xResult;
+        cpo::uno::Reference< css::util::XCloneable >
+              xCloneable( xOther, cpo::uno::UNO_QUERY );
         if( xCloneable.is())
-            xResult.set( xCloneable->createClone(), css::uno::UNO_QUERY );
+            xResult.set( xCloneable->createClone(), cpo::uno::UNO_QUERY );
 
         return xResult;
     }
@@ -45,8 +45,8 @@ template< class Interface >
 /// clones a vector of UNO-References
 template< class Interface >
     void CloneRefVector(
-        const std::vector< css::uno::Reference< Interface > > & rSource,
-        std::vector< css::uno::Reference< Interface > > & rDestination )
+        const std::vector< cpo::uno::Reference< Interface > > & rSource,
+        std::vector< cpo::uno::Reference< Interface > > & rDestination )
 {
     std::transform( rSource.begin(), rSource.end(),
                       std::back_inserter( rDestination ),
@@ -65,8 +65,8 @@ template< class T >
 /// clones a UNO-sequence of UNO-References
 template< class Interface >
     void CloneRefSequence(
-        const cpo::uno::Sequence< css::uno::Reference<Interface> > & rSource,
-        cpo::uno::Sequence< css::uno::Reference<Interface> > & rDestination )
+        const cpo::uno::Sequence< cpo::uno::Reference<Interface> > & rSource,
+        cpo::uno::Sequence< cpo::uno::Reference<Interface> > & rDestination )
 {
     rDestination.realloc( rSource.getLength());
     std::transform( rSource.begin(), rSource.end(),

@@ -63,6 +63,7 @@
 #include <svx/xflbstit.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace {
 
@@ -157,7 +158,7 @@ SwXParagraph::SwXParagraph()
 }
 
 SwXParagraph::SwXParagraph(
-        css::uno::Reference< SwXText > const & xParent,
+        cpo::uno::Reference< SwXText > const & xParent,
         SwTextNode & rTextNode,
         const sal_Int32 nSelStart, const sal_Int32 nSelEnd)
     : m_rPropSet(*aSwMapProvider.GetPropertySet(PROPERTY_MAP_PARAGRAPH))
@@ -180,7 +181,7 @@ SwXParagraph::~SwXParagraph()
 
 rtl::Reference<SwXParagraph>
 SwXParagraph::CreateXParagraph(SwDoc & rDoc, SwTextNode *const pTextNode,
-        css::uno::Reference< SwXText> const& i_xParent,
+        cpo::uno::Reference< SwXText> const& i_xParent,
         const sal_Int32 nSelStart, const sal_Int32 nSelEnd)
 {
     // re-use existing SwXParagraph
@@ -196,7 +197,7 @@ SwXParagraph::CreateXParagraph(SwDoc & rDoc, SwTextNode *const pTextNode,
     }
 
     // create new SwXParagraph
-    css::uno::Reference<SwXText> xParentText(i_xParent);
+    cpo::uno::Reference<SwXText> xParentText(i_xParent);
     if (!xParentText.is() && pTextNode)
     {
         SwPosition Pos(*pTextNode);
@@ -473,7 +474,7 @@ cpo::uno::Sequence< cpo::uno::Any > SwXParagraph::GetPropertyValues_Impl(
             if (rTextNode.GetAttr(RES_PARATR_LIST_AUTOFMT).GetStyleHandle())
             {
                 SwUnoCursor aEndCursor(*aPam.GetMark());
-                css::uno::Reference<css::beans::XPropertySet> xFakeSpan(
+                cpo::uno::Reference<css::beans::XPropertySet> xFakeSpan(
                     new SwXTextPortion(&aEndCursor, {}, PORTION_LIST_AUTOFMT));
                 pValues[nProp] <<= xFakeSpan;
             }

@@ -53,7 +53,7 @@ private:
     rtl::Reference< ScNamedRangesObj > mxParent;
     ScDocShell*             pDocShell;
     OUString                aName;
-    css::uno::Reference< css::container::XNamed > mxSheet;
+    cpo::uno::Reference< css::container::XNamed > mxSheet;
 
 private:
 friend class ScVbaName;
@@ -66,7 +66,7 @@ friend class ScVbaName;
 
 public:
                             ScNamedRangeObj( rtl::Reference< ScNamedRangesObj > xParent, ScDocShell* pDocSh, OUString aNm,
-                                    css::uno::Reference< css::container::XNamed > const & xSheet = css::uno::Reference< css::container::XNamed > ());
+                                    cpo::uno::Reference< css::container::XNamed > const & xSheet = cpo::uno::Reference< css::container::XNamed > ());
     virtual                 ~ScNamedRangeObj() override;
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
@@ -89,23 +89,23 @@ public:
     virtual void SAL_CALL   setName( const OUString& aName ) override;
 
                             /// XCellRangeReferrer
-    virtual css::uno::Reference< css::table::XCellRange > SAL_CALL
+    virtual cpo::uno::Reference< css::table::XCellRange > SAL_CALL
                             getReferredCells() override;
 
                             /// XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo >
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo() override;
     virtual void SAL_CALL   setPropertyValue( const OUString& aPropertyName,
                                     const cpo::uno::Any& aValue ) override;
     virtual cpo::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
     virtual void SAL_CALL   addPropertyChangeListener( const OUString& aPropertyName,
-                                    const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
+                                    const cpo::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
     virtual void SAL_CALL   removePropertyChangeListener( const OUString& aPropertyName,
-                                    const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
+                                    const cpo::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
     virtual void SAL_CALL   addVetoableChangeListener( const OUString& PropertyName,
-                                    const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+                                    const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
     virtual void SAL_CALL   removeVetoableChangeListener( const OUString& PropertyName,
-                                    const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+                                    const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
                             /// XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -170,7 +170,7 @@ public:
     virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
 
                             /// XEnumerationAccess
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL
+    virtual cpo::uno::Reference< css::container::XEnumeration > SAL_CALL
                             createEnumeration() override;
 
                             /// XElementAccess
@@ -178,21 +178,21 @@ public:
     virtual bool SAL_CALL hasElements() override;
 
                             /// XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo >
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo() override;
     virtual void SAL_CALL   setPropertyValue( const OUString& aPropertyName,
                                     const cpo::uno::Any& aValue ) override;
     virtual cpo::uno::Any SAL_CALL getPropertyValue(
                                     const OUString& PropertyName ) override;
     virtual void SAL_CALL   addPropertyChangeListener( const OUString& aPropertyName,
-                                    const css::uno::Reference<
+                                    const cpo::uno::Reference<
                                         css::beans::XPropertyChangeListener >& xListener ) override;
     virtual void SAL_CALL   removePropertyChangeListener( const OUString& aPropertyName,
-                                    const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
+                                    const cpo::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
     virtual void SAL_CALL   addVetoableChangeListener( const OUString& PropertyName,
-                                    const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+                                    const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
     virtual void SAL_CALL   removeVetoableChangeListener( const OUString& PropertyName,
-                                    const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+                                    const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
                             /// XActionLockable
     virtual bool SAL_CALL isActionLocked() override;
@@ -232,9 +232,9 @@ private:
     virtual ScRangeName*    GetRangeName_Impl() override;
     virtual SCTAB           GetTab_Impl() override;
 
-    css::uno::Reference< css::container::XNamed > mxSheet;
+    cpo::uno::Reference< css::container::XNamed > mxSheet;
 public:
-                            ScLocalNamedRangesObj(ScDocShell* pDocSh, css::uno::Reference< css::container::XNamed > xNamed );
+                            ScLocalNamedRangesObj(ScDocShell* pDocSh, cpo::uno::Reference< css::container::XNamed > xNamed );
     virtual                 ~ScLocalNamedRangesObj() override;
 };
 
@@ -298,7 +298,7 @@ public:
     virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
 
                             /// XEnumerationAccess
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL
+    virtual cpo::uno::Reference< css::container::XEnumeration > SAL_CALL
                             createEnumeration() override;
 
                             /// XElementAccess

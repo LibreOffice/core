@@ -19,7 +19,7 @@
 
 
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <comphelper/accessiblekeybindinghelper.hxx>
 
 #include "AccessibleHyperlink.hxx"
@@ -28,6 +28,7 @@
 #include <vcl/keycodes.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 
 // AccessibleHyperlink implementation

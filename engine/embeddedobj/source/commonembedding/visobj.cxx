@@ -30,6 +30,7 @@
 
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 void OCommonEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const awt::Size& aSize )
 {

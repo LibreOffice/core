@@ -28,7 +28,7 @@
 #include <i18nutil/transliteration.hxx>
 
 using namespace utl;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 #define MAX_FLAGS_OFFSET    29

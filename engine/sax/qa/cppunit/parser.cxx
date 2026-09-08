@@ -20,6 +20,7 @@
 
 using namespace css;
 using namespace css::xml::sax;
+using namespace ::cpo;
 
 namespace {
 

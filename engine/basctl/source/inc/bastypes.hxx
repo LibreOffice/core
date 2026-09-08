@@ -299,8 +299,8 @@ class ModuleInfoHelper
     ModuleInfoHelper (const ModuleInfoHelper&) = delete;
     ModuleInfoHelper& operator = (const ModuleInfoHelper&) = delete;
 public:
-    static void getObjectName( const css::uno::Reference< css::container::XNameContainer >& rLib, const OUString& rModName, OUString& rObjName );
-    static sal_Int32 getModuleType(  const css::uno::Reference< css::container::XNameContainer >& rLib, const OUString& rModName );
+    static void getObjectName( const cpo::uno::Reference< css::container::XNameContainer >& rLib, const OUString& rModName, OUString& rObjName );
+    static sal_Int32 getModuleType(  const cpo::uno::Reference< css::container::XNameContainer >& rLib, const OUString& rModName );
 };
 
 } // namespace basctl

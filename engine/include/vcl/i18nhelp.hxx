@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_I18NHELP_HXX
 #define INCLUDED_VCL_I18NHELP_HXX
 
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <mutex>
 #include <rtl/ustring.hxx>
@@ -41,7 +41,7 @@ class VCL_DLLPUBLIC I18nHelper
 {
     mutable std::mutex              maMutex;
     LanguageTag                     maLanguageTag;
-    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
     const LocaleDataWrapper*              mpLocaleDataWrapper { nullptr };
     std::unique_ptr<utl::TransliterationWrapper>    mpTransliterationWrapper;
@@ -55,7 +55,7 @@ class VCL_DLLPUBLIC I18nHelper
 
 public:
 
-                I18nHelper( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext, LanguageTag aLanguageTag );
+                I18nHelper( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext, LanguageTag aLanguageTag );
                 ~I18nHelper();
 
     sal_Int32   CompareString( const OUString& rStr1, const OUString& rStr2 ) const;

@@ -81,6 +81,7 @@ typedef UINT STDAPICALLTYPE OleUIInsertObjectA_Type(LPOLEUIINSERTOBJECTA);
 
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace ::comphelper;
 
 static cpo::uno::Sequence< sal_Int8 > GetRelatedInternalID_Impl( const cpo::uno::Sequence< sal_Int8 >& aClassID )

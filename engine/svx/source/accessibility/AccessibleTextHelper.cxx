@@ -26,7 +26,7 @@
 #include <algorithm>
 #include <sal/log.hxx>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
@@ -60,6 +60,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
+using namespace ::cpo;
 
 namespace accessibility
 {
@@ -767,7 +768,7 @@ void AccessibleTextHelper_Impl::UpdateVisibleChildren( bool bBroadcastEvents )
                 {
                     FireEvent(
                         AccessibleEventId::CHILD,
-                        cpo::uno::Any(css::uno::Reference<css::accessibility::XAccessible>(
+                        cpo::uno::Any(cpo::uno::Reference<css::accessibility::XAccessible>(
                             maParaManager.CreateChild(nCurrPara - mnFirstVisibleChild, mpFrontEnd,
                                                       GetEditSource(), nCurrPara))));
                 }
@@ -838,7 +839,7 @@ public:
         auto aHardRef( rPara.first.get() );
 
         if( aHardRef.is() )
-            mrImpl.FireEvent(AccessibleEventId::CHILD, cpo::uno::Any(), cpo::uno::Any(css::uno::Reference<css::accessibility::XAccessible>(aHardRef)) );
+            mrImpl.FireEvent(AccessibleEventId::CHILD, cpo::uno::Any(), cpo::uno::Any(cpo::uno::Reference<css::accessibility::XAccessible>(aHardRef)) );
     }
 
 private:

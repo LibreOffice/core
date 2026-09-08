@@ -30,7 +30,7 @@
 namespace dbaccess
 {
 
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::sdbcx;
@@ -123,7 +123,7 @@ namespace dbaccess
         m_xDest = nullptr;
     }
 
-    void OPropertyForward::setDefinition( const css::uno::Reference< css::beans::XPropertySet>& _xDest )
+    void OPropertyForward::setDefinition( const cpo::uno::Reference< css::beans::XPropertySet>& _xDest )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( m_bInInsert )

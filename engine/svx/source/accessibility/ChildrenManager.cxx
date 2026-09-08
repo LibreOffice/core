@@ -23,14 +23,14 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 
 namespace accessibility {
 
 // AccessibleChildrenManager
 ChildrenManager::ChildrenManager (
     const rtl::Reference<comphelper::OAccessible>& rpParent,
-    const css::uno::Reference<drawing::XShapes>& rxShapeList,
+    const cpo::uno::Reference<drawing::XShapes>& rxShapeList,
     const AccessibleShapeTreeInfo& rShapeTreeInfo,
     AccessibleContextBase& rContext)
     : mpImpl(
@@ -59,7 +59,7 @@ rtl::Reference<comphelper::OAccessible> ChildrenManager::GetChild(sal_Int64 nInd
     return mpImpl->GetChild (nIndex);
 }
 
-const css::uno::Reference<css::drawing::XShape>& ChildrenManager::GetChildShape(sal_Int64 nIndex)
+const cpo::uno::Reference<css::drawing::XShape>& ChildrenManager::GetChildShape(sal_Int64 nIndex)
 {
     return mpImpl->GetChildShape(nIndex);
 }
@@ -69,7 +69,7 @@ void ChildrenManager::Update (bool bCreateNewObjectsOnDemand)
     mpImpl->Update (bCreateNewObjectsOnDemand);
 }
 
-void ChildrenManager::SetShapeList (const css::uno::Reference<css::drawing::XShapes>& xShapeList)
+void ChildrenManager::SetShapeList (const cpo::uno::Reference<css::drawing::XShapes>& xShapeList)
 {
     mpImpl->SetShapeList (xShapeList);
 }

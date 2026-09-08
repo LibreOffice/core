@@ -15,7 +15,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/XInterface.hpp>
@@ -43,7 +43,7 @@ class Service:
 {
 public:
     explicit Service(
-        css::uno::Reference< cpo::uno::XComponentContext > context):
+        cpo::uno::Reference< cpo::uno::XComponentContext > context):
         context_(std::move(context)) {}
 
 private:
@@ -74,7 +74,7 @@ private:
 
     rtl::Reference< RootAccess > getRoot();
 
-    css::uno::Reference< cpo::uno::XComponentContext > context_;
+    cpo::uno::Reference< cpo::uno::XComponentContext > context_;
 
     std::mutex mutex_;
     rtl::Reference< RootAccess > root_;

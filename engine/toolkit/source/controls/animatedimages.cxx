@@ -42,7 +42,7 @@
 using namespace css::awt;
 using namespace css::container;
 using namespace css::lang;
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 namespace {
@@ -68,8 +68,8 @@ public:
     cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // XControl
-    bool setModel( const css::uno::Reference< css::awt::XControlModel >& i_rModel ) override;
-    void createPeer( const css::uno::Reference< css::awt::XToolkit >& i_toolkit, const css::uno::Reference< css::awt::XWindowPeer >& i_parentPeer ) override;
+    bool setModel( const cpo::uno::Reference< css::awt::XControlModel >& i_rModel ) override;
+    void createPeer( const cpo::uno::Reference< css::awt::XToolkit >& i_toolkit, const cpo::uno::Reference< css::awt::XWindowPeer >& i_parentPeer ) override;
 
 
     // XContainerListener

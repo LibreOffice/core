@@ -46,13 +46,13 @@ CPPUNIT_TEST_FIXTURE(Test, testFootnotesFollowTheMasterWhenTheFollowIsJoined)
     // the masters and their follows several times. A footnote frame has to follow the text its
     // footnote sits in every time that text moves.
     cpo::uno::Any aSelection(mxComponent);
-    css::uno::Reference<css::frame::XModel> xModel(mxComponent, css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::frame::XModel> xModel(mxComponent, cpo::uno::UNO_QUERY);
     css::beans::PropertyValues aRenderOptions = {
         comphelper::makePropertyValue(u"IsPrinter"_ustr, true),
         comphelper::makePropertyValue(u"View"_ustr, xModel->getCurrentController()),
         comphelper::makePropertyValue(u"RenderToGraphic"_ustr, true),
     };
-    css::uno::Reference<css::view::XRenderable> xRenderable(mxComponent, css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::view::XRenderable> xRenderable(mxComponent, cpo::uno::UNO_QUERY);
 
     // Without the accompanying fix in place, one footnote frame was left pointing at a text frame
     // that had already been destroyed, and laying out from that dead reference read freed memory

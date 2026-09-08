@@ -82,8 +82,8 @@ public:
 private:
     // ____ XComponent ____
     virtual void dispose() override;
-    virtual void addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-    virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+    virtual void addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& xListener ) override;
+    virtual void removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
     // ____ XEventListener ____
     virtual void disposing( const css::lang::EventObject& Source ) override;
@@ -93,7 +93,7 @@ private:
     virtual std::vector< std::unique_ptr<WrappedProperty> > createWrappedProperties() override;
     virtual void setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
     virtual cpo::uno::Any getPropertyValue( const OUString& PropertyName ) override;
-    virtual css::uno::Reference< css::beans::XPropertySet > getInnerPropertySet() override;
+    virtual cpo::uno::Reference< css::beans::XPropertySet > getInnerPropertySet() override;
 
     virtual css::beans::PropertyState getPropertyState( const OUString& PropertyName ) override;
     virtual void setPropertyToDefault( const OUString& PropertyName ) override;
@@ -101,7 +101,7 @@ private:
 
     //own methods
     rtl::Reference< ::chart::DataSeries > getDataSeries();
-    css::uno::Reference< css::beans::XPropertySet > getDataPointProperties();
+    cpo::uno::Reference< css::beans::XPropertySet > getDataPointProperties();
 
     std::shared_ptr< Chart2ModelContact >         m_spChart2ModelContact;
     ::comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_aEventListenerContainer;

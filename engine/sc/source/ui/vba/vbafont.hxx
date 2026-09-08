@@ -41,10 +41,10 @@ class ScVbaFont : public ScVbaFont_BASE
 
 public:
     /// @throws cpo::uno::RuntimeException
-    ScVbaFont(const css::uno::Reference<ov::XHelperInterface>& xParent,
-              const css::uno::Reference<cpo::uno::XComponentContext>& xContext,
+    ScVbaFont(const cpo::uno::Reference<ov::XHelperInterface>& xParent,
+              const cpo::uno::Reference<cpo::uno::XComponentContext>& xContext,
               const ScVbaPalette& dPalette,
-              const css::uno::Reference<css::beans::XPropertySet>& xPropertySet,
+              const cpo::uno::Reference<css::beans::XPropertySet>& xPropertySet,
               ScCellRangeObj* pRangeObj = nullptr, bool bFormControl = false);
     virtual ~ScVbaFont() override; // {}
 

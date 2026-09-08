@@ -23,7 +23,7 @@
 #include <intercept.hxx>
 
 using namespace ::com::sun::star;
-
+using namespace ::cpo;
 
 #define IUL 6
 

@@ -26,14 +26,14 @@ public:
     std::vector<OUString> & m_rSectionList;
 
     SwXMLSectionList(
-        const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& rContext,
         std::vector<OUString> & rNewSectionList);
 
     virtual ~SwXMLSectionList ( ) noexcept override;
 
 private:
     virtual SvXMLImportContext *CreateFastContext( sal_Int32 Element,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

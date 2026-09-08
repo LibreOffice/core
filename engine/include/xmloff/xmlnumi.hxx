@@ -36,7 +36,7 @@ typedef std::vector<rtl::Reference<SvxXMLListLevelStyleContext_Impl>> SvxXMLList
 class XMLOFF_DLLPUBLIC SvxXMLListStyleContext final
     : public SvXMLStyleContext
 {
-    css::uno::Reference< css::container::XIndexReplace > m_xNumRules;
+    cpo::uno::Reference< css::container::XIndexReplace > m_xNumRules;
 
     std::unique_ptr<SvxXMLListStyle_Impl> m_pLevelStyles;
 
@@ -54,21 +54,21 @@ public:
 
     ~SvxXMLListStyleContext() override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
     void FillUnoNumRule(
-            const css::uno::Reference< css::container::XIndexReplace> & rNumRule) const;
+            const cpo::uno::Reference< css::container::XIndexReplace> & rNumRule) const;
 
-    const css::uno::Reference< css::container::XIndexReplace >& GetNumRules() const
+    const cpo::uno::Reference< css::container::XIndexReplace >& GetNumRules() const
         { return m_xNumRules; }
 
-    static css::uno::Reference< css::container::XIndexReplace >
+    static cpo::uno::Reference< css::container::XIndexReplace >
     CreateNumRule(
-        const css::uno::Reference< css::frame::XModel > & rModel );
+        const cpo::uno::Reference< css::frame::XModel > & rModel );
 
     static void SetDefaultStyle(
-        const css::uno::Reference< css::container::XIndexReplace > & rNumRule,
+        const cpo::uno::Reference< css::container::XIndexReplace > & rNumRule,
         sal_Int16 nLevel,
         bool bOrdered );
 

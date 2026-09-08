@@ -22,6 +22,7 @@
 #include <vcl/window.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 namespace
 {
@@ -54,8 +55,8 @@ CPPUNIT_TEST_FIXTURE(DialogTest, testDialogSizeable)
     CPPUNIT_ASSERT(pWindow->GetStyle() & WB_SIZEABLE);
 
     xDialog->endExecute();
-    css::uno::Reference<css::lang::XComponent>(xDialog, css::uno::UNO_QUERY_THROW)->dispose();
-    css::uno::Reference<css::lang::XComponent>(xControlModel, css::uno::UNO_QUERY_THROW)->dispose();
+    cpo::uno::Reference<css::lang::XComponent>(xDialog, cpo::uno::UNO_QUERY_THROW)->dispose();
+    cpo::uno::Reference<css::lang::XComponent>(xControlModel, cpo::uno::UNO_QUERY_THROW)->dispose();
 }
 }
 

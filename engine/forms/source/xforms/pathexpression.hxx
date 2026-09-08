@@ -39,7 +39,7 @@ namespace xforms
 class PathExpression final : public ComputedExpression
 {
 public:
-    typedef std::vector<css::uno::Reference<css::xml::dom::XNode>> NodeVector_t;
+    typedef std::vector<cpo::uno::Reference<css::xml::dom::XNode>> NodeVector_t;
 
 private:
     /// the node-list result from the last bind (cached from mxResult)
@@ -61,9 +61,9 @@ public:
     void evaluate(const xforms::EvaluationContext& rContext);
 
     // get the result of this expression as node/node list/...
-    css::uno::Reference<css::xml::dom::XNode> getNode() const;
+    cpo::uno::Reference<css::xml::dom::XNode> getNode() const;
     const NodeVector_t& getNodeList() const { return maNodes; }
-    css::uno::Reference<css::xml::dom::XNodeList> getXNodeList() const;
+    cpo::uno::Reference<css::xml::dom::XNodeList> getXNodeList() const;
 };
 
 } // namespace xforms

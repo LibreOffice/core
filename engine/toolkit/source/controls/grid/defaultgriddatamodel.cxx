@@ -32,7 +32,7 @@
 #include <vector>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::awt::grid;
@@ -62,8 +62,8 @@ public:
     virtual void updateRowHeading( ::sal_Int32 RowIndex, const cpo::uno::Any& Heading ) override;
     virtual void updateCellToolTip( ::sal_Int32 ColumnIndex, ::sal_Int32 RowIndex, const cpo::uno::Any& Value ) override;
     virtual void updateRowToolTip( ::sal_Int32 RowIndex, const cpo::uno::Any& Value ) override;
-    virtual void addGridDataListener( const css::uno::Reference< css::awt::grid::XGridDataListener >& Listener ) override;
-    virtual void removeGridDataListener( const css::uno::Reference< css::awt::grid::XGridDataListener >& Listener ) override;
+    virtual void addGridDataListener( const cpo::uno::Reference< css::awt::grid::XGridDataListener >& Listener ) override;
+    virtual void removeGridDataListener( const cpo::uno::Reference< css::awt::grid::XGridDataListener >& Listener ) override;
 
     // XGridDataModel
     virtual ::sal_Int32 getRowCount() override;
@@ -77,7 +77,7 @@ public:
     virtual void disposing( std::unique_lock<std::mutex>& ) override;
 
     // XCloneable
-    virtual css::uno::Reference< css::util::XCloneable > createClone(  ) override;
+    virtual cpo::uno::Reference< css::util::XCloneable > createClone(  ) override;
 
     // XServiceInfo
     virtual OUString getImplementationName(  ) override;

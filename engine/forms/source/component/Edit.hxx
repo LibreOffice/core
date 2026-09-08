@@ -44,11 +44,11 @@ class OEditModel final : public OEditBaseModel
 
 public:
     OEditModel(
-        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
+        const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     OEditModel(
         const OEditModel* _pOriginal,
-        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
+        const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     virtual ~OEditModel() override;
 
@@ -67,8 +67,8 @@ public:
     virtual void getFastPropertyValue(cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
 
     // XPersistObject
-    virtual void write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
-    virtual void read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
+    virtual void write(const cpo::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
+    virtual void read(const cpo::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
     virtual OUString getServiceName() override;
 
     // XPropertySet
@@ -96,8 +96,8 @@ public:
 
 private:
     // OControlModel overridables
-    virtual void writeAggregate( const css::uno::Reference< css::io::XObjectOutputStream >& _rxOutStream ) const override;
-    virtual void readAggregate( const css::uno::Reference< css::io::XObjectInputStream >& _rxInStream ) override;
+    virtual void writeAggregate( const cpo::uno::Reference< css::io::XObjectOutputStream >& _rxOutStream ) const override;
+    virtual void readAggregate( const cpo::uno::Reference< css::io::XObjectInputStream >& _rxInStream ) override;
 
     // OBoundControlModel overridables
     virtual cpo::uno::Any   translateDbColumnToControlValue( ) override;
@@ -105,14 +105,14 @@ private:
 
     virtual cpo::uno::Any   getDefaultForReset() const override;
 
-    virtual void            onConnectedDbColumn( const css::uno::Reference< cpo::uno::XInterface >& _rxForm ) override;
+    virtual void            onConnectedDbColumn( const cpo::uno::Reference< cpo::uno::XInterface >& _rxForm ) override;
     virtual void            onDisconnectedDbColumn() override;
 
     virtual bool            approveDbColumnType( sal_Int32 _nColumnType ) override;
 
     virtual sal_uInt16 getPersistenceFlags() const override;
 
-    virtual css::uno::Reference< css::util::XCloneable > createClone(  ) override;
+    virtual cpo::uno::Reference< css::util::XCloneable > createClone(  ) override;
 
     bool    implActsAsRichText( ) const;
 };
@@ -134,7 +134,7 @@ class OEditControl : public OBoundControl
     ImplSVEvent *    m_nKeyEvent;
 
 public:
-    explicit OEditControl(const css::uno::Reference< cpo::uno::XComponentContext>& _rxContext);
+    explicit OEditControl(const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxContext);
     virtual ~OEditControl() override;
 
     DECLARE_UNO3_AGG_DEFAULTS(OEditControl, OBoundControl)
@@ -155,8 +155,8 @@ public:
     virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
 // css::form::XChangeBroadcaster
-    virtual void addChangeListener(const css::uno::Reference< css::form::XChangeListener>& _rxListener) override;
-    virtual void removeChangeListener(const css::uno::Reference< css::form::XChangeListener>& _rxListener) override;
+    virtual void addChangeListener(const cpo::uno::Reference< css::form::XChangeListener>& _rxListener) override;
+    virtual void removeChangeListener(const cpo::uno::Reference< css::form::XChangeListener>& _rxListener) override;
 
 // css::awt::XFocusListener
     virtual void focusGained( const css::awt::FocusEvent& e ) override;

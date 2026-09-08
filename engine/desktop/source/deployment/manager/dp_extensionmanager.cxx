@@ -58,11 +58,11 @@
 namespace lang  = css::lang;
 namespace task = css::task;
 namespace ucb = css::ucb;
-namespace uno = css::uno;
+namespace uno = cpo::uno;
 namespace beans = css::beans;
 namespace util = css::util;
 
-using css::uno::Reference;
+using cpo::uno::Reference;
 
 namespace {
 
@@ -117,19 +117,19 @@ void writeLastModified(OUString & url, Reference<ucb::XCommandEnvironment> const
 
 class ExtensionRemoveGuard
 {
-    css::uno::Reference<css::deployment::XPackage> m_extension;
-    css::uno::Reference<css::deployment::XPackageManager> m_xPackageManager;
+    cpo::uno::Reference<css::deployment::XPackage> m_extension;
+    cpo::uno::Reference<css::deployment::XPackageManager> m_xPackageManager;
 
 public:
     ExtensionRemoveGuard(){};
     ExtensionRemoveGuard(
-        css::uno::Reference<css::deployment::XPackage> extension,
-        css::uno::Reference<css::deployment::XPackageManager> xPackageManager):
+        cpo::uno::Reference<css::deployment::XPackage> extension,
+        cpo::uno::Reference<css::deployment::XPackageManager> xPackageManager):
         m_extension(std::move(extension)), m_xPackageManager(std::move(xPackageManager)) {}
     ~ExtensionRemoveGuard();
 
-    void set(css::uno::Reference<css::deployment::XPackage> const & extension,
-             css::uno::Reference<css::deployment::XPackageManager> const & xPackageManager) {
+    void set(cpo::uno::Reference<css::deployment::XPackage> const & extension,
+             cpo::uno::Reference<css::deployment::XPackageManager> const & xPackageManager) {
         m_extension = extension;
         m_xPackageManager = xPackageManager;
     }
@@ -142,8 +142,8 @@ ExtensionRemoveGuard::~ExtensionRemoveGuard()
         if (m_xPackageManager.is() && m_extension.is())
             m_xPackageManager->removePackage(
                 dp_misc::getIdentifier(m_extension), OUString(),
-                css::uno::Reference<css::task::XAbortChannel>(),
-                css::uno::Reference<css::ucb::XCommandEnvironment>());
+                cpo::uno::Reference<css::task::XAbortChannel>(),
+                cpo::uno::Reference<css::ucb::XCommandEnvironment>());
     } catch (...) {
         OSL_ASSERT(false);
     }
@@ -213,7 +213,7 @@ Reference<task::XAbortChannel> ExtensionManager::createAbortChannel()
     return new dp_misc::AbortChannel;
 }
 
-css::uno::Reference<css::deployment::XPackageManager>
+cpo::uno::Reference<css::deployment::XPackageManager>
 ExtensionManager::getPackageManager(std::u16string_view repository)
 {
     Reference<css::deployment::XPackageManager> xPackageManager;
@@ -516,7 +516,7 @@ ExtensionManager::getSupportedPackageTypes()
 bool ExtensionManager::doChecksForAddExtension(
     Reference<css::deployment::XPackageManager> const & xPackageMgr,
     cpo::uno::Sequence<beans::NamedValue> const & properties,
-    css::uno::Reference<css::deployment::XPackage> const & xTmpExtension,
+    cpo::uno::Reference<css::deployment::XPackage> const & xTmpExtension,
     Reference<task::XAbortChannel> const & xAbortChannel,
     Reference<ucb::XCommandEnvironment> const & xCmdEnv,
     Reference<css::deployment::XPackage> & out_existingExtension )

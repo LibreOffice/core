@@ -24,7 +24,7 @@
 #include <optional>
 #include <string_view>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <sal/types.h>
 #include "dp_misc_api.hxx"
@@ -73,8 +73,8 @@ public:
        with no content)
     */
     DescriptionInfoset(
-        css::uno::Reference< cpo::uno::XComponentContext > const & context,
-        css::uno::Reference< css::xml::dom::XNode > const & element);
+        cpo::uno::Reference< cpo::uno::XComponentContext > const & context,
+        cpo::uno::Reference< css::xml::dom::XNode > const & element);
 
     ~DescriptionInfoset();
 
@@ -148,7 +148,7 @@ public:
        @return
        dependencies; will never be null
     */
-    css::uno::Reference< css::xml::dom::XNodeList >
+    cpo::uno::Reference< css::xml::dom::XNodeList >
     getDependencies() const;
 
     /**
@@ -182,11 +182,11 @@ private:
         the expression used to obtain the parent of the localized children. It can be null.
         Then a null reference is returned.
     */
-    SAL_DLLPRIVATE css::uno::Reference< css::xml::dom::XNode >
+    SAL_DLLPRIVATE cpo::uno::Reference< css::xml::dom::XNode >
         getLocalizedChild( OUString const & sParent) const;
-    SAL_DLLPRIVATE  css::uno::Reference< css::xml::dom::XNode>
+    SAL_DLLPRIVATE  cpo::uno::Reference< css::xml::dom::XNode>
         matchLanguageTag(
-        css::uno::Reference< css::xml::dom::XNode > const & xParent,
+        cpo::uno::Reference< css::xml::dom::XNode > const & xParent,
         std::u16string_view rTag) const;
 
     /** If there is no child element with a locale matching the office locale, then we use
@@ -196,9 +196,9 @@ private:
         However, since OOo 2.4 we use also the first child as default for the license
         unless the two attributes are present.
     */
-    SAL_DLLPRIVATE  css::uno::Reference< css::xml::dom::XNode>
+    SAL_DLLPRIVATE  cpo::uno::Reference< css::xml::dom::XNode>
         getChildWithDefaultLocale(
-        css::uno::Reference< css::xml::dom::XNode > const & xParent) const;
+        cpo::uno::Reference< css::xml::dom::XNode > const & xParent) const;
     /**
         @param out_bParentExists
             indicates if the element node specified in sXPathParent exists.
@@ -225,9 +225,9 @@ private:
         checkDenylistVersion(std::u16string_view currentversion,
                               cpo::uno::Sequence< OUString > const & versions);
 
-    css::uno::Reference< cpo::uno::XComponentContext > m_context;
-    css::uno::Reference< css::xml::dom::XNode >        m_element;
-    css::uno::Reference< css::xml::xpath::XXPathAPI >  m_xpath;
+    cpo::uno::Reference< cpo::uno::XComponentContext > m_context;
+    cpo::uno::Reference< css::xml::dom::XNode >        m_element;
+    cpo::uno::Reference< css::xml::xpath::XXPathAPI >  m_xpath;
 };
 
 inline  bool DescriptionInfoset::hasDescription() const

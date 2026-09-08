@@ -53,7 +53,7 @@ public:
     void setBulletAspectRatio(double nAspectRatio);
     void setFontSize(sal_Int16 nSize);
     void setStyleName( const OUString& rStyleName ) { maStyleName <<= rStyleName; }
-    void setGraphic( css::uno::Reference< css::graphic::XGraphic > const & rXGraphic );
+    void setGraphic( cpo::uno::Reference< css::graphic::XGraphic > const & rXGraphic );
 
     std::shared_ptr< ::oox::drawingml::Color > maBulletColorPtr;
     cpo::uno::Any               mbBulletColorFollowText;
@@ -100,7 +100,7 @@ public:
     void                                setRestartNumbering( const bool bRestartNumbering ) { mbRestartNumbering = bRestartNumbering; }
     void                                apply( const TextParagraphProperties& rSourceProps );
     void                                pushToPropSet( const ::oox::core::XmlFilterBase* pFilterBase,
-                                                const css::uno::Reference < css::beans::XPropertySet > & xPropSet,
+                                                const cpo::uno::Reference < css::beans::XPropertySet > & xPropSet,
                                                 PropertyMap& rioBulletList,
                                                 const BulletList* pMasterBuList,
                                                 bool bApplyBulletList,

@@ -86,6 +86,7 @@
 #include <memory>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 
 SFX_IMPL_INTERFACE(ScEditShell, SfxShell)

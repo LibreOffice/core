@@ -32,7 +32,7 @@ namespace framework
         using svt::PopupMenuControllerBase::disposing;
 
         public:
-            NewMenuController( const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
+            NewMenuController( const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext );
             virtual ~NewMenuController() override;
 
             /* interface XServiceInfo */
@@ -56,8 +56,8 @@ namespace framework
 
             virtual void impl_setPopupMenu(std::unique_lock<std::mutex>& rGuard) override;
 
-            void fillPopupMenu( css::uno::Reference< css::awt::XPopupMenu > const & rPopupMenu );
-            static void retrieveShortcutsFromConfiguration( const css::uno::Reference< css::ui::XAcceleratorConfiguration >& rAccelCfg,
+            void fillPopupMenu( cpo::uno::Reference< css::awt::XPopupMenu > const & rPopupMenu );
+            static void retrieveShortcutsFromConfiguration( const cpo::uno::Reference< css::ui::XAcceleratorConfiguration >& rAccelCfg,
                                                      const cpo::uno::Sequence< OUString >& rCommands,
                                                      std::vector< vcl::KeyCode >& aMenuShortCuts );
             void setAccelerators();
@@ -74,10 +74,10 @@ namespace framework
             OUString                                                  m_aTargetFrame;
             OUString                                                  m_aModuleIdentifier;
             OUString                                                  m_aEmptyDocURL;
-            css::uno::Reference< cpo::uno::XComponentContext >        m_xContext;
-            css::uno::Reference< css::ui::XAcceleratorConfiguration > m_xDocAcceleratorManager;
-            css::uno::Reference< css::ui::XAcceleratorConfiguration > m_xModuleAcceleratorManager;
-            css::uno::Reference< css::ui::XAcceleratorConfiguration > m_xGlobalAcceleratorManager;
+            cpo::uno::Reference< cpo::uno::XComponentContext >        m_xContext;
+            cpo::uno::Reference< css::ui::XAcceleratorConfiguration > m_xDocAcceleratorManager;
+            cpo::uno::Reference< css::ui::XAcceleratorConfiguration > m_xModuleAcceleratorManager;
+            cpo::uno::Reference< css::ui::XAcceleratorConfiguration > m_xGlobalAcceleratorManager;
     };
 }
 

@@ -70,6 +70,7 @@
 #define STD_TO_OUSTR( str ) OStringToOUString( str, RTL_TEXTENCODING_UTF8 )
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 namespace
 {
@@ -331,10 +332,10 @@ namespace cmis
         return m_pSession;
     }
 
-    libcmis::Session* createSession(const css::uno::Reference<css::ucb::XCommandEnvironment>& xEnv,
+    libcmis::Session* createSession(const cpo::uno::Reference<css::ucb::XCommandEnvironment>& xEnv,
                                     ContentProvider& rProvider, const URL& rURL,
                                     const OUString& rContentId,
-                                    const css::uno::Reference<css::ucb::XContent>& xContext)
+                                    const cpo::uno::Reference<css::ucb::XContent>& xContext)
     {
         // init libcurl callback
         libcmis::SessionFactory::setCurlInitProtocolsFunction(&::InitCurl_easy);

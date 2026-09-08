@@ -33,6 +33,7 @@
 #include <ndole.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 SwOleClient::SwOleClient(SwView *pView, SwEditWin *pWin, const svt::EmbeddedObjectRef& xObj)
     : SfxInPlaceClient( pView, pWin, xObj.GetViewAspect() )

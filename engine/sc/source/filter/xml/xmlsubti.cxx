@@ -40,6 +40,7 @@
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 ScXMLTabProtectionData::ScXMLTabProtectionData() :
     meHash1(PASSHASH_SHA1),

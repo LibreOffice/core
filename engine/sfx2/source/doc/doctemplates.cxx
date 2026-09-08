@@ -112,8 +112,8 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::ucb;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::util;
 
@@ -172,7 +172,7 @@ public:
 class SfxDocTplService : public ::cppu::WeakImplHelper< css::lang::XLocalizable, css::frame::XDocumentTemplates, css::lang::XServiceInfo >
 {
 public:
-    explicit SfxDocTplService( const css::uno::Reference < cpo::uno::XComponentContext >& xContext );
+    explicit SfxDocTplService( const cpo::uno::Reference < cpo::uno::XComponentContext >& xContext );
     virtual ~SfxDocTplService() override;
 
     virtual OUString getImplementationName() override
@@ -197,10 +197,10 @@ public:
     css::lang::Locale              getLocale() override;
 
     // --- XDocumentTemplates ---
-    css::uno::Reference< css::ucb::XContent >  getContent() override;
+    cpo::uno::Reference< css::ucb::XContent >  getContent() override;
     bool               storeTemplate( const OUString& GroupName,
                                                    const OUString& TemplateName,
-                                                   const css::uno::Reference< css::frame::XStorable >& Storable ) override;
+                                                   const cpo::uno::Reference< css::frame::XStorable >& Storable ) override;
     bool               addTemplate( const OUString& GroupName,
                                                  const OUString& TemplateName,
                                                  const OUString& SourceURL ) override;
@@ -569,7 +569,7 @@ void SfxDocTplService::getDirList()
 
     aValue <<= maTemplateDirs;
 
-    css::uno::Reference< css::util::XPathSettings > xPathSettings =
+    cpo::uno::Reference< css::util::XPathSettings > xPathSettings =
         css::util::thePathSettings::get(mxContext);
 
     // load internal paths

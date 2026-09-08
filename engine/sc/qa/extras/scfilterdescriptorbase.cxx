@@ -21,10 +21,11 @@
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <cpo/uno/XInterface.hpp>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 namespace sc_apitest
 {

@@ -113,10 +113,10 @@ class T602ImportFilter : public cppu::WeakImplHelper <
 >
 {
 private:
-    css::uno::Reference<css::xml::sax::XDocumentHandler> mxHandler;
-    css::uno::Reference< cpo::uno::XComponentContext >   mxContext;
-    css::uno::Reference< css::lang::XComponent >         mxDoc;
-    css::uno::Reference < css::io::XInputStream >        mxInputStream;
+    cpo::uno::Reference<css::xml::sax::XDocumentHandler> mxHandler;
+    cpo::uno::Reference< cpo::uno::XComponentContext >   mxContext;
+    cpo::uno::Reference< css::lang::XComponent >         mxDoc;
+    cpo::uno::Reference < css::io::XInputStream >        mxInputStream;
 
     rtl::Reference<comphelper::AttributeList> mpAttrList;
 
@@ -213,8 +213,8 @@ private:
     bool importImpl( const cpo::uno::Sequence< css::beans::PropertyValue >& aDescriptor );
 
     public:
-        explicit T602ImportFilter(css::uno::Reference<cpo::uno::XComponentContext > x );
-        explicit T602ImportFilter(css::uno::Reference<css::io::XInputStream> xInputStream);
+        explicit T602ImportFilter(cpo::uno::Reference<cpo::uno::XComponentContext > x );
+        explicit T602ImportFilter(cpo::uno::Reference<css::io::XInputStream> xInputStream);
         virtual ~T602ImportFilter() override;
 
     // XFilter
@@ -222,7 +222,7 @@ private:
         virtual void cancel(  ) override {};
 
     // XImporter
-        virtual void setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
+        virtual void setTargetDocument( const cpo::uno::Reference< css::lang::XComponent >& xDoc ) override;
 
     // XExtendedTypeDetection
         virtual OUString detect(

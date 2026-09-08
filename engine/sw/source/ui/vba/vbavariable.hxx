@@ -28,13 +28,13 @@ typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XVariable > SwVbaVaria
 class SwVbaVariable : public SwVbaVariable_BASE
 {
 private:
-    css::uno::Reference< css::beans::XPropertyAccess > mxUserDefined;
+    cpo::uno::Reference< css::beans::XPropertyAccess > mxUserDefined;
     OUString maVariableName;
 
 public:
     /// @throws cpo::uno::RuntimeException
-    SwVbaVariable( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
-        css::uno::Reference< css::beans::XPropertyAccess > xUserDefined, OUString aName );
+    SwVbaVariable( const cpo::uno::Reference< ooo::vba::XHelperInterface >& rParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& rContext,
+        cpo::uno::Reference< css::beans::XPropertyAccess > xUserDefined, OUString aName );
     virtual ~SwVbaVariable() override;
 
    // XVariable

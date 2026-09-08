@@ -47,9 +47,10 @@
 #include <string_view>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace ::xmloff::token;
 using ::cpo::uno::Sequence;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 
 namespace
 {
@@ -209,9 +210,9 @@ SchXMLTableContext::~SchXMLTableContext()
 {
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLTableContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLTableContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
     SvXMLImportContext* pContext = nullptr;
 
@@ -246,7 +247,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLTableContext::cr
 }
 
 void SchXMLTableContext::startFastElement (sal_Int32 /*nElement*/,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     // get table-name
 
@@ -388,9 +389,9 @@ SchXMLTableColumnsContext::~SchXMLTableColumnsContext()
 {
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLTableColumnsContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLTableColumnsContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
     SvXMLImportContext* pContext = nullptr;
 
@@ -412,7 +413,7 @@ SchXMLTableColumnContext::SchXMLTableColumnContext(
 }
 
 void SchXMLTableColumnContext::startFastElement (sal_Int32 /*nElement*/,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     // get number-columns-repeated attribute
     sal_Int32 nRepeated = 1;
@@ -474,9 +475,9 @@ SchXMLTableRowsContext::~SchXMLTableRowsContext()
 {
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLTableRowsContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLTableRowsContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
     SvXMLImportContext* pContext = nullptr;
 
@@ -508,9 +509,9 @@ SchXMLTableRowContext::~SchXMLTableRowContext()
 {
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLTableRowContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLTableRowContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
     SvXMLImportContext* pContext = nullptr;
 
@@ -545,9 +546,9 @@ public:
     SchXMLRangeSomewhereContext( SvXMLImport& rImport,
                             OUString& rRangeString );
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
     virtual void endFastElement(sal_Int32 nElement) override;
 };
 
@@ -569,7 +570,7 @@ SchXMLTableCellContext::~SchXMLTableCellContext()
 }
 
 void SchXMLTableCellContext::startFastElement (sal_Int32 /*nElement*/,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     OUString aCellContent;
     SchXMLCellType eValueType  = SCH_CELL_TYPE_UNKNOWN;
@@ -615,9 +616,9 @@ void SchXMLTableCellContext::startFastElement (sal_Int32 /*nElement*/,
         mrTable.nMaxColumnIndex = mrTable.nColumnIndex;
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLTableCellContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLTableCellContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
     SvXMLImportContext* pContext = nullptr;
 
@@ -1026,9 +1027,9 @@ SchXMLRangeSomewhereContext::SchXMLRangeSomewhereContext( SvXMLImport& rImport,
 {
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLRangeSomewhereContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLRangeSomewhereContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
     if( nElement == XML_ELEMENT(SVG, XML_DESC)
         || nElement == XML_ELEMENT(SVG_COMPAT, XML_DESC) )

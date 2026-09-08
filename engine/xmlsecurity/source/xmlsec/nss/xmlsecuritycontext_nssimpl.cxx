@@ -29,6 +29,7 @@ namespace cpo::uno { class XComponentContext; }
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang ;
+using namespace ::cpo;
 
 using ::com::sun::star::xml::crypto::XSecurityEnvironment ;
 using ::com::sun::star::xml::crypto::XXMLSecurityContext ;

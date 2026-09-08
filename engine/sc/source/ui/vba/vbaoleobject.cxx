@@ -25,14 +25,15 @@
 #include "vbaoleobject.hxx"
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace ooo::vba;
 
 ScVbaOLEObject::ScVbaOLEObject( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< cpo::uno::XComponentContext >& xContext,
-            css::uno::Reference< css::drawing::XControlShape > const & xControlShape )
+            cpo::uno::Reference< css::drawing::XControlShape > const & xControlShape )
 : OLEObjectImpl_BASE( xParent, xContext )
 {
     //init m_xWindowPeer
-    uno::Reference< awt::XControlModel > xControlModel( xControlShape->getControl(), css::uno::UNO_SET_THROW );
+    uno::Reference< awt::XControlModel > xControlModel( xControlShape->getControl(), cpo::uno::UNO_SET_THROW );
     uno::Reference< container::XChild > xChild( xControlModel, uno::UNO_QUERY_THROW );
     xChild.set( xChild->getParent(), uno::UNO_QUERY_THROW );
     xChild.set( xChild->getParent(), uno::UNO_QUERY_THROW );

@@ -62,7 +62,7 @@ class OReadStatusBarDocumentHandler final : public OReadStatusBarDocumentHandler
             SB_NS_XLINK
         };
 
-        OReadStatusBarDocumentHandler( const css::uno::Reference< css::container::XIndexContainer >& aStatusBarItems );
+        OReadStatusBarDocumentHandler( const cpo::uno::Reference< css::container::XIndexContainer >& aStatusBarItems );
         virtual ~OReadStatusBarDocumentHandler() override;
 
         // XDocumentHandler
@@ -72,7 +72,7 @@ class OReadStatusBarDocumentHandler final : public OReadStatusBarDocumentHandler
 
         virtual void startElement(
             const OUString& aName,
-            const css::uno::Reference< css::xml::sax::XAttributeList > &xAttribs) override;
+            const cpo::uno::Reference< css::xml::sax::XAttributeList > &xAttribs) override;
 
         virtual void endElement(const OUString& aName) override;
 
@@ -84,7 +84,7 @@ class OReadStatusBarDocumentHandler final : public OReadStatusBarDocumentHandler
                                                     const OUString& aData) override;
 
         virtual void setDocumentLocator(
-            const css::uno::Reference< css::xml::sax::XLocator > &xLocator) override;
+            const cpo::uno::Reference< css::xml::sax::XLocator > &xLocator) override;
 
     private:
         OUString getErrorLineString();
@@ -92,16 +92,16 @@ class OReadStatusBarDocumentHandler final : public OReadStatusBarDocumentHandler
         bool                                                      m_bStatusBarStartFound;
         bool                                                      m_bStatusBarItemStartFound;
         std::unordered_map<OUString, StatusBar_XML_Entry >        m_aStatusBarMap;
-        css::uno::Reference< css::container::XIndexContainer >    m_aStatusBarItems;
-        css::uno::Reference< css::xml::sax::XLocator >            m_xLocator;
+        cpo::uno::Reference< css::container::XIndexContainer >    m_aStatusBarItems;
+        cpo::uno::Reference< css::xml::sax::XLocator >            m_xLocator;
 };
 
 class OWriteStatusBarDocumentHandler final
 {
     public:
         OWriteStatusBarDocumentHandler(
-            const css::uno::Reference< css::container::XIndexAccess >& rStatusBarItems,
-            const css::uno::Reference< css::xml::sax::XDocumentHandler >& rWriteDocHandler );
+            const cpo::uno::Reference< css::container::XIndexAccess >& rStatusBarItems,
+            const cpo::uno::Reference< css::xml::sax::XDocumentHandler >& rWriteDocHandler );
         ~OWriteStatusBarDocumentHandler();
 
         /// @throws css::xml::sax::SAXException
@@ -117,8 +117,8 @@ class OWriteStatusBarDocumentHandler final
             sal_Int16            nStyle,
             sal_Int16            nWidth );
 
-        css::uno::Reference< css::container::XIndexAccess >       m_aStatusBarItems;
-        css::uno::Reference< css::xml::sax::XDocumentHandler >    m_xWriteDocumentHandler;
+        cpo::uno::Reference< css::container::XIndexAccess >       m_aStatusBarItems;
+        cpo::uno::Reference< css::xml::sax::XDocumentHandler >    m_xWriteDocumentHandler;
         OUString                                                  m_aXMLStatusBarNS;
         OUString                                                  m_aXMLXlinkNS;
         OUString                                                  m_aAttributeURL;

@@ -31,8 +31,8 @@
 #include <xlroot.hxx>
 #include <xltools.hxx>
 
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::UNO_QUERY;
+using ::cpo::uno::Reference;
+using ::cpo::uno::UNO_QUERY;
 using ::com::sun::star::drawing::XShape;
 using ::com::sun::star::drawing::XControlShape;
 using ::com::sun::star::awt::XControlModel;

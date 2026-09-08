@@ -209,8 +209,8 @@
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
 #include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
-#include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.h>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/XComponentContext.hpp>
 #include <cpo/uno/XInterface.hpp>

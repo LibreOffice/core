@@ -21,7 +21,7 @@
 
 #include <vcl/idle.hxx>
 #include <comphelper/errcode.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <vcl/vclptr.hxx>
 #include "patattr.hxx"
 #include <sal/types.h>
@@ -498,7 +498,7 @@ private:
 
     Idle                aTrackIdle;
 
-    css::uno::Reference< css::script::vba::XVBAEventProcessor >
+    cpo::uno::Reference< css::script::vba::XVBAEventProcessor >
                         mxVbaEvents;
 
     // Stores Goal Seek settings
@@ -1045,7 +1045,7 @@ public:
     SdrObject*      GetObjectAtPoint( SCTAB nTab, const Point& rPos );
     bool            HasChartAtPoint( SCTAB nTab, const Point& rPos, OUString& rName );
 
-    css::uno::Reference< css::chart2::XChartDocument > GetChartByName( std::u16string_view rChartName );
+    cpo::uno::Reference< css::chart2::XChartDocument > GetChartByName( std::u16string_view rChartName );
 
     SC_DLLPUBLIC void GetChartRanges( std::u16string_view rChartName, std::vector< ScRangeList >& rRanges, const ScDocument& rSheetNameDoc );
     void              SetChartRanges( std::u16string_view rChartName, const std::vector< ScRangeList >& rRanges );
@@ -1057,7 +1057,7 @@ public:
                                        bool bColHeaders, bool bRowHeaders, bool bAdd );
     void              GetOldChartParameters( std::u16string_view rName,
                                              ScRangeList& rRanges, bool& rColHeaders, bool& rRowHeaders );
-    css::uno::Reference<
+    cpo::uno::Reference<
             css::embed::XEmbeddedObject >
                     FindOleObjectByName( std::u16string_view rName );
 
@@ -2068,7 +2068,7 @@ public:
         return static_cast<const T*>(GetEffItem(nCol, nRow, nTab, sal_uInt16(nWhich)));
     }
 
-    SC_DLLPUBLIC const css::uno::Reference< css::i18n::XBreakIterator >& GetBreakIterator();
+    SC_DLLPUBLIC const cpo::uno::Reference< css::i18n::XBreakIterator >& GetBreakIterator();
     bool                        HasStringWeakCharacters( const OUString& rString );
     SC_DLLPUBLIC SvtScriptType  GetStringScriptType( const OUString& rString );
     // pCell is an optimization, must point to rPos
@@ -2812,7 +2812,7 @@ public:
     void               AddUnoObject( SfxListener& rObject );
     void               RemoveUnoObject( SfxListener& rObject );
     void               BroadcastUno( const SfxHint &rHint );
-    void               AddUnoListenerCall( const css::uno::Reference<
+    void               AddUnoListenerCall( const cpo::uno::Reference<
                                            css::util::XModifyListener >& rListener,
                                            const css::lang::EventObject& rEvent );
 
@@ -2840,9 +2840,9 @@ public:
     void SC_DLLPUBLIC GetSortParam( ScSortParam& rParam, SCTAB nTab );
     void SC_DLLPUBLIC SetSortParam( const ScSortParam& rParam, SCTAB nTab );
 
-    void SetVbaEventProcessor( const css::uno::Reference< css::script::vba::XVBAEventProcessor >& rxVbaEvents )
+    void SetVbaEventProcessor( const cpo::uno::Reference< css::script::vba::XVBAEventProcessor >& rxVbaEvents )
                         { mxVbaEvents = rxVbaEvents; }
-    const css::uno::Reference< css::script::vba::XVBAEventProcessor >& GetVbaEventProcessor() const { return mxVbaEvents; }
+    const cpo::uno::Reference< css::script::vba::XVBAEventProcessor >& GetVbaEventProcessor() const { return mxVbaEvents; }
 
     /** Should only be GRAM_PODF or GRAM_ODFF. */
     void                              SetStorageGrammar( formula::FormulaGrammar::Grammar eGrammar );

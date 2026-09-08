@@ -55,6 +55,7 @@
 
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace comphelper {
 
@@ -259,7 +260,7 @@ bool EmbeddedObjectContainer::HasInstantiatedEmbeddedObject( const OUString& rNa
     return pImpl->maNameToObjectMap.contains(rName);
 }
 
-OUString EmbeddedObjectContainer::GetEmbeddedObjectName( const css::uno::Reference < css::embed::XEmbeddedObject >& xObj ) const
+OUString EmbeddedObjectContainer::GetEmbeddedObjectName( const cpo::uno::Reference < css::embed::XEmbeddedObject >& xObj ) const
 {
     auto it = pImpl->maObjectToNameMap.find(xObj);
     if (it == pImpl->maObjectToNameMap.end())
@@ -401,7 +402,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CreateEmbedde
 }
 
 void EmbeddedObjectContainer::AddEmbeddedObject(
-            const css::uno::Reference < css::embed::XEmbeddedObject >& xObj, const OUString& rName )
+            const cpo::uno::Reference < css::embed::XEmbeddedObject >& xObj, const OUString& rName )
 {
 #if OSL_DEBUG_LEVEL > 1
     SAL_WARN_IF( rName.isEmpty(), "comphelper.container", "Added object doesn't have a name!");
@@ -1059,13 +1060,13 @@ uno::Reference < io::XInputStream > EmbeddedObjectContainer::GetGraphicStream( c
     return xStream;
 }
 
-uno::Reference < io::XInputStream > EmbeddedObjectContainer::GetGraphicStream( const css::uno::Reference < css::embed::XEmbeddedObject >& xObj, OUString* pMediaType )
+uno::Reference < io::XInputStream > EmbeddedObjectContainer::GetGraphicStream( const cpo::uno::Reference < css::embed::XEmbeddedObject >& xObj, OUString* pMediaType )
 {
     // try to load it from the container storage
     return GetGraphicStream( GetEmbeddedObjectName( xObj ), pMediaType );
 }
 
-bool EmbeddedObjectContainer::InsertGraphicStream( const css::uno::Reference < css::io::XInputStream >& rStream, const OUString& rObjectName, const OUString& rMediaType )
+bool EmbeddedObjectContainer::InsertGraphicStream( const cpo::uno::Reference < css::io::XInputStream >& rStream, const OUString& rObjectName, const OUString& rMediaType )
 {
     try
     {
@@ -1098,7 +1099,7 @@ bool EmbeddedObjectContainer::InsertGraphicStream( const css::uno::Reference < c
     return true;
 }
 
-bool EmbeddedObjectContainer::InsertGraphicStreamDirectly( const css::uno::Reference < css::io::XInputStream >& rStream, const OUString& rObjectName, const OUString& rMediaType )
+bool EmbeddedObjectContainer::InsertGraphicStreamDirectly( const cpo::uno::Reference < css::io::XInputStream >& rStream, const OUString& rObjectName, const OUString& rMediaType )
 {
     try
     {

@@ -30,7 +30,7 @@ namespace comphelper
 {
 
 
-IndexAccessIterator::IndexAccessIterator(css::uno::Reference< cpo::uno::XInterface> xStartingPoint)
+IndexAccessIterator::IndexAccessIterator(cpo::uno::Reference< cpo::uno::XInterface> xStartingPoint)
     :m_xStartingPoint(std::move(xStartingPoint))
 {
     OSL_ENSURE(m_xStartingPoint.is(), "IndexAccessIterator::IndexAccessIterator : no starting point !");
@@ -39,7 +39,7 @@ IndexAccessIterator::IndexAccessIterator(css::uno::Reference< cpo::uno::XInterfa
 IndexAccessIterator::~IndexAccessIterator() {}
 
 
-css::uno::Reference< cpo::uno::XInterface> const & IndexAccessIterator::Next()
+cpo::uno::Reference< cpo::uno::XInterface> const & IndexAccessIterator::Next()
 {
     bool bCheckingStartingPoint = !m_xCurrentObject.is();
         // Is the current node the starting point?
@@ -48,7 +48,7 @@ css::uno::Reference< cpo::uno::XInterface> const & IndexAccessIterator::Next()
     if (!m_xCurrentObject.is())
         m_xCurrentObject = m_xStartingPoint;
 
-    css::uno::Reference< cpo::uno::XInterface> xSearchLoop( m_xCurrentObject);
+    cpo::uno::Reference< cpo::uno::XInterface> xSearchLoop( m_xCurrentObject);
     bool bHasMoreToSearch = true;
     bool bFoundSomething = false;
     while (!bFoundSomething && bHasMoreToSearch)
@@ -62,11 +62,11 @@ css::uno::Reference< cpo::uno::XInterface> const & IndexAccessIterator::Next()
         else
         {
             // First, check to see if there's a match below
-            css::uno::Reference< css::container::XIndexAccess> xContainerAccess(xSearchLoop, css::uno::UNO_QUERY);
+            cpo::uno::Reference< css::container::XIndexAccess> xContainerAccess(xSearchLoop, cpo::uno::UNO_QUERY);
             if (xContainerAccess.is() && xContainerAccess->getCount() && ShouldStepInto(xContainerAccess))
             {
                 cpo::uno::Any aElement(xContainerAccess->getByIndex(0));
-                xSearchLoop = *o3tl::doAccess<css::uno::Reference<cpo::uno::XInterface>>(aElement);
+                xSearchLoop = *o3tl::doAccess<cpo::uno::Reference<cpo::uno::XInterface>>(aElement);
                 bCheckingStartingPoint = false;
 
                 m_arrChildIndizies.push_back(sal_Int32(0));
@@ -75,11 +75,11 @@ css::uno::Reference< cpo::uno::XInterface> const & IndexAccessIterator::Next()
             {   // otherwise, look above and to the right, if possible
                 while (!m_arrChildIndizies.empty())
                 {   // If the list isn't empty and there's nothing above
-                    css::uno::Reference< css::container::XChild> xChild(xSearchLoop, css::uno::UNO_QUERY);
+                    cpo::uno::Reference< css::container::XChild> xChild(xSearchLoop, cpo::uno::UNO_QUERY);
                     OSL_ENSURE(xChild.is(), "IndexAccessIterator::Next : a content has no appropriate interface !");
 
-                    css::uno::Reference< cpo::uno::XInterface> xParent( xChild->getParent());
-                    xContainerAccess.set(xParent, css::uno::UNO_QUERY);
+                    cpo::uno::Reference< cpo::uno::XInterface> xParent( xChild->getParent());
+                    xContainerAccess.set(xParent, cpo::uno::UNO_QUERY);
                     OSL_ENSURE(xContainerAccess.is(), "IndexAccessIterator::Next : a content has an invalid parent !");
 
                     // Remove the index that SearchLoop had within this parent from my stack
@@ -91,7 +91,7 @@ css::uno::Reference< cpo::uno::XInterface> const & IndexAccessIterator::Next()
                         ++nOldSearchChildIndex;
                         // and check the next child
                         cpo::uno::Any aElement(xContainerAccess->getByIndex(nOldSearchChildIndex));
-                        xSearchLoop = *o3tl::doAccess<css::uno::Reference<cpo::uno::XInterface>>(aElement);
+                        xSearchLoop = *o3tl::doAccess<cpo::uno::Reference<cpo::uno::XInterface>>(aElement);
                         bCheckingStartingPoint = false;
                         // and update its position in the list.
                         m_arrChildIndizies.push_back(nOldSearchChildIndex);

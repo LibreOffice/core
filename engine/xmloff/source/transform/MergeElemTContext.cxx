@@ -26,7 +26,7 @@
 #include <xmloff/xmlnamespace.hxx>
 #include <osl/diagnose.h>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
 
@@ -43,7 +43,7 @@ public:
     virtual rtl::Reference<XMLTransformerContext> CreateChildContext( sal_uInt16 nPrefix,
                                    const OUString& rLocalName,
                                    const OUString& rQName,
-                                   const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+                                   const cpo::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 };
 
 }

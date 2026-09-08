@@ -207,7 +207,7 @@ String2Float( cpo::uno::Any& rAny, const gchar * value )
 /*****************************************************************************/
 
 /// @throws uno::RuntimeException
-static css::uno::Reference<css::accessibility::XAccessibleComponent>
+static cpo::uno::Reference<css::accessibility::XAccessibleComponent>
     getComponent( AtkText *pText )
 {
     AtkObjectWrapper *pWrap = ATK_OBJECT_WRAPPER( pText );
@@ -215,13 +215,13 @@ static css::uno::Reference<css::accessibility::XAccessibleComponent>
     {
         if( !pWrap->mpComponent.is() )
         {
-            pWrap->mpComponent.set(pWrap->mpContext, css::uno::UNO_QUERY);
+            pWrap->mpComponent.set(pWrap->mpContext, cpo::uno::UNO_QUERY);
         }
 
         return pWrap->mpComponent;
     }
 
-    return css::uno::Reference<css::accessibility::XAccessibleComponent>();
+    return cpo::uno::Reference<css::accessibility::XAccessibleComponent>();
 }
 
 static gchar*
@@ -246,7 +246,7 @@ get_color_value(const cpo::uno::Sequence< beans::PropertyValue >& rAttributeList
     {
         try
         {
-            css::uno::Reference<css::accessibility::XAccessibleComponent>
+            cpo::uno::Reference<css::accessibility::XAccessibleComponent>
                 pComponent = getComponent( text );
             if( pComponent.is() )
             {
@@ -1217,7 +1217,7 @@ attribute_set_new_from_property_values(
 
 AtkAttributeSet*
 attribute_set_new_from_extended_attributes(
-    const css::uno::Reference< css::accessibility::XAccessibleExtendedAttributes >& rExtendedAttributes )
+    const cpo::uno::Reference< css::accessibility::XAccessibleExtendedAttributes >& rExtendedAttributes )
 {
     AtkAttributeSet *pSet = nullptr;
 

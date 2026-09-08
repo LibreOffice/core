@@ -52,6 +52,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::comphelper;
+using namespace ::cpo;
 
 #define EDITMASK_LITERAL       'L'
 #define EDITMASK_ALPHA         'a'

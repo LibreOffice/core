@@ -26,7 +26,7 @@
 
 #include <com/sun/star/bridge/XBridgeFactory2.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <sal/types.h>
@@ -46,7 +46,7 @@ class BridgeFactory : private cppu::BaseMutex, public BridgeFactoryBase
 {
 public:
     void removeBridge(
-        css::uno::Reference< css::bridge::XBridge >
+        cpo::uno::Reference< css::bridge::XBridge >
             const & bridge);
 
     using BridgeFactoryBase::acquire;
@@ -67,31 +67,31 @@ private:
     virtual cpo::uno::Sequence< OUString >
     getSupportedServiceNames() override;
 
-    virtual css::uno::Reference< css::bridge::XBridge >
+    virtual cpo::uno::Reference< css::bridge::XBridge >
     createBridge(
         OUString const & sName, OUString const & sProtocol,
-        css::uno::Reference< css::connection::XConnection > const & aConnection,
-        css::uno::Reference< css::bridge::XInstanceProvider > const &
+        cpo::uno::Reference< css::connection::XConnection > const & aConnection,
+        cpo::uno::Reference< css::bridge::XInstanceProvider > const &
                 anInstanceProvider) override;
 
-    virtual css::uno::Reference< css::bridge::XBridge >
+    virtual cpo::uno::Reference< css::bridge::XBridge >
     getBridge(
         OUString const & sName) override;
 
     virtual
-    cpo::uno::Sequence< css::uno::Reference< css::bridge::XBridge > >
+    cpo::uno::Sequence< cpo::uno::Reference< css::bridge::XBridge > >
     getExistingBridges() override;
 
     void disposing() override;
 
     typedef
-        std::vector< css::uno::Reference< css::bridge::XBridge > >
+        std::vector< cpo::uno::Reference< css::bridge::XBridge > >
         BridgeVector;
 
     typedef
         std::map<
             OUString,
-            css::uno::Reference< css::bridge::XBridge > >
+            cpo::uno::Reference< css::bridge::XBridge > >
         BridgeMap;
 
     BridgeVector unnamed_;

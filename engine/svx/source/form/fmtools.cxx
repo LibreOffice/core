@@ -43,7 +43,7 @@
 #include <tools/debug.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::awt;
@@ -77,7 +77,7 @@ namespace
     }
 }
 
-void displayException(const Any& _rExcept, const css::uno::Reference<css::awt::XWindow>& rParent)
+void displayException(const Any& _rExcept, const cpo::uno::Reference<css::awt::XWindow>& rParent)
 {
     // check whether we need to display it
     if ( !lcl_shouldDisplayError( _rExcept ) )
@@ -94,17 +94,17 @@ void displayException(const Any& _rExcept, const css::uno::Reference<css::awt::X
     }
 }
 
-void displayException(const css::sdbc::SQLException& _rExcept, const css::uno::Reference<css::awt::XWindow>& rParent)
+void displayException(const css::sdbc::SQLException& _rExcept, const cpo::uno::Reference<css::awt::XWindow>& rParent)
 {
     displayException(Any(_rExcept), rParent);
 }
 
-void displayException(const css::sdb::SQLContext& _rExcept, const css::uno::Reference<css::awt::XWindow>& rParent)
+void displayException(const css::sdb::SQLContext& _rExcept, const cpo::uno::Reference<css::awt::XWindow>& rParent)
 {
     displayException(Any(_rExcept), rParent);
 }
 
-void displayException(const css::sdb::SQLErrorEvent& _rEvent, const css::uno::Reference<css::awt::XWindow>& rParent)
+void displayException(const css::sdb::SQLErrorEvent& _rEvent, const cpo::uno::Reference<css::awt::XWindow>& rParent)
 {
     displayException(_rEvent.Reason, rParent);
 }
@@ -194,9 +194,9 @@ void CursorWrapper::ImplConstruct(const Reference< css::sdbc::XResultSet>& _rxCu
     else
         m_xMoveOperations   = _rxCursor;
 
-    m_xBookmarkOperations.set(m_xMoveOperations, css::uno::UNO_QUERY);
-    m_xColumnsSupplier.set(m_xMoveOperations, css::uno::UNO_QUERY);
-    m_xPropertyAccess.set(m_xMoveOperations, css::uno::UNO_QUERY);
+    m_xBookmarkOperations.set(m_xMoveOperations, cpo::uno::UNO_QUERY);
+    m_xColumnsSupplier.set(m_xMoveOperations, cpo::uno::UNO_QUERY);
+    m_xPropertyAccess.set(m_xMoveOperations, cpo::uno::UNO_QUERY);
 
     if ( !m_xMoveOperations.is() || !m_xBookmarkOperations.is() || !m_xColumnsSupplier.is() || !m_xPropertyAccess.is() )
     {   // all or nothing !!

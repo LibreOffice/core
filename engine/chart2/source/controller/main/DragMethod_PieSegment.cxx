@@ -32,7 +32,7 @@ namespace chart
 {
 
 using namespace ::com::sun::star;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::basegfx::B2DVector;
 
 DragMethod_PieSegment::DragMethod_PieSegment( DrawViewWrapper& rDrawViewWrapper

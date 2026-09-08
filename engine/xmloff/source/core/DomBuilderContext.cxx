@@ -24,7 +24,7 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlerror.hxx>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>
 #include <com/sun/star/xml/dom/XNode.hpp>
@@ -38,10 +38,10 @@
 
 
 using cpo::uno::XComponentContext;
-using com::sun::star::uno::Reference;
+using cpo::uno::Reference;
 using cpo::uno::Sequence;
-using com::sun::star::uno::UNO_QUERY;
-using com::sun::star::uno::UNO_QUERY_THROW;
+using cpo::uno::UNO_QUERY;
+using cpo::uno::UNO_QUERY_THROW;
 using com::sun::star::xml::dom::DocumentBuilder;
 using com::sun::star::xml::dom::XDocument;
 using com::sun::star::xml::dom::XDocumentBuilder;
@@ -113,15 +113,15 @@ Reference<XDocument> DomBuilderContext::getTree()
     return mxNode->getOwnerDocument();
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > DomBuilderContext::createFastChildContext(
-    sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > DomBuilderContext::createFastChildContext(
+    sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
     // create DomBuilder for subtree
     return new DomBuilderContext( GetImport(), nElement, mxNode );
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > DomBuilderContext::createUnknownChildContext(
-    const OUString & rNamespace, const OUString &rName, const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > DomBuilderContext::createUnknownChildContext(
+    const OUString & rNamespace, const OUString &rName, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
     // create DomBuilder for subtree
     return new DomBuilderContext( GetImport(), rNamespace, rName, mxNode );
@@ -129,7 +129,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > DomBuilderContext::cre
 
 void DomBuilderContext::startFastElement(
     sal_Int32 /*nElement*/,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     SAL_WARN_IF( !mxNode.is(), "xmloff", "empty XNode not allowed" );
     SAL_WARN_IF( !mxNode->getOwnerDocument().is(), "xmloff", "XNode must have XDocument" );
@@ -139,7 +139,7 @@ void DomBuilderContext::startFastElement(
 
 void DomBuilderContext::startUnknownElement(
     const OUString & /*rNamespace*/, const OUString & /*rName*/,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     SAL_WARN_IF( !mxNode.is(), "xmloff", "empty XNode not allowed" );
     SAL_WARN_IF( !mxNode->getOwnerDocument().is(), "xmloff", "XNode must have XDocument" );
@@ -147,7 +147,7 @@ void DomBuilderContext::startUnknownElement(
 }
 
 void DomBuilderContext::HandleAttributes(
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     // add attribute nodes to new node
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )

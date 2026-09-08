@@ -42,6 +42,7 @@
 #include <autoformatpreview.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 #define FRAME_OFFSET 4
 

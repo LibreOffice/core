@@ -50,8 +50,8 @@ const tools::Long STD_WIN_SIZE_Y = 150;
 
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
@@ -183,7 +183,7 @@ bool FmFieldWin::createSelectionControls()
 
 void FmFieldWin::_propertyChanged(const css::beans::PropertyChangeEvent& evt)
 {
-    css::uno::Reference< css::form::XForm >  xForm(evt.Source, css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::form::XForm >  xForm(evt.Source, cpo::uno::UNO_QUERY);
     UpdateContent(xForm);
 }
 
@@ -216,7 +216,7 @@ void FmFieldWin::UpdateContent(FmFormShell const * pShell)
         UpdateContent( xForm );
 }
 
-void FmFieldWin::UpdateContent(const css::uno::Reference< css::form::XForm > & xForm)
+void FmFieldWin::UpdateContent(const cpo::uno::Reference< css::form::XForm > & xForm)
 {
     try
     {

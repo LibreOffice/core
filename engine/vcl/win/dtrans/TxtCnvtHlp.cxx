@@ -24,7 +24,7 @@
 #include "ImplHelper.hxx"
 
 using namespace ::com::sun::star::datatransfer;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 // assuming a '\0' terminated string if no length specified
 

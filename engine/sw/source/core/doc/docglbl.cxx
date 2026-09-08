@@ -46,12 +46,13 @@
 #include <iodetect.hxx>
 #include <frameformats.hxx>
 #include <memory>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace {
 

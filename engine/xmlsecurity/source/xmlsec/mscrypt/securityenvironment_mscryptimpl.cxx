@@ -54,6 +54,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang ;
+using namespace ::cpo;
 
 using ::com::sun::star::xml::crypto::XSecurityEnvironment ;
 using ::com::sun::star::security::XCertificate ;
@@ -965,7 +966,7 @@ sal_Int32 SecurityEnvironment_MSCryptImpl::verifyCertificate(
     return validity ;
 }
 
-sal_Int32 SecurityEnvironment_MSCryptImpl::getCertificateCharacters( const css::uno::Reference< css::security::XCertificate >& aCert ) {
+sal_Int32 SecurityEnvironment_MSCryptImpl::getCertificateCharacters( const cpo::uno::Reference< css::security::XCertificate >& aCert ) {
     sal_Int32 characters ;
     PCCERT_CONTEXT pCertContext ;
 

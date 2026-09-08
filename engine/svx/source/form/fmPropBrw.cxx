@@ -73,8 +73,8 @@ using namespace ::com::sun::star::form::inspection;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::inspection;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::util;
 using namespace ::svxform;
 using ::com::sun::star::awt::XWindow;
@@ -190,7 +190,7 @@ FmPropBrw::FmPropBrw(const Reference< XComponentContext >& _xORB, SfxBindings* _
         m_xMeAsFrame = Frame::create(m_xORB);
 
         // transport the container area of this dialog to be the container window of the frame
-        css::uno::Reference<css::awt::XWindow> xFrameContainerWindow(new weld::TransportAsXWindow(m_xContainer.get()));
+        cpo::uno::Reference<css::awt::XWindow> xFrameContainerWindow(new weld::TransportAsXWindow(m_xContainer.get()));
         m_xMeAsFrame->initialize(xFrameContainerWindow);
         m_xMeAsFrame->setName(u"form property browser"_ustr);
     }

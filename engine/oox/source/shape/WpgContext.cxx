@@ -17,6 +17,7 @@
 #include <oox/token/tokens.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 namespace oox::shape
 {

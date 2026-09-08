@@ -34,11 +34,11 @@ public:
 protected:
     void lcl_startFastElement(
         Token_t Element,
-        const css::uno::Reference<css::xml::sax::XFastAttributeList>& Attribs) override;
+        const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& Attribs) override;
     void lcl_endFastElement(Token_t Element) override;
-    css::uno::Reference<css::xml::sax::XFastContextHandler> lcl_createFastChildContext(
+    cpo::uno::Reference<css::xml::sax::XFastContextHandler> lcl_createFastChildContext(
         Token_t Element,
-        const css::uno::Reference<css::xml::sax::XFastAttributeList>& Attribs) override;
+        const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& Attribs) override;
     virtual void lcl_characters(const OUString& aChars) override;
 };
 

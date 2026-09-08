@@ -29,8 +29,8 @@
 
 using namespace ::cppu;
 using namespace ::osl;
-using namespace ::com::sun::star::uno;
-using namespace css::uno;
+using namespace ::cpo::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::task;
@@ -39,7 +39,7 @@ namespace unocontrols {
 
 //  construct/destruct
 
-StatusIndicator::StatusIndicator( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext )
+StatusIndicator::StatusIndicator( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext )
     : StatusIndicator_BASE(rxContext)
 {
     // It's not allowed to work with member in this method (refcounter !!!)
@@ -49,7 +49,7 @@ StatusIndicator::StatusIndicator( const css::uno::Reference< cpo::uno::XComponen
     // Create instances for fixedtext and progress ...
     m_xText = new UnoFixedTextControl();
     m_xProgressBar = new ProgressBar(rxContext);
-    // ... cast controls to css::uno::Reference< XControl > and set model ...
+    // ... cast controls to cpo::uno::Reference< XControl > and set model ...
     // ( ProgressBar has no model !!! )
     m_xText->setModel( new UnoControlFixedTextModel(rxContext) );
     // ... and add controls to basecontainercontrol!
@@ -176,8 +176,8 @@ css::awt::Size StatusIndicator::calcAdjustedSize ( const css::awt::Size& /*rNewS
 //  XControl
 
 void StatusIndicator::createPeer (
-    const css::uno::Reference< XToolkit > & rToolkit,
-    const css::uno::Reference< XWindowPeer > & rParent
+    const cpo::uno::Reference< XToolkit > & rToolkit,
+    const cpo::uno::Reference< XWindowPeer > & rParent
 )
 {
     if( !getPeer().is() )
@@ -194,7 +194,7 @@ void StatusIndicator::createPeer (
 
 //  XControl
 
-bool StatusIndicator::setModel ( const css::uno::Reference< XControlModel > & /*rModel*/ )
+bool StatusIndicator::setModel ( const cpo::uno::Reference< XControlModel > & /*rModel*/ )
 {
     // We have no model.
     return false;
@@ -202,11 +202,11 @@ bool StatusIndicator::setModel ( const css::uno::Reference< XControlModel > & /*
 
 //  XControl
 
-css::uno::Reference< XControlModel > StatusIndicator::getModel ()
+cpo::uno::Reference< XControlModel > StatusIndicator::getModel ()
 {
     // We have no model.
     // return (XControlModel*)this;
-    return css::uno::Reference< XControlModel >  ();
+    return cpo::uno::Reference< XControlModel >  ();
 }
 
 //  XComponent
@@ -261,7 +261,7 @@ void StatusIndicator::setPosSize (
 
 //  protected method
 
-WindowDescriptor StatusIndicator::impl_getWindowDescriptor( const css::uno::Reference< XWindowPeer >& xParentPeer )
+WindowDescriptor StatusIndicator::impl_getWindowDescriptor( const cpo::uno::Reference< XWindowPeer >& xParentPeer )
 {
     WindowDescriptor aDescriptor;
 
@@ -276,7 +276,7 @@ WindowDescriptor StatusIndicator::impl_getWindowDescriptor( const css::uno::Refe
 
 //  protected method
 
-void StatusIndicator::impl_paint ( sal_Int32 nX, sal_Int32 nY, const css::uno::Reference< XGraphics > & rGraphics )
+void StatusIndicator::impl_paint ( sal_Int32 nX, sal_Int32 nY, const cpo::uno::Reference< XGraphics > & rGraphics )
 {
     // This paint method is not buffered!
     // Every request paint the completely control. (But only, if peer exist)
@@ -286,7 +286,7 @@ void StatusIndicator::impl_paint ( sal_Int32 nX, sal_Int32 nY, const css::uno::R
     MutexGuard  aGuard (m_aMutex);
 
     // background = gray
-    css::uno::Reference< XWindowPeer > xPeer( impl_getPeerWindow(), UNO_QUERY );
+    cpo::uno::Reference< XWindowPeer > xPeer( impl_getPeerWindow(), UNO_QUERY );
     if( xPeer.is() )
         xPeer->setBackground( STATUSINDICATOR_BACKGROUNDCOLOR );
 

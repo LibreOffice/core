@@ -43,8 +43,8 @@
 
 using namespace sdr::table;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::lang;
 
@@ -184,10 +184,10 @@ sal_Int64 AccessibleCell::getAccessibleStateSet()
 
 
         //Just when the parent table is not read-only,set states EDITABLE,RESIZABLE,MOVEABLE
-        css::uno::Reference<XAccessible> xTempAcc = getAccessibleParent();
+        cpo::uno::Reference<XAccessible> xTempAcc = getAccessibleParent();
         if( xTempAcc.is() )
         {
-            css::uno::Reference<XAccessibleContext>
+            cpo::uno::Reference<XAccessibleContext>
                                     xTempAccContext = xTempAcc->getAccessibleContext();
             if( xTempAccContext.is() )
             {

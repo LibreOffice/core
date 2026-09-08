@@ -106,8 +106,8 @@ using namespace comphelper;
 using namespace osl;
 using namespace com::sun::star;
 using namespace com::sun::star::lang;
-using namespace com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 static sal_Int32 GetDayDiff(const Date& rDate) { return rDate - Date(1899'12'30); }
 

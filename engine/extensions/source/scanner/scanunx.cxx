@@ -28,7 +28,7 @@
 
 #include <com/sun/star/scanner/ScannerException.hpp>
 
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace css::scanner;
 using namespace ::cpo::uno;
 

@@ -23,7 +23,7 @@
 #include <rtl/ustring.hxx>
 #include <cppuhelper/factory.hxx>
 
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace css::lang;
 using namespace cpo::uno;
 using namespace cppu;

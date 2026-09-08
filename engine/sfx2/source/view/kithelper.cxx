@@ -60,6 +60,7 @@
 #include <boost/property_tree/json_parser.hpp>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 namespace {
 bool g_bSettingView(false);
@@ -165,7 +166,7 @@ int KitHelper::createView()
     return createView(pViewShell->GetViewFrame(), pViewShell->GetDocId());
 }
 
-std::unordered_map<OUString, css::uno::Reference<css::ui::XAcceleratorConfiguration>>& KitHelper::getAcceleratorConfs()
+std::unordered_map<OUString, cpo::uno::Reference<css::ui::XAcceleratorConfiguration>>& KitHelper::getAcceleratorConfs()
 {
     return SfxApplication::GetOrCreate()->GetAcceleratorConfs_Impl();
 }
@@ -943,7 +944,7 @@ void KitHelper::notifyContextChange(const css::ui::ContextChangeEventObject& rEv
     if (DisableCallbacks::disabled())
         return;
 
-    SfxViewShell* pViewShell = SfxViewShell::Get({ rEvent.Source, css::uno::UNO_QUERY });
+    SfxViewShell* pViewShell = SfxViewShell::Get({ rEvent.Source, cpo::uno::UNO_QUERY });
     if (!pViewShell)
     {
         // Source may be an embedded controller (e.g. ChartController) that
@@ -1050,7 +1051,7 @@ std::string_view extractKey(std::string_view privateKey)
 }
 }
 
-css::uno::Reference<css::security::XCertificate> KitHelper::getSigningCertificate(std::string_view rCert, std::string_view rKey)
+cpo::uno::Reference<css::security::XCertificate> KitHelper::getSigningCertificate(std::string_view rCert, std::string_view rKey)
 {
     const uno::Reference<cpo::uno::XComponentContext>& xContext = comphelper::getProcessComponentContext();
     uno::Reference<xml::crypto::XSEInitializer> xSEInitializer = xml::crypto::SEInitializer::create(xContext);
@@ -1098,7 +1099,7 @@ css::uno::Reference<css::security::XCertificate> KitHelper::getSigningCertificat
 }
 
 uno::Reference<security::XCertificate> KitHelper::addCertificate(
-    const css::uno::Reference<css::xml::crypto::XCertificateCreator>& xCertificateCreator,
+    const cpo::uno::Reference<css::xml::crypto::XCertificateCreator>& xCertificateCreator,
     const cpo::uno::Sequence<sal_Int8>& rCert)
 {
     // Trust arg is handled by CERT_DecodeTrustString(), see 'man certutil'.

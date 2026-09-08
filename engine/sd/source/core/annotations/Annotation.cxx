@@ -39,6 +39,7 @@
 
 
 using namespace css;
+using namespace ::cpo;
 
 namespace cpo::uno { class XComponentContext; }
 

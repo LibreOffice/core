@@ -56,7 +56,7 @@
 #include <basegfx/utils/systemdependentdata.hxx>
 #include <mutex>
 
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 
 namespace
 {

@@ -102,7 +102,7 @@ public:
 };
 
 void AddExtLst(sax_fastparser::FSHelperPtr const& pFS, DocxExport const& rExport,
-        css::uno::Reference<css::beans::XPropertySet> const& xShape);
+        cpo::uno::Reference<css::beans::XPropertySet> const& xShape);
 
 #endif // INCLUDED_SW_SOURCE_FILTER_WW8_DOCXSDREXPORT_HXX
 

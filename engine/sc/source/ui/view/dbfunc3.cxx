@@ -74,8 +74,8 @@
 using namespace com::sun::star;
 using ::cpo::uno::Any;
 using ::cpo::uno::Sequence;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::UNO_QUERY;
+using ::cpo::uno::Reference;
+using ::cpo::uno::UNO_QUERY;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::container::XNameAccess;
 using ::com::sun::star::sheet::XDimensionsSupplier;

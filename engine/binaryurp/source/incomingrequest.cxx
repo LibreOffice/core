@@ -139,8 +139,8 @@ bool IncomingRequest::execute_throw(
         break;
     case SPECIAL_FUNCTION_ID_QUERY_INTERFACE:
         if (!object_.is()) {
-            css::uno::Reference< cpo::uno::XInterface > ifc;
-            css::uno::Reference< css::bridge::XInstanceProvider > prov(
+            cpo::uno::Reference< cpo::uno::XInterface > ifc;
+            cpo::uno::Reference< css::bridge::XInstanceProvider > prov(
                 bridge_->getProvider());
             if (prov.is()) {
                 try {
@@ -156,14 +156,14 @@ bool IncomingRequest::execute_throw(
                             ifc.get(),
                             (cpo::uno::TypeDescription(
                                 cppu::UnoType<
-                                    css::uno::Reference<
+                                    cpo::uno::Reference<
                                         cpo::uno::XInterface > >::get()).
                              get()))),
                     SAL_NO_ACQUIRE);
                 *returnValue = BinaryAny(
                     cpo::uno::TypeDescription(
                         cppu::UnoType<
-                            css::uno::Reference<
+                            cpo::uno::Reference<
                                 cpo::uno::XInterface > >::get()),
                     &unoIfc.m_pUnoI);
             }

@@ -17,6 +17,7 @@
 #include <com/sun/star/text/XTextField.hpp>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace
 {

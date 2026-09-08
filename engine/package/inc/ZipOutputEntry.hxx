@@ -21,7 +21,7 @@
 
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XTempFile.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/crypto/XCipherContext.hpp>
 #include <com/sun/star/xml/crypto/XDigestContext.hpp>
@@ -40,11 +40,11 @@ class ZipPackageStream;
 class ZipOutputEntryBase
 {
 protected:
-    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
-    css::uno::Reference< css::io::XOutputStream > m_xOutStream;
+    cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+    cpo::uno::Reference< css::io::XOutputStream > m_xOutStream;
 
-    css::uno::Reference< css::xml::crypto::XCipherContext > m_xCipherContext;
-    css::uno::Reference< css::xml::crypto::XDigestContext > m_xDigestContext;
+    cpo::uno::Reference< css::xml::crypto::XCipherContext > m_xCipherContext;
+    cpo::uno::Reference< css::xml::crypto::XDigestContext > m_xDigestContext;
 
     CRC32               m_aCRC;
     ZipEntry            *m_pCurrentEntry;
@@ -55,7 +55,7 @@ protected:
 public:
     virtual ~ZipOutputEntryBase() = default;
 
-    virtual void writeStream(const css::uno::Reference< css::io::XInputStream >& xInStream) = 0;
+    virtual void writeStream(const cpo::uno::Reference< css::io::XInputStream >& xInStream) = 0;
 
     ZipEntry* getZipEntry() { return m_pCurrentEntry; }
     ZipPackageStream* getZipPackageStream() { return m_pCurrentStream; }
@@ -65,8 +65,8 @@ public:
 
 protected:
     ZipOutputEntryBase(
-        css::uno::Reference< css::io::XOutputStream > xOutStream,
-        css::uno::Reference< cpo::uno::XComponentContext > xContext,
+        cpo::uno::Reference< css::io::XOutputStream > xOutStream,
+        cpo::uno::Reference< cpo::uno::XComponentContext > xContext,
         ZipEntry* pEntry, ZipPackageStream* pStream, bool bEncrypt, bool checkStream);
 
     // Inherited classes call this with deflated data buffer.
@@ -89,16 +89,16 @@ class ZipOutputEntry : public ZipOutputEntryBase
 
 public:
     ZipOutputEntry(
-        const css::uno::Reference< css::io::XOutputStream >& rxOutStream,
-        const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+        const cpo::uno::Reference< css::io::XOutputStream >& rxOutStream,
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
         ZipEntry* pEntry, ZipPackageStream* pStream, bool bEncrypt);
-    void writeStream(const css::uno::Reference< css::io::XInputStream >& xInStream) override;
+    void writeStream(const cpo::uno::Reference< css::io::XInputStream >& xInStream) override;
     void write(const cpo::uno::Sequence< sal_Int8 >& rBuffer);
 
 protected:
     ZipOutputEntry(
-        const css::uno::Reference< css::io::XOutputStream >& rxOutStream,
-        const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+        const cpo::uno::Reference< css::io::XOutputStream >& rxOutStream,
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
         ZipEntry* pEntry, ZipPackageStream* pStream, bool bEncrypt, bool checkStream);
     virtual void finishDeflater() override;
     virtual sal_Int64 getDeflaterTotalIn() const override;
@@ -119,16 +119,16 @@ class ZipOutputEntryInThread final : public ZipOutputEntry
 
 public:
     ZipOutputEntryInThread(
-        const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
         std::unique_ptr<ZipEntry>&& pEntry, ZipPackageStream* pStream, bool bEncrypt);
     std::unique_ptr<comphelper::ThreadTask> createTask(
         const std::shared_ptr<comphelper::ThreadTaskTag>& pTag,
-        const css::uno::Reference< css::io::XInputStream >& xInStream );
+        const cpo::uno::Reference< css::io::XInputStream >& xInStream );
     /* This block of methods is for threaded zipping, where we compress to a temp stream, whose
        data is retrieved via getData */
     void createBufferFile();
     void setParallelDeflateException(const std::exception_ptr& exception) { m_aParallelDeflateException = exception; }
-    css::uno::Reference< css::io::XInputStream > getData() const;
+    cpo::uno::Reference< css::io::XInputStream > getData() const;
     const std::exception_ptr& getParallelDeflateException() const { return m_aParallelDeflateException; }
     void closeBufferFile();
     void deleteBufferFile();
@@ -147,10 +147,10 @@ class ZipOutputEntryParallel final : public ZipOutputEntryBase
     bool finished;
 public:
     ZipOutputEntryParallel(
-        const css::uno::Reference< css::io::XOutputStream >& rxOutStream,
-        const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+        const cpo::uno::Reference< css::io::XOutputStream >& rxOutStream,
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
         ZipEntry* pEntry, ZipPackageStream* pStream, bool bEncrypt);
-    void writeStream(const css::uno::Reference< css::io::XInputStream >& xInStream) override;
+    void writeStream(const cpo::uno::Reference< css::io::XInputStream >& xInStream) override;
 private:
     virtual void finishDeflater() override;
     virtual sal_Int64 getDeflaterTotalIn() const override;

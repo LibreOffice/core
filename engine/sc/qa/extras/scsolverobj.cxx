@@ -15,7 +15,7 @@
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/sheet/ModelConstraint.hpp>
 #include <com/sun/star/sheet/SolverConstraintOperator.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
@@ -25,6 +25,7 @@
 #include <cpo/uno/Any.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 namespace sc_apitest
 {

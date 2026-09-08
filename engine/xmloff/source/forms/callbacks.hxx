@@ -40,10 +40,10 @@ namespace xmloff
         /** steps through a collection and exports all children of this collection
         */
         virtual void    exportCollectionElements(
-            const css::uno::Reference< css::container::XIndexAccess >& _rxCollection) = 0;
+            const cpo::uno::Reference< css::container::XIndexAccess >& _rxCollection) = 0;
 
         virtual OUString                             getObjectStyleName(
-            const css::uno::Reference< css::beans::XPropertySet >& _rxObject ) = 0;
+            const cpo::uno::Reference< css::beans::XPropertySet >& _rxObject ) = 0;
 
     protected:
         ~IFormsExportContext() {}
@@ -54,7 +54,7 @@ namespace xmloff
     {
     public:
         virtual void registerEvents(
-            const css::uno::Reference< css::beans::XPropertySet >& _rxElement,
+            const cpo::uno::Reference< css::beans::XPropertySet >& _rxElement,
             const cpo::uno::Sequence< css::script::ScriptEventDescriptor >& _rEvents
             ) = 0;
 

@@ -28,6 +28,7 @@
 #include <com/sun/star/sheet/XMembersSupplier.hpp>
 
 using namespace css;
+using namespace ::cpo;
 
 namespace sc
 {

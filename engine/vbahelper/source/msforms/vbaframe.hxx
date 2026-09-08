@@ -32,12 +32,12 @@ class ScVbaFrame : public FrameImpl_BASE
 {
 public:
     ScVbaFrame(
-        const css::uno::Reference< ov::XHelperInterface >& xParent,
-        const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
-        const css::uno::Reference< cpo::uno::XInterface >& xControl,
-        const css::uno::Reference< css::frame::XModel >& xModel,
+        const cpo::uno::Reference< ov::XHelperInterface >& xParent,
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
+        const cpo::uno::Reference< cpo::uno::XInterface >& xControl,
+        const cpo::uno::Reference< css::frame::XModel >& xModel,
         std::unique_ptr<ov::AbstractGeometryAttributes> pGeomHelper,
-        css::uno::Reference< css::awt::XControl > xDialog );
+        cpo::uno::Reference< css::awt::XControl > xDialog );
 
     // XFrame attributes
     virtual OUString getCaption() override;
@@ -47,7 +47,7 @@ public:
     virtual void setSpecialEffect( sal_Int32 nSpecialEffect ) override;
     virtual sal_Int32 getBorderStyle() override;
     virtual void setBorderStyle( sal_Int32 nBorderStyle ) override;
-    virtual css::uno::Reference< ov::msforms::XNewFont > getFont() override;
+    virtual cpo::uno::Reference< ov::msforms::XNewFont > getFont() override;
     // XFrame methods
     cpo::uno::Any Controls( const cpo::uno::Any& rIndex ) override;
     //XHelperInterface
@@ -55,7 +55,7 @@ public:
     virtual cpo::uno::Sequence<OUString> getServiceNames() override;
 
 private:
-    css::uno::Reference< css::awt::XControl > mxDialog;
+    cpo::uno::Reference< css::awt::XControl > mxDialog;
 };
 
 #endif // INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBAFRAME_HXX

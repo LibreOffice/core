@@ -17,8 +17,8 @@ namespace apitest
 TextPrinterSettings::~TextPrinterSettings() {}
 void TextPrinterSettings::testPrinterSettingsProperties()
 {
-    css::uno::Reference<css::beans::XPropertySet> xPrinterSettings(init(),
-                                                                   css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::beans::XPropertySet> xPrinterSettings(init(),
+                                                                   cpo::uno::UNO_QUERY_THROW);
 
     testBooleanProperty(xPrinterSettings, u"PrintGraphics"_ustr);
     testBooleanProperty(xPrinterSettings, u"PrintLeftPages"_ustr);

@@ -75,7 +75,7 @@ namespace SwUnoCursorHelper
             bool    FillValue( sal_uInt16 nWhichId, sal_uInt16 nMemberId, const cpo::uno::Any*& pAny );
     };
 
-    css::uno::Reference< css::text::XTextContent >
+    cpo::uno::Reference< css::text::XTextContent >
         GetNestedTextContent(SwTextNode const & rTextNode, sal_Int32 const nIndex,
             bool const bParent);
 
@@ -232,14 +232,14 @@ namespace SwUnoCursorHelper
     /// at most one of the out parameters gets assigned a non-null value
     /// o_rpPaM is newly allocated and must be deleted; other parameters not
     SW_DLLPUBLIC void GetSelectableFromAny(
-        css::uno::Reference<cpo::uno::XInterface> const& xIfc,
+        cpo::uno::Reference<cpo::uno::XInterface> const& xIfc,
         SwDoc & rTargetDoc,
         std::optional<SwPaM>& o_rpPaM, std::pair<UIName, FlyCntType> & o_rFrame,
         UIName & o_rTableName, SwUnoTableCursor const*& o_rpTableCursor,
         ::sw::mark::MarkBase const*& o_rpMark,
         std::vector<SdrObject *> & o_rSdrObjects);
 
-    css::uno::Reference<css::text::XFlatParagraphIterator>
+    cpo::uno::Reference<css::text::XFlatParagraphIterator>
             CreateFlatParagraphIterator(SwDoc &, sal_Int32,  bool);
 
     void SetCharStyle(SwDoc& rDoc, const cpo::uno::Any& rValue, SfxItemSet& rSet);

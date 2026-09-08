@@ -69,24 +69,24 @@ class DispatchProvider final : public ::cppu::WeakImplHelper< css::frame::XDispa
     /* member */
     private:
         /// reference to global service manager to create new services
-        css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+        cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
         /// weakreference to owner frame (Don't use a hard reference. Owner can't delete us then!)
         cpo::uno::WeakReference< css::frame::XFrame > m_xFrame;
         /// cache of some other dispatch provider which are registered inside configuration to handle special URL protocols
         HandlerCache m_aProtocolHandlerCache;
-        std::unordered_map<OUString, css::uno::Reference<css::frame::XDispatchProvider>>
+        std::unordered_map<OUString, cpo::uno::Reference<css::frame::XDispatchProvider>>
             m_aProtocolHandlers;
 
     /* interface */
     public:
 
-        DispatchProvider( css::uno::Reference< cpo::uno::XComponentContext >      xContext ,
-                          const css::uno::Reference< css::frame::XFrame >&        xFrame   );
+        DispatchProvider( cpo::uno::Reference< cpo::uno::XComponentContext >      xContext ,
+                          const cpo::uno::Reference< css::frame::XFrame >&        xFrame   );
 
-        virtual css::uno::Reference< css::frame::XDispatch >                       queryDispatch  ( const css::util::URL&                                       aURL             ,
+        virtual cpo::uno::Reference< css::frame::XDispatch >                       queryDispatch  ( const css::util::URL&                                       aURL             ,
                                                                                                              const OUString&                                      sTargetFrameName ,
                                                                                                                    sal_Int32                                             nSearchFlags     ) override;
-        virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptions    ) override;
+        virtual cpo::uno::Sequence< cpo::uno::Reference< css::frame::XDispatch > > queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptions    ) override;
 
         void ClearProtocolHandlers() { m_aProtocolHandlers.clear(); }
 
@@ -95,20 +95,20 @@ class DispatchProvider final : public ::cppu::WeakImplHelper< css::frame::XDispa
         // Let him protected! So nobody can use us as base ...
         virtual ~DispatchProvider() override;
 
-        css::uno::Reference< css::frame::XDispatch > implts_getOrCreateDispatchHelper   (       EDispatchHelper                            eHelper                       ,
-                                                                                          const css::uno::Reference< css::frame::XFrame >& xOwner                        ,
+        cpo::uno::Reference< css::frame::XDispatch > implts_getOrCreateDispatchHelper   (       EDispatchHelper                            eHelper                       ,
+                                                                                          const cpo::uno::Reference< css::frame::XFrame >& xOwner                        ,
                                                                                           const OUString&                           sTarget = OUString()   ,
                                                                                                 sal_Int32                                  nSearchFlags = 0              );
         static bool                                  implts_isLoadableContent           ( const css::util::URL&                            aURL                          );
-        css::uno::Reference< css::frame::XDispatch > implts_queryDesktopDispatch        ( const css::uno::Reference< css::frame::XFrame >&  xDesktop                      ,
+        cpo::uno::Reference< css::frame::XDispatch > implts_queryDesktopDispatch        ( const cpo::uno::Reference< css::frame::XFrame >&  xDesktop                      ,
                                                                                           const css::util::URL&                            aURL                          ,
                                                                                           const OUString&                           sTargetFrameName              ,
                                                                                                 sal_Int32                                  nSearchFlags                  );
-        css::uno::Reference< css::frame::XDispatch > implts_queryFrameDispatch          ( const css::uno::Reference< css::frame::XFrame >&  xFrame                        ,
+        cpo::uno::Reference< css::frame::XDispatch > implts_queryFrameDispatch          ( const cpo::uno::Reference< css::frame::XFrame >&  xFrame                        ,
                                                                                           const css::util::URL&                            aURL                          ,
                                                                                           const OUString&                           sTargetFrameName              ,
                                                                                                 sal_Int32                                  nSearchFlags                  );
-        css::uno::Reference< css::frame::XDispatch > implts_searchProtocolHandler       ( const css::util::URL&                            aURL                          );
+        cpo::uno::Reference< css::frame::XDispatch > implts_searchProtocolHandler       ( const css::util::URL&                            aURL                          );
 
 }; // class DispatchProvider
 

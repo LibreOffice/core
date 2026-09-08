@@ -29,7 +29,7 @@
 #include <rtl/ref.hxx>
 
 using namespace cppu;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
@@ -269,11 +269,11 @@ void RootItemContainer::getFastPropertyValue( cpo::uno::Any& aValue  ,
     return ourInfoHelper;
 }
 
-css::uno::Reference< css::beans::XPropertySetInfo > RootItemContainer::getPropertySetInfo()
+cpo::uno::Reference< css::beans::XPropertySetInfo > RootItemContainer::getPropertySetInfo()
 {
     // Create structure of propertysetinfo for baseclass "OPropertySetHelper".
     // (Use method "getInfoHelper()".)
-    static css::uno::Reference< css::beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
+    static cpo::uno::Reference< css::beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
 
     return xInfo;
 }

@@ -31,6 +31,7 @@ constexpr OUString WRITER_DOCSERVICE = u"com.sun.star.text.TextDocument"_ustr;
 constexpr OUString CALC_DOCSERVICE = u"com.sun.star.sheet.SpreadsheetDocument"_ustr;
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace {
 

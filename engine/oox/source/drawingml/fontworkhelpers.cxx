@@ -60,6 +60,7 @@
 #include <map>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 void FontworkHelpers::resetPropertyValueInVec(std::vector<beans::PropertyValue>& rPropVec,
                                               const OUString& rName)
@@ -73,7 +74,7 @@ void FontworkHelpers::resetPropertyValueInVec(std::vector<beans::PropertyValue>&
 }
 
 void FontworkHelpers::putCustomShapeIntoTextPathMode(
-    const css::uno::Reference<drawing::XShape>& xShape,
+    const cpo::uno::Reference<drawing::XShape>& xShape,
     const oox::drawingml::CustomShapePropertiesPtr& pCustomShapePropertiesPtr,
     const OUString& sMSPresetType, const bool bFromWordArt)
 {

@@ -25,6 +25,7 @@
 #include <docsh.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 Calc_SpreadsheetDocument_get_implementation(
@@ -32,7 +33,7 @@ Calc_SpreadsheetDocument_get_implementation(
 {
     SolarMutexGuard aGuard;
     ScDLL::Init();
-    css::uno::Reference<cpo::uno::XInterface> xInterface = sfx2::createSfxModelInstance(args,
+    cpo::uno::Reference<cpo::uno::XInterface> xInterface = sfx2::createSfxModelInstance(args,
         [](SfxModelFlags _nCreationFlags)
         {
             rtl::Reference<SfxObjectShell> pShell = new ScDocShell(_nCreationFlags);

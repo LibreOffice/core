@@ -42,7 +42,7 @@
 namespace frm
 {
 using namespace comphelper;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
@@ -251,7 +251,7 @@ OGridColumn::~OGridColumn()
     // Free the aggregate
     if (m_xAggregate.is())
     {
-        css::uno::Reference<cpo::uno::XInterface>  xIface;
+        cpo::uno::Reference<cpo::uno::XInterface>  xIface;
         m_xAggregate->setDelegator(xIface);
     }
 
@@ -547,7 +547,7 @@ void OGridColumn::read(const Reference<XObjectInputStream>& _rxInStream)
     }
 }
 
-TextFieldColumn::TextFieldColumn(const css::uno::Reference<cpo::uno::XComponentContext>& _rContext)
+TextFieldColumn::TextFieldColumn(const cpo::uno::Reference<cpo::uno::XComponentContext>& _rContext)
                                 :OGridColumn(_rContext, FRM_SUN_COMPONENT_TEXTFIELD)
 {
 }
@@ -555,9 +555,9 @@ TextFieldColumn::TextFieldColumn(const TextFieldColumn* _pCloneFrom)
                                 :OGridColumn( _pCloneFrom )
 {
 }
-css::uno::Reference< css::beans::XPropertySetInfo> TextFieldColumn::getPropertySetInfo()
+cpo::uno::Reference< css::beans::XPropertySetInfo> TextFieldColumn::getPropertySetInfo()
 {
-    css::uno::Reference< css::beans::XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
+    cpo::uno::Reference< css::beans::XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
 }
 ::cppu::IPropertyArrayHelper& TextFieldColumn::getInfoHelper()
@@ -581,7 +581,7 @@ rtl::Reference<OGridColumn> TextFieldColumn::createCloneColumn() const
     return new TextFieldColumn(this);
 }
 
-PatternFieldColumn::PatternFieldColumn(const css::uno::Reference<cpo::uno::XComponentContext>& _rContext)
+PatternFieldColumn::PatternFieldColumn(const cpo::uno::Reference<cpo::uno::XComponentContext>& _rContext)
                                 :OGridColumn(_rContext, FRM_SUN_COMPONENT_PATTERNFIELD)
 {
 }
@@ -589,9 +589,9 @@ PatternFieldColumn::PatternFieldColumn(const PatternFieldColumn* _pCloneFrom)
                                 :OGridColumn( _pCloneFrom )
 {
 }
-css::uno::Reference< css::beans::XPropertySetInfo> PatternFieldColumn::getPropertySetInfo()
+cpo::uno::Reference< css::beans::XPropertySetInfo> PatternFieldColumn::getPropertySetInfo()
 {
-    css::uno::Reference< css::beans::XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
+    cpo::uno::Reference< css::beans::XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
 }
 ::cppu::IPropertyArrayHelper& PatternFieldColumn::getInfoHelper()
@@ -615,7 +615,7 @@ rtl::Reference<OGridColumn> PatternFieldColumn::createCloneColumn() const
     return new PatternFieldColumn(this);
 }
 
-DateFieldColumn::DateFieldColumn(const css::uno::Reference<cpo::uno::XComponentContext>& _rContext)
+DateFieldColumn::DateFieldColumn(const cpo::uno::Reference<cpo::uno::XComponentContext>& _rContext)
                                 :OGridColumn(_rContext, FRM_SUN_COMPONENT_DATEFIELD)
 {
 }
@@ -623,9 +623,9 @@ DateFieldColumn::DateFieldColumn(const DateFieldColumn* _pCloneFrom)
                                 :OGridColumn( _pCloneFrom )
 {
 }
-css::uno::Reference< css::beans::XPropertySetInfo> DateFieldColumn::getPropertySetInfo()
+cpo::uno::Reference< css::beans::XPropertySetInfo> DateFieldColumn::getPropertySetInfo()
 {
-    css::uno::Reference< css::beans::XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
+    cpo::uno::Reference< css::beans::XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
 }
 ::cppu::IPropertyArrayHelper& DateFieldColumn::getInfoHelper()
@@ -649,7 +649,7 @@ rtl::Reference<OGridColumn> DateFieldColumn::createCloneColumn() const
     return new DateFieldColumn(this);
 }
 
-TimeFieldColumn::TimeFieldColumn(const css::uno::Reference<cpo::uno::XComponentContext>& _rContext)
+TimeFieldColumn::TimeFieldColumn(const cpo::uno::Reference<cpo::uno::XComponentContext>& _rContext)
                                 :OGridColumn(_rContext, FRM_SUN_COMPONENT_TIMEFIELD)
 {
 }
@@ -657,9 +657,9 @@ TimeFieldColumn::TimeFieldColumn(const TimeFieldColumn* _pCloneFrom)
                                 :OGridColumn( _pCloneFrom )
 {
 }
-css::uno::Reference< css::beans::XPropertySetInfo> TimeFieldColumn::getPropertySetInfo()
+cpo::uno::Reference< css::beans::XPropertySetInfo> TimeFieldColumn::getPropertySetInfo()
 {
-    css::uno::Reference< css::beans::XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
+    cpo::uno::Reference< css::beans::XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
 }
 ::cppu::IPropertyArrayHelper& TimeFieldColumn::getInfoHelper()
@@ -683,7 +683,7 @@ rtl::Reference<OGridColumn> TimeFieldColumn::createCloneColumn() const
     return new TimeFieldColumn(this);
 }
 
-NumericFieldColumn::NumericFieldColumn(const css::uno::Reference<cpo::uno::XComponentContext>& _rContext)
+NumericFieldColumn::NumericFieldColumn(const cpo::uno::Reference<cpo::uno::XComponentContext>& _rContext)
                                 :OGridColumn(_rContext, FRM_SUN_COMPONENT_NUMERICFIELD)
 {
 }
@@ -691,9 +691,9 @@ NumericFieldColumn::NumericFieldColumn(const NumericFieldColumn* _pCloneFrom)
                                 :OGridColumn( _pCloneFrom )
 {
 }
-css::uno::Reference< css::beans::XPropertySetInfo> NumericFieldColumn::getPropertySetInfo()
+cpo::uno::Reference< css::beans::XPropertySetInfo> NumericFieldColumn::getPropertySetInfo()
 {
-    css::uno::Reference< css::beans::XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
+    cpo::uno::Reference< css::beans::XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
 }
 ::cppu::IPropertyArrayHelper& NumericFieldColumn::getInfoHelper()
@@ -717,7 +717,7 @@ rtl::Reference<OGridColumn> NumericFieldColumn::createCloneColumn() const
     return new NumericFieldColumn(this);
 }
 
-CurrencyFieldColumn::CurrencyFieldColumn(const css::uno::Reference<cpo::uno::XComponentContext>& _rContext)
+CurrencyFieldColumn::CurrencyFieldColumn(const cpo::uno::Reference<cpo::uno::XComponentContext>& _rContext)
                                 :OGridColumn(_rContext, FRM_SUN_COMPONENT_CURRENCYFIELD)
 {
 }
@@ -725,9 +725,9 @@ CurrencyFieldColumn::CurrencyFieldColumn(const CurrencyFieldColumn* _pCloneFrom)
                                 :OGridColumn( _pCloneFrom )
 {
 }
-css::uno::Reference< css::beans::XPropertySetInfo> CurrencyFieldColumn::getPropertySetInfo()
+cpo::uno::Reference< css::beans::XPropertySetInfo> CurrencyFieldColumn::getPropertySetInfo()
 {
-    css::uno::Reference< css::beans::XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
+    cpo::uno::Reference< css::beans::XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
 }
 ::cppu::IPropertyArrayHelper& CurrencyFieldColumn::getInfoHelper()
@@ -751,7 +751,7 @@ rtl::Reference<OGridColumn> CurrencyFieldColumn::createCloneColumn() const
     return new CurrencyFieldColumn(this);
 }
 
-CheckBoxColumn::CheckBoxColumn(const css::uno::Reference<cpo::uno::XComponentContext>& _rContext)
+CheckBoxColumn::CheckBoxColumn(const cpo::uno::Reference<cpo::uno::XComponentContext>& _rContext)
                                 :OGridColumn(_rContext, FRM_SUN_COMPONENT_CHECKBOX)
 {
 }
@@ -759,9 +759,9 @@ CheckBoxColumn::CheckBoxColumn(const CheckBoxColumn* _pCloneFrom)
                                 :OGridColumn( _pCloneFrom )
 {
 }
-css::uno::Reference< css::beans::XPropertySetInfo> CheckBoxColumn::getPropertySetInfo()
+cpo::uno::Reference< css::beans::XPropertySetInfo> CheckBoxColumn::getPropertySetInfo()
 {
-    css::uno::Reference< css::beans::XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
+    cpo::uno::Reference< css::beans::XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
 }
 ::cppu::IPropertyArrayHelper& CheckBoxColumn::getInfoHelper()
@@ -785,7 +785,7 @@ rtl::Reference<OGridColumn> CheckBoxColumn::createCloneColumn() const
     return new CheckBoxColumn(this);
 }
 
-ComboBoxColumn::ComboBoxColumn(const css::uno::Reference<cpo::uno::XComponentContext>& _rContext)
+ComboBoxColumn::ComboBoxColumn(const cpo::uno::Reference<cpo::uno::XComponentContext>& _rContext)
                                 :OGridColumn(_rContext, FRM_SUN_COMPONENT_COMBOBOX)
 {
 }
@@ -793,9 +793,9 @@ ComboBoxColumn::ComboBoxColumn(const ComboBoxColumn* _pCloneFrom)
                                 :OGridColumn( _pCloneFrom )
 {
 }
-css::uno::Reference< css::beans::XPropertySetInfo> ComboBoxColumn::getPropertySetInfo()
+cpo::uno::Reference< css::beans::XPropertySetInfo> ComboBoxColumn::getPropertySetInfo()
 {
-    css::uno::Reference< css::beans::XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
+    cpo::uno::Reference< css::beans::XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
 }
 ::cppu::IPropertyArrayHelper& ComboBoxColumn::getInfoHelper()
@@ -819,7 +819,7 @@ rtl::Reference<OGridColumn> ComboBoxColumn::createCloneColumn() const
     return new ComboBoxColumn(this);
 }
 
-ListBoxColumn::ListBoxColumn(const css::uno::Reference<cpo::uno::XComponentContext>& _rContext)
+ListBoxColumn::ListBoxColumn(const cpo::uno::Reference<cpo::uno::XComponentContext>& _rContext)
                                 :OGridColumn(_rContext, FRM_SUN_COMPONENT_LISTBOX)
 {
 }
@@ -827,9 +827,9 @@ ListBoxColumn::ListBoxColumn(const ListBoxColumn* _pCloneFrom)
                                 :OGridColumn( _pCloneFrom )
 {
 }
-css::uno::Reference< css::beans::XPropertySetInfo> ListBoxColumn::getPropertySetInfo()
+cpo::uno::Reference< css::beans::XPropertySetInfo> ListBoxColumn::getPropertySetInfo()
 {
-    css::uno::Reference< css::beans::XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
+    cpo::uno::Reference< css::beans::XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
 }
 ::cppu::IPropertyArrayHelper& ListBoxColumn::getInfoHelper()
@@ -853,7 +853,7 @@ rtl::Reference<OGridColumn> ListBoxColumn::createCloneColumn() const
     return new ListBoxColumn(this);
 }
 
-FormattedFieldColumn::FormattedFieldColumn(const css::uno::Reference<cpo::uno::XComponentContext>& _rContext)
+FormattedFieldColumn::FormattedFieldColumn(const cpo::uno::Reference<cpo::uno::XComponentContext>& _rContext)
                                 :OGridColumn(_rContext, FRM_SUN_COMPONENT_FORMATTEDFIELD)
 {
 }
@@ -861,9 +861,9 @@ FormattedFieldColumn::FormattedFieldColumn(const FormattedFieldColumn* _pCloneFr
                                 :OGridColumn( _pCloneFrom )
 {
 }
-css::uno::Reference< css::beans::XPropertySetInfo> FormattedFieldColumn::getPropertySetInfo()
+cpo::uno::Reference< css::beans::XPropertySetInfo> FormattedFieldColumn::getPropertySetInfo()
 {
-    css::uno::Reference< css::beans::XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
+    cpo::uno::Reference< css::beans::XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
 }
 ::cppu::IPropertyArrayHelper& FormattedFieldColumn::getInfoHelper()

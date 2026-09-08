@@ -28,7 +28,7 @@
 #include <com/sun/star/view/XPrintable.hpp>
 #include <com/sun/star/view/XPrintJobBroadcaster.hpp>
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -48,8 +48,8 @@ public:
     virtual ~SfxPrintHelper() override ;
 
     void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
-    virtual void addPrintJobListener( const css::uno::Reference< css::view::XPrintJobListener >& xListener ) override;
-    virtual void removePrintJobListener( const css::uno::Reference< css::view::XPrintJobListener >& xListener ) override;
+    virtual void addPrintJobListener( const cpo::uno::Reference< css::view::XPrintJobListener >& xListener ) override;
+    virtual void removePrintJobListener( const cpo::uno::Reference< css::view::XPrintJobListener >& xListener ) override;
     virtual cpo::uno::Sequence< css::beans::PropertyValue > getPrinter() override;
     virtual void setPrinter( const cpo::uno::Sequence< css::beans::PropertyValue >& seqPrinter ) override;
     virtual void print( const cpo::uno::Sequence< css::beans::PropertyValue >& seqOptions ) override;

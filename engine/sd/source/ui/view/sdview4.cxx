@@ -68,6 +68,7 @@
 #include <tools/debug.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 namespace sd {
 
@@ -521,7 +522,7 @@ IMPL_LINK_NOARG(View, DropInsertFileHdl, Timer *, void)
             if (bShallowDetect)
             {
                 mxDropMediaSizeListener.set(new avmedia::PlayerListener(
-                    [this, aCurrentDropFile](const css::uno::Reference<css::media::XPlayer>& rPlayer){
+                    [this, aCurrentDropFile](const cpo::uno::Reference<css::media::XPlayer>& rPlayer){
                         SolarMutexGuard g;
 
                         css::awt::Size aSize = rPlayer->getPreferredPlayerWindowSize();

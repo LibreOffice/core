@@ -44,8 +44,8 @@
 #include <macroloader.hxx>
 
 
-using namespace css;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 
 

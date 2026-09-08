@@ -32,12 +32,12 @@ class XMLFilterTestDialog : public weld::GenericDialogController
 {
 public:
     XMLFilterTestDialog(weld::Window* pParent,
-        const css::uno::Reference< cpo::uno::XComponentContext >& rxContext);
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext);
     virtual ~XMLFilterTestDialog() override;
 
     void test( const filter_info_impl& rFilterInfo );
 
-    void updateCurrentDocumentButtonState( css::uno::Reference< css::lang::XComponent > const * pRef = nullptr );
+    void updateCurrentDocumentButtonState( cpo::uno::Reference< css::lang::XComponent > const * pRef = nullptr );
 
 private:
     DECL_LINK(ClickHdl_Impl, weld::Button&, void);
@@ -47,14 +47,14 @@ private:
     void onImportBrowse();
     void initDialog();
 
-    css::uno::Reference< css::lang::XComponent > getFrontMostDocument( const OUString& rServiceName );
+    cpo::uno::Reference< css::lang::XComponent > getFrontMostDocument( const OUString& rServiceName );
     void import( const OUString& rURL );
     static void displayXMLFile( const OUString& rURL );
-    void doExport( const css::uno::Reference< css::lang::XComponent >& xComp );
+    void doExport( const cpo::uno::Reference< css::lang::XComponent >& xComp );
 
 private:
-    css::uno::Reference< cpo::uno::XComponentContext >              mxContext;
-    css::uno::Reference< css::document::XDocumentEventBroadcaster > mxGlobalBroadcaster;
+    cpo::uno::Reference< cpo::uno::XComponentContext >              mxContext;
+    cpo::uno::Reference< css::document::XDocumentEventBroadcaster > mxGlobalBroadcaster;
     rtl::Reference< GlobalEventListenerImpl >                       mxGlobalEventListener;
     cpo::uno::WeakReference< css::lang::XComponent >                mxLastFocusModel;
 

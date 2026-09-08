@@ -28,10 +28,10 @@
 
 namespace lang  = css::lang;
 namespace ucb = css::ucb;
-namespace uno = css::uno;
+namespace uno = cpo::uno;
 
 
-using css::uno::Reference;
+using cpo::uno::Reference;
 
 constexpr OUString PROP_SUPPRESS_LICENSE = u"SUPPRESS_LICENSE"_ustr;
 

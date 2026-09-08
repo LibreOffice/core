@@ -91,7 +91,8 @@
 #include <swtestviewcallback.hxx>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 static std::ostream& operator<<(std::ostream& os, ViewShellId id)
 {
@@ -3660,7 +3661,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testCondCollCopy)
 
     // When getting the text selection, then make sure it doesn't crash:
     uno::Reference<datatransfer::XTransferable2> xTransferable(pXTextDocument->getSelection(),
-                                                               css::uno::UNO_QUERY);
+                                                               cpo::uno::UNO_QUERY);
     datatransfer::DataFlavor aFlavor;
     aFlavor.MimeType = u"text/plain;charset=utf-16"_ustr;
     aFlavor.DataType = cppu::UnoType<OUString>::get();

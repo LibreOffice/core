@@ -77,45 +77,45 @@ class ChartTypeTemplate : public ::cppu::WeakImplHelper<
         css::lang::XServiceName >
 {
 public:
-    explicit ChartTypeTemplate( css::uno::Reference< cpo::uno::XComponentContext > const & xContext,
+    explicit ChartTypeTemplate( cpo::uno::Reference< cpo::uno::XComponentContext > const & xContext,
         OUString aServiceName );
     virtual ~ChartTypeTemplate() override;
 
     rtl::Reference< ::chart::Diagram > createDiagramByDataSource2(
-        const css::uno::Reference< css::chart2::data::XDataSource >& xDataSource,
+        const cpo::uno::Reference< css::chart2::data::XDataSource >& xDataSource,
         const cpo::uno::Sequence< css::beans::PropertyValue >& aArguments );
 
     // ____ XChartTypeTemplate ____
-    virtual css::uno::Reference< css::chart2::XDiagram > createDiagramByDataSource(
-        const css::uno::Reference< css::chart2::data::XDataSource >& xDataSource,
+    virtual cpo::uno::Reference< css::chart2::XDiagram > createDiagramByDataSource(
+        const cpo::uno::Reference< css::chart2::data::XDataSource >& xDataSource,
         const cpo::uno::Sequence< css::beans::PropertyValue >& aArguments ) override final;
     /// denotes if the chart needs categories at the first scale
     virtual bool supportsCategories() override;
     virtual void changeDiagram(
-        const css::uno::Reference< css::chart2::XDiagram >& xDiagram ) override final;
+        const cpo::uno::Reference< css::chart2::XDiagram >& xDiagram ) override final;
     virtual void changeDiagramData(
-        const css::uno::Reference< css::chart2::XDiagram >& xDiagram,
-        const css::uno::Reference< css::chart2::data::XDataSource >& xDataSource,
+        const cpo::uno::Reference< css::chart2::XDiagram >& xDiagram,
+        const cpo::uno::Reference< css::chart2::data::XDataSource >& xDataSource,
         const cpo::uno::Sequence< css::beans::PropertyValue >& aArguments ) override final;
     virtual bool matchesTemplate(
-        const css::uno::Reference< css::chart2::XDiagram >& xDiagram,
+        const cpo::uno::Reference< css::chart2::XDiagram >& xDiagram,
         bool bAdaptProperties ) override final;
-    virtual css::uno::Reference< cpo::uno::XInterface > getDataInterpreter() override final;
-    virtual css::uno::Reference< ::css::chart2::XChartType > getChartTypeForNewSeries(
-        const cpo::uno::Sequence< css::uno::Reference< css::chart2::XChartType > >& aFormerlyUsedChartTypes ) override final;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > getDataInterpreter() override final;
+    virtual cpo::uno::Reference< ::css::chart2::XChartType > getChartTypeForNewSeries(
+        const cpo::uno::Sequence< cpo::uno::Reference< css::chart2::XChartType > >& aFormerlyUsedChartTypes ) override final;
     virtual void applyStyle(
-        const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
+        const cpo::uno::Reference< css::chart2::XDataSeries >& xSeries,
         ::sal_Int32 nChartTypeIndex,
         ::sal_Int32 nSeriesIndex,
         ::sal_Int32 nSeriesCount ) override final;
     virtual void resetStyles(
-        const css::uno::Reference< css::chart2::XDiagram >& xDiagram ) override final;
+        const cpo::uno::Reference< css::chart2::XDiagram >& xDiagram ) override final;
 
     void changeDiagram(
         const rtl::Reference< ::chart::Diagram >& xDiagram );
     void changeDiagramData(
         const rtl::Reference< ::chart::Diagram >& xDiagram,
-        const css::uno::Reference< css::chart2::data::XDataSource >& xDataSource,
+        const cpo::uno::Reference< css::chart2::data::XDataSource >& xDataSource,
         const cpo::uno::Sequence< css::beans::PropertyValue >& aArguments );
     virtual bool matchesTemplate2(
         const rtl::Reference< ::chart::Diagram >& xDiagram,
@@ -193,7 +193,7 @@ public:
      */
     virtual void adaptScales(
         const std::vector< rtl::Reference< ::chart::BaseCoordinateSystem > > & aCooSysSeq,
-        const css::uno::Reference< css::chart2::data::XLabeledDataSequence > & xCategories );
+        const cpo::uno::Reference< css::chart2::data::XLabeledDataSequence > & xCategories );
 
     /** create a data series tree, that fits the requirements of the chart type.
 
@@ -252,7 +252,7 @@ public:
     virtual void adaptAxes(
         const std::vector< rtl::Reference< ::chart::BaseCoordinateSystem > > & rCoordSys );
 
-    const css::uno::Reference< cpo::uno::XComponentContext >&
+    const cpo::uno::Reference< cpo::uno::XComponentContext >&
         GetComponentContext() const { return m_xContext;}
 
     static void copyPropertiesFromOldToNewCoordinateSystem(
@@ -260,7 +260,7 @@ public:
                     const rtl::Reference< ChartType > & xNewChartType );
 
 protected:
-    css::uno::Reference< cpo::uno::XComponentContext >  m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext >  m_xContext;
     mutable rtl::Reference< ::chart::DataInterpreter > m_xDataInterpreter;
 
 private:
@@ -274,7 +274,7 @@ private:
                           std::vector<
                               rtl::Reference<
                                   ::chart::DataSeries > > > & aSeriesSeq,
-                      const css::uno::Reference< css::chart2::data::XLabeledDataSequence >& xCategories,
+                      const cpo::uno::Reference< css::chart2::data::XLabeledDataSequence >& xCategories,
                       const std::vector< rtl::Reference< ChartType > > & aOldChartTypesSeq);
 };
 

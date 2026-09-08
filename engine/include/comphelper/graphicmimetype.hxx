@@ -25,7 +25,7 @@ namespace com::sun::star::io
 {
 class XInputStream;
 }
-namespace com::sun::star::uno
+namespace cpo::uno
 {
 template <class interface_type> class Reference;
 }
@@ -39,9 +39,9 @@ class COMPHELPER_DLLPUBLIC GraphicMimeTypeHelper
 public:
     static OUString GetMimeTypeForExtension(std::string_view rExt);
     static OUString
-    GetMimeTypeForXGraphic(const css::uno::Reference<css::graphic::XGraphic>& xGraphic);
+    GetMimeTypeForXGraphic(const cpo::uno::Reference<css::graphic::XGraphic>& xGraphic);
     static OUString
-    GetMimeTypeForImageStream(const css::uno::Reference<css::io::XInputStream>& xInputStream);
+    GetMimeTypeForImageStream(const cpo::uno::Reference<css::io::XInputStream>& xInputStream);
     static OUString GetMimeTypeForConvertDataFormat(ConvertDataFormat convertDataFormat);
     static char const* GetExtensionForConvertDataFormat(ConvertDataFormat nFormat);
 };

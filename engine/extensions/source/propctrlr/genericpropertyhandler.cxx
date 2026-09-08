@@ -48,7 +48,7 @@
 namespace pcr
 {
 
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
 using namespace cpo::uno;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::script;
@@ -312,7 +312,7 @@ using namespace cpo::uno;
         m_xComponent.set( xIntrospectionAccess->queryAdapter( cppu::UnoType<XPropertySet>::get() ), UNO_QUERY_THROW );
         // now that we survived so far, remember m_xComponentIntrospectionAccess
         m_xComponentIntrospectionAccess = std::move(xIntrospectionAccess);
-        m_xPropertyState.set(m_xComponent, css::uno::UNO_QUERY);
+        m_xPropertyState.set(m_xComponent, cpo::uno::UNO_QUERY);
 
         m_bPropertyMapInitialized = false;
         m_aProperties.clear();
@@ -614,11 +614,11 @@ using namespace cpo::uno;
         m_xTypeConverter.clear();
         m_xPropertyState.clear();
     }
-    void GenericPropertyHandler::addEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener )
+    void GenericPropertyHandler::addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& Listener )
     {
         GenericPropertyHandler_Base::WeakComponentImplHelperBase::addEventListener( Listener );
     }
-    void GenericPropertyHandler::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener )
+    void GenericPropertyHandler::removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& Listener )
     {
         GenericPropertyHandler_Base::WeakComponentImplHelperBase::removeEventListener( Listener );
     }

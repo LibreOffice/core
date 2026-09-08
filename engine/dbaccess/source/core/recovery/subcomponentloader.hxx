@@ -39,13 +39,13 @@ namespace dbaccess
     {
     public:
         SubComponentLoader(
-            const css::uno::Reference< css::frame::XController >& i_rApplicationController,
-            const css::uno::Reference< css::ucb::XCommandProcessor >& i_rSubDocumentDefinition
+            const cpo::uno::Reference< css::frame::XController >& i_rApplicationController,
+            const cpo::uno::Reference< css::ucb::XCommandProcessor >& i_rSubDocumentDefinition
         );
 
         SubComponentLoader(
-            const css::uno::Reference< css::frame::XController >& i_rApplicationController,
-            const css::uno::Reference< css::lang::XComponent >& i_rNonDocumentComponent
+            const cpo::uno::Reference< css::frame::XController >& i_rApplicationController,
+            const cpo::uno::Reference< css::lang::XComponent >& i_rNonDocumentComponent
         );
 
         // XWindowListener
@@ -61,9 +61,9 @@ namespace dbaccess
         virtual ~SubComponentLoader() override;
 
     private:
-        const css::uno::Reference< css::ucb::XCommandProcessor >  mxDocDefCommands;
-        const css::uno::Reference< css::lang::XComponent >        mxNonDocComponent;
-        css::uno::Reference< css::awt::XWindow >                  mxAppComponentWindow;
+        const cpo::uno::Reference< css::ucb::XCommandProcessor >  mxDocDefCommands;
+        const cpo::uno::Reference< css::lang::XComponent >        mxNonDocComponent;
+        cpo::uno::Reference< css::awt::XWindow >                  mxAppComponentWindow;
     };
 
 } // namespace dbaccess

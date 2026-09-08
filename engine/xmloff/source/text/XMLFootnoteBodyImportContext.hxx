@@ -20,7 +20,7 @@
 #pragma once
 
 #include <xmloff/xmlictxt.hxx>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 
 
 /// import foot- and endnote body elements (<text:footnote-body>)
@@ -33,9 +33,9 @@ public:
 
 protected:
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
 };
 

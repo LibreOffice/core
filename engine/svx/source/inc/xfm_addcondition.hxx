@@ -35,11 +35,11 @@ namespace svxform
             ,public ::comphelper::OPropertyArrayUsageHelper< OAddConditionDialog >
     {
     public:
-        static css::uno::Reference< cpo::uno::XInterface >
-            Create( const css::uno::Reference< css::lang::XMultiServiceFactory >& );
+        static cpo::uno::Reference< cpo::uno::XInterface >
+            Create( const cpo::uno::Reference< css::lang::XMultiServiceFactory >& );
 
     private:
-        OAddConditionDialog( const css::uno::Reference< cpo::uno::XComponentContext >& _rxORB );
+        OAddConditionDialog( const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxORB );
 
         // XTypeProvider
         virtual cpo::uno::Sequence<sal_Int8> getImplementationId(  ) override;
@@ -49,21 +49,21 @@ namespace svxform
         virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
         // XPropertySet
-        virtual css::uno::Reference<css::beans::XPropertySetInfo>  getPropertySetInfo() override;
+        virtual cpo::uno::Reference<css::beans::XPropertySetInfo>  getPropertySetInfo() override;
         virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
         // OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
 
         // OGenericUnoDialog overridables
-        virtual std::unique_ptr<weld::DialogController> createDialog(const css::uno::Reference<css::awt::XWindow>& rParent) override;
+        virtual std::unique_ptr<weld::DialogController> createDialog(const cpo::uno::Reference<css::awt::XWindow>& rParent) override;
         virtual void executedDialog(sal_Int16 _nExecutionResult) override;
 
-        css::uno::Reference< css::beans::XPropertySet >
+        cpo::uno::Reference< css::beans::XPropertySet >
                                 m_xBinding;
         OUString                m_sFacetName;
         OUString                m_sConditionValue;
-        css::uno::Reference< css::xforms::XModel >
+        cpo::uno::Reference< css::xforms::XModel >
                                 m_xWorkModel;
     };
 

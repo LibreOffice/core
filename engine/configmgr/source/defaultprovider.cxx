@@ -19,7 +19,7 @@
 
 #include <sal/config.h>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/XInterface.hpp>
 #include <osl/mutex.hxx>
@@ -34,7 +34,7 @@ com_sun_star_comp_configuration_DefaultProvider_get_implementation(
     cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     osl::MutexGuard guard(*configmgr::lock());
-    css::uno::Reference<cpo::uno::XInterface> singleton(
+    cpo::uno::Reference<cpo::uno::XInterface> singleton(
         configmgr::configuration_provider::createDefault(context));
     singleton->acquire();
     return singleton.get();

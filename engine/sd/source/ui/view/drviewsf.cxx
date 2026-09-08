@@ -66,6 +66,7 @@
 
 using namespace svx::sidebar;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace sd {
 

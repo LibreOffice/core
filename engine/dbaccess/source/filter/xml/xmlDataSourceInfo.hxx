@@ -29,7 +29,7 @@ namespace dbaxml
 
         OXMLDataSourceInfo( ODBFilter& rImport,
                 sal_Int32 nElement,
-                const css::uno::Reference< css::xml::sax::XFastAttributeList > & _xAttrList);
+                const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & _xAttrList);
         virtual ~OXMLDataSourceInfo() override;
     };
 } // namespace dbaxml

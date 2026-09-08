@@ -44,26 +44,26 @@ private:
     VclPtr<vcl::Window> m_xContentArea;
     bool        m_bInitialStateChange;
 
-    css::uno::Reference< css::frame::XFrame2 >
+    cpo::uno::Reference< css::frame::XFrame2 >
                     m_xMeAsFrame;
-    css::uno::Reference< css::beans::XPropertySet >
+    cpo::uno::Reference< css::beans::XPropertySet >
                     m_xBrowserController;
-    css::uno::Reference< css::frame::XModel >
+    cpo::uno::Reference< css::frame::XModel >
                     m_xContextDocument;
 
     SdrView*        pView;
     virtual bool Close() override;
 
-    typedef std::vector< css::uno::Reference< cpo::uno::XInterface> > InterfaceArray;
+    typedef std::vector< cpo::uno::Reference< cpo::uno::XInterface> > InterfaceArray;
 
-    static cpo::uno::Sequence< css::uno::Reference< cpo::uno::XInterface > >
+    static cpo::uno::Sequence< cpo::uno::Reference< cpo::uno::XInterface > >
         CreateMultiSelectionSequence( const SdrMarkList& _rMarkList );
     void implSetNewObjectSequence( const cpo::uno::Sequence
-        < css::uno::Reference< cpo::uno::XInterface > >& _rObjectSeq );
+        < cpo::uno::Reference< cpo::uno::XInterface > >& _rObjectSeq );
 
-    void implSetNewObject( const css::uno::Reference< css::beans::XPropertySet >& _rxObject);
+    void implSetNewObject( const cpo::uno::Reference< css::beans::XPropertySet >& _rxObject);
 
-    static OUString GetHeadlineName( const css::uno::Reference< css::beans::XPropertySet >& _rxObject);
+    static OUString GetHeadlineName( const cpo::uno::Reference< css::beans::XPropertySet >& _rxObject);
 
 public:
     explicit PropBrw (DialogWindowLayout&);
@@ -74,7 +74,7 @@ public:
     void    Update( const SfxViewShell* pShell );
 
 private:
-    void    ImplUpdate( const css::uno::Reference< css::frame::XModel >& _rxContextDocument, SdrView* pView );
+    void    ImplUpdate( const cpo::uno::Reference< css::frame::XModel >& _rxContextDocument, SdrView* pView );
     void    ImplDestroyController();
     void    ImplReCreateController();
 };

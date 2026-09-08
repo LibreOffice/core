@@ -33,7 +33,7 @@
 
 namespace com::sun::star::ucb { class XCommandEnvironment; }
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::ucb;
@@ -140,7 +140,7 @@ static std::unique_ptr<SvStream> lcl_CreateStream( const OUString& rFileName, St
 
 std::unique_ptr<SvStream>
 UcbStreamHelper::CreateStream(const OUString& rFileName, StreamMode eOpenMode,
-                              const css::uno::Reference<css::awt::XWindow>& xParentWin,
+                              const cpo::uno::Reference<css::awt::XWindow>& xParentWin,
                               bool bUseSimpleFileAccessInteraction)
 {
     // related tdf#99312
@@ -158,7 +158,7 @@ UcbStreamHelper::CreateStream(const OUString& rFileName, StreamMode eOpenMode,
 
 std::unique_ptr<SvStream>
 UcbStreamHelper::CreateStream(const OUString& rFileName, StreamMode eOpenMode, bool bFileExists,
-                              const css::uno::Reference<css::awt::XWindow> & xParentWin,
+                              const cpo::uno::Reference<css::awt::XWindow> & xParentWin,
                               bool bUseSimpleFileAccessInteraction)
 {
     // related tdf#99312

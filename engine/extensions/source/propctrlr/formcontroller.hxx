@@ -45,13 +45,13 @@ namespace pcr
                             ,public FormController_PropertyBase2
     {
     private:
-        css::uno::Reference< css::beans::XPropertySet >
+        cpo::uno::Reference< css::beans::XPropertySet >
                                     m_xCurrentInspectee;
         OUString                    m_sImplementationName;
         cpo::uno::Sequence<OUString> m_aSupportedServiceNames;
     public:
         FormController(
-            const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
             OUString sImplementName,
             const cpo::uno::Sequence<OUString>& aSupportedServiceNames,
             bool _bUseFormFormComponentHandlers
@@ -68,7 +68,7 @@ namespace pcr
         virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
         // XPropertySet and friends
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+        virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
         virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
 

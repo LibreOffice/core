@@ -86,13 +86,13 @@ public:
     virtual bool hasLocale( const css::lang::Locale& rLocale ) override;
 
     // XHyphenator
-    virtual css::uno::Reference< css::linguistic2::XHyphenatedWord > hyphenate( const OUString& aWord, const css::lang::Locale& aLocale, sal_Int16 nMaxLeading, const cpo::uno::Sequence< css::beans::PropertyValue >& aProperties ) override;
-    virtual css::uno::Reference< css::linguistic2::XHyphenatedWord > queryAlternativeSpelling( const OUString& aWord, const css::lang::Locale& aLocale, sal_Int16 nIndex, const cpo::uno::Sequence< css::beans::PropertyValue >& aProperties ) override;
-    virtual css::uno::Reference< css::linguistic2::XPossibleHyphens > createPossibleHyphens( const OUString& aWord, const css::lang::Locale& aLocale, const cpo::uno::Sequence< css::beans::PropertyValue >& aProperties ) override;
+    virtual cpo::uno::Reference< css::linguistic2::XHyphenatedWord > hyphenate( const OUString& aWord, const css::lang::Locale& aLocale, sal_Int16 nMaxLeading, const cpo::uno::Sequence< css::beans::PropertyValue >& aProperties ) override;
+    virtual cpo::uno::Reference< css::linguistic2::XHyphenatedWord > queryAlternativeSpelling( const OUString& aWord, const css::lang::Locale& aLocale, sal_Int16 nIndex, const cpo::uno::Sequence< css::beans::PropertyValue >& aProperties ) override;
+    virtual cpo::uno::Reference< css::linguistic2::XPossibleHyphens > createPossibleHyphens( const OUString& aWord, const css::lang::Locale& aLocale, const cpo::uno::Sequence< css::beans::PropertyValue >& aProperties ) override;
 
     // XLinguServiceEventBroadcaster
-    virtual bool addLinguServiceEventListener( const css::uno::Reference< css::linguistic2::XLinguServiceEventListener >& rxLstnr ) override;
-    virtual bool removeLinguServiceEventListener( const css::uno::Reference< css::linguistic2::XLinguServiceEventListener >& rxLstnr ) override;
+    virtual bool addLinguServiceEventListener( const cpo::uno::Reference< css::linguistic2::XLinguServiceEventListener >& rxLstnr ) override;
+    virtual bool removeLinguServiceEventListener( const cpo::uno::Reference< css::linguistic2::XLinguServiceEventListener >& rxLstnr ) override;
 
     // XServiceDisplayName
     virtual OUString getServiceDisplayName( const css::lang::Locale& rLocale ) override;
@@ -102,8 +102,8 @@ public:
 
     // XComponent
     virtual void dispose() override;
-    virtual void addEventListener( const css::uno::Reference< css::lang::XEventListener >& rxListener ) override;
-    virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& rxListener ) override;
+    virtual void addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& rxListener ) override;
+    virtual void removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& rxListener ) override;
 
     // XServiceInfo
     virtual OUString getImplementationName() override;

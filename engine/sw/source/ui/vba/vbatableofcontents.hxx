@@ -29,13 +29,13 @@ typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XTableOfContents > SwV
 class SwVbaTableOfContents : public SwVbaTableOfContents_BASE
 {
 private:
-    css::uno::Reference< css::text::XTextDocument > mxTextDocument;
-    css::uno::Reference< css::text::XDocumentIndex > mxDocumentIndex;
-    css::uno::Reference< css::beans::XPropertySet > mxTocProps;
+    cpo::uno::Reference< css::text::XTextDocument > mxTextDocument;
+    cpo::uno::Reference< css::text::XDocumentIndex > mxDocumentIndex;
+    cpo::uno::Reference< css::beans::XPropertySet > mxTocProps;
 
 public:
     /// @throws cpo::uno::RuntimeException
-    SwVbaTableOfContents( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< cpo::uno::XComponentContext >& rContext, css::uno::Reference< css::text::XTextDocument >  xDoc, css::uno::Reference< css::text::XDocumentIndex >  xDocumentIndex );
+    SwVbaTableOfContents( const cpo::uno::Reference< ooo::vba::XHelperInterface >& rParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& rContext, cpo::uno::Reference< css::text::XTextDocument >  xDoc, cpo::uno::Reference< css::text::XDocumentIndex >  xDocumentIndex );
     virtual ~SwVbaTableOfContents() override;
 
     // Attributes

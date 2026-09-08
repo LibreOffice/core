@@ -218,7 +218,7 @@ public:
             Otherwise this list is expected to contain all the shapes in the
             called SdrObjList.
     */
-    void SetNavigationOrder (const css::uno::Reference<
+    void SetNavigationOrder (const cpo::uno::Reference<
                              css::container::XIndexAccess>& rxOrder);
 
     SAL_DLLPRIVATE virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;

@@ -36,39 +36,39 @@ class SwVbaFind : public SwVbaFind_BASE
 {
 private:
     rtl::Reference< SwXTextDocument > mxModel;
-    css::uno::Reference< css::text::XTextRange > mxTextRange;
-    css::uno::Reference< css::util::XPropertyReplace> mxPropertyReplace;
-    css::uno::Reference< css::text::XTextViewCursor> mxTVC;
-    css::uno::Reference< css::view::XSelectionSupplier> mxSelSupp;
+    cpo::uno::Reference< css::text::XTextRange > mxTextRange;
+    cpo::uno::Reference< css::util::XPropertyReplace> mxPropertyReplace;
+    cpo::uno::Reference< css::text::XTextViewCursor> mxTVC;
+    cpo::uno::Reference< css::view::XSelectionSupplier> mxSelSupp;
     bool mbReplace;
     sal_Int32 mnReplaceType;
     sal_Int32 mnWrap;
 
 private:
     /// @throws cpo::uno::RuntimeException
-    bool InRange( const css::uno::Reference< css::text::XTextRange >& xCurrentRange );
+    bool InRange( const cpo::uno::Reference< css::text::XTextRange >& xCurrentRange );
     /// @throws cpo::uno::RuntimeException
-    bool InEqualRange( const css::uno::Reference< css::text::XTextRange >& xCurrentRange );
+    bool InEqualRange( const cpo::uno::Reference< css::text::XTextRange >& xCurrentRange );
     void SetReplace( sal_Int32 type );
     /// @throws cpo::uno::RuntimeException
     void SetReplaceWith( const OUString& rText );
     /// @throws cpo::uno::RuntimeException
     OUString GetReplaceWith();
     /// @throws cpo::uno::RuntimeException
-    css::uno::Reference< css::text::XTextRange > FindOneElement();
+    cpo::uno::Reference< css::text::XTextRange > FindOneElement();
     /// @throws cpo::uno::RuntimeException
     bool SearchReplace();
 
     /// @throws cpo::uno::RuntimeException
-    SwVbaFind( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent,
-               const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
+    SwVbaFind( const cpo::uno::Reference< ooo::vba::XHelperInterface >& rParent,
+               const cpo::uno::Reference< cpo::uno::XComponentContext >& rContext,
                rtl::Reference< SwXTextDocument > xModel );
 public:
-    static css::uno::Reference< ooo::vba::word::XFind > GetOrCreateFind(
-                const css::uno::Reference< ooo::vba::XHelperInterface >& rParent,
-                const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
+    static cpo::uno::Reference< ooo::vba::word::XFind > GetOrCreateFind(
+                const cpo::uno::Reference< ooo::vba::XHelperInterface >& rParent,
+                const cpo::uno::Reference< cpo::uno::XComponentContext >& rContext,
                 const rtl::Reference< SwXTextDocument >& xModel,
-                const css::uno::Reference< css::text::XTextRange >& xTextRange);
+                const cpo::uno::Reference< css::text::XTextRange >& xTextRange);
     virtual ~SwVbaFind() override;
 
     // Attributes

@@ -26,7 +26,7 @@ class WpsContext final : public oox::drawingml::ShapeContext
 {
 public:
     WpsContext(oox::core::ContextHandler2Helper const& rParent,
-               css::uno::Reference<css::drawing::XShape> xShape,
+               cpo::uno::Reference<css::drawing::XShape> xShape,
                oox::drawingml::ShapePtr const& pMasterShapePtr,
                oox::drawingml::ShapePtr const& pShapePtr);
     ~WpsContext() override;
@@ -36,7 +36,7 @@ public:
     virtual void onEndElement() override;
 
 private:
-    css::uno::Reference<css::drawing::XShape> mxShape;
+    cpo::uno::Reference<css::drawing::XShape> mxShape;
     bool m_bHasWPGParent;
 };
 }

@@ -25,7 +25,7 @@ using namespace ::connectivity;
 
 namespace svxform
 {
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
 
     OSQLParserClient::OSQLParserClient(const Reference< cpo::uno::XComponentContext >& rxContext)
         : m_pParser(std::make_shared<OSQLParser>(rxContext, getParseContext()))
@@ -35,8 +35,8 @@ namespace svxform
     std::unique_ptr< ::connectivity::OSQLParseNode > OSQLParserClient::predicateTree(
             OUString& _rErrorMessage,
             const OUString& _rStatement,
-            const css::uno::Reference< css::util::XNumberFormatter >& _rxFormatter,
-            const css::uno::Reference< css::beans::XPropertySet >& _rxField
+            const cpo::uno::Reference< css::util::XNumberFormatter >& _rxFormatter,
+            const cpo::uno::Reference< css::beans::XPropertySet >& _rxField
         ) const
     {
         return m_pParser->predicateTree(_rErrorMessage, _rStatement, _rxFormatter, _rxField);

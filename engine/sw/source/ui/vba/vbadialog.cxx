@@ -42,13 +42,13 @@ const WordDialogTable aWordDialogTable[] =
     { 0, nullptr }
 };
 
-SwVbaDialog::SwVbaDialog( const css::uno::Reference< ov::XHelperInterface >& xParent,
-                 const css::uno::Reference< cpo::uno::XComponentContext > & xContext,
+SwVbaDialog::SwVbaDialog( const cpo::uno::Reference< ov::XHelperInterface >& xParent,
+                 const cpo::uno::Reference< cpo::uno::XComponentContext > & xContext,
                  const rtl::Reference< SwXTextDocument >& xModel,
                  sal_Int32 nIndex )
     : SwVbaDialog_BASE( xParent, xContext, nIndex ), m_xModel(xModel) {}
 
-css::uno::Reference< css::frame::XModel > SwVbaDialog::getModel() const
+cpo::uno::Reference< css::frame::XModel > SwVbaDialog::getModel() const
 {
     return static_cast<SfxBaseModel*>(m_xModel.get());
 }

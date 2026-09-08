@@ -25,13 +25,13 @@
 
 using namespace connectivity::sdbcx;
 using namespace connectivity;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::sdbc;
 using namespace connectivity::evoab;
 
 
-css::uno::Reference< css::beans::XPropertySet > OEvoabColumns::createObject(const OUString& _rName)
+cpo::uno::Reference< css::beans::XPropertySet > OEvoabColumns::createObject(const OUString& _rName)
 {
     const Any aCatalog;
     const OUString sCatalogName;

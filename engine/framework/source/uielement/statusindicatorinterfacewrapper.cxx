@@ -21,7 +21,7 @@
 #include <uielement/progressbarwrapper.hxx>
 
 using namespace cppu;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace com::sun::star::lang;
 
 namespace framework

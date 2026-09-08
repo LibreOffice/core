@@ -29,8 +29,8 @@
 class SdXMLGenericPageContext : public SvXMLImportContext
 {
     // the shape group this group is working on
-    css::uno::Reference< css::drawing::XShapes > mxShapes;
-    css::uno::Reference< css::office::XAnnotationAccess > mxAnnotationAccess;
+    cpo::uno::Reference< css::drawing::XShapes > mxShapes;
+    cpo::uno::Reference< css::office::XAnnotationAccess > mxAnnotationAccess;
 
 protected:
     OUString               maPageLayoutName;
@@ -60,25 +60,25 @@ protected:
     /** sets the globally unique identifier the element carried on this context's page */
     void SetGuid();
 
-    void SetShapes(css::uno::Reference< css::drawing::XShapes > const & rShapes);
+    void SetShapes(cpo::uno::Reference< css::drawing::XShapes > const & rShapes);
 
 public:
 
     SdXMLGenericPageContext( SvXMLImport& rImport,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
-        css::uno::Reference< css::drawing::XShapes > const & rShapes);
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+        cpo::uno::Reference< css::drawing::XShapes > const & rShapes);
     SdXMLGenericPageContext( SvXMLImport& rImport,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList);
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList);
     virtual ~SdXMLGenericPageContext() override;
 
-    virtual void startFastElement( sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+    virtual void startFastElement( sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
     virtual void endFastElement(sal_Int32 nElement) override;
 
-    const css::uno::Reference< css::drawing::XShapes >& GetLocalShapesContext() const
+    const cpo::uno::Reference< css::drawing::XShapes >& GetLocalShapesContext() const
         { return mxShapes; }
-    css::uno::Reference< css::drawing::XShapes >& GetLocalShapesContext()
+    cpo::uno::Reference< css::drawing::XShapes >& GetLocalShapesContext()
         { return mxShapes; }
 };
 

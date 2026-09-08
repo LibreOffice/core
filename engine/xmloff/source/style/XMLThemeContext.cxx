@@ -22,11 +22,12 @@
 #include <docmodel/theme/Theme.hxx>
 
 using namespace css;
+using namespace ::cpo;
 using namespace xmloff::token;
 
 XMLThemeContext::XMLThemeContext(
     SvXMLImport& rImport, const uno::Reference<xml::sax::XFastAttributeList>& xAttrList,
-    css::uno::Reference<cpo::uno::XInterface> const& xObjectWithThemeProperty)
+    cpo::uno::Reference<cpo::uno::XInterface> const& xObjectWithThemeProperty)
     : SvXMLImportContext(rImport)
     , m_xObjectWithThemeProperty(xObjectWithThemeProperty)
     , mpTheme(new model::Theme)

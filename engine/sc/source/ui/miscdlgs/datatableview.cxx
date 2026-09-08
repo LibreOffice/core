@@ -127,7 +127,7 @@ void ScDataTableRowView::HideEntries(SCCOLROW nPos, SCCOLROW nEndPos)
     }
 }
 
-ScDataTableView::ScDataTableView(const css::uno::Reference<css::awt::XWindow> &rParent, std::shared_ptr<ScDocument> pDoc) :
+ScDataTableView::ScDataTableView(const cpo::uno::Reference<css::awt::XWindow> &rParent, std::shared_ptr<ScDocument> pDoc) :
     Control(VCLUnoHelper::GetWindow(rParent)),
     mpDoc(std::move(pDoc)),
     mpSelectionEngine(new SelectionEngine(this)),

@@ -35,7 +35,7 @@ namespace connectivity
 using namespace comphelper;
 using namespace connectivity::sdbcx;
 using namespace dbtools;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbcx;
@@ -51,7 +51,7 @@ OKeysHelper::OKeysHelper(   OTableHelper* _pTable,
 {
 }
 
-css::uno::Reference< css::beans::XPropertySet > OKeysHelper::createObject(const OUString& _rName)
+cpo::uno::Reference< css::beans::XPropertySet > OKeysHelper::createObject(const OUString& _rName)
 {
     rtl::Reference< OTableKeyHelper > xRet;
 
@@ -107,8 +107,8 @@ static OUString getKeyRuleString(bool _bUpdate,sal_Int32 _nKeyRule)
 }
 
 void OKeysHelper::cloneDescriptorColumns(
-    const css::uno::Reference< css::beans::XPropertySet >& _rSourceDescriptor,
-    const css::uno::Reference< css::beans::XPropertySet >& _rDestDescriptor )
+    const cpo::uno::Reference< css::beans::XPropertySet >& _rSourceDescriptor,
+    const cpo::uno::Reference< css::beans::XPropertySet >& _rDestDescriptor )
 {
     Reference< XColumnsSupplier > xColSupp( _rSourceDescriptor, UNO_QUERY_THROW );
     Reference< XIndexAccess > xSourceCols( xColSupp->getColumns(), UNO_QUERY_THROW );
@@ -125,7 +125,7 @@ void OKeysHelper::cloneDescriptorColumns(
 }
 
 // XAppend
-css::uno::Reference< css::beans::XPropertySet > OKeysHelper::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
+cpo::uno::Reference< css::beans::XPropertySet > OKeysHelper::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     Reference< XConnection> xConnection = m_pTable->getConnection();
     if ( !xConnection.is() )
@@ -181,7 +181,7 @@ css::uno::Reference< css::beans::XPropertySet > OKeysHelper::appendObject( const
         {
             if ( i > 0 )
                 aSql.append(",");
-            xColProp.set(xColumns->getByIndex(i), css::uno::UNO_QUERY);
+            xColProp.set(xColumns->getByIndex(i), cpo::uno::UNO_QUERY);
             aSql.append( ::dbtools::quoteName( aQuote,getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME)))) );
 
         }

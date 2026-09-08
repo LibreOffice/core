@@ -73,13 +73,13 @@ namespace frm
                         buildStatusEvent() const;
 
         static void     doNotify(
-                    const css::uno::Reference< css::frame::XStatusListener >& _rxListener,
+                    const cpo::uno::Reference< css::frame::XStatusListener >& _rxListener,
                     const css::frame::FeatureStateEvent& _rEvent
                 );
 
         // XDispatch
-        virtual void addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& _rxControl, const css::util::URL& _rURL ) override;
-        virtual void removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& _rxControl, const css::util::URL& _rURL ) override;
+        virtual void addStatusListener( const cpo::uno::Reference< css::frame::XStatusListener >& _rxControl, const css::util::URL& _rURL ) override;
+        virtual void removeStatusListener( const cpo::uno::Reference< css::frame::XStatusListener >& _rxControl, const css::util::URL& _rURL ) override;
     };
 
 

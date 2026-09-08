@@ -21,7 +21,7 @@
 
 #include <test/testdllapi.hxx>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <vcl/window.hxx>
@@ -29,13 +29,13 @@
 class OOO_DLLPUBLIC_TEST XAccessibleEventBroadcasterTester
 {
 private:
-    const css::uno::Reference<css::accessibility::XAccessibleEventBroadcaster> mxBroadcaster;
+    const cpo::uno::Reference<css::accessibility::XAccessibleEventBroadcaster> mxBroadcaster;
     std::function<void()> m_aFireEventFunc;
 
     static bool isTransient(
-        const css::uno::Reference<css::accessibility::XAccessibleEventBroadcaster>& xBroadcaster);
+        const cpo::uno::Reference<css::accessibility::XAccessibleEventBroadcaster>& xBroadcaster);
     static bool
-    isTransient(const css::uno::Reference<css::accessibility::XAccessibleContext>& xCtx);
+    isTransient(const cpo::uno::Reference<css::accessibility::XAccessibleContext>& xCtx);
 
     void fireEvent();
 
@@ -47,7 +47,7 @@ public:
      * @param rFireEventFunc Function that triggers an accessible event for @c xBroadcaster.
      */
     XAccessibleEventBroadcasterTester(
-        const css::uno::Reference<css::accessibility::XAccessibleEventBroadcaster>& xBroadcaster,
+        const cpo::uno::Reference<css::accessibility::XAccessibleEventBroadcaster>& xBroadcaster,
         const std::function<void()>& rFireEventFunc);
 
     void testAddEventListener();
@@ -75,7 +75,7 @@ public:
      * @param pWindow Window for whose accessible events @c xBroadcaster is responsible.
      */
     WindowXAccessibleEventBroadcasterTester(
-        const css::uno::Reference<css::accessibility::XAccessibleEventBroadcaster>& xBroadcaster,
+        const cpo::uno::Reference<css::accessibility::XAccessibleEventBroadcaster>& xBroadcaster,
         vcl::Window* pWindow);
 
 private:

@@ -74,7 +74,7 @@ class ScXMLExport : public SvXMLExport
 {
     rtl::Reference<ScTableSheetObj> xCurrentTable;
 
-    css::uno::Reference<css::io::XInputStream> xSourceStream;
+    cpo::uno::Reference<css::io::XInputStream> xSourceStream;
     sal_Int64                   nSourceStreamPos;
 
     mutable std::unique_ptr<ScXMLEditAttributeMap> mpEditAttrMap;
@@ -138,9 +138,9 @@ class ScXMLExport : public SvXMLExport
     virtual void ExportContent_() override;
     virtual void ExportMeta_() override;
 
-    void CollectInternalShape(ScDocument& rDoc, css::uno::Reference< css::drawing::XShape > const & xShape);
+    void CollectInternalShape(ScDocument& rDoc, cpo::uno::Reference< css::drawing::XShape > const & xShape);
 
-    static css::table::CellRangeAddress GetEndAddress(const css::uno::Reference<css::sheet::XSpreadsheet>& xTable);
+    static css::table::CellRangeAddress GetEndAddress(const cpo::uno::Reference<css::sheet::XSpreadsheet>& xTable);
     static ScMyAreaLinksContainer GetAreaLinks(ScDocument& rDoc);
     ScMyDetectiveOpContainer GetDetectiveOpList(const ScDocument& rDoc);
     void WriteSingleColumn(const sal_Int32 nRepeatColumns, const sal_Int32 nStyleIndex,
@@ -170,7 +170,7 @@ class ScXMLExport : public SvXMLExport
     void FillColumnRowGroups(ScDocument& rDoc);
 
     bool GetMerged (const css::table::CellRangeAddress* pCellRange,
-        const css::uno::Reference <css::sheet::XSpreadsheet>& xTable);
+        const cpo::uno::Reference <css::sheet::XSpreadsheet>& xTable);
 
     void WriteTable(ScDocument& rDoc, sal_Int32 nTable, const rtl::Reference<ScTableSheetObj>& xTable);
     void WriteCell(ScDocument& rDoc, const ScMyCell& aCell, sal_Int32 nEqualCellCount);
@@ -179,7 +179,7 @@ class ScXMLExport : public SvXMLExport
     void WriteAreaLink(const ScMyCell& rMyCell);
     void WriteAnnotation(ScDocument& rDoc, const ScMyCell& rMyCell);
     void WriteDetective(const ScDocument& rDoc, const ScMyCell& rMyCell);
-    void ExportShape(const ScDocument& rDoc, const css::uno::Reference < css::drawing::XShape >& xShape, css::awt::Point* pPoint);
+    void ExportShape(const ScDocument& rDoc, const cpo::uno::Reference < css::drawing::XShape >& xShape, css::awt::Point* pPoint);
     void WriteShapes(const ScDocument& rDoc, const ScMyCell& rMyCell);
     void WriteTableShapes(const ScDocument& rDoc);
     void SetRepeatAttribute(sal_Int32 nEqualCellCount, bool bIncProgress);
@@ -191,7 +191,7 @@ class ScXMLExport : public SvXMLExport
     void WriteTableSource();
     void WriteScenario(const ScDocument& rDoc);   // core implementation
     void WriteTheLabelRanges(const ScDocument& rDoc, const rtl::Reference<ScModelObj>& xSpreadDoc);
-    void WriteLabelRanges(const ScDocument& rDoc, const css::uno::Reference< css::container::XIndexAccess >& xRangesIAccess, bool bColumn);
+    void WriteLabelRanges(const ScDocument& rDoc, const cpo::uno::Reference< css::container::XIndexAccess >& xRangesIAccess, bool bColumn);
     void WritePersons(const ScDocument& rDoc);
     void WriteNamedExpressions(const ScDocument& rDoc);
     void WriteExternalDataMapping(ScDocument& rDoc);
@@ -206,14 +206,14 @@ class ScXMLExport : public SvXMLExport
     void CollectUserDefinedNamespaces(const SfxItemPool* pPool, sal_uInt16 nAttrib);
 
     void AddStyleFromCells(
-        const css::uno::Reference< css::beans::XPropertySet >& xProperties,
-        const css::uno::Reference< css::sheet::XSpreadsheet >& xTable,
+        const cpo::uno::Reference< css::beans::XPropertySet >& xProperties,
+        const cpo::uno::Reference< css::sheet::XSpreadsheet >& xTable,
         sal_Int32 nTable, const OUString* pOldName );
     void AddStyleFromColumn(
-        const css::uno::Reference< css::beans::XPropertySet >& xColumnProperties,
+        const cpo::uno::Reference< css::beans::XPropertySet >& xColumnProperties,
         const OUString* pOldName, sal_Int32& rIndex, bool& rIsVisible );
     void AddStyleFromRow(
-        const css::uno::Reference< css::beans::XPropertySet >& xRowProperties,
+        const cpo::uno::Reference< css::beans::XPropertySet >& xRowProperties,
         const OUString* pOldName, sal_Int32& rIndex );
 
     void IncrementProgressBar(bool bFlush, sal_Int32 nInc = 1);
@@ -237,7 +237,7 @@ protected:
 
 public:
     ScXMLExport(
-        const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& rContext,
         OUString const & implementationName, SvXMLExportFlags nExportFlag);
 
     virtual ~ScXMLExport() override;
@@ -252,13 +252,13 @@ public:
     const rtl::Reference < XMLPropertySetMapper >& GetCellStylesPropertySetMapper() const { return xCellStylesPropertySetMapper; }
     const rtl::Reference < XMLPropertySetMapper >& GetTableStylesPropertySetMapper() const { return xTableStylesPropertySetMapper; }
 
-    void SetSourceStream( const css::uno::Reference<css::io::XInputStream>& xNewStream );
+    void SetSourceStream( const cpo::uno::Reference<css::io::XInputStream>& xNewStream );
 
     static void GetChangeTrackViewSettings(const ScDocument& rDoc, cpo::uno::Sequence<css::beans::PropertyValue>& rProps);
     virtual void GetViewSettings(cpo::uno::Sequence<css::beans::PropertyValue>& rProps) override;
     virtual void GetConfigurationSettings(cpo::uno::Sequence<css::beans::PropertyValue>& rProps) override;
 
-    virtual void exportAnnotationMeta( const css::uno::Reference < css::drawing::XShape >& xShape) override;
+    virtual void exportAnnotationMeta( const cpo::uno::Reference < css::drawing::XShape >& xShape) override;
 
     void SetSharedData(std::unique_ptr<ScMySharedData> pTemp);
     ScMySharedData* GetSharedData() { return pSharedData.get(); }
@@ -269,7 +269,7 @@ public:
     virtual ErrCode exportDoc( enum ::xmloff::token::XMLTokenEnum eClass = ::xmloff::token::XML_TOKEN_INVALID ) override;
 
     // XExporter
-    virtual void SAL_CALL setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
+    virtual void SAL_CALL setSourceDocument( const cpo::uno::Reference< css::lang::XComponent >& xDoc ) override;
 
     // XFilter
     virtual bool SAL_CALL filter( const cpo::uno::Sequence< css::beans::PropertyValue >& aDescriptor ) override;

@@ -13,7 +13,7 @@
 #include <com/sun/star/accessibility/XAccessibleTableSelection.hpp>
 #include <sal/log.hxx>
 
-static css::uno::Reference<css::accessibility::XAccessibleContext>
+static cpo::uno::Reference<css::accessibility::XAccessibleContext>
 getContext(AtkTableCell* pTableCell)
 {
     AtkObjectWrapper* pWrap = ATK_OBJECT_WRAPPER(pTableCell);
@@ -22,10 +22,10 @@ getContext(AtkTableCell* pTableCell)
         return pWrap->mpContext;
     }
 
-    return css::uno::Reference<css::accessibility::XAccessibleContext>();
+    return cpo::uno::Reference<css::accessibility::XAccessibleContext>();
 }
 
-static css::uno::Reference<css::accessibility::XAccessibleTable>
+static cpo::uno::Reference<css::accessibility::XAccessibleTable>
 getTableParent(AtkTableCell* pTableCell)
 {
     AtkObject* pParent = atk_object_get_parent(ATK_OBJECT(pTableCell));
@@ -34,13 +34,13 @@ getTableParent(AtkTableCell* pTableCell)
     {
         if (!pWrap->mpTable.is())
         {
-            pWrap->mpTable.set(pWrap->mpContext, css::uno::UNO_QUERY);
+            pWrap->mpTable.set(pWrap->mpContext, cpo::uno::UNO_QUERY);
         }
 
         return pWrap->mpTable;
     }
 
-    return css::uno::Reference<css::accessibility::XAccessibleTable>();
+    return cpo::uno::Reference<css::accessibility::XAccessibleTable>();
 }
 
 extern "C" {
@@ -50,11 +50,11 @@ static int tablecell_wrapper_get_column_span(AtkTableCell* cell)
     int nColumnExtent = -1;
     try
     {
-        css::uno::Reference<css::accessibility::XAccessibleContext> xContext = getContext(cell);
+        cpo::uno::Reference<css::accessibility::XAccessibleContext> xContext = getContext(cell);
         if (!xContext.is())
             return -1;
 
-        css::uno::Reference<css::accessibility::XAccessibleTable> xTable = getTableParent(cell);
+        cpo::uno::Reference<css::accessibility::XAccessibleTable> xTable = getTableParent(cell);
         if (xTable.is())
         {
             const sal_Int64 nChildIndex = xContext->getAccessibleIndexInParent();
@@ -76,23 +76,23 @@ static GPtrArray* tablecell_wrapper_get_column_header_cells(AtkTableCell* cell)
     GPtrArray* pHeaderCells = g_ptr_array_new();
     try
     {
-        css::uno::Reference<css::accessibility::XAccessibleContext> xContext = getContext(cell);
+        cpo::uno::Reference<css::accessibility::XAccessibleContext> xContext = getContext(cell);
         if (!xContext.is())
             return pHeaderCells;
 
-        css::uno::Reference<css::accessibility::XAccessibleTable> xTable = getTableParent(cell);
+        cpo::uno::Reference<css::accessibility::XAccessibleTable> xTable = getTableParent(cell);
         if (xTable.is())
         {
             const sal_Int64 nChildIndex = xContext->getAccessibleIndexInParent();
             const sal_Int32 nCol = xTable->getAccessibleColumn(nChildIndex);
-            css::uno::Reference<css::accessibility::XAccessibleTable> xHeaders
+            cpo::uno::Reference<css::accessibility::XAccessibleTable> xHeaders
                 = xTable->getAccessibleColumnHeaders();
             if (!xHeaders.is())
                 return pHeaderCells;
 
             for (sal_Int32 nRow = 0; nRow < xHeaders->getAccessibleRowCount(); nRow++)
             {
-                css::uno::Reference<css::accessibility::XAccessible> xCell
+                cpo::uno::Reference<css::accessibility::XAccessible> xCell
                     = xHeaders->getAccessibleCellAt(nRow, nCol);
                 AtkObject* pCell = atk_object_wrapper_ref(xCell);
                 g_ptr_array_add(pHeaderCells, pCell);
@@ -111,11 +111,11 @@ static gboolean tablecell_wrapper_get_position(AtkTableCell* cell, gint* row, gi
 {
     try
     {
-        css::uno::Reference<css::accessibility::XAccessibleContext> xContext = getContext(cell);
+        cpo::uno::Reference<css::accessibility::XAccessibleContext> xContext = getContext(cell);
         if (!xContext.is())
             return false;
 
-        css::uno::Reference<css::accessibility::XAccessibleTable> xTable = getTableParent(cell);
+        cpo::uno::Reference<css::accessibility::XAccessibleTable> xTable = getTableParent(cell);
         if (xTable.is())
         {
             const sal_Int64 nChildIndex = xContext->getAccessibleIndexInParent();
@@ -137,11 +137,11 @@ static gint tablecell_wrapper_get_row_span(AtkTableCell* cell)
     int nRowExtent = -1;
     try
     {
-        css::uno::Reference<css::accessibility::XAccessibleContext> xContext = getContext(cell);
+        cpo::uno::Reference<css::accessibility::XAccessibleContext> xContext = getContext(cell);
         if (!xContext.is())
             return -1;
 
-        css::uno::Reference<css::accessibility::XAccessibleTable> xTable = getTableParent(cell);
+        cpo::uno::Reference<css::accessibility::XAccessibleTable> xTable = getTableParent(cell);
         if (xTable.is())
         {
             const sal_Int64 nChildIndex = xContext->getAccessibleIndexInParent();
@@ -163,23 +163,23 @@ static GPtrArray* tablecell_wrapper_get_row_header_cells(AtkTableCell* cell)
     GPtrArray* pHeaderCells = g_ptr_array_new();
     try
     {
-        css::uno::Reference<css::accessibility::XAccessibleContext> xContext = getContext(cell);
+        cpo::uno::Reference<css::accessibility::XAccessibleContext> xContext = getContext(cell);
         if (!xContext.is())
             return pHeaderCells;
 
-        css::uno::Reference<css::accessibility::XAccessibleTable> xTable = getTableParent(cell);
+        cpo::uno::Reference<css::accessibility::XAccessibleTable> xTable = getTableParent(cell);
         if (xTable.is())
         {
             const sal_Int64 nChildIndex = xContext->getAccessibleIndexInParent();
             const sal_Int32 nRow = xTable->getAccessibleRow(nChildIndex);
-            css::uno::Reference<css::accessibility::XAccessibleTable> xHeaders
+            cpo::uno::Reference<css::accessibility::XAccessibleTable> xHeaders
                 = xTable->getAccessibleRowHeaders();
             if (!xHeaders.is())
                 return pHeaderCells;
 
             for (sal_Int32 nCol = 0; nCol < xHeaders->getAccessibleColumnCount(); nCol++)
             {
-                css::uno::Reference<css::accessibility::XAccessible> xCell
+                cpo::uno::Reference<css::accessibility::XAccessible> xCell
                     = xHeaders->getAccessibleCellAt(nRow, nCol);
                 AtkObject* pCell = atk_object_wrapper_ref(xCell);
                 g_ptr_array_add(pHeaderCells, pCell);
@@ -199,11 +199,11 @@ static gboolean tablecell_wrapper_get_row_column_span(AtkTableCell* cell, gint* 
 {
     try
     {
-        css::uno::Reference<css::accessibility::XAccessibleContext> xContext = getContext(cell);
+        cpo::uno::Reference<css::accessibility::XAccessibleContext> xContext = getContext(cell);
         if (!xContext.is())
             return -1;
 
-        css::uno::Reference<css::accessibility::XAccessibleTable> xTable = getTableParent(cell);
+        cpo::uno::Reference<css::accessibility::XAccessibleTable> xTable = getTableParent(cell);
         if (xTable.is())
         {
             const sal_Int64 nChildIndex = xContext->getAccessibleIndexInParent();
@@ -228,11 +228,11 @@ static AtkObject* tablecell_wrapper_get_table(AtkTableCell* cell)
 {
     try
     {
-        css::uno::Reference<css::accessibility::XAccessibleContext> xContext = getContext(cell);
+        cpo::uno::Reference<css::accessibility::XAccessibleContext> xContext = getContext(cell);
         if (!xContext.is())
             return nullptr;
 
-        css::uno::Reference<css::accessibility::XAccessible> xParent
+        cpo::uno::Reference<css::accessibility::XAccessible> xParent
             = getContext(cell)->getAccessibleParent();
         if (!xParent.is())
             return nullptr;

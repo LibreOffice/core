@@ -47,7 +47,7 @@ public:
     virtual void release() noexcept override;
 
     // XCurrentContext
-    virtual void handle( const css::uno::Reference< css::task::XInteractionRequest >& Request ) override;
+    virtual void handle( const cpo::uno::Reference< css::task::XInteractionRequest >& Request ) override;
 
 private:
     oslInterlockedCount m_aRefCount;

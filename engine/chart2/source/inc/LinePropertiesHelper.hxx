@@ -25,7 +25,7 @@
 
 namespace com::sun::star::beans { class XPropertySet; }
 namespace com::sun::star::beans { struct Property; }
-namespace com::sun::star::uno { template <class interface_type> class Reference; }
+namespace cpo::uno { template <class interface_type> class Reference; }
 
 namespace chart
 {
@@ -53,13 +53,13 @@ namespace LinePropertiesHelper
 
     void AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap );
 
-    bool IsLineVisible( const css::uno::Reference<
+    bool IsLineVisible( const cpo::uno::Reference<
         css::beans::XPropertySet >& xLineProperties );
-    void SetLineVisible( const css::uno::Reference<
+    void SetLineVisible( const cpo::uno::Reference<
         css::beans::XPropertySet >& xLineProperties );
-    void SetLineInvisible( const css::uno::Reference<
+    void SetLineInvisible( const cpo::uno::Reference<
         css::beans::XPropertySet >& xLineProperties );
-    void SetLineColor( const css::uno::Reference<
+    void SetLineColor( const cpo::uno::Reference<
         css::beans::XPropertySet >& xGridProperties, sal_Int32 nColor  );
 }
 

@@ -49,8 +49,8 @@
 #include <unotools/viewoptions.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::document;
@@ -236,7 +236,7 @@ void CuiConfigGroupListBox::ClearAll()
     m_xTreeView->clear();
 }
 
-void CuiConfigGroupListBox::FillScriptList(const css::uno::Reference< css::script::browse::XBrowseNode >& xRootNode,
+void CuiConfigGroupListBox::FillScriptList(const cpo::uno::Reference< css::script::browse::XBrowseNode >& xRootNode,
                                            const weld::TreeIter* pParentEntry)
 {
     try {
@@ -338,8 +338,8 @@ void CuiConfigGroupListBox::FillScriptList(const css::uno::Reference< css::scrip
     }
 }
 
-void CuiConfigGroupListBox::Init(const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
-    const css::uno::Reference< css::frame::XFrame >& xFrame)
+void CuiConfigGroupListBox::Init(const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
+    const cpo::uno::Reference< css::frame::XFrame >& xFrame)
 {
     m_xTreeView->freeze();
     ClearAll(); // Remove all old entries from treelist box
@@ -587,7 +587,7 @@ IMPL_LINK(CuiConfigGroupListBox, ExpandingHdl, const weld::TreeIter&, rIter, boo
  */
 
 SvxScriptSelectorDialog::SvxScriptSelectorDialog(
-    weld::Window* pParent, const css::uno::Reference< css::frame::XFrame >& xFrame)
+    weld::Window* pParent, const cpo::uno::Reference< css::frame::XFrame >& xFrame)
     : GenericDialogController(pParent, u"cui/ui/macroselectordialog.ui"_ustr, u"MacroSelectorDialog"_ustr)
     , m_xDialogDescription(m_xBuilder->weld_label(u"helpmacro"_ustr))
     , m_xCategories(new CuiConfigGroupListBox(m_xBuilder->weld_tree_view(u"categories"_ustr)))

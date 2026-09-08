@@ -32,7 +32,7 @@
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace css::lang;
 using namespace css::beans;
@@ -121,7 +121,7 @@ bool OGenericUnoDialog::convertFastPropertyValue( Any& rConvertedValue, Any& rOl
     {
         case UNODIALOG_PROPERTY_ID_PARENT:
         {
-            Reference<css::awt::XWindow> xNew(rValue, css::uno::UNO_QUERY);
+            Reference<css::awt::XWindow> xNew(rValue, cpo::uno::UNO_QUERY);
             if (xNew != m_xParent)
             {
                 rConvertedValue <<= xNew;

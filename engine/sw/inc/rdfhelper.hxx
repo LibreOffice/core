@@ -17,7 +17,7 @@
 
 #include "swdllapi.h"
 
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <cpo/uno/Sequence.h>
 
 class SwTextNode;
@@ -35,29 +35,29 @@ class SW_DLLPUBLIC SwRDFHelper
 {
 public:
     /// Gets all graph-names in RDF of a given type.
-    static cpo::uno::Sequence<css::uno::Reference<css::rdf::XURI>>
+    static cpo::uno::Sequence<cpo::uno::Reference<css::rdf::XURI>>
     getGraphNames(const rtl::Reference<SwXTextDocument>& xModel,
-                  const css::uno::Reference<css::rdf::XURI>& xType);
+                  const cpo::uno::Reference<css::rdf::XURI>& xType);
 
     /// Gets all graph-names in RDF of a given type.
-    static cpo::uno::Sequence<css::uno::Reference<css::rdf::XURI>>
+    static cpo::uno::Sequence<cpo::uno::Reference<css::rdf::XURI>>
     getGraphNames(const rtl::Reference<SwXTextDocument>& xModel, const OUString& rType);
 
     /// Gets all (XResource, key, value) statements in RDF graphs given the graph-names.
     static std::map<OUString, OUString>
     getStatements(const rtl::Reference<SwXTextDocument>& xModel,
-                  const cpo::uno::Sequence<css::uno::Reference<css::rdf::XURI>>& rGraphNames,
-                  const css::uno::Reference<css::rdf::XResource>& xSubject);
+                  const cpo::uno::Sequence<cpo::uno::Reference<css::rdf::XURI>>& rGraphNames,
+                  const cpo::uno::Reference<css::rdf::XResource>& xSubject);
 
     /// Gets all (XResource, key, value) statements in RDF graphs of type rType.
     static std::map<OUString, OUString>
     getStatements(const rtl::Reference<SwXTextDocument>& xModel, const OUString& rType,
-                  const css::uno::Reference<css::rdf::XResource>& xSubject);
+                  const cpo::uno::Reference<css::rdf::XResource>& xSubject);
 
     /// Add an (XResource, key, value) statement in the graph of type rType -- or if it does not exist, create a graph at rPath first.
     static void addStatement(const rtl::Reference<SwXTextDocument>& xModel,
                              const OUString& rType, const OUString& rPath,
-                             const css::uno::Reference<css::rdf::XResource>& xSubject,
+                             const cpo::uno::Reference<css::rdf::XResource>& xSubject,
                              const OUString& rKey, const OUString& rValue);
 
     /// Check if a graph of type rType exists.
@@ -67,13 +67,13 @@ public:
     /// Remove an (XResource, key, value) statement in the graph of type rType, if it exists.
     static void removeStatement(const rtl::Reference<SwXTextDocument>& xModel,
                                 const OUString& rType,
-                                const css::uno::Reference<css::rdf::XResource>& xSubject,
+                                const cpo::uno::Reference<css::rdf::XResource>& xSubject,
                                 const OUString& rKey, const OUString& rValue);
 
     /// Remove all statements in the graph of type rType, if any exists.
     static void clearStatements(const rtl::Reference<SwXTextDocument>& xModel,
                                 const OUString& rType,
-                                const css::uno::Reference<css::rdf::XResource>& xSubject);
+                                const cpo::uno::Reference<css::rdf::XResource>& xSubject);
 
     /// Gets all (rTextNode, key, value) statements in RDF graphs of type rType.
     static std::map<OUString, OUString> getTextNodeStatements(const OUString& rType, SwTextNode& rTextNode);

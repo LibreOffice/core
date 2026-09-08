@@ -52,7 +52,7 @@ class HistogramDataSequence final
 public:
     using ::comphelper::WeakComponentImplHelperBase::disposing;
     explicit HistogramDataSequence(
-        const css::uno::Reference<css::chart2::data::XDataSequence>& xRawData, bool bIsCategory,
+        const cpo::uno::Reference<css::chart2::data::XDataSequence>& xRawData, bool bIsCategory,
         sal_Int32 nFrequencyType = 0, double fBinWidth = 0.0, sal_Int32 nBinCount = 0,
         bool bUseUnderflowBin = false, double fUnderflowBinValue = 0.0,
         bool bUseOverflowBin = false, double fOverflowBinValue = 0.0);
@@ -75,7 +75,7 @@ public:
 
     /// declare property methods
     /// @see css::beans::XPropertySet
-    virtual css::uno::Reference<css::beans::XPropertySetInfo> getPropertySetInfo() override;
+    virtual cpo::uno::Reference<css::beans::XPropertySetInfo> getPropertySetInfo() override;
     virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
 
@@ -96,14 +96,14 @@ public:
 
     // XCloneable
     /// @see css::util::XCloneable
-    virtual css::uno::Reference<css::util::XCloneable> createClone() override;
+    virtual cpo::uno::Reference<css::util::XCloneable> createClone() override;
 
     // XModifyListener
     /// @see css::util::XModifyListener
     virtual void
-    addModifyListener(const css::uno::Reference<css::util::XModifyListener>& aListener) override;
+    addModifyListener(const cpo::uno::Reference<css::util::XModifyListener>& aListener) override;
     virtual void
-    removeModifyListener(const css::uno::Reference<css::util::XModifyListener>& aListener) override;
+    removeModifyListener(const cpo::uno::Reference<css::util::XModifyListener>& aListener) override;
     virtual void modified(const css::lang::EventObject& aEvent) override;
     virtual void disposing(const css::lang::EventObject& Source) override;
 
@@ -114,7 +114,7 @@ private:
     OUString m_sRole;
     cpo::uno::Sequence<OUString> mxLabels;
     cpo::uno::Sequence<cpo::uno::Any> mxValues;
-    css::uno::Reference<css::chart2::data::XDataSequence> m_xRawData;
+    cpo::uno::Reference<css::chart2::data::XDataSequence> m_xRawData;
     bool m_bIsCategory;
     bool m_bIsDirty;
 

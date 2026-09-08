@@ -25,7 +25,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XFrame2.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <comphelper/OAccessible.hxx>
@@ -41,6 +41,7 @@
 #include <test/a11y/AccessibilityTools.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 void test::AccessibleTestBase::setUp()
 {

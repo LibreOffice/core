@@ -75,15 +75,15 @@ public:
 
     // ____ XComponent ____
     virtual void dispose() override;
-    virtual void addEventListener( const css::uno::Reference<
+    virtual void addEventListener( const cpo::uno::Reference<
                                             css::lang::XEventListener >& xListener ) override;
-    virtual void removeEventListener( const css::uno::Reference<
+    virtual void removeEventListener( const cpo::uno::Reference<
                                                css::lang::XEventListener >& aListener ) override;
 
     // ____ chart::XAxis ____
-    virtual css::uno::Reference< css::beans::XPropertySet > getAxisTitle(  ) override;
-    virtual css::uno::Reference< css::beans::XPropertySet > getMajorGrid(  ) override;
-    virtual css::uno::Reference< css::beans::XPropertySet > getMinorGrid(  ) override;
+    virtual cpo::uno::Reference< css::beans::XPropertySet > getAxisTitle(  ) override;
+    virtual cpo::uno::Reference< css::beans::XPropertySet > getMajorGrid(  ) override;
+    virtual cpo::uno::Reference< css::beans::XPropertySet > getMinorGrid(  ) override;
 
     // ____ XShape ____
     virtual css::awt::Point getPosition() override;
@@ -95,19 +95,19 @@ public:
     virtual OUString getShapeType() override;
 
     // ____ XNumberFormatsSupplier ____
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
                 css::beans::XPropertySet > getNumberFormatSettings() override;
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
                 css::util::XNumberFormats > getNumberFormats() override;
 
 protected:
     // ____ WrappedPropertySet ____
     virtual const cpo::uno::Sequence< css::beans::Property >& getPropertySequence() override;
     virtual std::vector< std::unique_ptr<WrappedProperty> > createWrappedProperties() override;
-    virtual css::uno::Reference< css::beans::XPropertySet > getInnerPropertySet() override;
+    virtual cpo::uno::Reference< css::beans::XPropertySet > getInnerPropertySet() override;
 
 private: //methods
-    css::uno::Reference< css::chart2::XAxis > getAxis();
+    cpo::uno::Reference< css::chart2::XAxis > getAxis();
 
 private: //member
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;

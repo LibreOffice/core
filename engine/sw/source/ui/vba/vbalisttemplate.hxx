@@ -33,11 +33,11 @@ private:
 
 public:
     /// @throws cpo::uno::RuntimeException
-    SwVbaListTemplate( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< cpo::uno::XComponentContext >& rContext, const css::uno::Reference< css::text::XTextDocument >& xTextDoc, sal_Int32 nGalleryType, sal_Int32 nTemplateType );
+    SwVbaListTemplate( const cpo::uno::Reference< ooo::vba::XHelperInterface >& rParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& rContext, const cpo::uno::Reference< css::text::XTextDocument >& xTextDoc, sal_Int32 nGalleryType, sal_Int32 nTemplateType );
     virtual ~SwVbaListTemplate() override;
 
     /// @throws cpo::uno::RuntimeException
-    void applyListTemplate( css::uno::Reference< css::beans::XPropertySet > const & xProps );
+    void applyListTemplate( cpo::uno::Reference< css::beans::XPropertySet > const & xProps );
 
     // Methods
     virtual cpo::uno::Any SAL_CALL ListLevels( const cpo::uno::Any& index ) override;

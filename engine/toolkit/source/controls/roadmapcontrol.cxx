@@ -30,7 +30,7 @@ namespace toolkit
 {
 
 
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
 using namespace cpo::uno;
     using namespace ::com::sun::star::awt;
     using namespace ::com::sun::star::lang;
@@ -325,12 +325,12 @@ using namespace cpo::uno;
     }
 
 
-    void UnoControlRoadmapModel::addContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener )
+    void UnoControlRoadmapModel::addContainerListener( const cpo::uno::Reference< css::container::XContainerListener >& xListener )
     {
         maContainerListeners.addInterface( xListener );
     }
 
-    void UnoControlRoadmapModel::removeContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener )
+    void UnoControlRoadmapModel::removeContainerListener( const cpo::uno::Reference< css::container::XContainerListener >& xListener )
     {
         maContainerListeners.removeInterface( xListener );
     }
@@ -363,7 +363,7 @@ bool UnoRoadmapControl::setModel(const Reference< XControlModel >& _rModel)
 
         bool bReturn = UnoControlBase::setModel( _rModel );
 
-        xC.set(getModel(), css::uno::UNO_QUERY);
+        xC.set(getModel(), cpo::uno::UNO_QUERY);
         if ( xC.is() )
             xC->addContainerListener( this );
 

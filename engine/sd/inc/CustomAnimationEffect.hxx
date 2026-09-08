@@ -57,12 +57,12 @@ class CustomAnimationEffect final
     friend class EffectSequenceHelper;
 
 public:
-    CustomAnimationEffect( const css::uno::Reference< css::animations::XAnimationNode >& xNode );
+    CustomAnimationEffect( const cpo::uno::Reference< css::animations::XAnimationNode >& xNode );
     ~CustomAnimationEffect();
 
-    const css::uno::Reference< css::animations::XAnimationNode >& getNode() const { return mxNode; }
-    void setNode( const css::uno::Reference< css::animations::XAnimationNode >& xNode );
-    void replaceNode( const css::uno::Reference< css::animations::XAnimationNode >& xNode );
+    const cpo::uno::Reference< css::animations::XAnimationNode >& getNode() const { return mxNode; }
+    void setNode( const cpo::uno::Reference< css::animations::XAnimationNode >& xNode );
+    void replaceNode( const cpo::uno::Reference< css::animations::XAnimationNode >& xNode );
 
     CustomAnimationEffectPtr clone() const;
 
@@ -148,23 +148,23 @@ public:
     bool checkForText( const std::vector<sal_Int32>* paragraphNumberingLevel = nullptr );
     bool calculateIterateDuration();
 
-    void setAudio( const css::uno::Reference< css::animations::XAudio >& xAudio );
+    void setAudio( const cpo::uno::Reference< css::animations::XAudio >& xAudio );
     bool getStopAudio() const;
     void setStopAudio();
     void createAudio( const cpo::uno::Any& rSource );
     void setAudioSource( const cpo::uno::Any& rSource );
     void removeAudio();
-    const css::uno::Reference< css::animations::XAudio >& getAudio() const { return mxAudio; }
+    const cpo::uno::Reference< css::animations::XAudio >& getAudio() const { return mxAudio; }
 
     EffectSequenceHelper*   getEffectSequence() const { return mpEffectSequence; }
 
     // helper
     /// @throws cpo::uno::Exception
-    css::uno::Reference< css::animations::XAnimationNode > createAfterEffectNode() const;
-    css::uno::Reference< css::drawing::XShape > getTargetShape() const;
+    cpo::uno::Reference< css::animations::XAnimationNode > createAfterEffectNode() const;
+    cpo::uno::Reference< css::drawing::XShape > getTargetShape() const;
 
     // static helpers
-    static sal_Int32 get_node_type( const css::uno::Reference< css::animations::XAnimationNode >& xNode );
+    static sal_Int32 get_node_type( const cpo::uno::Reference< css::animations::XAnimationNode >& xNode );
     static sal_Int32 getNumberOfSubitems( const cpo::uno::Any& aTarget, sal_Int16 nIterateType );
 
     rtl::Reference<SdrPathObj> createSdrPathObjFromPath(SdrModel& rTargetModel);
@@ -196,8 +196,8 @@ private:
 
     EffectSequenceHelper* mpEffectSequence;
 
-    css::uno::Reference< css::animations::XAnimationNode > mxNode;
-    css::uno::Reference< css::animations::XAudio > mxAudio;
+    cpo::uno::Reference< css::animations::XAnimationNode > mxNode;
+    cpo::uno::Reference< css::animations::XAudio > mxAudio;
     cpo::uno::Any maTarget;
 
     bool        mbHasAfterEffect;
@@ -207,9 +207,9 @@ private:
 
 struct stl_CustomAnimationEffect_search_node_predict
 {
-    stl_CustomAnimationEffect_search_node_predict( const css::uno::Reference< css::animations::XAnimationNode >& xSearchNode );
+    stl_CustomAnimationEffect_search_node_predict( const cpo::uno::Reference< css::animations::XAnimationNode >& xSearchNode );
     bool operator()( const CustomAnimationEffectPtr& pEffect ) const;
-    const css::uno::Reference< css::animations::XAnimationNode >& mxSearchNode;
+    const cpo::uno::Reference< css::animations::XAnimationNode >& mxSearchNode;
 };
 
 /** this listener is implemented by UI components to track changes in the animation core */
@@ -229,7 +229,7 @@ class CustomAnimationTextGroup
     friend class EffectSequenceHelper;
 
 public:
-    CustomAnimationTextGroup( const css::uno::Reference< css::drawing::XShape >& rTarget, sal_Int32 nGroupId );
+    CustomAnimationTextGroup( const cpo::uno::Reference< css::drawing::XShape >& rTarget, sal_Int32 nGroupId );
 
     void reset();
     void addEffect( CustomAnimationEffectPtr const & pEffect );
@@ -245,7 +245,7 @@ public:
 
 private:
     EffectSequence maEffects;
-    css::uno::Reference< css::drawing::XShape > maTarget;
+    cpo::uno::Reference< css::drawing::XShape > maTarget;
 
     enum { PARA_LEVELS = 5 };
 
@@ -267,10 +267,10 @@ friend class MainSequence;
 
 public:
     SAL_DLLPRIVATE EffectSequenceHelper();
-    SAL_DLLPRIVATE EffectSequenceHelper( css::uno::Reference< css::animations::XTimeContainer > xSequenceRoot );
+    SAL_DLLPRIVATE EffectSequenceHelper( cpo::uno::Reference< css::animations::XTimeContainer > xSequenceRoot );
     SAL_DLLPRIVATE virtual ~EffectSequenceHelper();
 
-    SAL_DLLPRIVATE virtual css::uno::Reference< css::animations::XAnimationNode > getRootNode();
+    SAL_DLLPRIVATE virtual cpo::uno::Reference< css::animations::XAnimationNode > getRootNode();
 
     SAL_DLLPRIVATE CustomAnimationEffectPtr append( const CustomAnimationPresetPtr& pDescriptor, const cpo::uno::Any& rTarget, double fDuration );
     SAL_DLLPRIVATE CustomAnimationEffectPtr append( const SdrPathObj& rPathObj, const cpo::uno::Any& rTarget, double fDuration, const OUString& rPresetId );
@@ -280,20 +280,20 @@ public:
     SAL_DLLPRIVATE void remove( const CustomAnimationEffectPtr& pEffect );
     SAL_DLLPRIVATE void moveToBeforeEffect( const CustomAnimationEffectPtr& pEffect,  const CustomAnimationEffectPtr& pInsertBefore);
 
-    SAL_DLLPRIVATE void create( const css::uno::Reference< css::animations::XAnimationNode >& xNode );
-    SAL_DLLPRIVATE void createEffectsequence( const css::uno::Reference< css::animations::XAnimationNode >& xNode );
-    SAL_DLLPRIVATE void processAfterEffect( const css::uno::Reference< css::animations::XAnimationNode >& xNode );
-    SAL_DLLPRIVATE void createEffects( const css::uno::Reference< css::animations::XAnimationNode >& xNode );
+    SAL_DLLPRIVATE void create( const cpo::uno::Reference< css::animations::XAnimationNode >& xNode );
+    SAL_DLLPRIVATE void createEffectsequence( const cpo::uno::Reference< css::animations::XAnimationNode >& xNode );
+    SAL_DLLPRIVATE void processAfterEffect( const cpo::uno::Reference< css::animations::XAnimationNode >& xNode );
+    SAL_DLLPRIVATE void createEffects( const cpo::uno::Reference< css::animations::XAnimationNode >& xNode );
 
     SAL_DLLPRIVATE sal_Int32 getCount() const { return sal::static_int_cast< sal_Int32 >( maEffects.size() ); }
 
-    SAL_DLLPRIVATE virtual CustomAnimationEffectPtr findEffect( const css::uno::Reference< css::animations::XAnimationNode >& xNode ) const;
+    SAL_DLLPRIVATE virtual CustomAnimationEffectPtr findEffect( const cpo::uno::Reference< css::animations::XAnimationNode >& xNode ) const;
 
-    SAL_DLLPRIVATE virtual bool disposeShape( const css::uno::Reference< css::drawing::XShape >& xShape );
+    SAL_DLLPRIVATE virtual bool disposeShape( const cpo::uno::Reference< css::drawing::XShape >& xShape );
     SAL_DLLPRIVATE virtual void insertTextRange( const cpo::uno::Any& aTarget );
     SAL_DLLPRIVATE virtual void disposeTextRange( const cpo::uno::Any& aTarget, bool bPreviousParagraphEmpty );
-    SAL_DLLPRIVATE virtual bool hasEffect( const css::uno::Reference< css::drawing::XShape >& xShape );
-    SAL_DLLPRIVATE virtual void onTextChanged( const css::uno::Reference< css::drawing::XShape >& xShape );
+    SAL_DLLPRIVATE virtual bool hasEffect( const cpo::uno::Reference< css::drawing::XShape >& xShape );
+    SAL_DLLPRIVATE virtual void onTextChanged( const cpo::uno::Reference< css::drawing::XShape >& xShape );
 
     /** this method rebuilds the animation nodes */
     SAL_DLLPRIVATE virtual void rebuild();
@@ -320,8 +320,8 @@ public:
 
     SAL_DLLPRIVATE sal_Int32 getSequenceType() const { return mnSequenceType; }
 
-    SAL_DLLPRIVATE const css::uno::Reference< css::drawing::XShape >& getTriggerShape() const { return mxEventSource; }
-    SAL_DLLPRIVATE void setTriggerShape( const css::uno::Reference< css::drawing::XShape >& xTrigger ) { mxEventSource = xTrigger; }
+    SAL_DLLPRIVATE const cpo::uno::Reference< css::drawing::XShape >& getTriggerShape() const { return mxEventSource; }
+    SAL_DLLPRIVATE void setTriggerShape( const cpo::uno::Reference< css::drawing::XShape >& xTrigger ) { mxEventSource = xTrigger; }
 
     SAL_DLLPRIVATE virtual sal_Int32 getOffsetFromEffect( const CustomAnimationEffectPtr& xEffect ) const;
     SAL_DLLPRIVATE virtual CustomAnimationEffectPtr getEffectFromOffset( sal_Int32 nOffset ) const;
@@ -336,15 +336,15 @@ protected:
 
     SAL_DLLPRIVATE void updateTextGroups();
 
-    SAL_DLLPRIVATE bool getParagraphNumberingLevels( const css::uno::Reference< css::drawing::XShape >& xShape, std::vector< sal_Int32 >& rParagraphNumberingLevel );
+    SAL_DLLPRIVATE bool getParagraphNumberingLevels( const cpo::uno::Reference< css::drawing::XShape >& xShape, std::vector< sal_Int32 >& rParagraphNumberingLevel );
 
 protected:
-    css::uno::Reference< css::animations::XTimeContainer > mxSequenceRoot;
+    cpo::uno::Reference< css::animations::XTimeContainer > mxSequenceRoot;
     EffectSequence maEffects;
     std::list< ISequenceListener* > maListeners;
     CustomAnimationTextGroupMap maGroupMap;
     sal_Int32 mnSequenceType;
-    css::uno::Reference< css::drawing::XShape > mxEventSource;
+    cpo::uno::Reference< css::drawing::XShape > mxEventSource;
 };
 
 class MainSequence;
@@ -355,7 +355,7 @@ friend class MainSequence;
 friend class MainSequenceChangeGuard;
 
 public:
-    InteractiveSequence( const css::uno::Reference< css::animations::XTimeContainer >& xSequenceRoot, MainSequence* pMainSequence );
+    InteractiveSequence( const cpo::uno::Reference< css::animations::XTimeContainer >& xSequenceRoot, MainSequence* pMainSequence );
 
     /** this method rebuilds the animation nodes */
     virtual void rebuild() override;
@@ -377,28 +377,28 @@ class SAL_DLLPUBLIC_RTTI MainSequence final : public EffectSequenceHelper, publi
 
 public:
     MainSequence();
-    MainSequence( const css::uno::Reference< css::animations::XAnimationNode >& xTimingRootNode );
+    MainSequence( const cpo::uno::Reference< css::animations::XAnimationNode >& xTimingRootNode );
     virtual ~MainSequence() override;
 
-    SD_DLLPUBLIC virtual css::uno::Reference< css::animations::XAnimationNode > getRootNode() override;
-    void reset( const css::uno::Reference< css::animations::XAnimationNode >& xTimingRootNode );
+    SD_DLLPUBLIC virtual cpo::uno::Reference< css::animations::XAnimationNode > getRootNode() override;
+    void reset( const cpo::uno::Reference< css::animations::XAnimationNode >& xTimingRootNode );
 
     /** this method rebuilds the animation nodes */
     virtual void rebuild() override;
 
-    virtual CustomAnimationEffectPtr findEffect( const css::uno::Reference< css::animations::XAnimationNode >& xNode ) const override;
+    virtual CustomAnimationEffectPtr findEffect( const cpo::uno::Reference< css::animations::XAnimationNode >& xNode ) const override;
 
-    virtual bool disposeShape( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
+    virtual bool disposeShape( const cpo::uno::Reference< css::drawing::XShape >& xShape ) override;
     virtual void insertTextRange( const cpo::uno::Any& aTarget ) override;
     virtual void disposeTextRange( const cpo::uno::Any& aTarget, bool bPreviousParagraphEmpty ) override;
-    virtual bool hasEffect( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
-    virtual void onTextChanged( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
+    virtual bool hasEffect( const cpo::uno::Reference< css::drawing::XShape >& xShape ) override;
+    virtual void onTextChanged( const cpo::uno::Reference< css::drawing::XShape >& xShape ) override;
 
     const InteractiveSequenceVector& getInteractiveSequenceVector() const { return maInteractiveSequenceVector; }
 
     virtual void notify_change() override;
 
-    bool setTrigger( const CustomAnimationEffectPtr& pEffect, const css::uno::Reference< css::drawing::XShape >& xTriggerShape );
+    bool setTrigger( const CustomAnimationEffectPtr& pEffect, const cpo::uno::Reference< css::drawing::XShape >& xTriggerShape );
 
     /** starts a timer that recreates the internal structure from the API core after 1 second */
     void startRecreateTimer();
@@ -424,12 +424,12 @@ private:
     void createMainSequence();
     virtual void reset() override;
 
-    InteractiveSequencePtr createInteractiveSequence( const css::uno::Reference< css::drawing::XShape >& xShape );
+    InteractiveSequencePtr createInteractiveSequence( const cpo::uno::Reference< css::drawing::XShape >& xShape );
 
     InteractiveSequenceVector maInteractiveSequenceVector;
 
-    css::uno::Reference< css::util::XChangesListener > mxChangesListener;
-    css::uno::Reference< css::animations::XTimeContainer > mxTimingRootNode;
+    cpo::uno::Reference< css::util::XChangesListener > mxChangesListener;
+    cpo::uno::Reference< css::animations::XTimeContainer > mxTimingRootNode;
     Timer maTimer;
     bool mbTimerMode;
     bool mbRebuilding;

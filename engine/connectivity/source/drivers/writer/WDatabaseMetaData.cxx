@@ -24,6 +24,7 @@
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace connectivity::writer
 {

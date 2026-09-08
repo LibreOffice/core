@@ -28,7 +28,7 @@
 
 namespace sfx2 {
 
-PreventDuplicateInteraction::PreventDuplicateInteraction(css::uno::Reference< cpo::uno::XComponentContext > xContext)
+PreventDuplicateInteraction::PreventDuplicateInteraction(cpo::uno::Reference< cpo::uno::XComponentContext > xContext)
     : m_xContext(std::move(xContext))
 {
 }
@@ -37,7 +37,7 @@ PreventDuplicateInteraction::~PreventDuplicateInteraction()
 {
 }
 
-void PreventDuplicateInteraction::setHandler(const css::uno::Reference< css::task::XInteractionHandler >& xHandler)
+void PreventDuplicateInteraction::setHandler(const cpo::uno::Reference< css::task::XInteractionHandler >& xHandler)
 {
     // SAFE ->
     std::unique_lock aLock(m_aLock);
@@ -51,8 +51,8 @@ void PreventDuplicateInteraction::useDefaultUUIHandler()
     //if we use the default handler, set the parent to a window belonging to this object so that the dialogs
     //don't block unrelated windows.
     m_xWarningDialogsParent.reset(new WarningDialogsParentScope(m_xContext));
-    css::uno::Reference<css::task::XInteractionHandler> xHandler(css::task::InteractionHandler::createWithParent(
-        m_xContext, m_xWarningDialogsParent->GetDialogParent()), css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::task::XInteractionHandler> xHandler(css::task::InteractionHandler::createWithParent(
+        m_xContext, m_xWarningDialogsParent->GetDialogParent()), cpo::uno::UNO_QUERY_THROW);
 
     // SAFE ->
     std::unique_lock aLock(m_aLock);
@@ -65,14 +65,14 @@ cpo::uno::Any PreventDuplicateInteraction::queryInterface( const cpo::uno::Type&
     if ( aType.equals( cppu::UnoType<XInteractionHandler2>::get() ) )
     {
         std::unique_lock aLock(m_aLock);
-        css::uno::Reference< css::task::XInteractionHandler2 > xHandler( m_xHandler, css::uno::UNO_QUERY );
+        cpo::uno::Reference< css::task::XInteractionHandler2 > xHandler( m_xHandler, cpo::uno::UNO_QUERY );
         if ( !xHandler.is() )
             return cpo::uno::Any();
     }
     return ::cppu::WeakImplHelper<css::lang::XInitialization, css::task::XInteractionHandler2>::queryInterface(aType);
 }
 
-void PreventDuplicateInteraction::handle(const css::uno::Reference< css::task::XInteractionRequest >& xRequest)
+void PreventDuplicateInteraction::handle(const cpo::uno::Reference< css::task::XInteractionRequest >& xRequest)
 {
     cpo::uno::Any aRequest  = xRequest->getRequest();
     bool          bHandleIt = true;
@@ -91,7 +91,7 @@ void PreventDuplicateInteraction::handle(const css::uno::Reference< css::task::X
         bHandleIt = (rInfo.m_nCallCount <= rInfo.m_nMaxCount);
     }
 
-    css::uno::Reference< css::task::XInteractionHandler > xHandler = m_xHandler;
+    cpo::uno::Reference< css::task::XInteractionHandler > xHandler = m_xHandler;
 
     aLock.unlock();
     // <- SAFE
@@ -102,10 +102,10 @@ void PreventDuplicateInteraction::handle(const css::uno::Reference< css::task::X
     }
     else
     {
-        const cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > lContinuations = xRequest->getContinuations();
+        const cpo::uno::Sequence< cpo::uno::Reference< css::task::XInteractionContinuation > > lContinuations = xRequest->getContinuations();
         for (const auto& rContinuation : lContinuations)
         {
-            css::uno::Reference< css::task::XInteractionAbort > xAbort(rContinuation, css::uno::UNO_QUERY);
+            cpo::uno::Reference< css::task::XInteractionAbort > xAbort(rContinuation, cpo::uno::UNO_QUERY);
             if (xAbort.is())
             {
                 xAbort->select();
@@ -115,7 +115,7 @@ void PreventDuplicateInteraction::handle(const css::uno::Reference< css::task::X
     }
 }
 
-bool PreventDuplicateInteraction::handleInteractionRequest( const css::uno::Reference< css::task::XInteractionRequest >& xRequest )
+bool PreventDuplicateInteraction::handleInteractionRequest( const cpo::uno::Reference< css::task::XInteractionRequest >& xRequest )
 {
     cpo::uno::Any aRequest  = xRequest->getRequest();
     bool      bHandleIt = true;
@@ -134,7 +134,7 @@ bool PreventDuplicateInteraction::handleInteractionRequest( const css::uno::Refe
         bHandleIt = (rInfo.m_nCallCount <= rInfo.m_nMaxCount);
     }
 
-    css::uno::Reference< css::task::XInteractionHandler2 > xHandler( m_xHandler, css::uno::UNO_QUERY );
+    cpo::uno::Reference< css::task::XInteractionHandler2 > xHandler( m_xHandler, cpo::uno::UNO_QUERY );
     OSL_ENSURE( xHandler.is() || !m_xHandler.is(),
         "PreventDuplicateInteraction::handleInteractionRequest: inconsistency!" );
 
@@ -147,10 +147,10 @@ bool PreventDuplicateInteraction::handleInteractionRequest( const css::uno::Refe
     }
     else
     {
-        const cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > lContinuations = xRequest->getContinuations();
+        const cpo::uno::Sequence< cpo::uno::Reference< css::task::XInteractionContinuation > > lContinuations = xRequest->getContinuations();
         for (const auto& rContinuation : lContinuations)
         {
-            css::uno::Reference< css::task::XInteractionAbort > xAbort(rContinuation, css::uno::UNO_QUERY);
+            cpo::uno::Reference< css::task::XInteractionAbort > xAbort(rContinuation, cpo::uno::UNO_QUERY);
             if (xAbort.is())
             {
                 xAbort->select();
@@ -203,7 +203,7 @@ void PreventDuplicateInteraction::initialize(const cpo::uno::Sequence<cpo::uno::
     std::unique_lock aLock(m_aLock);
     // If we're re-initialized to set a specific new window as a parent then drop our temporary
     // dialog parent
-    css::uno::Reference<css::lang::XInitialization> xHandler(m_xHandler, css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::lang::XInitialization> xHandler(m_xHandler, cpo::uno::UNO_QUERY);
     if (xHandler.is())
     {
         m_xWarningDialogsParent.reset();

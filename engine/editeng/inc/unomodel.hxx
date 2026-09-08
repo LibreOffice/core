@@ -35,33 +35,33 @@ public:
     SvxSimpleUnoModel();
 
     // XMultiServiceFactory
-    virtual css::uno::Reference< cpo::uno::XInterface > createInstance( const OUString& aServiceSpecifier ) override;
-    virtual css::uno::Reference< cpo::uno::XInterface > createInstanceWithArguments( const OUString& ServiceSpecifier, const cpo::uno::Sequence< cpo::uno::Any >& Arguments ) override;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > createInstance( const OUString& aServiceSpecifier ) override;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > createInstanceWithArguments( const OUString& ServiceSpecifier, const cpo::uno::Sequence< cpo::uno::Any >& Arguments ) override;
     virtual cpo::uno::Sequence< OUString > getAvailableServiceNames(  ) override;
 
     // XStyleFamiliesSupplier
-    virtual css::uno::Reference< css::container::XNameAccess > getStyleFamilies(  ) override;
+    virtual cpo::uno::Reference< css::container::XNameAccess > getStyleFamilies(  ) override;
 
     // XAnyCompareFactory
-    virtual css::uno::Reference< css::ucb::XAnyCompare > createAnyCompareByName( const OUString& PropertyName ) override;
+    virtual cpo::uno::Reference< css::ucb::XAnyCompare > createAnyCompareByName( const OUString& PropertyName ) override;
 
     // XModel
     virtual bool attachResource( const OUString& aURL, const cpo::uno::Sequence< css::beans::PropertyValue >& aArgs ) override;
     virtual OUString getURL(  ) override;
     virtual cpo::uno::Sequence< css::beans::PropertyValue > getArgs(  ) override;
-    virtual void connectController( const css::uno::Reference< css::frame::XController >& xController ) override;
-    virtual void disconnectController( const css::uno::Reference< css::frame::XController >& xController ) override;
+    virtual void connectController( const cpo::uno::Reference< css::frame::XController >& xController ) override;
+    virtual void disconnectController( const cpo::uno::Reference< css::frame::XController >& xController ) override;
     virtual void lockControllers(  ) override;
     virtual void unlockControllers(  ) override;
     virtual bool hasControllersLocked(  ) override;
-    virtual css::uno::Reference< css::frame::XController > getCurrentController(  ) override;
-    virtual void setCurrentController( const css::uno::Reference< css::frame::XController >& xController ) override;
-    virtual css::uno::Reference< cpo::uno::XInterface > getCurrentSelection(  ) override;
+    virtual cpo::uno::Reference< css::frame::XController > getCurrentController(  ) override;
+    virtual void setCurrentController( const cpo::uno::Reference< css::frame::XController >& xController ) override;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > getCurrentSelection(  ) override;
 
     // XComponent
     virtual void dispose(  ) override;
-    virtual void addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-    virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+    virtual void addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& xListener ) override;
+    virtual void removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
 };
 

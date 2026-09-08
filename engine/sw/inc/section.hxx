@@ -341,7 +341,7 @@ public:
     virtual bool IsInClipboard() const override;
     virtual bool IsInUndo() const override;
     virtual bool IsInContent() const override;
-    virtual css::uno::Reference< css::rdf::XMetadatable > MakeUnoObject() override;
+    virtual cpo::uno::Reference< css::rdf::XMetadatable > MakeUnoObject() override;
     virtual bool supportsFullDrawingLayerFillAttributeSet() const override;
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 

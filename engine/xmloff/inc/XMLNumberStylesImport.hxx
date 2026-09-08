@@ -46,14 +46,14 @@ public:
     SdXMLNumberFormatImportContext( SdXMLImport& rImport,
         sal_Int32 nElement,
         SvXMLNumImpData* pNewData,  SvXMLStylesTokens nNewType,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
         SvXMLStylesContext& rStyles);
     virtual ~SdXMLNumberFormatImportContext() override;
 
     virtual void endFastElement(sal_Int32 nElement) override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
     sal_Int32 GetDrawKey() const { return mnKey; }
 };

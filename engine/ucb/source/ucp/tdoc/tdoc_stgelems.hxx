@@ -43,12 +43,12 @@ class ParentStorageHolder
 {
 public:
     ParentStorageHolder(
-        css::uno::Reference< css::embed::XStorage > xParentStorage,
+        cpo::uno::Reference< css::embed::XStorage > xParentStorage,
         const OUString & rUri );
 
     bool isParentARootStorage() const
     { return m_bParentIsRootStorage; }
-    css::uno::Reference< css::embed::XStorage >
+    cpo::uno::Reference< css::embed::XStorage >
     getParentStorage() const
     {
         std::scoped_lock aGuard( m_aMutex );
@@ -62,7 +62,7 @@ public:
 
 private:
     mutable std::mutex m_aMutex;
-    css::uno::Reference< css::embed::XStorage > m_xParentStorage;
+    cpo::uno::Reference< css::embed::XStorage > m_xParentStorage;
     bool                                  m_bParentIsRootStorage;
 };
 
@@ -76,11 +76,11 @@ class Storage : public StorageUNOBase, public ParentStorageHolder
 {
 public:
     Storage(
-        const css::uno::Reference< cpo::uno::XComponentContext > & rxContext,
+        const cpo::uno::Reference< cpo::uno::XComponentContext > & rxContext,
         rtl::Reference< StorageElementFactory > xFactory,
         const OUString & rUri,
-        const css::uno::Reference< css::embed::XStorage > & xParentStorage,
-        const css::uno::Reference< css::embed::XStorage > & xStorageToWrap );
+        const cpo::uno::Reference< css::embed::XStorage > & xParentStorage,
+        const cpo::uno::Reference< css::embed::XStorage > & xStorageToWrap );
     virtual ~Storage() override;
 
     // XInterface
@@ -102,9 +102,9 @@ public:
     virtual void SAL_CALL
     dispose() override;
     virtual void SAL_CALL
-    addEventListener( const css::uno::Reference< css::lang::XEventListener > & xListener ) override;
+    addEventListener( const cpo::uno::Reference< css::lang::XEventListener > & xListener ) override;
     virtual void SAL_CALL
-    removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+    removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
     // XNameAccess ( one of XStorage bases )
     virtual cpo::uno::Any SAL_CALL
@@ -122,28 +122,28 @@ public:
 
     // XStorage
     virtual void SAL_CALL
-    copyToStorage( const css::uno::Reference< css::embed::XStorage >& xDest ) override;
-    virtual css::uno::Reference< css::io::XStream > SAL_CALL
+    copyToStorage( const cpo::uno::Reference< css::embed::XStorage >& xDest ) override;
+    virtual cpo::uno::Reference< css::io::XStream > SAL_CALL
     openStreamElement( const OUString& aStreamName,
                        sal_Int32 nOpenMode ) override;
-    virtual css::uno::Reference< css::io::XStream > SAL_CALL
+    virtual cpo::uno::Reference< css::io::XStream > SAL_CALL
     openEncryptedStreamElement( const OUString& aStreamName,
                                 sal_Int32 nOpenMode,
                                 const OUString& aPassword ) override;
-    virtual css::uno::Reference< css::embed::XStorage > SAL_CALL
+    virtual cpo::uno::Reference< css::embed::XStorage > SAL_CALL
     openStorageElement( const OUString& aStorName,
                         sal_Int32 nOpenMode ) override;
-    virtual css::uno::Reference< css::io::XStream > SAL_CALL
+    virtual cpo::uno::Reference< css::io::XStream > SAL_CALL
     cloneStreamElement( const OUString& aStreamName ) override;
-    virtual css::uno::Reference< css::io::XStream > SAL_CALL
+    virtual cpo::uno::Reference< css::io::XStream > SAL_CALL
     cloneEncryptedStreamElement( const OUString& aStreamName,
                                  const OUString& aPassword ) override;
     virtual void SAL_CALL
-    copyLastCommitTo( const css::uno::Reference<
+    copyLastCommitTo( const cpo::uno::Reference<
                         css::embed::XStorage >& xTargetStorage ) override;
     virtual void SAL_CALL
     copyStorageElementLastCommitTo( const OUString& aStorName,
-                                    const css::uno::Reference<
+                                    const cpo::uno::Reference<
                                         css::embed::XStorage > &
                                             xTargetStorage ) override;
     virtual bool SAL_CALL
@@ -157,11 +157,11 @@ public:
                    const OUString& aNewName ) override;
     virtual void SAL_CALL
     copyElementTo( const OUString& aElementName,
-                   const css::uno::Reference< css::embed::XStorage >& xDest,
+                   const cpo::uno::Reference< css::embed::XStorage >& xDest,
                    const OUString& aNewName ) override;
     virtual void SAL_CALL
     moveElementTo( const OUString& aElementName,
-                   const css::uno::Reference< css::embed::XStorage >& xDest,
+                   const cpo::uno::Reference< css::embed::XStorage >& xDest,
                    const OUString& rNewName ) override;
 
     // XTransactedObject
@@ -170,11 +170,11 @@ public:
 
 private:
     rtl::Reference< StorageElementFactory >         m_xFactory;
-    css::uno::Reference< cpo::uno::XAggregation >         m_xAggProxy;
-    css::uno::Reference< css::embed::XStorage >           m_xWrappedStorage;
-    css::uno::Reference< css::embed::XTransactedObject >  m_xWrappedTransObj;
-    css::uno::Reference< css::lang::XComponent >          m_xWrappedComponent;
-    css::uno::Reference< css::lang::XTypeProvider >       m_xWrappedTypeProv;
+    cpo::uno::Reference< cpo::uno::XAggregation >         m_xAggProxy;
+    cpo::uno::Reference< css::embed::XStorage >           m_xWrappedStorage;
+    cpo::uno::Reference< css::embed::XTransactedObject >  m_xWrappedTransObj;
+    cpo::uno::Reference< css::lang::XComponent >          m_xWrappedComponent;
+    cpo::uno::Reference< css::lang::XTypeProvider >       m_xWrappedTypeProv;
     bool                                                  m_bIsDocumentStorage;
 
     StorageElementFactory::StorageMap::iterator m_aContainerIt;
@@ -192,10 +192,10 @@ class OutputStream : public OutputStreamUNOBase, public ParentStorageHolder
 {
 public:
     OutputStream(
-        const css::uno::Reference< cpo::uno::XComponentContext > & rxContext,
+        const cpo::uno::Reference< cpo::uno::XComponentContext > & rxContext,
         const OUString & rUri,
-        const css::uno::Reference< css::embed::XStorage >  & xParentStorage,
-        const css::uno::Reference< css::io::XOutputStream > & xStreamToWrap );
+        const cpo::uno::Reference< css::embed::XStorage >  & xParentStorage,
+        const cpo::uno::Reference< css::io::XOutputStream > & xStreamToWrap );
     virtual ~OutputStream() override;
 
     // XInterface
@@ -223,18 +223,18 @@ public:
     virtual void SAL_CALL
     dispose() override;
     virtual void SAL_CALL
-    addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
+    addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& xListener ) override;
     virtual void SAL_CALL
-    removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+    removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
 private:
-    css::uno::Reference<
+    cpo::uno::Reference<
         cpo::uno::XAggregation >     m_xAggProxy;
-    css::uno::Reference<
+    cpo::uno::Reference<
         css::io::XOutputStream >     m_xWrappedStream;
-    css::uno::Reference<
+    cpo::uno::Reference<
         css::lang::XComponent >      m_xWrappedComponent;
-    css::uno::Reference<
+    cpo::uno::Reference<
         css::lang::XTypeProvider >   m_xWrappedTypeProv;
 };
 
@@ -250,11 +250,11 @@ class Stream : public StreamUNOBase, public ParentStorageHolder
 {
 public:
     Stream(
-        const css::uno::Reference< cpo::uno::XComponentContext > & rxContext,
+        const cpo::uno::Reference< cpo::uno::XComponentContext > & rxContext,
         rtl::Reference<OfficeDocumentsManager> const & docsMgr,
         const OUString & rUri,
-        const css::uno::Reference< css::embed::XStorage >  & xParentStorage,
-        const css::uno::Reference< css::io::XStream > & xStreamToWrap );
+        const cpo::uno::Reference< css::embed::XStorage >  & xParentStorage,
+        const cpo::uno::Reference< css::io::XStream > & xStreamToWrap );
 
     virtual ~Stream() override;
 
@@ -270,10 +270,10 @@ public:
     getImplementationId() override;
 
     // XStream
-    virtual css::uno::Reference< css::io::XInputStream > SAL_CALL
+    virtual cpo::uno::Reference< css::io::XInputStream > SAL_CALL
     getInputStream() override;
 
-    virtual css::uno::Reference< css::io::XOutputStream > SAL_CALL
+    virtual cpo::uno::Reference< css::io::XOutputStream > SAL_CALL
     getOutputStream() override;
 
     // XOutputStream
@@ -313,9 +313,9 @@ public:
     virtual void SAL_CALL
     dispose() override;
     virtual void SAL_CALL
-    addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
+    addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& xListener ) override;
     virtual void SAL_CALL
-    removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+    removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
 private:
     /// @throws css::io::IOException
@@ -323,19 +323,19 @@ private:
 
     rtl::Reference<OfficeDocumentsManager> m_docsMgr;
     OUString m_uri;
-    css::uno::Reference<
+    cpo::uno::Reference<
         cpo::uno::XAggregation >     m_xAggProxy;
-    css::uno::Reference<
+    cpo::uno::Reference<
         css::io::XStream >           m_xWrappedStream;
-    css::uno::Reference<
+    cpo::uno::Reference<
         css::io::XOutputStream >     m_xWrappedOutputStream;
-    css::uno::Reference<
+    cpo::uno::Reference<
         css::io::XTruncate >         m_xWrappedTruncate;
-    css::uno::Reference<
+    cpo::uno::Reference<
         css::io::XInputStream >      m_xWrappedInputStream;
-    css::uno::Reference<
+    cpo::uno::Reference<
         css::lang::XComponent >      m_xWrappedComponent;
-    css::uno::Reference<
+    cpo::uno::Reference<
         css::lang::XTypeProvider >   m_xWrappedTypeProv;
 };
 

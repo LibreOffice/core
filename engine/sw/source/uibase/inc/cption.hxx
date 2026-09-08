@@ -40,7 +40,7 @@ class SwCaptionDialog final : public SfxDialogController
     bool m_bCopyAttributes;
     bool m_bOrderNumberingFirst; //#i61007# order of captions
 
-    css::uno::Reference<css::container::XNameAccess> m_xNameAccess;
+    cpo::uno::Reference<css::container::XNameAccess> m_xNameAccess;
 
     SwCaptionPreview m_aPreview;
     std::unique_ptr<weld::Entry> m_xTextEdit;

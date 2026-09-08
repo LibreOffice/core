@@ -68,8 +68,8 @@
 #include <stack>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::text;
 
 typedef std::pair< TextRangeList_t * const, SwTextAttr const * const > PortionList_t;
@@ -77,7 +77,7 @@ typedef std::stack< PortionList_t > PortionStack_t;
 
 static void lcl_CreatePortions(
     TextRangeList_t & i_rPortions,
-    css::uno::Reference< SwXText > const& i_xParentText,
+    cpo::uno::Reference< SwXText > const& i_xParentText,
     SwUnoCursor* pUnoCursor,
     FrameClientSortList_t & i_rFrames,
     const sal_Int32 i_nStartPos, const sal_Int32 i_nEndPos, bool bOnlyTextFields );
@@ -314,7 +314,7 @@ Sequence< OUString > SwXTextPortionEnumeration::getSupportedServiceNames()
 
 SwXTextPortionEnumeration::SwXTextPortionEnumeration(
         SwPaM& rParaCursor,
-        css::uno::Reference< SwXText > const & xParentText,
+        cpo::uno::Reference< SwXText > const & xParentText,
         const sal_Int32 nStart,
         const sal_Int32 nEnd,
         bool bOnlyTextFields)
@@ -526,7 +526,7 @@ lcl_CreateTOXMarkPortion(
 
 static rtl::Reference<SwXTextPortion>
 lcl_CreateMetaPortion(
-    css::uno::Reference<SwXText> const& xParent,
+    cpo::uno::Reference<SwXText> const& xParent,
     const SwUnoCursor * const pUnoCursor,
     SwTextAttr & rAttr, std::unique_ptr<TextRangeList_t const> && pPortions)
 {
@@ -550,7 +550,7 @@ lcl_CreateMetaPortion(
 
 /// Creates a text portion that has a non-empty ContentControl property.
 static rtl::Reference<SwXTextPortion>
-lcl_CreateContentControlPortion(const css::uno::Reference<SwXText>& xParent,
+lcl_CreateContentControlPortion(const cpo::uno::Reference<SwXText>& xParent,
                                 const SwUnoCursor* pUnoCursor, SwTextAttr& rAttr,
                                 std::unique_ptr<const TextRangeList_t>&& pPortions)
 {
@@ -721,7 +721,7 @@ SwXRedlinePortion_ImplList;
 static rtl::Reference<SwXTextPortion>
 lcl_ExportHints(
     PortionStack_t & rPortionStack,
-    const css::uno::Reference<SwXText> & xParent,
+    const cpo::uno::Reference<SwXText> & xParent,
     SwUnoCursor * const pUnoCursor,
     SwpHints const * const pHints,
     const sal_Int32 i_nStartPos,
@@ -1340,7 +1340,7 @@ static sal_Int32 lcl_GetNextIndex(
 
 static void lcl_CreatePortions(
         TextRangeList_t & i_rPortions,
-        css::uno::Reference< SwXText > const & i_xParentText,
+        cpo::uno::Reference< SwXText > const & i_xParentText,
         SwUnoCursor * const pUnoCursor,
         FrameClientSortList_t & i_rFrames,
         const sal_Int32 i_nStartPos,

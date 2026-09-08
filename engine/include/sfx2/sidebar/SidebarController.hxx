@@ -76,11 +76,11 @@ public:
             XFrame then <NULL/> is returned.
     */
     static SidebarController* GetSidebarControllerForFrame (
-        const css::uno::Reference<css::frame::XFrame>& rxFrame);
+        const cpo::uno::Reference<css::frame::XFrame>& rxFrame);
 
-    void registerSidebarForFrame(const css::uno::Reference<css::frame::XController>& xFrame);
+    void registerSidebarForFrame(const cpo::uno::Reference<css::frame::XController>& xFrame);
 
-    void unregisterSidebarForFrame(const css::uno::Reference<css::frame::XController>& xFrame);
+    void unregisterSidebarForFrame(const cpo::uno::Reference<css::frame::XController>& xFrame);
 
     // ui::XContextChangeEventListener
     virtual void notifyContextChangeEvent (const css::ui::ContextChangeEventObject& rEvent) override;
@@ -153,7 +153,7 @@ public:
 
     void notifyDeckTitle(std::u16string_view targetDeckId);
 
-    void updateModel(const css::uno::Reference<css::frame::XModel>& xModel);
+    void updateModel(const cpo::uno::Reference<css::frame::XModel>& xModel);
 
     void disposeDecks();
 
@@ -162,7 +162,7 @@ public:
 
     tools::Rectangle GetDeckDragArea() const;
 
-    css::uno::Reference<css::frame::XFrame> const & getXFrame() const {return mxFrame;}
+    cpo::uno::Reference<css::frame::XFrame> const & getXFrame() const {return mxFrame;}
 
     sal_Int32 getMaximumWidth() const { return mnMaximumSidebarWidth; }
     void setMaximumWidth(sal_Int32 nMaximumWidth) { mnMaximumSidebarWidth = nMaximumWidth; }
@@ -182,11 +182,11 @@ private:
     VclPtr<Deck> mpCurrentDeck;
     VclPtr<SidebarDockingWindow> mpParentWindow;
     const SfxViewFrame* mpViewFrame;
-    css::uno::Reference<css::frame::XFrame> mxFrame;
+    cpo::uno::Reference<css::frame::XFrame> mxFrame;
     VclPtr<TabBar> mpTabBar;
     Context maCurrentContext;
     Context maRequestedContext;
-    css::uno::Reference<css::frame::XController> mxCurrentController;
+    cpo::uno::Reference<css::frame::XController> mxCurrentController;
     /// Use a combination of SwitchFlag_* as value.
     sal_Int32 mnRequestedForceFlags;
     sal_Int32 mnMaximumSidebarWidth;
@@ -194,7 +194,7 @@ private:
     OUString msCurrentDeckId;
     AsynchronousCall maPropertyChangeForwarder;
     AsynchronousCall maContextChangeUpdate;
-    css::uno::Reference<css::beans::XPropertySet> mxThemePropertySet;
+    cpo::uno::Reference<css::beans::XPropertySet> mxThemePropertySet;
 
     /** Two flags control whether the deck is displayed or if only the
         tab bar remains visible.
@@ -214,7 +214,7 @@ private:
     */
     sal_Int32 mnSavedSidebarWidth;
     FocusManager maFocusManager;
-    css::uno::Reference<css::frame::XDispatch> mxReadOnlyModeDispatch;
+    cpo::uno::Reference<css::frame::XDispatch> mxReadOnlyModeDispatch;
     bool mbIsDocumentReadOnly;
     VclPtr<SfxSplitWindow> mpSplitWindow;
     /** When the user moves the splitter then we remember the
@@ -232,8 +232,8 @@ private:
     */
     void UpdateConfigurations();
 
-    css::uno::Reference<css::ui::XUIElement> CreateUIElement (
-        const css::uno::Reference<css::awt::XWindow>& rxWindow,
+    cpo::uno::Reference<css::ui::XUIElement> CreateUIElement (
+        const cpo::uno::Reference<css::awt::XWindow>& rxWindow,
         const OUString& rsImplementationURL,
         const Context& rContext);
 

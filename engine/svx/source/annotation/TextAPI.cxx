@@ -39,7 +39,7 @@ namespace com::sun::star::container
 class XNameContainer;
 }
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
@@ -172,7 +172,7 @@ void TextApiObject::SetText(OutlinerParaObject const& rText)
 
 OUString TextApiObject::GetText() const { return mpSource->GetText(); }
 
-TextApiObject* TextApiObject::getImplementation(const css::uno::Reference<css::text::XText>& xText)
+TextApiObject* TextApiObject::getImplementation(const cpo::uno::Reference<css::text::XText>& xText)
 {
     TextApiObject* pImpl = dynamic_cast<TextApiObject*>(xText.get());
 

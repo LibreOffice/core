@@ -100,7 +100,7 @@ public:
                 the new count of elements in the container
     */
     inline sal_Int32 addInterface(::std::unique_lock<::std::mutex>& rGuard, const key& rKey,
-                                  const css::uno::Reference<listener>& rListener)
+                                  const cpo::uno::Reference<listener>& rListener)
     {
         auto iter = find(rGuard, rKey);
         if (iter == m_aMap.end())
@@ -122,7 +122,7 @@ public:
                 the new count of elements in the container
     */
     inline sal_Int32 removeInterface(::std::unique_lock<::std::mutex>& rGuard, const key& rKey,
-                                     const css::uno::Reference<listener>& rListener)
+                                     const cpo::uno::Reference<listener>& rListener)
     {
         // search container with id nUik
         auto iter = find(rGuard, rKey);

@@ -38,12 +38,12 @@ class RootActionTriggerContainer final : public cppu::ImplInheritanceHelper<Prop
                                                                             css::container::XNamed>
 {
     public:
-        RootActionTriggerContainer(css::uno::Reference<css::awt::XPopupMenu> xMenu, const OUString* pMenuIdentifier);
+        RootActionTriggerContainer(cpo::uno::Reference<css::awt::XPopupMenu> xMenu, const OUString* pMenuIdentifier);
         virtual ~RootActionTriggerContainer() override;
 
         // XMultiServiceFactory
-        virtual css::uno::Reference< cpo::uno::XInterface > createInstance( const OUString& aServiceSpecifier ) override;
-        virtual css::uno::Reference< cpo::uno::XInterface > createInstanceWithArguments( const OUString& ServiceSpecifier, const cpo::uno::Sequence< cpo::uno::Any >& Arguments ) override;
+        virtual cpo::uno::Reference< cpo::uno::XInterface > createInstance( const OUString& aServiceSpecifier ) override;
+        virtual cpo::uno::Reference< cpo::uno::XInterface > createInstanceWithArguments( const OUString& ServiceSpecifier, const cpo::uno::Sequence< cpo::uno::Any >& Arguments ) override;
         virtual cpo::uno::Sequence< OUString > getAvailableServiceNames() override;
 
         // XIndexContainer
@@ -77,7 +77,7 @@ class RootActionTriggerContainer final : public cppu::ImplInheritanceHelper<Prop
         void FillContainer();
 
         bool            m_bContainerCreated;
-        css::uno::Reference<css::awt::XPopupMenu> m_xMenu;
+        cpo::uno::Reference<css::awt::XPopupMenu> m_xMenu;
         const OUString* m_pMenuIdentifier;
 };
 

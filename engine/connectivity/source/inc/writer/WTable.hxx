@@ -34,7 +34,7 @@ class OWriterConnection;
 class OWriterTable : public OWriterTable_BASE
 {
 private:
-    css::uno::Reference<css::text::XTextTable> m_xTable;
+    cpo::uno::Reference<css::text::XTextTable> m_xTable;
     OWriterConnection* m_pWriterConnection;
     sal_Int32 m_nStartCol = 0;
     sal_Int32 m_nDataCols = 0;

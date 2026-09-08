@@ -53,8 +53,8 @@ SfxChildWinFactory::SfxChildWinFactory( SfxChildWinCtor pTheCtor, sal_uInt16 nID
 
 struct SfxChildWindow_Impl
 {
-    css::uno::Reference< css::frame::XFrame >             xFrame;
-    css::uno::Reference< css::lang::XEventListener >      xListener;
+    cpo::uno::Reference< css::frame::XFrame >             xFrame;
+    cpo::uno::Reference< css::lang::XEventListener >      xListener;
     SfxChildWinFactory aFact = { nullptr, 0, 0 };
     bool                bHideNotDelete;
     bool                bVisible;
@@ -75,9 +75,9 @@ class DisposeListener : public ::cppu::WeakImplHelper< css::lang::XEventListener
 
         virtual void disposing( const css::lang::EventObject& aSource ) override
         {
-            css::uno::Reference< css::lang::XEventListener > xSelfHold( this );
+            cpo::uno::Reference< css::lang::XEventListener > xSelfHold( this );
 
-            css::uno::Reference< css::lang::XComponent > xComp( aSource.Source, css::uno::UNO_QUERY );
+            cpo::uno::Reference< css::lang::XComponent > xComp( aSource.Source, cpo::uno::UNO_QUERY );
             if( xComp.is() )
                 xComp->removeEventListener( this );
 
@@ -164,7 +164,7 @@ void SfxChildWindow::Destroy()
         ClearWorkwin();
         try
         {
-            css::uno::Reference < css::util::XCloseable > xClose( GetFrame(), css::uno::UNO_QUERY );
+            cpo::uno::Reference < css::util::XCloseable > xClose( GetFrame(), cpo::uno::UNO_QUERY );
             if ( xClose.is() )
                 xClose->close( true );
             else
@@ -580,7 +580,7 @@ bool SfxChildWindow::QueryClose()
 
     if ( pImpl->xFrame.is() )
     {
-        css::uno::Reference< css::frame::XController >  xCtrl = pImpl->xFrame->getController();
+        cpo::uno::Reference< css::frame::XController >  xCtrl = pImpl->xFrame->getController();
         if ( xCtrl.is() )
             bAllow = xCtrl->suspend( true );
     }
@@ -599,12 +599,12 @@ bool SfxChildWindow::QueryClose()
     return bAllow;
 }
 
-const css::uno::Reference< css::frame::XFrame >&  SfxChildWindow::GetFrame() const
+const cpo::uno::Reference< css::frame::XFrame >&  SfxChildWindow::GetFrame() const
 {
     return pImpl->xFrame;
 }
 
-void SfxChildWindow::SetFrame( const css::uno::Reference< css::frame::XFrame > & rFrame )
+void SfxChildWindow::SetFrame( const cpo::uno::Reference< css::frame::XFrame > & rFrame )
 {
     // Do nothing if nothing will be changed ...
     if( pImpl->xFrame == rFrame )

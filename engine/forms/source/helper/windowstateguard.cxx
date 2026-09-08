@@ -32,14 +32,14 @@ namespace frm
 
 
     using ::com::sun::star::awt::XWindowListener2;
-    using ::com::sun::star::uno::Reference;
+    using ::cpo::uno::Reference;
     using ::com::sun::star::awt::XWindow2;
     using ::com::sun::star::awt::WindowEvent;
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::awt::XControlModel;
     using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::lang::EventObject;
-    using ::com::sun::star::uno::UNO_QUERY;
+    using ::cpo::uno::UNO_QUERY;
     using ::cpo::uno::Exception;
 
     typedef ::cppu::WeakImplHelper <   XWindowListener2

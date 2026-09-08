@@ -21,14 +21,14 @@
 #include <vcl/accessibility/AccessibleBrowseBoxCell.hxx>
 #include <vcl/accessibletableprovider.hxx>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::accessibility;
 
 // AccessibleBrowseBoxCell
 AccessibleBrowseBoxCell::AccessibleBrowseBoxCell(
-        const css::uno::Reference< css::accessibility::XAccessible >& _rxParent, ::vcl::IAccessibleTableProvider& _rBrowseBox,
-        const css::uno::Reference< css::awt::XWindow >& _xFocusWindow,
+        const cpo::uno::Reference< css::accessibility::XAccessible >& _rxParent, ::vcl::IAccessibleTableProvider& _rBrowseBox,
+        const cpo::uno::Reference< css::awt::XWindow >& _xFocusWindow,
         sal_Int32 _nRowPos, sal_uInt16 _nColPos, AccessibleBrowseBoxObjType _eType )
     :AccessibleBrowseBoxBase( _rxParent, _rBrowseBox, _xFocusWindow, _eType )
     ,m_nRowPos( _nRowPos )

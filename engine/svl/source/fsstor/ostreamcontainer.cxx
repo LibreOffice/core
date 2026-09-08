@@ -24,6 +24,7 @@
 
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 OFSStreamContainer::OFSStreamContainer( const uno::Reference < io::XStream >& xStream )
 : m_bDisposed( false )

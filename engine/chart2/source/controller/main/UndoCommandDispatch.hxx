@@ -35,7 +35,7 @@ class UndoCommandDispatch : public CommandDispatch
 {
 public:
     explicit UndoCommandDispatch(
-        const css::uno::Reference< cpo::uno::XComponentContext > & xContext,
+        const cpo::uno::Reference< cpo::uno::XComponentContext > & xContext,
         rtl::Reference<::chart::ChartModel> xModel );
     virtual ~UndoCommandDispatch() override;
 
@@ -58,11 +58,11 @@ protected:
 
     virtual void fireStatusEvent(
         const OUString & rURL,
-        const css::uno::Reference< css::frame::XStatusListener > & xSingleListener ) override;
+        const cpo::uno::Reference< css::frame::XStatusListener > & xSingleListener ) override;
 
 private:
     rtl::Reference<::chart::ChartModel> m_xModel;
-    css::uno::Reference< css::document::XUndoManager > m_xUndoManager;
+    cpo::uno::Reference< css::document::XUndoManager > m_xUndoManager;
 };
 
 } //  namespace chart

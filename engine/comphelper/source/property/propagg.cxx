@@ -36,7 +36,7 @@ namespace comphelper
 {
 
 
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
 using namespace cpo::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
@@ -434,7 +434,7 @@ void OPropertySetAggregationHelper::vetoableChange(const css::beans::PropertyCha
 }
 
 
-void OPropertySetAggregationHelper::setAggregation(const css::uno::Reference<  cpo::uno::XInterface >& _rxDelegate)
+void OPropertySetAggregationHelper::setAggregation(const cpo::uno::Reference<  cpo::uno::XInterface >& _rxDelegate)
 {
     osl::MutexGuard aGuard(rBHelper.rMutex);
 
@@ -445,10 +445,10 @@ void OPropertySetAggregationHelper::setAggregation(const css::uno::Reference<  c
         m_bListening = false;
     }
 
-    m_xAggregateState.set(_rxDelegate, css::uno::UNO_QUERY);
-    m_xAggregateSet.set(_rxDelegate, css::uno::UNO_QUERY);
-    m_xAggregateMultiSet.set(_rxDelegate, css::uno::UNO_QUERY);
-    m_xAggregateFastSet.set(_rxDelegate, css::uno::UNO_QUERY);
+    m_xAggregateState.set(_rxDelegate, cpo::uno::UNO_QUERY);
+    m_xAggregateSet.set(_rxDelegate, cpo::uno::UNO_QUERY);
+    m_xAggregateMultiSet.set(_rxDelegate, cpo::uno::UNO_QUERY);
+    m_xAggregateFastSet.set(_rxDelegate, cpo::uno::UNO_QUERY);
 
     // must support XPropertySet and XMultiPropertySet
     if ( m_xAggregateSet.is() && !m_xAggregateMultiSet.is() )
@@ -473,7 +473,7 @@ void OPropertySetAggregationHelper::startListening()
 
 
 void OPropertySetAggregationHelper::addVetoableChangeListener(const OUString& _rPropertyName,
-                                                                       const  css::uno::Reference< css::beans::XVetoableChangeListener>& _rxListener)
+                                                                       const  cpo::uno::Reference< css::beans::XVetoableChangeListener>& _rxListener)
 {
     OPropertySetHelper::addVetoableChangeListener(_rPropertyName, _rxListener);
     if (!m_bListening)
@@ -482,7 +482,7 @@ void OPropertySetAggregationHelper::addVetoableChangeListener(const OUString& _r
 
 
 void OPropertySetAggregationHelper::addPropertyChangeListener(const OUString& _rPropertyName,
-                                                                       const css::uno::Reference< css::beans::XPropertyChangeListener>& _rxListener)
+                                                                       const cpo::uno::Reference< css::beans::XPropertyChangeListener>& _rxListener)
 {
     OPropertySetHelper::addPropertyChangeListener(_rPropertyName, _rxListener);
     if (!m_bListening)
@@ -491,7 +491,7 @@ void OPropertySetAggregationHelper::addPropertyChangeListener(const OUString& _r
 
 
 void OPropertySetAggregationHelper::addPropertiesChangeListener(const cpo::uno::Sequence< OUString >& _rPropertyNames,
-                                                                         const css::uno::Reference< css::beans::XPropertiesChangeListener>& _rxListener)
+                                                                         const cpo::uno::Reference< css::beans::XPropertiesChangeListener>& _rxListener)
 {
     OPropertySetHelper::addPropertiesChangeListener(_rPropertyNames, _rxListener);
     if (!m_bListening)

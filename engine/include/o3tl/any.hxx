@@ -20,7 +20,7 @@
 
 #include <cpo/uno/Any.hxx>
 #include <cpo/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/XInterface.hpp>
 #include <cppu/unotype.hxx>
 #include <rtl/ustring.hxx>
@@ -65,18 +65,18 @@ template<> struct Optional<float> {
 template<> struct Optional<double> {
     using type = std::optional<double const>;
 };
-template<typename T> struct Optional<css::uno::Reference<T>> {
-    using type = std::optional<css::uno::Reference<T> const>;
+template<typename T> struct Optional<cpo::uno::Reference<T>> {
+    using type = std::optional<cpo::uno::Reference<T> const>;
 };
-template<> struct Optional<css::uno::Reference<cpo::uno::XInterface>> {
-    using type = css::uno::Reference<cpo::uno::XInterface> const *;
+template<> struct Optional<cpo::uno::Reference<cpo::uno::XInterface>> {
+    using type = cpo::uno::Reference<cpo::uno::XInterface> const *;
 };
 
 template<typename> struct IsDerivedReference: std::false_type {};
-template<typename T> struct IsDerivedReference<css::uno::Reference<T>>:
+template<typename T> struct IsDerivedReference<cpo::uno::Reference<T>>:
     std::true_type
 {};
-template<> struct IsDerivedReference<css::uno::Reference<cpo::uno::XInterface>>:
+template<> struct IsDerivedReference<cpo::uno::Reference<cpo::uno::XInterface>>:
     std::false_type
 {};
 

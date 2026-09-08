@@ -20,12 +20,13 @@
 
 #include <cppuhelper/typeprovider.hxx>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <unopracc.hxx>
 #include <editeng/unoedsrc.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 
 SvxAccessibleTextPropertySet::SvxAccessibleTextPropertySet( const SvxEditSource* pEditSrc, const SvxItemPropertySet* pPropSet )

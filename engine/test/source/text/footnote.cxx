@@ -20,7 +20,7 @@ Footnote::~Footnote() {}
 
 void Footnote::testFootnoteProperties()
 {
-    css::uno::Reference<css::beans::XPropertySet> xFootnote(init(), css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::beans::XPropertySet> xFootnote(init(), cpo::uno::UNO_QUERY_THROW);
 
     short aReferenceIdGet;
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue ReferenceId",

@@ -17,6 +17,7 @@
 #include <cert.h>
 
 using namespace css;
+using namespace ::cpo;
 
 SEInitializer_AppleImpl::SEInitializer_AppleImpl(
     const uno::Reference<cpo::uno::XComponentContext>& rxContext)

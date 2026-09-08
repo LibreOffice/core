@@ -73,7 +73,7 @@ public:
 
     virtual void selectionChanged(bool bCorrectType) override;
 
-    virtual void updateModel(css::uno::Reference<css::frame::XModel> xModel) override;
+    virtual void updateModel(cpo::uno::Reference<css::frame::XModel> xModel) override;
 
 private:
     //ui controls
@@ -92,8 +92,8 @@ private:
     std::unique_ptr<weld::Label> mxFTSeriesTemplate;
 
     rtl::Reference<::chart::ChartModel> mxModel;
-    css::uno::Reference<css::util::XModifyListener> mxListener;
-    css::uno::Reference<css::view::XSelectionChangeListener> mxSelectionListener;
+    cpo::uno::Reference<css::util::XModifyListener> mxListener;
+    cpo::uno::Reference<css::view::XSelectionChangeListener> mxSelectionListener;
 
     bool mbModelValid;
 

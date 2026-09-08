@@ -33,6 +33,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using ::com::sun::star::lang::IndexOutOfBoundsException;
+using namespace ::cpo;
 
 SwAccessibleHyperlink::SwAccessibleHyperlink(const SwTextAttr & rTextAttr,
         SwAccessibleParagraph & rAccPara,

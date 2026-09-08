@@ -49,7 +49,7 @@ class ProgressBar final : public ProgressBar_BASE
 {
 public:
 
-    ProgressBar( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+    ProgressBar( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
     virtual ~ProgressBar() override;
 
@@ -81,16 +81,16 @@ public:
     //  XControl
 
     virtual bool setModel(
-        const css::uno::Reference< css::awt::XControlModel >& xModel
+        const cpo::uno::Reference< css::awt::XControlModel >& xModel
     ) override;
 
-    virtual css::uno::Reference< css::awt::XControlModel > getModel() override;
+    virtual cpo::uno::Reference< css::awt::XControlModel > getModel() override;
 
 private:
     virtual void impl_paint(
         sal_Int32 nX ,
         sal_Int32 nY ,
-        const css::uno::Reference< css::awt::XGraphics >& xGraphics
+        const cpo::uno::Reference< css::awt::XGraphics >& xGraphics
     ) override;
 
     void impl_recalcRange();

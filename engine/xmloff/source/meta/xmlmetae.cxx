@@ -40,6 +40,7 @@
 #include <unotools/docinfohelper.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace ::xmloff::token;
 
 static void lcl_AddTwoDigits( OUStringBuffer& rStr, sal_Int32 nVal )

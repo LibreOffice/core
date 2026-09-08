@@ -145,7 +145,7 @@ public:
 
     SbxObject* getVBAGlobals( );
 
-    static css::uno::Reference< css::frame::XModel >
+    static cpo::uno::Reference< css::frame::XModel >
         GetModelFromBasic( SbxObject* pBasic );
 
     static void DetachAllDocBasicItems();

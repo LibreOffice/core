@@ -41,6 +41,7 @@
 #include <rootfrm.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace {
 
@@ -554,7 +555,7 @@ bool SwAutoCorrDoc::TransliterateRTLWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
         OUStringBuffer sDisambiguatedWord;
 
         const ::cpo::uno::Sequence< ::css::beans::PropertyValue > aProperties;
-        css::uno::Reference< css::linguistic2::XHyphenatedWord >  xHyphWord;
+        cpo::uno::Reference< css::linguistic2::XHyphenatedWord >  xHyphWord;
         for (int i = 0; i+1 < sWord.getLength(); i++ )
         {
             xHyphWord = xHyph->hyphenate( sWord,

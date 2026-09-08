@@ -41,10 +41,10 @@ protected:
                             m_pCollection;          // datasource type collection
 
     cpo::uno::Any           m_aInitialSelection;
-    css::uno::Reference< css::sdbc::XConnection > m_xActiveConnection;
+    cpo::uno::Reference< css::sdbc::XConnection > m_xActiveConnection;
 
 protected:
-    ODatabaseAdministrationDialog(const css::uno::Reference< cpo::uno::XComponentContext >& _rxORB);
+    ODatabaseAdministrationDialog(const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxORB);
     virtual ~ODatabaseAdministrationDialog() override;
 protected:
 // OGenericUnoDialog overridables

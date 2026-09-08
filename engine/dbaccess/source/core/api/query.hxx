@@ -56,9 +56,9 @@ class OQuery    :public OContentHelper
     friend struct TRelease;
 
 protected:
-    css::uno::Reference< css::beans::XPropertySet >           m_xCommandDefinition;
-    css::uno::Reference< css::sdbc::XConnection >             m_xConnection;
-    css::uno::Reference< css::beans::XPropertySetInfo >       m_xCommandPropInfo;
+    cpo::uno::Reference< css::beans::XPropertySet >           m_xCommandDefinition;
+    cpo::uno::Reference< css::sdbc::XConnection >             m_xConnection;
+    cpo::uno::Reference< css::beans::XPropertySetInfo >       m_xCommandPropInfo;
     ::rtl::Reference< OContainerMediator >                    m_pColumnMediator;
     ::dbtools::WarningsContainer*                             m_pWarnings;
 
@@ -87,9 +87,9 @@ protected:
 
 public:
     OQuery(
-            const css::uno::Reference< css::beans::XPropertySet >& _rxCommandDefinition,
-            const css::uno::Reference< css::sdbc::XConnection >& _rxConn,
-            const css::uno::Reference< cpo::uno::XComponentContext >& _xORB
+            const cpo::uno::Reference< css::beans::XPropertySet >& _rxCommandDefinition,
+            const cpo::uno::Reference< css::sdbc::XConnection >& _rxConn,
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& _xORB
         );
 
     virtual cpo::uno::Sequence<cpo::uno::Type> getTypes() override;
@@ -99,7 +99,7 @@ public:
     DECLARE_XINTERFACE( )
 
 // css::beans::XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
 
 // OPropertySetHelper
     virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
@@ -108,7 +108,7 @@ public:
     DECLARE_SERVICE_INFO();
 
 // css::sdbcx::XDataDescriptorFactory
-    virtual css::uno::Reference< css::beans::XPropertySet > createDataDescriptor(  ) override;
+    virtual cpo::uno::Reference< css::beans::XPropertySet > createDataDescriptor(  ) override;
 
 // css::beans::XPropertyChangeListener
     virtual void propertyChange( const css::beans::PropertyChangeEvent& evt ) override;

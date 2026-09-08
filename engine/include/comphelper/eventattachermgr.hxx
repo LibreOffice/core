@@ -28,16 +28,16 @@ namespace script {
     class XEventAttacherManager;
 }
 }
-namespace com::sun::star::uno { template <class interface_type> class Reference; }
+namespace cpo::uno { template <class interface_type> class Reference; }
 
 
 namespace comphelper
 {
 
 /// @throws cpo::uno::Exception
-COMPHELPER_DLLPUBLIC css::uno::Reference< css::script::XEventAttacherManager >
+COMPHELPER_DLLPUBLIC cpo::uno::Reference< css::script::XEventAttacherManager >
 createEventAttacherManager(
-        const css::uno::Reference< cpo::uno::XComponentContext > & rxContext );
+        const cpo::uno::Reference< cpo::uno::XComponentContext > & rxContext );
 
 }
 

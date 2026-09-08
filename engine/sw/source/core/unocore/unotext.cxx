@@ -78,6 +78,7 @@
 #include <unocontentcontrol.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 constexpr OUString cInvalidObject = u"this object is invalid"_ustr;
 
@@ -139,8 +140,8 @@ SwXText::createXTextCursor()
     return xRet;
 }
 
-css::uno::Reference< css::text::XTextCursor > SAL_CALL SwXText::createTextCursorByRange(
-        const ::css::uno::Reference< ::css::text::XTextRange >& aTextPosition )
+cpo::uno::Reference< css::text::XTextCursor > SAL_CALL SwXText::createTextCursorByRange(
+        const ::cpo::uno::Reference< ::css::text::XTextRange >& aTextPosition )
 {
     SolarMutexGuard aGuard;
     return static_cast<text::XWordCursor*>(createXTextCursorByRange(aTextPosition).get());

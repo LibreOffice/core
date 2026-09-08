@@ -42,7 +42,7 @@ namespace cpo::uno
 {
 template <class E> class Sequence;
 }
-namespace com::sun::star::uno
+namespace cpo::uno
 {
 template <class interface_type> class Reference;
 }
@@ -61,8 +61,8 @@ COMPHELPER_DLLPUBLIC OUString GetContentPart(const OUString& _rRawString,
 COMPHELPER_DLLPUBLIC OUString GetHexString(const cpo::uno::Sequence<sal_Int8>& _rSeq,
                                            const char* _pSep, sal_uInt16 _nLineBreak = 0xFFFF);
 
-COMPHELPER_DLLPUBLIC css::uno::Reference<css::security::XCertificate> FindCertInContext(
-    const css::uno::Reference<css::xml::crypto::XXMLSecurityContext>& xSecurityContext,
+COMPHELPER_DLLPUBLIC cpo::uno::Reference<css::security::XCertificate> FindCertInContext(
+    const cpo::uno::Reference<css::xml::crypto::XXMLSecurityContext>& xSecurityContext,
     const OUString& rSHA1Thumbprint);
 }
 

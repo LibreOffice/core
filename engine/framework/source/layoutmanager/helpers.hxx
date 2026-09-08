@@ -46,21 +46,21 @@ bool isHorizontalDockingArea( const sal_Int32 nDockArea );
 bool isHorizontalDockingArea( const css::ui::DockingArea& nDockArea );
 OUString retrieveToolbarNameFromHelpURL( vcl::Window* pWindow );
 ToolBox* getToolboxPtr( vcl::Window* pWindow );
-vcl::Window* getWindowFromXUIElement( const css::uno::Reference< css::ui::XUIElement >& xUIElement );
-SystemWindow* getTopSystemWindow( const css::uno::Reference< css::awt::XWindow >& xWindow );
+vcl::Window* getWindowFromXUIElement( const cpo::uno::Reference< css::ui::XUIElement >& xUIElement );
+SystemWindow* getTopSystemWindow( const cpo::uno::Reference< css::awt::XWindow >& xWindow );
 bool equalRectangles( const css::awt::Rectangle& rRect1, const css::awt::Rectangle& rRect2 );
-bool lcl_checkUIElement(const css::uno::Reference< css::ui::XUIElement >& xUIElement,css::awt::Rectangle& _rPosSize, css::uno::Reference< css::awt::XWindow >& _xWindow);
-css::uno::Reference< css::awt::XVclWindowPeer > createToolkitWindow( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext, const css::uno::Reference< css::awt::XVclWindowPeer >& rParent, const OUString& pService );
+bool lcl_checkUIElement(const cpo::uno::Reference< css::ui::XUIElement >& xUIElement,css::awt::Rectangle& _rPosSize, cpo::uno::Reference< css::awt::XWindow >& _xWindow);
+cpo::uno::Reference< css::awt::XVclWindowPeer > createToolkitWindow( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext, const cpo::uno::Reference< css::awt::XVclWindowPeer >& rParent, const OUString& pService );
 WindowAlign ImplConvertAlignment( css::ui::DockingArea aAlignment );
 std::u16string_view getElementTypeFromResourceURL( std::u16string_view aResourceURL );
 void parseResourceURL( std::u16string_view aResourceURL, OUString& aElementType, OUString& aElementName );
 ::tools::Rectangle putAWTToRectangle( const css::awt::Rectangle& rRect );
 css::awt::Rectangle putRectangleValueToAWT( const ::tools::Rectangle& rRect );
-css::uno::Reference< css::frame::XModel > impl_getModelFromFrame( const css::uno::Reference< css::frame::XFrame >& rFrame );
-bool implts_isPreviewModel( const css::uno::Reference< css::frame::XModel >& xModel );
-bool implts_isFrameOrWindowTop( const css::uno::Reference< css::frame::XFrame >& xFrame );
-void impl_setDockingWindowVisibility( const css::uno::Reference< cpo::uno::XComponentContext>& rxContext, const css::uno::Reference< css::frame::XFrame >& rFrame, std::u16string_view rDockingWindowName, bool bVisible );
-void impl_addWindowListeners( const css::uno::Reference< cpo::uno::XInterface >& xThis, const css::uno::Reference< css::ui::XUIElement >& xUIElement );
+cpo::uno::Reference< css::frame::XModel > impl_getModelFromFrame( const cpo::uno::Reference< css::frame::XFrame >& rFrame );
+bool implts_isPreviewModel( const cpo::uno::Reference< css::frame::XModel >& xModel );
+bool implts_isFrameOrWindowTop( const cpo::uno::Reference< css::frame::XFrame >& xFrame );
+void impl_setDockingWindowVisibility( const cpo::uno::Reference< cpo::uno::XComponentContext>& rxContext, const cpo::uno::Reference< css::frame::XFrame >& rFrame, std::u16string_view rDockingWindowName, bool bVisible );
+void impl_addWindowListeners( const cpo::uno::Reference< cpo::uno::XInterface >& xThis, const cpo::uno::Reference< css::ui::XUIElement >& xUIElement );
 
 }
 

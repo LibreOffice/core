@@ -66,7 +66,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdb;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::i18n;
@@ -1315,7 +1315,7 @@ std::unique_ptr<OSQLParseNode> OSQLParser::predicateTree(OUString& rErrorMessage
 }
 
 
-OSQLParser::OSQLParser(css::uno::Reference< cpo::uno::XComponentContext > xContext,
+OSQLParser::OSQLParser(cpo::uno::Reference< cpo::uno::XComponentContext > xContext,
                        const IParseContext* _pContext,
                        const IParseContext* _pNeutral)
     :m_pContext(_pContext)
@@ -1484,9 +1484,9 @@ OSQLParser::OSQLParser(css::uno::Reference< cpo::uno::XComponentContext > xConte
 }
 
 //static
-tools::DeleteOnDeinit<css::uno::Reference< css::i18n::XLocaleData4>>& OSQLParser::getLocaleData()
+tools::DeleteOnDeinit<cpo::uno::Reference< css::i18n::XLocaleData4>>& OSQLParser::getLocaleData()
 {
-    static tools::DeleteOnDeinit<css::uno::Reference< css::i18n::XLocaleData4>> s_xLocaleData(tools::DeleteOnDeinitFlag::Empty);
+    static tools::DeleteOnDeinit<cpo::uno::Reference< css::i18n::XLocaleData4>> s_xLocaleData(tools::DeleteOnDeinitFlag::Empty);
     return s_xLocaleData;
 }
 
@@ -1533,7 +1533,7 @@ bool OSQLParser::extractDate(OSQLParseNode const * pLiteral,double& _rfValue)
     Reference< XNumberFormatsSupplier > xFormatSup = m_xFormatter->getNumberFormatsSupplier();
     Reference< XNumberFormatTypes > xFormatTypes;
     if ( xFormatSup.is() )
-        xFormatTypes.set(xFormatSup->getNumberFormats(), css::uno::UNO_QUERY);
+        xFormatTypes.set(xFormatSup->getNumberFormats(), cpo::uno::UNO_QUERY);
 
     // if there is no format key, yet, make sure we have a feasible one for our locale
     try

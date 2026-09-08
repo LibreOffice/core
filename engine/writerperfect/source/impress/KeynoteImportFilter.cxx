@@ -11,7 +11,7 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <com/sun/star/ucb/XContent.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -59,8 +59,8 @@ KeynoteImportFilter::detect(cpo::uno::Sequence<css::beans::PropertyValue>& Descr
     bool bIsPackage = false;
     bool bUCBContentChanged = false;
     const beans::PropertyValue* pValue = Descriptor.getConstArray();
-    css::uno::Reference<css::io::XInputStream> xInputStream;
-    css::uno::Reference<ucb::XContent> xContent;
+    cpo::uno::Reference<css::io::XInputStream> xInputStream;
+    cpo::uno::Reference<ucb::XContent> xContent;
     cpo::uno::Sequence<beans::NamedValue> lComponentDataNV;
     cpo::uno::Sequence<beans::PropertyValue> lComponentDataPV;
     bool bComponentDataNV = true;

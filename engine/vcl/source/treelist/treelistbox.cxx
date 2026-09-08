@@ -3492,7 +3492,7 @@ void SvTreeListBox::InitSettings()
 
 rtl::Reference<comphelper::OAccessible> SvTreeListBox::CreateAccessible()
 {
-    css::uno::Reference<XAccessible> xAccParent = GetAccessibleParent();
+    cpo::uno::Reference<XAccessible> xAccParent = GetAccessibleParent();
     if ( xAccParent.is() )
         return new AccessibleListBox(*this, xAccParent);
 

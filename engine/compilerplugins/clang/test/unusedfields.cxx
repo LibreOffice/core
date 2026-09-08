@@ -308,8 +308,8 @@ namespace ReadOnlyAnalysis5
     {
         std::unique_ptr<int> m_field1;
         rtl::Reference<RefTarget> m_field2;
-        css::uno::Reference<cpo::uno::XInterface> m_field3xx;
-        void f1(css::uno::Reference<cpo::uno::XInterface> a)
+        cpo::uno::Reference<cpo::uno::XInterface> m_field3xx;
+        void f1(cpo::uno::Reference<cpo::uno::XInterface> a)
         {
             if (m_field1)
                 m_field1.reset(new int);

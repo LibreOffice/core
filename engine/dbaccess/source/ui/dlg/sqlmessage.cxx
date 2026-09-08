@@ -36,7 +36,7 @@
 #define RET_MORE   RET_RETRY + 1
 
 using namespace dbtools;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::sdb;
 using namespace com::sun::star::sdbc;

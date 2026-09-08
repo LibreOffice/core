@@ -32,7 +32,7 @@
 #include <string.h>
 
 using namespace ::oox::core;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::xml::sax;
 
 namespace oox::ppt {

@@ -28,10 +28,10 @@ namespace frm
     class OCloneableAggregation
     {
     protected:
-        css::uno::Reference< cpo::uno::XAggregation>  m_xAggregate;
+        cpo::uno::Reference< cpo::uno::XAggregation>  m_xAggregate;
 
     protected:
-        static css::uno::Reference< cpo::uno::XAggregation > createAggregateClone( const OCloneableAggregation* _pOriginal );
+        static cpo::uno::Reference< cpo::uno::XAggregation > createAggregateClone( const OCloneableAggregation* _pOriginal );
     };
 
 

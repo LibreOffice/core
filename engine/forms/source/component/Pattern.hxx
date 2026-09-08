@@ -39,11 +39,11 @@ private:
 
 public:
     OPatternModel(
-        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
+        const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     OPatternModel(
         const OPatternModel* _pOriginal,
-        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
+        const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     virtual ~OPatternModel() override;
 
@@ -65,20 +65,20 @@ protected:
     // OBoundControlModel overridables
     virtual cpo::uno::Any   translateDbColumnToControlValue( ) override;
     virtual bool            commitControlValueToDbColumn( bool _bPostReset ) override;
-    virtual void            onConnectedDbColumn( const css::uno::Reference< cpo::uno::XInterface >& _rxForm ) override;
+    virtual void            onConnectedDbColumn( const cpo::uno::Reference< cpo::uno::XInterface >& _rxForm ) override;
     virtual void            onDisconnectedDbColumn() override;
 
     virtual cpo::uno::Any   getDefaultForReset() const override;
     virtual void            resetNoBroadcast() override;
 
 protected:
-    virtual css::uno::Reference< css::util::XCloneable > createClone(  ) override;
+    virtual cpo::uno::Reference< css::util::XCloneable > createClone(  ) override;
 };
 
 class OPatternControl: public OBoundControl
 {
 public:
-    explicit OPatternControl(const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory);
+    explicit OPatternControl(const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory);
 
     // css::lang::XServiceInfo
     OUString getImplementationName() override

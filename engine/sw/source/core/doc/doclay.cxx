@@ -92,6 +92,7 @@
 #include <vector>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 #define DEF_FLY_WIDTH    2268   // Default width for FlyFrames (2268 == 4cm)
 

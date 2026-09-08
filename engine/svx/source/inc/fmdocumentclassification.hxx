@@ -45,11 +45,11 @@ namespace svxform
         /** classifies a document model
         */
         static DocumentType classifyDocument(
-                                const css::uno::Reference< css::frame::XModel >& _rxDocumentModel
+                                const cpo::uno::Reference< css::frame::XModel >& _rxDocumentModel
                             );
 
         static DocumentType classifyHostDocument(
-                                const css::uno::Reference< cpo::uno::XInterface >& _rxFormComponent
+                                const cpo::uno::Reference< cpo::uno::XInterface >& _rxFormComponent
                             );
 
         static  DocumentType getDocumentTypeForModuleIdentifier(

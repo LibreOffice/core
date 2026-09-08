@@ -35,7 +35,7 @@ namespace connectivity::evoab
         virtual void refreshGroups() override {}
         virtual void refreshUsers() override {}
 // XTablesSupplier
-        virtual css::uno::Reference< css::container::XNameAccess > getTables(
+        virtual cpo::uno::Reference< css::container::XNameAccess > getTables(
                                     ) override;
     };
 }

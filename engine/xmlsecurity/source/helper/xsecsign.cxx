@@ -31,8 +31,8 @@
 namespace com::sun::star::graphic { class XGraphic; }
 
 using namespace css;
-using namespace css::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace css::graphic;
 
 /* protected: for signature generation */
@@ -53,7 +53,7 @@ OUString XSecController::createId()
     return OUString::createFromAscii(str);
 }
 
-css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener > XSecController::prepareSignatureToWrite(
+cpo::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener > XSecController::prepareSignatureToWrite(
     InternalSignatureInformation& internalSignatureInfor,
     sal_Int32 nStorageFormat,
     bool bXAdESCompliantIfODF)
@@ -116,7 +116,7 @@ css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener > XSecCon
     {
         const SignatureReferenceInformation& refInfor = vReferenceInfors[i];
 
-        css::uno::Reference< css::io::XInputStream > xInputStream
+        cpo::uno::Reference< css::io::XInputStream > xInputStream
             = getObjectInputStream( refInfor.ouURI );
 
         if (xInputStream.is())
@@ -332,7 +332,7 @@ void XSecController::setSignatureLineInvalidGraphic(
 }
 
 bool XSecController::WriteSignature(
-    const css::uno::Reference<css::xml::sax::XDocumentHandler>& xDocumentHandler,
+    const cpo::uno::Reference<css::xml::sax::XDocumentHandler>& xDocumentHandler,
     bool bXAdESCompliantIfODF )
 {
     bool rc = false;
@@ -358,7 +358,7 @@ bool XSecController::WriteSignature(
             /*
              * export the signature template
              */
-            css::uno::Reference<css::xml::sax::XDocumentHandler> xSEKHandler(m_xSAXEventKeeper);
+            cpo::uno::Reference<css::xml::sax::XDocumentHandler> xSEKHandler(m_xSAXEventKeeper);
 
             int i;
             int sigNum = m_vInternalSignatureInformations.size();
@@ -407,7 +407,7 @@ bool XSecController::WriteOOXMLSignature(const uno::Reference<embed::XStorage>& 
         try
         {
             // Export the signature template.
-            css::uno::Reference<xml::sax::XDocumentHandler> xSEKHandler(m_xSAXEventKeeper);
+            cpo::uno::Reference<xml::sax::XDocumentHandler> xSEKHandler(m_xSAXEventKeeper);
 
             for (InternalSignatureInformation & rInformation : m_vInternalSignatureInformations)
             {

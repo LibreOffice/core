@@ -33,13 +33,13 @@ class OOXMLStreamImpl : public OOXMLStream
 {
     void init();
 
-    css::uno::Reference<cpo::uno::XComponentContext> mxContext;
-    css::uno::Reference<css::io::XInputStream> mxStorageStream;
-    css::uno::Reference<css::embed::XStorage> mxStorage;
-    css::uno::Reference<css::embed::XRelationshipAccess> mxRelationshipAccess;
-    css::uno::Reference<css::io::XStream> mxDocumentStream;
-    css::uno::Reference<css::xml::sax::XFastParser> mxFastParser;
-    css::uno::Reference<css::xml::sax::XFastTokenHandler> mxFastTokenHandler;
+    cpo::uno::Reference<cpo::uno::XComponentContext> mxContext;
+    cpo::uno::Reference<css::io::XInputStream> mxStorageStream;
+    cpo::uno::Reference<css::embed::XStorage> mxStorage;
+    cpo::uno::Reference<css::embed::XRelationshipAccess> mxRelationshipAccess;
+    cpo::uno::Reference<css::io::XStream> mxDocumentStream;
+    cpo::uno::Reference<css::xml::sax::XFastParser> mxFastParser;
+    cpo::uno::Reference<css::xml::sax::XFastTokenHandler> mxFastTokenHandler;
 
     StreamType_t mnStreamType;
 
@@ -50,7 +50,7 @@ class OOXMLStreamImpl : public OOXMLStream
     /// Cache holding an Id <-> Target map of external relations.
     std::unordered_map<OUString, OUString> maIdCache;
 
-    bool lcl_getTarget(const css::uno::Reference<css::embed::XRelationshipAccess>& xRelationshipAccess,
+    bool lcl_getTarget(const cpo::uno::Reference<css::embed::XRelationshipAccess>& xRelationshipAccess,
                        StreamType_t nStreamType,
                        const OUString & rId,
                        OUString & rDocumentTarget);
@@ -60,23 +60,23 @@ public:
     OOXMLStreamImpl
     (OOXMLStreamImpl const & rStream, StreamType_t nType);
     OOXMLStreamImpl
-    (css::uno::Reference<cpo::uno::XComponentContext> const & xContext,
-     css::uno::Reference<css::io::XInputStream> xStorageStream,
+    (cpo::uno::Reference<cpo::uno::XComponentContext> const & xContext,
+     cpo::uno::Reference<css::io::XInputStream> xStorageStream,
      StreamType_t nType, bool bRepairStorage);
     OOXMLStreamImpl(OOXMLStreamImpl const & rStream, OUString aId);
 
     virtual ~OOXMLStreamImpl() override;
 
-    virtual css::uno::Reference<css::xml::sax::XFastParser> getFastParser() override;
-    virtual css::uno::Reference<css::io::XInputStream> getDocumentStream() override;
-    virtual css::uno::Reference<cpo::uno::XComponentContext> getContext() override;
+    virtual cpo::uno::Reference<css::xml::sax::XFastParser> getFastParser() override;
+    virtual cpo::uno::Reference<css::io::XInputStream> getDocumentStream() override;
+    virtual cpo::uno::Reference<cpo::uno::XComponentContext> getContext() override;
     virtual OUString getTargetForId(const OUString & rId) override;
     virtual const OUString & getTarget() const override;
 
-    virtual css::uno::Reference<css::xml::sax::XFastTokenHandler> getFastTokenHandler() override;
+    virtual cpo::uno::Reference<css::xml::sax::XFastTokenHandler> getFastTokenHandler() override;
 
     // Giving access to mxDocumentStream. It is needed by resolving custom xml to get list of customxml's used in document.
-    const css::uno::Reference<css::io::XStream>& accessDocumentStream() { return mxDocumentStream;}
+    const cpo::uno::Reference<css::io::XStream>& accessDocumentStream() { return mxDocumentStream;}
 };
 }
 

@@ -51,7 +51,7 @@ public:
 
     //=====  XAccessibleComponent  ============================================
 
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > SAL_CALL
                             getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
     virtual void SAL_CALL   grabFocus() override;
 
@@ -59,7 +59,7 @@ public:
 
     // override to calculate this on demand
     virtual sal_Int64 SAL_CALL getAccessibleChildCount() override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > SAL_CALL
                             getAccessibleChild( sal_Int64 i ) override;
 
     virtual sal_Int64 SAL_CALL getAccessibleStateSet() override;

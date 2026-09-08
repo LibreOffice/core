@@ -29,7 +29,7 @@ class SwVbaTemplate : public SwVbaTemplate_BASE
 private:
     OUString msFullUrl;
 public:
-    SwVbaTemplate( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
+    SwVbaTemplate( const cpo::uno::Reference< ooo::vba::XHelperInterface >& rParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& rContext,
         OUString  );
     virtual ~SwVbaTemplate() override;
 

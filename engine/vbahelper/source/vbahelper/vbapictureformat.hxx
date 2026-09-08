@@ -29,8 +29,8 @@ typedef InheritedHelperInterfaceWeakImpl< ov::msforms::XPictureFormat > ScVbaPic
 class ScVbaPictureFormat : public ScVbaPictureFormat_BASE
 {
 private:
-    css::uno::Reference< css::drawing::XShape > m_xShape;
-    css::uno::Reference< css::beans::XPropertySet > m_xPropertySet;
+    cpo::uno::Reference< css::drawing::XShape > m_xShape;
+    cpo::uno::Reference< css::beans::XPropertySet > m_xPropertySet;
 protected:
     virtual OUString getServiceImplName() override;
     virtual cpo::uno::Sequence<OUString> getServiceNames() override;
@@ -40,7 +40,7 @@ private:
 public:
     /// @throws css::lang::IllegalArgumentException
     /// @throws cpo::uno::RuntimeException
-    ScVbaPictureFormat( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext, css::uno::Reference< css::drawing::XShape > xShape );
+    ScVbaPictureFormat( const cpo::uno::Reference< ov::XHelperInterface >& xParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext, cpo::uno::Reference< css::drawing::XShape > xShape );
 
     // Attributes
     virtual double getBrightness() override;

@@ -29,14 +29,14 @@ namespace connectivity
 {
     class java_sql_Driver : public ::cppu::WeakImplHelper< css::sdbc::XDriver,css::lang::XServiceInfo>
     {
-        css::uno::Reference<cpo::uno::XComponentContext> m_aContext;
+        cpo::uno::Reference<cpo::uno::XComponentContext> m_aContext;
         ::comphelper::EventLogger m_aLogger;
 
     protected:
         virtual ~java_sql_Driver() override;
 
     public:
-        java_sql_Driver(const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext);
+        java_sql_Driver(const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxContext);
 
         // XServiceInfo
         virtual OUString getImplementationName(  ) override;
@@ -44,13 +44,13 @@ namespace connectivity
         virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
         // XDriver
-        virtual css::uno::Reference< css::sdbc::XConnection > connect( const OUString& url, const cpo::uno::Sequence< css::beans::PropertyValue >& info ) override ;
+        virtual cpo::uno::Reference< css::sdbc::XConnection > connect( const OUString& url, const cpo::uno::Sequence< css::beans::PropertyValue >& info ) override ;
         virtual bool acceptsURL( const OUString& url ) override ;
         virtual cpo::uno::Sequence< css::sdbc::DriverPropertyInfo > getPropertyInfo( const OUString& url, const cpo::uno::Sequence< css::beans::PropertyValue >& info ) override ;
         virtual sal_Int32 getMajorVersion(  ) override ;
         virtual sal_Int32 getMinorVersion(  ) override;
 
-        const css::uno::Reference<cpo::uno::XComponentContext>& getContext() const { return m_aContext; }
+        const cpo::uno::Reference<cpo::uno::XComponentContext>& getContext() const { return m_aContext; }
         const ::comphelper::EventLogger&   getLogger() const { return m_aLogger; }
     };
 

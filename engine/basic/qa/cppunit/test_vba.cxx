@@ -21,6 +21,7 @@
 
 #ifdef _WIN64
 using namespace ::com::sun::star;
+using namespace ::cpo;
 #endif
 
 namespace

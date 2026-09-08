@@ -32,7 +32,7 @@ class SwVbaBookmark : public SwVbaBookmark_BASE
 {
 private:
     rtl::Reference<SwXTextDocument> mxModel;
-    css::uno::Reference<css::text::XTextContent> mxBookmark;
+    cpo::uno::Reference<css::text::XTextContent> mxBookmark;
     OUString maBookmarkName;
     bool mbValid;
 
@@ -42,8 +42,8 @@ private:
 
 public:
     /// @throws cpo::uno::RuntimeException
-    SwVbaBookmark(const css::uno::Reference<ooo::vba::XHelperInterface>& rParent,
-                  const css::uno::Reference<cpo::uno::XComponentContext>& rContext,
+    SwVbaBookmark(const cpo::uno::Reference<ooo::vba::XHelperInterface>& rParent,
+                  const cpo::uno::Reference<cpo::uno::XComponentContext>& rContext,
                   rtl::Reference<SwXTextDocument> xModel, OUString aName);
     virtual ~SwVbaBookmark() override;
 

@@ -35,7 +35,7 @@ namespace pcr
 {
 
 
-    using ::com::sun::star::uno::Reference;
+    using ::cpo::uno::Reference;
     using ::cpo::uno::XComponentContext;
     using ::com::sun::star::inspection::XPropertyControl;
     using ::cpo::uno::RuntimeException;
@@ -46,7 +46,7 @@ namespace pcr
     using ::cpo::uno::XInterface;
     using ::com::sun::star::ucb::AlreadyInitializedException;
     using ::com::sun::star::lang::IllegalArgumentException;
-    using ::com::sun::star::uno::UNO_QUERY;
+    using ::cpo::uno::UNO_QUERY;
     using ::com::sun::star::awt::XWindow;
 
     DefaultHelpProvider::DefaultHelpProvider()
@@ -142,7 +142,7 @@ namespace pcr
 
         try
         {
-            Reference< XWindow > xControlWindow( _rxControl->getControlWindow(), css::uno::UNO_SET_THROW );
+            Reference< XWindow > xControlWindow( _rxControl->getControlWindow(), cpo::uno::UNO_SET_THROW );
             pControlWindow = VCLUnoHelper::GetWindow( xControlWindow );
         }
         catch( const Exception& )

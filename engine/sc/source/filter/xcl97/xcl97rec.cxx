@@ -78,8 +78,9 @@
 #include <memory>
 
 using namespace ::com::sun::star;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::UNO_QUERY;
+using namespace ::cpo;
+using ::cpo::uno::Reference;
+using ::cpo::uno::UNO_QUERY;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::drawing::XShape;
 using ::oox::drawingml::ShapeExport;
@@ -257,7 +258,7 @@ void SaveDrawingMLObjects( XclExpObjList& rList, XclExpXmlStream& rStrm )
 
         if (pObj && rxObj->GetObjType() == EXC_OBJTYPE_GROUP) // (it can be a subgroup)
         {
-            css::uno::Reference<css::drawing::XShapes> xShapes(pObj->GetShape(), UNO_QUERY);
+            cpo::uno::Reference<css::drawing::XShapes> xShapes(pObj->GetShape(), UNO_QUERY);
             if (xShapes)
             {
                 // skip (also) the objects of this group

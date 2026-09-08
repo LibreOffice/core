@@ -254,7 +254,7 @@ const SdrObjKind nObjectTypes[] =
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::ui;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
@@ -468,7 +468,7 @@ namespace
 
 // check if the control has one of the interfaces we can use for searching
 // *_pCurrentText will be filled with the current text of the control (as used when searching this control)
-bool IsSearchableControl( const css::uno::Reference< cpo::uno::XInterface>& _rxControl,
+bool IsSearchableControl( const cpo::uno::Reference< cpo::uno::XInterface>& _rxControl,
     OUString* _pCurrentText )
 {
     if ( !_rxControl.is() )
@@ -1948,8 +1948,8 @@ bool FmXFormShell::setCurrentSelection_Lock( InterfaceBag&& _rSelection )
     // TODO: this should happen elsewhere, but not here - shouldn't it?
     if ( !m_aCurrentSelection.empty() )
     {
-        Reference< XChild > xCur; if ( m_aCurrentSelection.size() == 1 ) xCur.set(*m_aCurrentSelection.begin(), css::uno::UNO_QUERY);
-        Reference< XChild > xNew; if ( _rSelection.size() == 1 ) xNew.set(*_rSelection.begin(), css::uno::UNO_QUERY);
+        Reference< XChild > xCur; if ( m_aCurrentSelection.size() == 1 ) xCur.set(*m_aCurrentSelection.begin(), cpo::uno::UNO_QUERY);
+        Reference< XChild > xNew; if ( _rSelection.size() == 1 ) xNew.set(*_rSelection.begin(), cpo::uno::UNO_QUERY);
 
         // is there nothing to be selected, or the parents differ, and the parent of the current object
         // is a selection supplier, then deselect

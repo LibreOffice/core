@@ -261,7 +261,7 @@ static OUString lcl_extractStandardGeneralName( const OUString & rCode )
 void ImpSvNumberformatScan::SetDependentKeywords()
 {
     using namespace ::com::sun::star;
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
 
     const CharClass* pCharClass = mrCurrentLanguageData.GetCharClass();
     const LocaleDataWrapper* pLocaleData = mrCurrentLanguageData.GetLocaleData();

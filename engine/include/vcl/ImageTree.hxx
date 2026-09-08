@@ -26,7 +26,7 @@
 #include <rtl/ustring.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
-namespace com::sun::star::uno { template <class interface_type> class Reference; }
+namespace cpo::uno { template <class interface_type> class Reference; }
 
 enum class ImageLoadFlags : sal_uInt16
 {
@@ -67,7 +67,7 @@ public:
     VCL_DLLPUBLIC std::shared_ptr<SvMemoryStream> getImageStream(
         OUString const & rName, OUString const & rStyle, OUString const & rLang);
 
-    VCL_DLLPUBLIC css::uno::Reference<css::io::XInputStream> getImageXInputStream(OUString const & rName,
+    VCL_DLLPUBLIC cpo::uno::Reference<css::io::XInputStream> getImageXInputStream(OUString const & rName,
         OUString const & rStyle, OUString const & rLang);
 
     VCL_DLLPUBLIC bool loadImage(
@@ -81,7 +81,7 @@ public:
         sal_Int32 nScalePercentage,
         const ImageLoadFlags eFlags = ImageLoadFlags::NONE);
 
-    VCL_DLLPUBLIC css::uno::Reference<css::container::XNameAccess> const & getNameAccess();
+    VCL_DLLPUBLIC cpo::uno::Reference<css::container::XNameAccess> const & getNameAccess();
 
 
     /** a crude form of life cycle control (called from DeInitVCL; otherwise,

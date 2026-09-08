@@ -47,9 +47,10 @@
 #include <comphelper/servicehelper.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace xmloff::token;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::UNO_QUERY;
+using ::cpo::uno::Reference;
+using ::cpo::uno::UNO_QUERY;
 
 /**
  * Determine whether this table is an external reference cache from its

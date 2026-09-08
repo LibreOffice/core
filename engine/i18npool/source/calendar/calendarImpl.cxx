@@ -25,7 +25,7 @@
 
 #include <cpo/uno/XComponentContext.hpp>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::i18n;
 using namespace ::cpo::uno;
 

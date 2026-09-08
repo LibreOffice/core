@@ -54,7 +54,7 @@ public:
     virtual void ArrangeGUIElements() override;
     virtual SdPage* GetActualPage() override;
     virtual SdPage* getCurrentPage() const override;
-    virtual css::uno::Reference<css::drawing::XDrawSubController> CreateSubController() override;
+    virtual cpo::uno::Reference<css::drawing::XDrawSubController> CreateSubController() override;
 
     void ExecCtrl(SfxRequest& rReq);
     void GetCtrlState(SfxItemSet& rSet);

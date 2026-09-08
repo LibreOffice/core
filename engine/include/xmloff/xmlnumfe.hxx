@@ -30,7 +30,7 @@
 #include <memory>
 
 namespace com::sun::star::lang { struct Locale; }
-namespace com::sun::star::uno { template <typename > class Reference; }
+namespace cpo::uno { template <typename > class Reference; }
 namespace com::sun::star::util { class XNumberFormatsSupplier; }
 
 inline constexpr OUString XML_WRITTENNUMBERSTYLES = u"WrittenNumberStyles"_ustr;
@@ -103,9 +103,9 @@ private:
 
 public:
     SvXMLNumFmtExport( SvXMLExport& rExport,
-                       const css::uno::Reference< css::util::XNumberFormatsSupplier >& rSupp );
+                       const cpo::uno::Reference< css::util::XNumberFormatsSupplier >& rSupp );
     SvXMLNumFmtExport( SvXMLExport& rExport,
-                       const css::uno::Reference< css::util::XNumberFormatsSupplier >& rSupp,
+                       const cpo::uno::Reference< css::util::XNumberFormatsSupplier >& rSupp,
                        OUString sPrefix );
 
     ~SvXMLNumFmtExport();

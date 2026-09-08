@@ -37,7 +37,7 @@
 namespace oox::ole {
 
 using namespace ::com::sun::star::script::vba;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star;
 

@@ -44,9 +44,9 @@ namespace dbaui
     {
         OUString               m_sOrgOrder;
 
-        css::uno::Reference< css::sdb::XSingleSelectQueryComposer> m_xQueryComposer;
-        css::uno::Reference< css::container::XNameAccess>          m_xColumns;
-        css::uno::Reference< css::sdbc::XConnection>               m_xConnection;
+        cpo::uno::Reference< css::sdb::XSingleSelectQueryComposer> m_xQueryComposer;
+        cpo::uno::Reference< css::container::XNameAccess>          m_xColumns;
+        cpo::uno::Reference< css::sdbc::XConnection>               m_xConnection;
 
         weld::ComboBox* m_aColumnList[DOG_ROWS];
         weld::ComboBox* m_aValueList[DOG_ROWS];
@@ -63,9 +63,9 @@ namespace dbaui
 
     public:
         DlgOrderCrit(weld::Window * pParent,
-                     const css::uno::Reference< css::sdbc::XConnection>& _rxConnection,
-                     const css::uno::Reference< css::sdb::XSingleSelectQueryComposer>& _rxComposer,
-                     const css::uno::Reference< css::container::XNameAccess>& _rxCols);
+                     const cpo::uno::Reference< css::sdbc::XConnection>& _rxConnection,
+                     const cpo::uno::Reference< css::sdb::XSingleSelectQueryComposer>& _rxComposer,
+                     const cpo::uno::Reference< css::container::XNameAccess>& _rxCols);
         virtual ~DlgOrderCrit() override;
 
         void            BuildOrderPart();

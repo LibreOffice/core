@@ -26,7 +26,7 @@
 
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::datatransfer::clipboard { class XClipboard; }
-namespace com::sun::star::uno { template <class interface_type> class Reference; }
+namespace cpo::uno { template <class interface_type> class Reference; }
 namespace cpo::uno { template <typename > class Sequence; }
 namespace vcl { class Window; }
 namespace tools { class JsonWriter; }
@@ -202,7 +202,7 @@ public:
     /**
      * Gets the selection as a transferable for later processing
      */
-    virtual css::uno::Reference<css::datatransfer::XTransferable> getSelection() = 0;
+    virtual cpo::uno::Reference<css::datatransfer::XTransferable> getSelection() = 0;
 
     /**
      * Adjusts the graphic selection.
@@ -279,7 +279,7 @@ public:
     virtual PointerStyle getPointer() = 0;
 
     /// Sets the clipboard of the component.
-    virtual void setClipboard(const css::uno::Reference<css::datatransfer::clipboard::XClipboard>& xClipboard) = 0;
+    virtual void setClipboard(const cpo::uno::Reference<css::datatransfer::clipboard::XClipboard>& xClipboard) = 0;
 
     /// If the current contents of the clipboard is something we can paste.
     virtual bool isMimeTypeSupported() = 0;

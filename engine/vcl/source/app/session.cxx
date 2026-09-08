@@ -39,7 +39,7 @@
 
 #include <vector>
 
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::frame;
@@ -55,12 +55,12 @@ class VCLSession:
 {
     struct Listener
     {
-        css::uno::Reference< XSessionManagerListener >      m_xListener;
+        cpo::uno::Reference< XSessionManagerListener >      m_xListener;
         bool                                        m_bInteractionRequested;
         bool                                        m_bInteractionDone;
         bool                                        m_bSaveDone;
 
-        explicit Listener( css::uno::Reference< XSessionManagerListener > xListener )
+        explicit Listener( cpo::uno::Reference< XSessionManagerListener > xListener )
                 : m_xListener(std::move( xListener )),
                   m_bInteractionRequested( false ),
                   m_bInteractionDone( false ),
@@ -79,11 +79,11 @@ class VCLSession:
 
     virtual ~VCLSession() override {}
 
-    virtual void addSessionManagerListener( const css::uno::Reference< XSessionManagerListener >& xListener ) override;
-    virtual void removeSessionManagerListener( const css::uno::Reference< XSessionManagerListener>& xListener ) override;
-    virtual void queryInteraction( const css::uno::Reference< XSessionManagerListener >& xListener ) override;
-    virtual void interactionDone( const css::uno::Reference< XSessionManagerListener >& xListener ) override;
-    virtual void saveDone( const css::uno::Reference< XSessionManagerListener >& xListener ) override;
+    virtual void addSessionManagerListener( const cpo::uno::Reference< XSessionManagerListener >& xListener ) override;
+    virtual void removeSessionManagerListener( const cpo::uno::Reference< XSessionManagerListener>& xListener ) override;
+    virtual void queryInteraction( const cpo::uno::Reference< XSessionManagerListener >& xListener ) override;
+    virtual void interactionDone( const cpo::uno::Reference< XSessionManagerListener >& xListener ) override;
+    virtual void saveDone( const cpo::uno::Reference< XSessionManagerListener >& xListener ) override;
     virtual bool cancelShutdown() override;
 
     OUString getImplementationName() override {
@@ -229,7 +229,7 @@ void VCLSession::callQuit()
     SolarMutexReleaser aReleaser;
     for (auto const & listener: aListeners)
     {
-        css::uno::Reference< XSessionManagerListener2 > xListener2( listener.m_xListener, UNO_QUERY );
+        cpo::uno::Reference< XSessionManagerListener2 > xListener2( listener.m_xListener, UNO_QUERY );
         if( xListener2.is() )
             xListener2->doQuit();
     }
@@ -267,7 +267,7 @@ void VCLSession::SalSessionEventProc( void* pData, SalSessionEvent* pEvent )
     }
 }
 
-void VCLSession::addSessionManagerListener( const css::uno::Reference<XSessionManagerListener>& xListener )
+void VCLSession::addSessionManagerListener( const cpo::uno::Reference<XSessionManagerListener>& xListener )
 {
     SAL_INFO("vcl.se", "VCLSession::addSessionManagerListener" );
 
@@ -277,7 +277,7 @@ void VCLSession::addSessionManagerListener( const css::uno::Reference<XSessionMa
     m_aListeners.emplace_back( xListener );
 }
 
-void VCLSession::removeSessionManagerListener( const css::uno::Reference<XSessionManagerListener>& xListener )
+void VCLSession::removeSessionManagerListener( const cpo::uno::Reference<XSessionManagerListener>& xListener )
 {
     SAL_INFO("vcl.se", "VCLSession::removeSessionManagerListener" );
 
@@ -288,7 +288,7 @@ void VCLSession::removeSessionManagerListener( const css::uno::Reference<XSessio
     std::erase_if(m_aListeners, [&](Listener& listener) {return xListener == listener.m_xListener;});
 }
 
-void VCLSession::queryInteraction( const css::uno::Reference<XSessionManagerListener>& xListener )
+void VCLSession::queryInteraction( const cpo::uno::Reference<XSessionManagerListener>& xListener )
 {
     SAL_INFO("vcl.se", "VCLSession::queryInteraction");
 
@@ -327,7 +327,7 @@ void VCLSession::queryInteraction( const css::uno::Reference<XSessionManagerList
     }
 }
 
-void VCLSession::interactionDone( const css::uno::Reference< XSessionManagerListener >& xListener )
+void VCLSession::interactionDone( const cpo::uno::Reference< XSessionManagerListener >& xListener )
 {
     SAL_INFO("vcl.se", "VCLSession::interactionDone");
 
@@ -355,7 +355,7 @@ void VCLSession::interactionDone( const css::uno::Reference< XSessionManagerList
     }
 }
 
-void VCLSession::saveDone( const css::uno::Reference< XSessionManagerListener >& xListener )
+void VCLSession::saveDone( const cpo::uno::Reference< XSessionManagerListener >& xListener )
 {
     SAL_INFO("vcl.se", "VCLSession::saveDone");
 

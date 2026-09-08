@@ -45,9 +45,9 @@ public:
 
     static std::unique_ptr<PanelLayout> Create (
         weld::Widget* pParent,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame,
+        const cpo::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings,
-        const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
+        const cpo::uno::Reference<css::ui::XSidebar>& rxSidebar);
 
     SfxBindings* GetBindings() { return mpBindings;}
 
@@ -67,9 +67,9 @@ public:
 
     ParaPropertyPanel (
         weld::Widget* pParent,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame,
+        const cpo::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings,
-        css::uno::Reference<css::ui::XSidebar> xSidebar);
+        cpo::uno::Reference<css::ui::XSidebar> xSidebar);
 
 private:
     // UI controls
@@ -142,7 +142,7 @@ private:
 
     vcl::EnumContext maContext;
     SfxBindings* mpBindings;
-    css::uno::Reference<css::ui::XSidebar> mxSidebar;
+    cpo::uno::Reference<css::ui::XSidebar> mxSidebar;
 
     DECL_LINK(ModifyIndentHdl_Impl, weld::MetricSpinButton&, void);
     DECL_LINK(ULSpaceHdl_Impl, weld::MetricSpinButton&, void);

@@ -22,7 +22,7 @@
 
 #include <sal/config.h>
 #include <xmloff/dllapi.h>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 #include <memory>
 
@@ -60,7 +60,7 @@ namespace xmloff
             @see endPage
         */
         void startPage(
-            const css::uno::Reference< css::drawing::XDrawPage >& _rxDrawPage);
+            const cpo::uno::Reference< css::drawing::XDrawPage >& _rxDrawPage);
 
         /** creates an import context for the office:forms element
         */
@@ -77,7 +77,7 @@ namespace xmloff
         */
         SAL_DLLPRIVATE SvXMLImportContext* createContext(
             const sal_Int32 _nElement,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList >& _rxAttribs);
+            const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& _rxAttribs);
 
         /** lookup a control given by id.
 
@@ -87,7 +87,7 @@ namespace xmloff
 
             @see startPage
         */
-        SAL_DLLPRIVATE css::uno::Reference< css::beans::XPropertySet >
+        SAL_DLLPRIVATE cpo::uno::Reference< css::beans::XPropertySet >
                 lookupControl(const OUString& _rId);
 
         /** end importing the forms of the current page
@@ -110,7 +110,7 @@ namespace xmloff
                 the style name for the control's number style
         */
         SAL_DLLPRIVATE void applyControlNumberStyle(
-            const css::uno::Reference< css::beans::XPropertySet >& _rxControlModel,
+            const cpo::uno::Reference< css::beans::XPropertySet >& _rxControlModel,
             const OUString& _rControlNumberStyleName
         );
 

@@ -48,12 +48,12 @@ class XMLChartExportPropertyMapper final : public SvXMLExportPropertyMapper
 {
 private:
     SvXMLExport& mrExport;
-    css::uno::Reference< css::chart2::XChartDocument > mxChartDoc;
+    cpo::uno::Reference< css::chart2::XChartDocument > mxChartDoc;
 
     virtual void ContextFilter(
         bool bEnableFoFontFamily,
         ::std::vector< XMLPropertyState >& rProperties,
-        const css::uno::Reference<css::beans::XPropertySet >& rPropSet ) const override;
+        const cpo::uno::Reference<css::beans::XPropertySet >& rPropSet ) const override;
 
     /// this method is called for every item that has the MID_FLAG_ELEMENT_EXPORT flag set
     virtual void handleElementItem(
@@ -74,7 +74,7 @@ public:
                                   SvXMLExport& rExport );
     virtual ~XMLChartExportPropertyMapper() override;
 
-    void setChartDoc( const css::uno::Reference< css::chart2::XChartDocument >& xChartDoc );
+    void setChartDoc( const cpo::uno::Reference< css::chart2::XChartDocument >& xChartDoc );
 };
 
 class XMLChartImportPropertyMapper final : public SvXMLImportPropertyMapper

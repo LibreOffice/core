@@ -28,7 +28,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <cpo/uno/XComponentContext.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <cppuhelper/bootstrap.hxx>
 #include "cppunit/TestAssert.h"

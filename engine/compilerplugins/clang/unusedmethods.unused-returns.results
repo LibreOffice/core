@@ -23,9 +23,9 @@ connectivity/source/inc/odbc/OFunctions.hxx:446
 connectivity/source/inc/odbc/OStatement.hxx:114
     _Bool connectivity::odbc::OStatement_Base::lockIfNecessary(const rtl::OUString &)
 cppuhelper/inc/interfacecontainer4.hxx:170
-    int cppuhelper::OInterfaceContainerHelper4::addInterface(std::unique_lock<std::mutex> &,const com::sun::star::uno::Reference<type-parameter-?-?> &)
+    int cppuhelper::OInterfaceContainerHelper4::addInterface(std::unique_lock<std::mutex> &,const cpo::uno::Reference<type-parameter-?-?> &)
 cppuhelper/inc/interfacecontainer4.hxx:181
-    int cppuhelper::OInterfaceContainerHelper4::removeInterface(std::unique_lock<std::mutex> &,const com::sun::star::uno::Reference<type-parameter-?-?> &)
+    int cppuhelper::OInterfaceContainerHelper4::removeInterface(std::unique_lock<std::mutex> &,const cpo::uno::Reference<type-parameter-?-?> &)
 cui/source/inc/iconcdlg.hxx:54
     _Bool IconChoicePage::FillItemSet(SfxItemSet *)
 cui/source/inc/SpellDialog.hxx:71
@@ -81,7 +81,7 @@ include/comphelper/crypto/Crypto.hxx:127
 include/comphelper/embeddedobjectcontainer.hxx:183
     _Bool comphelper::EmbeddedObjectContainer::StoreChildren(_Bool,_Bool)
 include/comphelper/embeddedobjectcontainer.hxx:184
-    _Bool comphelper::EmbeddedObjectContainer::StoreAsChildren(_Bool,_Bool,_Bool,const com::sun::star::uno::Reference<com::sun::star::embed::XStorage> &)
+    _Bool comphelper::EmbeddedObjectContainer::StoreAsChildren(_Bool,_Bool,_Bool,const cpo::uno::Reference<com::sun::star::embed::XStorage> &)
 include/comphelper/interfacecontainer3.hxx:47
     comphelper::OInterfaceIteratorHelper3<ListenerT> comphelper::<deduction guide for OInterfaceIteratorHelper3>(comphelper::OInterfaceIteratorHelper3<ListenerT>)
 include/comphelper/interfacecontainer3.hxx:62
@@ -89,7 +89,7 @@ include/comphelper/interfacecontainer3.hxx:62
 include/comphelper/interfacecontainer3.hxx:91
     comphelper::OInterfaceIteratorHelper3<ListenerT> comphelper::<deduction guide for OInterfaceIteratorHelper3>(const comphelper::OInterfaceIteratorHelper3<ListenerT> &)
 include/comphelper/interfacecontainer3.hxx:169
-    const com::sun::star::uno::Reference<type-parameter-?-?> & comphelper::OInterfaceContainerHelper3::getInterface(int) const
+    const cpo::uno::Reference<type-parameter-?-?> & comphelper::OInterfaceContainerHelper3::getInterface(int) const
 include/comphelper/interfacecontainer4.hxx:49
     comphelper::OInterfaceIteratorHelper4<ListenerT> comphelper::<deduction guide for OInterfaceIteratorHelper4>(comphelper::OInterfaceIteratorHelper4<ListenerT>)
 include/comphelper/interfacecontainer4.hxx:66
@@ -97,7 +97,7 @@ include/comphelper/interfacecontainer4.hxx:66
 include/comphelper/interfacecontainer4.hxx:100
     comphelper::OInterfaceIteratorHelper4<ListenerT> comphelper::<deduction guide for OInterfaceIteratorHelper4>(const comphelper::OInterfaceIteratorHelper4<ListenerT> &)
 include/comphelper/multicontainer2.hxx:94
-    int comphelper::OMultiTypeInterfaceContainerHelper2::addInterface(const cpo::uno::Type &,const com::sun::star::uno::Reference<cpo::uno::XInterface> &)
+    int comphelper::OMultiTypeInterfaceContainerHelper2::addInterface(const cpo::uno::Type &,const cpo::uno::Reference<cpo::uno::XInterface> &)
 include/editeng/editview.hxx:290
     ErrCode EditView::Read(SvStream &,enum EETextFormat,SvKeyValueIterator *)
 include/editeng/outliner.hxx:337
@@ -219,25 +219,25 @@ include/o3tl/sorted_vector.hxx:202
 include/o3tl/sorted_vector.hxx:202
     __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const char16_t *, std::__cxx1998::vector<char16_t> >, std::vector<char16_t> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
 include/o3tl/sorted_vector.hxx:202
-    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::beans::XPropertiesChangeListener> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::beans::XPropertiesChangeListener> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::beans::XPropertiesChangeListener> > > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const cpo::uno::Reference<com::sun::star::beans::XPropertiesChangeListener> *, std::__cxx1998::vector<cpo::uno::Reference<com::sun::star::beans::XPropertiesChangeListener> > >, std::vector<cpo::uno::Reference<com::sun::star::beans::XPropertiesChangeListener> > > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
 include/o3tl/sorted_vector.hxx:202
-    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::beans::XPropertyChangeListener> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::beans::XPropertyChangeListener> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::beans::XPropertyChangeListener> > > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const cpo::uno::Reference<com::sun::star::beans::XPropertyChangeListener> *, std::__cxx1998::vector<cpo::uno::Reference<com::sun::star::beans::XPropertyChangeListener> > >, std::vector<cpo::uno::Reference<com::sun::star::beans::XPropertyChangeListener> > > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
 include/o3tl/sorted_vector.hxx:202
-    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> > > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const cpo::uno::Reference<com::sun::star::beans::XPropertySet> *, std::__cxx1998::vector<cpo::uno::Reference<com::sun::star::beans::XPropertySet> > >, std::vector<cpo::uno::Reference<com::sun::star::beans::XPropertySet> > > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
 include/o3tl/sorted_vector.hxx:202
-    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::beans::XVetoableChangeListener> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::beans::XVetoableChangeListener> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::beans::XVetoableChangeListener> > > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const cpo::uno::Reference<com::sun::star::beans::XVetoableChangeListener> *, std::__cxx1998::vector<cpo::uno::Reference<com::sun::star::beans::XVetoableChangeListener> > >, std::vector<cpo::uno::Reference<com::sun::star::beans::XVetoableChangeListener> > > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
 include/o3tl/sorted_vector.hxx:202
-    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::container::XContainerListener> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::container::XContainerListener> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::container::XContainerListener> > > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const cpo::uno::Reference<com::sun::star::container::XContainerListener> *, std::__cxx1998::vector<cpo::uno::Reference<com::sun::star::container::XContainerListener> > >, std::vector<cpo::uno::Reference<com::sun::star::container::XContainerListener> > > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
 include/o3tl/sorted_vector.hxx:202
-    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::drawing::XShape> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::drawing::XShape> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::drawing::XShape> > > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const cpo::uno::Reference<com::sun::star::drawing::XShape> *, std::__cxx1998::vector<cpo::uno::Reference<com::sun::star::drawing::XShape> > >, std::vector<cpo::uno::Reference<com::sun::star::drawing::XShape> > > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
 include/o3tl/sorted_vector.hxx:202
-    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::io::XStreamListener> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::io::XStreamListener> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::io::XStreamListener> > > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const cpo::uno::Reference<com::sun::star::io::XStreamListener> *, std::__cxx1998::vector<cpo::uno::Reference<com::sun::star::io::XStreamListener> > >, std::vector<cpo::uno::Reference<com::sun::star::io::XStreamListener> > > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
 include/o3tl/sorted_vector.hxx:202
-    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::lang::XEventListener> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::lang::XEventListener> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::lang::XEventListener> > > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const cpo::uno::Reference<com::sun::star::lang::XEventListener> *, std::__cxx1998::vector<cpo::uno::Reference<com::sun::star::lang::XEventListener> > >, std::vector<cpo::uno::Reference<com::sun::star::lang::XEventListener> > > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
 include/o3tl/sorted_vector.hxx:202
-    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::text::XTextFrame> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::text::XTextFrame> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::text::XTextFrame> > > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const cpo::uno::Reference<com::sun::star::text::XTextFrame> *, std::__cxx1998::vector<cpo::uno::Reference<com::sun::star::text::XTextFrame> > >, std::vector<cpo::uno::Reference<com::sun::star::text::XTextFrame> > > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
 include/o3tl/sorted_vector.hxx:202
-    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<cpo::uno::XInterface> *, std::__cxx1998::vector<com::sun::star::uno::Reference<cpo::uno::XInterface> > >, std::vector<com::sun::star::uno::Reference<cpo::uno::XInterface> > > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const cpo::uno::Reference<cpo::uno::XInterface> *, std::__cxx1998::vector<cpo::uno::Reference<cpo::uno::XInterface> > >, std::vector<cpo::uno::Reference<cpo::uno::XInterface> > > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
 include/o3tl/sorted_vector.hxx:202
     __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const enum OpCode *, std::__cxx1998::vector<enum OpCode> >, std::vector<enum OpCode> > o3tl::sorted_vector::lower_bound(const type-parameter-?-? &) const
 include/o3tl/sorted_vector.hxx:202
@@ -417,25 +417,25 @@ include/o3tl/sorted_vector.hxx:207
 include/o3tl/sorted_vector.hxx:207
     __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const char16_t *, std::__cxx1998::vector<char16_t> >, std::vector<char16_t> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
 include/o3tl/sorted_vector.hxx:207
-    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::beans::XPropertiesChangeListener> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::beans::XPropertiesChangeListener> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::beans::XPropertiesChangeListener> > > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const cpo::uno::Reference<com::sun::star::beans::XPropertiesChangeListener> *, std::__cxx1998::vector<cpo::uno::Reference<com::sun::star::beans::XPropertiesChangeListener> > >, std::vector<cpo::uno::Reference<com::sun::star::beans::XPropertiesChangeListener> > > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
 include/o3tl/sorted_vector.hxx:207
-    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::beans::XPropertyChangeListener> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::beans::XPropertyChangeListener> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::beans::XPropertyChangeListener> > > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const cpo::uno::Reference<com::sun::star::beans::XPropertyChangeListener> *, std::__cxx1998::vector<cpo::uno::Reference<com::sun::star::beans::XPropertyChangeListener> > >, std::vector<cpo::uno::Reference<com::sun::star::beans::XPropertyChangeListener> > > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
 include/o3tl/sorted_vector.hxx:207
-    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> > > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const cpo::uno::Reference<com::sun::star::beans::XPropertySet> *, std::__cxx1998::vector<cpo::uno::Reference<com::sun::star::beans::XPropertySet> > >, std::vector<cpo::uno::Reference<com::sun::star::beans::XPropertySet> > > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
 include/o3tl/sorted_vector.hxx:207
-    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::beans::XVetoableChangeListener> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::beans::XVetoableChangeListener> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::beans::XVetoableChangeListener> > > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const cpo::uno::Reference<com::sun::star::beans::XVetoableChangeListener> *, std::__cxx1998::vector<cpo::uno::Reference<com::sun::star::beans::XVetoableChangeListener> > >, std::vector<cpo::uno::Reference<com::sun::star::beans::XVetoableChangeListener> > > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
 include/o3tl/sorted_vector.hxx:207
-    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::container::XContainerListener> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::container::XContainerListener> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::container::XContainerListener> > > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const cpo::uno::Reference<com::sun::star::container::XContainerListener> *, std::__cxx1998::vector<cpo::uno::Reference<com::sun::star::container::XContainerListener> > >, std::vector<cpo::uno::Reference<com::sun::star::container::XContainerListener> > > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
 include/o3tl/sorted_vector.hxx:207
-    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::drawing::XShape> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::drawing::XShape> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::drawing::XShape> > > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const cpo::uno::Reference<com::sun::star::drawing::XShape> *, std::__cxx1998::vector<cpo::uno::Reference<com::sun::star::drawing::XShape> > >, std::vector<cpo::uno::Reference<com::sun::star::drawing::XShape> > > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
 include/o3tl/sorted_vector.hxx:207
-    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::io::XStreamListener> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::io::XStreamListener> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::io::XStreamListener> > > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const cpo::uno::Reference<com::sun::star::io::XStreamListener> *, std::__cxx1998::vector<cpo::uno::Reference<com::sun::star::io::XStreamListener> > >, std::vector<cpo::uno::Reference<com::sun::star::io::XStreamListener> > > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
 include/o3tl/sorted_vector.hxx:207
-    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::lang::XEventListener> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::lang::XEventListener> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::lang::XEventListener> > > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const cpo::uno::Reference<com::sun::star::lang::XEventListener> *, std::__cxx1998::vector<cpo::uno::Reference<com::sun::star::lang::XEventListener> > >, std::vector<cpo::uno::Reference<com::sun::star::lang::XEventListener> > > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
 include/o3tl/sorted_vector.hxx:207
-    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::text::XTextFrame> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::text::XTextFrame> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::text::XTextFrame> > > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const cpo::uno::Reference<com::sun::star::text::XTextFrame> *, std::__cxx1998::vector<cpo::uno::Reference<com::sun::star::text::XTextFrame> > >, std::vector<cpo::uno::Reference<com::sun::star::text::XTextFrame> > > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
 include/o3tl/sorted_vector.hxx:207
-    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<cpo::uno::XInterface> *, std::__cxx1998::vector<com::sun::star::uno::Reference<cpo::uno::XInterface> > >, std::vector<com::sun::star::uno::Reference<cpo::uno::XInterface> > > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const cpo::uno::Reference<cpo::uno::XInterface> *, std::__cxx1998::vector<cpo::uno::Reference<cpo::uno::XInterface> > >, std::vector<cpo::uno::Reference<cpo::uno::XInterface> > > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
 include/o3tl/sorted_vector.hxx:207
     __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const enum OpCode *, std::__cxx1998::vector<enum OpCode> >, std::vector<enum OpCode> > o3tl::sorted_vector::upper_bound(const type-parameter-?-? &) const
 include/o3tl/sorted_vector.hxx:207
@@ -615,25 +615,25 @@ include/o3tl/sorted_vector.hxx:218
 include/o3tl/sorted_vector.hxx:218
     __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const char16_t *, std::__cxx1998::vector<char16_t> >, std::vector<char16_t> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
 include/o3tl/sorted_vector.hxx:218
-    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::beans::XPropertiesChangeListener> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::beans::XPropertiesChangeListener> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::beans::XPropertiesChangeListener> > > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const cpo::uno::Reference<com::sun::star::beans::XPropertiesChangeListener> *, std::__cxx1998::vector<cpo::uno::Reference<com::sun::star::beans::XPropertiesChangeListener> > >, std::vector<cpo::uno::Reference<com::sun::star::beans::XPropertiesChangeListener> > > o3tl::sorted_vector::find(const type-parameter-?-? &) const
 include/o3tl/sorted_vector.hxx:218
-    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::beans::XPropertyChangeListener> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::beans::XPropertyChangeListener> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::beans::XPropertyChangeListener> > > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const cpo::uno::Reference<com::sun::star::beans::XPropertyChangeListener> *, std::__cxx1998::vector<cpo::uno::Reference<com::sun::star::beans::XPropertyChangeListener> > >, std::vector<cpo::uno::Reference<com::sun::star::beans::XPropertyChangeListener> > > o3tl::sorted_vector::find(const type-parameter-?-? &) const
 include/o3tl/sorted_vector.hxx:218
-    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> > > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const cpo::uno::Reference<com::sun::star::beans::XPropertySet> *, std::__cxx1998::vector<cpo::uno::Reference<com::sun::star::beans::XPropertySet> > >, std::vector<cpo::uno::Reference<com::sun::star::beans::XPropertySet> > > o3tl::sorted_vector::find(const type-parameter-?-? &) const
 include/o3tl/sorted_vector.hxx:218
-    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::beans::XVetoableChangeListener> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::beans::XVetoableChangeListener> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::beans::XVetoableChangeListener> > > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const cpo::uno::Reference<com::sun::star::beans::XVetoableChangeListener> *, std::__cxx1998::vector<cpo::uno::Reference<com::sun::star::beans::XVetoableChangeListener> > >, std::vector<cpo::uno::Reference<com::sun::star::beans::XVetoableChangeListener> > > o3tl::sorted_vector::find(const type-parameter-?-? &) const
 include/o3tl/sorted_vector.hxx:218
-    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::container::XContainerListener> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::container::XContainerListener> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::container::XContainerListener> > > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const cpo::uno::Reference<com::sun::star::container::XContainerListener> *, std::__cxx1998::vector<cpo::uno::Reference<com::sun::star::container::XContainerListener> > >, std::vector<cpo::uno::Reference<com::sun::star::container::XContainerListener> > > o3tl::sorted_vector::find(const type-parameter-?-? &) const
 include/o3tl/sorted_vector.hxx:218
-    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::drawing::XShape> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::drawing::XShape> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::drawing::XShape> > > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const cpo::uno::Reference<com::sun::star::drawing::XShape> *, std::__cxx1998::vector<cpo::uno::Reference<com::sun::star::drawing::XShape> > >, std::vector<cpo::uno::Reference<com::sun::star::drawing::XShape> > > o3tl::sorted_vector::find(const type-parameter-?-? &) const
 include/o3tl/sorted_vector.hxx:218
-    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::io::XStreamListener> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::io::XStreamListener> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::io::XStreamListener> > > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const cpo::uno::Reference<com::sun::star::io::XStreamListener> *, std::__cxx1998::vector<cpo::uno::Reference<com::sun::star::io::XStreamListener> > >, std::vector<cpo::uno::Reference<com::sun::star::io::XStreamListener> > > o3tl::sorted_vector::find(const type-parameter-?-? &) const
 include/o3tl/sorted_vector.hxx:218
-    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::lang::XEventListener> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::lang::XEventListener> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::lang::XEventListener> > > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const cpo::uno::Reference<com::sun::star::lang::XEventListener> *, std::__cxx1998::vector<cpo::uno::Reference<com::sun::star::lang::XEventListener> > >, std::vector<cpo::uno::Reference<com::sun::star::lang::XEventListener> > > o3tl::sorted_vector::find(const type-parameter-?-? &) const
 include/o3tl/sorted_vector.hxx:218
-    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<com::sun::star::text::XTextFrame> *, std::__cxx1998::vector<com::sun::star::uno::Reference<com::sun::star::text::XTextFrame> > >, std::vector<com::sun::star::uno::Reference<com::sun::star::text::XTextFrame> > > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const cpo::uno::Reference<com::sun::star::text::XTextFrame> *, std::__cxx1998::vector<cpo::uno::Reference<com::sun::star::text::XTextFrame> > >, std::vector<cpo::uno::Reference<com::sun::star::text::XTextFrame> > > o3tl::sorted_vector::find(const type-parameter-?-? &) const
 include/o3tl/sorted_vector.hxx:218
-    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const com::sun::star::uno::Reference<cpo::uno::XInterface> *, std::__cxx1998::vector<com::sun::star::uno::Reference<cpo::uno::XInterface> > >, std::vector<com::sun::star::uno::Reference<cpo::uno::XInterface> > > o3tl::sorted_vector::find(const type-parameter-?-? &) const
+    __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const cpo::uno::Reference<cpo::uno::XInterface> *, std::__cxx1998::vector<cpo::uno::Reference<cpo::uno::XInterface> > >, std::vector<cpo::uno::Reference<cpo::uno::XInterface> > > o3tl::sorted_vector::find(const type-parameter-?-? &) const
 include/o3tl/sorted_vector.hxx:218
     __gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<const enum OpCode *, std::__cxx1998::vector<enum OpCode> >, std::vector<enum OpCode> > o3tl::sorted_vector::find(const type-parameter-?-? &) const
 include/o3tl/sorted_vector.hxx:218
@@ -805,9 +805,9 @@ include/oox/dump/oledumper.hxx:320
 include/oox/dump/oledumper.hxx:321
     char16_t oox::dump::AxPropertyObjectBase::dumpUnicodeProperty()
 include/oox/export/shapes.hxx:134
-    oox::drawingml::ShapeExport & oox::drawingml::ShapeExport::WriteNonVisualDrawingProperties(const com::sun::star::uno::Reference<com::sun::star::drawing::XShape> &,const char *)
+    oox::drawingml::ShapeExport & oox::drawingml::ShapeExport::WriteNonVisualDrawingProperties(const cpo::uno::Reference<com::sun::star::drawing::XShape> &,const char *)
 include/oox/export/shapes.hxx:184
-    oox::drawingml::ShapeExport & oox::drawingml::ShapeExport::WriteTextBox(const com::sun::star::uno::Reference<cpo::uno::XInterface> &,int,_Bool,_Bool)
+    oox::drawingml::ShapeExport & oox::drawingml::ShapeExport::WriteTextBox(const cpo::uno::Reference<cpo::uno::XInterface> &,int,_Bool,_Bool)
 include/oox/export/ThemeExport.hxx:50
     _Bool oox::ThemeExport::writeColorSet(const model::Theme &)
 include/oox/export/ThemeExport.hxx:51
@@ -821,9 +821,9 @@ include/oox/helper/binaryoutputstream.hxx:79
 include/oox/ole/axbinarywriter.hxx:115
     _Bool oox::ole::AxBinaryPropertyWriter::ComplexProperty::writeProperty(oox::ole::AxAlignedOutputStream &)
 include/oox/ole/olehelper.hxx:176
-    _Bool oox::ole::MSConvertOCXControls::importControlFromStream(oox::BinaryInputStream &,com::sun::star::uno::Reference<com::sun::star::form::XFormComponent> &,std::basic_string_view<char16_t>)
+    _Bool oox::ole::MSConvertOCXControls::importControlFromStream(oox::BinaryInputStream &,cpo::uno::Reference<com::sun::star::form::XFormComponent> &,std::basic_string_view<char16_t>)
 include/oox/ole/olehelper.hxx:187
-    _Bool oox::ole::MSConvertOCXControls::ReadOCXCtlsStream(const rtl::Reference<SotStorageStream> &,com::sun::star::uno::Reference<com::sun::star::form::XFormComponent> &,int,int)
+    _Bool oox::ole::MSConvertOCXControls::ReadOCXCtlsStream(const rtl::Reference<SotStorageStream> &,cpo::uno::Reference<com::sun::star::form::XFormComponent> &,int,int)
 include/sax/fshelper.hxx:132
     sax_fastparser::FastSerializerHelper * sax_fastparser::FastSerializerHelper::write(std::basic_string_view<char16_t>)
 include/sax/fshelper.hxx:133
@@ -859,13 +859,13 @@ include/svx/sidebar/LinePropertyPanelBase.hxx:78
 include/svx/svdobj.hxx:818
     _Bool SdrObject::deleteUserData(enum UserDataID)
 include/test/a11y/AccessibilityTools.hxx:60
-    com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessibleContext> AccessibilityTools::getAccessibleObjectForId(const com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessible> &,std::basic_string_view<char16_t>)
+    cpo::uno::Reference<com::sun::star::accessibility::XAccessibleContext> AccessibilityTools::getAccessibleObjectForId(const cpo::uno::Reference<com::sun::star::accessibility::XAccessible> &,std::basic_string_view<char16_t>)
 include/test/a11y/AccessibilityTools.hxx:130
-    com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessibleContext> AccessibilityTools::getAccessibleObjectForName(const com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessibleContext> &,const short,std::basic_string_view<char16_t>,type-parameter-?-?...)
+    cpo::uno::Reference<com::sun::star::accessibility::XAccessibleContext> AccessibilityTools::getAccessibleObjectForName(const cpo::uno::Reference<com::sun::star::accessibility::XAccessibleContext> &,const short,std::basic_string_view<char16_t>,type-parameter-?-?...)
 include/test/a11y/AccessibilityTools.hxx:160
-    com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessibleContext> AccessibilityTools::getAccessibleObjectForName(const com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessible> &,const short,std::basic_string_view<char16_t>,type-parameter-?-?...)
+    cpo::uno::Reference<com::sun::star::accessibility::XAccessibleContext> AccessibilityTools::getAccessibleObjectForName(const cpo::uno::Reference<com::sun::star::accessibility::XAccessible> &,const short,std::basic_string_view<char16_t>,type-parameter-?-?...)
 include/test/a11y/AccessibilityTools.hxx:184
-    _Bool AccessibilityTools::nameEquals(const com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessible> &,const std::basic_string_view<char16_t>)
+    _Bool AccessibilityTools::nameEquals(const cpo::uno::Reference<com::sun::star::accessibility::XAccessible> &,const std::basic_string_view<char16_t>)
 include/test/a11y/AccessibilityTools.hxx:272
     rtl::OUString AccessibilityTools::debugName(com::sun::star::accessibility::XAccessibleAction *)
 include/test/a11y/AccessibilityTools.hxx:273
@@ -873,9 +873,9 @@ include/test/a11y/AccessibilityTools.hxx:273
 include/test/a11y/eventposter.hxx:92
     _Bool test::EventPosterHelper::operator!() const
 include/test/helper/shape.hxx:41
-    com::sun::star::uno::Reference<com::sun::star::drawing::XShape> apitest::helper::shape::createEllipse(const com::sun::star::uno::Reference<com::sun::star::lang::XComponent> &,const int,const int,const int,const int)
+    cpo::uno::Reference<com::sun::star::drawing::XShape> apitest::helper::shape::createEllipse(const cpo::uno::Reference<com::sun::star::lang::XComponent> &,const int,const int,const int,const int)
 include/test/sheet/xnamedrange.hxx:22
-    com::sun::star::uno::Reference<cpo::uno::XInterface> apitest::XNamedRange::init()
+    cpo::uno::Reference<cpo::uno::XInterface> apitest::XNamedRange::init()
 include/test/xmltesttools.hxx:61
     rtl::OUString XmlTestTools::getXPath(const std::unique_ptr<struct _xmlDoc, struct xmlDocDeleter> &,const rtl::OString &,int,int,const char *)
 include/tools/config.hxx:37
@@ -895,9 +895,9 @@ include/tools/lazydelete.hxx:92
 include/tools/lazydelete.hxx:92
     std::optional<Wallpaper> tools::DeleteOnDeinit::set(type-parameter-?-? &&...)
 include/tools/lazydelete.hxx:92
-    std::optional<com::sun::star::uno::Reference<com::sun::star::i18n::XBreakIterator> > tools::DeleteOnDeinit::set(type-parameter-?-? &&...)
+    std::optional<cpo::uno::Reference<com::sun::star::i18n::XBreakIterator> > tools::DeleteOnDeinit::set(type-parameter-?-? &&...)
 include/tools/lazydelete.hxx:92
-    std::optional<com::sun::star::uno::Reference<com::sun::star::i18n::XLocaleData4> > tools::DeleteOnDeinit::set(type-parameter-?-? &&...)
+    std::optional<cpo::uno::Reference<com::sun::star::i18n::XLocaleData4> > tools::DeleteOnDeinit::set(type-parameter-?-? &&...)
 include/tools/lazydelete.hxx:92
     std::optional<drawinglayer::primitive2d::DiscreteShadow> tools::DeleteOnDeinit::set(type-parameter-?-? &&...)
 include/tools/lazydelete.hxx:92
@@ -917,7 +917,7 @@ include/tools/lazydelete.hxx:92
 include/tools/lazydelete.hxx:92
     std::optional<struct vcl::text::(anonymous namespace)::TextLayoutCacheMap> tools::DeleteOnDeinit::set(type-parameter-?-? &&...)
 include/tools/lazydelete.hxx:120
-    com::sun::star::uno::Reference<type-parameter-?-?> tools::DeleteUnoReferenceOnDeinit::get()
+    cpo::uno::Reference<type-parameter-?-?> tools::DeleteUnoReferenceOnDeinit::get()
 include/tools/multisel.hxx:93
     _Bool StringRangeEnumerator::insertRange(int,int,_Bool)
 include/tools/urlobj.hxx:428
@@ -979,7 +979,7 @@ include/vcl/texteng.hxx:271
 include/vcl/weld.hxx:2869
     _Bool weld::TextView::get_selection_bounds(int &,int &)
 include/xmloff/unointerfacetouniqueidentifiermapper.hxx:65
-    _Bool comphelper::UnoInterfaceToUniqueIdentifierMapper::registerReservedReference(const rtl::OUString &,const com::sun::star::uno::Reference<cpo::uno::XInterface> &)
+    _Bool comphelper::UnoInterfaceToUniqueIdentifierMapper::registerReservedReference(const rtl::OUString &,const cpo::uno::Reference<cpo::uno::XInterface> &)
 include/xmloff/xmluconv.hxx:278
     _Bool SvXMLUnitConverter::convertNumFormat(short &,const rtl::OUString &,std::basic_string_view<char16_t>,_Bool) const
 linguistic/source/lngsvcmgr.hxx:114
@@ -1037,9 +1037,9 @@ sc/source/ui/vba/vbaformat.hxx:71
 sc/source/ui/vba/vbaformat.hxx:75
     cpo::uno::Any ScVbaFormat::Borders(const cpo::uno::Any &)
 sc/source/ui/vba/vbaformat.hxx:78
-    com::sun::star::uno::Reference<ooo::vba::excel::XFont> ScVbaFormat::Font()
+    cpo::uno::Reference<ooo::vba::excel::XFont> ScVbaFormat::Font()
 sc/source/ui/vba/vbaformat.hxx:81
-    com::sun::star::uno::Reference<ooo::vba::excel::XInterior> ScVbaFormat::Interior()
+    cpo::uno::Reference<ooo::vba::excel::XInterior> ScVbaFormat::Interior()
 sc/source/ui/vba/vbaformat.hxx:87
     cpo::uno::Any ScVbaFormat::getNumberFormat()
 sc/source/ui/vba/vbaformat.hxx:93
@@ -1071,11 +1071,11 @@ sd/inc/drawdoc.hxx:749
 sd/inc/drawdoc.hxx:767
     _Bool SdDrawDocument::ImportDocumentPages(const std::vector<rtl::OUString> &,unsigned short,sd::DrawDocShell *,_Bool)
 sd/source/filter/eppt/pptx-epptooxml.cxx:193
-    oox::drawingml::ShapeExport & oox::core::PowerPointShapeExport::WritePlaceholderReferenceShape(enum oox::core::PlaceholderType,int,enum PageType,const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> &)
+    oox::drawingml::ShapeExport & oox::core::PowerPointShapeExport::WritePlaceholderReferenceShape(enum oox::core::PlaceholderType,int,enum PageType,const cpo::uno::Reference<com::sun::star::beans::XPropertySet> &)
 sd/source/filter/eppt/pptx-epptooxml.cxx:194
-    oox::drawingml::ShapeExport & oox::core::PowerPointShapeExport::WritePageShape(const com::sun::star::uno::Reference<com::sun::star::drawing::XShape> &,enum PageType,_Bool)
+    oox::drawingml::ShapeExport & oox::core::PowerPointShapeExport::WritePageShape(const cpo::uno::Reference<com::sun::star::drawing::XShape> &,enum PageType,_Bool)
 sd/source/filter/eppt/pptx-epptooxml.cxx:196
-    oox::drawingml::ShapeExport & oox::core::PowerPointShapeExport::WritePlaceholderReferenceTextBody(enum oox::core::PlaceholderType,enum PageType,const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> &)
+    oox::drawingml::ShapeExport & oox::core::PowerPointShapeExport::WritePlaceholderReferenceTextBody(enum oox::core::PlaceholderType,enum PageType,const cpo::uno::Reference<com::sun::star::beans::XPropertySet> &)
 sd/source/filter/html/htmlex.hxx:71
     _Bool HtmlExport::WriteHtml(std::basic_string_view<char16_t>,std::basic_string_view<char16_t>)
 sd/source/ui/inc/OutlineViewShell.hxx:113
@@ -1141,7 +1141,7 @@ sw/source/filter/ww8/ww8toolbar.hxx:337
 sw/source/uibase/inc/drawbase.hxx:53
     _Bool SwDrawBase::MouseMove(const MouseEvent &)
 sw/source/uibase/inc/fldmgr.hxx:119
-    const com::sun::star::uno::Reference<com::sun::star::text::XNumberingTypeInfo> & SwFieldMgr::GetNumberingInfo() const
+    const cpo::uno::Reference<com::sun::star::text::XNumberingTypeInfo> & SwFieldMgr::GetNumberingInfo() const
 sw/source/uibase/inc/mailmergewizard.hxx:78
     _Bool SwMailMergeWizard::skipUntil(unsigned short)
 sw/source/uibase/inc/wrtsh.hxx:450
@@ -1151,11 +1151,11 @@ sw/source/uibase/inc/wrtsh.hxx:458
 sw/source/writerfilter/dmapper/TagLogger.hxx:59
     std::enable_if<std::is_integral_v<type-parameter-?-?>, void>::type writerfilter::TagLogger::attribute(const std::basic_string<char> &,type-parameter-?-?)
 ucb/source/core/ucbstore.hxx:97
-    const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> & PropertySetRegistry::getConfigProvider(std::unique_lock<std::mutex> &)
+    const cpo::uno::Reference<com::sun::star::lang::XMultiServiceFactory> & PropertySetRegistry::getConfigProvider(std::unique_lock<std::mutex> &)
 ucb/source/ucp/webdav-curl/ContentProperties.hxx:160
     _Bool http_dav_ucp::CachableContentProperties::containsAllNames(const cpo::uno::Sequence<struct com::sun::star::beans::Property> &,std::vector<rtl::OUString> &) const
 unotools/source/ucbhelper/ucblockbytes.hxx:102
-    _Bool utl::UcbLockBytes::setInputStream(const com::sun::star::uno::Reference<com::sun::star::io::XInputStream> &)
+    _Bool utl::UcbLockBytes::setInputStream(const cpo::uno::Reference<com::sun::star::io::XInputStream> &)
 vcl/inc/font/FeatureCollector.hxx:44
     _Bool vcl::font::FeatureCollector::collect()
 vcl/inc/graphic/MemoryManaged.hxx:136
@@ -1163,7 +1163,7 @@ vcl/inc/graphic/MemoryManaged.hxx:136
 vcl/inc/impgraph.hxx:174
     _Bool ImpGraphic::swapOutGraphic(SvStream &)
 vcl/inc/pdf/IPDFEncryptor.hxx:74
-    _Bool vcl::pdf::IPDFEncryptor::prepareEncryption(const com::sun::star::uno::Reference<com::sun::star::beans::XMaterialHolder> &,struct vcl::PDFEncryptionProperties &)
+    _Bool vcl::pdf::IPDFEncryptor::prepareEncryption(const cpo::uno::Reference<com::sun::star::beans::XMaterialHolder> &,struct vcl::PDFEncryptionProperties &)
 vcl/inc/pdf/pdfwriter_impl.hxx:1345
     _Bool vcl::PDFWriterImpl::setCurrentStructureElement(int)
 vcl/inc/pdf/pdfwriter_impl.hxx:1346

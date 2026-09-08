@@ -34,7 +34,7 @@ namespace frm
 
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
@@ -109,7 +109,7 @@ ODateModel::~ODateModel( )
 
 // XCloneable
 
-css::uno::Reference< css::util::XCloneable > ODateModel::createClone()
+cpo::uno::Reference< css::util::XCloneable > ODateModel::createClone()
 {
     rtl::Reference<ODateModel> pClone = new ODateModel(this, getContext());
     pClone->clonedFrom(this);

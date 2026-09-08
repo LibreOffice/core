@@ -28,10 +28,10 @@ using OWriterTables_BASE = file::OTables;
 class OWriterTables : public OWriterTables_BASE
 {
 protected:
-    css::uno::Reference<css::beans::XPropertySet> createObject(const OUString& rName) override;
+    cpo::uno::Reference<css::beans::XPropertySet> createObject(const OUString& rName) override;
 
 public:
-    OWriterTables(const css::uno::Reference<css::sdbc::XDatabaseMetaData>& _rMetaData,
+    OWriterTables(const cpo::uno::Reference<css::sdbc::XDatabaseMetaData>& _rMetaData,
                   ::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
                   const ::std::vector<OUString>& _rVector)
         : OWriterTables_BASE(_rMetaData, _rParent, _rMutex, _rVector)

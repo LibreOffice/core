@@ -55,11 +55,11 @@ class OComboBoxModel final
 
 public:
     OComboBoxModel(
-        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
+        const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     OComboBoxModel(
         const OComboBoxModel* _pOriginal,
-        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
+        const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     virtual ~OComboBoxModel() override;
 
@@ -87,9 +87,9 @@ public:
     // XPersistObject
     virtual OUString    getServiceName() override;
     virtual void
-        write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
+        write(const cpo::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
     virtual void
-        read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
+        read(const cpo::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
 
     // OControlModel's property handling
     virtual void describeFixedProperties(
@@ -110,7 +110,7 @@ private:
     virtual cpo::uno::Any   translateDbColumnToControlValue( ) override;
     virtual bool            commitControlValueToDbColumn( bool _bPostReset ) override;
 
-    virtual void            onConnectedDbColumn( const css::uno::Reference< cpo::uno::XInterface >& _rxForm ) override;
+    virtual void            onConnectedDbColumn( const cpo::uno::Reference< cpo::uno::XInterface >& _rxForm ) override;
     virtual void            onDisconnectedDbColumn() override;
 
     virtual cpo::uno::Any   getDefaultForReset() const override;
@@ -123,13 +123,13 @@ private:
 
     void loadData( bool _bForce );
 
-    virtual css::uno::Reference< css::util::XCloneable > createClone(  ) override;
+    virtual cpo::uno::Reference< css::util::XCloneable > createClone(  ) override;
 };
 
 class OComboBoxControl : public OBoundControl
 {
 public:
-    explicit OComboBoxControl(const css::uno::Reference< cpo::uno::XComponentContext>& _rxContext);
+    explicit OComboBoxControl(const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxContext);
 
     // XServiceInfo
     OUString getImplementationName() override

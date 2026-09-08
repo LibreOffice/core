@@ -347,7 +347,7 @@ void VistaFilePickerImpl::doRequest(Request& rRequest)
 
 void VistaFilePickerImpl::impl_sta_addFilePickerListener(Request& rRequest)
 {
-    const css::uno::Reference< css::ui::dialogs::XFilePickerListener > xListener = rRequest.getArgumentOrDefault(PROP_PICKER_LISTENER, css::uno::Reference< css::ui::dialogs::XFilePickerListener >());
+    const cpo::uno::Reference< css::ui::dialogs::XFilePickerListener > xListener = rRequest.getArgumentOrDefault(PROP_PICKER_LISTENER, cpo::uno::Reference< css::ui::dialogs::XFilePickerListener >());
     if ( ! xListener.is())
         return;
 
@@ -361,7 +361,7 @@ void VistaFilePickerImpl::impl_sta_addFilePickerListener(Request& rRequest)
 
 void VistaFilePickerImpl::impl_sta_removeFilePickerListener(Request& rRequest)
 {
-    const css::uno::Reference< css::ui::dialogs::XFilePickerListener > xListener = rRequest.getArgumentOrDefault(PROP_PICKER_LISTENER, css::uno::Reference< css::ui::dialogs::XFilePickerListener >());
+    const cpo::uno::Reference< css::ui::dialogs::XFilePickerListener > xListener = rRequest.getArgumentOrDefault(PROP_PICKER_LISTENER, cpo::uno::Reference< css::ui::dialogs::XFilePickerListener >());
     if ( ! xListener.is())
         return;
 
@@ -459,10 +459,10 @@ void VistaFilePickerImpl::impl_sta_InitDialog(Request& rRequest, DWORD nOrFlags)
 
     iDialog->SetOptions ( nFlags );
 
-    css::uno::Reference<css::awt::XWindow> xWindow = rRequest.getArgumentOrDefault(PROP_PARENT_WINDOW, css::uno::Reference<css::awt::XWindow>());
+    cpo::uno::Reference<css::awt::XWindow> xWindow = rRequest.getArgumentOrDefault(PROP_PARENT_WINDOW, cpo::uno::Reference<css::awt::XWindow>());
     if(xWindow.is())
     {
-        css::uno::Reference<css::awt::XSystemDependentWindowPeer> xSysDepWin(xWindow,css::uno::UNO_QUERY);
+        cpo::uno::Reference<css::awt::XSystemDependentWindowPeer> xSysDepWin(xWindow,cpo::uno::UNO_QUERY);
         if(xSysDepWin.is()) {
             cpo::uno::Sequence<sal_Int8> aProcessIdent(16);
             rtl_getGlobalProcessId(reinterpret_cast<sal_uInt8*>(aProcessIdent.getArray()));

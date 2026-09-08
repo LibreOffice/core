@@ -28,7 +28,7 @@ namespace dbaxml
     public:
 
         OXMLConnectionResource( ODBFilter& rImport,
-                const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
+                const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
         virtual ~OXMLConnectionResource() override;
     };
 } // namespace dbaxml

@@ -24,7 +24,7 @@
 #include <sfx2/docfilt.hxx>
 #include <svl/stritem.hxx>
 #include <com/sun/star/awt/XTopWindow.hpp>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <cpo/uno/Exception.hpp>
 #include <utility>
 #include <vcl/svapp.hxx>
@@ -44,8 +44,8 @@
 #include <strings.hrc>
 
 using namespace ::com::sun::star::ui::dialogs;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 using namespace ::com::sun::star;
 
@@ -244,7 +244,7 @@ namespace
         INetURLObject aURL;
         OUString aStrDocName;
         // current document
-        css::uno::Reference<css::frame::XFrame> xFrame;
+        cpo::uno::Reference<css::frame::XFrame> xFrame;
         SfxDispatcher* pDispatcher;
     };
 }
@@ -257,7 +257,7 @@ IMPL_STATIC_LINK(SvxHyperlinkNewDocTp, DispatchDocument, void*, p, void)
     try
     {
         //if it throws dispatcher is invalid
-        css::uno::Reference<css::awt::XTopWindow>(xExecuteInfo->xFrame->getContainerWindow(), css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::awt::XTopWindow>(xExecuteInfo->xFrame->getContainerWindow(), cpo::uno::UNO_QUERY_THROW);
 
         SfxViewFrame *pViewFrame = nullptr;
 
@@ -295,7 +295,7 @@ IMPL_STATIC_LINK(SvxHyperlinkNewDocTp, DispatchDocument, void*, p, void)
 
         if (xExecuteInfo->bRbtEditNow)
         {
-            css::uno::Reference<css::awt::XTopWindow> xWindow(xExecuteInfo->xFrame->getContainerWindow(), css::uno::UNO_QUERY);
+            cpo::uno::Reference<css::awt::XTopWindow> xWindow(xExecuteInfo->xFrame->getContainerWindow(), cpo::uno::UNO_QUERY);
             if (xWindow.is()) //will be false if the frame was exited while the document was loading (e.g. we waited for warning dialogs)
                 xWindow->toFront();
         }

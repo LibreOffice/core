@@ -91,7 +91,7 @@ public:
     virtual bool hasElements(  ) override;
 
 // css::container::XEnumerationAccess
-    virtual css::uno::Reference< css::container::XEnumeration > createEnumeration(  ) override;
+    virtual cpo::uno::Reference< css::container::XEnumeration > createEnumeration(  ) override;
 
 // css::container::XIndexAccess
     virtual sal_Int32 getCount(  ) override;
@@ -110,12 +110,12 @@ public:
     virtual bool hasByName( const OUString& aName ) override;
 
 // css::container::XContainer
-    virtual void addContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) override;
-    virtual void removeContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) override;
+    virtual void addContainerListener( const cpo::uno::Reference< css::container::XContainerListener >& xListener ) override;
+    virtual void removeContainerListener( const cpo::uno::Reference< css::container::XContainerListener >& xListener ) override;
 
 // css::container::XChild
-    virtual css::uno::Reference< cpo::uno::XInterface > getParent(  ) override;
-    virtual void setParent( const css::uno::Reference< cpo::uno::XInterface >& Parent ) override;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > getParent(  ) override;
+    virtual void setParent( const cpo::uno::Reference< cpo::uno::XInterface >& Parent ) override;
 
 private:
     /** quickly checks if there already is an element with a given name. No access to the configuration occurs, i.e.

@@ -52,7 +52,7 @@ public:
     };
 
 public:
-    HelpBackendDb(css::uno::Reference<cpo::uno::XComponentContext> const& xContext,
+    HelpBackendDb(cpo::uno::Reference<cpo::uno::XComponentContext> const& xContext,
                   OUString const& url);
 
     void addEntry(OUString const& url, Data const& data);

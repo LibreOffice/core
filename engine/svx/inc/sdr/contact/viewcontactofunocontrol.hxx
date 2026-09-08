@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVX_INC_SDR_CONTACT_VIEWCONTACTOFUNOCONTROL_HXX
 #define INCLUDED_SVX_INC_SDR_CONTACT_VIEWCONTACTOFUNOCONTROL_HXX
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <svx/sdr/contact/viewcontactofsdrobj.hxx>
 #include <svx/svdouno.hxx>
 
@@ -53,8 +53,8 @@ namespace sdr::contact {
         /** retrieves a temporary XControl instance, whose parent is the given window
             @seealso SdrUnoObj::GetTemporaryControlForWindow
         */
-        css::uno::Reference< css::awt::XControl >
-            getTemporaryControlForWindow( const vcl::Window& _rWindow, css::uno::Reference< css::awt::XControlContainer >& _inout_ControlContainer ) const;
+        cpo::uno::Reference< css::awt::XControl >
+            getTemporaryControlForWindow( const vcl::Window& _rWindow, cpo::uno::Reference< css::awt::XControlContainer >& _inout_ControlContainer ) const;
 
     private:
         virtual ViewObjectContact& CreateObjectSpecificViewObjectContact( ObjectContact& _rObjectContact ) override;

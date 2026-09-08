@@ -57,7 +57,7 @@ struct IndicatorInfo
 
         /** @short  points to the indicator child, where we hold its states
                     alive here. */
-        css::uno::Reference< css::task::XStatusIndicator > m_xIndicator;
+        cpo::uno::Reference< css::task::XStatusIndicator > m_xIndicator;
 
         /** @short  the last set text for this indicator */
         OUString m_sText;
@@ -79,7 +79,7 @@ struct IndicatorInfo
             @param  nRange
                     the max range for this indicator.
          */
-        IndicatorInfo(const css::uno::Reference< css::task::XStatusIndicator >& xIndicator,
+        IndicatorInfo(const cpo::uno::Reference< css::task::XStatusIndicator >& xIndicator,
                       const OUString&                                    sText    )
         {
             m_xIndicator = xIndicator;
@@ -93,7 +93,7 @@ struct IndicatorInfo
                     are not interesting then. Because more than one child
                     indicator can use the same values...
          */
-        bool operator==(const css::uno::Reference< css::task::XStatusIndicator >& xIndicator) const
+        bool operator==(const cpo::uno::Reference< css::task::XStatusIndicator >& xIndicator) const
         {
             return (m_xIndicator == xIndicator);
         }
@@ -133,14 +133,14 @@ class StatusIndicatorFactory final : public  ::cppu::WeakImplHelper<
         IndicatorStack m_aStack;
 
         /** uno service manager to create own needed uno resources. */
-        css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+        cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
         /** most active indicator child, which could work with our shared indicator window only. */
-        css::uno::Reference< css::task::XStatusIndicator > m_xActiveChild;
+        cpo::uno::Reference< css::task::XStatusIndicator > m_xActiveChild;
 
         /** used to show the progress on the frame (layouted!) or
             as a plugged vcl window. */
-        css::uno::Reference< css::task::XStatusIndicator > m_xProgress;
+        cpo::uno::Reference< css::task::XStatusIndicator > m_xProgress;
 
         /** points to the frame, where we show the progress (in case
             m_xProgress points to a frame progress. */
@@ -172,7 +172,7 @@ class StatusIndicatorFactory final : public  ::cppu::WeakImplHelper<
     // interface
 
     public:
-        StatusIndicatorFactory(css::uno::Reference< cpo::uno::XComponentContext > xContext);
+        StatusIndicatorFactory(cpo::uno::Reference< cpo::uno::XComponentContext > xContext);
 
         virtual OUString getImplementationName() override
         {
@@ -193,24 +193,24 @@ class StatusIndicatorFactory final : public  ::cppu::WeakImplHelper<
         virtual void initialize(const cpo::uno::Sequence< cpo::uno::Any >& lArguments) override;
 
         // XStatusIndicatorFactory
-        virtual css::uno::Reference< css::task::XStatusIndicator > createStatusIndicator() override;
+        virtual cpo::uno::Reference< css::task::XStatusIndicator > createStatusIndicator() override;
 
         // XUpdatable
         virtual void update() override;
 
         // similar (XStatusIndicator)
-        void start(const css::uno::Reference< css::task::XStatusIndicator >& xChild,
+        void start(const cpo::uno::Reference< css::task::XStatusIndicator >& xChild,
                            const OUString&                                    sText ,
                                  sal_Int32                                           nRange);
 
-        void reset(const css::uno::Reference< css::task::XStatusIndicator >& xChild);
+        void reset(const cpo::uno::Reference< css::task::XStatusIndicator >& xChild);
 
-        void end(const css::uno::Reference< css::task::XStatusIndicator >& xChild);
+        void end(const cpo::uno::Reference< css::task::XStatusIndicator >& xChild);
 
-        void setText(const css::uno::Reference< css::task::XStatusIndicator >& xChild,
+        void setText(const cpo::uno::Reference< css::task::XStatusIndicator >& xChild,
                                       const OUString&                                    sText );
 
-        void setValue(const css::uno::Reference< css::task::XStatusIndicator >& xChild,
+        void setValue(const cpo::uno::Reference< css::task::XStatusIndicator >& xChild,
                                              sal_Int32                                           nValue);
 
         // comphelper::COKit::ThreadJoinable

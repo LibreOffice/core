@@ -41,7 +41,7 @@ public:
 
 // helper methods
     static ScDocument*  GetScDocument(
-                            const css::uno::Reference< css::frame::XModel >& xModel );
+                            const cpo::uno::Reference< css::frame::XModel >& xModel );
 
 // IMPORT: GeneralFunction / ScSubTotalFunc
     static css::sheet::GeneralFunction

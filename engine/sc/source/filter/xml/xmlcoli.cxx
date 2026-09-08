@@ -36,6 +36,7 @@
 #include <comphelper/servicehelper.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace xmloff::token;
 
 ScXMLTableColContext::ScXMLTableColContext( ScXMLImport& rImport,

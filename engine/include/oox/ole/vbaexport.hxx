@@ -12,7 +12,7 @@
 
 #include <cstddef>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <oox/dllapi.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -30,7 +30,7 @@ namespace com::sun::star {
 class OOX_DLLPUBLIC VbaExport
 {
 public:
-    VbaExport(css::uno::Reference<css::frame::XModel> xModel);
+    VbaExport(cpo::uno::Reference<css::frame::XModel> xModel);
 
     void exportVBA(SotStorage* pRootStorage);
 
@@ -38,16 +38,16 @@ public:
 
 private:
 
-    css::uno::Reference<css::container::XNameContainer>
+    cpo::uno::Reference<css::container::XNameContainer>
         getBasicLibrary() const;
 
-    css::uno::Reference<css::script::XLibraryContainer>
+    cpo::uno::Reference<css::script::XLibraryContainer>
         getLibraryContainer() const;
 
     OUString getProjectName() const;
     rtl_TextEncoding getVBATextEncoding() const;
 
-    css::uno::Reference<css::frame::XModel> mxModel;
+    cpo::uno::Reference<css::frame::XModel> mxModel;
 };
 
 class VBACompressionChunk

@@ -39,18 +39,18 @@ public:
      * StartElement need to call the parent method. */
     virtual void startFastElement(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     /** call HandleChild for each child element in the token map;
      * create a warning for all others. Classes that wish to override
      * CreateChildContext may want to call the parent method for
      * handling of defaults. */
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createUnknownChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createUnknownChildContext(
         const OUString& Namespace, const OUString& Name,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
 
     /** Create a warning for all non-namespace character
      * content. Classes that wish to deal with character content have
@@ -65,7 +65,7 @@ protected:
     /** will be called for each child element */
     virtual SvXMLImportContext* HandleChild(
         sal_Int32 nElementToken,
-        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList ) = 0;
+        const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList ) = 0;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

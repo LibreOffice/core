@@ -32,11 +32,11 @@ namespace frm
 
     public:
         OScrollBarModel(
-            const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
+            const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
         );
         OScrollBarModel(
             const OScrollBarModel* _pOriginal,
-            const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
+            const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
         );
         virtual ~OScrollBarModel() override;
 
@@ -47,11 +47,11 @@ namespace frm
 
         // XPersistObject
         virtual OUString getServiceName() override;
-        virtual void write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
-        virtual void read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
+        virtual void write(const cpo::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
+        virtual void read(const cpo::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
 
         // XCloneable
-        virtual css::uno::Reference< css::util::XCloneable > createClone(  ) override;
+        virtual cpo::uno::Reference< css::util::XCloneable > createClone(  ) override;
 
         // XPropertyState
         virtual cpo::uno::Any getPropertyDefaultByHandle( sal_Int32 _nHandle ) const override;
@@ -83,7 +83,7 @@ namespace frm
     };
 
     cpo::uno::Any translateExternalDoubleToControlIntValue(
-        const cpo::uno::Any& _rExternalValue, const css::uno::Reference< css::beans::XPropertySet >& _rxProperties,
+        const cpo::uno::Any& _rExternalValue, const cpo::uno::Reference< css::beans::XPropertySet >& _rxProperties,
         const OUString& _rMinValueName, const OUString& _rMaxValueName );
 
     cpo::uno::Any translateControlIntToExternalDoubleValue( const cpo::uno::Any& _rControlIntValue );

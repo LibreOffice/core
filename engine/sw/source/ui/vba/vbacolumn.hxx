@@ -31,12 +31,12 @@ typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XColumn > SwVbaColumn_
 class SwVbaColumn : public SwVbaColumn_BASE
 {
 private:
-    css::uno::Reference< css::text::XTextTable > mxTextTable;
+    cpo::uno::Reference< css::text::XTextTable > mxTextTable;
     sal_Int32 mnIndex;
 
 public:
     /// @throws cpo::uno::RuntimeException
-    SwVbaColumn( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< cpo::uno::XComponentContext >& rContext, css::uno::Reference< css::text::XTextTable >  xTextTable, sal_Int32 nIndex );
+    SwVbaColumn( const cpo::uno::Reference< ooo::vba::XHelperInterface >& rParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& rContext, cpo::uno::Reference< css::text::XTextTable >  xTextTable, sal_Int32 nIndex );
     virtual ~SwVbaColumn() override;
 
     // Methods
@@ -45,7 +45,7 @@ public:
     virtual void SAL_CALL Select(  ) override;
 
     /// @throws cpo::uno::RuntimeException
-    static void SelectColumn( const rtl::Reference< SwXTextDocument >& xModel, const css::uno::Reference< css::text::XTextTable >& xTextTable, sal_Int32 nStartColumn, sal_Int32 nEndColumn );
+    static void SelectColumn( const rtl::Reference< SwXTextDocument >& xModel, const cpo::uno::Reference< css::text::XTextTable >& xTextTable, sal_Int32 nStartColumn, sal_Int32 nEndColumn );
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;

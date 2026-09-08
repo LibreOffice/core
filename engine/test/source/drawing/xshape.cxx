@@ -14,11 +14,12 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <cppunit/TestAssert.h>
 
 using namespace css;
+using namespace ::cpo;
 
 namespace apitest
 {

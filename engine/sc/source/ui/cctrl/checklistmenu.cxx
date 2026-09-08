@@ -40,7 +40,7 @@
 #include <viewdata.hxx>
 
 using namespace com::sun::star;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 
 ScCheckListMenuControl::MenuItemData::MenuItemData()
     : mbEnabled(true)
@@ -131,7 +131,7 @@ void ScCheckListMenuControl::addMenuItem(const OUString& rText, Action* pAction)
 
     mxMenu->show();
     mxMenu->append_text(rText);
-    mxMenu->set_image(mxMenu->n_children() - 1, css::uno::Reference<css::graphic::XGraphic>(), 1);
+    mxMenu->set_image(mxMenu->n_children() - 1, cpo::uno::Reference<css::graphic::XGraphic>(), 1);
 }
 
 void ScCheckListMenuControl::addSeparator()

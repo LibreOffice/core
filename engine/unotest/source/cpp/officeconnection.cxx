@@ -22,7 +22,7 @@
 #include <com/sun/star/connection/NoConnectException.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/XComponentContext.hpp>
 #include <cppuhelper/bootstrap.hxx>
 #include <cppunit/TestAssert.h>
@@ -40,7 +40,7 @@ OfficeConnection::OfficeConnection(): process_(nullptr) {}
 OfficeConnection::~OfficeConnection() {}
 
 void OfficeConnection::setUp() {
-    css::uno::Reference< css::bridge::XUnoUrlResolver > resolver(
+    cpo::uno::Reference< css::bridge::XUnoUrlResolver > resolver(
         css::bridge::UnoUrlResolver::create(
             cppu::defaultBootstrap_InitialComponentContext()));
     OUString desc;
@@ -90,10 +90,10 @@ void OfficeConnection::setUp() {
     for (;;) {
         try {
             context_ =
-                css::uno::Reference< cpo::uno::XComponentContext >(
+                cpo::uno::Reference< cpo::uno::XComponentContext >(
                     resolver->resolve(
                         "uno:" + desc + ";urp;StarOffice.ComponentContext"),
-                    css::uno::UNO_QUERY_THROW);
+                    cpo::uno::UNO_QUERY_THROW);
             break;
         } catch (css::connection::NoConnectException &) {}
         if (process_ != nullptr) {
@@ -110,7 +110,7 @@ void OfficeConnection::tearDown() {
         return;
 
     if (context_.is()) {
-        css::uno::Reference< css::frame::XDesktop2 > desktop = css::frame::Desktop::create( context_ );
+        cpo::uno::Reference< css::frame::XDesktop2 > desktop = css::frame::Desktop::create( context_ );
         context_.clear();
         try {
             CPPUNIT_ASSERT(desktop->terminate());

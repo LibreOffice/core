@@ -27,7 +27,7 @@
 
 #include <map>
 
-typedef std::map< OUString, css::uno::Reference< css::datatransfer::clipboard::XClipboard > > ClipboardMap;
+typedef std::map< OUString, cpo::uno::Reference< css::datatransfer::clipboard::XClipboard > > ClipboardMap;
 
 namespace dtrans
 {
@@ -74,9 +74,9 @@ namespace dtrans
          * XClipboardManager
          */
 
-        virtual css::uno::Reference< css::datatransfer::clipboard::XClipboard > getClipboard( const OUString& aName ) override;
+        virtual cpo::uno::Reference< css::datatransfer::clipboard::XClipboard > getClipboard( const OUString& aName ) override;
 
-        virtual void addClipboard( const css::uno::Reference< css::datatransfer::clipboard::XClipboard >& xClipboard ) override;
+        virtual void addClipboard( const cpo::uno::Reference< css::datatransfer::clipboard::XClipboard >& xClipboard ) override;
 
         virtual void removeClipboard( const OUString& aName ) override;
 

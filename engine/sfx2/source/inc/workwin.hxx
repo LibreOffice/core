@@ -157,13 +157,13 @@ class LayoutManagerListener final : public ::cppu::WeakImplHelper<
         LayoutManagerListener( SfxWorkWindow* pWrkWin );
         virtual ~LayoutManagerListener() override;
 
-        void setFrame( const css::uno::Reference< css::frame::XFrame >& rFrame );
+        void setFrame( const cpo::uno::Reference< css::frame::XFrame >& rFrame );
 
 
         //  XComponent
 
-        virtual void addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-        virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+        virtual void addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& xListener ) override;
+        virtual void removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener ) override;
         virtual void dispose() override;
 
 
@@ -291,8 +291,8 @@ public:
     void                    ResetStatusBar_Impl();
     void                    SetStatusBar_Impl(StatusBarId eResId);
     void                    UpdateStatusBar_Impl();
-    css::uno::Reference< css::task::XStatusIndicator > GetStatusIndicator();
-    css::uno::Reference< css::frame::XFrame > GetFrameInterface();
+    cpo::uno::Reference< css::task::XStatusIndicator > GetStatusIndicator();
+    cpo::uno::Reference< css::frame::XFrame > GetFrameInterface();
 };
 
 #endif

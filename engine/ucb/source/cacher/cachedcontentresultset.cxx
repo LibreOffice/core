@@ -40,7 +40,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::script;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::ucb;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::util;
 using namespace cppu;
@@ -296,7 +296,7 @@ OUString const & CachedContentResultSet::CCRS_Cache
     {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException( ex.Message,
-                        css::uno::Reference< cpo::uno::XInterface >(),
+                        cpo::uno::Reference< cpo::uno::XInterface >(),
                         anyEx );
     }
 }
@@ -320,7 +320,7 @@ Reference< XContentIdentifier > CachedContentResultSet::CCRS_Cache
     {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException( ex.Message,
-                        css::uno::Reference< cpo::uno::XInterface >(),
+                        cpo::uno::Reference< cpo::uno::XInterface >(),
                         anyEx );
     }
 }
@@ -344,7 +344,7 @@ Reference< XContent > CachedContentResultSet::CCRS_Cache
     {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException( ex.Message,
-                        css::uno::Reference< cpo::uno::XInterface >(),
+                        cpo::uno::Reference< cpo::uno::XInterface >(),
                         anyEx );
     }
 }
@@ -1871,7 +1871,7 @@ Reference< css::io::XInputStream >
     SAL_CALL CachedContentResultSet
     ::getBinaryStream( sal_Int32 columnIndex )
 {
-    return rowOriginGet< css::uno::Reference<css::io::XInputStream> >(
+    return rowOriginGet< cpo::uno::Reference<css::io::XInputStream> >(
         &css::sdbc::XRow::getBinaryStream, columnIndex);
 }
 
@@ -1880,7 +1880,7 @@ Reference< css::io::XInputStream >
     SAL_CALL CachedContentResultSet
     ::getCharacterStream( sal_Int32 columnIndex )
 {
-    return rowOriginGet< css::uno::Reference<css::io::XInputStream> >(
+    return rowOriginGet< cpo::uno::Reference<css::io::XInputStream> >(
         &css::sdbc::XRow::getCharacterStream, columnIndex);
 }
 
@@ -1928,7 +1928,7 @@ Any SAL_CALL CachedContentResultSet
 Reference< XRef > SAL_CALL CachedContentResultSet
     ::getRef( sal_Int32 columnIndex )
 {
-    return rowOriginGet< css::uno::Reference<css::sdbc::XRef> >(
+    return rowOriginGet< cpo::uno::Reference<css::sdbc::XRef> >(
         &css::sdbc::XRow::getRef, columnIndex);
 }
 
@@ -1936,7 +1936,7 @@ Reference< XRef > SAL_CALL CachedContentResultSet
 Reference< XBlob > SAL_CALL CachedContentResultSet
     ::getBlob( sal_Int32 columnIndex )
 {
-    return rowOriginGet< css::uno::Reference<css::sdbc::XBlob> >(
+    return rowOriginGet< cpo::uno::Reference<css::sdbc::XBlob> >(
         &css::sdbc::XRow::getBlob, columnIndex);
 }
 
@@ -1944,7 +1944,7 @@ Reference< XBlob > SAL_CALL CachedContentResultSet
 Reference< XClob > SAL_CALL CachedContentResultSet
     ::getClob( sal_Int32 columnIndex )
 {
-    return rowOriginGet< css::uno::Reference<css::sdbc::XClob> >(
+    return rowOriginGet< cpo::uno::Reference<css::sdbc::XClob> >(
         &css::sdbc::XRow::getClob, columnIndex);
 }
 
@@ -1952,7 +1952,7 @@ Reference< XClob > SAL_CALL CachedContentResultSet
 Reference< XArray > SAL_CALL CachedContentResultSet
     ::getArray( sal_Int32 columnIndex )
 {
-    return rowOriginGet< css::uno::Reference<css::sdbc::XArray> >(
+    return rowOriginGet< cpo::uno::Reference<css::sdbc::XArray> >(
         &css::sdbc::XRow::getArray, columnIndex);
 }
 

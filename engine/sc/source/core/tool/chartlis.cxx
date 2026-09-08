@@ -30,6 +30,7 @@
 #include <com/sun/star/chart/XChartDataChangeEventListener.hpp>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 // Update chart listeners quickly, to get a similar behavior to loaded charts
 // which register UNO listeners.

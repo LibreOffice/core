@@ -67,13 +67,13 @@ namespace connectivity
             return _rCache.second;
         }
     protected:
-        css::uno::Reference< css::sdbc::XConnection >     m_xConnection;
+        cpo::uno::Reference< css::sdbc::XConnection >     m_xConnection;
         rtl::Reference< comphelper::OEventListenerHelper> m_xListenerHelper; // forward the calls from the connection to me
 
         virtual ~ODatabaseMetaDataBase() override;
 
     protected:
-        virtual css::uno::Reference< css::sdbc::XResultSet > impl_getTypeInfo_throw() = 0;
+        virtual cpo::uno::Reference< css::sdbc::XResultSet > impl_getTypeInfo_throw() = 0;
         // cached database information
         virtual OUString    impl_getIdentifierQuoteString_throw(  )             = 0;
         virtual bool        impl_isCatalogAtStart_throw(  )                     = 0;
@@ -92,7 +92,7 @@ namespace connectivity
 
     public:
 
-        ODatabaseMetaDataBase(const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,const cpo::uno::Sequence< css::beans::PropertyValue >& _rInfo);
+        ODatabaseMetaDataBase(const cpo::uno::Reference< css::sdbc::XConnection >& _rxConnection,const cpo::uno::Sequence< css::beans::PropertyValue >& _rInfo);
 
         // XDatabaseMetaData2
         virtual cpo::uno::Sequence< css::beans::PropertyValue > getConnectionInfo(  ) override;
@@ -100,22 +100,22 @@ namespace connectivity
         // XEventListener
         virtual void disposing( const css::lang::EventObject& Source ) override;
 
-        virtual css::uno::Reference< css::sdbc::XResultSet > getTypeInfo(  ) override;
-        virtual css::uno::Reference< css::sdbc::XResultSet > getProcedures( const cpo::uno::Any& catalog, const OUString& schemaPattern, const OUString& procedureNamePattern ) override;
-        virtual css::uno::Reference< css::sdbc::XResultSet > getProcedureColumns( const cpo::uno::Any& catalog, const OUString& schemaPattern, const OUString& procedureNamePattern, const OUString& columnNamePattern ) override;
-        virtual css::uno::Reference< css::sdbc::XResultSet > getSchemas(  ) override;
-        virtual css::uno::Reference< css::sdbc::XResultSet > getCatalogs(  ) override;
-        virtual css::uno::Reference< css::sdbc::XResultSet > getColumnPrivileges( const cpo::uno::Any& catalog, const OUString& schema, const OUString& table, const OUString& columnNamePattern ) override;
-        virtual css::uno::Reference< css::sdbc::XResultSet > getTablePrivileges( const cpo::uno::Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern ) override;
-        virtual css::uno::Reference< css::sdbc::XResultSet > getBestRowIdentifier( const cpo::uno::Any& catalog, const OUString& schema, const OUString& table, sal_Int32 scope, bool nullable ) override;
-        virtual css::uno::Reference< css::sdbc::XResultSet > getVersionColumns( const cpo::uno::Any& catalog, const OUString& schema, const OUString& table ) override;
-        virtual css::uno::Reference< css::sdbc::XResultSet > getPrimaryKeys( const cpo::uno::Any& catalog, const OUString& schema, const OUString& table ) override;
-        virtual css::uno::Reference< css::sdbc::XResultSet > getImportedKeys( const cpo::uno::Any& catalog, const OUString& schema, const OUString& table ) override;
-        virtual css::uno::Reference< css::sdbc::XResultSet > getExportedKeys( const cpo::uno::Any& catalog, const OUString& schema, const OUString& table ) override;
-        virtual css::uno::Reference< css::sdbc::XResultSet > getCrossReference( const cpo::uno::Any& primaryCatalog, const OUString& primarySchema, const OUString& primaryTable, const cpo::uno::Any& foreignCatalog, const OUString& foreignSchema, const OUString& foreignTable ) override;
-        virtual css::uno::Reference< css::sdbc::XResultSet > getIndexInfo( const cpo::uno::Any& catalog, const OUString& schema, const OUString& table, bool unique, bool approximate ) override;
+        virtual cpo::uno::Reference< css::sdbc::XResultSet > getTypeInfo(  ) override;
+        virtual cpo::uno::Reference< css::sdbc::XResultSet > getProcedures( const cpo::uno::Any& catalog, const OUString& schemaPattern, const OUString& procedureNamePattern ) override;
+        virtual cpo::uno::Reference< css::sdbc::XResultSet > getProcedureColumns( const cpo::uno::Any& catalog, const OUString& schemaPattern, const OUString& procedureNamePattern, const OUString& columnNamePattern ) override;
+        virtual cpo::uno::Reference< css::sdbc::XResultSet > getSchemas(  ) override;
+        virtual cpo::uno::Reference< css::sdbc::XResultSet > getCatalogs(  ) override;
+        virtual cpo::uno::Reference< css::sdbc::XResultSet > getColumnPrivileges( const cpo::uno::Any& catalog, const OUString& schema, const OUString& table, const OUString& columnNamePattern ) override;
+        virtual cpo::uno::Reference< css::sdbc::XResultSet > getTablePrivileges( const cpo::uno::Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern ) override;
+        virtual cpo::uno::Reference< css::sdbc::XResultSet > getBestRowIdentifier( const cpo::uno::Any& catalog, const OUString& schema, const OUString& table, sal_Int32 scope, bool nullable ) override;
+        virtual cpo::uno::Reference< css::sdbc::XResultSet > getVersionColumns( const cpo::uno::Any& catalog, const OUString& schema, const OUString& table ) override;
+        virtual cpo::uno::Reference< css::sdbc::XResultSet > getPrimaryKeys( const cpo::uno::Any& catalog, const OUString& schema, const OUString& table ) override;
+        virtual cpo::uno::Reference< css::sdbc::XResultSet > getImportedKeys( const cpo::uno::Any& catalog, const OUString& schema, const OUString& table ) override;
+        virtual cpo::uno::Reference< css::sdbc::XResultSet > getExportedKeys( const cpo::uno::Any& catalog, const OUString& schema, const OUString& table ) override;
+        virtual cpo::uno::Reference< css::sdbc::XResultSet > getCrossReference( const cpo::uno::Any& primaryCatalog, const OUString& primarySchema, const OUString& primaryTable, const cpo::uno::Any& foreignCatalog, const OUString& foreignSchema, const OUString& foreignTable ) override;
+        virtual cpo::uno::Reference< css::sdbc::XResultSet > getIndexInfo( const cpo::uno::Any& catalog, const OUString& schema, const OUString& table, bool unique, bool approximate ) override;
 
-        virtual css::uno::Reference< css::sdbc::XConnection > getConnection(  ) override;
+        virtual cpo::uno::Reference< css::sdbc::XConnection > getConnection(  ) override;
         // cached database information
         virtual OUString getIdentifierQuoteString(  ) override;
         virtual bool isCatalogAtStart(  ) override;

@@ -34,7 +34,7 @@
 
 namespace dbaxml
 {
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
 using namespace cpo::uno;
     using namespace ::com::sun::star::sdb;
     using namespace ::com::sun::star::sdbcx;
@@ -51,8 +51,8 @@ OXMLDatabase::~OXMLDatabase()
 
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > OXMLDatabase::createFastChildContext(
-            sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > OXMLDatabase::createFastChildContext(
+            sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
 

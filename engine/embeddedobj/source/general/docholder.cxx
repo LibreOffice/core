@@ -73,6 +73,7 @@
                             m_pEmbedObj->getCurrentState()!=embed::EmbedStates::UI_ACTIVE) ? 0 : 4 )
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace {
 
@@ -953,7 +954,7 @@ bool DocumentHolder::LoadDocToFrame( bool bInPlace )
         aArgs.put( u"ReadOnly"_ustr, m_bReadOnly );
 
         // set document title to show in the title bar
-        css::uno::Reference< css::frame::XTitle > xModelTitle( xDoc, css::uno::UNO_QUERY );
+        cpo::uno::Reference< css::frame::XTitle > xModelTitle( xDoc, cpo::uno::UNO_QUERY );
         if( xModelTitle.is() && m_pEmbedObj && !m_pEmbedObj->getContainerName().isEmpty() )
         {
             std::locale aResLoc = Translate::Create("sfx");

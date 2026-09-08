@@ -29,22 +29,22 @@ using namespace css;
 namespace drawinglayer::primitive2d
 {
 Primitive2DContainer::Primitive2DContainer(
-    const cpo::uno::Sequence<css::uno::Reference<css::graphic::XPrimitive2D>>& rSource)
+    const cpo::uno::Sequence<cpo::uno::Reference<css::graphic::XPrimitive2D>>& rSource)
 {
     for (const auto& rPrimitive : rSource)
         append(static_cast<const UnoPrimitive2D*>(rPrimitive.get())->getBasePrimitive2D());
 }
 Primitive2DContainer::Primitive2DContainer(
-    const std::deque<css::uno::Reference<css::graphic::XPrimitive2D>>& rSource)
+    const std::deque<cpo::uno::Reference<css::graphic::XPrimitive2D>>& rSource)
 {
     for (const auto& rPrimitive : rSource)
         append(static_cast<const UnoPrimitive2D*>(rPrimitive.get())->getBasePrimitive2D());
 }
 
-cpo::uno::Sequence<css::uno::Reference<css::graphic::XPrimitive2D>>
+cpo::uno::Sequence<cpo::uno::Reference<css::graphic::XPrimitive2D>>
 Primitive2DContainer::toSequence() const
 {
-    cpo::uno::Sequence<css::uno::Reference<css::graphic::XPrimitive2D>> aVal(size());
+    cpo::uno::Sequence<cpo::uno::Reference<css::graphic::XPrimitive2D>> aVal(size());
     auto p = aVal.getArray();
     for (const auto& rPrimitive : *this)
     {
@@ -129,7 +129,7 @@ void Primitive2DContainer::append(Primitive2DContainer&& rSource)
 
 UnoPrimitive2D::~UnoPrimitive2D() {}
 
-cpo::uno::Sequence<::css::uno::Reference<::css::graphic::XPrimitive2D>>
+cpo::uno::Sequence<::cpo::uno::Reference<::css::graphic::XPrimitive2D>>
 UnoPrimitive2D::getDecomposition(
     const cpo::uno::Sequence<css::beans::PropertyValue>& rViewParameters)
 {

@@ -33,14 +33,14 @@ namespace writerfilter::dmapper
 /// Handler for smart tags, i.e. <w:smartTag> and below.
 class SmartTagHandler : public LoggedProperties
 {
-    css::uno::Reference<cpo::uno::XComponentContext> m_xComponentContext;
-    css::uno::Reference<css::rdf::XDocumentMetadataAccess> m_xDocumentMetadataAccess;
+    cpo::uno::Reference<cpo::uno::XComponentContext> m_xComponentContext;
+    cpo::uno::Reference<css::rdf::XDocumentMetadataAccess> m_xDocumentMetadataAccess;
     OUString m_aURI;
     OUString m_aElement;
     std::vector<std::pair<OUString, OUString>> m_aAttributes;
 
 public:
-    SmartTagHandler(css::uno::Reference<cpo::uno::XComponentContext> xComponentContext,
+    SmartTagHandler(cpo::uno::Reference<cpo::uno::XComponentContext> xComponentContext,
                     const rtl::Reference<SwXTextDocument>& xTextDocument);
     ~SmartTagHandler() override;
 
@@ -51,7 +51,7 @@ public:
     void setElement(const OUString& rElement);
 
     /// Set m_aAttributes as RDF statements on xParagraph.
-    void handle(const css::uno::Reference<css::text::XTextRange>& xParagraph);
+    void handle(const cpo::uno::Reference<css::text::XTextRange>& xParagraph);
 };
 
 } // namespace writerfilter::dmapper

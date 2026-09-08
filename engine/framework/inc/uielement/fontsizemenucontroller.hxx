@@ -34,7 +34,7 @@ namespace framework
         using svt::PopupMenuControllerBase::disposing;
 
         public:
-            FontSizeMenuController( const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
+            FontSizeMenuController( const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext );
             virtual ~FontSizeMenuController() override;
 
             /* interface XServiceInfo */
@@ -53,13 +53,13 @@ namespace framework
 
         private:
             virtual void impl_setPopupMenu(std::unique_lock<std::mutex>& rGuard) override;
-            void setCurHeight( tools::Long nHeight, css::uno::Reference< css::awt::XPopupMenu > const & rPopupMenu );
-            void fillPopupMenu( css::uno::Reference< css::awt::XPopupMenu > const & rPopupMenu );
-            OUString retrievePrinterName( css::uno::Reference< css::frame::XFrame > const & rFrame );
+            void setCurHeight( tools::Long nHeight, cpo::uno::Reference< css::awt::XPopupMenu > const & rPopupMenu );
+            void fillPopupMenu( cpo::uno::Reference< css::awt::XPopupMenu > const & rPopupMenu );
+            OUString retrievePrinterName( cpo::uno::Reference< css::frame::XFrame > const & rFrame );
 
             std::vector<tools::Long>                         m_aHeightArray;
             css::frame::status::FontHeight                   m_aFontHeight;
-            css::uno::Reference< css::frame::XDispatch >     m_xCurrentFontDispatch;
+            cpo::uno::Reference< css::frame::XDispatch >     m_xCurrentFontDispatch;
     };
 }
 

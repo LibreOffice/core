@@ -32,8 +32,8 @@ class AcceleratorExecute;
 class FindTextFieldControl final : public InterimItemWindow
 {
 public:
-    FindTextFieldControl(ToolBox* pParent, css::uno::Reference<css::frame::XFrame> xFrame,
-                         css::uno::Reference<cpo::uno::XComponentContext> xContext);
+    FindTextFieldControl(ToolBox* pParent, cpo::uno::Reference<css::frame::XFrame> xFrame,
+                         cpo::uno::Reference<cpo::uno::XComponentContext> xContext);
 
     virtual void dispose() override;
 
@@ -53,8 +53,8 @@ public:
 private:
     ImplSVEvent* m_nAsyncGetFocusId;
     std::unique_ptr<weld::ComboBox> m_xWidget;
-    css::uno::Reference<css::frame::XFrame> m_xFrame;
-    css::uno::Reference<cpo::uno::XComponentContext> m_xContext;
+    cpo::uno::Reference<css::frame::XFrame> m_xFrame;
+    cpo::uno::Reference<cpo::uno::XComponentContext> m_xContext;
     std::unique_ptr<svt::AcceleratorExecute> m_pAcc;
     Link<weld::ComboBox&, void> m_aChangeHdl;
 

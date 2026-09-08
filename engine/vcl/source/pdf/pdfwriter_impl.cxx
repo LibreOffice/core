@@ -108,6 +108,7 @@
 #include "pdfwriter_utils.hxx"
 
 using namespace::com::sun::star;
+using namespace ::cpo;
 using namespace vcl::pdf;
 
 static bool g_bDebugDisableCompression = getenv("VCL_DEBUG_DISABLE_PDFCOMPRESSION");
@@ -313,7 +314,7 @@ void PDFWriterImpl::appendNonStrokingColor( const Color& rColor, OStringBuffer& 
 }
 
 PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext,
-                               const css::uno::Reference< css::beans::XMaterialHolder >& xEncryptionMaterialHolder,
+                               const cpo::uno::Reference< css::beans::XMaterialHolder >& xEncryptionMaterialHolder,
                                PDFWriter& i_rOuterFace)
         : VirtualDevice(Application::GetDefaultDevice(), DeviceFormat::WITHOUT_ALPHA, OUTDEV_PDF),
         m_aMapMode( MapUnit::MapPoint, Point(), 1.0 / pointToPixel(1), 1.0 / pointToPixel(1) ),
@@ -4372,7 +4373,7 @@ bool PDFWriterImpl::emitEmbeddedFiles()
         {
             checkAndEnableStreamEncryption(rEmbeddedFile.m_nObject);
             sal_uInt64 nBegin = getCurrentFilePosition();
-            css::uno::Reference<css::io::XOutputStream> xStream(new PDFStreamIf(this));
+            cpo::uno::Reference<css::io::XOutputStream> xStream(new PDFStreamIf(this));
             rEmbeddedFile.m_pStream->write(xStream);
             rEmbeddedFile.m_pStream.reset();
             xStream.clear();

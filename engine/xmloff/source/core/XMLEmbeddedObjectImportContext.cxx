@@ -35,7 +35,7 @@
 #include <xmloff/XMLFilterServiceNames.h>
 #include <XMLEmbeddedObjectImportContext.hxx>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
@@ -47,20 +47,20 @@ namespace {
 
 class XMLEmbeddedObjectImportContext_Impl : public SvXMLImportContext
 {
-    css::uno::Reference< css::xml::sax::XFastDocumentHandler > mxFastHandler;
+    cpo::uno::Reference< css::xml::sax::XFastDocumentHandler > mxFastHandler;
 
 public:
 
     XMLEmbeddedObjectImportContext_Impl( SvXMLImport& rImport,
-                                    const css::uno::Reference< css::xml::sax::XFastDocumentHandler >& rHandler );
+                                    const cpo::uno::Reference< css::xml::sax::XFastDocumentHandler >& rHandler );
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
     virtual void startFastElement(
                         sal_Int32 nElement,
-                        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+                        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     virtual void endFastElement(sal_Int32 nElement) override;
 
@@ -78,9 +78,9 @@ XMLEmbeddedObjectImportContext_Impl::XMLEmbeddedObjectImportContext_Impl(
     assert(mxFastHandler);
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLEmbeddedObjectImportContext_Impl::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLEmbeddedObjectImportContext_Impl::createFastChildContext(
     sal_Int32 ,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
     return new XMLEmbeddedObjectImportContext_Impl(GetImport(), mxFastHandler);
 }
@@ -214,9 +214,9 @@ XMLEmbeddedObjectImportContext::~XMLEmbeddedObjectImportContext()
 {
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLEmbeddedObjectImportContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLEmbeddedObjectImportContext::createFastChildContext(
     sal_Int32 ,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& )
 {
     if( mxFastHandler.is() )
         return new XMLEmbeddedObjectImportContext_Impl( GetImport(), mxFastHandler );

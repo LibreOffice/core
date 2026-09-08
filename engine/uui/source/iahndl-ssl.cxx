@@ -26,7 +26,7 @@
 #include <com/sun/star/task/XInteractionApprove.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include <com/sun/star/ucb/CertificateValidationRequest.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <comphelper/kit.hxx>
 #include <comphelper/sequence.hxx>
@@ -51,6 +51,7 @@
 
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 namespace {
 

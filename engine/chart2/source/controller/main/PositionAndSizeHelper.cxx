@@ -31,6 +31,7 @@ namespace chart
 {
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
+using namespace ::cpo;
 
 bool PositionAndSizeHelper::moveObject( ObjectType eObjectType
                 , const uno::Reference< beans::XPropertySet >& xObjectProp

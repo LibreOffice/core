@@ -74,7 +74,7 @@
 #include "../source/filter/ixbm/xbmread.hxx"
 #include "../source/filter/jpeg/jpeg.hxx"
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace cppu;
@@ -133,11 +133,11 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         comphelper::EnableFuzzing();
 
         // initialise unconfigured UCB:
-        css::uno::Reference<css::ucb::XUniversalContentBroker> xUcb(comphelper::getProcessServiceFactory()->
-            createInstance(u"com.sun.star.ucb.UniversalContentBroker"_ustr), css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::ucb::XUniversalContentBroker> xUcb(comphelper::getProcessServiceFactory()->
+            createInstance(u"com.sun.star.ucb.UniversalContentBroker"_ustr), cpo::uno::UNO_QUERY_THROW);
         cpo::uno::Sequence<cpo::uno::Any> aArgs{ cpo::uno::Any(u"NoConfig"_ustr) };
-        css::uno::Reference<css::ucb::XContentProvider> xFileProvider(comphelper::getProcessServiceFactory()->
-            createInstanceWithArguments(u"com.sun.star.ucb.FileContentProvider"_ustr, aArgs), css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::ucb::XContentProvider> xFileProvider(comphelper::getProcessServiceFactory()->
+            createInstanceWithArguments(u"com.sun.star.ucb.FileContentProvider"_ustr, aArgs), cpo::uno::UNO_QUERY_THROW);
         xUcb->registerContentProvider(xFileProvider, u"file"_ustr, true);
 
         Application::EnableHeadlessMode(false);

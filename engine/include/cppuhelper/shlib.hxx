@@ -21,7 +21,7 @@
 #define INCLUDED_CPPUHELPER_SHLIB_HXX
 
 #include "cppuhelper/cppuhelperdllapi.h"
-#include "com/sun/star/uno/Reference.h"
+#include "cpo/uno/Reference.h"
 #include "rtl/ustring.hxx"
 
 namespace com { namespace sun { namespace star { namespace lang { class XMultiServiceFactory; } } } }
@@ -46,11 +46,11 @@ namespace cppu
     factory instance (css::lang::XSingleComponentFactory or legacy
     css::lang::XSingleServiceFactory)
 */
-CPPUHELPER_DLLPUBLIC css::uno::Reference< cpo::uno::XInterface >
+CPPUHELPER_DLLPUBLIC cpo::uno::Reference< cpo::uno::XInterface >
 loadSharedLibComponentFactory(
     ::rtl::OUString const & uri,
     ::rtl::OUString const & rImplName,
-    css::uno::Reference< css::lang::XMultiServiceFactory > const & xMgr );
+    cpo::uno::Reference< css::lang::XMultiServiceFactory > const & xMgr );
 
 /** Invokes component_writeInfo() function of specified component library.  You can give either
     a fully qualified libname or single lib name. The libname need not be pre/postfixed
@@ -68,8 +68,8 @@ loadSharedLibComponentFactory(
 CPPUHELPER_DLLPUBLIC void
 writeSharedLibComponentInfo(
     ::rtl::OUString const & uri,
-    css::uno::Reference< css::lang::XMultiServiceFactory > const & xMgr,
-    css::uno::Reference< css::registry::XRegistryKey > const & xKey );
+    cpo::uno::Reference< css::lang::XMultiServiceFactory > const & xMgr,
+    cpo::uno::Reference< css::registry::XRegistryKey > const & xKey );
 
 } // end namespace cppu
 

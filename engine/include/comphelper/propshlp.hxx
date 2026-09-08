@@ -106,22 +106,22 @@ public:
     /** Ignored if the property is not bound. */
     virtual void addPropertyChangeListener(
         const ::rtl::OUString& aPropertyName,
-        const css::uno::Reference<css::beans::XPropertyChangeListener>& aListener) override;
+        const cpo::uno::Reference<css::beans::XPropertyChangeListener>& aListener) override;
 
     /** Ignored if the property is not bound. */
     virtual void removePropertyChangeListener(
         const ::rtl::OUString& aPropertyName,
-        const css::uno::Reference<css::beans::XPropertyChangeListener>& aListener) override;
+        const cpo::uno::Reference<css::beans::XPropertyChangeListener>& aListener) override;
 
     /** Ignored if the property is not constrained. */
     virtual void addVetoableChangeListener(
         const ::rtl::OUString& aPropertyName,
-        const css::uno::Reference<css::beans::XVetoableChangeListener>& aListener) override;
+        const cpo::uno::Reference<css::beans::XVetoableChangeListener>& aListener) override;
 
     /** Ignored if the property is not constrained. */
     virtual void removeVetoableChangeListener(
         const ::rtl::OUString& aPropertyName,
-        const css::uno::Reference<css::beans::XVetoableChangeListener>& aListener) override;
+        const cpo::uno::Reference<css::beans::XVetoableChangeListener>& aListener) override;
 
     /**
        Throw UnknownPropertyException or PropertyVetoException if the property with the name
@@ -148,19 +148,19 @@ public:
 
     virtual void addPropertiesChangeListener(
         const cpo::uno::Sequence<::rtl::OUString>& PropertyNames,
-        const css::uno::Reference<css::beans::XPropertiesChangeListener>& Listener) override final;
+        const cpo::uno::Reference<css::beans::XPropertiesChangeListener>& Listener) override final;
 
     virtual void removePropertiesChangeListener(
-        const css::uno::Reference<css::beans::XPropertiesChangeListener>& Listener) override final;
+        const cpo::uno::Reference<css::beans::XPropertiesChangeListener>& Listener) override final;
 
     virtual void firePropertiesChangeEvent(
         const cpo::uno::Sequence<::rtl::OUString>& PropertyNames,
-        const css::uno::Reference<css::beans::XPropertiesChangeListener>& Listener) override final;
+        const cpo::uno::Reference<css::beans::XPropertiesChangeListener>& Listener) override final;
 
     /**
        The property sequence is created in the call. The interface isn't used after the call.
      */
-    static css::uno::Reference<css::beans::XPropertySetInfo>
+    static cpo::uno::Reference<css::beans::XPropertySetInfo>
     createPropertySetInfo(cppu::IPropertyArrayHelper& rProperties);
 
 protected:

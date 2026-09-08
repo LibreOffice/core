@@ -57,6 +57,7 @@ using namespace ::ooo;
 using namespace ::ooo::vba;
 using namespace ::ooo::vba::word;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace {
 
@@ -371,7 +372,7 @@ float SAL_CALL SwVbaApplication::PixelsToPoints( float Pixels, bool fVertical )
     uno::Reference< frame::XController > xController( xModel->getCurrentController(), uno::UNO_SET_THROW );
     uno::Reference< frame::XFrame > xFrame( xController->getFrame(), uno::UNO_SET_THROW );
     uno::Reference< awt::XWindow > xWindow( xFrame->getContainerWindow(), uno::UNO_SET_THROW );
-    css::uno::Reference< css::awt::XDevice > xDevice( xWindow, css::uno::UNO_QUERY );
+    cpo::uno::Reference< css::awt::XDevice > xDevice( xWindow, cpo::uno::UNO_QUERY );
 
     return ooo::vba::PixelsToPoints(xDevice, Pixels, fVertical);
 }
@@ -382,7 +383,7 @@ float SAL_CALL SwVbaApplication::PointsToPixels( float Pixels, bool fVertical )
     uno::Reference< frame::XController > xController( xModel->getCurrentController(), uno::UNO_SET_THROW );
     uno::Reference< frame::XFrame > xFrame( xController->getFrame(), uno::UNO_SET_THROW );
     uno::Reference< awt::XWindow > xWindow( xFrame->getContainerWindow(), uno::UNO_SET_THROW );
-    css::uno::Reference< css::awt::XDevice > xDevice( xWindow, css::uno::UNO_QUERY );
+    cpo::uno::Reference< css::awt::XDevice > xDevice( xWindow, cpo::uno::UNO_QUERY );
 
     return ooo::vba::PointsToPixels(xDevice, Pixels, fVertical);
 }

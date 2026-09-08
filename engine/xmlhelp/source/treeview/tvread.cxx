@@ -151,7 +151,7 @@ namespace treeview {
 
 using namespace treeview;
 using namespace com::sun::star;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::configuration;
@@ -872,7 +872,7 @@ static bool isLetter( sal_Unicode c )
 }
 
 void TreeFileIterator::implGetLanguageVectorFromPackage( ::std::vector< OUString > &rv,
-    const css::uno::Reference< css::deployment::XPackage >& xPackage )
+    const cpo::uno::Reference< css::deployment::XPackage >& xPackage )
 {
     rv.clear();
     OUString aExtensionPath = xPackage->getURL();

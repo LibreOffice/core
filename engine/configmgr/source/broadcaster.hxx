@@ -26,7 +26,7 @@
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <com/sun/star/container/ContainerEvent.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/util/ChangesEvent.hpp>
 
@@ -47,31 +47,31 @@ public:
     Broadcaster() {}
 
     void addDisposeNotification(
-        css::uno::Reference< css::lang::XEventListener > const & listener,
+        cpo::uno::Reference< css::lang::XEventListener > const & listener,
         css::lang::EventObject const & event);
 
     void addContainerElementInsertedNotification(
-        css::uno::Reference< css::container::XContainerListener > const & listener,
+        cpo::uno::Reference< css::container::XContainerListener > const & listener,
         css::container::ContainerEvent const & event);
 
     void addContainerElementRemovedNotification(
-        css::uno::Reference< css::container::XContainerListener > const & listener,
+        cpo::uno::Reference< css::container::XContainerListener > const & listener,
         css::container::ContainerEvent const & event);
 
     void addContainerElementReplacedNotification(
-        css::uno::Reference< css::container::XContainerListener > const & listener,
+        cpo::uno::Reference< css::container::XContainerListener > const & listener,
         css::container::ContainerEvent const & event);
 
     void addPropertyChangeNotification(
-        css::uno::Reference< css::beans::XPropertyChangeListener > const & listener,
+        cpo::uno::Reference< css::beans::XPropertyChangeListener > const & listener,
         css::beans::PropertyChangeEvent const & event);
 
     void addPropertiesChangeNotification(
-        css::uno::Reference< css::beans::XPropertiesChangeListener > const & listener,
+        cpo::uno::Reference< css::beans::XPropertiesChangeListener > const & listener,
         cpo::uno::Sequence< css::beans::PropertyChangeEvent > const & event);
 
     void addChangesNotification(
-        css::uno::Reference< css::util::XChangesListener > const & listener,
+        cpo::uno::Reference< css::util::XChangesListener > const & listener,
         css::util::ChangesEvent const & event, bool bRootListener);
 
     void send();
@@ -81,47 +81,47 @@ private:
     Broadcaster& operator=(const Broadcaster&) = delete;
 
     struct DisposeNotification {
-        css::uno::Reference< css::lang::XEventListener >  listener;
+        cpo::uno::Reference< css::lang::XEventListener >  listener;
         css::lang::EventObject                            event;
 
         DisposeNotification(
-            css::uno::Reference< css::lang::XEventListener > const & theListener,
+            cpo::uno::Reference< css::lang::XEventListener > const & theListener,
             css::lang::EventObject theEvent);
     };
 
     struct ContainerNotification {
-        css::uno::Reference< css::container::XContainerListener > listener;
+        cpo::uno::Reference< css::container::XContainerListener > listener;
         css::container::ContainerEvent event;
 
         ContainerNotification(
-            css::uno::Reference< css::container::XContainerListener > const & theListener,
+            cpo::uno::Reference< css::container::XContainerListener > const & theListener,
             css::container::ContainerEvent theEvent);
     };
 
     struct PropertyChangeNotification {
-        css::uno::Reference< css::beans::XPropertyChangeListener > listener;
+        cpo::uno::Reference< css::beans::XPropertyChangeListener > listener;
         css::beans::PropertyChangeEvent                            event;
 
         PropertyChangeNotification(
-            css::uno::Reference< css::beans::XPropertyChangeListener > const & theListener,
+            cpo::uno::Reference< css::beans::XPropertyChangeListener > const & theListener,
             css::beans::PropertyChangeEvent theEvent);
     };
 
     struct PropertiesChangeNotification {
-        css::uno::Reference< css::beans::XPropertiesChangeListener > listener;
+        cpo::uno::Reference< css::beans::XPropertiesChangeListener > listener;
         cpo::uno::Sequence< css::beans::PropertyChangeEvent >        event;
 
         PropertiesChangeNotification(
-            css::uno::Reference< css::beans::XPropertiesChangeListener > const & theListener,
+            cpo::uno::Reference< css::beans::XPropertiesChangeListener > const & theListener,
             cpo::uno::Sequence< css::beans::PropertyChangeEvent > const & theEvent);
     };
 
     struct ChangesNotification {
-        css::uno::Reference< css::util::XChangesListener > listener;
+        cpo::uno::Reference< css::util::XChangesListener > listener;
         css::util::ChangesEvent                            event;
 
         ChangesNotification(
-            css::uno::Reference< css::util::XChangesListener > const & theListener,
+            cpo::uno::Reference< css::util::XChangesListener > const & theListener,
             css::util::ChangesEvent theEvent);
     };
 

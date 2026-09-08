@@ -47,7 +47,7 @@
 #include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
@@ -571,7 +571,7 @@ Reference< XForm >  FmFormPageImpl::findFormForDataSource(
                     Reference< XDataSource > xFormDS(xConnAsChild->getParent(), UNO_QUERY);
                     if (xFormDS.is())
                     {
-                        xDSProps.set(xFormDS, css::uno::UNO_QUERY);
+                        xDSProps.set(xFormDS, cpo::uno::UNO_QUERY);
                         if (xDSProps.is())
                             xDSProps->getPropertyValue(FM_PROP_NAME) >>= sFormDataSourceName;
                     }

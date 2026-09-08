@@ -32,14 +32,14 @@ class SwVbaTables : public SwVbaTables_BASE
 {
     rtl::Reference< SwXTextDocument > mxDocument;
 public:
-    SwVbaTables( const css::uno::Reference< ov::XHelperInterface >& xParent,
-                 const css::uno::Reference< cpo::uno::XComponentContext > & xContext,
+    SwVbaTables( const cpo::uno::Reference< ov::XHelperInterface >& xParent,
+                 const cpo::uno::Reference< cpo::uno::XComponentContext > & xContext,
                  const rtl::Reference< SwXTextDocument >& xDocument );
     // XTables
-    virtual css::uno::Reference< ov::word::XTable > SAL_CALL Add( const css::uno::Reference< ::ooo::vba::word::XRange >& Range, const cpo::uno::Any& NumRows, const cpo::uno::Any& NumColumns, const cpo::uno::Any& DefaultTableBehavior, const cpo::uno::Any& AutoFitBehavior ) override;
+    virtual cpo::uno::Reference< ov::word::XTable > SAL_CALL Add( const cpo::uno::Reference< ::ooo::vba::word::XRange >& Range, const cpo::uno::Any& NumRows, const cpo::uno::Any& NumColumns, const cpo::uno::Any& DefaultTableBehavior, const cpo::uno::Any& AutoFitBehavior ) override;
     // XEnumerationAccess
     virtual cpo::uno::Type SAL_CALL getElementType() override;
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
+    virtual cpo::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
     // ScVbaCollectionBaseImpl
     virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) override;
 

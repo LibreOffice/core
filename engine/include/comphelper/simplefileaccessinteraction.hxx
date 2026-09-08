@@ -36,13 +36,13 @@ class COMPHELPER_DLLPUBLIC SimpleFileAccessInteraction final : public ::ucbhelpe
 {
 
 public:
-    SimpleFileAccessInteraction(const css::uno::Reference< css::task::XInteractionHandler >& xHandler);
+    SimpleFileAccessInteraction(const cpo::uno::Reference< css::task::XInteractionHandler >& xHandler);
     virtual ~SimpleFileAccessInteraction() override;
 
 private:
 
     virtual ucbhelper::InterceptedInteraction::EInterceptionState intercepted(const ::ucbhelper::InterceptedInteraction::InterceptedRequest& aRequest,
-        const css::uno::Reference< css::task::XInteractionRequest >& xRequest) override;
+        const cpo::uno::Reference< css::task::XInteractionRequest >& xRequest) override;
 
 };
 }

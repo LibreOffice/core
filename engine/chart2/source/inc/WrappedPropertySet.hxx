@@ -52,27 +52,27 @@ public:
 
 public:
     //XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
 
     virtual void setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
     void setPropertyValue( std::unique_lock<std::mutex>& rGuard, const OUString& aPropertyName, const cpo::uno::Any& aValue );
     virtual cpo::uno::Any getPropertyValue( const OUString& PropertyName ) override;
     cpo::uno::Any getPropertyValue( std::unique_lock<std::mutex>& rGuard, const OUString& PropertyName );
 
-    virtual void addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
-    void addPropertyChangeListener( std::unique_lock<std::mutex>& rGuard, const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener );
-    virtual void removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
-    void removePropertyChangeListener( std::unique_lock<std::mutex>& rGuard, const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener );
-    virtual void addVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
-    virtual void removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+    virtual void addPropertyChangeListener( const OUString& aPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
+    void addPropertyChangeListener( std::unique_lock<std::mutex>& rGuard, const OUString& aPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& xListener );
+    virtual void removePropertyChangeListener( const OUString& aPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
+    void removePropertyChangeListener( std::unique_lock<std::mutex>& rGuard, const OUString& aPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& aListener );
+    virtual void addVetoableChangeListener( const OUString& PropertyName, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+    virtual void removeVetoableChangeListener( const OUString& PropertyName, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
     //XMultiPropertySet
     //getPropertySetInfo() already declared in XPropertySet
     virtual void setPropertyValues( const cpo::uno::Sequence< OUString >& aPropertyNames, const cpo::uno::Sequence< cpo::uno::Any >& aValues ) override;
     virtual cpo::uno::Sequence< cpo::uno::Any > getPropertyValues( const cpo::uno::Sequence< OUString >& aPropertyNames ) override;
-    virtual void addPropertiesChangeListener( const cpo::uno::Sequence< OUString >& aPropertyNames, const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
-    virtual void removePropertiesChangeListener( const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
-    virtual void firePropertiesChangeEvent( const cpo::uno::Sequence< OUString >& aPropertyNames, const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
+    virtual void addPropertiesChangeListener( const cpo::uno::Sequence< OUString >& aPropertyNames, const cpo::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
+    virtual void removePropertiesChangeListener( const cpo::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
+    virtual void firePropertiesChangeEvent( const cpo::uno::Sequence< OUString >& aPropertyNames, const cpo::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
 
     //XPropertyState
     virtual css::beans::PropertyState getPropertyState( const OUString& PropertyName ) override;
@@ -98,8 +98,8 @@ protected: //methods
     */
     virtual std::vector< std::unique_ptr<WrappedProperty> > createWrappedProperties()=0;
 
-    virtual css::uno::Reference< css::beans::XPropertySet > getInnerPropertySet() = 0;
-    css::uno::Reference< css::beans::XPropertyState > getInnerPropertyState();
+    virtual cpo::uno::Reference< css::beans::XPropertySet > getInnerPropertySet() = 0;
+    cpo::uno::Reference< css::beans::XPropertyState > getInnerPropertyState();
 
     ::cppu::IPropertyArrayHelper&   getInfoHelper(std::unique_lock<std::mutex>& rGuard);
     tWrappedPropertyMap&            getWrappedPropertyMap(std::unique_lock<std::mutex>& rGuard);
@@ -110,7 +110,7 @@ protected: //methods
     std::mutex m_aMutex;
 
 private:
-    css::uno::Reference< css::beans::XPropertySetInfo >     m_xInfo;//outer PropertySetInfo
+    cpo::uno::Reference< css::beans::XPropertySetInfo >     m_xInfo;//outer PropertySetInfo
 
     std::unique_ptr<::cppu::OPropertyArrayHelper>       m_pPropertyArrayHelper;//holds all possible outer properties
 

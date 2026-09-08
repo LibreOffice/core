@@ -61,6 +61,7 @@
 #include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using ::cpo::uno::Sequence;
 using ::cpo::uno::Any;
 using ::com::sun::star::sheet::DataPilotFieldAutoShowInfo;

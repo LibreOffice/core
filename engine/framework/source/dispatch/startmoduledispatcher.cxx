@@ -37,7 +37,7 @@ namespace framework{
     #error "Who uses \"fpf\" as define. It will overwrite my namespace alias ..."
 #endif
 
-StartModuleDispatcher::StartModuleDispatcher(css::uno::Reference< cpo::uno::XComponentContext > xContext)
+StartModuleDispatcher::StartModuleDispatcher(cpo::uno::Reference< cpo::uno::XComponentContext > xContext)
     : m_xContext         (std::move(xContext                         ))
 {
 }
@@ -49,12 +49,12 @@ StartModuleDispatcher::~StartModuleDispatcher()
 void StartModuleDispatcher::dispatch(const css::util::URL&                                  aURL      ,
                                               const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments)
 {
-    dispatchWithNotification(aURL, lArguments, css::uno::Reference< css::frame::XDispatchResultListener >());
+    dispatchWithNotification(aURL, lArguments, cpo::uno::Reference< css::frame::XDispatchResultListener >());
 }
 
 void StartModuleDispatcher::dispatchWithNotification(const css::util::URL&                                             aURL      ,
                                                               const cpo::uno::Sequence< css::beans::PropertyValue >&            /*lArguments*/,
-                                                              const css::uno::Reference< css::frame::XDispatchResultListener >& xListener )
+                                                              const cpo::uno::Reference< css::frame::XDispatchResultListener >& xListener )
 {
     ::sal_Int16 nResult = css::frame::DispatchResultState::DONTKNOW;
     if (isStartModuleDispatch(aURL))
@@ -80,12 +80,12 @@ cpo::uno::Sequence< css::frame::DispatchInformation > StartModuleDispatcher::get
     return cpo::uno::Sequence< css::frame::DispatchInformation >();
 }
 
-void StartModuleDispatcher::addStatusListener(const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/,
+void StartModuleDispatcher::addStatusListener(const cpo::uno::Reference< css::frame::XStatusListener >& /*xListener*/,
                                                        const css::util::URL&                                     /*aURL*/     )
 {
 }
 
-void StartModuleDispatcher::removeStatusListener(const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/,
+void StartModuleDispatcher::removeStatusListener(const cpo::uno::Reference< css::frame::XStatusListener >& /*xListener*/,
                                                           const css::util::URL&                                     /*aURL*/     )
 {
 }
@@ -95,12 +95,12 @@ bool StartModuleDispatcher::implts_isBackingModePossible()
     if ( ! SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::EModule::STARTMODULE))
         return false;
 
-    css::uno::Reference< css::frame::XFramesSupplier > xDesktop =
+    cpo::uno::Reference< css::frame::XFramesSupplier > xDesktop =
         css::frame::Desktop::create( m_xContext );
 
     FrameListAnalyzer aCheck(
         xDesktop,
-        css::uno::Reference< css::frame::XFrame >(),
+        cpo::uno::Reference< css::frame::XFrame >(),
         FrameAnalyzerFlags::Help | FrameAnalyzerFlags::BackingComponent);
 
     bool  bIsPossible    = false;
@@ -116,18 +116,18 @@ bool StartModuleDispatcher::implts_isBackingModePossible()
 
 void StartModuleDispatcher::implts_establishBackingMode()
 {
-    css::uno::Reference< css::frame::XDesktop2> xDesktop       = css::frame::Desktop::create( m_xContext );
-    css::uno::Reference< css::frame::XFrame > xFrame           = xDesktop->findFrame(SPECIALTARGET_BLANK, 0);
-    css::uno::Reference< css::awt::XWindow  > xContainerWindow = xFrame->getContainerWindow();
+    cpo::uno::Reference< css::frame::XDesktop2> xDesktop       = css::frame::Desktop::create( m_xContext );
+    cpo::uno::Reference< css::frame::XFrame > xFrame           = xDesktop->findFrame(SPECIALTARGET_BLANK, 0);
+    cpo::uno::Reference< css::awt::XWindow  > xContainerWindow = xFrame->getContainerWindow();
 
-    css::uno::Reference< css::frame::XController > xStartModule = css::frame::StartModule::createWithParentWindow(m_xContext, xContainerWindow);
-    css::uno::Reference< css::awt::XWindow > xComponentWindow(xStartModule, css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::frame::XController > xStartModule = css::frame::StartModule::createWithParentWindow(m_xContext, xContainerWindow);
+    cpo::uno::Reference< css::awt::XWindow > xComponentWindow(xStartModule, cpo::uno::UNO_QUERY);
     xFrame->setComponent(xComponentWindow, xStartModule);
     xStartModule->attachFrame(xFrame);
     xContainerWindow->setVisible(true);
 }
 
-void StartModuleDispatcher::implts_notifyResultListener(const css::uno::Reference< css::frame::XDispatchResultListener >& xListener,
+void StartModuleDispatcher::implts_notifyResultListener(const cpo::uno::Reference< css::frame::XDispatchResultListener >& xListener,
                                                               ::sal_Int16                                                 nState   ,
                                                         const cpo::uno::Any&                                              aResult  )
 {
@@ -135,7 +135,7 @@ void StartModuleDispatcher::implts_notifyResultListener(const css::uno::Referenc
         return;
 
     css::frame::DispatchResultEvent aEvent(
-        css::uno::Reference< cpo::uno::XInterface >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY),
+        cpo::uno::Reference< cpo::uno::XInterface >(static_cast< ::cppu::OWeakObject* >(this), cpo::uno::UNO_QUERY),
         nState,
         aResult);
 

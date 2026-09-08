@@ -32,8 +32,8 @@
 #include <toolkit/awt/vclxmenu.hxx>
 
 using namespace com::sun::star;
-using namespace css::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace css::lang;
 using namespace css::frame;
 using namespace css::beans;
@@ -68,7 +68,7 @@ PopupMenuControllerBase::~PopupMenuControllerBase()
 }
 
 // protected function
-void PopupMenuControllerBase::resetPopupMenu( css::uno::Reference< css::awt::XPopupMenu > const & rPopupMenu )
+void PopupMenuControllerBase::resetPopupMenu( cpo::uno::Reference< css::awt::XPopupMenu > const & rPopupMenu )
 {
     if ( rPopupMenu.is() && rPopupMenu->getItemCount() > 0 )
     {

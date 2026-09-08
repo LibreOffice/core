@@ -38,11 +38,11 @@ protected:
 
 public:
     ODateModel(
-        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
+        const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     ODateModel(
         const ODateModel* _pOriginal,
-        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
+        const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     virtual ~ODateModel() override;
 
@@ -88,10 +88,10 @@ protected:
 
     virtual void            resetNoBroadcast() override;
 
-    virtual void            onConnectedDbColumn( const css::uno::Reference< cpo::uno::XInterface >& _rxForm ) override;
+    virtual void            onConnectedDbColumn( const cpo::uno::Reference< cpo::uno::XInterface >& _rxForm ) override;
 
 protected:
-    virtual css::uno::Reference< css::util::XCloneable > createClone(  ) override;
+    virtual cpo::uno::Reference< css::util::XCloneable > createClone(  ) override;
 };
 
 class ODateControl: public OBoundControl
@@ -100,7 +100,7 @@ protected:
     virtual cpo::uno::Sequence< cpo::uno::Type> _getTypes() override;
 
 public:
-    explicit ODateControl(const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory);
+    explicit ODateControl(const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory);
     DECLARE_UNO3_AGG_DEFAULTS(ODateControl, OBoundControl)
 
 // css::lang::XServiceInfo

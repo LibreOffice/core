@@ -51,7 +51,7 @@ const sal_uInt16 nCurrFormatDefault = 0;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 namespace
@@ -565,7 +565,7 @@ void LocaleDataWrapper::scanCurrFormatImpl( std::u16string_view rCode,
 
 void LocaleDataWrapper::loadCurrencyFormats()
 {
-    css::uno::Reference< css::i18n::XNumberFormatCode > xNFC = i18n::NumberFormatMapper::create( m_xContext );
+    cpo::uno::Reference< css::i18n::XNumberFormatCode > xNFC = i18n::NumberFormatMapper::create( m_xContext );
     cpo::uno::Sequence< NumberFormatCode > aFormatSeq = xNFC->getAllFormatCode( KNumberFormatUsage::CURRENCY, maLanguageTag.getLocale() );
     sal_Int32 nCnt = aFormatSeq.getLength();
     if ( !nCnt )
@@ -814,7 +814,7 @@ static DateOrder getDateOrderFromLongDateOrder( LongDateOrder eLong )
 
 void LocaleDataWrapper::loadDateOrders()
 {
-    css::uno::Reference< css::i18n::XNumberFormatCode > xNFC = i18n::NumberFormatMapper::create( m_xContext );
+    cpo::uno::Reference< css::i18n::XNumberFormatCode > xNFC = i18n::NumberFormatMapper::create( m_xContext );
     cpo::uno::Sequence< NumberFormatCode > aFormatSeq = xNFC->getAllFormatCode( KNumberFormatUsage::DATE, maLanguageTag.getLocale() );
     sal_Int32 nCnt = aFormatSeq.getLength();
     if ( !nCnt )

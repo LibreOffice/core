@@ -76,6 +76,7 @@
 #endif
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace desktop;
 
 static COKitDocumentType getDocumentTypeFromName(std::string_view name)
@@ -451,7 +452,7 @@ void DesktopKitTest::closeDoc(std::unique_ptr<COKitDocumentImpl>& pDocument)
 
     if (mxComponent.is())
     {
-        css::uno::Reference<util::XCloseable> xCloseable(mxComponent, css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<util::XCloseable> xCloseable(mxComponent, cpo::uno::UNO_QUERY_THROW);
         xCloseable->close(false);
         mxComponent.clear();
     }

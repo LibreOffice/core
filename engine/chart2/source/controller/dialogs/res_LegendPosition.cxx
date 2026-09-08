@@ -39,6 +39,7 @@ namespace chart
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
+using namespace ::cpo;
 
 LegendPositionResources::LegendPositionResources(weld::Builder& rBuilder)
     : m_xRbtLeft(rBuilder.weld_radio_button(u"left"_ustr))

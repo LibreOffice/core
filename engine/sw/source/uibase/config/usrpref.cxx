@@ -39,7 +39,7 @@
 
 using namespace utl;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 void SwMasterUsrPref::SetUsrPref(const SwViewOption &rCopy)

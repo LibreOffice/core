@@ -37,6 +37,7 @@
 #include "content.hxx"
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace chelp;
 
 
@@ -164,7 +165,7 @@ void ContentProvider::init()
     // now adding as configuration change listener for the stylesheet
     m_xContainer.set(
         officecfg::Office::Common::Help::get(),
-        css::uno::UNO_QUERY_THROW);
+        cpo::uno::UNO_QUERY_THROW);
     m_xContainer->addContainerListener( this );
 
     OUString setupversion(

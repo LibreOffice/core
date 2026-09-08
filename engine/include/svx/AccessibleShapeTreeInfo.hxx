@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVX_ACCESSIBLESHAPETREEINFO_HXX
 #define INCLUDED_SVX_ACCESSIBLESHAPETREEINFO_HXX
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <svx/svxdllapi.h>
 #include <vcl/vclptr.hxx>
 
@@ -74,12 +74,12 @@ public:
 
     /** Deprecated.  Don't use this method.
     */
-    void SetDocumentWindow (const css::uno::Reference<
+    void SetDocumentWindow (const cpo::uno::Reference<
         css::accessibility::XAccessibleComponent>& rxViewWindow);
 
     /** Deprecated.  Don't use this method.
     */
-    const css::uno::Reference<
+    const cpo::uno::Reference<
         css::accessibility::XAccessibleComponent>&
         GetDocumentWindow() const { return mxDocumentWindow;}
 
@@ -89,7 +89,7 @@ public:
             The new broadcaster.  It replaces the current one.  An empty
             reference may be passed to unset the broadcaster
     */
-    void SetModelBroadcaster (const css::uno::Reference<
+    void SetModelBroadcaster (const cpo::uno::Reference<
         css::document::XShapeEventBroadcaster>& rxModelBroadcaster);
 
     /** Return the current model broadcaster.
@@ -97,7 +97,7 @@ public:
             The returned reference may be empty if the broadcaster has not
             been set or has been set to an empty reference.
     */
-    const css::uno::Reference<
+    const cpo::uno::Reference<
         css::document::XShapeEventBroadcaster>&
         GetModelBroadcaster() const { return mxModelBroadcaster;}
 
@@ -121,14 +121,14 @@ public:
             The new controller that replaces the current one.  An empty
             reference may be passed to unset the controller.
     */
-    void SetController (const css::uno::Reference<
+    void SetController (const cpo::uno::Reference<
         css::frame::XController>& rxController);
 
     /** Return the currently set controller.
         @return
             The reference to the currently set controller may be empty.
     */
-    const css::uno::Reference<
+    const cpo::uno::Reference<
         css::frame::XController>&
         GetController() const { return mxController;}
 
@@ -162,7 +162,7 @@ public:
 private:
     /** Deprecated.
     */
-    css::uno::Reference<
+    cpo::uno::Reference<
         css::accessibility::XAccessibleComponent> mxDocumentWindow;
 
     /** this broadcaster sends events indicating shape changes.
@@ -170,7 +170,7 @@ private:
 
         This once was named mxControllerBroadcaster.
     */
-    css::uno::Reference<
+    cpo::uno::Reference<
         css::document::XShapeEventBroadcaster> mxModelBroadcaster;
 
     /** This view is necessary to construct an SvxTextEditSource which in
@@ -180,7 +180,7 @@ private:
 
     /** The controller is used e.g. for obtaining the selected shapes.
     */
-    css::uno::Reference<
+    cpo::uno::Reference<
         css::frame::XController> mxController;
 
     /** This window is necessary to construct an SvxTextEditSource which in

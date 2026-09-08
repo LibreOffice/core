@@ -146,7 +146,7 @@ namespace
     #define E_UNKNOWN_EXEC_ERROR -1
 }
 
-CSysShExec::CSysShExec( const css::uno::Reference< cpo::uno::XComponentContext >& xContext ) :
+CSysShExec::CSysShExec( const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext ) :
     WeakComponentImplHelper< css::system::XSystemShellExecute, css::lang::XServiceInfo >( m_aMutex ),
     m_xContext(xContext),
     mnNbCallCoInitializeExForReinit(0)
@@ -315,7 +315,7 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
     OUString preprocessed_command(aCommand);
     if ((nFlags & URIS_ONLY) != 0)
     {
-        css::uno::Reference< css::uri::XUriReference > uri(
+        cpo::uno::Reference< css::uri::XUriReference > uri(
             css::uri::UriReferenceFactory::create(m_xContext)->parse(aCommand));
         if (!uri.is() || !uri->isAbsolute())
         {

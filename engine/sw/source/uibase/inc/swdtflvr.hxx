@@ -97,7 +97,7 @@ class UNLESS_MERGELIBS(SAL_DLLPUBLIC_RTTI) SwTransferable final : public Transfe
     bool m_bCleanUp   :1; //D&D cleanup after Drop (not by internal Drop)
 
     // helper methods for the copy
-    css::uno::Reference < css::embed::XEmbeddedObject > FindOLEObj( sal_Int64& nAspect ) const;
+    cpo::uno::Reference < css::embed::XEmbeddedObject > FindOLEObj( sal_Int64& nAspect ) const;
     const Graphic* FindOLEReplacementGraphic() const;
     void DeleteSelection();
 

@@ -59,7 +59,7 @@ cpo::uno::Any ImageProducer::queryInterface( const cpo::uno::Type & rType )
 }
 
 
-void ImageProducer::addConsumer( const css::uno::Reference< css::awt::XImageConsumer >& rxConsumer )
+void ImageProducer::addConsumer( const cpo::uno::Reference< css::awt::XImageConsumer >& rxConsumer )
 {
     DBG_ASSERT( rxConsumer.is(), "::AddConsumer(...): No consumer referenced!" );
     if( rxConsumer.is() )
@@ -67,7 +67,7 @@ void ImageProducer::addConsumer( const css::uno::Reference< css::awt::XImageCons
 }
 
 
-void ImageProducer::removeConsumer( const css::uno::Reference< css::awt::XImageConsumer >& rxConsumer )
+void ImageProducer::removeConsumer( const cpo::uno::Reference< css::awt::XImageConsumer >& rxConsumer )
 {
     ConsumerList_t::reverse_iterator riter = std::find(maConsList.rbegin(),maConsList.rend(),rxConsumer);
 
@@ -107,7 +107,7 @@ void ImageProducer::SetImage( SvStream& rStm )
 }
 
 
-void ImageProducer::setImage( css::uno::Reference< css::io::XInputStream > const & rInputStmRef )
+void ImageProducer::setImage( cpo::uno::Reference< css::io::XInputStream > const & rInputStmRef )
 {
     maURL.clear();
     moGraphic->Clear();

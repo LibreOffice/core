@@ -35,8 +35,8 @@
 
 using namespace utl;
 using namespace com::sun::star;
-using namespace com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 
 /** An autocorrection file dropped into such directory may create a language

@@ -75,10 +75,10 @@ namespace svx
                              ,public IContextRequestObserver
     {
     private:
-        css::uno::Reference< css::util::XURLTransformer >             m_xURLTransformer;
-        css::uno::Reference< css::awt::XControl >                     m_xActiveControl;
-        css::uno::Reference< css::awt::XTextComponent >               m_xActiveTextComponent;
-        css::uno::Reference< css::form::runtime::XFormController >    m_xActiveController;
+        cpo::uno::Reference< css::util::XURLTransformer >             m_xURLTransformer;
+        cpo::uno::Reference< css::awt::XControl >                     m_xActiveControl;
+        cpo::uno::Reference< css::awt::XTextComponent >               m_xActiveTextComponent;
+        cpo::uno::Reference< css::form::runtime::XFormController >    m_xActiveController;
 #ifndef DONT_REMEMBER_LAST_CONTROL
         // without this define, m_xActiveControl remembers the *last* active control, even
         // if it, in the meantime, already lost the focus
@@ -124,10 +124,10 @@ namespace svx
 
         /** to be called when a form in our document has been activated
         */
-        void    formActivated( const css::uno::Reference< css::form::runtime::XFormController >& _rxController );
+        void    formActivated( const cpo::uno::Reference< css::form::runtime::XFormController >& _rxController );
         /** to be called when a form in our document has been deactivated
         */
-        void    formDeactivated( const css::uno::Reference< css::form::runtime::XFormController >& _rxController );
+        void    formDeactivated( const cpo::uno::Reference< css::form::runtime::XFormController >& _rxController );
 
         /** notifies the instance that the design mode has changed
         */
@@ -152,14 +152,14 @@ namespace svx
 
         rtl::Reference<FmTextControlFeature>
                         implGetFeatureDispatcher(
-                            const css::uno::Reference< css::frame::XDispatchProvider >& _rxProvider,
+                            const cpo::uno::Reference< css::frame::XDispatchProvider >& _rxProvider,
                             SfxApplication const * _pApplication,
                             SfxSlotId _nSlot
                         );
 
         // fills the given structure with dispatchers for the given slots, for the given control
         void            fillFeatureDispatchers(
-                            const css::uno::Reference< css::awt::XControl >& _rxControl,
+                            const cpo::uno::Reference< css::awt::XControl >& _rxControl,
                             const SfxSlotId* _pZeroTerminatedSlots,
                             ControlFeatures& _rDispatchers
                         );
@@ -172,7 +172,7 @@ namespace svx
                         );
 
         /// to be called when a control has been activated
-        void    controlActivated( const css::uno::Reference< css::awt::XControl >& _rxControl );
+        void    controlActivated( const cpo::uno::Reference< css::awt::XControl >& _rxControl );
         /// to be called when the currently active control has been deactivated
         void    controlDeactivated( );
 
@@ -182,7 +182,7 @@ namespace svx
         @precond
             we don't have an active controller currently
         */
-        void    startControllerListening( const css::uno::Reference< css::form::runtime::XFormController >& _rxController );
+        void    startControllerListening( const cpo::uno::Reference< css::form::runtime::XFormController >& _rxController );
         /** stops listening at the active controller
         @precond
             we have an active controller currently

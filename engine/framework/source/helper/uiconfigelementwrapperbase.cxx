@@ -46,7 +46,7 @@ constexpr OUString UIELEMENT_PROPNAME_TYPE = u"Type"_ustr;
 constexpr OUString UIELEMENT_PROPNAME_XMENUBAR = u"XMenuBar"_ustr;
 constexpr OUString UIELEMENT_PROPNAME_NOCLOSE = u"NoClose"_ustr;
 using namespace com::sun::star::beans;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::lang;
@@ -91,12 +91,12 @@ Sequence< Type > UIConfigElementWrapperBase::getTypes(  )
 }
 
 // XComponent
-void UIConfigElementWrapperBase::addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener )
+void UIConfigElementWrapperBase::addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& xListener )
 {
     m_aListenerContainer.addInterface( cppu::UnoType<css::lang::XEventListener>::get(), xListener );
 }
 
-void UIConfigElementWrapperBase::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener )
+void UIConfigElementWrapperBase::removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener )
 {
     m_aListenerContainer.removeInterface( cppu::UnoType<css::lang::XEventListener>::get(), aListener );
 }
@@ -379,11 +379,11 @@ void UIConfigElementWrapperBase::getFastPropertyValue( cpo::uno::Any& aValue  ,
     return ourInfoHelper;
 }
 
-css::uno::Reference< css::beans::XPropertySetInfo > UIConfigElementWrapperBase::getPropertySetInfo()
+cpo::uno::Reference< css::beans::XPropertySetInfo > UIConfigElementWrapperBase::getPropertySetInfo()
 {
     // Create structure of propertysetinfo for baseclass "OPropertySetHelper".
     // (Use method "getInfoHelper()".)
-    static css::uno::Reference< css::beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
+    static cpo::uno::Reference< css::beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
 
     return xInfo;
 }

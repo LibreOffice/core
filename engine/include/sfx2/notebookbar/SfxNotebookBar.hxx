@@ -19,7 +19,7 @@ namespace com::sun::star::frame
 {
 class XFrame;
 }
-namespace com::sun::star::uno
+namespace cpo::uno
 {
 template <typename> class Reference;
 }
@@ -47,7 +47,7 @@ public:
     /// Creates the online notebookbar for the current view when it is active.
     static bool StateMethod(SfxBindings& rBindings);
     static bool StateMethod(SystemWindow* pSysWindow,
-                            const css::uno::Reference<css::frame::XFrame>& xFrame);
+                            const cpo::uno::Reference<css::frame::XFrame>& xFrame);
 
     /** Show menu bar in all frames of current application */
     static void ShowMenubar(bool bShow);

@@ -52,7 +52,7 @@
 #include <initjsunoscripting.hxx>
 #endif
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ucb;
@@ -144,7 +144,7 @@ void Desktop::RegisterServices()
     m_bServicesRegistered = true;
 }
 
-typedef std::map< OUString, css::uno::Reference<css::lang::XInitialization> > AcceptorMap;
+typedef std::map< OUString, cpo::uno::Reference<css::lang::XInitialization> > AcceptorMap;
 
 namespace
 {

@@ -63,7 +63,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::drawing::framework;
 using namespace ::sd::slidesorter;
 using ::sd::framework::FrameworkHelper;
@@ -129,7 +129,7 @@ constexpr snew_slide_value_info standard[] =
 LayoutMenu::LayoutMenu (
     weld::Widget* pParent,
     ViewShellBase& rViewShellBase,
-    css::uno::Reference<css::ui::XSidebar> xSidebar)
+    cpo::uno::Reference<css::ui::XSidebar> xSidebar)
     : PanelLayout( pParent, u"LayoutPanel"_ustr, u"modules/simpress/ui/layoutpanel.ui"_ustr ),
       mrBase(rViewShellBase),
       mxLayoutIconView(m_xBuilder->weld_icon_view(u"layoutpanel_icons"_ustr)),

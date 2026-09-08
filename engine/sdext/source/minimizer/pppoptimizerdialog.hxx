@@ -38,15 +38,15 @@ class PPPOptimizerDialog : public   ::cppu::WeakImplHelper<
                                     css::frame::XDispatchProvider,
                                     css::frame::XDispatch >
 {
-    css::uno::Reference< cpo::uno::XComponentContext > mxContext;
-    css::uno::Reference< css::frame::XFrame > mxFrame;
-    css::uno::Reference< css::frame::XController > mxController;
+    cpo::uno::Reference< cpo::uno::XComponentContext > mxContext;
+    cpo::uno::Reference< css::frame::XFrame > mxFrame;
+    cpo::uno::Reference< css::frame::XController > mxController;
 
     OptimizerDialog*    mpOptimizerDialog;
 
 public:
 
-    explicit PPPOptimizerDialog( const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
+    explicit PPPOptimizerDialog( const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext );
     virtual ~PPPOptimizerDialog() override;
 
     // XInitialization
@@ -60,19 +60,19 @@ public:
     virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XDispatchProvider
-    virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch(
+    virtual cpo::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch(
         const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags ) override;
 
-    virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches(
+    virtual cpo::uno::Sequence< cpo::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches(
         const cpo::uno::Sequence< css::frame::DispatchDescriptor >& aDescripts ) override;
 
     // XDispatch
     virtual void SAL_CALL dispatch( const css::util::URL& aURL,
                                         const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments ) override;
 
-    virtual void SAL_CALL addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xListener,
+    virtual void SAL_CALL addStatusListener( const cpo::uno::Reference< css::frame::XStatusListener >& xListener,
                                                 const css::util::URL& aURL ) override;
-    virtual void SAL_CALL removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xListener,
+    virtual void SAL_CALL removeStatusListener( const cpo::uno::Reference< css::frame::XStatusListener >& xListener,
                                                 const css::util::URL& aURL ) override;
 };
 

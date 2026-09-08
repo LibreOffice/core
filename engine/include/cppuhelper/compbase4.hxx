@@ -59,9 +59,9 @@ namespace cppu
             { WeakComponentImplHelperBase::release(); }
         virtual void dispose() SAL_OVERRIDE
             { WeakComponentImplHelperBase::dispose(); }
-        virtual void addEventListener(const css::uno::Reference< css::lang::XEventListener > & xListener) SAL_OVERRIDE
+        virtual void addEventListener(const cpo::uno::Reference< css::lang::XEventListener > & xListener) SAL_OVERRIDE
             { WeakComponentImplHelperBase::addEventListener(xListener); }
-        virtual void removeEventListener(const css::uno::Reference< css::lang::XEventListener > & xListener) SAL_OVERRIDE
+        virtual void removeEventListener(const cpo::uno::Reference< css::lang::XEventListener > & xListener) SAL_OVERRIDE
             { WeakComponentImplHelperBase::removeEventListener(xListener); }
         virtual cpo::uno::Sequence< cpo::uno::Type > getTypes() SAL_OVERRIDE
             { return WeakComponentImplHelper_getTypes( cd::get() ); }

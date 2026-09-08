@@ -34,11 +34,11 @@ private:
     rtl::Reference< SwXTextDocument > mxModel;
 
 public:
-    SwVbaFrames( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext > & xContext, const css::uno::Reference< css::container::XIndexAccess >& xFrames, rtl::Reference< SwXTextDocument >  xModel );
+    SwVbaFrames( const cpo::uno::Reference< ov::XHelperInterface >& xParent, const cpo::uno::Reference< cpo::uno::XComponentContext > & xContext, const cpo::uno::Reference< css::container::XIndexAccess >& xFrames, rtl::Reference< SwXTextDocument >  xModel );
 
     // XEnumerationAccess
     virtual cpo::uno::Type SAL_CALL getElementType() override;
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
+    virtual cpo::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
 
     // SwVbaFrames_BASE
     virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) override;

@@ -45,7 +45,7 @@ class StartModuleDispatcher final : public  ::cppu::WeakImplHelper<
         /** @short reference to a uno service manager,
                    which can be used to create own needed
                    uno resources. */
-        css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+        cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
     // native interface
 
@@ -62,7 +62,7 @@ class StartModuleDispatcher final : public  ::cppu::WeakImplHelper<
             @param  xFrame
                     the frame where the corresponding dispatch was started.
          */
-        StartModuleDispatcher(css::uno::Reference< cpo::uno::XComponentContext > xContext);
+        StartModuleDispatcher(cpo::uno::Reference< cpo::uno::XComponentContext > xContext);
 
         /** @short  does nothing real. */
         virtual ~StartModuleDispatcher() override;
@@ -74,14 +74,14 @@ class StartModuleDispatcher final : public  ::cppu::WeakImplHelper<
         // XNotifyingDispatch
         virtual void dispatchWithNotification( const css::util::URL&                                             aURL      ,
                                                         const cpo::uno::Sequence< css::beans::PropertyValue >&            lArguments,
-                                                        const css::uno::Reference< css::frame::XDispatchResultListener >& xListener ) override;
+                                                        const cpo::uno::Reference< css::frame::XDispatchResultListener >& xListener ) override;
 
         // XDispatch
         virtual void dispatch            ( const css::util::URL&                                     aURL      ,
                                                     const cpo::uno::Sequence< css::beans::PropertyValue >&    lArguments) override;
-        virtual void addStatusListener   ( const css::uno::Reference< css::frame::XStatusListener >& xListener ,
+        virtual void addStatusListener   ( const cpo::uno::Reference< css::frame::XStatusListener >& xListener ,
                                                     const css::util::URL&                                     aURL      ) override;
-        virtual void removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xListener ,
+        virtual void removeStatusListener( const cpo::uno::Reference< css::frame::XStatusListener >& xListener ,
                                                     const css::util::URL&                                     aURL      ) override;
 
         // XDispatchInformationProvider
@@ -115,7 +115,7 @@ class StartModuleDispatcher final : public  ::cppu::WeakImplHelper<
             @param  aResult
                     not used yet really ...
          */
-        void implts_notifyResultListener(const css::uno::Reference< css::frame::XDispatchResultListener >& xListener,
+        void implts_notifyResultListener(const cpo::uno::Reference< css::frame::XDispatchResultListener >& xListener,
                                                sal_Int16                                                   nState   ,
                                          const cpo::uno::Any&                                              aResult  );
 

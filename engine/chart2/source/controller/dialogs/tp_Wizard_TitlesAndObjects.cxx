@@ -29,6 +29,7 @@
 namespace chart
 {
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 TitlesAndObjectsTabPage::TitlesAndObjectsTabPage(weld::Container* pPage, weld::DialogController* pController,
                                                  rtl::Reference<::chart::ChartModel> xChartModel,

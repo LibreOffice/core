@@ -34,7 +34,7 @@ namespace toolkit
     class UnoControlFormattedFieldModel final : public UnoControlModel
     {
     public:
-        UnoControlFormattedFieldModel( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+        UnoControlFormattedFieldModel( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
         UnoControlFormattedFieldModel( const UnoControlFormattedFieldModel& rModel )
             : UnoControlModel(rModel)
             , m_bRevokedAsClient(false)
@@ -48,7 +48,7 @@ namespace toolkit
         OUString getServiceName() override;
 
         // css::beans::XMultiPropertySet
-        css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+        cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
 
 
         // css::lang::XServiceInfo
@@ -95,7 +95,7 @@ namespace toolkit
         cpo::uno::Any      m_aCachedFormat;
         bool               m_bRevokedAsClient;
         bool               m_bSettingValueAndText;
-        css::uno::Reference< css::util::XNumberFormatter >
+        cpo::uno::Reference< css::util::XNumberFormatter >
                            m_xCachedFormatter;
     };
 

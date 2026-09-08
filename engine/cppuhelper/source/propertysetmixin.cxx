@@ -59,7 +59,7 @@
 #include <com/sun/star/reflection/XTypeDescription.hpp>
 #include <com/sun/star/reflection/theCoreReflection.hpp>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Type.hxx>
@@ -95,12 +95,12 @@ struct Data: public salhelper::SimpleReferenceObject {
     PropertyMap properties;
 
     PropertyMap::const_iterator get(
-        css::uno::Reference< cpo::uno::XInterface > const & object,
+        cpo::uno::Reference< cpo::uno::XInterface > const & object,
         OUString const & name) const;
 
 protected:
     void initProperties(
-        css::uno::Reference< css::reflection::XTypeDescription > const & type,
+        cpo::uno::Reference< css::reflection::XTypeDescription > const & type,
         cpo::uno::Sequence< OUString > const & absentOptional,
         std::vector< OUString > * handleNames)
     {
@@ -110,17 +110,17 @@ protected:
 
 private:
     void initProperties(
-        css::uno::Reference< css::reflection::XTypeDescription > const & type,
+        cpo::uno::Reference< css::reflection::XTypeDescription > const & type,
         cpo::uno::Sequence< OUString > const & absentOptional,
         std::vector< OUString > * handleNames, std::set<OUString> * seen);
 
-    static css::uno::Reference< css::reflection::XTypeDescription >
+    static cpo::uno::Reference< css::reflection::XTypeDescription >
     resolveTypedefs(
-        css::uno::Reference< css::reflection::XTypeDescription > const & type);
+        cpo::uno::Reference< css::reflection::XTypeDescription > const & type);
 };
 
 Data::PropertyMap::const_iterator Data::get(
-    css::uno::Reference< cpo::uno::XInterface > const & object,
+    cpo::uno::Reference< cpo::uno::XInterface > const & object,
     OUString const & name) const
 {
     PropertyMap::const_iterator i(properties.find(name));
@@ -131,32 +131,32 @@ Data::PropertyMap::const_iterator Data::get(
 }
 
 void Data::initProperties(
-    css::uno::Reference< css::reflection::XTypeDescription > const & type,
+    cpo::uno::Reference< css::reflection::XTypeDescription > const & type,
     cpo::uno::Sequence< OUString > const & absentOptional,
     std::vector< OUString > * handleNames, std::set<OUString> * seen)
 {
-    css::uno::Reference< css::reflection::XInterfaceTypeDescription2 > ifc(
-        resolveTypedefs(type), css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference< css::reflection::XInterfaceTypeDescription2 > ifc(
+        resolveTypedefs(type), cpo::uno::UNO_QUERY_THROW);
     if (!seen->insert(ifc->getName()).second)
         return;
 
     const cpo::uno::Sequence<
-        css::uno::Reference< css::reflection::XTypeDescription > > bases(
+        cpo::uno::Reference< css::reflection::XTypeDescription > > bases(
         ifc->getBaseTypes());
     for (const auto & i : bases) {
         initProperties(i, absentOptional, handleNames, seen);
     }
     const cpo::uno::Sequence<
-        css::uno::Reference<
+        cpo::uno::Reference<
             css::reflection::XInterfaceMemberTypeDescription > > members(
         ifc->getMembers());
     for (const auto & m : members) {
         if (m->getTypeClass()
             == cpo::uno::TypeClass_INTERFACE_ATTRIBUTE)
         {
-            css::uno::Reference<
+            cpo::uno::Reference<
             css::reflection::XInterfaceAttributeTypeDescription2 > attr(
-                m, css::uno::UNO_QUERY_THROW);
+                m, cpo::uno::UNO_QUERY_THROW);
             sal_Int16 attrAttribs = 0;
             if (attr->isBound()) {
                 attrAttribs |= css::beans::PropertyAttribute::BOUND;
@@ -167,7 +167,7 @@ void Data::initProperties(
                 bSetUnknown = true;
             }
             cpo::uno::Sequence<
-            css::uno::Reference<
+            cpo::uno::Reference<
             css::reflection::XCompoundTypeDescription > > excs(
                 attr->getGetExceptions());
             bool bGetUnknown = false;
@@ -195,7 +195,7 @@ void Data::initProperties(
             if (bGetUnknown && bSetUnknown) {
                 attrAttribs |= css::beans::PropertyAttribute::OPTIONAL;
             }
-            css::uno::Reference< css::reflection::XTypeDescription > t(
+            cpo::uno::Reference< css::reflection::XTypeDescription > t(
                 attr->getType());
             for (;;)
             {
@@ -221,11 +221,11 @@ void Data::initProperties(
                 }
                 attrAttribs |= n;
                 const cpo::uno::Sequence<
-                css::uno::Reference< css::reflection::XTypeDescription > >
+                cpo::uno::Reference< css::reflection::XTypeDescription > >
                     args(
-                        css::uno::Reference<
+                        cpo::uno::Reference<
                         css::reflection::XStructTypeDescription >(
-                            t, css::uno::UNO_QUERY_THROW)->
+                            t, cpo::uno::UNO_QUERY_THROW)->
                         getTypeArguments());
                 if (args.getLength() != 1) {
                     throw cpo::uno::RuntimeException(
@@ -261,13 +261,13 @@ void Data::initProperties(
     }
 }
 
-css::uno::Reference< css::reflection::XTypeDescription > Data::resolveTypedefs(
-    css::uno::Reference< css::reflection::XTypeDescription > const & type)
+cpo::uno::Reference< css::reflection::XTypeDescription > Data::resolveTypedefs(
+    cpo::uno::Reference< css::reflection::XTypeDescription > const & type)
 {
-    css::uno::Reference< css::reflection::XTypeDescription > t(type);
+    cpo::uno::Reference< css::reflection::XTypeDescription > t(type);
     while (t->getTypeClass() == cpo::uno::TypeClass_TYPEDEF) {
-        t = css::uno::Reference< css::reflection::XIndirectTypeDescription >(
-            t, css::uno::UNO_QUERY_THROW)->getReferencedType();
+        t = cpo::uno::Reference< css::reflection::XIndirectTypeDescription >(
+            t, cpo::uno::UNO_QUERY_THROW)->getReferencedType();
     }
     return t;
 }
@@ -317,7 +317,7 @@ bool Info::hasPropertyByName(OUString const & name)
 }
 
 typedef
-std::multiset< css::uno::Reference< css::beans::XPropertyChangeListener > >
+std::multiset< cpo::uno::Reference< css::beans::XPropertyChangeListener > >
 BoundListenerBag;
 
 }
@@ -353,23 +353,23 @@ void PropertySetMixinImpl::BoundListeners::notify() const {
 class PropertySetMixinImpl::Impl: public Data {
 public:
     Impl(
-        css::uno::Reference< cpo::uno::XComponentContext > const & context,
+        cpo::uno::Reference< cpo::uno::XComponentContext > const & context,
         Implements theImplements,
         cpo::uno::Sequence< OUString > const & absentOptional,
         cpo::uno::Type const & type);
 
     OUString const & translateHandle(
-        css::uno::Reference< cpo::uno::XInterface > const & object,
+        cpo::uno::Reference< cpo::uno::XInterface > const & object,
         sal_Int32 handle) const;
 
     void setProperty(
-        css::uno::Reference< cpo::uno::XInterface > const & object,
+        cpo::uno::Reference< cpo::uno::XInterface > const & object,
         OUString const & name, cpo::uno::Any const & value,
         bool isAmbiguous, bool isDefaulted, sal_Int16 illegalArgumentPosition)
         const;
 
     cpo::uno::Any getProperty(
-        css::uno::Reference< cpo::uno::XInterface > const & object,
+        cpo::uno::Reference< cpo::uno::XInterface > const & object,
         OUString const & name, css::beans::PropertyState * state) const;
 
     PropertySetMixinImpl::Implements implements;
@@ -378,7 +378,7 @@ public:
     typedef std::unordered_map< OUString, BoundListenerBag > BoundListenerMap;
 
     typedef
-    std::multiset< css::uno::Reference< css::beans::XVetoableChangeListener > >
+    std::multiset< cpo::uno::Reference< css::beans::XVetoableChangeListener > >
     VetoListenerBag;
 
     typedef std::unordered_map< OUString, VetoListenerBag > VetoListenerMap;
@@ -389,23 +389,23 @@ public:
     bool disposed;
 
 private:
-    css::uno::Reference< css::reflection::XIdlClass > getReflection(
+    cpo::uno::Reference< css::reflection::XIdlClass > getReflection(
         OUString const & typeName) const;
 
     static cpo::uno::Any wrapValue(
-        css::uno::Reference< cpo::uno::XInterface > const & object,
+        cpo::uno::Reference< cpo::uno::XInterface > const & object,
         cpo::uno::Any const & value,
-        css::uno::Reference< css::reflection::XIdlClass > const & type,
+        cpo::uno::Reference< css::reflection::XIdlClass > const & type,
         bool wrapAmbiguous, bool isAmbiguous, bool wrapDefaulted,
         bool isDefaulted, bool wrapOptional);
 
-    css::uno::Reference< cpo::uno::XComponentContext > const & m_context;
+    cpo::uno::Reference< cpo::uno::XComponentContext > const & m_context;
     cpo::uno::Type m_type;
-    css::uno::Reference< css::reflection::XIdlClass > m_idlClass;
+    cpo::uno::Reference< css::reflection::XIdlClass > m_idlClass;
 };
 
 PropertySetMixinImpl::Impl::Impl(
-    css::uno::Reference< cpo::uno::XComponentContext > const & context,
+    cpo::uno::Reference< cpo::uno::XComponentContext > const & context,
     Implements theImplements,
     cpo::uno::Sequence< OUString > const & absentOptional,
     cpo::uno::Type const & type):
@@ -419,16 +419,16 @@ PropertySetMixinImpl::Impl::Impl(
              | IMPLEMENTS_PROPERTY_ACCESS))
         == 0);
     m_idlClass = getReflection(m_type.getTypeName());
-    css::uno::Reference< css::reflection::XTypeDescription > ifc;
+    cpo::uno::Reference< css::reflection::XTypeDescription > ifc;
     try {
         ifc.set(
-            css::uno::Reference< css::container::XHierarchicalNameAccess >(
+            cpo::uno::Reference< css::container::XHierarchicalNameAccess >(
                 m_context->getValueByName(
                     u"/singletons/com.sun.star.reflection."
                     "theTypeDescriptionManager"_ustr),
-                css::uno::UNO_QUERY_THROW)->getByHierarchicalName(
+                cpo::uno::UNO_QUERY_THROW)->getByHierarchicalName(
                     m_type.getTypeName()),
-            css::uno::UNO_QUERY_THROW);
+            cpo::uno::UNO_QUERY_THROW);
     } catch (css::container::NoSuchElementException & e) {
         cpo::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException(
@@ -445,7 +445,7 @@ PropertySetMixinImpl::Impl::Impl(
 }
 
 OUString const & PropertySetMixinImpl::Impl::translateHandle(
-    css::uno::Reference< cpo::uno::XInterface > const & object,
+    cpo::uno::Reference< cpo::uno::XInterface > const & object,
     sal_Int32 handle) const
 {
     if (handle < 0 || handle >= handleMap.getLength()) {
@@ -456,7 +456,7 @@ OUString const & PropertySetMixinImpl::Impl::translateHandle(
 }
 
 void PropertySetMixinImpl::Impl::setProperty(
-    css::uno::Reference< cpo::uno::XInterface > const & object,
+    cpo::uno::Reference< cpo::uno::XInterface > const & object,
     OUString const & name, cpo::uno::Any const & value, bool isAmbiguous,
     bool isDefaulted, sal_Int16 illegalArgumentPosition) const
 {
@@ -478,14 +478,14 @@ void PropertySetMixinImpl::Impl::setProperty(
              + name),
             object, illegalArgumentPosition);
     }
-    css::uno::Reference< css::reflection::XIdlField2 > f(
-        m_idlClass->getField(name), css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference< css::reflection::XIdlField2 > f(
+        m_idlClass->getField(name), cpo::uno::UNO_QUERY_THROW);
     cpo::uno::Any o(object->queryInterface(m_type));
     cpo::uno::Any v(
         wrapValue(
             object, value,
-            (css::uno::Reference< css::reflection::XIdlField2 >(
-                m_idlClass->getField(name), css::uno::UNO_QUERY_THROW)->
+            (cpo::uno::Reference< css::reflection::XIdlField2 >(
+                m_idlClass->getField(name), cpo::uno::UNO_QUERY_THROW)->
              getType()),
             ((i->second.property.Attributes
               & css::beans::PropertyAttribute::MAYBEAMBIGUOUS)
@@ -548,15 +548,15 @@ void PropertySetMixinImpl::Impl::setProperty(
 }
 
 cpo::uno::Any PropertySetMixinImpl::Impl::getProperty(
-    css::uno::Reference< cpo::uno::XInterface > const & object,
+    cpo::uno::Reference< cpo::uno::XInterface > const & object,
     OUString const & name, css::beans::PropertyState * state) const
 {
     PropertyMap::const_iterator i(properties.find(name));
     if (i == properties.end()) {
         throw css::beans::UnknownPropertyException(name, object);
     }
-    css::uno::Reference< css::reflection::XIdlField2 > field(
-        m_idlClass->getField(name), css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference< css::reflection::XIdlField2 > field(
+        m_idlClass->getField(name), cpo::uno::UNO_QUERY_THROW);
     cpo::uno::Any value;
     try {
         value = field->get(object->queryInterface(m_type));
@@ -602,12 +602,12 @@ cpo::uno::Any PropertySetMixinImpl::Impl::getProperty(
             && value.getValueTypeName().startsWith(
                 "com.sun.star.beans.Ambiguous<"))
         {
-            css::uno::Reference< css::reflection::XIdlClass > ambiguous(
+            cpo::uno::Reference< css::reflection::XIdlClass > ambiguous(
                 getReflection(value.getValueTypeName()));
             try {
-                if (!(css::uno::Reference< css::reflection::XIdlField2 >(
+                if (!(cpo::uno::Reference< css::reflection::XIdlField2 >(
                           ambiguous->getField(u"IsAmbiguous"_ustr),
-                          css::uno::UNO_QUERY_THROW)->get(value)
+                          cpo::uno::UNO_QUERY_THROW)->get(value)
                       >>= isAmbiguous))
                 {
                     throw cpo::uno::RuntimeException(
@@ -615,8 +615,8 @@ cpo::uno::Any PropertySetMixinImpl::Impl::getProperty(
                          " IsAmbiguous member"_ustr),
                         object);
                 }
-                value = css::uno::Reference< css::reflection::XIdlField2 >(
-                    ambiguous->getField(u"Value"_ustr), css::uno::UNO_QUERY_THROW)->
+                value = cpo::uno::Reference< css::reflection::XIdlField2 >(
+                    ambiguous->getField(u"Value"_ustr), cpo::uno::UNO_QUERY_THROW)->
                     get(value);
             } catch (css::lang::IllegalArgumentException & e) {
                 cpo::uno::Any anyEx = cppu::getCaughtException();
@@ -630,13 +630,13 @@ cpo::uno::Any PropertySetMixinImpl::Impl::getProperty(
                    && value.getValueTypeName().startsWith(
                        "com.sun.star.beans.Defaulted<"))
         {
-            css::uno::Reference< css::reflection::XIdlClass > defaulted(
+            cpo::uno::Reference< css::reflection::XIdlClass > defaulted(
                 getReflection(value.getValueTypeName()));
             try {
 
-                if (!(css::uno::Reference< css::reflection::XIdlField2 >(
+                if (!(cpo::uno::Reference< css::reflection::XIdlField2 >(
                           defaulted->getField(u"IsDefaulted"_ustr),
-                          css::uno::UNO_QUERY_THROW)->get(value)
+                          cpo::uno::UNO_QUERY_THROW)->get(value)
                       >>= isDefaulted))
                 {
                     throw cpo::uno::RuntimeException(
@@ -644,8 +644,8 @@ cpo::uno::Any PropertySetMixinImpl::Impl::getProperty(
                          " IsDefaulted member"_ustr),
                         object);
                 }
-                value = css::uno::Reference< css::reflection::XIdlField2 >(
-                    defaulted->getField(u"Value"_ustr), css::uno::UNO_QUERY_THROW)->
+                value = cpo::uno::Reference< css::reflection::XIdlField2 >(
+                    defaulted->getField(u"Value"_ustr), cpo::uno::UNO_QUERY_THROW)->
                     get(value);
             } catch (css::lang::IllegalArgumentException & e) {
                 cpo::uno::Any anyEx = cppu::getCaughtException();
@@ -659,13 +659,13 @@ cpo::uno::Any PropertySetMixinImpl::Impl::getProperty(
                    && value.getValueTypeName().startsWith(
                        "com.sun.star.beans.Optional<"))
         {
-            css::uno::Reference< css::reflection::XIdlClass > optional(
+            cpo::uno::Reference< css::reflection::XIdlClass > optional(
                 getReflection(value.getValueTypeName()));
             try {
                 bool present = false;
-                if (!(css::uno::Reference< css::reflection::XIdlField2 >(
+                if (!(cpo::uno::Reference< css::reflection::XIdlField2 >(
                           optional->getField(u"IsPresent"_ustr),
-                          css::uno::UNO_QUERY_THROW)->get(value)
+                          cpo::uno::UNO_QUERY_THROW)->get(value)
                       >>= present))
                 {
                     throw cpo::uno::RuntimeException(
@@ -677,8 +677,8 @@ cpo::uno::Any PropertySetMixinImpl::Impl::getProperty(
                     value.clear();
                     break;
                 }
-                value = css::uno::Reference< css::reflection::XIdlField2 >(
-                    optional->getField(u"Value"_ustr), css::uno::UNO_QUERY_THROW)->
+                value = cpo::uno::Reference< css::reflection::XIdlField2 >(
+                    optional->getField(u"Value"_ustr), cpo::uno::UNO_QUERY_THROW)->
                     get(value);
             } catch (css::lang::IllegalArgumentException & e) {
                 cpo::uno::Any anyEx = cppu::getCaughtException();
@@ -705,18 +705,18 @@ cpo::uno::Any PropertySetMixinImpl::Impl::getProperty(
     return value;
 }
 
-css::uno::Reference< css::reflection::XIdlClass >
+cpo::uno::Reference< css::reflection::XIdlClass >
 PropertySetMixinImpl::Impl::getReflection(OUString const & typeName) const
 {
-    return css::uno::Reference< css::reflection::XIdlClass >(
+    return cpo::uno::Reference< css::reflection::XIdlClass >(
         css::reflection::theCoreReflection::get(m_context)->forName(typeName),
-        css::uno::UNO_SET_THROW);
+        cpo::uno::UNO_SET_THROW);
 }
 
 cpo::uno::Any PropertySetMixinImpl::Impl::wrapValue(
-    css::uno::Reference< cpo::uno::XInterface > const & object,
+    cpo::uno::Reference< cpo::uno::XInterface > const & object,
     cpo::uno::Any const & value,
-    css::uno::Reference< css::reflection::XIdlClass > const & type,
+    cpo::uno::Reference< css::reflection::XIdlClass > const & type,
     bool wrapAmbiguous, bool isAmbiguous, bool wrapDefaulted, bool isDefaulted,
     bool wrapOptional)
 {
@@ -728,15 +728,15 @@ cpo::uno::Any PropertySetMixinImpl::Impl::wrapValue(
         cpo::uno::Any strct;
         type->createObject(strct);
         try {
-            css::uno::Reference< css::reflection::XIdlField2 > field(
-                type->getField(u"Value"_ustr), css::uno::UNO_QUERY_THROW);
+            cpo::uno::Reference< css::reflection::XIdlField2 > field(
+                type->getField(u"Value"_ustr), cpo::uno::UNO_QUERY_THROW);
             field->set(
                 strct,
                 wrapValue(
                     object, value, field->getType(), false, false,
                     wrapDefaulted, isDefaulted, wrapOptional));
-            css::uno::Reference< css::reflection::XIdlField2 >(
-                type->getField(u"IsAmbiguous"_ustr), css::uno::UNO_QUERY_THROW)->set(
+            cpo::uno::Reference< css::reflection::XIdlField2 >(
+                type->getField(u"IsAmbiguous"_ustr), cpo::uno::UNO_QUERY_THROW)->set(
                     strct, cpo::uno::Any(isAmbiguous));
         } catch (css::lang::IllegalArgumentException & e) {
             cpo::uno::Any anyEx = cppu::getCaughtException();
@@ -759,15 +759,15 @@ cpo::uno::Any PropertySetMixinImpl::Impl::wrapValue(
         cpo::uno::Any strct;
         type->createObject(strct);
         try {
-            css::uno::Reference< css::reflection::XIdlField2 > field(
-                type->getField(u"Value"_ustr), css::uno::UNO_QUERY_THROW);
+            cpo::uno::Reference< css::reflection::XIdlField2 > field(
+                type->getField(u"Value"_ustr), cpo::uno::UNO_QUERY_THROW);
             field->set(
                 strct,
                 wrapValue(
                     object, value, field->getType(), wrapAmbiguous, isAmbiguous,
                     false, false, wrapOptional));
-            css::uno::Reference< css::reflection::XIdlField2 >(
-                type->getField(u"IsDefaulted"_ustr), css::uno::UNO_QUERY_THROW)->set(
+            cpo::uno::Reference< css::reflection::XIdlField2 >(
+                type->getField(u"IsDefaulted"_ustr), cpo::uno::UNO_QUERY_THROW)->set(
                     strct, cpo::uno::Any(isDefaulted));
         } catch (css::lang::IllegalArgumentException & e) {
             cpo::uno::Any anyEx = cppu::getCaughtException();
@@ -791,12 +791,12 @@ cpo::uno::Any PropertySetMixinImpl::Impl::wrapValue(
         type->createObject(strct);
         bool present = value.hasValue();
         try {
-            css::uno::Reference< css::reflection::XIdlField2 >(
-                type->getField(u"IsPresent"_ustr), css::uno::UNO_QUERY_THROW)->set(
+            cpo::uno::Reference< css::reflection::XIdlField2 >(
+                type->getField(u"IsPresent"_ustr), cpo::uno::UNO_QUERY_THROW)->set(
                     strct, cpo::uno::Any(present));
             if (present) {
-                css::uno::Reference< css::reflection::XIdlField2 > field(
-                    type->getField(u"Value"_ustr), css::uno::UNO_QUERY_THROW);
+                cpo::uno::Reference< css::reflection::XIdlField2 > field(
+                    type->getField(u"Value"_ustr), cpo::uno::UNO_QUERY_THROW);
                 field->set(
                     strct,
                     wrapValue(
@@ -826,7 +826,7 @@ cpo::uno::Any PropertySetMixinImpl::Impl::wrapValue(
 }
 
 PropertySetMixinImpl::PropertySetMixinImpl(
-    css::uno::Reference< cpo::uno::XComponentContext > const & context,
+    cpo::uno::Reference< cpo::uno::XComponentContext > const & context,
     Implements implements,
     cpo::uno::Sequence< OUString > const & absentOptional,
     cpo::uno::Type const & type)
@@ -952,28 +952,28 @@ cpo::uno::Any PropertySetMixinImpl::queryInterface(cpo::uno::Type const & type)
     if ((m_impl->implements & IMPLEMENTS_PROPERTY_SET) != 0
          && type == cppu::UnoType<css::beans::XPropertySet>::get())
     {
-        css::uno::Reference< cpo::uno::XInterface > ifc(
+        cpo::uno::Reference< cpo::uno::XInterface > ifc(
             static_cast< css::beans::XPropertySet * >(this));
         return cpo::uno::Any(&ifc, type);
     }
     if ((m_impl->implements & IMPLEMENTS_FAST_PROPERTY_SET) != 0
                && type == cppu::UnoType<css::beans::XFastPropertySet>::get())
     {
-        css::uno::Reference< cpo::uno::XInterface > ifc(
+        cpo::uno::Reference< cpo::uno::XInterface > ifc(
             static_cast< css::beans::XFastPropertySet * >(this));
         return cpo::uno::Any(&ifc, type);
     }
     if ((m_impl->implements & IMPLEMENTS_PROPERTY_ACCESS) != 0
                && type == cppu::UnoType<css::beans::XPropertyAccess>::get())
     {
-        css::uno::Reference< cpo::uno::XInterface > ifc(
+        cpo::uno::Reference< cpo::uno::XInterface > ifc(
             static_cast< css::beans::XPropertyAccess * >(this));
         return cpo::uno::Any(&ifc, type);
     }
     return cpo::uno::Any();
 }
 
-css::uno::Reference< css::beans::XPropertySetInfo >
+cpo::uno::Reference< css::beans::XPropertySetInfo >
 PropertySetMixinImpl::getPropertySetInfo()
 {
     return new Info(m_impl);
@@ -996,10 +996,10 @@ cpo::uno::Any PropertySetMixinImpl::getPropertyValue(
 
 void PropertySetMixinImpl::addPropertyChangeListener(
     OUString const & propertyName,
-    css::uno::Reference< css::beans::XPropertyChangeListener > const & listener)
+    cpo::uno::Reference< css::beans::XPropertyChangeListener > const & listener)
 {
-    css::uno::Reference< css::beans::XPropertyChangeListener >(
-        listener, css::uno::UNO_SET_THROW); // reject NULL listener
+    cpo::uno::Reference< css::beans::XPropertyChangeListener >(
+        listener, cpo::uno::UNO_SET_THROW); // reject NULL listener
     checkUnknown(propertyName);
     bool disposed;
     {
@@ -1018,7 +1018,7 @@ void PropertySetMixinImpl::addPropertyChangeListener(
 
 void PropertySetMixinImpl::removePropertyChangeListener(
     OUString const & propertyName,
-    css::uno::Reference< css::beans::XPropertyChangeListener > const & listener)
+    cpo::uno::Reference< css::beans::XPropertyChangeListener > const & listener)
 {
     assert(listener.is());
     checkUnknown(propertyName);
@@ -1035,10 +1035,10 @@ void PropertySetMixinImpl::removePropertyChangeListener(
 
 void PropertySetMixinImpl::addVetoableChangeListener(
     OUString const & propertyName,
-    css::uno::Reference< css::beans::XVetoableChangeListener > const & listener)
+    cpo::uno::Reference< css::beans::XVetoableChangeListener > const & listener)
 {
-    css::uno::Reference< css::beans::XVetoableChangeListener >(
-        listener, css::uno::UNO_SET_THROW); // reject NULL listener
+    cpo::uno::Reference< css::beans::XVetoableChangeListener >(
+        listener, cpo::uno::UNO_SET_THROW); // reject NULL listener
     checkUnknown(propertyName);
     bool disposed;
     {
@@ -1057,7 +1057,7 @@ void PropertySetMixinImpl::addVetoableChangeListener(
 
 void PropertySetMixinImpl::removeVetoableChangeListener(
     OUString const & propertyName,
-    css::uno::Reference< css::beans::XVetoableChangeListener > const & listener)
+    cpo::uno::Reference< css::beans::XVetoableChangeListener > const & listener)
 {
     assert(listener.is());
     checkUnknown(propertyName);

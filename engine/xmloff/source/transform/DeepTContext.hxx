@@ -56,7 +56,7 @@ public:
     virtual rtl::Reference<XMLTransformerContext> CreateChildContext( sal_uInt16 nPrefix,
                                    const OUString& rLocalName,
                                    const OUString& rQName,
-                                   const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+                                   const cpo::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 
     void AddContent( rtl::Reference<XMLTransformerContext> const & pContent );
 

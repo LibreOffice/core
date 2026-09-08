@@ -21,7 +21,7 @@
 
 #include <cppuhelper/implbase.hxx>
 
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/linguistic2/XDictionaryListEventListener.hpp>
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
@@ -45,8 +45,8 @@ class FlushListener final :
         css::beans::XPropertyChangeListener
     >
 {
-    css::uno::Reference< css::linguistic2::XSearchableDictionaryList >    xDicList;
-    css::uno::Reference< css::linguistic2::XLinguProperties >             xPropSet;
+    cpo::uno::Reference< css::linguistic2::XSearchableDictionaryList >    xDicList;
+    cpo::uno::Reference< css::linguistic2::XLinguProperties >             xPropSet;
     SpellCache&                                                           mrSpellCache;
 
     FlushListener(const FlushListener &) = delete;
@@ -55,8 +55,8 @@ class FlushListener final :
 public:
     FlushListener( SpellCache& rFO ) : mrSpellCache(rFO) {}
 
-    void        SetDicList( css::uno::Reference< css::linguistic2::XSearchableDictionaryList > const &rDL );
-    void        SetPropSet( css::uno::Reference< css::linguistic2::XLinguProperties > const &rPS );
+    void        SetDicList( cpo::uno::Reference< css::linguistic2::XSearchableDictionaryList > const &rDL );
+    void        SetPropSet( cpo::uno::Reference< css::linguistic2::XLinguProperties > const &rPS );
 
     //XEventListener
     virtual void disposing( const css::lang::EventObject& rSource ) override;

@@ -612,7 +612,7 @@ struct StyleSheetDisposerFunctor final : public svl::StyleSheetDisposer
     Dispose(rtl::Reference<SfxStyleSheetBase> styleSheet) override
     {
         cppu::OWeakObject* weakObject = styleSheet.get();
-        css::uno::Reference< css::lang::XComponent > xComp( weakObject, css::uno::UNO_QUERY );
+        cpo::uno::Reference< css::lang::XComponent > xComp( weakObject, cpo::uno::UNO_QUERY );
         if( xComp.is() ) try
         {
             xComp->dispose();
@@ -788,7 +788,7 @@ void SfxStyleSheetBasePool::Remove( SfxStyleSheetBase* p )
     // this works well under normal conditions (checked breaking and counting
     // on SfxStyleSheetBase constructors and destructors)
 
-    // css::uno::Reference< css::lang::XComponent > xComp( getXWeak((*aIter).get()), css::uno::UNO_QUERY );
+    // cpo::uno::Reference< css::lang::XComponent > xComp( getXWeak((*aIter).get()), cpo::uno::UNO_QUERY );
     // if( xComp.is() ) try
     // {
     //  xComp->dispose();
@@ -923,7 +923,7 @@ SfxUnoStyleSheet::SfxUnoStyleSheet( const OUString& _rName, const SfxStyleSheetB
 {
 }
 
-SfxUnoStyleSheet* SfxUnoStyleSheet::getUnoStyleSheet( const css::uno::Reference< css::style::XStyle >& xStyle )
+SfxUnoStyleSheet* SfxUnoStyleSheet::getUnoStyleSheet( const cpo::uno::Reference< css::style::XStyle >& xStyle )
 {
     return dynamic_cast<SfxUnoStyleSheet*>(xStyle.get());
 }

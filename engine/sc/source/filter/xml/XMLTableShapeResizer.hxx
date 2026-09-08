@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <vector>
 
 namespace com::sun::star::drawing { class XShape; }
@@ -30,7 +30,7 @@ class ScDocument;
 
 struct ScMyToFixupOLE
 {
-    css::uno::Reference <css::drawing::XShape> xShape;
+    cpo::uno::Reference <css::drawing::XShape> xShape;
     OUString sRangeList;
 };
 
@@ -47,8 +47,8 @@ public:
     explicit ScMyOLEFixer(ScXMLImport& rImport);
     ~ScMyOLEFixer();
 
-    static bool IsOLE(const css::uno::Reference< css::drawing::XShape >& rShape);
-    void    AddOLE(const css::uno::Reference <css::drawing::XShape>& rShape,
+    static bool IsOLE(const cpo::uno::Reference< css::drawing::XShape >& rShape);
+    void    AddOLE(const cpo::uno::Reference <css::drawing::XShape>& rShape,
                    const OUString &rRangeList);
     void    FixupOLEs();
 };

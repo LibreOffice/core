@@ -29,7 +29,7 @@
 
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/drawing/Hatch.hpp>
@@ -130,10 +130,10 @@ class OOX_DLLPUBLIC DMLTextExport
 public:
     virtual void WriteOutliner(const OutlinerParaObject& rParaObj) = 0;
     /// Write the contents of the textbox that is associated to this shape.
-    virtual void WriteTextBox(css::uno::Reference<css::drawing::XShape> xShape) = 0;
+    virtual void WriteTextBox(cpo::uno::Reference<css::drawing::XShape> xShape) = 0;
     ///  Get textbox which belongs to the shape.
-    virtual css::uno::Reference<css::text::XTextFrame> GetUnoTextFrame(
-        css::uno::Reference<css::drawing::XShape> xShape) = 0;
+    virtual cpo::uno::Reference<css::text::XTextFrame> GetUnoTextFrame(
+        cpo::uno::Reference<css::drawing::XShape> xShape) = 0;
 protected:
     DMLTextExport() {}
     virtual ~DMLTextExport() {}
@@ -291,7 +291,7 @@ struct WriteRunInput
     sal_Int32 nCharHeight = -1;
     sal_Int16 nScriptType = css::i18n::ScriptType::LATIN;
     bool bUseTextSchemeColors = false;
-    css::uno::Reference<css::beans::XPropertySet> xShapePropSet;
+    cpo::uno::Reference<css::beans::XPropertySet> xShapePropSet;
 };
 
 class DrawingML
@@ -311,7 +311,7 @@ protected:
     ::sax_fastparser::FSHelperPtr             mpFS;
     ::oox::core::XmlFilterBase*               mpFB;
     /// If set, this is the parent of the currently handled shape.
-    css::uno::Reference<css::drawing::XShape> m_xParent;
+    cpo::uno::Reference<css::drawing::XShape> m_xParent;
     bool                                      mbIsBackgroundDark;
 
     /// True when exporting presentation placeholder shape.
@@ -325,14 +325,14 @@ protected:
 
     bool mbEmbedFonts = false;
 
-    bool GetProperty( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet, const OUString& aName );
-    bool GetPropertyAndState( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet,
-                  const css::uno::Reference< css::beans::XPropertyState >& rXPropState,
+    bool GetProperty( const cpo::uno::Reference< css::beans::XPropertySet >& rXPropSet, const OUString& aName );
+    bool GetPropertyAndState( const cpo::uno::Reference< css::beans::XPropertySet >& rXPropSet,
+                  const cpo::uno::Reference< css::beans::XPropertyState >& rXPropState,
                   const OUString& aName, css::beans::PropertyState& eState );
-    bool GetDirectProperty(const css::uno::Reference<css::beans::XPropertySet>& rXPropSet,
-                           const css::uno::Reference<css::beans::XPropertyState>& rXPropState,
+    bool GetDirectProperty(const cpo::uno::Reference<css::beans::XPropertySet>& rXPropSet,
+                           const cpo::uno::Reference<css::beans::XPropertyState>& rXPropState,
                            const OUString& aName);
-    OUString GetFieldValue( const css::uno::Reference< css::text::XTextRange >& rRun, bool& bIsURLField );
+    OUString GetFieldValue( const cpo::uno::Reference< css::text::XTextRange >& rRun, bool& bIsURLField );
     /** Gets OOXML datetime field type from LO Date format
 
         @param eDate LO Date format
@@ -351,7 +351,7 @@ protected:
     OOX_DLLPUBLIC static OUString GetDatetimeTypeFromDateTime(SvxDateFormat eDate, SvxTimeFormat eTime);
 
     /// Output the media (including copying a video from vnd.sun.star.Package: to the output if necessary).
-    void WriteMediaNonVisualProperties(const css::uno::Reference<css::drawing::XShape>& xShape);
+    void WriteMediaNonVisualProperties(const cpo::uno::Reference<css::drawing::XShape>& xShape);
 
     void WriteStyleProperties( sal_Int32 nTokenId, const cpo::uno::Sequence< css::beans::PropertyValue >& aProperties );
     void WriteFontRefStyle( const cpo::uno::Sequence< css::beans::PropertyValue >& aProperties );
@@ -360,11 +360,11 @@ protected:
     OUString GetRelationCompPrefix() const;
 
     static bool EqualGradients( const css::awt::Gradient2& rGradient1, const css::awt::Gradient2& rGradient2 );
-    bool IsFontworkShape(const css::uno::Reference< css::beans::XPropertySet >& rXShapePropSet);
+    bool IsFontworkShape(const cpo::uno::Reference< css::beans::XPropertySet >& rXShapePropSet);
 
-    void WriteGlowEffect(const css::uno::Reference<css::beans::XPropertySet>& rXPropSet);
-    void WriteTextGlowEffect(const css::uno::Reference<css::beans::XPropertySet>& rXPropSet);
-    void WriteSoftEdgeEffect(const css::uno::Reference<css::beans::XPropertySet>& rXPropSet);
+    void WriteGlowEffect(const cpo::uno::Reference<css::beans::XPropertySet>& rXPropSet);
+    void WriteTextGlowEffect(const cpo::uno::Reference<css::beans::XPropertySet>& rXPropSet);
+    void WriteSoftEdgeEffect(const cpo::uno::Reference<css::beans::XPropertySet>& rXPropSet);
     void WriteCustomGeometryPoint(const css::drawing::EnhancedCustomShapeParameterPair& rParamPair,
                                   const EnhancedCustomShape2d& rCustomShape2d,
                                   const bool bReplaceGeoWidth, const bool bReplaceGeoHeight);
@@ -388,7 +388,7 @@ public:
     void setDiagaramReplacementExport(bool bNew) { mbDiagaramReplacementExport = bNew; }
     bool isDiagaramReplacementExport() const { return mbDiagaramReplacementExport;}
 
-    void SetParent(const css::uno::Reference<css::drawing::XShape>& xShape) { m_xParent = xShape; }
+    void SetParent(const cpo::uno::Reference<css::drawing::XShape>& xShape) { m_xParent = xShape; }
     /// get/set mbDiagaramExport
     void setDiagaramExport(bool bNew) { mbDiagaramExport = bNew; }
     bool isDiagaramExport() const { return mbDiagaramExport;}
@@ -419,17 +419,17 @@ public:
     void WriteColor( const ::Color nColor, const cpo::uno::Sequence< css::beans::PropertyValue >& aTransformations, sal_Int32 nAlpha = MAX_PERCENT );
     void WriteColorTransformations( const cpo::uno::Sequence< css::beans::PropertyValue >& aTransformations, sal_Int32 nAlpha = MAX_PERCENT );
     void WriteGradientStop(double fOffset, const basegfx::BColor& rColor, const basegfx::BColor& rAlpha);
-    void WriteLineArrow( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet, bool bLineStart );
+    void WriteLineArrow( const cpo::uno::Reference< css::beans::XPropertySet >& rXPropSet, bool bLineStart );
     void WriteConnectorConnections( sal_Int32 nStartGlueId, sal_Int32 nEndGlueId, sal_Int32 nStartID, sal_Int32 nEndID );
 
-    bool WriteCharColor(const css::uno::Reference<css::beans::XPropertySet>& xPropertySet);
-    bool WriteSchemeColor(OUString const& rPropertyName, const css::uno::Reference<css::beans::XPropertySet>& xPropertySet, bool bUseTextSchemeColors = false);
+    bool WriteCharColor(const cpo::uno::Reference<css::beans::XPropertySet>& xPropertySet);
+    bool WriteSchemeColor(OUString const& rPropertyName, const cpo::uno::Reference<css::beans::XPropertySet>& xPropertySet, bool bUseTextSchemeColors = false);
 
     void WriteSolidFill( ::Color nColor, sal_Int32 nAlpha = MAX_PERCENT );
     void WriteSolidFill( const OUString& sSchemeName, const cpo::uno::Sequence< css::beans::PropertyValue >& aTransformations, sal_Int32 nAlpha = MAX_PERCENT );
     void WriteSolidFill( const ::Color nColor, const cpo::uno::Sequence< css::beans::PropertyValue >& aTransformations, sal_Int32 nAlpha = MAX_PERCENT );
-    void WriteSolidFill( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
-    OOX_DLLPUBLIC void WriteGradientFill( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
+    void WriteSolidFill( const cpo::uno::Reference< css::beans::XPropertySet >& rXPropSet );
+    OOX_DLLPUBLIC void WriteGradientFill( const cpo::uno::Reference< css::beans::XPropertySet >& rXPropSet );
 
     /* New API for WriteGradientFill:
        If a BGradient is given, it will be used. Else, the 'Fix' entry will be used for
@@ -443,100 +443,100 @@ public:
 
     void WriteGrabBagGradientFill( const cpo::uno::Sequence< css::beans::PropertyValue >& aGradientStops, const basegfx::BGradient& rGradient);
 
-    void WriteBlipOrNormalFill(const css::uno::Reference<css::beans::XPropertySet>& rXPropSet,
+    void WriteBlipOrNormalFill(const cpo::uno::Reference<css::beans::XPropertySet>& rXPropSet,
                                const OUString& rURLPropName, const css::awt::Size& rSize = {});
-    OOX_DLLPUBLIC void WriteBlipFill(const css::uno::Reference<css::beans::XPropertySet>& rXPropSet,
+    OOX_DLLPUBLIC void WriteBlipFill(const cpo::uno::Reference<css::beans::XPropertySet>& rXPropSet,
                        const OUString& sURLPropName, const css::awt::Size& rSize = {});
-    void WriteBlipFill(const css::uno::Reference<css::beans::XPropertySet>& rXPropSet,
+    void WriteBlipFill(const cpo::uno::Reference<css::beans::XPropertySet>& rXPropSet,
                        const css::awt::Size& rSize, const OUString& sURLPropName,
                        sal_Int32 nXmlNamespace);
 
-    void WriteXGraphicBlipFill(css::uno::Reference<css::beans::XPropertySet> const & rXPropSet,
-                               css::uno::Reference<css::graphic::XGraphic> const & rxGraphic,
+    void WriteXGraphicBlipFill(cpo::uno::Reference<css::beans::XPropertySet> const & rXPropSet,
+                               cpo::uno::Reference<css::graphic::XGraphic> const & rxGraphic,
                                sal_Int32 nXmlNamespace, bool bWriteMode,
                                bool bRelPathToMedia = false, css::awt::Size const& rSize = {});
 
-    void WritePattFill( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
-    void WritePattFill(const css::uno::Reference<css::beans::XPropertySet>& rXPropSet,
+    void WritePattFill( const cpo::uno::Reference< css::beans::XPropertySet >& rXPropSet );
+    void WritePattFill(const cpo::uno::Reference<css::beans::XPropertySet>& rXPropSet,
             const css::drawing::Hatch& rHatch);
 
-    void WriteGraphicCropProperties(css::uno::Reference<css::beans::XPropertySet> const & rxPropertySet,
+    void WriteGraphicCropProperties(cpo::uno::Reference<css::beans::XPropertySet> const & rxPropertySet,
                                     Size const & rOriginalSize, MapMode const & rMapMode);
 
-    void WriteSrcRectXGraphic(css::uno::Reference<css::beans::XPropertySet> const & rxPropertySet,
-                              css::uno::Reference<css::graphic::XGraphic> const & rxGraphic);
+    void WriteSrcRectXGraphic(cpo::uno::Reference<css::beans::XPropertySet> const & rxPropertySet,
+                              cpo::uno::Reference<css::graphic::XGraphic> const & rxGraphic);
 
-    OOX_DLLPUBLIC void WriteOutline( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet,
-                              css::uno::Reference< css::frame::XModel> const & xModel = nullptr );
+    OOX_DLLPUBLIC void WriteOutline( const cpo::uno::Reference< css::beans::XPropertySet >& rXPropSet,
+                              cpo::uno::Reference< css::frame::XModel> const & xModel = nullptr );
 
-    void WriteXGraphicStretch(css::uno::Reference<css::beans::XPropertySet> const & rXPropSet,
-                              css::uno::Reference<css::graphic::XGraphic> const & rxGraphic);
+    void WriteXGraphicStretch(cpo::uno::Reference<css::beans::XPropertySet> const & rXPropSet,
+                              cpo::uno::Reference<css::graphic::XGraphic> const & rxGraphic);
 
-    void WriteXGraphicTile(css::uno::Reference<css::beans::XPropertySet> const& rXPropSet,
-                           css::uno::Reference<css::graphic::XGraphic> const& rxGraphic,
+    void WriteXGraphicTile(cpo::uno::Reference<css::beans::XPropertySet> const& rXPropSet,
+                           cpo::uno::Reference<css::graphic::XGraphic> const& rxGraphic,
                            css::awt::Size const& rSize);
 
-    void WriteXGraphicCustomPosition(css::uno::Reference<css::beans::XPropertySet> const& rXPropSet,
-                                     css::uno::Reference<css::graphic::XGraphic> const& rxGraphic,
+    void WriteXGraphicCustomPosition(cpo::uno::Reference<css::beans::XPropertySet> const& rXPropSet,
+                                     cpo::uno::Reference<css::graphic::XGraphic> const& rxGraphic,
                                      css::awt::Size const& rSize);
 
     void WriteLinespacing(const css::style::LineSpacing& rLineSpacing, float fFirstCharHeight);
 
-    void WriteXGraphicBlip(css::uno::Reference<css::beans::XPropertySet> const & rXPropSet,
-                               css::uno::Reference<css::graphic::XGraphic> const & rxGraphic,
+    void WriteXGraphicBlip(cpo::uno::Reference<css::beans::XPropertySet> const & rXPropSet,
+                               cpo::uno::Reference<css::graphic::XGraphic> const & rxGraphic,
                                bool bRelPathToMedia);
 
-    void WriteImageBrightnessContrastTransparence(css::uno::Reference<css::beans::XPropertySet> const & rXPropSet);
+    void WriteImageBrightnessContrastTransparence(cpo::uno::Reference<css::beans::XPropertySet> const & rXPropSet);
 
-    void WriteXGraphicBlipMode(css::uno::Reference<css::beans::XPropertySet> const& rXPropSet,
-                               css::uno::Reference<css::graphic::XGraphic> const& rxGraphic,
+    void WriteXGraphicBlipMode(cpo::uno::Reference<css::beans::XPropertySet> const& rXPropSet,
+                               cpo::uno::Reference<css::graphic::XGraphic> const& rxGraphic,
                                css::awt::Size const& rSize);
 
-    OOX_DLLPUBLIC void WriteShapeTransformation(const css::uno::Reference< css::drawing::XShape >& rXShape,
+    OOX_DLLPUBLIC void WriteShapeTransformation(const cpo::uno::Reference< css::drawing::XShape >& rXShape,
                   sal_Int32 nXmlNamespace, bool bFlipH = false, bool bFlipV = false, bool bSuppressRotation = false, bool bSuppressFlipping = false, bool bFlippedBeforeRotation = false);
-    void WriteTransformation(const css::uno::Reference< css::drawing::XShape >& xShape, const tools::Rectangle& rRectangle,
+    void WriteTransformation(const cpo::uno::Reference< css::drawing::XShape >& xShape, const tools::Rectangle& rRectangle,
                   sal_Int32 nXmlNamespace, bool bFlipH = false, bool bFlipV = false, sal_Int32 nRotation = 0, bool bIsGroupShape = false);
 
-    void WriteText( const css::uno::Reference< cpo::uno::XInterface >& rXIface, bool bBodyPr, bool bText = true, sal_Int32 nXmlNamespace = 0, bool bWritePropertiesAsLstStyles = false);
+    void WriteText( const cpo::uno::Reference< cpo::uno::XInterface >& rXIface, bool bBodyPr, bool bText = true, sal_Int32 nXmlNamespace = 0, bool bWritePropertiesAsLstStyles = false);
 
     /** Writes a paragraph with no text, carrying the properties text put in it would get. */
-    void WriteTextlessParagraph(const css::uno::Reference<cpo::uno::XInterface>& rXIface);
+    void WriteTextlessParagraph(const cpo::uno::Reference<cpo::uno::XInterface>& rXIface);
 
     void WriteBodyProps(
-            const css::uno::Reference< cpo::uno::XInterface >& rXIface,
+            const cpo::uno::Reference< cpo::uno::XInterface >& rXIface,
             sal_Int32 nXmlNamespace, bool bIsFontworkShape,
             sal_Int32 nTop, sal_Int32 nBottom, sal_Int32 nLeft, sal_Int32 nRight);
 
     /// Writes one list level inside the list styles container.
-    void WriteLstStyle(const css::uno::Reference<css::text::XTextContent>& rParagraph,
+    void WriteLstStyle(const cpo::uno::Reference<css::text::XTextContent>& rParagraph,
                        bool& rbOverridingCharHeight, sal_Int32& rnCharHeight,
-                       const css::uno::Reference<css::beans::XPropertySet>& rXShapePropSet,
+                       const cpo::uno::Reference<css::beans::XPropertySet>& rXShapePropSet,
                        sal_Int32 nElement);
     /** Populates the lstStyle with the shape's text run and paragraph properties */
-    void WriteLstStyles(const css::uno::Reference<css::text::XTextContent>& rParagraph,
+    void WriteLstStyles(const cpo::uno::Reference<css::text::XTextContent>& rParagraph,
                        bool& rbOverridingCharHeight, sal_Int32& rnCharHeight,
-                       const css::uno::Reference<css::beans::XPropertySet>& rXShapePropSet);
-    void WriteParagraph( const css::uno::Reference< css::text::XTextContent >& rParagraph,
-                         bool& rbOverridingCharHeight, sal_Int32& rnCharHeight, const css::uno::Reference< css::beans::XPropertySet >& rXShapePropSet);
+                       const cpo::uno::Reference<css::beans::XPropertySet>& rXShapePropSet);
+    void WriteParagraph( const cpo::uno::Reference< css::text::XTextContent >& rParagraph,
+                         bool& rbOverridingCharHeight, sal_Int32& rnCharHeight, const cpo::uno::Reference< css::beans::XPropertySet >& rXShapePropSet);
     /** Writes paragraph properties
 
         @returns true if any paragraph properties were written
     */
-    bool WriteParagraphProperties(const css::uno::Reference< css::text::XTextContent >& rParagraph, float fFirstCharHeight, sal_Int32 nElement);
-    void WriteParagraphNumbering(const css::uno::Reference< css::beans::XPropertySet >& rXPropSet, float fFirstCharHeight,
+    bool WriteParagraphProperties(const cpo::uno::Reference< css::text::XTextContent >& rParagraph, float fFirstCharHeight, sal_Int32 nElement);
+    void WriteParagraphNumbering(const cpo::uno::Reference< css::beans::XPropertySet >& rXPropSet, float fFirstCharHeight,
                                   sal_Int16 nLevel );
-    void WriteParagraphTabStops(const css::uno::Reference<css::beans::XPropertySet>& rXPropSet);
-    void WriteRun( const css::uno::Reference< css::text::XTextRange >& rRun,
+    void WriteParagraphTabStops(const cpo::uno::Reference<css::beans::XPropertySet>& rXPropSet);
+    void WriteRun( const cpo::uno::Reference< css::text::XTextRange >& rRun,
                    bool& rbOverridingCharHeight, sal_Int32& rnCharHeight,
-                   const css::uno::Reference< css::beans::XPropertySet >& rXShapePropSet);
+                   const cpo::uno::Reference< css::beans::XPropertySet >& rXShapePropSet);
 
-    OOX_DLLPUBLIC void WriteRunProperties(const css::uno::Reference< css::beans::XPropertySet >& rRun, sal_Int32 nElement, WriteRunInput& rRunInput);
+    OOX_DLLPUBLIC void WriteRunProperties(const cpo::uno::Reference< css::beans::XPropertySet >& rRun, sal_Int32 nElement, WriteRunInput& rRunInput);
 
     void WritePresetShape( const OString& pShape , std::vector< std::pair<sal_Int32,sal_Int32>> & rAvList );
     OOX_DLLPUBLIC void WritePresetShape( const OString& pShape );
     void WritePresetShape( const OString& pShape, MSO_SPT eShapeType, bool bPredefinedHandlesUsed, const css::beans::PropertyValue& rProp );
     bool WriteCustomGeometry(
-        const css::uno::Reference<css::drawing::XShape>& rXShape,
+        const cpo::uno::Reference<css::drawing::XShape>& rXShape,
         const SdrObjCustomShape& rSdrObjCustomShape);
     void WriteEmptyCustomGeometry();
     /** Writes a graphic object's clip polygon as the shape's own geometry.
@@ -545,36 +545,36 @@ public:
         it would have written anyway.
      */
     OOX_DLLPUBLIC bool WriteGraphicClipCustomGeometry(
-        const css::uno::Reference<css::beans::XPropertySet>& rXPropSet,
+        const cpo::uno::Reference<css::beans::XPropertySet>& rXPropSet,
         const css::awt::Size& rSize);
-    void WritePolyPolygon(const css::uno::Reference<css::drawing::XShape>& rXShape,
+    void WritePolyPolygon(const cpo::uno::Reference<css::drawing::XShape>& rXShape,
                           const bool bClosed);
-    OOX_DLLPUBLIC void WriteFill(const css::uno::Reference<css::beans::XPropertySet>& xPropSet,
+    OOX_DLLPUBLIC void WriteFill(const cpo::uno::Reference<css::beans::XPropertySet>& xPropSet,
                    const css::awt::Size& rSize = {});
-    void WriteShapeStyle( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
-    OOX_DLLPUBLIC void WriteShapeEffects( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
+    void WriteShapeStyle( const cpo::uno::Reference< css::beans::XPropertySet >& rXPropSet );
+    OOX_DLLPUBLIC void WriteShapeEffects( const cpo::uno::Reference< css::beans::XPropertySet >& rXPropSet );
     void WriteShapeEffect( std::u16string_view sName, const cpo::uno::Sequence< css::beans::PropertyValue >& aEffectProps );
     /** Populates scene3d tag
         @param rXPropSet Prop set
         @param bIsText True if the 3D effects are for a text body, false if it is for a shape
      */
-    OOX_DLLPUBLIC void Write3DEffects(const css::uno::Reference<css::beans::XPropertySet>& rXPropSet, bool bIsText);
-    void WriteArtisticEffect( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
+    OOX_DLLPUBLIC void Write3DEffects(const cpo::uno::Reference<css::beans::XPropertySet>& rXPropSet, bool bIsText);
+    void WriteArtisticEffect( const cpo::uno::Reference< css::beans::XPropertySet >& rXPropSet );
     OString WriteWdpPicture( const OUString& rFileId, const cpo::uno::Sequence< sal_Int8 >& rPictureData );
 
     // Diagram helpers
-    OOX_DLLPUBLIC void WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rXShape,
+    OOX_DLLPUBLIC void WriteDiagram(const cpo::uno::Reference<css::drawing::XShape>& rXShape,
                                     sal_Int32 nDiagramId, sal_Int32 nShapeId = -1);
     void writeDiagramImageRels(const cpo::uno::Sequence<cpo::uno::Sequence<cpo::uno::Any>>& xRelSeq,
-                               const css::uno::Reference<css::io::XOutputStream>& xOutStream);
+                               const cpo::uno::Reference<css::io::XOutputStream>& xOutStream);
     void writeDiagramHlinkRels(const cpo::uno::Sequence<cpo::uno::Sequence<cpo::uno::Any>>& xRelSeq,
-                               const css::uno::Reference<css::io::XOutputStream>& xOutStream);
+                               const cpo::uno::Reference<css::io::XOutputStream>& xOutStream);
 
-    static void WriteFromTo(const css::uno::Reference<css::drawing::XShape>& rXShape, const css::awt::Size& aPageSize,
+    static void WriteFromTo(const cpo::uno::Reference<css::drawing::XShape>& rXShape, const css::awt::Size& aPageSize,
                             const sax_fastparser::FSHelperPtr& pDrawing);
 
-    static bool IsGroupShape( const css::uno::Reference< css::drawing::XShape >& rXShape );
-    sal_Int32 getBulletMarginIndentation (const css::uno::Reference< css::beans::XPropertySet >& rXPropSet,sal_Int16 nLevel, std::u16string_view propName);
+    static bool IsGroupShape( const cpo::uno::Reference< css::drawing::XShape >& rXShape );
+    sal_Int32 getBulletMarginIndentation (const cpo::uno::Reference< css::beans::XPropertySet >& rXPropSet,sal_Int16 nLevel, std::u16string_view propName);
 
     // A Helper to decide the script type for given text in order to call WriteRunProperties.
     static sal_Int16 GetScriptType(const OUString& rStr);
@@ -588,7 +588,7 @@ public:
     sax_fastparser::FSHelperPtr     CreateOutputStream (
                                         const OUString& sFullStream,
                                         std::u16string_view sRelativeStream,
-                                        const css::uno::Reference< css::io::XOutputStream >& xParentRelation,
+                                        const cpo::uno::Reference< css::io::XOutputStream >& xParentRelation,
                                         const OUString& sContentType,
                                         const OUString& sRelationshipType,
                                         OUString* pRelationshipId,

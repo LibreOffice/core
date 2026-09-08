@@ -40,7 +40,7 @@ class XPropertySet;
 
 class SmXMLExportWrapper
 {
-    css::uno::Reference<css::frame::XModel> xModel;
+    cpo::uno::Reference<css::frame::XModel> xModel;
     bool bFlat; //set true for export to flat .mml, set false for
         //export to a .sxm (or whatever) package
 
@@ -49,7 +49,7 @@ private:
     bool m_bUseHTMLMLEntities;
 
 public:
-    explicit SmXMLExportWrapper(css::uno::Reference<css::frame::XModel> xRef)
+    explicit SmXMLExportWrapper(cpo::uno::Reference<css::frame::XModel> xRef)
         : xModel(std::move(xRef))
         , bFlat(true)
         , m_bUseHTMLMLEntities(false)
@@ -65,17 +65,17 @@ public:
         m_bUseHTMLMLEntities = bUseHTMLMLEntities;
     }
 
-    bool WriteThroughComponent(const css::uno::Reference<css::io::XOutputStream>& xOutputStream,
-                               const css::uno::Reference<css::lang::XComponent>& xComponent,
-                               css::uno::Reference<cpo::uno::XComponentContext> const& rxContext,
-                               css::uno::Reference<css::beans::XPropertySet> const& rPropSet,
+    bool WriteThroughComponent(const cpo::uno::Reference<css::io::XOutputStream>& xOutputStream,
+                               const cpo::uno::Reference<css::lang::XComponent>& xComponent,
+                               cpo::uno::Reference<cpo::uno::XComponentContext> const& rxContext,
+                               cpo::uno::Reference<css::beans::XPropertySet> const& rPropSet,
                                const char* pComponentName);
 
-    bool WriteThroughComponent(const css::uno::Reference<css::embed::XStorage>& xStor,
-                               const css::uno::Reference<css::lang::XComponent>& xComponent,
+    bool WriteThroughComponent(const cpo::uno::Reference<css::embed::XStorage>& xStor,
+                               const cpo::uno::Reference<css::lang::XComponent>& xComponent,
                                const char* pStreamName,
-                               css::uno::Reference<cpo::uno::XComponentContext> const& rxContext,
-                               css::uno::Reference<css::beans::XPropertySet> const& rPropSet,
+                               cpo::uno::Reference<cpo::uno::XComponentContext> const& rxContext,
+                               cpo::uno::Reference<css::beans::XPropertySet> const& rPropSet,
                                const char* pComponentName);
 };
 
@@ -106,7 +106,7 @@ class SmXMLExport final : public SvXMLExport
     void ExportBlank(const SmNode* pNode);
 
 public:
-    SmXMLExport(const css::uno::Reference<cpo::uno::XComponentContext>& rContext,
+    SmXMLExport(const cpo::uno::Reference<cpo::uno::XComponentContext>& rContext,
                 OUString const& implementationName, SvXMLExportFlags nExportFlags);
 
     void ExportAutoStyles_() override {}

@@ -34,7 +34,7 @@ namespace toolkit
 {
 using ::comphelper::OContextEntryGuard;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::accessibility;
@@ -42,10 +42,10 @@ using namespace ::com::sun::star::accessibility;
 //= OAccessibleControlContext
 
 OAccessibleControlContext::OAccessibleControlContext(
-    const css::uno::Reference<css::awt::XControl>& rxControl)
+    const cpo::uno::Reference<css::awt::XControl>& rxControl)
 {
     if (rxControl.is())
-        m_xControlModel.set(rxControl->getModel(), css::uno::UNO_QUERY);
+        m_xControlModel.set(rxControl->getModel(), cpo::uno::UNO_QUERY);
     OSL_ENSURE(
         m_xControlModel.is(),
         "OAccessibleControlContext::Init: invalid creator (no control, or control without model!");
@@ -180,7 +180,7 @@ vcl::Window* OAccessibleControlContext::implGetWindow(Reference<awt::XWindow>* _
     Reference<awt::XControl> xControl(m_aControl);
     Reference<awt::XWindow> xWindow;
     if (xControl.is())
-        xWindow.set(xControl->getPeer(), css::uno::UNO_QUERY);
+        xWindow.set(xControl->getPeer(), cpo::uno::UNO_QUERY);
 
     vcl::Window* pWindow = xWindow.is() ? VCLUnoHelper::GetWindow(xWindow) : nullptr;
 

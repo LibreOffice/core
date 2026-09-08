@@ -69,8 +69,8 @@
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
@@ -307,7 +307,7 @@ bool SmXMLExportWrapper::WriteThroughComponent(const Reference<embed::XStorage>&
     return bRet;
 }
 
-SmXMLExport::SmXMLExport(const css::uno::Reference<cpo::uno::XComponentContext>& rContext,
+SmXMLExport::SmXMLExport(const cpo::uno::Reference<cpo::uno::XComponentContext>& rContext,
                          OUString const& implementationName, SvXMLExportFlags nExportFlags)
     : SvXMLExport(rContext, implementationName, util::MeasureUnit::INCH, XML_MATH, nExportFlags)
     , pTree(nullptr)

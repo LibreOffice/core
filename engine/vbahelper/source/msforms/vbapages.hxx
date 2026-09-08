@@ -32,10 +32,10 @@ protected:
     virtual cpo::uno::Sequence<OUString> getServiceNames() override;
 public:
     /// @throws css::lang::IllegalArgumentException
-    ScVbaPages( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xPages );
+    ScVbaPages( const cpo::uno::Reference< ov::XHelperInterface >& xParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext, const cpo::uno::Reference< css::container::XIndexAccess >& xPages );
         // XEnumerationAccess
     virtual cpo::uno::Type getElementType() override;
-    virtual css::uno::Reference< css::container::XEnumeration > createEnumeration() override;
+    virtual cpo::uno::Reference< css::container::XEnumeration > createEnumeration() override;
      // ScVbaPages_BASE
      virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) override;
 

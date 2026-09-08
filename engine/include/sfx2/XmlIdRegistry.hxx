@@ -27,7 +27,7 @@
 #include <sfx2/dllapi.h>
 
 namespace com::sun::star::beans { struct StringPair; }
-namespace com::sun::star::uno { template <typename > class Reference; }
+namespace cpo::uno { template <typename > class Reference; }
 
 namespace com::sun::star::rdf {
     class XMetadatable;
@@ -54,7 +54,7 @@ class SFX2_DLLPUBLIC IXmlIdRegistry
 public:
     virtual ~IXmlIdRegistry() { }
 
-    virtual css::uno::Reference< css::rdf::XMetadatable >
+    virtual cpo::uno::Reference< css::rdf::XMetadatable >
         GetElementByMetadataReference(
             const css::beans::StringPair & i_rXmlId) const = 0;
 

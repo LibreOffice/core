@@ -84,8 +84,8 @@ VclPtr<InterimItemWindow> ScZoomSliderControl::CreateItemWindow( vcl::Window *pP
     // #i98000# Don't try to get a value via SfxViewFrame::Current here.
     // The view's value is always notified via StateChanged later.
     VclPtrInstance<ScZoomSliderWnd> xSlider( pParent,
-        css::uno::Reference< css::frame::XDispatchProvider >( m_xFrame->getController(),
-        css::uno::UNO_QUERY ), 100 );
+        cpo::uno::Reference< css::frame::XDispatchProvider >( m_xFrame->getController(),
+        cpo::uno::UNO_QUERY ), 100 );
     return xSlider;
 }
 
@@ -179,7 +179,7 @@ tools::Long ScZoomSlider::Zoom2Offset( sal_uInt16 nCurrentZoom ) const
 }
 
 ScZoomSliderWnd::ScZoomSliderWnd( vcl::Window* pParent,
-                const css::uno::Reference< css::frame::XDispatchProvider >& rDispatchProvider,
+                const cpo::uno::Reference< css::frame::XDispatchProvider >& rDispatchProvider,
                 sal_uInt16 nCurrentZoom ):
                 InterimItemWindow(pParent, u"modules/scalc/ui/zoombox.ui"_ustr, u"ZoomBox"_ustr),
                 mxWidget(new ScZoomSlider(rDispatchProvider, nCurrentZoom)),
@@ -214,7 +214,7 @@ void ScZoomSliderWnd::dispose()
     InterimItemWindow::dispose();
 }
 
-ScZoomSlider::ScZoomSlider(css::uno::Reference< css::frame::XDispatchProvider> xDispatchProvider,
+ScZoomSlider::ScZoomSlider(cpo::uno::Reference< css::frame::XDispatchProvider> xDispatchProvider,
                            sal_uInt16 nCurrentZoom)
     : mnSliderLength(0)
     , mnCurrentZoom(nCurrentZoom)

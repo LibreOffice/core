@@ -16,6 +16,7 @@
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 class ZipPackageTest : public test::BootstrapFixtureBase
 {

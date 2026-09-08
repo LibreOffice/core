@@ -89,12 +89,12 @@ static void ooo_mount_operation_ask_password (GMountOperation *op,
     const char * /*message*/, const char *default_user,
     const char *default_domain, GAskPasswordFlags flags)
 {
-    css::uno::Reference< css::task::XInteractionHandler > xIH;
+    cpo::uno::Reference< css::task::XInteractionHandler > xIH;
 
     OOoMountOperation *pThis = reinterpret_cast<OOoMountOperation*>(op);
     GlibThreadDefaultMainContextScope scope(pThis->context.get());
 
-    const css::uno::Reference< css::ucb::XCommandEnvironment > &xEnv = pThis->xEnv;
+    const cpo::uno::Reference< css::ucb::XCommandEnvironment > &xEnv = pThis->xEnv;
 
     if (xEnv.is())
       xIH = xEnv->getInteractionHandler();
@@ -152,7 +152,7 @@ static void ooo_mount_operation_ask_password (GMountOperation *op,
         return;
     }
 
-    css::uno::Reference< css::task::XInteractionAbort > xAbort(xSelection->getXWeak(), css::uno::UNO_QUERY );
+    cpo::uno::Reference< css::task::XInteractionAbort > xAbort(xSelection->getXWeak(), cpo::uno::UNO_QUERY );
     if ( xAbort.is() )
     {
         g_mount_operation_reply (op, G_MOUNT_OPERATION_ABORTED);
@@ -191,7 +191,7 @@ static void ooo_mount_operation_ask_password (GMountOperation *op,
     g_mount_operation_reply (op, G_MOUNT_OPERATION_HANDLED);
 }
 
-GMountOperation *ooo_mount_operation_new(ucb::ucp::gio::glib::MainContextRef && context, const css::uno::Reference< css::ucb::XCommandEnvironment >& rEnv)
+GMountOperation *ooo_mount_operation_new(ucb::ucp::gio::glib::MainContextRef && context, const cpo::uno::Reference< css::ucb::XCommandEnvironment >& rEnv)
 {
     void* pMem = g_object_new (OOO_TYPE_MOUNT_OPERATION, nullptr);
     OOoMountOperation *pRet = new (pMem) OOoMountOperation;

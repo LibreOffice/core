@@ -36,7 +36,7 @@
 #include <utility>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo::uno;
 
 namespace svx::sidebar {
 #define DEFAULT_VALUE          0
@@ -49,9 +49,9 @@ namespace svx::sidebar {
 
 std::unique_ptr<PanelLayout> ParaPropertyPanel::Create (
     weld::Widget* pParent,
-    const css::uno::Reference<css::frame::XFrame>& rxFrame,
+    const cpo::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings,
-    const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
+    const cpo::uno::Reference<css::ui::XSidebar>& rxSidebar)
 {
     if (pParent == nullptr)
         throw lang::IllegalArgumentException(u"no parent Window given to ParaPropertyPanel::Create"_ustr, nullptr, 0);
@@ -569,9 +569,9 @@ FieldUnit ParaPropertyPanel::GetCurrentUnit( SfxItemState eState, const SfxPoolI
 }
 
 ParaPropertyPanel::ParaPropertyPanel(weld::Widget* pParent,
-    const css::uno::Reference<css::frame::XFrame>& rxFrame,
+    const cpo::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings,
-    css::uno::Reference<css::ui::XSidebar> xSidebar)
+    cpo::uno::Reference<css::ui::XSidebar> xSidebar)
     : PanelLayout(pParent, u"ParaPropertyPanel"_ustr, u"svx/ui/sidebarparagraph.ui"_ustr),
       //Alignment
       mxTBxHorzAlign(m_xBuilder->weld_toolbar(u"horizontalalignment"_ustr)),

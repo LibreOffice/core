@@ -39,9 +39,9 @@ using namespace css;
 using namespace css::beans;
 using namespace css::io;
 using namespace css::lang;
-using namespace css::uno;
 using namespace css::xml::sax;
 using namespace css::xml;
+using namespace ::cpo;
 using namespace ::cpo::uno;
 
 namespace oox::crypto {
@@ -830,8 +830,8 @@ void AgileEngine::writeEncryptionInfo(BinaryXOutputStream & rStream)
     rStream.writeMemory(aMemStream.GetData(), aMemStream.GetSize());
 }
 
-void AgileEngine::encrypt(const css::uno::Reference<css::io::XInputStream> &  rxInputStream,
-                          css::uno::Reference<css::io::XOutputStream> & rxOutputStream,
+void AgileEngine::encrypt(const cpo::uno::Reference<css::io::XInputStream> &  rxInputStream,
+                          cpo::uno::Reference<css::io::XOutputStream> & rxOutputStream,
                           sal_uInt32 nSize)
 {
     comphelper::CryptoHash aCryptoHash(mInfo.hmacKey, cryptoHashTypeFromString(mInfo.hashAlgorithm));

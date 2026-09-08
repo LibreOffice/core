@@ -51,7 +51,7 @@ namespace frm
         struct FeatureInfo
         {
             css::util::URL                                             aURL;
-            css::uno::Reference< css::frame::XDispatch >               xDispatcher;
+            cpo::uno::Reference< css::frame::XDispatch >               xDispatcher;
             bool                                                       bCachedState;
             cpo::uno::Any                                              aCachedAdditionalState;
 
@@ -60,7 +60,7 @@ namespace frm
         typedef ::std::map< sal_Int16, FeatureInfo >    FeatureMap;
 
     private:
-        css::uno::Reference< cpo::uno::XComponentContext >
+        cpo::uno::Reference< cpo::uno::XComponentContext >
                             m_xORB;
         ControlFeatureInterception
                             m_aFeatureInterception;
@@ -71,7 +71,7 @@ namespace frm
         sal_Int32           m_nConnectedFeatures;
 
     protected:
-        OFormNavigationHelper( const css::uno::Reference< cpo::uno::XComponentContext >& _rxORB );
+        OFormNavigationHelper( const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxORB );
         virtual ~OFormNavigationHelper();
 
         // XComponent
@@ -79,8 +79,8 @@ namespace frm
         void dispose(  );
 
         // XDispatchProviderInterception
-        virtual void registerDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& Interceptor ) override;
-        virtual void releaseDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& Interceptor ) override;
+        virtual void registerDispatchProviderInterceptor( const cpo::uno::Reference< css::frame::XDispatchProviderInterceptor >& Interceptor ) override;
+        virtual void releaseDispatchProviderInterceptor( const cpo::uno::Reference< css::frame::XDispatchProviderInterceptor >& Interceptor ) override;
 
         // XStatusListener
         virtual void statusChanged( const css::frame::FeatureStateEvent& State ) override;
@@ -149,7 +149,7 @@ namespace frm
 
         /** queries the interceptor chain for a dispatcher for the given URL
         */
-        css::uno::Reference< css::frame::XDispatch >
+        cpo::uno::Reference< css::frame::XDispatch >
                 queryDispatch( const css::util::URL& _rURL );
 
         /** invalidates the set of supported features
@@ -176,7 +176,7 @@ namespace frm
 
     public:
         OFormNavigationMapper(
-            const css::uno::Reference< cpo::uno::XComponentContext >& _rxORB
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxORB
         );
         ~OFormNavigationMapper( );
 

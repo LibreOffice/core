@@ -24,7 +24,7 @@
 #include <optional>
 #include <sfx2/dllapi.h>
 #include <sal/types.h>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <svl/lstner.hxx>
 #include <sfx2/shell.hxx>
 #include <i18nlangtag/languagetag.hxx>
@@ -213,7 +213,7 @@ public:
     SAL_RET_MAYBENULL static SfxViewShell* Current();
     SAL_WARN_UNUSED_RESULT static bool IsCurrentKitViewReadOnly();
 
-    SAL_RET_MAYBENULL static SfxViewShell* Get( const css::uno::Reference< css::frame::XController>& i_rController );
+    SAL_RET_MAYBENULL static SfxViewShell* Get( const cpo::uno::Reference< css::frame::XController>& i_rController );
 
     // Initialize Constructors/Destructors
                                 SFX_DECL_INTERFACE(SFX_INTERFACE_SFXVIEWSH)
@@ -242,7 +242,7 @@ public:
 
     SfxInPlaceClient*           GetIPClient() const;
     SfxInPlaceClient*           GetUIActiveClient() const;
-    SfxInPlaceClient*           FindIPClient( const css::uno::Reference < css::embed::XEmbeddedObject >&  xObj, vcl::Window *pObjParentWin ) const;
+    SfxInPlaceClient*           FindIPClient( const cpo::uno::Reference < css::embed::XEmbeddedObject >&  xObj, vcl::Window *pObjParentWin ) const;
 
     virtual ErrCode             DoVerb(sal_Int32 nVerb);
 
@@ -334,7 +334,7 @@ public:
         The default implementation simply returns the XModel of the associated SfxObjectShell. You will rarely
         need to overwrite this behavior.
     */
-    virtual css::uno::Reference< css::frame::XModel >
+    virtual cpo::uno::Reference< css::frame::XModel >
                                 GetCurrentDocument() const;
 
     /** forwards the current document, as returned by ->GetCurrentDocument, to SfxObjectShell::SetWorkingDocument
@@ -343,7 +343,7 @@ public:
 
     /** get an XRenderable instance that can render this document
     */
-    virtual css::uno::Reference< css::view::XRenderable > GetRenderable();
+    virtual cpo::uno::Reference< css::view::XRenderable > GetRenderable();
 
 
     virtual void                MarginChanged();
@@ -354,7 +354,7 @@ public:
     void                        SetNewWindowAllowed( bool bSet )    { bNoNewWindow = !bSet; }
 
     void                        SetController( SfxBaseController* pController );
-    css::uno::Reference<css::frame::XController> GetController() const;
+    cpo::uno::Reference<css::frame::XController> GetController() const;
 
     bool                        TryContextMenuInterception(const rtl::Reference<VCLXPopupMenu>& rIn,
                                                            const OUString& rMenuIdentifier,
@@ -369,12 +369,12 @@ public:
     void                        StartPrint( const cpo::uno::Sequence < css::beans::PropertyValue >&, bool, bool );
     const std::shared_ptr< vcl::PrinterController >& GetPrinterController() const;
 
-    void                        AddRemoveClipboardListener( const css::uno::Reference < css::datatransfer::clipboard::XClipboardListener>&, bool );
-    css::uno::Reference< css::datatransfer::clipboard::XClipboardNotifier > GetClipboardNotifier() const;
+    void                        AddRemoveClipboardListener( const cpo::uno::Reference < css::datatransfer::clipboard::XClipboardListener>&, bool );
+    cpo::uno::Reference< css::datatransfer::clipboard::XClipboardNotifier > GetClipboardNotifier() const;
 
     SAL_DLLPRIVATE SfxInPlaceClient* GetUIActiveIPClient_Impl() const;
-    SAL_DLLPRIVATE void AddContextMenuInterceptor_Impl( const css::uno::Reference < css::ui::XContextMenuInterceptor >& xInterceptor );
-    SAL_DLLPRIVATE void RemoveContextMenuInterceptor_Impl( const css::uno::Reference < css::ui::XContextMenuInterceptor >& xInterceptor );
+    SAL_DLLPRIVATE void AddContextMenuInterceptor_Impl( const cpo::uno::Reference < css::ui::XContextMenuInterceptor >& xInterceptor );
+    SAL_DLLPRIVATE void RemoveContextMenuInterceptor_Impl( const cpo::uno::Reference < css::ui::XContextMenuInterceptor >& xInterceptor );
     SAL_DLLPRIVATE bool GlobalKeyInput_Impl( const KeyEvent &rKeyEvent );
 
     SAL_DLLPRIVATE void NewIPClient_Impl( SfxInPlaceClient *pIPClient );

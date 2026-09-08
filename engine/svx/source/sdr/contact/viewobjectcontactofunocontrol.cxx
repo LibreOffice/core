@@ -105,10 +105,10 @@ namespace sdr::contact {
 
 
     using namespace ::com::sun::star::awt::InvalidateStyle;
-    using ::com::sun::star::uno::Reference;
+    using ::cpo::uno::Reference;
     using ::cpo::uno::XInterface;
-    using ::com::sun::star::uno::UNO_QUERY;
-    using ::com::sun::star::uno::UNO_QUERY_THROW;
+    using ::cpo::uno::UNO_QUERY;
+    using ::cpo::uno::UNO_QUERY_THROW;
     using ::cpo::uno::Exception;
     using ::com::sun::star::awt::XControl;
     using ::com::sun::star::awt::XControlModel;
@@ -1039,7 +1039,7 @@ namespace sdr::contact {
 
         m_pOutputDeviceForWindow = const_cast< OutputDevice * >( &_rDevice );
         m_aControl = std::move(aControl);
-        m_xContainer.set(_rPageView.getControlContainer( _rDevice ), css::uno::UNO_QUERY);
+        m_xContainer.set(_rPageView.getControlContainer( _rDevice ), cpo::uno::UNO_QUERY);
         DBG_ASSERT( (   m_xContainer.is()                                           // either have a XControlContainer
                     ||  (   ( !_rPageView.getControlContainer( _rDevice ).is() )    // or don't have any container,
                         &&  ( _rDevice.GetOwnerWindow() == nullptr )  // which is allowed for non-Window instances only

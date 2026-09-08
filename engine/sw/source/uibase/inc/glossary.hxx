@@ -44,7 +44,7 @@ class SwGlossaryDlg final : public SfxDialogController
 
     OUString const        m_sReadonlyPath;
 
-    css::uno::Reference< css::text::XAutoTextContainer2 > m_xAutoText;
+    cpo::uno::Reference< css::text::XAutoTextContainer2 > m_xAutoText;
 
     SwGlossaryHdl*  m_pGlossaryHdl;
 

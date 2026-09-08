@@ -21,7 +21,7 @@
 
 #include <sal/config.h>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/xml/dom/XElement.hpp>
 #include <com/sun/star/xml/dom/XNodeList.hpp>
@@ -88,20 +88,20 @@ bool satisfiesMaximalVersion(
 
 namespace dp_misc::Dependencies {
 
-cpo::uno::Sequence< css::uno::Reference< css::xml::dom::XElement > >
+cpo::uno::Sequence< cpo::uno::Reference< css::xml::dom::XElement > >
 check(dp_misc::DescriptionInfoset const & infoset) {
-    css::uno::Reference< css::xml::dom::XNodeList > deps(
+    cpo::uno::Reference< css::xml::dom::XNodeList > deps(
         infoset.getDependencies());
     sal_Int32 n = deps->getLength();
-    cpo::uno::Sequence< css::uno::Reference< css::xml::dom::XElement > >
+    cpo::uno::Sequence< cpo::uno::Reference< css::xml::dom::XElement > >
         unsatisfied(n);
     auto unsatisfiedRange = asNonConstRange(unsatisfied);
     sal_Int32 unsat = 0;
     // check first if minimalVersionLibreOffice is specified -- in that case ignore the legacy OOo dependencies
     bool bIgnoreOoo = false;
     for (sal_Int32 i = 0; i < n; ++i) {
-        css::uno::Reference< css::xml::dom::XElement > e(
-            deps->item(i), css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference< css::xml::dom::XElement > e(
+            deps->item(i), cpo::uno::UNO_QUERY_THROW);
         if ( e->getNamespaceURI() == namespaceLibreOffice && e->getTagName() == minimalVersionLibreOffice)
         {
             bIgnoreOoo = true;
@@ -109,8 +109,8 @@ check(dp_misc::DescriptionInfoset const & infoset) {
         }
     }
     for (sal_Int32 i = 0; i < n; ++i) {
-        css::uno::Reference< css::xml::dom::XElement > e(
-            deps->item(i), css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference< css::xml::dom::XElement > e(
+            deps->item(i), cpo::uno::UNO_QUERY_THROW);
         bool sat = false;
         if ( e->getNamespaceURI() == namespaceOpenOfficeOrg && e->getTagName() == minimalVersionOpenOfficeOrg )
         {

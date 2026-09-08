@@ -176,7 +176,7 @@ public:
     void                EnableDestruction() {m_bDestructionEnabled = true;}
     void                StartSend(sal_Int32 nExpectedCount);
 
-    void                DocumentSent( css::uno::Reference< css::mail::XMailMessage> const & xMessage,
+    void                DocumentSent( cpo::uno::Reference< css::mail::XMailMessage> const & xMessage,
                                         bool bResult,
                                         const OUString* pError );
     void                AllMailsSent();

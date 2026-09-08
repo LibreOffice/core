@@ -22,7 +22,7 @@ XMLBase64ImportContext::XMLBase64ImportContext(XMLImport& rImport)
 
 void XMLBase64ImportContext::startElement(
     const OUString& /*rName*/,
-    const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
+    const cpo::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
 }
 

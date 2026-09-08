@@ -72,17 +72,17 @@ private:
     virtual ::cppu::IPropertyArrayHelper & getInfoHelper() override;
 
     // ____ XPropertySet ____
-    virtual css::uno::Reference< css::beans::XPropertySetInfo >
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo >
         getPropertySetInfo() override;
 
     // ____ XCloneable ____
-    virtual css::uno::Reference< css::util::XCloneable > createClone() override;
+    virtual cpo::uno::Reference< css::util::XCloneable > createClone() override;
 
     // ____ XModifyBroadcaster ____
     virtual void addModifyListener(
-        const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+        const cpo::uno::Reference< css::util::XModifyListener >& aListener ) override;
     virtual void removeModifyListener(
-        const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+        const cpo::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
     // ____ XModifyListener ____
     virtual void modified(
@@ -94,9 +94,9 @@ private:
 
     // ____ XTitle ____
     virtual cpo::uno::Sequence<
-        css::uno::Reference< css::chart2::XFormattedString > > getText() override;
+        cpo::uno::Reference< css::chart2::XFormattedString > > getText() override;
     virtual void setText( const cpo::uno::Sequence<
-                                   css::uno::Reference<
+                                   cpo::uno::Reference<
                                    css::chart2::XFormattedString > >& Strings ) override;
 
     using ::cppu::OPropertySetHelper::disposing;
@@ -106,7 +106,7 @@ private:
 
     void fireModifyEvent();
 
-    cpo::uno::Sequence< css::uno::Reference< css::chart2::XFormattedString > > m_aStrings;
+    cpo::uno::Sequence< cpo::uno::Reference< css::chart2::XFormattedString > > m_aStrings;
 
     rtl::Reference<ModifyEventForwarder> m_xModifyEventForwarder;
 };

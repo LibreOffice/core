@@ -32,15 +32,15 @@ namespace abp
     class OAdminDialogInvokation
     {
     private:
-        css::uno::Reference< cpo::uno::XComponentContext >
+        cpo::uno::Reference< cpo::uno::XComponentContext >
                                                         m_xContext;
-        css::uno::Reference< css::beans::XPropertySet > m_xDataSource;
+        cpo::uno::Reference< css::beans::XPropertySet > m_xDataSource;
         weld::Window*         m_pMessageParent;
 
     public:
         OAdminDialogInvokation(
-            const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
-            css::uno::Reference< css::beans::XPropertySet > _xDataSource,
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
+            cpo::uno::Reference< css::beans::XPropertySet > _xDataSource,
             weld::Window* _pMessageParent
         );
 

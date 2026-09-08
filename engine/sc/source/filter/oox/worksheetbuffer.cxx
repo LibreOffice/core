@@ -44,7 +44,7 @@ namespace oox::xls {
 
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sheet;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 SheetInfoModel::SheetInfoModel() :
     mnSheetId( -1 ),

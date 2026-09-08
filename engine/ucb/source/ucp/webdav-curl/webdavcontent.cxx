@@ -86,6 +86,7 @@
 #include "DAVProperties.hxx"
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace http_dav_ucp;
 
 namespace
@@ -4022,7 +4023,7 @@ void Content::initOptsCacheLifeTime()
 
 
 void Content::getResourceOptions(
-                    const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv,
+                    const cpo::uno::Reference< css::ucb::XCommandEnvironment >& xEnv,
                     DAVOptions& rDAVOptions,
                     const std::unique_ptr< DAVResourceAccess > & rResAccess,
                     bool * networkAccessAllowed )
@@ -4256,7 +4257,7 @@ void Content::getResourceOptions(
 }
 
 //static
-bool Content::isResourceAvailable( const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv,
+bool Content::isResourceAvailable( const cpo::uno::Reference< css::ucb::XCommandEnvironment >& xEnv,
                                   const std::unique_ptr< DAVResourceAccess > & rResAccess,
                                   DAVOptions& rDAVOptions )
 {

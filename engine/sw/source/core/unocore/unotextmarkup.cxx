@@ -45,6 +45,7 @@
 #include <modeltoviewhelper.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 struct SwXTextMarkup::Impl
     : public SvtListener

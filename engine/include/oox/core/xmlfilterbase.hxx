@@ -23,7 +23,7 @@
 #include <memory>
 #include <string_view>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <oox/core/filterbase.hxx>
 #include <oox/core/relations.hxx>
 #include <oox/dllapi.h>
@@ -72,7 +72,7 @@ class FastParser;
 struct XmlFilterBaseImpl;
 
 using ShapePairs
-    = std::unordered_map<std::shared_ptr<drawingml::Shape>, css::uno::Reference<css::drawing::XShape>>;
+    = std::unordered_map<std::shared_ptr<drawingml::Shape>, cpo::uno::Reference<css::drawing::XShape>>;
 using NamedShapePairs = std::unordered_map<OUString, ShapePairs>;
 
 class OOX_DLLPUBLIC XmlFilterBase : public FilterBase
@@ -80,7 +80,7 @@ class OOX_DLLPUBLIC XmlFilterBase : public FilterBase
 public:
     /// @throws cpo::uno::RuntimeException
     explicit            XmlFilterBase(
-                            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+                            const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
     virtual             ~XmlFilterBase() override;
 
@@ -122,7 +122,7 @@ public:
         @return a non-empty reference to the XDocument, if the
         fragment could be imported.
      */
-    css::uno::Reference< css::xml::dom::XDocument> importFragment( const OUString& rFragmentPath );
+    cpo::uno::Reference< css::xml::dom::XDocument> importFragment( const OUString& rFragmentPath );
 
     /** Imports a fragment from an xml::dom::XDocument using the
         passed fragment handler
@@ -136,7 +136,7 @@ public:
         @return true, if the fragment could be imported.
      */
     bool importFragment( const ::rtl::Reference< FragmentHandler >& rxHandler,
-                         const css::uno::Reference< css::xml::sax::XFastSAXSerializable >& rxSerializer );
+                         const cpo::uno::Reference< css::xml::sax::XFastSAXSerializable >& rxSerializer );
 
     /** Imports the relations fragment associated with the specified fragment.
 
@@ -169,7 +169,7 @@ public:
 
         @return  Added relation Id.
      */
-    OUString     addRelation( const css::uno::Reference< css::io::XOutputStream >& rOutputStream, const OUString& rType, std::u16string_view rTarget, bool bExternal = false );
+    OUString     addRelation( const cpo::uno::Reference< css::io::XOutputStream >& rOutputStream, const OUString& rType, std::u16string_view rTarget, bool bExternal = false );
 
     /** Opens and returns the specified output stream from the base storage with specified media type.
 
@@ -185,7 +185,7 @@ public:
 
         @return The opened output stream.
      */
-    css::uno::Reference< css::io::XOutputStream >
+    cpo::uno::Reference< css::io::XOutputStream >
                         openFragmentStream(
                             const OUString& rStreamName,
                             const OUString& rMediaType );
@@ -229,7 +229,7 @@ public:
 
         @param xProperties  The document properties to export.
      */
-    void exportDocumentProperties( const css::uno::Reference< css::document::XDocumentProperties >& xProperties, bool bSecurityOptOpenReadOnly );
+    void exportDocumentProperties( const cpo::uno::Reference< css::document::XDocumentProperties >& xProperties, bool bSecurityOptOpenReadOnly );
 
     /** Write the customXml entries we are preserving (xlsx and pptx only). */
     void exportCustomFragments(const sax_fastparser::FSHelperPtr& pFS);
@@ -237,7 +237,7 @@ public:
     /** Read the document properties and also the customXml entries (xlsx and pptx only). */
     void importDocumentProperties();
 
-    static void putPropertiesToDocumentGrabBag(const css::uno::Reference<css::lang::XComponent>& xDstDoc,
+    static void putPropertiesToDocumentGrabBag(const cpo::uno::Reference<css::lang::XComponent>& xDstDoc,
                                                const comphelper::SequenceAsHashMap& rProperties);
 
     static FastParser* createParser();
@@ -253,7 +253,7 @@ public:
     NamedShapePairs* getDiagramFontHeights();
 
     void checkDocumentProperties(
-            const css::uno::Reference<css::document::XDocumentProperties>& xDocProps);
+            const cpo::uno::Reference<css::document::XDocumentProperties>& xDocProps);
 
     OUString getNamespaceURL(sal_Int32 nNSID) const;
 
@@ -263,21 +263,21 @@ public:
     sal_Int32 getNewOLEUniqueId() { return ++mnOLECount; }
 
 protected:
-    virtual css::uno::Reference< css::io::XInputStream >
+    virtual cpo::uno::Reference< css::io::XInputStream >
         implGetInputStream( comphelper::SequenceAsHashMap& rMediaDesc ) const override;
 
-    virtual css::uno::Reference< css::io::XStream >
+    virtual cpo::uno::Reference< css::io::XStream >
         implGetOutputStream( comphelper::SequenceAsHashMap& rMediaDesc ) const override;
 
     virtual bool implFinalizeExport(comphelper::SequenceAsHashMap& rMediaDescriptor) override;
 
 private:
     virtual StorageRef  implCreateStorage(
-                            const css::uno::Reference< css::io::XInputStream >& rxInStream ) const override;
+                            const cpo::uno::Reference< css::io::XInputStream >& rxInStream ) const override;
     virtual StorageRef  implCreateStorage(
-                            const css::uno::Reference< css::io::XStream >& rxOutStream ) const override;
+                            const cpo::uno::Reference< css::io::XStream >& rxOutStream ) const override;
 
-    void importCustomFragments(css::uno::Reference<css::embed::XStorage> const & xDocumentStorage);
+    void importCustomFragments(cpo::uno::Reference<css::embed::XStorage> const & xDocumentStorage);
 
 private:
     ::std::unique_ptr< XmlFilterBaseImpl > mxImpl;

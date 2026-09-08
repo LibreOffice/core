@@ -100,6 +100,7 @@
 #include <memory>
 
 using namespace css;
+using namespace ::cpo;
 
 EscherExContainer::EscherExContainer( SvStream& rSt, const sal_uInt16 nRecType, const sal_uInt16 nInstance ) :
     rStrm   ( rSt )

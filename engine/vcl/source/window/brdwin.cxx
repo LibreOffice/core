@@ -35,7 +35,7 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/ptrstyle.hxx>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 // useful caption height for title bar buttons
 #define MIN_CAPTION_HEIGHT 18

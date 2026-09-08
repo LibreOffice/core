@@ -29,7 +29,7 @@
 #include <memory>
 #include <vector>
 
-namespace com::sun::star::uno { template <typename > class Reference; }
+namespace cpo::uno { template <typename > class Reference; }
 namespace com::sun::star::beans { class XPropertySet; }
 namespace rtl { template <class reference_type> class Reference; }
 
@@ -65,14 +65,14 @@ protected:
         filter-processes. */
     std::vector<XMLPropertyState> Filter_(
             SvXMLExport const& rExport,
-            const css::uno::Reference<css::beans::XPropertySet>& rPropSet,
+            const cpo::uno::Reference<css::beans::XPropertySet>& rPropSet,
             bool bDefault, bool bDisableFoFontFamily ) const;
 
     /** Application-specific filter. By default do nothing. */
     virtual void ContextFilter(
             bool bEnableFoFontFamily,
             ::std::vector< XMLPropertyState >& rProperties,
-            const css::uno::Reference<css::beans::XPropertySet >& rPropSet ) const;
+            const cpo::uno::Reference<css::beans::XPropertySet >& rPropSet ) const;
 
     /** fills the given attribute list with the items in the given set */
     void _exportXML( sal_uInt16 nPropType, sal_uInt16& rPropTypeFlags,
@@ -116,7 +116,7 @@ public:
         filter-processes. */
     std::vector<XMLPropertyState> Filter(
         SvXMLExport const& rExport,
-        const css::uno::Reference<css::beans::XPropertySet>& rPropSet, bool bEnableFoFontFamily = false ) const;
+        const cpo::uno::Reference<css::beans::XPropertySet>& rPropSet, bool bEnableFoFontFamily = false ) const;
 
     /** Like Filter(), except that:
       * - only properties that have the map flag MID_FLAG_DEFAULT_ITEM_EXPORT
@@ -125,7 +125,7 @@ public:
       */
     std::vector<XMLPropertyState> FilterDefaults(
         SvXMLExport const& rExport,
-        const css::uno::Reference<css::beans::XPropertySet>& rPropSet ) const;
+        const cpo::uno::Reference<css::beans::XPropertySet>& rPropSet ) const;
 
     /** Provides a partial ordering over two arrays of XMLPropertyState,
        Partial because implementing a full order requires quite a lot of code. */

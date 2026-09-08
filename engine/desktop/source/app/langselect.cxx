@@ -23,7 +23,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/XLocalizable.hpp>
 #include <cpo/uno/Exception.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <comphelper/configuration.hxx>
 #include <comphelper/processfactory.hxx>
@@ -107,10 +107,10 @@ bool prepareLocale() {
     // Prepare default config provider by localizing it to the selected
     // locale this will ensure localized configuration settings to be
     // selected according to the UI language:
-    css::uno::Reference<css::lang::XLocalizable>(
+    cpo::uno::Reference<css::lang::XLocalizable>(
         css::configuration::theDefaultProvider::get(
             comphelper::getProcessComponentContext()),
-        css::uno::UNO_QUERY_THROW)->setLocale(tag.getLocale(false));
+        cpo::uno::UNO_QUERY_THROW)->setLocale(tag.getLocale(false));
     try {
         std::shared_ptr<comphelper::ConfigurationChanges> batch(
             comphelper::ConfigurationChanges::create());

@@ -40,13 +40,13 @@ namespace connectivity::calc
     {
     private:
         std::vector<sal_Int32> m_aTypes;      // holds all type for columns just to avoid to ask the propertyset
-        css::uno::Reference< css::sheet::XSpreadsheet >           m_xSheet;
+        cpo::uno::Reference< css::sheet::XSpreadsheet >           m_xSheet;
         OCalcConnection* m_pCalcConnection;
         sal_Int32 m_nStartCol;
         sal_Int32 m_nStartRow;
         sal_Int32 m_nDataCols;
         bool      m_bHasHeaders;
-        css::uno::Reference< css::util::XNumberFormats > m_xFormats;
+        cpo::uno::Reference< css::util::XNumberFormats > m_xFormats;
         ::Date m_aNullDate;
 
         void fillColumns();

@@ -22,7 +22,7 @@
 #include <memory>
 #include <editeng/svxacorr.hxx>
 
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 
 #include "swdllapi.h"
 
@@ -38,11 +38,11 @@ class SW_DLLPUBLIC SwAutoCorrect final : public SvxAutoCorrect
     // rShort is stream-name - encrypted!
     virtual bool GetLongText( const OUString& rShort, OUString& rLong ) override;
 
-    virtual void refreshBlockList( const css::uno::Reference < css::embed::XStorage >& ) override;
+    virtual void refreshBlockList( const cpo::uno::Reference < css::embed::XStorage >& ) override;
 
     // Text with attributes (only SWG-format!).
     // rShort is stream-name - encrypted!
-    virtual bool PutText( const css::uno::Reference < css::embed::XStorage >&,
+    virtual bool PutText( const cpo::uno::Reference < css::embed::XStorage >&,
                           const OUString& rFileName, const OUString& rShort, SfxObjectShell&, OUString& ) override;
 
 public:

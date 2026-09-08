@@ -27,10 +27,11 @@
 #include <XMLReplacementImageContext.hxx>
 #include <sal/log.hxx>
 
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::beans;
 using namespace css;
+using namespace ::cpo;
 using namespace ::xmloff::token;
 
 XMLReplacementImageContext::XMLReplacementImageContext(
@@ -77,9 +78,9 @@ void XMLReplacementImageContext::endFastElement(sal_Int32 )
     }
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLReplacementImageContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLReplacementImageContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
     if( nElement == XML_ELEMENT(OFFICE, XML_BINARY_DATA) &&
         !m_xBase64Stream.is() )

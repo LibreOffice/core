@@ -58,7 +58,7 @@ protected:
 
     SfxBindings* pBindings;
 
-    css::uno::Reference<css::frame::XModuleManager2> xModuleManager;
+    cpo::uno::Reference<css::frame::XModuleManager2> xModuleManager;
     DeletionWatcher* m_pDeletionWatcher;
 
     StyleList m_aStyleList;

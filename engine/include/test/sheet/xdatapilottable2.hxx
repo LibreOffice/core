@@ -10,7 +10,7 @@
 #ifndef INCLUDED_TEST_SHEET_XDATAPILOTTABLE2_HXX
 #define INCLUDED_TEST_SHEET_XDATAPILOTTABLE2_HXX
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/sheet/XDataPilotTable2.hpp>
@@ -32,17 +32,17 @@ public:
     void testInsertDrillDownSheet();
     virtual ~XDataPilotTable2();
 
-    virtual css::uno::Reference< cpo::uno::XInterface > initDP2() = 0;
-    virtual css::uno::Reference< cpo::uno::XInterface > getSheets() = 0;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > initDP2() = 0;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > getSheets() = 0;
 
 protected:
 
 private:
-    static void checkDrillDownSheetContent(css::uno::Reference< css::sheet::XSpreadsheet > const & xSheet, const cpo::uno::Sequence< cpo::uno::Sequence < cpo::uno::Any > >& aData);
+    static void checkDrillDownSheetContent(cpo::uno::Reference< css::sheet::XSpreadsheet > const & xSheet, const cpo::uno::Sequence< cpo::uno::Sequence < cpo::uno::Any > >& aData);
 
-    void getOutputRanges(css::uno::Reference< css::sheet::XDataPilotTable2 > const &);
-    void buildDataFields(css::uno::Reference< css::sheet::XDataPilotTable2 > const &);
-    void buildResultCells(css::uno::Reference< css::sheet::XDataPilotTable2 > const &);
+    void getOutputRanges(cpo::uno::Reference< css::sheet::XDataPilotTable2 > const &);
+    void buildDataFields(cpo::uno::Reference< css::sheet::XDataPilotTable2 > const &);
+    void buildResultCells(cpo::uno::Reference< css::sheet::XDataPilotTable2 > const &);
 
     std::vector< css::table::CellAddress > maResultCells;
     std::vector< sal_Int32 > maDataFieldDims;

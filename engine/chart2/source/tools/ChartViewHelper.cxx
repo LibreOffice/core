@@ -28,7 +28,7 @@
 namespace chart
 {
 using namespace ::com::sun::star;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 
 void ChartViewHelper::setViewToDirtyState(const rtl::Reference<::chart::ChartModel>& xChartModel)
 {
@@ -51,7 +51,7 @@ void ChartViewHelper::setViewToDirtyState(const rtl::Reference<::chart::ChartMod
 }
 
 void ChartViewHelper::setViewToDirtyState_UNO(
-    const css::uno::Reference<css::chart2::XChartDocument>& xChartModel)
+    const cpo::uno::Reference<css::chart2::XChartDocument>& xChartModel)
 {
     if (auto pChartModel = dynamic_cast<ChartModel*>(xChartModel.get()))
         setViewToDirtyState(rtl::Reference(pChartModel));

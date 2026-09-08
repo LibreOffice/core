@@ -39,15 +39,15 @@ namespace {
 
 SvxColorToolBoxControl* getColorToolBoxControl(const ToolbarUnoDispatcher& rColorDispatch)
 {
-    css::uno::Reference<css::frame::XToolbarController> xController = rColorDispatch.GetControllerForCommand(u".uno:FillColor"_ustr);
+    cpo::uno::Reference<css::frame::XToolbarController> xController = rColorDispatch.GetControllerForCommand(u".uno:FillColor"_ustr);
     SvxColorToolBoxControl* pToolBoxColorControl = dynamic_cast<SvxColorToolBoxControl*>(xController.get());
     return pToolBoxColorControl;
 }
 
 OUString getCID(const rtl::Reference<::chart::ChartModel>& xModel)
 {
-    css::uno::Reference<css::frame::XController> xController(xModel->getCurrentController());
-    css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(xController, css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::frame::XController> xController(xModel->getCurrentController());
+    cpo::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(xController, cpo::uno::UNO_QUERY);
     if (!xSelectionSupplier.is())
         return OUString();
 
@@ -59,7 +59,7 @@ OUString getCID(const rtl::Reference<::chart::ChartModel>& xModel)
         if (pController)
         {
             pController->select( cpo::uno::Any( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_PAGE, u"" ) ) );
-            xSelectionSupplier = css::uno::Reference<css::view::XSelectionSupplier>(xController, css::uno::UNO_QUERY);
+            xSelectionSupplier = cpo::uno::Reference<css::view::XSelectionSupplier>(xController, cpo::uno::UNO_QUERY);
             if (xSelectionSupplier.is())
                 aAny = xSelectionSupplier->getSelection();
         }
@@ -74,18 +74,18 @@ OUString getCID(const rtl::Reference<::chart::ChartModel>& xModel)
     return aCID;
 }
 
-css::uno::Reference<css::beans::XPropertySet> getPropSet(
+cpo::uno::Reference<css::beans::XPropertySet> getPropSet(
         const rtl::Reference<::chart::ChartModel>& xModel)
 {
     OUString aCID = getCID(xModel);
-    css::uno::Reference<css::beans::XPropertySet> xPropSet =
+    cpo::uno::Reference<css::beans::XPropertySet> xPropSet =
         ObjectIdentifier::getObjectPropertySet(aCID, xModel);
 
     ObjectType eType = ObjectIdentifier::getObjectType(aCID);
     if (eType == OBJECTTYPE_DIAGRAM)
     {
-        css::uno::Reference<css::chart2::XDiagram> xDiagram(
-                xPropSet, css::uno::UNO_QUERY);
+        cpo::uno::Reference<css::chart2::XDiagram> xDiagram(
+                xPropSet, cpo::uno::UNO_QUERY);
         if (!xDiagram.is())
             return xPropSet;
 
@@ -95,9 +95,9 @@ css::uno::Reference<css::beans::XPropertySet> getPropSet(
     return xPropSet;
 }
 
-ChartController* getController(const css::uno::Reference<css::frame::XModel>& xModel)
+ChartController* getController(const cpo::uno::Reference<css::frame::XModel>& xModel)
 {
-    css::uno::Reference<css::frame::XController>xController = xModel->getCurrentController();
+    cpo::uno::Reference<css::frame::XController>xController = xModel->getCurrentController();
     if (!xController.is())
         throw std::exception();
 
@@ -108,25 +108,25 @@ ChartController* getController(const css::uno::Reference<css::frame::XModel>& xM
     return pController;
 }
 
-ViewElementListProvider getViewElementListProvider( const css::uno::Reference<css::frame::XModel>& xModel)
+ViewElementListProvider getViewElementListProvider( const cpo::uno::Reference<css::frame::XModel>& xModel)
 {
     ChartController* pController = getController(xModel);
     ViewElementListProvider aProvider = pController->getViewElementListProvider();
     return aProvider;
 }
 
-DrawModelWrapper* getDrawModelWrapper(const css::uno::Reference<css::frame::XModel>& xModel)
+DrawModelWrapper* getDrawModelWrapper(const cpo::uno::Reference<css::frame::XModel>& xModel)
 {
     ChartController* pController = getController(xModel);
     return pController->GetDrawModelWrapper();
 }
 
-XFillGradientItem getXGradientForName(const css::uno::Reference<css::frame::XModel>& xModel,
+XFillGradientItem getXGradientForName(const cpo::uno::Reference<css::frame::XModel>& xModel,
         const OUString& rName)
 {
-    css::uno::Reference<css::lang::XMultiServiceFactory> xFact(xModel, css::uno::UNO_QUERY);
-    css::uno::Reference<css::container::XNameAccess> xNameAccess(
-            xFact->createInstance(u"com.sun.star.drawing.GradientTable"_ustr), css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::lang::XMultiServiceFactory> xFact(xModel, cpo::uno::UNO_QUERY);
+    cpo::uno::Reference<css::container::XNameAccess> xNameAccess(
+            xFact->createInstance(u"com.sun.star.drawing.GradientTable"_ustr), cpo::uno::UNO_QUERY);
     if (!xNameAccess.is())
         return XFillGradientItem();
 
@@ -143,12 +143,12 @@ XFillGradientItem getXGradientForName(const css::uno::Reference<css::frame::XMod
 
 }
 
-XFillFloatTransparenceItem getXTransparencyGradientForName(const css::uno::Reference<css::frame::XModel>& xModel,
+XFillFloatTransparenceItem getXTransparencyGradientForName(const cpo::uno::Reference<css::frame::XModel>& xModel,
         const OUString& rName)
 {
-    css::uno::Reference<css::lang::XMultiServiceFactory> xFact(xModel, css::uno::UNO_QUERY);
-    css::uno::Reference<css::container::XNameAccess> xNameAccess(
-            xFact->createInstance(u"com.sun.star.drawing.TransparencyGradientTable"_ustr), css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::lang::XMultiServiceFactory> xFact(xModel, cpo::uno::UNO_QUERY);
+    cpo::uno::Reference<css::container::XNameAccess> xNameAccess(
+            xFact->createInstance(u"com.sun.star.drawing.TransparencyGradientTable"_ustr), cpo::uno::UNO_QUERY);
     if (!xNameAccess.is())
         return XFillFloatTransparenceItem();
 
@@ -165,7 +165,7 @@ XFillFloatTransparenceItem getXTransparencyGradientForName(const css::uno::Refer
     return aItem;
 }
 
-XHatch getXHatchFromName(const css::uno::Reference<css::frame::XModel>& xModel,
+XHatch getXHatchFromName(const cpo::uno::Reference<css::frame::XModel>& xModel,
         OUString& rName)
 {
     try
@@ -195,7 +195,7 @@ XHatch getXHatchFromName(const css::uno::Reference<css::frame::XModel>& xModel,
     return XHatch();
 }
 
-GraphicObject getXBitmapFromName(const css::uno::Reference<css::frame::XModel>& xModel,
+GraphicObject getXBitmapFromName(const cpo::uno::Reference<css::frame::XModel>& xModel,
         std::u16string_view rName)
 {
     try
@@ -261,7 +261,7 @@ private:
 
 std::unique_ptr<PanelLayout> ChartAreaPanel::Create(
         weld::Widget* pParent,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame,
+        const cpo::uno::Reference<css::frame::XFrame>& rxFrame,
         ChartController* pController)
 {
     if (pParent == nullptr)
@@ -273,7 +273,7 @@ std::unique_ptr<PanelLayout> ChartAreaPanel::Create(
 }
 
 ChartAreaPanel::ChartAreaPanel(weld::Widget* pParent,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame,
+        const cpo::uno::Reference<css::frame::XFrame>& rxFrame,
         ChartController* pController):
     svx::sidebar::AreaPropertyPanelBase(pParent, rxFrame),
     mxModel(pController->getChartModel()),
@@ -299,7 +299,7 @@ void ChartAreaPanel::Initialize()
 {
     mxModel->addModifyListener(mxListener);
 
-    css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(mxModel->getCurrentController(), css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(mxModel->getCurrentController(), cpo::uno::UNO_QUERY);
     if (xSelectionSupplier.is())
         xSelectionSupplier->addSelectionChangeListener(mxSelectionListener);
 
@@ -319,7 +319,7 @@ bool ChartAreaPanel::selectionIsDataSeries() const
 void ChartAreaPanel::setFillTransparence(const XFillTransparenceItem& rItem)
 {
     PreventUpdate aProtector(mbUpdate);
-    css::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
+    cpo::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
     if (!xPropSet.is())
         return;
 
@@ -330,7 +330,7 @@ void ChartAreaPanel::setFillFloatTransparence(
         const XFillFloatTransparenceItem& rItem)
 {
     PreventUpdate aProtector(mbUpdate);
-    css::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
+    cpo::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
     if (!xPropSet.is())
         return;
 
@@ -350,7 +350,7 @@ void ChartAreaPanel::setFillFloatTransparence(
 void ChartAreaPanel::setFillStyle(const XFillStyleItem& rItem)
 {
     PreventUpdate aProtector(mbUpdate);
-    css::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
+    cpo::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
     if (!xPropSet.is())
         return;
 
@@ -360,7 +360,7 @@ void ChartAreaPanel::setFillStyle(const XFillStyleItem& rItem)
 void ChartAreaPanel::setFillStyleAndColor(const XFillStyleItem* pStyleItem,
         const XFillColorItem& rColorItem)
 {
-    css::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
+    cpo::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
     if (!xPropSet.is())
         return;
 
@@ -377,7 +377,7 @@ void ChartAreaPanel::setFillStyleAndGradient(const XFillStyleItem* pStyleItem,
         const XFillGradientItem& rGradientItem)
 {
     PreventUpdate aProtector(mbUpdate);
-    css::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
+    cpo::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
     if (!xPropSet.is())
         return;
 
@@ -395,7 +395,7 @@ void ChartAreaPanel::setFillStyleAndHatch(const XFillStyleItem* pStyleItem,
         const XFillHatchItem& rHatchItem)
 {
     PreventUpdate aProtector(mbUpdate);
-    css::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
+    cpo::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
     if (!xPropSet.is())
         return;
 
@@ -408,7 +408,7 @@ void ChartAreaPanel::setFillStyleAndBitmap(const XFillStyleItem* pStyleItem,
         const XFillBitmapItem& rBitmapItem)
 {
     PreventUpdate aProtector(mbUpdate);
-    css::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
+    cpo::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
     if (!xPropSet.is())
         return;
 
@@ -433,11 +433,11 @@ void ChartAreaPanel::updateData()
     if (!mbUpdate || !mbModelValid)
         return;
 
-    css::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
+    cpo::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
     if (!xPropSet.is())
         return;
 
-    css::uno::Reference<css::beans::XPropertySetInfo> xInfo(xPropSet->getPropertySetInfo());
+    cpo::uno::Reference<css::beans::XPropertySetInfo> xInfo(xPropSet->getPropertySetInfo());
     if (!xInfo.is())
         return;
 
@@ -528,10 +528,10 @@ void ChartAreaPanel::selectionChanged(bool bCorrectType)
     // set the initial correct color for the color picker
     if (comphelper::COKit::isActive())
     {
-        css::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
+        cpo::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
         if (xPropSet.is())
         {
-            css::uno::Reference<css::beans::XPropertySetInfo> xInfo(xPropSet->getPropertySetInfo());
+            cpo::uno::Reference<css::beans::XPropertySetInfo> xInfo(xPropSet->getPropertySetInfo());
             if (xInfo.is())
             {
                 SolarMutexGuard aGuard;
@@ -571,8 +571,8 @@ void ChartAreaPanel::doUpdateModel(const rtl::Reference<::chart::ChartModel>& xM
     {
         mxModel->removeModifyListener(mxListener);
 
-        css::uno::Reference<css::view::XSelectionSupplier> oldSelectionSupplier(
-            mxModel->getCurrentController(), css::uno::UNO_QUERY);
+        cpo::uno::Reference<css::view::XSelectionSupplier> oldSelectionSupplier(
+            mxModel->getCurrentController(), cpo::uno::UNO_QUERY);
         if (oldSelectionSupplier.is()) {
             oldSelectionSupplier->removeSelectionChangeListener(mxSelectionListener);
         }
@@ -586,12 +586,12 @@ void ChartAreaPanel::doUpdateModel(const rtl::Reference<::chart::ChartModel>& xM
 
     mxModel->addModifyListener(mxListener);
 
-    css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(mxModel->getCurrentController(), css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(mxModel->getCurrentController(), cpo::uno::UNO_QUERY);
     if (xSelectionSupplier.is())
         xSelectionSupplier->addSelectionChangeListener(mxSelectionListener);
 }
 
-void ChartAreaPanel::updateModel( css::uno::Reference<css::frame::XModel> xModel)
+void ChartAreaPanel::updateModel( cpo::uno::Reference<css::frame::XModel> xModel)
 {
     ::chart::ChartModel* pModel = dynamic_cast<::chart::ChartModel*>(xModel.get());
     assert(!xModel || pModel);

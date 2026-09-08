@@ -24,7 +24,7 @@
 #include <comphelper/processfactory.hxx>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace css::text;
 using namespace css::style;
 using namespace ::cpo::uno;

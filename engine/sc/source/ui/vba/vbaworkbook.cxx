@@ -48,6 +48,7 @@
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 cpo::uno::Sequence< sal_Int32 > ScVbaWorkbook::ColorData;
 
@@ -188,8 +189,8 @@ ScVbaWorkbook::init()
         pShell->RegisterAutomationWorkbookObject( this );
 }
 
-ScVbaWorkbook::ScVbaWorkbook( const css::uno::Reference< ov::XHelperInterface >& xParent,
-                              const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
+ScVbaWorkbook::ScVbaWorkbook( const cpo::uno::Reference< ov::XHelperInterface >& xParent,
+                              const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
                               rtl::Reference< ScModelObj > const & xModel )
 : ScVbaWorkbook_BASE( xParent, xContext ),
   mxModel(xModel)

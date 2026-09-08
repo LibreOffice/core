@@ -28,7 +28,7 @@
 
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -147,8 +147,8 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::graphic;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::io;
@@ -655,10 +655,10 @@ Reference < XContent > SfxMedium::GetContent() const
 
         // tdf#95144 add a default css::ucb::XCommandEnvironment
         // in order to have the WebDAV UCP provider manage https protocol certificates correctly
-        css:: uno::Reference< task::XInteractionHandler > xIH(
+        cpo::uno::Reference< task::XInteractionHandler > xIH(
                 css::task::InteractionHandler::createWithParent( comphelper::getProcessComponentContext(), nullptr ) );
 
-        css::uno::Reference< css::ucb::XProgressHandler > xProgress;
+        cpo::uno::Reference< css::ucb::XProgressHandler > xProgress;
         rtl::Reference<::ucbhelper::CommandEnvironment> pCommandEnv = new ::ucbhelper::CommandEnvironment( new comphelper::SimpleFileAccessInteraction( xIH ), xProgress );
 
         const SfxUnoAnyItem* pItem = SfxItemSet::GetItem(pImpl->m_pSet.get(), SID_CONTENT, false);
@@ -3293,17 +3293,17 @@ void SfxMedium::UseInteractionHandler( bool bUse )
 }
 
 
-css::uno::Reference< css::task::XInteractionHandler >
+cpo::uno::Reference< css::task::XInteractionHandler >
 SfxMedium::GetInteractionHandler( bool bGetAlways )
 {
     // if interaction isn't allowed explicitly ... return empty reference!
     if ( !bGetAlways && !pImpl->bUseInteractionHandler )
-        return css::uno::Reference< css::task::XInteractionHandler >();
+        return cpo::uno::Reference< css::task::XInteractionHandler >();
 
     // search a possible existing handler inside cached item set
     if ( pImpl->m_pSet )
     {
-        css::uno::Reference< css::task::XInteractionHandler > xHandler;
+        cpo::uno::Reference< css::task::XInteractionHandler > xHandler;
         const SfxUnoAnyItem* pHandler = SfxItemSet::GetItem(pImpl->m_pSet.get(), SID_INTERACTIONHANDLER, false);
         if ( pHandler && (pHandler->GetValue() >>= xHandler) && xHandler.is() )
             return xHandler;
@@ -3311,7 +3311,7 @@ SfxMedium::GetInteractionHandler( bool bGetAlways )
 
     // if default interaction isn't allowed explicitly ... return empty reference!
     if ( !bGetAlways && !pImpl->bAllowDefaultIntHdl )
-        return css::uno::Reference< css::task::XInteractionHandler >();
+        return cpo::uno::Reference< css::task::XInteractionHandler >();
 
     // otherwise return cached default handler ... if it exist.
     if ( pImpl->xInteraction.is() )
@@ -3853,7 +3853,7 @@ SfxFrame* SfxMedium::GetLoadTargetFrame() const
     return pImpl->wLoadTargetFrame;
 }
 
-void SfxMedium::setStreamToLoadFrom(const css::uno::Reference<css::io::XInputStream>& xInputStream, bool bIsReadOnly )
+void SfxMedium::setStreamToLoadFrom(const cpo::uno::Reference<css::io::XInputStream>& xInputStream, bool bIsReadOnly )
 {
     pImpl->m_xInputStreamToLoadFrom = xInputStream;
     pImpl->m_bInputStreamIsReadOnly = bIsReadOnly;
@@ -3909,7 +3909,7 @@ SvKeyValueIterator* SfxMedium::GetHeaderAttributes_Impl()
     return pImpl->xAttributes.get();
 }
 
-css::uno::Reference< css::io::XInputStream > const &  SfxMedium::GetInputStream()
+cpo::uno::Reference< css::io::XInputStream > const &  SfxMedium::GetInputStream()
 {
     if ( !pImpl->xInputStream.is() )
         GetMedium_Impl();
@@ -4291,7 +4291,7 @@ void SfxMedium::CreateTempFileNoCopy()
 }
 
 bool SfxMedium::SignDocumentContentUsingCertificate(
-    const css::uno::Reference<css::frame::XModel>& xModel, bool bHasValidDocumentSignature,
+    const cpo::uno::Reference<css::frame::XModel>& xModel, bool bHasValidDocumentSignature,
     svl::crypto::SigningContext& rSigningContext)
 {
     bool bChanges = false;

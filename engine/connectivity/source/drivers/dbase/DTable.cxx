@@ -69,7 +69,7 @@ using namespace ::ucbhelper;
 using namespace ::utl;
 using namespace ::cppu;
 using namespace ::dbtools;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::beans;
@@ -1574,7 +1574,7 @@ bool ODbaseTable::DeleteRow(const OSQLColumns& _rCols)
         Reference<XPropertySet> xIndex = isUniqueByColumnName(i);
         if (xIndex.is())
         {
-            xCol.set(m_xColumns->getByIndex(i), css::uno::UNO_QUERY);
+            xCol.set(m_xColumns->getByIndex(i), cpo::uno::UNO_QUERY);
             OSL_ENSURE(xCol.is(),"ODbaseTable::DeleteRow column is null!");
             if(xCol.is())
             {
@@ -1616,7 +1616,7 @@ Reference<XPropertySet> ODbaseTable::isUniqueByColumnName(sal_Int32 _nColumnPos)
         Reference<XPropertySet> xIndex;
         for(sal_Int32 i=0;i<m_xIndexes->getCount();++i)
         {
-            xIndex.set(m_xIndexes->getByIndex(i), css::uno::UNO_QUERY);
+            xIndex.set(m_xIndexes->getByIndex(i), cpo::uno::UNO_QUERY);
             if(xIndex.is() && getBOOL(xIndex->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISUNIQUE))))
             {
                 Reference<XNameAccess> xCols(Reference<XColumnsSupplier>(xIndex,UNO_QUERY_THROW)->getColumns());
@@ -1665,7 +1665,7 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, const OValueRefRow& pOrgRo
             for(nPos = 0;nPos<_xCols->getCount();++nPos)
             {
                 Reference<XPropertySet> xFindCol(
-                    _xCols->getByIndex(nPos), css::uno::UNO_QUERY);
+                    _xCols->getByIndex(nPos), cpo::uno::UNO_QUERY);
                 OSL_ENSURE(xFindCol.is(),"ODbaseTable::UpdateBuffer column is null!");
                 if(aCase(getString(xFindCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))),aColName))
                     break;
@@ -1765,7 +1765,7 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, const OValueRefRow& pOrgRo
             for(nPos = 0;nPos<_xCols->getCount();++nPos)
             {
                 Reference<XPropertySet> xFindCol(
-                    _xCols->getByIndex(nPos), css::uno::UNO_QUERY);
+                    _xCols->getByIndex(nPos), cpo::uno::UNO_QUERY);
                 if(aCase(getString(xFindCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))),aColName))
                     break;
             }

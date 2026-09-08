@@ -28,6 +28,7 @@
 #include <sal/log.hxx>
 
 using namespace css;
+using namespace ::cpo;
 using namespace xmloff::token;
 
 void XMLImageStyle::exportXML(OUString const & rStrName, cpo::uno::Any const & rValue, SvXMLExport& rExport)

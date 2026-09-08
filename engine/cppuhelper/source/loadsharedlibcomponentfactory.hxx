@@ -11,7 +11,7 @@
 
 #include <sal/config.h>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include "servicemanager.hxx"
 
@@ -30,9 +30,9 @@ void loadSharedLibComponentFactory(
     OUString const & uri, OUString const & environment,
     OUString const & prefix, OUString const & implementation,
     OUString const & constructor,
-    css::uno::Reference<css::lang::XMultiServiceFactory> const & serviceManager,
+    cpo::uno::Reference<css::lang::XMultiServiceFactory> const & serviceManager,
     WrapperConstructorFn * constructorFunction,
-    css::uno::Reference<cpo::uno::XInterface> * factory);
+    cpo::uno::Reference<cpo::uno::XInterface> * factory);
 
 }
 

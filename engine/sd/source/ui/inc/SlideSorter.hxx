@@ -116,7 +116,7 @@ public:
 
     /** Return the XController object of the main view.
     */
-    css::uno::Reference<css::frame::XController>
+    cpo::uno::Reference<css::frame::XController>
         GetXController() const;
 
     /** Return the ViewShellBase object.

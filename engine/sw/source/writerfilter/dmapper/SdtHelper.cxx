@@ -47,6 +47,7 @@ namespace writerfilter::dmapper
 using namespace ::com::sun::star;
 using namespace ::css::xml::xpath;
 using namespace ::comphelper;
+using namespace ::cpo;
 
 /// w:sdt's w:dropDownList doesn't have width, so guess the size based on the longest string.
 static awt::Size lcl_getOptimalWidth(const StyleSheetTablePtr& pStyleSheet,
@@ -87,7 +88,7 @@ static awt::Size lcl_getOptimalWidth(const StyleSheetTablePtr& pStyleSheet,
 }
 
 SdtHelper::SdtHelper(DomainMapper_Impl& rDM_Impl,
-                     css::uno::Reference<cpo::uno::XComponentContext> xContext)
+                     cpo::uno::Reference<cpo::uno::XComponentContext> xContext)
     : m_rDM_Impl(rDM_Impl)
     , m_xComponentContext(std::move(xContext))
     , m_aControlType(SdtControlType::unknown)

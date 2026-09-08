@@ -26,6 +26,7 @@
 namespace chart
 {
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 //  get line properties from a propertyset
 

@@ -75,6 +75,7 @@
 #include <memory>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 static bool lcl_GetTextToColumnsRange( const ScViewData& rData, ScRange& rRange, bool bDoEmptyCheckOnly )
 {

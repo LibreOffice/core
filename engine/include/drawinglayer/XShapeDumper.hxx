@@ -14,13 +14,13 @@
 
 namespace com::sun::star::drawing { class XShape; }
 namespace com::sun::star::drawing { class XShapes; }
-namespace com::sun::star::uno { template <typename > class Reference; }
+namespace cpo::uno { template <typename > class Reference; }
 
 struct DRAWINGLAYER_DLLPUBLIC XShapeDumper
 {
     XShapeDumper() = delete;
-    static OUString dump(const css::uno::Reference<css::drawing::XShapes>& xPageShapes, bool bDumpInteropProperties=false);
-    static OUString dump(const css::uno::Reference<css::drawing::XShape>& xPageShapes, bool bDumpInteropProperties=false);
+    static OUString dump(const cpo::uno::Reference<css::drawing::XShapes>& xPageShapes, bool bDumpInteropProperties=false);
+    static OUString dump(const cpo::uno::Reference<css::drawing::XShape>& xPageShapes, bool bDumpInteropProperties=false);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

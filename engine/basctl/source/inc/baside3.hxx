@@ -68,12 +68,12 @@ protected:
     void                InitSettings();
 
 public:
-    DialogWindow (DialogWindowLayout* pParent, ScriptDocument const& rDocument, const OUString& aLibName, const OUString& aName, css::uno::Reference<css::container::XNameContainer> const& xDialogModel);
+    DialogWindow (DialogWindowLayout* pParent, ScriptDocument const& rDocument, const OUString& aLibName, const OUString& aName, cpo::uno::Reference<css::container::XNameContainer> const& xDialogModel);
 
     virtual void        ExecuteCommand( SfxRequest& rReq ) override;
     virtual void        GetState( SfxItemSet& ) override;
     DlgEditor&          GetEditor() const   { return *m_pEditor; }
-    css::uno::Reference< css::container::XNameContainer > const & GetDialog() const;
+    cpo::uno::Reference< css::container::XNameContainer > const & GetDialog() const;
     DlgEdModel&         GetModel() const;
     DlgEdPage&          GetPage() const;
     DlgEdView&          GetView() const;

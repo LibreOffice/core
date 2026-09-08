@@ -27,8 +27,8 @@ namespace cpo::uno { class XComponentContext; }
 namespace chart
 {
 
-css::uno::Reference< css::chart2::XColorScheme > createConfigColorScheme(
-    const css::uno::Reference< cpo::uno::XComponentContext > & xContext );
+cpo::uno::Reference< css::chart2::XColorScheme > createConfigColorScheme(
+    const cpo::uno::Reference< cpo::uno::XComponentContext > & xContext );
 
 namespace impl
 {
@@ -38,7 +38,7 @@ class ChartConfigItem;
 class ConfigColorScheme final : public BaseColorScheme
 {
 public:
-    explicit ConfigColorScheme( const css::uno::Reference< cpo::uno::XComponentContext > & xContext );
+    explicit ConfigColorScheme( const cpo::uno::Reference< cpo::uno::XComponentContext > & xContext );
     virtual ~ConfigColorScheme() override;
 
     // ____ ConfigItemListener ____
@@ -55,7 +55,7 @@ private:
     void retrieveConfigColors();
 
     // member variables
-    css::uno::Reference< cpo::uno::XComponentContext >    m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext >    m_xContext;
     std::unique_ptr< impl::ChartConfigItem >            m_apChartConfigItem;
     bool                                                  m_bNeedsUpdate;
 };

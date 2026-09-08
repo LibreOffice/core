@@ -33,14 +33,14 @@ OUString XFormsEventConcrete::getType()
     return m_eventType;
 }
 
-css::uno::Reference< css::xml::dom::events::XEventTarget > XFormsEventConcrete::getTarget()
+cpo::uno::Reference< css::xml::dom::events::XEventTarget > XFormsEventConcrete::getTarget()
 {
-    return css::uno::Reference< css::xml::dom::events::XEventTarget >();
+    return cpo::uno::Reference< css::xml::dom::events::XEventTarget >();
 }
 
-css::uno::Reference< css::xml::dom::events::XEventTarget > XFormsEventConcrete::getCurrentTarget()
+cpo::uno::Reference< css::xml::dom::events::XEventTarget > XFormsEventConcrete::getCurrentTarget()
 {
-    return css::uno::Reference< css::xml::dom::events::XEventTarget >();
+    return cpo::uno::Reference< css::xml::dom::events::XEventTarget >();
 }
 
 css::xml::dom::events::PhaseType XFormsEventConcrete::getEventPhase()

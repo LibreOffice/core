@@ -22,7 +22,7 @@
 #include <uielement/toolbarwrapper.hxx>
 #include <uifactory/menubarfactory.hxx>
 
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
@@ -34,7 +34,7 @@ namespace {
 class ToolBarFactory :  public MenuBarFactory
 {
 public:
-    explicit ToolBarFactory( const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
+    explicit ToolBarFactory( const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext );
 
     virtual OUString getImplementationName() override
     {
@@ -52,11 +52,11 @@ public:
     }
 
     // XUIElementFactory
-    virtual css::uno::Reference< css::ui::XUIElement > createUIElement(
+    virtual cpo::uno::Reference< css::ui::XUIElement > createUIElement(
             const OUString& ResourceURL, const cpo::uno::Sequence< css::beans::PropertyValue >& Args ) override;
 };
 
-ToolBarFactory::ToolBarFactory( const css::uno::Reference< cpo::uno::XComponentContext >& xContext ) :
+ToolBarFactory::ToolBarFactory( const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext ) :
     MenuBarFactory( xContext )
 {
 }

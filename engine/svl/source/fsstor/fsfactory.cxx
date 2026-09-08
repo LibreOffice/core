@@ -33,6 +33,7 @@
 
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 
 uno::Reference< cpo::uno::XInterface > FSStorageFactory::createInstance()

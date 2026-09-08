@@ -21,7 +21,7 @@
 
 #include "elementmark.hxx"
 #include <com/sun/star/xml/crypto/sax/ElementMarkPriority.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 namespace com::sun::star::xml::crypto::sax { class XReferenceResolvedListener; }
 
@@ -60,20 +60,20 @@ private:
     bool m_bNotified;
 
     /* the listener to be notified */
-    css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener > m_xReferenceResolvedListener;
+    cpo::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener > m_xReferenceResolvedListener;
 
 public:
     ElementCollector(
         sal_Int32 nBufferId,
         css::xml::crypto::sax::ElementMarkPriority nPriority,
         bool bToModify,
-        css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener > xReferenceResolvedListener);
+        cpo::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener > xReferenceResolvedListener);
 
     css::xml::crypto::sax::ElementMarkPriority getPriority() const { return m_nPriority;}
     bool getModify() const { return m_bToModify;}
     void notifyListener();
     void setReferenceResolvedListener(
-        const css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener >& referenceResolvedListener);
+        const cpo::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener >& referenceResolvedListener);
     void doNotify();
 };
 

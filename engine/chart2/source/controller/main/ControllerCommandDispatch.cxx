@@ -60,8 +60,9 @@
 #include <editeng/escapementitem.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::cpo::uno::Sequence;
 
 namespace
@@ -569,7 +570,7 @@ void ControllerCommandDispatch::updateCommandAvailability()
         OSL_ENSURE(xChartModel.is(), "Invalid XChartDocument");
         if ( xChartModel.is() )
         {
-            css::uno::Reference< css::chart2::XDataProviderAccess > xCreatorDoc(xChartModel->getParent(), uno::UNO_QUERY);
+            cpo::uno::Reference< css::chart2::XDataProviderAccess > xCreatorDoc(xChartModel->getParent(), uno::UNO_QUERY);
             bCanCreateDataProvider = xCreatorDoc.is();
         }
     }

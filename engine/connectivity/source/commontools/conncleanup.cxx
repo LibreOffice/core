@@ -30,7 +30,7 @@ namespace dbtools
 {
 
 
-    using namespace css::uno;
+    using namespace ::cpo::uno;
 using namespace cpo::uno;
     using namespace css::beans;
     using namespace css::sdbc;

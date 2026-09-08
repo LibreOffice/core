@@ -159,8 +159,8 @@ private:
         sal_Int32 nVarCount;
         css::table::CellAddress aObjective;
         cpo::uno::Sequence<css::sheet::SolverConstraint> aConstraints;
-        css::uno::Reference<css::sheet::XSolver> xSolver;
-        css::uno::Reference<css::beans::XPropertySet> xOptProp;
+        cpo::uno::Reference<css::sheet::XSolver> xSolver;
+        cpo::uno::Reference<css::beans::XPropertySet> xOptProp;
         bool bSuccess;
     };
 

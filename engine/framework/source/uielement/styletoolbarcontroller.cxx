@@ -45,22 +45,22 @@ OUString MapFamilyToCommand( std::u16string_view rFamily )
     return OUString();
 }
 
-OUString GetDisplayFromInternalName( const css::uno::Reference< css::frame::XFrame >& rFrame,
+OUString GetDisplayFromInternalName( const cpo::uno::Reference< css::frame::XFrame >& rFrame,
                                      const OUString& rStyleName,
                                      const OUString& rFamilyName )
 {
     try
     {
-        css::uno::Reference< css::frame::XController > xController(
-            rFrame->getController(), css::uno::UNO_SET_THROW );
-        css::uno::Reference< css::style::XStyleFamiliesSupplier > xStylesSupplier(
-            xController->getModel(), css::uno::UNO_QUERY_THROW );
-        css::uno::Reference< css::container::XNameAccess > xFamilies(
-            xStylesSupplier->getStyleFamilies(), css::uno::UNO_SET_THROW );
+        cpo::uno::Reference< css::frame::XController > xController(
+            rFrame->getController(), cpo::uno::UNO_SET_THROW );
+        cpo::uno::Reference< css::style::XStyleFamiliesSupplier > xStylesSupplier(
+            xController->getModel(), cpo::uno::UNO_QUERY_THROW );
+        cpo::uno::Reference< css::container::XNameAccess > xFamilies(
+            xStylesSupplier->getStyleFamilies(), cpo::uno::UNO_SET_THROW );
 
-        css::uno::Reference< css::container::XNameAccess > xStyleSet;
+        cpo::uno::Reference< css::container::XNameAccess > xStyleSet;
         xFamilies->getByName( rFamilyName ) >>= xStyleSet;
-        css::uno::Reference< css::beans::XPropertySet > xStyle;
+        cpo::uno::Reference< css::beans::XPropertySet > xStyle;
         xStyleSet->getByName( rStyleName ) >>= xStyle;
 
         OUString aDisplayName;
@@ -81,12 +81,12 @@ OUString GetDisplayFromInternalName( const css::uno::Reference< css::frame::XFra
 
 namespace framework {
 
-StyleDispatcher::StyleDispatcher( const css::uno::Reference< css::frame::XFrame >& rFrame,
-                                  css::uno::Reference< css::util::XURLTransformer > xUrlTransformer,
+StyleDispatcher::StyleDispatcher( const cpo::uno::Reference< css::frame::XFrame >& rFrame,
+                                  cpo::uno::Reference< css::util::XURLTransformer > xUrlTransformer,
                                   const css::util::URL& rURL )
     : m_aCommand( rURL.Complete )
     , m_xUrlTransformer(std::move( xUrlTransformer ))
-    , m_xFrame( rFrame, css::uno::UNO_QUERY )
+    , m_xFrame( rFrame, cpo::uno::UNO_QUERY )
 {
     SAL_WARN_IF( !m_aCommand.startsWith( ".uno:StyleApply?" ), "fwk.uielement", "Wrong dispatcher!" );
 
@@ -142,12 +142,12 @@ void StyleDispatcher::dispatch( const css::util::URL& rURL,
     if ( !m_xFrame.is() )
         return;
 
-    css::uno::Reference< css::frame::XDispatch > xDispatch( m_xFrame->queryDispatch( rURL, OUString(), 0 ) );
+    cpo::uno::Reference< css::frame::XDispatch > xDispatch( m_xFrame->queryDispatch( rURL, OUString(), 0 ) );
     if ( xDispatch.is() )
         xDispatch->dispatch( rURL, rArguments );
 }
 
-void StyleDispatcher::addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& rListener,
+void StyleDispatcher::addStatusListener( const cpo::uno::Reference< css::frame::XStatusListener >& rListener,
                                          const css::util::URL& /*rURL*/ )
 {
     if ( !m_xOwner.is() )
@@ -168,7 +168,7 @@ void StyleDispatcher::addStatusListener( const css::uno::Reference< css::frame::
     }
 }
 
-void StyleDispatcher::removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& /*rListener*/,
+void StyleDispatcher::removeStatusListener( const cpo::uno::Reference< css::frame::XStatusListener >& /*rListener*/,
                                             const css::util::URL& /*rURL*/ )
 {
     if (m_xStyleFamilyStatusDispatch)
@@ -216,8 +216,8 @@ void StyleDispatcher::disposing( const css::lang::EventObject& rSource )
         m_xStyleApplyStatusDispatch.clear();
 }
 
-StyleToolbarController::StyleToolbarController( const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
-                                                const css::uno::Reference< css::frame::XFrame >& rFrame,
+StyleToolbarController::StyleToolbarController( const cpo::uno::Reference< cpo::uno::XComponentContext >& rContext,
+                                                const cpo::uno::Reference< css::frame::XFrame >& rFrame,
                                                 const OUString& rCommand )
     : ToolboxController( rContext, rFrame, rCommand )
 {

@@ -42,8 +42,8 @@
 
 using namespace ::comphelper;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using css::xml::dom::XDocumentBuilder;
 
 namespace
@@ -293,7 +293,7 @@ public:
         {
         }
 
-        uno::Reference<cpo::uno::XComponentContext> xContext(comphelper::getProcessComponentContext(), css::uno::UNO_SET_THROW);
+        uno::Reference<cpo::uno::XComponentContext> xContext(comphelper::getProcessComponentContext(), cpo::uno::UNO_SET_THROW);
         const uno::Reference<css::ucb::XSimpleFileAccess> xFileAccess(
         xContext->getServiceManager()->createInstanceWithContext(
             u"com.sun.star.ucb.SimpleFileAccess"_ustr, xContext),

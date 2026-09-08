@@ -23,8 +23,8 @@ private:
 
 public:
     /// @throws cpo::uno::RuntimeException
-    SwVbaFormFieldDropDown(const css::uno::Reference<ooo::vba::XHelperInterface>& rParent,
-                           const css::uno::Reference<cpo::uno::XComponentContext>& rContext,
+    SwVbaFormFieldDropDown(const cpo::uno::Reference<ooo::vba::XHelperInterface>& rParent,
+                           const cpo::uno::Reference<cpo::uno::XComponentContext>& rContext,
                            sw::mark::Fieldmark& rFormField);
     ~SwVbaFormFieldDropDown() override;
 

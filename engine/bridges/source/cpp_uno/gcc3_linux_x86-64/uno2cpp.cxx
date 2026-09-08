@@ -34,7 +34,7 @@
 #include "callvirtualmethod.hxx"
 #include "share.hxx"
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::cpo::uno;
 
 namespace {
@@ -421,7 +421,7 @@ void unoInterfaceProxyDispatch(
     {
         ::cpo::uno::RuntimeException aExc(
             u"illegal member type description!"_ustr,
-            ::com::sun::star::uno::Reference< ::cpo::uno::XInterface >() );
+            ::cpo::uno::Reference< ::cpo::uno::XInterface >() );
 
         cpo::uno::Type const & rExcType = cppu::UnoType<decltype(aExc)>::get();
         // binary identical null reference

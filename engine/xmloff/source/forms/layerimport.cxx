@@ -46,7 +46,7 @@
 namespace xmloff
 {
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
@@ -360,7 +360,7 @@ void OFormLayerXMLImport_Impl::startPage(const Reference< XDrawPage >& _rxDrawPa
     m_xCurrentPageFormsSupp.clear();
 
     OSL_ENSURE(_rxDrawPage.is(), "OFormLayerXMLImport_Impl::startPage: NULL page!");
-    m_xCurrentPageFormsSupp.set(_rxDrawPage, css::uno::UNO_QUERY);
+    m_xCurrentPageFormsSupp.set(_rxDrawPage, cpo::uno::UNO_QUERY);
     OSL_ENSURE( m_xCurrentPageFormsSupp.is(), "OFormLayerXMLImport_Impl::startPage: invalid draw page (no XFormsSupplier)!" );
     if ( !m_xCurrentPageFormsSupp.is() )
         return;
@@ -413,7 +413,7 @@ void OFormLayerXMLImport_Impl::endPage()
     // now that we have all children of the forms collection, attach the events
     Reference< XIndexAccess > xIndexContainer;
     if ( m_xCurrentPageFormsSupp.is() && m_xCurrentPageFormsSupp->hasForms() )
-        xIndexContainer.set(m_xCurrentPageFormsSupp->getForms(), css::uno::UNO_QUERY);
+        xIndexContainer.set(m_xCurrentPageFormsSupp->getForms(), cpo::uno::UNO_QUERY);
     if ( xIndexContainer.is() )
         ODefaultEventAttacherManager::setEvents( xIndexContainer );
 

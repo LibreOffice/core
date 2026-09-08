@@ -53,7 +53,7 @@ private:
                         const oox::ppt::SlidePersistPtr& rPersist );
     void importSlide(sal_uInt32 nSlide, sal_Int32 nPagesImported, bool bImportNotes);
     void importMasterSlides();
-    void importMasterSlide(const css::uno::Reference<css::frame::XModel>& xModel,
+    void importMasterSlide(const cpo::uno::Reference<css::frame::XModel>& xModel,
                            ::oox::ppt::PowerPointImport& rFilter,
                            const OUString& rMasterFragmentPath);
     void saveThemeToGrabBag(const oox::drawingml::ThemePtr& pThemePtr, sal_Int32 nThemeIdx);

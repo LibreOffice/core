@@ -39,21 +39,21 @@ class PDFDialog final:
 private:
     cpo::uno::Sequence< css::beans::PropertyValue >   maMediaDescriptor;
     cpo::uno::Sequence< css::beans::PropertyValue >   maFilterData;
-    css::uno::Reference< css::lang::XComponent >     mxSrcDoc;
+    cpo::uno::Reference< css::lang::XComponent >     mxSrcDoc;
 
     // OGenericUnoDialog
     virtual cpo::uno::Sequence< sal_Int8 > getImplementationId() override;
     virtual OUString getImplementationName() override;
     virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
-    virtual std::unique_ptr<weld::DialogController> createDialog(const css::uno::Reference<css::awt::XWindow>& rParent) override;
+    virtual std::unique_ptr<weld::DialogController> createDialog(const cpo::uno::Reference<css::awt::XWindow>& rParent) override;
     virtual void executedDialog( sal_Int16 nExecutionResult ) override;
-    virtual css::uno::Reference< css::beans::XPropertySetInfo>  getPropertySetInfo() override;
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo>  getPropertySetInfo() override;
     virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
 
     // OGenericUnoAsyncDialog
-    virtual std::shared_ptr<SfxTabDialogController> createAsyncDialog(const css::uno::Reference<css::awt::XWindow>& rParent) override;
-    virtual void runAsync(const css::uno::Reference< css::ui::dialogs::XDialogClosedListener >& xListener) override;
+    virtual std::shared_ptr<SfxTabDialogController> createAsyncDialog(const cpo::uno::Reference<css::awt::XWindow>& rParent) override;
+    virtual void runAsync(const cpo::uno::Reference< css::ui::dialogs::XDialogClosedListener >& xListener) override;
     virtual void executedAsyncDialog(std::shared_ptr<SfxTabDialogController> xAsyncDialog, sal_Int32 nExecutionResult) override;
 
     // XPropertyAccess
@@ -63,11 +63,11 @@ private:
     virtual void setPropertyValues( const cpo::uno::Sequence< css::beans::PropertyValue >& aProps ) override;
 
     // XExporter
-    virtual void setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
+    virtual void setSourceDocument( const cpo::uno::Reference< css::lang::XComponent >& xDoc ) override;
 
 public:
 
-    explicit    PDFDialog( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+    explicit    PDFDialog( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
     virtual     ~PDFDialog() override;
 };
 

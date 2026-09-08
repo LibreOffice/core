@@ -32,7 +32,7 @@
 namespace filter::config{
 
 CacheUpdateListener::CacheUpdateListener(FilterCache &rFilterCache,
-                                         css::uno::Reference< cpo::uno::XInterface > xConfigAccess,
+                                         cpo::uno::Reference< cpo::uno::XInterface > xConfigAccess,
                                          FilterCache::EItemType eConfigType)
     : m_rCache(rFilterCache)
     , m_xConfig(std::move(xConfigAccess))
@@ -48,14 +48,14 @@ void CacheUpdateListener::startListening()
 {
     // SAFE ->
     std::unique_lock aLock(m_aMutex);
-    css::uno::Reference< css::util::XChangesNotifier > xNotifier(m_xConfig, css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::util::XChangesNotifier > xNotifier(m_xConfig, cpo::uno::UNO_QUERY);
     aLock.unlock();
     // <- SAFE
 
     if (!xNotifier.is())
         return;
 
-    css::uno::Reference< css::util::XChangesListener > xThis(this);
+    cpo::uno::Reference< css::util::XChangesListener > xThis(this);
     xNotifier->addChangesListener(xThis);
 }
 
@@ -64,14 +64,14 @@ void CacheUpdateListener::stopListening()
 {
     // SAFE ->
     std::unique_lock aLock(m_aMutex);
-    css::uno::Reference< css::util::XChangesNotifier > xNotifier(m_xConfig, css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::util::XChangesNotifier > xNotifier(m_xConfig, cpo::uno::UNO_QUERY);
     aLock.unlock();
     // <- SAFE
 
     if (!xNotifier.is())
         return;
 
-    css::uno::Reference< css::util::XChangesListener > xThis(this);
+    cpo::uno::Reference< css::util::XChangesListener > xThis(this);
     xNotifier->removeChangesListener(xThis);
 }
 

@@ -25,10 +25,10 @@
 
 class ListControlHelper final
 {
-    css::uno::Reference< css::beans::XPropertySet > m_xProps;
+    cpo::uno::Reference< css::beans::XPropertySet > m_xProps;
 
 public:
-    explicit ListControlHelper( css::uno::Reference< css::beans::XPropertySet > xControl ) : m_xProps(std::move( xControl )){}
+    explicit ListControlHelper( cpo::uno::Reference< css::beans::XPropertySet > xControl ) : m_xProps(std::move( xControl )){}
     /// @throws cpo::uno::RuntimeException
     void AddItem( const cpo::uno::Any& pvargItem, const cpo::uno::Any& pvargIndex );
     /// @throws cpo::uno::RuntimeException

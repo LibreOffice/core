@@ -27,7 +27,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 CharClass::CharClass(
             const Reference< cpo::uno::XComponentContext > & rxContext,

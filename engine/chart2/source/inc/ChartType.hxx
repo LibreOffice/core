@@ -75,7 +75,7 @@ public:
     // ____ XChartType ____
     // still abstract ! implement !
     virtual OUString getChartType() override = 0;
-    virtual css::uno::Reference< css::chart2::XCoordinateSystem >
+    virtual cpo::uno::Reference< css::chart2::XCoordinateSystem >
         createCoordinateSystem( ::sal_Int32 DimensionCount ) final override;
     virtual cpo::uno::Sequence< OUString >
         getSupportedMandatoryRoles() override;
@@ -87,18 +87,18 @@ public:
 
     // ____ XDataSeriesContainer ____
     virtual void addDataSeries(
-        const css::uno::Reference< css::chart2::XDataSeries >& aDataSeries ) override;
+        const cpo::uno::Reference< css::chart2::XDataSeries >& aDataSeries ) override;
     virtual void removeDataSeries(
-        const css::uno::Reference< css::chart2::XDataSeries >& aDataSeries ) override;
-    virtual cpo::uno::Sequence< css::uno::Reference< css::chart2::XDataSeries > > getDataSeries() override;
+        const cpo::uno::Reference< css::chart2::XDataSeries >& aDataSeries ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Reference< css::chart2::XDataSeries > > getDataSeries() override;
     virtual void setDataSeries(
-        const cpo::uno::Sequence< css::uno::Reference< css::chart2::XDataSeries > >& aDataSeries ) override;
+        const cpo::uno::Sequence< cpo::uno::Reference< css::chart2::XDataSeries > >& aDataSeries ) override;
 
     // ____ XModifyBroadcaster ____
     virtual void addModifyListener(
-        const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+        const cpo::uno::Reference< css::util::XModifyListener >& aListener ) override;
     virtual void removeModifyListener(
-        const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+        const cpo::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
     virtual rtl::Reference<ChartType> cloneChartType() const = 0;
 
@@ -161,7 +161,7 @@ protected:
     using OPropertySet::disposing;
 
     // ____ XPropertySet ____
-    virtual css::uno::Reference< css::beans::XPropertySetInfo >
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo >
         getPropertySetInfo() override;
 
     /// merge XTypeProvider implementations

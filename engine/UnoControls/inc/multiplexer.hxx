@@ -68,16 +68,16 @@ protected:
     template <typename F> void for_each_container(F f) { (..., f(Listeners<Ifc>::list)); }
 
     template <class Ifc1>
-    void notifyPeer(const css::uno::Reference<css::awt::XWindow>& peer,
-                    void (css::awt::XWindow::*func)(const css::uno::Reference<Ifc1>&))
+    void notifyPeer(const cpo::uno::Reference<css::awt::XWindow>& peer,
+                    void (css::awt::XWindow::*func)(const cpo::uno::Reference<Ifc1>&))
     {
         if (peer)
             (peer.get()->*func)(this);
     }
 
     template <class Ifc1>
-    void add(std::unique_lock<std::mutex>& guard, const css::uno::Reference<Ifc1>& listener,
-             const css::uno::Reference<css::awt::XWindow>& peer)
+    void add(std::unique_lock<std::mutex>& guard, const cpo::uno::Reference<Ifc1>& listener,
+             const cpo::uno::Reference<css::awt::XWindow>& peer)
     {
         assert(listener);
         if (Listeners<Ifc1>::list.addInterface(guard, listener) == 1)
@@ -88,8 +88,8 @@ protected:
     }
 
     template <class Ifc1>
-    void remove(std::unique_lock<std::mutex>& guard, const css::uno::Reference<Ifc1>& listener,
-                const css::uno::Reference<css::awt::XWindow>& peer)
+    void remove(std::unique_lock<std::mutex>& guard, const cpo::uno::Reference<Ifc1>& listener,
+                const cpo::uno::Reference<css::awt::XWindow>& peer)
     {
         if (Listeners<Ifc1>::list.removeInterface(guard, listener) == 0)
         {
@@ -115,8 +115,8 @@ public:
         @param      rPeer       The peer from which the original events are dispatched. Null is allowed.
     */
 
-    OMRCListenerMultiplexerHelper(  const   css::uno::Reference< css::awt::XWindow >& xControl    ,
-                                    const   css::uno::Reference< css::awt::XWindow >& xPeer       );
+    OMRCListenerMultiplexerHelper(  const   cpo::uno::Reference< css::awt::XWindow >& xControl    ,
+                                    const   cpo::uno::Reference< css::awt::XWindow >& xPeer       );
 
     virtual ~OMRCListenerMultiplexerHelper() override;
 
@@ -129,7 +129,7 @@ public:
         @param      rPeer       The peer from which the original events are dispatched. Null is allowed.
     */
 
-    void setPeer( const css::uno::Reference< css::awt::XWindow >& xPeer );
+    void setPeer( const cpo::uno::Reference< css::awt::XWindow >& xPeer );
 
     /**
         @short      Remove all listeners and send a disposing message.
@@ -141,7 +141,7 @@ public:
         @short      Add the specified listener to the source.
     */
 
-    template <class Interface> void advise(const css::uno::Reference<Interface>& xListener)
+    template <class Interface> void advise(const cpo::uno::Reference<Interface>& xListener)
     {
         std::unique_lock aGuard(m_aMutex);
         add(aGuard, xListener, m_xPeer);
@@ -151,7 +151,7 @@ public:
         @short      Remove the specified listener from the source.
     */
 
-    template <class Interface> void unadvise(const css::uno::Reference<Interface>& xListener)
+    template <class Interface> void unadvise(const cpo::uno::Reference<Interface>& xListener)
     {
         std::unique_lock aGuard(m_aMutex);
         remove(aGuard, xListener, m_xPeer);
@@ -210,7 +210,7 @@ private:
 //  private variables
 
 private:
-    css::uno::Reference< css::awt::XWindow >      m_xPeer;   /// The source of the events. Normally this is the peer object.
+    cpo::uno::Reference< css::awt::XWindow >      m_xPeer;   /// The source of the events. Normally this is the peer object.
     cpo::uno::WeakReference< css::awt::XWindow >  m_xControl;
 };
 

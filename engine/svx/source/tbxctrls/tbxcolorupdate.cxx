@@ -48,7 +48,7 @@ namespace svx
 {
 ToolboxButtonColorUpdaterBase::ToolboxButtonColorUpdaterBase(
     bool bWideButton, OUString aCommandLabel, OUString aCommandURL, sal_uInt16 nSlotId,
-    css::uno::Reference<css::frame::XFrame> xFrame)
+    cpo::uno::Reference<css::frame::XFrame> xFrame)
     : mbWideButton(bWideButton)
     , mbWasHiContrastMode(Application::GetSettings().GetStyleSettings().GetHighContrastMode())
     , mnSlotId(nSlotId)
@@ -161,7 +161,7 @@ void ToolboxButtonColorUpdaterBase::SetRecentColor(const NamedColor& rNamedColor
 VclToolboxButtonColorUpdater::VclToolboxButtonColorUpdater(
     sal_uInt16 nSlotId, ToolBoxItemId nTbxBtnId, ToolBox* pToolBox, bool bWideButton,
     const OUString& rCommandLabel, const OUString& rCommandURL,
-    const css::uno::Reference<css::frame::XFrame>& rFrame)
+    const cpo::uno::Reference<css::frame::XFrame>& rFrame)
     : ToolboxButtonColorUpdaterBase(bWideButton, rCommandLabel, rCommandURL, nSlotId, rFrame)
     , mnBtnId(nTbxBtnId)
     , mpTbx(pToolBox)
@@ -327,7 +327,7 @@ OUString ToolboxButtonColorUpdaterBase::GetCurrentColorName() const
 
 ToolboxButtonColorUpdater::ToolboxButtonColorUpdater(
     sal_uInt16 nSlotId, const OUString& rTbxBtnId, weld::Toolbar* ptrTbx, bool bWideButton,
-    const OUString& rCommandLabel, const css::uno::Reference<css::frame::XFrame>& rFrame)
+    const OUString& rCommandLabel, const cpo::uno::Reference<css::frame::XFrame>& rFrame)
     : ToolboxButtonColorUpdaterBase(bWideButton, rCommandLabel, rTbxBtnId, nSlotId, rFrame)
     , msBtnId(rTbxBtnId)
     , mpTbx(ptrTbx)

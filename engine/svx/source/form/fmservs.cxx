@@ -25,6 +25,7 @@
 #include <fmservs.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 #define REGISTER_SERVICE(ImplName, ServiceName)                     \
     sString = (ServiceName);                                        \

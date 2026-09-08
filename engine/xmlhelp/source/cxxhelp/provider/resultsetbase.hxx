@@ -49,8 +49,8 @@ namespace chelp {
     {
     public:
 
-        ResultSetBase( css::uno::Reference< cpo::uno::XComponentContext > xContext,
-                       css::uno::Reference< css::ucb::XContentProvider > xProvider,
+        ResultSetBase( cpo::uno::Reference< cpo::uno::XComponentContext > xContext,
+                       cpo::uno::Reference< css::ucb::XContentProvider > xProvider,
                        const cpo::uno::Sequence< css::beans::Property >& seq );
 
         virtual ~ResultSetBase() override;
@@ -72,10 +72,10 @@ namespace chelp {
         dispose() override;
 
         virtual void SAL_CALL
-        addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
+        addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& xListener ) override;
 
         virtual void SAL_CALL
-        removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+        removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
 
         // XRow
@@ -197,27 +197,27 @@ namespace chelp {
                 return css::util::DateTime();
         }
 
-        virtual css::uno::Reference< css::io::XInputStream > SAL_CALL
+        virtual cpo::uno::Reference< css::io::XInputStream > SAL_CALL
         getBinaryStream( sal_Int32 columnIndex ) override
         {
             if( 0 <= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size() )
                 return m_aItems[m_nRow]->getBinaryStream( columnIndex );
             else
-                return css::uno::Reference< css::io::XInputStream >();
+                return cpo::uno::Reference< css::io::XInputStream >();
         }
 
-        virtual css::uno::Reference< css::io::XInputStream > SAL_CALL
+        virtual cpo::uno::Reference< css::io::XInputStream > SAL_CALL
         getCharacterStream( sal_Int32 columnIndex ) override
         {
             if( 0 <= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size() )
                 return m_aItems[m_nRow]->getCharacterStream( columnIndex );
             else
-                return css::uno::Reference< css::io::XInputStream >();
+                return cpo::uno::Reference< css::io::XInputStream >();
         }
 
         virtual cpo::uno::Any SAL_CALL
         getObject( sal_Int32 columnIndex,
-                   const css::uno::Reference< css::container::XNameAccess >& typeMap ) override
+                   const cpo::uno::Reference< css::container::XNameAccess >& typeMap ) override
         {
             if( 0 <= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size() )
                 return m_aItems[m_nRow]->getObject( columnIndex,typeMap );
@@ -225,40 +225,40 @@ namespace chelp {
                 return cpo::uno::Any();
         }
 
-        virtual css::uno::Reference< css::sdbc::XRef > SAL_CALL
+        virtual cpo::uno::Reference< css::sdbc::XRef > SAL_CALL
         getRef( sal_Int32 columnIndex ) override
         {
             if( 0 <= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size() )
                 return m_aItems[m_nRow]->getRef( columnIndex );
             else
-                return css::uno::Reference< css::sdbc::XRef >();
+                return cpo::uno::Reference< css::sdbc::XRef >();
         }
 
-        virtual css::uno::Reference< css::sdbc::XBlob > SAL_CALL
+        virtual cpo::uno::Reference< css::sdbc::XBlob > SAL_CALL
         getBlob( sal_Int32 columnIndex ) override
         {
             if( 0 <= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size() )
                 return m_aItems[m_nRow]->getBlob( columnIndex );
             else
-                return css::uno::Reference< css::sdbc::XBlob >();
+                return cpo::uno::Reference< css::sdbc::XBlob >();
         }
 
-        virtual css::uno::Reference< css::sdbc::XClob > SAL_CALL
+        virtual cpo::uno::Reference< css::sdbc::XClob > SAL_CALL
         getClob( sal_Int32 columnIndex ) override
         {
             if( 0 <= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size() )
                 return m_aItems[m_nRow]->getClob( columnIndex );
             else
-                return css::uno::Reference< css::sdbc::XClob >();
+                return cpo::uno::Reference< css::sdbc::XClob >();
         }
 
-        virtual css::uno::Reference< css::sdbc::XArray > SAL_CALL
+        virtual cpo::uno::Reference< css::sdbc::XArray > SAL_CALL
         getArray( sal_Int32 columnIndex ) override
         {
             if( 0 <= m_nRow && sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aItems.size() )
                 return m_aItems[m_nRow]->getArray( columnIndex );
             else
-                return css::uno::Reference< css::sdbc::XArray >();
+                return cpo::uno::Reference< css::sdbc::XArray >();
         }
 
 
@@ -316,7 +316,7 @@ namespace chelp {
         rowDeleted() override;
 
 
-        virtual  css::uno::Reference<  cpo::uno::XInterface > SAL_CALL
+        virtual  cpo::uno::Reference<  cpo::uno::XInterface > SAL_CALL
         getStatement() override;
 
         // XCloseable
@@ -329,19 +329,19 @@ namespace chelp {
         virtual OUString SAL_CALL
         queryContentIdentifierString() override;
 
-        virtual css::uno::Reference< css::ucb::XContentIdentifier > SAL_CALL
+        virtual cpo::uno::Reference< css::ucb::XContentIdentifier > SAL_CALL
         queryContentIdentifier() override;
 
-        virtual css::uno::Reference< css::ucb::XContent > SAL_CALL
+        virtual cpo::uno::Reference< css::ucb::XContent > SAL_CALL
         queryContent() override;
 
         // XResultSetMetaDataSupplier
-        virtual css::uno::Reference< css::sdbc::XResultSetMetaData > SAL_CALL
+        virtual cpo::uno::Reference< css::sdbc::XResultSetMetaData > SAL_CALL
         getMetaData() override;
 
 
         // XPropertySet
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
+        virtual cpo::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
         getPropertySetInfo() override;
 
         virtual void SAL_CALL setPropertyValue(
@@ -355,31 +355,31 @@ namespace chelp {
         virtual void SAL_CALL
         addPropertyChangeListener(
             const OUString& aPropertyName,
-            const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
+            const cpo::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
 
         virtual void SAL_CALL
         removePropertyChangeListener(
             const OUString& aPropertyName,
-            const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
+            const cpo::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
 
         virtual void SAL_CALL
         addVetoableChangeListener(
             const OUString& PropertyName,
-            const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+            const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
         virtual void SAL_CALL removeVetoableChangeListener(
             const OUString& PropertyName,
-            const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+            const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
     protected:
 
-        css::uno::Reference< cpo::uno::XComponentContext >  m_xContext;
-        css::uno::Reference< css::ucb::XContentProvider >  m_xProvider;
+        cpo::uno::Reference< cpo::uno::XComponentContext >  m_xContext;
+        cpo::uno::Reference< css::ucb::XContentProvider >  m_xProvider;
         sal_Int32                           m_nRow;
         bool                                m_nWasNull;
 
-        typedef std::vector< css::uno::Reference< css::ucb::XContentIdentifier > > IdentSet;
-        typedef std::vector< css::uno::Reference< css::sdbc::XRow > >              ItemSet;
+        typedef std::vector< cpo::uno::Reference< css::ucb::XContentIdentifier > > IdentSet;
+        typedef std::vector< cpo::uno::Reference< css::sdbc::XRow > >              ItemSet;
 
         IdentSet                            m_aIdents;
         ItemSet                             m_aItems;

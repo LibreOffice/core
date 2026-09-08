@@ -103,6 +103,7 @@
 #include <optional>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 #if OSL_DEBUG_LEVEL > 1
 

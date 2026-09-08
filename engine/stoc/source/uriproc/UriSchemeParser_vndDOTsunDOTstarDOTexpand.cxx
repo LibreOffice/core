@@ -20,7 +20,7 @@
 #include <sal/config.h>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uri/XUriSchemeParser.hpp>
@@ -115,7 +115,7 @@ public:
     { base_.clearFragment(); }
 
     virtual OUString SAL_CALL expand(
-        css::uno::Reference< css::util::XMacroExpander > const & expander) override;
+        cpo::uno::Reference< css::util::XMacroExpander > const & expander) override;
 
 private:
     virtual ~UrlReference() override {}
@@ -124,7 +124,7 @@ private:
 };
 
 OUString UrlReference::expand(
-    css::uno::Reference< css::util::XMacroExpander > const & expander)
+    cpo::uno::Reference< css::util::XMacroExpander > const & expander)
 {
     if (!expander.is()) {
         throw cpo::uno::RuntimeException(u"null expander passed to XVndSunStarExpandUrl.expand"_ustr);
@@ -152,7 +152,7 @@ public:
     virtual cpo::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() override;
 
-    virtual css::uno::Reference< css::uri::XUriReference > SAL_CALL
+    virtual cpo::uno::Reference< css::uri::XUriReference > SAL_CALL
     parse(
         OUString const & scheme,
         OUString const & schemeSpecificPart) override;
@@ -176,11 +176,11 @@ cpo::uno::Sequence< OUString > Parser::getSupportedServiceNames()
     return { u"com.sun.star.uri.UriSchemeParser_vndDOTsunDOTstarDOTexpand"_ustr };
 }
 
-css::uno::Reference< css::uri::XUriReference > Parser::parse(
+cpo::uno::Reference< css::uri::XUriReference > Parser::parse(
     OUString const & scheme, OUString const & schemeSpecificPart)
 {
     if (!parseSchemeSpecificPart(schemeSpecificPart)) {
-        return css::uno::Reference< css::uri::XUriReference >();
+        return cpo::uno::Reference< css::uri::XUriReference >();
     }
     return new UrlReference(scheme, schemeSpecificPart);
 }

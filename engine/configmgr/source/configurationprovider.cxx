@@ -31,7 +31,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cpo/uno/Any.hxx>
 #include <cpo/uno/Exception.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/XInterface.hpp>
 #include <com/sun/star/util/XFlushListener.hpp>
@@ -82,7 +82,7 @@ class Service : public ServiceBase
 {
 public:
     explicit Service(
-        const css::uno::Reference< cpo::uno::XComponentContext >& context):
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& context):
         context_(context), default_(true),
         lock_( lock() )
     {
@@ -90,7 +90,7 @@ public:
     }
 
     Service(
-        const css::uno::Reference< cpo::uno::XComponentContext >& context,
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& context,
         OUString locale):
         context_(context), locale_(std::move(locale)),
         default_(false),
@@ -125,10 +125,10 @@ private:
             : cpo::uno::Sequence<OUString> { u"com.sun.star.configuration.ConfigurationProvider"_ustr };
     }
 
-    virtual css::uno::Reference< cpo::uno::XInterface > createInstance(
+    virtual cpo::uno::Reference< cpo::uno::XInterface > createInstance(
         OUString const & aServiceSpecifier) override;
 
-    virtual css::uno::Reference< cpo::uno::XInterface >
+    virtual cpo::uno::Reference< cpo::uno::XInterface >
     createInstanceWithArguments(
         OUString const & ServiceSpecifier,
         cpo::uno::Sequence< cpo::uno::Any > const & Arguments) override;
@@ -139,18 +139,18 @@ private:
     virtual void refresh() override;
 
     virtual void addRefreshListener(
-        css::uno::Reference< css::util::XRefreshListener > const & l) override;
+        cpo::uno::Reference< css::util::XRefreshListener > const & l) override;
 
     virtual void removeRefreshListener(
-        css::uno::Reference< css::util::XRefreshListener > const & l) override;
+        cpo::uno::Reference< css::util::XRefreshListener > const & l) override;
 
     virtual void flush() override;
 
     virtual void addFlushListener(
-        css::uno::Reference< css::util::XFlushListener > const & l) override;
+        cpo::uno::Reference< css::util::XFlushListener > const & l) override;
 
     virtual void removeFlushListener(
-        css::uno::Reference< css::util::XFlushListener > const & l) override;
+        cpo::uno::Reference< css::util::XFlushListener > const & l) override;
 
     virtual void setLocale(css::lang::Locale const & eLocale) override;
 
@@ -158,7 +158,7 @@ private:
 
     void flushModifications() const;
 
-    css::uno::Reference< cpo::uno::XComponentContext > context_;
+    cpo::uno::Reference< cpo::uno::XComponentContext > context_;
     OUString locale_;
     bool default_;
     std::shared_ptr<osl::Mutex> lock_;
@@ -166,14 +166,14 @@ private:
     comphelper::OInterfaceContainerHelper4<css::util::XFlushListener> maFlushListeners;
 };
 
-css::uno::Reference< cpo::uno::XInterface > Service::createInstance(
+cpo::uno::Reference< cpo::uno::XInterface > Service::createInstance(
     OUString const & aServiceSpecifier)
 {
     return createInstanceWithArguments(
         aServiceSpecifier, cpo::uno::Sequence< cpo::uno::Any >());
 }
 
-css::uno::Reference< cpo::uno::XInterface >
+cpo::uno::Reference< cpo::uno::XInterface >
 Service::createInstanceWithArguments(
     OUString const & ServiceSpecifier,
     cpo::uno::Sequence< cpo::uno::Any > const & Arguments)
@@ -278,14 +278,14 @@ void Service::refresh() {
 }
 
 void Service::addRefreshListener(
-    css::uno::Reference< css::util::XRefreshListener > const & l)
+    cpo::uno::Reference< css::util::XRefreshListener > const & l)
 {
     std::unique_lock g(m_aMutex);
     maRefreshListeners.addInterface(g, l);
 }
 
 void Service::removeRefreshListener(
-    css::uno::Reference< css::util::XRefreshListener > const & l)
+    cpo::uno::Reference< css::util::XRefreshListener > const & l)
 {
     std::unique_lock g(m_aMutex);
     maRefreshListeners.removeInterface(g, l);
@@ -301,14 +301,14 @@ void Service::flush() {
 }
 
 void Service::addFlushListener(
-    css::uno::Reference< css::util::XFlushListener > const & l)
+    cpo::uno::Reference< css::util::XFlushListener > const & l)
 {
     std::unique_lock g(m_aMutex);
     maFlushListeners.addInterface(g, l);
 }
 
 void Service::removeFlushListener(
-    css::uno::Reference< css::util::XFlushListener > const & l)
+    cpo::uno::Reference< css::util::XFlushListener > const & l)
 {
     std::unique_lock g(m_aMutex);
     maFlushListeners.removeInterface(g, l);
@@ -396,8 +396,8 @@ com_sun_star_comp_configuration_ConfigurationProvider_get_implementation(
 
 }
 
-css::uno::Reference< cpo::uno::XInterface > createDefault(
-    css::uno::Reference< cpo::uno::XComponentContext > const & context)
+cpo::uno::Reference< cpo::uno::XInterface > createDefault(
+    cpo::uno::Reference< cpo::uno::XComponentContext > const & context)
 {
     return getXWeak(new Service(context));
 }

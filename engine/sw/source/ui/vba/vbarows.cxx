@@ -35,6 +35,7 @@
 using namespace ::ooo::vba;
 using namespace ::ooo::vba::word;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace {
 

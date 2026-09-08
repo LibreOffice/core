@@ -39,8 +39,8 @@ class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) FmFormObj final : public SdrUnoObj
 
     // information for the control environment is only maintained if an object is not in an
     // object list
-    css::uno::Reference< css::container::XIndexContainer>     m_xParent;
-    css::uno::Reference< css::form::XForms >                  m_xEnvironmentHistory;
+    cpo::uno::Reference< css::container::XIndexContainer>     m_xParent;
+    cpo::uno::Reference< css::form::XForms >                  m_xEnvironmentHistory;
     sal_Int32           m_nPos;
 
     VclPtr<OutputDevice>   m_pLastKnownRefDevice;
@@ -60,7 +60,7 @@ public:
     // Copy constructor
     FmFormObj(SdrModel& rSdrModel, FmFormObj const & rSource);
 
-    SAL_DLLPRIVATE const css::uno::Reference< css::container::XIndexContainer>&
+    SAL_DLLPRIVATE const cpo::uno::Reference< css::container::XIndexContainer>&
         GetOriginalParent() const { return m_xParent; }
     SAL_DLLPRIVATE const cpo::uno::Sequence< css::script::ScriptEventDescriptor >&
         GetOriginalEvents() const { return aEvts; }
@@ -68,7 +68,7 @@ public:
         GetOriginalIndex() const { return m_nPos; }
 
     SAL_DLLPRIVATE void SetObjEnv(
-            const css::uno::Reference< css::container::XIndexContainer>& xForm,
+            const cpo::uno::Reference< css::container::XIndexContainer>& xForm,
             const sal_Int32 nIdx,
             const cpo::uno::Sequence< css::script::ScriptEventDescriptor >& rEvts );
     SAL_DLLPRIVATE void ClearObjEnv();
@@ -81,9 +81,9 @@ public:
     SAL_DLLPRIVATE virtual SdrObjKind GetObjIdentifier() const override;
     SAL_DLLPRIVATE virtual void NbcReformatText() override;
 
-    SAL_DLLPRIVATE static css::uno::Reference< cpo::uno::XInterface> ensureModelEnv(
-                  const css::uno::Reference< cpo::uno::XInterface>& _rSourceContainer,
-                  const css::uno::Reference< css::form::XForms>& _rTopLevelDestContainer);
+    SAL_DLLPRIVATE static cpo::uno::Reference< cpo::uno::XInterface> ensureModelEnv(
+                  const cpo::uno::Reference< cpo::uno::XInterface>& _rSourceContainer,
+                  const cpo::uno::Reference< css::form::XForms>& _rTopLevelDestContainer);
 
     /** returns the FmFormObj behind the given SdrObject
 
@@ -94,7 +94,7 @@ public:
     SAL_DLLPRIVATE static       FmFormObj* GetFormObject( SdrObject* _pSdrObject );
     SAL_DLLPRIVATE static const FmFormObj* GetFormObject( const SdrObject* _pSdrObject );
 
-    SAL_DLLPRIVATE virtual void SetUnoControlModel( const css::uno::Reference< css::awt::XControlModel >& _rxModel ) override;
+    SAL_DLLPRIVATE virtual void SetUnoControlModel( const cpo::uno::Reference< css::awt::XControlModel >& _rxModel ) override;
 
 private:
     SAL_DLLPRIVATE virtual bool        EndCreate( SdrDragStat& rStat, SdrCreateCmd eCmd ) override;

@@ -35,7 +35,7 @@
 #include <boost/property_tree/json_parser.hpp>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo::uno;
 
 namespace sfx2::sidebar {
 

@@ -20,6 +20,7 @@
 #include <docmodel/uno/UnoComplexColor.hxx>
 
 using namespace css;
+using namespace ::cpo;
 using namespace xmloff::token;
 
 SvXMLEnumMapEntry<sal_Int16> const pXML_ThemeColor_Enum[] = { { XML_NONE, -1 },
@@ -74,7 +75,7 @@ void XMLComplexColorImport::fillAttributes(
 }
 
 bool XMLComplexColorImport::handleTransformContext(
-    sal_Int32 nElement, const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList)
+    sal_Int32 nElement, const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList)
 {
     if (nElement == XML_ELEMENT(LO_EXT, XML_TRANSFORMATION))
     {
@@ -127,9 +128,9 @@ XMLPropertyComplexColorContext::XMLPropertyComplexColorContext(
     maComplexColorImport.fillAttributes(xAttrList);
 }
 
-css::uno::Reference<css::xml::sax::XFastContextHandler>
+cpo::uno::Reference<css::xml::sax::XFastContextHandler>
 XMLPropertyComplexColorContext::createFastChildContext(
-    sal_Int32 nElement, const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList)
+    sal_Int32 nElement, const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList)
 {
     if (maComplexColorImport.handleTransformContext(nElement, xAttrList))
         return this;
@@ -158,9 +159,9 @@ XMLComplexColorContext::XMLComplexColorContext(
     maComplexColorImport.fillAttributes(xAttrList);
 }
 
-css::uno::Reference<css::xml::sax::XFastContextHandler>
+cpo::uno::Reference<css::xml::sax::XFastContextHandler>
 XMLComplexColorContext::createFastChildContext(
-    sal_Int32 nElement, const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList)
+    sal_Int32 nElement, const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList)
 {
     if (maComplexColorImport.handleTransformContext(nElement, xAttrList))
         return this;

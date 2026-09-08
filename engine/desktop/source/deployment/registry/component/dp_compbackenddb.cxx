@@ -25,7 +25,7 @@
 #include "dp_compbackenddb.hxx"
 
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 namespace dp_registry::backend::component {

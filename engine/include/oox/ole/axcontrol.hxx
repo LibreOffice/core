@@ -24,7 +24,7 @@
 #include <memory>
 #include <vector>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <oox/dllapi.h>
 #include <oox/helper/binarystreambase.hxx>
@@ -195,7 +195,7 @@ class OOX_DLLPUBLIC ControlConverter final
 {
 public:
     explicit            ControlConverter(
-                            const css::uno::Reference< css::frame::XModel >& rxDocModel,
+                            const cpo::uno::Reference< css::frame::XModel >& rxDocModel,
                             const GraphicHelper& rGraphicHelper,
                             bool bDefaultColorBgr = true );
                         ~ControlConverter();
@@ -259,7 +259,7 @@ public:
     /** Binds the passed control model to the passed data sources. The
         implementation will check which source types are supported. */
     void                bindToSources(
-                            const css::uno::Reference< css::awt::XControlModel >& rxCtrlModel,
+                            const cpo::uno::Reference< css::awt::XControlModel >& rxCtrlModel,
                             const OUString& rCtrlSource,
                             const OUString& rRowSource,
                             sal_Int32 nRefSheet = 0 ) const;
@@ -335,7 +335,7 @@ public:
                             sal_Int32& nOrientation );
 
 private:
-    css::uno::Reference< css::frame::XModel > mxDocModel;
+    cpo::uno::Reference< css::frame::XModel > mxDocModel;
     const GraphicHelper& mrGraphicHelper;
     mutable PropertySet maAddressConverter;
     mutable PropertySet maRangeConverter;
@@ -924,11 +924,11 @@ public:
 
     /** Converts all control properties and inserts them into the passed model. */
     bool                convertProperties(
-                            const css::uno::Reference< css::awt::XControlModel >& rxCtrlModel,
+                            const cpo::uno::Reference< css::awt::XControlModel >& rxCtrlModel,
                             const ControlConverter& rConv ) const;
 
     void                convertFromProperties(
-                            const css::uno::Reference< css::awt::XControlModel >& rxCtrlModel,
+                            const cpo::uno::Reference< css::awt::XControlModel >& rxCtrlModel,
                             const ControlConverter& rConv );
 
 private:
@@ -961,29 +961,29 @@ class EmbeddedForm
 {
 public:
     explicit            EmbeddedForm(
-                            const css::uno::Reference< css::frame::XModel >& rxDocModel,
-                            const css::uno::Reference< css::drawing::XDrawPage >& rxDrawPage,
+                            const cpo::uno::Reference< css::frame::XModel >& rxDocModel,
+                            const cpo::uno::Reference< css::drawing::XDrawPage >& rxDrawPage,
                             const GraphicHelper& rGraphicHelper );
 
     /** Converts the passed control and inserts the control model into the form.
         @return  The API control model, if conversion was successful. */
-    css::uno::Reference< css::awt::XControlModel >
+    cpo::uno::Reference< css::awt::XControlModel >
                         convertAndInsert( const EmbeddedControl& rControl, sal_Int32& rnCtrlIndex );
 
     /** Returns the XIndexContainer interface of the UNO control form, if existing. */
-    const css::uno::Reference< css::container::XIndexContainer >&
+    const cpo::uno::Reference< css::container::XIndexContainer >&
                         getXForm() const { return mxFormIC; }
 
 private:
     /** Creates the form that will hold the form controls. */
-    css::uno::Reference< css::container::XIndexContainer > const &
+    cpo::uno::Reference< css::container::XIndexContainer > const &
                         createXForm();
 
 private:
     ControlConverter                                       maControlConv;
-    css::uno::Reference< css::lang::XMultiServiceFactory > mxModelFactory;
-    css::uno::Reference< css::form::XFormsSupplier >       mxFormsSupp;
-    css::uno::Reference< css::container::XIndexContainer > mxFormIC;
+    cpo::uno::Reference< css::lang::XMultiServiceFactory > mxModelFactory;
+    cpo::uno::Reference< css::form::XFormsSupplier >       mxFormsSupp;
+    cpo::uno::Reference< css::container::XIndexContainer > mxFormIC;
 };
 
 

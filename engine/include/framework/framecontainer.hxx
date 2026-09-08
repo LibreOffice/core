@@ -24,13 +24,13 @@
 #include <vector>
 
 #include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <rtl/ustring.hxx>
 
 namespace framework{
 
-typedef ::std::vector< css::uno::Reference< css::frame::XFrame > >  TFrameContainer;
+typedef ::std::vector< cpo::uno::Reference< css::frame::XFrame > >  TFrameContainer;
 
 /*-************************************************************************************************************
     @short          implement a container to hold children of frame, task or desktop
@@ -53,7 +53,7 @@ class FrameContainer final
         /// list to hold all frames
         TFrameContainer m_aContainer;
         /// one container item can be the current active frame. It's necessary for Desktop or Frame implementation.
-        css::uno::Reference< css::frame::XFrame > m_xActiveFrame;
+        cpo::uno::Reference< css::frame::XFrame > m_xActiveFrame;
 
     // interface
 
@@ -64,25 +64,25 @@ class FrameContainer final
                  ~FrameContainer();
 
         /// add/remove/mark container items
-        void                                      append     ( const css::uno::Reference< css::frame::XFrame >& xFrame );
-        void                                      remove     ( const css::uno::Reference< css::frame::XFrame >& xFrame );
-        void                                      setActive  ( const css::uno::Reference< css::frame::XFrame >& xFrame );
-        css::uno::Reference< css::frame::XFrame > getActive  (                                                         ) const;
+        void                                      append     ( const cpo::uno::Reference< css::frame::XFrame >& xFrame );
+        void                                      remove     ( const cpo::uno::Reference< css::frame::XFrame >& xFrame );
+        void                                      setActive  ( const cpo::uno::Reference< css::frame::XFrame >& xFrame );
+        cpo::uno::Reference< css::frame::XFrame > getActive  (                                                         ) const;
 
         /// checks and free memory
-        bool exist      ( const css::uno::Reference< css::frame::XFrame >& xFrame ) const;
+        bool exist      ( const cpo::uno::Reference< css::frame::XFrame >& xFrame ) const;
         void     clear      (                                                         );
 
         /// deprecated IndexAccess!
         sal_uInt32                                getCount  (                   ) const;
-        css::uno::Reference< css::frame::XFrame > operator[]( sal_uInt32 nIndex ) const;
+        cpo::uno::Reference< css::frame::XFrame > operator[]( sal_uInt32 nIndex ) const;
 
         /// replacement for deprecated index access
-        cpo::uno::Sequence< css::uno::Reference< css::frame::XFrame > > getAllElements() const;
+        cpo::uno::Sequence< cpo::uno::Reference< css::frame::XFrame > > getAllElements() const;
 
         /// special helper for Frame::findFrame()
-        css::uno::Reference< css::frame::XFrame > searchOnAllChildrens   ( const OUString& sName ) const;
-        css::uno::Reference< css::frame::XFrame > searchOnDirectChildrens( std::u16string_view sName ) const;
+        cpo::uno::Reference< css::frame::XFrame > searchOnAllChildrens   ( const OUString& sName ) const;
+        cpo::uno::Reference< css::frame::XFrame > searchOnDirectChildrens( std::u16string_view sName ) const;
 
 }; // class FrameContainer
 

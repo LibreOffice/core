@@ -35,6 +35,7 @@
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 namespace
 {

@@ -17,12 +17,13 @@
 #include <sax/fshelper.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 namespace oox::ppt
 {
 EmbeddedFontListContext::EmbeddedFontListContext(
     FragmentHandler2 const& rParent, bool bEmbedTrueType,
-    css::uno::Reference<css::beans::XPropertySet> const& rxDocSettings)
+    cpo::uno::Reference<css::beans::XPropertySet> const& rxDocSettings)
     : FragmentHandler2(rParent)
     , maEmbeddedFontManager(getFilter().getModel())
     , mbEmbedTrueType(bEmbedTrueType)

@@ -76,6 +76,7 @@
 #include <memory>
 
 using namespace css;
+using namespace ::cpo;
 
 namespace
 {
@@ -641,14 +642,14 @@ FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawV
             uno::Reference< lang::XMultiComponentFactory > xMCF( xContext->getServiceManager() );
             if(xMCF.is())
             {
-                css::uno::Reference<css::ui::dialogs::XAsynchronousExecutableDialog> xDialog(
+                cpo::uno::Reference<css::ui::dialogs::XAsynchronousExecutableDialog> xDialog(
                     xMCF->createInstanceWithContext(
                         u"com.sun.star.comp.chart2.WizardDialog"_ustr
                         , xContext), uno::UNO_QUERY);
                 uno::Reference< lang::XInitialization > xInit( xDialog, uno::UNO_QUERY );
                 if( xChartModel.is() && xInit.is() )
                 {
-                    css::uno::Reference< css::awt::XWindow > xParent
+                    cpo::uno::Reference< css::awt::XWindow > xParent
                         = new weld::TransportAsXWindow(pWin->GetFrameWeld());
                     cpo::uno::Sequence<cpo::uno::Any> aSeq(comphelper::InitAnyPropertySequence(
                     {

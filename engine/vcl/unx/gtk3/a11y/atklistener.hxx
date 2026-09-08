@@ -40,31 +40,31 @@ public:
 private:
 
     AtkObjectWrapper *mpWrapper;
-    std::vector< css::uno::Reference< css::accessibility::XAccessible > >
+    std::vector< cpo::uno::Reference< css::accessibility::XAccessible > >
                       m_aChildList;
 
     virtual ~AtkListener() override;
 
     // Updates the child list held to provide the old IndexInParent on children_changed::remove
     void updateChildList(
-        css::uno::Reference<css::accessibility::XAccessibleContext> const &
+        cpo::uno::Reference<css::accessibility::XAccessibleContext> const &
             pContext);
 
     // Process CHILD_EVENT notifications with a new child added
     void handleChildAdded(
-        const css::uno::Reference< css::accessibility::XAccessibleContext >& rxParent,
-        const css::uno::Reference< css::accessibility::XAccessible>& rxChild,
+        const cpo::uno::Reference< css::accessibility::XAccessibleContext >& rxParent,
+        const cpo::uno::Reference< css::accessibility::XAccessible>& rxChild,
         sal_Int32 nIndexHint);
 
     // Process CHILD_EVENT notifications with a child removed
     void handleChildRemoved(
-        const css::uno::Reference< css::accessibility::XAccessibleContext >& rxParent,
-        const css::uno::Reference< css::accessibility::XAccessible>& rxChild,
+        const cpo::uno::Reference< css::accessibility::XAccessibleContext >& rxParent,
+        const cpo::uno::Reference< css::accessibility::XAccessible>& rxChild,
         sal_Int32 nIndexHint);
 
     // Process INVALIDATE_ALL_CHILDREN notification
     void handleInvalidateChildren(
-        const css::uno::Reference< css::accessibility::XAccessibleContext >& rxParent);
+        const cpo::uno::Reference< css::accessibility::XAccessibleContext >& rxParent);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

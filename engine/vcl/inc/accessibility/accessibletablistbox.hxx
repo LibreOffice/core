@@ -42,7 +42,7 @@ public:
     virtual sal_Int64 getAccessibleChildCount() override;
 
     /** @return  The XAccessible interface of the specified child. */
-    virtual css::uno::Reference< css::accessibility::XAccessible >
+    virtual cpo::uno::Reference< css::accessibility::XAccessible >
     getAccessibleChild( sal_Int64 nChildIndex ) override;
 
     rtl::Reference<comphelper::OAccessible> getHeaderBar()

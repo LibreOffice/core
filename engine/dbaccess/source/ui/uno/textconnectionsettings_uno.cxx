@@ -34,7 +34,7 @@
 namespace dbaui
 {
 
-    using ::com::sun::star::uno::Reference;
+    using ::cpo::uno::Reference;
     using ::cpo::uno::XInterface;
     using ::cpo::uno::Any;
     using ::cpo::uno::XComponentContext;
@@ -71,7 +71,7 @@ namespace dbaui
         virtual cpo::uno::Sequence<sal_Int8> getImplementationId() override;
 
         DECLARE_SERVICE_INFO();
-        virtual css::uno::Reference< css::beans::XPropertySetInfo>  getPropertySetInfo() override;
+        virtual cpo::uno::Reference< css::beans::XPropertySetInfo>  getPropertySetInfo() override;
         virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
 
@@ -85,13 +85,13 @@ namespace dbaui
             { ODatabaseAdministrationDialog::setPropertyValue(p1, p2); }
         virtual cpo::uno::Any getPropertyValue(const OUString& p1) override
             { return ODatabaseAdministrationDialog::getPropertyValue(p1); }
-        virtual void addPropertyChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XPropertyChangeListener>& p2) override
+        virtual void addPropertyChangeListener(const OUString& p1, const cpo::uno::Reference<css::beans::XPropertyChangeListener>& p2) override
             { ODatabaseAdministrationDialog::addPropertyChangeListener(p1, p2); }
-        virtual void removePropertyChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XPropertyChangeListener>& p2) override
+        virtual void removePropertyChangeListener(const OUString& p1, const cpo::uno::Reference<css::beans::XPropertyChangeListener>& p2) override
             { ODatabaseAdministrationDialog::removePropertyChangeListener(p1, p2); }
-        virtual void addVetoableChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2) override
+        virtual void addVetoableChangeListener(const OUString& p1, const cpo::uno::Reference<css::beans::XVetoableChangeListener>& p2) override
             { ODatabaseAdministrationDialog::addVetoableChangeListener(p1, p2); }
-        virtual void removeVetoableChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2) override
+        virtual void removeVetoableChangeListener(const OUString& p1, const cpo::uno::Reference<css::beans::XVetoableChangeListener>& p2) override
             { ODatabaseAdministrationDialog::removeVetoableChangeListener(p1, p2); }
         virtual void setTitle(const OUString& p1) override
             { ODatabaseAdministrationDialog::setTitle(p1); }
@@ -100,7 +100,7 @@ namespace dbaui
 
     protected:
         // OGenericUnoDialog overridables
-        virtual std::unique_ptr<weld::DialogController> createDialog(const css::uno::Reference<css::awt::XWindow>& rParent) override;
+        virtual std::unique_ptr<weld::DialogController> createDialog(const cpo::uno::Reference<css::awt::XWindow>& rParent) override;
         using OTextConnectionSettingsDialog_BASE::getFastPropertyValue;
     };
 
@@ -204,7 +204,7 @@ namespace dbaui
         return new ::cppu::OPropertyArrayHelper( aProps );
     }
 
-    std::unique_ptr<weld::DialogController> OTextConnectionSettingsDialog::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
+    std::unique_ptr<weld::DialogController> OTextConnectionSettingsDialog::createDialog(const cpo::uno::Reference<css::awt::XWindow>& rParent)
     {
         return std::make_unique<TextConnectionSettingsDialog>(Application::GetFrameWeld(rParent), *m_pDatasourceItems);
     }

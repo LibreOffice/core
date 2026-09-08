@@ -278,7 +278,7 @@ bool PassParamsByRef::isFat(QualType type) {
     }
     loplugin::TypeCheck tc(type);
     if ((tc.Class("Reference").Namespace("uno")
-            .Namespace("star").Namespace("sun").Namespace("com").GlobalNamespace())
+            .Namespace("cpo").GlobalNamespace())
         || (tc.Class("Sequence").Namespace("uno")
             .Namespace("cpo").GlobalNamespace())
         || tc.Class("OString").Namespace("rtl").GlobalNamespace()

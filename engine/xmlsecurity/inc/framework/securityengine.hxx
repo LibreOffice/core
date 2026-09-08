@@ -51,7 +51,7 @@ protected:
      * operation needs. The m_xSAXEventKeeper member is used to release
      * those resources when the security operation finishes.
      */
-    css::uno::Reference< css::xml::crypto::sax::XSAXEventKeeper > m_xSAXEventKeeper;
+    cpo::uno::Reference< css::xml::crypto::sax::XSAXEventKeeper > m_xSAXEventKeeper;
 
     /*
      * the id of ElementCollector of the template element.
@@ -93,7 +93,7 @@ protected:
     /*
      * the result listener, which will receives the security operation result.
      */
-    css::uno::Reference< cpo::uno::XInterface > m_xResultListener;
+    cpo::uno::Reference< cpo::uno::XInterface > m_xResultListener;
 
 protected:
     explicit SecurityEngine();

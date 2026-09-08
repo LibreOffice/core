@@ -23,9 +23,10 @@
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
-SwVbaDialogs::SwVbaDialogs( const css::uno::Reference< ov::XHelperInterface >& xParent,
-                  const css::uno::Reference< cpo::uno::XComponentContext > &xContext,
+SwVbaDialogs::SwVbaDialogs( const cpo::uno::Reference< ov::XHelperInterface >& xParent,
+                  const cpo::uno::Reference< cpo::uno::XComponentContext > &xContext,
                   const rtl::Reference< SwXTextDocument >& xModel )
         : SwVbaDialogs_BASE( xParent, xContext ), m_xModel(xModel) {}
 

@@ -15,6 +15,7 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 
 using namespace css;
+using namespace ::cpo;
 
 namespace editeng
 {

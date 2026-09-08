@@ -87,19 +87,19 @@ public:
     virtual css::table::CellRangeAddress SAL_CALL getVisibleRange() override;
 
                             // XCellRangeReferrer
-    virtual css::uno::Reference< css::table::XCellRange > SAL_CALL
+    virtual cpo::uno::Reference< css::table::XCellRange > SAL_CALL
                             getReferredCells() override;
 
                             // XFormLayerAccess
-    virtual css::uno::Reference< css::form::runtime::XFormController > SAL_CALL
-                            getFormController( const css::uno::Reference< css::form::XForm >& Form ) override;
+    virtual cpo::uno::Reference< css::form::runtime::XFormController > SAL_CALL
+                            getFormController( const cpo::uno::Reference< css::form::XForm >& Form ) override;
     virtual bool SAL_CALL
                             isFormDesignMode(  ) override;
     virtual void SAL_CALL   setFormDesignMode( bool DesignMode ) override;
 
                             // XControlAccess
-    virtual css::uno::Reference< css::awt::XControl > SAL_CALL
-                            getControl( const css::uno::Reference< css::awt::XControlModel >& xModel ) override;
+    virtual cpo::uno::Reference< css::awt::XControl > SAL_CALL
+                            getControl( const cpo::uno::Reference< css::awt::XControlModel >& xModel ) override;
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -143,19 +143,19 @@ class ScTabViewObj final : public ScViewPaneBase,
                      public css::sheet::XSelectedSheetsSupplier
 {
 private:
-    typedef std::vector<css::uno::Reference<css::sheet::XRangeSelectionListener>> RangeSelListeners;
+    typedef std::vector<cpo::uno::Reference<css::sheet::XRangeSelectionListener>> RangeSelListeners;
 
     SfxItemPropertySet                      aPropSet;
-    std::vector<css::uno::Reference<css::view::XSelectionChangeListener> >
+    std::vector<cpo::uno::Reference<css::view::XSelectionChangeListener> >
                                             aSelectionChgListeners;
     RangeSelListeners                       aRangeSelListeners;
-    std::vector<css::uno::Reference<css::sheet::XRangeSelectionChangeListener> >
+    std::vector<cpo::uno::Reference<css::sheet::XRangeSelectionChangeListener> >
                                             aRangeChgListeners;
-    std::vector<css::uno::Reference<css::beans::XPropertyChangeListener> >
+    std::vector<cpo::uno::Reference<css::beans::XPropertyChangeListener> >
                                             aPropertyChgListeners;
-    std::vector<css::uno::Reference<css::awt::XEnhancedMouseClickHandler> >
+    std::vector<cpo::uno::Reference<css::awt::XEnhancedMouseClickHandler> >
                                             aMouseClickHandlers;
-    std::vector<css::uno::Reference<css::sheet::XActivationEventListener> >
+    std::vector<cpo::uno::Reference<css::sheet::XActivationEventListener> >
                                             aActivationListeners;
     SCTAB                                   nPreviousTab;
     bool                                    bDrawSelModeSet;
@@ -167,7 +167,7 @@ private:
     sal_Int16                   GetZoomType() const;
     void                    SetZoomType(sal_Int16 ZoomType);
 
-    css::uno::Reference< cpo::uno::XInterface > GetClickedObject(const Point& rPoint) const;
+    cpo::uno::Reference< cpo::uno::XInterface > GetClickedObject(const Point& rPoint) const;
     void                    EndMouseListening();
     void                    EndActivationListening();
     bool                    mbLeftMousePressed;
@@ -197,8 +197,8 @@ public:
                             // XSelectionSupplier
     virtual bool SAL_CALL select( const cpo::uno::Any& aSelection ) override;
     virtual cpo::uno::Any SAL_CALL getSelection() override;
-    virtual void SAL_CALL   addSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
-    virtual void SAL_CALL   removeSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
+    virtual void SAL_CALL   addSelectionChangeListener( const cpo::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
+    virtual void SAL_CALL   removeSelectionChangeListener( const cpo::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
 
                             // XSheetRange
     virtual cpo::uno::Any SAL_CALL getSelectionFromString( const OUString& aStrRange ) override;
@@ -206,23 +206,23 @@ public:
     //! XPrintable?
 
                             // XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo >
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo() override;
     virtual void SAL_CALL   setPropertyValue( const OUString& aPropertyName,
                                     const cpo::uno::Any& aValue ) override;
     virtual cpo::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
     virtual void SAL_CALL   addPropertyChangeListener( const OUString& aPropertyName,
-                                    const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
+                                    const cpo::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
     virtual void SAL_CALL   removePropertyChangeListener( const OUString& aPropertyName,
-                                    const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
+                                    const cpo::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
     virtual void SAL_CALL   addVetoableChangeListener( const OUString& PropertyName,
-                                    const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+                                    const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
     virtual void SAL_CALL   removeVetoableChangeListener( const OUString& PropertyName,
-                                    const css::uno::Reference<
+                                    const cpo::uno::Reference<
                                         css::beans::XVetoableChangeListener >& aListener ) override;
 
                             // XEnumerationAccess
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL
+    virtual cpo::uno::Reference< css::container::XEnumeration > SAL_CALL
                             createEnumeration() override;
 
                             // XIndexAccess
@@ -234,20 +234,20 @@ public:
     virtual bool SAL_CALL hasElements() override;
 
                             // XSpreadsheetView
-    virtual css::uno::Reference< css::sheet::XSpreadsheet > SAL_CALL
+    virtual cpo::uno::Reference< css::sheet::XSpreadsheet > SAL_CALL
                             getActiveSheet() override;
-    virtual void SAL_CALL   setActiveSheet( const css::uno::Reference< css::sheet::XSpreadsheet >& xActiveSheet ) override;
+    virtual void SAL_CALL   setActiveSheet( const cpo::uno::Reference< css::sheet::XSpreadsheet >& xActiveSheet ) override;
 
                             //XEnhancedMouseClickBroadcaster
 
-    virtual void SAL_CALL addEnhancedMouseClickHandler( const css::uno::Reference<
+    virtual void SAL_CALL addEnhancedMouseClickHandler( const cpo::uno::Reference<
                                 css::awt::XEnhancedMouseClickHandler >& aListener ) override;
-    virtual void SAL_CALL removeEnhancedMouseClickHandler( const css::uno::Reference< css::awt::XEnhancedMouseClickHandler >& aListener ) override;
+    virtual void SAL_CALL removeEnhancedMouseClickHandler( const cpo::uno::Reference< css::awt::XEnhancedMouseClickHandler >& aListener ) override;
 
                             //XActivationBroadcaster
 
-    virtual void SAL_CALL addActivationEventListener( const css::uno::Reference< css::sheet::XActivationEventListener >& aListener ) override;
-    virtual void SAL_CALL removeActivationEventListener( const css::uno::Reference< css::sheet::XActivationEventListener >& aListener ) override;
+    virtual void SAL_CALL addActivationEventListener( const cpo::uno::Reference< css::sheet::XActivationEventListener >& aListener ) override;
+    virtual void SAL_CALL removeActivationEventListener( const cpo::uno::Reference< css::sheet::XActivationEventListener >& aListener ) override;
 
                             // XViewSplitable
     virtual bool SAL_CALL getIsWindowSplit() override;
@@ -264,10 +264,10 @@ public:
                             // XRangeSelection
     virtual void SAL_CALL   startRangeSelection( const cpo::uno::Sequence< css::beans::PropertyValue >& aArguments ) override;
     virtual void SAL_CALL   abortRangeSelection() override;
-    virtual void SAL_CALL   addRangeSelectionListener( const css::uno::Reference< css::sheet::XRangeSelectionListener >& aListener ) override;
-    virtual void SAL_CALL   removeRangeSelectionListener( const css::uno::Reference< css::sheet::XRangeSelectionListener >& aListener ) override;
-    virtual void SAL_CALL   addRangeSelectionChangeListener( const css::uno::Reference< css::sheet::XRangeSelectionChangeListener >& aListener ) override;
-    virtual void SAL_CALL   removeRangeSelectionChangeListener( const css::uno::Reference< css::sheet::XRangeSelectionChangeListener >& aListener ) override;
+    virtual void SAL_CALL   addRangeSelectionListener( const cpo::uno::Reference< css::sheet::XRangeSelectionListener >& aListener ) override;
+    virtual void SAL_CALL   removeRangeSelectionListener( const cpo::uno::Reference< css::sheet::XRangeSelectionListener >& aListener ) override;
+    virtual void SAL_CALL   addRangeSelectionChangeListener( const cpo::uno::Reference< css::sheet::XRangeSelectionChangeListener >& aListener ) override;
+    virtual void SAL_CALL   removeRangeSelectionChangeListener( const cpo::uno::Reference< css::sheet::XRangeSelectionChangeListener >& aListener ) override;
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -279,8 +279,8 @@ public:
     virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 
     // XTransferableSupplier
-    virtual css::uno::Reference< css::datatransfer::XTransferable > SAL_CALL getTransferable() override;
-    virtual void SAL_CALL insertTransferable( const css::uno::Reference< css::datatransfer::XTransferable >& xTrans ) override;
+    virtual cpo::uno::Reference< css::datatransfer::XTransferable > SAL_CALL getTransferable() override;
+    virtual void SAL_CALL insertTransferable( const cpo::uno::Reference< css::datatransfer::XTransferable >& xTrans ) override;
 
     // XSelectedSheetsSupplier
     virtual cpo::uno::Sequence<sal_Int32> SAL_CALL getSelectedSheets() override;

@@ -41,9 +41,10 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
+using namespace ::cpo;
 
 ScAccessiblePreviewTable::ScAccessiblePreviewTable(
-    const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
+    const cpo::uno::Reference<css::accessibility::XAccessible>& rxParent,
     ScPreviewShell* pViewShell, sal_Int32 nIndex)
     : ImplInheritanceHelper(rxParent, AccessibleRole::TABLE)
     , mpViewShell(pViewShell)

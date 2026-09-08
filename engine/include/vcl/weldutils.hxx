@@ -14,7 +14,7 @@
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <comphelper/interfacecontainer4.hxx>
 #include <comphelper/compbase.hxx>
 #include <tools/time.hxx>
@@ -83,84 +83,84 @@ public:
     void setFocus() override { m_pWeldWidget->grab_focus(); }
 
     void
-    addWindowListener(const css::uno::Reference<css::awt::XWindowListener>& rListener) override
+    addWindowListener(const cpo::uno::Reference<css::awt::XWindowListener>& rListener) override
     {
         std::unique_lock g(m_aMutex);
         m_aWindowListeners.addInterface(g, rListener);
     }
 
     void
-    removeWindowListener(const css::uno::Reference<css::awt::XWindowListener>& rListener) override
+    removeWindowListener(const cpo::uno::Reference<css::awt::XWindowListener>& rListener) override
     {
         std::unique_lock g(m_aMutex);
         m_aWindowListeners.removeInterface(g, rListener);
     }
 
     void
-    addFocusListener(const css::uno::Reference<css::awt::XFocusListener>& rListener) override
+    addFocusListener(const cpo::uno::Reference<css::awt::XFocusListener>& rListener) override
     {
         std::unique_lock g(m_aMutex);
         m_aFocusListeners.addInterface(g, rListener);
     }
 
     void
-    removeFocusListener(const css::uno::Reference<css::awt::XFocusListener>& rListener) override
+    removeFocusListener(const cpo::uno::Reference<css::awt::XFocusListener>& rListener) override
     {
         std::unique_lock g(m_aMutex);
         m_aFocusListeners.removeInterface(g, rListener);
     }
 
     void
-    addKeyListener(const css::uno::Reference<css::awt::XKeyListener>& rListener) override
+    addKeyListener(const cpo::uno::Reference<css::awt::XKeyListener>& rListener) override
     {
         std::unique_lock g(m_aMutex);
         m_aKeyListeners.addInterface(g, rListener);
     }
 
     void
-    removeKeyListener(const css::uno::Reference<css::awt::XKeyListener>& rListener) override
+    removeKeyListener(const cpo::uno::Reference<css::awt::XKeyListener>& rListener) override
     {
         std::unique_lock g(m_aMutex);
         m_aKeyListeners.removeInterface(g, rListener);
     }
 
     void
-    addMouseListener(const css::uno::Reference<css::awt::XMouseListener>& rListener) override
+    addMouseListener(const cpo::uno::Reference<css::awt::XMouseListener>& rListener) override
     {
         std::unique_lock g(m_aMutex);
         m_aMouseListeners.addInterface(g, rListener);
     }
 
     void
-    removeMouseListener(const css::uno::Reference<css::awt::XMouseListener>& rListener) override
+    removeMouseListener(const cpo::uno::Reference<css::awt::XMouseListener>& rListener) override
     {
         std::unique_lock g(m_aMutex);
         m_aMouseListeners.removeInterface(g, rListener);
     }
 
     void addMouseMotionListener(
-        const css::uno::Reference<css::awt::XMouseMotionListener>& rListener) override
+        const cpo::uno::Reference<css::awt::XMouseMotionListener>& rListener) override
     {
         std::unique_lock g(m_aMutex);
         m_aMotionListeners.addInterface(g, rListener);
     }
 
     void removeMouseMotionListener(
-        const css::uno::Reference<css::awt::XMouseMotionListener>& rListener) override
+        const cpo::uno::Reference<css::awt::XMouseMotionListener>& rListener) override
     {
         std::unique_lock g(m_aMutex);
         m_aMotionListeners.removeInterface(g, rListener);
     }
 
     void
-    addPaintListener(const css::uno::Reference<css::awt::XPaintListener>& rListener) override
+    addPaintListener(const cpo::uno::Reference<css::awt::XPaintListener>& rListener) override
     {
         std::unique_lock g(m_aMutex);
         m_aPaintListeners.addInterface(g, rListener);
     }
 
     void
-    removePaintListener(const css::uno::Reference<css::awt::XPaintListener>& rListener) override
+    removePaintListener(const cpo::uno::Reference<css::awt::XPaintListener>& rListener) override
     {
         std::unique_lock g(m_aMutex);
         m_aPaintListeners.removeInterface(g, rListener);
@@ -182,9 +182,9 @@ private:
     weld::Widget* mWidget; /** The widget on which actions are performed */
 
     /** Dispatcher. Need to keep a reference to it as long as this StatusListener exists. */
-    css::uno::Reference<css::frame::XDispatch> mxDispatch;
+    cpo::uno::Reference<css::frame::XDispatch> mxDispatch;
     css::util::URL maCommandURL;
-    css::uno::Reference<css::frame::XFrame> mxFrame;
+    cpo::uno::Reference<css::frame::XFrame> mxFrame;
 
 public:
     SAL_DLLPRIVATE void
@@ -192,7 +192,7 @@ public:
 
     SAL_DLLPRIVATE void disposing(const css::lang::EventObject& /*Source*/) override;
 
-    const css::uno::Reference<css::frame::XFrame>& getFrame() const { return mxFrame; }
+    const cpo::uno::Reference<css::frame::XFrame>& getFrame() const { return mxFrame; }
 
     void startListening();
 

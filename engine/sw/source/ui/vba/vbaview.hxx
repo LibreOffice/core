@@ -33,17 +33,17 @@ class SwVbaView : public SwVbaView_BASE
 {
 private:
     rtl::Reference< SwXTextDocument >         mxModel;
-    css::uno::Reference< css::text::XTextViewCursor > mxViewCursor;
-    css::uno::Reference< css::beans::XPropertySet >   mxViewSettings;
+    cpo::uno::Reference< css::text::XTextViewCursor > mxViewCursor;
+    cpo::uno::Reference< css::beans::XPropertySet >   mxViewSettings;
 
     /// @throws cpo::uno::RuntimeException
     /// @throws css::script::BasicErrorException
-    css::uno::Reference< css::text::XTextRange > getHFTextRange( sal_Int32 nType );
+    cpo::uno::Reference< css::text::XTextRange > getHFTextRange( sal_Int32 nType );
 
 public:
     /// @throws cpo::uno::RuntimeException
-    SwVbaView( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent,
-               const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
+    SwVbaView( const cpo::uno::Reference< ooo::vba::XHelperInterface >& rParent,
+               const cpo::uno::Reference< cpo::uno::XComponentContext >& rContext,
                rtl::Reference< SwXTextDocument > xModel );
     virtual ~SwVbaView() override;
 

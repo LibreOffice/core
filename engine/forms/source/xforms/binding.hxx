@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cppuhelper/implbase.hxx>
 #include "propertysetbase.hxx"
 #include <com/sun/star/form/binding/XValueBinding.hpp>
@@ -86,9 +86,9 @@ typedef cppu::ImplInheritanceHelper<
 class Binding : public Binding_t
 {
 public:
-    typedef std::vector<css::uno::Reference<css::util::XModifyListener> > ModifyListeners_t;
-    typedef std::vector<css::uno::Reference<css::form::validation::XValidityConstraintListener> > XValidityConstraintListeners_t;
-    typedef std::vector<css::uno::Reference<css::form::binding::XListEntryListener> > XListEntryListeners_t;
+    typedef std::vector<cpo::uno::Reference<css::util::XModifyListener> > ModifyListeners_t;
+    typedef std::vector<cpo::uno::Reference<css::form::validation::XValidityConstraintListener> > XValidityConstraintListeners_t;
+    typedef std::vector<cpo::uno::Reference<css::form::binding::XListEntryListener> > XListEntryListeners_t;
 
 
 private:
@@ -121,7 +121,7 @@ private:
     ComputedExpression maCalculate;
 
     /// the XML namespaces used for XML names/XPath-expressions in this binding
-    css::uno::Reference<css::container::XNameContainer> mxNamespaces;
+    cpo::uno::Reference<css::container::XNameContainer> mxNamespaces;
 
     /// a type name
     OUString msTypeName;
@@ -136,7 +136,7 @@ private:
     XValidityConstraintListeners_t maValidityListeners;
 
     /// nodes on which we are listening for events
-    std::vector<css::uno::Reference<css::xml::dom::XNode> > maEventNodes;
+    std::vector<cpo::uno::Reference<css::xml::dom::XNode> > maEventNodes;
 
     /// the current MIP object for the first node we are bound to
     MIP maMIP;
@@ -163,7 +163,7 @@ public:
 
 
     /// get the model implementation
-    css::uno::Reference<css::xforms::XModel> getModel() const;   /// get XForms model
+    cpo::uno::Reference<css::xforms::XModel> getModel() const;   /// get XForms model
     void _setModel( const rtl::Reference<Model>& ); /// set XForms model (only called by Model)
 
 
@@ -200,13 +200,13 @@ public:
 
     // access to a binding's namespace
     // (set-method only changes local namespaces (but may add to model))
-    css::uno::Reference<css::container::XNameContainer> getBindingNamespaces() const { return mxNamespaces; }
-    void setBindingNamespaces( const css::uno::Reference<css::container::XNameContainer>& ); /// get binding nmsp.
+    cpo::uno::Reference<css::container::XNameContainer> getBindingNamespaces() const { return mxNamespaces; }
+    void setBindingNamespaces( const cpo::uno::Reference<css::container::XNameContainer>& ); /// get binding nmsp.
 
     // access to the model's namespaces
     // (set-method changes model's namespaces (unless a local one is present))
-    css::uno::Reference<css::container::XNameContainer> getModelNamespaces() const;  /// set model namespaces
-    void setModelNamespaces( const css::uno::Reference<css::container::XNameContainer>& ); /// get model nmsp.
+    cpo::uno::Reference<css::container::XNameContainer> getModelNamespaces() const;  /// set model namespaces
+    void setModelNamespaces( const cpo::uno::Reference<css::container::XNameContainer>& ); /// get model nmsp.
 
 
     // read-only properties that map MIPs to control data source properties
@@ -228,7 +228,7 @@ public:
     std::vector<xforms::EvaluationContext> getMIPEvaluationContexts();
 
     /// get nodeset the bind is bound to
-    css::uno::Reference<css::xml::dom::XNodeList> getXNodeList();
+    cpo::uno::Reference<css::xml::dom::XNodeList> getXNodeList();
 
     /// heuristically determine whether this binding is simple binding
     /// (here: simple binding == does not depend on other parts of the
@@ -291,7 +291,7 @@ private:
     MIP getLocalMIP() const;
 
     /// get the data type that applies to this binding
-    css::uno::Reference<css::xsd::XDataType> getDataType() const;
+    cpo::uno::Reference<css::xsd::XDataType> getDataType() const;
 
     /// determine whether binding is valid according to the given data type
     bool isValid_DataType() const;
@@ -303,13 +303,13 @@ private:
     void clear();
 
     /// distribute MIPs from current node recursively to children
-    void distributeMIP( const css::uno::Reference<css::xml::dom::XNode> &rxNode );
+    void distributeMIP( const cpo::uno::Reference<css::xml::dom::XNode> &rxNode );
 
     /// implement get*Namespaces()
-    css::uno::Reference<css::container::XNameContainer> _getNamespaces() const;
+    cpo::uno::Reference<css::container::XNameContainer> _getNamespaces() const;
 
     /// implement set*Namespaces()
-    void _setNamespaces( const css::uno::Reference<css::container::XNameContainer>&, bool bBinding );
+    void _setNamespaces( const cpo::uno::Reference<css::container::XNameContainer>&, bool bBinding );
 
     /// set a useful default binding ID (if none is set)
     void _checkBindingID();
@@ -334,9 +334,9 @@ public:
 
     virtual cpo::uno::Sequence<OUString> getAllListEntries() override;
 
-    virtual void addListEntryListener( const css::uno::Reference<css::form::binding::XListEntryListener>& ) override;
+    virtual void addListEntryListener( const cpo::uno::Reference<css::form::binding::XListEntryListener>& ) override;
 
-    virtual void removeListEntryListener( const css::uno::Reference<css::form::binding::XListEntryListener>&) override;
+    virtual void removeListEntryListener( const cpo::uno::Reference<css::form::binding::XListEntryListener>&) override;
 
 
     // XValidator:
@@ -349,10 +349,10 @@ public:
         const cpo::uno::Any& ) override;
 
     virtual void addValidityConstraintListener(
-        const css::uno::Reference<css::form::validation::XValidityConstraintListener>& xListener ) override;
+        const cpo::uno::Reference<css::form::validation::XValidityConstraintListener>& xListener ) override;
 
     virtual void removeValidityConstraintListener(
-        const css::uno::Reference<css::form::validation::XValidityConstraintListener>& xListener ) override;
+        const cpo::uno::Reference<css::form::validation::XValidityConstraintListener>& xListener ) override;
 
 
     // XModifyBroadcaster & friends:
@@ -362,10 +362,10 @@ public:
 public:
 
     virtual void addModifyListener(
-        const css::uno::Reference<css::util::XModifyListener>& xListener ) override;
+        const cpo::uno::Reference<css::util::XModifyListener>& xListener ) override;
 
     virtual void removeModifyListener(
-        const css::uno::Reference<css::util::XModifyListener>& xListener ) override;
+        const cpo::uno::Reference<css::util::XModifyListener>& xListener ) override;
 
 
     // XNamed:
@@ -384,7 +384,7 @@ public:
 
 
     virtual void handleEvent(
-        const css::uno::Reference<css::xml::dom::events::XEvent>& xEvent ) override;
+        const cpo::uno::Reference<css::xml::dom::events::XEvent>& xEvent ) override;
 
 
     // XUnoTunnel
@@ -396,7 +396,7 @@ public:
     // XCloneable
 
 
-    virtual css::uno::Reference<css::util::XCloneable> createClone() override;
+    virtual cpo::uno::Reference<css::util::XCloneable> createClone() override;
 };
 
 

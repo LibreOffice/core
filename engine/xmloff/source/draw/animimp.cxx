@@ -40,7 +40,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::xml;
 using namespace ::com::sun::star::xml::sax;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::beans;
@@ -353,8 +353,8 @@ public:
 
     virtual void endFastElement(sal_Int32 nElement) override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
 class XMLAnimationsSoundContext : public SvXMLImportContext
@@ -462,9 +462,9 @@ XMLAnimationsEffectContext::XMLAnimationsEffectContext( SvXMLImport& rImport,
     }
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLAnimationsEffectContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLAnimationsEffectContext::createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     return new XMLAnimationsSoundContext( GetImport(), nElement, xAttrList, this );
 }
@@ -568,8 +568,8 @@ XMLAnimationsContext::XMLAnimationsContext( SvXMLImport& rImport )
 {
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLAnimationsContext::createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLAnimationsContext::createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     return new XMLAnimationsEffectContext( GetImport(), nElement, xAttrList, *this );
 }

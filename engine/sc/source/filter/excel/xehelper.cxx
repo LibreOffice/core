@@ -61,7 +61,7 @@
 #include <xelink.hxx>
 #include <xehelper.hxx>
 
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::com::sun::star::i18n::XBreakIterator;
 
 // Export progress bar ========================================================
@@ -985,10 +985,10 @@ OUString lclEncodeDosPath(
 
 bool isUrlRelative(const OUString& aUrl)
 {
-    css::uno::Reference<css::uri::XUriReferenceFactory> xUriFactory(
+    cpo::uno::Reference<css::uri::XUriReferenceFactory> xUriFactory(
         css::uri::UriReferenceFactory::create(
             comphelper::getProcessComponentContext()));
-    css::uno::Reference<css::uri::XUriReference> xUri(xUriFactory->parse(aUrl));
+    cpo::uno::Reference<css::uri::XUriReference> xUri(xUriFactory->parse(aUrl));
 
     return !xUri->isAbsolute();
 }

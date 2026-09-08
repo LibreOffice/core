@@ -26,7 +26,7 @@
 #include <cassert>
 
 using namespace com::sun::star::beans;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 constexpr OUString ROOT_NODE = u"OptionsDialogGroups"_ustr;

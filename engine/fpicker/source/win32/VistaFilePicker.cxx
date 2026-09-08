@@ -53,7 +53,7 @@ VistaFilePicker::~VistaFilePicker()
 {
 }
 
-void VistaFilePicker::addFilePickerListener(const css::uno::Reference< css::ui::dialogs::XFilePickerListener >& xListener)
+void VistaFilePicker::addFilePickerListener(const cpo::uno::Reference< css::ui::dialogs::XFilePickerListener >& xListener)
 {
     Request rRequest;
     rRequest.setRequest (VistaFilePickerImpl::E_ADD_PICKER_LISTENER);
@@ -62,7 +62,7 @@ void VistaFilePicker::addFilePickerListener(const css::uno::Reference< css::ui::
     m_rDialog.doRequest(rRequest);
 }
 
-void VistaFilePicker::removeFilePickerListener(const css::uno::Reference< css::ui::dialogs::XFilePickerListener >& xListener )
+void VistaFilePicker::removeFilePickerListener(const cpo::uno::Reference< css::ui::dialogs::XFilePickerListener >& xListener )
 {
     Request rRequest;
     rRequest.setRequest (VistaFilePickerImpl::E_REMOVE_PICKER_LISTENER);
@@ -461,7 +461,7 @@ void VistaFilePicker::initialize(const cpo::uno::Sequence< cpo::uno::Any >& lArg
         }
         break;
     }
-    css::uno::Reference<css::awt::XWindow> xParentWindow;
+    cpo::uno::Reference<css::awt::XWindow> xParentWindow;
     if(lArguments.getLength() > 1)
     {
         lArguments[1] >>= xParentWindow;

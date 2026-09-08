@@ -32,10 +32,10 @@ namespace dp_misc
 
 inline void progressUpdate(
     OUString const & status,
-    css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
+    cpo::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
 {
     if (xCmdEnv.is()) {
-        css::uno::Reference<css::ucb::XProgressHandler> xProgressHandler(
+        cpo::uno::Reference<css::ucb::XProgressHandler> xProgressHandler(
             xCmdEnv->getProgressHandler() );
         if (xProgressHandler.is()) {
             xProgressHandler->update( cpo::uno::Any(status) );
@@ -46,12 +46,12 @@ inline void progressUpdate(
 
 class ProgressLevel
 {
-    css::uno::Reference<css::ucb::XProgressHandler> m_xProgressHandler;
+    cpo::uno::Reference<css::ucb::XProgressHandler> m_xProgressHandler;
 
 public:
     inline ~ProgressLevel();
     inline ProgressLevel(
-        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
+        cpo::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
         OUString const & status );
 
     inline void update( OUString const & status ) const;
@@ -60,7 +60,7 @@ public:
 
 
 inline ProgressLevel::ProgressLevel(
-    css::uno::Reference< css::ucb::XCommandEnvironment > const & xCmdEnv,
+    cpo::uno::Reference< css::ucb::XCommandEnvironment > const & xCmdEnv,
     OUString const & status )
 {
     if (xCmdEnv.is())
@@ -97,7 +97,7 @@ inline void ProgressLevel::update( cpo::uno::Any const & status ) const
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC bool interactContinuation(
     cpo::uno::Any const & request,
     cpo::uno::Type const & continuation,
-    css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
+    cpo::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
     bool * pcont, bool * pabort );
 
 
@@ -107,12 +107,12 @@ class UNLESS_MERGELIBS(DESKTOP_DEPLOYMENTMISC_DLLPUBLIC) AbortChannel :
     public ::cppu::WeakImplHelper<css::task::XAbortChannel>
 {
     bool m_aborted;
-    css::uno::Reference<css::task::XAbortChannel> m_xNext;
+    cpo::uno::Reference<css::task::XAbortChannel> m_xNext;
 
 public:
     AbortChannel() : m_aborted( false ) {}
     static AbortChannel * get(
-        css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel )
+        cpo::uno::Reference<css::task::XAbortChannel> const & xAbortChannel )
         { return static_cast<AbortChannel *>(xAbortChannel.get()); }
 
     bool isAborted() const { return m_aborted; }
@@ -126,7 +126,7 @@ public:
     public:
         Chain(
             ::rtl::Reference<AbortChannel> abortChannel,
-            css::uno::Reference<css::task::XAbortChannel> const & xNext )
+            cpo::uno::Reference<css::task::XAbortChannel> const & xNext )
             : m_abortChannel(std::move( abortChannel ))
             { if (m_abortChannel.is()) m_abortChannel->m_xNext = xNext; }
         ~Chain()

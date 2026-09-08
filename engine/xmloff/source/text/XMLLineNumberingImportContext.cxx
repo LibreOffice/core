@@ -33,7 +33,7 @@
 
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::style;
 using namespace ::xmloff::token;
@@ -197,9 +197,9 @@ void XMLLineNumberingImportContext::CreateAndInsert(bool)
     xLineNumbering->setPropertyValue(u"NumberingType"_ustr, Any(nNumType));
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLLineNumberingImportContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLLineNumberingImportContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
     if ( nElement == XML_ELEMENT(TEXT, XML_LINENUMBERING_SEPARATOR) )
         return new XMLLineNumberingSeparatorImportContext(GetImport(), *this);

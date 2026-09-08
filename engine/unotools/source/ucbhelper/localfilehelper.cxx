@@ -29,7 +29,7 @@
 #include <ucbhelper/content.hxx>
 #include <vector>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::ucb;
 
 namespace utl

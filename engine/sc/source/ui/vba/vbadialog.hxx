@@ -27,7 +27,7 @@ typedef cppu::ImplInheritanceHelper< VbaDialogBase, ov::excel::XDialog > ScVbaDi
 class ScVbaDialog : public ScVbaDialog_BASE
 {
 public:
-    ScVbaDialog( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext > & xContext, const css::uno::Reference< css::frame::XModel >& xModel, sal_Int32 nIndex ):ScVbaDialog_BASE( xParent, xContext, nIndex ), m_xModel(xModel) {}
+    ScVbaDialog( const cpo::uno::Reference< ov::XHelperInterface >& xParent, const cpo::uno::Reference< cpo::uno::XComponentContext > & xContext, const cpo::uno::Reference< css::frame::XModel >& xModel, sal_Int32 nIndex ):ScVbaDialog_BASE( xParent, xContext, nIndex ), m_xModel(xModel) {}
 
     // Methods
     virtual OUString mapIndexToName( sal_Int32 nIndex ) override;
@@ -35,9 +35,9 @@ public:
     virtual OUString getServiceImplName() override;
     virtual cpo::uno::Sequence<OUString> getServiceNames() override;
 
-    virtual css::uno::Reference< css::frame::XModel > getModel() const override { return m_xModel; }
+    virtual cpo::uno::Reference< css::frame::XModel > getModel() const override { return m_xModel; }
 private:
-    css::uno::Reference< css::frame::XModel > m_xModel;
+    cpo::uno::Reference< css::frame::XModel > m_xModel;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

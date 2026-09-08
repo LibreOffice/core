@@ -33,11 +33,11 @@ private:
 
 public:
     ONumericModel(
-        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
+        const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     ONumericModel(
         const ONumericModel* _pOriginal,
-        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
+        const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     virtual ~ONumericModel() override;
 
@@ -66,13 +66,13 @@ protected:
     virtual void            resetNoBroadcast() override;
 
 protected:
-    virtual css::uno::Reference< css::util::XCloneable > createClone(  ) override;
+    virtual cpo::uno::Reference< css::util::XCloneable > createClone(  ) override;
 };
 
 class ONumericControl: public OBoundControl
 {
 public:
-    explicit ONumericControl(const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory);
+    explicit ONumericControl(const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory);
 
     // css::lang::XServiceInfo
     OUString getImplementationName() override

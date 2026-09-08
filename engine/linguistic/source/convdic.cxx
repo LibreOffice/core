@@ -37,7 +37,7 @@
 #include <com/sun/star/util/XFlushable.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <com/sun/star/util/XFlushListener.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -57,7 +57,8 @@ using namespace utl;
 using namespace osl;
 using namespace com::sun::star;
 using namespace com::sun::star::lang;
-using namespace com::sun::star::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 

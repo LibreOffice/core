@@ -40,7 +40,7 @@ class ScSolverSettings final
 private:
     ScDocShell* m_pDocShell;
     ScDocument& m_rDoc;
-    css::uno::Reference<css::container::XNamed> m_xSheet;
+    cpo::uno::Reference<css::container::XNamed> m_xSheet;
     // Status uses constants in css::uno::sheet::SolverStatus
     sal_Int8 m_nStatus;
     bool m_bSuppressDialog;
@@ -59,7 +59,7 @@ private:
     static void ShowErrorMessage(const OUString& rMessage);
 
 public:
-    ScSolverSettings(ScDocShell* pDocSh, css::uno::Reference<css::container::XNamed> xSheet);
+    ScSolverSettings(ScDocShell* pDocSh, cpo::uno::Reference<css::container::XNamed> xSheet);
     ~ScSolverSettings();
 
     // XSolverSettings attributes

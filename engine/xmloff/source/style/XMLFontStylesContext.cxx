@@ -38,8 +38,8 @@
 
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::awt;
@@ -137,9 +137,9 @@ void XMLFontStyleContextFontFace::FillProperties(
     }
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLFontStyleContextFontFace::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLFontStyleContextFontFace::createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList > &  )
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList > &  )
 {
     if( nElement == XML_ELEMENT(SVG, XML_FONT_FACE_SRC) ||
         nElement == XML_ELEMENT(SVG_COMPAT, XML_FONT_FACE_SRC) )
@@ -188,9 +188,9 @@ XMLFontStyleContextFontFaceSrc::XMLFontStyleContextFontFaceSrc( SvXMLImport& rIm
 {
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLFontStyleContextFontFaceSrc::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLFontStyleContextFontFaceSrc::createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList > & /*xAttrList*/ )
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & /*xAttrList*/ )
 {
     if( nElement == XML_ELEMENT(SVG, XML_FONT_FACE_URI) ||
         nElement == XML_ELEMENT(SVG_COMPAT, XML_FONT_FACE_URI) )
@@ -207,9 +207,9 @@ XMLFontStyleContextFontFaceUri::XMLFontStyleContextFontFaceUri( SvXMLImport& rIm
 {
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLFontStyleContextFontFaceUri::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLFontStyleContextFontFaceUri::createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList > & /*xAttrList*/ )
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & /*xAttrList*/ )
 {
     if( nElement == XML_ELEMENT(SVG, XML_FONT_FACE_FORMAT) )
         return new XMLFontStyleContextFontFaceFormat( GetImport(), *this );
@@ -316,7 +316,7 @@ void XMLFontStyleContextFontFaceUri::handleEmbeddedFont( const ::cpo::uno::Seque
 
 SvXMLStyleContext *XMLFontStylesContext::CreateStyleChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList )
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList )
 {
     if( nElement == XML_ELEMENT(STYLE, XML_FONT_FACE) )
     {

@@ -52,6 +52,7 @@
 #include <sc.hrc>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 void ScDrawShell::GetHLinkState( SfxItemSet& rSet )             //  Hyperlink
 {

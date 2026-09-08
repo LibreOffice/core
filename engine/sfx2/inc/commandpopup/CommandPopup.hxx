@@ -46,10 +46,10 @@ struct MenuContent final
 class MenuContentHandler final
 {
 private:
-    css::uno::Reference<cpo::uno::XComponentContext> m_xContext;
-    css::uno::Reference<css::frame::XFrame> m_xFrame;
-    css::uno::Reference<css::i18n::XCharacterClassification> m_xCharacterClassification;
-    css::uno::Reference<css::util::XURLTransformer> m_xURLTransformer;
+    cpo::uno::Reference<cpo::uno::XComponentContext> m_xContext;
+    cpo::uno::Reference<css::frame::XFrame> m_xFrame;
+    cpo::uno::Reference<css::i18n::XCharacterClassification> m_xCharacterClassification;
+    cpo::uno::Reference<css::util::XURLTransformer> m_xURLTransformer;
 
     MenuContent m_aMenuContent;
     OUString m_sModuleLongName;
@@ -57,9 +57,9 @@ private:
     std::unordered_set<OUString> m_aAdded;
 
 public:
-    MenuContentHandler(css::uno::Reference<css::frame::XFrame> const& xFrame);
+    MenuContentHandler(cpo::uno::Reference<css::frame::XFrame> const& xFrame);
 
-    void gatherMenuContent(css::uno::Reference<css::container::XIndexAccess> const& xIndexAccess,
+    void gatherMenuContent(cpo::uno::Reference<css::container::XIndexAccess> const& xIndexAccess,
                            MenuContent& rMenuContent);
 
     void findInMenu(OUString const& rText, std::unique_ptr<weld::TreeView>& rpCommandTreeView,
@@ -95,7 +95,7 @@ private:
     void dispatchCommandAndClose(OUString const& rCommand);
 
 public:
-    CommandListBox(weld::Window* pParent, css::uno::Reference<css::frame::XFrame> const& xFrame);
+    CommandListBox(weld::Window* pParent, cpo::uno::Reference<css::frame::XFrame> const& xFrame);
     void connect_closed(const Link<weld::Popover&, void>& rLink)
     {
         mxPopover->connect_closed(rLink);
@@ -108,7 +108,7 @@ private:
     std::unique_ptr<CommandListBox> mpListBox;
 
 public:
-    void showPopup(weld::Window* pParent, css::uno::Reference<css::frame::XFrame> const& xFrame);
+    void showPopup(weld::Window* pParent, cpo::uno::Reference<css::frame::XFrame> const& xFrame);
     DECL_LINK(PopupModeEnd, weld::Popover&, void);
 };
 

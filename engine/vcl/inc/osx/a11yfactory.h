@@ -26,12 +26,12 @@
 @interface AquaA11yFactory : NSObject
 {
 }
-+(void)insertIntoWrapperRepository: (AquaA11yWrapper *) element forAccessibleContext: (css::uno::Reference < css::accessibility::XAccessibleContext >) rxAccessibleContext;
-+(AquaA11yWrapper *)wrapperForAccessible: (css::uno::Reference < css::accessibility::XAccessible >) rxAccessible;
-+(AquaA11yWrapper *)wrapperForAccessibleContext: (css::uno::Reference < css::accessibility::XAccessibleContext >) rxAccessibleContext;
-+(AquaA11yWrapper *)wrapperForAccessibleContext: (css::uno::Reference < css::accessibility::XAccessibleContext >) rxAccessibleContext createIfNotExists:(BOOL) bCreate;
-+(AquaA11yWrapper *)wrapperForAccessibleContext: (css::uno::Reference < css::accessibility::XAccessibleContext >) rxAccessibleContext createIfNotExists:(BOOL) bCreate asRadioGroup:(BOOL) asRadioGroup;
-+(void)removeFromWrapperRepositoryFor: (css::uno::Reference < css::accessibility::XAccessibleContext >) rxAccessibleContext;
++(void)insertIntoWrapperRepository: (AquaA11yWrapper *) element forAccessibleContext: (cpo::uno::Reference < css::accessibility::XAccessibleContext >) rxAccessibleContext;
++(AquaA11yWrapper *)wrapperForAccessible: (cpo::uno::Reference < css::accessibility::XAccessible >) rxAccessible;
++(AquaA11yWrapper *)wrapperForAccessibleContext: (cpo::uno::Reference < css::accessibility::XAccessibleContext >) rxAccessibleContext;
++(AquaA11yWrapper *)wrapperForAccessibleContext: (cpo::uno::Reference < css::accessibility::XAccessibleContext >) rxAccessibleContext createIfNotExists:(BOOL) bCreate;
++(AquaA11yWrapper *)wrapperForAccessibleContext: (cpo::uno::Reference < css::accessibility::XAccessibleContext >) rxAccessibleContext createIfNotExists:(BOOL) bCreate asRadioGroup:(BOOL) asRadioGroup;
++(void)removeFromWrapperRepositoryFor: (cpo::uno::Reference < css::accessibility::XAccessibleContext >) rxAccessibleContext;
 +(void)registerWrapper: (AquaA11yWrapper *) theWrapper;
 +(void)revokeWrapper: (AquaA11yWrapper *) theWrapper;
 @end

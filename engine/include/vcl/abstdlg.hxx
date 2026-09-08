@@ -30,7 +30,7 @@
 #include <functional>
 #include <memory>
 
-namespace com::sun::star::uno { template <class interface_type> class Reference; }
+namespace cpo::uno { template <class interface_type> class Reference; }
 
 namespace com::sun::star::frame { class XModel; }
 
@@ -186,20 +186,20 @@ public:
     // creates instance of SignatureDialog from cui
     virtual VclPtr<AbstractSignatureLineDialog>
     CreateSignatureLineDialog(weld::Window* pParent,
-                              const css::uno::Reference<css::frame::XModel> xModel,
+                              const cpo::uno::Reference<css::frame::XModel> xModel,
                               bool bEditExisting)
         = 0;
 
     // creates instance of SignSignatureDialog from cui
     virtual VclPtr<AbstractSignSignatureLineDialog>
     CreateSignSignatureLineDialog(weld::Window* pParent,
-                                  const css::uno::Reference<css::frame::XModel> xModel)
+                                  const cpo::uno::Reference<css::frame::XModel> xModel)
         = 0;
 
     // creates instance of QrCodeDialog from cui
     virtual VclPtr<AbstractQrCodeGenDialog>
     CreateQrCodeGenDialog(weld::Window* pParent,
-                              const css::uno::Reference<css::frame::XModel> xModel,
+                              const cpo::uno::Reference<css::frame::XModel> xModel,
                               bool bEditExisting)
         = 0;
 

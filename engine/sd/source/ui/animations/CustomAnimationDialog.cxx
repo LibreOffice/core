@@ -71,11 +71,12 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::presentation;
+using namespace ::cpo;
 
-using ::com::sun::star::uno::UNO_QUERY;
+using ::cpo::uno::UNO_QUERY;
 using ::cpo::uno::Any;
 using ::cpo::uno::Sequence;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::cpo::uno::Exception;
 using ::com::sun::star::drawing::XShape;
 using ::com::sun::star::drawing::XDrawPage;
@@ -888,7 +889,7 @@ private:
     ::std::vector< OUString > maSoundList;
     bool mbHasText;
     const STLPropertySet* mpSet;
-    css::uno::Reference<css::media::XPlayer> mxPlayer;
+    cpo::uno::Reference<css::media::XPlayer> mxPlayer;
 
     weld::Window* mpDialog;
     std::unique_ptr<weld::Builder> mxBuilder;

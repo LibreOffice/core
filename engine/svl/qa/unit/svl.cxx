@@ -41,6 +41,7 @@
 #include <unicode/timezone.h>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace svl;
 
 namespace svl

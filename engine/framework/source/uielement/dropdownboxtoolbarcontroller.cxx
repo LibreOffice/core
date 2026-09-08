@@ -29,7 +29,7 @@
 #include <vcl/toolbox.hxx>
 
 using namespace ::com::sun::star;
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace css::beans;
 using namespace css::frame;

@@ -55,8 +55,8 @@ private:
     ScMyOLEFixer                        aFixupOLEs;
 
     rtl::Reference< ScTableSheetObj >   xCurrentSheet;
-    css::uno::Reference< css::drawing::XDrawPage > xDrawPage;
-    css::uno::Reference < css::drawing::XShapes > xShapes;
+    cpo::uno::Reference< css::drawing::XDrawPage > xDrawPage;
+    cpo::uno::Reference < css::drawing::XShapes > xShapes;
     OUString                       sCurrentSheetName;
     ScAddress                           maCurrentCellPos;
     ScRangeList                         maMatrixRangeList;
@@ -76,7 +76,7 @@ public:
     void                                AddColumn(bool bIsCovered);
     void                                AddColumns(sal_Int32 nRepeat);
     void                                FixupOLEs() { aFixupOLEs.FixupOLEs(); }
-    static bool                         IsOLE(const css::uno::Reference< css::drawing::XShape >& rShape)
+    static bool                         IsOLE(const cpo::uno::Reference< css::drawing::XShape >& rShape)
                                             { return ScMyOLEFixer::IsOLE(rShape); }
     void                                DeleteTable();
     const ScAddress&                    GetCurrentCellPos() const { return maCurrentCellPos; };
@@ -88,13 +88,13 @@ public:
     SCROW                               GetCurrentRow() const { return (maCurrentCellPos.Row() >= 0) ? maCurrentCellPos.Row() : 0; }
     const rtl::Reference< ScTableSheetObj >&
                                         GetCurrentXSheet() const { return xCurrentSheet; }
-    css::uno::Reference< css::drawing::XDrawPage > const &
+    cpo::uno::Reference< css::drawing::XDrawPage > const &
                                         GetCurrentXDrawPage();
-    css::uno::Reference< css::drawing::XShapes > const &
+    cpo::uno::Reference< css::drawing::XShapes > const &
                                         GetCurrentXShapes();
     bool                                HasDrawPage() const;
     bool                                HasXShapes() const;
-    void                                AddOLE(const css::uno::Reference <css::drawing::XShape>& rShape,
+    void                                AddOLE(const cpo::uno::Reference <css::drawing::XShape>& rShape,
                                                const OUString &rRangeList);
 
     void AddMatrixRange(const SCCOL nStartColumn,

@@ -92,7 +92,7 @@ struct FeatureState
 class FeatureCommandDispatchBase: public CommandDispatch
 {
 public:
-    explicit FeatureCommandDispatchBase( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+    explicit FeatureCommandDispatchBase( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
     virtual ~FeatureCommandDispatchBase() override;
 
     // late initialisation, especially for adding as listener
@@ -106,7 +106,7 @@ protected:
         const cpo::uno::Sequence< css::beans::PropertyValue >& Arguments ) override;
 
     virtual void fireStatusEvent( const OUString& rURL,
-        const css::uno::Reference< css::frame::XStatusListener >& xSingleListener ) override;
+        const cpo::uno::Reference< css::frame::XStatusListener >& xSingleListener ) override;
 
     // state of a feature
     virtual FeatureState getState( const OUString& rCommand ) = 0;

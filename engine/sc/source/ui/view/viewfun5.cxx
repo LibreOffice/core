@@ -76,6 +76,7 @@
 #include <memory>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 void ScViewFunc::PasteFromExcelClip(ScDocument& rClipDoc, SCTAB nSrcTab, SCCOL nPosX, SCROW nPosY,
                                     const Point* pLogicPos, bool bAllowDialogs)
@@ -298,7 +299,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
 
             xStm->Seek(0);
 
-            css::uno::Reference< css::io::XInputStream > xInputStream( new utl::OInputStreamWrapper( *xStm ) );
+            cpo::uno::Reference< css::io::XInputStream > xInputStream( new utl::OInputStreamWrapper( *xStm ) );
             SvxDrawingLayerImport( pModel, xInputStream );
 
             // set everything to right layer:

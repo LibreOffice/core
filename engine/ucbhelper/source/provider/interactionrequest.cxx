@@ -26,6 +26,7 @@
 #include <utility>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace ucbhelper;
 
 
@@ -40,7 +41,7 @@ struct InteractionRequest_Impl
     rtl::Reference< InteractionContinuation > m_xSelection;
     cpo::uno::Any m_aRequest;
     cpo::uno::Sequence<
-        css::uno::Reference<
+        cpo::uno::Reference<
             css::task::XInteractionContinuation > > m_aContinuations;
 
     InteractionRequest_Impl() {}

@@ -14,6 +14,7 @@
 #include <vcl/embeddedfontsmanager.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 class FontEmbeddingTest : public SdModelTestBase
 {

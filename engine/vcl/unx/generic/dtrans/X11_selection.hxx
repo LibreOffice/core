@@ -52,10 +52,10 @@ namespace x11 {
     class SelectionAdaptor
     {
     public:
-        virtual css::uno::Reference< css::datatransfer::XTransferable > getTransferable() = 0;
+        virtual cpo::uno::Reference< css::datatransfer::XTransferable > getTransferable() = 0;
         virtual void clearTransferable() = 0;
         virtual void fireContentsChanged() = 0;
-        virtual css::uno::Reference< cpo::uno::XInterface > getReference() = 0;
+        virtual cpo::uno::Reference< cpo::uno::XInterface > getReference() = 0;
         // returns a reference that will keep the SelectionAdaptor alive until the
         // reference is released
 
@@ -109,8 +109,8 @@ namespace x11 {
         virtual void        startDrag(
             const css::datatransfer::dnd::DragGestureEvent& trigger,
             sal_Int8 sourceActions, sal_Int32 cursor, sal_Int32 image,
-            const css::uno::Reference< css::datatransfer::XTransferable >& transferable,
-            const css::uno::Reference< css::datatransfer::dnd::XDragSourceListener >& listener
+            const cpo::uno::Reference< css::datatransfer::XTransferable >& transferable,
+            const cpo::uno::Reference< css::datatransfer::dnd::XDragSourceListener >& listener
             ) override;
 
     };
@@ -213,7 +213,7 @@ namespace x11 {
         oslThread                   m_aDragExecuteThread;
         ::osl::Condition            m_aDragRunning;
         ::Window                    m_aWindow;
-        css::uno::Reference< css::frame::XDesktop2 > m_xDesktop;
+        cpo::uno::Reference< css::frame::XDesktop2 > m_xDesktop;
         rtl::Reference<vcl::DisplayConnectionDispatch> m_xDisplayConnection;
         Time                        m_nSelectionTimestamp;
 
@@ -251,9 +251,9 @@ namespace x11 {
         ::Window                    m_aDropProxy;
         ::Window                    m_aDragSourceWindow;
         // XTransferable for Xdnd when we are drag source
-        css::uno::Reference< css::datatransfer::XTransferable >
+        cpo::uno::Reference< css::datatransfer::XTransferable >
                                     m_xDragSourceTransferable;
-        css::uno::Reference< css::datatransfer::dnd::XDragSourceListener >
+        cpo::uno::Reference< css::datatransfer::dnd::XDragSourceListener >
                                     m_xDragSourceListener;
         // root coordinates
         int                         m_nLastDragX, m_nLastDragY;
@@ -352,7 +352,7 @@ namespace x11 {
 
         bool getPasteData( Atom selection, Atom type, cpo::uno::Sequence< sal_Int8 >& rData );
         // returns true if conversion was successful
-        bool convertData( const css::uno::Reference< css::datatransfer::XTransferable >& xTransferable,
+        bool convertData( const cpo::uno::Reference< css::datatransfer::XTransferable >& xTransferable,
                           Atom nType,
                           Atom nSelection,
                           int & rFormat,
@@ -429,15 +429,15 @@ namespace x11 {
         virtual void        startDrag(
             const css::datatransfer::dnd::DragGestureEvent& trigger,
             sal_Int8 sourceActions, sal_Int32 cursor, sal_Int32 image,
-            const css::uno::Reference< css::datatransfer::XTransferable >& transferable,
-            const css::uno::Reference< css::datatransfer::dnd::XDragSourceListener >& listener
+            const cpo::uno::Reference< css::datatransfer::XTransferable >& transferable,
+            const cpo::uno::Reference< css::datatransfer::dnd::XDragSourceListener >& listener
             ) override;
 
         // SelectionAdaptor for XdndSelection Drag (we are drag source)
-        virtual css::uno::Reference< css::datatransfer::XTransferable > getTransferable() noexcept override;
+        virtual cpo::uno::Reference< css::datatransfer::XTransferable > getTransferable() noexcept override;
         virtual void clearTransferable() noexcept override;
         virtual void fireContentsChanged() noexcept override;
-        virtual css::uno::Reference< cpo::uno::XInterface > getReference() noexcept override;
+        virtual cpo::uno::Reference< cpo::uno::XInterface > getReference() noexcept override;
 
         // XEventListener
         virtual void disposing( const css::lang::EventObject& Source ) override;

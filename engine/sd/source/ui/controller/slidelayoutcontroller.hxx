@@ -26,7 +26,7 @@ namespace sd
 class SlideLayoutController : public svt::PopupWindowController
 {
 public:
-    SlideLayoutController(const css::uno::Reference<cpo::uno::XComponentContext>& rxContext,
+    SlideLayoutController(const cpo::uno::Reference<cpo::uno::XComponentContext>& rxContext,
                           bool bInsertPage);
 
     virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;

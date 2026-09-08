@@ -38,6 +38,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
+using namespace ::cpo;
 
 bool SwAccessibleFrameBase::IsSelected()
 {

@@ -70,7 +70,7 @@ private:
     // this class.
     IDropTarget* m_pDropTarget;
 
-    css::uno::Reference<cpo::uno::XComponentContext> m_xContext;
+    cpo::uno::Reference<cpo::uno::XComponentContext> m_xContext;
     // If m_bActive == true then events are fired to XDropTargetListener s,
     // none otherwise. The default value is true.
     bool m_bActive;
@@ -83,17 +83,17 @@ private:
     // This value is manipulated by the XDropTargetListener
     sal_Int8 m_nLastDropAction;
 
-    css::uno::Reference<css::datatransfer::XTransferable> m_currentData;
+    cpo::uno::Reference<css::datatransfer::XTransferable> m_currentData;
     // The current action is used to determine if the USER
     // action has changed (dropActionChanged)
     //  sal_Int8 m_userAction;
     // Set by listeners when they call XDropTargetDropContext::dropComplete
     bool m_bDropComplete;
-    css::uno::Reference<css::datatransfer::dnd::XDropTargetDragContext> m_currentDragContext;
-    css::uno::Reference<css::datatransfer::dnd::XDropTargetDropContext> m_currentDropContext;
+    cpo::uno::Reference<css::datatransfer::dnd::XDropTargetDragContext> m_currentDragContext;
+    cpo::uno::Reference<css::datatransfer::dnd::XDropTargetDropContext> m_currentDropContext;
 
 public:
-    explicit DropTarget(const css::uno::Reference<cpo::uno::XComponentContext>& rxContext);
+    explicit DropTarget(const cpo::uno::Reference<cpo::uno::XComponentContext>& rxContext);
     virtual ~DropTarget() override;
     DropTarget(DropTarget const&) = delete;
     DropTarget& operator=(DropTarget const&) = delete;
@@ -107,9 +107,9 @@ public:
 
     // XDropTarget
     virtual void addDropTargetListener(
-        const css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>& dtl) override;
+        const cpo::uno::Reference<css::datatransfer::dnd::XDropTargetListener>& dtl) override;
     virtual void removeDropTargetListener(
-        const css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>& dtl) override;
+        const cpo::uno::Reference<css::datatransfer::dnd::XDropTargetListener>& dtl) override;
     // Default is not active
     virtual bool isActive() override;
     virtual void setActive(bool isActive) override;
@@ -146,19 +146,19 @@ public:
 
     void
     _acceptDrop(sal_Int8 dropOperation,
-                const css::uno::Reference<css::datatransfer::dnd::XDropTargetDropContext>& context);
+                const cpo::uno::Reference<css::datatransfer::dnd::XDropTargetDropContext>& context);
     void
-    _rejectDrop(const css::uno::Reference<css::datatransfer::dnd::XDropTargetDropContext>& context);
+    _rejectDrop(const cpo::uno::Reference<css::datatransfer::dnd::XDropTargetDropContext>& context);
     void _dropComplete(
         bool success,
-        const css::uno::Reference<css::datatransfer::dnd::XDropTargetDropContext>& context);
+        const cpo::uno::Reference<css::datatransfer::dnd::XDropTargetDropContext>& context);
 
     // XDropTargetDragContext delegated from DragContext
     void
     _acceptDrag(sal_Int8 dragOperation,
-                const css::uno::Reference<css::datatransfer::dnd::XDropTargetDragContext>& context);
+                const cpo::uno::Reference<css::datatransfer::dnd::XDropTargetDragContext>& context);
     void
-    _rejectDrag(const css::uno::Reference<css::datatransfer::dnd::XDropTargetDragContext>& context);
+    _rejectDrag(const cpo::uno::Reference<css::datatransfer::dnd::XDropTargetDragContext>& context);
 
 protected:
     // Gets the current action dependent on the pressed modifiers, the effects

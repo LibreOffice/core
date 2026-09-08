@@ -27,7 +27,7 @@
 #include <sal/log.hxx>
 
 using namespace ::com::sun::star;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 
 namespace
 {

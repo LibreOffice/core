@@ -26,6 +26,7 @@
 #include <svl/cryptosign.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 /// Covers vcl/source/filter/ipdf/ fixes.
 class VclFilterIpdfTest : public UnoApiTest

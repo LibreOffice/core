@@ -53,13 +53,14 @@ class ShapeGroupContext;
 }
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace ::xmloff::token;
 
 namespace {
 
 struct ConnectionHint
 {
-    css::uno::Reference< css::drawing::XShape > mxConnector;
+    cpo::uno::Reference< css::drawing::XShape > mxConnector;
     OUString  aDestShapeId;
     sal_Int32 nDestGlueId;
     bool      bStart;
@@ -70,7 +71,7 @@ struct ConnectionHint
 /** this map store all gluepoint id mappings for shapes that had user defined gluepoints. This
     is needed because on insertion the gluepoints will get a new and unique id */
 typedef std::unordered_map<sal_Int32,sal_Int32> GluePointIdMap;
-typedef std::unordered_map< css::uno::Reference < css::drawing::XShape >, GluePointIdMap > ShapeGluePointsMap;
+typedef std::unordered_map< cpo::uno::Reference < css::drawing::XShape >, GluePointIdMap > ShapeGluePointsMap;
 
 /** this struct is created for each startPage() call and stores information that is needed during
     import of shapes for one page. Since pages could be nested ( notes pages inside impress ) there
@@ -425,12 +426,12 @@ SvXMLShapeContext* XMLShapeImportHelper::CreateFrameChildContext(
     return pContext;
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLShapeImportHelper::CreateFrameChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLShapeImportHelper::CreateFrameChildContext(
     SvXMLImportContext *pThisContext,
     sal_Int32 nElement,
     const uno::Reference< xml::sax::XFastAttributeList>& xAttrList )
 {
-    css::uno::Reference< css::xml::sax::XFastContextHandler > xContext;
+    cpo::uno::Reference< css::xml::sax::XFastContextHandler > xContext;
     SdXMLFrameShapeContext *pFrameContext = dynamic_cast<SdXMLFrameShapeContext*>( pThisContext  );
     if (pFrameContext)
         xContext = pFrameContext->createFastChildContext( nElement, xAttrList );
@@ -465,9 +466,9 @@ void XMLShapeImportHelper::addShape( uno::Reference< drawing::XShape >& rShape,
     all properties and styles are set.
 */
 void XMLShapeImportHelper::finishShape(
-        css::uno::Reference< css::drawing::XShape >& rShape,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >&,
-        css::uno::Reference< css::drawing::XShapes >&)
+        cpo::uno::Reference< css::drawing::XShape >& rShape,
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >&,
+        cpo::uno::Reference< css::drawing::XShapes >&)
 {
     /* Set property <PositionLayoutDir>
        to <PositionInHoriL2R>, if it exists and the import states that
@@ -728,7 +729,7 @@ void XMLShapeImportHelper::popGroupAndPostProcess()
     mpImpl->mpGroupContext = mpImpl->mpGroupContext->mpParentContext;
 }
 
-void XMLShapeImportHelper::shapeWithZIndexAdded( css::uno::Reference< css::drawing::XShape > const & xShape, sal_Int32 nZIndex )
+void XMLShapeImportHelper::shapeWithZIndexAdded( cpo::uno::Reference< css::drawing::XShape > const & xShape, sal_Int32 nZIndex )
 {
     if( !mpImpl->mpGroupContext)
         return;
@@ -781,7 +782,7 @@ void XMLShapeImportHelper::shapeRemoved(const uno::Reference<drawing::XShape>& x
     }
 }
 
-void XMLShapeImportHelper::addShapeConnection( css::uno::Reference< css::drawing::XShape > const & rConnectorShape,
+void XMLShapeImportHelper::addShapeConnection( cpo::uno::Reference< css::drawing::XShape > const & rConnectorShape,
                          bool bStart,
                          const OUString& rDestShapeId,
                          sal_Int32 nDestGlueId )
@@ -856,7 +857,7 @@ std::unique_ptr<SvXMLImportPropertyMapper> XMLShapeImportHelper::CreateShapeProp
 
 /** adds a mapping for a gluepoint identifier from an xml file to the identifier created after inserting
     the new gluepoint into the core. The saved mappings can be retrieved by getGluePointId() */
-void XMLShapeImportHelper::addGluePointMapping( css::uno::Reference< css::drawing::XShape > const & xShape,
+void XMLShapeImportHelper::addGluePointMapping( cpo::uno::Reference< css::drawing::XShape > const & xShape,
                           sal_Int32 nSourceId, sal_Int32 nDestinnationId )
 {
     if( mpPageContext )
@@ -864,7 +865,7 @@ void XMLShapeImportHelper::addGluePointMapping( css::uno::Reference< css::drawin
 }
 
 /** moves all current DestinationId's by n */
-void XMLShapeImportHelper::moveGluePointMapping( const css::uno::Reference< css::drawing::XShape >& xShape, const sal_Int32 n )
+void XMLShapeImportHelper::moveGluePointMapping( const cpo::uno::Reference< css::drawing::XShape >& xShape, const sal_Int32 n )
 {
     if( mpPageContext )
     {
@@ -882,7 +883,7 @@ void XMLShapeImportHelper::moveGluePointMapping( const css::uno::Reference< css:
 
 /** retrieves a mapping for a gluepoint identifier from the current xml file to the identifier created after
     inserting the new gluepoint into the core. The mapping must be initialized first with addGluePointMapping() */
-sal_Int32 XMLShapeImportHelper::getGluePointId( const css::uno::Reference< css::drawing::XShape >& xShape, sal_Int32 nSourceId )
+sal_Int32 XMLShapeImportHelper::getGluePointId( const cpo::uno::Reference< css::drawing::XShape >& xShape, sal_Int32 nSourceId )
 {
     if( mpPageContext )
     {
@@ -899,7 +900,7 @@ sal_Int32 XMLShapeImportHelper::getGluePointId( const css::uno::Reference< css::
 }
 
 /** this method must be calling before the first shape is imported for the given page */
-void XMLShapeImportHelper::startPage( css::uno::Reference< css::drawing::XShapes > const & rShapes )
+void XMLShapeImportHelper::startPage( cpo::uno::Reference< css::drawing::XShapes > const & rShapes )
 {
     std::shared_ptr<XMLShapeImportPageContextImpl> pOldContext = mpPageContext;
     mpPageContext = std::make_shared<XMLShapeImportPageContextImpl>();
@@ -908,7 +909,7 @@ void XMLShapeImportHelper::startPage( css::uno::Reference< css::drawing::XShapes
 }
 
 /** this method must be calling after the last shape is imported for the given page */
-void XMLShapeImportHelper::endPage( css::uno::Reference< css::drawing::XShapes > const & rShapes )
+void XMLShapeImportHelper::endPage( cpo::uno::Reference< css::drawing::XShapes > const & rShapes )
 {
     SAL_WARN_IF( !mpPageContext || (mpPageContext->mxShapes != rShapes), "xmloff", "wrong call to endPage(), no startPage called or wrong page" );
     if( nullptr == mpPageContext )

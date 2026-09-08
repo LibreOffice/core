@@ -34,8 +34,8 @@
 
 namespace framework{
 
-FrameListAnalyzer::FrameListAnalyzer( const css::uno::Reference< css::frame::XFramesSupplier >& xSupplier       ,
-                                      const css::uno::Reference< css::frame::XFrame >&          xReferenceFrame ,
+FrameListAnalyzer::FrameListAnalyzer( const cpo::uno::Reference< css::frame::XFramesSupplier >& xSupplier       ,
+                                      const cpo::uno::Reference< css::frame::XFrame >&          xReferenceFrame ,
                                             FrameAnalyzerFlags                                  eDetectMode     )
     : m_xSupplier      (xSupplier      )
     , m_xReferenceFrame(xReferenceFrame)
@@ -72,7 +72,7 @@ void FrameListAnalyzer::impl_analyze()
     m_xBackingComponent.clear();
 
     // try to get the task container by using the given supplier
-    css::uno::Reference< css::container::XIndexAccess > xFrameContainer = m_xSupplier->getFrames();
+    cpo::uno::Reference< css::container::XIndexAccess > xFrameContainer = m_xSupplier->getFrames();
 
     // All return list get an initial size to include all possible frames.
     // They will be packed at the end of this method ... using the actual step positions then.
@@ -89,10 +89,10 @@ void FrameListAnalyzer::impl_analyze()
     // It must be compared with the model of every frame of the container
     // to sort it into the list of frames with the same model.
     // Suppress this step, if right detect mode isn't set.
-    css::uno::Reference< css::frame::XModel > xReferenceModel;
+    cpo::uno::Reference< css::frame::XModel > xReferenceModel;
     if (m_eDetectMode & FrameAnalyzerFlags::Model)
     {
-        css::uno::Reference< css::frame::XController > xReferenceController;
+        cpo::uno::Reference< css::frame::XController > xReferenceController;
         if (m_xReferenceFrame.is())
             xReferenceController = m_xReferenceFrame->getController();
         if (xReferenceController.is())
@@ -101,7 +101,7 @@ void FrameListAnalyzer::impl_analyze()
 
     // check, if the reference frame is in hidden mode.
     // But look, if this analyze step is really needed.
-    css::uno::Reference< css::beans::XPropertySet > xSet(m_xReferenceFrame, css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::beans::XPropertySet > xSet(m_xReferenceFrame, cpo::uno::UNO_QUERY);
     if ( (m_eDetectMode & FrameAnalyzerFlags::Hidden) && xSet.is() )
     {
         xSet->getPropertyValue(FramePropNames[FramePropHandle::IsHidden]) >>= m_bReferenceIsHidden;
@@ -113,8 +113,8 @@ void FrameListAnalyzer::impl_analyze()
     {
         try
         {
-            const css::uno::Reference< cpo::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
-            css::uno::Reference< css::frame::XModuleManager2 > xModuleMgr = css::frame::ModuleManager::create(xContext);
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
+            cpo::uno::Reference< css::frame::XModuleManager2 > xModuleMgr = css::frame::ModuleManager::create(xContext);
             OUString sModule = xModuleMgr->identify(m_xReferenceFrame);
             m_bReferenceIsBacking = sModule == "com.sun.star.frame.StartModule";
         }
@@ -146,7 +146,7 @@ void FrameListAnalyzer::impl_analyze()
             // Ignore invalid items ... and of course the reference frame.
             // It will be a member of the given frame list too - but it was already
             // analyzed before!
-            css::uno::Reference< css::frame::XFrame > xFrame;
+            cpo::uno::Reference< css::frame::XFrame > xFrame;
             if (
                 !(xFrameContainer->getByIndex(i) >>= xFrame) ||
                 !(xFrame.is()                              ) ||
@@ -184,8 +184,8 @@ void FrameListAnalyzer::impl_analyze()
             {
                 try
                 {
-                    const css::uno::Reference< cpo::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
-                    css::uno::Reference< css::frame::XModuleManager2 > xModuleMgr = css::frame::ModuleManager::create(xContext);
+                    const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
+                    cpo::uno::Reference< css::frame::XModuleManager2 > xModuleMgr = css::frame::ModuleManager::create(xContext);
                     OUString sModule = xModuleMgr->identify(xFrame);
                     if (sModule == "com.sun.star.frame.StartModule")
                     {
@@ -202,8 +202,8 @@ void FrameListAnalyzer::impl_analyze()
             //    Add it to the list of "model frames".
             if (m_eDetectMode & FrameAnalyzerFlags::Model)
             {
-                css::uno::Reference< css::frame::XController > xController = xFrame->getController();
-                css::uno::Reference< css::frame::XModel >      xModel;
+                cpo::uno::Reference< css::frame::XController > xController = xFrame->getController();
+                cpo::uno::Reference< css::frame::XModel >      xModel;
                 if (xController.is())
                     xModel = xController->getModel();
                 if (xModel==xReferenceModel)
@@ -221,7 +221,7 @@ void FrameListAnalyzer::impl_analyze()
             bool bHidden = false;
             if (m_eDetectMode & FrameAnalyzerFlags::Hidden)
             {
-                xSet.set(xFrame, css::uno::UNO_QUERY);
+                xSet.set(xFrame, cpo::uno::UNO_QUERY);
                 if (xSet.is())
                 {
                     xSet->getPropertyValue(FramePropNames[FramePropHandle::IsHidden]) >>= bHidden;

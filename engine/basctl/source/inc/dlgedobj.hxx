@@ -63,7 +63,7 @@ protected:
     DlgEdObj(
         SdrModel& rSdrModel,
         const OUString& rModelName,
-        const css::uno::Reference< css::lang::XMultiServiceFactory >& rxSFac);
+        const cpo::uno::Reference< css::lang::XMultiServiceFactory >& rxSFac);
 
     // protected destructor
     virtual ~DlgEdObj() override;
@@ -112,7 +112,7 @@ public:
     virtual void SetRectFromProps();
     virtual void SetPropsFromRect();
 
-    css::uno::Reference< css::awt::XControl > GetControl() const;
+    cpo::uno::Reference< css::awt::XControl > GetControl() const;
 
     virtual void PositionAndSizeChange( const css::beans::PropertyChangeEvent& evt );
     /// @throws css::container::NoSuchElementException
@@ -134,7 +134,7 @@ public:
     void _elementRemoved();
 
     virtual void SetLayer(SdrLayerID nLayer) override;
-    void MakeDataAware( const css::uno::Reference< css::frame::XModel >& xModel );
+    void MakeDataAware( const cpo::uno::Reference< css::frame::XModel >& xModel );
 };
 
 

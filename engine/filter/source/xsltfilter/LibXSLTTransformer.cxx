@@ -45,7 +45,7 @@ using namespace ::cppu;
 using namespace ::osl;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::io;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
@@ -216,7 +216,7 @@ namespace XSLT
         if (buffer == nullptr || len < 0)
             return -1;
         sal_Int32 n;
-        css::uno::Reference<XInputStream> xis = m_transformer->getInputStream();
+        cpo::uno::Reference<XInputStream> xis = m_transformer->getInputStream();
         n = xis->readBytes(m_readBuf, len);
         if (n > 0)
         {
@@ -232,7 +232,7 @@ namespace XSLT
             return -1;
         if (len > 0)
         {
-            css::uno::Reference<XOutputStream> xos = m_transformer->getOutputStream();
+            cpo::uno::Reference<XOutputStream> xos = m_transformer->getOutputStream();
             sal_Int32 writeLen = len;
             sal_Int32 bufLen = ::std::min(writeLen, OUTPUT_BUFFER_SIZE);
             const sal_uInt8* memPtr =
@@ -254,7 +254,7 @@ namespace XSLT
     void
     Reader::closeOutput()
     {
-        css::uno::Reference<XOutputStream> xos = m_transformer->getOutputStream();
+        cpo::uno::Reference<XOutputStream> xos = m_transformer->getOutputStream();
         if (xos.is())
         {
             xos->flush();
@@ -406,7 +406,7 @@ namespace XSLT
     }
 
     LibXSLTTransformer::LibXSLTTransformer(
-            css::uno::Reference<XComponentContext> xContext) :
+            cpo::uno::Reference<XComponentContext> xContext) :
         m_xContext(std::move(xContext))
     {
     }
@@ -427,12 +427,12 @@ namespace XSLT
 
     void
     LibXSLTTransformer::setInputStream(
-            const css::uno::Reference<XInputStream>& inputStream)
+            const cpo::uno::Reference<XInputStream>& inputStream)
     {
         m_rInputStream = inputStream;
     }
 
-    css::uno::Reference<XInputStream>
+    cpo::uno::Reference<XInputStream>
     LibXSLTTransformer::getInputStream()
     {
         return m_rInputStream;
@@ -440,26 +440,26 @@ namespace XSLT
 
     void
     LibXSLTTransformer::setOutputStream(
-            const css::uno::Reference<XOutputStream>& outputStream)
+            const cpo::uno::Reference<XOutputStream>& outputStream)
     {
         m_rOutputStream = outputStream;
     }
 
-    css::uno::Reference<XOutputStream>
+    cpo::uno::Reference<XOutputStream>
     LibXSLTTransformer::getOutputStream()
     {
         return m_rOutputStream;
     }
 
     void
-    LibXSLTTransformer::addListener(const css::uno::Reference<XStreamListener>& listener)
+    LibXSLTTransformer::addListener(const cpo::uno::Reference<XStreamListener>& listener)
     {
         m_listeners.push_front(listener);
     }
 
     void
     LibXSLTTransformer::removeListener(
-            const css::uno::Reference<XStreamListener>& listener)
+            const cpo::uno::Reference<XStreamListener>& listener)
     {
         std::erase(m_listeners,listener);
     }
@@ -467,7 +467,7 @@ namespace XSLT
     void
     LibXSLTTransformer::start()
     {
-        for (const css::uno::Reference<XStreamListener>& xl : m_listeners)
+        for (const cpo::uno::Reference<XStreamListener>& xl : m_listeners)
         {
             xl->started();
         }
@@ -481,7 +481,7 @@ namespace XSLT
     {
         Any arg;
         arg <<= Exception(msg, *this);
-        for (const css::uno::Reference<XStreamListener>& xl : m_listeners)
+        for (const cpo::uno::Reference<XStreamListener>& xl : m_listeners)
         {
             if (xl.is())
             {
@@ -493,7 +493,7 @@ namespace XSLT
     void
     LibXSLTTransformer::done()
     {
-        for (const css::uno::Reference<XStreamListener>& xl : m_listeners)
+        for (const cpo::uno::Reference<XStreamListener>& xl : m_listeners)
         {
             if (xl.is())
             {

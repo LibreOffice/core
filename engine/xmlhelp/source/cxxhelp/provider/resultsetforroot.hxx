@@ -34,8 +34,8 @@ namespace chelp {
     {
     public:
 
-        ResultSetForRoot( const css::uno::Reference< cpo::uno::XComponentContext >&  rxContext,
-                          const css::uno::Reference< css::ucb::XContentProvider >&  xProvider,
+        ResultSetForRoot( const cpo::uno::Reference< cpo::uno::XComponentContext >&  rxContext,
+                          const cpo::uno::Reference< css::ucb::XContentProvider >&  xProvider,
                           const cpo::uno::Sequence< css::beans::Property >& seq,
                           URLParameter const & aURLParameter,
                           Databases* pDatabases );

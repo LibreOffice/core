@@ -63,7 +63,7 @@ private:
     cpo::uno::WeakReference< css::frame::XDispatchProviderInterceptor > m_xInterceptorLocker;
     rtl::Reference<Interceptor> m_pInterceptor;
 
-    css::uno::Reference< css::lang::XMultiServiceFactory > m_xFactory;
+    cpo::uno::Reference< css::lang::XMultiServiceFactory > m_xFactory;
 
     RECT                          m_aBorder;
 
@@ -74,17 +74,17 @@ private:
     HMENU                         m_nMenuHandle;
     HMENU                         m_nMenuShared;
     HOLEMENU                      m_nOLEMenu;
-    css::uno::Reference< css::awt::XWindow> m_xEditWindow;
+    cpo::uno::Reference< css::awt::XWindow> m_xEditWindow;
 
-    css::uno::Reference< css::awt::XWindow> m_xContainerWindow;
+    cpo::uno::Reference< css::awt::XWindow> m_xContainerWindow;
 
-    css::uno::Reference< css::frame::XModel > m_xDocument;
+    cpo::uno::Reference< css::frame::XModel > m_xDocument;
     sal_Int16                    m_nMacroExecMode;
 
-    css::uno::Reference< css::frame::XLayoutManager> m_xLayoutManager;
+    cpo::uno::Reference< css::frame::XLayoutManager> m_xLayoutManager;
 
 
-    css::uno::Reference< css::frame::XFrame2 > m_xFrame;
+    cpo::uno::Reference< css::frame::XFrame2 > m_xFrame;
 
     OUString m_aContainerName,m_aDocumentNamePart,m_aFilterName;
 
@@ -93,10 +93,10 @@ private:
     bool m_bLink;
 
 
-    css::uno::Reference< css::frame::XFrame2 > DocumentFrame();
+    cpo::uno::Reference< css::frame::XFrame2 > DocumentFrame();
 
 
-    css::uno::Reference< css::frame::XDispatchProviderInterceptor >
+    cpo::uno::Reference< css::frame::XDispatchProviderInterceptor >
         CreateNewInterceptor();
 
     void ClearInterceptorInternally();
@@ -119,7 +119,7 @@ public:
     }
 
     DocumentHolder(
-        const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory,
+        const cpo::uno::Reference< css::lang::XMultiServiceFactory >& xFactory,
         const ::rtl::Reference< EmbeddedDocumentInstanceAccess_Impl >& xOleAccess );
 
     ~DocumentHolder() override;
@@ -142,7 +142,7 @@ public:
     // further methods
 
     void SetDocument(
-        const css::uno::Reference< css::frame::XModel >& xDoc,
+        const cpo::uno::Reference< css::frame::XModel >& xDoc,
         bool bLink = false
     );
 
@@ -189,7 +189,7 @@ public:
         return m_hWndxWinParent;
      }
 
-    css::uno::Reference< css::frame::XModel >
+    cpo::uno::Reference< css::frame::XModel >
     GetDocument() const
     {
         return m_xDocument;
@@ -231,7 +231,7 @@ public:
 
     // XDockingAreaAcceptor
 
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
         css::awt::XWindow>
     getContainerWindow(
     ) override;

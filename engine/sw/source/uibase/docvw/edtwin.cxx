@@ -157,6 +157,7 @@
 
 using namespace sw::mark;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 constexpr int SCROLL_TIMER_RETARD_LIMIT = 5;
 
@@ -5859,7 +5860,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                         {
                             if (xMenu.is())
                             {
-                                css::uno::Reference<css::awt::XWindowPeer> xParent(aEvent.SourceWindow, css::uno::UNO_QUERY);
+                                cpo::uno::Reference<css::awt::XWindowPeer> xParent(aEvent.SourceWindow, cpo::uno::UNO_QUERY);
                                 sal_uInt16 nExecId = xMenu->execute(xParent, css::awt::Rectangle(aPixPos.X(), aPixPos.Y(), 1, 1),
                                                                     css::awt::PopupMenuDirection::EXECUTE_DOWN);
                                 if (!::ExecuteMenuCommand(xMenu, m_rView.GetViewFrame(), nExecId))

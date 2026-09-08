@@ -48,9 +48,10 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
+using namespace ::cpo;
 
 ScAccessiblePreviewHeaderCell::ScAccessiblePreviewHeaderCell(
-    const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
+    const cpo::uno::Reference<css::accessibility::XAccessible>& rxParent,
     ScPreviewShell* pViewShell, const ScAddress& rCellPos, bool bIsColHdr, bool bIsRowHdr,
     sal_Int32 nIndex)
     : ImplInheritanceHelper(rxParent, AccessibleRole::TABLE_CELL)

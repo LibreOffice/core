@@ -20,7 +20,7 @@
 #pragma once
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/OAccessible.hxx>
 #include <editeng/editengdllapi.h>
@@ -44,7 +44,7 @@ public:
     };
 
     AccessibleContextBase (
-        css::uno::Reference< css::accessibility::XAccessible> xParent,
+        cpo::uno::Reference< css::accessibility::XAccessible> xParent,
         const sal_Int16 aRole);
     virtual ~AccessibleContextBase() override;
 
@@ -147,11 +147,11 @@ public:
         getAccessibleChildCount() override;
 
     /// Return the specified child or throw exception.
-    virtual css::uno::Reference< css::accessibility::XAccessible>
+    virtual cpo::uno::Reference< css::accessibility::XAccessible>
         getAccessibleChild (sal_Int64 nIndex) override;
 
     /// Return a reference to the parent.
-    virtual css::uno::Reference< css::accessibility::XAccessible>
+    virtual cpo::uno::Reference< css::accessibility::XAccessible>
         getAccessibleParent() override;
 
     /// Return this object's role.
@@ -167,7 +167,7 @@ public:
         getAccessibleName() override;
 
     /// Return NULL to indicate that an empty relation set.
-    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet>
+    virtual cpo::uno::Reference< css::accessibility::XAccessibleRelationSet>
         getAccessibleRelationSet() override;
 
     /// Return the set of current states.
@@ -183,7 +183,7 @@ public:
 
     /** The default implementation returns an empty reference.
     */
-    virtual css::uno::Reference<css::accessibility::XAccessible>
+    virtual cpo::uno::Reference<css::accessibility::XAccessible>
         getAccessibleAtPoint(const css::awt::Point& aPoint) override;
 
     /** The default implementation does nothing.
@@ -253,7 +253,7 @@ protected:
 
 private:
     /// Reference to the parent object.
-    css::uno::Reference< css::accessibility::XAccessible> mxParent;
+    cpo::uno::Reference< css::accessibility::XAccessible> mxParent;
 
     /** Description of this object.  This is not a constant because it can
         be set from the outside.  Furthermore, it changes according to the

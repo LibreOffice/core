@@ -20,7 +20,7 @@ namespace cmis
     class DynamicResultSet : public ::ucbhelper::ResultSetImplHelper
     {
         ChildrenProvider* m_pChildrenProvider;
-        css::uno::Reference< css::ucb::XCommandEnvironment > m_xEnv;
+        cpo::uno::Reference< css::ucb::XCommandEnvironment > m_xEnv;
 
         private:
             virtual void initStatic() override;
@@ -29,10 +29,10 @@ namespace cmis
         public:
 
             DynamicResultSet(
-                    const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+                    const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                     ChildrenProvider* pChildrenProvider,
                     const css::ucb::OpenCommandArgument2& rCommand,
-                    const css::uno::Reference< css::ucb::XCommandEnvironment >& rxEnv );
+                    const cpo::uno::Reference< css::ucb::XCommandEnvironment >& rxEnv );
 
     };
 }

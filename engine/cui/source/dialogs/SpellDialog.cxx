@@ -62,8 +62,8 @@
 #include <sstream>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::linguistic2;
 using namespace linguistic;
@@ -1711,7 +1711,7 @@ IMPL_LINK(SentenceEditWindow_Impl, ToolbarHdl, const OUString&, rCurItemId, void
     }
 }
 
-bool SentenceEditWindow_Impl::MarkNextError( bool bIgnoreCurrentError, const css::uno::Reference<css::linguistic2::XSpellChecker>& xSpell )
+bool SentenceEditWindow_Impl::MarkNextError( bool bIgnoreCurrentError, const cpo::uno::Reference<css::linguistic2::XSpellChecker>& xSpell )
 {
     if (bIgnoreCurrentError)
         m_aIgnoreErrorsAt.insert( m_nErrorStart );

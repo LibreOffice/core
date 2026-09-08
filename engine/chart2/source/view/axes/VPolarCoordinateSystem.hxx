@@ -40,7 +40,7 @@ public:
             const css::awt::Rectangle& rMaximumSpaceForLabels,
             bool bLimitSpaceForLabels,
             std::vector<std::unique_ptr<VSeriesPlotter>>& rSeriesPlotterList,
-            css::uno::Reference<cpo::uno::XComponentContext> const& rComponentContext) override;
+            cpo::uno::Reference<cpo::uno::XComponentContext> const& rComponentContext) override;
 
     virtual void initVAxisInList() override;
     virtual void updateScalesAndIncrementsOnAxes() override;

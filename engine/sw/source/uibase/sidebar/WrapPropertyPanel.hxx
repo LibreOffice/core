@@ -34,7 +34,7 @@ namespace sw::sidebar {
     public:
         static std::unique_ptr<PanelLayout> Create(
             weld::Widget* pParent,
-            const css::uno::Reference< css::frame::XFrame>& rxFrame,
+            const cpo::uno::Reference< css::frame::XFrame>& rxFrame,
             SfxBindings* pBindings );
 
         // interface of ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
@@ -51,7 +51,7 @@ namespace sw::sidebar {
 
         WrapPropertyPanel(
             weld::Widget* pParent,
-            const css::uno::Reference< css::frame::XFrame >& rxFrame,
+            const cpo::uno::Reference< css::frame::XFrame >& rxFrame,
             SfxBindings* pBindings );
     private:
         SfxBindings* mpBindings;

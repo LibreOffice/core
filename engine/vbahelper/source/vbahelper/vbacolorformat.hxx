@@ -92,7 +92,7 @@ struct MsoColorIndices
 class ScVbaColorFormat : public ScVbaColorFormat_BASE
 {
 private:
-    css::uno::Reference< css::beans::XPropertySet > m_xPropertySet;
+    cpo::uno::Reference< css::beans::XPropertySet > m_xPropertySet;
     ScVbaFillFormat *m_pFillFormat;
     sal_Int16 m_nColorFormatType;
     sal_Int32 m_nFillFormatBackColor;
@@ -100,7 +100,7 @@ protected:
     virtual OUString getServiceImplName() override;
     virtual cpo::uno::Sequence<OUString> getServiceNames() override;
 public:
-    ScVbaColorFormat( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext, const css::uno::Reference< ov::XHelperInterface >& xInternalParent, const css::uno::Reference< css::drawing::XShape >& xShape, const sal_Int16 nColorFormatType );
+    ScVbaColorFormat( const cpo::uno::Reference< ov::XHelperInterface >& xParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext, const cpo::uno::Reference< ov::XHelperInterface >& xInternalParent, const cpo::uno::Reference< css::drawing::XShape >& xShape, const sal_Int16 nColorFormatType );
 
     // Attributes
     virtual sal_Int32 getRGB() override;

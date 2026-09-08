@@ -23,7 +23,7 @@
 #include <memory>
 #include <string_view>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/xml/sax/XFastContextHandler.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <oox/dllapi.h>
@@ -74,12 +74,12 @@ public:
 
     // com.sun.star.xml.sax.XFastContextHandler interface ---------------------
 
-    virtual void startFastElement( ::sal_Int32 Element, const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
-    virtual void startUnknownElement( const OUString& Namespace, const OUString& Name, const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
+    virtual void startFastElement( ::sal_Int32 Element, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
+    virtual void startUnknownElement( const OUString& Namespace, const OUString& Name, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
     virtual void endFastElement( ::sal_Int32 Element ) override;
     virtual void endUnknownElement( const OUString& Namespace, const OUString& Name ) override;
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext( ::sal_Int32 Element, const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createUnknownChildContext( const OUString& Namespace, const OUString& Name, const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext( ::sal_Int32 Element, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createUnknownChildContext( const OUString& Namespace, const OUString& Name, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
     virtual void characters( const OUString& aChars ) override;
 
     // record context interface -----------------------------------------------
@@ -92,7 +92,7 @@ protected:
     /** Helper constructor for the FragmentHandler. */
     explicit            ContextHandler( FragmentBaseDataRef  rxBaseData );
 
-    void                implSetLocator( const css::uno::Reference< css::xml::sax::XLocator >& rxLocator );
+    void                implSetLocator( const cpo::uno::Reference< css::xml::sax::XLocator >& rxLocator );
 
 #ifdef _MSC_VER
     ContextHandler() {} // workaround

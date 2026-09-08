@@ -20,7 +20,7 @@
 class PagesImportFilter : public writerperfect::ImportFilter<OdtGenerator>
 {
 public:
-    explicit PagesImportFilter(const css::uno::Reference<cpo::uno::XComponentContext>& rxContext)
+    explicit PagesImportFilter(const cpo::uno::Reference<cpo::uno::XComponentContext>& rxContext)
         : writerperfect::ImportFilter<OdtGenerator>(rxContext)
     {
     }

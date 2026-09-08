@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <rtl/ustring.hxx>
 #include <deque>
 #include <string_view>
@@ -42,36 +42,36 @@ class BackendDb
 {
 private:
 
-    css::uno::Reference<css::xml::dom::XDocument> m_doc;
-    css::uno::Reference<css::xml::xpath::XXPathAPI> m_xpathApi;
+    cpo::uno::Reference<css::xml::dom::XDocument> m_doc;
+    cpo::uno::Reference<css::xml::xpath::XXPathAPI> m_xpathApi;
 
     BackendDb(BackendDb const &) = delete;
     BackendDb &  operator = (BackendDb const &) = delete;
 
 protected:
-    const css::uno::Reference<cpo::uno::XComponentContext> m_xContext;
+    const cpo::uno::Reference<cpo::uno::XComponentContext> m_xContext;
     OUString m_urlDb;
 
 protected:
 
     /* caller must make sure that only one thread accesses the function
      */
-    css::uno::Reference<css::xml::dom::XDocument> const & getDocument();
+    cpo::uno::Reference<css::xml::dom::XDocument> const & getDocument();
 
     /* the namespace prefix is "reg" (without quotes)
      */
-    css::uno::Reference<css::xml::xpath::XXPathAPI> const & getXPathAPI();
+    cpo::uno::Reference<css::xml::xpath::XXPathAPI> const & getXPathAPI();
     void save();
     void removeElement(OUString const & sXPathExpression);
 
-    css::uno::Reference<css::xml::dom::XNode> getKeyElement(
+    cpo::uno::Reference<css::xml::dom::XNode> getKeyElement(
         std::u16string_view url);
 
     void writeSimpleList(
         std::deque< OUString> const & list,
         std::u16string_view sListTagName,
         std::u16string_view sMemberTagName,
-        css::uno::Reference<css::xml::dom::XNode> const & xParent);
+        cpo::uno::Reference<css::xml::dom::XNode> const & xParent);
 
     void writeVectorOfPair(
         std::vector< std::pair< OUString, OUString > > const & vecPairs,
@@ -79,29 +79,29 @@ protected:
         std::u16string_view sPairTagName,
         std::u16string_view sFirstTagName,
         std::u16string_view sSecondTagName,
-        css::uno::Reference<css::xml::dom::XNode> const & xParent);
+        cpo::uno::Reference<css::xml::dom::XNode> const & xParent);
 
     void writeSimpleElement(
         std::u16string_view sElementName, OUString const & value,
-        css::uno::Reference<css::xml::dom::XNode> const & xParent);
+        cpo::uno::Reference<css::xml::dom::XNode> const & xParent);
 
-    css::uno::Reference<css::xml::dom::XNode> writeKeyElement(
+    cpo::uno::Reference<css::xml::dom::XNode> writeKeyElement(
         OUString const & url);
 
     OUString readSimpleElement(
         std::u16string_view sElementName,
-        css::uno::Reference<css::xml::dom::XNode> const & xParent);
+        cpo::uno::Reference<css::xml::dom::XNode> const & xParent);
 
     std::vector< std::pair< OUString, OUString > >
     readVectorOfPair(
-        css::uno::Reference<css::xml::dom::XNode> const & parent,
+        cpo::uno::Reference<css::xml::dom::XNode> const & parent,
         std::u16string_view sListTagName,
         std::u16string_view sPairTagName,
         std::u16string_view sFirstTagName,
         std::u16string_view sSecondTagName);
 
     std::deque< OUString> readList(
-        css::uno::Reference<css::xml::dom::XNode> const & parent,
+        cpo::uno::Reference<css::xml::dom::XNode> const & parent,
         std::u16string_view sListTagName,
         std::u16string_view sMemberTagName);
 
@@ -128,7 +128,7 @@ protected:
     virtual OUString getKeyElementName()=0;
 
 public:
-    BackendDb(css::uno::Reference<cpo::uno::XComponentContext> const &  xContext,
+    BackendDb(cpo::uno::Reference<cpo::uno::XComponentContext> const &  xContext,
               OUString const & url);
     virtual ~BackendDb() {};
 
@@ -151,7 +151,7 @@ class RegisteredDb: public BackendDb
 {
 
 public:
-    RegisteredDb( css::uno::Reference<cpo::uno::XComponentContext> const &  xContext,
+    RegisteredDb( cpo::uno::Reference<cpo::uno::XComponentContext> const &  xContext,
                   OUString const & url);
 
 

@@ -43,6 +43,7 @@
 #define UNOGALLERY_DRAWING          6
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace unogallery {
 

@@ -27,6 +27,7 @@
 #include <svx/xtable.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 XColorListRef XColorList::CreateStdColorList()
 {

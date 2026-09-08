@@ -35,6 +35,7 @@
 #include <strings.hrc>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 /// Covers sw/source/core/unocore/ fixes.
 class SwCoreUnocoreTest : public SwModelTestBase
@@ -954,11 +955,11 @@ SelectionChangeListener::SelectionChangeListener() {}
 void SelectionChangeListener::selectionChanged(const lang::EventObject& rEvent)
 {
     uno::Reference<view::XSelectionSupplier> xSelectionSupplier(rEvent.Source, uno::UNO_QUERY);
-    css::uno::Reference<css::container::XIndexAccess> xSelection(xSelectionSupplier->getSelection(),
-                                                                 css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::container::XIndexAccess> xSelection(xSelectionSupplier->getSelection(),
+                                                                 cpo::uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSelection->getCount());
-    css::uno::Reference<css::text::XTextRange> xTextRange(xSelection->getByIndex(0),
-                                                          css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::text::XTextRange> xTextRange(xSelection->getByIndex(0),
+                                                          cpo::uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xTextRange->getString().startsWith("test"));
 }
 

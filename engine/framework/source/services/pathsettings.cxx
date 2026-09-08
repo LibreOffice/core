@@ -147,7 +147,7 @@ class PathSettings : public PathSettings_BASE
 private:
 
     /** reference to factory, which has create this instance. */
-    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
     /** list of all path variables and her corresponding values. */
     PathSettings::PathHash m_lPaths;
@@ -158,13 +158,13 @@ private:
 
     /** helper needed to (re-)substitute all internal save path values.
         Created on demand, also from the const read path, so it is mutable. */
-    mutable css::uno::Reference< css::util::XStringSubstitution > m_xSubstitution;
+    mutable cpo::uno::Reference< css::util::XStringSubstitution > m_xSubstitution;
 
     /** provides access to the old configuration schema (which will be migrated on demand). */
-    css::uno::Reference< css::container::XNameAccess > m_xCfgOld;
+    cpo::uno::Reference< css::container::XNameAccess > m_xCfgOld;
 
     /** provides access to the new configuration schema. */
-    css::uno::Reference< css::container::XNameAccess > m_xCfgNew;
+    cpo::uno::Reference< css::container::XNameAccess > m_xCfgNew;
 
     /** helper to listen for configuration changes without ownership cycle problems */
     rtl::Reference< WeakChangesListener > m_xCfgNewListener;
@@ -173,7 +173,7 @@ private:
 
 public:
 
-    explicit PathSettings(css::uno::Reference< cpo::uno::XComponentContext >  xContext);
+    explicit PathSettings(cpo::uno::Reference< cpo::uno::XComponentContext >  xContext);
 
     /** free all used resources ... if it was not already done. */
     virtual ~PathSettings() override;
@@ -350,7 +350,7 @@ private:
         placeholder variables ...
      */
     static void impl_subst(std::vector<OUString>& lVals   ,
-                    const css::uno::Reference< css::util::XStringSubstitution >& xSubst  ,
+                    const cpo::uno::Reference< css::util::XStringSubstitution >& xSubst  ,
                           bool                                               bReSubst);
 
     void impl_subst(std::unique_lock<std::mutex>& g,
@@ -413,12 +413,12 @@ private:
     virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
     /** factory methods to guarantee right (but on demand) initialized members ... */
-    css::uno::Reference< css::util::XStringSubstitution > fa_getSubstitution(std::unique_lock<std::mutex>& g) const;
-    css::uno::Reference< css::container::XNameAccess >    fa_getCfgOld(std::unique_lock<std::mutex>& g);
-    css::uno::Reference< css::container::XNameAccess >    fa_getCfgNew(std::unique_lock<std::mutex>& g);
+    cpo::uno::Reference< css::util::XStringSubstitution > fa_getSubstitution(std::unique_lock<std::mutex>& g) const;
+    cpo::uno::Reference< css::container::XNameAccess >    fa_getCfgOld(std::unique_lock<std::mutex>& g);
+    cpo::uno::Reference< css::container::XNameAccess >    fa_getCfgNew(std::unique_lock<std::mutex>& g);
 };
 
-PathSettings::PathSettings( css::uno::Reference< cpo::uno::XComponentContext >  xContext )
+PathSettings::PathSettings( cpo::uno::Reference< cpo::uno::XComponentContext >  xContext )
     : m_xContext(std::move(xContext))
 {
 }
@@ -433,8 +433,8 @@ void PathSettings::disposing(std::unique_lock<std::mutex>& g)
 {
     disposePropertySetListeners(g);
 
-    css::uno::Reference< css::util::XChangesNotifier >
-        xBroadcaster(m_xCfgNew, css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::util::XChangesNotifier >
+        xBroadcaster(m_xCfgNew, cpo::uno::UNO_QUERY);
     if (xBroadcaster.is())
         xBroadcaster->removeChangesListener(m_xCfgNewListener);
 
@@ -509,7 +509,7 @@ void PathSettings::impl_readAll(std::unique_lock<std::mutex>& g)
     try
     {
         // TODO think about me
-        css::uno::Reference< css::container::XNameAccess > xCfg    = fa_getCfgNew(g);
+        cpo::uno::Reference< css::container::XNameAccess > xCfg    = fa_getCfgNew(g);
         cpo::uno::Sequence< OUString >              lPaths = xCfg->getElementNames();
 
         sal_Int32 c = lPaths.getLength();
@@ -529,7 +529,7 @@ void PathSettings::impl_readAll(std::unique_lock<std::mutex>& g)
 // NO substitution here ! It's done outside ...
 std::vector<OUString> PathSettings::impl_readOldFormat(std::unique_lock<std::mutex>& g, const OUString& sPath)
 {
-    css::uno::Reference< css::container::XNameAccess > xCfg( fa_getCfgOld(g) );
+    cpo::uno::Reference< css::container::XNameAccess > xCfg( fa_getCfgOld(g) );
     std::vector<OUString> aPathVal;
 
     if( xCfg->hasByName(sPath) )
@@ -555,10 +555,10 @@ std::vector<OUString> PathSettings::impl_readOldFormat(std::unique_lock<std::mut
 // NO substitution here ! It's done outside ...
 PathSettings::PathInfo PathSettings::impl_readNewFormat(std::unique_lock<std::mutex>& g, const OUString& sPath)
 {
-    css::uno::Reference< css::container::XNameAccess > xCfg = fa_getCfgNew(g);
+    cpo::uno::Reference< css::container::XNameAccess > xCfg = fa_getCfgNew(g);
 
     // get access to the "queried" path
-    css::uno::Reference< css::container::XNameAccess > xPath;
+    cpo::uno::Reference< css::container::XNameAccess > xPath;
     xCfg->getByName(sPath) >>= xPath;
 
     PathSettings::PathInfo aPathVal;
@@ -570,7 +570,7 @@ PathSettings::PathInfo PathSettings::impl_readNewFormat(std::unique_lock<std::mu
         = comphelper::sequenceToContainer<std::vector<OUString>>(vTmpOrganizationPathsSeq);
 
     // read internal path list
-    css::uno::Reference< css::container::XNameAccess > xIPath;
+    cpo::uno::Reference< css::container::XNameAccess > xIPath;
     xPath->getByName(u"InternalPaths"_ustr) >>= xIPath;
     aPathVal.lInternalPaths = comphelper::sequenceToContainer<std::vector<OUString>>(xIPath->getElementNames());
 
@@ -593,7 +593,7 @@ PathSettings::PathInfo PathSettings::impl_readNewFormat(std::unique_lock<std::mu
 
     // analyze finalized/mandatory states
     aPathVal.bIsReadonly = false;
-    css::uno::Reference< css::beans::XProperty > xInfo(xPath, css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::beans::XProperty > xInfo(xPath, cpo::uno::UNO_QUERY);
     if (xInfo.is())
     {
         css::beans::Property aInfo = xInfo->getAsProperty();
@@ -610,8 +610,8 @@ PathSettings::PathInfo PathSettings::impl_readNewFormat(std::unique_lock<std::mu
 
 void PathSettings::impl_storePath(std::unique_lock<std::mutex>& g, const PathSettings::PathInfo& aPath)
 {
-    css::uno::Reference< css::container::XNameAccess > xCfgNew = fa_getCfgNew(g);
-    css::uno::Reference< css::container::XNameAccess > xCfgOld = fa_getCfgOld(g);
+    cpo::uno::Reference< css::container::XNameAccess > xCfgNew = fa_getCfgNew(g);
+    cpo::uno::Reference< css::container::XNameAccess > xCfgOld = fa_getCfgOld(g);
 
     // try to replace path-parts with well known and supported variables.
     // So an office can be moved easily to another location without losing
@@ -646,7 +646,7 @@ void PathSettings::impl_storePath(std::unique_lock<std::mutex>& g, const PathSet
     // Because our new configuration knows more than the list of old paths ... !
     if (xCfgOld->hasByName(aResubstPath.sPathName))
     {
-        css::uno::Reference< css::beans::XPropertySet > xProps(xCfgOld, css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference< css::beans::XPropertySet > xProps(xCfgOld, cpo::uno::UNO_QUERY_THROW);
         xProps->setPropertyValue(aResubstPath.sPathName, cpo::uno::Any());
         ::comphelper::ConfigurationHelper::flush(xCfgOld);
     }
@@ -923,7 +923,7 @@ void PathSettings::impl_notifyPropListener( std::unique_lock<std::mutex>& g,
 
 // static
 void PathSettings::impl_subst(std::vector<OUString>& lVals   ,
-                              const css::uno::Reference< css::util::XStringSubstitution >& xSubst  ,
+                              const cpo::uno::Reference< css::util::XStringSubstitution >& xSubst  ,
                                     bool                                               bReSubst)
 {
     for (auto & old : lVals)
@@ -942,7 +942,7 @@ void PathSettings::impl_subst(std::unique_lock<std::mutex>& g,
                               PathSettings::PathInfo& aPath   ,
                               bool                bReSubst)
 {
-    css::uno::Reference< css::util::XStringSubstitution > xSubst = fa_getSubstitution(g);
+    cpo::uno::Reference< css::util::XStringSubstitution > xSubst = fa_getSubstitution(g);
 
     impl_subst(aPath.lOrganizationPaths, xSubst, bReSubst);
     impl_subst(aPath.lInternalPaths, xSubst, bReSubst);
@@ -1373,9 +1373,9 @@ void PathSettings::getFastPropertyValue(std::unique_lock<std::mutex>& g,
     return *m_pPropHelp;
 }
 
-css::uno::Reference< css::util::XStringSubstitution > PathSettings::fa_getSubstitution(std::unique_lock<std::mutex>& g) const
+cpo::uno::Reference< css::util::XStringSubstitution > PathSettings::fa_getSubstitution(std::unique_lock<std::mutex>& g) const
 {
-    css::uno::Reference< css::util::XStringSubstitution > xSubst = m_xSubstitution;
+    cpo::uno::Reference< css::util::XStringSubstitution > xSubst = m_xSubstitution;
 
     if (! xSubst.is())
     {
@@ -1394,9 +1394,9 @@ css::uno::Reference< css::util::XStringSubstitution > PathSettings::fa_getSubsti
     return xSubst;
 }
 
-css::uno::Reference< css::container::XNameAccess > PathSettings::fa_getCfgOld(std::unique_lock<std::mutex>& g)
+cpo::uno::Reference< css::container::XNameAccess > PathSettings::fa_getCfgOld(std::unique_lock<std::mutex>& g)
 {
-    css::uno::Reference< css::container::XNameAccess > xCfg = m_xCfgOld;
+    cpo::uno::Reference< css::container::XNameAccess > xCfg = m_xCfgOld;
 
     if (! xCfg.is())
     {
@@ -1406,7 +1406,7 @@ css::uno::Reference< css::container::XNameAccess > PathSettings::fa_getCfgOld(st
                         m_xContext,
                         u"org.openoffice.Office.Common/Path/Current"_ustr,
                         ::comphelper::EConfigurationModes::Standard), // not readonly! Sometimes we need write access there !!!
-                   css::uno::UNO_QUERY_THROW);
+                   cpo::uno::UNO_QUERY_THROW);
 
         g.lock();
 
@@ -1416,9 +1416,9 @@ css::uno::Reference< css::container::XNameAccess > PathSettings::fa_getCfgOld(st
     return xCfg;
 }
 
-css::uno::Reference< css::container::XNameAccess > PathSettings::fa_getCfgNew(std::unique_lock<std::mutex>& g)
+cpo::uno::Reference< css::container::XNameAccess > PathSettings::fa_getCfgNew(std::unique_lock<std::mutex>& g)
 {
-    css::uno::Reference< css::container::XNameAccess > xCfg = m_xCfgNew;
+    cpo::uno::Reference< css::container::XNameAccess > xCfg = m_xCfgNew;
 
     if (! xCfg.is())
     {
@@ -1428,14 +1428,14 @@ css::uno::Reference< css::container::XNameAccess > PathSettings::fa_getCfgNew(st
                         m_xContext,
                         u"org.openoffice.Office.Paths/Paths"_ustr,
                         ::comphelper::EConfigurationModes::Standard),
-                   css::uno::UNO_QUERY_THROW);
+                   cpo::uno::UNO_QUERY_THROW);
 
         g.lock();
 
         m_xCfgNew = xCfg;
         m_xCfgNewListener = new WeakChangesListener(this);
 
-        css::uno::Reference< css::util::XChangesNotifier > xBroadcaster(xCfg, css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference< css::util::XChangesNotifier > xBroadcaster(xCfg, cpo::uno::UNO_QUERY_THROW);
         xBroadcaster->addChangesListener(m_xCfgNewListener);
     }
 

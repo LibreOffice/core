@@ -58,7 +58,7 @@ namespace basctl
 // ID used for the read-only infobar
 constexpr OUString BASIC_IDE_READONLY_INFOBAR = u"readonly"_ustr;
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star;
 
 BaseWindow::BaseWindow( vcl::Window* pParent, ScriptDocument aDocument, OUString aLibName, OUString aName )

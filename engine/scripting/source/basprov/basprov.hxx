@@ -50,21 +50,21 @@ namespace basprov
     private:
         BasicManager*   m_pAppBasicManager;
         BasicManager*   m_pDocBasicManager;
-        css::uno::Reference< css::script::XLibraryContainer >             m_xLibContainerApp;
-        css::uno::Reference< css::script::XLibraryContainer >             m_xLibContainerDoc;
-        css::uno::Reference< cpo::uno::XComponentContext >                m_xContext;
-        css::uno::Reference< css::document::XScriptInvocationContext >    m_xInvocationContext;
+        cpo::uno::Reference< css::script::XLibraryContainer >             m_xLibContainerApp;
+        cpo::uno::Reference< css::script::XLibraryContainer >             m_xLibContainerDoc;
+        cpo::uno::Reference< cpo::uno::XComponentContext >                m_xContext;
+        cpo::uno::Reference< css::document::XScriptInvocationContext >    m_xInvocationContext;
         OUString  m_sScriptingContext;
         bool m_bIsAppScriptCtx;
         bool m_bIsUserCtx;
 
         bool isLibraryShared(
-            const css::uno::Reference< css::script::XLibraryContainer >& rxLibContainer,
+            const cpo::uno::Reference< css::script::XLibraryContainer >& rxLibContainer,
             const OUString& rLibName );
 
     public:
         explicit BasicProviderImpl(
-            const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext );
         virtual ~BasicProviderImpl() override;
 
         // XServiceInfo
@@ -76,12 +76,12 @@ namespace basprov
         virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
         // XScriptProvider
-        virtual css::uno::Reference < css::script::provider::XScript > SAL_CALL getScript(
+        virtual cpo::uno::Reference < css::script::provider::XScript > SAL_CALL getScript(
             const OUString& scriptURI ) override;
 
         // XBrowseNode
         virtual OUString SAL_CALL getName(  ) override;
-        virtual cpo::uno::Sequence< css::uno::Reference< css::script::browse::XBrowseNode > > SAL_CALL getChildNodes(  ) override;
+        virtual cpo::uno::Sequence< cpo::uno::Reference< css::script::browse::XBrowseNode > > SAL_CALL getChildNodes(  ) override;
         virtual bool SAL_CALL hasChildNodes(  ) override;
         virtual sal_Int16 SAL_CALL getType(  ) override;
 

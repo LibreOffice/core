@@ -32,7 +32,7 @@ Math_FormulaDocument_get_implementation(
 {
     SolarMutexGuard aGuard;
     SmGlobals::ensure();
-    css::uno::Reference<cpo::uno::XInterface> xInterface = sfx2::createSfxModelInstance(args,
+    cpo::uno::Reference<cpo::uno::XInterface> xInterface = sfx2::createSfxModelInstance(args,
         [](SfxModelFlags _nCreationFlags)
         {
             rtl::Reference<SfxObjectShell> pShell = new SmDocShell(_nCreationFlags);

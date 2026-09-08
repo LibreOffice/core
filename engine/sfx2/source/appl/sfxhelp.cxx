@@ -34,7 +34,7 @@
 #endif
 
 #include <sal/log.hxx>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/UnknownModuleException.hpp>
 #include <com/sun/star/frame/XFrame2.hpp>
@@ -83,7 +83,7 @@
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 namespace {

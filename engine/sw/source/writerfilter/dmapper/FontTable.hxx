@@ -50,7 +50,7 @@ struct FontEntry : public virtual SvRefBase
 class FontTable : public LoggedProperties, public LoggedTable
     /*,public BinaryObj*/, public LoggedStream
 {
-    css::uno::Reference<css::frame::XModel2> m_xModel;
+    cpo::uno::Reference<css::frame::XModel2> m_xModel;
     std::unique_ptr<EmbeddedFontsManager, o3tl::default_delete<EmbeddedFontsManager>> m_xEmbeddedFontManager;
     std::vector< FontEntry::Pointer_t > m_aFontEntries;
     FontEntry::Pointer_t m_pCurrentEntry;
@@ -64,7 +64,7 @@ class FontTable : public LoggedProperties, public LoggedTable
     FontEntry::Pointer_t  getFontEntry(sal_uInt32 nIndex);
     FontEntry::Pointer_t  getFontEntryByName(std::u16string_view rName);
 
-    void addEmbeddedFont(const css::uno::Reference<css::io::XInputStream>& stream,
+    void addEmbeddedFont(const cpo::uno::Reference<css::io::XInputStream>& stream,
                          const OUString& fontName, std::u16string_view extra,
                          std::vector<unsigned char> const & key,
                          bool bSubsetted);
@@ -93,7 +93,7 @@ class FontTable : public LoggedProperties, public LoggedTable
                            const writerfilter::Reference<Table>::Pointer_t& ref) override;
     virtual void lcl_substream(Id name,
                                const writerfilter::Reference<Stream>::Pointer_t& ref) override;
-    virtual void lcl_startShape(css::uno::Reference<css::drawing::XShape> const& xShape) override;
+    virtual void lcl_startShape(cpo::uno::Reference<css::drawing::XShape> const& xShape) override;
     virtual void lcl_endShape( ) override;
     virtual void lcl_startTextBoxContent() override {};
     virtual void lcl_endTextBoxContent() override {};
@@ -112,7 +112,7 @@ private:
     OUString m_fontName;
     std::u16string_view m_style;
     OUString m_fontKey;
-    css::uno::Reference<css::io::XInputStream> m_inputStream;
+    cpo::uno::Reference<css::io::XInputStream> m_inputStream;
     bool m_bSubsetted = false;
 };
 

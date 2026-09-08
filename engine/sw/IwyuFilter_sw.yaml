@@ -57,7 +57,7 @@ excludelist:
     sw/inc/pagedesc.hxx:
     - boost/multi_index/identity.hpp
     sw/inc/rdfhelper.hxx:
-    - com/sun/star/uno/Reference.h
+    - cpo/uno/Reference.h
     sw/inc/ring.hxx:
     - utility
     sw/inc/shellid.hxx:

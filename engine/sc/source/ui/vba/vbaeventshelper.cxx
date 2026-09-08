@@ -49,6 +49,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::script::vba::VBAEventId;
+using namespace ::cpo;
 using namespace ::ooo::vba;
 
 namespace {

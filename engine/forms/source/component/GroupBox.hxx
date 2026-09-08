@@ -30,11 +30,11 @@ class OGroupBoxModel
 {
 public:
     OGroupBoxModel(
-        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
+        const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     OGroupBoxModel(
         const OGroupBoxModel* _pOriginal,
-        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
+        const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     virtual ~OGroupBoxModel() override;
 
@@ -47,9 +47,9 @@ public:
     // XPersistObject
     virtual OUString    getServiceName() override;
     virtual void
-        write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
+        write(const cpo::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
     virtual void
-        read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
+        read(const cpo::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
 
     // OControlModel's property handling
     virtual void describeAggregateProperties(
@@ -57,7 +57,7 @@ public:
     ) const override;
 
 protected:
-    virtual css::uno::Reference< css::util::XCloneable > createClone(  ) override;
+    virtual cpo::uno::Reference< css::util::XCloneable > createClone(  ) override;
 };
 
 
@@ -66,7 +66,7 @@ protected:
 class OGroupBoxControl : public OControl
 {
 public:
-    explicit OGroupBoxControl(const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory);
+    explicit OGroupBoxControl(const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory);
 
     // XServiceInfo
     OUString getImplementationName() override

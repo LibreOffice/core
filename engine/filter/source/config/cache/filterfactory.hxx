@@ -36,7 +36,7 @@ class FilterFactory : public ::cppu::ImplInheritanceHelper< BaseContainer       
 
     // native interface
 
-    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
     public:
 
@@ -49,7 +49,7 @@ class FilterFactory : public ::cppu::ImplInheritanceHelper< BaseContainer       
             @param  rxContext
                     reference to the uno service manager, which created this service instance.
          */
-        explicit FilterFactory(const css::uno::Reference< cpo::uno::XComponentContext >& rxContext);
+        explicit FilterFactory(const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext);
 
 
         /** @short  standard dtor.
@@ -64,9 +64,9 @@ class FilterFactory : public ::cppu::ImplInheritanceHelper< BaseContainer       
 
         // XMultiServiceFactory
 
-        virtual css::uno::Reference< cpo::uno::XInterface > createInstance(const OUString& sFilter) override;
+        virtual cpo::uno::Reference< cpo::uno::XInterface > createInstance(const OUString& sFilter) override;
 
-        virtual css::uno::Reference< cpo::uno::XInterface > createInstanceWithArguments(const OUString&                     sFilter   ,
+        virtual cpo::uno::Reference< cpo::uno::XInterface > createInstanceWithArguments(const OUString&                     sFilter   ,
                                                                                                  const cpo::uno::Sequence< cpo::uno::Any >& lArguments) override;
 
         virtual cpo::uno::Sequence< OUString > getAvailableServiceNames() override;
@@ -74,7 +74,7 @@ class FilterFactory : public ::cppu::ImplInheritanceHelper< BaseContainer       
 
         // XContainerQuery
 
-        virtual css::uno::Reference< css::container::XEnumeration > createSubSetEnumerationByQuery(const OUString& sQuery) override;
+        virtual cpo::uno::Reference< css::container::XEnumeration > createSubSetEnumerationByQuery(const OUString& sQuery) override;
 
 
     // internal helper!

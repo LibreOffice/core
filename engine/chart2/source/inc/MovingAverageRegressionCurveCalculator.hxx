@@ -33,7 +33,7 @@ public:
 
 protected:
     virtual OUString ImplGetRepresentation(
-        const css::uno::Reference<css::util::XNumberFormatter>& xNumFormatter,
+        const cpo::uno::Reference<css::util::XNumberFormatter>& xNumFormatter,
         sal_Int32 nNumberFormatKey, sal_Int32* pFormulaLength = nullptr ) const override;
 
 private:
@@ -48,8 +48,8 @@ private:
         double min,
         double max,
         sal_Int32 nPointCount,
-        const css::uno::Reference<css::chart2::XScaling>& xScalingX,
-        const css::uno::Reference<css::chart2::XScaling>& xScalingY,
+        const cpo::uno::Reference<css::chart2::XScaling>& xScalingX,
+        const cpo::uno::Reference<css::chart2::XScaling>& xScalingY,
         bool bMaySkipPointsInCalculation ) override;
 
     void calculateValues(const RegressionCalculationHelper::tDoubleVectorPair& aValues, bool bUseXAvg);

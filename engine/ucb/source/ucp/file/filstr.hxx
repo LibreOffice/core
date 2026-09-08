@@ -61,10 +61,10 @@ class XStream_impl :  public cppu::WeakImplHelper<
 
         // XStream
 
-        virtual css::uno::Reference< css::io::XInputStream > SAL_CALL
+        virtual cpo::uno::Reference< css::io::XInputStream > SAL_CALL
         getInputStream() override;
 
-        virtual css::uno::Reference< css::io::XOutputStream > SAL_CALL
+        virtual cpo::uno::Reference< css::io::XOutputStream > SAL_CALL
         getOutputStream() override;
 
 

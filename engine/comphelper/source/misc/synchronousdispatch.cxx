@@ -32,6 +32,7 @@ namespace comphelper
 
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 uno::Reference< lang::XComponent > SynchronousDispatch::dispatch(
         const uno::Reference< cpo::uno::XInterface > &xStartPoint,

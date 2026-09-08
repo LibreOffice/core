@@ -55,7 +55,7 @@ public:
         VCLXAccessibleTextField, for combo boxes it is an
         editable VCLXAccessibleEdit.
     */
-    css::uno::Reference< css::accessibility::XAccessible>
+    cpo::uno::Reference< css::accessibility::XAccessible>
         getAccessibleChild (sal_Int64 i) override;
 
     sal_Int16 getAccessibleRole() override;
@@ -75,7 +75,7 @@ public:
     virtual OUString getAccessibleActionDescription (sal_Int32 nIndex) override;
     /** No keybinding returned so far.
     */
-    virtual css::uno::Reference< css::accessibility::XAccessibleKeyBinding >
+    virtual cpo::uno::Reference< css::accessibility::XAccessibleKeyBinding >
             getAccessibleActionKeyBinding( sal_Int32 nIndex ) override;
 
     // XAccessibleValue
@@ -115,7 +115,7 @@ private:
     bool m_bIsDropDownBox;
 
     /// The child that represents the text field if there is one.
-    css::uno::Reference< css::accessibility::XAccessible>
+    cpo::uno::Reference< css::accessibility::XAccessible>
         m_xText;
 
     /// The child that contains the items of this box.

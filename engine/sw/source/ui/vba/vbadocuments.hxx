@@ -28,11 +28,11 @@ typedef cppu::ImplInheritanceHelper< VbaDocumentsBase, ov::word::XDocuments > Sw
 class SwVbaDocuments : public SwVbaDocuments_BASE
 {
 public:
-    SwVbaDocuments( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
+    SwVbaDocuments( const cpo::uno::Reference< ov::XHelperInterface >& xParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext );
 
     // XEnumerationAccess
     virtual cpo::uno::Type SAL_CALL getElementType() override;
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
+    virtual cpo::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
 
     // SwVbaDocuments_BASE
     virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) override;

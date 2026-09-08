@@ -31,7 +31,7 @@ class BasicElementBase : public SvXMLImportContext
 protected:
     static bool
     getBoolAttr(bool* pRet, sal_Int32 nToken,
-                const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttributes);
+                const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xAttributes);
 
 public:
     BasicElementBase(SvXMLImport& rImport);
@@ -40,63 +40,63 @@ public:
 class BasicLibrariesElement : public BasicElementBase
 {
 private:
-    css::uno::Reference<css::script::XLibraryContainer2> m_xLibContainer;
+    cpo::uno::Reference<css::script::XLibraryContainer2> m_xLibContainer;
 
 public:
     BasicLibrariesElement(SvXMLImport& rImport,
-                          const css::uno::Reference<css::frame::XModel>& rxModel);
+                          const cpo::uno::Reference<css::frame::XModel>& rxModel);
 
-    virtual css::uno::Reference<XFastContextHandler> createFastChildContext(
+    virtual cpo::uno::Reference<XFastContextHandler> createFastChildContext(
         sal_Int32 Element,
-        const css::uno::Reference<css::xml::sax::XFastAttributeList>& Attribs) override;
+        const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& Attribs) override;
 };
 
 class BasicEmbeddedLibraryElement : public BasicElementBase
 {
 private:
-    css::uno::Reference<css::script::XLibraryContainer2> m_xLibContainer;
-    css::uno::Reference<css::container::XNameContainer> m_xLib;
+    cpo::uno::Reference<css::script::XLibraryContainer2> m_xLibContainer;
+    cpo::uno::Reference<css::container::XNameContainer> m_xLib;
     OUString const m_aLibName;
     bool const m_bReadOnly;
 
 public:
     BasicEmbeddedLibraryElement(
         SvXMLImport& rImport,
-        const css::uno::Reference<css::script::XLibraryContainer2>& rxLibContainer,
+        const cpo::uno::Reference<css::script::XLibraryContainer2>& rxLibContainer,
         OUString aLibName, bool bReadOnly);
 
-    virtual css::uno::Reference<XFastContextHandler> createFastChildContext(
+    virtual cpo::uno::Reference<XFastContextHandler> createFastChildContext(
         sal_Int32 Element,
-        const css::uno::Reference<css::xml::sax::XFastAttributeList>& Attribs) override;
+        const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& Attribs) override;
     virtual void endFastElement(sal_Int32 nElement) override;
 };
 
 class BasicModuleElement : public BasicElementBase
 {
 private:
-    css::uno::Reference<css::container::XNameContainer> m_xLib;
+    cpo::uno::Reference<css::container::XNameContainer> m_xLib;
     OUString const m_aName;
 
 public:
     BasicModuleElement(SvXMLImport& rImport,
-                       const css::uno::Reference<css::container::XNameContainer>& rxLib,
+                       const cpo::uno::Reference<css::container::XNameContainer>& rxLib,
                        OUString aName);
 
-    virtual css::uno::Reference<XFastContextHandler> createFastChildContext(
+    virtual cpo::uno::Reference<XFastContextHandler> createFastChildContext(
         sal_Int32 Element,
-        const css::uno::Reference<css::xml::sax::XFastAttributeList>& Attribs) override;
+        const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& Attribs) override;
 };
 
 class BasicSourceCodeElement : public BasicElementBase
 {
 private:
-    css::uno::Reference<css::container::XNameContainer> m_xLib;
+    cpo::uno::Reference<css::container::XNameContainer> m_xLib;
     OUString const m_aName;
     OUStringBuffer m_aBuffer;
 
 public:
     BasicSourceCodeElement(SvXMLImport& rImport,
-                           const css::uno::Reference<css::container::XNameContainer>& rxLib,
+                           const cpo::uno::Reference<css::container::XNameContainer>& rxLib,
                            OUString rName);
 
     virtual void characters(const OUString& rChars) override;

@@ -47,6 +47,7 @@
 #include <memory>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 GalleryGraphicImportRet GalleryGraphicImport( const INetURLObject& rURL, Graphic& rGraphic,
                              OUString& rFilterName )

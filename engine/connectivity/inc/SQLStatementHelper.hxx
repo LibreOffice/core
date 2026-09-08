@@ -23,14 +23,14 @@
 #include <rtl/ustrbuf.hxx>
 
 namespace com::sun::star::beans { class XPropertySet; }
-namespace com::sun::star::uno { template <typename > class Reference; }
+namespace cpo::uno { template <typename > class Reference; }
 
 namespace dbtools
 {
     class OOO_DLLPUBLIC_DBTOOLS ISQLStatementHelper
     {
     public:
-        virtual void addComment(const css::uno::Reference< css::beans::XPropertySet >& descriptor,OUStringBuffer& _rOut) = 0;
+        virtual void addComment(const cpo::uno::Reference< css::beans::XPropertySet >& descriptor,OUStringBuffer& _rOut) = 0;
 
     protected:
         ~ISQLStatementHelper() {}

@@ -36,6 +36,7 @@
 
 using namespace http_dav_ucp;
 using namespace com::sun::star;
+using namespace ::cpo;
 
 
 // DAVAuthListener_Impl Implementation.

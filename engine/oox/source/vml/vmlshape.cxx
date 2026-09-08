@@ -84,8 +84,8 @@ namespace oox::vml {
 
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::graphic;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::io;
 
 using ::oox::core::XmlFilterBase;
@@ -974,7 +974,7 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
     return xShape;
 }
 
-Reference<XShape> SimpleShape::finalImplConvertAndInsert(const css::uno::Reference<css::drawing::XShape>& rxShape) const
+Reference<XShape> SimpleShape::finalImplConvertAndInsert(const cpo::uno::Reference<css::drawing::XShape>& rxShape) const
 {
     // tdf#41466 This setting must be done here, because the position of textbox will be set as an
     // effect of the PROP_TextBox property setting, and if we do this setting earlier (setting of

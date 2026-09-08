@@ -56,7 +56,7 @@ public:
      */
     CachedDataSequence();
 
-    explicit CachedDataSequence( const css::uno::Reference< cpo::uno::XComponentContext > & xContext );
+    explicit CachedDataSequence( const cpo::uno::Reference< cpo::uno::XComponentContext > & xContext );
 
     /** creates a sequence and initializes it with the given string.  This is
         especially useful for labels, which only have one element.
@@ -93,13 +93,13 @@ private:
     virtual cpo::uno::Sequence< OUString > getTextualData() override;
 
     // ____ XCloneable ____
-    virtual css::uno::Reference< css::util::XCloneable > createClone() override;
+    virtual cpo::uno::Reference< css::util::XCloneable > createClone() override;
 
     // ____ XModifyBroadcaster ____
     virtual void addModifyListener(
-        const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+        const cpo::uno::Reference< css::util::XModifyListener >& aListener ) override;
     virtual void removeModifyListener(
-        const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+        const cpo::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
     // css::lang::XInitialization:
     virtual void initialize(const cpo::uno::Sequence< cpo::uno::Any > & aArguments) override;

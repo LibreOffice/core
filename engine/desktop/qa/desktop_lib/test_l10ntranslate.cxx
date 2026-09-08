@@ -24,6 +24,7 @@
 #include <lib/l10ntranslate.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace desktop::l10n;
 
 /* Tests for the translate-on-copy utility behind

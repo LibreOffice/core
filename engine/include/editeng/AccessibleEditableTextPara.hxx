@@ -24,7 +24,7 @@
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
@@ -72,18 +72,18 @@ public:
     // - add parameter <_pParaManager> (default value NULL)
     //   This has to be the instance of <AccessibleParaManager>, which
     //   created and manages this accessible paragraph.
-    AccessibleEditableTextPara ( css::uno::Reference< css::accessibility::XAccessible > xParent,
+    AccessibleEditableTextPara ( cpo::uno::Reference< css::accessibility::XAccessible > xParent,
                                  const AccessibleParaManager* _pParaManager = nullptr );
 
     // XAccessibleContext
     virtual sal_Int64 getAccessibleChildCount() override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleChild( sal_Int64 i ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleParent() override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > getAccessibleChild( sal_Int64 i ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > getAccessibleParent() override;
     virtual sal_Int64 getAccessibleIndexInParent() override;
     virtual sal_Int16 getAccessibleRole() override;
     virtual OUString getAccessibleDescription() override;
     virtual OUString getAccessibleName() override;
-    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > getAccessibleRelationSet() override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessibleRelationSet > getAccessibleRelationSet() override;
     virtual sal_Int64 getAccessibleStateSet() override;
     virtual css::lang::Locale getLocale() override;
 
@@ -91,7 +91,7 @@ public:
     virtual css::awt::Rectangle implGetBounds() override;
 
     // XAccessibleComponent
-    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
     virtual void grabFocus(  ) override;
     virtual sal_Int32 getForeground(  ) override;
     virtual sal_Int32 getBackground(  ) override;
@@ -134,7 +134,7 @@ public:
 
     // XAccessibleHypertext
     virtual ::sal_Int32 getHyperLinkCount(  ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessibleHyperlink > getHyperLink( ::sal_Int32 nLinkIndex ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessibleHyperlink > getHyperLink( ::sal_Int32 nLinkIndex ) override;
     virtual ::sal_Int32 getHyperLinkIndex( ::sal_Int32 nCharIndex ) override;
 
     // XAccessibleMultiLineText
@@ -335,7 +335,7 @@ private:
     sal_Int64 mnStateSet;
 
     /// The shape we're the accessible for (unguarded)
-    css::uno::Reference< css::accessibility::XAccessible > mxParent;
+    cpo::uno::Reference< css::accessibility::XAccessible > mxParent;
 
 private:
     // Text paragraphs should provide FLOWS_TO and FLOWS_FROM relations (#i27138#)

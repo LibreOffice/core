@@ -26,7 +26,7 @@ namespace connectivity::writer
 class OWriterDatabaseMetaData : public component::OComponentDatabaseMetaData
 {
     OUString getURL() override;
-    css::uno::Reference<css::sdbc::XResultSet>
+    cpo::uno::Reference<css::sdbc::XResultSet>
     getTables(const cpo::uno::Any& catalog, const OUString& schemaPattern,
               const OUString& tableNamePattern, const cpo::uno::Sequence<OUString>& types) override;
 

@@ -22,6 +22,7 @@
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 
 using namespace css;
+using namespace ::cpo;
 
 IMPL_LINK_NOARG(UnknownAuthDialog, OKHdl_Impl, weld::Button&, void)
 {
@@ -44,8 +45,8 @@ IMPL_LINK_NOARG(UnknownAuthDialog, ViewCertHdl_Impl, weld::Button&, void)
 }
 
 UnknownAuthDialog::UnknownAuthDialog(
-    weld::Window* pParent, const css::uno::Reference<css::security::XCertificate>& rXCert,
-    const css::uno::Reference<cpo::uno::XComponentContext>& xContext)
+    weld::Window* pParent, const cpo::uno::Reference<css::security::XCertificate>& rXCert,
+    const cpo::uno::Reference<cpo::uno::XComponentContext>& xContext)
     : MessageDialogController(pParent, u"uui/ui/unknownauthdialog.ui"_ustr,
                               u"UnknownAuthDialog"_ustr)
     , m_xCommandButtonOK(m_xBuilder->weld_button(u"ok"_ustr))

@@ -27,10 +27,10 @@ namespace dbaccess
 {
 
     using ::com::sun::star::sdbc::XConnection;
-    using ::com::sun::star::uno::Reference;
+    using ::cpo::uno::Reference;
     using ::com::sun::star::lang::DisposedException;
     using ::com::sun::star::sdb::tools::XConnectionTools;
-    using ::com::sun::star::uno::UNO_QUERY_THROW;
+    using ::cpo::uno::UNO_QUERY_THROW;
     using ::com::sun::star::sdb::tools::XObjectNames;
 
     namespace CommandType = com::sun::star::sdb::CommandType;
@@ -53,7 +53,7 @@ namespace dbaccess
             throw DisposedException();
 
         Reference< XConnectionTools > xConnectionTools( xConnection, UNO_QUERY_THROW );
-        Reference< XObjectNames > xObjectNames( xConnectionTools->getObjectNames(), css::uno::UNO_SET_THROW );
+        Reference< XObjectNames > xObjectNames( xConnectionTools->getObjectNames(), cpo::uno::UNO_SET_THROW );
         xObjectNames->checkNameForCreate( mnCommandType, _rName );
     }
 

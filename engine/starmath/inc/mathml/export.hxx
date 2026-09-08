@@ -99,27 +99,27 @@ public:
 protected:
     /** export through an XML exporter component (output stream version)
         */
-    bool WriteThroughComponentOS(const css::uno::Reference<css::io::XOutputStream>& xOutputStream,
-                                 const css::uno::Reference<css::lang::XComponent>& xComponent,
-                                 css::uno::Reference<cpo::uno::XComponentContext> const& rxContext,
-                                 css::uno::Reference<css::beans::XPropertySet> const& rPropSet,
+    bool WriteThroughComponentOS(const cpo::uno::Reference<css::io::XOutputStream>& xOutputStream,
+                                 const cpo::uno::Reference<css::lang::XComponent>& xComponent,
+                                 cpo::uno::Reference<cpo::uno::XComponentContext> const& rxContext,
+                                 cpo::uno::Reference<css::beans::XPropertySet> const& rPropSet,
                                  const char16_t* pComponentName, int_fast16_t nSyntaxVersion);
 
     /** export through an XML exporter component (storage version)
       */
-    bool WriteThroughComponentS(const css::uno::Reference<css::embed::XStorage>& xStor,
-                                const css::uno::Reference<css::lang::XComponent>& xComponent,
+    bool WriteThroughComponentS(const cpo::uno::Reference<css::embed::XStorage>& xStor,
+                                const cpo::uno::Reference<css::lang::XComponent>& xComponent,
                                 const char16_t* pStreamName,
-                                css::uno::Reference<cpo::uno::XComponentContext> const& rxContext,
-                                css::uno::Reference<css::beans::XPropertySet> const& rPropSet,
+                                cpo::uno::Reference<cpo::uno::XComponentContext> const& rxContext,
+                                cpo::uno::Reference<css::beans::XPropertySet> const& rPropSet,
                                 const char16_t* pComponentName, int_fast16_t nSyntaxVersion);
 
     /** export through an XML exporter component (memory stream version)
       */
     OUString
-    WriteThroughComponentMS(const css::uno::Reference<css::lang::XComponent>& xComponent,
-                            css::uno::Reference<cpo::uno::XComponentContext> const& rxContext,
-                            css::uno::Reference<css::beans::XPropertySet> const& rPropSet);
+    WriteThroughComponentMS(const cpo::uno::Reference<css::lang::XComponent>& xComponent,
+                            cpo::uno::Reference<cpo::uno::XComponentContext> const& rxContext,
+                            cpo::uno::Reference<css::beans::XPropertySet> const& rPropSet);
 };
 
 class SmMLExport final : public SvXMLExport
@@ -196,7 +196,7 @@ public:
 public:
     /** Constructor
      */
-    SmMLExport(const css::uno::Reference<cpo::uno::XComponentContext>& rContext,
+    SmMLExport(const cpo::uno::Reference<cpo::uno::XComponentContext>& rContext,
                OUString const& implementationName, SvXMLExportFlags nExportFlags);
 
 private:

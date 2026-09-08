@@ -74,8 +74,8 @@
 #include <vcl/weld.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
@@ -133,24 +133,24 @@ public:
     explicit FormControllerImpl(SbaXDataBrowserController* pOwner);
 
     // XFormController
-    virtual css::uno::Reference< css::form::runtime::XFormOperations > getFormOperations() override;
-    virtual css::uno::Reference< css::awt::XControl >  getCurrentControl() override;
-    virtual void addActivateListener(const css::uno::Reference< css::form::XFormControllerListener > & l) override;
-    virtual void removeActivateListener(const css::uno::Reference< css::form::XFormControllerListener > & l) override;
-    virtual void addChildController( const css::uno::Reference< css::form::runtime::XFormController >& ChildController ) override;
-    virtual css::uno::Reference< css::form::runtime::XFormControllerContext > getContext() override;
-    virtual void setContext( const css::uno::Reference< css::form::runtime::XFormControllerContext >& _context ) override;
-    virtual css::uno::Reference< css::task::XInteractionHandler > getInteractionHandler() override;
-    virtual void setInteractionHandler( const css::uno::Reference< css::task::XInteractionHandler >& _interactionHandler ) override;
+    virtual cpo::uno::Reference< css::form::runtime::XFormOperations > getFormOperations() override;
+    virtual cpo::uno::Reference< css::awt::XControl >  getCurrentControl() override;
+    virtual void addActivateListener(const cpo::uno::Reference< css::form::XFormControllerListener > & l) override;
+    virtual void removeActivateListener(const cpo::uno::Reference< css::form::XFormControllerListener > & l) override;
+    virtual void addChildController( const cpo::uno::Reference< css::form::runtime::XFormController >& ChildController ) override;
+    virtual cpo::uno::Reference< css::form::runtime::XFormControllerContext > getContext() override;
+    virtual void setContext( const cpo::uno::Reference< css::form::runtime::XFormControllerContext >& _context ) override;
+    virtual cpo::uno::Reference< css::task::XInteractionHandler > getInteractionHandler() override;
+    virtual void setInteractionHandler( const cpo::uno::Reference< css::task::XInteractionHandler >& _interactionHandler ) override;
 
     // XChild, base of XFormController
-    virtual css::uno::Reference< cpo::uno::XInterface > getParent(  ) override;
-    virtual void setParent( const css::uno::Reference< cpo::uno::XInterface >& Parent ) override;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > getParent(  ) override;
+    virtual void setParent( const cpo::uno::Reference< cpo::uno::XInterface >& Parent ) override;
 
     // XComponent, base of XFormController
     virtual void dispose(  ) override;
-    virtual void addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-    virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+    virtual void addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& xListener ) override;
+    virtual void removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
     // XIndexAccess, base of XFormController
     virtual ::sal_Int32 getCount(  ) override;
@@ -161,31 +161,31 @@ public:
     virtual bool hasElements(  ) override;
 
     // XEnumerationAccess, base of XElementAccess
-    virtual css::uno::Reference< css::container::XEnumeration > createEnumeration(  ) override;
+    virtual cpo::uno::Reference< css::container::XEnumeration > createEnumeration(  ) override;
 
     // XModifyBroadcaster, base of XFormController
-    virtual void addModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
-    virtual void removeModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+    virtual void addModifyListener( const cpo::uno::Reference< css::util::XModifyListener >& aListener ) override;
+    virtual void removeModifyListener( const cpo::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
     // XConfirmDeleteBroadcaster, base of XFormController
-    virtual void addConfirmDeleteListener( const css::uno::Reference< css::form::XConfirmDeleteListener >& aListener ) override;
-    virtual void removeConfirmDeleteListener( const css::uno::Reference< css::form::XConfirmDeleteListener >& aListener ) override;
+    virtual void addConfirmDeleteListener( const cpo::uno::Reference< css::form::XConfirmDeleteListener >& aListener ) override;
+    virtual void removeConfirmDeleteListener( const cpo::uno::Reference< css::form::XConfirmDeleteListener >& aListener ) override;
 
     // XSQLErrorBroadcaster, base of XFormController
-    virtual void addSQLErrorListener( const css::uno::Reference< css::sdb::XSQLErrorListener >& Listener ) override;
-    virtual void removeSQLErrorListener( const css::uno::Reference< css::sdb::XSQLErrorListener >& Listener ) override;
+    virtual void addSQLErrorListener( const cpo::uno::Reference< css::sdb::XSQLErrorListener >& Listener ) override;
+    virtual void removeSQLErrorListener( const cpo::uno::Reference< css::sdb::XSQLErrorListener >& Listener ) override;
 
     // XRowSetApproveBroadcaster, base of XFormController
-    virtual void addRowSetApproveListener( const css::uno::Reference< css::sdb::XRowSetApproveListener >& listener ) override;
-    virtual void removeRowSetApproveListener( const css::uno::Reference< css::sdb::XRowSetApproveListener >& listener ) override;
+    virtual void addRowSetApproveListener( const cpo::uno::Reference< css::sdb::XRowSetApproveListener >& listener ) override;
+    virtual void removeRowSetApproveListener( const cpo::uno::Reference< css::sdb::XRowSetApproveListener >& listener ) override;
 
     // XDatabaseParameterBroadcaster2, base of XFormController
-    virtual void addDatabaseParameterListener( const css::uno::Reference< css::form::XDatabaseParameterListener >& aListener ) override;
-    virtual void removeDatabaseParameterListener( const css::uno::Reference< css::form::XDatabaseParameterListener >& aListener ) override;
+    virtual void addDatabaseParameterListener( const cpo::uno::Reference< css::form::XDatabaseParameterListener >& aListener ) override;
+    virtual void removeDatabaseParameterListener( const cpo::uno::Reference< css::form::XDatabaseParameterListener >& aListener ) override;
 
     // XDatabaseParameterBroadcaster, base of XDatabaseParameterBroadcaster2
-    virtual void addParameterListener( const css::uno::Reference< css::form::XDatabaseParameterListener >& aListener ) override;
-    virtual void removeParameterListener( const css::uno::Reference< css::form::XDatabaseParameterListener >& aListener ) override;
+    virtual void addParameterListener( const cpo::uno::Reference< css::form::XDatabaseParameterListener >& aListener ) override;
+    virtual void removeParameterListener( const cpo::uno::Reference< css::form::XDatabaseParameterListener >& aListener ) override;
 
     // XModeSelector, base of XFormController
     virtual void setMode( const OUString& aMode ) override;
@@ -194,11 +194,11 @@ public:
     virtual bool supportsMode( const OUString& aMode ) override;
 
     // XTabController, base of XFormController
-    virtual void setModel(const css::uno::Reference< css::awt::XTabControllerModel > & Model) override;
-    virtual css::uno::Reference< css::awt::XTabControllerModel >  getModel() override;
-    virtual void setContainer(const css::uno::Reference< css::awt::XControlContainer > & Container) override;
-    virtual css::uno::Reference< css::awt::XControlContainer >  getContainer() override;
-    virtual cpo::uno::Sequence< css::uno::Reference< css::awt::XControl >  > getControls() override;
+    virtual void setModel(const cpo::uno::Reference< css::awt::XTabControllerModel > & Model) override;
+    virtual cpo::uno::Reference< css::awt::XTabControllerModel >  getModel() override;
+    virtual void setContainer(const cpo::uno::Reference< css::awt::XControlContainer > & Container) override;
+    virtual cpo::uno::Reference< css::awt::XControlContainer >  getContainer() override;
+    virtual cpo::uno::Sequence< cpo::uno::Reference< css::awt::XControl >  > getControls() override;
     virtual void autoTabOrder() override;
     virtual void activateTabOrder() override;
     virtual void activateFirst() override;
@@ -1295,7 +1295,7 @@ bool SbaXDataBrowserController::approveParameter(const css::form::DatabaseParame
         for (sal_Int32 i = 0; i < aFinalValues.getLength(); ++i)
         {
             Reference< XPropertySet > xParam(
-                aRequest.Parameters->getByIndex(i), css::uno::UNO_QUERY);
+                aRequest.Parameters->getByIndex(i), cpo::uno::UNO_QUERY);
             OSL_ENSURE(xParam.is(), "SbaXDataBrowserController::approveParameter: one of the parameters is no property set!");
             if (xParam.is())
             {

@@ -27,6 +27,7 @@
 #include <unonames.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 //! SearchWords searches in whole cells - rename it ???
 

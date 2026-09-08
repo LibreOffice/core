@@ -21,7 +21,7 @@
 #define INCLUDED_TESTTOOLS_SOURCE_BRIDGETEST_CURRENTCONTEXTCHECKER_HXX
 
 #include <sal/config.h>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <osl/diagnose.hxx>
 #include <sal/types.h>
@@ -42,7 +42,7 @@ public:
     virtual ~CurrentContextChecker() override;
 
     virtual bool SAL_CALL perform(
-        css::uno::Reference< ::test::testtools::bridgetest::XCurrentContextChecker > const & other,
+        cpo::uno::Reference< ::test::testtools::bridgetest::XCurrentContextChecker > const & other,
         ::sal_Int32 setSteps, ::sal_Int32 checkSteps) override;
 
 private:
@@ -50,7 +50,7 @@ private:
     void operator =(CurrentContextChecker const &) = delete;
 
     SAL_DLLPRIVATE bool performCheck(
-        css::uno::Reference< ::test::testtools::bridgetest::XCurrentContextChecker > const & other,
+        cpo::uno::Reference< ::test::testtools::bridgetest::XCurrentContextChecker > const & other,
         ::sal_Int32 setSteps, ::sal_Int32 checkSteps);
 };
 

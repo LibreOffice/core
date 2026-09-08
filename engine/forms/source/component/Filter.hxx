@@ -56,11 +56,11 @@ namespace frm
     {
         TextListenerMultiplexer     m_aTextListeners;
 
-        css::uno::Reference< cpo::uno::XComponentContext >            m_xContext;
-        css::uno::Reference< css::beans::XPropertySet >               m_xField;
-        css::uno::Reference< css::util::XNumberFormatter >            m_xFormatter;
-        css::uno::Reference< css::sdbc::XConnection >                 m_xConnection;
-        css::uno::Reference< css::awt::XWindow >                      m_xMessageParent;
+        cpo::uno::Reference< cpo::uno::XComponentContext >            m_xContext;
+        cpo::uno::Reference< css::beans::XPropertySet >               m_xField;
+        cpo::uno::Reference< css::util::XNumberFormatter >            m_xFormatter;
+        cpo::uno::Reference< css::sdbc::XConnection >                 m_xConnection;
+        cpo::uno::Reference< css::awt::XWindow >                      m_xMessageParent;
 
         typedef std::unordered_map< OUString, OUString > MapString2String;
         MapString2String                m_aDisplayItemToValueItem;
@@ -72,23 +72,23 @@ namespace frm
         bool                            m_bFilterListFilled : 1;
 
         void implInitFilterList();
-        void initControlModel(css::uno::Reference< css::beans::XPropertySet > const & xControlModel);
+        void initControlModel(cpo::uno::Reference< css::beans::XPropertySet > const & xControlModel);
 
     public:
-        explicit OFilterControl( const css::uno::Reference< cpo::uno::XComponentContext >& _rxORB );
+        explicit OFilterControl( const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxORB );
 
         DECLARE_UNO3_AGG_DEFAULTS(OFilterControl,OWeakAggObject)
         cpo::uno::Any  queryAggregation( const cpo::uno::Type & rType ) override;
 
         virtual OUString GetComponentServiceName() const override;
-        virtual void   createPeer( const css::uno::Reference< css::awt::XToolkit > & rxToolkit, const css::uno::Reference< css::awt::XWindowPeer >  & rParentPeer ) override;
+        virtual void   createPeer( const cpo::uno::Reference< css::awt::XToolkit > & rxToolkit, const cpo::uno::Reference< css::awt::XWindowPeer >  & rParentPeer ) override;
 
     // css::lang::XComponent
         virtual void   dispose() override;
 
     // css::awt::XTextComponent
-        virtual void            addTextListener( const css::uno::Reference< css::awt::XTextListener > & l ) override;
-        virtual void            removeTextListener( const css::uno::Reference< css::awt::XTextListener > & l ) override;
+        virtual void            addTextListener( const cpo::uno::Reference< css::awt::XTextListener > & l ) override;
+        virtual void            removeTextListener( const cpo::uno::Reference< css::awt::XTextListener > & l ) override;
         virtual void            setText( const OUString& aText ) override;
         virtual void            insertText( const css::awt::Selection& rSel, const OUString& aText ) override;
         virtual OUString getText() override;
@@ -101,8 +101,8 @@ namespace frm
         virtual sal_Int16       getMaxTextLen() override;
 
     // css::form::XBoundComponent
-        virtual void            addUpdateListener(const css::uno::Reference< css::form::XUpdateListener > & /*l*/) override {}
-        virtual void            removeUpdateListener(const css::uno::Reference< css::form::XUpdateListener > & /*l*/) override {}
+        virtual void            addUpdateListener(const cpo::uno::Reference< css::form::XUpdateListener > & /*l*/) override {}
+        virtual void            removeUpdateListener(const cpo::uno::Reference< css::form::XUpdateListener > & /*l*/) override {}
         virtual bool        commit() override;
 
     // css::lang::XEventListener

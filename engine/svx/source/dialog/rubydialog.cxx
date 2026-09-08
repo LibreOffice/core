@@ -49,7 +49,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <svl/itemset.hxx>
 
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace css::frame;
 using namespace css::text;

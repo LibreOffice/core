@@ -28,7 +28,7 @@
 
 namespace basctl
 {
-    using ::com::sun::star::uno::Reference;
+    using ::cpo::uno::Reference;
     using ::com::sun::star::frame::XModel;
 
     // DocumentSignature

@@ -25,7 +25,7 @@
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 
 // used as shortcut when drag-source and drop-target are the same
-css::uno::Reference< css::datatransfer::XTransferable > g_XTransferable;
+cpo::uno::Reference< css::datatransfer::XTransferable > g_XTransferable;
 
 //<-- TRA
 

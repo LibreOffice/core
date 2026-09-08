@@ -28,12 +28,12 @@
 #include <vector>
 
 namespace com::sun::star {
-    namespace uno { template<class A> class Reference; }
     namespace lang { class XComponent; }
     namespace beans { struct PropertyValue; }
 }
 namespace cpo::uno {
     class Any;
+    template<class A> class Reference;
     template<class A> class Sequence;
 }
 
@@ -62,10 +62,10 @@ private:
     // write a single XML stream into the package
     bool WriteThroughComponent(
         // the component we export
-        const css::uno::Reference<css::lang::XComponent> & xComponent,
+        const cpo::uno::Reference<css::lang::XComponent> & xComponent,
         const char* pStreamName,        // the stream name
         // service factory for pServiceName
-        const css::uno::Reference<cpo::uno::XComponentContext> & rFactory,
+        const cpo::uno::Reference<cpo::uno::XComponentContext> & rFactory,
         const char* pServiceName,       // service name of the component
         // the argument (XInitialization)
         const cpo::uno::Sequence<cpo::uno::Any> & rArguments,
@@ -75,9 +75,9 @@ private:
     // write a single output stream
     // (to be called either directly or by WriteThroughComponent(...))
     bool WriteThroughComponent(
-        const css::uno::Reference<css::io::XOutputStream> & xOutputStream,
-        const css::uno::Reference<css::lang::XComponent> & xComponent,
-        const css::uno::Reference<cpo::uno::XComponentContext> & rFactory,
+        const cpo::uno::Reference<css::io::XOutputStream> & xOutputStream,
+        const cpo::uno::Reference<css::lang::XComponent> & xComponent,
+        const cpo::uno::Reference<cpo::uno::XComponentContext> & rFactory,
         const char* pServiceName,
         const cpo::uno::Sequence<cpo::uno::Any> & rArguments,
         const cpo::uno::Sequence<css::beans::PropertyValue> & rMediaDesc );

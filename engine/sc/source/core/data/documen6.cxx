@@ -33,6 +33,7 @@
 #include <table.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 //  this file is compiled with exceptions enabled
 //  put functions here that need exceptions!

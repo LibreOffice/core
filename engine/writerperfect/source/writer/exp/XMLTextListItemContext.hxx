@@ -21,7 +21,7 @@ public:
 
     rtl::Reference<XMLImportContext>
     CreateChildContext(const OUString& rName,
-                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
+                       const cpo::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
 };
 
 } // namespace writerperfect::exp

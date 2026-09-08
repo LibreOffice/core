@@ -59,7 +59,7 @@ class WarningDialogsParent final :
 {
 private:
     VclPtr<WorkWindow> m_xWin;
-    css::uno::Reference<css::awt::XWindow> m_xInterface;
+    cpo::uno::Reference<css::awt::XWindow> m_xInterface;
 
 private:
 
@@ -107,7 +107,7 @@ public:
         m_xWin.disposeAndClear();
     }
 
-    const css::uno::Reference<css::awt::XWindow>& GetDialogParent() const
+    const cpo::uno::Reference<css::awt::XWindow>& GetDialogParent() const
     {
         return m_xInterface;
     }
@@ -116,18 +116,18 @@ public:
 class WarningDialogsParentScope
 {
 private:
-    css::uno::Reference<css::frame::XDesktop> m_xDesktop;
+    cpo::uno::Reference<css::frame::XDesktop> m_xDesktop;
     rtl::Reference<WarningDialogsParent> m_xListener;
 
 public:
-    WarningDialogsParentScope(const css::uno::Reference<cpo::uno::XComponentContext>& rContext)
-        : m_xDesktop(css::frame::Desktop::create(rContext), css::uno::UNO_QUERY_THROW)
+    WarningDialogsParentScope(const cpo::uno::Reference<cpo::uno::XComponentContext>& rContext)
+        : m_xDesktop(css::frame::Desktop::create(rContext), cpo::uno::UNO_QUERY_THROW)
         , m_xListener(new WarningDialogsParent)
     {
         m_xDesktop->addTerminateListener(m_xListener);
     }
 
-    const css::uno::Reference<css::awt::XWindow>& GetDialogParent() const
+    const cpo::uno::Reference<css::awt::XWindow>& GetDialogParent() const
     {
         return m_xListener->GetDialogParent();
     }
@@ -167,7 +167,7 @@ class PreventDuplicateInteraction final :
                 sal_Int32 m_nCallCount;
                 /** hold the last intercepted request (matching the set interaction type) alive
                 so it can be used for further checks */
-                css::uno::Reference< css::task::XInteractionRequest > m_xRequest;
+                cpo::uno::Reference< css::task::XInteractionRequest > m_xRequest;
 
             public:
 
@@ -182,11 +182,11 @@ class PreventDuplicateInteraction final :
     private:
 
         /// Used to create needed uno services at runtime.
-        css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+        cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
         /** The outside interaction handler, which is used to handle every incoming interaction,
             if it's not blocked. */
-        css::uno::Reference< css::task::XInteractionHandler > m_xHandler;
+        cpo::uno::Reference< css::task::XInteractionHandler > m_xHandler;
 
         std::unique_ptr<WarningDialogsParentScope> m_xWarningDialogsParent;
 
@@ -211,7 +211,7 @@ class PreventDuplicateInteraction final :
 
             @threadsafe yes
         */
-        virtual void handle(const css::uno::Reference< css::task::XInteractionRequest >& xRequest) override;
+        virtual void handle(const cpo::uno::Reference< css::task::XInteractionRequest >& xRequest) override;
 
 
         /**
@@ -224,7 +224,7 @@ class PreventDuplicateInteraction final :
 
             @threadsafe yes
         */
-        virtual bool handleInteractionRequest( const css::uno::Reference< css::task::XInteractionRequest >& xRequest ) override;
+        virtual bool handleInteractionRequest( const cpo::uno::Reference< css::task::XInteractionRequest >& xRequest ) override;
 
 
         /**
@@ -250,7 +250,7 @@ class PreventDuplicateInteraction final :
 
             @threadsafe not necessary
         */
-        PreventDuplicateInteraction(css::uno::Reference< cpo::uno::XComponentContext > xContext);
+        PreventDuplicateInteraction(cpo::uno::Reference< cpo::uno::XComponentContext > xContext);
 
 
         /**
@@ -268,7 +268,7 @@ class PreventDuplicateInteraction final :
             @param      xHandler
                         the new interaction handler
          */
-        void setHandler(const css::uno::Reference< css::task::XInteractionHandler >& xHandler);
+        void setHandler(const cpo::uno::Reference< css::task::XInteractionHandler >& xHandler);
 
 
         /**

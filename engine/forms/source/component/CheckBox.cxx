@@ -27,7 +27,7 @@
 
 namespace frm
 {
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
@@ -78,7 +78,7 @@ OCheckBoxModel::~OCheckBoxModel()
 }
 
 
-css::uno::Reference< css::util::XCloneable > OCheckBoxModel::createClone()
+cpo::uno::Reference< css::util::XCloneable > OCheckBoxModel::createClone()
 {
     rtl::Reference<OCheckBoxModel> pClone = new OCheckBoxModel(this, getContext());
     pClone->clonedFrom(this);
@@ -130,7 +130,7 @@ OUString OCheckBoxModel::getServiceName()
 }
 
 
-void OCheckBoxModel::write(const css::uno::Reference<css::io::XObjectOutputStream>& _rxOutStream)
+void OCheckBoxModel::write(const cpo::uno::Reference<css::io::XObjectOutputStream>& _rxOutStream)
 {
     OReferenceValueComponent::write(_rxOutStream);
 

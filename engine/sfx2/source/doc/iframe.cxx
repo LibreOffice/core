@@ -51,6 +51,7 @@
 #include <eventsupplier.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace {
 
@@ -62,16 +63,16 @@ class IFrameObject : public ::cppu::WeakImplHelper <
         css::lang::XServiceInfo,
         css::beans::XPropertySet >
 {
-    css::uno::Reference < cpo::uno::XComponentContext > mxContext;
-    css::uno::Reference < css::frame::XFrame2 > mxFrame;
-    css::uno::Reference < css::embed::XEmbeddedObject > mxObj;
+    cpo::uno::Reference < cpo::uno::XComponentContext > mxContext;
+    cpo::uno::Reference < css::frame::XFrame2 > mxFrame;
+    cpo::uno::Reference < css::embed::XEmbeddedObject > mxObj;
     SfxItemPropertyMap  maPropMap;
     SfxFrameDescriptor  maFrmDescr;
 
 public:
     /// @throws cpo::uno::Exception
     /// @throws cpo::uno::RuntimeException
-    IFrameObject(css::uno::Reference < cpo::uno::XComponentContext> xContext, const cpo::uno::Sequence< cpo::uno::Any >& aArguments);
+    IFrameObject(cpo::uno::Reference < cpo::uno::XComponentContext> xContext, const cpo::uno::Sequence< cpo::uno::Any >& aArguments);
 
     virtual OUString getImplementationName() override
     {
@@ -90,19 +91,19 @@ public:
     }
 
     virtual bool load( const cpo::uno::Sequence < css::beans::PropertyValue >& lDescriptor,
-            const css::uno::Reference < css::frame::XFrame >& xFrame ) override;
+            const cpo::uno::Reference < css::frame::XFrame >& xFrame ) override;
     virtual void cancel() override;
     virtual void close( bool bDeliverOwnership ) override;
-    virtual void addCloseListener( const css::uno::Reference < css::util::XCloseListener >& xListener ) override;
-    virtual void removeCloseListener( const css::uno::Reference < css::util::XCloseListener >& xListener ) override;
+    virtual void addCloseListener( const cpo::uno::Reference < css::util::XCloseListener >& xListener ) override;
+    virtual void removeCloseListener( const cpo::uno::Reference < css::util::XCloseListener >& xListener ) override;
     virtual void disposing( const css::lang::EventObject& aEvent ) override ;
     virtual void setTitle( const OUString& aTitle ) override;
     virtual ::sal_Int16 execute(  ) override;
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo() override;
-    virtual void addPropertyChangeListener(const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener > & aListener) override;
-    virtual void removePropertyChangeListener(const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener > & aListener) override;
-    virtual void addVetoableChangeListener(const OUString& aPropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener > & aListener) override;
-    virtual void removeVetoableChangeListener(const OUString& aPropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener > & aListener) override;
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo() override;
+    virtual void addPropertyChangeListener(const OUString& aPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener > & aListener) override;
+    virtual void removePropertyChangeListener(const OUString& aPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener > & aListener) override;
+    virtual void addVetoableChangeListener(const OUString& aPropertyName, const cpo::uno::Reference< css::beans::XVetoableChangeListener > & aListener) override;
+    virtual void removeVetoableChangeListener(const OUString& aPropertyName, const cpo::uno::Reference< css::beans::XVetoableChangeListener > & aListener) override;
     virtual void setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
     virtual cpo::uno::Any getPropertyValue( const OUString& PropertyName ) override;
 };
@@ -256,11 +257,11 @@ void IFrameObject::close( bool /*bDeliverOwnership*/ )
 {
 }
 
-void IFrameObject::addCloseListener( const css::uno::Reference < css::util::XCloseListener >& )
+void IFrameObject::addCloseListener( const cpo::uno::Reference < css::util::XCloseListener >& )
 {
 }
 
-void IFrameObject::removeCloseListener( const css::uno::Reference < css::util::XCloseListener >& )
+void IFrameObject::removeCloseListener( const cpo::uno::Reference < css::util::XCloseListener >& )
 {
 }
 
@@ -412,19 +413,19 @@ cpo::uno::Any IFrameObject::getPropertyValue(const OUString& aPropertyName)
     return aAny;
 }
 
-void IFrameObject::addPropertyChangeListener(const OUString&, const css::uno::Reference< css::beans::XPropertyChangeListener > & )
+void IFrameObject::addPropertyChangeListener(const OUString&, const cpo::uno::Reference< css::beans::XPropertyChangeListener > & )
 {
 }
 
-void IFrameObject::removePropertyChangeListener(const OUString&, const css::uno::Reference< css::beans::XPropertyChangeListener > & )
+void IFrameObject::removePropertyChangeListener(const OUString&, const cpo::uno::Reference< css::beans::XPropertyChangeListener > & )
 {
 }
 
-void IFrameObject::addVetoableChangeListener(const OUString&, const css::uno::Reference< css::beans::XVetoableChangeListener > & )
+void IFrameObject::addVetoableChangeListener(const OUString&, const cpo::uno::Reference< css::beans::XVetoableChangeListener > & )
 {
 }
 
-void IFrameObject::removeVetoableChangeListener(const OUString&, const css::uno::Reference< css::beans::XVetoableChangeListener > & )
+void IFrameObject::removeVetoableChangeListener(const OUString&, const cpo::uno::Reference< css::beans::XVetoableChangeListener > & )
 {
 }
 

@@ -76,6 +76,7 @@
 #include <sax/tools/converter.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace
 {
@@ -824,7 +825,7 @@ void GetDocStructureDocProps(tools::JsonWriter& rJsonWriter, const SwDocShell* p
     rJsonWriter.put("Type", aType);
 
     // PropertySet -> JSON
-    css::uno::Reference<css::beans::XPropertyContainer> aUserDefinedProperties
+    cpo::uno::Reference<css::beans::XPropertyContainer> aUserDefinedProperties
         = xDocProps->getUserDefinedProperties();
     uno::Reference<beans::XPropertySet> aUserDefinedPropertySet(aUserDefinedProperties,
                                                                 uno::UNO_QUERY);
@@ -1397,7 +1398,7 @@ void GetExtractLinkTargets(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell
 /// the browser's read-only classification banner.
 void GetSecurityLabel(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell)
 {
-    const css::uno::Reference<css::frame::XModel> xModel
+    const cpo::uno::Reference<css::frame::XModel> xModel
         = pDocShell ? pDocShell->GetModel() : nullptr;
     const OUString aMarking = xModel.is() ? svx::seclabel::readMarking(xModel) : OUString();
     // Standard {commandName, commandValues} envelope so the browser routes it by

@@ -51,7 +51,7 @@
 class SalGtkPicker
 {
     public:
-                 SalGtkPicker( css::uno::Reference<cpo::uno::XComponentContext> xContext );
+                 SalGtkPicker( cpo::uno::Reference<cpo::uno::XComponentContext> xContext );
         virtual ~SalGtkPicker();
     protected:
         osl::Mutex m_rbHelperMtx;
@@ -71,7 +71,7 @@ class SalGtkPicker
         OString unicodetouri(const OUString &rURL) const;
 
         // to instantiate own services
-        css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+        cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
         static GtkWidget* GetParentWidget(const cpo::uno::Sequence<cpo::uno::Any>& rArguments);
 
@@ -92,8 +92,8 @@ private:
     osl::Mutex maLock;
     GtkWidget *mpDialog;
     bool mbTerminateDesktop;
-    css::uno::Reference<css::awt::XExtendedToolkit> mxToolkit;
-    css::uno::Reference<css::frame::XDesktop> mxDesktop;
+    cpo::uno::Reference<css::awt::XExtendedToolkit> mxToolkit;
+    cpo::uno::Reference<css::frame::XDesktop> mxDesktop;
     DECL_STATIC_LINK(RunDialog, TerminateDesktop, void*, void);
 public:
 
@@ -113,8 +113,8 @@ public:
     virtual void notifyTermination( const css::lang::EventObject& aEvent ) override;
 public:
     RunDialog(GtkWidget *pDialog,
-        css::uno::Reference<css::awt::XExtendedToolkit> xToolkit,
-        css::uno::Reference<css::frame::XDesktop> xDesktop);
+        cpo::uno::Reference<css::awt::XExtendedToolkit> xToolkit,
+        cpo::uno::Reference<css::frame::XDesktop> xDesktop);
     virtual ~RunDialog() override;
     gint run();
     void cancel();

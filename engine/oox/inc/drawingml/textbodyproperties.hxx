@@ -63,7 +63,7 @@ struct TextBodyProperties
     explicit TextBodyProperties();
 
     void pushTextDistances(Size const& rShapeSize);
-    void readjustTextDistances(css::uno::Reference<css::drawing::XShape> const& xShape);
+    void readjustTextDistances(cpo::uno::Reference<css::drawing::XShape> const& xShape);
     void pushVertSimulation();
 
 };

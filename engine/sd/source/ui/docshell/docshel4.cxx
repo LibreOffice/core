@@ -87,7 +87,8 @@
 #include <ResourceId.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using ::sd::framework::FrameworkHelper;
 
 namespace sd {
@@ -246,7 +247,7 @@ void DrawDocShell::UpdateRefDevice()
 /**
  * Creates new document, opens streams
  */
-bool DrawDocShell::InitNew( const css::uno::Reference< css::embed::XStorage >& xStorage )
+bool DrawDocShell::InitNew( const cpo::uno::Reference< css::embed::XStorage >& xStorage )
 {
     bool bRet = SfxObjectShell::InitNew( xStorage );
 
@@ -738,7 +739,7 @@ bool DrawDocShell::ConvertTo( SfxMedium& rMedium )
  * Reopen own streams to ensure that nobody else can prevent use from opening
  * them.
  */
-bool DrawDocShell::SaveCompleted( const css::uno::Reference< css::embed::XStorage >& xStorage )
+bool DrawDocShell::SaveCompleted( const cpo::uno::Reference< css::embed::XStorage >& xStorage )
 {
     bool bRet = false;
 

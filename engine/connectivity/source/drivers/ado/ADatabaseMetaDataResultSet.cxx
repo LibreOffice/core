@@ -43,7 +43,7 @@ using namespace connectivity::ado;
 using namespace cppu;
 using namespace ::comphelper;
 
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
@@ -1202,7 +1202,7 @@ void ODatabaseMetaDataResultSet::release() noexcept
     ODatabaseMetaDataResultSet_BASE::release();
 }
 
-css::uno::Reference< css::beans::XPropertySetInfo > ODatabaseMetaDataResultSet::getPropertySetInfo(  )
+cpo::uno::Reference< css::beans::XPropertySetInfo > ODatabaseMetaDataResultSet::getPropertySetInfo(  )
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }

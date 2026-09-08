@@ -29,7 +29,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/util/XChangesListener.hpp>
 #include <cppuhelper/basemutex.hxx>
@@ -211,7 +211,7 @@ private:
     ModulePathMap& updateModulePathMap( const OUString& rModuleName );
 
 protected:
-    css::uno::Reference< css::frame::XModel > mxModel;
+    cpo::uno::Reference< css::frame::XModel > mxModel;
     SfxObjectShell* mpShell;
 
 private:
@@ -220,7 +220,7 @@ private:
 
     EventHandlerInfoMap maEventInfos;
     EventHandlerPathMap maEventPaths;
-    css::uno::Reference< css::script::vba::XVBAModuleInfo > mxModuleInfos;
+    cpo::uno::Reference< css::script::vba::XVBAModuleInfo > mxModuleInfos;
     OUString maLibraryName;
 };
 

@@ -36,10 +36,10 @@
 namespace dbaccess
 {
 
-    using css::uno::Reference;
-    using css::uno::UNO_QUERY;
-    using css::uno::UNO_QUERY_THROW;
-    using css::uno::UNO_SET_THROW;
+    using cpo::uno::Reference;
+    using cpo::uno::UNO_QUERY;
+    using cpo::uno::UNO_QUERY_THROW;
+    using cpo::uno::UNO_SET_THROW;
     using cpo::uno::Exception;
     using cpo::uno::Sequence;
     using cpo::uno::XComponentContext;

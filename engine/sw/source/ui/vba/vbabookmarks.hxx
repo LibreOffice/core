@@ -40,13 +40,13 @@ private:
     void removeBookmarkByName( const OUString& rName );
 
 public:
-    SwVbaBookmarks( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext > & xContext, const css::uno::Reference< css::container::XIndexAccess >& xBookmarks, rtl::Reference< SwXTextDocument > xModel );
+    SwVbaBookmarks( const cpo::uno::Reference< ov::XHelperInterface >& xParent, const cpo::uno::Reference< cpo::uno::XComponentContext > & xContext, const cpo::uno::Reference< css::container::XIndexAccess >& xBookmarks, rtl::Reference< SwXTextDocument > xModel );
 
     /// @throws cpo::uno::RuntimeException
-    static void addBookmarkByName( const rtl::Reference< SwXTextDocument >& xModel, const OUString& rName, const css::uno::Reference< css::text::XTextRange >& rTextRange );
+    static void addBookmarkByName( const rtl::Reference< SwXTextDocument >& xModel, const OUString& rName, const cpo::uno::Reference< css::text::XTextRange >& rTextRange );
     // XEnumerationAccess
     virtual cpo::uno::Type SAL_CALL getElementType() override;
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
+    virtual cpo::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
 
     // SwVbaBookmarks_BASE
     virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) override;

@@ -28,7 +28,7 @@ namespace package_ucp {
 class DynamicResultSet : public ::ucbhelper::ResultSetImplHelper
 {
     rtl::Reference< Content > m_xContent;
-    css::uno::Reference< css::ucb::XCommandEnvironment > m_xEnv;
+    cpo::uno::Reference< css::ucb::XCommandEnvironment > m_xEnv;
 
 private:
     virtual void initStatic() override;
@@ -36,10 +36,10 @@ private:
 
 public:
     DynamicResultSet(
-            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
             rtl::Reference< Content > xContent,
             const css::ucb::OpenCommandArgument2& rCommand,
-            css::uno::Reference< css::ucb::XCommandEnvironment > xEnv );
+            cpo::uno::Reference< css::ucb::XCommandEnvironment > xEnv );
 };
 
 }

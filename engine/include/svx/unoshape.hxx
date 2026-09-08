@@ -242,24 +242,24 @@ public:
 
     // XComponent
     virtual void dispose() override;
-    virtual void addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-    virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+    virtual void addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& xListener ) override;
+    virtual void removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
     // XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
     virtual void setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
     virtual cpo::uno::Any getPropertyValue( const OUString& PropertyName ) override;
-    virtual void addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
-    virtual void removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
-    virtual void addVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
-    virtual void removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+    virtual void addPropertyChangeListener( const OUString& aPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
+    virtual void removePropertyChangeListener( const OUString& aPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
+    virtual void addVetoableChangeListener( const OUString& PropertyName, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+    virtual void removeVetoableChangeListener( const OUString& PropertyName, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
     // XMultiPropertySet
     virtual void setPropertyValues( const cpo::uno::Sequence< OUString >& aPropertyNames, const cpo::uno::Sequence< cpo::uno::Any >& aValues ) override;
     virtual cpo::uno::Sequence< cpo::uno::Any > getPropertyValues( const cpo::uno::Sequence< OUString >& aPropertyNames ) override;
-    virtual void addPropertiesChangeListener( const cpo::uno::Sequence< OUString >& aPropertyNames, const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
-    virtual void removePropertiesChangeListener( const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
-    virtual void firePropertiesChangeEvent( const cpo::uno::Sequence< OUString >& aPropertyNames, const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
+    virtual void addPropertiesChangeListener( const cpo::uno::Sequence< OUString >& aPropertyNames, const cpo::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
+    virtual void removePropertiesChangeListener( const cpo::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
+    virtual void firePropertiesChangeEvent( const cpo::uno::Sequence< OUString >& aPropertyNames, const cpo::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
 
     // XPropertyState
     virtual css::beans::PropertyState getPropertyState( const OUString& PropertyName ) override;
@@ -283,11 +283,11 @@ public:
     virtual bool supportsService( const OUString& ServiceName ) override;
 
     // XGluePointsSupplier
-    virtual css::uno::Reference< css::container::XIndexContainer > getGluePoints(  ) override;
+    virtual cpo::uno::Reference< css::container::XIndexContainer > getGluePoints(  ) override;
 
     // XChild
-    virtual css::uno::Reference< cpo::uno::XInterface > getParent(  ) override;
-    virtual void setParent( const css::uno::Reference< cpo::uno::XInterface >& Parent ) override;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > getParent(  ) override;
+    virtual void setParent( const cpo::uno::Reference< cpo::uno::XInterface >& Parent ) override;
 
     // XTypeProvider
     virtual cpo::uno::Sequence< cpo::uno::Type > getTypes(  ) override;
@@ -362,8 +362,8 @@ public:
     virtual bool supportsService( const OUString& ServiceName ) override;
 
     // css::text::XTextRange
-    virtual css::uno::Reference< css::text::XTextRange > getStart() override;
-    virtual css::uno::Reference< css::text::XTextRange > getEnd() override;
+    virtual cpo::uno::Reference< css::text::XTextRange > getStart() override;
+    virtual cpo::uno::Reference< css::text::XTextRange > getEnd() override;
     virtual OUString getString() override;
     virtual void setString( const OUString& aString ) override;
 
@@ -420,7 +420,7 @@ private:
     /// using a weak reference to prevent leaks via ref-counting cycles
     unotools::WeakReference< SvxDrawPage> mxWeakPage;
 
-    void addUnoShape( const css::uno::Reference< css::drawing::XShape >& xShape, size_t nPos );
+    void addUnoShape( const cpo::uno::Reference< css::drawing::XShape >& xShape, size_t nPos );
     void addShape(SvxShape& rShape, size_t nPos);
 
 public:
@@ -438,12 +438,12 @@ public:
     { SvxShape::release(); }
 
     // XShapes
-    virtual void add( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
-    virtual void remove( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
+    virtual void add( const cpo::uno::Reference< css::drawing::XShape >& xShape ) override;
+    virtual void remove( const cpo::uno::Reference< css::drawing::XShape >& xShape ) override;
 
     // XShapes2
-    virtual void addTop( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
-    virtual void addBottom( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
+    virtual void addTop( const cpo::uno::Reference< css::drawing::XShape >& xShape ) override;
+    virtual void addBottom( const cpo::uno::Reference< css::drawing::XShape >& xShape ) override;
 
     // XElementAccess
     virtual cpo::uno::Type getElementType() override;
@@ -531,8 +531,8 @@ public:
     virtual void setSize( const css::awt::Size& aSize ) override;
 
     // XControlShape
-    virtual css::uno::Reference< css::awt::XControlModel > getControl() override;
-    virtual void setControl( const css::uno::Reference< css::awt::XControlModel >& xControl ) override;
+    virtual cpo::uno::Reference< css::awt::XControlModel > getControl() override;
+    virtual void setControl( const cpo::uno::Reference< css::awt::XControlModel >& xControl ) override;
 
     // XTypeProvider
     virtual cpo::uno::Sequence< cpo::uno::Type > getTypes(  ) override;
@@ -664,8 +664,8 @@ public:
     { SvxShape::release(); }
 
     // XShapes
-    virtual void add( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
-    virtual void remove( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
+    virtual void add( const cpo::uno::Reference< css::drawing::XShape >& xShape ) override;
+    virtual void remove( const cpo::uno::Reference< css::drawing::XShape >& xShape ) override;
 
     // XElementAccess
     virtual cpo::uno::Type getElementType(  ) override;

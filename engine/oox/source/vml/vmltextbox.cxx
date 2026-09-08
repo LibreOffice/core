@@ -35,6 +35,7 @@
 namespace oox::vml {
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 TextFontModel::TextFontModel()
 {

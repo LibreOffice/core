@@ -37,7 +37,7 @@ class VAxisBase : public VAxisOrGridBase
 public:
     VAxisBase( sal_Int32 nDimensionIndex, sal_Int32 nDimensionCount
            , const AxisProperties& rAxisProperties
-           , const css::uno::Reference< css::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
+           , const cpo::uno::Reference< css::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
     virtual ~VAxisBase() override;
 
     /**
@@ -65,9 +65,9 @@ public:
     void setExtraLinePositionAtOtherAxis( double fCrossingAt );
 
     virtual void createDataTableView(std::vector<std::unique_ptr<VSeriesPlotter>>& rSeriesPlotterList,
-                                     css::uno::Reference<css::util::XNumberFormatsSupplier> const& xNumberFormatsSupplier,
+                                     cpo::uno::Reference<css::util::XNumberFormatsSupplier> const& xNumberFormatsSupplier,
                                      rtl::Reference<::chart::ChartModel> const& xChartDoc,
-                                     css::uno::Reference<cpo::uno::XComponentContext> const& rComponentContext);
+                                     cpo::uno::Reference<cpo::uno::XComponentContext> const& rComponentContext);
 
     const std::shared_ptr<DataTableView> & getDataTableView() { return m_pDataTableView; }
 
@@ -83,7 +83,7 @@ protected: //methods
     bool isComplexCategoryAxis() const;
 
 protected: //member
-    css::uno::Reference< css::util::XNumberFormatsSupplier >  m_xNumberFormatsSupplier;
+    cpo::uno::Reference< css::util::XNumberFormatsSupplier >  m_xNumberFormatsSupplier;
     AxisProperties                                            m_aAxisProperties;
     AxisLabelProperties                                       m_aAxisLabelProperties;
     cpo::uno::Sequence< OUString >                            m_aTextLabels;

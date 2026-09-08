@@ -75,7 +75,8 @@
 #include <test/commontesttools.hxx>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 namespace
 {
@@ -2174,7 +2175,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testEmbeddedDataSource)
     CPPUNIT_ASSERT(xDataSource.is());
     auto xConnection = xDataSource->getConnection(u""_ustr, u""_ustr);
     uno::Reference<container::XNameAccess> xTables
-        = css::uno::Reference<css::sdbcx::XTablesSupplier>(xConnection, uno::UNO_QUERY_THROW)
+        = cpo::uno::Reference<css::sdbcx::XTablesSupplier>(xConnection, uno::UNO_QUERY_THROW)
               ->getTables();
     CPPUNIT_ASSERT(xTables.is());
     CPPUNIT_ASSERT(xTables->hasByName(u"Sheet1"_ustr));
@@ -2188,7 +2189,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testEmbeddedDataSource)
     xDataSource.set(xDatabaseContext->getByName(u"calc-data-source"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDataSource.is());
     xConnection = xDataSource->getConnection(u""_ustr, u""_ustr);
-    xTables = css::uno::Reference<css::sdbcx::XTablesSupplier>(xConnection, uno::UNO_QUERY_THROW)
+    xTables = cpo::uno::Reference<css::sdbcx::XTablesSupplier>(xConnection, uno::UNO_QUERY_THROW)
                   ->getTables();
     CPPUNIT_ASSERT(xTables.is());
     CPPUNIT_ASSERT(xTables->hasByName(u"Sheet1"_ustr));

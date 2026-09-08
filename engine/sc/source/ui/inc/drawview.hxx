@@ -137,7 +137,7 @@ public:
     void     UnlockInternalLayer() { LockInternalLayer( false ); }
 
     SdrEndTextEditKind  ScEndTextEdit();    // calls SetDrawTextUndo(0)
-    css::uno::Reference< css::datatransfer::XTransferable > CopyToTransferable();
+    cpo::uno::Reference< css::datatransfer::XTransferable > CopyToTransferable();
 
     SdrObject*  GetObjectByName(std::u16string_view rName);
     bool        GetObjectIsMarked( const SdrObject * pObject );

@@ -26,7 +26,7 @@
 #include <com/sun/star/xml/xpath/XXPathObject.hpp>
 #include <com/sun/star/xforms/XSubmission.hpp>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include "computedexpression.hxx"
 
@@ -74,11 +74,11 @@ private:
     rtl::Reference<Model> mxModel;
 
     // this will extract the document from the model that will be submitted
-    css::uno::Reference< css::xml::dom::XDocumentFragment >
-        createSubmissionDocument(const css::uno::Reference< css::xml::xpath::XXPathObject >& aObject,
+    cpo::uno::Reference< css::xml::dom::XDocumentFragment >
+        createSubmissionDocument(const cpo::uno::Reference< css::xml::xpath::XXPathObject >& aObject,
                                  bool bRemoveWSNodes);
-    static css::uno::Reference< css::xml::dom::XDocument >
-        getInstanceDocument(const css::uno::Reference< css::xml::xpath::XXPathObject >& aObject);
+    static cpo::uno::Reference< css::xml::dom::XDocument >
+        getInstanceDocument(const cpo::uno::Reference< css::xml::xpath::XXPathObject >& aObject);
 
 public:
     Submission();
@@ -89,14 +89,14 @@ public:
 
 
     /// get XForms model
-    css::uno::Reference<css::xforms::XModel> getModel() const;
+    cpo::uno::Reference<css::xforms::XModel> getModel() const;
 
     /// get the model implementation
     xforms::Model* getModelImpl() const { return mxModel.get(); }
 
     /// set XForms model
     void setModel(
-        const css::uno::Reference<css::xforms::XModel>& );
+        const cpo::uno::Reference<css::xforms::XModel>& );
 
     OUString getID() const { return msID;}         /// get ID for this submission
     void setID( const OUString& );  /// set ID for this submission
@@ -145,7 +145,7 @@ public:
 
     /** perform the submission
      * @returns if submission was successful */
-    bool doSubmit( const css::uno::Reference< css::task::XInteractionHandler >& aHandler );
+    bool doSubmit( const cpo::uno::Reference< css::task::XInteractionHandler >& aHandler );
 
 private:
 
@@ -189,23 +189,23 @@ public:
 
     virtual void submit(  ) override;
     virtual void submitWithInteraction(
-        const css::uno::Reference< css::task::XInteractionHandler >& aHandler ) override;
+        const cpo::uno::Reference< css::task::XInteractionHandler >& aHandler ) override;
     virtual void addSubmissionVetoListener(
-        const css::uno::Reference< css::form::submission::XSubmissionVetoListener >& listener ) override;
+        const cpo::uno::Reference< css::form::submission::XSubmissionVetoListener >& listener ) override;
     virtual void removeSubmissionVetoListener(
-        const css::uno::Reference< css::form::submission::XSubmissionVetoListener >& listener ) override;
+        const cpo::uno::Reference< css::form::submission::XSubmissionVetoListener >& listener ) override;
 
 
     // XPropertySet
     // (need to disambiguate this)
 
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
     virtual void setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
     virtual cpo::uno::Any getPropertyValue( const OUString& PropertyName ) override;
-    virtual void addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
-    virtual void removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
-    virtual void addVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
-    virtual void removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+    virtual void addPropertyChangeListener( const OUString& aPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
+    virtual void removePropertyChangeListener( const OUString& aPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
+    virtual void addVetoableChangeListener( const OUString& PropertyName, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+    virtual void removeVetoableChangeListener( const OUString& PropertyName, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 };
 
 

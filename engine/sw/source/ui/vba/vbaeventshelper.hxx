@@ -29,7 +29,7 @@ class SwVbaEventsHelper : public VbaEventsHelperBase
 public:
     SwVbaEventsHelper(
         const cpo::uno::Sequence< cpo::uno::Any >& rArgs,
-        const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
     virtual ~SwVbaEventsHelper() override;
 
     // XServiceInfo

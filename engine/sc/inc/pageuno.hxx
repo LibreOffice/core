@@ -29,7 +29,7 @@ public:
     ScPageObj(SdrPage* pPage);
     virtual ~ScPageObj() noexcept override;
 
-    virtual css::uno::Reference<css::drawing::XShape> CreateShape(SdrObject* pObj) const override;
+    virtual cpo::uno::Reference<css::drawing::XShape> CreateShape(SdrObject* pObj) const override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

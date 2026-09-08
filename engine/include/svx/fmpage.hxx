@@ -57,7 +57,7 @@ public:
     virtual rtl::Reference<SdrObject> RemoveObject(size_t nObjNum) override;
 
     // access to all forms
-    const css::uno::Reference< css::form::XForms>& GetForms( bool _bForceCreate = true ) const;
+    const cpo::uno::Reference< css::form::XForms>& GetForms( bool _bForceCreate = true ) const;
 
     FmFormPageImpl& GetImpl() const { return *m_pImpl; }
 

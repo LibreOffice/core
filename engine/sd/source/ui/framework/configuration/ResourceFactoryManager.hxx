@@ -26,7 +26,7 @@
 #include <utility>
 #include <vector>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 
@@ -92,7 +92,7 @@ private:
     FactoryPatternList maFactoryPatternList;
 
     rtl::Reference<::sd::DrawController> mxControllerManager;
-    css::uno::Reference<css::util::XURLTransformer> mxURLTransformer;
+    cpo::uno::Reference<css::util::XURLTransformer> mxURLTransformer;
 
     /** Look up the factory for the given URL.
         @param rsURLBase

@@ -22,7 +22,7 @@ class StarOfficeDrawImportFilter : public writerperfect::ImportFilter<OdgGenerat
 {
 public:
     explicit StarOfficeDrawImportFilter(
-        const css::uno::Reference<cpo::uno::XComponentContext>& rxContext)
+        const cpo::uno::Reference<cpo::uno::XComponentContext>& rxContext)
         : writerperfect::ImportFilter<OdgGenerator>(rxContext)
     {
     }

@@ -34,7 +34,7 @@
 
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 AquaA11yFocusTracker& TheAquaA11yFocusTracker()
 {

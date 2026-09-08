@@ -40,7 +40,7 @@
 using namespace cppu;
 using namespace osl;
 using namespace com::sun::star::lang;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace com::sun::star::script;
 using namespace cpo::uno;
 using namespace com::sun::star::bridge;

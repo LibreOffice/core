@@ -125,7 +125,7 @@ public:
             not necessarily XPropertySet or XMultiPropertySet.  It
             is casted later to one of the two of them.
     */
-    explicit MultiPropertySetHandler (css::uno::Reference<
+    explicit MultiPropertySetHandler (cpo::uno::Reference<
         cpo::uno::XInterface> xObject);
     /** @descr  Add a property to handle.  The type given implicitly by the
             reference to a variable is used to create an instance of
@@ -174,10 +174,10 @@ private:
     ::std::map< OUString, std::unique_ptr<PropertyWrapperBase>, OUStringComparison> aPropertyList;
 
     /// The object from which to get the property values.
-    css::uno::Reference< cpo::uno::XInterface>    mxObject;
+    cpo::uno::Reference< cpo::uno::XInterface>    mxObject;
 };
 
-MultiPropertySetHandler::MultiPropertySetHandler (css::uno::Reference<
+MultiPropertySetHandler::MultiPropertySetHandler (cpo::uno::Reference<
     cpo::uno::XInterface> xObject)
         :   mxObject (std::move(xObject))
 {
@@ -199,8 +199,8 @@ bool    MultiPropertySetHandler::GetProperties()
 bool    MultiPropertySetHandler::MultiGet   (const cpo::uno::Sequence<
     OUString> & rNameList)
 {
-    css::uno::Reference< css::beans::XMultiPropertySet> xMultiSet (
-        mxObject, css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::beans::XMultiPropertySet> xMultiSet (
+        mxObject, cpo::uno::UNO_QUERY);
     if (xMultiSet.is())
         try
         {
@@ -223,8 +223,8 @@ bool    MultiPropertySetHandler::MultiGet   (const cpo::uno::Sequence<
 bool    MultiPropertySetHandler::SingleGet  (const cpo::uno::Sequence<
     OUString> & rNameList)
 {
-    css::uno::Reference< css::beans::XPropertySet> xSingleSet (
-        mxObject, css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::beans::XPropertySet> xSingleSet (
+        mxObject, cpo::uno::UNO_QUERY);
     if (xSingleSet.is())
         try
         {

@@ -19,7 +19,7 @@
 #ifndef INCLUDED_VBAHELPER_VBAFONTBASE_HXX
 #define INCLUDED_VBAHELPER_VBAFONTBASE_HXX
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <ooo/vba/XFontBase.hpp>
 #include <sal/types.h>
 #include <vbahelper/vbadllapi.h>
@@ -44,8 +44,8 @@ public:
     enum Component { WORD, EXCEL };
 
 protected:
-    css::uno::Reference< css::beans::XPropertySet > mxFont;
-    css::uno::Reference< css::container::XIndexAccess > mxPalette;
+    cpo::uno::Reference< css::beans::XPropertySet > mxFont;
+    cpo::uno::Reference< css::container::XIndexAccess > mxPalette;
     Component meWhich;
     bool mbFormControl;
 
@@ -75,10 +75,10 @@ public:
 
     /// @throws cpo::uno::RuntimeException
     VbaFontBase(
-        const css::uno::Reference< ov::XHelperInterface >& xParent,
-        const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
-        const css::uno::Reference< css::container::XIndexAccess >& xPalette,
-        const css::uno::Reference< css::beans::XPropertySet >& xPropertySet,
+        const cpo::uno::Reference< ov::XHelperInterface >& xParent,
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
+        const cpo::uno::Reference< css::container::XIndexAccess >& xPalette,
+        const cpo::uno::Reference< css::beans::XPropertySet >& xPropertySet,
         Component eWhich,
         bool bFormControl = false);
 

@@ -131,7 +131,7 @@ public:
     virtual void Notify( const SfxHint& rHint ) override;
 };
 
-typedef std::vector< css::uno::Reference< css::util::XModifyListener > > XModifyListenerArr_Impl;
+typedef std::vector< cpo::uno::Reference< css::util::XModifyListener > > XModifyListenerArr_Impl;
 
 //  ScCellRangesBase - base class for ScCellRangesObj (with access by index)
 //                                and ScCellRangeObj  (without access by index)
@@ -210,11 +210,11 @@ private:
     void                    ForgetMarkData();
     void                    ForgetCurrentAttrs();
 
-    css::uno::Reference<css::sheet::XSheetCellRanges>
+    cpo::uno::Reference<css::sheet::XSheetCellRanges>
                             QueryDifferences_Impl(const css::table::CellAddress& aCompare,
                                                     bool bColumnDiff);
-    css::uno::Reference<cpo::uno::XInterface>
-                            Find_Impl(const css::uno::Reference<css::util::XSearchDescriptor>& xDesc,
+    cpo::uno::Reference<cpo::uno::XInterface>
+                            Find_Impl(const cpo::uno::Reference<css::util::XSearchDescriptor>& xDesc,
                                     const ScAddress* pLastPos);
 
 protected:
@@ -266,20 +266,20 @@ public:
     virtual void SAL_CALL   clearContents( sal_Int32 nContentFlags ) override;
 
                             // XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo >
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo() override;
     SC_DLLPUBLIC virtual void SAL_CALL   setPropertyValue( const OUString& aPropertyName,
                                     const cpo::uno::Any& aValue ) override;
     virtual cpo::uno::Any SAL_CALL getPropertyValue(
                                     const OUString& PropertyName ) override;
     virtual void SAL_CALL   addPropertyChangeListener( const OUString& aPropertyName,
-                                    const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
+                                    const cpo::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
     virtual void SAL_CALL   removePropertyChangeListener( const OUString& aPropertyName,
-                                    const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
+                                    const cpo::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
     virtual void SAL_CALL   addVetoableChangeListener( const OUString& PropertyName,
-                                    const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+                                    const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
     virtual void SAL_CALL   removeVetoableChangeListener( const OUString& PropertyName,
-                                    const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+                                    const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
                             // XMultiPropertySet
     virtual void SAL_CALL   setPropertyValues( const cpo::uno::Sequence< OUString >& aPropertyNames,
@@ -287,10 +287,10 @@ public:
     virtual cpo::uno::Sequence< cpo::uno::Any > SAL_CALL
                             getPropertyValues( const cpo::uno::Sequence< OUString >& aPropertyNames ) override;
     virtual void SAL_CALL addPropertiesChangeListener( const cpo::uno::Sequence< OUString >& aPropertyNames,
-                                    const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
-    virtual void SAL_CALL removePropertiesChangeListener( const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
+                                    const cpo::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
+    virtual void SAL_CALL removePropertiesChangeListener( const cpo::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
     virtual void SAL_CALL firePropertiesChangeEvent( const cpo::uno::Sequence< OUString >& aPropertyNames,
-                                    const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
+                                    const cpo::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
 
                             // XTolerantMultiPropertySet
     virtual cpo::uno::Sequence< css::beans::SetPropertyTolerantFailed > SAL_CALL
@@ -317,8 +317,8 @@ public:
 
                             // XChartData
     virtual void SAL_CALL   addChartDataChangeEventListener(
-                                const css::uno::Reference< css::chart::XChartDataChangeEventListener >& aListener ) override;
-    virtual void SAL_CALL   removeChartDataChangeEventListener( const css::uno::Reference<
+                                const cpo::uno::Reference< css::chart::XChartDataChangeEventListener >& aListener ) override;
+    virtual void SAL_CALL   removeChartDataChangeEventListener( const cpo::uno::Reference<
                                     css::chart::XChartDataChangeEventListener >& aListener ) override;
     virtual double SAL_CALL getNotANumber() override;
     virtual bool SAL_CALL isNotANumber( double nNumber ) override;
@@ -333,49 +333,49 @@ public:
     virtual void SAL_CALL   setColumnDescriptions( const cpo::uno::Sequence< OUString >& aColumnDescriptions ) override;
 
                             // XCellRangesQuery
-    virtual css::uno::Reference< css::sheet::XSheetCellRanges > SAL_CALL
+    virtual cpo::uno::Reference< css::sheet::XSheetCellRanges > SAL_CALL
                             queryVisibleCells() override;
-    virtual css::uno::Reference< css::sheet::XSheetCellRanges > SAL_CALL
+    virtual cpo::uno::Reference< css::sheet::XSheetCellRanges > SAL_CALL
                             queryEmptyCells() override;
-    virtual css::uno::Reference< css::sheet::XSheetCellRanges > SAL_CALL
+    virtual cpo::uno::Reference< css::sheet::XSheetCellRanges > SAL_CALL
                             queryContentCells( sal_Int16 nContentFlags ) override;
-    virtual css::uno::Reference< css::sheet::XSheetCellRanges > SAL_CALL
+    virtual cpo::uno::Reference< css::sheet::XSheetCellRanges > SAL_CALL
                             queryFormulaCells( sal_Int32 nResultFlags ) override;
-    virtual css::uno::Reference< css::sheet::XSheetCellRanges > SAL_CALL
+    virtual cpo::uno::Reference< css::sheet::XSheetCellRanges > SAL_CALL
                             queryColumnDifferences(
                                 const css::table::CellAddress& aCompare ) override;
-    virtual css::uno::Reference< css::sheet::XSheetCellRanges > SAL_CALL
+    virtual cpo::uno::Reference< css::sheet::XSheetCellRanges > SAL_CALL
                             queryRowDifferences(
                                 const css::table::CellAddress& aCompare ) override;
-    virtual css::uno::Reference< css::sheet::XSheetCellRanges > SAL_CALL
+    virtual cpo::uno::Reference< css::sheet::XSheetCellRanges > SAL_CALL
                             queryIntersection(
                                 const css::table::CellRangeAddress& aRange ) override;
 
                             // XFormulaQuery
-    virtual css::uno::Reference< css::sheet::XSheetCellRanges > SAL_CALL
+    virtual cpo::uno::Reference< css::sheet::XSheetCellRanges > SAL_CALL
                             queryDependents( bool bRecursive ) override;
-    virtual css::uno::Reference< css::sheet::XSheetCellRanges > SAL_CALL
+    virtual cpo::uno::Reference< css::sheet::XSheetCellRanges > SAL_CALL
                             queryPrecedents( bool bRecursive ) override;
 
                             // XSearchable
-    virtual css::uno::Reference< css::util::XSearchDescriptor > SAL_CALL
+    virtual cpo::uno::Reference< css::util::XSearchDescriptor > SAL_CALL
                             createSearchDescriptor() override;
-    virtual css::uno::Reference< css::container::XIndexAccess > SAL_CALL
-                            findAll( const css::uno::Reference< css::util::XSearchDescriptor >& xDesc ) override;
-    virtual css::uno::Reference< cpo::uno::XInterface > SAL_CALL
-                            findFirst( const css::uno::Reference< css::util::XSearchDescriptor >& xDesc ) override;
-    virtual css::uno::Reference< cpo::uno::XInterface > SAL_CALL
-                            findNext( const css::uno::Reference< cpo::uno::XInterface >& xStartAt,
-                                      const css::uno::Reference< css::util::XSearchDescriptor >& xDesc ) override;
+    virtual cpo::uno::Reference< css::container::XIndexAccess > SAL_CALL
+                            findAll( const cpo::uno::Reference< css::util::XSearchDescriptor >& xDesc ) override;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > SAL_CALL
+                            findFirst( const cpo::uno::Reference< css::util::XSearchDescriptor >& xDesc ) override;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > SAL_CALL
+                            findNext( const cpo::uno::Reference< cpo::uno::XInterface >& xStartAt,
+                                      const cpo::uno::Reference< css::util::XSearchDescriptor >& xDesc ) override;
 
                             // XReplaceable
-    virtual css::uno::Reference< css::util::XReplaceDescriptor > SAL_CALL
+    virtual cpo::uno::Reference< css::util::XReplaceDescriptor > SAL_CALL
                             createReplaceDescriptor() override;
-    virtual sal_Int32 SAL_CALL replaceAll( const css::uno::Reference< css::util::XSearchDescriptor >& xDesc ) override;
+    virtual sal_Int32 SAL_CALL replaceAll( const cpo::uno::Reference< css::util::XSearchDescriptor >& xDesc ) override;
 
                             // XModifyBroadcaster
-    virtual void SAL_CALL   addModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
-    virtual void SAL_CALL   removeModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+    virtual void SAL_CALL   addModifyListener( const cpo::uno::Reference< css::util::XModifyListener >& aListener ) override;
+    virtual void SAL_CALL   removeModifyListener( const cpo::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -409,7 +409,7 @@ public:
     virtual void            RefChanged() override;
 
                             // XSheetCellRanges
-    virtual css::uno::Reference< css::container::XEnumerationAccess > SAL_CALL
+    virtual cpo::uno::Reference< css::container::XEnumerationAccess > SAL_CALL
                             getCells() override;
     virtual OUString SAL_CALL getRangeAddressesAsString() override;
     virtual cpo::uno::Sequence< css::table::CellRangeAddress > SAL_CALL
@@ -448,7 +448,7 @@ public:
     virtual bool SAL_CALL hasElements() override;
 
                             // XEnumerationAccess
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL
+    virtual cpo::uno::Reference< css::container::XEnumeration > SAL_CALL
                             createEnumeration() override;
 
                             // XServiceInfo
@@ -505,7 +505,7 @@ public:
     virtual                 ~ScCellRangeObj() override;
 
                             // uses ObjectShell from document, if set (returns NULL otherwise)
-    static css::uno::Reference<css::table::XCellRange>
+    static cpo::uno::Reference<css::table::XCellRange>
                             CreateRangeFromDoc( const ScDocument& rDoc, const ScRange& rR );
 
     virtual void            RefChanged() override;
@@ -514,7 +514,7 @@ public:
     virtual css::table::CellRangeAddress SAL_CALL getRangeAddress() override;
 
                             // XSheetCellRange
-    virtual css::uno::Reference< css::sheet::XSpreadsheet > SAL_CALL
+    virtual cpo::uno::Reference< css::sheet::XSpreadsheet > SAL_CALL
                             getSpreadsheet() override;
 
                             // XArrayFormulaRange
@@ -564,20 +564,20 @@ public:
                                 css::beans::PropertyValue >& xDescriptor ) override;
 
                             // XSheetFilterableEx
-    virtual css::uno::Reference< css::sheet::XSheetFilterDescriptor > SAL_CALL
-                            createFilterDescriptorByObject( const css::uno::Reference<
+    virtual cpo::uno::Reference< css::sheet::XSheetFilterDescriptor > SAL_CALL
+                            createFilterDescriptorByObject( const cpo::uno::Reference<
                                 css::sheet::XSheetFilterable >& xObject ) override;
 
                             // XSheetFilterable
-    virtual css::uno::Reference< css::sheet::XSheetFilterDescriptor > SAL_CALL
+    virtual cpo::uno::Reference< css::sheet::XSheetFilterDescriptor > SAL_CALL
                             createFilterDescriptor( bool bEmpty ) override;
-    virtual void SAL_CALL   filter( const css::uno::Reference<
+    virtual void SAL_CALL   filter( const cpo::uno::Reference<
                                 css::sheet::XSheetFilterDescriptor >& xDescriptor ) override;
 
                             // XSubTotalCalculatable
-    virtual css::uno::Reference< css::sheet::XSubTotalDescriptor > SAL_CALL
+    virtual cpo::uno::Reference< css::sheet::XSubTotalDescriptor > SAL_CALL
                             createSubTotalDescriptor( bool bEmpty ) override;
-    virtual void SAL_CALL   applySubTotals(const css::uno::Reference< css::sheet::XSubTotalDescriptor >& xDescriptor,
+    virtual void SAL_CALL   applySubTotals(const cpo::uno::Reference< css::sheet::XSubTotalDescriptor >& xDescriptor,
                                 bool bReplace) override;
     virtual void SAL_CALL   removeSubTotals() override;
 
@@ -587,33 +587,33 @@ public:
     virtual void SAL_CALL   doImport( const cpo::uno::Sequence< css::beans::PropertyValue >& aDescriptor ) override;
 
                             // XCellFormatRangesSupplier
-    virtual css::uno::Reference< css::container::XIndexAccess > SAL_CALL
+    virtual cpo::uno::Reference< css::container::XIndexAccess > SAL_CALL
                             getCellFormatRanges() override;
 
                             // XUniqueCellFormatRangesSupplier
-    virtual css::uno::Reference< css::container::XIndexAccess > SAL_CALL
+    virtual cpo::uno::Reference< css::container::XIndexAccess > SAL_CALL
                             getUniqueCellFormatRanges() override;
 
                             // XColumnRowRange
-    virtual css::uno::Reference< css::table::XTableColumns > SAL_CALL
+    virtual cpo::uno::Reference< css::table::XTableColumns > SAL_CALL
                             getColumns() override;
-    virtual css::uno::Reference< css::table::XTableRows > SAL_CALL
+    virtual cpo::uno::Reference< css::table::XTableRows > SAL_CALL
                             getRows() override;
 
                             // XCellRange
-    virtual css::uno::Reference< css::table::XCell > SAL_CALL
+    virtual cpo::uno::Reference< css::table::XCell > SAL_CALL
                             getCellByPosition( sal_Int32 nColumn, sal_Int32 nRow ) override;
-    virtual css::uno::Reference< css::table::XCellRange > SAL_CALL
+    virtual cpo::uno::Reference< css::table::XCellRange > SAL_CALL
                             getCellRangeByPosition( sal_Int32 nLeft, sal_Int32 nTop,
                                 sal_Int32 nRight, sal_Int32 nBottom ) override;
-    virtual css::uno::Reference< css::table::XCellRange > SAL_CALL
+    virtual cpo::uno::Reference< css::table::XCellRange > SAL_CALL
                             getCellRangeByName( const OUString& aRange ) override;
     /// @throws cpo::uno::RuntimeException
-    css::uno::Reference< css::table::XCellRange >
+    cpo::uno::Reference< css::table::XCellRange >
                             getCellRangeByName( const OUString& aRange,  const ScAddress::Details& rDetails );
 
                             // XPropertySet override due to Range-Properties
-    virtual css::uno::Reference< css::beans::XPropertySetInfo >
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo() override;
 
                             // XServiceInfo
@@ -672,9 +672,9 @@ private:
                                                 const cpo::uno::Any& aValue ) override;
 
     SvxUnoTextRangeBase*
-    getSvxUnoTextRange(const css::uno::Reference<css::text::XTextRange>& xRange);
-    bool insertScEditFieldObj(const css::uno::Reference<css::text::XTextRange>& xRange,
-                              const css::uno::Reference<css::text::XTextContent>& xContent,
+    getSvxUnoTextRange(const cpo::uno::Reference<css::text::XTextRange>& xRange);
+    bool insertScEditFieldObj(const cpo::uno::Reference<css::text::XTextRange>& xRange,
+                              const cpo::uno::Reference<css::text::XTextContent>& xContent,
                               bool bAbsorb);
 
 public:
@@ -695,33 +695,33 @@ public:
     SC_DLLPUBLIC void       InputEnglishString( const OUString& rText );
 
                             // XText
-    virtual void SAL_CALL   insertTextContent( const css::uno::Reference< css::text::XTextRange >& xRange,
-                                const css::uno::Reference< css::text::XTextContent >& xContent,
+    virtual void SAL_CALL   insertTextContent( const cpo::uno::Reference< css::text::XTextRange >& xRange,
+                                const cpo::uno::Reference< css::text::XTextContent >& xContent,
                                 bool bAbsorb ) override;
-    virtual void SAL_CALL   removeTextContent( const css::uno::Reference< css::text::XTextContent >& xContent ) override;
+    virtual void SAL_CALL   removeTextContent( const cpo::uno::Reference< css::text::XTextContent >& xContent ) override;
 
                             // XSimpleText
-    virtual css::uno::Reference< css::text::XTextCursor > SAL_CALL
+    virtual cpo::uno::Reference< css::text::XTextCursor > SAL_CALL
                             createTextCursor() override;
-    virtual css::uno::Reference< css::text::XTextCursor > SAL_CALL
-                            createTextCursorByRange( const css::uno::Reference< css::text::XTextRange >& aTextPosition ) override;
-    virtual void SAL_CALL   insertString( const css::uno::Reference< css::text::XTextRange >& xRange,
+    virtual cpo::uno::Reference< css::text::XTextCursor > SAL_CALL
+                            createTextCursorByRange( const cpo::uno::Reference< css::text::XTextRange >& aTextPosition ) override;
+    virtual void SAL_CALL   insertString( const cpo::uno::Reference< css::text::XTextRange >& xRange,
                                         const OUString& aString, bool bAbsorb ) override;
-    virtual void SAL_CALL   insertControlCharacter( const css::uno::Reference< css::text::XTextRange >& xRange,
+    virtual void SAL_CALL   insertControlCharacter( const cpo::uno::Reference< css::text::XTextRange >& xRange,
                                         sal_Int16 nControlCharacter, bool bAbsorb ) override;
 
                             // XTextRange
-    virtual css::uno::Reference< css::text::XText > SAL_CALL
+    virtual cpo::uno::Reference< css::text::XText > SAL_CALL
                             getText() override;
-    virtual css::uno::Reference< css::text::XTextRange > SAL_CALL
+    virtual cpo::uno::Reference< css::text::XTextRange > SAL_CALL
                             getStart() override;
-    virtual css::uno::Reference< css::text::XTextRange > SAL_CALL
+    virtual cpo::uno::Reference< css::text::XTextRange > SAL_CALL
                             getEnd() override;
     virtual OUString SAL_CALL getString() override;
     virtual void SAL_CALL   setString( const OUString& aString ) override;
 
                             // XEnumerationAccess
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL
+    virtual cpo::uno::Reference< css::container::XEnumeration > SAL_CALL
                             createEnumeration() override;
 
                             // XElementAccess
@@ -746,17 +746,17 @@ public:
     SC_DLLPUBLIC virtual css::table::CellAddress SAL_CALL getCellAddress() override;
 
                             // XSheetAnnotationAnchor
-    virtual css::uno::Reference< css::sheet::XSheetAnnotation > SAL_CALL
+    virtual cpo::uno::Reference< css::sheet::XSheetAnnotation > SAL_CALL
                             getAnnotation() override;
 
                             // XTextFieldsSupplier
-    virtual css::uno::Reference< css::container::XEnumerationAccess > SAL_CALL
+    virtual cpo::uno::Reference< css::container::XEnumerationAccess > SAL_CALL
                             getTextFields() override;
-    virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL
+    virtual cpo::uno::Reference< css::container::XNameAccess > SAL_CALL
                             getTextFieldMasters() override;
 
                             // XPropertySet override due to cell properties
-    virtual css::uno::Reference< css::beans::XPropertySetInfo >
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo() override;
 
                             // XServiceInfo
@@ -815,24 +815,24 @@ public:
     void                    InitInsertSheet(ScDocShell* pDocSh, SCTAB nTab);
 
                             // XSpreadsheet
-    virtual css::uno::Reference< css::sheet::XSheetCellCursor >
+    virtual cpo::uno::Reference< css::sheet::XSheetCellCursor >
                             SAL_CALL createCursor() override;
-    virtual css::uno::Reference< css::sheet::XSheetCellCursor > SAL_CALL
-                            createCursorByRange( const css::uno::Reference<
+    virtual cpo::uno::Reference< css::sheet::XSheetCellCursor > SAL_CALL
+                            createCursorByRange( const cpo::uno::Reference<
                                 css::sheet::XSheetCellRange >& aRange ) override;
 
                             // XSheetCellRange
-    virtual css::uno::Reference< css::sheet::XSpreadsheet > SAL_CALL
+    virtual cpo::uno::Reference< css::sheet::XSpreadsheet > SAL_CALL
                             getSpreadsheet() override;
 
                             // XCellRange
-    virtual css::uno::Reference< css::table::XCell > SAL_CALL
+    virtual cpo::uno::Reference< css::table::XCell > SAL_CALL
                             getCellByPosition( sal_Int32 nColumn, sal_Int32 nRow ) override;
-    virtual css::uno::Reference< css::table::XCellRange > SAL_CALL
+    virtual cpo::uno::Reference< css::table::XCellRange > SAL_CALL
                             getCellRangeByPosition( sal_Int32 nLeft, sal_Int32 nTop,
                                 sal_Int32 nRight, sal_Int32 nBottom ) override;
     using ScCellRangeObj::getCellRangeByName;
-    virtual css::uno::Reference< css::table::XCellRange > SAL_CALL
+    virtual cpo::uno::Reference< css::table::XCellRange > SAL_CALL
                             getCellRangeByName( const OUString& aRange ) override;
 
                             // XNamed
@@ -857,27 +857,27 @@ public:
                                 const css::table::CellRangeAddress& aSource ) override;
 
                             // XTableChartsSupplier
-    virtual css::uno::Reference< css::table::XTableCharts > SAL_CALL
+    virtual cpo::uno::Reference< css::table::XTableCharts > SAL_CALL
                             getCharts() override;
 
                             // XTablePivotChartsSupplier
-    virtual css::uno::Reference<css::table::XTablePivotCharts> SAL_CALL
+    virtual cpo::uno::Reference<css::table::XTablePivotCharts> SAL_CALL
                             getPivotCharts() override;
 
                             // XDataPilotTablesSupplier
-    virtual css::uno::Reference< css::sheet::XDataPilotTables > SAL_CALL
+    virtual cpo::uno::Reference< css::sheet::XDataPilotTables > SAL_CALL
                             getDataPilotTables() override;
 
                             // XScenariosSupplier
-    virtual css::uno::Reference< css::sheet::XScenarios > SAL_CALL
+    virtual cpo::uno::Reference< css::sheet::XScenarios > SAL_CALL
                             getScenarios() override;
 
                             // XSheetAnnotationsSupplier
-    virtual css::uno::Reference< css::sheet::XSheetAnnotations > SAL_CALL
+    virtual cpo::uno::Reference< css::sheet::XSheetAnnotations > SAL_CALL
                             getAnnotations() override;
 
                             // XDrawPageSupplier
-    virtual css::uno::Reference< css::drawing::XDrawPage > SAL_CALL
+    virtual cpo::uno::Reference< css::drawing::XDrawPage > SAL_CALL
                             getDrawPage() override;
 
                             // XPrintAreas
@@ -950,10 +950,10 @@ public:
     virtual void SAL_CALL   setExternalName( const OUString& aUrl, const OUString& aSheetName ) override;
 
                             // XEventsSupplier
-    virtual css::uno::Reference< css::container::XNameReplace > SAL_CALL getEvents() override;
+    virtual cpo::uno::Reference< css::container::XNameReplace > SAL_CALL getEvents() override;
 
                             // XPropertySet override due to sheet properties
-    virtual css::uno::Reference< css::beans::XPropertySetInfo >
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo() override;
 
                             // XServiceInfo
@@ -989,7 +989,7 @@ public:
     virtual void SAL_CALL   setName( const OUString& aName ) override;
 
                             // XPropertySet override due to column properties
-    virtual css::uno::Reference< css::beans::XPropertySetInfo >
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo() override;
 
                             // XServiceInfo
@@ -1017,7 +1017,7 @@ public:
     virtual                 ~ScTableRowObj() override;
 
                             // XPropertySet override due to row properties
-    virtual css::uno::Reference< css::beans::XPropertySetInfo >
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo() override;
 
                             // XServiceInfo
@@ -1045,7 +1045,7 @@ public:
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
                             // XEnumerationAccess
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL
+    virtual cpo::uno::Reference< css::container::XEnumeration > SAL_CALL
                             createEnumeration() override;
 
                             // XElementAccess
@@ -1114,7 +1114,7 @@ public:
     virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
 
                             // XEnumerationAccess
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL
+    virtual cpo::uno::Reference< css::container::XEnumeration > SAL_CALL
                             createEnumeration() override;
 
                             // XElementAccess
@@ -1181,7 +1181,7 @@ public:
     virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
 
                             // XEnumerationAccess
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL
+    virtual cpo::uno::Reference< css::container::XEnumeration > SAL_CALL
                             createEnumeration() override;
 
                             // XElementAccess

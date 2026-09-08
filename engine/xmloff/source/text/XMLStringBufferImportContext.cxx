@@ -22,7 +22,7 @@
 #include <xmloff/xmlnamespace.hxx>
 
 
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::xmloff::token::XML_P;
 
 XMLStringBufferImportContext::XMLStringBufferImportContext(
@@ -37,8 +37,8 @@ XMLStringBufferImportContext::~XMLStringBufferImportContext()
 {
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLStringBufferImportContext::createFastChildContext(
-        sal_Int32 /*nElement*/, const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLStringBufferImportContext::createFastChildContext(
+        sal_Int32 /*nElement*/, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
     return new XMLStringBufferImportContext(GetImport(), rTextBuffer);
 }

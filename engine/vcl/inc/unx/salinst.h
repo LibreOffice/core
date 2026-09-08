@@ -32,7 +32,7 @@ class SalX11Display;
 class X11SalInstance final : public SalGenericInstance
 {
 private:
-    std::unordered_map< Atom, css::uno::Reference< css::datatransfer::clipboard::XClipboard > > m_aInstances;
+    std::unordered_map< Atom, cpo::uno::Reference< css::datatransfer::clipboard::XClipboard > > m_aInstances;
 
     SalXLib *mpXLib;
 
@@ -82,11 +82,11 @@ public:
     virtual void                AfterAppInit() override;
 
     // dtrans implementation
-    virtual css::uno::Reference<css::datatransfer::clipboard::XClipboard>
+    virtual cpo::uno::Reference<css::datatransfer::clipboard::XClipboard>
     CreateClipboard(const cpo::uno::Sequence<cpo::uno::Any>& i_rArguments) override;
-    virtual css::uno::Reference<css::datatransfer::dnd::XDragSource>
+    virtual cpo::uno::Reference<css::datatransfer::dnd::XDragSource>
     ImplCreateDragSource(const SystemEnvData& rSysEnv) override;
-    virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget>
+    virtual cpo::uno::Reference<css::datatransfer::dnd::XDropTarget>
     ImplCreateDropTarget(const SystemEnvData& rSysEnv) override;
     virtual void            AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService) override;
 };

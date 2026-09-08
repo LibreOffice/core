@@ -101,8 +101,8 @@
 
 using namespace ::cppu;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 
@@ -1782,15 +1782,15 @@ cpo::uno::Sequence< cpo::uno::Any > SvxShape::getPropertyValues( const cpo::uno:
     return aRet;
 }
 
-void SvxShape::addPropertiesChangeListener( const cpo::uno::Sequence< OUString >& , const css::uno::Reference< css::beans::XPropertiesChangeListener >&  )
+void SvxShape::addPropertiesChangeListener( const cpo::uno::Sequence< OUString >& , const cpo::uno::Reference< css::beans::XPropertiesChangeListener >&  )
 {
 }
 
-void SvxShape::removePropertiesChangeListener( const css::uno::Reference< css::beans::XPropertiesChangeListener >&  )
+void SvxShape::removePropertiesChangeListener( const cpo::uno::Reference< css::beans::XPropertiesChangeListener >&  )
 {
 }
 
-void SvxShape::firePropertiesChangeEvent( const cpo::uno::Sequence< OUString >& , const css::uno::Reference< css::beans::XPropertiesChangeListener >&  )
+void SvxShape::firePropertiesChangeEvent( const cpo::uno::Sequence< OUString >& , const cpo::uno::Reference< css::beans::XPropertiesChangeListener >&  )
 {
 }
 
@@ -2489,12 +2489,12 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertyMapEn
     {
         if (auto pTextObj = DynCastSdrTextObj(pSdrObject.get()))
         {
-            css::uno::Reference<css::text::XTextColumns> xTextColumns;
+            cpo::uno::Reference<css::text::XTextColumns> xTextColumns;
             if (rValue >>= xTextColumns)
             {
                 pTextObj->SetTextColumnsNumber(xTextColumns->getColumnCount());
-                if (css::uno::Reference<css::beans::XPropertySet> xPropSet{ xTextColumns,
-                                                                            css::uno::UNO_QUERY })
+                if (cpo::uno::Reference<css::beans::XPropertySet> xPropSet{ xTextColumns,
+                                                                            cpo::uno::UNO_QUERY })
                 {
                     auto aVal = xPropSet->getPropertyValue(u"AutomaticDistance"_ustr);
                     if (sal_Int32 nSpacing; aVal >>= nSpacing)
@@ -2969,9 +2969,9 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertyMapEn
             if (pTextObj->HasTextColumnsNumber() || pTextObj->HasTextColumnsSpacing())
             {
                 auto xIf = SvxXTextColumns_createInstance();
-                css::uno::Reference<css::text::XTextColumns> xCols(xIf, css::uno::UNO_QUERY_THROW);
+                cpo::uno::Reference<css::text::XTextColumns> xCols(xIf, cpo::uno::UNO_QUERY_THROW);
                 xCols->setColumnCount(pTextObj->GetTextColumnsNumber());
-                css::uno::Reference<css::beans::XPropertySet> xProp(xIf, css::uno::UNO_QUERY_THROW);
+                cpo::uno::Reference<css::beans::XPropertySet> xProp(xIf, cpo::uno::UNO_QUERY_THROW);
                 xProp->setPropertyValue(u"AutomaticDistance"_ustr,
                                         cpo::uno::Any(pTextObj->GetTextColumnsSpacing()));
                 rValue <<= xIf;
@@ -3729,7 +3729,7 @@ uno::Reference<cpo::uno::XInterface> SvxShape::getParent()
     return uno::Reference<cpo::uno::XInterface>();
 }
 
-void SvxShape::setParent( const css::uno::Reference< cpo::uno::XInterface >& )
+void SvxShape::setParent( const cpo::uno::Reference< cpo::uno::XInterface >& )
 {
     throw lang::NoSupportException();
 }
@@ -4069,7 +4069,7 @@ uno::Reference< drawing::XShape > GetXShapeForSdrObject( SdrObject* pObj ) noexc
 }
 
 
-SdrObject* SdrObject::getSdrObjectFromXShape( const css::uno::Reference< cpo::uno::XInterface >& xInt )
+SdrObject* SdrObject::getSdrObjectFromXShape( const cpo::uno::Reference< cpo::uno::XInterface >& xInt )
 {
     SvxShape* pSvxShape = comphelper::getFromUnoTunnel<SvxShape>( xInt );
     return pSvxShape ? pSvxShape->GetSdrObject() : nullptr;

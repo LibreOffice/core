@@ -60,6 +60,7 @@
 #include <frozen/bits/elsa_std.h>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 namespace os = orcus::spreadsheet;
 

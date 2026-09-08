@@ -49,7 +49,7 @@ namespace drawinglayer::geometry {
 namespace drawinglayer::primitive3d {
     /// typedefs for basePrimitive3DImplBase, Primitive3DContainer and Primitive3DReference
     typedef comphelper::WeakComponentImplHelper< css::graphic::XPrimitive3D > BasePrimitive3DImplBase;
-    typedef css::uno::Reference< css::graphic::XPrimitive3D > Primitive3DReference;
+    typedef cpo::uno::Reference< css::graphic::XPrimitive3D > Primitive3DReference;
 
     class SAL_WARN_UNUSED DRAWINGLAYER_DLLPUBLIC Primitive3DContainer : public std::deque< Primitive3DReference >
     {
@@ -129,7 +129,7 @@ namespace drawinglayer::primitive3d
             /** The getDecomposition implementation for UNO API will use getDecomposition from this implementation. It
                 will get the ViewInformation from the ViewParameters for that purpose
              */
-            virtual cpo::uno::Sequence< ::css::uno::Reference< ::css::graphic::XPrimitive3D > > getDecomposition( const cpo::uno::Sequence< css::beans::PropertyValue >& rViewParameters ) override final;
+            virtual cpo::uno::Sequence< ::cpo::uno::Reference< ::css::graphic::XPrimitive3D > > getDecomposition( const cpo::uno::Sequence< css::beans::PropertyValue >& rViewParameters ) override final;
 
             /** the getRange default implementation will use getDecomposition to create the range information from merging
                 getRange results from the single local decomposition primitives.

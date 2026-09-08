@@ -33,14 +33,14 @@
 using namespace connectivity;
 using namespace connectivity::dbase;
 using namespace connectivity::file;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 
-css::uno::Reference< css::beans::XPropertySet > ODbaseTables::createObject(const OUString& _rName)
+cpo::uno::Reference< css::beans::XPropertySet > ODbaseTables::createObject(const OUString& _rName)
 {
     rtl::Reference<ODbaseTable> pRet = new ODbaseTable(this, static_cast<ODbaseConnection*>(static_cast<OFileCatalog&>(m_rParent).getConnection()),
                                         _rName,u"TABLE"_ustr);
@@ -60,7 +60,7 @@ Reference< XPropertySet > ODbaseTables::createDescriptor()
 }
 
 // XAppend
-css::uno::Reference< css::beans::XPropertySet > ODbaseTables::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
+cpo::uno::Reference< css::beans::XPropertySet > ODbaseTables::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     auto pTable = dynamic_cast<ODbaseTable*>(descriptor.get());
     if(pTable)

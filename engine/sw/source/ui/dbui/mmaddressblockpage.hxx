@@ -139,7 +139,7 @@ class AddressMultiLineEdit : public WeldEditView
     SwCustomizeAddressBlockDialog*  m_pParentDialog;
 
     virtual void EditViewSelectionChange() override;
-    virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget> GetDropTarget() override;
+    virtual cpo::uno::Reference<css::datatransfer::dnd::XDropTarget> GetDropTarget() override;
 
     virtual bool KeyInput(const KeyEvent& rKEvt) override;
     virtual bool Command(const CommandEvent& rCEvt) override;

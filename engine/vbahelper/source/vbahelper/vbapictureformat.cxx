@@ -22,9 +22,10 @@
 
 using namespace ooo::vba;
 using namespace com::sun::star;
+using namespace ::cpo;
 
-ScVbaPictureFormat::ScVbaPictureFormat( const css::uno::Reference< ov::XHelperInterface >& xParent,
-    const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
+ScVbaPictureFormat::ScVbaPictureFormat( const cpo::uno::Reference< ov::XHelperInterface >& xParent,
+    const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
     uno::Reference< drawing::XShape > xShape )
     : ScVbaPictureFormat_BASE( xParent, xContext ), m_xShape(std::move( xShape ))
 {

@@ -27,13 +27,13 @@
 class SdXMLDescriptionContext final : public SvXMLImportContext
 {
 private:
-    css::uno::Reference< css::drawing::XShape > mxShape;
+    cpo::uno::Reference< css::drawing::XShape > mxShape;
     OUString msText;
     sal_Int32 mnElement;
 public:
 
     SdXMLDescriptionContext( SvXMLImport& rImport, sal_Int32 mnElement,
-        const css::uno::Reference< css::drawing::XShape >& rxShape );
+        const cpo::uno::Reference< css::drawing::XShape >& rxShape );
     virtual ~SdXMLDescriptionContext() override;
 
     virtual void endFastElement(sal_Int32 nElement) override;

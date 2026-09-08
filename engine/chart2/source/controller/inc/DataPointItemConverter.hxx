@@ -40,8 +40,8 @@ class DataPointItemConverter final : public ItemConverter
 public:
     DataPointItemConverter(
         const rtl::Reference<::chart::ChartModel>& xChartModel,
-        const css::uno::Reference<cpo::uno::XComponentContext>& xContext,
-        const css::uno::Reference<css::beans::XPropertySet>& rPropertySet,
+        const cpo::uno::Reference<cpo::uno::XComponentContext>& xContext,
+        const cpo::uno::Reference<css::beans::XPropertySet>& rPropertySet,
         const rtl::Reference<::chart::DataSeries>& xSeries,
         SfxItemPool& rItemPool,
         SdrModel& rDrawModel,

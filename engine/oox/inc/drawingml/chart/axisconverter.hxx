@@ -43,7 +43,7 @@ public:
 
     /** Creates a chart2 axis and inserts it into the passed coordinate system. */
     void                convertFromModel(
-                            const css::uno::Reference< css::chart2::XAxis >& rxAxis);
+                            const cpo::uno::Reference< css::chart2::XAxis >& rxAxis);
 };
 
 struct AxisModel;
@@ -59,7 +59,7 @@ public:
 
     /** Creates a chart2 axis and inserts it into the passed coordinate system. */
     void convertFromModel(
-        const css::uno::Reference<css::chart2::XCoordinateSystem>& rxCoordSystem,
+        const cpo::uno::Reference<css::chart2::XCoordinateSystem>& rxCoordSystem,
         RefVector<TypeGroupConverter>& rTypeGroups, const AxisModel* pCrossingAxis,
         sal_Int32 nAxesSetIdx, sal_Int32 nAxisIdx, bool bUseFixedInnerSize,
         ChartType eCT);

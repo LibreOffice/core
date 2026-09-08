@@ -45,8 +45,8 @@ namespace pcr
     public:
         XSDValidationHelper(
             ::osl::Mutex& _rMutex,
-            const css::uno::Reference< css::beans::XPropertySet >& _rxIntrospectee,
-            const css::uno::Reference< css::frame::XModel >& _rxContextDocument
+            const cpo::uno::Reference< css::beans::XPropertySet >& _rxIntrospectee,
+            const cpo::uno::Reference< css::frame::XModel >& _rxContextDocument
         );
 
         /** retrieves the names of all XForms models in the document the control lives in
@@ -108,17 +108,17 @@ namespace pcr
     private:
         /** retrieves the data type repository associated with the current model
         */
-        css::uno::Reference< css::xforms::XDataTypeRepository >
+        cpo::uno::Reference< css::xforms::XDataTypeRepository >
                 getDataTypeRepository() const;
 
         /** retrieves the data type repository associated with any model
         */
-        css::uno::Reference< css::xforms::XDataTypeRepository >
+        cpo::uno::Reference< css::xforms::XDataTypeRepository >
                 getDataTypeRepository( const OUString& _rModelName ) const;
 
         /** retrieves the data type object for the given name
         */
-        css::uno::Reference< css::xsd::XDataType >
+        cpo::uno::Reference< css::xsd::XDataType >
             getDataType( const OUString& _rName ) const;
 
         /** retrieves the name of the basic data type which has the given class, in the given repository
@@ -126,7 +126,7 @@ namespace pcr
         static OUString
                 getBasicTypeNameForClass(
                     sal_Int16 _nClass,
-                    const css::uno::Reference< css::xforms::XDataTypeRepository >& _rxRepository
+                    const cpo::uno::Reference< css::xforms::XDataTypeRepository >& _rxRepository
                 );
     };
 

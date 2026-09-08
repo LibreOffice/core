@@ -34,11 +34,11 @@ private:
     // This method is called after the namespace map has been updated, but
     // before a context for the current element has been pushed.
     virtual SvXMLImportContext* CreateFastContext( sal_Int32 Element,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
 
 public:
     SwXMLBlockListImport(
-        const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& rContext,
         SwXMLTextBlocks &rBlocks );
 
     SwXMLTextBlocks& getBlockList()
@@ -54,13 +54,13 @@ class SwXMLTextBlockImport final : public SvXMLImport
     // This method is called after the namespace map has been updated, but
     // before a context for the current element has been pushed.
     virtual SvXMLImportContext* CreateFastContext( sal_Int32 Element,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
 
 public:
     bool m_bTextOnly;
     OUString &m_rText;
     SwXMLTextBlockImport(
-        const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& rContext,
         OUString &rNewText, bool bNewTextOnly );
 
     virtual ~SwXMLTextBlockImport()

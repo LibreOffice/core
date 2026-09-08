@@ -25,6 +25,7 @@
 #include <commonembobj.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 constexpr OUString IU0 = u".uno:Save"_ustr;
 constexpr OUString IU1 = u".uno:SaveAll"_ustr;

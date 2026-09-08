@@ -48,8 +48,8 @@ public:
             would not keep a strong reference to the new object.
     */
     AccessiblePageShape (
-        css::uno::Reference<css::drawing::XDrawPage> xPage,
-        const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
+        cpo::uno::Reference<css::drawing::XDrawPage> xPage,
+        const cpo::uno::Reference<css::accessibility::XAccessible>& rxParent,
         const AccessibleShapeTreeInfo& rShapeTreeInfo);
 
     virtual ~AccessiblePageShape() override;
@@ -69,7 +69,7 @@ public:
         @throws IndexOutOfBoundsException
             Throws always an exception because there are no children.
     */
-    virtual css::uno::Reference<css::accessibility::XAccessible> SAL_CALL
+    virtual cpo::uno::Reference<css::accessibility::XAccessible> SAL_CALL
         getAccessibleChild (sal_Int64 nIndex) override;
 
     // OAccessible
@@ -106,7 +106,7 @@ protected:
         CreateAccessibleName() override;
 
 private:
-    css::uno::Reference<css::drawing::XDrawPage> mxPage;
+    cpo::uno::Reference<css::drawing::XDrawPage> mxPage;
 
     AccessiblePageShape (const AccessiblePageShape&) = delete;
     AccessibleShape& operator= (const AccessiblePageShape&) = delete;

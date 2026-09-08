@@ -42,7 +42,7 @@ namespace com::sun::star::ui::dialogs
     struct DialogClosedEvent;
 }
 namespace com::sun::star::awt { class XWindow; }
-namespace com::sun::star::uno { template <typename > class Reference; }
+namespace cpo::uno { template <typename > class Reference; }
 namespace cpo::uno { class XComponentContext; }
 namespace weld { class Window; }
 
@@ -234,7 +234,7 @@ public:
     OUString                 GetDisplayDirectory() const;
     ErrCode                  GetGraphic( Graphic& rGraphic ) const;
 
-    const css::uno::Reference < css::ui::dialogs::XFilePicker3 >& GetFilePicker() const;
+    const cpo::uno::Reference < css::ui::dialogs::XFilePicker3 >& GetFilePicker() const;
 
     // XFilePickerListener methods
     void   FileSelectionChanged();
@@ -292,9 +292,9 @@ ErrCode FileOpenDialog_Impl( weld::Window* pParent,
                              const cpo::uno::Sequence< OUString >& rDenyList,
                              std::optional<bool>& rShowFilterDialog );
 
-css::uno::Reference<css::ui::dialogs::XFolderPicker2> SFX2_DLLPUBLIC createFolderPicker(const css::uno::Reference<cpo::uno::XComponentContext>& rContext, weld::Window* pPreferredParent);
+cpo::uno::Reference<css::ui::dialogs::XFolderPicker2> SFX2_DLLPUBLIC createFolderPicker(const cpo::uno::Reference<cpo::uno::XComponentContext>& rContext, weld::Window* pPreferredParent);
 
-ErrCode RequestPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter, OUString const & aURL, SfxItemSet* pSet, const css::uno::Reference<css::awt::XWindow>& rParent);
+ErrCode RequestPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter, OUString const & aURL, SfxItemSet* pSet, const cpo::uno::Reference<css::awt::XWindow>& rParent);
 ErrCode SetPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter, SfxItemSet* pSet,
                     const OUString& rPasswordToOpen, std::u16string_view rPasswordToModify,
                     bool bAllowPasswordReset = false);

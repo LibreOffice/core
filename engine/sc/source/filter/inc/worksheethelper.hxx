@@ -187,11 +187,11 @@ public:
                         getSheet() const;
 
     /** Returns the XCell interface for the passed cell address. */
-    css::uno::Reference< css::table::XCell >
+    cpo::uno::Reference< css::table::XCell >
                         getCell( const ScAddress& rAddress ) const;
 
     /** Returns the XDrawPage interface of the draw page of the current sheet. */
-    css::uno::Reference< css::drawing::XDrawPage >
+    cpo::uno::Reference< css::drawing::XDrawPage >
                         getDrawPage() const;
 
     /** Returns the absolute cell position in 1/100 mm. */

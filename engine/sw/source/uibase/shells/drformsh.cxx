@@ -48,6 +48,7 @@
 #include <swslots.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 SFX_IMPL_INTERFACE(SwDrawFormShell, SwDrawBaseShell)
 

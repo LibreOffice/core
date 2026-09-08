@@ -20,7 +20,7 @@
 #include "PageOrientationControl.hxx"
 #include <vcl/toolbox.hxx>
 
-PageOrientationPopup::PageOrientationPopup(const css::uno::Reference<cpo::uno::XComponentContext>& rContext)
+PageOrientationPopup::PageOrientationPopup(const cpo::uno::Reference<cpo::uno::XComponentContext>& rContext)
     : PopupWindowController(rContext, nullptr, OUString())
 {
 }

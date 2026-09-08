@@ -73,6 +73,7 @@ using namespace ::sd;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::animations;
+using namespace ::cpo;
 
 using ::cpo::uno::Any;
 using ::com::sun::star::drawing::XShape;
@@ -381,10 +382,10 @@ cpo::uno::Any SAL_CALL SdXShape::getPropertyDefault( const OUString& aPropertyNa
 }
 
 //XPropertySet
-css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL SdXShape::getPropertySetInfo()
+cpo::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL SdXShape::getPropertySetInfo()
 {
     std::span<SfxItemPropertyMapEntry const> nObjId = mpShape->getPropertyMapEntries();
-    css::uno::Reference<css::beans::XPropertySetInfo> pInfo;
+    cpo::uno::Reference<css::beans::XPropertySetInfo> pInfo;
 
     SdExtPropertySetInfoCache& rCache = (mpModel && mpModel->IsImpressDocument()) ?
         SdModule::get()->gImplImpressPropertySetInfoCache : SdModule::get()->gImplDrawPropertySetInfoCache;

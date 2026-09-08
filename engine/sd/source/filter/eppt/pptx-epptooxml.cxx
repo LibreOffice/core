@@ -140,8 +140,8 @@ using namespace ::com::sun::star::geometry;
 using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::office;
 using namespace ::com::sun::star::text;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::util;
 using namespace ::ppt;
 using ::com::sun::star::beans::XPropertySet;
@@ -1446,7 +1446,7 @@ void PowerPointExport::WriteTransition(const FSHelperPtr& pFS)
 
     if (ImplGetPropertyValue(mXPagePropSet, u"Sound"_ustr))
     {
-        css::uno::Reference<css::presentation::XSoundReference> xSound;
+        cpo::uno::Reference<css::presentation::XSoundReference> xSound;
         if ((mAny >>= xSound) && xSound.is() && xSound->getAllowed())
         {
             sSoundUrl = xSound->getURL();
@@ -1922,7 +1922,7 @@ void PowerPointExport::WritePresentationProps()
 
     if (!sCustomShow.isEmpty())
     {
-        css::uno::Reference<css::container::XNameContainer> mxCustShows;
+        cpo::uno::Reference<css::container::XNameContainer> mxCustShows;
         mxCustShows = mXModel->getCustomPresentations();
         const cpo::uno::Sequence<OUString> aNameSeq(mxCustShows->getElementNames());
 
@@ -2477,7 +2477,7 @@ static bool lcl_ComparePageProperties(SdrPage* pMasterPage, SdrPage* pMasterNext
 
 void PowerPointExport::FindEquivalentMasterPages()
 {
-    css::uno::Reference<css::drawing::XDrawPages> xDrawPages(
+    cpo::uno::Reference<css::drawing::XDrawPages> xDrawPages(
         mXModel->getMasterPages());
     maMastersLayouts.resize(mnMasterPages);
     maEquivalentMasters.resize(mnMasterPages, SAL_MAX_UINT32);
@@ -2485,7 +2485,7 @@ void PowerPointExport::FindEquivalentMasterPages()
     {
         if (i == mnCanvasMasterIndex)
             continue;
-        css::uno::Reference<css::drawing::XDrawPage> xDrawPage;
+        cpo::uno::Reference<css::drawing::XDrawPage> xDrawPage;
         cpo::uno::Any aAny(xDrawPages->getByIndex(i));
         aAny >>= xDrawPage;
         if (!xDrawPage.is())
@@ -2763,7 +2763,7 @@ void PowerPointExport::ImplWriteSlideMaster(sal_uInt32 nPageNum, Reference< XPro
 
     std::unordered_set<sal_Int32> aLayouts = getLayoutsUsedForMaster(pMasterPage);
 
-    css::uno::Reference< css::beans::XPropertySet > xPagePropSet;
+    cpo::uno::Reference< css::beans::XPropertySet > xPagePropSet;
     xPagePropSet.set(mXDrawPage, UNO_QUERY);
     if (xPagePropSet.is())
     {
@@ -4056,7 +4056,7 @@ void PowerPointExport::WriteMasterOwnPlaceholders(PowerPointShapeExport& rDML,
     }
 }
 
-sal_Int32 PowerPointExport::GetOrCreatePlaceholderIndex(const css::uno::Reference<XShape> &rXShape)
+sal_Int32 PowerPointExport::GetOrCreatePlaceholderIndex(const cpo::uno::Reference<XShape> &rXShape)
 {
     // One index per shape, however many parts write it: a slide's placeholder pairs with the
     // layout's by type and index, so handing the second writer a fresh number breaks that pair.

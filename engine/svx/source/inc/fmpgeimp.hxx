@@ -42,8 +42,8 @@ class FmFormPage;
 
 class FmFormPageImpl final
 {
-    css::uno::Reference< css::form::XForm >               xCurrentForm;
-    css::uno::Reference< css::form::XForms >              m_xForms;
+    cpo::uno::Reference< css::form::XForm >               xCurrentForm;
+    cpo::uno::Reference< css::form::XForms >              m_xForms;
     cpo::uno::WeakReference< css::container::XMap >       m_aControlShapeMap;
 
     FmFormPage&     m_rPage;
@@ -59,8 +59,8 @@ public:
     void initFrom( FmFormPageImpl& i_foreignImpl );
 
     //  only important for the DesignMode
-    void setCurForm(const css::uno::Reference< css::form::XForm>& xForm);
-    css::uno::Reference< css::form::XForm> getDefaultForm();
+    void setCurForm(const cpo::uno::Reference< css::form::XForm>& xForm);
+    cpo::uno::Reference< css::form::XForm> getDefaultForm();
 
     /** finds a place in the form component hierarchy where to insert the given component
 
@@ -68,9 +68,9 @@ public:
         the caller might decide on a suitable place where in the returned container the insertion
         should happen).
     */
-    css::uno::Reference< css::form::XForm> findPlaceInFormComponentHierarchy(
-        const css::uno::Reference< css::form::XFormComponent>& rContent,
-        const css::uno::Reference< css::sdbc::XDataSource>& rDatabase = css::uno::Reference< css::sdbc::XDataSource>(),
+    cpo::uno::Reference< css::form::XForm> findPlaceInFormComponentHierarchy(
+        const cpo::uno::Reference< css::form::XFormComponent>& rContent,
+        const cpo::uno::Reference< css::sdbc::XDataSource>& rDatabase = cpo::uno::Reference< css::sdbc::XDataSource>(),
         const OUString& rDBTitle = OUString(),
         const OUString& rCursorSource = OUString(),
         sal_Int32 nCommandType = 0
@@ -80,7 +80,7 @@ public:
     bool    hasEverBeenActivated( ) const { return !m_bFirstActivation; }
     void        setHasBeenActivated( ) { m_bFirstActivation = false; }
 
-    const css::uno::Reference< css::form::XForms>& getForms( bool _bForceCreate = true );
+    const cpo::uno::Reference< css::form::XForms>& getForms( bool _bForceCreate = true );
 
     void        SetFormsCreationHdl( const Link<FmFormPageImpl&,void>& _rFormsCreationHdl ) { m_aFormsCreationHdl = _rFormsCreationHdl; }
 
@@ -96,15 +96,15 @@ private:
         @param nCommandType
             the desired CommandType property value of the sought-after form
     */
-    css::uno::Reference< css::form::XForm> findFormForDataSource(
-        const css::uno::Reference< css::form::XForm>& rForm,
-        const css::uno::Reference< css::sdbc::XDataSource>& rDatabase,
+    cpo::uno::Reference< css::form::XForm> findFormForDataSource(
+        const cpo::uno::Reference< css::form::XForm>& rForm,
+        const cpo::uno::Reference< css::sdbc::XDataSource>& rDatabase,
         const OUString& rCommand,
         sal_Int32 nCommandType
     );
 
 public:
-    static OUString setUniqueName(const css::uno::Reference< css::form::XFormComponent>& xFormComponent, const css::uno::Reference< css::form::XForm>& xControls);
+    static OUString setUniqueName(const cpo::uno::Reference< css::form::XFormComponent>& xFormComponent, const cpo::uno::Reference< css::form::XForm>& xControls);
 
     void formObjectInserted( const FmFormObj& _object );
     void formObjectRemoved( const FmFormObj& _object );
@@ -112,7 +112,7 @@ public:
 
     /** returns an object mapping from control models to drawing shapes.
     */
-    UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) css::uno::Reference< css::container::XMap > getControlToShapeMap();
+    UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) cpo::uno::Reference< css::container::XMap > getControlToShapeMap();
 
 private:
     /** validates whether <member>xCurrentForm</member> is still valid and to be used
@@ -130,7 +130,7 @@ private:
     */
     bool    validateCurForm();
 
-    css::uno::Reference< css::container::XMap >
+    cpo::uno::Reference< css::container::XMap >
         impl_createControlShapeMap_nothrow();
 
     FmFormPageImpl( const FmFormPageImpl& ) = delete;

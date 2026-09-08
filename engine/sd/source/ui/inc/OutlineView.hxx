@@ -72,8 +72,8 @@ class OutlineView final
     virtual void EditViewSelectionChange() override;
     virtual OutputDevice& EditViewOutputDevice() const override;
     virtual Point EditViewPointerPosPixel() const override;
-    virtual css::uno::Reference<css::datatransfer::clipboard::XClipboard> GetClipboard() const override;
-    virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget> GetDropTarget() override;
+    virtual cpo::uno::Reference<css::datatransfer::clipboard::XClipboard> GetClipboard() const override;
+    virtual cpo::uno::Reference<css::datatransfer::dnd::XDropTarget> GetDropTarget() override;
     virtual void EditViewInputContext(const InputContext& rInputContext) override;
     virtual void EditViewCursorRect(const ::tools::Rectangle& rRect, int nExtTextInputWidth) override;
 

@@ -34,8 +34,8 @@ private:
 
 public:
     /// @throws cpo::uno::RuntimeException
-    SwVbaPane(const css::uno::Reference<ooo::vba::XHelperInterface>& rParent,
-              const css::uno::Reference<cpo::uno::XComponentContext>& rContext,
+    SwVbaPane(const cpo::uno::Reference<ooo::vba::XHelperInterface>& rParent,
+              const cpo::uno::Reference<cpo::uno::XComponentContext>& rContext,
               rtl::Reference<SwXTextDocument> xModel);
     virtual ~SwVbaPane() override;
 

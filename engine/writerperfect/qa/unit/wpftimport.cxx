@@ -17,7 +17,7 @@
 
 #include <sal/types.h>
 
-css::uno::Reference<css::io::XInputStream> createDummyInput()
+cpo::uno::Reference<css::io::XInputStream> createDummyInput()
 {
     rtl::Reference<comphelper::SequenceInputStream> xDummyInput(
         new comphelper::SequenceInputStream(cpo::uno::Sequence<sal_Int8>()));

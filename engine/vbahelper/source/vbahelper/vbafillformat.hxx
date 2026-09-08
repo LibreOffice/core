@@ -29,9 +29,9 @@ typedef InheritedHelperInterfaceWeakImpl< ov::msforms::XFillFormat > ScVbaFillFo
 class ScVbaFillFormat : public ScVbaFillFormat_BASE
 {
 private:
-    css::uno::Reference< css::drawing::XShape > m_xShape;
-    css::uno::Reference< css::beans::XPropertySet > m_xPropertySet;
-    css::uno::Reference< ov::msforms::XColorFormat > m_xColorFormat;
+    cpo::uno::Reference< css::drawing::XShape > m_xShape;
+    cpo::uno::Reference< css::beans::XPropertySet > m_xPropertySet;
+    cpo::uno::Reference< ov::msforms::XColorFormat > m_xColorFormat;
     css::drawing::FillStyle m_nFillStyle;
     sal_Int32 m_nForeColor;
     sal_Int16 m_nGradientAngle;
@@ -43,7 +43,7 @@ protected:
     virtual cpo::uno::Sequence<OUString> getServiceNames() override;
 
 public:
-    ScVbaFillFormat( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext, const css::uno::Reference< css::drawing::XShape >& xShape );
+    ScVbaFillFormat( const cpo::uno::Reference< ov::XHelperInterface >& xParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext, const cpo::uno::Reference< css::drawing::XShape >& xShape );
 
     /// @throws cpo::uno::RuntimeException
     void setForeColorAndInternalStyle( sal_Int32 nForeColor );
@@ -56,8 +56,8 @@ public:
     // Methods
     virtual void Solid() override;
     virtual void TwoColorGradient( sal_Int32 style, sal_Int32 variant ) override;
-    virtual css::uno::Reference< ov::msforms::XColorFormat > BackColor() override;
-    virtual css::uno::Reference< ov::msforms::XColorFormat > ForeColor() override;
+    virtual cpo::uno::Reference< ov::msforms::XColorFormat > BackColor() override;
+    virtual cpo::uno::Reference< ov::msforms::XColorFormat > ForeColor() override;
 
 };
 

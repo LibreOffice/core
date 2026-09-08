@@ -35,18 +35,18 @@ class SwVbaParagraph : public SwVbaParagraph_BASE
 {
 private:
     rtl::Reference< SwXTextDocument > mxTextDocument;
-    css::uno::Reference< css::text::XTextRange > mxTextRange;
+    cpo::uno::Reference< css::text::XTextRange > mxTextRange;
 
 public:
     /// @throws cpo::uno::RuntimeException
-    SwVbaParagraph( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent,
-                    const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
+    SwVbaParagraph( const cpo::uno::Reference< ooo::vba::XHelperInterface >& rParent,
+                    const cpo::uno::Reference< cpo::uno::XComponentContext >& rContext,
                     rtl::Reference< SwXTextDocument > xDocument,
-                    css::uno::Reference< css::text::XTextRange > xTextRange );
+                    cpo::uno::Reference< css::text::XTextRange > xTextRange );
     virtual ~SwVbaParagraph() override;
 
     // XParagraph
-    virtual css::uno::Reference< ooo::vba::word::XRange > SAL_CALL getRange() override;
+    virtual cpo::uno::Reference< ooo::vba::word::XRange > SAL_CALL getRange() override;
     virtual cpo::uno::Any SAL_CALL getStyle() override;
     virtual void SAL_CALL setStyle( const cpo::uno::Any& style ) override;
 
@@ -65,13 +65,13 @@ private:
     rtl::Reference< SwXTextDocument > mxTextDocument;
 public:
     /// @throws cpo::uno::RuntimeException
-    SwVbaParagraphs( const css::uno::Reference< ov::XHelperInterface >& xParent,
-                    const css::uno::Reference< cpo::uno::XComponentContext > & xContext,
+    SwVbaParagraphs( const cpo::uno::Reference< ov::XHelperInterface >& xParent,
+                    const cpo::uno::Reference< cpo::uno::XComponentContext > & xContext,
                     const rtl::Reference< SwXTextDocument >& xDocument );
 
     // XEnumerationAccess
     virtual cpo::uno::Type SAL_CALL getElementType() override;
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
+    virtual cpo::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
 
     // SwVbaParagraphs_BASE
     virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) override;

@@ -33,8 +33,8 @@ using UcbCommandEnvironment_Base = comphelper::WeakComponentImplHelper< css::lan
 
 class UcbCommandEnvironment : public UcbCommandEnvironment_Base
 {
-    css::uno::Reference< css::task::XInteractionHandler > m_xIH;
-    css::uno::Reference< css::ucb::XProgressHandler >     m_xPH;
+    cpo::uno::Reference< css::task::XInteractionHandler > m_xIH;
+    cpo::uno::Reference< css::ucb::XProgressHandler >     m_xPH;
 
 public:
     explicit UcbCommandEnvironment();
@@ -54,9 +54,9 @@ public:
     getSupportedServiceNames() override;
 
     // XCommandEnvironment
-    virtual css::uno::Reference< css::task::XInteractionHandler > SAL_CALL
+    virtual cpo::uno::Reference< css::task::XInteractionHandler > SAL_CALL
     getInteractionHandler() override;
-    virtual css::uno::Reference< css::ucb::XProgressHandler > SAL_CALL
+    virtual cpo::uno::Reference< css::ucb::XProgressHandler > SAL_CALL
     getProgressHandler() override;
 };
 

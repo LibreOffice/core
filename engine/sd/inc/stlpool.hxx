@@ -115,8 +115,8 @@ public:
 
     // XComponent
     virtual void SAL_CALL dispose(  ) override;
-    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+    virtual void SAL_CALL addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& xListener ) override;
+    virtual void SAL_CALL removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
 private:
     void CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily eFamily );
@@ -137,7 +137,7 @@ private:
     SdStyleFamilyRef        mxGraphicFamily;
     SdStyleFamilyRef        mxCellFamily;
     SdStyleFamilyMap        maStyleFamilyMap;
-    css::uno::Reference< css::container::XNameAccess > mxTableFamily;
+    cpo::uno::Reference< css::container::XNameAccess > mxTableFamily;
     OUString                msTableFamilyName;
 };
 

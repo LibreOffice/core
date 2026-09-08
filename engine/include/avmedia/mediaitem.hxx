@@ -140,21 +140,21 @@ private:
 typedef ::avmedia::MediaItem avmedia_MediaItem;
 
 bool AVMEDIA_DLLPUBLIC EmbedMedia(
-        const ::css::uno::Reference< ::css::frame::XModel>& xModel,
+        const ::cpo::uno::Reference< ::css::frame::XModel>& xModel,
         const OUString& rSourceURL,
         OUString & o_rEmbeddedURL,
-        ::css::uno::Reference<::css::io::XInputStream> const& xInputStream =
-            ::css::uno::Reference<::css::io::XInputStream>());
+        ::cpo::uno::Reference<::css::io::XInputStream> const& xInputStream =
+            ::cpo::uno::Reference<::css::io::XInputStream>());
 
 bool AVMEDIA_DLLPUBLIC CreateMediaTempFile(
-        ::css::uno::Reference<::css::io::XInputStream> const& xInStream,
+        ::cpo::uno::Reference<::css::io::XInputStream> const& xInStream,
         OUString& o_rTempFileURL,
         std::u16string_view rDesiredExtension);
 
 OUString GetFilename(OUString const& rSourceURL);
 
-::css::uno::Reference< ::css::io::XStream> CreateStream(
-    const ::css::uno::Reference< ::css::embed::XStorage>& xStorage, const OUString& rFilename);
+::cpo::uno::Reference< ::css::io::XStream> CreateStream(
+    const ::cpo::uno::Reference< ::css::embed::XStorage>& xStorage, const OUString& rFilename);
 
 struct AVMEDIA_DLLPUBLIC MediaTempFile
 {

@@ -25,6 +25,7 @@
 namespace chart
 {
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 std::shared_ptr<VPolarAxis> VPolarAxis::createAxis( const AxisProperties& rAxisProperties
            , const uno::Reference< util::XNumberFormatsSupplier >& xNumberFormatsSupplier

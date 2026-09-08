@@ -51,7 +51,7 @@ namespace drawinglayer::primitive3d
             return Primitive3DContainer();
         }
 
-        cpo::uno::Sequence< ::css::uno::Reference< ::css::graphic::XPrimitive3D > > BasePrimitive3D::getDecomposition( const cpo::uno::Sequence< beans::PropertyValue >& rViewParameters )
+        cpo::uno::Sequence< ::cpo::uno::Reference< ::css::graphic::XPrimitive3D > > BasePrimitive3D::getDecomposition( const cpo::uno::Sequence< beans::PropertyValue >& rViewParameters )
         {
             const geometry::ViewInformation3D aViewInformation(rViewParameters);
             return comphelper::containerToSequence(get3DDecomposition(aViewInformation));

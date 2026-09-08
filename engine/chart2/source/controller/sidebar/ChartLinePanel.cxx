@@ -33,22 +33,22 @@ namespace {
 
 SvxLineStyleToolBoxControl* getLineStyleToolBoxControl(const ToolbarUnoDispatcher& rToolBoxColor)
 {
-    css::uno::Reference<css::frame::XToolbarController> xController = rToolBoxColor.GetControllerForCommand(u".uno:XLineStyle"_ustr);
+    cpo::uno::Reference<css::frame::XToolbarController> xController = rToolBoxColor.GetControllerForCommand(u".uno:XLineStyle"_ustr);
     SvxLineStyleToolBoxControl* pToolBoxLineStyleControl = dynamic_cast<SvxLineStyleToolBoxControl*>(xController.get());
     return pToolBoxLineStyleControl;
 }
 
 SvxColorToolBoxControl* getColorToolBoxControl(const ToolbarUnoDispatcher& rToolBoxLineStyle)
 {
-    css::uno::Reference<css::frame::XToolbarController> xController = rToolBoxLineStyle.GetControllerForCommand(u".uno:XLineColor"_ustr);
+    cpo::uno::Reference<css::frame::XToolbarController> xController = rToolBoxLineStyle.GetControllerForCommand(u".uno:XLineColor"_ustr);
     SvxColorToolBoxControl* pToolBoxColorControl = dynamic_cast<SvxColorToolBoxControl*>(xController.get());
     return pToolBoxColorControl;
 }
 
 OUString getCID(const rtl::Reference<::chart::ChartModel>& xModel)
 {
-    css::uno::Reference<css::frame::XController> xController(xModel->getCurrentController());
-    css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(xController, css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::frame::XController> xController(xModel->getCurrentController());
+    cpo::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(xController, cpo::uno::UNO_QUERY);
     if (!xSelectionSupplier.is())
         return OUString();
 
@@ -62,18 +62,18 @@ OUString getCID(const rtl::Reference<::chart::ChartModel>& xModel)
     return aCID;
 }
 
-css::uno::Reference<css::beans::XPropertySet> getPropSet(
+cpo::uno::Reference<css::beans::XPropertySet> getPropSet(
         const rtl::Reference<::chart::ChartModel>& xModel)
 {
     OUString aCID = getCID(xModel);
-    css::uno::Reference<css::beans::XPropertySet> xPropSet =
+    cpo::uno::Reference<css::beans::XPropertySet> xPropSet =
         ObjectIdentifier::getObjectPropertySet(aCID, xModel);
 
     ObjectType eType = ObjectIdentifier::getObjectType(aCID);
     if (eType == OBJECTTYPE_DIAGRAM)
     {
-        css::uno::Reference<css::chart2::XDiagram> xDiagram(
-                xPropSet, css::uno::UNO_QUERY);
+        cpo::uno::Reference<css::chart2::XDiagram> xDiagram(
+                xPropSet, cpo::uno::UNO_QUERY);
         if (!xDiagram.is())
             return xPropSet;
 
@@ -105,7 +105,7 @@ private:
 
 std::unique_ptr<PanelLayout> ChartLinePanel::Create(
         weld::Widget* pParent,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame,
+        const cpo::uno::Reference<css::frame::XFrame>& rxFrame,
         ChartController* pController)
 {
     if (pParent == nullptr)
@@ -117,7 +117,7 @@ std::unique_ptr<PanelLayout> ChartLinePanel::Create(
 }
 
 ChartLinePanel::ChartLinePanel(weld::Widget* pParent,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame,
+        const cpo::uno::Reference<css::frame::XFrame>& rxFrame,
         ChartController* pController):
     svx::sidebar::LinePropertyPanelBase(pParent, rxFrame),
     mxModel(pController->getChartModel()),
@@ -146,7 +146,7 @@ void ChartLinePanel::Initialize()
 {
     mxModel->addModifyListener(mxListener);
 
-    css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(mxModel->getCurrentController(), css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(mxModel->getCurrentController(), cpo::uno::UNO_QUERY);
     if (xSelectionSupplier.is())
         xSelectionSupplier->addSelectionChangeListener(mxSelectionListener);
 
@@ -166,7 +166,7 @@ void ChartLinePanel::updateData()
         return;
 
     SolarMutexGuard aGuard;
-    css::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
+    cpo::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
     if (!xPropSet.is())
         return;
 
@@ -201,8 +201,8 @@ void ChartLinePanel::doUpdateModel(const rtl::Reference<::chart::ChartModel>& xM
     {
         mxModel->removeModifyListener(mxListener);
 
-        css::uno::Reference<css::view::XSelectionSupplier> oldSelectionSupplier(
-            mxModel->getCurrentController(), css::uno::UNO_QUERY);
+        cpo::uno::Reference<css::view::XSelectionSupplier> oldSelectionSupplier(
+            mxModel->getCurrentController(), cpo::uno::UNO_QUERY);
         if (oldSelectionSupplier.is()) {
             oldSelectionSupplier->removeSelectionChangeListener(mxSelectionListener);
         }
@@ -219,12 +219,12 @@ void ChartLinePanel::doUpdateModel(const rtl::Reference<::chart::ChartModel>& xM
 
     mxModel->addModifyListener(mxListener);
 
-    css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(mxModel->getCurrentController(), css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(mxModel->getCurrentController(), cpo::uno::UNO_QUERY);
     if (xSelectionSupplier.is())
         xSelectionSupplier->addSelectionChangeListener(mxSelectionListener);
 }
 
-void ChartLinePanel::updateModel(css::uno::Reference<css::frame::XModel> xModel)
+void ChartLinePanel::updateModel(cpo::uno::Reference<css::frame::XModel> xModel)
 {
     ::chart::ChartModel* pModel = dynamic_cast<::chart::ChartModel*>(xModel.get());
     assert(!xModel || pModel);
@@ -233,7 +233,7 @@ void ChartLinePanel::updateModel(css::uno::Reference<css::frame::XModel> xModel)
 
 void ChartLinePanel::setLineTransparency(const XLineTransparenceItem& rItem)
 {
-    css::uno::Reference<css::beans::XPropertySet> xPropSet =
+    cpo::uno::Reference<css::beans::XPropertySet> xPropSet =
         getPropSet(mxModel);
 
     if (!xPropSet.is())
@@ -245,7 +245,7 @@ void ChartLinePanel::setLineTransparency(const XLineTransparenceItem& rItem)
 
 void ChartLinePanel::setLineWidth(const XLineWidthItem& rItem)
 {
-    css::uno::Reference<css::beans::XPropertySet> xPropSet =
+    cpo::uno::Reference<css::beans::XPropertySet> xPropSet =
         getPropSet(mxModel);
 
     if (!xPropSet.is())

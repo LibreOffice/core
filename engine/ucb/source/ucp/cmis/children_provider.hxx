@@ -19,7 +19,7 @@ namespace cmis
         public:
             virtual ~ChildrenProvider( ) { };
 
-            virtual std::vector< css::uno::Reference< css::ucb::XContent > > getChildren( ) = 0;
+            virtual std::vector< cpo::uno::Reference< css::ucb::XContent > > getChildren( ) = 0;
     };
 }
 

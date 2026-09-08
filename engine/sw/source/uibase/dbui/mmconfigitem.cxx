@@ -49,8 +49,8 @@
 
 using namespace utl;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdb;
@@ -1625,11 +1625,11 @@ public:
             m_rParent.updateCurrentDBDataFromDocument();
     }
 
-    virtual void SAL_CALL addStatusListener(const css::uno::Reference< css::frame::XStatusListener >&, const css::util::URL&) override
+    virtual void SAL_CALL addStatusListener(const cpo::uno::Reference< css::frame::XStatusListener >&, const css::util::URL&) override
     {
     }
 
-    virtual void SAL_CALL removeStatusListener(const css::uno::Reference< css::frame::XStatusListener >&, const css::util::URL&) override
+    virtual void SAL_CALL removeStatusListener(const cpo::uno::Reference< css::frame::XStatusListener >&, const css::util::URL&) override
     {
     }
 };

@@ -55,7 +55,7 @@ enum class SalEvent;
 -(void)dockMenuItemTriggered: (id)sender;
 -(AquaSalFrame*)getSalFrame;
 -(BOOL)containsMouse;
--(css::uno::Reference < css::accessibility::XAccessibleContext >)accessibleContext;
+-(cpo::uno::Reference < css::accessibility::XAccessibleContext >)accessibleContext;
 
 /* NSDraggingDestination protocol methods
  */
@@ -290,7 +290,7 @@ enum class SalEvent;
 {
     SalFrameView*       mpParentView;
 }
--(id)initWithParent:(SalFrameView*)pParentView accessibleContext:(::com::sun::star::uno::Reference<::com::sun::star::accessibility::XAccessibleContext>&)rxAccessibleContext;
+-(id)initWithParent:(SalFrameView*)pParentView accessibleContext:(::cpo::uno::Reference<::com::sun::star::accessibility::XAccessibleContext>&)rxAccessibleContext;
 -(void)dealloc;
 @end
 

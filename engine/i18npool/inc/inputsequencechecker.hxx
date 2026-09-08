@@ -39,7 +39,7 @@ class InputSequenceCheckerImpl : public cppu::WeakImplHelper
 >
 {
 public:
-    InputSequenceCheckerImpl( const css::uno::Reference < cpo::uno::XComponentContext >& rxContext );
+    InputSequenceCheckerImpl( const cpo::uno::Reference < cpo::uno::XComponentContext >& rxContext );
     InputSequenceCheckerImpl(const char *pServiceName);
     virtual ~InputSequenceCheckerImpl() override;
 
@@ -58,18 +58,18 @@ private:
     const char *serviceName;
 
     struct lookupTableItem {
-        lookupTableItem(const char* rLanguage, css::uno::Reference < css::i18n::XExtendedInputSequenceChecker > _xISC) :
+        lookupTableItem(const char* rLanguage, cpo::uno::Reference < css::i18n::XExtendedInputSequenceChecker > _xISC) :
             aLanguage(rLanguage), xISC(std::move(_xISC)) {}
         const char* aLanguage;
-        css::uno::Reference < css::i18n::XExtendedInputSequenceChecker > xISC;
+        cpo::uno::Reference < css::i18n::XExtendedInputSequenceChecker > xISC;
     };
     std::vector<lookupTableItem> lookupTable;
     std::optional<lookupTableItem> cachedItem;
 
-    css::uno::Reference < cpo::uno::XComponentContext > m_xContext;
+    cpo::uno::Reference < cpo::uno::XComponentContext > m_xContext;
 
     /// @throws cpo::uno::RuntimeException
-    css::uno::Reference< css::i18n::XExtendedInputSequenceChecker >& getInputSequenceChecker(char const * rLanguage);
+    cpo::uno::Reference< css::i18n::XExtendedInputSequenceChecker >& getInputSequenceChecker(char const * rLanguage);
     static char* getLanguageByScripType(sal_Unicode cChar, sal_Unicode nChar);
 };
 

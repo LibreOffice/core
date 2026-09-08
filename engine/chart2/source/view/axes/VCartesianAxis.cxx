@@ -51,7 +51,7 @@
 #include <memory>
 
 using namespace ::com::sun::star;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::basegfx::B2DVector;
 using ::basegfx::B2DPolygon;
 using ::basegfx::B2DPolyPolygon;
@@ -2017,7 +2017,7 @@ void VCartesianAxis::createShapes()
 void VCartesianAxis::createDataTableView(std::vector<std::unique_ptr<VSeriesPlotter>>& rSeriesPlotterList,
                                          Reference<util::XNumberFormatsSupplier> const& xNumberFormatsSupplier,
                                          rtl::Reference<::chart::ChartModel> const& xChartDoc,
-                                         css::uno::Reference<cpo::uno::XComponentContext> const& rComponentContext)
+                                         cpo::uno::Reference<cpo::uno::XComponentContext> const& rComponentContext)
 {
     if (!m_aAxisProperties.m_bDisplayDataTable)
         return;

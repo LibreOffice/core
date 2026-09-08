@@ -10,12 +10,12 @@
 #pragma once
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <sax/fshelper.hxx>
 
 namespace oox::drawingml::chart
 {
-void exportGeography(const css::uno::Reference<css::beans::XPropertySet>& xSeriesProp,
+void exportGeography(const cpo::uno::Reference<css::beans::XPropertySet>& xSeriesProp,
                      const sax_fastparser::FSHelperPtr& pFS);
 
 } // namespace oox::drawingml::chart

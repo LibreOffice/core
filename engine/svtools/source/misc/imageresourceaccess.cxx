@@ -40,6 +40,7 @@ namespace svt::GraphicAccess
 
 using namespace ::utl;
 using namespace css;
+using namespace ::cpo;
 
 typedef ::cppu::WeakImplHelper<io::XStream, io::XSeekable> StreamSupplier_Base;
 

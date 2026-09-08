@@ -45,7 +45,7 @@ namespace dbaccess
             const OUString& i_rElementName
         ) = 0;
         void startElement(
-            const css::uno::Reference< css::xml::sax::XAttributeList >& i_rAttributes
+            const cpo::uno::Reference< css::xml::sax::XAttributeList >& i_rAttributes
         );
         virtual void endElement();
         void characters( std::u16string_view i_rCharacters );

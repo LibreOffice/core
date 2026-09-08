@@ -61,6 +61,7 @@
 #include <vector>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 {

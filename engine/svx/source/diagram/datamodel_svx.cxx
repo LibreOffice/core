@@ -39,6 +39,7 @@
 
 using namespace ::oox;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace svx::diagram {
 

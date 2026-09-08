@@ -44,6 +44,7 @@
 #include <com/sun/star/util/DateTime.hpp>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 SvxFieldData* SvxFieldData::Create(const uno::Reference<text::XTextContent>& xTextContent)
 {

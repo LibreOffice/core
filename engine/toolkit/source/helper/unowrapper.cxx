@@ -32,6 +32,7 @@
 #include <helper/unowrapper.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 static rtl::Reference<VCLXWindow> CreateXWindow( vcl::Window const * pWindow )
 {
@@ -128,7 +129,7 @@ TOOLKIT_DLLPUBLIC UnoWrapperBase* CreateUnoWrapper()
 }   // extern "C"
 
 
-UnoWrapper::UnoWrapper( const css::uno::Reference< css::awt::XToolkit>& rxToolkit )
+UnoWrapper::UnoWrapper( const cpo::uno::Reference< css::awt::XToolkit>& rxToolkit )
 {
     mxToolkit = rxToolkit;
 }
@@ -142,16 +143,16 @@ UnoWrapper::~UnoWrapper()
 {
 }
 
-css::uno::Reference< css::awt::XToolkit> UnoWrapper::GetVCLToolkit()
+cpo::uno::Reference< css::awt::XToolkit> UnoWrapper::GetVCLToolkit()
 {
     if ( !mxToolkit.is() )
         mxToolkit = VCLUnoHelper::CreateToolkit();
     return mxToolkit;
 }
 
-css::uno::Reference< css::awt::XVclWindowPeer> UnoWrapper::GetWindowInterface( vcl::Window* pWindow )
+cpo::uno::Reference< css::awt::XVclWindowPeer> UnoWrapper::GetWindowInterface( vcl::Window* pWindow )
 {
-    css::uno::Reference< css::awt::XVclWindowPeer> xPeer = pWindow->GetWindowPeer();
+    cpo::uno::Reference< css::awt::XVclWindowPeer> xPeer = pWindow->GetWindowPeer();
     if ( xPeer )
         return xPeer;
 
@@ -161,12 +162,12 @@ css::uno::Reference< css::awt::XVclWindowPeer> UnoWrapper::GetWindowInterface( v
     return xVCLXWindow;
 }
 
-VclPtr<vcl::Window> UnoWrapper::GetWindow(const css::uno::Reference<css::awt::XWindow>& rWindow)
+VclPtr<vcl::Window> UnoWrapper::GetWindow(const cpo::uno::Reference<css::awt::XWindow>& rWindow)
 {
     return VCLUnoHelper::GetWindow(rWindow);
 }
 
-void UnoWrapper::SetWindowInterface( vcl::Window* pWindow, const css::uno::Reference< css::awt::XVclWindowPeer> & xIFace )
+void UnoWrapper::SetWindowInterface( vcl::Window* pWindow, const cpo::uno::Reference< css::awt::XVclWindowPeer> & xIFace )
 {
     VCLXWindow* pVCLXWindow = dynamic_cast<VCLXWindow*>( xIFace.get() );
 
@@ -181,7 +182,7 @@ void UnoWrapper::SetWindowInterface( vcl::Window* pWindow, const css::uno::Refer
     }
     else
     {
-        css::uno::Reference< css::awt::XVclWindowPeer> xPeer = pWindow->GetWindowPeer();
+        cpo::uno::Reference< css::awt::XVclWindowPeer> xPeer = pWindow->GetWindowPeer();
         if( xPeer.is() )
         {
             bool bSameInstance( pVCLXWindow == dynamic_cast< VCLXWindow* >( xPeer.get() ));
@@ -194,7 +195,7 @@ void UnoWrapper::SetWindowInterface( vcl::Window* pWindow, const css::uno::Refer
     }
 }
 
-css::uno::Reference< css::awt::XGraphics> UnoWrapper::CreateGraphics( OutputDevice* pOutDev )
+cpo::uno::Reference< css::awt::XGraphics> UnoWrapper::CreateGraphics( OutputDevice* pOutDev )
 {
     rtl::Reference<VCLXGraphics> pGrf = new VCLXGraphics;
     pGrf->Init( pOutDev );
@@ -235,7 +236,7 @@ void UnoWrapper::WindowDestroyed( vcl::Window* pWindow )
         VclPtr< vcl::Window > pClient = pChild->GetWindow( GetWindowType::Client );
         if ( pClient && pClient->GetWindowPeer() )
         {
-            css::uno::Reference< css::lang::XComponent > xComp = pClient->GetComponentInterface( false );
+            cpo::uno::Reference< css::lang::XComponent > xComp = pClient->GetComponentInterface( false );
             xComp->dispose();
         }
         else
@@ -260,7 +261,7 @@ void UnoWrapper::WindowDestroyed( vcl::Window* pWindow )
 
             if ( pClient && pClient->GetWindowPeer() && lcl_ImplIsParent( pWindow, pClient ) )
             {
-                css::uno::Reference< css::lang::XComponent > xComp = pClient->GetComponentInterface( false );
+                cpo::uno::Reference< css::lang::XComponent > xComp = pClient->GetComponentInterface( false );
                 xComp->dispose();
             }
 

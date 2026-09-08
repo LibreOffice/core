@@ -45,7 +45,7 @@
 
 namespace cpo::uno { class XComponentContext; }
 
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace css::lang;
 using namespace css::script;
@@ -502,7 +502,7 @@ Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestTy
             break;
         }
 
-        auto ifc = o3tl::tryAccess<css::uno::Reference<cpo::uno::XInterface>>(
+        auto ifc = o3tl::tryAccess<cpo::uno::Reference<cpo::uno::XInterface>>(
             rVal);
         if (!ifc || !ifc->is())
         {

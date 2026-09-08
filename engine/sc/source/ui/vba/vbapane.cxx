@@ -26,10 +26,11 @@
 #include "vbarange.hxx"
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace ooo::vba;
 
 ScVbaPane::ScVbaPane(
-        const css::uno::Reference< ov::XHelperInterface >& xParent,
+        const cpo::uno::Reference< ov::XHelperInterface >& xParent,
         uno::Reference< cpo::uno::XComponentContext > xContext,
         const uno::Reference< frame::XModel >& rModel,
         const uno::Reference< sheet::XViewPane >& rViewPane ) :

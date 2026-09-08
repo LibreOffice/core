@@ -32,6 +32,7 @@ namespace toolkit
 
 
     using namespace ::com::sun::star;
+    using namespace ::cpo;
 
 
     //= UnoControlScrollBarModel
@@ -174,12 +175,12 @@ namespace toolkit
     }
 
     // css::awt::XScrollBar
-    void UnoScrollBarControl::addAdjustmentListener( const css::uno::Reference< css::awt::XAdjustmentListener > & l )
+    void UnoScrollBarControl::addAdjustmentListener( const cpo::uno::Reference< css::awt::XAdjustmentListener > & l )
     {
         maAdjustmentListeners.addInterface( l );
     }
 
-    void UnoScrollBarControl::removeAdjustmentListener( const css::uno::Reference< css::awt::XAdjustmentListener > & l )
+    void UnoScrollBarControl::removeAdjustmentListener( const cpo::uno::Reference< css::awt::XAdjustmentListener > & l )
     {
         maAdjustmentListeners.removeInterface( l );
     }

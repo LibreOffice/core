@@ -399,10 +399,10 @@ struct ImplSVData
     std::unordered_map< int, OUString > maPaperNames;
     std::unordered_set<CacheOwner*> maCacheOwners;
 
-    css::uno::Reference<css::i18n::XCharacterClassification> m_xCharClass;
+    cpo::uno::Reference<css::i18n::XCharacterClassification> m_xCharClass;
 
 #if defined _WIN32
-    css::uno::Reference<css::datatransfer::clipboard::XClipboard> m_xSystemClipboard;
+    cpo::uno::Reference<css::datatransfer::clipboard::XClipboard> m_xSystemClipboard;
 #endif
 
     osl::Condition m_inExecuteCondtion; // Set when code returns to Application::Execute,
@@ -421,7 +421,7 @@ struct ImplSVData
     void dumpState(rtl::OStringBuffer &rState);
 };
 
-css::uno::Reference<css::i18n::XCharacterClassification> const& ImplGetCharClass();
+cpo::uno::Reference<css::i18n::XCharacterClassification> const& ImplGetCharClass();
 
 void        ImplDeInitSVData();
 VCL_PLUGIN_PUBLIC basegfx::SystemDependentDataManager& ImplGetSystemDependentDataManager();

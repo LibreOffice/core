@@ -21,7 +21,7 @@
 #define INCLUDED_OOX_HELPER_MODELOBJECTHELPER_HXX
 
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <oox/dllapi.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -47,7 +47,7 @@ class OOX_DLLPUBLIC ObjectContainer
 {
 public:
     explicit            ObjectContainer(
-                            const css::uno::Reference< css::lang::XMultiServiceFactory >& rxModelFactory,
+                            const cpo::uno::Reference< css::lang::XMultiServiceFactory >& rxModelFactory,
                             OUString aServiceName );
                         ~ObjectContainer();
 
@@ -66,9 +66,9 @@ private:
     void                createContainer() const;
 
 private:
-    mutable css::uno::Reference< css::lang::XMultiServiceFactory >
+    mutable cpo::uno::Reference< css::lang::XMultiServiceFactory >
                         mxModelFactory;         ///< Factory to create the container.
-    mutable css::uno::Reference< css::container::XNameContainer >
+    mutable cpo::uno::Reference< css::container::XNameContainer >
                         mxContainer;            ///< Container for the objects.
     OUString            maServiceName;          ///< Service name to create the container.
     sal_Int32           mnIndex;                ///< Index to create unique identifiers.
@@ -86,7 +86,7 @@ class OOX_DLLPUBLIC ModelObjectHelper
 {
 public:
     explicit            ModelObjectHelper(
-                            const css::uno::Reference< css::lang::XMultiServiceFactory >& rxModelFactory );
+                            const cpo::uno::Reference< css::lang::XMultiServiceFactory >& rxModelFactory );
 
     /** Returns true, if the model contains a line marker with the passed name. */
     bool                hasLineMarker( const OUString& rMarkerName ) const;
@@ -113,9 +113,9 @@ public:
 
     /** Inserts a new named fill graphic, returns the bitmap name, based on
         an internal constant name with a new unused index appended. */
-    OUString insertFillBitmapXGraphic(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic);
+    OUString insertFillBitmapXGraphic(cpo::uno::Reference<css::graphic::XGraphic> const & rxGraphic);
 
-    css::uno::Reference<css::awt::XBitmap> getFillBitmap(OUString const & rGraphicName);
+    cpo::uno::Reference<css::awt::XBitmap> getFillBitmap(OUString const & rGraphicName);
 
 private:
     ObjectContainer     maMarkerContainer;      ///< Contains all named line markers (line end polygons).

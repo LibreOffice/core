@@ -47,10 +47,10 @@ protected:
     virtual void firePropertyChangeEvent() override;
 
     // ____ XPropertySet ____
-    css::uno::Reference<css::beans::XPropertySetInfo> getPropertySetInfo() override;
+    cpo::uno::Reference<css::beans::XPropertySetInfo> getPropertySetInfo() override;
 
     // ____ XCloneable ____
-    css::uno::Reference<css::util::XCloneable> createClone() override;
+    cpo::uno::Reference<css::util::XCloneable> createClone() override;
 };
 
 } //  namespace chart

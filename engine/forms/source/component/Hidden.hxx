@@ -32,11 +32,11 @@ class OHiddenModel
 
 public:
     OHiddenModel(
-        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
+        const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     OHiddenModel(
         const OHiddenModel* _pOriginal,
-        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
+        const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     virtual ~OHiddenModel() override;
 
@@ -55,9 +55,9 @@ public:
     // XPersistObject
     virtual OUString    getServiceName() override;
     virtual void
-        write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
+        write(const cpo::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
     virtual void
-        read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
+        read(const cpo::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
 
     // OControlModel's property handling
     virtual void describeFixedProperties(
@@ -68,7 +68,7 @@ public:
     using OControlModel::getFastPropertyValue;
 
 protected:
-    virtual css::uno::Reference< css::util::XCloneable > createClone(  ) override;
+    virtual cpo::uno::Reference< css::util::XCloneable > createClone(  ) override;
 };
 
 }

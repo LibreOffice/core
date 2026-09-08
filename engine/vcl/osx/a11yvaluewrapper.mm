@@ -21,7 +21,7 @@
 #include "a11yvaluewrapper.h"
 #include "a11ywrapperstatictext.h"
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::cpo::uno;
 
 // Wrapper for XAccessibleValue

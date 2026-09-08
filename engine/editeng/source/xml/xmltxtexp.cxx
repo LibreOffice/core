@@ -44,8 +44,8 @@
 
 using namespace com::sun::star;
 using namespace com::sun::star::container;
-using namespace com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::xml::sax;
 using namespace cppu;
@@ -181,11 +181,11 @@ cpo::uno::Sequence< css::beans::PropertyValue > SvxSimpleUnoModel::getArgs(  )
     return aSeq;
 }
 
-void SvxSimpleUnoModel::connectController( const css::uno::Reference< css::frame::XController >& )
+void SvxSimpleUnoModel::connectController( const cpo::uno::Reference< css::frame::XController >& )
 {
 }
 
-void SvxSimpleUnoModel::disconnectController( const css::uno::Reference< css::frame::XController >& )
+void SvxSimpleUnoModel::disconnectController( const cpo::uno::Reference< css::frame::XController >& )
 {
 }
 
@@ -202,17 +202,17 @@ bool SvxSimpleUnoModel::hasControllersLocked(  )
     return true;
 }
 
-css::uno::Reference< css::frame::XController > SvxSimpleUnoModel::getCurrentController(  )
+cpo::uno::Reference< css::frame::XController > SvxSimpleUnoModel::getCurrentController(  )
 {
     uno::Reference< frame::XController > xRet;
     return xRet;
 }
 
-void SvxSimpleUnoModel::setCurrentController( const css::uno::Reference< css::frame::XController >& )
+void SvxSimpleUnoModel::setCurrentController( const cpo::uno::Reference< css::frame::XController >& )
 {
 }
 
-css::uno::Reference< cpo::uno::XInterface > SvxSimpleUnoModel::getCurrentSelection(  )
+cpo::uno::Reference< cpo::uno::XInterface > SvxSimpleUnoModel::getCurrentSelection(  )
 {
     uno::Reference< XInterface > xRet;
     return xRet;
@@ -224,11 +224,11 @@ void SvxSimpleUnoModel::dispose(  )
 {
 }
 
-void SvxSimpleUnoModel::addEventListener( const css::uno::Reference< css::lang::XEventListener >& )
+void SvxSimpleUnoModel::addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& )
 {
 }
 
-void SvxSimpleUnoModel::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& )
+void SvxSimpleUnoModel::removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& )
 {
 }
 
@@ -238,10 +238,10 @@ class SvxXMLTextExportComponent : public SvXMLExport
 {
 public:
     SvxXMLTextExportComponent(
-        const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& rContext,
         EditEngine* pEditEngine,
         const ESelection& rSel,
-        const css::uno::Reference< css::xml::sax::XDocumentHandler >& rHandler );
+        const cpo::uno::Reference< css::xml::sax::XDocumentHandler >& rHandler );
 
     // methods without content:
     virtual void ExportAutoStyles_() override;
@@ -255,10 +255,10 @@ private:
 }
 
 SvxXMLTextExportComponent::SvxXMLTextExportComponent(
-    const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
+    const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
     EditEngine* pEditEngine,
     const ESelection& rSel,
-    const css::uno::Reference< css::xml::sax::XDocumentHandler > & xHandler)
+    const cpo::uno::Reference< css::xml::sax::XDocumentHandler > & xHandler)
 :   SvXMLExport( xContext, u""_ustr, /*rFileName*/u""_ustr, xHandler, static_cast<frame::XModel*>(new SvxSimpleUnoModel()), FieldUnit::CM,
     SvXMLExportFlags::OASIS  |  SvXMLExportFlags::AUTOSTYLES  |  SvXMLExportFlags::CONTENT  |  SvXMLExportFlags::EMBEDDED )
 {

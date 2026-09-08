@@ -41,7 +41,7 @@ class OfficeInstallationDirectories : public OfficeInstallationDirectories_Base
 {
 public:
     explicit OfficeInstallationDirectories(
-        css::uno::Reference< cpo::uno::XComponentContext > xCtx );
+        cpo::uno::Reference< cpo::uno::XComponentContext > xCtx );
     virtual ~OfficeInstallationDirectories() override;
 
     // XOfficeInstallationDirectories
@@ -66,7 +66,7 @@ private:
     void initDirs();
 
     std::mutex m_aMutex;
-    css::uno::Reference< cpo::uno::XComponentContext >    m_xCtx;
+    cpo::uno::Reference< cpo::uno::XComponentContext >    m_xCtx;
     std::optional<OUString>                  m_xOfficeBrandDir;
     std::optional<OUString>                  m_xUserDir;
 };

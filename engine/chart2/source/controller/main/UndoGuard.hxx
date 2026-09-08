@@ -37,7 +37,7 @@ class UndoGuard
 public:
     explicit UndoGuard(
         OUString i_undoMessage,
-        const css::uno::Reference< css::document::XUndoManager > & i_undoManager,
+        const cpo::uno::Reference< css::document::XUndoManager > & i_undoManager,
         const ModelFacet i_facet = E_MODEL
     );
     ~UndoGuard();
@@ -53,7 +53,7 @@ private:
 
 private:
     rtl::Reference<::chart::ChartModel>                       m_xChartModel;
-    const css::uno::Reference< css::document::XUndoManager >  m_xUndoManager;
+    const cpo::uno::Reference< css::document::XUndoManager >  m_xUndoManager;
 
     std::shared_ptr< ChartModelClone >  m_pDocumentSnapshot;
     OUString                           m_aUndoString;
@@ -68,7 +68,7 @@ class UndoLiveUpdateGuard : public UndoGuard
 public:
     explicit UndoLiveUpdateGuard(
         const OUString& i_undoMessage,
-        const css::uno::Reference< css::document::XUndoManager > & i_undoManager
+        const cpo::uno::Reference< css::document::XUndoManager > & i_undoManager
     );
     ~UndoLiveUpdateGuard();
 };
@@ -82,7 +82,7 @@ class UndoLiveUpdateGuardWithData :
 public:
     explicit UndoLiveUpdateGuardWithData(
         const OUString& i_undoMessage,
-        const css::uno::Reference< css::document::XUndoManager > & i_undoManager
+        const cpo::uno::Reference< css::document::XUndoManager > & i_undoManager
     );
     ~UndoLiveUpdateGuardWithData();
 };
@@ -92,7 +92,7 @@ class UndoGuardWithSelection : public UndoGuard
 public:
     explicit UndoGuardWithSelection(
         const OUString& i_undoMessage,
-        const css::uno::Reference< css::document::XUndoManager > & i_undoManager
+        const cpo::uno::Reference< css::document::XUndoManager > & i_undoManager
     );
     virtual ~UndoGuardWithSelection();
 };
@@ -101,12 +101,12 @@ class HiddenUndoContext
 {
 public:
     explicit HiddenUndoContext(
-        const css::uno::Reference< css::document::XUndoManager > & i_undoManager
+        const cpo::uno::Reference< css::document::XUndoManager > & i_undoManager
     );
     ~HiddenUndoContext();
 
 private:
-    css::uno::Reference< css::document::XUndoManager >    m_xUndoManager;
+    cpo::uno::Reference< css::document::XUndoManager >    m_xUndoManager;
 };
 
 }

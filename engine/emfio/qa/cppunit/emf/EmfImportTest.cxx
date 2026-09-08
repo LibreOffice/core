@@ -31,10 +31,10 @@
 #include <string_view>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace css::io;
 using namespace css::graphic;
-using namespace ::cpo::uno;
 using drawinglayer::primitive2d::Primitive2DSequence;
 using drawinglayer::primitive2d::Primitive2DContainer;
 

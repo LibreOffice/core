@@ -31,6 +31,7 @@
 #include <vcl/scheduler.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 /// Covers sfx2/source/view/ fixes.
 class Sfx2ViewTest : public UnoApiTest

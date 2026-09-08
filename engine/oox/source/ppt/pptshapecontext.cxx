@@ -35,7 +35,7 @@
 
 using namespace oox::core;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 namespace oox::ppt {
 

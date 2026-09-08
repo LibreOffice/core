@@ -38,7 +38,7 @@
 namespace comphelper
 {
 
-    using ::com::sun::star::uno::Reference;
+    using ::cpo::uno::Reference;
     using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::beans::XPropertySetInfo;
     using ::com::sun::star::beans::Property;
@@ -52,7 +52,7 @@ namespace comphelper
 #if OSL_DEBUG_LEVEL > 0
     using ::com::sun::star::lang::XServiceInfo;
 #endif
-    using ::com::sun::star::uno::UNO_QUERY;
+    using ::cpo::uno::UNO_QUERY;
 
     namespace PropertyAttribute = ::com::sun::star::beans::PropertyAttribute;
 

@@ -31,7 +31,7 @@ namespace com::sun::star::i18n { class XExtendedIndexEntrySupplier; }
 class SW_DLLPUBLIC IndexEntrySupplierWrapper
 {
     css::lang::Locale m_aLcl;
-    css::uno::Reference < css::i18n::XExtendedIndexEntrySupplier > m_xIES;
+    cpo::uno::Reference < css::i18n::XExtendedIndexEntrySupplier > m_xIES;
 
 public:
     IndexEntrySupplierWrapper();

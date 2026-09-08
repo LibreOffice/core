@@ -46,7 +46,7 @@
 #include <cstdlib>
 #include <memory>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 #define POSTSCRIPT_BOUNDINGSEARCH   0x1000  // we only try to get the BoundingBox
                                             // in the first 4096 bytes
@@ -152,7 +152,7 @@ private:
     sal_uInt32          nOffset;
     sal_uInt32          dwShift;
 
-    css::uno::Reference< css::task::XStatusIndicator > xStatusIndicator;
+    cpo::uno::Reference< css::task::XStatusIndicator > xStatusIndicator;
 
     void                ImplWriteProlog( const Graphic* pPreviewEPSI );
     void                ImplWriteEpilog();

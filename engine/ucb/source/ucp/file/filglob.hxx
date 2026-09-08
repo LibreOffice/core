@@ -85,7 +85,7 @@ namespace fileaccess {
 
     extern void throw_handler( TaskHandlerErr errorCode,
                                sal_Int32 minorCode,
-                               const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv,
+                               const cpo::uno::Reference< css::ucb::XCommandEnvironment >& xEnv,
                                const OUString& aUncPath,
                                BaseContent* pContent,
                                bool isHandled);

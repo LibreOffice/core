@@ -22,12 +22,12 @@
 
 using namespace connectivity;
 using namespace connectivity::file;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 
-css::uno::Reference< css::beans::XPropertySet > OTables::createObject(const OUString& /*_rName*/)
+cpo::uno::Reference< css::beans::XPropertySet > OTables::createObject(const OUString& /*_rName*/)
 {
     return nullptr;
 }

@@ -22,7 +22,7 @@
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -35,7 +35,7 @@ class ScannerManager final :
         css::scanner::XScannerManager2, css::awt::XBitmap, css::lang::XServiceInfo, css::lang::XInitialization>
 {
     osl::Mutex                              maProtector;
-    css::uno::Reference<css::awt::XWindow>  mxDialogParent;
+    cpo::uno::Reference<css::awt::XWindow>  mxDialogParent;
     void*                                   mpData;
 
     static void                             AcquireData();
@@ -49,10 +49,10 @@ public:
     // XScannerManager
     virtual cpo::uno::Sequence< css::scanner::ScannerContext >  getAvailableScanners() override;
     virtual bool               configureScanner( css::scanner::ScannerContext& scanner_context ) override;
-    virtual bool               configureScannerAndScan( css::scanner::ScannerContext& scanner_context, const css::uno::Reference< css::lang::XEventListener >& rxListener ) override;
-    virtual void                   startScan( const css::scanner::ScannerContext& scanner_context, const css::uno::Reference< css::lang::XEventListener >& rxListener ) override;
+    virtual bool               configureScannerAndScan( css::scanner::ScannerContext& scanner_context, const cpo::uno::Reference< css::lang::XEventListener >& rxListener ) override;
+    virtual void                   startScan( const css::scanner::ScannerContext& scanner_context, const cpo::uno::Reference< css::lang::XEventListener >& rxListener ) override;
     virtual css::scanner::ScanError              getError( const css::scanner::ScannerContext& scanner_context ) override;
-    virtual css::uno::Reference< css::awt::XBitmap >    getBitmap( const css::scanner::ScannerContext& scanner_context ) override;
+    virtual cpo::uno::Reference< css::awt::XBitmap >    getBitmap( const css::scanner::ScannerContext& scanner_context ) override;
 
     // XBitmap
     virtual css::awt::Size              getSize() override;
@@ -74,6 +74,6 @@ public:
  };
 
 /// @throws Exception
-css::uno::Reference< cpo::uno::XInterface > ScannerManager_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& rxFactory );
+cpo::uno::Reference< cpo::uno::XInterface > ScannerManager_CreateInstance( const cpo::uno::Reference< css::lang::XMultiServiceFactory >& rxFactory );
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

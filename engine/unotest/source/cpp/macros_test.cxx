@@ -35,6 +35,7 @@
 #include <vcl/scheduler.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 namespace unotest
 {
@@ -211,9 +212,9 @@ struct Valid
 {
     DateTime now;
     OUString subjectName;
-    const css::uno::Reference<css::xml::crypto::XSecurityEnvironment>& env;
+    const cpo::uno::Reference<css::xml::crypto::XSecurityEnvironment>& env;
     Valid(const cpo::uno::Sequence<css::beans::PropertyValue>& rFilterData,
-          const css::uno::Reference<css::xml::crypto::XSecurityEnvironment>& rEnv)
+          const cpo::uno::Reference<css::xml::crypto::XSecurityEnvironment>& rEnv)
         : now(DateTime::SYSTEM)
         , env(rEnv)
     {
@@ -223,7 +224,7 @@ struct Valid
                 propVal.Value >>= subjectName;
         }
     }
-    bool operator()(const css::uno::Reference<css::security::XCertificate>& cert) const
+    bool operator()(const cpo::uno::Reference<css::security::XCertificate>& cert) const
     {
         if (!now.IsBetween(DateTime(cert->getNotValidBefore()), DateTime(cert->getNotValidAfter())))
             return false;
@@ -236,16 +237,16 @@ struct Valid
 };
 }
 
-bool MacrosTest::IsValid(const css::uno::Reference<css::security::XCertificate>& cert,
-                         const css::uno::Reference<css::xml::crypto::XSecurityEnvironment>& env)
+bool MacrosTest::IsValid(const cpo::uno::Reference<css::security::XCertificate>& cert,
+                         const cpo::uno::Reference<css::xml::crypto::XSecurityEnvironment>& env)
 {
     const Valid test({}, env);
     return test(cert);
 }
 
-css::uno::Reference<css::security::XCertificate> MacrosTest::GetValidCertificate(
-    const cpo::uno::Sequence<css::uno::Reference<css::security::XCertificate>>& certs,
-    const css::uno::Reference<css::xml::crypto::XSecurityEnvironment>& env,
+cpo::uno::Reference<css::security::XCertificate> MacrosTest::GetValidCertificate(
+    const cpo::uno::Sequence<cpo::uno::Reference<css::security::XCertificate>>& certs,
+    const cpo::uno::Reference<css::xml::crypto::XSecurityEnvironment>& env,
     const cpo::uno::Sequence<css::beans::PropertyValue>& rFilterData)
 {
     if (auto it = std::find_if(certs.begin(), certs.end(), Valid(rFilterData, env));

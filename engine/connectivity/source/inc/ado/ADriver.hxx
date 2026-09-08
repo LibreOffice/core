@@ -44,19 +44,19 @@ namespace connectivity::ado
                                                 m_xConnections; //  vector containing a list
                                                     //  of all the Connection objects
                                                     //  for this Driver
-        css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+        cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
         // to put back all the inits with COINIT_MULTITHREADED if needed
         int mnNbCallCoInitializeExForReinit;
 
     public:
-        ODriver(const css::uno::Reference< cpo::uno::XComponentContext >& xContext);
+        ODriver(const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext);
         ~ODriver() override;
 
         // OComponentHelper
         virtual void disposing() override;
 
-        css::uno::Reference< cpo::uno::XComponentContext > getContext() const { return m_xContext; }
+        cpo::uno::Reference< cpo::uno::XComponentContext > getContext() const { return m_xContext; }
 
     private:
         void impl_checkURL_throw(const OUString& _sUrl);
@@ -67,15 +67,15 @@ namespace connectivity::ado
         virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
         // XDriver
-        virtual css::uno::Reference< css::sdbc::XConnection > connect( const OUString& url, const cpo::uno::Sequence< css::beans::PropertyValue >& info ) override;
+        virtual cpo::uno::Reference< css::sdbc::XConnection > connect( const OUString& url, const cpo::uno::Sequence< css::beans::PropertyValue >& info ) override;
         virtual bool acceptsURL( const OUString& url ) override;
         virtual cpo::uno::Sequence< css::sdbc::DriverPropertyInfo > getPropertyInfo( const OUString& url, const cpo::uno::Sequence< css::beans::PropertyValue >& info ) override;
         virtual sal_Int32 getMajorVersion(  ) override;
         virtual sal_Int32 getMinorVersion(  ) override;
 
         // XDataDefinitionSupplier
-        virtual css::uno::Reference< css::sdbcx::XTablesSupplier > getDataDefinitionByConnection( const css::uno::Reference< css::sdbc::XConnection >& connection ) override;
-        virtual css::uno::Reference< css::sdbcx::XTablesSupplier > getDataDefinitionByURL( const OUString& url, const cpo::uno::Sequence< css::beans::PropertyValue >& info ) override;
+        virtual cpo::uno::Reference< css::sdbcx::XTablesSupplier > getDataDefinitionByConnection( const cpo::uno::Reference< css::sdbc::XConnection >& connection ) override;
+        virtual cpo::uno::Reference< css::sdbcx::XTablesSupplier > getDataDefinitionByURL( const OUString& url, const cpo::uno::Sequence< css::beans::PropertyValue >& info ) override;
     };
 
 }

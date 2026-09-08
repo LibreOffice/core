@@ -38,7 +38,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
 
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 
 ScXMLExternalRefTabSourceContext::ScXMLExternalRefTabSourceContext(
     ScXMLImport& rImport,

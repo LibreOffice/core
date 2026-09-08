@@ -25,7 +25,7 @@
 using namespace svx;
 
 SvxLineSpacingToolBoxControl::SvxLineSpacingToolBoxControl(
-    const css::uno::Reference<cpo::uno::XComponentContext>& rContext)
+    const cpo::uno::Reference<cpo::uno::XComponentContext>& rContext)
     : PopupWindowController(rContext, nullptr, OUString())
 {
 }

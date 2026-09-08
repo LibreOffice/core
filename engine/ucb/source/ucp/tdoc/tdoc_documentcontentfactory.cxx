@@ -31,6 +31,7 @@
 #include "tdoc_documentcontentfactory.hxx"
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace tdoc_ucp;
 
 

@@ -57,6 +57,7 @@
 //-
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 //-
 
@@ -75,8 +76,8 @@ public:
     explicit SvxUnoDrawPagesAccess( SvxUnoDrawingModel& rMyModel ) noexcept;
 
     // XDrawPages
-    virtual css::uno::Reference< css::drawing::XDrawPage > insertNewByIndex( sal_Int32 nIndex ) override;
-    virtual void remove( const css::uno::Reference< css::drawing::XDrawPage >& xPage ) override;
+    virtual cpo::uno::Reference< css::drawing::XDrawPage > insertNewByIndex( sal_Int32 nIndex ) override;
+    virtual void remove( const cpo::uno::Reference< css::drawing::XDrawPage >& xPage ) override;
 
     // XIndexAccess
     virtual sal_Int32 getCount() override ;
@@ -163,7 +164,7 @@ bool SvxUnoDrawMSFactory::createEvent( const SdrModel* pDoc, const SdrHint* pSdr
 
 namespace {
 
-css::uno::Reference<cpo::uno::XInterface> create(
+cpo::uno::Reference<cpo::uno::XInterface> create(
     OUString const & rServiceSpecifier, OUString const & referer)
 {
     if( rServiceSpecifier.startsWith("com.sun.star.drawing.") )
@@ -647,7 +648,7 @@ cpo::uno::Sequence< OUString > SvxUnoDrawPagesAccess::getSupportedServiceNames( 
     return { u"com.sun.star.drawing.DrawPages"_ustr };
 }
 
-css::uno::Reference< css::container::XIndexReplace > SvxCreateNumRule(SdrModel* pModel)
+cpo::uno::Reference< css::container::XIndexReplace > SvxCreateNumRule(SdrModel* pModel)
 {
     const SvxNumRule* pDefaultRule = nullptr;
     if( pModel )

@@ -75,7 +75,7 @@ ThreadedDeflater::ThreadedDeflater(sal_Int32 nSetLevel)
 ThreadedDeflater::~ThreadedDeflater() { clear(); }
 
 void ThreadedDeflater::deflateWrite(
-    const css::uno::Reference<css::io::XInputStream>& xInStream,
+    const cpo::uno::Reference<css::io::XInputStream>& xInStream,
     const std::function<void(const cpo::uno::Sequence<sal_Int8>&, sal_Int32)>& rProcessInputFunc,
     const std::function<void(const cpo::uno::Sequence<sal_Int8>&, sal_Int32)>& rProcessOutputFunc)
 {

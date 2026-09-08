@@ -36,13 +36,13 @@ using namespace ::comphelper;
 
 using namespace connectivity;
 using namespace connectivity::ado;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::container;
 
-css::uno::Reference< css::beans::XPropertySet > OViews::createObject(const OUString& _rName)
+cpo::uno::Reference< css::beans::XPropertySet > OViews::createObject(const OUString& _rName)
 {
     rtl::Reference<OAdoView> pView = new OAdoView(isCaseSensitive(),m_aCollection.GetItem(_rName));
     pView->setNew(false);
@@ -61,7 +61,7 @@ Reference< XPropertySet > OViews::createDescriptor()
 
 
 // XAppend
-css::uno::Reference< css::beans::XPropertySet > OViews::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
+cpo::uno::Reference< css::beans::XPropertySet > OViews::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     OAdoView* pView = dynamic_cast<OAdoView*>( descriptor.get() );
     if ( pView == nullptr )

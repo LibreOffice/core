@@ -37,7 +37,7 @@
 #include <sfx2/strings.hrc>
 #include <helpids.h>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 constexpr OUString USERITEM_NAME = u"UserItem"_ustr;
@@ -47,7 +47,7 @@ struct TabPageImpl
 {
     bool                        mbStandard;
     SfxOkDialogController*      mpSfxDialogController;
-    css::uno::Reference< css::frame::XFrame > mxFrame;
+    cpo::uno::Reference< css::frame::XFrame > mxFrame;
 
     TabPageImpl() : mbStandard(false), mpSfxDialogController(nullptr) {}
 };
@@ -113,17 +113,17 @@ static auto Find(const SfxTabDlgData_Impl& rArr, std::u16string_view rId)
                         [rId](const auto& item) { return item->sId == rId; });
 }
 
-void SfxTabPage::SetFrame(const css::uno::Reference< css::frame::XFrame >& xFrame)
+void SfxTabPage::SetFrame(const cpo::uno::Reference< css::frame::XFrame >& xFrame)
 {
     if (mpImpl)
         mpImpl->mxFrame = xFrame;
 }
 
-css::uno::Reference< css::frame::XFrame > SfxTabPage::GetFrame() const
+cpo::uno::Reference< css::frame::XFrame > SfxTabPage::GetFrame() const
 {
     if (mpImpl)
         return mpImpl->mxFrame;
-    return css::uno::Reference< css::frame::XFrame >();
+    return cpo::uno::Reference< css::frame::XFrame >();
 }
 
 static bool isKitMobilePhone()

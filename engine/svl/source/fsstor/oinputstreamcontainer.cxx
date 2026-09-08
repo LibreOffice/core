@@ -23,6 +23,7 @@
 #include <cppuhelper/queryinterface.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 OFSInputStreamContainer::OFSInputStreamContainer( const uno::Reference< io::XInputStream >& xStream )
 : m_xInputStream( xStream )

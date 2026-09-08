@@ -31,14 +31,14 @@ class SwVbaSection : public SwVbaSection_BASE
 {
 private:
     rtl::Reference< SwXTextDocument > mxModel;
-    css::uno::Reference< css::beans::XPropertySet > mxPageProps;
+    cpo::uno::Reference< css::beans::XPropertySet > mxPageProps;
 
 public:
     /// @throws cpo::uno::RuntimeException
-    SwVbaSection( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent,
-                  const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
+    SwVbaSection( const cpo::uno::Reference< ooo::vba::XHelperInterface >& rParent,
+                  const cpo::uno::Reference< cpo::uno::XComponentContext >& rContext,
                   rtl::Reference< SwXTextDocument > xModel,
-                  css::uno::Reference< css::beans::XPropertySet > xProps );
+                  cpo::uno::Reference< css::beans::XPropertySet > xProps );
     virtual ~SwVbaSection() override;
 
     // Attributes

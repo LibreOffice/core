@@ -19,7 +19,7 @@
 
 #include <memory>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 
 #include <rtl/ustring.hxx>
 #include "XMLPropertyBackpatcher.hxx"
@@ -27,7 +27,7 @@
 #include <xmloff/txtimp.hxx>
 
 using ::std::map;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::cpo::uno::Any;
 using ::com::sun::star::beans::XPropertySet;
 

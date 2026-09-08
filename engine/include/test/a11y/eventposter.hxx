@@ -12,7 +12,7 @@
 #include <test/testdllapi.hxx>
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <COKit/COKit.hxx>
 #include <rtl/ustring.hxx>
@@ -114,7 +114,7 @@ public:
         : EventPosterHelper()
     {
     }
-    AccessibleEventPosterHelper(const css::uno::Reference<css::accessibility::XAccessible>& xAcc)
+    AccessibleEventPosterHelper(const cpo::uno::Reference<css::accessibility::XAccessible>& xAcc)
     {
         setWindow(xAcc);
     }
@@ -128,7 +128,7 @@ public:
      * This currently relies on a toplevel accessible being a @c VCLXWindow, and requires that
      * window's output device to be set (@see VCLXWindow::GetWindow()).
      */
-    void setWindow(css::uno::Reference<css::accessibility::XAccessible> xAcc);
+    void setWindow(cpo::uno::Reference<css::accessibility::XAccessible> xAcc);
 };
 }
 

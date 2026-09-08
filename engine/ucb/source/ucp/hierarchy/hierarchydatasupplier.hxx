@@ -38,15 +38,15 @@ private:
 
 public:
     HierarchyResultSetDataSupplier(
-                    const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+                    const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                     const rtl::Reference< HierarchyContent >& rContent,
                     sal_Int32 nOpenMode );
     virtual ~HierarchyResultSetDataSupplier() override;
 
     virtual OUString queryContentIdentifierString( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nIndex ) final override;
-    virtual css::uno::Reference< css::ucb::XContentIdentifier >
+    virtual cpo::uno::Reference< css::ucb::XContentIdentifier >
     queryContentIdentifier( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nIndex ) override;
-    virtual css::uno::Reference< css::ucb::XContent >
+    virtual cpo::uno::Reference< css::ucb::XContent >
     queryContent( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nIndex ) override;
 
     virtual bool getResult( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nIndex ) final override;
@@ -55,7 +55,7 @@ public:
     virtual sal_uInt32 currentCount() override;
     virtual bool isCountFinal() override;
 
-    virtual css::uno::Reference< css::sdbc::XRow >
+    virtual cpo::uno::Reference< css::sdbc::XRow >
     queryPropertyValues( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nIndex  ) override;
     virtual void releasePropertyValues( sal_uInt32 nIndex ) override;
 
@@ -69,9 +69,9 @@ private:
     struct ResultListEntry
     {
         OUString                             aId;
-        css::uno::Reference< css::ucb::XContentIdentifier > xId;
-        css::uno::Reference< css::ucb::XContent >           xContent;
-        css::uno::Reference< css::sdbc::XRow >              xRow;
+        cpo::uno::Reference< css::ucb::XContentIdentifier > xId;
+        cpo::uno::Reference< css::ucb::XContent >           xContent;
+        cpo::uno::Reference< css::sdbc::XRow >              xRow;
         HierarchyEntryData                        aData;
 
         explicit ResultListEntry( HierarchyEntryData aEntry ) : aData(std::move( aEntry )) {}
@@ -80,7 +80,7 @@ private:
     std::mutex                                      m_aMutex;
     ResultList                                      m_aResults;
     rtl::Reference< HierarchyContent >              m_xContent;
-    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
     HierarchyEntry                                  m_aFolder;
     HierarchyEntry::iterator                        m_aIterator;
     sal_Int32                                       m_nOpenMode;

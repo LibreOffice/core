@@ -31,8 +31,8 @@ typedef cppu::ImplInheritanceHelper< VbaDialogBase, ov::word::XDialog > SwVbaDia
 class SwVbaDialog : public SwVbaDialog_BASE
 {
 public:
-    SwVbaDialog( const css::uno::Reference< ov::XHelperInterface >& xParent,
-                 const css::uno::Reference< cpo::uno::XComponentContext > & xContext,
+    SwVbaDialog( const cpo::uno::Reference< ov::XHelperInterface >& xParent,
+                 const cpo::uno::Reference< cpo::uno::XComponentContext > & xContext,
                  const rtl::Reference< SwXTextDocument >& xModel,
                  sal_Int32 nIndex );
 
@@ -42,7 +42,7 @@ public:
     virtual OUString getServiceImplName() override;
     virtual cpo::uno::Sequence<OUString> getServiceNames() override;
 
-    virtual css::uno::Reference< css::frame::XModel > getModel() const override;
+    virtual cpo::uno::Reference< css::frame::XModel > getModel() const override;
 private:
     rtl::Reference< SwXTextDocument > m_xModel;
 };

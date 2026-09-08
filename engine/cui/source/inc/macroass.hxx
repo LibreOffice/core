@@ -51,7 +51,7 @@ class SfxMacroTabPage final : public SfxTabPage
 public:
     SfxMacroTabPage(
         weld::Container* pPage, weld::DialogController* pController,
-        const css::uno::Reference< css::frame::XFrame >& rxDocumentFrame,
+        const cpo::uno::Reference< css::frame::XFrame >& rxDocumentFrame,
         const SfxItemSet& rSet
     );
 
@@ -78,7 +78,7 @@ class SfxMacroAssignDlg : public SfxSingleTabDialogController
 {
 public:
     SfxMacroAssignDlg(weld::Widget* pParent,
-                      const css::uno::Reference< css::frame::XFrame >& rxDocumentFrame,
+                      const cpo::uno::Reference< css::frame::XFrame >& rxDocumentFrame,
                       std::unique_ptr<const SfxItemSet> xSet);
     SfxMacroTabPage* GetTabPage()
     {

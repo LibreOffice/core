@@ -36,9 +36,9 @@ public:
                                const XMLPropertyState& rProp,
                                ::std::vector<XMLPropertyState>& rProps);
 
-    virtual css::uno::Reference<css::xml::sax::XFastContextHandler> createFastChildContext(
+    virtual cpo::uno::Reference<css::xml::sax::XFastContextHandler> createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference<css::xml::sax::XFastAttributeList>& AttrList) override;
+        const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& AttrList) override;
 
     virtual void endFastElement(sal_Int32 nElement) override;
 };

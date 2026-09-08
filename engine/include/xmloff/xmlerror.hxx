@@ -88,9 +88,9 @@ namespace o3tl
 }
 
 namespace com::sun::star {
-    namespace uno { template<class X> class Reference; }
     namespace xml::sax { class XLocator; }
 }
+namespace cpo::uno { template<class X> class Reference; }
 namespace cpo::uno { template<class X> class Sequence; }
 
 class ErrorRecord;
@@ -127,7 +127,7 @@ public:
         sal_Int32 nId, /// error ID == error flags + error class + error number
         const cpo::uno::Sequence<OUString> & rParams,  /// parameters for error message
         const OUString& rExceptionMessage, /// original exception string
-        const css::uno::Reference<css::xml::sax::XLocator> & rLocator); /// location
+        const cpo::uno::Reference<css::xml::sax::XLocator> & rLocator); /// location
 
     /**
      * throw a SAXParseException that describes the first error that matches

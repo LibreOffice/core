@@ -37,7 +37,7 @@
 
 namespace dbaui
 {
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
     using namespace ::com::sun::star::sdbc;
 
     std::unique_ptr<SfxTabPage> OConnectionTabPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* _rAttrSet)

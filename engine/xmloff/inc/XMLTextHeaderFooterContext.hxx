@@ -28,8 +28,8 @@ namespace com::sun::star {
 
 class XMLTextHeaderFooterContext final : public SvXMLImportContext
 {
-    css::uno::Reference< css::text::XTextCursor > xOldTextCursor;
-    css::uno::Reference< css::beans::XPropertySet > xPropSet;
+    cpo::uno::Reference< css::text::XTextCursor > xOldTextCursor;
+    cpo::uno::Reference< css::beans::XPropertySet > xPropSet;
 
     const OUString sOn;
     const OUString sShareContent;
@@ -44,14 +44,14 @@ class XMLTextHeaderFooterContext final : public SvXMLImportContext
 public:
 
     XMLTextHeaderFooterContext( SvXMLImport& rImport,
-            const css::uno::Reference< css::beans::XPropertySet > & rPageStylePropSet,
+            const cpo::uno::Reference< css::beans::XPropertySet > & rPageStylePropSet,
                bool bFooter, bool bLft, bool bFrst );
 
     virtual ~XMLTextHeaderFooterContext() override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
     virtual void endFastElement(sal_Int32 nElement) override;
 };

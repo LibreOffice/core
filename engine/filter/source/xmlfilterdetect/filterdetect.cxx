@@ -31,7 +31,7 @@
 #include <o3tl/string_view.hxx>
 
 using namespace com::sun::star::container;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::beans;
 
@@ -75,7 +75,7 @@ bool IsMediaTypeXML( const OUString& mediaType )
 OUString FilterDetect::detect( cpo::uno::Sequence< css::beans::PropertyValue >& aArguments )
 {
     OUString sUrl;
-    css::uno::Reference< css::io::XInputStream > xInStream;
+    cpo::uno::Reference< css::io::XInputStream > xInStream;
 
     sal_Int32 nLength = aArguments.getLength();
     sal_Int32 location=nLength;

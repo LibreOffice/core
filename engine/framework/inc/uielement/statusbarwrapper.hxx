@@ -32,7 +32,7 @@ class StatusBarWrapper final : public UIConfigElementWrapperBase
 {
     public:
         StatusBarWrapper(
-            css::uno::Reference< cpo::uno::XComponentContext > xContext );
+            cpo::uno::Reference< cpo::uno::XComponentContext > xContext );
         virtual ~StatusBarWrapper() override;
 
         // XComponent
@@ -42,14 +42,14 @@ class StatusBarWrapper final : public UIConfigElementWrapperBase
         virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
         // XUIElement
-        virtual css::uno::Reference< cpo::uno::XInterface > getRealInterface() override;
+        virtual cpo::uno::Reference< cpo::uno::XInterface > getRealInterface() override;
 
         // XUIElementSettings
         virtual void updateSettings() override;
 
     private:
         rtl::Reference< StatusBarManager >                       m_xStatusBarManager;
-        css::uno::Reference< cpo::uno::XComponentContext >       m_xContext;
+        cpo::uno::Reference< cpo::uno::XComponentContext >       m_xContext;
 };
 
 } // namespace framework

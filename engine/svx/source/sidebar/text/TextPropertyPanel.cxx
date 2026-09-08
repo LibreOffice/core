@@ -29,7 +29,7 @@ namespace svx::sidebar {
 
 std::unique_ptr<PanelLayout> TextPropertyPanel::Create (
     weld::Widget* pParent,
-    const css::uno::Reference<css::frame::XFrame>& rxFrame)
+    const cpo::uno::Reference<css::frame::XFrame>& rxFrame)
 {
     if (pParent == nullptr)
         throw lang::IllegalArgumentException(u"no parent Window given to TextPropertyPanel::Create"_ustr, nullptr, 0);
@@ -39,7 +39,7 @@ std::unique_ptr<PanelLayout> TextPropertyPanel::Create (
     return std::make_unique<TextPropertyPanel>(pParent, rxFrame);
 }
 
-TextPropertyPanel::TextPropertyPanel(weld::Widget* pParent, const css::uno::Reference<css::frame::XFrame>& rxFrame)
+TextPropertyPanel::TextPropertyPanel(weld::Widget* pParent, const cpo::uno::Reference<css::frame::XFrame>& rxFrame)
     : PanelLayout(pParent, u"SidebarTextPanel"_ustr, u"svx/ui/sidebartextpanel.ui"_ustr)
     , mxFontnameFt(m_xBuilder->weld_label(u"fontnameft"_ustr))
     , mxFont(m_xBuilder->weld_toolbar(u"font"_ustr))

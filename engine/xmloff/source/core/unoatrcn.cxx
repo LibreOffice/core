@@ -29,6 +29,7 @@
 #include <xmloff/unoatrcn.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 // Interface implementation
 

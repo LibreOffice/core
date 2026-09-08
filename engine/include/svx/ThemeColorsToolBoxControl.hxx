@@ -25,11 +25,11 @@ class SVX_DLLPUBLIC ThemeColorsPaneWrapper final : public InterimItemWindow,
                                                    public SfxListener
 {
 private:
-    css::uno::Reference<css::frame::XFrame> m_xFrame;
+    cpo::uno::Reference<css::frame::XFrame> m_xFrame;
 
 public:
     ThemeColorsPaneWrapper(vcl::Window* pParent,
-                           const css::uno::Reference<css::frame::XFrame>& rxFrame);
+                           const cpo::uno::Reference<css::frame::XFrame>& rxFrame);
     virtual ~ThemeColorsPaneWrapper() override;
     virtual void dispose() override;
     void SetOptimalSize();
@@ -57,8 +57,8 @@ public:
     virtual void statusChanged(const css::frame::FeatureStateEvent& rEvent) override;
 
     // XToolbarController
-    virtual css::uno::Reference<css::awt::XWindow>
-        createItemWindow(const css::uno::Reference<css::awt::XWindow>& rParent) override;
+    virtual cpo::uno::Reference<css::awt::XWindow>
+        createItemWindow(const cpo::uno::Reference<css::awt::XWindow>& rParent) override;
 
     // WeakComponentImplHelperBase
     using ThemeColorsToolBoxControl_Base::disposing;

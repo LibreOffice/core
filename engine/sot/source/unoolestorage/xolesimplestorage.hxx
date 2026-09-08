@@ -46,27 +46,27 @@ class OLESimpleStorage : public cppu::WeakImplHelper<css::embed::XOLESimpleStora
 
     bool m_bDisposed;
 
-    css::uno::Reference< css::io::XStream > m_xStream;
-    css::uno::Reference< css::io::XStream > m_xTempStream;
+    cpo::uno::Reference< css::io::XStream > m_xStream;
+    cpo::uno::Reference< css::io::XStream > m_xTempStream;
     std::unique_ptr<SvStream> m_pStream;
     std::unique_ptr<BaseStorage> m_pStorage;
 
     ::comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_aListenersContainer; // list of listeners
-    css::uno::Reference<cpo::uno::XComponentContext> m_xContext;
+    cpo::uno::Reference<cpo::uno::XComponentContext> m_xContext;
 
     bool m_bNoTemporaryCopy;
 
     void UpdateOriginal_Impl();
 
     /// @throws cpo::uno::Exception
-    static void InsertInputStreamToStorage_Impl( BaseStorage* pStorage, const OUString & aName, const css::uno::Reference< css::io::XInputStream >& xInputStream );
+    static void InsertInputStreamToStorage_Impl( BaseStorage* pStorage, const OUString & aName, const cpo::uno::Reference< css::io::XInputStream >& xInputStream );
 
     /// @throws cpo::uno::Exception
-    static void InsertNameAccessToStorage_Impl( BaseStorage* pStorage, const OUString & aName, const css::uno::Reference< css::container::XNameAccess >& xNameAccess );
+    static void InsertNameAccessToStorage_Impl( BaseStorage* pStorage, const OUString & aName, const cpo::uno::Reference< css::container::XNameAccess >& xNameAccess );
 
 public:
 
-    OLESimpleStorage(css::uno::Reference<cpo::uno::XComponentContext> xContext,
+    OLESimpleStorage(cpo::uno::Reference<cpo::uno::XComponentContext> xContext,
             cpo::uno::Sequence<cpo::uno::Any> const &arguments);
 
     virtual ~OLESimpleStorage() override;
@@ -94,10 +94,10 @@ public:
     virtual void SAL_CALL dispose() final override;
 
     virtual void SAL_CALL addEventListener(
-            const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
+            const cpo::uno::Reference< css::lang::XEventListener >& xListener ) override;
 
     virtual void SAL_CALL removeEventListener(
-            const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
+            const cpo::uno::Reference< css::lang::XEventListener >& xListener ) override;
 
     //  XTransactedObject
 

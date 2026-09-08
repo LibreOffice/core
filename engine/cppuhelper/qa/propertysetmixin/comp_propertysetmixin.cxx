@@ -37,7 +37,7 @@
 #include <cppuhelper/weak.hxx>
 #include <cpo/uno/Any.hxx>
 #include <cpo/uno/Exception.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Type.hxx>
@@ -60,7 +60,7 @@ class Empty1:
 {
 public:
     explicit Empty1(
-        css::uno::Reference< cpo::uno::XComponentContext > const & context):
+        cpo::uno::Reference< cpo::uno::XComponentContext > const & context):
         cppu::PropertySetMixin< css::lang::XComponent >(
             context, static_cast< Implements >(0),
             cpo::uno::Sequence< OUString >())
@@ -78,12 +78,12 @@ public:
     }
 
     virtual void addEventListener(
-        css::uno::Reference< css::lang::XEventListener > const &)
+        cpo::uno::Reference< css::lang::XEventListener > const &)
         throw (cpo::uno::RuntimeException)
     {}
 
     virtual void removeEventListener(
-        css::uno::Reference< css::lang::XEventListener > const &)
+        cpo::uno::Reference< css::lang::XEventListener > const &)
         throw (cpo::uno::RuntimeException)
     {}
 
@@ -115,7 +115,7 @@ class Empty2:
 {
 public:
     explicit Empty2(
-        css::uno::Reference< cpo::uno::XComponentContext > const & context):
+        cpo::uno::Reference< cpo::uno::XComponentContext > const & context):
         cppu::PropertySetMixin< css::lang::XComponent >(
             context,
             static_cast< Implements >(
@@ -136,12 +136,12 @@ public:
     }
 
     virtual void addEventListener(
-        css::uno::Reference< css::lang::XEventListener > const &)
+        cpo::uno::Reference< css::lang::XEventListener > const &)
         throw (cpo::uno::RuntimeException)
     {}
 
     virtual void removeEventListener(
-        css::uno::Reference< css::lang::XEventListener > const &)
+        cpo::uno::Reference< css::lang::XEventListener > const &)
         throw (cpo::uno::RuntimeException)
     {}
 
@@ -179,7 +179,7 @@ class Full:
 {
 public:
     explicit Full(
-        css::uno::Reference< cpo::uno::XComponentContext > const & context):
+        cpo::uno::Reference< cpo::uno::XComponentContext > const & context):
         cppu::PropertySetMixin<
         test::cppuhelper::propertysetmixin::XTest3 >(
             context,
@@ -349,18 +349,18 @@ class Supplier:
 {
 public:
     explicit Supplier(
-        css::uno::Reference< cpo::uno::XComponentContext > const & context):
+        cpo::uno::Reference< cpo::uno::XComponentContext > const & context):
         m_context(context) {}
 
-    virtual css::uno::Reference< css::lang::XComponent > getEmpty1()
+    virtual cpo::uno::Reference< css::lang::XComponent > getEmpty1()
         throw (cpo::uno::RuntimeException)
     { return new Empty1(m_context); }
 
-    virtual css::uno::Reference< css::lang::XComponent > getEmpty2()
+    virtual cpo::uno::Reference< css::lang::XComponent > getEmpty2()
         throw (cpo::uno::RuntimeException)
     { return new Empty2(m_context); }
 
-    virtual css::uno::Reference< test::cppuhelper::propertysetmixin::XTest3 >
+    virtual cpo::uno::Reference< test::cppuhelper::propertysetmixin::XTest3 >
     getFull() throw (cpo::uno::RuntimeException)
     { return new Full(m_context); }
 
@@ -370,11 +370,11 @@ private:
 
     virtual ~Supplier() {}
 
-    css::uno::Reference< cpo::uno::XComponentContext > m_context;
+    cpo::uno::Reference< cpo::uno::XComponentContext > m_context;
 };
 
-css::uno::Reference< cpo::uno::XInterface > create(
-    css::uno::Reference< cpo::uno::XComponentContext > const & context)
+cpo::uno::Reference< cpo::uno::XInterface > create(
+    cpo::uno::Reference< cpo::uno::XComponentContext > const & context)
 {
     return static_cast< cppu::OWeakObject * >(new Supplier(context));
 }

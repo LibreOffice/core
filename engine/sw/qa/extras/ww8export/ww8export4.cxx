@@ -41,7 +41,8 @@
 #include <fmtftntx.hxx>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 namespace
 {

@@ -65,8 +65,8 @@
 #include <optional>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::beans;
@@ -91,9 +91,9 @@ public:
             const Reference< xml::sax::XFastAttributeList >& xAttrList,
             SvxXMLListLevelStyleContext_Impl& rLLevel   );
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
 class SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl : public SvXMLImportContext
@@ -185,9 +185,9 @@ public:
             SvXMLImport& rImport, sal_Int32 nElement,
             const Reference< xml::sax::XFastAttributeList > & xAttrList );
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     sal_Int32 GetLevel() const { return nLevel; }
     Sequence<beans::PropertyValue> GetProperties();
@@ -334,9 +334,9 @@ SvxXMLListLevelStyleContext_Impl::SvxXMLListLevelStyleContext_Impl(
     }
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SvxXMLListLevelStyleContext_Impl::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SvxXMLListLevelStyleContext_Impl::createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     if( nElement == XML_ELEMENT(STYLE, XML_LIST_LEVEL_PROPERTIES) ||
         nElement == XML_ELEMENT(STYLE, XML_TEXT_PROPERTIES) )
@@ -768,9 +768,9 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
     rListLevel.SetImageVertOrient( eVertOrient );
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SvxXMLListLevelStyleAttrContext_Impl::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SvxXMLListLevelStyleAttrContext_Impl::createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     if ( nElement == XML_ELEMENT(STYLE, XML_LIST_LEVEL_LABEL_ALIGNMENT) )
     {
@@ -860,9 +860,9 @@ SvxXMLListStyleContext::SvxXMLListStyleContext( SvXMLImport& rImport,
 
 SvxXMLListStyleContext::~SvxXMLListStyleContext() {}
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SvxXMLListStyleContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SvxXMLListStyleContext::createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     if( m_bOutline
         ? nElement == XML_ELEMENT(TEXT, XML_OUTLINE_LEVEL_STYLE)

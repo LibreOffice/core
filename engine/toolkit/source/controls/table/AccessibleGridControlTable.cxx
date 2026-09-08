@@ -27,10 +27,11 @@
 #include <vcl/unohelp.hxx>
 #include <tools/debug.hxx>
 
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::cpo::uno::Sequence;
 using ::cpo::uno::Any;
 
+using namespace ::cpo;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using namespace ::vcl;

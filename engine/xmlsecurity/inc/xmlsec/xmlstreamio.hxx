@@ -25,7 +25,7 @@ namespace com::sun::star::xml::crypto
 {
 class XUriBinding;
 }
-namespace com::sun::star::uno
+namespace cpo::uno
 {
 template <typename> class Reference;
 }
@@ -33,7 +33,7 @@ template <typename> class Reference;
 int xmlEnableStreamInputCallbacks();
 void xmlDisableStreamInputCallbacks();
 int xmlRegisterStreamInputCallbacks(
-    css::uno::Reference<css::xml::crypto::XUriBinding> const& aUriBinding);
+    cpo::uno::Reference<css::xml::crypto::XUriBinding> const& aUriBinding);
 int xmlUnregisterStreamInputCallbacks();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

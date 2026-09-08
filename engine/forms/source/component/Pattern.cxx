@@ -24,14 +24,14 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
 
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::cpo::uno::Sequence;
 using ::cpo::uno::XComponentContext;
 using ::com::sun::star::beans::Property;
 using ::cpo::uno::XInterface;
 using ::cpo::uno::Any;
 using ::com::sun::star::sdbc::XRowSet;
-using ::com::sun::star::uno::UNO_QUERY;
+using ::cpo::uno::UNO_QUERY;
 
 namespace FormComponentType = ::com::sun::star::form::FormComponentType;
 
@@ -80,7 +80,7 @@ OPatternModel::~OPatternModel()
 
 // XCloneable
 
-css::uno::Reference< css::util::XCloneable > OPatternModel::createClone()
+cpo::uno::Reference< css::util::XCloneable > OPatternModel::createClone()
 {
     rtl::Reference<OPatternModel> pClone = new OPatternModel(this, getContext());
     pClone->clonedFrom(this);

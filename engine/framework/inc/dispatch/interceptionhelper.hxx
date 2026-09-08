@@ -58,7 +58,7 @@ class InterceptionHelper final : public  ::cppu::WeakImplHelper<
     struct InterceptorInfo
     {
         /** @short reference to the interceptor component. */
-        css::uno::Reference< css::frame::XDispatchProvider > xInterceptor;
+        cpo::uno::Reference< css::frame::XDispatchProvider > xInterceptor;
 
         /** @short it's registration for URL patterns.
 
@@ -87,7 +87,7 @@ class InterceptionHelper final : public  ::cppu::WeakImplHelper<
                 @return An iterator object, which points directly to the located item inside this list.
                         In case no interceptor could be found, it points to the end of this list!
               */
-            iterator findByReference(const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor)
+            iterator findByReference(const cpo::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor)
             {
                 iterator pIt;
                 for (pIt=begin(); pIt!=end(); ++pIt)
@@ -149,7 +149,7 @@ class InterceptionHelper final : public  ::cppu::WeakImplHelper<
             @param xSlave
                     an outside creates dispatch provider, which has to be used here as lowest slave "interceptor".
          */
-        InterceptionHelper(const css::uno::Reference< css::frame::XFrame >&            xOwner,
+        InterceptionHelper(const cpo::uno::Reference< css::frame::XFrame >&            xOwner,
                            rtl::Reference< DispatchProvider >  xSlave);
 
     private:
@@ -188,7 +188,7 @@ class InterceptionHelper final : public  ::cppu::WeakImplHelper<
             @return A valid dispatch object, if any interceptor or at least our slave is interested on the given URL;
                     or NULL otherwise.
          */
-        virtual css::uno::Reference< css::frame::XDispatch > queryDispatch(const css::util::URL&  aURL            ,
+        virtual cpo::uno::Reference< css::frame::XDispatch > queryDispatch(const css::util::URL&  aURL            ,
                                                                                     const OUString& sTargetFrameName,
                                                                                           sal_Int32        nSearchFlags    ) override;
 
@@ -205,7 +205,7 @@ class InterceptionHelper final : public  ::cppu::WeakImplHelper<
 
             @return A list of dispatch objects.
          */
-        virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > queryDispatches(const cpo::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor) override;
+        virtual cpo::uno::Sequence< cpo::uno::Reference< css::frame::XDispatch > > queryDispatches(const cpo::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor) override;
 
         // XDispatchProviderInterception
 
@@ -222,7 +222,7 @@ class InterceptionHelper final : public  ::cppu::WeakImplHelper<
 
             @throw      A RuntimeException if the given reference is NULL!
          */
-        virtual void registerDispatchProviderInterceptor(const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor) override;
+        virtual void registerDispatchProviderInterceptor(const cpo::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor) override;
 
         // XDispatchProviderInterception
 
@@ -236,7 +236,7 @@ class InterceptionHelper final : public  ::cppu::WeakImplHelper<
 
             @throw      A RuntimeException if the given reference is NULL!
          */
-        virtual void releaseDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor ) override;
+        virtual void releaseDispatchProviderInterceptor( const cpo::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor ) override;
 
         // XEventListener
 

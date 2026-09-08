@@ -133,14 +133,14 @@ private:
     rtl::Reference<sdr::annotation::Annotation> GetAnnotationById(sal_uInt32 nAnnotationId);
 };
 
-OUString getAnnotationDateTimeString( const css::uno::Reference< css::office::XAnnotation >& xAnnotation );
+OUString getAnnotationDateTimeString( const cpo::uno::Reference< css::office::XAnnotation >& xAnnotation );
 
 SfxItemPool* GetAnnotationPool();
 
 css::util::DateTime getCurrentDateTime();
 
 /** Stamps the annotation with the wall clock its author reads and the moment that stands for. */
-void stampWithCurrentTime(const css::uno::Reference<css::office::XAnnotation>& xAnnotation);
+void stampWithCurrentTime(const cpo::uno::Reference<css::office::XAnnotation>& xAnnotation);
 
 }
 

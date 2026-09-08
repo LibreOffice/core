@@ -65,11 +65,11 @@ namespace dbtools::param
         ::std::vector< sal_Int32 >      m_aIndexes;
 
         /// the "delegator" column to which standard property requests are forwarded
-        css::uno::Reference< css::beans::XPropertySet >       m_xDelegator;
+        cpo::uno::Reference< css::beans::XPropertySet >       m_xDelegator;
         /// the property set info for our delegator
-        css::uno::Reference< css::beans::XPropertySetInfo >   m_xDelegatorPSI;
+        cpo::uno::Reference< css::beans::XPropertySetInfo >   m_xDelegatorPSI;
         /// the component taking the value
-        css::uno::Reference< css::sdbc::XParameters >         m_xValueDestination;
+        cpo::uno::Reference< css::sdbc::XParameters >         m_xValueDestination;
         /// helper for implementing XPropertySetInfo
         ::std::unique_ptr< ::cppu::OPropertyArrayHelper >     m_pInfoHelper;
 
@@ -80,12 +80,12 @@ namespace dbtools::param
 
     public:
         ParameterWrapper(
-            const css::uno::Reference< css::beans::XPropertySet >& _rxColumn
+            const cpo::uno::Reference< css::beans::XPropertySet >& _rxColumn
         );
 
         ParameterWrapper(
-            const css::uno::Reference< css::beans::XPropertySet >& _rxColumn,
-            const css::uno::Reference< css::sdbc::XParameters >& _rxAllParameters,
+            const cpo::uno::Reference< css::beans::XPropertySet >& _rxColumn,
+            const cpo::uno::Reference< css::sdbc::XParameters >& _rxAllParameters,
             std::vector< sal_Int32 >&& _rIndexes
         );
 
@@ -95,7 +95,7 @@ namespace dbtools::param
         virtual cpo::uno::Sequence< sal_Int8 > getImplementationId(  ) override;
 
         // XPropertySet
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo() override;
+        virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo() override;
         virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
         // OPropertySetHelper
@@ -146,14 +146,14 @@ namespace dbtools::param
             Note that here, the simple constructor of the ParameterWrapper will be used, which does not
             use a XParameters instance to forward values to, but only remembers the values itself.
         */
-        ParameterWrapperContainer( const css::uno::Reference< css::sdb::XSingleSelectQueryAnalyzer >& _rxComposer );
+        ParameterWrapperContainer( const cpo::uno::Reference< css::sdb::XSingleSelectQueryAnalyzer >& _rxComposer );
 
         // css::container::XElementAccess
         virtual cpo::uno::Type getElementType() override;
         virtual bool hasElements() override;
 
         // css::container::XEnumerationAccess
-        virtual css::uno::Reference< css::container::XEnumeration > createEnumeration() override;
+        virtual cpo::uno::Reference< css::container::XEnumeration > createEnumeration() override;
 
         // css::container::XIndexAccess
         virtual sal_Int32 getCount() override;

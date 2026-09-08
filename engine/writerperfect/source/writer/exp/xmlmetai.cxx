@@ -12,6 +12,7 @@
 #include "xmlimp.hxx"
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 namespace writerperfect::exp
 {
@@ -166,7 +167,7 @@ XMLMetaDocumentContext::XMLMetaDocumentContext(XMLImport& rImport)
 }
 
 rtl::Reference<XMLImportContext> XMLMetaDocumentContext::CreateChildContext(
-    const OUString& rName, const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
+    const OUString& rName, const cpo::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
     if (rName == "dc:title")
         return new XMLDcTitleContext(GetImport(), *this);

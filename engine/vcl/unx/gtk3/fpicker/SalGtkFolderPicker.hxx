@@ -32,7 +32,7 @@ class SalGtkFolderPicker :
     public:
 
         // constructor
-        SalGtkFolderPicker( const css::uno::Reference< cpo::uno::XComponentContext >& xServiceMgr );
+        SalGtkFolderPicker( const cpo::uno::Reference< cpo::uno::XComponentContext >& xServiceMgr );
 
         // XExecutableDialog functions
 

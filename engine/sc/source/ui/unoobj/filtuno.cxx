@@ -48,8 +48,8 @@
 #include <memory>
 
 using namespace com::sun::star;
-using namespace com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace connectivity::dbase;
 
 constexpr OUString SCFILTEROPTIONSOBJ_SERVICE = u"com.sun.star.ui.dialogs.FilterOptionsDialog"_ustr;

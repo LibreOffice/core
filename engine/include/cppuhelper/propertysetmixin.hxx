@@ -25,7 +25,7 @@
 #include "com/sun/star/beans/XFastPropertySet.hpp"
 #include "com/sun/star/beans/XPropertyAccess.hpp"
 #include "com/sun/star/beans/XPropertySet.hpp"
-#include "com/sun/star/uno/Reference.h"
+#include "cpo/uno/Reference.h"
 #include "cpo/uno/Sequence.hxx"
 #include "sal/types.h"
 #include "cppuhelper/cppuhelperdllapi.h"
@@ -240,7 +240,7 @@ protected:
         cpo::uno::Type const & type) SAL_OVERRIDE;
 
     // @see css::beans::XPropertySet::getPropertySetInfo
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo() SAL_OVERRIDE;
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo() SAL_OVERRIDE;
 
     // @see css::beans::XPropertySet::setPropertyValue
     virtual void setPropertyValue(
@@ -262,13 +262,13 @@ protected:
     */
     virtual void addPropertyChangeListener(
         rtl::OUString const & propertyName,
-        css::uno::Reference<
+        cpo::uno::Reference<
         css::beans::XPropertyChangeListener > const & listener) SAL_OVERRIDE;
 
     // @see css::beans::XPropertySet::removePropertyChangeListener
     virtual void removePropertyChangeListener(
         rtl::OUString const & propertyName,
-        css::uno::Reference<
+        cpo::uno::Reference<
         css::beans::XPropertyChangeListener > const & listener) SAL_OVERRIDE;
 
     /**
@@ -282,13 +282,13 @@ protected:
     */
     virtual void addVetoableChangeListener(
         rtl::OUString const & propertyName,
-        css::uno::Reference<
+        cpo::uno::Reference<
         css::beans::XVetoableChangeListener > const & listener) SAL_OVERRIDE;
 
     // @see css::beans::XPropertySet::removeVetoableChangeListener
     virtual void removeVetoableChangeListener(
         rtl::OUString const & propertyName,
-        css::uno::Reference<
+        cpo::uno::Reference<
         css::beans::XVetoableChangeListener > const & listener) SAL_OVERRIDE;
 
     // @see css::beans::XFastPropertySet::setFastPropertyValue
@@ -311,7 +311,7 @@ private:
     void operator=( const PropertySetMixinImpl&) SAL_DELETED_FUNCTION;
 
     PropertySetMixinImpl(
-        css::uno::Reference< cpo::uno::XComponentContext > const & context,
+        cpo::uno::Reference< cpo::uno::XComponentContext > const & context,
         Implements implements,
         cpo::uno::Sequence< rtl::OUString > const & absentOptional,
         cpo::uno::Type const & type);
@@ -380,7 +380,7 @@ protected:
        empty.
     */
     PropertySetMixin(
-        css::uno::Reference< cpo::uno::XComponentContext > const & context,
+        cpo::uno::Reference< cpo::uno::XComponentContext > const & context,
         Implements implements,
         cpo::uno::Sequence< rtl::OUString > const & absentOptional):
         PropertySetMixinImpl(

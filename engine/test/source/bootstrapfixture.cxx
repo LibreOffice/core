@@ -36,6 +36,7 @@
 #include "setupvcl.hxx"
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 static void aBasicErrorFunc( const OUString &rErr, const OUString &rAction )
 {

@@ -850,10 +850,10 @@ public:
 
     virtual OUString CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, std::optional<Color>& rTxtColor, std::optional<Color>& rFldColor, std::optional<FontLineStyle>& rFldLineStyle );
 
-    void            SetSpeller( css::uno::Reference< css::linguistic2::XSpellChecker > const &xSpeller );
-    css::uno::Reference< css::linguistic2::XSpellChecker > const &
+    void            SetSpeller( cpo::uno::Reference< css::linguistic2::XSpellChecker > const &xSpeller );
+    cpo::uno::Reference< css::linguistic2::XSpellChecker > const &
                     GetSpeller();
-    void            SetHyphenator( css::uno::Reference< css::linguistic2::XHyphenator > const & xHyph );
+    void            SetHyphenator( cpo::uno::Reference< css::linguistic2::XHyphenator > const & xHyph );
 
     static void     SetForbiddenCharsTable(const std::shared_ptr<SvxForbiddenCharactersTable>& xForbiddenChars);
 

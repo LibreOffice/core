@@ -41,8 +41,8 @@ private:
         double min,
         double max,
         sal_Int32 nPointCount,
-        const css::uno::Reference<css::chart2::XScaling>& xScalingX,
-        const css::uno::Reference<css::chart2::XScaling>& xScalingY,
+        const cpo::uno::Reference<css::chart2::XScaling>& xScalingX,
+        const cpo::uno::Reference<css::chart2::XScaling>& xScalingY,
         bool bMaySkipPointsInCalculation ) override;
 };
 

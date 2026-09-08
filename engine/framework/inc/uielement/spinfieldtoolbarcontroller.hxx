@@ -35,8 +35,8 @@ class SpinfieldToolbarController final : public ComplexToolbarController
 
 {
     public:
-        SpinfieldToolbarController( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
-                                    const css::uno::Reference< css::frame::XFrame >& rFrame,
+        SpinfieldToolbarController( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+                                    const cpo::uno::Reference< css::frame::XFrame >& rFrame,
                                     ToolBox* pToolBar,
                                     ToolBoxItemId nID,
                                     sal_Int32 nWidth,

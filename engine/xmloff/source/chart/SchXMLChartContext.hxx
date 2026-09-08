@@ -74,11 +74,11 @@ public:
     virtual ~SchXMLChartContext() override;
 
     virtual void startFastElement( sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
     virtual void endFastElement(sal_Int32 nElement) override;
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
 private:
     SchXMLTable maTable;
@@ -104,7 +104,7 @@ private:
     SeriesDefaultsAndStyles maSeriesDefaultsAndStyles;
     tSchXMLLSequencesPerIndex maLSequencesPerIndex;
 
-    css::uno::Reference< css::drawing::XShapes > mxDrawPage;
+    cpo::uno::Reference< css::drawing::XShapes > mxDrawPage;
     OUString msColTrans;
     OUString msRowTrans;
     OUString maChartTypeServiceName;
@@ -125,21 +125,21 @@ class SchXMLTitleContext : public SvXMLImportContext
 private:
     SchXMLImportHelper& mrImportHelper;
     std::vector<std::pair<OUString, OUString>>& mrTitle;
-    css::uno::Reference< css::drawing::XShape > mxTitleShape;
+    cpo::uno::Reference< css::drawing::XShape > mxTitleShape;
     OUString msAutoStyleName;
 
 public:
     SchXMLTitleContext( SchXMLImportHelper& rImpHelper,
                         SvXMLImport& rImport,
                         std::vector<std::pair<OUString, OUString>>& rTitle,
-                        css::uno::Reference< css::drawing::XShape > xTitleShape );
+                        cpo::uno::Reference< css::drawing::XShape > xTitleShape );
     virtual ~SchXMLTitleContext() override;
 
     virtual void startFastElement( sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

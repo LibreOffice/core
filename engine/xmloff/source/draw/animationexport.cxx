@@ -73,6 +73,7 @@
 #include <xmloff/animationexport.hxx>
 
 using namespace css;
+using namespace ::cpo;
 using namespace ::cppu;
 using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::presentation;
@@ -81,9 +82,9 @@ using namespace ::com::sun::star::beans;
 using namespace ::xmloff::token;
 
 using ::cpo::uno::Any;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::UNO_QUERY;
+using ::cpo::uno::UNO_QUERY_THROW;
+using ::cpo::uno::Reference;
 using ::cpo::uno::Sequence;
 using ::cpo::uno::Exception;
 using ::cpo::uno::RuntimeException;
@@ -693,7 +694,7 @@ void AnimationsExporterImpl::prepareNode( const Reference< XAnimationNode >& xNo
         case AnimationNodeType::SEQ:
         {
             Reference< XEnumerationAccess > xEnumerationAccess( xNode, UNO_QUERY_THROW );
-            Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), css::uno::UNO_SET_THROW );
+            Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), cpo::uno::UNO_SET_THROW );
             while( xEnumeration->hasMoreElements() )
             {
                 Reference< XAnimationNode > xChildNode( xEnumeration->nextElement(), UNO_QUERY_THROW );
@@ -1048,7 +1049,7 @@ void AnimationsExporterImpl::exportContainer( const Reference< XTimeContainer >&
             exportTransitionNode();
 
         Reference< XEnumerationAccess > xEnumerationAccess( xContainer, UNO_QUERY_THROW );
-        Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), css::uno::UNO_SET_THROW );
+        Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), cpo::uno::UNO_SET_THROW );
         while( xEnumeration->hasMoreElements() )
         {
             Reference< XAnimationNode > xChildNode( xEnumeration->nextElement(), UNO_QUERY_THROW );
@@ -1439,7 +1440,7 @@ Reference< XInterface > AnimationsExporterImpl::getParagraphTarget( const Paragr
     {
         Reference< XEnumerationAccess > xParaEnumAccess( pTarget.Shape, UNO_QUERY_THROW );
 
-        Reference< XEnumeration > xEnumeration( xParaEnumAccess->createEnumeration(), css::uno::UNO_SET_THROW );
+        Reference< XEnumeration > xEnumeration( xParaEnumAccess->createEnumeration(), cpo::uno::UNO_SET_THROW );
         sal_Int32 nParagraph = pTarget.Paragraph;
 
         while( xEnumeration->hasMoreElements() )
@@ -1727,13 +1728,13 @@ void AnimationsExporter::exportAnimations( const Reference< XAnimationNode >& xR
             {
                 // first check if there are no animations
                 Reference< XEnumerationAccess > xEnumerationAccess( xRootNode, UNO_QUERY_THROW );
-                Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), css::uno::UNO_SET_THROW );
+                Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), cpo::uno::UNO_SET_THROW );
                 if( xEnumeration->hasMoreElements() )
                 {
                     // first child node may be an empty main sequence, check this
                     Reference< XAnimationNode > xMainNode( xEnumeration->nextElement(), UNO_QUERY_THROW );
                     Reference< XEnumerationAccess > xMainEnumerationAccess( xMainNode, UNO_QUERY_THROW );
-                    Reference< XEnumeration > xMainEnumeration( xMainEnumerationAccess->createEnumeration(), css::uno::UNO_SET_THROW );
+                    Reference< XEnumeration > xMainEnumeration( xMainEnumerationAccess->createEnumeration(), cpo::uno::UNO_SET_THROW );
 
                     // only export if the main sequence is not empty or if there are additional
                     // trigger sequences

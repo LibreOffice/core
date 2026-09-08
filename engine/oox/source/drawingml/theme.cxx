@@ -109,7 +109,7 @@ const TextFont* Theme::resolveFont( std::u16string_view rName ) const
     return nullptr;
 }
 
-void Theme::addTheme(const css::uno::Reference<css::drawing::XDrawPage>& xDrawPage) const
+void Theme::addTheme(const cpo::uno::Reference<css::drawing::XDrawPage>& xDrawPage) const
 {
     SAL_WARN_IF(!xDrawPage.is(), "oox", "DrawPage is not set");
 

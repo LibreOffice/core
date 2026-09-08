@@ -26,6 +26,7 @@
 #include <xmloff/xmltoken.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace xmloff::token;
 
 namespace {
@@ -35,7 +36,7 @@ class ScXMLThreadedCommentReplyContext : public ScXMLImportContext
 {
 public:
     ScXMLThreadedCommentReplyContext(ScXMLImport& rImport,
-                                    const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+                                    const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                                     ScXMLAnnotationData& rData)
         : ScXMLImportContext(rImport)
         , mrData(rData)
@@ -57,9 +58,9 @@ public:
         }
     }
 
-    css::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
+    cpo::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference<css::xml::sax::XFastAttributeList>&) override
+        const cpo::uno::Reference<css::xml::sax::XFastAttributeList>&) override
     {
         if (nElement == XML_ELEMENT(LO_EXT, XML_TEXT))
             return new ScXMLContentContext(GetScImport(), maTextBuffer);
@@ -84,7 +85,7 @@ class ScXMLThreadedCommentContext : public ScXMLImportContext
 {
 public:
     ScXMLThreadedCommentContext(ScXMLImport& rImport,
-                               const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+                               const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                                ScXMLAnnotationData& rData)
         : ScXMLImportContext(rImport)
         , mrData(rData)
@@ -111,9 +112,9 @@ public:
         }
     }
 
-    css::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
+    cpo::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList) override
+        const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList) override
     {
         if (nElement == XML_ELEMENT(LO_EXT, XML_TEXT))
             return new ScXMLContentContext(GetScImport(), maTextBuffer);
@@ -208,15 +209,15 @@ ScXMLAnnotationContext::~ScXMLAnnotationContext()
 {
 }
 
-void ScXMLAnnotationContext::startFastElement(sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList)
+void ScXMLAnnotationContext::startFastElement(sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList)
 {
     if (pShapeContext)
         pShapeContext->startFastElement(nElement, xAttrList);
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > ScXMLAnnotationContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > ScXMLAnnotationContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     switch (nElement)
     {

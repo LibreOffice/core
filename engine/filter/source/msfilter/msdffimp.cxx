@@ -166,7 +166,7 @@
 
 using namespace ::com::sun::star    ;
 using namespace ::com::sun::star::drawing;
-using namespace uno                 ;
+using namespace ::cpo;
 using namespace ::cpo::uno;
 using namespace beans               ;
 using namespace drawing             ;
@@ -2759,24 +2759,24 @@ void DffPropertyReader::CheckAndCorrectExcelTextRotation( SvStream& rIn, SfxItem
             {
                 cpo::uno::Sequence< sal_Int8 > aXMLDataSeq( nLen );
                 rIn.ReadBytes(aXMLDataSeq.getArray(), nLen);
-                css::uno::Reference< css::io::XInputStream > xInputStream
+                cpo::uno::Reference< css::io::XInputStream > xInputStream
                     ( new ::comphelper::SequenceInputStream( aXMLDataSeq ) );
                 try
                 {
-                    const css::uno::Reference< cpo::uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
-                    css::uno::Reference< css::embed::XStorage > xStorage
+                    const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
+                    cpo::uno::Reference< css::embed::XStorage > xStorage
                         ( ::comphelper::OStorageHelper::GetStorageOfFormatFromInputStream(
                             OFOPXML_STORAGE_FORMAT_STRING, xInputStream, xContext, true ) );
                     if ( xStorage.is() )
                     {
-                        css::uno::Reference< css::embed::XStorage >
+                        cpo::uno::Reference< css::embed::XStorage >
                             xStorageDRS( xStorage->openStorageElement( u"drs"_ustr, css::embed::ElementModes::SEEKABLEREAD ) );
                         if ( xStorageDRS.is() )
                         {
-                            css::uno::Reference< css::io::XStream > xShapeXMLStream( xStorageDRS->openStreamElement( u"shapexml.xml"_ustr, css::embed::ElementModes::SEEKABLEREAD ) );
+                            cpo::uno::Reference< css::io::XStream > xShapeXMLStream( xStorageDRS->openStreamElement( u"shapexml.xml"_ustr, css::embed::ElementModes::SEEKABLEREAD ) );
                             if ( xShapeXMLStream.is() )
                             {
-                                css::uno::Reference< css::io::XInputStream > xShapeXMLInputStream( xShapeXMLStream->getInputStream() );
+                                cpo::uno::Reference< css::io::XInputStream > xShapeXMLInputStream( xShapeXMLStream->getInputStream() );
                                 if ( xShapeXMLInputStream.is() )
                                 {
                                     cpo::uno::Sequence< sal_Int8 > aSeq;
@@ -7107,7 +7107,7 @@ void SvxMSDffManager::ExtractOwnStream(SotStorage& rSrcStg, SvMemoryStream& rMem
     xStr->ReadStream(rMemStream);
 }
 
-css::uno::Reference < css::embed::XEmbeddedObject >  SvxMSDffManager::CheckForConvertToSOObj( sal_uInt32 nConvertFlags,
+cpo::uno::Reference < css::embed::XEmbeddedObject >  SvxMSDffManager::CheckForConvertToSOObj( sal_uInt32 nConvertFlags,
                         SotStorage& rSrcStg, const uno::Reference < embed::XStorage >& rDestStorage,
                         const Graphic& rGrf,
                         const tools::Rectangle& rVisArea, OUString const& rBaseURL)
@@ -7624,7 +7624,7 @@ SdrObject* SvxMSDffManager::getShapeForId( sal_Int32 nShapeId )
     return aIter != maShapeIdContainer.end() ? (*aIter).second : nullptr;
 }
 
-css::uno::Reference<css::xml::dom::XDocument> SvxMSDffManager::ParseMetroBlobShapeXML(SvStream& rStream)
+cpo::uno::Reference<css::xml::dom::XDocument> SvxMSDffManager::ParseMetroBlobShapeXML(SvStream& rStream)
 {
     if (!pSecPropSet || !pSecPropSet->SeekToContent(DFF_Prop_metroBlob, rStream))
         return {};
@@ -7633,7 +7633,7 @@ css::uno::Reference<css::xml::dom::XDocument> SvxMSDffManager::ParseMetroBlobSha
         return {};
     cpo::uno::Sequence<sal_Int8> aXMLDataSeq(nLen);
     rStream.ReadBytes(aXMLDataSeq.getArray(), nLen);
-    css::uno::Reference<css::io::XInputStream> xInputStream(
+    cpo::uno::Reference<css::io::XInputStream> xInputStream(
         new ::comphelper::SequenceInputStream(aXMLDataSeq));
     try
     {

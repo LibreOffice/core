@@ -23,7 +23,7 @@
 using namespace svx;
 
 TextCharacterSpacingPopup::TextCharacterSpacingPopup(
-    const css::uno::Reference<cpo::uno::XComponentContext>& rContext)
+    const cpo::uno::Reference<cpo::uno::XComponentContext>& rContext)
     : PopupWindowController(rContext, nullptr, OUString())
 {
 }

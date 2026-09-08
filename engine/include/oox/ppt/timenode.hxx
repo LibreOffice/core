@@ -26,7 +26,7 @@
 #include <memory>
 
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <oox/ppt/slidetransition.hxx>
 #include <oox/ppt/slidepersist.hxx>
 #include <oox/ppt/animationspersist.hxx>
@@ -63,7 +63,7 @@ namespace oox::ppt {
 
         void addNode(
             const ::oox::core::XmlFilterBase& rFilter,
-            const css::uno::Reference< css::animations::XAnimationNode >& rxNode,
+            const cpo::uno::Reference< css::animations::XAnimationNode >& rxNode,
             const SlidePersistPtr & slide);
         // data setters
         void setTo( const cpo::uno::Any & aTo );
@@ -74,9 +74,9 @@ namespace oox::ppt {
 
         void setNode(
             const ::oox::core::XmlFilterBase& rFilter,
-            const css::uno::Reference< css::animations::XAnimationNode >& xNode,
+            const cpo::uno::Reference< css::animations::XAnimationNode >& xNode,
             const SlidePersistPtr & pSlide,
-            const css::uno::Reference< css::animations::XAnimationNode >& xParent);
+            const cpo::uno::Reference< css::animations::XAnimationNode >& xParent);
 
         AnimTargetElementPtr const & getTarget()
             {
@@ -99,11 +99,11 @@ namespace oox::ppt {
 
         static OUString getServiceName( sal_Int16 nNodeType );
 
-        static css::uno::Reference< css::animations::XAnimationNode >
+        static cpo::uno::Reference< css::animations::XAnimationNode >
         createAndInsert(
             const ::oox::core::XmlFilterBase& rFilter,
             const OUString& rServiceName,
-            const css::uno::Reference< css::animations::XAnimationNode >& rxNode );
+            const cpo::uno::Reference< css::animations::XAnimationNode >& rxNode );
 
         const sal_Int16 mnNodeType;
 

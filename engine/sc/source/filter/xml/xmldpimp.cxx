@@ -47,8 +47,9 @@
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace xmloff::token;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 
 ScXMLDataPilotTablesContext::ScXMLDataPilotTablesContext( ScXMLImport& rImport ) :
     ScXMLImportContext( rImport )

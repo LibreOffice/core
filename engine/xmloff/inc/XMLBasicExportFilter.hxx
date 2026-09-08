@@ -29,23 +29,23 @@ typedef ::cppu::WeakImplHelper<
 class XMLBasicExportFilter final : public XMLBasicExportFilter_BASE
 {
 private:
-    css::uno::Reference< css::xml::sax::XDocumentHandler >    m_xHandler;
+    cpo::uno::Reference< css::xml::sax::XDocumentHandler >    m_xHandler;
 
 public:
     XMLBasicExportFilter(
-        const css::uno::Reference< css::xml::sax::XDocumentHandler >& rxHandler );
+        const cpo::uno::Reference< css::xml::sax::XDocumentHandler >& rxHandler );
     virtual ~XMLBasicExportFilter() override;
 
     // XDocumentHandler
     virtual void startDocument() override;
     virtual void endDocument() override;
     virtual void startElement( const OUString& aName,
-        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttribs ) override;
+        const cpo::uno::Reference< css::xml::sax::XAttributeList >& xAttribs ) override;
     virtual void endElement( const OUString& aName ) override;
     virtual void characters( const OUString& aChars ) override;
     virtual void ignorableWhitespace( const OUString& aWhitespaces ) override;
     virtual void processingInstruction( const OUString& aTarget, const OUString& aData ) override;
-    virtual void setDocumentLocator( const css::uno::Reference< css::xml::sax::XLocator >& xLocator ) override;
+    virtual void setDocumentLocator( const cpo::uno::Reference< css::xml::sax::XLocator >& xLocator ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

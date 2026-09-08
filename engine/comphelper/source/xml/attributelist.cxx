@@ -23,6 +23,7 @@
 #include <cassert>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 
 namespace comphelper {
@@ -56,7 +57,7 @@ AttributeList::~AttributeList()
 {
 }
 
-css::uno::Reference< css::util::XCloneable > AttributeList::createClone()
+cpo::uno::Reference< css::util::XCloneable > AttributeList::createClone()
 {
     return new AttributeList( *this );
 }

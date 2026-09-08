@@ -49,7 +49,7 @@ namespace dbaui
 #define PROPERTY_ID_QUERYCOMPOSER       100
 #define PROPERTY_ID_ROWSET              101
 
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
 using namespace cpo::uno;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::container;
@@ -78,7 +78,7 @@ using namespace cpo::uno;
         return cpo::uno::Sequence<sal_Int8>();
     }
 
-    css::uno::Reference< css::beans::XPropertySetInfo >  ComposerDialog::getPropertySetInfo()
+    cpo::uno::Reference< css::beans::XPropertySetInfo >  ComposerDialog::getPropertySetInfo()
     {
         Reference< XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
         return xInfo;
@@ -94,7 +94,7 @@ using namespace cpo::uno;
         return new ::cppu::OPropertyArrayHelper(aProps);
     }
 
-    std::unique_ptr<weld::DialogController> ComposerDialog::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
+    std::unique_ptr<weld::DialogController> ComposerDialog::createDialog(const cpo::uno::Reference<css::awt::XWindow>& rParent)
     {
         // obtain all the objects needed for the dialog
         Reference< XConnection > xConnection;
@@ -122,7 +122,7 @@ using namespace cpo::uno;
             {   // perhaps the composer can supply us with columns? This is necessary for cases
                 // where the dialog is invoked for a rowset which is not yet loaded
                 // #i22878#
-                xSuppColumns.set(m_xComposer, css::uno::UNO_QUERY);
+                xSuppColumns.set(m_xComposer, cpo::uno::UNO_QUERY);
                 if ( xSuppColumns.is() )
                     xColumns = xSuppColumns->getColumns();
             }

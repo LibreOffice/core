@@ -15,6 +15,7 @@
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 /**
  * TextInput formfields are inline text objects that are only found in MS Word.

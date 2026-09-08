@@ -37,7 +37,7 @@ namespace sdbtools
         mutable ::osl::Mutex    m_aMutex;
         cpo::uno::WeakReference< css::sdbc::XConnection >
                                 m_aConnection;
-        css::uno::Reference< cpo::uno::XComponentContext >
+        cpo::uno::Reference< cpo::uno::XComponentContext >
                                 m_aContext;
 
         /** a hard reference to the connection we're working for
@@ -46,20 +46,20 @@ namespace sdbtools
             The guard will, in its constructor, set the member, and reset it in its destructor.
             This ensures that the connection is only held hard when it's needed, and weak otherwise.
         */
-        css::uno::Reference< css::sdbc::XConnection >
+        cpo::uno::Reference< css::sdbc::XConnection >
                                 m_xConnection;
 
     protected:
         ::osl::Mutex&   getMutex() const { return m_aMutex; }
 
-        const css::uno::Reference< cpo::uno::XComponentContext >&
+        const cpo::uno::Reference< cpo::uno::XComponentContext >&
                         getContext() const { return m_aContext; }
 
     protected:
         class EntryGuard;
 
     protected:
-        explicit ConnectionDependentComponent( css::uno::Reference< cpo::uno::XComponentContext > _xContext )
+        explicit ConnectionDependentComponent( cpo::uno::Reference< cpo::uno::XComponentContext > _xContext )
             :m_aContext(std::move( _xContext ))
         {
         }
@@ -71,12 +71,12 @@ namespace sdbtools
             @param  _rxConnection
                 the connection to set
         */
-        void    setWeakConnection( const css::uno::Reference< css::sdbc::XConnection >& _rxConnection )
+        void    setWeakConnection( const cpo::uno::Reference< css::sdbc::XConnection >& _rxConnection )
         {
             m_aConnection = _rxConnection;
         }
 
-        const css::uno::Reference< css::sdbc::XConnection >&
+        const cpo::uno::Reference< css::sdbc::XConnection >&
                 getConnection() const { return m_xConnection; }
 
     public:

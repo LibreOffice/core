@@ -17,6 +17,7 @@
 #include <memory>
 
 using namespace css;
+using namespace ::cpo;
 
 namespace chart::wrapper
 {

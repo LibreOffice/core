@@ -29,7 +29,7 @@
 
 using namespace com::sun::star;
 using namespace com::sun::star::lang;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace com::sun::star::linguistic2;
 using namespace ::cpo::uno;
 
@@ -143,14 +143,14 @@ Sequence< sal_Int16 > PossibleHyphens::getHyphenationPositions()
     return aOrigHyphenPos;
 }
 
-css::uno::Reference <css::linguistic2::XHyphenatedWord> HyphenatedWord::CreateHyphenatedWord(
+cpo::uno::Reference <css::linguistic2::XHyphenatedWord> HyphenatedWord::CreateHyphenatedWord(
         const OUString &rWord, LanguageType nLang, sal_Int16 nHyphenationPos,
         const OUString &rHyphenatedWord, sal_Int16 nHyphenPos )
 {
     return new HyphenatedWord( rWord, nLang, nHyphenationPos, rHyphenatedWord, nHyphenPos );
 }
 
-css::uno::Reference < css::linguistic2::XPossibleHyphens > PossibleHyphens::CreatePossibleHyphens
+cpo::uno::Reference < css::linguistic2::XPossibleHyphens > PossibleHyphens::CreatePossibleHyphens
         (const OUString &rWord, LanguageType nLang,
          const OUString &rHyphWord,
          const cpo::uno::Sequence< sal_Int16 > &rPositions)

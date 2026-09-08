@@ -83,7 +83,7 @@ class StringResourceImpl : public StringResourceImpl_BASE
 {
 protected:
     std::mutex                                                m_aMutex;
-    css::uno::Reference< cpo::uno::XComponentContext >        m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext >        m_xContext;
 
     LocaleItem*                                               m_pCurrentLocaleItem;
     LocaleItem*                                               m_pDefaultLocaleItem;
@@ -142,7 +142,7 @@ protected:
 
 public:
     explicit StringResourceImpl(
-        const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
     virtual ~StringResourceImpl() override;
 
     // XServiceInfo
@@ -151,8 +151,8 @@ public:
     virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // XModifyBroadcaster
-    virtual void SAL_CALL addModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
-    virtual void SAL_CALL removeModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+    virtual void SAL_CALL addModifyListener( const cpo::uno::Reference< css::util::XModifyListener >& aListener ) override;
+    virtual void SAL_CALL removeModifyListener( const cpo::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
      // XStringResourceResolver
     virtual OUString SAL_CALL resolveString( const OUString& ResourceID ) override;
@@ -216,10 +216,10 @@ protected:
         std::u16string_view aLocation, bool bDefaultFile=false );
 
     bool implReadPropertiesFile(std::unique_lock<std::mutex>& rGuard, LocaleItem* pLocaleItem,
-        const css::uno::Reference< css::io::XInputStream >& xInput);
+        const cpo::uno::Reference< css::io::XInputStream >& xInput);
 
     bool implWritePropertiesFile( LocaleItem const * pLocaleItem,
-              const css::uno::Reference< css::io::XOutputStream >& xOutputStream,
+              const cpo::uno::Reference< css::io::XOutputStream >& xOutputStream,
               const OUString& aComment );
 
     void implWriteLocaleBinary( LocaleItem* pLocaleItem, BinaryOutput& rOut );
@@ -231,7 +231,7 @@ protected:
         std::unique_lock<std::mutex>& rGuard,
         const OUString& aNameBase,
         const OUString& aComment,
-        const css::uno::Reference< css::embed::XStorage >& Storage,
+        const cpo::uno::Reference< css::embed::XStorage >& Storage,
         bool bUsedForStore,
         bool bStoreAll
     );
@@ -242,7 +242,7 @@ protected:
     (
         std::u16string_view Location,
         const OUString& aNameBase,
-        const css::uno::Reference< css::ucb::XSimpleFileAccess3 >& xFileAccess
+        const cpo::uno::Reference< css::ucb::XSimpleFileAccess3 >& xFileAccess
     );
 
     /// @throws cpo::uno::Exception
@@ -251,7 +251,7 @@ protected:
     (
         std::u16string_view Location,
         const OUString& aNameBase,
-        const css::uno::Reference< css::ucb::XSimpleFileAccess3 >& xFileAccess
+        const cpo::uno::Reference< css::ucb::XSimpleFileAccess3 >& xFileAccess
     );
 
     /// @throws cpo::uno::Exception
@@ -262,7 +262,7 @@ protected:
         std::u16string_view Location,
         const OUString& aNameBase,
         const OUString& aComment,
-        const css::uno::Reference< css::ucb::XSimpleFileAccess3 >& xFileAccess,
+        const cpo::uno::Reference< css::ucb::XSimpleFileAccess3 >& xFileAccess,
         bool bUsedForStore,
         bool bStoreAll,
         bool bKillAll = false
@@ -270,7 +270,7 @@ protected:
 
 public:
     explicit StringResourcePersistenceImpl(
-        const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
     virtual ~StringResourcePersistenceImpl() override;
 
     // XServiceInfo
@@ -279,8 +279,8 @@ public:
     virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // XModifyBroadcaster
-    virtual void SAL_CALL addModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
-    virtual void SAL_CALL removeModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+    virtual void SAL_CALL addModifyListener( const cpo::uno::Reference< css::util::XModifyListener >& aListener ) override;
+    virtual void SAL_CALL removeModifyListener( const cpo::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
      // XStringResourceResolver
     virtual OUString SAL_CALL resolveString( const OUString& ResourceID ) override;
@@ -315,10 +315,10 @@ public:
     virtual bool SAL_CALL isModified(  ) override;
     virtual void SAL_CALL setComment( const OUString& Comment ) override;
     virtual void SAL_CALL storeToStorage
-        ( const css::uno::Reference< css::embed::XStorage >& Storage,
+        ( const cpo::uno::Reference< css::embed::XStorage >& Storage,
           const OUString& NameBase, const OUString& Comment ) override;
     virtual void SAL_CALL storeToURL( const OUString& URL, const OUString& NameBase,
-        const OUString& Comment, const css::uno::Reference
+        const OUString& Comment, const cpo::uno::Reference
         < css::task::XInteractionHandler >& Handler ) override;
     virtual cpo::uno::Sequence< ::sal_Int8 > SAL_CALL exportBinary(  ) override;
     virtual void SAL_CALL importBinary( const cpo::uno::Sequence< ::sal_Int8 >& Data ) override;
@@ -332,14 +332,14 @@ typedef ::cppu::ImplInheritanceHelper<
 
 class StringResourceWithStorageImpl : public StringResourceWithStorageImpl_BASE
 {
-    css::uno::Reference< css::embed::XStorage >       m_xStorage;
+    cpo::uno::Reference< css::embed::XStorage >       m_xStorage;
     bool                                              m_bStorageChanged;
 
     virtual void implScanLocales(std::unique_lock<std::mutex>& rGuard) override;
     virtual bool implLoadLocale(std::unique_lock<std::mutex>& rGuard, LocaleItem* pLocaleItem) override;
 
 public:
-    explicit StringResourceWithStorageImpl( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+    explicit StringResourceWithStorageImpl( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
     virtual ~StringResourceWithStorageImpl() override;
 
     // XServiceInfo
@@ -351,8 +351,8 @@ public:
     virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XModifyBroadcaster
-    virtual void SAL_CALL addModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
-    virtual void SAL_CALL removeModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+    virtual void SAL_CALL addModifyListener( const cpo::uno::Reference< css::util::XModifyListener >& aListener ) override;
+    virtual void SAL_CALL removeModifyListener( const cpo::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
      // XStringResourceResolver
     virtual OUString SAL_CALL resolveString( const OUString& ResourceID ) override;
@@ -387,19 +387,19 @@ public:
     virtual bool SAL_CALL isModified(  ) override;
     virtual void SAL_CALL setComment( const OUString& Comment ) override;
     virtual void SAL_CALL storeToStorage
-        ( const css::uno::Reference< css::embed::XStorage >& Storage,
+        ( const cpo::uno::Reference< css::embed::XStorage >& Storage,
           const OUString& NameBase, const OUString& Comment ) override;
     virtual void SAL_CALL storeToURL( const OUString& URL, const OUString& NameBase,
-        const OUString& Comment, const css::uno::Reference
+        const OUString& Comment, const cpo::uno::Reference
         < css::task::XInteractionHandler >& Handler ) override;
     virtual cpo::uno::Sequence< ::sal_Int8 > SAL_CALL exportBinary(  ) override;
     virtual void SAL_CALL importBinary( const cpo::uno::Sequence< ::sal_Int8 >& Data ) override;
 
     // XStringResourceWithStorage
     virtual void SAL_CALL storeAsStorage
-        ( const css::uno::Reference< css::embed::XStorage >& Storage ) override;
+        ( const cpo::uno::Reference< css::embed::XStorage >& Storage ) override;
     virtual void SAL_CALL setStorage
-        ( const css::uno::Reference< css::embed::XStorage >& Storage ) override;
+        ( const cpo::uno::Reference< css::embed::XStorage >& Storage ) override;
 };
 
 
@@ -412,16 +412,16 @@ class StringResourceWithLocationImpl : public StringResourceWithLocationImpl_BAS
 {
     OUString                                              m_aLocation;
     bool                                                  m_bLocationChanged;
-    css::uno::Reference< css::ucb::XSimpleFileAccess3 >   m_xSFI;
-    css::uno::Reference< css::task::XInteractionHandler > m_xInteractionHandler;
+    cpo::uno::Reference< css::ucb::XSimpleFileAccess3 >   m_xSFI;
+    cpo::uno::Reference< css::task::XInteractionHandler > m_xInteractionHandler;
 
-    const css::uno::Reference< css::ucb::XSimpleFileAccess3 > & getFileAccessImpl();
+    const cpo::uno::Reference< css::ucb::XSimpleFileAccess3 > & getFileAccessImpl();
 
     virtual void implScanLocales(std::unique_lock<std::mutex>& rGuard) override;
     virtual bool implLoadLocale(std::unique_lock<std::mutex>& rGuard, LocaleItem* pLocaleItem) override;
 
 public:
-    explicit StringResourceWithLocationImpl( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+    explicit StringResourceWithLocationImpl( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
     virtual ~StringResourceWithLocationImpl() override;
 
     // XServiceInfo
@@ -433,8 +433,8 @@ public:
     virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XModifyBroadcaster
-    virtual void SAL_CALL addModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
-    virtual void SAL_CALL removeModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+    virtual void SAL_CALL addModifyListener( const cpo::uno::Reference< css::util::XModifyListener >& aListener ) override;
+    virtual void SAL_CALL removeModifyListener( const cpo::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
      // XStringResourceResolver
     virtual OUString SAL_CALL resolveString( const OUString& ResourceID ) override;
@@ -469,10 +469,10 @@ public:
     virtual bool SAL_CALL isModified(  ) override;
     virtual void SAL_CALL setComment( const OUString& Comment ) override;
     virtual void SAL_CALL storeToStorage
-        ( const css::uno::Reference< css::embed::XStorage >& Storage,
+        ( const cpo::uno::Reference< css::embed::XStorage >& Storage,
           const OUString& NameBase, const OUString& Comment ) override;
     virtual void SAL_CALL storeToURL( const OUString& URL, const OUString& NameBase,
-        const OUString& Comment, const css::uno::Reference
+        const OUString& Comment, const cpo::uno::Reference
         < css::task::XInteractionHandler >& Handler ) override;
     virtual cpo::uno::Sequence< ::sal_Int8 > SAL_CALL exportBinary(  ) override;
     virtual void SAL_CALL importBinary( const cpo::uno::Sequence< ::sal_Int8 >& Data ) override;

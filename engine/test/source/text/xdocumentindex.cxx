@@ -30,8 +30,8 @@ XDocumentIndex::~XDocumentIndex() {}
  */
 void XDocumentIndex::testUpdate()
 {
-    css::uno::Reference<css::text::XDocumentIndex> xDocumentIndex(init(),
-                                                                  css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::text::XDocumentIndex> xDocumentIndex(init(),
+                                                                  cpo::uno::UNO_QUERY_THROW);
 
     bool bOK = true;
     try
@@ -39,11 +39,11 @@ void XDocumentIndex::testUpdate()
         auto xText = getTextDocument()->getText();
         auto xTextRange = xText->getEnd();
         xTextRange->setString(u"IndexMark"_ustr);
-        css::uno::Reference<css::lang::XMultiServiceFactory> xFactory(getTextDocument(),
-                                                                      css::uno::UNO_QUERY_THROW);
-        css::uno::Reference<css::text::XTextContent> xTextContentMark(
+        cpo::uno::Reference<css::lang::XMultiServiceFactory> xFactory(getTextDocument(),
+                                                                      cpo::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::text::XTextContent> xTextContentMark(
             xFactory->createInstance(u"com.sun.star.text.DocumentIndexMark"_ustr),
-            css::uno::UNO_QUERY_THROW);
+            cpo::uno::UNO_QUERY_THROW);
         xText->insertTextContent(xTextRange, xTextContentMark, true);
     }
     catch (cpo::uno::Exception /*exception*/)

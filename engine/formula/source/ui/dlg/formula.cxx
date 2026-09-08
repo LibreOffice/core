@@ -56,6 +56,7 @@ namespace formula
 {
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 class FormulaDlg_Impl
 {

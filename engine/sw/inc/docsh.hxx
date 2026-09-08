@@ -93,8 +93,8 @@ class SW_DLLPUBLIC SwDocShell
         ///< whether SID_MAIL_PREPAREEXPORT removed content that
         ///< SID_MAIL_EXPORT_FINISHED needs to restore
 
-    css::uno::Reference< ooo::vba::XSinkCaller > mxAutomationDocumentEventsCaller;
-    css::uno::Reference< ooo::vba::word::XDocument> mxAutomationDocumentObject;
+    cpo::uno::Reference< ooo::vba::XSinkCaller > mxAutomationDocumentEventsCaller;
+    cpo::uno::Reference< ooo::vba::word::XDocument> mxAutomationDocumentObject;
 
     /// Methods for access to doc.
     SAL_DLLPRIVATE void                  AddLink();
@@ -104,18 +104,18 @@ class SW_DLLPUBLIC SwDocShell
     SAL_DLLPRIVATE virtual void          Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
     /// FileIO
-    SAL_DLLPRIVATE virtual bool InitNew( const css::uno::Reference< css::embed::XStorage >& xStorage ) override;
+    SAL_DLLPRIVATE virtual bool InitNew( const cpo::uno::Reference< css::embed::XStorage >& xStorage ) override;
     SAL_DLLPRIVATE virtual bool Load( SfxMedium& rMedium ) override;
     SAL_DLLPRIVATE virtual bool LoadFrom( SfxMedium& rMedium ) override;
     SAL_DLLPRIVATE virtual bool ConvertFrom( SfxMedium &rMedium ) override;
     SAL_DLLPRIVATE virtual bool ConvertTo( SfxMedium &rMedium ) override;
     SAL_DLLPRIVATE virtual bool SaveAs( SfxMedium& rMedium ) override;
-    SAL_DLLPRIVATE virtual bool SaveCompleted( const css::uno::Reference< css::embed::XStorage >& xStorage ) override;
+    SAL_DLLPRIVATE virtual bool SaveCompleted( const cpo::uno::Reference< css::embed::XStorage >& xStorage ) override;
 
     SAL_DLLPRIVATE virtual bool     PrepareClose( bool bUI = true ) override;
 
     SAL_DLLPRIVATE virtual bool     InsertGeneratedStream(SfxMedium& rMedium,
-            css::uno::Reference<css::text::XTextRange> const& xInsertPosition)
+            cpo::uno::Reference<css::text::XTextRange> const& xInsertPosition)
         override;
 
     /// Make DocInfo known to the Doc.
@@ -315,7 +315,7 @@ public:
     virtual void PerformLinkUpdate() override;
     virtual bool HasUpdatableLinks() const override;
 
-    css::uno::Reference< css::frame::XController >
+    cpo::uno::Reference< css::frame::XController >
                                 GetController();
 
     SfxInPlaceClient* GetIPClient( const ::svt::EmbeddedObjectRef& xObjRef );
@@ -332,9 +332,9 @@ public:
     virtual void    SetProtectionPassword( const OUString &rPassword ) override;
     virtual bool    GetProtectionHash( /*out*/ cpo::uno::Sequence< sal_Int8 > &rPasswordHash ) override;
 
-    void RegisterAutomationDocumentEventsCaller(css::uno::Reference< ooo::vba::XSinkCaller > const& xCaller);
+    void RegisterAutomationDocumentEventsCaller(cpo::uno::Reference< ooo::vba::XSinkCaller > const& xCaller);
     void CallAutomationDocumentEventSinks(const OUString& Method, cpo::uno::Sequence< cpo::uno::Any >& Arguments);
-    void RegisterAutomationDocumentObject(css::uno::Reference< ooo::vba::word::XDocument > const& xDocument);
+    void RegisterAutomationDocumentObject(cpo::uno::Reference< ooo::vba::word::XDocument > const& xDocument);
 
     // Lock all unlocked views, and returns a guard object which unlocks those views when destructed
     virtual std::unique_ptr<LockAllViewsGuard> LockAllViews() override;
@@ -365,6 +365,6 @@ int SwFindDocShell( SfxObjectShellRef& xDocSh,
                     const OUString& rFilter,
                     sal_Int16 nVersion,
                     SwDocShell* pDestSh,
-                    const css::uno::Reference<css::task::XInteractionHandler>& xIHandler);
+                    const cpo::uno::Reference<css::task::XInteractionHandler>& xIHandler);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

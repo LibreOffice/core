@@ -17,7 +17,7 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <svl/svldllapi.h>
 
@@ -108,7 +108,7 @@ class SVL_DLLPUBLIC SigningContext
 {
 public:
     /// If set, the certificate used for signing.
-    css::uno::Reference<css::security::XCertificate> m_xCertificate;
+    cpo::uno::Reference<css::security::XCertificate> m_xCertificate;
     /// If m_xCertificate is not set, the time that would be used, in milliseconds since the epoch
     /// (1970-01-01 UTC).
     sal_Int64 m_nSignatureTime = 0;
@@ -123,7 +123,7 @@ class SVL_DLLPUBLIC CertificateOrName
 {
 public:
     /// If set, the certificate used for signing.
-    css::uno::Reference<css::security::XCertificate> m_xCertificate;
+    cpo::uno::Reference<css::security::XCertificate> m_xCertificate;
     /// Otherwise we don't have a certificate but have a name to be featured on the visual
     /// signature.
     OUString m_aName;

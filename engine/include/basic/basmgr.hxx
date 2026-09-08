@@ -35,7 +35,7 @@ namespace com::sun::star::script { class XStarBasicAccess; }
 class BasicManager;
 
 // Basic XML Import/Export
-BASIC_DLLPUBLIC css::uno::Reference< css::script::XStarBasicAccess >
+BASIC_DLLPUBLIC cpo::uno::Reference< css::script::XStarBasicAccess >
     getStarBasicAccess( BasicManager* pMgr );
 
 class SotStorage;
@@ -58,8 +58,8 @@ namespace basic { class ImplRepository; }
 
 struct LibraryContainerInfo
 {
-    css::uno::Reference< css::script::XStorageBasedLibraryContainer > mxScriptCont;
-    css::uno::Reference< css::script::XStorageBasedLibraryContainer > mxDialogCont;
+    cpo::uno::Reference< css::script::XStorageBasedLibraryContainer > mxScriptCont;
+    cpo::uno::Reference< css::script::XStorageBasedLibraryContainer > mxDialogCont;
     basic::SfxScriptLibraryContainer* mpOldBasicPassword;
 
     LibraryContainerInfo()
@@ -69,8 +69,8 @@ struct LibraryContainerInfo
 
     LibraryContainerInfo
     (
-        css::uno::Reference< css::script::XStorageBasedLibraryContainer > xScriptCont,
-        css::uno::Reference< css::script::XStorageBasedLibraryContainer > xDialogCont,
+        cpo::uno::Reference< css::script::XStorageBasedLibraryContainer > xScriptCont,
+        cpo::uno::Reference< css::script::XStorageBasedLibraryContainer > xDialogCont,
         basic::SfxScriptLibraryContainer* pOldBasicPassword
     )
         : mxScriptCont(std::move( xScriptCont ))
@@ -136,9 +136,9 @@ public:
     */
     void            SetLibraryContainerInfo( const LibraryContainerInfo& rInfo );
 
-    const css::uno::Reference< css::script::XStorageBasedLibraryContainer >&
+    const cpo::uno::Reference< css::script::XStorageBasedLibraryContainer >&
                     GetDialogLibraryContainer()  const;
-    const css::uno::Reference< css::script::XStorageBasedLibraryContainer >&
+    const cpo::uno::Reference< css::script::XStorageBasedLibraryContainer >&
                     GetScriptLibraryContainer()  const;
 
     bool            LoadLib( sal_uInt16 nLib );
@@ -181,7 +181,7 @@ private:
     BASIC_DLLPRIVATE bool HasLib( std::u16string_view rName ) const;
 
     BASIC_DLLPRIVATE StarBASIC* CreateLibForLibContainer( const OUString& rLibName,
-                        const css::uno::Reference< css::script::XLibraryContainer >& xScriptCont );
+                        const cpo::uno::Reference< css::script::XLibraryContainer >& xScriptCont );
     // For XML import/export:
     BASIC_DLLPRIVATE StarBASIC* CreateLib( const OUString& rLibName );
     BASIC_DLLPRIVATE StarBASIC* CreateLib( const OUString& rLibName, const OUString& Password,

@@ -122,7 +122,7 @@ namespace sfx2
         virtual void enterUndoContext( const OUString& i_title ) override;
         virtual void enterHiddenUndoContext(  ) override;
         virtual void leaveUndoContext(  ) override;
-        virtual void addUndoAction( const css::uno::Reference< css::document::XUndoAction >& i_action ) override;
+        virtual void addUndoAction( const cpo::uno::Reference< css::document::XUndoAction >& i_action ) override;
         virtual void undo(  ) override;
         virtual void redo(  ) override;
         virtual bool isUndoPossible(  ) override;
@@ -134,8 +134,8 @@ namespace sfx2
         virtual void clear(  ) override;
         virtual void clearRedo(  ) override;
         virtual void reset(  ) override;
-        virtual void addUndoManagerListener( const css::uno::Reference< css::document::XUndoManagerListener >& i_listener ) override;
-        virtual void removeUndoManagerListener( const css::uno::Reference< css::document::XUndoManagerListener >& i_listener ) override;
+        virtual void addUndoManagerListener( const cpo::uno::Reference< css::document::XUndoManagerListener >& i_listener ) override;
+        virtual void removeUndoManagerListener( const cpo::uno::Reference< css::document::XUndoManagerListener >& i_listener ) override;
 
         // XLockable, base of XUndoManager
         virtual void lock(  ) override;
@@ -143,8 +143,8 @@ namespace sfx2
         virtual bool isLocked(  ) override;
 
         // XChild, base of XUndoManager
-        virtual css::uno::Reference< cpo::uno::XInterface > getParent(  ) override;
-        virtual void setParent( const css::uno::Reference< cpo::uno::XInterface >& Parent ) override;
+        virtual cpo::uno::Reference< cpo::uno::XInterface > getParent(  ) override;
+        virtual void setParent( const cpo::uno::Reference< cpo::uno::XInterface >& Parent ) override;
 
     private:
         std::unique_ptr< DocumentUndoManager_Impl > m_pImpl;

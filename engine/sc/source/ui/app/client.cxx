@@ -34,6 +34,7 @@
 #include <gridwin.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 ScClient::ScClient( ScTabViewShell* pViewShell, vcl::Window* pDraw, SdrModel* pSdrModel, const SdrOle2Obj* pObj ) :
     SfxInPlaceClient( pViewShell, pDraw, pObj->GetAspect() ),

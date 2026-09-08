@@ -39,7 +39,8 @@
 #include <o3tl/string_view.hxx>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 class Test : public SwModelTestBase
 {
@@ -75,12 +76,12 @@ DECLARE_WW8EXPORT_TEST(testTdf100961_fixedDateTime, "tdf100961_fixedDateTime.doc
     // This should be a fixed date/time field, not the current time.
     getParagraph(1, u"05.01.19 04:06:08"_ustr);
 
-    css::uno::Reference<css::text::XTextFieldsSupplier> xSupplier(mxComponent,
-                                                                  css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::text::XTextFieldsSupplier> xSupplier(mxComponent,
+                                                                  cpo::uno::UNO_QUERY_THROW);
     auto xFieldsAccess(xSupplier->getTextFields());
     auto xFields(xFieldsAccess->createEnumeration());
 
-    css::uno::Reference<cpo::uno::XInterface> xField(xFields->nextElement(), css::uno::UNO_QUERY);
+    cpo::uno::Reference<cpo::uno::XInterface> xField(xFields->nextElement(), cpo::uno::UNO_QUERY);
     // Check fixed property was imported and date value was parsed correctly
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xField, u"IsFixed"_ustr));
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xField, u"IsDate"_ustr));
@@ -89,7 +90,7 @@ DECLARE_WW8EXPORT_TEST(testTdf100961_fixedDateTime, "tdf100961_fixedDateTime.doc
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), datetime.Month);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2019), datetime.Year);
 
-    xField.set(xFields->nextElement(), css::uno::UNO_QUERY);
+    xField.set(xFields->nextElement(), cpo::uno::UNO_QUERY);
     // Check fixed property was imported and time value was parsed correctly
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xField, u"IsFixed"_ustr));
     CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xField, u"IsDate"_ustr));

@@ -259,7 +259,7 @@ private:
     // empty strings mark page settings as not yet imported
 
     bool                                            m_bIsFirstSection;
-    css::uno::Reference< css::text::XTextRange >    m_xStartingRange;
+    cpo::uno::Reference< css::text::XTextRange >    m_xStartingRange;
     rtl::Reference< SwXTextCursor >                 m_xPreStartingRange;
 
     OUString m_sPageStyleName;
@@ -274,7 +274,7 @@ private:
     bool                                            m_bTitlePage;
     sal_Int16                                       m_nColumnCount;
     sal_Int32                                       m_nColumnDistance;
-    css::uno::Reference< css::beans::XPropertySet > m_xColumnContainer;
+    cpo::uno::Reference< css::beans::XPropertySet > m_xColumnContainer;
     std::vector< sal_Int32 >                        m_aColWidth;
     std::vector< sal_Int32 >                        m_aColDistance;
 
@@ -315,7 +315,7 @@ private:
     bool                                            m_bDynamicHeightTop;
     bool                                            m_bDynamicHeightBottom;
 
-    std::vector<css::uno::Reference<css::drawing::XShape>>    m_xRelativeWidthShapes;
+    std::vector<cpo::uno::Reference<css::drawing::XShape>>    m_xRelativeWidthShapes;
 
     // The "Link To Previous" flag indicates whether the header/footer
     // content should be taken from the previous section
@@ -336,7 +336,7 @@ private:
     /// Check if document is protected. If so, ensure a section exists, and apply its protected value.
     void ApplyProtectionProperties( rtl::Reference<SwXTextSection>& xSection, DomainMapper_Impl& rDM_Impl );
 
-    css::uno::Reference< css::text::XTextColumns > ApplyColumnProperties(const css::uno::Reference<css::beans::XPropertySet>& xPageStyle,
+    cpo::uno::Reference< css::text::XTextColumns > ApplyColumnProperties(const cpo::uno::Reference<css::beans::XPropertySet>& xPageStyle,
                                                                          DomainMapper_Impl& rDM_Impl);
 
     void CopyLastHeaderFooter(DomainMapper_Impl& rDM_Impl);
@@ -366,9 +366,9 @@ public:
 
     bool IsFirstSection() const { return m_bIsFirstSection; }
 
-    void SetStart( const css::uno::Reference< css::text::XTextRange >& xRange );
+    void SetStart( const cpo::uno::Reference< css::text::XTextRange >& xRange );
 
-    const css::uno::Reference< css::text::XTextRange >& GetStartingRange() const { return m_xStartingRange; }
+    const cpo::uno::Reference< css::text::XTextRange >& GetStartingRange() const { return m_xStartingRange; }
 
     rtl::Reference<SwXPageStyle> GetPageStyle(DomainMapper_Impl& rDM_Impl);
 
@@ -428,7 +428,7 @@ public:
     const std::optional<sal_Int32>& GetBelowSpacing() const { return m_oBelowSpacing; }
     void SetBelowSpacing(sal_Int32 nSet) { m_oBelowSpacing = nSet; }
 
-    void addRelativeWidthShape( const css::uno::Reference<css::drawing::XShape>& xShape ) { m_xRelativeWidthShapes.push_back( xShape ); }
+    void addRelativeWidthShape( const cpo::uno::Reference<css::drawing::XShape>& xShape ) { m_xRelativeWidthShapes.push_back( xShape ); }
 
     // determine which style gets the borders
     void ApplyBorderToPageStyles( DomainMapper_Impl &rDM_Impl,
@@ -454,7 +454,7 @@ public:
     bool m_bHadRightHeader = false;
     bool m_bHadRightFooter = false;
 
-    static void removeXTextContent(css::uno::Reference<css::text::XText> const& rxText);
+    static void removeXTextContent(cpo::uno::Reference<css::text::XText> const& rxText);
 };
 
 void BeforeConvertToTextFrame(const std::deque<StoredRedline>& rFramedRedlines, std::vector<sal_Int32>& redPos, std::vector<sal_Int32>& redLen, std::vector<OUString>& redCell, std::vector<OUString>& redTable);
@@ -485,8 +485,8 @@ private:
     OUString                                     m_sParaStyleName;
     OUString                                     m_sParaId;        // [MS-DOCX] sect. 2.2.4 "p and tr Extensions"
 
-    css::uno::Reference< css::text::XTextRange > m_xStartingRange; // start of a frame
-    css::uno::Reference< css::text::XTextRange > m_xEndingRange;   // end of the frame
+    cpo::uno::Reference< css::text::XTextRange > m_xStartingRange; // start of a frame
+    cpo::uno::Reference< css::text::XTextRange > m_xEndingRange;   // end of the frame
     sal_Int32 m_nListId = -1;
 
 public:
@@ -550,11 +550,11 @@ public:
     sal_Int8  GetDropCapLength() const          { return m_nDropCapLength; }
     void      SetDropCapLength( sal_Int8 nSet ) { m_nDropCapLength = nSet; }
 
-    const css::uno::Reference< css::text::XTextRange >& GetStartingRange() const      { return m_xStartingRange; }
-    void SetStartingRange( const css::uno::Reference< css::text::XTextRange >& xSet ) { m_xStartingRange = xSet; }
+    const cpo::uno::Reference< css::text::XTextRange >& GetStartingRange() const      { return m_xStartingRange; }
+    void SetStartingRange( const cpo::uno::Reference< css::text::XTextRange >& xSet ) { m_xStartingRange = xSet; }
 
-    const css::uno::Reference< css::text::XTextRange >& GetEndingRange() const    { return m_xEndingRange; }
-    void SetEndingRange( const css::uno::Reference< css::text::XTextRange >& xSet ) { m_xEndingRange = xSet; }
+    const cpo::uno::Reference< css::text::XTextRange >& GetEndingRange() const    { return m_xEndingRange; }
+    void SetEndingRange( const cpo::uno::Reference< css::text::XTextRange >& xSet ) { m_xEndingRange = xSet; }
 
     const OUString& GetParaStyleName() const      { return m_sParaStyleName; }
     void SetParaStyleName( const OUString& rSet ) { m_sParaStyleName = rSet; }
@@ -660,7 +660,7 @@ struct TableParagraph
     rtl::Reference<SwXTextCursor> m_rStartParagraph;
     rtl::Reference<SwXTextCursor> m_rEndParagraph;
     ParagraphPropertyMapPtr m_pPropertyMap;
-    css::uno::Reference<css::beans::XPropertySet> m_rPropertySet;
+    cpo::uno::Reference<css::beans::XPropertySet> m_rPropertySet;
 };
 
 typedef std::shared_ptr< std::vector<TableParagraph> > TableParagraphVectorPtr;

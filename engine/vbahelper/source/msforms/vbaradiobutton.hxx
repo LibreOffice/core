@@ -29,13 +29,13 @@ typedef cppu::ImplInheritanceHelper< ScVbaControl, ov::msforms::XRadioButton, cs
 class ScVbaRadioButton : public RadioButtonImpl_BASE
 {
 public:
-    ScVbaRadioButton( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext, const css::uno::Reference< cpo::uno::XInterface >& xControl, const css::uno::Reference< css::frame::XModel >& xModel, std::unique_ptr<ov::AbstractGeometryAttributes> pGeomHelper );
+    ScVbaRadioButton( const cpo::uno::Reference< ov::XHelperInterface >& xParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext, const cpo::uno::Reference< cpo::uno::XInterface >& xControl, const cpo::uno::Reference< css::frame::XModel >& xModel, std::unique_ptr<ov::AbstractGeometryAttributes> pGeomHelper );
    // Attributes
     virtual OUString getCaption() override;
     virtual void setCaption( const OUString& _caption ) override;
     virtual cpo::uno::Any getValue() override;
     virtual void setValue(const cpo::uno::Any&) override;
-    virtual css::uno::Reference< ov::msforms::XNewFont > getFont() override;
+    virtual cpo::uno::Reference< ov::msforms::XNewFont > getFont() override;
     //XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual cpo::uno::Sequence<OUString> getServiceNames() override;

@@ -33,7 +33,7 @@
 #include <svx/unopage.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 namespace sd {
@@ -104,17 +104,17 @@ Any SAL_CALL SdUnoSlideView::getSelection()
 }
 
 void SAL_CALL SdUnoSlideView::addSelectionChangeListener (
-    const css::uno::Reference<css::view::XSelectionChangeListener>&)
+    const cpo::uno::Reference<css::view::XSelectionChangeListener>&)
 {}
 
 void SAL_CALL SdUnoSlideView::removeSelectionChangeListener (
-    const css::uno::Reference<css::view::XSelectionChangeListener>&)
+    const cpo::uno::Reference<css::view::XSelectionChangeListener>&)
 {}
 
 //----- XDrawView -------------------------------------------------------------
 
 void SAL_CALL SdUnoSlideView::setCurrentPage (
-    const css::uno::Reference<css::drawing::XDrawPage>& rxDrawPage)
+    const cpo::uno::Reference<css::drawing::XDrawPage>& rxDrawPage)
 {
     Reference<beans::XPropertySet> xProperties (rxDrawPage, UNO_QUERY);
     if (xProperties.is())
@@ -128,7 +128,7 @@ void SAL_CALL SdUnoSlideView::setCurrentPage (
     }
 }
 
-css::uno::Reference<css::drawing::XDrawPage > SAL_CALL
+cpo::uno::Reference<css::drawing::XDrawPage > SAL_CALL
     SdUnoSlideView::getCurrentPage()
 {
     return mrSlideSorter.GetController().GetCurrentSlideManager().GetCurrentSlide()->GetXDrawPage();

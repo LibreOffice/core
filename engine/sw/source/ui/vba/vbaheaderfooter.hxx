@@ -32,23 +32,23 @@ class SwVbaHeaderFooter : public SwVbaHeaderFooter_BASE
 {
 private:
     rtl::Reference< SwXTextDocument > mxModel;
-    css::uno::Reference< css::beans::XPropertySet > mxPageStyleProps;
+    cpo::uno::Reference< css::beans::XPropertySet > mxPageStyleProps;
     bool mbHeader;
     sal_Int32 mnIndex;
 
 public:
     /// @throws cpo::uno::RuntimeException
-    SwVbaHeaderFooter( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent,
-                       const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
+    SwVbaHeaderFooter( const cpo::uno::Reference< ooo::vba::XHelperInterface >& rParent,
+                       const cpo::uno::Reference< cpo::uno::XComponentContext >& rContext,
                        rtl::Reference< SwXTextDocument > xModel,
-                       css::uno::Reference< css::beans::XPropertySet > xProps,
+                       cpo::uno::Reference< css::beans::XPropertySet > xProps,
                        bool isHeader, sal_Int32 index );
 
     // Attributes
     virtual bool SAL_CALL getIsHeader() override;
     virtual bool SAL_CALL getLinkToPrevious() override;
     virtual void SAL_CALL setLinkToPrevious( bool _linktoprevious ) override;
-    virtual css::uno::Reference< ::ooo::vba::word::XRange > SAL_CALL getRange() override;
+    virtual cpo::uno::Reference< ::ooo::vba::word::XRange > SAL_CALL getRange() override;
     virtual cpo::uno::Any SAL_CALL Shapes( const cpo::uno::Any& aIndex ) override;
 
     // XHelperInterface

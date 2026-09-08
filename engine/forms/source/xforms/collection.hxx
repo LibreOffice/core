@@ -33,7 +33,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Type.hxx>
 #include <vector>
 
@@ -49,7 +49,7 @@ class Collection : public Collection_t
 {
 public:
     typedef ELEMENT_TYPE T;
-    typedef std::vector<css::uno::Reference<css::container::XContainerListener> > Listeners_t;
+    typedef std::vector<cpo::uno::Reference<css::container::XContainerListener> > Listeners_t;
 
 protected:
     std::vector<T> maItems;
@@ -177,7 +177,7 @@ public:
     }
 
     // XEnumerationAccess : XElementAccess
-    virtual css::uno::Reference<css::container::XEnumeration> createEnumeration() override
+    virtual cpo::uno::Reference<css::container::XEnumeration> createEnumeration() override
     {
         return new Enumeration( this );
     }
@@ -213,7 +213,7 @@ public:
 
     // XContainer
     virtual void addContainerListener(
-        const css::uno::Reference<css::container::XContainerListener>& xListener ) override
+        const cpo::uno::Reference<css::container::XContainerListener>& xListener ) override
     {
         OSL_ENSURE( xListener.is(), "need listener!" );
         if( std::find( maListeners.begin(), maListeners.end(), xListener)
@@ -222,7 +222,7 @@ public:
     }
 
     virtual void removeContainerListener(
-        const css::uno::Reference<css::container::XContainerListener>& xListener ) override
+        const cpo::uno::Reference<css::container::XContainerListener>& xListener ) override
     {
         OSL_ENSURE( xListener.is(), "need listener!" );
         Listeners_t::iterator aIter =

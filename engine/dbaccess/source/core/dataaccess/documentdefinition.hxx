@@ -62,9 +62,9 @@ class ODocumentDefinition
         ,public ::comphelper::OPropertyArrayUsageHelper< ODocumentDefinition >
         ,public ODocumentDefinition_Base
 {
-    css::uno::Reference< css::embed::XEmbeddedObject>         m_xEmbeddedObject;
+    cpo::uno::Reference< css::embed::XEmbeddedObject>         m_xEmbeddedObject;
     rtl::Reference< OEmbedObjectHolder >                      m_xListener;
-    css::uno::Reference< css::sdbc::XConnection >             m_xLastKnownConnection;
+    cpo::uno::Reference< css::sdbc::XConnection >             m_xLastKnownConnection;
 
     rtl::Reference<OInterceptor>                              m_pInterceptor;
     bool                                                      m_bForm; // <TRUE/> if it is a form
@@ -79,8 +79,8 @@ protected:
 public:
 
     ODocumentDefinition(
-            const css::uno::Reference< cpo::uno::XInterface >& _rxContainer,
-            const css::uno::Reference< cpo::uno::XComponentContext >&,
+            const cpo::uno::Reference< cpo::uno::XInterface >& _rxContainer,
+            const cpo::uno::Reference< cpo::uno::XComponentContext >&,
             const TContentPtr& _pImpl,
             bool _bForm
         );
@@ -88,7 +88,7 @@ public:
     void    initialLoad(
                 const cpo::uno::Sequence< sal_Int8 >& i_rClassID,
                 const cpo::uno::Sequence< css::beans::PropertyValue >& i_rCreationArgs,
-                const css::uno::Reference< css::sdbc::XConnection >& i_rConnection
+                const cpo::uno::Reference< css::sdbc::XConnection >& i_rConnection
             );
 
     virtual cpo::uno::Sequence<cpo::uno::Type> getTypes() override;
@@ -98,7 +98,7 @@ public:
     DECLARE_XINTERFACE( )
 
 // css::beans::XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
 
     // OPropertySetHelper
     virtual void getFastPropertyValue(
@@ -107,11 +107,11 @@ public:
                             ) const override;
 
     // XComponentSupplier
-    virtual css::uno::Reference< css::util::XCloseable > getComponent(  ) override;
+    virtual cpo::uno::Reference< css::util::XCloseable > getComponent(  ) override;
 
     // XSubDocument
-    virtual css::uno::Reference< css::lang::XComponent > open(  ) override;
-    virtual css::uno::Reference< css::lang::XComponent > openDesign(  ) override;
+    virtual cpo::uno::Reference< css::lang::XComponent > open(  ) override;
+    virtual cpo::uno::Reference< css::lang::XComponent > openDesign(  ) override;
     virtual void store(  ) override;
     virtual bool close(  ) override;
 
@@ -123,7 +123,7 @@ public:
     virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
     // XCommandProcessor
-    virtual cpo::uno::Any execute( const css::ucb::Command& aCommand, sal_Int32 CommandId, const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment ) override ;
+    virtual cpo::uno::Any execute( const css::ucb::Command& aCommand, sal_Int32 CommandId, const cpo::uno::Reference< css::ucb::XCommandEnvironment >& Environment ) override ;
 
     // XRename
     virtual void rename( const OUString& newName ) override;
@@ -138,22 +138,22 @@ public:
     /** returns the forms/reports container storage, depending on m_bForm. Our own storage
         inside this container storage is the one with the name as indicated by m_pImpl->m_aProps.sPersistentName.
     */
-    css::uno::Reference< css::embed::XStorage >
+    cpo::uno::Reference< css::embed::XStorage >
         getContainerStorage() const;
 
-    bool save(bool _bApprove, const css::uno::Reference<css::awt::XTopWindow>& rDialogParent);
+    bool save(bool _bApprove, const cpo::uno::Reference<css::awt::XTopWindow>& rDialogParent);
     void saveAs();
     void closeObject();
     bool isModified();
     bool isNewReport() const { return !m_bForm && !m_pImpl->m_aProps.bAsTemplate; }
 
     static void fillReportData(
-                    const css::uno::Reference< cpo::uno::XComponentContext > & _rxContext,
-                    const css::uno::Reference< css::util::XCloseable >& _rxComponent,
-                    const css::uno::Reference< css::sdbc::XConnection >& _rxActiveConnection
+                    const cpo::uno::Reference< cpo::uno::XComponentContext > & _rxContext,
+                    const cpo::uno::Reference< css::util::XCloseable >& _rxComponent,
+                    const cpo::uno::Reference< css::sdbc::XConnection >& _rxActiveConnection
                 );
 
-    const css::uno::Reference< css::sdbc::XConnection >&
+    const cpo::uno::Reference< css::sdbc::XConnection >&
         getConnection() const { return m_xLastKnownConnection; }
 
     /** prepares closing the document component
@@ -168,13 +168,13 @@ public:
 
     static OUString GetDocumentServiceFromMediaType(
         const OUString& _rMediaType,
-        const css::uno::Reference< cpo::uno::XComponentContext > & _rxContext,
+        const cpo::uno::Reference< cpo::uno::XComponentContext > & _rxContext,
         cpo::uno::Sequence< sal_Int8 >& _rClassId
     );
     static OUString GetDocumentServiceFromMediaType(
-        const css::uno::Reference< css::embed::XStorage >& _rxContainerStorage,
+        const cpo::uno::Reference< css::embed::XStorage >& _rxContainerStorage,
         const OUString& _rEntityName,
-        const css::uno::Reference< cpo::uno::XComponentContext > & _rxContext,
+        const cpo::uno::Reference< cpo::uno::XComponentContext > & _rxContext,
         cpo::uno::Sequence< sal_Int8 >& _rClassId
     );
 
@@ -201,19 +201,19 @@ private:
         @param  _rxController
             the controller which belongs to the XModel of our (active) embedded object
     */
-    static void impl_initFormEditView( const css::uno::Reference< css::frame::XController >& _rxController );
+    static void impl_initFormEditView( const cpo::uno::Reference< css::frame::XController >& _rxController );
 
     /** removes the given frame from the desktop's frame collection
         @throws cpo::uno::RuntimeException
     */
     static void impl_removeFrameFromDesktop_throw(
-                    const css::uno::Reference< cpo::uno::XComponentContext >& _rContext,
-                    const css::uno::Reference< css::frame::XFrame >& _rxFrame
+                    const cpo::uno::Reference< cpo::uno::XComponentContext >& _rContext,
+                    const cpo::uno::Reference< css::frame::XFrame >& _rxFrame
                 );
 
     /** opens the UI for this sub document
     */
-    css::uno::Reference< css::lang::XComponent >
+    cpo::uno::Reference< css::lang::XComponent >
             impl_openUI_nolck_throw( bool _bForEditing );
 
     /** stores our document, if it's already loaded
@@ -226,7 +226,7 @@ private:
 
     /** returns our component, creates it if necessary
     */
-    css::uno::Reference< css::util::XCloseable >
+    cpo::uno::Reference< css::util::XCloseable >
             impl_getComponent_throw( const bool i_ForceCreate = true );
 
     /** shows or hides our component
@@ -250,7 +250,7 @@ private:
     */
     cpo::uno::Sequence< css::beans::PropertyValue >
         fillLoadArgs(
-            const css::uno::Reference< css::sdbc::XConnection>& _xConnection,
+            const cpo::uno::Reference< css::sdbc::XConnection>& _xConnection,
             const bool _bSuppressMacros,
             const bool _bReadOnly,
             const cpo::uno::Sequence< css::beans::PropertyValue >& i_rOpenCommandArguments,
@@ -282,7 +282,7 @@ private:
             If set, it will be used to create the embedded object.
     */
     void loadEmbeddedObject(
-                const css::uno::Reference< css::sdbc::XConnection>& _xConnection,
+                const cpo::uno::Reference< css::sdbc::XConnection>& _xConnection,
                 const cpo::uno::Sequence< sal_Int8 >& _aClassID,
                 const cpo::uno::Sequence< css::beans::PropertyValue >& _rAdditionalArgs,
                 const bool _bSuppressMacros,
@@ -320,13 +320,13 @@ private:
 
     void onCommandGetDocumentProperties( cpo::uno::Any& _rProps );
     /// @throws cpo::uno::Exception
-    void onCommandInsert( const OUString& _sURL, const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment );
+    void onCommandInsert( const OUString& _sURL, const cpo::uno::Reference< css::ucb::XCommandEnvironment >& Environment );
     void onCommandPreview( cpo::uno::Any& _rImage );
     cpo::uno::Any
         onCommandOpenSomething(
             const cpo::uno::Any& _rArgument,
             const bool _bActivate,
-            const css::uno::Reference< css::ucb::XCommandEnvironment >& _rxEnvironment
+            const cpo::uno::Reference< css::ucb::XCommandEnvironment >& _rxEnvironment
         );
 private:
     using ::cppu::OPropertySetHelper::getFastPropertyValue;

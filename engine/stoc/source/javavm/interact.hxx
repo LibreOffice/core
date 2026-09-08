@@ -40,7 +40,7 @@ public:
 
     virtual cpo::uno::Any SAL_CALL getRequest() override;
 
-    virtual cpo::uno::Sequence< css::uno::Reference<
+    virtual cpo::uno::Sequence< cpo::uno::Reference<
         css::task::XInteractionContinuation > > SAL_CALL
     getContinuations() override;
 
@@ -55,7 +55,7 @@ private:
     virtual ~InteractionRequest() override;
 
     cpo::uno::Any m_aRequest;
-    cpo::uno::Sequence< css::uno::Reference<
+    cpo::uno::Sequence< cpo::uno::Reference<
         css::task::XInteractionContinuation > > m_aContinuations;
     rtl::Reference< RetryContinuation > m_xRetryContinuation;
 };

@@ -40,11 +40,12 @@
 #include <algorithm>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace ::chart::DataSeriesProperties;
 
 using ::com::sun::star::beans::Property;
 using ::cpo::uno::Sequence;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 
 namespace
 {

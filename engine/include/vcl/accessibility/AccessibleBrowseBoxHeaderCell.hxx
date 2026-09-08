@@ -25,14 +25,14 @@ class VCL_DLLPUBLIC AccessibleBrowseBoxHeaderCell final : public AccessibleBrows
     sal_Int32   m_nColumnRowId;
 public:
     AccessibleBrowseBoxHeaderCell(sal_Int32 _nColumnRowId,
-                                      const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
+                                      const cpo::uno::Reference< css::accessibility::XAccessible >& rxParent,
                                       ::vcl::IAccessibleTableProvider&                  _rBrowseBox,
                                       AccessibleBrowseBoxObjType  _eObjType);
     /** @return  The count of visible children. */
     virtual sal_Int64 getAccessibleChildCount() override;
 
     /** @return  The XAccessible interface of the specified child. */
-    virtual css::uno::Reference< css::accessibility::XAccessible >
+    virtual cpo::uno::Reference< css::accessibility::XAccessible >
         getAccessibleChild( sal_Int64 nChildIndex ) override;
 
     /** @return  The index of this object among the parent's children. */

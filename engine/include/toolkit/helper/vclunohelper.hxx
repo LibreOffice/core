@@ -20,7 +20,7 @@
 #pragma once
 
 #include <toolkit/dllapi.h>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 
 #include <com/sun/star/awt/MouseEvent.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
@@ -67,23 +67,23 @@ class TOOLKIT_DLLPUBLIC VCLUnoHelper
 {
 public:
     // Toolkit
-    static css::uno::Reference< css::awt::XToolkit>   CreateToolkit();
+    static cpo::uno::Reference< css::awt::XToolkit>   CreateToolkit();
 
     // Bitmap
-    static Bitmap                                     GetBitmap( const css::uno::Reference< css::awt::XBitmap>& rxBitmap );
-    static css::uno::Reference< css::awt::XBitmap>    CreateBitmap( const Bitmap& rBitmap );
+    static Bitmap                                     GetBitmap( const cpo::uno::Reference< css::awt::XBitmap>& rxBitmap );
+    static cpo::uno::Reference< css::awt::XBitmap>    CreateBitmap( const Bitmap& rBitmap );
 
     // Window
-    static vcl::Window*                               GetWindow( const css::uno::Reference< css::awt::XWindow>& rxWindow );
-    static vcl::Window*                               GetWindow( const css::uno::Reference< css::awt::XWindowPeer>& rxWindowPeer );
-    static css::uno::Reference< css::awt::XWindow>    GetInterface( vcl::Window* pWindow );
+    static vcl::Window*                               GetWindow( const cpo::uno::Reference< css::awt::XWindow>& rxWindow );
+    static vcl::Window*                               GetWindow( const cpo::uno::Reference< css::awt::XWindowPeer>& rxWindowPeer );
+    static cpo::uno::Reference< css::awt::XWindow>    GetInterface( vcl::Window* pWindow );
 
     // OutputDevice
-    static OutputDevice*                            GetOutputDevice( const css::uno::Reference< css::awt::XDevice>& rxDevice );
-    static OutputDevice*                            GetOutputDevice( const css::uno::Reference< css::awt::XGraphics>& rxGraphics );
+    static OutputDevice*                            GetOutputDevice( const cpo::uno::Reference< css::awt::XDevice>& rxDevice );
+    static OutputDevice*                            GetOutputDevice( const cpo::uno::Reference< css::awt::XGraphics>& rxGraphics );
 
     // Region
-    static vcl::Region                                   GetRegion( const css::uno::Reference< css::awt::XRegion >& rxRegion );
+    static vcl::Region                                   GetRegion( const cpo::uno::Reference< css::awt::XRegion >& rxRegion );
 
     // Polygon
     static tools::Polygon CreatePolygon( const cpo::uno::Sequence< sal_Int32 >& DataX, const cpo::uno::Sequence< sal_Int32 >& DataY );
@@ -94,7 +94,7 @@ public:
     */
     static css::awt::FontDescriptor    CreateFontDescriptor( const vcl::Font& rFont );
     static vcl::Font                                CreateFont( const css::awt::FontDescriptor& rDescr, const vcl::Font& rInitFont );
-    static vcl::Font                                CreateFont( const css::uno::Reference< css::awt::XFont >& rxFont );
+    static vcl::Font                                CreateFont( const cpo::uno::Reference< css::awt::XFont >& rxFont );
     static css::awt::SimpleFontMetric  CreateFontMetric( const FontMetric& rFontMetric );
 
     // Rectangle
@@ -121,7 +121,7 @@ public:
     static css::awt::MouseEvent
         createMouseEvent(
             const ::MouseEvent& _rVclEvent,
-            const css::uno::Reference< cpo::uno::XInterface >& _rxContext
+            const cpo::uno::Reference< cpo::uno::XInterface >& _rxContext
         );
 
     static ::MouseEvent createVCLMouseEvent( const css::awt::MouseEvent& _rAwtEvent );
@@ -129,13 +129,13 @@ public:
     static css::awt::KeyEvent
         createKeyEvent(
             const ::KeyEvent& _rVclEvent,
-            const css::uno::Reference< cpo::uno::XInterface >& _rxContext
+            const cpo::uno::Reference< cpo::uno::XInterface >& _rxContext
         );
 
     static ::KeyEvent createVCLKeyEvent( const css::awt::KeyEvent& _rAwtEvent );
 
-    static ::PointerStyle getMousePointer(const css::uno::Reference<css::awt::XWindowPeer>& rWindowPeer);
-    static void setMousePointer(const css::uno::Reference<css::awt::XWindowPeer>& rWindowPeer, ::PointerStyle mousepointer);
+    static ::PointerStyle getMousePointer(const cpo::uno::Reference<css::awt::XWindowPeer>& rWindowPeer);
+    static void setMousePointer(const cpo::uno::Reference<css::awt::XWindowPeer>& rWindowPeer, ::PointerStyle mousepointer);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

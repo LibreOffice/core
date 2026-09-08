@@ -37,6 +37,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 namespace framework
 {
@@ -288,12 +289,12 @@ bool implts_isFrameOrWindowTop( const uno::Reference< frame::XFrame >& xFrame )
     return false;
 }
 
-void impl_setDockingWindowVisibility( const css::uno::Reference< cpo::uno::XComponentContext>& rxContext, const css::uno::Reference< css::frame::XFrame >& rFrame, std::u16string_view rDockingWindowName, bool bVisible )
+void impl_setDockingWindowVisibility( const cpo::uno::Reference< cpo::uno::XComponentContext>& rxContext, const cpo::uno::Reference< css::frame::XFrame >& rFrame, std::u16string_view rDockingWindowName, bool bVisible )
 {
     sal_Int32 nID    = o3tl::toInt32(rDockingWindowName);
     sal_Int32 nIndex = nID - DOCKWIN_ID_BASE;
 
-    css::uno::Reference< css::frame::XDispatchProvider > xProvider(rFrame, css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::frame::XDispatchProvider > xProvider(rFrame, cpo::uno::UNO_QUERY);
     if ( !(nIndex >= 0 && xProvider.is()) )
         return;
 
@@ -302,7 +303,7 @@ void impl_setDockingWindowVisibility( const css::uno::Reference< cpo::uno::XComp
     cpo::uno::Sequence< css::beans::PropertyValue > aArgs{ comphelper::makePropertyValue(
         aDockWinArgName, bVisible) };
 
-    css::uno::Reference< css::frame::XDispatchHelper > xDispatcher = css::frame::DispatchHelper::create( rxContext );
+    cpo::uno::Reference< css::frame::XDispatchHelper > xDispatcher = css::frame::DispatchHelper::create( rxContext );
 
     OUString aDockWinCommand = ".uno:" + aDockWinArgName;
     xDispatcher->executeDispatch(
@@ -314,22 +315,22 @@ void impl_setDockingWindowVisibility( const css::uno::Reference< cpo::uno::XComp
 }
 
 void impl_addWindowListeners(
-    const css::uno::Reference< cpo::uno::XInterface >& xThis,
-    const css::uno::Reference< css::ui::XUIElement >& xUIElement )
+    const cpo::uno::Reference< cpo::uno::XInterface >& xThis,
+    const cpo::uno::Reference< css::ui::XUIElement >& xUIElement )
 {
-    css::uno::Reference< css::awt::XWindow > xWindow( xUIElement->getRealInterface(), css::uno::UNO_QUERY );
-    css::uno::Reference< css::awt::XDockableWindow > xDockWindow( xUIElement->getRealInterface(), css::uno::UNO_QUERY );
+    cpo::uno::Reference< css::awt::XWindow > xWindow( xUIElement->getRealInterface(), cpo::uno::UNO_QUERY );
+    cpo::uno::Reference< css::awt::XDockableWindow > xDockWindow( xUIElement->getRealInterface(), cpo::uno::UNO_QUERY );
     if ( !(xDockWindow.is() && xWindow.is()) )
         return;
 
     try
     {
         xDockWindow->addDockableWindowListener(
-            css::uno::Reference< css::awt::XDockableWindowListener >(
-                xThis, css::uno::UNO_QUERY ));
+            cpo::uno::Reference< css::awt::XDockableWindowListener >(
+                xThis, cpo::uno::UNO_QUERY ));
         xWindow->addWindowListener(
-            css::uno::Reference< css::awt::XWindowListener >(
-                xThis, css::uno::UNO_QUERY ));
+            cpo::uno::Reference< css::awt::XWindowListener >(
+                xThis, cpo::uno::UNO_QUERY ));
         xDockWindow->enableDocking( true );
     }
     catch ( const cpo::uno::Exception& )

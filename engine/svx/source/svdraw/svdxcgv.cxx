@@ -625,7 +625,7 @@ Graphic SdrExchangeView::GetObjGraphic(const SdrObject& rSdrObject, bool bSVG)
             const SdrMediaObj* pSdrMediaObj = dynamic_cast<const SdrMediaObj*>(&rSdrObject);
             if (pSdrMediaObj)
             {
-                const css::uno::Reference<css::graphic::XGraphic>& xGraphic
+                const cpo::uno::Reference<css::graphic::XGraphic>& xGraphic
                     = pSdrMediaObj->getSnapshot();
                 if (xGraphic.is())
                     aRet = Graphic(xGraphic);

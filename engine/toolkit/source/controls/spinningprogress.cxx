@@ -23,7 +23,7 @@
 #include <vcl/toolkit/throbber.hxx>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 namespace {
@@ -32,13 +32,13 @@ typedef toolkit::AnimatedImagesControlModel SpinningProgressControlModel_Base;
 class SpinningProgressControlModel : public SpinningProgressControlModel_Base
 {
 public:
-    explicit SpinningProgressControlModel( css::uno::Reference< cpo::uno::XComponentContext > const & i_factory );
+    explicit SpinningProgressControlModel( cpo::uno::Reference< cpo::uno::XComponentContext > const & i_factory );
     SpinningProgressControlModel(const SpinningProgressControlModel& rOther) : SpinningProgressControlModel_Base(rOther) {}
 
     virtual rtl::Reference<UnoControlModel> Clone() const override;
 
     // XPropertySet
-    css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+    cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
 
     // XPersistObject
     OUString getServiceName() override;

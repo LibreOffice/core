@@ -38,7 +38,7 @@
 
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::style;
@@ -189,9 +189,9 @@ XMLTextMasterPageContext::~XMLTextMasterPageContext()
 {
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextMasterPageContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextMasterPageContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContextRef xContext;
 
@@ -243,7 +243,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextMasterPageConte
 
 SvXMLImportContext *XMLTextMasterPageContext::CreateHeaderFooterContext(
             sal_Int32 /*nElement*/,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList > & /*xAttrList*/,
+            const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & /*xAttrList*/,
             const bool bFooter,
             const bool bLeft,
             const bool bFirst )

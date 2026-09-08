@@ -31,6 +31,7 @@
 #include <DocumentSettingManager.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 // Constructor
 SwDrawModel::SwDrawModel(SwDoc& rDoc)

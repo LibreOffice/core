@@ -79,23 +79,23 @@ namespace accessibility
     class OProxyAggregation
     {
     private:
-        css::uno::Reference< cpo::uno::XAggregation >             m_xProxyAggregate;
-        css::uno::Reference< css::lang::XTypeProvider >           m_xProxyTypeAccess;
-        css::uno::Reference< cpo::uno::XComponentContext >        m_xContext;
+        cpo::uno::Reference< cpo::uno::XAggregation >             m_xProxyAggregate;
+        cpo::uno::Reference< css::lang::XTypeProvider >           m_xProxyTypeAccess;
+        cpo::uno::Reference< cpo::uno::XComponentContext >        m_xContext;
 
     protected:
-        const css::uno::Reference< cpo::uno::XComponentContext >& getComponentContext() const
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& getComponentContext() const
         {
             return m_xContext;
         }
 
     protected:
-        OProxyAggregation( const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext );
+        OProxyAggregation( const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxContext );
         ~OProxyAggregation();
 
         /// to be called from within your ctor
         void baseAggregateProxyFor(
-            const css::uno::Reference< cpo::uno::XInterface >& _rxComponent,
+            const cpo::uno::Reference< cpo::uno::XInterface >& _rxComponent,
             oslInterlockedCount& _rRefCount,
             ::cppu::OWeakObject& _rDelegator
         );
@@ -131,7 +131,7 @@ namespace accessibility
                                     >   BASE;   // prevents some MSVC problems
 
     protected:
-        css::uno::Reference< css::lang::XComponent >
+        cpo::uno::Reference< css::lang::XComponent >
                                             m_xInner;
         ::cppu::OBroadcastHelper&           m_rBHelper;
 
@@ -147,14 +147,14 @@ namespace accessibility
 
     protected:
         OComponentProxyAggregationHelper(
-            const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
             ::cppu::OBroadcastHelper& _rBHelper
         );
         virtual ~OComponentProxyAggregationHelper( );
 
         /// to be called from within your ctor
         void componentAggregateProxyFor(
-            const css::uno::Reference< css::lang::XComponent >& _rxComponent,
+            const cpo::uno::Reference< css::lang::XComponent >& _rxComponent,
             oslInterlockedCount& _rRefCount,
             ::cppu::OWeakObject& _rDelegator
         );
@@ -180,8 +180,8 @@ namespace accessibility
     {
     protected:
         OComponentProxyAggregation(
-            const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
-            const css::uno::Reference< css::lang::XComponent >& _rxComponent
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
+            const cpo::uno::Reference< css::lang::XComponent >& _rxComponent
         );
 
         virtual ~OComponentProxyAggregation() override;

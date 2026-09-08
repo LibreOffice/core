@@ -24,7 +24,7 @@
 #include <helper/unopropertyarrayhelper.hxx>
 
 
-UnoControlContainerModel::UnoControlContainerModel( const css::uno::Reference< cpo::uno::XComponentContext >& i_factory )
+UnoControlContainerModel::UnoControlContainerModel( const cpo::uno::Reference< cpo::uno::XComponentContext >& i_factory )
     :UnoControlModel( i_factory )
 {
     ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
@@ -70,9 +70,9 @@ cpo::uno::Any UnoControlContainerModel::ImplGetDefaultValue( sal_uInt16 nPropId 
 }
 
 
-css::uno::Reference< css::beans::XPropertySetInfo > UnoControlContainerModel::getPropertySetInfo(  )
+cpo::uno::Reference< css::beans::XPropertySetInfo > UnoControlContainerModel::getPropertySetInfo(  )
 {
-    static css::uno::Reference< css::beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
+    static cpo::uno::Reference< css::beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
 }
 

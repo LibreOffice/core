@@ -59,7 +59,7 @@ private:
     EventListenerMultiplexer                maDisposeListeners;
 
 protected:
-    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
 protected:
     void                                        ImplRegisterProperty( sal_uInt16 nPropType );
@@ -103,14 +103,14 @@ protected:
         : UnoControlModel_Base()
         , OPropertySetHelper()
         , maDisposeListeners( *this )
-        , m_xContext( css::uno::Reference< cpo::uno::XComponentContext >() )
+        , m_xContext( cpo::uno::Reference< cpo::uno::XComponentContext >() )
     {
         assert(false);
     }
 #endif
 
 public:
-                UnoControlModel( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+                UnoControlModel( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
                 UnoControlModel( const UnoControlModel& rModel );
 
     virtual rtl::Reference<UnoControlModel> Clone() const = 0;
@@ -124,15 +124,15 @@ public:
     cpo::uno::Any  queryAggregation( const cpo::uno::Type & rType ) override;
 
     // css::util::XCloneable
-    css::uno::Reference< css::util::XCloneable > createClone() override;
+    cpo::uno::Reference< css::util::XCloneable > createClone() override;
 
     // css::lang::XTypeProvider
     DECLARE_XTYPEPROVIDER()
 
     // css::lang::XComponent
     void dispose(  ) override;
-    void addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-    void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+    void addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& xListener ) override;
+    void removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
     // css::beans::XPropertyState
     css::beans::PropertyState getPropertyState( const OUString& PropertyName ) override;
@@ -142,8 +142,8 @@ public:
 
     // css::io::XPersistObject
     OUString getServiceName() override;
-    void write( const css::uno::Reference< css::io::XObjectOutputStream >& OutStream ) override;
-    void read( const css::uno::Reference< css::io::XObjectInputStream >& InStream ) override;
+    void write( const cpo::uno::Reference< css::io::XObjectOutputStream >& OutStream ) override;
+    void read( const cpo::uno::Reference< css::io::XObjectInputStream >& InStream ) override;
 
     // css::lang::XServiceInfo
     OUString getImplementationName(  ) override;
@@ -160,7 +160,7 @@ public:
     void getFastPropertyValue( std::unique_lock<std::mutex>& rGuard, cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
 
     // css::beans::XMultiPropertySet
-    css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+    cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
     void setPropertyValues( const cpo::uno::Sequence< OUString >& PropertyNames, const cpo::uno::Sequence< cpo::uno::Any >& Values ) override;
 protected:
     // override setValue methods to handle properties of FontDescriptor

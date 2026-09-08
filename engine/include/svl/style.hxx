@@ -385,7 +385,7 @@ public:
                       SfxStyleSearchBits _nMask,
                       const OUString& rParentStyleSheetName = u""_ustr );
 
-    static SfxUnoStyleSheet* getUnoStyleSheet( const css::uno::Reference< css::style::XStyle >& xStyle );
+    static SfxUnoStyleSheet* getUnoStyleSheet( const cpo::uno::Reference< css::style::XStyle >& xStyle );
 };
 
 #endif

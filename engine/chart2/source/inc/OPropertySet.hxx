@@ -180,8 +180,8 @@ public:
         getPropertyDefaults( const cpo::uno::Sequence< OUString >& aPropertyNames ) override final;
 
     // ____ XStyleSupplier ____
-    virtual css::uno::Reference< css::style::XStyle > getStyle() override final;
-    virtual void setStyle( const css::uno::Reference< css::style::XStyle >& xStyle ) override final;
+    virtual cpo::uno::Reference< css::style::XStyle > getStyle() override final;
+    virtual void setStyle( const cpo::uno::Reference< css::style::XStyle >& xStyle ) override final;
 
     // ____ XMultiPropertySet ____
     virtual void setPropertyValues(
@@ -222,11 +222,11 @@ private:
     void SetPropertyValueByHandle( sal_Int32 nHandle,
                                    const cpo::uno::Any & rValue );
 
-    bool SetStyle( const css::uno::Reference< css::style::XStyle > & xStyle );
+    bool SetStyle( const cpo::uno::Reference< css::style::XStyle > & xStyle );
 
     bool m_bSetNewValuesExplicitlyEvenIfTheyEqualDefault;
     std::unordered_map< sal_Int32, cpo::uno::Any >    m_aProperties;
-    css::uno::Reference< css::style::XStyle > m_xStyle;
+    cpo::uno::Reference< css::style::XStyle > m_xStyle;
 };
 
 } //  namespace property

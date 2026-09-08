@@ -46,8 +46,8 @@
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::util;
@@ -66,8 +66,8 @@ class DrawAnnotationContext : public SvXMLImportContext
 public:
     DrawAnnotationContext( SvXMLImport& rImport, const Reference< xml::sax::XFastAttributeList>& xAttrList, const Reference< XAnnotationAccess >& xAnnotationAccess );
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
     virtual void endFastElement(sal_Int32 nElement) override;
 
 private:
@@ -149,9 +149,9 @@ DrawAnnotationContext::DrawAnnotationContext( SvXMLImport& rImport, const Refere
     mxAnnotation->setSize( aSize );
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > DrawAnnotationContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > DrawAnnotationContext::createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     if( mxAnnotation.is() )
     {
@@ -268,7 +268,7 @@ void SdXMLGenericPageContext::startFastElement( sal_Int32 /*nElement*/, const Re
         GetImport().GetFormImport()->startPage( Reference< drawing::XDrawPage >::query( mxShapes ) );
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLGenericPageContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLGenericPageContext::createFastChildContext(
     sal_Int32 nElement,
     const Reference< xml::sax::XFastAttributeList>& xAttrList )
 {

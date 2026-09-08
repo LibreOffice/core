@@ -24,7 +24,7 @@ class SfxUnoDecks final : public cppu::WeakImplHelper<css::ui::XDecks>
 
 public:
 
-    SfxUnoDecks(css::uno::Reference<css::frame::XFrame> );
+    SfxUnoDecks(cpo::uno::Reference<css::frame::XFrame> );
 
 // XNameAccess
 
@@ -46,7 +46,7 @@ public:
 
 private:
 
-    const css::uno::Reference<css::frame::XFrame> xFrame;
+    const cpo::uno::Reference<css::frame::XFrame> xFrame;
     sfx2::sidebar::SidebarController* getSidebarController();
 
 };

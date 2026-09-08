@@ -11,6 +11,7 @@
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 SwVbaFormFieldDropDownListEntry::SwVbaFormFieldDropDownListEntry(
     const uno::Reference<ooo::vba::XHelperInterface>& rParent,

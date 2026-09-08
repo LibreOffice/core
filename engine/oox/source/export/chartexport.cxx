@@ -136,8 +136,8 @@
 #include <sax/fastattribs.hxx>
 
 using namespace css;
-using namespace css::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace css::drawing;
 using namespace ::oox::core;
 using css::beans::PropertyValue;
@@ -746,7 +746,7 @@ Sequence< Sequence< OUString > > ChartExport::getSplitCategoriesList( const OUSt
             {
                 try
                 {
-                    css::uno::Reference< css::chart2::XAnyDescriptionAccess > xDataAccess(xChartDoc->getDataProvider(), uno::UNO_QUERY);
+                    cpo::uno::Reference< css::chart2::XAnyDescriptionAccess > xDataAccess(xChartDoc->getDataProvider(), uno::UNO_QUERY);
                     const Sequence< Sequence< cpo::uno::Any > >aAnyCategories(bSeriesUsesColumns ? xDataAccess->getAnyRowDescriptions() : xDataAccess->getAnyColumnDescriptions());
                     auto pMax = std::max_element(aAnyCategories.begin(), aAnyCategories.end(),
                         [](const Sequence<cpo::uno::Any>& a, const Sequence<cpo::uno::Any>& b) {
@@ -2116,7 +2116,7 @@ void ChartExport::exportAdditionalShapes( const Reference< css::chart::XChartDoc
     if (!xDocPropSet.is())
         return;
 
-    css::uno::Reference< css::drawing::XShapes > mxAdditionalShapes;
+    cpo::uno::Reference< css::drawing::XShapes > mxAdditionalShapes;
     // get a sequence of non-chart shapes
     try
     {
@@ -3721,7 +3721,7 @@ void ChartExport::exportRadarChart( const Reference< chart2::XChartType >& xChar
 }
 
 void ChartExport::exportScatterChartSeries( const Reference< chart2::XChartType >& xChartType,
-        const cpo::uno::Sequence<css::uno::Reference<chart2::XDataSeries>>* pSeries)
+        const cpo::uno::Sequence<cpo::uno::Reference<chart2::XDataSeries>>* pSeries)
 {
     FSHelperPtr pFS = GetFS();
     pFS->startElement(FSNS(XML_c, XML_scatterChart));

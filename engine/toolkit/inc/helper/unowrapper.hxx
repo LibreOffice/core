@@ -31,24 +31,24 @@
 class UnoWrapper final : public UnoWrapperBase
 {
 private:
-    css::uno::Reference< css::awt::XToolkit>  mxToolkit;
+    cpo::uno::Reference< css::awt::XToolkit>  mxToolkit;
 
 public:
-    UnoWrapper( const css::uno::Reference< css::awt::XToolkit>& rxToolkit );
+    UnoWrapper( const cpo::uno::Reference< css::awt::XToolkit>& rxToolkit );
 
     virtual void        Destroy() override;
 
     // Toolkit
-    virtual css::uno::Reference< css::awt::XToolkit> GetVCLToolkit() override;
+    virtual cpo::uno::Reference< css::awt::XToolkit> GetVCLToolkit() override;
 
     // Graphics
-    virtual css::uno::Reference< css::awt::XGraphics> CreateGraphics( OutputDevice* pOutDev ) override;
+    virtual cpo::uno::Reference< css::awt::XGraphics> CreateGraphics( OutputDevice* pOutDev ) override;
     virtual void        ReleaseAllGraphics( OutputDevice* pOutDev ) override;
 
     // Window
-    virtual css::uno::Reference< css::awt::XVclWindowPeer> GetWindowInterface( vcl::Window* pWindow ) override;
-    virtual void        SetWindowInterface( vcl::Window* pWindow, const css::uno::Reference< css::awt::XVclWindowPeer> & xIFace ) override;
-    virtual VclPtr<vcl::Window> GetWindow(const css::uno::Reference<css::awt::XWindow>& rxWindow) override;
+    virtual cpo::uno::Reference< css::awt::XVclWindowPeer> GetWindowInterface( vcl::Window* pWindow ) override;
+    virtual void        SetWindowInterface( vcl::Window* pWindow, const cpo::uno::Reference< css::awt::XVclWindowPeer> & xIFace ) override;
+    virtual VclPtr<vcl::Window> GetWindow(const cpo::uno::Reference<css::awt::XWindow>& rxWindow) override;
 
     void                WindowDestroyed( vcl::Window* pWindow ) override;
 

@@ -60,8 +60,8 @@
 #include <vector>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::util;
 
 #define TIMEOUT_FIRST       300
@@ -105,8 +105,8 @@ public:
 class SfxBindings_Impl
 {
 public:
-    css::uno::Reference< css::frame::XDispatchRecorder > xRecorder;
-    css::uno::Reference< css::frame::XDispatchProvider >  xProv;
+    cpo::uno::Reference< css::frame::XDispatchRecorder > xRecorder;
+    cpo::uno::Reference< css::frame::XDispatchProvider >  xProv;
     std::unique_ptr<SfxWorkWindow> mxWorkWin;
     SfxBindings*            pSubBindings;
     std::vector<std::unique_ptr<SfxStateCache>> pCaches; // One cache for each binding
@@ -1442,7 +1442,7 @@ void SfxBindings::SetDispatcher( SfxDispatcher *pDisp )
 
     pDispatcher = pDisp;
 
-    css::uno::Reference < css::frame::XDispatchProvider > xProv;
+    cpo::uno::Reference < css::frame::XDispatchProvider > xProv;
     if ( pDisp )
         xProv.set( pDisp->GetFrame()->GetFrame().GetFrameInterface(), UNO_QUERY );
 
@@ -1512,7 +1512,7 @@ void SfxBindings::StartUpdate_Impl( bool bComplete )
 
 SfxItemState SfxBindings::QueryState( sal_uInt16 nSlot, std::unique_ptr<SfxPoolItem> &rpState )
 {
-    css::uno::Reference< css::frame::XDispatch >  xDisp;
+    cpo::uno::Reference< css::frame::XDispatch >  xDisp;
     SfxStateCache *pCache = GetStateCache( nSlot );
     if ( pCache )
         xDisp = pCache->GetDispatch();
@@ -1650,7 +1650,7 @@ sal_uInt16 SfxBindings::QuerySlotId( const util::URL& aURL )
     if (!pImpl)
         return 0;
 
-    css::uno::Reference<css::frame::XDispatch> xDispatch =
+    cpo::uno::Reference<css::frame::XDispatch> xDispatch =
         pImpl->xProv->queryDispatch(aURL, OUString(), 0);
     if (!xDispatch.is())
         return 0;
@@ -1666,7 +1666,7 @@ void SfxBindings::SetSubBindings_Impl( SfxBindings *pSub )
 {
     if ( pImpl->pSubBindings )
     {
-        pImpl->pSubBindings->SetDispatchProvider_Impl( css::uno::Reference< css::frame::XDispatchProvider > () );
+        pImpl->pSubBindings->SetDispatchProvider_Impl( cpo::uno::Reference< css::frame::XDispatchProvider > () );
     }
 
     pImpl->pSubBindings = pSub;
@@ -1707,25 +1707,25 @@ void SfxBindings::SetVisibleState( sal_uInt16 nId, bool bShow )
         pCache->SetVisibleState( bShow );
 }
 
-void SfxBindings::SetActiveFrame( const css::uno::Reference< css::frame::XFrame > & rFrame )
+void SfxBindings::SetActiveFrame( const cpo::uno::Reference< css::frame::XFrame > & rFrame )
 {
     if ( rFrame.is() || !pDispatcher )
-        SetDispatchProvider_Impl( css::uno::Reference< css::frame::XDispatchProvider > ( rFrame, css::uno::UNO_QUERY ) );
+        SetDispatchProvider_Impl( cpo::uno::Reference< css::frame::XDispatchProvider > ( rFrame, cpo::uno::UNO_QUERY ) );
     else
-        SetDispatchProvider_Impl( css::uno::Reference< css::frame::XDispatchProvider > (
-            pDispatcher->GetFrame()->GetFrame().GetFrameInterface(), css::uno::UNO_QUERY ) );
+        SetDispatchProvider_Impl( cpo::uno::Reference< css::frame::XDispatchProvider > (
+            pDispatcher->GetFrame()->GetFrame().GetFrameInterface(), cpo::uno::UNO_QUERY ) );
 }
 
-css::uno::Reference< css::frame::XFrame > SfxBindings::GetActiveFrame() const
+cpo::uno::Reference< css::frame::XFrame > SfxBindings::GetActiveFrame() const
 {
-    const css::uno::Reference< css::frame::XFrame > xFrame( pImpl->xProv, css::uno::UNO_QUERY );
+    const cpo::uno::Reference< css::frame::XFrame > xFrame( pImpl->xProv, cpo::uno::UNO_QUERY );
     if ( xFrame.is() || !pDispatcher )
         return xFrame;
     else
         return pDispatcher->GetFrame()->GetFrame().GetFrameInterface();
 }
 
-void SfxBindings::SetDispatchProvider_Impl( const css::uno::Reference< css::frame::XDispatchProvider > & rProv )
+void SfxBindings::SetDispatchProvider_Impl( const cpo::uno::Reference< css::frame::XDispatchProvider > & rProv )
 {
     bool bInvalidate = ( rProv != pImpl->xProv );
     if ( bInvalidate )
@@ -1738,12 +1738,12 @@ void SfxBindings::SetDispatchProvider_Impl( const css::uno::Reference< css::fram
         pImpl->pSubBindings->SetDispatchProvider_Impl( pImpl->xProv );
 }
 
-const css::uno::Reference< css::frame::XDispatchRecorder >& SfxBindings::GetRecorder() const
+const cpo::uno::Reference< css::frame::XDispatchRecorder >& SfxBindings::GetRecorder() const
 {
     return pImpl->xRecorder;
 }
 
-void SfxBindings::SetRecorder_Impl( css::uno::Reference< css::frame::XDispatchRecorder > const & rRecorder )
+void SfxBindings::SetRecorder_Impl( cpo::uno::Reference< css::frame::XDispatchRecorder > const & rRecorder )
 {
     pImpl->xRecorder = rRecorder;
 }

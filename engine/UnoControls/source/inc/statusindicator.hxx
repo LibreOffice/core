@@ -45,7 +45,7 @@ using StatusIndicator_BASE = cppu::ImplInheritanceHelper<BaseContainerControl,
 class StatusIndicator final : public StatusIndicator_BASE
 {
 public:
-    StatusIndicator( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+    StatusIndicator( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
     virtual ~StatusIndicator() override;
 
@@ -75,13 +75,13 @@ public:
     //  XControl
 
     virtual void createPeer(
-        const   css::uno::Reference< css::awt::XToolkit >&    xToolkit    ,
-        const   css::uno::Reference< css::awt::XWindowPeer >& xParent
+        const   cpo::uno::Reference< css::awt::XToolkit >&    xToolkit    ,
+        const   cpo::uno::Reference< css::awt::XWindowPeer >& xParent
     ) override;
 
-    virtual bool setModel( const css::uno::Reference< css::awt::XControlModel >& xModel ) override;
+    virtual bool setModel( const cpo::uno::Reference< css::awt::XControlModel >& xModel ) override;
 
-    virtual css::uno::Reference< css::awt::XControlModel > getModel() override;
+    virtual cpo::uno::Reference< css::awt::XControlModel > getModel() override;
 
     //  XComponent
 
@@ -97,13 +97,13 @@ public:
 
 private:
     virtual css::awt::WindowDescriptor impl_getWindowDescriptor(
-        const css::uno::Reference< css::awt::XWindowPeer >& xParentPeer
+        const cpo::uno::Reference< css::awt::XWindowPeer >& xParentPeer
     ) override;
 
     virtual void impl_paint (
         sal_Int32 nX,
         sal_Int32 nY,
-        const css::uno::Reference< css::awt::XGraphics > & rGraphics
+        const cpo::uno::Reference< css::awt::XGraphics > & rGraphics
     ) override;
 
     virtual void impl_recalcLayout( const css::awt::WindowEvent& aEvent ) override;

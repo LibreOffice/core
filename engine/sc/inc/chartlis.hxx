@@ -82,10 +82,10 @@ public:
 
     const OUString& GetName() const { return maName;}
 
-    void            SetUno( const css::uno::Reference< css::chart::XChartDataChangeEventListener >& rListener,
-                            const css::uno::Reference< css::chart::XChartData >& rSource );
-    css::uno::Reference< css::chart::XChartDataChangeEventListener >  GetUnoListener() const;
-    css::uno::Reference< css::chart::XChartData >                     GetUnoSource() const;
+    void            SetUno( const cpo::uno::Reference< css::chart::XChartDataChangeEventListener >& rListener,
+                            const cpo::uno::Reference< css::chart::XChartData >& rSource );
+    cpo::uno::Reference< css::chart::XChartDataChangeEventListener >  GetUnoListener() const;
+    cpo::uno::Reference< css::chart::XChartData >                     GetUnoSource() const;
 
     bool            IsUno() const   { return (pUnoData != nullptr); }
 
@@ -175,8 +175,8 @@ public:
                                     const ScRangeListRef& rRangeListRef );
     // use FreeUnused only the way it's used in ScDocument::UpdateChartListenerCollection
     void            FreeUnused();
-    void            FreeUno( const css::uno::Reference< css::chart::XChartDataChangeEventListener >& rListener,
-                             const css::uno::Reference< css::chart::XChartData >& rSource );
+    void            FreeUno( const cpo::uno::Reference< css::chart::XChartDataChangeEventListener >& rListener,
+                             const cpo::uno::Reference< css::chart::XChartData >& rSource );
     void            StartTimer();
     void            UpdateDirtyCharts();
     void            SetDirty();

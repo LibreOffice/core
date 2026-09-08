@@ -20,7 +20,7 @@
 #pragma once
 
 #include "debugtrace.hxx"
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <rtl/ref.hxx>
 #include <vector>
 

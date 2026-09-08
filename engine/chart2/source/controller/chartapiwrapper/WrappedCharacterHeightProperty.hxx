@@ -33,13 +33,13 @@ public:
     WrappedCharacterHeightProperty_Base( const OUString& rOuterEqualsInnerName, ReferenceSizePropertyProvider* pRefSizePropProvider );
     virtual ~WrappedCharacterHeightProperty_Base() override;
 
-    virtual void setPropertyValue( const cpo::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual void setPropertyValue( const cpo::uno::Any& rOuterValue, const cpo::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual cpo::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual cpo::uno::Any getPropertyValue( const cpo::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual cpo::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
+    virtual cpo::uno::Any getPropertyDefault( const cpo::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
 
-    virtual css::beans::PropertyState getPropertyState( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
+    virtual css::beans::PropertyState getPropertyState( const cpo::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
 
 protected:
     virtual cpo::uno::Any convertInnerToOuterValue( const cpo::uno::Any& rInnerValue ) const override;

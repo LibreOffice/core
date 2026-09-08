@@ -31,7 +31,7 @@
 
 namespace stoc_connector
 {
-    typedef std::unordered_set< css::uno::Reference< css::io::XStreamListener> >
+    typedef std::unordered_set< cpo::uno::Reference< css::io::XStreamListener> >
             XStreamListener_hash_set;
 
     class PipeConnection :
@@ -71,8 +71,8 @@ namespace stoc_connector
 
 
         // XConnectionBroadcaster
-        virtual void addStreamListener(const css::uno::Reference< css::io::XStreamListener>& aListener) override;
-        virtual void removeStreamListener(const css::uno::Reference< css::io::XStreamListener>& aListener) override;
+        virtual void addStreamListener(const cpo::uno::Reference< css::io::XStreamListener>& aListener) override;
+        virtual void removeStreamListener(const cpo::uno::Reference< css::io::XStreamListener>& aListener) override;
 
     public:
         void completeConnectionString();

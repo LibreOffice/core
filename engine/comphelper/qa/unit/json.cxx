@@ -118,7 +118,7 @@ public:
 
     void testAppendInterfaceNull()
     {
-        css::uno::Reference<cpo::uno::XInterface> ref;
+        cpo::uno::Reference<cpo::uno::XInterface> ref;
         CPPUNIT_ASSERT_EQUAL("null"_ostr, render(cpo::uno::Any(ref)));
     }
 
@@ -308,7 +308,7 @@ public:
     void testParseInterface()
     {
         // Null interface reference:
-        css::uno::Reference<cpo::uno::XInterface> ref;
+        cpo::uno::Reference<cpo::uno::XInterface> ref;
         comphelper::parseJsonToAny(u"null"_ustr, cppu::UnoType<cpo::uno::XInterface>::get()) >>= ref;
         CPPUNIT_ASSERT(!ref.is());
         // Non-null is not implemented yet:

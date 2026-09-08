@@ -59,7 +59,7 @@
 
 using namespace ::dp_misc;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::ucb;
 
@@ -115,13 +115,13 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
 
         void getComponentInfo(
             ComponentBackendDb::Data * data,
-            std::vector< css::uno::Reference< cpo::uno::XInterface > > *
+            std::vector< cpo::uno::Reference< cpo::uno::XInterface > > *
                 factories,
             Reference<XComponentContext> const & xContext );
 
         void componentLiveInsertion(
             ComponentBackendDb::Data const & data,
-            std::vector< css::uno::Reference< cpo::uno::XInterface > > const &
+            std::vector< cpo::uno::Reference< cpo::uno::XInterface > > const &
                 factories);
 
         void componentLiveRemoval(ComponentBackendDb::Data const & data);
@@ -309,7 +309,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
                           Reference<XCommandEnvironment> const & xCmdEnv );
     bool hasInUnoRc( RcItem kind, OUString const & url );
 
-    css::uno::Reference< cpo::uno::XComponentContext > getRootContext() const;
+    cpo::uno::Reference< cpo::uno::XComponentContext > getRootContext() const;
 
 public:
     BackendImpl( Sequence<Any> const & args,
@@ -1006,12 +1006,12 @@ bool BackendImpl::hasInUnoRc(
     return std::find( rSet.begin(), rSet.end(), rcterm ) != rSet.end();
 }
 
-css::uno::Reference< cpo::uno::XComponentContext > BackendImpl::getRootContext()
+cpo::uno::Reference< cpo::uno::XComponentContext > BackendImpl::getRootContext()
     const
 {
-    css::uno::Reference< cpo::uno::XComponentContext > rootContext(
+    cpo::uno::Reference< cpo::uno::XComponentContext > rootContext(
         getComponentContext()->getValueByName(u"_root"_ustr),
-        css::uno::UNO_QUERY);
+        cpo::uno::UNO_QUERY);
     return rootContext.is() ? rootContext : getComponentContext();
 }
 
@@ -1099,11 +1099,11 @@ Reference<XComponentContext> raise_uno_process(
 }
 
 void extractComponentData(
-    css::uno::Reference< cpo::uno::XComponentContext > const & context,
-    css::uno::Reference< css::registry::XRegistryKey > const & registry,
+    cpo::uno::Reference< cpo::uno::XComponentContext > const & context,
+    cpo::uno::Reference< css::registry::XRegistryKey > const & registry,
     ComponentBackendDb::Data * data,
-    std::vector< css::uno::Reference< cpo::uno::XInterface > > * factories,
-    css::uno::Reference< css::loader::XImplementationLoader > const &
+    std::vector< cpo::uno::Reference< cpo::uno::XInterface > > * factories,
+    cpo::uno::Reference< css::loader::XImplementationLoader > const &
         componentLoader,
     OUString const & componentUrl)
 {
@@ -1114,22 +1114,22 @@ void extractComponentData(
     if (!registryName.endsWith("/")) {
         prefix += RTL_CONSTASCII_LENGTH("/");
     }
-    const cpo::uno::Sequence< css::uno::Reference< css::registry::XRegistryKey > >
+    const cpo::uno::Sequence< cpo::uno::Reference< css::registry::XRegistryKey > >
         keys(registry->openKeys());
-    css::uno::Reference< css::lang::XMultiComponentFactory > smgr(
-        context->getServiceManager(), css::uno::UNO_SET_THROW);
-    for (css::uno::Reference< css::registry::XRegistryKey > const & key : keys) {
+    cpo::uno::Reference< css::lang::XMultiComponentFactory > smgr(
+        context->getServiceManager(), cpo::uno::UNO_SET_THROW);
+    for (cpo::uno::Reference< css::registry::XRegistryKey > const & key : keys) {
         OUString name(key->getKeyName().copy(prefix));
         data->implementationNames.push_back(name);
-        css::uno::Reference< css::registry::XRegistryKey > singletons(
+        cpo::uno::Reference< css::registry::XRegistryKey > singletons(
             key->openKey(u"UNO/SINGLETONS"_ustr));
         if (singletons.is()) {
             sal_Int32 prefix2 = key->getKeyName().getLength() +
                 RTL_CONSTASCII_LENGTH("/UNO/SINGLETONS/");
             const cpo::uno::Sequence<
-                css::uno::Reference< css::registry::XRegistryKey > >
+                cpo::uno::Reference< css::registry::XRegistryKey > >
                 singletonKeys(singletons->openKeys());
-            for (css::uno::Reference< css::registry::XRegistryKey > const & singletonKey : singletonKeys) {
+            for (cpo::uno::Reference< css::registry::XRegistryKey > const & singletonKey : singletonKeys) {
                 data->singletons.emplace_back(
                         singletonKey->getKeyName().copy(prefix2), name);
             }
@@ -1144,7 +1144,7 @@ void extractComponentData(
 
 void BackendImpl::ComponentPackageImpl::getComponentInfo(
     ComponentBackendDb::Data * data,
-    std::vector< css::uno::Reference< cpo::uno::XInterface > > * factories,
+    std::vector< cpo::uno::Reference< cpo::uno::XInterface > > * factories,
     Reference<XComponentContext> const & xContext )
 {
     const Reference<loader::XImplementationLoader> xLoader(
@@ -1176,14 +1176,14 @@ void BackendImpl::ComponentPackageImpl::getComponentInfo(
 
 void BackendImpl::ComponentPackageImpl::componentLiveInsertion(
     ComponentBackendDb::Data const & data,
-    std::vector< css::uno::Reference< cpo::uno::XInterface > > const &
+    std::vector< cpo::uno::Reference< cpo::uno::XInterface > > const &
         factories)
 {
-    css::uno::Reference< cpo::uno::XComponentContext > rootContext(
+    cpo::uno::Reference< cpo::uno::XComponentContext > rootContext(
         getMyBackend()->getRootContext());
-    css::uno::Reference< css::container::XSet > set(
-        rootContext->getServiceManager(), css::uno::UNO_QUERY_THROW);
-    std::vector< css::uno::Reference< cpo::uno::XInterface > >::const_iterator
+    cpo::uno::Reference< css::container::XSet > set(
+        rootContext->getServiceManager(), cpo::uno::UNO_QUERY_THROW);
+    std::vector< cpo::uno::Reference< cpo::uno::XInterface > >::const_iterator
         factory(factories.begin());
     for (auto const& implementationName : data.implementationNames)
     {
@@ -1195,8 +1195,8 @@ void BackendImpl::ComponentPackageImpl::componentLiveInsertion(
     }
     if (data.singletons.empty())        return;
 
-    css::uno::Reference< css::container::XNameContainer > cont(
-        rootContext, css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference< css::container::XNameContainer > cont(
+        rootContext, cpo::uno::UNO_QUERY_THROW);
     for (auto const& singleton : data.singletons)
     {
         OUString name("/singletons/" + singleton.first);
@@ -1221,10 +1221,10 @@ void BackendImpl::ComponentPackageImpl::componentLiveInsertion(
 void BackendImpl::ComponentPackageImpl::componentLiveRemoval(
     ComponentBackendDb::Data const & data)
 {
-    css::uno::Reference< cpo::uno::XComponentContext > rootContext(
+    cpo::uno::Reference< cpo::uno::XComponentContext > rootContext(
         getMyBackend()->getRootContext());
-    css::uno::Reference< css::container::XSet > set(
-        rootContext->getServiceManager(), css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference< css::container::XSet > set(
+        rootContext->getServiceManager(), cpo::uno::UNO_QUERY_THROW);
     for (auto const& implementationName : data.implementationNames)
     {
         try {
@@ -1236,8 +1236,8 @@ void BackendImpl::ComponentPackageImpl::componentLiveRemoval(
     if (data.singletons.empty())
         return;
 
-    css::uno::Reference< css::container::XNameContainer > cont(
-        rootContext, css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference< css::container::XNameContainer > cont(
+        rootContext, cpo::uno::UNO_QUERY_THROW);
     for (auto const& singleton : data.singletons)
     {
         OUString name("/singletons/" + singleton.first);
@@ -1346,26 +1346,26 @@ void BackendImpl::ComponentPackageImpl::processPackage_(
     OUString url(getURL());
     if (doRegisterPackage) {
         ComponentBackendDb::Data data;
-        css::uno::Reference< cpo::uno::XComponentContext > context;
+        cpo::uno::Reference< cpo::uno::XComponentContext > context;
         if (startup) {
             context = that->getComponentContext();
         } else {
-            context.set(that->getObject(url), css::uno::UNO_QUERY);
+            context.set(that->getObject(url), cpo::uno::UNO_QUERY);
             if (!context.is()) {
                 context.set(
                     that->insertObject(
                         url,
                         raise_uno_process(
                             that->getComponentContext(), abortChannel)),
-                    css::uno::UNO_QUERY_THROW);
+                    cpo::uno::UNO_QUERY_THROW);
             }
         }
-        css::uno::Reference< css::registry::XImplementationRegistration> impreg(
+        cpo::uno::Reference< css::registry::XImplementationRegistration> impreg(
             context->getServiceManager()->createInstanceWithContext(
                 u"com.sun.star.registry.ImplementationRegistration"_ustr,
                 context),
-            css::uno::UNO_QUERY_THROW);
-        css::uno::Reference< css::registry::XSimpleRegistry > rdb(getRDB());
+            cpo::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference< css::registry::XSimpleRegistry > rdb(getRDB());
         impreg->registerImplementation(m_loader, url, rdb);
         // Only write to unorc after successful registration; it may fail if
         // there is no suitable java
@@ -1374,7 +1374,7 @@ void BackendImpl::ComponentPackageImpl::processPackage_(
             that->addToUnoRc(RCITEM_JAR_TYPELIB, url, xCmdEnv);
             data.javaTypeLibrary = true;
         }
-        std::vector< css::uno::Reference< cpo::uno::XInterface > > factories;
+        std::vector< cpo::uno::Reference< cpo::uno::XInterface > > factories;
         getComponentInfo(&data, startup ? nullptr : &factories, context);
         if (!startup) {
             try {
@@ -1394,8 +1394,8 @@ void BackendImpl::ComponentPackageImpl::processPackage_(
     } else { // revoke
         m_registered = Reg::Void;
         ComponentBackendDb::Data data(that->readDataFromDb(url));
-        css::uno::Reference< cpo::uno::XComponentContext > context(
-            that->getObject(url), css::uno::UNO_QUERY);
+        cpo::uno::Reference< cpo::uno::XComponentContext > context(
+            that->getObject(url), cpo::uno::UNO_QUERY);
         bool remoteContext = context.is();
         if (!remoteContext) {
             context = that->getComponentContext();
@@ -1403,11 +1403,11 @@ void BackendImpl::ComponentPackageImpl::processPackage_(
         if (!startup) {
             componentLiveRemoval(data);
         }
-        css::uno::Reference< css::registry::XImplementationRegistration >(
+        cpo::uno::Reference< css::registry::XImplementationRegistration >(
             context->getServiceManager()->createInstanceWithContext(
                 u"com.sun.star.registry.ImplementationRegistration"_ustr,
                 context),
-            css::uno::UNO_QUERY_THROW)->revokeImplementation(url, getRDB());
+            cpo::uno::UNO_QUERY_THROW)->revokeImplementation(url, getRDB());
         if (data.javaTypeLibrary) {
             that->removeFromUnoRc(RCITEM_JAR_TYPELIB, url, xCmdEnv);
         }
@@ -1485,11 +1485,11 @@ void BackendImpl::TypelibraryPackageImpl::processPackage_(
         }
         else // RDB:
         {
-            css::uno::Reference< css::container::XSet >(
+            cpo::uno::Reference< css::container::XSet >(
                 that->getComponentContext()->getValueByName(
                     u"/singletons"
                     "/com.sun.star.reflection.theTypeDescriptionManager"_ustr),
-                css::uno::UNO_QUERY_THROW)->insert(
+                cpo::uno::UNO_QUERY_THROW)->insert(
                     cpo::uno::Any(expandUnoRcUrl(url)));
         }
 
@@ -1503,11 +1503,11 @@ void BackendImpl::TypelibraryPackageImpl::processPackage_(
 
         // revoking types at runtime, possible, sensible?
         if (!m_jarFile) {
-            css::uno::Reference< css::container::XSet >(
+            cpo::uno::Reference< css::container::XSet >(
                 that->getComponentContext()->getValueByName(
                     u"/singletons"
                     "/com.sun.star.reflection.theTypeDescriptionManager"_ustr),
-                css::uno::UNO_QUERY_THROW)->remove(
+                cpo::uno::UNO_QUERY_THROW)->remove(
                     cpo::uno::Any(expandUnoRcUrl(url)));
         }
     }
@@ -1650,15 +1650,15 @@ void BackendImpl::ComponentsPackageImpl::processPackage_(
     OUString url(getURL());
     if (doRegisterPackage) {
         if (!startup) {
-            css::uno::Reference< cpo::uno::XComponentContext > context(
-                that->getObject(url), css::uno::UNO_QUERY);
+            cpo::uno::Reference< cpo::uno::XComponentContext > context(
+                that->getObject(url), cpo::uno::UNO_QUERY);
             if (!context.is()) {
                 context.set(
                     that->insertObject(
                         url,
                         raise_uno_process(
                             that->getComponentContext(), abortChannel)),
-                    css::uno::UNO_QUERY_THROW);
+                    cpo::uno::UNO_QUERY_THROW);
             }
             // This relies on the root component context's service manager
             // supporting the extended XSet semantics:
@@ -1667,9 +1667,9 @@ void BackendImpl::ComponentsPackageImpl::processPackage_(
                 { u"uri"_ustr, cpo::uno::Any(expandUnoRcUrl(url)) },
                 { u"component-context"_ustr, cpo::uno::Any(context) }
             };
-            css::uno::Reference< css::container::XSet > smgr(
+            cpo::uno::Reference< css::container::XSet > smgr(
                 that->getRootContext()->getServiceManager(),
-                css::uno::UNO_QUERY_THROW);
+                cpo::uno::UNO_QUERY_THROW);
             smgr->insert(cpo::uno::Any(args));
         }
         that->addToUnoRc(RCITEM_COMPONENTS, url, xCmdEnv);
@@ -1679,9 +1679,9 @@ void BackendImpl::ComponentsPackageImpl::processPackage_(
             // This relies on the root component context's service manager
             // supporting the extended XSet semantics:
             cpo::uno::Sequence< css::beans::NamedValue > args { { u"uri"_ustr, cpo::uno::Any(expandUnoRcUrl(url)) } };
-            css::uno::Reference< css::container::XSet > smgr(
+            cpo::uno::Reference< css::container::XSet > smgr(
                 that->getRootContext()->getServiceManager(),
-                css::uno::UNO_QUERY_THROW);
+                cpo::uno::UNO_QUERY_THROW);
             smgr->remove(cpo::uno::Any(args));
         }
         that->releaseObject(url);

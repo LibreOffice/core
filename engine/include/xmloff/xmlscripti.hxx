@@ -31,15 +31,15 @@ namespace com::sun::star::frame {
 class XMLOFF_DLLPUBLIC XMLScriptContext final : public SvXMLImportContext
 {
 private:
-    css::uno::Reference< css::frame::XModel > m_xModel;
+    cpo::uno::Reference< css::frame::XModel > m_xModel;
 
 public:
     XMLScriptContext( SvXMLImport& rImport,
-                      const css::uno::Reference< css::frame::XModel>& rDocModel );
+                      const cpo::uno::Reference< css::frame::XModel>& rDocModel );
     virtual ~XMLScriptContext() override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
-            sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+            sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 };
 
 #endif // INCLUDED_XMLOFF_XMLSCRIPTI_HXX

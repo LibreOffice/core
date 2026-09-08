@@ -40,7 +40,7 @@ private:
     bool ensureNumberFormatter();
     const StandardFormatNormalizer* getValueNormalizer(cpo::uno::Type const& i_valueType);
 
-    css::uno::Reference<css::util::XNumberFormatter> xNumberFormatter;
+    cpo::uno::Reference<css::util::XNumberFormatter> xNumberFormatter;
     bool bAttemptedFormatterCreation;
     std::unordered_map<OUString, std::unique_ptr<StandardFormatNormalizer>> aNormalizers;
 };

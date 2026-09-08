@@ -101,7 +101,7 @@ private:
     CustomAnimationPane& mrPane;
     CustomAnimationEffectPtr mpEffect;
     ::basegfx::B2DPolyPolygon mxPolyPoly;
-    css::uno::Reference< css::drawing::XShape > mxOrigin;
+    cpo::uno::Reference< css::drawing::XShape > mxOrigin;
     rtl::Reference<SdrPathObj> mpPathObj;
     css::awt::Point maOriginPos;
     std::unique_ptr<SdrMark> mpMark;

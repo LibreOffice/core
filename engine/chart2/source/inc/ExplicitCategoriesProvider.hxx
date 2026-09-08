@@ -19,7 +19,7 @@
 #pragma once
 
 #include <unotools/weakref.hxx>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <cpo/uno/Sequence.h>
 
 #include <utility>
@@ -62,7 +62,7 @@ public:
 
     void init();
 
-    css::uno::Reference< css::chart2::data::XDataSequence > getOriginalCategories();
+    cpo::uno::Reference< css::chart2::data::XDataSequence > getOriginalCategories();
 
     cpo::uno::Sequence< OUString > const & getSimpleCategories();
     const std::vector<ComplexCategory>* getCategoriesByLevel( sal_Int32 nLevel );
@@ -82,7 +82,7 @@ public:
     bool hasComplexCategories() const;
     sal_Int32 getCategoryLevelCount() const;
 
-    const std::vector< css::uno::Reference< css::chart2::data::XLabeledDataSequence> >&
+    const std::vector< cpo::uno::Reference< css::chart2::data::XLabeledDataSequence> >&
             getSplitCategoriesList() const { return m_aSplitCategoriesList;}
 
     bool isDateAxis();
@@ -97,12 +97,12 @@ private:
     bool volatile m_bDirty;
     unotools::WeakReference< ::chart::BaseCoordinateSystem >   m_xCooSysModel;
     ChartModel& mrModel;
-    css::uno::Reference< css::chart2::data::XLabeledDataSequence> m_xOriginalCategories;
+    cpo::uno::Reference< css::chart2::data::XLabeledDataSequence> m_xOriginalCategories;
 
     bool m_bIsExplicitCategoriesInited;
     cpo::uno::Sequence< OUString >  m_aExplicitCategories;
     std::vector< std::vector< ComplexCategory > >   m_aComplexCats;
-    std::vector< css::uno::Reference< css::chart2::data::XLabeledDataSequence> > m_aSplitCategoriesList;
+    std::vector< cpo::uno::Reference< css::chart2::data::XLabeledDataSequence> > m_aSplitCategoriesList;
 
     bool m_bIsDateAxis;
     bool m_bIsAutoDate;

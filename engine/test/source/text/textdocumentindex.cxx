@@ -18,7 +18,7 @@ TextDocumentIndex::~TextDocumentIndex() {}
 
 void TextDocumentIndex::testDocumentIndexProperties()
 {
-    css::uno::Reference<css::beans::XPropertySet> xDocumentIndex(init(), css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::beans::XPropertySet> xDocumentIndex(init(), cpo::uno::UNO_QUERY_THROW);
 
     testBooleanProperty(xDocumentIndex, u"UseAlphabeticalSeparators"_ustr);
     testBooleanProperty(xDocumentIndex, u"UseKeyAsEntry"_ustr);

@@ -27,13 +27,13 @@ namespace connectivity
     class OOO_DLLPUBLIC_DBTOOLS OResultSetPrivileges :
         public ODatabaseMetaDataResultSet
     {
-        css::uno::Reference< css::sdbc::XResultSet>   m_xTables;
-        css::uno::Reference< css::sdbc::XRow>         m_xRow;
+        cpo::uno::Reference< css::sdbc::XResultSet>   m_xTables;
+        cpo::uno::Reference< css::sdbc::XRow>         m_xRow;
         bool                                          m_bResetValues;
     protected:
         virtual const ORowSetValue& getValue(sal_Int32 columnIndex) override;
     public:
-        OResultSetPrivileges(const css::uno::Reference< css::sdbc::XDatabaseMetaData>& _rxMeta
+        OResultSetPrivileges(const cpo::uno::Reference< css::sdbc::XDatabaseMetaData>& _rxMeta
             ,const cpo::uno::Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern);
 
         // ::comphelper::WeakComponentImplHelper

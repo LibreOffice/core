@@ -58,7 +58,7 @@ public:
 
     virtual sal_Int64 SAL_CALL getSelectedAccessibleChildCount(  ) override;
 
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild(
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild(
         sal_Int64 nSelectedChildIndex ) override;
 
     virtual void SAL_CALL deselectAccessibleChild(
@@ -86,7 +86,7 @@ private:
         css::accessibility::AccessibleRelationType eType, const SwFlyFrame* pFrame);
 
 public:
-    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet> SAL_CALL getAccessibleRelationSet() override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessibleRelationSet> SAL_CALL getAccessibleRelationSet() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

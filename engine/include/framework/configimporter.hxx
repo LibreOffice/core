@@ -27,7 +27,7 @@ namespace com::sun::star::container { class XIndexContainer; }
 namespace com::sun::star::embed { class XStorage; }
 namespace com::sun::star::ui { class XUIConfigurationManager2; }
 namespace cpo::uno { class XComponentContext; }
-namespace com::sun::star::uno { template <typename > class Reference; }
+namespace cpo::uno { template <typename > class Reference; }
 
 namespace framework
 {
@@ -35,10 +35,10 @@ namespace framework
     {
         public:
             static bool ImportCustomToolbars(
-                        const css::uno::Reference< css::ui::XUIConfigurationManager2 >& rContainerFactory,
-                        std::vector< css::uno::Reference< css::container::XIndexContainer > >& rSeqContainer,
-                        const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
-                        const css::uno::Reference< css::embed::XStorage >& rToolbarStorage );
+                        const cpo::uno::Reference< css::ui::XUIConfigurationManager2 >& rContainerFactory,
+                        std::vector< cpo::uno::Reference< css::container::XIndexContainer > >& rSeqContainer,
+                        const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+                        const cpo::uno::Reference< css::embed::XStorage >& rToolbarStorage );
     };
 
 } // namespace framework

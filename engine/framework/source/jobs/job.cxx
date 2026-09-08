@@ -50,8 +50,8 @@ namespace framework{
                 reference to the frame, in which environment we run
                 (May be null!)
 */
-Job::Job( /*IN*/ const css::uno::Reference< cpo::uno::XComponentContext >& xContext  ,
-          /*IN*/ css::uno::Reference< css::frame::XFrame >               xFrame )
+Job::Job( /*IN*/ const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext  ,
+          /*IN*/ cpo::uno::Reference< css::frame::XFrame >               xFrame )
     : m_aJobCfg            (xContext                     )
     , m_xContext           (xContext                     )
     , m_xFrame             (std::move(xFrame                       ))
@@ -77,8 +77,8 @@ Job::Job( /*IN*/ const css::uno::Reference< cpo::uno::XComponentContext >& xCont
                 reference to the model, in which environment we run
                 (May be null!)
 */
-Job::Job( /*IN*/ const css::uno::Reference< cpo::uno::XComponentContext >& xContext  ,
-          /*IN*/ css::uno::Reference< css::frame::XModel >               xModel )
+Job::Job( /*IN*/ const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext  ,
+          /*IN*/ cpo::uno::Reference< css::frame::XModel >               xModel )
     : m_aJobCfg            (xContext                     )
     , m_xContext           (xContext                     )
     , m_xModel             (std::move(xModel                       ))
@@ -113,8 +113,8 @@ Job::~Job()
     @param  xSourceFake
                 our user, which got the registration request for this listener
 */
-void Job::setDispatchResultFake( /*IN*/ const css::uno::Reference< css::frame::XDispatchResultListener >& xListener   ,
-                                 /*IN*/ const css::uno::Reference< cpo::uno::XInterface >&                xSourceFake )
+void Job::setDispatchResultFake( /*IN*/ const cpo::uno::Reference< css::frame::XDispatchResultListener >& xListener   ,
+                                 /*IN*/ const cpo::uno::Reference< cpo::uno::XInterface >&                xSourceFake )
 {
     SolarMutexGuard g;
 
@@ -182,13 +182,13 @@ void Job::execute( /*IN*/ const cpo::uno::Sequence< css::beans::NamedValue >& lD
     m_eRunState = E_RUNNING;
     impl_startListening();
 
-    css::uno::Reference< css::task::XAsyncJob >  xAJob;
-    css::uno::Reference< css::task::XJob >       xSJob;
+    cpo::uno::Reference< css::task::XAsyncJob >  xAJob;
+    cpo::uno::Reference< css::task::XJob >       xSJob;
     cpo::uno::Sequence< css::beans::NamedValue > lJobArgs = impl_generateJobArgs(lDynamicArgs);
 
     // It's necessary to hold us self alive!
     // Otherwise we might die by ref count ...
-    css::uno::Reference< css::task::XJobListener > xThis(this);
+    cpo::uno::Reference< css::task::XJobListener > xThis(this);
 
     try
     {
@@ -196,9 +196,9 @@ void Job::execute( /*IN*/ const cpo::uno::Sequence< css::beans::NamedValue >& lD
         // We must check for the supported interface on demand!
         // But we prefer the synchronous one ...
         m_xJob = m_xContext->getServiceManager()->createInstanceWithContext(m_aJobCfg.getService(), m_xContext);
-        xSJob.set(m_xJob, css::uno::UNO_QUERY);
+        xSJob.set(m_xJob, cpo::uno::UNO_QUERY);
         if (!xSJob.is())
-            xAJob.set(m_xJob, css::uno::UNO_QUERY);
+            xAJob.set(m_xJob, cpo::uno::UNO_QUERY);
 
         // execute it asynchronous
         if (xAJob.is())
@@ -250,7 +250,7 @@ void Job::execute( /*IN*/ const cpo::uno::Sequence< css::beans::NamedValue >& lD
     if (m_bPendingCloseFrame)
     {
         m_bPendingCloseFrame = false;
-        css::uno::Reference< css::util::XCloseable > xClose(m_xFrame, css::uno::UNO_QUERY);
+        cpo::uno::Reference< css::util::XCloseable > xClose(m_xFrame, cpo::uno::UNO_QUERY);
         if (xClose.is())
         {
             try
@@ -264,7 +264,7 @@ void Job::execute( /*IN*/ const cpo::uno::Sequence< css::beans::NamedValue >& lD
     if (m_bPendingCloseModel)
     {
         m_bPendingCloseModel = false;
-        css::uno::Reference< css::util::XCloseable > xClose(m_xModel, css::uno::UNO_QUERY);
+        cpo::uno::Reference< css::util::XCloseable > xClose(m_xModel, cpo::uno::UNO_QUERY);
         if (xClose.is())
         {
             try
@@ -300,7 +300,7 @@ void Job::die()
     {
         try
         {
-            css::uno::Reference< css::lang::XComponent > xDispose(m_xJob, css::uno::UNO_QUERY);
+            cpo::uno::Reference< css::lang::XComponent > xDispose(m_xJob, cpo::uno::UNO_QUERY);
             if (xDispose.is())
             {
                 xDispose->dispose();
@@ -519,7 +519,7 @@ void Job::impl_startListening()
         try
         {
             m_xDesktop = css::frame::Desktop::create( m_xContext );
-            css::uno::Reference< css::frame::XTerminateListener > xThis(this);
+            cpo::uno::Reference< css::frame::XTerminateListener > xThis(this);
             m_xDesktop->addTerminateListener(xThis);
             m_bListenOnDesktop = true;
         }
@@ -534,8 +534,8 @@ void Job::impl_startListening()
     {
         try
         {
-            css::uno::Reference< css::util::XCloseBroadcaster > xCloseable(m_xFrame                                 , css::uno::UNO_QUERY);
-            css::uno::Reference< css::util::XCloseListener >    xThis(this);
+            cpo::uno::Reference< css::util::XCloseBroadcaster > xCloseable(m_xFrame                                 , cpo::uno::UNO_QUERY);
+            cpo::uno::Reference< css::util::XCloseListener >    xThis(this);
             if (xCloseable.is())
             {
                 xCloseable->addCloseListener(xThis);
@@ -554,8 +554,8 @@ void Job::impl_startListening()
 
     try
     {
-        css::uno::Reference< css::util::XCloseBroadcaster > xCloseable(m_xModel                                 , css::uno::UNO_QUERY);
-        css::uno::Reference< css::util::XCloseListener >    xThis(this);
+        cpo::uno::Reference< css::util::XCloseBroadcaster > xCloseable(m_xModel                                 , cpo::uno::UNO_QUERY);
+        cpo::uno::Reference< css::util::XCloseListener >    xThis(this);
         if (xCloseable.is())
         {
             xCloseable->addCloseListener(xThis);
@@ -581,7 +581,7 @@ void Job::impl_stopListening()
     {
         try
         {
-            css::uno::Reference< css::frame::XTerminateListener > xThis(this);
+            cpo::uno::Reference< css::frame::XTerminateListener > xThis(this);
             m_xDesktop->removeTerminateListener(xThis);
             m_xDesktop.clear();
             m_bListenOnDesktop = false;
@@ -596,8 +596,8 @@ void Job::impl_stopListening()
     {
         try
         {
-            css::uno::Reference< css::util::XCloseBroadcaster > xCloseable(m_xFrame                                 , css::uno::UNO_QUERY);
-            css::uno::Reference< css::util::XCloseListener >    xThis(this);
+            cpo::uno::Reference< css::util::XCloseBroadcaster > xCloseable(m_xFrame                                 , cpo::uno::UNO_QUERY);
+            cpo::uno::Reference< css::util::XCloseListener >    xThis(this);
             if (xCloseable.is())
             {
                 xCloseable->removeCloseListener(xThis);
@@ -615,8 +615,8 @@ void Job::impl_stopListening()
 
     try
     {
-        css::uno::Reference< css::util::XCloseBroadcaster > xCloseable(m_xModel                                 , css::uno::UNO_QUERY);
-        css::uno::Reference< css::util::XCloseListener >    xThis(this);
+        cpo::uno::Reference< css::util::XCloseBroadcaster > xCloseable(m_xModel                                 , cpo::uno::UNO_QUERY);
+        cpo::uno::Reference< css::util::XCloseListener >    xThis(this);
         if (xCloseable.is())
         {
             xCloseable->removeCloseListener(xThis);
@@ -642,7 +642,7 @@ void Job::impl_stopListening()
     @param  aResult
                 its results
 */
-void Job::jobFinished( /*IN*/ const css::uno::Reference< css::task::XAsyncJob >& xJob    ,
+void Job::jobFinished( /*IN*/ const cpo::uno::Reference< css::task::XAsyncJob >& xJob    ,
                                 /*IN*/ const cpo::uno::Any&                               aResult )
 {
     SolarMutexGuard g;
@@ -686,7 +686,7 @@ void Job::queryTermination( /*IN*/ const css::lang::EventObject& )
     SolarMutexGuard g;
 
     // Otherwise try to close() it
-    css::uno::Reference< css::util::XCloseable > xClose(m_xJob, css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::util::XCloseable > xClose(m_xJob, cpo::uno::UNO_QUERY);
     if (xClose.is())
     {
         try
@@ -699,7 +699,7 @@ void Job::queryTermination( /*IN*/ const css::lang::EventObject& )
 
     if (m_eRunState != E_STOPPED_OR_FINISHED)
     {
-        css::uno::Reference< cpo::uno::XInterface > xThis(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
+        cpo::uno::Reference< cpo::uno::XInterface > xThis(static_cast< ::cppu::OWeakObject* >(this), cpo::uno::UNO_QUERY);
         throw css::frame::TerminationVetoException(u"job still in progress"_ustr, xThis);
     }
 }
@@ -753,7 +753,7 @@ void Job::queryClosing( const css::lang::EventObject& aEvent         ,
 
     // try close() first at the job.
     // The job can agree or disagree with this request.
-    css::uno::Reference< css::util::XCloseable > xClose(m_xJob, css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::util::XCloseable > xClose(m_xJob, cpo::uno::UNO_QUERY);
     if (xClose.is())
     {
         xClose->close(bGetsOwnership);
@@ -768,7 +768,7 @@ void Job::queryClosing( const css::lang::EventObject& aEvent         ,
     // But we must be aware of an "already disposed exception"...
     try
     {
-        css::uno::Reference< css::lang::XComponent > xDispose(m_xJob, css::uno::UNO_QUERY);
+        cpo::uno::Reference< css::lang::XComponent > xDispose(m_xJob, cpo::uno::UNO_QUERY);
         if (xDispose.is())
         {
             xDispose->dispose();
@@ -791,7 +791,7 @@ void Job::queryClosing( const css::lang::EventObject& aEvent         ,
         m_bPendingCloseModel = (m_xModel.is() && aEvent.Source == m_xModel);
 
         // throw suitable veto exception - because the internal job could not be cancelled.
-        css::uno::Reference< cpo::uno::XInterface > xThis(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
+        cpo::uno::Reference< cpo::uno::XInterface > xThis(static_cast< ::cppu::OWeakObject* >(this), cpo::uno::UNO_QUERY);
         throw css::util::CloseVetoException(u"job still in progress"_ustr, xThis);
     }
 

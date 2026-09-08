@@ -9,7 +9,7 @@
 
 #include "sdmodeltestbase.hxx"
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <com/sun/star/drawing/XShapes.hpp>
 

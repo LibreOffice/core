@@ -28,6 +28,7 @@
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 SwVbaBookmark::SwVbaBookmark( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< cpo::uno::XComponentContext >& rContext,
     rtl::Reference< SwXTextDocument > xModel, OUString aBookmarkName ) :

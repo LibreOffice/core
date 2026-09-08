@@ -30,14 +30,14 @@
 #include <utility>
 #include <osl/diagnose.h>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 
 
-SvNumberFormatsSupplierServiceObject::SvNumberFormatsSupplierServiceObject(css::uno::Reference< cpo::uno::XComponentContext > _xORB)
+SvNumberFormatsSupplierServiceObject::SvNumberFormatsSupplierServiceObject(cpo::uno::Reference< cpo::uno::XComponentContext > _xORB)
     :m_xORB(std::move(_xORB))
 {
 }

@@ -52,13 +52,13 @@ public:
         @param xElem element reference
     */
     void addSubElement(
-        css::uno::Reference< css::xml::sax::XAttributeList > const & xElem );
+        cpo::uno::Reference< css::xml::sax::XAttributeList > const & xElem );
 
     /** Gets sub element of given index.  The index follows order in which sub elements were added.
 
         @param nIndex index of sub element
     */
-    css::uno::Reference< css::xml::sax::XAttributeList > const & getSubElement( sal_Int32 nIndex );
+    cpo::uno::Reference< css::xml::sax::XAttributeList > const & getSubElement( sal_Int32 nIndex );
 
     /** Adds an attribute to elements.
 
@@ -72,13 +72,13 @@ public:
         @param xOut document handler to be written to
     */
     void dump(
-        css::uno::Reference< css::xml::sax::XDocumentHandler > const & xOut );
+        cpo::uno::Reference< css::xml::sax::XDocumentHandler > const & xOut );
     /** Dumps out sub elements (and all further sub elements).
 
         @param xOut document handler to be written to
     */
     void dumpSubElements(
-        css::uno::Reference< css::xml::sax::XDocumentHandler > const & xOut );
+        cpo::uno::Reference< css::xml::sax::XDocumentHandler > const & xOut );
 
     // XAttributeList
     virtual sal_Int16 getLength() override final;
@@ -89,7 +89,7 @@ public:
     virtual OUString getValueByName( OUString const & rName ) override final;
 
 private:
-    ::std::vector< css::uno::Reference<
+    ::std::vector< cpo::uno::Reference<
                       css::xml::sax::XAttributeList > > _subElems;
     OUString const _name;
     ::std::vector< OUString > _attrNames;
@@ -104,15 +104,15 @@ private:
 
 ##################################################################################################*/
 
-XMLSCRIPT_DLLPUBLIC css::uno::Reference< css::io::XInputStream >
+XMLSCRIPT_DLLPUBLIC cpo::uno::Reference< css::io::XInputStream >
 createInputStream(
     std::vector<sal_Int8>&& rInData );
 
-XMLSCRIPT_DLLPUBLIC css::uno::Reference< css::io::XInputStream >
+XMLSCRIPT_DLLPUBLIC cpo::uno::Reference< css::io::XInputStream >
 createInputStream(
     const sal_Int8* pData, int len );
 
-XMLSCRIPT_DLLPUBLIC css::uno::Reference< css::io::XOutputStream >
+XMLSCRIPT_DLLPUBLIC cpo::uno::Reference< css::io::XOutputStream >
 createOutputStream(
     std::vector<sal_Int8> * pOutData );
 

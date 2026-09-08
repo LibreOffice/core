@@ -24,7 +24,7 @@
 #include <xmloff/dllapi.h>
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <memory>
 #include <set>
 
@@ -49,7 +49,7 @@ class XMLOFF_DLLPUBLIC XMLTextListAutoStylePool
 
     /** this is an optional NumRule compare component for applications where
         the NumRules don't have names */
-    css::uno::Reference< css::ucb::XAnyCompare > mxNumRuleCompare;
+    cpo::uno::Reference< css::ucb::XAnyCompare > mxNumRuleCompare;
 
     SAL_DLLPRIVATE sal_uInt32 Find( const XMLTextListAutoStylePoolEntry_Impl* pEntry )
         const;
@@ -61,10 +61,10 @@ public:
     void RegisterName( const OUString& rName );
 
     OUString Add(
-            const css::uno::Reference< css::container::XIndexReplace > & rNumRules );
+            const cpo::uno::Reference< css::container::XIndexReplace > & rNumRules );
 
     OUString Find(
-            const css::uno::Reference< css::container::XIndexReplace > & rNumRules ) const;
+            const cpo::uno::Reference< css::container::XIndexReplace > & rNumRules ) const;
     OUString Find( const OUString& rInternalName ) const;
 
     void exportXML() const;

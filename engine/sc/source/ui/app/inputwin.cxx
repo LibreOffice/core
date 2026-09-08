@@ -84,8 +84,8 @@ const tools::Long TOOLBOX_WINDOW_HEIGHT = 22;   // Height of toolbox window in p
 const tools::Long POSITION_COMBOBOX_WIDTH = 18; // Width of position combobox in characters
 const int RESIZE_HOTSPOT_HEIGHT = 4;
 
-using com::sun::star::uno::Reference;
-using com::sun::star::uno::UNO_QUERY;
+using cpo::uno::Reference;
+using cpo::uno::UNO_QUERY;
 
 using com::sun::star::frame::XLayoutManager;
 using com::sun::star::beans::XPropertySet;

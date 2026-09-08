@@ -52,7 +52,7 @@ namespace XSLT
     class OleHandler
     {
     public:
-        OleHandler(css::uno::Reference<cpo::uno::XComponentContext> xContext)
+        OleHandler(cpo::uno::Reference<cpo::uno::XComponentContext> xContext)
             : m_xContext(std::move(xContext))
             , m_tcontext(nullptr)
         {
@@ -72,16 +72,16 @@ namespace XSLT
         }
 
     private:
-        css::uno::Reference<cpo::uno::XComponentContext> m_xContext;
-        css::uno::Reference<css::container::XNameContainer> m_storage;
-        css::uno::Reference<css::io::XStream> m_rootStream;
+        cpo::uno::Reference<cpo::uno::XComponentContext> m_xContext;
+        cpo::uno::Reference<css::container::XNameContainer> m_storage;
+        cpo::uno::Reference<css::io::XStream> m_rootStream;
         xsltTransformContextPtr m_tcontext;
 
         void    ensureCreateRootStorage();
         OString encodeSubStorage(const OUString& streamName);
         void    insertSubStorage(const OUString& streamName, std::string_view content);
         void    initRootStorageFromBase64(std::string_view content);
-        css::uno::Reference<css::io::XStream> createTempFile();
+        cpo::uno::Reference<css::io::XStream> createTempFile();
     };
 }
 

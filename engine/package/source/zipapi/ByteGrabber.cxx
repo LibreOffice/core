@@ -25,6 +25,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 /** ByteGrabber implements the >> operators on an XOutputStream. This is
  *  potentially quite slow and may need to be optimised

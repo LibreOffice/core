@@ -46,10 +46,10 @@ namespace framework::pattern::frame{
     @return [bool]
             true if closing failed.
  */
-inline bool closeIt(const css::uno::Reference< cpo::uno::XInterface >& xResource)
+inline bool closeIt(const cpo::uno::Reference< cpo::uno::XInterface >& xResource)
 {
-    css::uno::Reference< css::util::XCloseable > xClose  (xResource, css::uno::UNO_QUERY);
-    css::uno::Reference< css::lang::XComponent > xDispose(xResource, css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::util::XCloseable > xClose  (xResource, cpo::uno::UNO_QUERY);
+    cpo::uno::Reference< css::lang::XComponent > xDispose(xResource, cpo::uno::UNO_QUERY);
 
     try
     {

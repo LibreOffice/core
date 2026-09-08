@@ -77,8 +77,8 @@ class LoadDispatcher final : public  ::cppu::WeakImplHelper< css::frame::XNotify
             @param  nSearchFlags
                     used in case sTargetFrame isn't a special one.
          */
-        LoadDispatcher(const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
-                       const css::uno::Reference< css::frame::XFrame >&          xOwnerFrame ,
+        LoadDispatcher(const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
+                       const cpo::uno::Reference< css::frame::XFrame >&          xOwnerFrame ,
                        OUString                                                  sTargetName ,
                              sal_Int32                                           nSearchFlags);
 
@@ -93,16 +93,16 @@ class LoadDispatcher final : public  ::cppu::WeakImplHelper< css::frame::XNotify
         // XNotifyingDispatch
         virtual void dispatchWithNotification(const css::util::URL&                                             aURL      ,
                                                        const cpo::uno::Sequence< css::beans::PropertyValue >&            lArguments,
-                                                       const css::uno::Reference< css::frame::XDispatchResultListener >& xListener ) override;
+                                                       const cpo::uno::Reference< css::frame::XDispatchResultListener >& xListener ) override;
 
         // XDispatch
         virtual void dispatch(const css::util::URL&                                  aURL      ,
                                        const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments) override;
 
-        virtual void addStatusListener(const css::uno::Reference< css::frame::XStatusListener >& xListener,
+        virtual void addStatusListener(const cpo::uno::Reference< css::frame::XStatusListener >& xListener,
                                                 const css::util::URL&                                     aURL     ) override;
 
-        virtual void removeStatusListener(const css::uno::Reference< css::frame::XStatusListener >& xListener,
+        virtual void removeStatusListener(const cpo::uno::Reference< css::frame::XStatusListener >& xListener,
                                                    const css::util::URL&                                     aURL     ) override;
 
         // XSynchronousDispatch
@@ -112,7 +112,7 @@ class LoadDispatcher final : public  ::cppu::WeakImplHelper< css::frame::XNotify
     private:
         cpo::uno::Any impl_dispatch( const css::util::URL& rURL,
                                      const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments,
-                                     const css::uno::Reference< css::frame::XDispatchResultListener >& xListener );
+                                     const cpo::uno::Reference< css::frame::XDispatchResultListener >& xListener );
 }; // class LoadDispatcher
 
 } // namespace framework

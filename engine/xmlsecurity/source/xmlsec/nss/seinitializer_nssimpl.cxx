@@ -33,9 +33,10 @@
 
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 
-SEInitializer_NssImpl::SEInitializer_NssImpl( const css::uno::Reference< cpo::uno::XComponentContext > &rxContext )
+SEInitializer_NssImpl::SEInitializer_NssImpl( const cpo::uno::Reference< cpo::uno::XComponentContext > &rxContext )
 {
     m_xContext = rxContext;
 }

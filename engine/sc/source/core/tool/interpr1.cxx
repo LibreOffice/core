@@ -82,7 +82,7 @@
 #include <basic/sbx.hxx>
 #include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/sheet/XSheetCellRange.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <vbahelper/vbaaccesshelper.hxx>
 #include <macromgr.hxx>
 
@@ -95,6 +95,7 @@
 #include <algorithm>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace formula;
 
 const sal_uInt64 n2power48 = SAL_CONST_UINT64( 281474976710656); // 2^48

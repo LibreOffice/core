@@ -228,8 +228,8 @@ public:
     virtual sal_Int64 getPosition(  ) override;
     SAL_DLLPRIVATE virtual sal_Int64 getLength(  ) override;
     // XStream
-    virtual css::uno::Reference< css::io::XInputStream > getInputStream(  ) override;
-    virtual css::uno::Reference< css::io::XOutputStream > getOutputStream(  ) override;
+    virtual cpo::uno::Reference< css::io::XInputStream > getInputStream(  ) override;
+    virtual cpo::uno::Reference< css::io::XOutputStream > getOutputStream(  ) override;
     // XTruncate
     SAL_DLLPRIVATE virtual void truncate() override;
 

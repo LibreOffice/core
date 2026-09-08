@@ -66,7 +66,8 @@
 #include <vector>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
+using namespace ::cpo;
 
 TextEngine::TextEngine()
     : mpActiveView {nullptr}

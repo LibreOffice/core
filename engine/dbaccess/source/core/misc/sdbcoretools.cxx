@@ -34,7 +34,7 @@
 namespace dbaccess
 {
 
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
 using namespace cpo::uno;
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::io;
@@ -44,7 +44,7 @@ using namespace cpo::uno;
     using namespace ::com::sun::star::embed;
     using namespace ::com::sun::star::container;
 
-    void notifyDataSourceModified(const css::uno::Reference< cpo::uno::XInterface >& _rxObject)
+    void notifyDataSourceModified(const cpo::uno::Reference< cpo::uno::XInterface >& _rxObject)
     {
         Reference< XInterface > xDs = getDataSource( _rxObject );
         Reference<XDocumentDataSource> xDocumentDataSource(xDs,UNO_QUERY);
@@ -104,7 +104,7 @@ using namespace cpo::uno;
 
 namespace dbaccesstools {
 
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
 using namespace cpo::uno;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::embed;

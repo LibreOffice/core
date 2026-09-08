@@ -70,13 +70,13 @@ class InternalSignatureInformation
 public:
     SignatureInformation signatureInfor;
 
-    css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener > xReferenceResolvedListener;
+    cpo::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener > xReferenceResolvedListener;
 
     ::std::vector< sal_Int32 > vKeeperIds;
 
     InternalSignatureInformation(
         sal_Int32 nId,
-        css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener > const & xListener)
+        cpo::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener > const & xListener)
         :signatureInfor(nId)
     {
         xReferenceResolvedListener = xListener;
@@ -111,7 +111,7 @@ class XSecController final : public cppu::WeakImplHelper
     friend class OOXMLSecParser;
 
 private:
-    css::uno::Reference< cpo::uno::XComponentContext> mxCtx;
+    cpo::uno::Reference< cpo::uno::XComponentContext> mxCtx;
 
     /*
      * used to buffer SAX events
@@ -126,12 +126,12 @@ private:
     /*
      * the bridge component which creates/verifies signature
      */
-    css::uno::Reference< css::xml::crypto::XXMLSignature > m_xXMLSignature;
+    cpo::uno::Reference< css::xml::crypto::XXMLSignature > m_xXMLSignature;
 
     /*
      * the Security Context
      */
-    css::uno::Reference< css::xml::crypto::XXMLSecurityContext > m_xSecurityContext;
+    cpo::uno::Reference< css::xml::crypto::XXMLSecurityContext > m_xSecurityContext;
 
     /*
      * the security id incrementer, in order to make any security id unique
@@ -153,7 +153,7 @@ private:
      * and importing, and there is no other common interface they
      * can provided.
      */
-    css::uno::Reference< cpo::uno::XInterface > m_xPreviousNodeOnSAXChain;
+    cpo::uno::Reference< cpo::uno::XInterface > m_xPreviousNodeOnSAXChain;
     /*
      * whether the previous node can provide an XInitialize interface,
      * use this variable in order to typecast the XInterface to the
@@ -201,7 +201,7 @@ private:
     /*
      * the XSecParser which is used to parse the signature stream
      */
-    css::uno::Reference<css::xml::sax::XDocumentHandler> m_xSecParser;
+    cpo::uno::Reference<css::xml::sax::XDocumentHandler> m_xSecParser;
 
     /*
      * the caller assigned signature id for the next signature in the
@@ -231,7 +231,7 @@ private:
     void checkChainingStatus();
     void initializeSAXChain();
 
-    css::uno::Reference< css::io::XInputStream > getObjectInputStream( const OUString& objectURL );
+    cpo::uno::Reference< css::io::XInputStream > getObjectInputStream( const OUString& objectURL );
 
         //sal_Int32 getFastPropertyIndex(sal_Int32 nHandle) const;
 
@@ -239,7 +239,7 @@ private:
      * For signature generation
      */
     static OUString createId();
-    css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener > prepareSignatureToWrite(
+    cpo::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener > prepareSignatureToWrite(
         InternalSignatureInformation& signatureInfo,
         sal_Int32 nStorageFormat,
         bool bXAdESCompliantIfODF );
@@ -286,18 +286,18 @@ public:
 private:
     void setId( OUString const & ouId );
 
-    css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener > prepareSignatureToRead(
+    cpo::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener > prepareSignatureToRead(
         sal_Int32 nSecurityId );
 
 public:
-    explicit XSecController(css::uno::Reference<cpo::uno::XComponentContext> xCtx);
+    explicit XSecController(cpo::uno::Reference<cpo::uno::XComponentContext> xCtx);
     virtual ~XSecController() override;
 
     sal_Int32 getNewSecurityId(  );
 
-    void startMission(const rtl::Reference<UriBindingHelper>& xUriBinding, const css::uno::Reference<css::xml::crypto::XXMLSecurityContext>& xSecurityContext);
+    void startMission(const rtl::Reference<UriBindingHelper>& xUriBinding, const cpo::uno::Reference<css::xml::crypto::XXMLSecurityContext>& xSecurityContext);
 
-    void setSAXChainConnector(const css::uno::Reference< css::lang::XInitialization >& xInitialization);
+    void setSAXChainConnector(const cpo::uno::Reference< css::lang::XInitialization >& xInitialization);
 
     void clearSAXChainConnector();
     void endMission();
@@ -309,7 +309,7 @@ public:
             std::vector<SignatureInformation::X509Data> && rDatas);
 
     static void exportSignature(
-        const css::uno::Reference< css::xml::sax::XDocumentHandler >& xDocumentHandler,
+        const cpo::uno::Reference< css::xml::sax::XDocumentHandler >& xDocumentHandler,
         const SignatureInformation& signatureInfo,
         bool bXAdESCompliantIfODF );
 
@@ -355,12 +355,12 @@ public:
     void setSignatureLineId(sal_Int32 nSecurityId, const OUString& rSignatureLineId);
     void
     setSignatureLineValidGraphic(sal_Int32 nSecurityId,
-                                 const css::uno::Reference<css::graphic::XGraphic>& xValidGraphic);
+                                 const cpo::uno::Reference<css::graphic::XGraphic>& xValidGraphic);
     void setSignatureLineInvalidGraphic(
-        sal_Int32 nSecurityId, const css::uno::Reference<css::graphic::XGraphic>& xInvalidGraphic);
+        sal_Int32 nSecurityId, const cpo::uno::Reference<css::graphic::XGraphic>& xInvalidGraphic);
 
     bool WriteSignature(
-        const css::uno::Reference< css::xml::sax::XDocumentHandler >& xDocumentHandler,
+        const cpo::uno::Reference< css::xml::sax::XDocumentHandler >& xDocumentHandler,
         bool bXAdESCompliantIfODF);
 
     /*
@@ -368,7 +368,7 @@ public:
      */
     void collectToVerify( std::u16string_view referenceId );
     void addSignature( sal_Int32 nSignatureId );
-    css::uno::Reference< css::xml::sax::XDocumentHandler > const & createSignatureReader(XMLSignatureHelper& rXMLSignatureHelper, sal_Int32 nType = 0);
+    cpo::uno::Reference< css::xml::sax::XDocumentHandler > const & createSignatureReader(XMLSignatureHelper& rXMLSignatureHelper, sal_Int32 nType = 0);
     void releaseSignatureReader();
 
 public:
@@ -393,9 +393,9 @@ public:
     virtual void SAL_CALL signatureVerified( sal_Int32 securityId, css::xml::crypto::SecurityOperationStatus nResult ) override;
 
     /// Writes XML elements inside a single OOXML signature's <Signature> element.
-    bool WriteOOXMLSignature(const css::uno::Reference<css::embed::XStorage>& xRootStorage, const css::uno::Reference<css::xml::sax::XDocumentHandler>& xDocumentHandler);
+    bool WriteOOXMLSignature(const cpo::uno::Reference<css::embed::XStorage>& xRootStorage, const cpo::uno::Reference<css::xml::sax::XDocumentHandler>& xDocumentHandler);
     /// Exports an OOXML signature, called by WriteOOXMLSignature().
-    void exportOOXMLSignature(const css::uno::Reference<css::embed::XStorage>& xRootStorage, const css::uno::Reference<css::xml::sax::XDocumentHandler>& xDocumentHandler, const SignatureInformation& rInformation);
+    void exportOOXMLSignature(const cpo::uno::Reference<css::embed::XStorage>& xRootStorage, const cpo::uno::Reference<css::xml::sax::XDocumentHandler>& xDocumentHandler, const SignatureInformation& rInformation);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

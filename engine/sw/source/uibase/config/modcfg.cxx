@@ -34,7 +34,7 @@
 #include <modcfg.hxx>
 #include <caption.hxx>
 
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 #define GLOB_NAME_CALC      0

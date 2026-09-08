@@ -13,7 +13,7 @@
 #include <string_view>
 #include <vector>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <oox/dllapi.h>
 #include <oox/token/tokens.hxx>
 #include <rtl/ustring.hxx>
@@ -134,8 +134,8 @@ public:
     struct OOX_DLLPUBLIC Tag
     {
         Tag(int token = XML_TOKEN_INVALID,
-            const css::uno::Reference<css::xml::sax::XFastAttributeList>& attributes
-            = css::uno::Reference<css::xml::sax::XFastAttributeList>());
+            const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& attributes
+            = cpo::uno::Reference<css::xml::sax::XFastAttributeList>());
         Tag(int token, AttributeList attribs);
         int token; ///< tag type, or XML_TOKEN_INVALID
         AttributeList attributes;
@@ -225,8 +225,8 @@ class OOX_DLLPUBLIC XmlStreamBuilder : public XmlStream
 {
 public:
     void appendOpeningTag(int token,
-                          const css::uno::Reference<css::xml::sax::XFastAttributeList>& attributes
-                          = css::uno::Reference<css::xml::sax::XFastAttributeList>());
+                          const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& attributes
+                          = cpo::uno::Reference<css::xml::sax::XFastAttributeList>());
     void appendOpeningTag(int token, const AttributeList& attribs);
     void appendClosingTag(int token);
     // appends the characters after the last appended token

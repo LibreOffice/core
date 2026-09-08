@@ -34,7 +34,7 @@ class SwVbaRows : public SwVbaRows_BASE
 {
 private:
     rtl::Reference< SwXTextTable > mxTextTable;
-    css::uno::Reference< css::table::XTableRows > mxTableRows;
+    cpo::uno::Reference< css::table::XTableRows > mxTableRows;
     sal_Int32 mnStartRowIndex;
     sal_Int32 mnEndRowIndex;
 
@@ -42,17 +42,17 @@ private:
     /// @throws cpo::uno::RuntimeException
     void setIndentWithAdjustNone( sal_Int32 indent );
     /// @throws cpo::uno::RuntimeException
-    void setIndentWithAdjustFirstColumn( const css::uno::Reference< ooo::vba::word::XColumns >& xColumns, sal_Int32 indent );
+    void setIndentWithAdjustFirstColumn( const cpo::uno::Reference< ooo::vba::word::XColumns >& xColumns, sal_Int32 indent );
     /// @throws cpo::uno::RuntimeException
-    void setIndentWithAdjustProportional( const css::uno::Reference< ooo::vba::word::XColumns >& xColumns, sal_Int32 indent );
+    void setIndentWithAdjustProportional( const cpo::uno::Reference< ooo::vba::word::XColumns >& xColumns, sal_Int32 indent );
     /// @throws cpo::uno::RuntimeException
-    void setIndentWithAdjustSameWidth( const css::uno::Reference< ooo::vba::word::XColumns >& xColumns, sal_Int32 indent );
+    void setIndentWithAdjustSameWidth( const cpo::uno::Reference< ooo::vba::word::XColumns >& xColumns, sal_Int32 indent );
 
 public:
     /// @throws cpo::uno::RuntimeException
-    SwVbaRows( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext > & xContext, rtl::Reference< SwXTextTable >  xTextTable, const css::uno::Reference< css::table::XTableRows >& xTableRows );
+    SwVbaRows( const cpo::uno::Reference< ov::XHelperInterface >& xParent, const cpo::uno::Reference< cpo::uno::XComponentContext > & xContext, rtl::Reference< SwXTextTable >  xTextTable, const cpo::uno::Reference< css::table::XTableRows >& xTableRows );
     /// @throws cpo::uno::RuntimeException
-    SwVbaRows( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext > & xContext, rtl::Reference< SwXTextTable >  xTextTable, const css::uno::Reference< css::table::XTableRows >& xTableRows, sal_Int32 nStarIndex, sal_Int32 nEndIndex );
+    SwVbaRows( const cpo::uno::Reference< ov::XHelperInterface >& xParent, const cpo::uno::Reference< cpo::uno::XComponentContext > & xContext, rtl::Reference< SwXTextTable >  xTextTable, const cpo::uno::Reference< css::table::XTableRows >& xTableRows, sal_Int32 nStarIndex, sal_Int32 nEndIndex );
 
     // Attributes
     virtual ::sal_Int32 SAL_CALL getAlignment() override;
@@ -72,7 +72,7 @@ public:
     virtual cpo::uno::Any SAL_CALL Item( const cpo::uno::Any& Index1, const cpo::uno::Any& /*not processed in this base class*/ ) override;
     // XEnumerationAccess
     virtual cpo::uno::Type SAL_CALL getElementType() override;
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
+    virtual cpo::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
 
     // SwVbaRows_BASE
     virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) override;

@@ -34,7 +34,8 @@
 #include <IDocumentStylePoolAccess.hxx>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 /// Covers sw/source/core/undo/ fixes.
 class SwCoreUndoTest : public SwModelTestBase
@@ -121,8 +122,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreUndoTest, testImagePropsCreateUndoAndModifyDoc)
     SwDocShell* pDocShell = getSwDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     SwXTextDocument* pTextDoc = getSwTextDoc();
-    css::uno::Reference<css::beans::XPropertySet> xImage(
-        pTextDoc->getGraphicObjects()->getByName(u"Image1"_ustr), css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::beans::XPropertySet> xImage(
+        pTextDoc->getGraphicObjects()->getByName(u"Image1"_ustr), cpo::uno::UNO_QUERY_THROW);
 
     CPPUNIT_ASSERT(pTextDoc->isSetModifiedEnabled());
     CPPUNIT_ASSERT(!pTextDoc->isModified());

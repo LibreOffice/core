@@ -36,16 +36,16 @@ class DataSupplier : public ucbhelper::ResultSetDataSupplier
     bool getData(std::unique_lock<std::mutex>& rResultSetGuard);
 
 public:
-    DataSupplier( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+    DataSupplier( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
               const rtl::Reference< Content >& rContent,
               sal_Int32 nOpenMode);
 
     virtual ~DataSupplier() override;
 
     virtual OUString queryContentIdentifierString( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nIndex ) override;
-    virtual css::uno::Reference< css::ucb::XContentIdentifier >
+    virtual cpo::uno::Reference< css::ucb::XContentIdentifier >
     queryContentIdentifier( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nIndex ) override;
-    virtual css::uno::Reference< css::ucb::XContent >
+    virtual cpo::uno::Reference< css::ucb::XContent >
     queryContent( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nIndex ) override;
 
     virtual bool getResult( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nIndex ) override;
@@ -54,7 +54,7 @@ public:
     virtual sal_uInt32 currentCount() override;
     virtual bool isCountFinal() override;
 
-    virtual css::uno::Reference< css::sdbc::XRow >
+    virtual cpo::uno::Reference< css::sdbc::XRow >
     queryPropertyValues( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nIndex  ) override;
     virtual void releasePropertyValues( sal_uInt32 nIndex ) override;
 
@@ -66,9 +66,9 @@ private:
     struct ResultListEntry
     {
         OUString                             aId;
-        css::uno::Reference< css::ucb::XContentIdentifier > xId;
-        css::uno::Reference< css::ucb::XContent >           xContent;
-        css::uno::Reference< css::sdbc::XRow >              xRow;
+        cpo::uno::Reference< css::ucb::XContentIdentifier > xId;
+        cpo::uno::Reference< css::ucb::XContent >           xContent;
+        cpo::uno::Reference< css::sdbc::XRow >              xRow;
         std::unique_ptr<ContentProperties> pData;
 
         explicit ResultListEntry( std::unique_ptr<ContentProperties> && pEntry ) : pData( std::move(pEntry) ) {}
@@ -79,7 +79,7 @@ private:
     osl::Mutex                                   m_aMutex;
     ResultList                                   m_Results;
     rtl::Reference< Content >                    m_xContent;
-    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
     sal_Int32                                    m_nOpenMode;
     bool                                         m_bCountFinal;
     bool                                         m_bThrowException;

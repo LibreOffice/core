@@ -115,6 +115,7 @@
 #endif
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 static bool g_bIsLeanException;
 
@@ -470,8 +471,8 @@ void DeInitVCL()
 
 #if defined _WIN32
     // See GetSystemClipboard (vcl/source/treelist/transfer2.cxx):
-    if (auto const comp = css::uno::Reference<css::lang::XComponent>(
-            pSVData->m_xSystemClipboard, css::uno::UNO_QUERY))
+    if (auto const comp = cpo::uno::Reference<css::lang::XComponent>(
+            pSVData->m_xSystemClipboard, cpo::uno::UNO_QUERY))
     {
         SolarMutexReleaser r; // unblock pending "clipboard content changed" notifications
         comp->dispose(); // will use s_aClipboardSingletonMutex for CWinClipboard

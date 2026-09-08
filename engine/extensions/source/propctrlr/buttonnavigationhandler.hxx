@@ -30,18 +30,18 @@ namespace pcr
     class ButtonNavigationHandler : public PropertyHandlerComponent
     {
     private:
-        css::uno::Reference< css::inspection::XPropertyHandler >
+        cpo::uno::Reference< css::inspection::XPropertyHandler >
             m_xSlaveHandler;
 
     public:
         explicit ButtonNavigationHandler(
-            const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxContext
         );
 
     protected:
         virtual ~ButtonNavigationHandler() override;
 
-        static bool    isNavigationCapableButton( const css::uno::Reference< css::beans::XPropertySet >& _rxComponent );
+        static bool    isNavigationCapableButton( const cpo::uno::Reference< css::beans::XPropertySet >& _rxComponent );
 
     protected:
         // XServiceInfo
@@ -49,15 +49,15 @@ namespace pcr
         virtual cpo::uno::Sequence< OUString > getSupportedServiceNames () override;
 
         // XPropertyHandler overriables
-        virtual void                                    inspect( const css::uno::Reference< cpo::uno::XInterface >& _rxIntrospectee ) override;
+        virtual void                                    inspect( const cpo::uno::Reference< cpo::uno::XInterface >& _rxIntrospectee ) override;
         virtual cpo::uno::Any                           getPropertyValue( const OUString& _rPropertyName ) override;
         virtual void                                    setPropertyValue( const OUString& _rPropertyName, const cpo::uno::Any& _rValue ) override;
         virtual css::beans::PropertyState               getPropertyState( const OUString& _rPropertyName ) override;
         virtual cpo::uno::Sequence< OUString >          getActuatingProperties( ) override;
         virtual css::inspection::InteractiveSelectionResult
-                                                        onInteractivePropertySelection( const OUString& _rPropertyName, bool _bPrimary, cpo::uno::Any& _rData, const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI ) override;
-        virtual void                                    actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const cpo::uno::Any& _rNewValue, const cpo::uno::Any& _rOldValue, const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI, bool _bFirstTimeInit ) override;
-        virtual css::inspection::LineDescriptor         describePropertyLine( const OUString& _rPropertyName, const css::uno::Reference< css::inspection::XPropertyControlFactory >& _rxControlFactory ) override;
+                                                        onInteractivePropertySelection( const OUString& _rPropertyName, bool _bPrimary, cpo::uno::Any& _rData, const cpo::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI ) override;
+        virtual void                                    actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const cpo::uno::Any& _rNewValue, const cpo::uno::Any& _rOldValue, const cpo::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI, bool _bFirstTimeInit ) override;
+        virtual css::inspection::LineDescriptor         describePropertyLine( const OUString& _rPropertyName, const cpo::uno::Reference< css::inspection::XPropertyControlFactory >& _rxControlFactory ) override;
 
         // PropertyHandler overridables
         virtual cpo::uno::Sequence< css::beans::Property >

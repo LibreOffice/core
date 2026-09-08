@@ -25,14 +25,14 @@
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::util;
 using namespace ::cpo::uno;
 
 // class HelpInterceptor_Impl --------------------------------------------
 
 HelpDispatch_Impl::HelpDispatch_Impl( HelpInterceptor_Impl& _rInterceptor,
-                                      css::uno::Reference< css::frame::XDispatch > _xDisp ) :
+                                      cpo::uno::Reference< css::frame::XDispatch > _xDisp ) :
 
     m_rInterceptor  ( _rInterceptor ),
     m_xRealDispatch (std::move( _xDisp ))

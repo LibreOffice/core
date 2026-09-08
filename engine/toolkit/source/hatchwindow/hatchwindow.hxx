@@ -27,7 +27,7 @@ class SvResizeWindow;
 typedef cppu::ImplInheritanceHelper< VCLXWindow, css::embed::XHatchWindow> VCLXHatchWindow_Base;
 class VCLXHatchWindow : public VCLXHatchWindow_Base
 {
-    css::uno::Reference< css::embed::XHatchWindowController > m_xController;
+    cpo::uno::Reference< css::embed::XHatchWindowController > m_xController;
     css::awt::Size aHatchBorderSize;
     VclPtr<SvResizeWindow> pHatchWindow;
 
@@ -35,7 +35,7 @@ public:
     VCLXHatchWindow();
     virtual ~VCLXHatchWindow() override;
 
-    void initializeWindow( const css::uno::Reference< css::awt::XWindowPeer >& xParent,
+    void initializeWindow( const cpo::uno::Reference< css::awt::XWindowPeer >& xParent,
                 const css::awt::Rectangle& aBounds,
                 const css::awt::Size& aSize );
 
@@ -46,14 +46,14 @@ public:
     void Deactivated();
 
     // XHatchWindow
-    virtual void setController( const css::uno::Reference< css::embed::XHatchWindowController >& xController ) override;
+    virtual void setController( const cpo::uno::Reference< css::embed::XHatchWindowController >& xController ) override;
     virtual css::awt::Size getHatchBorderSize() override;
     virtual void setHatchBorderSize( const css::awt::Size& _hatchbordersize ) override;
 
     // XComponent
     virtual void dispose() override;
-    virtual void addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-    virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+    virtual void addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& xListener ) override;
+    virtual void removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener ) override;
 };
 
 

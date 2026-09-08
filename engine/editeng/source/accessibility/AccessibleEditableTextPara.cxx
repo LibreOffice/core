@@ -29,7 +29,7 @@
 #include <sal/log.hxx>
 #include <editeng/flditem.hxx>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -72,6 +72,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::accessibility;
+using namespace ::cpo;
 
 
 // AccessibleEditableTextPara implementation
@@ -2258,7 +2259,7 @@ cpo::uno::Sequence< beans::PropertyValue > AccessibleEditableTextPara::getRunAtt
     return nHyperLinks;
 }
 
-css::uno::Reference< css::accessibility::XAccessibleHyperlink > AccessibleEditableTextPara::getHyperLink( ::sal_Int32 nLinkIndex )
+cpo::uno::Reference< css::accessibility::XAccessibleHyperlink > AccessibleEditableTextPara::getHyperLink( ::sal_Int32 nLinkIndex )
 {
     rtl::Reference< AccessibleHyperlink > xRef;
 

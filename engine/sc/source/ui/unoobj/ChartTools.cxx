@@ -20,6 +20,7 @@
 #include <svx/svdpage.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 namespace sctools {
 

@@ -75,8 +75,8 @@
 #include <docmodel/uno/UnoTheme.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::container;
@@ -377,7 +377,7 @@ ImpXMLAutoLayoutInfo::ImpXMLAutoLayoutInfo(sal_uInt16 nTyp, ImpXMLEXPPageMasterI
 constexpr OUString gsPageLayoutNames( u"PageLayoutNames"_ustr );
 
 SdXMLExport::SdXMLExport(
-    const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
+    const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
     OUString const & implementationName,
     bool bIsDraw, SvXMLExportFlags nExportFlags )
 :   SvXMLExport( xContext, implementationName, util::MeasureUnit::CM,
@@ -2757,7 +2757,7 @@ void SdXMLExport::exportAnnotations( const Reference<XDrawPage>& xDrawPage )
                     Characters( sStringBuffer.makeStringAndClear() );
                 }
 
-                css::uno::Reference < css::text::XText > xText( xAnnotation->getTextRange() );
+                cpo::uno::Reference < css::text::XText > xText( xAnnotation->getTextRange() );
                 if( xText.is() )
                     GetTextParagraphExport()->exportText( xText );
             }

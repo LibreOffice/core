@@ -22,7 +22,7 @@
 
 #include <sfx2/dllapi.h>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <functional>
 
@@ -49,10 +49,10 @@ namespace sfx2
      * This evaluates certain creation arguments (passed to createInstanceWithArguments)
      * and passes them to the factory function of the derived class.
      */
-    css::uno::Reference<cpo::uno::XInterface>
+    cpo::uno::Reference<cpo::uno::XInterface>
         SFX2_DLLPUBLIC createSfxModelInstance(
             const cpo::uno::Sequence<cpo::uno::Any> & rxArgs,
-            std::function<css::uno::Reference<cpo::uno::XInterface>( SfxModelFlags )> creationFunc
+            std::function<cpo::uno::Reference<cpo::uno::XInterface>( SfxModelFlags )> creationFunc
         );
 
 } // namespace sfx2

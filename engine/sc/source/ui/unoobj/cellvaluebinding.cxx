@@ -44,7 +44,7 @@ namespace calc
 #define PROP_HANDLE_BOUND_CELL  1
 
     namespace lang = css::lang;
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
 using namespace cpo::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::table;
@@ -472,7 +472,7 @@ using namespace cpo::uno;
 
         std::unique_lock<std::mutex> aGuard(m_aMutex);
         m_aModifyListeners.forEach(aGuard,
-            [&aEvent] (const css::uno::Reference<css::util::XModifyListener> & l)
+            [&aEvent] (const cpo::uno::Reference<css::util::XModifyListener> & l)
             {
                 try
                 {
@@ -539,7 +539,7 @@ using namespace cpo::uno;
             // first the sheets collection
             Reference< XIndexAccess > xSheets;
             if ( m_xDocument.is() )
-                xSheets.set(m_xDocument->getSheets( ), css::uno::UNO_QUERY);
+                xSheets.set(m_xDocument->getSheets( ), cpo::uno::UNO_QUERY);
             OSL_ENSURE( xSheets.is(), "OCellValueBinding::initialize: could not retrieve the sheets!" );
 
             if ( xSheets.is() )
@@ -565,7 +565,7 @@ using namespace cpo::uno;
         if ( !m_xCell.is() )
             throw RuntimeException(u"Failed to retrieve cell object"_ustr, getXWeak());
 
-        m_xCellText.set(m_xCell, css::uno::UNO_QUERY);
+        m_xCellText.set(m_xCell, cpo::uno::UNO_QUERY);
 
         Reference<XModifyBroadcaster> xBroadcaster( m_xCell, UNO_QUERY );
         if ( xBroadcaster.is() )

@@ -228,7 +228,7 @@ private:
 public:
     static void     SetGlobalDrawPersist(SfxObjectShell* pPersist);
 private:
-    virtual css::uno::Reference< css::frame::XModel > createUnoModel() override;
+    virtual cpo::uno::Reference< css::frame::XModel > createUnoModel() override;
 };
 
 extern bool bDrawIsInUndo; // somewhere as member!

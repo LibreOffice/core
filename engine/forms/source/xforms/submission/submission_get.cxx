@@ -27,7 +27,7 @@
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <comphelper/diagnose_ex.hxx>
 
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace css::ucb;
 using namespace css::task;
 using namespace css::io;
@@ -35,19 +35,19 @@ using namespace ::cpo::uno;
 using namespace ucbhelper;
 
 
-CSubmissionGet::CSubmissionGet(std::u16string_view aURL, const css::uno::Reference< css::xml::dom::XDocumentFragment >& aFragment)
+CSubmissionGet::CSubmissionGet(std::u16string_view aURL, const cpo::uno::Reference< css::xml::dom::XDocumentFragment >& aFragment)
     : CSubmission(aURL, aFragment)
 {
 }
 
-CSubmission::SubmissionResult CSubmissionGet::submit(const css::uno::Reference< css::task::XInteractionHandler >& aInteractionHandler)
+CSubmission::SubmissionResult CSubmissionGet::submit(const cpo::uno::Reference< css::task::XInteractionHandler >& aInteractionHandler)
 {
     // GET always uses application/x-www-formurlencoded
     CSerializationURLEncoded aSerialization;
     aSerialization.setSource(m_aFragment);
     aSerialization.serialize();
 
-    css::uno::Reference< XInputStream > aInStream = aSerialization.getInputStream();
+    cpo::uno::Reference< XInputStream > aInStream = aSerialization.getInputStream();
 
     // create a commandEnvironment and use the default interaction handler
     rtl::Reference<CCommandEnvironmentHelper> pHelper = new CCommandEnvironmentHelper;

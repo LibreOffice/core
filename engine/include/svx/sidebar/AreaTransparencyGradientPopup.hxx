@@ -54,7 +54,7 @@ private:
     DECL_LINK(Right_Click45_Impl, const OUString&, void);
 
 public:
-    AreaTransparencyGradientPopup(const css::uno::Reference<css::frame::XFrame>& rFrame,
+    AreaTransparencyGradientPopup(const cpo::uno::Reference<css::frame::XFrame>& rFrame,
                                   AreaPropertyPanelBase& rPanel, weld::Widget* pParent);
     ~AreaTransparencyGradientPopup();
 

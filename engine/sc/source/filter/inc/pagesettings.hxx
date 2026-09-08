@@ -35,7 +35,7 @@ class HeaderFooterParser;
 /** Holds page style data for a single sheet. */
 struct PageSettingsModel
 {
-    css::uno::Reference<css::graphic::XGraphic> mxGraphic; /// Background Graphic
+    cpo::uno::Reference<css::graphic::XGraphic> mxGraphic; /// Background Graphic
     OUString     maBinSettPath;          /// Relation identifier of binary printer settings.
     OUString     maOddHeader;            /// Header string for odd pages.
     OUString     maOddFooter;            /// Footer string for odd pages.

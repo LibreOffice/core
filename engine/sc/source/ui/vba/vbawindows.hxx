@@ -29,11 +29,11 @@ typedef CollTestImplHelper< ov::excel::XWindows > ScVbaWindows_BASE;
 class ScVbaWindows : public ScVbaWindows_BASE
 {
 public:
-    ScVbaWindows( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext > & xContext );
+    ScVbaWindows( const cpo::uno::Reference< ov::XHelperInterface >& xParent, const cpo::uno::Reference< cpo::uno::XComponentContext > & xContext );
 
     // XEnumerationAccess
     virtual cpo::uno::Type SAL_CALL getElementType() override;
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
+    virtual cpo::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
 
     // XWindows
     virtual void SAL_CALL Arrange( ::sal_Int32 ArrangeStyle, const cpo::uno::Any& ActiveWorkbook, const cpo::uno::Any& SyncHorizontal, const cpo::uno::Any& SyncVertical ) override;

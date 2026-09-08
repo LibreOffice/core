@@ -58,7 +58,7 @@ using osl::Module;
 
 
 using cpo::uno::Sequence;
-using com::sun::star::uno::Reference;
+using cpo::uno::Reference;
 using cpo::uno::Any;
 using cpo::uno::RuntimeException;
 using cpo::uno::TypeDescription;
@@ -371,7 +371,7 @@ static PyObject* initTestEnvironment(
         using css::lang::XMultiServiceFactory;
         Reference<XMultiServiceFactory> const xMSF(
             xContext->getServiceManager(),
-            css::uno::UNO_QUERY_THROW);
+            cpo::uno::UNO_QUERY_THROW);
         char *const testlib = getenv("TEST_LIB");
         if (!testlib) { abort(); }
 #ifdef _WIN32
@@ -575,7 +575,7 @@ static PyObject *getConstantByName(
                 SAL_INFO("pyuno.legacyapi", "legacy UNO API " << typeName << " at " << getOrigin());
             }
             Runtime runtime;
-            css::uno::Reference< css::reflection::XConstantTypeDescription > td;
+            cpo::uno::Reference< css::reflection::XConstantTypeDescription > td;
             if (!(runtime.getImpl()->cargo->xTdMgr->getByHierarchicalName(
                       typeName)
                   >>= td))

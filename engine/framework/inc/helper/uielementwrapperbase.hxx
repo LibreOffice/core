@@ -65,8 +65,8 @@ class UIElementWrapperBase : private cppu::BaseMutex,
 
         // XComponent
         virtual  void dispose() override = 0;
-        virtual  void addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-        virtual  void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+        virtual  void addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& xListener ) override;
+        virtual  void removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
         // XInitialization
         virtual  void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
@@ -75,10 +75,10 @@ class UIElementWrapperBase : private cppu::BaseMutex,
         virtual  void update() override;
 
         // XUIElement
-        virtual  css::uno::Reference< css::frame::XFrame > getFrame() override;
+        virtual  cpo::uno::Reference< css::frame::XFrame > getFrame() override;
         virtual  OUString getResourceURL() override;
         virtual  ::sal_Int16 getType() override;
-        virtual  css::uno::Reference< cpo::uno::XInterface > getRealInterface() override = 0;
+        virtual  cpo::uno::Reference< cpo::uno::XInterface > getRealInterface() override = 0;
 
     //  protected methods
 
@@ -95,7 +95,7 @@ class UIElementWrapperBase : private cppu::BaseMutex,
         virtual  void                                                getFastPropertyValue( cpo::uno::Any&    aValue          ,
                                                                                                    sal_Int32                    nHandle         ) const override;
         virtual  ::cppu::IPropertyArrayHelper&                       getInfoHelper() override;
-        virtual  css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo() override;
+        virtual  cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo() override;
 
         static cpo::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescriptor();
 

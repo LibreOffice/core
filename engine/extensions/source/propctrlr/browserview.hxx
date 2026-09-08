@@ -34,7 +34,7 @@ namespace pcr
         Link<LinkParamNone*,void>   m_aPageActivationHandler;
 
     public:
-        explicit OPropertyBrowserView(const css::uno::Reference<cpo::uno::XComponentContext>& rContext, weld::Builder& rBuilder);
+        explicit OPropertyBrowserView(const cpo::uno::Reference<cpo::uno::XComponentContext>& rContext, weld::Builder& rBuilder);
         ~OPropertyBrowserView();
 
         OPropertyEditor&    getPropertyBox() { return *m_xPropBox; }

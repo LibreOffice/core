@@ -87,13 +87,13 @@
 #include <comphelper/string.hxx>
 
 using ::cpo::uno::Sequence;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::UNO_QUERY;
+using ::cpo::uno::Reference;
 using ::com::sun::star::task::XInteractionContinuation;
 using ::com::sun::star::task::XInteractionAbort;
 using ::com::sun::star::task::XInteractionApprove;
 using ::com::sun::star::lang::XInitialization;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
+using ::cpo::uno::UNO_QUERY_THROW;
 using ::com::sun::star::task::InteractionHandler;
 using ::com::sun::star::task::XInteractionHandler2;
 using ::cpo::uno::Exception;
@@ -101,6 +101,7 @@ using ::cpo::uno::Any;
 using ::com::sun::star::task::XInteractionRequest;
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace {
 

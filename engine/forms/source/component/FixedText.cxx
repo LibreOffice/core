@@ -28,7 +28,7 @@
 
 namespace frm
 {
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
@@ -58,7 +58,7 @@ OFixedTextModel::~OFixedTextModel( )
 }
 
 
-css::uno::Reference< css::util::XCloneable > OFixedTextModel::createClone()
+cpo::uno::Reference< css::util::XCloneable > OFixedTextModel::createClone()
 {
     rtl::Reference<OFixedTextModel> pClone = new OFixedTextModel(this, getContext());
     pClone->clonedFrom(this);

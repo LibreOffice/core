@@ -37,6 +37,7 @@
 #include <memory>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace ::cppu;
 
 SvxUnoDrawPool::SvxUnoDrawPool(SdrModel* pModel, rtl::Reference<comphelper::PropertySetInfo> const & xDefaults)

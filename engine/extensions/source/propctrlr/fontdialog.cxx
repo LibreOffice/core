@@ -60,7 +60,7 @@ namespace pcr
 {
 
 
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
 using namespace cpo::uno;
     using namespace ::com::sun::star::beans;
 
@@ -101,13 +101,13 @@ using namespace cpo::uno;
     class OFontPropertyExtractor
     {
     protected:
-        css::uno::Reference< css::beans::XPropertySet >
+        cpo::uno::Reference< css::beans::XPropertySet >
                     m_xPropValueAccess;
-        css::uno::Reference< css::beans::XPropertyState >
+        cpo::uno::Reference< css::beans::XPropertyState >
                     m_xPropStateAccess;
 
     public:
-        explicit OFontPropertyExtractor( const css::uno::Reference< css::beans::XPropertySet >&
+        explicit OFontPropertyExtractor( const cpo::uno::Reference< css::beans::XPropertySet >&
             _rxProps );
 
     public:
@@ -227,7 +227,7 @@ using namespace cpo::uno;
 
             // if PROPERTY_STANDARD_THEME is set, use style settings independent of platform (theme)
             // KEEP IN SYNC WITH UnoControl::createPeer
-            css::uno::Reference<css::beans::XPropertySetInfo> xPropSetInfo
+            cpo::uno::Reference<css::beans::XPropertySetInfo> xPropSetInfo
                 = _rxModel->getPropertySetInfo();
             if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(PROPERTY_STANDARD_THEME))
             {

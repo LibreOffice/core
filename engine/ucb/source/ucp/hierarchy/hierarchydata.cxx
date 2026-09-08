@@ -42,6 +42,7 @@
 #include "hierarchyuri.hxx"
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 namespace hierarchy_ucp
 {

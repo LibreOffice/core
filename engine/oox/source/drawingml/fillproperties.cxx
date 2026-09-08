@@ -57,10 +57,11 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::graphic;
+using namespace ::cpo;
 
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::cpo::uno::Exception;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
+using ::cpo::uno::UNO_QUERY_THROW;
 using ::com::sun::star::geometry::IntegerRectangle2D;
 
 namespace oox::drawingml {

@@ -31,7 +31,7 @@
 namespace frm
 {
     using namespace comphelper;
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
 using namespace cpo::uno;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::form;
@@ -131,7 +131,7 @@ using namespace cpo::uno;
         );
     }
 
-    css::uno::Reference< css::util::XCloneable > OScrollBarModel::createClone()
+    cpo::uno::Reference< css::util::XCloneable > OScrollBarModel::createClone()
 {
     rtl::Reference<OScrollBarModel> pClone = new OScrollBarModel(this, getContext());
     pClone->clonedFrom(this);

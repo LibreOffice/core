@@ -31,7 +31,7 @@
 using namespace ::xmloff::token;
 
 using ::com::sun::star::beans::XPropertySet;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 
 
 XMLIndexBibliographySourceContext::XMLIndexBibliographySourceContext(
@@ -56,9 +56,9 @@ void XMLIndexBibliographySourceContext::endFastElement(sal_Int32 )
     // No attributes, no properties.
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLIndexBibliographySourceContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLIndexBibliographySourceContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     if ( nElement == XML_ELEMENT(TEXT, XML_BIBLIOGRAPHY_ENTRY_TEMPLATE) )
     {

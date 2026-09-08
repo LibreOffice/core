@@ -49,7 +49,7 @@ namespace sd::sidebar {
 MasterPagesSelector::MasterPagesSelector(weld::Widget* pParent, SdDrawDocument& rDocument,
                                          ViewShellBase& rBase,
                                          std::shared_ptr<MasterPageContainer> pContainer,
-                                         css::uno::Reference<css::ui::XSidebar> xSidebar,
+                                         cpo::uno::Reference<css::ui::XSidebar> xSidebar,
                                          const OUString& rUIFileName, const OUString& rIconViewId)
     : PanelLayout(pParent, u"MasterPagePanel"_ustr, rUIFileName)
     , mpContainer(std::move(pContainer))

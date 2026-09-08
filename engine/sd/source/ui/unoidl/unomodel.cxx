@@ -231,6 +231,7 @@
 using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace ::sd;
+using namespace ::cpo;
 using namespace ::cpo::uno;
 
 namespace
@@ -402,7 +403,6 @@ bool SlideBackgroundInfo::getFillStyleImpl(const uno::Reference<drawing::XDrawPa
 using namespace ::css::animations;
 using namespace ::css::beans;
 using namespace ::css::container;
-using namespace ::css::uno;
 using namespace ::xmloff::token;
 using namespace ::css::presentation;
 
@@ -688,14 +688,14 @@ AnimationsExporter::AnimationsExporter(::tools::JsonWriter& rWriter,
             // first check if there are no animations
             Reference<XEnumerationAccess> xEnumerationAccess(xRootNode, UNO_QUERY_THROW);
             Reference<XEnumeration> xEnumeration(xEnumerationAccess->createEnumeration(),
-                                                 css::uno::UNO_SET_THROW);
+                                                 cpo::uno::UNO_SET_THROW);
             if (xEnumeration->hasMoreElements())
             {
                 // first child node may be an empty main sequence, check this
                 Reference<XAnimationNode> xMainNode(xEnumeration->nextElement(), UNO_QUERY_THROW);
                 Reference<XEnumerationAccess> xMainEnumerationAccess(xMainNode, UNO_QUERY_THROW);
                 Reference<XEnumeration> xMainEnumeration(
-                    xMainEnumerationAccess->createEnumeration(), css::uno::UNO_SET_THROW);
+                    xMainEnumerationAccess->createEnumeration(), cpo::uno::UNO_SET_THROW);
 
                 // only export if the main sequence is not empty or if there are additional
                 // trigger sequences
@@ -1213,7 +1213,7 @@ void AnimationsExporter::convertTiming(OStringBuffer& sTmp, const Any& rValue)
 
 void AnimationsExporter::appendTrigger(const cpo::uno::Any& rTarget, const OString& rTriggerHash)
 {
-    css::uno::Reference<cpo::uno::XInterface> xRef;
+    cpo::uno::Reference<cpo::uno::XInterface> xRef;
     rTarget >>= xRef;
 
     uno::Reference<drawing::XShape> xShape(xRef, uno::UNO_QUERY);
@@ -1438,7 +1438,7 @@ void AnimationsExporter::exportContainer(const Reference<XTimeContainer>& xConta
 
         Reference<XEnumerationAccess> xEnumerationAccess(xContainer, UNO_QUERY_THROW);
         Reference<XEnumeration> xEnumeration(xEnumerationAccess->createEnumeration(),
-                                             css::uno::UNO_SET_THROW);
+                                             cpo::uno::UNO_SET_THROW);
         while (xEnumeration->hasMoreElements())
         {
             Reference<XAnimationNode> xChildNode(xEnumeration->nextElement(), UNO_QUERY_THROW);
@@ -2619,7 +2619,7 @@ private:
 
         // Set up ViewInformation2D with visualized page
         drawinglayer::geometry::ViewInformation2D aViewInfo;
-        css::uno::Reference<css::drawing::XDrawPage> xDrawPage(pPage->getUnoPage());
+        cpo::uno::Reference<css::drawing::XDrawPage> xDrawPage(pPage->getUnoPage());
         if (xDrawPage.is())
             aViewInfo.setVisualizedPage(xDrawPage);
 
@@ -2969,7 +2969,7 @@ void SdXImpressDocument::getCommandValues(::tools::JsonWriter& rJsonWriter,
         // The document's STANAG marking (empty when unlabelled), for the browser's
         // read-only classification banner. Rendered with the label's provisioned policy.
         rJsonWriter.put("commandName", ".uno:SecurityLabel");
-        const css::uno::Reference<css::frame::XModel> xModel
+        const cpo::uno::Reference<css::frame::XModel> xModel
             = mpDocShell ? mpDocShell->GetModel() : nullptr;
         const OUString aMarking = xModel.is() ? svx::seclabel::readMarking(xModel) : OUString();
         auto aValues = rJsonWriter.startNode("commandValues");
@@ -3590,7 +3590,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdXImpressDocument::getHandoutMast
 
 // XMultiServiceFactory ( SvxFmMSFactory )
 
-css::uno::Reference<cpo::uno::XInterface> SdXImpressDocument::create(
+cpo::uno::Reference<cpo::uno::XInterface> SdXImpressDocument::create(
     OUString const & aServiceSpecifier, OUString const & referer)
 {
     ::SolarMutexGuard aGuard;
@@ -3871,7 +3871,7 @@ uno::Reference< cpo::uno::XInterface > SAL_CALL SdXImpressDocument::createInstan
     return create(aServiceSpecifier, u""_ustr);
 }
 
-css::uno::Reference<cpo::uno::XInterface>
+cpo::uno::Reference<cpo::uno::XInterface>
 SdXImpressDocument::createInstanceWithArguments(
     OUString const & ServiceSpecifier,
     cpo::uno::Sequence<cpo::uno::Any> const & Arguments)
@@ -4244,7 +4244,7 @@ uno::Reference< container::XNameAccess > SAL_CALL SdXImpressDocument::getStyleFa
     if( nullptr == mpDoc )
         throw lang::DisposedException();
 
-    uno::Reference< container::XNameAccess > xStyles( static_cast< OWeakObject* >( mpDoc->GetStyleSheetPool() ), css::uno::UNO_QUERY );
+    uno::Reference< container::XNameAccess > xStyles( static_cast< OWeakObject* >( mpDoc->GetStyleSheetPool() ), cpo::uno::UNO_QUERY );
     return xStyles;
 }
 

@@ -29,7 +29,8 @@ static pfunc_getRefreshToolbars            pRefreshToolbars            = nullptr
 static pfunc_createDockingWindow           pCreateDockingWindow        = nullptr;
 static pfunc_isDockingWindowVisible        pIsDockingWindowVisible     = nullptr;
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::frame;
 
 namespace framework
@@ -88,7 +89,7 @@ pfunc_getRefreshToolbars SetRefreshToolbars( pfunc_getRefreshToolbars pNewRefres
     return pOldFunc;
 }
 
-void RefreshToolbars( css::uno::Reference< css::frame::XFrame > const & rFrame )
+void RefreshToolbars( cpo::uno::Reference< css::frame::XFrame > const & rFrame )
 {
     pfunc_getRefreshToolbars pCallback = nullptr;
     {
@@ -109,7 +110,7 @@ pfunc_createDockingWindow SetDockingWindowCreator( pfunc_createDockingWindow pNe
     return pOldFunc;
 }
 
-void CreateDockingWindow( const css::uno::Reference< css::frame::XFrame >& rFrame, std::u16string_view rResourceURL )
+void CreateDockingWindow( const cpo::uno::Reference< css::frame::XFrame >& rFrame, std::u16string_view rResourceURL )
 {
     pfunc_createDockingWindow pFactory = nullptr;
     {
@@ -130,7 +131,7 @@ pfunc_isDockingWindowVisible SetIsDockingWindowVisible( pfunc_isDockingWindowVis
     return pOldFunc;
 }
 
-bool IsDockingWindowVisible( const css::uno::Reference< css::frame::XFrame >& rFrame, std::u16string_view rResourceURL )
+bool IsDockingWindowVisible( const cpo::uno::Reference< css::frame::XFrame >& rFrame, std::u16string_view rResourceURL )
 {
     pfunc_isDockingWindowVisible pCall = nullptr;
     {
@@ -146,7 +147,7 @@ bool IsDockingWindowVisible( const css::uno::Reference< css::frame::XFrame >& rF
 
 using namespace ::com::sun::star;
 uno::Reference<ui::XContextChangeEventListener> GetFirstListenerWith(
-    css::uno::Reference<cpo::uno::XComponentContext> const & xComponentContext,
+    cpo::uno::Reference<cpo::uno::XComponentContext> const & xComponentContext,
     uno::Reference<cpo::uno::XInterface> const& xEventFocus,
     std::function<bool (uno::Reference<ui::XContextChangeEventListener> const&)> const& rPredicate)
 {

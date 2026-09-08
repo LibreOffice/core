@@ -56,21 +56,21 @@ struct LangSvcEntries
 
 struct LangSvcEntries_Spell : public LangSvcEntries
 {
-    cpo::uno::Sequence< css::uno::Reference< css::linguistic2::XSpellChecker > >  aSvcRefs;
+    cpo::uno::Sequence< cpo::uno::Reference< css::linguistic2::XSpellChecker > >  aSvcRefs;
 
     explicit LangSvcEntries_Spell( const cpo::uno::Sequence< OUString > &rSvcImplNames ) : LangSvcEntries( rSvcImplNames ) {}
 };
 
 struct LangSvcEntries_Hyph : public LangSvcEntries
 {
-    cpo::uno::Sequence< css::uno::Reference< css::linguistic2::XHyphenator > >  aSvcRefs;
+    cpo::uno::Sequence< cpo::uno::Reference< css::linguistic2::XHyphenator > >  aSvcRefs;
 
     explicit LangSvcEntries_Hyph( const OUString &rSvcImplName ) : LangSvcEntries( rSvcImplName ) {}
 };
 
 struct LangSvcEntries_Thes : public LangSvcEntries
 {
-    cpo::uno::Sequence< css::uno::Reference< css::linguistic2::XThesaurus > >  aSvcRefs;
+    cpo::uno::Sequence< cpo::uno::Reference< css::linguistic2::XThesaurus > >  aSvcRefs;
 
     explicit LangSvcEntries_Thes( const cpo::uno::Sequence< OUString > &rSvcImplNames ) : LangSvcEntries( rSvcImplNames ) {}
 };

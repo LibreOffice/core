@@ -58,7 +58,7 @@ static bool   bCsSens= false;
 
 static sal_Unicode    cDeli  = '\t';
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star;
 using namespace ::cpo::uno;
 

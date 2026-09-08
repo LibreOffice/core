@@ -26,14 +26,14 @@
 
 using namespace svx::sidebar::commands;
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace css::frame;
 
 namespace svx::sidebar {
 
 DefaultShapesPanel::DefaultShapesPanel (
     weld::Widget* pParent,
-    css::uno::Reference<css::frame::XFrame> xFrame)
+    cpo::uno::Reference<css::frame::XFrame> xFrame)
     : PanelLayout(pParent, u"DefaultShapesPanel"_ustr, u"svx/ui/defaultshapespanel.ui"_ustr)
     , mxLineArrowSet(m_xBuilder->weld_icon_view(u"LinesArrows"_ustr))
     , mxCurveSet(m_xBuilder->weld_icon_view(u"Curves"_ustr))

@@ -38,7 +38,7 @@ namespace pcr
             IS_READ_ONLY        = 2003
         };
    };
-    using ::com::sun::star::uno::Reference;
+    using ::cpo::uno::Reference;
     using ::com::sun::star::beans::XPropertySetInfo;
     using ::cpo::uno::Any;
     using ::cpo::uno::Sequence;
@@ -76,7 +76,7 @@ namespace pcr
         sal_Int32   getMinHelpTextLines() const { return m_nMinHelpTextLines; }
         sal_Int32   getMaxHelpTextLines() const { return m_nMaxHelpTextLines; }
 
-        css::uno::Reference< css::beans::XPropertySetInfo >
+        cpo::uno::Reference< css::beans::XPropertySetInfo >
                             getPropertySetInfo();
         ::cppu::IPropertyArrayHelper&
                             getInfoHelper();

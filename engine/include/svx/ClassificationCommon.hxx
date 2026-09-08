@@ -35,26 +35,26 @@ SVX_DLLPUBLIC OUString
 convertClassificationResultToString(std::vector<svx::ClassificationResult> const& rResults);
 
 SVX_DLLPUBLIC OUString
-getProperty(css::uno::Reference<css::beans::XPropertyContainer> const& rxPropertyContainer,
+getProperty(cpo::uno::Reference<css::beans::XPropertyContainer> const& rxPropertyContainer,
             OUString const& rName);
 
 SVX_DLLPUBLIC bool containsProperty(cpo::uno::Sequence<css::beans::Property> const& rProperties,
                                     std::u16string_view rName);
 
 SVX_DLLPUBLIC void
-removeAllProperties(css::uno::Reference<css::beans::XPropertyContainer> const& rxPropertyContainer);
+removeAllProperties(cpo::uno::Reference<css::beans::XPropertyContainer> const& rxPropertyContainer);
 
 SVX_DLLPUBLIC bool addOrInsertDocumentProperty(
-    css::uno::Reference<css::beans::XPropertyContainer> const& rxPropertyContainer,
+    cpo::uno::Reference<css::beans::XPropertyContainer> const& rxPropertyContainer,
     OUString const& rsKey, OUString const& rsValue);
 
 SVX_DLLPUBLIC void insertFullTextualRepresentationAsDocumentProperty(
-    css::uno::Reference<css::beans::XPropertyContainer> const& rxPropertyContainer,
+    cpo::uno::Reference<css::beans::XPropertyContainer> const& rxPropertyContainer,
     sfx::ClassificationKeyCreator const& rKeyCreator,
     std::vector<svx::ClassificationResult> const& rResults);
 
 SVX_DLLPUBLIC void
-insertCreationOrigin(css::uno::Reference<css::beans::XPropertyContainer> const& rxPropertyContainer,
+insertCreationOrigin(cpo::uno::Reference<css::beans::XPropertyContainer> const& rxPropertyContainer,
                      sfx::ClassificationKeyCreator const& rKeyCreator,
                      sfx::ClassificationCreationOrigin eOrigin);
 

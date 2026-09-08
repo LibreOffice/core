@@ -32,9 +32,9 @@ class Content;
 struct ResultListEntry
 {
     OUString aId;
-    css::uno::Reference< css::ucb::XContentIdentifier > xId;
-    css::uno::Reference< css::ucb::XContent > xContent;
-    css::uno::Reference< css::sdbc::XRow > xRow;
+    cpo::uno::Reference< css::ucb::XContentIdentifier > xId;
+    cpo::uno::Reference< css::ucb::XContent > xContent;
+    cpo::uno::Reference< css::sdbc::XRow > xRow;
     GFileInfo *pInfo;
 
     explicit ResultListEntry( GFileInfo *pInInfo ) : pInfo(pInInfo)
@@ -63,9 +63,9 @@ public:
     virtual ~DataSupplier() override;
 
     virtual OUString queryContentIdentifierString( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nIndex ) override;
-    virtual css::uno::Reference< css::ucb::XContentIdentifier >
+    virtual cpo::uno::Reference< css::ucb::XContentIdentifier >
         queryContentIdentifier( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nIndex ) override;
-    virtual css::uno::Reference< css::ucb::XContent >
+    virtual cpo::uno::Reference< css::ucb::XContent >
         queryContent( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nIndex ) override;
 
     virtual bool getResult( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nIndex ) override;
@@ -74,7 +74,7 @@ public:
     virtual sal_uInt32 currentCount() override;
     virtual bool isCountFinal() override;
 
-    virtual css::uno::Reference< css::sdbc::XRow >
+    virtual cpo::uno::Reference< css::sdbc::XRow >
         queryPropertyValues( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nIndex  ) override;
     virtual void releasePropertyValues( sal_uInt32 nIndex ) override;
 

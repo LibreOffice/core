@@ -216,20 +216,20 @@ public:
 
 class SFX2_DLLPUBLIC SfxViewEventHint : public SfxEventHint
 {
-    css::uno::Reference< css::frame::XController2 > xViewController;
+    cpo::uno::Reference< css::frame::XController2 > xViewController;
 
 public:
-    SfxViewEventHint( SfxEventHintId nId, const OUString& aName, SfxObjectShell *pObj, const css::uno::Reference< css::frame::XController >& xController )
+    SfxViewEventHint( SfxEventHintId nId, const OUString& aName, SfxObjectShell *pObj, const cpo::uno::Reference< css::frame::XController >& xController )
                         : SfxEventHint( nId, aName, pObj )
-                        , xViewController( xController, css::uno::UNO_QUERY )
+                        , xViewController( xController, cpo::uno::UNO_QUERY )
                         {}
 
-    SfxViewEventHint( SfxEventHintId nId, const OUString& aName, SfxObjectShell *pObj, css::uno::Reference< css::frame::XController2 > xController )
+    SfxViewEventHint( SfxEventHintId nId, const OUString& aName, SfxObjectShell *pObj, cpo::uno::Reference< css::frame::XController2 > xController )
                         : SfxEventHint( nId, aName, pObj )
                         , xViewController(std::move( xController ))
                         {}
 
-    const css::uno::Reference< css::frame::XController2 >& GetController() const
+    const cpo::uno::Reference< css::frame::XController2 >& GetController() const
                         { return xViewController; }
 };
 
@@ -242,7 +242,7 @@ public:
                 css::view::PrintableState nState,
                 const cpo::uno::Sequence < css::beans::PropertyValue >& rOpts,
                 SfxObjectShell *pObj,
-                const css::uno::Reference< css::frame::XController2 >& xController )
+                const cpo::uno::Reference< css::frame::XController2 >& xController )
         : SfxViewEventHint(
             SfxEventHintId::PrintDoc,
             GlobalEventConfig::GetEventName( GlobalEventId::PRINTDOC ),
@@ -257,7 +257,7 @@ public:
             SfxEventHintId::PrintDoc,
             GlobalEventConfig::GetEventName( GlobalEventId::PRINTDOC ),
             nullptr,
-            css::uno::Reference< css::frame::XController >() )
+            cpo::uno::Reference< css::frame::XController >() )
         , mnPrintableState( nState )
         {}
 

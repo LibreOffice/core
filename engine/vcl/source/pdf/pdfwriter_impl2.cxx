@@ -54,9 +54,9 @@
 using namespace vcl;
 using namespace vcl::pdf;
 using namespace com::sun::star;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::beans;
+using namespace ::cpo;
 using namespace ::cpo::uno;
+using namespace com::sun::star::beans;
 
 static bool lcl_canUsePDFAxialShading(const Gradient& rGradient);
 

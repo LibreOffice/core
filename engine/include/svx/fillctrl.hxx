@@ -100,7 +100,7 @@ private:
     static void ReleaseFocus_Impl();
 
 public:
-    FillControl(vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame>& rFrame);
+    FillControl(vcl::Window* pParent, const cpo::uno::Reference<css::frame::XFrame>& rFrame);
     virtual void dispose() override;
     virtual ~FillControl() override;
 };

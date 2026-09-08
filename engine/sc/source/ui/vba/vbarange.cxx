@@ -162,6 +162,7 @@
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 // difference between VBA and file format width, in character units
 const double fExtraWidth = 182.0 / 256.0;
@@ -1358,7 +1359,7 @@ util::TriState lclGetMergedState( const uno::Reference< table::XCellRange >& rxC
 
 } // namespace
 
-css::uno::Reference< excel::XRange >
+cpo::uno::Reference< excel::XRange >
 ScVbaRange::getRangeObjectForName(
         const uno::Reference< cpo::uno::XComponentContext >& xContext, const OUString& sRangeName,
         ScDocShell* pDocSh, formula::FormulaGrammar::AddressConvention eConv )
@@ -4852,7 +4853,7 @@ ScVbaRange::Hyperlinks( const cpo::uno::Any& aIndex )
     return cpo::uno::Any( uno::Reference< excel::XHyperlinks >( xHlinks ) );
 }
 
-css::uno::Reference< excel::XValidation > SAL_CALL
+cpo::uno::Reference< excel::XValidation > SAL_CALL
 ScVbaRange::getValidation()
 {
     if ( !m_xValidation.is() )

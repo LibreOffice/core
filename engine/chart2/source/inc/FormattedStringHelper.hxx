@@ -22,7 +22,7 @@
 #include <rtl/ustring.hxx>
 
 namespace com::sun::star::beans { class XPropertySet; }
-namespace com::sun::star::uno { template <class interface_type> class Reference; }
+namespace cpo::uno { template <class interface_type> class Reference; }
 
 namespace chart
 {
@@ -34,7 +34,7 @@ public:
     static rtl::Reference< ::chart::FormattedString >
             createFormattedString(
                     const OUString & rString
-                    , const css::uno::Reference< css::beans::XPropertySet > & xTextProperties ) noexcept;
+                    , const cpo::uno::Reference< css::beans::XPropertySet > & xTextProperties ) noexcept;
 };
 
 } //namespace chart

@@ -31,7 +31,7 @@ namespace com::sun::star::datatransfer {
     class XTransferable;
 }
 
-namespace com::sun::star::uno { template <typename > class Reference; }
+namespace cpo::uno { template <typename > class Reference; }
 
 struct DataFlavorEx : public css::datatransfer::DataFlavor
 {
@@ -139,7 +139,7 @@ public:
         // In:- optional - check only for this specific format
         SotClipboardFormatId nOnlyTestFormat = SotClipboardFormatId::NONE,
         // In:- optional - check the contents of Xtransferable
-        const css::uno::Reference< css::datatransfer::XTransferable >* pxTransferable = nullptr,
+        const cpo::uno::Reference< css::datatransfer::XTransferable >* pxTransferable = nullptr,
         // Out: optional: - default action flags
         SotExchangeActionFlags* pActionFlags = nullptr);
 

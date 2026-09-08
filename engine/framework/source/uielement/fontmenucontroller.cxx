@@ -37,7 +37,7 @@
 
 //  Defines
 
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace css::lang;
 using namespace css::frame;
@@ -69,7 +69,7 @@ cpo::uno::Sequence< OUString > FontMenuController::getSupportedServiceNames()
     return { SERVICENAME_POPUPMENUCONTROLLER };
 }
 
-FontMenuController::FontMenuController( const css::uno::Reference< cpo::uno::XComponentContext >& xContext ) :
+FontMenuController::FontMenuController( const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext ) :
     svt::PopupMenuControllerBase( xContext )
 {
 }

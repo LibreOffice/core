@@ -99,6 +99,7 @@ constexpr OUString PROP_NAME = u"Name"_ustr;
 namespace framework {
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 namespace {
 
@@ -119,9 +120,9 @@ class LoadEnvListener : public ::cppu::WeakImplHelper< css::frame::XLoadEventLis
         }
 
         // frame.XLoadEventListener
-        virtual void loadFinished(const css::uno::Reference< css::frame::XFrameLoader >& xLoader) override;
+        virtual void loadFinished(const cpo::uno::Reference< css::frame::XFrameLoader >& xLoader) override;
 
-        virtual void loadCancelled(const css::uno::Reference< css::frame::XFrameLoader >& xLoader) override;
+        virtual void loadCancelled(const cpo::uno::Reference< css::frame::XFrameLoader >& xLoader) override;
 
         // frame.XDispatchResultListener
         virtual void dispatchFinished(const css::frame::DispatchResultEvent& aEvent) override;
@@ -132,7 +133,7 @@ class LoadEnvListener : public ::cppu::WeakImplHelper< css::frame::XLoadEventLis
 
 }
 
-LoadEnv::LoadEnv(css::uno::Reference< cpo::uno::XComponentContext >  xContext)
+LoadEnv::LoadEnv(cpo::uno::Reference< cpo::uno::XComponentContext >  xContext)
     : m_xContext(std::move(xContext))
     , m_nSearchFlags(0)
     , m_eFeature(LoadEnvFeatures::NONE)
@@ -149,14 +150,14 @@ LoadEnv::~LoadEnv()
         m_pQuietInteraction->dispose();
 }
 
-css::uno::Reference< css::lang::XComponent > LoadEnv::loadComponentFromURL(const css::uno::Reference< css::frame::XComponentLoader >&    xLoader,
-                                                                           const css::uno::Reference< cpo::uno::XComponentContext >&     xContext  ,
+cpo::uno::Reference< css::lang::XComponent > LoadEnv::loadComponentFromURL(const cpo::uno::Reference< css::frame::XComponentLoader >&    xLoader,
+                                                                           const cpo::uno::Reference< cpo::uno::XComponentContext >&     xContext  ,
                                                                            const OUString&                                        sURL   ,
                                                                            const OUString&                                        sTarget,
                                                                                  sal_Int32                                               nSearchFlags ,
                                                                            const cpo::uno::Sequence< css::beans::PropertyValue >&        lArgs  )
 {
-    css::uno::Reference< css::lang::XComponent > xComponent;
+    cpo::uno::Reference< css::lang::XComponent > xComponent;
     comphelper::ProfileZone aZone("loadComponentFromURL");
 
     try
@@ -169,7 +170,7 @@ css::uno::Reference< css::lang::XComponent > LoadEnv::loadComponentFromURL(const
 
         aEnv.startLoading(sURL,
                                lArgs,
-                               css::uno::Reference< css::frame::XFrame >(xLoader, css::uno::UNO_QUERY),
+                               cpo::uno::Reference< css::frame::XFrame >(xLoader, cpo::uno::UNO_QUERY),
                                sTarget,
                                nSearchFlags,
                                loadEnvFeatures);
@@ -306,11 +307,11 @@ void LoadEnv::startLoading(const OUString& sURL, const cpo::uno::Sequence<beans:
     start();
 }
 
-void LoadEnv::initializeUIDefaults( const css::uno::Reference< cpo::uno::XComponentContext >& i_rxContext,
+void LoadEnv::initializeUIDefaults( const cpo::uno::Reference< cpo::uno::XComponentContext >& i_rxContext,
                                     comphelper::SequenceAsHashMap& io_lMediaDescriptor, const bool i_bUIMode,
                                     rtl::Reference<QuietInteraction>* o_ppQuietInteraction )
 {
-    css::uno::Reference< css::task::XInteractionHandler > xInteractionHandler;
+    cpo::uno::Reference< css::task::XInteractionHandler > xInteractionHandler;
     sal_Int16                                             nMacroMode;
     sal_Int16                                             nUpdateMode;
 
@@ -323,13 +324,13 @@ void LoadEnv::initializeUIDefaults( const css::uno::Reference< cpo::uno::XCompon
             // tdf#154308 At least for the case the document is launched from the StartCenter, put that StartCenter as the
             // parent for any dialogs that may appear during typedetection (once load starts a permanent frame will be set
             // anyway and used as dialog parent, which will be this one if the startcenter was running)
-            css::uno::Reference<css::frame::XFramesSupplier> xSupplier = css::frame::Desktop::create(i_rxContext);
-            FrameListAnalyzer aTasksAnalyzer(xSupplier, css::uno::Reference<css::frame::XFrame>(), FrameAnalyzerFlags::BackingComponent);
-            css::uno::Reference<css::awt::XWindow> xDialogParent(aTasksAnalyzer.m_xBackingComponent ?
+            cpo::uno::Reference<css::frame::XFramesSupplier> xSupplier = css::frame::Desktop::create(i_rxContext);
+            FrameListAnalyzer aTasksAnalyzer(xSupplier, cpo::uno::Reference<css::frame::XFrame>(), FrameAnalyzerFlags::BackingComponent);
+            cpo::uno::Reference<css::awt::XWindow> xDialogParent(aTasksAnalyzer.m_xBackingComponent ?
                                                                  aTasksAnalyzer.m_xBackingComponent->getContainerWindow() :
                                                                  nullptr);
 
-            xInteractionHandler.set( css::task::InteractionHandler::createWithParent(i_rxContext, xDialogParent), css::uno::UNO_QUERY_THROW );
+            xInteractionHandler.set( css::task::InteractionHandler::createWithParent(i_rxContext, xDialogParent), cpo::uno::UNO_QUERY_THROW );
         }
         catch(const cpo::uno::RuntimeException&) {throw;}
         catch(const cpo::uno::Exception&       ) {      }
@@ -455,25 +456,25 @@ bool LoadEnv::waitWhileLoading(sal_uInt32 nTimeout)
     return !m_xAsynchronousJob.is();
 }
 
-css::uno::Reference< css::lang::XComponent > LoadEnv::getTargetComponent() const
+cpo::uno::Reference< css::lang::XComponent > LoadEnv::getTargetComponent() const
 {
     osl::MutexGuard g(m_mutex);
 
     if (!m_xTargetFrame.is())
-        return css::uno::Reference< css::lang::XComponent >();
+        return cpo::uno::Reference< css::lang::XComponent >();
 
-    css::uno::Reference< css::frame::XController > xController = m_xTargetFrame->getController();
+    cpo::uno::Reference< css::frame::XController > xController = m_xTargetFrame->getController();
     if (!xController.is())
         return m_xTargetFrame->getComponentWindow();
 
-    css::uno::Reference< css::frame::XModel > xModel = xController->getModel();
+    cpo::uno::Reference< css::frame::XModel > xModel = xController->getModel();
     if (!xModel.is())
         return xController;
 
     return xModel;
 }
 
-void LoadEnvListener::loadFinished(const css::uno::Reference< css::frame::XFrameLoader >&)
+void LoadEnvListener::loadFinished(const cpo::uno::Reference< css::frame::XFrameLoader >&)
 {
     std::unique_lock g(m_mutex);
     if (m_bWaitingResult)
@@ -481,7 +482,7 @@ void LoadEnvListener::loadFinished(const css::uno::Reference< css::frame::XFrame
     m_bWaitingResult = false;
 }
 
-void LoadEnvListener::loadCancelled(const css::uno::Reference< css::frame::XFrameLoader >&)
+void LoadEnvListener::loadCancelled(const cpo::uno::Reference< css::frame::XFrameLoader >&)
 {
     std::unique_lock g(m_mutex);
     if (m_bWaitingResult)
@@ -589,7 +590,7 @@ LoadEnv::EContentType LoadEnv::classifyContent(const OUString&                  
     if (ProtocolCheck::isProtocol(sURL,EProtocol::PrivateStream))
     {
         auto pIt = stlMediaDescriptor.find(utl::MediaDescriptor::PROP_INPUTSTREAM);
-        css::uno::Reference< css::io::XInputStream > xStream;
+        cpo::uno::Reference< css::io::XInputStream > xStream;
         if (pIt != stlMediaDescriptor.end())
             pIt->second >>= xStream;
         if (xStream.is())
@@ -602,7 +603,7 @@ LoadEnv::EContentType LoadEnv::classifyContent(const OUString&                  
     if (ProtocolCheck::isProtocol(sURL,EProtocol::PrivateObject))
     {
         auto pIt = stlMediaDescriptor.find(utl::MediaDescriptor::PROP_MODEL);
-        css::uno::Reference< css::frame::XModel > xModel;
+        cpo::uno::Reference< css::frame::XModel > xModel;
         if (pIt != stlMediaDescriptor.end())
             pIt->second >>= xModel;
         if (xModel.is())
@@ -612,16 +613,16 @@ LoadEnv::EContentType LoadEnv::classifyContent(const OUString&                  
     }
 
     // following operations can work on an internal type name only :-(
-    const css::uno::Reference< cpo::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
-    css::uno::Reference< css::document::XTypeDetection > xDetect(
+    const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
+    cpo::uno::Reference< css::document::XTypeDetection > xDetect(
          xContext->getServiceManager()->createInstanceWithContext(
              u"com.sun.star.document.TypeDetection"_ustr, xContext),
-         css::uno::UNO_QUERY_THROW);
+         cpo::uno::UNO_QUERY_THROW);
 
     OUString sType = xDetect->queryTypeByURL(sURL);
 
-    css::uno::Reference< css::frame::XLoaderFactory >      xLoaderFactory;
-    css::uno::Reference< css::container::XEnumeration >    xSet;
+    cpo::uno::Reference< css::frame::XLoaderFactory >      xLoaderFactory;
+    cpo::uno::Reference< css::container::XEnumeration >    xSet;
 
     // (iii) If a FrameLoader service (or at least
     //      a Filter) can be found, which supports
@@ -660,7 +661,7 @@ LoadEnv::EContentType LoadEnv::classifyContent(const OUString&                  
     // (v) Last but not least the UCB is used inside office to
     //     load contents. He has a special configuration to know
     //     which URL schemata can be used inside office.
-    css::uno::Reference< css::ucb::XUniversalContentBroker > xUCB(css::ucb::UniversalContentBroker::create(xContext));
+    cpo::uno::Reference< css::ucb::XUniversalContentBroker > xUCB(css::ucb::UniversalContentBroker::create(xContext));
     if (xUCB->queryContentProvider(sURL).is())
         return E_CAN_BE_LOADED;
 
@@ -742,7 +743,7 @@ void LoadEnv::impl_detectTypeAndFilter()
     // we can't use as an in/out parameter here. Copy it before and don't forget to
     // update structure afterwards again!
     cpo::uno::Sequence< css::beans::PropertyValue >        lDescriptor = m_lMediaDescriptor.getAsConstPropertyValueList();
-    css::uno::Reference< cpo::uno::XComponentContext >     xContext = m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext >     xContext = m_xContext;
 
     aReadLock.clear();
     // <- SAFE
@@ -764,10 +765,10 @@ void LoadEnv::impl_detectTypeAndFilter()
         // <- SAFE
     }
 
-    css::uno::Reference< css::document::XTypeDetection > xDetect(
+    cpo::uno::Reference< css::document::XTypeDetection > xDetect(
         xContext->getServiceManager()->createInstanceWithContext(
             u"com.sun.star.document.TypeDetection"_ustr, xContext),
-        css::uno::UNO_QUERY_THROW);
+        cpo::uno::UNO_QUERY_THROW);
     sType = xDetect->queryTypeByDescriptor(lDescriptor, true); /*TODO should deep detection be able for enable/disable it from outside? */
 
     // no valid content -> loading not possible
@@ -804,7 +805,7 @@ void LoadEnv::impl_detectTypeAndFilter()
     {
         // no -> try to find a preferred filter for the detected type.
         // Don't forget to update the media descriptor.
-        css::uno::Reference< css::container::XNameAccess > xTypeCont(xDetect, css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference< css::container::XNameAccess > xTypeCont(xDetect, cpo::uno::UNO_QUERY_THROW);
         try
         {
             ::comphelper::SequenceAsHashMap lTypeProps(xTypeCont->getByName(sType));
@@ -833,7 +834,7 @@ void LoadEnv::impl_detectTypeAndFilter()
     bool bIsOwnTemplate = false;
     if (!sFilter.isEmpty())
     {
-        css::uno::Reference< css::container::XNameAccess > xFilterCont(xContext->getServiceManager()->createInstanceWithContext(SERVICENAME_FILTERFACTORY, xContext), css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference< css::container::XNameAccess > xFilterCont(xContext->getServiceManager()->createInstanceWithContext(SERVICENAME_FILTERFACTORY, xContext), cpo::uno::UNO_QUERY_THROW);
         try
         {
             ::comphelper::SequenceAsHashMap lFilterProps(xFilterCont->getByName(sFilter));
@@ -872,7 +873,7 @@ bool LoadEnv::impl_handleContent()
     css::util::URL aURL = m_aURL;
 
     // get necessary container to query for a handler object
-    css::uno::Reference< css::frame::XLoaderFactory > xLoaderFactory = css::frame::ContentHandlerFactory::create(m_xContext);
+    cpo::uno::Reference< css::frame::XLoaderFactory > xLoaderFactory = css::frame::ContentHandlerFactory::create(m_xContext);
 
     aReadLock.clear();
     // <- SAFE -----------------------------------
@@ -882,16 +883,16 @@ bool LoadEnv::impl_handleContent()
 
     cpo::uno::Sequence< css::beans::NamedValue > lQuery { { PROP_TYPES, cpo::uno::Any(lTypeReg) } };
 
-    css::uno::Reference< css::container::XEnumeration > xSet = xLoaderFactory->createSubSetEnumerationByProperties(lQuery);
+    cpo::uno::Reference< css::container::XEnumeration > xSet = xLoaderFactory->createSubSetEnumerationByProperties(lQuery);
     while(xSet->hasMoreElements())
     {
         ::comphelper::SequenceAsHashMap lProps   (xSet->nextElement());
         OUString                 sHandler = lProps.getUnpackedValueOrDefault(PROP_NAME, OUString());
 
-        css::uno::Reference< css::frame::XNotifyingDispatch > xHandler;
+        cpo::uno::Reference< css::frame::XNotifyingDispatch > xHandler;
         try
         {
-            xHandler.set(xLoaderFactory->createInstance(sHandler), css::uno::UNO_QUERY);
+            xHandler.set(xLoaderFactory->createInstance(sHandler), cpo::uno::UNO_QUERY);
             if (!xHandler.is())
                 continue;
         }
@@ -919,7 +920,7 @@ bool LoadEnv::impl_furtherDocsAllowed()
 {
     // SAFE ->
     osl::ResettableMutexGuard aReadLock(m_mutex);
-    css::uno::Reference< cpo::uno::XComponentContext > xContext = m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext > xContext = m_xContext;
     aReadLock.clear();
     // <- SAFE
 
@@ -937,12 +938,12 @@ bool LoadEnv::impl_furtherDocsAllowed()
         {
             sal_Int32 nMaxOpenDocuments(*x);
 
-            css::uno::Reference< css::frame::XFramesSupplier > xDesktop(
+            cpo::uno::Reference< css::frame::XFramesSupplier > xDesktop(
                 css::frame::Desktop::create(xContext),
-                css::uno::UNO_QUERY_THROW);
+                cpo::uno::UNO_QUERY_THROW);
 
             FrameListAnalyzer aAnalyzer(xDesktop,
-                                        css::uno::Reference< css::frame::XFrame >(),
+                                        cpo::uno::Reference< css::frame::XFrame >(),
                                         FrameAnalyzerFlags::Help |
                                         FrameAnalyzerFlags::BackingComponent |
                                         FrameAnalyzerFlags::Hidden);
@@ -958,9 +959,9 @@ bool LoadEnv::impl_furtherDocsAllowed()
     {
         // SAFE ->
         aReadLock.reset();
-        css::uno::Reference< css::task::XInteractionHandler > xInteraction = m_lMediaDescriptor.getUnpackedValueOrDefault(
+        cpo::uno::Reference< css::task::XInteractionHandler > xInteraction = m_lMediaDescriptor.getUnpackedValueOrDefault(
                                                                                 utl::MediaDescriptor::PROP_INTERACTIONHANDLER,
-                                                                                css::uno::Reference< css::task::XInteractionHandler >());
+                                                                                cpo::uno::Reference< css::task::XInteractionHandler >());
         aReadLock.clear();
         // <- SAFE
 
@@ -971,7 +972,7 @@ bool LoadEnv::impl_furtherDocsAllowed()
             rtl::Reference<comphelper::OInteractionAbort>   pAbort   = new comphelper::OInteractionAbort();
             rtl::Reference<comphelper::OInteractionApprove> pApprove = new comphelper::OInteractionApprove();
 
-            cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > lContinuations{
+            cpo::uno::Sequence< cpo::uno::Reference< css::task::XInteractionContinuation > > lContinuations{
                 pAbort, pApprove
             };
 
@@ -1003,8 +1004,8 @@ bool LoadEnv::impl_filterHasInteractiveDialog() const
 
     // unless (tdf#115683) the filter has a UIComponent
     OUString sUIComponent;
-    css::uno::Reference<css::container::XNameAccess> xFilterCont(m_xContext->getServiceManager()->createInstanceWithContext(SERVICENAME_FILTERFACTORY, m_xContext),
-                                                                 css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::container::XNameAccess> xFilterCont(m_xContext->getServiceManager()->createInstanceWithContext(SERVICENAME_FILTERFACTORY, m_xContext),
+                                                                 cpo::uno::UNO_QUERY_THROW);
     try
     {
         ::comphelper::SequenceAsHashMap lFilterProps(xFilterCont->getByName(sFilter));
@@ -1070,7 +1071,7 @@ bool LoadEnv::impl_loadContent()
        )
         throw LoadEnvException(LoadEnvException::ID_NO_TARGET_FOUND);
 
-    css::uno::Reference< css::frame::XFrame > xTargetFrame = m_xTargetFrame;
+    cpo::uno::Reference< css::frame::XFrame > xTargetFrame = m_xTargetFrame;
 
     // Now we have a valid frame ... and type detection was already done.
     // We should apply the module dependent window position and size to the
@@ -1089,7 +1090,7 @@ bool LoadEnv::impl_loadContent()
     // Note further: ignore if this internal guard already contains a resource.
     // Might impl_searchRecycleTarget() set it before. But in case this impl-method wasn't used
     // and the target frame was new created ... this lock here must be set!
-    css::uno::Reference< css::document::XActionLockable > xTargetLock(xTargetFrame, css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::document::XActionLockable > xTargetLock(xTargetFrame, cpo::uno::UNO_QUERY);
     m_aTargetLock.setResource(xTargetLock);
 
     // Add status indicator to descriptor. Loader can show a progress then.
@@ -1104,12 +1105,12 @@ bool LoadEnv::impl_loadContent()
 
     if (!bHidden && !bMinimized && !bPreview && !bStartPres)
     {
-        css::uno::Reference<css::task::XStatusIndicator> xProgress = m_lMediaDescriptor.getUnpackedValueOrDefault(
-            utl::MediaDescriptor::PROP_STATUSINDICATOR, css::uno::Reference<css::task::XStatusIndicator>());
+        cpo::uno::Reference<css::task::XStatusIndicator> xProgress = m_lMediaDescriptor.getUnpackedValueOrDefault(
+            utl::MediaDescriptor::PROP_STATUSINDICATOR, cpo::uno::Reference<css::task::XStatusIndicator>());
         if (!xProgress.is())
         {
             // Note: it's an optional interface!
-            css::uno::Reference< css::task::XStatusIndicatorFactory > xProgressFactory(xTargetFrame, css::uno::UNO_QUERY);
+            cpo::uno::Reference< css::task::XStatusIndicatorFactory > xProgressFactory(xTargetFrame, cpo::uno::UNO_QUERY);
             if (xProgressFactory.is())
             {
                 xProgress = xProgressFactory->createStatusIndicator();
@@ -1120,13 +1121,13 @@ bool LoadEnv::impl_loadContent()
 
         // Now that we have a target window into which we can load, reinit the interaction handler to have this
         // window as its parent for modal dialogs and ensure the window is visible
-        css::uno::Reference< css::task::XInteractionHandler > xInteraction = m_lMediaDescriptor.getUnpackedValueOrDefault(
+        cpo::uno::Reference< css::task::XInteractionHandler > xInteraction = m_lMediaDescriptor.getUnpackedValueOrDefault(
                                                                                 utl::MediaDescriptor::PROP_INTERACTIONHANDLER,
-                                                                                css::uno::Reference< css::task::XInteractionHandler >());
-        css::uno::Reference<css::lang::XInitialization> xHandler(xInteraction, css::uno::UNO_QUERY);
+                                                                                cpo::uno::Reference< css::task::XInteractionHandler >());
+        cpo::uno::Reference<css::lang::XInitialization> xHandler(xInteraction, cpo::uno::UNO_QUERY);
         if (xHandler.is())
         {
-            css::uno::Reference<css::awt::XWindow> xWindow = xTargetFrame->getContainerWindow();
+            cpo::uno::Reference<css::awt::XWindow> xWindow = xTargetFrame->getContainerWindow();
             cpo::uno::Sequence<cpo::uno::Any> aArguments(comphelper::InitAnyPropertySequence(
             {
                 {u"Parent"_ustr, cpo::uno::Any(xWindow)}
@@ -1147,9 +1148,9 @@ bool LoadEnv::impl_loadContent()
     OUString sURL = m_aURL.Complete;
 
     // try to locate any interested frame loader
-    css::uno::Reference< cpo::uno::XInterface >                xLoader     = impl_searchLoader();
-    css::uno::Reference< css::frame::XFrameLoader >            xAsyncLoader(xLoader, css::uno::UNO_QUERY);
-    css::uno::Reference< css::frame::XSynchronousFrameLoader > xSyncLoader (xLoader, css::uno::UNO_QUERY);
+    cpo::uno::Reference< cpo::uno::XInterface >                xLoader     = impl_searchLoader();
+    cpo::uno::Reference< css::frame::XFrameLoader >            xAsyncLoader(xLoader, cpo::uno::UNO_QUERY);
+    cpo::uno::Reference< css::frame::XSynchronousFrameLoader > xSyncLoader (xLoader, cpo::uno::UNO_QUERY);
 
     if (xAsyncLoader.is())
     {
@@ -1186,7 +1187,7 @@ bool LoadEnv::impl_loadContent()
     return false;
 }
 
-css::uno::Reference< cpo::uno::XInterface > LoadEnv::impl_searchLoader()
+cpo::uno::Reference< cpo::uno::XInterface > LoadEnv::impl_searchLoader()
 {
     // SAFE -> -----------------------------------
     osl::ClearableMutexGuard aReadLock(m_mutex);
@@ -1215,7 +1216,7 @@ css::uno::Reference< cpo::uno::XInterface > LoadEnv::impl_searchLoader()
         throw LoadEnvException(LoadEnvException::ID_INVALID_MEDIADESCRIPTOR);
 
     // try to locate any interested frame loader
-    css::uno::Reference< css::frame::XLoaderFactory > xLoaderFactory = css::frame::FrameLoaderFactory::create(m_xContext);
+    cpo::uno::Reference< css::frame::XLoaderFactory > xLoaderFactory = css::frame::FrameLoaderFactory::create(m_xContext);
 
     aReadLock.clear();
     // <- SAFE -----------------------------------
@@ -1224,7 +1225,7 @@ css::uno::Reference< cpo::uno::XInterface > LoadEnv::impl_searchLoader()
 
     cpo::uno::Sequence< css::beans::NamedValue > lQuery { { PROP_TYPES, cpo::uno::Any(lTypesReg) } };
 
-    css::uno::Reference< css::container::XEnumeration > xSet = xLoaderFactory->createSubSetEnumerationByProperties(lQuery);
+    cpo::uno::Reference< css::container::XEnumeration > xSet = xLoaderFactory->createSubSetEnumerationByProperties(lQuery);
     while(xSet->hasMoreElements())
     {
         try
@@ -1233,7 +1234,7 @@ css::uno::Reference< cpo::uno::XInterface > LoadEnv::impl_searchLoader()
             // Ignore any loader, which makes trouble :-)
             ::comphelper::SequenceAsHashMap             lLoaderProps(xSet->nextElement());
             OUString                             sLoader     = lLoaderProps.getUnpackedValueOrDefault(PROP_NAME, OUString());
-            css::uno::Reference< cpo::uno::XInterface > xLoader = xLoaderFactory->createInstance(sLoader);
+            cpo::uno::Reference< cpo::uno::XInterface > xLoader = xLoaderFactory->createInstance(sLoader);
             if (xLoader.is())
                 return xLoader;
         }
@@ -1243,32 +1244,32 @@ css::uno::Reference< cpo::uno::XInterface > LoadEnv::impl_searchLoader()
             { continue; }
     }
 
-    return css::uno::Reference< cpo::uno::XInterface >();
+    return cpo::uno::Reference< cpo::uno::XInterface >();
 }
 
-void LoadEnv::impl_jumpToMark(const css::uno::Reference< css::frame::XFrame >& xFrame,
+void LoadEnv::impl_jumpToMark(const cpo::uno::Reference< css::frame::XFrame >& xFrame,
                               const css::util::URL&                            aURL  )
 {
     if (aURL.Mark.isEmpty())
         return;
 
-    css::uno::Reference< css::frame::XDispatchProvider > xProvider(xFrame, css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::frame::XDispatchProvider > xProvider(xFrame, cpo::uno::UNO_QUERY);
     if (! xProvider.is())
         return;
 
     // SAFE ->
     osl::ClearableMutexGuard aReadLock(m_mutex);
-    css::uno::Reference< cpo::uno::XComponentContext > xContext = m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext > xContext = m_xContext;
     aReadLock.clear();
     // <- SAFE
 
     css::util::URL aCmd;
     aCmd.Complete = u".uno:JumpToMark"_ustr;
 
-    css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(xContext));
+    cpo::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(xContext));
     xParser->parseStrict(aCmd);
 
-    css::uno::Reference< css::frame::XDispatch > xDispatcher = xProvider->queryDispatch(aCmd, SPECIALTARGET_SELF, 0);
+    cpo::uno::Reference< css::frame::XDispatch > xDispatcher = xProvider->queryDispatch(aCmd, SPECIALTARGET_SELF, 0);
     if (! xDispatcher.is())
         return;
 
@@ -1277,7 +1278,7 @@ void LoadEnv::impl_jumpToMark(const css::uno::Reference< css::frame::XFrame >& x
     xDispatcher->dispatch(aCmd, lArgs.getAsConstPropertyValueList());
 }
 
-css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
+cpo::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
 {
     osl::MutexGuard g(m_mutex);
 
@@ -1290,7 +1291,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
         m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_OPENNEWVIEW, false)
        )
     {
-        return css::uno::Reference< css::frame::XFrame >();
+        return cpo::uno::Reference< css::frame::XFrame >();
     }
 
     // check URL
@@ -1302,16 +1303,16 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
         /*TODO should be private:factory here tested too? */
        )
     {
-        return css::uno::Reference< css::frame::XFrame >();
+        return cpo::uno::Reference< css::frame::XFrame >();
     }
 
     // otherwise - iterate through the tasks of the desktop container
     // to find out, which of them might contains the requested document
-    css::uno::Reference< css::frame::XDesktop2 >  xSupplier = css::frame::Desktop::create( m_xContext );
-    css::uno::Reference< css::container::XIndexAccess > xTaskList = xSupplier->getFrames();
+    cpo::uno::Reference< css::frame::XDesktop2 >  xSupplier = css::frame::Desktop::create( m_xContext );
+    cpo::uno::Reference< css::container::XIndexAccess > xTaskList = xSupplier->getFrames();
 
     if (!xTaskList.is())
-        return css::uno::Reference< css::frame::XFrame >(); // task list can be empty!
+        return cpo::uno::Reference< css::frame::XFrame >(); // task list can be empty!
 
     // Note: To detect if a document was already loaded before
     // we check URLs here only. But might the existing and the required
@@ -1321,8 +1322,8 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
     // will be used to save the first hidden frame referring the searched model
     // Normally we are interested on visible frames... but if there is no such visible
     // frame we refer to any hidden frame also (but as fallback only).
-    css::uno::Reference< css::frame::XFrame > xHiddenTask;
-    css::uno::Reference< css::frame::XFrame > xTask;
+    cpo::uno::Reference< css::frame::XFrame > xHiddenTask;
+    cpo::uno::Reference< css::frame::XFrame > xTask;
 
     sal_Int32 count = xTaskList->getCount();
     for (sal_Int32 i=0; i<count; ++i)
@@ -1337,7 +1338,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
                 continue;
 
             OUString sURL;
-            css::uno::Reference< css::frame::XController > xController = xTask->getController();
+            cpo::uno::Reference< css::frame::XController > xController = xTask->getController();
             if (!xController.is())
             {
                 // If we have no controller, then perhaps there is a load in progress. The frame
@@ -1413,7 +1414,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
             { continue; }
     }
 
-    css::uno::Reference< css::frame::XFrame > xResult;
+    cpo::uno::Reference< css::frame::XFrame > xResult;
     if (xTask.is())
         xResult = std::move(xTask);
     else if (xHiddenTask.is())
@@ -1432,9 +1433,9 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
 }
 
 // static
-bool LoadEnv::impl_isFrameAlreadyUsedForLoading(const css::uno::Reference< css::frame::XFrame >& xFrame)
+bool LoadEnv::impl_isFrameAlreadyUsedForLoading(const cpo::uno::Reference< css::frame::XFrame >& xFrame)
 {
-    css::uno::Reference< css::document::XActionLockable > xLock(xFrame, css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::document::XActionLockable > xLock(xFrame, cpo::uno::UNO_QUERY);
 
     // ? no lock interface ?
     // Maybe it's an external written frame implementation :-(
@@ -1446,7 +1447,7 @@ bool LoadEnv::impl_isFrameAlreadyUsedForLoading(const css::uno::Reference< css::
     return xLock->isActionLocked();
 }
 
-css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
+cpo::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
 {
     // SAFE -> ..................................
     osl::ClearableMutexGuard aReadLock(m_mutex);
@@ -1456,10 +1457,10 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
     // or open a new untitled document...
     // The only exception from that - hidden frames!
     if (m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_HIDDEN, false))
-        return css::uno::Reference< css::frame::XFrame >();
+        return cpo::uno::Reference< css::frame::XFrame >();
 
-    css::uno::Reference< css::frame::XFramesSupplier > xSupplier = css::frame::Desktop::create( m_xContext );
-    FrameListAnalyzer aTasksAnalyzer(xSupplier, css::uno::Reference< css::frame::XFrame >(), FrameAnalyzerFlags::BackingComponent);
+    cpo::uno::Reference< css::frame::XFramesSupplier > xSupplier = css::frame::Desktop::create( m_xContext );
+    FrameListAnalyzer aTasksAnalyzer(xSupplier, cpo::uno::Reference< css::frame::XFrame >(), FrameAnalyzerFlags::BackingComponent);
     if (aTasksAnalyzer.m_xBackingComponent.is())
     {
         if (!impl_isFrameAlreadyUsedForLoading(aTasksAnalyzer.m_xBackingComponent))
@@ -1475,7 +1476,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
         m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_OPENNEWVIEW, false)
        )
     {
-        return css::uno::Reference< css::frame::XFrame >();
+        return cpo::uno::Reference< css::frame::XFrame >();
     }
 
     // On the other side some special URLs will open a new frame every time (expecting
@@ -1486,27 +1487,27 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
         (ProtocolCheck::isProtocol(m_aURL.Complete, EProtocol::PrivateObject  ))
        )
     {
-        return css::uno::Reference< css::frame::XFrame >();
+        return cpo::uno::Reference< css::frame::XFrame >();
     }
 
     // No backing frame! No special URL => recycle active task - if possible.
     // Means - if it does not already contains a modified document, or
     // use another office module.
-    css::uno::Reference< css::frame::XFrame > xTask = xSupplier->getActiveFrame();
+    cpo::uno::Reference< css::frame::XFrame > xTask = xSupplier->getActiveFrame();
 
     // not a real error - but might a focus problem!
     if (!xTask.is())
-        return css::uno::Reference< css::frame::XFrame >();
+        return cpo::uno::Reference< css::frame::XFrame >();
 
     // not a real error - may it's a view only
-    css::uno::Reference< css::frame::XController > xController = xTask->getController();
+    cpo::uno::Reference< css::frame::XController > xController = xTask->getController();
     if (!xController.is())
-        return css::uno::Reference< css::frame::XFrame >();
+        return cpo::uno::Reference< css::frame::XFrame >();
 
     // not a real error - may it's a db component instead of a full featured office document
-    css::uno::Reference< css::frame::XModel > xModel = xController->getModel();
+    cpo::uno::Reference< css::frame::XModel > xModel = xController->getModel();
     if (!xModel.is())
-        return css::uno::Reference< css::frame::XFrame >();
+        return cpo::uno::Reference< css::frame::XFrame >();
 
     // get some more information ...
 
@@ -1514,16 +1515,16 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
     // => it was saved there or opened from there. Such Documents can not be used here.
     // We search for empty document ... created by a private:factory/ URL!
     if (xModel->getURL().getLength()>0)
-        return css::uno::Reference< css::frame::XFrame >();
+        return cpo::uno::Reference< css::frame::XFrame >();
 
     // The old document must be unmodified ...
-    css::uno::Reference< css::util::XModifiable > xModified(xModel, css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::util::XModifiable > xModified(xModel, cpo::uno::UNO_QUERY);
     if (xModified->isModified())
-        return css::uno::Reference< css::frame::XFrame >();
+        return cpo::uno::Reference< css::frame::XFrame >();
 
     VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(xTask->getContainerWindow());
     if (pWindow && pWindow->IsInModalMode())
-        return css::uno::Reference< css::frame::XFrame >();
+        return cpo::uno::Reference< css::frame::XFrame >();
 
     // find out the application type of this document
     // We can recycle only documents, which uses the same application
@@ -1535,7 +1536,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
     // <- SAFE ..................................
 
     if (eOldApp != eNewApp)
-        return css::uno::Reference< css::frame::XFrame >();
+        return cpo::uno::Reference< css::frame::XFrame >();
 
     // OK this task seems to be usable for recycling
     // But we should mark it as such - means set an action lock.
@@ -1544,33 +1545,33 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
     // But if such lock already exist ... it means this task is used for
     // any other operation already. Don't use it then.
     if (impl_isFrameAlreadyUsedForLoading(xTask))
-        return css::uno::Reference< css::frame::XFrame >();
+        return cpo::uno::Reference< css::frame::XFrame >();
 
     // OK - there is a valid target frame.
     // But may be it contains already a document.
     // Then we have to ask it, if it allows recycling of this frame .-)
     bool bReactivateOldControllerOnError = false;
-    css::uno::Reference< css::frame::XController > xOldDoc = xTask->getController();
+    cpo::uno::Reference< css::frame::XController > xOldDoc = xTask->getController();
     if (xOldDoc.is())
     {
         comphelper::SequenceAsHashMap lOldDocDescriptor(xModel->getArgs());
 
         // replaceable document
         if (!lOldDocDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_REPLACEABLE, false))
-            return css::uno::Reference< css::frame::XFrame >();
+            return cpo::uno::Reference< css::frame::XFrame >();
 
         bReactivateOldControllerOnError = xOldDoc->suspend(true);
         if (! bReactivateOldControllerOnError)
-            return css::uno::Reference< css::frame::XFrame >();
+            return cpo::uno::Reference< css::frame::XFrame >();
     }
 
     // SAFE -> ..................................
     {
         osl::MutexGuard aWriteLock(m_mutex);
 
-        css::uno::Reference< css::document::XActionLockable > xLock(xTask, css::uno::UNO_QUERY);
+        cpo::uno::Reference< css::document::XActionLockable > xLock(xTask, cpo::uno::UNO_QUERY);
         if (!m_aTargetLock.setResource(xLock))
-            return css::uno::Reference< css::frame::XFrame >();
+            return cpo::uno::Reference< css::frame::XFrame >();
 
         m_bReactivateControllerOnError = bReactivateOldControllerOnError;
     }
@@ -1591,7 +1592,7 @@ void LoadEnv::impl_reactForLoadingState()
         // Bring the new loaded document to front (if allowed!).
         // Note: We show new created frames here only.
         // We don't hide already visible frames here ...
-        css::uno::Reference< css::awt::XWindow > xWindow      = m_xTargetFrame->getContainerWindow();
+        cpo::uno::Reference< css::awt::XWindow > xWindow      = m_xTargetFrame->getContainerWindow();
         bool                                 bHidden      = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_HIDDEN, false);
         bool                                 bMinimized = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_MINIMIZED, false);
         bool                                 bStartPres = m_lMediaDescriptor.contains(u"StartPresentation"_ustr);
@@ -1632,7 +1633,7 @@ void LoadEnv::impl_reactForLoadingState()
     else if (m_bReactivateControllerOnError)
     {
         // Try to reactivate the old document (if any exists!)
-        css::uno::Reference< css::frame::XController > xOldDoc = m_xTargetFrame->getController();
+        cpo::uno::Reference< css::frame::XController > xOldDoc = m_xTargetFrame->getController();
         // clear does not depend from reactivation state of a might existing old document!
         // We must make sure, that a might following getTargetComponent() call does not return
         // the old document!
@@ -1648,7 +1649,7 @@ void LoadEnv::impl_reactForLoadingState()
     else if (m_bCloseFrameOnError)
     {
         // close empty frames
-        css::uno::Reference< css::util::XCloseable > xCloseable (m_xTargetFrame, css::uno::UNO_QUERY);
+        cpo::uno::Reference< css::util::XCloseable > xCloseable (m_xTargetFrame, cpo::uno::UNO_QUERY);
 
         try
         {
@@ -1708,7 +1709,7 @@ bool LoadEnv::shouldFocusAndToFront() const
 }
 
 // static
-void LoadEnv::impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::XWindow >& xWindow      ,
+void LoadEnv::impl_makeFrameWindowVisible(const cpo::uno::Reference< css::awt::XWindow >& xWindow      ,
                                                 bool bForceToFront)
 {
     SolarMutexGuard aSolarGuard;
@@ -1722,7 +1723,7 @@ void LoadEnv::impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::X
         pWindow->Show(true, bForceToFront ? ShowFlags::ForegroundTask : ShowFlags::NONE);
 }
 
-void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::awt::XWindow >& xWindow)
+void LoadEnv::impl_applyPersistentWindowState(const cpo::uno::Reference< css::awt::XWindow >& xWindow)
 {
     // no window -> action not possible
     if (!xWindow.is())
@@ -1730,7 +1731,7 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
 
     // window already visible -> do nothing! If we use a "recycle frame" for loading ...
     // the current position and size must be used.
-    css::uno::Reference< css::awt::XWindow2 > xVisibleCheck(xWindow, css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::awt::XWindow2 > xVisibleCheck(xWindow, cpo::uno::UNO_QUERY);
     if (
         (xVisibleCheck.is()        ) &&
         (xVisibleCheck->isVisible())
@@ -1768,7 +1769,7 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
     if (sFilter.isEmpty())
         return;
 
-    css::uno::Reference< cpo::uno::XComponentContext > xContext = m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext > xContext = m_xContext;
 
     aReadLock.clear();
     // <- SAFE
@@ -1776,14 +1777,14 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
     try
     {
         // retrieve the module name from the filter configuration
-        css::uno::Reference< css::container::XNameAccess > xFilterCfg(
+        cpo::uno::Reference< css::container::XNameAccess > xFilterCfg(
             xContext->getServiceManager()->createInstanceWithContext(SERVICENAME_FILTERFACTORY, xContext),
-            css::uno::UNO_QUERY_THROW);
+            cpo::uno::UNO_QUERY_THROW);
         ::comphelper::SequenceAsHashMap lProps (xFilterCfg->getByName(sFilter));
         OUString                 sModule = lProps.getUnpackedValueOrDefault(FILTER_PROPNAME_ASCII_DOCUMENTSERVICE, OUString());
 
         // get access to the configuration of this office module
-        css::uno::Reference< css::container::XNameAccess > xModuleCfg(officecfg::Setup::Office::Factories::get());
+        cpo::uno::Reference< css::container::XNameAccess > xModuleCfg(officecfg::Setup::Office::Factories::get());
 
         // read window state from the configuration
         // and apply it on the window.

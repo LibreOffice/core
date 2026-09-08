@@ -33,8 +33,8 @@
 #include <editeng/eerdll.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 SwPageFootnoteInfoItem::SwPageFootnoteInfoItem( SwPageFootnoteInfo const & rInfo) :
     SfxPoolItem( FN_PARAM_FTN_INFO ),

@@ -31,6 +31,7 @@
 #include <com/sun/star/awt/XExtendedToolkit.hpp>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 uno::Reference < i18n::XBreakIterator > vcl::unohelper::CreateBreakIterator()
 {

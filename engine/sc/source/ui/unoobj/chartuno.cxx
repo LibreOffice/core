@@ -51,6 +51,7 @@
 #include <convuno.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 #define PROP_HANDLE_RELATED_CELLRANGES  1
 

@@ -25,7 +25,7 @@
 #include <xmloff/unoatrcn.hxx>
 #include <editeng/xmlcnitm.hxx>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::xml;

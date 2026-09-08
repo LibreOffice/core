@@ -51,8 +51,8 @@ namespace dbp
     public:
         OListComboWizard(
             weld::Window* pParent,
-            const css::uno::Reference< css::beans::XPropertySet >& _rxObjectModel,
-            const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext
+            const cpo::uno::Reference< css::beans::XPropertySet >& _rxObjectModel,
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxContext
         );
 
         OListComboSettings& getSettings() { return m_aSettings; }
@@ -87,7 +87,7 @@ namespace dbp
         bool isListBox() { return static_cast<OListComboWizard*>(getDialog())->isListBox(); }
 
     protected:
-        css::uno::Reference< css::container::XNameAccess >  getTables() const;
+        cpo::uno::Reference< css::container::XNameAccess >  getTables() const;
         cpo::uno::Sequence< OUString >                      getTableFields();
     };
 

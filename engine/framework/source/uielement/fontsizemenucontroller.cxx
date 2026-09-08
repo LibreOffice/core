@@ -41,7 +41,7 @@
 
 //  Defines
 
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::frame;
@@ -67,7 +67,7 @@ cpo::uno::Sequence< OUString > FontSizeMenuController::getSupportedServiceNames(
     return { SERVICENAME_POPUPMENUCONTROLLER };
 }
 
-FontSizeMenuController::FontSizeMenuController( const css::uno::Reference< cpo::uno::XComponentContext >& xContext ) :
+FontSizeMenuController::FontSizeMenuController( const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext ) :
     svt::PopupMenuControllerBase( xContext )
 {
 }
@@ -77,7 +77,7 @@ FontSizeMenuController::~FontSizeMenuController()
 }
 
 // private function
-OUString FontSizeMenuController::retrievePrinterName( css::uno::Reference< css::frame::XFrame > const & rFrame )
+OUString FontSizeMenuController::retrievePrinterName( cpo::uno::Reference< css::frame::XFrame > const & rFrame )
 {
     OUString aPrinterName;
 

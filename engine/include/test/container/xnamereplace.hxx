@@ -15,7 +15,7 @@
 
 #include <cpo/uno/XInterface.hpp>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Any.hxx>
 #include <utility>
 
@@ -29,7 +29,7 @@ public:
     {
     }
 
-    virtual css::uno::Reference<cpo::uno::XInterface> init() = 0;
+    virtual cpo::uno::Reference<cpo::uno::XInterface> init() = 0;
     void testReplaceByName();
 
     void setElement(const cpo::uno::Any& rElement) { m_aReplacementElement = rElement; }

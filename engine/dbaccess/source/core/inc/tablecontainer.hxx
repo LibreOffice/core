@@ -40,7 +40,7 @@ namespace dbaccess
     class OTableContainer :  public OFilteredContainer,
                              public ::cppu::ImplHelper1< css::container::XContainerListener>
     {
-        css::uno::Reference< css::container::XNameContainer > m_xTableDefinitions;
+        cpo::uno::Reference< css::container::XNameContainer > m_xTableDefinitions;
         ::rtl::Reference< OContainerMediator >                m_pTableMediator;
 
         // OFilteredContainer
@@ -49,9 +49,9 @@ namespace dbaccess
         virtual OUString getTableTypeRestriction() const override;
 
         // ::connectivity::sdbcx::OCollection
-        virtual css::uno::Reference< css::beans::XPropertySet >     createObject(const OUString& _rName) override;
-        virtual css::uno::Reference< css::beans::XPropertySet >   createDescriptor() override;
-        virtual css::uno::Reference< css::beans::XPropertySet > appendObject( const OUString& _rForName, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
+        virtual cpo::uno::Reference< css::beans::XPropertySet >     createObject(const OUString& _rName) override;
+        virtual cpo::uno::Reference< css::beans::XPropertySet >   createDescriptor() override;
+        virtual cpo::uno::Reference< css::beans::XPropertySet > appendObject( const OUString& _rForName, const cpo::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
         virtual void dropObject(sal_Int32 _nPos, const OUString& _sElementName) override;
 
         virtual void disposing() override;
@@ -81,9 +81,9 @@ namespace dbaccess
         */
         OTableContainer( ::cppu::OWeakObject& _rParent,
             ::osl::Mutex& _rMutex,
-            const css::uno::Reference< css::sdbc::XConnection >& _xCon,
+            const cpo::uno::Reference< css::sdbc::XConnection >& _xCon,
             bool _bCase,
-            const css::uno::Reference< css::container::XNameContainer >&  _xTableDefinitions,
+            const cpo::uno::Reference< css::container::XNameContainer >&  _xTableDefinitions,
             IRefreshListener*   _pRefreshListener,
             std::atomic<std::size_t>& _nInAppend
             );

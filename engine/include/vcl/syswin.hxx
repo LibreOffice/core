@@ -153,7 +153,7 @@ protected:
     // Single argument ctors shall be explicit.
     SAL_DLLPRIVATE explicit SystemWindow(
         WindowType eType, const char* pIdleDebugName, bool transferableIdle = false);
-    SAL_DLLPRIVATE void loadUI(vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame> &rFrame = css::uno::Reference<css::frame::XFrame>());
+    SAL_DLLPRIVATE void loadUI(vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription, const cpo::uno::Reference<css::frame::XFrame> &rFrame = cpo::uno::Reference<css::frame::XFrame>());
 
     SAL_DLLPRIVATE void SetWindowState(const vcl::WindowData& rData);
 

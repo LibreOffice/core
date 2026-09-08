@@ -19,7 +19,7 @@
 
 #include <doc.hxx>
 #include <docsh.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/frame/XModule.hpp>
 #include <com/sun/star/xforms/Model.hpp>
 #include <com/sun/star/xforms/XModel2.hpp>
@@ -30,6 +30,7 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 using uno::Reference;
 using uno::UNO_QUERY;
@@ -59,7 +60,7 @@ void SwDoc::initXForms( bool bCreateDefaultModel )
         Reference< XModule > xModule;
         SwDocShell* pShell( GetDocShell() );
         if ( pShell )
-            xModule.set(pShell->GetModel(), css::uno::UNO_QUERY);
+            xModule.set(pShell->GetModel(), cpo::uno::UNO_QUERY);
         OSL_ENSURE( xModule.is(), "SwDoc::initXForms: no XModule at the document!" );
         if ( xModule.is() )
             xModule->setIdentifier( u"com.sun.star.xforms.XMLFormDocument"_ustr );

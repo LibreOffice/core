@@ -36,6 +36,7 @@
 
 using namespace ::ooo::vba;
 using namespace css;
+using namespace ::cpo;
 
 static cpo::uno::Any lcl_createTable( const uno::Reference< XHelperInterface >& xParent,
                                  const uno::Reference< cpo::uno::XComponentContext >& xContext,

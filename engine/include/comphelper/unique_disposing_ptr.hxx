@@ -28,12 +28,12 @@ template<class T> class unique_disposing_ptr
 {
 private:
     std::unique_ptr<T, o3tl::default_delete<T>> m_xItem;
-    css::uno::Reference< css::frame::XTerminateListener> m_xTerminateListener;
+    cpo::uno::Reference< css::frame::XTerminateListener> m_xTerminateListener;
 
     unique_disposing_ptr(const unique_disposing_ptr&) = delete;
     unique_disposing_ptr& operator=(const unique_disposing_ptr&) = delete;
 public:
-    unique_disposing_ptr( const css::uno::Reference< css::lang::XComponent > &rComponent, T * p = nullptr, bool bComponent = false)
+    unique_disposing_ptr( const cpo::uno::Reference< css::lang::XComponent > &rComponent, T * p = nullptr, bool bComponent = false)
         : m_xItem(p)
     {
         m_xTerminateListener = new TerminateListener(rComponent, *this, bComponent);
@@ -73,11 +73,11 @@ private:
                                             css::lang::XServiceInfo>
     {
     private:
-        css::uno::Reference< css::lang::XComponent > m_xComponent;
+        cpo::uno::Reference< css::lang::XComponent > m_xComponent;
         unique_disposing_ptr<T>& m_rItem;
         bool const mbComponentDLL;
     public:
-        TerminateListener(css::uno::Reference< css::lang::XComponent > xComponent,
+        TerminateListener(cpo::uno::Reference< css::lang::XComponent > xComponent,
             unique_disposing_ptr<T>& rItem, bool bComponentDLL) :
                     m_xComponent(std::move(xComponent)),
                     m_rItem(rItem),
@@ -85,7 +85,7 @@ private:
         {
             if (m_xComponent.is())
             {
-                css::uno::Reference< css::frame::XDesktop> xDesktop(m_xComponent, css::uno::UNO_QUERY);
+                cpo::uno::Reference< css::frame::XDesktop> xDesktop(m_xComponent, cpo::uno::UNO_QUERY);
                 if (xDesktop.is())
                     xDesktop->addTerminateListener(this);
                 else
@@ -97,7 +97,7 @@ private:
         {
             if ( m_xComponent.is() )
             {
-                css::uno::Reference< css::frame::XDesktop> xDesktop(m_xComponent, css::uno::UNO_QUERY);
+                cpo::uno::Reference< css::frame::XDesktop> xDesktop(m_xComponent, cpo::uno::UNO_QUERY);
                 if (xDesktop.is())
                     xDesktop->removeTerminateListener(this);
                 else
@@ -112,7 +112,7 @@ private:
 
             if (shutDown && m_xComponent.is())
             {
-                css::uno::Reference< css::frame::XDesktop> xDesktop(m_xComponent, css::uno::UNO_QUERY);
+                cpo::uno::Reference< css::frame::XDesktop> xDesktop(m_xComponent, cpo::uno::UNO_QUERY);
                 if (xDesktop.is())
                     xDesktop->removeTerminateListener(this);
                 else
@@ -162,7 +162,7 @@ template<class T> class unique_disposing_solar_mutex_reset_ptr
     : public unique_disposing_ptr<T>
 {
 public:
-    unique_disposing_solar_mutex_reset_ptr( const css::uno::Reference< css::lang::XComponent > &rComponent, T * p = nullptr, bool bComponent = false)
+    unique_disposing_solar_mutex_reset_ptr( const cpo::uno::Reference< css::lang::XComponent > &rComponent, T * p = nullptr, bool bComponent = false)
         : unique_disposing_ptr<T>(rComponent, p, bComponent)
     {
     }

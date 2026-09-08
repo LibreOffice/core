@@ -47,7 +47,7 @@ namespace frm
             @throws css::sdbc::SQLException
                 if such an exception is thrown when executing the statement
         */
-        css::uno::Reference< css::sdbc::XResultSet >
+        cpo::uno::Reference< css::sdbc::XResultSet >
                 execute();
 
         /// determines whether the row set properties are dirty, i.e. have changed since the last call to execute
@@ -66,7 +66,7 @@ namespace frm
 
         void    setCommand          ( const OUString& _rCommand );
         void    setEscapeProcessing ( const bool _bEscapeProcessing );
-        void    setConnection       ( const css::uno::Reference< css::sdbc::XConnection >& _rxConnection );
+        void    setConnection       ( const cpo::uno::Reference< css::sdbc::XConnection >& _rxConnection );
 
     private:
         ::std::unique_ptr< CachedRowSet_Data >    m_pData;

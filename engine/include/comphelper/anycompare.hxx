@@ -104,7 +104,7 @@ namespace comphelper
     class StringCollationPredicateLess final : public IKeyPredicateLess
     {
     public:
-        StringCollationPredicateLess( css::uno::Reference< css::i18n::XCollator >  i_collator )
+        StringCollationPredicateLess( cpo::uno::Reference< css::i18n::XCollator >  i_collator )
             :m_collator(std::move( i_collator ))
         {
         }
@@ -120,7 +120,7 @@ namespace comphelper
         }
 
     private:
-        css::uno::Reference< css::i18n::XCollator > const m_collator;
+        cpo::uno::Reference< css::i18n::XCollator > const m_collator;
     };
 
 
@@ -180,8 +180,8 @@ namespace comphelper
                 )
                 throw css::lang::IllegalArgumentException();
 
-            css::uno::Reference< cpo::uno::XInterface > lhs( _lhs, css::uno::UNO_QUERY );
-            css::uno::Reference< cpo::uno::XInterface > rhs( _rhs, css::uno::UNO_QUERY );
+            cpo::uno::Reference< cpo::uno::XInterface > lhs( _lhs, cpo::uno::UNO_QUERY );
+            cpo::uno::Reference< cpo::uno::XInterface > rhs( _rhs, cpo::uno::UNO_QUERY );
             return lhs.get() < rhs.get();
         }
     };
@@ -203,7 +203,7 @@ namespace comphelper
     ::std::unique_ptr< IKeyPredicateLess > COMPHELPER_DLLPUBLIC
         getStandardLessPredicate(
             cpo::uno::Type const & i_type,
-            css::uno::Reference< css::i18n::XCollator > const & i_collator
+            cpo::uno::Reference< css::i18n::XCollator > const & i_collator
         );
 
     /**

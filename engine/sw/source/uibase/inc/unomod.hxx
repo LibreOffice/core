@@ -35,7 +35,7 @@ class SwDoc;
 class SwXViewSettings;
 class SwXPrintSettings;
 
-css::uno::Reference< cpo::uno::XInterface >  SAL_CALL SwXModule_CreateInstance(const css::uno::Reference< css::lang::XMultiServiceFactory > & );
+cpo::uno::Reference< cpo::uno::XInterface >  SAL_CALL SwXModule_CreateInstance(const cpo::uno::Reference< css::lang::XMultiServiceFactory > & );
 
 class SwXModule final : public cppu::WeakImplHelper
 <
@@ -53,10 +53,10 @@ public:
     SwXModule();
 
     //XViewSettings
-    virtual css::uno::Reference< css::beans::XPropertySet >  SAL_CALL getViewSettings() override;
+    virtual cpo::uno::Reference< css::beans::XPropertySet >  SAL_CALL getViewSettings() override;
 
     //XPrintSettings
-    virtual css::uno::Reference< css::beans::XPropertySet >  SAL_CALL getPrintSettings() override;
+    virtual cpo::uno::Reference< css::beans::XPropertySet >  SAL_CALL getPrintSettings() override;
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

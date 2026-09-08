@@ -41,7 +41,7 @@ namespace pcr
 
 
     using namespace ::com::sun::star;
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
 using namespace cpo::uno;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::container;
@@ -74,9 +74,9 @@ using namespace cpo::uno;
         ,m_aPropertyListeners( _rMutex )
     {
         OSL_ENSURE( _rxControlModel.is(), "EFormsHelper::EFormsHelper: invalid control model!" );
-        m_xBindableControl.set(_rxControlModel, css::uno::UNO_QUERY);
+        m_xBindableControl.set(_rxControlModel, cpo::uno::UNO_QUERY);
 
-        m_xDocument.set(_rxContextDocument, css::uno::UNO_QUERY);
+        m_xDocument.set(_rxContextDocument, cpo::uno::UNO_QUERY);
         OSL_ENSURE( m_xDocument.is(), "EFormsHelper::EFormsHelper: invalid document!" );
 
     }
@@ -214,7 +214,7 @@ using namespace cpo::uno;
     {
         Reference< XPropertySet > xBindingProps;
         if ( m_xBindableControl.is() )
-            xBindingProps.set(m_xBindableControl->getValueBinding(), css::uno::UNO_QUERY);
+            xBindingProps.set(m_xBindableControl->getValueBinding(), cpo::uno::UNO_QUERY);
         if ( !xBindingProps.is() )
             return;
 
@@ -398,7 +398,7 @@ using namespace cpo::uno;
         try
         {
             if ( m_xBindableControl.is() )
-                xBinding.set(m_xBindableControl->getValueBinding(), css::uno::UNO_QUERY);
+                xBinding.set(m_xBindableControl->getValueBinding(), cpo::uno::UNO_QUERY);
         }
         catch( const Exception& )
         {
@@ -653,7 +653,7 @@ using namespace cpo::uno;
 
                 Reference< XIndexAccess > xElements;
                 if ( xModel.is() )
-                    xElements.set(( _eType == Submission ) ? xModel->getSubmissions() : xModel->getBindings(), css::uno::UNO_QUERY);
+                    xElements.set(( _eType == Submission ) ? xModel->getSubmissions() : xModel->getBindings(), cpo::uno::UNO_QUERY);
                 if ( !xElements.is() )
                     break;
 

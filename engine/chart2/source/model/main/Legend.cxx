@@ -38,9 +38,10 @@ namespace cpo::uno { class XComponentContext; }
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans::PropertyAttribute;
+using namespace ::cpo;
 
 using ::cpo::uno::Sequence;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::cpo::uno::Any;
 using ::com::sun::star::beans::Property;
 

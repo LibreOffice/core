@@ -28,7 +28,7 @@
 namespace utl
 {
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
@@ -296,12 +296,12 @@ OStreamWrapper::OStreamWrapper(SvStream* pStream, bool bOwner)
     SetStream( pStream, bOwner );
 }
 
-css::uno::Reference< css::io::XInputStream > OStreamWrapper::getInputStream(  )
+cpo::uno::Reference< css::io::XInputStream > OStreamWrapper::getInputStream(  )
 {
     return this;
 }
 
-css::uno::Reference< css::io::XOutputStream > OStreamWrapper::getOutputStream(  )
+cpo::uno::Reference< css::io::XOutputStream > OStreamWrapper::getOutputStream(  )
 {
     return this;
 }

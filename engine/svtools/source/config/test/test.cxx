@@ -33,7 +33,7 @@
 
 #include <cppuhelper/servicefactory.hxx>
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <cpo/uno/Sequence.h>
 
 #include <rtl/ustring>
@@ -46,7 +46,7 @@
 
 using namespace ::osl                       ;
 using namespace ::comphelper                ;
-using namespace ::com::sun::star::uno       ;
+using namespace ::cpo::uno       ;
 using namespace ::com::sun::star::lang      ;
 using namespace ::com::sun::star::beans     ;
 using namespace ::com::sun::star::registry  ;

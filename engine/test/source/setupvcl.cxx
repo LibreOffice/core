@@ -35,7 +35,7 @@ struct Hook { // LINK only works as a member of a class...
 // context is disposed (redundantly again in unobootstrapprotector) from within
 // DeInitVCL (cf. Desktop::DeInit, desktop/source/app/app.cxx):
 IMPL_STATIC_LINK_NOARG(Hook, deinitHook, LinkParamNone *, void) {
-    css::uno::Reference<cpo::uno::XComponentContext> context;
+    cpo::uno::Reference<cpo::uno::XComponentContext> context;
     try {
         context = comphelper::getProcessComponentContext();
     } catch (cpo::uno::RuntimeException &) {}
@@ -43,18 +43,18 @@ IMPL_STATIC_LINK_NOARG(Hook, deinitHook, LinkParamNone *, void) {
     if (!context)
         return;
 
-    css::uno::Reference<css::lang::XMultiServiceFactory> config;
+    cpo::uno::Reference<css::lang::XMultiServiceFactory> config;
     try {
         config = css::configuration::theDefaultProvider::get(context);
     } catch (cpo::uno::DeploymentException &) {}
     if (config) {
         utl::ConfigManager::storeConfigItems();
-        css::uno::Reference<css::util::XFlushable>(
-            config, css::uno::UNO_QUERY_THROW)->flush();
+        cpo::uno::Reference<css::util::XFlushable>(
+            config, cpo::uno::UNO_QUERY_THROW)->flush();
     }
 
     // the desktop has to be terminate() before it can be dispose()
-    css::uno::Reference<css::frame::XDesktop> xDesktop;
+    cpo::uno::Reference<css::frame::XDesktop> xDesktop;
     try {
         xDesktop = css::frame::Desktop::create(comphelper::getProcessComponentContext());
     } catch (cpo::uno::DeploymentException &) {}
@@ -63,8 +63,8 @@ IMPL_STATIC_LINK_NOARG(Hook, deinitHook, LinkParamNone *, void) {
             xDesktop->terminate();
         } catch (cpo::uno::DeploymentException &) {}
 
-    css::uno::Reference<css::lang::XComponent>(
-        context, css::uno::UNO_QUERY_THROW)->dispose();
+    cpo::uno::Reference<css::lang::XComponent>(
+        context, cpo::uno::UNO_QUERY_THROW)->dispose();
 
     comphelper::setProcessServiceFactory(nullptr);
 }

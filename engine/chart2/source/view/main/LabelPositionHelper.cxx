@@ -31,6 +31,7 @@
 namespace chart
 {
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 LabelPositionHelper::LabelPositionHelper(
                       sal_Int32 nDimensionCount

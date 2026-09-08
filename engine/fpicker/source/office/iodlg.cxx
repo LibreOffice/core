@@ -56,7 +56,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <cpo/uno/Exception.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <comphelper/interaction.hxx>
@@ -82,7 +82,7 @@
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::ui::dialogs;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::container;

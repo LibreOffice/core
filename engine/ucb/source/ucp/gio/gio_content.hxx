@@ -53,11 +53,11 @@ inline constexpr OUString GIO_FILE_TYPE = u"application/vnd.sun.staroffice.gio-f
 inline constexpr OUString GIO_FOLDER_TYPE = u"application/vnd.sun.staroffice.gio-folder"_ustr;
 
 cpo::uno::Any convertToException(GError *pError,
-    const css::uno::Reference< cpo::uno::XInterface >& rContext, bool bThrow=true);
+    const cpo::uno::Reference< cpo::uno::XInterface >& rContext, bool bThrow=true);
 /// @throws css::io::IOException
 /// @throws cpo::uno::RuntimeException
 void convertToIOException(GError *pError,
-    const css::uno::Reference< cpo::uno::XInterface >& rContext);
+    const cpo::uno::Reference< cpo::uno::XInterface >& rContext);
 
 class ContentProvider;
 class Content : public ::ucbhelper::ContentImplHelper, public css::ucb::XContentCreator
@@ -68,17 +68,17 @@ private:
     GFileInfo *mpInfo;
     bool mbTransient;
 
-    GFileInfo *getGFileInfo(const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv,
+    GFileInfo *getGFileInfo(const cpo::uno::Reference< css::ucb::XCommandEnvironment >& xEnv,
         GError **ppError=nullptr);
-    bool isFolder(const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv);
+    bool isFolder(const cpo::uno::Reference< css::ucb::XCommandEnvironment >& xEnv);
 
     cpo::uno::Any mapGIOError( GError *error );
     cpo::uno::Any getBadArgExcept();
 
-    css::uno::Reference< css::sdbc::XRow >
+    cpo::uno::Reference< css::sdbc::XRow >
         getPropertyValues(
             const cpo::uno::Sequence< css::beans::Property >& rProperties,
-            const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
+            const cpo::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
 private:
     typedef rtl::Reference< Content > ContentRef;
     typedef std::vector< ContentRef > ContentRefList;
@@ -89,56 +89,56 @@ private:
 
     /// @throws cpo::uno::Exception
     cpo::uno::Any open(const css::ucb::OpenCommandArgument2 & rArg,
-        const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv );
+        const cpo::uno::Reference< css::ucb::XCommandEnvironment > & xEnv );
 
     /// @throws cpo::uno::Exception
     void transfer( const css::ucb::TransferInfo& rTransferInfo,
-        const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv );
+        const cpo::uno::Reference< css::ucb::XCommandEnvironment > & xEnv );
 
     /// @throws cpo::uno::Exception
-    void insert( const css::uno::Reference< css::io::XInputStream > & xInputStream,
-        bool bReplaceExisting, const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
+    void insert( const cpo::uno::Reference< css::io::XInputStream > & xInputStream,
+        bool bReplaceExisting, const cpo::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
 
     /// @throws cpo::uno::Exception
     void destroy( bool bDeletePhysical );
 
-    static void copyData( const css::uno::Reference< css::io::XInputStream >& xIn,
-        const css::uno::Reference< css::io::XOutputStream >& xOut );
+    static void copyData( const cpo::uno::Reference< css::io::XInputStream >& xIn,
+        const cpo::uno::Reference< css::io::XOutputStream >& xOut );
 
     cpo::uno::Sequence< cpo::uno::Any >
         setPropertyValues( const cpo::uno::Sequence<
             css::beans::PropertyValue >& rValues,
-            const css::uno::Reference<
+            const cpo::uno::Reference<
             css::ucb::XCommandEnvironment >& xEnv );
 
-    bool feedSink( const css::uno::Reference< cpo::uno::XInterface>& aSink );
+    bool feedSink( const cpo::uno::Reference< cpo::uno::XInterface>& aSink );
 
-    bool exchangeIdentity(const css::uno::Reference< css::ucb::XContentIdentifier >&  xNewId);
+    bool exchangeIdentity(const cpo::uno::Reference< css::ucb::XContentIdentifier >&  xNewId);
 
     void getFileInfo(
-        css::uno::Reference<css::ucb::XCommandEnvironment> const & env, GFileInfo ** info,
+        cpo::uno::Reference<css::ucb::XCommandEnvironment> const & env, GFileInfo ** info,
         bool fail);
 
 public:
     /// @throws css::ucb::ContentCreationException
-    Content( const css::uno::Reference<
+    Content( const cpo::uno::Reference<
         cpo::uno::XComponentContext >& rxContext, ContentProvider *pProvider,
-        const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier);
+        const cpo::uno::Reference< css::ucb::XContentIdentifier >& Identifier);
 
     /// @throws css::ucb::ContentCreationException
-    Content( const css::uno::Reference<
+    Content( const cpo::uno::Reference<
         cpo::uno::XComponentContext >& rxContext, ContentProvider *pProvider,
-        const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier,
+        const cpo::uno::Reference< css::ucb::XContentIdentifier >& Identifier,
         bool bIsFolder);
 
     virtual ~Content() override;
 
     virtual cpo::uno::Sequence< css::beans::Property >
-        getProperties( const css::uno::Reference<
+        getProperties( const cpo::uno::Reference<
             css::ucb::XCommandEnvironment > & xEnv ) override;
 
     virtual cpo::uno::Sequence< css::ucb::CommandInfo >
-        getCommands( const css::uno::Reference<
+        getCommands( const cpo::uno::Reference<
             css::ucb::XCommandEnvironment > & xEnv ) override;
 
     virtual OUString getParentURL() override;
@@ -165,19 +165,19 @@ public:
     virtual cpo::uno::Any SAL_CALL
         execute( const css::ucb::Command& aCommand,
         sal_Int32 CommandId,
-        const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment ) override;
+        const cpo::uno::Reference< css::ucb::XCommandEnvironment >& Environment ) override;
 
     virtual void SAL_CALL abort( sal_Int32 CommandId ) override;
 
     virtual cpo::uno::Sequence< css::ucb::ContentInfo >
         SAL_CALL queryCreatableContentsInfo() override;
-    virtual css::uno::Reference< css::ucb::XContent >
+    virtual cpo::uno::Reference< css::ucb::XContent >
         SAL_CALL createNewContent( const css::ucb::ContentInfo& Info ) override;
 
     /// @throws cpo::uno::RuntimeException
     cpo::uno::Sequence< css::ucb::ContentInfo >
         queryCreatableContentsInfo(
-        const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv);
+        const cpo::uno::Reference< css::ucb::XCommandEnvironment >& xEnv);
 
     GFile* getGFile();
 };

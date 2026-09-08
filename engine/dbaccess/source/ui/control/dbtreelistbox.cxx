@@ -47,7 +47,7 @@ namespace dbaui
 {
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
@@ -376,17 +376,17 @@ IMPL_LINK(TreeListBox, CommandHdl, const CommandEvent&, rCEvt, bool)
         cpo::uno::Any(comphelper::makePropertyValue( u"IsContextMenu"_ustr, true ))
     };
 
-    const css::uno::Reference< cpo::uno::XComponentContext >& xContext = comphelper::getProcessComponentContext();
-    css::uno::Reference<css::frame::XPopupMenuController> xMenuController
+    const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext = comphelper::getProcessComponentContext();
+    cpo::uno::Reference<css::frame::XPopupMenuController> xMenuController
         (xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-            u"com.sun.star.comp.framework.ResourceMenuController"_ustr, aArgs, xContext), css::uno::UNO_QUERY);
+            u"com.sun.star.comp.framework.ResourceMenuController"_ustr, aArgs, xContext), cpo::uno::UNO_QUERY);
 
     if (!xMenuController.is())
         return false;
 
     VclPtr<vcl::Window> xMenuParent = m_pContextMenuProvider->getMenuParent();
 
-    css::uno::Reference< css::awt::XWindow> xSourceWindow = VCLUnoHelper::GetInterface(xMenuParent);
+    cpo::uno::Reference< css::awt::XWindow> xSourceWindow = VCLUnoHelper::GetInterface(xMenuParent);
 
     rtl::Reference xPopupMenu( new VCLXPopupMenu );
     xMenuController->setPopupMenu( xPopupMenu );
@@ -456,10 +456,10 @@ IMPL_LINK(TreeListBox, CommandHdl, const CommandEvent&, rCEvt, bool)
     }
 
     // do action for selected entry in popup menu
-    css::uno::Reference<css::awt::XWindowPeer> xParent(xSourceWindow, css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::awt::XWindowPeer> xParent(xSourceWindow, cpo::uno::UNO_QUERY);
     xPopupMenu->execute(xParent, css::awt::Rectangle(aPos.X(), aPos.Y(), 1, 1), css::awt::PopupMenuDirection::EXECUTE_DOWN);
 
-    css::uno::Reference<css::lang::XComponent> xComponent(xMenuController, css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::lang::XComponent> xComponent(xMenuController, cpo::uno::UNO_QUERY);
     if (xComponent.is())
         xComponent->dispose();
     xMenuController.clear();

@@ -31,6 +31,7 @@
 #include <svl/cryptosign.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 namespace cssl = com::sun::star::lang;
 namespace cssxc = com::sun::star::xml::crypto;
 

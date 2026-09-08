@@ -25,8 +25,8 @@ namespace toolkit
 {
 
 
-    using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::UNO_QUERY;
+    using ::cpo::uno::Reference;
+    using ::cpo::uno::UNO_QUERY;
     using ::com::sun::star::awt::grid::GridDataEvent;
     using ::com::sun::star::container::ContainerEvent;
     using ::com::sun::star::lang::EventObject;

@@ -44,11 +44,11 @@ namespace dbaccess
 
         virtual ~ORowSetDataColumn() override;
     public:
-        ORowSetDataColumn(const css::uno::Reference < css::sdbc::XResultSetMetaData >& _xMetaData,
-                          const css::uno::Reference < css::sdbc::XRow >& _xRow,
-                          const css::uno::Reference < css::sdbc::XRowUpdate >& _xRowUpdate,
+        ORowSetDataColumn(const cpo::uno::Reference < css::sdbc::XResultSetMetaData >& _xMetaData,
+                          const cpo::uno::Reference < css::sdbc::XRow >& _xRow,
+                          const cpo::uno::Reference < css::sdbc::XRowUpdate >& _xRowUpdate,
                           sal_Int32 _nPos,
-                          const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _rxDBMeta,
+                          const cpo::uno::Reference< css::sdbc::XDatabaseMetaData >& _rxDBMeta,
                           OUString i_sDescription,
                           OUString i_sLabel,
                           std::function<const ::connectivity::ORowSetValue& (sal_Int32)> _getValue);
@@ -79,7 +79,7 @@ namespace dbaccess
     {
         ::rtl::Reference< ::connectivity::OSQLColumns> m_aColumns;
     protected:
-        virtual css::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
+        virtual cpo::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
         virtual void impl_refresh() override;
     public:
         ORowSetDataColumns(

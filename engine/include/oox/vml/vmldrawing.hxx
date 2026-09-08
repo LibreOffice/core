@@ -24,7 +24,7 @@
 #include <memory>
 #include <vector>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <oox/dllapi.h>
 #include <oox/ole/oleobjecthelper.hxx>
 #include <rtl/ustring.hxx>
@@ -95,7 +95,7 @@ class OOX_DLLPUBLIC Drawing
 public:
     explicit            Drawing(
                             ::oox::core::XmlFilterBase& rFilter,
-                            const css::uno::Reference< css::drawing::XDrawPage >& rxDrawPage,
+                            const cpo::uno::Reference< css::drawing::XDrawPage >& rxDrawPage,
                             DrawingType eType );
 
     virtual             ~Drawing();
@@ -137,18 +137,18 @@ public:
 
     /** Creates a new UNO shape object, inserts it into the passed UNO shape
         container, and sets the shape position and size. */
-    css::uno::Reference< css::drawing::XShape >
+    cpo::uno::Reference< css::drawing::XShape >
                         createAndInsertXShape(
                             const OUString& rService,
-                            const css::uno::Reference< css::drawing::XShapes >& rxShapes,
+                            const cpo::uno::Reference< css::drawing::XShapes >& rxShapes,
                             const css::awt::Rectangle& rShapeRect ) const;
 
     /** Creates a new UNO shape object for a form control, inserts the control
         model into the form, and the shape into the passed UNO shape container. */
-    css::uno::Reference< css::drawing::XShape >
+    cpo::uno::Reference< css::drawing::XShape >
                         createAndInsertXControlShape(
                             const ::oox::ole::EmbeddedControl& rControl,
-                            const css::uno::Reference< css::drawing::XShapes >& rxShapes,
+                            const cpo::uno::Reference< css::drawing::XShapes >& rxShapes,
                             const css::awt::Rectangle& rShapeRect,
                             sal_Int32& rnCtrlIndex ) const;
 
@@ -167,10 +167,10 @@ public:
 
     /** Derived classes create a UNO shape according to the passed shape model.
         Called for shape models that specify being under host control. */
-    virtual css::uno::Reference< css::drawing::XShape >
+    virtual cpo::uno::Reference< css::drawing::XShape >
                         createAndInsertClientXShape(
                             const ShapeBase& rShape,
-                            const css::uno::Reference< css::drawing::XShapes >& rxShapes,
+                            const cpo::uno::Reference< css::drawing::XShapes >& rxShapes,
                             const css::awt::Rectangle& rShapeRect ) const;
 
     /** Derived classes may want to know that a UNO shape has been inserted.
@@ -178,7 +178,7 @@ public:
         @param bGroupChild  True = inserted into a group shape,
             false = inserted directly into this drawing. */
     virtual void        notifyXShapeInserted(
-                            const css::uno::Reference< css::drawing::XShape >& rxShape,
+                            const cpo::uno::Reference< css::drawing::XShape >& rxShape,
                             const css::awt::Rectangle& rShapeRect,
                             const ShapeBase& rShape, bool bGroupChild );
 
@@ -188,7 +188,7 @@ private:
     typedef ::std::map< OUString, ControlInfo >      ControlInfoMap;
 
     ::oox::core::XmlFilterBase& mrFilter;   ///< Filter object that imports/exports the VML drawing.
-    css::uno::Reference< css::drawing::XDrawPage >
+    cpo::uno::Reference< css::drawing::XDrawPage >
                         mxDrawPage;         ///< UNO draw page used to insert the shapes.
     mutable std::unique_ptr<::oox::ole::EmbeddedForm> mxCtrlForm;     ///< The control form used to process embedded controls.
     mutable BlockIdVector maBlockIds;       ///< Block identifiers used by this drawing.

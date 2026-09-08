@@ -30,12 +30,12 @@
 
 class MainThreadExecutorRequest
 {
-    css::uno::Reference< css::task::XJob > m_xJob;
+    cpo::uno::Reference< css::task::XJob > m_xJob;
     cpo::uno::Sequence< css::beans::NamedValue > m_aValues;
 
     public:
         MainThreadExecutorRequest(
-            const css::uno::Reference< css::task::XJob >& xJob,
+            const cpo::uno::Reference< css::task::XJob >& xJob,
             const cpo::uno::Sequence< css::beans::NamedValue >& aValues );
 
         void doIt();
@@ -48,15 +48,15 @@ class MainThreadExecutor : public ::cppu::WeakImplHelper<
 {
 public:
     explicit MainThreadExecutor(
-        const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory )
+        const cpo::uno::Reference< css::lang::XMultiServiceFactory >& xFactory )
     {}
 
     static cpo::uno::Sequence< OUString > impl_staticGetSupportedServiceNames();
 
     static OUString impl_staticGetImplementationName();
 
-    static css::uno::Reference< cpo::uno::XInterface > impl_staticCreateSelfInstance(
-            const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager );
+    static cpo::uno::Reference< cpo::uno::XInterface > impl_staticCreateSelfInstance(
+            const cpo::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager );
 
     DECL_STATIC_LINK( MainThreadExecutor, worker, MainThreadExecutorRequest*, void );
 

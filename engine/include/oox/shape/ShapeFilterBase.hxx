@@ -44,7 +44,7 @@ public:
 
     /// @throws cpo::uno::RuntimeException
     explicit            ShapeFilterBase(
-                            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+                            const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
     virtual             ~ShapeFilterBase() override;
 
@@ -69,7 +69,7 @@ public:
 
     ::Color getSchemeColor( sal_Int32 nToken ) const;
 
-    void setGraphicMapper(css::uno::Reference<css::graphic::XGraphicMapper> const & rxGraphicMapper)
+    void setGraphicMapper(cpo::uno::Reference<css::graphic::XGraphicMapper> const & rxGraphicMapper)
     {
         mxGraphicMapper = rxGraphicMapper;
     }
@@ -81,7 +81,7 @@ private:
 
     std::shared_ptr< ::oox::drawingml::chart::ChartConverter > mxChartConv;
     ::oox::drawingml::ThemePtr mpTheme;
-    css::uno::Reference<css::graphic::XGraphicMapper> mxGraphicMapper;
+    cpo::uno::Reference<css::graphic::XGraphicMapper> mxGraphicMapper;
 };
 
 } // namespace oox::shape

@@ -111,17 +111,17 @@ namespace tools
     template <typename I>
     class DeleteUnoReferenceOnDeinit final : public tools::DeleteOnDeinitBase
     {
-        css::uno::Reference<I> m_xI;
+        cpo::uno::Reference<I> m_xI;
         virtual void doCleanup() override { set(nullptr); }
     public:
-        DeleteUnoReferenceOnDeinit(css::uno::Reference<I> _xI ) : m_xI(std::move( _xI )) {
+        DeleteUnoReferenceOnDeinit(cpo::uno::Reference<I> _xI ) : m_xI(std::move( _xI )) {
             addDeinitContainer( this ); }
 
-        css::uno::Reference<I> get() { return m_xI; }
+        cpo::uno::Reference<I> get() { return m_xI; }
 
-        void set (const css::uno::Reference<I>& r_xNew )
+        void set (const cpo::uno::Reference<I>& r_xNew )
         {
-            css::uno::Reference< css::lang::XComponent> xComponent (m_xI, css::uno::UNO_QUERY);
+            cpo::uno::Reference< css::lang::XComponent> xComponent (m_xI, cpo::uno::UNO_QUERY);
             m_xI = r_xNew;
             if (xComponent.is()) try
             {

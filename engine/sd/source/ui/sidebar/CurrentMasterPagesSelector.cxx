@@ -40,7 +40,7 @@ namespace sd::sidebar {
 std::unique_ptr<PanelLayout> CurrentMasterPagesSelector::Create (
     weld::Widget* pParent,
     ViewShellBase& rViewShellBase,
-    const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
+    const cpo::uno::Reference<css::ui::XSidebar>& rxSidebar)
 {
     SdDrawDocument* pDocument = rViewShellBase.GetDocument();
     if (pDocument == nullptr)
@@ -62,7 +62,7 @@ std::unique_ptr<PanelLayout> CurrentMasterPagesSelector::Create (
 CurrentMasterPagesSelector::CurrentMasterPagesSelector(
     weld::Widget* pParent, SdDrawDocument& rDocument, ViewShellBase& rBase,
     const std::shared_ptr<MasterPageContainer>& rpContainer,
-    const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
+    const cpo::uno::Reference<css::ui::XSidebar>& rxSidebar)
     : MasterPagesSelector(pParent, rDocument, rBase, rpContainer, rxSidebar,
                           u"modules/simpress/ui/masterpagepanel.ui"_ustr,
                           u"masterpagecurrent_icons"_ustr)

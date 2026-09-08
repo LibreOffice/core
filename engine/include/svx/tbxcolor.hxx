@@ -37,7 +37,7 @@ namespace svx
     {
     private:
         OUString                                         m_sToolboxResName;
-        css::uno::Reference<
+        cpo::uno::Reference<
             css::frame::XLayoutManager >   m_xLayouter;
 
     public:

@@ -24,9 +24,10 @@
 namespace cpo::uno { class XComponentContext; }
 
 using ::cpo::uno::Sequence;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 
 namespace chart

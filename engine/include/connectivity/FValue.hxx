@@ -372,7 +372,7 @@ namespace connectivity
         */
         void fill(sal_Int32 _nPos,
                   sal_Int32 _nType,
-                  const css::uno::Reference< css::sdbc::XRow>& _xRow);
+                  const cpo::uno::Reference< css::sdbc::XRow>& _xRow);
 
         /**
             fetches a single value out of the row
@@ -384,12 +384,12 @@ namespace connectivity
         void fill(sal_Int32 _nPos,
                   sal_Int32 _nType,
                   bool      _bNullable,
-                  const css::uno::Reference< css::sdbc::XRow>& _xRow);
+                  const cpo::uno::Reference< css::sdbc::XRow>& _xRow);
 
         void fill(const cpo::uno::Any& _rValue);
 
         void fill( const sal_Int32 _nType,
-                   const css::uno::Reference< css::sdb::XColumn >& _rxColumn );
+                   const cpo::uno::Reference< css::sdb::XColumn >& _rxColumn );
 
     private:
         void impl_fill( const sal_Int32 _nType, bool _bNullable, const detail::IValueSource& _rValueSource );

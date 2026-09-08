@@ -33,7 +33,7 @@ namespace chart
 {
 using namespace ::com::sun::star;
 
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::rtl::math::cos;
 using ::rtl::math::sin;
 using ::rtl::math::tan;

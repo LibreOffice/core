@@ -38,7 +38,7 @@ class OFormattedModel final
         // i.e. I just passed on the attributes of the field to which I am bound
         // (only valid if loaded)
 
-        css::uno::Reference< css::util::XNumberFormatsSupplier>   m_xOriginalFormatter;
+        cpo::uno::Reference< css::util::XNumberFormatsSupplier>   m_xOriginalFormatter;
         css::util::Date        m_aNullDate;
         cpo::uno::Any          m_aSaveValue;
 
@@ -46,16 +46,16 @@ class OFormattedModel final
         bool                                m_bOriginalNumeric      : 1,
                                             m_bNumeric              : 1;    // analogous for the TreatAsNumeric-property
 
-        css::uno::Reference< css::util::XNumberFormatsSupplier>  calcDefaultFormatsSupplier() const;
-        css::uno::Reference< css::util::XNumberFormatsSupplier>  calcFormFormatsSupplier() const;
-        css::uno::Reference< css::util::XNumberFormatsSupplier>  calcFormatsSupplier() const;
+        cpo::uno::Reference< css::util::XNumberFormatsSupplier>  calcDefaultFormatsSupplier() const;
+        cpo::uno::Reference< css::util::XNumberFormatsSupplier>  calcFormFormatsSupplier() const;
+        cpo::uno::Reference< css::util::XNumberFormatsSupplier>  calcFormatsSupplier() const;
 
         OFormattedModel(
-            const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
+            const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
         );
         OFormattedModel(
             const OFormattedModel* _pOriginal,
-            const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
+            const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
         );
         virtual ~OFormattedModel() override;
 
@@ -81,8 +81,8 @@ class OFormattedModel final
         virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
         // XPersistObject
-        virtual void write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
-        virtual void read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
+        virtual void write(const cpo::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
+        virtual void read(const cpo::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
         virtual OUString getServiceName() override;
 
         // XLoadListener
@@ -130,10 +130,10 @@ class OFormattedModel final
                             getDefaultForReset() const override;
         virtual void        resetNoBroadcast() override;
 
-        virtual void        onConnectedDbColumn( const css::uno::Reference< cpo::uno::XInterface >& _rxForm ) override;
+        virtual void        onConnectedDbColumn( const cpo::uno::Reference< cpo::uno::XInterface >& _rxForm ) override;
         virtual void        onDisconnectedDbColumn() override;
 
-        virtual css::uno::Reference< css::util::XCloneable > createClone(  ) override;
+        virtual cpo::uno::Reference< css::util::XCloneable > createClone(  ) override;
 
         void implConstruct();
 
@@ -147,7 +147,7 @@ class OFormattedModel final
         ImplSVEvent * m_nKeyEvent;
 
     public:
-        explicit OFormattedControl(const css::uno::Reference< cpo::uno::XComponentContext>& _rxContext);
+        explicit OFormattedControl(const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxContext);
         virtual ~OFormattedControl() override;
 
         DECLARE_UNO3_AGG_DEFAULTS(OFormattedControl, OBoundControl)

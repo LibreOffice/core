@@ -68,7 +68,7 @@ namespace svxform
 
     protected:
         // XClipboardOwner
-        virtual void lostOwnership( const css::uno::Reference< css::datatransfer::clipboard::XClipboard >& _rxClipboard, const css::uno::Reference< css::datatransfer::XTransferable >& _rxTrans ) override;
+        virtual void lostOwnership( const cpo::uno::Reference< css::datatransfer::clipboard::XClipboard >& _rxClipboard, const cpo::uno::Reference< css::datatransfer::XTransferable >& _rxTrans ) override;
 
         // TransferableHelper
         virtual void        DragFinished( sal_Int8 nDropAction ) override;
@@ -119,10 +119,10 @@ namespace svxform
         ListBoxEntrySet     m_aSelectedEntries;
         cpo::uno::Sequence< cpo::uno::Sequence< sal_uInt32 > >
                             m_aControlPaths;
-        cpo::uno::Sequence< css::uno::Reference< cpo::uno::XInterface > >
+        cpo::uno::Sequence< cpo::uno::Reference< cpo::uno::XInterface > >
                             m_aHiddenControlModels;
 
-        css::uno::Reference< css::form::XForms >
+        cpo::uno::Reference< css::form::XForms >
                             m_xFormsRoot;       // the root of the forms collection where the entries we represent reside
                                                 // this uniquely identifies the page and the document
 
@@ -137,7 +137,7 @@ namespace svxform
 
         // ctor to construct the data from an arbitrary Transferable (usually clipboard data)
         OControlTransferData(
-            const css::uno::Reference< css::datatransfer::XTransferable >& _rxTransferable
+            const cpo::uno::Reference< css::datatransfer::XTransferable >& _rxTransferable
         );
 
         inline const DataFlavorExVector&    GetDataFlavorExVector() const;
@@ -156,7 +156,7 @@ namespace svxform
         size_t  onEntryRemoved(const weld::TreeView* pView, const weld::TreeIter* _pEntry);
 
         void setFormsRoot(
-            const css::uno::Reference< css::form::XForms >& _rxFormsRoot
+            const cpo::uno::Reference< css::form::XForms >& _rxFormsRoot
             ) { m_xFormsRoot = _rxFormsRoot; }
 
         void buildPathFormat(const weld::TreeView* pTreeBox, const weld::TreeIter* pRoot);
@@ -167,16 +167,16 @@ namespace svxform
         void buildListFromPath(const weld::TreeView* pTreeBox, const weld::TreeIter* pRoot);
             // The reverse way: throws everything out of m_aSelectedEntries and rebuilds it using m_aControlPaths
 
-        void addHiddenControlsFormat(const cpo::uno::Sequence< css::uno::Reference< cpo::uno::XInterface > >& seqInterfaces);
+        void addHiddenControlsFormat(const cpo::uno::Sequence< cpo::uno::Reference< cpo::uno::XInterface > >& seqInterfaces);
             // adds an SVX_FML_HIDDEN_CONTROLS format and remembers the passed interfaces for it
             // (it is NOT checked whether actually only hidden controls are denominated
             // by this - the caller must ensure that)
 
         const ListBoxEntrySet&      selected() const { return m_aSelectedEntries; }
-        const cpo::uno::Sequence< css::uno::Reference< cpo::uno::XInterface > >&
+        const cpo::uno::Sequence< cpo::uno::Reference< cpo::uno::XInterface > >&
                                     hiddenControls() const { return m_aHiddenControlModels; }
 
-        const css::uno::Reference< css::form::XForms >&
+        const cpo::uno::Reference< css::form::XForms >&
                                 getFormsRoot() const { return m_xFormsRoot; }
     };
 

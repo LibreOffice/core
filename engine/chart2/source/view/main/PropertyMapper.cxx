@@ -33,6 +33,7 @@
 namespace chart
 {
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 void PropertyMapper::setMappedProperties(
           SvxShape& xTarget

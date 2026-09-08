@@ -21,7 +21,7 @@
 
 #include <libodfgen/libodfgen.hxx>
 
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 
 #include "writerperfectdllapi.h"
 
@@ -35,7 +35,7 @@ namespace writerperfect
 class WRITERPERFECT_DLLPUBLIC DocumentHandler final : public OdfDocumentHandler
 {
 public:
-    DocumentHandler(css::uno::Reference<css::xml::sax::XDocumentHandler> const& xHandler);
+    DocumentHandler(cpo::uno::Reference<css::xml::sax::XDocumentHandler> const& xHandler);
     SAL_DLLPRIVATE void startDocument() override;
     SAL_DLLPRIVATE void endDocument() override;
     SAL_DLLPRIVATE void startElement(const char* psName,
@@ -44,7 +44,7 @@ public:
     SAL_DLLPRIVATE void characters(const librevenge::RVNGString& sCharacters) override;
 
 private:
-    css::uno::Reference<css::xml::sax::XDocumentHandler> mxHandler;
+    cpo::uno::Reference<css::xml::sax::XDocumentHandler> mxHandler;
 };
 }
 

@@ -23,12 +23,12 @@
 #include <atk/atk.h>
 
 AtkObject*
-ooo_wrapper_registry_get(const css::uno::Reference<css::accessibility::XAccessible>& rxAccessible);
+ooo_wrapper_registry_get(const cpo::uno::Reference<css::accessibility::XAccessible>& rxAccessible);
 
 void ooo_wrapper_registry_add(
-    const css::uno::Reference<css::accessibility::XAccessible>& rxAccessible, AtkObject* obj);
+    const cpo::uno::Reference<css::accessibility::XAccessible>& rxAccessible, AtkObject* obj);
 
 void ooo_wrapper_registry_remove(
-    css::uno::Reference<css::accessibility::XAccessible> const& pAccessible);
+    cpo::uno::Reference<css::accessibility::XAccessible> const& pAccessible);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

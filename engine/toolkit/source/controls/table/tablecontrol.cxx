@@ -30,7 +30,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/vclevent.hxx>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using ::com::sun::star::accessibility::XAccessible;
 using namespace ::com::sun::star::accessibility;
@@ -314,7 +314,7 @@ namespace svt::table
 
     rtl::Reference<comphelper::OAccessible> TableControl::CreateAccessible()
     {
-        css::uno::Reference<css::accessibility::XAccessible> xParent = GetAccessibleParent();
+        cpo::uno::Reference<css::accessibility::XAccessible> xParent = GetAccessibleParent();
         return m_pImpl->getAccessible(xParent);
     }
 

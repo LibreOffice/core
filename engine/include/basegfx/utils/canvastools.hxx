@@ -41,7 +41,7 @@ namespace com::sun::star::awt
 }
 
 namespace cpo::uno { template <class E> class Sequence; }
-namespace com::sun::star::uno { template <class interface_type> class Reference; }
+namespace cpo::uno { template <class interface_type> class Reference; }
 
 namespace basegfx
 {

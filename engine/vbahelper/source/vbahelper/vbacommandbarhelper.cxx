@@ -32,6 +32,7 @@
 #include <string_view>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace ooo::vba;
 
 typedef std::map< OUString, OUString > MSO2OOCommandbarMap;
@@ -85,7 +86,7 @@ public:
 MSO2OOCommandbarHelper* MSO2OOCommandbarHelper::pMSO2OOCommandbarHelper = nullptr;
 
 
-VbaCommandBarHelper::VbaCommandBarHelper( css::uno::Reference< cpo::uno::XComponentContext > xContext, css::uno::Reference< css::frame::XModel >  xModel ) : mxContext(std::move( xContext )), mxModel(std::move( xModel ))
+VbaCommandBarHelper::VbaCommandBarHelper( cpo::uno::Reference< cpo::uno::XComponentContext > xContext, cpo::uno::Reference< css::frame::XModel >  xModel ) : mxContext(std::move( xContext )), mxModel(std::move( xModel ))
 {
     Init();
 }
@@ -110,17 +111,17 @@ void VbaCommandBarHelper::Init( )
         throw cpo::uno::RuntimeException( u"Not implemented"_ustr );
     }
 
-    css::uno::Reference< css::ui::XModuleUIConfigurationManagerSupplier > xUICfgMgrSupp(
+    cpo::uno::Reference< css::ui::XModuleUIConfigurationManagerSupplier > xUICfgMgrSupp(
         css::ui::theModuleUIConfigurationManagerSupplier::get(mxContext) );
 
     m_xAppCfgMgr.set( xUICfgMgrSupp->getUIConfigurationManager( maModuleId ), uno::UNO_SET_THROW );
 
-    css::uno::Reference< css::container::XNameAccess > xNameAccess = css::ui::theWindowStateConfiguration::get( mxContext );
+    cpo::uno::Reference< css::container::XNameAccess > xNameAccess = css::ui::theWindowStateConfiguration::get( mxContext );
 
     m_xWindowState.set( xNameAccess->getByName( maModuleId ), uno::UNO_QUERY_THROW );
 }
 
-css::uno::Reference< css::container::XIndexAccess > VbaCommandBarHelper::getSettings( const OUString& sResourceUrl )
+cpo::uno::Reference< css::container::XIndexAccess > VbaCommandBarHelper::getSettings( const OUString& sResourceUrl )
 {
     if( m_xDocCfgMgr->hasSettings( sResourceUrl ) )
         return m_xDocCfgMgr->getSettings( sResourceUrl, true );
@@ -128,7 +129,7 @@ css::uno::Reference< css::container::XIndexAccess > VbaCommandBarHelper::getSett
         return m_xAppCfgMgr->getSettings( sResourceUrl, true );
     else
     {
-        css::uno::Reference< css::container::XIndexAccess > xSettings( m_xAppCfgMgr->createSettings( ), uno::UNO_QUERY_THROW );
+        cpo::uno::Reference< css::container::XIndexAccess > xSettings( m_xAppCfgMgr->createSettings( ), uno::UNO_QUERY_THROW );
         return xSettings;
     }
 }
@@ -143,7 +144,7 @@ void VbaCommandBarHelper::removeSettings( const OUString& sResourceUrl )
     // persistChanges();
 }
 
-void VbaCommandBarHelper::ApplyTempChange( const OUString& sResourceUrl, const css::uno::Reference< css::container::XIndexAccess >& xSettings )
+void VbaCommandBarHelper::ApplyTempChange( const OUString& sResourceUrl, const cpo::uno::Reference< css::container::XIndexAccess >& xSettings )
 {
     if( m_xDocCfgMgr->hasSettings( sResourceUrl ) )
     {
@@ -177,7 +178,7 @@ bool VbaCommandBarHelper::hasToolbar( const OUString& sResourceUrl, std::u16stri
 }
 
 // return the resource url if found
-OUString VbaCommandBarHelper::findToolbarByName( const css::uno::Reference< css::container::XNameAccess >& xNameAccess, const OUString& sName )
+OUString VbaCommandBarHelper::findToolbarByName( const cpo::uno::Reference< css::container::XNameAccess >& xNameAccess, const OUString& sName )
 {
     // check if it is a buildin toolbar
     OUString sResourceUrl = MSO2OOCommandbarHelper::getMSO2OOCommandbarHelper()->findBuildinToolbar( sName );
@@ -202,7 +203,7 @@ OUString VbaCommandBarHelper::findToolbarByName( const css::uno::Reference< css:
 }
 
 // if found, return the position of the control. if not found, return -1
-sal_Int32 VbaCommandBarHelper::findControlByName( const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess, std::u16string_view sName, bool bMenu )
+sal_Int32 VbaCommandBarHelper::findControlByName( const cpo::uno::Reference< css::container::XIndexAccess >& xIndexAccess, std::u16string_view sName, bool bMenu )
 {
     sal_Int32 nCount = xIndexAccess->getCount();
     cpo::uno::Sequence< css::beans::PropertyValue > aProps;

@@ -31,12 +31,12 @@ public:
     {
 
     }
-    static void testTheBorders(css::uno::Reference<css::lang::XComponent> const & mxComponent, bool isBinaryDoc)
+    static void testTheBorders(cpo::uno::Reference<css::lang::XComponent> const & mxComponent, bool isBinaryDoc)
     {
-    css::uno::Reference<css::text::XTextDocument> textDocument(mxComponent, css::uno::UNO_QUERY);
-    css::uno::Reference<css::container::XEnumerationAccess> xParaEnumAccess(textDocument->getText(), css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::text::XTextDocument> textDocument(mxComponent, cpo::uno::UNO_QUERY);
+    cpo::uno::Reference<css::container::XEnumerationAccess> xParaEnumAccess(textDocument->getText(), cpo::uno::UNO_QUERY);
     // list of paragraphs
-    css::uno::Reference<css::container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    cpo::uno::Reference<css::container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
 
     // maps containing TopBorder widths for every cell
     // one map for each tables - there are 8 of them, counting from 0
@@ -146,12 +146,12 @@ public:
     tempMap = &map0;
     do
     {
-        css::uno::Reference<css::lang::XServiceInfo> xServiceInfo;
+        cpo::uno::Reference<css::lang::XServiceInfo> xServiceInfo;
         if (xParaEnum->nextElement() >>= xServiceInfo)
         {
             if (xServiceInfo->supportsService(u"com.sun.star.text.TextTable"_ustr))
             {
-                css::uno::Reference<css::text::XTextTable> const xTextTable(xServiceInfo, css::uno::UNO_QUERY_THROW);
+                cpo::uno::Reference<css::text::XTextTable> const xTextTable(xServiceInfo, cpo::uno::UNO_QUERY_THROW);
                 cpo::uno::Sequence<OUString> const cells = xTextTable->getCellNames();
 
                 if(currentTable == sal_Int32(1))
@@ -173,8 +173,8 @@ public:
 
                 for (const auto& rCell : cells)
                 {
-                    css::uno::Reference<css::table::XCell> xCell = xTextTable->getCellByName(rCell);
-                    css::uno::Reference< css::beans::XPropertySet > xPropSet(xCell, css::uno::UNO_QUERY_THROW);
+                    cpo::uno::Reference<css::table::XCell> xCell = xTextTable->getCellByName(rCell);
+                    cpo::uno::Reference< css::beans::XPropertySet > xPropSet(xCell, cpo::uno::UNO_QUERY_THROW);
                     cpo::uno::Any aAny = xPropSet->getPropertyValue(u"TopBorder"_ustr);
                     css::table::BorderLine aBorderLine;
                     it = tempMap->find(rCell);

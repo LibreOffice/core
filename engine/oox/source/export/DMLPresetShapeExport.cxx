@@ -23,6 +23,7 @@
 
 using namespace ::css;
 using namespace ::css::drawing;
+using namespace ::cpo;
 
 namespace oox::drawingml
 {
@@ -30,7 +31,7 @@ namespace oox::drawingml
 
 // ctor
 DMLPresetShapeExporter::DMLPresetShapeExporter(DrawingML* pDMLExporter,
-                                               css::uno::Reference<css::drawing::XShape> xShape)
+                                               cpo::uno::Reference<css::drawing::XShape> xShape)
     : m_pDMLexporter(pDMLExporter)
 {
     // This class only work with custom shapes!

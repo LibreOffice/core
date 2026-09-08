@@ -68,7 +68,7 @@ public:
 
     void pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase,
             const ::oox::drawingml::TextListStylePtr& pMasterTextListStyle,
-            const css::uno::Reference < css::table::XCell >& rxCell,
+            const cpo::uno::Reference < css::table::XCell >& rxCell,
             const TableProperties& rTableProperties,
             const TableStyle& rTable,
             sal_Int32 nColumn, sal_Int32 nMaxColumn, sal_Int32 nRow, sal_Int32 nMaxRow );

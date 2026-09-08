@@ -32,6 +32,7 @@
 #include "hierarchycontent.hxx"
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace hierarchy_ucp;
 
 

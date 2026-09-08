@@ -40,9 +40,9 @@ class SwXFilterOptions final : public ::cppu::WeakImplHelper<
 {
     OUString     m_sFilterOptions;
 
-    css::uno::Reference< css::io::XInputStream > m_xInputStream;
-    css::uno::Reference< css::lang::XComponent > m_xModel;
-    css::uno::Reference< css::awt::XWindow > m_xDialogParent;
+    cpo::uno::Reference< css::io::XInputStream > m_xInputStream;
+    cpo::uno::Reference< css::lang::XComponent > m_xModel;
+    cpo::uno::Reference< css::awt::XWindow > m_xDialogParent;
 
 public:
                             SwXFilterOptions();
@@ -59,11 +59,11 @@ public:
     virtual sal_Int16 SAL_CALL execute() override;
 
                             // XImporter
-    virtual void SAL_CALL   setTargetDocument( const css::uno::Reference<
+    virtual void SAL_CALL   setTargetDocument( const cpo::uno::Reference<
                                     css::lang::XComponent >& xDoc ) override;
 
                             // XExporter
-    virtual void SAL_CALL   setSourceDocument( const css::uno::Reference<
+    virtual void SAL_CALL   setSourceDocument( const cpo::uno::Reference<
                                     css::lang::XComponent >& xDoc ) override;
 
                             // XInitialization

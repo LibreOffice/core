@@ -40,22 +40,22 @@ class SwXMLItemSetContext final : public SvXMLImportContext
 public:
 
     SwXMLItemSetContext( SvXMLImport& rImport, sal_Int32 nElement,
-                         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+                         const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
                          SfxItemSet&  rItemSet,
                          SvXMLImportItemMapper& rIMap,
                          const SvXMLUnitConverter& rUnitConv );
 
     virtual ~SwXMLItemSetContext() override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
 private:
     // This method is called from this instance implementation of
     // createFastChildContext if the element matches an entry in the
     // SvXMLImportItemMapper with the mid flag MID_SW_FLAG_ELEMENT_ITEM_IMPORT
     SvXMLImportContextRef createFastChildContext( sal_Int32 nElement,
-                                   const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+                                   const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
                                    const SvXMLItemMapEntry& rEntry );
 };
 

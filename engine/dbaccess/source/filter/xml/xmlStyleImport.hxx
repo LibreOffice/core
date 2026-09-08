@@ -51,7 +51,7 @@ namespace dbaxml
 
         virtual ~OTableStyleContext() override;
 
-        virtual void FillPropertySet(const css::uno::Reference<
+        virtual void FillPropertySet(const cpo::uno::Reference<
                     css::beans::XPropertySet > & rPropSet ) override;
 
         virtual void SetDefaults() override;
@@ -78,7 +78,7 @@ namespace dbaxml
         virtual SvXMLStyleContext *CreateStyleStyleChildContext(
                 XmlStyleFamily nFamily,
                 sal_Int32 nElement,
-                const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
+                const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
 
     public:
 

@@ -33,6 +33,7 @@
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::text;
 using namespace css;
+using namespace ::cpo;
 
 namespace oox::drawingml {
 

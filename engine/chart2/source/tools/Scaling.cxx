@@ -40,6 +40,7 @@ namespace chart
 {
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
+using namespace ::cpo;
 
 LogarithmicScaling::LogarithmicScaling() :
         m_fBase( 10.0 ),

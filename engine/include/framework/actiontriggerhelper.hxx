@@ -21,7 +21,7 @@
 
 #include <config_options.h>
 #include <framework/fwkdllapi.h>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 namespace com::sun::star::awt { class XPopupMenu; }
 namespace com::sun::star::container { class XIndexContainer; }
@@ -37,8 +37,8 @@ namespace framework
             // @param rActionTriggerContainer = must be an instance of service "com.sun.star.ui.ActionTriggerContainer"
             static void
                 CreateMenuFromActionTriggerContainer(
-                    const css::uno::Reference<css::awt::XPopupMenu>& rNewMenu,
-                    const css::uno::Reference<css::container::XIndexContainer>& rActionTriggerContainer);
+                    const cpo::uno::Reference<css::awt::XPopupMenu>& rNewMenu,
+                    const cpo::uno::Reference<css::container::XIndexContainer>& rActionTriggerContainer);
 
             // Creates a "css::ui::ActionTriggerContainer" with the structure of the menu
             // provided as a parameter. The implementation class stores the menu pointer
@@ -48,8 +48,8 @@ namespace framework
             // @param rMenu = Must be a valid menu. Please be aware that this implementation is based on
             //                the above mentioned restriction!!!
 
-            static css::uno::Reference< css::container::XIndexContainer > CreateActionTriggerContainerFromMenu(
-                const css::uno::Reference<css::awt::XPopupMenu>& rMenu, const OUString* pMenuIdentifier );
+            static cpo::uno::Reference< css::container::XIndexContainer > CreateActionTriggerContainerFromMenu(
+                const cpo::uno::Reference<css::awt::XPopupMenu>& rMenu, const OUString* pMenuIdentifier );
 
             // Fills the submitted rActionTriggerContainer with the structure of the menu
             // provided as the second parameter
@@ -57,8 +57,8 @@ namespace framework
             // @param rMenu = must be a valid menu
             static void
                 FillActionTriggerContainerFromMenu(
-                    css::uno::Reference< css::container::XIndexContainer > const & rActionTriggerContainer,
-                    const css::uno::Reference<css::awt::XPopupMenu>& rMenu);
+                    cpo::uno::Reference< css::container::XIndexContainer > const & rActionTriggerContainer,
+                    const cpo::uno::Reference<css::awt::XPopupMenu>& rMenu);
 
     };
 }

@@ -40,7 +40,7 @@ public:
 
     // XUIElementFactory
 
-    css::uno::Reference<css::ui::XUIElement> SAL_CALL createUIElement (
+    cpo::uno::Reference<css::ui::XUIElement> SAL_CALL createUIElement (
         const OUString& rsResourceURL,
         const cpo::uno::Sequence<css::beans::PropertyValue>& rArguments) override;
 

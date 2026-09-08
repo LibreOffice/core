@@ -44,7 +44,7 @@ namespace drawinglayer::primitive2d
                 this will not only be used by the renderers to provide the correct decompose
                 graphic attribute context, but also to completely create the page's sub-content.
              */
-            const css::uno::Reference< css::drawing::XDrawPage > mxDrawPage;
+            const cpo::uno::Reference< css::drawing::XDrawPage > mxDrawPage;
 
             /// the PageContent
             Primitive2DContainer                           maPageContent;
@@ -62,14 +62,14 @@ namespace drawinglayer::primitive2d
         public:
             /// constructor
             PagePreviewPrimitive2D(
-                css::uno::Reference< css::drawing::XDrawPage > xDrawPage,
+                cpo::uno::Reference< css::drawing::XDrawPage > xDrawPage,
                 basegfx::B2DHomMatrix aTransform,
                 double fContentWidth,
                 double fContentHeight,
                 Primitive2DContainer&& rPageContent);
 
             /// data read access
-            const css::uno::Reference< css::drawing::XDrawPage >& getXDrawPage() const { return mxDrawPage; }
+            const cpo::uno::Reference< css::drawing::XDrawPage >& getXDrawPage() const { return mxDrawPage; }
             const Primitive2DContainer& getPageContent() const { return maPageContent; }
             const basegfx::B2DHomMatrix& getTransform() const { return maTransform; }
             double getContentWidth() const { return mfContentWidth; }

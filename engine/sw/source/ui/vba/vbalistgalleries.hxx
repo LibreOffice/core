@@ -28,17 +28,17 @@ typedef CollTestImplHelper< ooo::vba::word::XListGalleries > SwVbaListGalleries_
 class SwVbaListGalleries : public SwVbaListGalleries_BASE
 {
 private:
-    css::uno::Reference< css::text::XTextDocument > mxTextDocument;
+    cpo::uno::Reference< css::text::XTextDocument > mxTextDocument;
 
 public:
     /// @throws cpo::uno::RuntimeException
-    SwVbaListGalleries( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext > & xContext, css::uno::Reference< css::text::XTextDocument >  xTextDoc );
+    SwVbaListGalleries( const cpo::uno::Reference< ov::XHelperInterface >& xParent, const cpo::uno::Reference< cpo::uno::XComponentContext > & xContext, cpo::uno::Reference< css::text::XTextDocument >  xTextDoc );
 
     virtual ::sal_Int32 SAL_CALL getCount() override;
     virtual cpo::uno::Any SAL_CALL Item( const cpo::uno::Any& Index1, const cpo::uno::Any& /*not processed in this base class*/ ) override;
     // XEnumerationAccess
     virtual cpo::uno::Type SAL_CALL getElementType() override;
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
+    virtual cpo::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
 
     // SwVbaListGalleries_BASE
     virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) override;

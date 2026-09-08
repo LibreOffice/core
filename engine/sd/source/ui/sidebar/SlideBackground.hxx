@@ -51,7 +51,7 @@ public:
     SlideBackground(
         weld::Widget* pParent,
         ViewShellBase& rBase,
-        css::uno::Reference<css::frame::XFrame> xFrame,
+        cpo::uno::Reference<css::frame::XFrame> xFrame,
         SfxBindings* pBindings );
     virtual ~SlideBackground() override;
     SfxBindings* GetBindings() { return mpBindings; }
@@ -116,7 +116,7 @@ private:
     bool mbSwitchModeToNormal;
     bool mbSwitchModeToMaster;
 
-    css::uno::Reference<css::frame::XFrame> mxFrame;
+    cpo::uno::Reference<css::frame::XFrame> mxFrame;
     vcl::EnumContext maContext;
     vcl::EnumContext maDrawOtherContext;
     vcl::EnumContext maDrawMasterContext;

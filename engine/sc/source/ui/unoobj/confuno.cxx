@@ -44,6 +44,7 @@
 #include <tools/stream.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 constexpr OUString SCSAVEVERSION = u"SaveVersionOnClose"_ustr;
 
@@ -180,7 +181,7 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
             throw css::lang::IllegalArgumentException(
                 (u"LinkUpdateMode property value must be a SHORT with a value in"
                  " the range of the css::document::LinkUpdateModes constants"_ustr),
-                css::uno::Reference<cpo::uno::XInterface>(), -1);
+                cpo::uno::Reference<cpo::uno::XInterface>(), -1);
         }
         ScLkUpdMode eMode;
         switch (n)

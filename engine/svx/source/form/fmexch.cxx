@@ -25,7 +25,7 @@
 
 namespace svxform
 {
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
 using namespace cpo::uno;
     using namespace ::com::sun::star::datatransfer;
 
@@ -186,7 +186,7 @@ using namespace cpo::uno;
         m_bFocusEntry = _bFocusEntry;
     }
 
-    void OControlTransferData::addHiddenControlsFormat(const cpo::uno::Sequence< css::uno::Reference< cpo::uno::XInterface > >& seqInterfaces)
+    void OControlTransferData::addHiddenControlsFormat(const cpo::uno::Sequence< cpo::uno::Reference< cpo::uno::XInterface > >& seqInterfaces)
     {
         m_aHiddenControlModels = seqInterfaces;
     }

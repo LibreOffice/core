@@ -300,8 +300,8 @@
 #include <com/sun/star/text/textfield/Type.hpp>
 #include <com/sun/star/ucb/XAnyCompareFactory.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
-#include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.h>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/XInterface.hpp>
 #include <cpo/uno/XWeak.hpp>

@@ -39,7 +39,7 @@ public:
                                   SwViewShell& rViewShell, const SwAnnotationItem& rSidebarItem);
     virtual ~SidebarWinAccessible() override;
 
-    virtual css::uno::Reference<css::accessibility::XAccessible>
+    virtual cpo::uno::Reference<css::accessibility::XAccessible>
         SAL_CALL getAccessibleParent() override;
     virtual sal_Int64 SAL_CALL getAccessibleIndexInParent() override;
 

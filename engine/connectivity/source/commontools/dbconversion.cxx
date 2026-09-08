@@ -58,7 +58,7 @@ namespace dbtools
 {
 
 
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::sdb;
     using namespace ::com::sun::star::lang;

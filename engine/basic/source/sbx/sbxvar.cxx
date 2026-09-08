@@ -35,7 +35,7 @@
 #include <cpo/uno/XInterface.hpp>
 #include <utility>
 #include <filefmt.hxx>
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 // SbxVariable
@@ -390,7 +390,7 @@ void SbxVariable::SetDeclareClassName( const OUString& rDeclareClassName )
     m_aDeclareClassName = rDeclareClassName;
 }
 
-void SbxVariable::SetComListener( const css::uno::Reference< cpo::uno::XInterface >& xComListener,
+void SbxVariable::SetComListener( const cpo::uno::Reference< cpo::uno::XInterface >& xComListener,
                                   StarBASIC* pParentBasic )
 {
     m_xComListener = xComListener;

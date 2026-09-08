@@ -25,7 +25,7 @@
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmlerror.hxx>
 
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 
 XMLEventImportHelper::XMLEventImportHelper() :
     pEventNameMap(new NameMap)

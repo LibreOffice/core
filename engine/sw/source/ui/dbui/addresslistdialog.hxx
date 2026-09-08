@@ -45,7 +45,7 @@ class SwAddressListDialog : public SfxDialogController
 
     SwMailMergeAddressBlockPage* m_pAddressPage;
 
-    css::uno::Reference< css::sdb::XDatabaseContext> m_xDBContext;
+    cpo::uno::Reference< css::sdb::XDatabaseContext> m_xDBContext;
 
     SwDBData                                         m_aDBData;
 
@@ -81,12 +81,12 @@ public:
     SwAddressListDialog(SwMailMergeAddressBlockPage* pParent);
     virtual ~SwAddressListDialog() override;
 
-    css::uno::Reference< css::sdbc::XDataSource>
+    cpo::uno::Reference< css::sdbc::XDataSource>
                         GetSource() const;
 
     SharedConnection    GetConnection() const;
 
-    css::uno::Reference< css::sdbcx::XColumnsSupplier>
+    cpo::uno::Reference< css::sdbcx::XColumnsSupplier>
                         GetColumnsSupplier() const;
 
     const SwDBData&     GetDBData() const       {return m_aDBData;}

@@ -62,10 +62,10 @@ class JobDispatch : public  ::cppu::WeakImplHelper<
 private:
 
     /** reference to the uno service manager */
-    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
     /** reference to the frame, inside which this dispatch is used */
-    css::uno::Reference< css::frame::XFrame > m_xFrame;
+    cpo::uno::Reference< css::frame::XFrame > m_xFrame;
 
     /** name of module (writer, impress etc.) the frame is for */
     OUString m_sModuleIdentifier;
@@ -74,18 +74,18 @@ private:
 
 public:
 
-    explicit JobDispatch(css::uno::Reference< cpo::uno::XComponentContext >  xContext);
+    explicit JobDispatch(cpo::uno::Reference< cpo::uno::XComponentContext >  xContext);
     virtual ~JobDispatch() override;
 
     void impl_dispatchEvent  ( const OUString&                                            sEvent    ,
                                const cpo::uno::Sequence< css::beans::PropertyValue >&            lArgs     ,
-                               const css::uno::Reference< css::frame::XDispatchResultListener >& xListener );
+                               const cpo::uno::Reference< css::frame::XDispatchResultListener >& xListener );
     void impl_dispatchService( const OUString&                                            sService  ,
                                const cpo::uno::Sequence< css::beans::PropertyValue >&            lArgs     ,
-                               const css::uno::Reference< css::frame::XDispatchResultListener >& xListener );
+                               const cpo::uno::Reference< css::frame::XDispatchResultListener >& xListener );
     void impl_dispatchAlias  ( const OUString&                                            sAlias    ,
                                const cpo::uno::Sequence< css::beans::PropertyValue >&            lArgs     ,
-                               const css::uno::Reference< css::frame::XDispatchResultListener >& xListener );
+                               const cpo::uno::Reference< css::frame::XDispatchResultListener >& xListener );
 
 public:
     virtual OUString getImplementationName() override
@@ -107,22 +107,22 @@ public:
     virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& lArguments ) override;
 
     // XDispatchProvider
-    virtual css::uno::Reference< css::frame::XDispatch >                       queryDispatch  ( const css::util::URL&                                       aURL             ,
+    virtual cpo::uno::Reference< css::frame::XDispatch >                       queryDispatch  ( const css::util::URL&                                       aURL             ,
                                                                                                          const OUString&                                      sTargetFrameName ,
                                                                                                                sal_Int32                                             nSearchFlags     ) override;
-    virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor      ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Reference< css::frame::XDispatch > > queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor      ) override;
 
     // XNotifyingDispatch
     virtual void dispatchWithNotification( const css::util::URL&                                             aURL      ,
                                                     const cpo::uno::Sequence< css::beans::PropertyValue >&            lArgs     ,
-                                                    const css::uno::Reference< css::frame::XDispatchResultListener >& xListener ) override;
+                                                    const cpo::uno::Reference< css::frame::XDispatchResultListener >& xListener ) override;
 
     // XDispatch
     virtual void dispatch            ( const css::util::URL&                                     aURL      ,
                                                 const cpo::uno::Sequence< css::beans::PropertyValue >&    lArgs     ) override;
-    virtual void addStatusListener   ( const css::uno::Reference< css::frame::XStatusListener >& xListener ,
+    virtual void addStatusListener   ( const cpo::uno::Reference< css::frame::XStatusListener >& xListener ,
                                                 const css::util::URL&                                     aURL      ) override;
-    virtual void removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xListener ,
+    virtual void removeStatusListener( const cpo::uno::Reference< css::frame::XStatusListener >& xListener ,
                                                     const css::util::URL&                                     aURL      ) override;
 };
 
@@ -133,7 +133,7 @@ public:
     @param      xContext
                     reference to the uno service manager
 */
-JobDispatch::JobDispatch( /*IN*/ css::uno::Reference< cpo::uno::XComponentContext >  xContext )
+JobDispatch::JobDispatch( /*IN*/ cpo::uno::Reference< cpo::uno::XComponentContext >  xContext )
     : m_xContext    (std::move(xContext                        ))
 {
 }
@@ -168,7 +168,7 @@ void JobDispatch::initialize( const cpo::uno::Sequence< cpo::uno::Any >& lArgume
         {
             lArguments[a] >>= m_xFrame;
 
-            css::uno::Reference< css::frame::XModuleManager2 > xModuleManager =
+            cpo::uno::Reference< css::frame::XModuleManager2 > xModuleManager =
                 css::frame::ModuleManager::create(m_xContext);
             try
             {
@@ -197,11 +197,11 @@ void JobDispatch::initialize( const cpo::uno::Sequence< cpo::uno::Any >& lArgume
     @param  nSearchFlags
                 Can be SELF or CREATE only and are set only if sTargetFrameName isn't a special target
 */
-css::uno::Reference< css::frame::XDispatch > JobDispatch::queryDispatch( /*IN*/ const css::util::URL&  aURL             ,
+cpo::uno::Reference< css::frame::XDispatch > JobDispatch::queryDispatch( /*IN*/ const css::util::URL&  aURL             ,
                                                                                   /*IN*/ const OUString& /*sTargetFrameName*/ ,
                                                                                   /*IN*/       sal_Int32        /*nSearchFlags*/     )
 {
-    css::uno::Reference< css::frame::XDispatch > xDispatch;
+    cpo::uno::Reference< css::frame::XDispatch > xDispatch;
 
     JobURL aAnalyzedURL(aURL.Complete);
     if (aAnalyzedURL.isValid())
@@ -222,11 +222,11 @@ css::uno::Reference< css::frame::XDispatch > JobDispatch::queryDispatch( /*IN*/ 
             NULL references are not skipped. Every result
             match to one given descriptor item.
 */
-cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > JobDispatch::queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor )
+cpo::uno::Sequence< cpo::uno::Reference< css::frame::XDispatch > > JobDispatch::queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor )
 {
     // don't pack resulting list!
     sal_Int32 nCount = lDescriptor.getLength();
-    cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > lDispatches(nCount);
+    cpo::uno::Sequence< cpo::uno::Reference< css::frame::XDispatch > > lDispatches(nCount);
     auto lDispatchesRange = asNonConstRange(lDispatches);
     for (sal_Int32 i=0; i<nCount; ++i)
         lDispatchesRange[i] = queryDispatch( lDescriptor[i].FeatureURL  ,
@@ -261,7 +261,7 @@ cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > JobDispatch::
 */
 void JobDispatch::dispatchWithNotification( /*IN*/ const css::util::URL&                                             aURL      ,
                                                      /*IN*/ const cpo::uno::Sequence< css::beans::PropertyValue >&            lArgs     ,
-                                                     /*IN*/ const css::uno::Reference< css::frame::XDispatchResultListener >& xListener )
+                                                     /*IN*/ const cpo::uno::Reference< css::frame::XDispatchResultListener >& xListener )
 {
     JobURL aAnalyzedURL(aURL.Complete);
     if (aAnalyzedURL.isValid())
@@ -296,14 +296,14 @@ void JobDispatch::dispatchWithNotification( /*IN*/ const css::util::URL&        
 */
 void JobDispatch::impl_dispatchEvent( /*IN*/ const OUString&                                            sEvent    ,
                                       /*IN*/ const cpo::uno::Sequence< css::beans::PropertyValue >&            lArgs     ,
-                                      /*IN*/ const css::uno::Reference< css::frame::XDispatchResultListener >& xListener )
+                                      /*IN*/ const cpo::uno::Reference< css::frame::XDispatchResultListener >& xListener )
 {
     // get list of all enabled jobs
     // The called static helper methods read it from the configuration and
     // filter disabled jobs using it's time stamp values.
     std::vector< OUString > lJobs = JobData::getEnabledJobsForEvent(m_xContext, sEvent);
 
-    css::uno::Reference< css::frame::XDispatchResultListener > xThis( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
+    cpo::uno::Reference< css::frame::XDispatchResultListener > xThis( static_cast< ::cppu::OWeakObject* >(this), cpo::uno::UNO_QUERY );
 
     // no jobs... no execution
     // But a may given listener will know something...
@@ -362,7 +362,7 @@ void JobDispatch::impl_dispatchEvent( /*IN*/ const OUString&                    
 */
 void JobDispatch::impl_dispatchService( /*IN*/ const OUString&                                            sService  ,
                                         /*IN*/ const cpo::uno::Sequence< css::beans::PropertyValue >&            lArgs     ,
-                                        /*IN*/ const css::uno::Reference< css::frame::XDispatchResultListener >& xListener )
+                                        /*IN*/ const cpo::uno::Reference< css::frame::XDispatchResultListener >& xListener )
 {
     JobData aCfg(m_xContext);
     aCfg.setService(sService);
@@ -376,7 +376,7 @@ void JobDispatch::impl_dispatchService( /*IN*/ const OUString&                  
     rtl::Reference<Job> pJob = new Job(m_xContext, m_xFrame);
     pJob->setJobData(aCfg);
 
-    css::uno::Reference< css::frame::XDispatchResultListener > xThis( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
+    cpo::uno::Reference< css::frame::XDispatchResultListener > xThis( static_cast< ::cppu::OWeakObject* >(this), cpo::uno::UNO_QUERY );
 
     // Special mode for listener.
     // We don't notify it directly here. We delegate that
@@ -405,7 +405,7 @@ void JobDispatch::impl_dispatchService( /*IN*/ const OUString&                  
 */
 void JobDispatch::impl_dispatchAlias( /*IN*/ const OUString&                                            sAlias    ,
                                       /*IN*/ const cpo::uno::Sequence< css::beans::PropertyValue >&            lArgs     ,
-                                      /*IN*/ const css::uno::Reference< css::frame::XDispatchResultListener >& xListener )
+                                      /*IN*/ const cpo::uno::Reference< css::frame::XDispatchResultListener >& xListener )
 {
     JobData aCfg(m_xContext);
     aCfg.setAlias(sAlias);
@@ -414,7 +414,7 @@ void JobDispatch::impl_dispatchAlias( /*IN*/ const OUString&                    
     rtl::Reference<Job> pJob = new Job(m_xContext, m_xFrame);
     pJob->setJobData(aCfg);
 
-    css::uno::Reference< css::frame::XDispatchResultListener > xThis( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
+    cpo::uno::Reference< css::frame::XDispatchResultListener > xThis( static_cast< ::cppu::OWeakObject* >(this), cpo::uno::UNO_QUERY );
 
     // Special mode for listener.
     // We don't notify it directly here. We delegate that
@@ -442,13 +442,13 @@ void JobDispatch::impl_dispatchAlias( /*IN*/ const OUString&                    
 void JobDispatch::dispatch( /*IN*/ const css::util::URL&                                  aURL  ,
                                      /*IN*/ const cpo::uno::Sequence< css::beans::PropertyValue >& lArgs )
 {
-    dispatchWithNotification(aURL, lArgs, css::uno::Reference< css::frame::XDispatchResultListener >());
+    dispatchWithNotification(aURL, lArgs, cpo::uno::Reference< css::frame::XDispatchResultListener >());
 }
 
 /**
     @short  not supported
 */
-void JobDispatch::addStatusListener( /*IN*/ const css::uno::Reference< css::frame::XStatusListener >&,
+void JobDispatch::addStatusListener( /*IN*/ const cpo::uno::Reference< css::frame::XStatusListener >&,
                                               /*IN*/ const css::util::URL&                                      )
 {
 }
@@ -456,7 +456,7 @@ void JobDispatch::addStatusListener( /*IN*/ const css::uno::Reference< css::fram
 /**
     @short  not supported
 */
-void JobDispatch::removeStatusListener( /*IN*/ const css::uno::Reference< css::frame::XStatusListener >&,
+void JobDispatch::removeStatusListener( /*IN*/ const cpo::uno::Reference< css::frame::XStatusListener >&,
                                                  /*IN*/ const css::util::URL&                                          )
 {
 }

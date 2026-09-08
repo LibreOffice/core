@@ -49,6 +49,7 @@
 #include <com/sun/star/sheet/SensitivityReport.hpp>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 ScSolverProgressDialog::ScSolverProgressDialog(weld::Window* pParent)
     : GenericDialogController(pParent, u"modules/scalc/ui/solverprogressdialog.ui"_ustr,

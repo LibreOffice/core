@@ -32,7 +32,7 @@ constexpr OUString UIELEMENT_PROPNAME_RESOURCEURL = u"ResourceURL"_ustr;
 constexpr OUString UIELEMENT_PROPNAME_TYPE = u"Type"_ustr;
 constexpr OUString UIELEMENT_PROPNAME_FRAME = u"Frame"_ustr;
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
@@ -70,12 +70,12 @@ Sequence< Type > UIElementWrapperBase::getTypes(  )
     );
 }
 
-void UIElementWrapperBase::addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener )
+void UIElementWrapperBase::addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& xListener )
 {
     m_aListenerContainer.addInterface( cppu::UnoType<css::lang::XEventListener>::get(), xListener );
 }
 
-void UIElementWrapperBase::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener )
+void UIElementWrapperBase::removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& xListener )
 {
     m_aListenerContainer.removeInterface( cppu::UnoType<css::lang::XEventListener>::get(), xListener );
 }
@@ -107,9 +107,9 @@ void UIElementWrapperBase::initialize( const Sequence< Any >& aArguments )
 }
 
 // XUIElement
-css::uno::Reference< css::frame::XFrame > UIElementWrapperBase::getFrame()
+cpo::uno::Reference< css::frame::XFrame > UIElementWrapperBase::getFrame()
 {
-    css::uno::Reference< css::frame::XFrame > xFrame( m_xWeakFrame );
+    cpo::uno::Reference< css::frame::XFrame > xFrame( m_xWeakFrame );
     return xFrame;
 }
 
@@ -173,11 +173,11 @@ void UIElementWrapperBase::getFastPropertyValue( cpo::uno::Any& aValue  ,
     return ourInfoHelper;
 }
 
-css::uno::Reference< css::beans::XPropertySetInfo > UIElementWrapperBase::getPropertySetInfo()
+cpo::uno::Reference< css::beans::XPropertySetInfo > UIElementWrapperBase::getPropertySetInfo()
 {
     // Create structure of propertysetinfo for baseclass "OPropertySetHelper".
     // (Use method "getInfoHelper()".)
-    static css::uno::Reference< css::beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
+    static cpo::uno::Reference< css::beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
 
     return xInfo;
 }

@@ -50,10 +50,10 @@ public:
      void                                   intersectRectangle( const css::awt::Rectangle& rRect ) override;
      void                                   excludeRectangle( const css::awt::Rectangle& rRect ) override;
      void                                   xOrRectangle( const css::awt::Rectangle& rRect ) override;
-     void                                   unionRegion( const css::uno::Reference< css::awt::XRegion >& rxRegion ) override;
-     void                                   intersectRegion( const css::uno::Reference< css::awt::XRegion >& rxRegion ) override;
-     void                                   excludeRegion( const css::uno::Reference< css::awt::XRegion >& rxRegion ) override;
-     void                                   xOrRegion( const css::uno::Reference< css::awt::XRegion >& rxRegion ) override;
+     void                                   unionRegion( const cpo::uno::Reference< css::awt::XRegion >& rxRegion ) override;
+     void                                   intersectRegion( const cpo::uno::Reference< css::awt::XRegion >& rxRegion ) override;
+     void                                   excludeRegion( const cpo::uno::Reference< css::awt::XRegion >& rxRegion ) override;
+     void                                   xOrRegion( const cpo::uno::Reference< css::awt::XRegion >& rxRegion ) override;
      cpo::uno::Sequence< css::awt::Rectangle > getRectangles() override;
 
 };

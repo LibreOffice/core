@@ -68,7 +68,7 @@ SfxRecordingFloatWrapper_Impl::SfxRecordingFloatWrapper_Impl(vcl::Window* pParen
 SfxRecordingFloatWrapper_Impl::~SfxRecordingFloatWrapper_Impl()
 {
     SfxBoolItem aItem( FN_PARAM_1, true );
-    css::uno::Reference< css::frame::XDispatchRecorder > xRecorder = pBindings->GetRecorder();
+    cpo::uno::Reference< css::frame::XDispatchRecorder > xRecorder = pBindings->GetRecorder();
     if ( xRecorder.is() )
         pBindings->GetDispatcher()->ExecuteList(SID_STOP_RECORDING,
                 SfxCallMode::SYNCHRON, { &aItem });
@@ -78,7 +78,7 @@ bool SfxRecordingFloatWrapper_Impl::QueryClose()
 {
     // asking for recorded macro should be replaced if index access is available!
     bool bRet = true;
-    css::uno::Reference< css::frame::XDispatchRecorder > xRecorder = pBindings->GetRecorder();
+    cpo::uno::Reference< css::frame::XDispatchRecorder > xRecorder = pBindings->GetRecorder();
     if ( xRecorder.is() && !xRecorder->getRecordedMacro().isEmpty() )
     {
         SfxRecordingFloat_Impl* pFloatDlg = static_cast<SfxRecordingFloat_Impl*>(GetController().get());
@@ -114,7 +114,7 @@ SfxRecordingFloat_Impl::SfxRecordingFloat_Impl(SfxBindings* pBind, SfxChildWindo
 IMPL_LINK_NOARG(SfxRecordingFloat_Impl, PresentParentFrame, void*, void)
 {
     mnPostUserEventId = nullptr;
-    css::uno::Reference<css::awt::XTopWindow> xTopWindow(m_xDispatcher->GetFrame()->getContainerWindow(), css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::awt::XTopWindow> xTopWindow(m_xDispatcher->GetFrame()->getContainerWindow(), cpo::uno::UNO_QUERY);
     if (xTopWindow.is())
         xTopWindow->toFront();
 }

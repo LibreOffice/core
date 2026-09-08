@@ -82,13 +82,13 @@ namespace dbtools
             /// the type of the parameter
             ParameterClassification     eType;
             /// the column object for this parameter, as returned by the query composer
-            css::uno::Reference< css::beans::XPropertySet >
+            cpo::uno::Reference< css::beans::XPropertySet >
                                         xComposerColumn;
             /// the indices of inner parameters which need to be filled when this concrete parameter is set
             ::std::vector< sal_Int32 >  aInnerIndexes;
 
             /// ctor with composer column
-            ParameterMetaData( css::uno::Reference< css::beans::XPropertySet > _xColumn )
+            ParameterMetaData( cpo::uno::Reference< css::beans::XPropertySet > _xColumn )
                 :eType           ( ParameterClassification::FilledExternally )
                 ,xComposerColumn (std::move( _xColumn         ))
             {
@@ -101,18 +101,18 @@ namespace dbtools
         ::osl::Mutex&                       m_rMutex;
         ::comphelper::OInterfaceContainerHelper3<css::form::XDatabaseParameterListener> m_aParameterListeners;
 
-        css::uno::Reference< cpo::uno::XComponentContext >
+        cpo::uno::Reference< cpo::uno::XComponentContext >
                                             m_xContext;
 
         cpo::uno::WeakReference< css::beans::XPropertySet >
                                             m_xComponent;                // the database component whose parameters we're handling
-        css::uno::Reference< cpo::uno::XAggregation >
+        cpo::uno::Reference< cpo::uno::XAggregation >
                                             m_xAggregatedRowSet;    // the aggregated row set - necessary for unwrapped access to some interfaces
-        css::uno::Reference< css::sdbc::XParameters >
+        cpo::uno::Reference< css::sdbc::XParameters >
                                             m_xInnerParamUpdate;    // write access to the inner parameters
         SharedQueryComposer                 m_xComposer;            // query composer wrapping the statement which the *aggregate* is based on
         SharedQueryComposer                 m_xParentComposer;      // query composer wrapping the statement of our parent database component
-        css::uno::Reference< css::container::XIndexAccess >
+        cpo::uno::Reference< css::container::XIndexAccess >
                                             m_xInnerParamColumns;   // index access to the parameter columns, as got from the query composer
 
         ::dbtools::param::ParametersContainerRef
@@ -127,7 +127,7 @@ namespace dbtools
 
         OUString                            m_sIdentifierQuoteString;
         OUString                            m_sSpecialCharacters;
-        css::uno::Reference< css::sdbc::XDatabaseMetaData > m_xConnectionMetadata;
+        cpo::uno::Reference< css::sdbc::XDatabaseMetaData > m_xConnectionMetadata;
 
         ::std::vector< bool >               m_aParametersVisited;
 
@@ -138,13 +138,13 @@ namespace dbtools
         */
         explicit ParameterManager(
             ::osl::Mutex& _rMutex,
-            const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxContext
         );
 
         /// late ctor
         void    initialize(
-                    const css::uno::Reference< css::beans::XPropertySet >& _rxComponent,
-                    const css::uno::Reference< cpo::uno::XAggregation >& _rxComponentAggregate
+                    const cpo::uno::Reference< css::beans::XPropertySet >& _rxComponent,
+                    const cpo::uno::Reference< cpo::uno::XAggregation >& _rxComponentAggregate
                 );
 
         /// makes the object forgetting the references to the database component
@@ -178,7 +178,7 @@ namespace dbtools
                 <TRUE/> if and only if the parameter filling has <em>not</em> been cancelled by the user
         */
         bool    fillParameterValues(
-                    const css::uno::Reference< css::task::XInteractionHandler >& _rxCompletionHandler,
+                    const cpo::uno::Reference< css::task::XInteractionHandler >& _rxCompletionHandler,
                     ::osl::ResettableMutexGuard& _rClearForNotifies
                 );
 
@@ -203,13 +203,13 @@ namespace dbtools
         /** adds the given listener to the list of parameter listeners
         */
         void    addParameterListener(
-                    const css::uno::Reference< css::form::XDatabaseParameterListener >& _rxListener
+                    const cpo::uno::Reference< css::form::XDatabaseParameterListener >& _rxListener
                 );
 
         /** removes the given listener from the list of parameter listeners
         */
         void    removeParameterListener(
-                    const css::uno::Reference< css::form::XDatabaseParameterListener >& _rxListener
+                    const cpo::uno::Reference< css::form::XDatabaseParameterListener >& _rxListener
                 );
 
         // XParameters equivalents
@@ -227,14 +227,14 @@ namespace dbtools
         void setDate            ( sal_Int32 _nIndex, const css::util::Date& x);
         void setTime            ( sal_Int32 _nIndex, const css::util::Time& x);
         void setTimestamp       ( sal_Int32 _nIndex, const css::util::DateTime& x);
-        void setBinaryStream    ( sal_Int32 _nIndex, const css::uno::Reference< css::io::XInputStream>& x, sal_Int32 length);
-        void setCharacterStream ( sal_Int32 _nIndex, const css::uno::Reference< css::io::XInputStream>& x, sal_Int32 length);
+        void setBinaryStream    ( sal_Int32 _nIndex, const cpo::uno::Reference< css::io::XInputStream>& x, sal_Int32 length);
+        void setCharacterStream ( sal_Int32 _nIndex, const cpo::uno::Reference< css::io::XInputStream>& x, sal_Int32 length);
         void setObject          ( sal_Int32 _nIndex, const cpo::uno::Any& x);
         void setObjectWithInfo  ( sal_Int32 _nIndex, const cpo::uno::Any& x, sal_Int32 targetSqlType, sal_Int32 scale);
-        void setRef             ( sal_Int32 _nIndex, const css::uno::Reference< css::sdbc::XRef>& x);
-        void setBlob            ( sal_Int32 _nIndex, const css::uno::Reference< css::sdbc::XBlob>& x);
-        void setClob            ( sal_Int32 _nIndex, const css::uno::Reference< css::sdbc::XClob>& x);
-        void setArray           ( sal_Int32 _nIndex, const css::uno::Reference< css::sdbc::XArray>& x);
+        void setRef             ( sal_Int32 _nIndex, const cpo::uno::Reference< css::sdbc::XRef>& x);
+        void setBlob            ( sal_Int32 _nIndex, const cpo::uno::Reference< css::sdbc::XBlob>& x);
+        void setClob            ( sal_Int32 _nIndex, const cpo::uno::Reference< css::sdbc::XClob>& x);
+        void setArray           ( sal_Int32 _nIndex, const cpo::uno::Reference< css::sdbc::XArray>& x);
         void clearParameters();
 
     private:
@@ -246,7 +246,7 @@ namespace dbtools
         OUString
                 createFilterConditionFromColumnLink(
                     const OUString& /* [in]  */ _rMasterColumn,
-                    const css::uno::Reference< css::beans::XPropertySet >& /* [in]  */ xDetailColumn,
+                    const cpo::uno::Reference< css::beans::XPropertySet >& /* [in]  */ xDetailColumn,
                           OUString& /* [out] */ _rNewParamName
                 );
 
@@ -262,7 +262,7 @@ namespace dbtools
                 inner parameters
         */
         bool    initializeComposerByComponent(
-                    const css::uno::Reference< css::beans::XPropertySet >& _rxComponent
+                    const cpo::uno::Reference< css::beans::XPropertySet >& _rxComponent
                 );
 
         /** collects initial meta information about inner parameters (i.e. it initially fills
@@ -312,8 +312,8 @@ namespace dbtools
                 <member>m_aMasterFields</member> and <member>m_aDetailFields</member> have the same length
         */
         void    classifyLinks(
-                    const css::uno::Reference< css::container::XNameAccess >& _rxParentColumns,
-                    const css::uno::Reference< css::container::XNameAccess >& _rxColumns,
+                    const cpo::uno::Reference< css::container::XNameAccess >& _rxParentColumns,
+                    const cpo::uno::Reference< css::container::XNameAccess >& _rxColumns,
                     ::std::vector< OUString >& _out_rAdditionalFilterComponents,
                     ::std::vector< OUString >& _out_rAdditionalHavingComponents
                 );
@@ -337,7 +337,7 @@ namespace dbtools
                 the instance is alive, i.e. <member>isAlive</member> returns <TRUE/>
         */
         void    fillLinkedParameters(
-                    const css::uno::Reference< css::container::XNameAccess >& _rxParentColumns
+                    const cpo::uno::Reference< css::container::XNameAccess >& _rxParentColumns
                 );
 
         /** completes all missing parameters via an interaction handler
@@ -349,8 +349,8 @@ namespace dbtools
                 <TRUE/> if and only if the parameter filling has <em>not</em> been cancelled by the user
         */
         bool    completeParameters(
-                    const css::uno::Reference< css::task::XInteractionHandler >& _rxCompletionHandler,
-                    const css::uno::Reference< css::sdbc::XConnection >& _rxConnection
+                    const cpo::uno::Reference< css::task::XInteractionHandler >& _rxCompletionHandler,
+                    const cpo::uno::Reference< css::sdbc::XConnection >& _rxConnection
                 );
 
         /** asks the parameter listeners to fill in final values
@@ -376,7 +376,7 @@ namespace dbtools
                 <TRUE/> if and only if the columns could be successfully retrieved
         */
         bool    getParentColumns(
-                    css::uno::Reference< css::container::XNameAccess >& /* [out] */ _out_rxParentColumns,
+                    cpo::uno::Reference< css::container::XNameAccess >& /* [out] */ _out_rxParentColumns,
                     bool _bFromComposer
                 );
 
@@ -388,14 +388,14 @@ namespace dbtools
                 <TRUE/> if and only if the columns could be successfully retrieved
         */
         bool    getColumns(
-                    css::uno::Reference< css::container::XNameAccess >& /* [out] */ _rxColumns,
+                    cpo::uno::Reference< css::container::XNameAccess >& /* [out] */ _rxColumns,
                     bool _bFromComposer
                 );
 
         /** retrieves the active connection of the database component
         */
         void    getConnection(
-                    css::uno::Reference< css::sdbc::XConnection >& /* [out] */ _rxConnection
+                    cpo::uno::Reference< css::sdbc::XConnection >& /* [out] */ _rxConnection
                 );
 
         /** caches some info about the connection of our database component

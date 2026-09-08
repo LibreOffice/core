@@ -64,6 +64,7 @@
 #endif
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace oox::drawingml {
 
@@ -181,7 +182,7 @@ uno::Reference<xml::dom::XDocument> SmartArtDiagram::convertAndSet(std::u16strin
     return aDomTree;
 }
 
-css::uno::Reference<css::xml::dom::XDocument> SmartArtDiagram::convertAndSet(std::u16string_view rDOMData, svx::diagram::DomMapFlag aDomMapFlag, bool bAdd)
+cpo::uno::Reference<css::xml::dom::XDocument> SmartArtDiagram::convertAndSet(std::u16string_view rDOMData, svx::diagram::DomMapFlag aDomMapFlag, bool bAdd)
 {
     // construct MemoryStream and OStreamWrapper
     const OString sUtf8(OUStringToOString(rDOMData, RTL_TEXTENCODING_UTF8));
@@ -365,7 +366,7 @@ void SmartArtDiagram::writeDiagramOOXData(DrawingML& rOriginalDrawingML, uno::Re
 #endif
 }
 
-void SmartArtDiagram::writeDiagramReducedOOXData(css::uno::Reference<css::io::XOutputStream>& xOutputStream) const
+void SmartArtDiagram::writeDiagramReducedOOXData(cpo::uno::Reference<css::io::XOutputStream>& xOutputStream) const
 {
     // need a XmlFilterBase for ShapeExport/DrawingML. All the 'big' exports classes for
     // this are in sd/sc/sw and we are not in an oox export here, so none exists. Use
@@ -375,7 +376,7 @@ void SmartArtDiagram::writeDiagramReducedOOXData(css::uno::Reference<css::io::XO
     class LocalFilterBase final : public oox::core::XmlFilterBase
     {
     public:
-        explicit LocalFilterBase(css::uno::Reference<cpo::uno::XComponentContext> const& rxContext)
+        explicit LocalFilterBase(cpo::uno::Reference<cpo::uno::XComponentContext> const& rxContext)
         : XmlFilterBase(rxContext) {}
         // virtual ~LocalFilterBase() override;
 

@@ -52,7 +52,7 @@ class OFrames final : public ::cppu::WeakImplHelper< css::frame::XFrames >
             @param      xOwner            , reference to our owner. We hold a wekreference to prevent us against cross-references!
             @param      pFrameContainer   , pointer to shared framecontainer of owner. It's valid only, if weakreference is valid!
         */
-         OFrames(   const   css::uno::Reference< css::frame::XFrame >&              xOwner          ,
+         OFrames(   const   cpo::uno::Reference< css::frame::XFrame >&              xOwner          ,
                             FrameContainer*                                         pFrameContainer );
 
         //  XFrames
@@ -67,7 +67,7 @@ class OFrames final : public ::cppu::WeakImplHelper< css::frame::XFrames >
             @param      "xFrame", reference to an existing frame to append.
             @onerror    We do nothing in release or throw an assert in debug version.
         */
-        virtual void append( const css::uno::Reference< css::frame::XFrame >& xFrame ) override;
+        virtual void append( const cpo::uno::Reference< css::frame::XFrame >& xFrame ) override;
 
         /**
             @short      remove frame from container
@@ -79,7 +79,7 @@ class OFrames final : public ::cppu::WeakImplHelper< css::frame::XFrames >
             @param      "xFrame", reference to an existing frame to remove.
             @onerror    We do nothing in release or throw an assert in debug version.
         */
-        virtual void remove( const css::uno::Reference< css::frame::XFrame >& xFrame ) override;
+        virtual void remove( const cpo::uno::Reference< css::frame::XFrame >& xFrame ) override;
 
         /**
             @short      return list of all applicable frames for given flags
@@ -89,7 +89,7 @@ class OFrames final : public ::cppu::WeakImplHelper< css::frame::XFrames >
 
             @onerror    An empty list is returned.
         */
-        virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XFrame > > queryFrames( sal_Int32 nSearchFlags ) override;
+        virtual cpo::uno::Sequence< cpo::uno::Reference< css::frame::XFrame > > queryFrames( sal_Int32 nSearchFlags ) override;
 
         //  XIndexAccess
 

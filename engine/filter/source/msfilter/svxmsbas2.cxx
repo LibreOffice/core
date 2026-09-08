@@ -26,6 +26,7 @@
 #include <filter/msfilter/svxmsbas.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 ErrCode SvxImportMSVBasic::SaveOrDelMSVBAStorage( bool bSaveInto,
                                                 const OUString& rStorageName )

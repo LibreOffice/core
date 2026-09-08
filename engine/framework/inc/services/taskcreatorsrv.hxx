@@ -36,10 +36,10 @@ private:
     /** @short  the global uno service manager.
         @descr  Must be used to create own needed services.
      */
-    css::uno::Reference<cpo::uno::XComponentContext> m_xContext;
+    cpo::uno::Reference<cpo::uno::XComponentContext> m_xContext;
 
 public:
-    explicit TaskCreatorService(css::uno::Reference<cpo::uno::XComponentContext> xContext);
+    explicit TaskCreatorService(cpo::uno::Reference<cpo::uno::XComponentContext> xContext);
 
     virtual OUString getImplementationName() override
     {
@@ -57,29 +57,29 @@ public:
     }
 
     // XSingleServiceFactory
-    virtual css::uno::Reference<cpo::uno::XInterface> createInstance() override;
+    virtual cpo::uno::Reference<cpo::uno::XInterface> createInstance() override;
 
-    virtual css::uno::Reference<cpo::uno::XInterface>
+    virtual cpo::uno::Reference<cpo::uno::XInterface>
     createInstanceWithArguments(const cpo::uno::Sequence<cpo::uno::Any>& lArguments) override;
 
 private:
-    css::uno::Reference<css::awt::XWindow>
-    implts_createContainerWindow(const css::uno::Reference<css::awt::XWindow>& xParentWindow,
+    cpo::uno::Reference<css::awt::XWindow>
+    implts_createContainerWindow(const cpo::uno::Reference<css::awt::XWindow>& xParentWindow,
                                  const css::awt::Rectangle& aPosSize, bool bTopWindow);
 
-    static void implts_applyDocStyleToWindow(const css::uno::Reference<css::awt::XWindow>& xWindow);
+    static void implts_applyDocStyleToWindow(const cpo::uno::Reference<css::awt::XWindow>& xWindow);
 
-    css::uno::Reference<css::frame::XFrame2>
-    implts_createFrame(const css::uno::Reference<css::frame::XFrame>& xParentFrame,
-                       const css::uno::Reference<css::awt::XWindow>& xContainerWindow,
+    cpo::uno::Reference<css::frame::XFrame2>
+    implts_createFrame(const cpo::uno::Reference<css::frame::XFrame>& xParentFrame,
+                       const cpo::uno::Reference<css::awt::XWindow>& xContainerWindow,
                        const OUString& sName);
 
     void
-    implts_establishWindowStateListener(const css::uno::Reference<css::frame::XFrame2>& xFrame);
-    void implts_establishTitleBarUpdate(const css::uno::Reference<css::frame::XFrame2>& xFrame);
+    implts_establishWindowStateListener(const cpo::uno::Reference<css::frame::XFrame2>& xFrame);
+    void implts_establishTitleBarUpdate(const cpo::uno::Reference<css::frame::XFrame2>& xFrame);
 
     static void
-    implts_establishDocModifyListener(const css::uno::Reference<css::frame::XFrame2>& xFrame);
+    implts_establishDocModifyListener(const cpo::uno::Reference<css::frame::XFrame2>& xFrame);
 
     static OUString impl_filterNames(const OUString& sName);
 };

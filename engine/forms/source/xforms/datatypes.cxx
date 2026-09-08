@@ -39,7 +39,7 @@ namespace xforms
 {
 
 
-    using ::com::sun::star::uno::Reference;
+    using ::cpo::uno::Reference;
     using ::cpo::uno::Any;
     using ::com::sun::star::util::Date;
     using ::com::sun::star::util::Time;

@@ -27,16 +27,16 @@ class SwVbaRangeHelper
 {
 public:
     /// @throws cpo::uno::RuntimeException
-    static css::uno::Reference< css::text::XTextRange > getRangeByPosition( const css::uno::Reference< css::text::XText >& rText, sal_Int32 _position );
+    static cpo::uno::Reference< css::text::XTextRange > getRangeByPosition( const cpo::uno::Reference< css::text::XText >& rText, sal_Int32 _position );
     /// @throws cpo::uno::RuntimeException
-    static void insertString( css::uno::Reference< css::text::XTextRange > const & rTextRange, css::uno::Reference< css::text::XText > const & rText, std::u16string_view aStr, bool _bAbsorb );
+    static void insertString( cpo::uno::Reference< css::text::XTextRange > const & rTextRange, cpo::uno::Reference< css::text::XText > const & rText, std::u16string_view aStr, bool _bAbsorb );
     /// @throws cpo::uno::RuntimeException
     /// @throws css::script::BasicErrorException
-    static css::uno::Reference< css::text::XTextCursor > initCursor( const css::uno::Reference< css::text::XTextRange >& rTextRange, const css::uno::Reference< css::text::XText >& rText );
+    static cpo::uno::Reference< css::text::XTextCursor > initCursor( const cpo::uno::Reference< css::text::XTextRange >& rTextRange, const cpo::uno::Reference< css::text::XText >& rText );
     /// @throws cpo::uno::RuntimeException
-    static sal_Int32 getPosition( const css::uno::Reference< css::text::XText >& rText, const css::uno::Reference< css::text::XTextRange >& rTextRange );
+    static sal_Int32 getPosition( const cpo::uno::Reference< css::text::XText >& rText, const cpo::uno::Reference< css::text::XTextRange >& rTextRange );
     /// @throws cpo::uno::RuntimeException
-    static css::uno::Reference< css::text::XTextContent > findBookmarkByPosition( const css::uno::Reference< css::text::XTextDocument >& xTextDoc, const css::uno::Reference< css::text::XTextRange >& xTextRange );
+    static cpo::uno::Reference< css::text::XTextContent > findBookmarkByPosition( const cpo::uno::Reference< css::text::XTextDocument >& xTextDoc, const cpo::uno::Reference< css::text::XTextRange >& xTextRange );
 
 };
 #endif // INCLUDED_SW_SOURCE_UI_VBA_VBARANGEHELPER_HXX

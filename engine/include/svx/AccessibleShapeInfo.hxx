@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVX_ACCESSIBLESHAPEINFO_HXX
 #define INCLUDED_SVX_ACCESSIBLESHAPEINFO_HXX
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <svx/svxdllapi.h>
 
 namespace com::sun::star {
@@ -50,12 +50,12 @@ public:
     /** The shape itself for which an accessible object is to be
         constructed.
     */
-    css::uno::Reference<
+    cpo::uno::Reference<
         css::drawing::XShape> mxShape;
 
     /** The accessible parent object of the shape.
     */
-    css::uno::Reference<
+    cpo::uno::Reference<
         css::accessibility::XAccessible> mxParent;
 
     /** This object that may be realized by the same implementation as that
@@ -68,9 +68,9 @@ public:
     /** Copy the given values into the members described above.
     */
     AccessibleShapeInfo (
-        css::uno::Reference<
+        cpo::uno::Reference<
             css::drawing::XShape> xShape,
-        css::uno::Reference<
+        cpo::uno::Reference<
             css::accessibility::XAccessible> xParent,
         IAccessibleParent* pChildrenManager);
 
@@ -78,9 +78,9 @@ public:
         The accessible parent implementation object is set to NULL.
     */
     AccessibleShapeInfo (
-        css::uno::Reference<
+        cpo::uno::Reference<
             css::drawing::XShape> xShape,
-        css::uno::Reference<
+        cpo::uno::Reference<
             css::accessibility::XAccessible> xParent);
 
     ~AccessibleShapeInfo();

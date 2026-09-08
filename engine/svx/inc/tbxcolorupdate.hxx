@@ -51,7 +51,7 @@ class ToolboxButtonColorUpdaterBase : public SfxListener
 public:
     ToolboxButtonColorUpdaterBase(bool bWideButton, OUString aCommandLabel, OUString aCommandURL,
                                   sal_uInt16 nSlotId,
-                                  css::uno::Reference<css::frame::XFrame> xFrame);
+                                  cpo::uno::Reference<css::frame::XFrame> xFrame);
 
     virtual ~ToolboxButtonColorUpdaterBase();
 
@@ -74,7 +74,7 @@ protected:
     vcl::ImageType meImageType;
     OUString maCommandLabel;
     OUString maCommandURL;
-    css::uno::Reference<css::frame::XFrame> mxFrame;
+    cpo::uno::Reference<css::frame::XFrame> mxFrame;
 
     void Init(sal_uInt16 nSlotId);
 
@@ -94,7 +94,7 @@ public:
     VclToolboxButtonColorUpdater(sal_uInt16 nSlotId, ToolBoxItemId nTbxBtnId, ToolBox* ptrTbx,
                                  bool bWideButton, const OUString& rCommandLabel,
                                  const OUString& rCommandURL,
-                                 const css::uno::Reference<css::frame::XFrame>& rFrame);
+                                 const cpo::uno::Reference<css::frame::XFrame>& rFrame);
 
 private:
     ToolBoxItemId mnBtnId;
@@ -114,7 +114,7 @@ class ToolboxButtonColorUpdater final : public ToolboxButtonColorUpdaterBase
 public:
     ToolboxButtonColorUpdater(sal_uInt16 nSlotId, const OUString& rTbxBtnId, weld::Toolbar* ptrTbx,
                               bool bWideButton, const OUString& rCommandLabel,
-                              const css::uno::Reference<css::frame::XFrame>& rFrame);
+                              const cpo::uno::Reference<css::frame::XFrame>& rFrame);
 
 private:
     OUString msBtnId;

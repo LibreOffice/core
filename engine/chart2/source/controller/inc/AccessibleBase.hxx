@@ -166,7 +166,7 @@ protected:
         @throws css::lang::IndexOutOfBoundsException
         @throws cpo::uno::RuntimeException
      */
-    virtual css::uno::Reference< css::accessibility::XAccessible >
+    virtual cpo::uno::Reference< css::accessibility::XAccessible >
         ImplGetAccessibleChildById( sal_Int64 i ) const;
 
     /** Is called from getAccessibleChildCount(). Before this method is called,
@@ -185,9 +185,9 @@ protected:
 
     // ________ XAccessibleContext ________
     virtual sal_Int64 getAccessibleChildCount() override;
-    virtual css::uno::Reference< css::accessibility::XAccessible >
+    virtual cpo::uno::Reference< css::accessibility::XAccessible >
         getAccessibleChild( sal_Int64 i ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible >
+    virtual cpo::uno::Reference< css::accessibility::XAccessible >
         getAccessibleParent() override;
     virtual sal_Int64 getAccessibleIndexInParent() override;
     /// @return AccessibleRole.SHAPE
@@ -195,7 +195,7 @@ protected:
     // has to be implemented by derived classes
 //     virtual OUString getAccessibleName()
 //         throw (cpo::uno::RuntimeException);
-    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet >
+    virtual cpo::uno::Reference< css::accessibility::XAccessibleRelationSet >
         getAccessibleRelationSet() override;
     virtual sal_Int64 getAccessibleStateSet() override;
     virtual css::lang::Locale getLocale() override;
@@ -207,7 +207,7 @@ protected:
     virtual css::awt::Rectangle implGetBounds() override;
 
     // ________ XAccessibleComponent ________
-    virtual css::uno::Reference< css::accessibility::XAccessible >
+    virtual cpo::uno::Reference< css::accessibility::XAccessible >
         getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
     virtual void grabFocus() override;
     virtual sal_Int32 getForeground() override;

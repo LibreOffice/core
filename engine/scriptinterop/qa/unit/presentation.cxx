@@ -22,7 +22,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cool.hpp>
@@ -48,11 +48,11 @@ public:
 protected:
     // Loads a fresh presentation and makes its frame the active one, which is what
     // getActivePresentation resolves against.
-    css::uno::Reference<scriptinterop::XPresentation> loadPresentation()
+    cpo::uno::Reference<scriptinterop::XPresentation> loadPresentation()
     {
         mxComponent = loadFromDesktop(u"private:factory/simpress"_ustr);
-        css::uno::Reference<css::frame::XModel> const xModel(mxComponent,
-                                                             css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::frame::XModel> const xModel(mxComponent,
+                                                             cpo::uno::UNO_QUERY_THROW);
         auto const xDesktop
             = css::frame::Desktop::create(comphelper::getProcessComponentContext());
         xDesktop->setActiveFrame(xModel->getCurrentController()->getFrame());
@@ -100,13 +100,13 @@ CPPUNIT_TEST_FIXTURE(Test, testTextStyling)
     auto const xRange = xShape->getText();
     xRange->getTextStyle()->setBold(true)->setFontSize(24)->setForegroundColor(u"#c9211e"_ustr);
     // The formatting lands on the text runs, so a cursor over the text reports it.
-    css::uno::Reference<css::text::XText> const xText(xShape->getuno(),
-                                                      css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::text::XText> const xText(xShape->getuno(),
+                                                      cpo::uno::UNO_QUERY_THROW);
     auto const xCursor = xText->createTextCursor();
     xCursor->gotoStart(false);
     xCursor->gotoEnd(true);
-    css::uno::Reference<css::beans::XPropertySet> const xProps(xCursor,
-                                                               css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::beans::XPropertySet> const xProps(xCursor,
+                                                               cpo::uno::UNO_QUERY_THROW);
     float fWeight = 0;
     xProps->getPropertyValue(u"CharWeight"_ustr) >>= fWeight;
     CPPUNIT_ASSERT_EQUAL(150.0f, fWeight);
@@ -128,13 +128,13 @@ CPPUNIT_TEST_FIXTURE(Test, testItalicAndStrikethrough)
     auto const xShape = xSlide->insertTextBox(u"Styled"_ustr, 36, 36, 288, 72);
     xShape->getText()->getTextStyle()->setItalic(true)->setStrikethrough(true);
     // The formatting lands on the text runs, so a cursor over the text reports it.
-    css::uno::Reference<css::text::XText> const xText(xShape->getuno(),
-                                                      css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::text::XText> const xText(xShape->getuno(),
+                                                      cpo::uno::UNO_QUERY_THROW);
     auto const xCursor = xText->createTextCursor();
     xCursor->gotoStart(false);
     xCursor->gotoEnd(true);
-    css::uno::Reference<css::beans::XPropertySet> const xProps(xCursor,
-                                                               css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::beans::XPropertySet> const xProps(xCursor,
+                                                               cpo::uno::UNO_QUERY_THROW);
     css::awt::FontSlant eSlant = css::awt::FontSlant_NONE;
     xProps->getPropertyValue(u"CharPosture"_ustr) >>= eSlant;
     CPPUNIT_ASSERT_EQUAL(css::awt::FontSlant_ITALIC, eSlant);
@@ -155,19 +155,19 @@ CPPUNIT_TEST_FIXTURE(Test, testAppendTextRunStyling)
     CPPUNIT_ASSERT_EQUAL(u"plain bold"_ustr, xText->asString());
     CPPUNIT_ASSERT_EQUAL(u"bold"_ustr, xBold->asString());
     // Styling the returned range covers only that run, so the earlier run stays regular.
-    css::uno::Reference<css::beans::XPropertySet> const xPlainProps(xPlain->getuno(),
-                                                                    css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::beans::XPropertySet> const xPlainProps(xPlain->getuno(),
+                                                                    cpo::uno::UNO_QUERY_THROW);
     float fWeight = 0;
     xPlainProps->getPropertyValue(u"CharWeight"_ustr) >>= fWeight;
     CPPUNIT_ASSERT_EQUAL(100.0f, fWeight);
-    css::uno::Reference<css::beans::XPropertySet> const xBoldProps(xBold->getuno(),
-                                                                   css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::beans::XPropertySet> const xBoldProps(xBold->getuno(),
+                                                                   cpo::uno::UNO_QUERY_THROW);
     xBoldProps->getPropertyValue(u"CharWeight"_ustr) >>= fWeight;
     CPPUNIT_ASSERT_EQUAL(150.0f, fWeight);
     // A run appended after a styled run starts from regular formatting again.
     auto const xAfter = xText->appendText(u" after"_ustr);
-    css::uno::Reference<css::beans::XPropertySet> const xAfterProps(xAfter->getuno(),
-                                                                    css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::beans::XPropertySet> const xAfterProps(xAfter->getuno(),
+                                                                    cpo::uno::UNO_QUERY_THROW);
     xAfterProps->getPropertyValue(u"CharWeight"_ustr) >>= fWeight;
     CPPUNIT_ASSERT_EQUAL(100.0f, fWeight);
     // Appending an empty string produces an empty range, which has no characters to style.
@@ -193,18 +193,18 @@ CPPUNIT_TEST_FIXTURE(Test, testAppendParagraphAndBulletLevels)
     CPPUNIT_ASSERT_EQUAL(u"first\nsecond"_ustr, xText->asString());
     // Each paragraph carries its own bullet depth, and the bullets show because paragraphs
     // count as bulleted by default once they have a depth.
-    css::uno::Reference<css::container::XEnumerationAccess> const xParagraphs(
-        xText->getuno(), css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::container::XEnumerationAccess> const xParagraphs(
+        xText->getuno(), cpo::uno::UNO_QUERY_THROW);
     auto xEnum = xParagraphs->createEnumeration();
-    css::uno::Reference<css::beans::XPropertySet> xParaProps(xEnum->nextElement(),
-                                                             css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::beans::XPropertySet> xParaProps(xEnum->nextElement(),
+                                                             cpo::uno::UNO_QUERY_THROW);
     sal_Int16 nLevel = -1;
     xParaProps->getPropertyValue(u"NumberingLevel"_ustr) >>= nLevel;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), nLevel);
     bool bIsNumber = false;
     xParaProps->getPropertyValue(u"NumberingIsNumber"_ustr) >>= bIsNumber;
     CPPUNIT_ASSERT(bIsNumber);
-    xParaProps.set(xEnum->nextElement(), css::uno::UNO_QUERY_THROW);
+    xParaProps.set(xEnum->nextElement(), cpo::uno::UNO_QUERY_THROW);
     xParaProps->getPropertyValue(u"NumberingLevel"_ustr) >>= nLevel;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(1), nLevel);
     // Level -1 takes the paragraph off the bullet list again; a paragraph off the list reports
@@ -212,17 +212,17 @@ CPPUNIT_TEST_FIXTURE(Test, testAppendParagraphAndBulletLevels)
     xPara->setBulletLevel(-1);
     xEnum = xParagraphs->createEnumeration();
     xEnum->nextElement();
-    xParaProps.set(xEnum->nextElement(), css::uno::UNO_QUERY_THROW);
+    xParaProps.set(xEnum->nextElement(), cpo::uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT(!xParaProps->getPropertyValue(u"NumberingLevel"_ustr).hasValue());
     // Levels outside -1..9 are rejected.
     CPPUNIT_ASSERT_THROW(xText->setBulletLevel(10), cpo::uno::RuntimeException);
     // Setting the level on the whole text puts every paragraph on that depth.
     xText->setBulletLevel(2);
     xEnum = xParagraphs->createEnumeration();
-    xParaProps.set(xEnum->nextElement(), css::uno::UNO_QUERY_THROW);
+    xParaProps.set(xEnum->nextElement(), cpo::uno::UNO_QUERY_THROW);
     xParaProps->getPropertyValue(u"NumberingLevel"_ustr) >>= nLevel;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2), nLevel);
-    xParaProps.set(xEnum->nextElement(), css::uno::UNO_QUERY_THROW);
+    xParaProps.set(xEnum->nextElement(), cpo::uno::UNO_QUERY_THROW);
     xParaProps->getPropertyValue(u"NumberingLevel"_ustr) >>= nLevel;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2), nLevel);
     // Appending an empty paragraph gives back a position where later appended text lands, so
@@ -234,7 +234,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAppendParagraphAndBulletLevels)
     xEnum = xParagraphs->createEnumeration();
     xEnum->nextElement();
     xEnum->nextElement();
-    xParaProps.set(xEnum->nextElement(), css::uno::UNO_QUERY_THROW);
+    xParaProps.set(xEnum->nextElement(), cpo::uno::UNO_QUERY_THROW);
     xParaProps->getPropertyValue(u"NumberingLevel"_ustr) >>= nLevel;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(3), nLevel);
 }
@@ -291,9 +291,9 @@ CPPUNIT_TEST_FIXTURE(Test, testSlideBackgroundColor)
     auto const xSlide = xPresentation->appendSlide();
     xSlide->setBackgroundColor(u"#2a6099"_ustr);
     // The raw page reports the fill through its Background property set.
-    css::uno::Reference<css::beans::XPropertySet> const xPageProps(xSlide->getuno(),
-                                                                   css::uno::UNO_QUERY_THROW);
-    css::uno::Reference<css::beans::XPropertySet> xBackground;
+    cpo::uno::Reference<css::beans::XPropertySet> const xPageProps(xSlide->getuno(),
+                                                                   cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::beans::XPropertySet> xBackground;
     xPageProps->getPropertyValue(u"Background"_ustr) >>= xBackground;
     CPPUNIT_ASSERT(xBackground.is());
     sal_Int32 nColor = 0;

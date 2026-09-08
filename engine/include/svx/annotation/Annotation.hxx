@@ -115,7 +115,7 @@ class SVXCORE_DLLPUBLIC Annotation
       public ::cppu::PropertySetMixin<css::office::XAnnotation>
 {
 private:
-    css::uno::Reference<css::text::XText> getTextRangeImpl(const std::unique_lock<std::mutex>& g);
+    cpo::uno::Reference<css::text::XText> getTextRangeImpl(const std::unique_lock<std::mutex>& g);
     OUString GetTextImpl(const std::unique_lock<std::mutex>& g);
     void SetTextImpl(OUString const& rText, const std::unique_lock<std::mutex>& g);
 
@@ -149,7 +149,7 @@ protected:
     std::unique_ptr<SdrUndoAction> createUndoAnnotation();
 
 public:
-    Annotation(const css::uno::Reference<cpo::uno::XComponentContext>& context, SdrPage* pPage);
+    Annotation(const cpo::uno::Reference<cpo::uno::XComponentContext>& context, SdrPage* pPage);
     Annotation(const Annotation&) = delete;
     Annotation& operator=(const Annotation&) = delete;
 
@@ -168,7 +168,7 @@ public:
     void SetPosition(const css::geometry::RealPoint2D& rValue);
     void SetSize(const css::geometry::RealSize2D& rValue);
 
-    virtual css::uno::Reference<css::text::XText> getTextRange() override;
+    virtual cpo::uno::Reference<css::text::XText> getTextRange() override;
 
     // override WeakComponentImplHelperBase::disposing()
     // This function is called upon disposing the component,

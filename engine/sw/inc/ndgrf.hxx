@@ -48,7 +48,7 @@ class SAL_DLLPUBLIC_RTTI SwGrfNode final: public SwNoTextNode
 
     std::shared_ptr< SwAsyncRetrieveInputStreamThreadConsumer > mpThreadConsumer;
     bool mbLinkedInputStreamReady;
-    css::uno::Reference<css::io::XInputStream> mxInputStream;
+    cpo::uno::Reference<css::io::XInputStream> mxInputStream;
     bool mbIsStreamReadOnly;
 
     SwGrfNode( const SwNode& rWhere,
@@ -140,7 +140,7 @@ public:
     bool IsLinkedInputStreamReady() const { return mbLinkedInputStreamReady;}
     void TriggerAsyncRetrieveInputStream();
     void ApplyInputStream(
-        const css::uno::Reference<css::io::XInputStream>& xInputStream,
+        const cpo::uno::Reference<css::io::XInputStream>& xInputStream,
         const bool bIsStreamReadOnly );
     void UpdateLinkWithInputStream();
     bool IsAsyncRetrieveInputStreamPossible() const;

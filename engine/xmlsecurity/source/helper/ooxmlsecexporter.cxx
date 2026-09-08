@@ -33,6 +33,7 @@
 
 using namespace com::sun::star;
 using namespace css::xml::sax;
+using namespace ::cpo;
 
 struct OOXMLSecExporter::Impl
 {

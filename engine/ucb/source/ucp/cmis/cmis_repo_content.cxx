@@ -42,6 +42,7 @@
 #define STD_TO_OUSTR( str ) OUString( str.c_str(), str.length( ), RTL_TEXTENCODING_UTF8 )
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 namespace cmis
 {

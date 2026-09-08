@@ -36,6 +36,7 @@ namespace chart
 {
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 //  diverse methods for class conversions; e.g. ::basegfx::B3DHomMatrix to HomogenMatrix
 

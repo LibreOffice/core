@@ -45,6 +45,7 @@
 #include "xmlenums.hxx"
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace ::xmloff::token;
 
 XMLSettingsExportHelper::XMLSettingsExportHelper( ::xmloff::XMLSettingsExportContext& i_rContext )
@@ -394,7 +395,7 @@ void XMLSettingsExportHelper::exportForbiddenCharacters(
                     const uno::Reference<i18n::XForbiddenCharacters>& xForbChars,
                     const OUString& rName) const
 {
-    uno::Reference<linguistic2::XSupportedLocales> xLocales(xForbChars, css::uno::UNO_QUERY);
+    uno::Reference<linguistic2::XSupportedLocales> xLocales(xForbChars, cpo::uno::UNO_QUERY);
 
     SAL_WARN_IF( !(xForbChars.is() && xLocales.is()), "xmloff","XMLSettingsExportHelper::exportForbiddenCharacters: got illegal forbidden characters!" );
 

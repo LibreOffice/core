@@ -30,14 +30,14 @@ enum class SdrEscapeDirection;
 class GlueEscDirLB final : public InterimItemWindow
 {
 private:
-    css::uno::Reference<css::frame::XFrame> m_xFrame;
+    cpo::uno::Reference<css::frame::XFrame> m_xFrame;
     std::unique_ptr<weld::ComboBox> m_xWidget;
 
     DECL_LINK(SelectHdl, weld::ComboBox&, void);
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
 
 public:
-    GlueEscDirLB(vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame>& rFrame);
+    GlueEscDirLB(vcl::Window* pParent, const cpo::uno::Reference<css::frame::XFrame>& rFrame);
     virtual void dispose() override;
     virtual ~GlueEscDirLB() override;
 

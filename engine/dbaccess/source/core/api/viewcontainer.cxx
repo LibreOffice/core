@@ -30,7 +30,7 @@
 
 using namespace dbaccess;
 using namespace dbtools;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
@@ -78,9 +78,9 @@ cpo::uno::Sequence< OUString > OViewContainer::getSupportedServiceNames()
 }
 
 
-css::uno::Reference< css::beans::XPropertySet > OViewContainer::createObject(const OUString& _rName)
+cpo::uno::Reference< css::beans::XPropertySet > OViewContainer::createObject(const OUString& _rName)
 {
-    css::uno::Reference< css::beans::XPropertySet > xProp;
+    cpo::uno::Reference< css::beans::XPropertySet > xProp;
     if ( m_xMasterContainer.is() && m_xMasterContainer->hasByName(_rName) )
         xProp.set(m_xMasterContainer->getByName(_rName),UNO_QUERY);
 
@@ -119,7 +119,7 @@ Reference< XPropertySet > OViewContainer::createDescriptor()
 }
 
 // XAppend
-css::uno::Reference< css::beans::XPropertySet > OViewContainer::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
+cpo::uno::Reference< css::beans::XPropertySet > OViewContainer::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     // append the new table with a create stmt
     OUString aName = getString(descriptor->getPropertyValue(PROPERTY_NAME));

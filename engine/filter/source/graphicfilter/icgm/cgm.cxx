@@ -30,6 +30,7 @@
 #include <comphelper/diagnose_ex.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 constexpr double gnOutdx = 28000;                // Output size in 1/100TH mm
 constexpr double gnOutdy = 21000;                // on which is mapped
@@ -684,7 +685,7 @@ bool CGM::Write( SvStream& rIStm )
 
 // GraphicImport - the exported function
 FILTER_DLLPUBLIC sal_uInt32
-ImportCGM(SvStream& rIn, uno::Reference< frame::XModel > const & rXModel, css::uno::Reference<css::task::XStatusIndicator> const & aXStatInd)
+ImportCGM(SvStream& rIn, uno::Reference< frame::XModel > const & rXModel, cpo::uno::Reference<css::task::XStatusIndicator> const & aXStatInd)
 {
 
     sal_uInt32  nStatus = 0;            // retvalue == 0 -> ERROR

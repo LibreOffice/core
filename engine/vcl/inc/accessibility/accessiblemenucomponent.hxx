@@ -45,16 +45,16 @@ public:
 
     // XAccessibleContext
     virtual sal_Int64 getAccessibleChildCount(  ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleChild( sal_Int64 i ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleParent(  ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > getAccessibleChild( sal_Int64 i ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > getAccessibleParent(  ) override;
     virtual sal_Int16 getAccessibleRole(  ) override;
     virtual OUString getAccessibleDescription(  ) override;
     virtual OUString getAccessibleName(  ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > getAccessibleRelationSet(  ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessibleRelationSet > getAccessibleRelationSet(  ) override;
     virtual css::lang::Locale getLocale(  ) override;
 
     // XAccessibleComponent
-    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
     virtual css::awt::Point getLocationOnScreen(  ) override;
     virtual void grabFocus(  ) override;
     virtual sal_Int32 getForeground(  ) override;
@@ -66,7 +66,7 @@ public:
     virtual void clearAccessibleSelection(  ) override;
     virtual void selectAllAccessibleChildren(  ) override;
     virtual sal_Int64 getSelectedAccessibleChildCount(  ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
     virtual void deselectAccessibleChild( sal_Int64 nChildIndex ) override;
 };
 

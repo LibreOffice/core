@@ -21,6 +21,7 @@
 #include <map>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 typedef std::map< sal_Int16, OUString > IdToString;
 
@@ -157,7 +158,7 @@ bool ScCTB::IsMenuToolbar() const
     return tb.IsMenuToolbar();
 }
 
-bool ScCTB::ImportMenuTB( ScCTBWrapper& rWrapper, const css::uno::Reference< css::container::XIndexContainer >& xMenuDesc, CustomToolBarImportHelper& helper )
+bool ScCTB::ImportMenuTB( ScCTBWrapper& rWrapper, const cpo::uno::Reference< css::container::XIndexContainer >& xMenuDesc, CustomToolBarImportHelper& helper )
 {
     for ( auto& rItem : rTBC )
     {
@@ -277,7 +278,7 @@ ScTBC::Print(FILE* fp)
 }
 #endif
 
-bool ScTBC::ImportToolBarControl( ScCTBWrapper& rWrapper, const css::uno::Reference< css::container::XIndexContainer >& toolbarcontainer, CustomToolBarImportHelper& helper, bool bIsMenuToolbar )
+bool ScTBC::ImportToolBarControl( ScCTBWrapper& rWrapper, const cpo::uno::Reference< css::container::XIndexContainer >& toolbarcontainer, CustomToolBarImportHelper& helper, bool bIsMenuToolbar )
 {
     // how to identify built-in-command ?
 //    bool bBuiltin = false;

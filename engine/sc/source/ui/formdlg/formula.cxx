@@ -53,6 +53,7 @@
 
 using namespace formula;
 using namespace com::sun::star;
+using namespace ::cpo;
 
 //      init/ shared functions for dialog
 

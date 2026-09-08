@@ -84,7 +84,7 @@ private:
 
 public:
 
-    ZipPackageFolder( const css::uno::Reference < cpo::uno::XComponentContext >& xContext,
+    ZipPackageFolder( const cpo::uno::Reference < cpo::uno::XComponentContext >& xContext,
                       sal_Int32 nFormat,
                       bool bAllowRemoveOnInsert );
     virtual ~ZipPackageFolder() override;
@@ -134,7 +134,7 @@ public:
     virtual void removeByName( const OUString& Name ) override;
 
     // XEnumerationAccess
-    virtual css::uno::Reference< css::container::XEnumeration > createEnumeration(  ) override;
+    virtual cpo::uno::Reference< css::container::XEnumeration > createEnumeration(  ) override;
 
     // XElementAccess
     virtual cpo::uno::Type getElementType(  ) override;

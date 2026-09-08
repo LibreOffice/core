@@ -19,7 +19,7 @@
 #ifndef INCLUDED_UNOTOOLS_UCBSTREAMHELPER_HXX
 #define INCLUDED_UNOTOOLS_UCBSTREAMHELPER_HXX
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <unotools/unotoolsdllapi.h>
 
@@ -41,16 +41,16 @@ namespace utl
     public:
         static std::unique_ptr<SvStream>
         CreateStream(const OUString& rFileName, StreamMode eOpenMode,
-                     const css::uno::Reference<css::awt::XWindow> & xParentWin = nullptr,
+                     const cpo::uno::Reference<css::awt::XWindow> & xParentWin = nullptr,
                      bool bUseSimpleFileAccessInteraction = true);
         static std::unique_ptr<SvStream>
         CreateStream(const OUString& rFileName, StreamMode eOpenMode, bool bFileExists,
-                     const css::uno::Reference<css::awt::XWindow> & xParentWin = nullptr,
+                     const cpo::uno::Reference<css::awt::XWindow> & xParentWin = nullptr,
                      bool bUseSimpleFileAccessInteraction = true);
-        static std::unique_ptr<SvStream> CreateStream( const css::uno::Reference < css::io::XInputStream >& xStream );
-        static std::unique_ptr<SvStream> CreateStream( const css::uno::Reference < css::io::XStream >& xStream );
-        static std::unique_ptr<SvStream> CreateStream( const css::uno::Reference < css::io::XInputStream >& xStream, bool bCloseStream );
-        static std::unique_ptr<SvStream> CreateStream( const css::uno::Reference < css::io::XStream >& xStream, bool bCloseStream );
+        static std::unique_ptr<SvStream> CreateStream( const cpo::uno::Reference < css::io::XInputStream >& xStream );
+        static std::unique_ptr<SvStream> CreateStream( const cpo::uno::Reference < css::io::XStream >& xStream );
+        static std::unique_ptr<SvStream> CreateStream( const cpo::uno::Reference < css::io::XInputStream >& xStream, bool bCloseStream );
+        static std::unique_ptr<SvStream> CreateStream( const cpo::uno::Reference < css::io::XStream >& xStream, bool bCloseStream );
     };
 }
 

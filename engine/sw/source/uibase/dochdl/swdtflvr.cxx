@@ -141,6 +141,8 @@
 
 #include <memory>
 
+using namespace ::cpo;
+
 /* default (A4 format) width of 210mm - 2 * border size (border on both sides) */
 constexpr tools::Long constOleWidthInMm = 210 - 2 * lMinBorderInMm;
 
@@ -162,7 +164,7 @@ constexpr sal_uInt32 SWTRANSFER_OBJECTTYPE_MARKDOWN  = 0x00000080;
 
 using namespace ::svx;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::datatransfer;
 namespace {

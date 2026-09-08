@@ -873,7 +873,7 @@ public:
     /// Is this node in the undo array?
     virtual bool IsInUndo() const override;
     virtual bool IsInContent() const override;
-    virtual css::uno::Reference< css::rdf::XMetadatable > MakeUnoObject() override;
+    virtual cpo::uno::Reference< css::rdf::XMetadatable > MakeUnoObject() override;
 
     bool IsCollapse() const;
 

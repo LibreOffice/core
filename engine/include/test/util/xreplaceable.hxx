@@ -10,7 +10,7 @@
 #ifndef INCLUDED_TEST_UTIL_XREPLACEABLE_HXX
 #define INCLUDED_TEST_UTIL_XREPLACEABLE_HXX
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <test/testdllapi.hxx>
 #include <utility>
 
@@ -21,7 +21,7 @@ class OOO_DLLPUBLIC_TEST XReplaceable
 public:
         XReplaceable( OUString aSearchString, OUString aReplaceString):
             maSearchString(std::move(aSearchString)), maReplaceString(std::move(aReplaceString)) {}
-        virtual css::uno::Reference< cpo::uno::XInterface > init() = 0;
+        virtual cpo::uno::Reference< cpo::uno::XInterface > init() = 0;
 
     void testCreateReplaceDescriptor();
     void testReplaceAll();

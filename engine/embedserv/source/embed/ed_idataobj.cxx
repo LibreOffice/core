@@ -27,6 +27,7 @@
 #include <osl/thread.h>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 
 // EmbedDocument_Impl

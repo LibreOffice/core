@@ -35,7 +35,7 @@
 
 using namespace ::utl;
 using namespace ::osl;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 
@@ -121,7 +121,7 @@ class SvtCommandOptions_Impl : public ConfigItem
 
         bool                HasEntriesDisabled() const;
         bool                LookupDisabled( const OUString& ) const;
-        void EstablishFrameCallback(const css::uno::Reference< css::frame::XFrame >& xFrame);
+        void EstablishFrameCallback(const cpo::uno::Reference< css::frame::XFrame >& xFrame);
 
     private:
 
@@ -219,7 +219,7 @@ void SvtCommandOptions_Impl::Notify( const Sequence< OUString >& )
     // But look for already killed frames. We hold weak references instead of hard ones ...
     for (SvtFrameVector::iterator pIt  = m_lFrames.begin(); pIt != m_lFrames.end(); )
     {
-        css::uno::Reference< css::frame::XFrame > xFrame(pIt->get(), css::uno::UNO_QUERY);
+        cpo::uno::Reference< css::frame::XFrame > xFrame(pIt->get(), cpo::uno::UNO_QUERY);
         if (xFrame.is())
         {
             aGuard.unlock(); // because we can call back into ourself
@@ -255,7 +255,7 @@ bool SvtCommandOptions_Impl::LookupDisabled( const OUString& aCommand ) const
 
 //  public method
 
-void SvtCommandOptions_Impl::EstablishFrameCallback(const css::uno::Reference< css::frame::XFrame >& xFrame)
+void SvtCommandOptions_Impl::EstablishFrameCallback(const cpo::uno::Reference< css::frame::XFrame >& xFrame)
 {
     // check if frame already exists inside list
     // ignore double registrations
@@ -328,7 +328,7 @@ bool SvtCommandOptions::LookupDisabled( const OUString& aCommandURL ) const
 
 //  public method
 
-void SvtCommandOptions::EstablishFrameCallback(const css::uno::Reference< css::frame::XFrame >& xFrame)
+void SvtCommandOptions::EstablishFrameCallback(const cpo::uno::Reference< css::frame::XFrame >& xFrame)
 {
     std::unique_lock aGuard( GetOwnStaticMutex() );
     m_pImpl->EstablishFrameCallback(xFrame);

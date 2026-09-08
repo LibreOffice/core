@@ -22,6 +22,7 @@
 #include "numfmuno.hxx"
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 
 class SvNumFmtSuppl_Impl

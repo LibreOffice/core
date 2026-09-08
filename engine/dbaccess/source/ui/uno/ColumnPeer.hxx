@@ -29,14 +29,14 @@ namespace dbaui
     class OColumnPeer   :   public VCLXWindow
     {
         OFieldDescription*                                    m_pActFieldDescr;
-        css::uno::Reference< css::beans::XPropertySet>        m_xColumn;
+        cpo::uno::Reference< css::beans::XPropertySet>        m_xColumn;
     public:
 
         OColumnPeer(vcl::Window* _pParent
-                    ,const css::uno::Reference< cpo::uno::XComponentContext>& _rxContext);
+                    ,const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxContext);
 
-        void setColumn(const css::uno::Reference< css::beans::XPropertySet>& _xColumn);
-        void setConnection(const css::uno::Reference< css::sdbc::XConnection>& _xCon);
+        void setColumn(const cpo::uno::Reference< css::beans::XPropertySet>& _xColumn);
+        void setConnection(const cpo::uno::Reference< css::sdbc::XConnection>& _xCon);
         void setEditWidth(sal_Int32 _nWidth);
         // VCLXWindow
         virtual void setProperty( const OUString& PropertyName, const cpo::uno::Any& Value ) override;

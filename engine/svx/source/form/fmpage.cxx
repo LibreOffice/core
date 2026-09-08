@@ -37,8 +37,8 @@
 #include <comphelper/types.hxx>
 
 using namespace ::svxform;
-using com::sun::star::uno::Reference;
-using com::sun::star::uno::UNO_QUERY;
+using cpo::uno::Reference;
+using cpo::uno::UNO_QUERY;
 
 
 FmFormPage::FmFormPage(FmFormModel& rModel, bool bMasterPage)
@@ -113,7 +113,7 @@ bool FmFormPage::RequestHelp( vcl::Window* pWindow, SdrView const * pView,
         return false;
 
     OUString aHelpText;
-    css::uno::Reference< css::beans::XPropertySet >  xSet( pFormObject->GetUnoControlModel(), css::uno::UNO_QUERY );
+    cpo::uno::Reference< css::beans::XPropertySet >  xSet( pFormObject->GetUnoControlModel(), cpo::uno::UNO_QUERY );
     if (xSet.is())
     {
         if (::comphelper::hasProperty(FM_PROP_HELPTEXT, xSet))

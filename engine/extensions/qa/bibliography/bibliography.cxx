@@ -14,6 +14,7 @@
 #include <com/sun/star/frame/Bibliography.hpp>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace
 {

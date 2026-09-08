@@ -40,8 +40,8 @@
 #include <xmlsdtypes.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::drawing;
 using namespace ::xmloff::token;
@@ -85,9 +85,9 @@ void XMLShapeStyleContext::SetAttribute( sal_Int32 nElement, const OUString& rVa
     }
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLShapeStyleContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLShapeStyleContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     if( IsTokenInNamespace(nElement, XML_NAMESPACE_STYLE) ||
         IsTokenInNamespace(nElement, XML_NAMESPACE_LO_EXT) )

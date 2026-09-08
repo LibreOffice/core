@@ -39,6 +39,7 @@
 
 using namespace ::sw::mark;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 class SwXBookmark::Impl
     : public SvtListener

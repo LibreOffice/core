@@ -59,29 +59,29 @@ public:
     /** read a component from input stream
      */
     ErrCode
-    ReadThroughComponentIS(const css::uno::Reference<css::io::XInputStream>& xInputStream,
-                           const css::uno::Reference<css::lang::XComponent>& xModelComponent,
-                           css::uno::Reference<cpo::uno::XComponentContext> const& rxContext,
-                           css::uno::Reference<css::beans::XPropertySet> const& rPropSet,
+    ReadThroughComponentIS(const cpo::uno::Reference<css::io::XInputStream>& xInputStream,
+                           const cpo::uno::Reference<css::lang::XComponent>& xModelComponent,
+                           cpo::uno::Reference<cpo::uno::XComponentContext> const& rxContext,
+                           cpo::uno::Reference<css::beans::XPropertySet> const& rPropSet,
                            const char16_t* pFilterName, bool bEncrypted,
                            int_fast16_t nSyntaxVersion);
 
     /** read a component from storage
      */
-    ErrCode ReadThroughComponentS(const css::uno::Reference<css::embed::XStorage>& xStorage,
-                                  const css::uno::Reference<css::lang::XComponent>& xModelComponent,
+    ErrCode ReadThroughComponentS(const cpo::uno::Reference<css::embed::XStorage>& xStorage,
+                                  const cpo::uno::Reference<css::lang::XComponent>& xModelComponent,
                                   const char16_t* pStreamName,
-                                  css::uno::Reference<cpo::uno::XComponentContext> const& rxContext,
-                                  css::uno::Reference<css::beans::XPropertySet> const& rPropSet,
+                                  cpo::uno::Reference<cpo::uno::XComponentContext> const& rxContext,
+                                  cpo::uno::Reference<css::beans::XPropertySet> const& rPropSet,
                                   const char16_t* pFilterName, int_fast16_t nSyntaxVersion);
 
     /** read a component from text
      */
     ErrCode
     ReadThroughComponentMS(std::u16string_view aText,
-                           const css::uno::Reference<css::lang::XComponent>& xModelComponent,
-                           css::uno::Reference<cpo::uno::XComponentContext> const& rxContext,
-                           css::uno::Reference<css::beans::XPropertySet> const& rPropSet);
+                           const cpo::uno::Reference<css::lang::XComponent>& xModelComponent,
+                           cpo::uno::Reference<cpo::uno::XComponentContext> const& rxContext,
+                           cpo::uno::Reference<css::beans::XPropertySet> const& rPropSet);
 };
 
 class SmMLImport final : public SvXMLImport
@@ -108,7 +108,7 @@ public:
 public:
     /** Constructor
     */
-    SmMLImport(const css::uno::Reference<cpo::uno::XComponentContext>& rContext,
+    SmMLImport(const cpo::uno::Reference<cpo::uno::XComponentContext>& rContext,
                OUString const& implementationName, SvXMLImportFlags nImportFlags);
 
     /** Destructor
@@ -124,7 +124,7 @@ public:
     */
     SvXMLImportContext* CreateFastContext(
         sal_Int32 nElement,
-        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList) override;
+        const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList) override;
 
     /** Imports view settings formula
     */

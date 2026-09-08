@@ -172,13 +172,13 @@ namespace svx
     };
 
 
-    typedef std::vector< css::uno::Reference< css::linguistic2::XConversionDictionary > > HHDictList;
+    typedef std::vector< cpo::uno::Reference< css::linguistic2::XConversionDictionary > > HHDictList;
 
     class HangulHanjaOptionsDialog : public weld::GenericDialogController
     {
     private:
         HHDictList          m_aDictList;
-        css::uno::Reference< css::linguistic2::XConversionDictionaryList > m_xConversionDictionaryList;
+        cpo::uno::Reference< css::linguistic2::XConversionDictionaryList > m_xConversionDictionaryList;
 
         std::unique_ptr<weld::TreeView> m_xDictsLB;
         std::unique_ptr<weld::CheckButton> m_xIgnorepostCB;
@@ -288,7 +288,7 @@ namespace svx
         void            SetEditText( SuggestionEdit& rEdit, sal_uInt16 nEntryNum );
         void            EditModify( const weld::Entry* pEdit, sal_uInt8 nEntryOffset );
 
-        bool            DeleteEntryFromDictionary( const css::uno::Reference< css::linguistic2::XConversionDictionary >& xDict );
+        bool            DeleteEntryFromDictionary( const cpo::uno::Reference< css::linguistic2::XConversionDictionary >& xDict );
 
     public:
         HangulHanjaEditDictDialog(weld::Window* pParent, HHDictList& rDictList, sal_uInt32 nSelDict);

@@ -35,7 +35,7 @@
 #include <com/sun/star/ucb/XUniversalContentBroker.hpp>
 #include <cpo/uno/Any.hxx>
 #include <cpo/uno/Exception.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
@@ -121,7 +121,7 @@ Link<OUString *, bool> const & URIHelper::GetMaybeFileHdl()
 namespace {
 
 bool isAbsoluteHierarchicalUriReference(
-    css::uno::Reference< css::uri::XUriReference > const & uriReference)
+    cpo::uno::Reference< css::uri::XUriReference > const & uriReference)
 {
     return uriReference.is() && uriReference->isAbsolute()
         && !uriReference->hasRelativePath();
@@ -132,11 +132,11 @@ bool isAbsoluteHierarchicalUriReference(
 // does not support the getCasePreservingURL command, then this will hold for
 // any other prefix URL of the given URL, too:
 enum class Result { Success, GeneralFailure, SpecificFailure };
-Result normalizePrefix( css::uno::Reference< css::ucb::XUniversalContentBroker > const & broker,
+Result normalizePrefix( cpo::uno::Reference< css::ucb::XUniversalContentBroker > const & broker,
                         OUString const & uri, OUString * normalized)
 {
     assert(broker.is() && normalized != nullptr);
-    css::uno::Reference< css::ucb::XContent > content;
+    cpo::uno::Reference< css::ucb::XContent > content;
     try {
         content = broker->queryContent(broker->createContentIdentifier(uri));
     } catch (css::ucb::IllegalIdentifierException &) {}
@@ -145,12 +145,12 @@ Result normalizePrefix( css::uno::Reference< css::ucb::XUniversalContentBroker >
     }
     try {
         bool ok =
-            (css::uno::Reference< css::ucb::XCommandProcessor >(
-                   content, css::uno::UNO_QUERY_THROW)->execute(
+            (cpo::uno::Reference< css::ucb::XCommandProcessor >(
+                   content, cpo::uno::UNO_QUERY_THROW)->execute(
                        css::ucb::Command(u"getCasePreservingURL"_ustr,
                            -1, cpo::uno::Any()),
                        0,
-                       css::uno::Reference< css::ucb::XCommandEnvironment >())
+                       cpo::uno::Reference< css::ucb::XCommandEnvironment >())
                >>= *normalized);
         OSL_ASSERT(ok);
     } catch (cpo::uno::RuntimeException &) {
@@ -164,8 +164,8 @@ Result normalizePrefix( css::uno::Reference< css::ucb::XUniversalContentBroker >
 }
 
 OUString normalize(
-    css::uno::Reference< css::ucb::XUniversalContentBroker > const & broker,
-    css::uno::Reference< css::uri::XUriReferenceFactory > const & uriFactory,
+    cpo::uno::Reference< css::ucb::XUniversalContentBroker > const & broker,
+    cpo::uno::Reference< css::uri::XUriReferenceFactory > const & uriFactory,
     OUString const & uriReference)
 {
     // normalizePrefix can potentially fail (a typically example being a file
@@ -184,7 +184,7 @@ OUString normalize(
     default:
         break;
     }
-    css::uno::Reference< css::uri::XUriReference > ref(
+    cpo::uno::Reference< css::uri::XUriReference > ref(
         uriFactory->parse(uriReference));
     if (!isAbsoluteHierarchicalUriReference(ref)) {
         return uriReference;
@@ -208,7 +208,7 @@ OUString normalize(
         if (normalizePrefix(broker, normalized, &normalized) != Result::SpecificFailure)
         {
             buf.append(normalized);
-            css::uno::Reference< css::uri::XUriReference > preRef(
+            cpo::uno::Reference< css::uri::XUriReference > preRef(
                 uriFactory->parse(normalized));
             if (!isAbsoluteHierarchicalUriReference(preRef)) {
                 // This could only happen if something is inconsistent:
@@ -248,15 +248,15 @@ OUString normalize(
 
 }
 
-css::uno::Reference< css::uri::XUriReference >
+cpo::uno::Reference< css::uri::XUriReference >
 URIHelper::normalizedMakeRelative(
-    css::uno::Reference< cpo::uno::XComponentContext > const & context,
+    cpo::uno::Reference< cpo::uno::XComponentContext > const & context,
     OUString const & baseUriReference, OUString const & uriReference)
 {
     OSL_ASSERT(context.is());
-    css::uno::Reference< css::ucb::XUniversalContentBroker > broker(
+    cpo::uno::Reference< css::ucb::XUniversalContentBroker > broker(
         css::ucb::UniversalContentBroker::create(context));
-    css::uno::Reference< css::uri::XUriReferenceFactory > uriFactory(
+    cpo::uno::Reference< css::uri::XUriReferenceFactory > uriFactory(
         css::uri::UriReferenceFactory::create(context));
     return uriFactory->makeRelative(
         uriFactory->parse(normalize(broker, uriFactory, baseUriReference)),
@@ -267,7 +267,7 @@ URIHelper::normalizedMakeRelative(
 OUString URIHelper::simpleNormalizedMakeRelative(
     OUString const & baseUriReference, OUString const & uriReference)
 {
-    css::uno::Reference< css::uri::XUriReference > rel(
+    cpo::uno::Reference< css::uri::XUriReference > rel(
         URIHelper::normalizedMakeRelative(
             comphelper::getProcessComponentContext(), baseUriReference,
             uriReference));
@@ -815,7 +815,7 @@ OUString URIHelper::removePassword(OUString const & rURI,
 }
 
 OUString URIHelper::resolveIdnaHost(OUString const & url) {
-    css::uno::Reference<css::uri::XUriReference> uri(
+    cpo::uno::Reference<css::uri::XUriReference> uri(
         css::uri::UriReferenceFactory::create(
             comphelper::getProcessComponentContext())
         ->parse(url));

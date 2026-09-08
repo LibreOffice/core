@@ -24,7 +24,7 @@
 namespace oox::crypto {
 
 using namespace css::io;
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace css::beans;
 
@@ -51,7 +51,7 @@ DocumentEncryption::DocumentEncryption(const Reference< XComponentContext >& rxC
             Sequence<Any> aArguments;
             mxPackageEncryption.set(
                 mxContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-                    "com.sun.star.comp.oox.crypto." + sCryptoType, aArguments, mxContext), css::uno::UNO_QUERY);
+                    "com.sun.star.comp.oox.crypto." + sCryptoType, aArguments, mxContext), cpo::uno::UNO_QUERY);
 
             if (!mxPackageEncryption.is())
             {

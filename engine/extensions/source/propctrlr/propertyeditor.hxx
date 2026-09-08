@@ -51,7 +51,7 @@ namespace pcr
         std::unique_ptr<weld::Notebook> m_xTabControl;
         // controls initially have this parent before they are moved
         std::unique_ptr<weld::Container> m_xControlHoldingParent;
-        css::uno::Reference<cpo::uno::XComponentContext> m_xContext;
+        cpo::uno::Reference<cpo::uno::XComponentContext> m_xContext;
         IPropertyLineListener*      m_pListener;
         IPropertyControlObserver*   m_pObserver;
         sal_uInt16                  m_nNextId;
@@ -63,7 +63,7 @@ namespace pcr
         std::map<sal_uInt16, PropertyPage> m_aHiddenPages;
 
     public:
-        explicit OPropertyEditor(const css::uno::Reference<cpo::uno::XComponentContext>& rContext, weld::Builder& rBuilder);
+        explicit OPropertyEditor(const cpo::uno::Reference<cpo::uno::XComponentContext>& rContext, weld::Builder& rBuilder);
         ~OPropertyEditor();
 
         void                        SetLineListener( IPropertyLineListener* );
@@ -82,7 +82,7 @@ namespace pcr
 
         void                        SetPropertyValue(const OUString& _rEntryName, const cpo::uno::Any& _rValue, bool _bUnknownValue );
         sal_uInt16                  GetPropertyPos(const OUString& rEntryName ) const;
-        css::uno::Reference< css::inspection::XPropertyControl >
+        cpo::uno::Reference< css::inspection::XPropertyControl >
                                     GetPropertyControl( const OUString& rEntryName );
         void                        EnablePropertyLine( const OUString& _rEntryName, bool _bEnable );
         void                        EnablePropertyControls( const OUString& _rEntryName, sal_Int16 _nControls, bool _bEnable );

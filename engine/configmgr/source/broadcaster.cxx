@@ -29,7 +29,7 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <cpo/uno/Any.hxx>
 #include <cpo/uno/Exception.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/XInterface.hpp>
 #include <com/sun/star/util/XChangesListener.hpp>
 #include <cppuhelper/exc_hlp.hxx>
@@ -53,42 +53,42 @@ void appendMessage(
 }
 
 void Broadcaster::addDisposeNotification(
-    css::uno::Reference< css::lang::XEventListener > const & listener,
+    cpo::uno::Reference< css::lang::XEventListener > const & listener,
     css::lang::EventObject const & event)
 {
     disposeNotifications_.emplace_back(listener, event);
 }
 
 void Broadcaster::addContainerElementReplacedNotification(
-    css::uno::Reference< css::container::XContainerListener > const & listener,
+    cpo::uno::Reference< css::container::XContainerListener > const & listener,
     css::container::ContainerEvent const & event)
 {
     containerElementReplacedNotifications_.emplace_back(listener, event);
 }
 
 void Broadcaster::addContainerElementInsertedNotification(
-    css::uno::Reference< css::container::XContainerListener > const & listener,
+    cpo::uno::Reference< css::container::XContainerListener > const & listener,
     css::container::ContainerEvent const & event)
 {
     containerElementInsertedNotifications_.emplace_back(listener, event);
 }
 
 void Broadcaster::addContainerElementRemovedNotification(
-    css::uno::Reference< css::container::XContainerListener > const & listener,
+    cpo::uno::Reference< css::container::XContainerListener > const & listener,
     css::container::ContainerEvent const & event)
 {
     containerElementRemovedNotifications_.emplace_back(listener, event);
 }
 
 void Broadcaster::addPropertyChangeNotification(
-    css::uno::Reference< css::beans::XPropertyChangeListener > const & listener,
+    cpo::uno::Reference< css::beans::XPropertyChangeListener > const & listener,
     css::beans::PropertyChangeEvent const & event)
 {
     propertyChangeNotifications_.emplace_back(listener, event);
 }
 
 void Broadcaster::addPropertiesChangeNotification(
-    css::uno::Reference< css::beans::XPropertiesChangeListener > const &
+    cpo::uno::Reference< css::beans::XPropertiesChangeListener > const &
         listener,
     cpo::uno::Sequence< css::beans::PropertyChangeEvent > const & event)
 {
@@ -96,7 +96,7 @@ void Broadcaster::addPropertiesChangeNotification(
 }
 
 void Broadcaster::addChangesNotification(
-    css::uno::Reference< css::util::XChangesListener > const & listener,
+    cpo::uno::Reference< css::util::XChangesListener > const & listener,
     css::util::ChangesEvent const & event, bool bRootListener)
 {
     if (bRootListener)
@@ -184,13 +184,13 @@ void Broadcaster::send() {
         throw css::lang::WrappedTargetRuntimeException(
             ("configmgr exceptions during listener notification" +
              messages),
-            css::uno::Reference< cpo::uno::XInterface >(),
+            cpo::uno::Reference< cpo::uno::XInterface >(),
             exception);
     }
 }
 
 Broadcaster::DisposeNotification::DisposeNotification(
-    css::uno::Reference< css::lang::XEventListener > const & theListener,
+    cpo::uno::Reference< css::lang::XEventListener > const & theListener,
     css::lang::EventObject  theEvent):
     listener(theListener), event(std::move(theEvent))
 {
@@ -198,7 +198,7 @@ Broadcaster::DisposeNotification::DisposeNotification(
 }
 
 Broadcaster::ContainerNotification::ContainerNotification(
-    css::uno::Reference< css::container::XContainerListener > const &
+    cpo::uno::Reference< css::container::XContainerListener > const &
         theListener,
     css::container::ContainerEvent  theEvent):
     listener(theListener), event(std::move(theEvent))
@@ -207,7 +207,7 @@ Broadcaster::ContainerNotification::ContainerNotification(
 }
 
 Broadcaster::PropertyChangeNotification::PropertyChangeNotification(
-    css::uno::Reference< css::beans::XPropertyChangeListener > const &
+    cpo::uno::Reference< css::beans::XPropertyChangeListener > const &
         theListener,
     css::beans::PropertyChangeEvent  theEvent):
     listener(theListener), event(std::move(theEvent))
@@ -216,7 +216,7 @@ Broadcaster::PropertyChangeNotification::PropertyChangeNotification(
 }
 
 Broadcaster::PropertiesChangeNotification::PropertiesChangeNotification(
-    css::uno::Reference< css::beans::XPropertiesChangeListener > const &
+    cpo::uno::Reference< css::beans::XPropertiesChangeListener > const &
         theListener,
     cpo::uno::Sequence< css::beans::PropertyChangeEvent > const & theEvent):
     listener(theListener), event(theEvent)
@@ -225,7 +225,7 @@ Broadcaster::PropertiesChangeNotification::PropertiesChangeNotification(
 }
 
 Broadcaster::ChangesNotification::ChangesNotification(
-    css::uno::Reference< css::util::XChangesListener > const & theListener,
+    cpo::uno::Reference< css::util::XChangesListener > const & theListener,
     css::util::ChangesEvent  theEvent):
     listener(theListener), event(std::move(theEvent))
 {

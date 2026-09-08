@@ -45,6 +45,7 @@
 
 using namespace sfx2;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace {
 

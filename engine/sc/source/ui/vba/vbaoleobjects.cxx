@@ -27,6 +27,7 @@
 #include <utility>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace ooo::vba;
 
 typedef ::cppu::WeakImplHelper< container::XIndexAccess > XIndexAccess_BASE;
@@ -111,7 +112,7 @@ uno::Reference< container::XIndexAccess > oleObjectIndexWrapper( const uno::Refe
 }
 
 ScVbaOLEObjects::ScVbaOLEObjects( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< cpo::uno::XComponentContext >& xContext,
-                const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess )
+                const cpo::uno::Reference< css::container::XIndexAccess >& xIndexAccess )
             : OLEObjectsImpl_BASE( xParent, xContext, oleObjectIndexWrapper( xIndexAccess  ) )
 {
 }

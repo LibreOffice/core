@@ -33,7 +33,7 @@ namespace svt::uno
     public:
         WizardPageController(
             weld::Container* pParent,
-            const css::uno::Reference< css::ui::dialogs::XWizardController >& i_rController,
+            const cpo::uno::Reference< css::ui::dialogs::XWizardController >& i_rController,
             const sal_Int16 i_nPageId
         );
         virtual ~WizardPageController();
@@ -43,12 +43,12 @@ namespace svt::uno
         virtual bool        commitPage( vcl::WizardTypes::CommitPageReason _eReason ) override;
         virtual bool        canAdvance() const override;
 
-        const css::uno::Reference< css::ui::dialogs::XWizardPage >&
+        const cpo::uno::Reference< css::ui::dialogs::XWizardPage >&
                             getWizardPage() const { return m_xWizardPage; }
 
     private:
-        const css::uno::Reference< css::ui::dialogs::XWizardController >  m_xController;
-        css::uno::Reference< css::ui::dialogs::XWizardPage >              m_xWizardPage;
+        const cpo::uno::Reference< css::ui::dialogs::XWizardController >  m_xController;
+        cpo::uno::Reference< css::ui::dialogs::XWizardPage >              m_xWizardPage;
     };
 
 

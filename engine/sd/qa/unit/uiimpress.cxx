@@ -25,7 +25,7 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
@@ -98,6 +98,7 @@
 #include <xmloff/autolayout.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 /// Impress UI tests.
 class SdUiImpressTest : public SdModelTestBase
@@ -111,7 +112,7 @@ public:
     void checkCurrentPageNumber(sal_uInt16 nNum);
     void insertStringToObject(sal_uInt16 nObj, std::u16string_view rStr, bool bUseEscape);
     sd::slidesorter::SlideSorterViewShell*
-    getSlideSorterViewShell(const css::uno::Reference<css::lang::XComponent>& xComp = nullptr);
+    getSlideSorterViewShell(const cpo::uno::Reference<css::lang::XComponent>& xComp = nullptr);
     void lcl_search(const OUString& rKey, bool bFindAll = false, bool bBackwards = false);
 };
 
@@ -153,7 +154,7 @@ void SdUiImpressTest::insertStringToObject(sal_uInt16 nObj, std::u16string_view 
 }
 
 sd::slidesorter::SlideSorterViewShell*
-SdUiImpressTest::getSlideSorterViewShell(const css::uno::Reference<css::lang::XComponent>& xComp)
+SdUiImpressTest::getSlideSorterViewShell(const cpo::uno::Reference<css::lang::XComponent>& xComp)
 {
     // The slide sorter is created in the slide panel, which a unit test with the Kit does not get
     if (comphelper::COKit::isActive())

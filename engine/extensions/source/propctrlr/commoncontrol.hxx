@@ -44,7 +44,7 @@ namespace pcr
     {
     private:
         sal_Int16                       m_nControlType;
-        css::uno::Reference< css::inspection::XPropertyControlContext >
+        cpo::uno::Reference< css::inspection::XPropertyControlContext >
                                         m_xContext;
         css::inspection::XPropertyControl&
                                         m_rAntiImpl;
@@ -73,9 +73,9 @@ namespace pcr
         /// @throws cpo::uno::RuntimeException
         ::sal_Int16 getControlType() const { return m_nControlType; }
         /// @throws cpo::uno::RuntimeException
-        const css::uno::Reference< css::inspection::XPropertyControlContext >& getControlContext() const { return m_xContext; }
+        const cpo::uno::Reference< css::inspection::XPropertyControlContext >& getControlContext() const { return m_xContext; }
         /// @throws cpo::uno::RuntimeException
-        void setControlContext( const css::uno::Reference< css::inspection::XPropertyControlContext >& controlcontext );
+        void setControlContext( const cpo::uno::Reference< css::inspection::XPropertyControlContext >& controlcontext );
         /// @throws cpo::uno::RuntimeException
         bool isModified(  ) const { return m_bModified; }
         /// @throws cpo::uno::RuntimeException
@@ -127,11 +127,11 @@ namespace pcr
         // XPropertyControl - delegated to ->m_aImplControl
         virtual ::sal_Int16 getControlType() override
             { return CommonBehaviourControlHelper::getControlType(); }
-        virtual css::uno::Reference< css::inspection::XPropertyControlContext > getControlContext() override
+        virtual cpo::uno::Reference< css::inspection::XPropertyControlContext > getControlContext() override
             { return CommonBehaviourControlHelper::getControlContext(); }
-        virtual void setControlContext( const css::uno::Reference< css::inspection::XPropertyControlContext >& controlcontext ) override
+        virtual void setControlContext( const cpo::uno::Reference< css::inspection::XPropertyControlContext >& controlcontext ) override
             { CommonBehaviourControlHelper::setControlContext( controlcontext ); }
-        virtual css::uno::Reference< css::awt::XWindow > getControlWindow() override
+        virtual cpo::uno::Reference< css::awt::XWindow > getControlWindow() override
             { return new weld::TransportAsXWindow(getWidget()); }
         virtual bool isModified(  ) override
             { return CommonBehaviourControlHelper::isModified(); }

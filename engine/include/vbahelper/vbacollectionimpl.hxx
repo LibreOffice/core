@@ -27,7 +27,7 @@
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Type.hxx>
@@ -70,7 +70,7 @@ class VBAHELPER_DLLPUBLIC SimpleIndexAccessToEnumeration final : public Enumerat
 public:
     /// @throws cpo::uno::RuntimeException
     explicit SimpleIndexAccessToEnumeration(
-            css::uno::Reference< css::container::XIndexAccess > xIndexAccess ) :
+            cpo::uno::Reference< css::container::XIndexAccess > xIndexAccess ) :
         mxIndexAccess(std::move( xIndexAccess )), mnIndex( 0 ) {}
 
     virtual bool hasMoreElements() override
@@ -86,7 +86,7 @@ public:
     }
 
 private:
-    css::uno::Reference< css::container::XIndexAccess > mxIndexAccess;
+    cpo::uno::Reference< css::container::XIndexAccess > mxIndexAccess;
     sal_Int32 mnIndex;
 };
 
@@ -103,7 +103,7 @@ class VBAHELPER_DLLPUBLIC SimpleEnumerationBase : public EnumerationHelper_BASE
 public:
     /// @throws cpo::uno::RuntimeException
     explicit SimpleEnumerationBase(
-            const css::uno::Reference< css::container::XIndexAccess >& rxIndexAccess ) :
+            const cpo::uno::Reference< css::container::XIndexAccess >& rxIndexAccess ) :
         mxEnumeration( new SimpleIndexAccessToEnumeration( rxIndexAccess ) ) {}
 
     virtual bool hasMoreElements() override
@@ -121,7 +121,7 @@ public:
     virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& rSource ) = 0;
 
 private:
-    css::uno::Reference< css::container::XEnumeration > mxEnumeration;
+    cpo::uno::Reference< css::container::XEnumeration > mxEnumeration;
 };
 
 
@@ -130,11 +130,11 @@ class VBAHELPER_DLLPUBLIC EnumerationHelperImpl : public EnumerationHelper_BASE
 {
 protected:
     cpo::uno::WeakReference< ov::XHelperInterface > m_xParent;
-    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
-    css::uno::Reference< css::container::XEnumeration > m_xEnumeration;
+    cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+    cpo::uno::Reference< css::container::XEnumeration > m_xEnumeration;
 public:
     /// @throws cpo::uno::RuntimeException
-    EnumerationHelperImpl( const css::uno::Reference< ov::XHelperInterface >& xParent, css::uno::Reference< cpo::uno::XComponentContext >  xContext, css::uno::Reference< css::container::XEnumeration > xEnumeration ) : m_xParent( xParent ), m_xContext(std::move( xContext )),  m_xEnumeration(std::move( xEnumeration )) { }
+    EnumerationHelperImpl( const cpo::uno::Reference< ov::XHelperInterface >& xParent, cpo::uno::Reference< cpo::uno::XComponentContext >  xContext, cpo::uno::Reference< css::container::XEnumeration > xEnumeration ) : m_xParent( xParent ), m_xContext(std::move( xContext )),  m_xEnumeration(std::move( xEnumeration )) { }
     virtual bool hasMoreElements(  ) override { return m_xEnumeration->hasMoreElements(); }
 };
 
@@ -148,7 +148,7 @@ class XNamedObjectCollectionHelper final : public ::cppu::WeakImplHelper< css::c
                                                                     css::container::XEnumerationAccess >
 {
 public:
-typedef std::vector< css::uno::Reference< OneIfc > >  XNamedVec;
+typedef std::vector< cpo::uno::Reference< OneIfc > >  XNamedVec;
 private:
 
     class XNamedEnumerationHelper final : public EnumerationHelper_BASE
@@ -194,7 +194,7 @@ public:
 
         for ( ; it != it_end; ++it, ++pString )
         {
-            css::uno::Reference< css::container::XNamed > xName( *it, css::uno::UNO_QUERY_THROW );
+            cpo::uno::Reference< css::container::XNamed > xName( *it, cpo::uno::UNO_QUERY_THROW );
             *pString = xName->getName();
         }
         return sNames;
@@ -205,7 +205,7 @@ public:
         typename XNamedVec::iterator it_end = mXNamedVec.end();
         for ( ; cachePos != it_end; ++cachePos )
         {
-            css::uno::Reference< css::container::XNamed > xName( *cachePos, css::uno::UNO_QUERY_THROW );
+            cpo::uno::Reference< css::container::XNamed > xName( *cachePos, cpo::uno::UNO_QUERY_THROW );
             if ( aName == xName->getName() )
                 break;
         }
@@ -223,7 +223,7 @@ public:
 
     }
     // XEnumerationAccess
-    virtual css::uno::Reference< css::container::XEnumeration > createEnumeration(  ) override
+    virtual cpo::uno::Reference< css::container::XEnumeration > createEnumeration(  ) override
     {
         return new XNamedEnumerationHelper( mXNamedVec );
     }
@@ -235,8 +235,8 @@ class SAL_DLLPUBLIC_RTTI ScVbaCollectionBase : public InheritedHelperInterfaceIm
 {
 typedef InheritedHelperInterfaceImpl< Ifc... > BaseColBase;
 protected:
-    css::uno::Reference< css::container::XIndexAccess > m_xIndexAccess;
-    css::uno::Reference< css::container::XNameAccess > m_xNameAccess;
+    cpo::uno::Reference< css::container::XIndexAccess > m_xIndexAccess;
+    cpo::uno::Reference< css::container::XNameAccess > m_xNameAccess;
     bool mbIgnoreCase;
 
     /// @throws cpo::uno::RuntimeException
@@ -274,14 +274,14 @@ protected:
         return createCollectionObject( m_xIndexAccess->getByIndex( nIndex - 1 ) );
     }
 
-    void UpdateCollectionIndex( const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess )
+    void UpdateCollectionIndex( const cpo::uno::Reference< css::container::XIndexAccess >& xIndexAccess )
     {
-        m_xNameAccess.set(xIndexAccess, css::uno::UNO_QUERY_THROW);
+        m_xNameAccess.set(xIndexAccess, cpo::uno::UNO_QUERY_THROW);
         m_xIndexAccess = xIndexAccess;
     }
 
 public:
-    ScVbaCollectionBase( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext, css::uno::Reference< css::container::XIndexAccess > xIndexAccess, bool bIgnoreCase = false ) : BaseColBase( xParent, xContext ), m_xIndexAccess(std::move( xIndexAccess )), mbIgnoreCase( bIgnoreCase ) { m_xNameAccess.set(m_xIndexAccess, css::uno::UNO_QUERY); }
+    ScVbaCollectionBase( const cpo::uno::Reference< ov::XHelperInterface >& xParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext, cpo::uno::Reference< css::container::XIndexAccess > xIndexAccess, bool bIgnoreCase = false ) : BaseColBase( xParent, xContext ), m_xIndexAccess(std::move( xIndexAccess )), mbIgnoreCase( bIgnoreCase ) { m_xNameAccess.set(m_xIndexAccess, cpo::uno::UNO_QUERY); }
 
     //XCollection
     virtual ::sal_Int32 getCount() override
@@ -322,7 +322,7 @@ public:
         return u"Item"_ustr;
     }
     // XEnumerationAccess
-    virtual css::uno::Reference< css::container::XEnumeration > createEnumeration() override = 0;
+    virtual cpo::uno::Reference< css::container::XEnumeration > createEnumeration() override = 0;
 
     // XElementAccess
     virtual cpo::uno::Type getElementType() override = 0;
@@ -341,7 +341,7 @@ class VBAHELPER_DLLPUBLIC ScVbaCollectionBaseImpl : public CollImplBase
 {
 public:
     /// @throws cpo::uno::RuntimeException
-    ScVbaCollectionBaseImpl( const css::uno::Reference< ov::XHelperInterface > & xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess ) : CollImplBase( xParent, xContext, xIndexAccess){}
+    ScVbaCollectionBaseImpl( const cpo::uno::Reference< ov::XHelperInterface > & xParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext, const cpo::uno::Reference< css::container::XIndexAccess >& xIndexAccess ) : CollImplBase( xParent, xContext, xIndexAccess){}
 
 };
 
@@ -352,7 +352,7 @@ typedef ScVbaCollectionBase< ::cppu::WeakImplHelper< Ifc... >  > ImplBase;
 
 public:
     /// @throws cpo::uno::RuntimeException
-    CollTestImplHelper( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext,  const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess, bool bIgnoreCase = false ) : ImplBase( xParent, xContext, xIndexAccess, bIgnoreCase ) {}
+    CollTestImplHelper( const cpo::uno::Reference< ov::XHelperInterface >& xParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,  const cpo::uno::Reference< css::container::XIndexAccess >& xIndexAccess, bool bIgnoreCase = false ) : ImplBase( xParent, xContext, xIndexAccess, bIgnoreCase ) {}
 };
 
 

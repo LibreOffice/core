@@ -46,11 +46,11 @@ namespace calc
         : public OCellValueBinding_Base
     {
     private:
-        css::uno::Reference< css::sheet::XSpreadsheetDocument >
+        cpo::uno::Reference< css::sheet::XSpreadsheetDocument >
                     m_xDocument;            /// the document where our cell lives
-        css::uno::Reference< css::table::XCell >
+        cpo::uno::Reference< css::table::XCell >
                     m_xCell;                /// the cell we're bound to, for double value access
-        css::uno::Reference< css::text::XTextRange >
+        cpo::uno::Reference< css::text::XTextRange >
                     m_xCellText;            /// the cell we're bound to, for text access
         ::comphelper::OInterfaceContainerHelper4<css::util::XModifyListener>
                     m_aModifyListeners;     /// our modify listeners
@@ -59,7 +59,7 @@ namespace calc
 
     public:
         OCellValueBinding(
-            const css::uno::Reference< css::sheet::XSpreadsheetDocument >& _rxDocument,
+            const cpo::uno::Reference< css::sheet::XSpreadsheetDocument >& _rxDocument,
             bool _bListPos
         );
 
@@ -88,8 +88,8 @@ namespace calc
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
 
         // XModifyBroadcaster
-        virtual void SAL_CALL addModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
-        virtual void SAL_CALL removeModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+        virtual void SAL_CALL addModifyListener( const cpo::uno::Reference< css::util::XModifyListener >& aListener ) override;
+        virtual void SAL_CALL removeModifyListener( const cpo::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
         // XModifyListener
         virtual void SAL_CALL modified( const css::lang::EventObject& aEvent ) override;

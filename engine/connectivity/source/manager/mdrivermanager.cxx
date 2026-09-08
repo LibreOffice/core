@@ -40,7 +40,7 @@
 namespace drivermanager
 {
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
@@ -117,7 +117,7 @@ namespace
                 {
                     //load driver
                     rDesc.xDriver.set(
-                        rDesc.xComponentFactory->createInstanceWithContext(mxContext), css::uno::UNO_QUERY);
+                        rDesc.xComponentFactory->createInstanceWithContext(mxContext), cpo::uno::UNO_QUERY);
                 }
                 catch (const cpo::uno::Exception&)
                 {
@@ -213,7 +213,7 @@ void OSDBCDriverManager::bootstrapDrivers()
     Reference< XServiceInfo > xSI;
     while (xEnumDrivers->hasMoreElements())
     {
-        xFactory.set(xEnumDrivers->nextElement(), css::uno::UNO_QUERY);
+        xFactory.set(xEnumDrivers->nextElement(), cpo::uno::UNO_QUERY);
         OSL_ENSURE( xFactory.is(), "OSDBCDriverManager::bootstrapDrivers: no factory extracted" );
 
         if ( xFactory.is() )
@@ -223,7 +223,7 @@ void OSDBCDriverManager::bootstrapDrivers()
             bool bValidDescriptor = false;
 
             // can it tell us something about the implementation name?
-            xSI.set(xFactory, css::uno::UNO_QUERY);
+            xSI.set(xFactory, cpo::uno::UNO_QUERY);
             if ( xSI.is() )
             {   // yes -> no need to load the driver immediately (load it later when needed)
                 aDriverDescriptor.sImplementationName = xSI->getImplementationName();
@@ -245,7 +245,7 @@ void OSDBCDriverManager::bootstrapDrivers()
                 {
                     aDriverDescriptor.xDriver = xDriver;
                     // and obtain its implementation name
-                    xSI.set(xDriver, css::uno::UNO_QUERY);
+                    xSI.set(xDriver, cpo::uno::UNO_QUERY);
                     OSL_ENSURE( xSI.is(), "OSDBCDriverManager::bootstrapDrivers: a driver without service info?" );
                     if ( xSI.is() )
                     {

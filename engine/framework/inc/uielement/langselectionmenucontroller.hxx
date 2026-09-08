@@ -33,7 +33,7 @@ namespace framework
         using svt::PopupMenuControllerBase::disposing;
 
         public:
-            LanguageSelectionMenuController( const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
+            LanguageSelectionMenuController( const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext );
             virtual ~LanguageSelectionMenuController() override;
 
             /* interface XServiceInfo */
@@ -64,20 +64,20 @@ namespace framework
 
             bool                                             m_bShowMenu;
             OUString                                         m_aLangStatusCommandURL;
-            css::uno::Reference< css::frame::XDispatch >     m_xLanguageDispatch;
+            cpo::uno::Reference< css::frame::XDispatch >     m_xLanguageDispatch;
             OUString                                         m_aMenuCommandURL_Lang;
-            css::uno::Reference< css::frame::XDispatch >     m_xMenuDispatch_Lang;
+            cpo::uno::Reference< css::frame::XDispatch >     m_xMenuDispatch_Lang;
             OUString                                         m_aMenuCommandURL_Font;
-            css::uno::Reference< css::frame::XDispatch >     m_xMenuDispatch_Font;
+            cpo::uno::Reference< css::frame::XDispatch >     m_xMenuDispatch_Font;
             OUString                                         m_aMenuCommandURL_CharDlgForParagraph;
-            css::uno::Reference< css::frame::XDispatch >     m_xMenuDispatch_CharDlgForParagraph;
+            cpo::uno::Reference< css::frame::XDispatch >     m_xMenuDispatch_CharDlgForParagraph;
             OUString                                         m_aCurLang;
             SvtScriptType                                    m_nScriptType;
             OUString                                         m_aKeyboardLang;
             OUString                                         m_aGuessedTextLang;
             LanguageGuessingHelper                           m_aLangGuessHelper;
 
-            void fillPopupMenu( css::uno::Reference< css::awt::XPopupMenu > const & rPopupMenu, const Mode rMode );
+            void fillPopupMenu( cpo::uno::Reference< css::awt::XPopupMenu > const & rPopupMenu, const Mode rMode );
     };
 }
 

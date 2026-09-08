@@ -55,8 +55,8 @@ protected:
     ::osl::Mutex            m_aCancelMutex;
 
     unotools::WeakReference<::dbaccess::OResultSet> m_xWeakResultSet;
-    css::uno::Reference< css::beans::XPropertySet > m_xAggregateAsSet;
-    css::uno::Reference< css::util::XCancellable >  m_xAggregateAsCancellable;
+    cpo::uno::Reference< css::beans::XPropertySet > m_xAggregateAsSet;
+    cpo::uno::Reference< css::util::XCancellable >  m_xAggregateAsCancellable;
     bool                m_bUseBookmarks;
     bool                m_bEscapeProcessing;
 
@@ -64,7 +64,7 @@ protected:
 
 public:
     OStatementBase(const rtl::Reference< ::dbaccess::OConnection > & _xConn,
-                   const css::uno::Reference< cpo::uno::XInterface > & _xStatement);
+                   const cpo::uno::Reference< cpo::uno::XInterface > & _xStatement);
 
 
 // css::lang::XTypeProvider
@@ -79,7 +79,7 @@ public:
     virtual void disposing() override;
 
 // css::beans::XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
 
 // comphelper::OPropertyArrayUsageHelper
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
@@ -109,7 +109,7 @@ public:
     virtual void close(  ) override;
 
 // css::sdbc::XMultipleResults
-    virtual css::uno::Reference< css::sdbc::XResultSet > getResultSet(  ) override;
+    virtual cpo::uno::Reference< css::sdbc::XResultSet > getResultSet(  ) override;
     virtual sal_Int32 getUpdateCount(  ) override;
     virtual bool getMoreResults(  ) override;
 
@@ -118,7 +118,7 @@ public:
     virtual void clearBatch(  ) override;
     virtual cpo::uno::Sequence< sal_Int32 > executeBatch(  ) override;
 // css::sdbc::XGeneratedResultSet
-    virtual css::uno::Reference< css::sdbc::XResultSet > getGeneratedValues(  ) override;
+    virtual cpo::uno::Reference< css::sdbc::XResultSet > getGeneratedValues(  ) override;
 
 // Helper
     void disposeResultSet();
@@ -138,13 +138,13 @@ class OStatement    :public OStatementBase
                     ,public OStatement_IFACE
 {
 private:
-    css::uno::Reference< css::sdbc::XStatement >                  m_xAggregateStatement;
-    css::uno::Reference< css::sdb::XSingleSelectQueryComposer >   m_xComposer;
+    cpo::uno::Reference< css::sdbc::XStatement >                  m_xAggregateStatement;
+    cpo::uno::Reference< css::sdb::XSingleSelectQueryComposer >   m_xComposer;
     bool                                                          m_bAttemptedComposerCreation;
 
 public:
     OStatement(const rtl::Reference< ::dbaccess::OConnection > & _xConn,
-               const css::uno::Reference< cpo::uno::XInterface > & _xStatement);
+               const cpo::uno::Reference< cpo::uno::XInterface > & _xStatement);
 
     DECLARE_XINTERFACE()
     DECLARE_XTYPEPROVIDER()
@@ -155,10 +155,10 @@ public:
     virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
 // css::sdbc::XStatement
-    virtual css::uno::Reference< css::sdbc::XResultSet > executeQuery( const OUString& sql ) override;
+    virtual cpo::uno::Reference< css::sdbc::XResultSet > executeQuery( const OUString& sql ) override;
     virtual sal_Int32 executeUpdate( const OUString& sql ) override;
     virtual bool execute( const OUString& sql ) override;
-    virtual css::uno::Reference< css::sdbc::XConnection > getConnection(  ) override;
+    virtual cpo::uno::Reference< css::sdbc::XConnection > getConnection(  ) override;
 
     // OComponentHelper
     virtual void disposing() override;

@@ -44,7 +44,7 @@
 #include <map>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 namespace sfx2::sidebar {
@@ -805,7 +805,7 @@ bool ResourceManager::IsDeckEnabled (
     return false;
 }
 
-void ResourceManager::UpdateModel(const css::uno::Reference<css::frame::XModel>& xModel)
+void ResourceManager::UpdateModel(const cpo::uno::Reference<css::frame::XModel>& xModel)
 {
     for (auto const& deck : maDecks)
     {
@@ -816,7 +816,7 @@ void ResourceManager::UpdateModel(const css::uno::Reference<css::frame::XModel>&
 
         for (auto const& elem : rContainer)
         {
-            css::uno::Reference<css::ui::XUpdateModel> xPanel(elem->GetPanelComponent(), css::uno::UNO_QUERY);
+            cpo::uno::Reference<css::ui::XUpdateModel> xPanel(elem->GetPanelComponent(), cpo::uno::UNO_QUERY);
             if (xPanel.is()) // tdf#108814 interface is optional
             {
                 xPanel->updateModel(xModel);

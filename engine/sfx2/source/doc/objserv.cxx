@@ -126,8 +126,8 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
@@ -843,7 +843,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
         case SID_REDACTDOC:
         {
-            css::uno::Reference<css::frame::XModel> xModel = GetModel();
+            cpo::uno::Reference<css::frame::XModel> xModel = GetModel();
             if(!xModel.is())
                 return;
 

@@ -90,7 +90,7 @@ std::atomic<CollatorWrapper*> ScGlobal::pCollator(nullptr);
 std::atomic<CollatorWrapper*> ScGlobal::pCaseCollator(nullptr);
 std::atomic<::utl::TransliterationWrapper*> ScGlobal::pTransliteration(nullptr);
 std::atomic<::utl::TransliterationWrapper*> ScGlobal::pCaseTransliteration(nullptr);
-css::uno::Reference< css::i18n::XOrdinalSuffix> ScGlobal::xOrdinalSuffix;
+cpo::uno::Reference< css::i18n::XOrdinalSuffix> ScGlobal::xOrdinalSuffix;
 OUString        ScGlobal::aStrClipDocName;
 
 std::unique_ptr<SvxBrushItem> ScGlobal::xEmptyBrushItem;

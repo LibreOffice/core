@@ -20,7 +20,7 @@
 #pragma once
 
 #include <config_options.h>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/frame/XTitle.hpp>
 #include <com/sun/star/frame/XTitleChangeBroadcaster.hpp>
 #include <com/sun/star/frame/XFrameActionListener.hpp>
@@ -74,9 +74,9 @@ class UNLESS_MERGELIBS(FWK_DLLPUBLIC) TitleHelper final :
             @param  xNumbers
                     provides the right string and number for  an untitled component.
          */
-        TitleHelper(css::uno::Reference< cpo::uno::XComponentContext > xContext,
-            const css::uno::Reference< cpo::uno::XInterface >& xOwner,
-            const css::uno::Reference< css::frame::XUntitledNumbers >& xNumbers);
+        TitleHelper(cpo::uno::Reference< cpo::uno::XComponentContext > xContext,
+            const cpo::uno::Reference< cpo::uno::XInterface >& xOwner,
+            const cpo::uno::Reference< css::frame::XUntitledNumbers >& xNumbers);
 
         /** @short  free all internally used resources.
          */
@@ -92,11 +92,11 @@ class UNLESS_MERGELIBS(FWK_DLLPUBLIC) TitleHelper final :
 
 
         /** @see XTitleChangeBroadcaster */
-        virtual void addTitleChangeListener(const css::uno::Reference< css::frame::XTitleChangeListener >& xListener) override;
+        virtual void addTitleChangeListener(const cpo::uno::Reference< css::frame::XTitleChangeListener >& xListener) override;
 
 
         /** @see XTitleChangeBroadcaster */
-        virtual void removeTitleChangeListener(const css::uno::Reference< css::frame::XTitleChangeListener >& xListener) override;
+        virtual void removeTitleChangeListener(const cpo::uno::Reference< css::frame::XTitleChangeListener >& xListener) override;
 
 
         /** @see XTitleChangeListener */
@@ -121,22 +121,22 @@ class UNLESS_MERGELIBS(FWK_DLLPUBLIC) TitleHelper final :
         void impl_sendTitleChangedEvent ();
 
         void impl_updateTitle (bool init = false);
-        void impl_updateTitleForModel (const css::uno::Reference< css::frame::XModel3 >& xModel, bool init);
-        void impl_updateTitleForController (const css::uno::Reference< css::frame::XController >& xController, bool init);
-        void impl_updateTitleForFrame (const css::uno::Reference< css::frame::XFrame >& xFrame, bool init);
+        void impl_updateTitleForModel (const cpo::uno::Reference< css::frame::XModel3 >& xModel, bool init);
+        void impl_updateTitleForController (const cpo::uno::Reference< css::frame::XController >& xController, bool init);
+        void impl_updateTitleForFrame (const cpo::uno::Reference< css::frame::XFrame >& xFrame, bool init);
 
-        void impl_startListeningForModel (const css::uno::Reference< css::frame::XModel >& xModel);
-        void impl_startListeningForController (const css::uno::Reference< css::frame::XController >& xController);
-        void impl_startListeningForFrame (const css::uno::Reference< css::frame::XFrame >& xFrame);
-        void impl_updateListeningForFrame (const css::uno::Reference< css::frame::XFrame >& xFrame);
+        void impl_startListeningForModel (const cpo::uno::Reference< css::frame::XModel >& xModel);
+        void impl_startListeningForController (const cpo::uno::Reference< css::frame::XController >& xController);
+        void impl_startListeningForFrame (const cpo::uno::Reference< css::frame::XFrame >& xFrame);
+        void impl_updateListeningForFrame (const cpo::uno::Reference< css::frame::XFrame >& xFrame);
 
         static void impl_appendComponentTitle (      OUStringBuffer&                       sTitle    ,
-                                        const css::uno::Reference< cpo::uno::XInterface >& xComponent);
+                                        const cpo::uno::Reference< cpo::uno::XInterface >& xComponent);
         static void impl_appendProductName (OUStringBuffer& sTitle);
         void impl_appendModuleName (OUStringBuffer& sTitle);
         static void impl_appendDebugVersion (OUStringBuffer& sTitle);
 
-        void impl_setSubTitle (const css::uno::Reference< css::frame::XTitle >& xSubTitle);
+        void impl_setSubTitle (const cpo::uno::Reference< css::frame::XTitle >& xSubTitle);
 
         static OUString impl_convertURL2Title(std::u16string_view sURL);
 
@@ -145,7 +145,7 @@ class UNLESS_MERGELIBS(FWK_DLLPUBLIC) TitleHelper final :
     private:
 
         /** points to the global uno service manager. */
-        css::uno::Reference< cpo::uno::XComponentContext> m_xContext;
+        cpo::uno::Reference< cpo::uno::XComponentContext> m_xContext;
 
         /** reference to the outside UNO class using this helper. */
         cpo::uno::WeakReference< cpo::uno::XInterface > m_xOwner;

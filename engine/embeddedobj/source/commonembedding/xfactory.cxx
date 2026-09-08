@@ -35,6 +35,7 @@
 
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 
 uno::Reference< cpo::uno::XInterface > OOoEmbeddedObjectFactory::createInstanceInitFromEntry(

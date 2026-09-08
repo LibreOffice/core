@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <memory>
 #include <vector>
@@ -71,7 +71,7 @@ private:
     bool m_bAllReceived;
 
     /* the XMLElementWrapper of the buffered element */
-    css::uno::Reference<css::xml::wrapper::XXMLElementWrapper> m_xXMLElement;
+    cpo::uno::Reference<css::xml::wrapper::XXMLElementWrapper> m_xXMLElement;
 
 private:
     bool isECInSubTreeIncluded(sal_Int32 nIgnoredSecurityId) const;
@@ -80,7 +80,7 @@ private:
     const BufferNode* getNextChild(const BufferNode* pChild) const;
 
 public:
-    explicit BufferNode(css::uno::Reference<css::xml::wrapper::XXMLElementWrapper> xXMLElement);
+    explicit BufferNode(cpo::uno::Reference<css::xml::wrapper::XXMLElementWrapper> xXMLElement);
 
     bool isECOfBeforeModifyIncluded(sal_Int32 nIgnoredSecurityId) const;
     void setReceivedAll();
@@ -105,12 +105,12 @@ public:
     const BufferNode* isAncestor(const BufferNode* pDescendant) const;
     bool isPrevious(const BufferNode* pFollowing) const;
     const BufferNode* getNextNodeByTreeOrder() const;
-    const css::uno::Reference<css::xml::wrapper::XXMLElementWrapper>& getXMLElement() const
+    const cpo::uno::Reference<css::xml::wrapper::XXMLElementWrapper>& getXMLElement() const
     {
         return m_xXMLElement;
     }
     void
-    setXMLElement(const css::uno::Reference<css::xml::wrapper::XXMLElementWrapper>& xXMLElement);
+    setXMLElement(const cpo::uno::Reference<css::xml::wrapper::XXMLElementWrapper>& xXMLElement);
     void notifyBranch();
     void elementCollectorNotify();
 };

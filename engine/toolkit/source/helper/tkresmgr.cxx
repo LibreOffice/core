@@ -27,7 +27,7 @@
 
 #include <helper/tkresmgr.hxx>
 
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::com::sun::star::graphic::XGraphic;
 using ::com::sun::star::graphic::XGraphicProvider;
 using namespace ::com::sun::star;

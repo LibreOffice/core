@@ -56,7 +56,7 @@ typedef struct _xmlTextWriter* xmlTextWriterPtr;
 class EDITENG_DLLPUBLIC SvxNumberType
 {
     static sal_Int32 nRefCount;
-    static css::uno::Reference<css::text::XNumberingFormatter> xFormatter;
+    static cpo::uno::Reference<css::text::XNumberingFormatter> xFormatter;
 
     SvxNumType      nNumType;
     bool            bShowSymbol;        // Also show Symbol ?

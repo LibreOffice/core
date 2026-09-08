@@ -114,7 +114,7 @@ class SM_DLLPUBLIC SmDocShell final : public SfxObjectShell, public SfxListener
                                   bool bTemplate = false ) const override;
 
     virtual void        OnDocumentPrinterChanged( Printer * ) override;
-    virtual bool        InitNew( const css::uno::Reference< css::embed::XStorage >& xStorage ) override;
+    virtual bool        InitNew( const cpo::uno::Reference< css::embed::XStorage >& xStorage ) override;
     virtual bool        Load( SfxMedium& rMedium ) override;
     virtual bool        Save() override;
     virtual bool        SaveAs( SfxMedium& rMedium ) override;

@@ -47,7 +47,7 @@ using namespace ::comphelper;
 using namespace connectivity::ado;
 
 
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
@@ -856,7 +856,7 @@ void OStatement::release() noexcept
     OStatement_Base::release();
 }
 
-css::uno::Reference< css::beans::XPropertySetInfo > OStatement_Base::getPropertySetInfo(  )
+cpo::uno::Reference< css::beans::XPropertySetInfo > OStatement_Base::getPropertySetInfo(  )
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }

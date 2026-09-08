@@ -47,6 +47,7 @@
 #include "swdllimpl.hxx"
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 namespace
 {
@@ -148,7 +149,7 @@ SwDLL::~SwDLL() COVERITY_NOEXCEPT_FALSE
     // Need to clear this early in the shutdown process, because it might hold references
     // to large complex things like ScDocument.
     try {
-        css::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipboard =
+        cpo::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipboard =
             css::datatransfer::clipboard::SystemClipboard::create(
                 comphelper::getProcessComponentContext());
         xClipboard->setContents( nullptr, nullptr );

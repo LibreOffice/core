@@ -35,10 +35,10 @@ class WindowHelper
     public:
 
 
-static bool isTopWindow(const css::uno::Reference< css::awt::XWindow >& xWindow)
+static bool isTopWindow(const cpo::uno::Reference< css::awt::XWindow >& xWindow)
 {
     // even child frame containing top level windows (e.g. query designer of database) will be closed
-    css::uno::Reference< css::awt::XTopWindow > xTopWindowCheck(xWindow, css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::awt::XTopWindow > xTopWindowCheck(xWindow, cpo::uno::UNO_QUERY);
     if (xTopWindowCheck.is())
     {
         // Note: Toolkit interface XTopWindow sometimes is used by real VCL-child-windows also .-)

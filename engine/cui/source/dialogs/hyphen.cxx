@@ -34,6 +34,7 @@
 #define CUR_HYPH_POS_CHAR   '-'
 
 using namespace css;
+using namespace ::cpo;
 
 IMPL_LINK_NOARG(SvxHyphenWordDialog, CursorChangeHdl_Impl, weld::Entry&, void)
 {

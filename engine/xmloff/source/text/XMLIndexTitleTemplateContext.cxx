@@ -30,7 +30,7 @@
 
 using ::com::sun::star::beans::XPropertySet;
 using ::cpo::uno::Any;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::xmloff::token::XML_STYLE_NAME;
 
 
@@ -50,7 +50,7 @@ XMLIndexTitleTemplateContext::~XMLIndexTitleTemplateContext()
 
 void XMLIndexTitleTemplateContext::startFastElement(
     sal_Int32 /*nElement*/,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     // there's only one attribute: style-name
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )

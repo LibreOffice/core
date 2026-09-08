@@ -39,7 +39,7 @@ constexpr sal_uInt32 CHARTTRANSFER_OBJECTTYPE_DRAWMODEL = 1;
 
 using namespace ::com::sun::star;
 
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 
 namespace chart
 {

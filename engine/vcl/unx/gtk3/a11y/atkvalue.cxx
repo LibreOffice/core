@@ -27,7 +27,7 @@
 using namespace ::com::sun::star;
 
 /// @throws uno::RuntimeException
-static css::uno::Reference<css::accessibility::XAccessibleValue>
+static cpo::uno::Reference<css::accessibility::XAccessibleValue>
     getValue( AtkValue *pValue )
 {
     AtkObjectWrapper *pWrap = ATK_OBJECT_WRAPPER( pValue );
@@ -35,13 +35,13 @@ static css::uno::Reference<css::accessibility::XAccessibleValue>
     {
         if( !pWrap->mpValue.is() )
         {
-            pWrap->mpValue.set(pWrap->mpContext, css::uno::UNO_QUERY);
+            pWrap->mpValue.set(pWrap->mpContext, cpo::uno::UNO_QUERY);
         }
 
         return pWrap->mpValue;
     }
 
-    return css::uno::Reference<css::accessibility::XAccessibleValue>();
+    return cpo::uno::Reference<css::accessibility::XAccessibleValue>();
 }
 
 static void anyToGValue( const cpo::uno::Any& aAny, GValue *pValue )
@@ -62,7 +62,7 @@ value_wrapper_get_current_value( AtkValue *value,
                                  GValue   *gval )
 {
     try {
-        css::uno::Reference<css::accessibility::XAccessibleValue> pValue
+        cpo::uno::Reference<css::accessibility::XAccessibleValue> pValue
             = getValue( value );
         if( pValue.is() )
             anyToGValue( pValue->getCurrentValue(), gval );
@@ -77,7 +77,7 @@ value_wrapper_get_maximum_value( AtkValue *value,
                                  GValue   *gval )
 {
     try {
-        css::uno::Reference<css::accessibility::XAccessibleValue> pValue
+        cpo::uno::Reference<css::accessibility::XAccessibleValue> pValue
             = getValue( value );
         if( pValue.is() )
             anyToGValue( pValue->getMaximumValue(), gval );
@@ -92,7 +92,7 @@ value_wrapper_get_minimum_value( AtkValue *value,
                                  GValue   *gval )
 {
     try {
-        css::uno::Reference<css::accessibility::XAccessibleValue> pValue
+        cpo::uno::Reference<css::accessibility::XAccessibleValue> pValue
             = getValue( value );
         if( pValue.is() )
             anyToGValue( pValue->getMinimumValue(), gval );
@@ -107,7 +107,7 @@ value_wrapper_set_current_value( AtkValue     *value,
                                  const GValue *gval )
 {
     try {
-        css::uno::Reference<css::accessibility::XAccessibleValue> pValue
+        cpo::uno::Reference<css::accessibility::XAccessibleValue> pValue
             = getValue( value );
         if( pValue.is() )
         {

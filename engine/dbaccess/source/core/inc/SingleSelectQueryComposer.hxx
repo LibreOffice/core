@@ -87,13 +87,13 @@ namespace dbaccess
 
         std::vector< OUString >        m_aElementaryParts;     // the filter/groupby/having/order of the elementary statement
 
-        css::uno::Reference< css::sdbc::XConnection>              m_xConnection;
-        css::uno::Reference< css::sdbc::XDatabaseMetaData>        m_xMetaData;
-        css::uno::Reference< css::container::XNameAccess>         m_xConnectionTables;
-        css::uno::Reference< css::container::XNameAccess>         m_xConnectionQueries;
-        css::uno::Reference< css::util::XNumberFormatsSupplier >  m_xNumberFormatsSupplier;
-        css::uno::Reference< cpo::uno::XComponentContext>         m_aContext;
-        css::uno::Reference< css::script::XTypeConverter >        m_xTypeConverter;
+        cpo::uno::Reference< css::sdbc::XConnection>              m_xConnection;
+        cpo::uno::Reference< css::sdbc::XDatabaseMetaData>        m_xMetaData;
+        cpo::uno::Reference< css::container::XNameAccess>         m_xConnectionTables;
+        cpo::uno::Reference< css::container::XNameAccess>         m_xConnectionQueries;
+        cpo::uno::Reference< css::util::XNumberFormatsSupplier >  m_xNumberFormatsSupplier;
+        cpo::uno::Reference< cpo::uno::XComponentContext>         m_aContext;
+        cpo::uno::Reference< css::script::XTypeConverter >        m_xTypeConverter;
 
         std::vector<std::unique_ptr<OPrivateColumns>>         m_aCurrentColumns;
         std::unique_ptr<OPrivateTables>                       m_pTables;      // currently used tables
@@ -111,16 +111,16 @@ namespace dbaccess
 
 
         bool setORCriteria(::connectivity::OSQLParseNode const * pCondition, ::connectivity::OSQLParseTreeIterator& _rIterator,
-            std::vector< std::vector < css::beans::PropertyValue > >& rFilters, const css::uno::Reference< css::util::XNumberFormatter > & xFormatter) const;
+            std::vector< std::vector < css::beans::PropertyValue > >& rFilters, const cpo::uno::Reference< css::util::XNumberFormatter > & xFormatter) const;
         bool setANDCriteria(::connectivity::OSQLParseNode const * pCondition, ::connectivity::OSQLParseTreeIterator& _rIterator,
-            std::vector < css::beans::PropertyValue > & rFilters, const css::uno::Reference< css::util::XNumberFormatter > & xFormatter) const;
+            std::vector < css::beans::PropertyValue > & rFilters, const cpo::uno::Reference< css::util::XNumberFormatter > & xFormatter) const;
         bool setLikePredicate(::connectivity::OSQLParseNode const * pCondition, ::connectivity::OSQLParseTreeIterator const & _rIterator,
-            std::vector < css::beans::PropertyValue > & rFilters, const css::uno::Reference< css::util::XNumberFormatter > & xFormatter) const;
+            std::vector < css::beans::PropertyValue > & rFilters, const cpo::uno::Reference< css::util::XNumberFormatter > & xFormatter) const;
         bool setComparisonPredicate(::connectivity::OSQLParseNode const * pCondition, ::connectivity::OSQLParseTreeIterator const & _rIterator,
-            std::vector < css::beans::PropertyValue > & rFilters, const css::uno::Reference< css::util::XNumberFormatter > & xFormatter) const;
+            std::vector < css::beans::PropertyValue > & rFilters, const cpo::uno::Reference< css::util::XNumberFormatter > & xFormatter) const;
 
         static OUString getColumnName(::connectivity::OSQLParseNode const * pColumnRef, ::connectivity::OSQLParseTreeIterator const & _rIterator);
-        OUString getTableAlias(const css::uno::Reference< css::beans::XPropertySet >& column ) const;
+        OUString getTableAlias(const cpo::uno::Reference< css::beans::XPropertySet >& column ) const;
         static sal_Int32 getPredicateType(::connectivity::OSQLParseNode const * _pPredicate);
         // clears all Columns,Parameters and tables and insert it to their vectors
         void clearCurrentCollections();
@@ -134,7 +134,7 @@ namespace dbaccess
         OUString getStatementPart( TGetParseNode const & _aGetFunctor, ::connectivity::OSQLParseTreeIterator& _rIterator );
         void setQuery_Impl( const OUString& command );
 
-        void setConditionByColumn( const css::uno::Reference< css::beans::XPropertySet >& column
+        void setConditionByColumn( const cpo::uno::Reference< css::beans::XPropertySet >& column
                                 , bool andCriteria
                                 , std::function<bool(OSingleSelectQueryComposer *, const OUString&)> const & _aSetFunctor
                                 ,sal_Int32 filterOperator);
@@ -149,7 +149,7 @@ namespace dbaccess
         cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > >
                     getStructuredCondition( TGetParseNode const & _aGetFunctor );
 
-        css::uno::Reference< css::container::XIndexAccess >
+        cpo::uno::Reference< css::container::XIndexAccess >
                     setCurrentColumns( EColumnType _eType, const ::rtl::Reference< ::connectivity::OSQLColumns >& _rCols );
 
         //helper methods for mem_fun_t
@@ -189,7 +189,7 @@ namespace dbaccess
 
             @param bGroupBy: for GROUP BY clause? In that case, throw exception if trying to use an unrelated column and the database does not support that.
         */
-        OUString impl_getColumnRealName_throw(const css::uno::Reference< css::beans::XPropertySet >& column, bool bGroupBy);
+        OUString impl_getColumnRealName_throw(const cpo::uno::Reference< css::beans::XPropertySet >& column, bool bGroupBy);
 
         /** return the name of the column in the *query* for ORDER BY clause.
 
@@ -197,15 +197,15 @@ namespace dbaccess
 
             Throws exception if trying to use an unrelated column and the database does not support that.
         */
-        OUString impl_getColumnNameOrderBy_throw(const css::uno::Reference< css::beans::XPropertySet >& column);
+        OUString impl_getColumnNameOrderBy_throw(const cpo::uno::Reference< css::beans::XPropertySet >& column);
 
     protected:
         virtual ~OSingleSelectQueryComposer() override;
     public:
 
-        OSingleSelectQueryComposer( const css::uno::Reference< css::container::XNameAccess>& _xTableSupplier,
-                        const css::uno::Reference< css::sdbc::XConnection>& _xConnection,
-                        const css::uno::Reference< cpo::uno::XComponentContext>& _rContext);
+        OSingleSelectQueryComposer( const cpo::uno::Reference< css::container::XNameAccess>& _xTableSupplier,
+                        const cpo::uno::Reference< css::sdbc::XConnection>& _xConnection,
+                        const cpo::uno::Reference< cpo::uno::XComponentContext>& _rContext);
 
 
         void disposing() override;
@@ -219,7 +219,7 @@ namespace dbaccess
         // XServiceInfo
         DECLARE_SERVICE_INFO();
 
-        virtual css::uno::Reference< css::beans::XPropertySetInfo>  getPropertySetInfo() override;
+        virtual cpo::uno::Reference< css::beans::XPropertySetInfo>  getPropertySetInfo() override;
         virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
 
@@ -229,13 +229,13 @@ namespace dbaccess
         virtual void setElementaryQuery( const OUString& _rElementary ) override;
         virtual void setFilter( const OUString& filter ) override;
         virtual void setStructuredFilter( const cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > >& filter ) override;
-        virtual void appendFilterByColumn( const css::uno::Reference< css::beans::XPropertySet >& column, bool andCriteria,sal_Int32 filterOperator ) override;
-        virtual void appendGroupByColumn( const css::uno::Reference< css::beans::XPropertySet >& column ) override;
+        virtual void appendFilterByColumn( const cpo::uno::Reference< css::beans::XPropertySet >& column, bool andCriteria,sal_Int32 filterOperator ) override;
+        virtual void appendGroupByColumn( const cpo::uno::Reference< css::beans::XPropertySet >& column ) override;
         virtual void setGroup( const OUString& group ) override;
         virtual void setHavingClause( const OUString& filter ) override;
         virtual void setStructuredHavingClause( const cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > >& filter ) override;
-        virtual void appendHavingClauseByColumn( const css::uno::Reference< css::beans::XPropertySet >& column, bool andCriteria,sal_Int32 filterOperator ) override;
-        virtual void appendOrderByColumn( const css::uno::Reference< css::beans::XPropertySet >& column, bool ascending ) override;
+        virtual void appendHavingClauseByColumn( const cpo::uno::Reference< css::beans::XPropertySet >& column, bool andCriteria,sal_Int32 filterOperator ) override;
+        virtual void appendOrderByColumn( const cpo::uno::Reference< css::beans::XPropertySet >& column, bool ascending ) override;
         virtual void setOrder( const OUString& order ) override;
 
         // XSingleSelectQueryAnalyzer
@@ -245,19 +245,19 @@ namespace dbaccess
         virtual OUString getFilter(  ) override;
         virtual cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > > getStructuredFilter(  ) override;
         virtual OUString getGroup(  ) override;
-        virtual css::uno::Reference< css::container::XIndexAccess > getGroupColumns(  ) override;
+        virtual cpo::uno::Reference< css::container::XIndexAccess > getGroupColumns(  ) override;
         virtual OUString getHavingClause(  ) override;
         virtual cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > > getStructuredHavingClause(  ) override;
         virtual OUString getOrder(  ) override;
-        virtual css::uno::Reference< css::container::XIndexAccess > getOrderColumns(  ) override;
+        virtual cpo::uno::Reference< css::container::XIndexAccess > getOrderColumns(  ) override;
         virtual OUString getQueryWithSubstitution(  ) override;
 
         // XColumnsSupplier
-        virtual css::uno::Reference< css::container::XNameAccess > getColumns(  ) override;
+        virtual cpo::uno::Reference< css::container::XNameAccess > getColumns(  ) override;
         // XTablesSupplier
-        virtual css::uno::Reference< css::container::XNameAccess > getTables(  ) override;
+        virtual cpo::uno::Reference< css::container::XNameAccess > getTables(  ) override;
         // XParametersSupplier
-        virtual css::uno::Reference< css::container::XIndexAccess > getParameters(  ) override;
+        virtual cpo::uno::Reference< css::container::XIndexAccess > getParameters(  ) override;
     };
 }
 

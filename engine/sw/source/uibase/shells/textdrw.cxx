@@ -39,6 +39,7 @@
 #include <avmedia/mediawindow.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 void SwBaseShell::InsertURLButton(const OUString& rURL, const OUString& rTarget, const OUString& rText)
 {

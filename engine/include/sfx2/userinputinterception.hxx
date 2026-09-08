@@ -27,7 +27,7 @@
 
 namespace com::sun::star::awt { class XKeyHandler; }
 namespace com::sun::star::awt { class XMouseClickHandler; }
-namespace com::sun::star::uno { template <typename > class Reference; }
+namespace cpo::uno { template <typename > class Reference; }
 namespace osl { class Mutex; }
 
 class NotifyEvent;
@@ -55,13 +55,13 @@ namespace sfx2
 
         // delegator functions for your XUserInputInterception implementation
         /// @throws cpo::uno::RuntimeException
-        void    addKeyHandler( const css::uno::Reference< css::awt::XKeyHandler >& xHandler );
+        void    addKeyHandler( const cpo::uno::Reference< css::awt::XKeyHandler >& xHandler );
         /// @throws cpo::uno::RuntimeException
-        void    removeKeyHandler( const css::uno::Reference< css::awt::XKeyHandler >& xHandler );
+        void    removeKeyHandler( const cpo::uno::Reference< css::awt::XKeyHandler >& xHandler );
         /// @throws cpo::uno::RuntimeException
-        void    addMouseClickHandler( const css::uno::Reference< css::awt::XMouseClickHandler >& xHandler );
+        void    addMouseClickHandler( const cpo::uno::Reference< css::awt::XMouseClickHandler >& xHandler );
         /// @throws cpo::uno::RuntimeException
-        void    removeMouseClickHandler( const css::uno::Reference< css::awt::XMouseClickHandler >& xHandler );
+        void    removeMouseClickHandler( const cpo::uno::Reference< css::awt::XMouseClickHandler >& xHandler );
 
         // state
         bool    hasKeyHandlers() const;

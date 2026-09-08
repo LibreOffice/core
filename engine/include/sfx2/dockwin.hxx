@@ -24,7 +24,7 @@
 #include <sal/types.h>
 #include <vcl/dockwin.hxx>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <sfx2/dllapi.h>
 #include <sfx2/childwin.hxx>
@@ -33,8 +33,8 @@ namespace com::sun::star::frame { class XFrame; }
 
 class SfxDockingWindow_Impl;
 
-void SfxDockingWindowFactory( const css::uno::Reference< css::frame::XFrame >& rFrame, std::u16string_view rDockingWindowName );
-bool IsDockingWindowVisible( const css::uno::Reference< css::frame::XFrame >& rFrame, std::u16string_view rDockingWindowName );
+void SfxDockingWindowFactory( const cpo::uno::Reference< css::frame::XFrame >& rFrame, std::u16string_view rDockingWindowName );
+bool IsDockingWindowVisible( const cpo::uno::Reference< css::frame::XFrame >& rFrame, std::u16string_view rDockingWindowName );
 
 class SFX2_DLLPUBLIC SfxDockingWindow : public ResizableDockingWindow
 {

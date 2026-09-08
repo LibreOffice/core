@@ -42,12 +42,12 @@
 namespace com::sun::star::graphic { class XGraphic; }
 
 using namespace css;
-using namespace css::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace css::beans;
 
 /* protected: for signature verify */
-css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener > XSecController::prepareSignatureToRead(
+cpo::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener > XSecController::prepareSignatureToRead(
     sal_Int32 nSecurityId)
 {
     if ( m_eStatusOfSecurityComponents != InitializationState::INITIALIZED )
@@ -88,7 +88,7 @@ css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener > XSecCon
 
 void XSecController::addSignature()
 {
-    css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener > xReferenceResolvedListener;
+    cpo::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener > xReferenceResolvedListener;
     sal_Int32 nSignatureId = 0;
 
 
@@ -161,13 +161,13 @@ void XSecController::addStreamReference(
             /*
              * get the input stream
              */
-        css::uno::Reference< css::io::XInputStream > xObjectInputStream
+        cpo::uno::Reference< css::io::XInputStream > xObjectInputStream
                 = getObjectInputStream( ouUri );
 
         if ( xObjectInputStream.is() )
         {
-            css::uno::Reference<css::xml::crypto::XUriBinding> xUriBinding
-                (isi.xReferenceResolvedListener, css::uno::UNO_QUERY);
+            cpo::uno::Reference<css::xml::crypto::XUriBinding> xUriBinding
+                (isi.xReferenceResolvedListener, cpo::uno::UNO_QUERY);
             xUriBinding->setUriBinding(ouUri, xObjectInputStream);
         }
     }
@@ -204,8 +204,8 @@ void XSecController::setReferenceCount() const
         }
     }
 
-    css::uno::Reference<css::xml::crypto::sax::XReferenceCollector> xReferenceCollector
-        (isi.xReferenceResolvedListener, css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::xml::crypto::sax::XReferenceCollector> xReferenceCollector
+        (isi.xReferenceResolvedListener, cpo::uno::UNO_QUERY);
     xReferenceCollector->setReferenceCount( referenceCount );
 }
 
@@ -520,7 +520,7 @@ void XSecController::collectToVerify( std::u16string_view referenceId )
         return;
 
     bool bJustChainingOn = false;
-    css::uno::Reference< css::xml::sax::XDocumentHandler > xHandler;
+    cpo::uno::Reference< css::xml::sax::XDocumentHandler > xHandler;
 
     int i,j;
     int sigNum = m_vInternalSignatureInformations.size();
@@ -546,8 +546,8 @@ void XSecController::collectToVerify( std::u16string_view referenceId )
                 sal_Int32 nKeeperId = m_xSAXEventKeeper->addSecurityElementCollector(
                     css::xml::crypto::sax::ElementMarkPriority_BEFOREMODIFY, false );
 
-                css::uno::Reference<css::xml::crypto::sax::XReferenceCollector> xReferenceCollector
-                    ( isi.xReferenceResolvedListener, css::uno::UNO_QUERY );
+                cpo::uno::Reference<css::xml::crypto::sax::XReferenceCollector> xReferenceCollector
+                    ( isi.xReferenceResolvedListener, cpo::uno::UNO_QUERY );
 
                 m_xSAXEventKeeper->setSecurityId(nKeeperId, isi.signatureInfor.nSecurityId);
                 m_xSAXEventKeeper->addReferenceResolvedListener( nKeeperId, isi.xReferenceResolvedListener);
@@ -573,13 +573,13 @@ void XSecController::addSignature( sal_Int32 nSignatureId )
     m_bVerifyCurrentSignature = true;
 }
 
-css::uno::Reference< css::xml::sax::XDocumentHandler > const & XSecController::createSignatureReader(XMLSignatureHelper& rXMLSignatureHelper, sal_Int32 nType)
+cpo::uno::Reference< css::xml::sax::XDocumentHandler > const & XSecController::createSignatureReader(XMLSignatureHelper& rXMLSignatureHelper, sal_Int32 nType)
 {
     if (nType == embed::StorageFormats::OFOPXML)
         m_xSecParser = new OOXMLSecParser(rXMLSignatureHelper, this);
     else
         m_xSecParser = new XSecParser(rXMLSignatureHelper, this);
-    css::uno::Reference< css::lang::XInitialization > xInitialization(m_xSecParser, uno::UNO_QUERY);
+    cpo::uno::Reference< css::lang::XInitialization > xInitialization(m_xSecParser, uno::UNO_QUERY);
 
     setSAXChainConnector(xInitialization);
 

@@ -26,8 +26,8 @@
 namespace dbaccess
 {
 
-    using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::UNO_SET_THROW;
+    using ::cpo::uno::Reference;
+    using ::cpo::uno::UNO_SET_THROW;
     using ::com::sun::star::embed::XStorage;
     using ::com::sun::star::io::XStream;
 

@@ -12,7 +12,7 @@
 
 #include <com/sun/star/table/XCell.hpp>
 #include <cpo/uno/XInterface.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 
 #include <test/testdllapi.hxx>
@@ -22,8 +22,8 @@ namespace apitest
 class OOO_DLLPUBLIC_TEST XCalculatable
 {
 public:
-    virtual css::uno::Reference<cpo::uno::XInterface> init() = 0;
-    virtual cpo::uno::Sequence<css::uno::Reference<css::table::XCell>> getXCells() = 0;
+    virtual cpo::uno::Reference<cpo::uno::XInterface> init() = 0;
+    virtual cpo::uno::Sequence<cpo::uno::Reference<css::table::XCell>> getXCells() = 0;
 
     void testCalculate();
     void testCalculateAll();

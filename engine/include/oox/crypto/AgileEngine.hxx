@@ -106,7 +106,7 @@ public:
     bool decryptAndCheckVerifierHash(std::u16string_view rPassword);
 
     bool generateEncryptionKey(std::u16string_view rPassword) override;
-    bool readEncryptionInfo(css::uno::Reference<css::io::XInputStream> & rxInputStream) override;
+    bool readEncryptionInfo(cpo::uno::Reference<css::io::XInputStream> & rxInputStream) override;
     bool decrypt(BinaryXInputStream& aInputStream,
                  BinaryXOutputStream& aOutputStream) override;
 
@@ -119,8 +119,8 @@ public:
 
     void writeEncryptionInfo(BinaryXOutputStream& rStream) override;
 
-    void encrypt(const css::uno::Reference<css::io::XInputStream>&  rxInputStream,
-                 css::uno::Reference<css::io::XOutputStream>& rxOutputStream,
+    void encrypt(const cpo::uno::Reference<css::io::XInputStream>&  rxInputStream,
+                 cpo::uno::Reference<css::io::XOutputStream>& rxOutputStream,
                  sal_uInt32 nSize) override;
 
     bool setupEncryption(OUString const & rPassword) override;

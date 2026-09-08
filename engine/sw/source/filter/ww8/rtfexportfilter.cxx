@@ -31,6 +31,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 RtfExportFilter::RtfExportFilter(uno::Reference<cpo::uno::XComponentContext> xCtx)
     : m_xCtx(std::move(xCtx))

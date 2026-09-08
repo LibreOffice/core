@@ -36,6 +36,7 @@
 #include <cppuhelper/supportsservice.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 namespace {
 
@@ -49,7 +50,7 @@ private:
     UUIInteractionHelper m_pImpl;
 
 public:
-    explicit UUIInteractionHandler(css::uno::Reference< cpo::uno::XComponentContext > const & rxContext);
+    explicit UUIInteractionHandler(cpo::uno::Reference< cpo::uno::XComponentContext > const & rxContext);
 
     UUIInteractionHandler(const UUIInteractionHandler&) = delete;
     UUIInteractionHandler& operator=(const UUIInteractionHandler&) = delete;
@@ -66,42 +67,42 @@ public:
         cpo::uno::Sequence< cpo::uno::Any > const & rArguments) override;
 
     virtual void SAL_CALL
-    handle(css::uno::Reference< css::task::XInteractionRequest > const & rRequest) override;
+    handle(cpo::uno::Reference< css::task::XInteractionRequest > const & rRequest) override;
 
     virtual bool SAL_CALL
         handleInteractionRequest(
-            const css::uno::Reference< css::task::XInteractionRequest >& Request
+            const cpo::uno::Reference< css::task::XInteractionRequest >& Request
         ) override;
 
     virtual void SAL_CALL
-        addPropertyChangeListener( const OUString& /*aPropertyName*/, const css::uno::Reference< css::beans::XPropertyChangeListener >& /*xListener*/ ) override
+        addPropertyChangeListener( const OUString& /*aPropertyName*/, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& /*xListener*/ ) override
     {
         throw cpo::uno::RuntimeException(
             u"UUIInteractionHandler addPropertyChangeListener is not supported"_ustr);
     }
 
     virtual void SAL_CALL
-        removePropertyChangeListener( const OUString& /*aPropertyName*/, const css::uno::Reference< css::beans::XPropertyChangeListener >& /*xListener*/ ) override
+        removePropertyChangeListener( const OUString& /*aPropertyName*/, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& /*xListener*/ ) override
     {
         throw cpo::uno::RuntimeException(
             u"UUIInteractionHandler removePropertyChangeListener is not supported"_ustr);
     }
 
     virtual void SAL_CALL
-        addVetoableChangeListener( const OUString& /*aPropertyName*/, const css::uno::Reference< css::beans::XVetoableChangeListener >& /*xListener*/ ) override
+        addVetoableChangeListener( const OUString& /*aPropertyName*/, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& /*xListener*/ ) override
     {
         throw cpo::uno::RuntimeException(
             u"UUIInteractionHandler addVetoableChangeListener is not supported"_ustr);
     }
 
     virtual void SAL_CALL
-        removeVetoableChangeListener( const OUString& /*aPropertyName*/, const css::uno::Reference< css::beans::XVetoableChangeListener >& /*xListener*/ ) override
+        removeVetoableChangeListener( const OUString& /*aPropertyName*/, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& /*xListener*/ ) override
     {
         throw cpo::uno::RuntimeException(
             u"UUIInteractionHandler removeVetoableChangeListener is not supported"_ustr);
     }
 
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
         getPropertySetInfo() override
     {
         return nullptr;
@@ -111,7 +112,7 @@ public:
     {
         if (rPropertyName == "ParentWindow")
         {
-            css::uno::Reference<css::awt::XWindow> xWindow;
+            cpo::uno::Reference<css::awt::XWindow> xWindow;
             rValue >>= xWindow;
             m_pImpl.SetParentWindow(xWindow);
             return;

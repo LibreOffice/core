@@ -35,9 +35,9 @@ const char CR = 0x0d;
 const char LF = 0x0a;
 
 
-inline void try_dispose( css::uno::Reference< cpo::uno::XInterface> const & x )
+inline void try_dispose( cpo::uno::Reference< cpo::uno::XInterface> const & x )
 {
-    css::uno::Reference< css::lang::XComponent> xComp( x, css::uno::UNO_QUERY );
+    cpo::uno::Reference< css::lang::XComponent> xComp( x, cpo::uno::UNO_QUERY );
     if (xComp.is())
         xComp->dispose();
 }
@@ -84,9 +84,9 @@ DESKTOP_DEPLOYMENTMISC_DLLPUBLIC void setOfficeIpcThreadRunning(bool bRunning);
 class AbortChannel;
 
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
-css::uno::Reference< cpo::uno::XInterface> resolveUnoURL(
+cpo::uno::Reference< cpo::uno::XInterface> resolveUnoURL(
     OUString const & connectString,
-    css::uno::Reference< cpo::uno::XComponentContext> const & xLocalContext,
+    cpo::uno::Reference< cpo::uno::XComponentContext> const & xLocalContext,
     AbortChannel const * abortChannel = nullptr );
 
 // Check if office is running on this system (not necessarily in this process!)
@@ -127,7 +127,7 @@ OUString readConsole();
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
 void syncRepositories(
     bool force,
-    css::uno::Reference<
+    cpo::uno::Reference<
         css::ucb::XCommandEnvironment> const & xCmdEnv);
 
 /** workaround: for some reason the bridge threads which communicate with the
@@ -135,7 +135,7 @@ void syncRepositories(
 */
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
 void disposeBridges(
-    css::uno::Reference< cpo::uno::XComponentContext >
+    cpo::uno::Reference< cpo::uno::XComponentContext >
         const & ctx);
 
 }

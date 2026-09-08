@@ -19,7 +19,7 @@ class OOO_DLLPUBLIC_TEST XCellSeries
 {
 public:
     XCellSeries(sal_Int32 aStartX, sal_Int32 aStartY) : maStartX(aStartX), maStartY(aStartY){}
-    virtual css::uno::Reference< cpo::uno::XInterface > init() = 0;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > init() = 0;
     virtual ~XCellSeries(){}
 
     void testFillAuto();

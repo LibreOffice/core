@@ -76,7 +76,7 @@ namespace toolkit
         struct CachedImage
         {
             OUString                 sImageURL;
-            mutable css::uno::Reference< css::graphic::XGraphic >   xGraphic;
+            mutable cpo::uno::Reference< css::graphic::XGraphic >   xGraphic;
         };
 
     private:
@@ -84,13 +84,13 @@ namespace toolkit
 
         /** updates our images with the ones from the given XAnimatedImages component
         */
-        void    impl_updateImages_nolck( const css::uno::Reference< cpo::uno::XInterface >& i_animatedImages );
+        void    impl_updateImages_nolck( const cpo::uno::Reference< cpo::uno::XInterface >& i_animatedImages );
 
         AnimatedImagesPeer(const AnimatedImagesPeer&) = delete;
         AnimatedImagesPeer& operator=(const AnimatedImagesPeer&) = delete;
 
         void updateImageList_nothrow();
-        void updateImageList_nothrow( const css::uno::Reference< css::awt::XAnimatedImages >& i_images );
+        void updateImageList_nothrow( const cpo::uno::Reference< css::awt::XAnimatedImages >& i_images );
 
         std::vector< std::vector< CachedImage > >   maCachedImageSets;
     };

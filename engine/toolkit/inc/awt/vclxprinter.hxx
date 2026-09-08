@@ -77,13 +77,13 @@ public:
     DECLARE_XTYPEPROVIDER();
 
     // css::beans::XPropertySet
-    css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+    cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
     void setPropertyValue( const OUString& rPropertyName, const cpo::uno::Any& aValue ) override { OPropertySetHelper::setPropertyValue( rPropertyName, aValue ); }
     cpo::uno::Any getPropertyValue( const OUString& rPropertyName ) override { return OPropertySetHelper::getPropertyValue( rPropertyName ); }
-    void addPropertyChangeListener( const OUString& rPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& rxListener ) override { OPropertySetHelper::addPropertyChangeListener( rPropertyName, rxListener ); }
-    void removePropertyChangeListener( const OUString& rPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& rxListener ) override { OPropertySetHelper::removePropertyChangeListener( rPropertyName, rxListener ); }
-    void addVetoableChangeListener( const OUString& rPropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& rxListener ) override { OPropertySetHelper::addVetoableChangeListener( rPropertyName, rxListener ); }
-    void removeVetoableChangeListener( const OUString& rPropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& rxListener ) override { OPropertySetHelper::removeVetoableChangeListener( rPropertyName, rxListener ); }
+    void addPropertyChangeListener( const OUString& rPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& rxListener ) override { OPropertySetHelper::addPropertyChangeListener( rPropertyName, rxListener ); }
+    void removePropertyChangeListener( const OUString& rPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& rxListener ) override { OPropertySetHelper::removePropertyChangeListener( rPropertyName, rxListener ); }
+    void addVetoableChangeListener( const OUString& rPropertyName, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& rxListener ) override { OPropertySetHelper::addVetoableChangeListener( rPropertyName, rxListener ); }
+    void removeVetoableChangeListener( const OUString& rPropertyName, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& rxListener ) override { OPropertySetHelper::removeVetoableChangeListener( rPropertyName, rxListener ); }
 
     // ::cppu::OPropertySetHelper
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
@@ -115,13 +115,13 @@ public:
                     virtual ~VCLXPrinter() override;
 
     // css::beans::XPropertySet
-    css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override { return VCLXPrinterPropertySet::getPropertySetInfo(); }
+    cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override { return VCLXPrinterPropertySet::getPropertySetInfo(); }
     void setPropertyValue( const OUString& rPropertyName, const cpo::uno::Any& aValue ) override { VCLXPrinterPropertySet::setPropertyValue( rPropertyName, aValue ); }
     cpo::uno::Any getPropertyValue( const OUString& rPropertyName ) override { return VCLXPrinterPropertySet::getPropertyValue( rPropertyName ); }
-    void addPropertyChangeListener( const OUString& rPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& rxListener ) override { VCLXPrinterPropertySet::addPropertyChangeListener( rPropertyName, rxListener ); }
-    void removePropertyChangeListener( const OUString& rPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& rxListener ) override { VCLXPrinterPropertySet::removePropertyChangeListener( rPropertyName, rxListener ); }
-    void addVetoableChangeListener( const OUString& rPropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& rxListener ) override { VCLXPrinterPropertySet::addVetoableChangeListener( rPropertyName, rxListener ); }
-    void removeVetoableChangeListener( const OUString& rPropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& rxListener ) override { VCLXPrinterPropertySet::removeVetoableChangeListener( rPropertyName, rxListener ); }
+    void addPropertyChangeListener( const OUString& rPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& rxListener ) override { VCLXPrinterPropertySet::addPropertyChangeListener( rPropertyName, rxListener ); }
+    void removePropertyChangeListener( const OUString& rPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& rxListener ) override { VCLXPrinterPropertySet::removePropertyChangeListener( rPropertyName, rxListener ); }
+    void addVetoableChangeListener( const OUString& rPropertyName, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& rxListener ) override { VCLXPrinterPropertySet::addVetoableChangeListener( rPropertyName, rxListener ); }
+    void removeVetoableChangeListener( const OUString& rPropertyName, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& rxListener ) override { VCLXPrinterPropertySet::removeVetoableChangeListener( rPropertyName, rxListener ); }
 
     // css::awt::XPrinterPropertySet
     void setHorizontal( bool bHorizontal ) override { VCLXPrinterPropertySet::setHorizontal( bHorizontal ); }
@@ -134,7 +134,7 @@ public:
     bool start( const OUString& nJobName, sal_Int16 nCopies, bool nCollate ) override;
     void end(  ) override;
     void terminate(  ) override;
-    css::uno::Reference< css::awt::XDevice > startPage(  ) override;
+    cpo::uno::Reference< css::awt::XDevice > startPage(  ) override;
     void endPage(  ) override;
 };
 
@@ -151,13 +151,13 @@ public:
                         virtual ~VCLXInfoPrinter() override;
 
     // css::beans::XPropertySet
-    css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override { return VCLXPrinterPropertySet::getPropertySetInfo(); }
+    cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override { return VCLXPrinterPropertySet::getPropertySetInfo(); }
     void setPropertyValue( const OUString& rPropertyName, const cpo::uno::Any& aValue ) override { VCLXPrinterPropertySet::setPropertyValue( rPropertyName, aValue ); }
     cpo::uno::Any getPropertyValue( const OUString& rPropertyName ) override { return VCLXPrinterPropertySet::getPropertyValue( rPropertyName ); }
-    void addPropertyChangeListener( const OUString& rPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& rxListener ) override { VCLXPrinterPropertySet::addPropertyChangeListener( rPropertyName, rxListener ); }
-    void removePropertyChangeListener( const OUString& rPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& rxListener ) override { VCLXPrinterPropertySet::removePropertyChangeListener( rPropertyName, rxListener ); }
-    void addVetoableChangeListener( const OUString& rPropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& rxListener ) override { VCLXPrinterPropertySet::addVetoableChangeListener( rPropertyName, rxListener ); }
-    void removeVetoableChangeListener( const OUString& rPropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& rxListener ) override { VCLXPrinterPropertySet::removeVetoableChangeListener( rPropertyName, rxListener ); }
+    void addPropertyChangeListener( const OUString& rPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& rxListener ) override { VCLXPrinterPropertySet::addPropertyChangeListener( rPropertyName, rxListener ); }
+    void removePropertyChangeListener( const OUString& rPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& rxListener ) override { VCLXPrinterPropertySet::removePropertyChangeListener( rPropertyName, rxListener ); }
+    void addVetoableChangeListener( const OUString& rPropertyName, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& rxListener ) override { VCLXPrinterPropertySet::addVetoableChangeListener( rPropertyName, rxListener ); }
+    void removeVetoableChangeListener( const OUString& rPropertyName, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& rxListener ) override { VCLXPrinterPropertySet::removeVetoableChangeListener( rPropertyName, rxListener ); }
 
     // css::awt::XPrinterPropertySet
     void setHorizontal( bool bHorizontal ) override { VCLXPrinterPropertySet::setHorizontal( bHorizontal ); }
@@ -167,7 +167,7 @@ public:
     void setBinarySetup( const cpo::uno::Sequence< sal_Int8 >& data ) override { VCLXPrinterPropertySet::setBinarySetup( data ); }
 
     // css::awt::XInfoPrinter
-    css::uno::Reference< css::awt::XDevice > createDevice(  ) override;
+    cpo::uno::Reference< css::awt::XDevice > createDevice(  ) override;
 };
 
 
@@ -182,8 +182,8 @@ public:
     // css::awt::XPrinterServer2
     cpo::uno::Sequence< OUString > getPrinterNames(  ) override;
     OUString getDefaultPrinterName() override;
-    css::uno::Reference< css::awt::XPrinter > createPrinter( const OUString& printerName ) override;
-    css::uno::Reference< css::awt::XInfoPrinter > createInfoPrinter( const OUString& printerName ) override;
+    cpo::uno::Reference< css::awt::XPrinter > createPrinter( const OUString& printerName ) override;
+    cpo::uno::Reference< css::awt::XInfoPrinter > createInfoPrinter( const OUString& printerName ) override;
 
     OUString getImplementationName() override;
 

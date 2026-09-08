@@ -15,6 +15,7 @@
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace
 {

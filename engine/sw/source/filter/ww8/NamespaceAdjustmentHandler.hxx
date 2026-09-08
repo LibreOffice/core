@@ -35,11 +35,11 @@ class NamespaceAdjustmentHandler : public cppu::WeakImplHelper<css::xml::sax::XD
     };
 
     const oox::core::XmlFilterBase& m_rFilter;
-    css::uno::Reference<css::xml::sax::XDocumentHandler> m_xNext;
+    cpo::uno::Reference<css::xml::sax::XDocumentHandler> m_xNext;
 
 public:
     NamespaceAdjustmentHandler(
-        oox::core::XmlFilterBase& rFilter, css::uno::Reference<css::xml::sax::XDocumentHandler>
+        oox::core::XmlFilterBase& rFilter, cpo::uno::Reference<css::xml::sax::XDocumentHandler>
             xNext)
         : m_rFilter(rFilter), m_xNext(std::move(xNext))
     {
@@ -47,7 +47,7 @@ public:
 
     void SAL_CALL
     startElement(const OUString& rName,
-                 const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override
+                 const cpo::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override
     {
         rtl::Reference<comphelper::AttributeList> pList = new comphelper::AttributeList;
 
@@ -82,7 +82,7 @@ public:
         m_xNext->processingInstruction(rTarget, rData);
     }
     void SAL_CALL
-    setDocumentLocator(const css::uno::Reference<css::xml::sax::XLocator>& xLocator) override
+    setDocumentLocator(const cpo::uno::Reference<css::xml::sax::XLocator>& xLocator) override
     {
         m_xNext->setDocumentLocator(xLocator);
     }

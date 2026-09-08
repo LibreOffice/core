@@ -29,8 +29,8 @@ namespace com::sun::star {
 
 class XMLReplacementImageContext final : public SvXMLImportContext
 {
-    css::uno::Reference < css::io::XOutputStream > m_xBase64Stream;
-    css::uno::Reference < css::beans::XPropertySet > m_xPropSet;
+    cpo::uno::Reference < css::io::XOutputStream > m_xBase64Stream;
+    cpo::uno::Reference < css::beans::XPropertySet > m_xPropSet;
 
     OUString m_sHRef;
 
@@ -39,15 +39,15 @@ public:
 
     XMLReplacementImageContext( SvXMLImport& rImport,
             sal_Int32 nElement,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList > & rAttrList,
-            const css::uno::Reference< css::beans::XPropertySet >& rPropSet );
+            const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & rAttrList,
+            const cpo::uno::Reference< css::beans::XPropertySet >& rPropSet );
     virtual ~XMLReplacementImageContext() override;
 
     virtual void endFastElement(sal_Int32 nElement) override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
 };
 

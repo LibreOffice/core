@@ -32,7 +32,7 @@ class UUIInteractionRequestStringResolver:
 {
 public:
     explicit UUIInteractionRequestStringResolver(
-        css::uno::Reference< cpo::uno::XComponentContext > const & rxContext);
+        cpo::uno::Reference< cpo::uno::XComponentContext > const & rxContext);
 
 private:
     UUIInteractionHelper m_pImpl;
@@ -52,7 +52,7 @@ private:
 
     virtual css::beans::Optional< OUString > SAL_CALL
     getStringFromInformationalRequest(
-        const css::uno::Reference< css::task::XInteractionRequest >& Request ) override;
+        const cpo::uno::Reference< css::task::XInteractionRequest >& Request ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -78,7 +78,7 @@ class InterfaceOleWrapper : public cppu::WeakImplHelper<css::bridge::XBridgeSupp
                             public IUnoObjectWrapper
 {
 public:
-    InterfaceOleWrapper(css::uno::Reference<css::lang::XMultiServiceFactory> const & xFactory, sal_uInt8 unoWrapperClass, sal_uInt8 comWrapperClass);
+    InterfaceOleWrapper(cpo::uno::Reference<css::lang::XMultiServiceFactory> const & xFactory, sal_uInt8 unoWrapperClass, sal_uInt8 comWrapperClass);
     ~InterfaceOleWrapper() override;
 
     // IUnknown
@@ -155,13 +155,13 @@ public:
     virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // IUnoObjectWrapper
-    STDMETHOD( getWrapperXInterface)( css::uno::Reference<cpo::uno::XInterface>* pXInt) override;
-    STDMETHOD( getOriginalUnoObject)( css::uno::Reference<cpo::uno::XInterface>* pXInt) override;
+    STDMETHOD( getWrapperXInterface)( cpo::uno::Reference<cpo::uno::XInterface>* pXInt) override;
+    STDMETHOD( getOriginalUnoObject)( cpo::uno::Reference<cpo::uno::XInterface>* pXInt) override;
     STDMETHOD( getOriginalUnoStruct)( cpo::uno::Any * pStruct) override;
 
     // UnoConversionUtility
-    virtual css::uno::Reference< cpo::uno::XInterface > createUnoWrapperInstance() override;
-    virtual css::uno::Reference< cpo::uno::XInterface > createComWrapperInstance() override;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > createUnoWrapperInstance() override;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > createComWrapperInstance() override;
 
     const OUString& getImplementationName() const
     {
@@ -187,9 +187,9 @@ protected:
 
     bool getInvocationInfoForCall(DISPID id, css::script::InvocationInfo& info);
 
-    css::uno::Reference<css::script::XInvocation>                  m_xInvocation;
-    css::uno::Reference<css::beans::XExactName>                   m_xExactName;
-    css::uno::Reference<cpo::uno::XInterface>                   m_xOrigin;
+    cpo::uno::Reference<css::script::XInvocation>                  m_xInvocation;
+    cpo::uno::Reference<css::beans::XExactName>                   m_xExactName;
+    cpo::uno::Reference<cpo::uno::XInterface>                   m_xOrigin;
     NameToIdMap                     m_nameToDispIdMap;
     std::vector<MemberInfo>              m_MemberInfos;
     // This member is used to determine the default value
@@ -222,7 +222,7 @@ protected:
 class UnoObjectWrapperRemoteOpt: public InterfaceOleWrapper
 {
 public:
-    UnoObjectWrapperRemoteOpt( css::uno::Reference<css::lang::XMultiServiceFactory> const & aFactory, sal_uInt8 unoWrapperClass, sal_uInt8 comWrapperClass);
+    UnoObjectWrapperRemoteOpt( cpo::uno::Reference<css::lang::XMultiServiceFactory> const & aFactory, sal_uInt8 unoWrapperClass, sal_uInt8 comWrapperClass);
     ~UnoObjectWrapperRemoteOpt() override;
 
     STDMETHOD( GetIDsOfNames )( REFIID riid, LPOLESTR * rgszNames, UINT cNames,
@@ -234,7 +234,7 @@ public:
     // UnoConversionUtility
     // If UNO interfaces are converted in methods of this class then
     // they are always wrapped with instances of this class
-    virtual css::uno::Reference< cpo::uno::XInterface > createUnoWrapperInstance() override;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > createUnoWrapperInstance() override;
 
 protected:
 

@@ -28,7 +28,7 @@
 
 namespace com::sun::star::animations { class XAnimationNode; }
 namespace com::sun::star::beans { class XPropertySet; }
-namespace com::sun::star::uno { template <typename > class Reference; }
+namespace cpo::uno { template <typename > class Reference; }
 
 class SvXMLExport;
 
@@ -41,11 +41,11 @@ class XMLOFF_DLLPUBLIC AnimationsExporter final : public salhelper::SimpleRefere
     std::unique_ptr<AnimationsExporterImpl>  mpImpl;
 
 public:
-    AnimationsExporter( SvXMLExport& rExport, const css::uno::Reference< css::beans::XPropertySet >& xPageProps  );
+    AnimationsExporter( SvXMLExport& rExport, const cpo::uno::Reference< css::beans::XPropertySet >& xPageProps  );
     SAL_DLLPRIVATE virtual ~AnimationsExporter() override;
 
-    void prepare( const css::uno::Reference< css::animations::XAnimationNode >& xRootNode );
-    void exportAnimations( const css::uno::Reference< css::animations::XAnimationNode >& xRootNode );
+    void prepare( const cpo::uno::Reference< css::animations::XAnimationNode >& xRootNode );
+    void exportAnimations( const cpo::uno::Reference< css::animations::XAnimationNode >& xRootNode );
 };
 
 }

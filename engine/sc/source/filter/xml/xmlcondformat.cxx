@@ -35,8 +35,8 @@ ScXMLConditionalFormatsContext::ScXMLConditionalFormatsContext( ScXMLImport& rIm
     GetScImport().GetDocument()->SetCondFormList(new ScConditionalFormatList(), GetScImport().GetTables().GetCurrentSheet());
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL ScXMLConditionalFormatsContext::createFastChildContext(
-    sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL ScXMLConditionalFormatsContext::createFastChildContext(
+    sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext* pContext = nullptr;
     sax_fastparser::FastAttributeList *pAttribList =
@@ -107,8 +107,8 @@ ScXMLConditionalFormatContext::ScXMLConditionalFormatContext( ScXMLImport& rImpo
     mxFormat->SetRange(aRangeList);
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL ScXMLConditionalFormatContext::createFastChildContext(
-    sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL ScXMLConditionalFormatContext::createFastChildContext(
+    sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext* pContext = nullptr;
     sax_fastparser::FastAttributeList *pAttribList =
@@ -385,8 +385,8 @@ ScXMLColorScaleFormatContext::ScXMLColorScaleFormatContext( ScXMLImport& rImport
     pFormat->AddEntry(pColorScaleFormat);
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL ScXMLColorScaleFormatContext::createFastChildContext(
-    sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL ScXMLColorScaleFormatContext::createFastChildContext(
+    sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext* pContext = nullptr;
     sax_fastparser::FastAttributeList *pAttribList =
@@ -519,8 +519,8 @@ ScXMLDataBarFormatContext::ScXMLDataBarFormatContext( ScXMLImport& rImport,
     pFormat->AddEntry(pDataBarFormat);
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL ScXMLDataBarFormatContext::createFastChildContext(
-    sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL ScXMLDataBarFormatContext::createFastChildContext(
+    sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext* pContext = nullptr;
     sax_fastparser::FastAttributeList *pAttribList =
@@ -610,8 +610,8 @@ ScXMLIconSetFormatContext::ScXMLIconSetFormatContext(ScXMLImport& rImport,
     mpFormatData = pIconSetFormatData;
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL ScXMLIconSetFormatContext::createFastChildContext(
-    sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL ScXMLIconSetFormatContext::createFastChildContext(
+    sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext* pContext = nullptr;
     sax_fastparser::FastAttributeList *pAttribList =

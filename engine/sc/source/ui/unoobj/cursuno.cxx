@@ -27,6 +27,7 @@
 #include <markdata.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 constexpr OUString SCSHEETCELLCURSOR_SERVICE = u"com.sun.star.sheet.SheetCellCursor"_ustr;
 constexpr OUString SCCELLCURSOR_SERVICE = u"com.sun.star.table.CellCursor"_ustr;

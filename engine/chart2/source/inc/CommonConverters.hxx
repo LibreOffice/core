@@ -172,11 +172,11 @@ css::drawing::Position3D
 
 
 cpo::uno::Sequence< double > DataSequenceToDoubleSequence(
-    const css::uno::Reference< css::chart2::data::XDataSequence > & xDataSequence );
+    const cpo::uno::Reference< css::chart2::data::XDataSequence > & xDataSequence );
 
 
 cpo::uno::Sequence< OUString > DataSequenceToStringSequence(
-    const css::uno::Reference< css::chart2::data::XDataSequence > & xDataSequence );
+    const cpo::uno::Reference< css::chart2::data::XDataSequence > & xDataSequence );
 
 /** std::vector< std::vector< T > > -> std::vector< T >
  */

@@ -65,7 +65,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::embed;
@@ -1083,7 +1083,7 @@ Reference< XNameAccess > ODatabaseSource::getQueryDefinitions( )
     if ( !xContainer.is() )
     {
         Any aValue;
-        css::uno::Reference< cpo::uno::XInterface > xMy(*this);
+        cpo::uno::Reference< cpo::uno::XInterface > xMy(*this);
         if (dbtools::getDataSourceSetting(xMy, u"CommandDefinitions"_ustr, aValue))
         {
             OUString sSupportService;
@@ -1237,7 +1237,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_dba_ODatabaseSource(cpo::uno::XComponentContext* context,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
-    css::uno::Reference<XInterface> inst(
+    cpo::uno::Reference<XInterface> inst(
         DatabaseContext::create(context)->createInstance());
     inst->acquire();
     return inst.get();

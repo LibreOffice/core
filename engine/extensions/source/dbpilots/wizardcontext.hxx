@@ -39,31 +39,31 @@ namespace dbp
     struct OControlWizardContext
     {
         // the global data source context
-        css::uno::Reference< css::sdb::XDatabaseContext >
+        cpo::uno::Reference< css::sdb::XDatabaseContext >
                     xDatasourceContext;
 
         // the control mode
-        css::uno::Reference< css::beans::XPropertySet >
+        cpo::uno::Reference< css::beans::XPropertySet >
                     xObjectModel;
         // the form the control model belongs to
-        css::uno::Reference< css::beans::XPropertySet >
+        cpo::uno::Reference< css::beans::XPropertySet >
                     xForm;
         // the form as rowset
-        css::uno::Reference< css::sdbc::XRowSet >
+        cpo::uno::Reference< css::sdbc::XRowSet >
                     xRowSet;
 
         // the model of the document
-        css::uno::Reference< css::frame::XModel >
+        cpo::uno::Reference< css::frame::XModel >
                     xDocumentModel;
         // the page where the control mode resides
-        css::uno::Reference< css::drawing::XDrawPage >
+        cpo::uno::Reference< css::drawing::XDrawPage >
                     xDrawPage;
         // the shape which carries the control
-        css::uno::Reference< css::drawing::XControlShape >
+        cpo::uno::Reference< css::drawing::XControlShape >
                     xObjectShape;
 
         // the tables or queries of the data source the form is bound to (if any)
-        css::uno::Reference< css::container::XNameAccess >
+        cpo::uno::Reference< css::container::XNameAccess >
                     xObjectContainer;
         // the column types container of the object the form is bound to (table, query or SQL statement)
         typedef std::map<OUString, sal_Int32> TNameTypeMap;

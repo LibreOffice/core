@@ -25,7 +25,7 @@
 #include <vcl/scheduler.hxx>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo::uno;
 
 namespace
 {
@@ -180,7 +180,7 @@ void SwSnapToGridTest::checkShapeSize(SdrObject* pObject, const sal_Int32 nWidth
 {
     CPPUNIT_ASSERT(pObject);
 
-    css::uno::Reference<css::drawing::XShape> xShape = pObject->getUnoShape();
+    cpo::uno::Reference<css::drawing::XShape> xShape = pObject->getUnoShape();
     CPPUNIT_ASSERT(xShape.is());
 
     const awt::Size aSize = xShape->getSize();
@@ -193,7 +193,7 @@ void SwSnapToGridTest::checkShapePosition(SdrObject* pObject, const sal_Int32 nX
 {
     CPPUNIT_ASSERT(pObject);
 
-    css::uno::Reference<css::drawing::XShape> xShape = pObject->getUnoShape();
+    cpo::uno::Reference<css::drawing::XShape> xShape = pObject->getUnoShape();
     CPPUNIT_ASSERT(xShape.is());
 
     const awt::Point aPosition = xShape->getPosition();

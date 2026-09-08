@@ -62,7 +62,7 @@ public:
     virtual ::cppu::IPropertyArrayHelper & getInfoHelper() override;
 
     // ____ XPropertySet ____
-    virtual css::uno::Reference< css::beans::XPropertySetInfo >
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo >
         getPropertySetInfo() override;
 
     /// merge XInterface implementations
@@ -74,26 +74,26 @@ public:
     virtual ::sal_Int32 getDimension() override;
     virtual void setAxisByDimension(
         ::sal_Int32 nDimension,
-        const css::uno::Reference< css::chart2::XAxis >& xAxis,
+        const cpo::uno::Reference< css::chart2::XAxis >& xAxis,
         ::sal_Int32 nIndex ) override;
-    virtual css::uno::Reference< css::chart2::XAxis > getAxisByDimension(
+    virtual cpo::uno::Reference< css::chart2::XAxis > getAxisByDimension(
         ::sal_Int32 nDimension, ::sal_Int32 nIndex ) override;
     virtual ::sal_Int32 getMaximumAxisIndexByDimension( ::sal_Int32 nDimension ) override;
 
     // ____ XChartTypeContainer ____
     virtual void addChartType(
-        const css::uno::Reference< css::chart2::XChartType >& aChartType ) override;
+        const cpo::uno::Reference< css::chart2::XChartType >& aChartType ) override;
     virtual void removeChartType(
-        const css::uno::Reference< css::chart2::XChartType >& aChartType ) override;
-    virtual cpo::uno::Sequence< css::uno::Reference< css::chart2::XChartType > > getChartTypes() override;
+        const cpo::uno::Reference< css::chart2::XChartType >& aChartType ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Reference< css::chart2::XChartType > > getChartTypes() override;
     virtual void setChartTypes(
-        const cpo::uno::Sequence< css::uno::Reference< css::chart2::XChartType > >& aChartTypes ) final override;
+        const cpo::uno::Sequence< cpo::uno::Reference< css::chart2::XChartType > >& aChartTypes ) final override;
 
     // ____ XModifyBroadcaster ____
     virtual void addModifyListener(
-        const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+        const cpo::uno::Reference< css::util::XModifyListener >& aListener ) override;
     virtual void removeModifyListener(
-        const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+        const cpo::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
     void setAxisByDimension( sal_Int32 nDimension, const rtl::Reference< ::chart::Axis >& xAxis, sal_Int32 nIndex );
     const rtl::Reference< ::chart::Axis > & getAxisByDimension2(sal_Int32 nDimension, sal_Int32 nIndex ) const;

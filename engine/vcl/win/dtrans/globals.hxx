@@ -20,7 +20,7 @@
 
 #include <sal/config.h>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <osl/mutex.hxx>
 
 namespace com::sun::star::datatransfer
@@ -65,6 +65,6 @@ DWORD dndActionsToDropEffects(sal_Int8 actions);
 // or Alt).
 DWORD dndActionsToSingleDropEffect(sal_Int8 actions);
 
-extern css::uno::Reference<css::datatransfer::XTransferable> g_XTransferable;
+extern cpo::uno::Reference<css::datatransfer::XTransferable> g_XTransferable;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

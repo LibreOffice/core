@@ -43,15 +43,15 @@ class SVT_DLLPUBLIC StatusbarController :
                             public ::cppu::OWeakObject
 {
     public:
-        StatusbarController( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
-                             const css::uno::Reference< css::frame::XFrame >& xFrame,
+        StatusbarController( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+                             const cpo::uno::Reference< css::frame::XFrame >& xFrame,
                              OUString aCommandURL,
                              unsigned short       nID );
         StatusbarController();
         virtual ~StatusbarController() override;
 
-        css::uno::Reference< css::frame::XFrame > getFrameInterface() const;
-        css::uno::Reference< css::util::XURLTransformer > getURLTransformer() const;
+        cpo::uno::Reference< css::frame::XFrame > getFrameInterface() const;
+        cpo::uno::Reference< css::util::XURLTransformer > getURLTransformer() const;
 
         ::tools::Rectangle getControlRect() const;
 
@@ -68,8 +68,8 @@ class SVT_DLLPUBLIC StatusbarController :
 
         // XComponent
         virtual void dispose() override;
-        virtual void addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-        virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+        virtual void addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& xListener ) override;
+        virtual void removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
         // XEventListener
         virtual void disposing( const css::lang::EventObject& Source ) override;
@@ -85,7 +85,7 @@ class SVT_DLLPUBLIC StatusbarController :
                                        ::sal_Int32 nCommand,
                                        bool bMouseEvent,
                                        const cpo::uno::Any& aData ) override;
-        virtual void paint( const css::uno::Reference< css::awt::XGraphics >& xGraphics,
+        virtual void paint( const cpo::uno::Reference< css::awt::XGraphics >& xGraphics,
                                      const css::awt::Rectangle& rOutputRectangle,
                                      ::sal_Int32 nStyle ) override;
         virtual void click( const css::awt::Point& aPos ) override;
@@ -94,15 +94,15 @@ class SVT_DLLPUBLIC StatusbarController :
     protected:
         struct Listener
         {
-            Listener( css::util::URL _aURL, css::uno::Reference< css::frame::XDispatch > _xDispatch ) :
+            Listener( css::util::URL _aURL, cpo::uno::Reference< css::frame::XDispatch > _xDispatch ) :
                 aURL(std::move( _aURL )), xDispatch(std::move( _xDispatch )) {}
 
             css::util::URL                               aURL;
-            css::uno::Reference< css::frame::XDispatch > xDispatch;
+            cpo::uno::Reference< css::frame::XDispatch > xDispatch;
         };
 
         typedef std::unordered_map< OUString,
-                                    css::uno::Reference< css::frame::XDispatch > > URLToDispatchMap;
+                                    cpo::uno::Reference< css::frame::XDispatch > > URLToDispatchMap;
 
         // methods to support status forwarder, known by the old sfx2 toolbox controller implementation
         void addStatusListener( const OUString& aCommandURL );
@@ -116,14 +116,14 @@ class SVT_DLLPUBLIC StatusbarController :
         bool                                                      m_bInitialized : 1,
                                                                   m_bDisposed : 1;
         unsigned short                                            m_nID;
-        css::uno::Reference< css::frame::XFrame >                 m_xFrame;
-        css::uno::Reference< css::awt::XWindow >                  m_xParentWindow;
-        css::uno::Reference< cpo::uno::XComponentContext >        m_xContext;
+        cpo::uno::Reference< css::frame::XFrame >                 m_xFrame;
+        cpo::uno::Reference< css::awt::XWindow >                  m_xParentWindow;
+        cpo::uno::Reference< cpo::uno::XComponentContext >        m_xContext;
         OUString                                                  m_aCommandURL;
         URLToDispatchMap                                          m_aListenerMap;
         comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_aEventListeners;
-        mutable css::uno::Reference< css::util::XURLTransformer > m_xURLTransformer;
-        css::uno::Reference< css::ui::XStatusbarItem >            m_xStatusbarItem;
+        mutable cpo::uno::Reference< css::util::XURLTransformer > m_xURLTransformer;
+        cpo::uno::Reference< css::ui::XStatusbarItem >            m_xStatusbarItem;
         std::mutex m_aMutex; // for m_aEventListeners
 };
 

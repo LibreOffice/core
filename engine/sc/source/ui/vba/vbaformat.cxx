@@ -53,6 +53,7 @@
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 constexpr OUString FORMATSTRING = u"FormatString"_ustr;
 constexpr OUString LOCALE = u"Locale"_ustr;

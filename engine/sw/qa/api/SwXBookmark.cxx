@@ -20,7 +20,7 @@
 #include <com/sun/star/text/XText.hpp>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo::uno;
 
 namespace
 {

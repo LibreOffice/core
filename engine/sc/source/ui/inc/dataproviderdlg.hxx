@@ -29,7 +29,7 @@ class ScDataProviderDlg : public weld::GenericDialogController
 private:
     std::shared_ptr<ScDocument> mxDoc;
     std::unique_ptr<weld::Container> mxBox;
-    css::uno::Reference<css::awt::XWindow> m_xTableParent;
+    cpo::uno::Reference<css::awt::XWindow> m_xTableParent;
     VclPtr<ScDataTableView> mxTable;
     std::unique_ptr<weld::Container> mxList;
     std::unique_ptr<weld::ComboBox> mxDBRanges;

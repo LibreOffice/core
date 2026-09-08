@@ -29,7 +29,7 @@ class ScAccessibleCellBase
 {
 public:
     ScAccessibleCellBase(
-        const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
+        const cpo::uno::Reference<css::accessibility::XAccessible>& rxParent,
         ScDocument* pDoc,
         const ScAddress& rCellAddress,
         sal_Int64 nIndex);

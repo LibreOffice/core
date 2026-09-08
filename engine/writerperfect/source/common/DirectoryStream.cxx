@@ -28,7 +28,7 @@
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 
 #include <comphelper/processfactory.hxx>
@@ -44,7 +44,7 @@
 namespace io = css::io;
 namespace sdbc = css::sdbc;
 namespace ucb = css::ucb;
-namespace uno = css::uno;
+namespace uno = cpo::uno;
 
 namespace writerperfect
 {
@@ -107,14 +107,14 @@ DirectoryStream::Impl::Impl(uno::Reference<ucb::XContent> _xContent)
 {
 }
 
-DirectoryStream::DirectoryStream(const css::uno::Reference<css::ucb::XContent>& xContent)
+DirectoryStream::DirectoryStream(const cpo::uno::Reference<css::ucb::XContent>& xContent)
     : m_pImpl(isDirectory(xContent) ? new Impl(xContent) : nullptr)
 {
 }
 
 DirectoryStream::~DirectoryStream() {}
 
-bool DirectoryStream::isDirectory(const css::uno::Reference<css::ucb::XContent>& xContent)
+bool DirectoryStream::isDirectory(const cpo::uno::Reference<css::ucb::XContent>& xContent)
 {
     try
     {
@@ -132,7 +132,7 @@ bool DirectoryStream::isDirectory(const css::uno::Reference<css::ucb::XContent>&
 }
 
 std::unique_ptr<DirectoryStream>
-DirectoryStream::createForParent(const css::uno::Reference<css::ucb::XContent>& xContent)
+DirectoryStream::createForParent(const cpo::uno::Reference<css::ucb::XContent>& xContent)
 {
     try
     {
@@ -161,10 +161,10 @@ DirectoryStream::createForParent(const css::uno::Reference<css::ucb::XContent>& 
     }
 }
 
-css::uno::Reference<css::ucb::XContent> DirectoryStream::getContent() const
+cpo::uno::Reference<css::ucb::XContent> DirectoryStream::getContent() const
 {
     if (!m_pImpl)
-        return css::uno::Reference<css::ucb::XContent>();
+        return cpo::uno::Reference<css::ucb::XContent>();
     return m_pImpl->xContent;
 }
 

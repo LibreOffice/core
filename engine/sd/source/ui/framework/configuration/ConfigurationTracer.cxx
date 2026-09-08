@@ -23,7 +23,7 @@
 #include <ResourceId.hxx>
 #include <sal/log.hxx>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::drawing::framework;
 
 namespace sd::framework {

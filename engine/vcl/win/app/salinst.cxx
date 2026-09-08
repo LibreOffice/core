@@ -29,7 +29,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/solarmutex.hxx>
 #include <comphelper/windowserrorstring.hxx>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <o3tl/temporary.hxx>
 
@@ -970,7 +970,7 @@ void WinSalInstance::BeforeAbort(const OUString&, bool)
     ImplFreeSalGDI();
 }
 
-css::uno::Reference<css::datatransfer::dnd::XDragSource>
+cpo::uno::Reference<css::datatransfer::dnd::XDragSource>
 WinSalInstance::ImplCreateDragSource(const SystemEnvData& rSysEnv)
 {
     rtl::Reference<DragSource> xDragSource = new DragSource(comphelper::getProcessComponentContext());
@@ -978,7 +978,7 @@ WinSalInstance::ImplCreateDragSource(const SystemEnvData& rSysEnv)
     return xDragSource;
 }
 
-css::uno::Reference<css::datatransfer::dnd::XDropTarget>
+cpo::uno::Reference<css::datatransfer::dnd::XDropTarget>
 WinSalInstance::ImplCreateDropTarget(const SystemEnvData& rSysEnv)
 {
     rtl::Reference<DropTarget> xDropTarget = new DropTarget(comphelper::getProcessComponentContext());

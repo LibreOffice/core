@@ -61,7 +61,7 @@ class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC FontWorkGalleryDialog final : public wel
     std::unique_ptr<weld::IconView> maCtlFavorites;
     std::unique_ptr<weld::Button> mxOKButton;
 
-    css::uno::Reference<css::frame::XFrame> mxFrame;
+    cpo::uno::Reference<css::frame::XFrame> mxFrame;
 
     void            initFavorites(sal_uInt16 nThemeId);
     void            insertSelectedFontwork();
@@ -73,7 +73,7 @@ class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC FontWorkGalleryDialog final : public wel
 
 public:
     FontWorkGalleryDialog(weld::Window* pParent, SdrView& rView,
-                          css::uno::Reference<css::frame::XFrame> xFrame);
+                          cpo::uno::Reference<css::frame::XFrame> xFrame);
     virtual ~FontWorkGalleryDialog() override;
 
     // SJ: if the SdrObject** is set, the SdrObject is not inserted into the page when executing the dialog

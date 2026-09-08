@@ -56,7 +56,7 @@ namespace bib
         friend class OComponentListener;
 
     private:
-        css::uno::Reference< css::lang::XComponent >  m_xComponent;
+        cpo::uno::Reference< css::lang::XComponent >  m_xComponent;
         OComponentListener*                 m_pListener;
         bool                                m_bListening    : 1;
 
@@ -65,7 +65,7 @@ namespace bib
 
     protected:
         // attribute access for derivees
-        const css::uno::Reference< css::lang::XComponent >&
+        const cpo::uno::Reference< css::lang::XComponent >&
                                 getComponent() const    { return m_xComponent; }
         OComponentListener*     getListener()           { return m_pListener; }
 
@@ -76,7 +76,7 @@ namespace bib
 
     public:
         explicit OComponentAdapterBase(
-            const css::uno::Reference< css::lang::XComponent >& _rxComp
+            const cpo::uno::Reference< css::lang::XComponent >& _rxComp
         );
 
         // late construction
@@ -125,7 +125,7 @@ namespace bib
 
     public:
         explicit OLoadListenerAdapter(
-            const css::uno::Reference< css::form::XLoadable >& _rxLoadable
+            const cpo::uno::Reference< css::form::XLoadable >& _rxLoadable
         );
 
 

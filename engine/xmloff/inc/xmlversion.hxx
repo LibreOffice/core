@@ -35,10 +35,10 @@ private:
     const cpo::uno::Sequence < css::util::RevisionTag >& maVersions;
 public:
     XMLVersionListExport(
-        const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& rContext,
         const cpo::uno::Sequence < css::util::RevisionTag >& rVersions,
         const OUString &rFileName,
-        css::uno::Reference< css::xml::sax::XDocumentHandler > const &rHandler );
+        cpo::uno::Reference< css::xml::sax::XDocumentHandler > const &rHandler );
 
     ErrCode     exportDoc( enum ::xmloff::token::XMLTokenEnum eClass = ::xmloff::token::XML_TOKEN_INVALID ) override;
     void        ExportAutoStyles_() override {}
@@ -52,12 +52,12 @@ private:
     cpo::uno::Sequence < css::util::RevisionTag >& maVersions;
 
     virtual SvXMLImportContext *CreateFastContext( sal_Int32 Element,
-        const ::css::uno::Reference< ::css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const ::cpo::uno::Reference< ::css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
 public:
 
     XMLVersionListImport(
-        const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& rContext,
         cpo::uno::Sequence < css::util::RevisionTag >& rVersions );
     virtual ~XMLVersionListImport() noexcept override;
 
@@ -76,9 +76,9 @@ public:
 
     virtual ~XMLVersionListContext() override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler >
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler >
         createFastChildContext(sal_Int32 nElement,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttribs) override;
+            const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & xAttribs) override;
 };
 
 class XMLVersionContext final : public SvXMLImportContext
@@ -91,7 +91,7 @@ private:
 public:
 
     XMLVersionContext( XMLVersionListImport& rImport,
-                          const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList );
+                          const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList );
 
     virtual ~XMLVersionContext() override;
 };
@@ -99,8 +99,8 @@ public:
 class XMLVersionListPersistence final : public ::cppu::WeakImplHelper< css::document::XDocumentRevisionListPersistence, css::lang::XServiceInfo >
 {
 public:
-    virtual cpo::uno::Sequence< css::util::RevisionTag > load( const css::uno::Reference< css::embed::XStorage >& Storage ) override;
-    virtual void store( const css::uno::Reference< css::embed::XStorage >& Storage, const cpo::uno::Sequence< css::util::RevisionTag >& List ) override;
+    virtual cpo::uno::Sequence< css::util::RevisionTag > load( const cpo::uno::Reference< css::embed::XStorage >& Storage ) override;
+    virtual void store( const cpo::uno::Reference< css::embed::XStorage >& Storage, const cpo::uno::Sequence< css::util::RevisionTag >& List ) override;
 
     OUString getImplementationName() override;
 

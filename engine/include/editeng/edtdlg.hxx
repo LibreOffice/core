@@ -90,12 +90,12 @@ public:
                                         virtual ~EditAbstractDialogFactory() override;   // needed for export of vtable
     static EditAbstractDialogFactory*   Create();
     virtual VclPtr<AbstractThesaurusDialog>  CreateThesaurusDialog(weld::Widget*,
-                                                css::uno::Reference<css::linguistic2::XThesaurus> xThesaurus,
+                                                cpo::uno::Reference<css::linguistic2::XThesaurus> xThesaurus,
                                                 const OUString &rWord, LanguageType nLanguage) = 0;
 
     virtual VclPtr<AbstractHyphenWordDialog> CreateHyphenWordDialog(weld::Widget*,
                                                 const OUString &rWord, LanguageType nLang,
-                                                css::uno::Reference< css::linguistic2::XHyphenator >  &xHyphen,
+                                                cpo::uno::Reference< css::linguistic2::XHyphenator >  &xHyphen,
                                                 SvxSpellWrapper* pWrapper) = 0;
     virtual VclPtr<AbstractHangulHanjaConversionDialog> CreateHangulHanjaConversionDialog(weld::Widget* pParent) = 0;
 };

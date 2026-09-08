@@ -49,8 +49,9 @@ namespace chart
 {
 using namespace ::css;
 using namespace ::css::chart2;
+using namespace ::cpo;
 
-using ::css::uno::Reference;
+using ::cpo::uno::Reference;
 using ::cpo::uno::Sequence;
 using ::cpo::uno::Any;
 

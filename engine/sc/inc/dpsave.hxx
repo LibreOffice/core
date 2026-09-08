@@ -86,7 +86,7 @@ public:
     SC_DLLPUBLIC const std::optional<OUString> & GetLayoutName() const;
     void RemoveLayoutName();
 
-    void WriteToSource( const css::uno::Reference<cpo::uno::XInterface>& xMember,
+    void WriteToSource( const cpo::uno::Reference<cpo::uno::XInterface>& xMember,
                             sal_Int32 nPosition );
 
     void dumpAsXml(tools::XmlWriter& rWriter) const;
@@ -223,7 +223,7 @@ public:
 
     void SetMemberPosition( const OUString& rName, sal_Int32 nNewPos );
 
-    void WriteToSource( const css::uno::Reference<cpo::uno::XInterface>& xDim );
+    void WriteToSource( const cpo::uno::Reference<cpo::uno::XInterface>& xDim );
 
     void UpdateMemberVisibility(const std::unordered_map< OUString, bool>& rData);
 
@@ -354,7 +354,7 @@ public:
     SC_DLLPUBLIC void SetExpandCollapse( bool bSet );
     bool GetExpandCollapse() const { return mbExpandCollapse; }
 
-    void WriteToSource( const css::uno::Reference<css::sheet::XDimensionsSupplier>& xSource );
+    void WriteToSource( const cpo::uno::Reference<css::sheet::XDimensionsSupplier>& xSource );
     bool IsEmpty() const;
 
     const ScDPDimensionSaveData* GetExistingDimensionData() const { return mpDimensionData.get(); }

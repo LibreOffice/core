@@ -23,7 +23,7 @@ class ScDatabasePropertyPanel : public PanelLayout,
 {
 public:
     static std::unique_ptr<PanelLayout>
-    Create(weld::Widget* pParent, const css::uno::Reference<css::frame::XFrame>& rxFrame,
+    Create(weld::Widget* pParent, const cpo::uno::Reference<css::frame::XFrame>& rxFrame,
            SfxBindings* pBindings);
 
     virtual void HandleContextChange(const vcl::EnumContext& rContext) override;
@@ -38,7 +38,7 @@ public:
 
     // constructor/destructor
     ScDatabasePropertyPanel(weld::Widget* pParent,
-                            const css::uno::Reference<css::frame::XFrame>& rxFrame,
+                            const cpo::uno::Reference<css::frame::XFrame>& rxFrame,
                             SfxBindings* pBindings);
     virtual ~ScDatabasePropertyPanel() override;
 

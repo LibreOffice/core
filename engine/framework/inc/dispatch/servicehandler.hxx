@@ -55,13 +55,13 @@ class ServiceHandler final : public  ::cppu::WeakImplHelper<
     private:
 
         /// reference to global uno service manager which had created us
-        css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+        cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
     /* interface */
     public:
 
         // ctor/dtor
-                 ServiceHandler( css::uno::Reference< cpo::uno::XComponentContext > );
+                 ServiceHandler( cpo::uno::Reference< cpo::uno::XComponentContext > );
         virtual ~ServiceHandler(                                                                        ) override;
 
         /* interface XServiceInfo */
@@ -70,28 +70,28 @@ class ServiceHandler final : public  ::cppu::WeakImplHelper<
         virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
         // XDispatchProvider
-        virtual css::uno::Reference< css::frame::XDispatch >                       queryDispatch  ( const css::util::URL&                                       aURL        ,
+        virtual cpo::uno::Reference< css::frame::XDispatch >                       queryDispatch  ( const css::util::URL&                                       aURL        ,
                                                                                                              const OUString&                                      sTarget     ,
                                                                                                                    sal_Int32                                             nFlags      ) override;
-        virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor ) override;
+        virtual cpo::uno::Sequence< cpo::uno::Reference< css::frame::XDispatch > > queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor ) override;
 
         // XNotifyingDispatch
         virtual void dispatchWithNotification( const css::util::URL&                                             aURL      ,
                                                         const cpo::uno::Sequence< css::beans::PropertyValue >&            lArguments,
-                                                        const css::uno::Reference< css::frame::XDispatchResultListener >& xListener ) override;
+                                                        const cpo::uno::Reference< css::frame::XDispatchResultListener >& xListener ) override;
 
         // XDispatch
         virtual void dispatch            ( const css::util::URL&                                     aURL       ,
                                                     const cpo::uno::Sequence< css::beans::PropertyValue >&    lArguments ) override;
-        virtual void addStatusListener   ( const css::uno::Reference< css::frame::XStatusListener >& xListener  ,
+        virtual void addStatusListener   ( const cpo::uno::Reference< css::frame::XStatusListener >& xListener  ,
                                                     const css::util::URL&                                     aURL       ) override;
-        virtual void removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xListener  ,
+        virtual void removeStatusListener( const cpo::uno::Reference< css::frame::XStatusListener >& xListener  ,
                                                     const css::util::URL&                                     aURL       ) override;
 
     /* internal */
     private:
         /// @throws cpo::uno::RuntimeException
-        css::uno::Reference< cpo::uno::XInterface > implts_dispatch( const css::util::URL& aURL );
+        cpo::uno::Reference< cpo::uno::XInterface > implts_dispatch( const css::util::URL& aURL );
 
 };      //  class ServiceHandler
 

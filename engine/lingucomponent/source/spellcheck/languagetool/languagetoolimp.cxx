@@ -329,13 +329,13 @@ OUString getCheckerURL()
     return {};
 }
 
-void lclShowCURLErrorInteraction(const css::uno::Reference<cpo::uno::XComponentContext>& xContext,
+void lclShowCURLErrorInteraction(const cpo::uno::Reference<cpo::uno::XComponentContext>& xContext,
                                  CURLcode eCURLCode, const OUString& rServer)
 {
     if (!xContext.is())
         return;
 
-    css::uno::Reference<task::XInteractionHandler2> xInteractionHandler
+    cpo::uno::Reference<task::XInteractionHandler2> xInteractionHandler
         = task::InteractionHandler::createWithParent(xContext, nullptr);
     if (!xInteractionHandler.is())
         return;
@@ -344,7 +344,7 @@ void lclShowCURLErrorInteraction(const css::uno::Reference<cpo::uno::XComponentC
 
     rtl::Reference<comphelper::OInteractionApprove> pApprove
         = new comphelper::OInteractionApprove();
-    cpo::uno::Sequence<css::uno::Reference<css::task::XInteractionContinuation>> aContinuations{
+    cpo::uno::Sequence<cpo::uno::Reference<css::task::XInteractionContinuation>> aContinuations{
         pApprove
     };
 
@@ -360,7 +360,7 @@ void lclShowCURLErrorInteraction(const css::uno::Reference<cpo::uno::XComponentC
 }
 
 LanguageToolGrammarChecker::LanguageToolGrammarChecker(
-    const css::uno::Reference<cpo::uno::XComponentContext>& xContext)
+    const cpo::uno::Reference<cpo::uno::XComponentContext>& xContext)
     : mCachedResults(10)
     , mxContext(xContext)
 {

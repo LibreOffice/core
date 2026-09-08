@@ -41,7 +41,7 @@ private:
 
     struct ExecuteInfo
     {
-        css::uno::Reference< css::frame::XDispatch >     xDispatch;
+        cpo::uno::Reference< css::frame::XDispatch >     xDispatch;
         css::util::URL                                   aTargetURL;
         cpo::uno::Sequence< css::beans::PropertyValue >  aArgs;
     };

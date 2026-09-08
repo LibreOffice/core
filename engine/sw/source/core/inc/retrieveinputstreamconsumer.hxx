@@ -23,7 +23,7 @@
 #include <rtl/ustring.hxx>
 
 namespace com::sun::star::io { class XInputStream; }
-namespace com::sun::star::uno { template <typename > class Reference; }
+namespace cpo::uno { template <typename > class Reference; }
 
 class SwGrfNode;
 
@@ -46,7 +46,7 @@ class SwAsyncRetrieveInputStreamThreadConsumer
         /** method called to provide the retrieved input stream to the thread Consumer
         */
         void ApplyInputStream(
-            css::uno::Reference<css::io::XInputStream> const & xInputStream,
+            cpo::uno::Reference<css::io::XInputStream> const & xInputStream,
             const bool bIsStreamReadOnly );
 
     private:

@@ -27,7 +27,7 @@
 #include <cppuhelper/implbase.hxx>
 
 using ::cpo::uno::Any;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::cpo::uno::Sequence;
 using ::cpo::uno::XInterface;
 using ::com::sun::star::task::InteractionClassification_QUERY;

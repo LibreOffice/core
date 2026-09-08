@@ -52,7 +52,7 @@
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 
@@ -198,7 +198,7 @@ void FontWorkGalleryDialog::insertSelectedFontwork()
             bUseSpecialCalcMode ? *mpDestModel : mrSdrView.getSdrModelFromSdrView()));
 
     const Reference<XComponentContext>& xContext = comphelper::getProcessComponentContext();
-    css::uno::Reference<css::frame::XModuleManager> xModuleManager =
+    cpo::uno::Reference<css::frame::XModuleManager> xModuleManager =
             css::frame::ModuleManager::create(xContext);
     OUString aModuleIdentifier = xModuleManager->identify(mxFrame);
 
@@ -407,7 +407,7 @@ namespace {
 class FontworkAlignmentControl : public svt::PopupWindowController
 {
 public:
-    explicit FontworkAlignmentControl( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+    explicit FontworkAlignmentControl( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
     virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;
     virtual VclPtr<vcl::Window> createVclPopupWindow( vcl::Window* pParent ) override;
@@ -727,7 +727,7 @@ namespace {
 class FontworkCharacterSpacingControl : public svt::PopupWindowController
 {
 public:
-    explicit FontworkCharacterSpacingControl( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+    explicit FontworkCharacterSpacingControl( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
     virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;
     virtual VclPtr<vcl::Window> createVclPopupWindow( vcl::Window* pParent ) override;

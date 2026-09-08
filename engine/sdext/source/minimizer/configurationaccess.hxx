@@ -23,7 +23,7 @@
 #include <vector>
 #include "pppoptimizertoken.hxx"
 #include <cpo/uno/Any.h>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <cpo/uno/XInterface.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <cpo/uno/XComponentContext.hpp>
@@ -66,8 +66,8 @@ struct OptimizerSettings
         mbOpenNewDocument( true ),
         mnEstimatedFileSize( 0 ){};
 
-        void LoadSettingsFromConfiguration( const css::uno::Reference< css::container::XNameAccess >& rSettings );
-        void SaveSettingsToConfiguration( const css::uno::Reference< css::container::XNameReplace >& rSettings );
+        void LoadSettingsFromConfiguration( const cpo::uno::Reference< css::container::XNameAccess >& rSettings );
+        void SaveSettingsToConfiguration( const cpo::uno::Reference< css::container::XNameReplace >& rSettings );
 
         bool operator==( const OptimizerSettings& rOptimizerSettings ) const;
 
@@ -76,7 +76,7 @@ class ConfigurationAccess
 {
     public:
 
-        explicit ConfigurationAccess( const css::uno::Reference< cpo::uno::XComponentContext >& rXFactory );
+        explicit ConfigurationAccess( const cpo::uno::Reference< cpo::uno::XComponentContext >& rXFactory );
         ~ConfigurationAccess();
         void SaveConfiguration();
 
@@ -95,15 +95,15 @@ class ConfigurationAccess
         std::vector< OptimizerSettings >::iterator GetOptimizerSettingsByName( const OUString& rName );
 
     protected:
-        css::uno::Reference< cpo::uno::XComponentContext > mxContext;
+        cpo::uno::Reference< cpo::uno::XComponentContext > mxContext;
 
     private:
         std::vector< OptimizerSettings > maSettings;
 
         void LoadConfiguration();
-        css::uno::Reference< cpo::uno::XInterface > OpenConfiguration( bool bReadOnly );
-        static css::uno::Reference< cpo::uno::XInterface > GetConfigurationNode(
-            const css::uno::Reference< cpo::uno::XInterface >& xRoot, const OUString& sPathToNode );
+        cpo::uno::Reference< cpo::uno::XInterface > OpenConfiguration( bool bReadOnly );
+        static cpo::uno::Reference< cpo::uno::XInterface > GetConfigurationNode(
+            const cpo::uno::Reference< cpo::uno::XInterface >& xRoot, const OUString& sPathToNode );
 };
 
 #endif // INCLUDED_SDEXT_SOURCE_MINIMIZER_CONFIGURATIONACCESS_HXX

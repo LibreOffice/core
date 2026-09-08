@@ -13,6 +13,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 using namespace css;
+using namespace ::cpo;
 
 namespace apitest
 {

@@ -76,7 +76,7 @@ public:
         is </true>.
      */
     void setValuesAtPropertySet(
-        const css::uno::Reference< css::beans::XPropertySet > & xProp,
+        const cpo::uno::Reference< css::beans::XPropertySet > & xProp,
         bool bAdaptFontSizes = true );
 
     /** Sets the ReferencePageSize according to the internal settings of this
@@ -84,7 +84,7 @@ public:
         XFormattedStrings
      */
     void setValuesAtTitle(
-        const css::uno::Reference< css::chart2::XTitle > & xTitle );
+        const cpo::uno::Reference< css::chart2::XTitle > & xTitle );
 
     /** Sets the internal value at all data series in the currently set model.
         This is useful, if you have changed a chart-type and thus probably added
@@ -108,13 +108,13 @@ private:
         the current property set, or the other way round.
      */
     static void getAutoResizeFromPropSet(
-        const css::uno::Reference< css::beans::XPropertySet > & xProp,
+        const cpo::uno::Reference< css::beans::XPropertySet > & xProp,
         AutoResizeState & rInOutState );
 
     void impl_setValuesAtTitled(
-        const css::uno::Reference< css::chart2::XTitled > & xTitled );
+        const cpo::uno::Reference< css::chart2::XTitled > & xTitled );
     static void impl_getAutoResizeFromTitled(
-        const css::uno::Reference< css::chart2::XTitled > & xTitled,
+        const cpo::uno::Reference< css::chart2::XTitled > & xTitled,
         AutoResizeState & rInOutState );
 
     css::awt::Size m_aPageSize;

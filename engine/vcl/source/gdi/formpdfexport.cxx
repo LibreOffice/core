@@ -84,7 +84,7 @@ namespace toolkitform
 
 
     using namespace ::com::sun::star;
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
 using namespace cpo::uno;
     using namespace ::com::sun::star::awt;
     using namespace ::com::sun::star::style;
@@ -183,7 +183,7 @@ using namespace cpo::uno;
             while ( xParentForm.is() )
             {
                 xChild = xParentForm.get();
-                xParentForm.set(xChild->getParent(), css::uno::UNO_QUERY);
+                xParentForm.set(xChild->getParent(), cpo::uno::UNO_QUERY);
             }
             Reference< XIndexAccess > xRoot( xChild->getParent(), UNO_QUERY );
             OSL_ENSURE( xRoot.is(), "determineRadioGroupId: unable to determine the root of the form component hierarchy!" );
@@ -656,7 +656,7 @@ using namespace cpo::uno;
                     Reference< XChild > xChild( xModelProps, UNO_QUERY );
                     Reference < XPropertySet > xParentProps;
                     if ( xChild.is() )
-                        xParentProps.set(xChild->getParent(), css::uno::UNO_QUERY);
+                        xParentProps.set(xChild->getParent(), cpo::uno::UNO_QUERY);
                     if ( xParentProps.is() )
                     {
                         Reference< XServiceInfo > xParentSI( xParentProps, UNO_QUERY );

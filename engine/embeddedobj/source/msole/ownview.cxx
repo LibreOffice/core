@@ -43,6 +43,7 @@
 
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace ::comphelper;
 
 namespace {
@@ -171,7 +172,7 @@ bool OwnView_Impl::CreateModel( bool bUseNative )
 
 
 OUString OwnView_Impl::GetFilterNameFromExtentionAndInStream(
-                                                    const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
+                                                    const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
                                                     std::u16string_view aNameWithExtention,
                                                     const uno::Reference< io::XInputStream >& xInputStream )
 {

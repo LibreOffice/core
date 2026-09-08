@@ -67,8 +67,8 @@
 #include <flyfrm.hxx>
 
 using namespace utl;
-using namespace com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace com::sun::star;
 
 namespace {

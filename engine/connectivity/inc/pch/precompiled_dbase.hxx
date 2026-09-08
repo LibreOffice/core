@@ -130,8 +130,8 @@
 #include <com/sun/star/sdbcx/XViewsSupplier.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/ucb/XDynamicResultSet.hpp>
-#include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.h>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/XInterface.hpp>
 #include <com/sun/star/util/Date.hpp>

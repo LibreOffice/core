@@ -411,7 +411,7 @@ public:
     }
 
     void startDrag(const css::datatransfer::dnd::DragGestureEvent& rEvent,
-                   const css::uno::Reference<css::datatransfer::XTransferable>& rTrans,
+                   const cpo::uno::Reference<css::datatransfer::XTransferable>& rTrans,
                    VclToGtkHelper& rConversionHelper,
                    GdkDragAction sourceActions);
 

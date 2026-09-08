@@ -115,11 +115,11 @@ private:
     DlgEdPage*          pDlgEdPage;  // never nullptr
     std::unique_ptr<DlgEdView> pDlgEdView; // never nullptr
     rtl::Reference<DlgEdForm>  pDlgEdForm; // never nullptr
-    css::uno::Reference< css::container::XNameContainer >     m_xUnoControlDialogModel;
-    css::uno::Reference< css::awt::XControlContainer >        m_xControlContainer;
+    cpo::uno::Reference< css::container::XNameContainer >     m_xUnoControlDialogModel;
+    cpo::uno::Reference< css::awt::XControlContainer >        m_xControlContainer;
     cpo::uno::Sequence< css::datatransfer::DataFlavor >       m_ClipboardDataFlavors;
     cpo::uno::Sequence< css::datatransfer::DataFlavor >       m_ClipboardDataFlavorsResource;
-    css::uno::Reference< css::util::XNumberFormatsSupplier >  m_xSupplier;
+    cpo::uno::Reference< css::util::XNumberFormatsSupplier >  m_xSupplier;
     std::unique_ptr<DlgEdFactory, o3tl::default_delete<DlgEdFactory>> pObjFac; // never nullptr
     vcl::Window&                    rWindow; // DialogWindow
     std::unique_ptr<DlgEdFunc>    pFunc;
@@ -134,13 +134,13 @@ private:
     Idle                m_aResetDialogIdle;
     Idle                m_aRepaintIdle;
     tools::Long                mnPaintGuard;
-    css::uno::Reference< css::frame::XModel > m_xDocument;
+    cpo::uno::Reference< css::frame::XModel > m_xDocument;
 
 public:
     DlgEditor (
         vcl::Window&, DialogWindowLayout&,
-        css::uno::Reference<css::frame::XModel> const& xModel,
-        css::uno::Reference<css::container::XNameContainer> const & xDialogModel
+        cpo::uno::Reference<css::frame::XModel> const& xModel,
+        cpo::uno::Reference<css::container::XNameContainer> const & xDialogModel
     );
     virtual ~DlgEditor() override;
 
@@ -150,7 +150,7 @@ public:
         @see GetWindow
         @see SetWindow
     */
-    css::uno::Reference< css::awt::XControlContainer > const &
+    cpo::uno::Reference< css::awt::XControlContainer > const &
                     GetWindowControlContainer();
 
     void            SetScrollBars(ScrollAdaptor* pHScroll, ScrollAdaptor* pVScroll);
@@ -160,13 +160,13 @@ public:
     void            DoScroll();
     void            UpdateScrollBars();
 
-    void            SetDialog (const css::uno::Reference<css::container::XNameContainer>& xUnoControlDialogModel);
+    void            SetDialog (const cpo::uno::Reference<css::container::XNameContainer>& xUnoControlDialogModel);
     void            ResetDialogDeferred();
     void            RepaintDeferred();
-    const css::uno::Reference< css::container::XNameContainer >& GetDialog() const
+    const cpo::uno::Reference< css::container::XNameContainer >& GetDialog() const
                         {return m_xUnoControlDialogModel;}
 
-    css::uno::Reference< css::util::XNumberFormatsSupplier > const & GetNumberFormatsSupplier();
+    cpo::uno::Reference< css::util::XNumberFormatsSupplier > const & GetNumberFormatsSupplier();
 
     DlgEdModel&     GetModel()      const { return *pDlgEdModel; }
     DlgEdView&      GetView()       const { return *pDlgEdView; }

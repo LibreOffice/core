@@ -73,7 +73,7 @@ public:
         reading/writing converted items
      */
     ItemConverter(
-            css::uno::Reference< css::beans::XPropertySet > xPropertySet ,
+            cpo::uno::Reference< css::beans::XPropertySet > xPropertySet ,
             SfxItemPool& rItemPool );
     virtual ~ItemConverter() override;
 
@@ -160,7 +160,7 @@ protected:
     /** Returns the XPropertySet that was given in the CTOR and is used to apply
         items in ApplyItemSet().
      */
-    const css::uno::Reference< css::beans::XPropertySet >&  GetPropertySet() const { return m_xPropertySet;}
+    const cpo::uno::Reference< css::beans::XPropertySet >&  GetPropertySet() const { return m_xPropertySet;}
 
     // ____ ::utl::OEventListenerAdapter ____
     virtual void _disposing( const css::lang::EventObject& rSource ) override;
@@ -171,11 +171,11 @@ protected:
         the regression type of a regression curve which changes the object
         identity.
      */
-    void resetPropertySet( const css::uno::Reference< css::beans::XPropertySet > & xPropSet );
+    void resetPropertySet( const cpo::uno::Reference< css::beans::XPropertySet > & xPropSet );
 
 private:
-    css::uno::Reference< css::beans::XPropertySet >     m_xPropertySet;
-    css::uno::Reference< css::beans::XPropertySetInfo > m_xPropertySetInfo;
+    cpo::uno::Reference< css::beans::XPropertySet >     m_xPropertySet;
+    cpo::uno::Reference< css::beans::XPropertySetInfo > m_xPropertySetInfo;
 
     SfxItemPool&                                    m_rItemPool;
 };

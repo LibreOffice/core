@@ -44,7 +44,9 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/media/XManager.hpp>
 #include <cpo/uno/XComponentContext.hpp>
+
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace avmedia::priv {
 

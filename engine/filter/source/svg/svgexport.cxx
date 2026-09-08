@@ -82,8 +82,8 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::text;
-using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
+using namespace ::cpo;
 using namespace ::cpo::uno;
 using namespace ::xmloff::token;
 
@@ -331,7 +331,7 @@ bool operator==( const TextField & aLhsTextField, const TextField & aRhsTextFiel
 }
 
 SVGExport::SVGExport(
-    const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
+    const cpo::uno::Reference< cpo::uno::XComponentContext >& rContext,
     const Reference< XDocumentHandler >& rxHandler,
     const Sequence< PropertyValue >& rFilterData )
     : SvXMLExport( rContext, u""_ustr,

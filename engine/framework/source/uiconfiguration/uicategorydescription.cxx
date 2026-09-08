@@ -38,7 +38,7 @@
 #include <string_view>
 #include <unordered_map>
 
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::configuration;
@@ -338,7 +338,7 @@ void ConfigurationAccess_UICategory::disposing( const EventObject& aEvent )
 class UICategoryDescription :  public UICommandDescription
 {
 public:
-    explicit UICategoryDescription( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+    explicit UICategoryDescription( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
     virtual OUString getImplementationName() override
     {

@@ -83,8 +83,9 @@
 #include <vcl/filter/PDFiumLibrary.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
-namespace com::sun::star::uno
+namespace cpo::uno
 {
 template <class T>
 static std::ostream& operator<<(std::ostream& rStrm, const uno::Reference<T>& xRef)
@@ -826,9 +827,9 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testCustomSlideShow)
 {
     createSdImpressDoc("pptx/tdf131390.pptx");
 
-    css::uno::Reference<css::presentation::XCustomPresentationSupplier> aXCPSup(
-        mxComponent, css::uno::UNO_QUERY);
-    css::uno::Reference<css::container::XNameContainer> aXCont(aXCPSup->getCustomPresentations());
+    cpo::uno::Reference<css::presentation::XCustomPresentationSupplier> aXCPSup(
+        mxComponent, cpo::uno::UNO_QUERY);
+    cpo::uno::Reference<css::container::XNameContainer> aXCont(aXCPSup->getCustomPresentations());
     const cpo::uno::Sequence<OUString> aNameSeq(aXCont->getElementNames());
 
     // In the document, there are two custom presentations.

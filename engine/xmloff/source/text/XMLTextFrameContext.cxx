@@ -66,8 +66,8 @@
 #include <string_view>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::beans;
@@ -155,7 +155,7 @@ class XMLTextFrameParam_Impl : public SvXMLImportContext
 {
 public:
     XMLTextFrameParam_Impl( SvXMLImport& rImport,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
+            const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
             ParamMap &rParamMap);
 };
 
@@ -163,7 +163,7 @@ public:
 
 XMLTextFrameParam_Impl::XMLTextFrameParam_Impl(
         SvXMLImport& rImport,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
         ParamMap &rParamMap):
     SvXMLImportContext( rImport )
 {
@@ -200,7 +200,7 @@ public:
 
 
     XMLTextFrameContourContext_Impl( SvXMLImport& rImport, sal_Int32 nElement,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
+            const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
             const Reference < XPropertySet >& rPropSet,
             bool bPath );
 };
@@ -336,9 +336,9 @@ namespace {
 
 class XMLTextFrameContext_Impl : public SvXMLImportContext
 {
-    css::uno::Reference < css::text::XTextCursor > xOldTextCursor;
-    css::uno::Reference < css::beans::XPropertySet > xPropSet;
-    css::uno::Reference < css::io::XOutputStream > xBase64Stream;
+    cpo::uno::Reference < css::text::XTextCursor > xOldTextCursor;
+    cpo::uno::Reference < css::beans::XPropertySet > xPropSet;
+    cpo::uno::Reference < css::io::XOutputStream > xBase64Stream;
 
     /// old list item and block (#89891#)
     bool mbListContextPushed;
@@ -390,18 +390,18 @@ public:
 
     XMLTextFrameContext_Impl( SvXMLImport& rImport,
             sal_Int32 nElement,
-            const css::uno::Reference<css::xml::sax::XFastAttributeList > & rAttrList,
+            const cpo::uno::Reference<css::xml::sax::XFastAttributeList > & rAttrList,
             css::text::TextContentAnchorType eAnchorType,
             sal_uInt16 nType,
-            const css::uno::Reference<css::xml::sax::XFastAttributeList > & rFrameAttrList,
+            const cpo::uno::Reference<css::xml::sax::XFastAttributeList > & rFrameAttrList,
             bool bMultipleContent = false );
 
     virtual void endFastElement(sal_Int32 nElement) override;
 
     virtual void characters( const OUString& rChars ) override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
     void SetHyperlink( const OUString& rHRef,
                        const OUString& rName,
@@ -420,7 +420,7 @@ public:
     css::text::TextContentAnchorType GetAnchorType() const { return eAnchorType; }
     const OUString & GetMimeType() const { return sMimeType; }
 
-    const css::uno::Reference < css::beans::XPropertySet >& GetPropSet() const { return xPropSet; }
+    const cpo::uno::Reference < css::beans::XPropertySet >& GetPropSet() const { return xPropSet; }
 };
 
 }
@@ -790,7 +790,7 @@ OUString XMLTextFrameContext::getGraphicPackageURLFromImportContext(const SvXMLI
     return OUString();
 }
 
-css::uno::Reference<css::graphic::XGraphic> XMLTextFrameContext::getGraphicFromImportContext(const SvXMLImportContext& rContext) const
+cpo::uno::Reference<css::graphic::XGraphic> XMLTextFrameContext::getGraphicFromImportContext(const SvXMLImportContext& rContext) const
 {
     uno::Reference<graphic::XGraphic> xGraphic;
 
@@ -1176,9 +1176,9 @@ void XMLTextFrameContext_Impl::endFastElement(sal_Int32 )
     }
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextFrameContext_Impl::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextFrameContext_Impl::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     if( nElement == XML_ELEMENT(DRAW, XML_PARAM) )
     {
@@ -1334,7 +1334,7 @@ void XMLTextFrameContext_Impl::SetDesc( const OUString& rDesc )
 }
 
 
-bool XMLTextFrameContext::CreateIfNotThere( css::uno::Reference < css::beans::XPropertySet >& rPropSet )
+bool XMLTextFrameContext::CreateIfNotThere( cpo::uno::Reference < css::beans::XPropertySet >& rPropSet )
 {
     SvXMLImportContext *pContext = m_xImplContext.get();
     XMLTextFrameContext_Impl *pImpl = dynamic_cast< XMLTextFrameContext_Impl*>( pContext );
@@ -1443,7 +1443,7 @@ void XMLTextFrameContext::endFastElement(sal_Int32 )
     GetImport().GetTextImport()->StoreLastImportedFrameName(pImpl->GetOrigName());
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextFrameContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextFrameContext::createFastChildContext(
     sal_Int32 nElement,
     const uno::Reference< xml::sax::XFastAttributeList>& xAttrList )
 {

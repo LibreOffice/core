@@ -25,7 +25,7 @@
 #include <Cocoa/Cocoa.h>
 #include <postmac.h>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <vcl/ptrstyle.hxx>
 
@@ -81,7 +81,7 @@ public:
     sal_Int32                                     mnDPIX;           // #i100617# read DPI only once per office life
     sal_Int32                                     mnDPIY;           // #i100617# read DPI only once per office life
 
-    css::uno::Reference<css::datatransfer::clipboard::XClipboard> mxClipboard;
+    cpo::uno::Reference<css::datatransfer::clipboard::XClipboard> mxClipboard;
 
     SalData();
     ~SalData();

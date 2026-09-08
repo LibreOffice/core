@@ -31,7 +31,7 @@ namespace framework::WindowStateHelper
 // for use from SfxViewShell inherited classes
 FWK_DLLPUBLIC OUString GetFromWindow(vcl::Window* pWindow);
 // for use from application exports
-FWK_DLLPUBLIC OUString GetFromModel(const css::uno::Reference<css::frame::XModel>& xModel);
+FWK_DLLPUBLIC OUString GetFromModel(const cpo::uno::Reference<css::frame::XModel>& xModel);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

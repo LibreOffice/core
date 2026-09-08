@@ -49,6 +49,7 @@
 #include <memory>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 //  registered as implementation for service FunctionAccess,
 //  also supports service SpreadsheetDocumentSettings (to set null date etc.)

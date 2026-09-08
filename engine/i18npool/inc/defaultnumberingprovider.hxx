@@ -46,11 +46,11 @@ class DefaultNumberingProvider final : public cppu::WeakImplHelper
 {
 public:
     DefaultNumberingProvider(
-        const css::uno::Reference < cpo::uno::XComponentContext >& rxContext );
+        const cpo::uno::Reference < cpo::uno::XComponentContext >& rxContext );
     virtual ~DefaultNumberingProvider() override;
 
     //XDefaultNumberingProvider
-    virtual cpo::uno::Sequence< css::uno::Reference<
+    virtual cpo::uno::Sequence< cpo::uno::Reference<
         css::container::XIndexAccess > >
         getDefaultOutlineNumberings( const css::lang::Locale& aLocale ) override;
 
@@ -75,8 +75,8 @@ public:
     virtual bool supportsService(const OUString& ServiceName) override;
     virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 private:
-    css::uno::Reference < cpo::uno::XComponentContext > m_xContext;
-    css::uno::Reference < css::container::XHierarchicalNameAccess > xHierarchicalNameAccess;
+    cpo::uno::Reference < cpo::uno::XComponentContext > m_xContext;
+    cpo::uno::Reference < css::container::XHierarchicalNameAccess > xHierarchicalNameAccess;
     rtl::Reference<TransliterationImpl> translit;
     rtl::Reference<NativeNumberSupplierService> mxNatNum;
     std::map<OUString, const Supported_NumberingType*> maSupportedTypesCache;

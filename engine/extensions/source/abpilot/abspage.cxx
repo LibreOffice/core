@@ -22,7 +22,7 @@
 
 namespace abp
 {
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
 
     AddressBookSourcePage::AddressBookSourcePage(weld::Container* pPage, OAddressBookSourcePilot* pDialog, const OUString& rUIXMLDescription, const OUString& rID)
         : AddressBookSourcePage_Base(pPage, pDialog, rUIXMLDescription, rID)

@@ -48,7 +48,7 @@ public:
     using TablePivotChart_Base::disposing;
 
     // XEmbeddedObjectSupplier
-    virtual css::uno::Reference<css::lang::XComponent> SAL_CALL
+    virtual cpo::uno::Reference<css::lang::XComponent> SAL_CALL
         getEmbeddedObject() override;
 
     // XNamed

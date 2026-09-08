@@ -41,7 +41,7 @@ class CreationWizard final : public vcl::RoadmapWizardMachine, public TabPageNot
 {
 public:
     CreationWizard(weld::Window* pParent, const rtl::Reference<::chart::ChartModel>& xChartModel,
-                   css::uno::Reference<cpo::uno::XComponentContext> xContext);
+                   cpo::uno::Reference<cpo::uno::XComponentContext> xContext);
 
     CreationWizard() = delete;
     virtual ~CreationWizard() override;
@@ -61,7 +61,7 @@ private:
     virtual std::unique_ptr<BuilderPage> createPage(WizardState nState) override;
 
     rtl::Reference<::chart::ChartModel> m_xChartModel;
-    css::uno::Reference<cpo::uno::XComponentContext> m_xComponentContext;
+    cpo::uno::Reference<cpo::uno::XComponentContext> m_xComponentContext;
     ChartTypeTemplateProvider* m_pTemplateProvider;
     std::unique_ptr<DialogModel> m_pDialogModel;
 

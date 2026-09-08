@@ -56,7 +56,7 @@ public:
     virtual bool SAL_CALL doAccessibleAction( sal_Int32 nIndex ) override;
     virtual OUString SAL_CALL getAccessibleActionDescription(
                 sal_Int32 nIndex ) override;
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
             css::accessibility::XAccessibleKeyBinding > SAL_CALL
                getAccessibleActionKeyBinding( sal_Int32 nIndex ) override;
 

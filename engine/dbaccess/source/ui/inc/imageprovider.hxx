@@ -48,7 +48,7 @@ namespace dbaui
                 denotes the connection to work for. Must not be <NULL/>.
         */
         ImageProvider(
-            const css::uno::Reference< css::sdbc::XConnection >& _rxConnection
+            const cpo::uno::Reference< css::sdbc::XConnection >& _rxConnection
         );
 
         /** returns the image to be used for a database object with the given name
@@ -91,11 +91,11 @@ namespace dbaui
         static const OUString & getDatabaseImage();
     private:
         /// the connection we work with
-        css::uno::Reference< css::sdbc::XConnection > mxConnection;
+        cpo::uno::Reference< css::sdbc::XConnection > mxConnection;
         /// the views of the connection, if the DB supports views
-        css::uno::Reference< css::container::XNameAccess > mxViews;
+        cpo::uno::Reference< css::container::XNameAccess > mxViews;
         /// interface for providing table's UI
-        css::uno::Reference< css::sdb::application::XTableUIProvider > mxTableUI;
+        cpo::uno::Reference< css::sdb::application::XTableUIProvider > mxTableUI;
     };
 
 } // namespace dbaui

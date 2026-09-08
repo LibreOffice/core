@@ -51,7 +51,7 @@ com_sun_star_comp_dbaccess_LegacyInteractionHandler_get_implementation(
 
 namespace dbaui
 {
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
 using namespace cpo::uno;
     using namespace ::com::sun::star::ucb;
     using namespace ::com::sun::star::sdb;

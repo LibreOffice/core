@@ -84,12 +84,12 @@ using ::com::sun::star::task::XInteractionHandler;
 using ::com::sun::star::task::XInteractionHandler2;
 using ::cpo::uno::Any;
 using ::cpo::uno::Exception;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::cpo::uno::RuntimeException;
 using ::cpo::uno::Sequence;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::uno::UNO_SET_THROW;
+using ::cpo::uno::UNO_QUERY;
+using ::cpo::uno::UNO_QUERY_THROW;
+using ::cpo::uno::UNO_SET_THROW;
 using ::com::sun::star::util::XCloseable;
 using ::com::sun::star::document::XViewDataSupplier;
 using ::com::sun::star::container::XIndexAccess;
@@ -100,10 +100,10 @@ namespace {
 
 class SfxFrameLoader_Impl : public ::cppu::WeakImplHelper< css::frame::XSynchronousFrameLoader, css::lang::XServiceInfo >
 {
-    css::uno::Reference < cpo::uno::XComponentContext >  m_aContext;
+    cpo::uno::Reference < cpo::uno::XComponentContext >  m_aContext;
 
 public:
-    explicit SfxFrameLoader_Impl( const css::uno::Reference < cpo::uno::XComponentContext >& _rxContext );
+    explicit SfxFrameLoader_Impl( const cpo::uno::Reference < cpo::uno::XComponentContext >& _rxContext );
 
     virtual OUString getImplementationName() override;
 
@@ -114,7 +114,7 @@ public:
 
     // XSynchronousFrameLoader
 
-    virtual bool load( const cpo::uno::Sequence< css::beans::PropertyValue >& _rArgs, const css::uno::Reference< css::frame::XFrame >& _rxFrame ) override;
+    virtual bool load( const cpo::uno::Sequence< css::beans::PropertyValue >& _rArgs, const cpo::uno::Reference< css::frame::XFrame >& _rxFrame ) override;
     virtual void cancel() override;
 
 protected:
@@ -126,7 +126,7 @@ private:
                         ) const;
 
     static OUString     impl_askForFilter_nothrow(
-                            const css::uno::Reference< css::task::XInteractionHandler >& i_rxHandler,
+                            const cpo::uno::Reference< css::task::XInteractionHandler >& i_rxHandler,
                             const OUString& i_rDocumentURL
                         );
 
@@ -138,7 +138,7 @@ private:
 
     static bool         impl_createNewDocWithSlotParam(
                             const sal_uInt16 _nSlotID,
-                            const css::uno::Reference< css::frame::XFrame >& i_rxFrame,
+                            const cpo::uno::Reference< css::frame::XFrame >& i_rxFrame,
                             const bool i_bHidden
                         );
 
@@ -155,7 +155,7 @@ private:
                         );
 
     static SfxObjectShellRef   impl_findObjectShell(
-                            const css::uno::Reference< css::frame::XModel2 >& i_rxDocument
+                            const cpo::uno::Reference< css::frame::XModel2 >& i_rxDocument
                         );
 
     static void         impl_handleCaughtError_nothrow(
@@ -177,10 +177,10 @@ private:
                                   ::comphelper::NamedValueCollection& io_rDescriptor
                         );
 
-    static css::uno::Reference< css::frame::XController2 >
+    static cpo::uno::Reference< css::frame::XController2 >
                         impl_createDocumentView(
-                            const css::uno::Reference< css::frame::XModel2 >& i_rModel,
-                            const css::uno::Reference< css::frame::XFrame >& i_rFrame,
+                            const cpo::uno::Reference< css::frame::XModel2 >& i_rModel,
+                            const cpo::uno::Reference< css::frame::XFrame >& i_rFrame,
                             const ::comphelper::NamedValueCollection& i_rViewFactoryArgs,
                             const OUString& i_rViewName
                         );

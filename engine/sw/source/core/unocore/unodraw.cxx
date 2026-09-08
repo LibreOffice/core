@@ -80,6 +80,7 @@
 #include <SwRelativeWidthHeight.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 class SwShapeDescriptor_Impl
 {
@@ -399,7 +400,7 @@ void SwFmDrawPage::setPropertyValue(const OUString& rPropertyName, const cpo::un
         case WID_PAGE_THEME:
         {
             SdrPage* pPage = GetSdrPage();
-            css::uno::Reference<css::util::XTheme> xTheme;
+            cpo::uno::Reference<css::util::XTheme> xTheme;
             if (aValue >>= xTheme)
             {
                 auto& rUnoTheme = dynamic_cast<UnoTheme&>(*xTheme);
@@ -441,7 +442,7 @@ cpo::uno::Any SwFmDrawPage::getPropertyValue(const OUString& rPropertyName)
     {
         case WID_PAGE_THEME:
         {
-            css::uno::Reference<css::util::XTheme> xTheme;
+            cpo::uno::Reference<css::util::XTheme> xTheme;
 
             auto pTheme = GetSdrPage()->getSdrModelFromSdrPage().getTheme();
             if (pTheme)

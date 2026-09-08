@@ -65,7 +65,7 @@
 
 using namespace ::cppu;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::beans;
@@ -525,7 +525,7 @@ class QuietInteractionContext:
 {
 public:
     explicit QuietInteractionContext(
-        css::uno::Reference< cpo::uno::XCurrentContext > context):
+        cpo::uno::Reference< cpo::uno::XCurrentContext > context):
         context_(std::move(context)) {}
     QuietInteractionContext(const QuietInteractionContext&) = delete;
     QuietInteractionContext& operator=(const QuietInteractionContext&) = delete;
@@ -541,7 +541,7 @@ private:
             : cpo::uno::Any();
     }
 
-    css::uno::Reference< cpo::uno::XCurrentContext >
+    cpo::uno::Reference< cpo::uno::XCurrentContext >
         context_;
 };
 
@@ -897,7 +897,7 @@ OUString MenuBarManager::RetrieveLabelFromCommand(const OUString& rCmdURL)
 }
 
 bool MenuBarManager::CreatePopupMenuController( MenuItemHandler* pMenuItemHandler,
-                                                const css::uno::Reference< css::frame::XDispatchProvider >& rDispatchProvider,
+                                                const cpo::uno::Reference< css::frame::XDispatchProvider >& rDispatchProvider,
                                                 const OUString& rModuleIdentifier )
 {
     OUString aItemCommand( pMenuItemHandler->aMenuItemURL );

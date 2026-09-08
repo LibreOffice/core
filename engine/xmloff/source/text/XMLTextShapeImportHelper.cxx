@@ -35,7 +35,7 @@
 #include <xmloff/XMLTextShapeImportHelper.hxx>
 
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::beans;

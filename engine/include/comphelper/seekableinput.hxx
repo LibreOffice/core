@@ -19,7 +19,7 @@
 #ifndef INCLUDED_COMPHELPER_SEEKABLEINPUT_HXX
 #define INCLUDED_COMPHELPER_SEEKABLEINPUT_HXX
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -42,12 +42,12 @@ class COMPHELPER_DLLPUBLIC OSeekableInputWrapper final
 {
     std::mutex    m_aMutex;
 
-    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
-    css::uno::Reference< css::io::XInputStream > m_xOriginalStream;
+    cpo::uno::Reference< css::io::XInputStream > m_xOriginalStream;
 
-    css::uno::Reference< css::io::XInputStream > m_xCopyInput;
-    css::uno::Reference< css::io::XSeekable > m_xCopySeek;
+    cpo::uno::Reference< css::io::XInputStream > m_xCopyInput;
+    cpo::uno::Reference< css::io::XSeekable > m_xCopySeek;
     comphelper::ByteReader* m_pCopyByteReader { nullptr };
 
 private:
@@ -55,14 +55,14 @@ private:
 
 public:
     OSeekableInputWrapper(
-                css::uno::Reference< css::io::XInputStream > xInStream,
-                css::uno::Reference< cpo::uno::XComponentContext > xContext );
+                cpo::uno::Reference< css::io::XInputStream > xInStream,
+                cpo::uno::Reference< cpo::uno::XComponentContext > xContext );
 
     virtual ~OSeekableInputWrapper() override;
 
-    static css::uno::Reference< css::io::XInputStream > CheckSeekableCanWrap(
-                        const css::uno::Reference< css::io::XInputStream >& xInStream,
-                        const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+    static cpo::uno::Reference< css::io::XInputStream > CheckSeekableCanWrap(
+                        const cpo::uno::Reference< css::io::XInputStream >& xInStream,
+                        const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
 // XInputStream
     virtual sal_Int32 readBytes( cpo::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead ) override;

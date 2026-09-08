@@ -19,13 +19,13 @@
 #include <com/sun/star/table/XCell.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <cppunit/TestAssert.h>
 
 using namespace css;
-using namespace css::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 namespace apitest
 {

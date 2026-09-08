@@ -43,7 +43,7 @@ private:
 
     mutable rtl::Reference< ActiveMSPList > m_MSPList;
 
-    const css::uno::Reference< cpo::uno::XComponentContext > m_xComponentContext;
+    const cpo::uno::Reference< cpo::uno::XComponentContext > m_xComponentContext;
 
     const rtl::Reference< ActiveMSPList > & getActiveMSPList() const;
 
@@ -52,7 +52,7 @@ protected:
 
 public:
     explicit MasterScriptProviderFactory(
-        css::uno::Reference< cpo::uno::XComponentContext > const & xComponentContext );
+        cpo::uno::Reference< cpo::uno::XComponentContext > const & xComponentContext );
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -64,7 +64,7 @@ public:
         getSupportedServiceNames() override;
 
     // XScriptProviderFactory
-    virtual css::uno::Reference< css::script::provider::XScriptProvider >
+    virtual cpo::uno::Reference< css::script::provider::XScriptProvider >
         SAL_CALL createScriptProvider( const cpo::uno::Any& context ) override;
 };
 

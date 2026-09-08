@@ -27,6 +27,7 @@
 #include "owriteablestream.hxx"
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 OInputSeekStream::OInputSeekStream( OWriteStream_Impl& pImpl,
                                     uno::Reference < io::XInputStream > const & xStream,

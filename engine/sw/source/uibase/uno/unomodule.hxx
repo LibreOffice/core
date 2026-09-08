@@ -23,7 +23,7 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
 #include <com/sun/star/frame/DispatchDescriptor.hpp>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -34,16 +34,16 @@ public:
     SwUnoModule() {}
 
     // XNotifyingDispatch
-    virtual void SAL_CALL dispatchWithNotification( const css::util::URL& aURL, const cpo::uno::Sequence< css::beans::PropertyValue >& aArgs, const css::uno::Reference< css::frame::XDispatchResultListener >& xListener ) override;
+    virtual void SAL_CALL dispatchWithNotification( const css::util::URL& aURL, const cpo::uno::Sequence< css::beans::PropertyValue >& aArgs, const cpo::uno::Reference< css::frame::XDispatchResultListener >& xListener ) override;
 
     // XDispatch
     virtual void SAL_CALL dispatch( const css::util::URL& aURL, const cpo::uno::Sequence< css::beans::PropertyValue >& aArgs ) override;
-    virtual void SAL_CALL addStatusListener(const css::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) override;
-    virtual void SAL_CALL removeStatusListener(const css::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) override;
+    virtual void SAL_CALL addStatusListener(const cpo::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) override;
+    virtual void SAL_CALL removeStatusListener(const cpo::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) override;
 
     // XDispatchProvider
-    virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& seqDescriptor ) override ;
-    virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch(  const   css::util::URL &            aURL            ,
+    virtual cpo::uno::Sequence< cpo::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& seqDescriptor ) override ;
+    virtual cpo::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch(  const   css::util::URL &            aURL            ,
                                                             const   OUString &   sTargetFrameName,
                                                                     sal_Int32   eSearchFlags    ) override ;
     // XServiceInfo

@@ -50,6 +50,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 
 sal_uInt16 SfxStatusBarControl::convertAwtToVCLMouseButtons( sal_Int16 nAwtMouseButtons )

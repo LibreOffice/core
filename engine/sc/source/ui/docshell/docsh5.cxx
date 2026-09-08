@@ -65,8 +65,8 @@
 using com::sun::star::script::XLibraryContainer;
 using com::sun::star::script::vba::XVBACompatibility;
 using com::sun::star::container::XNameContainer;
-using com::sun::star::uno::Reference;
-using com::sun::star::uno::UNO_QUERY;
+using cpo::uno::Reference;
+using cpo::uno::UNO_QUERY;
 
 //  former viewfunc/dbfunc methods
 

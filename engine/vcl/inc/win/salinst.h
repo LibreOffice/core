@@ -22,7 +22,7 @@
 #include <sal/config.h>
 
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <osl/conditn.hxx>
 
 #include <salinst.hxx>
@@ -40,7 +40,7 @@ public:
 
     osl::Condition      maWaitingYieldCond;
 
-    css::uno::Reference<css::datatransfer::clipboard::XClipboard> mxClipboard;
+    cpo::uno::Reference<css::datatransfer::clipboard::XClipboard> mxClipboard;
 
 public:
     WinSalInstance();
@@ -85,11 +85,11 @@ public:
 
     static int WorkaroundExceptionHandlingInUSER32Lib(int nExcept, LPEXCEPTION_POINTERS pExceptionInfo);
 
-    virtual css::uno::Reference<css::datatransfer::clipboard::XClipboard>
+    virtual cpo::uno::Reference<css::datatransfer::clipboard::XClipboard>
     CreateClipboard(const cpo::uno::Sequence<cpo::uno::Any>& i_rArguments) override;
-    virtual css::uno::Reference<css::datatransfer::dnd::XDragSource>
+    virtual cpo::uno::Reference<css::datatransfer::dnd::XDragSource>
     ImplCreateDragSource(const SystemEnvData& rSysEnv) override;
-    virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget>
+    virtual cpo::uno::Reference<css::datatransfer::dnd::XDropTarget>
     ImplCreateDropTarget(const SystemEnvData& rSysEnv) override;
 
     // Sends a message to a window, making sure to unlock solar mutex if necessary

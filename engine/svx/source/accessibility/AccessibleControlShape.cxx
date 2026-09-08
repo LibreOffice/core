@@ -52,7 +52,7 @@
 
 using namespace ::accessibility;
 using namespace ::com::sun::star::accessibility;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::beans;
@@ -546,7 +546,7 @@ Reference< XAccessibleRelationSet > AccessibleControlShape::getAccessibleRelatio
     AccessibleControlShape* pCtlAccShape = GetLabeledByControlShape();
     if(pCtlAccShape)
     {
-        cpo::uno::Sequence<css::uno::Reference<XAccessible>> aSequence { pCtlAccShape };
+        cpo::uno::Sequence<cpo::uno::Reference<XAccessible>> aSequence { pCtlAccShape };
         if( getAccessibleRole() == AccessibleRole::RADIO_BUTTON )
         {
             pRelationSetHelper->AddRelation( AccessibleRelation( AccessibleRelationType_MEMBER_OF, aSequence ) );
@@ -656,7 +656,7 @@ bool AccessibleControlShape::ensureControlModelAccess()
     {
         Reference< XControlShape > xShape( mxShape, UNO_QUERY );
         if ( xShape.is() )
-            m_xControlModel.set(xShape->getControl(), css::uno::UNO_QUERY);
+            m_xControlModel.set(xShape->getControl(), cpo::uno::UNO_QUERY);
 
         if ( m_xControlModel.is() )
             m_xModelPropsMeta = m_xControlModel->getPropertySetInfo();

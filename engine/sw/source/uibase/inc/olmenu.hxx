@@ -90,8 +90,8 @@ class SW_DLLPUBLIC SwSpellPopup
     sal_uInt16 m_nRedlineNextId;
     sal_uInt16 m_nRedlinePrevId;
     SwWrtShell* m_pSh;
-    cpo::uno::Sequence< css::uno::Reference< css::linguistic2::XDictionary >  >     m_aDics;
-    css::uno::Reference< css::linguistic2::XSpellAlternatives > m_xSpellAlt;
+    cpo::uno::Sequence< cpo::uno::Reference< css::linguistic2::XDictionary >  >     m_aDics;
+    cpo::uno::Reference< css::linguistic2::XSpellAlternatives > m_xSpellAlt;
 
     OUString m_sExplanationLink;
 
@@ -112,7 +112,7 @@ class SW_DLLPUBLIC SwSpellPopup
 
 public:
     SwSpellPopup( SwWrtShell *pWrtSh,
-            css::uno::Reference< css::linguistic2::XSpellAlternatives > xAlt,
+            cpo::uno::Reference< css::linguistic2::XSpellAlternatives > xAlt,
             const OUString & rParaText );
 
     SwSpellPopup( SwWrtShell *pWrtSh,

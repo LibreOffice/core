@@ -50,8 +50,8 @@ namespace sdbtools
                 if _rxConnection is <NULL/>
         */
         ObjectNames(
-            const css::uno::Reference< cpo::uno::XComponentContext >& _rContext,
-            const css::uno::Reference< css::sdbc::XConnection >& _rxConnection
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& _rContext,
+            const cpo::uno::Reference< css::sdbc::XConnection >& _rxConnection
         );
 
         // XObjectNames

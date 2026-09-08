@@ -30,7 +30,7 @@ class SfxStatusBarControl;
 class StatusBar;
 
 rtl::Reference<svt::StatusbarController> SfxStatusBarControllerFactory(
-    const css::uno::Reference< css::frame::XFrame >& rFrame,
+    const cpo::uno::Reference< css::frame::XFrame >& rFrame,
     StatusBar* pStatusBar,
     unsigned short nID,
     const OUString& aCommandURL );
@@ -85,7 +85,7 @@ protected:
                                     ::sal_Int32 nCommand,
                                     bool bMouseEvent,
                                     const cpo::uno::Any& aData ) override;
-    virtual void paint( const css::uno::Reference< css::awt::XGraphics >& xGraphics,
+    virtual void paint( const cpo::uno::Reference< css::awt::XGraphics >& xGraphics,
                                  const css::awt::Rectangle& rOutputRectangle,
                                  ::sal_Int32 nStyle ) override;
     virtual void click( const css::awt::Point& aPos ) override;

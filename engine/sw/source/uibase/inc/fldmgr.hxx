@@ -23,7 +23,7 @@
 #include <pam.hxx>
 #include <swdllapi.h>
 #include <names.hxx>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <cpo/uno/Any.h>
 #include <memory>
 #include <optional>
@@ -115,8 +115,8 @@ private:
 
     SAL_DLLPRIVATE LanguageType    GetCurrLanguage() const;
 
-    css::uno::Reference<css::text::XNumberingTypeInfo> m_xNumberingInfo;
-    SAL_DLLPRIVATE css::uno::Reference<css::text::XNumberingTypeInfo> const & GetNumberingInfo()const;
+    cpo::uno::Reference<css::text::XNumberingTypeInfo> m_xNumberingInfo;
+    SAL_DLLPRIVATE cpo::uno::Reference<css::text::XNumberingTypeInfo> const & GetNumberingInfo()const;
 
 public:
     explicit SwFieldMgr(SwWrtShell* pSh = nullptr);

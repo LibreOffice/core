@@ -27,7 +27,7 @@ namespace pcr
     struct OLineDescriptor : public css::inspection::LineDescriptor
     {
         OUString                    sName;              // the name of the property
-        css::uno::Reference< css::inspection::XPropertyHandler >
+        cpo::uno::Reference< css::inspection::XPropertyHandler >
                                     xPropertyHandler;   // the handler for this property
         cpo::uno::Any               aValue;             // the current value of the property
 

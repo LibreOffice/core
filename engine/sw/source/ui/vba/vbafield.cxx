@@ -35,6 +35,7 @@
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 SwVbaField::SwVbaField(  const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< cpo::uno::XComponentContext >& rContext, const  uno::Reference< css::text::XTextField >& xTextField) : SwVbaField_BASE( rParent, rContext )
 {
@@ -326,7 +327,7 @@ SwVbaFields::SwVbaFields( const uno::Reference< XHelperInterface >& xParent,
 }
 
 uno::Reference< word::XField > SAL_CALL
-SwVbaFields::Add( const css::uno::Reference< ::ooo::vba::word::XRange >& Range, const cpo::uno::Any& Type, const cpo::uno::Any& Text, const cpo::uno::Any& /*PreserveFormatting*/ )
+SwVbaFields::Add( const cpo::uno::Reference< ::ooo::vba::word::XRange >& Range, const cpo::uno::Any& Type, const cpo::uno::Any& Text, const cpo::uno::Any& /*PreserveFormatting*/ )
 {
     sal_Int32 nType = word::WdFieldType::wdFieldEmpty;
     Type >>= nType;

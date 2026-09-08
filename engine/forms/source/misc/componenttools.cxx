@@ -32,8 +32,8 @@ namespace frm
 
     using ::com::sun::star::frame::XModel;
     using ::cpo::uno::XInterface;
-    using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::UNO_QUERY;
+    using ::cpo::uno::Reference;
+    using ::cpo::uno::UNO_QUERY;
     using ::com::sun::star::container::XChild;
 
     TypeBag::TypeBag( const TypeSequence& _rTypes1 )

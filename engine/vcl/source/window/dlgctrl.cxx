@@ -37,6 +37,7 @@
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 static bool ImplHasIndirectTabParent( vcl::Window* pWindow )
 {

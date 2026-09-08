@@ -45,7 +45,7 @@ public:
 
     /** Converts OOXML data label settings for the passed data point. */
     void                convertFromModel(
-                            const css::uno::Reference< css::chart2::XDataSeries >& rxDataSeries,
+                            const cpo::uno::Reference< css::chart2::XDataSeries >& rxDataSeries,
                             const TypeGroupConverter& rTypeGroup );
 };
 
@@ -58,7 +58,7 @@ public:
 
     /** Converts OOXML data label settings for the passed data series. */
     void                convertFromModel(
-                            const css::uno::Reference< css::chart2::XDataSeries >& rxDataSeries,
+                            const cpo::uno::Reference< css::chart2::XDataSeries >& rxDataSeries,
                             const TypeGroupConverter& rTypeGroup );
 };
 
@@ -71,10 +71,10 @@ public:
 
     /** Converts an OOXML errorbar and inserts it into the passed data series. */
     void                convertFromModel(
-                            const css::uno::Reference< css::chart2::XDataSeries >& rxDataSeries );
+                            const cpo::uno::Reference< css::chart2::XDataSeries >& rxDataSeries );
 
 private:
-    css::uno::Reference< css::chart2::data::XLabeledDataSequence >
+    cpo::uno::Reference< css::chart2::data::XLabeledDataSequence >
                         createLabeledDataSequence( ErrorBarModel::SourceType eSourceType );
 };
 
@@ -98,7 +98,7 @@ public:
 
     /** Converts an OOXML trendline and inserts it into the passed data series. */
     void                convertFromModel(
-                            const css::uno::Reference< css::chart2::XDataSeries >& rxDataSeries );
+                            const cpo::uno::Reference< css::chart2::XDataSeries >& rxDataSeries );
 };
 
 
@@ -110,7 +110,7 @@ public:
 
     /** Converts settings for a data point in the passed series. */
     void                convertFromModel(
-                            const css::uno::Reference< css::chart2::XDataSeries >& rxDataSeries,
+                            const cpo::uno::Reference< css::chart2::XDataSeries >& rxDataSeries,
                             const TypeGroupConverter& rTypeGroup,
                             const SeriesModel& rSeries );
 };
@@ -123,17 +123,17 @@ public:
     virtual             ~SeriesConverter() override;
 
     /** Creates a labeled data sequence object from category data link. */
-    css::uno::Reference< css::chart2::data::XLabeledDataSequence >
+    cpo::uno::Reference< css::chart2::data::XLabeledDataSequence >
                         createCategorySequence( const OUString& rRole );
     /** Creates a labeled data sequence object from value data link. */
-    css::uno::Reference< css::chart2::data::XLabeledDataSequence >
+    cpo::uno::Reference< css::chart2::data::XLabeledDataSequence >
                         createValueSequence( const OUString& rRole );
     /** Creates a data series object with initialized source links. */
-    css::uno::Reference< css::chart2::XDataSeries >
+    cpo::uno::Reference< css::chart2::XDataSeries >
                         createDataSeries( const TypeGroupConverter& rTypeGroup, bool bVaryColorsByPoint );
 
 private:
-    css::uno::Reference< css::chart2::data::XLabeledDataSequence >
+    cpo::uno::Reference< css::chart2::data::XLabeledDataSequence >
                         createLabeledDataSequence(
                             enum DataSourceType eSourceType,
                             const OUString& rRole,

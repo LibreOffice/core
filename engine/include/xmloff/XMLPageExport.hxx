@@ -26,7 +26,7 @@
 #include <vector>
 #include <rtl/ref.hxx>
 #include <salhelper/simplereferenceobject.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 namespace com::sun::star {
     namespace style { class XStyle; }
@@ -52,7 +52,7 @@ class XMLOFF_DLLPUBLIC XMLPageExport : public salhelper::SimpleReferenceObject
 {
     SvXMLExport& m_rExport;
 
-    css::uno::Reference< css::container::XNameAccess > m_xPageStyles;
+    cpo::uno::Reference< css::container::XNameAccess > m_xPageStyles;
 
     ::std::vector< XMLPageExportNameEntry > m_aNameVector;
 
@@ -67,15 +67,15 @@ protected:
     SvXMLExport& GetExport() { return m_rExport; }
 
     void collectPageMasterAutoStyle(
-                const css::uno::Reference< css::beans::XPropertySet > & rPropSet,
+                const cpo::uno::Reference< css::beans::XPropertySet > & rPropSet,
                 XMLPageExportNameEntry & rEntry);
 
     virtual void exportMasterPageContent(
-                const css::uno::Reference< css::beans::XPropertySet > & rPropSet,
+                const cpo::uno::Reference< css::beans::XPropertySet > & rPropSet,
                  bool bAutoStyles );
 
     bool exportStyle(
-                const css::uno::Reference< css::style::XStyle >& rStyle,
+                const cpo::uno::Reference< css::style::XStyle >& rStyle,
                 bool bAutoStyles );
 
     void exportStyles( bool bUsed, bool bAutoStyles );

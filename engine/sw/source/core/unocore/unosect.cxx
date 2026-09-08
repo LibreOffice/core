@@ -66,6 +66,7 @@
 #include <o3tl/string_view.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace {
 
@@ -454,7 +455,7 @@ SwXTextSection::getAnchor()
             }
             if (isMoveIntoTable)
             {
-                css::uno::Reference<SwXText> const xParentText =
+                cpo::uno::Reference<SwXText> const xParentText =
                     ::sw::CreateParentXText(pSectFormat->GetDoc(), SwPosition(*pIdx));
                 xRet = new SwXTextRange(*pSectFormat);
             }

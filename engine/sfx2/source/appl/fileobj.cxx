@@ -227,9 +227,9 @@ static OUString impl_getFilter( const OUString& _rURL )
 
     try
     {
-        css::uno::Reference< css::document::XTypeDetection > xTypeDetection(
+        cpo::uno::Reference< css::document::XTypeDetection > xTypeDetection(
             ::comphelper::getProcessServiceFactory()->createInstance( u"com.sun.star.document.TypeDetection"_ustr ),
-            css::uno::UNO_QUERY );
+            cpo::uno::UNO_QUERY );
         if ( xTypeDetection.is() )
         {
             comphelper::SequenceAsHashMap aDescr;
@@ -250,8 +250,8 @@ static OUString impl_getFilter( const OUString& _rURL )
                 }
                 if (sFilter.isEmpty())
                 {
-                    css::uno::Reference< css::container::XNameAccess > xTypeCont( xTypeDetection,
-                            css::uno::UNO_QUERY );
+                    cpo::uno::Reference< css::container::XNameAccess > xTypeCont( xTypeDetection,
+                            cpo::uno::UNO_QUERY );
                     if ( xTypeCont.is() )
                     {
                         /* XXX: for fdo#69948 scenario the sequence returned by

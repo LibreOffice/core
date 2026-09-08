@@ -30,7 +30,7 @@
 #include <rtl/ustring.hxx>
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/xforms/XModel.hpp>
 #include <cpo/uno/RuntimeException.hpp>
 #include <com/sun/star/xml/dom/XNodeList.hpp>
@@ -68,7 +68,7 @@ using xforms::Submission;
 using xforms::Model;
 using xforms::MIP;
 
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::xml::dom;
@@ -289,7 +289,7 @@ void Submission::liveCheck()
         throw RuntimeException(u"model not set"_ustr);
 }
 
-css::uno::Reference<XModel> Submission::getModel() const
+cpo::uno::Reference<XModel> Submission::getModel() const
 {
     return mxModel;
 }

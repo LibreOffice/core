@@ -31,7 +31,7 @@ class PDFInteractionHandler : public cppu::WeakImplHelper<css::lang::XInitializa
                                                           css::lang::XServiceInfo>
 {
 private:
-    css::uno::Reference<css::awt::XWindow> m_xParent;
+    cpo::uno::Reference<css::awt::XWindow> m_xParent;
 protected:
     // XServiceInfo
     virtual OUString getImplementationName() override;
@@ -42,10 +42,10 @@ protected:
     virtual void initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments) override;
 
     // XInteractionHandler
-    virtual void handle( const css::uno::Reference< css::task::XInteractionRequest >& ) override;
+    virtual void handle( const cpo::uno::Reference< css::task::XInteractionRequest >& ) override;
 
     // XInteractionHandler2
-    virtual bool handleInteractionRequest( const css::uno::Reference< css::task::XInteractionRequest >& ) override;
+    virtual bool handleInteractionRequest( const cpo::uno::Reference< css::task::XInteractionRequest >& ) override;
 
 public:
 

@@ -81,6 +81,7 @@
 #include <outleeng.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 static sal_uInt16 lcl_CalcExtraSpace( const SvxLineSpacingItem& rLSItem )
 {
@@ -659,7 +660,7 @@ bool ImpEditEngine::MouseButtonUp( const MouseEvent& rMEvt, EditView* pView )
         if ((bCtrlClickHappened && bCtrlClickSecOption)
             || (!bCtrlClickHappened && !bCtrlClickSecOption))
         {
-            css::uno::Reference<css::system::XSystemShellExecute> exec(
+            cpo::uno::Reference<css::system::XSystemShellExecute> exec(
                 css::system::SystemShellExecute::create(
                     comphelper::getProcessComponentContext()));
             exec->execute(pUrlField->GetURL(), OUString(),

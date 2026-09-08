@@ -28,6 +28,7 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 
 using namespace css;
+using namespace ::cpo;
 
 namespace comphelper {
 

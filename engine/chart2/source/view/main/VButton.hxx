@@ -12,7 +12,7 @@
 #include <tools/color.hxx>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <rtl/ref.hxx>
 #include <svx/unoshape.hxx>
 
@@ -42,7 +42,7 @@ public:
 
     void init(const rtl::Reference<SvxShapeGroupAnyD>& xTargetPage);
 
-    void createShapes(const css::uno::Reference<css::beans::XPropertySet>& xTextProp);
+    void createShapes(const cpo::uno::Reference<css::beans::XPropertySet>& xTextProp);
 
     void showArrow(bool bShowArrow)
     {

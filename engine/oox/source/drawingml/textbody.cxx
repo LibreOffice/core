@@ -24,7 +24,7 @@
 #include <oox/helper/propertyset.hxx>
 #include <oox/token/properties.hxx>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::beans;
 
@@ -169,7 +169,7 @@ void TextBody::ApplyStyleEmpty(
 
 void TextBody::ApplyMasterTextStyle(
     const ::oox::core::XmlFilterBase& rFilterBase,
-    const css::uno::Reference< css::style::XStyle >& aXStyle,
+    const cpo::uno::Reference< css::style::XStyle >& aXStyle,
     const TextCharacterProperties& rTextStyleProperties,
     const TextListStylePtr& pMasterTextListStylePtr, size_t nLevel) const
 {

@@ -108,8 +108,8 @@ class UNLESS_MERGELIBS(SAL_DLLPUBLIC_RTTI) SwModule final : public SfxModule, pu
 
     // DictionaryList listener to trigger spellchecking or hyphenation
     rtl::Reference< SwLinguServiceEventListener > m_xLinguServiceEventListener;
-    css::uno::Reference< css::scanner::XScannerManager2 >    m_xScannerManager;
-    css::uno::Reference< css::linguistic2::XLanguageGuessing >  m_xLanguageGuesser;
+    cpo::uno::Reference< css::scanner::XScannerManager2 >    m_xScannerManager;
+    cpo::uno::Reference< css::linguistic2::XLanguageGuessing >  m_xLanguageGuesser;
 
     SvtCTLOptions::TextNumerals m_eCTLTextNumerals;
 
@@ -125,7 +125,7 @@ class UNLESS_MERGELIBS(SAL_DLLPUBLIC_RTTI) SwModule final : public SfxModule, pu
     void                InsertEnv(SfxRequest&);
     void                InsertLab(SfxRequest&, bool bLabel);
 
-    css::uno::Reference< ooo::vba::XSinkCaller > mxAutomationApplicationEventsCaller;
+    cpo::uno::Reference< ooo::vba::XSinkCaller > mxAutomationApplicationEventsCaller;
 
 public:
     // public Data - used for internal Clipboard / Drag & Drop / XSelection
@@ -235,13 +235,13 @@ public:
     static void  CheckSpellChanges( bool bOnlineSpelling,
                     bool bIsSpellWrongAgain, bool bIsSpellAllAgain, bool bSmartTags );
 
-    css::uno::Reference< css::scanner::XScannerManager2 > const &
+    cpo::uno::Reference< css::scanner::XScannerManager2 > const &
             GetScannerManager();
 
-    css::uno::Reference< css::linguistic2::XLanguageGuessing > const &
+    cpo::uno::Reference< css::linguistic2::XLanguageGuessing > const &
             GetLanguageGuesser();
 
-    SW_DLLPUBLIC void RegisterAutomationApplicationEventsCaller(css::uno::Reference< ooo::vba::XSinkCaller > const& xCaller);
+    SW_DLLPUBLIC void RegisterAutomationApplicationEventsCaller(cpo::uno::Reference< ooo::vba::XSinkCaller > const& xCaller);
     void CallAutomationApplicationEventSinks(const OUString& Method, cpo::uno::Sequence< cpo::uno::Any >& Arguments);
 
     SW_DLLPUBLIC const SwTableAutoFormatTable& GetAutoFormatTable();

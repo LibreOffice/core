@@ -34,7 +34,7 @@
 using namespace ::dbtools;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::io;
@@ -2206,7 +2206,7 @@ void ORowSetValue::fill( sal_Int32 _nPos, sal_Int32 _nType, bool  _bNullable, co
 
 void ORowSetValue::fill(sal_Int32 _nPos,
                      sal_Int32 _nType,
-                     const css::uno::Reference< css::sdbc::XRow>& _xRow)
+                     const cpo::uno::Reference< css::sdbc::XRow>& _xRow)
 {
     fill(_nPos,_nType,true,_xRow);
 }

@@ -42,7 +42,7 @@ namespace basprov
         SbMethodRef         m_xMethod;
         OUString            m_funcName;
         BasicManager*       m_documentBasicManager;
-        css::uno::Reference< css::document::XScriptInvocationContext >
+        cpo::uno::Reference< css::document::XScriptInvocationContext >
                             m_xDocumentScriptContext;
         // hack, OPropertyContainer doesn't allow you to define a property of unknown
         // type ( I guess because an Any can't contain an Any... I've always wondered why?
@@ -61,7 +61,7 @@ namespace basprov
             OUString funcName,
             SbMethodRef xMethod,
             BasicManager& documentBasicManager,
-            const css::uno::Reference< css::document::XScriptInvocationContext >& documentScriptContext
+            const cpo::uno::Reference< css::document::XScriptInvocationContext >& documentScriptContext
         );
         virtual ~BasicScriptImpl() override;
 

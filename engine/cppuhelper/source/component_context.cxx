@@ -46,7 +46,7 @@
 
 constexpr OUString SMGR_SINGLETON = u"/singletons/com.sun.star.lang.theServiceManager"_ustr;
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star;
 

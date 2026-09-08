@@ -33,6 +33,7 @@
 #include <cpo/uno/RuntimeException.hpp>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 
 ValueSetItem::ValueSetItem( ValueSet& rParent )
@@ -508,7 +509,7 @@ awt::Rectangle ValueSetAcc::implGetBounds()
     if (xParent)
     {
         uno::Reference<accessibility::XAccessibleContext> xParentContext(xParent->getAccessibleContext());
-        uno::Reference<accessibility::XAccessibleComponent> xParentComponent(xParent->getAccessibleContext(), css::uno::UNO_QUERY);
+        uno::Reference<accessibility::XAccessibleComponent> xParentComponent(xParent->getAccessibleContext(), cpo::uno::UNO_QUERY);
         if (xParentComponent.is())
         {
             awt::Point aParentPos = xParentComponent->getLocationOnScreen();

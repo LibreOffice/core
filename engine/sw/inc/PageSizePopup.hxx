@@ -23,7 +23,7 @@
 class PageSizePopup final : public svt::PopupWindowController
 {
 public:
-    PageSizePopup(const css::uno::Reference<cpo::uno::XComponentContext>& rContext);
+    PageSizePopup(const cpo::uno::Reference<cpo::uno::XComponentContext>& rContext);
     virtual ~PageSizePopup() override;
 
     virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;

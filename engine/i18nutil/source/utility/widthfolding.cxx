@@ -21,7 +21,7 @@
 #include <cpo/uno/Sequence.hxx>
 #include "widthfolding_data.h"
 
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 

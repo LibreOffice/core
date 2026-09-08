@@ -52,7 +52,7 @@ class DicList : public cppu::WeakImplHelper<css::linguistic2::XSearchableDiction
 
     ::comphelper::OInterfaceContainerHelper3<css::lang::XEventListener> aEvtListeners;
 
-    typedef std::vector< css::uno::Reference< css::linguistic2::XDictionary > >   DictionaryVec_t;
+    typedef std::vector< cpo::uno::Reference< css::linguistic2::XDictionary > >   DictionaryVec_t;
     DictionaryVec_t                             aDicList;
 
     rtl::Reference<DicEvtListenerHelper>        mxDicEvtLstnrHelper;
@@ -75,7 +75,7 @@ class DicList : public cppu::WeakImplHelper<css::linguistic2::XSearchableDiction
 
     void                SearchForDictionaries( DictionaryVec_t &rDicList,
                                             const OUString &rDicDir, bool bIsWritePath, bool bDispatchEvents );
-    sal_Int32           GetDicPos(const css::uno::Reference<
+    sal_Int32           GetDicPos(const cpo::uno::Reference<
                             css::linguistic2::XDictionary > &xDic);
 
 public:
@@ -84,24 +84,24 @@ public:
 
     // XDictionaryList
     virtual ::sal_Int16 getCount(  ) override;
-    virtual cpo::uno::Sequence< css::uno::Reference< css::linguistic2::XDictionary > > getDictionaries(  ) override;
-    virtual css::uno::Reference< css::linguistic2::XDictionary > getDictionaryByName( const OUString& aDictionaryName ) override;
-    virtual bool addDictionary( const css::uno::Reference< css::linguistic2::XDictionary >& xDictionary ) override;
-    virtual bool removeDictionary( const css::uno::Reference< css::linguistic2::XDictionary >& xDictionary ) override;
-    virtual bool addDictionaryListEventListener( const css::uno::Reference< css::linguistic2::XDictionaryListEventListener >& xListener, bool bReceiveVerbose ) override;
-    virtual bool removeDictionaryListEventListener( const css::uno::Reference< css::linguistic2::XDictionaryListEventListener >& xListener ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Reference< css::linguistic2::XDictionary > > getDictionaries(  ) override;
+    virtual cpo::uno::Reference< css::linguistic2::XDictionary > getDictionaryByName( const OUString& aDictionaryName ) override;
+    virtual bool addDictionary( const cpo::uno::Reference< css::linguistic2::XDictionary >& xDictionary ) override;
+    virtual bool removeDictionary( const cpo::uno::Reference< css::linguistic2::XDictionary >& xDictionary ) override;
+    virtual bool addDictionaryListEventListener( const cpo::uno::Reference< css::linguistic2::XDictionaryListEventListener >& xListener, bool bReceiveVerbose ) override;
+    virtual bool removeDictionaryListEventListener( const cpo::uno::Reference< css::linguistic2::XDictionaryListEventListener >& xListener ) override;
     virtual ::sal_Int16 beginCollectEvents(  ) override;
     virtual ::sal_Int16 endCollectEvents(  ) override;
     virtual ::sal_Int16 flushEvents(  ) override;
-    virtual css::uno::Reference< css::linguistic2::XDictionary > createDictionary( const OUString& aName, const css::lang::Locale& aLocale, css::linguistic2::DictionaryType eDicType, const OUString& aURL ) override;
+    virtual cpo::uno::Reference< css::linguistic2::XDictionary > createDictionary( const OUString& aName, const css::lang::Locale& aLocale, css::linguistic2::DictionaryType eDicType, const OUString& aURL ) override;
 
     // XSearchableDictionaryList
-    virtual css::uno::Reference< css::linguistic2::XDictionaryEntry > queryDictionaryEntry( const OUString& aWord, const css::lang::Locale& aLocale, bool bSearchPosDics, bool bSpellEntry ) override;
+    virtual cpo::uno::Reference< css::linguistic2::XDictionaryEntry > queryDictionaryEntry( const OUString& aWord, const css::lang::Locale& aLocale, bool bSearchPosDics, bool bSpellEntry ) override;
 
     // XComponent
     virtual void dispose() override;
-    virtual void addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-    virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+    virtual void addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& xListener ) override;
+    virtual void removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
     // XServiceInfo
     virtual OUString getImplementationName() override;

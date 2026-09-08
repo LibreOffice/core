@@ -31,7 +31,7 @@ public:
     explicit UIObjectUnoObj(std::unique_ptr<UIObject> pObj);
     virtual ~UIObjectUnoObj() override;
 
-    css::uno::Reference<css::ui::test::XUIObject> getChild(const OUString& rID) override;
+    cpo::uno::Reference<css::ui::test::XUIObject> getChild(const OUString& rID) override;
 
     void executeAction(const OUString& rAction, const cpo::uno::Sequence<css::beans::PropertyValue>& xPropValues) override;
 
@@ -49,7 +49,7 @@ public:
 
     OUString getHierarchy() override;
 
-    bool equals(const css::uno::Reference<css::ui::test::XUIObject>& rOther) override;
+    bool equals(const cpo::uno::Reference<css::ui::test::XUIObject>& rOther) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

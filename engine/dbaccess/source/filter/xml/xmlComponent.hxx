@@ -29,8 +29,8 @@ namespace dbaxml
     public:
 
         OXMLComponent( ODBFilter& rImport
-                    ,const css::uno::Reference< css::xml::sax::XFastAttributeList > & _xAttrList
-                    ,const css::uno::Reference< css::container::XNameAccess >& _xParentContainer
+                    ,const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & _xAttrList
+                    ,const cpo::uno::Reference< css::container::XNameAccess >& _xParentContainer
                     ,const OUString& _sComponentServiceName
                     );
         virtual ~OXMLComponent() override;

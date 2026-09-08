@@ -20,7 +20,7 @@
 #include <sal/config.h>
 
 #include <com/sun/star/io/IOException.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XHierarchicalStorageAccess2.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
@@ -34,6 +34,7 @@
 #include "xstorage.hxx"
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 // OHierarchyHolder_Impl
 

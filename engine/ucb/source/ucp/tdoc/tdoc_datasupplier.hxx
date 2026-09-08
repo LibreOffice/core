@@ -36,9 +36,9 @@ class ResultSetDataSupplier final : public ::ucbhelper::ResultSetDataSupplier
     struct ResultListEntry
     {
         OUString                                  aURL;
-        css::uno::Reference< css::ucb::XContentIdentifier > xId;
-        css::uno::Reference< css::ucb::XContent >           xContent;
-        css::uno::Reference< css::sdbc::XRow >              xRow;
+        cpo::uno::Reference< css::ucb::XContentIdentifier > xId;
+        cpo::uno::Reference< css::ucb::XContent >           xContent;
+        cpo::uno::Reference< css::sdbc::XRow >              xRow;
 
         explicit ResultListEntry( OUString _aURL ) : aURL(std::move( _aURL )) {}
     };
@@ -46,7 +46,7 @@ class ResultSetDataSupplier final : public ::ucbhelper::ResultSetDataSupplier
     std::mutex                                   m_aMutex;
     std::vector< ResultListEntry >               m_aResults;
     rtl::Reference< Content >                    m_xContent;
-    css::uno::Reference< cpo::uno::XComponentContext >     m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext >     m_xContext;
     std::optional<cpo::uno::Sequence< OUString > >    m_xNamesOfChildren;
     bool                                         m_bCountFinal;
     bool                                         m_bThrowException;
@@ -57,14 +57,14 @@ private:
 
 public:
     ResultSetDataSupplier(
-        css::uno::Reference< cpo::uno::XComponentContext > xContext,
+        cpo::uno::Reference< cpo::uno::XComponentContext > xContext,
         rtl::Reference< Content > xContent );
     virtual ~ResultSetDataSupplier() override;
 
     virtual OUString queryContentIdentifierString( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nIndex ) override;
-    virtual css::uno::Reference< css::ucb::XContentIdentifier >
+    virtual cpo::uno::Reference< css::ucb::XContentIdentifier >
     queryContentIdentifier( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nIndex ) override;
-    virtual css::uno::Reference< css::ucb::XContent >
+    virtual cpo::uno::Reference< css::ucb::XContent >
     queryContent( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nIndex ) override;
 
     virtual bool getResult( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nIndex ) override;
@@ -73,7 +73,7 @@ public:
     virtual sal_uInt32 currentCount() override;
     virtual bool   isCountFinal() override;
 
-    virtual css::uno::Reference< css::sdbc::XRow >
+    virtual cpo::uno::Reference< css::sdbc::XRow >
     queryPropertyValues( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nIndex  ) override;
     virtual void releasePropertyValues( sal_uInt32 nIndex ) override;
 
@@ -83,7 +83,7 @@ public:
 
 private:
     OUString queryContentIdentifierStringImpl( std::unique_lock<std::mutex>& rResultSetGuard, std::unique_lock<std::mutex>& rGuard, sal_uInt32 nIndex );
-    css::uno::Reference< css::ucb::XContentIdentifier >
+    cpo::uno::Reference< css::ucb::XContentIdentifier >
       queryContentIdentifierImpl( std::unique_lock<std::mutex>& rResultSetGuard, std::unique_lock<std::mutex>& rGuard, sal_uInt32 nIndex );
     bool getResultImpl( std::unique_lock<std::mutex>& rResultSetGuard, std::unique_lock<std::mutex>& rGuard, sal_uInt32 nIndex );
 };

@@ -38,7 +38,7 @@ public:
 
     /** fills the given itemset with the attributes in the given list */
     void importXML( SfxItemSet& rSet,
-                    css::uno::Reference< css::xml::sax::XFastAttributeList > const & xAttrList,
+                    cpo::uno::Reference< css::xml::sax::XFastAttributeList > const & xAttrList,
                     const SvXMLUnitConverter& rUnitConverter,
                     const SvXMLNamespaceMap& rNamespaceMap );
 
@@ -75,7 +75,7 @@ public:
         const SvXMLUnitConverter& rUnitConverter );
 private:
     void importXMLUnknownAttributes( SfxItemSet& rSet,
-                    css::uno::Reference< css::xml::sax::XFastAttributeList > const & xAttrList,
+                    cpo::uno::Reference< css::xml::sax::XFastAttributeList > const & xAttrList,
                     const SvXMLUnitConverter& rUnitConverter,
                     std::unique_ptr<SvXMLAttrContainerItem>& pUnknownItem );
 

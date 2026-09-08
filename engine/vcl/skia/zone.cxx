@@ -43,9 +43,9 @@ void SkiaZone::hardDisable()
     xChanges->commit();
 
     // Force synchronous config write
-    css::uno::Reference<css::util::XFlushable>(
+    cpo::uno::Reference<css::util::XFlushable>(
         css::configuration::theDefaultProvider::get(comphelper::getProcessComponentContext()),
-        css::uno::UNO_QUERY_THROW)
+        cpo::uno::UNO_QUERY_THROW)
         ->flush();
 }
 

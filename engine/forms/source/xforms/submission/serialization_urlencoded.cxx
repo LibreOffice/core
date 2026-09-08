@@ -33,7 +33,7 @@
 
 #include "serialization_urlencoded.hxx"
 
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace css::io;
 using namespace css::xml::dom;
 using namespace ::cpo::uno;
@@ -163,7 +163,7 @@ void CSerializationURLEncoded::serialize()
 
     // output stream to the pipe buffer
 
-    css::uno::Reference< css::xml::dom::XNode > cur = m_aFragment->getFirstChild();
+    cpo::uno::Reference< css::xml::dom::XNode > cur = m_aFragment->getFirstChild();
     while (cur.is())
     {
         serialize_node(cur);

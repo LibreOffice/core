@@ -13,7 +13,7 @@
 #include <vector>
 
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <filter/msfilter/msfilterdllapi.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -45,30 +45,30 @@ class MSFILTER_DLLPUBLIC CustomToolBarImportHelper
     struct iconcontrolitem
     {
         OUString sCommand;
-        css::uno::Reference< css::graphic::XGraphic > image;
+        cpo::uno::Reference< css::graphic::XGraphic > image;
     };
     std::vector< iconcontrolitem > iconcommands;
     std::unique_ptr< MSOCommandConvertor > pMSOCmdConvertor;
-    css::uno::Reference< css::ui::XUIConfigurationManagerSupplier > m_xCfgSupp;
-    css::uno::Reference< css::ui::XUIConfigurationManager > m_xAppCfgMgr;
+    cpo::uno::Reference< css::ui::XUIConfigurationManagerSupplier > m_xCfgSupp;
+    cpo::uno::Reference< css::ui::XUIConfigurationManager > m_xAppCfgMgr;
     SfxObjectShell& mrDocSh;
-    static void ScaleImage( css::uno::Reference< css::graphic::XGraphic >& xGraphic, tools::Long nNewSize );
+    static void ScaleImage( cpo::uno::Reference< css::graphic::XGraphic >& xGraphic, tools::Long nNewSize );
 public:
-    CustomToolBarImportHelper( SfxObjectShell& rDocSh, const css::uno::Reference< css::ui::XUIConfigurationManager >& rxAppCfgMgr );
+    CustomToolBarImportHelper( SfxObjectShell& rDocSh, const cpo::uno::Reference< css::ui::XUIConfigurationManager >& rxAppCfgMgr );
 
     void setMSOCommandMap( MSOCommandConvertor* pCnvtr ) { pMSOCmdConvertor.reset( pCnvtr ); }
-    css::uno::Reference< css::ui::XUIConfigurationManager > getCfgManager();
-    const css::uno::Reference< css::ui::XUIConfigurationManager >& getAppCfgManager() const { return m_xAppCfgMgr;}
+    cpo::uno::Reference< css::ui::XUIConfigurationManager > getCfgManager();
+    const cpo::uno::Reference< css::ui::XUIConfigurationManager >& getAppCfgManager() const { return m_xAppCfgMgr;}
 
 
     static cpo::uno::Any createCommandFromMacro( std::u16string_view sCmd );
 
-    void addIcon( const css::uno::Reference< css::graphic::XGraphic >& xImage, const OUString& sString );
+    void addIcon( const cpo::uno::Reference< css::graphic::XGraphic >& xImage, const OUString& sString );
     void applyIcons();
     OUString MSOCommandToOOCommand( sal_Int16 msoCmd );
     OUString MSOTCIDToOOCommand( sal_Int16 msoTCID );
     SfxObjectShell& GetDocShell() { return mrDocSh; }
-    bool createMenu( const OUString& rName, const css::uno::Reference< css::container::XIndexAccess >& xMenuDesc );
+    bool createMenu( const OUString& rName, const cpo::uno::Reference< css::container::XIndexAccess >& xMenuDesc );
 };
 
 class MSFILTER_DLLPUBLIC TBBase

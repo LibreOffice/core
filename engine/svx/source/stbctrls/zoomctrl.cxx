@@ -211,8 +211,8 @@ void SvxZoomPageStatusBarControl::initialize( const cpo::uno::Sequence< cpo::uno
     StatusbarController::initialize(aArguments);
 
     // Get document type
-    css::uno::Reference< css::frame::XModuleManager2 > xModuleManager = css::frame::ModuleManager::create( m_xContext );
-    OUString aModuleIdentifier = xModuleManager->identify( css::uno::Reference<XInterface>( m_xFrame, css::uno::UnoReference_Query::UNO_QUERY ) );
+    cpo::uno::Reference< css::frame::XModuleManager2 > xModuleManager = css::frame::ModuleManager::create( m_xContext );
+    OUString aModuleIdentifier = xModuleManager->identify( cpo::uno::Reference<XInterface>( m_xFrame, cpo::uno::UnoReference_Query::UNO_QUERY ) );
 
     // Decide what to show in zoom bar
     if ( aModuleIdentifier == "com.sun.star.drawing.DrawingDocument" )

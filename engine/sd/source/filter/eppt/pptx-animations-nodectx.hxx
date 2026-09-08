@@ -8,7 +8,7 @@
  */
 #pragma once
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/animations/XAnimationNode.hpp>
 #include <unordered_set>
 #include <vector>
@@ -23,7 +23,7 @@ typedef std::unique_ptr<NodeContext> NodeContextPtr;
 
 class NodeContext
 {
-    const css::uno::Reference<css::animations::XAnimationNode> mxNode;
+    const cpo::uno::Reference<css::animations::XAnimationNode> mxNode;
 
     std::vector<NodeContextPtr> maChildNodes;
     std::vector<Cond> maBeginCondList;
@@ -56,10 +56,10 @@ class NodeContext
     void initValid(bool bHasValidChild, bool bIsIterateChild);
 
 public:
-    NodeContext(const css::uno::Reference<css::animations::XAnimationNode>& xNode,
+    NodeContext(const cpo::uno::Reference<css::animations::XAnimationNode>& xNode,
                 const std::unordered_set<sal_Int32>& rSlideShapeIDs, PowerPointExport& rExport,
                 bool bMainSeqChild, bool bIsIterateChild);
-    const css::uno::Reference<css::animations::XAnimationNode>& getNode() const { return mxNode; }
+    const cpo::uno::Reference<css::animations::XAnimationNode>& getNode() const { return mxNode; }
     sal_Int16 getEffectNodeType() const { return mnEffectNodeType; }
     sal_Int16 getEffectPresetClass() const { return mnEffectPresetClass; }
     const OUString& getEffectPresetId() const { return msEffectPresetId; }
@@ -67,7 +67,7 @@ public:
     bool isValid() const { return mbValid; }
     bool isOnSubTnLst() const { return mbOnSubTnLst; }
     const std::vector<NodeContextPtr>& getChildNodes() const { return maChildNodes; };
-    const css::uno::Reference<css::animations::XAnimationNode>& getNodeForCondition() const;
+    const cpo::uno::Reference<css::animations::XAnimationNode>& getNodeForCondition() const;
     const std::vector<Cond>& getBeginCondList() const { return maBeginCondList; }
     const std::vector<Cond>& getEndCondList() const { return maEndCondList; }
 };

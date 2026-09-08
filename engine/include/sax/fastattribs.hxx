@@ -74,7 +74,7 @@ class SAX_DLLPUBLIC FastAttributeList final : public cppu::WeakImplHelper< css::
 {
 public:
     FastAttributeList( FastTokenHandlerBase *pTokenHandler );
-    FastAttributeList( const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList );
+    FastAttributeList( const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList );
     virtual ~FastAttributeList() override;
 
     void clear();
@@ -84,7 +84,7 @@ public:
         maAttributeTokens.reserve(nNumTokens);
     }
     void add( const FastAttributeList& );
-    void add( const css::uno::Reference<css::xml::sax::XFastAttributeList>& );
+    void add( const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& );
     void add( sal_Int32 nToken, std::string_view value );
     void add( sal_Int32 nToken, std::u16string_view sValue ); // Converts to UTF-8
     template <typename C, typename T1, typename T2>
@@ -133,7 +133,7 @@ public:
     virtual cpo::uno::Sequence< css::xml::FastAttribute > getFastAttributes() override;
 
     // XCloneable
-    virtual ::css::uno::Reference< ::css::util::XCloneable > createClone() override;
+    virtual ::cpo::uno::Reference< ::css::util::XCloneable > createClone() override;
 
     sal_Int32 getAttributeIndex( ::sal_Int32 Token )
     {
@@ -237,7 +237,7 @@ private:
 };
 
 inline FastAttributeList& castToFastAttributeList(
-                    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+                    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     assert( dynamic_cast <FastAttributeList *> ( xAttrList.get() ) != nullptr );
     return *static_cast <FastAttributeList *> ( xAttrList.get() );

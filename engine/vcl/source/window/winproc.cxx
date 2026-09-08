@@ -537,7 +537,7 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, NotifyEventType n
                                 SolarMutexReleaser aReleaser;
 
                                 // FIXME: where do I get Action from ?
-                                css::uno::Reference< css::datatransfer::dnd::XDragSource > xDragSource = pMouseDownWin->GetDragSource();
+                                cpo::uno::Reference< css::datatransfer::dnd::XDragSource > xDragSource = pMouseDownWin->GetDragSource();
 
                                 if( xDragSource.is() )
                                 {
@@ -866,7 +866,7 @@ bool ImplKitHandleMouseEvent(const VclPtr<vcl::Window>& xWindow, NotifyEventType
         nEvent == NotifyEventType::MOUSEMOVE &&
         pFrameData->mbDragging)
     {
-        css::uno::Reference<css::datatransfer::dnd::XDropTargetDragContext> xDropTargetDragContext =
+        cpo::uno::Reference<css::datatransfer::dnd::XDropTargetDragContext> xDropTargetDragContext =
             new GenericDropTargetDragContext();
         rtl::Reference<DNDListenerContainer> xDropTarget(
             pDragWin->ImplGetWindowImpl()->mxDNDListenerContainer);
@@ -892,8 +892,8 @@ bool ImplKitHandleMouseEvent(const VclPtr<vcl::Window>& xWindow, NotifyEventType
         nEvent == NotifyEventType::MOUSEBUTTONUP &&
         pFrameData->mbDragging)
     {
-        css::uno::Reference<css::datatransfer::XTransferable> xTransfer;
-        css::uno::Reference<css::datatransfer::dnd::XDropTargetDropContext> xDropTargetDropContext =
+        cpo::uno::Reference<css::datatransfer::XTransferable> xTransfer;
+        cpo::uno::Reference<css::datatransfer::dnd::XDropTargetDropContext> xDropTargetDropContext =
             new GenericDropTargetDropContext();
         rtl::Reference<DNDListenerContainer> xDropTarget(
             pDragWin->ImplGetWindowImpl()->mxDNDListenerContainer);
@@ -965,7 +965,7 @@ bool ImplKitHandleMouseEvent(const VclPtr<vcl::Window>& xWindow, NotifyEventType
                                 nMouseY,
                                 nClicks,
                                 false);
-                            css::uno::Reference< css::datatransfer::dnd::XDragSource > xDragSource =
+                            cpo::uno::Reference< css::datatransfer::dnd::XDragSource > xDragSource =
                                 pDownWin->GetDragSource();
 
                             if (xDragSource.is())

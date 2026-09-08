@@ -223,8 +223,8 @@ class TPGalleryThemeProperties : public SfxTabPage
     bool                    bSearchRecursive;
 
     rtl::Reference< ::svt::DialogClosedListener >           xDialogListener;
-    css::uno::Reference< css::media::XPlayer >              xMediaPlayer;
-    css::uno::Reference< css::ui::dialogs::XFolderPicker2 > xFolderPicker;
+    cpo::uno::Reference< css::media::XPlayer >              xMediaPlayer;
+    cpo::uno::Reference< css::ui::dialogs::XFolderPicker2 > xFolderPicker;
 
     DialogGalleryPreview m_aWndPreview;
     std::unique_ptr<weld::ComboBox> m_xCbbFileType;

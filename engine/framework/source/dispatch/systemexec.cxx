@@ -49,7 +49,7 @@ cpo::uno::Sequence< OUString > SystemExec::getSupportedServiceNames()
     return { SERVICENAME_PROTOCOLHANDLER };
 }
 
-SystemExec::SystemExec( css::uno::Reference< cpo::uno::XComponentContext > xContext )
+SystemExec::SystemExec( cpo::uno::Reference< cpo::uno::XComponentContext > xContext )
         : m_xContext    (std::move( xContext                     ))
 {
 }
@@ -58,20 +58,20 @@ SystemExec::~SystemExec()
 {
 }
 
-css::uno::Reference< css::frame::XDispatch > SystemExec::queryDispatch( const css::util::URL&  aURL    ,
+cpo::uno::Reference< css::frame::XDispatch > SystemExec::queryDispatch( const css::util::URL&  aURL    ,
                                                                                  const OUString&,
                                                                                        sal_Int32 )
 {
-    css::uno::Reference< css::frame::XDispatch > xDispatcher;
+    cpo::uno::Reference< css::frame::XDispatch > xDispatcher;
     if (aURL.Complete.startsWith(PROTOCOL_VALUE))
         xDispatcher = this;
     return xDispatcher;
 }
 
-cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SystemExec::queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor )
+cpo::uno::Sequence< cpo::uno::Reference< css::frame::XDispatch > > SystemExec::queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor )
 {
     sal_Int32 nCount = lDescriptor.getLength();
-    cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > lDispatcher( nCount );
+    cpo::uno::Sequence< cpo::uno::Reference< css::frame::XDispatch > > lDispatcher( nCount );
     auto lDispatcherRange = asNonConstRange(lDispatcher);
     for( sal_Int32 i=0; i<nCount; ++i )
     {
@@ -86,12 +86,12 @@ cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SystemExec::q
 void SystemExec::dispatch( const css::util::URL&                                  aURL       ,
                                     const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments )
 {
-    dispatchWithNotification(aURL, lArguments, css::uno::Reference< css::frame::XDispatchResultListener >());
+    dispatchWithNotification(aURL, lArguments, cpo::uno::Reference< css::frame::XDispatchResultListener >());
 }
 
 void SystemExec::dispatchWithNotification( const css::util::URL&                                             aURL      ,
                                                     const cpo::uno::Sequence< css::beans::PropertyValue >&,
-                                                    const css::uno::Reference< css::frame::XDispatchResultListener >& xListener )
+                                                    const cpo::uno::Reference< css::frame::XDispatchResultListener >& xListener )
 {
     // convert "systemexec:file:///c:/temp/test.html" => "file:///c:/temp/test.html"
     sal_Int32 c = aURL.Complete.getLength()-PROTOCOL_VALUE.getLength();
@@ -106,11 +106,11 @@ void SystemExec::dispatchWithNotification( const css::util::URL&                
 
     try
     {
-        css::uno::Reference< css::util::XStringSubstitution > xPathSubst( css::util::PathSubstitution::create(m_xContext) );
+        cpo::uno::Reference< css::util::XStringSubstitution > xPathSubst( css::util::PathSubstitution::create(m_xContext) );
 
         OUString sSystemURL = xPathSubst->substituteVariables(sSystemURLWithVariables, true); // true force an exception if unknown variables exists !
 
-        css::uno::Reference< css::system::XSystemShellExecute > xShell = css::system::SystemShellExecute::create( m_xContext );
+        cpo::uno::Reference< css::system::XSystemShellExecute > xShell = css::system::SystemShellExecute::create( m_xContext );
 
         xShell->execute(sSystemURL, OUString(), css::system::SystemShellExecuteFlags::URIS_ONLY);
         impl_notifyResultListener(xListener, css::frame::DispatchResultState::SUCCESS);
@@ -121,19 +121,19 @@ void SystemExec::dispatchWithNotification( const css::util::URL&                
         }
 }
 
-void SystemExec::addStatusListener( const css::uno::Reference< css::frame::XStatusListener >&,
+void SystemExec::addStatusListener( const cpo::uno::Reference< css::frame::XStatusListener >&,
                                              const css::util::URL& )
 {
     // not supported yet
 }
 
-void SystemExec::removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >&,
+void SystemExec::removeStatusListener( const cpo::uno::Reference< css::frame::XStatusListener >&,
                                                 const css::util::URL& )
 {
     // not supported yet
 }
 
-void SystemExec::impl_notifyResultListener(const css::uno::Reference< css::frame::XDispatchResultListener >& xListener,
+void SystemExec::impl_notifyResultListener(const cpo::uno::Reference< css::frame::XDispatchResultListener >& xListener,
                                            const sal_Int16                                                   nState   )
 {
     if (xListener.is())

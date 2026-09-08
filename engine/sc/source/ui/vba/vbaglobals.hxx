@@ -32,27 +32,27 @@ typedef ::cppu::ImplInheritanceHelper< VbaGlobalsBase, ov::excel::XGlobals > ScV
 
 class ScVbaGlobals : public ScVbaGlobals_BASE
 {
-    css::uno::Reference< ov::excel::XApplication > mxApplication;
+    cpo::uno::Reference< ov::excel::XApplication > mxApplication;
     /// @throws cpo::uno::RuntimeException
-    css::uno::Reference< ov::excel::XApplication > const & getApplication();
+    cpo::uno::Reference< ov::excel::XApplication > const & getApplication();
 public:
 
     ScVbaGlobals( cpo::uno::Sequence< cpo::uno::Any > const& aArgs,
-                 css::uno::Reference< cpo::uno::XComponentContext >const& rxContext );
+                 cpo::uno::Reference< cpo::uno::XComponentContext >const& rxContext );
     virtual ~ScVbaGlobals() override;
 
     // XGlobals
-    virtual css::uno::Reference< ov::excel::XWorkbook > SAL_CALL getActiveWorkbook() override;
-    virtual css::uno::Reference< ov::excel::XWindow > SAL_CALL getActiveWindow() override;
-    virtual css::uno::Reference< ov::excel::XWorksheet > SAL_CALL getActiveSheet() override;
-    virtual css::uno::Reference< ov::XAssistant > SAL_CALL getAssistant() override;
+    virtual cpo::uno::Reference< ov::excel::XWorkbook > SAL_CALL getActiveWorkbook() override;
+    virtual cpo::uno::Reference< ov::excel::XWindow > SAL_CALL getActiveWindow() override;
+    virtual cpo::uno::Reference< ov::excel::XWorksheet > SAL_CALL getActiveSheet() override;
+    virtual cpo::uno::Reference< ov::XAssistant > SAL_CALL getAssistant() override;
     virtual void SAL_CALL Calculate(  ) override;
 
     virtual cpo::uno::Any SAL_CALL getSelection() override;
-    virtual css::uno::Reference< ov::excel::XRange > SAL_CALL getActiveCell() override;
-    virtual css::uno::Reference< ov::excel::XWorkbook > SAL_CALL getThisWorkbook() override;
-    virtual css::uno::Reference< ov::excel::XRange > SAL_CALL Cells( const cpo::uno::Any& RowIndex, const cpo::uno::Any& ColumnIndex ) override;
-    virtual css::uno::Reference< ov::excel::XRange > SAL_CALL Columns( const cpo::uno::Any& aIndex ) override;
+    virtual cpo::uno::Reference< ov::excel::XRange > SAL_CALL getActiveCell() override;
+    virtual cpo::uno::Reference< ov::excel::XWorkbook > SAL_CALL getThisWorkbook() override;
+    virtual cpo::uno::Reference< ov::excel::XRange > SAL_CALL Cells( const cpo::uno::Any& RowIndex, const cpo::uno::Any& ColumnIndex ) override;
+    virtual cpo::uno::Reference< ov::excel::XRange > SAL_CALL Columns( const cpo::uno::Any& aIndex ) override;
     virtual cpo::uno::Any SAL_CALL CommandBars( const cpo::uno::Any& aIndex ) override;
     virtual cpo::uno::Any SAL_CALL Evaluate( const OUString& Name ) override;
 
@@ -62,11 +62,11 @@ public:
     virtual cpo::uno::Any SAL_CALL Windows( const cpo::uno::Any& aIndex ) override;
     virtual cpo::uno::Any SAL_CALL Sheets( const cpo::uno::Any& aIndex ) override;
     virtual cpo::uno::Any SAL_CALL Range( const cpo::uno::Any& Cell1, const cpo::uno::Any& Cell2 ) override;
-    virtual css::uno::Reference< ::ooo::vba::excel::XRange > SAL_CALL Rows( const cpo::uno::Any& aIndex ) override;
+    virtual cpo::uno::Reference< ::ooo::vba::excel::XRange > SAL_CALL Rows( const cpo::uno::Any& aIndex ) override;
     virtual cpo::uno::Any SAL_CALL Names( const cpo::uno::Any& aIndex ) override;
-    virtual css::uno::Reference< ov::excel::XRange > SAL_CALL Intersect( const css::uno::Reference< ov::excel::XRange >& Arg1, const css::uno::Reference< ov::excel::XRange >& Arg2, const cpo::uno::Any& Arg3, const cpo::uno::Any& Arg4, const cpo::uno::Any& Arg5, const cpo::uno::Any& Arg6, const cpo::uno::Any& Arg7, const cpo::uno::Any& Arg8, const cpo::uno::Any& Arg9, const cpo::uno::Any& Arg10, const cpo::uno::Any& Arg11, const cpo::uno::Any& Arg12, const cpo::uno::Any& Arg13, const cpo::uno::Any& Arg14, const cpo::uno::Any& Arg15, const cpo::uno::Any& Arg16, const cpo::uno::Any& Arg17, const cpo::uno::Any& Arg18, const cpo::uno::Any& Arg19, const cpo::uno::Any& Arg20, const cpo::uno::Any& Arg21, const cpo::uno::Any& Arg22, const cpo::uno::Any& Arg23, const cpo::uno::Any& Arg24, const cpo::uno::Any& Arg25, const cpo::uno::Any& Arg26, const cpo::uno::Any& Arg27, const cpo::uno::Any& Arg28, const cpo::uno::Any& Arg29, const cpo::uno::Any& Arg30 ) override;
-    virtual css::uno::Reference< ov::excel::XRange > SAL_CALL Union( const css::uno::Reference< ov::excel::XRange >& Arg1, const css::uno::Reference< ov::excel::XRange >& Arg2, const cpo::uno::Any& Arg3, const cpo::uno::Any& Arg4, const cpo::uno::Any& Arg5, const cpo::uno::Any& Arg6, const cpo::uno::Any& Arg7, const cpo::uno::Any& Arg8, const cpo::uno::Any& Arg9, const cpo::uno::Any& Arg10, const cpo::uno::Any& Arg11, const cpo::uno::Any& Arg12, const cpo::uno::Any& Arg13, const cpo::uno::Any& Arg14, const cpo::uno::Any& Arg15, const cpo::uno::Any& Arg16, const cpo::uno::Any& Arg17, const cpo::uno::Any& Arg18, const cpo::uno::Any& Arg19, const cpo::uno::Any& Arg20, const cpo::uno::Any& Arg21, const cpo::uno::Any& Arg22, const cpo::uno::Any& Arg23, const cpo::uno::Any& Arg24, const cpo::uno::Any& Arg25, const cpo::uno::Any& Arg26, const cpo::uno::Any& Arg27, const cpo::uno::Any& Arg28, const cpo::uno::Any& Arg29, const cpo::uno::Any& Arg30 ) override;
-    virtual css::uno::Reference< ov::excel::XApplication > SAL_CALL getExcel() override;
+    virtual cpo::uno::Reference< ov::excel::XRange > SAL_CALL Intersect( const cpo::uno::Reference< ov::excel::XRange >& Arg1, const cpo::uno::Reference< ov::excel::XRange >& Arg2, const cpo::uno::Any& Arg3, const cpo::uno::Any& Arg4, const cpo::uno::Any& Arg5, const cpo::uno::Any& Arg6, const cpo::uno::Any& Arg7, const cpo::uno::Any& Arg8, const cpo::uno::Any& Arg9, const cpo::uno::Any& Arg10, const cpo::uno::Any& Arg11, const cpo::uno::Any& Arg12, const cpo::uno::Any& Arg13, const cpo::uno::Any& Arg14, const cpo::uno::Any& Arg15, const cpo::uno::Any& Arg16, const cpo::uno::Any& Arg17, const cpo::uno::Any& Arg18, const cpo::uno::Any& Arg19, const cpo::uno::Any& Arg20, const cpo::uno::Any& Arg21, const cpo::uno::Any& Arg22, const cpo::uno::Any& Arg23, const cpo::uno::Any& Arg24, const cpo::uno::Any& Arg25, const cpo::uno::Any& Arg26, const cpo::uno::Any& Arg27, const cpo::uno::Any& Arg28, const cpo::uno::Any& Arg29, const cpo::uno::Any& Arg30 ) override;
+    virtual cpo::uno::Reference< ov::excel::XRange > SAL_CALL Union( const cpo::uno::Reference< ov::excel::XRange >& Arg1, const cpo::uno::Reference< ov::excel::XRange >& Arg2, const cpo::uno::Any& Arg3, const cpo::uno::Any& Arg4, const cpo::uno::Any& Arg5, const cpo::uno::Any& Arg6, const cpo::uno::Any& Arg7, const cpo::uno::Any& Arg8, const cpo::uno::Any& Arg9, const cpo::uno::Any& Arg10, const cpo::uno::Any& Arg11, const cpo::uno::Any& Arg12, const cpo::uno::Any& Arg13, const cpo::uno::Any& Arg14, const cpo::uno::Any& Arg15, const cpo::uno::Any& Arg16, const cpo::uno::Any& Arg17, const cpo::uno::Any& Arg18, const cpo::uno::Any& Arg19, const cpo::uno::Any& Arg20, const cpo::uno::Any& Arg21, const cpo::uno::Any& Arg22, const cpo::uno::Any& Arg23, const cpo::uno::Any& Arg24, const cpo::uno::Any& Arg25, const cpo::uno::Any& Arg26, const cpo::uno::Any& Arg27, const cpo::uno::Any& Arg28, const cpo::uno::Any& Arg29, const cpo::uno::Any& Arg30 ) override;
+    virtual cpo::uno::Reference< ov::excel::XApplication > SAL_CALL getExcel() override;
     virtual cpo::uno::Any SAL_CALL getDebug() override;
     virtual cpo::uno::Any SAL_CALL MenuBars( const cpo::uno::Any& aIndex ) override;
 

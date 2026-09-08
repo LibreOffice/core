@@ -198,7 +198,7 @@ public:
     void                importWebPrTable( SequenceInputStream& rStrm, sal_Int32 nRecId );
 
     static cpo::uno::Sequence<cpo::uno::Any>
-    getSequenceOfAny(const css::uno::Reference<css::xml::sax::XFastAttributeList>& xFastAttributeList);
+    getSequenceOfAny(const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xFastAttributeList);
     /** Returns the unique connection identifier. */
     sal_Int32    getConnectionId() const { return maModel.mnId; }
     /** Returns the source data type of the connection. */

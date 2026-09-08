@@ -28,6 +28,7 @@
 
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace ::xmloff::token;
 
 class SvxXMLTabStopContext_Impl : public SvXMLImportContext
@@ -123,9 +124,9 @@ SvxXMLTabStopImportContext::SvxXMLTabStopImportContext(
 {
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SvxXMLTabStopImportContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SvxXMLTabStopImportContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     if( nElement == XML_ELEMENT(STYLE, XML_TAB_STOP) )
     {

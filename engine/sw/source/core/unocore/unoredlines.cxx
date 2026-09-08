@@ -36,6 +36,7 @@
 #include <redline.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 SwXRedlines::SwXRedlines(SwDoc* _pDoc) :
     SwUnoCollection(_pDoc)
@@ -99,7 +100,7 @@ cpo::uno::Sequence< OUString > SwXRedlines::getSupportedServiceNames()
     return cpo::uno::Sequence< OUString >();
 }
 
-css::uno::Reference<css::beans::XPropertySet> SwXRedlines::GetObject(SwRangeRedline& rRedline)
+cpo::uno::Reference<css::beans::XPropertySet> SwXRedlines::GetObject(SwRangeRedline& rRedline)
 {
     SwXRedline* pXRedline(nullptr);
     sw::FindRedlineHint aHint(rRedline, &pXRedline);

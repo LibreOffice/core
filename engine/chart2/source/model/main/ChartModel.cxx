@@ -85,11 +85,12 @@
 #include <svx/ChartThemeType.hxx>
 
 using ::cpo::uno::Sequence;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::cpo::uno::Any;
 using ::osl::MutexGuard;
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace ::apphelper;
 
 namespace

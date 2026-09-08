@@ -50,6 +50,7 @@
 #include <styleuno.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 static std::span<const SfxItemPropertyMapEntry> lcl_GetShapeMap()
 {

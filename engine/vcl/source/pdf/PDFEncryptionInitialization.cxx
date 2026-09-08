@@ -19,7 +19,7 @@ using namespace css;
 
 namespace vcl::pdf
 {
-css::uno::Reference<css::beans::XMaterialHolder> initEncryption(const OUString& i_rOwnerPassword,
+cpo::uno::Reference<css::beans::XMaterialHolder> initEncryption(const OUString& i_rOwnerPassword,
                                                                 const OUString& i_rUserPassword)
 {
     rtl::Reference<EncryptionHashTransporter> pTransporter = new EncryptionHashTransporter;

@@ -36,6 +36,7 @@
 #include <comphelper/attributelist.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > const & xHandler,  const cpo::uno::Sequence< cpo::uno::Sequence < beans::PropertyValue > >& rManList )
 {

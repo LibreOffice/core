@@ -51,7 +51,7 @@ public:
         @param rTable    The Table control.
         @param eObjType  Type of accessible table control. */
     AccessibleGridControlBase(
-        css::uno::Reference< css::accessibility::XAccessible > xParent,
+        cpo::uno::Reference< css::accessibility::XAccessible > xParent,
         svt::table::TableControl& rTable,
         AccessibleTableControlObjType eObjType);
 
@@ -63,7 +63,7 @@ public:
     // XAccessibleContext
 
     /** @return  A reference to the parent accessible object. */
-    virtual css::uno::Reference< css::accessibility::XAccessible >
+    virtual cpo::uno::Reference< css::accessibility::XAccessible >
     getAccessibleParent() override;
 
     /** @return
@@ -79,7 +79,7 @@ public:
     /** @return
             The relation set (the GridControl does not have one).
     */
-    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet >
+    virtual cpo::uno::Reference< css::accessibility::XAccessibleRelationSet >
         getAccessibleRelationSet() override;
 
     /** @return  The set of current states. */
@@ -112,7 +112,7 @@ public:
     /** @return
             The accessible child rendered under the given point.
     */
-    virtual css::uno::Reference< css::accessibility::XAccessible >
+    virtual cpo::uno::Reference< css::accessibility::XAccessible >
     getAccessibleAtPoint( const css::awt::Point& rPoint ) override;
 
     // XServiceInfo
@@ -170,7 +170,7 @@ protected:
     // members
 
     /** The parent accessible object. */
-    css::uno::Reference< css::accessibility::XAccessible > m_xParent;
+    cpo::uno::Reference< css::accessibility::XAccessible > m_xParent;
     /** The SVT Table control. */
     svt::table::TableControl& m_aTable;
     /** The type of this object (for names, descriptions, state sets, ...). */

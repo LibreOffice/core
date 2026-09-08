@@ -22,7 +22,8 @@
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 /// Covers sw/source/core/draw/ fixes.
 class SwCoreDrawTest : public SwModelTestBase

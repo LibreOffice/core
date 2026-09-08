@@ -37,7 +37,7 @@ class iOSTransferable : public ::cppu::WeakImplHelper<css::datatransfer::XTransf
 {
 public:
     explicit iOSTransferable(
-        css::uno::Reference<css::datatransfer::XMimeContentTypeFactory> const& rXMimeCntFactory,
+        cpo::uno::Reference<css::datatransfer::XMimeContentTypeFactory> const& rXMimeCntFactory,
         std::shared_ptr<DataFlavorMapper> pDataFlavorMapper);
 
     virtual ~iOSTransferable() override;
@@ -62,7 +62,7 @@ public:
 
 private:
     cpo::uno::Sequence<css::datatransfer::DataFlavor> mFlavorList;
-    css::uno::Reference<css::datatransfer::XMimeContentTypeFactory> mrXMimeCntFactory;
+    cpo::uno::Reference<css::datatransfer::XMimeContentTypeFactory> mrXMimeCntFactory;
     std::shared_ptr<DataFlavorMapper> mDataFlavorMapper;
 };
 

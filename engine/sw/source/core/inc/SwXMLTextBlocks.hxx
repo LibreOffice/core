@@ -45,17 +45,17 @@ class SwXMLTextBlocks final : public SwImpBlocks
     SwXmlFlags              m_nFlags;
     OUString                m_aPackageName;
     tools::SvRef<SfxMedium> m_xMedium;
-    css::uno::Reference < css::embed::XStorage > m_xBlkRoot;
-    css::uno::Reference < css::embed::XStorage > m_xRoot;
+    cpo::uno::Reference < css::embed::XStorage > m_xBlkRoot;
+    cpo::uno::Reference < css::embed::XStorage > m_xRoot;
 
     void ReadInfo();
     void WriteInfo();
-    void InitBlockMode ( const css::uno::Reference < css::embed::XStorage >& rStorage );
+    void InitBlockMode ( const cpo::uno::Reference < css::embed::XStorage >& rStorage );
     void ResetBlockMode();
 
 public:
     SwXMLTextBlocks( const OUString& rFile );
-    SwXMLTextBlocks( const css::uno::Reference < css::embed::XStorage >&, const OUString& rFile );
+    SwXMLTextBlocks( const cpo::uno::Reference < css::embed::XStorage >&, const OUString& rFile );
     void   AddName( const OUString&, const OUString&, const OUString&, bool bOnlyText );
     virtual void   AddName( const OUString&, const OUString&, bool bOnlyText = false ) override;
     static OUString GeneratePackageName ( std::u16string_view rShort );

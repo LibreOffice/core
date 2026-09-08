@@ -31,7 +31,7 @@ inline void extract_throw( T * p, cpo::uno::Any const & a )
     {
         throw cpo::uno::RuntimeException(
             "expected " + cppu::UnoType<T>::get().getTypeName(),
-            css::uno::Reference<
+            cpo::uno::Reference<
             cpo::uno::XInterface>() );
     }
 }

@@ -45,7 +45,7 @@
 #include <algorithm>
 #include <vector>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
@@ -415,7 +415,7 @@ void SvXMLImportPropertyMapper::FillPropertySequence(
 
 void SvXMLImportPropertyMapper::CheckSpecialContext(
             const ::std::vector< XMLPropertyState >& aProperties,
-            const css::uno::Reference< css::beans::XPropertySet >& rPropSet,
+            const cpo::uno::Reference< css::beans::XPropertySet >& rPropSet,
             ContextID_Index_Pair* pSpecialContextIds ) const
 {
     OSL_ENSURE( rPropSet.is(), "need an XPropertySet" );

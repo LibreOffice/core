@@ -33,7 +33,7 @@
 #include <com/sun/star/document/XShapeEventListener.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Type.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
@@ -115,7 +115,7 @@ public:
      //Solution: Overwrite the object's current name.
     virtual OUString    getAccessibleName() override;
     virtual OUString    getAccessibleDescription() override;
-    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet> getAccessibleRelationSet() override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessibleRelationSet> getAccessibleRelationSet() override;
 //=====  XAccessibleSelection  ============================================
 
     virtual void selectAccessibleChild(
@@ -130,7 +130,7 @@ public:
 
     virtual sal_Int64 getSelectedAccessibleChildCount(  ) override;
 
-    virtual css::uno::Reference< css::accessibility::XAccessible > getSelectedAccessibleChild(
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > getSelectedAccessibleChild(
         sal_Int64 nSelectedChildIndex ) override;
 
     virtual void deselectAccessibleChild(
@@ -211,7 +211,7 @@ public:
         @throws IndexOutOfBoundsException
             Throws an exception if the index is not valid.
     */
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
             css::accessibility::XAccessible>
         getAccessibleChild (sal_Int64 nIndex) override;
 
@@ -229,7 +229,7 @@ public:
 
     //=====  XAccessibleComponent  ============================================
 
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
         css::accessibility::XAccessible >
         getAccessibleAtPoint (const css::awt::Point& aPoint) override;
 
@@ -247,7 +247,7 @@ public:
     */
     virtual void
         addAccessibleEventListener (
-            const css::uno::Reference<
+            const cpo::uno::Reference<
             css::accessibility::XAccessibleEventListener >& rxListener) override;
 
     /** This call is forwarded to a) the base class and b) to the
@@ -259,7 +259,7 @@ public:
     */
     virtual void
         removeAccessibleEventListener (
-            const css::uno::Reference<
+            const cpo::uno::Reference<
             css::accessibility::XAccessibleEventListener >& rxListener) override;
 
 
@@ -312,7 +312,7 @@ public:
 
     //===== XAccessibleHypertext ========================================================
     virtual sal_Int32 getHyperLinkCount() override;
-    virtual css::uno::Reference< css::accessibility::XAccessibleHyperlink >
+    virtual cpo::uno::Reference< css::accessibility::XAccessibleHyperlink >
         getHyperLink( sal_Int32 nLinkIndex ) override;
     virtual sal_Int32 getHyperLinkIndex( sal_Int32 nCharIndex ) override;
     //=====  XAccessibleText  ==================================================
@@ -337,7 +337,7 @@ public:
 
     //===== Misc ========================================================
 
-    const css::uno::Reference< css::drawing::XShape >&
+    const cpo::uno::Reference< css::drawing::XShape >&
         GetXShape() const { return mxShape; }
 
     /** set the index _nIndex at the accessible shape
@@ -351,7 +351,7 @@ protected:
     std::unique_ptr<ChildrenManager> mpChildrenManager;
 
     /// Reference to the actual shape.
-    css::uno::Reference<
+    cpo::uno::Reference<
         css::drawing::XShape> mxShape;
 
     /** Bundle of information passed to all shapes in a document tree.

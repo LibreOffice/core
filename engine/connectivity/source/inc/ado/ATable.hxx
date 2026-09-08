@@ -52,14 +52,14 @@ namespace connectivity::ado
 
         virtual OUString getName() override;
         OUString getSchema() const { return m_SchemaName; }
-        virtual css::uno::Reference< css::sdbc::XDatabaseMetaData> getMetaData() const override;
+        virtual cpo::uno::Reference< css::sdbc::XDatabaseMetaData> getMetaData() const override;
 
         // XRename
         virtual void rename( const OUString& newName ) override;
 
         // XAlterTable
-        virtual void alterColumnByName( const OUString& colName, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
-        virtual void alterColumnByIndex( sal_Int32 index, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
+        virtual void alterColumnByName( const OUString& colName, const cpo::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
+        virtual void alterColumnByIndex( sal_Int32 index, const cpo::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
 
         WpADOTable getImpl() const { return m_aTable;}
         OCatalog* getCatalog() const { return m_pCatalog; }

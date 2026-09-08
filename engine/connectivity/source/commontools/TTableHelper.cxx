@@ -44,7 +44,7 @@
 
 using namespace ::comphelper;
 using namespace connectivity;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbcx;
@@ -543,7 +543,7 @@ void OTableHelper::alterColumnByIndex( sal_Int32 index, const Reference< XProper
         );
 
     Reference< XPropertySet > xOld(
-        m_xColumns->getByIndex(index), css::uno::UNO_QUERY);
+        m_xColumns->getByIndex(index), cpo::uno::UNO_QUERY);
     if(xOld.is())
         alterColumnByName(getString(xOld->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))),descriptor);
 }

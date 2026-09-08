@@ -54,6 +54,7 @@
 #include <unoxstyle.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 namespace sw::sidebar
 {
@@ -426,7 +427,7 @@ static OUString NestedTextContentToText(const cpo::uno::Any& rVal)
 }
 
 // List metadata associated to the paragraph or character range
-static void MetadataToTreeNode(const css::uno::Reference<cpo::uno::XInterface>& rSource,
+static void MetadataToTreeNode(const cpo::uno::Reference<cpo::uno::XInterface>& rSource,
                                svx::sidebar::TreeNode& rNode)
 {
     uno::Reference<rdf::XMetadatable> xMeta(rSource, uno::UNO_QUERY_THROW);
@@ -457,7 +458,7 @@ static void MetadataToTreeNode(const css::uno::Reference<cpo::uno::XInterface>& 
     {
         rtl::Reference<SwXTextDocument> pSwXTextDocument(pDocSh->GetBaseModel());
         const uno::Reference<rdf::XRepository> xRepo = pSwXTextDocument->getRDFRepository();
-        const css::uno::Reference<css::rdf::XResource> xSubject(rSource, uno::UNO_QUERY);
+        const cpo::uno::Reference<css::rdf::XResource> xSubject(rSource, uno::UNO_QUERY);
         std::map<OUString, OUString> xStatements
             = SwRDFHelper::getStatements(pSwXTextDocument, xRepo->getGraphNames(), xSubject);
         for (const auto& pair : xStatements)
@@ -502,7 +503,7 @@ PropertyToTreeNode(const css::beans::Property& rProperty,
     return aCurNode;
 }
 
-static void InsertValues(const css::uno::Reference<cpo::uno::XInterface>& rSource,
+static void InsertValues(const cpo::uno::Reference<cpo::uno::XInterface>& rSource,
                          std::unordered_map<OUString, bool>& rIsDefined,
                          svx::sidebar::TreeNode& rNode, const bool isRoot,
                          const std::vector<OUString>& rHiddenProperty,

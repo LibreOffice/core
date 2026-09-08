@@ -245,7 +245,7 @@ drawinglayer/source/tools/emfpcustomlinecap.hxx:32
 embeddedobj/source/inc/oleembobj.hxx:131
     OleEmbeddedObject m_nTargetState sal_Int32
 embeddedobj/source/inc/oleembobj.hxx:143
-    OleEmbeddedObject m_xClosePreventer css::uno::Reference<css::util::XCloseListener>
+    OleEmbeddedObject m_xClosePreventer cpo::uno::Reference<css::util::XCloseListener>
 embeddedobj/source/inc/oleembobj.hxx:165
     OleEmbeddedObject m_bHasSizeToSet _Bool
 embeddedobj/source/inc/oleembobj.hxx:166
@@ -261,7 +261,7 @@ embeddedobj/source/inc/oleembobj.hxx:174
 embeddedobj/source/inc/oleembobj.hxx:188
     OleEmbeddedObject m_bFromClipboard _Bool
 extensions/source/propctrlr/genericpropertyhandler.hxx:65
-    pcr::GenericPropertyHandler m_xComponentIntrospectionAccess css::uno::Reference<css::beans::XIntrospectionAccess>
+    pcr::GenericPropertyHandler m_xComponentIntrospectionAccess cpo::uno::Reference<css::beans::XIntrospectionAccess>
 extensions/source/scanner/scanner.hxx:39
     ScannerManager mpData void *
 filter/qa/cppunit/priority-test.cxx:46
@@ -371,11 +371,11 @@ framework/inc/services/layoutmanager.hxx:247
 framework/inc/services/layoutmanager.hxx:261
     framework::LayoutManager m_pGlobalSettings std::unique_ptr<GlobalSettings>
 framework/inc/uielement/langselectionmenucontroller.hxx:69
-    framework::LanguageSelectionMenuController m_xMenuDispatch_Lang css::uno::Reference<css::frame::XDispatch>
+    framework::LanguageSelectionMenuController m_xMenuDispatch_Lang cpo::uno::Reference<css::frame::XDispatch>
 framework/inc/uielement/langselectionmenucontroller.hxx:71
-    framework::LanguageSelectionMenuController m_xMenuDispatch_Font css::uno::Reference<css::frame::XDispatch>
+    framework::LanguageSelectionMenuController m_xMenuDispatch_Font cpo::uno::Reference<css::frame::XDispatch>
 framework/inc/uielement/langselectionmenucontroller.hxx:73
-    framework::LanguageSelectionMenuController m_xMenuDispatch_CharDlgForParagraph css::uno::Reference<css::frame::XDispatch>
+    framework::LanguageSelectionMenuController m_xMenuDispatch_CharDlgForParagraph cpo::uno::Reference<css::frame::XDispatch>
 framework/source/fwe/classes/addonsoptions.cxx:245
     framework::AddonsOptions_Impl::OneImageEntry aURL OUString
 framework/source/layoutmanager/toolbarlayoutmanager.hxx:275
@@ -393,7 +393,7 @@ include/basegfx/utils/gradienttools.hxx:54
 include/basic/sbxvar.hxx:74
     SbxValues::(anonymous union at /home/noel/online-plugin/engine/include/basic/sbxvar.hxx:42:5) pData void *
 include/basic/sbxvar.hxx:246
-    SbxVariable m_xComListener css::uno::Reference<cpo::uno::XInterface>
+    SbxVariable m_xComListener cpo::uno::Reference<cpo::uno::XInterface>
 include/basic/sbxvar.hxx:247
     SbxVariable m_pComListenerParentBasic StarBASIC *
 include/COKit/COKit.h:50
@@ -407,7 +407,7 @@ include/comphelper/configurationlistener.hxx:67
 include/comphelper/parallelsort.hxx:88
     comphelper::(anonymous namespace)::ProfileZone mbDummy _Bool
 include/comphelper/unique_disposing_ptr.hxx:31
-    comphelper::unique_disposing_ptr m_xTerminateListener css::uno::Reference<css::frame::XTerminateListener>
+    comphelper::unique_disposing_ptr m_xTerminateListener cpo::uno::Reference<css::frame::XTerminateListener>
 include/docmodel/styles/ChartStyle.hxx:221
     model::StyleSet mnId sal_Int32
 include/docmodel/theme/FormatScheme.hxx:92
@@ -457,9 +457,9 @@ include/editeng/outlobj.hxx:44
 include/editeng/splwrap.hxx:52
     SvxSpellWrapper xWait std::unique_ptr<weld::WaitObject>
 include/editeng/unotext.hxx:445
-    SvxUnoTextBase xParentText css::uno::Reference<css::text::XText>
+    SvxUnoTextBase xParentText cpo::uno::Reference<css::text::XText>
 include/editeng/unotext.hxx:614
-    SvxUnoTextContentEnumeration mxParentText css::uno::Reference<css::text::XText>
+    SvxUnoTextContentEnumeration mxParentText cpo::uno::Reference<css::text::XText>
 include/filter/msfilter/dffpropset.hxx:34
     DffPropFlags bBlip _Bool
 include/filter/msfilter/dffrecordheader.hxx:33
@@ -501,11 +501,11 @@ include/framework/addonsoptions.hxx:78
 include/framework/addonsoptions.hxx:79
     framework::MergeNotebookBarInstruction aMergeContext OUString
 include/framework/dispatchhelper.hxx:64
-    framework::DispatchHelper m_xBroadcaster css::uno::Reference<cpo::uno::XInterface>
+    framework::DispatchHelper m_xBroadcaster cpo::uno::Reference<cpo::uno::XInterface>
 include/framework/framelistanalyzer.hxx:121
-    framework::FrameListAnalyzer m_xHelp css::uno::Reference<css::frame::XFrame>
+    framework::FrameListAnalyzer m_xHelp cpo::uno::Reference<css::frame::XFrame>
 include/oox/core/fragmenthandler.hxx:53
-    oox::core::FragmentBaseData mxLocator css::uno::Reference<css::xml::sax::XLocator>
+    oox::core::FragmentBaseData mxLocator cpo::uno::Reference<css::xml::sax::XLocator>
 include/oox/drawingml/drawingmltypes.hxx:159
     oox::drawingml::IndexRange end sal_Int32
 include/oox/drawingml/theme.hxx:121
@@ -529,7 +529,7 @@ include/oox/ole/vbamodule.hxx:110
 include/oox/ole/vbamodule.hxx:111
     oox::ole::VbaModule mbPrivate _Bool
 include/oox/ole/vbaproject.hxx:199
-    oox::ole::VbaProject mxOleOverridesSink css::uno::Reference<css::container::XNameContainer>
+    oox::ole::VbaProject mxOleOverridesSink cpo::uno::Reference<css::container::XNameContainer>
 include/oox/ppt/comments.hxx:51
     oox::ppt::Comment dt OUString
 include/oox/ppt/comments.hxx:52
@@ -707,9 +707,9 @@ include/vcl/vclenum.hxx:172
 include/xmloff/shapeimport.hxx:93
     SdXML3DSceneAttributesHelper mbVRPUsed _Bool
 include/xmloff/txtparae.hxx:119
-    XMLTextParagraphExport maFrameRecurseGuard o3tl::sorted_vector<css::uno::Reference<css::text::XTextFrame> >
+    XMLTextParagraphExport maFrameRecurseGuard o3tl::sorted_vector<cpo::uno::Reference<css::text::XTextFrame> >
 include/xmloff/txtparae.hxx:120
-    XMLTextParagraphExport maShapeRecurseGuard o3tl::sorted_vector<css::uno::Reference<css::drawing::XShape> >
+    XMLTextParagraphExport maShapeRecurseGuard o3tl::sorted_vector<cpo::uno::Reference<css::drawing::XShape> >
 io/source/stm/odata.cxx:234
     (unnamed union at /home/noel/online-plugin/engine/io/source/stm/odata.cxx:234:5) n sal_uInt32
 io/source/stm/odata.cxx:241
@@ -1327,7 +1327,7 @@ svx/source/tbxctrls/StylesPreviewWindow.cxx:694
 svx/source/tbxctrls/tbcontrl.cxx:341
     (anonymous namespace)::SvxFontNameBox_Base m_aOwnFontList ::std::unique_ptr<FontList>
 sw/inc/accmap.hxx:94
-    SwAccessibleMap mvShapes std::vector<css::uno::Reference<css::drawing::XShape> >
+    SwAccessibleMap mvShapes std::vector<cpo::uno::Reference<css::drawing::XShape> >
 sw/inc/swmodule.hxx:95
     SwModule m_pErrorHandler std::unique_ptr<SfxErrorHandler>
 sw/inc/swmodule.hxx:110
@@ -1337,7 +1337,7 @@ sw/inc/swwait.hxx:45
 sw/inc/textboxhelper.hxx:219
     SwTextBoxNode m_bIsCloningInProgress _Bool
 sw/inc/unoframe.hxx:315
-    SwXOLEListener m_xOLEModel css::uno::Reference<css::frame::XModel>
+    SwXOLEListener m_xOLEModel cpo::uno::Reference<css::frame::XModel>
 sw/inc/view.hxx:197
     SwView m_xGlueDocShell std::unique_ptr<SwViewGlueDocShell>
 sw/qa/core/doc/doc.cxx:403
@@ -1513,7 +1513,7 @@ vcl/inc/unx/gtk/gtkframe.hxx:81
 vcl/inc/unx/gtk/gtkframe.hxx:82
     GtkSalFrame::IMHandler::PreviousKeyPress time guint32
 vcl/source/components/dtranscomp.cxx:212
-    vcl::(anonymous namespace)::GenericDragSource m_xTrans css::uno::Reference<css::datatransfer::XTransferable>
+    vcl::(anonymous namespace)::GenericDragSource m_xTrans cpo::uno::Reference<css::datatransfer::XTransferable>
 vcl/source/filter/eps/eps.cxx:120
     (anonymous namespace)::PSWriter nBoundingX2 double
 vcl/source/filter/idxf/dxf2mtf.hxx:42

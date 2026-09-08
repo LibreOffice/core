@@ -30,7 +30,7 @@ using namespace ::comphelper;
 using namespace connectivity::flat;
 using namespace connectivity::file;
 using namespace ::cppu;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
@@ -159,7 +159,7 @@ void OFlatResultSet::release() noexcept
     OFlatResultSet_BASE2::release();
 }
 
-css::uno::Reference< css::beans::XPropertySetInfo > OFlatResultSet::getPropertySetInfo(  )
+cpo::uno::Reference< css::beans::XPropertySetInfo > OFlatResultSet::getPropertySetInfo(  )
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }

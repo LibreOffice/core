@@ -27,6 +27,7 @@
 #include <com/sun/star/task/XStatusIndicator.hpp>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 namespace
 {

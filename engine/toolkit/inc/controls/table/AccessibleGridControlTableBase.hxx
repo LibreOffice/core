@@ -45,7 +45,7 @@ public:
         @param rTable    The Table control.
         @param eObjType  Type of table control object */
     AccessibleGridControlTableBase(
-        const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
+        const cpo::uno::Reference< css::accessibility::XAccessible >& rxParent,
         svt::table::TableControl& rTable,
         AccessibleTableControlObjType  eObjType);
 
@@ -88,11 +88,11 @@ public:
     getAccessibleColumnExtentAt( sal_Int32 nRow, sal_Int32 nColumn ) override;
 
     /** @return  The caption cell of the table (not supported). */
-    virtual css::uno::Reference< css::accessibility::XAccessible >
+    virtual cpo::uno::Reference< css::accessibility::XAccessible >
     getAccessibleCaption() override;
 
     /** @return  The summary object of the table (not supported). */
-    virtual css::uno::Reference< css::accessibility::XAccessible >
+    virtual cpo::uno::Reference< css::accessibility::XAccessible >
     getAccessibleSummary() override;
 
     /** @return  The child index of the specified cell. */

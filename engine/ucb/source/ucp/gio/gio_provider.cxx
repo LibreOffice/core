@@ -29,9 +29,9 @@
 
 namespace gio
 {
-css::uno::Reference< css::ucb::XContent > SAL_CALL
+cpo::uno::Reference< css::ucb::XContent > SAL_CALL
 ContentProvider::queryContent(
-            const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier )
+            const cpo::uno::Reference< css::ucb::XContentIdentifier >& Identifier )
 {
     SAL_INFO("ucb.ucp.gio", "QueryContent: " << Identifier->getContentIdentifier());
     osl::MutexGuard aGuard( m_aMutex );
@@ -57,7 +57,7 @@ ContentProvider::queryContent(
 }
 
 ContentProvider::ContentProvider(
-    const css::uno::Reference< cpo::uno::XComponentContext >& rxContext )
+    const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext )
 : ::ucbhelper::ContentProviderImplHelper( rxContext )
 {
 }

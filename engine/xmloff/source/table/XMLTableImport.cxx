@@ -52,7 +52,7 @@
 
 using namespace ::xmloff::token;
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::xml::sax;
@@ -74,8 +74,8 @@ class XMLProxyContext : public SvXMLImportContext
 public:
     XMLProxyContext( SvXMLImport& rImport, SvXMLImportContextRef xParent );
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
 private:
     SvXMLImportContextRef mxParent;
@@ -137,9 +137,9 @@ class XMLTableImportContext : public SvXMLImportContext
 public:
     XMLTableImportContext( const rtl::Reference< XMLTableImport >& xThis, Reference< XColumnRowRange > const & xColumnRowRange );
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
     virtual void endFastElement(sal_Int32 nElement) override;
 
@@ -151,7 +151,7 @@ public:
 
     OUString GetDefaultCellStyleName() const;
 
-    css::uno::Reference< css::table::XTable > mxTable;
+    cpo::uno::Reference< css::table::XTable > mxTable;
     Reference< XTableColumns > mxColumns;
     Reference< XTableRows > mxRows;
 
@@ -174,11 +174,11 @@ public:
                           const Reference< XMergeableCell >& xCell,
                           const OUString& sDefaultCellStyleName,
                           sal_Int32 nElement,
-                          const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
+                          const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     virtual void endFastElement(sal_Int32 nElement) override;
 
@@ -200,8 +200,8 @@ public:
     XMLTableTemplateContext( SvXMLImport& rImport );
 
     // Create child element.
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
     virtual void endFastElement(sal_Int32 nElement) override;
 
@@ -222,7 +222,7 @@ XMLProxyContext::XMLProxyContext( SvXMLImport& rImport, SvXMLImportContextRef xP
 {
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLProxyContext::createFastChildContext( sal_Int32 nElement, const Reference< XFastAttributeList >& xAttrList )
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLProxyContext::createFastChildContext( sal_Int32 nElement, const Reference< XFastAttributeList >& xAttrList )
 {
     if( mxParent.is() )
         return mxParent->createFastChildContext( nElement, xAttrList );
@@ -530,9 +530,9 @@ SvXMLImportContextRef XMLTableImportContext::ImportCell( sal_Int32 nElement, con
     return nullptr;
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTableImportContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLTableImportContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     switch (nElement)
     {
@@ -588,7 +588,7 @@ XMLCellImportContext::XMLCellImportContext( SvXMLImport& rImport,
     const Reference< XMergeableCell >& xCell,
     const OUString& sDefaultCellStyleName,
     sal_Int32 /*nElement*/,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 : SvXMLImportContext( rImport )
 , mxCell( xCell )
 , mbListContextPushed( false )
@@ -647,9 +647,9 @@ XMLCellImportContext::XMLCellImportContext( SvXMLImport& rImport,
     }
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLCellImportContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLCellImportContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     // create text cursor on demand
     if( !mxCursor.is() )
@@ -729,9 +729,9 @@ void XMLTableTemplateContext::endFastElement(sal_Int32 )
         xTableImport->addTableTemplate( msTemplateStyleName, maTableTemplate );
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTableTemplateContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLTableTemplateContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     if( IsTokenInNamespace(nElement, XML_NAMESPACE_TABLE) )
     {

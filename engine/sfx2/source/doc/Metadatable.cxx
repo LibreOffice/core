@@ -107,6 +107,7 @@
 
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 using ::sfx2::isValidXmlId;
 
@@ -147,7 +148,7 @@ public:
     XmlIdRegistry();
 
     /** get the ODF element with the given metadata reference. */
-    virtual css::uno::Reference< css::rdf::XMetadatable >
+    virtual cpo::uno::Reference< css::rdf::XMetadatable >
         GetElementByMetadataReference(
             const css::beans::StringPair & i_rReference) const
         override;
@@ -275,7 +276,7 @@ public:
     virtual bool IsInClipboard() const override { return false; }
     virtual bool IsInUndo() const override { return true; }
     virtual bool IsInContent() const override { return m_isInContent; }
-    virtual css::uno::Reference< css::rdf::XMetadatable > MakeUnoObject() override
+    virtual cpo::uno::Reference< css::rdf::XMetadatable > MakeUnoObject() override
     { OSL_FAIL("MetadatableUndo::MakeUnoObject"); throw; }
 };
 
@@ -299,7 +300,7 @@ public:
     virtual bool IsInClipboard() const override { return true; }
     virtual bool IsInUndo() const override { return false; }
     virtual bool IsInContent() const override { return m_isInContent; }
-    virtual css::uno::Reference< css::rdf::XMetadatable > MakeUnoObject() override
+    virtual cpo::uno::Reference< css::rdf::XMetadatable > MakeUnoObject() override
     { OSL_FAIL("MetadatableClipboard::MakeUnoObject"); throw; }
     void OriginNoLongerInBusinessAnymore() { m_pReg = nullptr; }
 };
@@ -361,7 +362,7 @@ XmlIdRegistry::XmlIdRegistry()
 {
 }
 
-css::uno::Reference< css::rdf::XMetadatable >
+cpo::uno::Reference< css::rdf::XMetadatable >
 XmlIdRegistry::GetElementByMetadataReference(
     const beans::StringPair & i_rReference) const
 {

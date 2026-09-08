@@ -126,8 +126,8 @@ private:
     GalleryThemeEntries maAllThemeEntries;
     GalleryThemeEntries maFoundThemeEntries;
 
-    css::uno::Reference<cpo::uno::XComponentContext> m_xContext;
-    css::uno::Reference<css::util::XURLTransformer> m_xTransformer;
+    cpo::uno::Reference<cpo::uno::XComponentContext> m_xContext;
+    cpo::uno::Reference<css::util::XURLTransformer> m_xTransformer;
 
     CharClass m_aCharacterClassficator;
     SfxListener maLocalListener;
@@ -206,14 +206,14 @@ public:
     bool KeyInput(const KeyEvent& rEvt);
     bool ViewBoxHasFocus() const;
 
-    static css::uno::Reference<css::frame::XFrame> GetFrame();
-    const css::uno::Reference<css::util::XURLTransformer>& GetURLTransformer() const
+    static cpo::uno::Reference<css::frame::XFrame> GetFrame();
+    const cpo::uno::Reference<css::util::XURLTransformer>& GetURLTransformer() const
     {
         return m_xTransformer;
     }
 
     void Execute(std::u16string_view rIdent);
-    void DispatchAdd(const css::uno::Reference<css::frame::XDispatch>& rxDispatch,
+    void DispatchAdd(const cpo::uno::Reference<css::frame::XDispatch>& rxDispatch,
                      const css::util::URL& rURL);
 
     DECL_STATIC_LINK(GalleryBrowser, AsyncDispatch_Impl, void*, void);
@@ -236,7 +236,7 @@ private:
 
 public:
     GalleryDragDrop(GalleryBrowser* pParent,
-                    const css::uno::Reference<css::datatransfer::dnd::XDropTarget>& rDropTarget)
+                    const cpo::uno::Reference<css::datatransfer::dnd::XDropTarget>& rDropTarget)
         : DropTargetHelper(rDropTarget)
         , m_pParent(pParent)
     {

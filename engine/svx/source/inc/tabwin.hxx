@@ -47,7 +47,7 @@ class FmFieldWin final : public SfxModelessDialogController
     rtl::Reference<comphelper::OPropertyChangeMultiplexer2>  m_xChangeListener;
     rtl::Reference<svx::OColumnTransferable> m_xHelper;
 
-    void addToList(const css::uno::Reference<css::container::XNameAccess>& i_xColumns);
+    void addToList(const cpo::uno::Reference<css::container::XNameAccess>& i_xColumns);
 
     DECL_LINK(RowActivatedHdl, weld::TreeView&, bool);
     DECL_LINK(DragBeginHdl, bool&, bool);
@@ -60,7 +60,7 @@ public:
                               const SfxPoolItem* pState) override;
 
     void UpdateContent(FmFormShell const *);
-    void UpdateContent(const css::uno::Reference< css::form::XForm > &);
+    void UpdateContent(const cpo::uno::Reference< css::form::XForm > &);
     void FillInfo( SfxChildWinInfo& rInfo ) const override;
 
     const OUString& GetDatabaseName() const { return m_aDatabaseName; }

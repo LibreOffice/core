@@ -32,13 +32,13 @@ public:
 
     /** Creates an external data provider that is able to use spreadsheet data. */
     virtual void        createDataProvider(
-                            const css::uno::Reference<
+                            const cpo::uno::Reference<
                             css::chart2::XChartDocument >& rxChartDoc ) const override;
 
     /** Creates a data sequence from the passed formula. */
-    virtual css::uno::Reference<css::chart2::data::XDataSequence>
+    virtual cpo::uno::Reference<css::chart2::data::XDataSequence>
         createDataSequence(
-            const css::uno::Reference<css::chart2::data::XDataProvider>& rxDataProvider,
+            const cpo::uno::Reference<css::chart2::data::XDataProvider>& rxDataProvider,
             const oox::drawingml::chart::DataSequenceModel& rDataSeq, const OUString& rRole,
             const OUString& aRoleQualifier ) const override;
 };

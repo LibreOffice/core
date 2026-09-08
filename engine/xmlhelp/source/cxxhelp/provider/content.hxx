@@ -39,9 +39,9 @@ namespace chelp
     {
     public:
 
-        Content( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+        Content( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                  ::ucbhelper::ContentProviderImplHelper* pProvider,
-                 const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier,
+                 const cpo::uno::Reference< css::ucb::XContentIdentifier >& Identifier,
                  Databases* pDatabases );
 
         virtual ~Content() override;
@@ -68,7 +68,7 @@ namespace chelp
         virtual cpo::uno::Any SAL_CALL
         execute( const css::ucb::Command& aCommand,
                  sal_Int32 CommandId,
-                 const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment ) override;
+                 const cpo::uno::Reference< css::ucb::XCommandEnvironment >& Environment ) override;
 
         virtual void SAL_CALL
         abort( sal_Int32 CommandId ) override;
@@ -83,13 +83,13 @@ namespace chelp
         // private methods
 
         virtual cpo::uno::Sequence< css::beans::Property >
-        getProperties( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv ) override;
+        getProperties( const cpo::uno::Reference< css::ucb::XCommandEnvironment > & xEnv ) override;
         virtual cpo::uno::Sequence< css::ucb::CommandInfo >
-        getCommands( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv ) override;
+        getCommands( const cpo::uno::Reference< css::ucb::XCommandEnvironment > & xEnv ) override;
 
         virtual OUString getParentURL() override { return OUString(); }
 
-        css::uno::Reference< css::sdbc::XRow >
+        cpo::uno::Reference< css::sdbc::XRow >
         getPropertyValues( const cpo::uno::Sequence< css::beans::Property >& rProperties );
     };
 

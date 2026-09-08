@@ -39,11 +39,11 @@ protected:
 
 public:
     OTimeModel(
-        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
+        const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     OTimeModel(
         const OTimeModel* _pOriginal,
-        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
+        const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     virtual ~OTimeModel() override;
 
@@ -86,10 +86,10 @@ protected:
     virtual cpo::uno::Any   getDefaultForReset() const override;
     virtual void            resetNoBroadcast() override;
 
-    virtual void            onConnectedDbColumn( const css::uno::Reference< cpo::uno::XInterface >& _rxForm ) override;
+    virtual void            onConnectedDbColumn( const cpo::uno::Reference< cpo::uno::XInterface >& _rxForm ) override;
 
 protected:
-    virtual css::uno::Reference< css::util::XCloneable > createClone(  ) override;
+    virtual cpo::uno::Reference< css::util::XCloneable > createClone(  ) override;
 };
 
 class OTimeControl: public OBoundControl
@@ -98,7 +98,7 @@ protected:
     virtual cpo::uno::Sequence< cpo::uno::Type> _getTypes() override;
 
 public:
-    explicit OTimeControl(const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory);
+    explicit OTimeControl(const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory);
     DECLARE_UNO3_AGG_DEFAULTS(OTimeControl, OBoundControl)
 
     // css::lang::XServiceInfo

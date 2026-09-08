@@ -44,9 +44,9 @@ public:
 
     // ____ XModifyBroadcaster ____
     virtual void addModifyListener(
-        const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+        const cpo::uno::Reference< css::util::XModifyListener >& aListener ) override;
     virtual void removeModifyListener(
-        const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+        const cpo::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
     // ____ XModifyListener ____
     virtual void modified(
@@ -74,73 +74,73 @@ namespace impl
 template< class InterfaceRef >
 struct addListenerFunctor
 {
-    explicit addListenerFunctor( css::uno::Reference< css::util::XModifyListener > xListener ) :
+    explicit addListenerFunctor( cpo::uno::Reference< css::util::XModifyListener > xListener ) :
             m_xListener(std::move( xListener ))
     {}
 
     void operator() ( const InterfaceRef & xObject )
     {
-        css::uno::Reference< css::util::XModifyBroadcaster >
-              xBroadcaster( xObject, css::uno::UNO_QUERY );
+        cpo::uno::Reference< css::util::XModifyBroadcaster >
+              xBroadcaster( xObject, cpo::uno::UNO_QUERY );
         if( xBroadcaster.is() && m_xListener.is())
             xBroadcaster->addModifyListener( m_xListener );
     }
 private:
-    css::uno::Reference< css::util::XModifyListener > m_xListener;
+    cpo::uno::Reference< css::util::XModifyListener > m_xListener;
 };
 
 template< class InterfaceRef >
 struct removeListenerFunctor
 {
-    explicit removeListenerFunctor( css::uno::Reference< css::util::XModifyListener > xListener ) :
+    explicit removeListenerFunctor( cpo::uno::Reference< css::util::XModifyListener > xListener ) :
             m_xListener(std::move( xListener ))
     {}
 
     void operator() ( const InterfaceRef & xObject )
     {
-        css::uno::Reference< css::util::XModifyBroadcaster >
-              xBroadcaster( xObject, css::uno::UNO_QUERY );
+        cpo::uno::Reference< css::util::XModifyBroadcaster >
+              xBroadcaster( xObject, cpo::uno::UNO_QUERY );
         if( xBroadcaster.is() && m_xListener.is())
             xBroadcaster->removeModifyListener( m_xListener );
     }
 private:
-    css::uno::Reference< css::util::XModifyListener > m_xListener;
+    cpo::uno::Reference< css::util::XModifyListener > m_xListener;
 };
 
 template< class Pair >
 struct addListenerToMappedElementFunctor
 {
-    explicit addListenerToMappedElementFunctor( css::uno::Reference< css::util::XModifyListener >  xListener ) :
+    explicit addListenerToMappedElementFunctor( cpo::uno::Reference< css::util::XModifyListener >  xListener ) :
             m_xListener(std::move( xListener ))
     {}
 
     void operator() ( const Pair & aPair )
     {
-        css::uno::Reference< css::util::XModifyBroadcaster >
-              xBroadcaster( aPair.second, css::uno::UNO_QUERY );
+        cpo::uno::Reference< css::util::XModifyBroadcaster >
+              xBroadcaster( aPair.second, cpo::uno::UNO_QUERY );
         if( xBroadcaster.is() && m_xListener.is())
             xBroadcaster->addModifyListener( m_xListener );
     }
 private:
-    css::uno::Reference< css::util::XModifyListener > m_xListener;
+    cpo::uno::Reference< css::util::XModifyListener > m_xListener;
 };
 
 template< class Pair >
 struct removeListenerFromMappedElementFunctor
 {
-    explicit removeListenerFromMappedElementFunctor( css::uno::Reference< css::util::XModifyListener > xListener ) :
+    explicit removeListenerFromMappedElementFunctor( cpo::uno::Reference< css::util::XModifyListener > xListener ) :
             m_xListener(std::move( xListener ))
     {}
 
     void operator() ( const Pair & aPair )
     {
-        css::uno::Reference< css::util::XModifyBroadcaster >
-              xBroadcaster( aPair.second, css::uno::UNO_QUERY );
+        cpo::uno::Reference< css::util::XModifyBroadcaster >
+              xBroadcaster( aPair.second, cpo::uno::UNO_QUERY );
         if( xBroadcaster.is() && m_xListener.is())
             xBroadcaster->removeModifyListener( m_xListener );
     }
 private:
-    css::uno::Reference< css::util::XModifyListener > m_xListener;
+    cpo::uno::Reference< css::util::XModifyListener > m_xListener;
 };
 
 } //  namespace impl
@@ -148,7 +148,7 @@ private:
 template< class InterfaceRef >
 void addListener(
     const InterfaceRef & xObject,
-    const css::uno::Reference< css::util::XModifyListener > & xListener )
+    const cpo::uno::Reference< css::util::XModifyListener > & xListener )
 {
     if( xListener.is())
     {
@@ -159,7 +159,7 @@ void addListener(
 template< class T >
 void addListener(
     const rtl::Reference<T> & xBroadcaster,
-    const css::uno::Reference< css::util::XModifyListener > & xListener )
+    const cpo::uno::Reference< css::util::XModifyListener > & xListener )
 {
     if( xBroadcaster && xListener  )
         xBroadcaster->addModifyListener( xListener );
@@ -168,7 +168,7 @@ void addListener(
 template< class Container >
 void addListenerToAllElements(
     const Container & rContainer,
-    const css::uno::Reference< css::util::XModifyListener > & xListener )
+    const cpo::uno::Reference< css::util::XModifyListener > & xListener )
 {
     if( xListener.is())
         std::for_each( rContainer.begin(), rContainer.end(),
@@ -178,7 +178,7 @@ void addListenerToAllElements(
 template< class T >
 void addListenerToAllElements(
     const std::vector<rtl::Reference<T>> & rContainer,
-    const css::uno::Reference< css::util::XModifyListener > & xListener )
+    const cpo::uno::Reference< css::util::XModifyListener > & xListener )
 {
     if( !xListener )
         return;
@@ -189,7 +189,7 @@ void addListenerToAllElements(
 template< class Container >
 void addListenerToAllMapElements(
     const Container & rContainer,
-    const css::uno::Reference< css::util::XModifyListener > & xListener )
+    const cpo::uno::Reference< css::util::XModifyListener > & xListener )
 {
     if( xListener.is())
         std::for_each( rContainer.begin(), rContainer.end(),
@@ -199,7 +199,7 @@ void addListenerToAllMapElements(
 template< class InterfaceRef >
 void removeListener(
     const InterfaceRef & xObject,
-    const css::uno::Reference< css::util::XModifyListener > & xListener )
+    const cpo::uno::Reference< css::util::XModifyListener > & xListener )
 {
     if( xListener.is())
     {
@@ -211,7 +211,7 @@ void removeListener(
 template< class T >
 void removeListener(
     const rtl::Reference<T> & xBroadcaster,
-    const css::uno::Reference< css::util::XModifyListener > & xListener )
+    const cpo::uno::Reference< css::util::XModifyListener > & xListener )
 {
     if( xBroadcaster && xListener  )
         xBroadcaster->removeModifyListener( xListener );
@@ -220,7 +220,7 @@ void removeListener(
 template< class Container >
 void removeListenerFromAllElements(
     const Container & rContainer,
-    const css::uno::Reference< css::util::XModifyListener > & xListener )
+    const cpo::uno::Reference< css::util::XModifyListener > & xListener )
 {
     if( xListener.is())
         std::for_each( rContainer.begin(), rContainer.end(),
@@ -230,7 +230,7 @@ void removeListenerFromAllElements(
 template< class T >
 void removeListenerFromAllElements(
     const std::vector<rtl::Reference<T>> & rContainer,
-    const css::uno::Reference< css::util::XModifyListener > & xListener )
+    const cpo::uno::Reference< css::util::XModifyListener > & xListener )
 {
     if( !xListener )
         return;
@@ -241,7 +241,7 @@ void removeListenerFromAllElements(
 template< class Container >
 void removeListenerFromAllMapElements(
     const Container & rContainer,
-    const css::uno::Reference< css::util::XModifyListener > & xListener )
+    const cpo::uno::Reference< css::util::XModifyListener > & xListener )
 {
     if( xListener.is())
         std::for_each( rContainer.begin(), rContainer.end(),

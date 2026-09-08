@@ -38,7 +38,7 @@
 #include <svl/svdde.hxx>
 #include <sot/formats.hxx>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 namespace sfx2

@@ -61,7 +61,7 @@ class JobExecutor : public Base
 private:
 
     /** reference to the uno service manager */
-    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
     /** cached list of all registered event names of cfg for call optimization. */
     std::vector<OUString> m_lEvents;
@@ -76,7 +76,7 @@ private:
 
 public:
 
-    explicit JobExecutor(const css::uno::Reference< cpo::uno::XComponentContext >& xContext);
+    explicit JobExecutor(const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext);
     virtual ~JobExecutor() override;
 
     virtual OUString getImplementationName() override
@@ -119,7 +119,7 @@ public:
     @param      xContext
                     reference to the uno service manager
  */
-JobExecutor::JobExecutor( /*IN*/ const css::uno::Reference< cpo::uno::XComponentContext >& xContext )
+JobExecutor::JobExecutor( /*IN*/ const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext )
     : m_xContext          (xContext                                                        )
     , m_aConfig           (xContext, u"/org.openoffice.Office.Jobs/Events"_ustr)
 {
@@ -140,14 +140,14 @@ void JobExecutor::initListeners()
     if (m_aConfig.getMode() != ConfigAccess::E_READONLY)
         return;
 
-    css::uno::Reference< css::container::XNameAccess > xRegistry(
-            m_aConfig.cfg(), css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::container::XNameAccess > xRegistry(
+            m_aConfig.cfg(), cpo::uno::UNO_QUERY);
     if (xRegistry.is())
         m_lEvents = Converter::convert_seqOUString2OUStringList(
                 xRegistry->getElementNames());
 
-    css::uno::Reference< css::container::XContainer > xNotifier(
-            m_aConfig.cfg(), css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::container::XContainer > xNotifier(
+            m_aConfig.cfg(), cpo::uno::UNO_QUERY);
     if (xNotifier.is())
     {
         m_xConfigListener = new WeakContainerListener(this);
@@ -165,10 +165,10 @@ JobExecutor::~JobExecutor()
 }
 
 void JobExecutor::disposing(std::unique_lock<std::mutex>& /*rGuard*/) {
-    css::uno::Reference<css::container::XContainer> notifier;
+    cpo::uno::Reference<css::container::XContainer> notifier;
     rtl::Reference<WeakContainerListener> listener;
     if (m_aConfig.getMode() != ConfigAccess::E_CLOSED) {
-        notifier.set(m_aConfig.cfg(), css::uno::UNO_QUERY);
+        notifier.set(m_aConfig.cfg(), cpo::uno::UNO_QUERY);
         listener = m_xConfigListener;
         m_aConfig.close();
     }
@@ -221,7 +221,7 @@ void JobExecutor::trigger( const OUString& sEvent )
             And freeing of such uno object is done by uno itself.
             So we have to use dynamic memory everytimes.
          */
-        rtl::Reference<Job> pJob = new Job(m_xContext, css::uno::Reference< css::frame::XFrame >());
+        rtl::Reference<Job> pJob = new Job(m_xContext, cpo::uno::Reference< css::frame::XFrame >());
         pJob->setJobData(aCfg);
 
         pJob->execute(cpo::uno::Sequence< css::beans::NamedValue >());
@@ -297,7 +297,7 @@ void JobExecutor::notifyEvent( const css::document::EventObject& aEvent )
             And freeing of such uno object is done by uno itself.
             So we have to use dynamic memory everytimes.
          */
-        css::uno::Reference< css::frame::XModel > xModel(aEvent.Source, css::uno::UNO_QUERY);
+        cpo::uno::Reference< css::frame::XModel > xModel(aEvent.Source, cpo::uno::UNO_QUERY);
         pJob = new Job(m_xContext, xModel);
         pJob->setJobData(aCfg);
 
@@ -358,7 +358,7 @@ void JobExecutor::disposing( const css::lang::EventObject& aEvent )
 {
     /* SAFE { */
     std::unique_lock g(m_aMutex);
-    css::uno::Reference< cpo::uno::XInterface > xCFG(m_aConfig.cfg(), css::uno::UNO_QUERY);
+    cpo::uno::Reference< cpo::uno::XInterface > xCFG(m_aConfig.cfg(), cpo::uno::UNO_QUERY);
     if (
         (xCFG                == aEvent.Source        ) &&
         (m_aConfig.getMode() != ConfigAccess::E_CLOSED)

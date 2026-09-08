@@ -11,7 +11,7 @@
 #define INCLUDED_TEST_SHEET_XDATAPILOTDESCRIPTOR_HXX
 
 #include <cpo/uno/XInterface.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/sheet/XDataPilotDescriptor.hpp>
 
 #include <test/testdllapi.hxx>
@@ -34,15 +34,15 @@ public:
     void testGetDataFields();
     void testGetHiddenFields();
 
-    virtual css::uno::Reference< cpo::uno::XInterface > init() = 0;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > init() = 0;
 
 protected:
     ~XDataPilotDescriptor() {}
 
 private:
-    static void testGetDataPilotFields_Impl( css::uno::Reference< css::sheet::XDataPilotDescriptor > const & xDescr );
+    static void testGetDataPilotFields_Impl( cpo::uno::Reference< css::sheet::XDataPilotDescriptor > const & xDescr );
 
-    static void checkName( css::uno::Reference< css::container::XIndexAccess > const & xIndex, std::size_t nIndex );
+    static void checkName( cpo::uno::Reference< css::container::XIndexAccess > const & xIndex, std::size_t nIndex );
     static std::vector<OUString> maFieldNames;
 };
 

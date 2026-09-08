@@ -48,7 +48,7 @@
 
 using namespace com::sun::star;
 using ::com::sun::star::frame::XFrame;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 
 #define TRANSCOL COL_WHITE
 

@@ -42,8 +42,8 @@
 #include <toolkit/helper/vclunohelper.hxx>
 
 using namespace css;
-using namespace css::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace css::lang;
 using namespace css::beans;
 
@@ -295,9 +295,9 @@ sal_Int32 DocumentToGraphicRenderer::getCurrentPageWriter()
 
 // static
 bool DocumentToGraphicRenderer::isShapeSelected(
-        css::uno::Reference< css::drawing::XShapes > & rxShapes,
-        css::uno::Reference< css::drawing::XShape > & rxShape,
-        const css::uno::Reference< css::frame::XController > & rxController )
+        cpo::uno::Reference< css::drawing::XShapes > & rxShapes,
+        cpo::uno::Reference< css::drawing::XShape > & rxShape,
+        const cpo::uno::Reference< css::frame::XController > & rxController )
 {
     bool bShape = false;
     if (rxController.is())

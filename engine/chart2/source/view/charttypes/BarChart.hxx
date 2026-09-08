@@ -47,7 +47,7 @@ private: //methods
                         , const css::drawing::Position3D& rPosition
                         , const css::drawing::Direction3D& rSize
                         , double fTopHeight, sal_Int32 nRotateZAngleHundredthDegree
-                        , const css::uno::Reference< css::beans::XPropertySet >& xObjectProperties
+                        , const cpo::uno::Reference< css::beans::XPropertySet >& xObjectProperties
                         , sal_Int32 nGeometry3D );
 
     css::awt::Point getLabelScreenPositionAndAlignment(

@@ -29,7 +29,7 @@
 #include <com/sun/star/reflection/theCoreReflection.hpp>
 #include <cpo/uno/Any.hxx>
 #include <cpo/uno/Exception.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Type.hxx>
 #include <cpo/uno/TypeClass.hpp>
 #include <cpo/uno/XComponentContext.hpp>
@@ -45,12 +45,12 @@
 
 namespace {
 
-cpo::uno::Type translateType(css::uno::Reference<css::reflection::XIdlClass> const & type) {
+cpo::uno::Type translateType(cpo::uno::Reference<css::reflection::XIdlClass> const & type) {
     return cpo::uno::Type(type->getTypeClass(), type->getName());
 }
 
 void printUnoValue(
-    std::ostream & out, css::uno::Reference<css::reflection::XIdlReflection> const & reflections,
+    std::ostream & out, cpo::uno::Reference<css::reflection::XIdlReflection> const & reflections,
     cpo::uno::Type const & type, cpo::uno::Any const & value)
 {
     switch (type.getTypeClass()) {
@@ -115,8 +115,8 @@ void printUnoValue(
         break;
     case cpo::uno::TypeClass_SEQUENCE:
         {
-            css::uno::Reference<css::reflection::XIdlClass> const refl(
-                reflections->forName(type.getTypeName()), css::uno::UNO_SET_THROW);
+            cpo::uno::Reference<css::reflection::XIdlClass> const refl(
+                reflections->forName(type.getTypeName()), cpo::uno::UNO_SET_THROW);
             auto const t = translateType(refl->getComponentType());
             auto const array = refl->getArray();
             auto const n = array->getLen(value);
@@ -138,9 +138,9 @@ void printUnoValue(
         {
             out << '{';
             auto first = true;
-            for (auto const & f: css::uno::Reference<css::reflection::XIdlClass>(
+            for (auto const & f: cpo::uno::Reference<css::reflection::XIdlClass>(
                      reflections->forName(type.getTypeName()),
-                     css::uno::UNO_SET_THROW)->getFields())
+                     cpo::uno::UNO_SET_THROW)->getFields())
             {
                 if (first) {
                     first = false;

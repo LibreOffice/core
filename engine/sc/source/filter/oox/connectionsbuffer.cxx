@@ -32,7 +32,7 @@
 
 namespace oox::xls {
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 namespace {
@@ -337,7 +337,7 @@ void Connection::importXFifteenRangePr(const AttributeList& rAttribs)
 }
 
 cpo::uno::Sequence<cpo::uno::Any> Connection::getSequenceOfAny(
-    const css::uno::Reference<css::xml::sax::XFastAttributeList>& xFastAttributeList)
+    const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xFastAttributeList)
 {
     cpo::uno::Sequence<css::xml::FastAttribute> aFast = xFastAttributeList->getFastAttributes();
     cpo::uno::Sequence<css::xml::Attribute> aUnk = xFastAttributeList->getUnknownAttributes();

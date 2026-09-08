@@ -37,7 +37,7 @@ namespace framework
         using svt::PopupMenuControllerBase::disposing;
 
         public:
-            ToolbarsMenuController( const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
+            ToolbarsMenuController( const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext );
             virtual ~ToolbarsMenuController() override;
 
             /* interface XServiceInfo */
@@ -46,7 +46,7 @@ namespace framework
             virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
             // XPopupMenuController
-            virtual void setPopupMenu( const css::uno::Reference< css::awt::XPopupMenu >& PopupMenu ) override;
+            virtual void setPopupMenu( const cpo::uno::Reference< css::awt::XPopupMenu >& PopupMenu ) override;
 
             // XStatusListener
             virtual void statusChanged( const css::frame::FeatureStateEvent& Event ) override;
@@ -60,7 +60,7 @@ namespace framework
 
             struct ExecuteInfo
             {
-                css::uno::Reference< css::frame::XDispatch >     xDispatch;
+                cpo::uno::Reference< css::frame::XDispatch >     xDispatch;
                 css::util::URL                                   aTargetURL;
             };
 
@@ -70,15 +70,15 @@ namespace framework
             // XInitialization
             virtual void initializeImpl( std::unique_lock<std::mutex>& rGuard, const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
-            void fillPopupMenu( css::uno::Reference< css::awt::XPopupMenu > const & rPopupMenu );
-            static cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > > getLayoutManagerToolbars( const css::uno::Reference< css::frame::XLayoutManager >& rLayoutManager );
-            css::uno::Reference< css::frame::XDispatch > getDispatchFromCommandURL( const OUString& rCommandURL );
-            void addCommand( css::uno::Reference< css::awt::XPopupMenu > const & rPopupMenu, const OUString& rCommandURL, const OUString& aLabel );
+            void fillPopupMenu( cpo::uno::Reference< css::awt::XPopupMenu > const & rPopupMenu );
+            static cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > > getLayoutManagerToolbars( const cpo::uno::Reference< css::frame::XLayoutManager >& rLayoutManager );
+            cpo::uno::Reference< css::frame::XDispatch > getDispatchFromCommandURL( const OUString& rCommandURL );
+            void addCommand( cpo::uno::Reference< css::awt::XPopupMenu > const & rPopupMenu, const OUString& rCommandURL, const OUString& aLabel );
 
-            css::uno::Reference< cpo::uno::XComponentContext >        m_xContext;
-            css::uno::Reference< css::container::XNameAccess >        m_xPersistentWindowState;
-            css::uno::Reference< css::ui::XUIConfigurationManager >   m_xModuleCfgMgr;
-            css::uno::Reference< css::ui::XUIConfigurationManager >   m_xDocCfgMgr;
+            cpo::uno::Reference< cpo::uno::XComponentContext >        m_xContext;
+            cpo::uno::Reference< css::container::XNameAccess >        m_xPersistentWindowState;
+            cpo::uno::Reference< css::ui::XUIConfigurationManager >   m_xModuleCfgMgr;
+            cpo::uno::Reference< css::ui::XUIConfigurationManager >   m_xDocCfgMgr;
             bool                                                      m_bResetActive;
             std::vector< OUString >                                   m_aCommandVector;
             IntlWrapper                                               m_aIntlWrapper;

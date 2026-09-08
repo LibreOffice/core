@@ -35,7 +35,7 @@ class SAL_DLLPUBLIC_TEMPLATE SaxNamespaceFilter_Base : public cppu::WeakImplHelp
 class SaxNamespaceFilter final : public SaxNamespaceFilter_Base
 {
     public:
-        SaxNamespaceFilter( css::uno::Reference< css::xml::sax::XDocumentHandler > const & rSax1DocumentHandler );
+        SaxNamespaceFilter( cpo::uno::Reference< css::xml::sax::XDocumentHandler > const & rSax1DocumentHandler );
         virtual ~SaxNamespaceFilter() override;
 
         // XDocumentHandler
@@ -45,7 +45,7 @@ class SaxNamespaceFilter final : public SaxNamespaceFilter_Base
 
         virtual void startElement(
             const OUString& aName,
-            const css::uno::Reference< css::xml::sax::XAttributeList > &xAttribs) override;
+            const cpo::uno::Reference< css::xml::sax::XAttributeList > &xAttribs) override;
 
         virtual void endElement(const OUString& aName) override;
 
@@ -57,15 +57,15 @@ class SaxNamespaceFilter final : public SaxNamespaceFilter_Base
                                                     const OUString& aData) override;
 
         virtual void setDocumentLocator(
-            const css::uno::Reference< css::xml::sax::XLocator > &xLocator) override;
+            const cpo::uno::Reference< css::xml::sax::XLocator > &xLocator) override;
 
     private:
         typedef ::std::stack< XMLNamespaces > NamespaceStack;
 
         OUString getErrorLineString();
 
-        css::uno::Reference< css::xml::sax::XLocator >          m_xLocator;
-        css::uno::Reference< css::xml::sax::XDocumentHandler>   xDocumentHandler;
+        cpo::uno::Reference< css::xml::sax::XLocator >          m_xLocator;
+        cpo::uno::Reference< css::xml::sax::XDocumentHandler>   xDocumentHandler;
         NamespaceStack                                          m_aNamespaceStack;
 };
 

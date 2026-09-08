@@ -42,10 +42,11 @@
 
 using namespace comphelper;
 using namespace css;
+using namespace ::cpo;
 
 CertificateChooser::CertificateChooser(weld::Window* _pParent,
                                        SfxViewShell* pViewShell,
-                                       std::vector< css::uno::Reference< css::xml::crypto::XXMLSecurityContext > > && rxSecurityContexts,
+                                       std::vector< cpo::uno::Reference< css::xml::crypto::XXMLSecurityContext > > && rxSecurityContexts,
                                        CertificateChooserUserAction eAction)
     : GenericDialogController(_pParent, u"xmlsec/ui/selectcertificatedialog.ui"_ustr, u"SelectCertificateDialog"_ustr)
     , meAction(eAction)

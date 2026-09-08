@@ -39,7 +39,7 @@
 
 namespace framework{
 
-PersistentWindowState::PersistentWindowState(css::uno::Reference< cpo::uno::XComponentContext >  xContext)
+PersistentWindowState::PersistentWindowState(cpo::uno::Reference< cpo::uno::XComponentContext >  xContext)
     : m_xContext              (std::move(xContext                     ))
     , m_bWindowStateAlreadySet(false                    )
 {
@@ -52,7 +52,7 @@ PersistentWindowState::~PersistentWindowState()
 void PersistentWindowState::initialize(const cpo::uno::Sequence< cpo::uno::Any >& lArguments)
 {
     // check arguments
-    css::uno::Reference< css::frame::XFrame > xFrame;
+    cpo::uno::Reference< css::frame::XFrame > xFrame;
     if (!lArguments.hasElements())
         throw css::lang::IllegalArgumentException(
                 u"Empty argument list!"_ustr,
@@ -81,13 +81,13 @@ void PersistentWindowState::frameAction(const css::frame::FrameActionEvent& aEve
     if( comphelper::COKit::isActive() )
         return;
 
-    css::uno::Reference< cpo::uno::XComponentContext >     xContext;
-    css::uno::Reference< css::frame::XFrame >              xFrame;
+    cpo::uno::Reference< cpo::uno::XComponentContext >     xContext;
+    cpo::uno::Reference< css::frame::XFrame >              xFrame;
     bool                                               bRestoreWindowState;
     {
         SolarMutexGuard g;
         xContext = m_xContext;
-        xFrame.set(m_xFrame.get(), css::uno::UNO_QUERY);
+        xFrame.set(m_xFrame.get(), cpo::uno::UNO_QUERY);
         bRestoreWindowState = !m_bWindowStateAlreadySet;
     }
 
@@ -96,7 +96,7 @@ void PersistentWindowState::frameAction(const css::frame::FrameActionEvent& aEve
         return;
 
     // no window -> no position and size available
-    css::uno::Reference< css::awt::XWindow > xWindow = xFrame->getContainerWindow();
+    cpo::uno::Reference< css::awt::XWindow > xWindow = xFrame->getContainerWindow();
     if (!xWindow.is())
         return;
 
@@ -105,7 +105,7 @@ void PersistentWindowState::frameAction(const css::frame::FrameActionEvent& aEve
     if (sModuleName.isEmpty())
         return;
 
-    css::uno::Reference<css::frame::XModel> xModel;
+    cpo::uno::Reference<css::frame::XModel> xModel;
     if (auto xController = xFrame->getController())
         xModel = xController->getModel();
 
@@ -145,19 +145,19 @@ void PersistentWindowState::frameAction(const css::frame::FrameActionEvent& aEve
 
 void PersistentWindowState::disposing(const css::lang::EventObject&)
 {
-    css::uno::Reference< css::frame::XFrame > xFrame(m_xFrame.get(), css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::frame::XFrame > xFrame(m_xFrame.get(), cpo::uno::UNO_QUERY);
     if (xFrame.is())
         xFrame->removeFrameActionListener(this);
 
     // nothing todo here - because we hold the frame as weak reference only
 }
 
-OUString PersistentWindowState::implst_identifyModule(const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
-                                                             const css::uno::Reference< css::frame::XFrame >&              xFrame)
+OUString PersistentWindowState::implst_identifyModule(const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+                                                             const cpo::uno::Reference< css::frame::XFrame >&              xFrame)
 {
     OUString sModuleName;
 
-    css::uno::Reference< css::frame::XModuleManager2 > xModuleManager =
+    cpo::uno::Reference< css::frame::XModuleManager2 > xModuleManager =
         css::frame::ModuleManager::create( rxContext );
 
     try
@@ -173,7 +173,7 @@ OUString PersistentWindowState::implst_identifyModule(const css::uno::Reference<
 }
 
 OUString PersistentWindowState::implst_getWindowStateFromConfig(
-        const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
         std::u16string_view sModuleName)
 {
     OUString sWindowState;
@@ -194,7 +194,7 @@ OUString PersistentWindowState::implst_getWindowStateFromConfig(
 }
 
 void PersistentWindowState::implst_setWindowStateOnConfig(
-        const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
         std::u16string_view sModuleName, const OUString& sWindowState)
 {
     try
@@ -212,7 +212,7 @@ void PersistentWindowState::implst_setWindowStateOnConfig(
         {}
 }
 
-OUString PersistentWindowState::implst_getWindowStateFromWindow(const css::uno::Reference< css::awt::XWindow >& xWindow)
+OUString PersistentWindowState::implst_getWindowStateFromWindow(const cpo::uno::Reference< css::awt::XWindow >& xWindow)
 {
     OUString sWindowState;
 
@@ -234,7 +234,7 @@ OUString PersistentWindowState::implst_getWindowStateFromWindow(const css::uno::
     return sWindowState;
 }
 
-void PersistentWindowState::implst_setWindowStateOnWindow(const css::uno::Reference< css::awt::XWindow >& xWindow     ,
+void PersistentWindowState::implst_setWindowStateOnWindow(const cpo::uno::Reference< css::awt::XWindow >& xWindow     ,
                                                           std::u16string_view                      sWindowState)
 {
     if (
@@ -271,8 +271,8 @@ void PersistentWindowState::implst_setWindowStateOnWindow(const css::uno::Refere
 }
 
 //static
-void PersistentWindowState::SaveWindowStateToConfig(const css::uno::Reference<cpo::uno::XComponentContext>& rContext,
-                                                    const css::uno::Reference<css::frame::XFrame>& rFrame)
+void PersistentWindowState::SaveWindowStateToConfig(const cpo::uno::Reference<cpo::uno::XComponentContext>& rContext,
+                                                    const cpo::uno::Reference<css::frame::XFrame>& rFrame)
 {
     // We don't want to do this stuff when being used through COKit
     if (comphelper::COKit::isActive())
@@ -281,7 +281,7 @@ void PersistentWindowState::SaveWindowStateToConfig(const css::uno::Reference<cp
     if (!rFrame.is())
         return;
 
-    css::uno::Reference<css::awt::XWindow> xWindow = rFrame->getContainerWindow();
+    cpo::uno::Reference<css::awt::XWindow> xWindow = rFrame->getContainerWindow();
     if (!xWindow.is())
         return;
 
@@ -294,7 +294,7 @@ void PersistentWindowState::SaveWindowStateToConfig(const css::uno::Reference<cp
     PersistentWindowState::implst_setWindowStateOnConfig(rContext, sModuleName, sWindowState);
 }
 
-OUString PersistentWindowState::implst_getWindowStateFromModel(const css::uno::Reference<css::frame::XModel>& xModel)
+OUString PersistentWindowState::implst_getWindowStateFromModel(const cpo::uno::Reference<css::frame::XModel>& xModel)
 {
     if (!xModel)
         return {};
@@ -303,7 +303,7 @@ OUString PersistentWindowState::implst_getWindowStateFromModel(const css::uno::R
 
     if (auto xViewDataSupplier = xModel.query<css::document::XViewDataSupplier>())
     {
-        css::uno::Reference<css::container::XIndexAccess> xIndexAccess(xViewDataSupplier->getViewData());
+        cpo::uno::Reference<css::container::XIndexAccess> xIndexAccess(xViewDataSupplier->getViewData());
         if (xIndexAccess && xIndexAccess->getCount() > 0)
         {
             cpo::uno::Sequence<css::beans::PropertyValue> aSeq;

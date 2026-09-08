@@ -32,7 +32,7 @@
 #include <com/sun/star/io/IOException.hpp>
 #include <cppuhelper/exc_hlp.hxx>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::xml::sax;
@@ -42,7 +42,7 @@ using namespace ::com::sun::star::io;
 namespace framework
 {
 
-MenuConfiguration::MenuConfiguration( css::uno::Reference< cpo::uno::XComponentContext > xContext )
+MenuConfiguration::MenuConfiguration( cpo::uno::Reference< cpo::uno::XComponentContext > xContext )
 :   m_xContext(std::move( xContext ))
 {
 }

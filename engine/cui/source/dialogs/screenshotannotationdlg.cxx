@@ -56,6 +56,7 @@
 #include <cppuhelper/implbase.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 namespace
 {
@@ -339,7 +340,7 @@ IMPL_LINK_NOARG(ScreenshotAnnotationDlg_Impl, copyButtonHandler, weld::Button&, 
     // Create a BitmapTransferable
     rtl::Reference<TransferableHelper> xClipCntnr = new BitmapTransferable(aTargetBitmap);
     // Get the system clipboard
-    css::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipboard =
+    cpo::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipboard =
         css::datatransfer::clipboard::SystemClipboard::create(
             comphelper::getProcessComponentContext());
 

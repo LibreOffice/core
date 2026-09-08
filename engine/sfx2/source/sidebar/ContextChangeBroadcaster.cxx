@@ -29,7 +29,7 @@
 #include <sfx2/viewsh.hxx>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo::uno;
 
 namespace sfx2::sidebar {
 
@@ -47,13 +47,13 @@ void ContextChangeBroadcaster::Initialize (const OUString& rsContextName)
     msContextName = rsContextName;
 }
 
-void ContextChangeBroadcaster::Activate (const css::uno::Reference<css::frame::XFrame>& rxFrame)
+void ContextChangeBroadcaster::Activate (const cpo::uno::Reference<css::frame::XFrame>& rxFrame)
 {
     if (msContextName.getLength() > 0)
         BroadcastContextChange(rxFrame, GetModuleName(rxFrame), msContextName);
 }
 
-void ContextChangeBroadcaster::Deactivate (const css::uno::Reference<css::frame::XFrame>& rxFrame)
+void ContextChangeBroadcaster::Deactivate (const cpo::uno::Reference<css::frame::XFrame>& rxFrame)
 {
     if (msContextName.getLength() > 0 && !comphelper::COKit::isActive())
     {
@@ -70,7 +70,7 @@ bool ContextChangeBroadcaster::SetBroadcasterEnabled (const bool bIsEnabled)
 }
 
 void ContextChangeBroadcaster::BroadcastContextChange (
-    const css::uno::Reference<css::frame::XFrame>& rxFrame,
+    const cpo::uno::Reference<css::frame::XFrame>& rxFrame,
     const OUString& rsModuleName,
     const OUString& rsContextName)
 {
@@ -98,14 +98,14 @@ void ContextChangeBroadcaster::BroadcastContextChange (
         KitHelper::notifyContextChange(aEvent);
     }
 
-    css::uno::Reference<css::ui::XContextChangeEventMultiplexer> xMultiplexer (
+    cpo::uno::Reference<css::ui::XContextChangeEventMultiplexer> xMultiplexer (
         css::ui::ContextChangeEventMultiplexer::get(
             ::comphelper::getProcessComponentContext()));
     if (xMultiplexer.is())
         xMultiplexer->broadcastContextChangeEvent(aEvent, rxFrame->getController());
 }
 
-OUString ContextChangeBroadcaster::GetModuleName (const css::uno::Reference<css::frame::XFrame>& rxFrame)
+OUString ContextChangeBroadcaster::GetModuleName (const cpo::uno::Reference<css::frame::XFrame>& rxFrame)
 {
     if ( ! rxFrame.is() || ! rxFrame->getController().is())
         return OUString();

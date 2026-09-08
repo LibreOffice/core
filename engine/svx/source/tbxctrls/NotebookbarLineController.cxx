@@ -29,6 +29,7 @@
 #include <vcl/weldutils.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 namespace
 {

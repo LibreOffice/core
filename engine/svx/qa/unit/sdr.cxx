@@ -37,6 +37,7 @@
 #include <sdr/contact/objectcontactofobjlistpainter.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace
 {

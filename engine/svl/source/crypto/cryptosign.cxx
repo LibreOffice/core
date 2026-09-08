@@ -2154,7 +2154,7 @@ OUString GetSubjectName(PCCERT_CONTEXT pCertContext)
     void ensureNssInit()
     {
         // e.g. tdf#122599 ensure NSS library is initialized for NSS_CMSMessage_CreateFromDER
-        css::uno::Reference<css::xml::crypto::XNSSInitializer>
+        cpo::uno::Reference<css::xml::crypto::XNSSInitializer>
             xNSSInitializer = css::xml::crypto::NSSInitializer::create(comphelper::getProcessComponentContext());
 
         // this calls NSS_Init

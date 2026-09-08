@@ -98,9 +98,9 @@ class UCBHELPER_DLLPUBLIC ContentImplHelper :
 
 protected:
     osl::Mutex                       m_aMutex;
-    css::uno::Reference< cpo::uno::XComponentContext >
+    cpo::uno::Reference< cpo::uno::XComponentContext >
                                      m_xContext;
-    css::uno::Reference< css::ucb::XContentIdentifier >
+    cpo::uno::Reference< css::ucb::XContentIdentifier >
                                      m_xIdentifier;
     rtl::Reference< ContentProviderImplHelper >
                                      m_xProvider;
@@ -121,7 +121,7 @@ private:
       */
     UCBHELPER_DLLPRIVATE
     virtual cpo::uno::Sequence< css::beans::Property >
-    getProperties( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv ) = 0;
+    getProperties( const cpo::uno::Reference< css::ucb::XCommandEnvironment > & xEnv ) = 0;
 
     /**
       * Your implementation of this method must return a sequence containing
@@ -132,7 +132,7 @@ private:
       */
     UCBHELPER_DLLPRIVATE
     virtual cpo::uno::Sequence< css::ucb::CommandInfo >
-    getCommands( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv ) = 0;
+    getCommands( const cpo::uno::Reference< css::ucb::XCommandEnvironment > & xEnv ) = 0;
 
     /**
       * The implementation of this method shall return the URL of the parent
@@ -159,8 +159,8 @@ protected:
       * @return an XPropertySetInfo implementation object containing meta data
       *         for the properties supported by this content.
       */
-    css::uno::Reference< css::beans::XPropertySetInfo >
-    getPropertySetInfo( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv,
+    cpo::uno::Reference< css::beans::XPropertySetInfo >
+    getPropertySetInfo( const cpo::uno::Reference< css::ucb::XCommandEnvironment > & xEnv,
                         bool bCache = true );
 
     /**
@@ -174,8 +174,8 @@ protected:
       * @return an XCommandInfo implementation object containing meta data
       *         for the commands supported by this content.
       */
-    css::uno::Reference< css::ucb::XCommandInfo >
-    getCommandInfo( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv,
+    cpo::uno::Reference< css::ucb::XCommandInfo >
+    getCommandInfo( const cpo::uno::Reference< css::ucb::XCommandEnvironment > & xEnv,
                     bool bCache = true );
 
     /**
@@ -231,7 +231,7 @@ protected:
       * @param  rNewId is the new content identifier for the content.
       * @return a success indicator.
       */
-    bool exchange( const css::uno::Reference< css::ucb::XContentIdentifier >& rNewId );
+    bool exchange( const cpo::uno::Reference< css::ucb::XContentIdentifier >& rNewId );
 
     /**
       * Use this method to get access to the Additional Core Properties of
@@ -244,7 +244,7 @@ protected:
       * @return the implementation of the service
       *         com.sun.star.ucb.PersistentPropertySet.
       */
-    css::uno::Reference< css::ucb::XPersistentPropertySet >
+    cpo::uno::Reference< css::ucb::XPersistentPropertySet >
     getAdditionalPropertySet( bool bCreate );
 
     /**
@@ -293,9 +293,9 @@ public:
       * @param Identifier is the content identifier for the content.
       */
     ContentImplHelper(
-            css::uno::Reference< cpo::uno::XComponentContext > xContext,
+            cpo::uno::Reference< cpo::uno::XComponentContext > xContext,
             rtl::Reference< ContentProviderImplHelper > xProvider,
-            css::uno::Reference< css::ucb::XContentIdentifier > Identifier );
+            cpo::uno::Reference< css::ucb::XContentIdentifier > Identifier );
 
     /**
       * Destructor.
@@ -330,21 +330,21 @@ public:
     virtual void
     dispose() override;
     virtual void
-    addEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener ) override;
+    addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& Listener ) override;
     virtual void
-    removeEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener ) override;
+    removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& Listener ) override;
 
     // XContent
-    virtual css::uno::Reference< css::ucb::XContentIdentifier >
+    virtual cpo::uno::Reference< css::ucb::XContentIdentifier >
     getIdentifier() override;
     virtual OUString
     getContentType() override = 0;
     virtual void
     addContentEventListener(
-        const css::uno::Reference< css::ucb::XContentEventListener >& Listener ) override;
+        const cpo::uno::Reference< css::ucb::XContentEventListener >& Listener ) override;
     virtual void
     removeContentEventListener(
-        const css::uno::Reference< css::ucb::XContentEventListener >& Listener ) override;
+        const cpo::uno::Reference< css::ucb::XContentEventListener >& Listener ) override;
 
     // XCommandProcessor
     virtual sal_Int32
@@ -352,7 +352,7 @@ public:
     virtual cpo::uno::Any
     execute( const css::ucb::Command& aCommand,
              sal_Int32 CommandId,
-             const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment ) override = 0;
+             const cpo::uno::Reference< css::ucb::XCommandEnvironment >& Environment ) override = 0;
     virtual void
     abort( sal_Int32 CommandId ) override = 0;
 
@@ -360,19 +360,19 @@ public:
     virtual void
     addPropertiesChangeListener(
         const cpo::uno::Sequence< OUString >& PropertyNames,
-         const css::uno::Reference< css::beans::XPropertiesChangeListener >& Listener ) override;
+         const cpo::uno::Reference< css::beans::XPropertiesChangeListener >& Listener ) override;
     virtual void
     removePropertiesChangeListener(
         const cpo::uno::Sequence< OUString >& PropertyNames,
-        const css::uno::Reference< css::beans::XPropertiesChangeListener >& Listener ) override;
+        const cpo::uno::Reference< css::beans::XPropertiesChangeListener >& Listener ) override;
 
     // XCommandInfoChangeNotifier
     virtual void
     addCommandInfoChangeListener(
-        const css::uno::Reference< css::ucb::XCommandInfoChangeListener >& Listener ) override;
+        const cpo::uno::Reference< css::ucb::XCommandInfoChangeListener >& Listener ) override;
     virtual void
     removeCommandInfoChangeListener(
-        const css::uno::Reference< css::ucb::XCommandInfoChangeListener >& Listener ) override;
+        const cpo::uno::Reference< css::ucb::XCommandInfoChangeListener >& Listener ) override;
 
     // XPropertyContainer
 
@@ -407,10 +407,10 @@ public:
     // XPropertySetInfoChangeNotifier
     virtual void
     addPropertySetInfoChangeListener(
-        const css::uno::Reference< css::beans::XPropertySetInfoChangeListener >& Listener ) override;
+        const cpo::uno::Reference< css::beans::XPropertySetInfoChangeListener >& Listener ) override;
     virtual void
     removePropertySetInfoChangeListener(
-        const css::uno::Reference< css::beans::XPropertySetInfoChangeListener >& Listener ) override;
+        const cpo::uno::Reference< css::beans::XPropertySetInfoChangeListener >& Listener ) override;
 
     // XChild
 
@@ -419,14 +419,14 @@ public:
       * if such a parent exists. The implementation of this method uses your
       * implementation of getParentURL.
       */
-    virtual css::uno::Reference< cpo::uno::XInterface >
+    virtual cpo::uno::Reference< cpo::uno::XInterface >
     getParent() override;
 
     /**
       * The implementation of this method always throws a NoSupportException.
       */
     virtual void
-    setParent( const css::uno::Reference< cpo::uno::XInterface >& Parent ) override;
+    setParent( const cpo::uno::Reference< cpo::uno::XInterface >& Parent ) override;
 
 
     // Non-interface methods.

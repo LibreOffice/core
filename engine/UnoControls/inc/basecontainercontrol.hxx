@@ -29,7 +29,7 @@ namespace unocontrols {
 
 struct IMPL_ControlInfo
 {
-    css::uno::Reference< css::awt::XControl > xControl;
+    cpo::uno::Reference< css::awt::XControl > xControl;
     OUString                                  sName;
 };
 
@@ -41,22 +41,22 @@ class BaseContainerControl : public BaseContainerControl_BASE
 {
 public:
 
-    BaseContainerControl( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+    BaseContainerControl( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
     virtual ~BaseContainerControl() override;
 
     //  XControl
 
     virtual void createPeer(
-        const css::uno::Reference< css::awt::XToolkit >&      xToolkit ,
-        const css::uno::Reference< css::awt::XWindowPeer >&   xParent
+        const cpo::uno::Reference< css::awt::XToolkit >&      xToolkit ,
+        const cpo::uno::Reference< css::awt::XWindowPeer >&   xParent
     ) override;
 
     virtual bool setModel(
-        const css::uno::Reference< css::awt::XControlModel >& xModel
+        const cpo::uno::Reference< css::awt::XControlModel >& xModel
     ) override;
 
-    virtual css::uno::Reference< css::awt::XControlModel > getModel() override;
+    virtual cpo::uno::Reference< css::awt::XControlModel > getModel() override;
 
     //  XComponent
 
@@ -70,22 +70,22 @@ public:
 
     virtual void addControl(
         const OUString&                                     sName    ,
-        const css::uno::Reference< css::awt::XControl >&    xControl
+        const cpo::uno::Reference< css::awt::XControl >&    xControl
     ) override;
 
     virtual void removeControl(
-        const css::uno::Reference< css::awt::XControl >& xControl
+        const cpo::uno::Reference< css::awt::XControl >& xControl
     ) override;
 
     virtual void setStatusText(
         const OUString& sStatusText
     ) override;
 
-    virtual css::uno::Reference< css::awt::XControl > getControl(
+    virtual cpo::uno::Reference< css::awt::XControl > getControl(
         const OUString& sName
     ) override;
 
-    virtual cpo::uno::Sequence< css::uno::Reference< css::awt::XControl > > getControls() override;
+    virtual cpo::uno::Sequence< cpo::uno::Reference< css::awt::XControl > > getControls() override;
 
     //  XWindow
 
@@ -95,14 +95,14 @@ protected:
     using WeakComponentImplHelperBase::disposing;
 
     virtual css::awt::WindowDescriptor impl_getWindowDescriptor(
-        const css::uno::Reference< css::awt::XWindowPeer >& xParentPeer
+        const cpo::uno::Reference< css::awt::XWindowPeer >& xParentPeer
     ) override;
 
 
     virtual void impl_paint(
         sal_Int32                                           nX ,
         sal_Int32                                           nY ,
-        const   css::uno::Reference< css::awt::XGraphics >&   xGraphics
+        const   cpo::uno::Reference< css::awt::XGraphics >&   xGraphics
     ) override;
 
 private:

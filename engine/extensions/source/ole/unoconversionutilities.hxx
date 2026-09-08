@@ -121,13 +121,13 @@ template< class >
 class UnoConversionUtilities
 {
 public:
-    explicit UnoConversionUtilities( const css::uno::Reference<css::lang::XMultiServiceFactory> & smgr):
+    explicit UnoConversionUtilities( const cpo::uno::Reference<css::lang::XMultiServiceFactory> & smgr):
         m_nUnoWrapperClass( INTERFACE_OLE_WRAPPER_IMPL),
         m_nComWrapperClass( IUNKNOWN_WRAPPER_IMPL),
         m_smgr( smgr)
     {}
 
-    UnoConversionUtilities( const css::uno::Reference<css::lang::XMultiServiceFactory> & xFactory, sal_uInt8 unoWrapperClass, sal_uInt8 comWrapperClass )
+    UnoConversionUtilities( const cpo::uno::Reference<css::lang::XMultiServiceFactory> & xFactory, sal_uInt8 unoWrapperClass, sal_uInt8 comWrapperClass )
         : m_nUnoWrapperClass(unoWrapperClass),
           m_nComWrapperClass(comWrapperClass), m_smgr(xFactory)
     {}
@@ -194,18 +194,18 @@ public:
 
 
     VARTYPE mapTypeClassToVartype( cpo::uno::TypeClass type);
-    css::uno::Reference< css::lang::XSingleServiceFactory > getInvocationFactory(const cpo::uno::Any& anyObject);
+    cpo::uno::Reference< css::lang::XSingleServiceFactory > getInvocationFactory(const cpo::uno::Any& anyObject);
 
 
-    virtual css::uno::Reference< cpo::uno::XInterface > createUnoWrapperInstance()=0;
-    virtual css::uno::Reference< cpo::uno::XInterface > createComWrapperInstance()=0;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > createUnoWrapperInstance()=0;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > createComWrapperInstance()=0;
 
     static bool isJScriptArray(const VARIANT* pvar);
 
     cpo::uno::Sequence<cpo::uno::Type> getImplementedInterfaces(IUnknown* pUnk);
 
 protected:
-    css::uno::Reference<cpo::uno::XInterface> createAdapter(const cpo::uno::Sequence<cpo::uno::Type>& types, const css::uno::Reference<cpo::uno::XInterface>& receiver);
+    cpo::uno::Reference<cpo::uno::XInterface> createAdapter(const cpo::uno::Sequence<cpo::uno::Type>& types, const cpo::uno::Reference<cpo::uno::XInterface>& receiver);
 
     // helper function for Sequence conversion
     void getElementCountAndTypeOfSequence( const cpo::uno::Any& rSeq, sal_Int32 dim, cpo::uno::Sequence< sal_Int32 >& seqElementCounts, cpo::uno::TypeDescription& typeDesc);
@@ -218,7 +218,7 @@ protected:
     static cpo::uno::Type getElementTypeOfSequence( const cpo::uno::Type& seqType);
 
     //Provides a typeconverter
-    css::uno::Reference<css::script::XTypeConverter> getTypeConverter();
+    cpo::uno::Reference<css::script::XTypeConverter> getTypeConverter();
 
     // This member determines what class is used to convert a UNO object
     // or struct to a COM object. It is passed along to the anyToVariant
@@ -232,18 +232,18 @@ protected:
     // manager that is to be used.
     // Local service manager as supplied by the loader when the creator function
     // of the service is being called.
-    css::uno::Reference<css::lang::XMultiServiceFactory> m_smgr;
+    cpo::uno::Reference<css::lang::XMultiServiceFactory> m_smgr;
     // An explicitly supplied service manager when the service
     // com.sun.star.bridge.OleBridgeSupplierVar1 is used. That can be a remote
     // manager.
-    css::uno::Reference<css::lang::XMultiServiceFactory> m_smgrRemote;
-    css::uno::Reference<css::lang::XSingleServiceFactory> m_xInvocationFactoryLocal;
-    css::uno::Reference<css::lang::XSingleServiceFactory> m_xInvocationFactoryRemote;
+    cpo::uno::Reference<css::lang::XMultiServiceFactory> m_smgrRemote;
+    cpo::uno::Reference<css::lang::XSingleServiceFactory> m_xInvocationFactoryLocal;
+    cpo::uno::Reference<css::lang::XSingleServiceFactory> m_xInvocationFactoryRemote;
 
 private:
     // Holds the type converter which is used for sequence conversion etc.
     // Use the getTypeConverter function to obtain the interface.
-    css::uno::Reference<css::script::XTypeConverter> m_typeConverter;
+    cpo::uno::Reference<css::script::XTypeConverter> m_typeConverter;
 
 
 };
@@ -255,10 +255,10 @@ template < class T >
 bool convertSelfToCom( T& unoInterface, VARIANT * pVar)
 {
     bool ret = false;
-    css::uno::Reference< cpo::uno::XInterface > xInt( unoInterface, css::uno::UNO_QUERY);
+    cpo::uno::Reference< cpo::uno::XInterface > xInt( unoInterface, cpo::uno::UNO_QUERY);
     if( xInt.is())
     {
-        css::uno::Reference< css::bridge::XBridgeSupplier2 > xSupplier( xInt, css::uno::UNO_QUERY);
+        cpo::uno::Reference< css::bridge::XBridgeSupplier2 > xSupplier( xInt, cpo::uno::UNO_QUERY);
         if( xSupplier.is())
         {
             sal_Int8 arId[16];
@@ -298,21 +298,21 @@ bool convertSelfToCom( T& unoInterface, VARIANT * pVar)
 // Param anyObject - contains the object ( interface, struct) for what we need an invocation object.
 
 template<class T>
-css::uno::Reference< css::lang::XSingleServiceFactory > UnoConversionUtilities<T>::getInvocationFactory(const cpo::uno::Any& anyObject)
+cpo::uno::Reference< css::lang::XSingleServiceFactory > UnoConversionUtilities<T>::getInvocationFactory(const cpo::uno::Any& anyObject)
 {
-    css::uno::Reference< css::lang::XSingleServiceFactory > retVal;
+    cpo::uno::Reference< css::lang::XSingleServiceFactory > retVal;
     osl::MutexGuard guard( getBridgeMutex());
     if( anyObject.getValueTypeClass() != cpo::uno::TypeClass_STRUCT &&
         m_smgrRemote.is() )
     {
         if(  ! m_xInvocationFactoryRemote.is() )
-            m_xInvocationFactoryRemote.set(m_smgrRemote->createInstance( INVOCATION_SERVICE), css::uno::UNO_QUERY);
+            m_xInvocationFactoryRemote.set(m_smgrRemote->createInstance( INVOCATION_SERVICE), cpo::uno::UNO_QUERY);
         retVal= m_xInvocationFactoryRemote;
     }
     else
     {
         if( ! m_xInvocationFactoryLocal.is() )
-            m_xInvocationFactoryLocal.set(m_smgr->createInstance(INVOCATION_SERVICE ), css::uno::UNO_QUERY);
+            m_xInvocationFactoryLocal.set(m_smgr->createInstance(INVOCATION_SERVICE ), cpo::uno::UNO_QUERY);
         retVal= m_xInvocationFactoryLocal;
     }
     return retVal;
@@ -396,7 +396,7 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANTARG* pArg, cpo::uno::
                     {
                         VARTYPE oleType = ::sal::static_int_cast< VARTYPE, int >( var.vt ^ VT_ARRAY );
                         cpo::uno::Sequence<cpo::uno::Any> unoSeq = createOleArrayWrapper( var.parray, oleType, ptype);
-                        css::uno::Reference<css::script::XTypeConverter> conv = getTypeConverter();
+                        cpo::uno::Reference<css::script::XTypeConverter> conv = getTypeConverter();
                         if (conv.is())
                         {
                             try
@@ -595,7 +595,7 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANTARG* pArg, cpo::uno::
             throw css::lang::IllegalArgumentException(
                 "[automation bridge]UnoConversionUtilities<T>:variantToAny\n"
                 "The provided VARIANT of type\" " + OUString::number(static_cast<sal_Int32>(var.vt)) +
-                "\" is unappropriate for conversion!", css::uno::Reference<cpo::uno::XInterface>(), -1);
+                "\" is unappropriate for conversion!", cpo::uno::Reference<cpo::uno::XInterface>(), -1);
     }
     catch (const css::script::CannotConvertException &)
     {
@@ -717,7 +717,7 @@ void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const cpo::uno::
         {
         case cpo::uno::TypeClass_INTERFACE:
         {
-            css::uno::Reference<cpo::uno::XInterface> xInt;
+            cpo::uno::Reference<cpo::uno::XInterface> xInt;
             if (rAny >>= xInt)
             {
                 createUnoObjectWrapper(rAny, pVariant);
@@ -993,7 +993,7 @@ void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const cpo::uno::
                       "There is no conversion for this UNO type to an Automation type."
                       "The destination type class is the type class of the UNO "
                       "argument which was to be converted.",
-                css::uno::Reference<cpo::uno::XInterface>(), rAny.getValueTypeClass(),
+                cpo::uno::Reference<cpo::uno::XInterface>(), rAny.getValueTypeClass(),
                 css::script::FailReason::TYPE_NOT_SUPPORTED, 0);
 
             break;
@@ -1003,7 +1003,7 @@ void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const cpo::uno::
             throw css::lang::IllegalArgumentException(
                       "[automation bridge]UnoConversionUtilities<T>::anyToVariant\n"
                       "The provided any of type\" " + rAny.getValueTypeName() +
-                "\" is unappropriate for conversion!", css::uno::Reference<cpo::uno::XInterface>(), -1);
+                "\" is unappropriate for conversion!", cpo::uno::Reference<cpo::uno::XInterface>(), -1);
 
         }
     }
@@ -1371,7 +1371,7 @@ void UnoConversionUtilities<T>::createUnoObjectWrapper(const cpo::uno::Any & rOb
 {
     osl::MutexGuard guard(getBridgeMutex());
 
-    css::uno::Reference<cpo::uno::XInterface> xInt;
+    cpo::uno::Reference<cpo::uno::XInterface> xInt;
 
     cpo::uno::TypeClass tc = rObj.getValueTypeClass();
     if (tc != cpo::uno::TypeClass_INTERFACE && tc != cpo::uno::TypeClass_STRUCT)
@@ -1394,10 +1394,10 @@ void UnoConversionUtilities<T>::createUnoObjectWrapper(const cpo::uno::Any & rOb
             return;
         }
         //make sure we have the main XInterface which is used with a map
-        xInt.set(xInt, css::uno::UNO_QUERY);
+        xInt.set(xInt, cpo::uno::UNO_QUERY);
         //If there is already a wrapper for the UNO object then use it
 
-        css::uno::Reference<cpo::uno::XInterface> xIntWrapper;
+        cpo::uno::Reference<cpo::uno::XInterface> xIntWrapper;
         // Does a UNO wrapper exist already ?
         auto it_uno = UnoObjToWrapperMap.find( reinterpret_cast<sal_uIntPtr>(xInt.get()));
         if(it_uno != UnoObjToWrapperMap.end())
@@ -1413,7 +1413,7 @@ void UnoConversionUtilities<T>::createUnoObjectWrapper(const cpo::uno::Any & rOb
         // or does it supply an IDispatch by its own ?
         else
         {
-            css::uno::Reference<cpo::uno::XInterface> xIntComWrapper = xInt;
+            cpo::uno::Reference<cpo::uno::XInterface> xIntComWrapper = xInt;
 
             // Adapter? then get the COM wrapper to which the adapter delegates its calls
             auto it = AdapterToWrapperMap.find( reinterpret_cast<sal_uIntPtr>(xInt.get()));
@@ -1428,21 +1428,21 @@ void UnoConversionUtilities<T>::createUnoObjectWrapper(const cpo::uno::Any & rOb
     // a wrapper. For that we need an XInvocation.
 
     // create an XInvocation using the invocation service
-    css::uno::Reference<css::script::XInvocation> xInv;
-    css::uno::Reference<css::lang::XSingleServiceFactory> xInvFactory= getInvocationFactory(rObj);
+    cpo::uno::Reference<css::script::XInvocation> xInv;
+    cpo::uno::Reference<css::lang::XSingleServiceFactory> xInvFactory= getInvocationFactory(rObj);
     if (xInvFactory.is())
     {
         cpo::uno::Sequence<cpo::uno::Any> params(2);
         params.getArray()[0] = rObj;
         params.getArray()[1] <<= OUString("FromOLE");
-        css::uno::Reference<cpo::uno::XInterface> xInt2 = xInvFactory->createInstanceWithArguments(params);
-        xInv.set(xInt2, css::uno::UNO_QUERY);
+        cpo::uno::Reference<cpo::uno::XInterface> xInt2 = xInvFactory->createInstanceWithArguments(params);
+        xInv.set(xInt2, cpo::uno::UNO_QUERY);
     }
 
     if (xInv.is())
     {
-        css::uno::Reference<cpo::uno::XInterface> xNewWrapper = createUnoWrapperInstance();
-        css::uno::Reference<css::lang::XInitialization> xInitWrapper(xNewWrapper, css::uno::UNO_QUERY);
+        cpo::uno::Reference<cpo::uno::XInterface> xNewWrapper = createUnoWrapperInstance();
+        cpo::uno::Reference<css::lang::XInitialization> xInitWrapper(xNewWrapper, cpo::uno::UNO_QUERY);
         if (xInitWrapper.is())
         {
             VARTYPE vartype= getVarType( rObj);
@@ -1721,7 +1721,7 @@ cpo::uno::Any UnoConversionUtilities<T>::createOleObjectWrapper(VARIANT* pVar, c
     // COM pointer are NULL, no wrapper required
     if (spUnknown == nullptr)
     {
-        css::uno::Reference<cpo::uno::XInterface> xInt;
+        cpo::uno::Reference<cpo::uno::XInterface> xInt;
         if( aType.getTypeClass() == cpo::uno::TypeClass_INTERFACE)
             ret.setValue( &xInt, aType);
         else if( aType.getTypeClass() == cpo::uno::TypeClass_STRUCT)
@@ -1738,7 +1738,7 @@ cpo::uno::Any UnoConversionUtilities<T>::createOleObjectWrapper(VARIANT* pVar, c
     CComQIPtr<IUnoObjectWrapper> spUno( spUnknown);
     if( spUno)
     {   // it is a wrapper
-        css::uno::Reference<cpo::uno::XInterface> xInt;
+        cpo::uno::Reference<cpo::uno::XInterface> xInt;
         if( SUCCEEDED( spUno->getOriginalUnoObject( &xInt)))
         {
             ret <<= xInt;
@@ -1757,7 +1757,7 @@ cpo::uno::Any UnoConversionUtilities<T>::createOleObjectWrapper(VARIANT* pVar, c
     // There can be two kinds of wrappers, those who wrap dispatch - UNO objects, and those who
     // wrap ordinary dispatch objects. The dispatch-UNO objects usually are adapted to represent
     // particular UNO interfaces.
-    css::uno::Reference<cpo::uno::XInterface> xIntWrapper;
+    cpo::uno::Reference<cpo::uno::XInterface> xIntWrapper;
     auto cit_currWrapper= ComPtrToWrapperMap.find( reinterpret_cast<sal_uIntPtr>(spUnknown.p));
     if(cit_currWrapper != ComPtrToWrapperMap.end())
             xIntWrapper = cit_currWrapper->second;
@@ -1774,7 +1774,7 @@ cpo::uno::Any UnoConversionUtilities<T>::createOleObjectWrapper(VARIANT* pVar, c
             //The COM component could be a UNO object. Then we need to provide
             // a proxy  that implements all interfaces
             cpo::uno::Sequence<cpo::uno::Type> seqTypes= getImplementedInterfaces(spUnknown);
-            css::uno::Reference<cpo::uno::XInterface> xIntAdapter;
+            cpo::uno::Reference<cpo::uno::XInterface> xIntAdapter;
             if (seqTypes.getLength() > 0)
             {
                 //It is a COM UNO object
@@ -1796,7 +1796,7 @@ cpo::uno::Any UnoConversionUtilities<T>::createOleObjectWrapper(VARIANT* pVar, c
         else
         {
             //There is an adapter available
-            css::uno::Reference<cpo::uno::XInterface> xIntAdapter(reinterpret_cast<cpo::uno::XInterface*>(it->second));
+            cpo::uno::Reference<cpo::uno::XInterface> xIntAdapter(reinterpret_cast<cpo::uno::XInterface*>(it->second));
             ret = xIntAdapter->queryInterface( desiredType);
             if ( ! ret.hasValue())
                 throw css::lang::IllegalArgumentException(
@@ -1817,14 +1817,14 @@ cpo::uno::Any UnoConversionUtilities<T>::createOleObjectWrapper(VARIANT* pVar, c
     }
 
     //There is no existing wrapper, therefore we create one for the real COM object
-    css::uno::Reference<cpo::uno::XInterface> xIntNewProxy= createComWrapperInstance();
+    cpo::uno::Reference<cpo::uno::XInterface> xIntNewProxy= createComWrapperInstance();
     if ( ! xIntNewProxy.is())
         throw BridgeRuntimeError(
                   "[automation bridge]UnoConversionUtilities<T>::createOleObjectWrapper \n"
                   "Could not create proxy object for COM object!");
 
     // initialize the COM wrapper
-    css::uno::Reference<css::lang::XInitialization> xInit( xIntNewProxy, css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::lang::XInitialization> xInit( xIntNewProxy, cpo::uno::UNO_QUERY);
     OSL_ASSERT( xInit.is());
 
     cpo::uno::Any  params[3];
@@ -1845,24 +1845,24 @@ cpo::uno::Any UnoConversionUtilities<T>::createOleObjectWrapper(VARIANT* pVar, c
     }
     else
     {
-        css::uno::Reference<cpo::uno::XInterface> xIntAdapter =
+        cpo::uno::Reference<cpo::uno::XInterface> xIntAdapter =
             createAdapter(seqTypes, xIntNewProxy);
         ret = xIntAdapter->queryInterface(desiredType);
     }
     return ret;
 }
 template<class T>
-css::uno::Reference<cpo::uno::XInterface> UnoConversionUtilities<T>::createAdapter(const cpo::uno::Sequence<cpo::uno::Type>& seqTypes,
-                                    const css::uno::Reference<cpo::uno::XInterface>& receiver)
+cpo::uno::Reference<cpo::uno::XInterface> UnoConversionUtilities<T>::createAdapter(const cpo::uno::Sequence<cpo::uno::Type>& seqTypes,
+                                    const cpo::uno::Reference<cpo::uno::XInterface>& receiver)
 {
-    css::uno::Reference< cpo::uno::XInterface> xIntAdapterFac;
+    cpo::uno::Reference< cpo::uno::XInterface> xIntAdapterFac;
     xIntAdapterFac= m_smgr->createInstance(INTERFACE_ADAPTER_FACTORY);
     // We create an adapter object that does not only implement the required type but also
     // all types that the COM object pretends to implement. A COM object must therefore
     // support the property "_implementedInterfaces".
-    css::uno::Reference<cpo::uno::XInterface> xIntAdapted;
-    css::uno::Reference<css::script::XInvocation> xInv(receiver, css::uno::UNO_QUERY);
-    css::uno::Reference<css::script::XInvocationAdapterFactory2> xAdapterFac( xIntAdapterFac, css::uno::UNO_QUERY);
+    cpo::uno::Reference<cpo::uno::XInterface> xIntAdapted;
+    cpo::uno::Reference<css::script::XInvocation> xInv(receiver, cpo::uno::UNO_QUERY);
+    cpo::uno::Reference<css::script::XInvocationAdapterFactory2> xAdapterFac( xIntAdapterFac, cpo::uno::UNO_QUERY);
     if( xAdapterFac.is())
         xIntAdapted= xAdapterFac->createAdapter( xInv, seqTypes);
 
@@ -2339,17 +2339,17 @@ cpo::uno::Sequence<cpo::uno::Type> UnoConversionUtilities<T>::getImplementedInte
     return seqTypes;
 }
 template<class T>
-css::uno::Reference<css::script::XTypeConverter> UnoConversionUtilities<T>::getTypeConverter()
+cpo::uno::Reference<css::script::XTypeConverter> UnoConversionUtilities<T>::getTypeConverter()
 {
     if ( ! m_typeConverter.is())
     {
         osl::MutexGuard guard(getBridgeMutex());
         if ( ! m_typeConverter.is())
         {
-            css::uno::Reference<cpo::uno::XInterface> xIntConverter =
+            cpo::uno::Reference<cpo::uno::XInterface> xIntConverter =
                 m_smgr->createInstance("com.sun.star.script.Converter");
             if (xIntConverter.is())
-                m_typeConverter.set(xIntConverter, css::uno::UNO_QUERY);
+                m_typeConverter.set(xIntConverter, cpo::uno::UNO_QUERY);
         }
     }
     return m_typeConverter;

@@ -39,6 +39,7 @@
 #define UNOGRAPHIC_RENDERDATA       3
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace {
 
@@ -73,11 +74,11 @@ public:
     virtual void _getPropertyValues( const comphelper::PropertyMapEntry** ppEntries, cpo::uno::Any* pValue ) override;
 
     // XGraphicRenderer
-    virtual void render( const css::uno::Reference< css::graphic::XGraphic >& Graphic ) override;
+    virtual void render( const cpo::uno::Reference< css::graphic::XGraphic >& Graphic ) override;
 
 private:
 
-    css::uno::Reference< css::awt::XDevice > mxDevice;
+    cpo::uno::Reference< css::awt::XDevice > mxDevice;
 
     VclPtr<OutputDevice>        mpOutDev;
     tools::Rectangle                   maDestRect;

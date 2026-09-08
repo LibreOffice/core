@@ -28,10 +28,10 @@
 #include "layerexp.hxx"
 #include <comphelper/diagnose_ex.hxx>
 
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;

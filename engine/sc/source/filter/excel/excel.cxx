@@ -51,6 +51,7 @@
 #include <memory>
 
 using namespace css;
+using namespace ::cpo;
 
 static void lcl_getListOfStreams(SotStorage * pStorage, comphelper::SequenceAsHashMap& aStreamsData, std::u16string_view sPrefix)
 {
@@ -456,7 +457,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportXLS(SvStream& rStream)
 {
     ScDLL::Init();
     SfxMedium aMedium;
-    css::uno::Reference<css::io::XInputStream> xStm(new utl::OInputStreamWrapper(rStream));
+    cpo::uno::Reference<css::io::XInputStream> xStm(new utl::OInputStreamWrapper(rStream));
     aMedium.GetItemSet().Put(SfxUnoAnyItem(SID_INPUTSTREAM, cpo::uno::Any(xStm)));
     aMedium.GetItemSet().Put(SfxUInt16Item(SID_UPDATEDOCMODE, css::document::UpdateDocMode::NO_UPDATE));
 

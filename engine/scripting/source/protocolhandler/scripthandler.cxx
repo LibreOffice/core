@@ -52,7 +52,7 @@
 #include <memory>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::util;
@@ -131,10 +131,10 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
     {
         try
         {
-            css::uno::Reference<css::uri::XUriReferenceFactory> urifac(
+            cpo::uno::Reference<css::uri::XUriReferenceFactory> urifac(
                 css::uri::UriReferenceFactory::create(m_xContext));
-            css::uno::Reference<css::uri::XVndSunStarScriptUrlReference> uri(
-                urifac->parse(aURL.Complete), css::uno::UNO_QUERY_THROW);
+            cpo::uno::Reference<css::uri::XVndSunStarScriptUrlReference> uri(
+                urifac->parse(aURL.Complete), cpo::uno::UNO_QUERY_THROW);
             auto const loc = uri->getParameter(u"location"_ustr);
             bool bIsDocumentScript = loc == "document";
 

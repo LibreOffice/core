@@ -49,7 +49,7 @@ protected:
 private:
     ScAutoFormatData* pCurData;
     ScopedVclPtrInstance<VirtualDevice> aVD;
-    css::uno::Reference<css::i18n::XBreakIterator> xBreakIter;
+    cpo::uno::Reference<css::i18n::XBreakIterator> xBreakIter;
     bool                    bFitWidth;
     svx::frame::Array       maArray;            /// Implementation to draw the frame borders.
     bool                    mbRTL;

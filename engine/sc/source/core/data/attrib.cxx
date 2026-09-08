@@ -39,6 +39,7 @@
 #include <textuno.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 
 SfxPoolItem* ScProtectionAttr::CreateDefault() { return new ScProtectionAttr; }

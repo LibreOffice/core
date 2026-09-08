@@ -105,7 +105,7 @@ public:
     void Flush();
     void GrabFocus();
 
-    css::uno::Reference<css::datatransfer::clipboard::XClipboard> GetClipboard() const
+    cpo::uno::Reference<css::datatransfer::clipboard::XClipboard> GetClipboard() const
     {
         return mxTextControl->GetClipboard();
     }

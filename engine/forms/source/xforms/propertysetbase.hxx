@@ -247,7 +247,7 @@ protected:
     virtual void getFastPropertyValue( cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
 
     virtual cppu::IPropertyArrayHelper& getInfoHelper() override;
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
 
 public:
     /// helper struct for granting selective access to some notification-related methods

@@ -34,7 +34,7 @@ class SdPagesField final : public InterimItemWindow
 {
 private:
     std::unique_ptr<weld::SpinButton> m_xWidget;
-    css::uno::Reference<css::frame::XFrame> m_xFrame;
+    cpo::uno::Reference<css::frame::XFrame> m_xFrame;
 
     DECL_LINK(ModifyHdl, weld::SpinButton&, void);
     DECL_STATIC_LINK(SdPagesField, OutputHdl, sal_Int64, OUString);
@@ -42,7 +42,7 @@ private:
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
 
 public:
-    SdPagesField(vcl::Window* pParent, css::uno::Reference<css::frame::XFrame> xFrame);
+    SdPagesField(vcl::Window* pParent, cpo::uno::Reference<css::frame::XFrame> xFrame);
     virtual void dispose() override;
     void set_sensitive(bool bSensitive);
     virtual ~SdPagesField() override;

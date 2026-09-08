@@ -35,7 +35,7 @@
 #include <strings.hrc>
 #include <vector>
 
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::com::sun::star::frame::XFrame;
 
 

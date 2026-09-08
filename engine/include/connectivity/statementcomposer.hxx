@@ -28,7 +28,7 @@
 
 namespace com::sun::star::sdbc { class XConnection; }
 namespace com::sun::star::sdb { class XSingleSelectQueryComposer; }
-namespace com::sun::star::uno { template <typename > class Reference; }
+namespace cpo::uno { template <typename > class Reference; }
 
 
 namespace dbtools
@@ -51,7 +51,7 @@ namespace dbtools
                 the connection to work with. Must not be <NULL/>.
         */
         StatementComposer(
-            const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
+            const cpo::uno::Reference< css::sdbc::XConnection >& _rxConnection,
             const OUString&  _rCommand,
             const sal_Int32  _nCommandType,
             const bool       _bEscapeProcessing
@@ -77,7 +77,7 @@ namespace dbtools
             @throws css::sdbc::SQLException
                 if such an exception occurs while creating the composer
         */
-        css::uno::Reference< css::sdb::XSingleSelectQueryComposer > const &
+        cpo::uno::Reference< css::sdb::XSingleSelectQueryComposer > const &
                 getComposer();
 
         /** returns the composer statement

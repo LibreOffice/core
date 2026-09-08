@@ -70,7 +70,7 @@
 #include <schedulerimpl.hxx>
 #endif
 
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <com/sun/star/awt/XToolkit.hpp>
 #include <comphelper/kit.hxx>
 #include <comphelper/threadpool.hxx>
@@ -90,7 +90,7 @@
 #include <thread>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 namespace {
 void InitSettings(ImplSVData* pSVData);
@@ -1448,9 +1448,9 @@ SystemWindowFlags Application::GetSystemWindowMode()
     return ImplGetSVData()->maAppData.mnSysWinMode;
 }
 
-css::uno::Reference< css::awt::XToolkit > Application::GetVCLToolkit()
+cpo::uno::Reference< css::awt::XToolkit > Application::GetVCLToolkit()
 {
-    css::uno::Reference< css::awt::XToolkit > xT;
+    cpo::uno::Reference< css::awt::XToolkit > xT;
     UnoWrapperBase* pWrapper = UnoWrapperBase::GetUnoWrapper();
     if ( pWrapper )
         xT = pWrapper->GetVCLToolkit();

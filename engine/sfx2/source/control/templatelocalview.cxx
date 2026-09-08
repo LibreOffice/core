@@ -33,6 +33,7 @@
 #include <doctemplateslocal.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 bool ViewFilter_Application::isFilteredExtension(FILTER_APPLICATION filter, std::u16string_view rExt)
 {
@@ -899,7 +900,7 @@ void TemplateLocalView::OnItemDblClicked (ThumbnailViewItem *pItem)
 bool TemplateLocalView::IsInternalTemplate(const OUString& rPath)
 {
     const uno::Reference< cpo::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
-    css::uno::Reference< css::util::XPathSettings > xPathSettings = css::util::thePathSettings::get(xContext);
+    cpo::uno::Reference< css::util::XPathSettings > xPathSettings = css::util::thePathSettings::get(xContext);
     cpo::uno::Sequence<OUString> aInternalTemplateDirs;
     cpo::uno::Any aAny = xPathSettings->getPropertyValue(u"Template_internal"_ustr);
     aAny >>= aInternalTemplateDirs;

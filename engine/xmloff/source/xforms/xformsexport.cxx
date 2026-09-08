@@ -58,7 +58,7 @@
 #include <com/sun/star/util/Duration.hpp>
 
 using namespace com::sun::star;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace xmloff::token;
 

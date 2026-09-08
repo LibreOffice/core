@@ -26,7 +26,7 @@
 #include <memory>
 
 namespace com::sun::star::awt { class XControlContainer; }
-namespace com::sun::star::uno { template <class interface_type> class Reference; }
+namespace cpo::uno { template <class interface_type> class Reference; }
 namespace rtl { template <class reference_type> class Reference; }
 namespace sdr::overlay { class OverlayManager; }
 namespace vcl { class Region; }

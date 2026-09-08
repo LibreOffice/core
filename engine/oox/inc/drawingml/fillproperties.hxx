@@ -26,7 +26,7 @@
 #include <com/sun/star/geometry/IntegerRectangle2D.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <oox/drawingml/color.hxx>
 #include <oox/helper/helper.hxx>
 #include <oox/ole/oleobjecthelper.hxx>
@@ -97,7 +97,7 @@ struct ArtisticEffectProperties
 
 struct BlipFillProperties
 {
-    css::uno::Reference<css::graphic::XGraphic> mxFillGraphic; /// The fill graphic.
+    cpo::uno::Reference<css::graphic::XGraphic> mxFillGraphic; /// The fill graphic.
     std::optional< sal_Int32 > moBitmapMode;         /// Bitmap tile or stretch.
     std::optional< css::geometry::IntegerRectangle2D >
                           moFillRect;             /// Stretch fill offsets.

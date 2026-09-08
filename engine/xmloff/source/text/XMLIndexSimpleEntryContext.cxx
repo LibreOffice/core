@@ -31,7 +31,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 
 using ::com::sun::star::beans::PropertyValue;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::cpo::uno::Sequence;
 using ::cpo::uno::Any;
 using ::xmloff::token::XML_STYLE_NAME;
@@ -55,7 +55,7 @@ XMLIndexSimpleEntryContext::~XMLIndexSimpleEntryContext()
 
 void XMLIndexSimpleEntryContext::startFastElement(
     sal_Int32 /*nElement*/,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     // we know only one attribute: style-name
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )

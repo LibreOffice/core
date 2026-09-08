@@ -35,8 +35,9 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
+using namespace ::cpo;
 
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 
 namespace chart::wrapper
 {

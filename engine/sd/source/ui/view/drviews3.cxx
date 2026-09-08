@@ -87,7 +87,7 @@
 #include <oox/export/drawingml.hxx>
 #include <oox/shape/ShapeFilterBase.hxx>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::drawing::framework;
 using ::com::sun::star::frame::XFrame;
 using ::com::sun::star::frame::XController;

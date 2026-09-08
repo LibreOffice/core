@@ -74,7 +74,7 @@ tools::DeleteOnDeinit<TSharedStorages>& SharedStorages()
 
 }
 
-PresetHandler::PresetHandler(css::uno::Reference< cpo::uno::XComponentContext > xContext)
+PresetHandler::PresetHandler(cpo::uno::Reference< cpo::uno::XComponentContext > xContext)
     : m_xContext(std::move(xContext))
     , m_eConfigType(E_GLOBAL)
     , m_bShouldReopenRWOnStore(false)
@@ -171,26 +171,26 @@ void lcl_throwCorruptedUIConfigurationException(
     OSL_ASSERT(ok);
     throw css::configuration::CorruptedUIConfigurationException(
         lcl_getLocalizedMessage(id),
-        css::uno::Reference< cpo::uno::XInterface >(),
+        cpo::uno::Reference< cpo::uno::XInterface >(),
         exception.getValueTypeName() + ": \"" + e.Message + "\"");
 }
 
 }
 
-css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorageShare()
+cpo::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorageShare()
 {
     auto sharedStorages = SharedStorages().get();
-    css::uno::Reference< css::embed::XStorage > xRoot = sharedStorages->m_lStoragesShare.getRootStorage();
+    cpo::uno::Reference< css::embed::XStorage > xRoot = sharedStorages->m_lStoragesShare.getRootStorage();
     if (xRoot.is())
         return xRoot;
 
-    css::uno::Reference< cpo::uno::XComponentContext > xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext > xContext;
     {
         SolarMutexGuard g;
         xContext = m_xContext;
     }
 
-    css::uno::Reference< css::util::XPathSettings > xPathSettings =
+    cpo::uno::Reference< css::util::XPathSettings > xPathSettings =
         css::util::thePathSettings::get( xContext );
 
     OUString sShareLayer = xPathSettings->getBasePathShareLayer();
@@ -217,12 +217,12 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorag
         cpo::uno::Any(css::embed::ElementModes::READ | css::embed::ElementModes::NOCREATE)
     };
 
-    css::uno::Reference< css::lang::XSingleServiceFactory > xStorageFactory = css::embed::FileSystemStorageFactory::create( xContext );
-    css::uno::Reference< css::embed::XStorage >             xStorage;
+    cpo::uno::Reference< css::lang::XSingleServiceFactory > xStorageFactory = css::embed::FileSystemStorageFactory::create( xContext );
+    cpo::uno::Reference< css::embed::XStorage >             xStorage;
 
     try
     {
-        xStorage.set(xStorageFactory->createInstanceWithArguments(lArgs), css::uno::UNO_QUERY_THROW);
+        xStorage.set(xStorageFactory->createInstanceWithArguments(lArgs), cpo::uno::UNO_QUERY_THROW);
     }
     catch(const cpo::uno::Exception&)
     {
@@ -236,20 +236,20 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorag
     return xStorage;
 }
 
-css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorageUser()
+cpo::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorageUser()
 {
     auto sharedStorages = SharedStorages().get();
-    css::uno::Reference< css::embed::XStorage > xRoot = sharedStorages->m_lStoragesUser.getRootStorage();
+    cpo::uno::Reference< css::embed::XStorage > xRoot = sharedStorages->m_lStoragesUser.getRootStorage();
     if (xRoot.is())
         return xRoot;
 
-    css::uno::Reference< cpo::uno::XComponentContext > xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext > xContext;
     {
         SolarMutexGuard g;
         xContext = m_xContext;
     }
 
-    css::uno::Reference< css::util::XPathSettings > xPathSettings =
+    cpo::uno::Reference< css::util::XPathSettings > xPathSettings =
         css::util::thePathSettings::get( xContext );
 
     OUString sUserLayer = xPathSettings->getBasePathUserLayer();
@@ -264,12 +264,12 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorag
     cpo::uno::Sequence< cpo::uno::Any > lArgs{ cpo::uno::Any(sUserLayer),
                                                cpo::uno::Any(css::embed::ElementModes::READWRITE) };
 
-    css::uno::Reference< css::lang::XSingleServiceFactory > xStorageFactory = css::embed::FileSystemStorageFactory::create( xContext );
-    css::uno::Reference< css::embed::XStorage >             xStorage;
+    cpo::uno::Reference< css::lang::XSingleServiceFactory > xStorageFactory = css::embed::FileSystemStorageFactory::create( xContext );
+    cpo::uno::Reference< css::embed::XStorage >             xStorage;
 
     try
     {
-        xStorage.set(xStorageFactory->createInstanceWithArguments(lArgs), css::uno::UNO_QUERY_THROW);
+        xStorage.set(xStorageFactory->createInstanceWithArguments(lArgs), cpo::uno::UNO_QUERY_THROW);
     }
     catch(const cpo::uno::Exception&)
     {
@@ -283,15 +283,15 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorag
     return xStorage;
 }
 
-css::uno::Reference< css::embed::XStorage > PresetHandler::getWorkingStorageUser() const
+cpo::uno::Reference< css::embed::XStorage > PresetHandler::getWorkingStorageUser() const
 {
     SolarMutexGuard g;
     return m_xWorkingStorageUser;
 }
 
-css::uno::Reference< css::embed::XStorage > PresetHandler::getParentStorageShare()
+cpo::uno::Reference< css::embed::XStorage > PresetHandler::getParentStorageShare()
 {
-    css::uno::Reference< css::embed::XStorage > xWorking;
+    cpo::uno::Reference< css::embed::XStorage > xWorking;
     {
         SolarMutexGuard g;
         xWorking = m_xWorkingStorageShare;
@@ -300,9 +300,9 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getParentStorageShare
     return SharedStorages().get()->m_lStoragesShare.getParentStorage(xWorking);
 }
 
-css::uno::Reference< css::embed::XStorage > PresetHandler::getParentStorageUser()
+cpo::uno::Reference< css::embed::XStorage > PresetHandler::getParentStorageUser()
 {
-    css::uno::Reference< css::embed::XStorage > xWorking;
+    cpo::uno::Reference< css::embed::XStorage > xWorking;
     {
         SolarMutexGuard g;
         xWorking = m_xWorkingStorageUser;
@@ -314,7 +314,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getParentStorageUser(
 void PresetHandler::connectToResource(      PresetHandler::EConfigType                   eConfigType  ,
                                       std::u16string_view                             sResource    ,
                                       std::u16string_view                             sModule      ,
-                                      const css::uno::Reference< css::embed::XStorage >& xDocumentRoot,
+                                      const cpo::uno::Reference< css::embed::XStorage >& xDocumentRoot,
                                       const LanguageTag&                                 rLanguageTag )
 {
     // TODO free all current open storages!
@@ -324,9 +324,9 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
         m_eConfigType   = eConfigType;
     }
 
-    css::uno::Reference< css::embed::XStorage > xShare;
-    css::uno::Reference< css::embed::XStorage > xNoLang;
-    css::uno::Reference< css::embed::XStorage > xUser;
+    cpo::uno::Reference< css::embed::XStorage > xShare;
+    cpo::uno::Reference< css::embed::XStorage > xNoLang;
+    cpo::uno::Reference< css::embed::XStorage > xUser;
 
     // special case for documents
     // use outside root storage, if we run in E_DOCUMENT mode!
@@ -400,7 +400,7 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
             {
                 SolarMutexGuard g;
 
-                css::uno::Reference< css::beans::XPropertySet > xPropSet( xDocumentRoot, css::uno::UNO_QUERY );
+                cpo::uno::Reference< css::beans::XPropertySet > xPropSet( xDocumentRoot, cpo::uno::UNO_QUERY );
                 if ( xPropSet.is() )
                 {
                     tools::Long nOpenMode = 0;
@@ -476,9 +476,9 @@ void PresetHandler::copyPresetToTarget(std::u16string_view sPreset,
 
     maybeReopenStorageAsReadWrite();
 
-    css::uno::Reference< css::embed::XStorage > xWorkingShare;
-    css::uno::Reference< css::embed::XStorage > xWorkingNoLang;
-    css::uno::Reference< css::embed::XStorage > xWorkingUser;
+    cpo::uno::Reference< css::embed::XStorage > xWorkingShare;
+    cpo::uno::Reference< css::embed::XStorage > xWorkingNoLang;
+    cpo::uno::Reference< css::embed::XStorage > xWorkingUser;
 
     {
         SolarMutexGuard g;
@@ -501,7 +501,7 @@ void PresetHandler::copyPresetToTarget(std::u16string_view sPreset,
 
     // remove existing elements before you try to copy the preset to that location ...
     // Otherwise w will get an ElementExistException inside copyElementTo()!
-    css::uno::Reference< css::container::XNameAccess > xCheckingUser(xWorkingUser, css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference< css::container::XNameAccess > xCheckingUser(xWorkingUser, cpo::uno::UNO_QUERY_THROW);
     if (xCheckingUser->hasByName(sTargetFile))
         xWorkingUser->removeElement(sTargetFile);
 
@@ -512,9 +512,9 @@ void PresetHandler::copyPresetToTarget(std::u16string_view sPreset,
     commitUserChanges();
 }
 
-css::uno::Reference< css::io::XStream > PresetHandler::openPreset(std::u16string_view sPreset)
+cpo::uno::Reference< css::io::XStream > PresetHandler::openPreset(std::u16string_view sPreset)
 {
-    css::uno::Reference< css::embed::XStorage > xFolder;
+    cpo::uno::Reference< css::embed::XStorage > xFolder;
     {
         SolarMutexGuard g;
         xFolder = m_xWorkingStorageNoLang;
@@ -522,23 +522,23 @@ css::uno::Reference< css::io::XStream > PresetHandler::openPreset(std::u16string
 
     // e.g. module without any config data ?!
     if (!xFolder.is())
-       return css::uno::Reference< css::io::XStream >();
+       return cpo::uno::Reference< css::io::XStream >();
 
     OUString sFile = OUString::Concat(sPreset) + ".xml";
 
     // inform user about errors (use original exceptions!)
-    css::uno::Reference< css::io::XStream > xStream = xFolder->openStreamElement(sFile, css::embed::ElementModes::READ);
+    cpo::uno::Reference< css::io::XStream > xStream = xFolder->openStreamElement(sFile, css::embed::ElementModes::READ);
     return xStream;
 }
 
-css::uno::Reference< css::io::XStream > PresetHandler::openTarget(
+cpo::uno::Reference< css::io::XStream > PresetHandler::openTarget(
         std::u16string_view sTarget, sal_Int32 const nMode)
 {
     if (nMode & css::embed::ElementModes::WRITE) {
         maybeReopenStorageAsReadWrite();
     }
 
-    css::uno::Reference< css::embed::XStorage > xFolder;
+    cpo::uno::Reference< css::embed::XStorage > xFolder;
     {
         SolarMutexGuard g;
         xFolder = m_xWorkingStorageUser;
@@ -546,7 +546,7 @@ css::uno::Reference< css::io::XStream > PresetHandler::openTarget(
 
     // e.g. module without any config data ?!
     if (!xFolder.is())
-       return css::uno::Reference< css::io::XStream >();
+       return cpo::uno::Reference< css::io::XStream >();
 
     OUString const sFile(OUString::Concat(sTarget) + ".xml");
 
@@ -555,7 +555,7 @@ css::uno::Reference< css::io::XStream > PresetHandler::openTarget(
 
 void PresetHandler::commitUserChanges()
 {
-    css::uno::Reference< css::embed::XStorage > xWorking;
+    cpo::uno::Reference< css::embed::XStorage > xWorking;
     EConfigType                                 eCfgType;
     {
         SolarMutexGuard g;
@@ -656,9 +656,9 @@ bool PresetHandler::isReadOnly() {
 
     if (m_eConfigType == E_DOCUMENT)
     {
-        if ( css::uno::Reference<css::embed::XStorage> xDocumentRoot = m_lDocumentStorages.getRootStorage(); xDocumentRoot.is() )
+        if ( cpo::uno::Reference<css::embed::XStorage> xDocumentRoot = m_lDocumentStorages.getRootStorage(); xDocumentRoot.is() )
         {
-            css::uno::Reference< css::beans::XPropertySet > xPropSet( xDocumentRoot, css::uno::UNO_QUERY );
+            cpo::uno::Reference< css::beans::XPropertySet > xPropSet( xDocumentRoot, cpo::uno::UNO_QUERY );
             if ( xPropSet.is() )
             {
                 tools::Long nOpenMode = 0;
@@ -671,7 +671,7 @@ bool PresetHandler::isReadOnly() {
     {
         if ( m_xWorkingStorageUser.is() )
         {
-            css::uno::Reference< css::beans::XPropertySet > xPropSet( m_xWorkingStorageUser, css::uno::UNO_QUERY );
+            cpo::uno::Reference< css::beans::XPropertySet > xPropSet( m_xWorkingStorageUser, cpo::uno::UNO_QUERY );
             if ( xPropSet.is() )
             {
                 tools::Long nOpenMode = 0;
@@ -709,11 +709,11 @@ void PresetHandler::maybeReopenStorageAsReadWrite() {
 
 
 // static
-css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openPathIgnoringErrors(const OUString& sPath ,
+cpo::uno::Reference< css::embed::XStorage > PresetHandler::impl_openPathIgnoringErrors(const OUString& sPath ,
                                                                                              sal_Int32        eMode ,
                                                                                              bool         bShare)
 {
-    css::uno::Reference< css::embed::XStorage > xPath;
+    cpo::uno::Reference< css::embed::XStorage > xPath;
     try
     {
         if (bShare)
@@ -754,14 +754,14 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openPathIgnoring
 }
 
 // static
-css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openLocalizedPathIgnoringErrors(
+cpo::uno::Reference< css::embed::XStorage > PresetHandler::impl_openLocalizedPathIgnoringErrors(
         OUString&      sPath         ,
         sal_Int32             eMode         ,
         bool              bShare        ,
         OUString&             rLanguageTag  ,
         bool              bAllowFallback)
 {
-    css::uno::Reference< css::embed::XStorage >      xPath         = impl_openPathIgnoringErrors(sPath, eMode, bShare);
+    cpo::uno::Reference< css::embed::XStorage >      xPath         = impl_openPathIgnoringErrors(sPath, eMode, bShare);
     ::std::vector< OUString >                 lSubFolders   = impl_getSubFolderNames(xPath);
     ::std::vector< OUString >::const_iterator pLocaleFolder = impl_findMatchingLocalizedValue(lSubFolders, rLanguageTag, bAllowFallback);
 
@@ -770,7 +770,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openLocalizedPat
         (pLocaleFolder == lSubFolders.end()                                                ) &&
         ((eMode & css::embed::ElementModes::NOCREATE) == css::embed::ElementModes::NOCREATE)
        )
-        return css::uno::Reference< css::embed::XStorage >();
+        return cpo::uno::Reference< css::embed::XStorage >();
 
     // it doesn't matter, if there is a locale fallback or not
     // If creation of storages is allowed, we do it anyway.
@@ -781,7 +781,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openLocalizedPat
     else
         sLocalizedPath += rLanguageTag;
 
-    css::uno::Reference< css::embed::XStorage > xLocalePath = impl_openPathIgnoringErrors(sLocalizedPath, eMode, bShare);
+    cpo::uno::Reference< css::embed::XStorage > xLocalePath = impl_openPathIgnoringErrors(sLocalizedPath, eMode, bShare);
 
     if (xLocalePath.is())
         sPath = sLocalizedPath;
@@ -792,7 +792,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openLocalizedPat
 }
 
 // static
-::std::vector< OUString > PresetHandler::impl_getSubFolderNames(const css::uno::Reference< css::embed::XStorage >& xFolder)
+::std::vector< OUString > PresetHandler::impl_getSubFolderNames(const cpo::uno::Reference< css::embed::XStorage >& xFolder)
 {
     if (!xFolder.is())
         return ::std::vector< OUString >();

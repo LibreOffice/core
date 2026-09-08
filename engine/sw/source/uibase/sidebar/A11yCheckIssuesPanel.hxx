@@ -66,7 +66,7 @@ class AccessibilityCheckLevel
 private:
     std::unique_ptr<weld::Builder> m_xBuilder;
     std::unique_ptr<weld::Box> m_xContainer; ///< this is required for gtk3 even if unused
-    css::uno::Reference<css::ui::XSidebar> m_xSidebar;
+    cpo::uno::Reference<css::ui::XSidebar> m_xSidebar;
     std::array<std::vector<std::unique_ptr<AccessibilityCheckEntry>>, 11> m_aEntries;
     std::array<std::unique_ptr<weld::Expander>, 11> m_xExpanders;
     std::array<std::unique_ptr<weld::Box>, 11> m_xBoxes;
@@ -74,7 +74,7 @@ private:
     DECL_LINK(ExpandHdl, weld::Expander&, void);
 
 public:
-    AccessibilityCheckLevel(weld::Box* pParent, css::uno::Reference<css::ui::XSidebar> xSidebar);
+    AccessibilityCheckLevel(weld::Box* pParent, cpo::uno::Reference<css::ui::XSidebar> xSidebar);
 
     void removeAllEntries();
 
@@ -90,7 +90,7 @@ class A11yCheckIssuesPanel : public PanelLayout,
 {
 public:
     static std::unique_ptr<PanelLayout> Create(weld::Widget* pParent, SfxBindings* pBindings,
-                                               css::uno::Reference<css::ui::XSidebar> xSidebar);
+                                               cpo::uno::Reference<css::ui::XSidebar> xSidebar);
 
     virtual void NotifyItemUpdate(const sal_uInt16 nSId, const SfxItemState eState,
                                   const SfxPoolItem* pState) override;
@@ -99,7 +99,7 @@ public:
                                  boost::property_tree::ptree& /*rState*/) override{};
 
     A11yCheckIssuesPanel(weld::Widget* pParent, SfxBindings* pBindings,
-                         css::uno::Reference<css::ui::XSidebar> xSidebar);
+                         cpo::uno::Reference<css::ui::XSidebar> xSidebar);
     void ImplDestroy();
     virtual ~A11yCheckIssuesPanel() override;
 
@@ -125,7 +125,7 @@ private:
 
     SfxBindings* mpBindings;
     SwDoc* mpDoc;
-    css::uno::Reference<css::ui::XSidebar> mxSidebar;
+    cpo::uno::Reference<css::ui::XSidebar> mxSidebar;
     ::sfx2::sidebar::ControllerItem maA11yCheckController;
     sal_Int32 mnIssueCount;
     bool mbAutomaticCheckEnabled;

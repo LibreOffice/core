@@ -30,11 +30,11 @@ public:
 
     rtl::Reference<XMLImportContext>
     CreateChildContext(const OUString& rName,
-                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
+                       const cpo::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
 
     void SAL_CALL
     startElement(const OUString& rName,
-                 const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
+                 const cpo::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
     void SAL_CALL endElement(const OUString& rName) override;
 };
 }
@@ -45,14 +45,14 @@ XMLTextBoxContext::XMLTextBoxContext(XMLImport& rImport)
 }
 
 rtl::Reference<XMLImportContext> XMLTextBoxContext::CreateChildContext(
-    const OUString& rName, const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
+    const OUString& rName, const cpo::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
     return CreateTextChildContext(GetImport(), rName);
 }
 
 void XMLTextBoxContext::startElement(
     const OUString& /*rName*/,
-    const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
+    const cpo::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
     GetImport().GetGenerator().openTextBox(librevenge::RVNGPropertyList());
 }
@@ -72,11 +72,11 @@ public:
 
     rtl::Reference<XMLImportContext>
     CreateChildContext(const OUString& rName,
-                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
+                       const cpo::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
 
     void SAL_CALL
     startElement(const OUString& rName,
-                 const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
+                 const cpo::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
     void SAL_CALL endElement(const OUString& rName) override;
 
 private:
@@ -91,7 +91,7 @@ XMLTextImageContext::XMLTextImageContext(XMLImport& rImport)
 }
 
 rtl::Reference<XMLImportContext> XMLTextImageContext::CreateChildContext(
-    const OUString& rName, const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
+    const OUString& rName, const cpo::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
     if (rName == "office:binary-data")
     {
@@ -102,7 +102,7 @@ rtl::Reference<XMLImportContext> XMLTextImageContext::CreateChildContext(
 }
 
 void XMLTextImageContext::startElement(
-    const OUString& /*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs)
+    const OUString& /*rName*/, const cpo::uno::Reference<css::xml::sax::XAttributeList>& xAttribs)
 {
     for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
     {
@@ -129,7 +129,7 @@ XMLTextFrameContext::XMLTextFrameContext(XMLImport& rImport)
 }
 
 rtl::Reference<XMLImportContext> XMLTextFrameContext::CreateChildContext(
-    const OUString& rName, const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
+    const OUString& rName, const cpo::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
     if (rName == "draw:image")
         return new XMLTextImageContext(GetImport());
@@ -140,7 +140,7 @@ rtl::Reference<XMLImportContext> XMLTextFrameContext::CreateChildContext(
 }
 
 void XMLTextFrameContext::startElement(
-    const OUString& /*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs)
+    const OUString& /*rName*/, const cpo::uno::Reference<css::xml::sax::XAttributeList>& xAttribs)
 {
     librevenge::RVNGPropertyList aPropertyList;
     for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)

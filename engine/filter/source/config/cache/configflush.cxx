@@ -64,14 +64,14 @@ void ConfigFlush::refresh()
 }
 
 
-void ConfigFlush::addRefreshListener(const css::uno::Reference< css::util::XRefreshListener >& xListener)
+void ConfigFlush::addRefreshListener(const cpo::uno::Reference< css::util::XRefreshListener >& xListener)
 {
     std::unique_lock g(m_aMutex);
     m_aRefreshListeners.addInterface(g, xListener);
 }
 
 
-void ConfigFlush::removeRefreshListener(const css::uno::Reference< css::util::XRefreshListener >& xListener)
+void ConfigFlush::removeRefreshListener(const cpo::uno::Reference< css::util::XRefreshListener >& xListener)
 {
     std::unique_lock g(m_aMutex);
     m_aRefreshListeners.removeInterface(g, xListener);

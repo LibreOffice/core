@@ -36,6 +36,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
+using namespace ::cpo;
 
 using utl::AccessibleRelationSetHelper;
 using ::com::sun::star::accessibility::XAccessibleContext;

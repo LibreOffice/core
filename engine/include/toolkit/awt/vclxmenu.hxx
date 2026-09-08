@@ -42,7 +42,7 @@ class PopupMenu;
 class VclMenuEvent;
 
 typedef ::std::vector<
-    css::uno::Reference< css::awt::XPopupMenu >
+    cpo::uno::Reference< css::awt::XPopupMenu >
 > PopupMenuRefList;
 
 typedef void (*MenuUserDataReleaseFunction)(void*);
@@ -88,8 +88,8 @@ public:
     cpo::uno::Sequence< sal_Int8 > getImplementationId() override;
 
     // css::awt::XMenu
-    virtual void addMenuListener( const css::uno::Reference< css::awt::XMenuListener >& xListener ) override;
-    virtual void removeMenuListener( const css::uno::Reference< css::awt::XMenuListener >& xListener ) override;
+    virtual void addMenuListener( const cpo::uno::Reference< css::awt::XMenuListener >& xListener ) override;
+    virtual void removeMenuListener( const cpo::uno::Reference< css::awt::XMenuListener >& xListener ) override;
     virtual void insertItem( sal_Int16 nItemId, const OUString& aText, sal_Int16 nItemStyle, sal_Int16 nPos ) override;
     virtual void removeItem( sal_Int16 nPos, sal_Int16 nCount ) override;
     virtual void clear( ) override;
@@ -113,8 +113,8 @@ public:
     virtual OUString getTipHelpText( ::sal_Int16 nItemId ) override;
 
     virtual bool isPopupMenu(  ) override;
-    virtual void setPopupMenu( sal_Int16 nItemId, const css::uno::Reference< css::awt::XPopupMenu >& aPopupMenu ) override;
-    virtual css::uno::Reference< css::awt::XPopupMenu > getPopupMenu( sal_Int16 nItemId ) override;
+    virtual void setPopupMenu( sal_Int16 nItemId, const cpo::uno::Reference< css::awt::XPopupMenu >& aPopupMenu ) override;
+    virtual cpo::uno::Reference< css::awt::XPopupMenu > getPopupMenu( sal_Int16 nItemId ) override;
 
     // css::awt::XPopupMenu
     virtual void insertSeparator( sal_Int16 nPos ) override;
@@ -122,13 +122,13 @@ public:
     virtual sal_Int16 getDefaultItem(  ) override;
     virtual void checkItem( sal_Int16 nItemId, bool bCheck ) override;
     virtual bool isItemChecked( sal_Int16 nItemId ) override;
-    virtual ::sal_Int16 execute( const css::uno::Reference< css::awt::XWindowPeer >& Parent, const css::awt::Rectangle& Position, ::sal_Int16 Direction ) override;
+    virtual ::sal_Int16 execute( const cpo::uno::Reference< css::awt::XWindowPeer >& Parent, const css::awt::Rectangle& Position, ::sal_Int16 Direction ) override;
     virtual bool isInExecute(  ) override;
     virtual void endExecute(  ) override;
     virtual void setAcceleratorKeyEvent( ::sal_Int16 nItemId, const css::awt::KeyEvent& aKeyEvent ) override;
     virtual css::awt::KeyEvent getAcceleratorKeyEvent( ::sal_Int16 nItemId ) override;
-    virtual void setItemImage( ::sal_Int16 nItemId, const css::uno::Reference< css::graphic::XGraphic >& xGraphic, bool bScale ) override;
-    virtual css::uno::Reference< css::graphic::XGraphic > getItemImage( ::sal_Int16 nItemId ) override;
+    virtual void setItemImage( ::sal_Int16 nItemId, const cpo::uno::Reference< css::graphic::XGraphic >& xGraphic, bool bScale ) override;
+    virtual cpo::uno::Reference< css::graphic::XGraphic > getItemImage( ::sal_Int16 nItemId ) override;
 
     // css::lang::XServiceInfo
     virtual OUString getImplementationName(  ) override;

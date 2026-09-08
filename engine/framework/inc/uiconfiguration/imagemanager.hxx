@@ -35,7 +35,7 @@ namespace framework
     class ImageManager final : public ::cppu::WeakImplHelper< css::ui::XImageManager, css::lang::XServiceInfo>
     {
         public:
-            ImageManager( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext, bool bForModule );
+            ImageManager( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext, bool bForModule );
             virtual ~ImageManager() override;
 
             virtual OUString getImplementationName() override
@@ -56,8 +56,8 @@ namespace framework
 
             // XComponent
             virtual void dispose() override;
-            virtual void addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-            virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+            virtual void addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& xListener ) override;
+            virtual void removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
             // XInitialization
             virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
@@ -66,25 +66,25 @@ namespace framework
             virtual void reset() override;
             virtual cpo::uno::Sequence< OUString > getAllImageNames( ::sal_Int16 nImageType ) override;
             virtual bool hasImage( ::sal_Int16 nImageType, const OUString& aCommandURL ) override;
-            virtual cpo::uno::Sequence< css::uno::Reference< css::graphic::XGraphic > > getImages( ::sal_Int16 nImageType, const cpo::uno::Sequence< OUString >& aCommandURLSequence ) override;
-            virtual void replaceImages( ::sal_Int16 nImageType, const cpo::uno::Sequence< OUString >& aCommandURLSequence, const cpo::uno::Sequence< css::uno::Reference< css::graphic::XGraphic > >& aGraphicsSequence ) override;
+            virtual cpo::uno::Sequence< cpo::uno::Reference< css::graphic::XGraphic > > getImages( ::sal_Int16 nImageType, const cpo::uno::Sequence< OUString >& aCommandURLSequence ) override;
+            virtual void replaceImages( ::sal_Int16 nImageType, const cpo::uno::Sequence< OUString >& aCommandURLSequence, const cpo::uno::Sequence< cpo::uno::Reference< css::graphic::XGraphic > >& aGraphicsSequence ) override;
             virtual void removeImages( ::sal_Int16 nImageType, const cpo::uno::Sequence< OUString >& aResourceURLSequence ) override;
-            virtual void insertImages( ::sal_Int16 nImageType, const cpo::uno::Sequence< OUString >& aCommandURLSequence, const cpo::uno::Sequence< css::uno::Reference< css::graphic::XGraphic > >& aGraphicSequence ) override;
+            virtual void insertImages( ::sal_Int16 nImageType, const cpo::uno::Sequence< OUString >& aCommandURLSequence, const cpo::uno::Sequence< cpo::uno::Reference< css::graphic::XGraphic > >& aGraphicSequence ) override;
 
             // XUIConfiguration
-            virtual void addConfigurationListener( const css::uno::Reference< css::ui::XUIConfigurationListener >& Listener ) override;
-            virtual void removeConfigurationListener( const css::uno::Reference< css::ui::XUIConfigurationListener >& Listener ) override;
+            virtual void addConfigurationListener( const cpo::uno::Reference< css::ui::XUIConfigurationListener >& Listener ) override;
+            virtual void removeConfigurationListener( const cpo::uno::Reference< css::ui::XUIConfigurationListener >& Listener ) override;
 
             // XUIConfigurationPersistence
             virtual void reload() override;
             virtual void store() override;
-            virtual void storeToStorage( const css::uno::Reference< css::embed::XStorage >& Storage ) override;
+            virtual void storeToStorage( const cpo::uno::Reference< css::embed::XStorage >& Storage ) override;
             virtual bool isModified() override;
             virtual bool isReadOnly() override;
 
             // Non-UNO methods
             /// @throws cpo::uno::RuntimeException
-            void setStorage( const css::uno::Reference< css::embed::XStorage >& Storage );
+            void setStorage( const cpo::uno::Reference< css::embed::XStorage >& Storage );
 
         private:
             ::std::unique_ptr<ImageManagerImpl> m_pImpl;

@@ -26,8 +26,8 @@
 
 namespace framework{
 
-LoadDispatcher::LoadDispatcher(const css::uno::Reference< cpo::uno::XComponentContext >& xContext    ,
-                               const css::uno::Reference< css::frame::XFrame >&          xOwnerFrame ,
+LoadDispatcher::LoadDispatcher(const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext    ,
+                               const cpo::uno::Reference< css::frame::XFrame >&          xOwnerFrame ,
                                OUString                                                  sTargetName ,
                                      sal_Int32                                           nSearchFlags)
     : m_xOwnerFrame (xOwnerFrame )
@@ -43,7 +43,7 @@ LoadDispatcher::~LoadDispatcher()
 
 void LoadDispatcher::dispatchWithNotification(const css::util::URL&                                             aURL      ,
                                                        const cpo::uno::Sequence< css::beans::PropertyValue >&            lArguments,
-                                                       const css::uno::Reference< css::frame::XDispatchResultListener >& xListener )
+                                                       const cpo::uno::Reference< css::frame::XDispatchResultListener >& xListener )
 {
     impl_dispatch( aURL, lArguments, xListener );
 }
@@ -51,33 +51,33 @@ void LoadDispatcher::dispatchWithNotification(const css::util::URL&             
 void LoadDispatcher::dispatch(const css::util::URL&                                  aURL      ,
                                        const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments)
 {
-    impl_dispatch( aURL, lArguments, css::uno::Reference< css::frame::XDispatchResultListener >() );
+    impl_dispatch( aURL, lArguments, cpo::uno::Reference< css::frame::XDispatchResultListener >() );
 }
 
 cpo::uno::Any LoadDispatcher::dispatchWithReturnValue( const css::util::URL& rURL,
                                                                 const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments )
 {
-    return impl_dispatch( rURL, lArguments, css::uno::Reference< css::frame::XDispatchResultListener >());
+    return impl_dispatch( rURL, lArguments, cpo::uno::Reference< css::frame::XDispatchResultListener >());
 }
 
-void LoadDispatcher::addStatusListener(const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/,
+void LoadDispatcher::addStatusListener(const cpo::uno::Reference< css::frame::XStatusListener >& /*xListener*/,
                                                 const css::util::URL&                                     /*aURL*/     )
 {
 }
 
-void LoadDispatcher::removeStatusListener(const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/,
+void LoadDispatcher::removeStatusListener(const cpo::uno::Reference< css::frame::XStatusListener >& /*xListener*/,
                                                    const css::util::URL&                                     /*aURL*/     )
 {
 }
 
 cpo::uno::Any LoadDispatcher::impl_dispatch( const css::util::URL& rURL,
                                              const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments,
-                                             const css::uno::Reference< css::frame::XDispatchResultListener >& xListener )
+                                             const cpo::uno::Reference< css::frame::XDispatchResultListener >& xListener )
 {
     // Attention: May be nobody outside hold such temp. dispatch object alive (because
     // the container in which we resist isn't implemented threadsafe but updated by a timer
     // and clear our reference...) we should hold us self alive!
-    css::uno::Reference< cpo::uno::XInterface > xThis(static_cast< css::frame::XNotifyingDispatch* >(this), css::uno::UNO_QUERY);
+    cpo::uno::Reference< cpo::uno::XInterface > xThis(static_cast< css::frame::XNotifyingDispatch* >(this), cpo::uno::UNO_QUERY);
 
     osl::MutexGuard g(m_mutex);
 
@@ -93,7 +93,7 @@ cpo::uno::Any LoadDispatcher::impl_dispatch( const css::util::URL& rURL,
                 css::frame::DispatchResultEvent(xThis, css::frame::DispatchResultState::DONTKNOW, cpo::uno::Any())); // DONTKNOW? ... not really started ... not really failed :-)
     }
 
-    css::uno::Reference< css::frame::XFrame > xBaseFrame(m_xOwnerFrame.get(), css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::frame::XFrame > xBaseFrame(m_xOwnerFrame.get(), cpo::uno::UNO_QUERY);
     if (!xBaseFrame.is() && xListener.is())
         xListener->dispatchFinished(
             css::frame::DispatchResultEvent(xThis, css::frame::DispatchResultState::FAILURE, cpo::uno::Any()));
@@ -101,7 +101,7 @@ cpo::uno::Any LoadDispatcher::impl_dispatch( const css::util::URL& rURL,
     // OK ... now the internal loader seems to be usable for new requests
     // and our owner frame seems to be valid for such operations.
     // Initialize it with all new but needed properties and start the loading.
-    css::uno::Reference< css::lang::XComponent > xComponent;
+    cpo::uno::Reference< css::lang::XComponent > xComponent;
     try
     {
         m_aLoader.startLoading( rURL.Complete, lArguments, xBaseFrame, m_sTarget, m_nSearchFlags, LoadEnvFeatures::AllowContentHandler | LoadEnvFeatures::WorkWithUI);

@@ -26,6 +26,7 @@
 #include <sal/log.hxx>
 
 using namespace css;
+using namespace ::cpo;
 using namespace xmloff::token;
 
 XMLSymbolImageContext::XMLSymbolImageContext(
@@ -65,9 +66,9 @@ void XMLSymbolImageContext::startFastElement(
     }
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLSymbolImageContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLSymbolImageContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
     if( (nElement & TOKEN_MASK) == xmloff::token::XML_BINARY_DATA )
     {

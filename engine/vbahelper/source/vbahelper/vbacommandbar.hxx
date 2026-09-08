@@ -29,13 +29,13 @@ class ScVbaCommandBar : public CommandBar_BASE
 {
 private:
     VbaCommandBarHelperRef pCBarHelper;
-    css::uno::Reference< css::container::XIndexAccess > m_xBarSettings;
+    cpo::uno::Reference< css::container::XIndexAccess > m_xBarSettings;
     OUString    m_sResourceUrl;
     bool        m_bIsMenu;
 
 public:
     /// @throws cpo::uno::RuntimeException
-    ScVbaCommandBar( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext, VbaCommandBarHelperRef pHelper, css::uno::Reference< css::container::XIndexAccess > xBarSettings, OUString sResourceUrl, bool bIsMenu );
+    ScVbaCommandBar( const cpo::uno::Reference< ov::XHelperInterface >& xParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext, VbaCommandBarHelperRef pHelper, cpo::uno::Reference< css::container::XIndexAccess > xBarSettings, OUString sResourceUrl, bool bIsMenu );
 
     // Attributes
     virtual OUString getName() override;
@@ -62,8 +62,8 @@ class VbaDummyCommandBar : public CommandBar_BASE
 public:
     /// @throws cpo::uno::RuntimeException
     VbaDummyCommandBar(
-            const css::uno::Reference< ov::XHelperInterface >& xParent,
-            const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
+            const cpo::uno::Reference< ov::XHelperInterface >& xParent,
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
             OUString aName );
 
     // Attributes

@@ -76,7 +76,7 @@ namespace com::sun::star::registry { class XRegistryKey; }
 using namespace css::java;
 using namespace css::lang;
 using namespace css::loader;
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace css::registry;
 
@@ -229,21 +229,21 @@ class JavaComponentLoader
     , public WeakComponentImplHelper<XImplementationLoader, XServiceInfo>
 {
     /** local context */
-    css::uno::Reference<XComponentContext> m_xComponentContext;
+    cpo::uno::Reference<XComponentContext> m_xComponentContext;
 
     /** possible remote process' context (use depends on configuration).
         note: lifetime must be effectively "static" as this JavaComponentLoader
         has no control over the lifetime of the services created via this
         context; hence JavaComponentLoader is a single-instance service.
      */
-    css::uno::Reference<XComponentContext> m_xRemoteComponentContext;
+    cpo::uno::Reference<XComponentContext> m_xRemoteComponentContext;
 
     /** Do not use m_javaLoader directly. Instead use getJavaLoader.
         This is either an in-process loader implemented in Java,
         or a remote instance of JavaComponentLoader running in uno process,
         acting as a proxy.
      */
-    css::uno::Reference<XImplementationLoader> m_javaLoader;
+    cpo::uno::Reference<XImplementationLoader> m_javaLoader;
     /** The returned Reference contains a null pointer if the office is not configured
         to run java.
 
@@ -251,12 +251,12 @@ class JavaComponentLoader
         If the Java implementation of the loader could not be obtained, for reasons other
         then that java was not configured the RuntimeException is thrown.
      */
-    const css::uno::Reference<XImplementationLoader> & getJavaLoader(OUString &);
+    const cpo::uno::Reference<XImplementationLoader> & getJavaLoader(OUString &);
 
 
 public:
     /// @throws RuntimeException
-    explicit JavaComponentLoader(css::uno::Reference<XComponentContext> xCtx);
+    explicit JavaComponentLoader(cpo::uno::Reference<XComponentContext> xCtx);
 
 public:
     // XServiceInfo
@@ -267,11 +267,11 @@ public:
     virtual void SAL_CALL disposing() override;
 
     // XImplementationLoader
-    virtual css::uno::Reference<XInterface> SAL_CALL activate(
+    virtual cpo::uno::Reference<XInterface> SAL_CALL activate(
         const OUString& implementationName, const OUString& implementationLoaderUrl,
-        const OUString& locationUrl, const css::uno::Reference<XRegistryKey>& xKey) override;
+        const OUString& locationUrl, const cpo::uno::Reference<XRegistryKey>& xKey) override;
     virtual bool SAL_CALL writeRegistryInfo(
-        const css::uno::Reference<XRegistryKey>& xKey,
+        const cpo::uno::Reference<XRegistryKey>& xKey,
         const OUString& implementationLoaderUrl, const OUString& locationUrl) override;
 };
 
@@ -291,7 +291,7 @@ void JavaComponentLoader::disposing()
     }
 }
 
-const css::uno::Reference<XImplementationLoader> & JavaComponentLoader::getJavaLoader(OUString & rRemoteArg)
+const cpo::uno::Reference<XImplementationLoader> & JavaComponentLoader::getJavaLoader(OUString & rRemoteArg)
 {
     static std::mutex ourMutex;
     std::unique_lock aGuard(ourMutex);
@@ -341,7 +341,7 @@ const css::uno::Reference<XImplementationLoader> & JavaComponentLoader::getJavaL
 
     try {
         // get a java vm, where we can create a loader
-        css::uno::Reference<XJavaVM> javaVM_xJavaVM(
+        cpo::uno::Reference<XJavaVM> javaVM_xJavaVM(
             m_xComponentContext->getValueByName(
                              (u"/singletons/"
                               "com.sun.star.java.theJavaVirtualMachine"_ustr)),
@@ -371,7 +371,7 @@ const css::uno::Reference<XImplementationLoader> & JavaComponentLoader::getJavaL
         {
             //throw RuntimeException(
             //   "javaloader error - JavaVirtualMachine service could not provide a VM",
-            //   css::uno::Reference<XInterface>());
+            //   cpo::uno::Reference<XInterface>());
             // We must not throw a RuntimeException, because this might end the applications.
             // It is ok if java components
             // are not working because the office can be installed without Java support.
@@ -470,7 +470,7 @@ const css::uno::Reference<XImplementationLoader> & JavaComponentLoader::getJavaL
         }
 
         // set the service manager at the javaloader
-        css::uno::Reference<XInitialization> javaLoader_XInitialization(m_javaLoader, UNO_QUERY_THROW);
+        cpo::uno::Reference<XInitialization> javaLoader_XInitialization(m_javaLoader, UNO_QUERY_THROW);
 
         Any any;
         any <<= m_xComponentContext->getServiceManager();
@@ -493,7 +493,7 @@ const css::uno::Reference<XImplementationLoader> & JavaComponentLoader::getJavaL
     return m_javaLoader;
 }
 
-JavaComponentLoader::JavaComponentLoader(css::uno::Reference<XComponentContext> xCtx)
+JavaComponentLoader::JavaComponentLoader(cpo::uno::Reference<XComponentContext> xCtx)
     : WeakComponentImplHelper(m_aMutex)
     , m_xComponentContext(std::move(xCtx))
 {
@@ -519,29 +519,29 @@ Sequence<OUString> SAL_CALL JavaComponentLoader::getSupportedServiceNames()
 
 // XImplementationLoader
 bool SAL_CALL JavaComponentLoader::writeRegistryInfo(
-    const css::uno::Reference<XRegistryKey> & xKey, const OUString & blabla,
+    const cpo::uno::Reference<XRegistryKey> & xKey, const OUString & blabla,
     const OUString & rLibName)
 {
     OUString remoteArg(blabla);
-    const css::uno::Reference<XImplementationLoader> & loader = getJavaLoader(remoteArg);
+    const cpo::uno::Reference<XImplementationLoader> & loader = getJavaLoader(remoteArg);
     if (!loader.is())
         throw CannotRegisterImplementationException(u"Could not create Java implementation loader"_ustr);
     return loader->writeRegistryInfo(xKey, remoteArg, rLibName);
 }
 
-css::uno::Reference<XInterface> SAL_CALL JavaComponentLoader::activate(
+cpo::uno::Reference<XInterface> SAL_CALL JavaComponentLoader::activate(
     const OUString & rImplName, const OUString & blabla, const OUString & rLibName,
-    const css::uno::Reference<XRegistryKey> & xKey)
+    const cpo::uno::Reference<XRegistryKey> & xKey)
 {
     OUString remoteArg(blabla);
     if (rImplName.isEmpty() && blabla.isEmpty() && rLibName.isEmpty())
     {
         // preload JVM was requested
         (void)getJavaLoader(remoteArg);
-        return css::uno::Reference<XInterface>();
+        return cpo::uno::Reference<XInterface>();
     }
 
-    const css::uno::Reference<XImplementationLoader> & loader = getJavaLoader(remoteArg);
+    const cpo::uno::Reference<XImplementationLoader> & loader = getJavaLoader(remoteArg);
     if (!loader.is())
         throw CannotActivateFactoryException(u"Could not create Java implementation loader"_ustr);
     return loader->activate(rImplName, remoteArg, rLibName, xKey);

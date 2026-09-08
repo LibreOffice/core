@@ -35,13 +35,13 @@ namespace sm::sidebar
 // static
 std::unique_ptr<PanelLayout>
 SmPropertiesPanel::Create(weld::Widget& rParent,
-                          const css::uno::Reference<css::frame::XFrame>& xFrame)
+                          const cpo::uno::Reference<css::frame::XFrame>& xFrame)
 {
     return std::make_unique<SmPropertiesPanel>(rParent, xFrame);
 }
 
 SmPropertiesPanel::SmPropertiesPanel(weld::Widget& rParent,
-                                     const css::uno::Reference<css::frame::XFrame>& xFrame)
+                                     const cpo::uno::Reference<css::frame::XFrame>& xFrame)
     : PanelLayout(&rParent, u"MathPropertiesPanel"_ustr,
                   u"modules/smath/ui/sidebarproperties_math.ui"_ustr)
     , mxFrame(xFrame)
@@ -57,9 +57,9 @@ SmPropertiesPanel::SmPropertiesPanel(weld::Widget& rParent,
     // Set localized labels to the buttons
     auto xConfs
         = css::frame::theUICommandDescription::get(comphelper::getProcessComponentContext());
-    if (css::uno::Reference<css::container::XNameAccess> xConf{
+    if (cpo::uno::Reference<css::container::XNameAccess> xConf{
             xConfs->getByName(u"com.sun.star.formula.FormulaProperties"_ustr),
-            css::uno::UNO_QUERY })
+            cpo::uno::UNO_QUERY })
     {
         for (const auto & [ button, command ] : maButtonCommands)
         {

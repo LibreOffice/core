@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
 #include <test/testdllapi.hxx>
@@ -27,14 +27,14 @@
 class OOO_DLLPUBLIC_TEST XAccessibleTextTester
 {
 protected:
-    const css::uno::Reference<css::accessibility::XAccessibleContext> m_xContext;
-    const css::uno::Reference<css::accessibility::XAccessibleText> m_xText;
+    const cpo::uno::Reference<css::accessibility::XAccessibleContext> m_xContext;
+    const cpo::uno::Reference<css::accessibility::XAccessibleText> m_xText;
 
 public:
     XAccessibleTextTester(
-        const css::uno::Reference<css::accessibility::XAccessibleContext>& xContext)
+        const cpo::uno::Reference<css::accessibility::XAccessibleContext>& xContext)
         : m_xContext(xContext)
-        , m_xText(m_xContext, css::uno::UNO_QUERY_THROW)
+        , m_xText(m_xContext, cpo::uno::UNO_QUERY_THROW)
     {
     }
 

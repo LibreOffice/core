@@ -30,7 +30,7 @@ class XMLFilterSettingsDialog : public weld::GenericDialogController
 {
 public:
     XMLFilterSettingsDialog(weld::Window* pParent,
-        const css::uno::Reference< cpo::uno::XComponentContext >& rxContext);
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext);
     virtual ~XMLFilterSettingsDialog() override;
 
     DECL_LINK(ClickHdl_Impl, weld::Button&, void );
@@ -70,10 +70,10 @@ private:
     static OUString getEntryString( const filter_info_impl* pInfo );
 
 private:
-    css::uno::Reference< cpo::uno::XComponentContext >    mxContext;
-    css::uno::Reference< css::container::XNameContainer > mxFilterContainer;
-    css::uno::Reference< css::container::XNameContainer > mxTypeDetection;
-    css::uno::Reference< css::container::XNameContainer > mxExtendedTypeDetection;
+    cpo::uno::Reference< cpo::uno::XComponentContext >    mxContext;
+    cpo::uno::Reference< css::container::XNameContainer > mxFilterContainer;
+    cpo::uno::Reference< css::container::XNameContainer > mxTypeDetection;
+    cpo::uno::Reference< css::container::XNameContainer > mxExtendedTypeDetection;
 
     std::vector< std::unique_ptr<filter_info_impl> > maFilterVector;
 

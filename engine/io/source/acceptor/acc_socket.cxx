@@ -32,7 +32,7 @@
 
 using namespace ::osl;
 using namespace ::cppu;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::connection;
@@ -40,7 +40,7 @@ using namespace ::com::sun::star::connection;
 
 namespace io_acceptor {
 
-    typedef std::unordered_set< css::uno::Reference< css::io::XStreamListener> >
+    typedef std::unordered_set< cpo::uno::Reference< css::io::XStreamListener> >
             XStreamListener_hash_set;
 
     namespace {
@@ -61,8 +61,8 @@ namespace io_acceptor {
         virtual OUString getDescription(  ) override;
 
         // XConnectionBroadcaster
-        virtual void addStreamListener(const css::uno::Reference< css::io::XStreamListener>& aListener) override;
-        virtual void removeStreamListener(const css::uno::Reference< css::io::XStreamListener>& aListener) override;
+        virtual void addStreamListener(const cpo::uno::Reference< css::io::XStreamListener>& aListener) override;
+        virtual void removeStreamListener(const cpo::uno::Reference< css::io::XStreamListener>& aListener) override;
 
     public:
         void completeConnectionString();

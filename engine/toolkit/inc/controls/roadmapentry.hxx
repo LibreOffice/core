@@ -47,7 +47,7 @@ public:
 
 private:
     /// @see css::beans::XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo >
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo >
         getPropertySetInfo() override;
 
     // OPropertySetHelper

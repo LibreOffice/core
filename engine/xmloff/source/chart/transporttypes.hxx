@@ -85,7 +85,7 @@ enum SchXMLLabeledSequencePart
 };
 typedef ::std::pair< tSchXMLIndex, SchXMLLabeledSequencePart > tSchXMLIndexWithPart;
 typedef ::std::multimap< tSchXMLIndexWithPart,
-        css::uno::Reference< css::chart2::data::XLabeledDataSequence > >
+        cpo::uno::Reference< css::chart2::data::XLabeledDataSequence > >
     tSchXMLLSequencesPerIndex;
 
 bool operator < ( const tSchXMLIndexWithPart & rFirst, const tSchXMLIndexWithPart & rSecond );
@@ -131,14 +131,14 @@ struct GlobalSeriesImportInfo
 
 struct RegressionStyle
 {
-    css::uno::Reference<
+    cpo::uno::Reference<
                 css::chart2::XDataSeries > m_xSeries;
-    css::uno::Reference<
+    cpo::uno::Reference<
                 css::beans::XPropertySet > m_xEquationProperties;
 
     OUString msStyleName;
 
-    RegressionStyle(css::uno::Reference<
+    RegressionStyle(cpo::uno::Reference<
                           css::chart2::XDataSeries > xSeries,
                     OUString sStyleName) :
             m_xSeries    (std::move( xSeries )),
@@ -177,13 +177,13 @@ struct DataRowPointStyle
     };
 
     StyleType meType;
-    css::uno::Reference< css::chart2::XDataSeries > m_xSeries;
+    cpo::uno::Reference< css::chart2::XDataSeries > m_xSeries;
 
-    css::uno::Reference< css::beans::XPropertySet > m_xOldAPISeries;
+    cpo::uno::Reference< css::beans::XPropertySet > m_xOldAPISeries;
 
-    css::uno::Reference< css::beans::XPropertySet > m_xErrorXProperties;
+    cpo::uno::Reference< css::beans::XPropertySet > m_xErrorXProperties;
 
-    css::uno::Reference< css::beans::XPropertySet > m_xErrorYProperties;
+    cpo::uno::Reference< css::beans::XPropertySet > m_xErrorYProperties;
 
     sal_Int32 m_nPointIndex;
     sal_Int32 m_nPointRepeat;
@@ -200,7 +200,7 @@ struct DataRowPointStyle
     bool mbSymbolSizeForSeriesIsMissingInFile;
 
     DataRowPointStyle( StyleType eType
-                        , css::uno::Reference< css::chart2::XDataSeries > xSeries
+                        , cpo::uno::Reference< css::chart2::XDataSeries > xSeries
                         , sal_Int32 nPointIndex
                         , sal_Int32 nPointRepeat
                         , OUString sStyleName
@@ -226,7 +226,7 @@ struct DataRowPointStyle
     }
 };
 
-typedef ::std::multimap< OUString, css::uno::Reference<
+typedef ::std::multimap< OUString, cpo::uno::Reference<
         css::chart2::data::XDataSequence > > tSchXMLRangeSequenceMap;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

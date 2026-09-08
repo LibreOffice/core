@@ -20,10 +20,10 @@ canvas/inc/base/graphicdevicebase.hxx:239
     unsigned char canvas::GraphicDeviceBase::enterFullScreenMode(unsigned char,)
     0
 canvas/inc/base/graphicdevicebase.hxx:305
-    void canvas::GraphicDeviceBase::removePropertyChangeListener(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertyChangeListener> &,)
+    void canvas::GraphicDeviceBase::removePropertyChangeListener(const class rtl::OUString &,const class cpo::uno::Reference<class com::sun::star::beans::XPropertyChangeListener> &,)
     empty
 canvas/inc/base/graphicdevicebase.hxx:318
-    void canvas::GraphicDeviceBase::removeVetoableChangeListener(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XVetoableChangeListener> &,)
+    void canvas::GraphicDeviceBase::removeVetoableChangeListener(const class rtl::OUString &,const class cpo::uno::Reference<class com::sun::star::beans::XVetoableChangeListener> &,)
     empty
 include/basegfx/utils/unopolypolygon.hxx:93
     void basegfx::unotools::UnoPolyPolygon::modifying()const
@@ -95,7 +95,7 @@ vcl/inc/qt5/QtFilePicker.hxx:182
     void QtFilePicker::updateAutomaticFileExtension()
     empty
 vcl/inc/salbmp.hxx:71
-    _Bool SalBitmap::Create(const class com::sun::star::uno::Reference<class com::sun::star::rendering::XBitmapCanvas> &,class Size &,_Bool,)
+    _Bool SalBitmap::Create(const class cpo::uno::Reference<class com::sun::star::rendering::XBitmapCanvas> &,class Size &,_Bool,)
     0
 vcl/inc/salframe.hxx:145
     void SalFrame::SetRepresentedURL(const class rtl::OUString &,)

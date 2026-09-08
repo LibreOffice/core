@@ -33,8 +33,8 @@
 #include <vcl/svapp.hxx>
 
 using namespace com::sun::star;
-using namespace com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::lang;
@@ -47,7 +47,7 @@ namespace framework
 {
 
 MenuBarWrapper::MenuBarWrapper(
-    css::uno::Reference< cpo::uno::XComponentContext > xContext
+    cpo::uno::Reference< cpo::uno::XComponentContext > xContext
     )
 :    MenuBarWrapper_Base( UIElementType::MENUBAR ),
      m_bRefreshPopupControllerCache( true ),

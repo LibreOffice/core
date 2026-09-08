@@ -59,7 +59,8 @@
 #include <txtftn.hxx>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 namespace
 {
@@ -1398,7 +1399,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf69500)
     static constexpr OUString sToolBarName = u"private:resource/toolbar/custom_toolbar_1"_ustr;
 
     auto getUIConfigManager = [this]() {
-        css::uno::Reference<cpo::uno::XComponentContext> xContext
+        cpo::uno::Reference<cpo::uno::XComponentContext> xContext
             = comphelper::getProcessComponentContext();
         uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
         CPPUNIT_ASSERT(xModel.is());
@@ -1442,7 +1443,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf60700_images)
     createSwDoc();
 
     auto getUIConfigManager = [this]() {
-        css::uno::Reference<cpo::uno::XComponentContext> xContext
+        cpo::uno::Reference<cpo::uno::XComponentContext> xContext
             = comphelper::getProcessComponentContext();
         uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
         CPPUNIT_ASSERT(xModel.is());
@@ -1467,7 +1468,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf60700_images)
         cpo::uno::Sequence<OUString> aImportURL{ u".uno:OpenFromWriter"_ustr };
         cpo::uno::Sequence<uno::Reference<graphic::XGraphic>> aImportGraph{ xGraphic };
 
-        css::uno::Reference<css::ui::XImageManager> xImgMgr(getUIConfigManager()->getImageManager(),
+        cpo::uno::Reference<css::ui::XImageManager> xImgMgr(getUIConfigManager()->getImageManager(),
                                                             uno::UNO_QUERY);
 
         xImgMgr->insertImages(imageType, aImportURL, aImportGraph);
@@ -1479,7 +1480,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf60700_images)
     // Verify that the custom icon is still present after save-and-reload
     {
         uno::Reference<ui::XUIConfigurationManager> xConfigManager = getUIConfigManager();
-        css::uno::Reference<css::ui::XImageManager> xImgMgr(xConfigManager->getImageManager(),
+        cpo::uno::Reference<css::ui::XImageManager> xImgMgr(xConfigManager->getImageManager(),
                                                             uno::UNO_QUERY);
 
         CPPUNIT_ASSERT(xImgMgr->hasImage(imageType, u".uno:OpenFromWriter"_ustr));
@@ -1491,7 +1492,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf60700_accelerators)
     createSwDoc();
 
     auto getUIConfigManager = [this]() {
-        css::uno::Reference<cpo::uno::XComponentContext> xContext
+        cpo::uno::Reference<cpo::uno::XComponentContext> xContext
             = comphelper::getProcessComponentContext();
         uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
         CPPUNIT_ASSERT(xModel.is());
@@ -1510,7 +1511,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf60700_accelerators)
 
     // Create and persist a custom keyboard shortcut to the document
     {
-        css::uno::Reference<css::ui::XAcceleratorConfiguration> xAccel
+        cpo::uno::Reference<css::ui::XAcceleratorConfiguration> xAccel
             = getUIConfigManager()->getShortCutManager();
 
         xAccel->setKeyEvent(aCtrlU, sCommand);
@@ -1523,7 +1524,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf60700_accelerators)
     // Verify that the custom keyboard shortcut is still present after save-and-reload
     {
         uno::Reference<ui::XUIConfigurationManager> xConfigManager = getUIConfigManager();
-        css::uno::Reference<css::ui::XAcceleratorConfiguration> xAccel
+        cpo::uno::Reference<css::ui::XAcceleratorConfiguration> xAccel
             = getUIConfigManager()->getShortCutManager();
 
         CPPUNIT_ASSERT_EQUAL(sCommand, xAccel->getCommandByKeyEvent(aCtrlU));

@@ -31,7 +31,7 @@
 
 namespace frm
 {
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::form;
@@ -404,7 +404,7 @@ void OGroupManager::RemoveElement( const Reference<XPropertySet>& xSet )
     removeFromGroupMap(sGroupName,xSet);
 }
 
-OUString OGroupManager::GetGroupName( const css::uno::Reference< css::beans::XPropertySet>& xComponent )
+OUString OGroupManager::GetGroupName( const cpo::uno::Reference< css::beans::XPropertySet>& xComponent )
 {
     if (!xComponent.is())
         return OUString();

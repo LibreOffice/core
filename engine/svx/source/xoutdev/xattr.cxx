@@ -362,7 +362,7 @@ bool XColorItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId)
     {
         case MID_COMPLEX_COLOR:
         {
-            css::uno::Reference<css::util::XComplexColor> xComplexColor;
+            cpo::uno::Reference<css::util::XComplexColor> xComplexColor;
             if (!(rVal >>= xComplexColor))
                 return false;
             setComplexColor(model::color::getFromXComplexColor(xComplexColor));
@@ -1091,7 +1091,7 @@ bool XLineColorItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId)
     {
         case MID_COMPLEX_COLOR:
         {
-            css::uno::Reference<css::util::XComplexColor> xComplexColor;
+            cpo::uno::Reference<css::util::XComplexColor> xComplexColor;
             if (!(rVal >>= xComplexColor))
                 return false;
             setComplexColor(model::color::getFromXComplexColor(xComplexColor));
@@ -1948,7 +1948,7 @@ bool XFillColorItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
         break;
         case MID_COMPLEX_COLOR:
         {
-            css::uno::Reference<css::util::XComplexColor> xComplexColor;
+            cpo::uno::Reference<css::util::XComplexColor> xComplexColor;
             if (!(rVal >>= xComplexColor))
                 return false;
             setComplexColor(model::color::getFromXComplexColor(xComplexColor));

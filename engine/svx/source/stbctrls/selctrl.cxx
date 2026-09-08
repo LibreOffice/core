@@ -141,8 +141,8 @@ bool SvxSelectionModeControl::MouseButtonDown( const MouseEvent& rEvt )
     SelectionTypePopup aPop(pPopupParent, mnState);
 
     // Check if Calc is opened; if true, hide block selection mode tdf#122280
-    const css::uno::Reference < css::frame::XModel > xModel = m_xFrame->getController()->getModel();
-    css::uno::Reference< css::lang::XServiceInfo > xServices( xModel, css::uno::UNO_QUERY );
+    const cpo::uno::Reference < css::frame::XModel > xModel = m_xFrame->getController()->getModel();
+    cpo::uno::Reference< css::lang::XServiceInfo > xServices( xModel, cpo::uno::UNO_QUERY );
     if ( xServices.is() )
     {
         bool bSpecModeCalc = xServices->supportsService(u"com.sun.star.sheet.SpreadsheetDocument"_ustr);

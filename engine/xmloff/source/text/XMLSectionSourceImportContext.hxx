@@ -20,7 +20,7 @@
 #pragma once
 
 #include <xmloff/xmlictxt.hxx>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 
 namespace com::sun::star {
     namespace beans { class XPropertySet; }
@@ -28,18 +28,18 @@ namespace com::sun::star {
 
 class XMLSectionSourceImportContext final : public SvXMLImportContext
 {
-    css::uno::Reference<css::beans::XPropertySet> & rSectionPropertySet;
+    cpo::uno::Reference<css::beans::XPropertySet> & rSectionPropertySet;
 
 public:
 
     XMLSectionSourceImportContext(
         SvXMLImport& rImport,
-        css::uno::Reference<css::beans::XPropertySet> & rSectPropSet);
+        cpo::uno::Reference<css::beans::XPropertySet> & rSectPropSet);
 
     virtual ~XMLSectionSourceImportContext() override;
 
     virtual void startFastElement( sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

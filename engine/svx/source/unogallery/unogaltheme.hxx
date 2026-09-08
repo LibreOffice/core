@@ -70,8 +70,8 @@ protected:
     virtual OUString getName(  ) override;
     virtual void update(  ) override;
     virtual ::sal_Int32 insertURLByIndex( const OUString& URL, ::sal_Int32 Index ) override;
-    virtual ::sal_Int32 insertGraphicByIndex( const css::uno::Reference< css::graphic::XGraphic >& Graphic, ::sal_Int32 Index ) override;
-    virtual ::sal_Int32 insertDrawingByIndex( const css::uno::Reference< css::lang::XComponent >& Drawing, ::sal_Int32 Index ) override;
+    virtual ::sal_Int32 insertGraphicByIndex( const cpo::uno::Reference< css::graphic::XGraphic >& Graphic, ::sal_Int32 Index ) override;
+    virtual ::sal_Int32 insertDrawingByIndex( const cpo::uno::Reference< css::lang::XComponent >& Drawing, ::sal_Int32 Index ) override;
     virtual void removeByIndex( ::sal_Int32 Index ) override;
 
     // SfxListener

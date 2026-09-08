@@ -39,18 +39,18 @@ namespace chart::RegressionCurveHelper
         createRegressionCurveByServiceName( std::u16string_view aServiceName );
 
     bool hasMeanValueLine(
-        const css::uno::Reference<css::chart2::XRegressionCurveContainer> & xRegCnt );
+        const cpo::uno::Reference<css::chart2::XRegressionCurveContainer> & xRegCnt );
     bool hasMeanValueLine(
         const rtl::Reference<::chart::DataSeries> & xRegCnt );
 
     bool isMeanValueLine(
-        const css::uno::Reference<css::chart2::XRegressionCurve> & xRegCurve );
+        const cpo::uno::Reference<css::chart2::XRegressionCurve> & xRegCurve );
     bool isMeanValueLine(
         const rtl::Reference<::chart::RegressionCurveModel> & xRegCurve );
 
     rtl::Reference<::chart::RegressionCurveModel>
         getMeanValueLine(
-            const css::uno::Reference<css::chart2::XRegressionCurveContainer> & xRegCnt );
+            const cpo::uno::Reference<css::chart2::XRegressionCurveContainer> & xRegCnt );
     rtl::Reference<::chart::RegressionCurveModel>
         getMeanValueLine(
             const rtl::Reference<::chart::DataSeries> & xRegCnt );
@@ -61,14 +61,14 @@ namespace chart::RegressionCurveHelper
              If set, this property-set will be used to apply a line color
      */
     void addMeanValueLine(
-        css::uno::Reference<css::chart2::XRegressionCurveContainer> const & xRegCnt,
-        const css::uno::Reference<css::beans::XPropertySet>& xSeriesProp );
+        cpo::uno::Reference<css::chart2::XRegressionCurveContainer> const & xRegCnt,
+        const cpo::uno::Reference<css::beans::XPropertySet>& xSeriesProp );
     void addMeanValueLine(
         rtl::Reference<::chart::DataSeries> const & xRegCnt,
-        const css::uno::Reference<css::beans::XPropertySet>& xSeriesProp );
+        const cpo::uno::Reference<css::beans::XPropertySet>& xSeriesProp );
 
     void removeMeanValueLine(
-        css::uno::Reference<css::chart2::XRegressionCurveContainer> const & xRegCnt );
+        cpo::uno::Reference<css::chart2::XRegressionCurveContainer> const & xRegCnt );
     void removeMeanValueLine(
         rtl::Reference<::chart::DataSeries> const & xRegCnt );
 
@@ -77,7 +77,7 @@ namespace chart::RegressionCurveHelper
      */
     rtl::Reference<::chart::RegressionCurveModel>
         getFirstCurveNotMeanValueLine(
-            const css::uno::Reference<css::chart2::XRegressionCurveContainer>& xCurveContainer );
+            const cpo::uno::Reference<css::chart2::XRegressionCurveContainer>& xCurveContainer );
     rtl::Reference<::chart::RegressionCurveModel>
         getFirstCurveNotMeanValueLine(
             const rtl::Reference<::chart::DataSeries>& xCurveContainer );
@@ -93,10 +93,10 @@ namespace chart::RegressionCurveHelper
         mean-value line
      */
     SvxChartRegress getFirstRegressTypeNotMeanValueLine(
-        const css::uno::Reference<css::chart2::XRegressionCurveContainer>& xCurveContainer );
+        const cpo::uno::Reference<css::chart2::XRegressionCurveContainer>& xCurveContainer );
 
     SvxChartRegress getRegressionType(
-        const css::uno::Reference<css::chart2::XRegressionCurve>& xCurve );
+        const cpo::uno::Reference<css::chart2::XRegressionCurve>& xCurve );
 
     /** @param xPropertySource is taken as source to copy all properties from if
                not null
@@ -106,19 +106,19 @@ namespace chart::RegressionCurveHelper
     rtl::Reference<::chart::RegressionCurveModel>
         addRegressionCurve(
             SvxChartRegress eType,
-            css::uno::Reference<css::chart2::XRegressionCurveContainer> const & xCurveContainer,
-            const css::uno::Reference<css::beans::XPropertySet >& xPropertySource =
-                    css::uno::Reference<css::beans::XPropertySet>(),
-            const css::uno::Reference<css::beans::XPropertySet>& xEquationProperties =
-                    css::uno::Reference<css::beans::XPropertySet>() );
+            cpo::uno::Reference<css::chart2::XRegressionCurveContainer> const & xCurveContainer,
+            const cpo::uno::Reference<css::beans::XPropertySet >& xPropertySource =
+                    cpo::uno::Reference<css::beans::XPropertySet>(),
+            const cpo::uno::Reference<css::beans::XPropertySet>& xEquationProperties =
+                    cpo::uno::Reference<css::beans::XPropertySet>() );
     rtl::Reference<::chart::RegressionCurveModel>
         addRegressionCurve(
             SvxChartRegress eType,
             rtl::Reference<::chart::DataSeries> const & xCurveContainer,
-            const css::uno::Reference<css::beans::XPropertySet >& xPropertySource =
-                    css::uno::Reference<css::beans::XPropertySet>(),
-            const css::uno::Reference<css::beans::XPropertySet>& xEquationProperties =
-                    css::uno::Reference<css::beans::XPropertySet>() );
+            const cpo::uno::Reference<css::beans::XPropertySet >& xPropertySource =
+                    cpo::uno::Reference<css::beans::XPropertySet>(),
+            const cpo::uno::Reference<css::beans::XPropertySet>& xEquationProperties =
+                    cpo::uno::Reference<css::beans::XPropertySet>() );
 
     bool removeAllExceptMeanValueLine(
         rtl::Reference<::chart::DataSeries> const & xCurveContainer );
@@ -129,8 +129,8 @@ namespace chart::RegressionCurveHelper
     rtl::Reference<::chart::RegressionCurveModel>
         changeRegressionCurveType(
             SvxChartRegress eType,
-            css::uno::Reference<css::chart2::XRegressionCurveContainer> const & xRegressionCurveContainer,
-            css::uno::Reference<css::chart2::XRegressionCurve> const & xRegressionCurve );
+            cpo::uno::Reference<css::chart2::XRegressionCurveContainer> const & xRegressionCurveContainer,
+            cpo::uno::Reference<css::chart2::XRegressionCurve> const & xRegressionCurve );
 
     /// returns a calculator object for regression curves (used by the view)
     rtl::Reference<::chart::RegressionCurveCalculator>
@@ -166,7 +166,7 @@ namespace chart::RegressionCurveHelper
         const rtl::Reference<RegressionCurveModel>& xCurve );
 
     void resetEquationPosition(
-        const css::uno::Reference<css::chart2::XRegressionCurve>& xCurve );
+        const cpo::uno::Reference<css::chart2::XRegressionCurve>& xCurve );
 
     /// @return the index of the given curve in the given container. -1 if not contained
     sal_Int32 getRegressionCurveIndex(

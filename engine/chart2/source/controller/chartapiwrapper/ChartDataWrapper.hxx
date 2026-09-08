@@ -50,7 +50,7 @@ class ChartDataWrapper final : public
 public:
     explicit ChartDataWrapper(std::shared_ptr<Chart2ModelContact> spChart2ModelContact);
     ChartDataWrapper(std::shared_ptr<Chart2ModelContact> spChart2ModelContact
-        , const css::uno::Reference< css::chart::XChartData >& xNewData );
+        , const cpo::uno::Reference< css::chart::XChartData >& xNewData );
     virtual ~ChartDataWrapper() override;
 
     /// XServiceInfo declarations
@@ -94,15 +94,15 @@ private:
     virtual void setColumnDescriptions( const cpo::uno::Sequence< OUString >& aColumnDescriptions ) override;
 
     // ____ XChartData (base of XChartDataArray) ____
-    virtual void addChartDataChangeEventListener( const css::uno::Reference< css::chart::XChartDataChangeEventListener >& aListener ) override;
-    virtual void removeChartDataChangeEventListener( const css::uno::Reference< css::chart::XChartDataChangeEventListener >& aListener ) override;
+    virtual void addChartDataChangeEventListener( const cpo::uno::Reference< css::chart::XChartDataChangeEventListener >& aListener ) override;
+    virtual void removeChartDataChangeEventListener( const cpo::uno::Reference< css::chart::XChartDataChangeEventListener >& aListener ) override;
     virtual double getNotANumber() override;
     virtual bool isNotANumber( double nNumber ) override;
 
     // ____ XComponent ____
     virtual void dispose() override;
-    virtual void addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-    virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+    virtual void addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& xListener ) override;
+    virtual void removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
     // ____ XEventListener ____
     virtual void disposing( const css::lang::EventObject& Source ) override;
@@ -114,7 +114,7 @@ private:
     void applyData( lcl_Operator& rDataOperator );
 
     std::mutex m_aMutex;
-    css::uno::Reference< css::chart2::XAnyDescriptionAccess > m_xDataAccess;
+    cpo::uno::Reference< css::chart2::XAnyDescriptionAccess > m_xDataAccess;
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
     ::comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_aEventListenerContainer;
 };

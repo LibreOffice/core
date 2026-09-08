@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <xmloff/xmlevent.hxx>
 
 #include <map>
@@ -81,7 +81,7 @@ public:
     /// create an appropriate import context for a particular event
     SvXMLImportContext* CreateContext(
         SvXMLImport& rImport,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList> & xAttrList,
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList> & xAttrList,
         XMLEventsImportContext* rEvents,
         const OUString& rXmlEventName,
         const OUString& rLanguage);

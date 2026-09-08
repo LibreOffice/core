@@ -62,6 +62,7 @@
 #include <vcl/gradient.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 namespace drawinglayer::processor2d
 {

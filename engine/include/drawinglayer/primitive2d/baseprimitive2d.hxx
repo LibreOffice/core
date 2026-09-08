@@ -197,7 +197,7 @@ public:
     /** The getDecomposition implementation for UNO API will use getDecomposition from this implementation. It
         will construct a ViewInformation2D from the ViewParameters for that purpose
      */
-    virtual cpo::uno::Sequence<::css::uno::Reference<::css::graphic::XPrimitive2D>>
+    virtual cpo::uno::Sequence<::cpo::uno::Reference<::css::graphic::XPrimitive2D>>
     getDecomposition(const cpo::uno::Sequence<css::beans::PropertyValue>& rViewParameters) override;
 
     /** The getRange implementation for UNO API will use getRange from this implementation. It

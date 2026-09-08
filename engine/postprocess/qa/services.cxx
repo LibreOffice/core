@@ -94,8 +94,8 @@ bool contains(
 }
 
 void addService(
-    css::uno::Reference<css::reflection::XServiceTypeDescription> const & service,
-    std::set<css::uno::Reference<css::reflection::XServiceTypeDescription>> * allServices)
+    cpo::uno::Reference<css::reflection::XServiceTypeDescription> const & service,
+    std::set<cpo::uno::Reference<css::reflection::XServiceTypeDescription>> * allServices)
 {
     assert(allServices != nullptr);
     if (!allServices->insert(service).second) {
@@ -117,11 +117,11 @@ public:
 
 private:
     void createInstance(
-        css::uno::Reference<css::container::XHierarchicalNameAccess> const & typeManager,
+        cpo::uno::Reference<css::container::XHierarchicalNameAccess> const & typeManager,
         OUString const & name, bool withArguments,
         OUString const & implementationName,
         cpo::uno::Sequence<OUString> const & serviceNames,
-        std::vector<css::uno::Reference<css::lang::XComponent>> * components);
+        std::vector<cpo::uno::Reference<css::lang::XComponent>> * components);
 };
 
 void Test::test() {
@@ -131,12 +131,12 @@ void Test::test() {
     // "~SwXMailMerge() goes into endless SwCache::Check()":
     denylist.emplace_back("SwXMailMerge");
 
-    css::uno::Reference<css::container::XContentEnumerationAccess> enumAcc(
-        m_xContext->getServiceManager(), css::uno::UNO_QUERY_THROW);
-    css::uno::Reference<css::container::XHierarchicalNameAccess> typeMgr(
+    cpo::uno::Reference<css::container::XContentEnumerationAccess> enumAcc(
+        m_xContext->getServiceManager(), cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::container::XHierarchicalNameAccess> typeMgr(
         m_xContext->getValueByName(
             u"/singletons/com.sun.star.reflection.theTypeDescriptionManager"_ustr),
-        css::uno::UNO_QUERY_THROW);
+        cpo::uno::UNO_QUERY_THROW);
     const cpo::uno::Sequence<OUString> serviceNames(
         m_xContext->getServiceManager()->getAvailableServiceNames());
     struct Constructor {
@@ -150,31 +150,31 @@ void Test::test() {
     };
     struct Implementation {
         Implementation(
-            css::uno::Reference<css::lang::XServiceInfo> const & theFactory,
+            cpo::uno::Reference<css::lang::XServiceInfo> const & theFactory,
             cpo::uno::Sequence<OUString> const & theServiceNames):
             factory(theFactory), serviceNames(theServiceNames),
             accumulationBased(false)
         {}
-        css::uno::Reference<css::lang::XServiceInfo> const factory;
+        cpo::uno::Reference<css::lang::XServiceInfo> const factory;
         cpo::uno::Sequence<OUString> const serviceNames;
         std::vector<Constructor> constructors;
         bool accumulationBased;
     };
     std::map<OUString, Implementation> impls;
     for (const auto& rServiceName : serviceNames) {
-        css::uno::Reference<css::container::XEnumeration> serviceImpls1(
+        cpo::uno::Reference<css::container::XEnumeration> serviceImpls1(
             enumAcc->createContentEnumeration(rServiceName),
-            css::uno::UNO_SET_THROW);
-        std::vector<css::uno::Reference<css::lang::XServiceInfo>> serviceImpls2;
+            cpo::uno::UNO_SET_THROW);
+        std::vector<cpo::uno::Reference<css::lang::XServiceInfo>> serviceImpls2;
         while (serviceImpls1->hasMoreElements()) {
             serviceImpls2.emplace_back(
-                    serviceImpls1->nextElement(), css::uno::UNO_QUERY_THROW);
+                    serviceImpls1->nextElement(), cpo::uno::UNO_QUERY_THROW);
         }
-        css::uno::Reference<css::reflection::XServiceTypeDescription2> desc;
+        cpo::uno::Reference<css::reflection::XServiceTypeDescription2> desc;
         if (typeMgr->hasByHierarchicalName(rServiceName)) {
             desc.set(
                 typeMgr->getByHierarchicalName(rServiceName),
-                css::uno::UNO_QUERY_THROW);
+                cpo::uno::UNO_QUERY_THROW);
         }
         if (serviceImpls2.empty()) {
             if (desc.is()) {
@@ -227,7 +227,7 @@ void Test::test() {
                     if (desc->isSingleInterfaceBased()) {
                         if (serviceImpls2.size() == 1) {
                             const cpo::uno::Sequence<
-                                css::uno::Reference<
+                                cpo::uno::Reference<
                                     css::reflection::XServiceConstructorDescription>>
                                         ctors(desc->getConstructors());
                             auto pCtor = std::find_if(ctors.begin(), ctors.end(),
@@ -249,7 +249,7 @@ void Test::test() {
             }
         }
     }
-    std::vector<css::uno::Reference<css::lang::XComponent>> comps;
+    std::vector<cpo::uno::Reference<css::lang::XComponent>> comps;
     for (auto const & i: impls) {
         if (std::find(denylist.begin(), denylist.end(), i.first)
             == denylist.end())
@@ -275,20 +275,20 @@ void Test::test() {
     SolarMutexReleaser rel;
     for (auto const & i: comps) {
         // cannot call dispose() on XDesktop before calling terminate()
-        if (!css::uno::Reference<css::frame::XDesktop>(i, css::uno::UNO_QUERY))
+        if (!cpo::uno::Reference<css::frame::XDesktop>(i, cpo::uno::UNO_QUERY))
             i->dispose();
     }
 }
 
 void Test::createInstance(
-    css::uno::Reference<css::container::XHierarchicalNameAccess> const & typeManager,
+    cpo::uno::Reference<css::container::XHierarchicalNameAccess> const & typeManager,
     OUString const & name, bool withArguments,
     OUString const & implementationName,
     cpo::uno::Sequence<OUString> const & serviceNames,
-    std::vector<css::uno::Reference<css::lang::XComponent>> * components)
+    std::vector<cpo::uno::Reference<css::lang::XComponent>> * components)
 {
     assert(components != nullptr);
-    css::uno::Reference<cpo::uno::XInterface> inst;
+    cpo::uno::Reference<cpo::uno::XInterface> inst;
     try {
         if (withArguments) {
             inst = m_xContext->getServiceManager()
@@ -313,12 +313,12 @@ void Test::createInstance(
             + msg(name) + "\" returned null reference")
          .getStr()),
         inst.is());
-    css::uno::Reference<css::lang::XComponent> comp(inst, css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::lang::XComponent> comp(inst, cpo::uno::UNO_QUERY);
     if (comp.is()) {
         components->push_back(comp);
     }
-    css::uno::Reference<css::lang::XServiceInfo> info(
-        inst, css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::lang::XServiceInfo> info(
+        inst, cpo::uno::UNO_QUERY);
     CPPUNIT_ASSERT_MESSAGE(
         (OString(
             "instantiating \"" + msg(implementationName) + "\" via \""
@@ -385,7 +385,7 @@ void Test::createInstance(
             + msg(expServs))
          .getStr()),
         contains(servs, expServs));
-    std::set<css::uno::Reference<css::reflection::XServiceTypeDescription>> allservs;
+    std::set<cpo::uno::Reference<css::reflection::XServiceTypeDescription>> allservs;
     for (auto const & serv: servs) {
         if (!typeManager->hasByHierarchicalName(serv)) {
             std::cout
@@ -394,18 +394,18 @@ void Test::createInstance(
             continue;
         }
         addService(
-            css::uno::Reference<css::reflection::XServiceTypeDescription>(
-                typeManager->getByHierarchicalName(serv), css::uno::UNO_QUERY_THROW),
+            cpo::uno::Reference<css::reflection::XServiceTypeDescription>(
+                typeManager->getByHierarchicalName(serv), cpo::uno::UNO_QUERY_THROW),
             &allservs);
     }
-    css::uno::Reference<css::beans::XPropertySetInfo> propsinfo;
+    cpo::uno::Reference<css::beans::XPropertySetInfo> propsinfo;
     for (auto const & serv: allservs) {
         auto const props = serv->getProperties();
         for (auto const & prop: props) {
             auto const optional
                 = (prop->getPropertyFlags() & css::beans::PropertyAttribute::OPTIONAL) != 0;
             if (!propsinfo.is()) {
-                css::uno::Reference<css::beans::XPropertySet> propset(inst, css::uno::UNO_QUERY);
+                cpo::uno::Reference<css::beans::XPropertySet> propset(inst, cpo::uno::UNO_QUERY);
                 if (!propset.is()) {
                     CPPUNIT_ASSERT_MESSAGE(
                         (OString(

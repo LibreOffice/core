@@ -36,7 +36,7 @@ class ScAccessibleDocumentPagePreview final
 {
 public:
     ScAccessibleDocumentPagePreview(
-        const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
+        const cpo::uno::Reference<css::accessibility::XAccessible>& rxParent,
         ScPreviewShell* pViewShell );
 protected:
     virtual ~ScAccessibleDocumentPagePreview() override;
@@ -54,7 +54,7 @@ public:
 
     ///=====  XAccessibleComponent  ============================================
 
-    virtual css::uno::Reference< css::accessibility::XAccessible >
+    virtual cpo::uno::Reference< css::accessibility::XAccessible >
         SAL_CALL getAccessibleAtPoint(
         const css::awt::Point& rPoint ) override;
 
@@ -66,7 +66,7 @@ public:
     virtual sal_Int64 SAL_CALL getAccessibleChildCount() override;
 
     /// Return the specified child or NULL if index is invalid.
-    virtual css::uno::Reference< css::accessibility::XAccessible> SAL_CALL
+    virtual cpo::uno::Reference< css::accessibility::XAccessible> SAL_CALL
         getAccessibleChild(sal_Int64 nIndex) override;
 
     /// Return the set of current states.

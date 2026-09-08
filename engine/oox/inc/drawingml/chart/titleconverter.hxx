@@ -41,19 +41,19 @@ public:
     virtual             ~TextConverter() override;
 
     /** Creates a data sequence object from the contained text data. */
-    css::uno::Reference< css::chart2::data::XDataSequence >
+    cpo::uno::Reference< css::chart2::data::XDataSequence >
                         createDataSequence( const OUString& rRole );
     /** Creates a sequence of formatted string objects. */
-    cpo::uno::Sequence< css::uno::Reference< css::chart2::XFormattedString > >
+    cpo::uno::Sequence< cpo::uno::Reference< css::chart2::XFormattedString > >
                         createStringSequence(
                             const OUString& rDefaultText,
                             const ModelRef< TextBody >& rxTextProp,
                             ObjectType eObjType );
 
 private:
-    css::uno::Reference< css::chart2::XFormattedString >
+    cpo::uno::Reference< css::chart2::XFormattedString >
                         appendFormattedString(
-                            ::std::vector< css::uno::Reference< css::chart2::XFormattedString > >& orStringVec,
+                            ::std::vector< cpo::uno::Reference< css::chart2::XFormattedString > >& orStringVec,
                             const OUString& rString,
                             bool bAddNewLine ) const;
 };
@@ -70,7 +70,7 @@ public:
 
     /** Creates a title text object and attaches it at the passed interface. */
     void                convertFromModel(
-                            const css::uno::Reference< css::chart2::XTitled >& rxTitled,
+                            const cpo::uno::Reference< css::chart2::XTitled >& rxTitled,
                             const OUString& rAutoTitle, ObjectType eObjType,
                             ChartType eCT,
                             sal_Int32 nMainIdx = -1, sal_Int32 nSubIdx = -1 );
@@ -87,10 +87,10 @@ public:
 
     /** Creates a legend object and attaches it at the passed diagram. */
     void                convertFromModel(
-                            const css::uno::Reference< css::chart2::XDiagram >& rxDiagram, ChartType eCT );
+                            const cpo::uno::Reference< css::chart2::XDiagram >& rxDiagram, ChartType eCT );
 
 private:
-    void                legendEntriesFormatting(const css::uno::Reference<css::chart2::XDiagram>& rxDiagram);
+    void                legendEntriesFormatting(const cpo::uno::Reference<css::chart2::XDiagram>& rxDiagram);
 };
 
 

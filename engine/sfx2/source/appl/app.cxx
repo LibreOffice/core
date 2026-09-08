@@ -59,6 +59,7 @@
 #include "getbasctlfunction.hxx"
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 SfxLinkItem::~SfxLinkItem() = default;
 
@@ -326,7 +327,7 @@ std::vector<SfxViewShell*>& SfxApplication::GetViewShells_Impl() const
     return pImpl->maViewShells;
 }
 
-std::unordered_map<OUString, css::uno::Reference<css::ui::XAcceleratorConfiguration>>& SfxApplication::GetAcceleratorConfs_Impl() const
+std::unordered_map<OUString, cpo::uno::Reference<css::ui::XAcceleratorConfiguration>>& SfxApplication::GetAcceleratorConfs_Impl() const
 {
     return pImpl->maAcceleratorConfs;
 }
@@ -409,16 +410,16 @@ bool SfxApplication::IsXScriptURL( const OUString& rScriptURL )
 #if !HAVE_FEATURE_SCRIPTING
     (void) rScriptURL;
 #else
-    const css::uno::Reference< cpo::uno::XComponentContext >& xContext =
+    const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext =
             ::comphelper::getProcessComponentContext();
 
-    css::uno::Reference< css::uri::XUriReferenceFactory >
+    cpo::uno::Reference< css::uri::XUriReferenceFactory >
             xFactory = css::uri::UriReferenceFactory::create( xContext );
 
     try
     {
-        css::uno::Reference< css::uri::XVndSunStarScriptUrl >
-                xUrl( xFactory->parse( rScriptURL ),  css::uno::UNO_QUERY );
+        cpo::uno::Reference< css::uri::XVndSunStarScriptUrl >
+                xUrl( xFactory->parse( rScriptURL ),  cpo::uno::UNO_QUERY );
 
         if ( xUrl.is() )
         {

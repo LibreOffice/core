@@ -520,7 +520,7 @@ void ScCellShell::GetPossibleClipboardFormats( SvxClipboardFormatItem& rFormats 
 static bool lcl_IsCellPastePossible( const TransferableDataHelper& rData )
 {
     bool bPossible = false;
-    css::uno::Reference< css::datatransfer::XTransferable2 > xTransferable(rData.GetXTransferable(), css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::datatransfer::XTransferable2 > xTransferable(rData.GetXTransferable(), cpo::uno::UNO_QUERY);
     if ( ScTransferObj::GetOwnClipboard(xTransferable) || ScDrawTransferObj::GetOwnClipboard(xTransferable) )
         bPossible = true;
     else

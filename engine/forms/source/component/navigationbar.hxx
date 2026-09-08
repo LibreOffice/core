@@ -58,11 +58,11 @@ namespace frm
 
     public:
         ONavigationBarModel(
-            const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
+            const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
         );
         ONavigationBarModel(
             const ONavigationBarModel* _pOriginal,
-            const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
+            const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
         );
         virtual ~ONavigationBarModel() override;
 
@@ -79,8 +79,8 @@ namespace frm
 
         // XPersistObject
         virtual OUString getServiceName() override;
-        virtual void write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
-        virtual void read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
+        virtual void write(const cpo::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
+        virtual void read(const cpo::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
 
         // XPropertySet
         virtual void getFastPropertyValue(cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
@@ -101,7 +101,7 @@ namespace frm
         using OControlModel::getFastPropertyValue;
 
     protected:
-        virtual css::uno::Reference< css::util::XCloneable > createClone(  ) override;
+        virtual cpo::uno::Reference< css::util::XCloneable > createClone(  ) override;
 
     private:
         void implInitPropertyContainer();

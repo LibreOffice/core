@@ -39,7 +39,7 @@ namespace pcr
 {
 
 
-    typedef std::map< OUString, css::uno::Reference< css::beans::XPropertySet >, std::less< OUString > >
+    typedef std::map< OUString, cpo::uno::Reference< css::beans::XPropertySet >, std::less< OUString > >
             MapStringToPropertySet;
 
 
@@ -48,11 +48,11 @@ namespace pcr
     class EFormsHelper
     {
     protected:
-        css::uno::Reference< css::beans::XPropertySet >
+        cpo::uno::Reference< css::beans::XPropertySet >
                         m_xControlModel;
-        css::uno::Reference< css::form::binding::XBindableValue >
+        cpo::uno::Reference< css::form::binding::XBindableValue >
                         m_xBindableControl;
-        css::uno::Reference< css::xforms::XFormsSupplier >
+        cpo::uno::Reference< css::xforms::XFormsSupplier >
                         m_xDocument;
         PropertyChangeListeners
                         m_aPropertyListeners;
@@ -64,8 +64,8 @@ namespace pcr
     public:
         EFormsHelper(
             ::osl::Mutex& _rMutex,
-            const css::uno::Reference< css::beans::XPropertySet >& _rxControlModel,
-            const css::uno::Reference< css::frame::XModel >& _rxContextDocument
+            const cpo::uno::Reference< css::beans::XPropertySet >& _rxControlModel,
+            const cpo::uno::Reference< css::frame::XModel >& _rxContextDocument
         );
 
         /** determines whether the given document is an eForm
@@ -75,7 +75,7 @@ namespace pcr
         */
         static  bool
                 isEForm(
-                    const css::uno::Reference< css::frame::XModel >& _rxContextDocument
+                    const cpo::uno::Reference< css::frame::XModel >& _rxContextDocument
                 );
 
         /** registers a listener to be notified when any aspect of the binding changes.
@@ -87,14 +87,14 @@ namespace pcr
             @see revokeBindingListener
         */
         void    registerBindingListener(
-                    const css::uno::Reference< css::beans::XPropertyChangeListener >& _rxBindingListener
+                    const cpo::uno::Reference< css::beans::XPropertyChangeListener >& _rxBindingListener
                 );
 
         /** revokes the binding listener which has previously been registered
             @see registerBindingListener
         */
         void    revokeBindingListener(
-                    const css::uno::Reference< css::beans::XPropertyChangeListener >& _rxBindingListener
+                    const cpo::uno::Reference< css::beans::XPropertyChangeListener >& _rxBindingListener
                 );
 
         /** checks whether it's possible to bind the control model to a given XSD data type
@@ -123,12 +123,12 @@ namespace pcr
         void    getBindingNames( const OUString& _rModelName, std::vector< OUString >& /* [out] */ _rBindingNames ) const;
 
         /// retrieves the XForms model (within the control model's document) with the given name
-        css::uno::Reference< css::xforms::XModel >
+        cpo::uno::Reference< css::xforms::XModel >
                 getFormModelByName( const OUString& _rModelName ) const;
 
         /** retrieves the model which the active binding of the control model belongs to
         */
-        css::uno::Reference< css::xforms::XModel >
+        cpo::uno::Reference< css::xforms::XModel >
                 getCurrentFormModel() const;
 
         /** retrieves the name of the model which the active binding of the control model belongs to
@@ -138,7 +138,7 @@ namespace pcr
 
         /** retrieves the binding instance which is currently attached to the control model
         */
-        css::uno::Reference< css::beans::XPropertySet >
+        cpo::uno::Reference< css::beans::XPropertySet >
                 getCurrentBinding() const;
 
         /** retrieves the name of the binding instance which is currently attached to the control model
@@ -148,18 +148,18 @@ namespace pcr
 
         /** sets a new binding at the control model
         */
-        void    setBinding( const css::uno::Reference< css::beans::XPropertySet >& _rxBinding );
+        void    setBinding( const cpo::uno::Reference< css::beans::XPropertySet >& _rxBinding );
 
         /** retrieves the binding instance which is currently used as list source for the control model
             @see isListEntrySink
         */
-        css::uno::Reference< css::form::binding::XListEntrySource >
+        cpo::uno::Reference< css::form::binding::XListEntrySource >
                 getCurrentListSourceBinding() const;
 
         /** sets a new list source at the control model
             @see isListEntrySink
         */
-        void    setListSourceBinding( const css::uno::Reference< css::form::binding::XListEntrySource >& _rxListSource );
+        void    setListSourceBinding( const cpo::uno::Reference< css::form::binding::XListEntrySource >& _rxListSource );
 
         /** retrieves a given binding for a given model, or creates a new one
 
@@ -169,7 +169,7 @@ namespace pcr
                 the name of the binding to retrieve. If the model denoted by <arg>_rTargetModel</arg> does not
                 have a binding with this name, a new binding is created and returned.
         */
-        css::uno::Reference< css::beans::XPropertySet >
+        cpo::uno::Reference< css::beans::XPropertySet >
             getOrCreateBindingForModel( const OUString& _rTargetModel, const OUString& _rBindingName ) const;
 
         /** types of sub-elements of a model
@@ -187,7 +187,7 @@ namespace pcr
         static OUString
                 getModelElementUIName(
                     const ModelElementType _eType,
-                    const css::uno::Reference< css::beans::XPropertySet >& _rxElement
+                    const cpo::uno::Reference< css::beans::XPropertySet >& _rxElement
                 );
 
         /** retrieves the submission object for an UI name
@@ -197,7 +197,7 @@ namespace pcr
             @see getModelElementUIName
             @see getAllElementUINames
         */
-        css::uno::Reference< css::beans::XPropertySet >
+        cpo::uno::Reference< css::beans::XPropertySet >
                 getModelElementFromUIName(
                     const ModelElementType _eType,
                     const OUString& _rUIName
@@ -219,8 +219,8 @@ namespace pcr
 
     protected:
         void    firePropertyChanges(
-                    const css::uno::Reference< css::beans::XPropertySet >& _rxOldProps,
-                    const css::uno::Reference< css::beans::XPropertySet >& _rxNewProps,
+                    const cpo::uno::Reference< css::beans::XPropertySet >& _rxOldProps,
+                    const cpo::uno::Reference< css::beans::XPropertySet >& _rxNewProps,
                     std::set< OUString >& _rFilter
                 ) const;
 
@@ -234,14 +234,14 @@ namespace pcr
                 ) const;
 
     private:
-        void impl_switchBindingListening_throw( bool _bDoListening, const css::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener );
+        void impl_switchBindingListening_throw( bool _bDoListening, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener );
 
         /// implementation for both <member>getOrCreateBindingForModel</member>
-        css::uno::Reference< css::beans::XPropertySet >
+        cpo::uno::Reference< css::beans::XPropertySet >
             implGetOrCreateBinding( const OUString& _rTargetModel, const OUString& _rBindingName ) const;
 
         void
-            impl_toggleBindingPropertyListening_throw( bool _bDoListen, const css::uno::Reference< css::beans::XPropertyChangeListener >& _rxConcreteListenerOrNull );
+            impl_toggleBindingPropertyListening_throw( bool _bDoListen, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& _rxConcreteListenerOrNull );
 
     private:
         EFormsHelper( const EFormsHelper& ) = delete;

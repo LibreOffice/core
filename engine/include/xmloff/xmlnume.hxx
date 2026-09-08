@@ -30,7 +30,7 @@ namespace com::sun::star {
 }
 
 namespace cpo::uno { template <class E> class Sequence; }
-namespace com::sun::star::uno { template <class interface_type> class Reference; }
+namespace cpo::uno { template <class interface_type> class Reference; }
 
 class SvXMLExport;
 
@@ -48,7 +48,7 @@ class XMLOFF_DLLPUBLIC SvxXMLNumRuleExport final
             const cpo::uno::Sequence< css::beans::PropertyValue>& rProps,
             bool bOutline );
 
-    SAL_DLLPRIVATE void exportStyle( const css::uno::Reference< css::style::XStyle >& rStyle );
+    SAL_DLLPRIVATE void exportStyle( const cpo::uno::Reference< css::style::XStyle >& rStyle );
     SAL_DLLPRIVATE void exportOutline();
 
     SvXMLExport& GetExport() { return m_rExport; }
@@ -59,13 +59,13 @@ public:
 
     // should be private but sw::StoredChapterNumberingExport needs it
     void exportLevelStyles(
-            const css::uno::Reference< css::container::XIndexReplace > & xNumRule,
+            const cpo::uno::Reference< css::container::XIndexReplace > & xNumRule,
             bool bOutline=false );
 
     void exportStyles(bool bUsed, bool bExportChapterNumbering);
     void exportNumberingRule(
             const OUString& rName, bool bIsHidden,
-            const css::uno::Reference< css::container::XIndexReplace > & xNumRule );
+            const cpo::uno::Reference< css::container::XIndexReplace > & xNumRule );
 };
 
 #endif // INCLUDED_XMLOFF_XMLNUME_HXX

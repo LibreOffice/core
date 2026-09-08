@@ -140,8 +140,8 @@ class OControl  :public ::cppu::OComponentHelper
 {
 protected:
     ::osl::Mutex                                m_aMutex;
-    css::uno::Reference< css::awt::XControl >   m_xControl;
-    css::uno::Reference< cpo::uno::XAggregation>
+    cpo::uno::Reference< css::awt::XControl >   m_xControl;
+    cpo::uno::Reference< cpo::uno::XAggregation>
                                                 m_xAggregate;
 
     WindowStateGuard                            m_aWindowStateGuard;
@@ -160,19 +160,19 @@ public:
 
             This is helpful, if your derived class wants to cache an interface of the aggregate.
             In this case, the aggregate needs to be queried for this interface <b>before</b> the
-            <member scope="css::uno">XAggregation::setDelegator</member> call.
+            <member scope="cpo::uno">XAggregation::setDelegator</member> call.
 
             In such a case, pass <FALSE/> to this parameter. Then, cache the aggregate's interface(s)
             as needed. Afterwards, call <member>doSetDelegator</member>.
 
             In your destructor, you need to call <member>doResetDelegator</member> before
             resetting the cached interfaces. This will reset the aggregates delegator to <NULL/>,
-            which will ensure that the <member scope="css::uno">XInterface::release</member>
+            which will ensure that the <member scope="cpo::uno">XInterface::release</member>
             calls on the cached interfaces are really applied to the aggregate, instead of
             the <type>OControl</type> itself.
     */
     OControl(
-        const css::uno::Reference< cpo::uno::XComponentContext >& _rFactory,
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& _rFactory,
         const OUString& _rAggregateService,
         const bool _bSetDelegator = true
     );
@@ -203,9 +203,9 @@ protected:
 // XComponent (as base of XControl)
     virtual void dispose(  ) override
         { OComponentHelper::dispose(); }
-    virtual void addEventListener( const css::uno::Reference< css::lang::XEventListener>& _rxListener) override
+    virtual void addEventListener( const cpo::uno::Reference< css::lang::XEventListener>& _rxListener) override
         { OComponentHelper::addEventListener(_rxListener); }
-    virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener>& _rxListener) override
+    virtual void removeEventListener( const cpo::uno::Reference< css::lang::XEventListener>& _rxListener) override
         { OComponentHelper::removeEventListener(_rxListener); }
 
 // XEventListener
@@ -217,13 +217,13 @@ protected:
     virtual OUString    getImplementationName() override = 0;
 
 // XControl
-    virtual void                                        setContext(const css::uno::Reference<cpo::uno::XInterface>& Context) override;
-    virtual css::uno::Reference<cpo::uno::XInterface>   getContext() override;
-    virtual void                                        createPeer(const css::uno::Reference<css::awt::XToolkit>& Toolkit, const css::uno::Reference<css::awt::XWindowPeer>& Parent) override;
-    virtual css::uno::Reference<css::awt::XWindowPeer>  getPeer() override;
-    virtual bool                                    setModel(const css::uno::Reference<css::awt::XControlModel>& Model) override;
-    virtual css::uno::Reference<css::awt::XControlModel> getModel() override;
-    virtual css::uno::Reference<css::awt::XView>        getView() override;
+    virtual void                                        setContext(const cpo::uno::Reference<cpo::uno::XInterface>& Context) override;
+    virtual cpo::uno::Reference<cpo::uno::XInterface>   getContext() override;
+    virtual void                                        createPeer(const cpo::uno::Reference<css::awt::XToolkit>& Toolkit, const cpo::uno::Reference<css::awt::XWindowPeer>& Parent) override;
+    virtual cpo::uno::Reference<css::awt::XWindowPeer>  getPeer() override;
+    virtual bool                                    setModel(const cpo::uno::Reference<css::awt::XControlModel>& Model) override;
+    virtual cpo::uno::Reference<css::awt::XControlModel> getModel() override;
+    virtual cpo::uno::Reference<css::awt::XView>        getView() override;
     virtual void                                        setDesignMode(bool bOn) override;
     virtual bool                                    isDesignMode() override;
     virtual bool                                    isTransparent() override;
@@ -248,7 +248,7 @@ class OBoundControl :public OControl
 
 public:
     OBoundControl(
-        const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
         const OUString& _rAggregateService,
         const bool _bSetDelegator = true
     );
@@ -264,7 +264,7 @@ public:
         // default implementation just disables the controls, overwrite _setLock to change this behaviour
 
     // XControl
-    virtual bool setModel(const css::uno::Reference< css::awt::XControlModel >& Model) override;
+    virtual bool setModel(const cpo::uno::Reference< css::awt::XControlModel >& Model) override;
 
     // XEventListener
     virtual void disposing(const css::lang::EventObject& Source) override;
@@ -302,15 +302,15 @@ class OControlModel :public ::cppu::OComponentHelper
 {
 
 protected:
-    css::uno::Reference<cpo::uno::XComponentContext>  m_xContext;
+    cpo::uno::Reference<cpo::uno::XComponentContext>  m_xContext;
 
     ::osl::Mutex                    m_aMutex;
     oslInterlockedCount             m_lockCount;
 
-    css::uno::Reference<cpo::uno::XInterface>                    m_xParent;                  // ParentComponent
+    cpo::uno::Reference<cpo::uno::XInterface>                    m_xParent;                  // ParentComponent
     PropertyBagHelper               m_aPropertyBagHelper;
 
-    const css::uno::Reference<cpo::uno::XComponentContext>&
+    const cpo::uno::Reference<cpo::uno::XComponentContext>&
         getContext() const { return m_xContext; }
 
 // <properties>
@@ -329,14 +329,14 @@ protected:
 
 protected:
     OControlModel(
-        const css::uno::Reference< cpo::uno::XComponentContext>& _rFactory,   // factory to create the aggregate with
+        const cpo::uno::Reference< cpo::uno::XComponentContext>& _rFactory,   // factory to create the aggregate with
         const OUString& _rUnoControlModelTypeName,                       // service name of te model to aggregate
         const OUString& rDefault = OUString(),                    // service name of the default control
         const bool _bSetDelegator = true                                // set to false if you want to call setDelegator later (after returning from this ctor)
     );
     OControlModel(
         const OControlModel* _pOriginal,                                        // the original object to clone
-        const css::uno::Reference< cpo::uno::XComponentContext>& _rFactory,   // factory to create the aggregate with
+        const cpo::uno::Reference< cpo::uno::XComponentContext>& _rFactory,   // factory to create the aggregate with
         const bool _bCloneAggregate = true,                             // should the aggregate of the original be cloned, too?
         const bool _bSetDelegator = true                                // set to false if you want to call setDelegator later (after returning from this ctor)
     );
@@ -354,8 +354,8 @@ protected:
 
     virtual cpo::uno::Sequence< cpo::uno::Type>   _getTypes();
 
-    void    readHelpTextCompatibly(const css::uno::Reference< css::io::XObjectInputStream >& _rxInStream);
-    void    writeHelpTextCompatibly(const css::uno::Reference< css::io::XObjectOutputStream >& _rxOutStream);
+    void    readHelpTextCompatibly(const cpo::uno::Reference< css::io::XObjectInputStream >& _rxInStream);
+    void    writeHelpTextCompatibly(const cpo::uno::Reference< css::io::XObjectOutputStream >& _rxOutStream);
 
     void    doSetDelegator();
     void    doResetDelegator();
@@ -389,13 +389,13 @@ public:
 // XPersistObject
     virtual OUString    getServiceName() override = 0;
     virtual void
-        write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
+        write(const cpo::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
     virtual void
-        read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
+        read(const cpo::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
 
 // XChild (base of XFormComponent)
-    virtual css::uno::Reference<cpo::uno::XInterface>   getParent() override;
-    virtual void           setParent(const css::uno::Reference<cpo::uno::XInterface>& Parent) override;
+    virtual cpo::uno::Reference<cpo::uno::XInterface>   getParent() override;
+    virtual void           setParent(const cpo::uno::Reference<cpo::uno::XInterface>& Parent) override;
 
 // XEventListener
     virtual void disposing(const css::lang::EventObject& Source) override;
@@ -413,7 +413,7 @@ public:
     virtual cpo::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const override;
 
 // XCloneable
-    virtual css::uno::Reference< css::util::XCloneable > createClone(  ) override = 0;
+    virtual cpo::uno::Reference< css::util::XCloneable > createClone(  ) override = 0;
 
 // XPropertyContainer
     virtual void addProperty( const OUString& Name, ::sal_Int16 Attributes, const cpo::uno::Any& DefaultValue ) override;
@@ -428,12 +428,12 @@ protected:
     using OPropertySetAggregationHelper::getPropertyValues;
 
 protected:
-    virtual void writeAggregate( const css::uno::Reference< css::io::XObjectOutputStream >& _rxOutStream ) const;
-    virtual void readAggregate( const css::uno::Reference< css::io::XObjectInputStream >& _rxInStream );
+    virtual void writeAggregate( const cpo::uno::Reference< css::io::XObjectOutputStream >& _rxOutStream ) const;
+    virtual void readAggregate( const cpo::uno::Reference< css::io::XObjectInputStream >& _rxInStream );
 
 protected:
     // XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo> getPropertySetInfo() override;
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo> getPropertySetInfo() override;
     // OPropertySetHelper
     virtual cppu::IPropertyArrayHelper& getInfoHelper() override;
 
@@ -452,7 +452,7 @@ protected:
         cpo::uno::Sequence< css::beans::Property >& _out_rFixedProperties,
         cpo::uno::Sequence< css::beans::Property >& _out_rAggregateProperties
     ) const override;
-    virtual css::uno::Reference< css::beans::XMultiPropertySet >
+    virtual cpo::uno::Reference< css::beans::XMultiPropertySet >
                             getPropertiesInterface() override;
 
     /** describes the properties of our aggregate
@@ -523,10 +523,10 @@ protected:
     };
 
 private:
-    css::uno::Reference< css::beans::XPropertySet >
+    cpo::uno::Reference< css::beans::XPropertySet >
                                         m_xField;
     // the form which controls supplies the field we bind to.
-    css::uno::Reference< css::form::XLoadable >
+    cpo::uno::Reference< css::form::XLoadable >
                                         m_xAmbientForm;
 
     OUString                            m_sValuePropertyName;
@@ -541,15 +541,15 @@ private:
     ::comphelper::OInterfaceContainerHelper3<css::form::validation::XFormComponentValidityListener>
                                         m_aFormComponentListeners;
 
-    css::uno::Reference< css::form::binding::XValueBinding >
+    cpo::uno::Reference< css::form::binding::XValueBinding >
                                         m_xExternalBinding;
-    css::uno::Reference< css::form::validation::XValidator >
+    cpo::uno::Reference< css::form::validation::XValidator >
                                         m_xValidator;
     cpo::uno::Type                      m_aExternalValueType;
 
 // <properties>
     OUString                            m_aControlSource;           // data source, name of the field
-    css::uno::Reference< css::beans::XPropertySet >
+    cpo::uno::Reference< css::beans::XPropertySet >
                                         m_xLabelControl;            // reference to a sibling control (model) which is our label
     bool                                m_bInputRequired;
 // </properties>
@@ -579,11 +579,11 @@ protected:
         // Any other arguments will throw an IllegalArgumentException.
         // The default value is FM_COMPONENT_FIXEDTEXT.
 
-    css::uno::Reference< css::sdbc::XRowSet >
+    cpo::uno::Reference< css::sdbc::XRowSet >
                                         m_xCursor;
-    css::uno::Reference< css::sdb::XColumnUpdate >
+    cpo::uno::Reference< css::sdb::XColumnUpdate >
                                         m_xColumnUpdate;
-    css::uno::Reference< css::sdb::XColumn >
+    cpo::uno::Reference< css::sdb::XColumn >
                                         m_xColumn;
 
 protected:
@@ -595,7 +595,7 @@ protected:
 protected:
 
     OBoundControlModel(
-        const css::uno::Reference< cpo::uno::XComponentContext>& _rxContext,
+        const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxContext,
                                                             // factory to create the aggregate with
         const OUString& _rUnoControlModelTypeName,   // service name of te model to aggregate
         const OUString& _rDefault,                   // service name of the default control
@@ -605,7 +605,7 @@ protected:
     );
     OBoundControlModel(
         const OBoundControlModel* _pOriginal,               // the original object to clone
-        const css::uno::Reference< cpo::uno::XComponentContext>& _rxContext
+        const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxContext
                                                             // factory to create the aggregate with
     );
     virtual ~OBoundControlModel() override;
@@ -822,7 +822,7 @@ protected:
 
     /** called whenever a connection to a database column has been established
     */
-    virtual void            onConnectedDbColumn( const css::uno::Reference< cpo::uno::XInterface >& _rxForm );
+    virtual void            onConnectedDbColumn( const cpo::uno::Reference< cpo::uno::XInterface >& _rxForm );
     /** called whenever a connection to a database column has been suspended
     */
     virtual void            onDisconnectedDbColumn();
@@ -872,8 +872,8 @@ protected:
         (unfortunately). So derived classes may use the following two methods. They secure the written
         data with marks, so any new common properties in newer versions will be skipped by older ones.
     */
-    void    writeCommonProperties(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream);
-    void    readCommonProperties(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream);
+    void    writeCommonProperties(const cpo::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream);
+    void    readCommonProperties(const cpo::uno::Reference< css::io::XObjectInputStream>& _rxInStream);
     // the next method may be used in derived classes's read when an unknown version is encountered
     void    defaultCommonProperties();
 
@@ -894,7 +894,7 @@ protected:
 
     /// sets m_xField to the given new value, without notifying our listeners
     void    impl_setField_noNotify(
-                const css::uno::Reference< css::beans::XPropertySet>& _rxField
+                const cpo::uno::Reference< css::beans::XPropertySet>& _rxField
             );
     bool hasField() const
     {
@@ -911,7 +911,7 @@ protected:
     ) const override;
 
 public:
-    const css::uno::Reference< css::beans::XPropertySet>& getField() const
+    const cpo::uno::Reference< css::beans::XPropertySet>& getField() const
     {
         return m_xField;
     }
@@ -926,8 +926,8 @@ public:
 
     // XReset
     virtual void reset(  ) override;
-    virtual void addResetListener( const css::uno::Reference< css::form::XResetListener >& aListener ) override;
-    virtual void removeResetListener( const css::uno::Reference< css::form::XResetListener >& aListener ) override;
+    virtual void addResetListener( const cpo::uno::Reference< css::form::XResetListener >& aListener ) override;
+    virtual void removeResetListener( const cpo::uno::Reference< css::form::XResetListener >& aListener ) override;
 
     // XServiceInfo
     virtual cpo::uno::Sequence<OUString> getSupportedServiceNames(  ) override;
@@ -937,18 +937,18 @@ public:
     static  cpo::uno::Sequence<OUString> getSupportedServiceNames_Static();
 
     // XChild
-    virtual void setParent( const css::uno::Reference< cpo::uno::XInterface >& Parent ) override;
+    virtual void setParent( const cpo::uno::Reference< cpo::uno::XInterface >& Parent ) override;
 
     // XPersistObject
-    virtual void write( const css::uno::Reference< css::io::XObjectOutputStream >& OutStream ) override;
-    virtual void read( const css::uno::Reference< css::io::XObjectInputStream >& InStream ) override;
+    virtual void write( const cpo::uno::Reference< css::io::XObjectOutputStream >& OutStream ) override;
+    virtual void read( const cpo::uno::Reference< css::io::XObjectInputStream >& InStream ) override;
 
     // XBoundComponent
     virtual bool commit() override;
 
     // XUpdateBroadcaster (base of XBoundComponent)
-    virtual void addUpdateListener( const css::uno::Reference< css::form::XUpdateListener >& aListener ) override;
-    virtual void removeUpdateListener( const css::uno::Reference< css::form::XUpdateListener >& aListener ) override;
+    virtual void addUpdateListener( const cpo::uno::Reference< css::form::XUpdateListener >& aListener ) override;
+    virtual void removeUpdateListener( const cpo::uno::Reference< css::form::XUpdateListener >& aListener ) override;
 
     // XPropertySet
     virtual void getFastPropertyValue(cpo::uno::Any& rValue, sal_Int32 nHandle) const override;
@@ -978,15 +978,15 @@ public:
 
 protected:
     // XBindableValue
-    virtual void setValueBinding( const css::uno::Reference< css::form::binding::XValueBinding >& _rxBinding ) override;
-    virtual css::uno::Reference< css::form::binding::XValueBinding > getValueBinding(  ) override;
+    virtual void setValueBinding( const cpo::uno::Reference< css::form::binding::XValueBinding >& _rxBinding ) override;
+    virtual cpo::uno::Reference< css::form::binding::XValueBinding > getValueBinding(  ) override;
 
     // XModifyListener
     virtual void modified( const css::lang::EventObject& _rEvent ) override;
 
     // XValidatable
-    virtual void setValidator( const css::uno::Reference< css::form::validation::XValidator >& Validator ) override;
-    virtual css::uno::Reference< css::form::validation::XValidator > getValidator(  ) override;
+    virtual void setValidator( const cpo::uno::Reference< css::form::validation::XValidator >& Validator ) override;
+    virtual cpo::uno::Reference< css::form::validation::XValidator > getValidator(  ) override;
 
     // XValidityConstraintListener
     virtual void validityConstraintChanged( const css::lang::EventObject& Source ) override;
@@ -994,8 +994,8 @@ protected:
     // XValidatableFormComponent
     virtual bool isValid(  ) override;
     virtual cpo::uno::Any getCurrentValue(  ) override;
-    virtual void addFormComponentValidityListener( const css::uno::Reference< css::form::validation::XFormComponentValidityListener >& Listener ) override;
-    virtual void removeFormComponentValidityListener( const css::uno::Reference< css::form::validation::XFormComponentValidityListener >& Listener ) override;
+    virtual void addFormComponentValidityListener( const cpo::uno::Reference< css::form::validation::XFormComponentValidityListener >& Listener ) override;
+    virtual void removeFormComponentValidityListener( const cpo::uno::Reference< css::form::validation::XFormComponentValidityListener >& Listener ) override;
 
 protected:
     // OPropertyChangeListener
@@ -1053,10 +1053,10 @@ protected:
         @precond
             m_xField is not <NULL/>
     */
-    void        initFromField( const css::uno::Reference< css::sdbc::XRowSet>& _rxForm );
+    void        initFromField( const cpo::uno::Reference< css::sdbc::XRowSet>& _rxForm );
 
 private:
-    void        connectToField( const css::uno::Reference< css::sdbc::XRowSet>& _rxForm );
+    void        connectToField( const cpo::uno::Reference< css::sdbc::XRowSet>& _rxForm );
     void        resetField();
 
     /** does a new validation of the control value
@@ -1131,7 +1131,7 @@ private:
                 there currently is no external binding in place
     */
     void        connectExternalValueBinding(
-                    const css::uno::Reference< css::form::binding::XValueBinding >& _rxBinding,
+                    const cpo::uno::Reference< css::form::binding::XValueBinding >& _rxBinding,
                     ControlModelLock& _rInstanceLock
                 );
 
@@ -1150,7 +1150,7 @@ private:
             our mutex is currently locked exactly once
     */
     void        connectValidator(
-                    const css::uno::Reference< css::form::validation::XValidator >& _rxValidator
+                    const cpo::uno::Reference< css::form::validation::XValidator >& _rxValidator
                 );
 
     /** disconnects the component from its current an external validator
@@ -1177,7 +1177,7 @@ private:
         @seealso getExternalValueType
     */
     bool    impl_approveValueBinding_nolock(
-                    const css::uno::Reference< css::form::binding::XValueBinding >& _rxBinding
+                    const cpo::uno::Reference< css::form::binding::XValueBinding >& _rxBinding
                 );
 };
 

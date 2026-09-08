@@ -99,8 +99,8 @@ class SortedResultSet: public cppu::WeakImplHelper <
     comphelper::OMultiTypeInterfaceContainerHelperVar4<OUString, css::beans::XPropertyChangeListener>    maPropChangeListeners;
     comphelper::OMultiTypeInterfaceContainerHelperVar4<OUString, css::beans::XVetoableChangeListener>    maVetoChangeListeners;
 
-    css::uno::Reference < css::sdbc::XResultSet >            mxOriginal;
-    css::uno::Reference < css::sdbc::XResultSet >            mxOther;
+    cpo::uno::Reference < css::sdbc::XResultSet >            mxOriginal;
+    cpo::uno::Reference < css::sdbc::XResultSet >            mxOther;
 
     rtl::Reference<SRSPropertySetInfo> mpPropSetInfo;
     SortInfo*           mpSortInfo;
@@ -122,31 +122,31 @@ private:
     /// @throws cpo::uno::RuntimeException
     sal_Int32          Compare( SortListData const *pOne,
                                  SortListData const *pTwo );
-    void                BuildSortInfo( const css::uno::Reference< css::sdbc::XResultSet >& aResult,
+    void                BuildSortInfo( const cpo::uno::Reference< css::sdbc::XResultSet >& aResult,
                                        const cpo::uno::Sequence < css::ucb::NumberedSortingInfo > &xSortInfo,
-                                       const css::uno::Reference< css::ucb::XAnyCompareFactory > &xCompFac );
+                                       const cpo::uno::Reference< css::ucb::XAnyCompareFactory > &xCompFac );
     /// @throws css::sdbc::SQLException
     /// @throws cpo::uno::RuntimeException
-    static sal_Int32   CompareImpl( const css::uno::Reference < css::sdbc::XResultSet >& xResultOne,
-                                     const css::uno::Reference < css::sdbc::XResultSet >& xResultTwo,
+    static sal_Int32   CompareImpl( const cpo::uno::Reference < css::sdbc::XResultSet >& xResultOne,
+                                     const cpo::uno::Reference < css::sdbc::XResultSet >& xResultTwo,
                                      sal_Int32 nIndexOne, sal_Int32 nIndexTwo,
                                      SortInfo const * pSortInfo );
     /// @throws css::sdbc::SQLException
     /// @throws cpo::uno::RuntimeException
-    sal_Int32          CompareImpl( const css::uno::Reference < css::sdbc::XResultSet >& xResultOne,
-                                     const css::uno::Reference < css::sdbc::XResultSet >& xResultTwo,
+    sal_Int32          CompareImpl( const cpo::uno::Reference < css::sdbc::XResultSet >& xResultOne,
+                                     const cpo::uno::Reference < css::sdbc::XResultSet >& xResultTwo,
                                      sal_Int32 nIndexOne, sal_Int32 nIndexTwo );
     void               PropertyChangedImpl(std::unique_lock<std::mutex>& rGuard, const css::beans::PropertyChangeEvent& rEvt);
 
 public:
-                        SortedResultSet( css::uno::Reference< css::sdbc::XResultSet > const & aResult );
+                        SortedResultSet( cpo::uno::Reference< css::sdbc::XResultSet > const & aResult );
                         virtual ~SortedResultSet() override;
 
     sal_Int32          GetCount() const { return mnCount; }
 
     void                CopyData( SortedResultSet* pSource );
     void                Initialize( const cpo::uno::Sequence < css::ucb::NumberedSortingInfo > &xSortInfo,
-                                    const css::uno::Reference< css::ucb::XAnyCompareFactory > &xCompFac );
+                                    const cpo::uno::Reference< css::ucb::XAnyCompareFactory > &xCompFac );
     void                CheckProperties( sal_Int32 nOldCount, bool bWasFinal );
 
     void                InsertNew( sal_Int32 nPos, sal_Int32 nCount );
@@ -167,18 +167,18 @@ public:
     dispose() override;
 
     virtual void SAL_CALL
-    addEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener ) override;
+    addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& Listener ) override;
 
     virtual void SAL_CALL
-    removeEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener ) override;
+    removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& Listener ) override;
 
     // XContentAccess
     virtual OUString SAL_CALL
     queryContentIdentifierString() override;
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
                 css::ucb::XContentIdentifier > SAL_CALL
     queryContentIdentifier() override;
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
                 css::ucb::XContent > SAL_CALL
     queryContent() override;
 
@@ -217,7 +217,7 @@ public:
     rowInserted() override;
     virtual bool SAL_CALL
     rowDeleted() override;
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
                 cpo::uno::XInterface > SAL_CALL
     getStatement() override;
 
@@ -261,28 +261,28 @@ public:
     virtual css::util::DateTime SAL_CALL
     getTimestamp( sal_Int32 columnIndex ) override;
 
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
                 css::io::XInputStream > SAL_CALL
     getBinaryStream( sal_Int32 columnIndex ) override;
 
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
                 css::io::XInputStream > SAL_CALL
     getCharacterStream( sal_Int32 columnIndex ) override;
 
     virtual cpo::uno::Any SAL_CALL
     getObject( sal_Int32 columnIndex,
-               const css::uno::Reference<
+               const cpo::uno::Reference<
                    css::container::XNameAccess >& typeMap ) override;
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
                 css::sdbc::XRef > SAL_CALL
     getRef( sal_Int32 columnIndex ) override;
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
                 css::sdbc::XBlob > SAL_CALL
     getBlob( sal_Int32 columnIndex ) override;
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
                 css::sdbc::XClob > SAL_CALL
     getClob( sal_Int32 columnIndex ) override;
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
                 css::sdbc::XArray > SAL_CALL
     getArray( sal_Int32 columnIndex ) override;
 
@@ -291,12 +291,12 @@ public:
     close() override;
 
     // XResultSetMetaDataSupplier
-    virtual css::uno::Reference< css::sdbc::XResultSetMetaData > SAL_CALL
+    virtual cpo::uno::Reference< css::sdbc::XResultSetMetaData > SAL_CALL
     getMetaData() override;
 
 
     // XPropertySet
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
                 css::beans::XPropertySetInfo > SAL_CALL
     getPropertySetInfo() override;
 
@@ -309,22 +309,22 @@ public:
 
     virtual void SAL_CALL
     addPropertyChangeListener( const OUString& PropertyName,
-                               const css::uno::Reference<
+                               const cpo::uno::Reference<
                                        css::beans::XPropertyChangeListener >& Listener ) override;
 
     virtual void SAL_CALL
     removePropertyChangeListener( const OUString& PropertyName,
-                                  const css::uno::Reference<
+                                  const cpo::uno::Reference<
                                       css::beans::XPropertyChangeListener >& Listener ) override;
 
     virtual void SAL_CALL
     addVetoableChangeListener( const OUString& PropertyName,
-                               const css::uno::Reference<
+                               const cpo::uno::Reference<
                                        css::beans::XVetoableChangeListener >& Listener ) override;
 
     virtual void SAL_CALL
     removeVetoableChangeListener( const OUString& PropertyName,
-                                  const css::uno::Reference<
+                                  const cpo::uno::Reference<
                                       css::beans::XVetoableChangeListener >& aListener ) override;
 };
 

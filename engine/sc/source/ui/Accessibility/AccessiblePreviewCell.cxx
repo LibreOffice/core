@@ -37,6 +37,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
+using namespace ::cpo;
 
 ScAccessiblePreviewCell::ScAccessiblePreviewCell(
     const rtl::Reference<ScAccessiblePreviewTable>& rParent, ScPreviewShell* pViewShell,

@@ -34,7 +34,7 @@ class XMLContentControlContext : public SvXMLImportContext
 
     bool& m_rIgnoreLeadingSpace;
 
-    css::uno::Reference<css::text::XTextRange> m_xStart;
+    cpo::uno::Reference<css::text::XTextRange> m_xStart;
 
     bool m_bShowingPlaceHolder = false;
 
@@ -63,13 +63,13 @@ public:
 
     void startFastElement(
         sal_Int32 nElement,
-        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList) override;
+        const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList) override;
 
     void endFastElement(sal_Int32 nElement) override;
 
-    css::uno::Reference<css::xml::sax::XFastContextHandler> createFastChildContext(
+    cpo::uno::Reference<css::xml::sax::XFastContextHandler> createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference<css::xml::sax::XFastAttributeList>& rAttrList) override;
+        const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& rAttrList) override;
 
     void characters(const OUString& rChars) override;
 
@@ -86,7 +86,7 @@ public:
 
     void startFastElement(
         sal_Int32 nElement,
-        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList) override;
+        const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

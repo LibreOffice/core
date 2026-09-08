@@ -23,7 +23,7 @@
 
 #include <string_view>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <unotools/resmgr.hxx>
 
@@ -61,7 +61,7 @@ public:
             The shape from which properties will be extracted by later calls
             to <member>addProperty</member>.
     */
-    DescriptionGenerator(css::uno::Reference<css::drawing::XShape> xShape);
+    DescriptionGenerator(cpo::uno::Reference<css::drawing::XShape> xShape);
 
     ~DescriptionGenerator();
 
@@ -113,10 +113,10 @@ public:
 
 private:
     /// Reference to the shape from which the properties are extracted.
-    css::uno::Reference<css::drawing::XShape> mxShape;
+    cpo::uno::Reference<css::drawing::XShape> mxShape;
 
     /// Reference to the shape's property set.
-    css::uno::Reference<css::beans::XPropertySet> mxSet;
+    cpo::uno::Reference<css::beans::XPropertySet> mxSet;
 
     /// The description string that is build.
     OUStringBuffer msDescription;

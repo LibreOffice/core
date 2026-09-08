@@ -26,7 +26,7 @@
 
 namespace filter::config{
 
-FrameLoaderFactory::FrameLoaderFactory(const css::uno::Reference< cpo::uno::XComponentContext >& rxContext)
+FrameLoaderFactory::FrameLoaderFactory(const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext)
     : m_xContext(rxContext)
 {
     BaseContainer::init(u"com.sun.star.comp.filter.config.FrameLoaderFactory"_ustr  ,
@@ -40,13 +40,13 @@ FrameLoaderFactory::~FrameLoaderFactory()
 }
 
 
-css::uno::Reference< cpo::uno::XInterface > FrameLoaderFactory::createInstance(const OUString& sLoader)
+cpo::uno::Reference< cpo::uno::XInterface > FrameLoaderFactory::createInstance(const OUString& sLoader)
 {
     return createInstanceWithArguments(sLoader, cpo::uno::Sequence< cpo::uno::Any >());
 }
 
 
-css::uno::Reference< cpo::uno::XInterface > FrameLoaderFactory::createInstanceWithArguments(const OUString&                     sLoader  ,
+cpo::uno::Reference< cpo::uno::XInterface > FrameLoaderFactory::createInstanceWithArguments(const OUString&                     sLoader  ,
                                                                                                      const cpo::uno::Sequence< cpo::uno::Any >& lArguments)
 {
     // SAFE ->
@@ -58,10 +58,10 @@ css::uno::Reference< cpo::uno::XInterface > FrameLoaderFactory::createInstanceWi
     CacheItem aLoader = cache.getItem(m_eType, sLoader);
 
     // create service instance
-    css::uno::Reference< cpo::uno::XInterface > xLoader = m_xContext->getServiceManager()->createInstanceWithContext(sLoader, m_xContext);
+    cpo::uno::Reference< cpo::uno::XInterface > xLoader = m_xContext->getServiceManager()->createInstanceWithContext(sLoader, m_xContext);
 
     // initialize filter
-    css::uno::Reference< css::lang::XInitialization > xInit(xLoader, css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::lang::XInitialization > xInit(xLoader, cpo::uno::UNO_QUERY);
     if (xInit.is())
     {
         // format: lInitData[0] = seq<PropertyValue>, which contains all configuration properties of this loader

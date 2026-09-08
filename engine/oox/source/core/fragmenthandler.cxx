@@ -25,7 +25,7 @@
 namespace oox::core {
 
 using namespace ::com::sun::star::io;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::xml::sax;
 
 FragmentBaseData::FragmentBaseData( XmlFilterBase& rFilter, OUString aFragmentPath, RelationsRef xRelations ) :

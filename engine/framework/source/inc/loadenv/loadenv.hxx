@@ -101,12 +101,12 @@ private:
     /** @short  reference to a uno service manager, which must be used
                 to created on needed services on demand.
      */
-    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
     /** @short  points to the frame, which uses this LoadEnv object
                 and must be used to start target search there.
      */
-    css::uno::Reference< css::frame::XFrame > m_xBaseFrame;
+    cpo::uno::Reference< css::frame::XFrame > m_xBaseFrame;
 
     /** @short  points to the frame, into which the new component was loaded.
 
@@ -121,7 +121,7 @@ private:
                 to return the frame/controller or model to any interested
                 user of the results of this load request.
      */
-    css::uno::Reference< css::frame::XFrame > m_xTargetFrame;
+    cpo::uno::Reference< css::frame::XFrame > m_xTargetFrame;
 
     /** @short  contains the name of the target, in which the specified resource
                 of this instance must be loaded.
@@ -169,7 +169,7 @@ private:
     /** @short  it holds one (!) asynchronous used contenthandler or frameloader
                 alive, till the asynchronous operation will be finished.
      */
-    css::uno::Reference< cpo::uno::XInterface > m_xAsynchronousJob;
+    cpo::uno::Reference< cpo::uno::XInterface > m_xAsynchronousJob;
 
     /** @short  holds the information about the finished load process.
 
@@ -206,7 +206,7 @@ public:
         @throw  A RuntimeException in case any internal process indicates, that
                 the whole runtime can't be used any longer.
      */
-    LoadEnv(css::uno::Reference< cpo::uno::XComponentContext >  xContext);
+    LoadEnv(cpo::uno::Reference< cpo::uno::XComponentContext >  xContext);
 
     /** @short  deinitialize an instance of this class in the right way.
      */
@@ -215,8 +215,8 @@ public:
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::io::IOException
     /// @throws cpo::uno::RuntimeException
-    static css::uno::Reference< css::lang::XComponent > loadComponentFromURL(const css::uno::Reference< css::frame::XComponentLoader >&    xLoader,
-                                                                             const css::uno::Reference< cpo::uno::XComponentContext >&     xContext,
+    static cpo::uno::Reference< css::lang::XComponent > loadComponentFromURL(const cpo::uno::Reference< css::frame::XComponentLoader >&    xLoader,
+                                                                             const cpo::uno::Reference< cpo::uno::XComponentContext >&     xContext,
                                                                              const OUString&                                        sURL   ,
                                                                              const OUString&                                        sTarget,
                                                                                    sal_Int32                                               nFlags ,
@@ -271,7 +271,7 @@ public:
      */
     void startLoading(const OUString&                                           sURL            ,
                            const cpo::uno::Sequence< css::beans::PropertyValue >&    lMediaDescriptor,
-                           const css::uno::Reference< css::frame::XFrame >&          xBaseFrame      ,
+                           const cpo::uno::Reference< css::frame::XFrame >&          xBaseFrame      ,
                            const OUString&                                           sTarget         ,
                                  sal_Int32                                           nSearchFlags    ,
                                  LoadEnvFeatures                                     eFeature        = LoadEnvFeatures::NONE);
@@ -299,7 +299,7 @@ public:
     bool waitWhileLoading(sal_uInt32 nTimeout = 0);
 
     /** TODO document me ... */
-    css::uno::Reference< css::lang::XComponent > getTargetComponent() const;
+    cpo::uno::Reference< css::lang::XComponent > getTargetComponent() const;
 
 public:
 
@@ -337,7 +337,7 @@ public:
 
     /** TODO document me ... */
     static  void initializeUIDefaults(
-                const css::uno::Reference< cpo::uno::XComponentContext >& i_rxContext,
+                const cpo::uno::Reference< cpo::uno::XComponentContext >& i_rxContext,
                 comphelper::SequenceAsHashMap& io_lMediaDescriptor,
                 const bool _bUIMode,
                 rtl::Reference<QuietInteraction>* o_ppQuiteInteraction
@@ -347,7 +347,7 @@ public:
     void impl_setResult(bool bResult);
 
     /** TODO document me ... */
-    css::uno::Reference< cpo::uno::XInterface > impl_searchLoader();
+    cpo::uno::Reference< cpo::uno::XInterface > impl_searchLoader();
 
     /** @short  it means; show the frame, bring it to front,
                 might set the right icon etcpp. in case loading was
@@ -447,7 +447,7 @@ private:
         @throw  A RuntimeException in case any internal process indicates, that
                 the whole runtime can't be used any longer.
      */
-    css::uno::Reference< css::frame::XFrame > impl_searchAlreadyLoaded();
+    cpo::uno::Reference< css::frame::XFrame > impl_searchAlreadyLoaded();
 
     /** @short  search for any target frame, which seems to be usable
                 for this load request.
@@ -477,7 +477,7 @@ private:
         @throw  A RuntimeException in case any internal process indicates, that
                 the whole runtime can't be used any longer.
      */
-    css::uno::Reference< css::frame::XFrame > impl_searchRecycleTarget();
+    cpo::uno::Reference< css::frame::XFrame > impl_searchRecycleTarget();
 
     /** @short  because showing of a frame is needed more than once...
                 it's implemented as a separate method .-)
@@ -504,7 +504,7 @@ private:
                 If it's set to true... both actions has to be done: setVisible(), toFront()!
                 This mode is needed by a)
      */
-    static void impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::XWindow >& xWindow      ,
+    static void impl_makeFrameWindowVisible(const cpo::uno::Reference< css::awt::XWindow >& xWindow      ,
                                            bool                                  bForceToFront);
 
     /** @short  checks whether a frame is already used for another load request or not.
@@ -518,13 +518,13 @@ private:
                 true if this frame is already used for loading,
                 false otherwise.
      */
-    static bool impl_isFrameAlreadyUsedForLoading(const css::uno::Reference< css::frame::XFrame >& xFrame);
+    static bool impl_isFrameAlreadyUsedForLoading(const cpo::uno::Reference< css::frame::XFrame >& xFrame);
 
     /** @short  try to determine the used application module
                 of this load request and apply right position and size
                 for this document window... hopefully before we show it .-)
      */
-    void impl_applyPersistentWindowState(const css::uno::Reference< css::awt::XWindow >& xWindow);
+    void impl_applyPersistentWindowState(const cpo::uno::Reference< css::awt::XWindow >& xWindow);
 
     /** @short  determine if it's allowed to open new document frames.
      */
@@ -532,7 +532,7 @@ private:
 
     /** @short  jumps to the requested bookmark inside a given document.
      */
-    void impl_jumpToMark(const css::uno::Reference< css::frame::XFrame >& xFrame,
+    void impl_jumpToMark(const cpo::uno::Reference< css::frame::XFrame >& xFrame,
                          const css::util::URL&                            aURL  );
 
     /** @short  determine if this loader has an interactive dialog shown before

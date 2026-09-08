@@ -63,6 +63,7 @@
 #include "persistence.hxx"
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 
 cpo::uno::Sequence< beans::PropertyValue > GetValuableArgs_Impl( const cpo::uno::Sequence< beans::PropertyValue >& aMedDescr,

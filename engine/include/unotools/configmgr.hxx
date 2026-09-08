@@ -25,7 +25,7 @@
 #include <string_view>
 #include <vector>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <sal/types.h>
 #include <unotools/unotoolsdllapi.h>
 
@@ -60,17 +60,17 @@ public:
 
     SAL_DLLPRIVATE static ConfigManager & getConfigManager();
 
-    SAL_DLLPRIVATE static css::uno::Reference< css::container::XHierarchicalNameAccess>
+    SAL_DLLPRIVATE static cpo::uno::Reference< css::container::XHierarchicalNameAccess>
     acquireTree(utl::ConfigItem const & item);
 
-    static css::uno::Reference< css::container::XHierarchicalNameAccess>
+    static cpo::uno::Reference< css::container::XHierarchicalNameAccess>
     acquireTree(std::u16string_view rSubTreeName);
 
     SAL_DLLPRIVATE ConfigManager();
 
     SAL_DLLPRIVATE ~ConfigManager();
 
-    SAL_DLLPRIVATE css::uno::Reference< css::container::XHierarchicalNameAccess >
+    SAL_DLLPRIVATE cpo::uno::Reference< css::container::XHierarchicalNameAccess >
     addConfigItem(utl::ConfigItem & item);
 
     SAL_DLLPRIVATE void removeConfigItem(utl::ConfigItem & item);

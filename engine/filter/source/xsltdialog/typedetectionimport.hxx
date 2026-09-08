@@ -56,17 +56,17 @@ public:
     TypeDetectionImporter();
     virtual ~TypeDetectionImporter() override;
 
-    static void doImport( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext, const css::uno::Reference < css::io::XInputStream >& xOS,
+    static void doImport( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext, const cpo::uno::Reference < css::io::XInputStream >& xOS,
                           std::vector< std::unique_ptr<filter_info_impl> >& rFilters );
 
     virtual void startDocument(  ) override;
     virtual void endDocument(  ) override;
-    virtual void startElement( const OUString& aName, const css::uno::Reference< css::xml::sax::XAttributeList >& xAttribs ) override;
+    virtual void startElement( const OUString& aName, const cpo::uno::Reference< css::xml::sax::XAttributeList >& xAttribs ) override;
     virtual void endElement( const OUString& aName ) override;
     virtual void characters( const OUString& aChars ) override;
     virtual void ignorableWhitespace( const OUString& aWhitespaces ) override;
     virtual void processingInstruction( const OUString& aTarget, const OUString& aData ) override;
-    virtual void setDocumentLocator( const css::uno::Reference< css::xml::sax::XLocator >& xLocator ) override;
+    virtual void setDocumentLocator( const cpo::uno::Reference< css::xml::sax::XLocator >& xLocator ) override;
 
 private:
     void fillFilterVector(  std::vector< std::unique_ptr<filter_info_impl> >& rFilters );

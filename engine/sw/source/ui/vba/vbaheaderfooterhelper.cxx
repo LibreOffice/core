@@ -27,6 +27,7 @@
 #include <unobasestyle.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace ::ooo::vba;
 
 #define FIRST_PAGE 1

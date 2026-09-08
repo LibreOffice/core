@@ -27,13 +27,13 @@
 
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo::uno;
 
 namespace svx::sidebar {
 
 AreaPropertyPanel::AreaPropertyPanel(
     weld::Widget* pParent,
-    const css::uno::Reference<css::frame::XFrame>& rxFrame,
+    const cpo::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
     : AreaPropertyPanelBase(pParent, rxFrame),
       maStyleControl(SID_ATTR_FILL_STYLE, *pBindings, *this),
@@ -69,7 +69,7 @@ AreaPropertyPanel::~AreaPropertyPanel()
 
 std::unique_ptr<PanelLayout> AreaPropertyPanel::Create (
     weld::Widget* pParent,
-    const css::uno::Reference<css::frame::XFrame>& rxFrame,
+    const cpo::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
 {
     if (pParent == nullptr)

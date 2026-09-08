@@ -40,6 +40,7 @@
 #include <memory>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 //  Special value for zoom
 //! somewhere central
@@ -175,7 +176,7 @@ void SAL_CALL ScSpreadsheetSettings::setPropertyValue(
             throw css::lang::IllegalArgumentException(
                 (u"LinkUpdateMode property value must be a SHORT with a value in the range of 0--2"
                  " as documented for css::sheet::XGlobalSheetSettings attribute LinkUpdateMode"_ustr),
-                css::uno::Reference<cpo::uno::XInterface>(), -1);
+                cpo::uno::Reference<cpo::uno::XInterface>(), -1);
         }
         aAppOpt.SetLinkMode( static_cast<ScLkUpdMode>(n) );
         bSaveApp = true;

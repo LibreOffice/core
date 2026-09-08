@@ -32,7 +32,7 @@ org_openoffice_comp_dbu_ODatasourceAdministrationDialog_get_implementation(
 
 namespace dbaui
 {
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 
@@ -75,7 +75,7 @@ Reference<XPropertySetInfo> ODataSourcePropertyDialog::getPropertySetInfo()
 }
 
 std::unique_ptr<weld::DialogController>
-ODataSourcePropertyDialog::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
+ODataSourcePropertyDialog::createDialog(const cpo::uno::Reference<css::awt::XWindow>& rParent)
 {
     std::unique_ptr<ODbAdminDialog> xDialog(new ODbAdminDialog(
         Application::GetFrameWeld(rParent), m_pDatasourceItems.get(), m_aContext));

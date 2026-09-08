@@ -20,7 +20,7 @@
 #include "atkregistry.hxx"
 
 using namespace ::com::sun::star::accessibility;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 static GHashTable *uno_to_gobject = nullptr;
 
@@ -56,7 +56,7 @@ ooo_wrapper_registry_add(const Reference< XAccessible >& rxAccessible, AtkObject
 
 void
 ooo_wrapper_registry_remove(
-    css::uno::Reference<css::accessibility::XAccessible> const & pAccessible)
+    cpo::uno::Reference<css::accessibility::XAccessible> const & pAccessible)
 {
     if( uno_to_gobject )
         g_hash_table_remove(

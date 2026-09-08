@@ -22,7 +22,7 @@
 
 #include <memory>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <oox/helper/refvector.hxx>
 #include <oox/ole/axbinaryreader.hxx>
 #include <oox/ole/axcontrol.hxx>
@@ -134,7 +134,7 @@ public:
         and converts all control properties. */
     void                createAndConvert(
                             sal_Int32 nCtrlIndex,
-                            const css::uno::Reference< css::container::XNameContainer >& rxParentNC,
+                            const cpo::uno::Reference< css::container::XNameContainer >& rxParentNC,
                             const ControlConverter& rConv ) const;
 
 protected:
@@ -146,7 +146,7 @@ protected:
 
     /** Converts all control properties, and inserts and converts embedded controls. */
     bool                convertProperties(
-                            const css::uno::Reference< css::awt::XControlModel >& rxCtrlModel,
+                            const cpo::uno::Reference< css::awt::XControlModel >& rxCtrlModel,
                             const ControlConverter& rConv,
                             sal_Int32 nCtrlIndex ) const;
 
@@ -187,22 +187,22 @@ class VbaUserForm final : public VbaFormControl
 {
 public:
     explicit            VbaUserForm(
-                            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
-                            const css::uno::Reference< css::frame::XModel >& rxDocModel,
+                            const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+                            const cpo::uno::Reference< css::frame::XModel >& rxDocModel,
                             const GraphicHelper& rGraphicHelper,
                             bool bDefaultColorBgr );
 
     /** Imports the form and its embedded controls, and inserts the form with
         all its controls into the passed dialog library. */
     void                importForm(
-                           const css::uno::Reference< css::container::XNameContainer >& rxDialogLib,
+                           const cpo::uno::Reference< css::container::XNameContainer >& rxDialogLib,
                            StorageBase& rVbaFormStrg,
                            const OUString& rModuleName,
                            rtl_TextEncoding eTextEnc );
 
 private:
-    css::uno::Reference< cpo::uno::XComponentContext > mxContext;
-    css::uno::Reference< css::frame::XModel >          mxDocModel;
+    cpo::uno::Reference< cpo::uno::XComponentContext > mxContext;
+    cpo::uno::Reference< css::frame::XModel >          mxDocModel;
     ControlConverter                                   maConverter;
 };
 

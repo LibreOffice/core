@@ -27,6 +27,7 @@
 #include <vcl/transfer.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 
 TransferableClipboardListener::TransferableClipboardListener( const Link<TransferableDataHelper*,void>& rCallback ) :

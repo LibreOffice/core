@@ -34,6 +34,7 @@
 #include <com/sun/star/system/SystemShellExecute.hpp>
 
 using namespace css;
+using namespace ::cpo;
 
 FixedHyperlink::FixedHyperlink(vcl::Window* pParent, WinBits nWinStyle)
     : FixedText(pParent, nWinStyle, WindowType::LINK_BUTTON)

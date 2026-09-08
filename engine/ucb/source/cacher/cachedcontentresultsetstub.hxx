@@ -52,7 +52,7 @@ private:
     impl_getCurrentRowContent(
         std::unique_lock<std::mutex>& rGuard,
         cpo::uno::Any& rRowContent,
-        const css::uno::Reference< css::sdbc::XRow >& xRow );
+        const cpo::uno::Reference< css::sdbc::XRow >& xRow );
 
     sal_Int32
     impl_getColumnCount(std::unique_lock<std::mutex>&);
@@ -62,21 +62,21 @@ private:
     impl_getCurrentContentIdentifierString(
             std::unique_lock<std::mutex>& rGuard,
             cpo::uno::Any& rAny
-            , const css::uno::Reference< css::ucb::XContentAccess >& xContentAccess );
+            , const cpo::uno::Reference< css::ucb::XContentAccess >& xContentAccess );
 
     /// @throws cpo::uno::RuntimeException
     static void
     impl_getCurrentContentIdentifier(
             std::unique_lock<std::mutex>& rGuard,
             cpo::uno::Any& rAny
-            , const css::uno::Reference< css::ucb::XContentAccess >& xContentAccess );
+            , const cpo::uno::Reference< css::ucb::XContentAccess >& xContentAccess );
 
     /// @throws cpo::uno::RuntimeException
     static void
     impl_getCurrentContent(
             std::unique_lock<std::mutex>& rGuard,
             cpo::uno::Any& rAny
-            , const css::uno::Reference< css::ucb::XContentAccess >& xContentAccess );
+            , const cpo::uno::Reference< css::ucb::XContentAccess >& xContentAccess );
 
     /// @throws cpo::uno::RuntimeException
     void
@@ -88,7 +88,7 @@ private:
         std::function<void(std::unique_lock<std::mutex>&, cpo::uno::Any& rRowContent)> impl_loadRow);
 
 public:
-    CachedContentResultSetStub( css::uno::Reference< css::sdbc::XResultSet > const & xOrigin );
+    CachedContentResultSetStub( cpo::uno::Reference< css::sdbc::XResultSet > const & xOrigin );
 
     virtual ~CachedContentResultSetStub() override;
 
@@ -160,9 +160,9 @@ public:
 
     // XCachedContentResultSetStubFactory
 
-    virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL
+    virtual cpo::uno::Reference< css::sdbc::XResultSet > SAL_CALL
     createCachedContentResultSetStub(
-                const css::uno::Reference< css::sdbc::XResultSet > & xSource ) override;
+                const cpo::uno::Reference< css::sdbc::XResultSet > & xSource ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

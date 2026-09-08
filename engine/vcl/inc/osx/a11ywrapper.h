@@ -37,19 +37,19 @@
 // rAccessibleXYZ as a field in an Objective-C-Class would not call Con-/Destructor, so use a struct instead
 struct ReferenceWrapper
 {
-    css::uno::Reference < css::accessibility::XAccessibleAction > rAccessibleAction;
-    css::uno::Reference < css::accessibility::XAccessibleContext > rAccessibleContext;
-    css::uno::Reference < css::accessibility::XAccessibleContext2 > rAccessibleContext2;
-    css::uno::Reference < css::accessibility::XAccessibleComponent > rAccessibleComponent;
-    css::uno::Reference < css::accessibility::XAccessibleExtendedComponent > rAccessibleExtendedComponent;
-    css::uno::Reference < css::accessibility::XAccessibleSelection > rAccessibleSelection;
-    css::uno::Reference < css::accessibility::XAccessibleTable > rAccessibleTable;
-    css::uno::Reference < css::accessibility::XAccessibleText > rAccessibleText;
-    css::uno::Reference < css::accessibility::XAccessibleEditableText > rAccessibleEditableText;
-    css::uno::Reference < css::accessibility::XAccessibleValue > rAccessibleValue;
-    css::uno::Reference < css::accessibility::XAccessibleTextAttributes > rAccessibleTextAttributes;
-    css::uno::Reference < css::accessibility::XAccessibleMultiLineText > rAccessibleMultiLineText;
-    css::uno::Reference < css::accessibility::XAccessibleTextMarkup > rAccessibleTextMarkup;
+    cpo::uno::Reference < css::accessibility::XAccessibleAction > rAccessibleAction;
+    cpo::uno::Reference < css::accessibility::XAccessibleContext > rAccessibleContext;
+    cpo::uno::Reference < css::accessibility::XAccessibleContext2 > rAccessibleContext2;
+    cpo::uno::Reference < css::accessibility::XAccessibleComponent > rAccessibleComponent;
+    cpo::uno::Reference < css::accessibility::XAccessibleExtendedComponent > rAccessibleExtendedComponent;
+    cpo::uno::Reference < css::accessibility::XAccessibleSelection > rAccessibleSelection;
+    cpo::uno::Reference < css::accessibility::XAccessibleTable > rAccessibleTable;
+    cpo::uno::Reference < css::accessibility::XAccessibleText > rAccessibleText;
+    cpo::uno::Reference < css::accessibility::XAccessibleEditableText > rAccessibleEditableText;
+    cpo::uno::Reference < css::accessibility::XAccessibleValue > rAccessibleValue;
+    cpo::uno::Reference < css::accessibility::XAccessibleTextAttributes > rAccessibleTextAttributes;
+    cpo::uno::Reference < css::accessibility::XAccessibleMultiLineText > rAccessibleMultiLineText;
+    cpo::uno::Reference < css::accessibility::XAccessibleTextMarkup > rAccessibleTextMarkup;
 };
 
 @interface AquaA11yWrapper : NSAccessibilityElement
@@ -103,9 +103,9 @@ struct ReferenceWrapper
 -(BOOL)actsAsRadioGroup;
 -(NSWindow*)windowForParent;
 -(id)init;
--(id)initWithAccessibleContext: (css::uno::Reference < css::accessibility::XAccessibleContext >) anAccessibleContext;
+-(id)initWithAccessibleContext: (cpo::uno::Reference < css::accessibility::XAccessibleContext >) anAccessibleContext;
 -(void)setDisposed;
--(void) setDefaults: (css::uno::Reference < css::accessibility::XAccessibleContext >) rxAccessibleContext;
+-(void) setDefaults: (cpo::uno::Reference < css::accessibility::XAccessibleContext >) rxAccessibleContext;
 +(void)setPopupMenuOpen:(BOOL)popupMenuOpen;
 -(css::accessibility::XAccessibleAction *)accessibleAction;
 -(css::accessibility::XAccessibleContext *)accessibleContext;

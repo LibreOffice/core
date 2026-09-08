@@ -26,7 +26,7 @@
 class XMLPersAttrListTContext : public XMLTransformerContext
 {
 
-    css::uno::Reference< css::xml::sax::XAttributeList > m_xAttrList;
+    cpo::uno::Reference< css::xml::sax::XAttributeList > m_xAttrList;
     OUString m_aElemQName;
     sal_uInt16 const m_nActionMap;
 
@@ -65,12 +65,12 @@ public:
     virtual rtl::Reference<XMLTransformerContext> CreateChildContext( sal_uInt16 nPrefix,
                                    const OUString& rLocalName,
                                    const OUString& rQName,
-                                   const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+                                   const cpo::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 
     // StartElement is called after a context has been constructed and
     // before an elements context is parsed. It may be used for actions that
     // require virtual methods. The default is to do nothing.
-    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void StartElement( const cpo::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 
     // EndElement is called before a context will be destructed, but
     // after an elements context has been parsed. It may be used for actions
@@ -95,7 +95,7 @@ public:
         ::xmloff::token::XMLTokenEnum eAToken,
         const OUString & rValue );
 
-    const css::uno::Reference< css::xml::sax::XAttributeList >&
+    const cpo::uno::Reference< css::xml::sax::XAttributeList >&
         GetAttrList() const { return m_xAttrList; }
 
 };

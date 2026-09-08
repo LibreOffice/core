@@ -91,11 +91,11 @@ using namespace ::dbtools;
     using ::cpo::uno::Exception;
     using ::cpo::uno::XInterface;
     using ::cpo::uno::Sequence;
-    using ::com::sun::star::uno::UNO_QUERY;
-    using ::com::sun::star::uno::UNO_QUERY_THROW;
-    using ::com::sun::star::uno::UNO_SET_THROW;
+    using ::cpo::uno::UNO_QUERY;
+    using ::cpo::uno::UNO_QUERY_THROW;
+    using ::cpo::uno::UNO_SET_THROW;
     using ::cpo::uno::Type;
-    using ::com::sun::star::uno::Reference;
+    using ::cpo::uno::Reference;
     using ::cpo::uno::Any;
     using ::cpo::uno::XComponentContext;
     using ::com::sun::star::form::FormButtonType_SUBMIT;
@@ -147,7 +147,7 @@ public:
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 };
 
-FormViewPageWindowAdapter::FormViewPageWindowAdapter( css::uno::Reference<cpo::uno::XComponentContext> _xContext, const SdrPageWindow& _rWindow, FmXFormView* _pViewImpl )
+FormViewPageWindowAdapter::FormViewPageWindowAdapter( cpo::uno::Reference<cpo::uno::XComponentContext> _xContext, const SdrPageWindow& _rWindow, FmXFormView* _pViewImpl )
 :   m_xControlContainer( _rWindow.GetControlContainer() ),
     m_xContext(std::move( _xContext )),
     m_pViewImpl( _pViewImpl ),
@@ -1147,7 +1147,7 @@ rtl::Reference<SdrObject> FmXFormView::implCreateFieldControl( const svx::ODataA
         {
             Reference< XChild > xChild( xConnection, UNO_QUERY );
             if ( xChild.is() )
-                xDataSource.set(xChild->getParent(), css::uno::UNO_QUERY);
+                xDataSource.set(xChild->getParent(), cpo::uno::UNO_QUERY);
         }
 
         // obtain the data source

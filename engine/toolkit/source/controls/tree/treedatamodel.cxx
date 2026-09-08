@@ -31,7 +31,7 @@
 #include <utility>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::awt::tree;
@@ -54,13 +54,13 @@ public:
     void broadcast( broadcast_type eType, const Reference< XTreeNode >& xParentNode, const Reference< XTreeNode >& rNode );
 
     // XMutableTreeDataModel
-    virtual css::uno::Reference< css::awt::tree::XMutableTreeNode > createNode( const cpo::uno::Any& DisplayValue, bool ChildrenOnDemand ) override;
-    virtual void setRoot( const css::uno::Reference< css::awt::tree::XMutableTreeNode >& RootNode ) override;
+    virtual cpo::uno::Reference< css::awt::tree::XMutableTreeNode > createNode( const cpo::uno::Any& DisplayValue, bool ChildrenOnDemand ) override;
+    virtual void setRoot( const cpo::uno::Reference< css::awt::tree::XMutableTreeNode >& RootNode ) override;
 
     // XTreeDataModel
-    virtual css::uno::Reference< css::awt::tree::XTreeNode > getRoot(  ) override;
-    virtual void addTreeDataModelListener( const css::uno::Reference< css::awt::tree::XTreeDataModelListener >& Listener ) override;
-    virtual void removeTreeDataModelListener( const css::uno::Reference< css::awt::tree::XTreeDataModelListener >& Listener ) override;
+    virtual cpo::uno::Reference< css::awt::tree::XTreeNode > getRoot(  ) override;
+    virtual void addTreeDataModelListener( const cpo::uno::Reference< css::awt::tree::XTreeDataModelListener >& Listener ) override;
+    virtual void removeTreeDataModelListener( const cpo::uno::Reference< css::awt::tree::XTreeDataModelListener >& Listener ) override;
 
     // XComponent
     virtual void dispose(  ) override;
@@ -98,8 +98,8 @@ public:
     // XMutableTreeNode
     virtual cpo::uno::Any getDataValue() override;
     virtual void setDataValue( const cpo::uno::Any& _datavalue ) override;
-    virtual void appendChild( const css::uno::Reference< css::awt::tree::XMutableTreeNode >& ChildNode ) override;
-    virtual void insertChildByIndex( ::sal_Int32 Index, const css::uno::Reference< css::awt::tree::XMutableTreeNode >& ChildNode ) override;
+    virtual void appendChild( const cpo::uno::Reference< css::awt::tree::XMutableTreeNode >& ChildNode ) override;
+    virtual void insertChildByIndex( ::sal_Int32 Index, const cpo::uno::Reference< css::awt::tree::XMutableTreeNode >& ChildNode ) override;
     virtual void removeChildByIndex( ::sal_Int32 Index ) override;
     virtual void setHasChildrenOnDemand( bool ChildrenOnDemand ) override;
     virtual void setDisplayValue( const cpo::uno::Any& Value ) override;
@@ -108,10 +108,10 @@ public:
     virtual void setCollapsedGraphicURL( const OUString& URL ) override;
 
     // XTreeNode
-    virtual css::uno::Reference< css::awt::tree::XTreeNode > getChildAt( ::sal_Int32 Index ) override;
+    virtual cpo::uno::Reference< css::awt::tree::XTreeNode > getChildAt( ::sal_Int32 Index ) override;
     virtual ::sal_Int32 getChildCount(  ) override;
-    virtual css::uno::Reference< css::awt::tree::XTreeNode > getParent(  ) override;
-    virtual ::sal_Int32 getIndex( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
+    virtual cpo::uno::Reference< css::awt::tree::XTreeNode > getParent(  ) override;
+    virtual ::sal_Int32 getIndex( const cpo::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
     virtual bool hasChildrenOnDemand(  ) override;
     virtual cpo::uno::Any getDisplayValue(  ) override;
     virtual OUString getNodeGraphicURL(  ) override;

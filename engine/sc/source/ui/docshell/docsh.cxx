@@ -164,7 +164,8 @@
 #include <vcl/tabs.hrc>
 
 using namespace com::sun::star;
-using ::com::sun::star::uno::Reference;
+using namespace ::cpo;
+using ::cpo::uno::Reference;
 using ::com::sun::star::lang::XMultiServiceFactory;
 
 #define ShellClass_ScDocShell
@@ -551,13 +552,13 @@ bool ScDocShell::GetRecalcRowHeightsMode()
 }
 
 bool ScDocShell::ImportFrom(SfxMedium& rMedium,
-                            const css::uno::Reference<css::text::XTextRange>& xInsertPosition)
+                            const cpo::uno::Reference<css::text::XTextRange>& xInsertPosition)
 {
     LoadMediumGuard aLoadGuard(m_pDocument.get());
     return SfxObjectShell::ImportFrom(rMedium, xInsertPosition);
 }
 
-bool ScDocShell::LoadXML( SfxMedium* pLoadMedium, const css::uno::Reference< css::embed::XStorage >& xStor )
+bool ScDocShell::LoadXML( SfxMedium* pLoadMedium, const cpo::uno::Reference< css::embed::XStorage >& xStor )
 {
     LoadMediumGuard aLoadGuard(m_pDocument.get());
 
@@ -641,7 +642,7 @@ bool ScDocShell::LoadXML( SfxMedium* pLoadMedium, const css::uno::Reference< css
     return bRet;
 }
 
-bool ScDocShell::SaveXML( SfxMedium* pSaveMedium, const css::uno::Reference< css::embed::XStorage >& xStor )
+bool ScDocShell::SaveXML( SfxMedium* pSaveMedium, const cpo::uno::Reference< css::embed::XStorage >& xStor )
 {
     m_pDocument->EnableIdle(false);
 
@@ -3840,7 +3841,7 @@ bool ScDocShell::GetProtectionHash( /*out*/ cpo::uno::Sequence< sal_Int8 > &rPas
     return bRes;
 }
 
-void ScDocShell::RegisterAutomationWorkbookObject(css::uno::Reference< ooo::vba::excel::XWorkbook > const& xWorkbook)
+void ScDocShell::RegisterAutomationWorkbookObject(cpo::uno::Reference< ooo::vba::excel::XWorkbook > const& xWorkbook)
 {
     mxAutomationWorkbookObject = xWorkbook;
 }

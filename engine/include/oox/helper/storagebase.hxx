@@ -23,7 +23,7 @@
 #include <memory>
 #include <vector>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <oox/dllapi.h>
 #include <oox/helper/refmap.hxx>
 #include <rtl/ustring.hxx>
@@ -51,11 +51,11 @@ class OOX_DLLPUBLIC StorageBase
 {
 public:
     explicit            StorageBase(
-                            const css::uno::Reference< css::io::XInputStream >& rxInStream,
+                            const cpo::uno::Reference< css::io::XInputStream >& rxInStream,
                             bool bBaseStreamAccess );
 
     explicit            StorageBase(
-                            const css::uno::Reference< css::io::XStream >& rxOutStream,
+                            const cpo::uno::Reference< css::io::XStream >& rxOutStream,
                             bool bBaseStreamAccess );
 
     virtual             ~StorageBase();
@@ -71,7 +71,7 @@ public:
     bool                isReadOnly() const { return mbReadOnly;}
 
     /** Returns the com.sun.star.embed.XStorage interface of the current storage. */
-    css::uno::Reference< css::embed::XStorage >
+    cpo::uno::Reference< css::embed::XStorage >
                         getXStorage() const;
 
     /** Returns the element name of this storage. */
@@ -103,7 +103,7 @@ public:
             access has been enabled in the constructor, the base stream can be
             accessed by passing an empty string as stream name.
      */
-    css::uno::Reference< css::io::XInputStream >
+    cpo::uno::Reference< css::io::XInputStream >
                         openInputStream( const OUString& rStreamName );
 
     /** Opens and returns the specified output stream from the storage.
@@ -114,7 +114,7 @@ public:
             stream access has been enabled in the constructor, the base stream
             can be accessed by passing an empty string as stream name.
      */
-    css::uno::Reference< css::io::XOutputStream >
+    cpo::uno::Reference< css::io::XOutputStream >
                         openOutputStream( const OUString& rStreamName );
 
     /** Copies the specified element from this storage to the passed
@@ -147,7 +147,7 @@ private:
     virtual bool        implIsStorage() const = 0;
 
     /** Returns the com.sun.star.embed.XStorage interface of the current storage. */
-    virtual css::uno::Reference< css::embed::XStorage >
+    virtual cpo::uno::Reference< css::embed::XStorage >
                         implGetXStorage() const = 0;
 
     /** Returns the names of all elements of this storage. */
@@ -157,11 +157,11 @@ private:
     virtual StorageRef  implOpenSubStorage( const OUString& rElementName, bool bCreate ) = 0;
 
     /** Implementation of opening an input stream element. */
-    virtual css::uno::Reference< css::io::XInputStream >
+    virtual cpo::uno::Reference< css::io::XInputStream >
                         implOpenInputStream( const OUString& rElementName ) = 0;
 
     /** Implementation of opening an output stream element. */
-    virtual css::uno::Reference< css::io::XOutputStream >
+    virtual cpo::uno::Reference< css::io::XOutputStream >
                         implOpenOutputStream( const OUString& rElementName ) = 0;
 
     /** Commits the current storage. */
@@ -173,9 +173,9 @@ private:
 private:
     RefMap< OUString, StorageBase >
                         maSubStorages;      ///< Map of direct sub storages.
-    css::uno::Reference< css::io::XInputStream >
+    cpo::uno::Reference< css::io::XInputStream >
                         mxInStream;         ///< Cached base input stream (to keep it alive).
-    css::uno::Reference< css::io::XStream >
+    cpo::uno::Reference< css::io::XStream >
                         mxOutStream;        ///< Cached base output stream (to keep it alive).
     OUString            maParentPath;       ///< Full path of parent storage.
     OUString            maStorageName;      ///< Name of this storage, if it is a substorage.

@@ -40,6 +40,7 @@
 #include <test/a11y/XAccessibleEventBroadcasterTester.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 namespace
 {
@@ -74,7 +75,7 @@ public:
 }
 
 XAccessibleEventBroadcasterTester::XAccessibleEventBroadcasterTester(
-    const css::uno::Reference<css::accessibility::XAccessibleEventBroadcaster>& xBroadcaster,
+    const cpo::uno::Reference<css::accessibility::XAccessibleEventBroadcaster>& xBroadcaster,
     const std::function<void()>& rFireEventFunc)
     : mxBroadcaster(xBroadcaster)
     , m_aFireEventFunc(rFireEventFunc)

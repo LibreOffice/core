@@ -266,7 +266,7 @@ class TableManager : public virtual SvRefBase
     /**
      handle for the current position in document
      */
-    css::uno::Reference<css::text::XTextRange> mCurHandle;
+    cpo::uno::Reference<css::text::XTextRange> mCurHandle;
 
     TableManagerState mState;
 
@@ -318,18 +318,18 @@ protected:
         return mState.getTableProps();
     }
 
-    const css::uno::Reference<css::text::XTextRange>& getHandle() const
+    const cpo::uno::Reference<css::text::XTextRange>& getHandle() const
     {
         return mCurHandle;
     }
 
-    void setHandle(const css::uno::Reference<css::text::XTextRange>& rHandle)
+    void setHandle(const cpo::uno::Reference<css::text::XTextRange>& rHandle)
     {
         mCurHandle = rHandle;
     }
 
 private:
-    typedef tools::SvRef< css::uno::Reference<css::text::XTextRange> > T_p;
+    typedef tools::SvRef< cpo::uno::Reference<css::text::XTextRange> > T_p;
 
     /**
        depth of the current cell
@@ -399,12 +399,12 @@ private:
      Open a cell at current level.
      */
 
-    void openCell(const css::uno::Reference<css::text::XTextRange>& rHandle, const TablePropertyMapPtr& pProps);
+    void openCell(const cpo::uno::Reference<css::text::XTextRange>& rHandle, const TablePropertyMapPtr& pProps);
 
     /**
      Close a cell at current level.
      */
-    void closeCell(const css::uno::Reference<css::text::XTextRange>& rHandle);
+    void closeCell(const cpo::uno::Reference<css::text::XTextRange>& rHandle);
 
     /**
      Ensure a cell is open at the current level.
@@ -459,7 +459,7 @@ public:
 
        @param rHandle     the handle
      */
-    void handle(const css::uno::Reference<css::text::XTextRange>& rHandle);
+    void handle(const cpo::uno::Reference<css::text::XTextRange>& rHandle);
 
     /**
        Start a new table level.

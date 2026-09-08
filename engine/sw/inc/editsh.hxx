@@ -725,7 +725,7 @@ public:
 
     /// restore selections.
     void HyphEnd();
-    css::uno::Reference< cpo::uno::XInterface>
+    cpo::uno::Reference< cpo::uno::XInterface>
                 HyphContinue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt );
 
     void HyphIgnore();
@@ -815,7 +815,7 @@ public:
     void HandleCorrectionError(const OUString& aText, SwPosition aPos, sal_Int32 nBegin,
                                sal_Int32 nLen, const Point* pPt,
                                SwRect& rSelectRect);
-    css::uno::Reference< css::linguistic2::XSpellAlternatives >
+    cpo::uno::Reference< css::linguistic2::XSpellAlternatives >
             GetCorrection( const Point* pPt, SwRect& rSelectRect );
 
     bool GetGrammarCorrection( css::linguistic2::ProofreadingResult /*out*/ &rResult,

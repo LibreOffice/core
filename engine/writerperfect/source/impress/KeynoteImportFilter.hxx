@@ -18,7 +18,7 @@
 class KeynoteImportFilter : public writerperfect::ImportFilter<OdpGenerator>
 {
 public:
-    explicit KeynoteImportFilter(const css::uno::Reference<cpo::uno::XComponentContext>& rxContext)
+    explicit KeynoteImportFilter(const cpo::uno::Reference<cpo::uno::XComponentContext>& rxContext)
         : writerperfect::ImportFilter<OdpGenerator>(rxContext)
     {
     }

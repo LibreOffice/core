@@ -30,6 +30,7 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace ::ooo::vba;
 
 ScVbaFileDialog::ScVbaFileDialog( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< cpo::uno::XComponentContext >& xContext, const sal_Int32 nType )
@@ -149,7 +150,7 @@ sal_Int32 ScVbaFileDialog::Show()
             throw cpo::uno::RuntimeException();
     }
 
-    m_xItems = css::uno::Reference< ov::excel::XFileDialogSelectedItems >(
+    m_xItems = cpo::uno::Reference< ov::excel::XFileDialogSelectedItems >(
             new ScVbaFileDialogSelectedItems(this, mxContext, std::move(sSelectedPaths)) );
     return nRet;
 }

@@ -42,6 +42,7 @@
 
 using namespace utl;
 using namespace com::sun::star;
+using namespace ::cpo;
 
 // vOptionNames[] -- names of the user option entries
 // The order must correspond to the enum class UserOptToken in useroptions.hxx.

@@ -41,7 +41,8 @@
 #include <com/sun/star/graphic/GraphicType.hpp>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 class ScExportTest3 : public ScModelTestBase
 {

@@ -33,7 +33,7 @@
 #include <svx/svxdlg.hxx>
 #include <o3tl/string_view.hxx>
 
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::svxform;
 using namespace css::sdbc;

@@ -39,7 +39,8 @@
 #include <rootfrm.hxx>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 /// Third set of tests asserting the behavior of Writer user interface shells.
 class SwUiWriterTest3 : public SwModelTestBase
@@ -2611,9 +2612,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130746)
     // change the row size instead.
     const uno::Reference<cpo::uno::XComponentContext>& xContext
         = comphelper::getProcessComponentContext();
-    css::uno::Reference<ui::XModuleUIConfigurationManagerSupplier> confSupplier
+    cpo::uno::Reference<ui::XModuleUIConfigurationManagerSupplier> confSupplier
         = ui::theModuleUIConfigurationManagerSupplier::get(xContext);
-    css::uno::Reference<ui::XUIConfigurationManager> xManager
+    cpo::uno::Reference<ui::XUIConfigurationManager> xManager
         = confSupplier->getUIConfigurationManager(u"com.sun.star.text.TextDocument"_ustr);
     awt::KeyEvent keyEvent;
     keyEvent.KeyCode = css::awt::Key::UP;

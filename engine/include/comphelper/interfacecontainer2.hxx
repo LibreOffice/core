@@ -41,7 +41,7 @@ namespace detail {
     */
     union element_alias2
     {
-        std::vector< css::uno::Reference< cpo::uno::XInterface > > *pAsVector;
+        std::vector< cpo::uno::Reference< cpo::uno::XInterface > > *pAsVector;
         cpo::uno::XInterface * pAsInterface;
         element_alias2() : pAsInterface(nullptr) {}
     };
@@ -142,7 +142,7 @@ public:
     /**
       Return all interfaces added to this container.
      **/
-    std::vector< css::uno::Reference< cpo::uno::XInterface > > getElements() const;
+    std::vector< cpo::uno::Reference< cpo::uno::XInterface > > getElements() const;
 
     /** Inserts an element into the container.  The position is not specified, thus it is not
         specified in which order events are fired.
@@ -160,7 +160,7 @@ public:
         @return
                 the new count of elements in the container
     */
-    sal_Int32 addInterface( const css::uno::Reference< cpo::uno::XInterface > & rxIFace );
+    sal_Int32 addInterface( const cpo::uno::Reference< cpo::uno::XInterface > & rxIFace );
     /** Removes an element from the container.  It uses interface equality to remove the interface.
 
         @param rxIFace
@@ -168,9 +168,9 @@ public:
         @return
                 the new count of elements in the container
     */
-    sal_Int32 removeInterface( const css::uno::Reference< cpo::uno::XInterface > & rxIFace );
+    sal_Int32 removeInterface( const cpo::uno::Reference< cpo::uno::XInterface > & rxIFace );
     /** Return an interface by index */
-    css::uno::Reference< cpo::uno::XInterface > getInterface(sal_Int32 nIndex) const;
+    cpo::uno::Reference< cpo::uno::XInterface > getInterface(sal_Int32 nIndex) const;
     /**
       Call disposing on all object in the container that
       support XEventListener. Then clear the container.
@@ -190,7 +190,7 @@ public:
         @tparam ListenerT listener type
         @tparam FuncT unary functor type, let your compiler deduce this for you
         @param func unary functor object expecting an argument of type
-                    css::uno::Reference<ListenerT>
+                    cpo::uno::Reference<ListenerT>
     */
     template <typename ListenerT, typename FuncT>
     inline void forEach( FuncT const& func );
@@ -252,7 +252,7 @@ private:
     public:
         NotifySingleListener( NotificationMethod method, const EventT& event ) : m_pMethod( method ), m_rEvent( event ) { }
 
-        void operator()( const css::uno::Reference<ListenerT>& listener ) const
+        void operator()( const cpo::uno::Reference<ListenerT>& listener ) const
         {
             (listener.get()->*m_pMethod)( m_rEvent );
         }
@@ -264,7 +264,7 @@ inline void OInterfaceContainerHelper2::forEach( FuncT const& func )
 {
     OInterfaceIteratorHelper2 iter( *this );
     while (iter.hasMoreElements()) {
-        css::uno::Reference<ListenerT> const xListener( iter.next(), css::uno::UNO_QUERY );
+        cpo::uno::Reference<ListenerT> const xListener( iter.next(), cpo::uno::UNO_QUERY );
         if (xListener.is()) {
             try {
                 func( xListener );

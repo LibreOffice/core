@@ -21,7 +21,7 @@
 #define INCLUDED_COMPHELPER_STREAMSECTION_HXX
 
 #include <config_options.h>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <comphelper/comphelperdllapi.h>
 
 namespace com::sun::star::io
@@ -46,9 +46,9 @@ namespace comphelper
 
 class UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) OStreamSection
 {
-    css::uno::Reference<css::io::XMarkableStream> m_xMarkStream;
-    css::uno::Reference<css::io::XDataInputStream> m_xInStream;
-    css::uno::Reference<css::io::XDataOutputStream> m_xOutStream;
+    cpo::uno::Reference<css::io::XMarkableStream> m_xMarkStream;
+    cpo::uno::Reference<css::io::XDataInputStream> m_xInStream;
+    cpo::uno::Reference<css::io::XDataOutputStream> m_xOutStream;
 
     sal_Int32 m_nBlockStart;
     sal_Int32 m_nBlockLen;
@@ -58,13 +58,13 @@ public:
         @param      _rxInput    the stream to read from. Must support the
                                 css::io::XMarkableStream interface
     */
-    OStreamSection(const css::uno::Reference<css::io::XDataInputStream>& _rxInput);
+    OStreamSection(const cpo::uno::Reference<css::io::XDataInputStream>& _rxInput);
 
     /** starts writing of a "skippable" section of data into the given output stream
         @param      _rxOutput           the stream the stream to write to. Must support the
                                         css::io::XMarkableStream interface
     */
-    OStreamSection(const css::uno::Reference<css::io::XDataOutputStream>& _rxOutput);
+    OStreamSection(const cpo::uno::Reference<css::io::XDataOutputStream>& _rxOutput);
 
     /** dtor. <BR>If constructed for writing, the section "opened" by this object will be "closed".<BR>
         If constructed for reading, any remaining bytes 'til the end of the section will be skipped.

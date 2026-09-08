@@ -28,12 +28,12 @@ typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XListGallery > SwVbaLi
 class SwVbaListGallery : public SwVbaListGallery_BASE
 {
 private:
-    css::uno::Reference< css::text::XTextDocument > mxTextDocument;
+    cpo::uno::Reference< css::text::XTextDocument > mxTextDocument;
     sal_Int32 mnType;
 
 public:
     /// @throws cpo::uno::RuntimeException
-    SwVbaListGallery( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< cpo::uno::XComponentContext >& rContext, css::uno::Reference< css::text::XTextDocument >  xTextDoc, sal_Int32 nType );
+    SwVbaListGallery( const cpo::uno::Reference< ooo::vba::XHelperInterface >& rParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& rContext, cpo::uno::Reference< css::text::XTextDocument >  xTextDoc, sal_Int32 nType );
     virtual ~SwVbaListGallery() override;
 
     // Methods

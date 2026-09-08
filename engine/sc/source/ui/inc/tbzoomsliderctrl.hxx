@@ -53,14 +53,14 @@ private:
     Image                    maIncreaseButton;
     Image                    maDecreaseButton;
     bool                     mbOmitPaint;
-    css::uno::Reference<css::frame::XDispatchProvider> m_xDispatchProvider;
+    cpo::uno::Reference<css::frame::XDispatchProvider> m_xDispatchProvider;
 
     sal_uInt16 Offset2Zoom(tools::Long nOffset) const;
     tools::Long Zoom2Offset(sal_uInt16 nZoom) const;
 
     void DoPaint(vcl::RenderContext& rRenderContext);
 public:
-    ScZoomSlider(css::uno::Reference<css::frame::XDispatchProvider> xDispatchProvider,
+    ScZoomSlider(cpo::uno::Reference<css::frame::XDispatchProvider> xDispatchProvider,
                  sal_uInt16 nCurrentZoom);
 
     void UpdateFromItem(const SvxZoomSliderItem* pZoomSliderItem);
@@ -81,7 +81,7 @@ private:
     std::unique_ptr<weld::CustomWeld> mxWeld;
 
 public:
-    ScZoomSliderWnd(vcl::Window* pParent, const css::uno::Reference<css::frame::XDispatchProvider>& rDispatchProvider,
+    ScZoomSliderWnd(vcl::Window* pParent, const cpo::uno::Reference<css::frame::XDispatchProvider>& rDispatchProvider,
                     sal_uInt16 nCurrentZoom);
     virtual ~ScZoomSliderWnd() override;
     virtual void dispose() override;

@@ -21,7 +21,7 @@
 
 #include "tools/AsynchronousTask.hxx"
 #include <ucbhelper/content.hxx>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 
 #include <memory>
 #include <utility>
@@ -126,11 +126,11 @@ private:
         InitializeFolderScanning(), GatherFolderList(), ScanFolder(),
         InitializeEntryScanning(), and ScanEntry().
     */
-    css::uno::Reference<css::ucb::XContent> mxTemplateRoot;
-    css::uno::Reference<css::ucb::XCommandEnvironment> mxFolderEnvironment;
-    css::uno::Reference<css::ucb::XCommandEnvironment> mxEntryEnvironment;
-    css::uno::Reference<css::sdbc::XResultSet> mxFolderResultSet;
-    css::uno::Reference<css::sdbc::XResultSet> mxEntryResultSet;
+    cpo::uno::Reference<css::ucb::XContent> mxTemplateRoot;
+    cpo::uno::Reference<css::ucb::XCommandEnvironment> mxFolderEnvironment;
+    cpo::uno::Reference<css::ucb::XCommandEnvironment> mxEntryEnvironment;
+    cpo::uno::Reference<css::sdbc::XResultSet> mxFolderResultSet;
+    cpo::uno::Reference<css::sdbc::XResultSet> mxEntryResultSet;
 
     /** Obtain the root folder of the template folder hierarchy.  The result
         is stored in mxTemplateRoot for later use.

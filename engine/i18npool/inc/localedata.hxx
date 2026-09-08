@@ -110,7 +110,7 @@ public:
     /// @throws cpo::uno::RuntimeException
     cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > > getContinuousNumberingLevels( const css::lang::Locale& rLocale );
     /// @throws cpo::uno::RuntimeException
-    cpo::uno::Sequence< css::uno::Reference< css::container::XIndexAccess > > getOutlineNumberingLevels( const css::lang::Locale& rLocale );
+    cpo::uno::Sequence< cpo::uno::Reference< css::container::XIndexAccess > > getOutlineNumberingLevels( const css::lang::Locale& rLocale );
 
     // XLocaleData4
     virtual cpo::uno::Sequence< OUString > getDateAcceptancePatterns( const css::lang::Locale& rLocale ) override;

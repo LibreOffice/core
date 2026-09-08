@@ -126,8 +126,8 @@ class ScriptContainersListBox
 
     ScriptsListBox* m_pScriptsListBox;
 
-    css::uno::Reference<cpo::uno::XComponentContext> m_xContext;
-    css::uno::Reference<css::frame::XFrame> m_xFrame;
+    cpo::uno::Reference<cpo::uno::XComponentContext> m_xContext;
+    cpo::uno::Reference<css::frame::XFrame> m_xFrame;
 
     std::unique_ptr<weld::TreeView> m_xTreeView;
 
@@ -154,12 +154,12 @@ public:
     weld::TreeView& get_widget() { return *m_xTreeView; }
     void ClearAll();
 
-    void Init(const css::uno::Reference<cpo::uno::XComponentContext>& xContext,
-              const css::uno::Reference<css::frame::XFrame>& xFrame);
+    void Init(const cpo::uno::Reference<cpo::uno::XComponentContext>& xContext,
+              const cpo::uno::Reference<css::frame::XFrame>& xFrame);
     void SetScriptsListBox(ScriptsListBox* pBox) { m_pScriptsListBox = pBox; }
     void ScriptContainerSelected();
 
-    void Insert(const css::uno::Reference<css::script::browse::XBrowseNode>& xInsertNode,
+    void Insert(const cpo::uno::Reference<css::script::browse::XBrowseNode>& xInsertNode,
                 const weld::TreeIter* pParentEntry, const OUString& rsUiName,
                 const OUString& rsImage, bool bChildOnDemand = false, int nPos = -1,
                 weld::TreeIter* pRet = nullptr);
@@ -176,7 +176,7 @@ class MacroManagerDialog : public weld::GenericDialogController, public SfxListe
     OUString m_aScriptsListBoxLabelBaseStr;
 
     // For forwarding to Assign dialog
-    css::uno::Reference<css::frame::XFrame> m_xDocumentFrame;
+    cpo::uno::Reference<css::frame::XFrame> m_xDocumentFrame;
 
     std::unique_ptr<ScriptContainersListBox> m_xScriptContainersListBox;
     std::unique_ptr<ScriptsListBox> m_xScriptsListBox;
@@ -221,12 +221,12 @@ class MacroManagerDialog : public weld::GenericDialogController, public SfxListe
                                               const weld::TreeIter& rEntry);
     void ScriptingFrameworkScriptsDeleteEntry(weld::TreeView& rTreeView,
                                               const weld::TreeIter& rEntry);
-    static bool getBoolProperty(css::uno::Reference<css::beans::XPropertySet> const& xProps,
+    static bool getBoolProperty(cpo::uno::Reference<css::beans::XPropertySet> const& xProps,
                                 OUString const& propName);
-    OUString getListOfChildren(const css::uno::Reference<css::script::browse::XBrowseNode>& node,
+    OUString getListOfChildren(const cpo::uno::Reference<css::script::browse::XBrowseNode>& node,
                                int depth);
 
-    css::uno::Reference<css::script::browse::XBrowseNode>
+    cpo::uno::Reference<css::script::browse::XBrowseNode>
     getBrowseNode(const weld::TreeView& rTreeView, const weld::TreeIter& rTreeIter);
 
     void UpdateUI();
@@ -236,7 +236,7 @@ class MacroManagerDialog : public weld::GenericDialogController, public SfxListe
 
 public:
     MacroManagerDialog(weld::Window* pParent,
-                       const css::uno::Reference<css::frame::XFrame>& xFrame);
+                       const cpo::uno::Reference<css::frame::XFrame>& xFrame);
     virtual ~MacroManagerDialog() override;
 
     OUString GetScriptURL() const;

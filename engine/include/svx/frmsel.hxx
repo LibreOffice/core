@@ -158,7 +158,7 @@ public:
 
     // accessibility
 
-    css::uno::Reference<css::accessibility::XAccessible> getAccessibleParent() const { return GetDrawingArea()->get_accessible_parent(); }
+    cpo::uno::Reference<css::accessibility::XAccessible> getAccessibleParent() const { return GetDrawingArea()->get_accessible_parent(); }
     virtual rtl::Reference<comphelper::OAccessible> CreateAccessible() override;
     a11yrelationset get_accessible_relation_set() const { return GetDrawingArea()->get_accessible_relation_set(); }
 

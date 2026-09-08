@@ -26,7 +26,7 @@
 constexpr OUString WRONG_TYPE_EXCEPTION = u"Only XPropertSet allowed!"_ustr;
 
 using namespace cppu;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::container;
 using namespace com::sun::star::lang;

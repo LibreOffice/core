@@ -23,7 +23,7 @@
 #include <cstddef>
 #include <vector>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <oox/dllapi.h>
 #include <rtl/ustring.hxx>
@@ -148,7 +148,7 @@ public:
             contained, otherwise a numerical index will be appended.
      */
     static OUString getUnusedName(
-                            const css::uno::Reference< css::container::XNameAccess >& rxNameAccess,
+                            const cpo::uno::Reference< css::container::XNameAccess >& rxNameAccess,
                             const OUString& rSuggestedName,
                             sal_Unicode cSeparator );
 
@@ -164,7 +164,7 @@ public:
         @return  True = object successfully inserted.
      */
     static bool         insertByName(
-                            const css::uno::Reference< css::container::XNameContainer >& rxNameContainer,
+                            const cpo::uno::Reference< css::container::XNameContainer >& rxNameContainer,
                             const OUString& rName,
                             const cpo::uno::Any& rObject );
 
@@ -191,7 +191,7 @@ public:
             true.
      */
     static OUString insertByUnusedName(
-                            const css::uno::Reference< css::container::XNameContainer >& rxNameContainer,
+                            const cpo::uno::Reference< css::container::XNameContainer >& rxNameContainer,
                             const OUString& rSuggestedName,
                             sal_Unicode cSeparator,
                             const cpo::uno::Any& rObject );

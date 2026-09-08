@@ -42,6 +42,7 @@
 #include <svx/sdrobjectfilter.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 void SwTextShell::ExecBasicMove(SfxRequest &rReq)
 {

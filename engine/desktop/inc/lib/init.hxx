@@ -295,7 +295,7 @@ namespace desktop {
 
     struct DESKTOP_DLLPUBLIC COKitDocumentImpl : public COKitDocument
     {
-        css::uno::Reference<css::lang::XComponent> mxComponent;
+        cpo::uno::Reference<css::lang::XComponent> mxComponent;
         std::map<size_t, std::shared_ptr<CallbackFlushHandler>> mpCallbackFlushHandlers;
         const int mnDocumentId;
         WaitUntilIdle maIdleHelper;
@@ -305,7 +305,7 @@ namespace desktop {
         // touching the possibly-disposed model. See comphelper::COKit.
         OUString maOriginalDocumentUrlKey;
 
-        explicit COKitDocumentImpl(css::uno::Reference<css::lang::XComponent> xComponent,
+        explicit COKitDocumentImpl(cpo::uno::Reference<css::lang::XComponent> xComponent,
                                     int nDocumentId);
         ~COKitDocumentImpl();
 

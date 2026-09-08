@@ -25,7 +25,7 @@
 
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 AccessibleBrowseBoxHeaderCell::AccessibleBrowseBoxHeaderCell(
     sal_Int32 _nColumnRowId, const Reference<XAccessible>& rxParent,

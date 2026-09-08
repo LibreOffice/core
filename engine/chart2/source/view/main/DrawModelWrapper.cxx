@@ -38,6 +38,7 @@ namespace com::sun::star::linguistic2 { class XHyphenator; }
 namespace com::sun::star::linguistic2 { class XSpellChecker; }
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 
 namespace chart

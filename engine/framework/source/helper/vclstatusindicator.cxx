@@ -25,7 +25,7 @@
 
 namespace framework {
 
-VCLStatusIndicator::VCLStatusIndicator(css::uno::Reference< css::awt::XWindow >                xParentWindow)
+VCLStatusIndicator::VCLStatusIndicator(cpo::uno::Reference< css::awt::XWindow >                xParentWindow)
     : m_xParentWindow    (std::move(xParentWindow                ))
     , m_pStatusBar       (nullptr                            )
     , m_nRange           (0                            )

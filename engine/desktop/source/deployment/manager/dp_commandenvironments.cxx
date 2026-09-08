@@ -31,9 +31,9 @@
 namespace deployment = css::deployment;
 namespace task = css::task;
 namespace ucb = css::ucb;
-namespace uno = css::uno;
+namespace uno = cpo::uno;
 
-using css::uno::Reference;
+using cpo::uno::Reference;
 
 namespace dp_manager {
 
@@ -115,7 +115,7 @@ TmpRepositoryCommandEnv::TmpRepositoryCommandEnv()
 }
 
 TmpRepositoryCommandEnv::TmpRepositoryCommandEnv(
-    css::uno::Reference< css::task::XInteractionHandler> const & handler):
+    cpo::uno::Reference< css::task::XInteractionHandler> const & handler):
     BaseCommandEnv(handler)
 {
 }
@@ -144,7 +144,7 @@ void TmpRepositoryCommandEnv::handle(
 
 
 LicenseCommandEnv::LicenseCommandEnv(
-    css::uno::Reference< css::task::XInteractionHandler> const & handler,
+    cpo::uno::Reference< css::task::XInteractionHandler> const & handler,
     bool bSuppressLicense,
     OUString repository):
     BaseCommandEnv(handler), m_repository(std::move(repository)),
@@ -181,7 +181,7 @@ void LicenseCommandEnv::handle(
 
 
 NoLicenseCommandEnv::NoLicenseCommandEnv(
-    css::uno::Reference< css::task::XInteractionHandler> const & handler):
+    cpo::uno::Reference< css::task::XInteractionHandler> const & handler):
     BaseCommandEnv(handler)
 {
 }

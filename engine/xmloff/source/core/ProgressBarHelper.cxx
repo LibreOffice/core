@@ -27,7 +27,7 @@ using namespace ::com::sun::star;
 const sal_Int32 nDefaultProgressBarRange = 1000000;
 const float fProgressStep = 0.5;
 
-ProgressBarHelper::ProgressBarHelper(css::uno::Reference < css::task::XStatusIndicator> xTempStatusIndicator,
+ProgressBarHelper::ProgressBarHelper(cpo::uno::Reference < css::task::XStatusIndicator> xTempStatusIndicator,
                                     const bool bTempStrict)
 : m_xStatusIndicator(std::move(xTempStatusIndicator))
 , m_nRange(nDefaultProgressBarRange)

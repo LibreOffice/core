@@ -33,7 +33,7 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/factory.hxx>
 
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <cpo/uno/RuntimeException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XComponent.hpp>

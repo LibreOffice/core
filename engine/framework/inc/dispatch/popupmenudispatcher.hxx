@@ -40,7 +40,7 @@ namespace framework{
 /*-************************************************************************************************************
     @short          helper for desktop only(!) to create new tasks on demand for dispatches
     @descr          Use this class as member only! Never use it as baseclass.
-                    XInterface will be ambiguous and we hold a weakcss::uno::Reference to our OWNER - not to our SUPERCLASS!
+                    XInterface will be ambiguous and we hold a weakcpo::uno::Reference to our OWNER - not to our SUPERCLASS!
 
     @implements     XInterface
                     XDispatch
@@ -64,7 +64,7 @@ class PopupMenuDispatcher final : public  ::cppu::WeakImplHelper<
     public:
 
         //  constructor / destructor
-        PopupMenuDispatcher( css::uno::Reference< cpo::uno::XComponentContext > xContext );
+        PopupMenuDispatcher( cpo::uno::Reference< cpo::uno::XComponentContext > xContext );
 
         /* interface XServiceInfo */
         virtual OUString getImplementationName() override;
@@ -74,22 +74,22 @@ class PopupMenuDispatcher final : public  ::cppu::WeakImplHelper<
         // XInitialization
         virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& lArguments ) override;
         // XDispatchProvider
-        virtual css::uno::Reference< css::frame::XDispatch > queryDispatch(
+        virtual cpo::uno::Reference< css::frame::XDispatch > queryDispatch(
             const css::util::URL&  aURL        ,
             const OUString& sTarget     ,
             sal_Int32              nFlags      ) override;
 
-        virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > queryDispatches(
+        virtual cpo::uno::Sequence< cpo::uno::Reference< css::frame::XDispatch > > queryDispatches(
             const cpo::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor ) override;
 
         //  XDispatch
         virtual void dispatch( const css::util::URL&                                  aURL,
                                         const cpo::uno::Sequence< css::beans::PropertyValue >& seqProperties ) override;
 
-        virtual void addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xControl,
+        virtual void addStatusListener( const cpo::uno::Reference< css::frame::XStatusListener >& xControl,
                                                  const css::util::URL&                                     aURL ) override;
 
-        virtual void removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xControl,
+        virtual void removeStatusListener( const cpo::uno::Reference< css::frame::XStatusListener >& xControl,
                                                     const css::util::URL&                                     aURL  ) override;
 
         //   XFrameActionListener
@@ -103,10 +103,10 @@ class PopupMenuDispatcher final : public  ::cppu::WeakImplHelper<
 
         void impl_RetrievePopupControllerQuery();
 
-        cpo::uno::WeakReference< css::frame::XFrame >           m_xWeakFrame;   /// cpo::uno::WeakReference to frame (Don't use a hard css::uno::Reference. Owner can't delete us then!)
-        css::uno::Reference< css::container::XNameAccess >      m_xPopupCtrlQuery;   /// reference to query for popup controller
-        css::uno::Reference< css::uri::XUriReferenceFactory >   m_xUriRefFactory;   /// reference to the uri reference factory
-        css::uno::Reference< cpo::uno::XComponentContext >      m_xContext;   /// factory shared with our owner to create new services!
+        cpo::uno::WeakReference< css::frame::XFrame >           m_xWeakFrame;   /// cpo::uno::WeakReference to frame (Don't use a hard cpo::uno::Reference. Owner can't delete us then!)
+        cpo::uno::Reference< css::container::XNameAccess >      m_xPopupCtrlQuery;   /// reference to query for popup controller
+        cpo::uno::Reference< css::uri::XUriReferenceFactory >   m_xUriRefFactory;   /// reference to the uri reference factory
+        cpo::uno::Reference< cpo::uno::XComponentContext >      m_xContext;   /// factory shared with our owner to create new services!
         bool                                                    m_bAlreadyDisposed;   /// Protection against multiple disposing calls.
         bool                                                    m_bActivateListener;   /// dispatcher is listener for frame activation
 

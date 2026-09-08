@@ -21,11 +21,11 @@
 #include "xmlhelper.hxx"
 
 #include <rtl/ustring.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>
 #include <comphelper/processfactory.hxx>
 
-using com::sun::star::uno::Reference;
+using cpo::uno::Reference;
 using com::sun::star::container::XNameContainer;
 using com::sun::star::xml::dom::DocumentBuilder;
 using com::sun::star::xml::dom::XDocumentBuilder;

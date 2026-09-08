@@ -60,7 +60,7 @@ using namespace com::sun::star;
 
 namespace filter::config{
 
-TypeDetection::TypeDetection(const css::uno::Reference< cpo::uno::XComponentContext >& rxContext)
+TypeDetection::TypeDetection(const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext)
    : m_xContext(rxContext)
    , m_xTerminateListener(new TerminateDetection(this))
    , m_bCancel(false)
@@ -87,7 +87,7 @@ OUString TypeDetection::queryTypeByURL(const OUString& sURL)
 
     css::util::URL  aURL;
     aURL.Complete = sURL;
-    css::uno::Reference< css::util::XURLTransformer > xParser( css::util::URLTransformer::create(m_xContext) );
+    cpo::uno::Reference< css::util::XURLTransformer > xParser( css::util::URLTransformer::create(m_xContext) );
     xParser->parseStrict(aURL);
 
     // set std types as minimum requirement first!
@@ -404,7 +404,7 @@ OUString TypeDetection::queryTypeByDescriptor(cpo::uno::Sequence< css::beans::Pr
 
         css::util::URL  aURL;
         aURL.Complete = sURL;
-        css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(m_xContext));
+        cpo::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(m_xContext));
         xParser->parseStrict(aURL);
 
         OUString aSelectedFilter = stlDescriptor.getUnpackedValueOrDefault(
@@ -870,13 +870,13 @@ void TypeDetection::impl_getAllFormatTypes(
 }
 
 
-static bool isBrokenZIP(const css::uno::Reference<css::io::XInputStream>& xStream,
-                        const css::uno::Reference<cpo::uno::XComponentContext>& xContext)
+static bool isBrokenZIP(const cpo::uno::Reference<css::io::XInputStream>& xStream,
+                        const cpo::uno::Reference<cpo::uno::XComponentContext>& xContext)
 {
     try
     {
         // Only consider seekable streams starting with "PK", to avoid false detections
-        css::uno::Reference<css::io::XSeekable> xSeek(xStream, css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::io::XSeekable> xSeek(xStream, cpo::uno::UNO_QUERY_THROW);
         comphelper::ScopeGuard restorePos(
             [xSeek, nPos = xSeek->getPosition()]
             {
@@ -919,11 +919,11 @@ static bool isBrokenZIP(const css::uno::Reference<css::io::XInputStream>& xStrea
         {
             // If this is a broken ZIP package that can be repaired, this would succeed,
             // and the result will be not empty
-            if (css::uno::Reference<css::beans::XPropertySet> xPackage{
+            if (cpo::uno::Reference<css::beans::XPropertySet> xPackage{
                     xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
                         u"com.sun.star.packages.comp.ZipPackage"_ustr,
                         comphelper::containerToSequence(aArguments), xContext),
-                    css::uno::UNO_QUERY })
+                    cpo::uno::UNO_QUERY })
                 if (bool bHasElements; xPackage->getPropertyValue(u"HasElements"_ustr) >>= bHasElements)
                     return bHasElements;
         }
@@ -966,9 +966,9 @@ OUString TypeDetection::impl_detectTypeFlatAndDeep(comphelper::SequenceAsHashMap
             impl_openStream(rDescriptor);
             if (auto xStream = rDescriptor.getUnpackedValueOrDefault(
                     utl::MediaDescriptor::PROP_INPUTSTREAM,
-                    css::uno::Reference<css::io::XInputStream>()))
+                    cpo::uno::Reference<css::io::XInputStream>()))
             {
-                css::uno::Reference<cpo::uno::XComponentContext> xContext;
+                cpo::uno::Reference<cpo::uno::XComponentContext> xContext;
 
                 // SAFE ->
                 {
@@ -979,9 +979,9 @@ OUString TypeDetection::impl_detectTypeFlatAndDeep(comphelper::SequenceAsHashMap
 
                 if (isBrokenZIP(xStream, xContext))
                 {
-                    if (css::uno::Reference<css::task::XInteractionHandler> xInteraction{
+                    if (cpo::uno::Reference<css::task::XInteractionHandler> xInteraction{
                             aInteraction,
-                            css::uno::UNO_QUERY })
+                            cpo::uno::UNO_QUERY })
                     {
                         INetURLObject aURL(rDescriptor.getUnpackedValueOrDefault(
                             utl::MediaDescriptor::PROP_URL, OUString()));
@@ -1088,10 +1088,10 @@ void TypeDetection::impl_seekStreamToZero(comphelper::SequenceAsHashMap const& r
 {
     // try to seek to 0 ...
     // But because XSeekable is an optional interface ... try it only .-)
-    css::uno::Reference< css::io::XInputStream > xStream = rDescriptor.getUnpackedValueOrDefault(
+    cpo::uno::Reference< css::io::XInputStream > xStream = rDescriptor.getUnpackedValueOrDefault(
                                                             utl::MediaDescriptor::PROP_INPUTSTREAM,
-                                                            css::uno::Reference< css::io::XInputStream >());
-    css::uno::Reference< css::io::XSeekable > xSeek(xStream, css::uno::UNO_QUERY);
+                                                            cpo::uno::Reference< css::io::XInputStream >());
+    cpo::uno::Reference< css::io::XSeekable > xSeek(xStream, cpo::uno::UNO_QUERY);
     if (!xSeek.is())
         return;
 
@@ -1122,8 +1122,8 @@ OUString TypeDetection::impl_askDetectService(const OUString&               sDet
     // "simple implemented detect services" .-)
     impl_seekStreamToZero(rDescriptor);
 
-    css::uno::Reference< css::document::XExtendedFilterDetection > xDetector;
-    css::uno::Reference< cpo::uno::XComponentContext >         xContext;
+    cpo::uno::Reference< css::document::XExtendedFilterDetection > xDetector;
+    cpo::uno::Reference< cpo::uno::XComponentContext >         xContext;
 
     // SAFE ->
     {
@@ -1142,7 +1142,7 @@ OUString TypeDetection::impl_askDetectService(const OUString&               sDet
         // gracefully .-)
         xDetector.set(
                 xContext->getServiceManager()->createInstanceWithContext(sDetectService, xContext),
-                css::uno::UNO_QUERY_THROW);
+                cpo::uno::UNO_QUERY_THROW);
     }
     catch (...)
     {
@@ -1197,9 +1197,9 @@ OUString TypeDetection::impl_askDetectService(const OUString&               sDet
 
 OUString TypeDetection::impl_askUserForTypeAndFilterIfAllowed(comphelper::SequenceAsHashMap& rDescriptor)
 {
-    css::uno::Reference< css::task::XInteractionHandler > xInteraction =
+    cpo::uno::Reference< css::task::XInteractionHandler > xInteraction =
         rDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_INTERACTIONHANDLER,
-        css::uno::Reference< css::task::XInteractionHandler >());
+        cpo::uno::Reference< css::task::XInteractionHandler >());
 
     if (!xInteraction.is())
         return OUString();
@@ -1208,9 +1208,9 @@ OUString TypeDetection::impl_askUserForTypeAndFilterIfAllowed(comphelper::Sequen
         rDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_URL,
         OUString());
 
-    css::uno::Reference< css::io::XInputStream > xStream =
+    cpo::uno::Reference< css::io::XInputStream > xStream =
         rDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_INPUTSTREAM,
-        css::uno::Reference< css::io::XInputStream >());
+        cpo::uno::Reference< css::io::XInputStream >());
 
     // Don't disturb the user for "non existing files - means empty URLs" or
     // if we were forced to detect a stream.

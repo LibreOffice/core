@@ -31,13 +31,13 @@
 class CSmplMailClient : public cppu::WeakImplHelper<css::system::XSimpleMailClient>
 {
 public:
-    virtual css::uno::Reference<css::system::XSimpleMailMessage> SAL_CALL createSimpleMailMessage() override;
+    virtual cpo::uno::Reference<css::system::XSimpleMailMessage> SAL_CALL createSimpleMailMessage() override;
 
-    virtual void SAL_CALL sendSimpleMailMessage(const css::uno::Reference<css::system::XSimpleMailMessage>& xSimpleMailMessage, sal_Int32 aFlag) override;
+    virtual void SAL_CALL sendSimpleMailMessage(const cpo::uno::Reference<css::system::XSimpleMailMessage>& xSimpleMailMessage, sal_Int32 aFlag) override;
 
 private:
-    void validateParameter(const css::uno::Reference<css::system::XSimpleMailMessage>& xSimpleMailMessage, sal_Int32 aFlag);
-    void assembleCommandLine(const css::uno::Reference<css::system::XSimpleMailMessage>& xSimpleMailMessage, sal_Int32 aFlag, std::vector<OUString>& rCommandArgs);
+    void validateParameter(const cpo::uno::Reference<css::system::XSimpleMailMessage>& xSimpleMailMessage, sal_Int32 aFlag);
+    void assembleCommandLine(const cpo::uno::Reference<css::system::XSimpleMailMessage>& xSimpleMailMessage, sal_Int32 aFlag, std::vector<OUString>& rCommandArgs);
     OUString CopyAttachment(const OUString& sOrigAttachURL, OUString& sUserVisibleName, bool& nodelete);
     // Don't try to delete the copied attachment files; let the spawned process cleanup them
     void ReleaseAttachments();

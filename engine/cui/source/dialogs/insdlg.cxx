@@ -58,8 +58,8 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::ui::dialogs;
 
 bool InsertObjectDialog_Impl::IsCreateNew() const
@@ -74,7 +74,7 @@ uno::Reference< io::XInputStream > InsertObjectDialog_Impl::GetIconIfIconified( 
 
 InsertObjectDialog_Impl::InsertObjectDialog_Impl(weld::Window* pParent,
     const OUString& rUIXMLDescription, const OUString& rID,
-    css::uno::Reference < css::embed::XStorage > xStorage)
+    cpo::uno::Reference < css::embed::XStorage > xStorage)
     : GenericDialogController(pParent, rUIXMLDescription, rID)
     , m_xStorage(std::move( xStorage ))
     , aCnt( m_xStorage )
@@ -375,7 +375,7 @@ uno::Reference< io::XInputStream > SvInsertOleDlg::GetIconIfIconified( OUString*
 
 
 SfxInsertFloatingFrameDialog::SfxInsertFloatingFrameDialog(weld::Window *pParent,
-                            const css::uno::Reference < css::embed::XStorage >& xStorage)
+                            const cpo::uno::Reference < css::embed::XStorage >& xStorage)
     : InsertObjectDialog_Impl(pParent, u"cui/ui/insertfloatingframe.ui"_ustr, u"InsertFloatingFrameDialog"_ustr,
                               xStorage)
 {

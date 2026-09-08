@@ -29,8 +29,8 @@
 
 namespace com::sun::star {
     namespace animations { class XAnimationNode; }
-    namespace uno { template<class X> class Reference; }
 }
+namespace cpo::uno { template<class X> class Reference; }
 
 namespace sd {
 
@@ -55,7 +55,7 @@ public:
     const OUString& getVariantLabel() const { return maVariantLabel; }
 
 private:
-    TransitionPreset( const css::uno::Reference< css::animations::XAnimationNode >& xNode );
+    TransitionPreset( const cpo::uno::Reference< css::animations::XAnimationNode >& xNode );
 
     static bool importTransitionPresetList(TransitionPresetList& rList);
     static std::map<OUString, TransitionPresetList> mPresetsMap;
@@ -70,7 +70,7 @@ private:
     OUString maVariantLabel;
 
     static bool importTransitionsFile( TransitionPresetList& rList,
-                                       css::uno::Reference< css::lang::XMultiServiceFactory > const & xServiceFactory,
+                                       cpo::uno::Reference< css::lang::XMultiServiceFactory > const & xServiceFactory,
                                        const OUString& aFilename );
 };
 

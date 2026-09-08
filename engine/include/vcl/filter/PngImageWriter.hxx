@@ -30,7 +30,7 @@ struct PngChunk
 class VCL_DLLPUBLIC PngImageWriter
 {
     SvStream& mrStream;
-    css::uno::Reference<css::task::XStatusIndicator> mxStatusIndicator;
+    cpo::uno::Reference<css::task::XStatusIndicator> mxStatusIndicator;
 
     sal_Int32 mnCompressionLevel;
     bool mbInterlaced, mbTranslucent;

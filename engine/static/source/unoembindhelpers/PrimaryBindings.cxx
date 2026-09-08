@@ -14,7 +14,7 @@
 
 #include <bridges/emscriptencxxabi/cxxabi.hxx>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Type.hxx>
 #include <cpo/uno/TypeClass.hpp>
@@ -42,7 +42,7 @@
 #include <utility>
 
 using namespace emscripten;
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 template <> struct emscripten::smart_ptr_trait<cpo::uno::Type>
@@ -420,8 +420,8 @@ EMSCRIPTEN_BINDINGS(PrimaryBindings)
         cppu::throwException(any);
     });
     function("sameUnoObject",
-             +[](css::uno::Reference<cpo::uno::XInterface> const& ref1,
-                 css::uno::Reference<cpo::uno::XInterface> const& ref2) { return ref1 == ref2; });
+             +[](cpo::uno::Reference<cpo::uno::XInterface> const& ref1,
+                 cpo::uno::Reference<cpo::uno::XInterface> const& ref2) { return ref1 == ref2; });
     function("rtl_uString_release",
              +[](std::uintptr_t ptr) { rtl_uString_release(reinterpret_cast<rtl_uString*>(ptr)); });
     function("getUnoExceptionFromCxaException", +[](std::uintptr_t ptr) {

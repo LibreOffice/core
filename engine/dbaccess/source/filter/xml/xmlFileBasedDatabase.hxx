@@ -28,7 +28,7 @@ namespace dbaxml
     public:
 
         OXMLFileBasedDatabase( ODBFilter& rImport,
-                const css::uno::Reference< css::xml::sax::XFastAttributeList > & _xAttrList );
+                const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & _xAttrList );
         virtual ~OXMLFileBasedDatabase() override;
     };
 } // namespace dbaxml

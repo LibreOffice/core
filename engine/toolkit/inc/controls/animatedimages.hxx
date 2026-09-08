@@ -36,13 +36,13 @@ namespace toolkit
     class AnimatedImagesControlModel : public AnimatedImagesControlModel_Base
     {
     public:
-                                        AnimatedImagesControlModel( css::uno::Reference< cpo::uno::XComponentContext > const & i_factory );
+                                        AnimatedImagesControlModel( cpo::uno::Reference< cpo::uno::XComponentContext > const & i_factory );
                                         AnimatedImagesControlModel( const AnimatedImagesControlModel& i_copySource );
 
         virtual rtl::Reference<UnoControlModel> Clone() const override;
 
         // XPropertySet
-        css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+        cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
 
         // XPersistObject
         OUString getServiceName() override;
@@ -65,8 +65,8 @@ namespace toolkit
         virtual void removeImageSet( ::sal_Int32 i_index ) override;
 
         // XAnimatedImages::XContainer
-        virtual void addContainerListener( const css::uno::Reference< css::container::XContainerListener >& i_listener ) override;
-        virtual void removeContainerListener( const css::uno::Reference< css::container::XContainerListener >& i_listener ) override;
+        virtual void addContainerListener( const cpo::uno::Reference< css::container::XContainerListener >& i_listener ) override;
+        virtual void removeContainerListener( const cpo::uno::Reference< css::container::XContainerListener >& i_listener ) override;
 
     protected:
                                         virtual ~AnimatedImagesControlModel() override;

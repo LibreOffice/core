@@ -51,11 +51,11 @@ class XMLSECURITY_DLLPUBLIC PDFSignatureHelper
 
 public:
     PDFSignatureHelper();
-    bool ReadAndVerifySignature(const css::uno::Reference<css::io::XInputStream>& xInputStream);
+    bool ReadAndVerifySignature(const cpo::uno::Reference<css::io::XInputStream>& xInputStream);
     bool ReadAndVerifySignatureSvStream(SvStream& rStream);
     cpo::uno::Sequence<css::security::DocumentSignatureInformation>
     GetDocumentSignatureInformations(
-        const css::uno::Reference<css::xml::crypto::XSecurityEnvironment>& xSecEnv) const;
+        const cpo::uno::Reference<css::xml::crypto::XSecurityEnvironment>& xSecEnv) const;
     SignatureInformations const& GetSignatureInformations() const;
 
     /// Return the ID of the next created signature.
@@ -65,10 +65,10 @@ public:
     /// Comment / reason to be used next time signing is performed.
     void SetDescription(const OUString& rDescription);
     /// Append a new signature at the end of xInputStream.
-    bool Sign(const css::uno::Reference<css::frame::XModel>& xModel,
-              const css::uno::Reference<css::io::XInputStream>& xInputStream, bool bAdES);
+    bool Sign(const cpo::uno::Reference<css::frame::XModel>& xModel,
+              const cpo::uno::Reference<css::io::XInputStream>& xInputStream, bool bAdES);
     /// Remove the signature at nPosition (and all dependent signatures) from xInputStream.
-    static bool RemoveSignature(const css::uno::Reference<css::io::XInputStream>& xInputStream,
+    static bool RemoveSignature(const cpo::uno::Reference<css::io::XInputStream>& xInputStream,
                                 sal_uInt16 nPosition);
 };
 

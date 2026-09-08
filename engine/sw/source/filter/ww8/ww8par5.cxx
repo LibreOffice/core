@@ -93,6 +93,7 @@
 #define WW8_TOX_LEVEL_DELIM     ':'
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace msfilter::util;
 using namespace sw::util;
 using namespace sw::mark;

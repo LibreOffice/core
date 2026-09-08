@@ -92,8 +92,8 @@ public:
     virtual VclPtr<AbstractSwConvertTableDlg> CreateSwConvertTableDlg(SwView& rView, bool bToTable) override;
     virtual VclPtr<VclAbstractDialog> CreateSwCaptionDialog(weld::Window *pParent, SwView &rV) override;
     virtual VclPtr<AbstractSwInsertDBColAutoPilot> CreateSwInsertDBColAutoPilot(SwView& rView,
-        css::uno::Reference< css::sdbc::XDataSource> rxSource,
-        css::uno::Reference<css::sdbcx::XColumnsSupplier> xColSupp,
+        cpo::uno::Reference< css::sdbc::XDataSource> rxSource,
+        cpo::uno::Reference<css::sdbcx::XColumnsSupplier> xColSupp,
         const SwDBData& rData) override;
     virtual VclPtr<SfxAbstractTabDialog> CreateSwFootNoteOptionDlg(weld::Window *pParent, SwWrtShell &rSh) override;
 
@@ -132,8 +132,8 @@ public:
     virtual VclPtr<AbstractSwFieldDlg> CreateSwFieldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, weld::Window *pParent) override;
     virtual VclPtr<SfxAbstractDialog>   CreateSwFieldEditDlg ( SwView& rVw ) override;
     virtual VclPtr<AbstractSwRenameXNamedDlg> CreateSwRenameXNamedDlg(weld::Widget* pParent,
-        css::uno::Reference< css::container::XNamed > & xNamed,
-        css::uno::Reference< css::container::XNameAccess > & xNameAccess) override;
+        cpo::uno::Reference< css::container::XNamed > & xNamed,
+        cpo::uno::Reference< css::container::XNameAccess > & xNameAccess) override;
     virtual VclPtr<AbstractSwModalRedlineAcceptDlg> CreateSwModalRedlineAcceptDlg(weld::Window *pParent) override;
 
     virtual VclPtr<VclAbstractDialog>          CreateTableMergeDialog(weld::Window* pParent, bool& rWithPrev) override;
@@ -166,7 +166,7 @@ public:
                                                 const OUString& rSourceName,
                                                 const OUString& rTableName,
                                                 sal_Int32 nCommandType,
-                                                const css::uno::Reference< css::sdbc::XConnection>& xConnection ) override;
+                                                const cpo::uno::Reference< css::sdbc::XConnection>& xConnection ) override;
     virtual VclPtr<AbstractMailMergeCreateFromDlg>     CreateMailMergeCreateFromDlg(weld::Window* pParent) override;
     virtual VclPtr<AbstractMailMergeFieldConnectionsDlg> CreateMailMergeFieldConnectionsDlg(weld::Window* pParent) override;
     virtual VclPtr<VclAbstractDialog>          CreateMultiTOXMarkDlg(weld::Window* pParent, SwTOXMgr &rTOXMgr) override;

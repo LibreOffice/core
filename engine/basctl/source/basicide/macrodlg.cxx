@@ -50,7 +50,7 @@ namespace basctl
 {
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 MacroChooser::MacroChooser(weld::Window* pParnt, const Reference< frame::XFrame >& xDocFrame)
     : SfxDialogController(pParnt, u"modules/BasicIDE/ui/basicmacrodialog.ui"_ustr, u"BasicMacroDialog"_ustr)

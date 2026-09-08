@@ -24,7 +24,7 @@
 
 #include <string_view>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/io/XStream.hpp>
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
@@ -54,14 +54,14 @@ public:
 
     static bool getThumbnailFormatFromBitmap_Impl(
             const Bitmap& rBitmap,
-            const css::uno::Reference< css::io::XStream >& xStream );
+            const cpo::uno::Reference< css::io::XStream >& xStream );
 
     static OUString getThumbnailReplacementIDByFactoryName_Impl(
         std::u16string_view aFactoryShortName);
 
     static bool getThumbnailReplacement_Impl(
             std::u16string_view rResID,
-            const css::uno::Reference< css::io::XStream >& xStream );
+            const cpo::uno::Reference< css::io::XStream >& xStream );
 
 };
 

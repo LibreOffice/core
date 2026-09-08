@@ -31,7 +31,7 @@
 
 namespace cpo::uno { class XComponentContext; }
 
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace css::registry;
 using namespace css::lang;

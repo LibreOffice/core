@@ -47,7 +47,7 @@ public:
             straight vertical line, and the close-value on the right hand side.
      */
     explicit StockChartTypeTemplate(
-        css::uno::Reference< cpo::uno::XComponentContext > const & xContext,
+        cpo::uno::Reference< cpo::uno::XComponentContext > const & xContext,
         const OUString & rServiceName,
         StockVariant eVariant,
         bool bJapaneseStyle );
@@ -64,7 +64,7 @@ protected:
     virtual ::cppu::IPropertyArrayHelper & getInfoHelper() override;
 
     // ____ XPropertySet ____
-    virtual css::uno::Reference< css::beans::XPropertySetInfo >
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo >
         getPropertySetInfo() override;
 
     // ____ XChartTypeTemplate ____

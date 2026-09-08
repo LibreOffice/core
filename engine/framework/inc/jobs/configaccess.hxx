@@ -56,10 +56,10 @@ class ConfigAccess final
             reference to the uno service manager
             It's necessary to instantiate own needed services.
          */
-        css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+        cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
         /** hold an opened configuration alive */
-        css::uno::Reference< cpo::uno::XInterface > m_xConfig;
+        cpo::uno::Reference< cpo::uno::XInterface > m_xConfig;
 
         /** knows the root of the opened config access point */
         OUString m_sRoot;
@@ -72,7 +72,7 @@ class ConfigAccess final
         void      closeImpl();
     public:
 
-                 ConfigAccess( css::uno::Reference< cpo::uno::XComponentContext > xContext,
+                 ConfigAccess( cpo::uno::Reference< cpo::uno::XComponentContext > xContext,
                                OUString                                     sRoot );
                  ~ConfigAccess();
 
@@ -80,7 +80,7 @@ class ConfigAccess final
         void      close  (                 );
         EOpenMode getMode(                 ) const;
 
-        const css::uno::Reference< cpo::uno::XInterface >& cfg();
+        const cpo::uno::Reference< cpo::uno::XInterface >& cfg();
 };
 
 } // namespace framework

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_OOX_CORE_FASTPARSER_HXX
 #define INCLUDED_OOX_CORE_FASTPARSER_HXX
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ref.hxx>
 #include <sal/types.h>
@@ -69,7 +69,7 @@ public:
         @throws cpo::uno::RuntimeException
     */
     void                setDocumentHandler(
-                            const css::uno::Reference< css::xml::sax::XFastDocumentHandler >& rxDocHandler );
+                            const cpo::uno::Reference< css::xml::sax::XFastDocumentHandler >& rxDocHandler );
 
     void                clearDocumentHandler();
 
@@ -88,7 +88,7 @@ public:
         @throws cpo::uno::RuntimeException
     */
     void                parseStream(
-                            const css::uno::Reference< css::io::XInputStream >& rxInStream,
+                            const cpo::uno::Reference< css::io::XInputStream >& rxInStream,
                             const OUString& rStreamName );
 
     /** Parses a stream from the passed storage with the specified name.
@@ -99,11 +99,11 @@ public:
     */
     void                parseStream( StorageBase& rStorage, const OUString& rStreamName );
 
-    const css::uno::Reference< css::xml::sax::XFastTokenHandler >&
+    const cpo::uno::Reference< css::xml::sax::XFastTokenHandler >&
                getTokenHandler() const { return mxTokenHandler; }
 
 private:
-    css::uno::Reference<css::xml::sax::XFastTokenHandler>   mxTokenHandler;
+    cpo::uno::Reference<css::xml::sax::XFastTokenHandler>   mxTokenHandler;
     const NamespaceMap&                                     mrNamespaceMap;
     rtl::Reference<sax_fastparser::FastSaxParser>           mxParser;
 };

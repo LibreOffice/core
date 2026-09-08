@@ -30,7 +30,7 @@
 #include "filrset.hxx"
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include "prov.hxx"
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/ucb/ListActionType.hpp>
@@ -40,6 +40,7 @@
 
 using namespace fileaccess;
 using namespace com::sun::star;
+using namespace ::cpo;
 
 XResultSet_impl::XResultSet_impl( TaskManager* pMyShell,
                                   const OUString& aUnqPath,

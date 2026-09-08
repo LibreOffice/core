@@ -19,6 +19,7 @@
 #include "vbaprogressbar.hxx"
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace ooo::vba;
 
 // uno servicename com.sun.star.awt.UnoControlProgressBarMode

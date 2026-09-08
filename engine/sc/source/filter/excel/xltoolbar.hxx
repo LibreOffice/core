@@ -43,7 +43,7 @@ public:
     virtual void Print( FILE* ) override;
 #endif
     bool Read(SvStream &rS) override;
-    bool ImportToolBarControl( ScCTBWrapper&, const css::uno::Reference< css::container::XIndexContainer >& toolbarcontainer, CustomToolBarImportHelper& helper, bool bIsMenuBar );
+    bool ImportToolBarControl( ScCTBWrapper&, const cpo::uno::Reference< css::container::XIndexContainer >& toolbarcontainer, CustomToolBarImportHelper& helper, bool bIsMenuBar );
 };
 
 class ScCTB : public TBBase
@@ -61,7 +61,7 @@ public:
     bool Read(SvStream &rS) override;
     bool IsMenuToolbar() const;
     bool ImportCustomToolBar( ScCTBWrapper&, CustomToolBarImportHelper& );
-    bool ImportMenuTB( ScCTBWrapper&, const css::uno::Reference< css::container::XIndexContainer >&, CustomToolBarImportHelper& );
+    bool ImportMenuTB( ScCTBWrapper&, const cpo::uno::Reference< css::container::XIndexContainer >&, CustomToolBarImportHelper& );
     const OUString& GetName() { return tb.getName().getString(); }
 
 };

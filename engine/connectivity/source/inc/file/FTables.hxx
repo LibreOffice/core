@@ -29,10 +29,10 @@ namespace connectivity::file
         public sdbcx::OCollection
     {
     protected:
-        virtual css::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
+        virtual cpo::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
         virtual void impl_refresh() override;
     public:
-        OTables(const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _rMetaData,::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
+        OTables(const cpo::uno::Reference< css::sdbc::XDatabaseMetaData >& _rMetaData,::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
             const ::std::vector< OUString> &_rVector) : sdbcx::OCollection(_rParent,_rMetaData->supportsMixedCaseQuotedIdentifiers(),_rMutex,_rVector)
         {}
 

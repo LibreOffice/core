@@ -30,7 +30,7 @@ typedef InheritedHelperInterfaceWeakImpl< ov::excel::XAxis >  ScVbaAxis_BASE;
 class ScVbaAxis : public ScVbaAxis_BASE
 {
     rtl::Reference< ScVbaChart > moChartParent;
-    css::uno::Reference< css::beans::XPropertySet > mxPropertySet;
+    cpo::uno::Reference< css::beans::XPropertySet > mxPropertySet;
     sal_Int32 mnType;
     sal_Int32 mnGroup;
     ov::ShapeHelper maShapeHelper;
@@ -42,10 +42,10 @@ class ScVbaAxis : public ScVbaAxis_BASE
     bool isValueAxis();
 
 public:
-    ScVbaAxis( const rtl::Reference< ScVbaChart >& xParent, const css::uno::Reference< cpo::uno::XComponentContext > & xContext, css::uno::Reference< css::beans::XPropertySet >  _xPropertySet, sal_Int32 _nType, sal_Int32 _nGroup );
+    ScVbaAxis( const rtl::Reference< ScVbaChart >& xParent, const cpo::uno::Reference< cpo::uno::XComponentContext > & xContext, cpo::uno::Reference< css::beans::XPropertySet >  _xPropertySet, sal_Int32 _nType, sal_Int32 _nGroup );
     // Methods
     virtual void SAL_CALL Delete(  ) override;
-    virtual css::uno::Reference< ::ooo::vba::excel::XAxisTitle > SAL_CALL getAxisTitle(  ) override;
+    virtual cpo::uno::Reference< ::ooo::vba::excel::XAxisTitle > SAL_CALL getAxisTitle(  ) override;
     virtual void SAL_CALL setDisplayUnit( ::sal_Int32 DisplayUnit ) override;
     virtual ::sal_Int32 SAL_CALL getDisplayUnit(  ) override;
     virtual void SAL_CALL setCrosses( ::sal_Int32 Crosses ) override;

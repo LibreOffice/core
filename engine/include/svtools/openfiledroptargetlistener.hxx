@@ -39,7 +39,7 @@ class OpenFileDropTargetListener final : public cppu::WeakImplHelper< css::datat
 {
     private:
         /// uno service manager to create necessary services
-        css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+        cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
         /// weakreference to target frame (Don't use a hard reference. Owner can't delete us then!)
         cpo::uno::WeakReference< css::frame::XFrame > m_xTargetFrame;
@@ -48,8 +48,8 @@ class OpenFileDropTargetListener final : public cppu::WeakImplHelper< css::datat
         DataFlavorExVector m_aFormats;
 
     public:
-        UNLESS_MERGELIBS(SVT_DLLPUBLIC) OpenFileDropTargetListener( css::uno::Reference< cpo::uno::XComponentContext > xContext,
-                                    const css::uno::Reference< css::frame::XFrame >& xFrame );
+        UNLESS_MERGELIBS(SVT_DLLPUBLIC) OpenFileDropTargetListener( cpo::uno::Reference< cpo::uno::XComponentContext > xContext,
+                                    const cpo::uno::Reference< css::frame::XFrame >& xFrame );
         virtual ~OpenFileDropTargetListener() override;
 
     public:

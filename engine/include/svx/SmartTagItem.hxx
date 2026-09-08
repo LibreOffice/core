@@ -20,7 +20,7 @@
 #pragma once
 
 #include <svl/poolitem.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/smarttags/XSmartTagAction.hpp>
 #include <svx/svxdllapi.h>
@@ -38,11 +38,11 @@ namespace com::sun::star::frame {
 }
 class SVX_DLLPUBLIC SvxSmartTagItem final : public SfxPoolItem
 {
-    const cpo::uno::Sequence < cpo::uno::Sequence< css::uno::Reference< css::smarttags::XSmartTagAction > > > maActionComponentsSequence;
+    const cpo::uno::Sequence < cpo::uno::Sequence< cpo::uno::Reference< css::smarttags::XSmartTagAction > > > maActionComponentsSequence;
     const cpo::uno::Sequence < cpo::uno::Sequence< sal_Int32 > > maActionIndicesSequence;
-    const cpo::uno::Sequence< css::uno::Reference< css::container::XStringKeyMap > > maStringKeyMaps;
-    const css::uno::Reference<css::text::XTextRange> mxRange;
-    const css::uno::Reference<css::frame::XController> mxController;
+    const cpo::uno::Sequence< cpo::uno::Reference< css::container::XStringKeyMap > > maStringKeyMaps;
+    const cpo::uno::Reference<css::text::XTextRange> mxRange;
+    const cpo::uno::Reference<css::frame::XController> mxController;
     const css::lang::Locale maLocale;
     const OUString maApplicationName;
     const OUString maRangeText;
@@ -52,11 +52,11 @@ public:
 
     DECLARE_ITEM_TYPE_FUNCTION(SvxSmartTagItem)
     SvxSmartTagItem( const TypedWhichId<SvxSmartTagItem> nId,
-                     const cpo::uno::Sequence < cpo::uno::Sequence< css::uno::Reference< css::smarttags::XSmartTagAction > > >& rActionComponentsSequence,
+                     const cpo::uno::Sequence < cpo::uno::Sequence< cpo::uno::Reference< css::smarttags::XSmartTagAction > > >& rActionComponentsSequence,
                      const cpo::uno::Sequence < cpo::uno::Sequence< sal_Int32 > >& rActionIndicesSequence,
-                     const cpo::uno::Sequence< css::uno::Reference< css::container::XStringKeyMap > >& rStringKeyMaps,
-                     css::uno::Reference<css::text::XTextRange> xRange,
-                     css::uno::Reference<css::frame::XController> xController,
+                     const cpo::uno::Sequence< cpo::uno::Reference< css::container::XStringKeyMap > >& rStringKeyMaps,
+                     cpo::uno::Reference<css::text::XTextRange> xRange,
+                     cpo::uno::Reference<css::frame::XController> xController,
                      css::lang::Locale aLocale,
                      OUString aApplicationName,
                      OUString aRangeText );
@@ -67,11 +67,11 @@ public:
     virtual bool             QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool             PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
-    const cpo::uno::Sequence < cpo::uno::Sequence< css::uno::Reference< css::smarttags::XSmartTagAction > > >& GetActionComponentsSequence() const { return maActionComponentsSequence; }
+    const cpo::uno::Sequence < cpo::uno::Sequence< cpo::uno::Reference< css::smarttags::XSmartTagAction > > >& GetActionComponentsSequence() const { return maActionComponentsSequence; }
     const cpo::uno::Sequence < cpo::uno::Sequence< sal_Int32 > >& GetActionIndicesSequence() const { return maActionIndicesSequence; }
-    const cpo::uno::Sequence< css::uno::Reference< css::container::XStringKeyMap > >& GetStringKeyMaps() const { return maStringKeyMaps; }
-    const css::uno::Reference<css::text::XTextRange>& GetTextRange() const { return mxRange; }
-    const css::uno::Reference<css::frame::XController>& GetController() const { return mxController; }
+    const cpo::uno::Sequence< cpo::uno::Reference< css::container::XStringKeyMap > >& GetStringKeyMaps() const { return maStringKeyMaps; }
+    const cpo::uno::Reference<css::text::XTextRange>& GetTextRange() const { return mxRange; }
+    const cpo::uno::Reference<css::frame::XController>& GetController() const { return mxController; }
     const css::lang::Locale& GetLocale() const { return maLocale; }
     const OUString& GetApplicationName() const { return maApplicationName; }
     const OUString& GetRangeText() const { return maRangeText; }

@@ -20,7 +20,7 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_MMCONFIGITEM_HXX
 
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
 #include <memory>
 #include <set>
@@ -59,7 +59,7 @@ class SW_DLLPUBLIC SwMailMergeConfigItem
     sal_uInt32 m_nBegin;
     sal_uInt32 m_nEnd;
     std::set<sal_Int32> m_aExcludedRecords;
-    css::uno::Reference<css::view::XSelectionChangeListener> m_xDBChangedListener;
+    cpo::uno::Reference<css::view::XSelectionChangeListener> m_xDBChangedListener;
 
     OUString m_sSelectedPrinter;
 
@@ -81,18 +81,18 @@ public:
     const std::vector<std::pair<OUString, int>>& GetDefaultAddressHeaders() const;
 
     void SetCurrentConnection(
-        css::uno::Reference< css::sdbc::XDataSource> const & xSource,
+        cpo::uno::Reference< css::sdbc::XDataSource> const & xSource,
         const SharedConnection& rConnection,
-        css::uno::Reference< css::sdbcx::XColumnsSupplier> const & xColumnsSupplier,
+        cpo::uno::Reference< css::sdbcx::XColumnsSupplier> const & xColumnsSupplier,
         const SwDBData& rDBData);
 
-    css::uno::Reference< css::sdbc::XDataSource> const & GetSource() const;
+    cpo::uno::Reference< css::sdbc::XDataSource> const & GetSource() const;
 
     SharedConnection const & GetConnection() const;
 
-    css::uno::Reference< css::sdbcx::XColumnsSupplier> const & GetColumnsSupplier();
+    cpo::uno::Reference< css::sdbcx::XColumnsSupplier> const & GetColumnsSupplier();
 
-    css::uno::Reference< css::sdbc::XResultSet> const & GetResultSet() const;
+    cpo::uno::Reference< css::sdbc::XResultSet> const & GetResultSet() const;
 
     void DisposeResultSet();
 

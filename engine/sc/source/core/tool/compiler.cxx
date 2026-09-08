@@ -81,6 +81,7 @@
 
 using namespace formula;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 std::optional<CharClass>            ScCompiler::goCharClassEnglish;
 std::optional<CharClass>            ScCompiler::goCharClassLocalized;

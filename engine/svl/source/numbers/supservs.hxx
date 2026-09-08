@@ -39,12 +39,12 @@ class SvNumberFormatsSupplierServiceObject final
             ,public css::lang::XServiceInfo
 {
     std::unique_ptr<SvNumberFormatter>                  m_pOwnFormatter;
-    css::uno::Reference< cpo::uno::XComponentContext >  m_xORB;
+    cpo::uno::Reference< cpo::uno::XComponentContext >  m_xORB;
 
     void implEnsureFormatter();
 
 public:
-    explicit SvNumberFormatsSupplierServiceObject(css::uno::Reference< cpo::uno::XComponentContext > _xORB);
+    explicit SvNumberFormatsSupplierServiceObject(cpo::uno::Reference< cpo::uno::XComponentContext > _xORB);
     virtual ~SvNumberFormatsSupplierServiceObject() override;
 
     // XInterface
@@ -65,9 +65,9 @@ public:
     virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
     // XNumberFormatsSupplier
-    virtual css::uno::Reference< css::beans::XPropertySet >
+    virtual cpo::uno::Reference< css::beans::XPropertySet >
                 getNumberFormatSettings() override;
-    virtual css::uno::Reference< css::util::XNumberFormats >
+    virtual cpo::uno::Reference< css::util::XNumberFormats >
                 getNumberFormats() override;
 
     // XUnoTunneler

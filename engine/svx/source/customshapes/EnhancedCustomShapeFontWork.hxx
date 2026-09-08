@@ -28,11 +28,11 @@ class SdrObjCustomShape;
 
 class EnhancedCustomShapeFontWork
 {
-        static css::uno::Reference < css::i18n::XBreakIterator > mxBreakIterator;
+        static cpo::uno::Reference < css::i18n::XBreakIterator > mxBreakIterator;
 
     public:
 
-        static css::uno::Reference < css::i18n::XBreakIterator > const & GetBreakIterator();
+        static cpo::uno::Reference < css::i18n::XBreakIterator > const & GetBreakIterator();
         static rtl::Reference<SdrObject> CreateFontWork(
             const SdrObject* pShape2d,
             const SdrObjCustomShape& rSdrObjCustomShape);

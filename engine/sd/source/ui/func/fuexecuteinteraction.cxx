@@ -46,6 +46,7 @@
 #include <com/sun/star/media/XPlayer.hpp>
 
 using namespace css;
+using namespace ::cpo;
 
 namespace sd
 {

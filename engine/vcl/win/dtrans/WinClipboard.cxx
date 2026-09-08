@@ -63,7 +63,7 @@ unsigned __stdcall releaseAsyncProc(void* p)
     return 0;
 }
 
-void releaseAsync(css::uno::Reference<css::datatransfer::XTransferable>& ref)
+void releaseAsync(cpo::uno::Reference<css::datatransfer::XTransferable>& ref)
 {
     if (!ref)
         return;
@@ -129,7 +129,7 @@ uno::Reference<datatransfer::XTransferable> CWinClipboard::getContents()
     return getContents_noLock();
 }
 
-css::uno::Reference<css::datatransfer::XTransferable> CWinClipboard::getContents_noLock()
+cpo::uno::Reference<css::datatransfer::XTransferable> CWinClipboard::getContents_noLock()
 {
     if (m_bDisposed)
         throw lang::DisposedException("object is already disposed",
@@ -359,7 +359,7 @@ cpo::uno::Sequence<OUString> CWinClipboard::getSupportedServiceNames()
     return { "com.sun.star.datatransfer.clipboard.SystemClipboard" };
 }
 
-css::uno::Reference<css::datatransfer::clipboard::XClipboard>
+cpo::uno::Reference<css::datatransfer::clipboard::XClipboard>
 WinSalInstance::CreateClipboard(const cpo::uno::Sequence<cpo::uno::Any>& arguments)
 {
     // Tests run in parallel; sharing the real Windows clipboard between them would race. Headless

@@ -33,6 +33,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::mail;
+using namespace ::cpo;
 
 class SwTestAccountSettingsDialog : public SfxDialogController
 {

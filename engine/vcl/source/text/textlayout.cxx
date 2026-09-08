@@ -235,8 +235,8 @@ namespace vcl
     }
 
     std::tuple<sal_Int32, sal_Int32> TextLayoutCommon::BreakLine(const tools::Long nWidth, OUString const& rStr,
-                        css::uno::Reference< css::linguistic2::XHyphenator > const& xHyph,
-                        css::uno::Reference<css::i18n::XBreakIterator>& xBI,
+                        cpo::uno::Reference< css::linguistic2::XHyphenator > const& xHyph,
+                        cpo::uno::Reference<css::i18n::XBreakIterator>& xBI,
                         const bool bHyphenate, const tools::Long nOrigLineWidth,
                         const sal_Int32 nPos, const sal_Int32 nLen)
     {
@@ -283,7 +283,7 @@ namespace vcl
 
         OUString aWord = rStr.copy( nWordStart, nWordLen );
         sal_Int32 nMinTrail = nWordEnd-nSoftBreak+1;  //+1: Before the "broken off" char
-        css::uno::Reference< css::linguistic2::XHyphenatedWord > xHyphWord;
+        cpo::uno::Reference< css::linguistic2::XHyphenatedWord > xHyphWord;
         if (xHyph.is())
             xHyphWord = xHyph->hyphenate( aWord, rDefLocale, aWord.getLength() - nMinTrail, cpo::uno::Sequence< css::beans::PropertyValue >() );
 
@@ -420,16 +420,16 @@ namespace vcl
 
         tools::Long nMaxLineWidth  = 0;
         const bool bHyphenate = (nStyle & DrawTextFlags::WordBreakHyphenation) == DrawTextFlags::WordBreakHyphenation;
-        css::uno::Reference< css::linguistic2::XHyphenator > xHyph;
+        cpo::uno::Reference< css::linguistic2::XHyphenator > xHyph;
         if (bHyphenate)
         {
             // get service provider
-            const css::uno::Reference<cpo::uno::XComponentContext>& xContext(comphelper::getProcessComponentContext());
-            css::uno::Reference<css::linguistic2::XLinguServiceManager2> xLinguMgr = css::linguistic2::LinguServiceManager::create(xContext);
+            const cpo::uno::Reference<cpo::uno::XComponentContext>& xContext(comphelper::getProcessComponentContext());
+            cpo::uno::Reference<css::linguistic2::XLinguServiceManager2> xLinguMgr = css::linguistic2::LinguServiceManager::create(xContext);
             xHyph = xLinguMgr->getHyphenator();
         }
 
-        css::uno::Reference<css::i18n::XBreakIterator> xBI;
+        cpo::uno::Reference<css::i18n::XBreakIterator> xBI;
         sal_Int32 nPos = 0;
         sal_Int32 nLen = rStr.getLength();
         sal_Int32 nCurrentTextY = 0;

@@ -37,54 +37,54 @@ class SwVbaRange : public SwVbaRange_BASE
 {
 private:
     rtl::Reference< SwXTextDocument > mxTextDocument;
-    css::uno::Reference< css::text::XTextCursor >   mxTextCursor;
-    css::uno::Reference< css::text::XText >         mxText;
+    cpo::uno::Reference< css::text::XTextCursor >   mxTextCursor;
+    cpo::uno::Reference< css::text::XText >         mxText;
 
 private:
     /// @throws css::script::BasicErrorException
     /// @throws cpo::uno::RuntimeException
-    void initialize( const css::uno::Reference< css::text::XTextRange >& rStart, const css::uno::Reference< css::text::XTextRange >& rEnd );
+    void initialize( const cpo::uno::Reference< css::text::XTextRange >& rStart, const cpo::uno::Reference< css::text::XTextRange >& rEnd );
     /// @throws cpo::uno::RuntimeException
     void GetStyleInfo(OUString& aStyleName, OUString& aStyleType );
 public:
     /// @throws css::script::BasicErrorException
     /// @throws cpo::uno::RuntimeException
-    SwVbaRange( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent,
-                const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
+    SwVbaRange( const cpo::uno::Reference< ooo::vba::XHelperInterface >& rParent,
+                const cpo::uno::Reference< cpo::uno::XComponentContext >& rContext,
                 rtl::Reference< SwXTextDocument > xTextDocument,
-                const css::uno::Reference< css::text::XTextRange >& rStart);
+                const cpo::uno::Reference< css::text::XTextRange >& rStart);
     /// @throws css::script::BasicErrorException
     /// @throws cpo::uno::RuntimeException
-    SwVbaRange( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent,
-                const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
+    SwVbaRange( const cpo::uno::Reference< ooo::vba::XHelperInterface >& rParent,
+                const cpo::uno::Reference< cpo::uno::XComponentContext >& rContext,
                 rtl::Reference< SwXTextDocument > xTextDocument,
-                const css::uno::Reference< css::text::XTextRange >& rStart,
-                const css::uno::Reference< css::text::XTextRange >& rEnd );
+                const cpo::uno::Reference< css::text::XTextRange >& rStart,
+                const cpo::uno::Reference< css::text::XTextRange >& rEnd );
     /// @throws css::script::BasicErrorException
     /// @throws cpo::uno::RuntimeException
-    SwVbaRange( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent,
-                const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
+    SwVbaRange( const cpo::uno::Reference< ooo::vba::XHelperInterface >& rParent,
+                const cpo::uno::Reference< cpo::uno::XComponentContext >& rContext,
                 rtl::Reference< SwXTextDocument > xTextDocument,
-                const css::uno::Reference< css::text::XTextRange >& rStart,
-                const css::uno::Reference< css::text::XTextRange >& rEnd,
-                css::uno::Reference< css::text::XText > xText);
+                const cpo::uno::Reference< css::text::XTextRange >& rStart,
+                const cpo::uno::Reference< css::text::XTextRange >& rEnd,
+                cpo::uno::Reference< css::text::XText > xText);
     virtual ~SwVbaRange() override;
     const rtl::Reference< SwXTextDocument >& getDocument() const { return mxTextDocument; }
 
-    virtual css::uno::Reference< css::text::XTextRange > SAL_CALL getXTextRange() override;
-    const css::uno::Reference< css::text::XText >& getXText() const { return mxText; }
-    void setXTextCursor( const css::uno::Reference< css::text::XTextCursor >& xTextCursor ) { mxTextCursor = xTextCursor; }
+    virtual cpo::uno::Reference< css::text::XTextRange > SAL_CALL getXTextRange() override;
+    const cpo::uno::Reference< css::text::XText >& getXText() const { return mxText; }
+    void setXTextCursor( const cpo::uno::Reference< css::text::XTextCursor >& xTextCursor ) { mxTextCursor = xTextCursor; }
 
     // Attribute
     virtual OUString SAL_CALL getText() override;
     virtual void SAL_CALL setText( const OUString& rText ) override;
-    virtual css::uno::Reference< ooo::vba::word::XParagraphFormat > SAL_CALL getParagraphFormat() override;
-    virtual void SAL_CALL setParagraphFormat( const css::uno::Reference< ooo::vba::word::XParagraphFormat >& rParagraphFormat ) override;
+    virtual cpo::uno::Reference< ooo::vba::word::XParagraphFormat > SAL_CALL getParagraphFormat() override;
+    virtual void SAL_CALL setParagraphFormat( const cpo::uno::Reference< ooo::vba::word::XParagraphFormat >& rParagraphFormat ) override;
     virtual cpo::uno::Any SAL_CALL getStyle() override;
     virtual void SAL_CALL setStyle( const cpo::uno::Any& _xStyle ) override;
-    virtual css::uno::Reference< ooo::vba::word::XFont > SAL_CALL getFont() override;
-    virtual css::uno::Reference< ooo::vba::word::XFind > SAL_CALL getFind() override;
-    virtual css::uno::Reference< ooo::vba::word::XListFormat > SAL_CALL getListFormat() override;
+    virtual cpo::uno::Reference< ooo::vba::word::XFont > SAL_CALL getFont() override;
+    virtual cpo::uno::Reference< ooo::vba::word::XFind > SAL_CALL getFind() override;
+    virtual cpo::uno::Reference< ooo::vba::word::XListFormat > SAL_CALL getListFormat() override;
 
     //XDefaultProperty
     virtual OUString SAL_CALL getDefaultPropertyName() override { return u"Text"_ustr; }
@@ -102,7 +102,7 @@ public:
     virtual void SAL_CALL setStart( ::sal_Int32 _start ) override;
     virtual ::sal_Int32 SAL_CALL getEnd() override;
     virtual void SAL_CALL setEnd( ::sal_Int32 _end ) override;
-    virtual bool SAL_CALL InRange( const css::uno::Reference< ::ooo::vba::word::XRange >& Range ) override;
+    virtual bool SAL_CALL InRange( const cpo::uno::Reference< ::ooo::vba::word::XRange >& Range ) override;
     virtual cpo::uno::Any SAL_CALL Revisions( const cpo::uno::Any& aIndex ) override;
     virtual cpo::uno::Any SAL_CALL Sections( const cpo::uno::Any& aIndex ) override;
     virtual cpo::uno::Any SAL_CALL Fields( const cpo::uno::Any& aIndex ) override;

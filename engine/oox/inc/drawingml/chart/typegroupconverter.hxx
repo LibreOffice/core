@@ -123,7 +123,7 @@ public:
 
     /** Converts the OOXML up/down bars. */
     void                convertFromModel(
-                            const css::uno::Reference< css::chart2::XChartType >& rxChartType );
+                            const cpo::uno::Reference< css::chart2::XChartType >& rxChartType );
 };
 
 struct TypeGroupModel;
@@ -160,16 +160,16 @@ public:
     bool                isSingleSeriesTitle() const;
 
     /** Creates a coordinate system according to the contained chart type. */
-    css::uno::Reference< css::chart2::XCoordinateSystem >
+    cpo::uno::Reference< css::chart2::XCoordinateSystem >
                         createCoordinateSystem();
     /** Creates a labeled data sequence object for axis categories. */
-    css::uno::Reference< css::chart2::data::XLabeledDataSequence >
+    cpo::uno::Reference< css::chart2::data::XLabeledDataSequence >
                         createCategorySequence();
 
     /** Converts the OOXML type group model into a chart2 coordinate system. */
     void                convertFromModel(
-                            const css::uno::Reference< css::chart2::XDiagram >& rxDiagram,
-                            const css::uno::Reference< css::chart2::XCoordinateSystem >& rxCoordSystem,
+                            const cpo::uno::Reference< css::chart2::XDiagram >& rxDiagram,
+                            const cpo::uno::Reference< css::chart2::XCoordinateSystem >& rxCoordSystem,
                             sal_Int32 nAxesSetIdx, bool bSupportsVaryColorsByPoint );
 
     /** Sets the passed OOXML marker style at the passed property set. */
@@ -195,8 +195,8 @@ public:
 private:
     /** Inserts the passed series into the chart type. Adds additional properties to the series. */
     void                insertDataSeries(
-                            const css::uno::Reference< css::chart2::XChartType >& rxChartType,
-                            const css::uno::Reference< css::chart2::XDataSeries >& rxSeries,
+                            const cpo::uno::Reference< css::chart2::XChartType >& rxChartType,
+                            const cpo::uno::Reference< css::chart2::XDataSeries >& rxSeries,
                             sal_Int32 nAxesSetIdx );
 
 private:

@@ -510,44 +510,44 @@ OUString ScPrincipalComponentAnalysisDialog::GetChartName(SCTAB nOutputTab) cons
 }
 
 void ScPrincipalComponentAnalysisDialog::WhitenChartWall(
-    const css::uno::Reference<css::chart2::XDiagram>& rDiagram)
+    const cpo::uno::Reference<css::chart2::XDiagram>& rDiagram)
 {
     // A wall takes the grey the fill properties start every object off with,
     // while the area around it is already the colour of the document. Painting
     // the wall white puts the whole chart on one colour.
-    css::uno::Reference<css::beans::XPropertySet> xWall(rDiagram->getWall(),
-                                                        css::uno::UNO_SET_THROW);
+    cpo::uno::Reference<css::beans::XPropertySet> xWall(rDiagram->getWall(),
+                                                        cpo::uno::UNO_SET_THROW);
     xWall->setPropertyValue(u"FillStyle"_ustr, cpo::uno::Any(css::drawing::FillStyle_SOLID));
     xWall->setPropertyValue(u"FillColor"_ustr, cpo::uno::Any(sal_Int32(COL_WHITE)));
 }
 
-css::uno::Reference<css::chart2::XTitle>
+cpo::uno::Reference<css::chart2::XTitle>
 ScPrincipalComponentAnalysisDialog::MakeChartTitle(const OUString& rText)
 {
-    css::uno::Reference<css::lang::XMultiServiceFactory> xServiceFactory(
-        comphelper::getProcessServiceFactory(), css::uno::UNO_SET_THROW);
-    css::uno::Reference<css::chart2::XFormattedString> xTitleText(
+    cpo::uno::Reference<css::lang::XMultiServiceFactory> xServiceFactory(
+        comphelper::getProcessServiceFactory(), cpo::uno::UNO_SET_THROW);
+    cpo::uno::Reference<css::chart2::XFormattedString> xTitleText(
         xServiceFactory->createInstance(u"com.sun.star.chart2.FormattedString"_ustr),
-        css::uno::UNO_QUERY_THROW);
+        cpo::uno::UNO_QUERY_THROW);
     xTitleText->setString(rText);
-    css::uno::Reference<css::chart2::XTitle> xTitle(
+    cpo::uno::Reference<css::chart2::XTitle> xTitle(
         xServiceFactory->createInstance(u"com.sun.star.chart2.Title"_ustr),
-        css::uno::UNO_QUERY_THROW);
+        cpo::uno::UNO_QUERY_THROW);
     xTitle->setText({ xTitleText });
     return xTitle;
 }
 
-css::uno::Reference<css::chart2::XChartDocument>
+cpo::uno::Reference<css::chart2::XChartDocument>
 ScPrincipalComponentAnalysisDialog::CreateSheetChart(ScDocShell& rDocShell,
                                                      const ScRange& rDataRange,
                                                      const css::awt::Rectangle& rRectangle)
 {
     const SCTAB nOutputTab = rDataRange.aStart.Tab();
-    css::uno::Reference<css::container::XIndexAccess> xSheets(rDocShell.GetModel()->getSheets(),
-                                                              css::uno::UNO_QUERY_THROW);
-    css::uno::Reference<css::table::XTableChartsSupplier> xSupplier(xSheets->getByIndex(nOutputTab),
-                                                                    css::uno::UNO_QUERY_THROW);
-    css::uno::Reference<css::table::XTableCharts> xCharts = xSupplier->getCharts();
+    cpo::uno::Reference<css::container::XIndexAccess> xSheets(rDocShell.GetModel()->getSheets(),
+                                                              cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::table::XTableChartsSupplier> xSupplier(xSheets->getByIndex(nOutputTab),
+                                                                    cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::table::XTableCharts> xCharts = xSupplier->getCharts();
 
     const css::table::CellRangeAddress aAddress(nOutputTab, rDataRange.aStart.Col(),
                                                 rDataRange.aStart.Row(), rDataRange.aEnd.Col(),
@@ -557,12 +557,12 @@ ScPrincipalComponentAnalysisDialog::CreateSheetChart(ScDocShell& rDocShell,
     // need no names of their own along the bottom.
     xCharts->addNewByName(aChartName, rRectangle, { aAddress }, true, false);
 
-    css::uno::Reference<css::container::XNameAccess> xChartsByName(xCharts,
-                                                                   css::uno::UNO_QUERY_THROW);
-    css::uno::Reference<css::document::XEmbeddedObjectSupplier> xObjectSupplier(
-        xChartsByName->getByName(aChartName), css::uno::UNO_QUERY_THROW);
-    return css::uno::Reference<css::chart2::XChartDocument>(xObjectSupplier->getEmbeddedObject(),
-                                                            css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::container::XNameAccess> xChartsByName(xCharts,
+                                                                   cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::document::XEmbeddedObjectSupplier> xObjectSupplier(
+        xChartsByName->getByName(aChartName), cpo::uno::UNO_QUERY_THROW);
+    return cpo::uno::Reference<css::chart2::XChartDocument>(xObjectSupplier->getEmbeddedObject(),
+                                                            cpo::uno::UNO_QUERY_THROW);
 }
 
 void ScPrincipalComponentAnalysisDialog::AddVarianceChart(ScDocShell& rDocShell,
@@ -574,48 +574,48 @@ void ScPrincipalComponentAnalysisDialog::AddVarianceChart(ScDocShell& rDocShell,
         // Anchor the chart at the top of the sheet, clear of the numbers.
         const tools::Rectangle aCell = ScDrawLayer::GetCellRect(
             mrDocument, ScAddress(nChartColumn, nMeanRow, rShareRange.aStart.Tab()), false);
-        css::uno::Reference<css::chart2::XChartDocument> xChartDocument = CreateSheetChart(
+        cpo::uno::Reference<css::chart2::XChartDocument> xChartDocument = CreateSheetChart(
             rDocShell, rShareRange,
             css::awt::Rectangle(aCell.Left(), aCell.Top(), nChartWidth, nChartHeight));
 
         // Bars for the share each component carries with a line over them for
         // the running total. The template draws the last series of the two as
         // the line, which is the running total.
-        css::uno::Reference<css::lang::XMultiServiceFactory> xTemplateFactory(
-            xChartDocument->getChartTypeManager(), css::uno::UNO_QUERY_THROW);
-        css::uno::Reference<css::chart2::XChartTypeTemplate> xTemplate(
+        cpo::uno::Reference<css::lang::XMultiServiceFactory> xTemplateFactory(
+            xChartDocument->getChartTypeManager(), cpo::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::chart2::XChartTypeTemplate> xTemplate(
             xTemplateFactory->createInstance(u"com.sun.star.chart2.template.ColumnWithLine"_ustr),
-            css::uno::UNO_QUERY_THROW);
-        css::uno::Reference<css::chart2::XDiagram> xDiagram = xChartDocument->getFirstDiagram();
+            cpo::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::chart2::XDiagram> xDiagram = xChartDocument->getFirstDiagram();
         xTemplate->changeDiagram(xDiagram);
         WhitenChartWall(xDiagram);
 
-        css::uno::Reference<css::chart2::XTitled> xTitled(xChartDocument,
-                                                          css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::chart2::XTitled> xTitled(xChartDocument,
+                                                          cpo::uno::UNO_QUERY_THROW);
         xTitled->setTitleObject(MakeChartTitle(ScResId(STR_VARIANCE_SHARE_CHART_TITLE)));
 
-        css::uno::Reference<css::chart2::XCoordinateSystemContainer> xCoordinateSystems(
-            xDiagram, css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::chart2::XCoordinateSystemContainer> xCoordinateSystems(
+            xDiagram, cpo::uno::UNO_QUERY_THROW);
         const auto aSystems = xCoordinateSystems->getCoordinateSystems();
         if (aSystems.hasElements())
         {
             // One bar per component stands along the bottom.
-            css::uno::Reference<css::chart2::XTitled> xComponentAxis(
-                aSystems[0]->getAxisByDimension(0, 0), css::uno::UNO_QUERY_THROW);
+            cpo::uno::Reference<css::chart2::XTitled> xComponentAxis(
+                aSystems[0]->getAxisByDimension(0, 0), cpo::uno::UNO_QUERY_THROW);
             xComponentAxis->setTitleObject(
                 MakeChartTitle(ScResId(STR_PRINCIPAL_COMPONENTS_AXIS_TITLE)));
 
-            const css::uno::Reference<css::chart2::XAxis> xShareAxis
+            const cpo::uno::Reference<css::chart2::XAxis> xShareAxis
                 = aSystems[0]->getAxisByDimension(1, 0);
-            css::uno::Reference<css::chart2::XTitled> xShareAxisTitled(xShareAxis,
-                                                                       css::uno::UNO_QUERY_THROW);
+            cpo::uno::Reference<css::chart2::XTitled> xShareAxisTitled(xShareAxis,
+                                                                       cpo::uno::UNO_QUERY_THROW);
             xShareAxisTitled->setTitleObject(
                 MakeChartTitle(ScResId(STR_VARIANCE_SHARE_AXIS_TITLE)));
 
             // Both series are a share of a whole, so the axis they share counts
             // in percent.
-            css::uno::Reference<css::beans::XPropertySet> xShareAxisProperties(
-                xShareAxis, css::uno::UNO_QUERY_THROW);
+            cpo::uno::Reference<css::beans::XPropertySet> xShareAxisProperties(
+                xShareAxis, cpo::uno::UNO_QUERY_THROW);
             const sal_uInt32 nFormat = mrDocument.GetFormatTable()->GetStandardFormat(
                 SvNumFormatType::PERCENT, ScGlobal::eLnge);
             xShareAxisProperties->setPropertyValue(u"NumberFormat"_ustr,
@@ -641,7 +641,7 @@ void ScPrincipalComponentAnalysisDialog::AddCorrelationCircleChart(ScDocShell& r
     {
         const tools::Rectangle aCell = ScDrawLayer::GetCellRect(
             mrDocument, ScAddress(nChartColumn, nMeanRow, rDataRange.aStart.Tab()), false);
-        css::uno::Reference<css::chart2::XChartDocument> xChartDocument
+        cpo::uno::Reference<css::chart2::XChartDocument> xChartDocument
             = CreateSheetChart(rDocShell, rDataRange,
                                css::awt::Rectangle(aCell.Left(), aCell.Top() + nTopOffset,
                                                    nCircleChartSide, nCircleChartSide));
@@ -649,31 +649,31 @@ void ScPrincipalComponentAnalysisDialog::AddCorrelationCircleChart(ScDocShell& r
         // The template reads the last two columns of the range as the pair of
         // components the features are placed against, and every column before
         // them as a feature, which is the order they stand in on the sheet.
-        css::uno::Reference<css::lang::XMultiServiceFactory> xTemplateFactory(
-            xChartDocument->getChartTypeManager(), css::uno::UNO_QUERY_THROW);
-        css::uno::Reference<css::chart2::XChartTypeTemplate> xTemplate(
+        cpo::uno::Reference<css::lang::XMultiServiceFactory> xTemplateFactory(
+            xChartDocument->getChartTypeManager(), cpo::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::chart2::XChartTypeTemplate> xTemplate(
             xTemplateFactory->createInstance(
                 u"com.sun.star.chart2.template.CorrelationCircle"_ustr),
-            css::uno::UNO_QUERY_THROW);
-        css::uno::Reference<css::chart2::XDiagram> xDiagram = xChartDocument->getFirstDiagram();
+            cpo::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::chart2::XDiagram> xDiagram = xChartDocument->getFirstDiagram();
         xTemplate->changeDiagram(xDiagram);
         WhitenChartWall(xDiagram);
 
-        css::uno::Reference<css::chart2::XTitled> xTitled(xChartDocument,
-                                                          css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::chart2::XTitled> xTitled(xChartDocument,
+                                                          cpo::uno::UNO_QUERY_THROW);
         xTitled->setTitleObject(MakeChartTitle(ScResId(STR_CORRELATION_CIRCLE_CHART_TITLE)));
 
         // The two directions are the pair of components the features are placed
         // against, each named after which of the pair it is.
-        css::uno::Reference<css::chart2::XCoordinateSystemContainer> xCoordinateSystems(
-            xDiagram, css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::chart2::XCoordinateSystemContainer> xCoordinateSystems(
+            xDiagram, cpo::uno::UNO_QUERY_THROW);
         const auto aSystems = xCoordinateSystems->getCoordinateSystems();
         if (aSystems.hasElements())
         {
             for (sal_Int32 nDimension = 0; nDimension < 2; ++nDimension)
             {
-                css::uno::Reference<css::chart2::XTitled> xAxis(
-                    aSystems[0]->getAxisByDimension(nDimension, 0), css::uno::UNO_QUERY_THROW);
+                cpo::uno::Reference<css::chart2::XTitled> xAxis(
+                    aSystems[0]->getAxisByDimension(nDimension, 0), cpo::uno::UNO_QUERY_THROW);
                 xAxis->setTitleObject(
                     MakeChartTitle(FillIn(STR_PRINCIPAL_COMPONENT_AXIS_TITLE_TEMPLATE, u"%NUMBER%",
                                           OUString::number(nDimension + 1))));

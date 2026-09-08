@@ -34,7 +34,7 @@
 #include <comphelper/types.hxx>
 #include <rtl/ref.hxx>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
@@ -235,7 +235,7 @@ void ODefinitionContainer::replaceByName( const OUString& _rName, const Any& aEl
         cpo::uno::Any a(cppu::getCaughtException());
         throw css::lang::WrappedTargetException(
           "wrapped Exception " + e.Message,
-          css::uno::Reference<cpo::uno::XInterface>(), a);
+          cpo::uno::Reference<cpo::uno::XInterface>(), a);
     }
 }
 

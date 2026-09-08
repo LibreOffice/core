@@ -522,7 +522,7 @@ void PaletteManager::PopupColorPicker(weld::Window* pParent, const OUString& aCo
 void PaletteManager::DispatchColorCommand(const OUString& aCommand, const NamedColor& rColor)
 {
     using namespace css;
-    using namespace css::uno;
+    using namespace ::cpo::uno;
     using namespace cpo::uno;
     using namespace css::frame;
     using namespace css::beans;

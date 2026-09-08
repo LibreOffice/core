@@ -36,7 +36,7 @@ class TextConversionImpl final : public cppu::WeakImplHelper
 >
 {
 public:
-    TextConversionImpl( css::uno::Reference < cpo::uno::XComponentContext > xContext ) : m_xContext(std::move(xContext)) {};
+    TextConversionImpl( cpo::uno::Reference < cpo::uno::XComponentContext > xContext ) : m_xContext(std::move(xContext)) {};
 
         // Methods
         css::i18n::TextConversionResult
@@ -64,8 +64,8 @@ public:
         getSupportedServiceNames() override;
 private:
     css::lang::Locale aLocale;
-    css::uno::Reference < css::i18n::XExtendedTextConversion > xTC;
-    css::uno::Reference < cpo::uno::XComponentContext > m_xContext;
+    cpo::uno::Reference < css::i18n::XExtendedTextConversion > xTC;
+    cpo::uno::Reference < cpo::uno::XComponentContext > m_xContext;
 
     /// @throws css::lang::NoSupportException
     void getLocaleSpecificTextConversion( const css::lang::Locale& rLocale );

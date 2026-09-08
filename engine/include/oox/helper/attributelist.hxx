@@ -25,7 +25,7 @@
 #include <string_view>
 #include <vector>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/util/DateTime.hpp>
 #include <oox/dllapi.h>
 #include <rtl/ustring.hxx>
@@ -83,7 +83,7 @@ class OOX_DLLPUBLIC AttributeList
 {
 public:
     explicit            AttributeList(
-                            const css::uno::Reference< css::xml::sax::XFastAttributeList >& rxAttribs );
+                            const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& rxAttribs );
     ~AttributeList();
 
     const rtl::Reference<sax_fastparser::FastAttributeList> &  getFastAttributeList() const { return mxAttribs; }

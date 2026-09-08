@@ -334,24 +334,24 @@ static NSString* getCurrentSelection()
             return [CreateNSString(pEditWin->GetSelected()) autorelease];
     }
 
-    css::uno::Reference<css::frame::XDesktop> xDesktop = css::frame::Desktop::create(::comphelper::getProcessComponentContext());
+    cpo::uno::Reference<css::frame::XDesktop> xDesktop = css::frame::Desktop::create(::comphelper::getProcessComponentContext());
     if (!xDesktop.is())
         return nil;
 
-    css::uno::Reference<css::frame::XModel> xModel(xDesktop->getCurrentComponent(), css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::frame::XModel> xModel(xDesktop->getCurrentComponent(), cpo::uno::UNO_QUERY);
     if (!xModel)
         return nil;
 
-    css::uno::Reference<cpo::uno::XInterface> xSelection(xModel->getCurrentSelection(), css::uno::UNO_QUERY);
+    cpo::uno::Reference<cpo::uno::XInterface> xSelection(xModel->getCurrentSelection(), cpo::uno::UNO_QUERY);
     if (!xSelection)
         return nil;
 
-    css::uno::Reference<css::container::XIndexAccess> xIndexAccess(xSelection, css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::container::XIndexAccess> xIndexAccess(xSelection, cpo::uno::UNO_QUERY);
     if (xIndexAccess.is())
     {
         if (xIndexAccess->getCount() > 0)
         {
-            css::uno::Reference<css::text::XTextRange> xTextRange(xIndexAccess->getByIndex(0), css::uno::UNO_QUERY);
+            cpo::uno::Reference<css::text::XTextRange> xTextRange(xIndexAccess->getByIndex(0), cpo::uno::UNO_QUERY);
             if (xTextRange.is())
             {
                 // tdf#168609 catch exceptions from SwXText::getString()
@@ -374,7 +374,7 @@ static NSString* getCurrentSelection()
     // The Basic IDE returns a XEnumeration with a single item
     // Note: the following code was adapted from
     // svx/source/tbxctrls/tbunosearchcontrollers.cxx
-    css::uno::Reference<css::container::XEnumeration> xEnum(xSelection, css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::container::XEnumeration> xEnum(xSelection, cpo::uno::UNO_QUERY);
     if (xEnum.is() && xEnum->hasMoreElements())
     {
         OUString aString;
@@ -384,7 +384,7 @@ static NSString* getCurrentSelection()
 
     // The following is needed for cells and text fields in Calc
     // and Impress
-    css::uno::Reference<css::text::XTextRange> xTextRange(xSelection, css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::text::XTextRange> xTextRange(xSelection, cpo::uno::UNO_QUERY);
     if (xTextRange.is())
     {
         // tdf#168609 catch exceptions from SwXText::getString()
@@ -926,7 +926,7 @@ static NSString* getCurrentSelection()
         mpFrame->ToTop( SalFrameToTop::RestoreWhenMin | SalFrameToTop::GrabFocus );
 }
 
--(css::uno::Reference < css::accessibility::XAccessibleContext >)accessibleContext
+-(cpo::uno::Reference < css::accessibility::XAccessibleContext >)accessibleContext
 {
     return mpFrame -> GetWindow() -> GetAccessible() -> getAccessibleContext();
 }
@@ -3014,7 +3014,7 @@ static NSString* getCurrentSelection()
 
     mbNeedChildWrapper = NO;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > xAccessibleContext( pWindow->GetAccessible()->getAccessibleContext() );
+    ::cpo::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > xAccessibleContext( pWindow->GetAccessible()->getAccessibleContext() );
     assert(!mpChildWrapper);
     mpChildWrapper = [[SalFrameViewA11yWrapper alloc] initWithParent:self accessibleContext:xAccessibleContext];
     [AquaA11yFactory insertIntoWrapperRepository:mpChildWrapper forAccessibleContext:xAccessibleContext];
@@ -3270,7 +3270,7 @@ static NSString* getCurrentSelection()
 
 @implementation SalFrameViewA11yWrapper
 
--(id)initWithParent:(SalFrameView *)pParentView accessibleContext:(::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >&)rxAccessibleContext
+-(id)initWithParent:(SalFrameView *)pParentView accessibleContext:(::cpo::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >&)rxAccessibleContext
 {
     [super init];
 

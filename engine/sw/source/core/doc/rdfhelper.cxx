@@ -25,10 +25,11 @@
 #include <unotxdoc.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
-cpo::uno::Sequence<css::uno::Reference<css::rdf::XURI>> SwRDFHelper::getGraphNames(
+cpo::uno::Sequence<cpo::uno::Reference<css::rdf::XURI>> SwRDFHelper::getGraphNames(
     const rtl::Reference<SwXTextDocument>& xModel,
-    const css::uno::Reference<rdf::XURI>& xType)
+    const cpo::uno::Reference<rdf::XURI>& xType)
 {
     try
     {
@@ -63,7 +64,7 @@ SwRDFHelper::getGraphNames(const rtl::Reference<SwXTextDocument>& xModel,
 std::map<OUString, OUString>
 SwRDFHelper::getStatements(const rtl::Reference<SwXTextDocument>& xModel,
                            const cpo::uno::Sequence<uno::Reference<css::rdf::XURI>>& rGraphNames,
-                           const css::uno::Reference<css::rdf::XResource>& xSubject)
+                           const cpo::uno::Reference<css::rdf::XResource>& xSubject)
 {
     std::map<OUString, OUString> aRet;
     if (!rGraphNames.hasElements())
@@ -91,14 +92,14 @@ SwRDFHelper::getStatements(const rtl::Reference<SwXTextDocument>& xModel,
 std::map<OUString, OUString>
 SwRDFHelper::getStatements(const rtl::Reference<SwXTextDocument>& xModel,
                            const OUString& rType,
-                           const css::uno::Reference<css::rdf::XResource>& xSubject)
+                           const cpo::uno::Reference<css::rdf::XResource>& xSubject)
 {
     return getStatements(xModel, getGraphNames(xModel, rType), xSubject);
 }
 
 void SwRDFHelper::addStatement(const rtl::Reference<SwXTextDocument>& xModel,
                                const OUString& rType, const OUString& rPath,
-                               const css::uno::Reference<css::rdf::XResource>& xSubject,
+                               const cpo::uno::Reference<css::rdf::XResource>& xSubject,
                                const OUString& rKey, const OUString& rValue)
 {
     const uno::Reference<cpo::uno::XComponentContext>& xComponentContext(comphelper::getProcessComponentContext());
@@ -127,7 +128,7 @@ bool SwRDFHelper::hasMetadataGraph(const rtl::Reference<SwXTextDocument>& xModel
 
 void SwRDFHelper::removeStatement(const rtl::Reference<SwXTextDocument>& xModel,
                                   const OUString& rType,
-                                  const css::uno::Reference<css::rdf::XResource>& xSubject,
+                                  const cpo::uno::Reference<css::rdf::XResource>& xSubject,
                                   const OUString& rKey, const OUString& rValue)
 {
     const uno::Reference<cpo::uno::XComponentContext>& xComponentContext(comphelper::getProcessComponentContext());
@@ -144,7 +145,7 @@ void SwRDFHelper::removeStatement(const rtl::Reference<SwXTextDocument>& xModel,
 
 void SwRDFHelper::clearStatements(const rtl::Reference<SwXTextDocument>& xModel,
                                   const OUString& rType,
-                                  const css::uno::Reference<css::rdf::XResource>& xSubject)
+                                  const cpo::uno::Reference<css::rdf::XResource>& xSubject)
 {
     const uno::Reference<cpo::uno::XComponentContext>& xComponentContext(comphelper::getProcessComponentContext());
     uno::Reference<rdf::XURI> xType = rdf::URI::create(xComponentContext, rType);

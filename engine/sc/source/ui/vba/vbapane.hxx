@@ -29,27 +29,27 @@ class ScVbaPane final : public cppu::WeakImplHelper< ov::excel::XPane >
 public:
     /// @throws cpo::uno::RuntimeException
     ScVbaPane(
-        const css::uno::Reference< ov::XHelperInterface >& rParent,
-        css::uno::Reference< cpo::uno::XComponentContext > xContext,
-        const css::uno::Reference< css::frame::XModel >& rModel,
-        const css::uno::Reference< css::sheet::XViewPane >& rViewPane );
+        const cpo::uno::Reference< ov::XHelperInterface >& rParent,
+        cpo::uno::Reference< cpo::uno::XComponentContext > xContext,
+        const cpo::uno::Reference< css::frame::XModel >& rModel,
+        const cpo::uno::Reference< css::sheet::XViewPane >& rViewPane );
 
     // XPane attributes
     virtual sal_Int32 SAL_CALL getScrollColumn() override;
     virtual void SAL_CALL setScrollColumn( sal_Int32 _scrollcolumn ) override;
     virtual sal_Int32 SAL_CALL getScrollRow() override;
     virtual void SAL_CALL setScrollRow( sal_Int32 _scrollrow ) override;
-     virtual css::uno::Reference< ov::excel::XRange > SAL_CALL getVisibleRange() override;
+     virtual cpo::uno::Reference< ov::excel::XRange > SAL_CALL getVisibleRange() override;
 
     // XPane methods
     virtual void SAL_CALL SmallScroll( const cpo::uno::Any& Down, const cpo::uno::Any& Up, const cpo::uno::Any& ToRight, const cpo::uno::Any& ToLeft ) override;
     virtual void SAL_CALL LargeScroll( const cpo::uno::Any& Down, const cpo::uno::Any& Up, const cpo::uno::Any& ToRight, const cpo::uno::Any& ToLeft ) override;
 
 private:
-    css::uno::Reference< css::frame::XModel > m_xModel;
-    css::uno::Reference< css::sheet::XViewPane > m_xViewPane;
+    cpo::uno::Reference< css::frame::XModel > m_xModel;
+    cpo::uno::Reference< css::sheet::XViewPane > m_xViewPane;
     cpo::uno::WeakReference< ov::XHelperInterface > m_xParent;
-    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

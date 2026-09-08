@@ -12,7 +12,7 @@
 
 #include <cpo/uno/XInterface.hpp>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <test/testdllapi.hxx>
 
@@ -26,7 +26,7 @@ public:
     {
     }
 
-    virtual css::uno::Reference<cpo::uno::XInterface> init() = 0;
+    virtual cpo::uno::Reference<cpo::uno::XInterface> init() = 0;
     void testGetCount();
     void testGetByIndex();
     // will throw an exception and should fail if not

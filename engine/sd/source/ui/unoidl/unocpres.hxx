@@ -86,8 +86,8 @@ public:
 
     // XComponent
     virtual void SAL_CALL dispose(  ) override;
-    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+    virtual void SAL_CALL addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& xListener ) override;
+    virtual void SAL_CALL removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener ) override;
 };
 
 class SdXCustomPresentationAccess final : public ::cppu::WeakImplHelper< css::container::XNameContainer,
@@ -111,8 +111,8 @@ public:
     virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XSingleServiceFactory
-    virtual css::uno::Reference< cpo::uno::XInterface > SAL_CALL createInstance(  ) override;
-    virtual css::uno::Reference< cpo::uno::XInterface > SAL_CALL createInstanceWithArguments( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > SAL_CALL createInstance(  ) override;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > SAL_CALL createInstanceWithArguments( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XNameContainer
     virtual void SAL_CALL insertByName( const OUString& aName, const cpo::uno::Any& aElement ) override;

@@ -29,10 +29,10 @@ private:
 
     virtual SvXMLImportContext* CreateFastContext(
         sal_Int32 nElement,
-        const ::css::uno::Reference<::css::xml::sax::XFastAttributeList>& xAttrList) override;
+        const ::cpo::uno::Reference<::css::xml::sax::XFastAttributeList>& xAttrList) override;
 
 public:
-    SchXMLImport(const css::uno::Reference<cpo::uno::XComponentContext>& xContext,
+    SchXMLImport(const cpo::uno::Reference<cpo::uno::XComponentContext>& xContext,
                  OUString const& implementationName, SvXMLImportFlags nImportFlags);
 
     virtual ~SchXMLImport() noexcept override;
@@ -41,7 +41,7 @@ public:
 
     // XImporter
     virtual void
-    setTargetDocument(const css::uno::Reference<css::lang::XComponent>& xDoc) override;
+    setTargetDocument(const cpo::uno::Reference<css::lang::XComponent>& xDoc) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

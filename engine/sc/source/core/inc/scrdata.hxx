@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 namespace com::sun::star::i18n
 {
@@ -29,7 +29,7 @@ class XBreakIterator;
 class ScScriptTypeData
 {
 public:
-    css::uno::Reference<css::i18n::XBreakIterator> xBreakIter;
+    cpo::uno::Reference<css::i18n::XBreakIterator> xBreakIter;
 
     ScScriptTypeData() {}
 };

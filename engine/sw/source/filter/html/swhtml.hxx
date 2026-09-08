@@ -780,9 +780,9 @@ private:
                            sal_Int16 eHoriOri,
                            SfxItemSet& rCSS1ItemSet,
                            SvxCSS1PropertyInfo& rCSS1PropInfo );
-    css::uno::Reference< css::drawing::XShape >  InsertControl(
-                        const css::uno::Reference< css::form::XFormComponent > & rFormComp,
-                        const css::uno::Reference< css::beans::XPropertySet > & rFCompPropSet,
+    cpo::uno::Reference< css::drawing::XShape >  InsertControl(
+                        const cpo::uno::Reference< css::form::XFormComponent > & rFormComp,
+                        const cpo::uno::Reference< css::beans::XPropertySet > & rFCompPropSet,
                         const Size& rSize,
                         sal_Int16 eVertOri,
                         sal_Int16 eHoriOri,
@@ -793,7 +793,7 @@ private:
                         const std::vector<OUString>& rUnoMacroParamTable,
                         bool bSetPropSet = true,
                         bool bHidden = false );
-    void SetControlSize( const css::uno::Reference< css::drawing::XShape > & rShape, const Size& rTextSz,
+    void SetControlSize( const cpo::uno::Reference< css::drawing::XShape > & rShape, const Size& rTextSz,
                          bool bMinWidth, bool bMinHeight );
 
 public:
@@ -927,7 +927,7 @@ public:
     // for reading asynchronously from SvStream
     virtual void Continue( HtmlTokenId nToken ) override;
 
-    virtual bool ParseMetaOptions( const css::uno::Reference<css::document::XDocumentProperties>&,
+    virtual bool ParseMetaOptions( const cpo::uno::Reference<css::document::XDocumentProperties>&,
             SvKeyValueIterator* ) override;
 
 

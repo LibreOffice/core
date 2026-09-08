@@ -35,7 +35,7 @@
 using namespace ::cppu;
 using namespace ::comphelper;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
@@ -76,8 +76,8 @@ namespace comphelper
         virtual  Sequence< OUString > getSupportedServiceNames() override;
 
         // XPropertySet
-        virtual void addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
-        virtual void removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
+        virtual void addPropertyChangeListener( const OUString& aPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
+        virtual void removePropertyChangeListener( const OUString& aPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
     };
 
     }
@@ -226,7 +226,7 @@ Sequence< OUString > GenericPropertySet::getSupportedServiceNames(  )
     return { u"com.sun.star.beans.XPropertySet"_ustr };
 }
 
-css::uno::Reference< css::beans::XPropertySet > comphelper::GenericPropertySet_CreateInstance( comphelper::PropertySetInfo* pInfo )
+cpo::uno::Reference< css::beans::XPropertySet > comphelper::GenericPropertySet_CreateInstance( comphelper::PropertySetInfo* pInfo )
 {
     return static_cast<XPropertySet*>(new GenericPropertySet( pInfo ));
 }

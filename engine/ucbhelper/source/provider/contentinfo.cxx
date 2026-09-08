@@ -27,6 +27,7 @@
 #include "contentinfo.hxx"
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 
 // PropertySetInfo Implementation.

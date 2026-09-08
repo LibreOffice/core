@@ -47,10 +47,10 @@
 namespace dbaccess
 {
 
-    using css::uno::Reference;
-    using css::uno::UNO_QUERY;
-    using css::uno::UNO_QUERY_THROW;
-    using css::uno::UNO_SET_THROW;
+    using cpo::uno::Reference;
+    using cpo::uno::UNO_QUERY;
+    using cpo::uno::UNO_QUERY_THROW;
+    using cpo::uno::UNO_SET_THROW;
     using cpo::uno::Exception;
     using cpo::uno::Any;
     using cpo::uno::Sequence;
@@ -187,7 +187,7 @@ namespace dbaccess
         virtual void    EndElement  ( const bool i_bIgnoreWhitespace ) override;
         virtual void    Characters( const OUString& i_rCharacters ) override;
 
-        virtual css::uno::Reference< cpo::uno::XComponentContext >
+        virtual cpo::uno::Reference< cpo::uno::XComponentContext >
                         GetComponentContext() const override;
 
     private:

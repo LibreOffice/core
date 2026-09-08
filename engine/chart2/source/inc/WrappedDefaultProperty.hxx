@@ -32,13 +32,13 @@ public:
     virtual ~WrappedDefaultProperty() override;
 
     virtual void setPropertyToDefault(
-        const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
+        const cpo::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
 
     virtual cpo::uno::Any getPropertyDefault(
-        const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
+        const cpo::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
 
     virtual css::beans::PropertyState getPropertyState(
-        const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
+        const cpo::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
 private:
     cpo::uno::Any m_aOuterDefaultValue;
 };

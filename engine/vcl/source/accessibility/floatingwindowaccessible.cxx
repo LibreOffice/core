@@ -23,7 +23,7 @@
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <vcl/window.hxx>
 
-namespace uno = ::com::sun::star::uno;
+namespace uno = ::cpo::uno;
 
 using namespace com::sun::star::accessibility;
 using ::com::sun::star::accessibility::AccessibleRelation;

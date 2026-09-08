@@ -46,8 +46,8 @@ namespace dbp
     public:
         OGroupBoxWizard(
             weld::Window* _pParent,
-            const css::uno::Reference< css::beans::XPropertySet >& _rxObjectModel,
-            const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext
+            const cpo::uno::Reference< css::beans::XPropertySet >& _rxObjectModel,
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxContext
         );
 
         OOptionGroupSettings& getSettings() { return m_aSettings; }

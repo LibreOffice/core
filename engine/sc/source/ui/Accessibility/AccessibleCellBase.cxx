@@ -41,6 +41,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
+using namespace ::cpo;
 
 #define DEFAULT_LINE_WIDTH 2
 

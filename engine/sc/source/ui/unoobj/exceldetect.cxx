@@ -23,6 +23,7 @@
 #include <global.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 ScExcelBiffDetect::ScExcelBiffDetect() {}
 ScExcelBiffDetect::~ScExcelBiffDetect() {}

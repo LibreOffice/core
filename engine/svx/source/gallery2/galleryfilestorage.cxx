@@ -48,6 +48,7 @@
 #include <tools/vcompat.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 GalleryFileStorage::GalleryFileStorage(
     const GalleryStorageLocations& rGalleryBinaryStorageLocations,

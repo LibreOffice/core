@@ -23,7 +23,7 @@
 
 namespace svx::sidebar {
 
-AreaTransparencyGradientPopup::AreaTransparencyGradientPopup(const css::uno::Reference<css::frame::XFrame>& rFrame,
+AreaTransparencyGradientPopup::AreaTransparencyGradientPopup(const cpo::uno::Reference<css::frame::XFrame>& rFrame,
                                             AreaPropertyPanelBase& rPanel, weld::Widget* pParent)
     : WeldToolbarPopup(rFrame, pParent, u"svx/ui/floatingareastyle.ui"_ustr, u"FloatingAreaStyle"_ustr)
     , mrAreaPropertyPanel(rPanel)

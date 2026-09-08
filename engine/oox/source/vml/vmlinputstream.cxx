@@ -31,7 +31,7 @@
 namespace oox::vml {
 
 using namespace ::com::sun::star::io;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::cpo::uno;
 
 namespace {

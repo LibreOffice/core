@@ -18,7 +18,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 
-SfxBluetoothModel::SendMailResult SfxBluetoothModel::SaveAndSend( const css::uno::Reference< css::frame::XFrame >& xFrame )
+SfxBluetoothModel::SendMailResult SfxBluetoothModel::SaveAndSend( const cpo::uno::Reference< css::frame::XFrame >& xFrame )
 {
     SaveResult      eSaveResult;
     SendMailResult  eResult = SEND_MAIL_ERROR;

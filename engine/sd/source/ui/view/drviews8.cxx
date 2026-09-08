@@ -43,7 +43,7 @@ void DrawViewShell::ScannerEvent()
 
         if( css::scanner::ScanError_ScanErrorNone == eError )
         {
-            const css::uno::Reference< css::awt::XBitmap > xBitmap( mxScannerManager->getBitmap( aContext ) );
+            const cpo::uno::Reference< css::awt::XBitmap > xBitmap( mxScannerManager->getBitmap( aContext ) );
 
             if( xBitmap.is() )
             {

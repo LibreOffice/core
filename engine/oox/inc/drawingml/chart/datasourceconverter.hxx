@@ -41,7 +41,7 @@ public:
 
     /** Creates a data sequence object from the contained formula link.
         @param oDimType  If set, stores this as the ChartExDimType property. */
-    css::uno::Reference< css::chart2::data::XDataSequence >
+    cpo::uno::Reference< css::chart2::data::XDataSequence >
                         createDataSequence( const OUString& rRole,
                                             std::optional<DataSourceType> oDimType = std::nullopt );
 };
@@ -57,7 +57,7 @@ public:
 
     /** Creates a data sequence object from the contained series data.
         @param oDimType  If set, forwarded to DataSequenceConverter. */
-    css::uno::Reference< css::chart2::data::XDataSequence >
+    cpo::uno::Reference< css::chart2::data::XDataSequence >
                         createDataSequence( const OUString& rRole,
                                             std::optional<DataSourceType> oDimType = std::nullopt );
 };

@@ -120,18 +120,18 @@ class XMLOFF_DLLPUBLIC SvXMLExport : public cppu::WeakImplHelper<
 {
     std::unique_ptr<SvXMLExport_Impl>            mpImpl;            // dummy
 
-    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
     OUString m_implementationName;
 
-    css::uno::Reference< css::frame::XModel > mxModel;
-    css::uno::Reference< css::xml::sax::XDocumentHandler >            mxHandler;      // the handlers
-    css::uno::Reference< css::xml::sax::XExtendedDocumentHandler >    mxExtHandler;
-    css::uno::Reference< css::util::XNumberFormatsSupplier > mxNumberFormatsSupplier;
-    css::uno::Reference< css::document::XGraphicStorageHandler > mxGraphicStorageHandler;
-    css::uno::Reference< css::document::XEmbeddedObjectResolver > mxEmbeddedResolver;
-    css::uno::Reference< css::task::XStatusIndicator > mxStatusIndicator;
-    css::uno::Reference< css::beans::XPropertySet > mxExportInfo;
-    css::uno::Reference< css::lang::XEventListener > mxEventListener;
+    cpo::uno::Reference< css::frame::XModel > mxModel;
+    cpo::uno::Reference< css::xml::sax::XDocumentHandler >            mxHandler;      // the handlers
+    cpo::uno::Reference< css::xml::sax::XExtendedDocumentHandler >    mxExtHandler;
+    cpo::uno::Reference< css::util::XNumberFormatsSupplier > mxNumberFormatsSupplier;
+    cpo::uno::Reference< css::document::XGraphicStorageHandler > mxGraphicStorageHandler;
+    cpo::uno::Reference< css::document::XEmbeddedObjectResolver > mxEmbeddedResolver;
+    cpo::uno::Reference< css::task::XStatusIndicator > mxStatusIndicator;
+    cpo::uno::Reference< css::beans::XPropertySet > mxExportInfo;
+    cpo::uno::Reference< css::lang::XEventListener > mxEventListener;
 
     rtl::Reference<comphelper::AttributeList> mxAttrList;        // a common attribute list
 
@@ -264,16 +264,16 @@ protected:
     */
     virtual sal_Int32 GetDocumentSpecificSettings( ::std::vector< SettingsGroup >& _out_rSettings );
 
-    const css::uno::Reference< css::document::XEmbeddedObjectResolver >& GetEmbeddedResolver() const { return mxEmbeddedResolver; }
-    inline void SetEmbeddedResolver( css::uno::Reference< css::document::XEmbeddedObjectResolver > const & _xEmbeddedResolver );
+    const cpo::uno::Reference< css::document::XEmbeddedObjectResolver >& GetEmbeddedResolver() const { return mxEmbeddedResolver; }
+    inline void SetEmbeddedResolver( cpo::uno::Reference< css::document::XEmbeddedObjectResolver > const & _xEmbeddedResolver );
 
-    const css::uno::Reference<css::document::XGraphicStorageHandler> & GetGraphicStorageHandler() const
+    const cpo::uno::Reference<css::document::XGraphicStorageHandler> & GetGraphicStorageHandler() const
     {
         return mxGraphicStorageHandler;
     }
-    void SetGraphicStorageHandler(css::uno::Reference<css::document::XGraphicStorageHandler> const & rxGraphicStorageHandler);
+    void SetGraphicStorageHandler(cpo::uno::Reference<css::document::XGraphicStorageHandler> const & rxGraphicStorageHandler);
 
-    void SetDocHandler( const css::uno::Reference< css::xml::sax::XDocumentHandler > &rHandler );
+    void SetDocHandler( const cpo::uno::Reference< css::xml::sax::XDocumentHandler > &rHandler );
 
     void ExportThemeElement(std::shared_ptr<model::Theme> const& pTheme);
 
@@ -281,25 +281,25 @@ protected:
 public:
 
     SvXMLExport(
-        const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
         OUString implementationName,
         sal_Int16 const eDefaultMeasureUnit /*css::util::MeasureUnit*/,
         const enum ::xmloff::token::XMLTokenEnum eClass,
         SvXMLExportFlags nExportFlag );
 
     SvXMLExport(
-        const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
         OUString implementationName,
         OUString fileName,
         sal_Int16 const eDefaultMeasureUnit /*css::util::MeasureUnit*/,
-        const css::uno::Reference< css::xml::sax::XDocumentHandler > & rHandler);
+        const cpo::uno::Reference< css::xml::sax::XDocumentHandler > & rHandler);
 
     SvXMLExport(
-        const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
         OUString implementationName,
         OUString fileName,
-        const css::uno::Reference< css::xml::sax::XDocumentHandler > & rHandler,
-        const css::uno::Reference< css::frame::XModel > &,
+        const cpo::uno::Reference< css::xml::sax::XDocumentHandler > & rHandler,
+        const cpo::uno::Reference< css::frame::XModel > &,
         FieldUnit const eDefaultFieldUnit,
         SvXMLExportFlags nExportFlag );
 
@@ -318,7 +318,7 @@ public:
     void setEmbeddedFontFiles(const std::unordered_map<OString, OUString>&);
 
     // XExporter
-    virtual void setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
+    virtual void setSourceDocument( const cpo::uno::Reference< css::lang::XComponent >& xDoc ) override;
 
     // XFilter
     virtual bool filter( const cpo::uno::Sequence< css::beans::PropertyValue >& aDescriptor ) override;
@@ -394,16 +394,16 @@ public:
             const LanguageTag& rLanguageTag, bool bWriteEmpty );
 
     // add several attributes to the common attribute list
-    void AddAttributeList( const css::uno::Reference<
+    void AddAttributeList( const cpo::uno::Reference<
                                   css::xml::sax::XAttributeList >& xAttrList );
 
     // Get common attribute list as implementation or interface.
     comphelper::AttributeList &GetAttrList() { return *mxAttrList; }
-    css::uno::Reference< css::xml::sax::XAttributeList > GetXAttrList() const { return mxAttrList; }
+    cpo::uno::Reference< css::xml::sax::XAttributeList > GetXAttrList() const { return mxAttrList; }
 
     // Get document handler. This methods are not const, because the
     // reference allows modifications through the handler.
-    const css::uno::Reference< css::xml::sax::XDocumentHandler > & GetDocHandler() const { return mxHandler; }
+    const cpo::uno::Reference< css::xml::sax::XDocumentHandler > & GetDocHandler() const { return mxHandler; }
 
     // Get original URL.
     const OUString& GetOrigFileName() const { return msOrigFileName; }
@@ -431,14 +431,14 @@ public:
     virtual OUString getDataStyleName(const sal_Int32 nNumberFormat, bool bTimeFormat = false ) const;
     sal_Int32 dataStyleForceSystemLanguage(sal_Int32 nFormat) const;
 
-    virtual void exportAnnotationMeta( const css::uno::Reference < css::drawing::XShape >& xShape);
+    virtual void exportAnnotationMeta( const cpo::uno::Reference < css::drawing::XShape >& xShape);
 
     // Get XModel
-    const css::uno::Reference< css::frame::XModel > &
+    const cpo::uno::Reference< css::frame::XModel > &
                GetModel() const { return mxModel; }
     // Get XNumberFormatsSupplier
-    css::uno::Reference< css::util::XNumberFormatsSupplier > & GetNumberFormatsSupplier() { return mxNumberFormatsSupplier; }
-    void SetNumberFormatsSupplier(const css::uno::Reference< css::util::XNumberFormatsSupplier >& _xNumberFormatSupplier)
+    cpo::uno::Reference< css::util::XNumberFormatsSupplier > & GetNumberFormatsSupplier() { return mxNumberFormatsSupplier; }
+    void SetNumberFormatsSupplier(const cpo::uno::Reference< css::util::XNumberFormatsSupplier >& _xNumberFormatSupplier)
     {
         mxNumberFormatsSupplier = _xNumberFormatSupplier;
         if ( mxNumberFormatsSupplier.is() && mxHandler.is() )
@@ -470,9 +470,9 @@ public:
     inline bool HasFormExport() const;
 
     // get XPropertySet with export information
-    const css::uno::Reference< css::beans::XPropertySet >& getExportInfo() const { return mxExportInfo; }
+    const cpo::uno::Reference< css::beans::XPropertySet >& getExportInfo() const { return mxExportInfo; }
 
-    const css::uno::Reference< css::task::XStatusIndicator >& GetStatusIndicator() const { return mxStatusIndicator; }
+    const cpo::uno::Reference< css::task::XStatusIndicator >& GetStatusIndicator() const { return mxStatusIndicator; }
 
     /// get Event export, with handlers for script types "None" and
     /// "StarBasic" already registered; other handlers may be registered, too.
@@ -481,9 +481,9 @@ public:
     /// get the export for image maps
     XMLImageMapExport& GetImageMapExport();
 
-    OUString AddEmbeddedXGraphic(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic, OUString & rOutMimeType, OUString const & rRequestedName = OUString());
-    bool AddEmbeddedXGraphicAsBase64(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic);
-    bool GetGraphicMimeTypeFromStream(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic, OUString & rOutMimeType);
+    OUString AddEmbeddedXGraphic(cpo::uno::Reference<css::graphic::XGraphic> const & rxGraphic, OUString & rOutMimeType, OUString const & rRequestedName = OUString());
+    bool AddEmbeddedXGraphicAsBase64(cpo::uno::Reference<css::graphic::XGraphic> const & rxGraphic);
+    bool GetGraphicMimeTypeFromStream(cpo::uno::Reference<css::graphic::XGraphic> const & rxGraphic, OUString & rOutMimeType);
 
     OUString AddEmbeddedObject(
                             const OUString& rEmbeddedObjectURL );
@@ -500,7 +500,7 @@ public:
     SvXMLExportFlags getExportFlags() const { return mnExportFlags; }
 
     void ExportEmbeddedOwnObject(
-        css::uno::Reference<css::lang::XComponent > const & rComp );
+        cpo::uno::Reference<css::lang::XComponent > const & rComp );
 
     OUString GetRelativeReference(const OUString& rValue);
 
@@ -531,7 +531,7 @@ public:
         /// original exception message (if applicable)
         const OUString& rExceptionMessage,
         /// error location (if applicable)
-        const css::uno::Reference<css::xml::sax::XLocator> & rLocator );
+        const cpo::uno::Reference<css::xml::sax::XLocator> & rLocator );
 
     void SetError(
         sal_Int32 nId,
@@ -541,7 +541,7 @@ public:
 
     ::comphelper::UnoInterfaceToUniqueIdentifierMapper& getInterfaceToIdentifierMapper();
 
-    const css::uno::Reference< cpo::uno::XComponentContext >& getComponentContext() const { return m_xContext;}
+    const cpo::uno::Reference< cpo::uno::XComponentContext >& getComponentContext() const { return m_xContext;}
 
     // Shapes in Writer cannot be named via context menu (#i51726#)
     SvtModuleOptions::EFactory GetModelType() const
@@ -556,7 +556,7 @@ public:
     // to do anything useful.
     bool decomposePDF() const;
 
-    css::uno::Reference< css::embed::XStorage > const & GetTargetStorage() const;
+    cpo::uno::Reference< css::embed::XStorage > const & GetTargetStorage() const;
 
     /// returns value of ODF version attribute
     char const* GetODFVersionAttributeValue() const;
@@ -571,10 +571,10 @@ public:
             sal_uInt16 const nLegacyPrefix, OUString const& rValue);
 
     /// add xml:id attribute (for RDF metadata)
-    void AddAttributeXmlId(css::uno::Reference<cpo::uno::XInterface> const & i_xIfc);
+    void AddAttributeXmlId(cpo::uno::Reference<cpo::uno::XInterface> const & i_xIfc);
 
     /// add RDFa attributes for a metadatable text content
-    void AddAttributesRDFa( css::uno::Reference<css::text::XTextContent> const & i_xTextContent);
+    void AddAttributesRDFa( cpo::uno::Reference<css::text::XTextContent> const & i_xTextContent);
 
     bool exportTextNumberElement() const;
 
@@ -649,13 +649,13 @@ inline bool SvXMLExport::HasFormExport() const
 }
 
 inline void SvXMLExport::SetEmbeddedResolver(
-    css::uno::Reference< css::document::XEmbeddedObjectResolver > const & _xEmbeddedResolver )
+    cpo::uno::Reference< css::document::XEmbeddedObjectResolver > const & _xEmbeddedResolver )
 {
     mxEmbeddedResolver = _xEmbeddedResolver;
 }
 
 inline void SvXMLExport::SetGraphicStorageHandler(
-    css::uno::Reference<css::document::XGraphicStorageHandler> const & rxGraphicStorageHandler)
+    cpo::uno::Reference<css::document::XGraphicStorageHandler> const & rxGraphicStorageHandler)
 {
     mxGraphicStorageHandler = rxGraphicStorageHandler;
 }

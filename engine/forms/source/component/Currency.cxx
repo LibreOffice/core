@@ -32,7 +32,7 @@
 namespace frm
 {
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
@@ -130,7 +130,7 @@ OCurrencyModel::~OCurrencyModel()
 
 // XCloneable
 
-css::uno::Reference< css::util::XCloneable > OCurrencyModel::createClone()
+cpo::uno::Reference< css::util::XCloneable > OCurrencyModel::createClone()
 {
     rtl::Reference<OCurrencyModel> pClone = new OCurrencyModel(this, getContext());
     pClone->clonedFrom(this);

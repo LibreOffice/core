@@ -58,7 +58,7 @@ public:
     };
 
 public:
-    ConfigurationBackendDb(css::uno::Reference<cpo::uno::XComponentContext> const& xContext,
+    ConfigurationBackendDb(cpo::uno::Reference<cpo::uno::XComponentContext> const& xContext,
                            OUString const& url);
 
     void addEntry(OUString const& url, Data const& data);

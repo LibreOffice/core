@@ -34,6 +34,8 @@
 #include <vcl/svapp.hxx>
 #include <memory>
 
+using namespace ::cpo;
+
 namespace {
 
 enum class UnoGraphicProperty

@@ -78,7 +78,8 @@
 #include <test/commontesttools.hxx>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 namespace
 {
@@ -1184,7 +1185,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf167132)
     xCursor->goRight(10, false); // to start of "two", which is bold
     xCursor->gotoRange(xPara2->getEnd(), true);
     CPPUNIT_ASSERT_EQUAL(u"two: "_ustr, xCursor->getString());
-    xContentEnumAccess.set(xCursor, css::uno::UNO_QUERY_THROW);
+    xContentEnumAccess.set(xCursor, cpo::uno::UNO_QUERY_THROW);
     xContentEnum
         = xContentEnumAccess->createContentEnumeration(u"com.sun.star.text.TextContent"_ustr);
     CPPUNIT_ASSERT(xContentEnum->hasMoreElements()); // The selection contains the formula
@@ -1205,7 +1206,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf167132)
     CPPUNIT_ASSERT_EQUAL(100.0f, getProperty<float>(xRun, u"CharWeight"_ustr));
     xRun = getRun(xPara2, 4, u""_ustr);
     // Check that the run includes the formula
-    xContentEnumAccess.set(xRun, css::uno::UNO_QUERY_THROW);
+    xContentEnumAccess.set(xRun, cpo::uno::UNO_QUERY_THROW);
     xContentEnum
         = xContentEnumAccess->createContentEnumeration(u"com.sun.star.text.TextContent"_ustr);
     CPPUNIT_ASSERT(xContentEnum->hasMoreElements()); // The selection contains the formula

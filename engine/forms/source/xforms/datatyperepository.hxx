@@ -49,13 +49,13 @@ namespace xforms
         ODataTypeRepository( );
 
         // XDataTypeRepository
-        virtual css::uno::Reference< css::xsd::XDataType > getBasicDataType( sal_Int16 dataTypeClass ) override;
-        virtual css::uno::Reference< css::xsd::XDataType > cloneDataType( const OUString& sourceName, const OUString& newName ) override;
+        virtual cpo::uno::Reference< css::xsd::XDataType > getBasicDataType( sal_Int16 dataTypeClass ) override;
+        virtual cpo::uno::Reference< css::xsd::XDataType > cloneDataType( const OUString& sourceName, const OUString& newName ) override;
         virtual void revokeDataType( const OUString& typeName ) override;
-        virtual css::uno::Reference< css::xsd::XDataType > getDataType( const OUString& typeName ) override;
+        virtual cpo::uno::Reference< css::xsd::XDataType > getDataType( const OUString& typeName ) override;
 
         // XEnumerationAccess (base of XDataTypeRepository)
-        virtual css::uno::Reference< css::container::XEnumeration > createEnumeration(  ) override;
+        virtual cpo::uno::Reference< css::container::XEnumeration > createEnumeration(  ) override;
 
         // XNameAccess (base of XDataTypeRepository)
         virtual cpo::uno::Any getByName( const OUString& aName ) override;

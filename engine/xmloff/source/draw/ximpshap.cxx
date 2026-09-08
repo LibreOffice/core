@@ -94,8 +94,8 @@
 #include <o3tl/safeint.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::container;
@@ -145,7 +145,7 @@ static bool ImpIsEmptyURL( std::u16string_view rURL )
 
 SdXMLShapeContext::SdXMLShapeContext(
     SvXMLImport& rImport,
-    css::uno::Reference< css::xml::sax::XFastAttributeList> xAttrList,
+    cpo::uno::Reference< css::xml::sax::XFastAttributeList> xAttrList,
     uno::Reference< drawing::XShapes > xShapes,
     bool bTemporaryShape)
     : SvXMLShapeContext( rImport, bTemporaryShape )
@@ -172,9 +172,9 @@ SdXMLShapeContext::~SdXMLShapeContext()
 {
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLShapeContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLShapeContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContextRef xContext;
     // #i68101#
@@ -321,7 +321,7 @@ void SdXMLShapeContext::addGluePoint( const uno::Reference< xml::sax::XFastAttri
 }
 
 void SdXMLShapeContext::startFastElement (sal_Int32 /*nElement*/,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/)
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/)
 {
     GetImport().GetShapeImport()->finishShape( mxShape, mxAttrList, mxShapes );
 }
@@ -515,7 +515,7 @@ void SdXMLShapeContext::AddShape(OUString const & serviceName)
             // you may need to adjust the more obscure OReportDefinition::createInstanceWithArguments as well as the
             // more obvious SvxUnoDrawMSFactory::createInstanceWithArguments
             xShape.set( xServiceFact->createInstanceWithArguments(serviceName, { cpo::uno::Any(GetImport().GetDocumentBase()) }),
-                        css::uno::UNO_QUERY);
+                        cpo::uno::UNO_QUERY);
         }
         else
         {
@@ -941,7 +941,7 @@ bool SdXMLShapeContext::isPresentationShape() const
 
 SdXMLRectShapeContext::SdXMLRectShapeContext(
     SvXMLImport& rImport,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes > const & rShapes,
     bool bTemporaryShape)
 :   SdXMLShapeContext( rImport, xAttrList, rShapes, bTemporaryShape ),
@@ -969,7 +969,7 @@ bool SdXMLRectShapeContext::processAttribute( const sax_fastparser::FastAttribut
 }
 
 void SdXMLRectShapeContext::startFastElement (sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     // create rectangle shape
     AddShape(u"com.sun.star.drawing.RectangleShape"_ustr);
@@ -1004,7 +1004,7 @@ void SdXMLRectShapeContext::startFastElement (sal_Int32 nElement,
 
 SdXMLLineShapeContext::SdXMLLineShapeContext(
     SvXMLImport& rImport,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes > const & rShapes,
     bool bTemporaryShape)
 :   SdXMLShapeContext( rImport, xAttrList, rShapes, bTemporaryShape ),
@@ -1051,7 +1051,7 @@ bool SdXMLLineShapeContext::processAttribute( const sax_fastparser::FastAttribut
 }
 
 void SdXMLLineShapeContext::startFastElement (sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     // #85920# use SetTransformation() to handle import of simple lines.
     // This is necessary to take into account all anchor positions and
@@ -1110,7 +1110,7 @@ void SdXMLLineShapeContext::startFastElement (sal_Int32 nElement,
 
 SdXMLEllipseShapeContext::SdXMLEllipseShapeContext(
     SvXMLImport& rImport,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes > const & rShapes,
     bool bTemporaryShape)
 :   SdXMLShapeContext( rImport, xAttrList, rShapes, bTemporaryShape ),
@@ -1184,7 +1184,7 @@ bool SdXMLEllipseShapeContext::processAttribute( const sax_fastparser::FastAttri
 }
 
 void SdXMLEllipseShapeContext::startFastElement (sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     // create rectangle shape
     AddShape(u"com.sun.star.drawing.EllipseShape"_ustr);
@@ -1247,7 +1247,7 @@ void SdXMLEllipseShapeContext::startFastElement (sal_Int32 nElement,
 
 SdXMLPolygonShapeContext::SdXMLPolygonShapeContext(
     SvXMLImport& rImport,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes > const & rShapes, bool bClosed, bool bTemporaryShape)
 :   SdXMLShapeContext( rImport, xAttrList, rShapes, bTemporaryShape ),
     mbClosed( bClosed )
@@ -1277,7 +1277,7 @@ SdXMLPolygonShapeContext::~SdXMLPolygonShapeContext()
 }
 
 void SdXMLPolygonShapeContext::startFastElement (sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     // Add, set Style and properties from base shape
     if(mbClosed)
@@ -1350,7 +1350,7 @@ void SdXMLPolygonShapeContext::startFastElement (sal_Int32 nElement,
 
 SdXMLPathShapeContext::SdXMLPathShapeContext(
     SvXMLImport& rImport,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes > const & rShapes,
     bool bTemporaryShape)
 :   SdXMLShapeContext( rImport, xAttrList, rShapes, bTemporaryShape )
@@ -1381,7 +1381,7 @@ bool SdXMLPathShapeContext::processAttribute( const sax_fastparser::FastAttribut
 }
 
 void SdXMLPathShapeContext::startFastElement (sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     // create polygon shape
     if(maD.isEmpty())
@@ -1501,7 +1501,7 @@ void SdXMLPathShapeContext::startFastElement (sal_Int32 nElement,
 
 SdXMLTextBoxShapeContext::SdXMLTextBoxShapeContext(
     SvXMLImport& rImport,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes > const & rShapes)
 :   SdXMLShapeContext( rImport, xAttrList, rShapes, false/*bTemporaryShape*/ ),
     mnRadius(0),
@@ -1532,7 +1532,7 @@ bool SdXMLTextBoxShapeContext::processAttribute( const sax_fastparser::FastAttri
 }
 
 void SdXMLTextBoxShapeContext::startFastElement (sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     // create textbox shape
     bool bIsPresShape = false;
@@ -1690,7 +1690,7 @@ void SdXMLTextBoxShapeContext::startFastElement (sal_Int32 nElement,
 
 SdXMLControlShapeContext::SdXMLControlShapeContext(
     SvXMLImport& rImport,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes > const & rShapes,
     bool bTemporaryShape)
 :   SdXMLShapeContext( rImport, xAttrList, rShapes, bTemporaryShape )
@@ -1716,7 +1716,7 @@ bool SdXMLControlShapeContext::processAttribute( const sax_fastparser::FastAttri
 }
 
 void SdXMLControlShapeContext::startFastElement (sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     // create Control shape
     // add, set style and properties from base shape
@@ -1752,7 +1752,7 @@ void SdXMLControlShapeContext::startFastElement (sal_Int32 nElement,
 
 SdXMLConnectorShapeContext::SdXMLConnectorShapeContext(
     SvXMLImport& rImport,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes > const & rShapes,
     bool bTemporaryShape)
 :   SdXMLShapeContext( rImport, xAttrList, rShapes, bTemporaryShape ),
@@ -1931,7 +1931,7 @@ bool SdXMLConnectorShapeContext::processAttribute( const sax_fastparser::FastAtt
 }
 
 void SdXMLConnectorShapeContext::startFastElement (sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     // For security reasons, do not add empty connectors. There may have been an error in EA2
     // that created empty, far set off connectors (e.g. 63 meters below top of document). This
@@ -2091,7 +2091,7 @@ void SdXMLConnectorShapeContext::startFastElement (sal_Int32 nElement,
 
 SdXMLMeasureShapeContext::SdXMLMeasureShapeContext(
     SvXMLImport& rImport,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes > const & rShapes,
     bool bTemporaryShape)
 :   SdXMLShapeContext( rImport, xAttrList, rShapes, bTemporaryShape ),
@@ -2144,7 +2144,7 @@ bool SdXMLMeasureShapeContext::processAttribute( const sax_fastparser::FastAttri
 }
 
 void SdXMLMeasureShapeContext::startFastElement (sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     // create Measure shape
     // add, set style and properties from base shape
@@ -2197,7 +2197,7 @@ void SdXMLMeasureShapeContext::endFastElement(sal_Int32 nElement)
 
 SdXMLPageShapeContext::SdXMLPageShapeContext(
     SvXMLImport& rImport,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes > const & rShapes,
     bool bTemporaryShape)
 :   SdXMLShapeContext( rImport, xAttrList, rShapes, bTemporaryShape ), mnPageNumber(0)
@@ -2220,7 +2220,7 @@ bool SdXMLPageShapeContext::processAttribute( const sax_fastparser::FastAttribut
 }
 
 void SdXMLPageShapeContext::startFastElement (sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     // create Page shape
     // add, set style and properties from base shape
@@ -2286,7 +2286,7 @@ void SdXMLPageShapeContext::startFastElement (sal_Int32 nElement,
 
 SdXMLCaptionShapeContext::SdXMLCaptionShapeContext(
     SvXMLImport& rImport,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes > const & rShapes,
     bool bTemporaryShape)
 :   SdXMLShapeContext( rImport, xAttrList, rShapes, bTemporaryShape ),
@@ -2300,7 +2300,7 @@ SdXMLCaptionShapeContext::~SdXMLCaptionShapeContext()
 }
 
 void SdXMLCaptionShapeContext::startFastElement (sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     // create Caption shape
     // add, set style and properties from base shape
@@ -2380,7 +2380,7 @@ bool SdXMLCaptionShapeContext::processAttribute( const sax_fastparser::FastAttri
 
 
 SdXMLGraphicObjectShapeContext::SdXMLGraphicObjectShapeContext(
-    SvXMLImport& rImport, const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+    SvXMLImport& rImport, const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
     uno::Reference<drawing::XShapes> const& rShapes)
     : SdXMLShapeContext(rImport, xAttrList, rShapes, false /*bTemporaryShape*/)
     , mnPage(-1)
@@ -2409,7 +2409,7 @@ bool SdXMLGraphicObjectShapeContext::processAttribute( const sax_fastparser::Fas
 }
 
 void SdXMLGraphicObjectShapeContext::startFastElement (sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     // create graphic object shape
     OUString service;
@@ -2502,11 +2502,11 @@ void SdXMLGraphicObjectShapeContext::endFastElement(sal_Int32 nElement)
     SdXMLShapeContext::endFastElement(nElement);
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLGraphicObjectShapeContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLGraphicObjectShapeContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    css::uno::Reference< css::xml::sax::XFastContextHandler > xContext;
+    cpo::uno::Reference< css::xml::sax::XFastContextHandler > xContext;
 
     if( nElement == XML_ELEMENT(OFFICE, XML_BINARY_DATA) )
     {
@@ -2538,7 +2538,7 @@ SdXMLGraphicObjectShapeContext::~SdXMLGraphicObjectShapeContext()
 
 SdXMLChartShapeContext::SdXMLChartShapeContext(
     SvXMLImport& rImport,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes > const & rShapes,
     bool bTemporaryShape)
 :   SdXMLShapeContext( rImport, xAttrList, rShapes, bTemporaryShape )
@@ -2546,7 +2546,7 @@ SdXMLChartShapeContext::SdXMLChartShapeContext(
 }
 
 void SdXMLChartShapeContext::startFastElement (sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     const bool bIsPresentation = isPresentationShape();
 
@@ -2626,9 +2626,9 @@ void SdXMLChartShapeContext::characters( const OUString& rChars )
         mxChartContext->characters( rChars );
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLChartShapeContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLChartShapeContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     if( mxChartContext.is() )
         return mxChartContext->createFastChildContext( nElement, xAttrList );
@@ -2638,8 +2638,8 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLChartShapeContext
 
 
 SdXMLObjectShapeContext::SdXMLObjectShapeContext( SvXMLImport& rImport,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
-        css::uno::Reference< css::drawing::XShapes > const & rShapes)
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+        cpo::uno::Reference< css::drawing::XShapes > const & rShapes)
 : SdXMLShapeContext( rImport, xAttrList, rShapes, false/*bTemporaryShape*/ )
 {
 }
@@ -2649,7 +2649,7 @@ SdXMLObjectShapeContext::~SdXMLObjectShapeContext()
 }
 
 void SdXMLObjectShapeContext::startFastElement (sal_Int32 /*nElement*/,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/)
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/)
 {
     // #96717# in theorie, if we don't have a URL we shouldn't even
     // export this OLE shape. But practically it's too risky right now
@@ -2795,9 +2795,9 @@ bool SdXMLObjectShapeContext::processAttribute( const sax_fastparser::FastAttrib
     return true;
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLObjectShapeContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLObjectShapeContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     if(nElement == XML_ELEMENT(OFFICE, XML_BINARY_DATA))
     {
@@ -2841,8 +2841,8 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLObjectShapeContex
 
 
 SdXMLPluginShapeContext::SdXMLPluginShapeContext( SvXMLImport& rImport,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
-        css::uno::Reference< css::drawing::XShapes > const & rShapes) :
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+        cpo::uno::Reference< css::drawing::XShapes > const & rShapes) :
 SdXMLShapeContext( rImport, xAttrList, rShapes, false/*bTemporaryShape*/ ),
 mbMedia( false )
 {
@@ -2853,7 +2853,7 @@ SdXMLPluginShapeContext::~SdXMLPluginShapeContext()
 }
 
 void SdXMLPluginShapeContext::startFastElement (sal_Int32 /*nElement*/,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
 
     // watch for MimeType attribute to see if we have a media object
@@ -3068,9 +3068,9 @@ void SdXMLPluginShapeContext::endFastElement(sal_Int32 nElement)
     SdXMLShapeContext::endFastElement(nElement);
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLPluginShapeContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLPluginShapeContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     if( nElement == XML_ELEMENT(DRAW, XML_PARAM) )
     {
@@ -3103,8 +3103,8 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLPluginShapeContex
 
 
 SdXMLFloatingFrameShapeContext::SdXMLFloatingFrameShapeContext( SvXMLImport& rImport,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
-        css::uno::Reference< css::drawing::XShapes > const & rShapes)
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+        cpo::uno::Reference< css::drawing::XShapes > const & rShapes)
 : SdXMLShapeContext( rImport, xAttrList, rShapes, false/*bTemporaryShape*/ )
 {
 }
@@ -3124,7 +3124,7 @@ uno::Reference<drawing::XShape> SdXMLFloatingFrameShapeContext::CreateFloatingFr
 }
 
 void SdXMLFloatingFrameShapeContext::startFastElement (sal_Int32 /*nElement*/,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/)
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/)
 {
     uno::Reference<drawing::XShape> xShape(SdXMLFloatingFrameShapeContext::CreateFloatingFrameShape());
 
@@ -3210,8 +3210,8 @@ void SdXMLFloatingFrameShapeContext::endFastElement(sal_Int32 nElement)
 
 
 SdXMLFrameShapeContext::SdXMLFrameShapeContext( SvXMLImport& rImport,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
-        css::uno::Reference< css::drawing::XShapes > const & rShapes,
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+        cpo::uno::Reference< css::drawing::XShapes > const & rShapes,
         bool bTemporaryShape)
 : SdXMLShapeContext( rImport, xAttrList, rShapes, bTemporaryShape ),
     mbSupportsReplacement( false )
@@ -3324,7 +3324,7 @@ OUString SdXMLFrameShapeContext::getGraphicPackageURLFromImportContext(const SvX
     return aRetval;
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLFrameShapeContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLFrameShapeContext::createFastChildContext(
     sal_Int32 nElement,
     const uno::Reference< xml::sax::XFastAttributeList>& xAttrList )
 {
@@ -3481,7 +3481,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLFrameShapeContext
 }
 
 void SdXMLFrameShapeContext::startFastElement (sal_Int32 /*nElement*/,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/)
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/)
 {
     // ignore
 }
@@ -3606,7 +3606,7 @@ bool SdXMLFrameShapeContext::processAttribute( const sax_fastparser::FastAttribu
 
 SdXMLCustomShapeContext::SdXMLCustomShapeContext(
     SvXMLImport& rImport,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes > const & rShapes)
 :   SdXMLShapeContext( rImport, xAttrList, rShapes, false/*bTemporaryShape*/ )
 {
@@ -3655,7 +3655,7 @@ bool SdXMLCustomShapeContext::processAttribute( const sax_fastparser::FastAttrib
 }
 
 void SdXMLCustomShapeContext::startFastElement (sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     // create rectangle shape
     AddShape(u"com.sun.star.drawing.CustomShape"_ustr);
@@ -3816,11 +3816,11 @@ void SdXMLCustomShapeContext::endFastElement(sal_Int32 nElement)
     }
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLCustomShapeContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLCustomShapeContext::createFastChildContext(
     sal_Int32 nElement,
     const uno::Reference< xml::sax::XFastAttributeList>& xAttrList )
 {
-    css::uno::Reference< css::xml::sax::XFastContextHandler > xContext;
+    cpo::uno::Reference< css::xml::sax::XFastContextHandler > xContext;
     if ( nElement == XML_ELEMENT(DRAW, XML_ENHANCED_GEOMETRY) )
     {
         uno::Reference< beans::XPropertySet > xPropSet( mxShape,uno::UNO_QUERY );
@@ -3834,7 +3834,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLCustomShapeContex
     return xContext;
 }
 
-SdXMLTableShapeContext::SdXMLTableShapeContext( SvXMLImport& rImport, const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList, css::uno::Reference< css::drawing::XShapes > const & rShapes )
+SdXMLTableShapeContext::SdXMLTableShapeContext( SvXMLImport& rImport, const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList, cpo::uno::Reference< css::drawing::XShapes > const & rShapes )
 : SdXMLShapeContext( rImport, xAttrList, rShapes, false )
 {
 }
@@ -3844,7 +3844,7 @@ SdXMLTableShapeContext::~SdXMLTableShapeContext()
 }
 
 void SdXMLTableShapeContext::startFastElement (sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     OUString service(u"com.sun.star.drawing.TableShape"_ustr);
 
@@ -3970,9 +3970,9 @@ bool SdXMLTableShapeContext::processAttribute( const sax_fastparser::FastAttribu
     return SdXMLShapeContext::processAttribute( aIter );
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLTableShapeContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLTableShapeContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     if( mxTableImportContext.is() && IsTokenInNamespace(nElement, XML_NAMESPACE_TABLE) )
         return mxTableImportContext->createFastChildContext(nElement, xAttrList);

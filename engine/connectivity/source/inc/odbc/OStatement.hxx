@@ -63,7 +63,7 @@ namespace connectivity::odbc
         css::sdbc::SQLWarning                             m_aLastWarning;
     protected:
         unotools::WeakReference< OResultSet >             m_xResultSet;   // The last ResultSet created
-        css::uno::Reference< css::sdbc::XStatement>       m_xGeneratedStatement;
+        cpo::uno::Reference< css::sdbc::XStatement>       m_xGeneratedStatement;
         //  for this Statement
 
         std::vector< OUString>   m_aBatchVector;
@@ -157,7 +157,7 @@ namespace connectivity::odbc
 
     public:
         OStatement_Base(OConnection* _pConnection );
-        using OStatement_BASE::operator css::uno::Reference< cpo::uno::XInterface >;
+        using OStatement_BASE::operator cpo::uno::Reference< cpo::uno::XInterface >;
 
         const Functions& functions() const { return m_pConnection->functions(); }
         // OComponentHelper
@@ -171,12 +171,12 @@ namespace connectivity::odbc
         virtual cpo::uno::Sequence< cpo::uno::Type > getTypes(  ) override;
 
         // XPropertySet
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+        virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
         // XStatement
-        virtual css::uno::Reference< css::sdbc::XResultSet > executeQuery( const OUString& sql ) override ;
+        virtual cpo::uno::Reference< css::sdbc::XResultSet > executeQuery( const OUString& sql ) override ;
         virtual sal_Int32 executeUpdate( const OUString& sql ) override ;
         virtual bool execute( const OUString& sql ) override ;
-        virtual css::uno::Reference< css::sdbc::XConnection > getConnection(  ) override ;
+        virtual cpo::uno::Reference< css::sdbc::XConnection > getConnection(  ) override ;
         // XWarningsSupplier
         virtual cpo::uno::Any getWarnings(  ) override;
         virtual void clearWarnings(  ) override;
@@ -185,11 +185,11 @@ namespace connectivity::odbc
         // XCloseable
         virtual void close(  ) override;
         // XMultipleResults
-        virtual css::uno::Reference< css::sdbc::XResultSet > getResultSet(  ) override;
+        virtual cpo::uno::Reference< css::sdbc::XResultSet > getResultSet(  ) override;
         virtual sal_Int32 getUpdateCount(  ) override;
         virtual bool getMoreResults(  ) override;
         //XGeneratedResultSet
-        virtual css::uno::Reference< css::sdbc::XResultSet > getGeneratedValues(  ) override;
+        virtual cpo::uno::Reference< css::sdbc::XResultSet > getGeneratedValues(  ) override;
 
         // other methods
         SQLHANDLE getConnectionHandle() { return m_pConnection->getConnection(); }

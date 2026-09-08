@@ -128,6 +128,7 @@ constexpr OUString aFilterDataString = u"FilterData"_ustr;
 
 using namespace ::com::sun::star;
 using namespace css::system;
+using namespace ::cpo;
 
 namespace {
 

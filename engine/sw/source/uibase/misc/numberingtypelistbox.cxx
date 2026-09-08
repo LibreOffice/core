@@ -28,6 +28,7 @@
 #include <osl/diagnose.h>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 struct SwNumberingTypeListBox_Impl
 {

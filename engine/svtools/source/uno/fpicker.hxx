@@ -22,19 +22,19 @@
 #include <sal/config.h>
 #include <rtl/ustring.hxx>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/XComponentContext.hpp>
 
 namespace cpo::uno { class XInterface; }
 
-css::uno::Reference<cpo::uno::XInterface> FilePicker_CreateInstance(
-        css::uno::Reference< cpo::uno::XComponentContext > const & context);
+cpo::uno::Reference<cpo::uno::XInterface> FilePicker_CreateInstance(
+        cpo::uno::Reference< cpo::uno::XComponentContext > const & context);
 cpo::uno::Sequence<OUString> FilePicker_getSupportedServiceNames();
 OUString FilePicker_getImplementationName();
 
-css::uno::Reference<cpo::uno::XInterface> FolderPicker_CreateInstance(
-        css::uno::Reference< cpo::uno::XComponentContext > const & context);
+cpo::uno::Reference<cpo::uno::XInterface> FolderPicker_CreateInstance(
+        cpo::uno::Reference< cpo::uno::XComponentContext > const & context);
 cpo::uno::Sequence<OUString> FolderPicker_getSupportedServiceNames();
 OUString FolderPicker_getImplementationName();
 

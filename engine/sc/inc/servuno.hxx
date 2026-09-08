@@ -20,7 +20,7 @@
 #pragma once
 
 #include <cpo/uno/Sequence.h>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 
 namespace cpo::uno { class XInterface; }
 
@@ -66,7 +66,7 @@ public:
     };
 
                             // pDocShell is not needed for all Services
-    static css::uno::Reference< cpo::uno::XInterface >
+    static cpo::uno::Reference< cpo::uno::XInterface >
                             MakeInstance( Type nType, ScDocShell* pDocShell );
     static cpo::uno::Sequence<OUString> GetAllServiceNames();
     static Type             GetProviderType(std::u16string_view rServiceName);

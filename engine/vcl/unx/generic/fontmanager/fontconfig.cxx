@@ -1065,7 +1065,7 @@ IMPL_LINK_NOARG(PrintFontManager, autoInstallFontLangSupport, Timer *, void)
     try
     {
         using namespace org::freedesktop::PackageKit;
-        css::uno::Reference<XSyncDbusSessionHelper> xSyncDbusSessionHelper(SyncDbusSessionHelper::create(comphelper::getProcessComponentContext()));
+        cpo::uno::Reference<XSyncDbusSessionHelper> xSyncDbusSessionHelper(SyncDbusSessionHelper::create(comphelper::getProcessComponentContext()));
         xSyncDbusSessionHelper->InstallFontconfigResources(comphelper::containerToSequence(m_aCurrentRequests), u"hide-finished"_ustr);
     }
     catch (const cpo::uno::Exception&)

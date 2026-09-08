@@ -32,7 +32,7 @@
 #include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace css::system;
 
 ExternalToolEdit::ExternalToolEdit()

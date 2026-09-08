@@ -18,6 +18,7 @@
 #include <comphelper/propertyvalue.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 class AutoRedactionTest : public UnoApiTest
 {

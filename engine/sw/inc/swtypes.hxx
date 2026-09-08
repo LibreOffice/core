@@ -21,7 +21,7 @@
 #include <rtl/ustring.hxx>
 
 #include <limits.h>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
 #include "swdllapi.h"
 #include <o3tl/typed_flags_set.hxx>
@@ -113,10 +113,10 @@ constexpr short lOutlineMinTextDistance = o3tl::toTwips(15, o3tl::Length::in100)
 SW_DLLPUBLIC OUString SwResId(TranslateId aId);
 OUString SwResId(TranslateNId aContextSingularPlural, int nCardinality);
 
-css::uno::Reference< css::linguistic2::XSpellChecker >  GetSpellChecker();
-css::uno::Reference< css::linguistic2::XHyphenator >    GetHyphenator();
-css::uno::Reference< css::linguistic2::XThesaurus >     GetThesaurus();
-css::uno::Reference< css::linguistic2::XLinguProperties > GetLinguPropertySet();
+cpo::uno::Reference< css::linguistic2::XSpellChecker >  GetSpellChecker();
+cpo::uno::Reference< css::linguistic2::XHyphenator >    GetHyphenator();
+cpo::uno::Reference< css::linguistic2::XThesaurus >     GetThesaurus();
+cpo::uno::Reference< css::linguistic2::XLinguProperties > GetLinguPropertySet();
 
 // Returns the twip size of this graphic.
 SW_DLLPUBLIC Size GetGraphicSizeTwip( const Graphic&, vcl::RenderContext* pOutDev );

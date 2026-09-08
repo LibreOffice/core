@@ -38,8 +38,8 @@
 #include <docmodel/uno/UnoGradientTools.hxx>
 
 using namespace css;
-using namespace css::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 namespace
 {
@@ -52,9 +52,9 @@ protected:
     void testTransparentBackground(std::u16string_view filename);
 };
 
-OUString getShapeDump(css::uno::Reference<css::chart::XChartDocument> const& doc)
+OUString getShapeDump(cpo::uno::Reference<css::chart::XChartDocument> const& doc)
 {
-    return css::uno::Reference<css::qa::XDumper>(doc, css::uno::UNO_QUERY_THROW)->dump(u"shapes"_ustr);
+    return cpo::uno::Reference<css::qa::XDumper>(doc, cpo::uno::UNO_QUERY_THROW)->dump(u"shapes"_ustr);
 }
 
 sal_Int32 getNumberFormat( const Reference<chart2::XChartDocument>& xChartDoc, const OUString& sFormat )
@@ -1185,7 +1185,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testNumberFormatsDOCX)
         uno::Reference< chart2::XChartDocument > xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
         CPPUNIT_ASSERT(xChartDoc.is());
 
-        css::uno::Reference<chart2::XDiagram> xDiagram(xChartDoc->getFirstDiagram(), UNO_SET_THROW);
+        cpo::uno::Reference<chart2::XDiagram> xDiagram(xChartDoc->getFirstDiagram(), UNO_SET_THROW);
         Reference<chart2::XDataSeries> xDataSeries = getDataSeriesFromDoc(xChartDoc, 0);
         uno::Reference<beans::XPropertySet> xPropertySet(xDataSeries, uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT(xPropertySet.is());
@@ -1206,7 +1206,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testNumberFormatsDOCX)
         uno::Reference< chart2::XChartDocument > xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
         CPPUNIT_ASSERT(xChartDoc.is());
 
-        css::uno::Reference<chart2::XDiagram> xDiagram(xChartDoc->getFirstDiagram(), UNO_SET_THROW);
+        cpo::uno::Reference<chart2::XDiagram> xDiagram(xChartDoc->getFirstDiagram(), UNO_SET_THROW);
         Reference<chart2::XDataSeries> xDataSeries = getDataSeriesFromDoc(xChartDoc, 0);
         CPPUNIT_ASSERT(xDataSeries.is());
         Reference<beans::XPropertySet> xPropertySet(xDataSeries->getDataPointByIndex(1), uno::UNO_SET_THROW);
@@ -1231,7 +1231,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testShapePropsDefaultStrokeWidthXLSX)
         uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet(0);
         CPPUNIT_ASSERT(xChartDoc.is());
 
-        css::uno::Reference<chart2::XDiagram> xDiagram(xChartDoc->getFirstDiagram(), UNO_SET_THROW);
+        cpo::uno::Reference<chart2::XDiagram> xDiagram(xChartDoc->getFirstDiagram(), UNO_SET_THROW);
         Reference<chart2::XDataSeries> xDataSeries = getDataSeriesFromDoc(xChartDoc, 0);
         uno::Reference<beans::XPropertySet> xPropertySet(xDataSeries, uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT(xPropertySet.is());
@@ -1245,7 +1245,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testShapePropsDefaultStrokeWidthXLSX)
         uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet(0);
         CPPUNIT_ASSERT(xChartDoc.is());
 
-        css::uno::Reference<chart2::XDiagram> xDiagram(xChartDoc->getFirstDiagram(), UNO_SET_THROW);
+        cpo::uno::Reference<chart2::XDiagram> xDiagram(xChartDoc->getFirstDiagram(), UNO_SET_THROW);
         Reference<chart2::XDataSeries> xDataSeries = getDataSeriesFromDoc(xChartDoc, 0);
         uno::Reference<beans::XPropertySet> xPropertySet(xDataSeries, uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT(xPropertySet.is());
@@ -1260,7 +1260,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testPercentageNumberFormatsDOCX)
     uno::Reference< chart2::XChartDocument > xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xChartDoc.is());
 
-    css::uno::Reference<chart2::XDiagram> xDiagram(xChartDoc->getFirstDiagram(), UNO_SET_THROW);
+    cpo::uno::Reference<chart2::XDiagram> xDiagram(xChartDoc->getFirstDiagram(), UNO_SET_THROW);
     Reference<chart2::XDataSeries> xDataSeries = getDataSeriesFromDoc(xChartDoc, 0);
     uno::Reference<beans::XPropertySet> xPropertySet(xDataSeries, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xPropertySet.is());
@@ -1767,7 +1767,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf122226)
     uno::Reference< chart2::XChartDocument > xChartDoc ( getChartDocFromWriter(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT( xChartDoc.is() );
 
-    css::uno::Reference<chart2::XDiagram> xDiagram(xChartDoc->getFirstDiagram(), UNO_SET_THROW);
+    cpo::uno::Reference<chart2::XDiagram> xDiagram(xChartDoc->getFirstDiagram(), UNO_SET_THROW);
     Reference<chart2::XDataSeries> xDataSeries = getDataSeriesFromDoc(xChartDoc, 0);
     uno::Reference<beans::XPropertySet> xPropertySet(xDataSeries->getDataPointByIndex(0), uno::UNO_SET_THROW);
     CPPUNIT_ASSERT(xPropertySet.is());

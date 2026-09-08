@@ -26,13 +26,13 @@ namespace dbaui
 {
     class OParameterUpdateHelper : public IUpdateHelper
     {
-        css::uno::Reference< css::sdbc::XPreparedStatement >  m_xPrepared;
-        css::uno::Reference< css::sdbc::XParameters >         m_xParameters;
+        cpo::uno::Reference< css::sdbc::XPreparedStatement >  m_xPrepared;
+        cpo::uno::Reference< css::sdbc::XParameters >         m_xParameters;
 
     public:
-        explicit OParameterUpdateHelper(const css::uno::Reference< css::sdbc::XPreparedStatement >& _xPrepared)
+        explicit OParameterUpdateHelper(const cpo::uno::Reference< css::sdbc::XPreparedStatement >& _xPrepared)
            :m_xPrepared(_xPrepared)
-           ,m_xParameters(_xPrepared,css::uno::UNO_QUERY)
+           ,m_xParameters(_xPrepared,cpo::uno::UNO_QUERY)
         {
         }
         virtual ~OParameterUpdateHelper() {}

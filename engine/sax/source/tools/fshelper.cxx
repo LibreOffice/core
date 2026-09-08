@@ -22,7 +22,7 @@
 #include "fastserializer.hxx"
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::cpo::uno;
 
 namespace sax_fastparser {
@@ -133,7 +133,7 @@ FastSerializerHelper* FastSerializerHelper::writeId(sal_Int32 tokenId)
     return this;
 }
 
-css::uno::Reference< css::io::XOutputStream > const & FastSerializerHelper::getOutputStream() const
+cpo::uno::Reference< css::io::XOutputStream > const & FastSerializerHelper::getOutputStream() const
 {
     return mpSerializer->getOutputStream();
 }

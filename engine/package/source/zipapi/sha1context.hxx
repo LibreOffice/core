@@ -39,7 +39,7 @@ public:
 
     virtual ~StarOfficeSHA1DigestContext() override;
 
-    static css::uno::Reference< css::xml::crypto::XDigestContext > Create();
+    static cpo::uno::Reference< css::xml::crypto::XDigestContext > Create();
 
     virtual void updateDigest( const cpo::uno::Sequence< ::sal_Int8 >& aData ) override;
     virtual cpo::uno::Sequence< ::sal_Int8 > finalizeDigestAndDispose() override;
@@ -59,7 +59,7 @@ public:
 
     virtual ~CorrectSHA1DigestContext() override;
 
-    static css::uno::Reference<css::xml::crypto::XDigestContext> Create();
+    static cpo::uno::Reference<css::xml::crypto::XDigestContext> Create();
 
     virtual void updateDigest(const cpo::uno::Sequence<::sal_Int8>& rData) override;
     virtual cpo::uno::Sequence<::sal_Int8> finalizeDigestAndDispose() override;

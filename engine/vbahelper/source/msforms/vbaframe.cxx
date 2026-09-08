@@ -25,6 +25,7 @@
 #include <utility>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace ooo::vba;
 
 ScVbaFrame::ScVbaFrame(
@@ -33,7 +34,7 @@ ScVbaFrame::ScVbaFrame(
         const uno::Reference< cpo::uno::XInterface >& xControl,
         const uno::Reference< frame::XModel >& xModel,
         std::unique_ptr<ov::AbstractGeometryAttributes> pGeomHelper,
-        css::uno::Reference< css::awt::XControl > xDialog ) :
+        cpo::uno::Reference< css::awt::XControl > xDialog ) :
     FrameImpl_BASE( xParent, xContext, xControl, xModel, std::move(pGeomHelper) ),
     mxDialog(std::move( xDialog ))
 {

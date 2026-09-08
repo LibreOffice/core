@@ -38,7 +38,7 @@ namespace logging
 {
     using ::com::sun::star::logging::XConsoleHandler;
     using ::com::sun::star::lang::XServiceInfo;
-    using ::com::sun::star::uno::Reference;
+    using ::cpo::uno::Reference;
     using ::cpo::uno::XComponentContext;
     using ::com::sun::star::logging::XLogFormatter;
     using ::cpo::uno::Sequence;

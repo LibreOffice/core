@@ -10,7 +10,7 @@
 
 #include <vcl/ImageTree.hxx>
 #include <implimagetree.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 
 ImageTree & ImageTree::get() {
@@ -34,7 +34,7 @@ std::shared_ptr<SvMemoryStream> ImageTree::getImageStream(OUString const & rName
     return mpImplImageTree->getImageStream(rName, rStyle, rLang);
 }
 
-css::uno::Reference<css::io::XInputStream> ImageTree::getImageXInputStream(OUString const & rName, OUString const & rStyle, OUString const & rLang)
+cpo::uno::Reference<css::io::XInputStream> ImageTree::getImageXInputStream(OUString const & rName, OUString const & rStyle, OUString const & rLang)
 {
     return mpImplImageTree->getImageXInputStream(rName, rStyle, rLang);
 }
@@ -54,7 +54,7 @@ bool ImageTree::loadImage(OUString const & rName, OUString const & rStyle,
     return loadImage(rName, rStyle, rBitmap, bLocalized, -1, eFlags);
 }
 
-css::uno::Reference<css::container::XNameAccess> const & ImageTree::getNameAccess()
+cpo::uno::Reference<css::container::XNameAccess> const & ImageTree::getNameAccess()
 {
     return mpImplImageTree->getNameAccess();
 }

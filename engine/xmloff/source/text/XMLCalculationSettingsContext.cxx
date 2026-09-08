@@ -30,7 +30,7 @@
 #include <xmloff/xmltoken.hxx>
 
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::text;
@@ -38,7 +38,7 @@ using namespace ::xmloff::token;
 
 XMLCalculationSettingsContext::XMLCalculationSettingsContext( SvXMLImport& rImport,
                                     sal_Int32 /*nElement*/,
-                                    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+                                    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 : SvXMLImportContext ( rImport )
 , nYear( 1930 )
 {

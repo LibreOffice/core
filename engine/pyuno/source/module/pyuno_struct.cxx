@@ -28,9 +28,9 @@
 #include "pyuno_impl.hxx"
 
 using cpo::uno::Sequence;
-using com::sun::star::uno::Reference;
+using cpo::uno::Reference;
 using cpo::uno::Any;
-using com::sun::star::uno::UNO_QUERY;
+using cpo::uno::UNO_QUERY;
 using cpo::uno::TypeClass;
 using cpo::uno::RuntimeException;
 using cpo::uno::Exception;
@@ -398,7 +398,7 @@ PyRef PyUNOStruct_new (
     {
         PyThreadDetach antiguard;
         xInvocation.set(
-            ssf->createInstanceWithArguments( Sequence<Any>( &targetInterface, 1 ) ), css::uno::UNO_QUERY_THROW );
+            ssf->createInstanceWithArguments( Sequence<Any>( &targetInterface, 1 ) ), cpo::uno::UNO_QUERY_THROW );
     }
     if( !Py_IsInitialized() )
         throw RuntimeException();

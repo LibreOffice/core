@@ -31,7 +31,7 @@
 #include <osl/diagnose.h>
 
 using namespace dbaui;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;

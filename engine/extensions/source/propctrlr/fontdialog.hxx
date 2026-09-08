@@ -44,14 +44,14 @@ namespace pcr
 
         /// fills the given item set with values obtained from the given property set
         static void         translatePropertiesToItems(
-            const css::uno::Reference< css::beans::XPropertySet >& _rxModel,
+            const cpo::uno::Reference< css::beans::XPropertySet >& _rxModel,
             SfxItemSet* _pSet);
 
         /** fills the given property set with values obtained from the given item set
         */
         static void translateItemsToProperties(
             const SfxItemSet& _rSet,
-            const css::uno::Reference< css::beans::XPropertySet >& _rxModel);
+            const cpo::uno::Reference< css::beans::XPropertySet >& _rxModel);
 
         /** fills the given property set with values obtained from the given item set
         */

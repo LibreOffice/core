@@ -68,6 +68,7 @@
 
 using namespace com::sun::star;
 using namespace css::sheet;
+using namespace ::cpo;
 
 //  everything without Which-ID, map only for PropertySetInfo
 

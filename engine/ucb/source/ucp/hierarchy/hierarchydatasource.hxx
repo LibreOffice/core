@@ -39,12 +39,12 @@ class HierarchyDataSource : public cppu::WeakImplHelper<
                                 css::lang::XMultiServiceFactory>
 {
     std::mutex m_aMutex;
-    css::uno::Reference< cpo::uno::XComponentContext >     m_xContext;
-    css::uno::Reference< css::lang::XMultiServiceFactory >  m_xConfigProvider;
+    cpo::uno::Reference< cpo::uno::XComponentContext >     m_xContext;
+    cpo::uno::Reference< css::lang::XMultiServiceFactory >  m_xConfigProvider;
     comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_aDisposeEventListeners;
 
 public:
-    explicit HierarchyDataSource( css::uno::Reference< cpo::uno::XComponentContext > xContext );
+    explicit HierarchyDataSource( cpo::uno::Reference< cpo::uno::XComponentContext > xContext );
     virtual ~HierarchyDataSource() override;
 
     // XServiceInfo
@@ -54,12 +54,12 @@ public:
 
     // XComponent
     virtual void SAL_CALL dispose() override;
-    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener > & xListener ) override;
-    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener > & aListener ) override;
+    virtual void SAL_CALL addEventListener( const cpo::uno::Reference< css::lang::XEventListener > & xListener ) override;
+    virtual void SAL_CALL removeEventListener( const cpo::uno::Reference< css::lang::XEventListener > & aListener ) override;
 
     // XMultiServiceFactory
-    virtual css::uno::Reference< cpo::uno::XInterface > SAL_CALL createInstance( const OUString & aServiceSpecifier ) override;
-    virtual css::uno::Reference< cpo::uno::XInterface > SAL_CALL createInstanceWithArguments( const OUString & ServiceSpecifier,
+    virtual cpo::uno::Reference< cpo::uno::XInterface > SAL_CALL createInstance( const OUString & aServiceSpecifier ) override;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > SAL_CALL createInstanceWithArguments( const OUString & ServiceSpecifier,
                                  const cpo::uno::Sequence<
                                     cpo::uno::Any > & Arguments ) override;
     virtual cpo::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames() override;
@@ -68,12 +68,12 @@ public:
 
 private:
     /// @throws cpo::uno::Exception
-    css::uno::Reference< cpo::uno::XInterface > createInstanceWithArguments( std::u16string_view ServiceSpecifier,
+    cpo::uno::Reference< cpo::uno::XInterface > createInstanceWithArguments( std::u16string_view ServiceSpecifier,
                                  const cpo::uno::Sequence<
                                     cpo::uno::Any > & Arguments,
                                  bool bCheckArgs );
 
-    css::uno::Reference< css::lang::XMultiServiceFactory > getConfigProvider();
+    cpo::uno::Reference< css::lang::XMultiServiceFactory > getConfigProvider();
 
     static bool createConfigPath( std::u16string_view rInPath, OUString & rOutPath );
 };

@@ -113,11 +113,11 @@ public:
 
     // The SAX-Parser-Interface
     virtual void parseStream(  const InputSource& structSource) override;
-    virtual void setDocumentHandler(const css::uno::Reference< XDocumentHandler > & xHandler) override;
+    virtual void setDocumentHandler(const cpo::uno::Reference< XDocumentHandler > & xHandler) override;
 
-    virtual void setErrorHandler(const css::uno::Reference< XErrorHandler > & xHandler) override;
-    virtual void setDTDHandler(const css::uno::Reference < XDTDHandler > & xHandler) override;
-    virtual void setEntityResolver(const css::uno::Reference<  XEntityResolver >& xResolver) override;
+    virtual void setErrorHandler(const cpo::uno::Reference< XErrorHandler > & xHandler) override;
+    virtual void setDTDHandler(const cpo::uno::Reference < XDTDHandler > & xHandler) override;
+    virtual void setEntityResolver(const cpo::uno::Reference<  XEntityResolver >& xResolver) override;
 
     virtual void setLocale( const Locale &locale ) override;
 
@@ -146,12 +146,12 @@ public: // module scope
     std::mutex aMutex;
     bool m_bEnableDoS; // fdo#60471 thank you Adobe Illustrator
 
-    css::uno::Reference< XDocumentHandler >   rDocumentHandler;
-    css::uno::Reference< XExtendedDocumentHandler > rExtendedDocumentHandler;
+    cpo::uno::Reference< XDocumentHandler >   rDocumentHandler;
+    cpo::uno::Reference< XExtendedDocumentHandler > rExtendedDocumentHandler;
 
-    css::uno::Reference< XErrorHandler >  rErrorHandler;
-    css::uno::Reference< XDTDHandler >    rDTDHandler;
-    css::uno::Reference< XEntityResolver > rEntityResolver;
+    cpo::uno::Reference< XErrorHandler >  rErrorHandler;
+    cpo::uno::Reference< XDTDHandler >    rDTDHandler;
+    cpo::uno::Reference< XEntityResolver > rEntityResolver;
     rtl::Reference < LocatorImpl >        rDocumentLocator;
 
 
@@ -417,7 +417,7 @@ void SaxExpatParser::parseStream(   const InputSource& structSource)
     if( ! entity.structSource.aInputStream.is() )
     {
         throw SAXException(u"No input source"_ustr,
-                            css::uno::Reference< cpo::uno::XInterface > () , cpo::uno::Any() );
+                            cpo::uno::Reference< cpo::uno::XInterface > () , cpo::uno::Any() );
     }
 
     entity.converter.setInputStream( entity.structSource.aInputStream );
@@ -432,7 +432,7 @@ void SaxExpatParser::parseStream(   const InputSource& structSource)
     if( ! entity.pParser )
     {
         throw SAXException(u"Couldn't create parser"_ustr,
-                            css::uno::Reference< cpo::uno::XInterface > (), cpo::uno::Any() );
+                            cpo::uno::Reference< cpo::uno::XInterface > (), cpo::uno::Any() );
     }
 
     // set all necessary C-Callbacks
@@ -484,24 +484,24 @@ void SaxExpatParser::parseStream(   const InputSource& structSource)
     }
 }
 
-void SaxExpatParser::setDocumentHandler(const css::uno::Reference< XDocumentHandler > & xHandler)
+void SaxExpatParser::setDocumentHandler(const cpo::uno::Reference< XDocumentHandler > & xHandler)
 {
     m_pImpl->rDocumentHandler = xHandler;
     m_pImpl->rExtendedDocumentHandler =
-        css::uno::Reference< XExtendedDocumentHandler >( xHandler , css::uno::UNO_QUERY );
+        cpo::uno::Reference< XExtendedDocumentHandler >( xHandler , cpo::uno::UNO_QUERY );
 }
 
-void SaxExpatParser::setErrorHandler(const css::uno::Reference< XErrorHandler > & xHandler)
+void SaxExpatParser::setErrorHandler(const cpo::uno::Reference< XErrorHandler > & xHandler)
 {
     m_pImpl->rErrorHandler = xHandler;
 }
 
-void SaxExpatParser::setDTDHandler(const css::uno::Reference< XDTDHandler > & xHandler)
+void SaxExpatParser::setDTDHandler(const cpo::uno::Reference< XDTDHandler > & xHandler)
 {
     m_pImpl->rDTDHandler = xHandler;
 }
 
-void SaxExpatParser::setEntityResolver(const css::uno::Reference < XEntityResolver > & xResolver)
+void SaxExpatParser::setEntityResolver(const cpo::uno::Reference < XEntityResolver > & xResolver)
 {
     m_pImpl->rEntityResolver = xResolver;
 }
@@ -663,7 +663,7 @@ void SaxExpatParser_Impl::parse( )
 
             SAXParseException aExcept(
                 getErrorMessage(xmlE , sSystemId, nLine) ,
-                css::uno::Reference< cpo::uno::XInterface >(),
+                cpo::uno::Reference< cpo::uno::XInterface >(),
                 cpo::uno::Any( &exception , cppu::UnoType<decltype(exception)>::get() ),
                 rDocumentLocator->getPublicId(),
                 rDocumentLocator->getSystemId(),

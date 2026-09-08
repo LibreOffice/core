@@ -29,14 +29,14 @@ namespace connectivity::flat
 
     class OFlatDatabaseMetaData :   public file::ODatabaseMetaData
     {
-        virtual css::uno::Reference< css::sdbc::XResultSet > impl_getTypeInfo_throw() override;
+        virtual cpo::uno::Reference< css::sdbc::XResultSet > impl_getTypeInfo_throw() override;
     protected:
         virtual ~OFlatDatabaseMetaData() override;
     public:
         OFlatDatabaseMetaData(file::OConnection* _pCon);
 
         virtual OUString getURL(  ) override;
-        virtual css::uno::Reference< css::sdbc::XResultSet > getColumns( const cpo::uno::Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern, const OUString& columnNamePattern ) override;
+        virtual cpo::uno::Reference< css::sdbc::XResultSet > getColumns( const cpo::uno::Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern, const OUString& columnNamePattern ) override;
     };
 
 }

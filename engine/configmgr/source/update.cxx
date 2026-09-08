@@ -23,7 +23,7 @@
 
 #include <com/sun/star/configuration/XUpdate.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/XInterface.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -48,7 +48,7 @@ class Service:
     public cppu::WeakImplHelper< css::configuration::XUpdate, css::lang::XServiceInfo >
 {
 public:
-    explicit Service(const css::uno::Reference< cpo::uno::XComponentContext >& context):
+    explicit Service(const cpo::uno::Reference< cpo::uno::XComponentContext >& context):
         context_(context)
     {
         assert(context.is());
@@ -89,7 +89,7 @@ private:
     }
 
     std::shared_ptr<osl::Mutex> lock_;
-    css::uno::Reference< cpo::uno::XComponentContext > context_;
+    cpo::uno::Reference< cpo::uno::XComponentContext > context_;
 };
 
 void Service::insertExtensionXcsFile(

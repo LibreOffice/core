@@ -51,6 +51,7 @@
 #include <osl/diagnose.h>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace ::xmloff::token;
 using namespace ::formula;
 
@@ -698,7 +699,7 @@ void ScXMLAutoStylePoolP::exportStyleAttributes(
 }
 
 void ScXMLAutoStylePoolP::exportStyleContent(
-        const css::uno::Reference< css::xml::sax::XDocumentHandler > & rHandler,
+        const cpo::uno::Reference< css::xml::sax::XDocumentHandler > & rHandler,
         XmlStyleFamily nFamily,
         const std::vector< XMLPropertyState >& rProperties,
         const SvXMLExportPropertyMapper& rPropExp

@@ -55,9 +55,9 @@ public:
     SvNumberFormatter*          GetNumberFormatter() const;
 
                                 // XNumberFormatsSupplier
-    virtual css::uno::Reference< css::beans::XPropertySet >
+    virtual cpo::uno::Reference< css::beans::XPropertySet >
                                 getNumberFormatSettings() override;
-    virtual css::uno::Reference< css::util::XNumberFormats >
+    virtual cpo::uno::Reference< css::util::XNumberFormats >
                                 getNumberFormats() override;
 
                                 // XUnoTunnel

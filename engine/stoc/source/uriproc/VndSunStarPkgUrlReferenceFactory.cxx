@@ -18,7 +18,7 @@
  */
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
@@ -45,7 +45,7 @@ class Factory:
 {
 public:
     explicit Factory(
-        css::uno::Reference< cpo::uno::XComponentContext > context):
+        cpo::uno::Reference< cpo::uno::XComponentContext > context):
         m_context(std::move(context)) {}
 
     Factory(const Factory&) = delete;
@@ -58,14 +58,14 @@ public:
     virtual cpo::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() override;
 
-    virtual css::uno::Reference< css::uri::XUriReference > SAL_CALL
+    virtual cpo::uno::Reference< css::uri::XUriReference > SAL_CALL
     createVndSunStarPkgUrlReference(
-        css::uno::Reference< css::uri::XUriReference > const & authority) override;
+        cpo::uno::Reference< css::uri::XUriReference > const & authority) override;
 
 private:
     virtual ~Factory() override {}
 
-    css::uno::Reference< cpo::uno::XComponentContext > m_context;
+    cpo::uno::Reference< cpo::uno::XComponentContext > m_context;
 };
 
 OUString Factory::getImplementationName()
@@ -84,9 +84,9 @@ cpo::uno::Sequence< OUString > Factory::getSupportedServiceNames()
     return s;
 }
 
-css::uno::Reference< css::uri::XUriReference >
+cpo::uno::Reference< css::uri::XUriReference >
 Factory::createVndSunStarPkgUrlReference(
-    css::uno::Reference< css::uri::XUriReference > const & authority)
+    cpo::uno::Reference< css::uri::XUriReference > const & authority)
 {
     if (!authority.is()) {
         throw cpo::uno::RuntimeException(
@@ -99,12 +99,12 @@ Factory::createVndSunStarPkgUrlReference(
             rtl::Uri::encode(
                 authority->getUriReference(), rtl_UriCharClassRegName,
                 rtl_UriEncodeIgnoreEscapes, RTL_TEXTENCODING_UTF8);
-        css::uno::Reference< css::uri::XUriReference > uriRef(
+        cpo::uno::Reference< css::uri::XUriReference > uriRef(
             css::uri::UriReferenceFactory::create(m_context)->parse(
                 buf));
         return uriRef;
     } else {
-        return css::uno::Reference< css::uri::XUriReference >();
+        return cpo::uno::Reference< css::uri::XUriReference >();
     }
 }
 

@@ -48,9 +48,9 @@ class StatusBarCommandDispatch : public impl::StatusBarCommandDispatch_Base
 {
 public:
     explicit StatusBarCommandDispatch(
-        const css::uno::Reference< cpo::uno::XComponentContext > & xContext,
+        const cpo::uno::Reference< cpo::uno::XComponentContext > & xContext,
         rtl::Reference<::chart::ChartModel> xModel,
-        const css::uno::Reference< css::view::XSelectionSupplier > & xSelSupp );
+        const cpo::uno::Reference< css::view::XSelectionSupplier > & xSelSupp );
     virtual ~StatusBarCommandDispatch() override;
 
     // late initialisation, especially for adding as listener
@@ -76,7 +76,7 @@ protected:
 
     virtual void fireStatusEvent(
         const OUString & rURL,
-        const css::uno::Reference< css::frame::XStatusListener > & xSingleListener ) override;
+        const cpo::uno::Reference< css::frame::XStatusListener > & xSingleListener ) override;
 
     // ____ XSelectionChangeListener ____
     virtual void selectionChanged(
@@ -84,7 +84,7 @@ protected:
 
 private:
     rtl::Reference<::chart::ChartModel> m_xChartModel;
-    css::uno::Reference< css::view::XSelectionSupplier > m_xSelectionSupplier;
+    cpo::uno::Reference< css::view::XSelectionSupplier > m_xSelectionSupplier;
     bool m_bIsModified;
     ObjectIdentifier m_aSelectedOID;
 };

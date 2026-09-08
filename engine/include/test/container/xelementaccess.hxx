@@ -12,7 +12,7 @@
 
 #include <cpo/uno/XInterface.hpp>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Type.hxx>
 
 #include <test/testdllapi.hxx>
@@ -30,7 +30,7 @@ public:
     void testGetElementType();
     void testHasElements();
 
-    virtual css::uno::Reference<cpo::uno::XInterface> init() = 0;
+    virtual cpo::uno::Reference<cpo::uno::XInterface> init() = 0;
 
 protected:
     ~XElementAccess() {}

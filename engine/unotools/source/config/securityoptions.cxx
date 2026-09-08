@@ -37,7 +37,7 @@
 
 //  namespaces
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 constexpr OUString PROPERTYNAME_MACRO_TRUSTEDAUTHORS = u"TrustedAuthors"_ustr;

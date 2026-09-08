@@ -38,9 +38,9 @@ class SvXMLImport;
  * XML data from a sequence of SAX events */
 class DomBuilderContext final : public SvXMLImportContext
 {
-    css::uno::Reference<css::xml::dom::XNode> mxNode;
+    cpo::uno::Reference<css::xml::dom::XNode> mxNode;
 
-    void HandleAttributes(const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs);
+    void HandleAttributes(const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs);
 
 public:
 
@@ -53,11 +53,11 @@ public:
     /** constructor: create DOM subtree under the given node */
     DomBuilderContext( SvXMLImport& rImport,
                        sal_Int32 nElement,
-                       css::uno::Reference<css::xml::dom::XNode> const & );
+                       cpo::uno::Reference<css::xml::dom::XNode> const & );
     /** constructor: create DOM subtree under the given node */
     DomBuilderContext( SvXMLImport& rImport,
                        const OUString & Namespace, const OUString & Name,
-                       css::uno::Reference<css::xml::dom::XNode> const & );
+                       cpo::uno::Reference<css::xml::dom::XNode> const & );
 
     virtual ~DomBuilderContext() override;
 
@@ -66,22 +66,22 @@ public:
 
 
     /** access the DOM tree */
-    css::uno::Reference<css::xml::dom::XDocument> getTree();
+    cpo::uno::Reference<css::xml::dom::XDocument> getTree();
 
 
     // implement SvXMLImportContext methods:
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createUnknownChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createUnknownChildContext(
         const OUString& Namespace, const OUString& Name,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
 
     virtual void startFastElement(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
     virtual void startUnknownElement(const OUString & Namespace, const OUString & Name,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override;
 
     virtual void characters( const OUString& rChars ) override;
 };

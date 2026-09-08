@@ -35,6 +35,7 @@
 #include <comphelper/diagnose_ex.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 using OConnection_BASE = connectivity::file::OConnection;
 
@@ -195,7 +196,7 @@ uno::Reference<sdbc::XDatabaseMetaData> OWriterConnection::getMetaData()
     return xMetaData;
 }
 
-css::uno::Reference<css::sdbcx::XTablesSupplier> OWriterConnection::createCatalog()
+cpo::uno::Reference<css::sdbcx::XTablesSupplier> OWriterConnection::createCatalog()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     rtl::Reference<connectivity::sdbcx::OCatalog> xTab = m_xCatalog;

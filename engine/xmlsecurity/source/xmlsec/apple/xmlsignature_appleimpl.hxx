@@ -26,9 +26,9 @@ public:
     XMLSignature_AppleImpl();
     virtual ~XMLSignature_AppleImpl() override;
 
-    virtual css::uno::Reference<css::xml::crypto::XXMLSignatureTemplate> SAL_CALL generate(
-        const css::uno::Reference<css::xml::crypto::XXMLSignatureTemplate>& aTemplate,
-        const css::uno::Reference<css::xml::crypto::XSecurityEnvironment>& aEnvironment) override;
+    virtual cpo::uno::Reference<css::xml::crypto::XXMLSignatureTemplate> SAL_CALL generate(
+        const cpo::uno::Reference<css::xml::crypto::XXMLSignatureTemplate>& aTemplate,
+        const cpo::uno::Reference<css::xml::crypto::XSecurityEnvironment>& aEnvironment) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

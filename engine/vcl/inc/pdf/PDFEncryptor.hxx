@@ -50,7 +50,7 @@ public:
                                const OUString& i_rOwnerPassword, const OUString& i_rUserPassword);
 
     bool prepareEncryption(
-        const css::uno::Reference<css::beans::XMaterialHolder>& xEncryptionMaterialHolder,
+        const cpo::uno::Reference<css::beans::XMaterialHolder>& xEncryptionMaterialHolder,
         PDFEncryptionProperties& rProperties) override;
 
     void setupKeysAndCheck(PDFEncryptionProperties& rProperties) override;

@@ -40,8 +40,8 @@ namespace xmlscript
     {
     private:
         std::mutex                                                m_aMutex;
-        css::uno::Reference< css::xml::sax::XDocumentHandler >    m_xHandler;
-        css::uno::Reference< css::frame::XModel >                 m_xModel;
+        cpo::uno::Reference< css::xml::sax::XDocumentHandler >    m_xHandler;
+        cpo::uno::Reference< css::frame::XModel >                 m_xModel;
         bool const                                                m_bOasis;
 
     public:
@@ -55,7 +55,7 @@ namespace xmlscript
         virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
         // XExporter
-        virtual void setSourceDocument( const css::uno::Reference< css::lang::XComponent >& rxDoc ) override;
+        virtual void setSourceDocument( const cpo::uno::Reference< css::lang::XComponent >& rxDoc ) override;
 
         // XFilter
         virtual bool filter( const cpo::uno::Sequence< css::beans::PropertyValue >& aDescriptor ) override;

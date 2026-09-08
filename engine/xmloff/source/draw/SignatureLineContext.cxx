@@ -26,7 +26,7 @@
 
 using namespace css;
 using namespace css::xml::sax;
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace css::drawing;
 using namespace css::embed;
@@ -77,7 +77,7 @@ SignatureLineContext::SignatureLineContext(SvXMLImport& rImport, sal_Int32 /*nEl
     try
     {
         // Get the document signatures
-        css::uno::Reference<XStorable> xStorable(GetImport().GetModel(), UNO_QUERY_THROW);
+        cpo::uno::Reference<XStorable> xStorable(GetImport().GetModel(), UNO_QUERY_THROW);
         Reference<XStorage> xStorage = comphelper::OStorageHelper::GetStorageOfFormatFromURL(
             ZIP_STORAGE_FORMAT_STRING, xStorable->getLocation(), ElementModes::READ);
 

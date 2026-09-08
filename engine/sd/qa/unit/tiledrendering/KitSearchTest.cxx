@@ -25,6 +25,7 @@
 #include <vcl/filter/PDFiumLibrary.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 class KitSearchTest : public SdTiledRenderingTest
 {

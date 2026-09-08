@@ -62,7 +62,7 @@
 
 namespace frm
 {
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
 using namespace cpo::uno;
     using namespace ::com::sun::star::awt;
     using namespace ::com::sun::star::lang;
@@ -579,7 +579,7 @@ using namespace cpo::uno;
                 Reference< XVclWindowPeer >  xVclWindow( getPeer(), UNO_QUERY );
                 if (xVclWindow.is())
                 {
-                    OUString aRefText = ::comphelper::getString(css::uno::Reference< XPropertySet > (getModel(), UNO_QUERY_THROW)->getPropertyValue(PROPERTY_REFVALUE));
+                    OUString aRefText = ::comphelper::getString(cpo::uno::Reference< XPropertySet > (getModel(), UNO_QUERY_THROW)->getPropertyValue(PROPERTY_REFVALUE));
                     Any aValue;
                     if (aText == aRefText)
                         aValue <<= sal_Int32(TRISTATE_TRUE);
@@ -845,7 +845,7 @@ using namespace cpo::uno;
         Reference< XChild > xModel( xControlModel, UNO_QUERY );
         Reference< XRowSet > xForm;
         if ( xModel.is() )
-            xForm.set(xModel->getParent(), css::uno::UNO_QUERY);
+            xForm.set(xModel->getParent(), cpo::uno::UNO_QUERY);
         m_xConnection = ::dbtools::getConnection( xForm );
         OSL_ENSURE( m_xConnection.is(), "OFilterControl::initialize: unable to determine the form's connection!" );
 #endif

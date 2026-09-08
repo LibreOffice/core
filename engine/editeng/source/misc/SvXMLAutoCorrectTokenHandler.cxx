@@ -25,7 +25,7 @@
 #pragma GCC diagnostic pop
 #endif
 
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace ::cpo::uno;
 using namespace ::xmloff::token;
 

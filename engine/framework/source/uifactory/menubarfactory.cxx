@@ -32,7 +32,7 @@
 #include <utility>
 #include <vcl/svapp.hxx>
 
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::frame;
@@ -42,7 +42,7 @@ using namespace ::com::sun::star::ui;
 namespace framework
 {
 
-MenuBarFactory::MenuBarFactory( css::uno::Reference< cpo::uno::XComponentContext >  xContext )
+MenuBarFactory::MenuBarFactory( cpo::uno::Reference< cpo::uno::XComponentContext >  xContext )
     : m_xContext(std::move( xContext ))
 {
 }
@@ -65,7 +65,7 @@ void MenuBarFactory::CreateUIElement(const OUString& ResourceURL
                                      ,const Sequence< PropertyValue >& Args
                                      ,std::u16string_view ResourceType
                                      ,const Reference< css::ui::XUIElement >& _xMenuBar
-                                     ,const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext)
+                                     ,const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxContext)
 {
     sal_Int32 nConfigPropertyIndex( Args.getLength() );
     sal_Int32 nURLPropertyIndex( Args.getLength() );

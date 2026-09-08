@@ -61,15 +61,15 @@ constexpr sal_uInt16 NUMITEM_VERSION_04 = 0x04;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::style;
 
 sal_Int32 SvxNumberType::nRefCount = 0;
-css::uno::Reference<css::text::XNumberingFormatter> SvxNumberType::xFormatter;
-static void lcl_getFormatter(css::uno::Reference<css::text::XNumberingFormatter>& _xFormatter)
+cpo::uno::Reference<css::text::XNumberingFormatter> SvxNumberType::xFormatter;
+static void lcl_getFormatter(cpo::uno::Reference<css::text::XNumberingFormatter>& _xFormatter)
 {
     if(_xFormatter.is())
         return;

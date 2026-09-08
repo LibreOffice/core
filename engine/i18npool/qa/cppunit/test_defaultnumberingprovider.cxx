@@ -19,6 +19,7 @@
 #include <unordered_map>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 /// i18npool defaultnumberingprovider tests.
 class I18npoolDefaultnumberingproviderTest : public test::BootstrapFixture

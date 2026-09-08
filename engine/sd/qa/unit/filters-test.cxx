@@ -19,6 +19,7 @@
 #include <DrawDocShell.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 /// Test loading of files to assure they do not crash on load.
 class SdFiltersTest

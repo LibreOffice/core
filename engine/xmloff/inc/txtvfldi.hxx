@@ -66,7 +66,7 @@ public:
 
     /// prepare XTextField for insertion into document
     void PrepareField(
-        const css::uno::Reference<css::beans::XPropertySet> & xPropertySet);
+        const cpo::uno::Reference<css::beans::XPropertySet> & xPropertySet);
 
     /// is value a string (rather than double)?
     bool IsStringValue() const { return bStringType; }
@@ -157,7 +157,7 @@ protected:
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
-        const css::uno::Reference<
+        const cpo::uno::Reference<
         css::beans::XPropertySet> & xPropertySet) override;
 
     // various accessor methods:
@@ -180,7 +180,7 @@ public:
 private:
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
-        const css::uno::Reference<
+        const cpo::uno::Reference<
         css::beans::XPropertySet> & xPropertySet) override;
 };
 
@@ -196,7 +196,7 @@ public:
 
 private:
     virtual void PrepareField(
-        const css::uno::Reference<
+        const cpo::uno::Reference<
         css::beans::XPropertySet> & xPropertySet) override;
 };
 
@@ -211,7 +211,7 @@ public:
 
 private:
     virtual void PrepareField(
-        const css::uno::Reference<
+        const cpo::uno::Reference<
         css::beans::XPropertySet> & xPropertySet) override;
 };
 
@@ -255,7 +255,7 @@ protected:
 
     /// find appropriate field master
     bool FindFieldMaster(
-        css::uno::Reference<
+        cpo::uno::Reference<
         css::beans::XPropertySet> & xMaster);
 };
 
@@ -272,7 +272,7 @@ public:
 private:
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
-        const css::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
+        const cpo::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
 };
 
 
@@ -290,7 +290,7 @@ private:
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
-        const css::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
+        const cpo::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
 };
 
 
@@ -318,7 +318,7 @@ public:
         XMLTextImportHelper& rHlp);             /// Text import helper
 
     virtual void PrepareField(
-        const css::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
+        const cpo::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
 };
 
 
@@ -346,7 +346,7 @@ private:
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
-        const css::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
+        const cpo::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
 };
 
 
@@ -366,9 +366,9 @@ public:
         XMLTextImportHelper& rHlp,              /// text import helper
         enum VarType eVarType);                 /// variable type
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 };
 
 /**
@@ -384,11 +384,11 @@ public:
         SvXMLImport& rImport,                   /// XML Import
         XMLTextImportHelper& rHlp,              /// text import helper
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList> & xAttrList,/// list of element attributes
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList> & xAttrList,/// list of element attributes
         enum VarType eVarType);                 /// variable type
 
     /// get field master for name and rename if appropriate
-    static bool FindFieldMaster(css::uno::Reference<css::beans::XPropertySet> & xMaster,
+    static bool FindFieldMaster(cpo::uno::Reference<css::beans::XPropertySet> & xMaster,
                                     SvXMLImport& rImport,
                                     XMLTextImportHelper& rHelper,
                                     const OUString& sVarName,
@@ -417,7 +417,7 @@ private:
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
-        const css::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
+        const cpo::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
 };
 
 

@@ -62,8 +62,8 @@
 #include <cpo/uno/Sequence.hxx>
 
 using namespace css;
-using namespace css::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 void ScLimitSizeOnDrawPage( Size& rSize, Point& rPos, const Size& rPage )
 {
@@ -443,10 +443,10 @@ FuInsertMedia::FuInsertMedia( ScTabViewShell&   rViewSh,
         if( pWin )
             pWin->EnterWait();
 
-        css::uno::Reference<css::frame::XDispatchProvider> xDispatchProvider(rViewShell.GetViewFrame().GetFrame().GetFrameInterface(), css::uno::UNO_QUERY);
+        cpo::uno::Reference<css::frame::XDispatchProvider> xDispatchProvider(rViewShell.GetViewFrame().GetFrame().GetFrameInterface(), cpo::uno::UNO_QUERY);
 
         rtl::Reference<avmedia::PlayerListener> xPlayerListener(new avmedia::PlayerListener(
-            [xDispatchProvider, aURL, bLink](const css::uno::Reference<css::media::XPlayer>& rPlayer){
+            [xDispatchProvider, aURL, bLink](const cpo::uno::Reference<css::media::XPlayer>& rPlayer){
                 css::awt::Size aSize = rPlayer->getPreferredPlayerWindowSize();
                 avmedia::MediaWindow::dispatchInsertAVMedia(xDispatchProvider, aSize, aURL, bLink);
             }));

@@ -43,7 +43,7 @@ public:
 
     using ToolBox::InsertItem;
     virtual void InsertItem(const OUString& rCommand,
-            const css::uno::Reference<css::frame::XFrame>& rFrame,
+            const cpo::uno::Reference<css::frame::XFrame>& rFrame,
             ToolBoxItemBits nBits,
             const Size& rRequestedSize,
             ImplToolItems::size_type nPos = APPEND) override;
@@ -54,8 +54,8 @@ public:
     void InitToolBox(VclBuilder::stringmap& rMap);
 
 protected:
-    css::uno::Reference<css::lang::XComponent> mxImageController;
-    typedef std::map<ToolBoxItemId, css::uno::Reference<css::frame::XToolbarController>> ControllerContainer;
+    cpo::uno::Reference<css::lang::XComponent> mxImageController;
+    typedef std::map<ToolBoxItemId, cpo::uno::Reference<css::frame::XToolbarController>> ControllerContainer;
     ControllerContainer maControllers;
     bool mbAreHandlersRegistered;
     bool mbUseDefaultButtonSize;
@@ -68,10 +68,10 @@ protected:
     DECL_LINK(ChangedIconHandler, LinkParamNone*, void );
     DECL_LINK(ChangedDataHandler, const DataChangedEvent*, void );
 
-    css::uno::Reference<css::frame::XToolbarController> GetControllerForItemId(const ToolBoxItemId nItemId) const;
+    cpo::uno::Reference<css::frame::XToolbarController> GetControllerForItemId(const ToolBoxItemId nItemId) const;
 
     void CreateController(const ToolBoxItemId nItemId,
-                          const css::uno::Reference<css::frame::XFrame>& rxFrame,
+                          const cpo::uno::Reference<css::frame::XFrame>& rxFrame,
                           const sal_Int32 nItemWidth, bool bSideBar);
     void RegisterHandlers();
 };

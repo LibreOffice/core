@@ -67,7 +67,7 @@ class OGridControlModel final :public OControlModel
     OUString                         m_sHelpText;
 // [properties]
 
-    css::uno::Reference< css::beans::XPropertySet >       m_xSelection;
+    cpo::uno::Reference< css::beans::XPropertySet >       m_xSelection;
 
 // [properties]
     OUString                m_sHelpURL;                 // URL
@@ -87,11 +87,11 @@ class OGridControlModel final :public OControlModel
 
 public:
     OGridControlModel(
-        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
+        const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     OGridControlModel(
         const OGridControlModel* _pOriginal,
-        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
+        const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     virtual ~OGridControlModel() override;
 
@@ -100,7 +100,7 @@ public:
     virtual cpo::uno::Any queryAggregation( const cpo::uno::Type& _rType ) override;
 
     // XChild
-    virtual void setParent(const css::uno::Reference<cpo::uno::XInterface>& Parent) override;
+    virtual void setParent(const cpo::uno::Reference<cpo::uno::XInterface>& Parent) override;
 
     // XServiceInfo
     OUString getImplementationName() override
@@ -119,23 +119,23 @@ public:
 
     // XReset
     virtual void reset() override;
-    virtual void addResetListener(const css::uno::Reference< css::form::XResetListener>& _rxListener) override;
-    virtual void removeResetListener(const css::uno::Reference< css::form::XResetListener>& _rxListener) override;
+    virtual void addResetListener(const cpo::uno::Reference< css::form::XResetListener>& _rxListener) override;
+    virtual void removeResetListener(const cpo::uno::Reference< css::form::XResetListener>& _rxListener) override;
 
     // XSelectionSupplier
     virtual bool select(const cpo::uno::Any& aElement) override;
     virtual cpo::uno::Any getSelection() override;
-    virtual void addSelectionChangeListener(const css::uno::Reference< css::view::XSelectionChangeListener >& xListener) override;
-    virtual void removeSelectionChangeListener(const css::uno::Reference< css::view::XSelectionChangeListener >& xListener) override;
+    virtual void addSelectionChangeListener(const cpo::uno::Reference< css::view::XSelectionChangeListener >& xListener) override;
+    virtual void removeSelectionChangeListener(const cpo::uno::Reference< css::view::XSelectionChangeListener >& xListener) override;
 
     // XGridColumnFactory
-    virtual css::uno::Reference< css::beans::XPropertySet> createColumn(const OUString& ColumnType) override;
+    virtual cpo::uno::Reference< css::beans::XPropertySet> createColumn(const OUString& ColumnType) override;
     virtual cpo::uno::Sequence<OUString> getColumnTypes() override;
 
     // XPersistObject
     virtual OUString getServiceName() override;
-    virtual void write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
-    virtual void read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
+    virtual void write(const cpo::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
+    virtual void read(const cpo::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
 
     // XPropertySet
     virtual void getFastPropertyValue(cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
@@ -150,12 +150,12 @@ public:
     virtual void errorOccured( const css::sdb::SQLErrorEvent& _rEvent ) override;
 
     // XRowSetSupplier
-    virtual css::uno::Reference< css::sdbc::XRowSet > getRowSet(  ) override;
-    virtual void setRowSet( const css::uno::Reference< css::sdbc::XRowSet >& xDataSource ) override;
+    virtual cpo::uno::Reference< css::sdbc::XRowSet > getRowSet(  ) override;
+    virtual void setRowSet( const cpo::uno::Reference< css::sdbc::XRowSet >& xDataSource ) override;
 
     // XRowSetChangeBroadcaster
-    virtual void addRowSetChangeListener( const css::uno::Reference< css::sdb::XRowSetChangeListener >& i_Listener ) override;
-    virtual void removeRowSetChangeListener( const css::uno::Reference< css::sdb::XRowSetChangeListener >& i_Listener ) override;
+    virtual void addRowSetChangeListener( const cpo::uno::Reference< css::sdb::XRowSetChangeListener >& i_Listener ) override;
+    virtual void removeRowSetChangeListener( const cpo::uno::Reference< css::sdb::XRowSetChangeListener >& i_Listener ) override;
 
     // OControlModel's property handling
     virtual void describeFixedProperties(
@@ -167,10 +167,10 @@ public:
     using OControlModel::getFastPropertyValue;
 
 private:
-    virtual css::uno::Reference< css::util::XCloneable > createClone(  ) override;
+    virtual cpo::uno::Reference< css::util::XCloneable > createClone(  ) override;
 
     virtual void approveNewElement(
-            const css::uno::Reference< css::beans::XPropertySet >& _rxObject,
+            const cpo::uno::Reference< css::beans::XPropertySet >& _rxObject,
             ElementDescription* _pElement
         ) override;
 
@@ -178,15 +178,15 @@ private:
 
     virtual ElementDescription* createElementMetaData( ) override;
 
-    virtual void implRemoved(const css::uno::Reference<cpo::uno::XInterface>& _rxObject) override;
+    virtual void implRemoved(const cpo::uno::Reference<cpo::uno::XInterface>& _rxObject) override;
     virtual void implInserted( const ElementDescription* _pElement ) override;
     virtual void impl_replacedElement(
                     const css::container::ContainerEvent& _rEvent,
                     ::osl::ClearableMutexGuard& _rInstanceLock
                 ) override;
 
-    void gotColumn(const css::uno::Reference< cpo::uno::XInterface >& _rxColumn);
-    void lostColumn(const css::uno::Reference< cpo::uno::XInterface >& _rxColumn);
+    void gotColumn(const cpo::uno::Reference< cpo::uno::XInterface >& _rxColumn);
+    void lostColumn(const cpo::uno::Reference< cpo::uno::XInterface >& _rxColumn);
 
     void cloneColumns( const OGridControlModel* _pOriginalContainer );
 };

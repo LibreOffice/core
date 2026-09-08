@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <rtl/ustring.hxx>
 #include <rtl/ref.hxx>
 
@@ -44,40 +44,40 @@ namespace chart::StatisticsHelper
     // also called "Standard deviation of the mean (SDOM)"
     double getStandardError( const cpo::uno::Sequence< double > & rData );
 
-    css::uno::Reference< css::chart2::data::XLabeledDataSequence >
+    cpo::uno::Reference< css::chart2::data::XLabeledDataSequence >
         getErrorLabeledDataSequenceFromDataSource(
-            const css::uno::Reference< css::chart2::data::XDataSource > & xDataSource,
+            const cpo::uno::Reference< css::chart2::data::XDataSource > & xDataSource,
             bool bPositiveValue,
             bool bYError = true );
 
-    css::uno::Reference< css::chart2::data::XDataSequence >
+    cpo::uno::Reference< css::chart2::data::XDataSequence >
         getErrorDataSequenceFromDataSource(
-            const css::uno::Reference< css::chart2::data::XDataSource > & xDataSource,
+            const cpo::uno::Reference< css::chart2::data::XDataSource > & xDataSource,
             bool bPositiveValue,
             bool bYError = true );
 
     double getErrorFromDataSource(
-        const css::uno::Reference< css::chart2::data::XDataSource > & xDataSource,
+        const cpo::uno::Reference< css::chart2::data::XDataSource > & xDataSource,
         sal_Int32 nIndex,
         bool bPositiveValue,
         bool bYError = true );
 
     void setErrorDataSequence(
-        const css::uno::Reference< css::chart2::data::XDataSource > & xDataSource,
-        const css::uno::Reference< css::chart2::data::XDataProvider > & xDataProvider,
+        const cpo::uno::Reference< css::chart2::data::XDataSource > & xDataSource,
+        const cpo::uno::Reference< css::chart2::data::XDataProvider > & xDataProvider,
         const OUString & rNewRange,
         bool bPositiveValue,
         bool bYError = true,
         OUString const * pXMLRange = nullptr );
 
     /// @return the newly created or existing error bar object
-    css::uno::Reference< css::beans::XPropertySet >
+    cpo::uno::Reference< css::beans::XPropertySet >
         addErrorBars(
             const rtl::Reference< ::chart::DataSeries > & xDataSeries,
             sal_Int32 nStyle,
             bool bYError = true );
 
-    css::uno::Reference< css::beans::XPropertySet >
+    cpo::uno::Reference< css::beans::XPropertySet >
         getErrorBars(
             const rtl::Reference< ::chart::DataSeries > & xDataSeries,
             bool bYError = true );

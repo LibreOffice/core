@@ -26,6 +26,7 @@
 #include <utility>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace ooo::vba;
 
 ScVbaCommandBar::ScVbaCommandBar( const uno::Reference< ov::XHelperInterface >& xParent,

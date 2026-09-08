@@ -77,7 +77,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::drawing;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::xmloff::token;
 
@@ -433,7 +433,7 @@ Any AnimationsImportHelperImpl::convertPath( const OUString& rValue )
 AnimationNodeContext::AnimationNodeContext(
         const Reference< XAnimationNode >& xParentNode,
         SvXMLImport& rImport, sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
         const std::shared_ptr<AnimationsImportHelperImpl>& pHelper )
 :   SvXMLImportContext(rImport),
     mpHelper( pHelper )
@@ -539,7 +539,7 @@ AnimationNodeContext::AnimationNodeContext(
     }
 }
 
-void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+void AnimationNodeContext::init_node(  const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     if( !mxNode.is() )
         return;
@@ -1203,8 +1203,8 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
     }
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler >  AnimationNodeContext::createFastChildContext(sal_Int32 nElement,
-        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList)
+cpo::uno::Reference< css::xml::sax::XFastContextHandler >  AnimationNodeContext::createFastChildContext(sal_Int32 nElement,
+        const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList)
 {
     if( mxNode.is())
         return new AnimationNodeContext( mxNode, GetImport(), nElement, xAttrList, mpHelper );

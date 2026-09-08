@@ -33,7 +33,7 @@ namespace frm
 {
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
@@ -133,7 +133,7 @@ OTimeModel::~OTimeModel( )
 
 // XCloneable
 
-css::uno::Reference< css::util::XCloneable > OTimeModel::createClone()
+cpo::uno::Reference< css::util::XCloneable > OTimeModel::createClone()
 {
     rtl::Reference<OTimeModel> pClone = new OTimeModel(this, getContext());
     pClone->clonedFrom(this);

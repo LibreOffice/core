@@ -19,7 +19,7 @@
 #ifndef INCLUDED_COMPHELPER_STORAGEHELPER_HXX
 #define INCLUDED_COMPHELPER_STORAGEHELPER_HXX
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <comphelper/comphelperdllapi.h>
 #include <memory>
@@ -69,105 +69,105 @@ class COMPHELPER_DLLPUBLIC OStorageHelper
 {
 public:
     /// @throws cpo::uno::Exception
-    static css::uno::Reference< css::lang::XSingleServiceFactory >
+    static cpo::uno::Reference< css::lang::XSingleServiceFactory >
         GetStorageFactory(
-            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext
-                            = css::uno::Reference< cpo::uno::XComponentContext >() );
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext
+                            = cpo::uno::Reference< cpo::uno::XComponentContext >() );
 
     /// @throws cpo::uno::Exception
-    static css::uno::Reference< css::lang::XSingleServiceFactory >
+    static cpo::uno::Reference< css::lang::XSingleServiceFactory >
         GetFileSystemStorageFactory(
-            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext
-                            = css::uno::Reference< cpo::uno::XComponentContext >() );
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext
+                            = cpo::uno::Reference< cpo::uno::XComponentContext >() );
 
     /// @throws cpo::uno::Exception
-    static css::uno::Reference< css::embed::XStorage >
+    static cpo::uno::Reference< css::embed::XStorage >
         GetTemporaryStorage(
-            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext
-                            = css::uno::Reference< cpo::uno::XComponentContext >() );
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext
+                            = cpo::uno::Reference< cpo::uno::XComponentContext >() );
 
     /// this one will only return Storage
     ///
     /// @throws cpo::uno::Exception
-    static css::uno::Reference< css::embed::XStorage >
+    static cpo::uno::Reference< css::embed::XStorage >
         GetStorageFromURL(
             const OUString& aURL,
             sal_Int32 nStorageMode,
-            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext
-                            = css::uno::Reference< cpo::uno::XComponentContext >() );
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext
+                            = cpo::uno::Reference< cpo::uno::XComponentContext >() );
 
     /// this one will return either Storage or FileSystemStorage
     ///
     /// @throws cpo::uno::Exception
-    static css::uno::Reference< css::embed::XStorage >
+    static cpo::uno::Reference< css::embed::XStorage >
         GetStorageFromURL2(
             const OUString& aURL,
             sal_Int32 nStorageMode,
-            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext
-                            = css::uno::Reference< cpo::uno::XComponentContext >() );
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext
+                            = cpo::uno::Reference< cpo::uno::XComponentContext >() );
 
     /// @throws cpo::uno::Exception
-    static css::uno::Reference< css::embed::XStorage >
+    static cpo::uno::Reference< css::embed::XStorage >
         GetStorageFromInputStream(
-            const css::uno::Reference < css::io::XInputStream >& xStream,
-            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext
-                            = css::uno::Reference< cpo::uno::XComponentContext >() );
+            const cpo::uno::Reference < css::io::XInputStream >& xStream,
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext
+                            = cpo::uno::Reference< cpo::uno::XComponentContext >() );
 
     /// @throws cpo::uno::Exception
-    static css::uno::Reference< css::embed::XStorage >
+    static cpo::uno::Reference< css::embed::XStorage >
         GetStorageFromStream(
-            const css::uno::Reference < css::io::XStream >& xStream,
+            const cpo::uno::Reference < css::io::XStream >& xStream,
             sal_Int32 nStorageMode = css::embed::ElementModes::READWRITE,
-            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext
-                            = css::uno::Reference< cpo::uno::XComponentContext >() );
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext
+                            = cpo::uno::Reference< cpo::uno::XComponentContext >() );
 
     /// @throws cpo::uno::Exception
     static void CopyInputToOutput(
-            const css::uno::Reference< css::io::XInputStream >& xInput,
-            const css::uno::Reference< css::io::XOutputStream >& xOutput );
+            const cpo::uno::Reference< css::io::XInputStream >& xInput,
+            const cpo::uno::Reference< css::io::XOutputStream >& xOutput );
 
     /// @throws cpo::uno::Exception
-    static css::uno::Reference< css::io::XInputStream >
+    static cpo::uno::Reference< css::io::XInputStream >
         GetInputStreamFromURL(
             const OUString& aURL,
-            const css::uno::Reference< cpo::uno::XComponentContext >& context );
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& context );
 
     /// @throws cpo::uno::Exception
     static void SetCommonStorageEncryptionData(
-            const css::uno::Reference< css::embed::XStorage >& xStorage,
+            const cpo::uno::Reference< css::embed::XStorage >& xStorage,
             const cpo::uno::Sequence< css::beans::NamedValue >& aEncryptionData );
 
     // the following method supports only storages of OOo formats
     /// @throws cpo::uno::Exception
     static sal_Int32 GetXStorageFormat(
-            const css::uno::Reference< css::embed::XStorage >& xStorage );
+            const cpo::uno::Reference< css::embed::XStorage >& xStorage );
 
     /// @throws cpo::uno::Exception
-    static css::uno::Reference< css::embed::XStorage >
+    static cpo::uno::Reference< css::embed::XStorage >
         GetStorageOfFormatFromURL(
             const OUString& aFormat,
             const OUString& aURL,
             sal_Int32 nStorageMode,
-            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext
-                            = css::uno::Reference< cpo::uno::XComponentContext >() );
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext
+                            = cpo::uno::Reference< cpo::uno::XComponentContext >() );
 
     /// @throws cpo::uno::Exception
-    static css::uno::Reference< css::embed::XStorage >
+    static cpo::uno::Reference< css::embed::XStorage >
         GetStorageOfFormatFromInputStream(
             const OUString& aFormat,
-            const css::uno::Reference < css::io::XInputStream >& xStream,
-            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext
-                            = css::uno::Reference< cpo::uno::XComponentContext >(),
+            const cpo::uno::Reference < css::io::XInputStream >& xStream,
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext
+                            = cpo::uno::Reference< cpo::uno::XComponentContext >(),
             bool bRepairStorage = false );
 
     /// @throws cpo::uno::Exception
-    static css::uno::Reference< css::embed::XStorage >
+    static cpo::uno::Reference< css::embed::XStorage >
         GetStorageOfFormatFromStream(
             const OUString& aFormat,
-            const css::uno::Reference < css::io::XStream >& xStream,
+            const cpo::uno::Reference < css::io::XStream >& xStream,
             sal_Int32 nStorageMode = css::embed::ElementModes::READWRITE,
-            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext
-                            = css::uno::Reference< cpo::uno::XComponentContext >(),
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext
+                            = cpo::uno::Reference< cpo::uno::XComponentContext >(),
             bool bRepairStorage = false );
 
     static cpo::uno::Sequence< css::beans::NamedValue >
@@ -188,19 +188,19 @@ public:
 
     // Methods to allow easy use of hierarchical names inside storages
 
-    static css::uno::Reference< css::embed::XStorage > GetStorageAtPath(
-        const css::uno::Reference< css::embed::XStorage > &xStorage,
+    static cpo::uno::Reference< css::embed::XStorage > GetStorageAtPath(
+        const cpo::uno::Reference< css::embed::XStorage > &xStorage,
         std::u16string_view aPath, sal_uInt32 nOpenMode, LifecycleProxy const &rNastiness );
-    static css::uno::Reference< css::io::XStream > GetStreamAtPath(
-        const css::uno::Reference< css::embed::XStorage > &xStorage,
+    static cpo::uno::Reference< css::io::XStream > GetStreamAtPath(
+        const cpo::uno::Reference< css::embed::XStorage > &xStorage,
         std::u16string_view aPath, sal_uInt32 nOpenMode, LifecycleProxy const &rNastiness );
-    static css::uno::Reference< css::io::XStream > GetStreamAtPackageURL(
-        const css::uno::Reference< css::embed::XStorage > &xStorage,
+    static cpo::uno::Reference< css::io::XStream > GetStreamAtPackageURL(
+        const cpo::uno::Reference< css::embed::XStorage > &xStorage,
         const OUString& rURL, sal_uInt32 const nOpenMode,
         LifecycleProxy const & rNastiness );
 
     static OUString
-    GetODFVersionFromStorage(const css::uno::Reference<css::embed::XStorage>& xStorage);
+    GetODFVersionFromStorage(const cpo::uno::Reference<css::embed::XStorage>& xStorage);
 };
 
 }

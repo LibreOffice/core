@@ -22,7 +22,7 @@
 
 #include <sal/log.hxx>
 
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <com/sun/star/text/HorizontalAdjust.hpp>
 
 
@@ -45,7 +45,7 @@ using namespace ::xmloff::token;
 
 using ::std::vector;
 using ::cpo::uno::Any;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 
 
 XMLFootnoteSeparatorImport::XMLFootnoteSeparatorImport(

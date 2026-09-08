@@ -29,7 +29,7 @@
 #include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ustring.hxx>
 #include <comphelper/diagnose_ex.hxx>
@@ -42,7 +42,7 @@ namespace deployment = css::deployment ;
 namespace lang       = css::lang ;
 namespace task       = css::task ;
 namespace css_ucb    = css::ucb ;
-namespace uno        = css::uno ;
+namespace uno        = cpo::uno ;
 
 
 namespace dp_info {

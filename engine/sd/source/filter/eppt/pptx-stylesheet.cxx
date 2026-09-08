@@ -71,7 +71,7 @@ PPTExCharSheet::PPTExCharSheet( int nInstance )
     }
 }
 
-void PPTExCharSheet::SetStyleSheet( const css::uno::Reference< css::beans::XPropertySet > & rXPropSet,
+void PPTExCharSheet::SetStyleSheet( const cpo::uno::Reference< css::beans::XPropertySet > & rXPropSet,
                                     FontCollection& rFontCollection, int nLevel )
 {
     PortionObj  aPortionObj( rXPropSet, rFontCollection );
@@ -92,7 +92,7 @@ void PPTExCharSheet::SetStyleSheet( const css::uno::Reference< css::beans::XProp
 }
 
 void PPTExCharSheet::Write( SvStream& rSt, sal_uInt16 nLev, bool bSimpleText,
-    const css::uno::Reference< css::beans::XPropertySet > & rPagePropSet )
+    const cpo::uno::Reference< css::beans::XPropertySet > & rPagePropSet )
 {
     const PPTExCharLevel& rLev = maCharLevel[ nLev ];
 
@@ -224,7 +224,7 @@ PPTExParaSheet::PPTExParaSheet( int nInstance, sal_uInt16 nDefaultTab, PPTExBull
     }
 }
 
-void PPTExParaSheet::SetStyleSheet( const css::uno::Reference< css::beans::XPropertySet > & rXPropSet,
+void PPTExParaSheet::SetStyleSheet( const cpo::uno::Reference< css::beans::XPropertySet > & rXPropSet,
                                         FontCollection& rFontCollection, int nLevel, const PPTExCharLevel& rCharLevel )
 {
     ParagraphObj aParagraphObj( rXPropSet, pBuProv );
@@ -314,7 +314,7 @@ void PPTExParaSheet::SetStyleSheet( const css::uno::Reference< css::beans::XProp
 }
 
 void PPTExParaSheet::Write( SvStream& rSt, sal_uInt16 nLev, bool bSimpleText,
-    const css::uno::Reference< css::beans::XPropertySet > & rPagePropSet )
+    const cpo::uno::Reference< css::beans::XPropertySet > & rPagePropSet )
 {
     const PPTExParaLevel& rLev = maParaLevel[ nLev ];
 
@@ -401,7 +401,7 @@ PPTExStyleSheet::~PPTExStyleSheet()
 {
 }
 
-void PPTExStyleSheet::SetStyleSheet( const css::uno::Reference< css::beans::XPropertySet > & rXPropSet,
+void PPTExStyleSheet::SetStyleSheet( const cpo::uno::Reference< css::beans::XPropertySet > & rXPropSet,
                                         FontCollection& rFontCollection, int nInstance, int nLevel )
 {
     if ( nInstance == EPP_TEXTTYPE_notUsed )

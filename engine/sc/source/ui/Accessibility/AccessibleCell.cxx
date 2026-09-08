@@ -48,6 +48,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
+using namespace ::cpo;
 
 rtl::Reference<ScAccessibleCell> ScAccessibleCell::create(
         const uno::Reference<XAccessible>& rxParent,

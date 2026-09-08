@@ -43,7 +43,7 @@ namespace abp
         // helper
         OAddressBookSourcePilot* getDialog();
         const OAddressBookSourcePilot* getDialog() const;
-        const css::uno::Reference< cpo::uno::XComponentContext > &
+        const cpo::uno::Reference< cpo::uno::XComponentContext > &
                                 getORB() const;
         AddressSettings&        getSettings();
         const AddressSettings&  getSettings() const;

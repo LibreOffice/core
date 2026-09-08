@@ -37,13 +37,13 @@
 namespace drivermanager
 {
 
-    typedef std::map< OUString, css::uno::Reference< css::sdbc::XDriver > > DriverCollection;
+    typedef std::map< OUString, cpo::uno::Reference< css::sdbc::XDriver > > DriverCollection;
 
     struct DriverAccess
     {
         OUString           sImplementationName;        /// the implementation name of the driver
-        css::uno::Reference< css::sdbc::XDriver >                  xDriver;                    /// the driver itself
-        css::uno::Reference< css::lang::XSingleComponentFactory >  xComponentFactory;          /// the factory to create the driver component (if not already done so)
+        cpo::uno::Reference< css::sdbc::XDriver >                  xDriver;                    /// the driver itself
+        cpo::uno::Reference< css::lang::XSingleComponentFactory >  xComponentFactory;          /// the factory to create the driver component (if not already done so)
     };
 
 
@@ -58,7 +58,7 @@ namespace drivermanager
     {
         friend class ODriverEnumeration;
 
-        css::uno::Reference<cpo::uno::XComponentContext>  m_xContext;
+        cpo::uno::Reference<cpo::uno::XComponentContext>  m_xContext;
         ::comphelper::EventLogger       m_aEventLogger;
 
         typedef std::vector<DriverAccess> DriverAccessArray;
@@ -66,7 +66,7 @@ namespace drivermanager
 
         // for drivers registered at runtime (not bootstrapped) we don't require an XServiceInfo interface,
         // so we have to remember their impl-name in another way
-        typedef std::map< OUString, css::uno::Reference< css::sdbc::XDriver > > DriverCollection;
+        typedef std::map< OUString, cpo::uno::Reference< css::sdbc::XDriver > > DriverCollection;
         DriverCollection                m_aDriversRT;
 
         ::connectivity::DriversConfig   m_aDriverConfig;
@@ -75,20 +75,20 @@ namespace drivermanager
     public:
 
         explicit OSDBCDriverManager(
-            const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext );
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxContext );
         virtual ~OSDBCDriverManager() override;
 
     // XDriverManager
-        virtual css::uno::Reference< css::sdbc::XConnection > getConnection( const OUString& url ) override;
-        virtual css::uno::Reference< css::sdbc::XConnection > getConnectionWithInfo( const OUString& url, const cpo::uno::Sequence< css::beans::PropertyValue >& info ) override;
+        virtual cpo::uno::Reference< css::sdbc::XConnection > getConnection( const OUString& url ) override;
+        virtual cpo::uno::Reference< css::sdbc::XConnection > getConnectionWithInfo( const OUString& url, const cpo::uno::Sequence< css::beans::PropertyValue >& info ) override;
         virtual void setLoginTimeout( sal_Int32 seconds ) override;
         virtual sal_Int32 getLoginTimeout(  ) override;
 
     // XDriverAccess
-        virtual css::uno::Reference< css::sdbc::XDriver > getDriverByURL( const OUString& url ) override;
+        virtual cpo::uno::Reference< css::sdbc::XDriver > getDriverByURL( const OUString& url ) override;
 
     // XEnumerationAccess
-        virtual css::uno::Reference< css::container::XEnumeration > createEnumeration(  ) override;
+        virtual cpo::uno::Reference< css::container::XEnumeration > createEnumeration(  ) override;
 
     // XElementAccess
         virtual cpo::uno::Type getElementType(  ) override;
@@ -100,12 +100,12 @@ namespace drivermanager
         virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
     // XNamingService
-        virtual css::uno::Reference< cpo::uno::XInterface > getRegisteredObject( const OUString& Name ) override;
-        virtual void registerObject( const OUString& Name, const css::uno::Reference< cpo::uno::XInterface >& Object ) override;
+        virtual cpo::uno::Reference< cpo::uno::XInterface > getRegisteredObject( const OUString& Name ) override;
+        virtual void registerObject( const OUString& Name, const cpo::uno::Reference< cpo::uno::XInterface >& Object ) override;
         virtual void revokeObject( const OUString& Name ) override;
 
     private:
-        css::uno::Reference< css::sdbc::XDriver > implGetDriverForURL(const OUString& _rURL);
+        cpo::uno::Reference< css::sdbc::XDriver > implGetDriverForURL(const OUString& _rURL);
 
         /** retrieve the driver order preferences from the configuration and
             sort m_aDriversBS accordingly.

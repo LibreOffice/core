@@ -39,6 +39,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::comphelper;
+using namespace ::cpo;
 
 VCLXAccessibleComponent::VCLXAccessibleComponent(vcl::Window* pWindow)
     : m_xWindow(pWindow)
@@ -211,7 +212,7 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
             DBG_ASSERT( pWindow, "VclEventId::WindowChildDestroyed - Window=?" );
             if ( pWindow->GetAccessible( false ).is() )
             {
-                aOldValue <<= css::uno::Reference<accessibility::XAccessible>(
+                aOldValue <<= cpo::uno::Reference<accessibility::XAccessible>(
                     pWindow->GetAccessible(false));
                 NotifyAccessibleEvent( accessibility::AccessibleEventId::CHILD, aOldValue, aNewValue );
             }
@@ -657,12 +658,12 @@ awt::Rectangle VCLXAccessibleComponent::implGetBounds()
     AbsoluteScreenPixelRectangle aRect = pWindow->GetWindowExtentsAbsolute();
     awt::Rectangle aBounds = vcl::unohelper::ConvertToAWTRect(aRect);
 
-    css::uno::Reference<css::accessibility::XAccessible> xParent = pWindow->GetAccessibleParent();
+    cpo::uno::Reference<css::accessibility::XAccessible> xParent = pWindow->GetAccessibleParent();
     if (!xParent.is())
         return aBounds;
 
-    css::uno::Reference<css::accessibility::XAccessibleComponent> xParentComponent(
-        xParent->getAccessibleContext(), css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::accessibility::XAccessibleComponent> xParentComponent(
+        xParent->getAccessibleContext(), cpo::uno::UNO_QUERY);
     if (!xParentComponent)
         return aBounds;
 

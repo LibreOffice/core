@@ -44,10 +44,10 @@ public:
     explicit LabeledDataSequence();
     explicit LabeledDataSequence(const LabeledDataSequence &);
     explicit LabeledDataSequence(
-        css::uno::Reference< css::chart2::data::XDataSequence > xValues );
+        cpo::uno::Reference< css::chart2::data::XDataSequence > xValues );
     explicit LabeledDataSequence(
-        css::uno::Reference< css::chart2::data::XDataSequence > xValues,
-        css::uno::Reference< css::chart2::data::XDataSequence > xLabels );
+        cpo::uno::Reference< css::chart2::data::XDataSequence > xValues,
+        cpo::uno::Reference< css::chart2::data::XDataSequence > xLabels );
 
     virtual ~LabeledDataSequence() override;
 
@@ -57,25 +57,25 @@ public:
     virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // ____ XLabeledDataSequence ____
-    virtual css::uno::Reference< css::chart2::data::XDataSequence > getValues() override;
+    virtual cpo::uno::Reference< css::chart2::data::XDataSequence > getValues() override;
     virtual void setValues(
-        const css::uno::Reference< css::chart2::data::XDataSequence >& xSequence ) override;
-    virtual css::uno::Reference< css::chart2::data::XDataSequence > getLabel() override;
+        const cpo::uno::Reference< css::chart2::data::XDataSequence >& xSequence ) override;
+    virtual cpo::uno::Reference< css::chart2::data::XDataSequence > getLabel() override;
     virtual void setLabel(
-        const css::uno::Reference< css::chart2::data::XDataSequence >& xSequence ) override;
+        const cpo::uno::Reference< css::chart2::data::XDataSequence >& xSequence ) override;
 
     // ____ XCloneable ____
-    virtual css::uno::Reference< css::util::XCloneable > createClone() override;
+    virtual cpo::uno::Reference< css::util::XCloneable > createClone() override;
 
     // ____ XModifyBroadcaster ____
     virtual void addModifyListener(
-        const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+        const cpo::uno::Reference< css::util::XModifyListener >& aListener ) override;
     virtual void removeModifyListener(
-        const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+        const cpo::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
 private:
-    css::uno::Reference< css::chart2::data::XDataSequence > m_xData;
-    css::uno::Reference< css::chart2::data::XDataSequence > m_xLabel;
+    cpo::uno::Reference< css::chart2::data::XDataSequence > m_xData;
+    cpo::uno::Reference< css::chart2::data::XDataSequence > m_xLabel;
 
     rtl::Reference<ModifyEventForwarder> m_xModifyEventForwarder;
 };

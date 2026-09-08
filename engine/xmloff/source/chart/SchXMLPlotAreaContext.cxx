@@ -49,9 +49,10 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace ::xmloff::token;
 
-using com::sun::star::uno::Reference;
+using cpo::uno::Reference;
 
 namespace
 {
@@ -206,7 +207,7 @@ SchXMLPlotAreaContext::~SchXMLPlotAreaContext()
 {}
 
 void SchXMLPlotAreaContext::startFastElement (sal_Int32 /*nElement*/,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     // parse attributes
     uno::Reference< chart2::XChartDocument > xNewDoc( GetImport().GetModel(), uno::UNO_QUERY );
@@ -398,9 +399,9 @@ void SchXMLPlotAreaContext::startFastElement (sal_Int32 /*nElement*/,
     }
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLPlotAreaContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLPlotAreaContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext* pContext = nullptr;
 
@@ -604,9 +605,9 @@ SchXMLDataLabelParaContext::SchXMLDataLabelParaContext( SvXMLImport& rImport, ::
 {
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLDataLabelParaContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLDataLabelParaContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
     if ( nElement == XML_ELEMENT(TEXT, XML_SPAN) )
         return new SchXMLDataLabelSpanContext(GetImport(), mrLabels);
@@ -624,9 +625,9 @@ SchXMLDataLabelContext::SchXMLDataLabelContext(SvXMLImport& rImport,
 {
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLDataLabelContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLDataLabelContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
     if ( nElement == XML_ELEMENT(TEXT, XML_P) )
         return new SchXMLDataLabelParaContext(GetImport(), mrLabels.mLabels);
@@ -637,7 +638,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLDataLabelContext
 
 void SchXMLDataLabelContext::startFastElement(
     sal_Int32 /*nElement*/,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
@@ -679,7 +680,7 @@ void SchXMLDataLabelContext::startFastElement(
 
 SchXMLDataPointContext::SchXMLDataPointContext(  SvXMLImport& rImport,
                                                  ::std::vector< DataRowPointStyle >& rStyleVector,
-                                                 const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
+                                                 const cpo::uno::Reference< css::chart2::XDataSeries >& xSeries,
                                                  sal_Int32& rIndex,
                                                  bool bSymbolSizeForSeriesIsMissingInFile ) :
         SvXMLImportContext( rImport ),
@@ -691,9 +692,9 @@ SchXMLDataPointContext::SchXMLDataPointContext(  SvXMLImport& rImport,
     mDataPoint.mbSymbolSizeForSeriesIsMissingInFile = bSymbolSizeForSeriesIsMissingInFile;
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLDataPointContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLDataPointContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& )
 {
     SvXMLImportContext* pContext = nullptr;
     switch(nElement)
@@ -714,7 +715,7 @@ SchXMLDataPointContext::~SchXMLDataPointContext()
 }
 
 void SchXMLDataPointContext::startFastElement (sal_Int32 /*Element*/,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     OUString sAutoStyleName;
     sal_Int32 nRepeat = 1;
@@ -884,7 +885,7 @@ SchXMLCoordinateRegionContext::~SchXMLCoordinateRegionContext()
 }
 
 void SchXMLCoordinateRegionContext::startFastElement (sal_Int32 /*Element*/,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     // parse attributes
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
@@ -908,7 +909,7 @@ SchXMLWallFloorContext::~SchXMLWallFloorContext()
 }
 
 void SchXMLWallFloorContext::startFastElement (sal_Int32 /*Element*/,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     if( !mxWallFloorSupplier.is())
         return;
@@ -949,7 +950,7 @@ SchXMLStockContext::~SchXMLStockContext()
 }
 
 void SchXMLStockContext::startFastElement (sal_Int32 /*Element*/,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     if( !mxStockPropProvider.is())
         return;
@@ -1049,7 +1050,7 @@ SchXMLStatisticsObjectContext::SchXMLStatisticsObjectContext(
     SvXMLImport& rImport,
     OUString sSeriesStyleName,
     ::std::vector< DataRowPointStyle >& rStyleVector,
-    css::uno::Reference< css::chart2::XDataSeries > xSeries,
+    cpo::uno::Reference< css::chart2::XDataSeries > xSeries,
     ContextType eContextType,
     tSchXMLLSequencesPerIndex & rLSequencesPerIndex) :
 
@@ -1194,7 +1195,7 @@ void SetErrorBarPropertiesFromStyleName( const OUString& aStyleName, const uno::
 }
 
 void SchXMLStatisticsObjectContext::startFastElement (sal_Int32 /*Element*/,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     OUString sAutoStyleName;
     OUString aPosRange;

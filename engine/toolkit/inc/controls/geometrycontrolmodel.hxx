@@ -50,7 +50,7 @@ namespace toolkit { class ScriptEventContainer; }
         ,public OGCM_Base
     {
     protected:
-        css::uno::Reference< cpo::uno::XAggregation >
+        cpo::uno::Reference< cpo::uno::XAggregation >
                     m_xAggregate;
         rtl::Reference< toolkit::ScriptEventContainer >
                     mxEventContainer;
@@ -64,7 +64,7 @@ namespace toolkit { class ScriptEventContainer; }
         sal_Int16       m_nTabIndex;
         sal_Int32       m_nStep;
         OUString m_aTag;
-        css::uno::Reference< css::resource::XStringResourceResolver > m_xStrResolver;
+        cpo::uno::Reference< css::resource::XStringResourceResolver > m_xStrResolver;
         // </properties>
 
         bool        m_bCloneable;
@@ -86,7 +86,7 @@ namespace toolkit { class ScriptEventContainer; }
                 is the object to be aggregated. Must be acquired exactly once (by the reference object given).<br/>
                 Will be reset to NULL upon leaving
         */
-        OGeometryControlModel_Base(css::uno::Reference< css::util::XCloneable >& _rxAggregateInstance);
+        OGeometryControlModel_Base(cpo::uno::Reference< css::util::XCloneable >& _rxAggregateInstance);
 
         /** releases the aggregation
             <p>Can be used if in a derived class, an exception has to be thrown after this base class here already
@@ -128,21 +128,21 @@ namespace toolkit { class ScriptEventContainer; }
         virtual cpo::uno::Any              getPropertyDefaultByHandle(sal_Int32 nHandle) const override;
 
         // XPropertySet
-        virtual css::uno::Reference< css::beans::XPropertySetInfo> getPropertySetInfo() override;
+        virtual cpo::uno::Reference< css::beans::XPropertySetInfo> getPropertySetInfo() override;
 
         // OPropertySetAggregationHelper overridables
         using OPropertySetAggregationHelper::getInfoHelper;
 
         // XCloneable
-        virtual css::uno::Reference< css::util::XCloneable > createClone(  ) override;
+        virtual cpo::uno::Reference< css::util::XCloneable > createClone(  ) override;
 
         //XScriptEventsSupplier
-        virtual css::uno::Reference< css::container::XNameContainer >
+        virtual cpo::uno::Reference< css::container::XNameContainer >
             getEvents(  ) override;
 
         // XCloneable implementation - to be overwritten
         virtual rtl::Reference<OGeometryControlModel_Base> createClone_Impl(
-            css::uno::Reference< css::util::XCloneable >& _rxAggregateInstance) = 0;
+            cpo::uno::Reference< css::util::XCloneable >& _rxAggregateInstance) = 0;
 
         // XComponent
         using comphelper::OPropertySetAggregationHelper::disposing;
@@ -172,10 +172,10 @@ namespace toolkit { class ScriptEventContainer; }
         ,public ::comphelper::OAggregationArrayUsageHelper< OTemplateInstanceDisambiguation< CONTROLMODEL > >
     {
     public:
-        OGeometryControlModel( const css::uno::Reference< cpo::uno::XComponentContext >& i_factory );
+        OGeometryControlModel( const cpo::uno::Reference< cpo::uno::XComponentContext >& i_factory );
 
     private:
-        OGeometryControlModel(css::uno::Reference< css::util::XCloneable >& _rxAggregateInstance);
+        OGeometryControlModel(cpo::uno::Reference< css::util::XCloneable >& _rxAggregateInstance);
 
         // OAggregationArrayUsageHelper overridables
         virtual void fillProperties(
@@ -188,7 +188,7 @@ namespace toolkit { class ScriptEventContainer; }
 
         // OGeometryControlModel_Base
         virtual rtl::Reference<OGeometryControlModel_Base> createClone_Impl(
-            css::uno::Reference< css::util::XCloneable >& _rxAggregateInstance) override;
+            cpo::uno::Reference< css::util::XCloneable >& _rxAggregateInstance) override;
 
         // XTypeProvider
         virtual cpo::uno::Sequence< sal_Int8 > getImplementationId(  ) override;
@@ -216,7 +216,7 @@ namespace toolkit { class ScriptEventContainer; }
                 (this is not checked here)
         */
         OCommonGeometryControlModel(
-                    css::uno::Reference< css::util::XCloneable >& _rxAgg,
+                    cpo::uno::Reference< css::util::XCloneable >& _rxAgg,
             OUString _aServiceSpecifier
         );
 
@@ -228,7 +228,7 @@ namespace toolkit { class ScriptEventContainer; }
 
         // OGeometryControlModel_Base
         virtual rtl::Reference<OGeometryControlModel_Base> createClone_Impl(
-            css::uno::Reference< css::util::XCloneable >& _rxAggregateInstance) override;
+            cpo::uno::Reference< css::util::XCloneable >& _rxAggregateInstance) override;
 
         // XTypeProvider
         virtual cpo::uno::Sequence< sal_Int8 > getImplementationId(  ) override;

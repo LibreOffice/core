@@ -67,6 +67,7 @@
 #include <COKit/COKit.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 // Execute Drawing-Ids
 

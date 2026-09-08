@@ -61,7 +61,7 @@ class SwInterHyphInfoTextFrame
 {
 private:
     /// output: hyphenated word
-    css::uno::Reference<css::linguistic2::XHyphenatedWord> m_xHyphWord;
+    cpo::uno::Reference<css::linguistic2::XHyphenatedWord> m_xHyphWord;
 public:
     /// input: requested range to hyphenate
     TextFrameIndex m_nStart;
@@ -75,7 +75,7 @@ public:
     void UpdateTextNodeHyphInfo(SwTextFrame const& rFrame,
             SwTextNode const& rNode, SwInterHyphInfo & o_rHyphInfo);
 
-    void SetHyphWord(const css::uno::Reference<css::linguistic2::XHyphenatedWord> &xHW)
+    void SetHyphWord(const cpo::uno::Reference<css::linguistic2::XHyphenatedWord> &xHW)
     {
         m_xHyphWord = xHW;
     }

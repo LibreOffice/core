@@ -241,8 +241,8 @@
 
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 #define MIN_ACTIONS_FOR_DIALOG  5000    ///< if there are more meta objects, we show a dialog during the break up
 
@@ -1762,7 +1762,7 @@ protected:
     uno::Reference<beans::XPropertyContainer> m_xPropertyContainer;
     sfx::ClassificationKeyCreator m_aKeyCreator;
 public:
-    ClassificationCommon(sd::DrawViewShell& rDrawViewShell, const css::uno::Reference<css::document::XDocumentProperties>& rDocProps)
+    ClassificationCommon(sd::DrawViewShell& rDrawViewShell, const cpo::uno::Reference<css::document::XDocumentProperties>& rDocProps)
         : m_rDrawViewShell(rDrawViewShell)
         , m_xDocumentProperties(rDocProps)
         , m_xPropertyContainer(m_xDocumentProperties->getUserDefinedProperties())
@@ -1828,7 +1828,7 @@ private:
     }
 
 public:
-    ClassificationCollector(sd::DrawViewShell & rDrawViewShell, const css::uno::Reference<css::document::XDocumentProperties>& rDocProps)
+    ClassificationCollector(sd::DrawViewShell & rDrawViewShell, const cpo::uno::Reference<css::document::XDocumentProperties>& rDocProps)
         : ClassificationCommon(rDrawViewShell, rDocProps)
     {}
 
@@ -1981,7 +1981,7 @@ private:
     }
 
 public:
-    ClassificationInserter(sd::DrawViewShell & rDrawViewShell, const css::uno::Reference<css::document::XDocumentProperties>& rDocProps)
+    ClassificationInserter(sd::DrawViewShell & rDrawViewShell, const cpo::uno::Reference<css::document::XDocumentProperties>& rDocProps)
         : ClassificationCommon(rDrawViewShell, rDocProps)
     {
     }
@@ -3525,7 +3525,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             if (SfxObjectShell* pObjShell = SfxObjectShell::Current())
             {
-                css::uno::Reference<css::document::XDocumentProperties> xDocProps(pObjShell->getDocProperties());
+                cpo::uno::Reference<css::document::XDocumentProperties> xDocProps(pObjShell->getDocProperties());
                 auto xDialog = std::make_shared<svx::ClassificationDialog>(GetFrameWeld(), xDocProps, false, [](){} );
                 ClassificationCollector aCollector(*this, xDocProps);
                 aCollector.collect();
@@ -4516,7 +4516,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             try
             {
-                css::uno::Reference < css::ui::dialogs::XExecutableDialog > xDialog = css::ui::dialogs::XSLTFilterDialog::create( ::comphelper::getProcessComponentContext() );
+                cpo::uno::Reference < css::ui::dialogs::XExecutableDialog > xDialog = css::ui::dialogs::XSLTFilterDialog::create( ::comphelper::getProcessComponentContext() );
                 xDialog->execute();
             }
             catch( cpo::uno::RuntimeException& )

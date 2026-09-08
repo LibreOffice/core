@@ -57,8 +57,8 @@ public:
     virtual void setVolumeDB( sal_Int16 nVolumeDB ) override;
     virtual sal_Int16 getVolumeDB() override;
     virtual css::awt::Size getPreferredPlayerWindowSize(  ) override;
-    virtual css::uno::Reference< css::media::XPlayerWindow > createPlayerWindow( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
-    virtual css::uno::Reference< css::media::XFrameGrabber > createFrameGrabber(  ) override;
+    virtual cpo::uno::Reference< css::media::XPlayerWindow > createPlayerWindow( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    virtual cpo::uno::Reference< css::media::XFrameGrabber > createFrameGrabber(  ) override;
     // XServiceInfo
     virtual OUString getImplementationName() override;
     virtual bool supportsService( const OUString& ServiceName ) override;

@@ -30,25 +30,25 @@
 class SdXMLEventsContext : public SvXMLImportContext
 {
 private:
-    css::uno::Reference< css::drawing::XShape > mxShape;
+    cpo::uno::Reference< css::drawing::XShape > mxShape;
 
 public:
 
     SdXMLEventsContext( SvXMLImport& rImport,
-        const css::uno::Reference< css::drawing::XShape >& rxShape );
+        const cpo::uno::Reference< css::drawing::XShape >& rxShape );
     virtual ~SdXMLEventsContext() override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 };
 
 struct SdXMLEventContextData
 {
-    SdXMLEventContextData(const css::uno::Reference<css::drawing::XShape>& rxShape);
+    SdXMLEventContextData(const cpo::uno::Reference<css::drawing::XShape>& rxShape);
     void ApplyProperties();
 
-    css::uno::Reference<css::drawing::XShape> mxShape;
+    cpo::uno::Reference<css::drawing::XShape> mxShape;
 
     bool mbValid;
     bool mbScript;

@@ -60,9 +60,9 @@ namespace connectivity::file
         bool hasFunctions() const;
         bool evaluateRestriction()   { return m_aInterpreter->start(); }
         void setSelectionEvaluationResult(OValueRefRow const & _pRow,const std::vector<sal_Int32>& _rColumnMapping);
-        void setOrigColumns(const css::uno::Reference< css::container::XNameAccess>& rCols);
+        void setOrigColumns(const cpo::uno::Reference< css::container::XNameAccess>& rCols);
         static OOperandAttr* createOperandAttr(sal_Int32 _nPos,
-                                                const css::uno::Reference< css::beans::XPropertySet>& _xCol);
+                                                const cpo::uno::Reference< css::beans::XPropertySet>& _xCol);
     };
 
 }

@@ -12,7 +12,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/linguistic2/ProofreadingIterator.hpp>
 #include <com/sun/star/linguistic2/XProofreadingIterator.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/XComponentContext.hpp>
 #include <vcl/svapp.hxx>
 
@@ -20,12 +20,12 @@
 
 namespace
 {
-css::uno::Reference<css::linguistic2::XProofreadingIterator> _instance;
+cpo::uno::Reference<css::linguistic2::XProofreadingIterator> _instance;
 bool disposed = false;
 
-void doDispose(css::uno::Reference<css::linguistic2::XProofreadingIterator> const& inst)
+void doDispose(cpo::uno::Reference<css::linguistic2::XProofreadingIterator> const& inst)
 {
-    css::uno::Reference<css::lang::XComponent> comp(inst, css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::lang::XComponent> comp(inst, cpo::uno::UNO_QUERY);
     if (comp.is())
     {
         SolarMutexReleaser r;
@@ -34,10 +34,10 @@ void doDispose(css::uno::Reference<css::linguistic2::XProofreadingIterator> cons
 }
 }
 
-css::uno::Reference<css::linguistic2::XProofreadingIterator>
-sw::proofreadingiterator::get(css::uno::Reference<cpo::uno::XComponentContext> const& context)
+cpo::uno::Reference<css::linguistic2::XProofreadingIterator>
+sw::proofreadingiterator::get(cpo::uno::Reference<cpo::uno::XComponentContext> const& context)
 {
-    css::uno::Reference<css::linguistic2::XProofreadingIterator> inst(
+    cpo::uno::Reference<css::linguistic2::XProofreadingIterator> inst(
         css::linguistic2::ProofreadingIterator::create(context));
     bool disp;
     {
@@ -54,7 +54,7 @@ sw::proofreadingiterator::get(css::uno::Reference<cpo::uno::XComponentContext> c
 
 void sw::proofreadingiterator::dispose()
 {
-    css::uno::Reference<css::linguistic2::XProofreadingIterator> inst;
+    cpo::uno::Reference<css::linguistic2::XProofreadingIterator> inst;
     {
         SolarMutexGuard g;
         inst = _instance;

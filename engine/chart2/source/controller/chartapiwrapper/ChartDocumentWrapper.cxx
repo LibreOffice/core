@@ -66,10 +66,11 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart;
+using namespace ::cpo;
 
 using ::cpo::uno::Any;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::UNO_QUERY_THROW;
+using ::cpo::uno::Reference;
 using ::cpo::uno::Sequence;
 using ::com::sun::star::beans::Property;
 
@@ -256,11 +257,11 @@ class WrappedDataSourceLabelsInFirstRowProperty : public WrappedProperty
 public:
     explicit WrappedDataSourceLabelsInFirstRowProperty(std::shared_ptr<Chart2ModelContact> spChart2ModelContact);
 
-    virtual void setPropertyValue( const cpo::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual void setPropertyValue( const cpo::uno::Any& rOuterValue, const cpo::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual cpo::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual cpo::uno::Any getPropertyValue( const cpo::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual cpo::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
+    virtual cpo::uno::Any getPropertyDefault( const cpo::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
 
 private: //member
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
@@ -346,11 +347,11 @@ class WrappedDataSourceLabelsInFirstColumnProperty : public WrappedProperty
 public:
     explicit WrappedDataSourceLabelsInFirstColumnProperty(std::shared_ptr<Chart2ModelContact> spChart2ModelContact);
 
-    virtual void setPropertyValue( const cpo::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual void setPropertyValue( const cpo::uno::Any& rOuterValue, const cpo::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual cpo::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual cpo::uno::Any getPropertyValue( const cpo::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual cpo::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
+    virtual cpo::uno::Any getPropertyDefault( const cpo::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
 
 private: //member
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
@@ -436,11 +437,11 @@ class WrappedHasLegendProperty : public WrappedProperty
 public:
     explicit WrappedHasLegendProperty(std::shared_ptr<Chart2ModelContact> spChart2ModelContact);
 
-    virtual void setPropertyValue( const cpo::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual void setPropertyValue( const cpo::uno::Any& rOuterValue, const cpo::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual cpo::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual cpo::uno::Any getPropertyValue( const cpo::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual cpo::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
+    virtual cpo::uno::Any getPropertyDefault( const cpo::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
 
 private: //member
     std::shared_ptr< Chart2ModelContact > m_spChart2ModelContact;
@@ -524,11 +525,11 @@ class WrappedHasMainTitleProperty : public WrappedProperty
 public:
     explicit WrappedHasMainTitleProperty(std::shared_ptr<Chart2ModelContact> spChart2ModelContact);
 
-    virtual void setPropertyValue( const cpo::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual void setPropertyValue( const cpo::uno::Any& rOuterValue, const cpo::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual cpo::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual cpo::uno::Any getPropertyValue( const cpo::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual cpo::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
+    virtual cpo::uno::Any getPropertyDefault( const cpo::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
 
 private: //member
     std::shared_ptr< Chart2ModelContact > m_spChart2ModelContact;
@@ -590,11 +591,11 @@ class WrappedHasSubTitleProperty : public WrappedProperty
 public:
     explicit WrappedHasSubTitleProperty(std::shared_ptr<Chart2ModelContact> spChart2ModelContact);
 
-    virtual void setPropertyValue( const cpo::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual void setPropertyValue( const cpo::uno::Any& rOuterValue, const cpo::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual cpo::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual cpo::uno::Any getPropertyValue( const cpo::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual cpo::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
+    virtual cpo::uno::Any getPropertyDefault( const cpo::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
 
 private: //member
     std::shared_ptr< Chart2ModelContact > m_spChart2ModelContact;
@@ -656,11 +657,11 @@ class WrappedNullDateProperty : public WrappedProperty
 public:
     explicit WrappedNullDateProperty(std::shared_ptr<Chart2ModelContact> spChart2ModelContact);
 
-    virtual void setPropertyValue( const cpo::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual void setPropertyValue( const cpo::uno::Any& rOuterValue, const cpo::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual cpo::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual cpo::uno::Any getPropertyValue( const cpo::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual cpo::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
+    virtual cpo::uno::Any getPropertyDefault( const cpo::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
 
 private: //member
     std::shared_ptr< Chart2ModelContact > m_spChart2ModelContact;

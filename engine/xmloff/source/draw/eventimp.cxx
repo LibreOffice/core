@@ -36,7 +36,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::xml;
 using namespace ::com::sun::star::xml::sax;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::beans;
@@ -83,9 +83,9 @@ public:
 
     SdXMLEventContext( SvXMLImport& rImport, sal_Int32 nElement, const Reference< XFastAttributeList>& xAttrList, const Reference< XShape >& rxShape );
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
     virtual void endFastElement(sal_Int32 nElement) override;
 };
 
@@ -212,9 +212,9 @@ SdXMLEventContext::SdXMLEventContext( SvXMLImport& rImp,
         rImp.NotifyMacroEventRead();
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLEventContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLEventContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     if( nElement == XML_ELEMENT(PRESENTATION, XML_SOUND) )
         return new XMLEventSoundContext( GetImport(), xAttrList, this );
@@ -443,9 +443,9 @@ SdXMLEventsContext::~SdXMLEventsContext()
 {
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLEventsContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLEventsContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     return new SdXMLEventContext( GetImport(), nElement, xAttrList, mxShape );
 }

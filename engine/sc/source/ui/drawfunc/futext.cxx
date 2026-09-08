@@ -99,7 +99,7 @@ static void lcl_UpdateHyphenator( Outliner& rOutliner, const SdrObject* pObj )
 {
     // use hyphenator only if hyphenation attribute is set
     if ( pObj && pObj->GetMergedItem(EE_PARA_HYPHENATE).GetValue() ) {
-            css::uno::Reference<css::linguistic2::XHyphenator> xHyphenator( LinguMgr::GetHyphenator() );
+            cpo::uno::Reference<css::linguistic2::XHyphenator> xHyphenator( LinguMgr::GetHyphenator() );
             rOutliner.SetHyphenator( xHyphenator );
     }
 }

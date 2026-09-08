@@ -23,7 +23,7 @@
 #include <xmlscript/xmlns.h>
 #include <com/sun/star/xml/sax/XWriter.hpp>
 
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace com::sun::star;
 
 namespace xmlscript
@@ -89,7 +89,7 @@ exportLibraryContainer(
 
 void
 exportLibrary(
-    css::uno::Reference< css::xml::sax::XWriter > const & xOut,
+    cpo::uno::Reference< css::xml::sax::XWriter > const & xOut,
     const LibDescriptor& rLib )
 {
     xOut->startDocument();

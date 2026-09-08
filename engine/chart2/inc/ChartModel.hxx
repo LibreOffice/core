@@ -149,32 +149,32 @@ private:
 
     OUString m_aResource;
     cpo::uno::Sequence< css::beans::PropertyValue >   m_aMediaDescriptor;
-    css::uno::Reference< css::document::XDocumentProperties > m_xDocumentProperties;
+    cpo::uno::Reference< css::document::XDocumentProperties > m_xDocumentProperties;
     ::rtl::Reference< UndoManager >                    m_pUndoManager;
 
     ::comphelper::OInterfaceContainerHelper2           m_aControllers;
-    css::uno::Reference< css::frame::XController >     m_xCurrentController;
+    cpo::uno::Reference< css::frame::XController >     m_xCurrentController;
     sal_uInt16                                         m_nControllerLockCount;
 
-    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
     rtl::Reference< wrapper::ChartDocumentWrapper >    m_xOldModelAgg;
 
-    css::uno::Reference< css::embed::XStorage >        m_xStorage;
+    cpo::uno::Reference< css::embed::XStorage >        m_xStorage;
     //the content of this should be always synchronized with the current m_xViewWindow size. The variable is necessary to hold the information as long as no view window exists.
     css::awt::Size                                     m_aVisualAreaSize;
-    css::uno::Reference< css::frame::XModel >          m_xParent;
+    cpo::uno::Reference< css::frame::XModel >          m_xParent;
     rtl::Reference< ::chart::RangeHighlighter >        m_xRangeHighlighter;
-    css::uno::Reference<css::awt::XRequestCallback>    m_xPopupRequest;
+    cpo::uno::Reference<css::awt::XRequestCallback>    m_xPopupRequest;
     std::vector< GraphicObject >                            m_aGraphicObjectVector;
 
-    css::uno::Reference< css::chart2::data::XDataProvider >   m_xDataProvider;
+    cpo::uno::Reference< css::chart2::data::XDataProvider >   m_xDataProvider;
     /** is only valid if m_xDataProvider is set. If m_xDataProvider is set to an
         external data provider this reference must be set to 0
     */
     rtl::Reference< InternalDataProvider > m_xInternalDataProvider;
 
     rtl::Reference< SvNumberFormatsSupplierObj > m_xOwnNumberFormatsSupplier;
-    css::uno::Reference< css::util::XNumberFormatsSupplier >
+    cpo::uno::Reference< css::util::XNumberFormatsSupplier >
                                 m_xNumberFormatsSupplier;
     std::unique_ptr< SvNumberFormatter > m_apSvNumberFormatter; // #i113784# avoid memory leak
 
@@ -208,10 +208,10 @@ private:
     OUString impl_g_getLocation();
 
     bool
-        impl_isControllerConnected( const css::uno::Reference< css::frame::XController >& xController );
+        impl_isControllerConnected( const cpo::uno::Reference< css::frame::XController >& xController );
 
     /// @throws cpo::uno::RuntimeException
-    css::uno::Reference< css::frame::XController >
+    cpo::uno::Reference< css::frame::XController >
         impl_getCurrentController();
 
     /// @throws cpo::uno::RuntimeException
@@ -226,17 +226,17 @@ private:
 
     void impl_store(
         const cpo::uno::Sequence< css::beans::PropertyValue >& rMediaDescriptor,
-        const css::uno::Reference< css::embed::XStorage > & xStorage );
+        const cpo::uno::Reference< css::embed::XStorage > & xStorage );
     void impl_load(
         const cpo::uno::Sequence< css::beans::PropertyValue >& rMediaDescriptor,
-        const css::uno::Reference< css::embed::XStorage >& xStorage );
+        const cpo::uno::Reference< css::embed::XStorage >& xStorage );
     void impl_loadGraphics(
-        const css::uno::Reference< css::embed::XStorage >& xStorage );
-    css::uno::Reference< css::document::XFilter >
+        const cpo::uno::Reference< css::embed::XStorage >& xStorage );
+    cpo::uno::Reference< css::document::XFilter >
         impl_createFilter( const cpo::uno::Sequence< css::beans::PropertyValue > & rMediaDescriptor );
 
     rtl::Reference< ::chart::ChartTypeTemplate > impl_createDefaultChartTypeTemplate();
-    css::uno::Reference< css::chart2::data::XDataSource > impl_createDefaultData();
+    cpo::uno::Reference< css::chart2::data::XDataSource > impl_createDefaultData();
 
     void impl_adjustAdditionalShapesPositionAndSize(
         const css::awt::Size& aVisualAreaSize );
@@ -245,7 +245,7 @@ private:
 
 public:
     ChartModel() = delete;
-    ChartModel(css::uno::Reference< cpo::uno::XComponentContext > xContext);
+    ChartModel(cpo::uno::Reference< cpo::uno::XComponentContext > xContext);
     explicit ChartModel( const ChartModel & rOther );
     virtual ~ChartModel() override;
 
@@ -271,10 +271,10 @@ public:
         getArgs() override;
 
     virtual void
-        connectController( const css::uno::Reference< css::frame::XController >& xController ) override;
+        connectController( const cpo::uno::Reference< css::frame::XController >& xController ) override;
 
     virtual void
-        disconnectController( const css::uno::Reference< css::frame::XController >& xController ) override;
+        disconnectController( const cpo::uno::Reference< css::frame::XController >& xController ) override;
 
     virtual void
         lockControllers() override;
@@ -285,13 +285,13 @@ public:
     virtual bool
         hasControllersLocked() override;
 
-    virtual css::uno::Reference< css::frame::XController >
+    virtual cpo::uno::Reference< css::frame::XController >
         getCurrentController() override;
 
     virtual void
-        setCurrentController( const css::uno::Reference< css::frame::XController >& xController ) override;
+        setCurrentController( const cpo::uno::Reference< css::frame::XController >& xController ) override;
 
-    virtual css::uno::Reference< cpo::uno::XInterface >
+    virtual cpo::uno::Reference< cpo::uno::XInterface >
         getCurrentSelection() override;
 
     // css::lang::XComponent (base of XModel)
@@ -299,10 +299,10 @@ public:
         dispose() override;
 
     virtual void
-        addEventListener( const css::uno::Reference< css::lang::XEventListener > & xListener ) override;
+        addEventListener( const cpo::uno::Reference< css::lang::XEventListener > & xListener ) override;
 
     virtual void
-        removeEventListener( const css::uno::Reference< css::lang::XEventListener > & xListener ) override;
+        removeEventListener( const cpo::uno::Reference< css::lang::XEventListener > & xListener ) override;
 
     // css::util::XCloseable
     virtual void
@@ -310,10 +310,10 @@ public:
 
     // css::util::XCloseBroadcaster (base of XCloseable)
     virtual void
-        addCloseListener( const css::uno::Reference< css::util::XCloseListener > & xListener ) override;
+        addCloseListener( const cpo::uno::Reference< css::util::XCloseListener > & xListener ) override;
 
     virtual void
-        removeCloseListener( const css::uno::Reference< css::util::XCloseListener > & xListener ) override;
+        removeCloseListener( const cpo::uno::Reference< css::util::XCloseListener > & xListener ) override;
 
     // css::frame::XStorable2 (extension of XStorable)
     virtual void storeSelf(
@@ -349,10 +349,10 @@ public:
 
     // css::util::XModifyBroadcaster (base of XModifiable)
     virtual void
-        addModifyListener( const css::uno::Reference< css::util::XModifyListener >& xListener ) override;
+        addModifyListener( const cpo::uno::Reference< css::util::XModifyListener >& xListener ) override;
 
     virtual void
-        removeModifyListener( const css::uno::Reference< css::util::XModifyListener >& xListener ) override;
+        removeModifyListener( const cpo::uno::Reference< css::util::XModifyListener >& xListener ) override;
 
     // ____ XModifyListener ____
     virtual void modified(
@@ -374,49 +374,49 @@ public:
         getTypes() override;
 
     // ____ document::XDocumentPropertiesSupplier ____
-    virtual css::uno::Reference< css::document::XDocumentProperties >
+    virtual cpo::uno::Reference< css::document::XDocumentProperties >
         getDocumentProperties(  ) override;
 
     // ____ document::XUndoManagerSupplier ____
-    virtual css::uno::Reference< css::document::XUndoManager >
+    virtual cpo::uno::Reference< css::document::XUndoManager >
         getUndoManager(  ) override;
 
     // css::chart2::XChartDocument
-    virtual css::uno::Reference< css::chart2::XDiagram >
+    virtual cpo::uno::Reference< css::chart2::XDiagram >
         getFirstDiagram() override;
     virtual void setFirstDiagram(
-        const css::uno::Reference< css::chart2::XDiagram >& xDiagram ) override;
+        const cpo::uno::Reference< css::chart2::XDiagram >& xDiagram ) override;
     virtual void
         createInternalDataProvider( bool bCloneExistingData ) override;
     virtual bool hasInternalDataProvider() override;
-    virtual css::uno::Reference< css::chart2::data::XDataProvider >
+    virtual cpo::uno::Reference< css::chart2::data::XDataProvider >
         getDataProvider() override;
     virtual void
-        setChartTypeManager( const css::uno::Reference< css::chart2::XChartTypeManager >& xNewManager ) override;
-    virtual css::uno::Reference< css::chart2::XChartTypeManager >
+        setChartTypeManager( const cpo::uno::Reference< css::chart2::XChartTypeManager >& xNewManager ) override;
+    virtual cpo::uno::Reference< css::chart2::XChartTypeManager >
         getChartTypeManager() override;
-    virtual css::uno::Reference< css::chart2::XChartStyle> getStyles() override;
-    virtual css::uno::Reference< css::chart2::XChartColorStyle> getColorStyles() override;
-    virtual css::uno::Reference< css::beans::XPropertySet >
+    virtual cpo::uno::Reference< css::chart2::XChartStyle> getStyles() override;
+    virtual cpo::uno::Reference< css::chart2::XChartColorStyle> getColorStyles() override;
+    virtual cpo::uno::Reference< css::beans::XPropertySet >
         getPageBackground() override;
 
     virtual void createDefaultChart() override;
 
     // ____ XDataReceiver (public API) ____
     virtual void
-        attachDataProvider( const css::uno::Reference< css::chart2::data::XDataProvider >& xProvider ) override;
+        attachDataProvider( const cpo::uno::Reference< css::chart2::data::XDataProvider >& xProvider ) override;
     virtual void setArguments(
         const cpo::uno::Sequence< css::beans::PropertyValue >& aArguments ) override;
     virtual cpo::uno::Sequence< OUString > getUsedRangeRepresentations() override;
-    virtual css::uno::Reference< css::chart2::data::XDataSource > getUsedData() override;
-    virtual void attachNumberFormatsSupplier( const css::uno::Reference<
+    virtual cpo::uno::Reference< css::chart2::data::XDataSource > getUsedData() override;
+    virtual void attachNumberFormatsSupplier( const cpo::uno::Reference<
         css::util::XNumberFormatsSupplier >& xSupplier ) override;
-    virtual css::uno::Reference< css::chart2::data::XRangeHighlighter > getRangeHighlighter() override;
-    virtual css::uno::Reference<css::awt::XRequestCallback> getPopupRequest() override;
+    virtual cpo::uno::Reference< css::chart2::data::XRangeHighlighter > getRangeHighlighter() override;
+    virtual cpo::uno::Reference<css::awt::XRequestCallback> getPopupRequest() override;
 
     // ____ XTitled ____
-    virtual css::uno::Reference< css::chart2::XTitle > getTitleObject() override;
-    virtual void setTitleObject( const css::uno::Reference< css::chart2::XTitle >& Title ) override;
+    virtual cpo::uno::Reference< css::chart2::XTitle > getTitleObject() override;
+    virtual void setTitleObject( const cpo::uno::Reference< css::chart2::XTitle >& Title ) override;
 
     // ____ XInterface (for old API wrapper) ____
     virtual cpo::uno::Any queryInterface( const cpo::uno::Type& aType ) override;
@@ -426,7 +426,7 @@ public:
     virtual void load( const cpo::uno::Sequence< css::beans::PropertyValue >& rMediaDescriptor ) override;
 
     // ____ XCloneable ____
-    virtual css::uno::Reference< css::util::XCloneable > createClone() override;
+    virtual cpo::uno::Reference< css::util::XCloneable > createClone() override;
 
     // ____ XVisualObject ____
     virtual void setVisualAreaSize(
@@ -440,9 +440,9 @@ public:
         ::sal_Int64 nAspect ) override;
 
     // ____ XMultiServiceFactory ____
-    virtual css::uno::Reference< cpo::uno::XInterface >
+    virtual cpo::uno::Reference< cpo::uno::XInterface >
         createInstance( const OUString& aServiceSpecifier ) override;
-    virtual css::uno::Reference< cpo::uno::XInterface >
+    virtual cpo::uno::Reference< cpo::uno::XInterface >
         createInstanceWithArguments( const OUString& ServiceSpecifier
                                    , const cpo::uno::Sequence< cpo::uno::Any >& Arguments ) override;
     virtual cpo::uno::Sequence< OUString >
@@ -450,34 +450,34 @@ public:
 
     // ____ XStorageBasedDocument ____
     virtual void loadFromStorage(
-        const css::uno::Reference< css::embed::XStorage >& xStorage,
+        const cpo::uno::Reference< css::embed::XStorage >& xStorage,
         const cpo::uno::Sequence< css::beans::PropertyValue >& rMediaDescriptor ) override;
     virtual void storeToStorage(
-        const css::uno::Reference< css::embed::XStorage >& xStorage,
+        const cpo::uno::Reference< css::embed::XStorage >& xStorage,
         const cpo::uno::Sequence< css::beans::PropertyValue >& rMediaDescriptor ) override;
     virtual void switchToStorage(
-        const css::uno::Reference< css::embed::XStorage >& xStorage ) override;
-    virtual css::uno::Reference< css::embed::XStorage > getDocumentStorage() override;
+        const cpo::uno::Reference< css::embed::XStorage >& xStorage ) override;
+    virtual cpo::uno::Reference< css::embed::XStorage > getDocumentStorage() override;
     virtual void addStorageChangeListener(
-        const css::uno::Reference< css::document::XStorageChangeListener >& xListener ) override;
+        const cpo::uno::Reference< css::document::XStorageChangeListener >& xListener ) override;
     virtual void removeStorageChangeListener(
-        const css::uno::Reference< css::document::XStorageChangeListener >& xListener ) override;
+        const cpo::uno::Reference< css::document::XStorageChangeListener >& xListener ) override;
 
     // for SvNumberFormatsSupplierObj
     // ____ XUnoTunnel ___
     virtual ::sal_Int64 getSomething( const cpo::uno::Sequence< ::sal_Int8 >& aIdentifier ) override;
 
     // ____ XNumberFormatsSupplier ____
-    virtual css::uno::Reference< css::beans::XPropertySet > getNumberFormatSettings() override;
-    virtual css::uno::Reference< css::util::XNumberFormats > getNumberFormats() override;
+    virtual cpo::uno::Reference< css::beans::XPropertySet > getNumberFormatSettings() override;
+    virtual cpo::uno::Reference< css::util::XNumberFormats > getNumberFormats() override;
 
     // ____ XChild ____
-    virtual css::uno::Reference< cpo::uno::XInterface > getParent() override;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > getParent() override;
     virtual void setParent(
-        const css::uno::Reference< cpo::uno::XInterface >& Parent ) override;
+        const cpo::uno::Reference< cpo::uno::XInterface >& Parent ) override;
 
     // ____ XDataSource ____ allows access to the currently used data and data ranges
-    virtual cpo::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > getDataSequences() override;
+    virtual cpo::uno::Sequence< cpo::uno::Reference< css::chart2::data::XLabeledDataSequence > > getDataSequences() override;
 
     // XUpdatable
     virtual void update() override;
@@ -489,7 +489,7 @@ public:
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
     // normal methods
-    css::uno::Reference< css::util::XNumberFormatsSupplier > const &
+    cpo::uno::Reference< css::util::XNumberFormatsSupplier > const &
         getNumberFormatsSupplier();
 
     const rtl::Reference<ChartView> & createChartView();

@@ -48,6 +48,7 @@
 #include <memory>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 GalleryTheme::GalleryTheme( Gallery* pGallery, GalleryThemeEntry* pThemeEntry )
     : mpParent(pGallery)

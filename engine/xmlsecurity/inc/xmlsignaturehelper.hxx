@@ -63,7 +63,7 @@ namespace com::sun::star::xml::sax { class XWriter; }
 class XMLSignatureHelper
 {
 private:
-    css::uno::Reference< cpo::uno::XComponentContext > mxCtx;
+    cpo::uno::Reference< cpo::uno::XComponentContext > mxCtx;
     rtl::Reference<UriBindingHelper> mxUriBinding;
 
     rtl::Reference<XSecController> mpXSecController;
@@ -75,7 +75,7 @@ private:
     XMLSignatureHelper(const XMLSignatureHelper&) = delete;
 
 public:
-    XMLSignatureHelper(const css::uno::Reference< cpo::uno::XComponentContext >& mrCtx );
+    XMLSignatureHelper(const cpo::uno::Reference< cpo::uno::XComponentContext >& mrCtx );
     ~XMLSignatureHelper();
 
     void StartVerifySignatureElement();
@@ -83,7 +83,7 @@ public:
     // Set the storage which should be used by the default UriBinding
     // Must be set before StartMission().
     //sODFVersion indicates  the ODF version
-    XMLSECURITY_DLLPUBLIC void SetStorage( const css::uno::Reference < css::embed::XStorage >& rxStorage, std::u16string_view sODFVersion, const css::uno::Reference<css::io::XStream>& xScriptStream = css::uno::Reference<css::io::XStream>() );
+    XMLSECURITY_DLLPUBLIC void SetStorage( const cpo::uno::Reference < css::embed::XStorage >& rxStorage, std::u16string_view sODFVersion, const cpo::uno::Reference<css::io::XStream>& xScriptStream = cpo::uno::Reference<css::io::XStream>() );
 
                 // Argument for the Link is a uno::Reference< xml::sax::XAttributeList >*
                 // Return 1 to verify, 0 to skip.
@@ -98,13 +98,13 @@ public:
     /// @return
     ///    A sequence with the signing certificate at the back on success.
     ///    An empty sequence on failure.
-    std::vector<css::uno::Reference<css::security::XCertificate>>
+    std::vector<cpo::uno::Reference<css::security::XCertificate>>
     CheckAndUpdateSignatureInformation(
-        css::uno::Reference<css::xml::crypto::XSecurityEnvironment> const& xSecEnv,
+        cpo::uno::Reference<css::xml::crypto::XSecurityEnvironment> const& xSecEnv,
         SignatureInformation const& rInfo);
 
                 // See XSecController for documentation
-    void        StartMission(const css::uno::Reference<css::xml::crypto::XXMLSecurityContext>& xSecurityContext);
+    void        StartMission(const cpo::uno::Reference<css::xml::crypto::XXMLSecurityContext>& xSecurityContext);
     void        EndMission();
     sal_Int32   GetNewSecurityId();
     /** sets data that describes the certificate.
@@ -136,38 +136,38 @@ public:
     void SetSignatureLineId(sal_Int32 nSecurityId, const OUString& rSignatureLineId);
     void
     SetSignatureLineValidGraphic(sal_Int32 nSecurityId,
-                                 const css::uno::Reference<css::graphic::XGraphic>& xValidGraphic);
+                                 const cpo::uno::Reference<css::graphic::XGraphic>& xValidGraphic);
     void SetSignatureLineInvalidGraphic(
-        sal_Int32 nSecurityId, const css::uno::Reference<css::graphic::XGraphic>& xInvalidGraphic);
+        sal_Int32 nSecurityId, const cpo::uno::Reference<css::graphic::XGraphic>& xInvalidGraphic);
 
     void        AddForSigning( sal_Int32 securityId, const OUString& uri, bool bBinary, bool bXAdESCompliantIfODF );
-    void        CreateAndWriteSignature( const css::uno::Reference< css::xml::sax::XDocumentHandler >& xDocumentHandler, bool bXAdESCompliantIfODF );
-    bool        ReadAndVerifySignature( const css::uno::Reference< css::io::XInputStream >& xInputStream );
+    void        CreateAndWriteSignature( const cpo::uno::Reference< css::xml::sax::XDocumentHandler >& xDocumentHandler, bool bXAdESCompliantIfODF );
+    bool        ReadAndVerifySignature( const cpo::uno::Reference< css::io::XInputStream >& xInputStream );
 
     // MT: ??? I think only for adding/removing, not for new signatures...
     // MM: Yes, but if you want to insert a new signature into an existing signature file, those function
     //     will be very useful, see Mission 3 in the new "multisigdemo" program   :-)
-    css::uno::Reference< css::xml::sax::XWriter> CreateDocumentHandlerWithHeader( const css::uno::Reference< css::io::XOutputStream >& xOutputStream );
-    static void CloseDocumentHandler( const css::uno::Reference< css::xml::sax::XDocumentHandler>& xDocumentHandler );
+    cpo::uno::Reference< css::xml::sax::XWriter> CreateDocumentHandlerWithHeader( const cpo::uno::Reference< css::io::XOutputStream >& xOutputStream );
+    static void CloseDocumentHandler( const cpo::uno::Reference< css::xml::sax::XDocumentHandler>& xDocumentHandler );
     static void ExportSignature(
-        const css::uno::Reference< css::xml::sax::XDocumentHandler >& xDocumentHandler,
+        const cpo::uno::Reference< css::xml::sax::XDocumentHandler >& xDocumentHandler,
         const SignatureInformation& signatureInfo,
         bool bXAdESCompliantIfODF );
 
     /// Read and verify OOXML signatures.
-    bool ReadAndVerifySignatureStorage(const css::uno::Reference<css::embed::XStorage>& xStorage, bool bCacheLastSignature = true);
+    bool ReadAndVerifySignatureStorage(const cpo::uno::Reference<css::embed::XStorage>& xStorage, bool bCacheLastSignature = true);
     /// Read and verify a single OOXML signature.
-    bool ReadAndVerifySignatureStorageStream(const css::uno::Reference<css::io::XInputStream>& xInputStream);
+    bool ReadAndVerifySignatureStorageStream(const cpo::uno::Reference<css::io::XInputStream>& xInputStream);
     /// Adds or removes an OOXML digital signature relation to _rels/.rels if there wasn't any before.
-    void EnsureSignaturesRelation(const css::uno::Reference<css::embed::XStorage>& xStorage, bool bAdd);
+    void EnsureSignaturesRelation(const cpo::uno::Reference<css::embed::XStorage>& xStorage, bool bAdd);
     /// Given that xStorage is an OOXML _xmlsignatures storage, create origin.sigs and its relations.
-    void ExportSignatureRelations(const css::uno::Reference<css::embed::XStorage>& xStorage, int nSignatureCount);
+    void ExportSignatureRelations(const cpo::uno::Reference<css::embed::XStorage>& xStorage, int nSignatureCount);
     /// Given that xSignatureStorage is an OOXML _xmlsignatures storage, create and write a new signature.
-    void CreateAndWriteOOXMLSignature(const css::uno::Reference<css::embed::XStorage>& xRootStorage, const css::uno::Reference<css::embed::XStorage>& xSignatureStorage, int nSignatureIndex);
+    void CreateAndWriteOOXMLSignature(const cpo::uno::Reference<css::embed::XStorage>& xRootStorage, const cpo::uno::Reference<css::embed::XStorage>& xSignatureStorage, int nSignatureIndex);
     /// Similar to CreateAndWriteOOXMLSignature(), but used to write the signature to the persistent storage, not the temporary one.
-    void ExportOOXMLSignature(const css::uno::Reference<css::embed::XStorage>& xRootStorage, const css::uno::Reference<css::embed::XStorage>& xSignatureStorage, const SignatureInformation& rInformation, int nSignatureIndex);
+    void ExportOOXMLSignature(const cpo::uno::Reference<css::embed::XStorage>& xRootStorage, const cpo::uno::Reference<css::embed::XStorage>& xSignatureStorage, const SignatureInformation& rInformation, int nSignatureIndex);
     /// Given that xStorage is an OOXML root storage, advertise signatures in its [Content_Types].xml stream.
-    void ExportSignatureContentTypes(const css::uno::Reference<css::embed::XStorage>& xStorage, int nSignatureCount);
+    void ExportSignatureContentTypes(const cpo::uno::Reference<css::embed::XStorage>& xStorage, int nSignatureCount);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -293,8 +293,8 @@ public:
         return static_cast<const T*>(GetItem(rSet, sal_uInt16(nSlot), bDeep));
     }
 
-    void SetFrame(const css::uno::Reference< css::frame::XFrame >& xFrame);
-    css::uno::Reference< css::frame::XFrame > GetFrame() const;
+    void SetFrame(const cpo::uno::Reference< css::frame::XFrame >& xFrame);
+    cpo::uno::Reference< css::frame::XFrame > GetFrame() const;
 
     const SfxItemSet* GetDialogExampleSet() const;
 

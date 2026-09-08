@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <framework/ConfigurationChangeEvent.hxx>
 #include <rtl/ref.hxx>
 #include <unordered_map>

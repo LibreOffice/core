@@ -19,7 +19,7 @@
 #ifndef INCLUDED_VBAHELPER_VBAPAGESETUPBASE_HXX
 #define INCLUDED_VBAHELPER_VBAPAGESETUPBASE_HXX
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <ooo/vba/XPageSetupBase.hpp>
 #include <sal/types.h>
 #include <vbahelper/vbadllapi.h>
@@ -41,13 +41,13 @@ typedef InheritedHelperInterfaceWeakImpl< ooo::vba::XPageSetupBase > VbaPageSetu
 class VBAHELPER_DLLPUBLIC VbaPageSetupBase :  public VbaPageSetupBase_BASE
 {
 protected:
-    css::uno::Reference< css::beans::XPropertySet > mxPageProps;
+    cpo::uno::Reference< css::beans::XPropertySet > mxPageProps;
     sal_Int32 mnOrientLandscape;
     sal_Int32 mnOrientPortrait;
 
     /// @throws cpo::uno::RuntimeException
-    VbaPageSetupBase( const css::uno::Reference< ov::XHelperInterface >& xParent,
-                    const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
+    VbaPageSetupBase( const cpo::uno::Reference< ov::XHelperInterface >& xParent,
+                    const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext );
 public:
 
     // Attribute

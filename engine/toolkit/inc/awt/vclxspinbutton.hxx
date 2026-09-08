@@ -56,8 +56,8 @@ namespace toolkit
         void dispose( ) override;
 
         // XSpinValue
-        virtual void addAdjustmentListener( const css::uno::Reference< css::awt::XAdjustmentListener >& listener ) override;
-        virtual void removeAdjustmentListener( const css::uno::Reference< css::awt::XAdjustmentListener >& listener ) override;
+        virtual void addAdjustmentListener( const cpo::uno::Reference< css::awt::XAdjustmentListener >& listener ) override;
+        virtual void removeAdjustmentListener( const cpo::uno::Reference< css::awt::XAdjustmentListener >& listener ) override;
         virtual void setValue( sal_Int32 n ) override;
         virtual void setValues( sal_Int32 minValue, sal_Int32 maxValue, sal_Int32 currentValue ) override;
         virtual sal_Int32 getValue(  ) override;

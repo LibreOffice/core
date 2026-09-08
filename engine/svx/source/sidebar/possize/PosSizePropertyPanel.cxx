@@ -51,7 +51,7 @@
 #include <bitmaps.hlst>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 constexpr OUString USERITEM_NAME = u"FitItem"_ustr;
@@ -60,9 +60,9 @@ namespace svx::sidebar {
 
 PosSizePropertyPanel::PosSizePropertyPanel(
     weld::Widget* pParent,
-    const css::uno::Reference<css::frame::XFrame>& rxFrame,
+    const cpo::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings,
-    css::uno::Reference<css::ui::XSidebar> xSidebar)
+    cpo::uno::Reference<css::ui::XSidebar> xSidebar)
 :   PanelLayout(pParent, u"PosSizePropertyPanel"_ustr, u"svx/ui/sidebarpossize.ui"_ustr),
     mxFtPosX(m_xBuilder->weld_label(u"horizontallabel"_ustr)),
     mxMtrPosX(m_xBuilder->weld_metric_spin_button(u"horizontalpos"_ustr, FieldUnit::CM)),
@@ -259,9 +259,9 @@ void PosSizePropertyPanel::Initialize()
 
 std::unique_ptr<PanelLayout> PosSizePropertyPanel::Create (
     weld::Widget* pParent,
-    const css::uno::Reference<css::frame::XFrame>& rxFrame,
+    const cpo::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings,
-    const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
+    const cpo::uno::Reference<css::ui::XSidebar>& rxSidebar)
 {
     if (pParent == nullptr)
         throw lang::IllegalArgumentException(u"no parent Window given to PosSizePropertyPanel::Create"_ustr, nullptr, 0);

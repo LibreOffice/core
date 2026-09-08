@@ -20,7 +20,7 @@ class HistogramChartTypeTemplate : public ChartTypeTemplate, public ::property::
 {
 public:
     explicit HistogramChartTypeTemplate(
-        css::uno::Reference<cpo::uno::XComponentContext> const& xContext,
+        cpo::uno::Reference<cpo::uno::XComponentContext> const& xContext,
         const OUString& rServiceName, StackMode eStackMode, sal_Int32 nDim = 2);
 
     /// merge XInterface implementations
@@ -34,7 +34,7 @@ protected:
     virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
     // ____ XPropertySet ____
-    virtual css::uno::Reference<css::beans::XPropertySetInfo> getPropertySetInfo() override;
+    virtual cpo::uno::Reference<css::beans::XPropertySetInfo> getPropertySetInfo() override;
 
     // ____ ChartTypeTemplate ____
     virtual rtl::Reference<::chart::ChartType> getChartTypeForNewSeries2(

@@ -40,7 +40,7 @@ void checkIndex_Impl(sal_Int32 _nIndex, std::u16string_view _sText)
 }
 using namespace ::com::sun::star::lang;
 using namespace comphelper;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using ::com::sun::star::accessibility::XAccessible;
 using namespace ::com::sun::star::accessibility;
 using namespace ::vcl;
@@ -48,7 +48,7 @@ using namespace ::vcl;
 // = AccessibleGridControlCell
 
 AccessibleGridControlCell::AccessibleGridControlCell(
-    const css::uno::Reference<css::accessibility::XAccessible>& _rxParent,
+    const cpo::uno::Reference<css::accessibility::XAccessible>& _rxParent,
     svt::table::TableControl& _rTable, sal_Int32 _nRowPos, sal_uInt16 _nColPos,
     AccessibleTableControlObjType _eType)
     : AccessibleGridControlBase(_rxParent, _rTable, _eType)
@@ -96,7 +96,7 @@ void AccessibleGridControlTableCell::implGetSelection(sal_Int32& nStartIndex, sa
 }
 
 AccessibleGridControlTableCell::AccessibleGridControlTableCell(
-    const css::uno::Reference<XAccessible>& _rxParent, svt::table::TableControl& _rTable,
+    const cpo::uno::Reference<XAccessible>& _rxParent, svt::table::TableControl& _rTable,
     sal_Int32 _nRowPos, sal_uInt16 _nColPos)
     : ImplInheritanceHelper(_rxParent, _rTable, _nRowPos, _nColPos,
                             AccessibleTableControlObjType::TABLECELL)
@@ -135,7 +135,7 @@ OUString AccessibleGridControlTableCell::getImplementationName()
 sal_Int64 AccessibleGridControlTableCell::getAccessibleChildCount() { return 0; }
 
 /** @return  The css::accessibility::XAccessible interface of the specified child. */
-css::uno::Reference<css::accessibility::XAccessible>
+cpo::uno::Reference<css::accessibility::XAccessible>
     AccessibleGridControlTableCell::getAccessibleChild(sal_Int64)
 {
     throw css::lang::IndexOutOfBoundsException();

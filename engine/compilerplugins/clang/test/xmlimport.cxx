@@ -14,7 +14,7 @@
 // Cannot include this, cannot be found
 //#include <xmloff/xmlictxt.hxx>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <rtl/ref.hxx>
 
 namespace com::sun::star::xml::sax
@@ -33,16 +33,16 @@ public:
     virtual void startFastElement() {}
     virtual void endFastElement() {}
     virtual void characters(const OUString&) {}
-    virtual css::uno::Reference<css::xml::sax::XFastContextHandler> createFastChildContext()
+    virtual cpo::uno::Reference<css::xml::sax::XFastContextHandler> createFastChildContext()
     {
         return nullptr;
     }
-    virtual css::uno::Reference<css::xml::sax::XFastContextHandler> createUnknownChildContext()
+    virtual cpo::uno::Reference<css::xml::sax::XFastContextHandler> createUnknownChildContext()
     {
         return nullptr;
     }
 
-    virtual void StartElement(const css::uno::Reference<css::xml::sax::XAttributeList>&) {}
+    virtual void StartElement(const cpo::uno::Reference<css::xml::sax::XAttributeList>&) {}
     virtual void EndElement() {}
     virtual void Characters(const OUString&) {}
     virtual SvXMLImportContextRef CreateChildContext() { return nullptr; }
@@ -59,7 +59,7 @@ public:
     // expected-error@+1 {{cannot override both startFastElement and StartElement [loplugin:xmlimport]}}
     virtual void startFastElement() override { xxx(); }
     // expected-error@+1 {{cannot override both startFastElement and StartElement [loplugin:xmlimport]}}
-    virtual void StartElement(const css::uno::Reference<css::xml::sax::XAttributeList>&) override
+    virtual void StartElement(const cpo::uno::Reference<css::xml::sax::XAttributeList>&) override
     {
         xxx();
     }
@@ -101,13 +101,13 @@ public:
         // expected-error@+1 {{don't call this superclass method [loplugin:xmlimport]}}
         SvXMLImportContext::characters(rChars);
     }
-    virtual css::uno::Reference<css::xml::sax::XFastContextHandler>
+    virtual cpo::uno::Reference<css::xml::sax::XFastContextHandler>
     createFastChildContext() override
     {
         // expected-error@+1 {{don't call this superclass method [loplugin:xmlimport]}}
         return SvXMLImportContext::createFastChildContext();
     }
-    virtual css::uno::Reference<css::xml::sax::XFastContextHandler>
+    virtual cpo::uno::Reference<css::xml::sax::XFastContextHandler>
     createUnknownChildContext() override
     {
         // expected-error@+1 {{don't call this superclass method [loplugin:xmlimport]}}
@@ -119,7 +119,7 @@ class Test8 : public SvXMLImportContext
 {
 public:
     virtual void
-    StartElement(const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList) override
+    StartElement(const cpo::uno::Reference<css::xml::sax::XAttributeList>& xAttrList) override
     {
         // expected-error@+1 {{don't call this superclass method [loplugin:xmlimport]}}
         SvXMLImportContext::StartElement(xAttrList);
@@ -145,7 +145,7 @@ public:
 class Test9a : public SvXMLImportContext
 {
 public:
-    virtual void StartElement(const css::uno::Reference<css::xml::sax::XAttributeList>&) override
+    virtual void StartElement(const cpo::uno::Reference<css::xml::sax::XAttributeList>&) override
     {
         xxx();
     }
@@ -154,7 +154,7 @@ class Test9b : public Test9a
 {
 public:
     virtual void
-    StartElement(const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList) override
+    StartElement(const cpo::uno::Reference<css::xml::sax::XAttributeList>& xAttrList) override
     {
         Test9a::StartElement(xAttrList);
     }
@@ -170,13 +170,13 @@ public:
     // expected-error@+1 {{empty, should be removed [loplugin:xmlimport]}}
     virtual void characters(const OUString&) override {}
     // expected-error@+1 {{empty, should be removed [loplugin:xmlimport]}}
-    virtual css::uno::Reference<css::xml::sax::XFastContextHandler>
+    virtual cpo::uno::Reference<css::xml::sax::XFastContextHandler>
     createFastChildContext() override
     {
         return nullptr;
     }
     // expected-error@+1 {{empty, should be removed [loplugin:xmlimport]}}
-    virtual css::uno::Reference<css::xml::sax::XFastContextHandler>
+    virtual cpo::uno::Reference<css::xml::sax::XFastContextHandler>
     createUnknownChildContext() override
     {
         return nullptr;
@@ -186,7 +186,7 @@ public:
 class Test10b : public SvXMLImportContext
 {
 public:
-    virtual void StartElement(const css::uno::Reference<css::xml::sax::XAttributeList>&) override {}
+    virtual void StartElement(const cpo::uno::Reference<css::xml::sax::XAttributeList>&) override {}
     virtual void EndElement() override {}
     virtual void Characters(const OUString&) override {}
     virtual SvXMLImportContextRef CreateChildContext() override { return nullptr; }

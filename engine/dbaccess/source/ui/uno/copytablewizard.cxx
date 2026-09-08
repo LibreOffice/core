@@ -72,11 +72,11 @@
 namespace dbaui
 {
 
-    using ::com::sun::star::uno::Reference;
+    using ::cpo::uno::Reference;
     using ::cpo::uno::XInterface;
-    using ::com::sun::star::uno::UNO_QUERY;
-    using ::com::sun::star::uno::UNO_QUERY_THROW;
-    using ::com::sun::star::uno::UNO_SET_THROW;
+    using ::cpo::uno::UNO_QUERY;
+    using ::cpo::uno::UNO_QUERY_THROW;
+    using ::cpo::uno::UNO_SET_THROW;
     using ::cpo::uno::Exception;
     using ::cpo::uno::RuntimeException;
     using ::cpo::uno::Any;
@@ -185,7 +185,7 @@ namespace dbaui
 
     protected:
         // OGenericUnoDialog overridables
-        virtual std::unique_ptr<weld::DialogController> createDialog(const css::uno::Reference<css::awt::XWindow>& rParent) override;
+        virtual std::unique_ptr<weld::DialogController> createDialog(const cpo::uno::Reference<css::awt::XWindow>& rParent) override;
         virtual void executedDialog( sal_Int16 _nExecutionResult ) override;
 
     private:
@@ -592,7 +592,7 @@ namespace
         Reference< XDataSource > xDataSource;
         Reference< XChild > xAsChild( _rxConnection, UNO_QUERY );
         if ( xAsChild.is() )
-            xDataSource.set(xAsChild->getParent(), css::uno::UNO_QUERY);
+            xDataSource.set(xAsChild->getParent(), cpo::uno::UNO_QUERY);
 
         if ( xDataSource.is() )
             return lcl_getInteractionHandler_throw( xDataSource, _rFallback );
@@ -1485,7 +1485,7 @@ void CopyTableWizard::initialize( const Sequence< Any >& _rArguments )
     return new ::cppu::OPropertyArrayHelper( aProps );
 }
 
-std::unique_ptr<weld::DialogController> CopyTableWizard::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
+std::unique_ptr<weld::DialogController> CopyTableWizard::createDialog(const cpo::uno::Reference<css::awt::XWindow>& rParent)
 {
     OSL_PRECOND( isInitialized(), "CopyTableWizard::createDialog: not initialized!" );
         // this should have been prevented in ::execute already

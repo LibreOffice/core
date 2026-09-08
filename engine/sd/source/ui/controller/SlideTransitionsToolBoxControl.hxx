@@ -42,8 +42,8 @@ public:
     virtual void SAL_CALL statusChanged(const css::frame::FeatureStateEvent& rEvent) override;
 
     // XToolbarController
-    virtual css::uno::Reference<css::awt::XWindow>
-        SAL_CALL createItemWindow(const css::uno::Reference<css::awt::XWindow>& rParent) override;
+    virtual cpo::uno::Reference<css::awt::XWindow>
+        SAL_CALL createItemWindow(const cpo::uno::Reference<css::awt::XWindow>& rParent) override;
 
     // XInitialization
     virtual void SAL_CALL initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments) override;

@@ -41,7 +41,7 @@ public:
 
     void selectionChanged(bool bCorrectType) override;
 
-    void updateModel(css::uno::Reference<css::frame::XModel> xModel) override;
+    void updateModel(cpo::uno::Reference<css::frame::XModel> xModel) override;
 
 private:
     void Initialize();
@@ -49,7 +49,7 @@ private:
     // bool selectionIsDataSeries() const;
 
     rtl::Reference<::chart::ChartModel> mxModel;
-    css::uno::Reference<css::util::XModifyListener> mxListener;
+    cpo::uno::Reference<css::util::XModifyListener> mxListener;
     rtl::Reference<ChartSidebarSelectionListener> mxSelectionListener;
 
     bool mbUpdate;

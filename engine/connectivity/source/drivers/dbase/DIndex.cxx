@@ -44,7 +44,7 @@ using namespace ::cppu;
 using namespace connectivity::file;
 using namespace connectivity::dbase;
 using namespace com::sun::star::sdbc;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace com::sun::star::beans;
 
 IMPLEMENT_SERVICE_INFO(ODbaseIndex,u"com.sun.star.sdbcx.driver.dbase.Index"_ustr,u"com.sun.star.sdbcx.Index"_ustr);

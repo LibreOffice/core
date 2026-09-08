@@ -56,7 +56,7 @@ public:
         @throws cpo::uno::RuntimeException
         on errors during construction of an instance of this class.
     */
-    MailDispatcher(css::uno::Reference<css::mail::XSmtpService> xMailService);
+    MailDispatcher(cpo::uno::Reference<css::mail::XSmtpService> xMailService);
 
     /**
         Shutdown the mail dispatcher. Every mail messages
@@ -72,12 +72,12 @@ public:
         @param xMailMessage
         [in] a mail message that should be send.
     */
-    void enqueueMailMessage(css::uno::Reference<css::mail::XMailMessage> const& xMailMessage);
+    void enqueueMailMessage(cpo::uno::Reference<css::mail::XMailMessage> const& xMailMessage);
     /**
         Dequeues a mail message.
         This enables the caller to remove attachments when sending mails is to be cancelled.
     */
-    css::uno::Reference<css::mail::XMailMessage> dequeueMailMessage();
+    cpo::uno::Reference<css::mail::XMailMessage> dequeueMailMessage();
 
     /**
         Start sending mail messages asynchronously. A client may register
@@ -133,10 +133,10 @@ private:
     virtual void SAL_CALL onTerminated() override;
 
     std::vector<::rtl::Reference<IMailDispatcherListener>> cloneListener();
-    void sendMailMessageNotifyListener(css::uno::Reference<css::mail::XMailMessage> const& message);
+    void sendMailMessageNotifyListener(cpo::uno::Reference<css::mail::XMailMessage> const& message);
 
-    css::uno::Reference<css::mail::XSmtpService> m_xMailserver;
-    std::list<css::uno::Reference<css::mail::XMailMessage>> m_aXMessageList;
+    cpo::uno::Reference<css::mail::XSmtpService> m_xMailserver;
+    std::list<cpo::uno::Reference<css::mail::XMailMessage>> m_aXMessageList;
     std::vector<::rtl::Reference<IMailDispatcherListener>> m_aListenerVector;
     ::osl::Mutex m_aMessageContainerMutex;
     ::osl::Mutex m_aListenerContainerMutex;

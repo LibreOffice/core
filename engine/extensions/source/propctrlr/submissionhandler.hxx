@@ -38,8 +38,8 @@ namespace pcr
     public:
         SubmissionHelper(
             osl::Mutex& _rMutex,
-            const css::uno::Reference< css::beans::XPropertySet >& _rxIntrospectee,
-            const css::uno::Reference< css::frame::XModel >& _rxContextDocument
+            const cpo::uno::Reference< css::beans::XPropertySet >& _rxIntrospectee,
+            const cpo::uno::Reference< css::frame::XModel >& _rxContextDocument
         );
 
         /** determines whether the given control model is able to trigger submissions
@@ -48,8 +48,8 @@ namespace pcr
             for components where this method returned <FALSE/>
         */
         static bool canTriggerSubmissions(
-                    const css::uno::Reference< css::beans::XPropertySet >& _rxControlModel,
-                    const css::uno::Reference< css::frame::XModel >& _rxContextDocument
+                    const cpo::uno::Reference< css::beans::XPropertySet >& _rxControlModel,
+                    const cpo::uno::Reference< css::frame::XModel >& _rxContextDocument
                 );
     };
 
@@ -66,7 +66,7 @@ namespace pcr
 
     public:
         explicit SubmissionPropertyHandler(
-            const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxContext
         );
 
         virtual ~SubmissionPropertyHandler() override;
@@ -83,8 +83,8 @@ namespace pcr
         virtual cpo::uno::Sequence< OUString >
                                             getSupersededProperties( ) override;
         virtual css::inspection::LineDescriptor
-                                            describePropertyLine( const OUString& _rPropertyName, const css::uno::Reference< css::inspection::XPropertyControlFactory >& _rxControlFactory ) override;
-        virtual void                        actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const cpo::uno::Any& _rNewValue, const cpo::uno::Any& _rOldValue, const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI, bool ) override;
+                                            describePropertyLine( const OUString& _rPropertyName, const cpo::uno::Reference< css::inspection::XPropertyControlFactory >& _rxControlFactory ) override;
+        virtual void                        actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const cpo::uno::Any& _rNewValue, const cpo::uno::Any& _rOldValue, const cpo::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI, bool ) override;
         virtual cpo::uno::Any               convertToPropertyValue( const OUString& _rPropertyName, const cpo::uno::Any& _rControlValue ) override;
         virtual cpo::uno::Any               convertToControlValue( const OUString& _rPropertyName, const cpo::uno::Any& _rPropertyValue, const cpo::uno::Type& _rControlValueType ) override;
 

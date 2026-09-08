@@ -39,7 +39,7 @@
 namespace
 {
 
-    using ::com::sun::star::uno::Reference;
+    using ::cpo::uno::Reference;
     using ::cpo::uno::Any;
     using ::cpo::uno::Sequence;
     using ::com::sun::star::lang::XServiceInfo;

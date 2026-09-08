@@ -22,7 +22,7 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/txtimp.hxx>
 
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 
 
 XMLFootnoteBodyImportContext::XMLFootnoteBodyImportContext( SvXMLImport& rImport ) :
@@ -30,9 +30,9 @@ XMLFootnoteBodyImportContext::XMLFootnoteBodyImportContext( SvXMLImport& rImport
 {
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLFootnoteBodyImportContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLFootnoteBodyImportContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     // return text context
     return

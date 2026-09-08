@@ -26,7 +26,7 @@
 #include "dp_configurationbackenddb.hxx"
 
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 namespace dp_registry::backend::configuration {

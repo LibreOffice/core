@@ -18,21 +18,21 @@ typedef CollTestImplHelper< ov::excel::XMenus > Menus_BASE;
 class ScVbaMenus : public Menus_BASE
 {
 private:
-    css::uno::Reference< ov::XCommandBarControls > m_xCommandBarControls;
+    cpo::uno::Reference< ov::XCommandBarControls > m_xCommandBarControls;
 
 public:
     /// @throws cpo::uno::RuntimeException
-    ScVbaMenus( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext, css::uno::Reference< ov::XCommandBarControls > xCommandBarControls );
+    ScVbaMenus( const cpo::uno::Reference< ov::XHelperInterface >& xParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext, cpo::uno::Reference< ov::XCommandBarControls > xCommandBarControls );
 
     // XEnumerationAccess
     virtual cpo::uno::Type SAL_CALL getElementType() override;
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
+    virtual cpo::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
     virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) override;
 
     // Methods
     virtual sal_Int32 SAL_CALL getCount() override;
     virtual cpo::uno::Any SAL_CALL Item( const cpo::uno::Any& Index, const cpo::uno::Any& /*Index2*/ ) override;
-    virtual css::uno::Reference< ov::excel::XMenu > SAL_CALL Add( const OUString& Caption, const cpo::uno::Any& Before, const cpo::uno::Any& Restore ) override;
+    virtual cpo::uno::Reference< ov::excel::XMenu > SAL_CALL Add( const OUString& Caption, const cpo::uno::Any& Before, const cpo::uno::Any& Restore ) override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual cpo::uno::Sequence<OUString> getServiceNames() override;

@@ -64,6 +64,7 @@
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 namespace svgio::svgreader
 {

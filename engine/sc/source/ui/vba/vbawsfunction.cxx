@@ -27,6 +27,7 @@
 #include <compiler.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace ooo::vba;
 
 namespace {
@@ -58,7 +59,7 @@ void lclConvertBooleanToDouble( cpo::uno::Any& rAny )
 
 } // namespace
 
-ScVbaWSFunction::ScVbaWSFunction( const uno::Reference< XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext ) :
+ScVbaWSFunction::ScVbaWSFunction( const uno::Reference< XHelperInterface >& xParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext ) :
     ScVbaWSFunction_BASE( xParent, xContext )
 {
 }

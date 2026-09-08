@@ -27,7 +27,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <cpo/uno/Any.h>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <cpo/uno/Sequence.h>
 #include <cppunit/TestAssert.h>
 #include <cppunit/extensions/HelperMacros.h>
@@ -49,7 +49,8 @@
 #include <wrtsh.hxx>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 namespace
 {

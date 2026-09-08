@@ -57,10 +57,11 @@
 #include <cppuhelper/propshlp.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace ::chart::wrapper;
 using namespace ::chart::DataSeriesProperties;
 
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::cpo::uno::Sequence;
 using ::com::sun::star::beans::Property;
 using ::cpo::uno::Any;
@@ -265,11 +266,11 @@ class WrappedAttachedAxisProperty : public ::chart::WrappedProperty
 public:
     explicit WrappedAttachedAxisProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact);
 
-    virtual void setPropertyValue( const Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual void setPropertyValue( const Any& rOuterValue, const cpo::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual Any getPropertyValue( const cpo::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
+    virtual Any getPropertyDefault( const cpo::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
 
 protected:
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
@@ -364,11 +365,11 @@ class WrappedLineColorProperty : public WrappedSeriesAreaOrLineProperty
 public:
     explicit WrappedLineColorProperty( DataSeriesPointWrapper* pDataSeriesPointWrapper );
 
-    virtual void setPropertyValue( const Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual void setPropertyValue( const Any& rOuterValue, const cpo::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual void setPropertyToDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
+    virtual void setPropertyToDefault( const cpo::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
 
-    virtual cpo::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
+    virtual cpo::uno::Any getPropertyDefault( const cpo::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
 
 protected:
     DataSeriesPointWrapper* m_pDataSeriesPointWrapper;
@@ -408,9 +409,9 @@ class WrappedLineStyleProperty : public WrappedSeriesAreaOrLineProperty
 public:
     explicit WrappedLineStyleProperty( DataSeriesPointWrapper* pDataSeriesPointWrapper );
 
-    virtual void setPropertyValue( const Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual void setPropertyValue( const Any& rOuterValue, const cpo::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual void setPropertyToDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
+    virtual void setPropertyToDefault( const cpo::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
 
 protected:
     DataSeriesPointWrapper* m_pDataSeriesPointWrapper;
@@ -649,14 +650,14 @@ beans::PropertyState DataSeriesPointWrapper::getPropertyState( const OUString& r
         cpo::uno::Any a(e.TargetException);
         throw css::lang::WrappedTargetRuntimeException(
             "wrapped Exception " + e.Message,
-            css::uno::Reference<cpo::uno::XInterface>(), a);
+            cpo::uno::Reference<cpo::uno::XInterface>(), a);
     }
     catch( const cpo::uno::Exception& e )
     {
         cpo::uno::Any a(cppu::getCaughtException());
         throw css::lang::WrappedTargetRuntimeException(
             "wrapped Exception " + e.Message,
-            css::uno::Reference<cpo::uno::XInterface>(), a);
+            cpo::uno::Reference<cpo::uno::XInterface>(), a);
     }
     return aState;
 }

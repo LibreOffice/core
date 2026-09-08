@@ -36,7 +36,7 @@
 
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 namespace chart::sidebar {
@@ -60,14 +60,14 @@ enum class AxisType
     Y_SECOND
 };
 
-ChartModel* getChartModel(const css::uno::Reference<css::frame::XModel>& xModel)
+ChartModel* getChartModel(const cpo::uno::Reference<css::frame::XModel>& xModel)
 {
     ChartModel* pModel = dynamic_cast<ChartModel*>(xModel.get());
 
     return pModel;
 }
 
-bool isLegendVisible(const css::uno::Reference<css::frame::XModel>& xModel)
+bool isLegendVisible(const cpo::uno::Reference<css::frame::XModel>& xModel)
 {
     ChartModel* pModel = getChartModel(xModel);
     if (!pModel)
@@ -92,7 +92,7 @@ bool isLegendVisible(const css::uno::Reference<css::frame::XModel>& xModel)
     return false;
 }
 
-void setLegendVisible(const css::uno::Reference<css::frame::XModel>& xModel, bool bVisible)
+void setLegendVisible(const cpo::uno::Reference<css::frame::XModel>& xModel, bool bVisible)
 {
     ChartModel* pModel = getChartModel(xModel);
     if (!pModel)
@@ -104,7 +104,7 @@ void setLegendVisible(const css::uno::Reference<css::frame::XModel>& xModel, boo
         LegendHelper::hideLegend(*pModel);
 }
 
-bool isLegendOverlay(const css::uno::Reference<css::frame::XModel>& xModel)
+bool isLegendOverlay(const cpo::uno::Reference<css::frame::XModel>& xModel)
 {
     ChartModel* pModel = getChartModel(xModel);
     if (!pModel)
@@ -129,7 +129,7 @@ bool isLegendOverlay(const css::uno::Reference<css::frame::XModel>& xModel)
     return false;
 }
 
-void setLegendOverlay(const css::uno::Reference<css::frame::XModel>& xModel, bool bOverlay)
+void setLegendOverlay(const cpo::uno::Reference<css::frame::XModel>& xModel, bool bOverlay)
 {
     ChartModel* pModel = getChartModel(xModel);
     if (!pModel)
@@ -229,7 +229,7 @@ void setAxisVisible(const rtl::Reference<::chart::ChartModel>& xModel, AxisType 
         AxisHelper::hideAxis(nDimensionIndex, bMajor, xDiagram);
 }
 
-sal_Int32 getLegendPos(const css::uno::Reference<css::frame::XModel>& xModel)
+sal_Int32 getLegendPos(const cpo::uno::Reference<css::frame::XModel>& xModel)
 {
     ChartModel* pModel = getChartModel(xModel);
     if (!pModel)
@@ -256,7 +256,7 @@ sal_Int32 getLegendPos(const css::uno::Reference<css::frame::XModel>& xModel)
     }
 }
 
-void setLegendPos(const css::uno::Reference<css::frame::XModel>& xModel, sal_Int32 nPos)
+void setLegendPos(const cpo::uno::Reference<css::frame::XModel>& xModel, sal_Int32 nPos)
 {
     ChartModel* pModel = getChartModel(xModel);
     if (!pModel)
@@ -571,7 +571,7 @@ void ChartElementsPanel::doUpdateModel(const rtl::Reference<::chart::ChartModel>
     mxModel->addModifyListener(mxListener);
 }
 
-void ChartElementsPanel::updateModel(css::uno::Reference<css::frame::XModel> xModel)
+void ChartElementsPanel::updateModel(cpo::uno::Reference<css::frame::XModel> xModel)
 {
     ::chart::ChartModel* pModel = dynamic_cast<::chart::ChartModel*>(xModel.get());
     assert(!xModel || pModel);

@@ -27,8 +27,8 @@ namespace connectivity
     class OIndexColumns final : public sdbcx::OCollection
     {
         OIndexHelper* m_pIndex;
-        virtual css::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
-        virtual css::uno::Reference< css::beans::XPropertySet > createDescriptor() override;
+        virtual cpo::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
+        virtual cpo::uno::Reference< css::beans::XPropertySet > createDescriptor() override;
         virtual void impl_refresh() override;
     public:
         OIndexColumns(  OIndexHelper* _pIndex,

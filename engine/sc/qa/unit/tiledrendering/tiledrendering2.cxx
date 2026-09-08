@@ -61,6 +61,7 @@
 #include <drawview.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSidebarLocale)
 {

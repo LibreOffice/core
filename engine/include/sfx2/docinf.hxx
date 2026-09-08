@@ -34,7 +34,7 @@ namespace com::sun::star {
     }
 }
 
-namespace com::sun::star::uno { template <typename > class Reference; }
+namespace cpo::uno { template <typename > class Reference; }
 namespace cpo::uno { template <typename > class Sequence; }
 
 
@@ -46,7 +46,7 @@ namespace sfx2 {
     @param  i_pStorage      OLE Storage
  */
 ErrCode SFX2_DLLPUBLIC LoadOlePropertySet(
-    const css::uno::Reference< css::document::XDocumentProperties>& i_xDocProps,
+    const cpo::uno::Reference< css::document::XDocumentProperties>& i_xDocProps,
     SotStorage* i_pStorage );
 
 /** save document meta-data to OLE stream
@@ -58,7 +58,7 @@ ErrCode SFX2_DLLPUBLIC LoadOlePropertySet(
     @param  i_pHyperlinks   Blob: Hyperlink blob ("_PID_HLINKS")
  */
 bool SFX2_DLLPUBLIC SaveOlePropertySet(
-    const css::uno::Reference< css::document::XDocumentProperties>& i_xDocProps,
+    const cpo::uno::Reference< css::document::XDocumentProperties>& i_xDocProps,
     SotStorage* i_pStorage,
     const cpo::uno::Sequence<sal_Int8> * i_pThumb = nullptr,
     const cpo::uno::Sequence<sal_Int8> * i_pGuid = nullptr,

@@ -23,6 +23,7 @@
 namespace chart
 {
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 SchLegendDlg::SchLegendDlg(weld::Window* pWindow, const uno::Reference<cpo::uno::XComponentContext>& xCC)
     : GenericDialogController(pWindow, u"modules/schart/ui/dlg_InsertLegend.ui"_ustr,

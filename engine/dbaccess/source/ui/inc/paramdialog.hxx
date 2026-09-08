@@ -48,11 +48,11 @@ namespace dbaui
     {
         sal_Int32              m_nCurrentlySelected;
 
-        css::uno::Reference< css::container::XIndexAccess >
+        cpo::uno::Reference< css::container::XIndexAccess >
                                m_xParams;
-        css::uno::Reference< css::sdbc::XConnection >
+        cpo::uno::Reference< css::sdbc::XConnection >
                                m_xConnection;
-        css::uno::Reference< css::util::XNumberFormatter >
+        cpo::uno::Reference< css::util::XNumberFormatter >
                                m_xFormatter;
         ::dbtools::OPredicateInputController
                                m_aPredicateInput;
@@ -73,9 +73,9 @@ namespace dbaui
 
     public:
         OParameterDialog(weld::Window* _pParent,
-            const css::uno::Reference< css::container::XIndexAccess > & _rParamContainer,
-            const css::uno::Reference< css::sdbc::XConnection > & _rxConnection,
-            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext);
+            const cpo::uno::Reference< css::container::XIndexAccess > & _rParamContainer,
+            const cpo::uno::Reference< css::sdbc::XConnection > & _rxConnection,
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext);
         virtual ~OParameterDialog() override;
 
         const cpo::uno::Sequence< css::beans::PropertyValue >&

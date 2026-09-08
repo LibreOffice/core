@@ -49,6 +49,8 @@
 
 #include <vcl/tabs.hrc>
 
+using namespace ::cpo;
+
 // carrier of the dialog
 SwFieldDlg::SwFieldDlg(SfxBindings* pB, SwChildWinWrapper* /*pCW*/, weld::Window *pParent)
     : SfxTabDialogController(pParent, u"modules/swriter/ui/fielddialog.ui"_ustr, u"FieldDialog"_ustr)

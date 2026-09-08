@@ -21,14 +21,14 @@
 #include <framework/addonsoptions.hxx>
 #include <menuconfiguration.hxx>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/menu.hxx>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 using namespace ::cpo::uno;

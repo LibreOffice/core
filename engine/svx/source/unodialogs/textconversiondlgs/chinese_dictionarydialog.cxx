@@ -37,8 +37,8 @@ namespace textconversiondlgs
 {
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 DictionaryList::DictionaryList(std::unique_ptr<weld::TreeView> xControl)
     : m_xControl(std::move(xControl))
@@ -327,7 +327,7 @@ ChineseDictionaryDialog::ChineseDictionaryDialog(weld::Window* pParent)
     Reference< linguistic2::XConversionDictionary > xDictionary_To_Traditional;
     //get dictionaries
     {
-        css::uno::Reference<cpo::uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
+        cpo::uno::Reference<cpo::uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
         if (xContext.is())
         {
             Reference< linguistic2::XConversionDictionaryList > xDictionaryList = linguistic2::ConversionDictionaryList::create(xContext);

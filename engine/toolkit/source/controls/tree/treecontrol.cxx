@@ -32,8 +32,8 @@
 #include <helper/unopropertyarrayhelper.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::awt::tree;
 using namespace ::com::sun::star::lang;
@@ -45,7 +45,7 @@ namespace toolkit
 {
 
 
-UnoTreeModel::UnoTreeModel( const css::uno::Reference< cpo::uno::XComponentContext >& i_factory )
+UnoTreeModel::UnoTreeModel( const cpo::uno::Reference< cpo::uno::XComponentContext >& i_factory )
     :UnoControlModel( i_factory )
 {
     ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
@@ -132,44 +132,44 @@ public:
     void dispose(  ) override;
 
     // css::awt::XControl
-    void createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
+    void createPeer( const cpo::uno::Reference< css::awt::XToolkit >& Toolkit, const cpo::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
 
     // css::view::XSelectionSupplier
     virtual bool select( const cpo::uno::Any& xSelection ) override;
     virtual cpo::uno::Any getSelection(  ) override;
-    virtual void addSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
-    virtual void removeSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
+    virtual void addSelectionChangeListener( const cpo::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
+    virtual void removeSelectionChangeListener( const cpo::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
 
     // css::view::XMultiSelectionSupplier
     virtual bool addSelection( const cpo::uno::Any& Selection ) override;
     virtual void removeSelection( const cpo::uno::Any& Selection ) override;
     virtual void clearSelection(  ) override;
     virtual ::sal_Int32 getSelectionCount(  ) override;
-    virtual css::uno::Reference< css::container::XEnumeration > createSelectionEnumeration(  ) override;
-    virtual css::uno::Reference< css::container::XEnumeration > createReverseSelectionEnumeration(  ) override;
+    virtual cpo::uno::Reference< css::container::XEnumeration > createSelectionEnumeration(  ) override;
+    virtual cpo::uno::Reference< css::container::XEnumeration > createReverseSelectionEnumeration(  ) override;
 
     // css::awt::XTreeControl
     virtual OUString getDefaultExpandedGraphicURL() override;
     virtual void setDefaultExpandedGraphicURL( const OUString& _defaultexpandedgraphicurl ) override;
     virtual OUString getDefaultCollapsedGraphicURL() override;
     virtual void setDefaultCollapsedGraphicURL( const OUString& _defaultcollapsedgraphicurl ) override;
-    virtual bool isNodeExpanded( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
-    virtual bool isNodeCollapsed( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
-    virtual void makeNodeVisible( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
-    virtual bool isNodeVisible( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
-    virtual void expandNode( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
-    virtual void collapseNode( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
-    virtual void addTreeExpansionListener( const css::uno::Reference< css::awt::tree::XTreeExpansionListener >& Listener ) override;
-    virtual void removeTreeExpansionListener( const css::uno::Reference< css::awt::tree::XTreeExpansionListener >& Listener ) override;
-    virtual css::uno::Reference< css::awt::tree::XTreeNode > getNodeForLocation( ::sal_Int32 x, ::sal_Int32 y ) override;
-    virtual css::uno::Reference< css::awt::tree::XTreeNode > getClosestNodeForLocation( ::sal_Int32 x, ::sal_Int32 y ) override;
-    virtual css::awt::Rectangle getNodeRect( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
+    virtual bool isNodeExpanded( const cpo::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
+    virtual bool isNodeCollapsed( const cpo::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
+    virtual void makeNodeVisible( const cpo::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
+    virtual bool isNodeVisible( const cpo::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
+    virtual void expandNode( const cpo::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
+    virtual void collapseNode( const cpo::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
+    virtual void addTreeExpansionListener( const cpo::uno::Reference< css::awt::tree::XTreeExpansionListener >& Listener ) override;
+    virtual void removeTreeExpansionListener( const cpo::uno::Reference< css::awt::tree::XTreeExpansionListener >& Listener ) override;
+    virtual cpo::uno::Reference< css::awt::tree::XTreeNode > getNodeForLocation( ::sal_Int32 x, ::sal_Int32 y ) override;
+    virtual cpo::uno::Reference< css::awt::tree::XTreeNode > getClosestNodeForLocation( ::sal_Int32 x, ::sal_Int32 y ) override;
+    virtual css::awt::Rectangle getNodeRect( const cpo::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
     virtual bool isEditing(  ) override;
     virtual bool stopEditing(  ) override;
     virtual void cancelEditing(  ) override;
-    virtual void startEditingAtNode( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
-    virtual void addTreeEditListener( const css::uno::Reference< css::awt::tree::XTreeEditListener >& Listener ) override;
-    virtual void removeTreeEditListener( const css::uno::Reference< css::awt::tree::XTreeEditListener >& Listener ) override;
+    virtual void startEditingAtNode( const cpo::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
+    virtual void addTreeEditListener( const cpo::uno::Reference< css::awt::tree::XTreeEditListener >& Listener ) override;
+    virtual void removeTreeEditListener( const cpo::uno::Reference< css::awt::tree::XTreeEditListener >& Listener ) override;
 
     // css::lang::XServiceInfo
     DECLIMPL_SERVICEINFO_DERIVED( UnoTreeControl, UnoControlBase, u"com.sun.star.awt.tree.TreeControl"_ustr )

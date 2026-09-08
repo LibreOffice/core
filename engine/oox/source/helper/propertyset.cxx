@@ -29,7 +29,7 @@
 namespace oox {
 
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 void PropertySet::set( const Reference< XPropertySet >& rxPropSet )

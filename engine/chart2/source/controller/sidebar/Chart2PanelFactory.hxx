@@ -40,7 +40,7 @@ public:
     const ChartPanelFactory& operator=(const ChartPanelFactory&) = delete;
 
     // XUIElementFactory
-    virtual css::uno::Reference<css::ui::XUIElement> createUIElement(
+    virtual cpo::uno::Reference<css::ui::XUIElement> createUIElement(
         const OUString& rsResourceURL,
         const ::cpo::uno::Sequence<css::beans::PropertyValue>& rArguments) override;
 

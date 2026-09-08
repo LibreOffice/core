@@ -52,17 +52,17 @@ private:
     /** the global uno service manager.
         Must be used to create own needed services.
      */
-    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
     /** points to the underlying configuration.
         This ModuleManager does not cache - it calls directly the
         configuration API!
       */
-    css::uno::Reference< css::container::XNameAccess > m_xCFG;
+    cpo::uno::Reference< css::container::XNameAccess > m_xCFG;
 
 public:
 
-    explicit ModuleManager(css::uno::Reference< cpo::uno::XComponentContext >  xContext);
+    explicit ModuleManager(cpo::uno::Reference< cpo::uno::XComponentContext >  xContext);
 
     ModuleManager(const ModuleManager&) = delete;
     ModuleManager& operator=(const ModuleManager&) = delete;
@@ -77,7 +77,7 @@ public:
     getSupportedServiceNames() override;
 
     // XModuleManager
-    virtual OUString identify(const css::uno::Reference< cpo::uno::XInterface >& xModule) override;
+    virtual OUString identify(const cpo::uno::Reference< cpo::uno::XInterface >& xModule) override;
 
     // XNameReplace
     virtual void replaceByName(const OUString& sName ,
@@ -96,9 +96,9 @@ public:
     virtual bool hasElements() override;
 
     // XContainerQuery
-    virtual css::uno::Reference< css::container::XEnumeration > createSubSetEnumerationByQuery(const OUString& sQuery) override;
+    virtual cpo::uno::Reference< css::container::XEnumeration > createSubSetEnumerationByQuery(const OUString& sQuery) override;
 
-    virtual css::uno::Reference< css::container::XEnumeration > createSubSetEnumerationByProperties(const cpo::uno::Sequence< css::beans::NamedValue >& lProperties) override;
+    virtual cpo::uno::Reference< css::container::XEnumeration > createSubSetEnumerationByProperties(const cpo::uno::Sequence< css::beans::NamedValue >& lProperties) override;
 
 private:
 
@@ -122,10 +122,10 @@ private:
 
         @threadsafe
      */
-    OUString implts_identify(const css::uno::Reference< cpo::uno::XInterface >& xComponent);
+    OUString implts_identify(const cpo::uno::Reference< cpo::uno::XInterface >& xComponent);
 };
 
-ModuleManager::ModuleManager(css::uno::Reference< cpo::uno::XComponentContext >  xContext)
+ModuleManager::ModuleManager(cpo::uno::Reference< cpo::uno::XComponentContext >  xContext)
     : m_xContext(std::move(xContext))
 {
     if (!comphelper::IsFuzzing())
@@ -133,7 +133,7 @@ ModuleManager::ModuleManager(css::uno::Reference< cpo::uno::XComponentContext > 
         m_xCFG.set( comphelper::ConfigurationHelper::openConfig(
                     m_xContext, u"/org.openoffice.Setup/Office/Factories"_ustr,
                     comphelper::EConfigurationModes::ReadOnly ),
-                css::uno::UNO_QUERY_THROW );
+                cpo::uno::UNO_QUERY_THROW );
     }
 }
 
@@ -152,13 +152,13 @@ cpo::uno::Sequence< OUString > ModuleManager::getSupportedServiceNames()
     return { u"com.sun.star.frame.ModuleManager"_ustr };
 }
 
-OUString ModuleManager::identify(const css::uno::Reference< cpo::uno::XInterface >& xModule)
+OUString ModuleManager::identify(const cpo::uno::Reference< cpo::uno::XInterface >& xModule)
 {
     // valid parameter?
-    css::uno::Reference< css::frame::XFrame >      xFrame     (xModule, css::uno::UNO_QUERY);
-    css::uno::Reference< css::awt::XWindow >       xWindow    (xModule, css::uno::UNO_QUERY);
-    css::uno::Reference< css::frame::XController > xController(xModule, css::uno::UNO_QUERY);
-    css::uno::Reference< css::frame::XModel >      xModel     (xModule, css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::frame::XFrame >      xFrame     (xModule, cpo::uno::UNO_QUERY);
+    cpo::uno::Reference< css::awt::XWindow >       xWindow    (xModule, cpo::uno::UNO_QUERY);
+    cpo::uno::Reference< css::frame::XController > xController(xModule, cpo::uno::UNO_QUERY);
+    cpo::uno::Reference< css::frame::XModel >      xModel     (xModule, cpo::uno::UNO_QUERY);
 
     if (
         (!xFrame.is()     ) &&
@@ -219,12 +219,12 @@ void ModuleManager::replaceByName(const OUString& sName ,
     // it cache it as a member of this module manager instance. If we change some props there ... but don't
     // flush changes (because an error occurred) we will read them later. If we use a different config access
     // we can close it without a flush... and our read data won't be affected .-)
-    css::uno::Reference< cpo::uno::XInterface >         xCfg      = ::comphelper::ConfigurationHelper::openConfig(
+    cpo::uno::Reference< cpo::uno::XInterface >         xCfg      = ::comphelper::ConfigurationHelper::openConfig(
                                                                         m_xContext,
                                                                         u"/org.openoffice.Setup/Office/Factories"_ustr,
                                                                         ::comphelper::EConfigurationModes::Standard);
-    css::uno::Reference< css::container::XNameAccess >  xModules (xCfg, css::uno::UNO_QUERY_THROW);
-    css::uno::Reference< css::container::XNameReplace > xModule  ;
+    cpo::uno::Reference< css::container::XNameAccess >  xModules (xCfg, cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference< css::container::XNameReplace > xModule  ;
 
     xModules->getByName(sName) >>= xModule;
     if (!xModule.is())
@@ -247,7 +247,7 @@ void ModuleManager::replaceByName(const OUString& sName ,
 cpo::uno::Any ModuleManager::getByName(const OUString& sName)
 {
     // get access to the element
-    css::uno::Reference< css::container::XNameAccess > xModule;
+    cpo::uno::Reference< css::container::XNameAccess > xModule;
     if (m_xCFG)
         m_xCFG->getByName(sName) >>= xModule;
     if (!xModule.is())
@@ -290,12 +290,12 @@ bool ModuleManager::hasElements()
     return m_xCFG && m_xCFG->hasElements();
 }
 
-css::uno::Reference< css::container::XEnumeration > ModuleManager::createSubSetEnumerationByQuery(const OUString&)
+cpo::uno::Reference< css::container::XEnumeration > ModuleManager::createSubSetEnumerationByQuery(const OUString&)
 {
-    return css::uno::Reference< css::container::XEnumeration >();
+    return cpo::uno::Reference< css::container::XEnumeration >();
 }
 
-css::uno::Reference< css::container::XEnumeration > ModuleManager::createSubSetEnumerationByProperties(const cpo::uno::Sequence< css::beans::NamedValue >& lProperties)
+cpo::uno::Reference< css::container::XEnumeration > ModuleManager::createSubSetEnumerationByProperties(const cpo::uno::Sequence< css::beans::NamedValue >& lProperties)
 {
     ::comphelper::SequenceAsHashMap lSearchProps(lProperties);
     const cpo::uno::Sequence< OUString > lModules = getElementNames();
@@ -317,18 +317,18 @@ css::uno::Reference< css::container::XEnumeration > ModuleManager::createSubSetE
     return new ::comphelper::OAnyEnumeration(comphelper::containerToSequence(lResult));
 }
 
-OUString ModuleManager::implts_identify(const css::uno::Reference< cpo::uno::XInterface >& xComponent)
+OUString ModuleManager::implts_identify(const cpo::uno::Reference< cpo::uno::XInterface >& xComponent)
 {
     // Search for an optional (!) interface XModule first.
     // It's used to overrule an existing service name. Used e.g. by our database form designer
     // which uses a writer module internally.
-    css::uno::Reference< css::frame::XModule > xModule(xComponent, css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::frame::XModule > xModule(xComponent, cpo::uno::UNO_QUERY);
     if (xModule.is())
         return xModule->getIdentifier();
 
     // detect modules in a generic way...
     // comparing service names with configured entries...
-    css::uno::Reference< css::lang::XServiceInfo > xInfo(xComponent, css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::lang::XServiceInfo > xInfo(xComponent, cpo::uno::UNO_QUERY);
     if (!xInfo.is())
         return OUString();
 

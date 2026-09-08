@@ -63,8 +63,8 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
@@ -452,7 +452,7 @@ OUString  DBChangeDialog_Impl::GetCurrentURL()const
 }
 
 // XDispatchProvider
-BibInterceptorHelper::BibInterceptorHelper( const ::bib::BibBeamer* pBibBeamer, css::uno::Reference< css::frame::XDispatch > const & xDispatch)
+BibInterceptorHelper::BibInterceptorHelper( const ::bib::BibBeamer* pBibBeamer, cpo::uno::Reference< css::frame::XDispatch > const & xDispatch)
 {
     if( pBibBeamer )
     {
@@ -475,7 +475,7 @@ void BibInterceptorHelper::ReleaseInterceptor()
     xInterception.clear();
 }
 
-css::uno::Reference< css::frame::XDispatch >
+cpo::uno::Reference< css::frame::XDispatch >
     BibInterceptorHelper::queryDispatch( const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags )
 {
     Reference< XDispatch > xReturn;
@@ -490,7 +490,7 @@ css::uno::Reference< css::frame::XDispatch >
     return xReturn;
 }
 
-cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > >
+cpo::uno::Sequence< cpo::uno::Reference< css::frame::XDispatch > >
     BibInterceptorHelper::queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& aDescripts )
 {
     Sequence< Reference< XDispatch> > aReturn( aDescripts.getLength() );
@@ -503,24 +503,24 @@ cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > >
 }
 
 // XDispatchProviderInterceptor
-css::uno::Reference< css::frame::XDispatchProvider >
+cpo::uno::Reference< css::frame::XDispatchProvider >
     BibInterceptorHelper::getSlaveDispatchProvider(  )
 {
     return xSlaveDispatchProvider;
 }
 
-void BibInterceptorHelper::setSlaveDispatchProvider( const css::uno::Reference< css::frame::XDispatchProvider >& xNewSlaveDispatchProvider )
+void BibInterceptorHelper::setSlaveDispatchProvider( const cpo::uno::Reference< css::frame::XDispatchProvider >& xNewSlaveDispatchProvider )
 {
     xSlaveDispatchProvider = xNewSlaveDispatchProvider;
 }
 
-css::uno::Reference< css::frame::XDispatchProvider >
+cpo::uno::Reference< css::frame::XDispatchProvider >
     BibInterceptorHelper::getMasterDispatchProvider(  )
 {
     return xMasterDispatchProvider;
 }
 
-void BibInterceptorHelper::setMasterDispatchProvider( const css::uno::Reference< css::frame::XDispatchProvider >& xNewMasterDispatchProvider )
+void BibInterceptorHelper::setMasterDispatchProvider( const cpo::uno::Reference< css::frame::XDispatchProvider >& xNewMasterDispatchProvider )
 {
     xMasterDispatchProvider = xNewMasterDispatchProvider;
 }

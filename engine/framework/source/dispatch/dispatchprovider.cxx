@@ -56,8 +56,8 @@ namespace framework{
     @param      xFrame
                     reference to our owner frame.
 */
-DispatchProvider::DispatchProvider( css::uno::Reference< cpo::uno::XComponentContext >  xContext  ,
-                                    const css::uno::Reference< css::frame::XFrame >&    xFrame    )
+DispatchProvider::DispatchProvider( cpo::uno::Reference< cpo::uno::XComponentContext >  xContext  ,
+                                    const cpo::uno::Reference< css::frame::XFrame >&    xFrame    )
         : m_xContext    (std::move( xContext                     ))
         , m_xFrame      ( xFrame                        )
 {
@@ -90,15 +90,15 @@ DispatchProvider::~DispatchProvider()
 
     @threadsafe yes
 */
-css::uno::Reference< css::frame::XDispatch > DispatchProvider::queryDispatch( const css::util::URL&  aURL             ,
+cpo::uno::Reference< css::frame::XDispatch > DispatchProvider::queryDispatch( const css::util::URL&  aURL             ,
                                                                                        const OUString& sTargetFrameName ,
                                                                                              sal_Int32        nSearchFlags     )
 {
-    css::uno::Reference< css::frame::XDispatch > xDispatcher;
+    cpo::uno::Reference< css::frame::XDispatch > xDispatcher;
 
-    css::uno::Reference< css::frame::XFrame > xOwner(m_xFrame);
+    cpo::uno::Reference< css::frame::XFrame > xOwner(m_xFrame);
 
-    css::uno::Reference< css::frame::XDesktop > xDesktopCheck( xOwner, css::uno::UNO_QUERY );
+    cpo::uno::Reference< css::frame::XDesktop > xDesktopCheck( xOwner, cpo::uno::UNO_QUERY );
 
     if (xDesktopCheck.is())
         xDispatcher = implts_queryDesktopDispatch(xOwner, aURL, sTargetFrameName, nSearchFlags);
@@ -123,12 +123,12 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::queryDispatch( co
 
     @threadsafe yes
 */
-cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > DispatchProvider::queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptions )
+cpo::uno::Sequence< cpo::uno::Reference< css::frame::XDispatch > > DispatchProvider::queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptions )
 {
     // Create return list - which must have the same size as the given descriptor.
     // It's not allowed to pack it!
     sal_Int32                                                          nCount     = lDescriptions.getLength();
-    cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > lDispatcher( nCount );
+    cpo::uno::Sequence< cpo::uno::Reference< css::frame::XDispatch > > lDispatcher( nCount );
     auto lDispatcherRange = asNonConstRange(lDispatcher);
     // Step over all descriptors and try to get a dispatcher for it.
     for( sal_Int32 i=0; i<nCount; ++i )
@@ -148,12 +148,12 @@ cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > DispatchProvi
 
     @threadsafe yes
  */
-css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryDesktopDispatch( const css::uno::Reference< css::frame::XFrame >& xDesktop         ,
+cpo::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryDesktopDispatch( const cpo::uno::Reference< css::frame::XFrame >& xDesktop         ,
                                                                                             const css::util::URL&                           aURL             ,
                                                                                             const OUString&                          sTargetFrameName ,
                                                                                                   sal_Int32                                 nSearchFlags     )
 {
-    css::uno::Reference< css::frame::XDispatch > xDispatcher;
+    cpo::uno::Reference< css::frame::XDispatch > xDispatcher;
 
     // ignore wrong requests which are not supported
     if (
@@ -215,10 +215,10 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryDeskt
         sal_Int32 nRightFlags  = nSearchFlags & ~css::frame::FrameSearchFlag::CREATE;
 
         // try to find any existing target and ask it for its dispatcher
-        css::uno::Reference< css::frame::XFrame > xFoundFrame = xDesktop->findFrame(sTargetFrameName, nRightFlags);
+        cpo::uno::Reference< css::frame::XFrame > xFoundFrame = xDesktop->findFrame(sTargetFrameName, nRightFlags);
         if (xFoundFrame.is())
         {
-            css::uno::Reference< css::frame::XDispatchProvider > xProvider( xFoundFrame, css::uno::UNO_QUERY );
+            cpo::uno::Reference< css::frame::XDispatchProvider > xProvider( xFoundFrame, cpo::uno::UNO_QUERY );
             xDispatcher = xProvider->queryDispatch(aURL,SPECIALTARGET_SELF,0);
         }
         // If it couldn't be found, but creation was allowed,
@@ -230,12 +230,12 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryDeskt
     return xDispatcher;
 }
 
-css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrameDispatch( const css::uno::Reference< css::frame::XFrame >& xFrame           ,
+cpo::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrameDispatch( const cpo::uno::Reference< css::frame::XFrame >& xFrame           ,
                                                                                           const css::util::URL&                           aURL             ,
                                                                                           const OUString&                          sTargetFrameName ,
                                                                                                 sal_Int32                                 nSearchFlags     )
 {
-    css::uno::Reference< css::frame::XDispatch > xDispatcher;
+    cpo::uno::Reference< css::frame::XDispatch > xDispatcher;
 
     // 0) Some URLs are dispatched in a generic way (e.g. by the menu) using the default target "".
     //    But they are specified to use their own fixed target. Detect such URLs here and use the correct target.
@@ -252,7 +252,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
         (sTargetFrameName==SPECIALTARGET_DEFAULT)
        )
     {
-        css::uno::Reference< css::frame::XDispatchProvider > xParent( xFrame->getCreator(), css::uno::UNO_QUERY );
+        cpo::uno::Reference< css::frame::XDispatchProvider > xParent( xFrame->getCreator(), cpo::uno::UNO_QUERY );
         if (xParent.is())
             xDispatcher = xParent->queryDispatch(aURL, sTargetFrameName, 0); // it's a special target - ignore search flags
     }
@@ -263,14 +263,14 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
 
     else if (sTargetFrameName==SPECIALTARGET_BEAMER)
     {
-        css::uno::Reference< css::frame::XDispatchProvider > xBeamer( xFrame->findFrame( SPECIALTARGET_BEAMER, css::frame::FrameSearchFlag::CHILDREN | css::frame::FrameSearchFlag::SELF ), css::uno::UNO_QUERY );
+        cpo::uno::Reference< css::frame::XDispatchProvider > xBeamer( xFrame->findFrame( SPECIALTARGET_BEAMER, css::frame::FrameSearchFlag::CHILDREN | css::frame::FrameSearchFlag::SELF ), cpo::uno::UNO_QUERY );
         if (xBeamer.is())
         {
             xDispatcher = xBeamer->queryDispatch(aURL, SPECIALTARGET_SELF, 0);
         }
         else
         {
-            css::uno::Reference< css::frame::XDispatchProvider > xController( xFrame->getController(), css::uno::UNO_QUERY );
+            cpo::uno::Reference< css::frame::XDispatchProvider > xController( xFrame->getController(), cpo::uno::UNO_QUERY );
             if (xController.is())
                 // Force using of a special target, but use original search flags.
                 // The caller may or may not use the CREATE flag!
@@ -283,7 +283,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
 
     else if (sTargetFrameName==SPECIALTARGET_PARENT)
     {
-        css::uno::Reference< css::frame::XDispatchProvider > xParent( xFrame->getCreator(), css::uno::UNO_QUERY );
+        cpo::uno::Reference< css::frame::XDispatchProvider > xParent( xFrame->getCreator(), cpo::uno::UNO_QUERY );
         if (xParent.is())
             // SELF => we must address the parent directly, and not its parent or any other parent!
             xDispatcher = xParent->queryDispatch(aURL, SPECIALTARGET_SELF, 0);
@@ -304,7 +304,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
         }
         else
         {
-            css::uno::Reference< css::frame::XDispatchProvider > xParent( xFrame->getCreator(), css::uno::UNO_QUERY );
+            cpo::uno::Reference< css::frame::XDispatchProvider > xParent( xFrame->getCreator(), cpo::uno::UNO_QUERY );
             // Normally if isTop() returned false, the parent frame MUST(!) exist,
             // but it seems to be better to check that here to avoid an access violation.
             if (xParent.is())
@@ -326,7 +326,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
         // There is a hardcoded interception for special URLs.
         if ( aURL.Complete == ".uno:CloseDoc" || aURL.Complete == ".uno:CloseWin" )
         {
-            css::uno::Reference< css::frame::XDispatchProvider > xParent( xFrame->getCreator(), css::uno::UNO_QUERY );
+            cpo::uno::Reference< css::frame::XDispatchProvider > xParent( xFrame->getCreator(), cpo::uno::UNO_QUERY );
             // In case the frame is not a top one, is not based on system window and has a parent,
             // the parent frame should be queried for the correct dispatcher.
             // See i93473
@@ -347,7 +347,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
             // Ask our controller for its opinion on these dispatched URLs,
             // because some URLs are internal and can be handled faster by SFX - which usually is the current controller!
             // But in case of e.g. the bibliography not all queries will be handled successfully here.
-            css::uno::Reference< css::frame::XDispatchProvider > xController( xFrame->getController(), css::uno::UNO_QUERY );
+            cpo::uno::Reference< css::frame::XDispatchProvider > xController( xFrame->getController(), cpo::uno::UNO_QUERY );
             if (xController.is())
                 xDispatcher = xController->queryDispatch(aURL, SPECIALTARGET_SELF, 0);
         }
@@ -382,7 +382,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
         sal_Int32 nRightFlags  = nSearchFlags & ~css::frame::FrameSearchFlag::CREATE;
 
         // try to find any existing target and ask it for its dispatcher
-        css::uno::Reference< css::frame::XFrame > xFoundFrame = xFrame->findFrame(sTargetFrameName, nRightFlags);
+        cpo::uno::Reference< css::frame::XFrame > xFoundFrame = xFrame->findFrame(sTargetFrameName, nRightFlags);
         if (xFoundFrame.is())
         {
             // Attention: Found target is our own owner frame!
@@ -394,7 +394,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
                 xDispatcher = implts_getOrCreateDispatchHelper( E_SELFDISPATCHER, xFrame );
             else
             {
-                css::uno::Reference< css::frame::XDispatchProvider > xProvider( xFoundFrame, css::uno::UNO_QUERY );
+                cpo::uno::Reference< css::frame::XDispatchProvider > xProvider( xFoundFrame, cpo::uno::UNO_QUERY );
                 xDispatcher = xProvider->queryDispatch(aURL,SPECIALTARGET_SELF,0);
             }
         }
@@ -407,7 +407,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
         //       We already know it: the target must be created new.
         if (nSearchFlags & css::frame::FrameSearchFlag::CREATE)
         {
-            css::uno::Reference< css::frame::XDispatchProvider > xParent( xFrame->getCreator(), css::uno::UNO_QUERY );
+            cpo::uno::Reference< css::frame::XDispatchProvider > xParent( xFrame->getCreator(), cpo::uno::UNO_QUERY );
             if (xParent.is())
                 xDispatcher = xParent->queryDispatch(aURL, sTargetFrameName, css::frame::FrameSearchFlag::CREATE);
         }
@@ -429,15 +429,15 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
 
     @threadsafe yes
 */
-css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_searchProtocolHandler( const css::util::URL& aURL )
+cpo::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_searchProtocolHandler( const css::util::URL& aURL )
 {
-    css::uno::Reference< css::frame::XDispatch > xDispatcher;
+    cpo::uno::Reference< css::frame::XDispatch > xDispatcher;
     ProtocolHandler                              aHandler;
 
     // This member itself is threadsafe and lives if we live - we don't need any mutex here.
     if (framework::HandlerCache::search(aURL,&aHandler))
     {
-        css::uno::Reference< css::frame::XDispatchProvider > xHandler;
+        cpo::uno::Reference< css::frame::XDispatchProvider > xHandler;
         {
             SolarMutexGuard g;
 
@@ -450,12 +450,12 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_searchProt
                 if (it == m_aProtocolHandlers.end())
                 {
                     xHandler.set(
-                        css::uno::Reference<css::lang::XMultiServiceFactory>(m_xContext->getServiceManager(), css::uno::UNO_QUERY_THROW)
+                        cpo::uno::Reference<css::lang::XMultiServiceFactory>(m_xContext->getServiceManager(), cpo::uno::UNO_QUERY_THROW)
                           ->createInstance(aHandler.m_sUNOName),
-                        css::uno::UNO_QUERY);
+                        cpo::uno::UNO_QUERY);
 
                     // Check if the handler explicitly requested to avoid caching.
-                    css::uno::Reference<css::util::XCacheInfo> xCacheInfo(xHandler, css::uno::UNO_QUERY);
+                    cpo::uno::Reference<css::util::XCacheInfo> xCacheInfo(xHandler, cpo::uno::UNO_QUERY);
                     if (!xCacheInfo.is() || xCacheInfo->isCachingAllowed())
                     {
                         m_aProtocolHandlers.emplace(aHandler.m_sUNOName, xHandler);
@@ -470,10 +470,10 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_searchProt
             catch(const cpo::uno::Exception&) {}
 
             // check if initialization is necessary
-            css::uno::Reference< css::lang::XInitialization > xInit( xHandler, css::uno::UNO_QUERY );
+            cpo::uno::Reference< css::lang::XInitialization > xInit( xHandler, cpo::uno::UNO_QUERY );
             if (xInit.is() && bInitialize)
             {
-                css::uno::Reference< css::frame::XFrame > xOwner( m_xFrame.get(), css::uno::UNO_QUERY );
+                cpo::uno::Reference< css::frame::XFrame > xOwner( m_xFrame.get(), cpo::uno::UNO_QUERY );
                 SAL_WARN_IF(!xOwner.is(), "fwk", "DispatchProvider::implts_searchProtocolHandler(): Couldn't get reference to my owner frame. So I can't set may needed context information for this protocol handler.");
                 if (xOwner.is())
                 {
@@ -518,12 +518,12 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_searchProt
 
     @threadsafe yes
 */
-css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreateDispatchHelper( EDispatchHelper                                  eHelper     ,
-                                                                                                 const css::uno::Reference< css::frame::XFrame >& xOwner      ,
+cpo::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreateDispatchHelper( EDispatchHelper                                  eHelper     ,
+                                                                                                 const cpo::uno::Reference< css::frame::XFrame >& xOwner      ,
                                                                                                  const OUString&                           sTarget     ,
                                                                                                  sal_Int32                                  nSearchFlags)
 {
-    css::uno::Reference< css::frame::XDispatch > xDispatchHelper;
+    cpo::uno::Reference< css::frame::XDispatch > xDispatchHelper;
 
     switch (eHelper)
     {

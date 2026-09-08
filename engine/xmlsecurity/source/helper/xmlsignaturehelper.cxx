@@ -53,7 +53,8 @@ constexpr OUString OOXML_SIGNATURE_SIGNATURE = u"http://schemas.openxmlformats.o
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::graphic;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 XMLSignatureHelper::XMLSignatureHelper( const uno::Reference< cpo::uno::XComponentContext >& rxCtx)
     : mxCtx(rxCtx), mbODFPre1_2(false)
@@ -69,7 +70,7 @@ XMLSignatureHelper::~XMLSignatureHelper()
 void XMLSignatureHelper::SetStorage(
     const Reference < css::embed::XStorage >& rxStorage,
     std::u16string_view sODFVersion,
-    const css::uno::Reference<css::io::XStream>& xScriptStream)
+    const cpo::uno::Reference<css::io::XStream>& xScriptStream)
 {
     SAL_WARN_IF( mxUriBinding.is(), "xmlsecurity.helper", "SetStorage - UriBinding already set!" );
     mxUriBinding = new UriBindingHelper( rxStorage, xScriptStream );
@@ -141,13 +142,13 @@ void XMLSignatureHelper::SetSignatureLineId(sal_Int32 nSecurityId, const OUStrin
 }
 
 void XMLSignatureHelper::SetSignatureLineValidGraphic(
-    sal_Int32 nSecurityId, const css::uno::Reference<XGraphic>& xValidGraphic)
+    sal_Int32 nSecurityId, const cpo::uno::Reference<XGraphic>& xValidGraphic)
 {
     mpXSecController->setSignatureLineValidGraphic(nSecurityId, xValidGraphic);
 }
 
 void XMLSignatureHelper::SetSignatureLineInvalidGraphic(
-    sal_Int32 nSecurityId, const css::uno::Reference<XGraphic>& xInvalidGraphic)
+    sal_Int32 nSecurityId, const cpo::uno::Reference<XGraphic>& xInvalidGraphic)
 {
     mpXSecController->setSignatureLineInvalidGraphic(nSecurityId, xInvalidGraphic);
 }
@@ -159,7 +160,7 @@ void XMLSignatureHelper::AddForSigning( sal_Int32 nSecurityId, const OUString& u
 
 
 uno::Reference<xml::sax::XWriter> XMLSignatureHelper::CreateDocumentHandlerWithHeader(
-    const css::uno::Reference< css::io::XOutputStream >& xOutputStream )
+    const cpo::uno::Reference< css::io::XOutputStream >& xOutputStream )
 {
     /*
      * get SAX writer component
@@ -236,7 +237,7 @@ void XMLSignatureHelper::CreateAndWriteSignature( const uno::Reference< xml::sax
     }
 }
 
-bool XMLSignatureHelper::ReadAndVerifySignature( const css::uno::Reference< css::io::XInputStream >& xInputStream )
+bool XMLSignatureHelper::ReadAndVerifySignature( const cpo::uno::Reference< css::io::XInputStream >& xInputStream )
 {
     mbError = false;
 
@@ -367,7 +368,7 @@ bool XMLSignatureHelper::ReadAndVerifySignatureStorage(const uno::Reference<embe
     return true;
 }
 
-bool XMLSignatureHelper::ReadAndVerifySignatureStorageStream(const css::uno::Reference<css::io::XInputStream>& xInputStream)
+bool XMLSignatureHelper::ReadAndVerifySignatureStorageStream(const cpo::uno::Reference<css::io::XInputStream>& xInputStream)
 {
     mbError = false;
 
@@ -401,7 +402,7 @@ bool XMLSignatureHelper::ReadAndVerifySignatureStorageStream(const css::uno::Ref
     return !mbError;
 }
 
-void XMLSignatureHelper::EnsureSignaturesRelation(const css::uno::Reference<css::embed::XStorage>& xStorage, bool bAdd)
+void XMLSignatureHelper::EnsureSignaturesRelation(const cpo::uno::Reference<css::embed::XStorage>& xStorage, bool bAdd)
 {
     sal_Int32 nOpenMode = embed::ElementModes::READWRITE;
     uno::Reference<embed::XStorage> xSubStorage = xStorage->openStorageElement(u"_rels"_ustr, nOpenMode);
@@ -457,7 +458,7 @@ void XMLSignatureHelper::EnsureSignaturesRelation(const css::uno::Reference<css:
     xTransact->commit();
 }
 
-void XMLSignatureHelper::ExportSignatureRelations(const css::uno::Reference<css::embed::XStorage>& xStorage, int nSignatureCount)
+void XMLSignatureHelper::ExportSignatureRelations(const cpo::uno::Reference<css::embed::XStorage>& xStorage, int nSignatureCount)
 {
     // Write the empty file, its relations will be the signatures.
     sal_Int32 nOpenMode = embed::ElementModes::READWRITE;
@@ -483,7 +484,7 @@ void XMLSignatureHelper::ExportSignatureRelations(const css::uno::Reference<css:
     xTransact->commit();
 }
 
-void XMLSignatureHelper::ExportSignatureContentTypes(const css::uno::Reference<css::embed::XStorage>& xStorage, int nSignatureCount)
+void XMLSignatureHelper::ExportSignatureContentTypes(const cpo::uno::Reference<css::embed::XStorage>& xStorage, int nSignatureCount)
 {
     uno::Reference<io::XStream> xStream = xStorage->openStreamElement(u"[Content_Types].xml"_ustr, embed::ElementModes::READWRITE);
     uno::Reference<io::XInputStream> xInputStream = xStream->getInputStream();

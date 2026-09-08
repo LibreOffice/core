@@ -238,8 +238,8 @@ void Standard2007Engine::writeEncryptionInfo(BinaryXOutputStream& rStream)
         &mInfo.verifier.encryptedVerifierHash, sizeof mInfo.verifier.encryptedVerifierHash);
 }
 
-void Standard2007Engine::encrypt(const css::uno::Reference<css::io::XInputStream> &  rxInputStream,
-                                 css::uno::Reference<css::io::XOutputStream> & rxOutputStream,
+void Standard2007Engine::encrypt(const cpo::uno::Reference<css::io::XInputStream> &  rxInputStream,
+                                 cpo::uno::Reference<css::io::XOutputStream> & rxOutputStream,
                                  sal_uInt32 nSize)
 {
     if (mKey.empty())
@@ -270,7 +270,7 @@ void Standard2007Engine::encrypt(const css::uno::Reference<css::io::XInputStream
     }
 }
 
-bool Standard2007Engine::readEncryptionInfo(css::uno::Reference<css::io::XInputStream> & rxInputStream)
+bool Standard2007Engine::readEncryptionInfo(cpo::uno::Reference<css::io::XInputStream> & rxInputStream)
 {
     BinaryXInputStream aBinaryStream(rxInputStream, false);
 

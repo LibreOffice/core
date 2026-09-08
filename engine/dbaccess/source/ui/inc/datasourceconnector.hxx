@@ -31,13 +31,13 @@ namespace dbaui
     class ODatasourceConnector final
     {
         weld::Window*  m_pErrorMessageParent;
-        css::uno::Reference< cpo::uno::XComponentContext >
+        cpo::uno::Reference< cpo::uno::XComponentContext >
                              m_xContext;
         OUString             m_sContextInformation;
 
     public:
         ODatasourceConnector(
-            const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
             weld::Window* _pMessageParent,
             OUString _sContextInformation
         );
@@ -47,16 +47,16 @@ namespace dbaui
 
         /** creates a connection to the data source, displaying a possible error to the user
         */
-        css::uno::Reference< css::sdbc::XConnection >
+        cpo::uno::Reference< css::sdbc::XConnection >
                     connect(
                         const OUString& _rDataSourceName
                     ) const;
 
         /** creates a connection to the data source, displaying a possible error to the user
         */
-        css::uno::Reference< css::sdbc::XConnection >
+        cpo::uno::Reference< css::sdbc::XConnection >
                     connect(
-                        const css::uno::Reference< css::sdbc::XDataSource>& _xDataSource
+                        const cpo::uno::Reference< css::sdbc::XDataSource>& _xDataSource
                     ) const;
     };
 

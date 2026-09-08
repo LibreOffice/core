@@ -41,7 +41,7 @@
 
 namespace logging
 {
-    using ::com::sun::star::uno::Reference;
+    using ::cpo::uno::Reference;
     using ::com::sun::star::logging::LogRecord;
     using ::com::sun::star::logging::XLogFormatter;
     using ::cpo::uno::Sequence;
@@ -82,7 +82,7 @@ namespace logging
         FileValidity                    m_eFileValidity;
 
     public:
-        FileHandler(const css::uno::Reference<XComponentContext> &context,
+        FileHandler(const cpo::uno::Reference<XComponentContext> &context,
                 const cpo::uno::Sequence<cpo::uno::Any> &arguments);
         virtual ~FileHandler() override;
 
@@ -125,7 +125,7 @@ namespace logging
 
     }
 
-    FileHandler::FileHandler(const css::uno::Reference<XComponentContext> &context,
+    FileHandler::FileHandler(const cpo::uno::Reference<XComponentContext> &context,
             const cpo::uno::Sequence<cpo::uno::Any> &arguments)
         :FileHandler_Base( m_aMutex )
         ,m_xContext( context )

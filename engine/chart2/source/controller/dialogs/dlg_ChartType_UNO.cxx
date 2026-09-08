@@ -26,6 +26,8 @@
 namespace chart
 {
 using namespace ::com::sun::star;
+using namespace ::cpo;
+
 ChartTypeUnoDlg::ChartTypeUnoDlg( const uno::Reference< cpo::uno::XComponentContext >& _xContext )
                     : ChartTypeUnoDlg_BASE( _xContext )
 {
@@ -74,7 +76,7 @@ void ChartTypeUnoDlg::implInitialize(const cpo::uno::Any& _rValue)
         ChartTypeUnoDlg_BASE::implInitialize(_rValue);
 }
 
-std::unique_ptr<weld::DialogController> ChartTypeUnoDlg::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
+std::unique_ptr<weld::DialogController> ChartTypeUnoDlg::createDialog(const cpo::uno::Reference<css::awt::XWindow>& rParent)
 {
     ChartModel* pChartModel = dynamic_cast<ChartModel*>(rParent.get());
     assert(pChartModel);

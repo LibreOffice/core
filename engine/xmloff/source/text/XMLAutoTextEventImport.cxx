@@ -18,7 +18,7 @@
  */
 
 #include "XMLAutoTextEventImport.hxx"
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <cpo/uno/XInterface.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -30,7 +30,7 @@
 using namespace ::com::sun::star;
 
 using ::cpo::uno::Any;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::cpo::uno::Sequence;
 using ::cpo::uno::Type;
 using ::cpo::uno::XInterface;
@@ -39,7 +39,7 @@ using ::com::sun::star::container::XNameReplace;
 using ::xmloff::token::XML_AUTO_TEXT_EVENTS;
 
 XMLAutoTextEventImport::XMLAutoTextEventImport(
-    const css::uno::Reference<cpo::uno::XComponentContext>& xContext)
+    const cpo::uno::Reference<cpo::uno::XComponentContext>& xContext)
     : SvXMLImport(xContext, u"com.sun.star.comp.Writer.XMLOasisAutotextEventsImporter"_ustr)
 {
 }

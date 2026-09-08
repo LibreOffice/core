@@ -43,8 +43,8 @@ public:
     virtual void statusChanged(const css::frame::FeatureStateEvent& rEvent) override;
 
     // XToolbarController
-    virtual css::uno::Reference<css::awt::XWindow>
-        createItemWindow(const css::uno::Reference<css::awt::XWindow>& rParent) override;
+    virtual cpo::uno::Reference<css::awt::XWindow>
+        createItemWindow(const cpo::uno::Reference<css::awt::XWindow>& rParent) override;
 
     // XInitialization
     virtual void initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments) override;
@@ -62,7 +62,7 @@ public:
     virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
 private:
-    void InitializeStyles(const css::uno::Reference<css::frame::XModel>& xModel);
+    void InitializeStyles(const cpo::uno::Reference<css::frame::XModel>& xModel);
 };
 
 #endif

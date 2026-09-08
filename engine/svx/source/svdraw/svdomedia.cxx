@@ -45,6 +45,7 @@
 #include <sfx2/objsh.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 
 // A media object that points at an external URL is a document link. Registering
@@ -265,7 +266,7 @@ void SdrMediaObj::grabSnapshot(const OUString& rRealURL) const
     uno::Reference<graphic::XGraphic> xCachedSnapshot = m_xImpl->m_xCachedSnapshot;
 
     m_xImpl->m_xPlayerListener.set(new avmedia::PlayerListener(
-        [this, xCachedSnapshot, rRealURL, sReferer, sMimeType](const css::uno::Reference<css::media::XPlayer>& rPlayer){
+        [this, xCachedSnapshot, rRealURL, sReferer, sMimeType](const cpo::uno::Reference<css::media::XPlayer>& rPlayer){
             SolarMutexGuard g;
             uno::Reference<graphic::XGraphic> xGraphic
                 = m_xImpl->m_MediaProperties.getGraphic().GetXGraphic();

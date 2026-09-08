@@ -19,6 +19,7 @@
 #include <vcl/filter/PDFiumLibrary.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace
 {

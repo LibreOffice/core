@@ -34,7 +34,7 @@
 #include <com/sun/star/java/XJavaThreadRegister_11.hpp>
 #include <com/sun/star/java/XJavaVM.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <osl/thread.hxx>
@@ -60,7 +60,7 @@ class JavaVirtualMachine:
 {
 public:
     explicit JavaVirtualMachine(
-        css::uno::Reference<
+        cpo::uno::Reference<
             cpo::uno::XComponentContext > xContext);
 
     // XInitialization
@@ -121,7 +121,7 @@ private:
 
     void handleJniException(JNIEnv * environment);
 
-    css::uno::Reference< cpo::uno::XComponentContext >
+    cpo::uno::Reference< cpo::uno::XComponentContext >
         m_xContext;
 
     // the following are controlled by BaseMutex::m_aMutex:
@@ -132,7 +132,7 @@ private:
         // If the first creation of Java failed and this flag is set then the
         // next call to getJavaVM throws a RuntimException.  This is useful when
         // the second attempt to create Java might cause a crash.
-    css::uno::Reference< css::container::XContainer >
+    cpo::uno::Reference< css::container::XContainer >
         m_xInetConfiguration;
 
     osl::ThreadData m_aAttachGuards;

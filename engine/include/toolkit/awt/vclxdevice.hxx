@@ -47,13 +47,13 @@ public:
     const VclPtr<OutputDevice>& GetOutputDevice() const { return mpOutputDevice; }
 
     // css::awt::XDevice,
-    css::uno::Reference< css::awt::XGraphics >    createGraphics(  ) override;
-    css::uno::Reference< css::awt::XDevice >      createDevice( sal_Int32 nWidth, sal_Int32 nHeight ) override;
+    cpo::uno::Reference< css::awt::XGraphics >    createGraphics(  ) override;
+    cpo::uno::Reference< css::awt::XDevice >      createDevice( sal_Int32 nWidth, sal_Int32 nHeight ) override;
     css::awt::DeviceInfo                                       getInfo() override;
     cpo::uno::Sequence< css::awt::FontDescriptor > getFontDescriptors(  ) override;
-    css::uno::Reference< css::awt::XFont >        getFont( const css::awt::FontDescriptor& aDescriptor ) override;
-    css::uno::Reference< css::awt::XBitmap >      createBitmap( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight ) override;
-    css::uno::Reference< css::awt::XDisplayBitmap > createDisplayBitmap( const css::uno::Reference< css::awt::XBitmap >& Bitmap ) override;
+    cpo::uno::Reference< css::awt::XFont >        getFont( const css::awt::FontDescriptor& aDescriptor ) override;
+    cpo::uno::Reference< css::awt::XBitmap >      createBitmap( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight ) override;
+    cpo::uno::Reference< css::awt::XDisplayBitmap > createDisplayBitmap( const cpo::uno::Reference< css::awt::XBitmap >& Bitmap ) override;
 
     // css::awt::XUnitConversion
     css::awt::Point convertPointToLogic( const css::awt::Point& aPoint, ::sal_Int16 TargetUnit ) override;

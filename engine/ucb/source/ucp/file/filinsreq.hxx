@@ -104,7 +104,7 @@ class XInteractionSupplyNameImpl : public cppu::WeakImplHelper<
 
         XInteractionRequestImpl(
             const OUString& aClashingName,
-            const css::uno::Reference< cpo::uno::XInterface>& xOrigin,
+            const cpo::uno::Reference< cpo::uno::XInterface>& xOrigin,
             TaskManager* pShell,
             sal_Int32 CommandId);
 
@@ -121,7 +121,7 @@ class XInteractionSupplyNameImpl : public cppu::WeakImplHelper<
                 return EMPTY_OUSTRING;
         }
 
-        css::uno::Reference<css::task::XInteractionRequest> const& getRequest() const
+        cpo::uno::Reference<css::task::XInteractionRequest> const& getRequest() const
         {
             return m_xRequest;
         }
@@ -131,9 +131,9 @@ class XInteractionSupplyNameImpl : public cppu::WeakImplHelper<
         XInteractionSupplyNameImpl* p1;
         XInteractionAbortImpl* p2;
 
-        css::uno::Reference<css::task::XInteractionRequest> m_xRequest;
+        cpo::uno::Reference<css::task::XInteractionRequest> m_xRequest;
 
-        css::uno::Reference< cpo::uno::XInterface> m_xOrigin;
+        cpo::uno::Reference< cpo::uno::XInterface> m_xOrigin;
     };
 
 }

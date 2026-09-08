@@ -33,13 +33,13 @@ class ManifestReader: public ::cppu::WeakImplHelper
 >
 {
 private:
-    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 public:
-    ManifestReader( const css::uno::Reference< cpo::uno::XComponentContext > & xContext );
+    ManifestReader( const cpo::uno::Reference< cpo::uno::XComponentContext > & xContext );
     virtual ~ManifestReader() override;
 
     // XManifestReader
-    virtual cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > > readManifestSequence( const css::uno::Reference< css::io::XInputStream >& rStream ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > > SAL_CALL readManifestSequence( const cpo::uno::Reference< css::io::XInputStream >& rStream ) override;
 
     // XServiceInfo
     virtual OUString getImplementationName(  ) override;

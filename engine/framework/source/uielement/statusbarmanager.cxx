@@ -51,6 +51,7 @@
 #include <cassert>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace framework
 {
@@ -489,8 +490,8 @@ void StatusBarManager::DataChanged( const DataChangedEvent& rDCEvt )
          ( rDCEvt.GetType() == DataChangedEventType::DISPLAY          ))  &&
          ( rDCEvt.GetFlags() & AllSettingsFlags::STYLE               ))
     {
-        css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
-        css::uno::Reference< css::beans::XPropertySet > xPropSet( m_xFrame, css::uno::UNO_QUERY );
+        cpo::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
+        cpo::uno::Reference< css::beans::XPropertySet > xPropSet( m_xFrame, cpo::uno::UNO_QUERY );
         if ( xPropSet.is() )
             xPropSet->getPropertyValue(u"LayoutManager"_ustr) >>= xLayoutManager;
         if ( xLayoutManager.is() )

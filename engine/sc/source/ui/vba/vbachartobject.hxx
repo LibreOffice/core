@@ -33,23 +33,23 @@ typedef InheritedHelperInterfaceWeakImpl<ov::excel::XChartObject > ChartObjectIm
 class ScVbaChartObject : public ChartObjectImpl_BASE
 {
 
-    css::uno::Reference< css::table::XTableChart  > xTableChart;
-    css::uno::Reference< css::document::XEmbeddedObjectSupplier > xEmbeddedObjectSupplier;
-    css::uno::Reference< css::drawing::XDrawPageSupplier > xDrawPageSupplier;
-    css::uno::Reference< css::drawing::XDrawPage > xDrawPage;
-    css::uno::Reference< css::drawing::XShape > xShape;
-    css::uno::Reference< css::container::XNamed > xNamed;
+    cpo::uno::Reference< css::table::XTableChart  > xTableChart;
+    cpo::uno::Reference< css::document::XEmbeddedObjectSupplier > xEmbeddedObjectSupplier;
+    cpo::uno::Reference< css::drawing::XDrawPageSupplier > xDrawPageSupplier;
+    cpo::uno::Reference< css::drawing::XDrawPage > xDrawPage;
+    cpo::uno::Reference< css::drawing::XShape > xShape;
+    cpo::uno::Reference< css::container::XNamed > xNamed;
     OUString sPersistName;
     std::optional<ov::ShapeHelper> oShapeHelper;
-    css::uno::Reference< css::container::XNamed > xNamedShape;
+    cpo::uno::Reference< css::container::XNamed > xNamedShape;
     OUString const & getPersistName();
     /// @throws css::script::BasicErrorException
-    css::uno::Reference< css::drawing::XShape > setShape();
+    cpo::uno::Reference< css::drawing::XShape > setShape();
 public:
-    ScVbaChartObject( const css::uno::Reference< ov::XHelperInterface >& _xParent, const css::uno::Reference< cpo::uno::XComponentContext >& _xContext, css::uno::Reference< css::table::XTableChart >  _xTableChart, css::uno::Reference< css::drawing::XDrawPageSupplier >  _xDrawPageSupplier );
+    ScVbaChartObject( const cpo::uno::Reference< ov::XHelperInterface >& _xParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& _xContext, cpo::uno::Reference< css::table::XTableChart >  _xTableChart, cpo::uno::Reference< css::drawing::XDrawPageSupplier >  _xDrawPageSupplier );
     virtual OUString SAL_CALL getName() override;
     virtual void SAL_CALL setName( const OUString& sName ) override;
-    virtual css::uno::Reference< ov::excel::XChart > SAL_CALL getChart() override;
+    virtual cpo::uno::Reference< ov::excel::XChart > SAL_CALL getChart() override;
     virtual void SAL_CALL Delete() override;
     /// @throws css::script::BasicErrorException
     void Activate();

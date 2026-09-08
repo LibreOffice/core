@@ -33,14 +33,14 @@ private:
 
 public:
     /// @throws cpo::uno::RuntimeException
-    ScVbaCommandBars( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess, const css::uno::Reference< css::frame::XModel >& xModel );
+    ScVbaCommandBars( const cpo::uno::Reference< ov::XHelperInterface >& xParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext, const cpo::uno::Reference< css::container::XIndexAccess >& xIndexAccess, const cpo::uno::Reference< css::frame::XModel >& xModel );
     virtual ~ScVbaCommandBars() override;
 
     // XCommandBars
-    virtual css::uno::Reference< ov::XCommandBar > Add( const cpo::uno::Any& Name, const cpo::uno::Any& Position, const cpo::uno::Any& MenuBar, const cpo::uno::Any& Temporary ) override;
+    virtual cpo::uno::Reference< ov::XCommandBar > Add( const cpo::uno::Any& Name, const cpo::uno::Any& Position, const cpo::uno::Any& MenuBar, const cpo::uno::Any& Temporary ) override;
     // XEnumerationAccess
     virtual cpo::uno::Type getElementType() override;
-    virtual css::uno::Reference< css::container::XEnumeration > createEnumeration() override;
+    virtual cpo::uno::Reference< css::container::XEnumeration > createEnumeration() override;
     virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) override;
 
     virtual sal_Int32 getCount() override;

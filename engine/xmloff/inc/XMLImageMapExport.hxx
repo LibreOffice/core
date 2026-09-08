@@ -22,10 +22,10 @@
 #include <sal/types.h>
 
 namespace com::sun::star {
-    namespace uno { template<class X> class Reference; }
     namespace beans { class XPropertySet; }
     namespace container { class XIndexContainer; }
 }
+namespace cpo::uno { template<class X> class Reference; }
 class SvXMLExport;
 
 
@@ -45,13 +45,13 @@ public:
      */
     void Export(
         /// the property set containing the ImageMap property
-        const css::uno::Reference< css::beans::XPropertySet> & rPropertySet);
+        const cpo::uno::Reference< css::beans::XPropertySet> & rPropertySet);
     /**
      * Export an ImageMap (XIndexContainer).
      */
     void Export(
         /// the container containing the image map elements
-        const css::uno::Reference< css::container::XIndexContainer> & rContainer);
+        const cpo::uno::Reference< css::container::XIndexContainer> & rContainer);
 
 private:
 
@@ -61,28 +61,28 @@ private:
      * Calls methods for specific image map entries.
      */
     void ExportMapEntry(
-        const css::uno::Reference< css::beans::XPropertySet> & rPropertySet);
+        const cpo::uno::Reference< css::beans::XPropertySet> & rPropertySet);
 
     /**
      * Export the specifics of a rectangular image map entry.
      * To be called by ExportMapEntry.
      */
     void ExportRectangle(
-        const css::uno::Reference< css::beans::XPropertySet> & rPropertySet);
+        const cpo::uno::Reference< css::beans::XPropertySet> & rPropertySet);
 
     /**
      * Export the specifics of a circular image map entry.
      * To be called by ExportMapEntry.
      */
     void ExportCircle(
-        const css::uno::Reference< css::beans::XPropertySet> & rPropertySet);
+        const cpo::uno::Reference< css::beans::XPropertySet> & rPropertySet);
 
     /**
      * Export the specifics of a polygonal image map entry;
      * To be called by ExportMapEntry.
      */
     void ExportPolygon(
-        const css::uno::Reference< css::beans::XPropertySet> & rPropertySet);
+        const cpo::uno::Reference< css::beans::XPropertySet> & rPropertySet);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

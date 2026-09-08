@@ -45,6 +45,7 @@
 #include <memory>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace xmloff::token;
 
 ScSortParam convertSortSequence(const cpo::uno::Sequence<beans::PropertyValue>& rSortSequence,

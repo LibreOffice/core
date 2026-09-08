@@ -45,7 +45,7 @@ public:
 
     static void changeTextAdjustment( tAnySequence& rPropValues, const tNameSequence& rPropNames, LabelAlignment eAlignment);
     static void doDynamicFontResize(  tAnySequence& rPropValues, const tNameSequence& rPropNames
-                    , const css::uno::Reference< css::beans::XPropertySet >& xAxisModelProps
+                    , const cpo::uno::Reference< css::beans::XPropertySet >& xAxisModelProps
                     , const css::awt::Size& rNewReferenceSize );
 
     static void correctPositionForRotation( const rtl::Reference<SvxShapeText>& xShape2DText

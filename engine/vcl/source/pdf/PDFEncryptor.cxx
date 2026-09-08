@@ -17,6 +17,7 @@
 #include <array>
 
 using namespace css;
+using namespace ::cpo;
 
 namespace vcl::pdf
 {

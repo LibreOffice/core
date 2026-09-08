@@ -54,8 +54,8 @@ private:
     @throws WrappedTargetException
         if an error occurs accessing the URL via the UCB
     */
-    css::uno::Reference< cpo::uno::XInterface > loadObjectFromURL(const OUString& _rName,const OUString& _sURL);
-    css::uno::Reference< cpo::uno::XInterface > getObject( const OUString& _rURL );
+    cpo::uno::Reference< cpo::uno::XInterface > loadObjectFromURL(const OUString& _rName,const OUString& _sURL);
+    cpo::uno::Reference< cpo::uno::XInterface > getObject( const OUString& _rURL );
 
     /** sets all properties which were transient at the data source. e.g. password
         @param  _sURL       The file URL of the data source
@@ -65,7 +65,7 @@ private:
 
     /** creates a new data source
     */
-    css::uno::Reference< cpo::uno::XInterface >
+    cpo::uno::Reference< cpo::uno::XInterface >
             impl_createNewDataSource();
 
 #if HAVE_FEATURE_SCRIPTING
@@ -73,10 +73,10 @@ private:
 #endif
 
     ::osl::Mutex                    m_aMutex;
-    css::uno::Reference< cpo::uno::XComponentContext >
+    cpo::uno::Reference< cpo::uno::XComponentContext >
                                     m_aContext;
 
-    css::uno::Reference< css::sdb::XDatabaseRegistrations >
+    cpo::uno::Reference< css::sdb::XDatabaseRegistrations >
                                     m_xDatabaseRegistrations;
 
     typedef std::map<OUString, ODatabaseModelImpl*> ObjectCache;
@@ -94,15 +94,15 @@ private:
     rtl::Reference<DatabaseDocumentLoader>         m_xDatabaseDocumentLoader;
 
 public:
-    explicit ODatabaseContext( const css::uno::Reference< cpo::uno::XComponentContext >& );
+    explicit ODatabaseContext( const cpo::uno::Reference< cpo::uno::XComponentContext >& );
     virtual ~ODatabaseContext() override;
 
     // OComponentHelper
     virtual void disposing() override;
 
     // XSingleServiceFactory
-    virtual css::uno::Reference< cpo::uno::XInterface > createInstance(  ) override;
-    virtual css::uno::Reference< cpo::uno::XInterface > createInstanceWithArguments( const cpo::uno::Sequence< cpo::uno::Any >& _rArguments ) override;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > createInstance(  ) override;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > createInstanceWithArguments( const cpo::uno::Sequence< cpo::uno::Any >& _rArguments ) override;
 
     // XServiceInfo
     virtual OUString getImplementationName(  ) override;
@@ -114,7 +114,7 @@ public:
     virtual bool hasElements(  ) override;
 
     // XEnumerationAccess
-    virtual css::uno::Reference< css::container::XEnumeration > createEnumeration(  ) override;
+    virtual cpo::uno::Reference< css::container::XEnumeration > createEnumeration(  ) override;
 
     // XNameAccess
     virtual cpo::uno::Any getByName( const OUString& aName ) override;
@@ -122,8 +122,8 @@ public:
     virtual bool hasByName( const OUString& aName ) override;
 
     // XNamingService
-    virtual css::uno::Reference< cpo::uno::XInterface > getRegisteredObject( const OUString& Name ) override;
-    virtual void registerObject( const OUString& Name, const css::uno::Reference< cpo::uno::XInterface >& Object ) override;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > getRegisteredObject( const OUString& Name ) override;
+    virtual void registerObject( const OUString& Name, const cpo::uno::Reference< cpo::uno::XInterface >& Object ) override;
     virtual void revokeObject( const OUString& Name ) override;
 
     // XDatabaseRegistrations
@@ -134,12 +134,12 @@ public:
     virtual void revokeDatabaseLocation( const OUString& Name ) override;
     virtual void changeDatabaseLocation( const OUString& Name, const OUString& NewLocation ) override;
     virtual bool isDatabaseRegistrationReadOnly( const OUString& Name ) override;
-    virtual void addDatabaseRegistrationsListener( const css::uno::Reference< css::sdb::XDatabaseRegistrationsListener >& Listener ) override;
-    virtual void removeDatabaseRegistrationsListener( const css::uno::Reference< css::sdb::XDatabaseRegistrationsListener >& Listener ) override;
+    virtual void addDatabaseRegistrationsListener( const cpo::uno::Reference< css::sdb::XDatabaseRegistrationsListener >& Listener ) override;
+    virtual void removeDatabaseRegistrationsListener( const cpo::uno::Reference< css::sdb::XDatabaseRegistrationsListener >& Listener ) override;
 
     // XContainer
-    virtual void addContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) override;
-    virtual void removeContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) override;
+    virtual void addContainerListener( const cpo::uno::Reference< css::container::XContainerListener >& xListener ) override;
+    virtual void removeContainerListener( const cpo::uno::Reference< css::container::XContainerListener >& xListener ) override;
 
     void registerDatabaseDocument( ODatabaseModelImpl& _rModelImpl);
     void revokeDatabaseDocument( const ODatabaseModelImpl& _rModelImpl);
@@ -151,7 +151,7 @@ public:
 private:
     // BasicManagerCreationListener
     virtual void onBasicManagerCreated(
-        const css::uno::Reference< css::frame::XModel >& _rxForDocument,
+        const cpo::uno::Reference< css::frame::XModel >& _rxForDocument,
         BasicManager& _rBasicManager
     ) override;
 };

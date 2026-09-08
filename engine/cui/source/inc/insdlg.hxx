@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 
@@ -29,16 +29,16 @@
 class InsertObjectDialog_Impl : public weld::GenericDialogController
 {
 protected:
-    css::uno::Reference < css::embed::XEmbeddedObject > m_xObj;
-    const css::uno::Reference < css::embed::XStorage > m_xStorage;
+    cpo::uno::Reference < css::embed::XEmbeddedObject > m_xObj;
+    const cpo::uno::Reference < css::embed::XStorage > m_xStorage;
     comphelper::EmbeddedObjectContainer aCnt;
 
     InsertObjectDialog_Impl(weld::Window * pParent,
         const OUString& rUIXMLDescription, const OUString& rID,
-        css::uno::Reference < css::embed::XStorage > xStorage);
+        cpo::uno::Reference < css::embed::XStorage > xStorage);
 public:
-    const css::uno::Reference<css::embed::XEmbeddedObject>& GetObject() const { return m_xObj; }
-    virtual css::uno::Reference<css::io::XInputStream> GetIconIfIconified(OUString* pGraphicMediaType);
+    const cpo::uno::Reference<css::embed::XEmbeddedObject>& GetObject() const { return m_xObj; }
+    virtual cpo::uno::Reference<css::io::XInputStream> GetIconIfIconified(OUString* pGraphicMediaType);
     void SetHelpId(const OUString& rHelpId) { m_xDialog->set_help_id(rHelpId); }
     virtual bool IsCreateNew() const;
 };
@@ -67,12 +67,12 @@ class SvInsertOleDlg : public InsertObjectDialog_Impl
 
 public:
     SvInsertOleDlg(weld::Window* pParent,
-        const css::uno::Reference < css::embed::XStorage >& xStorage,
+        const cpo::uno::Reference < css::embed::XStorage >& xStorage,
         const SvObjectServerList* pServers );
     virtual short run() override;
 
     /// get replacement for the iconified embedded object and the mediatype of the replacement
-    css::uno::Reference< css::io::XInputStream > GetIconIfIconified( OUString* pGraphicMediaType ) override;
+    cpo::uno::Reference< css::io::XInputStream > GetIconIfIconified( OUString* pGraphicMediaType ) override;
 };
 
 class SfxInsertFloatingFrameDialog : public InsertObjectDialog_Impl
@@ -103,9 +103,9 @@ private:
 
 public:
     SfxInsertFloatingFrameDialog(weld::Window *pParent,
-        const css::uno::Reference<css::embed::XStorage>& xStorage);
+        const cpo::uno::Reference<css::embed::XStorage>& xStorage);
     SfxInsertFloatingFrameDialog(weld::Window* pParent,
-        const css::uno::Reference<css::embed::XEmbeddedObject>& xObj);
+        const cpo::uno::Reference<css::embed::XEmbeddedObject>& xObj);
     virtual short run() override;
 };
 

@@ -23,7 +23,7 @@
 #include <unotools/unotoolsdllapi.h>
 #include <i18nlangtag/lang.h>
 #include <rtl/ustring.hxx>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 
 #include <ostream>
 
@@ -154,10 +154,10 @@ inline std::basic_ostream<charT, traits> & operator <<(std::basic_ostream<charT,
 
 class UNOTOOLS_DLLPUBLIC TextSearch
 {
-    static css::uno::Reference< css::util::XTextSearch2 >
+    static cpo::uno::Reference< css::util::XTextSearch2 >
         getXTextSearch( const i18nutil::SearchOptions2& rPara );
 
-    css::uno::Reference < css::util::XTextSearch2 >
+    cpo::uno::Reference < css::util::XTextSearch2 >
             xTextSearch;
 
     void Init( const SearchParam & rParam,

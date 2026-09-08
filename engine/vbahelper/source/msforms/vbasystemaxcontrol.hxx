@@ -29,13 +29,13 @@ typedef cppu::ImplInheritanceHelper< ScVbaControl, css::script::XInvocation > Sy
 
 class VbaSystemAXControl : public SystemAXControlImpl_BASE
 {
-    css::uno::Reference< css::script::XInvocation > m_xControlInvocation;
+    cpo::uno::Reference< css::script::XInvocation > m_xControlInvocation;
 
 public:
-    VbaSystemAXControl( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext, const css::uno::Reference< cpo::uno::XInterface >& xControl, const css::uno::Reference< css::frame::XModel >& xModel, std::unique_ptr<ov::AbstractGeometryAttributes> pGeomHelper  );
+    VbaSystemAXControl( const cpo::uno::Reference< ov::XHelperInterface >& xParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext, const cpo::uno::Reference< cpo::uno::XInterface >& xControl, const cpo::uno::Reference< css::frame::XModel >& xModel, std::unique_ptr<ov::AbstractGeometryAttributes> pGeomHelper  );
 
     // XInvocation
-    virtual css::uno::Reference< css::beans::XIntrospectionAccess > getIntrospection(  ) override;
+    virtual cpo::uno::Reference< css::beans::XIntrospectionAccess > getIntrospection(  ) override;
     virtual cpo::uno::Any invoke( const OUString& aFunctionName, const cpo::uno::Sequence< cpo::uno::Any >& aParams, cpo::uno::Sequence< ::sal_Int16 >& aOutParamIndex, cpo::uno::Sequence< cpo::uno::Any >& aOutParam ) override;
     virtual void setValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
     virtual cpo::uno::Any getValue( const OUString& aPropertyName ) override;

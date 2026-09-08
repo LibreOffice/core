@@ -37,8 +37,8 @@ class OwnView_Impl : public ::cppu::WeakImplHelper < css::util::XCloseListener,
 {
     ::osl::Mutex m_aMutex;
 
-    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
-    css::uno::Reference< css::frame::XModel > m_xModel;
+    cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+    cpo::uno::Reference< css::frame::XModel > m_xModel;
 
     OUString m_aTempFileURL;
     OUString m_aNativeTempURL;
@@ -54,18 +54,18 @@ private:
 
     bool CreateModel( bool bUseNative );
 
-    bool ReadContentsAndGenerateTempFile( const css::uno::Reference< css::io::XInputStream >& xStream, bool bParseHeader );
+    bool ReadContentsAndGenerateTempFile( const cpo::uno::Reference< css::io::XInputStream >& xStream, bool bParseHeader );
 
     void CreateNative();
 
 public:
     static OUString GetFilterNameFromExtentionAndInStream(
-                                const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
+                                const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
                                 std::u16string_view aNameWithExtention,
-                                const css::uno::Reference< css::io::XInputStream >& xInputStream );
+                                const cpo::uno::Reference< css::io::XInputStream >& xInputStream );
 
-    OwnView_Impl( const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
-                  const css::uno::Reference< css::io::XInputStream >& xStream );
+    OwnView_Impl( const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
+                  const cpo::uno::Reference< css::io::XInputStream >& xStream );
     virtual ~OwnView_Impl() override;
 
     bool Open();

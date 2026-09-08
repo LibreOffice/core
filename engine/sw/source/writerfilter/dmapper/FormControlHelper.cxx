@@ -47,6 +47,7 @@
 namespace writerfilter::dmapper {
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 rtl::Reference<SwFmDrawPage> const & FormControlHelper::getDrawPage()
 {

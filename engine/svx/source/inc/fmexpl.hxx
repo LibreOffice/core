@@ -126,9 +126,9 @@ class FmEntryDataList;
 class FmEntryData
 {
 private:
-    css::uno::Reference< cpo::uno::XInterface >       m_xNormalizedIFace;
-    css::uno::Reference< css::beans::XPropertySet >   m_xProperties;
-    css::uno::Reference< css::container::XChild >     m_xChild;
+    cpo::uno::Reference< cpo::uno::XInterface >       m_xNormalizedIFace;
+    cpo::uno::Reference< css::beans::XPropertySet >   m_xProperties;
+    cpo::uno::Reference< css::container::XChild >     m_xChild;
 
 protected:
     OUString            m_aNormalImage;
@@ -139,11 +139,11 @@ protected:
     FmEntryData*        pParent;
 
 protected:
-    void    newObject( const css::uno::Reference< cpo::uno::XInterface >& _rxIFace );
+    void    newObject( const cpo::uno::Reference< cpo::uno::XInterface >& _rxIFace );
 
 public:
 
-    FmEntryData( FmEntryData* pParentData, const css::uno::Reference< cpo::uno::XInterface >& _rIFace );
+    FmEntryData( FmEntryData* pParentData, const cpo::uno::Reference< cpo::uno::XInterface >& _rIFace );
     virtual ~FmEntryData();
 
     void    SetText( const OUString& rText ){ aText = rText; }
@@ -159,17 +159,17 @@ public:
 
     // note that the interface returned is normalized, i.e. querying the given XInterface of the object
     // for XInterface must return the interface itself.
-    const css::uno::Reference< cpo::uno::XInterface >& GetElement() const
+    const cpo::uno::Reference< cpo::uno::XInterface >& GetElement() const
     {
         return m_xNormalizedIFace;
     }
 
-    const css::uno::Reference< css::beans::XPropertySet >& GetPropertySet() const
+    const cpo::uno::Reference< css::beans::XPropertySet >& GetPropertySet() const
     {
         return m_xProperties;
     }
 
-    const css::uno::Reference< css::container::XChild >& GetChildIFace() const
+    const cpo::uno::Reference< css::container::XChild >& GetChildIFace() const
     {
         return m_xChild;
     }
@@ -220,13 +220,13 @@ public:
 
 class FmFormData final : public FmEntryData
 {
-    css::uno::Reference< css::form::XForm >           m_xForm;
+    cpo::uno::Reference< css::form::XForm >           m_xForm;
 
 public:
-    FmFormData(const css::uno::Reference< css::form::XForm >& _rxForm, FmFormData* _pParent);
+    FmFormData(const cpo::uno::Reference< css::form::XForm >& _rxForm, FmFormData* _pParent);
     virtual ~FmFormData() override;
 
-    const css::uno::Reference< css::form::XForm >& GetFormIface() const { return m_xForm; }
+    const cpo::uno::Reference< css::form::XForm >& GetFormIface() const { return m_xForm; }
 
     virtual bool IsEqualWithoutChildren( FmEntryData* pEntryData ) override;
 };
@@ -234,22 +234,22 @@ public:
 
 class FmControlData final : public FmEntryData
 {
-    css::uno::Reference< css::form::XFormComponent >  m_xFormComponent;
+    cpo::uno::Reference< css::form::XFormComponent >  m_xFormComponent;
 
     OUString GetImage() const;
 
 public:
 
     FmControlData(
-        const css::uno::Reference< css::form::XFormComponent >& _rxComponent,
+        const cpo::uno::Reference< css::form::XFormComponent >& _rxComponent,
         FmFormData* _pParent
     );
     virtual ~FmControlData() override;
 
-    const css::uno::Reference< css::form::XFormComponent >& GetFormComponent() const { return m_xFormComponent; }
+    const cpo::uno::Reference< css::form::XFormComponent >& GetFormComponent() const { return m_xFormComponent; }
     virtual bool IsEqualWithoutChildren( FmEntryData* pEntryData ) override;
 
-    void ModelReplaced(const css::uno::Reference< css::form::XFormComponent >& _rxNew);
+    void ModelReplaced(const cpo::uno::Reference< css::form::XFormComponent >& _rxNew);
 };
 
 
@@ -289,8 +289,8 @@ namespace svxform
         bool CanUndo() const { return m_bCanUndo; }
         void ReleaseModel() { m_pNavModel = nullptr; }
     private:
-        void Insert(const css::uno::Reference< cpo::uno::XInterface >& xIface, sal_Int32 nIndex);
-        void Remove( const css::uno::Reference< cpo::uno::XInterface >& _rxElement );
+        void Insert(const cpo::uno::Reference< cpo::uno::XInterface >& xIface, sal_Int32 nIndex);
+        void Remove( const cpo::uno::Reference< cpo::uno::XInterface >& _rxElement );
     };
 
     class NavigatorTreeModel final : public SfxBroadcaster
@@ -306,17 +306,17 @@ namespace svxform
         FmFormModel*                m_pFormModel;
         rtl::Reference<OFormComponentObserver> m_pPropChangeList;
 
-        void UpdateContent( const css::uno::Reference< css::form::XForms >& xForms );
+        void UpdateContent( const cpo::uno::Reference< css::form::XForms >& xForms );
 
-        void InsertForm(const css::uno::Reference< css::form::XForm >& xForm, sal_uInt32 nRelPos);
+        void InsertForm(const cpo::uno::Reference< css::form::XForm >& xForm, sal_uInt32 nRelPos);
         void RemoveForm(FmFormData const * pFormData);
 
-        void InsertFormComponent(const css::uno::Reference< css::form::XFormComponent >& xComp, sal_uInt32 nRelPos);
+        void InsertFormComponent(const cpo::uno::Reference< css::form::XFormComponent >& xComp, sal_uInt32 nRelPos);
         void RemoveFormComponent(FmControlData const * pControlData);
         void InsertSdrObj(const SdrObject* pSdrObj);
         void RemoveSdrObj(const SdrObject* pSdrObj);
 
-        void ReplaceFormComponent(const css::uno::Reference< css::form::XFormComponent >& xOld, const css::uno::Reference< css::form::XFormComponent >& xNew);
+        void ReplaceFormComponent(const cpo::uno::Reference< css::form::XFormComponent >& xOld, const cpo::uno::Reference< css::form::XFormComponent >& xNew);
 
         void BroadcastMarkedObjects(const SdrMarkList& mlMarked);
             // send a RequestSelectHint with the currently selected objects
@@ -340,13 +340,13 @@ namespace svxform
         void Clear();
         void SetModified();
 
-        css::uno::Reference< css::form::XForms >    GetForms() const;
+        cpo::uno::Reference< css::form::XForms >    GetForms() const;
         FmFormShell*        GetFormShell() const { return m_pFormShell; }
         FmFormPage*         GetFormPage() const { return m_pFormPage; }
-        FmEntryData*        FindData( const css::uno::Reference< cpo::uno::XInterface >& xElement, FmEntryDataList* pDataList, bool bRecurs=true );
+        FmEntryData*        FindData( const cpo::uno::Reference< cpo::uno::XInterface >& xElement, FmEntryDataList* pDataList, bool bRecurs=true );
         FmEntryData*        FindData( const OUString& rText, FmFormData const * pParentData, bool bRecurs );
         FmEntryDataList*    GetRootList() const { return m_pRootList.get(); }
-        static css::uno::Reference< css::container::XIndexContainer >   GetFormComponents( FmFormData const * pParentFormData );
+        static cpo::uno::Reference< css::container::XIndexContainer >   GetFormComponents( FmFormData const * pParentFormData );
 
         virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
     };
@@ -431,7 +431,7 @@ namespace svxform
         void SynchronizeMarkList();
             // reverse direction of SynchronizeMarkList: selects in the view all controls corresponding to the current selection
 
-        void CollectObjects(FmFormData const * pFormData, bool bDeep, ::std::set< css::uno::Reference< css::form::XFormComponent > >& _rObjects);
+        void CollectObjects(FmFormData const * pFormData, bool bDeep, ::std::set< cpo::uno::Reference< css::form::XFormComponent > >& _rObjects);
 
         // in the Select I usually update the Marklist of the corresponding view,
         // with the following functions I can control the locking of this behavior

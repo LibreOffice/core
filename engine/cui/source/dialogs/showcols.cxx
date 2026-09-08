@@ -46,7 +46,7 @@ IMPL_LINK_NOARG(FmShowColsDialog, OnClickedOk, weld::Button&, void)
         "FmShowColsDialog::OnClickedOk : you should call SetColumns before executing the dialog !");
     if (m_xColumns.is())
     {
-        css::uno::Reference<css::beans::XPropertySet> xCol;
+        cpo::uno::Reference<css::beans::XPropertySet> xCol;
         auto nSelectedRows = m_xList->get_selected_rows();
         for (auto i : nSelectedRows)
         {
@@ -69,7 +69,7 @@ IMPL_LINK_NOARG(FmShowColsDialog, OnClickedOk, weld::Button&, void)
     m_xDialog->response(RET_OK);
 }
 
-void FmShowColsDialog::SetColumns(const css::uno::Reference<css::container::XIndexContainer>& xCols)
+void FmShowColsDialog::SetColumns(const cpo::uno::Reference<css::container::XIndexContainer>& xCols)
 {
     DBG_ASSERT(xCols.is(), "FmShowColsDialog::SetColumns : invalid columns !");
     if (!xCols.is())
@@ -78,12 +78,12 @@ void FmShowColsDialog::SetColumns(const css::uno::Reference<css::container::XInd
 
     m_xList->clear();
 
-    css::uno::Reference<css::beans::XPropertySet> xCurCol;
+    cpo::uno::Reference<css::beans::XPropertySet> xCurCol;
     OUString sCurName;
     for (sal_Int32 i = 0; i < xCols->getCount(); ++i)
     {
         sCurName.clear();
-        xCurCol.set(xCols->getByIndex(i), css::uno::UNO_QUERY);
+        xCurCol.set(xCols->getByIndex(i), cpo::uno::UNO_QUERY);
         bool bIsHidden = false;
         try
         {

@@ -67,6 +67,7 @@
 #include <memory>
 
 using namespace css;
+using namespace ::cpo;
 
 #define METABUTTON_WIDTH        16
 #define METABUTTON_HEIGHT       18

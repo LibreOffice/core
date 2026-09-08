@@ -2409,7 +2409,7 @@ void ScTabView::SetNewVisArea()
 
     SfxViewFrame& rViewFrame = aViewData.GetViewShell()->GetViewFrame();
     SfxFrame& rFrame = rViewFrame.GetFrame();
-    css::uno::Reference<css::frame::XController> xController = rFrame.GetController();
+    cpo::uno::Reference<css::frame::XController> xController = rFrame.GetController();
     if (xController.is())
     {
         ScTabViewObj* pImp = dynamic_cast<ScTabViewObj*>( xController.get() );

@@ -30,13 +30,13 @@ typedef InheritedHelperInterfaceWeakImpl< ov::excel::XName > NameImpl_BASE;
 
 class ScVbaName : public NameImpl_BASE
 {
-    css::uno::Reference< css::frame::XModel > mxModel;
-    css::uno::Reference< css::sheet::XNamedRange > mxNamedRange;
-    css::uno::Reference< css::sheet::XNamedRanges > mxNames;
+    cpo::uno::Reference< css::frame::XModel > mxModel;
+    cpo::uno::Reference< css::sheet::XNamedRange > mxNamedRange;
+    cpo::uno::Reference< css::sheet::XNamedRanges > mxNames;
     OUString getContent( const formula::FormulaGrammar::Grammar eGrammar );
     void setContent( const OUString& sContent, const formula::FormulaGrammar::Grammar eGrammar );
 public:
-    ScVbaName( const css::uno::Reference< ov::XHelperInterface >& xParent,  const css::uno::Reference< cpo::uno::XComponentContext >& xContext, css::uno::Reference< css::sheet::XNamedRange > xName , css::uno::Reference< css::sheet::XNamedRanges > xNames , css::uno::Reference< css::frame::XModel > xModel );
+    ScVbaName( const cpo::uno::Reference< ov::XHelperInterface >& xParent,  const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext, cpo::uno::Reference< css::sheet::XNamedRange > xName , cpo::uno::Reference< css::sheet::XNamedRanges > xNames , cpo::uno::Reference< css::frame::XModel > xModel );
     virtual ~ScVbaName() override;
 
     // Attributes
@@ -56,7 +56,7 @@ public:
     virtual void SAL_CALL setRefersToR1C1( const OUString &rRefersTo ) override;
     virtual OUString SAL_CALL getRefersToR1C1Local() override;
     virtual void SAL_CALL setRefersToR1C1Local( const OUString &rRefersTo ) override;
-    virtual css::uno::Reference< ov::excel::XRange > SAL_CALL getRefersToRange() override;
+    virtual cpo::uno::Reference< ov::excel::XRange > SAL_CALL getRefersToRange() override;
 
     // Methods
     virtual void SAL_CALL Delete() override;

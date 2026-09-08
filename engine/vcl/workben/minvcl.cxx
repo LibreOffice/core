@@ -52,8 +52,8 @@ SAL_IMPLEMENT_MAIN()
         TheApplication aApp;
 
         auto xContext = cppu::defaultBootstrap_InitialComponentContext();
-        css::uno::Reference<css::lang::XMultiServiceFactory> xServiceManager(
-            xContext->getServiceManager(), css::uno::UNO_QUERY);
+        cpo::uno::Reference<css::lang::XMultiServiceFactory> xServiceManager(
+            xContext->getServiceManager(), cpo::uno::UNO_QUERY);
         comphelper::setProcessServiceFactory(xServiceManager);
         LanguageTag::setConfiguredSystemLanguage(MsLangId::getSystemLanguage());
         InitVCL();

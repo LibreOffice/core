@@ -35,7 +35,8 @@
 #include <frameformats.hxx>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 class Test : public SwModelTestBase
 {
@@ -901,7 +902,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf91594, "tdf91594.docx")
 }
 DECLARE_OOXMLEXPORT_TEST(testTDF99434, "protectedform.docx")
 {
-    css::uno::Reference<css::lang::XMultiServiceFactory> m_xTextFactory(mxComponent, uno::UNO_QUERY);
+    cpo::uno::Reference<css::lang::XMultiServiceFactory> m_xTextFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference< beans::XPropertySet > xSettings(m_xTextFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY);
     cpo::uno::Any aProtect = xSettings->getPropertyValue(u"ProtectForm"_ustr);
     bool bProt = false;

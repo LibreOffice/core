@@ -46,10 +46,10 @@ public:
     virtual void setActiveTabPageID( ::sal_Int16 _activetabpageid ) override;
     virtual ::sal_Int16 getTabPageCount(  ) override;
     virtual bool isTabPageActive( ::sal_Int16 tabPageIndex ) override;
-    virtual css::uno::Reference< css::awt::tab::XTabPage > getTabPage( ::sal_Int16 tabPageIndex ) override;
-    virtual css::uno::Reference< css::awt::tab::XTabPage > getTabPageByID( ::sal_Int16 tabPageID ) override;
-    virtual void addTabPageContainerListener( const css::uno::Reference< css::awt::tab::XTabPageContainerListener >& listener ) override;
-    virtual void removeTabPageContainerListener( const css::uno::Reference< css::awt::tab::XTabPageContainerListener >& listener ) override;
+    virtual cpo::uno::Reference< css::awt::tab::XTabPage > getTabPage( ::sal_Int16 tabPageIndex ) override;
+    virtual cpo::uno::Reference< css::awt::tab::XTabPage > getTabPageByID( ::sal_Int16 tabPageID ) override;
+    virtual void addTabPageContainerListener( const cpo::uno::Reference< css::awt::tab::XTabPageContainerListener >& listener ) override;
+    virtual void removeTabPageContainerListener( const cpo::uno::Reference< css::awt::tab::XTabPageContainerListener >& listener ) override;
 
     virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override;
 
@@ -67,7 +67,7 @@ private:
     virtual void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
 
     TabPageListenerMultiplexer m_aTabPageListeners;
-    ::std::vector< css::uno::Reference< css::awt::tab::XTabPage > > m_aTabPages;
+    ::std::vector< cpo::uno::Reference< css::awt::tab::XTabPage > > m_aTabPages;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

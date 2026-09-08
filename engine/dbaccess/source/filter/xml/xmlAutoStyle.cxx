@@ -23,7 +23,7 @@
 #include <xmloff/families.hxx>
 namespace dbaxml
 {
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
 
 void OXMLAutoStylePoolP::exportStyleAttributes(
             comphelper::AttributeList& rAttrList,

@@ -27,6 +27,7 @@
 #include <unicode/regex.h>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 class TestTextSearch : public test::BootstrapFixtureBase
 {

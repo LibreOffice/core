@@ -26,8 +26,8 @@
 
 #include "vbaapplication.hxx"
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::ooo::vba;
 
 SwVbaGlobals::SwVbaGlobals(  cpo::uno::Sequence< cpo::uno::Any > const& aArgs, uno::Reference< cpo::uno::XComponentContext >const& rxContext ) : SwVbaGlobals_BASE( uno::Reference< XHelperInterface >(), rxContext, u"WordDocumentContext"_ustr )

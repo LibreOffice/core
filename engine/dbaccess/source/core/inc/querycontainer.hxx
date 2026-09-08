@@ -54,9 +54,9 @@ namespace dbaccess
     {
     private:
         ::dbtools::WarningsContainer*  m_pWarnings;
-        css::uno::Reference< css::container::XNameContainer >
+        cpo::uno::Reference< css::container::XNameContainer >
                                         m_xCommandDefinitions;
-        css::uno::Reference< css::sdbc::XConnection >
+        cpo::uno::Reference< css::sdbc::XConnection >
                                         m_xConnection;
         // possible actions on our "aggregate"
         enum class AggregateAction { NONE, Inserting };
@@ -74,7 +74,7 @@ namespace dbaccess
         };
 
         // ODefinitionContainer
-        virtual css::uno::Reference< css::ucb::XContent > createObject( const OUString& _rName) override;
+        virtual cpo::uno::Reference< css::ucb::XContent > createObject( const OUString& _rName) override;
         virtual bool checkExistence(const OUString& _rName) override;
 
         // helper
@@ -93,9 +93,9 @@ namespace dbaccess
                 <p>The caller is responsible for ensuring the lifetime of the object pointed to by this parameter.
         */
         OQueryContainer(
-            const css::uno::Reference< css::container::XNameContainer >& _rxCommandDefinitions,
-            const css::uno::Reference< css::sdbc::XConnection >& _rxConn,
-            const css::uno::Reference< cpo::uno::XComponentContext >& _rxORB,
+            const cpo::uno::Reference< css::container::XNameContainer >& _rxCommandDefinitions,
+            const cpo::uno::Reference< css::sdbc::XConnection >& _rxConn,
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxORB,
             ::dbtools::WarningsContainer* _pWarnings
             );
 
@@ -103,9 +103,9 @@ namespace dbaccess
 
     public:
         static rtl::Reference<OQueryContainer> create(
-            const css::uno::Reference< css::container::XNameContainer >& _rxCommandDefinitions,
-            const css::uno::Reference< css::sdbc::XConnection >& _rxConn,
-            const css::uno::Reference< cpo::uno::XComponentContext >& _rxORB,
+            const cpo::uno::Reference< css::container::XNameContainer >& _rxCommandDefinitions,
+            const cpo::uno::Reference< css::sdbc::XConnection >& _rxConn,
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxORB,
             ::dbtools::WarningsContainer* _pWarnings
             );
 
@@ -119,18 +119,18 @@ namespace dbaccess
         virtual void elementReplaced( const css::container::ContainerEvent& Event ) override;
 
         // XContainerApproveListener
-        virtual css::uno::Reference< css::util::XVeto > approveInsertElement( const css::container::ContainerEvent& Event ) override;
-        virtual css::uno::Reference< css::util::XVeto > approveReplaceElement( const css::container::ContainerEvent& Event ) override;
-        virtual css::uno::Reference< css::util::XVeto > approveRemoveElement( const css::container::ContainerEvent& Event ) override;
+        virtual cpo::uno::Reference< css::util::XVeto > approveInsertElement( const css::container::ContainerEvent& Event ) override;
+        virtual cpo::uno::Reference< css::util::XVeto > approveReplaceElement( const css::container::ContainerEvent& Event ) override;
+        virtual cpo::uno::Reference< css::util::XVeto > approveRemoveElement( const css::container::ContainerEvent& Event ) override;
 
     // css::lang::XEventListener
         virtual void disposing( const css::lang::EventObject& Source ) override;
 
     // css::sdbcx::XDataDescriptorFactory
-        virtual css::uno::Reference< css::beans::XPropertySet > createDataDescriptor(  ) override;
+        virtual cpo::uno::Reference< css::beans::XPropertySet > createDataDescriptor(  ) override;
 
     // css::sdbcx::XAppend
-        virtual void appendByDescriptor( const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
+        virtual void appendByDescriptor( const cpo::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
 
     // css::sdbcx::XDrop
         virtual void dropByName( const OUString& elementName ) override;
@@ -152,9 +152,9 @@ namespace dbaccess
             container will be asked for the given name.<BR>
             The returned object is acquired once.
         */
-        css::uno::Reference< css::ucb::XContent > implCreateWrapper(const OUString& _rName);
+        cpo::uno::Reference< css::ucb::XContent > implCreateWrapper(const OUString& _rName);
         /// create a query object wrapping a CommandDefinition. The returned object is acquired once.
-        css::uno::Reference< css::ucb::XContent > implCreateWrapper(const css::uno::Reference< css::ucb::XContent >& _rxCommandDesc);
+        cpo::uno::Reference< css::ucb::XContent > implCreateWrapper(const cpo::uno::Reference< css::ucb::XContent >& _rxCommandDesc);
 
     };
 }   // namespace dbaccess

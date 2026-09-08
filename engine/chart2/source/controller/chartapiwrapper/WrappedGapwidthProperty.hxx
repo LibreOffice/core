@@ -37,9 +37,9 @@ public:
             , std::shared_ptr<Chart2ModelContact> spChart2ModelContact );
     virtual ~WrappedBarPositionProperty_Base() override;
 
-    virtual void setPropertyValue( const cpo::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual void setPropertyValue( const cpo::uno::Any& rOuterValue, const cpo::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual cpo::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual cpo::uno::Any getPropertyValue( const cpo::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
     void setDimensionAndAxisIndex( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex );
 

@@ -31,7 +31,7 @@
 #include <memory>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 // Declaration of a variable
 // If there are errors it will be parsed up to the comma or the newline.

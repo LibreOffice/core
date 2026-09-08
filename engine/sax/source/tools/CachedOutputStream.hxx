@@ -38,7 +38,7 @@ class CachedOutputStream
     std::shared_ptr< ForMergeBase > mpForMerge;
     const Int8Sequence maCache;
     /// Output stream, usually writing data into files.
-    css::uno::Reference< css::io::XOutputStream > mxOutputStream;
+    cpo::uno::Reference< css::io::XOutputStream > mxOutputStream;
     uno_Sequence *pSeq;
     sal_Int32 mnCacheWrittenSize;
     bool mbWriteToOutStream;
@@ -50,12 +50,12 @@ public:
                          , mbWriteToOutStream(true)
     {}
 
-    const css::uno::Reference< css::io::XOutputStream >& getOutputStream() const
+    const cpo::uno::Reference< css::io::XOutputStream >& getOutputStream() const
     {
         return mxOutputStream;
     }
 
-    void setOutputStream( const css::uno::Reference< css::io::XOutputStream >& xOutputStream )
+    void setOutputStream( const cpo::uno::Reference< css::io::XOutputStream >& xOutputStream )
     {
         mxOutputStream = xOutputStream;
     }

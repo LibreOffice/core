@@ -21,7 +21,7 @@
 
 #include <osl/diagnose.h>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Exception.hpp>
 #include <com/sun/star/beans/Property.hpp>
@@ -29,7 +29,7 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
-using com::sun::star::uno::Reference;
+using cpo::uno::Reference;
 using cpo::uno::Sequence;
 using cpo::uno::Exception;
 using com::sun::star::beans::Property;

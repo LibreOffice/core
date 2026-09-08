@@ -27,7 +27,7 @@
 
 using namespace ::com::sun::star;
 
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::cpo::uno::Sequence;
 
 namespace chart
@@ -97,7 +97,7 @@ void CommandDispatch::disposing( const lang::EventObject& /* Source */ )
 {}
 
 void CommandDispatch::fireAllStatusEvents(
-    const css::uno::Reference< css::frame::XStatusListener > & xSingleListener )
+    const cpo::uno::Reference< css::frame::XStatusListener > & xSingleListener )
 {
     fireStatusEvent( OUString(), xSingleListener );
 }

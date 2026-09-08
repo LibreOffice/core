@@ -21,7 +21,7 @@
 #define INCLUDED_OOX_VML_VMLINPUTSTREAM_HXX
 
 #include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/string.hxx>
@@ -56,8 +56,8 @@ class InputStream final : public ::cppu::WeakImplHelper< css::io::XInputStream >
 {
 public:
     explicit            InputStream(
-                            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
-                            const css::uno::Reference< css::io::XInputStream >& rxInStrm );
+                            const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+                            const cpo::uno::Reference< css::io::XInputStream >& rxInStrm );
     virtual             ~InputStream() override;
 
     virtual sal_Int32 readBytes( cpo::uno::Sequence< sal_Int8 >& rData, sal_Int32 nBytesToRead ) override;
@@ -78,7 +78,7 @@ private:
     OString      readToElementEnd();
 
 private:
-    css::uno::Reference< css::io::XTextInputStream2 >
+    cpo::uno::Reference< css::io::XTextInputStream2 >
                         mxTextStrm;
     cpo::uno::Sequence< sal_Unicode > maOpeningBracket;
     cpo::uno::Sequence< sal_Unicode > maClosingBracket;

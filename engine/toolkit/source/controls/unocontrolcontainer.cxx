@@ -37,6 +37,7 @@
 #include <utility>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 
 

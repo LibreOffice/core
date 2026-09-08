@@ -40,7 +40,7 @@ class NumberFormatCodeMapper final : public cppu::WeakImplHelper
 >
 {
 public:
-    NumberFormatCodeMapper( const css::uno::Reference <
+    NumberFormatCodeMapper( const cpo::uno::Reference <
                     cpo::uno::XComponentContext >& rxContext );
     virtual ~NumberFormatCodeMapper() override;
 
@@ -56,7 +56,7 @@ public:
 
 private:
     std::mutex maMutex;
-    css::uno::Reference < css::i18n::XLocaleData5 > m_xLocaleData;
+    cpo::uno::Reference < css::i18n::XLocaleData5 > m_xLocaleData;
     typedef std::pair< css::lang::Locale, cpo::uno::Sequence< css::i18n::FormatElement > > FormatElementCacheItem;
     std::deque < FormatElementCacheItem > m_aFormatElementCache;
 

@@ -133,7 +133,7 @@ public:
 
     SC_DLLPUBLIC void           PasteFromSystem(bool useSavedPrefs = false);
     SC_DLLPUBLIC bool           PasteFromSystem( SotClipboardFormatId nFormatId, bool bApi = false, bool useSavedPrefs = false );
-    void                        PasteFromTransferable( const css::uno::Reference<
+    void                        PasteFromTransferable( const cpo::uno::Reference<
                                                        css::datatransfer::XTransferable >& rxTransferable );
 
     void            PasteDraw();
@@ -141,24 +141,24 @@ public:
                         std::u16string_view rSrcShellID, std::u16string_view rDestShellID );
 
     bool            PasteOnDrawObjectLinked(
-                        const css::uno::Reference< css::datatransfer::XTransferable >& rxTransferable,
+                        const cpo::uno::Reference< css::datatransfer::XTransferable >& rxTransferable,
                         SdrObject& rHitObj);
 
     bool            PasteDataFormat( SotClipboardFormatId nFormatId,
-                                        const css::uno::Reference< css::datatransfer::XTransferable >& rxTransferable,
+                                        const cpo::uno::Reference< css::datatransfer::XTransferable >& rxTransferable,
                                         SCCOL nPosX, SCROW nPosY, const Point* pLogicPos,
                                         bool bLink = false, bool bAllowDialogs = false, bool useSavedPrefs = false );
 
     bool            PasteFile( const Point&, const OUString&, bool bLink );
-    bool            PasteObject( const Point&, const css::uno::Reference < css::embed::XEmbeddedObject >&, const Size*, const Graphic* = nullptr, const OUString& = OUString(), sal_Int64 nAspect = css::embed::Aspects::MSOLE_CONTENT );
+    bool            PasteObject( const Point&, const cpo::uno::Reference < css::embed::XEmbeddedObject >&, const Size*, const Graphic* = nullptr, const OUString& = OUString(), sal_Int64 nAspect = css::embed::Aspects::MSOLE_CONTENT );
     bool            PasteBitmap( const Point&, const Bitmap& );
     bool            PasteMetaFile( const Point&, const GDIMetaFile& );
     bool            PasteGraphic( const Point& rPos, const Graphic& rGraphic,
                                     const OUString& rFile );
     bool            PasteBookmark( SotClipboardFormatId nFormatId,
-                                const css::uno::Reference< css::datatransfer::XTransferable >& rxTransferable,
+                                const cpo::uno::Reference< css::datatransfer::XTransferable >& rxTransferable,
                                 SCCOL nPosX, SCROW nPosY );
-    bool            PasteLink( const css::uno::Reference< css::datatransfer::XTransferable >& rxTransferable );
+    bool            PasteLink( const cpo::uno::Reference< css::datatransfer::XTransferable >& rxTransferable );
 
     void            InsertBookmark( const OUString& rDescription, const OUString& rURL,
                                     SCCOL nPosX, SCROW nPosY, const OUString* pTarget = nullptr,
@@ -372,7 +372,7 @@ private:
     void SheetViewChanged();
 
     void            PasteRTF( SCCOL nCol, SCROW nStartRow,
-                                const css::uno::Reference< css::datatransfer::XTransferable >& rxTransferable );
+                                const cpo::uno::Reference< css::datatransfer::XTransferable >& rxTransferable );
 
     bool PasteMultiRangesFromClip(
         InsertDeleteFlags nFlags, ScDocument* pClipDoc,
@@ -392,7 +392,7 @@ private:
                                         bool bAllowDialogs,
                                         const TransferableDataHelper& rDataHelper, const Point& rPos);
     bool            PasteDataFormatFormattedText( SotClipboardFormatId nFormatId,
-                                        const css::uno::Reference< css::datatransfer::XTransferable >& rxTransferable,
+                                        const cpo::uno::Reference< css::datatransfer::XTransferable >& rxTransferable,
                                         SCCOL nPosX, SCROW nPosY,
                                         bool bAllowDialogs, const TransferableDataHelper& rDataHelper, bool useSavedPrefs = false );
 

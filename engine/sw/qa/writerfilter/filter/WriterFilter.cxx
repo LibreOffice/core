@@ -16,6 +16,7 @@
 #include <com/sun/star/qa/XDumper.hpp>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace
 {
@@ -37,7 +38,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDoNotMirrorRtlDrawObjs)
 
     // Then make sure the shape is on the right margin:
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
-    css::uno::Reference<qa::XDumper> xDumper(xModel->getCurrentController(), uno::UNO_QUERY);
+    cpo::uno::Reference<qa::XDumper> xDumper(xModel->getCurrentController(), uno::UNO_QUERY);
     OString aDump = xDumper->dump(u"layout"_ustr).toUtf8();
     auto pCharBuffer = reinterpret_cast<const xmlChar*>(aDump.getStr());
     xmlDocUniquePtr pXmlDoc(xmlParseDoc(pCharBuffer));
@@ -57,7 +58,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInlineEndnoteAndFootnoteDOCX)
 
     // When laying out that document:
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
-    css::uno::Reference<qa::XDumper> xDumper(xModel->getCurrentController(), uno::UNO_QUERY);
+    cpo::uno::Reference<qa::XDumper> xDumper(xModel->getCurrentController(), uno::UNO_QUERY);
     OString aDump = xDumper->dump(u"layout"_ustr).toUtf8();
     auto pCharBuffer = reinterpret_cast<const xmlChar*>(aDump.getStr());
     xmlDocUniquePtr pXmlDoc(xmlParseDoc(pCharBuffer));

@@ -20,7 +20,7 @@ class CorrelationCircleChartTypeTemplate : public ChartTypeTemplate, public ::pr
 {
 public:
     explicit CorrelationCircleChartTypeTemplate(
-        css::uno::Reference<cpo::uno::XComponentContext> const& xContext,
+        cpo::uno::Reference<cpo::uno::XComponentContext> const& xContext,
         const OUString& rServiceName);
     virtual ~CorrelationCircleChartTypeTemplate() override;
 
@@ -35,7 +35,7 @@ protected:
     virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
     // ____ XPropertySet ____
-    virtual css::uno::Reference<css::beans::XPropertySetInfo> getPropertySetInfo() override;
+    virtual cpo::uno::Reference<css::beans::XPropertySetInfo> getPropertySetInfo() override;
 
     // ____ ChartTypeTemplate ____
     virtual bool supportsCategories() override;

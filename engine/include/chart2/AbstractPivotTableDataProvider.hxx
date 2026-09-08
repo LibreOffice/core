@@ -58,18 +58,18 @@ public:
      *  @param nIndex
      *      index of the data series
      */
-    virtual ::css::uno::Reference<::css::chart2::data::XDataSequence>
+    virtual ::cpo::uno::Reference<::css::chart2::data::XDataSequence>
     createDataSequenceOfValuesByIndex(sal_Int32 nIndex) = 0;
     /** creates a single data sequence of label(s) for the given data series index.
      *
      *  @param nIndex
      *      index of the data series
      */
-    virtual ::css::uno::Reference<::css::chart2::data::XDataSequence>
+    virtual ::cpo::uno::Reference<::css::chart2::data::XDataSequence>
     createDataSequenceOfLabelsByIndex(sal_Int32 nIndex) = 0;
     /** creates a single data sequence of categories.
      */
-    virtual ::css::uno::Reference<::css::chart2::data::XDataSequence>
+    virtual ::cpo::uno::Reference<::css::chart2::data::XDataSequence>
     createDataSequenceOfCategories() = 0;
     /** field output description: either "- all -", "- multiple -", or specific value
      *

@@ -27,7 +27,7 @@ namespace dbaxml
     class OXMLDocuments : public SvXMLImportContext
     {
     private:
-        css::uno::Reference< css::container::XNameAccess > m_xContainer;
+        cpo::uno::Reference< css::container::XNameAccess > m_xContainer;
         OUString     m_sCollectionServiceName;
         OUString     m_sComponentServiceName;
 
@@ -36,20 +36,20 @@ namespace dbaxml
 
         // for forms and reports
         OXMLDocuments( ODBFilter& rImport
-                    ,const css::uno::Reference< css::container::XNameAccess >& _xContainer
+                    ,const cpo::uno::Reference< css::container::XNameAccess >& _xContainer
                     ,OUString _sCollectionServiceName
                     ,OUString _sComponentServiceName);
 
         // for queries
         OXMLDocuments( ODBFilter& rImport
-                    ,const css::uno::Reference< css::container::XNameAccess >& _xContainer
+                    ,const cpo::uno::Reference< css::container::XNameAccess >& _xContainer
                     ,OUString _sCollectionServiceName = OUString()
                     );
 
         virtual ~OXMLDocuments() override;
 
-        virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
-            sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+        virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+            sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
     };
 } // namespace dbaxml
 

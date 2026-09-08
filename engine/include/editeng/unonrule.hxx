@@ -30,11 +30,11 @@
 
 namespace com::sun::star::beans { struct PropertyValue; }
 
-EDITENG_DLLPUBLIC css::uno::Reference< css::container::XIndexReplace > SvxCreateNumRule(const SvxNumRule& rRule);
-css::uno::Reference< css::container::XIndexReplace > SvxCreateNumRule();
+EDITENG_DLLPUBLIC cpo::uno::Reference< css::container::XIndexReplace > SvxCreateNumRule(const SvxNumRule& rRule);
+cpo::uno::Reference< css::container::XIndexReplace > SvxCreateNumRule();
 /// @throws css::lang::IllegalArgumentException
-const SvxNumRule& SvxGetNumRule( css::uno::Reference< css::container::XIndexReplace > const & xRule );
-EDITENG_DLLPUBLIC css::uno::Reference< css::ucb::XAnyCompare > SvxCreateNumRuleCompare() noexcept;
+const SvxNumRule& SvxGetNumRule( cpo::uno::Reference< css::container::XIndexReplace > const & xRule );
+EDITENG_DLLPUBLIC cpo::uno::Reference< css::ucb::XAnyCompare > SvxCreateNumRuleCompare() noexcept;
 
 class SvxUnoNumberingRules final : public ::cppu::WeakImplHelper< css::container::XIndexReplace, css::ucb::XAnyCompare,
     css::util::XCloneable, css::lang::XServiceInfo >
@@ -60,7 +60,7 @@ public:
     virtual sal_Int16 compare( const cpo::uno::Any& Any1, const cpo::uno::Any& Any2 ) override;
 
     // XCloneable
-    virtual css::uno::Reference< css::util::XCloneable > createClone(  ) override;
+    virtual cpo::uno::Reference< css::util::XCloneable > createClone(  ) override;
 
     // XServiceInfo
     virtual OUString getImplementationName(  ) override;

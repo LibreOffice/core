@@ -43,7 +43,7 @@ namespace connectivity::dbase
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
         // OPropertySetHelper
         virtual ::cppu::IPropertyArrayHelper & getInfoHelper() override;
-        virtual bool fillIndexValues(const css::uno::Reference< css::sdbcx::XColumnsSupplier> &_xIndex) override;
+        virtual bool fillIndexValues(const cpo::uno::Reference< css::sdbcx::XColumnsSupplier> &_xIndex) override;
     public:
         DECLARE_SERVICE_INFO();
 
@@ -56,7 +56,7 @@ namespace connectivity::dbase
         //XTypeProvider
         virtual cpo::uno::Sequence< cpo::uno::Type > getTypes(  ) override;
         // XPropertySet
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+        virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
 
         // XRowLocate
         virtual cpo::uno::Any getBookmark(  ) override;

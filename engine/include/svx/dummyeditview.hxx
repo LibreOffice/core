@@ -47,7 +47,7 @@ protected:
     virtual Point EditViewPointerPosPixel() const override { return Point(); }
     virtual void EditViewInputContext(const InputContext&) override {}
     virtual void EditViewCursorRect(const tools::Rectangle&, int) override {}
-    virtual css::uno::Reference<css::datatransfer::clipboard::XClipboard>
+    virtual cpo::uno::Reference<css::datatransfer::clipboard::XClipboard>
     GetClipboard() const override
     {
         return {};

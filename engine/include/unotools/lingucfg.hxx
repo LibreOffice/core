@@ -143,9 +143,9 @@ class UNOTOOLS_DLLPUBLIC SvtLinguConfig final : public utl::detail::Options
     UNOTOOLS_DLLPRIVATE static SvtLinguConfigItem & GetConfigItem();
 
     // configuration update access for the 'Linguistic' main node
-    mutable css::uno::Reference< css::util::XChangesBatch > m_xMainUpdateAccess;
+    mutable cpo::uno::Reference< css::util::XChangesBatch > m_xMainUpdateAccess;
 
-    css::uno::Reference< css::util::XChangesBatch > const & GetMainUpdateAccess() const;
+    cpo::uno::Reference< css::util::XChangesBatch > const & GetMainUpdateAccess() const;
 
     OUString GetVendorImageUrl_Impl( const OUString &rServiceImplName, const OUString &rImageName ) const;
 

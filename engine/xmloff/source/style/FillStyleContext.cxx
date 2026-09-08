@@ -41,6 +41,7 @@
 #include <xmloff/XMLBase64ImportContext.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 
 XMLGradientStyleContext::XMLGradientStyleContext( SvXMLImport& rImport, sal_Int32 ,
@@ -56,9 +57,9 @@ XMLGradientStyleContext::~XMLGradientStyleContext()
 {
 }
 
-css::uno::Reference<css::xml::sax::XFastContextHandler> XMLGradientStyleContext::createFastChildContext(
+cpo::uno::Reference<css::xml::sax::XFastContextHandler> XMLGradientStyleContext::createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList)
+        const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList)
 {
     if (nElement == XML_ELEMENT(LO_EXT, xmloff::token::XML_GRADIENT_STOP))
         return new XMLGradientStopContext(GetImport(), nElement, xAttrList, maColorStopVec);
@@ -155,9 +156,9 @@ XMLBitmapStyleContext::~XMLBitmapStyleContext()
 {
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLBitmapStyleContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLBitmapStyleContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
     if( nElement == XML_ELEMENT(OFFICE, xmloff::token::XML_BINARY_DATA) )
     {
@@ -231,9 +232,9 @@ XMLTransGradientStyleContext::~XMLTransGradientStyleContext()
 {
 }
 
-css::uno::Reference<css::xml::sax::XFastContextHandler> XMLTransGradientStyleContext::createFastChildContext(
+cpo::uno::Reference<css::xml::sax::XFastContextHandler> XMLTransGradientStyleContext::createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList)
+        const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList)
 {
     if (nElement == XML_ELEMENT(LO_EXT, xmloff::token::XML_OPACITY_STOP))
         return new XMLTransparencyStopContext(GetImport(), nElement, xAttrList, maColorStopVec);

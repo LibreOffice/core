@@ -29,6 +29,7 @@
 #include <sal/log.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace ::xmloff::token;
 
 namespace {
@@ -43,8 +44,8 @@ public:
     SchXMLBodyContext_Impl( SchXMLImportHelper& rImpHelper,
                 SvXMLImport& rImport );
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
 }
@@ -144,11 +145,11 @@ SchXMLBodyContext::SchXMLBodyContext( SchXMLImportHelper& rImpHelper,
 SchXMLBodyContext::~SchXMLBodyContext()
 {}
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLBodyContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLBodyContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    css::uno::Reference< css::xml::sax::XFastContextHandler > xContext;
+    cpo::uno::Reference< css::xml::sax::XFastContextHandler > xContext;
 
     // <chart:chart> element
     if( nElement == XML_ELEMENT(CHART, XML_CHART) )

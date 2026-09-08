@@ -23,10 +23,10 @@ class TableEditPanel : public PanelLayout,
 {
 public:
     static std::unique_ptr<PanelLayout>
-    Create(weld::Widget* pParent, const css::uno::Reference<css::frame::XFrame>& rxFrame,
+    Create(weld::Widget* pParent, const cpo::uno::Reference<css::frame::XFrame>& rxFrame,
            SfxBindings* pBindings);
 
-    TableEditPanel(weld::Widget* pParent, const css::uno::Reference<css::frame::XFrame>& rxFrame,
+    TableEditPanel(weld::Widget* pParent, const cpo::uno::Reference<css::frame::XFrame>& rxFrame,
                    SfxBindings* pBindings);
     virtual ~TableEditPanel() override;
 

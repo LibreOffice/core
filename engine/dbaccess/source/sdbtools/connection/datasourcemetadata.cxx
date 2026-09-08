@@ -24,7 +24,7 @@
 namespace sdbtools
 {
 
-    using ::com::sun::star::uno::Reference;
+    using ::cpo::uno::Reference;
     using ::com::sun::star::sdbc::XConnection;
     using ::cpo::uno::XComponentContext;
 

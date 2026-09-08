@@ -33,6 +33,7 @@
 #include "gluepts.hxx"
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace ::cppu;
 
 const sal_uInt16 NON_USER_DEFINED_GLUE_POINTS = 4;

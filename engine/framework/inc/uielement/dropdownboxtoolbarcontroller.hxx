@@ -35,8 +35,8 @@ class DropdownToolbarController final : public ComplexToolbarController
 
 {
     public:
-        DropdownToolbarController( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
-                                   const css::uno::Reference< css::frame::XFrame >& rFrame,
+        DropdownToolbarController( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+                                   const cpo::uno::Reference< css::frame::XFrame >& rFrame,
                                    ToolBox* pToolBar,
                                    ToolBoxItemId nID,
                                    sal_Int32 nWidth,

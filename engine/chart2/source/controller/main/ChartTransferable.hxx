@@ -50,7 +50,7 @@ protected:
         const css::datatransfer::DataFlavor& rFlavor ) override;
 
 private:
-    css::uno::Reference< css::graphic::XGraphic > m_xMetaFileGraphic;
+    cpo::uno::Reference< css::graphic::XGraphic > m_xMetaFileGraphic;
     std::unique_ptr<SdrModel> m_xMarkedObjModel;
     bool m_bDrawing;
 };

@@ -28,6 +28,7 @@
 #include <cpo/uno/Any.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 namespace
 {

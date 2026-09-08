@@ -34,6 +34,7 @@
 #include <svx/gallery1.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace {
 

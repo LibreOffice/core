@@ -40,6 +40,7 @@
 #include <utility>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 namespace
 {
@@ -70,7 +71,7 @@ public:
     // XText
     virtual rtl::Reference<SwXTextCursor> createXTextCursor() override;
     virtual rtl::Reference<SwXTextCursor> createXTextCursorByRange(
-        const ::css::uno::Reference<::css::text::XTextRange>& aTextPosition) override;
+        const ::cpo::uno::Reference<::css::text::XTextRange>& aTextPosition) override;
 };
 }
 
@@ -148,7 +149,7 @@ public:
     // 3 possible states: not attached, attached, disposed
     bool m_bIsDisposed;
     bool m_bIsDescriptor;
-    css::uno::Reference<SwXText> m_xParentText;
+    cpo::uno::Reference<SwXText> m_xParentText;
     rtl::Reference<SwXContentControlText> m_xText;
     SwContentControl* m_pContentControl;
     bool m_bShowingPlaceHolder;
@@ -179,7 +180,7 @@ public:
     OUString m_aMultiLine;
 
     Impl(SwXContentControl& rThis, SwDoc& rDoc, SwContentControl* pContentControl,
-         css::uno::Reference<SwXText> xParentText, std::unique_ptr<const TextRangeList_t> pPortions)
+         cpo::uno::Reference<SwXText> xParentText, std::unique_ptr<const TextRangeList_t> pPortions)
         : m_pTextPortions(std::move(pPortions))
         , m_bIsDisposed(false)
         , m_bIsDescriptor(pContentControl == nullptr)
@@ -237,13 +238,13 @@ void SwXContentControl::Impl::Notify(const SfxHint& rHint)
     m_EventListeners.disposeAndClear(aGuard, aEvent);
 }
 
-const css::uno::Reference<SwXText>& SwXContentControl::GetParentText() const
+const cpo::uno::Reference<SwXText>& SwXContentControl::GetParentText() const
 {
     return m_pImpl->m_xParentText;
 }
 
 SwXContentControl::SwXContentControl(SwDoc* pDoc, SwContentControl* pContentControl,
-                                     const css::uno::Reference<SwXText>& xParentText,
+                                     const cpo::uno::Reference<SwXText>& xParentText,
                                      std::unique_ptr<const TextRangeList_t> pPortions)
     : m_pImpl(new SwXContentControl::Impl(*this, *pDoc, pContentControl, xParentText,
                                           std::move(pPortions)))
@@ -266,7 +267,7 @@ rtl::Reference<SwXContentControl> SwXContentControl::CreateXContentControl(SwDoc
 
 rtl::Reference<SwXContentControl>
 SwXContentControl::CreateXContentControl(SwContentControl& rContentControl,
-                                         const css::uno::Reference<SwXText>& xParent,
+                                         const cpo::uno::Reference<SwXText>& xParent,
                                          std::unique_ptr<const TextRangeList_t>&& pPortions)
 {
     // re-use existing SwXContentControl
@@ -295,7 +296,7 @@ SwXContentControl::CreateXContentControl(SwContentControl& rContentControl,
         SAL_WARN("sw.uno", "CreateXContentControl: no text node");
         return nullptr;
     }
-    css::uno::Reference<SwXText> xParentText(xParent);
+    cpo::uno::Reference<SwXText> xParentText(xParent);
     if (!xParentText.is())
     {
         SwTextContentControl* pTextAttr = rContentControl.GetTextAttr();

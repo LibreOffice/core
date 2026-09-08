@@ -34,11 +34,11 @@ namespace dbaccess
     {
     public:
         SubComponentRecovery(
-                const css::uno::Reference< cpo::uno::XComponentContext >& i_rContext,
-                const css::uno::Reference< css::sdb::application::XDatabaseDocumentUI >& i_rController,
-                css::uno::Reference< css::lang::XComponent > i_xComponent )
+                const cpo::uno::Reference< cpo::uno::XComponentContext >& i_rContext,
+                const cpo::uno::Reference< css::sdb::application::XDatabaseDocumentUI >& i_rController,
+                cpo::uno::Reference< css::lang::XComponent > i_xComponent )
             :m_rContext( i_rContext )
-            ,m_xDocumentUI( i_rController, css::uno::UNO_SET_THROW )
+            ,m_xDocumentUI( i_rController, cpo::uno::UNO_SET_THROW )
             ,m_xComponent(std::move( i_xComponent ))
             ,m_eType( UNKNOWN )
             ,m_aCompDesc()
@@ -47,11 +47,11 @@ namespace dbaccess
         }
 
         SubComponentRecovery(
-                const css::uno::Reference< cpo::uno::XComponentContext >& i_rContext,
-                const css::uno::Reference< css::sdb::application::XDatabaseDocumentUI >& i_rController,
+                const cpo::uno::Reference< cpo::uno::XComponentContext >& i_rContext,
+                const cpo::uno::Reference< css::sdb::application::XDatabaseDocumentUI >& i_rController,
                 const SubComponentType i_eType )
             :m_rContext( i_rContext )
-            ,m_xDocumentUI( i_rController, css::uno::UNO_SET_THROW )
+            ,m_xDocumentUI( i_rController, cpo::uno::UNO_SET_THROW )
             ,m_xComponent()
             ,m_eType( i_eType )
             ,m_aCompDesc()
@@ -60,14 +60,14 @@ namespace dbaccess
 
         // only to be used after being constructed with a component
         void    saveToRecoveryStorage(
-                    const css::uno::Reference< css::embed::XStorage >& i_rRecoveryStorage,
+                    const cpo::uno::Reference< css::embed::XStorage >& i_rRecoveryStorage,
                     MapCompTypeToCompDescs& io_mapCompDescs
                 );
 
         // only to be used after being constructed with a type
-        css::uno::Reference< css::lang::XComponent >
+        cpo::uno::Reference< css::lang::XComponent >
                 recoverFromStorage(
-                    const css::uno::Reference< css::embed::XStorage >& i_rRecoveryStorage,
+                    const cpo::uno::Reference< css::embed::XStorage >& i_rRecoveryStorage,
                     const OUString& i_rComponentName,
                     const bool i_bForEditing
                 );
@@ -76,23 +76,23 @@ namespace dbaccess
 
     private:
         void    impl_saveSubDocument_throw(
-                    const css::uno::Reference< css::embed::XStorage >& i_rObjectStorage
+                    const cpo::uno::Reference< css::embed::XStorage >& i_rObjectStorage
                 );
 
         void    impl_saveQueryDesign_throw(
-                    const css::uno::Reference< css::embed::XStorage >& i_rObjectStorage
+                    const cpo::uno::Reference< css::embed::XStorage >& i_rObjectStorage
                 );
 
-        css::uno::Reference< css::lang::XComponent >
+        cpo::uno::Reference< css::lang::XComponent >
                 impl_recoverSubDocument_throw(
-                    const css::uno::Reference< css::embed::XStorage >& i_rRecoveryStorage,
+                    const cpo::uno::Reference< css::embed::XStorage >& i_rRecoveryStorage,
                     const OUString& i_rComponentName,
                     const bool i_bForEditing
                 );
 
-        css::uno::Reference< css::lang::XComponent >
+        cpo::uno::Reference< css::lang::XComponent >
                 impl_recoverQueryDesign_throw(
-                    const css::uno::Reference< css::embed::XStorage >& i_rRecoveryStorage,
+                    const cpo::uno::Reference< css::embed::XStorage >& i_rRecoveryStorage,
                     const OUString& i_rComponentName,
                     const bool i_bForEditing
                 );
@@ -100,11 +100,11 @@ namespace dbaccess
         void    impl_identifyComponent_throw();
 
     private:
-        const css::uno::Reference< cpo::uno::XComponentContext >&
+        const cpo::uno::Reference< cpo::uno::XComponentContext >&
                                                 m_rContext;
-        css::uno::Reference< css::sdb::application::XDatabaseDocumentUI >
+        cpo::uno::Reference< css::sdb::application::XDatabaseDocumentUI >
                                                 m_xDocumentUI;
-        const css::uno::Reference< css::lang::XComponent >
+        const cpo::uno::Reference< css::lang::XComponent >
                                                 m_xComponent;
         SubComponentType                        m_eType;
         SubComponentDescriptor                  m_aCompDesc;

@@ -78,8 +78,8 @@
 #include <unonames.hxx>
 
 using namespace com::sun::star;
-using namespace css::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 ScXMLImportWrapper::ScXMLImportWrapper( ScDocShell& rDocSh, SfxMedium* pM, uno::Reference < embed::XStorage > xStor ) :
     mrDocShell(rDocSh),

@@ -39,7 +39,7 @@ public:
 
     /** Converts the contained OOXML chart model to a chart2 document. */
     void                convertFromModel(
-                            const css::uno::Reference< css::drawing::XShapes >& rxExternalPage,
+                            const cpo::uno::Reference< css::drawing::XShapes >& rxExternalPage,
                             const css::awt::Point& rChartPos );
 };
 

@@ -42,7 +42,7 @@ public:
 
     /** Converts the OOXML plot area model to a chart2 diagram. */
     void                convertFromModel(
-                            const css::uno::Reference< css::chart2::XDiagram >& rxDiagram,
+                            const cpo::uno::Reference< css::chart2::XDiagram >& rxDiagram,
                             TypeGroupConverter const & rTypeGroup );
 };
 
@@ -57,7 +57,7 @@ public:
 
     /** Converts the OOXML wall/floor model to a chart2 diagram. */
     void                convertFromModel(
-                            const css::uno::Reference< css::chart2::XDiagram >& rxDiagram,
+                            const cpo::uno::Reference< css::chart2::XDiagram >& rxDiagram,
                             ObjectType eObjType );
 };
 

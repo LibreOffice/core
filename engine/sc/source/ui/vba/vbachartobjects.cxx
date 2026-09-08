@@ -37,6 +37,7 @@
 #include <comphelper/diagnose_ex.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace ::ooo::vba;
 
 namespace {
@@ -84,7 +85,7 @@ public:
 
 }
 
-ScVbaChartObjects::ScVbaChartObjects( const css::uno::Reference< ov::XHelperInterface >& _xParent, const css::uno::Reference< cpo::uno::XComponentContext >& _xContext, const css::uno::Reference< css::table::XTableCharts >& _xTableCharts, uno::Reference< drawing::XDrawPageSupplier >  _xDrawPageSupplier ) : ChartObjects_BASE(_xParent, _xContext, css::uno::Reference< css::container::XIndexAccess >( _xTableCharts, css::uno::UNO_QUERY ) ), xTableCharts( _xTableCharts ) , xDrawPageSupplier(std::move( _xDrawPageSupplier ))
+ScVbaChartObjects::ScVbaChartObjects( const cpo::uno::Reference< ov::XHelperInterface >& _xParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& _xContext, const cpo::uno::Reference< css::table::XTableCharts >& _xTableCharts, uno::Reference< drawing::XDrawPageSupplier >  _xDrawPageSupplier ) : ChartObjects_BASE(_xParent, _xContext, cpo::uno::Reference< css::container::XIndexAccess >( _xTableCharts, cpo::uno::UNO_QUERY ) ), xTableCharts( _xTableCharts ) , xDrawPageSupplier(std::move( _xDrawPageSupplier ))
 {
 
 }
@@ -167,7 +168,7 @@ void SAL_CALL ScVbaChartObjects::Delete(  )
 uno::Reference< container::XEnumeration >
 ScVbaChartObjects::createEnumeration()
 {
-    css::uno::Reference< container::XEnumerationAccess > xEnumAccess( xTableCharts, uno::UNO_QUERY_THROW );
+    cpo::uno::Reference< container::XEnumerationAccess > xEnumAccess( xTableCharts, uno::UNO_QUERY_THROW );
     return new ChartObjectEnumerationImpl( mxContext, xEnumAccess->createEnumeration(), xDrawPageSupplier, getParent() /* sheet */);
 }
 

@@ -166,7 +166,7 @@ public:
 
     SAL_DLLPRIVATE cpo::uno::WeakReference<cpo::uno::XInterface> const& GetXObject() const
             { return m_wXObject; }
-    SAL_DLLPRIVATE void SetXObject(css::uno::Reference<cpo::uno::XInterface> const& xObject)
+    SAL_DLLPRIVATE void SetXObject(cpo::uno::Reference<cpo::uno::XInterface> const& xObject)
             { m_wXObject = xObject; }
 
     void RegisterToFormat( SwFormat& rFormat );

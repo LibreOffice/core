@@ -30,7 +30,7 @@
 #include "osl/diagnose.h"
 #include "uno/mapping.h"
 #include "cpo/uno/Type.hxx"
-#include "com/sun/star/uno/Reference.hxx"
+#include "cpo/uno/Reference.hxx"
 #include "cppu/unotype.hxx"
 #include "uno/environment.hxx"
 

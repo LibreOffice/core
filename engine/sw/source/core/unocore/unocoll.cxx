@@ -79,8 +79,8 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::document;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
@@ -1372,7 +1372,7 @@ sal_Int32 SwXTextSections::getCount()
 
 cpo::uno::Any SwXTextSections::getByIndex(sal_Int32 nIndex)
 {
-    return Any(css::uno::Reference<css::text::XTextSection>(getSwTextSectionByIndex(nIndex)));
+    return Any(cpo::uno::Reference<css::text::XTextSection>(getSwTextSectionByIndex(nIndex)));
 }
 
 rtl::Reference<SwXTextSection> SwXTextSections::getSwTextSectionByIndex(sal_Int32 nIndex)

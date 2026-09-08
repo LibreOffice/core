@@ -66,8 +66,8 @@
 #include <bitmaps.hlst>
 
 using namespace css;
-using namespace css::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 namespace
 {
@@ -149,7 +149,7 @@ rtl::Reference<SidebarController> SidebarController::create(SidebarDockingWindow
 {
     rtl::Reference<SidebarController> instance(new SidebarController(pParentWindow, pViewFrame));
 
-    const css::uno::Reference<css::frame::XFrame>& rxFrame = pViewFrame->GetFrame().GetFrameInterface();
+    const cpo::uno::Reference<css::frame::XFrame>& rxFrame = pViewFrame->GetFrame().GetFrameInterface();
     instance->registerSidebarForFrame(rxFrame->getController());
     rxFrame->addFrameActionListener(instance);
     // Listen for window events.
@@ -178,7 +178,7 @@ SidebarController::~SidebarController()
 }
 
 SidebarController* SidebarController::GetSidebarControllerForFrame (
-    const css::uno::Reference<css::frame::XFrame>& rxFrame)
+    const cpo::uno::Reference<css::frame::XFrame>& rxFrame)
 {
     uno::Reference<frame::XController> const xController(rxFrame->getController());
     if (!xController.is()) // this may happen during dispose of Draw controller but perhaps it's a bug
@@ -197,10 +197,10 @@ SidebarController* SidebarController::GetSidebarControllerForFrame (
     return dynamic_cast<SidebarController*>(xListener.get());
 }
 
-void SidebarController::registerSidebarForFrame(const css::uno::Reference<css::frame::XController>& xController)
+void SidebarController::registerSidebarForFrame(const cpo::uno::Reference<css::frame::XController>& xController)
 {
     // Listen for context change events.
-    css::uno::Reference<css::ui::XContextChangeEventMultiplexer> xMultiplexer (
+    cpo::uno::Reference<css::ui::XContextChangeEventMultiplexer> xMultiplexer (
         css::ui::ContextChangeEventMultiplexer::get(
             ::comphelper::getProcessComponentContext()));
     xMultiplexer->addContextChangeEventListener(
@@ -208,12 +208,12 @@ void SidebarController::registerSidebarForFrame(const css::uno::Reference<css::f
         xController);
 }
 
-void SidebarController::unregisterSidebarForFrame(const css::uno::Reference<css::frame::XController>& xController)
+void SidebarController::unregisterSidebarForFrame(const cpo::uno::Reference<css::frame::XController>& xController)
 {
     saveDeckState();
     disposeDecks();
 
-    css::uno::Reference<css::ui::XContextChangeEventMultiplexer> xMultiplexer (
+    cpo::uno::Reference<css::ui::XContextChangeEventMultiplexer> xMultiplexer (
         css::ui::ContextChangeEventMultiplexer::get(
             ::comphelper::getProcessComponentContext()));
     xMultiplexer->removeContextChangeEventListener(
@@ -360,7 +360,7 @@ void SidebarController::notifyContextChangeEvent (const css::ui::ContextChangeEv
 
     if (maRequestedContext != maCurrentContext)
     {
-        mxCurrentController.set(rEvent.Source, css::uno::UNO_QUERY);
+        mxCurrentController.set(rEvent.Source, cpo::uno::UNO_QUERY);
         maContextChangeUpdate.RequestCall(); // async call, not a prob
                                              // calling with held
                                              // solarmutex
@@ -592,7 +592,7 @@ void SidebarController::UpdateConfigurations()
     // Find the set of decks that could be displayed for the new context.
     ResourceManager::DeckContextDescriptorContainer aDecks;
 
-    css::uno::Reference<css::frame::XController> xController = mxCurrentController.is() ? mxCurrentController : mxFrame->getController();
+    cpo::uno::Reference<css::frame::XController> xController = mxCurrentController.is() ? mxCurrentController : mxFrame->getController();
 
     mpResourceManager->GetMatchingDecks (
         aDecks,
@@ -765,7 +765,7 @@ void SidebarController::CreatePanels(std::u16string_view rDeckId, const Context&
 
     ResourceManager::PanelContextDescriptorContainer aPanelContextDescriptors;
 
-    css::uno::Reference<css::frame::XController> xController = mxCurrentController.is() ? mxCurrentController : mxFrame->getController();
+    cpo::uno::Reference<css::frame::XController> xController = mxCurrentController.is() ? mxCurrentController : mxFrame->getController();
 
     mpResourceManager->GetMatchingPanels(
                                         aPanelContextDescriptors,
@@ -890,7 +890,7 @@ void SidebarController::SwitchToDeck (
     // Determine the panels to display in the deck.
     ResourceManager::PanelContextDescriptorContainer aPanelContextDescriptors;
 
-    css::uno::Reference<css::frame::XController> xController = mxCurrentController.is() ? mxCurrentController : mxFrame->getController();
+    cpo::uno::Reference<css::frame::XController> xController = mxCurrentController.is() ? mxCurrentController : mxFrame->getController();
 
     mpResourceManager->GetMatchingPanels(
         aPanelContextDescriptors,
@@ -1535,7 +1535,7 @@ ResourceManager::PanelContextDescriptorContainer SidebarController::GetMatchingP
     return aPanels;
 }
 
-void SidebarController::updateModel(const css::uno::Reference<css::frame::XModel>& xModel)
+void SidebarController::updateModel(const cpo::uno::Reference<css::frame::XModel>& xModel)
 {
     mpResourceManager->UpdateModel(xModel);
 }

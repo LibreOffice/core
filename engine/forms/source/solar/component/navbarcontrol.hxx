@@ -39,10 +39,10 @@ namespace frm
                             :public UnoControl
                             ,public ONavigationBarControl_Base
     {
-        css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+        cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
     public:
         explicit ONavigationBarControl(
-            const css::uno::Reference< cpo::uno::XComponentContext >& _rxORB
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxORB
         );
 
     protected:
@@ -53,7 +53,7 @@ namespace frm
         virtual cpo::uno::Any queryAggregation( const cpo::uno::Type& _rType ) override;
 
         // XControl
-        virtual void createPeer( const css::uno::Reference< css::awt::XToolkit >& _rToolkit, const css::uno::Reference< css::awt::XWindowPeer >& _rParent ) override;
+        virtual void createPeer( const cpo::uno::Reference< css::awt::XToolkit >& _rToolkit, const cpo::uno::Reference< css::awt::XWindowPeer >& _rParent ) override;
 
         // XServiceInfo
         virtual OUString getImplementationName() override;
@@ -66,8 +66,8 @@ namespace frm
         virtual void setDesignMode( bool _bOn ) override;
 
         // XDispatchProviderInterception
-        virtual void registerDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& Interceptor ) override;
-        virtual void releaseDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& Interceptor ) override;
+        virtual void registerDispatchProviderInterceptor( const cpo::uno::Reference< css::frame::XDispatchProviderInterceptor >& Interceptor ) override;
+        virtual void releaseDispatchProviderInterceptor( const cpo::uno::Reference< css::frame::XDispatchProviderInterceptor >& Interceptor ) override;
     };
 
     class ONavigationBarPeer final
@@ -78,9 +78,9 @@ namespace frm
         /** factory method
         */
         static rtl::Reference<ONavigationBarPeer> Create(
-            const css::uno::Reference< cpo::uno::XComponentContext >& _rxORB,
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxORB,
             vcl::Window* _pParentWindow,
-            const css::uno::Reference< css::awt::XControlModel >& _rxModel
+            const cpo::uno::Reference< css::awt::XControlModel >& _rxModel
         );
 
         // XInterface
@@ -94,7 +94,7 @@ namespace frm
 
     private:
         explicit ONavigationBarPeer(
-            const css::uno::Reference< cpo::uno::XComponentContext >& _rxORB
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxORB
         );
         virtual ~ONavigationBarPeer() override;
 

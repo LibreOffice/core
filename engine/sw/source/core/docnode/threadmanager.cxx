@@ -28,6 +28,7 @@
 #include <com/sun/star/util/XJobManager.hpp>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 /** class to manage threads
 
@@ -131,7 +132,7 @@ void ThreadManager::RemoveThread( const oslInterlockedCount nThreadID,
         if ( bThreadFinished )
         {
             // release thread as job from thread joiner instance
-            css::uno::Reference< css::util::XJobManager > rThreadJoiner( mrThreadJoiner );
+            cpo::uno::Reference< css::util::XJobManager > rThreadJoiner( mrThreadJoiner );
             if ( rThreadJoiner.is() )
             {
                 rThreadJoiner->releaseJob( aTmpThreadData.aJob );
@@ -185,7 +186,7 @@ bool ThreadManager::StartThread( const tThreadData& rThreadData )
         maStartedThreads.push_back( rThreadData );
 
         // register thread as job at thread joiner instance
-        css::uno::Reference< css::util::XJobManager > rThreadJoiner( mrThreadJoiner );
+        cpo::uno::Reference< css::util::XJobManager > rThreadJoiner( mrThreadJoiner );
         if ( rThreadJoiner.is() )
         {
             rThreadJoiner->registerJob( rThreadData.aJob );

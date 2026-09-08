@@ -43,7 +43,7 @@
 class SvXMLExport;
 class SvXMLExportPropertyMapper;
 
-typedef std::map< const css::uno::Reference< cpo::uno::XInterface >, OUString > TableStyleMap;
+typedef std::map< const cpo::uno::Reference< cpo::uno::XInterface >, OUString > TableStyleMap;
 
 struct XMLTableInfo
 {
@@ -60,10 +60,10 @@ public:
     virtual ~XMLTableExport() override;
 
     // This method collects all automatic styles for the given table
-    void collectTableAutoStyles(const css::uno::Reference < css::table::XColumnRowRange >& xColumnRowRange);
+    void collectTableAutoStyles(const cpo::uno::Reference < css::table::XColumnRowRange >& xColumnRowRange);
 
     // This method exports the given table
-    void exportTable(const css::uno::Reference < css::table::XColumnRowRange >& xColumnRowRange);
+    void exportTable(const cpo::uno::Reference < css::table::XColumnRowRange >& xColumnRowRange);
 
     // export the styles from the cell style family
     void exportTableStyles();
@@ -78,7 +78,7 @@ private:
     rtl::Reference< SvXMLExportPropertyMapper >     mxCellExportPropertySetMapper;
     rtl::Reference< SvXMLExportPropertyMapper >     mxRowExportPropertySetMapper;
     rtl::Reference< SvXMLExportPropertyMapper >     mxColumnExportPropertySetMapper;
-    std::map< const css::uno::Reference< css::table::XColumnRowRange >, std::shared_ptr< XMLTableInfo > >
+    std::map< const cpo::uno::Reference< css::table::XColumnRowRange >, std::shared_ptr< XMLTableInfo > >
                                                     maTableInfoMap;
     bool                                            mbExportTables;
     bool                                            mbWriter;
@@ -86,18 +86,18 @@ private:
     SvXMLExport& GetExport() { return mrExport; }
     const SvXMLExport& GetExport() const  { return mrExport; }
 
-    SAL_DLLPRIVATE void ImpExportText( const css::uno::Reference < css::table::XCell >& xCell );
+    SAL_DLLPRIVATE void ImpExportText( const cpo::uno::Reference < css::table::XCell >& xCell );
 
-    void ExportCell( const css::uno::Reference < css::table::XCell >& xCell, const std::shared_ptr< XMLTableInfo >& pTableInfo, std::u16string_view sDefaultCellStyle  );
-    void ExportTableColumns( const css::uno::Reference < css::container::XIndexAccess >& xtableColumns, const std::shared_ptr< XMLTableInfo >& pTableInfo );
+    void ExportCell( const cpo::uno::Reference < css::table::XCell >& xCell, const std::shared_ptr< XMLTableInfo >& pTableInfo, std::u16string_view sDefaultCellStyle  );
+    void ExportTableColumns( const cpo::uno::Reference < css::container::XIndexAccess >& xtableColumns, const std::shared_ptr< XMLTableInfo >& pTableInfo );
 
 };
 
 class XMLOFF_DLLPUBLIC XMLCellStyleExport final : public XMLStyleExport
 {
     using XMLStyleExport::XMLStyleExport;
-    virtual void exportStyleAttributes(const css::uno::Reference<css::style::XStyle>& rStyle) override;
-    virtual void exportStyleContent(const css::uno::Reference<css::style::XStyle>& rStyle) override;
+    virtual void exportStyleAttributes(const cpo::uno::Reference<css::style::XStyle>& rStyle) override;
+    virtual void exportStyleContent(const cpo::uno::Reference<css::style::XStyle>& rStyle) override;
 };
 
 #endif

@@ -94,8 +94,9 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
+using namespace ::cpo;
 using namespace ::chart::DataSeriesProperties;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 
 namespace chart
 {
@@ -1231,9 +1232,9 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
             cpo::uno::Any(comphelper::makePropertyValue( u"Value"_ustr, aMenuName ))
         };
 
-        css::uno::Reference< css::frame::XPopupMenuController > xPopupController(
+        cpo::uno::Reference< css::frame::XPopupMenuController > xPopupController(
             m_xCC->getServiceManager()->createInstanceWithArgumentsAndContext(
-            u"com.sun.star.comp.framework.ResourceMenuController"_ustr, aArgs, m_xCC ), css::uno::UNO_QUERY );
+            u"com.sun.star.comp.framework.ResourceMenuController"_ustr, aArgs, m_xCC ), cpo::uno::UNO_QUERY );
 
         if ( !xPopupController.is() || !xPopupMenu.is() )
             return;
@@ -1270,7 +1271,7 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
             }
         }
 
-        css::uno::Reference< css::lang::XComponent > xComponent( xPopupController, css::uno::UNO_QUERY );
+        cpo::uno::Reference< css::lang::XComponent > xComponent( xPopupController, cpo::uno::UNO_QUERY );
         if ( xComponent.is() )
             xComponent->dispose();
     }
@@ -2031,7 +2032,7 @@ void ChartController::sendPopupRequest(std::u16string_view rCID, tools::Rectangl
 
     OUString sPivotTableName = pPivotTableDataProvider->getPivotTableName();
 
-    css::uno::Reference<css::awt::XRequestCallback> xPopupRequest = pChartModel->getPopupRequest();
+    cpo::uno::Reference<css::awt::XRequestCallback> xPopupRequest = pChartModel->getPopupRequest();
     PopupRequest* pPopupRequest = dynamic_cast<PopupRequest*>(xPopupRequest.get());
     if (!pPopupRequest)
         return;

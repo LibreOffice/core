@@ -55,8 +55,8 @@ public:
         std::vector<OUString> aNames;
         for( const T& rItem : maItems )
         {
-            css::uno::Reference<css::container::XNamed>
-                xNamed( rItem, css::uno::UNO_QUERY );
+            cpo::uno::Reference<css::container::XNamed>
+                xNamed( rItem, cpo::uno::UNO_QUERY );
             if( xNamed.is() )
                 aNames.push_back( xNamed->getName() );
         }
@@ -68,8 +68,8 @@ protected:
     typename std::vector<T>::const_iterator findItem( const OUString& rName ) const
     {
         return std::find_if(maItems.begin(), maItems.end(), [&rName](const T& rItem) {
-            css::uno::Reference<css::container::XNamed>
-                xNamed( rItem, css::uno::UNO_QUERY );
+            cpo::uno::Reference<css::container::XNamed>
+                xNamed( rItem, cpo::uno::UNO_QUERY );
             return xNamed.is() && xNamed->getName() == rName;
         });
     }

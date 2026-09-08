@@ -24,6 +24,7 @@
 #include <utility>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace framework{
 
@@ -97,7 +98,7 @@ public:
 
 public:
     virtual cpo::uno::Any getRequest() override;
-    virtual cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > getContinuations() override;
+    virtual cpo::uno::Sequence< cpo::uno::Reference< css::task::XInteractionContinuation > > getContinuations() override;
 
 private:
     cpo::uno::Any                                                                       m_aRequest;
@@ -110,7 +111,7 @@ private:
 
 RequestFilterSelect_Impl::RequestFilterSelect_Impl( const OUString& sURL )
 {
-    css::uno::Reference< cpo::uno::XInterface > temp2;
+    cpo::uno::Reference< cpo::uno::XInterface > temp2;
     css::document::NoSuchFilterRequest aFilterRequest( OUString(),
                                                        temp2                            ,
                                                        sURL                                          );
@@ -149,7 +150,7 @@ cpo::uno::Any RequestFilterSelect_Impl::getRequest()
 // After interaction we support read access on these continuations on our c++ interface to
 // return user decision.
 
-cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > RequestFilterSelect_Impl::getContinuations()
+cpo::uno::Sequence< cpo::uno::Reference< css::task::XInteractionContinuation > > RequestFilterSelect_Impl::getContinuations()
 {
     return { m_xAbort, m_xFilter };
 }
@@ -189,11 +190,11 @@ namespace {
 class InteractionRequest_Impl : public ::cppu::WeakImplHelper< css::task::XInteractionRequest >
 {
     cpo::uno::Any m_aRequest;
-    cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > m_lContinuations;
+    cpo::uno::Sequence< cpo::uno::Reference< css::task::XInteractionContinuation > > m_lContinuations;
 
 public:
     InteractionRequest_Impl( cpo::uno::Any  aRequest,
-        const cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > >& lContinuations )
+        const cpo::uno::Sequence< cpo::uno::Reference< css::task::XInteractionContinuation > >& lContinuations )
         : m_aRequest(std::move(aRequest)), m_lContinuations(lContinuations)
     {
     }

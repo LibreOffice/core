@@ -37,14 +37,14 @@ class BrowseNodeFactoryImpl :
         css::lang::XServiceInfo >
 {
 private:
-    css::uno::Reference< cpo::uno::XComponentContext > m_xComponentContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext > m_xComponentContext;
 
 protected:
     virtual ~BrowseNodeFactoryImpl() override;
 
 public:
     explicit BrowseNodeFactoryImpl(
-        css::uno::Reference< cpo::uno::XComponentContext > const & xComponentContext );
+        cpo::uno::Reference< cpo::uno::XComponentContext > const & xComponentContext );
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -56,11 +56,11 @@ public:
         getSupportedServiceNames() override;
 
     // XBrowseNodeFactory
-    virtual css::uno::Reference< css::script::browse::XBrowseNode > SAL_CALL
+    virtual cpo::uno::Reference< css::script::browse::XBrowseNode > SAL_CALL
         createView( sal_Int16 viewType ) override;
 private:
     /// @throws cpo::uno::RuntimeException
-    css::uno::Reference< css::script::browse::XBrowseNode >
+    cpo::uno::Reference< css::script::browse::XBrowseNode >
         getOrganizerHierarchy() const;
 };
 

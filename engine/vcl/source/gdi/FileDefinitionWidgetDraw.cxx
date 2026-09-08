@@ -40,6 +40,7 @@
 #include <o3tl/string_view.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 namespace vcl
 {

@@ -25,7 +25,7 @@
 #include "a11ytablewrapper.h"
 
 using namespace ::com::sun::star::accessibility;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 @implementation AquaA11ySelectionWrapper : NSObject
 

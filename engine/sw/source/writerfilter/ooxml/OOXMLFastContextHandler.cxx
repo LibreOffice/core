@@ -59,6 +59,7 @@ const sal_uInt8 cFtnEdnCont = 0x4;
 namespace writerfilter::ooxml
 {
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace oox;
 using namespace ::com::sun::star::xml::sax;
 
@@ -2110,7 +2111,7 @@ void SAL_CALL OOXMLFastContextHandlerWrapper::endFastElement(::sal_Int32 Element
                     case CallDataType::Init:
                     {
                         sal_Int32 nElement = callDataIt->getElement();
-                        css::uno::Reference<css::xml::sax::XFastAttributeList> rAttribs
+                        cpo::uno::Reference<css::xml::sax::XFastAttributeList> rAttribs
                             = callDataIt->getAttributes();
                         if (mbIsWriterFrameDetected)
                         {
@@ -2127,7 +2128,7 @@ void SAL_CALL OOXMLFastContextHandlerWrapper::endFastElement(::sal_Int32 Element
                     case CallDataType::ElementAttr:
                     {
                         sal_Int32 nElement = callDataIt->getElement();
-                        css::uno::Reference<css::xml::sax::XFastAttributeList> rAttrs
+                        cpo::uno::Reference<css::xml::sax::XFastAttributeList> rAttrs
                             = callDataIt->getAttributes();
                         auto xHandler = aLocalHandlers.back();
                         if (xHandler)
@@ -2155,7 +2156,7 @@ void SAL_CALL OOXMLFastContextHandlerWrapper::endFastElement(::sal_Int32 Element
                     {
                         const ::rtl::OUString& rNameSpace = callDataIt->getUnknownNameSpace();
                         const ::rtl::OUString& rElement = callDataIt->getUnknownElement();
-                        css::uno::Reference<css::xml::sax::XFastAttributeList> rAttrs
+                        cpo::uno::Reference<css::xml::sax::XFastAttributeList> rAttrs
                             = callDataIt->getAttributes();
                         auto xHandler = aLocalHandlers.back();
                         if (xHandler)
@@ -2175,7 +2176,7 @@ void SAL_CALL OOXMLFastContextHandlerWrapper::endFastElement(::sal_Int32 Element
                     case CallDataType::ElementContext:
                     {
                         sal_Int32 nElement = callDataIt->getElement();
-                        css::uno::Reference<css::xml::sax::XFastAttributeList> rAttrs
+                        cpo::uno::Reference<css::xml::sax::XFastAttributeList> rAttrs
                             = callDataIt->getAttributes();
                         uno::Reference< xml::sax::XFastContextHandler > newContext = aLocalHandlers.back()->createFastChildContext(nElement, rAttrs);
                         if (nElement == Token_t(NMSP_vml | XML_textbox))
@@ -2190,7 +2191,7 @@ void SAL_CALL OOXMLFastContextHandlerWrapper::endFastElement(::sal_Int32 Element
                     {
                         const ::rtl::OUString& rNameSpace = callDataIt->getUnknownNameSpace();
                         const ::rtl::OUString& rElement = callDataIt->getUnknownElement();
-                        css::uno::Reference<css::xml::sax::XFastAttributeList> rAttrs
+                        cpo::uno::Reference<css::xml::sax::XFastAttributeList> rAttrs
                             = callDataIt->getAttributes();
                         uno::Reference< xml::sax::XFastContextHandler > newContext = aLocalHandlers.back()->createUnknownChildContext(rNameSpace, rElement, rAttrs);
                         aLocalHandlers.push_back(newContext);

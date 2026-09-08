@@ -37,7 +37,7 @@ public:
     bool    create( AVAsset* pMovie );
 
     // XFrameGrabber
-    virtual css::uno::Reference< css::graphic::XGraphic > grabFrame( double fMediaTime ) override;
+    virtual cpo::uno::Reference< css::graphic::XGraphic > grabFrame( double fMediaTime ) override;
 
     // XServiceInfo
     virtual OUString getImplementationName(  ) override;

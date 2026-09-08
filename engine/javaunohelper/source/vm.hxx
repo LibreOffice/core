@@ -31,7 +31,7 @@
 #pragma clang diagnostic pop
 #endif
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <rtl/ref.hxx>
 
 namespace cpo::uno { class XComponentContext; }
@@ -42,9 +42,9 @@ namespace javaunohelper {
 ::rtl::Reference< ::jvmaccess::UnoVirtualMachine > create_vm_access(
     JNIEnv * jni_env, jobject loader );
 
-css::uno::Reference< cpo::uno::XComponentContext >
+cpo::uno::Reference< cpo::uno::XComponentContext >
 install_vm_singleton(
-    css::uno::Reference< cpo::uno::XComponentContext >
+    cpo::uno::Reference< cpo::uno::XComponentContext >
     const & xContext,
     ::rtl::Reference< ::jvmaccess::UnoVirtualMachine > const & vm_access );
 

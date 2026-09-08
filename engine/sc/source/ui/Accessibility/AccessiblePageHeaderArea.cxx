@@ -39,6 +39,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
+using namespace ::cpo;
 
 ScAccessiblePageHeaderArea::ScAccessiblePageHeaderArea(
         const uno::Reference<XAccessible>& rxParent,

@@ -57,7 +57,7 @@ class OGridColumn   :public ::cppu::BaseMutex
 // [properties]
 
 public:
-    OGridColumn(const css::uno::Reference<cpo::uno::XComponentContext>& _rContext, OUString _sModelName);
+    OGridColumn(const cpo::uno::Reference<cpo::uno::XComponentContext>& _rContext, OUString _sModelName);
     explicit OGridColumn(const OGridColumn* _pOriginal );
     virtual ~OGridColumn() override;
 
@@ -80,8 +80,8 @@ public:
     virtual void disposing(const css::lang::EventObject& _rSource) override;
 
     // XPersistObject
-    void write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream);
-    void read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream);
+    void write(const cpo::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream);
+    void read(const cpo::uno::Reference< css::io::XObjectInputStream>& _rxInStream);
 
     // XPropertySet
     virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override = 0;
@@ -96,7 +96,7 @@ public:
     virtual cpo::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const override;
 
     // XCloneable
-    virtual css::uno::Reference< css::util::XCloneable > createClone(  ) override;
+    virtual cpo::uno::Reference< css::util::XCloneable > createClone(  ) override;
 
     const OUString& getModelName() const { return m_aModelName; }
 
@@ -129,10 +129,10 @@ class TextFieldColumn
     ,public comphelper::OAggregationArrayUsageHelper< TextFieldColumn >
 {
 public:
-    explicit TextFieldColumn(const css::uno::Reference<cpo::uno::XComponentContext>& _rContext );
+    explicit TextFieldColumn(const cpo::uno::Reference<cpo::uno::XComponentContext>& _rContext );
     explicit TextFieldColumn(const TextFieldColumn* _pCloneFrom);
 
-    virtual css::uno::Reference< css::beans::XPropertySetInfo> getPropertySetInfo() override;
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo> getPropertySetInfo() override;
     virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
     virtual void fillProperties(
@@ -148,10 +148,10 @@ class PatternFieldColumn
     ,public comphelper::OAggregationArrayUsageHelper< PatternFieldColumn >
 {
 public:
-    explicit PatternFieldColumn(const css::uno::Reference<cpo::uno::XComponentContext>& _rContext );
+    explicit PatternFieldColumn(const cpo::uno::Reference<cpo::uno::XComponentContext>& _rContext );
     explicit PatternFieldColumn(const PatternFieldColumn* _pCloneFrom);
 
-    virtual css::uno::Reference< css::beans::XPropertySetInfo> getPropertySetInfo() override;
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo> getPropertySetInfo() override;
     virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
     virtual void fillProperties(
@@ -167,10 +167,10 @@ class DateFieldColumn
     ,public comphelper::OAggregationArrayUsageHelper< DateFieldColumn >
 {
 public:
-    explicit DateFieldColumn(const css::uno::Reference<cpo::uno::XComponentContext>& _rContext );
+    explicit DateFieldColumn(const cpo::uno::Reference<cpo::uno::XComponentContext>& _rContext );
     explicit DateFieldColumn(const DateFieldColumn* _pCloneFrom);
 
-    virtual css::uno::Reference< css::beans::XPropertySetInfo> getPropertySetInfo() override;
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo> getPropertySetInfo() override;
     virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
     virtual void fillProperties(
@@ -186,10 +186,10 @@ class TimeFieldColumn
     ,public comphelper::OAggregationArrayUsageHelper< TimeFieldColumn >
 {
 public:
-    explicit TimeFieldColumn(const css::uno::Reference<cpo::uno::XComponentContext>& _rContext );
+    explicit TimeFieldColumn(const cpo::uno::Reference<cpo::uno::XComponentContext>& _rContext );
     explicit TimeFieldColumn(const TimeFieldColumn* _pCloneFrom);
 
-    virtual css::uno::Reference< css::beans::XPropertySetInfo> getPropertySetInfo() override;
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo> getPropertySetInfo() override;
     virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
     virtual void fillProperties(
@@ -205,10 +205,10 @@ class NumericFieldColumn
     ,public comphelper::OAggregationArrayUsageHelper< NumericFieldColumn >
 {
 public:
-    explicit NumericFieldColumn(const css::uno::Reference<cpo::uno::XComponentContext>& _rContext );
+    explicit NumericFieldColumn(const cpo::uno::Reference<cpo::uno::XComponentContext>& _rContext );
     explicit NumericFieldColumn(const NumericFieldColumn* _pCloneFrom);
 
-    virtual css::uno::Reference< css::beans::XPropertySetInfo> getPropertySetInfo() override;
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo> getPropertySetInfo() override;
     virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
     virtual void fillProperties(
@@ -224,10 +224,10 @@ class CurrencyFieldColumn
     ,public comphelper::OAggregationArrayUsageHelper< CurrencyFieldColumn >
 {
 public:
-    explicit CurrencyFieldColumn(const css::uno::Reference<cpo::uno::XComponentContext>& _rContext );
+    explicit CurrencyFieldColumn(const cpo::uno::Reference<cpo::uno::XComponentContext>& _rContext );
     explicit CurrencyFieldColumn(const CurrencyFieldColumn* _pCloneFrom);
 
-    virtual css::uno::Reference< css::beans::XPropertySetInfo> getPropertySetInfo() override;
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo> getPropertySetInfo() override;
     virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
     virtual void fillProperties(
@@ -243,10 +243,10 @@ class CheckBoxColumn
     ,public comphelper::OAggregationArrayUsageHelper< CheckBoxColumn >
 {
 public:
-    explicit CheckBoxColumn(const css::uno::Reference<cpo::uno::XComponentContext>& _rContext );
+    explicit CheckBoxColumn(const cpo::uno::Reference<cpo::uno::XComponentContext>& _rContext );
     explicit CheckBoxColumn(const CheckBoxColumn* _pCloneFrom);
 
-    virtual css::uno::Reference< css::beans::XPropertySetInfo> getPropertySetInfo() override;
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo> getPropertySetInfo() override;
     virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
     virtual void fillProperties(
@@ -262,10 +262,10 @@ class ComboBoxColumn
     ,public comphelper::OAggregationArrayUsageHelper< ComboBoxColumn >
 {
 public:
-    explicit ComboBoxColumn(const css::uno::Reference<cpo::uno::XComponentContext>& _rContext );
+    explicit ComboBoxColumn(const cpo::uno::Reference<cpo::uno::XComponentContext>& _rContext );
     explicit ComboBoxColumn(const ComboBoxColumn* _pCloneFrom);
 
-    virtual css::uno::Reference< css::beans::XPropertySetInfo> getPropertySetInfo() override;
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo> getPropertySetInfo() override;
     virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
     virtual void fillProperties(
@@ -281,10 +281,10 @@ class ListBoxColumn
     ,public comphelper::OAggregationArrayUsageHelper< ListBoxColumn >
 {
 public:
-    explicit ListBoxColumn(const css::uno::Reference<cpo::uno::XComponentContext>& _rContext );
+    explicit ListBoxColumn(const cpo::uno::Reference<cpo::uno::XComponentContext>& _rContext );
     explicit ListBoxColumn(const ListBoxColumn* _pCloneFrom);
 
-    virtual css::uno::Reference< css::beans::XPropertySetInfo> getPropertySetInfo() override;
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo> getPropertySetInfo() override;
     virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
     virtual void fillProperties(
@@ -300,10 +300,10 @@ class FormattedFieldColumn
     ,public comphelper::OAggregationArrayUsageHelper< FormattedFieldColumn >
 {
 public:
-    explicit FormattedFieldColumn(const css::uno::Reference<cpo::uno::XComponentContext>& _rContext );
+    explicit FormattedFieldColumn(const cpo::uno::Reference<cpo::uno::XComponentContext>& _rContext );
     explicit FormattedFieldColumn(const FormattedFieldColumn* _pCloneFrom);
 
-    virtual css::uno::Reference< css::beans::XPropertySetInfo> getPropertySetInfo() override;
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo> getPropertySetInfo() override;
     virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
     virtual void fillProperties(

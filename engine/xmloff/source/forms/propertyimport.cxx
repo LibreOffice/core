@@ -46,7 +46,7 @@ using namespace ::xmloff::token;
 namespace xmloff
 {
 
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
 using namespace cpo::uno;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::xml;
@@ -291,9 +291,9 @@ OPropertyImport::OPropertyImport(OFormLayerXMLImport_Impl& _rImport)
 {
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > OPropertyImport::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > OPropertyImport::createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
     if( (nElement & TOKEN_MASK) == token::XML_PROPERTIES )
     {
@@ -376,8 +376,8 @@ OPropertyElementsContext::OPropertyElementsContext(SvXMLImport& _rImport,
 {
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > OPropertyElementsContext::createFastChildContext(
-    sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > OPropertyElementsContext::createFastChildContext(
+    sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
     if( (nElement & TOKEN_MASK) == XML_PROPERTY )
     {
@@ -393,7 +393,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > OPropertyElementsConte
 #if OSL_DEBUG_LEVEL > 0
     void OPropertyElementsContext::startFastElement(
         sal_Int32 /*nElement*/,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
     {
         OSL_ENSURE(0 == xAttrList->getFastAttributes().getLength(), "OPropertyElementsContext::StartElement: the form:properties element should not have attributes!");
     }
@@ -414,7 +414,7 @@ OSinglePropertyContext::OSinglePropertyContext(SvXMLImport& _rImport,
 
 void OSinglePropertyContext::startFastElement(
     sal_Int32 /*nElement*/,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     css::beans::PropertyValue aPropValue;      // the property the instance imports currently
     cpo::uno::Type aPropType;          // the type of the property the instance imports currently
@@ -471,7 +471,7 @@ OListPropertyContext::OListPropertyContext( SvXMLImport& _rImport,
 
 void OListPropertyContext::startFastElement(
     sal_Int32 /*nElement*/,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
@@ -513,8 +513,8 @@ void OListPropertyContext::endFastElement(sal_Int32 )
     m_xPropertyImporter->implPushBackGenericPropertyValue( aSequenceValue );
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > OListPropertyContext::createFastChildContext(
-    sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > OListPropertyContext::createFastChildContext(
+    sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
     if ( (nElement & TOKEN_MASK) == XML_LIST_VALUE )
     {
@@ -533,7 +533,7 @@ OListValueContext::OListValueContext( SvXMLImport& _rImport, OUString& _rListVal
 
 void OListValueContext::startFastElement(
     sal_Int32 /*nElement*/,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {

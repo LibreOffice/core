@@ -38,7 +38,7 @@ public:
 
     ~ModifyListenerCallBack();
 
-    void startListening(const css::uno::Reference<css::util::XModifyBroadcaster>& xBroadcaster);
+    void startListening(const cpo::uno::Reference<css::util::XModifyBroadcaster>& xBroadcaster);
     void stopListening();
 
 private: //methods
@@ -46,7 +46,7 @@ private: //methods
 
 private: //member
     ModifyListenerCallBack_impl* pModifyListener_impl;
-    css::uno::Reference<css::util::XModifyListener> m_xModifyListener;
+    cpo::uno::Reference<css::util::XModifyListener> m_xModifyListener;
 };
 
 } // namespace chart

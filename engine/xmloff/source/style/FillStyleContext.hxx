@@ -39,12 +39,12 @@ private:
 public:
 
     XMLGradientStyleContext( SvXMLImport& rImport, sal_Int32 nElement,
-                           const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
+                           const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
     virtual ~XMLGradientStyleContext() override;
 
-    virtual css::uno::Reference<css::xml::sax::XFastContextHandler> createFastChildContext(
+    virtual cpo::uno::Reference<css::xml::sax::XFastContextHandler> createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference<css::xml::sax::XFastAttributeList>& AttrList) override;
+        const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& AttrList) override;
 
     virtual void endFastElement(sal_Int32 nElement) override;
 
@@ -62,7 +62,7 @@ private:
 public:
 
     XMLHatchStyleContext( SvXMLImport& rImport, sal_Int32 nElement,
-                           const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
+                           const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
     virtual ~XMLHatchStyleContext() override;
 
     virtual void endFastElement(sal_Int32 nElement) override;
@@ -77,16 +77,16 @@ class XMLBitmapStyleContext: public SvXMLStyleContext
 private:
     cpo::uno::Any          maAny;
     OUString               maStrName;
-    css::uno::Reference < css::io::XOutputStream > mxBase64Stream;
+    cpo::uno::Reference < css::io::XOutputStream > mxBase64Stream;
 
 public:
 
     XMLBitmapStyleContext( SvXMLImport& rImport, sal_Int32 nElement,
-                           const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
+                           const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
     virtual ~XMLBitmapStyleContext() override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
     virtual void endFastElement(sal_Int32 nElement) override;
 
@@ -105,12 +105,12 @@ private:
 public:
 
     XMLTransGradientStyleContext( SvXMLImport& rImport, sal_Int32 nElement,
-                           const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
+                           const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
     virtual ~XMLTransGradientStyleContext() override;
 
-    virtual css::uno::Reference<css::xml::sax::XFastContextHandler> createFastChildContext(
+    virtual cpo::uno::Reference<css::xml::sax::XFastContextHandler> createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference<css::xml::sax::XFastAttributeList>& AttrList) override;
+        const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& AttrList) override;
 
     virtual void endFastElement(sal_Int32 nElement) override;
 
@@ -124,7 +124,7 @@ private:
 public:
 
     XMLTransparencyStopContext(SvXMLImport& rImport, sal_Int32 nElement,
-                           const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+                           const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
                            std::vector<css::awt::ColorStop>& rColorStopVec);
     virtual ~XMLTransparencyStopContext() override;
 };
@@ -140,7 +140,7 @@ private:
 public:
 
     XMLMarkerStyleContext( SvXMLImport& rImport, sal_Int32 nElement,
-                           const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
+                           const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
     virtual ~XMLMarkerStyleContext() override;
 
     virtual void endFastElement(sal_Int32 nElement) override;
@@ -159,7 +159,7 @@ private:
 public:
 
     XMLDashStyleContext( SvXMLImport& rImport, sal_Int32 nElement,
-                           const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
+                           const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
     virtual ~XMLDashStyleContext() override;
 
     virtual void endFastElement(sal_Int32 nElement) override;

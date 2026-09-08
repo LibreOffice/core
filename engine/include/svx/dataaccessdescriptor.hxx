@@ -28,7 +28,7 @@ namespace com::sun::star::beans { class XPropertySet; }
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace cpo::uno { class Any; }
 namespace cpo::uno { template <class E> class Sequence; }
-namespace com::sun::star::uno { template <typename > class Reference; }
+namespace cpo::uno { template <typename > class Reference; }
 
 namespace svx
 {
@@ -69,7 +69,7 @@ namespace svx
         ODataAccessDescriptor();
         ODataAccessDescriptor( const ODataAccessDescriptor& _rSource );
         ODataAccessDescriptor(ODataAccessDescriptor&& _rSource) noexcept;
-        ODataAccessDescriptor( const css::uno::Reference< css::beans::XPropertySet >& _rValues );
+        ODataAccessDescriptor( const cpo::uno::Reference< css::beans::XPropertySet >& _rValues );
         ODataAccessDescriptor( const cpo::uno::Sequence< css::beans::PropertyValue >& _rValues );
 
         // allows to construct a descriptor from an Any containing either an XPropertySet or a property value sequence

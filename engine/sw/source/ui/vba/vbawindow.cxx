@@ -33,6 +33,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
+using namespace ::cpo;
 
 SwVbaWindow::SwVbaWindow(
         const uno::Reference< XHelperInterface >& xParent,

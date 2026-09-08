@@ -43,7 +43,7 @@ class WeakContainerListener;
 class ConfigurationAccess_FactoryManager final : public ::cppu::WeakImplHelper< css::container::XContainerListener>
 {
     public:
-                      ConfigurationAccess_FactoryManager( const css::uno::Reference< cpo::uno::XComponentContext>& rxContext, OUString  _sRoot );
+                      ConfigurationAccess_FactoryManager( const cpo::uno::Reference< cpo::uno::XComponentContext>& rxContext, OUString  _sRoot );
         virtual       ~ConfigurationAccess_FactoryManager() override;
 
         void          readConfigurationData();
@@ -72,8 +72,8 @@ class ConfigurationAccess_FactoryManager final : public ::cppu::WeakImplHelper< 
         OUString                     m_aPropFactory;
         OUString                     m_sRoot;
         std::unordered_map<OUString, OUString> m_aFactoryManagerMap;
-        css::uno::Reference< css::lang::XMultiServiceFactory >     m_xConfigProvider;
-        css::uno::Reference< css::container::XNameAccess >         m_xConfigAccess;
+        cpo::uno::Reference< css::lang::XMultiServiceFactory >     m_xConfigProvider;
+        cpo::uno::Reference< css::container::XNameAccess >         m_xConfigAccess;
         rtl::Reference< WeakContainerListener >  m_xConfigListener;
         bool                         m_bConfigAccessInitialized;
 };

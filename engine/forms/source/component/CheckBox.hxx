@@ -31,11 +31,11 @@ class OCheckBoxModel final : public OReferenceValueComponent
 
 public:
     OCheckBoxModel(
-        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
+        const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     OCheckBoxModel(
         const OCheckBoxModel* _pOriginal,
-        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
+        const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     virtual ~OCheckBoxModel() override;
 
@@ -48,9 +48,9 @@ public:
     // XPersistObject
     virtual OUString    getServiceName() override;
     virtual void
-        write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
+        write(const cpo::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
     virtual void
-        read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
+        read(const cpo::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
 
     // OControlModel's property handling
     virtual void describeFixedProperties(
@@ -58,7 +58,7 @@ public:
     ) const override;
 
 private:
-    virtual css::uno::Reference< css::util::XCloneable > createClone(  ) override;
+    virtual cpo::uno::Reference< css::util::XCloneable > createClone(  ) override;
 
     // OBoundControlModel overridables
     virtual cpo::uno::Any   translateDbColumnToControlValue( ) override;
@@ -68,7 +68,7 @@ private:
 class OCheckBoxControl : public OBoundControl
 {
 public:
-    explicit OCheckBoxControl(const css::uno::Reference< cpo::uno::XComponentContext>& _rxContext);
+    explicit OCheckBoxControl(const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxContext);
 
     // XServiceInfo
     OUString getImplementationName() override

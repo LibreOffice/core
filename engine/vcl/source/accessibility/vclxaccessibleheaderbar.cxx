@@ -28,7 +28,7 @@
 #include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::accessibility;
 using namespace ::cpo::uno;
@@ -65,7 +65,7 @@ sal_Int64 VCLXAccessibleHeaderBar::getAccessibleChildCount()
 
     return nCount;
 }
-css::uno::Reference<css::accessibility::XAccessible>
+cpo::uno::Reference<css::accessibility::XAccessible>
     VCLXAccessibleHeaderBar::getAccessibleChild(sal_Int64 i)
 {
     SolarMutexGuard g;

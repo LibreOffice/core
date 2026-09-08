@@ -18,7 +18,7 @@
  */
 
 #include <com/sun/star/i18n/ScriptType.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <editeng/unolingu.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <i18npool/breakiterator.hxx>
@@ -44,6 +44,7 @@
 using namespace ::sw::mark;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n::ScriptType;
+using namespace ::cpo;
 
 static TextFrameIndex lcl_AddSpace_Latin(const SwTextSizeInfo& rInf, const OUString* pStr,
                                          const SwLinePortion& rPor, TextFrameIndex nPos,

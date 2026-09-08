@@ -24,6 +24,7 @@
 #define CLOSING( token ) XML_STREAM_CLOSING( token )
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 namespace oox::formulaimport
 {

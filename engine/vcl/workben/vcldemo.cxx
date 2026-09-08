@@ -18,7 +18,7 @@
 #include <comphelper/random.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <o3tl/safeint.hxx>
@@ -54,6 +54,7 @@
 #define THUMB_REPEAT_FACTOR 10
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 namespace {
     double getTimeNow()
@@ -1182,7 +1183,7 @@ public:
                 return;
             bHasLoadedAll = true;
 
-            css::uno::Reference<css::container::XNameAccess> xRef(ImageTree::get().getNameAccess());
+            cpo::uno::Reference<css::container::XNameAccess> xRef(ImageTree::get().getNameAccess());
             const cpo::uno::Sequence< OUString > aAllIcons = xRef->getElementNames();
 
             for (const auto& rIcon : aAllIcons)

@@ -39,7 +39,7 @@ public:
     {}
 
     // Decryption
-    virtual bool readEncryptionInfo(css::uno::Reference<css::io::XInputStream> & rxInputStream) = 0;
+    virtual bool readEncryptionInfo(cpo::uno::Reference<css::io::XInputStream> & rxInputStream) = 0;
 
     virtual bool generateEncryptionKey(std::u16string_view rPassword) = 0;
 
@@ -52,8 +52,8 @@ public:
 
     virtual bool setupEncryption(const OUString& rPassword) = 0;
 
-    virtual void encrypt(const css::uno::Reference<css::io::XInputStream> & rxInputStream,
-                         css::uno::Reference<css::io::XOutputStream> & rxOutputStream,
+    virtual void encrypt(const cpo::uno::Reference<css::io::XInputStream> & rxInputStream,
+                         cpo::uno::Reference<css::io::XOutputStream> & rxOutputStream,
                          sal_uInt32 nSize) = 0;
 
     virtual bool checkDataIntegrity() = 0;

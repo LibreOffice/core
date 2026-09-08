@@ -47,16 +47,16 @@ class TextSearch: public cppu::WeakImplHelper
 >
 {
     std::mutex m_aMutex;
-    css::uno::Reference < cpo::uno::XComponentContext > m_xContext;
+    cpo::uno::Reference < cpo::uno::XComponentContext > m_xContext;
 
     css::util::SearchOptions2 aSrchPara;
     OUString sSrchStr;
     OUString sSrchStr2;
 
-    mutable css::uno::Reference< css::i18n::XCharacterClassification > xCharClass;
+    mutable cpo::uno::Reference< css::i18n::XCharacterClassification > xCharClass;
 
-    css::uno::Reference< css::i18n::XExtendedTransliteration > xTranslit;
-    css::uno::Reference< css::i18n::XExtendedTransliteration > xTranslit2;
+    cpo::uno::Reference< css::i18n::XExtendedTransliteration > xTranslit;
+    cpo::uno::Reference< css::i18n::XExtendedTransliteration > xTranslit2;
 
     // define a function pointer for the different search methods
     typedef css::util::SearchResult
@@ -103,7 +103,7 @@ class TextSearch: public cppu::WeakImplHelper
     // Members and methods for the "Weight Levenshtein-Distance" search
     int nLimit;
     std::unique_ptr<WLevDistance> pWLD;
-    css::uno::Reference < css::i18n::XBreakIterator > xBreak;
+    cpo::uno::Reference < css::i18n::XBreakIterator > xBreak;
     /// @throws cpo::uno::RuntimeException
     css::util::SearchResult
         ApproxSrchFrwrd( std::unique_lock<std::mutex>& rGuard, const OUString& searchStr,
@@ -131,7 +131,7 @@ class TextSearch: public cppu::WeakImplHelper
 
 public:
     explicit TextSearch(
-        const css::uno::Reference < cpo::uno::XComponentContext >& rxContext );
+        const cpo::uno::Reference < cpo::uno::XComponentContext >& rxContext );
 
     virtual ~TextSearch() override;
 

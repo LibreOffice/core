@@ -41,8 +41,8 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::frame;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 namespace {
 
@@ -63,11 +63,11 @@ public:
 
     virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
-    virtual css::uno::Reference < css::frame::XDispatch > queryDispatch(
+    virtual cpo::uno::Reference < css::frame::XDispatch > queryDispatch(
             const css::util::URL& aURL, const OUString& sTargetFrameName,
             sal_Int32 eSearchFlags ) override;
 
-    virtual cpo::uno::Sequence< css::uno::Reference < css::frame::XDispatch > > queryDispatches(
+    virtual cpo::uno::Sequence< cpo::uno::Reference < css::frame::XDispatch > > queryDispatches(
             const cpo::uno::Sequence < css::frame::DispatchDescriptor >& seqDescriptor ) override;
 
     virtual cpo::uno::Sequence< sal_Int16 > getSupportedCommandGroups() override;
@@ -78,7 +78,7 @@ public:
 void SfxAppDispatchProvider::initialize(
     cpo::uno::Sequence<cpo::uno::Any> const & aArguments)
 {
-    css::uno::Reference<css::frame::XFrame> f;
+    cpo::uno::Reference<css::frame::XFrame> f;
     if (aArguments.getLength() != 1 || !(aArguments[0] >>= f)) {
         throw css::lang::IllegalArgumentException(
             u"SfxAppDispatchProvider::initialize expects one XFrame argument"_ustr,

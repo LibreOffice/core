@@ -60,7 +60,7 @@ class PropertySetContainer : public comphelper::WeakImplHelper<css::container::X
         virtual bool hasElements() override;
 
     private:
-        typedef std::vector< css::uno::Reference< css::beans::XPropertySet > > PropertySetVector;
+        typedef std::vector< cpo::uno::Reference< css::beans::XPropertySet > > PropertySetVector;
         PropertySetVector                                                               m_aPropertySetVector;
 };
 

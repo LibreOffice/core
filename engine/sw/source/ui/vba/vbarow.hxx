@@ -32,14 +32,14 @@ typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XRow > SwVbaRow_BASE;
 class SwVbaRow : public SwVbaRow_BASE
 {
 private:
-    css::uno::Reference< css::text::XTextTable > mxTextTable;
-    css::uno::Reference< css::table::XTableRows > mxTableRows;
-    css::uno::Reference< css::beans::XPropertySet > mxRowProps;
+    cpo::uno::Reference< css::text::XTextTable > mxTextTable;
+    cpo::uno::Reference< css::table::XTableRows > mxTableRows;
+    cpo::uno::Reference< css::beans::XPropertySet > mxRowProps;
     sal_Int32 mnIndex;
 
 public:
     /// @throws cpo::uno::RuntimeException
-    SwVbaRow( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< cpo::uno::XComponentContext >& rContext, css::uno::Reference< css::text::XTextTable >  xTextTable, sal_Int32 nIndex );
+    SwVbaRow( const cpo::uno::Reference< ooo::vba::XHelperInterface >& rParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& rContext, cpo::uno::Reference< css::text::XTextTable >  xTextTable, sal_Int32 nIndex );
     virtual ~SwVbaRow() override;
 
     // Attributes
@@ -53,7 +53,7 @@ public:
     virtual void SAL_CALL SetHeight( float height, sal_Int32 heightrule ) override;
 
     /// @throws cpo::uno::RuntimeException
-    static void SelectRow( const rtl::Reference< SwXTextDocument >& xModel, const css::uno::Reference< css::text::XTextTable >& xTextTable, sal_Int32 nStartRow, sal_Int32 nEndRow );
+    static void SelectRow( const rtl::Reference< SwXTextDocument >& xModel, const cpo::uno::Reference< css::text::XTextTable >& xTextTable, sal_Int32 nStartRow, sal_Int32 nEndRow );
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;

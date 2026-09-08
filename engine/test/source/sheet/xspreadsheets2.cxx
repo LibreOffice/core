@@ -29,8 +29,8 @@
 #include <o3tl/string_view.hxx>
 
 using namespace css;
-using namespace css::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 namespace apitest {
 

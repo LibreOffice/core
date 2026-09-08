@@ -34,8 +34,8 @@
 #include <osl/file.hxx>
 #include <vcl/svapp.hxx>
 
-OpenFileDropTargetListener::OpenFileDropTargetListener( css::uno::Reference< cpo::uno::XComponentContext > xContext,
-                                        const css::uno::Reference< css::frame::XFrame >&          xFrame  )
+OpenFileDropTargetListener::OpenFileDropTargetListener( cpo::uno::Reference< cpo::uno::XComponentContext > xContext,
+                                        const cpo::uno::Reference< css::frame::XFrame >&          xFrame  )
         : m_xContext      (std::move( xContext                      ))
         , m_xTargetFrame  ( xFrame                        )
 {
@@ -190,8 +190,8 @@ void OpenFileDropTargetListener::implts_OpenFile( const OUString& rFilePath )
     /* SAFE { */
     SolarMutexGuard aGuard;
 
-    css::uno::Reference< css::frame::XFrame >         xTargetFrame( m_xTargetFrame.get(), css::uno::UNO_QUERY );
-    css::uno::Reference< css::util::XURLTransformer > xParser     ( css::util::URLTransformer::create(m_xContext) );
+    cpo::uno::Reference< css::frame::XFrame >         xTargetFrame( m_xTargetFrame.get(), cpo::uno::UNO_QUERY );
+    cpo::uno::Reference< css::util::XURLTransformer > xParser     ( css::util::URLTransformer::create(m_xContext) );
 
     if (xTargetFrame.is() && xParser.is())
     {
@@ -199,9 +199,9 @@ void OpenFileDropTargetListener::implts_OpenFile( const OUString& rFilePath )
         aURL.Complete = aFileURL;
         xParser->parseStrict(aURL);
 
-        css::uno::Reference < css::frame::XDispatchProvider > xProvider( xTargetFrame, css::uno::UNO_QUERY );
+        cpo::uno::Reference < css::frame::XDispatchProvider > xProvider( xTargetFrame, cpo::uno::UNO_QUERY );
         // Create a new task or recycle an existing one
-        css::uno::Reference< css::frame::XDispatch > xDispatcher = xProvider->queryDispatch( aURL, u"_default"_ustr, 0 );
+        cpo::uno::Reference< css::frame::XDispatch > xDispatcher = xProvider->queryDispatch( aURL, u"_default"_ustr, 0 );
         if ( xDispatcher.is() )
             xDispatcher->dispatch( aURL, cpo::uno::Sequence < css::beans::PropertyValue >() );
     }

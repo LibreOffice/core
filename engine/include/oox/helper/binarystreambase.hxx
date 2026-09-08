@@ -20,7 +20,7 @@
 #ifndef INCLUDED_OOX_HELPER_BINARYSTREAMBASE_HXX
 #define INCLUDED_OOX_HELPER_BINARYSTREAMBASE_HXX
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <oox/dllapi.h>
 #include <sal/types.h>
@@ -136,10 +136,10 @@ public:
 
 protected:
     explicit            BinaryXSeekableStream(
-                            const css::uno::Reference< css::io::XSeekable >& rxSeekable );
+                            const cpo::uno::Reference< css::io::XSeekable >& rxSeekable );
 
 private:
-    css::uno::Reference< css::io::XSeekable >
+    cpo::uno::Reference< css::io::XSeekable >
                         mxSeekable;     ///< Stream seeking interface.
 };
 

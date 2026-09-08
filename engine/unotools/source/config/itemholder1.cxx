@@ -39,10 +39,10 @@ ItemHolder1::ItemHolder1()
 {
     try
     {
-        const css::uno::Reference< cpo::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
-        css::uno::Reference< css::lang::XComponent > xCfg(
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
+        cpo::uno::Reference< css::lang::XComponent > xCfg(
             css::configuration::theDefaultProvider::get( xContext ),
-            css::uno::UNO_QUERY_THROW );
+            cpo::uno::UNO_QUERY_THROW );
         xCfg->addEventListener(static_cast< css::lang::XEventListener* >(this));
     }
 #ifdef DBG_UTIL
@@ -73,7 +73,7 @@ void ItemHolder1::holdConfigItem(EItem eItem)
 
 void ItemHolder1::disposing(const css::lang::EventObject&)
 {
-    css::uno::Reference< cpo::uno::XInterface > xSelfHold(static_cast< css::lang::XEventListener* >(this), css::uno::UNO_QUERY);
+    cpo::uno::Reference< cpo::uno::XInterface > xSelfHold(static_cast< css::lang::XEventListener* >(this), cpo::uno::UNO_QUERY);
     impl_releaseAllItems();
 }
 

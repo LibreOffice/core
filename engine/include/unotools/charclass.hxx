@@ -26,7 +26,7 @@
 #include <com/sun/star/i18n/KCharacterType.hpp>
 #include <com/sun/star/i18n/ParseResult.hpp>
 #include <com/sun/star/i18n/UnicodeScript.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 namespace cpo::uno { class XComponentContext; }
 namespace com::sun::star::i18n { class XCharacterClassification; }
@@ -64,7 +64,7 @@ inline constexpr sal_Int32 nCharClassBaseType =
 class UNOTOOLS_DLLPUBLIC CharClass
 {
     LanguageTag                 maLanguageTag;
-    css::uno::Reference< css::i18n::XCharacterClassification >    xCC;
+    cpo::uno::Reference< css::i18n::XCharacterClassification >    xCC;
 
     CharClass(const CharClass&) = delete;
     CharClass& operator=(const CharClass&) = delete;
@@ -72,7 +72,7 @@ class UNOTOOLS_DLLPUBLIC CharClass
 public:
     /// Preferred ctor with service manager specified
     CharClass(
-        const css::uno::Reference< cpo::uno::XComponentContext > & rxContext,
+        const cpo::uno::Reference< cpo::uno::XComponentContext > & rxContext,
         LanguageTag aLanguageTag );
 
     /// Deprecated ctor, tries to get a process service manager or to load the

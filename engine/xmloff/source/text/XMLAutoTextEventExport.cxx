@@ -22,7 +22,7 @@
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Exception.hpp>
 #include <cpo/uno/XComponentContext.hpp>
@@ -41,15 +41,15 @@ using ::com::sun::star::container::XNameReplace;
 using ::com::sun::star::document::XEventsSupplier;
 using ::cpo::uno::Any;
 using ::cpo::uno::Exception;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::cpo::uno::Sequence;
 using ::cpo::uno::XInterface;
-using ::com::sun::star::uno::UNO_QUERY;
+using ::cpo::uno::UNO_QUERY;
 using ::com::sun::star::xml::sax::XDocumentHandler;
 
 
 XMLAutoTextEventExport::XMLAutoTextEventExport(
-    const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
+    const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
     OUString const & implementationName, SvXMLExportFlags nFlags
     )
 :   SvXMLExport(xContext, implementationName, util::MeasureUnit::INCH, XML_AUTO_TEXT, nFlags)

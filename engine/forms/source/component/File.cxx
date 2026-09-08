@@ -35,7 +35,7 @@ using namespace comphelper;
 namespace frm
 {
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
@@ -95,7 +95,7 @@ OFileControlModel::~OFileControlModel()
 }
 
 
-css::uno::Reference< css::util::XCloneable > OFileControlModel::createClone()
+cpo::uno::Reference< css::util::XCloneable > OFileControlModel::createClone()
 {
     rtl::Reference<OFileControlModel> pClone = new OFileControlModel(this, getContext());
     pClone->clonedFrom(this);

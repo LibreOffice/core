@@ -26,7 +26,7 @@
 #include <com/sun/star/awt/XFixedText.hpp>
 #include <com/sun/star/awt/XLayoutConstrains.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <test/a11y/AccessibilityTools.hxx>
 #include <test/a11y/XAccessibleComponentTester.hxx>
 #include <test/a11y/XAccessibleContextTester.hxx>
@@ -37,6 +37,7 @@
 #include <vcl/scheduler.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 namespace
 {
@@ -45,8 +46,8 @@ class AccessibleFixedTextTest : public test::AccessibleTestBase
 private:
     void testFixedText();
     void runInterfaceTests(
-        const css::uno::Reference<accessibility::XAccessibleContext>& rxFixedTextContext,
-        const css::uno::Reference<css::awt::XWindow>& rxFixedTextWindow);
+        const cpo::uno::Reference<accessibility::XAccessibleContext>& rxFixedTextContext,
+        const cpo::uno::Reference<css::awt::XWindow>& rxFixedTextWindow);
 
 public:
     CPPUNIT_TEST_SUITE(AccessibleFixedTextTest);
@@ -63,56 +64,56 @@ void AccessibleFixedTextTest::testFixedText()
                                             m_xContext),
         uno::UNO_QUERY_THROW);
 
-    css::uno::Reference<css::awt::XControl> xDlgControl(
+    cpo::uno::Reference<css::awt::XControl> xDlgControl(
         xFactory->createInstanceWithContext(u"com.sun.star.awt.UnoControlDialog"_ustr, m_xContext),
-        css::uno::UNO_QUERY_THROW);
+        cpo::uno::UNO_QUERY_THROW);
     xDlgControl->setModel(xDlgModel);
 
-    css::uno::Reference<css::awt::XControlModel> xFixedTextModel(
+    cpo::uno::Reference<css::awt::XControlModel> xFixedTextModel(
         xFactory->createInstanceWithContext(u"com.sun.star.awt.UnoControlFixedTextModel"_ustr,
                                             m_xContext),
-        css::uno::UNO_QUERY_THROW);
+        cpo::uno::UNO_QUERY_THROW);
 
-    css::uno::Reference<css::awt::XControl> xFixedTextControl(
+    cpo::uno::Reference<css::awt::XControl> xFixedTextControl(
         xFactory->createInstanceWithContext(u"com.sun.star.awt.UnoControlFixedText"_ustr,
                                             m_xContext),
-        css::uno::UNO_QUERY_THROW);
+        cpo::uno::UNO_QUERY_THROW);
 
     xFixedTextControl->setModel(xFixedTextModel);
 
-    css::uno::Reference<css::awt::XFixedText> xFT(xFixedTextControl, css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::awt::XFixedText> xFT(xFixedTextControl, cpo::uno::UNO_QUERY_THROW);
     xFT->setText(u"FxedText"_ustr);
 
     /* Set the text control to its preferred size, otherwise it
      * defaults to the size hard coded in its constructor (100 x 12) */
-    css::uno::Reference<css::awt::XLayoutConstrains> xLCTxt(xFixedTextControl,
-                                                            css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::awt::XLayoutConstrains> xLCTxt(xFixedTextControl,
+                                                            cpo::uno::UNO_QUERY_THROW);
     css::awt::Size textSize = xLCTxt->getPreferredSize();
-    css::uno::Reference<css::awt::XWindow> xWinTxt(xFixedTextControl, css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::awt::XWindow> xWinTxt(xFixedTextControl, cpo::uno::UNO_QUERY_THROW);
     xWinTxt->setPosSize(0, 0, textSize.Width, textSize.Height, css::awt::PosSize::SIZE);
 
-    css::uno::Reference<css::awt::XControlContainer> xControlContainer(xDlgControl,
-                                                                       css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::awt::XControlContainer> xControlContainer(xDlgControl,
+                                                                       cpo::uno::UNO_QUERY_THROW);
     xControlContainer->addControl(u"Text"_ustr, xFixedTextControl);
 
-    css::uno::Reference<css::awt::XWindow> xWinDlg(xDlgControl, css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::awt::XWindow> xWinDlg(xDlgControl, cpo::uno::UNO_QUERY_THROW);
     xWinDlg->setVisible(true);
     xWinDlg->setPosSize(0, 0, 200, 100, css::awt::PosSize::SIZE);
 
     Scheduler::ProcessEventsToIdle();
 
-    css::uno::Reference<css::accessibility::XAccessible> xRoot(xWinDlg, css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::accessibility::XAccessible> xRoot(xWinDlg, cpo::uno::UNO_QUERY_THROW);
     test::AccessibleTestBase::dumpA11YTree(xRoot);
 
-    css::uno::Reference<css::accessibility::XAccessibleContext> xContext
+    cpo::uno::Reference<css::accessibility::XAccessibleContext> xContext
         = AccessibilityTools::getAccessibleObjectForRole(xRoot,
                                                          css::accessibility::AccessibleRole::LABEL);
     runInterfaceTests(xContext, xWinTxt);
 }
 
 void AccessibleFixedTextTest::runInterfaceTests(
-    const css::uno::Reference<accessibility::XAccessibleContext>& rxContext,
-    const css::uno::Reference<css::awt::XWindow>& rxFixedTextWindow)
+    const cpo::uno::Reference<accessibility::XAccessibleContext>& rxContext,
+    const cpo::uno::Reference<css::awt::XWindow>& rxFixedTextWindow)
 {
     XAccessibleContextTester aContextTester(rxContext);
     aContextTester.testAll();

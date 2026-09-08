@@ -33,7 +33,7 @@
 #include <ChartType.hxx>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 namespace chart::sidebar {
@@ -154,10 +154,10 @@ void setReverse(const rtl::Reference<::chart::ChartModel>& xModel,
     xAxis->setScaleData(aData);
 }
 
-OUString getCID(const css::uno::Reference<css::frame::XModel>& xModel)
+OUString getCID(const cpo::uno::Reference<css::frame::XModel>& xModel)
 {
-    css::uno::Reference<css::frame::XController> xController(xModel->getCurrentController());
-    css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(xController, css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::frame::XController> xController(xModel->getCurrentController());
+    cpo::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(xController, cpo::uno::UNO_QUERY);
     if (!xSelectionSupplier.is())
         return OUString();
 
@@ -259,7 +259,7 @@ void ChartAxisPanel::Initialize()
 {
     mxModel->addModifyListener(mxModifyListener);
 
-    css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(mxModel->getCurrentController(), css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(mxModel->getCurrentController(), cpo::uno::UNO_QUERY);
     if (xSelectionSupplier.is())
         xSelectionSupplier->addSelectionChangeListener(mxSelectionListener);
 
@@ -392,8 +392,8 @@ void ChartAxisPanel::doUpdateModel(const rtl::Reference<::chart::ChartModel>& xM
     {
         mxModel->removeModifyListener(mxModifyListener);
 
-        css::uno::Reference<css::view::XSelectionSupplier> oldSelectionSupplier(
-            mxModel->getCurrentController(), css::uno::UNO_QUERY);
+        cpo::uno::Reference<css::view::XSelectionSupplier> oldSelectionSupplier(
+            mxModel->getCurrentController(), cpo::uno::UNO_QUERY);
         if (oldSelectionSupplier.is()) {
             oldSelectionSupplier->removeSelectionChangeListener(mxSelectionListener);
         }
@@ -407,7 +407,7 @@ void ChartAxisPanel::doUpdateModel(const rtl::Reference<::chart::ChartModel>& xM
 
     mxModel->addModifyListener(mxModifyListener);
 
-    css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(mxModel->getCurrentController(), css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(mxModel->getCurrentController(), cpo::uno::UNO_QUERY);
     if (xSelectionSupplier.is())
         xSelectionSupplier->addSelectionChangeListener(mxSelectionListener);
 }
@@ -420,7 +420,7 @@ void ChartAxisPanel::updateHistogramControlSensitivity()
     mxHistogramUnderflow->set_sensitive(mxCBHistogramUnderflow->get_active());
 }
 
-void ChartAxisPanel::updateModel(css::uno::Reference<css::frame::XModel> xModel)
+void ChartAxisPanel::updateModel(cpo::uno::Reference<css::frame::XModel> xModel)
 {
     ::chart::ChartModel* pModel = dynamic_cast<::chart::ChartModel*>(xModel.get());
     assert(!xModel || pModel);

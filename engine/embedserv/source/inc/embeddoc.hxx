@@ -23,7 +23,7 @@
 #include <oleidl.h>
 #include <objidl.h>
 
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <cpo/uno/Sequence.h>
 #include <rtl/ref.hxx>
 #include <unordered_map>
@@ -47,18 +47,18 @@ class EmbedDocument_Impl
 {
 protected:
     cpo::uno::Sequence< css::beans::PropertyValue >
-                fillArgsForLoading_Impl( css::uno::Reference< css::io::XInputStream > const & xStream,
+                fillArgsForLoading_Impl( cpo::uno::Reference< css::io::XInputStream > const & xStream,
                                          DWORD nStreamMode,
                                          LPCOLESTR pFilePath = nullptr );
     cpo::uno::Sequence< css::beans::PropertyValue >
-                fillArgsForStoring_Impl( css::uno::Reference< css::io::XOutputStream > const & xStream );
+                fillArgsForStoring_Impl( cpo::uno::Reference< css::io::XOutputStream > const & xStream );
 
     HRESULT SaveTo_Impl( IStorage* pStg );
 
     sal_uInt64 getMetaFileHandle_Impl( bool isEnhMeta );
 
 public:
-    EmbedDocument_Impl( const css::uno::Reference< css::lang::XMultiServiceFactory >& smgr,
+    EmbedDocument_Impl( const cpo::uno::Reference< css::lang::XMultiServiceFactory >& smgr,
                         const GUID* guid );
     virtual ~EmbedDocument_Impl();
 
@@ -150,7 +150,7 @@ public:
 protected:
     oslInterlockedCount                 m_refCount;
 
-    css::uno::Reference< css::lang::XMultiServiceFactory > m_xFactory;
+    cpo::uno::Reference< css::lang::XMultiServiceFactory > m_xFactory;
 
     rtl::Reference<DocumentHolder>      m_pDocHolder;
     OUString                     m_aFileName;

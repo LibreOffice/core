@@ -40,7 +40,7 @@ getAsConst( std::u16string_view rString )
 }
 
 /// @throws uno::RuntimeException
-static css::uno::Reference<css::accessibility::XAccessibleImage>
+static cpo::uno::Reference<css::accessibility::XAccessibleImage>
     getImage( AtkImage *pImage )
 {
     AtkObjectWrapper *pWrap = ATK_OBJECT_WRAPPER( pImage );
@@ -48,13 +48,13 @@ static css::uno::Reference<css::accessibility::XAccessibleImage>
     {
         if( !pWrap->mpImage.is() )
         {
-            pWrap->mpImage.set(pWrap->mpContext, css::uno::UNO_QUERY);
+            pWrap->mpImage.set(pWrap->mpContext, cpo::uno::UNO_QUERY);
         }
 
         return pWrap->mpImage;
     }
 
-    return css::uno::Reference<css::accessibility::XAccessibleImage>();
+    return cpo::uno::Reference<css::accessibility::XAccessibleImage>();
 }
 
 extern "C" {
@@ -63,7 +63,7 @@ static const gchar *
 image_get_image_description( AtkImage *image )
 {
     try {
-        css::uno::Reference<css::accessibility::XAccessibleImage> pImage
+        cpo::uno::Reference<css::accessibility::XAccessibleImage> pImage
             = getImage( image );
         if( pImage.is() )
             return getAsConst( pImage->getAccessibleImageDescription() );
@@ -99,7 +99,7 @@ image_get_image_size( AtkImage *image,
 {
     *width = *height = -1;
     try {
-        css::uno::Reference<css::accessibility::XAccessibleImage> pImage
+        cpo::uno::Reference<css::accessibility::XAccessibleImage> pImage
             = getImage( image );
         if( pImage.is() )
         {

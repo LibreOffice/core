@@ -50,7 +50,7 @@ namespace comphelper
 {
 class OAccessible;
 }
-typedef css::uno::Reference<css::accessibility::XAccessibleRelationSet> a11yrelationset;
+typedef cpo::uno::Reference<css::accessibility::XAccessibleRelationSet> a11yrelationset;
 enum class PointerStyle;
 class CommandEvent;
 class Formatter;
@@ -376,8 +376,8 @@ public:
     // reset to default background
     virtual void set_background() = 0;
 
-    virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget> get_drop_target() = 0;
-    virtual css::uno::Reference<css::datatransfer::clipboard::XClipboard> get_clipboard() const = 0;
+    virtual cpo::uno::Reference<css::datatransfer::dnd::XDropTarget> get_drop_target() = 0;
+    virtual cpo::uno::Reference<css::datatransfer::clipboard::XClipboard> get_clipboard() const = 0;
 
     virtual void connect_get_property_tree(const Link<tools::JsonWriter&, void>& rLink) = 0;
     virtual void get_property_tree(tools::JsonWriter& rJsonWriter) = 0;
@@ -401,7 +401,7 @@ public:
     virtual void move(weld::Widget* pWidget, weld::Container* pNewParent) = 0;
     // create an XWindow as a child of this container. The XWindow is
     // suitable to contain css::awt::XControl items
-    virtual css::uno::Reference<css::awt::XWindow> CreateChildFrame() = 0;
+    virtual cpo::uno::Reference<css::awt::XWindow> CreateChildFrame() = 0;
     // rLink is called when the focus transitions from a widget outside the container
     // to a widget inside the container or vice versa
     virtual void connect_container_focus_changed(const Link<Container&, void>& rLink)
@@ -593,7 +593,7 @@ public:
     virtual void set_window_state(const OUString& rStr) = 0;
     virtual OUString get_window_state(vcl::WindowDataMask nMask) const = 0;
 
-    virtual css::uno::Reference<css::awt::XWindow> GetXWindow() = 0;
+    virtual cpo::uno::Reference<css::awt::XWindow> GetXWindow() = 0;
 
     void connect_help(const Link<Widget&, bool>& rLink) { m_aHelpRequestHdl = rLink; }
 
@@ -1306,7 +1306,7 @@ public:
     // col index -1 sets the expander image
     virtual void set_image(int row, VirtualDevice& rImage, int col = -1) = 0;
     // col index -1 sets the expander image
-    virtual void set_image(int row, const css::uno::Reference<css::graphic::XGraphic>& rImage,
+    virtual void set_image(int row, const cpo::uno::Reference<css::graphic::XGraphic>& rImage,
                            int col = -1)
         = 0;
     virtual void set_text_emphasis(int row, bool bOn, int col) = 0;
@@ -1463,7 +1463,7 @@ public:
     virtual void set_image(const TreeIter& rIter, VirtualDevice& rImage, int col = -1) = 0;
     // col index -1 sets the expander image
     virtual void set_image(const TreeIter& rIter,
-                           const css::uno::Reference<css::graphic::XGraphic>& rImage, int col = -1)
+                           const cpo::uno::Reference<css::graphic::XGraphic>& rImage, int col = -1)
         = 0;
     virtual void set_font_color(const TreeIter& rIter, const Color& rColor) = 0;
 
@@ -1901,7 +1901,7 @@ public:
     virtual void set_label(const OUString& rText) = 0;
     // pDevice, the image for the button, or nullptr to unset
     virtual void set_image(VirtualDevice* pDevice) = 0;
-    virtual void set_image(const css::uno::Reference<css::graphic::XGraphic>& rImage) = 0;
+    virtual void set_image(const cpo::uno::Reference<css::graphic::XGraphic>& rImage) = 0;
     virtual void set_from_icon_name(const OUString& rIconName) = 0;
     virtual OUString get_label() const = 0;
     void clicked() { signal_clicked(); }
@@ -2435,7 +2435,7 @@ class VCL_DLLPUBLIC Image : virtual public Widget
 public:
     virtual void set_from_icon_name(const OUString& rIconName) = 0;
     virtual void set_image(VirtualDevice* pDevice) = 0;
-    virtual void set_image(const css::uno::Reference<css::graphic::XGraphic>& rImage) = 0;
+    virtual void set_image(const cpo::uno::Reference<css::graphic::XGraphic>& rImage) = 0;
 };
 
 class VCL_DLLPUBLIC Calendar : virtual public Widget
@@ -3071,7 +3071,7 @@ public:
 
     virtual void insert(int pos, const OUString& rId, const OUString& rStr,
                         const OUString* pIconName, VirtualDevice* pImageSurface,
-                        const css::uno::Reference<css::graphic::XGraphic>& rImage,
+                        const cpo::uno::Reference<css::graphic::XGraphic>& rImage,
                         TriState eCheckRadioFalse)
         = 0;
 
@@ -3104,7 +3104,7 @@ public:
         insert(-1, rId, rStr, nullptr, &rImage, nullptr, TRISTATE_INDET);
     }
     void append(const OUString& rId, const OUString& rStr,
-                const css::uno::Reference<css::graphic::XGraphic>& rImage)
+                const cpo::uno::Reference<css::graphic::XGraphic>& rImage)
     {
         insert(-1, rId, rStr, nullptr, nullptr, rImage, TRISTATE_INDET);
     }
@@ -3168,7 +3168,7 @@ public:
     virtual void set_item_icon_name(const OUString& rIdent, const OUString& rIconName) = 0;
     virtual void set_item_image_mirrored(const OUString& rIdent, bool bMirrored) = 0;
     virtual void set_item_image(const OUString& rIdent,
-                                const css::uno::Reference<css::graphic::XGraphic>& rIcon)
+                                const cpo::uno::Reference<css::graphic::XGraphic>& rIcon)
         = 0;
     virtual void set_item_image(const OUString& rIdent, VirtualDevice* pDevice) = 0;
 
@@ -3181,7 +3181,7 @@ public:
     virtual void set_item_ident(int nIndex, const OUString& rIdent) = 0;
     virtual void set_item_label(int nIndex, const OUString& rLabel) = 0;
     virtual void set_item_image(int nIndex,
-                                const css::uno::Reference<css::graphic::XGraphic>& rIcon)
+                                const cpo::uno::Reference<css::graphic::XGraphic>& rIcon)
         = 0;
     virtual void set_item_tooltip_text(int nIndex, const OUString& rTip) = 0;
     virtual void set_item_accessible_name(int nIndex, const OUString& rName) = 0;

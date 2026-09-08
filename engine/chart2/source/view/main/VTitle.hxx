@@ -19,7 +19,7 @@
 #pragma once
 
 #include <com/sun/star/awt/Size.hpp>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <rtl/ustring.hxx>
 #include <rtl/ref.hxx>
 #include <sal/types.h>
@@ -36,7 +36,7 @@ class Title;
 class VTitle final
 {
 public:
-    explicit VTitle( css::uno::Reference< css::chart2::XTitle > xTitle );
+    explicit VTitle( cpo::uno::Reference< css::chart2::XTitle > xTitle );
     ~VTitle();
 
     void    init( const rtl::Reference<SvxShapeGroupAnyD>& xTargetPage
@@ -56,7 +56,7 @@ public:
 
 private:
     rtl::Reference<SvxShapeGroupAnyD>            m_xTarget;
-    css::uno::Reference< css::chart2::XTitle >              m_xTitle;
+    cpo::uno::Reference< css::chart2::XTitle >              m_xTitle;
     rtl::Reference<SvxShapeText>                            m_xShape;
     OUString   m_aCID;
 

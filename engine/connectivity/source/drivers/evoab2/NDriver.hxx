@@ -43,10 +43,10 @@ namespace connectivity::evoab
     {
         ::osl::Mutex                                        m_aMutex;
         std::vector<unotools::WeakReference<OEvoabConnection>> m_xConnections;
-        css::uno::Reference< cpo::uno::XComponentContext >  m_xContext;
+        cpo::uno::Reference< cpo::uno::XComponentContext >  m_xContext;
 
     public:
-        explicit OEvoabDriver(const css::uno::Reference< cpo::uno::XComponentContext >& );
+        explicit OEvoabDriver(const cpo::uno::Reference< cpo::uno::XComponentContext >& );
         virtual ~OEvoabDriver() override;
 
         // OComponentHelper
@@ -59,14 +59,14 @@ namespace connectivity::evoab
 
 
         // XDriver
-        virtual css::uno::Reference< css::sdbc::XConnection > connect( const OUString& url, const cpo::uno::Sequence< css::beans::PropertyValue >& info ) override;
+        virtual cpo::uno::Reference< css::sdbc::XConnection > connect( const OUString& url, const cpo::uno::Sequence< css::beans::PropertyValue >& info ) override;
         virtual bool acceptsURL( const OUString& url ) override;
         virtual cpo::uno::Sequence< css::sdbc::DriverPropertyInfo > getPropertyInfo( const OUString& url, const cpo::uno::Sequence< css::beans::PropertyValue >& info ) override;
         virtual sal_Int32 getMajorVersion(  ) override;
         virtual sal_Int32 getMinorVersion(  ) override;
 
     public:
-        const css::uno::Reference< cpo::uno::XComponentContext >& getComponentContext( ) const { return m_xContext; }
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& getComponentContext( ) const { return m_xContext; }
 
         // static methods
         static bool acceptsURL_Stat( std::u16string_view url );

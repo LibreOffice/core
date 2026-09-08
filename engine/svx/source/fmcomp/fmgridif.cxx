@@ -66,7 +66,7 @@ using namespace ::svxform;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::beans;
@@ -1333,12 +1333,12 @@ void FmXGridPeer::propertyChange(const PropertyChangeEvent& evt)
     else if (pGrid && m_xColumns.is() && m_xColumns->hasElements())
     {
         // next find which column has changed
-        css::uno::Reference<cpo::uno::XInterface> xCurrent;
+        cpo::uno::Reference<cpo::uno::XInterface> xCurrent;
         sal_Int32 i;
 
         for ( i = 0; i < m_xColumns->getCount(); i++)
         {
-            xCurrent.set(m_xColumns->getByIndex(i), css::uno::UNO_QUERY);
+            xCurrent.set(m_xColumns->getByIndex(i), cpo::uno::UNO_QUERY);
             if (evt.Source == xCurrent)
                 break;
         }
@@ -1597,7 +1597,7 @@ void FmXGridPeer::setColumns(const Reference< XIndexContainer >& Columns)
         Reference< XPropertySet > xCol;
         for (sal_Int32 i = 0; i < m_xColumns->getCount(); i++)
         {
-            xCol.set(m_xColumns->getByIndex(i), css::uno::UNO_QUERY);
+            xCol.set(m_xColumns->getByIndex(i), cpo::uno::UNO_QUERY);
             removeColumnListeners(xCol);
         }
         Reference< XContainer >  xContainer(m_xColumns, UNO_QUERY);
@@ -1621,7 +1621,7 @@ void FmXGridPeer::setColumns(const Reference< XIndexContainer >& Columns)
         Reference< XPropertySet >  xCol;
         for (sal_Int32 i = 0; i < Columns->getCount(); i++)
         {
-            xCol.set(Columns->getByIndex(i), css::uno::UNO_QUERY);
+            xCol.set(Columns->getByIndex(i), cpo::uno::UNO_QUERY);
             addColumnListeners(xCol);
         }
 
@@ -1678,7 +1678,7 @@ void FmXGridPeer::elementInserted(const ContainerEvent& evt)
     if (!pGrid || !m_xColumns.is() || pGrid->IsInColumnMove() || m_xColumns->getCount() == static_cast<sal_Int32>(pGrid->GetModelColCount()))
         return;
 
-    Reference< XPropertySet >  xNewColumn(evt.Element, css::uno::UNO_QUERY);
+    Reference< XPropertySet >  xNewColumn(evt.Element, cpo::uno::UNO_QUERY);
     addColumnListeners(xNewColumn);
 
     OUString aName = ::comphelper::getString(xNewColumn->getPropertyValue(FM_PROP_LABEL));
@@ -1711,9 +1711,9 @@ void FmXGridPeer::elementReplaced(const ContainerEvent& evt)
     if (!pGrid || !m_xColumns.is() || pGrid->IsInColumnMove())
         return;
 
-    Reference< XPropertySet > xNewColumn(evt.Element, css::uno::UNO_QUERY);
+    Reference< XPropertySet > xNewColumn(evt.Element, cpo::uno::UNO_QUERY);
     Reference< XPropertySet > xOldColumn(
-        evt.ReplacedElement, css::uno::UNO_QUERY);
+        evt.ReplacedElement, cpo::uno::UNO_QUERY);
 
     bool bWasEditing = pGrid->IsEditing();
     if (bWasEditing)
@@ -1739,7 +1739,7 @@ void FmXGridPeer::elementReplaced(const ContainerEvent& evt)
     Reference< XColumnsSupplier > xSuppColumns;
     CursorWrapper* pGridDataSource = pGrid->getDataSource();
     if ( pGridDataSource )
-        xSuppColumns.set(Reference< XInterface >( *pGridDataSource ), css::uno::UNO_QUERY);
+        xSuppColumns.set(Reference< XInterface >( *pGridDataSource ), cpo::uno::UNO_QUERY);
     Reference< XNameAccess > xColumnsByName;
     if ( xSuppColumns.is() )
         xColumnsByName = xSuppColumns->getColumns();
@@ -1768,7 +1768,7 @@ void FmXGridPeer::elementRemoved(const ContainerEvent& evt)
 
     pGrid->RemoveColumn(pGrid->GetColumnIdFromModelPos(static_cast<sal_uInt16>(::comphelper::getINT32(evt.Accessor))));
 
-    Reference< XPropertySet > xOldColumn(evt.Element, css::uno::UNO_QUERY);
+    Reference< XPropertySet > xOldColumn(evt.Element, cpo::uno::UNO_QUERY);
     removeColumnListeners(xOldColumn);
 }
 
@@ -2028,7 +2028,7 @@ void FmXGridPeer::dispose()
         xInterceptor->setSlaveDispatchProvider( nullptr );
 
         // start over with the next chain element
-        xInterceptor.set(xSlave, css::uno::UNO_QUERY);
+        xInterceptor.set(xSlave, cpo::uno::UNO_QUERY);
     }
 
     DisConnectFromDispatcher();

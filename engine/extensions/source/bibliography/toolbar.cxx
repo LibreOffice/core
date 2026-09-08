@@ -42,8 +42,8 @@
 #include "bibtools.hxx"
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::beans;
 
 
@@ -306,7 +306,7 @@ void BibToolBar::InitListener()
 
         xTrans->parseStrict( aURL );
 
-        css::uno::Reference< css::frame::XStatusListener> xListener;
+        cpo::uno::Reference< css::frame::XStatusListener> xListener;
         if (nId == nTBC_SOURCE)
         {
             xListener=new BibTBListBoxListener(this,aURL.Complete,nId);

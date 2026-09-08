@@ -43,10 +43,10 @@ public:
 
 namespace model::style
 {
-DOCMODEL_DLLPUBLIC css::uno::Reference<css::chart2::XChartStyle>
+DOCMODEL_DLLPUBLIC cpo::uno::Reference<css::chart2::XChartStyle>
 createXChartStyle(model::StyleSet const& rStyle);
 DOCMODEL_DLLPUBLIC model::StyleSet*
-getFromXChartStyle(css::uno::Reference<css::chart2::XChartStyle> const& rxStyle);
+getFromXChartStyle(cpo::uno::Reference<css::chart2::XChartStyle> const& rxStyle);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

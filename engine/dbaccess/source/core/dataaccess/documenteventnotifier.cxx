@@ -30,7 +30,7 @@
 namespace dbaccess
 {
 
-    using ::com::sun::star::uno::Reference;
+    using ::cpo::uno::Reference;
     using ::cpo::uno::Exception;
     using ::cpo::uno::Any;
     using ::com::sun::star::frame::DoubleInitializationException;

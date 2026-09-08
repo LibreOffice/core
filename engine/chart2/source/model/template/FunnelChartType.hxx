@@ -41,10 +41,10 @@ private:
     virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
     // ____ XPropertySet ____
-    virtual css::uno::Reference<css::beans::XPropertySetInfo> getPropertySetInfo() override;
+    virtual cpo::uno::Reference<css::beans::XPropertySetInfo> getPropertySetInfo() override;
 
     // ____ XCloneable ____
-    virtual css::uno::Reference<css::util::XCloneable> createClone() override;
+    virtual cpo::uno::Reference<css::util::XCloneable> createClone() override;
 };
 
 } //  namespace chart

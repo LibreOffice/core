@@ -35,7 +35,7 @@ class FrameLoaderFactory : public ::cppu::ImplInheritanceHelper< BaseContainer  
 
     // native interface
 
-    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
     public:
 
@@ -48,7 +48,7 @@ class FrameLoaderFactory : public ::cppu::ImplInheritanceHelper< BaseContainer  
             @param  rxContext
                     reference to the uno service manager, which created this service instance.
          */
-        explicit FrameLoaderFactory(const css::uno::Reference< cpo::uno::XComponentContext >& rxContext);
+        explicit FrameLoaderFactory(const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext);
 
 
         /** @short  standard dtor.
@@ -63,9 +63,9 @@ class FrameLoaderFactory : public ::cppu::ImplInheritanceHelper< BaseContainer  
 
         // XMultiServiceFactory
 
-        virtual css::uno::Reference< cpo::uno::XInterface > createInstance(const OUString& sLoader) override;
+        virtual cpo::uno::Reference< cpo::uno::XInterface > createInstance(const OUString& sLoader) override;
 
-        virtual css::uno::Reference< cpo::uno::XInterface > createInstanceWithArguments(const OUString&                     sLoader   ,
+        virtual cpo::uno::Reference< cpo::uno::XInterface > createInstanceWithArguments(const OUString&                     sLoader   ,
                                                                                                  const cpo::uno::Sequence< cpo::uno::Any >& lArguments) override;
 
         virtual cpo::uno::Sequence< OUString > getAvailableServiceNames() override;
@@ -86,9 +86,9 @@ class FrameLoaderFactory : public ::cppu::ImplInheritanceHelper< BaseContainer  
       virtual bool hasElements() override
         { return BaseContainer::hasElements(); }
 
-      virtual css::uno::Reference< css::container::XEnumeration > createSubSetEnumerationByQuery( const OUString& Query ) override
+      virtual cpo::uno::Reference< css::container::XEnumeration > createSubSetEnumerationByQuery( const OUString& Query ) override
         { return BaseContainer::createSubSetEnumerationByQuery(Query); }
-      virtual css::uno::Reference< css::container::XEnumeration > createSubSetEnumerationByProperties( const cpo::uno::Sequence< css::beans::NamedValue >& Properties ) override
+      virtual cpo::uno::Reference< css::container::XEnumeration > createSubSetEnumerationByProperties( const cpo::uno::Sequence< css::beans::NamedValue >& Properties ) override
         { return BaseContainer::createSubSetEnumerationByProperties(Properties); }
 
 };

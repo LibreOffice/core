@@ -74,7 +74,7 @@ void AcceleratorConfigurationReader::endDocument()
 }
 
 void AcceleratorConfigurationReader::startElement(const OUString&                                      sElement      ,
-                                                           const css::uno::Reference< css::xml::sax::XAttributeList >& xAttributeList)
+                                                           const cpo::uno::Reference< css::xml::sax::XAttributeList >& xAttributeList)
 {
     EXMLElement eElement = AcceleratorConfigurationReader::implst_classifyElement(sElement);
 
@@ -196,7 +196,7 @@ void AcceleratorConfigurationReader::processingInstruction(const OUString& /*sTa
 {
 }
 
-void AcceleratorConfigurationReader::setDocumentLocator(const css::uno::Reference< css::xml::sax::XLocator >& xLocator)
+void AcceleratorConfigurationReader::setDocumentLocator(const cpo::uno::Reference< css::xml::sax::XLocator >& xLocator)
 {
     m_xLocator = xLocator;
 }
@@ -212,7 +212,7 @@ AcceleratorConfigurationReader::EXMLElement AcceleratorConfigurationReader::impl
     else
         throw cpo::uno::RuntimeException(
                 u"Unknown XML element detected!"_ustr,
-                css::uno::Reference< css::xml::sax::XDocumentHandler >());
+                cpo::uno::Reference< css::xml::sax::XDocumentHandler >());
 
     return eElement;
 }
@@ -236,7 +236,7 @@ AcceleratorConfigurationReader::EXMLAttribute AcceleratorConfigurationReader::im
     else
         throw cpo::uno::RuntimeException(
                 u"Unknown XML attribute detected!"_ustr,
-                css::uno::Reference< css::xml::sax::XDocumentHandler >());
+                cpo::uno::Reference< css::xml::sax::XDocumentHandler >());
 
     return eAttribute;
 }

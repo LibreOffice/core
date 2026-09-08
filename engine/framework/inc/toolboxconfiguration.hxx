@@ -25,7 +25,7 @@ namespace com::sun::star::container { class XIndexContainer; }
 namespace com::sun::star::io { class XInputStream; }
 namespace com::sun::star::io { class XOutputStream; }
 namespace cpo::uno { class XComponentContext; }
-namespace com::sun::star::uno { template <typename > class Reference; }
+namespace cpo::uno { template <typename > class Reference; }
 
 namespace framework
 {
@@ -34,14 +34,14 @@ class ToolBoxConfiguration
 {
     public:
         static bool LoadToolBox(
-            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
-            const css::uno::Reference< css::io::XInputStream >& rInputStream,
-            const css::uno::Reference< css::container::XIndexContainer >& rToolbarConfiguration );
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+            const cpo::uno::Reference< css::io::XInputStream >& rInputStream,
+            const cpo::uno::Reference< css::container::XIndexContainer >& rToolbarConfiguration );
 
         static bool StoreToolBox(
-            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
-            const css::uno::Reference< css::io::XOutputStream >& rOutputStream,
-            const css::uno::Reference< css::container::XIndexAccess >& rToolbarConfiguration );
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+            const cpo::uno::Reference< css::io::XOutputStream >& rOutputStream,
+            const cpo::uno::Reference< css::container::XIndexAccess >& rToolbarConfiguration );
 };
 
 } // namespace framework

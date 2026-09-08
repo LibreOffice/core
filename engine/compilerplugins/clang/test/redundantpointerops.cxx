@@ -11,7 +11,7 @@
 
 #include <memory>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/XInterface.hpp>
 #include <rtl/ref.hxx>
 #include <sal/types.h>
@@ -66,9 +66,9 @@ void function7(rtl::Reference<cpo::uno::XInterface> x)
     (void) *x.get(); // expected-error {{'*' followed by '.get()' operating on 'rtl::Reference<cpo::uno::XInterface>', just use '*' [loplugin:redundantpointerops]}}
 }
 
-void function8(css::uno::Reference<cpo::uno::XInterface> x)
+void function8(cpo::uno::Reference<cpo::uno::XInterface> x)
 {
-    (void) *x.get(); // expected-error {{'*' followed by '.get()' operating on 'css::uno::Reference<cpo::uno::XInterface>', just use '*' [loplugin:redundantpointerops]}}
+    (void) *x.get(); // expected-error {{'*' followed by '.get()' operating on 'cpo::uno::Reference<cpo::uno::XInterface>', just use '*' [loplugin:redundantpointerops]}}
 }
 
 void function9(tools::SvRef<SvRefBase> x)
@@ -83,7 +83,7 @@ void function10(DerivedRtlReference x)
     (void) *x.get(); // expected-error {{'*' followed by '.get()' operating on 'DerivedRtlReference', just use '*' [loplugin:redundantpointerops]}}
 }
 
-struct DerivedUnoReference: public css::uno::Reference<cpo::uno::XInterface> {};
+struct DerivedUnoReference: public cpo::uno::Reference<cpo::uno::XInterface> {};
 
 void function11(DerivedUnoReference x)
 {

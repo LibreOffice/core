@@ -29,6 +29,7 @@
 #include "excelvbahelper.hxx"
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace ::ooo::vba;
 
 /** Standard EGA colors, bright. */

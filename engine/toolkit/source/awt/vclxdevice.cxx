@@ -47,11 +47,11 @@ VCLXDevice::~VCLXDevice()
 }
 
 // css::awt::XDevice,
-css::uno::Reference< css::awt::XGraphics > VCLXDevice::createGraphics(  )
+cpo::uno::Reference< css::awt::XGraphics > VCLXDevice::createGraphics(  )
 {
     SolarMutexGuard aGuard;
 
-    css::uno::Reference< css::awt::XGraphics > xRef;
+    cpo::uno::Reference< css::awt::XGraphics > xRef;
 
     if ( mpOutputDevice )
         xRef = mpOutputDevice->CreateUnoGraphics();
@@ -59,7 +59,7 @@ css::uno::Reference< css::awt::XGraphics > VCLXDevice::createGraphics(  )
     return xRef;
 }
 
-css::uno::Reference< css::awt::XDevice > VCLXDevice::createDevice( sal_Int32 nWidth, sal_Int32 nHeight )
+cpo::uno::Reference< css::awt::XDevice > VCLXDevice::createDevice( sal_Int32 nWidth, sal_Int32 nHeight )
 {
     SolarMutexGuard aGuard;
 
@@ -104,7 +104,7 @@ cpo::uno::Sequence< css::awt::FontDescriptor > VCLXDevice::getFontDescriptors(  
     return aFonts;
 }
 
-css::uno::Reference< css::awt::XFont > VCLXDevice::getFont( const css::awt::FontDescriptor& rDescriptor )
+cpo::uno::Reference< css::awt::XFont > VCLXDevice::getFont( const css::awt::FontDescriptor& rDescriptor )
 {
     SolarMutexGuard aGuard;
 
@@ -116,7 +116,7 @@ css::uno::Reference< css::awt::XFont > VCLXDevice::getFont( const css::awt::Font
     return pMetric;
 }
 
-css::uno::Reference< css::awt::XBitmap > VCLXDevice::createBitmap( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight )
+cpo::uno::Reference< css::awt::XBitmap > VCLXDevice::createBitmap( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight )
 {
     SolarMutexGuard aGuard;
 
@@ -129,7 +129,7 @@ css::uno::Reference< css::awt::XBitmap > VCLXDevice::createBitmap( sal_Int32 nX,
     return pBmp;
 }
 
-css::uno::Reference< css::awt::XDisplayBitmap > VCLXDevice::createDisplayBitmap( const css::uno::Reference< css::awt::XBitmap >& rxBitmap )
+cpo::uno::Reference< css::awt::XDisplayBitmap > VCLXDevice::createDisplayBitmap( const cpo::uno::Reference< css::awt::XBitmap >& rxBitmap )
 {
     SolarMutexGuard aGuard;
 

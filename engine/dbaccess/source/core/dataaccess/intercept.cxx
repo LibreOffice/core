@@ -26,7 +26,7 @@
 
 namespace dbaccess
 {
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
@@ -98,7 +98,7 @@ void OInterceptor::dispatch( const URL& URL,const Sequence<PropertyValue >& Argu
 
     if ( URL.Complete == m_aInterceptedURL[ DISPATCH_SAVE ] )
     {
-        m_pContentHolder->save(false, css::uno::Reference<css::awt::XTopWindow>());
+        m_pContentHolder->save(false, cpo::uno::Reference<css::awt::XTopWindow>());
         return;
     }
 

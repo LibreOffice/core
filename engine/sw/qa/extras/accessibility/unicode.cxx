@@ -14,6 +14,7 @@
 #include <test/a11y/accessibletestbase.hxx>
 
 using namespace css;
+using namespace ::cpo;
 using namespace accessibility;
 
 // Checks fetching multi-unit characters

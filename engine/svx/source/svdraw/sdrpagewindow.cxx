@@ -38,6 +38,7 @@
 #include <vcl/window.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 struct SdrPageWindow::Impl
 {

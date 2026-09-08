@@ -37,7 +37,7 @@
 #include <o3tl/string_view.hxx>
 
 using namespace ::com::sun::star::ui::dialogs;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 IMPL_LINK_NOARG(SvxPathSelectDialog, SelectHdl_Impl, weld::TreeView&, void)
 {

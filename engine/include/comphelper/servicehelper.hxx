@@ -50,7 +50,7 @@ namespace comphelper {
         return reinterpret_cast<T*>(sal::static_int_cast<sal_IntPtr>(n));
     }
 
-    template <class T> T* getFromUnoTunnel(const css::uno::Reference<css::lang::XUnoTunnel>& xUT)
+    template <class T> T* getFromUnoTunnel(const cpo::uno::Reference<css::lang::XUnoTunnel>& xUT)
     {
         if (!xUT.is())
             return nullptr;
@@ -59,10 +59,10 @@ namespace comphelper {
     }
 
     // Takes an interface
-    template <class T> T* getFromUnoTunnel(const css::uno::Reference<cpo::uno::XInterface>& xIface)
+    template <class T> T* getFromUnoTunnel(const cpo::uno::Reference<cpo::uno::XInterface>& xIface)
     {
         return getFromUnoTunnel<T>(
-            css::uno::Reference<css::lang::XUnoTunnel>{ xIface, css::uno::UNO_QUERY });
+            cpo::uno::Reference<css::lang::XUnoTunnel>{ xIface, cpo::uno::UNO_QUERY });
     }
 
     template <typename T>

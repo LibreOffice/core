@@ -26,7 +26,7 @@
 
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 
 class Point;

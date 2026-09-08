@@ -32,6 +32,7 @@
 #include <vcl/GraphicExternalLink.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace
 {
@@ -218,7 +219,7 @@ Graphic::Graphic(const GDIMetaFile& rMetaFile)
 {
 }
 
-Graphic::Graphic( const css::uno::Reference< css::graphic::XGraphic >& rxGraphic )
+Graphic::Graphic( const cpo::uno::Reference< css::graphic::XGraphic >& rxGraphic )
 {
     const ::unographic::Graphic* pUnoGraphic = dynamic_cast<::unographic::Graphic*>(rxGraphic.get());
     const ::Graphic* pGraphic = pUnoGraphic ? &pUnoGraphic->GetGraphic() : nullptr;

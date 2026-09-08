@@ -75,8 +75,8 @@ struct SbiForStack {                // for/next stack:
                         pArrayLowerBounds;
     std::unique_ptr<sal_Int32[]>
                         pArrayUpperBounds;
-    css::uno::Reference< css::container::XEnumeration > xEnumeration;
-    css::uno::Reference<css::container::XIndexAccess> xIndexAccess;
+    cpo::uno::Reference< css::container::XEnumeration > xEnumeration;
+    cpo::uno::Reference<css::container::XIndexAccess> xIndexAccess;
 
     SbiForStack()
         : pNext(nullptr)
@@ -196,7 +196,7 @@ public:
 // time are managed by chained instances. There is all the data that only lives
 // when the BASIC is living too, like the I/O-system.
 
-typedef std::vector< css::uno::Reference< css::lang::XComponent > > ComponentVector_t;
+typedef std::vector< cpo::uno::Reference< css::lang::XComponent > > ComponentVector_t;
 
 
 class SbiInstance

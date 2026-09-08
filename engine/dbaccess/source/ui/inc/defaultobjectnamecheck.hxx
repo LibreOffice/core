@@ -35,7 +35,7 @@ namespace dbaui
     class HierarchicalNameCheck :public IObjectNameCheck
     {
     private:
-        css::uno::Reference< css::container::XHierarchicalNameAccess >  mxHierarchicalNames;
+        cpo::uno::Reference< css::container::XHierarchicalNameAccess >  mxHierarchicalNames;
         OUString msRelativeRoot;
 
     public:
@@ -49,7 +49,7 @@ namespace dbaui
             if the given container is <NULL/>
         */
         HierarchicalNameCheck(
-            const css::uno::Reference< css::container::XHierarchicalNameAccess >& _rxNames,
+            const cpo::uno::Reference< css::container::XHierarchicalNameAccess >& _rxNames,
             const OUString& _rRelativeRoot
         );
 
@@ -83,7 +83,7 @@ namespace dbaui
     {
     private:
         sal_Int32 mnCommandType;
-        css::uno::Reference< css::sdb::tools::XObjectNames >  mxObjectNames;
+        cpo::uno::Reference< css::sdb::tools::XObjectNames >  mxObjectNames;
 
     public:
         /** constructs a DynamicTableOrQueryNameCheck instance
@@ -98,7 +98,7 @@ namespace dbaui
             CommandType::TABLE nor CommandType::QUERY.
         */
         DynamicTableOrQueryNameCheck(
-            const css::uno::Reference< css::sdbc::XConnection >& _rxSdbLevelConnection,
+            const cpo::uno::Reference< css::sdbc::XConnection >& _rxSdbLevelConnection,
             sal_Int32 _nCommandType
         );
 

@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 
 #include <rtl/ustring.hxx>
 #include <tools/long.hxx>
@@ -42,7 +42,7 @@ class RDFaExportHelper
 private:
     SvXMLExport & m_rExport;
 
-    css::uno::Reference<css::rdf::XDocumentRepository> m_xRepository;
+    cpo::uno::Reference<css::rdf::XDocumentRepository> m_xRepository;
 
     typedef ::std::map< OUString, OUString >
         BlankNodeMap_t;
@@ -52,13 +52,13 @@ private:
     tools::Long m_Counter;
 
     OUString
-    LookupBlankNode( css::uno::Reference<css::rdf::XBlankNode> const & i_xBlankNode);
+    LookupBlankNode( cpo::uno::Reference<css::rdf::XBlankNode> const & i_xBlankNode);
 
 public:
     RDFaExportHelper(SvXMLExport & i_rExport);
 
     void
-    AddRDFa(css::uno::Reference<css::rdf::XMetadatable> const & i_xMetadatable);
+    AddRDFa(cpo::uno::Reference<css::rdf::XMetadatable> const & i_xMetadatable);
 };
 
 } // namespace xmloff

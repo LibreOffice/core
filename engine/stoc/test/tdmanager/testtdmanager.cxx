@@ -32,7 +32,7 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <cpo/uno/Exception.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/TypeClass.hpp>
@@ -65,17 +65,17 @@ public:
 
     static cpo::uno::Sequence< OUString > getSupportedServiceNames();
 
-    static css::uno::Reference< cpo::uno::XInterface > SAL_CALL createInstance(
-        css::uno::Reference< cpo::uno::XComponentContext > const & context)
+    static cpo::uno::Reference< cpo::uno::XInterface > SAL_CALL createInstance(
+        cpo::uno::Reference< cpo::uno::XComponentContext > const & context)
         throw (cpo::uno::Exception);
 
 private:
     explicit Service(
-        css::uno::Reference< cpo::uno::XComponentContext > const & context):
+        cpo::uno::Reference< cpo::uno::XComponentContext > const & context):
         m_context(context)
     {}
 
-    css::uno::Reference< cpo::uno::XComponentContext > m_context;
+    cpo::uno::Reference< cpo::uno::XComponentContext > m_context;
 };
 
 }
@@ -116,41 +116,41 @@ template< typename T > void assertEqual(T const & value, T const & argument) {
 sal_Int32 Service::run(cpo::uno::Sequence< OUString > const & arguments)
     throw (cpo::uno::RuntimeException)
 {
-    css::uno::Reference< css::lang::XMultiComponentFactory > factory(
+    cpo::uno::Reference< css::lang::XMultiComponentFactory > factory(
         m_context->getServiceManager());
     assertTrue(factory.is());
-    css::uno::Reference< css::container::XHierarchicalNameAccess > manager(
+    cpo::uno::Reference< css::container::XHierarchicalNameAccess > manager(
         m_context->getValueByName(
             OUString(
                     "/singletons/"
                     "com.sun.star.reflection.theTypeDescriptionManager")),
-        css::uno::UNO_QUERY_THROW);
+        cpo::uno::UNO_QUERY_THROW);
 
 
     // test: add cmd line rdbs to manager
 
 
     OSL_ASSERT( arguments.getLength() > 0 );
-    css::uno::Reference<css::container::XSet> xSet(
-        manager, css::uno::UNO_QUERY_THROW );
+    cpo::uno::Reference<css::container::XSet> xSet(
+        manager, cpo::uno::UNO_QUERY_THROW );
     for ( sal_Int32 argPos = 0; argPos < arguments.getLength(); ++argPos ) {
         OUString url;
         OSL_VERIFY( osl_File_E_None == osl_getFileURLFromSystemPath(
                         arguments[argPos].pData, &url.pData ) );
         bool supposedToBeCompatible = ! url.endsWithIgnoreAsciiCase("_incomp.rdb");
 
-        css::uno::Reference<css::registry::XSimpleRegistry> xReg(
+        cpo::uno::Reference<css::registry::XSimpleRegistry> xReg(
             m_context->getServiceManager()->createInstanceWithContext(
                 "com.sun.star.registry.SimpleRegistry",
-                m_context ), css::uno::UNO_QUERY_THROW );
+                m_context ), cpo::uno::UNO_QUERY_THROW );
         xReg->open( url, true /* read-only */, false /* ! create */ );
         cpo::uno::Any arg( css::uno::makeAny(xReg) );
-        css::uno::Reference<css::container::XHierarchicalNameAccess> xTDprov(
+        cpo::uno::Reference<css::container::XHierarchicalNameAccess> xTDprov(
             m_context->getServiceManager()->
             createInstanceWithArgumentsAndContext(
                 "com.sun.star.comp.stoc.RegistryTypeDescriptionProvider",
                 cpo::uno::Sequence<cpo::uno::Any>( &arg, 1 ), m_context ),
-            css::uno::UNO_QUERY_THROW );
+            cpo::uno::UNO_QUERY_THROW );
         try {
             xSet->insert( css::uno::makeAny(xTDprov) );
             if (! supposedToBeCompatible)
@@ -167,10 +167,10 @@ sal_Int32 Service::run(cpo::uno::Sequence< OUString > const & arguments)
 
     /
 
-    css::uno::Reference< css::reflection::XIndirectTypeDescription > sequence(
+    cpo::uno::Reference< css::reflection::XIndirectTypeDescription > sequence(
         manager->getByHierarchicalName(
             OUString("[][]boolean")),
-        css::uno::UNO_QUERY_THROW);
+        cpo::uno::UNO_QUERY_THROW);
     assertEqual(cpo::uno::TypeClass_SEQUENCE, sequence->getTypeClass());
     assertEqual(
         OUString("[][]boolean"),
@@ -179,11 +179,11 @@ sal_Int32 Service::run(cpo::uno::Sequence< OUString > const & arguments)
         OUString("[]boolean"),
         sequence->getReferencedType()->getName());
 
-    css::uno::Reference< css::reflection::XStructTypeDescription > structure(
+    cpo::uno::Reference< css::reflection::XStructTypeDescription > structure(
         manager->getByHierarchicalName(
             OUString( "test.tdmanager.Struct<boolean,test.tdmanager.Struct<"
                     "any,cpo.uno.XInterface>>")),
-        css::uno::UNO_QUERY_THROW);
+        cpo::uno::UNO_QUERY_THROW);
     assertEqual(cpo::uno::TypeClass_STRUCT, structure->getTypeClass());
     assertEqual(
         OUString( "test.tdmanager.Struct<boolean,test.tdmanager.Struct<"
@@ -207,11 +207,11 @@ sal_Int32 Service::run(cpo::uno::Sequence< OUString > const & arguments)
         OUString( "test.tdmanager.Struct<any,cpo.uno.XInterface>"),
         structure->getTypeArguments()[1]->getName());
 
-    css::uno::Reference< css::reflection::XInterfaceMethodTypeDescription >
+    cpo::uno::Reference< css::reflection::XInterfaceMethodTypeDescription >
         method(
             manager->getByHierarchicalName(
                 OUString( "cpo.uno.XComponentContext::getValueByName")),
-            css::uno::UNO_QUERY_THROW);
+            cpo::uno::UNO_QUERY_THROW);
     assertEqual(cpo::uno::TypeClass_INTERFACE_METHOD, method->getTypeClass());
     assertEqual(
         OUString( "cpo.uno.XComponentContext::getValueByName"),
@@ -237,26 +237,26 @@ sal_Int32 Service::run(cpo::uno::Sequence< OUString > const & arguments)
     assertEqual< sal_Int32 >(0, method->getExceptions().getLength());
 
     assertFalse(
-        css::uno::Reference< css::reflection::XPublished >(
-            css::uno::Reference< css::reflection::XTypeDescription >(
+        cpo::uno::Reference< css::reflection::XPublished >(
+            cpo::uno::Reference< css::reflection::XTypeDescription >(
                 manager->getByHierarchicalName(
                     OUString("[]boolean")),
-                css::uno::UNO_QUERY_THROW),
-            css::uno::UNO_QUERY).is());
+                cpo::uno::UNO_QUERY_THROW),
+            cpo::uno::UNO_QUERY).is());
     assertFalse(
-        css::uno::Reference< css::reflection::XPublished >(
-            css::uno::Reference< css::reflection::XTypeDescription >(
+        cpo::uno::Reference< css::reflection::XPublished >(
+            cpo::uno::Reference< css::reflection::XTypeDescription >(
                 manager->getByHierarchicalName(
                     OUString( "com.sun.star.beans.XIntroTest::ObjectName")),
-                css::uno::UNO_QUERY_THROW),
-            css::uno::UNO_QUERY).is());
+                cpo::uno::UNO_QUERY_THROW),
+            cpo::uno::UNO_QUERY).is());
     assertFalse(
-        css::uno::Reference< css::reflection::XPublished >(
-            css::uno::Reference< css::reflection::XTypeDescription >(
+        cpo::uno::Reference< css::reflection::XPublished >(
+            cpo::uno::Reference< css::reflection::XTypeDescription >(
                 manager->getByHierarchicalName(
                     OUString( "com.sun.star.beans.XIntroTest::writeln")),
-                css::uno::UNO_QUERY_THROW),
-            css::uno::UNO_QUERY).is());
+                cpo::uno::UNO_QUERY_THROW),
+            cpo::uno::UNO_QUERY).is());
     //TODO: check that the reflection of a property of an accumulation-based
     // service does not support XPublished
 
@@ -271,8 +271,8 @@ cpo::uno::Sequence< OUString > Service::getSupportedServiceNames() {
     return cpo::uno::Sequence< OUString >();
 }
 
-css::uno::Reference< cpo::uno::XInterface > Service::createInstance(
-    css::uno::Reference< cpo::uno::XComponentContext > const & context)
+cpo::uno::Reference< cpo::uno::XInterface > Service::createInstance(
+    cpo::uno::Reference< cpo::uno::XComponentContext > const & context)
     throw (cpo::uno::Exception)
 {
     return cppu::getXWeak(new Service(context));
@@ -282,7 +282,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(char const 
                                                 void * serviceManager, void *) {
     void * p = 0;
     if (serviceManager != 0) {
-        css::uno::Reference< css::lang::XSingleComponentFactory > f;
+        cpo::uno::Reference< css::lang::XSingleComponentFactory > f;
         if (Service::getImplementationName().equalsAscii(implName)) {
             f = cppu::createSingleComponentFactory(
                 &Service::createInstance, Service::getImplementationName(),
@@ -301,7 +301,7 @@ namespace {
 bool writeInfo(void * registryKey, OUString const & implementationName,
                cpo::uno::Sequence< OUString > const & serviceNames) {
     OUString keyName = "/" + implementationName + "/UNO/SERVICES";
-    css::uno::Reference< css::registry::XRegistryKey > key;
+    cpo::uno::Reference< css::registry::XRegistryKey > key;
     try {
         key = static_cast< css::registry::XRegistryKey * >(registryKey)->
             createKey(keyName);

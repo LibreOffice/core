@@ -51,7 +51,7 @@ BaseIndex::~BaseIndex() {}
 
 void BaseIndex::testBaseIndexProperties()
 {
-    css::uno::Reference<css::beans::XPropertySet> xBaseIndex(init(), css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::beans::XPropertySet> xBaseIndex(init(), cpo::uno::UNO_QUERY_THROW);
     testStringProperty(xBaseIndex, u"Title"_ustr, u"Value"_ustr);
     testBooleanProperty(xBaseIndex, u"IsProtected"_ustr);
 
@@ -72,13 +72,13 @@ void BaseIndex::testBaseIndexProperties()
     {
         OUString name = u"TextColumns"_ustr;
 
-        css::uno::Reference<css::text::XTextColumns> xGetTextColumns;
+        cpo::uno::Reference<css::text::XTextColumns> xGetTextColumns;
         CPPUNIT_ASSERT(xBaseIndex->getPropertyValue(name) >>= xGetTextColumns);
 
         xGetTextColumns->setColumnCount(xGetTextColumns->getColumnCount() + 1);
         xBaseIndex->setPropertyValue(name, cpo::uno::Any(xGetTextColumns));
 
-        css::uno::Reference<css::text::XTextColumns> xSetTextColumns;
+        cpo::uno::Reference<css::text::XTextColumns> xSetTextColumns;
         CPPUNIT_ASSERT(xBaseIndex->getPropertyValue(name) >>= xSetTextColumns);
 
         //CPPUNIT_ASSERT_EQUAL(xGetTextColumns->getColumnCount(), xSetTextColumns->getColumnCount());
@@ -104,7 +104,7 @@ void BaseIndex::testBaseIndexProperties()
         aTempFile.EnableKillingFile();
         writerFileWithBitmap(aTempFile.GetURL());
 
-        css::uno::Reference<css::graphic::XGraphic> xGraphic;
+        cpo::uno::Reference<css::graphic::XGraphic> xGraphic;
         CPPUNIT_ASSERT(xBaseIndex->getPropertyValue(u"BackGraphic"_ustr) >>= xGraphic);
         CPPUNIT_ASSERT(!xGraphic.is());
 
@@ -129,7 +129,7 @@ void BaseIndex::testBaseIndexProperties()
     {
         OUString name = u"ContentSection"_ustr;
 
-        css::uno::Reference<css::text::XTextSection> xGetTextSection;
+        cpo::uno::Reference<css::text::XTextSection> xGetTextSection;
         CPPUNIT_ASSERT_MESSAGE(name.toUtf8().getStr(),
                                xBaseIndex->getPropertyValue(name) >>= xGetTextSection);
         CPPUNIT_ASSERT_EQUAL_MESSAGE(name.toUtf8().getStr(), u""_ustr,
@@ -140,7 +140,7 @@ void BaseIndex::testBaseIndexProperties()
     {
         OUString name = u"HeaderSection"_ustr;
 
-        css::uno::Reference<css::text::XTextSection> xGetTextSection;
+        cpo::uno::Reference<css::text::XTextSection> xGetTextSection;
         if (xBaseIndex->getPropertyValue(name).hasValue())
             CPPUNIT_ASSERT_MESSAGE(name.toUtf8().getStr(),
                                    xBaseIndex->getPropertyValue(name) >>= xGetTextSection);

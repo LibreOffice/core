@@ -126,7 +126,7 @@ private: //methods
 private: //member
     ExplicitScaleData     m_rScale;
     ExplicitIncrementData m_rIncrement;
-    css::uno::Reference< css::chart2::XScaling > m_xInverseScaling;
+    cpo::uno::Reference< css::chart2::XScaling > m_xInverseScaling;
 
     //minimum and maximum of the visible range after scaling
     double    m_fScaledVisibleMin;

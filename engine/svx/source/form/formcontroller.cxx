@@ -95,8 +95,8 @@ using namespace ::connectivity;
 using namespace ::dbtools;
 
 
-css::uno::Reference< cpo::uno::XInterface >
-    FormController_NewInstance_Impl( const css::uno::Reference< css::lang::XMultiServiceFactory > & _rxORB )
+cpo::uno::Reference< cpo::uno::XInterface >
+    FormController_NewInstance_Impl( const cpo::uno::Reference< css::lang::XMultiServiceFactory > & _rxORB )
 {
     return *( new ::svxform::FormController( comphelper::getComponentContext(_rxORB) ) );
 }
@@ -111,14 +111,14 @@ namespace svxform
     using ::com::sun::star::awt::XWindowPeer;
     using ::com::sun::star::form::XGrid;
     using ::com::sun::star::beans::XPropertySet;
-    using ::com::sun::star::uno::UNO_SET_THROW;
-    using ::com::sun::star::uno::UNO_QUERY_THROW;
+    using ::cpo::uno::UNO_SET_THROW;
+    using ::cpo::uno::UNO_QUERY_THROW;
     using ::com::sun::star::container::XIndexAccess;
     using ::cpo::uno::Exception;
     using ::cpo::uno::XInterface;
-    using ::com::sun::star::uno::UNO_QUERY;
+    using ::cpo::uno::UNO_QUERY;
     using ::cpo::uno::Sequence;
-    using ::com::sun::star::uno::Reference;
+    using ::cpo::uno::Reference;
     using ::com::sun::star::beans::XPropertySetInfo;
     using ::com::sun::star::beans::PropertyValue;
     using ::com::sun::star::lang::IndexOutOfBoundsException;
@@ -3436,7 +3436,7 @@ bool FormController::supportsMode(const OUString& Mode)
     return comphelper::findValue(aModes, Mode) != -1;
 }
 
-css::uno::Reference<css::awt::XWindow> FormController::getDialogParentWindow(const css::uno::Reference<css::form::runtime::XFormController> & xFormController)
+cpo::uno::Reference<css::awt::XWindow> FormController::getDialogParentWindow(const cpo::uno::Reference<css::form::runtime::XFormController> & xFormController)
 {
     try
     {
@@ -3481,7 +3481,7 @@ bool FormController::checkFormComponentValidity( OUString& /* [out] */ _rFirstIn
                 continue;
 
             _rFirstInvalidityExplanation = xValidator->explainInvalid( xValidatable->getCurrentValue() );
-            _rxFirstInvalidModel.set(xValidatable, css::uno::UNO_QUERY);
+            _rxFirstInvalidModel.set(xValidatable, cpo::uno::UNO_QUERY);
             return false;
         }
     }
@@ -3521,7 +3521,7 @@ Reference< XControl > FormController::locateControl( const Reference< XControlMo
 namespace
 {
     void displayErrorSetFocus(const OUString& _rMessage, const Reference<XControl>& _rxFocusControl,
-                              const css::uno::Reference<css::awt::XWindow>& rDialogParent)
+                              const cpo::uno::Reference<css::awt::XWindow>& rDialogParent)
     {
         SQLContext aError(SvxResId(RID_STR_WRITEERROR), {}, {}, 0, {}, _rMessage);
         displayException(aError, rDialogParent);
@@ -3844,7 +3844,7 @@ bool FormController::approveParameter(const DatabaseParameterEvent& aEvent)
             for (sal_Int32 i=0; i<aFinalValues.getLength(); ++i, ++pFinalValues)
             {
                 Reference< XPropertySet > xParam(
-                    aRequest.Parameters->getByIndex(i), css::uno::UNO_QUERY);
+                    aRequest.Parameters->getByIndex(i), cpo::uno::UNO_QUERY);
                 if (xParam.is())
                 {
 #ifdef DBG_UTIL

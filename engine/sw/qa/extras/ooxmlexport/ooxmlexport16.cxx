@@ -36,7 +36,8 @@
 #include <test/commontesttools.hxx>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 class Test : public SwModelTestBase
 {
@@ -964,11 +965,11 @@ CPPUNIT_TEST_FIXTURE(Test, testCommentDateUtc)
     // The w:date beside it is the author's wall clock, three hours ahead of the moment here.
     createSwDoc("CommentDone.docx");
 
-    css::uno::Reference<css::text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent,
-                                                                           css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent,
+                                                                           cpo::uno::UNO_QUERY);
     auto xFields(xTextFieldsSupplier->getTextFields()->createEnumeration());
-    css::uno::Reference<css::beans::XPropertySet> xComment(xFields->nextElement(),
-                                                          css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::beans::XPropertySet> xComment(xFields->nextElement(),
+                                                          cpo::uno::UNO_QUERY);
     // Without the accompanying fix in place, this test would have failed: the part was not read,
     // so the moment was lost and only the zoneless wall clock remained.
     util::DateTime aDateUtc = getProperty<util::DateTime>(xComment, u"DateTimeUTC"_ustr);
@@ -1046,14 +1047,14 @@ DECLARE_OOXMLEXPORT_TEST(testTableWidth, "frame_size_export.docx")
 CPPUNIT_TEST_FIXTURE(Test, testCommentDoneModel)
 {
     auto verify = [this](bool bIsExport = false) {
-        css::uno::Reference<css::text::XTextFieldsSupplier> xTextFieldsSupplier(
-            mxComponent, css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::text::XTextFieldsSupplier> xTextFieldsSupplier(
+            mxComponent, cpo::uno::UNO_QUERY_THROW);
         auto xFields(xTextFieldsSupplier->getTextFields()->createEnumeration());
 
         // First comment: initially resolved, toggled to unresolved on import, unresolved on roundtrip
         CPPUNIT_ASSERT(xFields->hasMoreElements());
         cpo::uno::Any aComment = xFields->nextElement();
-        css::uno::Reference<css::beans::XPropertySet> xComment(aComment, css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::beans::XPropertySet> xComment(aComment, cpo::uno::UNO_QUERY_THROW);
 
         if (!bIsExport)
         {
@@ -1071,7 +1072,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCommentDoneModel)
         // Second comment: initially unresolved, toggled to resolved on import, resolved on roundtrip
         CPPUNIT_ASSERT(xFields->hasMoreElements());
         aComment = xFields->nextElement();
-        xComment.set(aComment, css::uno::UNO_QUERY_THROW);
+        xComment.set(aComment, cpo::uno::UNO_QUERY_THROW);
 
         if (!bIsExport)
         {

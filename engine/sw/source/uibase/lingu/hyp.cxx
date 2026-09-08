@@ -32,6 +32,7 @@
 #include <memory>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 // interactive separation
 SwHyphWrapper::SwHyphWrapper( SwView& rView,

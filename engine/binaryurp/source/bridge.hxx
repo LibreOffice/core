@@ -28,7 +28,7 @@
 
 #include <com/sun/star/bridge/XBridge.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <osl/conditn.hxx>
 #include <rtl/ref.hxx>
@@ -68,8 +68,8 @@ public:
     Bridge(
         rtl::Reference< BridgeFactory > const & factory,
         OUString name,
-        css::uno::Reference< css::connection::XConnection > const & connection,
-        css::uno::Reference< css::bridge::XInstanceProvider > provider);
+        cpo::uno::Reference< css::connection::XConnection > const & connection,
+        cpo::uno::Reference< css::bridge::XInstanceProvider > provider);
 
     void start();
 
@@ -80,10 +80,10 @@ public:
     // thread:
     void terminate(bool final);
 
-    const css::uno::Reference< css::connection::XConnection >&
+    const cpo::uno::Reference< css::connection::XConnection >&
     getConnection() const { return connection_;}
 
-    const css::uno::Reference< css::bridge::XInstanceProvider >&
+    const cpo::uno::Reference< css::bridge::XInstanceProvider >&
     getProvider() const { return provider_;}
 
     cpo::uno::Mapping & getCppToBinaryMapping() { return cppToBinaryMapping_;}
@@ -166,7 +166,7 @@ private:
 
     virtual ~Bridge() override;
 
-    virtual css::uno::Reference< cpo::uno::XInterface >
+    virtual cpo::uno::Reference< cpo::uno::XInterface >
     getInstance(OUString const & sInstanceName) override;
 
     virtual OUString getName() override;
@@ -176,11 +176,11 @@ private:
     virtual void dispose() override;
 
     virtual void addEventListener(
-        css::uno::Reference< css::lang::XEventListener >
+        cpo::uno::Reference< css::lang::XEventListener >
             const & xListener) override;
 
     virtual void removeEventListener(
-        css::uno::Reference< css::lang::XEventListener >
+        cpo::uno::Reference< css::lang::XEventListener >
             const & aListener) override;
 
     // Only called from reader_ thread:
@@ -214,7 +214,7 @@ private:
 
     typedef
         std::vector<
-            css::uno::Reference<
+            cpo::uno::Reference<
                 css::lang::XEventListener > >
         Listeners;
 
@@ -232,9 +232,9 @@ private:
 
     rtl::Reference< BridgeFactory > factory_;
     OUString name_;
-    css::uno::Reference< css::connection::XConnection >
+    cpo::uno::Reference< css::connection::XConnection >
         connection_;
-    css::uno::Reference< css::bridge::XInstanceProvider >
+    cpo::uno::Reference< css::bridge::XInstanceProvider >
         provider_;
     cpo::uno::Environment binaryUno_;
     cpo::uno::Mapping cppToBinaryMapping_;

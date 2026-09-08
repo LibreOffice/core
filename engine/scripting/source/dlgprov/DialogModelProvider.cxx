@@ -29,7 +29,7 @@ namespace dlgprov {
 
 using namespace ::com::sun::star;
 using namespace lang;
-using namespace uno;
+using namespace ::cpo;
 using namespace ::cpo::uno;
 using namespace beans;
 

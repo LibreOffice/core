@@ -24,7 +24,7 @@
 #include <optional>
 #include <vector>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <oox/dllapi.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -91,7 +91,7 @@ public:
     const TextFontModel* getFirstFont() const;
     /** Returns the entire text of all text portions. */
     OUString     getText() const;
-    void convert(const css::uno::Reference<css::drawing::XShape>& xShape) const;
+    void convert(const cpo::uno::Reference<css::drawing::XShape>& xShape) const;
 
     ShapeTypeModel&     mrTypeModel;
     /// Text distance from the border (inset attribute of v:textbox), valid only if set.

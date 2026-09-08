@@ -34,7 +34,7 @@ typedef
 class SvtFolderPicker: public SvtFolderPicker_Base
 {
 private:
-    css::uno::Reference< css::ui::dialogs::XDialogClosedListener >
+    cpo::uno::Reference< css::ui::dialogs::XDialogClosedListener >
                             m_xListener;
 
     void                            prepareExecute();
@@ -64,7 +64,7 @@ public:
     // XAsynchronousExecutableDialog functions
 
     virtual void       setDialogTitle( const OUString& _rTitle ) override;
-    virtual void       startExecuteModal( const css::uno::Reference< css::ui::dialogs::XDialogClosedListener >& xListener ) override;
+    virtual void       startExecuteModal( const cpo::uno::Reference< css::ui::dialogs::XDialogClosedListener >& xListener ) override;
 
 
     // XServiceInfo functions

@@ -65,9 +65,10 @@
 #include <atomic>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::UNO_QUERY;
+using ::cpo::uno::Reference;
+using ::cpo::uno::UNO_QUERY;
 using ::com::sun::star::lang::EventObject;
 using ::com::sun::star::awt::XWindowListener2;
 using ::com::sun::star::awt::XDockableWindowListener;
@@ -124,7 +125,7 @@ public:
 
     std::unique_ptr<UnoPropertyArrayHelper>
                                         mpPropHelper;
-    css::uno::Reference< css::awt::XGraphics >
+    cpo::uno::Reference< css::awt::XGraphics >
                                         mxViewGraphics;
     rtl::Reference< toolkit::WindowStyleSettings >
                                         mxWindowStyleSettings;
@@ -412,7 +413,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
     if (mpImpl->mbDisposing)
         return;
-    css::uno::Reference< cpo::uno::XInterface > xThis( getXWeak() );
+    cpo::uno::Reference< cpo::uno::XInterface > xThis( getXWeak() );
 
     switch ( rVclWindowEvent.GetId() )
     {
@@ -906,7 +907,7 @@ void VCLXWindow::dispose(  )
     }
 }
 
-void VCLXWindow::addEventListener( const css::uno::Reference< css::lang::XEventListener >& rxListener )
+void VCLXWindow::addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& rxListener )
 {
     SolarMutexGuard aGuard;
     if (mpImpl->mbDisposing) // called during dispose by accessibility stuff
@@ -914,7 +915,7 @@ void VCLXWindow::addEventListener( const css::uno::Reference< css::lang::XEventL
     mpImpl->getEventListeners().addInterface( rxListener );
 }
 
-void VCLXWindow::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& rxListener )
+void VCLXWindow::removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& rxListener )
 {
     SolarMutexGuard aGuard;
     if (mpImpl->mbDisposing)
@@ -988,7 +989,7 @@ void VCLXWindow::setFocus(  )
         GetWindow()->GrabFocus();
 }
 
-void VCLXWindow::addWindowListener( const css::uno::Reference< css::awt::XWindowListener >& rxListener )
+void VCLXWindow::addWindowListener( const cpo::uno::Reference< css::awt::XWindowListener >& rxListener )
 {
     SolarMutexGuard aGuard;
     if (mpImpl->mbDisposing)
@@ -1005,7 +1006,7 @@ void VCLXWindow::addWindowListener( const css::uno::Reference< css::awt::XWindow
         GetWindow()->EnableAllResize();
 }
 
-void VCLXWindow::removeWindowListener( const css::uno::Reference< css::awt::XWindowListener >& rxListener )
+void VCLXWindow::removeWindowListener( const cpo::uno::Reference< css::awt::XWindowListener >& rxListener )
 {
     SolarMutexGuard aGuard;
 
@@ -1019,7 +1020,7 @@ void VCLXWindow::removeWindowListener( const css::uno::Reference< css::awt::XWin
     mpImpl->getWindowListeners().removeInterface( rxListener );
 }
 
-void VCLXWindow::addFocusListener( const css::uno::Reference< css::awt::XFocusListener >& rxListener )
+void VCLXWindow::addFocusListener( const cpo::uno::Reference< css::awt::XFocusListener >& rxListener )
 {
     SolarMutexGuard aGuard;
     if (mpImpl->mbDisposing)
@@ -1027,7 +1028,7 @@ void VCLXWindow::addFocusListener( const css::uno::Reference< css::awt::XFocusLi
     mpImpl->getFocusListeners().addInterface( rxListener );
 }
 
-void VCLXWindow::removeFocusListener( const css::uno::Reference< css::awt::XFocusListener >& rxListener )
+void VCLXWindow::removeFocusListener( const cpo::uno::Reference< css::awt::XFocusListener >& rxListener )
 {
     SolarMutexGuard aGuard;
     if (mpImpl->mbDisposing)
@@ -1035,7 +1036,7 @@ void VCLXWindow::removeFocusListener( const css::uno::Reference< css::awt::XFocu
     mpImpl->getFocusListeners().removeInterface( rxListener );
 }
 
-void VCLXWindow::addKeyListener( const css::uno::Reference< css::awt::XKeyListener >& rxListener )
+void VCLXWindow::addKeyListener( const cpo::uno::Reference< css::awt::XKeyListener >& rxListener )
 {
     SolarMutexGuard aGuard;
     if (mpImpl->mbDisposing)
@@ -1043,7 +1044,7 @@ void VCLXWindow::addKeyListener( const css::uno::Reference< css::awt::XKeyListen
     mpImpl->getKeyListeners().addInterface( rxListener );
 }
 
-void VCLXWindow::removeKeyListener( const css::uno::Reference< css::awt::XKeyListener >& rxListener )
+void VCLXWindow::removeKeyListener( const cpo::uno::Reference< css::awt::XKeyListener >& rxListener )
 {
     SolarMutexGuard aGuard;
     if (mpImpl->mbDisposing)
@@ -1051,7 +1052,7 @@ void VCLXWindow::removeKeyListener( const css::uno::Reference< css::awt::XKeyLis
     mpImpl->getKeyListeners().removeInterface( rxListener );
 }
 
-void VCLXWindow::addMouseListener( const css::uno::Reference< css::awt::XMouseListener >& rxListener )
+void VCLXWindow::addMouseListener( const cpo::uno::Reference< css::awt::XMouseListener >& rxListener )
 {
     SolarMutexGuard aGuard;
     if (mpImpl->mbDisposing)
@@ -1059,7 +1060,7 @@ void VCLXWindow::addMouseListener( const css::uno::Reference< css::awt::XMouseLi
     mpImpl->getMouseListeners().addInterface( rxListener );
 }
 
-void VCLXWindow::removeMouseListener( const css::uno::Reference< css::awt::XMouseListener >& rxListener )
+void VCLXWindow::removeMouseListener( const cpo::uno::Reference< css::awt::XMouseListener >& rxListener )
 {
     SolarMutexGuard aGuard;
     if (mpImpl->mbDisposing)
@@ -1067,7 +1068,7 @@ void VCLXWindow::removeMouseListener( const css::uno::Reference< css::awt::XMous
     mpImpl->getMouseListeners().removeInterface( rxListener );
 }
 
-void VCLXWindow::addMouseMotionListener( const css::uno::Reference< css::awt::XMouseMotionListener >& rxListener )
+void VCLXWindow::addMouseMotionListener( const cpo::uno::Reference< css::awt::XMouseMotionListener >& rxListener )
 {
     SolarMutexGuard aGuard;
     if (mpImpl->mbDisposing)
@@ -1075,7 +1076,7 @@ void VCLXWindow::addMouseMotionListener( const css::uno::Reference< css::awt::XM
     mpImpl->getMouseMotionListeners().addInterface( rxListener );
 }
 
-void VCLXWindow::removeMouseMotionListener( const css::uno::Reference< css::awt::XMouseMotionListener >& rxListener )
+void VCLXWindow::removeMouseMotionListener( const cpo::uno::Reference< css::awt::XMouseMotionListener >& rxListener )
 {
     SolarMutexGuard aGuard;
     if (mpImpl->mbDisposing)
@@ -1083,7 +1084,7 @@ void VCLXWindow::removeMouseMotionListener( const css::uno::Reference< css::awt:
     mpImpl->getMouseMotionListeners().removeInterface( rxListener );
 }
 
-void VCLXWindow::addPaintListener( const css::uno::Reference< css::awt::XPaintListener >& rxListener )
+void VCLXWindow::addPaintListener( const cpo::uno::Reference< css::awt::XPaintListener >& rxListener )
 {
     SolarMutexGuard aGuard;
     if (mpImpl->mbDisposing)
@@ -1091,7 +1092,7 @@ void VCLXWindow::addPaintListener( const css::uno::Reference< css::awt::XPaintLi
     mpImpl->getPaintListeners().addInterface( rxListener );
 }
 
-void VCLXWindow::removePaintListener( const css::uno::Reference< css::awt::XPaintListener >& rxListener )
+void VCLXWindow::removePaintListener( const cpo::uno::Reference< css::awt::XPaintListener >& rxListener )
 {
     SolarMutexGuard aGuard;
     if (mpImpl->mbDisposing)
@@ -1100,14 +1101,14 @@ void VCLXWindow::removePaintListener( const css::uno::Reference< css::awt::XPain
 }
 
 // css::awt::XWindowPeer
-css::uno::Reference< css::awt::XToolkit > VCLXWindow::getToolkit(  )
+cpo::uno::Reference< css::awt::XToolkit > VCLXWindow::getToolkit(  )
 {
     // no guard. nothing to guard here.
     // 82463 - 12/21/00 - fs
     return Application::GetVCLToolkit();
 }
 
-void VCLXWindow::setPointer( const css::uno::Reference< css::awt::XPointer >& rxPointer )
+void VCLXWindow::setPointer( const cpo::uno::Reference< css::awt::XPointer >& rxPointer )
 {
     SolarMutexGuard aGuard;
 
@@ -1155,7 +1156,7 @@ void VCLXWindow::invalidateRect( const css::awt::Rectangle& rRect, sal_Int16 nIn
 
 
 // css::awt::XVclWindowPeer
-bool VCLXWindow::isChild( const css::uno::Reference< css::awt::XWindowPeer >& rxPeer )
+bool VCLXWindow::isChild( const cpo::uno::Reference< css::awt::XWindowPeer >& rxPeer )
 {
     SolarMutexGuard aGuard;
 
@@ -2224,7 +2225,7 @@ css::awt::Size VCLXWindow::calcAdjustedSize( const css::awt::Size& rNewSize )
 
 
 // css::awt::XView
-bool VCLXWindow::setGraphics( const css::uno::Reference< css::awt::XGraphics >& rxDevice )
+bool VCLXWindow::setGraphics( const cpo::uno::Reference< css::awt::XGraphics >& rxDevice )
 {
     SolarMutexGuard aGuard;
 
@@ -2236,7 +2237,7 @@ bool VCLXWindow::setGraphics( const css::uno::Reference< css::awt::XGraphics >& 
     return mpImpl->mxViewGraphics.is();
 }
 
-css::uno::Reference< css::awt::XGraphics > VCLXWindow::getGraphics(  )
+cpo::uno::Reference< css::awt::XGraphics > VCLXWindow::getGraphics(  )
 {
     SolarMutexGuard aGuard;
 
@@ -2350,7 +2351,7 @@ void VCLXWindow::setZoom( float fZoomX, float /*fZoomY*/ )
 }
 
 // css::awt::XDockable
-void VCLXWindow::addDockableWindowListener( const css::uno::Reference< css::awt::XDockableWindowListener >& xListener )
+void VCLXWindow::addDockableWindowListener( const cpo::uno::Reference< css::awt::XDockableWindowListener >& xListener )
 {
     SolarMutexGuard aGuard;
 
@@ -2359,7 +2360,7 @@ void VCLXWindow::addDockableWindowListener( const css::uno::Reference< css::awt:
 
 }
 
-void VCLXWindow::removeDockableWindowListener( const css::uno::Reference< css::awt::XDockableWindowListener >& xListener )
+void VCLXWindow::removeDockableWindowListener( const cpo::uno::Reference< css::awt::XDockableWindowListener >& xListener )
 {
     SolarMutexGuard aGuard;
 

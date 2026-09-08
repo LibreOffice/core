@@ -15,7 +15,7 @@
 
 #include "WpftLoader.hxx"
 
-namespace uno = css::uno;
+namespace uno = cpo::uno;
 
 namespace writerperfect::test
 {

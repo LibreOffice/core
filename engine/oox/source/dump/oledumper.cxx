@@ -32,7 +32,7 @@
 namespace oox::dump {
 
 using namespace ::com::sun::star::io;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 OUString OleInputObjectBase::dumpAnsiString32( const String& rName )
 {

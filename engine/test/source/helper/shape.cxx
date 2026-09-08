@@ -15,9 +15,10 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/PropertyVetoException.hpp>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 namespace apitest::helper::shape
 {

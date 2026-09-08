@@ -29,6 +29,7 @@
 #include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
     // XNotifyingDispatch
 void SAL_CALL SdUnoModule::dispatchWithNotification( const util::URL& aURL, const cpo::uno::Sequence< beans::PropertyValue >& aArgs, const uno::Reference< frame::XDispatchResultListener >& xListener )

@@ -33,17 +33,17 @@ typedef CollTestImplHelper< ov::excel::XWorksheets > ScVbaWorksheets_BASE;
 
 class ScVbaWorksheets : public ScVbaWorksheets_BASE
 {
-    css::uno::Reference< css::frame::XModel > mxModel;
-    css::uno::Reference< css::sheet::XSpreadsheets > m_xSheets;
+    cpo::uno::Reference< css::frame::XModel > mxModel;
+    cpo::uno::Reference< css::sheet::XSpreadsheets > m_xSheets;
 public:
-    ScVbaWorksheets( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext > & xContext, const css::uno::Reference< css::container::XIndexAccess >& xSheets, css::uno::Reference< css::frame::XModel > xModel );
-    ScVbaWorksheets( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext > & xContext, const css::uno::Reference< css::container::XEnumerationAccess >& xEnum,  css::uno::Reference< css::frame::XModel > xModel );
+    ScVbaWorksheets( const cpo::uno::Reference< ov::XHelperInterface >& xParent, const cpo::uno::Reference< cpo::uno::XComponentContext > & xContext, const cpo::uno::Reference< css::container::XIndexAccess >& xSheets, cpo::uno::Reference< css::frame::XModel > xModel );
+    ScVbaWorksheets( const cpo::uno::Reference< ov::XHelperInterface >& xParent, const cpo::uno::Reference< cpo::uno::XComponentContext > & xContext, const cpo::uno::Reference< css::container::XEnumerationAccess >& xEnum,  cpo::uno::Reference< css::frame::XModel > xModel );
 
     bool isSelectedSheets() const;
 
     // XEnumerationAccess
     virtual cpo::uno::Type SAL_CALL getElementType() override;
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
+    virtual cpo::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
 
     // XWorksheets
     virtual cpo::uno::Any SAL_CALL getVisible() override;
@@ -62,7 +62,7 @@ public:
 
     /// @throws css::lang::IllegalArgumentException
     /// @throws cpo::uno::RuntimeException
-    static bool nameExists( const css::uno::Reference <css::sheet::XSpreadsheetDocument>& xSpreadDoc, std::u16string_view name, SCTAB& nTab );
+    static bool nameExists( const cpo::uno::Reference <css::sheet::XSpreadsheetDocument>& xSpreadDoc, std::u16string_view name, SCTAB& nTab );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -65,7 +65,7 @@ class XMLPropertyBackpatcher
 
     /// backpatch list type
     typedef ::std::vector<
-                css::uno::Reference<css::beans::XPropertySet> > BackpatchListType;
+                cpo::uno::Reference<css::beans::XPropertySet> > BackpatchListType;
 
     /// backpatch list for unresolved IDs
     ::std::map<const OUString, std::unique_ptr<BackpatchListType>> aBackpatchListMap;
@@ -90,7 +90,7 @@ public:
     /// is not yet known, store the XPropertySet in the backpatch list.
     /// Use this whenever the value should be set, even if it is not yet known.
     void SetProperty(
-        const css::uno::Reference<css::beans::XPropertySet> & xPropSet,
+        const cpo::uno::Reference<css::beans::XPropertySet> & xPropSet,
         const OUString& sName);
 };
 

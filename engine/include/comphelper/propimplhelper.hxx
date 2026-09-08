@@ -181,26 +181,26 @@ public:
         return getPropertyValueImpl(aGuard, aPropertyName);
     }
 
-    css::uno::Reference<css::beans::XPropertySetInfo> getPropertySetInfo() override
+    cpo::uno::Reference<css::beans::XPropertySetInfo> getPropertySetInfo() override
     {
         return createPropertySetInfo(getInfoHelper());
     }
 
     void addPropertyChangeListener(
         const OUString& rPropertyName,
-        const css::uno::Reference<css::beans::XPropertyChangeListener>& rxListener) override;
+        const cpo::uno::Reference<css::beans::XPropertyChangeListener>& rxListener) override;
 
     void removePropertyChangeListener(
         const OUString& rPropertyName,
-        const css::uno::Reference<css::beans::XPropertyChangeListener>& rxListener) override;
+        const cpo::uno::Reference<css::beans::XPropertyChangeListener>& rxListener) override;
 
     void addVetoableChangeListener(
         const OUString& rPropertyName,
-        const css::uno::Reference<css::beans::XVetoableChangeListener>& rxListener) override;
+        const cpo::uno::Reference<css::beans::XVetoableChangeListener>& rxListener) override;
 
     void removeVetoableChangeListener(
         const OUString& rPropertyName,
-        const css::uno::Reference<css::beans::XVetoableChangeListener>& rxListener) override;
+        const cpo::uno::Reference<css::beans::XVetoableChangeListener>& rxListener) override;
 
     // XFastPropertySet
 
@@ -222,14 +222,14 @@ public:
 
     void addPropertiesChangeListener(
         const cpo::uno::Sequence<OUString>&,
-        const css::uno::Reference<css::beans::XPropertiesChangeListener>& Listener) override final
+        const cpo::uno::Reference<css::beans::XPropertiesChangeListener>& Listener) override final
     {
         std::unique_lock aGuard(this->m_aMutex);
         m_aPropertiesChangeListeners.addInterface(aGuard, Listener);
     }
 
     void removePropertiesChangeListener(
-        const css::uno::Reference<css::beans::XPropertiesChangeListener>& Listener) override final
+        const cpo::uno::Reference<css::beans::XPropertiesChangeListener>& Listener) override final
     {
         std::unique_lock aGuard(this->m_aMutex);
         m_aPropertiesChangeListeners.removeInterface(aGuard, Listener);
@@ -237,11 +237,11 @@ public:
 
     void firePropertiesChangeEvent(
         const cpo::uno::Sequence<OUString>& PropertyNames,
-        const css::uno::Reference<css::beans::XPropertiesChangeListener>& Listener) override final;
+        const cpo::uno::Reference<css::beans::XPropertiesChangeListener>& Listener) override final;
 
     // Utilities
 
-    static css::uno::Reference<css::beans::XPropertySetInfo>
+    static cpo::uno::Reference<css::beans::XPropertySetInfo>
     createPropertySetInfo(cppu::IPropertyArrayHelper& rProperties)
     {
         return new detail::PropertyImplHelperInfo(rProperties);
@@ -323,13 +323,13 @@ private:
 
     template <typename ListenerT>
     void addListener(const OUString& rPropertyName,
-                     const css::uno::Reference<ListenerT>& rxListener, sal_Int16 nRequiredAttribute,
+                     const cpo::uno::Reference<ListenerT>& rxListener, sal_Int16 nRequiredAttribute,
                      OMultiTypeInterfaceContainerHelperVar4<sal_Int32, ListenerT>& rByHandleLC,
                      comphelper::OInterfaceContainerHelper4<ListenerT>& rAllLC);
 
     template <typename ListenerT>
     void removeListener(const OUString& rPropertyName,
-                        const css::uno::Reference<ListenerT>& rxListener,
+                        const cpo::uno::Reference<ListenerT>& rxListener,
                         OMultiTypeInterfaceContainerHelperVar4<sal_Int32, ListenerT>& rByHandleLC,
                         comphelper::OInterfaceContainerHelper4<ListenerT>& rAllLC);
 
@@ -359,7 +359,7 @@ private:
 template <IsUnoImplBase BaseClass, typename... Ifc>
 void OPropertyImplHelper<BaseClass, Ifc...>::addPropertyChangeListener(
     const OUString& rPropertyName,
-    const css::uno::Reference<css::beans::XPropertyChangeListener>& rxListener)
+    const cpo::uno::Reference<css::beans::XPropertyChangeListener>& rxListener)
 {
     addListener(rPropertyName, rxListener, css::beans::PropertyAttribute::BOUND, m_aBoundLC,
                 m_aPropertyChangeListeners);
@@ -368,7 +368,7 @@ void OPropertyImplHelper<BaseClass, Ifc...>::addPropertyChangeListener(
 template <IsUnoImplBase BaseClass, typename... Ifc>
 void OPropertyImplHelper<BaseClass, Ifc...>::removePropertyChangeListener(
     const OUString& rPropertyName,
-    const css::uno::Reference<css::beans::XPropertyChangeListener>& rxListener)
+    const cpo::uno::Reference<css::beans::XPropertyChangeListener>& rxListener)
 {
     removeListener(rPropertyName, rxListener, m_aBoundLC, m_aPropertyChangeListeners);
 }
@@ -376,7 +376,7 @@ void OPropertyImplHelper<BaseClass, Ifc...>::removePropertyChangeListener(
 template <IsUnoImplBase BaseClass, typename... Ifc>
 void OPropertyImplHelper<BaseClass, Ifc...>::addVetoableChangeListener(
     const OUString& rPropertyName,
-    const css::uno::Reference<css::beans::XVetoableChangeListener>& rxListener)
+    const cpo::uno::Reference<css::beans::XVetoableChangeListener>& rxListener)
 {
     addListener(rPropertyName, rxListener, css::beans::PropertyAttribute::CONSTRAINED,
                 m_aVetoableLC, m_aVetoableChangeListeners);
@@ -385,7 +385,7 @@ void OPropertyImplHelper<BaseClass, Ifc...>::addVetoableChangeListener(
 template <IsUnoImplBase BaseClass, typename... Ifc>
 void OPropertyImplHelper<BaseClass, Ifc...>::removeVetoableChangeListener(
     const OUString& rPropertyName,
-    const css::uno::Reference<css::beans::XVetoableChangeListener>& rxListener)
+    const cpo::uno::Reference<css::beans::XVetoableChangeListener>& rxListener)
 {
     removeListener(rPropertyName, rxListener, m_aVetoableLC, m_aVetoableChangeListeners);
 }
@@ -393,7 +393,7 @@ void OPropertyImplHelper<BaseClass, Ifc...>::removeVetoableChangeListener(
 template <IsUnoImplBase BaseClass, typename... Ifc>
 template <typename ListenerT>
 void OPropertyImplHelper<BaseClass, Ifc...>::addListener(
-    const OUString& rPropertyName, const css::uno::Reference<ListenerT>& rxListener,
+    const OUString& rPropertyName, const cpo::uno::Reference<ListenerT>& rxListener,
     sal_Int16 nRequiredAttribute,
     OMultiTypeInterfaceContainerHelperVar4<sal_Int32, ListenerT>& rByHandleLC,
     comphelper::OInterfaceContainerHelper4<ListenerT>& rAllLC)
@@ -426,7 +426,7 @@ void OPropertyImplHelper<BaseClass, Ifc...>::addListener(
 template <IsUnoImplBase BaseClass, typename... Ifc>
 template <typename ListenerT>
 void OPropertyImplHelper<BaseClass, Ifc...>::removeListener(
-    const OUString& rPropertyName, const css::uno::Reference<ListenerT>& rxListener,
+    const OUString& rPropertyName, const cpo::uno::Reference<ListenerT>& rxListener,
     OMultiTypeInterfaceContainerHelperVar4<sal_Int32, ListenerT>& rByHandleLC,
     comphelper::OInterfaceContainerHelper4<ListenerT>& rAllLC)
 {
@@ -569,7 +569,7 @@ cpo::uno::Sequence<cpo::uno::Any> OPropertyImplHelper<BaseClass, Ifc...>::getPro
 template <IsUnoImplBase BaseClass, typename... Ifc>
 void OPropertyImplHelper<BaseClass, Ifc...>::firePropertiesChangeEvent(
     const cpo::uno::Sequence<OUString>& rPropertyNames,
-    const css::uno::Reference<css::beans::XPropertiesChangeListener>& rListener)
+    const cpo::uno::Reference<css::beans::XPropertiesChangeListener>& rListener)
 {
     sal_Int32 nLen = rPropertyNames.getLength();
     auto pHandles = std::make_unique<sal_Int32[]>(nLen);
@@ -583,8 +583,8 @@ void OPropertyImplHelper<BaseClass, Ifc...>::firePropertiesChangeEvent(
         cpo::uno::Sequence<css::beans::PropertyChangeEvent> aChanges(nFireLen);
         css::beans::PropertyChangeEvent* pChanges = aChanges.getArray();
         std::unique_lock aGuard(this->m_aMutex);
-        css::uno::Reference<cpo::uno::XInterface> xSource(
-            static_cast<css::beans::XPropertySet*>(this), css::uno::UNO_QUERY);
+        cpo::uno::Reference<cpo::uno::XInterface> xSource(
+            static_cast<css::beans::XPropertySet*>(this), cpo::uno::UNO_QUERY);
         sal_Int32 nFirePos = 0;
         for (sal_Int32 i = 0; i < nLen; i++)
         {
@@ -704,8 +704,8 @@ void OPropertyImplHelper<BaseClass, Ifc...>::fire(std::unique_lock<std::mutex>& 
 
     cpo::uno::Sequence<css::beans::PropertyChangeEvent> aEvts(nHandles);
     css::beans::PropertyChangeEvent* pEvts = aEvts.getArray();
-    css::uno::Reference<cpo::uno::XInterface> xSource(static_cast<css::beans::XPropertySet*>(this),
-                                                      css::uno::UNO_QUERY);
+    cpo::uno::Reference<cpo::uno::XInterface> xSource(static_cast<css::beans::XPropertySet*>(this),
+                                                      cpo::uno::UNO_QUERY);
 
     cppu::IPropertyArrayHelper& rPH = getInfoHelper();
     sal_Int32 nChangesLen = 0;

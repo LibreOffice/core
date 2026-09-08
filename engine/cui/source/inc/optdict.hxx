@@ -19,7 +19,7 @@
 #pragma once
 
 #include <vcl/weld.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <svx/langbox.hxx>
 
@@ -41,7 +41,7 @@ private:
     std::unique_ptr<SvxLanguageBox> m_xLanguageLB;
     std::unique_ptr<weld::CheckButton> m_xExceptBtn;
     std::unique_ptr<weld::Button> m_xOKBtn;
-    css::uno::Reference<css::linguistic2::XDictionary> m_xNewDic;
+    cpo::uno::Reference<css::linguistic2::XDictionary> m_xNewDic;
 
     DECL_LINK(OKHdl_Impl, weld::Button&, void);
     DECL_LINK(ModifyHdl_Impl, weld::Entry&, void);
@@ -49,7 +49,7 @@ private:
 public:
     SvxNewDictionaryDialog(weld::Window* pParent);
 
-    const css::uno::Reference<css::linguistic2::XDictionary>& GetNewDictionary() const { return m_xNewDic; }
+    const cpo::uno::Reference<css::linguistic2::XDictionary>& GetNewDictionary() const { return m_xNewDic; }
 };
 
 // class SvxEditDictionaryDialog -----------------------------------------
@@ -62,7 +62,7 @@ private:
     OUString                sReplaceFT_Text;
 
     cpo::uno::Sequence<
-        css::uno::Reference<
+        cpo::uno::Reference<
             css::linguistic2::XDictionary >  > aDics;  //! snapshot copy to work on
 
     bool            bFirstSelect;
@@ -93,7 +93,7 @@ private:
     void            ShowWords_Impl( sal_uInt16 nId );
     void            SetLanguage_Impl( LanguageType nLanguage );
     bool            IsDicReadonly_Impl() const { return bDicIsReadonly; }
-    void            SetDicReadonly_Impl( css::uno::Reference<
+    void            SetDicReadonly_Impl( cpo::uno::Reference<
                             css::linguistic2::XDictionary > const &xDic );
 
     void            RemoveDictEntry(int nEntry);

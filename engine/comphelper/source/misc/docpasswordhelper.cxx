@@ -41,7 +41,7 @@
 
 using ::cpo::uno::Sequence;
 using ::cpo::uno::Exception;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::com::sun::star::task::PasswordRequestMode;
 using ::com::sun::star::task::PasswordRequestMode_PASSWORD_ENTER;
 using ::com::sun::star::task::PasswordRequestMode_PASSWORD_REENTER;

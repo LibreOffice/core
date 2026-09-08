@@ -22,10 +22,10 @@ class SEInitializer_AppleImpl : public SEInitializer_NssImpl
 {
 public:
     explicit SEInitializer_AppleImpl(
-        const css::uno::Reference<cpo::uno::XComponentContext>& rxContext);
+        const cpo::uno::Reference<cpo::uno::XComponentContext>& rxContext);
     virtual ~SEInitializer_AppleImpl() override;
 
-    virtual css::uno::Reference<css::xml::crypto::XXMLSecurityContext>
+    virtual cpo::uno::Reference<css::xml::crypto::XXMLSecurityContext>
         SAL_CALL createSecurityContext(const OUString&) override;
 };
 

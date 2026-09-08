@@ -57,8 +57,8 @@ class X509Certificate_MSCryptImpl : public ::cppu::WeakImplHelper<
         virtual css::util::DateTime SAL_CALL getNotValidAfter() override;
         virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getIssuerUniqueID() override;
         virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getSubjectUniqueID() override;
-        virtual cpo::uno::Sequence< css::uno::Reference< css::security::XCertificateExtension > > SAL_CALL getExtensions() override;
-        virtual css::uno::Reference< css::security::XCertificateExtension > SAL_CALL findCertificateExtension( const cpo::uno::Sequence< sal_Int8 >& oid ) override;
+        virtual cpo::uno::Sequence< cpo::uno::Reference< css::security::XCertificateExtension > > SAL_CALL getExtensions() override;
+        virtual cpo::uno::Reference< css::security::XCertificateExtension > SAL_CALL findCertificateExtension( const cpo::uno::Sequence< sal_Int8 >& oid ) override;
         virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getEncoded() override;
         virtual OUString SAL_CALL getSubjectPublicKeyAlgorithm() override;
         virtual cpo::uno::Sequence< sal_Int8 > SAL_CALL getSubjectPublicKeyValue() override;

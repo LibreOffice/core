@@ -43,7 +43,7 @@ namespace com::sun::star {
 
 class SVT_DLLPUBLIC DocumentToGraphicRenderer
 {
-    const css::uno::Reference<css::lang::XComponent>& mxDocument;
+    const cpo::uno::Reference<css::lang::XComponent>& mxDocument;
 
     enum DocType {
             WRITER,
@@ -52,10 +52,10 @@ class SVT_DLLPUBLIC DocumentToGraphicRenderer
             UNKNOWN
         };
 
-    css::uno::Reference<css::frame::XModel>         mxModel;
-    css::uno::Reference<css::frame::XController>    mxController;
-    css::uno::Reference<css::view::XRenderable>     mxRenderable;
-    css::uno::Reference<css::awt::XToolkit>         mxToolkit;
+    cpo::uno::Reference<css::frame::XModel>         mxModel;
+    cpo::uno::Reference<css::frame::XController>    mxController;
+    cpo::uno::Reference<css::view::XRenderable>     mxRenderable;
+    cpo::uno::Reference<css::awt::XToolkit>         mxToolkit;
     cpo::uno::Any                                   maSelection;
     DocType                                         meDocType;
     std::vector<OUString>                           maChapterNames;
@@ -70,7 +70,7 @@ class SVT_DLLPUBLIC DocumentToGraphicRenderer
     sal_Int32 getCurrentPageWriter();
 
 public:
-    DocumentToGraphicRenderer(const css::uno::Reference<css::lang::XComponent>& xDocument, bool bSelectionOnly);
+    DocumentToGraphicRenderer(const cpo::uno::Reference<css::lang::XComponent>& xDocument, bool bSelectionOnly);
     ~DocumentToGraphicRenderer();
 
     sal_Int32 getCurrentPage();
@@ -96,9 +96,9 @@ public:
         Call only if the SelectionOnly property was set.
      */
     static bool isShapeSelected(
-            css::uno::Reference< css::drawing::XShapes > & rxShapes,
-            css::uno::Reference< css::drawing::XShape > & rxShape,
-            const css::uno::Reference< css::frame::XController > & rxController );
+            cpo::uno::Reference< css::drawing::XShapes > & rxShapes,
+            cpo::uno::Reference< css::drawing::XShape > & rxShape,
+            const cpo::uno::Reference< css::frame::XController > & rxController );
 
     bool isWriter() const;
     bool isCalc() const;

@@ -27,11 +27,11 @@
 
 #include <cppu/unotype.hxx>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 
-using namespace css;
-using namespace css::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace com::sun::star;
 
 namespace sc_apitest

@@ -27,7 +27,7 @@
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-OTempFileService::OTempFileService(css::uno::Reference< cpo::uno::XComponentContext > const &)
+OTempFileService::OTempFileService(cpo::uno::Reference< cpo::uno::XComponentContext > const &)
 : mpStream( nullptr )
 , mbRemoveFile( true )
 , mbInClosed( false )
@@ -304,12 +304,12 @@ sal_Int64 OTempFileService::getLength(  )
 
 // XStream
 
-css::uno::Reference< css::io::XInputStream > OTempFileService::getInputStream()
+cpo::uno::Reference< css::io::XInputStream > OTempFileService::getInputStream()
 {
     return this;
 }
 
-css::uno::Reference< css::io::XOutputStream > OTempFileService::getOutputStream()
+cpo::uno::Reference< css::io::XOutputStream > OTempFileService::getOutputStream()
 {
     return this;
 }
@@ -331,7 +331,7 @@ void OTempFileService::truncate()
 #define PROPERTY_HANDLE_RESOURCE_NAME 3
 
 // XPropertySet
-::css::uno::Reference< ::css::beans::XPropertySetInfo > OTempFileService::getPropertySetInfo()
+::cpo::uno::Reference< ::css::beans::XPropertySetInfo > OTempFileService::getPropertySetInfo()
 {
     // Create a table that map names to index values.
     // attention: properties need to be sorted by name!
@@ -345,7 +345,7 @@ void OTempFileService::truncate()
                 css::beans::PropertyAttribute::READONLY )
         },
         true );
-    static css::uno::Reference< css::beans::XPropertySetInfo > xInfo( 
+    static cpo::uno::Reference< css::beans::XPropertySetInfo > xInfo(
         ::cppu::OPropertySetHelper::createPropertySetInfo( ourPropertyInfo ) );
     return xInfo;
 }
@@ -373,19 +373,19 @@ void OTempFileService::setPropertyValue( const ::rtl::OUString& aPropertyName, c
         throw css::beans::UnknownPropertyException(aPropertyName);
     }
 }
-void OTempFileService::addPropertyChangeListener( const ::rtl::OUString& /*aPropertyName*/, const ::css::uno::Reference< ::css::beans::XPropertyChangeListener >& /*xListener*/ )
+void OTempFileService::addPropertyChangeListener( const ::rtl::OUString& /*aPropertyName*/, const ::cpo::uno::Reference< ::css::beans::XPropertyChangeListener >& /*xListener*/ )
 {
     assert(false);
 }
-void OTempFileService::removePropertyChangeListener( const ::rtl::OUString& /*aPropertyName*/, const ::css::uno::Reference< ::css::beans::XPropertyChangeListener >& /*xListener*/ )
+void OTempFileService::removePropertyChangeListener( const ::rtl::OUString& /*aPropertyName*/, const ::cpo::uno::Reference< ::css::beans::XPropertyChangeListener >& /*xListener*/ )
 {
     assert(false);
 }
-void OTempFileService::addVetoableChangeListener( const ::rtl::OUString& /*aPropertyName*/, const ::css::uno::Reference< ::css::beans::XVetoableChangeListener >& /*xListener*/ )
+void OTempFileService::addVetoableChangeListener( const ::rtl::OUString& /*aPropertyName*/, const ::cpo::uno::Reference< ::css::beans::XVetoableChangeListener >& /*xListener*/ )
 {
     assert(false);
 }
-void OTempFileService::removeVetoableChangeListener( const ::rtl::OUString& /*aPropertyName*/, const ::css::uno::Reference< ::css::beans::XVetoableChangeListener >& /*xListener*/ )
+void OTempFileService::removeVetoableChangeListener( const ::rtl::OUString& /*aPropertyName*/, const ::cpo::uno::Reference< ::css::beans::XVetoableChangeListener >& /*xListener*/ )
 {
     assert(false);
 }

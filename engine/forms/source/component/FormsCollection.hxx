@@ -42,10 +42,10 @@ class OFormsCollection
         ,public OFormsCollection_BASE
 {
     ::osl::Mutex                               m_aMutex;
-    css::uno::Reference<cpo::uno::XInterface>  m_xParent; // Parent
+    cpo::uno::Reference<cpo::uno::XInterface>  m_xParent; // Parent
 
 public:
-    explicit OFormsCollection(const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory);
+    explicit OFormsCollection(const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory);
     OFormsCollection( const OFormsCollection& _cloneSource );
     virtual ~OFormsCollection() override;
 
@@ -67,14 +67,14 @@ public:
     virtual cpo::uno::Sequence<OUString> getSupportedServiceNames(  ) override;
 
     // XCloneable
-    virtual css::uno::Reference< css::util::XCloneable > createClone(  ) override;
+    virtual cpo::uno::Reference< css::util::XCloneable > createClone(  ) override;
 
     // OComponentHelper
     virtual void disposing() override;
 
     // css::container::XChild
-    virtual css::uno::Reference<cpo::uno::XInterface> getParent() override;
-    virtual void setParent(const css::uno::Reference<cpo::uno::XInterface>& Parent) override;
+    virtual cpo::uno::Reference<cpo::uno::XInterface> getParent() override;
+    virtual void setParent(const cpo::uno::Reference<cpo::uno::XInterface>& Parent) override;
 
     // prevent method hiding
     using OInterfaceContainer::disposing;
@@ -106,7 +106,7 @@ public:
         { return OInterfaceContainer::insertByIndex(p1, p2); }
     virtual void removeByIndex(sal_Int32 p1) override
         { return OInterfaceContainer::removeByIndex(p1); }
-    virtual css::uno::Reference<css::container::XEnumeration> createEnumeration() override
+    virtual cpo::uno::Reference<css::container::XEnumeration> createEnumeration() override
         { return OInterfaceContainer::createEnumeration(); }
     virtual void registerScriptEvent(sal_Int32 p1, const css::script::ScriptEventDescriptor& p2) override
         { OInterfaceContainer::registerScriptEvent(p1, p2); }
@@ -122,23 +122,23 @@ public:
         { OInterfaceContainer::removeEntry(p1); }
     virtual cpo::uno::Sequence<css::script::ScriptEventDescriptor> getScriptEvents(sal_Int32 p1) override
         { return OInterfaceContainer::getScriptEvents(p1); }
-    virtual void attach(sal_Int32 p1, const css::uno::Reference<cpo::uno::XInterface>& p2, const cpo::uno::Any& p3) override
+    virtual void attach(sal_Int32 p1, const cpo::uno::Reference<cpo::uno::XInterface>& p2, const cpo::uno::Any& p3) override
         { OInterfaceContainer::attach(p1, p2, p3); }
-    virtual void detach(sal_Int32 p1, const css::uno::Reference<cpo::uno::XInterface>& p2) override
+    virtual void detach(sal_Int32 p1, const cpo::uno::Reference<cpo::uno::XInterface>& p2) override
         { OInterfaceContainer::detach(p1, p2); }
-    virtual void addScriptListener(const css::uno::Reference<css::script::XScriptListener>& p1) override
+    virtual void addScriptListener(const cpo::uno::Reference<css::script::XScriptListener>& p1) override
         { OInterfaceContainer::addScriptListener(p1); }
-    virtual void removeScriptListener(const css::uno::Reference<css::script::XScriptListener>& p1) override
+    virtual void removeScriptListener(const cpo::uno::Reference<css::script::XScriptListener>& p1) override
         { OInterfaceContainer::removeScriptListener(p1); }
     virtual void dispose() override
         { ::cppu::OComponentHelper::dispose(); }
-    virtual void addEventListener(const css::uno::Reference<css::lang::XEventListener>& p1) override
+    virtual void addEventListener(const cpo::uno::Reference<css::lang::XEventListener>& p1) override
         { ::cppu::OComponentHelper::addEventListener(p1); }
-    virtual void removeEventListener(const css::uno::Reference<css::lang::XEventListener>& p1) override
+    virtual void removeEventListener(const cpo::uno::Reference<css::lang::XEventListener>& p1) override
         { ::cppu::OComponentHelper::removeEventListener(p1); }
-    virtual void addContainerListener(const css::uno::Reference<css::container::XContainerListener>& p1) override
+    virtual void addContainerListener(const cpo::uno::Reference<css::container::XContainerListener>& p1) override
         { OInterfaceContainer::addContainerListener(p1); }
-    virtual void removeContainerListener(const css::uno::Reference<css::container::XContainerListener>& p1) override
+    virtual void removeContainerListener(const cpo::uno::Reference<css::container::XContainerListener>& p1) override
         { OInterfaceContainer::removeContainerListener(p1); }
 };
 

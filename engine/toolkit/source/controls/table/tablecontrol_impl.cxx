@@ -53,7 +53,7 @@ namespace svt::table
     using ::com::sun::star::accessibility::AccessibleTableModelChange;
     using ::cpo::uno::Any;
     using ::com::sun::star::accessibility::XAccessible;
-    using ::com::sun::star::uno::Reference;
+    using ::cpo::uno::Reference;
 
     namespace AccessibleEventId = css::accessibility::AccessibleEventId;
     namespace AccessibleTableModelChangeType = css::accessibility::AccessibleTableModelChangeType;
@@ -2338,7 +2338,7 @@ namespace svt::table
     }
 
     const rtl::Reference<accessibility::AccessibleGridControl>&
-    TableControl_Impl::getAccessible(const css::uno::Reference<css::accessibility::XAccessible>& rxParent)
+    TableControl_Impl::getAccessible(const cpo::uno::Reference<css::accessibility::XAccessible>& rxParent)
     {
         if (m_xAccessibleTable.is())
             return m_xAccessibleTable;

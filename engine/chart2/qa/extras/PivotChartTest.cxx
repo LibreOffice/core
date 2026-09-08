@@ -31,7 +31,8 @@
 namespace com::sun::star::table { class XCellRange; }
 namespace com::sun::star::util { class XNumberFormats; }
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 class PivotChartTest : public ChartTest
 {

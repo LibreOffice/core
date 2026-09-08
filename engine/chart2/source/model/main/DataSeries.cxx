@@ -44,10 +44,11 @@
 namespace cpo::uno { class XComponentContext; }
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 using ::com::sun::star::beans::Property;
 using ::cpo::uno::Sequence;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::osl::MutexGuard;
 
 namespace chart
@@ -98,7 +99,7 @@ void lcl_SetParent(
         xChild->setParent( xParentInterface );
 }
 
-typedef std::map< sal_Int32, css::uno::Reference< css::beans::XPropertySet > >
+typedef std::map< sal_Int32, cpo::uno::Reference< css::beans::XPropertySet > >
     lcl_tDataPointMap;
 
 void lcl_CloneAttributedDataPoints(
@@ -739,7 +740,7 @@ bool DataSeries::hasUnhiddenData()
 
 bool DataSeries::hasPointOwnColor(
         sal_Int32 nPointIndex
-        , const css::uno::Reference< css::beans::XPropertySet >& xDataPointProperties //may be NULL this is just for performance
+        , const cpo::uno::Reference< css::beans::XPropertySet >& xDataPointProperties //may be NULL this is just for performance
          )
 {
     if( hasPointOwnProperties( nPointIndex ))
@@ -1048,12 +1049,12 @@ sal_Int32 DataSeries::getExplicitNumberFormatKeyForDataLabel()
 
 }
 
-void DataSeries::setCalculatedYSequence(css::uno::Reference<css::chart2::data::XLabeledDataSequence> const& xSequence)
+void DataSeries::setCalculatedYSequence(cpo::uno::Reference<css::chart2::data::XLabeledDataSequence> const& xSequence)
 {
     m_xCalculatedYSequence = xSequence;
 }
 
-css::uno::Reference<css::chart2::data::XLabeledDataSequence> DataSeries::getCalculatedYSequence() const
+cpo::uno::Reference<css::chart2::data::XLabeledDataSequence> DataSeries::getCalculatedYSequence() const
 {
     return m_xCalculatedYSequence;
 }

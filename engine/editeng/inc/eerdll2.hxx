@@ -41,13 +41,13 @@ namespace editeng
 class GlobalEditData
 {
 private:
-    css::uno::Reference< css::linguistic2::XLanguageGuessing >  xLanguageGuesser;
+    cpo::uno::Reference< css::linguistic2::XLanguageGuessing >  xLanguageGuesser;
     std::shared_ptr<SvxForbiddenCharactersTable> xForbiddenCharsTable;
 
 public:
     std::shared_ptr<SvxForbiddenCharactersTable> const & GetForbiddenCharsTable();
     void            SetForbiddenCharsTable(std::shared_ptr<SvxForbiddenCharactersTable> const & xForbiddenChars ) { xForbiddenCharsTable = xForbiddenChars; }
-    css::uno::Reference< css::linguistic2::XLanguageGuessing > const & GetLanguageGuesser();
+    cpo::uno::Reference< css::linguistic2::XLanguageGuessing > const & GetLanguageGuesser();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

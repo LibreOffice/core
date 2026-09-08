@@ -36,7 +36,7 @@
 
 namespace dbaccess
 {
-    using ::com::sun::star::uno::Reference;
+    using ::cpo::uno::Reference;
     using ::cpo::uno::RuntimeException;
     using ::cpo::uno::Any;
     using ::cpo::uno::Sequence;

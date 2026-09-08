@@ -56,7 +56,7 @@ class ChartDocumentWrapper final : public ChartDocumentWrapper_Base
                            , public ::utl::OEventListenerAdapter
 {
 public:
-    explicit ChartDocumentWrapper( const css::uno::Reference< cpo::uno::XComponentContext > & xContext );
+    explicit ChartDocumentWrapper( const cpo::uno::Reference< cpo::uno::XComponentContext > & xContext );
     virtual ~ChartDocumentWrapper() override;
 
     /// XServiceInfo declarations
@@ -64,8 +64,8 @@ public:
     virtual bool supportsService( const OUString& ServiceName ) override;
     virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
-    void setAddIn( const css::uno::Reference< css::util::XRefreshable >& xAddIn );
-    const css::uno::Reference< css::util::XRefreshable >& getAddIn() const { return m_xAddIn;}
+    void setAddIn( const cpo::uno::Reference< css::util::XRefreshable >& xAddIn );
+    const cpo::uno::Reference< css::util::XRefreshable >& getAddIn() const { return m_xAddIn;}
 
     void setUpdateAddIn( bool bUpdateAddIn );
     bool getUpdateAddIn() const { return m_bUpdateAddIn;}
@@ -73,21 +73,21 @@ public:
     void setBaseDiagram( const OUString& rBaseDiagram );
     const OUString& getBaseDiagram() const { return m_aBaseDiagram;}
 
-    css::uno::Reference< css::drawing::XShapes > getAdditionalShapes() const;
+    cpo::uno::Reference< css::drawing::XShapes > getAdditionalShapes() const;
 
     /// @throws cpo::uno::RuntimeException
     rtl::Reference<SvxDrawPage> impl_getDrawPage() const;
 
     // ____ chart::XChartDocument ____
-    virtual css::uno::Reference< css::drawing::XShape > getTitle() override;
-    virtual css::uno::Reference< css::drawing::XShape > getSubTitle() override;
-    virtual css::uno::Reference< css::drawing::XShape > getLegend() override;
-    virtual css::uno::Reference< css::beans::XPropertySet > getArea() override;
-    virtual css::uno::Reference< css::chart::XDiagram > getDiagram() override;
-    virtual void setDiagram( const css::uno::Reference<
+    virtual cpo::uno::Reference< css::drawing::XShape > getTitle() override;
+    virtual cpo::uno::Reference< css::drawing::XShape > getSubTitle() override;
+    virtual cpo::uno::Reference< css::drawing::XShape > getLegend() override;
+    virtual cpo::uno::Reference< css::beans::XPropertySet > getArea() override;
+    virtual cpo::uno::Reference< css::chart::XDiagram > getDiagram() override;
+    virtual void setDiagram( const cpo::uno::Reference<
                                       css::chart::XDiagram >& xDiagram ) override;
-    virtual css::uno::Reference< css::chart::XChartData > getData() override;
-    virtual void attachData( const css::uno::Reference<
+    virtual cpo::uno::Reference< css::chart::XChartData > getData() override;
+    virtual void attachData( const cpo::uno::Reference<
                                       css::chart::XChartData >& xData ) override;
 
     // ____ XModel ____
@@ -96,22 +96,22 @@ public:
     virtual OUString getURL() override;
     virtual cpo::uno::Sequence<
         css::beans::PropertyValue > getArgs() override;
-    virtual void connectController( const css::uno::Reference<
+    virtual void connectController( const cpo::uno::Reference<
                                              css::frame::XController >& Controller ) override;
-    virtual void disconnectController( const css::uno::Reference<
+    virtual void disconnectController( const cpo::uno::Reference<
                                                 css::frame::XController >& Controller ) override;
     virtual void lockControllers() override;
     virtual void unlockControllers() override;
     virtual bool hasControllersLocked() override;
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
         css::frame::XController > getCurrentController() override;
-    virtual void setCurrentController( const css::uno::Reference< css::frame::XController >& Controller ) override;
-    virtual css::uno::Reference<cpo::uno::XInterface > getCurrentSelection() override;
+    virtual void setCurrentController( const cpo::uno::Reference< css::frame::XController >& Controller ) override;
+    virtual cpo::uno::Reference<cpo::uno::XInterface > getCurrentSelection() override;
 
     // ____ XComponent ____
     virtual void dispose() override;
-    virtual void addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-    virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+    virtual void addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& xListener ) override;
+    virtual void removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
     // ____ XInterface (for new interfaces) ____
     virtual cpo::uno::Any queryInterface( const cpo::uno::Type& aType ) override;
@@ -120,24 +120,24 @@ public:
     virtual void _disposing( const css::lang::EventObject& rSource ) override;
 
     // ____ XDrawPageSupplier ____
-    virtual css::uno::Reference< css::drawing::XDrawPage > getDrawPage() override;
+    virtual cpo::uno::Reference< css::drawing::XDrawPage > getDrawPage() override;
 
     // ____ XMultiServiceFactory ____
-    virtual css::uno::Reference< cpo::uno::XInterface > createInstance( const OUString& aServiceSpecifier ) override;
-    virtual css::uno::Reference< cpo::uno::XInterface > createInstanceWithArguments(
+    virtual cpo::uno::Reference< cpo::uno::XInterface > createInstance( const OUString& aServiceSpecifier ) override;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > createInstanceWithArguments(
                 const OUString& ServiceSpecifier,
                 const cpo::uno::Sequence< cpo::uno::Any >& Arguments ) override;
     virtual cpo::uno::Sequence< OUString > getAvailableServiceNames() override;
 
     // ____ XAggregation ____
     virtual void setDelegator(
-        const css::uno::Reference< cpo::uno::XInterface >& rDelegator ) override;
+        const cpo::uno::Reference< cpo::uno::XInterface >& rDelegator ) override;
     virtual cpo::uno::Any queryAggregation( const cpo::uno::Type& aType ) override;
 
     // ____ WrappedPropertySet ____
     virtual const cpo::uno::Sequence< css::beans::Property >& getPropertySequence() override;
     virtual std::vector< std::unique_ptr<WrappedProperty> > createWrappedProperties() override;
-    virtual css::uno::Reference< css::beans::XPropertySet > getInnerPropertySet() override;
+    virtual cpo::uno::Reference< css::beans::XPropertySet > getInnerPropertySet() override;
 
     // ____ XPropertySet ____
     virtual void setPropertyValue(const OUString& rPropertyName,
@@ -149,21 +149,21 @@ private: //methods
 private: //member
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
 
-    css::uno::Reference< cpo::uno::XInterface >   m_xDelegator;
+    cpo::uno::Reference< cpo::uno::XInterface >   m_xDelegator;
 
     rtl::Reference< TitleWrapper >   m_xTitle;
     rtl::Reference< TitleWrapper >   m_xSubTitle;
     rtl::Reference< LegendWrapper >   m_xLegend;
-    css::uno::Reference< css::chart::XChartData > m_xChartData;
+    cpo::uno::Reference< css::chart::XChartData > m_xChartData;
     rtl::Reference< DiagramWrapper >   m_xDiagram;
-    css::uno::Reference< css::beans::XPropertySet > m_xArea;
+    cpo::uno::Reference< css::beans::XPropertySet > m_xArea;
 
-    css::uno::Reference< css::util::XRefreshable > m_xAddIn;
+    cpo::uno::Reference< css::util::XRefreshable > m_xAddIn;
     OUString   m_aBaseDiagram;
     bool        m_bUpdateAddIn;
 
     rtl::Reference< ChartView >                   m_xChartView;
-    css::uno::Reference< css::lang::XMultiServiceFactory>
+    cpo::uno::Reference< css::lang::XMultiServiceFactory>
                                                   m_xShapeFactory;
 
     bool                                          m_bIsDisposed;

@@ -205,14 +205,14 @@ public:
     static OUString GetDefaultExt(XPropertyListType t);
     OUString GetDefaultExt() const { return GetDefaultExt(meType); }
 
-    virtual css::uno::Reference< css::container::XNameContainer >
+    virtual cpo::uno::Reference< css::container::XNameContainer >
         createInstance() = 0;
     bool Load();
-    bool LoadFrom(const css::uno::Reference<
+    bool LoadFrom(const cpo::uno::Reference<
                        css::embed::XStorage > &xStorage,
                   const OUString &rURL, const OUString &rReferer);
     bool Save();
-    bool SaveTo  (const css::uno::Reference<
+    bool SaveTo  (const cpo::uno::Reference<
                        css::embed::XStorage > &xStorage,
                    const OUString &rURL,
                                   OUString *pOptName);
@@ -254,7 +254,7 @@ public:
     void Replace(tools::Long nIndex, std::unique_ptr<XColorEntry> pEntry);
     XColorEntry* GetColor(tools::Long nIndex) const;
     tools::Long GetIndexOfColor( const Color& rColor) const;
-    virtual css::uno::Reference< css::container::XNameContainer > createInstance() override;
+    virtual cpo::uno::Reference< css::container::XNameContainer > createInstance() override;
     virtual bool Create() override;
 
     static XColorListRef CreateStdColorList();
@@ -273,7 +273,7 @@ public:
 
     Bitmap CreateBitmapForUI(tools::Long nIndex, const Size& rSize);
 
-    virtual css::uno::Reference< css::container::XNameContainer > createInstance() override;
+    virtual cpo::uno::Reference< css::container::XNameContainer > createInstance() override;
     virtual bool Create() override;
 };
 
@@ -294,7 +294,7 @@ public:
     void Replace(std::unique_ptr<XDashEntry> pEntry, tools::Long nIndex);
     XDashEntry* GetDash(tools::Long nIndex) const;
 
-    virtual css::uno::Reference< css::container::XNameContainer > createInstance() override;
+    virtual cpo::uno::Reference< css::container::XNameContainer > createInstance() override;
     virtual bool Create() override;
 
     // Special call to get a bitmap for the solid line representation. It
@@ -323,7 +323,7 @@ public:
     XHatchEntry* GetHatch(tools::Long nIndex) const;
     Bitmap GetBitmapForPreview(tools::Long nIndex, const Size& rSize);
 
-    virtual css::uno::Reference< css::container::XNameContainer > createInstance() override;
+    virtual cpo::uno::Reference< css::container::XNameContainer > createInstance() override;
     virtual bool Create() override;
 };
 
@@ -341,7 +341,7 @@ public:
     XGradientEntry* GetGradient(tools::Long nIndex) const;
     Bitmap GetBitmapForPreview(tools::Long nIndex, const Size& rSize);
 
-    virtual css::uno::Reference< css::container::XNameContainer > createInstance() override;
+    virtual cpo::uno::Reference< css::container::XNameContainer > createInstance() override;
     virtual bool Create() override;
 };
 
@@ -358,7 +358,7 @@ public:
     XBitmapEntry* GetBitmap(tools::Long nIndex) const;
     Bitmap GetBitmapForPreview(tools::Long nIndex, const Size& rSize);
 
-    virtual css::uno::Reference< css::container::XNameContainer > createInstance() override;
+    virtual cpo::uno::Reference< css::container::XNameContainer > createInstance() override;
     virtual bool Create() override;
 };
 
@@ -375,7 +375,7 @@ public:
     XBitmapEntry* GetBitmap(tools::Long nIndex) const;
     Bitmap GetBitmapForPreview(tools::Long nIndex, const Size& rSize);
 
-    virtual css::uno::Reference< css::container::XNameContainer > createInstance() override;
+    virtual cpo::uno::Reference< css::container::XNameContainer > createInstance() override;
     virtual bool Create() override;
 };
 

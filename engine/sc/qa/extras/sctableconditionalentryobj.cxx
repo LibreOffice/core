@@ -23,14 +23,15 @@
 
 #include <unonames.hxx>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/XInterface.hpp>
 
 #include <comphelper/propertyvalue.hxx>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace com::sun::star;
 
 namespace sc_apitest

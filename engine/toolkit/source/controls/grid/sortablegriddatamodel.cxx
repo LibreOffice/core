@@ -46,7 +46,7 @@ using namespace css::awt::grid;
 using namespace css::i18n;
 using namespace css::lang;
 using namespace css::ucb;
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 namespace {
@@ -61,7 +61,7 @@ typedef ::comphelper::WeakComponentImplHelper    <   css::awt::grid::XSortableMu
 class SortableGridDataModel :public SortableGridDataModel_Base
 {
 public:
-    explicit SortableGridDataModel( const css::uno::Reference< cpo::uno::XComponentContext > & rxContext );
+    explicit SortableGridDataModel( const cpo::uno::Reference< cpo::uno::XComponentContext > & rxContext );
     SortableGridDataModel( SortableGridDataModel const & i_copySource );
 
     bool    isInitialized() const { return m_isInitialized; }
@@ -87,8 +87,8 @@ public:
     virtual void updateRowHeading( ::sal_Int32 RowIndex, const cpo::uno::Any& Heading ) override;
     virtual void updateCellToolTip( ::sal_Int32 ColumnIndex, ::sal_Int32 RowIndex, const cpo::uno::Any& Value ) override;
     virtual void updateRowToolTip( ::sal_Int32 RowIndex, const cpo::uno::Any& Value ) override;
-    virtual void addGridDataListener( const css::uno::Reference< css::awt::grid::XGridDataListener >& Listener ) override;
-    virtual void removeGridDataListener( const css::uno::Reference< css::awt::grid::XGridDataListener >& Listener ) override;
+    virtual void addGridDataListener( const cpo::uno::Reference< css::awt::grid::XGridDataListener >& Listener ) override;
+    virtual void removeGridDataListener( const cpo::uno::Reference< css::awt::grid::XGridDataListener >& Listener ) override;
 
     // XGridDataModel
     virtual ::sal_Int32 getRowCount() override;
@@ -102,7 +102,7 @@ public:
     virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
     // XCloneable
-    virtual css::uno::Reference< css::util::XCloneable > createClone(  ) override;
+    virtual cpo::uno::Reference< css::util::XCloneable > createClone(  ) override;
 
     // XServiceInfo
     virtual OUString getImplementationName(  ) override;
@@ -182,10 +182,10 @@ private:
     }
 
 private:
-    css::uno::Reference< cpo::uno::XComponentContext >            m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext >            m_xContext;
     bool                                                          m_isInitialized;
-    css::uno::Reference< css::awt::grid::XMutableGridDataModel >  m_delegator;
-    css::uno::Reference< css::i18n::XCollator >                   m_collator;
+    cpo::uno::Reference< css::awt::grid::XMutableGridDataModel >  m_delegator;
+    cpo::uno::Reference< css::i18n::XCollator >                   m_collator;
     ::sal_Int32                                                   m_currentSortColumn;
     bool                                                    m_sortAscending;
     ::std::vector< ::sal_Int32 >                                  m_publicToPrivateRowIndex;

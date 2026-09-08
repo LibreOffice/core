@@ -32,7 +32,8 @@
 #include <comphelper/diagnose_ex.hxx>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 namespace chart::sidebar
 {
@@ -274,7 +275,7 @@ void ChartTypePanel::doUpdateModel(const rtl::Reference<::chart::ChartModel>& xM
     m_xChartModel->addModifyListener(mxListener);
 }
 
-void ChartTypePanel::updateModel(css::uno::Reference<css::frame::XModel> xModel)
+void ChartTypePanel::updateModel(cpo::uno::Reference<css::frame::XModel> xModel)
 {
     ::chart::ChartModel* pModel = dynamic_cast<::chart::ChartModel*>(xModel.get());
     assert(!xModel || pModel);

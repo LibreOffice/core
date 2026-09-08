@@ -33,15 +33,15 @@
 
 namespace com::sun::star::lang { class XMultiServiceFactory; }
 
-css::uno::Reference<cpo::uno::XInterface>
+cpo::uno::Reference<cpo::uno::XInterface>
     ScSpreadsheetSettings_CreateInstance(
-        const css::uno::Reference< css::lang::XMultiServiceFactory>& rSMgr );
-css::uno::Reference<cpo::uno::XInterface> SAL_CALL
+        const cpo::uno::Reference< css::lang::XMultiServiceFactory>& rSMgr );
+cpo::uno::Reference<cpo::uno::XInterface> SAL_CALL
     ScRecentFunctionsObj_CreateInstance(
-        const css::uno::Reference< css::lang::XMultiServiceFactory>& rSMgr );
-css::uno::Reference<cpo::uno::XInterface> SAL_CALL
+        const cpo::uno::Reference< css::lang::XMultiServiceFactory>& rSMgr );
+cpo::uno::Reference<cpo::uno::XInterface> SAL_CALL
     ScFunctionListObj_CreateInstance(
-        const css::uno::Reference< css::lang::XMultiServiceFactory>& rSMgr );
+        const cpo::uno::Reference< css::lang::XMultiServiceFactory>& rSMgr );
 
 
 class ScSpreadsheetSettings final : public cppu::WeakImplHelper<
@@ -146,20 +146,20 @@ public:
         { setProperty(u"ReplaceCellsWarning"_ustr,p1); }
 
     // XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo >
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo() override;
     virtual void SAL_CALL   setPropertyValue( const OUString& aPropertyName,
                                     const cpo::uno::Any& aValue ) override;
     virtual cpo::uno::Any SAL_CALL getPropertyValue(
                                     const OUString& PropertyName ) override;
     virtual void SAL_CALL   addPropertyChangeListener( const OUString& aPropertyName,
-                                    const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
+                                    const cpo::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
     virtual void SAL_CALL   removePropertyChangeListener( const OUString& aPropertyName,
-                                    const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
+                                    const cpo::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
     virtual void SAL_CALL   addVetoableChangeListener( const OUString& PropertyName,
-                                    const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+                                    const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
     virtual void SAL_CALL   removeVetoableChangeListener( const OUString& PropertyName,
-                                    const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+                                    const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -210,7 +210,7 @@ public:
     virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
 
                             // XEnumerationAccess
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL
+    virtual cpo::uno::Reference< css::container::XEnumeration > SAL_CALL
                             createEnumeration() override;
 
                             // XElementAccess

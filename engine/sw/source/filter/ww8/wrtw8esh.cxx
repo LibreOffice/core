@@ -95,6 +95,7 @@
 
 using ::editeng::SvxBorderLine;
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace sw::util;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::drawing::XShape;
@@ -3018,7 +3019,7 @@ SwMSConvertControls::SwMSConvertControls( SfxObjectShell const *pDSh, SwPaM *pP 
 // in transitioning away old filter for ole/ocx controls, ReadOCXStream has been made pure virtual in
 // filter/source/msocximex.cxx, so... we need an implementation here
 bool  SwMSConvertControls::ReadOCXStream( rtl::Reference<SotStorage> const & rSrc1,
-        css::uno::Reference< css::drawing::XShape > *pShapeRef,
+        cpo::uno::Reference< css::drawing::XShape > *pShapeRef,
         bool bFloatingCtrl )
 {
     uno::Reference< form::XFormComponent > xFComp;

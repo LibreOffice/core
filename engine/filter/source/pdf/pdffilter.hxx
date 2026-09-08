@@ -31,8 +31,8 @@ class PDFFilter : public cppu::WeakImplHelper < css::document::XFilter, css::doc
 {
 private:
 
-    css::uno::Reference< cpo::uno::XComponentContext >  mxContext;
-    css::uno::Reference< css::lang::XComponent >         mxSrcDoc;
+    cpo::uno::Reference< cpo::uno::XComponentContext >  mxContext;
+    cpo::uno::Reference< css::lang::XComponent >         mxSrcDoc;
 
     bool                            implExport( const cpo::uno::Sequence< css::beans::PropertyValue >& rDescriptor );
 
@@ -43,7 +43,7 @@ protected:
     virtual void cancel( ) override;
 
     // XExporter
-    virtual void setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
+    virtual void setSourceDocument( const cpo::uno::Reference< css::lang::XComponent >& xDoc ) override;
 
     // XInitialization
     virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
@@ -55,7 +55,7 @@ protected:
 
 public:
 
-    explicit    PDFFilter( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+    explicit    PDFFilter( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
     virtual     ~PDFFilter() override;
 };
 

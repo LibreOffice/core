@@ -22,7 +22,7 @@
 #include <tools/urlobj.hxx>
 #include <osl/conditn.hxx>
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/xml/dom/XDocumentFragment.hpp>
 
@@ -48,15 +48,15 @@ class CCommandEnvironmentHelper final : public cppu::WeakImplHelper< css::ucb::X
     friend class CSubmissionGet;
     friend class CSubmission;
 
-    css::uno::Reference< css::task::XInteractionHandler >   m_aInteractionHandler;
-    css::uno::Reference< css::ucb::XProgressHandler >       m_aProgressHandler;
+    cpo::uno::Reference< css::task::XInteractionHandler >   m_aInteractionHandler;
+    cpo::uno::Reference< css::ucb::XProgressHandler >       m_aProgressHandler;
 
 public:
-    virtual css::uno::Reference< css::task::XInteractionHandler > getInteractionHandler() override
+    virtual cpo::uno::Reference< css::task::XInteractionHandler > getInteractionHandler() override
     {
         return m_aInteractionHandler;
     }
-    virtual css::uno::Reference< css::ucb::XProgressHandler > getProgressHandler() override
+    virtual cpo::uno::Reference< css::ucb::XProgressHandler > getProgressHandler() override
     {
         return m_aProgressHandler;
     }
@@ -96,12 +96,12 @@ class CSubmission
 
 protected:
     INetURLObject m_aURLObj;
-    css::uno::Reference< css::xml::dom::XDocumentFragment > m_aFragment;
-    css::uno::Reference< css::io::XInputStream >            m_aResultStream;
-    css::uno::Reference< cpo::uno::XComponentContext >      m_xContext;
+    cpo::uno::Reference< css::xml::dom::XDocumentFragment > m_aFragment;
+    cpo::uno::Reference< css::io::XInputStream >            m_aResultStream;
+    cpo::uno::Reference< cpo::uno::XComponentContext >      m_xContext;
 
-    ::std::unique_ptr< CSerialization > createSerialization(const css::uno::Reference< css::task::XInteractionHandler >& aHandler
-                                                  ,css::uno::Reference<css::ucb::XCommandEnvironment>& _rOutEnv);
+    ::std::unique_ptr< CSerialization > createSerialization(const cpo::uno::Reference< css::task::XInteractionHandler >& aHandler
+                                                  ,cpo::uno::Reference<css::ucb::XCommandEnvironment>& _rOutEnv);
 
 public:
     enum SubmissionResult {
@@ -109,7 +109,7 @@ public:
         UNKNOWN_ERROR
     };
 
-    CSubmission(std::u16string_view aURL, css::uno::Reference< css::xml::dom::XDocumentFragment > aFragment)
+    CSubmission(std::u16string_view aURL, cpo::uno::Reference< css::xml::dom::XDocumentFragment > aFragment)
         : m_aURLObj(aURL)
         , m_aFragment(std::move(aFragment))
         , m_xContext(::comphelper::getProcessComponentContext())
@@ -119,9 +119,9 @@ public:
 
     virtual ~CSubmission() {}
 
-    virtual SubmissionResult submit(const css::uno::Reference< css::task::XInteractionHandler >& ) = 0;
+    virtual SubmissionResult submit(const cpo::uno::Reference< css::task::XInteractionHandler >& ) = 0;
 
-    SubmissionResult replace(std::u16string_view, const css::uno::Reference< css::xml::dom::XDocument >&, const css::uno::Reference< css::frame::XFrame>&);
+    SubmissionResult replace(std::u16string_view, const cpo::uno::Reference< css::xml::dom::XDocument >&, const cpo::uno::Reference< css::frame::XFrame>&);
 
 };
 

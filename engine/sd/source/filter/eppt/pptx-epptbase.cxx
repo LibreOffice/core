@@ -71,8 +71,8 @@ using ::com::sun::star::task::XStatusIndicator;
 using ::com::sun::star::text::XSimpleText;
 using ::cpo::uno::Any;
 using ::cpo::uno::Exception;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::UNO_QUERY;
+using ::cpo::uno::Reference;
+using ::cpo::uno::UNO_QUERY;
 
 PHLayout const pPHLayout[] =
 {
@@ -419,7 +419,7 @@ bool PPTWriterBase::CreateSlideMaster( sal_uInt32 nPageNum )
         return false;
     SetCurrentStyleSheet( nPageNum );
 
-    css::uno::Reference< css::beans::XPropertySet > aXBackgroundPropSet;
+    cpo::uno::Reference< css::beans::XPropertySet > aXBackgroundPropSet;
     if (ImplGetPropertyValue(mXPagePropSet, u"Background"_ustr))                // load background shape
         mAny >>= aXBackgroundPropSet;
 
@@ -428,7 +428,7 @@ bool PPTWriterBase::CreateSlideMaster( sal_uInt32 nPageNum )
     return true;
 };
 
-sal_Int32 PPTWriterBase::GetLayoutOffset( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet )
+sal_Int32 PPTWriterBase::GetLayoutOffset( const cpo::uno::Reference< css::beans::XPropertySet >& rXPropSet )
 {
     cpo::uno::Any aAny;
     sal_Int32 nLayout = 20;
@@ -440,7 +440,7 @@ sal_Int32 PPTWriterBase::GetLayoutOffset( const css::uno::Reference< css::beans:
     return nLayout;
 }
 
-sal_Int32 PPTWriterBase::GetLayoutOffsetFixed( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet )
+sal_Int32 PPTWriterBase::GetLayoutOffsetFixed( const cpo::uno::Reference< css::beans::XPropertySet >& rXPropSet )
 {
     sal_Int32 nLayout = GetLayoutOffset( rXPropSet );
 
@@ -454,7 +454,7 @@ sal_Int32 PPTWriterBase::GetLayoutOffsetFixed( const css::uno::Reference< css::b
     return nLayout;
 }
 
-PHLayout const & PPTWriterBase::GetLayout(  const css::uno::Reference< css::beans::XPropertySet >& rXPropSet )
+PHLayout const & PPTWriterBase::GetLayout(  const cpo::uno::Reference< css::beans::XPropertySet >& rXPropSet )
 {
     return pPHLayout[ GetLayoutOffsetFixed( rXPropSet ) ];
 }
@@ -472,14 +472,14 @@ PHLayout const & PPTWriterBase::GetLayout( sal_Int32 nOffset )
 sal_uInt32 PPTWriterBase::GetMasterIndex( PageType ePageType )
 {
     sal_uInt32 nRetValue = 0;
-    css::uno::Reference< css::drawing::XMasterPageTarget >aXMasterPageTarget( mXDrawPage, css::uno::UNO_QUERY );
+    cpo::uno::Reference< css::drawing::XMasterPageTarget >aXMasterPageTarget( mXDrawPage, cpo::uno::UNO_QUERY );
 
     if ( aXMasterPageTarget.is() )
     {
-        css::uno::Reference< css::drawing::XDrawPage >aXDrawPage = aXMasterPageTarget->getMasterPage();
+        cpo::uno::Reference< css::drawing::XDrawPage >aXDrawPage = aXMasterPageTarget->getMasterPage();
         if ( aXDrawPage.is() )
         {
-            css::uno::Reference< css::beans::XPropertySet > aXPropertySet( aXDrawPage, css::uno::UNO_QUERY );
+            cpo::uno::Reference< css::beans::XPropertySet > aXPropertySet( aXDrawPage, cpo::uno::UNO_QUERY );
             if ( aXPropertySet.is() )
             {
                 if ( ImplGetPropertyValue( aXPropertySet, u"Number"_ustr ) )
@@ -571,7 +571,7 @@ bool PPTWriterBase::GetStyleSheets()
                         if ( aXNameAccess->hasByName( aFamily ) )
                         {
                             Any aAny( aXNameAccess->getByName( aFamily ) );
-                            xNameAccess.set(aAny, css::uno::UNO_QUERY);
+                            xNameAccess.set(aAny, cpo::uno::UNO_QUERY);
                             if( xNameAccess.is() )
                             {
                                 Reference< XNameAccess > aXFamily;
@@ -581,7 +581,7 @@ bool PPTWriterBase::GetStyleSheets()
                                     {
                                         aAny = aXFamily->getByName( aStyle );
                                         Reference< XStyle > xStyle(
-                                            aAny, css::uno::UNO_QUERY);
+                                            aAny, cpo::uno::UNO_QUERY);
                                         if( xStyle.is() )
                                         {
                                             Reference< XStyle > aXStyle;
@@ -638,7 +638,7 @@ bool PPTWriterBase::CreateMainNotes()
         return false;
     SetCurrentStyleSheet( 0 );
 
-    css::uno::Reference< css::drawing::XMasterPageTarget > aXMasterPageTarget( mXDrawPage, css::uno::UNO_QUERY );
+    cpo::uno::Reference< css::drawing::XMasterPageTarget > aXMasterPageTarget( mXDrawPage, cpo::uno::UNO_QUERY );
 
     if ( !aXMasterPageTarget.is() )
         return false;
@@ -647,7 +647,7 @@ bool PPTWriterBase::CreateMainNotes()
     if ( !mXDrawPage.is() )
         return false;
 
-    mXPropSet.set( mXDrawPage, css::uno::UNO_QUERY );
+    mXPropSet.set( mXDrawPage, cpo::uno::UNO_QUERY );
     if ( !mXPropSet.is() )
         return false;
 

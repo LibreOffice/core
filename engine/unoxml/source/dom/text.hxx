@@ -25,7 +25,7 @@
 
 #include <cppuhelper/implbase.hxx>
 
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/XText.hpp>
 
@@ -49,13 +49,13 @@ namespace DOM
 
     public:
 
-        virtual void saxify(const css::uno::Reference< css::xml::sax::XDocumentHandler >& i_xHandler) override;
+        virtual void saxify(const cpo::uno::Reference< css::xml::sax::XDocumentHandler >& i_xHandler) override;
 
         virtual void fastSaxify( Context& io_rContext ) override;
 
          // Breaks this node into two nodes at the specified offset, keeping
          // both in the tree as siblings.
-         virtual css::uno::Reference< css::xml::dom::XText > SAL_CALL splitText(sal_Int32 offset) override;
+         virtual cpo::uno::Reference< css::xml::dom::XText > SAL_CALL splitText(sal_Int32 offset) override;
 
 
          // --- delegations for XCharacterData
@@ -98,27 +98,27 @@ namespace DOM
 
         // --- resolve uno inheritance problems...
         // --- delegation for XNode base.
-        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL appendChild(const css::uno::Reference< css::xml::dom::XNode >& newChild) override
+        virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL appendChild(const cpo::uno::Reference< css::xml::dom::XNode >& newChild) override
         {
             return CCharacterData::appendChild(newChild);
         }
-        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL cloneNode(bool deep) override
+        virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL cloneNode(bool deep) override
         {
             return CCharacterData::cloneNode(deep);
         }
-        virtual css::uno::Reference< css::xml::dom::XNamedNodeMap > SAL_CALL getAttributes() override
+        virtual cpo::uno::Reference< css::xml::dom::XNamedNodeMap > SAL_CALL getAttributes() override
         {
             return CCharacterData::getAttributes();
         }
-        virtual css::uno::Reference< css::xml::dom::XNodeList > SAL_CALL getChildNodes() override
+        virtual cpo::uno::Reference< css::xml::dom::XNodeList > SAL_CALL getChildNodes() override
         {
             return CCharacterData::getChildNodes();
         }
-        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL getFirstChild() override
+        virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL getFirstChild() override
         {
             return CCharacterData::getFirstChild();
         }
-        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL getLastChild() override
+        virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL getLastChild() override
         {
             return CCharacterData::getLastChild();
         }
@@ -130,7 +130,7 @@ namespace DOM
         {
             return CCharacterData::getNamespaceURI();
         }
-        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL getNextSibling() override
+        virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL getNextSibling() override
         {
             return CCharacterData::getNextSibling();
         }
@@ -142,11 +142,11 @@ namespace DOM
         {
             return CCharacterData::getNodeValue();
         }
-        virtual css::uno::Reference< css::xml::dom::XDocument > SAL_CALL getOwnerDocument() override
+        virtual cpo::uno::Reference< css::xml::dom::XDocument > SAL_CALL getOwnerDocument() override
         {
             return CCharacterData::getOwnerDocument();
         }
-        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL getParentNode() override
+        virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL getParentNode() override
         {
             return CCharacterData::getParentNode();
         }
@@ -154,7 +154,7 @@ namespace DOM
         {
             return CCharacterData::getPrefix();
         }
-        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL getPreviousSibling() override
+        virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL getPreviousSibling() override
         {
             return CCharacterData::getPreviousSibling();
         }
@@ -166,8 +166,8 @@ namespace DOM
         {
             return CCharacterData::hasChildNodes();
         }
-        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL insertBefore(
-                const css::uno::Reference< css::xml::dom::XNode >& newChild, const css::uno::Reference< css::xml::dom::XNode >& refChild) override
+        virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL insertBefore(
+                const cpo::uno::Reference< css::xml::dom::XNode >& newChild, const cpo::uno::Reference< css::xml::dom::XNode >& refChild) override
         {
             return CCharacterData::insertBefore(newChild, refChild);
         }
@@ -179,12 +179,12 @@ namespace DOM
         {
             CCharacterData::normalize();
         }
-        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL removeChild(const css::uno::Reference< css::xml::dom::XNode >& oldChild) override
+        virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL removeChild(const cpo::uno::Reference< css::xml::dom::XNode >& oldChild) override
         {
             return CCharacterData::removeChild(oldChild);
         }
-        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL replaceChild(
-                const css::uno::Reference< css::xml::dom::XNode >& newChild, const css::uno::Reference< css::xml::dom::XNode >& oldChild) override
+        virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL replaceChild(
+                const cpo::uno::Reference< css::xml::dom::XNode >& newChild, const cpo::uno::Reference< css::xml::dom::XNode >& oldChild) override
         {
             return CCharacterData::replaceChild(newChild, oldChild);
         }

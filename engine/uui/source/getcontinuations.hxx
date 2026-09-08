@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 
 namespace com::sun::star {
@@ -30,12 +30,12 @@ namespace com::sun::star {
 
 template< class t1 >
 bool setContinuation(
-    css::uno::Reference< css::task::XInteractionContinuation > const & rContinuation,
-    css::uno::Reference< t1 > * pContinuation)
+    cpo::uno::Reference< css::task::XInteractionContinuation > const & rContinuation,
+    cpo::uno::Reference< t1 > * pContinuation)
 {
     if (pContinuation && !pContinuation->is())
     {
-        pContinuation->set(rContinuation, css::uno::UNO_QUERY);
+        pContinuation->set(rContinuation, cpo::uno::UNO_QUERY);
         if (pContinuation->is())
             return true;
     }
@@ -45,9 +45,9 @@ bool setContinuation(
 template< class t1, class t2 >
 void getContinuations(
     cpo::uno::Sequence<
-        css::uno::Reference< css::task::XInteractionContinuation > > const & rContinuations,
-    css::uno::Reference< t1 > * pContinuation1,
-    css::uno::Reference< t2 > * pContinuation2)
+        cpo::uno::Reference< css::task::XInteractionContinuation > > const & rContinuations,
+    cpo::uno::Reference< t1 > * pContinuation1,
+    cpo::uno::Reference< t2 > * pContinuation2)
 {
     for (const auto& rContinuation : rContinuations)
     {
@@ -61,10 +61,10 @@ void getContinuations(
 template< class t1, class t2, class t3 >
 void getContinuations(
     cpo::uno::Sequence<
-        css::uno::Reference< css::task::XInteractionContinuation > > const & rContinuations,
-    css::uno::Reference< t1 > * pContinuation1,
-    css::uno::Reference< t2 > * pContinuation2,
-    css::uno::Reference< t3 > * pContinuation3)
+        cpo::uno::Reference< css::task::XInteractionContinuation > > const & rContinuations,
+    cpo::uno::Reference< t1 > * pContinuation1,
+    cpo::uno::Reference< t2 > * pContinuation2,
+    cpo::uno::Reference< t3 > * pContinuation3)
 {
     for (const auto& rContinuation : rContinuations)
     {
@@ -80,11 +80,11 @@ void getContinuations(
 template< class t1, class t2, class t3, class t4 >
 void getContinuations(
     cpo::uno::Sequence<
-        css::uno::Reference< css::task::XInteractionContinuation > > const &  rContinuations,
-    css::uno::Reference< t1 > * pContinuation1,
-    css::uno::Reference< t2 > * pContinuation2,
-    css::uno::Reference< t3 > * pContinuation3,
-    css::uno::Reference< t4 > * pContinuation4)
+        cpo::uno::Reference< css::task::XInteractionContinuation > > const &  rContinuations,
+    cpo::uno::Reference< t1 > * pContinuation1,
+    cpo::uno::Reference< t2 > * pContinuation2,
+    cpo::uno::Reference< t3 > * pContinuation3,
+    cpo::uno::Reference< t4 > * pContinuation4)
 {
     for (const auto& rContinuation : rContinuations)
     {

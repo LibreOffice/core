@@ -39,6 +39,7 @@
 
 using namespace ::com::sun::star;
 using namespace comphelper;
+using namespace ::cpo;
 
 
 MimeConfigurationHelper::MimeConfigurationHelper( uno::Reference< cpo::uno::XComponentContext > xContext )

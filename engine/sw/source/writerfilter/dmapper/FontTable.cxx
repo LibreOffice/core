@@ -28,6 +28,7 @@
 #include <unotxdoc.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 namespace writerfilter::dmapper
 {
@@ -250,7 +251,7 @@ bool FontTable::IsReadOnly() const
     return m_bReadOnly;
 }
 
-void FontTable::addEmbeddedFont(const css::uno::Reference<css::io::XInputStream>& stream,
+void FontTable::addEmbeddedFont(const cpo::uno::Reference<css::io::XInputStream>& stream,
                                 const OUString& fontName, std::u16string_view extra,
                                 std::vector<unsigned char> const & key,
                                 bool bSubsetted)

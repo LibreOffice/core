@@ -37,7 +37,7 @@ namespace connectivity::calc
     class OCalcConnection : public file::OConnection
     {
         // the spreadsheet document:
-        css::uno::Reference< css::sheet::XSpreadsheetDocument > m_xDoc;
+        cpo::uno::Reference< css::sheet::XSpreadsheetDocument > m_xDoc;
         OUString m_sPassword;
         OUString m_aFileName;
         oslInterlockedCount m_nDocCount;
@@ -49,7 +49,7 @@ namespace connectivity::calc
             std::unique_ptr<utl::CloseVeto> m_pCloseListener;
             /// but also listen to XDesktop and if app is terminating anyway, dispose m_xDoc while
             /// its still possible to do so properly
-            css::uno::Reference<css::frame::XDesktop2> m_xDesktop;
+            cpo::uno::Reference<css::frame::XDesktop2> m_xDesktop;
             osl::Mutex m_aMutex;
         public:
             CloseVetoButTerminateListener()
@@ -57,8 +57,8 @@ namespace connectivity::calc
             {
             }
 
-            void start(const css::uno::Reference<cpo::uno::XInterface>& rCloseable,
-                       const css::uno::Reference<css::frame::XDesktop2>& rDesktop)
+            void start(const cpo::uno::Reference<cpo::uno::XInterface>& rCloseable,
+                       const cpo::uno::Reference<css::frame::XDesktop2>& rDesktop)
             {
                 m_xDesktop = rDesktop;
                 m_xDesktop->addTerminateListener(this);
@@ -114,20 +114,20 @@ namespace connectivity::calc
         virtual void disposing() override;
 
         // XConnection
-        virtual css::uno::Reference< css::sdbc::XDatabaseMetaData > getMetaData(  ) override;
-        virtual css::uno::Reference< css::sdbcx::XTablesSupplier > createCatalog() override;
-        virtual css::uno::Reference< css::sdbc::XStatement > createStatement(  ) override;
-        virtual css::uno::Reference< css::sdbc::XPreparedStatement > prepareStatement( const OUString& sql ) override;
-        virtual css::uno::Reference< css::sdbc::XPreparedStatement > prepareCall( const OUString& sql ) override;
+        virtual cpo::uno::Reference< css::sdbc::XDatabaseMetaData > getMetaData(  ) override;
+        virtual cpo::uno::Reference< css::sdbcx::XTablesSupplier > createCatalog() override;
+        virtual cpo::uno::Reference< css::sdbc::XStatement > createStatement(  ) override;
+        virtual cpo::uno::Reference< css::sdbc::XPreparedStatement > prepareStatement( const OUString& sql ) override;
+        virtual cpo::uno::Reference< css::sdbc::XPreparedStatement > prepareCall( const OUString& sql ) override;
 
         // no interface methods
-        css::uno::Reference< css::sheet::XSpreadsheetDocument> const & acquireDoc();
+        cpo::uno::Reference< css::sheet::XSpreadsheetDocument> const & acquireDoc();
         void releaseDoc();
 
         class ODocHolder
         {
             OCalcConnection* m_pConnection;
-            css::uno::Reference< css::sheet::XSpreadsheetDocument> m_xDoc;
+            cpo::uno::Reference< css::sheet::XSpreadsheetDocument> m_xDoc;
         public:
             ODocHolder(OCalcConnection* _pConnection) : m_pConnection(_pConnection)
             {
@@ -138,7 +138,7 @@ namespace connectivity::calc
                 m_xDoc.clear();
                 m_pConnection->releaseDoc();
             }
-            const css::uno::Reference< css::sheet::XSpreadsheetDocument>& getDoc() const { return m_xDoc; }
+            const cpo::uno::Reference< css::sheet::XSpreadsheetDocument>& getDoc() const { return m_xDoc; }
         };
     };
 

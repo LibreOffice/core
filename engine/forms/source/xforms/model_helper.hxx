@@ -28,7 +28,7 @@
 #include "submission.hxx"
 #include "unohelper.hxx"
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -47,7 +47,7 @@ namespace xforms
 namespace xforms
 {
 
-class BindingCollection : public NamedCollection<css::uno::Reference<css::beans::XPropertySet> >
+class BindingCollection : public NamedCollection<cpo::uno::Reference<css::beans::XPropertySet> >
 {
     Model* mpModel;
 
@@ -75,7 +75,7 @@ protected:
     }
 };
 
-class SubmissionCollection : public NamedCollection<css::uno::Reference<css::beans::XPropertySet> >
+class SubmissionCollection : public NamedCollection<cpo::uno::Reference<css::beans::XPropertySet> >
 {
     Model* mpModel;
 
@@ -129,7 +129,7 @@ sal_Int32 lcl_findInstance( const InstanceCollection*,
 void getInstanceData(
     const cpo::uno::Sequence<css::beans::PropertyValue>&,
     OUString* pID,
-    css::uno::Reference<css::xml::dom::XDocument>*,
+    cpo::uno::Reference<css::xml::dom::XDocument>*,
     OUString* pURL,
     bool* pURLOnce );
 
@@ -137,7 +137,7 @@ void getInstanceData(
 void setInstanceData(
     cpo::uno::Sequence<css::beans::PropertyValue>&,
     const OUString* pID,
-    const css::uno::Reference<css::xml::dom::XDocument>*,
+    const cpo::uno::Reference<css::xml::dom::XDocument>*,
     const OUString* pURL,
     const bool* pURLOnce );
 

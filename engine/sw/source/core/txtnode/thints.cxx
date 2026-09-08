@@ -1290,7 +1290,7 @@ void SwTextNode::DestroyAttr( SwTextAttr* pAttr )
         {
             if (SwDocShell* pDocSh = rDoc.GetDocShell())
             {
-                const css::uno::Reference<css::rdf::XResource> xSubject = pMeta->MakeUnoObject();
+                const cpo::uno::Reference<css::rdf::XResource> xSubject = pMeta->MakeUnoObject();
                 rtl::Reference<SwXTextDocument> xModel = pDocSh->GetBaseModel();
                 SwRDFHelper::clearStatements(xModel, u"urn:bails"_ustr, xSubject);
             }

@@ -63,9 +63,9 @@
 #include "sdrtableobjimpl.hxx"
 
 using ::cpo::uno::Any;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
+using ::cpo::uno::Reference;
+using ::cpo::uno::UNO_QUERY;
+using ::cpo::uno::UNO_QUERY_THROW;
 using ::cpo::uno::Exception;
 using ::com::sun::star::container::XIndexAccess;
 using ::com::sun::star::style::XStyle;
@@ -267,7 +267,7 @@ void SdrTableObjImpl::CropTableModelToSelection(const CellPos& rStart, const Cel
     }
 
     // copy row heights
-    Reference< XTableRows > xNewRows(mxTable->getRows(), css::uno::UNO_SET_THROW );
+    Reference< XTableRows > xNewRows(mxTable->getRows(), cpo::uno::UNO_SET_THROW );
     for( sal_Int32 nRow = 0; nRow < nRows; ++nRow )
     {
         Reference< XPropertySet > xNewSet( xNewRows->getByIndex( nRow ), UNO_QUERY_THROW );
@@ -275,7 +275,7 @@ void SdrTableObjImpl::CropTableModelToSelection(const CellPos& rStart, const Cel
     }
 
     // copy column widths
-    Reference< XTableColumns > xNewColumns( mxTable->getColumns(), css::uno::UNO_SET_THROW );
+    Reference< XTableColumns > xNewColumns( mxTable->getColumns(), cpo::uno::UNO_SET_THROW );
     for( sal_Int32 nCol = 0; nCol < nColumns; ++nCol )
     {
         Reference< XPropertySet > xNewSet( xNewColumns->getByIndex( nCol ), UNO_QUERY_THROW );
@@ -384,7 +384,7 @@ SdrTableObjImpl& SdrTableObjImpl::operator=( const SdrTableObjImpl& rSource )
         // search in target SdrModel for that TableStyle
         const OUString sStyleName( Reference< XNamed >( rSource.mxTableStyle, UNO_QUERY_THROW )->getName() );
         Reference< XStyleFamiliesSupplier > xSFS(rTargetSdrModel.getUnoModel(), UNO_QUERY_THROW );
-        Reference< XNameAccess > xFamilyNameAccess( xSFS->getStyleFamilies(), css::uno::UNO_SET_THROW );
+        Reference< XNameAccess > xFamilyNameAccess( xSFS->getStyleFamilies(), cpo::uno::UNO_SET_THROW );
         Reference< XNameAccess > xTableFamilyAccess( xFamilyNameAccess->getByName( u"table"_ustr ), UNO_QUERY_THROW );
 
         if( xTableFamilyAccess->hasByName( sStyleName ) )

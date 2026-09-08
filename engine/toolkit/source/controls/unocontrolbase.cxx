@@ -40,10 +40,10 @@ bool UnoControlBase::ImplHasProperty( sal_uInt16 nPropId )
 
 bool UnoControlBase::ImplHasProperty( const OUString& aPropertyName )
 {
-    css::uno::Reference< css::beans::XPropertySet >  xPSet( mxModel, css::uno::UNO_QUERY );
+    cpo::uno::Reference< css::beans::XPropertySet >  xPSet( mxModel, cpo::uno::UNO_QUERY );
     if ( !xPSet.is() )
         return false;
-    css::uno::Reference< css::beans::XPropertySetInfo >  xInfo = xPSet->getPropertySetInfo();
+    cpo::uno::Reference< css::beans::XPropertySetInfo >  xInfo = xPSet->getPropertySetInfo();
     if ( !xInfo.is() )
         return false;
 
@@ -52,7 +52,7 @@ bool UnoControlBase::ImplHasProperty( const OUString& aPropertyName )
 
 void UnoControlBase::ImplSetPropertyValues( const cpo::uno::Sequence< OUString >& aPropertyNames, const cpo::uno::Sequence< cpo::uno::Any >& aValues, bool bUpdateThis )
 {
-    css::uno::Reference< css::beans::XMultiPropertySet > xMPS( mxModel, css::uno::UNO_QUERY );
+    cpo::uno::Reference< css::beans::XMultiPropertySet > xMPS( mxModel, cpo::uno::UNO_QUERY );
     if ( !mxModel.is() )
         return;
 
@@ -82,7 +82,7 @@ void UnoControlBase::ImplSetPropertyValue( const OUString& aPropertyName, const 
     if ( !mxModel.is() )
         return;
 
-    css::uno::Reference< css::beans::XPropertySet >  xPSet( mxModel, css::uno::UNO_QUERY );
+    cpo::uno::Reference< css::beans::XPropertySet >  xPSet( mxModel, cpo::uno::UNO_QUERY );
     if ( !bUpdateThis )
         ImplLockPropertyChangeNotification( aPropertyName, true );
 
@@ -102,7 +102,7 @@ void UnoControlBase::ImplSetPropertyValue( const OUString& aPropertyName, const 
 
 cpo::uno::Any UnoControlBase::ImplGetPropertyValue( const OUString& aPropertyName ) const
 {
-    css::uno::Reference< css::beans::XPropertySet >  xPSet( mxModel, css::uno::UNO_QUERY );
+    cpo::uno::Reference< css::beans::XPropertySet >  xPSet( mxModel, cpo::uno::UNO_QUERY );
     if ( xPSet.is() )
         return xPSet->getPropertyValue( aPropertyName );
     else
@@ -169,11 +169,11 @@ util::Time UnoControlBase::ImplGetPropertyValue_Time( sal_uInt16 nProp )
 css::awt::Size UnoControlBase::Impl_getMinimumSize()
 {
     css::awt::Size aSz;
-    css::uno::Reference< css::awt::XWindowPeer >  xP = ImplGetCompatiblePeer();
+    cpo::uno::Reference< css::awt::XWindowPeer >  xP = ImplGetCompatiblePeer();
     DBG_ASSERT( xP.is(), "Layout: No Peer!" );
     if ( xP.is() )
     {
-        css::uno::Reference< css::awt::XLayoutConstrains >  xL( xP, css::uno::UNO_QUERY );
+        cpo::uno::Reference< css::awt::XLayoutConstrains >  xL( xP, cpo::uno::UNO_QUERY );
         if ( xL.is() )
             aSz = xL->getMinimumSize();
 
@@ -186,11 +186,11 @@ css::awt::Size UnoControlBase::Impl_getMinimumSize()
 css::awt::Size UnoControlBase::Impl_getPreferredSize()
 {
     css::awt::Size aSz;
-    css::uno::Reference< css::awt::XWindowPeer >  xP = ImplGetCompatiblePeer();
+    cpo::uno::Reference< css::awt::XWindowPeer >  xP = ImplGetCompatiblePeer();
     DBG_ASSERT( xP.is(), "Layout: No Peer!" );
     if ( xP.is() )
     {
-        css::uno::Reference< css::awt::XLayoutConstrains >  xL( xP, css::uno::UNO_QUERY );
+        cpo::uno::Reference< css::awt::XLayoutConstrains >  xL( xP, cpo::uno::UNO_QUERY );
         if ( xL.is() )
             aSz = xL->getPreferredSize();
 
@@ -203,11 +203,11 @@ css::awt::Size UnoControlBase::Impl_getPreferredSize()
 css::awt::Size UnoControlBase::Impl_calcAdjustedSize( const css::awt::Size& rNewSize )
 {
     css::awt::Size aSz;
-    css::uno::Reference< css::awt::XWindowPeer >  xP = ImplGetCompatiblePeer();
+    cpo::uno::Reference< css::awt::XWindowPeer >  xP = ImplGetCompatiblePeer();
     DBG_ASSERT( xP.is(), "Layout: No Peer!" );
     if ( xP.is() )
     {
-        css::uno::Reference< css::awt::XLayoutConstrains > xL( xP, css::uno::UNO_QUERY );
+        cpo::uno::Reference< css::awt::XLayoutConstrains > xL( xP, cpo::uno::UNO_QUERY );
         if ( xL.is() )
             aSz = xL->calcAdjustedSize( rNewSize );
 
@@ -220,11 +220,11 @@ css::awt::Size UnoControlBase::Impl_calcAdjustedSize( const css::awt::Size& rNew
 css::awt::Size UnoControlBase::Impl_getMinimumSize( sal_Int16 nCols, sal_Int16 nLines )
 {
     css::awt::Size aSz;
-    css::uno::Reference< css::awt::XWindowPeer >  xP = ImplGetCompatiblePeer();
+    cpo::uno::Reference< css::awt::XWindowPeer >  xP = ImplGetCompatiblePeer();
     DBG_ASSERT( xP.is(), "Layout: No Peer!" );
     if ( xP.is() )
     {
-        css::uno::Reference< css::awt::XTextLayoutConstrains >  xL( xP, css::uno::UNO_QUERY );
+        cpo::uno::Reference< css::awt::XTextLayoutConstrains >  xL( xP, cpo::uno::UNO_QUERY );
         if ( xL.is() )
             aSz = xL->getMinimumSize( nCols, nLines );
 
@@ -236,11 +236,11 @@ css::awt::Size UnoControlBase::Impl_getMinimumSize( sal_Int16 nCols, sal_Int16 n
 
 void UnoControlBase::Impl_getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines )
 {
-    css::uno::Reference< css::awt::XWindowPeer >  xP = ImplGetCompatiblePeer();
+    cpo::uno::Reference< css::awt::XWindowPeer >  xP = ImplGetCompatiblePeer();
     DBG_ASSERT( xP.is(), "Layout: No Peer!" );
     if ( xP.is() )
     {
-        css::uno::Reference< css::awt::XTextLayoutConstrains >  xL( xP, css::uno::UNO_QUERY );
+        cpo::uno::Reference< css::awt::XTextLayoutConstrains >  xL( xP, cpo::uno::UNO_QUERY );
         if ( xL.is() )
             xL->getColumnsAndLines( nCols, nLines );
 

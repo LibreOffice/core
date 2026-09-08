@@ -41,7 +41,7 @@ public:
                             const OUString& rFragmentPath,
                             Drawing& rDrawing );
 
-    virtual css::uno::Reference< css::io::XInputStream >
+    virtual cpo::uno::Reference< css::io::XInputStream >
                         openFragmentStream() const override;
 
     virtual ::oox::core::ContextHandlerRef

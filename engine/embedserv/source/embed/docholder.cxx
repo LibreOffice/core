@@ -68,6 +68,7 @@
 #include <rtl/ref.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 // add mutex locking ???
 
@@ -1181,7 +1182,7 @@ HRESULT DocumentHolder::SetObjectRects(LPCRECT aRect, LPCRECT aClip)
 }
 
 
-css::uno::Reference< css::awt::XWindow> DocumentHolder::getContainerWindow()
+cpo::uno::Reference< css::awt::XWindow> DocumentHolder::getContainerWindow()
 {
     if(m_xContainerWindow.is())
         return m_xContainerWindow;

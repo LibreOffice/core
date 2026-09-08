@@ -28,16 +28,16 @@ typedef cppu::ImplInheritanceHelper<VbaPageSetupBase, ov::excel::XPageSetup> ScV
 
 class ScVbaPageSetup : public ScVbaPageSetup_BASE
 {
-    css::uno::Reference<css::frame::XModel> mxModel;
-    css::uno::Reference<css::sheet::XSpreadsheet> mxSheet;
+    cpo::uno::Reference<css::frame::XModel> mxModel;
+    cpo::uno::Reference<css::sheet::XSpreadsheet> mxSheet;
     bool mbIsLandscape;
 
 public:
     /// @throws cpo::uno::RuntimeException
-    ScVbaPageSetup(const css::uno::Reference<ov::XHelperInterface>& xParent,
-                   const css::uno::Reference<cpo::uno::XComponentContext>& xContext,
-                   css::uno::Reference<css::sheet::XSpreadsheet> xSheet,
-                   const css::uno::Reference<css::frame::XModel>& xModel);
+    ScVbaPageSetup(const cpo::uno::Reference<ov::XHelperInterface>& xParent,
+                   const cpo::uno::Reference<cpo::uno::XComponentContext>& xContext,
+                   cpo::uno::Reference<css::sheet::XSpreadsheet> xSheet,
+                   const cpo::uno::Reference<css::frame::XModel>& xModel);
 
     // Attribute
     virtual OUString SAL_CALL getPrintArea() override;

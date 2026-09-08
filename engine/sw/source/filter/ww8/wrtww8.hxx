@@ -490,7 +490,7 @@ public:
     ww8::Frames m_aFrames;             // The floating frames in this document
     /// Progress of the running export, reported as a node index between zero and the node count
     /// of the document.
-    css::uno::Reference<css::task::XStatusIndicator> m_xStatusIndicator;
+    cpo::uno::Reference<css::task::XStatusIndicator> m_xStatusIndicator;
     const SwPageDesc *m_pCurrentPageDesc;
     const SwPageDesc* m_pPreviousSectionPageDesc;
     bool m_bFirstTOCNodeWithSection;
@@ -1066,7 +1066,7 @@ private:
 
     void RestoreMacroCmds();
 
-    void DoComboBox(css::uno::Reference<css::beans::XPropertySet> const & xPropSet);
+    void DoComboBox(cpo::uno::Reference<css::beans::XPropertySet> const & xPropSet);
 
 public:
 

@@ -62,11 +62,11 @@ namespace dbaccess
     {
         void fillPrivileges() const;
         rtl::Reference< OContainerMediator > m_xColumnMediator;
-        css::uno::Reference< css::sdbcx::XColumnsSupplier >       m_xTable;
-        css::uno::Reference< css::container::XNameAccess >        m_xColumnDefinitions;
-        css::uno::Reference< css::sdbc::XConnection >             m_xConnection;
-        css::uno::Reference< css::sdbc::XDatabaseMetaData >       m_xMetaData;
-        css::uno::Reference< css::util::XNumberFormatsSupplier >  m_xNumberFormats;
+        cpo::uno::Reference< css::sdbcx::XColumnsSupplier >       m_xTable;
+        cpo::uno::Reference< css::container::XNameAccess >        m_xColumnDefinitions;
+        cpo::uno::Reference< css::sdbc::XConnection >             m_xConnection;
+        cpo::uno::Reference< css::sdbc::XDatabaseMetaData >       m_xMetaData;
+        cpo::uno::Reference< css::util::XNumberFormatsSupplier >  m_xNumberFormats;
 
         // <properties>
         mutable sal_Int32                                         m_nPrivileges;
@@ -77,8 +77,8 @@ namespace dbaccess
     protected:
         // IColumnFactory
         virtual rtl::Reference<OColumn> createColumn(const OUString& _rName) const override;
-        virtual css::uno::Reference< css::beans::XPropertySet > createColumnDescriptor() override;
-        virtual void columnAppended( const css::uno::Reference< css::beans::XPropertySet >& _rxSourceDescriptor ) override;
+        virtual cpo::uno::Reference< css::beans::XPropertySet > createColumnDescriptor() override;
+        virtual void columnAppended( const cpo::uno::Reference< css::beans::XPropertySet >& _rxSourceDescriptor ) override;
         virtual void columnDropped(const OUString& _sName) override;
 
         virtual void refreshColumns() override;
@@ -109,10 +109,10 @@ namespace dbaccess
             @throws css::sdbc::SQLException
         */
         ODBTableDecorator(
-            const css::uno::Reference< css::sdbc::XConnection >& _rxConn,
-            const css::uno::Reference< css::sdbcx::XColumnsSupplier >& _rxTable,
-            const css::uno::Reference< css::util::XNumberFormatsSupplier >& _rxNumberFormats,
-            const css::uno::Reference< css::container::XNameAccess >& _rxColumnDefinitions
+            const cpo::uno::Reference< css::sdbc::XConnection >& _rxConn,
+            const cpo::uno::Reference< css::sdbcx::XColumnsSupplier >& _rxTable,
+            const cpo::uno::Reference< css::util::XNumberFormatsSupplier >& _rxNumberFormats,
+            const cpo::uno::Reference< css::container::XNameAccess >& _rxColumnDefinitions
         );
 
         // ODescriptor
@@ -132,13 +132,13 @@ namespace dbaccess
     // css::lang::XServiceInfo
         DECLARE_SERVICE_INFO();
         // XPropertySet
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+        virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
     // css::sdbcx::XRename,
         virtual void rename( const OUString& _rNewName ) override;
 
     // css::sdbcx::XAlterTable,
-        virtual void alterColumnByName( const OUString& _rName, const css::uno::Reference< css::beans::XPropertySet >& _rxDescriptor ) override;
-        virtual void alterColumnByIndex( sal_Int32 _nIndex, const css::uno::Reference< css::beans::XPropertySet >& _rxDescriptor ) override;
+        virtual void alterColumnByName( const OUString& _rName, const cpo::uno::Reference< css::beans::XPropertySet >& _rxDescriptor ) override;
+        virtual void alterColumnByIndex( sal_Int32 _nIndex, const cpo::uno::Reference< css::beans::XPropertySet >& _rxDescriptor ) override;
 
         // XNamed
         virtual OUString getName() override;
@@ -148,13 +148,13 @@ namespace dbaccess
         static const cpo::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
         // XColumnsSupplier
-        virtual css::uno::Reference< css::container::XNameAccess > getColumns(  ) override;
+        virtual cpo::uno::Reference< css::container::XNameAccess > getColumns(  ) override;
         // XKeysSupplier
-        virtual css::uno::Reference< css::container::XIndexAccess > getKeys(  ) override;
+        virtual cpo::uno::Reference< css::container::XIndexAccess > getKeys(  ) override;
         // XIndexesSupplier
-        virtual css::uno::Reference< css::container::XNameAccess > getIndexes(  ) override;
+        virtual cpo::uno::Reference< css::container::XNameAccess > getIndexes(  ) override;
         // XDataDescriptorFactory
-        virtual css::uno::Reference< css::beans::XPropertySet > createDataDescriptor(  ) override;
+        virtual cpo::uno::Reference< css::beans::XPropertySet > createDataDescriptor(  ) override;
 
     protected:
         using ODataSettings::getFastPropertyValue;

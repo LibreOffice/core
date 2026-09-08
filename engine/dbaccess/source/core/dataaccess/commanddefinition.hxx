@@ -57,14 +57,14 @@ protected:
     virtual ~OCommandDefinition() override;
 
 public:
-    OCommandDefinition(const css::uno::Reference< cpo::uno::XComponentContext >& ,
-        const css::uno::Reference< cpo::uno::XInterface >& _xParentContainer,
+    OCommandDefinition(const cpo::uno::Reference< cpo::uno::XComponentContext >& ,
+        const cpo::uno::Reference< cpo::uno::XInterface >& _xParentContainer,
         const TContentPtr& _pImpl);
 
     OCommandDefinition(
-             const css::uno::Reference< cpo::uno::XInterface >& _rxContainer
+             const cpo::uno::Reference< cpo::uno::XInterface >& _rxContainer
             ,const OUString& _rElementName
-            ,const css::uno::Reference< cpo::uno::XComponentContext >&
+            ,const cpo::uno::Reference< cpo::uno::XComponentContext >&
             ,const TContentPtr& _pImpl
         );
 
@@ -86,31 +86,31 @@ public:
         { OComponentDefinition::setPropertyValue(p1, p2); }
     virtual cpo::uno::Any getPropertyValue(const OUString& p1) override
         { return OComponentDefinition::getPropertyValue(p1); }
-    virtual void addPropertyChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XPropertyChangeListener>& p2) override
+    virtual void addPropertyChangeListener(const OUString& p1, const cpo::uno::Reference<css::beans::XPropertyChangeListener>& p2) override
         { OComponentDefinition::addPropertyChangeListener(p1, p2); }
-    virtual void removePropertyChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XPropertyChangeListener>& p2) override
+    virtual void removePropertyChangeListener(const OUString& p1, const cpo::uno::Reference<css::beans::XPropertyChangeListener>& p2) override
         { OComponentDefinition::removePropertyChangeListener(p1, p2); }
-    virtual void addVetoableChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2) override
+    virtual void addVetoableChangeListener(const OUString& p1, const cpo::uno::Reference<css::beans::XVetoableChangeListener>& p2) override
         { OComponentDefinition::addVetoableChangeListener(p1, p2); }
-    virtual void removeVetoableChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2) override
+    virtual void removeVetoableChangeListener(const OUString& p1, const cpo::uno::Reference<css::beans::XVetoableChangeListener>& p2) override
         { OComponentDefinition::removeVetoableChangeListener(p1, p2); }
-    virtual css::uno::Reference<css::ucb::XContentIdentifier> getIdentifier() override
+    virtual cpo::uno::Reference<css::ucb::XContentIdentifier> getIdentifier() override
         { return OComponentDefinition::getIdentifier(); }
     virtual OUString getContentType() override
         { return OComponentDefinition::getContentType(); }
-    virtual void addContentEventListener(const css::uno::Reference<css::ucb::XContentEventListener>& p1) override
+    virtual void addContentEventListener(const cpo::uno::Reference<css::ucb::XContentEventListener>& p1) override
         { OComponentDefinition::addContentEventListener(p1); }
-    virtual void removeContentEventListener(const css::uno::Reference<css::ucb::XContentEventListener>& p1) override
+    virtual void removeContentEventListener(const cpo::uno::Reference<css::ucb::XContentEventListener>& p1) override
         { OComponentDefinition::removeContentEventListener(p1); }
      virtual void dispose() override
         { OComponentDefinition::dispose(); }
-    virtual void addEventListener(const css::uno::Reference<css::lang::XEventListener>& p1) override
+    virtual void addEventListener(const cpo::uno::Reference<css::lang::XEventListener>& p1) override
         { OComponentDefinition::addEventListener(p1); }
-     virtual void removeEventListener(const css::uno::Reference<css::lang::XEventListener>& p1) override
+     virtual void removeEventListener(const cpo::uno::Reference<css::lang::XEventListener>& p1) override
         { OComponentDefinition::removeEventListener(p1); }
 
     // OPropertySetHelper
-    virtual css::uno::Reference<css::beans::XPropertySetInfo> getPropertySetInfo() override;
+    virtual cpo::uno::Reference<css::beans::XPropertySetInfo> getPropertySetInfo() override;
     virtual cppu::IPropertyArrayHelper& getInfoHelper() override;
     virtual cppu::IPropertyArrayHelper* createArrayHelper() const override;
 

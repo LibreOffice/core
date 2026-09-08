@@ -39,31 +39,31 @@ class DispatchDisabler final : public ::cppu::WeakImplHelper<
                                         css::lang::XServiceInfo >
 {
     std::set<OUString> maDisabledURLs;
-    css::uno::Reference< css::frame::XDispatchProvider > mxSlave;
-    css::uno::Reference< css::frame::XDispatchProvider > mxMaster;
+    cpo::uno::Reference< css::frame::XDispatchProvider > mxSlave;
+    cpo::uno::Reference< css::frame::XDispatchProvider > mxMaster;
 public:
-             DispatchDisabler(const css::uno::Reference< cpo::uno::XComponentContext >& rxContext);
+             DispatchDisabler(const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext);
 
     // XInitialization
     virtual void initialize( const ::cpo::uno::Sequence< ::cpo::uno::Any >& aArguments ) override;
 
     // XDispatchProvider
-    virtual ::css::uno::Reference< ::css::frame::XDispatch >
+    virtual ::cpo::uno::Reference< ::css::frame::XDispatch >
         queryDispatch( const ::css::util::URL& URL,
                const OUString& TargetFrameName,
                ::sal_Int32 SearchFlags ) override;
-    virtual ::cpo::uno::Sequence< ::css::uno::Reference< ::css::frame::XDispatch > >
+    virtual ::cpo::uno::Sequence< ::cpo::uno::Reference< ::css::frame::XDispatch > >
         queryDispatches( const ::cpo::uno::Sequence< ::css::frame::DispatchDescriptor >& Requests ) override;
 
     // XDispatchProviderInterceptor
-    virtual ::css::uno::Reference< ::css::frame::XDispatchProvider >
+    virtual ::cpo::uno::Reference< ::css::frame::XDispatchProvider >
         getSlaveDispatchProvider() override;
     virtual void
-        setSlaveDispatchProvider( const ::css::uno::Reference< ::css::frame::XDispatchProvider >& NewDispatchProvider ) override;
-    virtual ::css::uno::Reference< ::css::frame::XDispatchProvider >
+        setSlaveDispatchProvider( const ::cpo::uno::Reference< ::css::frame::XDispatchProvider >& NewDispatchProvider ) override;
+    virtual ::cpo::uno::Reference< ::css::frame::XDispatchProvider >
         getMasterDispatchProvider() override;
     virtual void
-        setMasterDispatchProvider( const ::css::uno::Reference< ::css::frame::XDispatchProvider >& NewSupplier ) override;
+        setMasterDispatchProvider( const ::cpo::uno::Reference< ::css::frame::XDispatchProvider >& NewSupplier ) override;
 
     // XInterceptorInfo
     virtual ::cpo::uno::Sequence< OUString >

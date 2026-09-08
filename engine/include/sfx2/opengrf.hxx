@@ -25,7 +25,7 @@
 #include <unotools/resmgr.hxx>
 
 namespace com::sun::star::ui::dialogs { class XFilePickerControlAccess; }
-namespace com::sun::star::uno { template <class interface_type> class Reference; }
+namespace cpo::uno { template <class interface_type> class Reference; }
 namespace weld { class Window; }
 
 class Graphic;
@@ -58,7 +58,7 @@ public:
     OUString const &        GetDetectedFilter() const;
     void                    SetDetectedFilter(const OUString&);
 
-    css::uno::Reference<css::ui::dialogs::XFilePickerControlAccess> const & GetFilePickerControlAccess() const;
+    cpo::uno::Reference<css::ui::dialogs::XFilePickerControlAccess> const & GetFilePickerControlAccess() const;
     static TranslateId SvxOpenGrfErr2ResId(ErrCode err);
 
 private:

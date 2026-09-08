@@ -52,7 +52,7 @@ void Sidebar::ShowDeck(std::u16string_view rsDeckId, SfxViewFrame* pViewFrame, b
     {
         // close the sidebar if it was already visible and showing this sidebar deck
         const util::URL aURL(Tools::GetURL(u".uno:Sidebar"_ustr));
-        css::uno::Reference<frame::XDispatch> xDispatch(Tools::GetDispatch(pViewFrame->GetFrame().GetFrameInterface(), aURL));
+        cpo::uno::Reference<frame::XDispatch> xDispatch(Tools::GetDispatch(pViewFrame->GetFrame().GetFrameInterface(), aURL));
         if (xDispatch.is())
             xDispatch->dispatch(aURL, cpo::uno::Sequence<beans::PropertyValue>());
     }
@@ -65,7 +65,7 @@ void Sidebar::ShowDeck(std::u16string_view rsDeckId, SfxViewFrame* pViewFrame, b
 
 void Sidebar::ShowPanel (
     std::u16string_view rsPanelId,
-    const css::uno::Reference<frame::XFrame>& rxFrame, bool bFocus)
+    const cpo::uno::Reference<frame::XFrame>& rxFrame, bool bFocus)
 {
     SidebarController* pController = SidebarController::GetSidebarControllerForFrame(rxFrame);
     if (!pController)
@@ -90,7 +90,7 @@ void Sidebar::ShowPanel (
 
 void Sidebar::TogglePanel (
     std::u16string_view rsPanelId,
-    const css::uno::Reference<frame::XFrame>& rxFrame)
+    const cpo::uno::Reference<frame::XFrame>& rxFrame)
 {
     SidebarController* pController = SidebarController::GetSidebarControllerForFrame(rxFrame);
     if (!pController)
@@ -112,7 +112,7 @@ void Sidebar::TogglePanel (
 
 bool Sidebar::IsPanelVisible(
     std::u16string_view rsPanelId,
-    const css::uno::Reference<frame::XFrame>& rxFrame)
+    const cpo::uno::Reference<frame::XFrame>& rxFrame)
 {
     SidebarController* pController = SidebarController::GetSidebarControllerForFrame(rxFrame);
     if (!pController)

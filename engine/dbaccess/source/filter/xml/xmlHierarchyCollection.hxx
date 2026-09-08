@@ -27,8 +27,8 @@ namespace dbaxml
     class ODBFilter;
     class OXMLHierarchyCollection : public SvXMLImportContext
     {
-        css::uno::Reference< css::container::XNameAccess > m_xContainer;
-        css::uno::Reference< css::beans::XPropertySet >    m_xTable;
+        cpo::uno::Reference< css::container::XNameAccess > m_xContainer;
+        cpo::uno::Reference< css::beans::XPropertySet >    m_xTable;
         OUString     m_sCollectionServiceName;
         OUString     m_sComponentServiceName;
 
@@ -36,19 +36,19 @@ namespace dbaxml
     public:
 
         OXMLHierarchyCollection( ODBFilter& rImport
-                    ,const css::uno::Reference< css::xml::sax::XFastAttributeList > & _xAttrList
-                    ,const css::uno::Reference< css::container::XNameAccess >& _xParentContainer
+                    ,const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & _xAttrList
+                    ,const cpo::uno::Reference< css::container::XNameAccess >& _xParentContainer
                     ,const OUString& _sCollectionServiceName
                     ,OUString _sComponentServiceName
                     );
         OXMLHierarchyCollection( ODBFilter& rImport
-                    ,const css::uno::Reference< css::container::XNameAccess >& _xContainer
-                    ,const css::uno::Reference< css::beans::XPropertySet >&    _xTable
+                    ,const cpo::uno::Reference< css::container::XNameAccess >& _xContainer
+                    ,const cpo::uno::Reference< css::beans::XPropertySet >&    _xTable
                     );
         virtual ~OXMLHierarchyCollection() override;
 
-        virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
-            sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+        virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+            sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
     };
 } // namespace dbaxml
 

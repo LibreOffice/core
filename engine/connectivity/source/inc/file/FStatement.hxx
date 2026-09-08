@@ -64,8 +64,8 @@ namespace connectivity::file
 
         css::sdbc::SQLWarning                              m_aLastWarning;
         unotools::WeakReference< OResultSet>               m_xResultSet;   // The last ResultSet created
-        css::uno::Reference< css::sdbc::XDatabaseMetaData> m_xDBMetaData;
-        css::uno::Reference< css::container::XNameAccess>  m_xColNames; // table columns                                                          //  for this Statement
+        cpo::uno::Reference< css::sdbc::XDatabaseMetaData> m_xDBMetaData;
+        cpo::uno::Reference< css::container::XNameAccess>  m_xColNames; // table columns                                                          //  for this Statement
 
 
         connectivity::OSQLParser                    m_aParser;
@@ -130,7 +130,7 @@ namespace connectivity::file
 
         OConnection* getOwnConnection() const { return m_pConnection.get(); }
 
-        using OStatement_BASE::operator css::uno::Reference< cpo::uno::XInterface >;
+        using OStatement_BASE::operator cpo::uno::Reference< cpo::uno::XInterface >;
 
         /// @throws css::sdbc::SQLException
         /// @throws cpo::uno::RuntimeException
@@ -147,7 +147,7 @@ namespace connectivity::file
         virtual cpo::uno::Sequence< cpo::uno::Type > getTypes(  ) override;
 
         // XPropertySet
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+        virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
         // XWarningsSupplier
         virtual cpo::uno::Any getWarnings(  ) override;
         virtual void clearWarnings(  ) override;
@@ -186,10 +186,10 @@ namespace connectivity::file
         virtual void release() noexcept override;
 
         // XStatement
-        virtual css::uno::Reference< css::sdbc::XResultSet > executeQuery( const OUString& sql ) override ;
+        virtual cpo::uno::Reference< css::sdbc::XResultSet > executeQuery( const OUString& sql ) override ;
         virtual sal_Int32 executeUpdate( const OUString& sql ) override ;
         virtual bool execute( const OUString& sql ) override ;
-        virtual css::uno::Reference< css::sdbc::XConnection > getConnection(  ) override ;
+        virtual cpo::uno::Reference< css::sdbc::XConnection > getConnection(  ) override ;
     };
 
 }

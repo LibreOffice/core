@@ -81,7 +81,7 @@
 
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
@@ -99,10 +99,10 @@ const char ITEM_DESCRIPTOR_VISIBLE[]    = "IsVisible";
 
 const sal_uInt16 STARTID_CUSTOMIZE_POPUPMENU = 1000;
 
-static css::uno::Reference< css::frame::XLayoutManager > getLayoutManagerFromFrame(
-    css::uno::Reference< css::frame::XFrame > const & rFrame )
+static cpo::uno::Reference< css::frame::XLayoutManager > getLayoutManagerFromFrame(
+    cpo::uno::Reference< css::frame::XFrame > const & rFrame )
 {
-    css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
+    cpo::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
 
     Reference< XPropertySet > xPropSet( rFrame, UNO_QUERY );
     if ( xPropSet.is() )
@@ -198,7 +198,7 @@ public:
         m_pToolBar.disposeAndClear();
     }
 
-    virtual css::uno::Reference<css::awt::XWindow> GetInterface() override
+    virtual cpo::uno::Reference<css::awt::XWindow> GetInterface() override
     {
         return VCLUnoHelper::GetInterface(m_pToolBar);
     }
@@ -402,7 +402,7 @@ public:
 
     virtual void Destroy() override {}
 
-    virtual css::uno::Reference<css::awt::XWindow> GetInterface() override
+    virtual cpo::uno::Reference<css::awt::XWindow> GetInterface() override
     {
         return new weld::TransportAsXWindow(m_pWeldedToolBar, m_pBuilder);
     }
@@ -737,7 +737,7 @@ void ToolBarManager::UpdateControllers()
 }
 
 //for update toolbar controller via Support Visible
-void ToolBarManager::UpdateController( const css::uno::Reference< css::frame::XToolbarController >& xController)
+void ToolBarManager::UpdateController( const cpo::uno::Reference< css::frame::XToolbarController >& xController)
 {
 
     if ( !m_bUpdateControllers )

@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <xmlscript/xmlscriptdllapi.h>
 
@@ -34,29 +34,29 @@ namespace xmlscript
 {
 
 void exportDialogModel(
-    css::uno::Reference< css::xml::sax::XExtendedDocumentHandler > const & xOut,
-    css::uno::Reference< css::container::XNameContainer > const & xDialogModel,
-    css::uno::Reference< css::frame::XModel > const & xDocument );
+    cpo::uno::Reference< css::xml::sax::XExtendedDocumentHandler > const & xOut,
+    cpo::uno::Reference< css::container::XNameContainer > const & xDialogModel,
+    cpo::uno::Reference< css::frame::XModel > const & xDocument );
 
-XMLSCRIPT_DLLPUBLIC css::uno::Reference< css::xml::sax::XDocumentHandler >
+XMLSCRIPT_DLLPUBLIC cpo::uno::Reference< css::xml::sax::XDocumentHandler >
 importDialogModel(
-    css::uno::Reference< css::container::XNameContainer > const & xDialogModel,
-    css::uno::Reference< cpo::uno::XComponentContext > const & xContext,
-    css::uno::Reference< css::frame::XModel > const & xDocument );
+    cpo::uno::Reference< css::container::XNameContainer > const & xDialogModel,
+    cpo::uno::Reference< cpo::uno::XComponentContext > const & xContext,
+    cpo::uno::Reference< css::frame::XModel > const & xDocument );
 
 // additional functions for convenience
 
-XMLSCRIPT_DLLPUBLIC css::uno::Reference< css::io::XInputStreamProvider >
+XMLSCRIPT_DLLPUBLIC cpo::uno::Reference< css::io::XInputStreamProvider >
 exportDialogModel(
-    css::uno::Reference< css::container::XNameContainer > const & xDialogModel,
-    css::uno::Reference< cpo::uno::XComponentContext > const & xContext,
-    css::uno::Reference< css::frame::XModel > const & xDocument );
+    cpo::uno::Reference< css::container::XNameContainer > const & xDialogModel,
+    cpo::uno::Reference< cpo::uno::XComponentContext > const & xContext,
+    cpo::uno::Reference< css::frame::XModel > const & xDocument );
 
 XMLSCRIPT_DLLPUBLIC void importDialogModel(
-    css::uno::Reference< css::io::XInputStream > const & xInput,
-    css::uno::Reference< css::container::XNameContainer > const & xDialogModel,
-    css::uno::Reference< cpo::uno::XComponentContext > const & xContext,
-    css::uno::Reference< css::frame::XModel > const & xDocument );
+    cpo::uno::Reference< css::io::XInputStream > const & xInput,
+    cpo::uno::Reference< css::container::XNameContainer > const & xDialogModel,
+    cpo::uno::Reference< cpo::uno::XComponentContext > const & xContext,
+    cpo::uno::Reference< css::frame::XModel > const & xDocument );
 
 }
 

@@ -30,7 +30,7 @@
 namespace frm
 {
 using namespace ::comphelper;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
@@ -59,7 +59,7 @@ OHiddenModel::~OHiddenModel( )
 }
 
 
-css::uno::Reference< css::util::XCloneable > OHiddenModel::createClone()
+cpo::uno::Reference< css::util::XCloneable > OHiddenModel::createClone()
 {
     rtl::Reference<OHiddenModel> pClone = new OHiddenModel(this, getContext());
     pClone->clonedFrom(this);

@@ -74,6 +74,7 @@
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 /// @returns : the language for the selected text that is set for the
 ///     specified attribute (script type).

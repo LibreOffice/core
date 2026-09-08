@@ -53,24 +53,24 @@ struct AtkObjectWrapper
     AtkObject* mpOrig;  //if we're a GtkDrawingArea acting as a custom LibreOffice widget, this is the toolkit default impl
     AtkObject* mpSysObjChild; //if we're a container for a sysobj, then this is the sysobj native gtk AtkObject
 
-    css::uno::Reference<css::accessibility::XAccessible> mpAccessible;
-    css::uno::Reference<css::accessibility::XAccessibleContext> mpContext;
-    css::uno::Reference<css::accessibility::XAccessibleAction> mpAction;
-    css::uno::Reference<css::accessibility::XAccessibleComponent> mpComponent;
-    css::uno::Reference<css::accessibility::XAccessibleEditableText>
+    cpo::uno::Reference<css::accessibility::XAccessible> mpAccessible;
+    cpo::uno::Reference<css::accessibility::XAccessibleContext> mpContext;
+    cpo::uno::Reference<css::accessibility::XAccessibleAction> mpAction;
+    cpo::uno::Reference<css::accessibility::XAccessibleComponent> mpComponent;
+    cpo::uno::Reference<css::accessibility::XAccessibleEditableText>
         mpEditableText;
-    css::uno::Reference<css::accessibility::XAccessibleHypertext> mpHypertext;
-    css::uno::Reference<css::accessibility::XAccessibleImage> mpImage;
-    css::uno::Reference<css::accessibility::XAccessibleMultiLineText>
+    cpo::uno::Reference<css::accessibility::XAccessibleHypertext> mpHypertext;
+    cpo::uno::Reference<css::accessibility::XAccessibleImage> mpImage;
+    cpo::uno::Reference<css::accessibility::XAccessibleMultiLineText>
         mpMultiLineText;
-    css::uno::Reference<css::accessibility::XAccessibleSelection> mpSelection;
-    css::uno::Reference<css::accessibility::XAccessibleTable> mpTable;
-    css::uno::Reference<css::accessibility::XAccessibleTableSelection> mpTableSelection;
-    css::uno::Reference<css::accessibility::XAccessibleText> mpText;
-    css::uno::Reference<css::accessibility::XAccessibleTextMarkup> mpTextMarkup;
-    css::uno::Reference<css::accessibility::XAccessibleTextAttributes>
+    cpo::uno::Reference<css::accessibility::XAccessibleSelection> mpSelection;
+    cpo::uno::Reference<css::accessibility::XAccessibleTable> mpTable;
+    cpo::uno::Reference<css::accessibility::XAccessibleTableSelection> mpTableSelection;
+    cpo::uno::Reference<css::accessibility::XAccessibleText> mpText;
+    cpo::uno::Reference<css::accessibility::XAccessibleTextMarkup> mpTextMarkup;
+    cpo::uno::Reference<css::accessibility::XAccessibleTextAttributes>
         mpTextAttributes;
-    css::uno::Reference<css::accessibility::XAccessibleValue> mpValue;
+    cpo::uno::Reference<css::accessibility::XAccessibleValue> mpValue;
 
 //    OString * m_pKeyBindings
 };
@@ -82,11 +82,11 @@ struct AtkObjectWrapperClass
 
 GType                  atk_object_wrapper_get_type() G_GNUC_CONST;
 AtkObject *            atk_object_wrapper_ref(
-    const css::uno::Reference< css::accessibility::XAccessible >& rxAccessible,
+    const cpo::uno::Reference< css::accessibility::XAccessible >& rxAccessible,
     bool create = true );
 
 AtkObject *            atk_object_wrapper_new(
-    const css::uno::Reference< css::accessibility::XAccessible >& rxAccessible,
+    const cpo::uno::Reference< css::accessibility::XAccessible >& rxAccessible,
     AtkObject* parent = nullptr, AtkObject* orig = nullptr );
 
 void                   atk_object_wrapper_add_child(AtkObjectWrapper* wrapper, AtkObject *child, gint index);

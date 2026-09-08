@@ -30,14 +30,14 @@
 
 
 using namespace connectivity::file;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
 using namespace ::cpo::uno;
 
-OFileDriver::OFileDriver(css::uno::Reference< cpo::uno::XComponentContext > _xContext)
+OFileDriver::OFileDriver(cpo::uno::Reference< cpo::uno::XComponentContext > _xContext)
     : ODriver_BASE(m_aMutex)
     ,m_xContext(std::move(_xContext))
 {

@@ -43,6 +43,7 @@
 #define USER_DATA_VERSION USER_DATA_VERSION_1
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 void FillFieldSelect(weld::TreeView& rListBox)
 {

@@ -44,7 +44,7 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 
 using namespace ::com::sun::star::accessibility;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 static bool enabled = false; 
 
@@ -164,7 +164,7 @@ static bool enabled = false;
     [ dAllWrapper setObject: element forKey: [ AquaA11yFactory keyForAccessibleContext: rxAccessibleContext ] ];
 }
 
-+(void)removeFromWrapperRepositoryFor: (css::uno::Reference < css::accessibility::XAccessibleContext >) rxAccessibleContext {
++(void)removeFromWrapperRepositoryFor: (cpo::uno::Reference < css::accessibility::XAccessibleContext >) rxAccessibleContext {
     // TODO: when RADIO_BUTTON search for associated RadioGroup-wrapper and delete that as well
     AquaA11yWrapper * theWrapper = [ AquaA11yFactory wrapperForAccessibleContext: rxAccessibleContext createIfNotExists: NO ];
     if ( theWrapper != nil ) {

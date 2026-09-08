@@ -17,7 +17,7 @@ namespace vcl::pdf
 {
 /** retrieve password from user
      */
-bool VCL_DLLPUBLIC getPassword(const css::uno::Reference<css::task::XInteractionHandler>& xHandler,
+bool VCL_DLLPUBLIC getPassword(const cpo::uno::Reference<css::task::XInteractionHandler>& xHandler,
                                OUString& rOutPwd, bool bFirstTry, const OUString& rDocName);
 }
 

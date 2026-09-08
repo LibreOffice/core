@@ -46,7 +46,7 @@ class OComponentEventThread
             ,public ::cppu::OWeakObject
 {
     typedef std::vector<std::unique_ptr<css::lang::EventObject>> ThreadEvents;
-    typedef std::vector< css::uno::Reference< cpo::uno::XAdapter> > ThreadObjects;
+    typedef std::vector< cpo::uno::Reference< cpo::uno::XAdapter> > ThreadObjects;
 
     std::mutex                      m_aMutex;
     ::osl::Condition                m_aCond;            // Queue filled?
@@ -70,7 +70,7 @@ protected:
     // Because the Control is only held as a WeakRef, it can disappear in the meantime.
     virtual void processEvent( ::cppu::OComponentHelper* _pCompImpl,
                                const css::lang::EventObject* _pEvt,
-                               const css::uno::Reference< css::awt::XControl>& _rControl,
+                               const cpo::uno::Reference< css::awt::XControl>& _rControl,
                                bool _bFlag) = 0;
 
 public:
@@ -83,7 +83,7 @@ public:
     virtual ~OComponentEventThread() override;
 
     void addEvent( std::unique_ptr<css::lang::EventObject> _pEvt );
-    void addEvent( std::unique_ptr<css::lang::EventObject> _pEvt, const css::uno::Reference< css::awt::XControl>& rControl,
+    void addEvent( std::unique_ptr<css::lang::EventObject> _pEvt, const cpo::uno::Reference< css::awt::XControl>& rControl,
                    bool bFlag = false );
 
     // css::lang::XEventListener

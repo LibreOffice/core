@@ -53,10 +53,10 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::presentation;
 
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
+using ::cpo::uno::UNO_QUERY;
+using ::cpo::uno::UNO_QUERY_THROW;
 using ::cpo::uno::Any;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::cpo::uno::Exception;
 using ::cpo::uno::XInterface;
 using ::com::sun::star::text::XTextRange;
@@ -184,7 +184,7 @@ static OUString getDescription( const Any& rTarget, bool bWithText )
         ParagraphTarget aParaTarget;
         rTarget >>= aParaTarget;
 
-        css::uno::Reference<css::document::XActionLockable> xLockable(aParaTarget.Shape, css::uno::UNO_QUERY);
+        cpo::uno::Reference<css::document::XActionLockable> xLockable(aParaTarget.Shape, cpo::uno::UNO_QUERY);
         if (xLockable.is())
             xLockable->addActionLock();
         comphelper::ScopeGuard aGuard([&xLockable]()
@@ -194,7 +194,7 @@ static OUString getDescription( const Any& rTarget, bool bWithText )
         });
 
         Reference< XEnumerationAccess > xText( aParaTarget.Shape, UNO_QUERY_THROW );
-        Reference< XEnumeration > xEnumeration( xText->createEnumeration(), css::uno::UNO_SET_THROW );
+        Reference< XEnumeration > xEnumeration( xText->createEnumeration(), cpo::uno::UNO_SET_THROW );
         sal_Int32 nPara = aParaTarget.Paragraph;
 
         while( xEnumeration->hasMoreElements() && nPara )

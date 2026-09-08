@@ -22,7 +22,7 @@
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/debug.hxx>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <cpo/uno/Sequence.h>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -41,12 +41,13 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace ::xmloff::token;
 
 using ::cpo::uno::Any;
-using ::com::sun::star::uno::UNO_QUERY;
+using ::cpo::uno::UNO_QUERY;
 using ::cpo::uno::Sequence;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::container::XIndexContainer;
 using ::com::sun::star::document::XEventsSupplier;

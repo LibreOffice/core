@@ -26,6 +26,7 @@
 #include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 // com.sun.star.comp.Draw.DrawingDocument
 
@@ -37,7 +38,7 @@ sd_DrawingDocument_get_implementation(
 
     SdDLL::Init();
 
-    css::uno::Reference<cpo::uno::XInterface> xInterface = sfx2::createSfxModelInstance(args,
+    cpo::uno::Reference<cpo::uno::XInterface> xInterface = sfx2::createSfxModelInstance(args,
         [](SfxModelFlags _nCreationFlags)
         {
             rtl::Reference<SfxObjectShell> pShell = new ::sd::GraphicDocShell(_nCreationFlags);
@@ -58,7 +59,7 @@ sd_PresentationDocument_get_implementation(
 
     SdDLL::Init();
 
-    css::uno::Reference<cpo::uno::XInterface> xInterface = sfx2::createSfxModelInstance(args,
+    cpo::uno::Reference<cpo::uno::XInterface> xInterface = sfx2::createSfxModelInstance(args,
         [](SfxModelFlags _nCreationFlags)
         {
             rtl::Reference<SfxObjectShell> pShell =

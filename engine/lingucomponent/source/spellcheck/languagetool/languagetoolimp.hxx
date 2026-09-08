@@ -38,13 +38,13 @@ class LanguageToolGrammarChecker
     cpo::uno::Sequence<css::lang::Locale> m_aSuppLocales;
     o3tl::lru_map<OString, cpo::uno::Sequence<css::linguistic2::SingleProofreadingError>>
         mCachedResults;
-    css::uno::Reference<cpo::uno::XComponentContext> mxContext;
+    cpo::uno::Reference<cpo::uno::XComponentContext> mxContext;
     OUString maLastErrorCheckerURL;
     LanguageToolGrammarChecker(const LanguageToolGrammarChecker&) = delete;
     LanguageToolGrammarChecker& operator=(const LanguageToolGrammarChecker&) = delete;
 
 public:
-    LanguageToolGrammarChecker(const css::uno::Reference<cpo::uno::XComponentContext>& xContext);
+    LanguageToolGrammarChecker(const cpo::uno::Reference<cpo::uno::XComponentContext>& xContext);
     virtual ~LanguageToolGrammarChecker() override;
 
     // XSupportedLocales

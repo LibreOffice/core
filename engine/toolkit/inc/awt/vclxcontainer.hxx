@@ -34,14 +34,14 @@ public:
                     virtual ~VCLXContainer() override;
 
     // css::awt::XVclContainer
-    void addVclContainerListener( const css::uno::Reference< css::awt::XVclContainerListener >& l ) override;
-    void removeVclContainerListener( const css::uno::Reference< css::awt::XVclContainerListener >& l ) override;
-    cpo::uno::Sequence< css::uno::Reference< css::awt::XWindow > > getWindows(  ) override;
+    void addVclContainerListener( const cpo::uno::Reference< css::awt::XVclContainerListener >& l ) override;
+    void removeVclContainerListener( const cpo::uno::Reference< css::awt::XVclContainerListener >& l ) override;
+    cpo::uno::Sequence< cpo::uno::Reference< css::awt::XWindow > > getWindows(  ) override;
 
     // css::awt::XVclContainerPeer
     void enableDialogControl( bool bEnable ) override;
-    void setTabOrder( const cpo::uno::Sequence< css::uno::Reference< css::awt::XWindow > >& WindowOrder, const cpo::uno::Sequence< cpo::uno::Any >& Tabs, bool GroupControl ) override;
-    void setGroup( const cpo::uno::Sequence< css::uno::Reference< css::awt::XWindow > >& Windows ) override;
+    void setTabOrder( const cpo::uno::Sequence< cpo::uno::Reference< css::awt::XWindow > >& WindowOrder, const cpo::uno::Sequence< cpo::uno::Any >& Tabs, bool GroupControl ) override;
+    void setGroup( const cpo::uno::Sequence< cpo::uno::Reference< css::awt::XWindow > >& Windows ) override;
 
     // css::awt::XVclWindowPeer
     void setProperty( const OUString& PropertyName, const cpo::uno::Any& Value ) override;

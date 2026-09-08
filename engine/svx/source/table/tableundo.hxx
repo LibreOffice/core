@@ -235,7 +235,7 @@ private:
     struct Data
     {
         TableStyleSettings maSettings;
-        css::uno::Reference< css::container::XIndexAccess > mxTableStyle;
+        cpo::uno::Reference< css::container::XIndexAccess > mxTableStyle;
     };
 
     void setData( const Data& rData );

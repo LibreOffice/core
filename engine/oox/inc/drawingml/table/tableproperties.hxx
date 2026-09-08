@@ -55,7 +55,7 @@ public:
     Color&                              getBgColor(){ return maBgColor; };
 
     void pushToPropSet( const ::oox::core::XmlFilterBase& rFilterBase,
-        const css::uno::Reference < css::beans::XPropertySet > & xPropSet,
+        const cpo::uno::Reference < css::beans::XPropertySet > & xPropSet,
         const ::oox::drawingml::TextListStylePtr& pMasterTextListStyle );
 
 private:

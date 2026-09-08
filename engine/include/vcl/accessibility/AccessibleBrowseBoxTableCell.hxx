@@ -35,7 +35,7 @@ private:
     virtual void                            implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex ) override;
 
 public:
-    AccessibleBrowseBoxTableCell( const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
+    AccessibleBrowseBoxTableCell( const cpo::uno::Reference< css::accessibility::XAccessible >& _rxParent,
                                 ::vcl::IAccessibleTableProvider& _rBrowseBox,
                                 sal_Int32 _nRowId,
                                 sal_uInt16 _nColId);
@@ -60,7 +60,7 @@ public:
     /** @return
             The XAccessible interface of the specified child.
     */
-    virtual css::uno::Reference< css::accessibility::XAccessible >
+    virtual cpo::uno::Reference< css::accessibility::XAccessible >
         getAccessibleChild( sal_Int64 nChildIndex ) override;
 
     /** Return a bitset of states of the current object.

@@ -49,6 +49,7 @@
 #include <svl/itemprop.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 void SwChartHelper::DoUpdateAllCharts( SwDoc* pDoc )
 {
@@ -1985,19 +1986,19 @@ cpo::uno::Sequence< OUString > SAL_CALL SwChartDataSequence::generateLabel(
     return 0;
 }
 
-std::vector< css::uno::Reference< css::table::XCell > > SwChartDataSequence::GetCells()
+std::vector< cpo::uno::Reference< css::table::XCell > > SwChartDataSequence::GetCells()
 {
     if (m_bDisposed)
         throw lang::DisposedException();
     auto pTableFormat(GetFrameFormat());
     if(!pTableFormat)
-        return std::vector< css::uno::Reference< css::table::XCell > >();
+        return std::vector< cpo::uno::Reference< css::table::XCell > >();
     auto pTable(SwTable::FindTable(pTableFormat));
     if(pTable->IsTableComplex())
-        return std::vector< css::uno::Reference< css::table::XCell > >();
+        return std::vector< cpo::uno::Reference< css::table::XCell > >();
     SwRangeDescriptor aDesc;
     if(!FillRangeDescriptor(aDesc, GetCellRangeName(*pTableFormat, *m_pTableCursor)))
-        return std::vector< css::uno::Reference< css::table::XCell > >();
+        return std::vector< cpo::uno::Reference< css::table::XCell > >();
     return SwXCellRange::CreateXCellRange(m_pTableCursor, *pTableFormat, aDesc)->GetCells();
 }
 

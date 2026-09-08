@@ -22,7 +22,7 @@
 
 #include <cppuhelper/weakref.hxx>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <ooo/vba/XWindowBase.hpp>
 #include <rtl/ustring.hxx>
@@ -50,13 +50,13 @@ class VBAHELPER_DLLPUBLIC VbaWindowBase : public WindowBaseImpl_BASE
 public:
     /// @throws cpo::uno::RuntimeException
     VbaWindowBase(
-        const css::uno::Reference< ov::XHelperInterface >& xParent,
-        const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
-        const css::uno::Reference< css::frame::XController >& xController );
+        const cpo::uno::Reference< ov::XHelperInterface >& xParent,
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
+        const cpo::uno::Reference< css::frame::XController >& xController );
     /// @throws cpo::uno::RuntimeException
     VbaWindowBase(
         cpo::uno::Sequence< cpo::uno::Any > const& aArgs,
-        css::uno::Reference< cpo::uno::XComponentContext > const& xContext );
+        cpo::uno::Reference< cpo::uno::XComponentContext > const& xContext );
 
     // XWindowBase
     virtual sal_Int32 getHeight() override ;
@@ -76,15 +76,15 @@ public:
 
 protected:
     /// @throws cpo::uno::RuntimeException
-    css::uno::Reference< css::frame::XController > getController() const;
+    cpo::uno::Reference< css::frame::XController > getController() const;
     /// @throws cpo::uno::RuntimeException
-    css::uno::Reference< css::awt::XWindow > getWindow() const;
+    cpo::uno::Reference< css::awt::XWindow > getWindow() const;
     /// @throws cpo::uno::RuntimeException
-    css::uno::Reference< css::awt::XWindow2 > getWindow2() const;
+    cpo::uno::Reference< css::awt::XWindow2 > getWindow2() const;
 
 private:
     /// @throws cpo::uno::RuntimeException
-    void construct( const css::uno::Reference< css::frame::XController >& xController );
+    void construct( const cpo::uno::Reference< css::frame::XController >& xController );
 
     cpo::uno::WeakReference< css::frame::XController > m_xController;
     cpo::uno::WeakReference< css::awt::XWindow > m_xWindow;

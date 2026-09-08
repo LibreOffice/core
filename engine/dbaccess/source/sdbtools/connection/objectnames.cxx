@@ -40,13 +40,13 @@
 namespace sdbtools
 {
 
-    using ::com::sun::star::uno::Reference;
+    using ::cpo::uno::Reference;
     using ::com::sun::star::sdbc::XConnection;
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::sdbc::SQLException;
     using ::com::sun::star::sdbc::XDatabaseMetaData;
     using ::com::sun::star::container::XNameAccess;
-    using ::com::sun::star::uno::UNO_QUERY_THROW;
+    using ::cpo::uno::UNO_QUERY_THROW;
     using ::com::sun::star::sdbcx::XTablesSupplier;
     using ::com::sun::star::sdb::XQueriesSupplier;
     using ::cpo::uno::Exception;
@@ -296,8 +296,8 @@ namespace sdbtools
         {
             Reference< XTablesSupplier > xSuppTables( _rxConnection, UNO_QUERY_THROW );
             Reference< XQueriesSupplier > xQueriesSupplier( _rxConnection, UNO_QUERY_THROW );
-            xTables.set( xSuppTables->getTables(), css::uno::UNO_SET_THROW );
-            xQueries.set( xQueriesSupplier->getQueries(), css::uno::UNO_SET_THROW );
+            xTables.set( xSuppTables->getTables(), cpo::uno::UNO_SET_THROW );
+            xQueries.set( xQueriesSupplier->getQueries(), cpo::uno::UNO_SET_THROW );
         }
         catch( const Exception& )
         {
@@ -328,7 +328,7 @@ namespace sdbtools
         Reference< XDatabaseMetaData > xMeta;
         try
         {
-            xMeta.set( _rxConnection->getMetaData(), css::uno::UNO_SET_THROW );
+            xMeta.set( _rxConnection->getMetaData(), cpo::uno::UNO_SET_THROW );
         }
         catch( const Exception& )
         {
@@ -387,7 +387,7 @@ namespace sdbtools
     OUString ObjectNames::convertToSQLName( const OUString& Name )
     {
         EntryGuard aGuard( *this );
-        Reference< XDatabaseMetaData > xMeta( getConnection()->getMetaData(), css::uno::UNO_SET_THROW );
+        Reference< XDatabaseMetaData > xMeta( getConnection()->getMetaData(), cpo::uno::UNO_SET_THROW );
         return ::dbtools::convertName2SQLName( Name, xMeta->getExtraNameCharacters() );
     }
 

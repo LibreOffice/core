@@ -32,8 +32,8 @@ namespace pcr
     class IPropertyControlObserver
     {
     public:
-        virtual void    focusGained( const css::uno::Reference< css::inspection::XPropertyControl >& Control ) = 0;
-        virtual void    valueChanged( const css::uno::Reference< css::inspection::XPropertyControl >& Control ) = 0;
+        virtual void    focusGained( const cpo::uno::Reference< css::inspection::XPropertyControl >& Control ) = 0;
+        virtual void    valueChanged( const cpo::uno::Reference< css::inspection::XPropertyControl >& Control ) = 0;
 
     protected:
         ~IPropertyControlObserver() {}

@@ -47,8 +47,8 @@ namespace sfx2
     {
         friend class FileDialogHelper;
 
-        css::uno::Reference < css::ui::dialogs::XFilePicker3 > mxFileDlg;
-        css::uno::Reference < css::container::XNameAccess >   mxFilterCFG;
+        cpo::uno::Reference < css::ui::dialogs::XFilePicker3 > mxFileDlg;
+        cpo::uno::Reference < css::container::XNameAccess >   mxFilterCFG;
 
         std::vector< css::beans::StringPair >   maFilters;
 
@@ -207,7 +207,7 @@ namespace sfx2
         bool             isAsyncFilePicker() const { return mbAsyncPicker; }
         bool             isPasswordEnabled() const { return mbIsPwdEnabled; }
 
-        css::uno::Reference<css::awt::XWindow> GetFrameInterface();
+        cpo::uno::Reference<css::awt::XWindow> GetFrameInterface();
     };
 }   // end of namespace sfx2
 

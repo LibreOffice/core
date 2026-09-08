@@ -36,7 +36,7 @@ namespace document = css::document;
 namespace lang = css::lang;
 namespace sheet = css::sheet;
 namespace table = css::table;
-namespace uno = css::uno;
+namespace uno = cpo::uno;
 
 using uno::UNO_QUERY;
 

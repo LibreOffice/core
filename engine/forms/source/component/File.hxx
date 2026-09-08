@@ -38,11 +38,11 @@ protected:
 
 public:
     OFileControlModel(
-        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
+        const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     OFileControlModel(
         const OFileControlModel* _pOriginal,
-        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
+        const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     virtual ~OFileControlModel() override;
 
@@ -68,13 +68,13 @@ public:
 
     // XPersistObject
     virtual OUString getServiceName() override;
-    virtual void write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
-    virtual void read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
+    virtual void write(const cpo::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
+    virtual void read(const cpo::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
 
     // XReset
     virtual void reset() override;
-    virtual void addResetListener(const css::uno::Reference< css::form::XResetListener>& _rxListener) override;
-    virtual void removeResetListener(const css::uno::Reference< css::form::XResetListener>& _rxListener) override;
+    virtual void addResetListener(const cpo::uno::Reference< css::form::XResetListener>& _rxListener) override;
+    virtual void removeResetListener(const cpo::uno::Reference< css::form::XResetListener>& _rxListener) override;
 
     // OControlModel's property handling
     virtual void describeFixedProperties(
@@ -86,7 +86,7 @@ public:
     using OControlModel::getFastPropertyValue;
 
 protected:
-    virtual css::uno::Reference< css::util::XCloneable > createClone(  ) override;
+    virtual cpo::uno::Reference< css::util::XCloneable > createClone(  ) override;
 };
 
 

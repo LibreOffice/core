@@ -45,8 +45,8 @@ namespace connectivity::file
         OUString                    m_aFilenameExtension;
         OFileDriver*                m_pDriver;      //  Pointer to the owning
                                                     //  driver object
-        css::uno::Reference< css::ucb::XDynamicResultSet >    m_xDir; // directory
-        css::uno::Reference< css::ucb::XContent>              m_xContent;
+        cpo::uno::Reference< css::ucb::XDynamicResultSet >    m_xDir; // directory
+        cpo::uno::Reference< css::ucb::XContent>              m_xContent;
 
         bool                    m_bAutoCommit;
         bool                    m_bReadOnly;
@@ -75,24 +75,24 @@ namespace connectivity::file
         DECLARE_SERVICE_INFO();
 
         // XConnection
-        virtual css::uno::Reference< css::sdbc::XStatement > createStatement(  ) override;
-        virtual css::uno::Reference< css::sdbc::XPreparedStatement > prepareStatement( const OUString& sql ) override;
-        virtual css::uno::Reference< css::sdbc::XPreparedStatement > prepareCall( const OUString& sql ) override;
+        virtual cpo::uno::Reference< css::sdbc::XStatement > createStatement(  ) override;
+        virtual cpo::uno::Reference< css::sdbc::XPreparedStatement > prepareStatement( const OUString& sql ) override;
+        virtual cpo::uno::Reference< css::sdbc::XPreparedStatement > prepareCall( const OUString& sql ) override;
         virtual OUString nativeSQL( const OUString& sql ) override;
         virtual void setAutoCommit( bool autoCommit ) override;
         virtual bool getAutoCommit(  ) override;
         virtual void commit(  ) override;
         virtual void rollback(  ) override;
         virtual bool isClosed(  ) override final;
-        virtual css::uno::Reference< css::sdbc::XDatabaseMetaData > getMetaData(  ) override;
+        virtual cpo::uno::Reference< css::sdbc::XDatabaseMetaData > getMetaData(  ) override;
         virtual void setReadOnly( bool readOnly ) override;
         virtual bool isReadOnly(  ) override;
         virtual void setCatalog( const OUString& catalog ) override;
         virtual OUString getCatalog(  ) override;
         virtual void setTransactionIsolation( sal_Int32 level ) override;
         virtual sal_Int32 getTransactionIsolation(  ) override;
-        virtual css::uno::Reference< css::container::XNameAccess > getTypeMap(  ) override;
-        virtual void setTypeMap( const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
+        virtual cpo::uno::Reference< css::container::XNameAccess > getTypeMap(  ) override;
+        virtual void setTypeMap( const cpo::uno::Reference< css::container::XNameAccess >& typeMap ) override;
         // XCloseable
         virtual void close(  ) override final;
         // XWarningsSupplier
@@ -103,10 +103,10 @@ namespace connectivity::file
         static const cpo::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
         // no interface methods
-        css::uno::Reference< css::ucb::XDynamicResultSet > getDir() const;
-        const css::uno::Reference< css::ucb::XContent>&  getContent() const { return m_xContent; }
+        cpo::uno::Reference< css::ucb::XDynamicResultSet > getDir() const;
+        const cpo::uno::Reference< css::ucb::XContent>&  getContent() const { return m_xContent; }
         // create a catalog or return the catalog already created
-        virtual css::uno::Reference< css::sdbcx::XTablesSupplier > createCatalog();
+        virtual cpo::uno::Reference< css::sdbcx::XTablesSupplier > createCatalog();
 
         bool                matchesExtension( const OUString& _rExt ) const;
 

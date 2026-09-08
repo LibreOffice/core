@@ -32,14 +32,14 @@ class ExcelVbaProject final : public ::oox::ole::VbaProject
 {
 public:
     explicit            ExcelVbaProject(
-                            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
-                            const css::uno::Reference< css::sheet::XSpreadsheetDocument >& rxDocument );
+                            const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+                            const cpo::uno::Reference< css::sheet::XSpreadsheetDocument >& rxDocument );
 
 private:
     /** Adds dummy modules for sheets without imported code name. */
     virtual void        prepareImport() override;
 
-    css::uno::Reference< css::sheet::XSpreadsheetDocument >
+    cpo::uno::Reference< css::sheet::XSpreadsheetDocument >
                         mxDocument;
 };
 

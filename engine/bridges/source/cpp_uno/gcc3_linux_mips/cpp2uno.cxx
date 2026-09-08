@@ -31,7 +31,7 @@
 #include <string.h>
 #include <typeinfo>
 
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 //#define BRDEBUG

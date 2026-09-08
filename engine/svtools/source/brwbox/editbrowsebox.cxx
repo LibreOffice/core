@@ -35,7 +35,7 @@ namespace svt
 {
 
 using namespace com::sun::star::accessibility;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 
@@ -956,7 +956,7 @@ void EditBrowseBox::ActivateCell(sal_Int32 nRow, sal_uInt16 nCol, bool bCellFocu
         if ( isAccessibleAlive() && HasFocus() )
         {
             commitTableEvent(AccessibleEventId::ACTIVE_DESCENDANT_CHANGED,
-                             Any(css::uno::Reference<XAccessible>(
+                             Any(cpo::uno::Reference<XAccessible>(
                                  CreateAccessibleCell(nRow, GetColumnPos(nCol - 1)))),
                              Any());
         }
@@ -972,7 +972,7 @@ void EditBrowseBox::DeactivateCell(bool bUpdate)
     if (isAccessibleAlive() && m_pActiveCell.is())
     {
         commitBrowseBoxEvent(AccessibleEventId::CHILD, Any(),
-                             Any(css::uno::Reference<XAccessible>(m_pActiveCell)));
+                             Any(cpo::uno::Reference<XAccessible>(m_pActiveCell)));
         clearActiveCell();
     }
 

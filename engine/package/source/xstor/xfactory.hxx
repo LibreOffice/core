@@ -30,18 +30,18 @@
 class OStorageFactory : public ::cppu::WeakImplHelper< css::lang::XSingleServiceFactory,
                                                 css::lang::XServiceInfo >
 {
-    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
 public:
-    explicit OStorageFactory( const css::uno::Reference< cpo::uno::XComponentContext >& xContext )
+    explicit OStorageFactory( const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext )
     : m_xContext( xContext )
     {
         OSL_ENSURE( xContext.is(), "No service manager is provided!" );
     }
 
     // XSingleServiceFactory
-    virtual css::uno::Reference< cpo::uno::XInterface > createInstance() override;
-    virtual css::uno::Reference< cpo::uno::XInterface > createInstanceWithArguments( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > createInstance() override;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > createInstanceWithArguments( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XServiceInfo
     virtual OUString getImplementationName() override;

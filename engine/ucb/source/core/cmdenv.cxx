@@ -31,6 +31,7 @@
 
  *************************************************************************/
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace ucb_cmdenv;
 
 // UcbCommandEnvironment Implementation.

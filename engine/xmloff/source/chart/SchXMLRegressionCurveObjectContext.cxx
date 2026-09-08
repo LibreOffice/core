@@ -37,13 +37,14 @@
 #include <com/sun/star/chart2/RelativePosition.hpp>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace xmloff::token;
 
 SchXMLRegressionCurveObjectContext::SchXMLRegressionCurveObjectContext(
                                         SchXMLImportHelper& rImpHelper,
                                         SvXMLImport& rImport,
                                         std::vector< RegressionStyle >& rRegressionStyleVector,
-                                        css::uno::Reference<
+                                        cpo::uno::Reference<
                                                     css::chart2::XDataSeries > xSeries,
                                         const awt::Size & rChartSize) :
     SvXMLImportContext( rImport ),
@@ -59,7 +60,7 @@ SchXMLRegressionCurveObjectContext::~SchXMLRegressionCurveObjectContext()
 }
 
 void SchXMLRegressionCurveObjectContext::startFastElement (sal_Int32 /*nElement*/,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     OUString sAutoStyleName;
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
@@ -74,9 +75,9 @@ void SchXMLRegressionCurveObjectContext::startFastElement (sal_Int32 /*nElement*
     mrRegressionStyleVector.push_back( aStyle );
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLRegressionCurveObjectContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLRegressionCurveObjectContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
     if( nElement == XML_ELEMENT(CHART, XML_EQUATION) )
     {
@@ -103,7 +104,7 @@ SchXMLEquationContext::~SchXMLEquationContext()
 {}
 
 void SchXMLEquationContext::startFastElement (sal_Int32 /*nElement*/,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     // parse attributes
     SchXMLImport& rImport = static_cast< SchXMLImport& >(GetImport());

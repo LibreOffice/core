@@ -29,7 +29,7 @@
 #include <algorithm>
 
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 namespace sfx2
@@ -182,7 +182,7 @@ struct SvLinkSource_Impl
     std::unique_ptr<SvLinkSourceTimer>
                             pTimer;
     sal_uInt64              nTimeout;
-    css::uno::Reference<css::io::XInputStream>
+    cpo::uno::Reference<css::io::XInputStream>
                             m_xInputStreamToLoadFrom;
     bool                    m_bIsReadOnly;
 
@@ -210,7 +210,7 @@ SvLinkSource::StreamToLoadFrom SvLinkSource::getStreamToLoadFrom()
         pImpl->m_bIsReadOnly);
 }
 
-void SvLinkSource::setStreamToLoadFrom(const css::uno::Reference<css::io::XInputStream>& xInputStream, bool bIsReadOnly )
+void SvLinkSource::setStreamToLoadFrom(const cpo::uno::Reference<css::io::XInputStream>& xInputStream, bool bIsReadOnly )
 {
     pImpl->m_xInputStreamToLoadFrom = xInputStream;
     pImpl->m_bIsReadOnly = bIsReadOnly;

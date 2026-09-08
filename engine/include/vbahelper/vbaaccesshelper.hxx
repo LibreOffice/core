@@ -25,7 +25,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/XInterface.hpp>
 #include <osl/diagnose.h>
@@ -38,21 +38,21 @@
 namespace ooo::vba
 {
 
-        inline css::uno::Reference< css::lang::XMultiServiceFactory > getVBAServiceFactory( SfxObjectShell const * pShell )
+        inline cpo::uno::Reference< css::lang::XMultiServiceFactory > getVBAServiceFactory( SfxObjectShell const * pShell )
         {
             cpo::uno::Any aUnoVar;
             if ( !pShell || ! pShell->GetBasicManager()->GetGlobalUNOConstant( u"VBAGlobals"_ustr, aUnoVar ) )
                 throw css::lang::IllegalArgumentException();
-            css::uno::Reference< css::lang::XMultiServiceFactory > xVBAFactory( aUnoVar, css::uno::UNO_QUERY_THROW );
+            cpo::uno::Reference< css::lang::XMultiServiceFactory > xVBAFactory( aUnoVar, cpo::uno::UNO_QUERY_THROW );
             return xVBAFactory;
         }
 
         /// @throws cpo::uno::Exception
-        inline css::uno::Reference< cpo::uno::XInterface > createVBAUnoAPIServiceWithArgs( SfxObjectShell const * pShell,  const char* _pAsciiName, const cpo::uno::Sequence< cpo::uno::Any >& aArgs )
+        inline cpo::uno::Reference< cpo::uno::XInterface > createVBAUnoAPIServiceWithArgs( SfxObjectShell const * pShell,  const char* _pAsciiName, const cpo::uno::Sequence< cpo::uno::Any >& aArgs )
         {
             OSL_PRECOND( pShell, "createVBAUnoAPIService: no shell!" );
             OUString sVarName( OUString::createFromAscii( _pAsciiName ) );
-            css::uno::Reference< cpo::uno::XInterface > xIf = getVBAServiceFactory( pShell )->createInstanceWithArguments( sVarName, aArgs  );
+            cpo::uno::Reference< cpo::uno::XInterface > xIf = getVBAServiceFactory( pShell )->createInstanceWithArguments( sVarName, aArgs  );
             return xIf;
         }
 

@@ -22,7 +22,7 @@
 #include <config_options.h>
 #include <unotools/unotoolsdllapi.h>
 #include <tools/fontenum.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
@@ -95,9 +95,9 @@ namespace utl
 
 class UNOTOOLS_DLLPUBLIC DefaultFontConfiguration
 {
-    css::uno::Reference< css::lang::XMultiServiceFactory >
+    cpo::uno::Reference< css::lang::XMultiServiceFactory >
             m_xConfigProvider;
-    css::uno::Reference< css::container::XNameAccess >
+    cpo::uno::Reference< css::container::XNameAccess >
             m_xConfigAccess;
 
     struct LocaleAccess
@@ -106,7 +106,7 @@ class UNOTOOLS_DLLPUBLIC DefaultFontConfiguration
         // used to get rid of upper/lower case problems
         OUString aConfigLocaleString;
         // xAccess is mutable to be able to be filled on demand
-        mutable css::uno::Reference< css::container::XNameAccess > xAccess;
+        mutable cpo::uno::Reference< css::container::XNameAccess > xAccess;
     };
 
     std::unordered_map< OUString, LocaleAccess > m_aConfig;
@@ -136,9 +136,9 @@ struct UNOTOOLS_DLLPUBLIC FontNameAttr
 class UNLESS_MERGELIBS(UNOTOOLS_DLLPUBLIC) FontSubstConfiguration
 {
 private:
-    css::uno::Reference< css::lang::XMultiServiceFactory >
+    cpo::uno::Reference< css::lang::XMultiServiceFactory >
             m_xConfigProvider;
-    css::uno::Reference< css::container::XNameAccess >
+    cpo::uno::Reference< css::container::XNameAccess >
             m_xConfigAccess;
     struct LocaleSubst
     {
@@ -157,14 +157,14 @@ private:
     mutable UniqueSubstHash maSubstHash;
     LanguageTag maLanguageTag;
 
-    void fillSubstVector( const css::uno::Reference< css::container::XNameAccess >& rFont,
+    void fillSubstVector( const cpo::uno::Reference< css::container::XNameAccess >& rFont,
                           const OUString& rType,
                           std::vector< OUString >& rSubstVector ) const;
-    static FontWeight getSubstWeight( const css::uno::Reference< css::container::XNameAccess >& rFont,
+    static FontWeight getSubstWeight( const cpo::uno::Reference< css::container::XNameAccess >& rFont,
                           const OUString& rType );
-    static FontWidth getSubstWidth( const css::uno::Reference< css::container::XNameAccess >& rFont,
+    static FontWidth getSubstWidth( const cpo::uno::Reference< css::container::XNameAccess >& rFont,
                              const OUString& rType );
-    static ImplFontAttrs getSubstType( const css::uno::Reference< css::container::XNameAccess >& rFont,
+    static ImplFontAttrs getSubstType( const cpo::uno::Reference< css::container::XNameAccess >& rFont,
                                 const OUString& rType );
     void readLocaleSubst( const OUString& rBcp47 ) const;
 public:

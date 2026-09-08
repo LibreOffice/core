@@ -68,7 +68,7 @@ namespace frm
 
 
     using ::dbtools::SQLExceptionInfo;
-    using ::com::sun::star::uno::Reference;
+    using ::cpo::uno::Reference;
     using ::cpo::uno::XComponentContext;
     using ::cpo::uno::RuntimeException;
     using ::cpo::uno::Sequence;
@@ -86,7 +86,7 @@ namespace frm
     using namespace ::com::sun::star::sdbc;
     using ::com::sun::star::form::XForm;
     using ::com::sun::star::ucb::AlreadyInitializedException;
-    using ::com::sun::star::uno::UNO_QUERY;
+    using ::cpo::uno::UNO_QUERY;
     using ::com::sun::star::lang::EventObject;
     using ::com::sun::star::beans::PropertyChangeEvent;
     using ::com::sun::star::lang::XMultiServiceFactory;
@@ -95,7 +95,7 @@ namespace frm
     using ::com::sun::star::awt::XControl;
     using ::com::sun::star::form::XGrid;
     using ::com::sun::star::container::XIndexAccess;
-    using ::com::sun::star::uno::UNO_QUERY_THROW;
+    using ::cpo::uno::UNO_QUERY_THROW;
     using ::com::sun::star::form::XBoundControl;
     using ::com::sun::star::form::XBoundComponent;
     using ::com::sun::star::sdbcx::XRowLocate;
@@ -914,7 +914,7 @@ namespace frm
                 // both the control and its model can be committable, so try both
                 Reference< XBoundComponent > xBound( xCurrentControl, UNO_QUERY );
                 if ( !xBound.is() )
-                    xBound.set(xCurrentControl->getModel(), css::uno::UNO_QUERY);
+                    xBound.set(xCurrentControl->getModel(), cpo::uno::UNO_QUERY);
                 // and now really commit
                 if ( xBound.is() )
                     bSuccess = xBound->commit();
@@ -1105,7 +1105,7 @@ namespace frm
     void FormOperations::impl_initFromController_throw()
     {
         OSL_PRECOND( m_xController.is(), "FormOperations::impl_initFromController_throw: invalid controller!" );
-        m_xCursor.set(m_xController->getModel(), css::uno::UNO_QUERY);
+        m_xCursor.set(m_xController->getModel(), cpo::uno::UNO_QUERY);
         if ( !m_xCursor.is() )
             throw IllegalArgumentException( OUString(), *this, 0 );
 
@@ -1119,9 +1119,9 @@ namespace frm
     void FormOperations::impl_initFromForm_throw()
     {
         OSL_PRECOND( m_xCursor.is(), "FormOperations::impl_initFromForm_throw: invalid form!" );
-        m_xCursorProperties.set(m_xCursor, css::uno::UNO_QUERY);
-        m_xUpdateCursor.set(m_xCursor, css::uno::UNO_QUERY);
-        m_xLoadableForm.set(m_xCursor, css::uno::UNO_QUERY);
+        m_xCursorProperties.set(m_xCursor, cpo::uno::UNO_QUERY);
+        m_xUpdateCursor.set(m_xCursor, cpo::uno::UNO_QUERY);
+        m_xLoadableForm.set(m_xCursor, cpo::uno::UNO_QUERY);
 
         if ( !m_xCursor.is() || !m_xCursorProperties.is() || !m_xLoadableForm.is() )
             throw IllegalArgumentException( OUString(), *this, 0 );
@@ -1146,7 +1146,7 @@ namespace frm
 
     void FormOperations::createWithForm( const Reference< XForm >& _rxForm )
     {
-        m_xCursor.set(_rxForm, css::uno::UNO_QUERY);
+        m_xCursor.set(_rxForm, cpo::uno::UNO_QUERY);
         if ( !m_xCursor.is() )
             throw IllegalArgumentException( OUString(), *this, 0 );
 
@@ -1658,18 +1658,18 @@ namespace frm
         }
     }
 
-    css::uno::Reference<css::awt::XWindow> FormOperations::GetDialogParent() const
+    cpo::uno::Reference<css::awt::XWindow> FormOperations::GetDialogParent() const
     {
-        css::uno::Reference<css::awt::XWindow> xDialogParent;
+        cpo::uno::Reference<css::awt::XWindow> xDialogParent;
 
         //tdf#122152 extract parent for dialog
         if (m_xController.is())
         {
-            css::uno::Reference<css::awt::XControl> xContainerControl(m_xController->getContainer(), css::uno::UNO_QUERY);
+            cpo::uno::Reference<css::awt::XControl> xContainerControl(m_xController->getContainer(), cpo::uno::UNO_QUERY);
             if (xContainerControl.is())
             {
-                css::uno::Reference<css::awt::XWindowPeer> xContainerPeer = xContainerControl->getPeer();
-                xDialogParent = css::uno::Reference<css::awt::XWindow>(xContainerPeer, css::uno::UNO_QUERY);
+                cpo::uno::Reference<css::awt::XWindowPeer> xContainerPeer = xContainerControl->getPeer();
+                xDialogParent = cpo::uno::Reference<css::awt::XWindow>(xContainerPeer, cpo::uno::UNO_QUERY);
             }
         }
 
@@ -1688,7 +1688,7 @@ namespace frm
             return;
         try
         {
-            css::uno::Reference<css::awt::XWindow> xDialogParent(GetDialogParent());
+            cpo::uno::Reference<css::awt::XWindow> xDialogParent(GetDialogParent());
 
             Reference< XExecutableDialog> xDialog;
             if ( _bFilter )

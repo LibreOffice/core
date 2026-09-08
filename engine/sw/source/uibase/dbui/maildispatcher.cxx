@@ -27,6 +27,7 @@
 #include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 typedef std::vector< ::rtl::Reference<IMailDispatcherListener> > MailDispatcherListenerContainer_t;
 

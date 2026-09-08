@@ -45,17 +45,17 @@ namespace xmloff
         // SvXMLImportContext overridable
         virtual void startFastElement(
             sal_Int32 nElement,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList) override;
+            const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList) override;
         virtual void endFastElement(sal_Int32 nElement) override;
-        virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
-            sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+        virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+            sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
     private:
         static void implImportBool(
-            const css::uno::Reference< css::xml::sax::XFastAttributeList >& _rxAttributes,
+            const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& _rxAttributes,
             OfficeFormsAttributes _eAttribute,
-            const css::uno::Reference< css::beans::XPropertySet >& _rxProps,
-            const css::uno::Reference< css::beans::XPropertySetInfo >& _rxPropInfo,
+            const cpo::uno::Reference< css::beans::XPropertySet >& _rxProps,
+            const cpo::uno::Reference< css::beans::XPropertySetInfo >& _rxPropInfo,
             const OUString& _rPropName,
             bool _bDefault
             );
@@ -77,8 +77,8 @@ namespace xmloff
         static void implExportBool(
             SvXMLExport& _rExp,
             OfficeFormsAttributes _eAttribute,
-            const css::uno::Reference< css::beans::XPropertySet >& _rxProps,
-            const css::uno::Reference< css::beans::XPropertySetInfo >& _rxPropInfo,
+            const cpo::uno::Reference< css::beans::XPropertySet >& _rxProps,
+            const cpo::uno::Reference< css::beans::XPropertySetInfo >& _rxPropInfo,
             const OUString& _rPropName,
             bool _bDefault
             );

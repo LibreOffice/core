@@ -21,10 +21,10 @@
 #define INCLUDED_SFX2_INC_FWKHELPER_HXX
 
 #include <sal/config.h>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 
-void RefreshToolbars(css::uno::Reference<css::frame::XFrame> const& rFrame);
+void RefreshToolbars(cpo::uno::Reference<css::frame::XFrame> const& rFrame);
 
 #endif
 

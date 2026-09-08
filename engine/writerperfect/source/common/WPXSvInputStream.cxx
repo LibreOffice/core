@@ -31,7 +31,7 @@
 
 namespace writerperfect
 {
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::io;
 
@@ -260,7 +260,7 @@ struct ZipStreamData
 {
     explicit ZipStreamData(OString aName);
 
-    css::uno::Reference<css::io::XInputStream> xStream;
+    cpo::uno::Reference<css::io::XInputStream> xStream;
 
     /** Name of the stream.
       *
@@ -278,7 +278,7 @@ struct ZipStreamData
   */
 struct ZipStorageImpl
 {
-    explicit ZipStorageImpl(const css::uno::Reference<css::container::XNameAccess>& rxContainer);
+    explicit ZipStorageImpl(const cpo::uno::Reference<css::container::XNameAccess>& rxContainer);
 
     /** Initialize for access.
       *

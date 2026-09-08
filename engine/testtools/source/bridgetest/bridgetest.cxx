@@ -60,7 +60,7 @@
 
 using namespace osl;
 using namespace cppu;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
@@ -196,7 +196,7 @@ static void assign( TestElement & rData,
                     float fFloat, double fDouble,
                     TestEnum eEnum, const OUString& rStr,
                     sal_Int8 nByte2, sal_Int16 nShort2,
-                    const css::uno::Reference< cpo::uno::XInterface >& xTest,
+                    const cpo::uno::Reference< cpo::uno::XInterface >& xTest,
                     const cpo::uno::Any& rAny )
 {
     rData.Bool = bBool;
@@ -324,7 +324,7 @@ private:
 
 public:
     void SAL_CALL callRecursivly(
-        const css::uno::Reference< XRecursiveCall >& xCall,
+        const cpo::uno::Reference< XRecursiveCall >& xCall,
         sal_Int32 nToCall ) override
         {
             MutexGuard guard( m_mutex );

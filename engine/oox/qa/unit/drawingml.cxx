@@ -44,6 +44,7 @@
 #include <osl/process.h>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace
 {

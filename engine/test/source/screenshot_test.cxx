@@ -47,7 +47,7 @@ namespace {
 }
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo::uno;
 
     /// the target directory for screenshots
 constexpr OUString g_aScreenshotDirectory(u"screenshots"_ustr);

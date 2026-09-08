@@ -52,6 +52,7 @@
 bool bPasteIsMove = false;
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 static void lcl_AdjustInsertPos( ScViewData& rData, Point& rPos, const Size& rSize )
 {

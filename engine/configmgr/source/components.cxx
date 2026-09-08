@@ -35,7 +35,7 @@
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <cpo/uno/Any.hxx>
 #include <cpo/uno/Exception.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/XComponentContext.hpp>
 #include <cpo/uno/XInterface.hpp>
@@ -222,7 +222,7 @@ void Components::WriteThread::execute() {
 }
 
 Components & Components::getSingleton(
-    css::uno::Reference< cpo::uno::XComponentContext > const & context)
+    cpo::uno::Reference< cpo::uno::XComponentContext > const & context)
 {
     assert(context.is());
     static Components singleton(context);
@@ -447,7 +447,7 @@ css::beans::Optional< cpo::uno::Any > Components::getExternalValue(
     OUString name(descriptor.substr(0, i));
     ExternalServices::iterator j(externalServices_.find(name));
     if (j == externalServices_.end()) {
-        css::uno::Reference< cpo::uno::XInterface > service;
+        cpo::uno::Reference< cpo::uno::XInterface > service;
         try {
             service = context_->getServiceManager()->createInstanceWithContext(
                 name, context_);
@@ -461,9 +461,9 @@ css::beans::Optional< cpo::uno::Any > Components::getExternalValue(
                 "configmgr",
                 "createInstance(" << name << ") failed");
         }
-        css::uno::Reference< css::beans::XPropertySet > propset;
+        cpo::uno::Reference< css::beans::XPropertySet > propset;
         if (service.is()) {
-            propset.set( service, css::uno::UNO_QUERY_THROW);
+            propset.set( service, cpo::uno::UNO_QUERY_THROW);
         }
         j = externalServices_.emplace(name, propset).first;
     }
@@ -490,7 +490,7 @@ css::beans::Optional< cpo::uno::Any > Components::getExternalValue(
 }
 
 Components::Components(
-    css::uno::Reference< cpo::uno::XComponentContext > const & context):
+    cpo::uno::Reference< cpo::uno::XComponentContext > const & context):
     context_(context), sharedExtensionLayer_(-1), userExtensionLayer_(-1),
     modificationTarget_(ModificationTarget::None)
 {

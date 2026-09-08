@@ -71,6 +71,7 @@
 
 using namespace css;
 using namespace css::animations;
+using namespace ::cpo;
 
 class SdExportTest2 : public SdModelTestBase
 {
@@ -1041,34 +1042,34 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testAnimationSoundRemoteNotFetchedOOXML)
     saveAndReload(TestFilter::PPTX);
 }
 
-static css::uno::Reference<css::animations::XAnimationNode>
-lcl_getPageAnimationNode(const css::uno::Reference<css::lang::XComponent>& xComponent,
+static cpo::uno::Reference<css::animations::XAnimationNode>
+lcl_getPageAnimationNode(const cpo::uno::Reference<css::lang::XComponent>& xComponent,
                          sal_Int32 nPage)
 {
-    css::uno::Reference<css::drawing::XDrawPagesSupplier> xSupplier(xComponent,
-                                                                    css::uno::UNO_QUERY_THROW);
-    css::uno::Reference<css::drawing::XDrawPage> xPage(xSupplier->getDrawPages()->getByIndex(nPage),
-                                                       css::uno::UNO_QUERY_THROW);
-    css::uno::Reference<css::animations::XAnimationNodeSupplier> xNodeSupplier(
-        xPage, css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::drawing::XDrawPagesSupplier> xSupplier(xComponent,
+                                                                    cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::drawing::XDrawPage> xPage(xSupplier->getDrawPages()->getByIndex(nPage),
+                                                       cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::animations::XAnimationNodeSupplier> xNodeSupplier(
+        xPage, cpo::uno::UNO_QUERY_THROW);
     return xNodeSupplier->getAnimationNode();
 }
 
-static css::uno::Reference<css::animations::XAnimationNode>
-lcl_findAudioNode(const css::uno::Reference<css::animations::XAnimationNode>& xNode)
+static cpo::uno::Reference<css::animations::XAnimationNode>
+lcl_findAudioNode(const cpo::uno::Reference<css::animations::XAnimationNode>& xNode)
 {
     if (!xNode.is())
         return nullptr;
     if (xNode->getType() == css::animations::AnimationNodeType::AUDIO)
         return xNode;
-    css::uno::Reference<css::container::XEnumerationAccess> xEnumAccess(xNode, css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::container::XEnumerationAccess> xEnumAccess(xNode, cpo::uno::UNO_QUERY);
     if (xEnumAccess.is())
     {
-        css::uno::Reference<css::container::XEnumeration> xEnum = xEnumAccess->createEnumeration();
+        cpo::uno::Reference<css::container::XEnumeration> xEnum = xEnumAccess->createEnumeration();
         while (xEnum.is() && xEnum->hasMoreElements())
         {
-            css::uno::Reference<css::animations::XAnimationNode> xChild(xEnum->nextElement(),
-                                                                        css::uno::UNO_QUERY);
+            cpo::uno::Reference<css::animations::XAnimationNode> xChild(xEnum->nextElement(),
+                                                                        cpo::uno::UNO_QUERY);
             if (auto xFound = lcl_findAudioNode(xChild))
                 return xFound;
         }
@@ -1083,8 +1084,8 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testAnimationSoundAllowedForPlayback)
     // allowed.
     createSdImpressDoc("odp/animation-sound-remote.fodp");
     SdDrawDocument* pDoc = getSdDocShell()->GetDoc();
-    css::uno::Reference<css::animations::XAudio> xAudio(
-        lcl_findAudioNode(lcl_getPageAnimationNode(mxComponent, 0)), css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::animations::XAudio> xAudio(
+        lcl_findAudioNode(lcl_getPageAnimationNode(mxComponent, 0)), cpo::uno::UNO_QUERY);
     CPPUNIT_ASSERT(xAudio.is());
 
     // the external animation sound is registered as a link that can be allowed
@@ -1110,16 +1111,16 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testAllowedSoundNotPersisted)
     CPPUNIT_ASSERT_EQUAL(size_t(1), pLinkMgr->GetLinks().size());
     pLinkMgr->GetLinks()[0]->Update();
     {
-        css::uno::Reference<css::animations::XAudio> xAudio(
-            lcl_findAudioNode(lcl_getPageAnimationNode(mxComponent, 0)), css::uno::UNO_QUERY);
+        cpo::uno::Reference<css::animations::XAudio> xAudio(
+            lcl_findAudioNode(lcl_getPageAnimationNode(mxComponent, 0)), cpo::uno::UNO_QUERY);
         CPPUNIT_ASSERT(xAudio.is());
         CPPUNIT_ASSERT(xmloff::getSoundAllowed(xAudio->getSource()));
     }
 
     saveAndReload(TestFilter::ODP);
 
-    css::uno::Reference<css::animations::XAudio> xAudio(
-        lcl_findAudioNode(lcl_getPageAnimationNode(mxComponent, 0)), css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::animations::XAudio> xAudio(
+        lcl_findAudioNode(lcl_getPageAnimationNode(mxComponent, 0)), cpo::uno::UNO_QUERY);
     CPPUNIT_ASSERT(xAudio.is());
     CPPUNIT_ASSERT(!xmloff::getSoundAllowed(xAudio->getSource()));
     CPPUNIT_ASSERT(lcl_hasSoundLink(*getSdDocShell()->GetDoc()));
@@ -1131,8 +1132,8 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testAnimationSoundInPackageAllowed)
     // audio node plays without the user acting and it is not a link.
     createSdImpressDoc("odp/animation-sound-package.fodp");
     SdDrawDocument* pDoc = getSdDocShell()->GetDoc();
-    css::uno::Reference<css::animations::XAudio> xAudio(
-        lcl_findAudioNode(lcl_getPageAnimationNode(mxComponent, 0)), css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::animations::XAudio> xAudio(
+        lcl_findAudioNode(lcl_getPageAnimationNode(mxComponent, 0)), cpo::uno::UNO_QUERY);
     CPPUNIT_ASSERT(xAudio.is());
 
     CPPUNIT_ASSERT(xmloff::getSoundAllowed(xAudio->getSource()));
@@ -1149,8 +1150,8 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testAnimationSoundExternalImportPPTX)
     // fetch attempt would hang this test.
     createSdImpressDoc("pptx/animation-sound-external.pptx");
     SdDrawDocument* pDoc = getSdDocShell()->GetDoc();
-    css::uno::Reference<css::animations::XAudio> xAudio(
-        lcl_findAudioNode(lcl_getPageAnimationNode(mxComponent, 0)), css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::animations::XAudio> xAudio(
+        lcl_findAudioNode(lcl_getPageAnimationNode(mxComponent, 0)), cpo::uno::UNO_QUERY);
     CPPUNIT_ASSERT(xAudio.is());
 
     sfx2::LinkManager* pLinkMgr = pDoc->GetLinkManager();
@@ -1171,8 +1172,8 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testAnimationSoundEmbeddedImportPPTX)
     // so it needs no allowing and is not a link.
     createSdImpressDoc("pptx/animation-sound-embedded.pptx");
     SdDrawDocument* pDoc = getSdDocShell()->GetDoc();
-    css::uno::Reference<css::animations::XAudio> xAudio(
-        lcl_findAudioNode(lcl_getPageAnimationNode(mxComponent, 0)), css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::animations::XAudio> xAudio(
+        lcl_findAudioNode(lcl_getPageAnimationNode(mxComponent, 0)), cpo::uno::UNO_QUERY);
     CPPUNIT_ASSERT(xAudio.is());
 
     CPPUNIT_ASSERT(xmloff::getSoundAllowed(xAudio->getSource()));

@@ -47,6 +47,7 @@
 #include <swerror.h>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 void SwXMLTextBlocks::InitBlockMode ( const uno::Reference < embed::XStorage >& rStorage )
 {

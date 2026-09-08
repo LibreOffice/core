@@ -27,7 +27,7 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 
 using namespace ::com::sun::star::accessibility;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 // Wrapper for AXCombobox role
 

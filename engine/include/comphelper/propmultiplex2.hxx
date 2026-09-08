@@ -77,7 +77,7 @@ class UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) OPropertyChangeMultiplexer2 final
     friend class OPropertyChangeListener2;
     std::mutex& m_rMutex;
     std::vector<OUString> m_aProperties;
-    css::uno::Reference<css::beans::XPropertySet> m_xSet;
+    cpo::uno::Reference<css::beans::XPropertySet> m_xSet;
     OPropertyChangeListener2* m_pListener;
     sal_Int32 m_nLockCount;
     bool m_bListening : 1;
@@ -88,7 +88,7 @@ class UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) OPropertyChangeMultiplexer2 final
 public:
     OPropertyChangeMultiplexer2(std::mutex& rMutex, std::unique_lock<std::mutex>& rGuard,
                                 OPropertyChangeListener2* _pListener,
-                                const css::uno::Reference<css::beans::XPropertySet>& _rxSet);
+                                const cpo::uno::Reference<css::beans::XPropertySet>& _rxSet);
 
     // XEventListener
     virtual void disposing(const css::lang::EventObject& Source) override;

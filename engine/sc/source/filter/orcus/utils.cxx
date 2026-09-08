@@ -37,7 +37,7 @@ CopiedTempStream::CopiedTempStream(SvStream& rSrc)
     maTemp.CloseStream();
 }
 
-CopiedTempStream::CopiedTempStream(const css::uno::Reference<css::io::XInputStream>& xSrc)
+CopiedTempStream::CopiedTempStream(const cpo::uno::Reference<css::io::XInputStream>& xSrc)
 {
     maTemp.EnableKillingFile();
     SvStream* pDest = maTemp.GetStream(StreamMode::WRITE);

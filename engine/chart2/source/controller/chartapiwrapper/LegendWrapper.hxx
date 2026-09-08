@@ -66,16 +66,16 @@ public:
 
     // ____ XComponent ____
     virtual void dispose() override;
-    virtual void addEventListener( const css::uno::Reference<
+    virtual void addEventListener( const cpo::uno::Reference<
                                             css::lang::XEventListener >& xListener ) override;
-    virtual void removeEventListener( const css::uno::Reference<
+    virtual void removeEventListener( const cpo::uno::Reference<
                                                css::lang::XEventListener >& aListener ) override;
 
 protected:
     // ____ WrappedPropertySet ____
     virtual const cpo::uno::Sequence< css::beans::Property >& getPropertySequence() override;
     virtual std::vector< std::unique_ptr<WrappedProperty> > createWrappedProperties() override;
-    virtual css::uno::Reference< css::beans::XPropertySet > getInnerPropertySet() override;
+    virtual cpo::uno::Reference< css::beans::XPropertySet > getInnerPropertySet() override;
 
 private:
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;

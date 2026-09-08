@@ -21,10 +21,10 @@
 
 #include <sal/config.h>
 #include <rtl/ustring.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 class SdDrawDocument;
 
-void NotifyDocumentEvent( SdDrawDocument const & rDocument, const OUString& rEventName, const css::uno::Reference< cpo::uno::XInterface >& xSource );
+void NotifyDocumentEvent( SdDrawDocument const & rDocument, const OUString& rEventName, const cpo::uno::Reference< cpo::uno::XInterface >& xSource );
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

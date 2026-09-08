@@ -92,7 +92,7 @@ class ScDataTableView : public Control
     DECL_LINK(HorzScrollHdl, weld::Scrollbar&, void);
 
 public:
-    ScDataTableView(const css::uno::Reference<css::awt::XWindow>& rParent,
+    ScDataTableView(const cpo::uno::Reference<css::awt::XWindow>& rParent,
                     std::shared_ptr<ScDocument> pDoc);
     ~ScDataTableView() override;
 

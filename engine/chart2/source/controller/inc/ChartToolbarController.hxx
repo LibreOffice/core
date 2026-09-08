@@ -42,10 +42,10 @@ public:
 
     virtual void doubleClick() override;
 
-    virtual css::uno::Reference<css::awt::XWindow> createPopupWindow() override;
+    virtual cpo::uno::Reference<css::awt::XWindow> createPopupWindow() override;
 
-    virtual css::uno::Reference<css::awt::XWindow>
-        createItemWindow(const css::uno::Reference<css::awt::XWindow>& rParent) override;
+    virtual cpo::uno::Reference<css::awt::XWindow>
+        createItemWindow(const cpo::uno::Reference<css::awt::XWindow>& rParent) override;
 
     // XServiceInfo
     virtual OUString getImplementationName() override;
@@ -70,7 +70,7 @@ public:
 
 private:
 
-    css::uno::Reference<css::frame::XFramesSupplier> mxFramesSupplier;
+    cpo::uno::Reference<css::frame::XFramesSupplier> mxFramesSupplier;
 };
 
 }

@@ -64,11 +64,11 @@ public:
     static void switchToTextCategories(
         const rtl::Reference<::chart::ChartModel> & xChartDoc );
 
-    static bool isDateNumberFormat( sal_Int32 nNumberFormat, const css::uno::Reference< css::util::XNumberFormats >& xNumberFormats );
-    static sal_Int32 getDateNumberFormat( const css::uno::Reference< css::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
-    static sal_Int32 getDateTimeInputNumberFormat( const css::uno::Reference< css::util::XNumberFormatsSupplier >& xNumberFormatsSupplier, double fNumber );
+    static bool isDateNumberFormat( sal_Int32 nNumberFormat, const cpo::uno::Reference< css::util::XNumberFormats >& xNumberFormats );
+    static sal_Int32 getDateNumberFormat( const cpo::uno::Reference< css::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
+    static sal_Int32 getDateTimeInputNumberFormat( const cpo::uno::Reference< css::util::XNumberFormatsSupplier >& xNumberFormatsSupplier, double fNumber );
 
-    static sal_Int32 getPercentNumberFormat( const css::uno::Reference<
+    static sal_Int32 getPercentNumberFormat( const cpo::uno::Reference<
                 css::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
 
     static bool areChartTypesCompatible(

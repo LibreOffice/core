@@ -163,13 +163,13 @@ cpo::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_NssImpl::getSubjectUniqu
     }
 }
 
-cpo::uno::Sequence< css::uno::Reference< css::security::XCertificateExtension > > SAL_CALL X509Certificate_NssImpl::getExtensions() {
+cpo::uno::Sequence< cpo::uno::Reference< css::security::XCertificateExtension > > SAL_CALL X509Certificate_NssImpl::getExtensions() {
     if( m_pCert != nullptr && m_pCert->extensions != nullptr ) {
         CERTCertExtension** extns ;
         int len ;
 
         for( len = 0, extns = m_pCert->extensions; *extns != nullptr; len ++, extns ++ ) ;
-        cpo::uno::Sequence< css::uno::Reference< css::security::XCertificateExtension > > xExtns( len ) ;
+        cpo::uno::Sequence< cpo::uno::Reference< css::security::XCertificateExtension > > xExtns( len ) ;
         auto xExtnsRange = asNonConstRange(xExtns);
 
         for( extns = m_pCert->extensions, len = 0; *extns != nullptr; extns ++, len ++ ) {
@@ -211,11 +211,11 @@ cpo::uno::Sequence< css::uno::Reference< css::security::XCertificateExtension > 
 
         return xExtns ;
     } else {
-        return cpo::uno::Sequence< css::uno::Reference< css::security::XCertificateExtension > > ();
+        return cpo::uno::Sequence< cpo::uno::Reference< css::security::XCertificateExtension > > ();
     }
 }
 
-css::uno::Reference< css::security::XCertificateExtension > SAL_CALL X509Certificate_NssImpl::findCertificateExtension( const cpo::uno::Sequence< sal_Int8 >& oid ) {
+cpo::uno::Reference< css::security::XCertificateExtension > SAL_CALL X509Certificate_NssImpl::findCertificateExtension( const cpo::uno::Sequence< sal_Int8 >& oid ) {
     if( m_pCert != nullptr && m_pCert->extensions != nullptr ) {
         CERTCertExtension** extns ;
         SECItem idItem ;
@@ -223,7 +223,7 @@ css::uno::Reference< css::security::XCertificateExtension > SAL_CALL X509Certifi
         idItem.data = reinterpret_cast<unsigned char *>(const_cast<sal_Int8 *>(oid.getConstArray()));
         idItem.len = oid.getLength() ;
 
-        css::uno::Reference<css::security::XCertificateExtension> xExtn;
+        cpo::uno::Reference<css::security::XCertificateExtension> xExtn;
         for( extns = m_pCert->extensions; *extns != nullptr; extns ++ ) {
             if( SECITEM_CompareItem( &idItem, &(*extns)->id ) == SECEqual ) {
                 const SECItem id = (*extns)->id;

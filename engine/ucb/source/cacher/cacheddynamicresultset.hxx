@@ -32,19 +32,19 @@ class CachedDynamicResultSet
                 , public css::lang::XTypeProvider
                 , public css::lang::XServiceInfo
 {
-    css::uno::Reference< css::ucb::XContentIdentifierMapping >
+    cpo::uno::Reference< css::ucb::XContentIdentifierMapping >
                             m_xContentIdentifierMapping;
 
 protected:
     virtual void
-    impl_InitResultSetOne( std::unique_lock<std::mutex>& rGuard, const css::uno::Reference< css::sdbc::XResultSet >& xResultSet ) override;
+    impl_InitResultSetOne( std::unique_lock<std::mutex>& rGuard, const cpo::uno::Reference< css::sdbc::XResultSet >& xResultSet ) override;
     virtual void
-    impl_InitResultSetTwo( std::unique_lock<std::mutex>& rGuard, const css::uno::Reference< css::sdbc::XResultSet >& xResultSet ) override;
+    impl_InitResultSetTwo( std::unique_lock<std::mutex>& rGuard, const cpo::uno::Reference< css::sdbc::XResultSet >& xResultSet ) override;
 
 public:
-    CachedDynamicResultSet( css::uno::Reference< css::ucb::XDynamicResultSet > const & xOrigin
-        , const css::uno::Reference< css::ucb::XContentIdentifierMapping > & xContentMapping
-        , const css::uno::Reference< cpo::uno::XComponentContext > & xContext );
+    CachedDynamicResultSet( cpo::uno::Reference< css::ucb::XDynamicResultSet > const & xOrigin
+        , const cpo::uno::Reference< css::ucb::XContentIdentifierMapping > & xContentMapping
+        , const cpo::uno::Reference< cpo::uno::XComponentContext > & xContext );
 
     virtual ~CachedDynamicResultSet() override;
 
@@ -78,12 +78,12 @@ class CachedDynamicResultSetFactory final :
                     css::lang::XServiceInfo,
                     css::ucb::XCachedDynamicResultSetFactory>
 {
-    css::uno::Reference< cpo::uno::XComponentContext >    m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext >    m_xContext;
 
 public:
 
     CachedDynamicResultSetFactory(
-        const css::uno::Reference< cpo::uno::XComponentContext > & xContext);
+        const cpo::uno::Reference< cpo::uno::XComponentContext > & xContext);
 
     virtual ~CachedDynamicResultSetFactory() override;
 
@@ -94,10 +94,10 @@ public:
 
     // XCachedDynamicResultSetFactory
 
-    virtual css::uno::Reference< css::ucb::XDynamicResultSet > SAL_CALL
+    virtual cpo::uno::Reference< css::ucb::XDynamicResultSet > SAL_CALL
     createCachedDynamicResultSet(
-                  const css::uno::Reference< css::ucb::XDynamicResultSet > &          SourceStub
-                , const css::uno::Reference< css::ucb::XContentIdentifierMapping > &  ContentIdentifierMapping
+                  const cpo::uno::Reference< css::ucb::XDynamicResultSet > &          SourceStub
+                , const cpo::uno::Reference< css::ucb::XContentIdentifierMapping > &  ContentIdentifierMapping
                 ) override;
 };
 

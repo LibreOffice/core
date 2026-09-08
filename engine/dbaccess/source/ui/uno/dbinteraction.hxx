@@ -58,14 +58,14 @@ namespace dbaui
     class BasicInteractionHandler
                 :public BasicInteractionHandler_Base
     {
-        css::uno::Reference< css::awt::XWindow > m_xParentWindow;
-        const css::uno::Reference< cpo::uno::XComponentContext >
+        cpo::uno::Reference< css::awt::XWindow > m_xParentWindow;
+        const cpo::uno::Reference< cpo::uno::XComponentContext >
                             m_xContext;
         const bool          m_bFallbackToGeneric;
 
     public:
         BasicInteractionHandler(
-            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
             const bool i_bFallbackToGeneric
         );
 
@@ -73,33 +73,33 @@ namespace dbaui
         virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& rArgs ) override;
 
         // XInteractionHandler2
-        virtual bool handleInteractionRequest( const css::uno::Reference< css::task::XInteractionRequest >& Request ) override;
+        virtual bool handleInteractionRequest( const cpo::uno::Reference< css::task::XInteractionRequest >& Request ) override;
 
         // XInteractionHandler
-        virtual void handle( const css::uno::Reference< css::task::XInteractionRequest >& Request ) override;
+        virtual void handle( const cpo::uno::Reference< css::task::XInteractionRequest >& Request ) override;
 
     protected:
         bool
-                impl_handle_throw( const css::uno::Reference< css::task::XInteractionRequest >& i_Request );
+                impl_handle_throw( const cpo::uno::Reference< css::task::XInteractionRequest >& i_Request );
 
         /// handle SQLExceptions (and derived classes)
         static void implHandle(
                     const ::dbtools::SQLExceptionInfo& _rSqlInfo,
-                    const cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > >& _rContinuations);
+                    const cpo::uno::Sequence< cpo::uno::Reference< css::task::XInteractionContinuation > >& _rContinuations);
 
         /// handle parameter requests
         void    implHandle(
                     const css::sdb::ParametersRequest& _rParamRequest,
-                    const cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > >& _rContinuations);
+                    const cpo::uno::Sequence< cpo::uno::Reference< css::task::XInteractionContinuation > >& _rContinuations);
 
         /// handle document save requests
         void    implHandle(
                     const css::sdb::DocumentSaveRequest& _rParamRequest,
-                    const cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > >& _rContinuations);
+                    const cpo::uno::Sequence< cpo::uno::Reference< css::task::XInteractionContinuation > >& _rContinuations);
 
         /// handles requests which are not SDB-specific
         bool    implHandleUnknown(
-                    const css::uno::Reference< css::task::XInteractionRequest >& _rxRequest );
+                    const cpo::uno::Reference< css::task::XInteractionRequest >& _rxRequest );
 
         /// known continuation types
         enum Continuation
@@ -117,7 +117,7 @@ namespace dbaui
         */
         static sal_Int32 getContinuation(
             Continuation _eCont,
-            const cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > >& _rContinuations);
+            const cpo::uno::Sequence< cpo::uno::Reference< css::task::XInteractionContinuation > >& _rContinuations);
     };
 
     // SQLExceptionInteractionHandler
@@ -125,7 +125,7 @@ namespace dbaui
     {
     public:
         explicit SQLExceptionInteractionHandler(
-                const css::uno::Reference< cpo::uno::XComponentContext >& rxContext
+                const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext
             )
             :BasicInteractionHandler( rxContext, false )
         {
@@ -153,7 +153,7 @@ namespace dbaui
     {
     public:
         explicit LegacyInteractionHandler(
-                const css::uno::Reference< cpo::uno::XComponentContext >& rxContext
+                const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext
             )
             :BasicInteractionHandler( rxContext, true )
         {

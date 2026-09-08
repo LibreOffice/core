@@ -45,6 +45,7 @@ constexpr OUString AVMEDIA_WIN_PLAYER_SERVICENAME = u"com.sun.star.media.Player_
 constexpr float AVMEDIA_DB_RANGE = 40.0;
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace avmedia::win {
 

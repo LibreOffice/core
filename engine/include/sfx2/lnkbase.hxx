@@ -86,7 +86,7 @@ private:
     bool                    bWasLastEditOK : 1;
     bool                    m_bIsConnect : 1;
     bool                    m_bIsReadOnly;
-    css::uno::Reference<css::io::XInputStream>
+    cpo::uno::Reference<css::io::XInputStream>
                             m_xInputStreamToLoadFrom;
 
     DECL_DLLPRIVATE_LINK( EndEditHdl, const OUString&, void );
@@ -159,7 +159,7 @@ public:
     void            SetSynchron( bool bFlag )   { bSynchron = bFlag; }
 
     void            setStreamToLoadFrom(
-                        const css::uno::Reference<css::io::XInputStream>& xInputStream,
+                        const cpo::uno::Reference<css::io::XInputStream>& xInputStream,
                         bool bIsReadOnly )
                             { m_xInputStreamToLoadFrom = xInputStream;
                               m_bIsReadOnly = bIsReadOnly; }

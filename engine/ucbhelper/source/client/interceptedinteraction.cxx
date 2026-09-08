@@ -27,7 +27,7 @@ InterceptedInteraction::InterceptedInteraction()
 {
 }
 
-void InterceptedInteraction::setInterceptedHandler(const css::uno::Reference< css::task::XInteractionHandler >& xInterceptedHandler)
+void InterceptedInteraction::setInterceptedHandler(const cpo::uno::Reference< css::task::XInteractionHandler >& xInterceptedHandler)
 {
     m_xInterceptedHandler = xInterceptedHandler;
 }
@@ -39,32 +39,32 @@ void InterceptedInteraction::setInterceptions(::std::vector< InterceptedRequest 
 
 InterceptedInteraction::EInterceptionState InterceptedInteraction::intercepted(
     const InterceptedRequest&,
-    const css::uno::Reference< css::task::XInteractionRequest >&)
+    const cpo::uno::Reference< css::task::XInteractionRequest >&)
 {
     // default behaviour! see impl_interceptRequest() for further information ...
     return E_NOT_INTERCEPTED;
 }
 
-css::uno::Reference< css::task::XInteractionContinuation > InterceptedInteraction::extractContinuation(const cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > >& lContinuations,
+cpo::uno::Reference< css::task::XInteractionContinuation > InterceptedInteraction::extractContinuation(const cpo::uno::Sequence< cpo::uno::Reference< css::task::XInteractionContinuation > >& lContinuations,
                                                                                                        const cpo::uno::Type&                                                                   aType         )
 {
-    const css::uno::Reference< css::task::XInteractionContinuation >* pContinuations = std::find_if(lContinuations.begin(), lContinuations.end(),
-        [&aType](const css::uno::Reference< css::task::XInteractionContinuation >& rContinuation) {
-            css::uno::Reference< cpo::uno::XInterface > xCheck(rContinuation, css::uno::UNO_QUERY);
+    const cpo::uno::Reference< css::task::XInteractionContinuation >* pContinuations = std::find_if(lContinuations.begin(), lContinuations.end(),
+        [&aType](const cpo::uno::Reference< css::task::XInteractionContinuation >& rContinuation) {
+            cpo::uno::Reference< cpo::uno::XInterface > xCheck(rContinuation, cpo::uno::UNO_QUERY);
             return xCheck->queryInterface(aType).hasValue();
         });
     if (pContinuations != lContinuations.end())
         return *pContinuations;
 
-    return css::uno::Reference< css::task::XInteractionContinuation >();
+    return cpo::uno::Reference< css::task::XInteractionContinuation >();
 }
 
-void InterceptedInteraction::handle(const css::uno::Reference< css::task::XInteractionRequest >& xRequest)
+void InterceptedInteraction::handle(const cpo::uno::Reference< css::task::XInteractionRequest >& xRequest)
 {
     impl_handleDefault(xRequest);
 }
 
-void InterceptedInteraction::impl_handleDefault(const css::uno::Reference< css::task::XInteractionRequest >& xRequest)
+void InterceptedInteraction::impl_handleDefault(const cpo::uno::Reference< css::task::XInteractionRequest >& xRequest)
 {
     EInterceptionState eState = impl_interceptRequest(xRequest);
 
@@ -93,11 +93,11 @@ void InterceptedInteraction::impl_handleDefault(const css::uno::Reference< css::
     }
 }
 
-InterceptedInteraction::EInterceptionState InterceptedInteraction::impl_interceptRequest(const css::uno::Reference< css::task::XInteractionRequest >& xRequest)
+InterceptedInteraction::EInterceptionState InterceptedInteraction::impl_interceptRequest(const cpo::uno::Reference< css::task::XInteractionRequest >& xRequest)
 {
     cpo::uno::Any                                                                    aRequest       = xRequest->getRequest();
     const cpo::uno::Type&                                                            aRequestType   = aRequest.getValueType();
-    cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > lContinuations = xRequest->getContinuations();
+    cpo::uno::Sequence< cpo::uno::Reference< css::task::XInteractionContinuation > > lContinuations = xRequest->getContinuations();
 
     // check against the list of static requests
     auto pIt = std::find_if(m_lInterceptions.begin(), m_lInterceptions.end(),
@@ -118,7 +118,7 @@ InterceptedInteraction::EInterceptionState InterceptedInteraction::impl_intercep
         if (eState != E_NOT_INTERCEPTED)
             return eState;
 
-        css::uno::Reference< css::task::XInteractionContinuation > xContinuation = InterceptedInteraction::extractContinuation(lContinuations, rInterception.Continuation);
+        cpo::uno::Reference< css::task::XInteractionContinuation > xContinuation = InterceptedInteraction::extractContinuation(lContinuations, rInterception.Continuation);
         if (xContinuation.is())
         {
             xContinuation->select();

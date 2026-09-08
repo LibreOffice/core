@@ -37,6 +37,7 @@
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace {
 
@@ -58,10 +59,10 @@ public:
 
 }
 
-ScVbaNames::ScVbaNames(const css::uno::Reference< ov::XHelperInterface >& xParent,
-            const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
-            const css::uno::Reference< css::sheet::XNamedRanges >& xNames,
-            css::uno::Reference< css::frame::XModel > xModel ):
+ScVbaNames::ScVbaNames(const cpo::uno::Reference< ov::XHelperInterface >& xParent,
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
+            const cpo::uno::Reference< css::sheet::XNamedRanges >& xNames,
+            cpo::uno::Reference< css::frame::XModel > xModel ):
             ScVbaNames_BASE(  xParent , xContext , uno::Reference< container::XIndexAccess >( xNames, uno::UNO_QUERY ) ),
             mxModel(std::move( xModel )),
             mxNames( xNames )

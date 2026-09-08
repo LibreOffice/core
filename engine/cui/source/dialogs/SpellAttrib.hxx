@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <cpo/uno/Sequence.h>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/linguistic2/XProofreader.hpp>
@@ -33,7 +33,7 @@ struct SpellErrorDescription
     OUString                                     sExplanation;
     OUString                                     sExplanationURL;
     css::lang::Locale                      aLocale;
-    css::uno::Reference< css::linguistic2::XProofreader > xGrammarChecker;
+    cpo::uno::Reference< css::linguistic2::XProofreader > xGrammarChecker;
     cpo::uno::Sequence< OUString >  aSuggestions;
     OUString                                     sRuleId;
 
@@ -41,7 +41,7 @@ struct SpellErrorDescription
                       OUString aText,
                       css::lang::Locale _aLocale,
                       const cpo::uno::Sequence< OUString >& rSuggestions,
-                      css::uno::Reference< css::linguistic2::XProofreader > _xGrammarChecker,
+                      cpo::uno::Reference< css::linguistic2::XProofreader > _xGrammarChecker,
                       const OUString* pDialogTitle = nullptr,
                       const OUString* pExplanation = nullptr,
                       const OUString* pRuleId = nullptr,

@@ -33,11 +33,11 @@ class XMLOFF_DLLPUBLIC XMLTextMasterPageExport : public XMLPageExport
 protected:
 
     virtual void exportHeaderFooterContent(
-            const css::uno::Reference< css::text::XText >& rText,
+            const cpo::uno::Reference< css::text::XText >& rText,
             bool bAutoStyles, bool bExportParagraph = true );
 
     virtual void exportMasterPageContent(
-                const css::uno::Reference< css::beans::XPropertySet > & rPropSet,
+                const cpo::uno::Reference< css::beans::XPropertySet > & rPropSet,
                  bool bAutoStyles ) override;
 
 public:

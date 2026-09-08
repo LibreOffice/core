@@ -25,7 +25,7 @@
 #include <sfx2/lnkbase.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 
 namespace com::sun::star {
 
@@ -115,10 +115,10 @@ public:
     const OUString& GetProgName() const;
     bool IsEmpty() const;
 
-    void SetObjRef(const css::uno::Reference < css::embed::XEmbeddedObject >& rNewObjRef);
-    css::uno::Reference < css::embed::XEmbeddedObject > const & GetObjRef() const;
+    void SetObjRef(const cpo::uno::Reference < css::embed::XEmbeddedObject >& rNewObjRef);
+    cpo::uno::Reference < css::embed::XEmbeddedObject > const & GetObjRef() const;
 
-    SVX_DLLPRIVATE css::uno::Reference < css::embed::XEmbeddedObject > const & GetObjRef_NoInit() const;
+    SVX_DLLPRIVATE cpo::uno::Reference < css::embed::XEmbeddedObject > const & GetObjRef_NoInit() const;
 
     void AbandonObject();
 
@@ -146,15 +146,15 @@ public:
     virtual void NbcSetLogicRect(const tools::Rectangle& rRect, bool bAdaptTextMinSize = true) override;
     virtual void SetGeoData(const SdrObjGeoData& rGeo) override;
 
-    static bool CanUnloadRunningObj( const css::uno::Reference< css::embed::XEmbeddedObject >& xObj,
+    static bool CanUnloadRunningObj( const cpo::uno::Reference< css::embed::XEmbeddedObject >& xObj,
                                          sal_Int64 nAspect );
-    static bool Unload( const css::uno::Reference< css::embed::XEmbeddedObject >& xObj, sal_Int64 nAspect );
+    static bool Unload( const cpo::uno::Reference< css::embed::XEmbeddedObject >& xObj, sal_Int64 nAspect );
     bool Unload();
     void Connect(SvxOle2Shape* pCreator = nullptr);
     void Disconnect();
     void ObjectLoaded();
 
-    css::uno::Reference< css::frame::XModel > getXModel() const;
+    cpo::uno::Reference< css::frame::XModel > getXModel() const;
 
     bool IsChart() const;
     bool IsCalc() const;
@@ -172,14 +172,14 @@ public:
     bool CompleteDeferredLink();
     bool HasDeferredLink() const;
 
-    void SyncObjVisualArea(const css::uno::Reference<css::embed::XEmbeddedObject>& xObj);
+    void SyncObjVisualArea(const cpo::uno::Reference<css::embed::XEmbeddedObject>& xObj);
 
     // allows to transfer the graphics to the object helper
     void SetGraphicToObj( const Graphic& aGraphic );
-    void SetGraphicToObj( const css::uno::Reference< css::io::XInputStream >& xGrStream,
+    void SetGraphicToObj( const cpo::uno::Reference< css::io::XInputStream >& xGrStream,
                           const OUString& aMediaType );
 
-    const css::uno::Reference< css::frame::XModel > & GetParentXModel()  const;
+    const cpo::uno::Reference< css::frame::XModel > & GetParentXModel()  const;
     bool CalculateNewScaling( double& aScaleWidth, double& aScaleHeight, Size& aObjAreaSize );
     bool AddOwnLightClient();
 

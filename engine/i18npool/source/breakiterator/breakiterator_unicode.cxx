@@ -38,6 +38,7 @@ extern const char OpenOffice_dat[];
 U_CDECL_END
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
 

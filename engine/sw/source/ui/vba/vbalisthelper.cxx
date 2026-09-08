@@ -29,6 +29,7 @@
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 const sal_Int32 LIST_LEVEL_COUNT = 9;
 
@@ -44,7 +45,7 @@ constexpr OUString CHAR_SQUARE = u"\u2540"_ustr;
 constexpr OUString CHAR_FOUR_DIAMONDS = u"\u2756"_ustr;
 constexpr OUString CHAR_ARROW = u"\u27A2"_ustr;
 
-SwVbaListHelper::SwVbaListHelper( css::uno::Reference< css::text::XTextDocument > xTextDoc, sal_Int32 nGalleryType, sal_Int32 nTemplateType ) : mxTextDocument(std::move( xTextDoc )), mnGalleryType( nGalleryType ), mnTemplateType( nTemplateType )
+SwVbaListHelper::SwVbaListHelper( cpo::uno::Reference< css::text::XTextDocument > xTextDoc, sal_Int32 nGalleryType, sal_Int32 nTemplateType ) : mxTextDocument(std::move( xTextDoc )), mnGalleryType( nGalleryType ), mnTemplateType( nTemplateType )
 {
     Init();
 }

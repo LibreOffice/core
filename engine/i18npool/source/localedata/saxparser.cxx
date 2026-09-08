@@ -43,7 +43,7 @@
 #include "LocaleNode.hxx"
 
 using namespace ::cppu;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::xml::sax;
@@ -333,8 +333,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         rParser->parseStream( source );
 
         nError = pDocHandler->nError;
-        css::uno::Reference<css::lang::XComponent>(
-            xContext, css::uno::UNO_QUERY_THROW)->dispose();
+        cpo::uno::Reference<css::lang::XComponent>(
+            xContext, cpo::uno::UNO_QUERY_THROW)->dispose();
         return nError;
     } catch (cpo::uno::Exception & e) {
         std::cerr << "ERROR: " << e.Message << '\n';

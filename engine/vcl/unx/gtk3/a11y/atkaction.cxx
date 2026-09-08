@@ -30,6 +30,7 @@
 #include <map>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 // FIXME
 static const gchar *
@@ -44,7 +45,7 @@ getAsConst( const OString& rString )
 }
 
 /// @throws uno::RuntimeException
-static css::uno::Reference<css::accessibility::XAccessibleAction>
+static cpo::uno::Reference<css::accessibility::XAccessibleAction>
         getAction( AtkAction *action )
 {
     AtkObjectWrapper *pWrap = ATK_OBJECT_WRAPPER( action );
@@ -53,13 +54,13 @@ static css::uno::Reference<css::accessibility::XAccessibleAction>
     {
         if( !pWrap->mpAction.is() )
         {
-            pWrap->mpAction.set(pWrap->mpContext, css::uno::UNO_QUERY);
+            pWrap->mpAction.set(pWrap->mpContext, cpo::uno::UNO_QUERY);
         }
 
         return pWrap->mpAction;
     }
 
-    return css::uno::Reference<css::accessibility::XAccessibleAction>();
+    return cpo::uno::Reference<css::accessibility::XAccessibleAction>();
 }
 
 extern "C" {
@@ -69,7 +70,7 @@ action_wrapper_do_action (AtkAction *action,
                           gint       i)
 {
     try {
-        css::uno::Reference<css::accessibility::XAccessibleAction> pAction
+        cpo::uno::Reference<css::accessibility::XAccessibleAction> pAction
             = getAction( action );
         if( pAction.is() )
             return pAction->doAccessibleAction( i );
@@ -85,7 +86,7 @@ static gint
 action_wrapper_get_n_actions (AtkAction *action)
 {
     try {
-        css::uno::Reference<css::accessibility::XAccessibleAction> pAction
+        cpo::uno::Reference<css::accessibility::XAccessibleAction> pAction
             = getAction( action );
         if( pAction.is() )
             return pAction->getAccessibleActionCount();
@@ -124,7 +125,7 @@ action_wrapper_get_name (AtkAction *action,
     };
 
     try {
-        css::uno::Reference<css::accessibility::XAccessibleAction> pAction
+        cpo::uno::Reference<css::accessibility::XAccessibleAction> pAction
             = getAction( action );
         if( pAction.is() )
         {
@@ -213,7 +214,7 @@ action_wrapper_get_keybinding (AtkAction *action,
                                gint       i)
 {
     try {
-        css::uno::Reference<css::accessibility::XAccessibleAction> pAction
+        cpo::uno::Reference<css::accessibility::XAccessibleAction> pAction
             = getAction( action );
         if( pAction.is() )
         {

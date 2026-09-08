@@ -62,11 +62,11 @@ public:
         }
 
     virtual void addPropertyChangeListener (
-        const OUString &, const css::uno::Reference< css::beans::XPropertyChangeListener > &) override
+        const OUString &, const cpo::uno::Reference< css::beans::XPropertyChangeListener > &) override
         {}
 
     virtual void removePropertyChangeListener (
-        const OUString &, const css::uno::Reference< css::beans::XPropertyChangeListener > &) override
+        const OUString &, const cpo::uno::Reference< css::beans::XPropertyChangeListener > &) override
         {}
 
     virtual void flush() override

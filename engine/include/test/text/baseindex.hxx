@@ -12,14 +12,14 @@
 
 #include <test/testdllapi.hxx>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 namespace apitest
 {
 class OOO_DLLPUBLIC_TEST BaseIndex
 {
 public:
-    virtual css::uno::Reference<cpo::uno::XInterface> init() = 0;
+    virtual cpo::uno::Reference<cpo::uno::XInterface> init() = 0;
     virtual ~BaseIndex();
     void testBaseIndexProperties();
 };

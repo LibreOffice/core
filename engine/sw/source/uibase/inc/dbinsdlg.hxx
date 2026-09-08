@@ -26,7 +26,7 @@
 #include <unotools/configitem.hxx>
 #include "numfmtlb.hxx"
 #include <swdbdata.hxx>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <cpo/uno/Sequence.h>
 #include <o3tl/sorted_vector.hxx>
 
@@ -144,16 +144,16 @@ class SwInsertDBColAutoPilot final : public SfxDialogController, public utl::Con
 
 public:
     SwInsertDBColAutoPilot( SwView& rView,
-        css::uno::Reference< css::sdbc::XDataSource> const & rxSource,
-        css::uno::Reference<css::sdbcx::XColumnsSupplier> const & xColSupp,
+        cpo::uno::Reference< css::sdbc::XDataSource> const & rxSource,
+        cpo::uno::Reference<css::sdbcx::XColumnsSupplier> const & xColSupp,
         SwDBData aData  );
 
     virtual ~SwInsertDBColAutoPilot() override;
 
     void DataToDoc( const cpo::uno::Sequence< cpo::uno::Any >& rSelection,
-        css::uno::Reference< css::sdbc::XDataSource> const & rxSource,
-        css::uno::Reference< css::sdbc::XConnection> const & xConnection,
-        css::uno::Reference< css::sdbc::XResultSet > const & xResultSet);
+        cpo::uno::Reference< css::sdbc::XDataSource> const & rxSource,
+        cpo::uno::Reference< css::sdbc::XConnection> const & xConnection,
+        cpo::uno::Reference< css::sdbc::XResultSet > const & xResultSet);
 
 };
 

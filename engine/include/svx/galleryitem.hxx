@@ -22,7 +22,7 @@
 #include <svx/svxdllapi.h>
 #include <svl/poolitem.hxx>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 namespace com::sun::star::graphic { class XGraphic; }
 namespace com::sun::star::lang { class XComponent; }
@@ -41,8 +41,8 @@ class SVXCORE_DLLPUBLIC SvxGalleryItem final : public SfxPoolItem
 {
     sal_Int8 m_nType;
     OUString m_aURL;
-    css::uno::Reference< css::lang::XComponent > m_xDrawing;
-    css::uno::Reference< css::graphic::XGraphic > m_xGraphic;
+    cpo::uno::Reference< css::lang::XComponent > m_xDrawing;
+    cpo::uno::Reference< css::graphic::XGraphic > m_xGraphic;
 
 public:
     static SfxPoolItem* CreateDefault();
@@ -54,7 +54,7 @@ public:
 
     sal_Int8 GetType() const { return m_nType; }
     const OUString& GetURL() const { return m_aURL; }
-    const css::uno::Reference< css::graphic::XGraphic >& GetGraphic() const { return m_xGraphic; }
+    const cpo::uno::Reference< css::graphic::XGraphic >& GetGraphic() const { return m_xGraphic; }
 
     // pure virtual methods from SfxPoolItem
     virtual bool         operator==( const SfxPoolItem& ) const override;

@@ -41,7 +41,7 @@ class ConvDicXMLExport : public SvXMLExport
 public:
     ConvDicXMLExport( ConvDic &rConvDic,
         const OUString &rFileName,
-        css::uno::Reference< css::xml::sax::XDocumentHandler > const &rHandler) :
+        cpo::uno::Reference< css::xml::sax::XDocumentHandler > const &rHandler) :
         SvXMLExport ( comphelper::getProcessComponentContext(), u"com.sun.star.lingu2.ConvDicXMLExport"_ustr, rFileName,
                       css::util::MeasureUnit::CM, rHandler ),
         rDic        ( rConvDic ),
@@ -92,7 +92,7 @@ public:
 
 private:
     virtual SvXMLImportContext *CreateFastContext( sal_Int32 Element,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
 };
 
 

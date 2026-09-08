@@ -23,7 +23,7 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <cpo/uno/XComponentContext.hpp>
 
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace css::scanner;
 using namespace ::cpo::uno;
 

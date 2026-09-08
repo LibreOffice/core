@@ -45,9 +45,9 @@ class SpellCheckerDispatcher :
     typedef std::map< LanguageType, LangSvcEntries_Spell_Ptr_t >    SpellSvcByLangMap_t;
     SpellSvcByLangMap_t     m_aSvcMap;
 
-    css::uno::Reference< css::linguistic2::XLinguProperties >           m_xPropSet;
-    css::uno::Reference< css::linguistic2::XSearchableDictionaryList >  m_xDicList;
-    std::map<LanguageType, std::vector<css::uno::Reference<css::linguistic2::XDictionary>>> m_aDictionaryMap;
+    cpo::uno::Reference< css::linguistic2::XLinguProperties >           m_xPropSet;
+    cpo::uno::Reference< css::linguistic2::XSearchableDictionaryList >  m_xDicList;
+    std::map<LanguageType, std::vector<cpo::uno::Reference<css::linguistic2::XDictionary>>> m_aDictionaryMap;
 
     LngSvcMgr                       &m_rMgr;
     mutable std::unique_ptr<linguistic::SpellCache> m_pCache; // Spell Cache (holds known words)
@@ -58,9 +58,9 @@ class SpellCheckerDispatcher :
 
     inline linguistic::SpellCache &  GetCache() const;
 
-    inline const css::uno::Reference< css::linguistic2::XLinguProperties > &
+    inline const cpo::uno::Reference< css::linguistic2::XLinguProperties > &
             GetPropSet();
-    inline const css::uno::Reference< css::linguistic2::XSearchableDictionaryList > &
+    inline const cpo::uno::Reference< css::linguistic2::XSearchableDictionaryList > &
             GetDicList();
 
     /// @throws cpo::uno::RuntimeException
@@ -70,7 +70,7 @@ class SpellCheckerDispatcher :
 
     /// @throws cpo::uno::RuntimeException
     /// @throws css::lang::IllegalArgumentException
-    css::uno::Reference<
+    cpo::uno::Reference<
         css::linguistic2::XSpellAlternatives >
             spell_Impl(const OUString& aWord, LanguageType nLanguage,
                     const css::beans::PropertyValues& aProperties);
@@ -85,7 +85,7 @@ public:
 
     // XSpellChecker
     virtual bool isValid( const OUString& aWord, const css::lang::Locale& aLocale, const cpo::uno::Sequence< ::css::beans::PropertyValue >& aProperties ) override;
-    virtual css::uno::Reference< css::linguistic2::XSpellAlternatives > spell( const OUString& aWord, const css::lang::Locale& aLocale, const cpo::uno::Sequence< ::css::beans::PropertyValue >& aProperties ) override;
+    virtual cpo::uno::Reference< css::linguistic2::XSpellAlternatives > spell( const OUString& aWord, const css::lang::Locale& aLocale, const cpo::uno::Sequence< ::css::beans::PropertyValue >& aProperties ) override;
 
     // LinguDispatcher
     virtual void SetServiceList( const css::lang::Locale &rLocale, const cpo::uno::Sequence< OUString > &rSvcImplNames ) override;
@@ -107,7 +107,7 @@ inline linguistic::SpellCache & SpellCheckerDispatcher::GetCache() const
 }
 
 
-inline const css::uno::Reference< css::linguistic2::XLinguProperties > &
+inline const cpo::uno::Reference< css::linguistic2::XLinguProperties > &
         SpellCheckerDispatcher::GetPropSet()
 {
     if (!m_xPropSet.is())
@@ -116,7 +116,7 @@ inline const css::uno::Reference< css::linguistic2::XLinguProperties > &
 }
 
 
-inline const css::uno::Reference< css::linguistic2::XSearchableDictionaryList > &
+inline const cpo::uno::Reference< css::linguistic2::XSearchableDictionaryList > &
         SpellCheckerDispatcher::GetDicList()
 {
     if (!m_xDicList.is())

@@ -63,8 +63,8 @@ public:
     /** insert the text body at the text cursor */
     void                insertAt(
                             const ::oox::core::XmlFilterBase& rFilterBase,
-                            const css::uno::Reference < css::text::XText > & xText,
-                            const css::uno::Reference < css::text::XTextCursor > & xAt,
+                            const cpo::uno::Reference < css::text::XText > & xText,
+                            const cpo::uno::Reference < css::text::XTextCursor > & xAt,
                             const TextCharacterProperties& rTextStyleProperties,
                             const TextListStylePtr& pMasterTextListStyle ) const;
     bool isEmpty() const;
@@ -92,14 +92,14 @@ public:
 
     void                ApplyStyleEmpty(
                             const ::oox::core::XmlFilterBase& rFilterBase,
-                            const css::uno::Reference < css::text::XText > & xText,
+                            const cpo::uno::Reference < css::text::XText > & xText,
                             const TextCharacterProperties& rTextStyleProperties,
                             const TextListStylePtr& pMasterTextListStylePtr) const;
 
     /// throws exception
     void                ApplyMasterTextStyle(
                             const ::oox::core::XmlFilterBase& rFilterBase,
-                            const css::uno::Reference< css::style::XStyle > & aXStyle,
+                            const cpo::uno::Reference< css::style::XStyle > & aXStyle,
                             const TextCharacterProperties& rTextStyleProperties,
                             const TextListStylePtr& pMasterTextListStylePtr, size_t nLevel) const;
 private:

@@ -25,7 +25,7 @@
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/datatransfer/clipboard/SystemClipboard.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <comphelper/processfactory.hxx>
 #include <tools/color.hxx>
 #include <vcl/unohelp.hxx>
@@ -170,8 +170,8 @@ void XAccessibleTextTester::testGetCharacterBounds()
     }
 
     // check whether all characters fit into component bounds
-    css::uno::Reference<css::accessibility::XAccessibleComponent> xComponent(
-        m_xContext, css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::accessibility::XAccessibleComponent> xComponent(
+        m_xContext, cpo::uno::UNO_QUERY_THROW);
     css::awt::Rectangle aBounds = xComponent->getBounds();
     for (int i = 0; i < nCharCount; ++i)
     {
@@ -587,11 +587,11 @@ void XAccessibleTextTester::testCopyText()
 
 OUString XAccessibleTextTester::getSystemClipboardText()
 {
-    css::uno::Reference<css::datatransfer::clipboard::XSystemClipboard> xClipboard
+    cpo::uno::Reference<css::datatransfer::clipboard::XSystemClipboard> xClipboard
         = css::datatransfer::clipboard::SystemClipboard::create(
             comphelper::getProcessComponentContext());
 
-    css::uno::Reference<css::datatransfer::XTransferable> xTrans = xClipboard->getContents();
+    cpo::uno::Reference<css::datatransfer::XTransferable> xTrans = xClipboard->getContents();
 
     cpo::uno::Sequence<css::datatransfer::DataFlavor> aDataFlavors
         = xTrans->getTransferDataFlavors();

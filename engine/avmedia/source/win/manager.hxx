@@ -35,7 +35,7 @@ public:
     ~Manager() override;
 
     // XManager
-    virtual css::uno::Reference< css::media::XPlayer > createPlayer( const OUString& aURL ) override;
+    virtual cpo::uno::Reference< css::media::XPlayer > createPlayer( const OUString& aURL ) override;
 
     // XServiceInfo
     virtual OUString getImplementationName(  ) override;

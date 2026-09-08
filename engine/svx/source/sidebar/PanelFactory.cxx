@@ -50,7 +50,7 @@
 #include <cpo/uno/XComponentContext.hpp>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace svx::sidebar;
 
@@ -74,7 +74,7 @@ public:
     PanelFactory& operator=(const PanelFactory&) = delete;
 
     // XUIElementFactory
-    css::uno::Reference<css::ui::XUIElement> createUIElement (
+    cpo::uno::Reference<css::ui::XUIElement> createUIElement (
         const OUString& rsResourceURL,
         const ::cpo::uno::Sequence<css::beans::PropertyValue>& rArguments) override;
 

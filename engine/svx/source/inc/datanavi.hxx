@@ -189,7 +189,7 @@ namespace svxform
 
         DataTreeDropTarget m_aDropHelper;
 
-        css::uno::Reference< css::xforms::XFormsUIHelper1 >
+        cpo::uno::Reference< css::xforms::XFormsUIHelper1 >
                                     m_xUIHelper;
 
         DataNavigatorWindow*        m_pNaviWin;
@@ -209,11 +209,11 @@ namespace svxform
         DECL_LINK(PopupMenuHdl, const CommandEvent&, bool);
 
         void                        AddChildren(const weld::TreeIter* _pParent,
-                                                const css::uno::Reference< css::xml::dom::XNode >& _xNode);
+                                                const cpo::uno::Reference< css::xml::dom::XNode >& _xNode);
         bool                        DoToolBoxAction(std::u16string_view rToolBoxID);
         void                        AddEntry(std::unique_ptr<ItemNode> _pNewNode, bool _bIsElement, weld::TreeIter* pRet = nullptr);
-        void                        AddEntry(const css::uno::Reference< css::beans::XPropertySet >& _rPropSet, weld::TreeIter* pRet = nullptr);
-        void                        EditEntry( const css::uno::Reference< css::beans::XPropertySet >& _rPropSet );
+        void                        AddEntry(const cpo::uno::Reference< css::beans::XPropertySet >& _rPropSet, weld::TreeIter* pRet = nullptr);
+        void                        EditEntry( const cpo::uno::Reference< css::beans::XPropertySet >& _rPropSet );
         bool                        RemoveEntry();
 
         void                        PrepDnD();
@@ -227,7 +227,7 @@ namespace svxform
         virtual ~XFormsPage() override;
 
         bool                 HasModel() const { return m_bHasModel; }
-        OUString             SetModel( const css::uno::Reference< css::xforms::XModel > & _xModel, int _nPagePos );
+        OUString             SetModel( const cpo::uno::Reference< css::xforms::XModel > & _xModel, int _nPagePos );
         void                 ClearModel();
         OUString             LoadInstance(const cpo::uno::Sequence< css::beans::PropertyValue >& _xPropSeq);
 
@@ -242,10 +242,10 @@ namespace svxform
         void                 SetInstanceURL( const OUString &url ) { m_sInstanceURL=url; }
         void                 SetLinkOnce( bool bLinkOnce ) { m_bLinkOnce=bLinkOnce; }
 
-        css::uno::Reference<css::beans::XPropertySet>
-                             GetBindingForNode( const css::uno::Reference<css::xml::dom::XNode> &xNode ) { return m_xUIHelper->getBindingForNode(xNode,true); }
-        OUString             GetServiceNameForNode( const css::uno::Reference<css::xml::dom::XNode> &xNode ) { return m_xUIHelper->getDefaultServiceNameForNode(xNode); }
-        const css::uno::Reference< css::xforms::XFormsUIHelper1 >&
+        cpo::uno::Reference<css::beans::XPropertySet>
+                             GetBindingForNode( const cpo::uno::Reference<css::xml::dom::XNode> &xNode ) { return m_xUIHelper->getBindingForNode(xNode,true); }
+        OUString             GetServiceNameForNode( const cpo::uno::Reference<css::xml::dom::XNode> &xNode ) { return m_xUIHelper->getDefaultServiceNameForNode(xNode); }
+        const cpo::uno::Reference< css::xforms::XFormsUIHelper1 >&
                              GetXFormsHelper() const { return m_xUIHelper; }
     };
 
@@ -267,19 +267,19 @@ namespace svxform
         bool                        m_bIsNotifyDisabled;
         std::vector< std::unique_ptr<XFormsPage> >
                                     m_aPageList;
-        std::vector< css::uno::Reference< css::container::XContainer >  >
+        std::vector< cpo::uno::Reference< css::container::XContainer >  >
                                     m_aContainerList;
-        std::vector< css::uno::Reference< css::xml::dom::events::XEventTarget > >
+        std::vector< cpo::uno::Reference< css::xml::dom::events::XEventTarget > >
                                     m_aEventTargetList;
         Timer                       m_aUpdateTimer;
 
         ::rtl::Reference < DataListener >
                                     m_xDataListener;
-        css::uno::Reference< css::container::XNameContainer >
+        cpo::uno::Reference< css::container::XNameContainer >
                                     m_xDataContainer;
-        css::uno::Reference< css::frame::XFrame >
+        cpo::uno::Reference< css::frame::XFrame >
                                     m_xFrame;
-        css::uno::Reference< css::frame::XModel >
+        cpo::uno::Reference< css::frame::XModel >
                                     m_xFrameModel;
 
         DECL_LINK(            ModelSelectListBoxHdl, weld::ComboBox&, void );
@@ -306,8 +306,8 @@ namespace svxform
 
         static void                 SetDocModified();
         void                        NotifyChanges( bool _bLoadAll = false );
-        void                        AddContainerBroadcaster( const css::uno::Reference< css::container::XContainer > & xContainer );
-        void                        AddEventBroadcaster( const css::uno::Reference< css::xml::dom::events::XEventTarget >& xTarget );
+        void                        AddContainerBroadcaster( const cpo::uno::Reference< css::container::XContainer > & xContainer );
+        void                        AddEventBroadcaster( const cpo::uno::Reference< css::xml::dom::events::XEventTarget >& xTarget );
         void                        RemoveBroadcaster();
 
         weld::Window*               GetFrameWeld() const { return m_xParent->GetFrameWeld(); }
@@ -346,11 +346,11 @@ namespace svxform
     class AddDataItemDialog final : public weld::GenericDialogController
     {
     private:
-        css::uno::Reference< css::xforms::XFormsUIHelper1 >
+        cpo::uno::Reference< css::xforms::XFormsUIHelper1 >
                             m_xUIHelper;
-        css::uno::Reference< css::beans::XPropertySet >
+        cpo::uno::Reference< css::beans::XPropertySet >
                             m_xBinding;
-        css::uno::Reference< css::beans::XPropertySet >
+        cpo::uno::Reference< css::beans::XPropertySet >
                             m_xTempBinding;
 
         ItemNode*           m_pItemNode;
@@ -392,7 +392,7 @@ namespace svxform
     public:
         AddDataItemDialog(
             weld::Window* pParent, ItemNode* _pNode,
-            const css::uno::Reference< css::xforms::XFormsUIHelper1 >& _rUIHelper );
+            const cpo::uno::Reference< css::xforms::XFormsUIHelper1 >& _rUIHelper );
         virtual ~AddDataItemDialog() override;
 
         void                InitText( DataItemType _eType );
@@ -404,9 +404,9 @@ namespace svxform
         Idle                           m_aResultIdle;
         OUString                       m_sPropertyName;
 
-        css::uno::Reference< css::xforms::XFormsUIHelper1 >
+        cpo::uno::Reference< css::xforms::XFormsUIHelper1 >
                                        m_xUIHelper;
-        css::uno::Reference< css::beans::XPropertySet >
+        cpo::uno::Reference< css::beans::XPropertySet >
                                        m_xBinding;
 
         std::unique_ptr<weld::TextView> m_xConditionED;
@@ -421,10 +421,10 @@ namespace svxform
 
     public:
         AddConditionDialog(weld::Window* pParent,
-            OUString _aPropertyName, const css::uno::Reference< css::beans::XPropertySet >& _rBinding);
+            OUString _aPropertyName, const cpo::uno::Reference< css::beans::XPropertySet >& _rBinding);
         virtual ~AddConditionDialog() override;
 
-        const css::uno::Reference< css::xforms::XFormsUIHelper1 >& GetUIHelper() const { return m_xUIHelper; }
+        const cpo::uno::Reference< css::xforms::XFormsUIHelper1 >& GetUIHelper() const { return m_xUIHelper; }
         OUString GetCondition() const { return m_xConditionED->get_text(); }
         void SetCondition(const OUString& _rCondition)
         {
@@ -439,7 +439,7 @@ namespace svxform
         AddConditionDialog* m_pConditionDlg;
         std::vector< OUString >    m_aRemovedList;
 
-        css::uno::Reference< css::container::XNameContainer >&
+        cpo::uno::Reference< css::container::XNameContainer >&
                                    m_rNamespaces;
 
         std::unique_ptr<weld::TreeView> m_xNamespacesList;
@@ -455,7 +455,7 @@ namespace svxform
         void                LoadNamespaces();
 
     public:
-        NamespaceItemDialog(AddConditionDialog* pParent, css::uno::Reference< css::container::XNameContainer >& _rContainer);
+        NamespaceItemDialog(AddConditionDialog* pParent, cpo::uno::Reference< css::container::XNameContainer >& _rContainer);
         virtual ~NamespaceItemDialog() override;
     };
 
@@ -492,15 +492,15 @@ namespace svxform
 
         ItemNode*            m_pItemNode;
 
-        css::uno::Reference< css::xforms::XFormsUIHelper1 >
+        cpo::uno::Reference< css::xforms::XFormsUIHelper1 >
                             m_xUIHelper;
-        css::uno::Reference< css::xforms::XSubmission >
+        cpo::uno::Reference< css::xforms::XSubmission >
                             m_xNewSubmission;
-        css::uno::Reference< css::beans::XPropertySet >
+        cpo::uno::Reference< css::beans::XPropertySet >
                             m_xSubmission;
-        css::uno::Reference< css::beans::XPropertySet >
+        cpo::uno::Reference< css::beans::XPropertySet >
                             m_xTempBinding;
-        css::uno::Reference< css::beans::XPropertySet >
+        cpo::uno::Reference< css::beans::XPropertySet >
                             m_xCreatedBinding;
 
         std::unique_ptr<weld::Entry> m_xNameED;
@@ -519,10 +519,10 @@ namespace svxform
 
     public:
         AddSubmissionDialog(weld::Window* pParent, ItemNode* pNode,
-            const css::uno::Reference< css::xforms::XFormsUIHelper1 >& rUIHelper);
+            const cpo::uno::Reference< css::xforms::XFormsUIHelper1 >& rUIHelper);
         virtual ~AddSubmissionDialog() override;
 
-        const css::uno::Reference< css::xforms::XSubmission >& GetNewSubmission() const { return m_xNewSubmission; }
+        const cpo::uno::Reference< css::xforms::XSubmission >& GetNewSubmission() const { return m_xNewSubmission; }
     };
 
     class AddModelDialog final : public weld::GenericDialogController

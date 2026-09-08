@@ -23,6 +23,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
+using namespace ::cpo;
 
 ScAccessibleDocumentBase::ScAccessibleDocumentBase(const uno::Reference<XAccessible>& rxParent)
     : ScAccessibleContextBase(rxParent, AccessibleRole::DOCUMENT_SPREADSHEET)

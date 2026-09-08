@@ -38,8 +38,8 @@ public:
     virtual OUString GetTitle() const override;
 
     void SetMoreOptionsCommand(const OUString& rsCommandName,
-                               const css::uno::Reference<css::frame::XFrame>& rxFrame,
-                               const css::uno::Reference<css::frame::XController>& rxController);
+                               const cpo::uno::Reference<css::frame::XFrame>& rxFrame,
+                               const cpo::uno::Reference<css::frame::XController>& rxController);
 
     void UpdateExpandedState();
 
@@ -57,7 +57,7 @@ private:
 
     std::unique_ptr<weld::Expander> mxExpander;
 
-    css::uno::Reference<css::frame::XToolbarController> mxController;
+    cpo::uno::Reference<css::frame::XToolbarController> mxController;
 
     Panel* mpPanel;
     OUString msIdent;

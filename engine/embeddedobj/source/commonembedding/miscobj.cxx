@@ -51,6 +51,7 @@
 #include "persistence.hxx"
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 
 OCommonEmbeddedObject::OCommonEmbeddedObject( uno::Reference< cpo::uno::XComponentContext > xContext,

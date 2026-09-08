@@ -27,6 +27,7 @@
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 static OUString lcl_CheckGroupName( std::u16string_view aGroupName )
 {

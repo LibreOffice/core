@@ -40,7 +40,7 @@ public:
             The activated context.
     */
     static void NotifyContextChange (
-        const css::uno::Reference<css::frame::XController>& rxController,
+        const cpo::uno::Reference<css::frame::XController>& rxController,
         const vcl::EnumContext::Context eContext);
 
     /** Notify the activation of a context.
@@ -57,7 +57,7 @@ public:
 
 private:
     static OUString GetModuleName (
-        const css::uno::Reference<css::frame::XFrame>& rxFrame);
+        const cpo::uno::Reference<css::frame::XFrame>& rxFrame);
 };
 
 #endif

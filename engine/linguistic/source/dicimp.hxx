@@ -42,7 +42,7 @@ class DictionaryNeo :
 {
 
     ::comphelper::OInterfaceContainerHelper3<css::linguistic2::XDictionaryEventListener> aDicEvtListeners;
-    std::vector< css::uno::Reference< css::linguistic2::XDictionaryEntry > >
+    std::vector< cpo::uno::Reference< css::linguistic2::XDictionaryEntry > >
                                                                 aEntries;
     OUString                                                    aDicName;
     OUString                                                    aMainURL;
@@ -58,7 +58,7 @@ class DictionaryNeo :
     DictionaryNeo & operator = (const DictionaryNeo &) = delete;
 
     void                    launchEvent(sal_Int16 nEvent,
-                                        const css::uno::Reference< css::linguistic2::XDictionaryEntry >& xEntry);
+                                        const cpo::uno::Reference< css::linguistic2::XDictionaryEntry >& xEntry);
 
     ErrCode                     loadEntries(const OUString &rMainURL);
     ErrCode                     saveEntries(const OUString &rMainURL);
@@ -69,7 +69,7 @@ class DictionaryNeo :
                                         bool bSimilarOnly = false);
     bool                        isSorted();
 
-    bool                        addEntry_Impl(const css::uno::Reference< css::linguistic2::XDictionaryEntry >& rDicEntry,
+    bool                        addEntry_Impl(const cpo::uno::Reference< css::linguistic2::XDictionaryEntry >& rDicEntry,
                                           bool bIsLoadEntries = false);
 
 public:
@@ -98,11 +98,11 @@ public:
         getLocale() override;
     virtual void
         setLocale( const css::lang::Locale& aLocale ) override;
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
             css::linguistic2::XDictionaryEntry >
         getEntry( const OUString& aWord ) override;
     virtual bool
-        addEntry( const css::uno::Reference<
+        addEntry( const cpo::uno::Reference<
                 css::linguistic2::XDictionaryEntry >& xDicEntry ) override;
     virtual bool
         add( const OUString& aWord, bool bIsNegative,
@@ -111,14 +111,14 @@ public:
         remove( const OUString& aWord ) override;
     virtual bool
         isFull() override;
-    virtual cpo::uno::Sequence< css::uno::Reference< css::linguistic2::XDictionaryEntry > >
+    virtual cpo::uno::Sequence< cpo::uno::Reference< css::linguistic2::XDictionaryEntry > >
         getEntries() override;
     virtual void
         clear() override;
     virtual bool
-        addDictionaryEventListener( const css::uno::Reference< css::linguistic2::XDictionaryEventListener >& xListener ) override;
+        addDictionaryEventListener( const cpo::uno::Reference< css::linguistic2::XDictionaryEventListener >& xListener ) override;
     virtual bool
-        removeDictionaryEventListener( const css::uno::Reference< css::linguistic2::XDictionaryEventListener >& xListener ) override;
+        removeDictionaryEventListener( const cpo::uno::Reference< css::linguistic2::XDictionaryEventListener >& xListener ) override;
 
     // XStorable
     virtual bool

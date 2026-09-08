@@ -46,45 +46,45 @@ class SfxViewFrame;
 namespace ooo::vba::excel {
 
 // nTabs empty means apply zoom to all sheets
-void implSetZoom( const css::uno::Reference< css::frame::XModel >& xModel, sal_Int16 nZoom, std::vector< SCTAB >& nTabs );
-void implnCopy( const css::uno::Reference< css::frame::XModel>& xModel );
-void implnPaste ( const css::uno::Reference< css::frame::XModel>& xModel );
-void implnCut( const css::uno::Reference< css::frame::XModel>& xModel );
-void implnPasteSpecial( const css::uno::Reference< css::frame::XModel>& xModel, InsertDeleteFlags nFlags, ScPasteFunc nFunction, bool bSkipEmpty, bool bTranspose);
-SAL_RET_MAYBENULL ScTabViewShell* getBestViewShell( const css::uno::Reference< css::frame::XModel>& xModel ) ;
-SAL_RET_MAYBENULL ScDocShell* getDocShell( const css::uno::Reference< css::frame::XModel>& xModel ) ;
-SAL_RET_MAYBENULL ScTabViewShell* getCurrentBestViewShell( const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
-SAL_RET_MAYBENULL SfxViewFrame* getViewFrame( const css::uno::Reference< css::frame::XModel >& xModel );
+void implSetZoom( const cpo::uno::Reference< css::frame::XModel >& xModel, sal_Int16 nZoom, std::vector< SCTAB >& nTabs );
+void implnCopy( const cpo::uno::Reference< css::frame::XModel>& xModel );
+void implnPaste ( const cpo::uno::Reference< css::frame::XModel>& xModel );
+void implnCut( const cpo::uno::Reference< css::frame::XModel>& xModel );
+void implnPasteSpecial( const cpo::uno::Reference< css::frame::XModel>& xModel, InsertDeleteFlags nFlags, ScPasteFunc nFunction, bool bSkipEmpty, bool bTranspose);
+SAL_RET_MAYBENULL ScTabViewShell* getBestViewShell( const cpo::uno::Reference< css::frame::XModel>& xModel ) ;
+SAL_RET_MAYBENULL ScDocShell* getDocShell( const cpo::uno::Reference< css::frame::XModel>& xModel ) ;
+SAL_RET_MAYBENULL ScTabViewShell* getCurrentBestViewShell( const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext );
+SAL_RET_MAYBENULL SfxViewFrame* getViewFrame( const cpo::uno::Reference< css::frame::XModel >& xModel );
 
 /// @throws cpo::uno::RuntimeException
-css::uno::Reference< css::sheet::XUnnamedDatabaseRanges > GetUnnamedDataBaseRanges( const ScDocShell* pShell );
+cpo::uno::Reference< css::sheet::XUnnamedDatabaseRanges > GetUnnamedDataBaseRanges( const ScDocShell* pShell );
 
 /// @throws cpo::uno::RuntimeException
-css::uno::Reference< css::sheet::XDatabaseRange > GetAutoFiltRange( const ScDocShell* pShell, sal_Int16 nSheet );
+cpo::uno::Reference< css::sheet::XDatabaseRange > GetAutoFiltRange( const ScDocShell* pShell, sal_Int16 nSheet );
 /// @throws cpo::uno::RuntimeException
-css::uno::Reference< ooo::vba::XHelperInterface > getUnoSheetModuleObj( const css::uno::Reference< css::sheet::XSpreadsheet >& xSheet );
+cpo::uno::Reference< ooo::vba::XHelperInterface > getUnoSheetModuleObj( const cpo::uno::Reference< css::sheet::XSpreadsheet >& xSheet );
 /// @throws cpo::uno::RuntimeException
-css::uno::Reference< ooo::vba::XHelperInterface > getUnoSheetModuleObj( const css::uno::Reference< css::sheet::XSheetCellRangeContainer >& xRanges );
+cpo::uno::Reference< ooo::vba::XHelperInterface > getUnoSheetModuleObj( const cpo::uno::Reference< css::sheet::XSheetCellRangeContainer >& xRanges );
 /// @throws cpo::uno::RuntimeException
-css::uno::Reference< ooo::vba::XHelperInterface > getUnoSheetModuleObj( const css::uno::Reference< css::table::XCellRange >& xRange );
+cpo::uno::Reference< ooo::vba::XHelperInterface > getUnoSheetModuleObj( const cpo::uno::Reference< css::table::XCellRange >& xRange );
 /// @throws cpo::uno::RuntimeException
-css::uno::Reference< ooo::vba::XHelperInterface > getUnoSheetModuleObj( const css::uno::Reference< css::table::XCell >& xCell );
+cpo::uno::Reference< ooo::vba::XHelperInterface > getUnoSheetModuleObj( const cpo::uno::Reference< css::table::XCell >& xCell );
 /// @throws cpo::uno::RuntimeException
-css::uno::Reference< ooo::vba::XHelperInterface > getUnoSheetModuleObj( const css::uno::Reference< css::frame::XModel >& xModel, SCTAB nTab );
+cpo::uno::Reference< ooo::vba::XHelperInterface > getUnoSheetModuleObj( const cpo::uno::Reference< css::frame::XModel >& xModel, SCTAB nTab );
 
 /// @throws cpo::uno::RuntimeException
-ScDocShell* GetDocShellFromRange( const css::uno::Reference< cpo::uno::XInterface >& xRange );
-void setUpDocumentModules( const css::uno::Reference< css::sheet::XSpreadsheetDocument >& xDoc );
+ScDocShell* GetDocShellFromRange( const cpo::uno::Reference< cpo::uno::XInterface >& xRange );
+void setUpDocumentModules( const cpo::uno::Reference< css::sheet::XSpreadsheetDocument >& xDoc );
 
 void ExportAsFixedFormatHelper(
-    const css::uno::Reference< css::frame::XModel >& xModel, const css::uno::Reference< ooo::vba::excel::XApplication >& xApplication,
+    const cpo::uno::Reference< css::frame::XModel >& xModel, const cpo::uno::Reference< ooo::vba::excel::XApplication >& xApplication,
     const cpo::uno::Any& Type, const cpo::uno::Any& FileName, const cpo::uno::Any& Quality,
     const cpo::uno::Any& IncludeDocProperties, const cpo::uno::Any& From,
     const cpo::uno::Any& To, const cpo::uno::Any& OpenAfterPublish);
 
 void SetDocInfoState(
-    const css::uno::Reference< css::frame::XModel >& xModel,
-    const css::uno::Reference< css::document::XDocumentProperties>& i_xOldDocInfo);
+    const cpo::uno::Reference< css::frame::XModel >& xModel,
+    const cpo::uno::Reference< css::document::XDocumentProperties>& i_xOldDocInfo);
 
 class ScVbaCellRangeAccess
 {
@@ -96,7 +96,7 @@ public:
 // Will throw if unsuccessful.
 /// @throws cpo::uno::RuntimeException
 template < typename ImplObject >
-    ImplObject* getImplFromDocModuleWrapper( const css::uno::Reference< cpo::uno::XInterface >& rxWrapperIf )
+    ImplObject* getImplFromDocModuleWrapper( const cpo::uno::Reference< cpo::uno::XInterface >& rxWrapperIf )
     {
         ImplObject* pObj = comphelper::getFromUnoTunnel<ImplObject>(rxWrapperIf);
         if ( !pObj )

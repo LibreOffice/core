@@ -50,15 +50,15 @@ class Package : protected cppu::BaseMutex, public t_PackageBase
     void processPackage_impl(
         bool registerPackage,
         bool startup,
-        css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
-        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv );
+        cpo::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
+        cpo::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv );
 
 protected:
     ::rtl::Reference<PackageRegistryBackend> m_myBackend;
     const OUString m_url;
     OUString m_name;
     OUString m_displayName;
-    const css::uno::Reference<css::deployment::XPackageTypeInfo> m_xPackageType;
+    const cpo::uno::Reference<css::deployment::XPackageTypeInfo> m_xPackageType;
     const bool m_bRemoved;
     //Only set if m_bRemoved = true;
     const OUString m_identifier;
@@ -75,14 +75,14 @@ protected:
     isRegistered_(
         ::osl::ResettableMutexGuard & guard,
         ::rtl::Reference< ::dp_misc::AbortChannel > const & abortChannel,
-        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
+        cpo::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
         = 0;
     virtual void processPackage_(
         ::osl::ResettableMutexGuard & guard,
         bool registerPackage,
         bool startup,
         ::rtl::Reference< ::dp_misc::AbortChannel > const & abortChannel,
-        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
+        cpo::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
         = 0;
 
     virtual ~Package() override;
@@ -90,7 +90,7 @@ protected:
              OUString url,
              OUString name,
              OUString displayName,
-             css::uno::Reference<css::deployment::XPackageTypeInfo> const & xPackageType,
+             cpo::uno::Reference<css::deployment::XPackageTypeInfo> const & xPackageType,
              bool bRemoved,
              OUString identifier);
 
@@ -122,45 +122,45 @@ public:
     // XComponent
     virtual void dispose() override;
     virtual void addEventListener(
-        css::uno::Reference<css::lang::XEventListener> const & xListener ) override;
+        cpo::uno::Reference<css::lang::XEventListener> const & xListener ) override;
     virtual void removeEventListener(
-        css::uno::Reference<css::lang::XEventListener> const & xListener ) override;
+        cpo::uno::Reference<css::lang::XEventListener> const & xListener ) override;
 
     // XModifyBroadcaster
     virtual void addModifyListener(
-        css::uno::Reference<css::util::XModifyListener> const & xListener ) override;
+        cpo::uno::Reference<css::util::XModifyListener> const & xListener ) override;
     virtual void removeModifyListener(
-        css::uno::Reference<css::util::XModifyListener> const & xListener ) override;
+        cpo::uno::Reference<css::util::XModifyListener> const & xListener ) override;
 
     // XPackage
-    virtual css::uno::Reference<css::task::XAbortChannel>
+    virtual cpo::uno::Reference<css::task::XAbortChannel>
     createAbortChannel() override;
     virtual css::beans::Optional< css::beans::Ambiguous<bool> >
     isRegistered(
-        css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
-        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
+        cpo::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
+        cpo::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
 
     virtual ::sal_Int32 checkPrerequisites(
-        const css::uno::Reference< css::task::XAbortChannel >& xAbortChannel,
-        const css::uno::Reference< css::ucb::XCommandEnvironment >& xCmdEnv,
+        const cpo::uno::Reference< css::task::XAbortChannel >& xAbortChannel,
+        const cpo::uno::Reference< css::ucb::XCommandEnvironment >& xCmdEnv,
         bool noLicenseChecking) override;
 
     virtual bool checkDependencies(
-        const css::uno::Reference< css::ucb::XCommandEnvironment >& xCmdEnv ) override;
+        const cpo::uno::Reference< css::ucb::XCommandEnvironment >& xCmdEnv ) override;
 
     virtual void registerPackage(
         bool startup,
-        css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
-        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
+        cpo::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
+        cpo::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
     virtual void revokePackage(
         bool startup,
-        css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
-        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
+        cpo::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
+        cpo::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
     virtual bool isBundle() override;
-    virtual cpo::uno::Sequence< css::uno::Reference<css::deployment::XPackage> >
+    virtual cpo::uno::Sequence< cpo::uno::Reference<css::deployment::XPackage> >
     getBundle(
-        css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
-        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
+        cpo::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
+        cpo::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
     virtual OUString getName() override;
     virtual css::beans::Optional< OUString > getIdentifier() override;
     virtual OUString getVersion() override;
@@ -171,15 +171,15 @@ public:
     virtual cpo::uno::Sequence< OUString >
     getUpdateInformationURLs() override;
     virtual css::beans::StringPair getPublisherInfo() override;
-    virtual css::uno::Reference< css::graphic::XGraphic >
+    virtual cpo::uno::Reference< css::graphic::XGraphic >
     getIcon( bool bHighContrast ) override;
-    virtual css::uno::Reference<css::deployment::XPackageTypeInfo>
+    virtual cpo::uno::Reference<css::deployment::XPackageTypeInfo>
     getPackageType() override;
     virtual void exportTo(
         OUString const & destFolderURL,
         OUString const & newTitle,
         sal_Int32 nameClashAction,
-        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
+        cpo::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
     virtual OUString getRepositoryName() override;
     virtual css::beans::Optional< OUString > getRegistrationDataURL() override;
     virtual bool isRemoved() override;
@@ -203,12 +203,12 @@ class PackageRegistryBackend
     //of bindPackage calls which are costly. Therefore we keep hard references in
     //the map now.
     typedef std::unordered_map<
-        OUString, css::uno::Reference<css::deployment::XPackage> > t_string2ref;
+        OUString, cpo::uno::Reference<css::deployment::XPackage> > t_string2ref;
     t_string2ref m_bound;
 
 protected:
     OUString m_cachePath;
-    css::uno::Reference<cpo::uno::XComponentContext> m_xComponentContext;
+    cpo::uno::Reference<cpo::uno::XComponentContext> m_xComponentContext;
 
     OUString m_context;
     // currently only for library containers:
@@ -220,10 +220,10 @@ protected:
     static OUString StrUnsupportedMediaType() { return DpResId(RID_STR_UNSUPPORTED_MEDIA_TYPE); }
 
     // @@@ to be implemented by specific backend:
-    virtual css::uno::Reference<css::deployment::XPackage> bindPackage_(
+    virtual cpo::uno::Reference<css::deployment::XPackage> bindPackage_(
         OUString const & url, OUString const & mediaType,
         bool bRemoved, OUString const & identifier,
-        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
+        cpo::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
         = 0;
 
     void check();
@@ -232,14 +232,14 @@ protected:
     virtual ~PackageRegistryBackend() override;
     PackageRegistryBackend(
         cpo::uno::Sequence<cpo::uno::Any> const & args,
-        css::uno::Reference<cpo::uno::XComponentContext> const & xContext );
+        cpo::uno::Reference<cpo::uno::XComponentContext> const & xContext );
 
     /* creates a folder with a unique name.
        If url is empty then it is created in the backend folder, otherwise
        at a location relative to that folder specified by url.
     */
     OUString createFolder(
-        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv);
+        cpo::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv);
     /* deletes folders and files.
 
        All folder all files which end with ".tmp" or ".tmp_" and which are
@@ -257,7 +257,7 @@ public:
     static OUString StrRegisteringPackage() { return DpResId(RID_STR_REGISTERING_PACKAGE); }
     static OUString StrRevokingPackage() { return DpResId(RID_STR_REVOKING_PACKAGE); }
 
-    css::uno::Reference<cpo::uno::XComponentContext> const &
+    cpo::uno::Reference<cpo::uno::XComponentContext> const &
     getComponentContext() const { return m_xComponentContext; }
 
     OUString const & getCachePath() const { return m_cachePath; }
@@ -269,10 +269,10 @@ public:
     virtual void disposing( css::lang::EventObject const & evt ) override;
 
     // XPackageRegistry
-    virtual css::uno::Reference<css::deployment::XPackage> bindPackage(
+    virtual cpo::uno::Reference<css::deployment::XPackage> bindPackage(
         OUString const & url, OUString const & mediaType,
         bool bRemoved, OUString const & identifier,
-        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
+        cpo::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
 
 //     virtual void packageRemoved(
 //         OUString const & url, OUString const & mediaType)

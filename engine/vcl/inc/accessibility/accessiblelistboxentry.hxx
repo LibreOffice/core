@@ -101,18 +101,18 @@ private:
 
     // XAccessibleContext
     virtual sal_Int64 getAccessibleChildCount(  ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleChild( sal_Int64 i ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleParent(  ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > getAccessibleChild( sal_Int64 i ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > getAccessibleParent(  ) override;
     virtual sal_Int64 getAccessibleIndexInParent(  ) override;
     virtual sal_Int16 getAccessibleRole(  ) override;
     virtual OUString getAccessibleDescription(  ) override;
     virtual OUString getAccessibleName(  ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > getAccessibleRelationSet(  ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessibleRelationSet > getAccessibleRelationSet(  ) override;
     virtual sal_Int64 getAccessibleStateSet(  ) override;
     virtual css::lang::Locale getLocale(  ) override;
 
     // XAccessibleComponent
-    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
     virtual void grabFocus(  ) override;
     virtual sal_Int32 getForeground(  ) override;
     virtual sal_Int32 getBackground(  ) override;
@@ -141,7 +141,7 @@ private:
     virtual sal_Int32 getAccessibleActionCount(  ) override;
     virtual bool doAccessibleAction( sal_Int32 nIndex ) override;
     virtual OUString getAccessibleActionDescription( sal_Int32 nIndex ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessibleKeyBinding > getAccessibleActionKeyBinding( sal_Int32 nIndex ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessibleKeyBinding > getAccessibleActionKeyBinding( sal_Int32 nIndex ) override;
 
     // XAccessibleSelection
     void selectAccessibleChild( sal_Int64 nChildIndex ) override;
@@ -149,7 +149,7 @@ private:
     void clearAccessibleSelection(  ) override;
     void selectAllAccessibleChildren(  ) override;
     sal_Int64 getSelectedAccessibleChildCount(  ) override;
-    css::uno::Reference< css::accessibility::XAccessible > getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
+    cpo::uno::Reference< css::accessibility::XAccessible > getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
     void deselectAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
 
     // XAccessibleValue

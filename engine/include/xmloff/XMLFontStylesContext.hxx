@@ -44,7 +44,7 @@ class XMLOFF_DLLPUBLIC XMLFontStylesContext final : public SvXMLStylesContext
 
     using SvXMLStylesContext::CreateStyleChildContext;
     virtual SvXMLStyleContext *CreateStyleChildContext( sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
 
 public:
 

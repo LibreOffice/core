@@ -31,12 +31,12 @@
 namespace svt
 {
 
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
 using namespace cpo::uno;
     using namespace ::com::sun::star::task;
     using namespace ::com::sun::star::ucb;
 
-    OFilePickerInteractionHandler::OFilePickerInteractionHandler( css::uno::Reference< css::task::XInteractionHandler > _xMaster )
+    OFilePickerInteractionHandler::OFilePickerInteractionHandler( cpo::uno::Reference< css::task::XInteractionHandler > _xMaster )
         :m_xMaster(std::move( _xMaster ))
         ,m_bUsed( false )
         ,m_eInterceptions( OFilePickerInteractionHandler::E_NOINTERCEPTION )

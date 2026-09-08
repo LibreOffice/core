@@ -20,7 +20,7 @@
 #define INCLUDED_CONNECTIVITY_FILTERMANAGER_HXX
 
 #include <config_options.h>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <rtl/ustrbuf.hxx>
 
@@ -68,7 +68,7 @@ namespace dbtools
         };
 
     private:
-        css::uno::Reference< css::beans::XPropertySet >   m_xComponentAggregate;
+        cpo::uno::Reference< css::beans::XPropertySet >   m_xComponentAggregate;
         OUString                                          m_aPublicFilterComponent;
         OUString                                          m_aPublicHavingComponent;
         OUString                                          m_aLinkFilterComponent;
@@ -80,7 +80,7 @@ namespace dbtools
         explicit FilterManager();
 
         /// late ctor
-        void    initialize(const css::uno::Reference< css::beans::XPropertySet >& _rxComponentAggregate );
+        void    initialize(const cpo::uno::Reference< css::beans::XPropertySet >& _rxComponentAggregate );
 
         /// makes the object forgetting the references to the database component
         void    dispose( );

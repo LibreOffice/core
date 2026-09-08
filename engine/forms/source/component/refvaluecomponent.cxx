@@ -33,7 +33,7 @@ namespace frm
 {
 
     using namespace comphelper;
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
 using namespace cpo::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
@@ -111,7 +111,7 @@ using namespace cpo::uno;
                 throw css::lang::IllegalArgumentException(
                     (u"DefaultState property value must be a SHORT in the range"
                      " 0--2"_ustr),
-                    css::uno::Reference<cpo::uno::XInterface>(), -1);
+                    cpo::uno::Reference<cpo::uno::XInterface>(), -1);
             }
             m_eDefaultChecked = static_cast<ToggleState>(nDefaultChecked);
             resetNoBroadcast();

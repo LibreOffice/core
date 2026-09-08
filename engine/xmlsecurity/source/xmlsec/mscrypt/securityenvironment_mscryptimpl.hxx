@@ -34,7 +34,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <cpo/uno/Exception.hpp>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -73,43 +73,43 @@ class SecurityEnvironment_MSCryptImpl : public ::cppu::WeakImplHelper<
         bool                                m_bEnableDefault ;
 
         //Service manager
-        css::uno::Reference< css::lang::XMultiServiceFactory > m_xServiceManager ;
+        cpo::uno::Reference< css::lang::XMultiServiceFactory > m_xServiceManager ;
 
     public:
-        explicit SecurityEnvironment_MSCryptImpl( const css::uno::Reference< cpo::uno::XComponentContext >& xContext ) ;
+        explicit SecurityEnvironment_MSCryptImpl( const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext ) ;
         virtual ~SecurityEnvironment_MSCryptImpl() override;
 
         //Methods from XSecurityEnvironment
-        virtual cpo::uno::Sequence< css::uno::Reference< css::security::XCertificate > > SAL_CALL getPersonalCertificates() override;
-        virtual cpo::uno::Sequence< css::uno::Reference< css::security::XCertificate > > SAL_CALL getAllCertificates() override
-        { return cpo::uno::Sequence< css::uno::Reference< css::security::XCertificate > >(); }
+        virtual cpo::uno::Sequence< cpo::uno::Reference< css::security::XCertificate > > SAL_CALL getPersonalCertificates() override;
+        virtual cpo::uno::Sequence< cpo::uno::Reference< css::security::XCertificate > > SAL_CALL getAllCertificates() override
+        { return cpo::uno::Sequence< cpo::uno::Reference< css::security::XCertificate > >(); }
 
-        virtual css::uno::Reference< css::security::XCertificate > SAL_CALL getCertificate(
+        virtual cpo::uno::Reference< css::security::XCertificate > SAL_CALL getCertificate(
             const OUString& issuerName,
             const cpo::uno::Sequence< sal_Int8 >& serialNumber ) override;
 
         /// @throws cpo::uno::SecurityException
         /// @throws cpo::uno::RuntimeException
-        virtual css::uno::Reference< css::security::XCertificate > getCertificate(
+        virtual cpo::uno::Reference< css::security::XCertificate > getCertificate(
             const OUString& issuerName,
             const OUString& serialNumber ) ;
 
-        virtual cpo::uno::Sequence< css::uno::Reference< css::security::XCertificate > > SAL_CALL buildCertificatePath(
-            const css::uno::Reference< css::security::XCertificate >& beginCert ) override;
+        virtual cpo::uno::Sequence< cpo::uno::Reference< css::security::XCertificate > > SAL_CALL buildCertificatePath(
+            const cpo::uno::Reference< css::security::XCertificate >& beginCert ) override;
 
-        virtual css::uno::Reference< css::security::XCertificate > SAL_CALL createCertificateFromRaw(
+        virtual cpo::uno::Reference< css::security::XCertificate > SAL_CALL createCertificateFromRaw(
             const cpo::uno::Sequence< sal_Int8 >& rawCertificate ) override;
 
-        virtual css::uno::Reference< css::security::XCertificate > SAL_CALL createCertificateFromAscii(
+        virtual cpo::uno::Reference< css::security::XCertificate > SAL_CALL createCertificateFromAscii(
             const OUString& asciiCertificate ) override;
 
         virtual ::sal_Int32 SAL_CALL verifyCertificate(
-            const css::uno::Reference< css::security::XCertificate >& xCert,
-            const cpo::uno::Sequence< css::uno::Reference<
+            const cpo::uno::Reference< css::security::XCertificate >& xCert,
+            const cpo::uno::Sequence< cpo::uno::Reference<
             css::security::XCertificate > >& intermediateCertificates) override;
 
         virtual ::sal_Int32 SAL_CALL getCertificateCharacters(
-            const css::uno::Reference< css::security::XCertificate >& xCert ) override;
+            const cpo::uno::Reference< css::security::XCertificate >& xCert ) override;
 
         virtual OUString SAL_CALL getSecurityEnvironmentInformation(  ) override;
 

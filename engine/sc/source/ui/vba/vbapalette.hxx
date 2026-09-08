@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 namespace com::sun::star {
     namespace container { class XIndexAccess; }
@@ -34,11 +34,11 @@ private:
     SfxObjectShell* m_pShell;
 public:
     explicit ScVbaPalette( SfxObjectShell* pShell ) : m_pShell( pShell ) {}
-    explicit ScVbaPalette( const css::uno::Reference< css::frame::XModel >& rxModel );
+    explicit ScVbaPalette( const cpo::uno::Reference< css::frame::XModel >& rxModel );
     // if no palette available e.g. because the document doesn't have a
     // palette defined then a default palette will be returned.
-    css::uno::Reference< css::container::XIndexAccess > getPalette() const;
-    static css::uno::Reference< css::container::XIndexAccess > getDefaultPalette();
+    cpo::uno::Reference< css::container::XIndexAccess > getPalette() const;
+    static cpo::uno::Reference< css::container::XIndexAccess > getDefaultPalette();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

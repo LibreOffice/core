@@ -770,7 +770,7 @@ void UNO_proxy_dispatch(
         // binary identical struct
         cpo::uno::RuntimeException exc(
             buf.makeStringAndClear(),
-            css::uno::Reference<
+            cpo::uno::Reference<
               cpo::uno::XInterface >() );
         cpo::uno::Type const & exc_type = cppu::UnoType<decltype(exc)>::get();
         uno_type_any_construct( *uno_exc, &exc, exc_type.getTypeLibType(), nullptr );
@@ -781,7 +781,7 @@ void UNO_proxy_dispatch(
         // binary identical struct
         cpo::uno::RuntimeException exc(
             u"[jni_uno bridge error] attaching current thread to java failed!"_ustr,
-            css::uno::Reference<
+            cpo::uno::Reference<
               cpo::uno::XInterface >() );
         cpo::uno::Type const & exc_type = cppu::UnoType<decltype(exc)>::get();
         uno_type_any_construct( *uno_exc, &exc, exc_type.getTypeLibType(), nullptr );

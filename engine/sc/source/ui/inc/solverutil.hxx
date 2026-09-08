@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 
 namespace com::sun::star {
@@ -32,7 +32,7 @@ class ScSolverUtil
 public:
     static void GetImplementations( cpo::uno::Sequence<OUString>& rImplNames,
                                     cpo::uno::Sequence<OUString>& rDescriptions );
-    static css::uno::Reference<css::sheet::XSolver> GetSolver( std::u16string_view rImplName );
+    static cpo::uno::Reference<css::sheet::XSolver> GetSolver( std::u16string_view rImplName );
     static cpo::uno::Sequence<css::beans::PropertyValue> GetDefaults( std::u16string_view rImplName );
 };
 

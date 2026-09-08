@@ -52,6 +52,7 @@
 #include <map>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 struct SfxShell_Impl: public SfxBroadcaster
 {
@@ -283,13 +284,13 @@ void SfxShell::HandleOpenXmlFilterSettings(SfxRequest & rReq)
         uno::Reference < ui::dialogs::XExecutableDialog > xDialog = ui::dialogs::XSLTFilterDialog::create( ::comphelper::getProcessComponentContext() );
 
         // set dialog parent
-        css::uno::Reference<com::sun::star::lang::XInitialization> xInit(xDialog,
-                                                                         css::uno::UNO_QUERY);
+        cpo::uno::Reference<com::sun::star::lang::XInitialization> xInit(xDialog,
+                                                                         cpo::uno::UNO_QUERY);
         if (xInit.is())
         {
             if (SfxViewShell* pViewShell = GetViewShell())
             {
-                css::uno::Reference<css::awt::XWindow> xDialogParent
+                cpo::uno::Reference<css::awt::XWindow> xDialogParent
                     = VCLUnoHelper::GetInterface(pViewShell->GetWindow());
                 cpo::uno::Sequence<cpo::uno::Any> aSeq(comphelper::InitAnyPropertySequence(
                     { { u"ParentWindow"_ustr, cpo::uno::Any(xDialogParent) } }));

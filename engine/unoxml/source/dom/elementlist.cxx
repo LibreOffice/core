@@ -31,7 +31,7 @@
 #include "element.hxx"
 #include "document.hxx"
 
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace css::xml::dom;
 using namespace css::xml::dom::events;
 namespace DOM { class CElementListImpl; }
@@ -49,7 +49,7 @@ namespace DOM
         {
         }
 
-        virtual void SAL_CALL handleEvent(const css::uno::Reference<css::xml::dom::events::XEvent>& rEvent) override
+        virtual void SAL_CALL handleEvent(const cpo::uno::Reference<css::xml::dom::events::XEvent>& rEvent) override
         {
             rtl::Reference<DOM::CElementListImpl> xOwner(mxOwner);
             if (xOwner)

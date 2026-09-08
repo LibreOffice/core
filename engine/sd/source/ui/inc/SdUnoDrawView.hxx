@@ -49,17 +49,17 @@ public:
     virtual cpo::uno::Any SAL_CALL getSelection() override;
 
     virtual void SAL_CALL addSelectionChangeListener (
-        const css::uno::Reference<css::view::XSelectionChangeListener>& rxListener) override;
+        const cpo::uno::Reference<css::view::XSelectionChangeListener>& rxListener) override;
 
     virtual void SAL_CALL removeSelectionChangeListener (
-        const css::uno::Reference<css::view::XSelectionChangeListener>& rxListener) override;
+        const cpo::uno::Reference<css::view::XSelectionChangeListener>& rxListener) override;
 
     // XDrawView
 
     virtual void SAL_CALL setCurrentPage (
-        const css::uno::Reference<css::drawing::XDrawPage >& xPage) override;
+        const cpo::uno::Reference<css::drawing::XDrawPage >& xPage) override;
 
-    virtual css::uno::Reference<css::drawing::XDrawPage> SAL_CALL getCurrentPage() override;
+    virtual cpo::uno::Reference<css::drawing::XDrawPage> SAL_CALL getCurrentPage() override;
 
     // XFastPropertySet
 
@@ -92,7 +92,7 @@ private:
             The new layer object.
         @throws cpo::uno::RuntimeException
     */
-    void setActiveLayer (const css::uno::Reference< css::drawing::XLayer>& rxLayer);
+    void setActiveLayer (const cpo::uno::Reference< css::drawing::XLayer>& rxLayer);
 
     void SetZoom( sal_Int16 nZoom );
     sal_Int16 GetZoom() const;

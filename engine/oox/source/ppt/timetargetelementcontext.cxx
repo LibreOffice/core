@@ -34,7 +34,7 @@
 #include <sax/fastattribs.hxx>
 #include <utility>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::oox::core;
 
 namespace oox::ppt {

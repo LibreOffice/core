@@ -46,8 +46,8 @@
 #include <vector>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
@@ -666,7 +666,7 @@ void UnoControl::setOutputSize( const awt::Size& aSize )
     Reference< XWindow2 > xPeerWindow;
     {
         ::osl::MutexGuard aGuard( GetMutex() );
-        xPeerWindow.set(getPeer(), css::uno::UNO_QUERY);
+        xPeerWindow.set(getPeer(), cpo::uno::UNO_QUERY);
     }
 
     if ( xPeerWindow.is() )
@@ -730,7 +730,7 @@ void UnoControl::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int3
             maComponentInfos.nHeight = Height;
         maComponentInfos.nFlags |= Flags;
 
-        xWindow.set(getPeer(), css::uno::UNO_QUERY);
+        xWindow.set(getPeer(), cpo::uno::UNO_QUERY);
     }
 
     if( xWindow.is() )
@@ -744,7 +744,7 @@ awt::Rectangle UnoControl::getPosSize(  )
 
     {
         ::osl::MutexGuard aGuard( GetMutex() );
-        xWindow.set(getPeer(), css::uno::UNO_QUERY);
+        xWindow.set(getPeer(), cpo::uno::UNO_QUERY);
     }
 
     if( xWindow.is() )
@@ -760,7 +760,7 @@ void UnoControl::setVisible( bool bVisible )
 
         // Visible status is handled by View
         maComponentInfos.bVisible = bVisible;
-        xWindow.set(getPeer(), css::uno::UNO_QUERY);
+        xWindow.set(getPeer(), cpo::uno::UNO_QUERY);
     }
     if ( xWindow.is() )
         xWindow->setVisible( bVisible );
@@ -774,7 +774,7 @@ void UnoControl::setEnable( bool bEnable )
 
         // Enable status is handled by View
         maComponentInfos.bEnable = bEnable;
-        xWindow.set(getPeer(), css::uno::UNO_QUERY);
+        xWindow.set(getPeer(), cpo::uno::UNO_QUERY);
     }
     if ( xWindow.is() )
         xWindow->setEnable( bEnable );
@@ -785,7 +785,7 @@ void UnoControl::setFocus(  )
     Reference< XWindow > xWindow;
     {
         ::osl::MutexGuard aGuard( GetMutex() );
-        xWindow.set(getPeer(), css::uno::UNO_QUERY);
+        xWindow.set(getPeer(), cpo::uno::UNO_QUERY);
     }
     if ( xWindow.is() )
         xWindow->setFocus();
@@ -798,7 +798,7 @@ void UnoControl::addWindowListener( const Reference< XWindowListener >& rxListen
         ::osl::MutexGuard aGuard( GetMutex() );
         maWindowListeners.addInterface( rxListener );
         if ( maWindowListeners.getLength() == 1 )
-            xPeerWindow.set(getPeer(), css::uno::UNO_QUERY);
+            xPeerWindow.set(getPeer(), cpo::uno::UNO_QUERY);
     }
     if ( xPeerWindow.is() )
         xPeerWindow->addWindowListener( &maWindowListeners );
@@ -810,7 +810,7 @@ void UnoControl::removeWindowListener( const Reference< XWindowListener >& rxLis
     {
         ::osl::MutexGuard aGuard( GetMutex() );
         if ( maWindowListeners.getLength() == 1 )
-            xPeerWindow.set(getPeer(), css::uno::UNO_QUERY);
+            xPeerWindow.set(getPeer(), cpo::uno::UNO_QUERY);
         maWindowListeners.removeInterface( rxListener );
     }
     if ( xPeerWindow.is() )
@@ -824,7 +824,7 @@ void UnoControl::addFocusListener( const Reference< XFocusListener >& rxListener
         ::osl::MutexGuard aGuard( GetMutex() );
         maFocusListeners.addInterface( rxListener );
         if ( maFocusListeners.getLength() == 1 )
-            xPeerWindow.set(getPeer(), css::uno::UNO_QUERY);
+            xPeerWindow.set(getPeer(), cpo::uno::UNO_QUERY);
     }
     if ( xPeerWindow.is() )
         xPeerWindow->addFocusListener( &maFocusListeners );
@@ -836,7 +836,7 @@ void UnoControl::removeFocusListener( const Reference< XFocusListener >& rxListe
     {
         ::osl::MutexGuard aGuard( GetMutex() );
         if ( maFocusListeners.getLength() == 1 )
-            xPeerWindow.set(getPeer(), css::uno::UNO_QUERY);
+            xPeerWindow.set(getPeer(), cpo::uno::UNO_QUERY);
         maFocusListeners.removeInterface( rxListener );
     }
     if ( xPeerWindow.is() )
@@ -850,7 +850,7 @@ void UnoControl::addKeyListener( const Reference< XKeyListener >& rxListener )
         ::osl::MutexGuard aGuard( GetMutex() );
         maKeyListeners.addInterface( rxListener );
         if ( maKeyListeners.getLength() == 1 )
-            xPeerWindow.set(getPeer(), css::uno::UNO_QUERY);
+            xPeerWindow.set(getPeer(), cpo::uno::UNO_QUERY);
     }
     if ( xPeerWindow.is() )
         xPeerWindow->addKeyListener( &maKeyListeners);
@@ -862,7 +862,7 @@ void UnoControl::removeKeyListener( const Reference< XKeyListener >& rxListener 
     {
         ::osl::MutexGuard aGuard( GetMutex() );
         if ( maKeyListeners.getLength() == 1 )
-            xPeerWindow.set(getPeer(), css::uno::UNO_QUERY);
+            xPeerWindow.set(getPeer(), cpo::uno::UNO_QUERY);
         maKeyListeners.removeInterface( rxListener );
     }
     if ( xPeerWindow.is() )
@@ -876,7 +876,7 @@ void UnoControl::addMouseListener( const Reference< XMouseListener >& rxListener
         ::osl::MutexGuard aGuard( GetMutex() );
         maMouseListeners.addInterface( rxListener );
         if ( maMouseListeners.getLength() == 1 )
-            xPeerWindow.set(getPeer(), css::uno::UNO_QUERY);
+            xPeerWindow.set(getPeer(), cpo::uno::UNO_QUERY);
     }
     if ( xPeerWindow.is() )
         xPeerWindow->addMouseListener( &maMouseListeners);
@@ -888,7 +888,7 @@ void UnoControl::removeMouseListener( const Reference< XMouseListener >& rxListe
     {
         ::osl::MutexGuard aGuard( GetMutex() );
         if ( maMouseListeners.getLength() == 1 )
-            xPeerWindow.set(getPeer(), css::uno::UNO_QUERY);
+            xPeerWindow.set(getPeer(), cpo::uno::UNO_QUERY);
         maMouseListeners.removeInterface( rxListener );
     }
     if ( xPeerWindow.is() )
@@ -902,7 +902,7 @@ void UnoControl::addMouseMotionListener( const Reference< XMouseMotionListener >
         ::osl::MutexGuard aGuard( GetMutex() );
         maMouseMotionListeners.addInterface( rxListener );
         if ( maMouseMotionListeners.getLength() == 1 )
-            xPeerWindow.set(getPeer(), css::uno::UNO_QUERY);
+            xPeerWindow.set(getPeer(), cpo::uno::UNO_QUERY);
     }
     if ( xPeerWindow.is() )
         xPeerWindow->addMouseMotionListener( &maMouseMotionListeners);
@@ -914,7 +914,7 @@ void UnoControl::removeMouseMotionListener( const Reference< XMouseMotionListene
     {
         ::osl::MutexGuard aGuard( GetMutex() );
         if ( maMouseMotionListeners.getLength() == 1 )
-            xPeerWindow.set(getPeer(), css::uno::UNO_QUERY);
+            xPeerWindow.set(getPeer(), cpo::uno::UNO_QUERY);
         maMouseMotionListeners.removeInterface( rxListener );
     }
     if ( xPeerWindow.is() )
@@ -928,7 +928,7 @@ void UnoControl::addPaintListener( const Reference< XPaintListener >& rxListener
         ::osl::MutexGuard aGuard( GetMutex() );
         maPaintListeners.addInterface( rxListener );
         if ( maPaintListeners.getLength() == 1 )
-            xPeerWindow.set(getPeer(), css::uno::UNO_QUERY);
+            xPeerWindow.set(getPeer(), cpo::uno::UNO_QUERY);
     }
     if ( xPeerWindow.is() )
         xPeerWindow->addPaintListener( &maPaintListeners);
@@ -940,7 +940,7 @@ void UnoControl::removePaintListener( const Reference< XPaintListener >& rxListe
     {
         ::osl::MutexGuard aGuard( GetMutex() );
         if ( maPaintListeners.getLength() == 1 )
-            xPeerWindow.set(getPeer(), css::uno::UNO_QUERY);
+            xPeerWindow.set(getPeer(), cpo::uno::UNO_QUERY);
         maPaintListeners.removeInterface( rxListener );
     }
     if ( xPeerWindow.is() )
@@ -955,7 +955,7 @@ bool UnoControl::setGraphics( const Reference< XGraphics >& rDevice )
         ::osl::MutexGuard aGuard( GetMutex() );
 
         mxGraphics = rDevice;
-        xView.set(getPeer(), css::uno::UNO_QUERY);
+        xView.set(getPeer(), cpo::uno::UNO_QUERY);
     }
     return !xView.is() || xView->setGraphics( rDevice );
 }
@@ -1009,7 +1009,7 @@ void UnoControl::setZoom( float fZoomX, float fZoomY )
         maComponentInfos.nZoomX = fZoomX;
         maComponentInfos.nZoomY = fZoomY;
 
-        xView.set(getPeer(), css::uno::UNO_QUERY);
+        xView.set(getPeer(), cpo::uno::UNO_QUERY);
     }
     if ( xView.is() )
         xView->setZoom( fZoomX, fZoomY );
@@ -1411,7 +1411,7 @@ void UnoControl::setDesignMode( bool bOn )
 
         // remember this
         mbDesignMode = bOn;
-        xWindow.set(getPeer(), css::uno::UNO_QUERY);
+        xWindow.set(getPeer(), cpo::uno::UNO_QUERY);
 
         xAccessibleComp.set(maAccessibleContext, UNO_QUERY);
         maAccessibleContext.clear();
@@ -1528,7 +1528,7 @@ awt::Point UnoControl::convertPointToLogic( const awt::Point& i_Point, ::sal_Int
     Reference< XUnitConversion > xPeerConversion;
     {
         ::osl::MutexGuard aGuard( GetMutex() );
-        xPeerConversion.set(getPeer(), css::uno::UNO_QUERY);
+        xPeerConversion.set(getPeer(), cpo::uno::UNO_QUERY);
     }
     if ( xPeerConversion.is() )
         return xPeerConversion->convertPointToLogic( i_Point, i_TargetUnit );
@@ -1541,7 +1541,7 @@ awt::Point UnoControl::convertPointToPixel( const awt::Point& i_Point, ::sal_Int
     Reference< XUnitConversion > xPeerConversion;
     {
         ::osl::MutexGuard aGuard( GetMutex() );
-        xPeerConversion.set(getPeer(), css::uno::UNO_QUERY);
+        xPeerConversion.set(getPeer(), cpo::uno::UNO_QUERY);
     }
     if ( xPeerConversion.is() )
         return xPeerConversion->convertPointToPixel( i_Point, i_SourceUnit );
@@ -1554,7 +1554,7 @@ awt::Size UnoControl::convertSizeToLogic( const awt::Size& i_Size, ::sal_Int16 i
     Reference< XUnitConversion > xPeerConversion;
     {
         ::osl::MutexGuard aGuard( GetMutex() );
-        xPeerConversion.set(getPeer(), css::uno::UNO_QUERY);
+        xPeerConversion.set(getPeer(), cpo::uno::UNO_QUERY);
     }
     if ( xPeerConversion.is() )
         return xPeerConversion->convertSizeToLogic( i_Size, i_TargetUnit );
@@ -1567,7 +1567,7 @@ awt::Size UnoControl::convertSizeToPixel( const awt::Size& i_Size, ::sal_Int16 i
     Reference< XUnitConversion > xPeerConversion;
     {
         ::osl::MutexGuard aGuard( GetMutex() );
-        xPeerConversion.set(getPeer(), css::uno::UNO_QUERY);
+        xPeerConversion.set(getPeer(), cpo::uno::UNO_QUERY);
     }
     if ( xPeerConversion.is() )
         return xPeerConversion->convertSizeToPixel( i_Size, i_SourceUnit );
@@ -1580,7 +1580,7 @@ uno::Reference< awt::XStyleSettings > UnoControl::getStyleSettings()
     Reference< awt::XStyleSettingsSupplier > xPeerSupplier;
     {
         ::osl::MutexGuard aGuard( GetMutex() );
-        xPeerSupplier.set(getPeer(), css::uno::UNO_QUERY);
+        xPeerSupplier.set(getPeer(), cpo::uno::UNO_QUERY);
     }
     if ( xPeerSupplier.is() )
         return xPeerSupplier->getStyleSettings();

@@ -93,9 +93,9 @@
 #include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::linguistic2;
+using namespace ::cpo;
 using namespace ::cpo::uno;
 
 constexpr OUString CH_HYPH = u"-"_ustr;

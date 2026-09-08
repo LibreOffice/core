@@ -31,7 +31,7 @@ namespace svx
     {
         Link<const OUString&,bool>      m_aNameValidator;
 
-        css::uno::Reference< css::configuration::XReadWriteAccess> m_xReadWriteAccess;
+        cpo::uno::Reference< css::configuration::XReadWriteAccess> m_xReadWriteAccess;
 
         std::unique_ptr<weld::Button> m_xBrowseFile;
         std::unique_ptr<weld::Entry> m_xName;

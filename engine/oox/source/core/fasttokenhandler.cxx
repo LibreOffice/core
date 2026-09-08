@@ -27,7 +27,7 @@ using namespace ::com::sun::star;
 
 namespace oox::core {
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 // XServiceInfo

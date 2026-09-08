@@ -73,7 +73,7 @@ vcl::ImageType ToolbarUnoDispatcher::GetIconSize()
 }
 
 ToolbarUnoDispatcher::ToolbarUnoDispatcher(weld::Toolbar& rToolbar, weld::Builder& rBuilder,
-                                           const css::uno::Reference<css::frame::XFrame>& rFrame,
+                                           const cpo::uno::Reference<css::frame::XFrame>& rFrame,
                                            bool bSideBar, weld::Label* pFirstLabel)
     : m_xFrame(rFrame)
     , m_pToolbar(&rToolbar)
@@ -119,7 +119,7 @@ ToolbarUnoDispatcher::ToolbarUnoDispatcher(weld::Toolbar& rToolbar, weld::Builde
 
 void ToolbarUnoDispatcher::CreateController(const OUString& rCommand)
 {
-    css::uno::Reference<css::frame::XToolbarController> xController(
+    cpo::uno::Reference<css::frame::XToolbarController> xController(
         sfx2::sidebar::ControllerFactory::CreateToolBoxController(
             *m_pToolbar, *m_pBuilder, rCommand, m_xFrame, m_xFrame->getController(), m_bSideBar));
 
@@ -127,19 +127,19 @@ void ToolbarUnoDispatcher::CreateController(const OUString& rCommand)
         maControllers.insert(std::make_pair(rCommand, xController));
 }
 
-css::uno::Reference<css::frame::XToolbarController>
+cpo::uno::Reference<css::frame::XToolbarController>
 ToolbarUnoDispatcher::GetControllerForCommand(const OUString& rCommand) const
 {
     ControllerContainer::const_iterator iController(maControllers.find(rCommand));
     if (iController != maControllers.end())
         return iController->second;
 
-    return css::uno::Reference<css::frame::XToolbarController>();
+    return cpo::uno::Reference<css::frame::XToolbarController>();
 }
 
 IMPL_LINK(ToolbarUnoDispatcher, SelectHdl, const OUString&, rCommand, void)
 {
-    css::uno::Reference<css::frame::XToolbarController> xController(
+    cpo::uno::Reference<css::frame::XToolbarController> xController(
         GetControllerForCommand(rCommand));
 
     if (xController.is())
@@ -148,7 +148,7 @@ IMPL_LINK(ToolbarUnoDispatcher, SelectHdl, const OUString&, rCommand, void)
 
 IMPL_LINK(ToolbarUnoDispatcher, ToggleMenuHdl, const OUString&, rCommand, void)
 {
-    css::uno::Reference<css::frame::XToolbarController> xController(
+    cpo::uno::Reference<css::frame::XToolbarController> xController(
         GetControllerForCommand(rCommand));
 
     if (xController.is())
@@ -169,8 +169,8 @@ IMPL_LINK_NOARG(ToolbarUnoDispatcher, ChangedIconSizeHandler, LinkParamNone*, vo
 
     for (auto const& it : maControllers)
     {
-        css::uno::Reference<css::frame::XSubToolbarController> xController(it.second,
-                                                                           css::uno::UNO_QUERY);
+        cpo::uno::Reference<css::frame::XSubToolbarController> xController(it.second,
+                                                                           cpo::uno::UNO_QUERY);
         if (xController.is() && xController->opensSubToolbar())
         {
             // The button should show the last function that was selected from the
@@ -191,8 +191,8 @@ void ToolbarUnoDispatcher::dispose()
     aControllers.swap(maControllers);
     for (auto const& controller : aControllers)
     {
-        css::uno::Reference<css::lang::XComponent> xComponent(controller.second,
-                                                              css::uno::UNO_QUERY);
+        cpo::uno::Reference<css::lang::XComponent> xComponent(controller.second,
+                                                              cpo::uno::UNO_QUERY);
         if (xComponent.is())
             xComponent->dispose();
     }

@@ -31,6 +31,7 @@
 #include <com/sun/star/sheet/XSolverDescription.hpp>
 
 using namespace css;
+using namespace ::cpo;
 
 constexpr OUString SC_SOLVERSETTINGS_SERVICE = u"com.sun.star.sheet.SolverSettings"_ustr;
 

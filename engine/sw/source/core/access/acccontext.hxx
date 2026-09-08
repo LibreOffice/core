@@ -200,14 +200,14 @@ public:
     virtual sal_Int64 SAL_CALL getAccessibleChildCount() override;
 
     // Return the specified child or NULL if index is invalid.
-    virtual css::uno::Reference< css::accessibility::XAccessible> SAL_CALL
+    virtual cpo::uno::Reference< css::accessibility::XAccessible> SAL_CALL
         getAccessibleChild (sal_Int64 nIndex) override;
 
-    virtual cpo::uno::Sequence<css::uno::Reference< css::accessibility::XAccessible>> SAL_CALL
+    virtual cpo::uno::Sequence<cpo::uno::Reference< css::accessibility::XAccessible>> SAL_CALL
         getAccessibleChildren() override;
 
     // Return a reference to the parent.
-    virtual css::uno::Reference< css::accessibility::XAccessible> SAL_CALL
+    virtual cpo::uno::Reference< css::accessibility::XAccessible> SAL_CALL
         getAccessibleParent() override;
 
     // Return this objects index among the parents children.
@@ -225,7 +225,7 @@ public:
         getAccessibleName() override;
 
     // Return NULL to indicate that an empty relation set.
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
             css::accessibility::XAccessibleRelationSet> SAL_CALL
         getAccessibleRelationSet() override;
 
@@ -238,7 +238,7 @@ public:
         getLocale() override;
 
     // XAccessibleComponent
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint(
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint(
                 const css::awt::Point& aPoint ) override;
 
     virtual css::awt::Point SAL_CALL getLocationOnScreen() override;

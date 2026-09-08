@@ -132,7 +132,7 @@ public:
     */
     virtual void UpdatePreview (SdPage* pPage) override;
 
-    virtual css::uno::Reference<css::drawing::XDrawSubController> CreateSubController() override;
+    virtual cpo::uno::Reference<css::drawing::XDrawSubController> CreateSubController() override;
 
     /** Make the given page the new current page.  This method
         notifies the controller and adapts the selection of the

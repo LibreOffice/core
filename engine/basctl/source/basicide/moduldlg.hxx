@@ -199,7 +199,7 @@ public:
 
 void implExportLib(const ScriptDocument& rScriptDocument, const OUString& aLibName,
                    const OUString& aTargetURL,
-                   const css::uno::Reference<css::task::XInteractionHandler>& Handler);
+                   const cpo::uno::Reference<css::task::XInteractionHandler>& Handler);
 void ExportAsPackage(const ScriptDocument& rScriptDocument, const OUString& aLibName,
                      weld::Dialog* pDialog);
 void ExportAsBasic(const ScriptDocument& rScriptDocument, const OUString& aLibName,
@@ -215,10 +215,10 @@ private:
 
     DECL_LINK(ActivatePageHdl, const OUString&, void);
 
-    void SetCurrentEntry(const css::uno::Reference<css::frame::XFrame>& xDocFrame);
+    void SetCurrentEntry(const cpo::uno::Reference<css::frame::XFrame>& xDocFrame);
 
 public:
-    OrganizeDialog(weld::Window* pParent, const css::uno::Reference<css::frame::XFrame>& xDocFrame, sal_Int16 tabId);
+    OrganizeDialog(weld::Window* pParent, const cpo::uno::Reference<css::frame::XFrame>& xDocFrame, sal_Int16 tabId);
     virtual ~OrganizeDialog() override;
 };
 

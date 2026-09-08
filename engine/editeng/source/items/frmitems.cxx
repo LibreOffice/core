@@ -87,6 +87,7 @@ using namespace ::editeng;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::table::BorderLineStyle;
+using namespace ::cpo;
 
 
 SfxPoolItem* SvxPaperBinItem::CreateDefault() { return new  SvxPaperBinItem(0);}
@@ -3274,7 +3275,7 @@ bool SvxBoxItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
                 return mpBottomBorderLine->setComplexColorFromAny(rVal);
             else if (rVal.hasValue())
             {
-                css::uno::Reference<css::util::XComplexColor> xComplexColor;
+                cpo::uno::Reference<css::util::XComplexColor> xComplexColor;
                 if (!(rVal >>= xComplexColor))
                     return false;
 
@@ -3289,7 +3290,7 @@ bool SvxBoxItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
                 return mpLeftBorderLine->setComplexColorFromAny(rVal);
             else if (rVal.hasValue())
             {
-                css::uno::Reference<css::util::XComplexColor> xComplexColor;
+                cpo::uno::Reference<css::util::XComplexColor> xComplexColor;
                 if (!(rVal >>= xComplexColor))
                     return false;
 
@@ -3304,7 +3305,7 @@ bool SvxBoxItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
                 return mpRightBorderLine->setComplexColorFromAny(rVal);
             else if (rVal.hasValue())
             {
-                css::uno::Reference<css::util::XComplexColor> xComplexColor;
+                cpo::uno::Reference<css::util::XComplexColor> xComplexColor;
                 if (!(rVal >>= xComplexColor))
                     return false;
 
@@ -3319,7 +3320,7 @@ bool SvxBoxItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
                 return mpTopBorderLine->setComplexColorFromAny(rVal);
             else if (rVal.hasValue())
             {
-                css::uno::Reference<css::util::XComplexColor> xComplexColor;
+                cpo::uno::Reference<css::util::XComplexColor> xComplexColor;
                 if (!(rVal >>= xComplexColor))
                     return false;
 
@@ -4735,7 +4736,7 @@ bool SvxBrushItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
 
         case MID_BACKGROUND_COMPLEX_COLOR:
         {
-            css::uno::Reference<css::util::XComplexColor> xComplexColor;
+            cpo::uno::Reference<css::util::XComplexColor> xComplexColor;
             if (!(rVal >>= xComplexColor))
                 return false;
 

@@ -37,13 +37,13 @@ namespace com::sun::star {
 class SwXMLBrushItemImportContext : public SvXMLImportContext
 {
 private:
-    css::uno::Reference<css::io::XOutputStream> m_xBase64Stream;
-    css::uno::Reference<css::graphic::XGraphic> m_xGraphic;
+    cpo::uno::Reference<css::io::XOutputStream> m_xBase64Stream;
+    cpo::uno::Reference<css::graphic::XGraphic> m_xGraphic;
 
     std::unique_ptr<SvxBrushItem> m_pItem;
 
     void ProcessAttrs(
-               const css::uno::Reference<css::xml::sax::XFastAttributeList > & xAttrList,
+               const cpo::uno::Reference<css::xml::sax::XFastAttributeList > & xAttrList,
                const SvXMLUnitConverter& rUnitConv );
 
 public:
@@ -51,21 +51,21 @@ public:
     SwXMLBrushItemImportContext(
             SvXMLImport& rImport,
             sal_Int32 nElement,
-            const css::uno::Reference<css::xml::sax::XFastAttributeList > & xAttrList,
+            const cpo::uno::Reference<css::xml::sax::XFastAttributeList > & xAttrList,
             const SvXMLUnitConverter& rUnitConv,
             const SvxBrushItem& rItem    );
 
     SwXMLBrushItemImportContext(
             SvXMLImport& rImport,
             sal_Int32 nElement,
-            const css::uno::Reference<css::xml::sax::XFastAttributeList > & xAttrList,
+            const cpo::uno::Reference<css::xml::sax::XFastAttributeList > & xAttrList,
             const SvXMLUnitConverter& rUnitConv,
             sal_uInt16 nWhich   );
 
     virtual ~SwXMLBrushItemImportContext() override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 

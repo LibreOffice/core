@@ -58,8 +58,8 @@
 #define NAVI_ENTRIES 21
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 
@@ -767,7 +767,7 @@ uno::Reference< awt::XWindow > SAL_CALL NavElementToolBoxControl::createItemWind
 
         std::unique_ptr<weld::ComboBox> xWidget(m_pBuilder->weld_combo_box(u"NavElementWidget"_ustr));
 
-        xItemWindow = css::uno::Reference<css::awt::XWindow>(new weld::TransportAsXWindow(xWidget.get()));
+        xItemWindow = cpo::uno::Reference<css::awt::XWindow>(new weld::TransportAsXWindow(xWidget.get()));
 
         m_xWeldBox.reset(new NavElementBox_Base(std::move(xWidget), m_xFrame));
         m_pBox = m_xWeldBox.get();
@@ -803,7 +803,7 @@ class PrevNextScrollToolboxController : public PrevNextScrollToolboxController_B
 public:
     enum Type { PREVIOUS, NEXT };
 
-    PrevNextScrollToolboxController( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext, Type eType );
+    PrevNextScrollToolboxController( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext, Type eType );
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -819,9 +819,9 @@ private:
 
 }
 
-PrevNextScrollToolboxController::PrevNextScrollToolboxController( const css::uno::Reference< cpo::uno::XComponentContext > & rxContext, Type eType )
+PrevNextScrollToolboxController::PrevNextScrollToolboxController( const cpo::uno::Reference< cpo::uno::XComponentContext > & rxContext, Type eType )
     : PrevNextScrollToolboxController_Base( rxContext,
-            css::uno::Reference< css::frame::XFrame >(),
+            cpo::uno::Reference< css::frame::XFrame >(),
             (eType == PREVIOUS) ? u".uno:ScrollToPrevious"_ustr: u".uno:ScrollToNext"_ustr ),
       meType( eType )
 {

@@ -85,8 +85,8 @@ namespace basctl
 constexpr OUString BASIC_IDE_EDITOR_WINDOW = u"BasicIDEEditorWindow"_ustr;
 constexpr OUString BASIC_IDE_CURRENT_ZOOM = u"CurrentZoom"_ustr;
 
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star;
 
 class ContainerListenerImpl : public ::cppu::WeakImplHelper< container::XContainerListener >

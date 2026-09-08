@@ -29,6 +29,7 @@
 #include <vcl/BitmapTools.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 XBitmapEntry* XPatternList::GetBitmap(tools::Long nIndex) const
 {

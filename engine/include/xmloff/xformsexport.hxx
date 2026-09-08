@@ -24,27 +24,27 @@
 
 class SvXMLExport;
 namespace com::sun::star {
-    namespace uno { template<typename T> class Reference; }
     namespace beans { class XPropertySet; struct PropertyValue; }
     namespace container { class XNameAccess; }
 }
+namespace cpo::uno { template<typename T> class Reference; }
 namespace cpo::uno { template <typename > class Sequence; }
 
 
 /** export an XForms model. */
 void exportXForms( SvXMLExport& );
 
-OUString getXFormsBindName( const css::uno::Reference<css::beans::XPropertySet>& xBinding );
+OUString getXFormsBindName( const cpo::uno::Reference<css::beans::XPropertySet>& xBinding );
 
-OUString getXFormsListBindName( const css::uno::Reference<css::beans::XPropertySet>& xBinding );
+OUString getXFormsListBindName( const cpo::uno::Reference<css::beans::XPropertySet>& xBinding );
 
-OUString getXFormsSubmissionName( const css::uno::Reference<css::beans::XPropertySet>& xBinding );
+OUString getXFormsSubmissionName( const cpo::uno::Reference<css::beans::XPropertySet>& xBinding );
 
 
 /** returns the settings of the given XForms container, to be exported as document specific settings
 */
 void XMLOFF_DLLPUBLIC getXFormsSettings(
-        const css::uno::Reference< css::container::XNameAccess >& _rXForms,
+        const cpo::uno::Reference< css::container::XNameAccess >& _rXForms,
               cpo::uno::Sequence< css::beans::PropertyValue >& _out_rSettings
     );
 

@@ -47,8 +47,8 @@
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 class ScExportTest5 : public ScModelTestBase
 {
@@ -166,17 +166,17 @@ CPPUNIT_TEST_FIXTURE(ScExportTest5, testTdf142264ManyChartsToXLSX)
     createScDoc("ods/many_charts.ods");
     saveAndReload(TestFilter::XLSX);
 
-    css::uno::Reference<css::drawing::XDrawPagesSupplier> xSupplier(mxComponent,
-                                                                    css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::drawing::XDrawPagesSupplier> xSupplier(mxComponent,
+                                                                    cpo::uno::UNO_QUERY_THROW);
     auto xDrawPages = xSupplier->getDrawPages();
 
     // No charts (or other objects) on the first sheet, and resp. first draw page
-    css::uno::Reference<css::drawing::XDrawPage> xPage(xDrawPages->getByIndex(0),
-                                                       css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::drawing::XDrawPage> xPage(xDrawPages->getByIndex(0),
+                                                       cpo::uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xPage->getCount());
 
     // 20 charts on the second sheet, and resp. second draw page
-    xPage.set(xDrawPages->getByIndex(1), css::uno::UNO_QUERY_THROW);
+    xPage.set(xDrawPages->getByIndex(1), cpo::uno::UNO_QUERY_THROW);
     // Without the fix in place, this test would have failed with
     // - Expected: 20
     // - Actual : 0
@@ -184,20 +184,20 @@ CPPUNIT_TEST_FIXTURE(ScExportTest5, testTdf142264ManyChartsToXLSX)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(20), xPage->getCount());
     for (sal_Int32 i = 0; i < xPage->getCount(); ++i)
     {
-        css::uno::Reference<css::beans::XPropertySet> xProps(xPage->getByIndex(i),
-                                                             css::uno::UNO_QUERY_THROW);
-        css::uno::Reference<css::chart2::XChartDocument> xChart(
-            xProps->getPropertyValue(u"Model"_ustr), css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::beans::XPropertySet> xProps(xPage->getByIndex(i),
+                                                             cpo::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::chart2::XChartDocument> xChart(
+            xProps->getPropertyValue(u"Model"_ustr), cpo::uno::UNO_QUERY_THROW);
         const auto xDiagram = xChart->getFirstDiagram();
         CPPUNIT_ASSERT(xDiagram);
 
-        css::uno::Reference<css::chart2::XCoordinateSystemContainer> xCooSysContainer(
+        cpo::uno::Reference<css::chart2::XCoordinateSystemContainer> xCooSysContainer(
             xDiagram, uno::UNO_QUERY_THROW);
 
         const auto xCooSysSeq = xCooSysContainer->getCoordinateSystems();
         for (const auto& rCooSys : xCooSysSeq)
         {
-            css::uno::Reference<css::chart2::XChartTypeContainer> xChartTypeCont(
+            cpo::uno::Reference<css::chart2::XChartTypeContainer> xChartTypeCont(
                 rCooSys, uno::UNO_QUERY_THROW);
             cpo::uno::Sequence<uno::Reference<chart2::XChartType>> xChartTypeSeq
                 = xChartTypeCont->getChartTypes();
@@ -206,24 +206,24 @@ CPPUNIT_TEST_FIXTURE(ScExportTest5, testTdf142264ManyChartsToXLSX)
     }
 
     // 20 charts on the third sheet, and resp. third draw page
-    xPage.set(xDrawPages->getByIndex(2), css::uno::UNO_QUERY_THROW);
+    xPage.set(xDrawPages->getByIndex(2), cpo::uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(20), xPage->getCount());
     for (sal_Int32 i = 0; i < xPage->getCount(); ++i)
     {
-        css::uno::Reference<css::beans::XPropertySet> xProps(xPage->getByIndex(i),
-                                                             css::uno::UNO_QUERY_THROW);
-        css::uno::Reference<css::chart2::XChartDocument> xChart(
-            xProps->getPropertyValue(u"Model"_ustr), css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::beans::XPropertySet> xProps(xPage->getByIndex(i),
+                                                             cpo::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::chart2::XChartDocument> xChart(
+            xProps->getPropertyValue(u"Model"_ustr), cpo::uno::UNO_QUERY_THROW);
         const auto xDiagram = xChart->getFirstDiagram();
         CPPUNIT_ASSERT(xDiagram);
 
-        css::uno::Reference<css::chart2::XCoordinateSystemContainer> xCooSysContainer(
+        cpo::uno::Reference<css::chart2::XCoordinateSystemContainer> xCooSysContainer(
             xDiagram, uno::UNO_QUERY_THROW);
 
         const auto xCooSysSeq = xCooSysContainer->getCoordinateSystems();
         for (const auto& rCooSys : xCooSysSeq)
         {
-            css::uno::Reference<css::chart2::XChartTypeContainer> xChartTypeCont(
+            cpo::uno::Reference<css::chart2::XChartTypeContainer> xChartTypeCont(
                 rCooSys, uno::UNO_QUERY_THROW);
             cpo::uno::Sequence<uno::Reference<chart2::XChartType>> xChartTypeSeq
                 = xChartTypeCont->getChartTypes();
@@ -237,42 +237,42 @@ CPPUNIT_TEST_FIXTURE(ScExportTest5, testTdf143929MultiColumnToODS)
     createScDoc("ods/two-col-shape.ods");
 
     {
-        css::uno::Reference<css::drawing::XDrawPagesSupplier> xSupplier(mxComponent,
-                                                                        css::uno::UNO_QUERY_THROW);
-        css::uno::Reference<css::drawing::XDrawPage> xPage(xSupplier->getDrawPages()->getByIndex(0),
-                                                           css::uno::UNO_QUERY_THROW);
-        css::uno::Reference<css::container::XIndexAccess> xIndexAccess(xPage,
-                                                                       css::uno::UNO_QUERY_THROW);
-        css::uno::Reference<css::drawing::XShape> xShape(xIndexAccess->getByIndex(0),
-                                                         css::uno::UNO_QUERY_THROW);
-        css::uno::Reference<css::beans::XPropertySet> xProps(xShape, css::uno::UNO_QUERY_THROW);
-        css::uno::Reference<css::text::XTextColumns> xCols(
-            xProps->getPropertyValue(u"TextColumns"_ustr), css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::drawing::XDrawPagesSupplier> xSupplier(mxComponent,
+                                                                        cpo::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::drawing::XDrawPage> xPage(xSupplier->getDrawPages()->getByIndex(0),
+                                                           cpo::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::container::XIndexAccess> xIndexAccess(xPage,
+                                                                       cpo::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::drawing::XShape> xShape(xIndexAccess->getByIndex(0),
+                                                         cpo::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::beans::XPropertySet> xProps(xShape, cpo::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::text::XTextColumns> xCols(
+            xProps->getPropertyValue(u"TextColumns"_ustr), cpo::uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xCols->getColumnCount());
-        css::uno::Reference<css::beans::XPropertySet> xColProps(xCols, css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::beans::XPropertySet> xColProps(xCols, cpo::uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(sal_Int32(1000)),
                              xColProps->getPropertyValue(u"AutomaticDistance"_ustr));
     }
 
     saveAndReload(TestFilter::ODS);
     {
-        css::uno::Reference<css::drawing::XDrawPagesSupplier> xSupplier(mxComponent,
-                                                                        css::uno::UNO_QUERY_THROW);
-        css::uno::Reference<css::drawing::XDrawPage> xPage(xSupplier->getDrawPages()->getByIndex(0),
-                                                           css::uno::UNO_QUERY_THROW);
-        css::uno::Reference<css::container::XIndexAccess> xIndexAccess(xPage,
-                                                                       css::uno::UNO_QUERY_THROW);
-        css::uno::Reference<css::drawing::XShape> xShape(xIndexAccess->getByIndex(0),
-                                                         css::uno::UNO_QUERY_THROW);
-        css::uno::Reference<css::beans::XPropertySet> xProps(xShape, css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::drawing::XDrawPagesSupplier> xSupplier(mxComponent,
+                                                                        cpo::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::drawing::XDrawPage> xPage(xSupplier->getDrawPages()->getByIndex(0),
+                                                           cpo::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::container::XIndexAccess> xIndexAccess(xPage,
+                                                                       cpo::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::drawing::XShape> xShape(xIndexAccess->getByIndex(0),
+                                                         cpo::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::beans::XPropertySet> xProps(xShape, cpo::uno::UNO_QUERY_THROW);
 
         // Without the fix in place, this would have failed with:
         //   An uncaught exception of type cpo.uno.RuntimeException
         //   - unsatisfied query for interface of type com.sun.star.text.XTextColumns!
-        css::uno::Reference<css::text::XTextColumns> xCols(
-            xProps->getPropertyValue(u"TextColumns"_ustr), css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::text::XTextColumns> xCols(
+            xProps->getPropertyValue(u"TextColumns"_ustr), cpo::uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xCols->getColumnCount());
-        css::uno::Reference<css::beans::XPropertySet> xColProps(xCols, css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::beans::XPropertySet> xColProps(xCols, cpo::uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT_EQUAL(cpo::uno::Any(sal_Int32(1000)),
                              xColProps->getPropertyValue(u"AutomaticDistance"_ustr));
     }

@@ -27,8 +27,8 @@
 namespace CDTransObjFactory
 {
 sal::systools::COMReference<IDataObject> createDataObjFromTransferable(
-    const css::uno::Reference<cpo::uno::XComponentContext>& rxContext,
-    const css::uno::Reference<css::datatransfer::XTransferable>& refXTransferable);
+    const cpo::uno::Reference<cpo::uno::XComponentContext>& rxContext,
+    const cpo::uno::Reference<css::datatransfer::XTransferable>& refXTransferable);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

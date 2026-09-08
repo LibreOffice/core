@@ -28,7 +28,7 @@
 
 #include <com/sun/star/io/XSeekable.hpp>
 
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace com::sun::star::io;
 using namespace ::cpo::uno;
 

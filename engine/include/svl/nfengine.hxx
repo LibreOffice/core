@@ -37,12 +37,12 @@ class SvNumberFormatter;
 class SVL_DLLPUBLIC SvNFLanguageData
 {
 public:
-    SvNFLanguageData(const css::uno::Reference<cpo::uno::XComponentContext>& rxContext,
+    SvNFLanguageData(const cpo::uno::Reference<cpo::uno::XComponentContext>& rxContext,
                      LanguageType eLang, const SvNumberFormatter& rColorCallback);
     SvNFLanguageData(const SvNFLanguageData& rOther);
     ~SvNFLanguageData();
 
-    const css::uno::Reference<cpo::uno::XComponentContext>& GetComponentContext() const
+    const cpo::uno::Reference<cpo::uno::XComponentContext>& GetComponentContext() const
     {
         return xContext;
     }
@@ -133,7 +133,7 @@ private:
     friend class SvNFFormatData;
     friend class SvNumberFormatter;
 
-    css::uno::Reference<cpo::uno::XComponentContext> xContext;
+    cpo::uno::Reference<cpo::uno::XComponentContext> xContext;
 
     const LanguageType IniLnge; // Initial language/country setting
     LanguageType ActLnge; // Current language/country setting
@@ -228,7 +228,7 @@ private:
     // Generate additional formats provided by i18n
     SVL_DLLPRIVATE void ImpGenerateAdditionalFormats(
         SvNFLanguageData& rCurrentLanguage, const NativeNumberWrapper& rNatNum, sal_uInt32 CLOffset,
-        css::uno::Reference<css::i18n::XNumberFormatCode> const& rNumberFormatCode,
+        cpo::uno::Reference<css::i18n::XNumberFormatCode> const& rNumberFormatCode,
         bool bAfterChangingSystemCL);
 
     // called by SvNumberFormatterRegistry_Impl::Notify if the default system currency changes

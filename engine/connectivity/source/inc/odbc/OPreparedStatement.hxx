@@ -60,7 +60,7 @@ namespace connectivity::odbc
         void putParamData (sal_Int32 index);
         /// @throws css::sdbc::SQLException
         /// @throws cpo::uno::RuntimeException
-        void setStream (sal_Int32 ParameterIndex,const css::uno::Reference< css::io::XInputStream>& x,
+        void setStream (sal_Int32 ParameterIndex,const cpo::uno::Reference< css::io::XInputStream>& x,
                                                     SQLLEN length,sal_Int32 SQLtype);
         SQLLEN* getLengthBuf (sal_Int32 index);
         void* allocBindBuf (    sal_Int32 index,    sal_Int32 bufLen);
@@ -101,10 +101,10 @@ namespace connectivity::odbc
         virtual cpo::uno::Sequence< cpo::uno::Type > getTypes(  ) override;
 
         // XPreparedStatement
-        virtual css::uno::Reference< css::sdbc::XResultSet > executeQuery(  ) override;
+        virtual cpo::uno::Reference< css::sdbc::XResultSet > executeQuery(  ) override;
         virtual sal_Int32 executeUpdate(  ) override;
         virtual bool execute(  ) override;
-        virtual css::uno::Reference< css::sdbc::XConnection > getConnection(  ) override;
+        virtual cpo::uno::Reference< css::sdbc::XConnection > getConnection(  ) override;
         // XParameters
         virtual void setNull( sal_Int32 parameterIndex, sal_Int32 sqlType ) override;
         virtual void setObjectNull( sal_Int32 parameterIndex, sal_Int32 sqlType, const OUString& typeName ) override;
@@ -120,14 +120,14 @@ namespace connectivity::odbc
         virtual void setDate( sal_Int32 parameterIndex, const css::util::Date& x ) override;
         virtual void setTime( sal_Int32 parameterIndex, const css::util::Time& x ) override;
         virtual void setTimestamp( sal_Int32 parameterIndex, const css::util::DateTime& x ) override;
-        virtual void setBinaryStream( sal_Int32 parameterIndex, const css::uno::Reference< css::io::XInputStream >& x, sal_Int32 length ) override;
-        virtual void setCharacterStream( sal_Int32 parameterIndex, const css::uno::Reference< css::io::XInputStream >& x, sal_Int32 length ) override;
+        virtual void setBinaryStream( sal_Int32 parameterIndex, const cpo::uno::Reference< css::io::XInputStream >& x, sal_Int32 length ) override;
+        virtual void setCharacterStream( sal_Int32 parameterIndex, const cpo::uno::Reference< css::io::XInputStream >& x, sal_Int32 length ) override;
         virtual void setObject( sal_Int32 parameterIndex, const cpo::uno::Any& x ) override;
         virtual void setObjectWithInfo( sal_Int32 parameterIndex, const cpo::uno::Any& x, sal_Int32 targetSqlType, sal_Int32 scale ) override;
-        virtual void setRef( sal_Int32 parameterIndex, const css::uno::Reference< css::sdbc::XRef >& x ) override;
-        virtual void setBlob( sal_Int32 parameterIndex, const css::uno::Reference< css::sdbc::XBlob >& x ) override;
-        virtual void setClob( sal_Int32 parameterIndex, const css::uno::Reference< css::sdbc::XClob >& x ) override;
-        virtual void setArray( sal_Int32 parameterIndex, const css::uno::Reference< css::sdbc::XArray >& x ) override;
+        virtual void setRef( sal_Int32 parameterIndex, const cpo::uno::Reference< css::sdbc::XRef >& x ) override;
+        virtual void setBlob( sal_Int32 parameterIndex, const cpo::uno::Reference< css::sdbc::XBlob >& x ) override;
+        virtual void setClob( sal_Int32 parameterIndex, const cpo::uno::Reference< css::sdbc::XClob >& x ) override;
+        virtual void setArray( sal_Int32 parameterIndex, const cpo::uno::Reference< css::sdbc::XArray >& x ) override;
         virtual void clearParameters(  ) override;
         // XPreparedBatchExecution
         virtual void addBatch(  ) override;
@@ -136,7 +136,7 @@ namespace connectivity::odbc
         // XCloseable
         virtual void close(  ) override;
         // XResultSetMetaDataSupplier
-        virtual css::uno::Reference< css::sdbc::XResultSetMetaData > getMetaData(  ) override;
+        virtual cpo::uno::Reference< css::sdbc::XResultSetMetaData > getMetaData(  ) override;
         const rtl::Reference< OResultSetMetaData > & getMetaDataImpl();
 
     public:

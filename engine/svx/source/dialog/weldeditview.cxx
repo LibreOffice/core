@@ -553,7 +553,7 @@ public:
 
     // XAccessibleComponent
 
-    virtual css::uno::Reference<css::accessibility::XAccessible>
+    virtual cpo::uno::Reference<css::accessibility::XAccessible>
         getAccessibleAtPoint(const css::awt::Point& rPoint) override
     {
         SolarMutexGuard aGuard;
@@ -628,7 +628,7 @@ public:
         return 0;
     }
 
-    virtual css::uno::Reference<css::accessibility::XAccessible>
+    virtual cpo::uno::Reference<css::accessibility::XAccessible>
         getAccessibleChild(sal_Int64 i) override
     {
         if (m_xTextHelper)
@@ -636,7 +636,7 @@ public:
         throw css::lang::IndexOutOfBoundsException(); // there is no child...
     }
 
-    virtual css::uno::Reference<css::accessibility::XAccessible>
+    virtual cpo::uno::Reference<css::accessibility::XAccessible>
         getAccessibleParent() override
     {
         SolarMutexGuard aGuard;
@@ -655,13 +655,13 @@ public:
         // -1 for child not found/no parent (according to specification)
         sal_Int64 nRet = -1;
 
-        css::uno::Reference<css::accessibility::XAccessible> xParent(getAccessibleParent());
+        cpo::uno::Reference<css::accessibility::XAccessible> xParent(getAccessibleParent());
         if (!xParent)
             return nRet;
 
         try
         {
-            css::uno::Reference<css::accessibility::XAccessibleContext> xParentContext(
+            cpo::uno::Reference<css::accessibility::XAccessibleContext> xParentContext(
                 xParent->getAccessibleContext());
 
             //  iterate over parent's children and search for this object
@@ -670,7 +670,7 @@ public:
                 sal_Int64 nChildCount = xParentContext->getAccessibleChildCount();
                 for (sal_Int64 nChild = 0; (nChild < nChildCount) && (-1 == nRet); ++nChild)
                 {
-                    css::uno::Reference<css::accessibility::XAccessible> xChild(
+                    cpo::uno::Reference<css::accessibility::XAccessible> xChild(
                         xParentContext->getAccessibleChild(nChild));
                     if (xChild.get() == this)
                         nRet = nChild;
@@ -728,7 +728,7 @@ public:
         return aRet;
     }
 
-    virtual css::uno::Reference<css::accessibility::XAccessibleRelationSet>
+    virtual cpo::uno::Reference<css::accessibility::XAccessibleRelationSet>
         getAccessibleRelationSet() override
     {
         SolarMutexGuard aGuard;
@@ -773,7 +773,7 @@ public:
 
     // XAccessibleEventBroadcaster
     virtual void addAccessibleEventListener(
-        const css::uno::Reference<css::accessibility::XAccessibleEventListener>& rListener) override
+        const cpo::uno::Reference<css::accessibility::XAccessibleEventListener>& rListener) override
     {
         if (!m_xTextHelper) // not disposing (about to destroy view shell)
             return;
@@ -781,7 +781,7 @@ public:
     }
 
     virtual void removeAccessibleEventListener(
-        const css::uno::Reference<css::accessibility::XAccessibleEventListener>& rListener) override
+        const cpo::uno::Reference<css::accessibility::XAccessibleEventListener>& rListener) override
     {
         if (!m_xTextHelper) // not disposing (about to destroy view shell)
             return;
@@ -1608,14 +1608,14 @@ void WeldEditView::LoseFocus()
 
 bool WeldEditView::CanFocus() const { return true; }
 
-css::uno::Reference<css::datatransfer::dnd::XDropTarget> WeldEditView::GetDropTarget()
+cpo::uno::Reference<css::datatransfer::dnd::XDropTarget> WeldEditView::GetDropTarget()
 {
     if (!m_xDropTarget)
         m_xDropTarget = weld::CustomWidgetController::GetDropTarget();
     return m_xDropTarget;
 }
 
-css::uno::Reference<css::datatransfer::clipboard::XClipboard> WeldEditView::GetClipboard() const
+cpo::uno::Reference<css::datatransfer::clipboard::XClipboard> WeldEditView::GetClipboard() const
 {
     return weld::CustomWidgetController::GetClipboard();
 }

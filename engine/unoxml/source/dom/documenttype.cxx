@@ -26,7 +26,7 @@
 #include "entitiesmap.hxx"
 #include "notationsmap.hxx"
 
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace css::xml::dom;
 
 namespace DOM
@@ -45,11 +45,11 @@ namespace DOM
     A NamedNodeMap containing the general entities, both external and
     internal, declared in the DTD.
     */
-    css::uno::Reference< XNamedNodeMap > SAL_CALL CDocumentType::getEntities()
+    cpo::uno::Reference< XNamedNodeMap > SAL_CALL CDocumentType::getEntities()
     {
         ::osl::MutexGuard const g(m_rMutex);
 
-        css::uno::Reference< XNamedNodeMap > aMap;
+        cpo::uno::Reference< XNamedNodeMap > aMap;
         if (m_aDtdPtr != nullptr)
         {
             aMap.set(new CEntitiesMap);
@@ -86,11 +86,11 @@ namespace DOM
     /**
     A NamedNodeMap containing the notations declared in the DTD.
     */
-    css::uno::Reference< XNamedNodeMap > SAL_CALL CDocumentType::getNotations()
+    cpo::uno::Reference< XNamedNodeMap > SAL_CALL CDocumentType::getNotations()
     {
         ::osl::MutexGuard const g(m_rMutex);
 
-        css::uno::Reference< XNamedNodeMap > aMap;
+        cpo::uno::Reference< XNamedNodeMap > aMap;
         if (m_aDtdPtr != nullptr)
         {
             aMap.set(new CNotationsMap);

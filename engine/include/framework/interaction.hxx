@@ -22,7 +22,7 @@
 #include <config_options.h>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <framework/fwkdllapi.h>
 
 namespace com::sun::star::task
@@ -74,7 +74,7 @@ public:
 
     bool isAbort() const;
     OUString getFilter() const;
-    css::uno::Reference<css::task::XInteractionRequest> GetRequest() const;
+    cpo::uno::Reference<css::task::XInteractionRequest> GetRequest() const;
 };
 
 /*-************************************************************************************************************
@@ -91,9 +91,9 @@ public:
 class FWK_DLLPUBLIC InteractionRequest
 {
 public:
-    static css::uno::Reference<css::task::XInteractionRequest> CreateRequest(
+    static cpo::uno::Reference<css::task::XInteractionRequest> CreateRequest(
         const cpo::uno::Any& aRequest,
-        const cpo::uno::Sequence<css::uno::Reference<css::task::XInteractionContinuation>>&
+        const cpo::uno::Sequence<cpo::uno::Reference<css::task::XInteractionContinuation>>&
             lContinuations);
 };
 

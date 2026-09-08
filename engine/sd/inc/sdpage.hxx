@@ -133,7 +133,7 @@ friend class sd::UndoAttrObject;
     std::vector<std::pair<basegfx::B2DRectangle, OUString>> maLinkAnnotations;
 
     /** holds the smil animation sequences for this page */
-    css::uno::Reference< css::animations::XAnimationNode > mxAnimationNode;
+    cpo::uno::Reference< css::animations::XAnimationNode > mxAnimationNode;
 
     /** a helper class to manipulate effects inside the main sequence */
     std::shared_ptr< sd::MainSequence > mpMainSequence;
@@ -322,13 +322,13 @@ public:
 
         @throws cpo::uno::RuntimeException
     */
-    css::uno::Reference< css::animations::XAnimationNode > const & getAnimationNode();
+    cpo::uno::Reference< css::animations::XAnimationNode > const & getAnimationNode();
 
     /** sets the main animation node
 
         @throws cpo::uno::RuntimeException
     */
-    void setAnimationNode( css::uno::Reference< css::animations::XAnimationNode > const & xNode );
+    void setAnimationNode( cpo::uno::Reference< css::animations::XAnimationNode > const & xNode );
 
     /// @return a helper class to manipulate effects inside the main sequence
     SD_DLLPUBLIC std::shared_ptr< sd::MainSequence > const & getMainSequence();
@@ -340,7 +340,7 @@ public:
     bool hasAnimationNode() const;
 
     /// @return the SdPage implementation for the given XDrawPage or 0 if not available
-    static SdPage* getImplementation( const css::uno::Reference< css::drawing::XDrawPage >& xPage );
+    static SdPage* getImplementation( const cpo::uno::Reference< css::drawing::XDrawPage >& xPage );
 
     /** removes all custom animations for the given shape */
     void removeAnimations( const SdrObject* pObj );

@@ -36,9 +36,9 @@ class DataSource final : public
 public:
     explicit DataSource();
     explicit DataSource(
-        const cpo::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > & rSequences );
+        const cpo::uno::Sequence< cpo::uno::Reference< css::chart2::data::XLabeledDataSequence > > & rSequences );
     explicit DataSource(
-        const std::vector< css::uno::Reference< css::chart2::data::XLabeledDataSequence >  > & rSequences );
+        const std::vector< cpo::uno::Reference< css::chart2::data::XLabeledDataSequence >  > & rSequences );
 
     virtual ~DataSource() override;
 
@@ -48,14 +48,14 @@ public:
     virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // ____ XDataSource ____
-    virtual cpo::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > >
+    virtual cpo::uno::Sequence< cpo::uno::Reference< css::chart2::data::XLabeledDataSequence > >
         getDataSequences() override;
 
     // ____ XDataSink ____
-    virtual void setData( const cpo::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > >& aData ) override;
+    virtual void setData( const cpo::uno::Sequence< cpo::uno::Reference< css::chart2::data::XLabeledDataSequence > >& aData ) override;
 
 private:
-    cpo::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > >
+    cpo::uno::Sequence< cpo::uno::Reference< css::chart2::data::XLabeledDataSequence > >
         m_aDataSeq;
 };
 

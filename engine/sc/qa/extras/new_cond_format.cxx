@@ -20,6 +20,7 @@
 #include <com/sun/star/sheet/XColorScaleEntry.hpp>
 
 using namespace css;
+using namespace ::cpo;
 
 namespace sc_apitest {
 

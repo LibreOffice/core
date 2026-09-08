@@ -58,7 +58,7 @@ private:
     const OUString maStringSum;
     std::unique_ptr<SvNumberFormatter> mxNumFormat;
 
-    css::uno::Reference<css::i18n::XBreakIterator> m_xBreak;
+    cpo::uno::Reference<css::i18n::XBreakIterator> m_xBreak;
 
     void Init();
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;

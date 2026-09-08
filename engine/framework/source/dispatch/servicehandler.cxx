@@ -57,7 +57,7 @@ cpo::uno::Sequence< OUString > ServiceHandler::getSupportedServiceNames()
     @param      xFactory
                 reference to uno servicemanager for creation of new services
 */
-ServiceHandler::ServiceHandler( css::uno::Reference< cpo::uno::XComponentContext > xContext )
+ServiceHandler::ServiceHandler( cpo::uno::Reference< cpo::uno::XComponentContext > xContext )
         : m_xContext    (std::move( xContext                      ))
 {
 }
@@ -78,11 +78,11 @@ ServiceHandler::~ServiceHandler()
                 We don't create new dispatch instances here really - we return THIS as result to handle it
                 at the same implementation.
 */
-css::uno::Reference< css::frame::XDispatch > ServiceHandler::queryDispatch( const css::util::URL&  aURL    ,
+cpo::uno::Reference< css::frame::XDispatch > ServiceHandler::queryDispatch( const css::util::URL&  aURL    ,
                                                                                      const OUString& /*sTarget*/ ,
                                                                                            sal_Int32        /*nFlags*/  )
 {
-    css::uno::Reference< css::frame::XDispatch > xDispatcher;
+    cpo::uno::Reference< css::frame::XDispatch > xDispatcher;
     if (aURL.Complete.startsWith(PROTOCOL_VALUE))
         xDispatcher = this;
     return xDispatcher;
@@ -91,10 +91,10 @@ css::uno::Reference< css::frame::XDispatch > ServiceHandler::queryDispatch( cons
 /**
     @short      do the same like dispatch() but for multiple requests at the same time
 */
-cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > ServiceHandler::queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor )
+cpo::uno::Sequence< cpo::uno::Reference< css::frame::XDispatch > > ServiceHandler::queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor )
 {
     sal_Int32 nCount = lDescriptor.getLength();
-    cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > lDispatcher( nCount );
+    cpo::uno::Sequence< cpo::uno::Reference< css::frame::XDispatch > > lDispatcher( nCount );
     auto lDispatcherRange = asNonConstRange(lDispatcher);
     for( sal_Int32 i=0; i<nCount; ++i )
     {
@@ -121,7 +121,7 @@ void ServiceHandler::dispatch( const css::util::URL&                            
 {
     // dispatch() is an [oneway] call ... and may our user release his reference to us immediately.
     // So we should hold us self alive till this call ends.
-    css::uno::Reference< css::frame::XNotifyingDispatch > xSelfHold(this);
+    cpo::uno::Reference< css::frame::XNotifyingDispatch > xSelfHold(this);
     implts_dispatch(aURL);
     // No notification for status listener!
 }
@@ -140,14 +140,14 @@ void ServiceHandler::dispatch( const css::util::URL&                            
 */
 void ServiceHandler::dispatchWithNotification( const css::util::URL&                                             aURL      ,
                                                         const cpo::uno::Sequence< css::beans::PropertyValue >&            /*lArguments*/,
-                                                        const css::uno::Reference< css::frame::XDispatchResultListener >& xListener )
+                                                        const cpo::uno::Reference< css::frame::XDispatchResultListener >& xListener )
 {
     // This class was designed to die by reference. And if user release his reference to us immediately after calling this method
     // we can run into some problems. So we hold us self alive till this method ends.
     // Another reason: We can use this reference as source of sending event at the end too.
-    css::uno::Reference< css::frame::XNotifyingDispatch > xThis(this);
+    cpo::uno::Reference< css::frame::XNotifyingDispatch > xThis(this);
 
-    css::uno::Reference< cpo::uno::XInterface > xService = implts_dispatch(aURL);
+    cpo::uno::Reference< cpo::uno::XInterface > xService = implts_dispatch(aURL);
     if (xListener.is())
     {
         css::frame::DispatchResultEvent aEvent;
@@ -175,7 +175,7 @@ void ServiceHandler::dispatchWithNotification( const css::util::URL&            
                 a valid reference otherwise. This return value can be used to indicate,
                 if dispatch was successful.
 */
-css::uno::Reference< cpo::uno::XInterface > ServiceHandler::implts_dispatch( const css::util::URL& aURL )
+cpo::uno::Reference< cpo::uno::XInterface > ServiceHandler::implts_dispatch( const css::util::URL& aURL )
 {
     // extract service name and may optional given parameters from given URL
     // and use it to create and start the component
@@ -196,19 +196,19 @@ css::uno::Reference< cpo::uno::XInterface > ServiceHandler::implts_dispatch( con
     }
 
     if (sServiceName.isEmpty())
-        return css::uno::Reference< cpo::uno::XInterface >();
+        return cpo::uno::Reference< cpo::uno::XInterface >();
 
     // If a service doesn't support an optional job executor interface - he can't get
     // any given parameters!
     // Because we can't know if we must call createInstanceWithArguments() or XJobExecutor::trigger() ...
 
-    css::uno::Reference< cpo::uno::XInterface > xService;
+    cpo::uno::Reference< cpo::uno::XInterface > xService;
     try
     {
         // => a) a service starts running inside his own ctor and we create it only
         xService = m_xContext->getServiceManager()->createInstanceWithContext(sServiceName, m_xContext);
         // or b) he implements the right interface and starts there (may with optional parameters)
-        css::uno::Reference< css::task::XJobExecutor > xExecutable(xService, css::uno::UNO_QUERY);
+        cpo::uno::Reference< css::task::XJobExecutor > xExecutable(xService, cpo::uno::UNO_QUERY);
         if (xExecutable.is())
             xExecutable->trigger(sArguments);
     }
@@ -235,13 +235,13 @@ css::uno::Reference< cpo::uno::XInterface > ServiceHandler::implts_dispatch( con
     @param      aURL
                     URL about listener will be informed, if something occurred
 */
-void ServiceHandler::addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/ ,
+void ServiceHandler::addStatusListener( const cpo::uno::Reference< css::frame::XStatusListener >& /*xListener*/ ,
                                                  const css::util::URL&                                     /*aURL*/      )
 {
     // not supported yet
 }
 
-void ServiceHandler::removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/ ,
+void ServiceHandler::removeStatusListener( const cpo::uno::Reference< css::frame::XStatusListener >& /*xListener*/ ,
                                                     const css::util::URL&                                     /*aURL*/      )
 {
     // not supported yet

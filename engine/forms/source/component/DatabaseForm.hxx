@@ -163,9 +163,9 @@ class ODatabaseForm :public OFormComponents
     cpo::uno::Sequence< OUString >      m_aDetailFields;
 
     // the object doin' most of the work - an SDB-rowset
-    css::uno::Reference< cpo::uno::XAggregation>      m_xAggregate;
+    cpo::uno::Reference< cpo::uno::XAggregation>      m_xAggregate;
     // same object, interface as member because of performance reasons
-    css::uno::Reference< css::sdbc::XRowSet>          m_xAggregateAsRowSet;
+    cpo::uno::Reference< css::sdbc::XRowSet>          m_xAggregateAsRowSet;
 
     PropertyBagHelper           m_aPropertyBagHelper;
     ::dbtools::WarningsContainer    m_aWarnings;
@@ -208,7 +208,7 @@ class ODatabaseForm :public OFormComponents
     bool                 m_bSharingConnection : 1;       // true if the connection we're using is shared with our parent
 
 public:
-    explicit ODatabaseForm(const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory);
+    explicit ODatabaseForm(const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory);
     ODatabaseForm( const ODatabaseForm& _cloneSource );
     virtual ~ODatabaseForm() override;
 
@@ -224,7 +224,7 @@ public:
     virtual void disposing() override;
 
     // property handling
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
     virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
     virtual void getFastPropertyValue(cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
     virtual bool convertFastPropertyValue(cpo::uno::Any& rConvertedValue, cpo::uno::Any& rOldValue, sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
@@ -239,7 +239,7 @@ public:
         cpo::uno::Sequence< css::beans::Property >& _out_rFixedProperties,
         cpo::uno::Sequence< css::beans::Property >& _out_rAggregateProperties
     ) const override;
-    virtual css::uno::Reference< css::beans::XMultiPropertySet >
+    virtual cpo::uno::Reference< css::beans::XMultiPropertySet >
                             getPropertiesInterface() override;
 
     // css::beans::XPropertyState
@@ -248,25 +248,25 @@ public:
     virtual cpo::uno::Any getPropertyDefaultByHandle(sal_Int32 nHandle) const override;
 
     // css::sdbc::XSQLErrorBroadcaster
-    virtual void addSQLErrorListener(const css::uno::Reference< css::sdb::XSQLErrorListener>& _rxListener) override;
-    virtual void removeSQLErrorListener(const css::uno::Reference< css::sdb::XSQLErrorListener>& _rxListener) override;
+    virtual void addSQLErrorListener(const cpo::uno::Reference< css::sdb::XSQLErrorListener>& _rxListener) override;
+    virtual void removeSQLErrorListener(const cpo::uno::Reference< css::sdb::XSQLErrorListener>& _rxListener) override;
 
     // css::form::XForm
     // nothing to implement
 
     // css::form::XReset
     virtual void reset() override;
-    virtual void addResetListener(const css::uno::Reference< css::form::XResetListener>& _rxListener) override;
-    virtual void removeResetListener(const css::uno::Reference< css::form::XResetListener>& _rxListener) override;
+    virtual void addResetListener(const cpo::uno::Reference< css::form::XResetListener>& _rxListener) override;
+    virtual void removeResetListener(const cpo::uno::Reference< css::form::XResetListener>& _rxListener) override;
 
     // css::form::XSubmit
-    virtual void submit(const css::uno::Reference< css::awt::XControl>& aControl, const css::awt::MouseEvent& aMouseEvt) override;
-    virtual void addSubmitListener(const css::uno::Reference< css::form::XSubmitListener>& _rxListener) override;
-    virtual void removeSubmitListener(const css::uno::Reference< css::form::XSubmitListener>& _rxListener) override;
+    virtual void submit(const cpo::uno::Reference< css::awt::XControl>& aControl, const css::awt::MouseEvent& aMouseEvt) override;
+    virtual void addSubmitListener(const cpo::uno::Reference< css::form::XSubmitListener>& _rxListener) override;
+    virtual void removeSubmitListener(const cpo::uno::Reference< css::form::XSubmitListener>& _rxListener) override;
 
     // css::container::XChild
-    virtual css::uno::Reference<cpo::uno::XInterface> getParent() override { return OFormComponents::getParent(); }
-    virtual void setParent(const css::uno::Reference<cpo::uno::XInterface>& Parent) override;
+    virtual cpo::uno::Reference<cpo::uno::XInterface> getParent() override { return OFormComponents::getParent(); }
+    virtual void setParent(const cpo::uno::Reference<cpo::uno::XInterface>& Parent) override;
 
     // css::container::XNamed
     virtual OUString getName() override;
@@ -275,12 +275,12 @@ public:
     // css::awt::XTabControllerModel
     virtual bool getGroupControl() override;
     virtual void setGroupControl(bool /*_bGroupControl*/) override { }
-    virtual void setControlModels(const cpo::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& _rControls) override;
-    virtual cpo::uno::Sequence< css::uno::Reference< css::awt::XControlModel > > getControlModels() override;
-    virtual void setGroup(const cpo::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& _rGroup, const OUString& _rGroupName) override;
+    virtual void setControlModels(const cpo::uno::Sequence< cpo::uno::Reference< css::awt::XControlModel > >& _rControls) override;
+    virtual cpo::uno::Sequence< cpo::uno::Reference< css::awt::XControlModel > > getControlModels() override;
+    virtual void setGroup(const cpo::uno::Sequence< cpo::uno::Reference< css::awt::XControlModel > >& _rGroup, const OUString& _rGroupName) override;
     virtual sal_Int32 getGroupCount() override;
-    virtual void getGroup(sal_Int32 _nGroup, cpo::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& _rxGroup, OUString& _rName) override;
-    virtual void getGroupByName(const OUString& _rName, cpo::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& _rxGroup) override;
+    virtual void getGroup(sal_Int32 _nGroup, cpo::uno::Sequence< cpo::uno::Reference< css::awt::XControlModel > >& _rxGroup, OUString& _rName) override;
+    virtual void getGroupByName(const OUString& _rName, cpo::uno::Sequence< cpo::uno::Reference< css::awt::XControlModel > >& _rxGroup) override;
 
     // css::lang::XEventListener
     virtual void disposing(const css::lang::EventObject& _rSource) override;
@@ -297,8 +297,8 @@ public:
     virtual void unload() override;
     virtual void reload() override;
     virtual bool isLoaded() override;
-    virtual void addLoadListener(const css::uno::Reference< css::form::XLoadListener>& _rxListener) override;
-    virtual void removeLoadListener(const css::uno::Reference< css::form::XLoadListener>& _rxListener) override;
+    virtual void addLoadListener(const cpo::uno::Reference< css::form::XLoadListener>& _rxListener) override;
+    virtual void removeLoadListener(const cpo::uno::Reference< css::form::XLoadListener>& _rxListener) override;
 
     // css::sdbc::XCloseable
     virtual void close() override;
@@ -314,24 +314,24 @@ public:
     virtual bool approveRowSetChange(const css::lang::EventObject& event) override;
 
     // css::sdb::XRowSetApproveBroadcaster
-    virtual void addRowSetApproveListener(const css::uno::Reference< css::sdb::XRowSetApproveListener>& _rxListener) override;
-    virtual void removeRowSetApproveListener(const css::uno::Reference< css::sdb::XRowSetApproveListener>& _rxListener) override;
+    virtual void addRowSetApproveListener(const cpo::uno::Reference< css::sdb::XRowSetApproveListener>& _rxListener) override;
+    virtual void removeRowSetApproveListener(const cpo::uno::Reference< css::sdb::XRowSetApproveListener>& _rxListener) override;
 
     // com::sun::star::form::XDatabaseParameterBroadcaster2
-    virtual void addDatabaseParameterListener(const css::uno::Reference< css::form::XDatabaseParameterListener>& _rxListener) override;
-    virtual void removeDatabaseParameterListener(const css::uno::Reference< css::form::XDatabaseParameterListener>& _rxListener) override;
+    virtual void addDatabaseParameterListener(const cpo::uno::Reference< css::form::XDatabaseParameterListener>& _rxListener) override;
+    virtual void removeDatabaseParameterListener(const cpo::uno::Reference< css::form::XDatabaseParameterListener>& _rxListener) override;
 
     // com::sun::star::form::XDatabaseParameterBroadcaster
-    virtual void addParameterListener(const css::uno::Reference< css::form::XDatabaseParameterListener>& _rxListener) override;
-    virtual void removeParameterListener(const css::uno::Reference< css::form::XDatabaseParameterListener>& _rxListener) override;
+    virtual void addParameterListener(const cpo::uno::Reference< css::form::XDatabaseParameterListener>& _rxListener) override;
+    virtual void removeParameterListener(const cpo::uno::Reference< css::form::XDatabaseParameterListener>& _rxListener) override;
 
     // css::sdbc::XRowSet
     virtual void execute() override;
-    virtual void addRowSetListener(const css::uno::Reference< css::sdbc::XRowSetListener>& _rxListener) override;
-    virtual void removeRowSetListener(const css::uno::Reference< css::sdbc::XRowSetListener>& _rxListener) override;
+    virtual void addRowSetListener(const cpo::uno::Reference< css::sdbc::XRowSetListener>& _rxListener) override;
+    virtual void removeRowSetListener(const cpo::uno::Reference< css::sdbc::XRowSetListener>& _rxListener) override;
 
     // css::sdb::XCompletedExecution
-    virtual void executeWithCompletion( const css::uno::Reference< css::task::XInteractionHandler >& handler ) override;
+    virtual void executeWithCompletion( const cpo::uno::Reference< css::task::XInteractionHandler >& handler ) override;
 
     // css::sdbc::XResultSet
     virtual bool next() override;
@@ -351,7 +351,7 @@ public:
     virtual bool rowUpdated() override;
     virtual bool rowInserted() override;
     virtual bool rowDeleted() override;
-    virtual css::uno::Reference<cpo::uno::XInterface> getStatement() override;
+    virtual cpo::uno::Reference<cpo::uno::XInterface> getStatement() override;
 
     // css::sdbc::XResultSetUpdate
     virtual void insertRow() override;
@@ -371,8 +371,8 @@ public:
 
     // css::io::XPersistObject
     virtual OUString getServiceName() override;
-    virtual void write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
-    virtual void read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
+    virtual void write(const cpo::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
+    virtual void read(const cpo::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
 
     // css::sdbc::XSQLErrorListener
     virtual void errorOccured(const css::sdb::SQLErrorEvent& aEvent) override;
@@ -392,14 +392,14 @@ public:
     virtual void setDate(sal_Int32 parameterIndex, const css::util::Date& x) override;
     virtual void setTime(sal_Int32 parameterIndex, const css::util::Time& x) override;
     virtual void setTimestamp(sal_Int32 parameterIndex, const css::util::DateTime& x) override;
-    virtual void setBinaryStream(sal_Int32 parameterIndex, const css::uno::Reference< css::io::XInputStream>& x, sal_Int32 length) override;
-    virtual void setCharacterStream(sal_Int32 parameterIndex, const css::uno::Reference< css::io::XInputStream>& x, sal_Int32 length) override;
+    virtual void setBinaryStream(sal_Int32 parameterIndex, const cpo::uno::Reference< css::io::XInputStream>& x, sal_Int32 length) override;
+    virtual void setCharacterStream(sal_Int32 parameterIndex, const cpo::uno::Reference< css::io::XInputStream>& x, sal_Int32 length) override;
     virtual void setObject(sal_Int32 parameterIndex, const cpo::uno::Any& x) override;
     virtual void setObjectWithInfo(sal_Int32 parameterIndex, const cpo::uno::Any& x, sal_Int32 targetSqlType, sal_Int32 scale) override;
-    virtual void setRef(sal_Int32 parameterIndex, const css::uno::Reference< css::sdbc::XRef>& x) override;
-    virtual void setBlob(sal_Int32 parameterIndex, const css::uno::Reference< css::sdbc::XBlob>& x) override;
-    virtual void setClob(sal_Int32 parameterIndex, const css::uno::Reference< css::sdbc::XClob>& x) override;
-    virtual void setArray(sal_Int32 parameterIndex, const css::uno::Reference< css::sdbc::XArray>& x) override;
+    virtual void setRef(sal_Int32 parameterIndex, const cpo::uno::Reference< css::sdbc::XRef>& x) override;
+    virtual void setBlob(sal_Int32 parameterIndex, const cpo::uno::Reference< css::sdbc::XBlob>& x) override;
+    virtual void setClob(sal_Int32 parameterIndex, const cpo::uno::Reference< css::sdbc::XClob>& x) override;
+    virtual void setArray(sal_Int32 parameterIndex, const cpo::uno::Reference< css::sdbc::XArray>& x) override;
     virtual void clearParameters() override;
 
     // XPropertyChangeListener
@@ -419,7 +419,7 @@ public:
     virtual void clearWarnings(  ) override;
 
     // XCloneable
-    virtual css::uno::Reference< css::util::XCloneable > createClone(  ) override;
+    virtual cpo::uno::Reference< css::util::XCloneable > createClone(  ) override;
 
 protected:
     // OPropertySetAggregationHelper overridables
@@ -428,27 +428,27 @@ protected:
 
     // OInterfaceContainer overridables
     virtual void implInserted( const ElementDescription* _pElement ) override;
-    virtual void implRemoved(const css::uno::Reference<cpo::uno::XInterface>& _rxObject) override;
+    virtual void implRemoved(const cpo::uno::Reference<cpo::uno::XInterface>& _rxObject) override;
 
     // OPropertyChangeListener
     virtual void _propertyChanged( const css::beans::PropertyChangeEvent& ) override;
 
 private:
     bool executeRowSet(::osl::ResettableMutexGuard& _rClearForNotifies, bool bMoveToFirst,
-                    const css::uno::Reference< css::task::XInteractionHandler >& _rxCompletionHandler);
+                    const cpo::uno::Reference< css::task::XInteractionHandler >& _rxCompletionHandler);
     bool    fillParameters(::osl::ResettableMutexGuard& _rClearForNotifies,
-                    const css::uno::Reference< css::task::XInteractionHandler >& _rxCompletionHandler);
+                    const cpo::uno::Reference< css::task::XInteractionHandler >& _rxCompletionHandler);
     void    updateParameterInfo();
     bool    hasValidParent() const;
 
     // impl methods
     /// @throws cpo::uno::RuntimeException
     void    load_impl(bool bCausedByParentForm, bool bMoveToFirst = true,
-        const css::uno::Reference< css::task::XInteractionHandler >& _rxCompletionHandler = css::uno::Reference< css::task::XInteractionHandler >());
+        const cpo::uno::Reference< css::task::XInteractionHandler >& _rxCompletionHandler = cpo::uno::Reference< css::task::XInteractionHandler >());
     /// @throws cpo::uno::RuntimeException
     void    reload_impl(bool bMoveToFirst,
-        const css::uno::Reference< css::task::XInteractionHandler >& _rxCompletionHandler = css::uno::Reference< css::task::XInteractionHandler >());
-    void    submit_impl(const css::uno::Reference< css::awt::XControl>& Control, const css::awt::MouseEvent& MouseEvt);
+        const cpo::uno::Reference< css::task::XInteractionHandler >& _rxCompletionHandler = cpo::uno::Reference< css::task::XInteractionHandler >());
+    void    submit_impl(const cpo::uno::Reference< css::awt::XControl>& Control, const css::awt::MouseEvent& MouseEvt);
     void    reset_impl(bool _bApproveByListeners);
 
     bool    implEnsureConnection();
@@ -456,16 +456,16 @@ private:
     // connection sharing
 
     /// checks if we can re-use (aka share) the connection of the given parent
-    bool    canShareConnection( const css::uno::Reference< css::beans::XPropertySet >& _rxParentProps );
+    bool    canShareConnection( const cpo::uno::Reference< css::beans::XPropertySet >& _rxParentProps );
 
     /// starts sharing the connection with the parent
-    void        doShareConnection( const css::uno::Reference< css::beans::XPropertySet >& _rxParentProps );
+    void        doShareConnection( const cpo::uno::Reference< css::beans::XPropertySet >& _rxParentProps );
 
     /// stops sharing the connection with the parent
     void        stopSharingConnection( );
 
     /// called when the connection which we share with our parent is being disposed
-    void        disposingSharedConnection( const css::uno::Reference< css::sdbc::XConnection >& _rxConn );
+    void        disposingSharedConnection( const cpo::uno::Reference< css::sdbc::XConnection >& _rxConn );
 
     /// checks if we currently share our connection with our parent
     bool    isSharingConnection( ) const { return m_bSharingConnection; }
@@ -499,20 +499,20 @@ private:
     void    onError(const css::sdbc::SQLException&, const OUString& _rContextDescription);
 
     // html tools
-    OUString         GetDataEncoded(bool _bURLEncoded,const css::uno::Reference< css::awt::XControl>& SubmitButton, const css::awt::MouseEvent& MouseEvt);
-    cpo::uno::Sequence<sal_Int8>   GetDataMultiPartEncoded(const css::uno::Reference< css::awt::XControl>& SubmitButton, const css::awt::MouseEvent& MouseEvt,
+    OUString         GetDataEncoded(bool _bURLEncoded,const cpo::uno::Reference< css::awt::XControl>& SubmitButton, const css::awt::MouseEvent& MouseEvt);
+    cpo::uno::Sequence<sal_Int8>   GetDataMultiPartEncoded(const cpo::uno::Reference< css::awt::XControl>& SubmitButton, const css::awt::MouseEvent& MouseEvt,
                                              OUString& rContentType);
 
-    void AppendComponent(HtmlSuccessfulObjList& rList, const css::uno::Reference< css::beans::XPropertySet>& xComponentSet, std::u16string_view rNamePrefix,
-                     const css::uno::Reference< css::awt::XControl>& rxSubmitButton, const css::awt::MouseEvent& MouseEvt);
+    void AppendComponent(HtmlSuccessfulObjList& rList, const cpo::uno::Reference< css::beans::XPropertySet>& xComponentSet, std::u16string_view rNamePrefix,
+                     const cpo::uno::Reference< css::awt::XControl>& rxSubmitButton, const css::awt::MouseEvent& MouseEvt);
 
-    void FillSuccessfulList(HtmlSuccessfulObjList& rList, const css::uno::Reference< css::awt::XControl>& rxSubmitButton, const css::awt::MouseEvent& MouseEvt);
+    void FillSuccessfulList(HtmlSuccessfulObjList& rList, const cpo::uno::Reference< css::awt::XControl>& rxSubmitButton, const css::awt::MouseEvent& MouseEvt);
 
     static void InsertTextPart(INetMIMEMessage& rParent, std::u16string_view rName, std::u16string_view rData);
     static void InsertFilePart(INetMIMEMessage& rParent, std::u16string_view rName, const OUString& rFileName);
     static void Encode(OUString& rString);
 
-    css::uno::Reference< css::sdbc::XConnection > getConnection();
+    cpo::uno::Reference< css::sdbc::XConnection > getConnection();
 
     void    impl_createLoadTimer();
 
@@ -520,7 +520,7 @@ private:
 
     DECL_LINK( OnTimeout, Timer*, void );
 
-    css::uno::Reference<css::util::XNumberFormatter> getFormatter();
+    cpo::uno::Reference<css::util::XNumberFormatter> getFormatter();
 
 protected:
     using OPropertySetHelper::getPropertyValues;

@@ -29,7 +29,7 @@ public:
     virtual ~WrappedTextRotationProperty() override;
 
     virtual css::beans::PropertyState getPropertyState(
-        const css::uno::Reference<css::beans::XPropertyState>& xInnerPropertyState) const override;
+        const cpo::uno::Reference<css::beans::XPropertyState>& xInnerPropertyState) const override;
 
 private:
     virtual cpo::uno::Any convertInnerToOuterValue(const cpo::uno::Any& rInnerValue) const override;

@@ -22,9 +22,9 @@
 #include <xmloff/xmlstyle.hxx>
 
 namespace com::sun::star {
-    namespace uno { template<class X> class Reference; }
     namespace beans { class XPropertySet; }
 }
+namespace cpo::uno { template<class X> class Reference; }
 class SvXMLImport;
 
 /// import footnote and endnote configuration elements
@@ -55,13 +55,13 @@ public:
     XMLFootnoteConfigurationImportContext(
         SvXMLImport& rImport,
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList> & xAttrList);
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList> & xAttrList);
 
     virtual ~XMLFootnoteConfigurationImportContext() override;
 
     /// for footnotes, also parse begin and end notices
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
     /// set configuration at document; calls ProcessSettings
     /* Move code from <CreateAndInsertLate(..)> to <Finish(..)>, because
@@ -71,7 +71,7 @@ public:
 
     /// set configuration at document
     void ProcessSettings(
-        const css::uno::Reference< css::beans::XPropertySet> & rConfig);
+        const cpo::uno::Reference< css::beans::XPropertySet> & rConfig);
 
     /// for helper class: set begin notice
     void SetBeginNotice( const OUString& sText);

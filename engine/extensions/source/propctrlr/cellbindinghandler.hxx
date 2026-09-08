@@ -41,7 +41,7 @@ namespace pcr
 
     public:
         explicit CellBindingPropertyHandler(
-            const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxContext
         );
 
     protected:
@@ -58,7 +58,7 @@ namespace pcr
         virtual cpo::uno::Any                   convertToPropertyValue( const OUString& _rPropertyName, const cpo::uno::Any& _rControlValue ) override;
         virtual cpo::uno::Any                   convertToControlValue( const OUString& _rPropertyName, const cpo::uno::Any& _rPropertyValue, const cpo::uno::Type& _rControlValueType ) override;
         virtual cpo::uno::Sequence< OUString >  getActuatingProperties( ) override;
-        virtual void                            actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const cpo::uno::Any& _rNewValue, const cpo::uno::Any& _rOldValue, const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI, bool _bFirstTimeInit ) override;
+        virtual void                            actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const cpo::uno::Any& _rNewValue, const cpo::uno::Any& _rOldValue, const cpo::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI, bool _bFirstTimeInit ) override;
 
         // PropertyHandler overridables
         virtual cpo::uno::Sequence< css::beans::Property >
@@ -82,7 +82,7 @@ namespace pcr
             @param _rxInspectorUI
                 provides access to the property browser UI. Must not be <NULL/>.
         */
-        void impl_updateDependentProperty_nothrow( PropertyId _nPropId, const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI ) const;
+        void impl_updateDependentProperty_nothrow( PropertyId _nPropId, const cpo::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI ) const;
     };
 
 

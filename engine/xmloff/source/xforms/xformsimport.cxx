@@ -21,7 +21,7 @@
 #include "XFormsModelContext.hxx"
 #include <utility>
 #include <xmloff/xformsimport.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/form/binding/XValueBinding.hpp>
 #include <com/sun/star/form/binding/XBindableValue.hpp>
@@ -36,11 +36,11 @@
 #include <comphelper/diagnose_ex.hxx>
 
 using std::pair;
-using com::sun::star::uno::Reference;
+using cpo::uno::Reference;
 using cpo::uno::Exception;
-using com::sun::star::uno::UNO_QUERY;
-using com::sun::star::uno::UNO_QUERY_THROW;
-using com::sun::star::uno::UNO_SET_THROW;
+using cpo::uno::UNO_QUERY;
+using cpo::uno::UNO_QUERY_THROW;
+using cpo::uno::UNO_SET_THROW;
 using cpo::uno::Sequence;
 using com::sun::star::beans::XPropertySet;
 using com::sun::star::beans::XPropertySetInfo;

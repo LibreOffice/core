@@ -23,7 +23,7 @@
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
 
 
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
@@ -155,12 +155,12 @@ void ScriptEventContainer::removeByName( const OUString& Name )
 }
 
 // Methods XContainer
-void ScriptEventContainer::addContainerListener( const css::uno::Reference< css::container::XContainerListener >& l )
+void ScriptEventContainer::addContainerListener( const cpo::uno::Reference< css::container::XContainerListener >& l )
 {
     maContainerListeners.addInterface( l );
 }
 
-void ScriptEventContainer::removeContainerListener( const css::uno::Reference< css::container::XContainerListener >& l )
+void ScriptEventContainer::removeContainerListener( const cpo::uno::Reference< css::container::XContainerListener >& l )
 {
     maContainerListeners.removeInterface( l );
 }

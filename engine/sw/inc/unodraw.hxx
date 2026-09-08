@@ -58,19 +58,19 @@ public:
     SwFmDrawPage( SwDoc* pDoc, SdrPage* pPage );
     virtual ~SwFmDrawPage() noexcept override;
 
-    const SdrMarkList&  PreGroup(const css::uno::Reference< css::drawing::XShapes >& rShapes);
-    void                PreUnGroup(const css::uno::Reference< css::drawing::XShapeGroup >& rShapeGroup);
+    const SdrMarkList&  PreGroup(const cpo::uno::Reference< css::drawing::XShapes >& rShapes);
+    void                PreUnGroup(const cpo::uno::Reference< css::drawing::XShapeGroup >& rShapeGroup);
 
     SdrView*            GetDrawView() {return mpView.get();}
     SdrPageView*        GetPageView();
     void                RemovePageView();
-    static css::uno::Reference<css::drawing::XShape> GetShape(SdrObject* pObj);
-    static css::uno::Reference<css::drawing::XShapeGroup> GetShapeGroup(SdrObject* pObj);
+    static cpo::uno::Reference<css::drawing::XShape> GetShape(SdrObject* pObj);
+    static cpo::uno::Reference<css::drawing::XShapeGroup> GetShapeGroup(SdrObject* pObj);
 
     // The following method is called when a SvxShape-object is to be created.
     // Derived classes may obtain at this point a derivation or an object
     // that is aggregating a SvxShape.
-    virtual css::uno::Reference< css::drawing::XShape >  CreateShape( SdrObject *pObj ) const override;
+    virtual cpo::uno::Reference< css::drawing::XShape >  CreateShape( SdrObject *pObj ) const override;
     void RemoveShape(const SwXShape* pShape)
     {
         auto ppShape = find(m_vShapes.begin(), m_vShapes.end(), pShape);
@@ -79,7 +79,7 @@ public:
     };
 
     //XEnumerationAccess
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
+    virtual cpo::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
 
     //XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override;
@@ -90,12 +90,12 @@ public:
     virtual bool SAL_CALL hasElements(  ) override;
 
     //XShapes
-    virtual void SAL_CALL add(const css::uno::Reference< css::drawing::XShape > & xShape) override;
-    virtual void SAL_CALL remove(const css::uno::Reference< css::drawing::XShape > & xShape) override;
+    virtual void SAL_CALL add(const cpo::uno::Reference< css::drawing::XShape > & xShape) override;
+    virtual void SAL_CALL remove(const cpo::uno::Reference< css::drawing::XShape > & xShape) override;
 
     //XShapeGrouper
-    virtual css::uno::Reference< css::drawing::XShapeGroup >  SAL_CALL group(const css::uno::Reference< css::drawing::XShapes > & xShapes) override;
-    virtual void SAL_CALL ungroup(const css::uno::Reference< css::drawing::XShapeGroup > & aGroup) override;
+    virtual cpo::uno::Reference< css::drawing::XShapeGroup >  SAL_CALL group(const cpo::uno::Reference< css::drawing::XShapes > & xShapes) override;
+    virtual void SAL_CALL ungroup(const cpo::uno::Reference< css::drawing::XShapeGroup > & aGroup) override;
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -103,13 +103,13 @@ public:
     virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     //XPropertySet
-    virtual css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
+    virtual cpo::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
     virtual void SAL_CALL setPropertyValue(const OUString& aPropertyName, const cpo::uno::Any& aValue) override;
     virtual cpo::uno::Any SAL_CALL getPropertyValue(const OUString& PropertyName) override;
-    virtual void SAL_CALL addPropertyChangeListener(const OUString& aPropertyName, const css::uno::Reference<css::beans::XPropertyChangeListener>& xListener) override;
-    virtual void SAL_CALL removePropertyChangeListener(const OUString& aPropertyName, const css::uno::Reference<css::beans::XPropertyChangeListener>& aListener) override;
-    virtual void SAL_CALL addVetoableChangeListener(const OUString& PropertyName, const css::uno::Reference<css::beans::XVetoableChangeListener>& aListener) override;
-    virtual void SAL_CALL removeVetoableChangeListener(const OUString& PropertyName, const css::uno::Reference<css::beans::XVetoableChangeListener>& aListener) override;
+    virtual void SAL_CALL addPropertyChangeListener(const OUString& aPropertyName, const cpo::uno::Reference<css::beans::XPropertyChangeListener>& xListener) override;
+    virtual void SAL_CALL removePropertyChangeListener(const OUString& aPropertyName, const cpo::uno::Reference<css::beans::XPropertyChangeListener>& aListener) override;
+    virtual void SAL_CALL addVetoableChangeListener(const OUString& PropertyName, const cpo::uno::Reference<css::beans::XVetoableChangeListener>& aListener) override;
+    virtual void SAL_CALL removeVetoableChangeListener(const OUString& PropertyName, const cpo::uno::Reference<css::beans::XVetoableChangeListener>& aListener) override;
 
     // renamed and outlined to detect where it's called
     void    InvalidateSwDoc(); // {pDoc = 0;}
@@ -133,14 +133,14 @@ class SwXShape : public SwXShapeBaseClass
     friend class SwFmDrawPage;
     const SwFmDrawPage* m_pPage;
 
-    css::uno::Reference< cpo::uno::XAggregation > m_xShapeAgg;
+    cpo::uno::Reference< cpo::uno::XAggregation > m_xShapeAgg;
     // reference to <XShape>, determined in the
     // constructor by <queryAggregation> at <xShapeAgg>.
-    css::uno::Reference< css::drawing::XShape > mxShape;
+    cpo::uno::Reference< css::drawing::XShape > mxShape;
 
     const SfxItemPropertySet*           m_pPropSet;
     std::span<const SfxItemPropertyMapEntry>      m_pPropertyMapEntries;
-    css::uno::Reference< css::beans::XPropertySetInfo > mxPropertySetInfo;
+    cpo::uno::Reference< css::beans::XPropertySetInfo > mxPropertySetInfo;
 
     std::unique_ptr<SwShapeDescriptor_Impl>  m_pImpl;
 
@@ -196,7 +196,7 @@ class SwXShape : public SwXShapeBaseClass
 protected:
     virtual ~SwXShape() override;
 public:
-    SwXShape(css::uno::Reference<cpo::uno::XInterface> & xShape, SwDoc const*const pDoc);
+    SwXShape(cpo::uno::Reference<cpo::uno::XInterface> & xShape, SwDoc const*const pDoc);
 
     static const cpo::uno::Sequence< sal_Int8 > & getUnoTunnelId();
     virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type& aType ) override;
@@ -207,13 +207,13 @@ public:
     virtual sal_Int64 SAL_CALL getSomething( const cpo::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
     //XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
     virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
     virtual cpo::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
-    virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
-    virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
-    virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
-    virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+    virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
+    virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
+    virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+    virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
     //XPropertyState
     virtual css::beans::PropertyState SAL_CALL getPropertyState( const OUString& PropertyName ) override;
@@ -222,13 +222,13 @@ public:
     virtual cpo::uno::Any SAL_CALL getPropertyDefault( const OUString& aPropertyName ) override;
 
     //XTextContent
-    virtual void SAL_CALL attach(const css::uno::Reference< css::text::XTextRange > & xTextRange) override;
-    virtual css::uno::Reference< css::text::XTextRange >  SAL_CALL getAnchor() override;
+    virtual void SAL_CALL attach(const cpo::uno::Reference< css::text::XTextRange > & xTextRange) override;
+    virtual cpo::uno::Reference< css::text::XTextRange >  SAL_CALL getAnchor() override;
 
     //XComponent
     virtual void SAL_CALL dispose() override;
-    virtual void SAL_CALL addEventListener(const css::uno::Reference< css::lang::XEventListener > & aListener) override;
-    virtual void SAL_CALL removeEventListener(const css::uno::Reference< css::lang::XEventListener > & aListener) override;
+    virtual void SAL_CALL addEventListener(const cpo::uno::Reference< css::lang::XEventListener > & aListener) override;
+    virtual void SAL_CALL removeEventListener(const cpo::uno::Reference< css::lang::XEventListener > & aListener) override;
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -255,15 +255,15 @@ class SwXGroupShape final :
 {
     virtual ~SwXGroupShape() override;
 public:
-    SwXGroupShape(css::uno::Reference<cpo::uno::XInterface> & xShape, SwDoc const* pDoc);
+    SwXGroupShape(cpo::uno::Reference<cpo::uno::XInterface> & xShape, SwDoc const* pDoc);
 
     virtual cpo::uno::Any SAL_CALL queryInterface( const cpo::uno::Type& aType ) override;
     virtual void SAL_CALL acquire(  ) noexcept override;
     virtual void SAL_CALL release(  ) noexcept override;
 
     //XShapes
-    virtual void SAL_CALL add( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
-    virtual void SAL_CALL remove( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
+    virtual void SAL_CALL add( const cpo::uno::Reference< css::drawing::XShape >& xShape ) override;
+    virtual void SAL_CALL remove( const cpo::uno::Reference< css::drawing::XShape >& xShape ) override;
 
     //XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override;

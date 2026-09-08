@@ -63,6 +63,7 @@
 #endif
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 #ifdef _WIN32
 
@@ -683,8 +684,8 @@ namespace
     }
 
     uno::Reference < io::XStream > lcl_GetExtractedStream( OUString& rUrl,
-        const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
-        const css::uno::Reference< css::io::XStream >& xObjectStream )
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
+        const cpo::uno::Reference< css::io::XStream >& xObjectStream )
     {
         uno::Reference <io::XTempFile> xNativeTempFile(
             io::TempFile::create(xContext),
@@ -804,8 +805,8 @@ namespace
     //Dump the objects content to a tempfile, just the "CONTENTS" stream if
     //there is one for non-compound documents, otherwise the whole content.
     //On success a file is returned which must be removed by the caller
-    OUString lcl_ExtractObject(const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
-        const css::uno::Reference< css::io::XStream >& xObjectStream)
+    OUString lcl_ExtractObject(const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
+        const cpo::uno::Reference< css::io::XStream >& xObjectStream)
     {
         OUString sUrl;
 
@@ -819,8 +820,8 @@ namespace
         return sUrl;
     }
 
-    uno::Reference < io::XStream > lcl_ExtractObjectStream( const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
-        const css::uno::Reference< css::io::XStream >& xObjectStream )
+    uno::Reference < io::XStream > lcl_ExtractObjectStream( const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
+        const cpo::uno::Reference< css::io::XStream >& xObjectStream )
     {
         OUString sUrl;
         return lcl_GetExtractedStream( sUrl, xContext, xObjectStream );

@@ -21,7 +21,7 @@
 
 #include <sal/types.h>
 
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 
 #include <com/sun/star/xml/dom/events/PhaseType.hpp>
 #include <com/sun/star/xml/dom/events/AttrChangeType.hpp>
@@ -39,7 +39,7 @@ typedef ::cppu::ImplInheritanceHelper< CEvent, css::xml::dom::events::XMutationE
 class CMutationEvent final
     : public CMutationEvent_Base
 {
-    css::uno::Reference< css::xml::dom::XNode > m_relatedNode;
+    cpo::uno::Reference< css::xml::dom::XNode > m_relatedNode;
     OUString m_prevValue;
     OUString m_newValue;
     OUString m_attrName;
@@ -50,7 +50,7 @@ public:
 
     virtual ~CMutationEvent() override;
 
-    virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL getRelatedNode() override;
+    virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL getRelatedNode() override;
     virtual OUString SAL_CALL getPrevValue() override;
     virtual OUString SAL_CALL getNewValue() override;
     virtual OUString SAL_CALL getAttrName() override;
@@ -59,7 +59,7 @@ public:
                            const OUString& typeArg,
                            bool canBubbleArg,
                            bool cancelableArg,
-                           const css::uno::Reference< css::xml::dom::XNode >& relatedNodeArg,
+                           const cpo::uno::Reference< css::xml::dom::XNode >& relatedNodeArg,
                            const OUString& prevValueArg,
                            const OUString& newValueArg,
                            const OUString& attrNameArg,
@@ -67,8 +67,8 @@ public:
 
     // delegate to CEvent, since we are inheriting from CEvent and XEvent
     virtual OUString SAL_CALL getType() override;
-    virtual css::uno::Reference< css::xml::dom::events::XEventTarget > SAL_CALL getTarget() override;
-    virtual css::uno::Reference< css::xml::dom::events::XEventTarget > SAL_CALL getCurrentTarget() override;
+    virtual cpo::uno::Reference< css::xml::dom::events::XEventTarget > SAL_CALL getTarget() override;
+    virtual cpo::uno::Reference< css::xml::dom::events::XEventTarget > SAL_CALL getCurrentTarget() override;
     virtual css::xml::dom::events::PhaseType SAL_CALL getEventPhase() override;
     virtual bool SAL_CALL getBubbles() override;
     virtual bool SAL_CALL getCancelable() override;

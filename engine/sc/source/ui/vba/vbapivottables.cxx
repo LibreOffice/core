@@ -22,6 +22,7 @@
 #include <ooo/vba/excel/XPivotTable.hpp>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace ::ooo::vba;
 
 static cpo::uno::Any DataPilotToPivotTable( const cpo::uno::Any& aSource, const uno::Reference< cpo::uno::XComponentContext > & xContext )

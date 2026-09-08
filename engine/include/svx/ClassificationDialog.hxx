@@ -83,7 +83,7 @@ private:
 
 public:
     ClassificationDialog(weld::Window* pParent,
-                         const css::uno::Reference<css::document::XDocumentProperties>& rDocProps,
+                         const cpo::uno::Reference<css::document::XDocumentProperties>& rDocProps,
                          bool bPerParagraph, std::function<void()> aParagraphSignHandler = []() {});
     ~ClassificationDialog() override;
 

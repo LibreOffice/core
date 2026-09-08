@@ -30,7 +30,7 @@
 namespace utl
 {
 
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
     using namespace ::com::sun::star::lang;
 
     //= OEventListenerImpl
@@ -109,7 +109,7 @@ namespace utl
         stopAllComponentListening( );
     }
 
-    void OEventListenerAdapter::stopComponentListening( const css::uno::Reference< css::lang::XComponent >& _rxComp )
+    void OEventListenerAdapter::stopComponentListening( const cpo::uno::Reference< css::lang::XComponent >& _rxComp )
     {
         if ( m_pImpl->aListeners.empty() )
             return;

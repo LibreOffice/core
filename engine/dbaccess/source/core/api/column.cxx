@@ -40,7 +40,7 @@ using namespace dbaccess;
 using namespace connectivity;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
@@ -144,7 +144,7 @@ OColumns::OColumns(::cppu::OWeakObject& _rParent,
 }
 
 OColumns::OColumns(::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
-        css::uno::Reference< css::container::XNameAccess > _xDrvColumns,
+        cpo::uno::Reference< css::container::XNameAccess > _xDrvColumns,
         bool _bCaseSensitive,const std::vector< OUString> &_rVector,
         IColumnFactory* _pColFactory,
         ::connectivity::sdbcx::IRefreshableColumns* _pRefresh,
@@ -216,7 +216,7 @@ void OColumns::impl_refresh()
         m_pRefreshColumns->refreshColumns();
 }
 
-css::uno::Reference< css::beans::XPropertySet > OColumns::createObject(const OUString& _rName)
+cpo::uno::Reference< css::beans::XPropertySet > OColumns::createObject(const OUString& _rName)
 {
     OSL_ENSURE(m_pColFactoryImpl, "OColumns::createObject: no column factory!");
 
@@ -324,9 +324,9 @@ Sequence< Type > OColumns::getTypes(  )
 }
 
 // XAppend
-css::uno::Reference< css::beans::XPropertySet > OColumns::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
+cpo::uno::Reference< css::beans::XPropertySet > OColumns::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
-    css::uno::Reference< css::beans::XPropertySet > xReturn;
+    cpo::uno::Reference< css::beans::XPropertySet > xReturn;
 
     Reference< XAppend > xAppend( m_xDrvColumns, UNO_QUERY );
     if ( xAppend.is() )

@@ -30,6 +30,7 @@
 #include <unomailmerge.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 // com.sun.star.comp.Writer.TextDocument
 
@@ -39,7 +40,7 @@ Writer_SwTextDocument_get_implementation(
 {
     SolarMutexGuard aGuard;
     SwGlobals::ensure();
-    css::uno::Reference<cpo::uno::XInterface> xInterface = sfx2::createSfxModelInstance(args,
+    cpo::uno::Reference<cpo::uno::XInterface> xInterface = sfx2::createSfxModelInstance(args,
         [](SfxModelFlags _nCreationFlags)
         {
             rtl::Reference<SfxObjectShell> pShell = new SwDocShell(_nCreationFlags);

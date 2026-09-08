@@ -25,12 +25,12 @@ class SfxUnoSidebar final : public cppu::WeakImplHelper<css::ui::XSidebarProvide
 
 private:
 
-    const css::uno::Reference<css::frame::XFrame> xFrame;
+    const cpo::uno::Reference<css::frame::XFrame> xFrame;
     sfx2::sidebar::SidebarController* getSidebarController();
 
 public:
 
-    SfxUnoSidebar(css::uno::Reference<css::frame::XFrame> );
+    SfxUnoSidebar(cpo::uno::Reference<css::frame::XFrame> );
 
     virtual void showDecks (const bool bVisible) override;
 
@@ -39,11 +39,11 @@ public:
 
     virtual bool isVisible() override;
 
-    virtual css::uno::Reference<css::frame::XFrame> getFrame() override;
+    virtual cpo::uno::Reference<css::frame::XFrame> getFrame() override;
 
-    virtual css::uno::Reference<css::ui::XDecks> getDecks() override;
+    virtual cpo::uno::Reference<css::ui::XDecks> getDecks() override;
 
-    virtual css::uno::Reference<css::ui::XSidebar> getSidebar() override;
+    virtual cpo::uno::Reference<css::ui::XSidebar> getSidebar() override;
 
 };
 

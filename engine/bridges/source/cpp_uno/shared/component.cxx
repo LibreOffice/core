@@ -19,7 +19,7 @@
 
 #include <bridge.hxx>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/XInterface.hpp>
 #include <rtl/process.h>
@@ -76,11 +76,11 @@ static void s_stub_computeObjectIdentifier(va_list * pParam)
 
     try
     {
-        ::com::sun::star::uno::Reference<
+        ::cpo::uno::Reference<
               ::cpo::uno::XInterface > xHome(
                   static_cast< cpo::uno::XInterface * >(
                       pInterface ),
-                  ::com::sun::star::uno::UNO_QUERY );
+                  ::cpo::uno::UNO_QUERY );
         assert(xHome.is() && "### query to XInterface failed!");
         if (xHome.is())
         {

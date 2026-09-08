@@ -63,7 +63,7 @@ class SAL_DLLPUBLIC_TEMPLATE ChineseTranslation_UnoDialog_Base : public cppu::We
 class TEXTCONVERSIONDLGS_DLLPUBLIC ChineseTranslation_UnoDialog final : public ChineseTranslation_UnoDialog_Base
 {
 public:
-    ChineseTranslation_UnoDialog(const css::uno::Reference< css::awt::XWindow >& xParentWindow);
+    ChineseTranslation_UnoDialog(const cpo::uno::Reference< css::awt::XWindow >& xParentWindow);
     virtual ~ChineseTranslation_UnoDialog() override;
 
     sal_Int16 execute();
@@ -76,7 +76,7 @@ private:
     void impl_DeleteDialog();
 
 private:
-    css::uno::Reference< css::awt::XWindow > m_xParentWindow;
+    cpo::uno::Reference< css::awt::XWindow > m_xParentWindow;
 
     std::unique_ptr<ChineseTranslationDialog> m_xDialog;
 };

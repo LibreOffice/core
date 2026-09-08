@@ -12,7 +12,7 @@
 
 #include <comphelper/comphelperdllapi.h>
 #include <rtl/ustring.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::frame
@@ -35,22 +35,22 @@ namespace comphelper
 */
 COMPHELPER_DLLPUBLIC bool dispatchCommand(const OUString& rCommand,
         const cpo::uno::Sequence<css::beans::PropertyValue>& rArguments,
-        const css::uno::Reference<css::frame::XDispatchResultListener>& xListener = {});
+        const cpo::uno::Reference<css::frame::XDispatchResultListener>& xListener = {});
 
 COMPHELPER_DLLPUBLIC bool dispatchCommand(const OUString& rCommand,
-        const css::uno::Reference<css::frame::XDispatchProvider>& xDispatchProvider,
+        const cpo::uno::Reference<css::frame::XDispatchProvider>& xDispatchProvider,
         const cpo::uno::Sequence<css::beans::PropertyValue>& rArguments,
-        const css::uno::Reference<css::frame::XDispatchResultListener>& xListener = {});
+        const cpo::uno::Reference<css::frame::XDispatchResultListener>& xListener = {});
 
 COMPHELPER_DLLPUBLIC bool dispatchCommand(const OUString& rCommand,
-        const css::uno::Reference<css::frame::XFrame>& xFrame,
+        const cpo::uno::Reference<css::frame::XFrame>& xFrame,
         const cpo::uno::Sequence<css::beans::PropertyValue>& rArguments,
-        const css::uno::Reference<css::frame::XDispatchResultListener>& xListener = {});
+        const cpo::uno::Reference<css::frame::XDispatchResultListener>& xListener = {});
 
 COMPHELPER_DLLPUBLIC bool dispatchCommand(const OUString& rCommand,
-        const css::uno::Reference<css::frame::XController>& xController,
+        const cpo::uno::Reference<css::frame::XController>& xController,
         const cpo::uno::Sequence<css::beans::PropertyValue>& rArguments,
-        const css::uno::Reference<css::frame::XDispatchResultListener>& xListener = {});
+        const cpo::uno::Reference<css::frame::XDispatchResultListener>& xListener = {});
 
 }
 

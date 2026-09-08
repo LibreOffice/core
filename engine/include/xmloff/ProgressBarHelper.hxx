@@ -31,7 +31,7 @@ inline constexpr OUString XML_PROGRESSREPEAT = u"ProgressRepeat"_ustr;
 
 class XMLOFF_DLLPUBLIC ProgressBarHelper
 {
-            css::uno::Reference < css::task::XStatusIndicator >   m_xStatusIndicator;
+            cpo::uno::Reference < css::task::XStatusIndicator >   m_xStatusIndicator;
             sal_Int32                                             m_nRange;
             sal_Int32                                             m_nReference;
             sal_Int32                                             m_nValue;
@@ -44,7 +44,7 @@ class XMLOFF_DLLPUBLIC ProgressBarHelper
             bool                                                  m_bFailure;
 #endif
 public:
-            ProgressBarHelper(css::uno::Reference < css::task::XStatusIndicator> xStatusIndicator,
+            ProgressBarHelper(cpo::uno::Reference < css::task::XStatusIndicator> xStatusIndicator,
                                 const bool bStrict);
             ~ProgressBarHelper();
 

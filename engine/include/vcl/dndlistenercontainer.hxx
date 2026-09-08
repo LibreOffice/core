@@ -38,8 +38,8 @@ class DNDListenerContainer final :
     sal_Int8 m_nDefaultActions;
     comphelper::OInterfaceContainerHelper4<css::datatransfer::dnd::XDragGestureListener> maDragGestureListeners;
     comphelper::OInterfaceContainerHelper4<css::datatransfer::dnd::XDropTargetListener> maDropTargetListeners;
-    css::uno::Reference< css::datatransfer::dnd::XDropTargetDragContext > m_xDropTargetDragContext;
-    css::uno::Reference< css::datatransfer::dnd::XDropTargetDropContext > m_xDropTargetDropContext;
+    cpo::uno::Reference< css::datatransfer::dnd::XDropTargetDragContext > m_xDropTargetDragContext;
+    cpo::uno::Reference< css::datatransfer::dnd::XDropTargetDropContext > m_xDropTargetDropContext;
 
 public:
 
@@ -47,36 +47,36 @@ public:
     virtual ~DNDListenerContainer() override;
 
     sal_uInt32 fireDropEvent(
-        const css::uno::Reference< css::datatransfer::dnd::XDropTargetDropContext >& context,
+        const cpo::uno::Reference< css::datatransfer::dnd::XDropTargetDropContext >& context,
         sal_Int8 dropAction, sal_Int32 locationX, sal_Int32 locationY, sal_Int8 sourceActions,
-        const css::uno::Reference< css::datatransfer::XTransferable >& transferable );
+        const cpo::uno::Reference< css::datatransfer::XTransferable >& transferable );
 
     sal_uInt32 fireDragExitEvent();
 
     sal_uInt32 fireDragOverEvent(
-        const css::uno::Reference< css::datatransfer::dnd::XDropTargetDragContext >& context,
+        const cpo::uno::Reference< css::datatransfer::dnd::XDropTargetDragContext >& context,
         sal_Int8 dropAction, sal_Int32 locationX, sal_Int32 locationY, sal_Int8 sourceActions );
 
     sal_uInt32 fireDragEnterEvent(
-        const css::uno::Reference< css::datatransfer::dnd::XDropTargetDragContext >& context,
+        const cpo::uno::Reference< css::datatransfer::dnd::XDropTargetDragContext >& context,
         sal_Int8 dropAction, sal_Int32 locationX, sal_Int32 locationY, sal_Int8 sourceActions,
         const cpo::uno::Sequence< css::datatransfer::DataFlavor >& dataFlavor );
 
     sal_uInt32 fireDropActionChangedEvent(
-        const css::uno::Reference< css::datatransfer::dnd::XDropTargetDragContext >& context,
+        const cpo::uno::Reference< css::datatransfer::dnd::XDropTargetDragContext >& context,
         sal_Int8 dropAction, sal_Int32 locationX, sal_Int32 locationY, sal_Int8 sourceActions );
 
     sal_uInt32 fireDragGestureEvent(
         sal_Int8 dragAction, sal_Int32 dragOriginX, sal_Int32 dragOriginY,
-        const css::uno::Reference< css::datatransfer::dnd::XDragSource >& dragSource,
+        const cpo::uno::Reference< css::datatransfer::dnd::XDragSource >& dragSource,
         const cpo::uno::Any& triggerEvent );
 
     /*
      * XDragGestureRecognizer
      */
 
-    virtual void addDragGestureListener( const css::uno::Reference< css::datatransfer::dnd::XDragGestureListener >& dgl ) override;
-    virtual void removeDragGestureListener( const css::uno::Reference< css::datatransfer::dnd::XDragGestureListener >& dgl ) override;
+    virtual void addDragGestureListener( const cpo::uno::Reference< css::datatransfer::dnd::XDragGestureListener >& dgl ) override;
+    virtual void removeDragGestureListener( const cpo::uno::Reference< css::datatransfer::dnd::XDragGestureListener >& dgl ) override;
     virtual void resetRecognizer(  ) override;
 
     // Helper method to check if there are any drag gesture listeners registered
@@ -101,8 +101,8 @@ public:
      * XDropTarget
      */
 
-    virtual void addDropTargetListener( const css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >& dtl ) override;
-    virtual void removeDropTargetListener( const css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >& dtl ) override;
+    virtual void addDropTargetListener( const cpo::uno::Reference< css::datatransfer::dnd::XDropTargetListener >& dtl ) override;
+    virtual void removeDropTargetListener( const cpo::uno::Reference< css::datatransfer::dnd::XDropTargetListener >& dtl ) override;
     virtual bool isActive(  ) override;
     virtual void setActive( bool active ) override;
     virtual sal_Int8 getDefaultActions(  ) override;

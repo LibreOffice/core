@@ -102,8 +102,8 @@ public:
     AccessibleDocumentViewBase (
         ::sd::Window* pSdWindow,
         ::sd::ViewShell* pViewShell,
-        css::uno::Reference<css::frame::XController> xController,
-        const css::uno::Reference<css::accessibility::XAccessible>& rxParent);
+        cpo::uno::Reference<css::frame::XController> xController,
+        const cpo::uno::Reference<css::accessibility::XAccessible>& rxParent);
 
     virtual ~AccessibleDocumentViewBase() override;
 
@@ -129,7 +129,7 @@ public:
 
     //=====  XAccessibleContext  ==============================================
 
-    virtual css::uno::Reference<css::accessibility::XAccessible> SAL_CALL
+    virtual cpo::uno::Reference<css::accessibility::XAccessible> SAL_CALL
         getAccessibleParent() override;
 
     /** This implementation returns either 1 or 0 depending on whether there
@@ -141,7 +141,7 @@ public:
     /** This implementation either returns the active accessible OLE object
         if it exists and the given index is 0 or throws an exception.
     */
-    virtual css::uno::Reference<css::accessibility::XAccessible> SAL_CALL
+    virtual cpo::uno::Reference<css::accessibility::XAccessible> SAL_CALL
         getAccessibleChild (sal_Int64 nIndex) override;
 
     // OAccessible
@@ -149,7 +149,7 @@ public:
 
     //=====  XAccessibleComponent  ============================================
 
-    virtual css::uno::Reference<css::accessibility::XAccessible > SAL_CALL
+    virtual cpo::uno::Reference<css::accessibility::XAccessible > SAL_CALL
         getAccessibleAtPoint (const css::awt::Point& aPoint) override;
 
     //=====  XInterface  ======================================================
@@ -213,7 +213,7 @@ private:
         implGetMutex() override;
 
     // return ourself as context in default case
-    virtual css::uno::Reference< css::accessibility::XAccessibleContext >
+    virtual cpo::uno::Reference< css::accessibility::XAccessibleContext >
         implGetAccessibleContext() override;
 
     // return false in default case
@@ -226,15 +226,15 @@ private:
 
 protected:
     /// The API window that is made accessible.
-    css::uno::Reference< css::awt::XWindow>
+    cpo::uno::Reference< css::awt::XWindow>
          mxWindow;
 
     /// The controller of the window in which this view is displayed.
-    css::uno::Reference< css::frame::XController>
+    cpo::uno::Reference< css::frame::XController>
          mxController;
 
     /// Model of the document.
-    css::uno::Reference < css::frame::XModel>
+    cpo::uno::Reference < css::frame::XModel>
         mxModel;
 
     // Bundle of information that is passed down the shape tree.
@@ -246,7 +246,7 @@ protected:
     /** Accessible OLE object.  Set or removed by the
         <member>SetAccessibleOLEObject</member> method.
     */
-    css::uno::Reference< css::accessibility::XAccessible>
+    cpo::uno::Reference< css::accessibility::XAccessible>
         mxAccessibleOLEObject;
 
     Link<VclWindowEvent&,void> maWindowLink;
@@ -293,7 +293,7 @@ protected:
             accessible OLE object (if there is one) is removed.
     */
     void SetAccessibleOLEObject (
-        const css::uno::Reference<css::accessibility::XAccessible>& xOLEObject);
+        const cpo::uno::Reference<css::accessibility::XAccessible>& xOLEObject);
 
 public:
     void SwitchViewActivated() { Activated(); }

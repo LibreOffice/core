@@ -38,7 +38,7 @@ using namespace osl;
 using namespace com::sun::star;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
@@ -652,8 +652,8 @@ void PropertyHelper_Hyphen::SetTmpPropVals( const PropertyValues &rPropVals )
 }
 
 PropertyHelper_Thesaurus::PropertyHelper_Thesaurus(
-            const css::uno::Reference< cpo::uno::XInterface > &rxSource,
-            css::uno::Reference< css::linguistic2::XLinguProperties > const &rxPropSet )
+            const cpo::uno::Reference< cpo::uno::XInterface > &rxSource,
+            cpo::uno::Reference< css::linguistic2::XLinguProperties > const &rxPropSet )
 {
     mxPropHelper = new PropertyHelper_Thes( rxSource, rxPropSet );
 }
@@ -678,8 +678,8 @@ void PropertyHelper_Thesaurus::SetTmpPropVals( const css::beans::PropertyValues 
 }
 
 PropertyHelper_Hyphenation::PropertyHelper_Hyphenation(
-            const css::uno::Reference< cpo::uno::XInterface > &rxSource,
-            css::uno::Reference< css::linguistic2::XLinguProperties > const &rxPropSet)
+            const cpo::uno::Reference< cpo::uno::XInterface > &rxSource,
+            cpo::uno::Reference< css::linguistic2::XLinguProperties > const &rxPropSet)
 {
     mxPropHelper = new PropertyHelper_Hyphen( rxSource, rxPropSet );
 }
@@ -729,20 +729,20 @@ bool PropertyHelper_Hyphenation::IsNoHyphenateCaps() const
 }
 
 bool PropertyHelper_Hyphenation::addLinguServiceEventListener(
-                const css::uno::Reference< css::linguistic2::XLinguServiceEventListener >& rxListener )
+                const cpo::uno::Reference< css::linguistic2::XLinguServiceEventListener >& rxListener )
 {
     return mxPropHelper->addLinguServiceEventListener( rxListener );
 }
 
 bool PropertyHelper_Hyphenation::removeLinguServiceEventListener(
-                const css::uno::Reference< css::linguistic2::XLinguServiceEventListener >& rxListener )
+                const cpo::uno::Reference< css::linguistic2::XLinguServiceEventListener >& rxListener )
 {
     return mxPropHelper->removeLinguServiceEventListener( rxListener );
 }
 
 PropertyHelper_Spelling::PropertyHelper_Spelling(
-            const css::uno::Reference< cpo::uno::XInterface > &rxSource,
-            css::uno::Reference< css::linguistic2::XLinguProperties > const &rxPropSet )
+            const cpo::uno::Reference< cpo::uno::XInterface > &rxSource,
+            cpo::uno::Reference< css::linguistic2::XLinguProperties > const &rxPropSet )
 {
     mxPropHelper = new PropertyHelper_Spell( rxSource, rxPropSet );
 }
@@ -787,14 +787,14 @@ bool PropertyHelper_Spelling::IsSpellHyphenatedCompound() const
 }
 
 bool PropertyHelper_Spelling::addLinguServiceEventListener(
-                const css::uno::Reference<
+                const cpo::uno::Reference<
                     css::linguistic2::XLinguServiceEventListener >& rxListener )
 {
     return mxPropHelper->addLinguServiceEventListener( rxListener );
 }
 
 bool PropertyHelper_Spelling::removeLinguServiceEventListener(
-                const css::uno::Reference<
+                const cpo::uno::Reference<
                     css::linguistic2::XLinguServiceEventListener >& rxListener )
 {
     return mxPropHelper->removeLinguServiceEventListener( rxListener );

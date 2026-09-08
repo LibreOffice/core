@@ -27,7 +27,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlerror.hxx>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::xmloff::token;
 
@@ -67,9 +67,9 @@ XMLEventsImportContext::~XMLEventsImportContext()
 }
 
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLEventsImportContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLEventsImportContext::createFastChildContext(
     sal_Int32 /*nElement*/,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     // a) search for script:language and script:event-name attribute
     // b) delegate to factory. The factory will:

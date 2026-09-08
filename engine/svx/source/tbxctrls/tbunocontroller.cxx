@@ -47,6 +47,7 @@
 #include <vcl/InterimItemWindow.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace {
 
@@ -58,7 +59,7 @@ class FontHeightToolBoxControl : public FontHeightToolBoxControl_Base
 {
     public:
         explicit FontHeightToolBoxControl(
-            const css::uno::Reference< cpo::uno::XComponentContext >& rServiceManager );
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& rServiceManager );
 
         // XServiceInfo
         virtual OUString getImplementationName() override;
@@ -76,8 +77,8 @@ class FontHeightToolBoxControl : public FontHeightToolBoxControl_Base
         virtual void execute( sal_Int16 KeyModifier ) override;
         virtual void click() override;
         virtual void doubleClick() override;
-        virtual css::uno::Reference< css::awt::XWindow > createPopupWindow() override;
-        virtual css::uno::Reference< css::awt::XWindow > createItemWindow( const css::uno::Reference< css::awt::XWindow >& Parent ) override;
+        virtual cpo::uno::Reference< css::awt::XWindow > createPopupWindow() override;
+        virtual cpo::uno::Reference< css::awt::XWindow > createItemWindow( const cpo::uno::Reference< css::awt::XWindow >& Parent ) override;
 
         void dispatchCommand( const cpo::uno::Sequence< css::beans::PropertyValue >& rArgs );
         using svt::ToolboxController::dispatchCommand;
@@ -458,7 +459,7 @@ uno::Reference< awt::XWindow > FontHeightToolBoxControl::createItemWindow(
 
         std::unique_ptr<weld::ComboBox> xWidget(m_pBuilder->weld_combo_box(u"fontsizecombobox"_ustr));
 
-        xItemWindow = css::uno::Reference<css::awt::XWindow>(new weld::TransportAsXWindow(xWidget.get()));
+        xItemWindow = cpo::uno::Reference<css::awt::XWindow>(new weld::TransportAsXWindow(xWidget.get()));
 
         m_xWeldBox.reset(new SvxFontSizeBox_Base(std::move(xWidget), m_xFrame, *this));
         m_pBox = m_xWeldBox.get();

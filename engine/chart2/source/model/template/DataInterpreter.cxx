@@ -31,8 +31,9 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
+using namespace ::cpo;
 
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::cpo::uno::Sequence;
 
 #ifdef DEBUG_CHART2_TEMPLATE
@@ -376,7 +377,7 @@ cpo::uno::Sequence< OUString > DataInterpreter::getSupportedServiceNames()
 }
 
 std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > DataInterpreter::getDataSequences(
-        const css::uno::Reference< css::chart2::data::XDataSource >& xSource)
+        const cpo::uno::Reference< css::chart2::data::XDataSource >& xSource)
 {
     std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > aData;
     for (const Reference< data::XLabeledDataSequence > & rLDS : xSource->getDataSequences() )

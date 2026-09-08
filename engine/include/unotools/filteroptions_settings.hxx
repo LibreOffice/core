@@ -18,14 +18,14 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <officecfg/Office/UI.hxx>
 
 namespace utl
 {
 // Read-only access for elements under org.openoffice.Office.UI/FilePicker/ShowFilterDialog
-inline css::uno::Reference<css::beans::XPropertySet>
+inline cpo::uno::Reference<css::beans::XPropertySet>
 getSettingsForFilterOptions(const OUString& filter)
 {
     auto xNameAccess = officecfg::Office::UI::FilePicker::ShowFilterDialog::get();
@@ -35,7 +35,7 @@ getSettingsForFilterOptions(const OUString& filter)
 }
 
 // Write access for elements under org.openoffice.Office.UI/FilePicker/ShowFilterDialog
-inline css::uno::Reference<css::beans::XPropertySet>
+inline cpo::uno::Reference<css::beans::XPropertySet>
 getSettingsForFilterOptions(const OUString& filter,
                             const std::shared_ptr<comphelper::ConfigurationChanges>& batch)
 {

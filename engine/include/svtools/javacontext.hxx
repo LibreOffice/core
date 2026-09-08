@@ -42,7 +42,7 @@ namespace svt
             particular Request then the message box is shown. Afterwards
             nothing happens.
          */
-        JavaContext( const css::uno::Reference< cpo::uno::XCurrentContext> & ctx );
+        JavaContext( const cpo::uno::Reference< cpo::uno::XCurrentContext> & ctx );
         ~JavaContext();
 
         // XInterface
@@ -61,8 +61,8 @@ namespace svt
         JavaContext& operator = (JavaContext const &) = delete;
 
         oslInterlockedCount                                  m_aRefCount;
-        css::uno::Reference< cpo::uno::XCurrentContext >     m_xNextContext;
-        css::uno::Reference< css::task::XInteractionHandler> m_xHandler;
+        cpo::uno::Reference< cpo::uno::XCurrentContext >     m_xNextContext;
+        cpo::uno::Reference< css::task::XInteractionHandler> m_xHandler;
     };
 }
 

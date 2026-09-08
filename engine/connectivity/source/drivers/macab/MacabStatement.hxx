@@ -101,7 +101,7 @@ namespace connectivity::macab
         using MacabCommonStatement_BASE::rBHelper;
 
         explicit MacabCommonStatement(MacabConnection *_pConnection);
-        using MacabCommonStatement_BASE::operator css::uno::Reference< cpo::uno::XInterface >;
+        using MacabCommonStatement_BASE::operator cpo::uno::Reference< cpo::uno::XInterface >;
 
         // OComponentHelper
         using MacabCommonStatement_BASE::disposing;
@@ -118,17 +118,17 @@ namespace connectivity::macab
                 ) override;
 
         // XPropertySet
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(
+        virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(
                 ) override;
 
         // XStatement
-        virtual css::uno::Reference< css::sdbc::XResultSet > executeQuery(
+        virtual cpo::uno::Reference< css::sdbc::XResultSet > executeQuery(
                 const OUString& sql ) override;
         virtual sal_Int32 executeUpdate(
                  const OUString& sql ) override;
         virtual bool execute(
                 const OUString& sql ) override;
-        virtual css::uno::Reference< css::sdbc::XConnection > getConnection(
+        virtual cpo::uno::Reference< css::sdbc::XConnection > getConnection(
                 ) override;
 
         // XWarningsSupplier

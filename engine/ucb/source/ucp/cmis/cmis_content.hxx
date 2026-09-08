@@ -59,10 +59,10 @@ inline constexpr OUString CMIS_FILE_TYPE = u"application/vnd.libreoffice.cmis-fi
 inline constexpr OUString CMIS_FOLDER_TYPE = u"application/vnd.libreoffice.cmis-folder"_ustr;
 
 class ContentProvider;
-libcmis::Session* createSession(const css::uno::Reference<css::ucb::XCommandEnvironment>& xEnv,
+libcmis::Session* createSession(const cpo::uno::Reference<css::ucb::XCommandEnvironment>& xEnv,
                                 ContentProvider& rProvider, const URL& rURL,
                                 const OUString& rContentId,
-                                const css::uno::Reference<css::ucb::XContent>& xContext);
+                                const cpo::uno::Reference<css::ucb::XContent>& xContext);
 
 class Content : public ::ucbhelper::ContentImplHelper,
                 public css::ucb::XContentCreator,
@@ -83,19 +83,19 @@ private:
     libcmis::ObjectTypePtr m_pObjectType;
     std::map< std::string, libcmis::PropertyPtr > m_pObjectProps;
 
-    bool isFolder( const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
+    bool isFolder( const cpo::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
     void setCmisProperty(const std::string& rName, const std::string& rValue,
-            const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
+            const cpo::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
 
     cpo::uno::Any getBadArgExcept();
 
-    css::uno::Reference< css::sdbc::XRow >
+    cpo::uno::Reference< css::sdbc::XRow >
         getPropertyValues(
             const cpo::uno::Sequence< css::beans::Property >& rProperties,
-            const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
+            const cpo::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
 
-    libcmis::Session* getSession( const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
-    libcmis::ObjectTypePtr const & getObjectType( const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
+    libcmis::Session* getSession( const cpo::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
+    libcmis::ObjectTypePtr const & getObjectType( const cpo::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
 
 private:
     typedef rtl::Reference< Content > ContentRef;
@@ -104,65 +104,65 @@ private:
     /// @throws cpo::uno::Exception
     /// @throws libcmis::Exception
     cpo::uno::Any open(const css::ucb::OpenCommandArgument2 & rArg,
-        const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv );
+        const cpo::uno::Reference< css::ucb::XCommandEnvironment > & xEnv );
 
     /// @throws cpo::uno::Exception
     void transfer( const css::ucb::TransferInfo& rTransferInfo,
-        const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv );
+        const cpo::uno::Reference< css::ucb::XCommandEnvironment > & xEnv );
 
     /// @throws cpo::uno::Exception
-    void insert( const css::uno::Reference< css::io::XInputStream > & xInputStream,
+    void insert( const cpo::uno::Reference< css::io::XInputStream > & xInputStream,
         bool bReplaceExisting, std::u16string_view rMimeType,
-        const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
+        const cpo::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
 
     /// @throws cpo::uno::Exception
     OUString checkIn( const css::ucb::CheckinArgument& rArg,
-        const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv );
+        const cpo::uno::Reference< css::ucb::XCommandEnvironment > & xEnv );
 
     /// @throws cpo::uno::Exception
-    OUString checkOut( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv );
+    OUString checkOut( const cpo::uno::Reference< css::ucb::XCommandEnvironment > & xEnv );
 
     /// @throws cpo::uno::Exception
-    OUString cancelCheckOut( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv );
+    OUString cancelCheckOut( const cpo::uno::Reference< css::ucb::XCommandEnvironment > & xEnv );
 
-    static void copyData( const css::uno::Reference< css::io::XInputStream >& xIn,
-        const css::uno::Reference< css::io::XOutputStream >& xOut );
+    static void copyData( const cpo::uno::Reference< css::io::XInputStream >& xIn,
+        const cpo::uno::Reference< css::io::XOutputStream >& xOut );
 
     cpo::uno::Sequence< cpo::uno::Any >
         setPropertyValues( const cpo::uno::Sequence< css::beans::PropertyValue >& rValues,
-            const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
+            const cpo::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
 
     /// @throws cpo::uno::Exception
     cpo::uno::Sequence< css::document::CmisVersion >
-        getAllVersions( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv );
+        getAllVersions( const cpo::uno::Reference< css::ucb::XCommandEnvironment > & xEnv );
 
-    bool feedSink( const css::uno::Reference< cpo::uno::XInterface>& aSink,
-        const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
+    bool feedSink( const cpo::uno::Reference< cpo::uno::XInterface>& aSink,
+        const cpo::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
 
 public:
     /// @throws css::ucb::ContentCreationException
-    Content( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+    Content( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
         ContentProvider *pProvider,
-        const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier,
+        const cpo::uno::Reference< css::ucb::XContentIdentifier >& Identifier,
         libcmis::ObjectPtr pObject = libcmis::ObjectPtr( ) );
 
     /// @throws css::ucb::ContentCreationException
-    Content( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+    Content( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
         ContentProvider *pProvider,
-        const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier,
+        const cpo::uno::Reference< css::ucb::XContentIdentifier >& Identifier,
         bool bIsFolder);
 
     virtual ~Content() override;
 
     virtual cpo::uno::Sequence< css::beans::Property >
-        getProperties( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv ) override;
+        getProperties( const cpo::uno::Reference< css::ucb::XCommandEnvironment > & xEnv ) override;
 
     libcmis::ObjectPtr updateProperties(
             const cpo::uno::Any& iCmisProps,
-            const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv);
+            const cpo::uno::Reference< css::ucb::XCommandEnvironment > & xEnv);
 
     virtual cpo::uno::Sequence< css::ucb::CommandInfo >
-        getCommands( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv ) override;
+        getCommands( const cpo::uno::Reference< css::ucb::XCommandEnvironment > & xEnv ) override;
 
     virtual OUString getParentURL() override;
 
@@ -188,26 +188,26 @@ public:
     virtual cpo::uno::Any SAL_CALL
         execute( const css::ucb::Command& aCommand,
         sal_Int32 CommandId,
-        const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment ) override;
+        const cpo::uno::Reference< css::ucb::XCommandEnvironment >& Environment ) override;
 
     virtual void SAL_CALL abort( sal_Int32 CommandId ) override;
 
     virtual cpo::uno::Sequence< css::ucb::ContentInfo >
         SAL_CALL queryCreatableContentsInfo() override;
 
-    virtual css::uno::Reference< css::ucb::XContent >
+    virtual cpo::uno::Reference< css::ucb::XContent >
         SAL_CALL createNewContent( const css::ucb::ContentInfo& Info ) override;
 
     /// @throws cpo::uno::RuntimeException
     cpo::uno::Sequence< css::ucb::ContentInfo >
-        queryCreatableContentsInfo( const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
+        queryCreatableContentsInfo( const cpo::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
 
-    virtual std::vector< css::uno::Reference< css::ucb::XContent > > getChildren( ) override;
+    virtual std::vector< cpo::uno::Reference< css::ucb::XContent > > getChildren( ) override;
 
     /// @throws cpo::uno::RuntimeException
     /// @throws css::ucb::CommandFailedException
     /// @throws libcmis::Exception
-    libcmis::ObjectPtr const & getObject( const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
+    libcmis::ObjectPtr const & getObject( const cpo::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
 };
 
 }

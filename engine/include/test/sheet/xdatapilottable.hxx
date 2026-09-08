@@ -10,7 +10,7 @@
 #ifndef INCLUDED_TEST_SHEET_XDATAPILOTTABLE_HXX
 #define INCLUDED_TEST_SHEET_XDATAPILOTTABLE_HXX
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/table/XCell.hpp>
 #include <test/testdllapi.hxx>
 
@@ -19,15 +19,15 @@ namespace apitest {
 class OOO_DLLPUBLIC_TEST XDataPilotTable
 {
 public:
-    virtual css::uno::Reference< cpo::uno::XInterface > init() = 0;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > init() = 0;
     virtual ~XDataPilotTable();
 
     void testGetOutputRange();
     void testRefresh();
 
 protected:
-    css::uno::Reference< css::table::XCell > xCellForChange;
-    css::uno::Reference< css::table::XCell > xCellForCheck;
+    cpo::uno::Reference< css::table::XCell > xCellForChange;
+    cpo::uno::Reference< css::table::XCell > xCellForCheck;
 };
 
 }

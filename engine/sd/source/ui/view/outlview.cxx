@@ -77,7 +77,7 @@
 #include <undo/undomanager.hxx>
 #include <stlsheet.hxx>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::frame;
 
 namespace sd {
@@ -270,13 +270,13 @@ Point OutlineView::EditViewPointerPosPixel() const
     return pActiveWin->GetPointerPosPixel();
 }
 
-css::uno::Reference<css::datatransfer::clipboard::XClipboard> OutlineView::GetClipboard() const
+cpo::uno::Reference<css::datatransfer::clipboard::XClipboard> OutlineView::GetClipboard() const
 {
     vcl::Window* pActiveWin(mpOutlinerViews[0]->GetEditView().GetWindow());
     return pActiveWin->GetClipboard();
 }
 
-css::uno::Reference<css::datatransfer::dnd::XDropTarget> OutlineView::GetDropTarget()
+cpo::uno::Reference<css::datatransfer::dnd::XDropTarget> OutlineView::GetDropTarget()
 {
     vcl::Window* pActiveWin(mpOutlinerViews[0]->GetEditView().GetWindow());
     return pActiveWin->GetDropTarget();

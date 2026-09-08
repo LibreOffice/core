@@ -34,7 +34,7 @@ namespace chart {
 struct TickInfo
 {
     double      fScaledTickValue;
-    css::uno::Reference<css::chart2::XScaling> xInverseScaling;
+    cpo::uno::Reference<css::chart2::XScaling> xInverseScaling;
     rtl::Reference<SvxShapeText> xTextShape;
     OUString aText;//used only for complex categories so far
     ::basegfx::B2DVector  aTickScreenPosition;
@@ -43,7 +43,7 @@ struct TickInfo
 
 //methods:
     TickInfo() = delete;
-    explicit TickInfo( css::uno::Reference<css::chart2::XScaling> xInverse );
+    explicit TickInfo( cpo::uno::Reference<css::chart2::XScaling> xInverse );
 
     /**
      * Return a value associated with the tick mark. It's normally an original
@@ -95,7 +95,7 @@ private: //methods
 protected: //member
     ExplicitScaleData     m_rScale;
     ExplicitIncrementData m_rIncrement;
-    css::uno::Reference< css::chart2::XScaling > m_xInverseScaling;
+    cpo::uno::Reference< css::chart2::XScaling > m_xInverseScaling;
 
     //minimum and maximum of the visible range after scaling
     double    m_fScaledVisibleMin;

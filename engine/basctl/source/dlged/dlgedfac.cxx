@@ -31,9 +31,10 @@ namespace basctl
 {
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 
-DlgEdFactory::DlgEdFactory( css::uno::Reference< css::frame::XModel > xModel ) : mxModel(std::move( xModel ))
+DlgEdFactory::DlgEdFactory( cpo::uno::Reference< css::frame::XModel > xModel ) : mxModel(std::move( xModel ))
 {
     SdrObjFactory::InsertMakeObjectHdl( LINK(this, DlgEdFactory, MakeObject) );
 }

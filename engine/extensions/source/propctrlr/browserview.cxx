@@ -24,10 +24,10 @@
 
 namespace pcr
 {
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
     using namespace ::com::sun::star::lang;
 
-    OPropertyBrowserView::OPropertyBrowserView(const css::uno::Reference<cpo::uno::XComponentContext>& rContext, weld::Builder& rBuilder)
+    OPropertyBrowserView::OPropertyBrowserView(const cpo::uno::Reference<cpo::uno::XComponentContext>& rContext, weld::Builder& rBuilder)
         : m_xPropBox(new OPropertyEditor(rContext, rBuilder))
         , m_nActivePage(0)
     {

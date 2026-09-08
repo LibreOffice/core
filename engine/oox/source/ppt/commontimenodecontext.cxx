@@ -36,7 +36,7 @@
 #include "animationtypes.hxx"
 
 using namespace ::oox::core;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::xml::sax;

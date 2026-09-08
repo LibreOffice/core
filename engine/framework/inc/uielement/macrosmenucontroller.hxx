@@ -27,10 +27,10 @@ namespace framework
     {
         using svt::PopupMenuControllerBase::disposing;
 
-        css::uno::Reference< cpo::uno::XComponentContext >    m_xContext;
+        cpo::uno::Reference< cpo::uno::XComponentContext >    m_xContext;
 
         public:
-            MacrosMenuController( const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
+            MacrosMenuController( const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext );
             virtual ~MacrosMenuController() override;
 
             /* interface XServiceInfo */
@@ -45,8 +45,8 @@ namespace framework
             virtual void disposing( const css::lang::EventObject& Source ) override;
 
         private:
-            void fillPopupMenu(const css::uno::Reference<css::awt::XPopupMenu>& rPopupMenu);
-            void addScriptItems(const css::uno::Reference<css::awt::XPopupMenu>& rPopupMenu, sal_uInt16 startItemId);
+            void fillPopupMenu(const cpo::uno::Reference<css::awt::XPopupMenu>& rPopupMenu);
+            void addScriptItems(const cpo::uno::Reference<css::awt::XPopupMenu>& rPopupMenu, sal_uInt16 startItemId);
     };
 }
 

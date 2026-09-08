@@ -11,7 +11,7 @@
 
 #include "sdmodeltestbase.hxx"
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
@@ -72,6 +72,7 @@
 #include <svx/svdotext.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 /// Impress miscellaneous tests.
 class SdMiscTest : public SdModelTestBase

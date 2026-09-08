@@ -50,7 +50,7 @@
 #include <brdwin.hxx>
 #include <window.h>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 class SystemWindow::ImplData
 {
@@ -94,7 +94,7 @@ SystemWindow::SystemWindow(WindowType eType, const char* pIdleDebugName, bool tr
 }
 
 void SystemWindow::loadUI(vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription,
-    const css::uno::Reference<css::frame::XFrame> &rFrame)
+    const cpo::uno::Reference<css::frame::XFrame> &rFrame)
 {
     mbIsDeferredInit = true;
     mpDialogParent = pParent; //should be unset in doDeferredInit

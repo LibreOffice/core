@@ -22,7 +22,7 @@
 
 #include <sal/config.h>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -94,7 +94,7 @@ private:
 };
 
 LO_DLLPUBLIC_TESTTOOLS
-OUString testMulti( css::uno::Reference< test::testtools::bridgetest::XMulti >  const & multi);
+OUString testMulti( cpo::uno::Reference< test::testtools::bridgetest::XMulti >  const & multi);
 
 }
 

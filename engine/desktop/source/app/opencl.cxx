@@ -43,7 +43,7 @@
 #include <osl/process.h>
 
 using namespace ::osl;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::frame;
 
 namespace desktop {
@@ -108,7 +108,7 @@ static bool testOpenCLDriver()
 static bool testOpenCLCompute(const Reference< XDesktop2 > &xDesktop, const OUString &rURL)
 {
     bool bSuccess = false;
-    css::uno::Reference< css::lang::XComponent > xComponent;
+    cpo::uno::Reference< css::lang::XComponent > xComponent;
 
     sal_uInt64 nKernelFailures = openclwrapper::kernelFailures;
 
@@ -124,7 +124,7 @@ static bool testOpenCLCompute(const Reference< XDesktop2 > &xDesktop, const OUSt
     }
 
     try {
-        css::uno::Reference< css::frame::XComponentLoader > xLoader(xDesktop, css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference< css::frame::XComponentLoader > xLoader(xDesktop, cpo::uno::UNO_QUERY_THROW);
 
         cpo::uno::Sequence< css::beans::PropertyValue > aArgs{ comphelper::makePropertyValue(u"Hidden"_ustr,
                                                                                              true) };
@@ -132,14 +132,14 @@ static bool testOpenCLCompute(const Reference< XDesktop2 > &xDesktop, const OUSt
         xComponent.set(xLoader->loadComponentFromURL(rURL, u"_blank"_ustr, 0, aArgs));
 
         // What an unpleasant API to use.
-        css::uno::Reference< css::sheet::XCalculatable > xCalculatable( xComponent, css::uno::UNO_QUERY_THROW);
-        css::uno::Reference< css::sheet::XSpreadsheetDocument > xSpreadDoc( xComponent, css::uno::UNO_QUERY_THROW );
-        css::uno::Reference< css::sheet::XSpreadsheets > xSheets( xSpreadDoc->getSheets(), css::uno::UNO_SET_THROW );
-        css::uno::Reference< css::container::XIndexAccess > xIndex( xSheets, css::uno::UNO_QUERY_THROW );
-        css::uno::Reference< css::sheet::XSpreadsheet > xSheet( xIndex->getByIndex(0), css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference< css::sheet::XCalculatable > xCalculatable( xComponent, cpo::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference< css::sheet::XSpreadsheetDocument > xSpreadDoc( xComponent, cpo::uno::UNO_QUERY_THROW );
+        cpo::uno::Reference< css::sheet::XSpreadsheets > xSheets( xSpreadDoc->getSheets(), cpo::uno::UNO_SET_THROW );
+        cpo::uno::Reference< css::container::XIndexAccess > xIndex( xSheets, cpo::uno::UNO_QUERY_THROW );
+        cpo::uno::Reference< css::sheet::XSpreadsheet > xSheet( xIndex->getByIndex(0), cpo::uno::UNO_QUERY_THROW);
 
         // So we insert our MAX call at the end on a named range.
-        css::uno::Reference< css::table::XCell2 > xThresh( xSheet->getCellByPosition(1,1), css::uno::UNO_QUERY_THROW ); // B2
+        cpo::uno::Reference< css::table::XCell2 > xThresh( xSheet->getCellByPosition(1,1), cpo::uno::UNO_QUERY_THROW ); // B2
         double fThreshold = xThresh->getValue();
 
         // We need pure OCL formulae all the way through the
@@ -147,7 +147,7 @@ static bool testOpenCLCompute(const Reference< XDesktop2 > &xDesktop, const OUSt
         xCalculatable->calculateAll();
 
         // So we insert our MAX call at the end on a named range.
-        css::uno::Reference< css::table::XCell2 > xCell( xSheet->getCellByPosition(1,0), css::uno::UNO_QUERY_THROW );
+        cpo::uno::Reference< css::table::XCell2 > xCell( xSheet->getCellByPosition(1,0), cpo::uno::UNO_QUERY_THROW );
         xCell->setFormula(u"=MAX(results)"_ustr);
         double fResult = xCell->getValue();
 

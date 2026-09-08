@@ -157,7 +157,7 @@ private:
 
     MainSequencePtr mpMainSequence;
 
-    css::uno::Reference< css::drawing::XDrawPage > mxCurrentPage;
+    cpo::uno::Reference< css::drawing::XDrawPage > mxCurrentPage;
     rtl::Reference< ::sd::DrawController > mxView;
 
     /** The CustomAnimationPresets is initialized either on demand or

@@ -30,6 +30,7 @@
 #include "owriteablestream.hxx"
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 OInputCompStream::OInputCompStream( OWriteStream_Impl& aImpl,
                                     uno::Reference < io::XInputStream > xStream,

@@ -26,12 +26,12 @@ typedef InheritedHelperInterfaceWeakImpl<ov::excel::XPivotTable> PivotTableImpl_
 
 class ScVbaPivotTable : public PivotTableImpl_BASE
 {
-    css::uno::Reference<css::sheet::XDataPilotTable> m_xTable;
+    cpo::uno::Reference<css::sheet::XDataPilotTable> m_xTable;
 
 public:
-    ScVbaPivotTable(const css::uno::Reference<cpo::uno::XComponentContext>& xContext,
-                    css::uno::Reference<css::sheet::XDataPilotTable> xTable);
-    virtual css::uno::Reference<ov::excel::XPivotCache> SAL_CALL PivotCache() override;
+    ScVbaPivotTable(const cpo::uno::Reference<cpo::uno::XComponentContext>& xContext,
+                    cpo::uno::Reference<css::sheet::XDataPilotTable> xTable);
+    virtual cpo::uno::Reference<ov::excel::XPivotCache> SAL_CALL PivotCache() override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual cpo::uno::Sequence<OUString> getServiceNames() override;

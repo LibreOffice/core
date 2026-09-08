@@ -27,7 +27,7 @@
 
 namespace com::sun::star::beans { class XPropertySet; }
 namespace com::sun::star::beans { class XPropertyState; }
-namespace com::sun::star::uno { template <class interface_type> class Reference; }
+namespace cpo::uno { template <class interface_type> class Reference; }
 
 namespace chart
 {
@@ -49,25 +49,25 @@ public:
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::lang::WrappedTargetException
     /// @throws cpo::uno::RuntimeException
-    virtual void setPropertyValue( const cpo::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const;
+    virtual void setPropertyValue( const cpo::uno::Any& rOuterValue, const cpo::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const;
 
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::lang::WrappedTargetException
     /// @throws cpo::uno::RuntimeException
-    virtual cpo::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const;
+    virtual cpo::uno::Any getPropertyValue( const cpo::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const;
 
     /// @throws css::beans::UnknownPropertyException
     /// @throws cpo::uno::RuntimeException
-    virtual void setPropertyToDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const;
+    virtual void setPropertyToDefault( const cpo::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const;
 
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::lang::WrappedTargetException
     /// @throws cpo::uno::RuntimeException
-    virtual cpo::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const;
+    virtual cpo::uno::Any getPropertyDefault( const cpo::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const;
 
     /// @throws css::beans::UnknownPropertyException
     /// @throws cpo::uno::RuntimeException
-    virtual css::beans::PropertyState getPropertyState( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const;
+    virtual css::beans::PropertyState getPropertyState( const cpo::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const;
 
 protected:
     virtual cpo::uno::Any convertInnerToOuterValue( const cpo::uno::Any& rInnerValue ) const;

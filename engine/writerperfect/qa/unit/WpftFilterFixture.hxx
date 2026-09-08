@@ -13,7 +13,7 @@
 
 #include "wpftqahelperdllapi.h"
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 
 #include <rtl/ustring.hxx>
@@ -69,9 +69,9 @@ public:
     virtual void setUp() override;
 
 protected:
-    css::uno::Reference<css::frame::XDesktop2> m_xDesktop;
-    css::uno::Reference<css::document::XTypeDetection> m_xTypeDetection;
-    css::uno::Reference<css::container::XNameAccess> m_xTypeMap;
+    cpo::uno::Reference<css::frame::XDesktop2> m_xDesktop;
+    cpo::uno::Reference<css::document::XTypeDetection> m_xTypeDetection;
+    cpo::uno::Reference<css::container::XNameAccess> m_xTypeMap;
 };
 }
 }

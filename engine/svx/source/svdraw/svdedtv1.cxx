@@ -1340,7 +1340,7 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, bool bReplaceAll)
             // will be changed?
             if (!SfxPoolItem::areSame(*pLineColor, pObj->GetMergedItem(XATTR_LINECOLOR)))
             {
-                css::uno::Reference<css::beans::XPropertySet> xProps(pObj->getUnoShape(), css::uno::UNO_QUERY);
+                cpo::uno::Reference<css::beans::XPropertySet> xProps(pObj->getUnoShape(), cpo::uno::UNO_QUERY);
 
                 // do we have XPropertySet from target object?
                 if (xProps)

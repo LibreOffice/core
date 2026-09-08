@@ -41,8 +41,8 @@ public:
     /** constructs the container.<BR>
     */
     OCommandContainer(
-         const css::uno::Reference< cpo::uno::XComponentContext >& _xORB
-        ,const css::uno::Reference< cpo::uno::XInterface >&   _xParentContainer
+         const cpo::uno::Reference< cpo::uno::XComponentContext >& _xORB
+        ,const cpo::uno::Reference< cpo::uno::XInterface >&   _xParentContainer
         ,const TContentPtr& _pImpl
         ,bool _bTables
         );
@@ -53,14 +53,14 @@ public:
     virtual cpo::uno::Sequence<sal_Int8> getImplementationId() override;
 
     // XSingleServiceFactory
-    virtual css::uno::Reference< cpo::uno::XInterface > createInstance( ) override;
-    virtual css::uno::Reference< cpo::uno::XInterface > createInstanceWithArguments( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > createInstance( ) override;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > createInstanceWithArguments( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
 protected:
     virtual ~OCommandContainer() override;
 
     // ODefinitionContainer
-    virtual css::uno::Reference< css::ucb::XContent > createObject(const OUString& _rName) override;
+    virtual cpo::uno::Reference< css::ucb::XContent > createObject(const OUString& _rName) override;
 
 protected:
     // OContentHelper overridables

@@ -52,7 +52,7 @@ UIObjectUnoObj::~UIObjectUnoObj()
     mpObj.reset();
 }
 
-css::uno::Reference<css::ui::test::XUIObject> UIObjectUnoObj::getChild(const OUString& rID)
+cpo::uno::Reference<css::ui::test::XUIObject> UIObjectUnoObj::getChild(const OUString& rID)
 {
     SolarMutexGuard aGuard;
     std::unique_ptr<UIObject> pObj = mpObj->get_child(rID);
@@ -208,7 +208,7 @@ OUString UIObjectUnoObj::getHierarchy()
     return mpObj->dumpHierarchy();
 }
 
-bool UIObjectUnoObj::equals(const css::uno::Reference<css::ui::test::XUIObject>& rOther)
+bool UIObjectUnoObj::equals(const cpo::uno::Reference<css::ui::test::XUIObject>& rOther)
 {
     return mpObj->equals(*static_cast<UIObjectUnoObj&>(*rOther).mpObj);
 }

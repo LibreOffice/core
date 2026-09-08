@@ -37,7 +37,7 @@
 const sal_uInt16 START_ITEMID = 1000;
 
 using namespace com::sun::star::awt;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
@@ -276,7 +276,7 @@ static void FillActionTriggerContainerWithMenu(const Reference<XPopupMenu>& rMen
 
                 rActionTriggerContainer->insertByIndex(nPos, Any(xPropSet));
 
-                css::uno::Reference<XPopupMenu> xPopupMenu = rMenu->getPopupMenu(nItemId);
+                cpo::uno::Reference<XPopupMenu> xPopupMenu = rMenu->getPopupMenu(nItemId);
                 if (xPopupMenu.is())
                 {
                     // recursive call to build next sub menu
@@ -305,13 +305,13 @@ void ActionTriggerHelper::CreateMenuFromActionTriggerContainer(
 
 void ActionTriggerHelper::FillActionTriggerContainerFromMenu(
     Reference< XIndexContainer > const & xActionTriggerContainer,
-    const css::uno::Reference<XPopupMenu>& rMenu)
+    const cpo::uno::Reference<XPopupMenu>& rMenu)
 {
     FillActionTriggerContainerWithMenu(rMenu, xActionTriggerContainer);
 }
 
 Reference< XIndexContainer > ActionTriggerHelper::CreateActionTriggerContainerFromMenu(
-    const css::uno::Reference<XPopupMenu>& rMenu,
+    const cpo::uno::Reference<XPopupMenu>& rMenu,
     const OUString* pMenuIdentifier )
 {
     return new RootActionTriggerContainer(rMenu, pMenuIdentifier);

@@ -34,6 +34,7 @@
 #include <vector>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 ScMyOLEFixer::ScMyOLEFixer(ScXMLImport& rTempImport)
     : rImport(rTempImport),

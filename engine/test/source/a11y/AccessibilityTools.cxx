@@ -37,6 +37,7 @@
 #include <o3tl/string_view.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 uno::Reference<accessibility::XAccessibleContext>
 AccessibilityTools::getAccessibleObjectForPredicate(
@@ -80,9 +81,9 @@ uno::Reference<accessibility::XAccessibleContext> AccessibilityTools::getAccessi
         });
 }
 
-css::uno::Reference<css::accessibility::XAccessibleContext>
+cpo::uno::Reference<css::accessibility::XAccessibleContext>
 AccessibilityTools::getAccessibleObjectForId(
-    const css::uno::Reference<css::accessibility::XAccessible>& xacc, const std::u16string_view sId)
+    const cpo::uno::Reference<css::accessibility::XAccessible>& xacc, const std::u16string_view sId)
 {
     return getAccessibleObjectForId(xacc->getAccessibleContext(), sId);
 }
@@ -98,18 +99,18 @@ uno::Reference<accessibility::XAccessibleContext> AccessibilityTools::getAccessi
         });
 }
 
-css::uno::Reference<css::accessibility::XAccessibleContext>
+cpo::uno::Reference<css::accessibility::XAccessibleContext>
 AccessibilityTools::getAccessibleObjectForRole(
-    const css::uno::Reference<css::accessibility::XAccessible>& xacc, sal_Int16 role)
+    const cpo::uno::Reference<css::accessibility::XAccessible>& xacc, sal_Int16 role)
 {
     return getAccessibleObjectForRole(xacc->getAccessibleContext(), role);
 }
 
 /* this is basically the same as getAccessibleObjectForPredicate() but specialized for efficiency,
  * and because the template version will not work with getAccessibleObjectForPredicate() anyway */
-css::uno::Reference<css::accessibility::XAccessibleContext>
+cpo::uno::Reference<css::accessibility::XAccessibleContext>
 AccessibilityTools::getAccessibleObjectForName(
-    const css::uno::Reference<css::accessibility::XAccessibleContext>& xCtx, const sal_Int16 role,
+    const cpo::uno::Reference<css::accessibility::XAccessibleContext>& xCtx, const sal_Int16 role,
     std::u16string_view name)
 {
     if (xCtx->getAccessibleRole() == role && nameEquals(xCtx, name))

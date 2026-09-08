@@ -82,9 +82,10 @@
 #define TIMEOUT_START_RESCHEDULE    10L /* 10th s */
 
 using namespace ::com::sun::star;
-using ::com::sun::star::uno::Reference;
+using namespace ::cpo;
+using ::cpo::uno::Reference;
 using ::cpo::uno::RuntimeException;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
+using ::cpo::uno::UNO_QUERY_THROW;
 using ::com::sun::star::lang::DisposedException;
 using ::com::sun::star::awt::XWindow;
 using ::com::sun::star::frame::XController;
@@ -94,7 +95,7 @@ using ::com::sun::star::container::XIndexAccess;
 using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::beans::StringPair;
 using ::cpo::uno::Sequence;
-using ::com::sun::star::uno::UNO_QUERY;
+using ::cpo::uno::UNO_QUERY;
 using ::cpo::uno::Exception;
 using ::com::sun::star::frame::XFrame;
 using ::com::sun::star::frame::XFrameActionListener;
@@ -670,7 +671,7 @@ Reference< frame::XModel > SfxBaseController::getModel()
 
 //  SfxBaseController -> XDispatchProvider
 
-static css::uno::Reference<css::frame::XDispatch>
+static cpo::uno::Reference<css::frame::XDispatch>
 GetSlotDispatchWithFallback(SfxViewFrame* pViewFrame, const css::util::URL& aURL,
                             const OUString& sActCommand, bool bMasterCommand, const SfxSlot* pSlot)
 {
@@ -1184,7 +1185,7 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
 
         if ( i_eConnect == E_CONNECT )
         {
-            css::uno::Reference<css::frame::XModel3> xModel(getModel(), css::uno::UNO_QUERY_THROW);
+            cpo::uno::Reference<css::frame::XModel3> xModel(getModel(), cpo::uno::UNO_QUERY_THROW);
             const sal_Int16 nPluginMode = ::comphelper::NamedValueCollection::getOrDefault( xModel->getArgs2( { u"PluginMode"_ustr } ), u"PluginMode", sal_Int16( 0 ) );
             const bool bHasPluginMode = ( nPluginMode != 0 );
 

@@ -46,10 +46,10 @@
 namespace {
 
 using namespace css;
-using namespace uno;
 using namespace io;
-using namespace ::cpo::uno;
 using namespace xml::sax;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::osl;
 using namespace sax_fastparser;
 

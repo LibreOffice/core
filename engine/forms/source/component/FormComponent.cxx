@@ -60,7 +60,7 @@
 #include <comphelper/kit.hxx>
 namespace frm
 {
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
@@ -127,8 +127,8 @@ OControl::OControl( const Reference< XComponentContext >& _rxContext, const OUSt
     // Increment the RefCount for aggregates, because the aggregate by itself increments the RefCount in the setDelegator
     osl_atomic_increment( &m_refCount );
     {
-        m_xAggregate.set(_rxContext->getServiceManager()->createInstanceWithContext(_rAggregateService, _rxContext), css::uno::UNO_QUERY);
-        m_xControl.set(m_xAggregate, css::uno::UNO_QUERY);
+        m_xAggregate.set(_rxContext->getServiceManager()->createInstanceWithContext(_rAggregateService, _rxContext), cpo::uno::UNO_QUERY);
+        m_xControl.set(m_xAggregate, cpo::uno::UNO_QUERY);
     }
     osl_atomic_decrement( &m_refCount );
 
@@ -460,7 +460,7 @@ Any OControlModel::queryAggregation(const Type& _rType)
     return aReturn;
 }
 
-void OControlModel::readHelpTextCompatibly(const css::uno::Reference< css::io::XObjectInputStream >& _rxInStream)
+void OControlModel::readHelpTextCompatibly(const cpo::uno::Reference< css::io::XObjectInputStream >& _rxInStream)
 {
     OUString sHelpText;
     ::comphelper::operator>>( _rxInStream, sHelpText);
@@ -476,7 +476,7 @@ void OControlModel::readHelpTextCompatibly(const css::uno::Reference< css::io::X
     }
 }
 
-void OControlModel::writeHelpTextCompatibly(const css::uno::Reference< css::io::XObjectOutputStream >& _rxOutStream)
+void OControlModel::writeHelpTextCompatibly(const cpo::uno::Reference< css::io::XObjectOutputStream >& _rxOutStream)
 {
     OUString sHelpText;
     try
@@ -625,7 +625,7 @@ void OControlModel::setParent(const Reference< XInterface >& _rxParent)
         xComp->removeEventListener(static_cast<XPropertiesChangeListener*>(this));
 
     m_xParent = _rxParent;
-    xComp.set(m_xParent, css::uno::UNO_QUERY);
+    xComp.set(m_xParent, cpo::uno::UNO_QUERY);
 
     if ( xComp.is() )
         xComp->addEventListener(static_cast<XPropertiesChangeListener*>(this));
@@ -1580,7 +1580,7 @@ void OBoundControlModel::readCommonProperties(const Reference<css::io::XObjectIn
     nUsedFlag = _rxInStream->readLong();
     if (nUsedFlag)
         xPersist = _rxInStream->readObject();
-    m_xLabelControl.set(xPersist, css::uno::UNO_QUERY);
+    m_xLabelControl.set(xPersist, cpo::uno::UNO_QUERY);
     Reference< XComponent > xComp( m_xLabelControl, UNO_QUERY );
     if (xComp.is())
         xComp->addEventListener(static_cast<css::lang::XEventListener*>(static_cast<XPropertyChangeListener*>(this)));

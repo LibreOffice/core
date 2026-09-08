@@ -32,13 +32,14 @@
 #include "descriptionimp.hxx"
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace ::xmloff::token;
 
 // dr3d:3dlight context
 
 SdXML3DLightContext::SdXML3DLightContext(
     SvXMLImport& rImport,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 :   SvXMLImportContext( rImport ),
     maDiffuseColor(0x00000000),
     maDirection(0.0, 0.0, 1.0),
@@ -92,7 +93,7 @@ SdXML3DLightContext::~SdXML3DLightContext()
 
 SdXML3DSceneShapeContext::SdXML3DSceneShapeContext(
     SvXMLImport& rImport,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes > const & rShapes,
     bool bTemporaryShapes)
 :   SdXMLShapeContext( rImport, xAttrList, rShapes, bTemporaryShapes ), SdXML3DSceneAttributesHelper( rImport )
@@ -105,7 +106,7 @@ SdXML3DSceneShapeContext::~SdXML3DSceneShapeContext()
 
 void SdXML3DSceneShapeContext::startFastElement(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     // create new 3DScene shape and add it to rShapes, use it
     // as base for the new 3DScene import
@@ -154,9 +155,9 @@ void SdXML3DSceneShapeContext::endFastElement(sal_Int32 nElement)
     SdXMLShapeContext::endFastElement(nElement);
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SdXML3DSceneShapeContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SdXML3DSceneShapeContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContextRef xContext;
     switch (nElement)
@@ -202,7 +203,7 @@ SdXML3DSceneAttributesHelper::SdXML3DSceneAttributesHelper( SvXMLImport& rImport
 }
 
 /** creates a 3d light context and adds it to the internal list for later processing */
-SvXMLImportContext * SdXML3DSceneAttributesHelper::create3DLightContext( const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
+SvXMLImportContext * SdXML3DSceneAttributesHelper::create3DLightContext( const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     const rtl::Reference<SdXML3DLightContext> xContext{new SdXML3DLightContext(mrImport, xAttrList)};
 
@@ -319,7 +320,7 @@ void SdXML3DSceneAttributesHelper::processSceneAttribute( const sax_fastparser::
 }
 
 /** this sets the scene attributes at this propertyset */
-void SdXML3DSceneAttributesHelper::setSceneAttributes( const css::uno::Reference< css::beans::XPropertySet >& xPropSet )
+void SdXML3DSceneAttributesHelper::setSceneAttributes( const cpo::uno::Reference< css::beans::XPropertySet >& xPropSet )
 {
     cpo::uno::Any aAny;
 

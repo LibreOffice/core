@@ -72,18 +72,18 @@ public:
 
     virtual cpo::uno::Sequence< cpo::uno::Type > getConnectionPointTypes() override;
 
-    virtual css::uno::Reference< css::lang::XConnectionPoint > queryConnectionPoint(
+    virtual cpo::uno::Reference< css::lang::XConnectionPoint > queryConnectionPoint(
         const cpo::uno::Type& aType
     ) override;
 
     virtual void advise(
         const   cpo::uno::Type&                              aType ,
-        const   css::uno::Reference< cpo::uno::XInterface >&  xListener
+        const   cpo::uno::Reference< cpo::uno::XInterface >&  xListener
     ) override;
 
     virtual void unadvise(
         const   cpo::uno::Type&                              aType       ,
-        const   css::uno::Reference< cpo::uno::XInterface >&  xListener
+        const   cpo::uno::Reference< cpo::uno::XInterface >&  xListener
     ) override;
 
     //  public but impl method!

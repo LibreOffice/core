@@ -71,7 +71,7 @@ public:
     OQueryDescriptor_Base(const OQueryDescriptor_Base& _rSource,::cppu::OWeakObject& _rMySelf);
 
 // css::sdbcx::XColumnsSupplier
-    virtual css::uno::Reference< css::container::XNameAccess > getColumns(  ) override;
+    virtual cpo::uno::Reference< css::container::XNameAccess > getColumns(  ) override;
 
 // css::lang::XServiceInfo
     virtual OUString getImplementationName(  ) override;
@@ -82,8 +82,8 @@ protected:
 
 // IColumnFactory
     virtual rtl::Reference<OColumn> createColumn(const OUString& _rName) const override;
-    virtual css::uno::Reference< css::beans::XPropertySet > createColumnDescriptor() override;
-    virtual void columnAppended( const css::uno::Reference< css::beans::XPropertySet >& _rxSourceDescriptor ) override;
+    virtual cpo::uno::Reference< css::beans::XPropertySet > createColumnDescriptor() override;
+    virtual void columnAppended( const cpo::uno::Reference< css::beans::XPropertySet >& _rxSourceDescriptor ) override;
     virtual void columnDropped(const OUString& _sName) override;
 
     /** rebuild our columns set
@@ -127,7 +127,7 @@ public:
     DECLARE_XINTERFACE( )
 
     // css::beans::XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
 
 };
 }   // namespace dbaccess

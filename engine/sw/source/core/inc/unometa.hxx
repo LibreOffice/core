@@ -73,7 +73,7 @@ protected:
     /// @throws css::lang::IllegalArgumentException
     /// @throws cpo::uno::RuntimeException
     void AttachImpl(
-            const css::uno::Reference< css::text::XTextRange > & xTextRange,
+            const cpo::uno::Reference< css::text::XTextRange > & xTextRange,
             const sal_uInt16 nWhich);
 
     virtual ~SwXMeta() override;
@@ -83,7 +83,7 @@ protected:
 
     /// @param pDoc and pMeta != 0, but not & because of ImplInheritanceHelper
     SwXMeta(SwDoc *const pDoc, ::sw::Meta *const pMeta,
-        css::uno::Reference<SwXText> const&  xParentText,
+        cpo::uno::Reference<SwXText> const&  xParentText,
         std::unique_ptr<TextRangeList_t const> pPortions);
 
     SwXMeta(SwDoc *const pDoc);
@@ -93,7 +93,7 @@ public:
     static rtl::Reference<SwXMeta>
         CreateXMeta(
             ::sw::Meta & rMeta,
-            const css::uno::Reference<SwXText>& xParentText,
+            const cpo::uno::Reference<SwXText>& xParentText,
             std::unique_ptr<TextRangeList_t const> && pPortions);
 
     static rtl::Reference<SwXMeta>
@@ -101,7 +101,7 @@ public:
 
     /// init params with position of the attribute content (w/out CH_TXTATR)
     bool SetContentRange( SwTextNode *& rpNode, sal_Int32 & rStart, sal_Int32 & rEnd) const;
-    css::uno::Reference< SwXText > const & GetParentText() const;
+    cpo::uno::Reference< SwXText > const & GetParentText() const;
 
     /// @throws css::lang::IllegalArgumentException
     /// @throws cpo::uno::RuntimeException
@@ -109,7 +109,7 @@ public:
 
     // MetadatableMixin
     virtual ::sfx2::Metadatable * GetCoreObject() override;
-    virtual css::uno::Reference< css::frame::XModel >
+    virtual cpo::uno::Reference< css::frame::XModel >
         GetModel() override;
 
     // XServiceInfo
@@ -122,59 +122,59 @@ public:
     // XComponent
     virtual void SAL_CALL dispose() override;
     virtual void SAL_CALL addEventListener(
-            const css::uno::Reference< css::lang::XEventListener > & xListener) override;
+            const cpo::uno::Reference< css::lang::XEventListener > & xListener) override;
     virtual void SAL_CALL removeEventListener(
-            const css::uno::Reference< css::lang::XEventListener > & xListener) override;
+            const cpo::uno::Reference< css::lang::XEventListener > & xListener) override;
 
     // XChild
-    virtual css::uno::Reference< cpo::uno::XInterface > SAL_CALL
+    virtual cpo::uno::Reference< cpo::uno::XInterface > SAL_CALL
         getParent() override;
     virtual void SAL_CALL setParent(
-            css::uno::Reference< cpo::uno::XInterface> const& xParent) override;
+            cpo::uno::Reference< cpo::uno::XInterface> const& xParent) override;
 
     // XElementAccess
     virtual cpo::uno::Type SAL_CALL getElementType() override;
     virtual bool SAL_CALL hasElements() override;
 
     // XEnumerationAccess
-    virtual css::uno::Reference< css::container::XEnumeration >  SAL_CALL
+    virtual cpo::uno::Reference< css::container::XEnumeration >  SAL_CALL
         createEnumeration() override;
 
     // XTextContent
     virtual void SAL_CALL attach(
-            const css::uno::Reference< css::text::XTextRange > & xTextRange) override;
-    virtual css::uno::Reference< css::text::XTextRange > SAL_CALL getAnchor() override;
+            const cpo::uno::Reference< css::text::XTextRange > & xTextRange) override;
+    virtual cpo::uno::Reference< css::text::XTextRange > SAL_CALL getAnchor() override;
 
     // XTextRange
-    virtual css::uno::Reference< css::text::XText >
+    virtual cpo::uno::Reference< css::text::XText >
         SAL_CALL getText() override;
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
                 css::text::XTextRange > SAL_CALL getStart() override;
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
                 css::text::XTextRange > SAL_CALL getEnd() override;
     virtual OUString SAL_CALL getString() override;
     virtual void SAL_CALL setString(const OUString& rString) override;
 
     // XSimpleText
-    virtual css::uno::Reference< css::text::XTextCursor >  SAL_CALL
+    virtual cpo::uno::Reference< css::text::XTextCursor >  SAL_CALL
         createTextCursor() override;
-    virtual css::uno::Reference< css::text::XTextCursor >  SAL_CALL
+    virtual cpo::uno::Reference< css::text::XTextCursor >  SAL_CALL
         createTextCursorByRange(
-            const css::uno::Reference< css::text::XTextRange > & xTextPosition) override;
+            const cpo::uno::Reference< css::text::XTextRange > & xTextPosition) override;
     virtual void SAL_CALL insertString(
-            const css::uno::Reference< css::text::XTextRange > & xRange,
+            const cpo::uno::Reference< css::text::XTextRange > & xRange,
             const OUString& aString, bool bAbsorb) override;
     virtual void SAL_CALL insertControlCharacter(
-            const css::uno::Reference< css::text::XTextRange > & xRange,
+            const cpo::uno::Reference< css::text::XTextRange > & xRange,
             sal_Int16 nControlCharacter, bool bAbsorb) override;
 
     // XText
     virtual void SAL_CALL insertTextContent(
-            const css::uno::Reference< css::text::XTextRange > & xRange,
-            const css::uno::Reference< css::text::XTextContent > & xContent,
+            const cpo::uno::Reference< css::text::XTextRange > & xRange,
+            const cpo::uno::Reference< css::text::XTextContent > & xContent,
             bool bAbsorb) override;
     virtual void SAL_CALL removeTextContent(
-            const css::uno::Reference< css::text::XTextContent > & xContent) override;
+            const cpo::uno::Reference< css::text::XTextContent > & xContent) override;
 
 };
 
@@ -194,11 +194,11 @@ private:
 
     friend rtl::Reference<SwXMeta>
         SwXMeta::CreateXMeta(::sw::Meta &,
-            const css::uno::Reference<SwXText>&,
+            const cpo::uno::Reference<SwXText>&,
             std::unique_ptr<TextRangeList_t const> && pPortions);
 
     SwXMetaField(SwDoc *const pDoc, ::sw::Meta *const pMeta,
-        css::uno::Reference<SwXText> const& xParentText,
+        cpo::uno::Reference<SwXText> const& xParentText,
         std::unique_ptr<TextRangeList_t const> pPortions);
 
     friend rtl::Reference<SwXMeta>
@@ -218,12 +218,12 @@ public:
     // XComponent
     virtual void SAL_CALL dispose() override;
     virtual void SAL_CALL addEventListener(
-            const css::uno::Reference< css::lang::XEventListener > & xListener) override;
+            const cpo::uno::Reference< css::lang::XEventListener > & xListener) override;
     virtual void SAL_CALL removeEventListener(
-            const css::uno::Reference< css::lang::XEventListener > & xListener) override;
+            const cpo::uno::Reference< css::lang::XEventListener > & xListener) override;
 
     // XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
         getPropertySetInfo() override;
     virtual void SAL_CALL setPropertyValue(
             const OUString& rPropertyName,
@@ -232,21 +232,21 @@ public:
         getPropertyValue(const OUString& rPropertyName) override;
     virtual void SAL_CALL addPropertyChangeListener(
             const OUString& rPropertyName,
-            const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener) override;
+            const cpo::uno::Reference< css::beans::XPropertyChangeListener >& xListener) override;
     virtual void SAL_CALL removePropertyChangeListener(
             const OUString& rPropertyName,
-            const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener) override;
+            const cpo::uno::Reference< css::beans::XPropertyChangeListener >& xListener) override;
     virtual void SAL_CALL addVetoableChangeListener(
             const OUString& rPropertyName,
-            const css::uno::Reference< css::beans::XVetoableChangeListener >& xListener) override;
+            const cpo::uno::Reference< css::beans::XVetoableChangeListener >& xListener) override;
     virtual void SAL_CALL removeVetoableChangeListener(
             const OUString& rPropertyName,
-            const css::uno::Reference< css::beans::XVetoableChangeListener >& xListener) override;
+            const cpo::uno::Reference< css::beans::XVetoableChangeListener >& xListener) override;
 
     // XTextContent
     virtual void SAL_CALL attach(
-            const css::uno::Reference< css::text::XTextRange > & xTextRange) override;
-    virtual css::uno::Reference< css::text::XTextRange > SAL_CALL getAnchor() override;
+            const cpo::uno::Reference< css::text::XTextRange > & xTextRange) override;
+    virtual cpo::uno::Reference< css::text::XTextRange > SAL_CALL getAnchor() override;
 
     // XTextField
     virtual OUString SAL_CALL getPresentation(bool bShowCommand) override;
@@ -255,8 +255,8 @@ public:
 
 /// get prefix/suffix from the RDF repository. @throws RuntimeException
 void getPrefixAndSuffix(
-        const css::uno::Reference< css::frame::XModel>& xModel,
-        const css::uno::Reference< css::rdf::XMetadatable>& xMetaField,
+        const cpo::uno::Reference< css::frame::XModel>& xModel,
+        const cpo::uno::Reference< css::rdf::XMetadatable>& xMetaField,
         OUString *const o_pPrefix, OUString *const o_pSuffix, OUString *const o_pShadowColor);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

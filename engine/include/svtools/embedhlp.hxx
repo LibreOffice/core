@@ -20,7 +20,7 @@
 #pragma once
 
 #include <svtools/svtdllapi.h>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <vcl/graph.hxx>
 #include <rtl/ustring.hxx>
 #include <memory>
@@ -56,31 +56,31 @@ class SVT_DLLPUBLIC EmbeddedObjectRef
 public:
     static void DrawPaintReplacement( const tools::Rectangle &rRect, const OUString &rText, OutputDevice *pOut );
     static void DrawShading( const tools::Rectangle &rRect, OutputDevice *pOut );
-    static bool TryRunningState( const css::uno::Reference < css::embed::XEmbeddedObject >& );
+    static bool TryRunningState( const cpo::uno::Reference < css::embed::XEmbeddedObject >& );
     static void SetGraphicToContainer( const Graphic& rGraphic,
                                         comphelper::EmbeddedObjectContainer& aContainer,
                                         const OUString& aName,
                                         const OUString& aMediaType );
 
-    static css::uno::Reference< css::io::XInputStream > GetGraphicReplacementStream(
+    static cpo::uno::Reference< css::io::XInputStream > GetGraphicReplacementStream(
                                         sal_Int64 nViewAspect,
-                                        const css::uno::Reference < css::embed::XEmbeddedObject >&,
+                                        const cpo::uno::Reference < css::embed::XEmbeddedObject >&,
                                         OUString* pMediaType )
                             noexcept;
 
-    static bool IsChart(const css::uno::Reference < css::embed::XEmbeddedObject >& xObj);
+    static bool IsChart(const cpo::uno::Reference < css::embed::XEmbeddedObject >& xObj);
 
-    const css::uno::Reference <css::embed::XEmbeddedObject>& operator->() const;
-    const css::uno::Reference <css::embed::XEmbeddedObject>& GetObject() const;
+    const cpo::uno::Reference <css::embed::XEmbeddedObject>& operator->() const;
+    const cpo::uno::Reference <css::embed::XEmbeddedObject>& GetObject() const;
 
     // default constructed object; needs further assignment before it can be used
     EmbeddedObjectRef();
 
     // assign a previously default constructed object
-    void Assign( const css::uno::Reference < css::embed::XEmbeddedObject >& xObj, sal_Int64 nAspect );
+    void Assign( const cpo::uno::Reference < css::embed::XEmbeddedObject >& xObj, sal_Int64 nAspect );
 
     // create object for a certain view aspect
-    EmbeddedObjectRef( const css::uno::Reference < css::embed::XEmbeddedObject >& xObj, sal_Int64 nAspect );
+    EmbeddedObjectRef( const cpo::uno::Reference < css::embed::XEmbeddedObject >& xObj, sal_Int64 nAspect );
 
     ~EmbeddedObjectRef();
     EmbeddedObjectRef( const EmbeddedObjectRef& );
@@ -99,7 +99,7 @@ public:
 
     void            SetGraphic( const Graphic& rGraphic, const OUString& rMediaType );
     void            SetGraphicStream(
-                        const css::uno::Reference< css::io::XInputStream >& xInGrStream,
+                        const cpo::uno::Reference< css::io::XInputStream >& xInGrStream,
                         const OUString& rMediaType );
 
                     // bUpdateOle = false update the Link-Objects

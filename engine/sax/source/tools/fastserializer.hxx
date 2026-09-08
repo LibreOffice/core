@@ -47,10 +47,10 @@ class FastSaxSerializer
     typedef cpo::uno::Sequence< ::sal_Int32 > Int32Sequence;
 
 public:
-    explicit FastSaxSerializer(const css::uno::Reference< css::io::XOutputStream >& xOutputStream);
+    explicit FastSaxSerializer(const cpo::uno::Reference< css::io::XOutputStream >& xOutputStream);
     ~FastSaxSerializer();
 
-    css::uno::Reference< css::io::XOutputStream > const & getOutputStream() const;
+    cpo::uno::Reference< css::io::XOutputStream > const & getOutputStream() const;
     /// called by FSHelper to put data in for writeTokenValueList
     TokenValueList& getTokenValueList() { return maTokenValues; }
 
@@ -160,7 +160,7 @@ private:
      *  to ensure correct order of ForSort methods.
      */
     CachedOutputStream maCachedOutputStream;
-    css::uno::Reference< css::xml::sax::XFastTokenHandler > mxFastTokenHandler;
+    cpo::uno::Reference< css::xml::sax::XFastTokenHandler > mxFastTokenHandler;
 
     class ForMerge : public ForMergeBase
     {

@@ -42,7 +42,7 @@
 #include <vcl/accessibility/AccessibleBrowseBoxTableCell.hxx>
 #include <vcl/filter/PngImageWriter.hxx>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::accessibility;
 
 static void lcl_DumpEntryAndSiblings(tools::JsonWriter& rJsonWriter,
@@ -712,7 +712,7 @@ IMPL_LINK_NOARG(SvHeaderTabListBox, ScrollHdl_Impl, SvTreeListBox*, void)
 
 IMPL_LINK_NOARG(SvHeaderTabListBox, CreateAccessibleHdl_Impl, HeaderBar*, void)
 {
-    css::uno::Reference< XAccessible > xAccParent = m_xHeaderBar->GetAccessibleParent();
+    cpo::uno::Reference< XAccessible > xAccParent = m_xHeaderBar->GetAccessibleParent();
     if ( xAccParent.is() )
     {
         rtl::Reference<comphelper::OAccessible> pAccessible = new AccessibleBrowseBoxHeaderBar(

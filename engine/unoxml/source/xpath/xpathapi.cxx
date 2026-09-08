@@ -41,7 +41,7 @@
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace css::xml::dom;
 using namespace css::xml::xpath;

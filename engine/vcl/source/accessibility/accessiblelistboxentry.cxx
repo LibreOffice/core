@@ -38,7 +38,7 @@
 #include <strings.hrc>
 
 using namespace ::com::sun::star::accessibility;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star;
@@ -571,7 +571,7 @@ bool AccessibleListBoxEntry::copyText( sal_Int32 nStartIndex, sal_Int32 nEndInde
         return false;
 
     sal_Int32 nLen = nEndIndex - nStartIndex + 1;
-    css::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipBoard = m_pTreeListBox->GetClipboard();
+    cpo::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipBoard = m_pTreeListBox->GetClipboard();
     vcl::unohelper::TextDataObject::CopyStringTo(sText.copy(nStartIndex, nLen), xClipBoard);
 
     return true;

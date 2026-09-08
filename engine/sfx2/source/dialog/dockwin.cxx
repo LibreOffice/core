@@ -55,6 +55,7 @@
 #define MAX_TOGGLEAREA_HEIGHT       20
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 // If you want to change the number you also have to:
 // - Add new slot ids to sfxsids.hrc

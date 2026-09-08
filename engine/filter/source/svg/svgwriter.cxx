@@ -58,9 +58,9 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::text;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::xml::sax;
+using namespace ::cpo;
 using namespace ::cpo::uno;
+using namespace ::com::sun::star::xml::sax;
 
 constexpr OUString aPrefixClipPathId = u"clip_path_"_ustr;
 
@@ -2821,7 +2821,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
             }
             else
             {
-                css::uno::Reference< css::i18n::XBreakIterator > xBI( vcl::unohelper::CreateBreakIterator() );
+                cpo::uno::Reference< css::i18n::XBreakIterator > xBI( vcl::unohelper::CreateBreakIterator() );
                 const css::lang::Locale& rLocale = Application::GetSettings().GetLanguageTag().getLocale();
                 sal_Int32 nCurPos = 0, nLastPos = 0, nX = aPos.X();
 
@@ -2910,7 +2910,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
 
 namespace
 {
-void GetGraphicFromXShape(const css::uno::Reference<css::drawing::XShape>* pShape, Graphic& rGraphic)
+void GetGraphicFromXShape(const cpo::uno::Reference<css::drawing::XShape>* pShape, Graphic& rGraphic)
 {
     if (!pShape)
     {
@@ -2935,7 +2935,7 @@ void GetGraphicFromXShape(const css::uno::Reference<css::drawing::XShape>* pShap
 void SVGActionWriter::ImplWriteBmp( const Bitmap& rBmp,
                                     const Point& rPt, const Size& rSz,
                                     const Point& rSrcPt, const Size& rSrcSz,
-                                    const css::uno::Reference<css::drawing::XShape>* pShape )
+                                    const cpo::uno::Reference<css::drawing::XShape>* pShape )
 {
     if( rBmp.IsEmpty() )
         return;

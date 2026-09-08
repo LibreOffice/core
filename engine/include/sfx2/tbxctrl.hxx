@@ -36,7 +36,7 @@ class InterimItemWindow;
 class SfxToolBoxControl;
 class SfxModule;
 
-rtl::Reference<svt::ToolboxController> SfxToolBoxControllerFactory( const css::uno::Reference< css::frame::XFrame >& rFrame, ToolBox* pToolbox, ToolBoxItemId nID, const OUString& aCommandURL );
+rtl::Reference<svt::ToolboxController> SfxToolBoxControllerFactory( const cpo::uno::Reference< css::frame::XFrame >& rFrame, ToolBox* pToolbox, ToolBoxItemId nID, const OUString& aCommandURL );
 
 typedef rtl::Reference<SfxToolBoxControl> (*SfxToolBoxControlCtor)( sal_uInt16 nSlotId, ToolBoxItemId nId, ToolBox& rBox );
 
@@ -98,8 +98,8 @@ public:
     virtual void execute( sal_Int16 KeyModifier ) override;
     virtual void click() override;
     virtual void doubleClick() override;
-    virtual css::uno::Reference< css::awt::XWindow > createPopupWindow() override;
-    virtual css::uno::Reference< css::awt::XWindow > createItemWindow( const css::uno::Reference< css::awt::XWindow >& rParent ) override;
+    virtual cpo::uno::Reference< css::awt::XWindow > createPopupWindow() override;
+    virtual cpo::uno::Reference< css::awt::XWindow > createItemWindow( const cpo::uno::Reference< css::awt::XWindow >& rParent ) override;
 
 public:
                                SFX_DECL_TOOLBOX_CONTROL();
@@ -113,7 +113,7 @@ public:
 
     void                       Dispatch( const OUString& aCommand,
                                          cpo::uno::Sequence< css::beans::PropertyValue > const & aArgs );
-    static void                Dispatch( const css::uno::Reference< css::frame::XDispatchProvider >& rDispatchProvider,
+    static void                Dispatch( const cpo::uno::Reference< css::frame::XDispatchProvider >& rDispatchProvider,
                                          const OUString& rCommand,
                                          cpo::uno::Sequence< css::beans::PropertyValue > const & aArgs );
 

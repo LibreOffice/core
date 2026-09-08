@@ -23,9 +23,10 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
 
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::cpo::uno::Sequence;
 
+using namespace ::cpo;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 

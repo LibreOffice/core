@@ -135,7 +135,7 @@ public:
     void SetColor();
 };
 
-sdr::annotation::TextApiObject* getTextApiObject( const css::uno::Reference< css::office::XAnnotation >& xAnnotation );
+sdr::annotation::TextApiObject* getTextApiObject( const cpo::uno::Reference< css::office::XAnnotation >& xAnnotation );
 
 
 } // namespace sd

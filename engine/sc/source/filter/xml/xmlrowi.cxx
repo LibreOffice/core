@@ -43,6 +43,7 @@
 #include <osl/diagnose.h>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace xmloff::token;
 
 ScXMLTableRowContext::ScXMLTableRowContext( ScXMLImport& rImport,

@@ -39,7 +39,7 @@ public:
 
     virtual ~BlowfishCFB8CipherContext() override;
 
-    static css::uno::Reference< css::xml::crypto::XCipherContext >
+    static cpo::uno::Reference< css::xml::crypto::XCipherContext >
         Create( const cpo::uno::Sequence< sal_Int8 >& aDerivedKey, const cpo::uno::Sequence< sal_Int8 >& aInitVector, bool bEncrypt );
 
     virtual cpo::uno::Sequence< ::sal_Int8 > convertWithCipherContext( const cpo::uno::Sequence< ::sal_Int8 >& aData ) override;

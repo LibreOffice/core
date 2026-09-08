@@ -23,13 +23,13 @@ public:
     explicit XMLSignature_NssImpl();
 
     //Methods from XXMLSignature
-    virtual css::uno::Reference<css::xml::crypto::XXMLSignatureTemplate> SAL_CALL generate(
-        const css::uno::Reference<css::xml::crypto::XXMLSignatureTemplate>& aTemplate,
-        const css::uno::Reference<css::xml::crypto::XSecurityEnvironment>& aEnvironment) override;
+    virtual cpo::uno::Reference<css::xml::crypto::XXMLSignatureTemplate> SAL_CALL generate(
+        const cpo::uno::Reference<css::xml::crypto::XXMLSignatureTemplate>& aTemplate,
+        const cpo::uno::Reference<css::xml::crypto::XSecurityEnvironment>& aEnvironment) override;
 
-    virtual css::uno::Reference<css::xml::crypto::XXMLSignatureTemplate> SAL_CALL
-    validate(const css::uno::Reference<css::xml::crypto::XXMLSignatureTemplate>& aTemplate,
-             const css::uno::Reference<css::xml::crypto::XXMLSecurityContext>& aContext) override;
+    virtual cpo::uno::Reference<css::xml::crypto::XXMLSignatureTemplate> SAL_CALL
+    validate(const cpo::uno::Reference<css::xml::crypto::XXMLSignatureTemplate>& aTemplate,
+             const cpo::uno::Reference<css::xml::crypto::XXMLSecurityContext>& aContext) override;
 
     //Methods from XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

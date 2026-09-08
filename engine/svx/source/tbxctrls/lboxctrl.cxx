@@ -36,7 +36,7 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
@@ -226,7 +226,7 @@ void SvxUndoRedoControl::Do(sal_Int16 nCount)
     }
 }
 
-SvxUndoRedoControl::SvxUndoRedoControl(const css::uno::Reference<cpo::uno::XComponentContext>& rContext)
+SvxUndoRedoControl::SvxUndoRedoControl(const cpo::uno::Reference<cpo::uno::XComponentContext>& rContext)
     : PopupWindowController(rContext, nullptr, OUString())
 {
 }

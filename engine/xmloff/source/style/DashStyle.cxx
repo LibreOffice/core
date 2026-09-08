@@ -34,6 +34,7 @@
 #include <sal/log.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace ::xmloff::token;
 
 SvXMLEnumMapEntry<drawing::DashStyle> const pXML_DashStyle_Enum[] =

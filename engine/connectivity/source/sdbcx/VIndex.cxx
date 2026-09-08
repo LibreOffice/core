@@ -31,7 +31,7 @@ using namespace ::dbtools;
 using namespace ::connectivity::sdbcx;
 using namespace ::cppu;
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::container;
@@ -166,7 +166,7 @@ Reference< XPropertySet > OIndex::createDataDescriptor(  )
     return this;
 }
 
-css::uno::Reference< css::beans::XPropertySetInfo > OIndex::getPropertySetInfo(  )
+cpo::uno::Reference< css::beans::XPropertySetInfo > OIndex::getPropertySetInfo(  )
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }

@@ -32,6 +32,7 @@
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 static cpo::uno::Any
 getDocument( uno::Reference< cpo::uno::XComponentContext > const & xContext, const rtl::Reference< SwXTextDocument > &xDoc, const cpo::uno::Any& aApplication )

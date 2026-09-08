@@ -37,7 +37,7 @@ namespace connectivity::file
             @param  _xRow
                 The current row from the resultset given to fillNames.
         */
-        virtual OUString buildName(  const css::uno::Reference< css::sdbc::XRow >& _xRow) override;
+        virtual OUString buildName(  const cpo::uno::Reference< css::sdbc::XRow >& _xRow) override;
 
     public:
         virtual void refreshTables() override;

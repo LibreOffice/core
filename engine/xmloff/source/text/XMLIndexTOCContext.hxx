@@ -20,7 +20,7 @@
 #pragma once
 
 #include <xmloff/xmlictxt.hxx>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 
 
 namespace com::sun::star {
@@ -53,7 +53,7 @@ class XMLIndexBodyContext;
 class XMLIndexTOCContext final : public SvXMLImportContext
 {
     /** XPropertySet of the index */
-    css::uno::Reference<css::beans::XPropertySet> xTOCPropertySet;
+    cpo::uno::Reference<css::beans::XPropertySet> xTOCPropertySet;
 
     enum IndexTypeEnum eIndexType;
 
@@ -69,13 +69,13 @@ public:
 
     virtual void startFastElement(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     virtual void endFastElement(sal_Int32 nElement) override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

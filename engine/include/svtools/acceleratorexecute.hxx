@@ -69,18 +69,18 @@ class SVT_DLLPUBLIC AcceleratorExecute final
         std::mutex m_aLock;
 
         /** TODO document me */
-        css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+        cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
         /** TODO document me */
-        css::uno::Reference< css::util::XURLTransformer > m_xURLParser;
+        cpo::uno::Reference< css::util::XURLTransformer > m_xURLParser;
 
         /** TODO document me */
-        css::uno::Reference< css::frame::XDispatchProvider > m_xDispatcher;
+        cpo::uno::Reference< css::frame::XDispatchProvider > m_xDispatcher;
 
         /** TODO document me */
-        css::uno::Reference< css::ui::XAcceleratorConfiguration > m_xGlobalCfg;
-        css::uno::Reference< css::ui::XAcceleratorConfiguration > m_xModuleCfg;
-        css::uno::Reference< css::ui::XAcceleratorConfiguration > m_xDocCfg;
+        cpo::uno::Reference< css::ui::XAcceleratorConfiguration > m_xGlobalCfg;
+        cpo::uno::Reference< css::ui::XAcceleratorConfiguration > m_xModuleCfg;
+        cpo::uno::Reference< css::ui::XAcceleratorConfiguration > m_xDocCfg;
     // interface
     public:
 
@@ -138,8 +138,8 @@ class SVT_DLLPUBLIC AcceleratorExecute final
                     is used only. Further the global Desktop instance is
                     used for dispatch.
          */
-        void init(const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
-                          const css::uno::Reference< css::frame::XFrame >&              xEnv );
+        void init(const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+                          const cpo::uno::Reference< css::frame::XFrame >&              xEnv );
 
 
         /** @short  trigger this accelerator.
@@ -173,14 +173,14 @@ class SVT_DLLPUBLIC AcceleratorExecute final
 
 
         /** TODO document me */
-        static css::uno::Reference< css::ui::XAcceleratorConfiguration > st_openModuleConfig(const css::uno::Reference< cpo::uno::XComponentContext >& rxContext ,
-                                                                                              const css::uno::Reference< css::frame::XFrame >&              xFrame);
+        static cpo::uno::Reference< css::ui::XAcceleratorConfiguration > st_openModuleConfig(const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext ,
+                                                                                              const cpo::uno::Reference< css::frame::XFrame >&              xFrame);
 
-        static css::uno::Reference<css::ui::XAcceleratorConfiguration> kit_createNewAcceleratorConfiguration(const css::uno::Reference< cpo::uno::XComponentContext >& rxContext, const OUString& sModule);
-        void kit_setModuleConfig(const css::uno::Reference<css::ui::XAcceleratorConfiguration>& acceleratorConfig);
+        static cpo::uno::Reference<css::ui::XAcceleratorConfiguration> kit_createNewAcceleratorConfiguration(const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext, const OUString& sModule);
+        void kit_setModuleConfig(const cpo::uno::Reference<css::ui::XAcceleratorConfiguration>& acceleratorConfig);
 
         /** TODO document me */
-        static css::uno::Reference< css::ui::XAcceleratorConfiguration > st_openDocConfig(const css::uno::Reference< css::frame::XModel >& xModel);
+        static cpo::uno::Reference< css::ui::XAcceleratorConfiguration > st_openDocConfig(const cpo::uno::Reference< css::frame::XModel >& xModel);
 
 
     // internal
@@ -200,7 +200,7 @@ class SVT_DLLPUBLIC AcceleratorExecute final
 
 
         /** TODO document me */
-        SVT_DLLPRIVATE css::uno::Reference< css::util::XURLTransformer > impl_ts_getURLParser();
+        SVT_DLLPRIVATE cpo::uno::Reference< css::util::XURLTransformer > impl_ts_getURLParser();
 };
 
 } // namespace svt

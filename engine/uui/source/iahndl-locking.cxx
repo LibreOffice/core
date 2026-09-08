@@ -52,6 +52,7 @@
 #define UUI_DOC_OWN_SAVE_LOCK   3
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 namespace {
 

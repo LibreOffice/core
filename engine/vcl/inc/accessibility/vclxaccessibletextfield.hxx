@@ -33,14 +33,14 @@ class VCLXAccessibleTextField final : public VCLXAccessibleTextComponent
 {
 public:
     VCLXAccessibleTextField(ListBox* pListBox,
-                            const css::uno::Reference<css::accessibility::XAccessible>& _xParent);
+                            const cpo::uno::Reference<css::accessibility::XAccessible>& _xParent);
 
     // XAccessibleContext
     sal_Int64 getAccessibleChildCount() override;
-    css::uno::Reference< css::accessibility::XAccessible>
+    cpo::uno::Reference< css::accessibility::XAccessible>
         getAccessibleChild (sal_Int64 i) override;
     sal_Int16 getAccessibleRole() override;
-    css::uno::Reference< css::accessibility::XAccessible >
+    cpo::uno::Reference< css::accessibility::XAccessible >
         getAccessibleParent(  ) override;
 
     // XServiceInfo
@@ -60,7 +60,7 @@ private:
     /** We need to save the accessible parent to return it in getAccessibleParent(),
         because this method of the base class returns the wrong parent.
     */
-    css::uno::Reference< css::accessibility::XAccessible >  m_xParent;
+    cpo::uno::Reference< css::accessibility::XAccessible >  m_xParent;
 };
 
 

@@ -146,8 +146,8 @@
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
-#include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.h>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/xml/sax/XFastContextHandler.hpp>
 #include <comphelper/comphelperdllapi.h>

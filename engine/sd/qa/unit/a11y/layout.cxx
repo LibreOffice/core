@@ -16,6 +16,7 @@
 #include <test/a11y/accessibletestbase.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, TestImpressDefaultStructure)
 {

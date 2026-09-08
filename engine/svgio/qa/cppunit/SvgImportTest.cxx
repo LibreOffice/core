@@ -27,7 +27,7 @@
 #include <string_view>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace css::io;
 using namespace css::graphic;
 using namespace ::cpo::uno;
@@ -97,8 +97,8 @@ namespace
 bool arePrimitive2DSequencesEqual(const Primitive2DSequence& rA, const Primitive2DSequence& rB)
 {
     auto rv = std::mismatch(rA.begin(), rA.end(), rB.begin(), rB.end(),
-        [](const css::uno::Reference<css::graphic::XPrimitive2D>& a,
-           const css::uno::Reference<css::graphic::XPrimitive2D>& b)
+        [](const cpo::uno::Reference<css::graphic::XPrimitive2D>& a,
+           const cpo::uno::Reference<css::graphic::XPrimitive2D>& b)
         {
             return drawinglayer::primitive2d::arePrimitive2DReferencesEqual(a, b);
         });
@@ -1366,7 +1366,7 @@ CPPUNIT_TEST_FIXTURE(Test, testBehaviourWhenWidthAndHeightIsOrIsNotSet)
         basegfx::B2DRange aRange;
         cpo::uno::Sequence<beans::PropertyValue> aViewParameters;
 
-        for (css::uno::Reference<css::graphic::XPrimitive2D> const & xReference : aSequence)
+        for (cpo::uno::Reference<css::graphic::XPrimitive2D> const & xReference : aSequence)
         {
             if (xReference.is())
             {
@@ -1391,7 +1391,7 @@ CPPUNIT_TEST_FIXTURE(Test, testBehaviourWhenWidthAndHeightIsOrIsNotSet)
         basegfx::B2DRange aRange;
         cpo::uno::Sequence<beans::PropertyValue> aViewParameters;
 
-        for (css::uno::Reference<css::graphic::XPrimitive2D> const & xReference : aSequence)
+        for (cpo::uno::Reference<css::graphic::XPrimitive2D> const & xReference : aSequence)
         {
             if (xReference.is())
             {

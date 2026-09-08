@@ -25,7 +25,7 @@
 
 namespace writerfilter::dmapper
 {
-std::string XTextRangeToString(css::uno::Reference<css::text::XTextRange> const& textRange);
+std::string XTextRangeToString(cpo::uno::Reference<css::text::XTextRange> const& textRange);
 void resolveSprmProps(Properties& rHandler, Sprm& rSprm);
 }
 

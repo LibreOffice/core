@@ -21,7 +21,7 @@
 
 #include "sddllapi.h"
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <utility>
 
 namespace com::sun::star::animations { class XAnimationNode; }
@@ -34,11 +34,11 @@ namespace sd
 */
 struct AfterEffectNode
 {
-    css::uno::Reference< css::animations::XAnimationNode > mxNode;
-    css::uno::Reference< css::animations::XAnimationNode > mxMaster;
+    cpo::uno::Reference< css::animations::XAnimationNode > mxNode;
+    cpo::uno::Reference< css::animations::XAnimationNode > mxMaster;
     bool mbOnNextEffect;
 
-    AfterEffectNode( css::uno::Reference< css::animations::XAnimationNode > xNode, css::uno::Reference< css::animations::XAnimationNode > xMaster, bool bOnNextEffect )
+    AfterEffectNode( cpo::uno::Reference< css::animations::XAnimationNode > xNode, cpo::uno::Reference< css::animations::XAnimationNode > xMaster, bool bOnNextEffect )
         : mxNode(std::move( xNode )), mxMaster(std::move( xMaster )), mbOnNextEffect( bOnNextEffect ) {}
 };
 

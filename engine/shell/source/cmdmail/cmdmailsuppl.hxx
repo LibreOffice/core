@@ -39,24 +39,24 @@ class CmdMailSuppl :
         css::lang::XServiceInfo >
 {
 
-    css::uno::Reference< css::lang::XMultiServiceFactory > m_xConfigurationProvider;
+    cpo::uno::Reference< css::lang::XMultiServiceFactory > m_xConfigurationProvider;
 
 public:
-    explicit CmdMailSuppl( const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
+    explicit CmdMailSuppl( const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext );
 
 
     // XSimpleMailClientSupplier
 
 
-    virtual css::uno::Reference< css::system::XSimpleMailClient > SAL_CALL querySimpleMailClient(  ) override;
+    virtual cpo::uno::Reference< css::system::XSimpleMailClient > SAL_CALL querySimpleMailClient(  ) override;
 
 
     // XSimpleMailClient
 
 
-    virtual css::uno::Reference< css::system::XSimpleMailMessage > SAL_CALL createSimpleMailMessage(  ) override;
+    virtual cpo::uno::Reference< css::system::XSimpleMailMessage > SAL_CALL createSimpleMailMessage(  ) override;
 
-    virtual void SAL_CALL sendSimpleMailMessage( const css::uno::Reference< css::system::XSimpleMailMessage >& xSimpleMailMessage, sal_Int32 aFlag ) override;
+    virtual void SAL_CALL sendSimpleMailMessage( const cpo::uno::Reference< css::system::XSimpleMailMessage >& xSimpleMailMessage, sal_Int32 aFlag ) override;
 
 
     // XServiceInfo

@@ -24,7 +24,7 @@
 #include <tools/long.hxx>
 
 class ScDocument;
-namespace com::sun::star::uno { template <typename > class Reference; }
+namespace cpo::uno { template <typename > class Reference; }
 namespace com::sun::star::sdbc { class XRow; }
 
 class ScDatabaseDocUtil
@@ -41,7 +41,7 @@ public:
         StrData();
     };
     static bool PutData( ScDocument& rDoc, SCCOL nCol, SCROW nRow, SCTAB nTab,
-                        const css::uno::Reference< css::sdbc::XRow>& xRow,
+                        const cpo::uno::Reference< css::sdbc::XRow>& xRow,
                         sal_Int32 nRowPos,
                         tools::Long nType, bool bCurrency, StrData* pStrData = nullptr );
 };

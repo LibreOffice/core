@@ -21,6 +21,7 @@
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 // Helper function to access the content controls
 // @param rIndex

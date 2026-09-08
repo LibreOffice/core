@@ -19,7 +19,7 @@
 #ifndef INCLUDED_VBAHELPER_VBATEXTFRAME_HXX
 #define INCLUDED_VBAHELPER_VBATEXTFRAME_HXX
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <ooo/vba/msforms/XTextFrame.hpp>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -42,8 +42,8 @@ typedef InheritedHelperInterfaceWeakImpl< ov::msforms::XTextFrame > VbaTextFrame
 class VBAHELPER_DLLPUBLIC VbaTextFrame : public VbaTextFrame_BASE
 {
 protected:
-    css::uno::Reference< css::drawing::XShape > m_xShape;
-    css::uno::Reference< css::beans::XPropertySet > m_xPropertySet;
+    cpo::uno::Reference< css::drawing::XShape > m_xShape;
+    cpo::uno::Reference< css::beans::XPropertySet > m_xPropertySet;
 protected:
     virtual OUString getServiceImplName() override;
     virtual cpo::uno::Sequence<OUString> getServiceNames() override;
@@ -51,7 +51,7 @@ protected:
     sal_Int32 getMargin( const OUString& sMarginType );
     void setMargin( const OUString& sMarginType, float fMargin );
 public:
-    VbaTextFrame( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext , css::uno::Reference< css::drawing::XShape > xShape);
+    VbaTextFrame( const cpo::uno::Reference< ov::XHelperInterface >& xParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext , cpo::uno::Reference< css::drawing::XShape > xShape);
     // Attributes
     virtual bool getAutoSize() override;
     virtual void setAutoSize( bool _autosize ) override;

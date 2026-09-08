@@ -41,7 +41,7 @@ XMLStylesContext::XMLStylesContext(XMLImport& rImport, StyleType eType)
 }
 
 rtl::Reference<XMLImportContext> XMLStylesContext::CreateChildContext(
-    const OUString& rName, const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
+    const OUString& rName, const cpo::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
     if (rName == "style:style" || rName == "style:page-layout" || rName == "style:master-page")
         return new XMLStyleContext(GetImport(), *this);
@@ -102,11 +102,11 @@ public:
     XMLFontFaceContext(XMLImport& rImport);
     void SAL_CALL
     startElement(const OUString& rName,
-                 const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
+                 const cpo::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
 
     rtl::Reference<XMLImportContext>
     CreateChildContext(const OUString& rName,
-                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
+                       const cpo::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
 
     OUString const& GetName() const { return maName; }
 
@@ -122,7 +122,7 @@ public:
 
     rtl::Reference<XMLImportContext>
     CreateChildContext(const OUString& rName,
-                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
+                       const cpo::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
 
 private:
     XMLFontFaceContext& mrFontFace;
@@ -135,12 +135,12 @@ public:
     XMLFontFaceUriContext(XMLImport& rImport, XMLFontFaceContext const& rFontFace);
     void SAL_CALL
     startElement(const OUString& rName,
-                 const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
+                 const cpo::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
     void SAL_CALL endElement(const OUString& rName) override;
 
     rtl::Reference<XMLImportContext>
     CreateChildContext(const OUString& rName,
-                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
+                       const cpo::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
 
     librevenge::RVNGPropertyList& GetPropertyList() { return maPropertyList; }
 
@@ -156,7 +156,7 @@ public:
     XMLFontFaceFormatContext(XMLImport& rImport, XMLFontFaceUriContext& rFontFaceUri);
     void SAL_CALL
     startElement(const OUString& rName,
-                 const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
+                 const cpo::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
 
 private:
     XMLFontFaceUriContext& mrFontFaceUri;
@@ -171,7 +171,7 @@ XMLFontFaceFormatContext::XMLFontFaceFormatContext(XMLImport& rImport,
 }
 
 void XMLFontFaceFormatContext::startElement(
-    const OUString& /*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs)
+    const OUString& /*rName*/, const cpo::uno::Reference<css::xml::sax::XAttributeList>& xAttribs)
 {
     for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
     {
@@ -195,7 +195,7 @@ XMLFontFaceUriContext::XMLFontFaceUriContext(XMLImport& rImport,
 }
 
 void XMLFontFaceUriContext::startElement(
-    const OUString& /*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs)
+    const OUString& /*rName*/, const cpo::uno::Reference<css::xml::sax::XAttributeList>& xAttribs)
 {
     for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
     {
@@ -222,7 +222,7 @@ void XMLFontFaceUriContext::endElement(const OUString& /*rName*/)
 }
 
 rtl::Reference<XMLImportContext> XMLFontFaceUriContext::CreateChildContext(
-    const OUString& rName, const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
+    const OUString& rName, const cpo::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
     if (rName == "office:binary-data")
     {
@@ -243,7 +243,7 @@ XMLFontFaceSrcContext::XMLFontFaceSrcContext(XMLImport& rImport, XMLFontFaceCont
 }
 
 rtl::Reference<XMLImportContext> XMLFontFaceSrcContext::CreateChildContext(
-    const OUString& rName, const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
+    const OUString& rName, const cpo::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
     if (rName == "svg:font-face-uri")
         return new XMLFontFaceUriContext(GetImport(), mrFontFace);
@@ -257,7 +257,7 @@ XMLFontFaceContext::XMLFontFaceContext(XMLImport& rImport)
 }
 
 void XMLFontFaceContext::startElement(
-    const OUString& /*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs)
+    const OUString& /*rName*/, const cpo::uno::Reference<css::xml::sax::XAttributeList>& xAttribs)
 {
     for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
     {
@@ -269,7 +269,7 @@ void XMLFontFaceContext::startElement(
 }
 
 rtl::Reference<XMLImportContext> XMLFontFaceContext::CreateChildContext(
-    const OUString& rName, const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
+    const OUString& rName, const cpo::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
     if (rName == "svg:font-face-src")
         return new XMLFontFaceSrcContext(GetImport(), *this);
@@ -283,7 +283,7 @@ XMLFontFaceDeclsContext::XMLFontFaceDeclsContext(XMLImport& rImport)
 }
 
 rtl::Reference<XMLImportContext> XMLFontFaceDeclsContext::CreateChildContext(
-    const OUString& rName, const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
+    const OUString& rName, const cpo::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
     if (rName == "style:font-face")
         return new XMLFontFaceContext(GetImport());

@@ -20,7 +20,7 @@
 #include "xmlimp.hxx"
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::text;
 
 namespace {
@@ -33,9 +33,9 @@ public:
 
     SwXMLBodyContentContext_Impl( SwXMLImport& rImport );
 
-    css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     // The body element's text:global attribute can be ignored, because
     // we must have the correct object shell already.
@@ -49,9 +49,9 @@ SwXMLBodyContentContext_Impl::SwXMLBodyContentContext_Impl( SwXMLImport& rImport
 {
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SwXMLBodyContentContext_Impl::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SwXMLBodyContentContext_Impl::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     return GetSwImport().GetTextImport()->CreateTextChildContext(
             GetImport(), nElement, xAttrList,

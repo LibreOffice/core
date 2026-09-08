@@ -29,7 +29,7 @@
 namespace func_provider
 {
 
-namespace uno = css::uno;
+namespace uno = cpo::uno;
 namespace ucb = css::ucb;
 namespace lang = css::lang;
 namespace uri = css::uri;

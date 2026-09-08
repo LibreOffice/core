@@ -31,11 +31,11 @@ class OImageButtonModel
 {
 public:
     OImageButtonModel(
-        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
+        const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     OImageButtonModel(
         const OImageButtonModel* _pOriginal,
-        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
+        const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     virtual ~OImageButtonModel() override;
 
@@ -47,8 +47,8 @@ public:
 
 // css::io::XPersistObject
     virtual OUString getServiceName() override;
-    virtual void write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
-    virtual void read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
+    virtual void write(const cpo::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
+    virtual void read(const cpo::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
 
     // OControlModel's property handling
     virtual void describeFixedProperties(
@@ -56,7 +56,7 @@ public:
     ) const override;
 
 protected:
-    virtual css::uno::Reference< css::util::XCloneable > createClone(  ) override;
+    virtual cpo::uno::Reference< css::util::XCloneable > createClone(  ) override;
 };
 
 typedef ::cppu::ImplHelper1< css::awt::XMouseListener> OImageButtonControl_BASE;
@@ -68,7 +68,7 @@ protected:
     virtual cpo::uno::Sequence< cpo::uno::Type> _getTypes() override;
 
 public:
-    explicit OImageButtonControl(const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory);
+    explicit OImageButtonControl(const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory);
 
     // XServiceInfo
     OUString getImplementationName() override

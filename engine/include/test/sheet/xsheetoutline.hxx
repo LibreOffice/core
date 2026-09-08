@@ -10,7 +10,7 @@
 #ifndef INCLUDED_TEST_SHEET_XSHEETOUTLINE_HXX
 #define INCLUDED_TEST_SHEET_XSHEETOUTLINE_HXX
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <test/testdllapi.hxx>
 
 namespace apitest
@@ -18,7 +18,7 @@ namespace apitest
 class OOO_DLLPUBLIC_TEST XSheetOutline
 {
 public:
-    virtual css::uno::Reference<cpo::uno::XInterface> init() = 0;
+    virtual cpo::uno::Reference<cpo::uno::XInterface> init() = 0;
 
     // XSheetOutline
     void testHideDetail();

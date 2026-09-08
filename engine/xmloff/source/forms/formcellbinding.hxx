@@ -35,9 +35,9 @@ namespace xmloff
     */
     class FormCellBindingHelper
     {
-        css::uno::Reference< css::beans::XPropertySet >
+        cpo::uno::Reference< css::beans::XPropertySet >
                     m_xControlModel;    // the model we work for
-        css::uno::Reference< css::sheet::XSpreadsheetDocument >
+        cpo::uno::Reference< css::sheet::XSpreadsheetDocument >
                     m_xDocument;        // the document where the model lives
 
     public:
@@ -46,7 +46,7 @@ namespace xmloff
             this model, since then no of its functionality will be available.</p>
         */
         static  bool    livesInSpreadsheetDocument(
-                                const css::uno::Reference< css::beans::XPropertySet >& _rxControlModel
+                                const cpo::uno::Reference< css::beans::XPropertySet >& _rxControlModel
                             );
 
         /** ctor
@@ -59,15 +59,15 @@ namespace xmloff
                 model.
         */
         FormCellBindingHelper(
-            const css::uno::Reference< css::beans::XPropertySet >& _rxControlModel,
-            const css::uno::Reference< css::frame::XModel >& _rxDocument
+            const cpo::uno::Reference< css::beans::XPropertySet >& _rxControlModel,
+            const cpo::uno::Reference< css::frame::XModel >& _rxDocument
         );
 
         /** gets a cell binding for the given address
             @precond
                 isCellBindingAllowed returns <TRUE/>
         */
-        css::uno::Reference< css::form::binding::XValueBinding >
+        cpo::uno::Reference< css::form::binding::XValueBinding >
                         createCellBindingFromStringAddress(
                             const OUString& _rAddress,
                             bool _bUseIntegerBinding
@@ -75,7 +75,7 @@ namespace xmloff
 
         /** gets a cell range list source binding for the given address
         */
-        css::uno::Reference< css::form::binding::XListEntrySource >
+        cpo::uno::Reference< css::form::binding::XListEntrySource >
                         createCellListSourceFromStringAddress( const OUString& _rAddress ) const;
 
         /** creates a string representation for the given value binding's address
@@ -88,7 +88,7 @@ namespace xmloff
             @see isCellBinding
         */
         OUString getStringAddressFromCellBinding(
-                            const css::uno::Reference< css::form::binding::XValueBinding >& _rxBinding
+                            const cpo::uno::Reference< css::form::binding::XValueBinding >& _rxBinding
                         ) const;
 
         /** creates a string representation for the given list source's range address
@@ -102,17 +102,17 @@ namespace xmloff
             @see isCellRangeListSource
         */
         OUString getStringAddressFromCellListSource(
-                            const css::uno::Reference< css::form::binding::XListEntrySource >& _rxSource
+                            const cpo::uno::Reference< css::form::binding::XListEntrySource >& _rxSource
                         ) const;
 
         /** returns the current binding of our control model, if any.
         */
-        css::uno::Reference< css::form::binding::XValueBinding >
+        cpo::uno::Reference< css::form::binding::XValueBinding >
                         getCurrentBinding( ) const;
 
         /** returns the current external list source of the control model, if any
         */
-        css::uno::Reference< css::form::binding::XListEntrySource >
+        cpo::uno::Reference< css::form::binding::XListEntrySource >
                         getCurrentListSource( ) const;
 
         /** sets a new binding for our control model
@@ -121,7 +121,7 @@ namespace xmloff
                 returning <TRUE/>)
         */
         void            setBinding(
-                            const css::uno::Reference< css::form::binding::XValueBinding >& _rxBinding
+                            const cpo::uno::Reference< css::form::binding::XValueBinding >& _rxBinding
                         );
 
         /** sets a list source for our control model
@@ -130,7 +130,7 @@ namespace xmloff
                 returning <TRUE/>)
         */
         void            setListSource(
-                            const css::uno::Reference< css::form::binding::XListEntrySource >& _rxSource
+                            const cpo::uno::Reference< css::form::binding::XListEntrySource >& _rxSource
                         );
 
         /** checks whether it's possible to bind the control model to a spreadsheet cell
@@ -140,7 +140,7 @@ namespace xmloff
         /** checks whether within the given document, it's possible to bind control models to spreadsheet cells
         */
         static bool     isCellBindingAllowed(
-                            const css::uno::Reference< css::frame::XModel >& _rxDocument
+                            const cpo::uno::Reference< css::frame::XModel >& _rxDocument
                         );
 
         /** checks whether it's possible to bind the control model to a range of spreadsheet cells
@@ -152,26 +152,26 @@ namespace xmloff
             spreadsheet cells supplying the list entries
         */
         static bool     isListCellRangeAllowed(
-                            const css::uno::Reference< css::frame::XModel >& _rxDocument
+                            const cpo::uno::Reference< css::frame::XModel >& _rxDocument
                         );
 
         /** checks whether a given binding is a spreadsheet cell binding
         */
         static bool     isCellBinding(
-                            const css::uno::Reference< css::form::binding::XValueBinding >& _rxBinding
+                            const cpo::uno::Reference< css::form::binding::XValueBinding >& _rxBinding
                         );
 
         /** checks whether a given binding is a spreadsheet cell binding, exchanging
             integer values
         */
         static bool     isCellIntegerBinding(
-                            const css::uno::Reference< css::form::binding::XValueBinding >& _rxBinding
+                            const cpo::uno::Reference< css::form::binding::XValueBinding >& _rxBinding
                         );
 
         /** checks whether a given list source is a spreadsheet cell list source
         */
         static bool    isCellRangeListSource(
-                            const css::uno::Reference< css::form::binding::XListEntrySource >& _rxSource
+                            const cpo::uno::Reference< css::form::binding::XListEntrySource >& _rxSource
                         );
 
     private:
@@ -198,14 +198,14 @@ namespace xmloff
             the given service
         */
         static bool     isSpreadsheetDocumentWhichSupplies(
-                            const css::uno::Reference< css::sheet::XSpreadsheetDocument >& _rxDocument,
+                            const cpo::uno::Reference< css::sheet::XSpreadsheetDocument >& _rxDocument,
                             const OUString& _rService
                         );
 
         /** checks whether a given component supports a given service
         */
         static bool     doesComponentSupport(
-                            const css::uno::Reference< cpo::uno::XInterface >& _rxComponent,
+                            const cpo::uno::Reference< cpo::uno::XInterface >& _rxComponent,
                             const OUString& _rService
                         );
 
@@ -219,7 +219,7 @@ namespace xmloff
                 the value of the instantiation argument. Not evaluated if <arg>_rArgumentName</arg>
                 is empty.
         */
-        css::uno::Reference< cpo::uno::XInterface >
+        cpo::uno::Reference< cpo::uno::XInterface >
                         createDocumentDependentInstance(
                             const OUString& _rService,
                             const OUString& _rArgumentName,

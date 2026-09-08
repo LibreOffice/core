@@ -22,6 +22,7 @@
 #include "vbafiledialogitems.hxx"
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace ::ooo::vba;
 
 namespace {
@@ -48,8 +49,8 @@ public:
 }
 
 ScVbaFileDialogSelectedItems::ScVbaFileDialogSelectedItems(
-        const css::uno::Reference< ov::XHelperInterface >& xParent
-       ,const css::uno::Reference< cpo::uno::XComponentContext >& xContext
+        const cpo::uno::Reference< ov::XHelperInterface >& xParent
+       ,const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext
        ,std::vector< OUString >&& rItems)
     : FileDialogSelectedItems_BASE( xParent, xContext, uno::Reference< container::XIndexAccess>() )
     , m_sItems(std::move(rItems)) {}

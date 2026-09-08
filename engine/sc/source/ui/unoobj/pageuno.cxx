@@ -23,6 +23,7 @@
 #include <shapeuno.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 ScPageObj::ScPageObj( SdrPage* pPage ) :
     SvxDrawPage( pPage )

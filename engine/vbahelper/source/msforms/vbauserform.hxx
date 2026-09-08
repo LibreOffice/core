@@ -32,16 +32,16 @@ typedef cppu::ImplInheritanceHelper< ScVbaControl, ov::msforms::XUserForm > ScVb
 class ScVbaUserForm : public ScVbaUserForm_BASE
 {
 private:
-    css::uno::Reference< css::awt::XDialog > m_xDialog;
+    cpo::uno::Reference< css::awt::XDialog > m_xDialog;
     bool mbDispose;
     OUString m_sLibName;
 protected:
 public:
     /// @throws css::lang::IllegalArgumentException
     /// @throws cpo::uno::RuntimeException
-    ScVbaUserForm( cpo::uno::Sequence< cpo::uno::Any > const& aArgs, css::uno::Reference< cpo::uno::XComponentContext >const& xContext );
+    ScVbaUserForm( cpo::uno::Sequence< cpo::uno::Any > const& aArgs, cpo::uno::Reference< cpo::uno::XComponentContext >const& xContext );
     virtual ~ScVbaUserForm() override;
-    static css::uno::Reference< css::awt::XControl > nestedSearch( const OUString& aPropertyName, css::uno::Reference< css::awt::XControlContainer > const & xContainer );
+    static cpo::uno::Reference< css::awt::XControl > nestedSearch( const OUString& aPropertyName, cpo::uno::Reference< css::awt::XControlContainer > const & xContainer );
     // XUserForm
     virtual void RePaint(  ) override;
     virtual void Show(  ) override;
@@ -59,7 +59,7 @@ public:
     virtual bool getVisible() override;
     virtual void setVisible( bool bVis ) override;
     // XIntrospection
-    virtual css::uno::Reference< css::beans::XIntrospectionAccess > getIntrospection(  ) override;
+    virtual cpo::uno::Reference< css::beans::XIntrospectionAccess > getIntrospection(  ) override;
     virtual cpo::uno::Any invoke( const OUString& aFunctionName, const cpo::uno::Sequence< cpo::uno::Any >& aParams, cpo::uno::Sequence< ::sal_Int16 >& aOutParamIndex, cpo::uno::Sequence< cpo::uno::Any >& aOutParam ) override;
     virtual bool hasMethod( const OUString& aName ) override;
     virtual bool hasProperty( const OUString& aName ) override;

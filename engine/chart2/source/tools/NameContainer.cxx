@@ -25,6 +25,7 @@
 #include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using ::cpo::uno::Sequence;
 using ::cpo::uno::Any;
 

@@ -54,9 +54,9 @@ public:
 
     virtual ~ScXMLExternalRefRowsContext() override;
 
-    virtual css::uno::Reference< XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual cpo::uno::Reference< XFastContextHandler > SAL_CALL createFastChildContext(
                         sal_Int32 nElement,
-                        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+                        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
 private:
     ScXMLExternalTabData&   mrExternalRefInfo;
@@ -73,9 +73,9 @@ public:
 
     virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
 
-    virtual css::uno::Reference< XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual cpo::uno::Reference< XFastContextHandler > SAL_CALL createFastChildContext(
                                         sal_Int32 nElement,
-                                        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+                                        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
 private:
     ScXMLImport&            mrScImport;
@@ -94,9 +94,9 @@ public:
 
     virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
 
-    virtual css::uno::Reference< XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual cpo::uno::Reference< XFastContextHandler > SAL_CALL createFastChildContext(
                         sal_Int32 nElement,
-                        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+                        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     void SetCellString(const OUString& rStr);
 

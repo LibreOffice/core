@@ -39,18 +39,18 @@ namespace connectivity
     class OPooledConnection : public ::cppu::BaseMutex
                              ,public OPooledConnection_Base
     {
-        css::uno::Reference< css::sdbc::XConnection >             m_xRealConnection;  // the connection from driver
+        cpo::uno::Reference< css::sdbc::XConnection >             m_xRealConnection;  // the connection from driver
         rtl::Reference< OConnectionWeakWrapper >                  m_xComponent;       // the connection which wraps the real connection
-        css::uno::Reference< css::reflection::XProxyFactory >     m_xProxyFactory;
+        cpo::uno::Reference< css::reflection::XProxyFactory >     m_xProxyFactory;
     public:
         // OComponentHelper
         virtual void disposing() override;
 
-        OPooledConnection(const css::uno::Reference< css::sdbc::XConnection >& _xConnection,
-                          const css::uno::Reference< css::reflection::XProxyFactory >& _rxProxyFactory);
+        OPooledConnection(const cpo::uno::Reference< css::sdbc::XConnection >& _xConnection,
+                          const cpo::uno::Reference< css::reflection::XProxyFactory >& _rxProxyFactory);
 
         //XPooledConnection
-        virtual css::uno::Reference< css::sdbc::XConnection > getConnection(  ) override;
+        virtual cpo::uno::Reference< css::sdbc::XConnection > getConnection(  ) override;
 
         // XEventListener
         virtual void disposing( const css::lang::EventObject& Source ) override;

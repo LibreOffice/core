@@ -29,11 +29,11 @@ namespace dbaccess
     // this set is used when we have a bookmarkable set from the driver
     class WrappedResultSet : public OCacheSet
     {
-        css::uno::Reference< css::sdbcx::XRowLocate>      m_xRowLocate;
-        css::uno::Reference< css::sdbc::XResultSetUpdate> m_xUpd;
-        css::uno::Reference< css::sdbc::XRowUpdate>       m_xUpdRow;
+        cpo::uno::Reference< css::sdbcx::XRowLocate>      m_xRowLocate;
+        cpo::uno::Reference< css::sdbc::XResultSetUpdate> m_xUpd;
+        cpo::uno::Reference< css::sdbc::XRowUpdate>       m_xUpdRow;
 
-        void updateColumn(sal_Int32 nPos, const css::uno::Reference< css::sdbc::XRowUpdate >& _xParameter, const connectivity::ORowSetValue& _rValue);
+        void updateColumn(sal_Int32 nPos, const cpo::uno::Reference< css::sdbc::XRowUpdate >& _xParameter, const connectivity::ORowSetValue& _rValue);
     public:
         explicit WrappedResultSet(sal_Int32 i_nMaxRows) : OCacheSet(i_nMaxRows)
         {}
@@ -42,8 +42,8 @@ namespace dbaccess
             m_xRowLocate = nullptr;
         }
 
-        virtual void construct(const css::uno::Reference< css::sdbc::XResultSet>& _xDriverSet,const OUString& i_sRowSetFilter) override;
-        virtual void reset(const css::uno::Reference< css::sdbc::XResultSet>& _xDriverSet) override;
+        virtual void construct(const cpo::uno::Reference< css::sdbc::XResultSet>& _xDriverSet,const OUString& i_sRowSetFilter) override;
+        virtual void reset(const cpo::uno::Reference< css::sdbc::XResultSet>& _xDriverSet) override;
         // css::sdbcx::XRowLocate
         virtual cpo::uno::Any getBookmark() override;
         virtual bool moveToBookmark( const cpo::uno::Any& bookmark ) override;

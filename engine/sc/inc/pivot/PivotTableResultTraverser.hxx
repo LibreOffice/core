@@ -31,7 +31,7 @@ public:
     }
 
     virtual void startDimension(sal_Int32 /*nDimensionIndex*/,
-                                css::uno::Reference<cpo::uno::XInterface> const& /*xDimension*/,
+                                cpo::uno::Reference<cpo::uno::XInterface> const& /*xDimension*/,
                                 css::sheet::DataPilotFieldOrientation /*eOrientation*/)
     {
     }
@@ -39,7 +39,7 @@ public:
     virtual void endDimension() {}
 
     virtual void startLevel(sal_Int32 /*nLevelIndex*/,
-                            css::uno::Reference<cpo::uno::XInterface> const& /*xLevel*/,
+                            cpo::uno::Reference<cpo::uno::XInterface> const& /*xLevel*/,
                             OUString const& /*rLevelName*/)
     {
     }

@@ -114,7 +114,7 @@ namespace pcr
 
 
     using namespace ::com::sun::star;
-    using namespace uno;
+    using namespace ::cpo;
     using namespace cpo::uno;
     using namespace lang;
     using namespace beans;
@@ -2041,7 +2041,7 @@ namespace pcr
             Reference< XForm > xAsForm( m_xComponent, UNO_QUERY );
             if ( xAsForm.is() )
             {
-                Reference< XForm > xFormsParent( xAsForm->getParent(), css::uno::UNO_QUERY );
+                Reference< XForm > xFormsParent( xAsForm->getParent(), cpo::uno::UNO_QUERY );
                 m_bComponentIsSubForm = xFormsParent.is();
             }
 

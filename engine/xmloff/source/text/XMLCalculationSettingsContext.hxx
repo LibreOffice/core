@@ -27,7 +27,7 @@ class XMLCalculationSettingsContext : public SvXMLImportContext
 public:
     XMLCalculationSettingsContext( SvXMLImport& rImport,
                                     sal_Int32 nElement,
-                                    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
+                                    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
 
     virtual ~XMLCalculationSettingsContext() override;
     virtual void endFastElement(sal_Int32 nElement) override;

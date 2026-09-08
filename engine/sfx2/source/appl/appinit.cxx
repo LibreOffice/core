@@ -21,7 +21,7 @@
 
 #include <sfx2/app.hxx>
 #include <com/sun/star/frame/XTerminateListener.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/frame/theGlobalEventBroadcaster.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -46,7 +46,7 @@
 #include <sfx2/dispatch.hxx>
 #include <nochaos.hxx>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star;
@@ -93,8 +93,8 @@ void SfxTerminateListener_Impl::notifyTermination( const EventObject& aEvent )
     pApp->Get_Impl()->mxAppDispatch->ReleaseAll();
     pApp->Get_Impl()->mxAppDispatch.clear();
 
-    const css::uno::Reference< cpo::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
-    css::uno::Reference< css::document::XDocumentEventListener > xGlobalBroadcaster(css::frame::theGlobalEventBroadcaster::get(xContext), css::uno::UNO_QUERY_THROW);
+    const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
+    cpo::uno::Reference< css::document::XDocumentEventListener > xGlobalBroadcaster(css::frame::theGlobalEventBroadcaster::get(xContext), cpo::uno::UNO_QUERY_THROW);
 
     css::document::DocumentEvent aEvent2;
     aEvent2.EventName = u"OnCloseApp"_ustr;

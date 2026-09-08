@@ -45,7 +45,7 @@
 class ScDocShell;
 class ScTableLink;
 
-typedef std::vector< css::uno::Reference< css::util::XRefreshListener > > XRefreshListenerArr_Impl;
+typedef std::vector< cpo::uno::Reference< css::util::XRefreshListener > > XRefreshListenerArr_Impl;
 
 class ScSheetLinkObj final : public cppu::WeakImplHelper<
                             css::container::XNamed,
@@ -76,24 +76,24 @@ public:
 
                             // XRefreshable
     virtual void SAL_CALL   refresh() override;
-    virtual void SAL_CALL   addRefreshListener( const css::uno::Reference< css::util::XRefreshListener >& l ) override;
-    virtual void SAL_CALL   removeRefreshListener( const css::uno::Reference< css::util::XRefreshListener >& l ) override;
+    virtual void SAL_CALL   addRefreshListener( const cpo::uno::Reference< css::util::XRefreshListener >& l ) override;
+    virtual void SAL_CALL   removeRefreshListener( const cpo::uno::Reference< css::util::XRefreshListener >& l ) override;
 
                             // XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo >
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo(  ) override;
     virtual void SAL_CALL   setPropertyValue( const OUString& aPropertyName,
                                     const cpo::uno::Any& aValue ) override;
     virtual cpo::uno::Any SAL_CALL getPropertyValue(
                                     const OUString& PropertyName ) override;
     virtual void SAL_CALL   addPropertyChangeListener( const OUString& aPropertyName,
-                                    const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
+                                    const cpo::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
     virtual void SAL_CALL   removePropertyChangeListener( const OUString& aPropertyName,
-                                    const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
+                                    const cpo::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
     virtual void SAL_CALL   addVetoableChangeListener( const OUString& PropertyName,
-                                    const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+                                    const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
     virtual void SAL_CALL   removeVetoableChangeListener( const OUString& PropertyName,
-                                    const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+                                    const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
                             // called from get/setPropertyValue:
     OUString         getFileName() const;
@@ -140,7 +140,7 @@ public:
     virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
 
                             // XEnumerationAccess
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL
+    virtual cpo::uno::Reference< css::container::XEnumeration > SAL_CALL
                             createEnumeration() override;
 
                             // XElementAccess
@@ -180,23 +180,23 @@ public:
 
                             // XRefreshable
     virtual void SAL_CALL   refresh() override;
-    virtual void SAL_CALL   addRefreshListener( const css::uno::Reference< css::util::XRefreshListener >& l ) override;
-    virtual void SAL_CALL   removeRefreshListener( const css::uno::Reference< css::util::XRefreshListener >& l ) override;
+    virtual void SAL_CALL   addRefreshListener( const cpo::uno::Reference< css::util::XRefreshListener >& l ) override;
+    virtual void SAL_CALL   removeRefreshListener( const cpo::uno::Reference< css::util::XRefreshListener >& l ) override;
 
                             // XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo >
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo(  ) override;
     virtual void SAL_CALL   setPropertyValue( const OUString& aPropertyName,
                                     const cpo::uno::Any& aValue ) override;
     virtual cpo::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
     virtual void SAL_CALL   addPropertyChangeListener( const OUString& aPropertyName,
-                                    const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
+                                    const cpo::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
     virtual void SAL_CALL   removePropertyChangeListener( const OUString& aPropertyName,
-                                    const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
+                                    const cpo::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
     virtual void SAL_CALL   addVetoableChangeListener( const OUString& PropertyName,
-                                    const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+                                    const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
     virtual void SAL_CALL   removeVetoableChangeListener( const OUString& PropertyName,
-                                    const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+                                    const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
                             // called from get/setPropertyValue:
     OUString                getFileName() const;
@@ -250,7 +250,7 @@ public:
     virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
 
                             // XEnumerationAccess
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL
+    virtual cpo::uno::Reference< css::container::XEnumeration > SAL_CALL
                             createEnumeration() override;
 
                             // XElementAccess
@@ -300,8 +300,8 @@ public:
 
                             // XRefreshable
     virtual void SAL_CALL   refresh() override;
-    virtual void SAL_CALL   addRefreshListener( const css::uno::Reference< css::util::XRefreshListener >& l ) override;
-    virtual void SAL_CALL   removeRefreshListener( const css::uno::Reference< css::util::XRefreshListener >& l ) override;
+    virtual void SAL_CALL   addRefreshListener( const cpo::uno::Reference< css::util::XRefreshListener >& l ) override;
+    virtual void SAL_CALL   removeRefreshListener( const cpo::uno::Reference< css::util::XRefreshListener >& l ) override;
 
                             // XDDELinkResults
     virtual cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Any > >
@@ -344,7 +344,7 @@ public:
     virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
 
                             // XEnumerationAccess
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL
+    virtual cpo::uno::Reference< css::container::XEnumeration > SAL_CALL
                             createEnumeration() override;
 
                             // XElementAccess
@@ -352,7 +352,7 @@ public:
     virtual bool SAL_CALL hasElements() override;
 
                             // XDDELinks
-    virtual css::uno::Reference< css::sheet::XDDELink > SAL_CALL addDDELink(
+    virtual cpo::uno::Reference< css::sheet::XDDELink > SAL_CALL addDDELink(
         const OUString& aApplication, const OUString& aTopic,
         const OUString& aItem, css::sheet::DDELinkMode nMode ) override;
 
@@ -397,7 +397,7 @@ public:
     virtual ~ScExternalDocLinkObj() override;
 
                             // XExternalDocLink
-    virtual css::uno::Reference< css::sheet::XExternalSheetCache >
+    virtual cpo::uno::Reference< css::sheet::XExternalSheetCache >
         SAL_CALL addSheetCache( const OUString& aSheetName, bool bDynamicCache ) override;
 
                             // XNameAccess
@@ -410,7 +410,7 @@ public:
     virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 nIndex ) override;
 
                             // XEnumerationAccess
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL
+    virtual cpo::uno::Reference< css::container::XEnumeration > SAL_CALL
                             createEnumeration() override;
 
                             // XElementAccess
@@ -434,10 +434,10 @@ public:
     virtual ~ScExternalDocLinksObj() override;
 
                             // XExternalDocLinks
-    virtual css::uno::Reference< css::sheet::XExternalDocLink >
+    virtual cpo::uno::Reference< css::sheet::XExternalDocLink >
         SAL_CALL addDocLink( const OUString& aDocName ) override;
 
-    virtual css::uno::Reference<css::sheet::XExternalDocLink>
+    virtual cpo::uno::Reference<css::sheet::XExternalDocLink>
         SAL_CALL addSpecialDocLink(const OUString& aDocName, sal_Int16 nLinkType) override;
 
                             // XNameAccess
@@ -450,7 +450,7 @@ public:
     virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 nIndex ) override;
 
                             // XEnumerationAccess
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL
+    virtual cpo::uno::Reference< css::container::XEnumeration > SAL_CALL
                             createEnumeration() override;
 
                             // XElementAccess

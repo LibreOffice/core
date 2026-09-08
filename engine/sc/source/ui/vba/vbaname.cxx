@@ -33,12 +33,13 @@
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
-ScVbaName::ScVbaName(const css::uno::Reference< ov::XHelperInterface >& xParent,
-            const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
-            css::uno::Reference< css::sheet::XNamedRange > xName,
-            css::uno::Reference< css::sheet::XNamedRanges > xNames,
-            css::uno::Reference< css::frame::XModel > xModel ):
+ScVbaName::ScVbaName(const cpo::uno::Reference< ov::XHelperInterface >& xParent,
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
+            cpo::uno::Reference< css::sheet::XNamedRange > xName,
+            cpo::uno::Reference< css::sheet::XNamedRanges > xNames,
+            cpo::uno::Reference< css::frame::XModel > xModel ):
             NameImpl_BASE(  xParent , xContext ),
             mxModel(std::move( xModel )),
             mxNamedRange(std::move( xName )),
@@ -186,7 +187,7 @@ ScVbaName::setRefersToR1C1Local( const OUString & rRefersTo )
     setRefersTo( rRefersTo );
 }
 
-css::uno::Reference< ov::excel::XRange >
+cpo::uno::Reference< ov::excel::XRange >
 ScVbaName::getRefersToRange()
 {
     uno::Reference< ov::excel::XRange > xRange = ScVbaRange::getRangeObjectForName(

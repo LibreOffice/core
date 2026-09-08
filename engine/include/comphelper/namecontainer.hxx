@@ -30,14 +30,14 @@ namespace cpo::uno
 {
 class Type;
 }
-namespace com::sun::star::uno
+namespace cpo::uno
 {
 template <class interface_type> class Reference;
 }
 
 namespace comphelper
 {
-COMPHELPER_DLLPUBLIC css::uno::Reference<css::container::XNameContainer>
+COMPHELPER_DLLPUBLIC cpo::uno::Reference<css::container::XNameContainer>
 NameContainer_createInstance(const cpo::uno::Type& aType);
 }
 

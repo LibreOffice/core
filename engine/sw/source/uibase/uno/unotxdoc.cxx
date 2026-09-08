@@ -188,8 +188,8 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::i18n;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
@@ -1384,15 +1384,15 @@ class SwDrawPagesObj : public cppu::WeakImplHelper<
     css::lang::XServiceInfo>
 {
 private:
-    css::uno::Reference< css::drawing::XDrawPageSupplier > m_xDoc;
+    cpo::uno::Reference< css::drawing::XDrawPageSupplier > m_xDoc;
 public:
-    SwDrawPagesObj(css::uno::Reference< css::drawing::XDrawPageSupplier > xDoc) : m_xDoc(std::move(xDoc)) {}
+    SwDrawPagesObj(cpo::uno::Reference< css::drawing::XDrawPageSupplier > xDoc) : m_xDoc(std::move(xDoc)) {}
 
     // XDrawPages
-    virtual css::uno::Reference< css::drawing::XDrawPage > SAL_CALL
+    virtual cpo::uno::Reference< css::drawing::XDrawPage > SAL_CALL
         insertNewByIndex(sal_Int32 /*nIndex*/) override { throw css::lang::NoSupportException(); }
 
-    virtual void SAL_CALL remove(const css::uno::Reference< css::drawing::XDrawPage >& /*xPage*/) override
+    virtual void SAL_CALL remove(const cpo::uno::Reference< css::drawing::XDrawPage >& /*xPage*/) override
     {
         throw css::lang::NoSupportException();
     }
@@ -1614,7 +1614,7 @@ void    SwXTextDocument::InitNewDoc()
     }
 }
 
-css::uno::Reference<cpo::uno::XInterface> SwXTextDocument::create(
+cpo::uno::Reference<cpo::uno::XInterface> SwXTextDocument::create(
     OUString const & rServiceName,
     cpo::uno::Sequence<cpo::uno::Any> const * arguments)
 {

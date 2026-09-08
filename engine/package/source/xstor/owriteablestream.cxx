@@ -64,12 +64,13 @@
 #define MAX_STORCACHE_SIZE 30000
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace package
 {
 
 static void CopyInputToOutput(
-    const css::uno::Reference< css::io::XInputStream >& xInput,
+    const cpo::uno::Reference< css::io::XInputStream >& xInput,
     SvStream& rOutput )
 {
     static const sal_Int32 nConstBufferSize = 32000;

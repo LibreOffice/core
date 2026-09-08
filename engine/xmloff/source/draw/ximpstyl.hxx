@@ -51,7 +51,7 @@ public:
     SdXMLPageMasterStyleContext(
         SdXMLImport& rImport,
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList);
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList);
     virtual ~SdXMLPageMasterStyleContext() override;
 
     sal_Int32 GetBorderBottom() const { return mnBorderBottom; }
@@ -77,10 +77,10 @@ public:
     SdXMLPageMasterContext(
         SdXMLImport& rImport,
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList);
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList);
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
     const SdXMLPageMasterStyleContext* GetPageMasterStyle() const { return mxPageMasterStyle.get(); }
 };
@@ -98,19 +98,19 @@ public:
     SdXMLMasterPageContext(
         SdXMLImport& rImport,
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
-        css::uno::Reference< css::drawing::XDrawPages2 > const & xMasterPages);
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+        cpo::uno::Reference< css::drawing::XDrawPages2 > const & xMasterPages);
     // Called for handout master page
     SdXMLMasterPageContext(
         SdXMLImport& rImport,
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
-        css::uno::Reference< css::drawing::XShapes > const & rShapes);
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+        cpo::uno::Reference< css::drawing::XShapes > const & rShapes);
     virtual ~SdXMLMasterPageContext() override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
     virtual void endFastElement(sal_Int32 nElement) override;
 
@@ -132,7 +132,7 @@ public:
     SdXMLPresentationPlaceholderContext(
         SdXMLImport& rImport,
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList);
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList);
     virtual ~SdXMLPresentationPlaceholderContext() override;
 
     const OUString& GetName() const { return msName; }
@@ -155,10 +155,10 @@ public:
     SdXMLPresentationPageLayoutContext(
         SdXMLImport& rImport,
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList);
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList);
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
     virtual void endFastElement(sal_Int32 nElement) override;
 
@@ -178,26 +178,26 @@ class SdXMLStylesContext : public SvXMLStylesContext
 
     void ImpSetGraphicStyles() const;
     void ImpSetCellStyles() const;
-    void ImpSetGraphicStyles( css::uno::Reference< css::container::XNameAccess > const & xPageStyles,
+    void ImpSetGraphicStyles( cpo::uno::Reference< css::container::XNameAccess > const & xPageStyles,
         XmlStyleFamily nFamily, const OUString& rPrefix) const;
 
 protected:
     using SvXMLStylesContext::CreateStyleChildContext;
     virtual SvXMLStyleContext* CreateStyleChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList) override;
 
     using SvXMLStylesContext::CreateStyleStyleChildContext;
     virtual SvXMLStyleContext *CreateStyleStyleChildContext(
         XmlStyleFamily nFamily,
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList) override;
 
     using SvXMLStylesContext::CreateDefaultStyleStyleChildContext;
     virtual SvXMLStyleContext *CreateDefaultStyleStyleChildContext(
         XmlStyleFamily nFamily,
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList) override;
 public:
 
     SdXMLStylesContext(
@@ -209,7 +209,7 @@ public:
 
     void SetMasterPageStyles(SdXMLMasterPageContext const & rMaster) const;
 
-    css::uno::Reference< css::container::XNameAccess > getPageLayouts() const;
+    cpo::uno::Reference< css::container::XNameAccess > getPageLayouts() const;
 };
 
 // office:master-styles context
@@ -225,8 +225,8 @@ public:
 
     SdXMLMasterStylesContext(SdXMLImport& rImport);
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
-                sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+                sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 };
 
 // <pres:header-decl>, <pres:footer-decl> and <pres:date-time-decl>
@@ -235,7 +235,7 @@ class SdXMLHeaderFooterDeclContext : public SvXMLStyleContext
 {
 public:
     SdXMLHeaderFooterDeclContext( SvXMLImport& rImport,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
 
     virtual bool IsTransient() const override;
     virtual void endFastElement(sal_Int32 ) override;

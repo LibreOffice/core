@@ -46,6 +46,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace oox;
 using namespace sax_fastparser;
 

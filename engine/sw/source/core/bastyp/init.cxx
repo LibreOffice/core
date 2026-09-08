@@ -141,6 +141,7 @@
 #include <viscrs.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 // some ranges for sets in collections/ nodes
 

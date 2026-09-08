@@ -39,7 +39,7 @@ namespace pcr
 {
 
 
-    using ::com::sun::star::uno::Reference;
+    using ::cpo::uno::Reference;
     using ::cpo::uno::XComponentContext;
     using ::com::sun::star::inspection::XPropertyControl;
     using ::com::sun::star::inspection::XPropertyControlContext;
@@ -316,7 +316,7 @@ namespace pcr
 
             Sequence aMediaProperties{ comphelper::makePropertyValue(u"URL"_ustr, rImageURL) };
 
-            xGraphic = Reference<XGraphic>(xGraphicProvider->queryGraphic(aMediaProperties), css::uno::UNO_SET_THROW);
+            xGraphic = Reference<XGraphic>(xGraphicProvider->queryGraphic(aMediaProperties), cpo::uno::UNO_SET_THROW);
         }
         catch( const Exception& )
         {
@@ -326,7 +326,7 @@ namespace pcr
         rButton.set_image(xGraphic);
     }
 
-    void OBrowserLine::ShowBrowseButton(const css::uno::Reference<css::graphic::XGraphic>& rGraphic, bool bPrimary)
+    void OBrowserLine::ShowBrowseButton(const cpo::uno::Reference<css::graphic::XGraphic>& rGraphic, bool bPrimary)
     {
         weld::Button& rButton( impl_ensureButton( bPrimary ) );
         rButton.set_image(rGraphic);
@@ -389,7 +389,7 @@ namespace pcr
         {
             try
             {
-                Reference< XPropertyControlContext > xContext( m_xControl->getControlContext(), css::uno::UNO_SET_THROW );
+                Reference< XPropertyControlContext > xContext( m_xControl->getControlContext(), cpo::uno::UNO_SET_THROW );
                 xContext->focusGained( m_xControl );
             }
             catch( const Exception& )

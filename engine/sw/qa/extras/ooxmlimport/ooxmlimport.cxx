@@ -71,7 +71,8 @@
 #include <test/commontesttools.hxx>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 namespace
 {
@@ -778,7 +779,7 @@ CPPUNIT_TEST_FIXTURE(Test, testGroupshapeSdt)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(20), getProperty<sal_Int32>(getRun(getParagraphOfText(1, xShape->getText()), 1), u"CharKerning"_ustr));
 }
 
-void lcl_countTextFrames(const css::uno::Reference< lang::XComponent >& xComponent,
+void lcl_countTextFrames(const cpo::uno::Reference< lang::XComponent >& xComponent,
    sal_Int32 nExpected )
 {
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(xComponent, uno::UNO_QUERY);
@@ -1055,7 +1056,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf75573)
     CPPUNIT_ASSERT(sal_Int32(20000) < getProperty<sal_Int32>(xPropertySet, u"VertOrientPosition"_ustr));
     CPPUNIT_ASSERT(sal_Int32(2500) < getProperty<sal_Int32>(xPropertySet, u"HoriOrientPosition"_ustr));
 
-    css::uno::Reference<css::lang::XMultiServiceFactory> m_xTextFactory(mxComponent, uno::UNO_QUERY);
+    cpo::uno::Reference<css::lang::XMultiServiceFactory> m_xTextFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference< beans::XPropertySet > xSettings(m_xTextFactory->createInstance(u"com.sun.star.document.Settings"_ustr), uno::UNO_QUERY);
     cpo::uno::Any aProtect = xSettings->getPropertyValue(u"ProtectForm"_ustr);
     bool bProt = true;

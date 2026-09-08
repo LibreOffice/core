@@ -19,7 +19,7 @@
 #pragma once
 
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <unotools/resmgr.hxx>
 
 #include <cmath>
@@ -59,12 +59,12 @@ sal_Int32           DateToDays( sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 n
 /// @throws css::lang::IllegalArgumentException
 void                DaysToDate( sal_Int32 nDays, sal_uInt16& rDay, sal_uInt16& rMonth, sal_uInt16& rYear );
 /// @throws cpo::uno::RuntimeException
-sal_Int32           GetNullDate( const css::uno::Reference< css::beans::XPropertySet >& xOptions );
+sal_Int32           GetNullDate( const cpo::uno::Reference< css::beans::XPropertySet >& xOptions );
 sal_Int32           GetDiffDate360(
                         sal_uInt16 nDay1, sal_uInt16 nMonth1, sal_uInt16 nYear1, bool bLeapYear1,
                         sal_uInt16 nDay2, sal_uInt16 nMonth2, sal_uInt16 nYear2,
                         bool bUSAMethod );
-inline sal_Int32    GetDiffDate360( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nDate1, sal_Int32 nDate2, bool bUSAMethod );
+inline sal_Int32    GetDiffDate360( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nDate1, sal_Int32 nDate2, bool bUSAMethod );
 sal_Int32           GetDiffDate360( sal_Int32 nNullDate, sal_Int32 nDate1, sal_Int32 nDate2, bool bUSAMethod );
 
 sal_Int32           GetDaysInYears( sal_uInt16 nYear1, sal_uInt16 nYear2 );
@@ -84,7 +84,7 @@ sal_Int32           GetDaysInYear( sal_Int32 nNullDate, sal_Int32 nDate, sal_Int
 double              GetYearFrac( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode );
 /// @throws cpo::uno::RuntimeException
 /// @throws css::lang::IllegalArgumentException
-inline double       GetYearFrac( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode );
+inline double       GetYearFrac( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode );
 
 double              BinomialCoefficient( double n, double k );
 double              GetGcd( double f1, double f2 );
@@ -284,7 +284,7 @@ public:
                                 */
     void                        InsertHolidayList(
                                     ScaAnyConverter& rAnyConv,
-                                    const css::uno::Reference< css::beans::XPropertySet >& xOptions,
+                                    const cpo::uno::Reference< css::beans::XPropertySet >& xOptions,
                                     const cpo::uno::Any& rHolAny,
                                     sal_Int32 nNullDate);
 };
@@ -354,7 +354,7 @@ public:
                                 */
     void                        Append(
                                     ScaAnyConverter& rAnyConv,
-                                    const css::uno::Reference< css::beans::XPropertySet >& xOpt,
+                                    const cpo::uno::Reference< css::beans::XPropertySet >& xOpt,
                                     const cpo::uno::Sequence< cpo::uno::Any >& rAnySeq );
 
     /// @throws cpo::uno::RuntimeException
@@ -568,7 +568,7 @@ inline bool IsLeapYear( sal_uInt16 n )
 }
 
 
-inline sal_Int32 GetDiffDate360( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nDate1, sal_Int32 nDate2, bool bUSAMethod )
+inline sal_Int32 GetDiffDate360( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nDate1, sal_Int32 nDate2, bool bUSAMethod )
 {
     return GetDiffDate360( GetNullDate( xOpt ), nDate1, nDate2, bUSAMethod );
 }
@@ -580,7 +580,7 @@ inline sal_Int16 GetDayOfWeek( sal_Int32 n )
 }
 
 
-inline double GetYearFrac( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode )
+inline double GetYearFrac( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode )
 {
     return GetYearFrac( GetNullDate( xOpt ), nStartDate, nEndDate, nMode );
 }
@@ -808,7 +808,7 @@ inline void ScaDate::addYears( sal_Int32 nYearCount )
 class ScaAnyConverter
 {
 private:
-    css::uno::Reference< css::util::XNumberFormatter2 > xFormatter;
+    cpo::uno::Reference< css::util::XNumberFormatter2 > xFormatter;
     sal_Int32                   nDefaultFormat;
     bool                    bHasValidFormat;
 
@@ -822,14 +822,14 @@ private:
 
 public:
     explicit                    ScaAnyConverter(
-                                    const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
+                                    const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext );
                                 ~ScaAnyConverter();
 
                                 /// Initializing with the current locale
                                 ///
                                 /// @throws cpo::uno::RuntimeException
     void                        init(
-                                    const css::uno::Reference< css::beans::XPropertySet >& xPropSet );
+                                    const cpo::uno::Reference< css::beans::XPropertySet >& xPropSet );
 
                                 /** Converts an Any to double (without initialization).
                                     The Any can be empty or contain a double or string.
@@ -849,7 +849,7 @@ public:
                                              false if the Any is empty or the string is empty */
     bool                        getDouble(
                                     double& rfResult,
-                                    const css::uno::Reference< css::beans::XPropertySet >& xPropSet,
+                                    const cpo::uno::Reference< css::beans::XPropertySet >& xPropSet,
                                     const cpo::uno::Any& rAny );
 
                                 /** Converts an Any to double (with initialization).
@@ -858,7 +858,7 @@ public:
                                         on other Any types or on invalid strings.
                                     @return  the value of the double or string or fDefault if the Any or string is empty */
     double                      getDouble(
-                                    const css::uno::Reference< css::beans::XPropertySet >& xPropSet,
+                                    const cpo::uno::Reference< css::beans::XPropertySet >& xPropSet,
                                     const cpo::uno::Any& rAny,
                                     double fDefault );
 
@@ -870,7 +870,7 @@ public:
                                              false if the Any is empty or the string is empty */
     bool                        getInt32(
                                     sal_Int32& rnResult,
-                                    const css::uno::Reference< css::beans::XPropertySet >& xPropSet,
+                                    const cpo::uno::Reference< css::beans::XPropertySet >& xPropSet,
                                     const cpo::uno::Any& rAny );
 
                                 /** Converts an Any to sal_Int32 (with initialization).
@@ -879,7 +879,7 @@ public:
                                         on other Any types or on invalid values or strings.
                                     @return  the truncated value of the double or string or nDefault if the Any or string is empty */
     sal_Int32                   getInt32(
-                                    const css::uno::Reference< css::beans::XPropertySet >& xPropSet,
+                                    const cpo::uno::Reference< css::beans::XPropertySet >& xPropSet,
                                     const cpo::uno::Any& rAny,
                                     sal_Int32 nDefault );
 };

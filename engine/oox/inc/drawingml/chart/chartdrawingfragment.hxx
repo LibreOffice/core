@@ -76,7 +76,7 @@ public:
     explicit            ChartDrawingFragment(
                             ::oox::core::XmlFilterBase& rFilter,
                             const OUString& rFragmentPath,
-                            const css::uno::Reference< css::drawing::XShapes >& rxDrawPage,
+                            const cpo::uno::Reference< css::drawing::XShapes >& rxDrawPage,
                             const css::awt::Size& rChartSize,
                             const css::awt::Point& rShapesOffset,
                             bool bOleSupport );
@@ -87,7 +87,7 @@ public:
     virtual void        onEndElement() override;
 
 private:
-    css::uno::Reference< css::drawing::XShapes >
+    cpo::uno::Reference< css::drawing::XShapes >
                         mxDrawPage;             /// Drawing page of this sheet.
     ::oox::drawingml::ShapePtr mxShape;         /// Current top-level shape.
     std::shared_ptr< ShapeAnchor > mxAnchor;    /// Current anchor of top-level shape.

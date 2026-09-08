@@ -30,7 +30,7 @@ namespace sw {
                                css::lang::XServiceInfo
                              >
     {
-        css::uno::Reference< css::lang::XComponent > m_xSrcDoc;
+        cpo::uno::Reference< css::lang::XComponent > m_xSrcDoc;
 
     public:
        LayoutDumpFilter();
@@ -41,7 +41,7 @@ namespace sw {
         virtual void SAL_CALL cancel(  ) override;
 
         // XExporter
-        virtual void SAL_CALL setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
+        virtual void SAL_CALL setSourceDocument( const cpo::uno::Reference< css::lang::XComponent >& xDoc ) override;
 
         // XInitialization
         virtual void SAL_CALL initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;

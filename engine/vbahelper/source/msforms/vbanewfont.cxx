@@ -26,6 +26,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace ::ooo::vba;
 
 

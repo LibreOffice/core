@@ -38,6 +38,7 @@
 #include <unomodel.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSidebarSwitchDeck)
 {

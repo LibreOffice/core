@@ -66,8 +66,8 @@
 #include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::datatransfer;
 
@@ -574,7 +574,7 @@ bool SdTransferable::WriteObject( SvStream& rOStm, void* pObject, sal_uInt32 nOb
                 pDoc->setUnoModel( xComponent );
 
                 {
-                    css::uno::Reference<css::io::XOutputStream> xDocOut( new utl::OOutputStreamWrapper( rOStm ) );
+                    cpo::uno::Reference<css::io::XOutputStream> xDocOut( new utl::OOutputStreamWrapper( rOStm ) );
                     SvxDrawingLayerExport( pDoc, xDocOut, xComponent, (pDoc->GetDocumentType() == DocumentType::Impress) ? "com.sun.star.comp.Impress.XMLClipboardExporter" : "com.sun.star.comp.DrawingLayer.XMLExporter" );
                 }
 

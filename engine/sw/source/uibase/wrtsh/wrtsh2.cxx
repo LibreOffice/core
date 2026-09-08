@@ -66,6 +66,8 @@
 #include <strings.hrc>
 #include <officecfg/Office/Common.hxx>
 
+using namespace ::cpo;
+
 bool SwWrtShell::InsertField2(SwField const& rField,
     SwPaM* pAnnotationRange, ::std::optional<SwPosition> *const poAnchorStart)
 {

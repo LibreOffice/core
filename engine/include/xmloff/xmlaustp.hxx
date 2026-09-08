@@ -40,7 +40,7 @@ namespace cpo::uno {
     template<typename A> class Sequence;
 }
 
-namespace com::sun::star::uno { template <typename > class Reference; }
+namespace cpo::uno { template <typename > class Reference; }
 
 namespace com::sun::star::xml::sax { class XDocumentHandler; }
 namespace xmloff { struct AutoStyleEntry; }
@@ -66,7 +66,7 @@ protected:
 
 // this method is executed after Properties Export, so you can e.g. export a map or so on
     virtual void exportStyleContent(
-            const css::uno::Reference< css::xml::sax::XDocumentHandler > & rHandler,
+            const cpo::uno::Reference< css::xml::sax::XDocumentHandler > & rHandler,
             XmlStyleFamily nFamily,
             const ::std::vector< XMLPropertyState >& rProperties,
             const SvXMLExportPropertyMapper& rPropExp,

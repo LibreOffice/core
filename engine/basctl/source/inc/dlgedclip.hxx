@@ -45,7 +45,7 @@ public:
     virtual bool isDataFlavorSupported( const css::datatransfer::DataFlavor& rFlavor ) override;
 
     // XClipboardOwner
-    virtual void lostOwnership( const css::uno::Reference< css::datatransfer::clipboard::XClipboard >& xClipboard, const css::uno::Reference< css::datatransfer::XTransferable >& xTrans ) override;
+    virtual void lostOwnership( const cpo::uno::Reference< css::datatransfer::clipboard::XClipboard >& xClipboard, const cpo::uno::Reference< css::datatransfer::XTransferable >& xTrans ) override;
 };
 
 } // namespace basctl

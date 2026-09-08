@@ -49,13 +49,13 @@ namespace svt
         };
 
     private:
-        css::uno::Reference< css::task::XInteractionHandler > m_xMaster;    // our master handler
+        cpo::uno::Reference< css::task::XInteractionHandler > m_xMaster;    // our master handler
         cpo::uno::Any                                         m_aException; // the last handled request
         bool                                                  m_bUsed;      // indicates using of this interaction handler instance
         EInterceptedInteractions                              m_eInterceptions; // enable/disable interception of some special interactions
 
     public:
-        explicit OFilePickerInteractionHandler( css::uno::Reference< css::task::XInteractionHandler > _xMaster );
+        explicit OFilePickerInteractionHandler( cpo::uno::Reference< css::task::XInteractionHandler > _xMaster );
 
         // some generic functions
         void     enableInterceptions( EInterceptedInteractions eInterceptions );
@@ -68,7 +68,7 @@ namespace svt
 
     private:
         // XInteractionHandler
-        virtual void handle( const css::uno::Reference< css::task::XInteractionRequest >& _rxRequest ) override;
+        virtual void handle( const cpo::uno::Reference< css::task::XInteractionRequest >& _rxRequest ) override;
 
         virtual ~OFilePickerInteractionHandler() override;
     };

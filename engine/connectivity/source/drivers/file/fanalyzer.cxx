@@ -26,7 +26,7 @@
 
 using namespace ::connectivity;
 using namespace ::connectivity::file;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::cpo::uno;
@@ -193,7 +193,7 @@ void OSQLAnalyzer::dispose()
     }
 }
 
-void OSQLAnalyzer::setOrigColumns(const css::uno::Reference< css::container::XNameAccess>& rCols)
+void OSQLAnalyzer::setOrigColumns(const cpo::uno::Reference< css::container::XNameAccess>& rCols)
 {
     m_aCompiler->setOrigColumns(rCols);
     for (auto const& selectionEval : m_aSelectionEvaluations)

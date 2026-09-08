@@ -25,6 +25,7 @@
 #include <oox/token/properties.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 namespace oox::drawingml::chart
 {

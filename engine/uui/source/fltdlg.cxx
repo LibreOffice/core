@@ -191,7 +191,7 @@ OUString FilterDialog::impl_buildUIFileName(const OUString& sName)
     else
     {
         // otherwise it's really a URL... build short name by using INetURLObject
-        css::uno::Reference<css::util::XStringWidth> xStringCalculator(
+        cpo::uno::Reference<css::util::XStringWidth> xStringCalculator(
             new StringCalculator(m_xFtURL.get()));
         if (xStringCalculator.is())
         {

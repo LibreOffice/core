@@ -24,6 +24,7 @@
 #include <comphelper/diagnose_ex.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 NativeNumberWrapper::NativeNumberWrapper(
             const uno::Reference< cpo::uno::XComponentContext > & rxContext

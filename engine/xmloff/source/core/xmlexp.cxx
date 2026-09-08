@@ -108,8 +108,8 @@
 #include <boost/property_tree/json_parser.hpp>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
@@ -162,7 +162,7 @@ public:
 
     virtual void    Characters( const OUString& i_rCharacters ) override;
 
-    virtual css::uno::Reference< cpo::uno::XComponentContext >
+    virtual cpo::uno::Reference< cpo::uno::XComponentContext >
                     GetComponentContext() const override;
 private:
     SvXMLExport&                    m_rExport;
@@ -442,7 +442,7 @@ SvXMLExport::SvXMLExport(
 }
 
 SvXMLExport::SvXMLExport(
-    const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
+    const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
     OUString implementationName,
     OUString fileName,
     sal_Int16 const eDefaultMeasureUnit /*css::util::MeasureUnit*/,
@@ -472,7 +472,7 @@ SvXMLExport::SvXMLExport(
 }
 
 SvXMLExport::SvXMLExport(
-    const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
+    const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
     OUString implementationName,
     OUString fileName,
     const uno::Reference< xml::sax::XDocumentHandler > & rHandler,
@@ -569,7 +569,7 @@ void SvXMLExport::setSourceDocument( const uno::Reference< lang::XComponent >& x
 
     if(!mxNumberFormatsSupplier.is() )
     {
-        mxNumberFormatsSupplier.set(mxModel, css::uno::UNO_QUERY);
+        mxNumberFormatsSupplier.set(mxModel, cpo::uno::UNO_QUERY);
         if(mxNumberFormatsSupplier.is() && mxHandler.is())
             mpNumExport.reset( new SvXMLNumFmtExport(*this, mxNumberFormatsSupplier) );
     }

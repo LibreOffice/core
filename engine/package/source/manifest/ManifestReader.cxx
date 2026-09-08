@@ -29,7 +29,7 @@
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <vector>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::io;

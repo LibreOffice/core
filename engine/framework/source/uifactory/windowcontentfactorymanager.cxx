@@ -38,6 +38,7 @@
 #include <comphelper/diagnose_ex.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace framework;
 
 namespace {
@@ -49,7 +50,7 @@ typedef comphelper::WeakComponentImplHelper<
 class WindowContentFactoryManager : public WindowContentFactoryManager_BASE
 {
 public:
-    explicit WindowContentFactoryManager( css::uno::Reference< cpo::uno::XComponentContext> xContext );
+    explicit WindowContentFactoryManager( cpo::uno::Reference< cpo::uno::XComponentContext> xContext );
 
     virtual OUString getImplementationName() override
     {
@@ -67,13 +68,13 @@ public:
     }
 
     // XSingleComponentFactory
-    virtual css::uno::Reference< cpo::uno::XInterface > createInstanceWithContext( const css::uno::Reference< cpo::uno::XComponentContext >& Context ) override;
-    virtual css::uno::Reference< cpo::uno::XInterface > createInstanceWithArgumentsAndContext( const cpo::uno::Sequence< cpo::uno::Any >& Arguments, const css::uno::Reference< cpo::uno::XComponentContext >& Context ) override;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > createInstanceWithContext( const cpo::uno::Reference< cpo::uno::XComponentContext >& Context ) override;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > createInstanceWithArgumentsAndContext( const cpo::uno::Sequence< cpo::uno::Any >& Arguments, const cpo::uno::Reference< cpo::uno::XComponentContext >& Context ) override;
 
 private:
     virtual void disposing(std::unique_lock<std::mutex>&) override;
 
-    css::uno::Reference< cpo::uno::XComponentContext >     m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext >     m_xContext;
     bool                                               m_bConfigRead;
     rtl::Reference<ConfigurationAccess_FactoryManager> m_pConfigAccess;
 };

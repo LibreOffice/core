@@ -11,14 +11,14 @@
 #include <sax/fshelper.hxx>
 
 #include <com/sun/star/drawing/XDrawPage.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include "epptooxml.hxx"
 
 namespace oox::core
 {
 void WriteAnimations(const ::sax_fastparser::FSHelperPtr& pFS,
-                     const css::uno::Reference<css::drawing::XDrawPage>& rXDrawPage,
+                     const cpo::uno::Reference<css::drawing::XDrawPage>& rXDrawPage,
                      PowerPointExport& rExport);
 }
 

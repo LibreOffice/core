@@ -40,16 +40,16 @@ namespace dbaccess
     private:
         typedef std::map< OUString, ::rtl::Reference< OPropertyForward > >  PropertyForwardList;
         PropertyForwardList                                   m_aForwardList;
-        css::uno::Reference< css::container::XNameAccess >    m_xSettings;    // can not be weak
-        css::uno::Reference< css::container::XContainer >     m_xContainer;   // can not be weak
+        cpo::uno::Reference< css::container::XNameAccess >    m_xSettings;    // can not be weak
+        cpo::uno::Reference< css::container::XContainer >     m_xContainer;   // can not be weak
 
     protected:
         virtual ~OContainerMediator() override;
 
     public:
         OContainerMediator(
-            const css::uno::Reference< css::container::XContainer >& _xContainer,
-            const css::uno::Reference< css::container::XNameAccess >& _xSettings
+            const cpo::uno::Reference< css::container::XContainer >& _xContainer,
+            const cpo::uno::Reference< css::container::XNameAccess >& _xSettings
        );
 
         virtual void elementInserted( const css::container::ContainerEvent& _rEvent ) override;
@@ -58,7 +58,7 @@ namespace dbaccess
         virtual void disposing( const css::lang::EventObject& Source ) override;
 
         void notifyElementCreated(const OUString& _sElementName
-                                ,const css::uno::Reference< css::beans::XPropertySet>& _xElement);
+                                ,const cpo::uno::Reference< css::beans::XPropertySet>& _xElement);
 
     private:
         /** cleans up the instance, by deregistering as listener at the containers,
@@ -70,7 +70,7 @@ namespace dbaccess
         */
         void    impl_initSettings_nothrow(
                     const OUString& _rName,
-                    const css::uno::Reference< css::beans::XPropertySet >& _rxDestination
+                    const cpo::uno::Reference< css::beans::XPropertySet >& _rxDestination
                 );
     };
 

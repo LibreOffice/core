@@ -29,13 +29,13 @@ public:
 
     rtl::Reference<XMLImportContext>
     CreateChildContext(const OUString& rName,
-                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
+                       const cpo::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
     int GetColumn() const;
     void SetColumn(int nColumn);
 
     void SAL_CALL
     startElement(const OUString& rName,
-                 const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
+                 const cpo::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
     void SAL_CALL endElement(const OUString& rName) override;
 
 private:
@@ -50,11 +50,11 @@ public:
 
     rtl::Reference<XMLImportContext>
     CreateChildContext(const OUString& rName,
-                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
+                       const cpo::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
 
     void SAL_CALL
     startElement(const OUString& rName,
-                 const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
+                 const cpo::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
     void SAL_CALL endElement(const OUString& rName) override;
 
 private:
@@ -69,13 +69,13 @@ XMLTableCellContext::XMLTableCellContext(XMLImport& rImport, XMLTableRowContext&
 }
 
 rtl::Reference<XMLImportContext> XMLTableCellContext::CreateChildContext(
-    const OUString& rName, const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
+    const OUString& rName, const cpo::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
     return CreateTextChildContext(GetImport(), rName);
 }
 
 void XMLTableCellContext::startElement(
-    const OUString& /*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs)
+    const OUString& /*rName*/, const cpo::uno::Reference<css::xml::sax::XAttributeList>& xAttribs)
 {
     librevenge::RVNGPropertyList aPropertyList;
     for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
@@ -113,7 +113,7 @@ public:
 
     void SAL_CALL
     startElement(const OUString& rName,
-                 const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
+                 const cpo::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
 
 private:
     librevenge::RVNGPropertyListVector& m_rColumns;
@@ -128,7 +128,7 @@ XMLTableColumnContext::XMLTableColumnContext(XMLImport& rImport,
 }
 
 void XMLTableColumnContext::startElement(
-    const OUString& /*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs)
+    const OUString& /*rName*/, const cpo::uno::Reference<css::xml::sax::XAttributeList>& xAttribs)
 {
     librevenge::RVNGPropertyList aPropertyList;
     for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
@@ -149,7 +149,7 @@ XMLTableRowContext::XMLTableRowContext(XMLImport& rImport)
 }
 
 rtl::Reference<XMLImportContext> XMLTableRowContext::CreateChildContext(
-    const OUString& rName, const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
+    const OUString& rName, const cpo::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
     if (rName == "table:table-cell")
         return new XMLTableCellContext(GetImport(), *this);
@@ -164,7 +164,7 @@ rtl::Reference<XMLImportContext> XMLTableRowContext::CreateChildContext(
 }
 
 void XMLTableRowContext::startElement(
-    const OUString& /*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs)
+    const OUString& /*rName*/, const cpo::uno::Reference<css::xml::sax::XAttributeList>& xAttribs)
 {
     librevenge::RVNGPropertyList aPropertyList;
     for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
@@ -195,7 +195,7 @@ XMLTableContext::XMLTableContext(XMLImport& rImport, bool bTopLevel)
 }
 
 rtl::Reference<XMLImportContext> XMLTableContext::CreateChildContext(
-    const OUString& rName, const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
+    const OUString& rName, const cpo::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
     if (rName == "table:table-column")
         // Make sure columns are parsed before we open the table.
@@ -218,7 +218,7 @@ rtl::Reference<XMLImportContext> XMLTableContext::CreateChildContext(
 }
 
 void XMLTableContext::startElement(
-    const OUString& /*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs)
+    const OUString& /*rName*/, const cpo::uno::Reference<css::xml::sax::XAttributeList>& xAttribs)
 {
     for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
     {

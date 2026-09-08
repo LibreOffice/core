@@ -27,7 +27,7 @@
 #include "rtl/ustring.hxx"
 #include "rtl/unload.h"
 
-#include "com/sun/star/uno/Reference.h"
+#include "cpo/uno/Reference.h"
 #include "cppuhelper/cppuhelperdllapi.h"
 
 namespace com { namespace sun { namespace star { namespace lang { class XMultiServiceFactory; } } } }
@@ -119,9 +119,9 @@ namespace cppu
     @param xContext component context to be used
     @return component instance
 */
-typedef css::uno::Reference< cpo::uno::XInterface >(
+typedef cpo::uno::Reference< cpo::uno::XInterface >(
     * ComponentFactoryFunc)(
-        css::uno::Reference< cpo::uno::XComponentContext > const & xContext );
+        cpo::uno::Reference< cpo::uno::XComponentContext > const & xContext );
 
 /** Creates a single component factory supporting the XSingleComponentFactory interface.
 
@@ -131,7 +131,7 @@ typedef css::uno::Reference< cpo::uno::XInterface >(
     @param pModCount a backwards-compatibility remainder of a removed library
            unloading feature; always set to null
 */
-CPPUHELPER_DLLPUBLIC css::uno::Reference< css::lang::XSingleComponentFactory >
+CPPUHELPER_DLLPUBLIC cpo::uno::Reference< css::lang::XSingleComponentFactory >
 createSingleComponentFactory(
     ComponentFactoryFunc fptr,
     ::rtl::OUString const & rImplementationName,
@@ -148,7 +148,7 @@ createSingleComponentFactory(
 
     @see createSingleComponentFactory
 */
-CPPUHELPER_DLLPUBLIC css::uno::Reference< css::lang::XSingleComponentFactory >
+CPPUHELPER_DLLPUBLIC cpo::uno::Reference< css::lang::XSingleComponentFactory >
 createOneInstanceComponentFactory(
     ComponentFactoryFunc fptr,
     ::rtl::OUString const & rImplementationName,
@@ -161,8 +161,8 @@ createOneInstanceComponentFactory(
     @see createOneInstanceFactory
     @deprecated
 */
-typedef css::uno::Reference< cpo::uno::XInterface >(* ComponentInstantiation)(
-    const css::uno::Reference< css::lang::XMultiServiceFactory > & rServiceManager );
+typedef cpo::uno::Reference< cpo::uno::XInterface >(* ComponentInstantiation)(
+    const cpo::uno::Reference< css::lang::XMultiServiceFactory > & rServiceManager );
 
 /** Deprecated.  Creates a single service factory.
 
@@ -178,9 +178,9 @@ typedef css::uno::Reference< cpo::uno::XInterface >(* ComponentInstantiation)(
     @see createOneInstanceFactory
     @deprecated
 */
-CPPUHELPER_DLLPUBLIC css::uno::Reference< css::lang::XSingleServiceFactory >
+CPPUHELPER_DLLPUBLIC cpo::uno::Reference< css::lang::XSingleServiceFactory >
 createSingleFactory(
-    const css::uno::Reference< css::lang::XMultiServiceFactory > & rServiceManager,
+    const cpo::uno::Reference< css::lang::XMultiServiceFactory > & rServiceManager,
     const ::rtl::OUString & rImplementationName,
     ComponentInstantiation pCreateFunction,
     const cpo::uno::Sequence< ::rtl::OUString > & rServiceNames,
@@ -200,9 +200,9 @@ createSingleFactory(
     @see createSingleFactory
     @deprecated
 */
-CPPUHELPER_DLLPUBLIC css::uno::Reference< css::lang::XSingleServiceFactory >
+CPPUHELPER_DLLPUBLIC cpo::uno::Reference< css::lang::XSingleServiceFactory >
 createOneInstanceFactory(
-    const css::uno::Reference< css::lang::XMultiServiceFactory > & rServiceManager,
+    const cpo::uno::Reference< css::lang::XMultiServiceFactory > & rServiceManager,
     const ::rtl::OUString & rComponentName,
     ComponentInstantiation pCreateFunction,
     const cpo::uno::Sequence< ::rtl::OUString > & rServiceNames,
@@ -217,11 +217,11 @@ createOneInstanceFactory(
     XSingleServiceFactory and XComponent.
     @deprecated
 */
-CPPUHELPER_DLLPUBLIC css::uno::Reference< css::lang::XSingleServiceFactory >
+CPPUHELPER_DLLPUBLIC cpo::uno::Reference< css::lang::XSingleServiceFactory >
 createSingleRegistryFactory(
-    const css::uno::Reference< css::lang::XMultiServiceFactory > & rServiceManager,
+    const cpo::uno::Reference< css::lang::XMultiServiceFactory > & rServiceManager,
     const ::rtl::OUString & rImplementationName,
-    const css::uno::Reference< css::registry::XRegistryKey > & rImplementationKey );
+    const cpo::uno::Reference< css::registry::XRegistryKey > & rImplementationKey );
 
 }
 

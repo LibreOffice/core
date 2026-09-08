@@ -27,7 +27,7 @@
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <oox/dllapi.h>
@@ -92,7 +92,7 @@ class OOX_DLLPUBLIC FilterBase : public FilterBase_BASE
 public:
     /// @throws cpo::uno::RuntimeException
     explicit            FilterBase(
-                            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+                            const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
     virtual             ~FilterBase() override;
 
@@ -111,23 +111,23 @@ public:
 
 
     /** Returns the component context passed in the filter constructor (always existing). */
-    const css::uno::Reference< cpo::uno::XComponentContext >&
+    const cpo::uno::Reference< cpo::uno::XComponentContext >&
                         getComponentContext() const;
 
     /** Returns the document model (always existing). */
-    const css::uno::Reference< css::frame::XModel >&
+    const cpo::uno::Reference< css::frame::XModel >&
                         getModel() const;
 
     /** Returns the service factory provided by the document model (always existing). */
-    const css::uno::Reference< css::lang::XMultiServiceFactory >&
+    const cpo::uno::Reference< css::lang::XMultiServiceFactory >&
                         getModelFactory() const;
 
     /** Returns the frame that will contain the document model (may be null). */
-    const css::uno::Reference< css::frame::XFrame >&
+    const cpo::uno::Reference< css::frame::XFrame >&
                         getTargetFrame() const;
 
     /** Returns the status indicator (may be null). */
-    const css::uno::Reference< css::task::XStatusIndicator >&
+    const cpo::uno::Reference< css::task::XStatusIndicator >&
                         getStatusIndicator() const;
 
     /** Returns the FilterData */
@@ -153,7 +153,7 @@ public:
             access has been enabled in the storage, the base stream can be
             accessed by passing an empty string as stream name.
      */
-    css::uno::Reference< css::io::XInputStream >
+    cpo::uno::Reference< css::io::XInputStream >
                         openInputStream( const OUString& rStreamName ) const;
 
     /** Opens and returns the specified output stream from the base storage.
@@ -164,7 +164,7 @@ public:
             access has been enabled in the storage, the base stream can be
             accessed by passing an empty string as stream name.
      */
-    css::uno::Reference< css::io::XOutputStream >
+    cpo::uno::Reference< css::io::XOutputStream >
                         openOutputStream( const OUString& rStreamName ) const;
 
     /** Commits changes to base storage (and substorages) */
@@ -180,7 +180,7 @@ public:
     ModelObjectHelper&  getModelObjectHelper() const;
 
     ModelObjectHelper& getModelObjectHelperForModel(
-        const css::uno::Reference<css::lang::XMultiServiceFactory>& xFactory) const;
+        const cpo::uno::Reference<css::lang::XMultiServiceFactory>& xFactory) const;
 
     /** Returns a helper for the handling of OLE objects. */
     ::oox::ole::OleObjectHelper& getOleObjectHelper() const;
@@ -218,12 +218,12 @@ public:
     // com.sun.star.document.XImporter interface ------------------------------
 
     virtual void setTargetDocument(
-                            const css::uno::Reference< css::lang::XComponent >& rxDocument ) override;
+                            const cpo::uno::Reference< css::lang::XComponent >& rxDocument ) override;
 
     // com.sun.star.document.XExporter interface ------------------------------
 
     virtual void setSourceDocument(
-                            const css::uno::Reference< css::lang::XComponent >& rxDocument ) override;
+                            const cpo::uno::Reference< css::lang::XComponent >& rxDocument ) override;
 
     // com.sun.star.document.XFilter interface --------------------------------
 
@@ -239,14 +239,14 @@ public:
     bool isExportSlideShow() const;
 
 protected:
-    virtual css::uno::Reference< css::io::XInputStream >
+    virtual cpo::uno::Reference< css::io::XInputStream >
                         implGetInputStream( comphelper::SequenceAsHashMap& rMediaDesc ) const;
-    virtual css::uno::Reference< css::io::XStream >
+    virtual cpo::uno::Reference< css::io::XStream >
                         implGetOutputStream( comphelper::SequenceAsHashMap& rMediaDesc ) const;
 
     virtual bool        implFinalizeExport( comphelper::SequenceAsHashMap& rMediaDescriptor );
 
-    css::uno::Reference< css::io::XStream > const &
+    cpo::uno::Reference< css::io::XStream > const &
                         getMainDocumentStream( ) const;
 
 private:
@@ -261,9 +261,9 @@ private:
     virtual ::oox::ole::VbaProject* implCreateVbaProject() const = 0;
 
     virtual StorageRef  implCreateStorage(
-                            const css::uno::Reference< css::io::XInputStream >& rxInStream ) const = 0;
+                            const cpo::uno::Reference< css::io::XInputStream >& rxInStream ) const = 0;
     virtual StorageRef  implCreateStorage(
-                            const css::uno::Reference< css::io::XStream >& rxOutStream ) const = 0;
+                            const cpo::uno::Reference< css::io::XStream >& rxOutStream ) const = 0;
 
 private:
     std::unique_ptr< FilterBaseImpl > mxImpl;

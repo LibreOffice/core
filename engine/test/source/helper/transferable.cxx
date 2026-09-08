@@ -16,7 +16,7 @@ using namespace css;
 namespace apitest::helper::transferable
 {
 OString OOO_DLLPUBLIC_TEST getTextSelection(
-    const css::uno::Reference<css::datatransfer::XTransferable>& xTransferable, OString mimeType)
+    const cpo::uno::Reference<css::datatransfer::XTransferable>& xTransferable, OString mimeType)
 {
     if (!xTransferable.is())
         return OString();

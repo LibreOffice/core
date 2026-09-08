@@ -78,8 +78,8 @@
 #include <vcl/GraphicObject.hxx>
 #include <tools/urlobj.hxx>
 
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
@@ -1122,7 +1122,7 @@ Reference< XStorage > ODatabaseDocument::impl_createStorageFor_throw( const OUSt
     return Reference< XStorage >( xStorageFactory->createInstanceWithArguments( aParam ), UNO_QUERY_THROW );
 }
 
-css::uno::Reference<css::embed::XStorage> ODatabaseDocument::impl_GetStorageOrCreateFor_throw(
+cpo::uno::Reference<css::embed::XStorage> ODatabaseDocument::impl_GetStorageOrCreateFor_throw(
     const ::comphelper::NamedValueCollection& _rArguments, const OUString& _rURL) const
 {
     // Try to get the storage from arguments, then create storage for target URL
@@ -1419,7 +1419,7 @@ Reference< XNameAccess > ODatabaseDocument::impl_getDocumentContainer_throw( ODa
     if ( !xContainer.is() )
     {
         Any aValue;
-        css::uno::Reference< cpo::uno::XInterface > xMy(*this);
+        cpo::uno::Reference< cpo::uno::XInterface > xMy(*this);
         if (dbtools::getDataSourceSetting(xMy, bFormsContainer ? u"Forms"_ustr : u"Reports"_ustr, aValue))
         {
             OUString sSupportService;

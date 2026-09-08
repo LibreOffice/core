@@ -17,11 +17,11 @@ typedef InheritedHelperInterfaceWeakImpl< ov::excel::XMenuItem > MenuItem_BASE;
 class ScVbaMenuItem : public MenuItem_BASE
 {
 private:
-    css::uno::Reference< ov::XCommandBarControl > m_xCommandBarControl;
+    cpo::uno::Reference< ov::XCommandBarControl > m_xCommandBarControl;
 
 public:
     /// @throws cpo::uno::RuntimeException
-    ScVbaMenuItem( const css::uno::Reference< ov::XHelperInterface >& rParent, const css::uno::Reference< cpo::uno::XComponentContext >& rContext, css::uno::Reference< ov::XCommandBarControl > xCommandBarControl );
+    ScVbaMenuItem( const cpo::uno::Reference< ov::XHelperInterface >& rParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& rContext, cpo::uno::Reference< ov::XCommandBarControl > xCommandBarControl );
 
     virtual OUString SAL_CALL getCaption() override;
     virtual void SAL_CALL setCaption( const OUString& _caption ) override;

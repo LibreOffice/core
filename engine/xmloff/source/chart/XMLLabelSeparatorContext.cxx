@@ -39,9 +39,9 @@ XMLLabelSeparatorContext::XMLLabelSeparatorContext(
 XMLLabelSeparatorContext::~XMLLabelSeparatorContext()
 {}
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLLabelSeparatorContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLLabelSeparatorContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
     if( (nElement & TOKEN_MASK) == xmloff::token::XML_P )
     {

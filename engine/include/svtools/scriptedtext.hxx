@@ -25,7 +25,7 @@
 
 
 namespace com::sun::star::i18n { class XBreakIterator; }
-namespace com::sun::star::uno { template <typename > class Reference; }
+namespace cpo::uno { template <typename > class Reference; }
 
 class OutputDevice;
 namespace vcl { class Font; }
@@ -76,7 +76,7 @@ public:
                                     The break iterator for iterating through the script portions. */
     void                        SetText(
                                     const OUString& _rText,
-                                    const css::uno::Reference< css::i18n::XBreakIterator >& _xBreakIter );
+                                    const cpo::uno::Reference< css::i18n::XBreakIterator >& _xBreakIter );
 
                                 /** Returns a size struct containing the width and height of the text in the current output device.
                                     @return  A size struct with the text dimensions. */

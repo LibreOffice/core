@@ -20,7 +20,7 @@
 #define INCLUDED_PACKAGE_SOURCE_XSTOR_SWITCHPERSISTENCESTREAM_HXX
 
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
@@ -58,22 +58,22 @@ class SwitchablePersistenceStream
 public:
 
     SwitchablePersistenceStream(
-        const css::uno::Reference< css::io::XStream >& xStream );
+        const cpo::uno::Reference< css::io::XStream >& xStream );
 
     SwitchablePersistenceStream(
-        const css::uno::Reference< css::io::XInputStream >& xInStream );
+        const cpo::uno::Reference< css::io::XInputStream >& xInStream );
 
     virtual ~SwitchablePersistenceStream() override;
 
-    void SwitchPersistenceTo( const css::uno::Reference< css::io::XStream >& xStream );
+    void SwitchPersistenceTo( const cpo::uno::Reference< css::io::XStream >& xStream );
 
-    void SwitchPersistenceTo( const css::uno::Reference< css::io::XInputStream >& xInputStream );
+    void SwitchPersistenceTo( const cpo::uno::Reference< css::io::XInputStream >& xInputStream );
 
-    void CopyAndSwitchPersistenceTo( const css::uno::Reference< css::io::XStream >& xStream );
+    void CopyAndSwitchPersistenceTo( const cpo::uno::Reference< css::io::XStream >& xStream );
 
 // css::io::XStream
-    virtual css::uno::Reference< css::io::XInputStream > getInputStream(  ) override;
-    virtual css::uno::Reference< css::io::XOutputStream > getOutputStream(  ) override;
+    virtual cpo::uno::Reference< css::io::XInputStream > getInputStream(  ) override;
+    virtual cpo::uno::Reference< css::io::XOutputStream > getOutputStream(  ) override;
 
 // css::io::XInputStream
     virtual ::sal_Int32 readBytes( cpo::uno::Sequence< ::sal_Int8 >& aData, ::sal_Int32 nBytesToRead ) override;

@@ -71,7 +71,7 @@ public:
 
     /** Final processing after import of all style settings. Returns the API format index. */
     void                finalizeImport(
-                            const css::uno::Reference< css::util::XNumberFormats >& rxNumFmts,
+                            const cpo::uno::Reference< css::util::XNumberFormats >& rxNumFmts,
                             const css::lang::Locale& rFromLocale );
     sal_uInt32          fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs = false ) const;
 

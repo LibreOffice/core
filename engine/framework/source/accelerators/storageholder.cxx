@@ -58,19 +58,19 @@ void StorageHolder::forgetCachedStorages()
     m_lStorages.clear();
 }
 
-void StorageHolder::setRootStorage(const css::uno::Reference< css::embed::XStorage >& xRoot)
+void StorageHolder::setRootStorage(const cpo::uno::Reference< css::embed::XStorage >& xRoot)
 {
     std::unique_lock g(m_mutex);
     m_xRoot = xRoot;
 }
 
-css::uno::Reference< css::embed::XStorage > StorageHolder::getRootStorage() const
+cpo::uno::Reference< css::embed::XStorage > StorageHolder::getRootStorage() const
 {
     std::unique_lock g(m_mutex);
     return m_xRoot;
 }
 
-css::uno::Reference< css::embed::XStorage > StorageHolder::openPath(const OUString& sPath    ,
+cpo::uno::Reference< css::embed::XStorage > StorageHolder::openPath(const OUString& sPath    ,
                                                                           sal_Int32        nOpenMode)
 {
     OUString sNormedPath = StorageHolder::impl_st_normPath(sPath);
@@ -78,11 +78,11 @@ css::uno::Reference< css::embed::XStorage > StorageHolder::openPath(const OUStri
 
     // SAFE -> ----------------------------------
     std::unique_lock aReadLock(m_mutex);
-    css::uno::Reference< css::embed::XStorage > xParent = m_xRoot;
+    cpo::uno::Reference< css::embed::XStorage > xParent = m_xRoot;
     aReadLock.unlock();
     // <- SAFE ----------------------------------
 
-    css::uno::Reference< css::embed::XStorage > xChild;
+    cpo::uno::Reference< css::embed::XStorage > xChild;
     OUString                             sRelPath;
 
     for (auto const& lFolder : lFolders)
@@ -181,13 +181,13 @@ void StorageHolder::commitPath(const OUString& sPath)
 {
     StorageHolder::TStorageList lStorages = getAllPathStorages(sPath);
 
-    css::uno::Reference< css::embed::XTransactedObject > xCommit;
+    cpo::uno::Reference< css::embed::XTransactedObject > xCommit;
     StorageHolder::TStorageList::reverse_iterator pIt;
     for (  pIt  = lStorages.rbegin(); // order of commit is important ... otherwise changes are not recognized!
            pIt != lStorages.rend();
          ++pIt                      )
     {
-        xCommit.set(*pIt, css::uno::UNO_QUERY);
+        xCommit.set(*pIt, cpo::uno::UNO_QUERY);
         if (!xCommit.is())
             continue;
         xCommit->commit();
@@ -196,7 +196,7 @@ void StorageHolder::commitPath(const OUString& sPath)
     // SAFE -> ------------------------------
     {
         std::unique_lock aReadLock(m_mutex);
-        xCommit.set(m_xRoot, css::uno::UNO_QUERY);
+        xCommit.set(m_xRoot, cpo::uno::UNO_QUERY);
     }
     // <- SAFE ------------------------------
 
@@ -296,7 +296,7 @@ void StorageHolder::removeStorageListener(      XMLBasedAcceleratorConfiguration
         rInfo.Listener.erase(pIt2);
 }
 
-OUString StorageHolder::getPathOfStorage(const css::uno::Reference< css::embed::XStorage >& xStorage)
+OUString StorageHolder::getPathOfStorage(const cpo::uno::Reference< css::embed::XStorage >& xStorage)
 {
     std::unique_lock g(m_mutex);
 
@@ -310,13 +310,13 @@ OUString StorageHolder::getPathOfStorage(const css::uno::Reference< css::embed::
     return OUString();
 }
 
-css::uno::Reference< css::embed::XStorage > StorageHolder::getParentStorage(const css::uno::Reference< css::embed::XStorage >& xChild)
+cpo::uno::Reference< css::embed::XStorage > StorageHolder::getParentStorage(const cpo::uno::Reference< css::embed::XStorage >& xChild)
 {
     OUString sChildPath = getPathOfStorage(xChild);
     return getParentStorage(sChildPath);
 }
 
-css::uno::Reference< css::embed::XStorage > StorageHolder::getParentStorage(const OUString& sChildPath)
+cpo::uno::Reference< css::embed::XStorage > StorageHolder::getParentStorage(const OUString& sChildPath)
 {
     // normed path = "a/b/c/" ... we search for "a/b/"
     OUString sNormedPath = StorageHolder::impl_st_normPath(sChildPath);
@@ -329,7 +329,7 @@ css::uno::Reference< css::embed::XStorage > StorageHolder::getParentStorage(cons
 
     // a)
     if (c < 1)
-        return css::uno::Reference< css::embed::XStorage >();
+        return cpo::uno::Reference< css::embed::XStorage >();
 
     // SAFE -> ----------------------------------
     {
@@ -355,7 +355,7 @@ css::uno::Reference< css::embed::XStorage > StorageHolder::getParentStorage(cons
 
     // ?
     SAL_INFO("fwk", "StorageHolder::getParentStorage(): Unexpected situation. Cached storage item seems to be wrong.");
-    return css::uno::Reference< css::embed::XStorage >();
+    return cpo::uno::Reference< css::embed::XStorage >();
 }
 
 StorageHolder& StorageHolder::operator=(const StorageHolder& rCopy)
@@ -366,7 +366,7 @@ StorageHolder& StorageHolder::operator=(const StorageHolder& rCopy)
     return *this;
 }
 
-css::uno::Reference< css::embed::XStorage > StorageHolder::openSubStorageWithFallback(const css::uno::Reference< css::embed::XStorage >& xBaseStorage  ,
+cpo::uno::Reference< css::embed::XStorage > StorageHolder::openSubStorageWithFallback(const cpo::uno::Reference< css::embed::XStorage >& xBaseStorage  ,
                                                                                       const OUString&                             sSubStorage   ,
                                                                                             sal_Int32                                    eOpenMode)
 {
@@ -374,7 +374,7 @@ css::uno::Reference< css::embed::XStorage > StorageHolder::openSubStorageWithFal
     //    ignore errors ... but save it for later use!
     try
     {
-        css::uno::Reference< css::embed::XStorage > xSubStorage = xBaseStorage->openStorageElement(sSubStorage, eOpenMode);
+        cpo::uno::Reference< css::embed::XStorage > xSubStorage = xBaseStorage->openStorageElement(sSubStorage, eOpenMode);
         if (xSubStorage.is())
             return xSubStorage;
     }
@@ -397,13 +397,13 @@ css::uno::Reference< css::embed::XStorage > StorageHolder::openSubStorageWithFal
     //    don't catch exception here! Outside code wish to know, if operation failed or not.
     //    Otherwise they work on NULL references ...
     sal_Int32 eNewMode = (eOpenMode & ~css::embed::ElementModes::WRITE);
-    css::uno::Reference< css::embed::XStorage > xSubStorage = xBaseStorage->openStorageElement(sSubStorage, eNewMode);
+    cpo::uno::Reference< css::embed::XStorage > xSubStorage = xBaseStorage->openStorageElement(sSubStorage, eNewMode);
     if (xSubStorage.is())
         return xSubStorage;
 
     // d) no chance!
     SAL_INFO("fwk", "openSubStorageWithFallback(): Unexpected situation! Got no exception for missing storage ...");
-    return css::uno::Reference< css::embed::XStorage >();
+    return cpo::uno::Reference< css::embed::XStorage >();
 }
 
 OUString StorageHolder::impl_st_normPath(const OUString& sPath)

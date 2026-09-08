@@ -124,13 +124,13 @@ public:
 
         @return a cpo::uno::XAdapter reference
     */
-    virtual css::uno::Reference< cpo::uno::XAdapter > queryAdapter() SAL_OVERRIDE;
+    virtual cpo::uno::Reference< cpo::uno::XAdapter > queryAdapter() SAL_OVERRIDE;
 
     /** Cast operator to XInterface reference.
 
         @return XInterface reference
     */
-    operator css::uno::Reference< cpo::uno::XInterface > ()
+    operator cpo::uno::Reference< cpo::uno::XInterface > ()
         { return this; }
 
     cpo::uno::XWeak* getXWeak() { return this; }

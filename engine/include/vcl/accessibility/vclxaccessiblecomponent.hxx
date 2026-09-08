@@ -53,7 +53,7 @@ protected:
     virtual void    FillAccessibleRelationSet( utl::AccessibleRelationSetHelper& rRelationSet );
     virtual void    FillAccessibleStateSet( sal_Int64& rStateSet );
 
-    virtual css::uno::Reference< css::accessibility::XAccessible > GetChildAccessible( const VclWindowEvent& rVclWindowEvent );
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > GetChildAccessible( const VclWindowEvent& rVclWindowEvent );
 
 public:
     VCLXAccessibleComponent(vcl::Window* pWindow);
@@ -74,18 +74,18 @@ public:
 
     // css::accessibility::XAccessibleContext
     sal_Int64 getAccessibleChildCount(  ) override;
-    css::uno::Reference< css::accessibility::XAccessible > getAccessibleChild( sal_Int64 i ) override;
-    css::uno::Reference< css::accessibility::XAccessible > getAccessibleParent(  ) override;
+    cpo::uno::Reference< css::accessibility::XAccessible > getAccessibleChild( sal_Int64 i ) override;
+    cpo::uno::Reference< css::accessibility::XAccessible > getAccessibleParent(  ) override;
     sal_Int16 getAccessibleRole(  ) override;
     OUString getAccessibleDescription(  ) override;
     OUString getAccessibleName(  ) override;
     OUString getAccessibleId(  ) override;
-    css::uno::Reference< css::accessibility::XAccessibleRelationSet > getAccessibleRelationSet(  ) override;
+    cpo::uno::Reference< css::accessibility::XAccessibleRelationSet > getAccessibleRelationSet(  ) override;
     sal_Int64 getAccessibleStateSet(  ) override;
     css::lang::Locale getLocale(  ) override;
 
     // css::accessibility::XAccessibleComponent
-    css::uno::Reference< css::accessibility::XAccessible > getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
+    cpo::uno::Reference< css::accessibility::XAccessible > getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
     css::awt::Point getLocationOnScreen(  ) override;
     void grabFocus(  ) override;
     virtual sal_Int32 getForeground(  ) override;

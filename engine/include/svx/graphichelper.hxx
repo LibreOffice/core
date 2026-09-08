@@ -41,12 +41,12 @@ public:
     static OUString ExportGraphic(weld::Window* pWin, const Graphic& rGraphic, const OUString& rGraphicName);
     static OUString ExportGraphicToTempFile(const Graphic& rGraphic, std::u16string_view rGraphicName);
     static void
-    SaveShapeAsGraphicToPath(const css::uno::Reference<css::lang::XComponent>& xComponent,
-                             const css::uno::Reference<css::drawing::XShape>& xShape,
+    SaveShapeAsGraphicToPath(const cpo::uno::Reference<css::lang::XComponent>& xComponent,
+                             const cpo::uno::Reference<css::drawing::XShape>& xShape,
                              const OUString& rMimeType, const OUString& rPath);
     static void SaveShapeAsGraphic(weld::Window* pWin,
-                                   const css::uno::Reference<css::lang::XComponent>& xComponent,
-                                   const css::uno::Reference<css::drawing::XShape>& xShape);
+                                   const cpo::uno::Reference<css::lang::XComponent>& xComponent,
+                                   const cpo::uno::Reference<css::drawing::XShape>& xShape);
     static short HasToSaveTransformedImage(weld::Widget* pWin);
 };
 

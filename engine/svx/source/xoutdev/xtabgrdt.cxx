@@ -38,6 +38,7 @@
 #include <memory>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 XGradientList::XGradientList( const OUString& rPath, const OUString& rReferer )
 :   XPropertyList( XPropertyListType::Gradient, rPath, rReferer )

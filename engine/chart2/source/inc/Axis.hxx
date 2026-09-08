@@ -78,30 +78,30 @@ private:
 
 public:
     // ____ XPropertySet ____
-    virtual css::uno::Reference< css::beans::XPropertySetInfo >
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo >
         getPropertySetInfo() override;
 
     // ____ XAxis ____
     virtual void setScaleData( const css::chart2::ScaleData& rScaleData ) override;
     virtual css::chart2::ScaleData getScaleData() override;
-    virtual css::uno::Reference< css::beans::XPropertySet > getGridProperties() override;
-    virtual cpo::uno::Sequence< css::uno::Reference< css::beans::XPropertySet > > getSubGridProperties() override;
-    virtual cpo::uno::Sequence< css::uno::Reference< css::beans::XPropertySet > > getSubTickProperties() override;
+    virtual cpo::uno::Reference< css::beans::XPropertySet > getGridProperties() override;
+    virtual cpo::uno::Sequence< cpo::uno::Reference< css::beans::XPropertySet > > getSubGridProperties() override;
+    virtual cpo::uno::Sequence< cpo::uno::Reference< css::beans::XPropertySet > > getSubTickProperties() override;
 
     // ____ XTitled ____
-    virtual css::uno::Reference< css::chart2::XTitle > getTitleObject() override;
+    virtual cpo::uno::Reference< css::chart2::XTitle > getTitleObject() override;
     virtual void setTitleObject(
-        const css::uno::Reference< css::chart2::XTitle >& Title ) override;
+        const cpo::uno::Reference< css::chart2::XTitle >& Title ) override;
 
     // ____ XCloneable ____
     // Note: the coordinate systems are not cloned!
-    virtual css::uno::Reference< css::util::XCloneable > createClone() override;
+    virtual cpo::uno::Reference< css::util::XCloneable > createClone() override;
 
     // ____ XModifyBroadcaster ____
     virtual void addModifyListener(
-        const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+        const cpo::uno::Reference< css::util::XModifyListener >& aListener ) override;
     virtual void removeModifyListener(
-        const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+        const cpo::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
     rtl::Reference< ::chart::Title > getTitleObject2() const;
     void setTitleObject( const rtl::Reference< ::chart::Title >& xNewTitle );

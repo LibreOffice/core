@@ -56,6 +56,7 @@
 #define MAX_PAGES_FOR_FUZZING 2048
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 CGMImpressOutAct::CGMImpressOutAct(CGM& rCGM, const uno::Reference< frame::XModel > & rModel)
     : mnCurrentPage(0)

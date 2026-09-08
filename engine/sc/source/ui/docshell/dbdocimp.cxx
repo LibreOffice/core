@@ -61,6 +61,7 @@
 #include <refupdatecontext.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 void ScDBDocFunc::ShowInBeamer( const ScImportParam& rParam, const SfxViewFrame* pFrame )
 {

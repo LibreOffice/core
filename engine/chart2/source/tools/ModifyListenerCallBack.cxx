@@ -21,7 +21,7 @@
 #include <comphelper/compbase.hxx>
 
 using namespace ::com::sun::star;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 
 namespace chart {
 
@@ -67,7 +67,7 @@ void ModifyListenerCallBack_impl::disposing( const lang::EventObject& /*Source*/
     m_xBroadcaster.clear();
 }
 
-void ModifyListenerCallBack_impl::startListening( const css::uno::Reference< css::util::XModifyBroadcaster >& xBroadcaster )
+void ModifyListenerCallBack_impl::startListening( const cpo::uno::Reference< css::util::XModifyBroadcaster >& xBroadcaster )
 {
     if( m_xBroadcaster == xBroadcaster )
         return;
@@ -97,7 +97,7 @@ ModifyListenerCallBack::~ModifyListenerCallBack()
     stopListening();
 }
 
-void ModifyListenerCallBack::startListening( const css::uno::Reference< css::util::XModifyBroadcaster >& xBroadcaster )
+void ModifyListenerCallBack::startListening( const cpo::uno::Reference< css::util::XModifyBroadcaster >& xBroadcaster )
 {
     pModifyListener_impl->startListening( xBroadcaster );
 }

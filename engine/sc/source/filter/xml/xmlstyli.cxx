@@ -61,10 +61,11 @@ using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
+using namespace ::cpo;
 using namespace xmloff::token;
 using namespace ::formula;
 
-using com::sun::star::uno::UNO_QUERY;
+using cpo::uno::UNO_QUERY;
 ScXMLCellImportPropertyMapper::ScXMLCellImportPropertyMapper(
         const rtl::Reference< XMLPropertySetMapper >& rMapper,
         SvXMLImport& rImportP) :
@@ -277,9 +278,9 @@ class XMLTableCellPropsContext : public SvXMLPropertySetContext
              SvXMLImportPropertyMapper* pMap);
 
     using SvXMLPropertySetContext::createFastChildContext;
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
         ::std::vector< XMLPropertyState > &rProperties,
         const XMLPropertyState& rProp ) override;
 };
@@ -297,9 +298,9 @@ XMLTableCellPropsContext::XMLTableCellPropsContext(
 {
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTableCellPropsContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLTableCellPropsContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
     ::std::vector< XMLPropertyState > &rProperties,
     const XMLPropertyState& rProperty)
 {
@@ -444,11 +445,11 @@ XMLTableStyleContext::~XMLTableStyleContext()
         delete mpCondFormat;
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTableStyleContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLTableStyleContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
-    css::uno::Reference< css::xml::sax::XFastContextHandler > xContext;
+    cpo::uno::Reference< css::xml::sax::XFastContextHandler > xContext;
 
     if( nElement == XML_ELEMENT(STYLE, XML_MAP) )
     {
@@ -962,7 +963,7 @@ ScMasterPageContext::~ScMasterPageContext()
 
 SvXMLImportContext *ScMasterPageContext::CreateHeaderFooterContext(
             sal_Int32 nElement,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
+            const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
             const bool bFooter,
             const bool bLeft,
             const bool bFirst )

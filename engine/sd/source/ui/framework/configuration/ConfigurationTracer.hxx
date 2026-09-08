@@ -26,7 +26,7 @@ namespace sd::framework
 {
 class Configuration;
 }
-namespace com::sun::star::uno
+namespace cpo::uno
 {
 template <typename> class Reference;
 }

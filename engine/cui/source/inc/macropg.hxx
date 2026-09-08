@@ -23,7 +23,7 @@
 
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <rtl/ustring.hxx>
 
 #include <unordered_map>
@@ -44,11 +44,11 @@ class SvxMacroTabPage_ : public SfxTabPage
     void GenericHandler_Impl(const weld::Button* pBtn);
     const EventPair* LookupEvent(const OUString& rEventName);
 
-    css::uno::Reference< css::container::XNameReplace > m_xAppEvents;
+    cpo::uno::Reference< css::container::XNameReplace > m_xAppEvents;
 protected:
     std::unique_ptr<SvxMacroTabPage_Impl> mpImpl;
-    css::uno::Reference< css::container::XNameReplace > m_xDocEvents;
-    css::uno::Reference< css::util::XModifiable > m_xModifiable;
+    cpo::uno::Reference< css::container::XNameReplace > m_xDocEvents;
+    cpo::uno::Reference< css::util::XModifiable > m_xModifiable;
     EventsHash m_appEventsHash;
     EventsHash m_docEventsHash;
     int m_nAssignedEvents;
@@ -64,7 +64,7 @@ public:
 
     virtual                     ~SvxMacroTabPage_() override;
 
-    void                        InitAndSetHandler( const css::uno::Reference< css::container::XNameReplace >& xAppEvents, const css::uno::Reference< css::container::XNameReplace >& xDocEvents, const css::uno::Reference< css::util::XModifiable >& xModifiable );
+    void                        InitAndSetHandler( const cpo::uno::Reference< css::container::XNameReplace >& xAppEvents, const cpo::uno::Reference< css::container::XNameReplace >& xDocEvents, const cpo::uno::Reference< css::util::XModifiable >& xModifiable );
     virtual bool                FillItemSet( SfxItemSet* rSet ) override;
 
     virtual void                Reset( const SfxItemSet* ) override;
@@ -78,9 +78,9 @@ class SvxMacroTabPage : public SvxMacroTabPage_
 public:
     SvxMacroTabPage(
         weld::Container* pPage, weld::DialogController* pController,
-        const css::uno::Reference< css::frame::XFrame >& _rxDocumentFrame,
+        const cpo::uno::Reference< css::frame::XFrame >& _rxDocumentFrame,
         const SfxItemSet& rSet,
-        css::uno::Reference< css::container::XNameReplace > const & xNameReplace,
+        cpo::uno::Reference< css::container::XNameReplace > const & xNameReplace,
         sal_uInt16 nSelectedIndex
     );
 };
@@ -103,9 +103,9 @@ class SvxMacroAssignDlg : public SvxMacroAssignSingleTabDialog
 public:
     SvxMacroAssignDlg(
         weld::Window* pParent,
-        const css::uno::Reference< css::frame::XFrame >& _rxDocumentFrame,
+        const cpo::uno::Reference< css::frame::XFrame >& _rxDocumentFrame,
         const SfxItemSet& rSet,
-        const css::uno::Reference< css::container::XNameReplace >& xNameReplace,
+        const cpo::uno::Reference< css::container::XNameReplace >& xNameReplace,
         sal_uInt16 nSelectedIndex
     );
 };

@@ -25,9 +25,9 @@ class CSubmissionGet : public CSubmission
 {
 public:
     CSubmissionGet(std::u16string_view aURL,
-                   const css::uno::Reference<css::xml::dom::XDocumentFragment>& aFragment);
+                   const cpo::uno::Reference<css::xml::dom::XDocumentFragment>& aFragment);
     virtual SubmissionResult
-    submit(const css::uno::Reference<css::task::XInteractionHandler>& aInteractionHandler) override;
+    submit(const cpo::uno::Reference<css::task::XInteractionHandler>& aInteractionHandler) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -29,7 +29,7 @@
 #include <unordered_map>
 
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <comphelper/stl_types.hxx>
 #include <filter/msfilter/dffpropset.hxx>
@@ -490,9 +490,9 @@ protected:
                                   const tools::Rectangle& rBoundRect,
                                   const tools::Rectangle& rVisArea,
                                   const int _nCalledByGroup ) const;
-    static css::uno::Reference < css::embed::XEmbeddedObject > CheckForConvertToSOObj(
+    static cpo::uno::Reference < css::embed::XEmbeddedObject > CheckForConvertToSOObj(
                 sal_uInt32 nConvertFlags, SotStorage& rSrcStg,
-                const css::uno::Reference < css::embed::XStorage >& xDestStg,
+                const cpo::uno::Reference < css::embed::XStorage >& xDestStg,
                 const Graphic& rGrf,
                 const tools::Rectangle& rVisArea,
                 OUString const& rBaseURL);
@@ -534,7 +534,7 @@ protected:
     virtual bool GetOLEStorageName( sal_uInt32 nOLEId,
                                       OUString& rStorageName,
                                       rtl::Reference<SotStorage>& rSrcStorage,
-                                      css::uno::Reference < css::embed::XStorage >& xDestStg
+                                      cpo::uno::Reference < css::embed::XStorage >& xDestStg
                                     ) const;
 
     /** Prevent that (rounded) rectangles with wrapped text will always be
@@ -717,7 +717,7 @@ public:
         SdrModel& rSdrModel,
         const OUString& rStorageName,
         rtl::Reference<SotStorage> const & rSrcStorage,
-        const css::uno::Reference < css::embed::XStorage >& xDestStg,
+        const cpo::uno::Reference < css::embed::XStorage >& xDestStg,
         const Graphic& rGraf,
         const tools::Rectangle& rBoundRect,
         const tools::Rectangle& rVisArea,
@@ -737,7 +737,7 @@ public:
 
     static bool SetPropValue(
         const cpo::uno::Any& rAny,
-        const css::uno::Reference< css::beans::XPropertySet > & rXPropSet,
+        const cpo::uno::Reference< css::beans::XPropertySet > & rXPropSet,
         const OUString& rPropertyName
     );
 
@@ -751,7 +751,7 @@ public:
     SdrObject* getShapeForId( sal_Int32 nShapeId );
 
     // Read drs/shapexml.xml from metroBlob and return the document element
-    css::uno::Reference<css::xml::dom::XDocument> ParseMetroBlobShapeXML(SvStream& rStream);
+    cpo::uno::Reference<css::xml::dom::XDocument> ParseMetroBlobShapeXML(SvStream& rStream);
 };
 
 struct SvxMSDffShapeInfo

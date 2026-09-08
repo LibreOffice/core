@@ -62,7 +62,7 @@ private:
     bool m_showName = true;
     bool m_showText = true;
 
-    css::uno::Reference< css::frame::XFrame >
+    cpo::uno::Reference< css::frame::XFrame >
                                 mxDocumentFrame;
 
 protected:
@@ -106,7 +106,7 @@ public:
     virtual ~SvxHyperlinkTabPageBase () override;
 
     void    SetDocumentFrame(
-        const css::uno::Reference< css::frame::XFrame >& rxDocumentFrame )
+        const cpo::uno::Reference< css::frame::XFrame >& rxDocumentFrame )
     {
         mxDocumentFrame = rxDocumentFrame;
     }

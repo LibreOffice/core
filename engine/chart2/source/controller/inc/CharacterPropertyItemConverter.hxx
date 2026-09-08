@@ -29,15 +29,15 @@ class CharacterPropertyItemConverter final : public ItemConverter
 {
 public:
     CharacterPropertyItemConverter(
-        const css::uno::Reference<css::beans::XPropertySet>& rPropertySet,
+        const cpo::uno::Reference<css::beans::XPropertySet>& rPropertySet,
         SfxItemPool& rItemPool );
 
     CharacterPropertyItemConverter(
-        const css::uno::Reference<css::beans::XPropertySet>& rPropertySet,
+        const cpo::uno::Reference<css::beans::XPropertySet>& rPropertySet,
         SfxItemPool& rItemPool,
         const std::optional<css::awt::Size>& pRefSize,
         OUString aRefSizePropertyName,
-        const css::uno::Reference<css::beans::XPropertySet>& rRefSizePropSet = css::uno::Reference<css::beans::XPropertySet>() );
+        const cpo::uno::Reference<css::beans::XPropertySet>& rRefSizePropSet = cpo::uno::Reference<css::beans::XPropertySet>() );
 
     virtual ~CharacterPropertyItemConverter() override;
 
@@ -47,10 +47,10 @@ private:
     virtual void FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutItemSet ) const override;
     virtual bool ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet & rItemSet ) override;
 
-    const css::uno::Reference<css::beans::XPropertySet>& GetRefSizePropertySet() const;
+    const cpo::uno::Reference<css::beans::XPropertySet>& GetRefSizePropertySet() const;
 
     OUString m_aRefSizePropertyName;
-    css::uno::Reference<css::beans::XPropertySet> m_xRefSizePropSet;
+    cpo::uno::Reference<css::beans::XPropertySet> m_xRefSizePropSet;
     std::optional<css::awt::Size> m_pRefSize;
 };
 

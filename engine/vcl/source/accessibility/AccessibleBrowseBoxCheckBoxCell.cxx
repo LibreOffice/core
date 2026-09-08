@@ -24,7 +24,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
 using namespace com::sun::star::accessibility;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 AccessibleCheckBoxCell::AccessibleCheckBoxCell(const Reference<XAccessible>& _rxParent,
@@ -115,7 +115,7 @@ sal_Int64 AccessibleCheckBoxCell::getAccessibleChildCount(  )
     return 0;
 }
 
-css::uno::Reference< css::accessibility::XAccessible > AccessibleCheckBoxCell::getAccessibleChild( sal_Int64 )
+cpo::uno::Reference< css::accessibility::XAccessible > AccessibleCheckBoxCell::getAccessibleChild( sal_Int64 )
 {
     throw css::lang::IndexOutOfBoundsException();
 }

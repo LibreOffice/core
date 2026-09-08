@@ -54,7 +54,7 @@ public:
     };
 
 public:
-    ExtensionBackendDb(css::uno::Reference<cpo::uno::XComponentContext> const& xContext,
+    ExtensionBackendDb(cpo::uno::Reference<cpo::uno::XComponentContext> const& xContext,
                        OUString const& url);
 
     void addEntry(OUString const& url, Data const& data);

@@ -16,6 +16,7 @@
 #include <test/xmldocptr.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 namespace
 {
@@ -72,7 +73,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAddVerticalFrameOffsetsRTF)
 
     // Then make sure the floating and the inline tables don't overlap:
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
-    css::uno::Reference<qa::XDumper> xDumper(xModel->getCurrentController(), uno::UNO_QUERY);
+    cpo::uno::Reference<qa::XDumper> xDumper(xModel->getCurrentController(), uno::UNO_QUERY);
     OString aDump = xDumper->dump(u"layout"_ustr).toUtf8();
     auto pCharBuffer = reinterpret_cast<const xmlChar*>(aDump.getStr());
     xmlDocUniquePtr pXmlDoc(xmlParseDoc(pCharBuffer));

@@ -33,8 +33,9 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
+using namespace ::cpo;
 using ::cpo::uno::Any;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 
 namespace
 {

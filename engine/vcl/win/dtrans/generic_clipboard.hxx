@@ -39,8 +39,8 @@ namespace dtrans
     {
         OUString     m_aName;
 
-        css::uno::Reference< css::datatransfer::XTransferable > m_aContents;
-        css::uno::Reference< css::datatransfer::clipboard::XClipboardOwner > m_aOwner;
+        cpo::uno::Reference< css::datatransfer::XTransferable > m_aContents;
+        cpo::uno::Reference< css::datatransfer::clipboard::XClipboardOwner > m_aOwner;
         comphelper::OInterfaceContainerHelper4<css::datatransfer::clipboard::XClipboardListener> maClipboardListeners;
 
         bool m_bInitialized;
@@ -70,11 +70,11 @@ namespace dtrans
          * XClipboard
          */
 
-        virtual css::uno::Reference< css::datatransfer::XTransferable > getContents() override;
+        virtual cpo::uno::Reference< css::datatransfer::XTransferable > getContents() override;
 
         virtual void setContents(
-            const css::uno::Reference< css::datatransfer::XTransferable >& xTrans,
-            const css::uno::Reference< css::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner ) override;
+            const cpo::uno::Reference< css::datatransfer::XTransferable >& xTrans,
+            const cpos::uno::Reference< css::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner ) override;
 
         virtual OUString getName() override;
 
@@ -89,10 +89,10 @@ namespace dtrans
          */
 
         virtual void addClipboardListener(
-            const css::uno::Reference< css::datatransfer::clipboard::XClipboardListener >& listener ) override;
+            const cpo::uno::Reference< css::datatransfer::clipboard::XClipboardListener >& listener ) override;
 
         virtual void removeClipboardListener(
-            const css::uno::Reference< css::datatransfer::clipboard::XClipboardListener >& listener ) override;
+            const cpo::uno::Reference< css::datatransfer::clipboard::XClipboardListener >& listener ) override;
 
     };
 

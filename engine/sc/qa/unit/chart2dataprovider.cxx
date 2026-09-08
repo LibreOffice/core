@@ -19,7 +19,8 @@
 #include "helper/qahelper.hxx"
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 class ScChart2DataProviderTest : public ScModelTestBase
 {

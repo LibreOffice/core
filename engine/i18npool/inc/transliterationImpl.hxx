@@ -36,7 +36,7 @@ class TransliterationImpl final : public cppu::WeakImplHelper
 {
 public:
     // Constructors
-    TransliterationImpl(const css::uno::Reference < cpo::uno::XComponentContext >& xContext);
+    TransliterationImpl(const cpo::uno::Reference < cpo::uno::XComponentContext >& xContext);
     // Destructor
     virtual ~TransliterationImpl() override;
 
@@ -83,22 +83,22 @@ public:
 
 private:
 #define maxCascade 27
-    css::uno::Reference< css::i18n::XExtendedTransliteration > bodyCascade[maxCascade];
+    cpo::uno::Reference< css::i18n::XExtendedTransliteration > bodyCascade[maxCascade];
     sal_Int16 numCascade;
     bool caseignoreOnly;
-    css::uno::Reference< cpo::uno::XComponentContext > mxContext;
-    css::uno::Reference< css::i18n::XLocaleData5 > mxLocaledata;
-    css::uno::Reference< css::i18n::XExtendedTransliteration > caseignore;
+    cpo::uno::Reference< cpo::uno::XComponentContext > mxContext;
+    cpo::uno::Reference< css::i18n::XLocaleData5 > mxLocaledata;
+    cpo::uno::Reference< css::i18n::XExtendedTransliteration > caseignore;
 
     /// @throws cpo::uno::RuntimeException
     bool loadModuleByName( std::u16string_view implName,
-        css::uno::Reference<css::i18n::XExtendedTransliteration> & body, const css::lang::Locale& rLocale);
+        cpo::uno::Reference<css::i18n::XExtendedTransliteration> & body, const css::lang::Locale& rLocale);
 
     void clear();
 
     /// @throws cpo::uno::RuntimeException
     void loadBody( OUString const &implName,
-        css::uno::Reference< css::i18n::XExtendedTransliteration >& body );
+        cpo::uno::Reference< css::i18n::XExtendedTransliteration >& body );
 
     /// @throws cpo::uno::RuntimeException
     cpo::uno::Sequence< OUString > getRange(

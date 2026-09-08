@@ -12,7 +12,7 @@
 
 #include <cpo/uno/XInterface.hpp>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <test/testdllapi.hxx>
 
@@ -21,12 +21,12 @@ namespace apitest
 class OOO_DLLPUBLIC_TEST XShapeGrouper
 {
 public:
-    void setDrawPage(const css::uno::Reference<cpo::uno::XInterface>& r_xDrawPage)
+    void setDrawPage(const cpo::uno::Reference<cpo::uno::XInterface>& r_xDrawPage)
     {
         m_xDrawPage = r_xDrawPage;
     }
 
-    virtual css::uno::Reference<cpo::uno::XInterface> init() = 0;
+    virtual cpo::uno::Reference<cpo::uno::XInterface> init() = 0;
 
     void testGroup();
     void testUngroup();
@@ -35,7 +35,7 @@ protected:
     ~XShapeGrouper() {}
 
 private:
-    css::uno::Reference<cpo::uno::XInterface> m_xDrawPage;
+    cpo::uno::Reference<cpo::uno::XInterface> m_xDrawPage;
 };
 } // namespace apitest
 

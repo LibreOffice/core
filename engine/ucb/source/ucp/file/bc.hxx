@@ -79,7 +79,7 @@ namespace fileaccess {
 
         BaseContent(
             TaskManager* pMyShell,
-            const css::uno::Reference< css::ucb::XContentIdentifier >& xContentIdentifier,
+            const cpo::uno::Reference< css::ucb::XContentIdentifier >& xContentIdentifier,
             OUString aUnqPath, sal_uInt16 nState = FullFeatured);
 
         virtual ~BaseContent() override;
@@ -90,10 +90,10 @@ namespace fileaccess {
 
         virtual void SAL_CALL
         addEventListener(
-            const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
+            const cpo::uno::Reference< css::lang::XEventListener >& xListener ) override;
 
         virtual void SAL_CALL
-        removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+        removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
 
         // XServiceInfo
@@ -115,14 +115,14 @@ namespace fileaccess {
         execute(
             const css::ucb::Command& aCommand,
             sal_Int32 CommandId,
-            const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment ) override;
+            const cpo::uno::Reference< css::ucb::XCommandEnvironment >& Environment ) override;
 
         virtual void SAL_CALL
         abort( sal_Int32 CommandId ) override;
 
 
         // XContent
-        virtual css::uno::Reference< css::ucb::XContentIdentifier > SAL_CALL
+        virtual cpo::uno::Reference< css::ucb::XContentIdentifier > SAL_CALL
         getIdentifier() override;
 
         virtual OUString SAL_CALL
@@ -130,22 +130,22 @@ namespace fileaccess {
 
         virtual void SAL_CALL
         addContentEventListener(
-            const css::uno::Reference< css::ucb::XContentEventListener >& Listener ) override;
+            const cpo::uno::Reference< css::ucb::XContentEventListener >& Listener ) override;
 
         virtual void SAL_CALL
         removeContentEventListener(
-            const css::uno::Reference< css::ucb::XContentEventListener >& Listener ) override;
+            const cpo::uno::Reference< css::ucb::XContentEventListener >& Listener ) override;
 
         // XPropertiesChangeNotifier
 
         virtual void SAL_CALL
         addPropertiesChangeListener(
             const cpo::uno::Sequence< OUString >& PropertyNames,
-            const css::uno::Reference< css::beans::XPropertiesChangeListener >& Listener ) override;
+            const cpo::uno::Reference< css::beans::XPropertiesChangeListener >& Listener ) override;
 
         virtual void SAL_CALL
         removePropertiesChangeListener( const cpo::uno::Sequence< OUString >& PropertyNames,
-                                        const css::uno::Reference< css::beans::XPropertiesChangeListener >& Listener ) override;
+                                        const cpo::uno::Reference< css::beans::XPropertiesChangeListener >& Listener ) override;
 
         // XPropertyContainer
 
@@ -162,11 +162,11 @@ namespace fileaccess {
 
         virtual void SAL_CALL
         addPropertySetInfoChangeListener(
-            const css::uno::Reference< css::beans::XPropertySetInfoChangeListener >& Listener ) override;
+            const cpo::uno::Reference< css::beans::XPropertySetInfoChangeListener >& Listener ) override;
 
         virtual void SAL_CALL
         removePropertySetInfoChangeListener(
-            const css::uno::Reference< css::beans::XPropertySetInfoChangeListener >& Listener ) override;
+            const cpo::uno::Reference< css::beans::XPropertySetInfoChangeListener >& Listener ) override;
 
 
         // XContentCreator
@@ -174,17 +174,17 @@ namespace fileaccess {
         virtual cpo::uno::Sequence< css::ucb::ContentInfo > SAL_CALL
         queryCreatableContentsInfo() override;
 
-        virtual css::uno::Reference< css::ucb::XContent > SAL_CALL
+        virtual cpo::uno::Reference< css::ucb::XContent > SAL_CALL
         createNewContent( const css::ucb::ContentInfo& Info ) override;
 
 
         // XChild
-        virtual css::uno::Reference< cpo::uno::XInterface > SAL_CALL
+        virtual cpo::uno::Reference< cpo::uno::XInterface > SAL_CALL
         getParent() override;
 
         // Not supported
         virtual void SAL_CALL
-        setParent( const css::uno::Reference< cpo::uno::XInterface >& Parent ) override;
+        setParent( const cpo::uno::Reference< cpo::uno::XInterface >& Parent ) override;
 
 
         // Notifier
@@ -198,7 +198,7 @@ namespace fileaccess {
     private:
         // Data members
         TaskManager*                                                m_pMyShell;
-        css::uno::Reference< css::ucb::XContentIdentifier >   m_xContentIdentifier;
+        cpo::uno::Reference< css::ucb::XContentIdentifier >   m_xContentIdentifier;
         OUString                                              m_aUncPath;
         bool                                                  m_bFolder;
         sal_uInt16                                            m_nState;
@@ -212,15 +212,15 @@ namespace fileaccess {
 
         // Private Methods
         /// @throws cpo::uno::RuntimeException
-        css::uno::Reference< css::ucb::XCommandInfo >
+        cpo::uno::Reference< css::ucb::XCommandInfo >
         getCommandInfo();
 
         /// @throws cpo::uno::RuntimeException
-        css::uno::Reference< css::beans::XPropertySetInfo >
+        cpo::uno::Reference< css::beans::XPropertySetInfo >
         getPropertySetInfo();
 
         /// @throws cpo::uno::RuntimeException
-        css::uno::Reference< css::sdbc::XRow >
+        cpo::uno::Reference< css::sdbc::XRow >
         getPropertyValues(
             sal_Int32 nMyCommandIdentifier,
             const cpo::uno::Sequence< css::beans::Property >& PropertySet );
@@ -230,7 +230,7 @@ namespace fileaccess {
             sal_Int32 nMyCommandIdentifier,
             const cpo::uno::Sequence< css::beans::PropertyValue >& Values );
 
-        css::uno::Reference< css::ucb::XDynamicResultSet >
+        cpo::uno::Reference< css::ucb::XDynamicResultSet >
         open(
             sal_Int32 nMyCommandIdentifier,
             const css::ucb::OpenCommandArgument2& aCommandArgument );

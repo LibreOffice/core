@@ -45,9 +45,9 @@ namespace calc
         : public OCellListSource_Base
     {
     private:
-        css::uno::Reference< css::sheet::XSpreadsheetDocument >
+        cpo::uno::Reference< css::sheet::XSpreadsheetDocument >
                     m_xDocument;            /// the document where our cell lives
-        css::uno::Reference< css::table::XCellRange >
+        cpo::uno::Reference< css::table::XCellRange >
                     m_xRange;               /// the range of cells we're bound to
         ::comphelper::OInterfaceContainerHelper4<css::form::binding::XListEntryListener>
                     m_aListEntryListeners;  /// our listeners
@@ -55,7 +55,7 @@ namespace calc
 
     public:
         explicit OCellListSource(
-            const css::uno::Reference< css::sheet::XSpreadsheetDocument >& _rxDocument
+            const cpo::uno::Reference< css::sheet::XSpreadsheetDocument >& _rxDocument
         );
 
     protected:
@@ -65,8 +65,8 @@ namespace calc
         virtual sal_Int32 SAL_CALL getListEntryCount(  ) override;
         virtual OUString SAL_CALL getListEntry( sal_Int32 Position ) override;
         virtual cpo::uno::Sequence< OUString > SAL_CALL getAllListEntries(  ) override;
-        virtual void SAL_CALL addListEntryListener( const css::uno::Reference< css::form::binding::XListEntryListener >& Listener ) override;
-        virtual void SAL_CALL removeListEntryListener( const css::uno::Reference< css::form::binding::XListEntryListener >& Listener ) override;
+        virtual void SAL_CALL addListEntryListener( const cpo::uno::Reference< css::form::binding::XListEntryListener >& Listener ) override;
+        virtual void SAL_CALL removeListEntryListener( const cpo::uno::Reference< css::form::binding::XListEntryListener >& Listener ) override;
 
         // XListEntryTypedSource
         virtual cpo::uno::Sequence< OUString > SAL_CALL getAllListEntriesTyped( cpo::uno::Sequence< cpo::uno::Any >& rDataValues ) override;

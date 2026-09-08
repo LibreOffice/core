@@ -35,30 +35,30 @@ namespace func_provider
 {
 
 //Typedefs
-typedef std::map  <   css::uno::Reference< cpo::uno::XInterface >
-                  ,   css::uno::Reference< css::script::provider::XScriptProvider >
+typedef std::map  <   cpo::uno::Reference< cpo::uno::XInterface >
+                  ,   cpo::uno::Reference< css::script::provider::XScriptProvider >
                   >   ScriptComponent_map;
 
 typedef std::unordered_map< OUString,
-    css::uno::Reference< css::script::provider::XScriptProvider > > Msp_hash;
+    cpo::uno::Reference< css::script::provider::XScriptProvider > > Msp_hash;
 
 class ActiveMSPList : public ::cppu::WeakImplHelper< css::lang::XEventListener  >
 {
 
 public:
 
-    explicit ActiveMSPList(  const css::uno::Reference<
+    explicit ActiveMSPList(  const cpo::uno::Reference<
         cpo::uno::XComponentContext > & xContext  );
     virtual ~ActiveMSPList() override;
 
-    css::uno::Reference< css::script::provider::XScriptProvider >
+    cpo::uno::Reference< css::script::provider::XScriptProvider >
         getMSPFromStringContext( const OUString& context );
 
-    css::uno::Reference< css::script::provider::XScriptProvider >
+    cpo::uno::Reference< css::script::provider::XScriptProvider >
         getMSPFromAnyContext( const cpo::uno::Any& context );
 
-    css::uno::Reference< css::script::provider::XScriptProvider >
-        getMSPFromInvocationContext( const css::uno::Reference< css::document::XScriptInvocationContext >& context );
+    cpo::uno::Reference< css::script::provider::XScriptProvider >
+        getMSPFromInvocationContext( const cpo::uno::Reference< css::document::XScriptInvocationContext >& context );
 
     //XEventListener
 
@@ -66,11 +66,11 @@ public:
     virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
 private:
-    void addActiveMSP( const css::uno::Reference< cpo::uno::XInterface >& xComponent,
-                       const css::uno::Reference< css::script::provider::XScriptProvider >& msp );
-    css::uno::Reference< css::script::provider::XScriptProvider >
+    void addActiveMSP( const cpo::uno::Reference< cpo::uno::XInterface >& xComponent,
+                       const cpo::uno::Reference< css::script::provider::XScriptProvider >& msp );
+    cpo::uno::Reference< css::script::provider::XScriptProvider >
         createNewMSP( const cpo::uno::Any& context );
-    css::uno::Reference< css::script::provider::XScriptProvider >
+    cpo::uno::Reference< css::script::provider::XScriptProvider >
         createNewMSP( const OUString& context )
     {
         return createNewMSP( cpo::uno::Any( context ) );
@@ -85,7 +85,7 @@ private:
     OUString userDirString;
     OUString shareDirString;
     OUString bundledDirString;
-    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 };
 } // func_provider
 

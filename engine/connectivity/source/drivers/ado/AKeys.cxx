@@ -33,14 +33,14 @@
 using namespace ::comphelper;
 using namespace connectivity;
 using namespace connectivity::ado;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::container;
 
-css::uno::Reference< css::beans::XPropertySet > OKeys::createObject(const OUString& _rName)
+cpo::uno::Reference< css::beans::XPropertySet > OKeys::createObject(const OUString& _rName)
 {
     return new OAdoKey(isCaseSensitive(),m_pConnection,m_aCollection.GetItem(_rName));
 }
@@ -56,7 +56,7 @@ Reference< XPropertySet > OKeys::createDescriptor()
 }
 
 // XAppend
-css::uno::Reference< css::beans::XPropertySet > OKeys::appendObject( const OUString&, const Reference< XPropertySet >& descriptor )
+cpo::uno::Reference< css::beans::XPropertySet > OKeys::appendObject( const OUString&, const Reference< XPropertySet >& descriptor )
 {
     OAdoKey* pKey = dynamic_cast<OAdoKey*>( descriptor.get() );
     if ( pKey == nullptr)

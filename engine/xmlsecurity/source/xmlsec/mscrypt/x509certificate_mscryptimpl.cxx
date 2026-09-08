@@ -45,7 +45,7 @@
 #include <svl/sigstruct.hxx>
 
 using namespace com::sun::star;
-using namespace ::com::sun::star::uno ;
+using namespace ::cpo::uno ;
 using namespace ::com::sun::star::security ;
 using namespace ::cpo::uno;
 
@@ -362,7 +362,7 @@ cpo::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_MSCryptImpl::getSubjectU
     }
 }
 
-cpo::uno::Sequence< css::uno::Reference< css::security::XCertificateExtension > > SAL_CALL X509Certificate_MSCryptImpl::getExtensions() {
+cpo::uno::Sequence< cpo::uno::Reference< css::security::XCertificateExtension > > SAL_CALL X509Certificate_MSCryptImpl::getExtensions() {
     if( m_pCertContext != nullptr && m_pCertContext->pCertInfo != nullptr && m_pCertContext->pCertInfo->cExtension != 0 ) {
         rtl::Reference<CertificateExtension_XmlSecImpl> xExtn ;
         Sequence< Reference< XCertificateExtension > > xExtns( m_pCertContext->pCertInfo->cExtension ) ;
@@ -390,7 +390,7 @@ cpo::uno::Sequence< css::uno::Reference< css::security::XCertificateExtension > 
     }
 }
 
-css::uno::Reference< css::security::XCertificateExtension > SAL_CALL X509Certificate_MSCryptImpl::findCertificateExtension( const cpo::uno::Sequence< sal_Int8 >& /*oid*/ ) {
+cpo::uno::Reference< css::security::XCertificateExtension > SAL_CALL X509Certificate_MSCryptImpl::findCertificateExtension( const cpo::uno::Sequence< sal_Int8 >& /*oid*/ ) {
     if( m_pCertContext != nullptr && m_pCertContext->pCertInfo != nullptr && m_pCertContext->pCertInfo->cExtension != 0 ) {
         rtl::Reference<CertificateExtension_XmlSecImpl> xExtn ;
 

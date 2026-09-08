@@ -27,7 +27,7 @@
 
 using namespace connectivity;
 using namespace connectivity::sdbcx;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
@@ -40,7 +40,7 @@ OIndexColumns::OIndexColumns(   OIndexHelper* _pIndex,
 {
 }
 
-css::uno::Reference< css::beans::XPropertySet > OIndexColumns::createObject(const OUString& _rName)
+cpo::uno::Reference< css::beans::XPropertySet > OIndexColumns::createObject(const OUString& _rName)
 {
     ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
     OUString aCatalog, aSchema, aTable;

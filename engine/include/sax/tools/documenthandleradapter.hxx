@@ -41,7 +41,7 @@ namespace sax
 
         virtual void
         startElement(const OUString& aName,
-                const css::uno::Reference< css::xml::sax::XAttributeList > & xAttribs) override
+                const cpo::uno::Reference< css::xml::sax::XAttributeList > & xAttribs) override
         {
             m_handler->startElement(aName, xAttribs);
         }
@@ -69,23 +69,23 @@ namespace sax
             m_handler->processingInstruction(aTarget, aData);
         }
         virtual void
-        setDocumentLocator(const css::uno::Reference< css::xml::sax::XLocator > & xLocator) override
+        setDocumentLocator(const cpo::uno::Reference< css::xml::sax::XLocator > & xLocator) override
         {
             m_handler->setDocumentLocator(xLocator);
         }
         DocumentHandlerAdapter() :
-            m_handler(css::uno::Reference< css::xml::sax::XDocumentHandler > (nullptr, css::uno::UNO_QUERY))
+            m_handler(cpo::uno::Reference< css::xml::sax::XDocumentHandler > (nullptr, cpo::uno::UNO_QUERY))
         {
         }
         ;
 
     protected:
         void
-        setDelegate(const css::uno::Reference< css::xml::sax::XDocumentHandler >& delegate)
+        setDelegate(const cpo::uno::Reference< css::xml::sax::XDocumentHandler >& delegate)
         {
             m_handler = delegate;
         }
-        const css::uno::Reference< css::xml::sax::XDocumentHandler >&
+        const cpo::uno::Reference< css::xml::sax::XDocumentHandler >&
         getDelegate() const
         {
             return m_handler;
@@ -97,7 +97,7 @@ namespace sax
         }
 
     private:
-        css::uno::Reference< css::xml::sax::XDocumentHandler > m_handler;
+        cpo::uno::Reference< css::xml::sax::XDocumentHandler > m_handler;
 
     };
 
@@ -126,7 +126,7 @@ namespace sax
 
         virtual void
         startElement(const OUString& aName,
-                const css::uno::Reference< css::xml::sax::XAttributeList > & xAttribs) override
+                const cpo::uno::Reference< css::xml::sax::XAttributeList > & xAttribs) override
         {
             m_handler->startElement(aName, xAttribs);
         }
@@ -154,7 +154,7 @@ namespace sax
             m_handler->processingInstruction(aTarget, aData);
         }
         virtual void
-        setDocumentLocator(const css::uno::Reference< css::xml::sax::XLocator > & xLocator) override
+        setDocumentLocator(const cpo::uno::Reference< css::xml::sax::XLocator > & xLocator) override
         {
             m_handler->setDocumentLocator(xLocator);
         }
@@ -186,16 +186,16 @@ namespace sax
         }
     protected:
         ExtendedDocumentHandlerAdapter() :
-            m_handler(css::uno::Reference< css::xml::sax::XExtendedDocumentHandler > (nullptr, css::uno::UNO_QUERY))
+            m_handler(cpo::uno::Reference< css::xml::sax::XExtendedDocumentHandler > (nullptr, cpo::uno::UNO_QUERY))
         {
         }
 
         void
-        setDelegate(const css::uno::Reference< css::xml::sax::XExtendedDocumentHandler >& delegate)
+        setDelegate(const cpo::uno::Reference< css::xml::sax::XExtendedDocumentHandler >& delegate)
         {
             m_handler = delegate;
         }
-        const css::uno::Reference< css::xml::sax::XExtendedDocumentHandler >&
+        const cpo::uno::Reference< css::xml::sax::XExtendedDocumentHandler >&
         getDelegate() const
         {
             return m_handler;
@@ -207,7 +207,7 @@ namespace sax
         }
 
     private:
-        css::uno::Reference< css::xml::sax::XExtendedDocumentHandler > m_handler;
+        cpo::uno::Reference< css::xml::sax::XExtendedDocumentHandler > m_handler;
     };
 }
 #endif // INCLUDED_SAX_TOOLS_DOCUMENTHANDLERADAPTER_HXX

@@ -41,7 +41,7 @@
 #include <sfx2/viewfrm.hxx>
 
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo;
 using namespace ::cpo::uno;
 
 class SfxPickListImpl : public SfxListener

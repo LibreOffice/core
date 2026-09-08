@@ -24,7 +24,7 @@ class CopiedTempStream
 
 public:
     CopiedTempStream(SvStream& rSrc);
-    CopiedTempStream(const css::uno::Reference<css::io::XInputStream>& xSrc);
+    CopiedTempStream(const cpo::uno::Reference<css::io::XInputStream>& xSrc);
 
     OUString getFileName() const { return maTemp.GetFileName(); }
 };

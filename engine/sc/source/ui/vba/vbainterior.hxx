@@ -34,13 +34,13 @@ typedef InheritedHelperInterfaceWeakImpl< ov::excel::XInterior > ScVbaInterior_B
 
 class ScVbaInterior final :  public ScVbaInterior_BASE
 {
-    css::uno::Reference< css::beans::XPropertySet > m_xProps;
+    cpo::uno::Reference< css::beans::XPropertySet > m_xProps;
     ScDocument* m_pScDoc;
     Color m_aPattColor;
     sal_Int32 m_nPattern;
 
-    css::uno::Reference< css::container::XIndexAccess > getPalette() const;
-    css::uno::Reference< css::container::XNameContainer > GetAttributeContainer();
+    cpo::uno::Reference< css::container::XIndexAccess > getPalette() const;
+    cpo::uno::Reference< css::container::XNameContainer > GetAttributeContainer();
     static cpo::uno::Any SetAttributeData( sal_Int32 nValue );
     static sal_Int32 GetAttributeData( cpo::uno::Any const & aValue );
     Color GetBackColor();
@@ -55,8 +55,8 @@ class ScVbaInterior final :  public ScVbaInterior_BASE
 
 public:
         /// @throws css::lang::IllegalArgumentException
-        ScVbaInterior( const css::uno::Reference< ov::XHelperInterface >& xParent,  const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
-                 css::uno::Reference< css::beans::XPropertySet > xProps, ScDocument* pScDoc = nullptr);
+        ScVbaInterior( const cpo::uno::Reference< ov::XHelperInterface >& xParent,  const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
+                 cpo::uno::Reference< css::beans::XPropertySet > xProps, ScDocument* pScDoc = nullptr);
 
     virtual cpo::uno::Any SAL_CALL getColor() override ;
     virtual void SAL_CALL setColor( const cpo::uno::Any& _color ) override ;

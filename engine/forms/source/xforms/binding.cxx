@@ -72,11 +72,11 @@ using com::sun::star::form::binding::XValueBinding;
 using com::sun::star::lang::EventObject;
 using com::sun::star::lang::IndexOutOfBoundsException;
 using cpo::uno::Any;
-using com::sun::star::uno::Reference;
+using cpo::uno::Reference;
 using cpo::uno::RuntimeException;
 using cpo::uno::Sequence;
-using com::sun::star::uno::UNO_QUERY;
-using com::sun::star::uno::UNO_QUERY_THROW;
+using cpo::uno::UNO_QUERY;
+using cpo::uno::UNO_QUERY_THROW;
 using cpo::uno::XInterface;
 using cpo::uno::Exception;
 using com::sun::star::util::XModifyListener;
@@ -128,7 +128,7 @@ void Binding::_setModel( const rtl::Reference<Model>& xModel )
 
     // prepare binding for removal of old model
     clear(); // remove all cached data (e.g. XPath evaluation results)
-    css::uno::Reference<css::container::XNameContainer> xNamespaces = getModelNamespaces(); // save namespaces
+    cpo::uno::Reference<css::container::XNameContainer> xNamespaces = getModelNamespaces(); // save namespaces
 
     mxModel = xModel;
 
@@ -146,7 +146,7 @@ OUString Binding::getModelID() const
 }
 
 
-css::uno::Reference<css::xml::dom::XNodeList> Binding::getXNodeList()
+cpo::uno::Reference<css::xml::dom::XNodeList> Binding::getXNodeList()
 {
     // first make sure we are bound
     if( ! maBindingExpression.hasValue() )
@@ -391,17 +391,17 @@ void Binding::setType( const OUString& sTypeName )
     bindingModified();
 }
 
-void Binding::setBindingNamespaces( const css::uno::Reference<css::container::XNameContainer>& rNamespaces )
+void Binding::setBindingNamespaces( const cpo::uno::Reference<css::container::XNameContainer>& rNamespaces )
 {
     _setNamespaces( rNamespaces, true );
 }
 
-css::uno::Reference<css::container::XNameContainer> Binding::getModelNamespaces() const
+cpo::uno::Reference<css::container::XNameContainer> Binding::getModelNamespaces() const
 {
     return _getNamespaces();
 }
 
-void Binding::setModelNamespaces( const css::uno::Reference<css::container::XNameContainer>& rNamespaces )
+void Binding::setModelNamespaces( const cpo::uno::Reference<css::container::XNameContainer>& rNamespaces )
 {
     _setNamespaces( rNamespaces, false );
 }
@@ -592,7 +592,7 @@ void Binding::bind( bool bForceRebind )
 
 
 // helper for Binding::valueModified
-static void lcl_modified( const css::uno::Reference<css::util::XModifyListener>& xListener,
+static void lcl_modified( const cpo::uno::Reference<css::util::XModifyListener>& xListener,
                    const Reference<XInterface>& xSource )
 {
     OSL_ENSURE( xListener.is(), "no listener?" );
@@ -600,7 +600,7 @@ static void lcl_modified( const css::uno::Reference<css::util::XModifyListener>&
 }
 
 // helper for Binding::valueModified
-static void lcl_listentry( const css::uno::Reference<css::form::binding::XListEntryListener>& xListener,
+static void lcl_listentry( const cpo::uno::Reference<css::form::binding::XListEntryListener>& xListener,
                     const Reference<XInterface>& xSource )
 {
     OSL_ENSURE( xListener.is(), "no listener?" );
@@ -609,7 +609,7 @@ static void lcl_listentry( const css::uno::Reference<css::form::binding::XListEn
 }
 
 // helper for Binding::valueModified
-static void lcl_validate( const css::uno::Reference<css::form::validation::XValidityConstraintListener>& xListener,
+static void lcl_validate( const cpo::uno::Reference<css::form::validation::XValidityConstraintListener>& xListener,
                    const Reference<XInterface>& xSource )
 {
     OSL_ENSURE( xListener.is(), "no listener?" );
@@ -644,19 +644,19 @@ void Binding::valueModified()
     Reference<XInterface> xSource = static_cast<XPropertySet*>( this );
     ::std::for_each( maModifyListeners.begin(),
               maModifyListeners.end(),
-                    [xSource](const css::uno::Reference<css::util::XModifyListener>& xListener)
+                    [xSource](const cpo::uno::Reference<css::util::XModifyListener>& xListener)
                     {
                         return lcl_modified(xListener, xSource);
                     });
     ::std::for_each( maListEntryListeners.begin(),
               maListEntryListeners.end(),
-                    [xSource](const css::uno::Reference<css::form::binding::XListEntryListener>& xListener)
+                    [xSource](const cpo::uno::Reference<css::form::binding::XListEntryListener>& xListener)
                     {
                         return lcl_listentry(xListener,xSource);
                     });
     ::std::for_each( maValidityListeners.begin(),
               maValidityListeners.end(),
-                    [xSource](const css::uno::Reference<css::form::validation::XValidityConstraintListener>& xListener)
+                    [xSource](const cpo::uno::Reference<css::form::validation::XValidityConstraintListener>& xListener)
                     {
                         lcl_validate(xListener, xSource);
                     });
@@ -666,18 +666,18 @@ void Binding::valueModified()
         distributeMIP( xNode->getFirstChild() );
 }
 
-void Binding::distributeMIP( const css::uno::Reference<css::xml::dom::XNode> & rxNode ) {
+void Binding::distributeMIP( const cpo::uno::Reference<css::xml::dom::XNode> & rxNode ) {
 
     rtl::Reference<css::xforms::XFormsEventConcrete> pEvent = new css::xforms::XFormsEventConcrete;
     pEvent->initXFormsEvent(u"xforms-generic"_ustr, true, false);
 
     // naive depth-first traversal
-    css::uno::Reference<css::xml::dom::XNode> xNode( rxNode );
+    cpo::uno::Reference<css::xml::dom::XNode> xNode( rxNode );
     while(xNode.is()) {
 
         // notifications should be triggered at the
         // leaf nodes first, bubbling upwards the hierarchy.
-        css::uno::Reference<css::xml::dom::XNode> child(xNode->getFirstChild());
+        cpo::uno::Reference<css::xml::dom::XNode> child(xNode->getFirstChild());
         if(child.is())
             distributeMIP(child);
 
@@ -737,7 +737,7 @@ MIP Binding::getLocalMIP() const
     return aMIP;
 }
 
-css::uno::Reference<css::xsd::XDataType> Binding::getDataType() const
+cpo::uno::Reference<css::xsd::XDataType> Binding::getDataType() const
 {
     OSL_ENSURE( mxModel.is(), "need model" );
     OSL_ENSURE( mxModel->getDataTypeRepository().is(), "need types" );
@@ -789,8 +789,8 @@ void Binding::clear()
 }
 
 
-static void lcl_removeOtherNamespaces( const css::uno::Reference<css::container::XNameContainer>& xFrom,
-                                css::uno::Reference<css::container::XNameContainer> const & xTo )
+static void lcl_removeOtherNamespaces( const cpo::uno::Reference<css::container::XNameContainer>& xFrom,
+                                cpo::uno::Reference<css::container::XNameContainer> const & xTo )
 {
     OSL_ENSURE( xFrom.is(), "no source" );
     OSL_ENSURE( xTo.is(), "no target" );
@@ -811,8 +811,8 @@ static void lcl_removeOtherNamespaces( const css::uno::Reference<css::container:
  * @param bFromSource true: use elements from source
  *                    false: use only elements from target
  */
-static void lcl_copyNamespaces( const css::uno::Reference<css::container::XNameContainer>& xFrom,
-                         css::uno::Reference<css::container::XNameContainer> const & xTo,
+static void lcl_copyNamespaces( const cpo::uno::Reference<css::container::XNameContainer>& xFrom,
+                         cpo::uno::Reference<css::container::XNameContainer> const & xTo,
                          bool bOverwrite )
 {
     OSL_ENSURE( xFrom.is(), "no source" );
@@ -843,9 +843,9 @@ static void lcl_copyNamespaces( const css::uno::Reference<css::container::XNameC
 
 // implement get*Namespaces()
 // (identical for both variants)
-css::uno::Reference<css::container::XNameContainer> Binding::_getNamespaces() const
+cpo::uno::Reference<css::container::XNameContainer> Binding::_getNamespaces() const
 {
-    css::uno::Reference<css::container::XNameContainer> xNamespaces = new NameContainer<OUString>();
+    cpo::uno::Reference<css::container::XNameContainer> xNamespaces = new NameContainer<OUString>();
     lcl_copyNamespaces( mxNamespaces, xNamespaces, true );
 
     // merge model's with binding's own namespaces
@@ -857,10 +857,10 @@ css::uno::Reference<css::container::XNameContainer> Binding::_getNamespaces() co
 
 // implement set*Namespaces()
 // bBinding = true: setBindingNamespaces, otherwise: setModelNamespaces
-void Binding::_setNamespaces( const css::uno::Reference<css::container::XNameContainer>& rNamespaces,
+void Binding::_setNamespaces( const cpo::uno::Reference<css::container::XNameContainer>& rNamespaces,
                               bool bBinding )
 {
-    css::uno::Reference<css::container::XNameContainer> xModelNamespaces = ( mxModel != nullptr )
+    cpo::uno::Reference<css::container::XNameContainer> xModelNamespaces = ( mxModel != nullptr )
                                             ? mxModel->getNamespaces()
                                             : nullptr;
     OSL_ENSURE( ( mxModel != nullptr ) == xModelNamespaces.is(), "no model nmsp?");
@@ -885,7 +885,7 @@ void Binding::_setNamespaces( const css::uno::Reference<css::container::XNameCon
                  && xModelNamespaces->hasByName( rName ) );
 
         // write namespace into the appropriate namespace container
-        css::uno::Reference<css::container::XNameContainer>& rWhich = bLocal ? mxNamespaces : xModelNamespaces;
+        cpo::uno::Reference<css::container::XNameContainer>& rWhich = bLocal ? mxNamespaces : xModelNamespaces;
         OSL_ENSURE( rWhich.is(), "whoops" );
         if( rWhich->hasByName( rName ) )
             rWhich->replaceByName( rName, aValue );
@@ -974,7 +974,7 @@ void Binding::setValue( const cpo::uno::Any& aValue )
     if( !maBindingExpression.hasValue() )
         throw InvalidBindingStateException(u"no suitable node found"_ustr, static_cast<XValueBinding*>(this));
 
-    css::uno::Reference<css::xml::dom::XNode> xNode = maBindingExpression.getNode();
+    cpo::uno::Reference<css::xml::dom::XNode> xNode = maBindingExpression.getNode();
     if( !xNode.is() )
         throw InvalidBindingStateException(u"no suitable node found"_ustr, static_cast<XValueBinding*>(this));
 
@@ -1053,7 +1053,7 @@ Sequence<OUString> Binding::getAllListEntries()
     return aSequence;
 }
 
-void Binding::addListEntryListener( const css::uno::Reference<css::form::binding::XListEntryListener>& xListener )
+void Binding::addListEntryListener( const cpo::uno::Reference<css::form::binding::XListEntryListener>& xListener )
 {
     OSL_ENSURE( xListener.is(), "need listener!" );
     if( ::std::find( maListEntryListeners.begin(),
@@ -1063,7 +1063,7 @@ void Binding::addListEntryListener( const css::uno::Reference<css::form::binding
         maListEntryListeners.push_back( xListener );
 }
 
-void Binding::removeListEntryListener( const css::uno::Reference<css::form::binding::XListEntryListener>& xListener )
+void Binding::removeListEntryListener( const cpo::uno::Reference<css::form::binding::XListEntryListener>& xListener )
 {
     XListEntryListeners_t::iterator aIter =
         ::std::find( maListEntryListeners.begin(), maListEntryListeners.end(),
@@ -1096,7 +1096,7 @@ OUString Binding::explainInvalid(
 }
 
 void Binding::addValidityConstraintListener(
-    const css::uno::Reference<css::form::validation::XValidityConstraintListener>& xListener )
+    const cpo::uno::Reference<css::form::validation::XValidityConstraintListener>& xListener )
 {
     OSL_ENSURE( xListener.is(), "need listener!" );
     if( ::std::find(maValidityListeners.begin(), maValidityListeners.end(), xListener)
@@ -1105,7 +1105,7 @@ void Binding::addValidityConstraintListener(
 }
 
 void Binding::removeValidityConstraintListener(
-    const css::uno::Reference<css::form::validation::XValidityConstraintListener>& xListener )
+    const cpo::uno::Reference<css::form::validation::XValidityConstraintListener>& xListener )
 {
     XValidityConstraintListeners_t::iterator aIter =
         ::std::find( maValidityListeners.begin(), maValidityListeners.end(),
@@ -1118,7 +1118,7 @@ void Binding::removeValidityConstraintListener(
 // xml::dom::event::XEventListener
 
 
-void Binding::handleEvent( const css::uno::Reference<css::xml::dom::events::XEvent>& xEvent )
+void Binding::handleEvent( const cpo::uno::Reference<css::xml::dom::events::XEvent>& xEvent )
 {
     OUString sType(xEvent->getType());
     //OUString sEventMIPChanged("xforms-generic");
@@ -1158,7 +1158,7 @@ sal_Int64 Binding::getSomething( const cpo::uno::Sequence<sal_Int8>& xId )
 // XCloneable
 
 
-css::uno::Reference<css::util::XCloneable> Binding::createClone()
+cpo::uno::Reference<css::util::XCloneable> Binding::createClone()
 {
     Reference< XPropertySet > xClone;
 
@@ -1169,10 +1169,10 @@ css::uno::Reference<css::util::XCloneable> Binding::createClone()
         xClone = new Binding;
         copy( this, xClone );
     }
-    return css::uno::Reference<css::util::XCloneable>( xClone, UNO_QUERY );
+    return cpo::uno::Reference<css::util::XCloneable>( xClone, UNO_QUERY );
 }
 
-css::uno::Reference<css::xforms::XModel> Binding::getModel() const
+cpo::uno::Reference<css::xforms::XModel> Binding::getModel() const
 {
     return mxModel;
 }
@@ -1187,14 +1187,14 @@ void Binding::initializePropertySet()
     registerProperty( css::beans::Property(u"BindingExpression"_ustr, HANDLE_BindingExpression, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND ),
     new DirectPropertyAccessor< Binding, OUString >(this, &Binding::setBindingExpression, &Binding::getBindingExpression));
 
-    registerProperty( css::beans::Property(u"Model"_ustr, HANDLE_Model, cppu::UnoType<css::uno::Reference<css::xforms::XModel>>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY ),
-    new DirectPropertyAccessor< Binding, css::uno::Reference<css::xforms::XModel> >(this, nullptr, &Binding::getModel));
+    registerProperty( css::beans::Property(u"Model"_ustr, HANDLE_Model, cppu::UnoType<cpo::uno::Reference<css::xforms::XModel>>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY ),
+    new DirectPropertyAccessor< Binding, cpo::uno::Reference<css::xforms::XModel> >(this, nullptr, &Binding::getModel));
 
-    registerProperty( css::beans::Property(u"BindingNamespaces"_ustr, HANDLE_BindingNamespaces, cppu::UnoType<css::uno::Reference<css::container::XNameContainer>>::get(), css::beans::PropertyAttribute::BOUND ),
-    new DirectPropertyAccessor< Binding, css::uno::Reference<css::container::XNameContainer> >(this, &Binding::setBindingNamespaces, &Binding::getBindingNamespaces));
+    registerProperty( css::beans::Property(u"BindingNamespaces"_ustr, HANDLE_BindingNamespaces, cppu::UnoType<cpo::uno::Reference<css::container::XNameContainer>>::get(), css::beans::PropertyAttribute::BOUND ),
+    new DirectPropertyAccessor< Binding, cpo::uno::Reference<css::container::XNameContainer> >(this, &Binding::setBindingNamespaces, &Binding::getBindingNamespaces));
 
-    registerProperty( css::beans::Property(u"ModelNamespaces"_ustr, HANDLE_ModelNamespaces, cppu::UnoType<css::uno::Reference<css::container::XNameContainer>>::get(), css::beans::PropertyAttribute::BOUND ),
-    new DirectPropertyAccessor< Binding, css::uno::Reference<css::container::XNameContainer> >(this, &Binding::setModelNamespaces, &Binding::getModelNamespaces));
+    registerProperty( css::beans::Property(u"ModelNamespaces"_ustr, HANDLE_ModelNamespaces, cppu::UnoType<cpo::uno::Reference<css::container::XNameContainer>>::get(), css::beans::PropertyAttribute::BOUND ),
+    new DirectPropertyAccessor< Binding, cpo::uno::Reference<css::container::XNameContainer> >(this, &Binding::setModelNamespaces, &Binding::getModelNamespaces));
 
     registerProperty( css::beans::Property(u"ModelID"_ustr, HANDLE_ModelID, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY ),
     new DirectPropertyAccessor< Binding, OUString >(this, nullptr, &Binding::getModelID));
@@ -1232,7 +1232,7 @@ void Binding::initializePropertySet()
 }
 
 void Binding::addModifyListener(
-    const css::uno::Reference<css::util::XModifyListener>& xListener )
+    const cpo::uno::Reference<css::util::XModifyListener>& xListener )
 {
     OSL_ENSURE( xListener.is(), "need listener!" );
     if( ::std::find( maModifyListeners.begin(), maModifyListeners.end(), xListener )
@@ -1246,7 +1246,7 @@ void Binding::addModifyListener(
 }
 
 void Binding::removeModifyListener(
-    const css::uno::Reference<css::util::XModifyListener>& xListener )
+    const cpo::uno::Reference<css::util::XModifyListener>& xListener )
 {
     ModifyListeners_t::iterator aIter =
         ::std::find( maModifyListeners.begin(), maModifyListeners.end(), xListener );

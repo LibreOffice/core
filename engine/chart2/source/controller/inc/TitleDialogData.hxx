@@ -42,7 +42,7 @@ struct TitleDialogData
     when pOldState is NULL then all data are written to the model
     */
     bool writeDifferenceToModel( const rtl::Reference<::chart::ChartModel>& xChartModel
-                        , const css::uno::Reference< cpo::uno::XComponentContext >& xContext
+                        , const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext
                         , const TitleDialogData* pOldState=nullptr );
 };
 

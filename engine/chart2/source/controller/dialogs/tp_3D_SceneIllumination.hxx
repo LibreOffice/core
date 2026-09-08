@@ -40,7 +40,7 @@ class ThreeD_SceneIllumination_TabPage
 {
 public:
     ThreeD_SceneIllumination_TabPage(weld::Container* pParent, weld::Window* pTopLevel,
-                                     css::uno::Reference<css::beans::XPropertySet> xSceneProperties,
+                                     cpo::uno::Reference<css::beans::XPropertySet> xSceneProperties,
                                      const rtl::Reference<::chart::ChartModel>& xChartModel);
     ~ThreeD_SceneIllumination_TabPage();
 
@@ -61,7 +61,7 @@ private:
 
     std::unique_ptr<LightSourceInfo[]> m_pLightSourceInfoList;
 
-    css::uno::Reference<css::beans::XPropertySet> m_xSceneProperties;
+    cpo::uno::Reference<css::beans::XPropertySet> m_xSceneProperties;
 
     TimerTriggeredControllerLock m_aTimerTriggeredControllerLock;
 

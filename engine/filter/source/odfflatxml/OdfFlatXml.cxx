@@ -41,7 +41,7 @@ using namespace ::cppu;
 using namespace ::sax;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::io;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::xml;
@@ -137,11 +137,11 @@ OdfFlatXml::importer(
     inputSource.aInputStream = inputStream;
     try
     {
-        css::uno::Reference< css::io::XSeekable > xSeekable( inputStream, css::uno::UNO_QUERY );
+        cpo::uno::Reference< css::io::XSeekable > xSeekable( inputStream, cpo::uno::UNO_QUERY );
         if ( xSeekable.is() )
             xSeekable->seek( 0 );
 
-        css::uno::Reference< css::xml::sax::XFastParser > xFastParser (docHandler, UNO_QUERY );
+        cpo::uno::Reference< css::xml::sax::XFastParser > xFastParser (docHandler, UNO_QUERY );
         if( xFastParser.is() )
             xFastParser->parseStream( inputSource );
         else
@@ -196,7 +196,7 @@ OdfFlatXml::importer(
     inputSource.aInputStream = inputStream;
     try
     {
-        css::uno::Reference< css::io::XSeekable > xSeekable( inputStream, css::uno::UNO_QUERY );
+        cpo::uno::Reference< css::io::XSeekable > xSeekable( inputStream, cpo::uno::UNO_QUERY );
         if ( xSeekable.is() )
             xSeekable->seek( 0 );
 

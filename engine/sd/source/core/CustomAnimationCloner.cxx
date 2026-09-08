@@ -41,7 +41,7 @@
 #include <CustomAnimationCloner.hxx>
 #include <sdpage.hxx>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::presentation;

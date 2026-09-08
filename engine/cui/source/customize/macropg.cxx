@@ -36,7 +36,7 @@
 #include <utility>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 constexpr OUString aVndSunStarUNO = u"vnd.sun.star.UNO:"_ustr;

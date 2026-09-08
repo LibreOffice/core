@@ -30,7 +30,7 @@ class SfxUnoPanel final : public cppu::WeakImplHelper<css::ui::XPanel>
 
 public:
 
-    SfxUnoPanel(css::uno::Reference<css::frame::XFrame>, OUString, OUString );
+    SfxUnoPanel(cpo::uno::Reference<css::frame::XFrame>, OUString, OUString );
 
     virtual OUString getId() override;
 
@@ -48,11 +48,11 @@ public:
     virtual void moveUp() override;
     virtual void moveDown() override;
 
-    virtual css::uno::Reference<css::awt::XWindow> getDialog() override;
+    virtual cpo::uno::Reference<css::awt::XWindow> getDialog() override;
 
 private:
 
-    const css::uno::Reference<css::frame::XFrame> xFrame;
+    const cpo::uno::Reference<css::frame::XFrame> xFrame;
     sfx2::sidebar::SidebarController* getSidebarController();
 
     const OUString mPanelId;

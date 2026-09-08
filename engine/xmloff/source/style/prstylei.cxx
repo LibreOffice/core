@@ -45,8 +45,8 @@
 #include "StylePropertiesContext.hxx"
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::container;
@@ -173,9 +173,9 @@ const OldFillStyleDefinitionSet& XMLPropStyleContext::getFooterSet()
     return theFooterSet();
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLPropStyleContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLPropStyleContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     sal_uInt32 nFamily = 0;
     if( IsTokenInNamespace(nElement, XML_NAMESPACE_STYLE) ||
@@ -314,7 +314,7 @@ void XMLPropStyleContext::CreateAndInsert( bool bOverwrite )
                         Reference < XNameContainer > xFamilies = pSvXMLStylesContext->GetStylesContainer( GetFamily() );
                         if(xFamilies.is() && xFamilies->hasByName( sParent ) )
                         {
-                            css::uno::Reference< css::style::XStyle > xStyle;
+                            cpo::uno::Reference< css::style::XStyle > xStyle;
                             Any aAny = xFamilies->getByName( sParent );
                             aAny >>= xStyle;
                             sParent = xStyle->getName() ;

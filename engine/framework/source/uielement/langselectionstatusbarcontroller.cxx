@@ -48,8 +48,8 @@
 
 using namespace ::cppu;
 using namespace ::com::sun::star;
-using namespace css::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace css::lang;
 using namespace css::frame;
 using namespace framework;
@@ -60,7 +60,7 @@ class LangSelectionStatusbarController:
     public svt::StatusbarController
 {
 public:
-    explicit LangSelectionStatusbarController( const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
+    explicit LangSelectionStatusbarController( const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext );
     LangSelectionStatusbarController(const LangSelectionStatusbarController&) = delete;
     LangSelectionStatusbarController& operator=(const LangSelectionStatusbarController&) = delete;
 

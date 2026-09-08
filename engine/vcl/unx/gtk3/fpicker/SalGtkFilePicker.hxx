@@ -51,12 +51,12 @@ class SalGtkFilePicker : public SalGtkPicker, public SalGtkFilePicker_Base
     public:
 
         // constructor
-        SalGtkFilePicker( const css::uno::Reference< cpo::uno::XComponentContext >& xServiceMgr );
+        SalGtkFilePicker( const cpo::uno::Reference< cpo::uno::XComponentContext >& xServiceMgr );
 
         // XFilePickerNotifier
 
-        virtual void addFilePickerListener( const css::uno::Reference< css::ui::dialogs::XFilePickerListener >& xListener ) override;
-        virtual void removeFilePickerListener( const css::uno::Reference< css::ui::dialogs::XFilePickerListener >& xListener ) override;
+        virtual void addFilePickerListener( const cpo::uno::Reference< css::ui::dialogs::XFilePickerListener >& xListener ) override;
+        virtual void removeFilePickerListener( const cpo::uno::Reference< css::ui::dialogs::XFilePickerListener >& xListener ) override;
 
         // XExecutableDialog functions
 
@@ -145,7 +145,7 @@ class SalGtkFilePicker : public SalGtkPicker, public SalGtkFilePicker_Base
         void impl_initialize(GtkWidget* pParentWidget, sal_Int16 templateId);
 
     private:
-        css::uno::Reference< css::ui::dialogs::XFilePickerListener >
+        cpo::uno::Reference< css::ui::dialogs::XFilePickerListener >
             m_xListener;
         std::unique_ptr<std::vector<FilterEntry>> m_pFilterVector;
         GtkWidget  *m_pVBox;

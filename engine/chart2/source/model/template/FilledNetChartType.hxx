@@ -41,7 +41,7 @@ private:
     virtual OUString getChartType() override;
 
     // ____ XCloneable ____
-    virtual css::uno::Reference<css::util::XCloneable> createClone() override;
+    virtual cpo::uno::Reference<css::util::XCloneable> createClone() override;
 };
 
 } //  namespace chart

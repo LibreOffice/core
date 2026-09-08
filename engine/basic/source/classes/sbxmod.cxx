@@ -80,8 +80,8 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::reflection;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::script;
-using namespace com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 typedef ::cppu::WeakImplHelper< XInvocation > DocObjectWrapper_BASE;
 typedef std::map< sal_Int16, Any > OutParamMap;
@@ -2169,7 +2169,7 @@ SbObjModule::SetUnoObject( const cpo::uno::Any& aObj )
         return;
     pDocObject = new SbUnoObject( GetName(), aObj );
 
-    css::uno::Reference< css::lang::XServiceInfo > xServiceInfo( aObj, css::uno::UNO_QUERY_THROW );
+    cpo::uno::Reference< css::lang::XServiceInfo > xServiceInfo( aObj, cpo::uno::UNO_QUERY_THROW );
     if( xServiceInfo->supportsService( u"ooo.vba.excel.Worksheet"_ustr ) )
     {
         SetClassName( u"Worksheet"_ustr );

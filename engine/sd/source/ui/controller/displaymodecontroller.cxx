@@ -18,7 +18,7 @@
 #include <sdresid.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
@@ -35,7 +35,7 @@ namespace {
 class DisplayModeController : public svt::PopupWindowController
 {
 public:
-    explicit DisplayModeController( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+    explicit DisplayModeController( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
     virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;
     virtual VclPtr<vcl::Window> createVclPopupWindow( vcl::Window* pParent ) override;
@@ -191,7 +191,7 @@ IMPL_LINK( DisplayModeToolbarMenu, SelectValueSetHdl, ValueSet*, pControl, void 
     mxControl->EndPopupMode();
 }
 
-DisplayModeController::DisplayModeController( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext )
+DisplayModeController::DisplayModeController( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext )
 : svt::PopupWindowController( rxContext, Reference< frame::XFrame >(), OUString() )
 {
 }

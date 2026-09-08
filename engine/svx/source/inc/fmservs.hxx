@@ -21,7 +21,7 @@
 
 #include <sal/config.h>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <svx/svxdllapi.h>
 
 namespace com::sun::star::lang { class XMultiServiceFactory; }
@@ -80,9 +80,9 @@ namespace svxform
 {
     SVXCORE_DLLPUBLIC void ImplSmartRegisterUnoServices();
 
-    css::uno::Reference<cpo::uno::XInterface>
+    cpo::uno::Reference<cpo::uno::XInterface>
     OAddConditionDialog_Create(
-        css::uno::Reference<css::lang::XMultiServiceFactory> const &);
+        cpo::uno::Reference<css::lang::XMultiServiceFactory> const &);
 
     OUString OAddConditionDialog_GetImplementationName();
 
@@ -91,19 +91,19 @@ namespace svxform
 }
 
 /// @throws cpo::uno::Exception
-css::uno::Reference<cpo::uno::XInterface>
+cpo::uno::Reference<cpo::uno::XInterface>
 FmXGridControl_NewInstance_Impl(
-    css::uno::Reference<css::lang::XMultiServiceFactory> const &);
+    cpo::uno::Reference<css::lang::XMultiServiceFactory> const &);
 
 /// @throws cpo::uno::Exception
-css::uno::Reference<cpo::uno::XInterface>
+cpo::uno::Reference<cpo::uno::XInterface>
 FormController_NewInstance_Impl(
-    css::uno::Reference<css::lang::XMultiServiceFactory> const &);
+    cpo::uno::Reference<css::lang::XMultiServiceFactory> const &);
 
 /// @throws cpo::uno::Exception
-css::uno::Reference<cpo::uno::XInterface>
+cpo::uno::Reference<cpo::uno::XInterface>
 LegacyFormController_NewInstance_Impl(
-    css::uno::Reference<css::lang::XMultiServiceFactory> const &);
+    cpo::uno::Reference<css::lang::XMultiServiceFactory> const &);
 
 #endif // INCLUDED_SVX_SOURCE_INC_FMSERVS_HXX
 

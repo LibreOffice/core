@@ -34,7 +34,7 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 
 // namespaces
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
@@ -676,7 +676,7 @@ void ColumnsWidget::InsertColumns()
     }
 }
 
-SvxTableToolBoxControl::SvxTableToolBoxControl(const css::uno::Reference<cpo::uno::XComponentContext>& rContext)
+SvxTableToolBoxControl::SvxTableToolBoxControl(const cpo::uno::Reference<cpo::uno::XComponentContext>& rContext)
     : PopupWindowController(rContext, nullptr, OUString())
 {
 }
@@ -734,7 +734,7 @@ com_sun_star_comp_svx_TableToolBoxControl_get_implementation(
     return cppu::acquire(new SvxTableToolBoxControl(rContext));
 }
 
-SvxColumnsToolBoxControl::SvxColumnsToolBoxControl(const css::uno::Reference<cpo::uno::XComponentContext>& rContext)
+SvxColumnsToolBoxControl::SvxColumnsToolBoxControl(const cpo::uno::Reference<cpo::uno::XComponentContext>& rContext)
     : PopupWindowController(rContext, nullptr, OUString())
 {
 }

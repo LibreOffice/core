@@ -34,25 +34,25 @@ namespace ooo::vba::word
     {
         SwView* getView( const rtl::Reference<SwXTextDocument>& xModel );
         /// @throws cpo::uno::RuntimeException
-        css::uno::Reference< css::text::XTextViewCursor > getXTextViewCursor( const rtl::Reference< SwXTextDocument >& xModel );
+        cpo::uno::Reference< css::text::XTextViewCursor > getXTextViewCursor( const rtl::Reference< SwXTextDocument >& xModel );
         /// @throws cpo::uno::RuntimeException
         rtl::Reference< SwXBaseStyle > getCurrentPageStyle( const rtl::Reference< SwXTextDocument >& xModel );
         /// @throws cpo::uno::RuntimeException
-        rtl::Reference< SwXBaseStyle > getCurrentPageStyle( const rtl::Reference< SwXTextDocument>& xModel, const css::uno::Reference< css::beans::XPropertySet >& xProps );
+        rtl::Reference< SwXBaseStyle > getCurrentPageStyle( const rtl::Reference< SwXTextDocument>& xModel, const cpo::uno::Reference< css::beans::XPropertySet >& xProps );
         /// @throws cpo::uno::RuntimeException
         sal_Int32 getPageCount( const rtl::Reference<SwXTextDocument>& xModel );
         /// @throws cpo::uno::RuntimeException
         rtl::Reference< SwXBaseStyle > getDefaultParagraphStyle( const rtl::Reference< SwXTextDocument >& xModel );
         /// @throws cpo::uno::RuntimeException
-        css::uno::Reference< css::text::XTextRange > getFirstObjectPosition( const css::uno::Reference< css::text::XText >& xText );
+        cpo::uno::Reference< css::text::XTextRange > getFirstObjectPosition( const cpo::uno::Reference< css::text::XText >& xText );
         /// @throws cpo::uno::RuntimeException
-        css::uno::Reference< css::text::XText > getCurrentXText( const rtl::Reference<SwXTextDocument>& xModel );
+        cpo::uno::Reference< css::text::XText > getCurrentXText( const rtl::Reference<SwXTextDocument>& xModel );
         /// @throws cpo::uno::RuntimeException
         bool gotoSelectedObjectAnchor( const rtl::Reference<SwXTextDocument>& xModel );
         /// @throws cpo::uno::RuntimeException
-        rtl::Reference< SwXTextDocument > getCurrentWordDoc( const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
+        rtl::Reference< SwXTextDocument > getCurrentWordDoc( const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext );
         /// @throws cpo::uno::RuntimeException
-        rtl::Reference< SwXTextDocument > getThisWordDoc( const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
+        rtl::Reference< SwXTextDocument > getThisWordDoc( const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext );
 
     enum E_DIRECTION
     {

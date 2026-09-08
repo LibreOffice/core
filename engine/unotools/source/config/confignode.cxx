@@ -36,7 +36,7 @@
 namespace utl
 {
 
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
 using namespace cpo::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::util;
@@ -286,7 +286,7 @@ using namespace cpo::uno;
             if (m_xDirectAccess.is() && m_xDirectAccess->hasByName(sNormalized))
             {
                 xNode.set(
-                    m_xDirectAccess->getByName(sNormalized), css::uno::UNO_QUERY);
+                    m_xDirectAccess->getByName(sNormalized), cpo::uno::UNO_QUERY);
                 if (!xNode.is())
                     OSL_FAIL("OConfigurationNode::openNode: could not open the node!");
             }
@@ -294,7 +294,7 @@ using namespace cpo::uno;
             {
                 xNode.set(
                     m_xHierarchyAccess->getByHierarchicalName(_rPath),
-                    css::uno::UNO_QUERY);
+                    cpo::uno::UNO_QUERY);
                 if (!xNode.is())
                     OSL_FAIL("OConfigurationNode::openNode: could not open the node!");
             }

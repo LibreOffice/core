@@ -22,7 +22,7 @@
 #include <com/sun/star/beans/StringPair.hpp>
 #include <cpo/uno/Any.hxx>
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/ucb/IOErrorCode.hpp>
 #include <unotools/confignode.hxx>
 #include "asyncfilepicker.hxx"

@@ -24,7 +24,7 @@
 #include <rtl/ref.hxx>
 #include <sfx2/dllapi.h>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 namespace com::sun::star::task
 {
@@ -42,7 +42,7 @@ public:
     RequestPackageReparation(const RequestPackageReparation&) = delete;
     RequestPackageReparation& operator=(const RequestPackageReparation&) = delete;
     bool isApproved() const;
-    css::uno::Reference<css::task::XInteractionRequest> GetRequest() const;
+    cpo::uno::Reference<css::task::XInteractionRequest> GetRequest() const;
 };
 
 class NotifyBrokenPackage_Impl;
@@ -55,7 +55,7 @@ public:
     ~NotifyBrokenPackage();
     NotifyBrokenPackage(const NotifyBrokenPackage&) = delete;
     NotifyBrokenPackage& operator=(const NotifyBrokenPackage&) = delete;
-    css::uno::Reference<css::task::XInteractionRequest> GetRequest() const;
+    cpo::uno::Reference<css::task::XInteractionRequest> GetRequest() const;
 };
 
 #endif // INCLUDED_SFX2_BROKENPACKAGEINT_HXX

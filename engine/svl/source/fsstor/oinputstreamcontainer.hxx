@@ -36,8 +36,8 @@ class OFSInputStreamContainer : public cppu::WeakImplHelper < css::io::XInputStr
 {
     std::mutex m_aMutex;
 
-    css::uno::Reference < css::io::XInputStream > m_xInputStream;
-    css::uno::Reference < css::io::XSeekable > m_xSeekable;
+    cpo::uno::Reference < css::io::XInputStream > m_xInputStream;
+    cpo::uno::Reference < css::io::XSeekable > m_xSeekable;
 
     bool m_bSeekable;
 
@@ -46,7 +46,7 @@ class OFSInputStreamContainer : public cppu::WeakImplHelper < css::io::XInputStr
     ::comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_aListenersContainer; // list of listeners
 
 public:
-    explicit OFSInputStreamContainer( const css::uno::Reference < css::io::XInputStream >& xStream );
+    explicit OFSInputStreamContainer( const cpo::uno::Reference < css::io::XInputStream >& xStream );
 
     virtual ~OFSInputStreamContainer() override;
 
@@ -63,8 +63,8 @@ public:
     virtual void closeInput(  ) override;
 
     //XStream
-    virtual css::uno::Reference< css::io::XInputStream > getInputStream(  ) override;
-    virtual css::uno::Reference< css::io::XOutputStream > getOutputStream(  ) override;
+    virtual cpo::uno::Reference< css::io::XInputStream > getInputStream(  ) override;
+    virtual cpo::uno::Reference< css::io::XOutputStream > getOutputStream(  ) override;
 
     //XSeekable
     virtual void seek( sal_Int64 location ) override;
@@ -73,8 +73,8 @@ public:
 
     //XComponent
     virtual void dispose() override;
-    virtual void addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-    virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+    virtual void addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& xListener ) override;
+    virtual void removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
 };
 

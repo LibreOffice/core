@@ -25,7 +25,7 @@
 #include <memory>
 
 #include <cppuhelper/weakref.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <oox/drawingml/clrscheme.hxx>
 #include <oox/drawingml/color.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
@@ -63,12 +63,12 @@ class SlidePersist : public std::enable_shared_from_this< SlidePersist >
 
 public:
     SlidePersist( oox::core::XmlFilterBase& rFilter, bool bMaster, bool bNotes,
-                    const css::uno::Reference< css::drawing::XDrawPage >&,
+                    const cpo::uno::Reference< css::drawing::XDrawPage >&,
                     oox::drawingml::ShapePtr pShapesPtr, ::oox::drawingml::TextListStylePtr  );
     ~SlidePersist();
 
 
-    const css::uno::Reference< css::drawing::XDrawPage >& getPage() const { return mxPage; };
+    const cpo::uno::Reference< css::drawing::XDrawPage >& getPage() const { return mxPage; };
 
 #if OSL_DEBUG_LEVEL > 0
     static cpo::uno::WeakReference< css::drawing::XDrawPage > mxDebugPage;
@@ -123,8 +123,8 @@ public:
     void releaseShapes();
 
 
-    std::map< OUString, css::uno::Reference< css::animations::XAnimationNode > >& getAnimNodesMap() { return maAnimNodesMap; };
-    css::uno::Reference<css::animations::XAnimationNode> getAnimationNode(const OUString& sId) const;
+    std::map< OUString, cpo::uno::Reference< css::animations::XAnimationNode > >& getAnimNodesMap() { return maAnimNodesMap; };
+    cpo::uno::Reference<css::animations::XAnimationNode> getAnimationNode(const OUString& sId) const;
     ::oox::drawingml::ShapePtr getShape( const OUString & id ) { return maShapeMap[ id ]; }
     ::oox::drawingml::ShapeIdMap& getShapeMap() { return maShapeMap; }
 
@@ -139,7 +139,7 @@ private:
     OUString                                                                maPath;
     OUString                                                                maLayoutPath;
     std::shared_ptr< oox::vml::Drawing >                                    mpDrawingPtr;
-    css::uno::Reference< css::drawing::XDrawPage >                          mxPage;
+    cpo::uno::Reference< css::drawing::XDrawPage >                          mxPage;
     oox::drawingml::ThemePtr                                                mpThemePtr;         // the theme that is used
     oox::drawingml::ClrMapPtr                                               mpClrMapPtr;        // color mapping (if any)
     SlidePersistPtr                                                         mpMasterPagePtr;
@@ -160,7 +160,7 @@ private:
     oox::drawingml::TextListStylePtr                                        maNotesTextStylePtr;
     oox::drawingml::TextListStylePtr                                        maOtherTextStylePtr;
 
-    std::map< OUString, css::uno::Reference< css::animations::XAnimationNode > > maAnimNodesMap;
+    std::map< OUString, cpo::uno::Reference< css::animations::XAnimationNode > > maAnimNodesMap;
     std::map< OUString, ::oox::drawingml::ShapePtr >                        maShapeMap;
 
     OUString                                                                maTitleText;

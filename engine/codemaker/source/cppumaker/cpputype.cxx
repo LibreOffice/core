@@ -789,7 +789,7 @@ void CppuType::dumpType(
         break;
     case codemaker::UnoType::Sort::Interface:
         if (!native) {
-            out << "::css::uno::Reference< ";
+            out << "::cpo::uno::Reference< ";
         }
         out << codemaker::cpp::scopedCppName(u2b(n));
         if (!native) {
@@ -3116,7 +3116,7 @@ bool ExceptionType::dumpBaseMembers(
             && memberCount == 1
             && member.name == "Context"
             && member.type == "cpo.uno.XInterface") {
-            out << " = ::css::uno::Reference< ::cpo::uno::XInterface >()";
+            out << " = ::cpo::uno::Reference< ::cpo::uno::XInterface >()";
         }
         hasMember = true;
         ++memberCount;
@@ -3512,16 +3512,16 @@ void ServiceType::dumpHppFile(
         for (const unoidl::SingleInterfaceBasedServiceEntity::Constructor& cons :
              entity_->getConstructors()) {
             if (cons.defaultConstructor) {
-                o << indent() << "static ::css::uno::Reference< "
+                o << indent() << "static ::cpo::uno::Reference< "
                   << scopedBaseName << " > "
                   << codemaker::cpp::translateUnoToCppIdentifier(
                       "create"_ostr, "method", codemaker::cpp::IdentifierTranslationMode::NonGlobal,
                       &cppName)
-                  << ("(::css::uno::Reference< ::cpo::uno::XComponentContext > const &"
+                  << ("(::cpo::uno::Reference< ::cpo::uno::XComponentContext > const &"
                       " the_context) {\n");
                 inc();
                 o << indent() << "assert(the_context.is());\n" << indent()
-                  << "::css::uno::Reference< " << scopedBaseName
+                  << "::cpo::uno::Reference< " << scopedBaseName
                   << " > the_instance;\n" << indent() << "try {\n";
                 inc();
                 o << ("#if defined LO_URE_CURRENT_ENV && defined "
@@ -3531,21 +3531,21 @@ void ServiceType::dumpHppFile(
                   << name_.replaceAll(".", "_dot_")
                   << ") && defined LO_URE_CTOR_FUN_"
                   << name_.replaceAll(".", "_dot_") << "\n" << indent()
-                  << "the_instance = ::css::uno::Reference< " << scopedBaseName
-                  << (" >(::css::uno::Reference< ::cpo::uno::XInterface >("
+                  << "the_instance = ::cpo::uno::Reference< " << scopedBaseName
+                  << (" >(::cpo::uno::Reference< ::cpo::uno::XInterface >("
                       "static_cast< ::cpo::uno::XInterface * >((*"
                       "LO_URE_CTOR_FUN_")
                   << name_.replaceAll(".", "_dot_")
                   << (")(the_context.get(), ::cpo::uno::Sequence<"
                       " ::cpo::uno::Any >())), ::SAL_NO_ACQUIRE),"
-                      " ::css::uno::UNO_QUERY);\n#else\n")
-                  << indent() << "the_instance = ::css::uno::Reference< "
+                      " ::cpo::uno::UNO_QUERY);\n#else\n")
+                  << indent() << "the_instance = ::cpo::uno::Reference< "
                   << scopedBaseName
                   << (" >(the_context->getServiceManager()->"
                       "createInstanceWithContext("
                       " \"")
                   << name_
-                  << "\", the_context), ::css::uno::UNO_QUERY);\n#endif\n";
+                  << "\", the_context), ::cpo::uno::UNO_QUERY);\n#endif\n";
                 dec();
                 o << indent()
                   << "} catch (const ::cpo::uno::RuntimeException &) {\n";
@@ -3570,12 +3570,12 @@ void ServiceType::dumpHppFile(
                 dec();
                 o << indent() << "}\n\n";
             } else {
-                o << indent() << "static ::css::uno::Reference< "
+                o << indent() << "static ::cpo::uno::Reference< "
                   << scopedBaseName << " > "
                   << codemaker::cpp::translateUnoToCppIdentifier(
                       u2b(cons.name), "method", codemaker::cpp::IdentifierTranslationMode::NonGlobal,
                       &cppName)
-                  << ("(::css::uno::Reference< ::cpo::uno::XComponentContext > const &"
+                  << ("(::cpo::uno::Reference< ::cpo::uno::XComponentContext > const &"
                       " the_context");
                 bool rest = hasRestParameter(cons);
                 for (const unoidl::SingleInterfaceBasedServiceEntity::Constructor::Parameter& param :
@@ -3636,7 +3636,7 @@ void ServiceType::dumpHppFile(
                         o << ";\n";
                     }
                 }
-                o << indent() << "::css::uno::Reference< "
+                o << indent() << "::cpo::uno::Reference< "
                   << scopedBaseName << " > the_instance;\n";
                 codemaker::ExceptionTree tree;
                 for (const OUString& ex : cons.exceptions) {
@@ -3653,8 +3653,8 @@ void ServiceType::dumpHppFile(
                   << name_.replaceAll(".", "_dot_")
                   << ") && defined LO_URE_CTOR_FUN_"
                   << name_.replaceAll(".", "_dot_") << "\n" << indent()
-                  << "the_instance = ::css::uno::Reference< " << scopedBaseName
-                  << (" >(::css::uno::Reference< ::cpo::uno::XInterface >("
+                  << "the_instance = ::cpo::uno::Reference< " << scopedBaseName
+                  << (" >(::cpo::uno::Reference< ::cpo::uno::XInterface >("
                       "static_cast< ::cpo::uno::XInterface * >((*"
                       "LO_URE_CTOR_FUN_")
                   << name_.replaceAll(".", "_dot_")
@@ -3668,9 +3668,9 @@ void ServiceType::dumpHppFile(
                 } else {
                     o << "the_arguments";
                 }
-                o << ")), ::SAL_NO_ACQUIRE), ::css::uno::UNO_QUERY);\n" << indent()
-                  << ("::css::uno::Reference< ::css::lang::XInitialization > "
-                      "init(the_instance, ::css::uno::UNO_QUERY);\n")
+                o << ")), ::SAL_NO_ACQUIRE), ::cpo::uno::UNO_QUERY);\n" << indent()
+                  << ("::cpo::uno::Reference< ::css::lang::XInitialization > "
+                      "init(the_instance, ::cpo::uno::UNO_QUERY);\n")
                   << indent() << "if (init.is()) {\n"
                   << indent() << "    init->initialize(";
                 if (cons.parameters.empty()) {
@@ -3680,7 +3680,7 @@ void ServiceType::dumpHppFile(
                 }
                 o << ");\n" << indent() << "}\n";
                 o << "#else\n"
-                  << indent() << "the_instance = ::css::uno::Reference< "
+                  << indent() << "the_instance = ::cpo::uno::Reference< "
                   << scopedBaseName
                   << (" >(the_context->getServiceManager()->"
                       "createInstanceWithArgumentsAndContext("
@@ -3695,7 +3695,7 @@ void ServiceType::dumpHppFile(
                 } else {
                     o << "the_arguments";
                 }
-                o << ", the_context), ::css::uno::UNO_QUERY);\n#endif\n";
+                o << ", the_context), ::cpo::uno::UNO_QUERY);\n#endif\n";
                 if (!tree.getRoot().present) {
                     dec();
                     o << indent()
@@ -3810,16 +3810,16 @@ void SingletonType::dumpHppFile(
     }
     o << "\nclass " << cppName << " {\npublic:\n";
     inc();
-    o << indent() << "static ::css::uno::Reference< "
+    o << indent() << "static ::cpo::uno::Reference< "
       << scopedBaseName << " > "
       << codemaker::cpp::translateUnoToCppIdentifier(
           "get"_ostr, "method", codemaker::cpp::IdentifierTranslationMode::NonGlobal, &cppName)
-      << ("(::css::uno::Reference<"
+      << ("(::cpo::uno::Reference<"
           " ::cpo::uno::XComponentContext > const & the_context)"
           " {\n");
     inc();
     o << indent() << "assert(the_context.is());\n" << indent()
-      << "::css::uno::Reference< " << scopedBaseName
+      << "::cpo::uno::Reference< " << scopedBaseName
       << (" > instance;\n#if defined LO_URE_CURRENT_ENV && defined "
           "LO_URE_CTOR_ENV_")
       << name_.replaceAll(".", "_dot_")
@@ -3827,14 +3827,14 @@ void SingletonType::dumpHppFile(
       << name_.replaceAll(".", "_dot_")
       << ") && defined LO_URE_CTOR_FUN_"
       << name_.replaceAll(".", "_dot_") << "\n" << indent()
-      << "instance = ::css::uno::Reference< " << scopedBaseName
-      << (" >(::css::uno::Reference< ::cpo::uno::XInterface >("
+      << "instance = ::cpo::uno::Reference< " << scopedBaseName
+      << (" >(::cpo::uno::Reference< ::cpo::uno::XInterface >("
           "static_cast< ::cpo::uno::XInterface * >((*"
           "LO_URE_CTOR_FUN_")
       << name_.replaceAll(".", "_dot_")
       << (")(the_context.get(), ::cpo::uno::Sequence<"
           " ::cpo::uno::Any >())), ::SAL_NO_ACQUIRE),"
-          " ::css::uno::UNO_QUERY);\n#else\n")
+          " ::cpo::uno::UNO_QUERY);\n#else\n")
       << indent() << ("the_context->getValueByName("
                       "::rtl::OUString( \"/singletons/")
       << name_ << "\" )) >>= instance;\n#endif\n"

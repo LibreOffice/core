@@ -52,7 +52,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace cppu;
 

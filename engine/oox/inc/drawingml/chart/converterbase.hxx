@@ -53,7 +53,7 @@ public:
                             ::oox::core::XmlFilterBase& rFilter,
                             const ChartConverter& rChartConverter,
                             const ChartSpaceModel& rChartModel,
-                            const css::uno::Reference< css::chart2::XChartDocument >& rxChartDoc,
+                            const cpo::uno::Reference< css::chart2::XChartDocument >& rxChartDoc,
                             const css::awt::Size& rChartSize );
     virtual             ~ConverterRoot();
 
@@ -63,9 +63,9 @@ public:
     ConverterRoot & operator =(ConverterRoot &&) = default;
 
     /** Creates an instance for the passed service name, using the process service factory. */
-    css::uno::Reference< cpo::uno::XInterface >
+    cpo::uno::Reference< cpo::uno::XInterface >
                         createInstance( const OUString& rServiceName ) const;
-    css::uno::Reference< cpo::uno::XComponentContext > const &
+    cpo::uno::Reference< cpo::uno::XComponentContext > const &
                         getComponentContext() const;
 
 protected:
@@ -74,7 +74,7 @@ protected:
     /** Returns the chart converter. */
     const ChartConverter&     getChartConverter() const;
     /** Returns the API chart document model. */
-    css::uno::Reference< css::chart2::XChartDocument > const &
+    cpo::uno::Reference< css::chart2::XChartDocument > const &
                         getChartDocument() const;
     /** Returns the position and size of the chart shape in 1/100 mm. */
     const css::awt::Size& getChartSize() const;
@@ -86,7 +86,7 @@ protected:
     /** Registers a title object and its layout data, needed for conversion of
         the title position using the old Chart1 API. */
     void                registerTitleLayout(
-                            const css::uno::Reference< css::chart2::XTitle >& rxTitle,
+                            const cpo::uno::Reference< css::chart2::XTitle >& rxTitle,
                             const ModelRef< LayoutModel >& rxLayout, ObjectType eObjType,
                             sal_Int32 nMainIdx, sal_Int32 nSubIdx );
     /** Converts the positions of the main title and all axis titles. */
@@ -134,7 +134,7 @@ public:
 
     /** Tries to set the position from the contained OOXML layout model. */
     void                convertFromModel(
-                            const css::uno::Reference< css::drawing::XShape >& rxShape,
+                            const cpo::uno::Reference< css::drawing::XShape >& rxShape,
                             double fRotationAngle );
     bool getAutoLayout() const {return mrModel.mbAutoLayout;}
 };

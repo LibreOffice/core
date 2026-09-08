@@ -66,9 +66,9 @@ void exportUTF16String(SvStream& rStrm, const OUString& rString)
     }
 }
 
-bool isWorkbook(const css::uno::Reference<cpo::uno::XInterface>& xInterface)
+bool isWorkbook(const cpo::uno::Reference<cpo::uno::XInterface>& xInterface)
 {
-    css::uno::Reference<ooo::vba::excel::XWorkbook> xWorkbook(xInterface, css::uno::UNO_QUERY);
+    cpo::uno::Reference<ooo::vba::excel::XWorkbook> xWorkbook(xInterface, cpo::uno::UNO_QUERY);
     return xWorkbook.is();
 }
 
@@ -470,7 +470,7 @@ void VBAEncryption::write()
 
 #endif
 
-VbaExport::VbaExport(css::uno::Reference<css::frame::XModel> xModel):
+VbaExport::VbaExport(cpo::uno::Reference<css::frame::XModel> xModel):
     mxModel(std::move(xModel))
 {
 }
@@ -730,13 +730,13 @@ void writePROJECTMODULE(SvStream& rStrm, const OUString& name, const sal_uInt16 
 
 // section 2.3.4.2.3
 void writePROJECTMODULES(SvStream& rStrm,
-                         const css::uno::Reference<css::container::XNameContainer>& xNameContainer,
+                         const cpo::uno::Reference<css::container::XNameContainer>& xNameContainer,
                          const std::vector<sal_Int32>& rLibraryMap,
                          const rtl_TextEncoding eTextEncoding)
 {
     const cpo::uno::Sequence<OUString> aElementNames = xNameContainer->getElementNames();
     sal_Int32 n = aElementNames.getLength();
-    css::uno::Reference<css::script::vba::XVBAModuleInfo> xModuleInfo(xNameContainer, css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::script::vba::XVBAModuleInfo> xModuleInfo(xNameContainer, cpo::uno::UNO_QUERY);
     assert(xModuleInfo.is());
 
     // TODO: this whole part is document specific
@@ -756,7 +756,7 @@ void writePROJECTMODULES(SvStream& rStrm,
 
 // section 2.3.4.2
 void exportDirStream(SvStream& rStrm,
-                     const css::uno::Reference<css::container::XNameContainer>& xNameContainer,
+                     const cpo::uno::Reference<css::container::XNameContainer>& xNameContainer,
                      const std::vector<sal_Int32>& rLibraryMap, const OUString& projectName,
                      const rtl_TextEncoding eTextEncoding)
 {
@@ -830,13 +830,13 @@ void exportVBAProjectStream(SvStream& rStrm)
 
 // section 2.3.1 PROJECT Stream
 void exportPROJECTStream(SvStream& rStrm,
-                         const css::uno::Reference<css::container::XNameContainer>& xNameContainer,
+                         const cpo::uno::Reference<css::container::XNameContainer>& xNameContainer,
                          const OUString& projectName, const std::vector<sal_Int32>& rLibraryMap,
                          const rtl_TextEncoding eTextEncoding)
 {
     const cpo::uno::Sequence<OUString> aElementNames = xNameContainer->getElementNames();
     sal_Int32 n = aElementNames.getLength();
-    css::uno::Reference<css::script::vba::XVBAModuleInfo> xModuleInfo(xNameContainer, css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::script::vba::XVBAModuleInfo> xModuleInfo(xNameContainer, cpo::uno::UNO_QUERY);
     assert(xModuleInfo.is());
 
     // section 2.3.1.1ProjectProperties
@@ -963,11 +963,11 @@ void exportPROJECTwmStream(SvStream& rStrm, const cpo::uno::Sequence<OUString>& 
     rStrm.WriteUInt16(0x0000); // terminator
 }
 
-void getCorrectExportOrder(const css::uno::Reference<css::container::XNameContainer>& xNameContainer, std::vector<sal_Int32>& rLibraryMap)
+void getCorrectExportOrder(const cpo::uno::Reference<css::container::XNameContainer>& xNameContainer, std::vector<sal_Int32>& rLibraryMap)
 {
     const cpo::uno::Sequence<OUString> aElementNames = xNameContainer->getElementNames();
     sal_Int32 n = aElementNames.getLength();
-    css::uno::Reference<css::script::vba::XVBAModuleInfo> xModuleInfo(xNameContainer, css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::script::vba::XVBAModuleInfo> xModuleInfo(xNameContainer, cpo::uno::UNO_QUERY);
 
     sal_Int32 nCurrentId = 0;
     // first all the non-document modules
@@ -1024,7 +1024,7 @@ void addFileStreamToSotStream(const OUString& rPath, SotStorageStream& rStream)
 
 void VbaExport::exportVBA(SotStorage* pRootStorage)
 {
-    css::uno::Reference<css::container::XNameContainer> xNameContainer = getBasicLibrary();
+    cpo::uno::Reference<css::container::XNameContainer> xNameContainer = getBasicLibrary();
     if (!xNameContainer.is()) {
         return;
     }
@@ -1098,7 +1098,7 @@ void VbaExport::exportVBA(SotStorage* pRootStorage)
     pWorkbookStream->Commit();
 #else
 
-    css::uno::Reference<css::script::vba::XVBAModuleInfo> xModuleInfo(xNameContainer, css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::script::vba::XVBAModuleInfo> xModuleInfo(xNameContainer, cpo::uno::UNO_QUERY);
     for (sal_Int32 i = 0; i < n; ++i)
     {
         const OUString& rModuleName = aElementNames[aLibraryMap[i]];
@@ -1122,22 +1122,22 @@ void VbaExport::exportVBA(SotStorage* pRootStorage)
     pRootStorage->Commit();
 }
 
-css::uno::Reference<css::script::XLibraryContainer> VbaExport::getLibraryContainer() const
+cpo::uno::Reference<css::script::XLibraryContainer> VbaExport::getLibraryContainer() const
 {
     oox::PropertySet aDocProp(mxModel);
-    css::uno::Reference<css::script::XLibraryContainer> xLibContainer(aDocProp.getAnyProperty(oox::PROP_BasicLibraries), css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::script::XLibraryContainer> xLibContainer(aDocProp.getAnyProperty(oox::PROP_BasicLibraries), cpo::uno::UNO_QUERY);
 
     return xLibContainer;
 }
 
-css::uno::Reference<css::container::XNameContainer> VbaExport::getBasicLibrary() const
+cpo::uno::Reference<css::container::XNameContainer> VbaExport::getBasicLibrary() const
 {
-    css::uno::Reference<css::container::XNameContainer> xLibrary;
+    cpo::uno::Reference<css::container::XNameContainer> xLibrary;
     try
     {
-        css::uno::Reference<css::script::XLibraryContainer> xLibContainer = getLibraryContainer();
+        cpo::uno::Reference<css::script::XLibraryContainer> xLibContainer = getLibraryContainer();
         OUString aProjectName = getProjectName();
-        xLibrary.set( xLibContainer->getByName(aProjectName), css::uno::UNO_QUERY_THROW );
+        xLibrary.set( xLibContainer->getByName(aProjectName), cpo::uno::UNO_QUERY_THROW );
     }
     catch(...)
     {
@@ -1148,11 +1148,11 @@ css::uno::Reference<css::container::XNameContainer> VbaExport::getBasicLibrary()
 
 bool VbaExport::containsVBAProject()
 {
-    css::uno::Reference<css::script::XLibraryContainer> xLibContainer = getLibraryContainer();
+    cpo::uno::Reference<css::script::XLibraryContainer> xLibContainer = getLibraryContainer();
     if (!xLibContainer.is())
         return false;
 
-    css::uno::Reference<css::script::vba::XVBACompatibility> xVbaCompatibility (xLibContainer, css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::script::vba::XVBACompatibility> xVbaCompatibility (xLibContainer, cpo::uno::UNO_QUERY);
     if (!xVbaCompatibility.is())
         return false;
 
@@ -1163,7 +1163,7 @@ bool VbaExport::containsVBAProject()
 
 OUString VbaExport::getProjectName() const
 {
-    css::uno::Reference<css::script::vba::XVBACompatibility> xVbaCompatibility(getLibraryContainer(), css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::script::vba::XVBACompatibility> xVbaCompatibility(getLibraryContainer(), cpo::uno::UNO_QUERY);
     if (xVbaCompatibility.is())
         return xVbaCompatibility->getProjectName();
 
@@ -1173,8 +1173,8 @@ OUString VbaExport::getProjectName() const
 rtl_TextEncoding VbaExport::getVBATextEncoding() const
 {
     rtl_TextEncoding aTextEncoding = osl_getThreadTextEncoding();
-    css::uno::Reference<css::beans::XPropertySet> xProps(getLibraryContainer(),
-                                                         css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::beans::XPropertySet> xProps(getLibraryContainer(),
+                                                         cpo::uno::UNO_QUERY);
     if (xProps.is())
         try
         {

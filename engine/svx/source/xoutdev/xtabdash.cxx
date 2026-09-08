@@ -38,6 +38,7 @@
 #include <memory>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 XDashList::XDashList(const OUString& rPath, const OUString& rReferer)
     : XPropertyList(XPropertyListType::Dash, rPath, rReferer)

@@ -36,9 +36,9 @@ namespace func_provider
 
 struct ProviderDetails
 {
-    //css::uno::Reference< css::lang::XSingleServiceFactory > factory;
-    css::uno::Reference< css::lang::XSingleComponentFactory > factory;
-    css::uno::Reference< css::script::provider::XScriptProvider > provider;
+    //cpo::uno::Reference< css::lang::XSingleServiceFactory > factory;
+    cpo::uno::Reference< css::lang::XSingleComponentFactory > factory;
+    cpo::uno::Reference< css::script::provider::XScriptProvider > provider;
 };
 typedef std::unordered_map < OUString, ProviderDetails  > ProviderDetails_hash;
 
@@ -48,30 +48,30 @@ class ProviderCache
 
 public:
      /// @throws cpo::uno::RuntimeException
-     ProviderCache( const css::uno::Reference< cpo::uno::XComponentContext >& xContext, const cpo::uno::Sequence< cpo::uno::Any >& scriptContext );
+     ProviderCache( const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext, const cpo::uno::Sequence< cpo::uno::Any >& scriptContext );
      /// @throws cpo::uno::RuntimeException
-     ProviderCache( const css::uno::Reference< cpo::uno::XComponentContext >& xContext, const cpo::uno::Sequence< cpo::uno::Any >& scriptContext,
+     ProviderCache( const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext, const cpo::uno::Sequence< cpo::uno::Any >& scriptContext,
         const cpo::uno::Sequence< OUString >& denyList );
     ~ProviderCache();
-     css::uno::Reference< css::script::provider::XScriptProvider >
+     cpo::uno::Reference< css::script::provider::XScriptProvider >
          getProvider( const OUString& providerName );
      /// @throws cpo::uno::RuntimeException
-     cpo::uno::Sequence < css::uno::Reference< css::script::provider::XScriptProvider > >
+     cpo::uno::Sequence < cpo::uno::Reference< css::script::provider::XScriptProvider > >
          getAllProviders();
 private:
     /// @throws cpo::uno::RuntimeException
     void populateCache();
 
     /// @throws cpo::uno::RuntimeException
-    css::uno::Reference< css::script::provider::XScriptProvider >
+    cpo::uno::Reference< css::script::provider::XScriptProvider >
         createProvider( ProviderDetails& details );
     bool isInDenyList( const OUString& serviceName ) const;
     cpo::uno::Sequence< OUString >  m_sDenyList;
     ProviderDetails_hash  m_hProviderDetailsCache;
     std::mutex m_mutex;
     cpo::uno::Sequence< cpo::uno::Any >  m_Sctx;
-    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
-    css::uno::Reference< css::lang::XMultiComponentFactory > m_xMgr;
+    cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+    cpo::uno::Reference< css::lang::XMultiComponentFactory > m_xMgr;
 
 
 };

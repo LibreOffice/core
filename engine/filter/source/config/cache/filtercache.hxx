@@ -27,7 +27,7 @@
 #include <cpo/uno/XInterface.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <cpo/uno/Any.h>
 #include <comphelper/documentconstants.hxx>
 #include <cppuhelper/basemutex.hxx>
@@ -164,18 +164,18 @@ class FilterCache : public cppu::BaseMutex
 
         /** @short  holds the used configuration provider alive, which
                     provides access to the list of types. */
-        mutable css::uno::Reference< cpo::uno::XInterface > m_xConfigTypes;
+        mutable cpo::uno::Reference< cpo::uno::XInterface > m_xConfigTypes;
 
 
         /** @short  holds the used configuration provider alive, which
                     provides access to the list of filters. */
-        mutable css::uno::Reference< cpo::uno::XInterface > m_xConfigFilters;
+        mutable cpo::uno::Reference< cpo::uno::XInterface > m_xConfigFilters;
 
 
         /** @short  holds the used configuration provider alive, which
                     provides access to the list of other values needed
                     by our type detection framework. */
-        mutable css::uno::Reference< cpo::uno::XInterface > m_xConfigOthers;
+        mutable cpo::uno::Reference< cpo::uno::XInterface > m_xConfigOthers;
 
 
         /** @short  contains all loaded types with its properties. */
@@ -236,7 +236,7 @@ class FilterCache : public cppu::BaseMutex
         cpo::uno::Sequence< OUString > m_aTypeProps[4];
 
         /// readonly access to the module configuration of OOo
-        css::uno::Reference< css::container::XNameAccess > m_xModuleCfg;
+        cpo::uno::Reference< css::container::XNameAccess > m_xModuleCfg;
 
         rtl::Reference< CacheUpdateListener > m_xTypesChglisteners;
         rtl::Reference< CacheUpdateListener > m_xFiltersChgListener;
@@ -620,7 +620,7 @@ class FilterCache : public cppu::BaseMutex
                         all necessary listener connections will be established
                         too. So this cache will be informed about outside updates.
          */
-        css::uno::Reference< cpo::uno::XInterface > impl_openConfig(EConfigProvider eProvide);
+        cpo::uno::Reference< cpo::uno::XInterface > impl_openConfig(EConfigProvider eProvide);
 
 
         /** @short      tries to open the requested configuration root
@@ -641,7 +641,7 @@ class FilterCache : public cppu::BaseMutex
                         and initialized within the requested modes successfully;
                         a NULL reference otherwise.
          */
-        css::uno::Reference< cpo::uno::XInterface > impl_createConfigAccess(const OUString& sRoot       ,
+        cpo::uno::Reference< cpo::uno::XInterface > impl_createConfigAccess(const OUString& sRoot       ,
                                                                                   bool         bReadOnly   ,
                                                                                   bool         bLocalesMode);
 
@@ -729,7 +729,7 @@ class FilterCache : public cppu::BaseMutex
             @throw  [cpo::uno::Exception]
                     if an unrecoverable error occurs inside this operation.
          */
-        void impl_loadSet(const css::uno::Reference< css::container::XNameAccess >& xConfig,
+        void impl_loadSet(const cpo::uno::Reference< css::container::XNameAccess >& xConfig,
                                 EItemType                                           eType  ,
                                 EReadOption                                         eOption,
                                 CacheItemList*                                      pCache );
@@ -757,7 +757,7 @@ class FilterCache : public cppu::BaseMutex
             @throw  [cpo::uno::Exception]
                     if an unrecoverable error occurs inside this operation.
          */
-        CacheItem impl_loadItem(const css::uno::Reference< css::container::XNameAccess >& xSet   ,
+        CacheItem impl_loadItem(const cpo::uno::Reference< css::container::XNameAccess >& xSet   ,
                                       EItemType                                           eType  ,
                                 const OUString&                                    sItem  ,
                                       EReadOption                                         eOption);
@@ -796,7 +796,7 @@ class FilterCache : public cppu::BaseMutex
 
             @throws cpo::uno::Exception
         */
-        static void impl_saveItem(const css::uno::Reference< css::container::XNameReplace >& xSet  ,
+        static void impl_saveItem(const cpo::uno::Reference< css::container::XNameReplace >& xSet  ,
                                  EItemType                                            eType ,
                            const CacheItem & aValue);
 
@@ -813,7 +813,7 @@ class FilterCache : public cppu::BaseMutex
 
             @throws cpo::uno::Exception
         */
-        static void impl_flushByList(const css::uno::Reference< css::container::XNameAccess >& xSet  ,
+        static void impl_flushByList(const cpo::uno::Reference< css::container::XNameAccess >& xSet  ,
                                     EItemType                                           eType ,
                               const CacheItemList&                                      rCache,
                               const std::vector<OUString>&                              lItems);
@@ -846,7 +846,7 @@ class FilterCache : public cppu::BaseMutex
             @throws An exception if anything failed inside this operation.
                     e.g. the given configuration set was not open.
          */
-        static EItemFlushState impl_specifyFlushOperation(const css::uno::Reference< css::container::XNameAccess >& xSet ,
+        static EItemFlushState impl_specifyFlushOperation(const cpo::uno::Reference< css::container::XNameAccess >& xSet ,
                                                    const CacheItemList&                                      rList,
                                                    const OUString&                                    sItem);
 
@@ -855,7 +855,7 @@ class FilterCache : public cppu::BaseMutex
 
             @throws cpo::uno::Exception
         */
-        void impl_readPatchUINames(const css::uno::Reference< css::container::XNameAccess >& xNode,
+        void impl_readPatchUINames(const cpo::uno::Reference< css::container::XNameAccess >& xNode,
                                          CacheItem&                                          rItem);
 
 
@@ -863,7 +863,7 @@ class FilterCache : public cppu::BaseMutex
 
             @throws cpo::uno::Exception
         */
-        static void impl_savePatchUINames(const css::uno::Reference< css::container::XNameReplace >& xNode,
+        static void impl_savePatchUINames(const cpo::uno::Reference< css::container::XNameReplace >& xNode,
                                    const CacheItem&                                           rItem);
 
         /** TODO */
@@ -873,7 +873,7 @@ class FilterCache : public cppu::BaseMutex
 
             @throws cpo::uno::Exception
         */
-        CacheItem impl_readOldItem(const css::uno::Reference< css::container::XNameAccess >& xSet ,
+        CacheItem impl_readOldItem(const cpo::uno::Reference< css::container::XNameAccess >& xSet ,
                                          EItemType                                           eType,
                                    const OUString&                                    sItem);
 

@@ -21,11 +21,12 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlmetai.hxx>
 #include <xmloff/xmlimp.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace ::xmloff::token;
 
 namespace {
@@ -33,21 +34,21 @@ namespace {
 class XMLMetaImportComponent : public SvXMLImport
 {
 private:
-    css::uno::Reference< css::document::XDocumentProperties> mxDocProps;
+    cpo::uno::Reference< css::document::XDocumentProperties> mxDocProps;
 
 public:
     // XMLMetaImportComponent() throw();
     explicit XMLMetaImportComponent(
-        const css::uno::Reference< cpo::uno::XComponentContext >& xContext
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext
         );
 
 protected:
 
     virtual SvXMLImportContext *CreateFastContext( sal_Int32 nElement,
-        const ::css::uno::Reference< ::css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const ::cpo::uno::Reference< ::css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     // XImporter
-    virtual void setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
+    virtual void setTargetDocument( const cpo::uno::Reference< css::lang::XComponent >& xDoc ) override;
 };
 
 }

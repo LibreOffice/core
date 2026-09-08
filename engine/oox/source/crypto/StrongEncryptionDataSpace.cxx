@@ -23,7 +23,7 @@ using namespace css;
 using namespace css::beans;
 using namespace css::io;
 using namespace css::lang;
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 namespace oox::crypto

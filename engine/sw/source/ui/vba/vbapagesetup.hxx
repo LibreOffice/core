@@ -41,10 +41,10 @@ private:
 
 public:
     /// @throws cpo::uno::RuntimeException
-    SwVbaPageSetup( const css::uno::Reference< ooo::vba::XHelperInterface >& xParent,
-                    const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
+    SwVbaPageSetup( const cpo::uno::Reference< ooo::vba::XHelperInterface >& xParent,
+                    const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
                     const rtl::Reference< SwXTextDocument >& xModel,
-                    const css::uno::Reference< css::beans::XPropertySet >& xProps );
+                    const cpo::uno::Reference< css::beans::XPropertySet >& xProps );
 
     // Attributes
     virtual double SAL_CALL getGutter() override;

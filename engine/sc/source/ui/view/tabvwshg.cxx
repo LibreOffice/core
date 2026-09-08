@@ -37,6 +37,7 @@
 #include <avmedia/mediawindow.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 void ScTabViewShell::InsertURLButton( const OUString& rName, const OUString& rURL,
                                         const OUString& rTarget,

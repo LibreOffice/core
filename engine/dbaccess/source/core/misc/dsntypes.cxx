@@ -33,7 +33,7 @@ namespace dbaccess
 {
 
     using namespace ::com::sun::star;
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
     using namespace ::com::sun::star::beans;
 
     namespace
@@ -49,7 +49,7 @@ namespace dbaccess
         }
     }
 // ODsnTypeCollection
-ODsnTypeCollection::ODsnTypeCollection(const css::uno::Reference< cpo::uno::XComponentContext >& _xContext)
+ODsnTypeCollection::ODsnTypeCollection(const cpo::uno::Reference< cpo::uno::XComponentContext >& _xContext)
 :m_aDriverConfig(_xContext)
 #if OSL_DEBUG_LEVEL > 0
 ,m_nLivingIterators(0)

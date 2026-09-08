@@ -83,6 +83,7 @@
 #include <redline.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 /**
  * Check if pCurrentCursor points into already existing ranges and delete those.

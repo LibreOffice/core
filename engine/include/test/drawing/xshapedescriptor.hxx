@@ -11,7 +11,7 @@
 
 #include <cpo/uno/XInterface.hpp>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <test/testdllapi.hxx>
 #include <utility>
@@ -25,7 +25,7 @@ public:
         : m_aShapeType(std::move(aShapeType))
     {
     }
-    virtual css::uno::Reference<cpo::uno::XInterface> init() = 0;
+    virtual cpo::uno::Reference<cpo::uno::XInterface> init() = 0;
 
     void testGetShapeType();
 

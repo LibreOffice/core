@@ -12,7 +12,7 @@
 
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <cpo/uno/XInterface.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <test/testdllapi.hxx>
 
@@ -21,7 +21,7 @@ namespace apitest
 class OOO_DLLPUBLIC_TEST XCellRangeReferrer
 {
 public:
-    virtual css::uno::Reference<cpo::uno::XInterface> init() = 0;
+    virtual cpo::uno::Reference<cpo::uno::XInterface> init() = 0;
 
     void setCellRange(css::table::CellRangeAddress aCellRange) { m_aCellRange = aCellRange; }
     const css::table::CellRangeAddress& getCellRange() const { return m_aCellRange; }

@@ -21,7 +21,7 @@
 
 #include <vcl/wizardmachine.hxx>
 #include <mailmergehelper.hxx>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 
 class SwMailMergeWizard;
 class SwFrameFormat;
@@ -42,7 +42,7 @@ class SwMailMergeLayoutPage : public vcl::OWizardPage
 
     SwMailMergeWizard*  m_pWizard;
 
-    css::uno::Reference< css::beans::XPropertySet >  m_xViewProperties;
+    cpo::uno::Reference< css::beans::XPropertySet >  m_xViewProperties;
 
     std::unique_ptr<weld::Container> m_xPosition;
     std::unique_ptr<weld::CheckButton> m_xAlignToBodyCB;

@@ -27,6 +27,7 @@
 #include <mutex>
 
 using namespace css;
+using namespace ::cpo;
 
 namespace {
 

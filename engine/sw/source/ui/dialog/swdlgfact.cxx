@@ -98,8 +98,8 @@
 
 using namespace css;
 using namespace css::frame;
-using namespace css::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 namespace
 {
@@ -426,9 +426,9 @@ class AbstractSwInsertDBColAutoPilot_Impl
 public:
     using AbstractDialogImpl_NoSync::AbstractDialogImpl_NoSync;
     void DataToDoc(const cpo::uno::Sequence<cpo::uno::Any>& rSelection,
-                   css::uno::Reference<css::sdbc::XDataSource> rxSource,
-                   css::uno::Reference<css::sdbc::XConnection> xConnection,
-                   css::uno::Reference<css::sdbc::XResultSet> xResultSet) override
+                   cpo::uno::Reference<css::sdbc::XDataSource> rxSource,
+                   cpo::uno::Reference<css::sdbc::XConnection> xConnection,
+                   cpo::uno::Reference<css::sdbc::XResultSet> xResultSet) override
     {
         m_pDlg->DataToDoc(rSelection, rxSource, xConnection, xResultSet);
     }
@@ -745,8 +745,8 @@ public:
 }
 
 VclPtr<AbstractSwRenameXNamedDlg> SwAbstractDialogFactory_Impl::CreateSwRenameXNamedDlg(weld::Widget* pParent,
-    css::uno::Reference< css::container::XNamed > & xNamed,
-    css::uno::Reference< css::container::XNameAccess > & xNameAccess)
+    cpo::uno::Reference< css::container::XNamed > & xNamed,
+    cpo::uno::Reference< css::container::XNameAccess > & xNameAccess)
 {
     return VclPtr<AbstractSwRenameXNamedDlg_Impl>::Create(pParent,xNamed, xNameAccess);
 }
@@ -965,7 +965,7 @@ public:
     {
         return m_pDlg->GetSelection();
     }
-    css::uno::Reference<css::sdbc::XResultSet> GetResultSet() const override
+    cpo::uno::Reference<css::sdbc::XResultSet> GetResultSet() const override
     {
         return m_pDlg->GetResultSet();
     }

@@ -41,8 +41,8 @@ public:
 
     virtual ~SchXMLDocContext() override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
 // context for flat file xml format
@@ -54,10 +54,10 @@ public:
         SchXMLImportHelper& i_rImpHelper,
         SchXMLImport& i_rImport,
         sal_Int32 i_nElement,
-        const css::uno::Reference<css::document::XDocumentProperties>& i_xDocProps);
+        const cpo::uno::Reference<css::document::XDocumentProperties>& i_xDocProps);
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
 class SchXMLBodyContext : public SvXMLImportContext
@@ -72,9 +72,9 @@ public:
         sal_Int32 nElement );
     virtual ~SchXMLBodyContext() override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

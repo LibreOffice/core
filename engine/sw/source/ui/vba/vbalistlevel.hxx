@@ -33,14 +33,14 @@ private:
 
 public:
     /// @throws cpo::uno::RuntimeException
-    SwVbaListLevel( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< cpo::uno::XComponentContext >& rContext, SwVbaListHelperRef  pHelper, sal_Int32 nLevel );
+    SwVbaListLevel( const cpo::uno::Reference< ooo::vba::XHelperInterface >& rParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& rContext, SwVbaListHelperRef  pHelper, sal_Int32 nLevel );
     virtual ~SwVbaListLevel() override;
 
     // Attributes
     virtual ::sal_Int32 SAL_CALL getAlignment() override;
     virtual void SAL_CALL setAlignment( ::sal_Int32 _alignment ) override;
-    virtual css::uno::Reference< ::ooo::vba::word::XFont > SAL_CALL getFont() override;
-    virtual void SAL_CALL setFont( const css::uno::Reference< ::ooo::vba::word::XFont >& _font ) override;
+    virtual cpo::uno::Reference< ::ooo::vba::word::XFont > SAL_CALL getFont() override;
+    virtual void SAL_CALL setFont( const cpo::uno::Reference< ::ooo::vba::word::XFont >& _font ) override;
     virtual ::sal_Int32 SAL_CALL getIndex() override;
     virtual OUString SAL_CALL getLinkedStyle() override;
     virtual void SAL_CALL setLinkedStyle( const OUString& _linkedstyle ) override;

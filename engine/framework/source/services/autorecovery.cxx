@@ -103,7 +103,7 @@
 #include <officecfg/Office/Recovery.hxx>
 #include <officecfg/Setup.hxx>
 
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace css::document;
 using namespace css::frame;
@@ -168,7 +168,7 @@ struct DispatchParams
 public:
      DispatchParams();
      DispatchParams(const ::comphelper::SequenceAsHashMap&             lArgs ,
-                    const css::uno::Reference< cpo::uno::XInterface >& xOwner);
+                    const cpo::uno::Reference< cpo::uno::XInterface >& xOwner);
 
      void forget();
 
@@ -183,7 +183,7 @@ public:
                 it can provide its own status indicator object
                 to us - so we use it instead of the normal one.
      */
-    css::uno::Reference< css::task::XStatusIndicator > m_xProgress;
+    cpo::uno::Reference< css::task::XStatusIndicator > m_xProgress;
 
     /** TODO document me */
     OUString m_sSavePath;
@@ -200,7 +200,7 @@ public:
                 our instance live if the event callback reach us.
                 So we hold a uno reference to ourself.
      */
-    css::uno::Reference< cpo::uno::XInterface > m_xHoldRefForAsyncOpAlive;
+    cpo::uno::Reference< cpo::uno::XInterface > m_xHoldRefForAsyncOpAlive;
 };
 
 /** These values are used as flags and represent the current state of a document.
@@ -331,7 +331,7 @@ public:
             {}
 
             /** @short  points to the document. */
-            css::uno::Reference< css::frame::XModel > Document;
+            cpo::uno::Reference< css::frame::XModel > Document;
 
             /** @short  knows, if the document is really modified since the last autosave,
                         or  was postponed, because it was an active one etcpp...
@@ -396,34 +396,34 @@ private:
     /** @short  the global uno service manager.
         @descr  Must be used to create own needed services.
      */
-    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
     /** @short  points to the underlying recovery configuration.
         @descr  This instance does not cache - it calls directly the
                 configuration API!
       */
-    css::uno::Reference< css::container::XNameAccess > m_xRecoveryCFG;
+    cpo::uno::Reference< css::container::XNameAccess > m_xRecoveryCFG;
 
     /** @short  proxy weak binding to forward Events to ourself without
                 an ownership cycle
       */
-    css::uno::Reference< css::util::XChangesListener > m_xRecoveryCFGListener;
+    cpo::uno::Reference< css::util::XChangesListener > m_xRecoveryCFGListener;
 
     /** @short  points to the used configuration package or.openoffice.Setup
         @descr  This instance does not cache - it calls directly the
                 configuration API!
       */
-    css::uno::Reference< css::container::XNameAccess > m_xModuleCFG;
+    cpo::uno::Reference< css::container::XNameAccess > m_xModuleCFG;
 
     /** @short  holds the global event broadcaster alive,
                 where we listen for new created documents.
       */
-    css::uno::Reference< css::frame::XGlobalEventBroadcaster > m_xNewDocBroadcaster;
+    cpo::uno::Reference< css::frame::XGlobalEventBroadcaster > m_xNewDocBroadcaster;
 
     /** @short  proxy weak binding to forward Events to ourself without
                 an ownership cycle
       */
-    css::uno::Reference< css::document::XDocumentEventListener > m_xNewDocBroadcasterListener;
+    cpo::uno::Reference< css::document::XDocumentEventListener > m_xNewDocBroadcasterListener;
 
     /** @short  because we stop/restart listening sometimes, it's a good idea to know
                 if we already registered as listener .-)
@@ -493,7 +493,7 @@ private:
 
 public:
 
-    explicit AutoRecovery(css::uno::Reference< cpo::uno::XComponentContext >  xContext);
+    explicit AutoRecovery(cpo::uno::Reference< cpo::uno::XComponentContext >  xContext);
     virtual ~AutoRecovery(                                                                   ) override;
 
     virtual OUString getImplementationName() override
@@ -528,10 +528,10 @@ public:
     virtual void dispatch(const css::util::URL&                                  aURL      ,
                                    const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments) override;
 
-    virtual void addStatusListener(const css::uno::Reference< css::frame::XStatusListener >& xListener,
+    virtual void addStatusListener(const cpo::uno::Reference< css::frame::XStatusListener >& xListener,
                                             const css::util::URL&                                     aURL     ) override;
 
-    virtual void removeStatusListener(const css::uno::Reference< css::frame::XStatusListener >& xListener,
+    virtual void removeStatusListener(const cpo::uno::Reference< css::frame::XStatusListener >& xListener,
                                                const css::util::URL&                                     aURL     ) override;
 
     // css.document.XDocumentEventListener
@@ -572,7 +572,7 @@ protected:
 
     virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo() override;
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo() override;
 
 private:
     virtual void disposing() final override;
@@ -692,7 +692,7 @@ private:
 
         @threadsafe
      */
-    void implts_registerDocument(const css::uno::Reference< css::frame::XModel3 >& xDocument);
+    void implts_registerDocument(const cpo::uno::Reference< css::frame::XModel3 >& xDocument);
 
     /** @short  remove the specified document from our internal document list.
 
@@ -707,21 +707,21 @@ private:
 
         @threadsafe
      */
-    void implts_deregisterDocument(const css::uno::Reference< css::frame::XModel >& xDocument                ,
+    void implts_deregisterDocument(const cpo::uno::Reference< css::frame::XModel >& xDocument                ,
                                          bool                                   bStopListening = true);
 
     // TODO document me
-    void implts_markDocumentModifiedAgainstLastBackup(const css::uno::Reference< css::frame::XModel >& xDocument);
+    void implts_markDocumentModifiedAgainstLastBackup(const cpo::uno::Reference< css::frame::XModel >& xDocument);
 
     // TODO document me
-    void implts_updateModifiedState(const css::uno::Reference< css::frame::XModel >& xDocument);
+    void implts_updateModifiedState(const cpo::uno::Reference< css::frame::XModel >& xDocument);
 
     // TODO document me
-    void implts_updateDocumentUsedForSavingState(const css::uno::Reference< css::frame::XModel >& xDocument      ,
+    void implts_updateDocumentUsedForSavingState(const cpo::uno::Reference< css::frame::XModel >& xDocument      ,
                                                        bool                                   bSaveInProgress);
 
     // TODO document me
-    void implts_markDocumentAsSaved(const css::uno::Reference< css::frame::XModel >& xDocument);
+    void implts_markDocumentAsSaved(const cpo::uno::Reference< css::frame::XModel >& xDocument);
 
     /** @short  search a document inside given list.
 
@@ -739,7 +739,7 @@ private:
                 rList.end()!
      */
     static TDocumentList::iterator impl_searchDocument(      AutoRecovery::TDocumentList&               rList    ,
-                                                       const css::uno::Reference< css::frame::XModel >& xDocument);
+                                                       const cpo::uno::Reference< css::frame::XModel >& xDocument);
 
     /** TODO document me */
     void implts_changeAllDocVisibility(bool bVisible);
@@ -819,7 +819,7 @@ private:
       */
     void implts_saveOneDoc(const OUString&                                    sBackupPath      ,
                                  AutoRecovery::TDocumentInfo&                        rInfo            ,
-                           const css::uno::Reference< css::task::XStatusIndicator >& xExternalProgress);
+                           const cpo::uno::Reference< css::task::XStatusIndicator >& xExternalProgress);
 
     /** @short  recovery all documents, which was saved during
                 a crash before.
@@ -1018,11 +1018,11 @@ private:
      */
     static void impl_establishProgress(const AutoRecovery::TDocumentInfo&               rInfo    ,
                                        comphelper::SequenceAsHashMap& rArgs,
-                                const css::uno::Reference< css::frame::XFrame >& xNewFrame);
+                                const cpo::uno::Reference< css::frame::XFrame >& xNewFrame);
 
     static void impl_forgetProgress(const AutoRecovery::TDocumentInfo&               rInfo    ,
                                     comphelper::SequenceAsHashMap& rArgs,
-                             const css::uno::Reference< css::frame::XFrame >& xNewFrame);
+                             const cpo::uno::Reference< css::frame::XFrame >& xNewFrame);
 
     /** try to remove the specified file from disc.
 
@@ -1112,7 +1112,7 @@ class CacheLockGuard
 
         // holds the outside caller alive, so it's shared resources
         // are valid every time
-        css::uno::Reference< cpo::uno::XInterface > m_xOwner;
+        cpo::uno::Reference< cpo::uno::XInterface > m_xOwner;
 
         // mutex shared with outside caller!
         osl::Mutex& m_rSharedMutex;
@@ -1212,10 +1212,10 @@ DispatchParams::DispatchParams()
 };
 
 DispatchParams::DispatchParams(const ::comphelper::SequenceAsHashMap&             lArgs ,
-                               const css::uno::Reference< cpo::uno::XInterface >& xOwner)
+                               const cpo::uno::Reference< cpo::uno::XInterface >& xOwner)
 {
     m_nWorkingEntryID         = lArgs.getUnpackedValueOrDefault(u"EntryID"_ustr, sal_Int32(-1)                                       );
-    m_xProgress               = lArgs.getUnpackedValueOrDefault(u"StatusIndicator"_ustr, css::uno::Reference< css::task::XStatusIndicator >());
+    m_xProgress               = lArgs.getUnpackedValueOrDefault(u"StatusIndicator"_ustr, cpo::uno::Reference< css::task::XStatusIndicator >());
     m_sSavePath               = lArgs.getUnpackedValueOrDefault(u"SavePath"_ustr, OUString()                                   );
     m_xHoldRefForAsyncOpAlive = xOwner;
 };
@@ -1228,7 +1228,7 @@ void DispatchParams::forget()
     m_xHoldRefForAsyncOpAlive.clear();
 };
 
-AutoRecovery::AutoRecovery(css::uno::Reference< cpo::uno::XComponentContext >  xContext)
+AutoRecovery::AutoRecovery(cpo::uno::Reference< cpo::uno::XComponentContext >  xContext)
     : AutoRecovery_BASE         (m_aMutex)
     , ::cppu::OPropertySetHelper(cppu::WeakComponentImplHelperBase::rBHelper)
     , m_xContext                (std::move(xContext                                           ))
@@ -1517,7 +1517,7 @@ void AutoRecovery::implts_dispatch(const DispatchParams& aParams)
         implts_startListening();
 }
 
-void AutoRecovery::addStatusListener(const css::uno::Reference< css::frame::XStatusListener >& xListener,
+void AutoRecovery::addStatusListener(const cpo::uno::Reference< css::frame::XStatusListener >& xListener,
                                               const css::util::URL&                                     aURL     )
 {
     if (!xListener.is())
@@ -1545,7 +1545,7 @@ void AutoRecovery::addStatusListener(const css::uno::Reference< css::frame::XSta
     } /* SAFE */
 }
 
-void AutoRecovery::removeStatusListener(const css::uno::Reference< css::frame::XStatusListener >& xListener,
+void AutoRecovery::removeStatusListener(const cpo::uno::Reference< css::frame::XStatusListener >& xListener,
                                                  const css::util::URL&                                     aURL     )
 {
     if (!xListener.is())
@@ -1556,7 +1556,7 @@ void AutoRecovery::removeStatusListener(const css::uno::Reference< css::frame::X
 
 void AutoRecovery::documentEventOccured(const css::document::DocumentEvent& aEvent)
 {
-    css::uno::Reference< css::frame::XModel3 > xDocument(aEvent.Source, css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::frame::XModel3 > xDocument(aEvent.Source, cpo::uno::UNO_QUERY);
 
     // new document => put it into the internal list
     if (
@@ -1678,7 +1678,7 @@ void AutoRecovery::changesOccurred(const css::util::ChangesEvent& aEvent)
 
 void AutoRecovery::modified(const css::lang::EventObject& aEvent)
 {
-    css::uno::Reference< css::frame::XModel > xDocument(aEvent.Source, css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::frame::XModel > xDocument(aEvent.Source, cpo::uno::UNO_QUERY);
     if (! xDocument.is())
         return;
 
@@ -1705,7 +1705,7 @@ void AutoRecovery::disposing(const css::lang::EventObject& aEvent)
     // dispose from one of our cached documents ?
     // Normally they should send a OnUnload message ...
     // But some stacktraces shows another possible use case .-)
-    css::uno::Reference< css::frame::XModel > xDocument(aEvent.Source, css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::frame::XModel > xDocument(aEvent.Source, cpo::uno::UNO_QUERY);
     if (xDocument.is())
     {
         implts_deregisterDocument(xDocument, false); // false => don't call removeEventListener() .. because it's not needed here
@@ -1724,7 +1724,7 @@ void AutoRecovery::implts_openConfig()
         return;
     } /* SAFE */
 
-    css::uno::Reference<css::lang::XMultiServiceFactory> xConfigProvider(
+    cpo::uno::Reference<css::lang::XMultiServiceFactory> xConfigProvider(
             css::configuration::theDefaultProvider::get(m_xContext));
 
     std::vector<cpo::uno::Any> lParams;
@@ -1736,11 +1736,11 @@ void AutoRecovery::implts_openConfig()
     lParams.push_back(cpo::uno::Any(aParam));
 
     // throws a RuntimeException if an error occurs!
-    css::uno::Reference<css::container::XNameAccess> xCFG(
+    cpo::uno::Reference<css::container::XNameAccess> xCFG(
             xConfigProvider->createInstanceWithArguments(
                     u"com.sun.star.configuration.ConfigurationAccess"_ustr,
                     comphelper::containerToSequence(lParams)),
-            css::uno::UNO_QUERY);
+            cpo::uno::UNO_QUERY);
 
     sal_Int32 nMinSpaceDocSave    = MIN_DISCSPACE_DOCSAVE;
     sal_Int32 nMinSpaceConfigSave = MIN_DISCSPACE_CONFIGSAVE;
@@ -1816,7 +1816,7 @@ void AutoRecovery::implts_readConfig()
     aCacheLock.unlock();
     // <- REENTRANT --------------------------------
 
-    css::uno::Reference<css::container::XNameAccess> xRecoveryList(
+    cpo::uno::Reference<css::container::XNameAccess> xRecoveryList(
             officecfg::Office::Recovery::RecoveryList::get());
 
     // REENTRANT -> --------------------------
@@ -1824,7 +1824,7 @@ void AutoRecovery::implts_readConfig()
 
     for (const OUString& rItem : xRecoveryList->getElementNames())
     {
-        css::uno::Reference< css::beans::XPropertySet > xItem;
+        cpo::uno::Reference< css::beans::XPropertySet > xItem;
         xRecoveryList->getByName(rItem) >>= xItem;
         if (!xItem.is())
             continue;
@@ -1881,7 +1881,7 @@ void AutoRecovery::implts_specifyDefaultFilterAndExtension(AutoRecovery::TDocume
                 static_cast< css::frame::XDispatch* >(this));
     }
 
-    css::uno::Reference< css::container::XNameAccess> xCFG;
+    cpo::uno::Reference< css::container::XNameAccess> xCFG;
     /* SAFE */ {
     osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
     xCFG = m_xModuleCFG;
@@ -1894,7 +1894,7 @@ void AutoRecovery::implts_specifyDefaultFilterAndExtension(AutoRecovery::TDocume
             implts_openConfig();
             // open module config on demand and cache the update access
             xCFG.set(officecfg::Setup::Office::Factories::get(),
-                    css::uno::UNO_SET_THROW);
+                    cpo::uno::UNO_SET_THROW);
 
             /* SAFE */ {
             osl::MutexGuard g2(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
@@ -1902,18 +1902,18 @@ void AutoRecovery::implts_specifyDefaultFilterAndExtension(AutoRecovery::TDocume
             } /* SAFE */
         }
 
-        css::uno::Reference< css::container::XNameAccess > xModuleProps(
+        cpo::uno::Reference< css::container::XNameAccess > xModuleProps(
             xCFG->getByName(rInfo.AppModule),
-            css::uno::UNO_QUERY_THROW);
+            cpo::uno::UNO_QUERY_THROW);
 
         xModuleProps->getByName(u"ooSetupFactoryActualFilter"_ustr) >>= rInfo.DefaultFilter;
 
-        css::uno::Reference< css::container::XNameAccess > xFilterCFG(
+        cpo::uno::Reference< css::container::XNameAccess > xFilterCFG(
                 m_xContext->getServiceManager()->createInstanceWithContext(
-                    u"com.sun.star.document.FilterFactory"_ustr, m_xContext), css::uno::UNO_QUERY_THROW);
-        css::uno::Reference< css::container::XNameAccess > xTypeCFG(
+                    u"com.sun.star.document.FilterFactory"_ustr, m_xContext), cpo::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference< css::container::XNameAccess > xTypeCFG(
                 m_xContext->getServiceManager()->createInstanceWithContext(
-                    u"com.sun.star.document.TypeDetection"_ustr, m_xContext), css::uno::UNO_QUERY_THROW);
+                    u"com.sun.star.document.TypeDetection"_ustr, m_xContext), cpo::uno::UNO_QUERY_THROW);
 
         ::comphelper::SequenceAsHashMap       lFilterProps        (xFilterCFG->getByName(rInfo.DefaultFilter));
         OUString                       sTypeRegistration   = lFilterProps.getUnpackedValueOrDefault(u"Type"_ustr, OUString());
@@ -1940,7 +1940,7 @@ void AutoRecovery::implts_specifyAppModuleAndFactory(AutoRecovery::TDocumentInfo
         "Can not find out the application module nor its factory URL, if no application module (or a suitable) document is known!",
         *this );
 
-    css::uno::Reference< css::frame::XModuleManager2 > xManager = ModuleManager::create(m_xContext);
+    cpo::uno::Reference< css::frame::XModuleManager2 > xManager = ModuleManager::create(m_xContext);
 
     if (rInfo.AppModule.isEmpty())
         rInfo.AppModule = xManager->identify(rInfo.Document);
@@ -2001,11 +2001,11 @@ void AutoRecovery::implts_flushConfigItem(AutoRecovery::TDocumentInfo& rInfo, bo
     {
         implts_openConfig();
 
-        css::uno::Reference<css::container::XNameAccess> xCheck(
+        cpo::uno::Reference<css::container::XNameAccess> xCheck(
                 officecfg::Office::Recovery::RecoveryList::get(batch));
 
-        css::uno::Reference< css::container::XNameContainer >   xModify(xCheck, css::uno::UNO_QUERY_THROW);
-        css::uno::Reference< css::lang::XSingleServiceFactory > xCreate(xCheck, css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference< css::container::XNameContainer >   xModify(xCheck, cpo::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference< css::lang::XSingleServiceFactory > xCreate(xCheck, cpo::uno::UNO_QUERY_THROW);
 
         OUString sID = RECOVERY_ITEM_BASE_IDENTIFIER + OUString::number(rInfo.ID);
 
@@ -2038,14 +2038,14 @@ void AutoRecovery::implts_flushConfigItem(AutoRecovery::TDocumentInfo& rInfo, bo
         else
         {
             // new/modify
-            css::uno::Reference< css::beans::XPropertySet > xSet;
+            cpo::uno::Reference< css::beans::XPropertySet > xSet;
             bool                                        bNew = !xCheck->hasByName(sID);
             if (bNew)
             {
                 if (!bAllowAdd)
                     return; // no change made, just exit
 
-                xSet.set(xCreate->createInstance(), css::uno::UNO_QUERY_THROW);
+                xSet.set(xCreate->createInstance(), cpo::uno::UNO_QUERY_THROW);
             }
             else
                 xCheck->getByName(sID) >>= xSet;
@@ -2112,13 +2112,13 @@ void AutoRecovery::implts_flushConfigItem(AutoRecovery::TDocumentInfo& rInfo, bo
 
 void AutoRecovery::implts_startListening()
 {
-    css::uno::Reference< css::util::XChangesNotifier > xCFG;
-    css::uno::Reference< css::frame::XGlobalEventBroadcaster > xBroadcaster;
+    cpo::uno::Reference< css::util::XChangesNotifier > xCFG;
+    cpo::uno::Reference< css::frame::XGlobalEventBroadcaster > xBroadcaster;
     bool bListenForDocEvents;
     bool bListenForConfigChanges;
     /* SAFE */ {
     osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
-    xCFG.set              (m_xRecoveryCFG, css::uno::UNO_QUERY);
+    xCFG.set              (m_xRecoveryCFG, cpo::uno::UNO_QUERY);
     xBroadcaster        = m_xNewDocBroadcaster;
     bListenForDocEvents = m_bListenForDocEvents;
     bListenForConfigChanges = m_bListenForConfigChanges;
@@ -2129,7 +2129,7 @@ void AutoRecovery::implts_startListening()
         (! bListenForConfigChanges)
        )
     {
-        css::uno::Reference<css::util::XChangesListener> const xListener(
+        cpo::uno::Reference<css::util::XChangesListener> const xListener(
                 new WeakChangesListener(this));
         xCFG->addChangesListener(xListener);
         /* SAFE */ {
@@ -2153,7 +2153,7 @@ void AutoRecovery::implts_startListening()
         (! bListenForDocEvents)
        )
     {
-        css::uno::Reference<css::document::XDocumentEventListener> const
+        cpo::uno::Reference<css::document::XDocumentEventListener> const
             xListener(new WeakDocumentEventListener(this));
         xBroadcaster->addDocumentEventListener(xListener);
         /* SAFE */ {
@@ -2166,14 +2166,14 @@ void AutoRecovery::implts_startListening()
 
 void AutoRecovery::implts_stopListening()
 {
-    css::uno::Reference< css::util::XChangesNotifier > xCFG;
-    css::uno::Reference< css::document::XDocumentEventBroadcaster > xGlobalEventBroadcaster;
+    cpo::uno::Reference< css::util::XChangesNotifier > xCFG;
+    cpo::uno::Reference< css::document::XDocumentEventBroadcaster > xGlobalEventBroadcaster;
     /* SAFE */ {
     osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
     // Attention: Don't reset our internal members here too.
     // May be we must work with our configuration, but don't wish to be informed
     // about changes any longer. Needed e.g. during Job::EmergencySave!
-    xCFG.set                   (m_xRecoveryCFG      , css::uno::UNO_QUERY);
+    xCFG.set                   (m_xRecoveryCFG      , cpo::uno::UNO_QUERY);
     xGlobalEventBroadcaster = m_xNewDocBroadcaster;
     } /* SAFE */
 
@@ -2195,10 +2195,10 @@ void AutoRecovery::implts_startModifyListeningOnDoc(AutoRecovery::TDocumentInfo&
     if (rInfo.ListenForModify)
         return;
 
-    css::uno::Reference< css::util::XModifyBroadcaster > xBroadcaster(rInfo.Document, css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::util::XModifyBroadcaster > xBroadcaster(rInfo.Document, cpo::uno::UNO_QUERY);
     if (xBroadcaster.is())
     {
-        css::uno::Reference< css::util::XModifyListener > xThis(this);
+        cpo::uno::Reference< css::util::XModifyListener > xThis(this);
         xBroadcaster->addModifyListener(xThis);
         rInfo.ListenForModify = true;
     }
@@ -2209,10 +2209,10 @@ void AutoRecovery::implts_stopModifyListeningOnDoc(AutoRecovery::TDocumentInfo& 
     if (! rInfo.ListenForModify)
         return;
 
-    css::uno::Reference< css::util::XModifyBroadcaster > xBroadcaster(rInfo.Document, css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::util::XModifyBroadcaster > xBroadcaster(rInfo.Document, cpo::uno::UNO_QUERY);
     if (xBroadcaster.is())
     {
-        css::uno::Reference< css::util::XModifyListener > xThis(this);
+        cpo::uno::Reference< css::util::XModifyListener > xThis(this);
         xBroadcaster->removeModifyListener(xThis);
         rInfo.ListenForModify = false;
     }
@@ -2289,7 +2289,7 @@ IMPL_LINK_NOARG(AutoRecovery, implts_timerExpired, Timer *, void)
         // But we must be aware that we can be destroyed hardly
         // if our uno reference will be gone!
         // => Hold this object alive till this method finish its work.
-        css::uno::Reference< cpo::uno::XInterface > xSelfHold(static_cast< css::lang::XTypeProvider* >(this));
+        cpo::uno::Reference< cpo::uno::XInterface > xSelfHold(static_cast< css::lang::XTypeProvider* >(this));
 
         // Needed! Otherwise every reschedule request allow a new triggered timer event :-(
         implts_stopTimer();
@@ -2383,7 +2383,7 @@ IMPL_LINK_NOARG(AutoRecovery, implts_asyncDispatch, LinkParamNone*, void)
     /* SAFE */ {
         osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
         aParams = m_aDispatchParams;
-        css::uno::Reference< cpo::uno::XInterface > xHoldRefForMethodAlive = aParams.m_xHoldRefForAsyncOpAlive;
+        cpo::uno::Reference< cpo::uno::XInterface > xHoldRefForMethodAlive = aParams.m_xHoldRefForAsyncOpAlive;
         m_aDispatchParams.forget(); // clears all members ... including the ref-hold object .-)
     } /* SAFE */
 
@@ -2396,7 +2396,7 @@ IMPL_LINK_NOARG(AutoRecovery, implts_asyncDispatch, LinkParamNone*, void)
     }
 }
 
-void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame::XModel3 > & xDocument)
+void AutoRecovery::implts_registerDocument(const cpo::uno::Reference< css::frame::XModel3 > & xDocument)
 {
     // ignore corrupted events, where no document is given ... Runtime Error ?!
     if (!xDocument.is())
@@ -2431,14 +2431,14 @@ void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame
 
     // Check if doc is well known on the desktop. Otherwise ignore it!
     // Other frames mostly are used from external programs - e.g. the bean ...
-    css::uno::Reference< css::frame::XController > xController = xDocument->getCurrentController();
+    cpo::uno::Reference< css::frame::XController > xController = xDocument->getCurrentController();
     if (!xController.is())
         return;
 
-    css::uno::Reference< css::frame::XFrame >   xFrame   = xController->getFrame();
+    cpo::uno::Reference< css::frame::XFrame >   xFrame   = xController->getFrame();
     if (!xFrame.is())
         return;
-    css::uno::Reference< css::frame::XDesktop > xDesktop (xFrame->getCreator(), css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::frame::XDesktop > xDesktop (xFrame->getCreator(), cpo::uno::UNO_QUERY);
     if (!xDesktop.is())
         return;
 
@@ -2453,10 +2453,10 @@ void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame
     aNew.Document = xDocument;
 
     // TODO replace getLocation() with getURL() ... it's a workaround currently only!
-    css::uno::Reference< css::frame::XStorable > xDoc(aNew.Document, css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference< css::frame::XStorable > xDoc(aNew.Document, cpo::uno::UNO_QUERY_THROW);
     aNew.OrgURL = xDoc->getLocation();
 
-    css::uno::Reference< css::frame::XTitle > xTitle(aNew.Document, css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference< css::frame::XTitle > xTitle(aNew.Document, cpo::uno::UNO_QUERY_THROW);
     aNew.Title = xTitle->getTitle ();
 
     // classify the used application module, which is used by this document.
@@ -2484,14 +2484,14 @@ void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame
 
     // Further we must know, if this document base on a template.
     // Then we must load it in a different way.
-    css::uno::Reference< css::document::XDocumentPropertiesSupplier > xSupplier(aNew.Document, css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::document::XDocumentPropertiesSupplier > xSupplier(aNew.Document, cpo::uno::UNO_QUERY);
     if (xSupplier.is()) // optional interface!
     {
-        css::uno::Reference< css::document::XDocumentProperties > xDocProps(xSupplier->getDocumentProperties(), css::uno::UNO_SET_THROW);
+        cpo::uno::Reference< css::document::XDocumentProperties > xDocProps(xSupplier->getDocumentProperties(), cpo::uno::UNO_SET_THROW);
         aNew.TemplateURL = xDocProps->getTemplateURL();
     }
 
-    css::uno::Reference< css::util::XModifiable > xModifyCheck(xDocument, css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference< css::util::XModifiable > xModifyCheck(xDocument, cpo::uno::UNO_QUERY_THROW);
     if (xModifyCheck->isModified())
     {
         aNew.DocumentState |= DocState::Modified;
@@ -2521,7 +2521,7 @@ void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame
     aCacheLock.unlock();
 }
 
-void AutoRecovery::implts_deregisterDocument(const css::uno::Reference< css::frame::XModel >& xDocument     ,
+void AutoRecovery::implts_deregisterDocument(const cpo::uno::Reference< css::frame::XModel >& xDocument     ,
                                                    bool                                   bStopListening)
 {
     AutoRecovery::TDocumentInfo aInfo;
@@ -2566,7 +2566,7 @@ void AutoRecovery::implts_deregisterDocument(const css::uno::Reference< css::fra
     implts_flushConfigItem(aInfo, true); // true => remove it from config
 }
 
-void AutoRecovery::implts_markDocumentModifiedAgainstLastBackup(const css::uno::Reference< css::frame::XModel >& xDocument)
+void AutoRecovery::implts_markDocumentModifiedAgainstLastBackup(const cpo::uno::Reference< css::frame::XModel >& xDocument)
 {
     CacheLockGuard aCacheLock(this, cppu::WeakComponentImplHelperBase::rBHelper.rMutex, m_nDocCacheLock, LOCK_FOR_CACHE_USE);
 
@@ -2587,11 +2587,11 @@ void AutoRecovery::implts_markDocumentModifiedAgainstLastBackup(const css::uno::
     } /* SAFE */
 }
 
-void AutoRecovery::implts_updateModifiedState(const css::uno::Reference< css::frame::XModel >& xDocument)
+void AutoRecovery::implts_updateModifiedState(const cpo::uno::Reference< css::frame::XModel >& xDocument)
 {
     // use true as fallback to get every document on EmergencySave/AutoRecovery!
     bool bModified = true;
-    css::uno::Reference< css::util::XModifiable > xModify(xDocument, css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::util::XModifiable > xModify(xDocument, cpo::uno::UNO_QUERY);
     if (xModify.is())
         bModified = xModify->isModified();
 
@@ -2618,7 +2618,7 @@ void AutoRecovery::implts_updateModifiedState(const css::uno::Reference< css::fr
     } /* SAFE */
 }
 
-void AutoRecovery::implts_updateDocumentUsedForSavingState(const css::uno::Reference< css::frame::XModel >& xDocument      ,
+void AutoRecovery::implts_updateDocumentUsedForSavingState(const cpo::uno::Reference< css::frame::XModel >& xDocument      ,
                                                                  bool                                   bSaveInProgress)
 {
     CacheLockGuard aCacheLock(this, cppu::WeakComponentImplHelperBase::rBHelper.rMutex, m_nDocCacheLock, LOCK_FOR_CACHE_USE);
@@ -2635,7 +2635,7 @@ void AutoRecovery::implts_updateDocumentUsedForSavingState(const css::uno::Refer
     } /* SAFE */
 }
 
-void AutoRecovery::implts_markDocumentAsSaved(const css::uno::Reference< css::frame::XModel >& xDocument)
+void AutoRecovery::implts_markDocumentAsSaved(const cpo::uno::Reference< css::frame::XModel >& xDocument)
 {
     CacheLockGuard aCacheLock(this, cppu::WeakComponentImplHelperBase::rBHelper.rMutex, m_nDocCacheLock, LOCK_FOR_CACHE_USE);
 
@@ -2658,7 +2658,7 @@ void AutoRecovery::implts_markDocumentAsSaved(const css::uno::Reference< css::fr
 
     aInfo.DocumentState = DocState::Unknown;
     // TODO replace getLocation() with getURL() ... it's a workaround currently only!
-    css::uno::Reference< css::frame::XStorable > xDoc(aInfo.Document, css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::frame::XStorable > xDoc(aInfo.Document, cpo::uno::UNO_QUERY);
     aInfo.OrgURL = xDoc->getLocation();
 
     /* Save off the backup file URLs and then clear them. NOTE - it is
@@ -2674,7 +2674,7 @@ void AutoRecovery::implts_markDocumentAsSaved(const css::uno::Reference< css::fr
     comphelper::SequenceAsHashMap lDescriptor(aInfo.Document->getArgs());
     aInfo.RealFilter = lDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_FILTERNAME, OUString());
 
-    css::uno::Reference< css::frame::XTitle > xDocTitle(xDocument, css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::frame::XTitle > xDocTitle(xDocument, cpo::uno::UNO_QUERY);
     if (xDocTitle.is ())
         aInfo.Title = xDocTitle->getTitle ();
     else
@@ -2699,15 +2699,15 @@ void AutoRecovery::implts_markDocumentAsSaved(const css::uno::Reference< css::fr
 }
 
 AutoRecovery::TDocumentList::iterator AutoRecovery::impl_searchDocument(      AutoRecovery::TDocumentList&               rList    ,
-                                                                        const css::uno::Reference< css::frame::XModel >& xDocument)
+                                                                        const cpo::uno::Reference< css::frame::XModel >& xDocument)
 {
     return std::find_if(rList.begin(), rList.end(),
         [&xDocument](const AutoRecovery::TDocumentInfo& rInfo) { return rInfo.Document == xDocument; });
 }
 
-void lcl_changeVisibility( const css::uno::Reference< css::frame::XFramesSupplier >& i_rFrames, bool i_bVisible )
+void lcl_changeVisibility( const cpo::uno::Reference< css::frame::XFramesSupplier >& i_rFrames, bool i_bVisible )
 {
-    css::uno::Reference< css::container::XIndexAccess > xFramesContainer = i_rFrames->getFrames();
+    cpo::uno::Reference< css::container::XIndexAccess > xFramesContainer = i_rFrames->getFrames();
     const sal_Int32 count = xFramesContainer->getCount();
 
     Any aElement;
@@ -2715,22 +2715,22 @@ void lcl_changeVisibility( const css::uno::Reference< css::frame::XFramesSupplie
     {
         aElement = xFramesContainer->getByIndex(i);
         // check for sub frames
-        css::uno::Reference< css::frame::XFramesSupplier > xFramesSupp( aElement, css::uno::UNO_QUERY );
+        cpo::uno::Reference< css::frame::XFramesSupplier > xFramesSupp( aElement, cpo::uno::UNO_QUERY );
         if ( xFramesSupp.is() )
             lcl_changeVisibility( xFramesSupp, i_bVisible );
 
-        css::uno::Reference< css::frame::XFrame > xFrame( aElement, css::uno::UNO_QUERY );
+        cpo::uno::Reference< css::frame::XFrame > xFrame( aElement, cpo::uno::UNO_QUERY );
         if ( !xFrame.is() )
             continue;
 
-        css::uno::Reference< css::awt::XWindow > xWindow( xFrame->getContainerWindow(), UNO_SET_THROW );
+        cpo::uno::Reference< css::awt::XWindow > xWindow( xFrame->getContainerWindow(), UNO_SET_THROW );
         xWindow->setVisible( i_bVisible );
     }
 }
 
 void AutoRecovery::implts_changeAllDocVisibility(bool bVisible)
 {
-    css::uno::Reference< css::frame::XFramesSupplier > xDesktop = css::frame::Desktop::create(m_xContext);
+    cpo::uno::Reference< css::frame::XFramesSupplier > xDesktop = css::frame::Desktop::create(m_xContext);
     lcl_changeVisibility( xDesktop, bVisible );
 }
 
@@ -2747,7 +2747,7 @@ void lc_removeLockFile(AutoRecovery::TDocumentInfo const & rInfo)
 
     try
     {
-        css::uno::Reference< css::frame::XStorable > xStore(rInfo.Document, css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference< css::frame::XStorable > xStore(rInfo.Document, cpo::uno::UNO_QUERY_THROW);
         OUString aURL = xStore->getLocation();
         if ( !aURL.isEmpty() )
         {
@@ -2793,12 +2793,12 @@ void AutoRecovery::implts_prepareSessionShutdown()
         // to kill the session before the saving is ready
         if ((m_eJob & Job::SessionSave) != Job::SessionSave)
         {
-            css::uno::Reference< css::util::XModifiable > xModify(info.Document, css::uno::UNO_QUERY);
+            cpo::uno::Reference< css::util::XModifiable > xModify(info.Document, cpo::uno::UNO_QUERY);
             if (xModify.is())
                 xModify->setModified(false);
 
             // close the model.
-            css::uno::Reference< css::util::XCloseable > xClose(info.Document, css::uno::UNO_QUERY);
+            cpo::uno::Reference< css::util::XCloseable > xClose(info.Document, cpo::uno::UNO_QUERY);
             if (xClose.is())
             {
                 try
@@ -2851,7 +2851,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(       bool        bAllow
                                                               bool        bRemoveLockFiles,
                                                         const DispatchParams* pParams           )
 {
-    css::uno::Reference< css::task::XStatusIndicator > xExternalProgress;
+    cpo::uno::Reference< css::task::XStatusIndicator > xExternalProgress;
     if (pParams)
         xExternalProgress = pParams->m_xProgress;
 
@@ -3025,7 +3025,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(       bool        bAllow
 
 void AutoRecovery::implts_saveOneDoc(const OUString&                                    sBackupPath      ,
                                            AutoRecovery::TDocumentInfo&                        rInfo            ,
-                                     const css::uno::Reference< css::task::XStatusIndicator >& xExternalProgress)
+                                     const cpo::uno::Reference< css::task::XStatusIndicator >& xExternalProgress)
 {
     // no document? => can occur if we loaded our configuration with files,
     // which couldn't be recovered successfully. In such case we have all needed information
@@ -3055,7 +3055,7 @@ void AutoRecovery::implts_saveOneDoc(const OUString&                            
     // prepare frame/document/mediadescriptor in a way, that it uses OUR progress .-)
     if (xExternalProgress.is())
         lNewArgs[utl::MediaDescriptor::PROP_STATUSINDICATOR] <<= xExternalProgress;
-    impl_establishProgress(rInfo, lNewArgs, css::uno::Reference< css::frame::XFrame >());
+    impl_establishProgress(rInfo, lNewArgs, cpo::uno::Reference< css::frame::XFrame >());
 
     // #i66598# use special handling of property "DocumentBaseURL" (it must be an empty string!)
     // for make hyperlinks working
@@ -3066,7 +3066,7 @@ void AutoRecovery::implts_saveOneDoc(const OUString&                            
     // try to save this document as a new temp file every time.
     // Mark AutoSave state as "INCOMPLETE" if it failed.
     // Because the last temp file is too old and does not include all changes.
-    Reference< XDocumentRecovery > xDocRecover(rInfo.Document, css::uno::UNO_QUERY_THROW);
+    Reference< XDocumentRecovery > xDocRecover(rInfo.Document, cpo::uno::UNO_QUERY_THROW);
 
     // save the state about "trying to save"
     // ... we need it for recovery if e.g. a crash occurs inside next line!
@@ -3085,7 +3085,7 @@ void AutoRecovery::implts_saveOneDoc(const OUString&                            
         // message during autosave.
         if (!bEmergencySave && m_eJob & Job::UserAutoSave && !rInfo.OrgURL.isEmpty())
         {
-            Reference< XStorable > xDocSave(rInfo.Document, css::uno::UNO_QUERY_THROW);
+            Reference< XStorable > xDocSave(rInfo.Document, cpo::uno::UNO_QUERY_THROW);
             xDocSave->store();
             bUserAutoSaved = true;
         }
@@ -3189,7 +3189,7 @@ void AutoRecovery::implts_saveOneDoc(const OUString&                            
     }
 
     // make sure the progress is not referred any longer
-    impl_forgetProgress(rInfo, lNewArgs, css::uno::Reference< css::frame::XFrame >());
+    impl_forgetProgress(rInfo, lNewArgs, cpo::uno::Reference< css::frame::XFrame >());
 
     // try to remove the old temp file.
     // Ignore any error here. We have a new temp file, which is up to date.
@@ -3362,7 +3362,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
                 // to take the logical file URL.
         }
 
-        css::uno::Reference< css::util::XModifiable > xModify(info.Document, css::uno::UNO_QUERY);
+        cpo::uno::Reference< css::util::XModifiable > xModify(info.Document, cpo::uno::UNO_QUERY);
         if ( xModify.is() )
         {
             bool bModified = ((info.DocumentState & DocState::Modified) == DocState::Modified);
@@ -3401,7 +3401,7 @@ void AutoRecovery::implts_openOneDoc(const OUString&               sURL       ,
                                      comphelper::SequenceAsHashMap& lDescriptor,
                                            AutoRecovery::TDocumentInfo&   rInfo      )
 {
-    css::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create(m_xContext);
+    cpo::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create(m_xContext);
 
     ::std::vector< Reference< XComponent > > aCleanup;
     try
@@ -3516,7 +3516,7 @@ void AutoRecovery::implts_openOneDoc(const OUString&               sURL       ,
         // clean up
         for (auto const& component : aCleanup)
         {
-            css::uno::Reference< css::util::XCloseable > xClose(component, css::uno::UNO_QUERY);
+            cpo::uno::Reference< css::util::XCloseable > xClose(component, cpo::uno::UNO_QUERY);
             if ( xClose.is() )
                 xClose->close( true );
             else
@@ -3547,7 +3547,7 @@ void AutoRecovery::implts_generateNewTempURL(const OUString&               sBack
     OUStringBuffer sUniqueName;
     if (!rInfo.OrgURL.isEmpty())
     {
-        css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(m_xContext));
+        cpo::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(m_xContext));
         css::util::URL aURL;
         aURL.Complete = rInfo.OrgURL;
         xParser->parseStrict(aURL);
@@ -4018,9 +4018,9 @@ cpo::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescriptor()
     return ourInfoHelper;
 }
 
-css::uno::Reference< css::beans::XPropertySetInfo > AutoRecovery::getPropertySetInfo()
+cpo::uno::Reference< css::beans::XPropertySetInfo > AutoRecovery::getPropertySetInfo()
 {
-    static css::uno::Reference< css::beans::XPropertySetInfo > xInfo(
+    static cpo::uno::Reference< css::beans::XPropertySetInfo > xInfo(
                     ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper()));
 
     return xInfo;
@@ -4031,18 +4031,18 @@ void AutoRecovery::implts_verifyCacheAgainstDesktopDocumentList()
     SAL_INFO("fwk.autorecovery", "AutoRecovery::implts_verifyCacheAgainstDesktopDocumentList() ...");
     try
     {
-        css::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create(m_xContext);
+        cpo::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create(m_xContext);
 
-        css::uno::Reference< css::container::XIndexAccess > xContainer(
+        cpo::uno::Reference< css::container::XIndexAccess > xContainer(
             xDesktop->getFrames(),
-            css::uno::UNO_QUERY_THROW);
+            cpo::uno::UNO_QUERY_THROW);
 
         sal_Int32 i = 0;
         sal_Int32 c = xContainer->getCount();
 
         for (i=0; i<c; ++i)
         {
-            css::uno::Reference< css::frame::XFrame > xFrame;
+            cpo::uno::Reference< css::frame::XFrame > xFrame;
             try
             {
                 xContainer->getByIndex(i) >>= xFrame;
@@ -4058,9 +4058,9 @@ void AutoRecovery::implts_verifyCacheAgainstDesktopDocumentList()
 
             // We are interested on visible documents only.
             // Note: It's n optional interface .-(
-            css::uno::Reference< css::awt::XWindow2 > xVisibleCheck(
+            cpo::uno::Reference< css::awt::XWindow2 > xVisibleCheck(
                 xFrame->getContainerWindow(),
-                css::uno::UNO_QUERY);
+                cpo::uno::UNO_QUERY);
             if (
                 (!xVisibleCheck.is()        ) ||
                 (!xVisibleCheck->isVisible())
@@ -4071,8 +4071,8 @@ void AutoRecovery::implts_verifyCacheAgainstDesktopDocumentList()
 
             // extract the model from the frame.
             // Ignore "view only" frames, which does not have a model.
-            css::uno::Reference< css::frame::XController > xController;
-            css::uno::Reference< css::frame::XModel3 >     xModel;
+            cpo::uno::Reference< css::frame::XController > xController;
+            cpo::uno::Reference< css::frame::XModel3 >     xModel;
 
             xController = xFrame->getController();
             if (xController.is())
@@ -4148,30 +4148,30 @@ void AutoRecovery::impl_showFullDiscError()
 // static
 void AutoRecovery::impl_establishProgress(const AutoRecovery::TDocumentInfo&               rInfo    ,
                                           comphelper::SequenceAsHashMap& rArgs,
-                                          const css::uno::Reference< css::frame::XFrame >& xNewFrame)
+                                          const cpo::uno::Reference< css::frame::XFrame >& xNewFrame)
 {
     // external well known frame must be preferred (because it was created by ourself
     // for loading documents into this frame)!
     // But if no frame exists... we can try to locate it using any frame bound to the provided
     // document. Of course we must live without any frame in case the document does not exists at this
     // point. But this state should not occur. In such case xNewFrame should be valid ... hopefully .-)
-    css::uno::Reference< css::frame::XFrame > xFrame = xNewFrame;
+    cpo::uno::Reference< css::frame::XFrame > xFrame = xNewFrame;
     if (
         (!xFrame.is()       ) &&
         (rInfo.Document.is())
        )
     {
-        css::uno::Reference< css::frame::XController > xController = rInfo.Document->getCurrentController();
+        cpo::uno::Reference< css::frame::XController > xController = rInfo.Document->getCurrentController();
         if (xController.is())
             xFrame = xController->getFrame();
     }
 
     // Any outside progress must be used ...
     // Only if there is no progress, we can create our own one.
-    css::uno::Reference< css::task::XStatusIndicator > xInternalProgress;
-    css::uno::Reference< css::task::XStatusIndicator > xExternalProgress = rArgs.getUnpackedValueOrDefault(
+    cpo::uno::Reference< css::task::XStatusIndicator > xInternalProgress;
+    cpo::uno::Reference< css::task::XStatusIndicator > xExternalProgress = rArgs.getUnpackedValueOrDefault(
                                                                                 utl::MediaDescriptor::PROP_STATUSINDICATOR,
-                                                                                css::uno::Reference< css::task::XStatusIndicator >() );
+                                                                                cpo::uno::Reference< css::task::XStatusIndicator >() );
 
     // Normally a progress is set from outside (e.g. by the CrashSave/Recovery dialog, which uses our dispatch API).
     // But for a normal auto save we don't have such "external progress"... because this function is triggered by our own timer then.
@@ -4181,7 +4181,7 @@ void AutoRecovery::impl_establishProgress(const AutoRecovery::TDocumentInfo&    
         (xFrame.is()             )
        )
     {
-        css::uno::Reference< css::task::XStatusIndicatorFactory > xProgressFactory(xFrame, css::uno::UNO_QUERY);
+        cpo::uno::Reference< css::task::XStatusIndicatorFactory > xProgressFactory(xFrame, cpo::uno::UNO_QUERY);
         if (xProgressFactory.is())
             xInternalProgress = xProgressFactory->createStatusIndicator();
     }
@@ -4201,7 +4201,7 @@ void AutoRecovery::impl_establishProgress(const AutoRecovery::TDocumentInfo&    
         (xFrame.is()           )
        )
     {
-        css::uno::Reference< css::beans::XPropertySet > xFrameProps(xFrame, css::uno::UNO_QUERY);
+        cpo::uno::Reference< css::beans::XPropertySet > xFrameProps(xFrame, cpo::uno::UNO_QUERY);
         if (xFrameProps.is())
             xFrameProps->setPropertyValue(FramePropNames[FramePropHandle::IndicatorInterception], cpo::uno::Any(xExternalProgress));
     }
@@ -4214,28 +4214,28 @@ void AutoRecovery::impl_establishProgress(const AutoRecovery::TDocumentInfo&    
 // static
 void AutoRecovery::impl_forgetProgress(const AutoRecovery::TDocumentInfo&               rInfo    ,
                                        comphelper::SequenceAsHashMap& rArgs,
-                                       const css::uno::Reference< css::frame::XFrame >& xNewFrame)
+                                       const cpo::uno::Reference< css::frame::XFrame >& xNewFrame)
 {
     // external well known frame must be preferred (because it was created by ourself
     // for loading documents into this frame)!
     // But if no frame exists... we can try to locate it using any frame bound to the provided
     // document. Of course we must live without any frame in case the document does not exists at this
     // point. But this state should not occur. In such case xNewFrame should be valid ... hopefully .-)
-    css::uno::Reference< css::frame::XFrame > xFrame = xNewFrame;
+    cpo::uno::Reference< css::frame::XFrame > xFrame = xNewFrame;
     if (
         (!xFrame.is()       ) &&
         (rInfo.Document.is())
        )
     {
-        css::uno::Reference< css::frame::XController > xController = rInfo.Document->getCurrentController();
+        cpo::uno::Reference< css::frame::XController > xController = rInfo.Document->getCurrentController();
         if (xController.is())
             xFrame = xController->getFrame();
     }
 
     // stop progress interception on corresponding frame.
-    css::uno::Reference< css::beans::XPropertySet > xFrameProps(xFrame, css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::beans::XPropertySet > xFrameProps(xFrame, cpo::uno::UNO_QUERY);
     if (xFrameProps.is())
-        xFrameProps->setPropertyValue(FramePropNames[FramePropHandle::IndicatorInterception], cpo::uno::Any(css::uno::Reference< css::task::XStatusIndicator >()));
+        xFrameProps->setPropertyValue(FramePropNames[FramePropHandle::IndicatorInterception], cpo::uno::Any(cpo::uno::Reference< css::task::XStatusIndicator >()));
 
     // forget progress inside list of arguments.
     auto pArg = rArgs.find(utl::MediaDescriptor::PROP_STATUSINDICATOR);
@@ -4267,7 +4267,7 @@ void AutoRecovery::st_impl_removeFile(const OUString& sURL)
 
     try
     {
-        ::ucbhelper::Content aContent(sURL, css::uno::Reference< css::ucb::XCommandEnvironment >(), m_xContext);
+        ::ucbhelper::Content aContent(sURL, cpo::uno::Reference< css::ucb::XCommandEnvironment >(), m_xContext);
         aContent.executeCommand(u"delete"_ustr, cpo::uno::Any(true));
     }
     catch(const cpo::uno::Exception&)

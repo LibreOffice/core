@@ -30,20 +30,20 @@ public:
     SecurityEnvironment_AppleImpl();
     virtual ~SecurityEnvironment_AppleImpl() override;
 
-    virtual cpo::uno::Sequence<css::uno::Reference<css::security::XCertificate>>
+    virtual cpo::uno::Sequence<cpo::uno::Reference<css::security::XCertificate>>
         SAL_CALL getPersonalCertificates() override;
 
     virtual sal_Int32 SAL_CALL
-    verifyCertificate(const css::uno::Reference<css::security::XCertificate>& xCert,
-                      const cpo::uno::Sequence<css::uno::Reference<css::security::XCertificate>>&
+    verifyCertificate(const cpo::uno::Reference<css::security::XCertificate>& xCert,
+                      const cpo::uno::Sequence<cpo::uno::Reference<css::security::XCertificate>>&
                           intermediateCerts) override;
 
     virtual sal_Int32 SAL_CALL getCertificateCharacters(
-        const css::uno::Reference<css::security::XCertificate>& xCert) override;
+        const cpo::uno::Reference<css::security::XCertificate>& xCert) override;
 
-    virtual cpo::uno::Sequence<css::uno::Reference<css::security::XCertificate>>
+    virtual cpo::uno::Sequence<cpo::uno::Reference<css::security::XCertificate>>
         SAL_CALL buildCertificatePath(
-            const css::uno::Reference<css::security::XCertificate>& beginCert) override;
+            const cpo::uno::Reference<css::security::XCertificate>& beginCert) override;
 
     /// The certificate remembered by buildCertificatePath(), when it was a Keychain one.
     const rtl::Reference<X509Certificate_AppleImpl>& getAppleSigningCertificate() const

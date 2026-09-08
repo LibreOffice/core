@@ -129,7 +129,7 @@ private:
     std::unique_ptr<weld::Button> mxPB_PLAY;
     std::unique_ptr<weld::CheckButton> mxCB_AUTO_PREVIEW;
 
-    css::uno::Reference< css::drawing::XDrawView >             mxView;
+    cpo::uno::Reference< css::drawing::XDrawView >             mxView;
 
     std::unordered_map<OUString, std::unique_ptr<TransitionEntry>> maTranstionMap;
 

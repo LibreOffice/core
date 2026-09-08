@@ -20,6 +20,7 @@
 #include "WrappedTextRotationProperty.hxx"
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using ::cpo::uno::Any;
 
 namespace chart

@@ -23,6 +23,7 @@
 #include <listenercalls.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 ScUnoListenerCalls::ScUnoListenerCalls() {}
 

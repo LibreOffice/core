@@ -191,8 +191,8 @@ public:
     virtual void activateTab( ::sal_Int32 ID ) override;
     virtual ::sal_Int32 getActiveTabID() override;
 
-    virtual void addTabListener( const css::uno::Reference< css::awt::XTabListener >& Listener ) override;
-    virtual void removeTabListener( const css::uno::Reference< css::awt::XTabListener >& Listener ) override;
+    virtual void addTabListener( const cpo::uno::Reference< css::awt::XTabListener >& Listener ) override;
+    virtual void removeTabListener( const cpo::uno::Reference< css::awt::XTabListener >& Listener ) override;
     // C++
     /// @throws cpo::uno::RuntimeException
     TabControl*  getTabControl() const;
@@ -448,8 +448,8 @@ public:
     virtual void SetWindow( const VclPtr< vcl::Window > &pWindow ) override;
 
     // css::awt::XTextComponent
-    void addTextListener( const css::uno::Reference< css::awt::XTextListener >& l ) override;
-    void removeTextListener( const css::uno::Reference< css::awt::XTextListener >& l ) override;
+    void addTextListener( const cpo::uno::Reference< css::awt::XTextListener >& l ) override;
+    void removeTextListener( const cpo::uno::Reference< css::awt::XTextListener >& l ) override;
     void setText( const OUString& aText ) override;
     void insertText( const css::awt::Selection& Sel, const OUString& Text ) override;
     OUString getText(  ) override;
@@ -569,8 +569,8 @@ public:
     virtual cpo::uno::Sequence< ::sal_Int32 > getSelectedRows() override;
     virtual bool hasSelectedRows() override;
     virtual bool isRowSelected(::sal_Int32 index) override;
-    virtual void addSelectionListener(const css::uno::Reference< css::awt::grid::XGridSelectionListener > & listener) override;
-    virtual void removeSelectionListener(const css::uno::Reference< css::awt::grid::XGridSelectionListener > & listener) override;
+    virtual void addSelectionListener(const cpo::uno::Reference< css::awt::grid::XGridSelectionListener > & listener) override;
+    virtual void removeSelectionListener(const cpo::uno::Reference< css::awt::grid::XGridSelectionListener > & listener) override;
 
     void setProperty( const OUString& PropertyName, const cpo::uno::Any& Value ) override;
     cpo::uno::Any getProperty( const OUString& PropertyName ) override;

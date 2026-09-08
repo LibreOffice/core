@@ -36,10 +36,10 @@ class DefaultShapesPanel final
 public:
     DefaultShapesPanel (
         weld::Widget* pParent,
-        css::uno::Reference<css::frame::XFrame> xFrame);
+        cpo::uno::Reference<css::frame::XFrame> xFrame);
     static std::unique_ptr<PanelLayout> Create(
         weld::Widget* pParent,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame);
+        const cpo::uno::Reference<css::frame::XFrame>& rxFrame);
     virtual ~DefaultShapesPanel() override;
 
 private:
@@ -54,7 +54,7 @@ private:
     std::unique_ptr<weld::IconView> mxStarSet;
     std::unique_ptr<weld::IconView> mx3DObjectSet;
 
-    css::uno::Reference< css::frame::XFrame >       mxFrame;
+    cpo::uno::Reference< css::frame::XFrame >       mxFrame;
     std::vector<std::pair<weld::IconView*, const std::map<sal_uInt16, OUString>*>> maShapeGalleries;
 
     void populateShapes();

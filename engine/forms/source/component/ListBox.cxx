@@ -58,7 +58,7 @@
 namespace frm
 {
     using namespace comphelper;
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
 using namespace cpo::uno;
     using namespace ::com::sun::star::sdb;
     using namespace ::com::sun::star::sdbc;
@@ -196,7 +196,7 @@ using namespace cpo::uno;
 
     // XCloneable
 
-    css::uno::Reference< css::util::XCloneable > OListBoxModel::createClone()
+    cpo::uno::Reference< css::util::XCloneable > OListBoxModel::createClone()
 {
     rtl::Reference<OListBoxModel> pClone = new OListBoxModel(this, getContext());
     pClone->clonedFrom(this);

@@ -27,7 +27,7 @@
     AquaA11yWrapper* textArea;
 }
 - (id)initWithAccessibleContext:
-    (css::uno::Reference<css::accessibility::XAccessibleContext>)anAccessibleContext;
+    (cpo::uno::Reference<css::accessibility::XAccessibleContext>)anAccessibleContext;
 - (id)valueAttribute;
 - (id)numberOfCharactersAttribute;
 - (id)selectedTextAttribute;

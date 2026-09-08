@@ -30,7 +30,7 @@
 #include <com/sun/star/geometry/IntegerRectangle2D.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/style/TabAlign.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <docmodel/theme/FormatScheme.hxx>
 #include <oox/dllapi.h>
@@ -93,17 +93,17 @@ typedef std::shared_ptr< TableProperties > TablePropertiesPtr;
 
 
 /** converts the attributes from a CT_TLPoint into an awt Point with 1/1000% */
-css::awt::Point GetPointPercent( const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttribs );
+css::awt::Point GetPointPercent( const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttribs );
 
 
 /** converts the attributes from a CT_Size2D into an awt Size with 1/100th mm */
-css::awt::Size GetSize2D( const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttributes );
+css::awt::Size GetSize2D( const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttributes );
 
 /** converts the attributes from a CT_RelativeRect to an IntegerRectangle2D */
-css::geometry::IntegerRectangle2D GetRelativeRect( const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttributes );
+css::geometry::IntegerRectangle2D GetRelativeRect( const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttributes );
 
 void fillRelativeRectangle(model::RelativeRectangle& rRelativeRectangle,
-                           const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttributes);
+                           const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xAttributes);
 
 /** converts EMUs into 1/100th mmm */
 sal_Int32 GetCoordinate( sal_Int32 nValue );
@@ -160,7 +160,7 @@ struct IndexRange {
 };
 
 /** retrieve the content of CT_IndexRange */
-IndexRange GetIndexRange( const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttributes );
+IndexRange GetIndexRange( const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttributes );
 
 /**
 * nRotation is a 100th of a degree and the return value is

@@ -128,7 +128,7 @@ sal_Int64 Paragraph::getAccessibleChildCount()
 }
 
 // virtual
-css::uno::Reference< css::accessibility::XAccessible >
+cpo::uno::Reference< css::accessibility::XAccessible >
 Paragraph::getAccessibleChild(sal_Int64)
 {
     ensureAlive();
@@ -139,7 +139,7 @@ Paragraph::getAccessibleChild(sal_Int64)
 }
 
 // virtual
-css::uno::Reference< css::accessibility::XAccessible >
+cpo::uno::Reference< css::accessibility::XAccessible >
 Paragraph::getAccessibleParent()
 {
     ensureAlive();
@@ -175,7 +175,7 @@ OUString Paragraph::getAccessibleName()
 }
 
 // virtual
-css::uno::Reference< css::accessibility::XAccessibleRelationSet >
+cpo::uno::Reference< css::accessibility::XAccessibleRelationSet >
 Paragraph::getAccessibleRelationSet()
 {
     ensureAlive();
@@ -200,7 +200,7 @@ css::lang::Locale Paragraph::getLocale()
 }
 
 // virtual
-css::uno::Reference< css::accessibility::XAccessible >
+cpo::uno::Reference< css::accessibility::XAccessible >
 Paragraph::getAccessibleAtPoint(css::awt::Point const &)
 {
     ensureAlive();
@@ -1159,7 +1159,7 @@ sal_Int32 Document::retrieveParagraphLineWithCursor( Paragraph const * pParagrap
 }
 
 
-css::uno::Reference< css::accessibility::XAccessibleRelationSet >
+cpo::uno::Reference< css::accessibility::XAccessibleRelationSet >
 Document::retrieveParagraphRelationSet( Paragraph const * pParagraph )
 {
     ::osl::MutexGuard aInternalGuard( GetMutex() );
@@ -1170,14 +1170,14 @@ Document::retrieveParagraphRelationSet( Paragraph const * pParagraph )
 
     if (nPara > m_nVisibleBegin && nPara < m_nVisibleEnd)
     {
-        cpo::uno::Sequence<css::uno::Reference<css::accessibility::XAccessible>> aSequence { getAccessibleChild(getIter(nPara - 1)) };
+        cpo::uno::Sequence<cpo::uno::Reference<css::accessibility::XAccessible>> aSequence { getAccessibleChild(getIter(nPara - 1)) };
         css::accessibility::AccessibleRelation aRelation(css::accessibility::AccessibleRelationType_CONTENT_FLOWS_FROM, aSequence);
         pRelationSetHelper->AddRelation( aRelation );
     }
 
     if (nPara >= m_nVisibleBegin && m_nVisibleEnd > 1 && nPara < m_nVisibleEnd - 1)
     {
-        cpo::uno::Sequence<css::uno::Reference<css::accessibility::XAccessible>> aSequence { getAccessibleChild(getIter(nPara + 1)) };
+        cpo::uno::Sequence<cpo::uno::Reference<css::accessibility::XAccessible>> aSequence { getAccessibleChild(getIter(nPara + 1)) };
         css::accessibility::AccessibleRelation aRelation( css::accessibility::AccessibleRelationType_CONTENT_FLOWS_TO, aSequence );
         pRelationSetHelper->AddRelation( aRelation );
     }
@@ -1193,7 +1193,7 @@ sal_Int64 Document::getAccessibleChildCount()
 }
 
 // virtual
-css::uno::Reference< css::accessibility::XAccessible >
+cpo::uno::Reference< css::accessibility::XAccessible >
 Document::getAccessibleChild(sal_Int64 i)
 {
     ::comphelper::OExternalLockGuard aGuard(this);
@@ -1212,7 +1212,7 @@ Document::getAccessibleChild(sal_Int64 i)
 }
 
 // virtual
-css::uno::Reference< css::accessibility::XAccessible >
+cpo::uno::Reference< css::accessibility::XAccessible >
 Document::getAccessibleAtPoint(css::awt::Point const & rPoint)
 {
     ::comphelper::OExternalLockGuard aGuard(this);
@@ -1242,7 +1242,7 @@ void    Document::FillAccessibleRelationSet( utl::AccessibleRelationSetHelper& r
 {
     if( getAccessibleParent()->getAccessibleContext()->getAccessibleRole() == css::accessibility::AccessibleRole::SCROLL_PANE )
     {
-        cpo::uno::Sequence<css::uno::Reference<css::accessibility::XAccessible>> aSequence {  getAccessibleParent() };
+        cpo::uno::Sequence<cpo::uno::Reference<css::accessibility::XAccessible>> aSequence {  getAccessibleParent() };
         rRelationSet.AddRelation( css::accessibility::AccessibleRelation( css::accessibility::AccessibleRelationType_MEMBER_OF, aSequence ) );
     }
     else
@@ -1441,7 +1441,7 @@ Document::getParagraph(Paragraphs::iterator const & rIt)
     return rIt->getParagraph().get();
 }
 
-css::uno::Reference< css::accessibility::XAccessible >
+cpo::uno::Reference< css::accessibility::XAccessible >
 Document::getAccessibleChild(Paragraphs::iterator const & rIt)
 {
     rtl::Reference< Paragraph > xParagraph(rIt->getParagraph());
@@ -1669,7 +1669,7 @@ void Document::handleParagraphNotifications()
                         m_nSelectionLastPos = 0x7FFFFFFF;
                     }
 
-                    css::uno::Reference< css::accessibility::XAccessible >
+                    cpo::uno::Reference< css::accessibility::XAccessible >
                           xStrong;
                     if (bWasVisible)
                         xStrong = getAccessibleChild(aIt);

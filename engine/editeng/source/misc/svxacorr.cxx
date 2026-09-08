@@ -76,8 +76,8 @@
 #include <rtl/character.hxx>
 
 using namespace ::com::sun::star::ucb;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
@@ -439,7 +439,7 @@ void SvxAutoCorrect::FnCapitalStartWord( SvxAutoCorrDoc& rDoc, const OUString& r
             if( !FindInWordStartExceptList(eLang, sWord) )
             {
                 // Check that word isn't correctly spelt before correcting:
-                css::uno::Reference< css::linguistic2::XSpellChecker > xSpeller =
+                cpo::uno::Reference< css::linguistic2::XSpellChecker > xSpeller =
                     LinguMgr::GetSpellChecker();
                 if( xSpeller->hasLocale(LanguageTag::convertToLocale(eLang)) )
                 {
@@ -1993,7 +1993,7 @@ void SvxAutoCorrect::refreshBlockList( const uno::Reference< embed::XStorage >& 
 }
 
 // Text with attribution (only the SWG - SWG format!)
-bool SvxAutoCorrect::PutText( const css::uno::Reference < css::embed::XStorage >&,
+bool SvxAutoCorrect::PutText( const cpo::uno::Reference < css::embed::XStorage >&,
                               const OUString&, const OUString&, SfxObjectShell&, OUString& )
 {
     return false;

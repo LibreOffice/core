@@ -32,7 +32,7 @@
 namespace frm
 {
 using namespace comphelper;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
@@ -85,7 +85,7 @@ ORadioButtonModel::~ORadioButtonModel()
 
 // XCloneable
 
-css::uno::Reference< css::util::XCloneable > ORadioButtonModel::createClone()
+cpo::uno::Reference< css::util::XCloneable > ORadioButtonModel::createClone()
 {
     rtl::Reference<ORadioButtonModel> pClone = new ORadioButtonModel(this, getContext());
     pClone->clonedFrom(this);

@@ -34,6 +34,7 @@
 #include <com/sun/star/linguistic2/XMeaning.hpp>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 IMPL_LINK_NOARG( SvxThesaurusDialog, ModifyTimer_Hdl, Timer *, void )
 {

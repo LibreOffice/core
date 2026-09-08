@@ -36,6 +36,7 @@
 #include "officeinstallationdirectories.hxx"
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 static bool makeCanonicalFileURL( OUString & rURL )
 {

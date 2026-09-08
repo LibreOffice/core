@@ -20,7 +20,7 @@
 #ifndef INCLUDED_COMPHELPER_TYPES_HXX
 #define INCLUDED_COMPHELPER_TYPES_HXX
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <comphelper/comphelperdllapi.h>
 
@@ -40,9 +40,9 @@ namespace comphelper
     /** ask the given object for an XComponent interface and dispose on it
     */
     template <class TYPE>
-    void disposeComponent(css::uno::Reference<TYPE>& _rxComp)
+    void disposeComponent(cpo::uno::Reference<TYPE>& _rxComp)
     {
-        css::uno::Reference<css::lang::XComponent> xComp(_rxComp, css::uno::UNO_QUERY);
+        cpo::uno::Reference<css::lang::XComponent> xComp(_rxComp, cpo::uno::UNO_QUERY);
         if (xComp.is())
         {
             xComp->dispose();

@@ -28,9 +28,9 @@
 class XMLNumRulePropHdl : public XMLPropertyHandler
 {
 private:
-    css::uno::Reference< css::ucb::XAnyCompare > mxNumRuleCompare;
+    cpo::uno::Reference< css::ucb::XAnyCompare > mxNumRuleCompare;
 public:
-    explicit XMLNumRulePropHdl( css::uno::Reference< css::ucb::XAnyCompare > xNumRuleCompare );
+    explicit XMLNumRulePropHdl( cpo::uno::Reference< css::ucb::XAnyCompare > xNumRuleCompare );
     virtual ~XMLNumRulePropHdl() override;
 
     virtual bool equals( const cpo::uno::Any& r1, const cpo::uno::Any& r2 ) const override;

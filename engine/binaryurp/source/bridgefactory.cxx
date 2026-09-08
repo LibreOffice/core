@@ -25,7 +25,7 @@
 #include <com/sun/star/connection/XConnection.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <cpo/uno/Exception.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/XComponentContext.hpp>
 #include <cpo/uno/XInterface.hpp>
@@ -41,7 +41,7 @@
 namespace binaryurp {
 
 void BridgeFactory::removeBridge(
-    css::uno::Reference< css::bridge::XBridge > const & bridge)
+    cpo::uno::Reference< css::bridge::XBridge > const & bridge)
 {
     assert(bridge.is());
     OUString n(bridge->getName());
@@ -80,10 +80,10 @@ cpo::uno::Sequence< OUString > BridgeFactory::getSupportedServiceNames()
     return { u"com.sun.star.bridge.BridgeFactory"_ustr };
 }
 
-css::uno::Reference< css::bridge::XBridge > BridgeFactory::createBridge(
+cpo::uno::Reference< css::bridge::XBridge > BridgeFactory::createBridge(
     OUString const & sName, OUString const & sProtocol,
-    css::uno::Reference< css::connection::XConnection > const & aConnection,
-    css::uno::Reference< css::bridge::XInstanceProvider > const &
+    cpo::uno::Reference< css::connection::XConnection > const & aConnection,
+    cpo::uno::Reference< css::bridge::XInstanceProvider > const &
         anInstanceProvider)
 {
     rtl::Reference< Bridge > b;
@@ -115,16 +115,16 @@ css::uno::Reference< css::bridge::XBridge > BridgeFactory::createBridge(
     return b;
 }
 
-css::uno::Reference< css::bridge::XBridge > BridgeFactory::getBridge(
+cpo::uno::Reference< css::bridge::XBridge > BridgeFactory::getBridge(
     OUString const & sName)
 {
     osl::MutexGuard g(m_aMutex);
     BridgeMap::iterator i(named_.find(sName));
     return i == named_.end()
-        ? css::uno::Reference< css::bridge::XBridge >() : i->second;
+        ? cpo::uno::Reference< css::bridge::XBridge >() : i->second;
 }
 
-cpo::uno::Sequence< css::uno::Reference< css::bridge::XBridge > >
+cpo::uno::Sequence< cpo::uno::Reference< css::bridge::XBridge > >
 BridgeFactory::getExistingBridges() {
     osl::MutexGuard g(m_aMutex);
     if (unnamed_.size() > SAL_MAX_INT32) {
@@ -139,7 +139,7 @@ BridgeFactory::getExistingBridges() {
             getXWeak());
     }
     n = static_cast< sal_Int32 >(n + named_.size());
-    cpo::uno::Sequence< css::uno::Reference< css::bridge::XBridge > > s(n);
+    cpo::uno::Sequence< cpo::uno::Reference< css::bridge::XBridge > > s(n);
     auto r = asNonConstRange(s);
     sal_Int32 i = 0;
     for (auto const& item : unnamed_)
@@ -162,8 +162,8 @@ void BridgeFactory::disposing() {
     for (auto const& item : l1)
     {
         try {
-            css::uno::Reference<css::lang::XComponent>(
-                item, css::uno::UNO_QUERY_THROW)->dispose();
+            cpo::uno::Reference<css::lang::XComponent>(
+                item, cpo::uno::UNO_QUERY_THROW)->dispose();
         } catch (cpo::uno::Exception & e) {
             SAL_WARN("binaryurp", "ignoring " << e);
         }
@@ -171,8 +171,8 @@ void BridgeFactory::disposing() {
     for (auto const& item : l2)
     {
         try {
-            css::uno::Reference<css::lang::XComponent>(
-                item.second, css::uno::UNO_QUERY_THROW)->dispose();
+            cpo::uno::Reference<css::lang::XComponent>(
+                item.second, cpo::uno::UNO_QUERY_THROW)->dispose();
         } catch (cpo::uno::Exception & e) {
             SAL_WARN("binaryurp", "ignoring " << e);
         }

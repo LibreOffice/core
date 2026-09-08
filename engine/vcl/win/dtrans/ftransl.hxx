@@ -36,7 +36,7 @@ class CDataFormatTranslatorUNO : public
 {
 
 public:
-    explicit CDataFormatTranslatorUNO( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+    explicit CDataFormatTranslatorUNO( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
     // XDataFormatTranslator
 
@@ -53,7 +53,7 @@ public:
     virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
 private:
-    const css::uno::Reference< cpo::uno::XComponentContext >  m_xContext;
+    const cpo::uno::Reference< cpo::uno::XComponentContext >  m_xContext;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

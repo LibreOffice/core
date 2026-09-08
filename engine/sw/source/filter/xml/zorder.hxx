@@ -31,7 +31,7 @@ struct GetZOrderLayer
     {
     }
 
-    auto operator()(css::uno::Reference<css::beans::XPropertySet> const& xShape) -> unsigned int
+    auto operator()(cpo::uno::Reference<css::beans::XPropertySet> const& xShape) -> unsigned int
     {
         sal_Int16 nLayerID(0);
         if (xShape->getPropertySetInfo()->hasPropertyByName(u"LayerID"_ustr))

@@ -26,7 +26,7 @@ extern "C" { using Fn = SwAbstractDialogFactory * (*)(); }
 class SwDialogsTest : public ScreenshotTest
 {
 private:
-    css::uno::Reference<css::lang::XComponent> component_;
+    cpo::uno::Reference<css::lang::XComponent> component_;
 
     /// helper method to populate KnownDialogs, called in setUp(). Needs to be
     /// written and has to add entries to KnownDialogs

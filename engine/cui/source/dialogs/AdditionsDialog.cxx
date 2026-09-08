@@ -58,20 +58,20 @@
 #define MAX_ITEMS_PER_PAGE 30
 
 using namespace css;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::cpo::uno::Exception;
 using ::cpo::uno::Sequence;
 
 using namespace com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::beans;
 
 namespace
 {
 // Gets the content of the given URL and returns as a standard string
-std::string ucbGet(const OUString& rURL, const css::uno::Reference<css::awt::XWindow>& xParentWin)
+std::string ucbGet(const OUString& rURL, const cpo::uno::Reference<css::awt::XWindow>& xParentWin)
 {
     try
     {

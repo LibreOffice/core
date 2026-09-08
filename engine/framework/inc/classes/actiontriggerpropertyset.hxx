@@ -75,7 +75,7 @@ class ActionTriggerPropertySet final : private cppu::BaseMutex,
 
         virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo() override;
+        virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo() override;
 
         static cpo::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescriptor();
 
@@ -88,13 +88,13 @@ class ActionTriggerPropertySet final : private cppu::BaseMutex,
                                             cpo::uno::Any&           aConvertedValue );
 
         /// @throws css::lang::IllegalArgumentException
-        static bool impl_tryToChangeProperty(  const   css::uno::Reference< css::awt::XBitmap >&  xBitmap,
+        static bool impl_tryToChangeProperty(  const   cpo::uno::Reference< css::awt::XBitmap >&  xBitmap,
                                         const   cpo::uno::Any&   aNewValue       ,
                                             cpo::uno::Any&           aOldValue       ,
                                             cpo::uno::Any&           aConvertedValue );
 
         /// @throws css::lang::IllegalArgumentException
-        static bool impl_tryToChangeProperty(  const   css::uno::Reference< cpo::uno::XInterface >& xInterface,
+        static bool impl_tryToChangeProperty(  const   cpo::uno::Reference< cpo::uno::XInterface >& xInterface,
                                         const   cpo::uno::Any&   aNewValue       ,
                                             cpo::uno::Any&           aOldValue       ,
                                             cpo::uno::Any&           aConvertedValue );
@@ -104,8 +104,8 @@ class ActionTriggerPropertySet final : private cppu::BaseMutex,
         OUString                                    m_aCommandURL;
         OUString                                    m_aHelpURL;
         OUString                                    m_aText;
-        css::uno::Reference< css::awt::XBitmap >    m_xBitmap;
-        css::uno::Reference< cpo::uno::XInterface > m_xActionTriggerContainer;
+        cpo::uno::Reference< css::awt::XBitmap >    m_xBitmap;
+        cpo::uno::Reference< cpo::uno::XInterface > m_xActionTriggerContainer;
 };
 
 }

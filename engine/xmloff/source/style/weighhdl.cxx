@@ -28,7 +28,7 @@
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/awt/FontWeight.hpp>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::xmloff::token;
 

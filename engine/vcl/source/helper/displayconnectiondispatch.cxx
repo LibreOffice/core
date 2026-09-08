@@ -25,7 +25,7 @@
 #include <salinst.hxx>
 
 using namespace vcl;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace com::sun::star::awt;
 
 DisplayConnectionDispatch::DisplayConnectionDispatch()

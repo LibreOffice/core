@@ -101,22 +101,22 @@ class ChartController final : public ::cppu::WeakImplHelper <
 {
 public:
     ChartController() = delete;
-    explicit ChartController(css::uno::Reference< cpo::uno::XComponentContext > xContext);
+    explicit ChartController(cpo::uno::Reference< cpo::uno::XComponentContext > xContext);
     virtual ~ChartController() override;
 
     OUString GetContextName();
 
     // css::frame::XController (required interface)
     virtual void
-        attachFrame( const css::uno::Reference< css::frame::XFrame > & xFrame ) override;
+        attachFrame( const cpo::uno::Reference< css::frame::XFrame > & xFrame ) override;
 
     virtual bool
-        attachModel( const css::uno::Reference< css::frame::XModel > & xModel ) override;
+        attachModel( const cpo::uno::Reference< css::frame::XModel > & xModel ) override;
 
-    virtual css::uno::Reference< css::frame::XFrame >
+    virtual cpo::uno::Reference< css::frame::XFrame >
         getFrame() override;
 
-    virtual css::uno::Reference< css::frame::XModel >
+    virtual cpo::uno::Reference< css::frame::XModel >
         getModel() override;
 
     virtual cpo::uno::Any
@@ -129,28 +129,28 @@ public:
         suspend( bool bSuspend ) override;
 
     // css::frame::XController2
-    virtual css::uno::Reference<css::awt::XWindow> getComponentWindow() override;
+    virtual cpo::uno::Reference<css::awt::XWindow> getComponentWindow() override;
     virtual OUString getViewControllerName() override;
     virtual cpo::uno::Sequence<css::beans::PropertyValue> getCreationArguments() override;
-    virtual css::uno::Reference<css::ui::XSidebarProvider> getSidebar() override;
+    virtual cpo::uno::Reference<css::ui::XSidebarProvider> getSidebar() override;
 
     // css::lang::XComponent (base of XController)
     virtual void
         dispose() override;
 
     virtual void
-        addEventListener( const css::uno::Reference< css::lang::XEventListener > & xListener ) override;
+        addEventListener( const cpo::uno::Reference< css::lang::XEventListener > & xListener ) override;
 
     virtual void
-        removeEventListener( const css::uno::Reference< css::lang::XEventListener > & xListener ) override;
+        removeEventListener( const cpo::uno::Reference< css::lang::XEventListener > & xListener ) override;
 
     // css::frame::XDispatchProvider (required interface)
-    virtual css::uno::Reference< css::frame::XDispatch>
+    virtual cpo::uno::Reference< css::frame::XDispatch>
         queryDispatch( const css::util::URL& rURL
                             , const OUString& rTargetFrameName
                             , sal_Int32 nSearchFlags) override;
 
-    virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > >
+    virtual cpo::uno::Sequence< cpo::uno::Reference< css::frame::XDispatch > >
         queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor > & xDescripts) override;
 
     // css::view::XSelectionSupplier (optional interface)
@@ -161,17 +161,17 @@ public:
         getSelection() override;
 
     virtual void
-        addSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener > & xListener ) override;
+        addSelectionChangeListener( const cpo::uno::Reference< css::view::XSelectionChangeListener > & xListener ) override;
 
     virtual void
-        removeSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener > & xListener ) override;
+        removeSelectionChangeListener( const cpo::uno::Reference< css::view::XSelectionChangeListener > & xListener ) override;
 
     // css::ui::XContextMenuInterception (optional interface)
     virtual void
-        registerContextMenuInterceptor( const css::uno::Reference< css::ui::XContextMenuInterceptor > & xInterceptor) override;
+        registerContextMenuInterceptor( const cpo::uno::Reference< css::ui::XContextMenuInterceptor > & xInterceptor) override;
 
     virtual void
-        releaseContextMenuInterceptor( const css::uno::Reference< css::ui::XContextMenuInterceptor > & xInterceptor) override;
+        releaseContextMenuInterceptor( const cpo::uno::Reference< css::ui::XContextMenuInterceptor > & xInterceptor) override;
 
     //additional interfaces
 
@@ -194,11 +194,11 @@ public:
                     , const cpo::uno::Sequence< css::beans::PropertyValue >& aArgs ) override;
 
     virtual void
-        addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xControl
+        addStatusListener( const cpo::uno::Reference< css::frame::XStatusListener >& xControl
                     , const css::util::URL& aURL ) override;
 
     virtual void
-        removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xControl
+        removeStatusListener( const cpo::uno::Reference< css::frame::XStatusListener >& xControl
                     , const css::util::URL& aURL ) override;
 
     // css::awt::XWindow
@@ -219,40 +219,40 @@ public:
         setFocus() override;
 
     virtual void
-        addWindowListener( const css::uno::Reference< css::awt::XWindowListener >& xListener ) override;
+        addWindowListener( const cpo::uno::Reference< css::awt::XWindowListener >& xListener ) override;
 
     virtual void
-        removeWindowListener( const css::uno::Reference< css::awt::XWindowListener >& xListener ) override;
+        removeWindowListener( const cpo::uno::Reference< css::awt::XWindowListener >& xListener ) override;
 
     virtual void
-        addFocusListener( const css::uno::Reference< css::awt::XFocusListener >& xListener ) override;
+        addFocusListener( const cpo::uno::Reference< css::awt::XFocusListener >& xListener ) override;
 
     virtual void
-        removeFocusListener( const css::uno::Reference< css::awt::XFocusListener >& xListener ) override;
+        removeFocusListener( const cpo::uno::Reference< css::awt::XFocusListener >& xListener ) override;
 
     virtual void
-        addKeyListener( const css::uno::Reference< css::awt::XKeyListener >& xListener ) override;
+        addKeyListener( const cpo::uno::Reference< css::awt::XKeyListener >& xListener ) override;
 
     virtual void
-        removeKeyListener( const css::uno::Reference< css::awt::XKeyListener >& xListener ) override;
+        removeKeyListener( const cpo::uno::Reference< css::awt::XKeyListener >& xListener ) override;
 
     virtual void
-        addMouseListener( const css::uno::Reference< css::awt::XMouseListener >& xListener ) override;
+        addMouseListener( const cpo::uno::Reference< css::awt::XMouseListener >& xListener ) override;
 
     virtual void
-        removeMouseListener( const css::uno::Reference< css::awt::XMouseListener >& xListener ) override;
+        removeMouseListener( const cpo::uno::Reference< css::awt::XMouseListener >& xListener ) override;
 
     virtual void
-        addMouseMotionListener( const css::uno::Reference< css::awt::XMouseMotionListener >& xListener ) override;
+        addMouseMotionListener( const cpo::uno::Reference< css::awt::XMouseMotionListener >& xListener ) override;
 
     virtual void
-        removeMouseMotionListener( const css::uno::Reference< css::awt::XMouseMotionListener >& xListener ) override;
+        removeMouseMotionListener( const cpo::uno::Reference< css::awt::XMouseMotionListener >& xListener ) override;
 
     virtual void
-        addPaintListener( const css::uno::Reference< css::awt::XPaintListener >& xListener ) override;
+        addPaintListener( const cpo::uno::Reference< css::awt::XPaintListener >& xListener ) override;
 
     virtual void
-        removePaintListener( const css::uno::Reference< css::awt::XPaintListener >& xListener ) override;
+        removePaintListener( const cpo::uno::Reference< css::awt::XPaintListener >& xListener ) override;
 
     // css::util::XModifyListener
     virtual void modified(
@@ -322,7 +322,7 @@ public:
     ChartWindow* GetChartWindow() const;
     weld::Window* GetChartFrame();
     bool isAdditionalShapeSelected() const;
-    void SetAndApplySelection(const css::uno::Reference<css::drawing::XShape>& rxShape);
+    void SetAndApplySelection(const cpo::uno::Reference<css::drawing::XShape>& rxShape);
     void StartTextEdit( const Point* pMousePixel = nullptr );
 
     void NotifyUndoActionHdl( std::unique_ptr<SdrUndoAction> );
@@ -377,15 +377,15 @@ private:
 
     bool m_bSuspended;
 
-    css::uno::Reference< cpo::uno::XComponentContext> m_xCC;
+    cpo::uno::Reference< cpo::uno::XComponentContext> m_xCC;
 
     //model
-    css::uno::Reference< css::frame::XFrame > m_xFrame;
+    cpo::uno::Reference< css::frame::XFrame > m_xFrame;
     mutable ::osl::Mutex m_aModelMutex;
     TheModelRef m_aModel;
 
     //view
-    css::uno::Reference<css::awt::XWindow> m_xViewWindow;
+    cpo::uno::Reference<css::awt::XWindow> m_xViewWindow;
     rtl::Reference<::chart::ChartView> m_xChartView;
     std::shared_ptr< DrawModelWrapper > m_pDrawModelWrapper;
     std::unique_ptr<DrawViewWrapper> m_pDrawViewWrapper;
@@ -401,7 +401,7 @@ private:
     bool m_bConnectingToView;
     bool m_bDisposed;
 
-    css::uno::Reference< css::document::XUndoManager > m_xUndoManager;
+    cpo::uno::Reference< css::document::XUndoManager > m_xUndoManager;
     std::unique_ptr< UndoGuard > m_pTextActionUndoGuard;
 
     std::unique_ptr< ::svt::AcceleratorExecute > m_apAccelExecute;
@@ -409,7 +409,7 @@ private:
     CommandDispatchContainer m_aDispatchContainer;
 
     std::unique_ptr< DropTargetHelper > m_apDropTargetHelper;
-    css::uno::Reference<
+    cpo::uno::Reference<
             css::frame::XLayoutManagerEventBroadcaster > m_xLayoutManagerEventBroadcaster;
 
     ChartDrawMode m_eDrawMode;
@@ -483,8 +483,8 @@ private:
     void executeDispatch_MoveSeries( bool bForward );
 
     bool EndTextEdit();
-    cpo::uno::Sequence< css::uno::Reference<css::chart2::XFormattedString >> GetFormattedTitle(
-        const EditTextObject& aEdit, const css::uno::Reference< css::drawing::XShape >& xShape );
+    cpo::uno::Sequence< cpo::uno::Reference<css::chart2::XFormattedString >> GetFormattedTitle(
+        const EditTextObject& aEdit, const cpo::uno::Reference< css::drawing::XShape >& xShape );
 
     void executeDispatch_View3D();
     void executeDispatch_PositionAndSize( const ::cpo::uno::Sequence< ::css::beans::PropertyValue >* pArgs = nullptr );
@@ -495,38 +495,38 @@ private:
     void executeDispatch_ScaleText();
 
     static void executeDispatch_FontBold(
-        const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties);
+        const std::vector<cpo::uno::Reference<css::beans::XPropertySet>>& xProperties);
     static void executeDispatch_FontName(
-        const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties,
+        const std::vector<cpo::uno::Reference<css::beans::XPropertySet>>& xProperties,
         const cpo::uno::Sequence<css::beans::PropertyValue>& rArgs);
     static void executeDispatch_FontHeight(
-        const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties,
+        const std::vector<cpo::uno::Reference<css::beans::XPropertySet>>& xProperties,
         const cpo::uno::Sequence<css::beans::PropertyValue>& rArgs);
     static void executeDispatch_FontItalic(
-        const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties);
+        const std::vector<cpo::uno::Reference<css::beans::XPropertySet>>& xProperties);
     static void executeDispatch_FontUnderline(
-        const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties,
+        const std::vector<cpo::uno::Reference<css::beans::XPropertySet>>& xProperties,
         const cpo::uno::Sequence<css::beans::PropertyValue>& rArgs);
     static void executeDispatch_FontStrikeout(
-        const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties);
+        const std::vector<cpo::uno::Reference<css::beans::XPropertySet>>& xProperties);
     static void executeDispatch_FontShadowed(
-        const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties);
+        const std::vector<cpo::uno::Reference<css::beans::XPropertySet>>& xProperties);
     static void executeDispatch_FontColor(
-        const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties,
+        const std::vector<cpo::uno::Reference<css::beans::XPropertySet>>& xProperties,
         const cpo::uno::Sequence<css::beans::PropertyValue>& rArgs);
     static void executeDispatch_FontGrow(
-        const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties);
+        const std::vector<cpo::uno::Reference<css::beans::XPropertySet>>& xProperties);
     static void executeDispatch_FontShrink(
-        const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties);
+        const std::vector<cpo::uno::Reference<css::beans::XPropertySet>>& xProperties);
     static void executeDispatch_FontReset(
-        const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties);
+        const std::vector<cpo::uno::Reference<css::beans::XPropertySet>>& xProperties);
     static void executeDispatch_FontSpacing(
-        const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties,
+        const std::vector<cpo::uno::Reference<css::beans::XPropertySet>>& xProperties,
         const cpo::uno::Sequence<css::beans::PropertyValue>& rArgs);
     static void executeDispatch_FontSuperScript(
-        const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties);
+        const std::vector<cpo::uno::Reference<css::beans::XPropertySet>>& xProperties);
     static void executeDispatch_FontSubScript(
-        const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties);
+        const std::vector<cpo::uno::Reference<css::beans::XPropertySet>>& xProperties);
 
     void executeDispatch_Paste();
     void executeDispatch_Copy();
@@ -561,7 +561,7 @@ private:
 
     //sets the model member to null if it equals the parameter
     //returns true if successful
-    bool impl_releaseThisModel( const css::uno::Reference< cpo::uno::XInterface > & xModel );
+    bool impl_releaseThisModel( const cpo::uno::Reference< cpo::uno::XInterface > & xModel );
 
     enum eMoveOrResizeType
     {
@@ -575,7 +575,7 @@ private:
 
     static const o3tl::sorted_vector< std::u16string_view >& impl_getAvailableCommands();
 
-    void impl_PasteGraphic( css::uno::Reference< css::graphic::XGraphic > const & xGraphic,
+    void impl_PasteGraphic( cpo::uno::Reference< css::graphic::XGraphic > const & xGraphic,
                             const ::Point & aPosition );
     void impl_PasteShapes( SdrModel* pModel );
     void impl_PasteStringAsTextShape( const OUString& rString, const css::awt::Point& rPosition );

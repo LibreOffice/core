@@ -17,11 +17,12 @@
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace com::sun::star;
+using namespace ::cpo;
 
 namespace sc_apitest
 {

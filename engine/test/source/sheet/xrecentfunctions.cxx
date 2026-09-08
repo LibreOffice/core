@@ -12,13 +12,14 @@
 #include <test/sheet/xrecentfunctions.hxx>
 
 #include <com/sun/star/sheet/XRecentFunctions.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 
 #include <cppunit/TestAssert.h>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 namespace apitest
 {

@@ -92,6 +92,7 @@
 #include <officecfg/Office/Common.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 // Slotmaps for the application's methods
 

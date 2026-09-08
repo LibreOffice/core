@@ -79,7 +79,7 @@ public:
 
     ///=====  XAccessibleComponent  ============================================
 
-    virtual css::uno::Reference< css::accessibility::XAccessible >
+    virtual cpo::uno::Reference< css::accessibility::XAccessible >
         SAL_CALL getAccessibleAtPoint(
         const css::awt::Point& rPoint ) override;
 
@@ -102,7 +102,7 @@ public:
 
     /// Return the specified child or NULL if index is invalid.
     /// override to calculate this on demand
-    virtual css::uno::Reference< css::accessibility::XAccessible> SAL_CALL
+    virtual cpo::uno::Reference< css::accessibility::XAccessible> SAL_CALL
         getAccessibleChild(sal_Int64 nIndex) override;
 
     /// Return the set of current states.
@@ -117,11 +117,11 @@ public:
         virtual void SAL_CALL clearAccessibleSelection(  ) override;
         virtual void SAL_CALL selectAllAccessibleChildren(  ) override;
         virtual sal_Int64 SAL_CALL getSelectedAccessibleChildCount(  ) override;
-        virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild(
+        virtual cpo::uno::Reference< css::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild(
             sal_Int64 nSelectedChildIndex ) override;
         virtual void SAL_CALL deselectAccessibleChild(
             sal_Int64 nSelectedChildIndex ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) override;
 protected:
     /// Return this object's description.
     virtual OUString
@@ -139,12 +139,12 @@ public:
     */
     virtual void SAL_CALL
         addAccessibleEventListener(
-            const css::uno::Reference<css::accessibility::XAccessibleEventListener>& xListener) override;
+            const cpo::uno::Reference<css::accessibility::XAccessibleEventListener>& xListener) override;
 
     //  Remove an existing event listener.
     virtual void SAL_CALL
         removeAccessibleEventListener(
-            const css::uno::Reference<css::accessibility::XAccessibleEventListener>& xListener) override;
+            const cpo::uno::Reference<css::accessibility::XAccessibleEventListener>& xListener) override;
 
 private:
     std::unique_ptr<accessibility::AccessibleTextHelper> mpTextHelper;
@@ -189,7 +189,7 @@ public:
     {
     }
 
-    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) override;
 
     // for mapping positions/sizes within the TextView to a11y
     virtual OutputDevice* GetOutputDeviceForView() override;

@@ -30,7 +30,7 @@ class ScAccessiblePageHeaderArea;
 class ScAccessiblePageHeader final : public ScAccessibleContextBase
 {
 public:
-    ScAccessiblePageHeader( const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
+    ScAccessiblePageHeader( const cpo::uno::Reference<css::accessibility::XAccessible>& rxParent,
                             ScPreviewShell* pViewShell, bool bHeader, sal_Int32 nIndex );
 
 protected:
@@ -48,14 +48,14 @@ public:
 
     //=====  XAccessibleComponent  ============================================
 
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > SAL_CALL
                             getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
     virtual void SAL_CALL   grabFocus() override;
 
     //=====  XAccessibleContext  ==============================================
 
     virtual sal_Int64 SAL_CALL getAccessibleChildCount() override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > SAL_CALL
                             getAccessibleChild( sal_Int64 i ) override;
     virtual sal_Int64 SAL_CALL getAccessibleIndexInParent() override;
     virtual sal_Int64 SAL_CALL getAccessibleStateSet() override;

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/XInterface.hpp>
 #include <comphelper/weakbag.hxx>
 #include <cppuhelper/weak.hxx>
@@ -34,9 +34,9 @@ class WeakBagTest : public CppUnit::TestFixture
 public:
     void test()
     {
-        css::uno::Reference<cpo::uno::XInterface> ref1(new cppu::OWeakObject);
-        css::uno::Reference<cpo::uno::XInterface> ref2(new cppu::OWeakObject);
-        css::uno::Reference<cpo::uno::XInterface> ref3(new cppu::OWeakObject);
+        cpo::uno::Reference<cpo::uno::XInterface> ref1(new cppu::OWeakObject);
+        cpo::uno::Reference<cpo::uno::XInterface> ref2(new cppu::OWeakObject);
+        cpo::uno::Reference<cpo::uno::XInterface> ref3(new cppu::OWeakObject);
 
         comphelper::WeakBag<cpo::uno::XInterface> bag;
 

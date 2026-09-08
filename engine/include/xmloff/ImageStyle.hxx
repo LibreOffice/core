@@ -25,7 +25,7 @@
 #include <rtl/ustring.hxx>
 
 namespace cpo::uno { class Any; }
-namespace com::sun::star::uno { template <typename > class Reference; }
+namespace cpo::uno { template <typename > class Reference; }
 namespace com::sun::star::xml::sax { class XFastAttributeList; }
 
 class SvXMLExport;
@@ -35,7 +35,7 @@ namespace XMLImageStyle
 {
 
 XMLOFF_DLLPUBLIC void exportXML(OUString const & rStrName, cpo::uno::Any const & rValue, SvXMLExport& rExport);
-XMLOFF_DLLPUBLIC bool importXML(css::uno::Reference<css::xml::sax::XFastAttributeList> const & xAttrList,
+XMLOFF_DLLPUBLIC bool importXML(cpo::uno::Reference<css::xml::sax::XFastAttributeList> const & xAttrList,
                                 cpo::uno::Any& rValue, OUString& rStrName, SvXMLImport& rImport);
 
 }

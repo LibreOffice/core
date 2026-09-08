@@ -20,8 +20,8 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 
 using namespace com::sun::star;
-using namespace com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::xmloff::token;
 
 namespace {
@@ -79,7 +79,7 @@ SchXMLPropertyMappingContext::~SchXMLPropertyMappingContext()
 }
 
 void SchXMLPropertyMappingContext::startFastElement (sal_Int32 /*nElement*/,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     OUString aRange;
     OUString aRole;

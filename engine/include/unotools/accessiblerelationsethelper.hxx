@@ -44,7 +44,7 @@ class UNOTOOLS_DLLPUBLIC AccessibleRelationSetHelper final
 public:
     AccessibleRelationSetHelper();
 
-    css::uno::Reference<css::accessibility::XAccessibleRelationSet> Clone() const;
+    cpo::uno::Reference<css::accessibility::XAccessibleRelationSet> Clone() const;
 
 private:
     AccessibleRelationSetHelper(const AccessibleRelationSetHelper& rHelper);

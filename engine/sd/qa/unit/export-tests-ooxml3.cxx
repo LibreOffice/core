@@ -21,7 +21,8 @@
 #include <sdpage.hxx>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 class SdOOXMLExportTest3 : public SdModelTestBase
 {
@@ -447,7 +448,7 @@ struct SvgPngCounts
 };
 
 SvgPngCounts
-countSvgAndPngInPictures(const css::uno::Reference<css::packages::zip::XZipFileAccess2>& xZip)
+countSvgAndPngInPictures(const cpo::uno::Reference<css::packages::zip::XZipFileAccess2>& xZip)
 {
     SvgPngCounts aCounts;
     const cpo::uno::Sequence<OUString> aNames = xZip->getElementNames();

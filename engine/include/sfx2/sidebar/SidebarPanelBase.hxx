@@ -31,7 +31,7 @@
 #include <com/sun/star/ui/XToolPanel.hpp>
 #include <com/sun/star/ui/XSidebarPanel.hpp>
 #include <com/sun/star/ui/XUpdateModel.hpp>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 
 class PanelLayout;
 
@@ -54,7 +54,7 @@ typedef comphelper::WeakComponentImplHelper<css::ui::XContextChangeEventListener
                                        css::ui::XUpdateModel>
             SidebarPanelBaseInterfaceBase;
 
-SFX2_DLLPUBLIC css::uno::Reference<css::frame::XFrame> GetFrame(const comphelper::NamedValueCollection& rArguments);
+SFX2_DLLPUBLIC cpo::uno::Reference<css::frame::XFrame> GetFrame(const comphelper::NamedValueCollection& rArguments);
 
 /** Base class for sidebar panels that provides some convenience
     functionality.
@@ -62,8 +62,8 @@ SFX2_DLLPUBLIC css::uno::Reference<css::frame::XFrame> GetFrame(const comphelper
 class SFX2_DLLPUBLIC SidebarPanelBase final : public SidebarPanelBaseInterfaceBase
 {
 public:
-    static css::uno::Reference<css::ui::XUIElement> Create(const OUString& rsResourceURL,
-                                                           const css::uno::Reference<css::frame::XFrame>& rxFrame,
+    static cpo::uno::Reference<css::ui::XUIElement> Create(const OUString& rsResourceURL,
+                                                           const cpo::uno::Reference<css::frame::XFrame>& rxFrame,
                                                            std::unique_ptr<PanelLayout> xControl,
                                                            const css::ui::LayoutSize& rLayoutSize);
 
@@ -74,27 +74,27 @@ public:
     virtual void disposing (const css::lang::EventObject& rEvent) override;
 
     // XUIElement
-    virtual css::uno::Reference<css::frame::XFrame> getFrame() override;
+    virtual cpo::uno::Reference<css::frame::XFrame> getFrame() override;
     virtual OUString getResourceURL() override;
     virtual sal_Int16 getType() override;
-    virtual css::uno::Reference<cpo::uno::XInterface> getRealInterface() override;
+    virtual cpo::uno::Reference<cpo::uno::XInterface> getRealInterface() override;
 
     // XToolPanel
-    virtual css::uno::Reference<css::accessibility::XAccessible> createAccessible(
-                const css::uno::Reference<css::accessibility::XAccessible>& rxParentAccessible) override;
-    virtual css::uno::Reference<css::awt::XWindow> getWindow() override;
+    virtual cpo::uno::Reference<css::accessibility::XAccessible> createAccessible(
+                const cpo::uno::Reference<css::accessibility::XAccessible>& rxParentAccessible) override;
+    virtual cpo::uno::Reference<css::awt::XWindow> getWindow() override;
 
     // XSidebarPanel
     virtual css::ui::LayoutSize getHeightForWidth(sal_Int32 nWidth) override;
     virtual sal_Int32 getMinimalWidth() override;
 
     // XUpdateModel
-    virtual void updateModel(const css::uno::Reference<css::frame::XModel>& xModel) override;
+    virtual void updateModel(const cpo::uno::Reference<css::frame::XModel>& xModel) override;
 
     void SetParentPanel(sfx2::sidebar::Panel* pPanel);
 
 private:
-    SidebarPanelBase(OUString sResourceURL, css::uno::Reference<css::frame::XFrame> xFrame,
+    SidebarPanelBase(OUString sResourceURL, cpo::uno::Reference<css::frame::XFrame> xFrame,
                      std::unique_ptr<PanelLayout> xControl, const css::ui::LayoutSize& rLayoutSize);
     virtual ~SidebarPanelBase() override;
     SidebarPanelBase(const SidebarPanelBase&) = delete;
@@ -102,7 +102,7 @@ private:
 
     virtual void disposing(std::unique_lock<std::mutex>&) override;
 
-    css::uno::Reference<css::frame::XFrame> mxFrame;
+    cpo::uno::Reference<css::frame::XFrame> mxFrame;
     std::unique_ptr<PanelLayout> mxControl;
     const OUString msResourceURL;
     const css::ui::LayoutSize maLayoutSize;

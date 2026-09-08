@@ -66,6 +66,7 @@
 #include <sc.hrc>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 #define SC_HANDLESIZE_BIG       9
 

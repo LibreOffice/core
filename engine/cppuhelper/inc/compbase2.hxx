@@ -43,9 +43,9 @@ public:
     // css::lang::XComponent
     virtual void dispose() override;
     virtual void
-    addEventListener(css::uno::Reference<css::lang::XEventListener> const& rxListener) override;
+    addEventListener(cpo::uno::Reference<css::lang::XEventListener> const& rxListener) override;
     virtual void
-    removeEventListener(css::uno::Reference<css::lang::XEventListener> const& rxListener) override;
+    removeEventListener(cpo::uno::Reference<css::lang::XEventListener> const& rxListener) override;
 
     virtual cpo::uno::Any queryInterface(cpo::uno::Type const& rType) override;
 
@@ -83,12 +83,12 @@ public:
     // css::lang::XComponent
     virtual void dispose() noexcept final override { WeakComponentImplHelperBase2::dispose(); }
     virtual void addEventListener(
-        css::uno::Reference<css::lang::XEventListener> const& rxListener) final override
+        cpo::uno::Reference<css::lang::XEventListener> const& rxListener) final override
     {
         WeakComponentImplHelperBase2::addEventListener(rxListener);
     }
     virtual void removeEventListener(
-        css::uno::Reference<css::lang::XEventListener> const& rxListener) final override
+        cpo::uno::Reference<css::lang::XEventListener> const& rxListener) final override
     {
         WeakComponentImplHelperBase2::removeEventListener(rxListener);
     }

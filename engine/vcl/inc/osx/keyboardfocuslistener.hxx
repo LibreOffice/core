@@ -28,7 +28,7 @@ class KeyboardFocusListener : public salhelper::SimpleReferenceObject
 {
 public:
     virtual void
-    focusedObjectChanged(const css::uno::Reference<css::accessibility::XAccessible>& xAccessible)
+    focusedObjectChanged(const cpo::uno::Reference<css::accessibility::XAccessible>& xAccessible)
         = 0;
 };
 

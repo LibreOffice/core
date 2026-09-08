@@ -66,10 +66,10 @@
 #include <basic/codecompletecache.hxx>
 #include <memory>
 
-using com::sun::star::uno::Reference;
+using cpo::uno::Reference;
 
-using namespace com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace com::sun::star::container;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::script;

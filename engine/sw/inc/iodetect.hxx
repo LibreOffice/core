@@ -52,7 +52,7 @@ class SfxFilterContainer;
 class SotStorage;
 class SvStream;
 namespace com::sun::star::embed { class XStorage; }
-namespace com::sun::star::uno { template <typename> class Reference; }
+namespace cpo::uno { template <typename> class Reference; }
 
 struct SwIoDetect
 {
@@ -106,7 +106,7 @@ public:
     static std::shared_ptr<const SfxFilter> GetFileFilter(const OUString& rFileName);
 
     static bool IsValidStgFilter( SotStorage& , const SfxFilter& );
-    static bool IsValidStgFilter( const css::uno::Reference < css::embed::XStorage >& rStg, const SfxFilter& rFilter);
+    static bool IsValidStgFilter( const cpo::uno::Reference < css::embed::XStorage >& rStg, const SfxFilter& rFilter);
 
     static bool IsDetectableText(SvStream& rStream, sal_uLong nMaxBuf,
                                  LineEnd* pLineEnd, bool* pBom);

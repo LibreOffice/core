@@ -42,7 +42,7 @@ using namespace ::oox::core;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::text;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 namespace oox::drawingml {
@@ -100,10 +100,10 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler2Helper cons
     // ST_TextColumnCount
     if (const sal_Int32 nColumns = rAttribs.getInteger(XML_numCol, 0); nColumns > 0)
     {
-        css::uno::Reference<css::text::XTextColumns> xCols(SvxXTextColumns_createInstance(),
-                                                           css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::text::XTextColumns> xCols(SvxXTextColumns_createInstance(),
+                                                           cpo::uno::UNO_QUERY_THROW);
         xCols->setColumnCount(nColumns);
-        css::uno::Reference<css::beans::XPropertySet> xProps(xCols, css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::beans::XPropertySet> xProps(xCols, cpo::uno::UNO_QUERY_THROW);
         // ST_PositiveCoordinate32
         const sal_Int32 nSpacing = o3tl::convert(rAttribs.getInteger(XML_spcCol, 0),
                                                  o3tl::Length::emu, o3tl::Length::mm100);

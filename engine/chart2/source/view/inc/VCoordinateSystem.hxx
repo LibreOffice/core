@@ -116,7 +116,7 @@ public:
             const css::awt::Rectangle& rMaximumSpaceForLabels,
             bool bLimitSpaceForLabels,
             std::vector<std::unique_ptr<VSeriesPlotter>>& rSeriesPlotterList,
-            css::uno::Reference<cpo::uno::XComponentContext> const& rComponentContext);
+            cpo::uno::Reference<cpo::uno::XComponentContext> const& rComponentContext);
 
     virtual void initVAxisInList();
     virtual void updateScalesAndIncrementsOnAxes();

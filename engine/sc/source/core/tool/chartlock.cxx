@@ -31,7 +31,8 @@
 #include <com/sun/star/frame/XModel.hpp>
 
 using namespace com::sun::star;
-using ::com::sun::star::uno::Reference;
+using namespace ::cpo;
+using ::cpo::uno::Reference;
 using ::cpo::uno::WeakReference;
 
 #define SC_CHARTLOCKTIMEOUT 660

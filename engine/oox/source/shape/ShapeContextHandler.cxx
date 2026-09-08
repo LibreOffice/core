@@ -49,6 +49,7 @@
 #include <utility>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace oox::shape {
 using namespace core;
@@ -621,12 +622,12 @@ ShapeContextHandler::getShape()
     return xResult;
 }
 
-void ShapeContextHandler::setDrawPage(const css::uno::Reference< css::drawing::XDrawPage > & the_value)
+void ShapeContextHandler::setDrawPage(const cpo::uno::Reference< css::drawing::XDrawPage > & the_value)
 {
     mxDrawPage = the_value;
 }
 
-void ShapeContextHandler::setModel(const css::uno::Reference< css::frame::XModel > & the_value)
+void ShapeContextHandler::setModel(const cpo::uno::Reference< css::frame::XModel > & the_value)
 {
     if( !mxShapeFilterBase.is() )
         throw cpo::uno::RuntimeException();
@@ -677,7 +678,7 @@ void ShapeContextHandler::setMediaDescriptor(const cpo::uno::Sequence<beans::Pro
     maMediaDescriptor = rMediaDescriptor;
 }
 
-void ShapeContextHandler::setGraphicMapper(css::uno::Reference<css::graphic::XGraphicMapper> const & rxGraphicMapper)
+void ShapeContextHandler::setGraphicMapper(cpo::uno::Reference<css::graphic::XGraphicMapper> const & rxGraphicMapper)
 {
     mxShapeFilterBase->setGraphicMapper(rxGraphicMapper);
 }

@@ -30,7 +30,7 @@
 namespace com::sun::star::sdbc { class SQLException; }
 namespace cpo::uno { class Type; }
 namespace cpo::uno { class XInterface; }
-namespace com::sun::star::uno { template <class interface_type> class Reference; }
+namespace cpo::uno { template <class interface_type> class Reference; }
 
 namespace connectivity
 {
@@ -122,7 +122,7 @@ namespace connectivity
 
             @param  _rxContext
                 the context in which the error occurred. This will be filled in as
-                <member scope="css::uno">Exception::Context</member> member.
+                <member scope="cpo::uno">Exception::Context</member> member.
 
             @param _rParamValue1
                 a runtime-dependent value which should be filled into the error message
@@ -144,7 +144,7 @@ namespace connectivity
         */
         void            raiseException(
                             const ErrorCondition _eCondition,
-                            const css::uno::Reference< cpo::uno::XInterface >& _rxContext,
+                            const cpo::uno::Reference< cpo::uno::XInterface >& _rxContext,
                             const std::optional<OUString>& _rParamValue1 = std::nullopt,
                             const std::optional<OUString>& _rParamValue2 = std::nullopt,
                             const std::optional<OUString>& _rParamValue3 = std::nullopt
@@ -177,7 +177,7 @@ namespace connectivity
 
             @param  _rxContext
                 the context in which the error occurred. This will be filled in as
-                <member scope="css::uno">Exception::Context</member> member.
+                <member scope="cpo::uno">Exception::Context</member> member.
 
             @param _rExceptionType
                 the type of the exception to throw. This type <em>must</em> specify
@@ -192,7 +192,7 @@ namespace connectivity
         */
         void            raiseTypedException(
                             const ErrorCondition _eCondition,
-                            const css::uno::Reference< cpo::uno::XInterface >& _rxContext,
+                            const cpo::uno::Reference< cpo::uno::XInterface >& _rxContext,
                             const cpo::uno::Type& _rExceptionType
                         ) const;
 
@@ -204,7 +204,7 @@ namespace connectivity
 
             @param  _rxContext
                 the context in which the error occurred. This will be filled in as
-                <member scope="css::uno">Exception::Context</member> member.
+                <member scope="cpo::uno">Exception::Context</member> member.
 
             @param _rParamValue1
                 a runtime-dependent value which should be filled into the error message
@@ -227,7 +227,7 @@ namespace connectivity
         css::sdbc::SQLException
                         getSQLException(
                             const ErrorCondition _eCondition,
-                            const css::uno::Reference< cpo::uno::XInterface >& _rxContext,
+                            const cpo::uno::Reference< cpo::uno::XInterface >& _rxContext,
                             const std::optional<OUString>& _rParamValue1 = std::nullopt,
                             const std::optional<OUString>& _rParamValue2 = std::nullopt,
                             const std::optional<OUString>& _rParamValue3 = std::nullopt

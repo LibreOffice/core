@@ -13,7 +13,7 @@
 #include <com/sun/star/sheet/addin/XAnalysis.hpp>
 #include <cpo/uno/XInterface.hpp>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <comphelper/processfactory.hxx>
 
@@ -25,7 +25,7 @@ public:
     virtual void setUp() override;
 
 protected:
-    css::uno::Reference<css::sheet::addin::XAnalysis> mxAnalysis;
+    cpo::uno::Reference<css::sheet::addin::XAnalysis> mxAnalysis;
 };
 
 void Test::setUp()
@@ -33,7 +33,7 @@ void Test::setUp()
     test::BootstrapFixture::setUp();
     auto xFactory(comphelper::getProcessServiceFactory());
     mxAnalysis.set(xFactory->createInstance(u"com.sun.star.sheet.addin.Analysis"_ustr),
-                   css::uno::UNO_QUERY_THROW);
+                   cpo::uno::UNO_QUERY_THROW);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, test_getDec2Hex)

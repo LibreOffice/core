@@ -25,16 +25,16 @@ public:
     SchXMLPropertyMappingContext(
                           SvXMLImport& rImport,
                           tSchXMLLSequencesPerIndex& rLSequencesPerIndex,
-                              css::uno::Reference<
+                              cpo::uno::Reference<
                               css::chart2::XDataSeries > xSeries );
 
     virtual ~SchXMLPropertyMappingContext() override;
 
     virtual void startFastElement (sal_Int32 Element,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs) override;
 private:
 
-    css::uno::Reference< css::chart2::XDataSeries > mxDataSeries;
+    cpo::uno::Reference< css::chart2::XDataSeries > mxDataSeries;
 
     tSchXMLLSequencesPerIndex& mrLSequencesPerIndex;
 

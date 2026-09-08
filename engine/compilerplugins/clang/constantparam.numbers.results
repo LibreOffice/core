@@ -3,7 +3,7 @@ basctl/source/inc/dlged.hxx:76
     enum basctl::DlgEdHint::Kind 
     2
 basic/source/classes/sbunoobj.cxx:3225
-    class com::sun::star::uno::Reference<class com::sun::star::reflection::XTypeDescriptionEnumeration> getTypeDescriptorEnumeration(const class rtl::OUString &,const class cpo::uno::Sequence<enum cpo::uno::TypeClass> &,enum com::sun::star::reflection::TypeDescriptionSearchDepth)
+    class cpo::uno::Reference<class com::sun::star::reflection::XTypeDescriptionEnumeration> getTypeDescriptorEnumeration(const class rtl::OUString &,const class cpo::uno::Sequence<enum cpo::uno::TypeClass> &,enum com::sun::star::reflection::TypeDescriptionSearchDepth)
     enum com::sun::star::reflection::TypeDescriptionSearchDepth depth
     -1
 basic/source/inc/expr.hxx:196
@@ -27,19 +27,19 @@ basic/source/runtime/methods.cxx:3128
     const unsigned int i
     3
 canvas/inc/verifyinput.hxx:103
-    void verifyInput(const struct com::sun::star::geometry::Matrix2D &,const char *,const class com::sun::star::uno::Reference<class cpo::uno::XInterface> &,short)
+    void verifyInput(const struct com::sun::star::geometry::Matrix2D &,const char *,const class cpo::uno::Reference<class cpo::uno::XInterface> &,short)
     short nArgPos
     2
 chart2/qa/extras/chart2export.cxx:125
-    void checkPolynomialTrendline(const class com::sun::star::uno::Reference<class com::sun::star::chart2::XRegressionCurve> &,const class rtl::OUString &,int,double,double,double)
+    void checkPolynomialTrendline(const class cpo::uno::Reference<class com::sun::star::chart2::XRegressionCurve> &,const class rtl::OUString &,int,double,double,double)
     int aExpectedDegree
     3
 chart2/qa/extras/chart2export.cxx:147
-    void checkMovingAverageTrendline(const class com::sun::star::uno::Reference<class com::sun::star::chart2::XRegressionCurve> &,const class rtl::OUString &,int)
+    void checkMovingAverageTrendline(const class cpo::uno::Reference<class com::sun::star::chart2::XRegressionCurve> &,const class rtl::OUString &,int)
     int aExpectedPeriod
     3
 chart2/qa/extras/PivotChartTest.cxx:82
-    void lclModifyFunction(const class com::sun::star::uno::Reference<class com::sun::star::sheet::XDataPilotDescriptor> &,class std::basic_string_view<char16_t>,enum com::sun::star::sheet::GeneralFunction)
+    void lclModifyFunction(const class cpo::uno::Reference<class com::sun::star::sheet::XDataPilotDescriptor> &,class std::basic_string_view<char16_t>,enum com::sun::star::sheet::GeneralFunction)
     enum com::sun::star::sheet::GeneralFunction eFunction
     2
 chart2/source/controller/inc/AccessibleBase.hxx:143
@@ -47,7 +47,7 @@ chart2/source/controller/inc/AccessibleBase.hxx:143
     long aState
     4194304
 chart2/source/inc/LinePropertiesHelper.hxx:62
-    void SetLineColor(const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,int)
+    void SetLineColor(const class cpo::uno::Reference<class com::sun::star::beans::XPropertySet> &,int)
     int nColor
     14540253
 chart2/source/inc/ObjectIdentifier.hxx:184
@@ -55,11 +55,11 @@ chart2/source/inc/ObjectIdentifier.hxx:184
     enum chart::ObjectType eSubObjectType
     12
 chart2/source/inc/StatisticsHelper.hxx:77
-    class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> addErrorBars(const class rtl::Reference<class chart::DataSeries> &,int,_Bool)
+    class cpo::uno::Reference<class com::sun::star::beans::XPropertySet> addErrorBars(const class rtl::Reference<class chart::DataSeries> &,int,_Bool)
     int nStyle
     2
 chart2/source/model/template/PieChartTypeTemplate.hxx:36
-    void chart::PieChartTypeTemplate::PieChartTypeTemplate(const class com::sun::star::uno::Reference<class cpo::uno::XComponentContext> &,const class rtl::OUString &,enum com::sun::star::chart2::PieChartOffsetMode,_Bool,enum com::sun::star::chart2::PieChartSubType,int,int)
+    void chart::PieChartTypeTemplate::PieChartTypeTemplate(const class cpo::uno::Reference<class cpo::uno::XComponentContext> &,const class rtl::OUString &,enum com::sun::star::chart2::PieChartOffsetMode,_Bool,enum com::sun::star::chart2::PieChartSubType,int,int)
     int nCompositeSize
     3
 chart2/source/tools/RangeHighlighter.cxx:50
@@ -75,7 +75,7 @@ codemaker/source/javamaker/classfile.cxx:86
     unsigned int data
     3405691582
 comphelper/qa/unit/variadictemplates.cxx:63
-    void extract(const class cpo::uno::Sequence<class cpo::uno::Any> &,int,optional<type-parameter-?-?> &,const class com::sun::star::uno::Reference<class cpo::uno::XInterface> &)
+    void extract(const class cpo::uno::Sequence<class cpo::uno::Any> &,int,optional<type-parameter-?-?> &,const class cpo::uno::Reference<class cpo::uno::XInterface> &)
     int nArg
     4
 connectivity/source/inc/java/sql/ConnectionLog.hxx:105
@@ -91,7 +91,7 @@ connectivity/source/inc/java/sql/ConnectionLog.hxx:117
     const int _nLogLevel
     300
 connectivity/source/inc/mysql/YTable.hxx:83
-    void connectivity::mysql::OMySQLTable::OMySQLTable(class connectivity::sdbcx::OCollection *,const class com::sun::star::uno::Reference<class com::sun::star::sdbc::XConnection> &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,int)
+    void connectivity::mysql::OMySQLTable::OMySQLTable(class connectivity::sdbcx::OCollection *,const class cpo::uno::Reference<class com::sun::star::sdbc::XConnection> &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,int)
     int _nPrivileges
     511
 connectivity/source/inc/odbc/OFunctions.hxx:38
@@ -271,7 +271,7 @@ connectivity/source/inc/odbc/OPreparedStatement.hxx:75
     int _nType
     -2
 connectivity/source/inc/odbc/OTools.hxx:216
-    class cpo::uno::Sequence<signed char> connectivity::odbc::OTools::getBytesValue(const class connectivity::odbc::OConnection *,void *,int,short,_Bool &,const class com::sun::star::uno::Reference<class cpo::uno::XInterface> &)
+    class cpo::uno::Sequence<signed char> connectivity::odbc::OTools::getBytesValue(const class connectivity::odbc::OConnection *,void *,int,short,_Bool &,const class cpo::uno::Reference<class cpo::uno::XInterface> &)
     short _fSqlType
     -2
 cppcanvas/source/inc/implrenderer.hxx:183
@@ -295,7 +295,7 @@ cui/source/inc/cuihyperdlg.hxx:49
     unsigned short nId
     10361
 cui/source/inc/MacroManagerDialog.hxx:162
-    void ScriptContainersListBox::Insert(const class com::sun::star::uno::Reference<class com::sun::star::script::browse::XBrowseNode> &,const class weld::TreeIter *,const class rtl::OUString &,const class rtl::OUString &,_Bool,int,class weld::TreeIter *)
+    void ScriptContainersListBox::Insert(const class cpo::uno::Reference<class com::sun::star::script::browse::XBrowseNode> &,const class weld::TreeIter *,const class rtl::OUString &,const class rtl::OUString &,_Bool,int,class weld::TreeIter *)
     int nPos
     -1
 cui/source/inc/SpellDialog.hxx:118
@@ -411,11 +411,11 @@ filter/source/msfilter/mscodec.cxx:98
     unsigned long nBufferSize
     16
 forms/source/richtext/richtextcontrol.cxx:81
-    void implAdjustTriStateFlag(const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class rtl::OUString &,long &,long,long)
+    void implAdjustTriStateFlag(const class cpo::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class rtl::OUString &,long &,long,long)
     long _nPositiveFlag
     256
 forms/source/richtext/richtextcontrol.cxx:81
-    void implAdjustTriStateFlag(const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class rtl::OUString &,long &,long,long)
+    void implAdjustTriStateFlag(const class cpo::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class rtl::OUString &,long &,long,long)
     long nNegativeFlag
     512
 forms/source/richtext/rtattributes.hxx:51
@@ -435,7 +435,7 @@ fpicker/source/office/iodlg.hxx:203
     enum com::sun::star::ucb::IOErrorCode _eCode
     5
 framework/inc/uielement/macrosmenucontroller.hxx:49
-    void framework::MacrosMenuController::addScriptItems(const class com::sun::star::uno::Reference<class com::sun::star::awt::XPopupMenu> &,unsigned short)
+    void framework::MacrosMenuController::addScriptItems(const class cpo::uno::Reference<class com::sun::star::awt::XPopupMenu> &,unsigned short)
     unsigned short startItemId
     4
 framework/source/uielement/thesaurusmenucontroller.cxx:50
@@ -515,7 +515,7 @@ include/comphelper/seqstream.hxx:117
     int _nMinimumResize
     128
 include/comphelper/storagehelper.hxx:119
-    class com::sun::star::uno::Reference<class com::sun::star::embed::XStorage> comphelper::OStorageHelper::GetStorageFromStream(const class com::sun::star::uno::Reference<class com::sun::star::io::XStream> &,int,const class com::sun::star::uno::Reference<class cpo::uno::XComponentContext> &)
+    class cpo::uno::Reference<class com::sun::star::embed::XStorage> comphelper::OStorageHelper::GetStorageFromStream(const class cpo::uno::Reference<class com::sun::star::io::XStream> &,int,const class cpo::uno::Reference<class cpo::uno::XComponentContext> &)
     int nStorageMode
     7
 include/comphelper/string.hxx:74
@@ -535,7 +535,7 @@ include/comphelper/traceevent.hxx:100
     unsigned long bufferSize
     100
 include/connectivity/dbtools.hxx:303
-    class com::sun::star::sdbc::SQLException prependErrorInfo(const class com::sun::star::sdbc::SQLException &,const class com::sun::star::uno::Reference<class cpo::uno::XInterface> &,const class rtl::OUString &,const enum dbtools::StandardSQLState)
+    class com::sun::star::sdbc::SQLException prependErrorInfo(const class com::sun::star::sdbc::SQLException &,const class cpo::uno::Reference<class cpo::uno::XInterface> &,const class rtl::OUString &,const enum dbtools::StandardSQLState)
     const enum dbtools::StandardSQLState _eSQLState
     2147483647
 include/connectivity/sqlerror.hxx:83
@@ -551,7 +551,7 @@ include/connectivity/sqlerror.hxx:162
     const int _eCondition
     200
 include/connectivity/sqlerror.hxx:187
-    void connectivity::SQLError::raiseTypedException(const int,const class com::sun::star::uno::Reference<class cpo::uno::XInterface> &,const class cpo::uno::Type &) const
+    void connectivity::SQLError::raiseTypedException(const int,const class cpo::uno::Reference<class cpo::uno::XInterface> &,const class cpo::uno::Type &) const
     const int _eCondition
     100
 include/dbaccess/genericcontroller.hxx:294
@@ -791,7 +791,7 @@ include/i18nutil/unicode.hxx:42
     short unknownType
     87
 include/linguistic/spelldta.hxx:87
-    class com::sun::star::uno::Reference<class com::sun::star::linguistic2::XSpellAlternatives> linguistic::SpellAlternatives::CreateSpellAlternatives(const class rtl::OUString &,struct o3tl::strong_int<unsigned short, struct LanguageTypeTag>,short,const class cpo::uno::Sequence<class rtl::OUString> &)
+    class cpo::uno::Reference<class com::sun::star::linguistic2::XSpellAlternatives> linguistic::SpellAlternatives::CreateSpellAlternatives(const class rtl::OUString &,struct o3tl::strong_int<unsigned short, struct LanguageTypeTag>,short,const class cpo::uno::Sequence<class rtl::OUString> &)
     short nTypeP
     4
 include/o3tl/string_view.hxx:493
@@ -839,7 +839,7 @@ include/oox/export/drawingml.hxx:381
     int nAlpha
     100000
 include/oox/export/drawingml.hxx:401
-    void oox::drawingml::DrawingML::WriteBlipFill(const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const struct com::sun::star::awt::Size &,const class rtl::OUString &,int)
+    void oox::drawingml::DrawingML::WriteBlipFill(const class cpo::uno::Reference<class com::sun::star::beans::XPropertySet> &,const struct com::sun::star::awt::Size &,const class rtl::OUString &,int)
     int nXmlNamespace
     421
 include/oox/helper/attributelist.hxx:100
@@ -863,7 +863,7 @@ include/oox/helper/binarystreambase.hxx:103
     int nBlockSize
     4
 include/oox/helper/containerhelper.hxx:193
-    class rtl::OUString oox::ContainerHelper::insertByUnusedName(const class com::sun::star::uno::Reference<class com::sun::star::container::XNameContainer> &,const class rtl::OUString &,char16_t,const class cpo::uno::Any &)
+    class rtl::OUString oox::ContainerHelper::insertByUnusedName(const class cpo::uno::Reference<class com::sun::star::container::XNameContainer> &,const class rtl::OUString &,char16_t,const class cpo::uno::Any &)
     char16_t cSeparator
     32
 include/oox/helper/containerhelper.hxx:258
@@ -879,7 +879,7 @@ include/oox/helper/propertyset.hxx:110
     int nPropId
     574
 include/oox/helper/textinputstream.hxx:42
-    void oox::TextInputStream::TextInputStream(const class com::sun::star::uno::Reference<class cpo::uno::XComponentContext> &,const class com::sun::star::uno::Reference<class com::sun::star::io::XInputStream> &,unsigned short)
+    void oox::TextInputStream::TextInputStream(const class cpo::uno::Reference<class cpo::uno::XComponentContext> &,const class cpo::uno::Reference<class com::sun::star::io::XInputStream> &,unsigned short)
     unsigned short eTextEnc
     76
 include/oox/mathml/importutils.hxx:123
@@ -887,7 +887,7 @@ include/oox/mathml/importutils.hxx:123
      ###1
     1644043
 include/oox/mathml/importutils.hxx:136
-    void oox::formulaimport::XmlStream::Tag::Tag(int,const class com::sun::star::uno::Reference<class com::sun::star::xml::sax::XFastAttributeList> &)
+    void oox::formulaimport::XmlStream::Tag::Tag(int,const class cpo::uno::Reference<class com::sun::star::xml::sax::XFastAttributeList> &)
     int token
     -1
 include/oox/mathml/importutils.hxx:151
@@ -963,7 +963,7 @@ include/sfx2/fcontnr.hxx:109
     enum SfxFilterFlags nNotMask
     393216
 include/sfx2/frame.hxx:192
-    void SfxUnoFrameItem::SfxUnoFrameItem(unsigned short,class com::sun::star::uno::Reference<class com::sun::star::frame::XFrame>)
+    void SfxUnoFrameItem::SfxUnoFrameItem(unsigned short,class cpo::uno::Reference<class com::sun::star::frame::XFrame>)
     unsigned short nWhich
     6516
 include/sfx2/linkmgr.hxx:64
@@ -1123,7 +1123,7 @@ include/svx/dbaexchange.hxx:58
     enum ColumnTransferFormatFlags nFormats
     7
 include/svx/dbaexchange.hxx:98
-    void svx::OColumnTransferable::OColumnTransferable(const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class com::sun::star::uno::Reference<class com::sun::star::sdbc::XConnection> &,enum ColumnTransferFormatFlags)
+    void svx::OColumnTransferable::OColumnTransferable(const class cpo::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class rtl::OUString &,const class cpo::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class cpo::uno::Reference<class com::sun::star::sdbc::XConnection> &,enum ColumnTransferFormatFlags)
     enum ColumnTransferFormatFlags _nFormats
     5
 include/svx/dlgctrl.hxx:104
@@ -1143,11 +1143,11 @@ include/svx/fmgridcl.hxx:40
     long nWinBits
     1051648
 include/svx/fmview.hxx:90
-    void FmFormView::createControlLabelPair(const class OutputDevice *,int,int,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class com::sun::star::uno::Reference<class com::sun::star::util::XNumberFormats> &,enum SdrObjKind,enum SdrInventor,enum SdrObjKind,class SdrModel &,class rtl::Reference<class SdrUnoObj> &,class rtl::Reference<class SdrUnoObj> &)
+    void FmFormView::createControlLabelPair(const class OutputDevice *,int,int,const class cpo::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class cpo::uno::Reference<class com::sun::star::util::XNumberFormats> &,enum SdrObjKind,enum SdrInventor,enum SdrObjKind,class SdrModel &,class rtl::Reference<class SdrUnoObj> &,class rtl::Reference<class SdrUnoObj> &)
     enum SdrInventor _nInventor
     827609170
 include/svx/fmview.hxx:90
-    void FmFormView::createControlLabelPair(const class OutputDevice *,int,int,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class com::sun::star::uno::Reference<class com::sun::star::util::XNumberFormats> &,enum SdrObjKind,enum SdrInventor,enum SdrObjKind,class SdrModel &,class rtl::Reference<class SdrUnoObj> &,class rtl::Reference<class SdrUnoObj> &)
+    void FmFormView::createControlLabelPair(const class OutputDevice *,int,int,const class cpo::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class cpo::uno::Reference<class com::sun::star::util::XNumberFormats> &,enum SdrObjKind,enum SdrInventor,enum SdrObjKind,class SdrModel &,class rtl::Reference<class SdrUnoObj> &,class rtl::Reference<class SdrUnoObj> &)
     enum SdrObjKind _nLabelObjectID
     501
 include/svx/fontworkgallery.hxx:65
@@ -1259,51 +1259,51 @@ include/test/a11y/accessibletestbase.hxx:248
     unsigned long nTimeoutMs
     3000
 include/test/helper/form.hxx:40
-    class com::sun::star::uno::Reference<class com::sun::star::drawing::XControlShape> createCommandButton(const class com::sun::star::uno::Reference<class com::sun::star::lang::XComponent> &,const int,const int,const int,const int)
+    class cpo::uno::Reference<class com::sun::star::drawing::XControlShape> createCommandButton(const class cpo::uno::Reference<class com::sun::star::lang::XComponent> &,const int,const int,const int,const int)
     const int nX
     15000
 include/test/helper/form.hxx:40
-    class com::sun::star::uno::Reference<class com::sun::star::drawing::XControlShape> createCommandButton(const class com::sun::star::uno::Reference<class com::sun::star::lang::XComponent> &,const int,const int,const int,const int)
+    class cpo::uno::Reference<class com::sun::star::drawing::XControlShape> createCommandButton(const class cpo::uno::Reference<class com::sun::star::lang::XComponent> &,const int,const int,const int,const int)
     const int nY
     10000
 include/test/helper/form.hxx:40
-    class com::sun::star::uno::Reference<class com::sun::star::drawing::XControlShape> createCommandButton(const class com::sun::star::uno::Reference<class com::sun::star::lang::XComponent> &,const int,const int,const int,const int)
+    class cpo::uno::Reference<class com::sun::star::drawing::XControlShape> createCommandButton(const class cpo::uno::Reference<class com::sun::star::lang::XComponent> &,const int,const int,const int,const int)
     const int nHeight
     3000
 include/test/helper/form.hxx:40
-    class com::sun::star::uno::Reference<class com::sun::star::drawing::XControlShape> createCommandButton(const class com::sun::star::uno::Reference<class com::sun::star::lang::XComponent> &,const int,const int,const int,const int)
+    class cpo::uno::Reference<class com::sun::star::drawing::XControlShape> createCommandButton(const class cpo::uno::Reference<class com::sun::star::lang::XComponent> &,const int,const int,const int,const int)
     const int nWidth
     4500
 include/test/helper/shape.hxx:55
-    class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> createLine(const class com::sun::star::uno::Reference<class com::sun::star::lang::XComponent> &,const int,const int,const int,const int)
+    class cpo::uno::Reference<class com::sun::star::drawing::XShape> createLine(const class cpo::uno::Reference<class com::sun::star::lang::XComponent> &,const int,const int,const int,const int)
     const int nX
     7500
 include/test/helper/shape.hxx:55
-    class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> createLine(const class com::sun::star::uno::Reference<class com::sun::star::lang::XComponent> &,const int,const int,const int,const int)
+    class cpo::uno::Reference<class com::sun::star::drawing::XShape> createLine(const class cpo::uno::Reference<class com::sun::star::lang::XComponent> &,const int,const int,const int,const int)
     const int nY
     10000
 include/test/helper/shape.hxx:55
-    class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> createLine(const class com::sun::star::uno::Reference<class com::sun::star::lang::XComponent> &,const int,const int,const int,const int)
+    class cpo::uno::Reference<class com::sun::star::drawing::XShape> createLine(const class cpo::uno::Reference<class com::sun::star::lang::XComponent> &,const int,const int,const int,const int)
     const int nWidth
     5000
 include/test/helper/shape.hxx:55
-    class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> createLine(const class com::sun::star::uno::Reference<class com::sun::star::lang::XComponent> &,const int,const int,const int,const int)
+    class cpo::uno::Reference<class com::sun::star::drawing::XShape> createLine(const class cpo::uno::Reference<class com::sun::star::lang::XComponent> &,const int,const int,const int,const int)
     const int nHeight
     3500
 include/test/helper/shape.hxx:69
-    class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> createRectangle(const class com::sun::star::uno::Reference<class com::sun::star::lang::XComponent> &,const int,const int,const int,const int)
+    class cpo::uno::Reference<class com::sun::star::drawing::XShape> createRectangle(const class cpo::uno::Reference<class com::sun::star::lang::XComponent> &,const int,const int,const int,const int)
     const int nY
     5000
 include/test/helper/shape.hxx:69
-    class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> createRectangle(const class com::sun::star::uno::Reference<class com::sun::star::lang::XComponent> &,const int,const int,const int,const int)
+    class cpo::uno::Reference<class com::sun::star::drawing::XShape> createRectangle(const class cpo::uno::Reference<class com::sun::star::lang::XComponent> &,const int,const int,const int,const int)
     const int nWidth
     5000
 include/test/unoapi_property_testers.hxx:85
-    void testLongOptionalProperty(const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class rtl::OUString &,const int &)
+    void testLongOptionalProperty(const class cpo::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class rtl::OUString &,const int &)
     const int & nValue
     42
 include/test/unoapi_property_testers.hxx:166
-    void testColorProperty(const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class rtl::OUString &,const int &)
+    void testColorProperty(const class cpo::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class rtl::OUString &,const int &)
     const int & rValue
     305419896
 include/toolkit/controls/unocontrolbase.hxx:47
@@ -1363,11 +1363,11 @@ include/tools/urlobj.hxx:271
     unsigned short eCharset
     76
 include/tools/urlobj.hxx:276
-    class rtl::OUString INetURLObject::getAbbreviated(const class com::sun::star::uno::Reference<class com::sun::star::util::XStringWidth> &,int,enum INetURLObject::DecodeMechanism,unsigned short) const
+    class rtl::OUString INetURLObject::getAbbreviated(const class cpo::uno::Reference<class com::sun::star::util::XStringWidth> &,int,enum INetURLObject::DecodeMechanism,unsigned short) const
     enum INetURLObject::DecodeMechanism eMechanism
     3
 include/tools/urlobj.hxx:276
-    class rtl::OUString INetURLObject::getAbbreviated(const class com::sun::star::uno::Reference<class com::sun::star::util::XStringWidth> &,int,enum INetURLObject::DecodeMechanism,unsigned short) const
+    class rtl::OUString INetURLObject::getAbbreviated(const class cpo::uno::Reference<class com::sun::star::util::XStringWidth> &,int,enum INetURLObject::DecodeMechanism,unsigned short) const
     unsigned short eCharset
     76
 include/tools/urlobj.hxx:294
@@ -1503,11 +1503,11 @@ include/ucbhelper/simpleinteractionrequest.hxx:79
     const enum ContinuationFlags nContinuations
     12
 include/unotools/confignode.hxx:239
-    class utl::OConfigurationTreeRoot utl::OConfigurationTreeRoot::tryCreateWithComponentContext(const class com::sun::star::uno::Reference<class cpo::uno::XComponentContext> &,const class rtl::OUString &,int,enum utl::OConfigurationTreeRoot::CREATION_MODE)
+    class utl::OConfigurationTreeRoot utl::OConfigurationTreeRoot::tryCreateWithComponentContext(const class cpo::uno::Reference<class cpo::uno::XComponentContext> &,const class rtl::OUString &,int,enum utl::OConfigurationTreeRoot::CREATION_MODE)
     int _nDepth
     -1
 include/unotools/configvaluecontainer.hxx:83
-    void utl::OConfigurationValueContainer::OConfigurationValueContainer(const class com::sun::star::uno::Reference<class cpo::uno::XComponentContext> &,class std::mutex &,const class rtl::OUString &,const int)
+    void utl::OConfigurationValueContainer::OConfigurationValueContainer(const class cpo::uno::Reference<class cpo::uno::XComponentContext> &,class std::mutex &,const class rtl::OUString &,const int)
     const int _nLevels
     2
 include/unotools/fontdefs.hxx:43
@@ -1683,11 +1683,11 @@ include/vcl/wrkwin.hxx:67
     long nStyle
     1312
 include/xmloff/txtparae.hxx:356
-    void XMLTextParagraphExport::exportListAndSectionChange(class com::sun::star::uno::Reference<class com::sun::star::text::XTextSection> &,class MultiPropertySetHelper &,short,const class com::sun::star::uno::Reference<class com::sun::star::text::XTextContent> &,const class XMLTextNumRuleInfo &,const class XMLTextNumRuleInfo &,_Bool)
+    void XMLTextParagraphExport::exportListAndSectionChange(class cpo::uno::Reference<class com::sun::star::text::XTextSection> &,class MultiPropertySetHelper &,short,const class cpo::uno::Reference<class com::sun::star::text::XTextContent> &,const class XMLTextNumRuleInfo &,const class XMLTextNumRuleInfo &,_Bool)
     short nTextSectionId
     5
 include/xmloff/txtparae.hxx:392
-    void XMLTextParagraphExport::Add(enum XmlStyleFamily,class MultiPropertySetHelper &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &)
+    void XMLTextParagraphExport::Add(enum XmlStyleFamily,class MultiPropertySetHelper &,const class cpo::uno::Reference<class com::sun::star::beans::XPropertySet> &)
     enum XmlStyleFamily nFamily
     100
 include/xmloff/xmlaustp.hxx:94
@@ -1707,7 +1707,7 @@ include/xmloff/xmlerror.hxx:135
     int nIdMask
     1073741824
 include/xmloff/xmlexp.hxx:275
-    void SvXMLExport::SvXMLExport(const class com::sun::star::uno::Reference<class cpo::uno::XComponentContext> &,class rtl::OUString,class rtl::OUString,const short,const class com::sun::star::uno::Reference<class com::sun::star::xml::sax::XDocumentHandler> &)
+    void SvXMLExport::SvXMLExport(const class cpo::uno::Reference<class cpo::uno::XComponentContext> &,class rtl::OUString,class rtl::OUString,const short,const class cpo::uno::Reference<class com::sun::star::xml::sax::XDocumentHandler> &)
     const short eDefaultMeasureUnit
     3
 include/xmloff/xmlexp.hxx:511
@@ -2027,7 +2027,7 @@ sc/inc/zforauto.hxx:38
     unsigned short eByteStrSet
     76
 sc/qa/extras/new_cond_format.cxx:365
-    void testColorScaleEntries(const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,int,int,const class rtl::OUString &,class Color,int,const class rtl::OUString &,class Color,int,const class rtl::OUString &,class Color)
+    void testColorScaleEntries(const class cpo::uno::Reference<class com::sun::star::beans::XPropertySet> &,int,int,const class rtl::OUString &,class Color,int,const class rtl::OUString &,class Color,int,const class rtl::OUString &,class Color)
     int nMediumType
     2
 sc/qa/extras/scpdfexport.cxx:55
@@ -2295,7 +2295,7 @@ sc/source/filter/xml/xmlfonte.cxx:41
     unsigned char nIdCount
     3
 sc/source/filter/xml/xmlstyli.cxx:272
-    void (anonymous namespace)::XMLTableCellPropsContext::XMLTableCellPropsContext(class SvXMLImport &,int,const class com::sun::star::uno::Reference<class com::sun::star::xml::sax::XFastAttributeList> &,unsigned int,class std::vector<struct XMLPropertyState> &,const class rtl::Reference<class SvXMLImportPropertyMapper> &)
+    void (anonymous namespace)::XMLTableCellPropsContext::XMLTableCellPropsContext(class SvXMLImport &,int,const class cpo::uno::Reference<class com::sun::star::xml::sax::XFastAttributeList> &,unsigned int,class std::vector<struct XMLPropertyState> &,const class rtl::Reference<class SvXMLImportPropertyMapper> &)
     unsigned int nFamily
     196608
 sc/source/ui/Accessibility/AccessibleCsvControl.cxx:217
@@ -2407,7 +2407,7 @@ sc/source/ui/unoobj/cellsuno.cxx:1184
     const enum formula::FormulaGrammar::Grammar eGrammar
     16908294
 sc/source/ui/vba/vbarange.hxx:167
-    class com::sun::star::uno::Reference<class ooo::vba::excel::XRange> ScVbaRange::getRangeObjectForName(const class com::sun::star::uno::Reference<class cpo::uno::XComponentContext> &,const class rtl::OUString &,class ScDocShell *,enum formula::FormulaGrammar::AddressConvention)
+    class cpo::uno::Reference<class ooo::vba::excel::XRange> ScVbaRange::getRangeObjectForName(const class cpo::uno::Reference<class cpo::uno::XComponentContext> &,const class rtl::OUString &,class ScDocShell *,enum formula::FormulaGrammar::AddressConvention)
     enum formula::FormulaGrammar::AddressConvention eConv
     3
 sc/source/ui/view/printfun.cxx:79
@@ -2819,7 +2819,7 @@ sw/inc/tblafmt.hxx:249
     unsigned short fileVersion
     5050
 sw/inc/unotextcursor.hxx:98
-    void SwXTextCursor::SwXTextCursor(class com::sun::star::uno::Reference<class com::sun::star::text::XText>,const class SwPaM &,const enum CursorType)
+    void SwXTextCursor::SwXTextCursor(class cpo::uno::Reference<class com::sun::star::text::XText>,const class SwPaM &,const enum CursorType)
     const enum CursorType eType
     7
 sw/qa/core/Test-BigPtrArray.cxx:53
@@ -2915,7 +2915,7 @@ sw/source/core/inc/UndoNumbering.hxx:39
     enum SwUndoId nUndoId
     10
 sw/source/core/inc/unocontentcontrol.hxx:60
-    void SwXContentControl::AttachImpl(const class com::sun::star::uno::Reference<class com::sun::star::text::XTextRange> &,unsigned short)
+    void SwXContentControl::AttachImpl(const class cpo::uno::Reference<class com::sun::star::text::XTextRange> &,unsigned short)
     unsigned short nWhich
     56
 sw/source/core/layout/dbg_lay.cxx:495
@@ -3011,7 +3011,7 @@ sw/source/filter/ww8/ww8scan.hxx:1535
     unsigned char nVersion
     8
 sw/source/filter/xml/xmlbrshi.hxx:58
-    void SwXMLBrushItemImportContext::SwXMLBrushItemImportContext(class SvXMLImport &,int,const class com::sun::star::uno::Reference<class com::sun::star::xml::sax::XFastAttributeList> &,const class SvXMLUnitConverter &,unsigned short)
+    void SwXMLBrushItemImportContext::SwXMLBrushItemImportContext(class SvXMLImport &,int,const class cpo::uno::Reference<class com::sun::star::xml::sax::XFastAttributeList> &,const class SvXMLUnitConverter &,unsigned short)
     unsigned short nWhich
     111
 sw/source/uibase/inc/frmmgr.hxx:121
@@ -3387,7 +3387,7 @@ xmloff/inc/xmlbahdl.hxx:135
     signed char nB
     4
 xmloff/inc/XMLBase64Export.hxx:38
-    _Bool XMLBase64Export::exportElement(const class com::sun::star::uno::Reference<class com::sun::star::io::XInputStream> &,enum xmloff::token::XMLTokenEnum)
+    _Bool XMLBase64Export::exportElement(const class cpo::uno::Reference<class com::sun::star::io::XInputStream> &,enum xmloff::token::XMLTokenEnum)
     enum xmloff::token::XMLTokenEnum eName
     2159
 xmloff/source/chart/transporttypes.hxx:218
@@ -3435,11 +3435,11 @@ xmloff/source/forms/property_description.hxx:81
     const unsigned short i_namespacePrefix
     15
 xmloff/source/script/xmlbasicscript.hxx:33
-    _Bool xmloff::BasicElementBase::getBoolAttr(_Bool *,int,const class com::sun::star::uno::Reference<class com::sun::star::xml::sax::XFastAttributeList> &)
+    _Bool xmloff::BasicElementBase::getBoolAttr(_Bool *,int,const class cpo::uno::Reference<class com::sun::star::xml::sax::XFastAttributeList> &)
     int nToken
     1968759
 xmloff/source/text/XMLIndexMarkExport.cxx:178
-    void lcl_ExportPropertyBool(class SvXMLExport &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class rtl::OUString &,enum xmloff::token::XMLTokenEnum,class cpo::uno::Any &)
+    void lcl_ExportPropertyBool(class SvXMLExport &,const class cpo::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class rtl::OUString &,enum xmloff::token::XMLTokenEnum,class cpo::uno::Any &)
     enum xmloff::token::XMLTokenEnum eToken
     2270
 xmloff/source/transform/TransformerContext.hxx:57

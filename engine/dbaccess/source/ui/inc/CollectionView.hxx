@@ -31,8 +31,8 @@ namespace dbaui
     */
     class OCollectionView : public weld::GenericDialogController
     {
-        css::uno::Reference< css::ucb::XContent>                  m_xContent;
-        css::uno::Reference< cpo::uno::XComponentContext >        m_xContext;
+        cpo::uno::Reference< css::ucb::XContent>                  m_xContent;
+        cpo::uno::Reference< cpo::uno::XComponentContext >        m_xContext;
         rtl::Reference< ::ucbhelper::CommandEnvironment >         m_xCmdEnv;
         bool                   m_bCreateForm;
 
@@ -54,11 +54,11 @@ namespace dbaui
         void Initialize();
     public:
         OCollectionView(weld::Window * pParent,
-                        const css::uno::Reference< css::ucb::XContent>& _xContent,
+                        const cpo::uno::Reference< css::ucb::XContent>& _xContent,
                         const OUString& _sDefaultName,
-                        css::uno::Reference< cpo::uno::XComponentContext > _xContext);
+                        cpo::uno::Reference< cpo::uno::XComponentContext > _xContext);
         virtual ~OCollectionView() override;
-        const css::uno::Reference< css::ucb::XContent>& getSelectedFolder() const { return m_xContent;}
+        const cpo::uno::Reference< css::ucb::XContent>& getSelectedFolder() const { return m_xContent;}
         OUString getName() const;
     };
 }   // namespace dbaui

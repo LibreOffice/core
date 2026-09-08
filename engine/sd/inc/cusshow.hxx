@@ -39,7 +39,7 @@ private:
 
 public:
     SdCustomShow();
-    SdCustomShow(css::uno::Reference<cpo::uno::XInterface> const& xShow);
+    SdCustomShow(cpo::uno::Reference<cpo::uno::XInterface> const& xShow);
 
     ~SdCustomShow();
 
@@ -59,7 +59,7 @@ public:
     void SetName(const OUString& rName);
     const OUString& GetName() const { return aName; }
 
-    css::uno::Reference<cpo::uno::XInterface> getUnoCustomShow();
+    cpo::uno::Reference<cpo::uno::XInterface> getUnoCustomShow();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

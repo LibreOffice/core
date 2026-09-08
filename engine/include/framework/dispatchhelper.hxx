@@ -50,7 +50,7 @@ class UNLESS_MERGELIBS(FWK_DLLPUBLIC) DispatchHelper final
 
     /** global uno service manager.
             Can be used to create own needed services. */
-    css::uno::Reference<cpo::uno::XComponentContext> m_xContext;
+    cpo::uno::Reference<cpo::uno::XComponentContext> m_xContext;
 
     /** used to wait for asynchronous listener callbacks. */
     std::condition_variable m_aBlock;
@@ -58,14 +58,14 @@ class UNLESS_MERGELIBS(FWK_DLLPUBLIC) DispatchHelper final
 
     cpo::uno::Any m_aResult;
 
-    css::uno::Reference<cpo::uno::XInterface> m_xBroadcaster;
+    cpo::uno::Reference<cpo::uno::XInterface> m_xBroadcaster;
 
     // interface
 
 public:
     // ctor/dtor
 
-    DispatchHelper(css::uno::Reference<cpo::uno::XComponentContext> xContext);
+    DispatchHelper(cpo::uno::Reference<cpo::uno::XComponentContext> xContext);
     virtual ~DispatchHelper() override;
 
     // XServiceInfo
@@ -75,14 +75,14 @@ public:
 
     // XDispatchHelper
     virtual cpo::uno::Any
-    executeDispatch(const css::uno::Reference<css::frame::XDispatchProvider>& xDispatchProvider,
+    executeDispatch(const cpo::uno::Reference<css::frame::XDispatchProvider>& xDispatchProvider,
                     const OUString& sURL, const OUString& sTargetFrameName, sal_Int32 nSearchFlags,
                     const cpo::uno::Sequence<css::beans::PropertyValue>& lArguments) override;
 
     // not a public XDispatchHelper-method, need in sfx2/source/control/statcach.cxx for extensions
     /// @throws cpo::uno::RuntimeException
     const cpo::uno::Any&
-    executeDispatch(const css::uno::Reference<css::frame::XDispatch>& xDispatch,
+    executeDispatch(const cpo::uno::Reference<css::frame::XDispatch>& xDispatch,
                     const css::util::URL& aURL, bool SyncronFlag,
                     const cpo::uno::Sequence<css::beans::PropertyValue>& lArguments);
 

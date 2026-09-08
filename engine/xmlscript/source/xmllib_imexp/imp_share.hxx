@@ -47,7 +47,7 @@ inline sal_Int32 toInt32( std::u16string_view rStr )
 }
 inline bool getBoolAttr(
     bool * pRet, OUString const & rAttrName,
-    css::uno::Reference< css::xml::input::XAttributes > const & xAttributes, sal_Int32 uid )
+    cpo::uno::Reference< css::xml::input::XAttributes > const & xAttributes, sal_Int32 uid )
 {
     OUString aValue(
         xAttributes->getValueByUidName( uid, rAttrName ) );
@@ -65,7 +65,7 @@ inline bool getBoolAttr(
         }
         else
         {
-            throw css::xml::sax::SAXException(rAttrName + ": no boolean value (true|false)!", css::uno::Reference< cpo::uno::XInterface >(), cpo::uno::Any() );
+            throw css::xml::sax::SAXException(rAttrName + ": no boolean value (true|false)!", cpo::uno::Reference< cpo::uno::XInterface >(), cpo::uno::Any() );
         }
     }
     return false;
@@ -73,7 +73,7 @@ inline bool getBoolAttr(
 
 inline bool getStringAttr(
     OUString * pRet, OUString const & rAttrName,
-    css::uno::Reference< css::xml::input::XAttributes > const & xAttributes, sal_Int32 uid )
+    cpo::uno::Reference< css::xml::input::XAttributes > const & xAttributes, sal_Int32 uid )
 {
     *pRet = xAttributes->getValueByUidName( uid, rAttrName );
     return (!pRet->isEmpty());
@@ -81,7 +81,7 @@ inline bool getStringAttr(
 
 inline bool getLongAttr(
     sal_Int32 * pRet, OUString const & rAttrName,
-    css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
+    cpo::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
     sal_Int32 uid )
 {
     OUString aValue(
@@ -130,15 +130,15 @@ public:
 
     // XRoot
     virtual void startDocument(
-        css::uno::Reference< css::xml::input::XNamespaceMapping > const & xNamespaceMapping ) override;
+        cpo::uno::Reference< css::xml::input::XNamespaceMapping > const & xNamespaceMapping ) override;
     virtual void endDocument() override;
     virtual void processingInstruction(
         OUString const & rTarget, OUString const & rData ) override;
     virtual void setDocumentLocator(
-        css::uno::Reference< css::xml::sax::XLocator > const & xLocator ) override;
-    virtual css::uno::Reference< css::xml::input::XElement > startRootElement(
+        cpo::uno::Reference< css::xml::sax::XLocator > const & xLocator ) override;
+    virtual cpo::uno::Reference< css::xml::input::XElement > startRootElement(
         sal_Int32 nUid, OUString const & rLocalName,
-        css::uno::Reference< css::xml::input::XAttributes > const & xAttributes ) override;
+        cpo::uno::Reference< css::xml::input::XAttributes > const & xAttributes ) override;
 };
 
 class LibElementBase
@@ -149,29 +149,29 @@ protected:
     rtl::Reference<LibElementBase> mxParent;
 private:
     OUString const _aLocalName;
-    css::uno::Reference< css::xml::input::XAttributes > _xAttributes;
+    cpo::uno::Reference< css::xml::input::XAttributes > _xAttributes;
 
 public:
     LibElementBase(
         OUString aLocalName,
-        css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
+        cpo::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         LibElementBase * pParent, LibraryImport * pImport );
     virtual ~LibElementBase() override;
 
     // XElement
-    virtual css::uno::Reference< css::xml::input::XElement > getParent() override;
+    virtual cpo::uno::Reference< css::xml::input::XElement > getParent() override;
     virtual OUString getLocalName() override;
     virtual sal_Int32 getUid() override;
-    virtual css::uno::Reference< css::xml::input::XAttributes > getAttributes() override;
+    virtual cpo::uno::Reference< css::xml::input::XAttributes > getAttributes() override;
     virtual void ignorableWhitespace(
         OUString const & rWhitespaces ) override;
     virtual void characters( OUString const & rChars ) override;
     virtual void processingInstruction(
         OUString const & rTarget, OUString const & rData ) override;
     virtual void endElement() override;
-    virtual css::uno::Reference< css::xml::input::XElement > startChildElement(
+    virtual cpo::uno::Reference< css::xml::input::XElement > startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
-        css::uno::Reference< css::xml::input::XAttributes > const & xAttributes ) override;
+        cpo::uno::Reference< css::xml::input::XAttributes > const & xAttributes ) override;
 };
 
 class LibrariesElement : public LibElementBase
@@ -181,14 +181,14 @@ class LibrariesElement : public LibElementBase
     std::vector< LibDescriptor > mLibDescriptors;
 
 public:
-    virtual css::uno::Reference< css::xml::input::XElement > startChildElement(
+    virtual cpo::uno::Reference< css::xml::input::XElement > startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
-        css::uno::Reference< css::xml::input::XAttributes > const & xAttributes ) override;
+        cpo::uno::Reference< css::xml::input::XAttributes > const & xAttributes ) override;
     virtual void endElement() override;
 
     LibrariesElement(
         OUString const & rLocalName,
-        css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
+        cpo::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         LibraryImport * pImport )
         : LibElementBase( rLocalName, xAttributes, nullptr, pImport )
         {}
@@ -200,14 +200,14 @@ class LibraryElement : public LibElementBase
 
 public:
 
-    virtual css::uno::Reference< css::xml::input::XElement > startChildElement(
+    virtual cpo::uno::Reference< css::xml::input::XElement > startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
-        css::uno::Reference< css::xml::input::XAttributes > const & xAttributes ) override;
+        cpo::uno::Reference< css::xml::input::XAttributes > const & xAttributes ) override;
     virtual void endElement() override;
 
     LibraryElement(
         OUString const & rLocalName,
-        css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
+        cpo::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         LibElementBase * pParent, LibraryImport * pImport )
         : LibElementBase( rLocalName, xAttributes, pParent, pImport )
     {}

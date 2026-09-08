@@ -31,10 +31,10 @@ class ScVbaAxes : public ScVbaAxes_BASE
 {
     rtl::Reference< ScVbaChart > moChartParent; // not the true parent I guess
 public:
-    ScVbaAxes( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext > & xContext, const rtl::Reference< ScVbaChart >& xChart );
+    ScVbaAxes( const cpo::uno::Reference< ov::XHelperInterface >& xParent, const cpo::uno::Reference< cpo::uno::XComponentContext > & xContext, const rtl::Reference< ScVbaChart >& xChart );
     // XEnumerationAccess
     virtual cpo::uno::Type SAL_CALL getElementType() override;
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
+    virtual cpo::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
     // XCollection
     virtual cpo::uno::Any SAL_CALL Item( const cpo::uno::Any& aIndex, const cpo::uno::Any& aIndex2 ) override;
     virtual cpo::uno::Any createCollectionObject(const cpo::uno::Any&) override;
@@ -43,7 +43,7 @@ public:
     virtual cpo::uno::Sequence<OUString> getServiceNames() override;
     /// @throws cpo::uno::RuntimeException
     /// @throws css::script::BasicErrorException
-    static css::uno::Reference< ov::excel::XAxis > createAxis( const css::uno::Reference< ov::excel::XChart >& xChart, const css::uno::Reference< cpo::uno::XComponentContext >& xContext,  sal_Int32 nType, sal_Int32 nAxisGroup );
+    static cpo::uno::Reference< ov::excel::XAxis > createAxis( const cpo::uno::Reference< ov::excel::XChart >& xChart, const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,  sal_Int32 nType, sal_Int32 nAxisGroup );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

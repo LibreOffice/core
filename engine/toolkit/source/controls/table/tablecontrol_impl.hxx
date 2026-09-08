@@ -290,7 +290,7 @@ namespace svt::table
 
         // A11Y
         const rtl::Reference<accessibility::AccessibleGridControl>&
-        getAccessible(const css::uno::Reference<css::accessibility::XAccessible>& rxParent);
+        getAccessible(const cpo::uno::Reference<css::accessibility::XAccessible>& rxParent);
         void            disposeAccessible();
 
         // ITableModelListener

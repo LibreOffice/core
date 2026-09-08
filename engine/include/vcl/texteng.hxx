@@ -37,7 +37,7 @@
 #include <vcl/vclenum.hxx>
 
 #include <com/sun/star/lang/Locale.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 class TextDoc;
 class TextView;
@@ -94,8 +94,8 @@ class VCL_DLLPUBLIC TextEngine : public SfxBroadcaster
     std::unique_ptr<TEIMEInfos> mpIMEInfos;
 
     css::lang::Locale   maLocale;
-    css::uno::Reference< css::i18n::XBreakIterator > mxBreakIterator;
-    css::uno::Reference < css::i18n::XExtendedInputSequenceChecker > mxISC;
+    cpo::uno::Reference< css::i18n::XBreakIterator > mxBreakIterator;
+    cpo::uno::Reference < css::i18n::XExtendedInputSequenceChecker > mxISC;
 
     tools::Rectangle           maInvalidRect;
 
@@ -144,7 +144,7 @@ class VCL_DLLPUBLIC TextEngine : public SfxBroadcaster
     // gets not exported. First and second parameter swapped to have a different signature.
     SAL_DLLPRIVATE TextPaM  ImpInsertText( sal_Unicode c, const TextSelection& rSel, bool bOverwrite, bool bIsUserInput = false );
     // some other new functions needed that must not be exported to remain compatible
-    SAL_DLLPRIVATE css::uno::Reference< css::i18n::XExtendedInputSequenceChecker > const & GetInputSequenceChecker();
+    SAL_DLLPRIVATE cpo::uno::Reference< css::i18n::XExtendedInputSequenceChecker > const & GetInputSequenceChecker();
     SAL_DLLPRIVATE bool IsInputSequenceCheckingRequired( sal_Unicode c, const TextSelection& rCurSel ) const;
 
     // broadcast or adjust selections
@@ -289,7 +289,7 @@ public:
 
     SAL_DLLPRIVATE void                SetLocale( const css::lang::Locale& rLocale );
     css::lang::Locale const & GetLocale();
-    SAL_DLLPRIVATE css::uno::Reference< css::i18n::XBreakIterator > const & GetBreakIterator();
+    SAL_DLLPRIVATE cpo::uno::Reference< css::i18n::XBreakIterator > const & GetBreakIterator();
 
     static bool         DoesKeyChangeText( const KeyEvent& rKeyEvent );
     SAL_DLLPRIVATE static bool         IsSimpleCharInput( const KeyEvent& rKeyEvent );

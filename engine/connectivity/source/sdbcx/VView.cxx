@@ -28,7 +28,7 @@
 using namespace connectivity;
 using namespace connectivity::sdbcx;
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
@@ -37,7 +37,7 @@ IMPLEMENT_SERVICE_INFO(OView,u"com.sun.star.sdbcx.VView"_ustr,u"com.sun.star.sdb
 
 OView::OView(bool _bCase,
             const OUString& Name,
-            css::uno::Reference< css::sdbc::XDatabaseMetaData >  _xMetaData,
+            cpo::uno::Reference< css::sdbc::XDatabaseMetaData >  _xMetaData,
             OUString Command,
             OUString SchemaName,
             OUString CatalogName) : ODescriptor(::comphelper::OMutexAndBroadcastHelper::m_aBHelper,_bCase)
@@ -52,7 +52,7 @@ OView::OView(bool _bCase,
     construct();
 }
 
-OView::OView(bool _bCase, css::uno::Reference< css::sdbc::XDatabaseMetaData > _xMetaData)
+OView::OView(bool _bCase, cpo::uno::Reference< css::sdbc::XDatabaseMetaData > _xMetaData)
     : ODescriptor(::comphelper::OMutexAndBroadcastHelper::m_aBHelper, _bCase, true)
     ,m_xMetaData(std::move(_xMetaData))
 {
@@ -110,7 +110,7 @@ OUString OView::getName()
     return sComposedName;
 }
 
-css::uno::Reference< css::beans::XPropertySetInfo > OView::getPropertySetInfo(  )
+cpo::uno::Reference< css::beans::XPropertySetInfo > OView::getPropertySetInfo(  )
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }

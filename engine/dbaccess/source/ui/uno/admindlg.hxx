@@ -31,7 +31,7 @@ class ODataSourcePropertyDialog final
 {
 public:
 
-    explicit ODataSourcePropertyDialog(const css::uno::Reference< cpo::uno::XComponentContext >& _rxORB);
+    explicit ODataSourcePropertyDialog(const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxORB);
 
     // XTypeProvider
     virtual cpo::uno::Sequence<sal_Int8> getImplementationId(  ) override;
@@ -41,14 +41,14 @@ public:
     virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
     // XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo>  getPropertySetInfo() override;
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo>  getPropertySetInfo() override;
     virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
     // OPropertyArrayUsageHelper
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
 private:
     // OGenericUnoDialog overridables
-    virtual std::unique_ptr<weld::DialogController> createDialog(const css::uno::Reference<css::awt::XWindow>& rParent) override;
+    virtual std::unique_ptr<weld::DialogController> createDialog(const cpo::uno::Reference<css::awt::XWindow>& rParent) override;
 };
 
 }   // namespace dbaui

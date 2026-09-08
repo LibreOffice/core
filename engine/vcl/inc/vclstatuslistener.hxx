@@ -23,15 +23,15 @@
 template <class T> class VclStatusListener final : public cppu::WeakImplHelper < css::frame::XStatusListener>
 {
 public:
-    VclStatusListener(T* widget, const css::uno::Reference<css::frame::XFrame>& rFrame, const OUString& aCommand);
+    VclStatusListener(T* widget, const cpo::uno::Reference<css::frame::XFrame>& rFrame, const OUString& aCommand);
 
 private:
     VclPtr<T> mWidget; /** The widget on which actions are performed */
 
     /** Dispatcher. Need to keep a reference to it as long as this StatusListener exists. */
-    css::uno::Reference<css::frame::XDispatch> mxDispatch;
+    cpo::uno::Reference<css::frame::XDispatch> mxDispatch;
     css::util::URL maCommandURL;
-    css::uno::Reference<css::frame::XFrame> mxFrame;
+    cpo::uno::Reference<css::frame::XFrame> mxFrame;
 
 public:
     void statusChanged(const css::frame::FeatureStateEvent& rEvent) override;
@@ -44,20 +44,20 @@ public:
 };
 
 template<class T>
-VclStatusListener<T>::VclStatusListener(T* widget, const css::uno::Reference<css::frame::XFrame>& rFrame, const OUString& aCommand) :
+VclStatusListener<T>::VclStatusListener(T* widget, const cpo::uno::Reference<css::frame::XFrame>& rFrame, const OUString& aCommand) :
     mWidget(widget),
     mxFrame(rFrame)
 {
-    const css::uno::Reference<cpo::uno::XComponentContext>& xContext = ::comphelper::getProcessComponentContext();
+    const cpo::uno::Reference<cpo::uno::XComponentContext>& xContext = ::comphelper::getProcessComponentContext();
     maCommandURL.Complete = aCommand;
-    css::uno::Reference<css::util::XURLTransformer> xParser = css::util::URLTransformer::create(xContext);
+    cpo::uno::Reference<css::util::XURLTransformer> xParser = css::util::URLTransformer::create(xContext);
     xParser->parseStrict(maCommandURL);
 }
 
 template<class T>
 void VclStatusListener<T>::startListening()
 {
-    css::uno::Reference<css::frame::XDispatchProvider> xDispatchProvider(mxFrame, css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::frame::XDispatchProvider> xDispatchProvider(mxFrame, cpo::uno::UNO_QUERY);
     if (!xDispatchProvider.is())
         return;
 

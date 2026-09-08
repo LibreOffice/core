@@ -43,7 +43,7 @@ VCLXContainer::~VCLXContainer()
 
 
 // css::awt::XVclContainer
-void VCLXContainer::addVclContainerListener( const css::uno::Reference< css::awt::XVclContainerListener >& rxListener )
+void VCLXContainer::addVclContainerListener( const cpo::uno::Reference< css::awt::XVclContainerListener >& rxListener )
 {
     SolarMutexGuard aGuard;
 
@@ -51,7 +51,7 @@ void VCLXContainer::addVclContainerListener( const css::uno::Reference< css::awt
         GetContainerListeners().addInterface( rxListener );
 }
 
-void VCLXContainer::removeVclContainerListener( const css::uno::Reference< css::awt::XVclContainerListener >& rxListener )
+void VCLXContainer::removeVclContainerListener( const cpo::uno::Reference< css::awt::XVclContainerListener >& rxListener )
 {
     SolarMutexGuard aGuard;
 
@@ -59,25 +59,25 @@ void VCLXContainer::removeVclContainerListener( const css::uno::Reference< css::
         GetContainerListeners().removeInterface( rxListener );
 }
 
-cpo::uno::Sequence< css::uno::Reference< css::awt::XWindow > > VCLXContainer::getWindows(  )
+cpo::uno::Sequence< cpo::uno::Reference< css::awt::XWindow > > VCLXContainer::getWindows(  )
 {
     SolarMutexGuard aGuard;
 
     // Request container interface from all children
-    cpo::uno::Sequence< css::uno::Reference< css::awt::XWindow > > aSeq;
+    cpo::uno::Sequence< cpo::uno::Reference< css::awt::XWindow > > aSeq;
     VclPtr<vcl::Window> pWindow = GetWindow();
     if ( pWindow )
     {
         sal_uInt16 nChildren = pWindow->GetChildCount();
         if ( nChildren )
         {
-            aSeq = cpo::uno::Sequence< css::uno::Reference< css::awt::XWindow > >( nChildren );
-            css::uno::Reference< css::awt::XWindow > * pChildRefs = aSeq.getArray();
+            aSeq = cpo::uno::Sequence< cpo::uno::Reference< css::awt::XWindow > >( nChildren );
+            cpo::uno::Reference< css::awt::XWindow > * pChildRefs = aSeq.getArray();
             for ( sal_uInt16 n = 0; n < nChildren; n++ )
             {
                 vcl::Window* pChild = pWindow->GetChild( n );
-                css::uno::Reference< css::awt::XWindowPeer >  xWP = pChild->GetComponentInterface();
-                pChildRefs[n].set(xWP, css::uno::UNO_QUERY);
+                cpo::uno::Reference< css::awt::XWindowPeer >  xWP = pChild->GetComponentInterface();
+                pChildRefs[n].set(xWP, cpo::uno::UNO_QUERY);
             }
         }
     }
@@ -102,13 +102,13 @@ void VCLXContainer::enableDialogControl( bool bEnable )
     }
 }
 
-void VCLXContainer::setTabOrder( const cpo::uno::Sequence< css::uno::Reference< css::awt::XWindow > >& Components, const cpo::uno::Sequence< cpo::uno::Any >& Tabs, bool bGroupControl )
+void VCLXContainer::setTabOrder( const cpo::uno::Sequence< cpo::uno::Reference< css::awt::XWindow > >& Components, const cpo::uno::Sequence< cpo::uno::Any >& Tabs, bool bGroupControl )
 {
     SolarMutexGuard aGuard;
 
     sal_uInt32 nCount = Components.getLength();
     DBG_ASSERT( nCount == static_cast<sal_uInt32>(Tabs.getLength()), "setTabOrder: TabCount != ComponentCount" );
-    const css::uno::Reference< css::awt::XWindow > * pComps = Components.getConstArray();
+    const cpo::uno::Reference< css::awt::XWindow > * pComps = Components.getConstArray();
     const cpo::uno::Any* pTabs = Tabs.getConstArray();
 
     vcl::Window* pPrevWin = nullptr;
@@ -147,12 +147,12 @@ void VCLXContainer::setTabOrder( const cpo::uno::Sequence< css::uno::Reference< 
     }
 }
 
-void VCLXContainer::setGroup( const cpo::uno::Sequence< css::uno::Reference< css::awt::XWindow > >& Components )
+void VCLXContainer::setGroup( const cpo::uno::Sequence< cpo::uno::Reference< css::awt::XWindow > >& Components )
 {
     SolarMutexGuard aGuard;
 
     sal_uInt32 nCount = Components.getLength();
-    const css::uno::Reference< css::awt::XWindow > * pComps = Components.getConstArray();
+    const cpo::uno::Reference< css::awt::XWindow > * pComps = Components.getConstArray();
 
     vcl::Window* pPrevWin = nullptr;
     vcl::Window* pPrevRadio = nullptr;

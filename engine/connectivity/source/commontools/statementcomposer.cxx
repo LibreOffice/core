@@ -39,13 +39,13 @@ namespace dbtools
 {
 
 
-    using ::com::sun::star::uno::Reference;
+    using ::cpo::uno::Reference;
     using ::com::sun::star::sdbc::XConnection;
     using ::com::sun::star::sdb::XSingleSelectQueryComposer;
     using ::com::sun::star::lang::NullPointerException;
     using ::cpo::uno::Exception;
     using ::com::sun::star::lang::XComponent;
-    using ::com::sun::star::uno::UNO_QUERY_THROW;
+    using ::cpo::uno::UNO_QUERY_THROW;
     using ::com::sun::star::sdb::XQueriesSupplier;
     using ::com::sun::star::container::XNameAccess;
     using ::com::sun::star::beans::XPropertySet;
@@ -136,7 +136,7 @@ namespace dbtools
                     {
                         // ask the connection for the query
                         Reference< XQueriesSupplier > xSupplyQueries( _rData.xConnection, UNO_QUERY_THROW );
-                        Reference< XNameAccess >      xQueries( xSupplyQueries->getQueries(), css::uno::UNO_SET_THROW );
+                        Reference< XNameAccess >      xQueries( xSupplyQueries->getQueries(), cpo::uno::UNO_SET_THROW );
 
                         if ( !xQueries->hasByName( _rData.sCommand ) )
                             break;

@@ -47,6 +47,7 @@
 #include <unordered_map>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace ::ooo::vba;
 
 typedef ::std::pair< OUString, ::std::pair< double, double > > VbaTimerInfo;

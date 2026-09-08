@@ -49,7 +49,7 @@
 #include <com/sun/star/datatransfer/clipboard/XClipboardNotifier.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/view/XRenderable.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
@@ -123,8 +123,8 @@
 #include <sfxslots.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 using namespace ::cppu;
@@ -597,7 +597,7 @@ void aboutTextFormatting(std::string msg, const uno::Reference<css::accessibilit
     if (nLength <= 0)
         return;
 
-    css::uno::Reference<css::accessibility::XAccessibleTextAttributes>
+    cpo::uno::Reference<css::accessibility::XAccessibleTextAttributes>
         xAccTextAttr(xAccText, uno::UNO_QUERY);
     cpo::uno::Sequence< OUString > aRequestedAttributes;
 
@@ -1928,7 +1928,7 @@ void SfxViewShell::InitInterface_Impl()
 /** search for a filter name dependent on type and module
  */
 static OUString impl_retrieveFilterNameFromTypeAndModule(
-    const css::uno::Reference< css::container::XContainerQuery >& rContainerQuery,
+    const cpo::uno::Reference< css::container::XContainerQuery >& rContainerQuery,
     const OUString& rType,
     const OUString& rModuleIdentifier,
     const sal_Int32 nFlags )
@@ -1939,7 +1939,7 @@ static OUString impl_retrieveFilterNameFromTypeAndModule(
         { u"DocumentService"_ustr, cpo::uno::Any( rModuleIdentifier ) }
     };
 
-    css::uno::Reference< css::container::XEnumeration > xEnumeration =
+    cpo::uno::Reference< css::container::XEnumeration > xEnumeration =
         rContainerQuery->createSubSetEnumerationByProperties( aQuery );
 
     OUString aFoundFilterName;
@@ -1973,13 +1973,13 @@ enum ETypeFamily
 
 }
 
-static OUString impl_searchFormatTypeForApp(const css::uno::Reference< css::frame::XFrame >& xFrame     ,
+static OUString impl_searchFormatTypeForApp(const cpo::uno::Reference< css::frame::XFrame >& xFrame     ,
                                                   ETypeFamily                                eTypeFamily)
 {
     try
     {
-        const css::uno::Reference< cpo::uno::XComponentContext >&  xContext      (::comphelper::getProcessComponentContext());
-        css::uno::Reference< css::frame::XModuleManager2 >  xModuleManager(css::frame::ModuleManager::create(xContext));
+        const cpo::uno::Reference< cpo::uno::XComponentContext >&  xContext      (::comphelper::getProcessComponentContext());
+        cpo::uno::Reference< css::frame::XModuleManager2 >  xModuleManager(css::frame::ModuleManager::create(xContext));
 
         OUString sModule = xModuleManager->identify(xFrame);
         OUString sType   ;
@@ -2201,12 +2201,12 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         case SID_WEBHTML:
         {
-            css::uno::Reference< lang::XMultiServiceFactory > xSMGR(::comphelper::getProcessServiceFactory(), css::uno::UNO_SET_THROW);
-            css::uno::Reference< cpo::uno::XComponentContext > xContext(::comphelper::getProcessComponentContext(), css::uno::UNO_SET_THROW);
-            css::uno::Reference< css::frame::XFrame >         xFrame( rFrame.GetFrame().GetFrameInterface() );
-            css::uno::Reference< css::frame::XModel >         xModel;
+            cpo::uno::Reference< lang::XMultiServiceFactory > xSMGR(::comphelper::getProcessServiceFactory(), cpo::uno::UNO_SET_THROW);
+            cpo::uno::Reference< cpo::uno::XComponentContext > xContext(::comphelper::getProcessComponentContext(), cpo::uno::UNO_SET_THROW);
+            cpo::uno::Reference< css::frame::XFrame >         xFrame( rFrame.GetFrame().GetFrameInterface() );
+            cpo::uno::Reference< css::frame::XModel >         xModel;
 
-            css::uno::Reference< css::frame::XModuleManager2 > xModuleManager( css::frame::ModuleManager::create(xContext) );
+            cpo::uno::Reference< css::frame::XModuleManager2 > xModuleManager( css::frame::ModuleManager::create(xContext) );
 
             OUString aModule;
             try
@@ -2223,13 +2223,13 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
 
             if ( xFrame.is() )
             {
-                css::uno::Reference< css::frame::XController > xController = xFrame->getController();
+                cpo::uno::Reference< css::frame::XController > xController = xFrame->getController();
                 if ( xController.is() )
                     xModel = xController->getModel();
             }
 
             // We need at least a valid module name and model reference
-            css::uno::Reference< css::frame::XStorable > xStorable( xModel, css::uno::UNO_QUERY );
+            cpo::uno::Reference< css::frame::XStorable > xStorable( xModel, cpo::uno::UNO_QUERY );
             if ( xModel.is() && xStorable.is() )
             {
                 OUString aFilterName;
@@ -2242,9 +2242,9 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                 bool bPrivateProtocol = ( aFileObj.GetProtocol() == INetProtocol::PrivSoffice );
                 bool bHasLocation = !aLocation.isEmpty() && !bPrivateProtocol;
 
-                css::uno::Reference< css::container::XContainerQuery > xContainerQuery(
+                cpo::uno::Reference< css::container::XContainerQuery > xContainerQuery(
                     xSMGR->createInstance( u"com.sun.star.document.FilterFactory"_ustr ),
-                    css::uno::UNO_QUERY_THROW );
+                    cpo::uno::UNO_QUERY_THROW );
 
                 // Retrieve filter from type
 
@@ -3216,8 +3216,8 @@ bool SfxViewShell::ExecKey_Impl(const KeyEvent& aKey)
     if (comphelper::COKit::isActive())
     {
         // Get the module name.
-        const css::uno::Reference< cpo::uno::XComponentContext >&  xContext      (::comphelper::getProcessComponentContext());
-        css::uno::Reference< css::frame::XModuleManager2 >  xModuleManager(css::frame::ModuleManager::create(xContext));
+        const cpo::uno::Reference< cpo::uno::XComponentContext >&  xContext      (::comphelper::getProcessComponentContext());
+        cpo::uno::Reference< css::frame::XModuleManager2 >  xModuleManager(css::frame::ModuleManager::create(xContext));
         OUString sModule = xModuleManager->identify(rFrame.GetFrame().GetFrameInterface());
 
         // Get the language name.
@@ -3227,7 +3227,7 @@ bool SfxViewShell::ExecKey_Impl(const KeyEvent& aKey)
         OUString key = sModule + viewLang;
 
         // Check it in configurations map. Create a configuration manager if there isn't one for the key.
-        std::unordered_map<OUString, css::uno::Reference<css::ui::XAcceleratorConfiguration>>& acceleratorConfs = SfxApplication::Get()->GetAcceleratorConfs_Impl();
+        std::unordered_map<OUString, cpo::uno::Reference<css::ui::XAcceleratorConfiguration>>& acceleratorConfs = SfxApplication::Get()->GetAcceleratorConfs_Impl();
         if (acceleratorConfs.find(key) == acceleratorConfs.end())
         {
             // Create a new configuration manager for the module.
@@ -3940,7 +3940,7 @@ bool SfxViewShell::TryContextMenuInterception(const rtl::Reference<VCLXPopupMenu
         rPopupMenu, &rMenuIdentifier);
 
     // get selection from controller
-    aEvent.Selection = css::uno::Reference< css::view::XSelectionSupplier >( GetController(), css::uno::UNO_QUERY );
+    aEvent.Selection = cpo::uno::Reference< css::view::XSelectionSupplier >( GetController(), cpo::uno::UNO_QUERY );
 
     // call interceptors
     std::unique_lock g(pImpl->aMutex);

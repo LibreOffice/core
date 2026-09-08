@@ -19,6 +19,7 @@
 #include <utility>
 #include <vcl/svapp.hxx>
 
+using namespace ::cpo;
 using namespace css;
 using namespace ::sfx2::sidebar;
 

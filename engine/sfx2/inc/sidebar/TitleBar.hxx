@@ -39,7 +39,7 @@ public:
 
     Size get_preferred_size() const;
 
-    void SetIcon(const css::uno::Reference<css::graphic::XGraphic>& rIcon);
+    void SetIcon(const cpo::uno::Reference<css::graphic::XGraphic>& rIcon);
 
     weld::Toolbar& GetToolBox()
     {

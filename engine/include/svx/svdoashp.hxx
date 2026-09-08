@@ -23,7 +23,7 @@
 #include <svx/svdotext.hxx>
 #include <svx/svdhdl.hxx>
 #include <vector>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <com/sun/star/drawing/XCustomShapeHandle.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <svx/svxdllapi.h>
@@ -67,7 +67,7 @@ namespace o3tl
 
 struct SdrCustomShapeInteraction
 {
-    css::uno::Reference< css::drawing::XCustomShapeHandle > xInteraction;
+    cpo::uno::Reference< css::drawing::XCustomShapeHandle > xInteraction;
     css::awt::Point                                         aPosition;
     CustomShapeHandleModes                                  nMode;
 };
@@ -88,7 +88,7 @@ class SVXCORE_DLLPUBLIC SdrObjCustomShape : public SdrTextObj
 
 protected:
     virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
-    virtual void setUnoShape(const css::uno::Reference<css::drawing::XShape>& rxUnoShape) override;
+    virtual void setUnoShape(const cpo::uno::Reference<css::drawing::XShape>& rxUnoShape) override;
 
 public:
     virtual void setDiagramDataModelID(const OUString& rID) override;

@@ -8,7 +8,7 @@
  */
 
 #include "rtflookahead.hxx"
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <tools/stream.hxx>
 #include "rtftokenizer.hxx"
 
@@ -18,6 +18,7 @@ class XStatusIndicator;
 }
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 namespace writerfilter::rtftok
 {

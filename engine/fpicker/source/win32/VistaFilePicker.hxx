@@ -75,9 +75,9 @@ public:
     // XFilePickerNotifier
 
 
-    virtual void addFilePickerListener( const css::uno::Reference< css::ui::dialogs::XFilePickerListener >& xListener ) override;
+    virtual void addFilePickerListener( const cpo::uno::Reference< css::ui::dialogs::XFilePickerListener >& xListener ) override;
 
-    virtual void removeFilePickerListener( const css::uno::Reference< css::ui::dialogs::XFilePickerListener >& xListener ) override;
+    virtual void removeFilePickerListener( const cpo::uno::Reference< css::ui::dialogs::XFilePickerListener >& xListener ) override;
 
 
     // XExecutableDialog functions

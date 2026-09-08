@@ -25,7 +25,7 @@
 #include <string_view>
 
 namespace com::sun::star::frame { class XFrame; }
-namespace com::sun::star::uno { template <typename > class Reference; }
+namespace cpo::uno { template <typename > class Reference; }
 
 
 namespace sfx2::sidebar {
@@ -46,7 +46,7 @@ public:
     */
     static void ShowPanel (
         std::u16string_view rsPanelId,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame, bool bFocus = false);
+        const cpo::uno::Reference<css::frame::XFrame>& rxFrame, bool bFocus = false);
 
     /** Switch to the deck that contains the specified panel and toggle
         the visibility of the panel (expanded and scrolled into the
@@ -56,11 +56,11 @@ public:
     */
     static void TogglePanel (
         std::u16string_view rsPanelId,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame);
+        const cpo::uno::Reference<css::frame::XFrame>& rxFrame);
 
     static bool IsPanelVisible(
         std::u16string_view rsPanelId,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame);
+        const cpo::uno::Reference<css::frame::XFrame>& rxFrame);
 
     static bool Setup(std::u16string_view sidebarDeckId = u"");
 };

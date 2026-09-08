@@ -185,6 +185,7 @@ using namespace sax_fastparser;
 using namespace sw::util;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::drawing;
+using namespace ::cpo;
 
 namespace {
 
@@ -5495,7 +5496,7 @@ void DocxAttributeOutput::DefaultStyle()
 *  NOTE : Tested on images of type JPEG,EMF/WMF,BMP, PNG and GIF.
 */
 void DocxAttributeOutput::WriteSrcRect(
-    const css::uno::Reference<css::beans::XPropertySet>& xShapePropSet,
+    const cpo::uno::Reference<css::beans::XPropertySet>& xShapePropSet,
     const SwFrameFormat* pFrameFormat)
 {
     uno::Reference<graphic::XGraphic> xGraphic;
@@ -5547,7 +5548,7 @@ void DocxAttributeOutput::WriteSrcRect(
 }
 
 uno::Reference<css::text::XTextFrame> DocxAttributeOutput::GetUnoTextFrame(
-    css::uno::Reference<css::drawing::XShape> xShape)
+    cpo::uno::Reference<css::drawing::XShape> xShape)
 {
     return SwTextBoxHelper::getUnoTextFrame(xShape);
 }
@@ -5663,12 +5664,12 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
         }
     }
 
-    css::uno::Reference<css::beans::XPropertySet> xShapePropSet;
+    cpo::uno::Reference<css::beans::XPropertySet> xShapePropSet;
     if (pSdrObj)
     {
-        css::uno::Reference<css::drawing::XShape> xShape(
-            const_cast<SdrObject*>(pSdrObj)->getUnoShape(), css::uno::UNO_QUERY);
-        xShapePropSet.set(xShape, css::uno::UNO_QUERY);
+        cpo::uno::Reference<css::drawing::XShape> xShape(
+            const_cast<SdrObject*>(pSdrObj)->getUnoShape(), cpo::uno::UNO_QUERY);
+        xShapePropSet.set(xShape, cpo::uno::UNO_QUERY);
         assert(xShapePropSet);
     }
 

@@ -21,7 +21,7 @@
 
 #include "common.h"
 #include <oleidl.h>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <cpo/uno/Sequence.h>
 #include <cpo/uno/XInterface.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -34,7 +34,7 @@ class EmbedProviderFactory_Impl;
 class EmbedServer_Impl: public cppu::WeakImplHelper<css::lang::XServiceInfo>
 {
 public:
-    EmbedServer_Impl( const css::uno::Reference< css::lang::XMultiServiceFactory > &xFactory );
+    EmbedServer_Impl( const cpo::uno::Reference< css::lang::XMultiServiceFactory > &xFactory );
     virtual ~EmbedServer_Impl() override;
 
     OUString getImplementationName() override;
@@ -46,14 +46,14 @@ public:
 protected:
 
     std::vector<CComPtr<EmbedProviderFactory_Impl>> m_pOLEFactories;
-    css::uno::Reference< css::lang::XMultiServiceFactory > m_xFactory;
+    cpo::uno::Reference< css::lang::XMultiServiceFactory > m_xFactory;
 };
 
 class EmbedProviderFactory_Impl : public IClassFactory
 {
 public:
 
-    EmbedProviderFactory_Impl(const css::uno::Reference<css::lang::XMultiServiceFactory>& xFactory, const GUID& guid);
+    EmbedProviderFactory_Impl(const cpo::uno::Reference<css::lang::XMultiServiceFactory>& xFactory, const GUID& guid);
     virtual ~EmbedProviderFactory_Impl();
 
     bool registerClass();
@@ -74,7 +74,7 @@ protected:
     GUID                m_guid;
     DWORD               m_factoryHandle;
 
-    css::uno::Reference< css::lang::XMultiServiceFactory > m_xFactory;
+    cpo::uno::Reference< css::lang::XMultiServiceFactory > m_xFactory;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

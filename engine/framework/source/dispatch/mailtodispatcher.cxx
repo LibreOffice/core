@@ -55,7 +55,7 @@ cpo::uno::Sequence< OUString > MailToDispatcher::getSupportedServiceNames()
     @param      rxContext
                     reference to uno servicemanager for creation of new services
 */
-MailToDispatcher::MailToDispatcher( css::uno::Reference< cpo::uno::XComponentContext > xContext )
+MailToDispatcher::MailToDispatcher( cpo::uno::Reference< cpo::uno::XComponentContext > xContext )
         : m_xContext    (std::move( xContext                     ))
 {
 }
@@ -76,11 +76,11 @@ MailToDispatcher::~MailToDispatcher()
                 We don't create new dispatch instances here really - we return THIS as result to handle it
                 at the same implementation.
 */
-css::uno::Reference< css::frame::XDispatch > MailToDispatcher::queryDispatch( const css::util::URL&  aURL    ,
+cpo::uno::Reference< css::frame::XDispatch > MailToDispatcher::queryDispatch( const css::util::URL&  aURL    ,
                                                                                        const OUString& /*sTarget*/ ,
                                                                                              sal_Int32        /*nFlags*/  )
 {
-    css::uno::Reference< css::frame::XDispatch > xDispatcher;
+    cpo::uno::Reference< css::frame::XDispatch > xDispatcher;
     if (aURL.Complete.startsWith("mailto:"))
         xDispatcher = this;
     return xDispatcher;
@@ -89,10 +89,10 @@ css::uno::Reference< css::frame::XDispatch > MailToDispatcher::queryDispatch( co
 /**
     @short      do the same like dispatch() but for multiple requests at the same time
 */
-cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > MailToDispatcher::queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor )
+cpo::uno::Sequence< cpo::uno::Reference< css::frame::XDispatch > > MailToDispatcher::queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor )
 {
     sal_Int32 nCount = lDescriptor.getLength();
-    cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > lDispatcher( nCount );
+    cpo::uno::Sequence< cpo::uno::Reference< css::frame::XDispatch > > lDispatcher( nCount );
     auto lDispatcherRange = asNonConstRange(lDispatcher);
     for( sal_Int32 i=0; i<nCount; ++i )
     {
@@ -120,7 +120,7 @@ void MailToDispatcher::dispatch( const css::util::URL&                          
 {
     // dispatch() is an [oneway] call ... and may our user release his reference to us immediately.
     // So we should hold us self alive till this call ends.
-    css::uno::Reference< css::frame::XNotifyingDispatch > xSelfHold(this);
+    cpo::uno::Reference< css::frame::XNotifyingDispatch > xSelfHold(this);
     implts_dispatch(aURL);
     // No notification for status listener!
 }
@@ -139,12 +139,12 @@ void MailToDispatcher::dispatch( const css::util::URL&                          
 */
 void MailToDispatcher::dispatchWithNotification( const css::util::URL&                                             aURL      ,
                                                           const cpo::uno::Sequence< css::beans::PropertyValue >&            /*lArguments*/,
-                                                          const css::uno::Reference< css::frame::XDispatchResultListener >& xListener )
+                                                          const cpo::uno::Reference< css::frame::XDispatchResultListener >& xListener )
 {
     // This class was designed to die by reference. And if user release his reference to us immediately after calling this method
     // we can run into some problems. So we hold us self alive till this method ends.
     // Another reason: We can use this reference as source of sending event at the end too.
-    css::uno::Reference< css::frame::XNotifyingDispatch > xThis(this);
+    cpo::uno::Reference< css::frame::XNotifyingDispatch > xThis(this);
 
     bool bState = implts_dispatch(aURL);
     if (xListener.is())
@@ -178,7 +178,7 @@ bool MailToDispatcher::implts_dispatch( const css::util::URL& aURL )
 {
     bool bSuccess = false;
 
-    css::uno::Reference< css::system::XSystemShellExecute > xSystemShellExecute = css::system::SystemShellExecute::create( m_xContext );
+    cpo::uno::Reference< css::system::XSystemShellExecute > xSystemShellExecute = css::system::SystemShellExecute::create( m_xContext );
 
     try
     {
@@ -209,13 +209,13 @@ bool MailToDispatcher::implts_dispatch( const css::util::URL& aURL )
     @param      aURL
                     URL about listener will be informed, if something occurred
 */
-void MailToDispatcher::addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/ ,
+void MailToDispatcher::addStatusListener( const cpo::uno::Reference< css::frame::XStatusListener >& /*xListener*/ ,
                                                    const css::util::URL&                                     /*aURL*/      )
 {
     // not supported yet
 }
 
-void MailToDispatcher::removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/ ,
+void MailToDispatcher::removeStatusListener( const cpo::uno::Reference< css::frame::XStatusListener >& /*xListener*/ ,
                                                       const css::util::URL&                                     /*aURL*/      )
 {
     // not supported yet

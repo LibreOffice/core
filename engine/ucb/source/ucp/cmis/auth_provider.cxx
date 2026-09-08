@@ -21,6 +21,7 @@
 #include "auth_provider.hxx"
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 namespace cmis
 {
@@ -69,7 +70,7 @@ namespace cmis
     std::string AuthProvider::getRefreshToken(std::string& rUsername)
     {
         std::string refreshToken;
-        const css::uno::Reference<css::ucb::XCommandEnvironment> xEnv = getXEnv();
+        const cpo::uno::Reference<css::ucb::XCommandEnvironment> xEnv = getXEnv();
         if (xEnv.is())
         {
             uno::Reference<task::XInteractionHandler> xIH = xEnv->getInteractionHandler();
@@ -129,7 +130,7 @@ namespace cmis
             return false;
         if (password == refreshToken)
             return true;
-        const css::uno::Reference<css::ucb::XCommandEnvironment> xEnv = getXEnv();
+        const cpo::uno::Reference<css::ucb::XCommandEnvironment> xEnv = getXEnv();
         if (xEnv.is())
         {
             uno::Reference<task::XInteractionHandler> xIH = xEnv->getInteractionHandler();
@@ -153,12 +154,12 @@ namespace cmis
 
     cpo::uno::WeakReference< css::ucb::XCommandEnvironment> AuthProvider::sm_xEnv;
 
-    void AuthProvider::setXEnv(const css::uno::Reference< css::ucb::XCommandEnvironment>& xEnv )
+    void AuthProvider::setXEnv(const cpo::uno::Reference< css::ucb::XCommandEnvironment>& xEnv )
     {
         sm_xEnv = xEnv;
     }
 
-    css::uno::Reference< css::ucb::XCommandEnvironment> AuthProvider::getXEnv()
+    cpo::uno::Reference< css::ucb::XCommandEnvironment> AuthProvider::getXEnv()
     {
         return sm_xEnv;
     }
@@ -168,7 +169,7 @@ namespace cmis
             const char* /*password*/ )
     {
         OUString url_oustr( url, strlen( url ), RTL_TEXTENCODING_UTF8 );
-        const css::uno::Reference<
+        const cpo::uno::Reference<
             css::ucb::XCommandEnvironment> xEnv = getXEnv( );
 
         if ( xEnv.is() )

@@ -118,7 +118,7 @@ void Button::dispose()
     Control::dispose();
 }
 
-void Button::SetCommandHandler(const OUString& aCommand, const css::uno::Reference<css::frame::XFrame>& rFrame)
+void Button::SetCommandHandler(const OUString& aCommand, const cpo::uno::Reference<css::frame::XFrame>& rFrame)
 {
     maCommand = aCommand;
     SetClickHdl( LINK( this, Button, dispatchCommandHandler) );

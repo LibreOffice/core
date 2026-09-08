@@ -38,8 +38,8 @@ class ProgressBarWrapper final : public UIElementWrapperBase
         virtual ~ProgressBarWrapper() override;
 
         // public interfaces
-        void setStatusBar( const css::uno::Reference< css::awt::XWindow >& rStatusBar, bool bOwnsInstance = false );
-        css::uno::Reference< css::awt::XWindow > getStatusBar() const;
+        void setStatusBar( const cpo::uno::Reference< css::awt::XWindow >& rStatusBar, bool bOwnsInstance = false );
+        cpo::uno::Reference< css::awt::XWindow > getStatusBar() const;
 
         // wrapped methods of css::task::XStatusIndicator
         /// @throws cpo::uno::RuntimeException
@@ -64,13 +64,13 @@ class ProgressBarWrapper final : public UIElementWrapperBase
         virtual void update() override;
 
         // XUIElement
-        virtual css::uno::Reference< cpo::uno::XInterface > getRealInterface() override;
+        virtual cpo::uno::Reference< cpo::uno::XInterface > getRealInterface() override;
 
     //  variables
     //  (should be private everyway!)
 
     private:
-        css::uno::Reference< css::awt::XWindow >         m_xStatusBar;    // Reference to our status bar XWindow
+        cpo::uno::Reference< css::awt::XWindow >         m_xStatusBar;    // Reference to our status bar XWindow
         unotools::WeakReference< StatusIndicatorInterfaceWrapper >  m_xProgressBarIfacWrapper;
         bool                                             m_bOwnsInstance; // Indicator that we are owner of the XWindow
         sal_Int32                                        m_nRange;

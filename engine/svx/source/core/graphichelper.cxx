@@ -57,6 +57,7 @@
 #include <unotools/streamwrap.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 namespace
 {

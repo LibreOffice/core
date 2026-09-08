@@ -19,7 +19,7 @@ class ClusteredColumnChartTypeTemplate : public ChartTypeTemplate, public ::prop
 {
 public:
     ClusteredColumnChartTypeTemplate(
-        css::uno::Reference<cpo::uno::XComponentContext> const& xContext,
+        cpo::uno::Reference<cpo::uno::XComponentContext> const& xContext,
         const OUString& rServiceName, sal_Int32 nDim = 2);
     virtual ~ClusteredColumnChartTypeTemplate() override;
 
@@ -34,7 +34,7 @@ protected:
     virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
     // ____ XPropertySet ____
-    virtual css::uno::Reference<css::beans::XPropertySetInfo> getPropertySetInfo() override;
+    virtual cpo::uno::Reference<css::beans::XPropertySetInfo> getPropertySetInfo() override;
 
     // ____ ChartTypeTemplate ____
     virtual bool matchesTemplate2(const rtl::Reference<::chart::Diagram>& xDiagram,

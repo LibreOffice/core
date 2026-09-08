@@ -33,8 +33,8 @@ namespace dbaccess
                           public ::comphelper::OPropertyArrayUsageHelper < OResultColumn >
     {
     protected:
-        css::uno::Reference < css::sdbc::XResultSetMetaData > m_xMetaData;
-        css::uno::Reference< css::sdbc::XDatabaseMetaData >   m_xDBMetaData;
+        cpo::uno::Reference < css::sdbc::XResultSetMetaData > m_xMetaData;
+        cpo::uno::Reference< css::sdbc::XDatabaseMetaData >   m_xDBMetaData;
         sal_Int32                             m_nPos;
         cpo::uno::Any                         m_aIsRowVersion;
         mutable ::std::optional< bool > m_isSigned;
@@ -55,9 +55,9 @@ namespace dbaccess
         virtual ~OResultColumn() override;
     public:
         OResultColumn(
-            const css::uno::Reference < css::sdbc::XResultSetMetaData >& _xMetaData,
+            const cpo::uno::Reference < css::sdbc::XResultSetMetaData >& _xMetaData,
             sal_Int32 _nPos,
-            const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _rxDBMeta );
+            const cpo::uno::Reference< css::sdbc::XDatabaseMetaData >& _rxDBMeta );
 
     // css::lang::XTypeProvider
         virtual cpo::uno::Sequence< sal_Int8 > getImplementationId() override;

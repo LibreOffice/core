@@ -22,6 +22,7 @@
 #include <swrenamexnameddlg.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 SwRenameXNamedDlg::SwRenameXNamedDlg(weld::Widget* pParent,
             const uno::Reference< container::XNamed > & xN,

@@ -75,7 +75,7 @@ using namespace ::osl;
 using namespace ::sax;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::io;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::xml;
@@ -125,12 +125,12 @@ namespace XSLT
     private:
 
         // the UNO ServiceFactory
-        css::uno::Reference<XComponentContext> m_xContext;
+        cpo::uno::Reference<XComponentContext> m_xContext;
 
         // DocumentHandler interface of the css::xml::sax::Writer service
-        css::uno::Reference<XOutputStream> m_rOutputStream;
+        cpo::uno::Reference<XOutputStream> m_rOutputStream;
 
-        css::uno::Reference<xslt::XXSLTTransformer> m_tcontrol;
+        cpo::uno::Reference<xslt::XXSLTTransformer> m_tcontrol;
 
         osl::Condition m_cTransformed;
         bool m_bTerminated;
@@ -143,12 +143,12 @@ namespace XSLT
         OUString
         expandUrl(const OUString&);
 
-        css::uno::Reference<xslt::XXSLTTransformer> impl_createTransformer(const OUString& rTransformer, const Sequence<Any>& rArgs);
+        cpo::uno::Reference<xslt::XXSLTTransformer> impl_createTransformer(const OUString& rTransformer, const Sequence<Any>& rArgs);
 
     public:
 
         // ctor...
-        explicit XSLTFilter(css::uno::Reference<XComponentContext> x);
+        explicit XSLTFilter(cpo::uno::Reference<XComponentContext> x);
 
         //  XServiceInfo
         virtual bool supportsService(const OUString& sServiceName) override;
@@ -157,13 +157,13 @@ namespace XSLT
 
         // XImportFilter
         virtual bool
-        importer(const Sequence<PropertyValue>& aSourceData, const css::uno::Reference<
+        importer(const Sequence<PropertyValue>& aSourceData, const cpo::uno::Reference<
                 XDocumentHandler>& xHandler,
                 const Sequence<OUString>& msUserData) override;
 
         // XImportFilter2
         virtual bool
-        importer(const Sequence<PropertyValue>& aSourceData, const css::uno::Reference<
+        importer(const Sequence<PropertyValue>& aSourceData, const cpo::uno::Reference<
                 XFastParser>& xFastParser,
                 const Sequence<OUString>& msUserData) override;
 
@@ -181,7 +181,7 @@ namespace XSLT
 
     }
 
-    XSLTFilter::XSLTFilter(css::uno::Reference<XComponentContext> x):
+    XSLTFilter::XSLTFilter(cpo::uno::Reference<XComponentContext> x):
         m_xContext(std::move(x)), m_bTerminated(false), m_bError(false)
     {}
 
@@ -212,17 +212,17 @@ namespace XSLT
         {
             sPreparedURL = rtl::Uri::decode(sPreparedURL, rtl_UriDecodeWithCharset,
                                             RTL_TEXTENCODING_UTF8);
-            css::uno::Reference<XMacroExpander>
+            cpo::uno::Reference<XMacroExpander>
                 xMacroExpander = theMacroExpander::get(m_xContext);
             sPreparedURL = xMacroExpander->expandMacros(sPreparedURL);
         }
         return sPreparedURL;
     }
 
-    css::uno::Reference<xslt::XXSLTTransformer>
+    cpo::uno::Reference<xslt::XXSLTTransformer>
     XSLTFilter::impl_createTransformer(const OUString& rTransformer, const Sequence<Any>& rArgs)
     {
-        css::uno::Reference<xslt::XXSLTTransformer> xTransformer;
+        cpo::uno::Reference<xslt::XXSLTTransformer> xTransformer;
 
         // check if the filter needs XSLT-2.0-capable transformer
         // COMPATIBILITY: libreoffice 3.5/3.6 used to save the impl.
@@ -237,7 +237,7 @@ namespace XSLT
                     m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
                         u"com.sun.star.xml.xslt.XSLT2Transformer"_ustr,
                         {Any{rArgs}}, m_xContext),
-                    css::uno::UNO_QUERY_THROW);
+                    cpo::uno::UNO_QUERY_THROW);
             }
             catch (const cpo::uno::Exception&)
             {
@@ -283,7 +283,7 @@ namespace XSLT
     XSLTFilter::rel2abs(const OUString& s)
     {
 
-        css::uno::Reference<XStringSubstitution>
+        cpo::uno::Reference<XStringSubstitution>
                 subs(css::util::PathSubstitution::create(m_xContext));
         OUString aWorkingDir(subs->getSubstituteVariableValue( u"$(progurl)"_ustr ));
         INetURLObject aObj(aWorkingDir);
@@ -296,7 +296,7 @@ namespace XSLT
 
     bool
     XSLTFilter::importer(const Sequence<PropertyValue>& aSourceData,
-            const css::uno::Reference<XDocumentHandler>& xHandler, const Sequence<
+            const cpo::uno::Reference<XDocumentHandler>& xHandler, const Sequence<
                     OUString>& msUserData)
     {
         if (msUserData.getLength() < 5)
@@ -309,8 +309,8 @@ namespace XSLT
         // is most important here since we need to supply it to
         // the sax parser that drives the supplied document handler
         OUString aName, aURL;
-        css::uno::Reference<XInputStream> xInputStream;
-        css::uno::Reference<XInteractionHandler> xInterActionHandler;
+        cpo::uno::Reference<XInputStream> xInputStream;
+        cpo::uno::Reference<XInteractionHandler> xInterActionHandler;
         for (const auto& sourceDataItem : aSourceData)
         {
             aName = sourceDataItem.Name;
@@ -339,7 +339,7 @@ namespace XSLT
         {
                 try
                     {
-                        css::uno::Reference<css::io::XSeekable> xSeek(xInputStream, UNO_QUERY);
+                        cpo::uno::Reference<css::io::XSeekable> xSeek(xInputStream, UNO_QUERY);
                         if (xSeek.is())
                             xSeek->seek(0);
 
@@ -350,7 +350,7 @@ namespace XSLT
                         m_tcontrol->setInputStream(xInputStream);
 
                         // create pipe
-                        css::uno::Reference<XOutputStream> pipeout =
+                        cpo::uno::Reference<XOutputStream> pipeout =
                                         Pipe::create(m_xContext);
 
                         //connect transformer to pipe
@@ -362,8 +362,8 @@ namespace XSLT
                         aInput.sPublicId = aURL;
                         aInput.aInputStream.set(pipeout, UNO_QUERY);
 
-                        css::uno::Reference< css::xml::sax::XFastParser > xFastParser(
-                            xHandler, css::uno::UNO_QUERY );
+                        cpo::uno::Reference< css::xml::sax::XFastParser > xFastParser(
+                            xHandler, cpo::uno::UNO_QUERY );
 
                         // transform
                         m_tcontrol->start();
@@ -400,7 +400,7 @@ namespace XSLT
                                 {
                                     // create SAX parser that will read the document file
                                     // and provide events to xHandler passed to this call
-                                    css::uno::Reference<XParser> xSaxParser = Parser::create(m_xContext);
+                                    cpo::uno::Reference<XParser> xSaxParser = Parser::create(m_xContext);
                                     // set doc handler
                                     xSaxParser->setDocumentHandler(xHandler);
                                     xSaxParser->parseStream( aInput );
@@ -424,7 +424,7 @@ namespace XSLT
 
     bool
     XSLTFilter::importer(const Sequence<PropertyValue>& aSourceData,
-            const css::uno::Reference<XFastParser>& xFastParser, const Sequence<
+            const cpo::uno::Reference<XFastParser>& xFastParser, const Sequence<
                     OUString>& msUserData)
     {
         if (msUserData.getLength() < 5)
@@ -438,8 +438,8 @@ namespace XSLT
         // the sax parser that drives the supplied document handler
         sal_Int32 nLength = aSourceData.getLength();
         OUString aName, aURL;
-        css::uno::Reference<XInputStream> xInputStream;
-        css::uno::Reference<XInteractionHandler> xInterActionHandler;
+        cpo::uno::Reference<XInputStream> xInputStream;
+        cpo::uno::Reference<XInteractionHandler> xInterActionHandler;
         for (sal_Int32 i = 0; i < nLength; i++)
         {
             aName = aSourceData[i].Name;
@@ -468,7 +468,7 @@ namespace XSLT
         {
                 try
                     {
-                        css::uno::Reference<css::io::XSeekable> xSeek(xInputStream, UNO_QUERY);
+                        cpo::uno::Reference<css::io::XSeekable> xSeek(xInputStream, UNO_QUERY);
                         if (xSeek.is())
                             xSeek->seek(0);
 
@@ -479,7 +479,7 @@ namespace XSLT
                         m_tcontrol->setInputStream(xInputStream);
 
                         // create pipe
-                        css::uno::Reference<XOutputStream> pipeout =
+                        cpo::uno::Reference<XOutputStream> pipeout =
                                         Pipe::create(m_xContext);
 
                         //connect transformer to pipe
@@ -553,7 +553,7 @@ namespace XSLT
         // from its data-source interface
         OUString aName, sURL;
         OUString aDoctypePublic;
-        // css::uno::Reference<XOutputStream> rOutputStream;
+        // cpo::uno::Reference<XOutputStream> rOutputStream;
         sal_Int32 nLength = aSourceData.getLength();
         for (sal_Int32 i = 0; i < nLength; i++)
         {
@@ -569,7 +569,7 @@ namespace XSLT
         if (!getDelegate().is())
         {
             // get the document writer
-            setDelegate(css::uno::Reference<XExtendedDocumentHandler>(
+            setDelegate(cpo::uno::Reference<XExtendedDocumentHandler>(
                             Writer::create(m_xContext),
                             UNO_QUERY_THROW));
         }
@@ -592,12 +592,12 @@ namespace XSLT
                 m_tcontrol->addListener(new XSLTFilterStreamListener(*this));
 
                 // create pipe
-                css::uno::Reference<XOutputStream> pipeout =
+                cpo::uno::Reference<XOutputStream> pipeout =
                                 Pipe::create(m_xContext);
-                css::uno::Reference<XInputStream> pipein(pipeout, UNO_QUERY);
+                cpo::uno::Reference<XInputStream> pipein(pipeout, UNO_QUERY);
 
                 // connect sax writer to pipe
-                css::uno::Reference<XActiveDataSource> xmlsource(getDelegate(),
+                cpo::uno::Reference<XActiveDataSource> xmlsource(getDelegate(),
                         UNO_QUERY);
                 xmlsource->setOutputStream(pipeout);
 

@@ -22,7 +22,7 @@
 #include <vcl/unohelp.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::cpo::uno::Sequence;
 using ::cpo::uno::Any;
 

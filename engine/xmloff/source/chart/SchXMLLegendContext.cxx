@@ -32,6 +32,7 @@
 
 using namespace ::xmloff::token;
 using namespace com::sun::star;
+using namespace ::cpo;
 
 SchXMLLegendContext::SchXMLLegendContext( SchXMLImportHelper& rImpHelper, SvXMLImport& rImport ) :
     SvXMLImportContext( rImport ),
@@ -40,7 +41,7 @@ SchXMLLegendContext::SchXMLLegendContext( SchXMLImportHelper& rImpHelper, SvXMLI
 }
 
 void SchXMLLegendContext::startFastElement( sal_Int32 /*nElement*/,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     uno::Reference< chart::XChartDocument > xDoc = mrImportHelper.GetChartDocument();
     if( !xDoc.is() )

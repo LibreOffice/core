@@ -32,6 +32,7 @@
 #include "txtparai.hxx"
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace xmloff::token;
 
 XMLContentControlContext::XMLContentControlContext(SvXMLImport& rImport, sal_Int32 /*nElement*/,
@@ -301,7 +302,7 @@ void XMLContentControlContext::endFastElement(sal_Int32)
     }
 }
 
-css::uno::Reference<css::xml::sax::XFastContextHandler>
+cpo::uno::Reference<css::xml::sax::XFastContextHandler>
 XMLContentControlContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference<xml::sax::XFastAttributeList>& xAttrList)
 {

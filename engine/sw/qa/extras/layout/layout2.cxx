@@ -33,7 +33,8 @@
 #include <redline.hxx>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 /// Test to assert layout / rendering result of Writer.
 class SwLayoutWriter2 : public SwModelTestBase

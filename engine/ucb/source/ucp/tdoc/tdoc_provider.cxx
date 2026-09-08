@@ -41,6 +41,7 @@
 #include "tdoc_storage.hxx"
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace tdoc_ucp;
 
 

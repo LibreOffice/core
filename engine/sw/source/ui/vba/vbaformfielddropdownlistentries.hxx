@@ -26,19 +26,19 @@ private:
 public:
     /// @throws cpo::uno::RuntimeException
     SwVbaFormFieldDropDownListEntries(
-        const css::uno::Reference<ov::XHelperInterface>& xParent,
-        const css::uno::Reference<cpo::uno::XComponentContext>& xContext,
+        const cpo::uno::Reference<ov::XHelperInterface>& xParent,
+        const cpo::uno::Reference<cpo::uno::XComponentContext>& xContext,
         sw::mark::DropDownFieldmark& m_rDropDown);
 
     // XListEntries
-    css::uno::Reference<ooo::vba::word::XListEntry>
+    cpo::uno::Reference<ooo::vba::word::XListEntry>
         SAL_CALL Add(const OUString& rName, const cpo::uno::Any& rIndex) override;
     void SAL_CALL Clear() override;
     sal_Int32 SAL_CALL getCount() override;
 
     // XEnumerationAccess
     cpo::uno::Type SAL_CALL getElementType() override;
-    css::uno::Reference<css::container::XEnumeration> SAL_CALL createEnumeration() override;
+    cpo::uno::Reference<css::container::XEnumeration> SAL_CALL createEnumeration() override;
 
     // SwVbaFormFieldDropDownListEntries_BASE
     cpo::uno::Any createCollectionObject(const cpo::uno::Any& aSource) override;

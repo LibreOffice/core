@@ -35,14 +35,14 @@ public:
 
     virtual void startFastElement(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
     virtual void endFastElement(sal_Int32 nElement) override;
 
 private:
     OUString msURL;
-    css::uno::Reference < css::io::XOutputStream > mxBase64Stream;
+    cpo::uno::Reference < css::io::XOutputStream > mxBase64Stream;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

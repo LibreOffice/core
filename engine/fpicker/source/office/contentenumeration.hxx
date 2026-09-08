@@ -167,7 +167,7 @@ namespace svt
         mutable std::mutex              m_aMutex;
 
         FolderDescriptor                m_aFolder;
-        css::uno::Reference< css::ucb::XCommandEnvironment >
+        cpo::uno::Reference< css::ucb::XCommandEnvironment >
                                         m_xCommandEnv;
         IEnumerationResultHandler*      m_pResultHandler;
         bool                            m_bCancelled;
@@ -187,7 +187,7 @@ namespace svt
                 an instance which should be used to translate content titles. May be <NULL/>
         */
         FileViewContentEnumerator(
-            const css::uno::Reference< css::ucb::XCommandEnvironment >& _rxCommandEnv,
+            const cpo::uno::Reference< css::ucb::XCommandEnvironment >& _rxCommandEnv,
             ContentData& _rContentToFill,
             ::osl::Mutex& _rContentMutex
         );

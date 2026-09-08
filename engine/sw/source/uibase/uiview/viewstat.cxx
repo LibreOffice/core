@@ -59,6 +59,7 @@
 #include <workctrl.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 void SwView::GetState(SfxItemSet &rSet)
 {

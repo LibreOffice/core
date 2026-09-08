@@ -47,7 +47,7 @@ public:
 
     // ________ AccessibleBase ________
     virtual bool ImplUpdateChildren() override;
-    virtual css::uno::Reference< css::accessibility::XAccessible >
+    virtual cpo::uno::Reference< css::accessibility::XAccessible >
         ImplGetAccessibleChildById( sal_Int64 i ) const override;
     virtual sal_Int64 ImplGetAccessibleChildCount() const override;
 

@@ -19,7 +19,7 @@
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/XInterface.hpp>
 #include <comphelper/processfactory.hxx>
 #include <test/bootstrapfixture.hxx>
@@ -33,7 +33,7 @@ class TerminateTest final : public test::BootstrapFixture,
 public:
     void setUp() override;
 
-    css::uno::Reference<cpo::uno::XInterface> init() override;
+    cpo::uno::Reference<cpo::uno::XInterface> init() override;
 
     void triggerDesktopTerminate() override;
 
@@ -49,21 +49,21 @@ void TerminateTest::setUp()
         css::frame::Desktop::create(comphelper::getComponentContext(getMultiServiceFactory())));
 }
 
-css::uno::Reference<cpo::uno::XInterface> TerminateTest::init()
+cpo::uno::Reference<cpo::uno::XInterface> TerminateTest::init()
 {
     auto const component
         = loadFromDesktop(u"private:factory/swriter"_ustr, u"com.sun.star.text.TextDocument"_ustr);
-    css::uno::Reference<css::text::XTextDocument> xTextDocument(component,
-                                                                css::uno::UNO_QUERY_THROW);
-    css::uno::Reference<css::lang::XMultiServiceFactory> xMSF(component, css::uno::UNO_QUERY_THROW);
-    css::uno::Reference<css::text::XText> xText = xTextDocument->getText();
-    css::uno::Reference<css::text::XTextCursor> xCursor = xText->createTextCursor();
-    css::uno::Reference<css::text::XTextTable> xTable(
-        xMSF->createInstance(u"com.sun.star.text.TextTable"_ustr), css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::text::XTextDocument> xTextDocument(component,
+                                                                cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::lang::XMultiServiceFactory> xMSF(component, cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::text::XText> xText = xTextDocument->getText();
+    cpo::uno::Reference<css::text::XTextCursor> xCursor = xText->createTextCursor();
+    cpo::uno::Reference<css::text::XTextTable> xTable(
+        xMSF->createInstance(u"com.sun.star.text.TextTable"_ustr), cpo::uno::UNO_QUERY_THROW);
     xTable->initialize(4, 3);
     xText->insertTextContent(xCursor, xTable, false);
     CPPUNIT_ASSERT(xCursor.is());
-    return css::uno::Reference<cpo::uno::XInterface>(xTable, css::uno::UNO_QUERY_THROW);
+    return cpo::uno::Reference<cpo::uno::XInterface>(xTable, cpo::uno::UNO_QUERY_THROW);
 }
 
 void TerminateTest::triggerDesktopTerminate() { mxDesktop->terminate(); }

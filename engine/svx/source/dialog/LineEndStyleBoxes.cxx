@@ -64,7 +64,7 @@ LineEndStyleBoxes::LineEndStyleBoxes(std::unique_ptr<weld::Label> xStartLabel,
                                      std::unique_ptr<weld::ComboBox> xEndBox,
                                      std::function<void(const XLineStartItem&)> aSetLineStart,
                                      std::function<void(const XLineEndItem&)> aSetLineEnd,
-                                     css::uno::Reference<css::frame::XFrame> xFrame)
+                                     cpo::uno::Reference<css::frame::XFrame> xFrame)
     : maStart{ std::move(xStartLabel), std::move(xStartBox), {} }
     , maEnd{ std::move(xEndLabel), std::move(xEndBox), {} }
     , maSetLineStart(std::move(aSetLineStart))

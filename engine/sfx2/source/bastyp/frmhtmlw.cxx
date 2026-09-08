@@ -44,6 +44,7 @@
 #include <sax/tools/converter.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 char const sHTML_SC_yes[] =  "YES";
 char const sHTML_SC_no[] =       "NO";

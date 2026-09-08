@@ -44,7 +44,7 @@ struct ExplicitScaleData
 
     css::chart2::AxisOrientation Orientation;
 
-    css::uno::Reference<css::chart2::XScaling> Scaling;
+    cpo::uno::Reference<css::chart2::XScaling> Scaling;
 
     sal_Int32 AxisType; //see css::chart2::AxisType
     bool m_bShiftedCategoryPosition;

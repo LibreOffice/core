@@ -113,6 +113,7 @@
 #include <o3tl/string_view.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using ::editeng::SvxBorderLine;
 
 namespace

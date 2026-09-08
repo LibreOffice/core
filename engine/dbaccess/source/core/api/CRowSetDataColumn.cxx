@@ -30,7 +30,7 @@
 using namespace dbaccess;
 using namespace comphelper;
 using namespace connectivity;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
@@ -206,9 +206,9 @@ ORowSetDataColumns::~ORowSetDataColumns()
 {
 }
 
-css::uno::Reference< css::beans::XPropertySet > ORowSetDataColumns::createObject(const OUString& _rName)
+cpo::uno::Reference< css::beans::XPropertySet > ORowSetDataColumns::createObject(const OUString& _rName)
 {
-    css::uno::Reference< css::beans::XPropertySet > xNamed;
+    cpo::uno::Reference< css::beans::XPropertySet > xNamed;
 
     ::comphelper::UStringMixEqual aCase(isCaseSensitive());
     ::connectivity::OSQLColumns::Vector::const_iterator first =  ::connectivity::find(m_aColumns->begin(),m_aColumns->end(),_rName,aCase);

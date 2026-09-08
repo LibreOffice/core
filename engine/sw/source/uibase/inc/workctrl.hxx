@@ -98,7 +98,7 @@ class NavElementBox_Base
 {
 public:
     NavElementBox_Base(std::unique_ptr<weld::ComboBox> xComboBox,
-                       css::uno::Reference<css::frame::XFrame> xFrame);
+                       cpo::uno::Reference<css::frame::XFrame> xFrame);
 
     virtual ~NavElementBox_Base() {}
 
@@ -111,7 +111,7 @@ public:
 
 protected:
     std::unique_ptr<weld::ComboBox> m_xComboBox;
-    css::uno::Reference< css::frame::XFrame > m_xFrame;
+    cpo::uno::Reference< css::frame::XFrame > m_xFrame;
 
     virtual bool DoKeyInput(const KeyEvent& /*rKEvt*/);
 
@@ -125,7 +125,7 @@ class NavElementBox_Impl final : public InterimItemWindow, public NavElementBox_
 {
 public:
     NavElementBox_Impl(vcl::Window* pParent,
-                       const css::uno::Reference<css::frame::XFrame>& xFrame);
+                       const cpo::uno::Reference<css::frame::XFrame>& xFrame);
 
     virtual void dispose() override
     {
@@ -153,7 +153,7 @@ class NavElementToolBoxControl final : public NavElementToolBoxControl_Base
 {
 public:
     explicit NavElementToolBoxControl(
-        const css::uno::Reference< cpo::uno::XComponentContext >& rServiceManager );
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& rServiceManager );
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -171,8 +171,8 @@ public:
     virtual void SAL_CALL execute( sal_Int16 KeyModifier ) override;
     virtual void SAL_CALL click() override;
     virtual void SAL_CALL doubleClick() override;
-    virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createPopupWindow() override;
-    virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createItemWindow( const css::uno::Reference< css::awt::XWindow >& Parent ) override;
+    virtual cpo::uno::Reference< css::awt::XWindow > SAL_CALL createPopupWindow() override;
+    virtual cpo::uno::Reference< css::awt::XWindow > SAL_CALL createItemWindow( const cpo::uno::Reference< css::awt::XWindow >& Parent ) override;
 
     weld::ComboBox* GetComboBox() {return m_pBox->GetComboBox();}
 

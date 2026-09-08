@@ -53,6 +53,7 @@
 #include <libxml/xpathInternals.h>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace {
 
@@ -478,7 +479,7 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testDocumentProperties)
     }
 
     rtl::Reference<Listener> xListener = new Listener();
-    css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(xProps, css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(xProps, cpo::uno::UNO_QUERY);
     xBroadcaster->addModifyListener(xListener);
     xProps->setAuthor(u"not me"_ustr);
     CPPUNIT_ASSERT(xListener->reset());

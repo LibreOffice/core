@@ -29,7 +29,7 @@
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 
 #include <oox/core/xmlfilterbase.hxx>
@@ -221,13 +221,13 @@ public:
     void                addShape(
                             ::oox::core::XmlFilterBase& rFilterBase,
                             const Theme* pTheme,
-                            const css::uno::Reference< css::drawing::XShapes >& rxShapes,
+                            const cpo::uno::Reference< css::drawing::XShapes >& rxShapes,
                             const basegfx::B2DHomMatrix& aTransformation,
                             const FillProperties& rShapeOrParentShapeFillProps,
                             ShapeIdMap* pShapeMap = nullptr,
                             const oox::drawingml::ShapePtr& pParentGroupShape = nullptr);
 
-    const css::uno::Reference< css::drawing::XShape > &
+    const cpo::uno::Reference< css::drawing::XShape > &
                         getXShape() const { return mxShape; }
 
     SAL_DLLPRIVATE void applyShapeReference( const Shape& rReferencedShape,
@@ -307,12 +307,12 @@ protected:
         FRAMETYPE_TABLE ///< A table embedded in a shape.
     };
 
-    SAL_DLLPRIVATE css::uno::Reference< css::drawing::XShape > const &
+    SAL_DLLPRIVATE cpo::uno::Reference< css::drawing::XShape > const &
                         createAndInsert(
                             ::oox::core::XmlFilterBase& rFilterBase,
                             const OUString& rServiceName,
                             const Theme* pTheme,
-                            const css::uno::Reference< css::drawing::XShapes >& rxShapes,
+                            const cpo::uno::Reference< css::drawing::XShapes >& rxShapes,
                             bool bClearText,
                             const oox::drawingml::ShapePtr& pPlaceholder,
                             basegfx::B2DHomMatrix& aTransformation,
@@ -324,13 +324,13 @@ protected:
                             ::oox::core::XmlFilterBase& rFilterBase,
                             Shape& rMaster,
                             const Theme* pTheme,
-                            const css::uno::Reference< css::drawing::XShapes >& rxShapes,
+                            const cpo::uno::Reference< css::drawing::XShapes >& rxShapes,
                             ShapeIdMap* pShapeMap,
                             const basegfx::B2DHomMatrix& aTransformation );
 
     SAL_DLLPRIVATE void convertSmartArtToMetafile( ::oox::core::XmlFilterBase const& rFilterBase );
 
-    SAL_DLLPRIVATE css::uno::Reference< css::drawing::XShape >
+    SAL_DLLPRIVATE cpo::uno::Reference< css::drawing::XShape >
                         renderDiagramToGraphic( ::oox::core::XmlFilterBase const & rFilterBase );
 
     SAL_DLLPRIVATE OUString finalizeServiceName(
@@ -340,7 +340,7 @@ protected:
 
     virtual void        finalizeXShape(
                             ::oox::core::XmlFilterBase& rFilter,
-                            const css::uno::Reference< css::drawing::XShapes >& rxShapes );
+                            const cpo::uno::Reference< css::drawing::XShapes >& rxShapes );
 
     SAL_DLLPRIVATE void putPropertyToGrabBag(
                             const OUString& sPropertyName, const cpo::uno::Any& aPropertyValue );
@@ -373,7 +373,7 @@ protected:
     PropertyMap                 maShapeProperties;
     PropertyMap                 maDefaultShapeProperties;
     TextListStylePtr            mpMasterTextListStyle;
-    css::uno::Reference< css::drawing::XShape > mxShape;
+    cpo::uno::Reference< css::drawing::XShape > mxShape;
     ConnectorShapePropertiesList maConnectorShapePropertiesList;
 
     OUString                    msConnectorName;

@@ -35,7 +35,7 @@ class ErrorBarItemConverter final : public ItemConverter
 public:
     ErrorBarItemConverter(
         const rtl::Reference< ChartModel > & xChartModel,
-        const css::uno::Reference< css::beans::XPropertySet > & rPropertySet,
+        const cpo::uno::Reference< css::beans::XPropertySet > & rPropertySet,
         SfxItemPool& rItemPool,
         SdrModel& rDrawModel );
     virtual ~ErrorBarItemConverter() override;
@@ -52,7 +52,7 @@ protected:
 
 private:
     std::shared_ptr< ItemConverter >  m_spGraphicConverter;
-    css::uno::Reference< css::frame::XModel >  m_xModel;
+    cpo::uno::Reference< css::frame::XModel >  m_xModel;
 };
 
 } //  namespace chart::wrapper

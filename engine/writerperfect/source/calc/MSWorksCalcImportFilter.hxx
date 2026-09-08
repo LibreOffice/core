@@ -21,7 +21,7 @@ class MSWorksCalcImportFilter : public writerperfect::ImportFilter<OdsGenerator>
 {
 public:
     explicit MSWorksCalcImportFilter(
-        const css::uno::Reference<cpo::uno::XComponentContext>& rxContext)
+        const cpo::uno::Reference<cpo::uno::XComponentContext>& rxContext)
         : writerperfect::ImportFilter<OdsGenerator>(rxContext)
     {
     }

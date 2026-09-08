@@ -20,7 +20,7 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 namespace apitest
 {
@@ -37,8 +37,8 @@ namespace shape
  * @param nWidth        The width of the shape.
  * @return  The created XShape.
  */
-css::uno::Reference<css::drawing::XShape>
-    OOO_DLLPUBLIC_TEST createEllipse(const css::uno::Reference<css::lang::XComponent>& r_xComponent,
+cpo::uno::Reference<css::drawing::XShape>
+    OOO_DLLPUBLIC_TEST createEllipse(const cpo::uno::Reference<css::lang::XComponent>& r_xComponent,
                                      const sal_Int32 nX, const sal_Int32 nY, const sal_Int32 nWidth,
                                      const sal_Int32 nHeight);
 
@@ -51,8 +51,8 @@ css::uno::Reference<css::drawing::XShape>
  * @param nWidth        The width of the shape.
  * @return  The created XShape.
  */
-css::uno::Reference<css::drawing::XShape>
-    OOO_DLLPUBLIC_TEST createLine(const css::uno::Reference<css::lang::XComponent>& r_xComponent,
+cpo::uno::Reference<css::drawing::XShape>
+    OOO_DLLPUBLIC_TEST createLine(const cpo::uno::Reference<css::lang::XComponent>& r_xComponent,
                                   const sal_Int32 nX, const sal_Int32 nY, const sal_Int32 nWidth,
                                   const sal_Int32 nHeight);
 
@@ -65,8 +65,8 @@ css::uno::Reference<css::drawing::XShape>
  * @param nWidth        The width of the shape.
  * @return  The created XShape.
  */
-css::uno::Reference<css::drawing::XShape> OOO_DLLPUBLIC_TEST
-createRectangle(const css::uno::Reference<css::lang::XComponent>& r_xComponent, const sal_Int32 nX,
+cpo::uno::Reference<css::drawing::XShape> OOO_DLLPUBLIC_TEST
+createRectangle(const cpo::uno::Reference<css::lang::XComponent>& r_xComponent, const sal_Int32 nX,
                 const sal_Int32 nY, const sal_Int32 nWidth, const sal_Int32 nHeight);
 
 /** @brief Create a XShape.
@@ -79,8 +79,8 @@ createRectangle(const css::uno::Reference<css::lang::XComponent>& r_xComponent, 
  * @param nWidth        The width of the shape.
  * @return  The created XShape.
  */
-css::uno::Reference<css::drawing::XShape> OOO_DLLPUBLIC_TEST createShape(
-    const css::uno::Reference<css::lang::XComponent>& r_xComponent, std::u16string_view r_aKind,
+cpo::uno::Reference<css::drawing::XShape> OOO_DLLPUBLIC_TEST createShape(
+    const cpo::uno::Reference<css::lang::XComponent>& r_xComponent, std::u16string_view r_aKind,
     const sal_Int32 nX, const sal_Int32 nY, const sal_Int32 nWidth, const sal_Int32 nHeight);
 
 } // namespace shape

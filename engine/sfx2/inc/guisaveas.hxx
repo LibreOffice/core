@@ -57,16 +57,16 @@ class SfxStoringHelper
     friend class ModelData_Impl;
 
 private:
-    css::uno::Reference< css::container::XNameAccess >     m_xFilterCFG;
-    css::uno::Reference< css::container::XContainerQuery > m_xFilterQuery;
-    css::uno::Reference< css::frame::XModuleManager2 >     m_xModuleManager;
+    cpo::uno::Reference< css::container::XNameAccess >     m_xFilterCFG;
+    cpo::uno::Reference< css::container::XContainerQuery > m_xFilterQuery;
+    cpo::uno::Reference< css::frame::XModuleManager2 >     m_xModuleManager;
 
     std::shared_ptr<ModelData_Impl> m_xModelData;
     cpo::uno::Sequence< css::beans::PropertyValue > m_aArgsSequence;
 
-    css::uno::Reference< css::container::XNameAccess > const & GetFilterConfiguration();
-    css::uno::Reference< css::container::XContainerQuery > const & GetFilterQuery();
-    css::uno::Reference< css::frame::XModuleManager2 > const & GetModuleManager();
+    cpo::uno::Reference< css::container::XNameAccess > const & GetFilterConfiguration();
+    cpo::uno::Reference< css::container::XContainerQuery > const & GetFilterQuery();
+    cpo::uno::Reference< css::frame::XModuleManager2 > const & GetModuleManager();
 
     bool m_bRemote;
     bool m_bPreselectPassword;
@@ -90,7 +90,7 @@ public:
     SfxStoringHelper();
 
     bool GUIStoreModel(
-                    const css::uno::Reference< css::frame::XModel2 >& xModel,
+                    const cpo::uno::Reference< css::frame::XModel2 >& xModel,
                     std::u16string_view aSlotName,
                     cpo::uno::Sequence< css::beans::PropertyValue >& aArgsSequence,
                     bool bPreselectPassword,
@@ -99,23 +99,23 @@ public:
                     bool bIsAsync );
 
     static bool CheckFilterOptionsAppearance(
-                    const css::uno::Reference< css::container::XNameAccess >& xFilterCFG,
+                    const cpo::uno::Reference< css::container::XNameAccess >& xFilterCFG,
                     const OUString& aFilterName );
 
 
     static void SetDocInfoState(
-        const css::uno::Reference< css::frame::XModel2 >& xModel,
-        const css::uno::Reference< css::document::XDocumentProperties>& i_xOldDocInfo );
+        const cpo::uno::Reference< css::frame::XModel2 >& xModel,
+        const cpo::uno::Reference< css::document::XDocumentProperties>& i_xOldDocInfo );
 
     static bool WarnUnacceptableFormat(
-                                    const css::uno::Reference< css::frame::XModel2 >& xModel,
+                                    const cpo::uno::Reference< css::frame::XModel2 >& xModel,
                                     std::u16string_view aOldUIName,
                                     std::u16string_view aExtension,
                                     const OUString& aDefExtension,
                                     bool rDefaultIsAlien );
 
-    static css::uno::Reference<css::awt::XWindow> GetModelXWindow(const css::uno::Reference<css::frame::XModel2>& rModel);
-    static weld::Window* GetModelWindow( const css::uno::Reference< css::frame::XModel2 >& xModel );
+    static cpo::uno::Reference<css::awt::XWindow> GetModelXWindow(const cpo::uno::Reference<css::frame::XModel2>& rModel);
+    static weld::Window* GetModelWindow( const cpo::uno::Reference< css::frame::XModel2 >& xModel );
 
 };
 

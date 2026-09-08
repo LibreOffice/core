@@ -51,6 +51,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
+using namespace ::cpo;
 
 SwMailMergeAddressBlockPage::SwMailMergeAddressBlockPage(weld::Container* pPage, SwMailMergeWizard* pWizard)
     : vcl::OWizardPage(pPage, pWizard, u"modules/swriter/ui/mmaddressblockpage.ui"_ustr, u"MMAddressBlockPage"_ustr)
@@ -1441,8 +1442,8 @@ namespace
                                                             css::datatransfer::dnd::XDropTarget >
     {
     private:
-        css::uno::Reference<css::datatransfer::dnd::XDropTarget> m_xRealDropTarget;
-        std::vector<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> m_aListeners;
+        cpo::uno::Reference<css::datatransfer::dnd::XDropTarget> m_xRealDropTarget;
+        std::vector<cpo::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> m_aListeners;
         SwCustomizeAddressBlockDialog* m_pParentDialog;
 
         // XEventListener
@@ -1482,7 +1483,7 @@ namespace
                 }
             }
 
-            std::vector<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> aListeners(m_aListeners);
+            std::vector<cpo::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> aListeners(m_aListeners);
             for (auto const& listener : aListeners)
                 listener->drop(aReplacement);
 
@@ -1497,39 +1498,39 @@ namespace
             aReplacement.SupportedDataFlavors.realloc(1);
             SotExchange::GetFormatDataFlavor(SotClipboardFormatId::STRING, aReplacement.SupportedDataFlavors.getArray()[0]);
 
-            std::vector<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> aListeners(m_aListeners);
+            std::vector<cpo::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> aListeners(m_aListeners);
             for (auto const& listener : aListeners)
                 listener->dragEnter(aReplacement);
         }
 
         virtual void SAL_CALL dragExit( const css::datatransfer::dnd::DropTargetEvent& dte ) override
         {
-            std::vector<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> aListeners(m_aListeners);
+            std::vector<cpo::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> aListeners(m_aListeners);
             for (auto const& listener : aListeners)
                 listener->dragExit( dte );
         }
 
         virtual void SAL_CALL dragOver( const css::datatransfer::dnd::DropTargetDragEvent& dtde ) override
         {
-            std::vector<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> aListeners(m_aListeners);
+            std::vector<cpo::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> aListeners(m_aListeners);
             for (auto const& listener : aListeners)
                 listener->dragOver( dtde );
         }
 
         virtual void SAL_CALL dropActionChanged( const css::datatransfer::dnd::DropTargetDragEvent& dtde ) override
         {
-            std::vector<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> aListeners(m_aListeners);
+            std::vector<cpo::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> aListeners(m_aListeners);
             for (auto const& listener : aListeners)
                 listener->dropActionChanged( dtde );
         }
 
         // XDropTarget
-        virtual void SAL_CALL addDropTargetListener(const css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>& xListener) override
+        virtual void SAL_CALL addDropTargetListener(const cpo::uno::Reference<css::datatransfer::dnd::XDropTargetListener>& xListener) override
         {
             m_aListeners.push_back(xListener);
         }
 
-        virtual void SAL_CALL removeDropTargetListener(const css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>& xListener) override
+        virtual void SAL_CALL removeDropTargetListener(const cpo::uno::Reference<css::datatransfer::dnd::XDropTargetListener>& xListener) override
         {
             std::erase(m_aListeners, xListener);
         }
@@ -1555,7 +1556,7 @@ namespace
         }
 
     public:
-        DropTargetListener(css::uno::Reference<css::datatransfer::dnd::XDropTarget> xRealDropTarget,
+        DropTargetListener(cpo::uno::Reference<css::datatransfer::dnd::XDropTarget> xRealDropTarget,
                            SwCustomizeAddressBlockDialog* pParentDialog)
             : m_xRealDropTarget(std::move(xRealDropTarget))
             , m_pParentDialog(pParentDialog)
@@ -1564,7 +1565,7 @@ namespace
     };
 }
 
-css::uno::Reference<css::datatransfer::dnd::XDropTarget> AddressMultiLineEdit::GetDropTarget()
+cpo::uno::Reference<css::datatransfer::dnd::XDropTarget> AddressMultiLineEdit::GetDropTarget()
 {
     if (!m_xDropTarget.is())
     {

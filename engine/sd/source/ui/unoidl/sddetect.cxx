@@ -34,8 +34,8 @@
 #include <unotools/mediadescriptor.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::beans;

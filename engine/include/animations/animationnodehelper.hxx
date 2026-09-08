@@ -25,7 +25,7 @@
 #include <tools/helpers.hxx>
 
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/animations/XAnimate.hpp>
 #include <com/sun/star/animations/XAnimationNode.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
@@ -45,29 +45,29 @@ namespace anim
 
     /** pushes the given node to the given vector and recursively calls itself for each child node.
     */
-    inline void create_deep_vector( const css::uno::Reference< css::animations::XAnimationNode >& xNode,
-                                std::vector< css::uno::Reference< css::animations::XAnimationNode > >& rVector )
+    inline void create_deep_vector( const cpo::uno::Reference< css::animations::XAnimationNode >& xNode,
+                                std::vector< cpo::uno::Reference< css::animations::XAnimationNode > >& rVector )
     {
         rVector.push_back( xNode );
 
         try
         {
             // get an XEnumerationAccess to the children
-            css::uno::Reference< css::container::XEnumerationAccess >
-                  xEnumerationAccess( xNode, css::uno::UNO_QUERY );
+            cpo::uno::Reference< css::container::XEnumerationAccess >
+                  xEnumerationAccess( xNode, cpo::uno::UNO_QUERY );
 
             if( xEnumerationAccess.is() )
             {
-                css::uno::Reference< css::container::XEnumeration >
+                cpo::uno::Reference< css::container::XEnumeration >
                       xEnumeration = xEnumerationAccess->createEnumeration();
 
                 if( xEnumeration.is() )
                 {
                     while( xEnumeration->hasMoreElements() )
                     {
-                        css::uno::Reference< css::animations::XAnimationNode >
+                        cpo::uno::Reference< css::animations::XAnimationNode >
                             xChildNode( xEnumeration->nextElement(),
-                                        css::uno::UNO_QUERY_THROW );
+                                        cpo::uno::UNO_QUERY_THROW );
 
                         create_deep_vector( xChildNode, rVector );
                     }
@@ -113,7 +113,7 @@ namespace anim
         if (!rTarget.hasValue())
             return;
 
-        css::uno::Reference<cpo::uno::XInterface> xRef;
+        cpo::uno::Reference<cpo::uno::XInterface> xRef;
         if (auto xParagraphTarget = o3tl::tryAccess<css::presentation::ParagraphTarget>(rTarget))
         {
             if (xParagraphTarget->Shape.is())

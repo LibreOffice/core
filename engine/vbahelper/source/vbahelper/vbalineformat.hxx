@@ -29,8 +29,8 @@ typedef InheritedHelperInterfaceWeakImpl< ov::msforms::XLineFormat > ScVbaLineFo
 class ScVbaLineFormat : public ScVbaLineFormat_BASE
 {
 private:
-    css::uno::Reference< css::drawing::XShape > m_xShape;
-    css::uno::Reference< css::beans::XPropertySet > m_xPropertySet;
+    cpo::uno::Reference< css::drawing::XShape > m_xShape;
+    cpo::uno::Reference< css::beans::XPropertySet > m_xPropertySet;
     sal_Int32 m_nLineDashStyle;
     double m_nLineWeight;
     virtual OUString getServiceImplName() override;
@@ -39,7 +39,7 @@ private:
     /// @throws cpo::uno::RuntimeException
     static OUString convertArrowheadStyleToLineStartEndName( sal_Int32 nArrowheadStyle );
 public:
-    ScVbaLineFormat( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext, const css::uno::Reference< css::drawing::XShape >& xShape );
+    ScVbaLineFormat( const cpo::uno::Reference< ov::XHelperInterface >& xParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext, const cpo::uno::Reference< css::drawing::XShape >& xShape );
 
     // Attributes
     virtual sal_Int32 getBeginArrowheadStyle() override;
@@ -66,8 +66,8 @@ public:
     virtual void setDashStyle( sal_Int32 _dashstyle ) override;
 
     // Methods
-    virtual css::uno::Reference< ov::msforms::XColorFormat > BackColor() override;
-    virtual css::uno::Reference< ov::msforms::XColorFormat > ForeColor() override;
+    virtual cpo::uno::Reference< ov::msforms::XColorFormat > BackColor() override;
+    virtual cpo::uno::Reference< ov::msforms::XColorFormat > ForeColor() override;
 };
 
 #endif // INCLUDED_VBAHELPER_SOURCE_VBAHELPER_VBALINEFORMAT_HXX

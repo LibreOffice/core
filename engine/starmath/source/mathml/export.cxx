@@ -59,8 +59,8 @@ using namespace xmloff::token;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
@@ -584,7 +584,7 @@ void SmMLExport::GetConfigurationSettings(Sequence<PropertyValue>& rProps)
     }
 }
 
-SmMLExport::SmMLExport(const css::uno::Reference<cpo::uno::XComponentContext>& rContext,
+SmMLExport::SmMLExport(const cpo::uno::Reference<cpo::uno::XComponentContext>& rContext,
                        OUString const& implementationName, SvXMLExportFlags nExportFlags)
     : SvXMLExport(rContext, implementationName, util::MeasureUnit::INCH, XML_MATH, nExportFlags)
     , m_pElementTree(nullptr)

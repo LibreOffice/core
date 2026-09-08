@@ -46,8 +46,8 @@ public:
     virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
     // XStream
-    virtual css::uno::Reference<XInputStream> getInputStream() override;
-    virtual css::uno::Reference<XOutputStream> getOutputStream() override;
+    virtual cpo::uno::Reference<XInputStream> getInputStream() override;
+    virtual cpo::uno::Reference<XOutputStream> getOutputStream() override;
 
     // XInputStream
     virtual sal_Int32 readBytes(cpo::uno::Sequence<sal_Int8>& aData,

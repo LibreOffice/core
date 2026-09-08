@@ -24,7 +24,7 @@
 
 #include <sal/types.h>
 #include <cppuhelper/implbase.hxx>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <cpo/uno/Sequence.h>
 
 #include <com/sun/star/xml/dom/XSAXDocumentBuilder2.hpp>
@@ -43,18 +43,18 @@ namespace DOM
 
     private:
         std::mutex m_Mutex;
-        const css::uno::Reference< cpo::uno::XComponentContext> m_xContext;
+        const cpo::uno::Reference< cpo::uno::XComponentContext> m_xContext;
 
         css::xml::dom::SAXDocumentBuilderState m_aState;
-        std::stack< css::uno::Reference< css::xml::dom::XNode > > m_aNodeStack;
+        std::stack< cpo::uno::Reference< css::xml::dom::XNode > > m_aNodeStack;
 
-        css::uno::Reference< css::xml::dom::XDocument > m_aDocument;
-        css::uno::Reference< css::xml::dom::XDocumentFragment > m_aFragment;
+        cpo::uno::Reference< css::xml::dom::XDocument > m_aDocument;
+        cpo::uno::Reference< css::xml::dom::XDocumentFragment > m_aFragment;
 
 
     public:
-        explicit CSAXDocumentBuilder(const css::uno::Reference< cpo::uno::XComponentContext >& );
-        static void setElementFastAttributes(const css::uno::Reference< css::xml::dom::XElement >& aElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttribs);
+        explicit CSAXDocumentBuilder(const cpo::uno::Reference< cpo::uno::XComponentContext >& );
+        static void setElementFastAttributes(const cpo::uno::Reference< css::xml::dom::XElement >& aElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttribs);
 
 
         // XServiceInfo
@@ -66,23 +66,23 @@ namespace DOM
         virtual void SAL_CALL startDocument() override;
         virtual void SAL_CALL endDocument() override;
         virtual void SAL_CALL processingInstruction( const OUString& rTarget, const OUString& rData ) override;
-        virtual void SAL_CALL setDocumentLocator( const css::uno::Reference< css::xml::sax::XLocator >& xLocator ) override;
+        virtual void SAL_CALL setDocumentLocator( const cpo::uno::Reference< css::xml::sax::XLocator >& xLocator ) override;
 
         // XFastContextHandler
-        virtual void SAL_CALL startFastElement( sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
-        virtual void SAL_CALL startUnknownElement( const OUString& Namespace, const OUString& Name, const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
+        virtual void SAL_CALL startFastElement( sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
+        virtual void SAL_CALL startUnknownElement( const OUString& Namespace, const OUString& Name, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
         virtual void SAL_CALL endFastElement( sal_Int32 Element ) override;
         virtual void SAL_CALL endUnknownElement( const OUString& Namespace, const OUString& Name ) override;
-        virtual css::uno::Reference< XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
-        virtual css::uno::Reference< XFastContextHandler > SAL_CALL createUnknownChildContext( const OUString& Namespace, const OUString& Name, const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
+        virtual cpo::uno::Reference< XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
+        virtual cpo::uno::Reference< XFastContextHandler > SAL_CALL createUnknownChildContext( const OUString& Namespace, const OUString& Name, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
         virtual void SAL_CALL characters( const OUString& aChars ) override;
 
         // XSAXDocumentBuilder
         virtual css::xml::dom::SAXDocumentBuilderState SAL_CALL getState() override;
         virtual void SAL_CALL reset() override;
-        virtual css::uno::Reference< css::xml::dom::XDocument > SAL_CALL getDocument() override;
-        virtual css::uno::Reference< css::xml::dom::XDocumentFragment > SAL_CALL getDocumentFragment() override;
-        virtual void SAL_CALL startDocumentFragment(const css::uno::Reference< css::xml::dom::XDocument >& ownerDoc) override;
+        virtual cpo::uno::Reference< css::xml::dom::XDocument > SAL_CALL getDocument() override;
+        virtual cpo::uno::Reference< css::xml::dom::XDocumentFragment > SAL_CALL getDocumentFragment() override;
+        virtual void SAL_CALL startDocumentFragment(const cpo::uno::Reference< css::xml::dom::XDocument >& ownerDoc) override;
         virtual void SAL_CALL endDocumentFragment() override;
 
 

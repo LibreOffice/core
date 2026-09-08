@@ -71,6 +71,7 @@
 #include <COKit/COKit.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 void ScTabViewShell::ConnectObject( const SdrOle2Obj* pObj )
 {

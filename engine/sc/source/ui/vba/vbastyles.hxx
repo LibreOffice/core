@@ -29,20 +29,20 @@ typedef CollTestImplHelper< ov::excel::XStyles > ScVbaStyles_BASE;
 class ScVbaStyles: public ScVbaStyles_BASE
 {
     rtl::Reference< ScModelObj > mxModel;
-    css::uno::Reference< css::lang::XMultiServiceFactory > mxMSF;
-    css::uno::Reference< css::container::XNameContainer > mxNameContainerCellStyles;
+    cpo::uno::Reference< css::lang::XMultiServiceFactory > mxMSF;
+    cpo::uno::Reference< css::container::XNameContainer > mxNameContainerCellStyles;
 public:
     /// @throws css::script::BasicErrorException
-    ScVbaStyles( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext > & xContext, ScModelObj* pModel );
+    ScVbaStyles( const cpo::uno::Reference< ov::XHelperInterface >& xParent, const cpo::uno::Reference< cpo::uno::XComponentContext > & xContext, ScModelObj* pModel );
     /// @throws cpo::uno::RuntimeException
     cpo::uno::Sequence< OUString > getStyleNames();
     /// @throws css::script::BasicErrorException
     void Delete(const OUString& _sStyleName);
     // XStyles
-     virtual css::uno::Reference< ov::excel::XStyle > SAL_CALL Add( const OUString& Name, const cpo::uno::Any& BasedOn ) override;
+     virtual cpo::uno::Reference< ov::excel::XStyle > SAL_CALL Add( const OUString& Name, const cpo::uno::Any& BasedOn ) override;
     // XEnumerationAccess
     virtual cpo::uno::Type SAL_CALL getElementType() override;
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
+    virtual cpo::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
     virtual cpo::uno::Any createCollectionObject(const cpo::uno::Any&) override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;

@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <vcl/transfer.hxx>
 
 #include <sfx2/objsh.hxx>
@@ -88,7 +88,7 @@ public:
     SdrView*            GetDragSourceView()             { return m_pDragSourceView.get(); }
     ScDragSrc           GetDragSourceFlags() const      { return m_nDragSourceFlags; }
 
-    static ScDrawTransferObj* GetOwnClipboard(const css::uno::Reference<css::datatransfer::XTransferable2>&);
+    static ScDrawTransferObj* GetOwnClipboard(const cpo::uno::Reference<css::datatransfer::XTransferable2>&);
 
     const ScRangeListVector& GetProtectedChartRangesVector() const { return m_aProtectedChartRangesVector; }
 };

@@ -31,6 +31,7 @@
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 SwVbaStyle::SwVbaStyle( const uno::Reference< XHelperInterface >& xParent,
                         const uno::Reference< cpo::uno::XComponentContext > & xContext,

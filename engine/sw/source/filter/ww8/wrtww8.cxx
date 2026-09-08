@@ -123,6 +123,7 @@
 #include <fmtanchr.hxx>
 
 using namespace css;
+using namespace ::cpo;
 using namespace sw::util;
 using namespace sw::types;
 

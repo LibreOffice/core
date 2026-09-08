@@ -122,6 +122,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::document;
+using namespace ::cpo;
 
 /*
  * global functions...

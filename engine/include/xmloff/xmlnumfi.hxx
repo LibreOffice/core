@@ -72,7 +72,7 @@ class SvXMLNumFmtHelper
 
 public:
     SvXMLNumFmtHelper(
-        const css::uno::Reference< css::util::XNumberFormatsSupplier >& rSupp );
+        const cpo::uno::Reference< css::util::XNumberFormatsSupplier >& rSupp );
 
     SvXMLNumFmtHelper( SvNumberFormatter* pNumberFormatter );
 
@@ -80,7 +80,7 @@ public:
 
     SvXMLStyleContext*  CreateChildContext( SvXMLImport& rImport,
                 sal_Int32 nElement,
-                const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+                const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
                 SvXMLStylesContext& rStyles);
 
     SvXMLNumImpData* getData() { return m_pData.get(); }
@@ -168,22 +168,22 @@ public:
                                     sal_Int32 nElement,
                                     SvXMLNumImpData* pNewData,
                                     SvXMLStylesTokens nNewType,
-                                    const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+                                    const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
                                     SvXMLStylesContext& rStyles );
                 SvXMLNumFormatContext( SvXMLImport& rImport,
                                     const OUString& rName,
-                                    const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+                                    const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
                                     const sal_Int32 nKey,
                                     LanguageType nLang,
                                     SvXMLStylesContext& rStyles );
     virtual     ~SvXMLNumFormatContext() override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
     virtual void CreateAndInsert(bool bOverwrite) override final;
 
     sal_Int32 GetKey();
-    sal_Int32 CreateAndInsert( css::uno::Reference< css::util::XNumberFormatsSupplier > const & xFormatsSupplier );
+    sal_Int32 CreateAndInsert( cpo::uno::Reference< css::util::XNumberFormatsSupplier > const & xFormatsSupplier );
     SvXMLStylesTokens GetType() const           { return m_nType; }   // SvXMLStylesTokens
 
     bool HasLongDoW() const                     { return m_bHasLongDoW; }

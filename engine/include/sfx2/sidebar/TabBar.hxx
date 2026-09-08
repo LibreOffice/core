@@ -41,7 +41,7 @@ public:
             weld::Menu& rMainMenu, weld::Menu& rSubMenu)> PopupMenuSignalConnectFunction;
     TabBar (
         vcl::Window* pParentWindow,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame,
+        const cpo::uno::Reference<css::frame::XFrame>& rxFrame,
         ::std::function<void (const OUString& rsDeckId)> aDeckActivationFunctor,
         PopupMenuSignalConnectFunction aPopupMenuSignalConnectFunction,
         SidebarController& rParentSidebarController);
@@ -72,7 +72,7 @@ public:
 
     virtual FactoryFunction GetUITestFactory() const override;
 private:
-    css::uno::Reference<css::frame::XFrame> mxFrame;
+    cpo::uno::Reference<css::frame::XFrame> mxFrame;
 
     // This unusual auxiliary builder is because without a toplevel GtkWindow
     // gtk will warn on loading a .ui with an accelerator defined, so use a
@@ -105,7 +105,7 @@ private:
     const Item::DeckActivationFunctor maDeckActivationFunctor;
 
     void CreateTabItem(weld::Toolbar& rButton, const DeckDescriptor& rDeckDescriptor);
-    css::uno::Reference<css::graphic::XGraphic> GetItemImage(const DeckDescriptor& rDeskDescriptor) const;
+    cpo::uno::Reference<css::graphic::XGraphic> GetItemImage(const DeckDescriptor& rDeskDescriptor) const;
     void UpdateButtonIcons();
 
     SidebarController& mrParentSidebarController;

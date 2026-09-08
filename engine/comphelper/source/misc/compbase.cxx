@@ -49,7 +49,7 @@ void WeakComponentImplHelperBase::disposeOnDestruct()
 void WeakComponentImplHelperBase::disposing(std::unique_lock<std::mutex>&) {}
 
 void WeakComponentImplHelperBase::addEventListener(
-    css::uno::Reference<css::lang::XEventListener> const& rxListener)
+    cpo::uno::Reference<css::lang::XEventListener> const& rxListener)
 {
     std::unique_lock aGuard(m_aMutex);
     if (m_bDisposed)
@@ -58,7 +58,7 @@ void WeakComponentImplHelperBase::addEventListener(
 }
 
 void WeakComponentImplHelperBase::removeEventListener(
-    css::uno::Reference<css::lang::XEventListener> const& rxListener)
+    cpo::uno::Reference<css::lang::XEventListener> const& rxListener)
 {
     std::unique_lock aGuard(m_aMutex);
     maEventListeners.removeInterface(aGuard, rxListener);

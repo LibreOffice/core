@@ -67,6 +67,7 @@
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 #if HAVE_FEATURE_SCRIPTING
 

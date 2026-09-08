@@ -14,7 +14,7 @@
 #include <com/sun/star/table/XCell.hpp>
 #include <cpo/uno/XInterface.hpp>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <test/testdllapi.hxx>
 
@@ -23,9 +23,9 @@ namespace apitest
 class OOO_DLLPUBLIC_TEST XTableColumns
 {
 public:
-    virtual css::uno::Reference<cpo::uno::XInterface> init() = 0;
+    virtual cpo::uno::Reference<cpo::uno::XInterface> init() = 0;
 
-    void setXSpreadsheet(const css::uno::Reference<css::sheet::XSpreadsheet>& r_xSheet)
+    void setXSpreadsheet(const cpo::uno::Reference<css::sheet::XSpreadsheet>& r_xSheet)
     {
         m_xSheet = r_xSheet;
     }
@@ -45,9 +45,9 @@ protected:
     ~XTableColumns() {}
 
 private:
-    css::uno::Reference<css::sheet::XSpreadsheet> m_xSheet;
+    cpo::uno::Reference<css::sheet::XSpreadsheet> m_xSheet;
 
-    static OUString getCellText(const css::uno::Reference<css::table::XCell>& r_xCell);
+    static OUString getCellText(const cpo::uno::Reference<css::table::XCell>& r_xCell);
 };
 
 } // namespace apitest

@@ -180,7 +180,7 @@ static PyRef createClassFromTypeDescription(
 }
 
 static PyRef createEmptyPyTypeForTypeDescription(
-    const css::uno::Reference<css::reflection::XTypeDescription>& xType)
+    const cpo::uno::Reference<css::reflection::XTypeDescription>& xType)
 {
     PyRef ret(
         PyObject_CallFunctionObjArgs(
@@ -195,7 +195,7 @@ static PyRef createEmptyPyTypeForTypeDescription(
 }
 
 static PyRef createClassForService(
-    const css::uno::Reference<css::reflection::XServiceTypeDescription2>& xService)
+    const cpo::uno::Reference<css::reflection::XServiceTypeDescription2>& xService)
 {
     PyRef ret = createEmptyPyTypeForTypeDescription(xService);
 
@@ -223,7 +223,7 @@ static PyRef createClassForService(
 }
 
 static PyRef createClassForSingleton(
-    const css::uno::Reference<css::reflection::XSingletonTypeDescription>& xSingleton,
+    const cpo::uno::Reference<css::reflection::XSingletonTypeDescription>& xSingleton,
     const Runtime& runtime)
 {
     PyRef ret = createEmptyPyTypeForTypeDescription(xSingleton);
@@ -263,12 +263,12 @@ static PyRef createClass( const OUString & name, const Runtime &runtime )
 
     if (xType.hasValue())
     {
-        css::uno::Reference<css::reflection::XServiceTypeDescription2> xService;
+        cpo::uno::Reference<css::reflection::XServiceTypeDescription2> xService;
 
         if ((xType >>= xService) && xService.is())
             return createClassForService(xService);
 
-        css::uno::Reference<css::reflection::XSingletonTypeDescription> xSingleton;
+        cpo::uno::Reference<css::reflection::XSingletonTypeDescription> xSingleton;
 
         if ((xType >>= xSingleton) && xSingleton.is())
             return createClassForSingleton(xSingleton, runtime);

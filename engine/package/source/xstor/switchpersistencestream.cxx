@@ -27,6 +27,7 @@
 #include "switchpersistencestream.hxx"
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 struct SPStreamData_Impl
 {

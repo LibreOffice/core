@@ -24,14 +24,14 @@
 #include <comphelper/kit.hxx>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo::uno;
 
 namespace svx
 {
 namespace sidebar
 {
 FontworkPropertyPanel::FontworkPropertyPanel(weld::Widget* pParent,
-                                             const css::uno::Reference<css::frame::XFrame>& rxFrame)
+                                             const cpo::uno::Reference<css::frame::XFrame>& rxFrame)
     : PanelLayout(pParent, u"FontworkPropertyPanel"_ustr, u"svx/ui/sidebarfontwork.ui"_ustr)
     , m_pToolbar(m_xBuilder->weld_toolbar(u"fontwork-toolbox"_ustr))
     , m_xToolbar(new ToolbarUnoDispatcher(*m_pToolbar, *m_xBuilder, rxFrame))
@@ -42,7 +42,7 @@ FontworkPropertyPanel::FontworkPropertyPanel(weld::Widget* pParent,
 
 std::unique_ptr<PanelLayout>
 FontworkPropertyPanel::Create(weld::Widget* pParent,
-                              const css::uno::Reference<css::frame::XFrame>& rxFrame)
+                              const cpo::uno::Reference<css::frame::XFrame>& rxFrame)
 {
     if (pParent == nullptr)
         throw lang::IllegalArgumentException(

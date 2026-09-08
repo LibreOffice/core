@@ -26,20 +26,20 @@
 namespace connectivity::calc
 {
     /// @throws cpo::uno::Exception
-    css::uno::Reference< cpo::uno::XInterface >
-        ODriver_CreateInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory);
+    cpo::uno::Reference< cpo::uno::XInterface >
+        ODriver_CreateInstance(const cpo::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory);
 
     class ODriver : public file::OFileDriver
     {
     public:
-        ODriver(const css::uno::Reference<
+        ODriver(const cpo::uno::Reference<
                             cpo::uno::XComponentContext >& _rxContext) :
             file::OFileDriver(_rxContext) {}
 
         OUString getImplementationName(  ) override;
 
         // XDriver
-        virtual css::uno::Reference< css::sdbc::XConnection >
+        virtual cpo::uno::Reference< css::sdbc::XConnection >
                 connect( const OUString& url, const cpo::uno::Sequence<
                             css::beans::PropertyValue >& info ) override;
         virtual bool acceptsURL( const OUString& url ) override;

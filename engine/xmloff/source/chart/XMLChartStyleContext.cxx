@@ -32,6 +32,7 @@
 #include "XMLChartPropertyContext.hxx"
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using ::xmloff::token::XML_DATA_STYLE_NAME;
 using ::xmloff::token::XML_PERCENTAGE_DATA_STYLE_NAME;
 using ::xmloff::token::XML_TEXT_PROPERTIES;
@@ -103,9 +104,9 @@ void XMLChartStyleContext::FillPropertySet(
     lcl_NumberFormatStyleToProperty( msPercentageDataStyleName, u"PercentageNumberFormat"_ustr, mrStyles, rPropSet );
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLChartStyleContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLChartStyleContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     if( IsTokenInNamespace(nElement, XML_NAMESPACE_STYLE) ||
         IsTokenInNamespace(nElement, XML_NAMESPACE_LO_EXT) )

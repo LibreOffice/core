@@ -249,7 +249,7 @@ public:
 
 protected:
     void implDtorClearModel();
-    virtual css::uno::Reference< css::frame::XModel > createUnoModel();
+    virtual cpo::uno::Reference< css::frame::XModel > createUnoModel();
 
 private:
     SdrModel(const SdrModel& rSrcModel) = delete;
@@ -263,7 +263,7 @@ private:
     SVX_DLLPRIVATE void ImpCreateTables(bool bDisablePropertyFiles);
 
     // this is a weak reference to a possible living api wrapper for this model
-    css::uno::Reference< css::frame::XModel > mxUnoModel;
+    cpo::uno::Reference< css::frame::XModel > mxUnoModel;
 
     // used to disable unique name checking during page move
     bool mbMakePageObjectsNamesUnique = true;
@@ -311,9 +311,9 @@ public:
     // swapping.
     // The stream from which the model was loaded or in which is was saved last
     // needs to be delivered
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
                 css::embed::XStorage> GetDocumentStorage() const;
-    css::uno::Reference<
+    cpo::uno::Reference<
             css::io::XInputStream >
         GetDocumentStream(OUString const& rURL,
                 ::comphelper::LifecycleProxy const & rProxy) const;
@@ -566,8 +566,8 @@ public:
     bool GetDisableTextEditUsesCommonUndoManager() const { return mbDisableTextEditUsesCommonUndoManager; }
     void SetDisableTextEditUsesCommonUndoManager(bool bNew) { mbDisableTextEditUsesCommonUndoManager = bNew; }
 
-    css::uno::Reference< css::frame::XModel > const & getUnoModel();
-    void setUnoModel( const css::uno::Reference< css::frame::XModel >& xModel );
+    cpo::uno::Reference< css::frame::XModel > const & getUnoModel();
+    void setUnoModel( const cpo::uno::Reference< css::frame::XModel >& xModel );
 
     // these functions are used by the api to disable repaints during a
     // set of api calls.

@@ -62,7 +62,8 @@
 #include <tabfrm.hxx>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 namespace
 {
@@ -1138,7 +1139,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf154319)
     auto xSupplier(mxComponent.queryThrow<css::text::XDocumentIndexesSupplier>());
     auto xIndexes = xSupplier->getDocumentIndexes();
     auto xTOCIndex(xIndexes->getByIndex(0).queryThrow<css::beans::XPropertySet>());
-    css::uno::Reference<css::container::XIndexReplace> xLevelFormats;
+    cpo::uno::Reference<css::container::XIndexReplace> xLevelFormats;
     CPPUNIT_ASSERT(xTOCIndex->getPropertyValue(u"LevelFormat"_ustr) >>= xLevelFormats);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(11), xLevelFormats->getCount());
 
@@ -1201,7 +1202,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf154695)
     auto xSupplier(mxComponent.queryThrow<css::text::XDocumentIndexesSupplier>());
     auto xIndexes = xSupplier->getDocumentIndexes();
     auto xTOCIndex(xIndexes->getByIndex(0).queryThrow<css::beans::XPropertySet>());
-    css::uno::Reference<css::container::XIndexReplace> xLevelFormats;
+    cpo::uno::Reference<css::container::XIndexReplace> xLevelFormats;
     CPPUNIT_ASSERT(xTOCIndex->getPropertyValue(u"LevelFormat"_ustr) >>= xLevelFormats);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(11), xLevelFormats->getCount());
 

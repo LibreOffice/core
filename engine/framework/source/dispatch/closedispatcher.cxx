@@ -44,6 +44,7 @@
 #include <o3tl/string_view.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 namespace framework{
 
@@ -56,8 +57,8 @@ constexpr OUString URL_CLOSEDOC = u".uno:CloseDoc"_ustr;
 constexpr OUString URL_CLOSEWIN = u".uno:CloseWin"_ustr;
 const char URL_CLOSEFRAME[] = ".uno:CloseFrame";
 
-CloseDispatcher::CloseDispatcher(css::uno::Reference< cpo::uno::XComponentContext >        xContext ,
-                                 const css::uno::Reference< css::frame::XFrame >&          xFrame ,
+CloseDispatcher::CloseDispatcher(cpo::uno::Reference< cpo::uno::XComponentContext >        xContext ,
+                                 const cpo::uno::Reference< css::frame::XFrame >&          xFrame ,
                                  std::u16string_view                                       sTarget)
     : m_xContext(std::move(xContext))
     , m_aAsyncCallback(
@@ -88,7 +89,7 @@ CloseDispatcher::~CloseDispatcher()
 void CloseDispatcher::dispatch(const css::util::URL&                                  aURL      ,
                                         const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments)
 {
-    dispatchWithNotification(aURL, lArguments, css::uno::Reference< css::frame::XDispatchResultListener >());
+    dispatchWithNotification(aURL, lArguments, cpo::uno::Reference< css::frame::XDispatchResultListener >());
 }
 
 cpo::uno::Sequence< sal_Int16 > CloseDispatcher::getSupportedCommandGroups()
@@ -119,19 +120,19 @@ cpo::uno::Sequence< css::frame::DispatchInformation > CloseDispatcher::getConfig
     return cpo::uno::Sequence< css::frame::DispatchInformation >();
 }
 
-void CloseDispatcher::addStatusListener(const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/,
+void CloseDispatcher::addStatusListener(const cpo::uno::Reference< css::frame::XStatusListener >& /*xListener*/,
                                                  const css::util::URL&                                     /*aURL*/     )
 {
 }
 
-void CloseDispatcher::removeStatusListener(const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/,
+void CloseDispatcher::removeStatusListener(const cpo::uno::Reference< css::frame::XStatusListener >& /*xListener*/,
                                                     const css::util::URL&                                     /*aURL*/     )
 {
 }
 
 void CloseDispatcher::dispatchWithNotification(const css::util::URL&                                             aURL      ,
                                                         const cpo::uno::Sequence< css::beans::PropertyValue >&            lArguments,
-                                                        const css::uno::Reference< css::frame::XDispatchResultListener >& xListener )
+                                                        const cpo::uno::Reference< css::frame::XDispatchResultListener >& xListener )
 {
     // SAFE -> ----------------------------------
     SolarMutexClearableGuard aWriteLock;
@@ -203,7 +204,7 @@ void CloseDispatcher::dispatchWithNotification(const css::util::URL&            
     // They call us back by using our c++ interface.
 
     m_xResultListener = xListener;
-    m_xSelfHold.set(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
+    m_xSelfHold.set(static_cast< ::cppu::OWeakObject* >(this), cpo::uno::UNO_QUERY);
 
     aWriteLock.clear();
     // <- SAFE ----------------------------------
@@ -255,9 +256,9 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback, LinkParamNone*, void)
 
     bool bCloseAllViewsToo;
     EOperation                                                  eOperation;
-    css::uno::Reference< cpo::uno::XComponentContext >          xContext;
-    css::uno::Reference< css::frame::XFrame >                   xCloseFrame;
-    css::uno::Reference< css::frame::XDispatchResultListener >  xListener;
+    cpo::uno::Reference< cpo::uno::XComponentContext >          xContext;
+    cpo::uno::Reference< css::frame::XFrame >                   xCloseFrame;
+    cpo::uno::Reference< css::frame::XDispatchResultListener >  xListener;
     {
         SolarMutexGuard g;
 
@@ -267,7 +268,7 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback, LinkParamNone*, void)
 
         eOperation  = m_eOperation;
         xContext    = m_xContext;
-        xCloseFrame.set(m_xCloseFrame.get(), css::uno::UNO_QUERY);
+        xCloseFrame.set(m_xCloseFrame.get(), cpo::uno::UNO_QUERY);
         xListener   = m_xResultListener;
     }
 
@@ -283,13 +284,13 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback, LinkParamNone*, void)
     // Analyze the environment a first time.
     // If we found some special cases, we can
     // make some decisions earlier!
-    css::uno::Reference< css::frame::XFramesSupplier > xDesktop( css::frame::Desktop::create(xContext), css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference< css::frame::XFramesSupplier > xDesktop( css::frame::Desktop::create(xContext), cpo::uno::UNO_QUERY_THROW);
     FrameListAnalyzer aCheck1(xDesktop, xCloseFrame, FrameAnalyzerFlags::Help | FrameAnalyzerFlags::BackingComponent);
 
     // Check for existing UNO connections.
     // NOTE: There is a race between checking this and connections being created/destroyed before
     //       we close the frame / terminate the app.
-    css::uno::Reference<css::bridge::XBridgeFactory2> bridgeFac( css::bridge::BridgeFactory::create(xContext) );
+    cpo::uno::Reference<css::bridge::XBridgeFactory2> bridgeFac( css::bridge::BridgeFactory::create(xContext) );
     bool bHasActiveConnections = bridgeFac->getExistingBridges().hasElements();
 
     // a) If the current frame (where the close dispatch was requested for) does not have
@@ -387,7 +388,7 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback, LinkParamNone*, void)
         // get quickstart service
         try
         {
-            css::uno::Reference< css::beans::XFastPropertySet > xSet( xContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.comp.desktop.QuickstartWrapper"_ustr, xContext), css::uno::UNO_QUERY_THROW );
+            cpo::uno::Reference< css::beans::XFastPropertySet > xSet( xContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.comp.desktop.QuickstartWrapper"_ustr, xContext), cpo::uno::UNO_QUERY_THROW );
             cpo::uno::Any aVal( xSet->getFastPropertyValue( 0 ) );
             bool bState = false;
             if( aVal >>= bState )
@@ -406,7 +407,7 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback, LinkParamNone*, void)
 
     if ( ! bSuccess &&  bControllerSuspended )
     {
-        css::uno::Reference< css::frame::XController > xController = xCloseFrame->getController();
+        cpo::uno::Reference< css::frame::XController > xController = xCloseFrame->getController();
         if (xController.is())
             xController->suspend(false);
     }
@@ -423,7 +424,7 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback, LinkParamNone*, void)
     // Further this member is used to detect still running and not yet finished
     // asynchronous operations. So it's time now to release this reference.
     // But hold it temp alive. Otherwise we die before we can finish this method really :-))
-    css::uno::Reference< cpo::uno::XInterface > xTempHold = m_xSelfHold;
+    cpo::uno::Reference< cpo::uno::XInterface > xTempHold = m_xSelfHold;
     m_xSelfHold.clear();
     m_xResultListener.clear();
     }
@@ -432,7 +433,7 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback, LinkParamNone*, void)
     }
 }
 
-bool CloseDispatcher::implts_prepareFrameForClosing(const css::uno::Reference< css::frame::XFrame >& xFrame,
+bool CloseDispatcher::implts_prepareFrameForClosing(const cpo::uno::Reference< css::frame::XFrame >& xFrame,
                                                     bool                                   bCloseAllOtherViewsToo,
                                                     bool&                                  bControllerSuspended  )
 {
@@ -446,13 +447,13 @@ bool CloseDispatcher::implts_prepareFrameForClosing(const css::uno::Reference< c
     // will show the "save/discard/cancel" dialog for the last view only!
     if (bCloseAllOtherViewsToo)
     {
-        css::uno::Reference< cpo::uno::XComponentContext > xContext;
+        cpo::uno::Reference< cpo::uno::XComponentContext > xContext;
         {
             SolarMutexGuard g;
             xContext = m_xContext;
         }
 
-        css::uno::Reference< css::frame::XFramesSupplier > xDesktop( css::frame::Desktop::create( xContext ), css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference< css::frame::XFramesSupplier > xDesktop( css::frame::Desktop::create( xContext ), cpo::uno::UNO_QUERY_THROW);
         FrameListAnalyzer aCheck(xDesktop, xFrame, FrameAnalyzerFlags::All);
 
         size_t c = aCheck.m_lModelFrames.size();
@@ -466,7 +467,7 @@ bool CloseDispatcher::implts_prepareFrameForClosing(const css::uno::Reference< c
 
     // Inform user about modified documents or still running jobs (e.g. printing).
     {
-        css::uno::Reference< css::frame::XController > xController = xFrame->getController();
+        cpo::uno::Reference< css::frame::XController > xController = xFrame->getController();
         if (xController.is()) // some views don't uses a controller .-( (e.g. the help window)
         {
             bControllerSuspended = xController->suspend(true);
@@ -483,10 +484,10 @@ bool CloseDispatcher::implts_prepareFrameForClosing(const css::uno::Reference< c
 
 bool CloseDispatcher::implts_closeFrame()
 {
-    css::uno::Reference< css::frame::XFrame > xFrame;
+    cpo::uno::Reference< css::frame::XFrame > xFrame;
     {
         SolarMutexGuard g;
-        xFrame.set(m_xCloseFrame.get(), css::uno::UNO_QUERY);
+        xFrame.set(m_xCloseFrame.get(), cpo::uno::UNO_QUERY);
     }
 
     // frame already dead ? => so it's closed ... it's closed ...
@@ -509,28 +510,28 @@ bool CloseDispatcher::implts_closeFrame()
 
 bool CloseDispatcher::implts_establishBackingMode()
 {
-    css::uno::Reference< cpo::uno::XComponentContext > xContext;
-    css::uno::Reference< css::frame::XFrame >          xFrame;
+    cpo::uno::Reference< cpo::uno::XComponentContext > xContext;
+    cpo::uno::Reference< css::frame::XFrame >          xFrame;
     {
         SolarMutexGuard g;
         xContext  = m_xContext;
-        xFrame.set(m_xCloseFrame.get(), css::uno::UNO_QUERY);
+        xFrame.set(m_xCloseFrame.get(), cpo::uno::UNO_QUERY);
     }
 
     if (!xFrame.is())
         return false;
 
-    css::uno::Reference < css::document::XActionLockable > xLock( xFrame, css::uno::UNO_QUERY );
+    cpo::uno::Reference < css::document::XActionLockable > xLock( xFrame, cpo::uno::UNO_QUERY );
     if ( xLock.is() && xLock->isActionLocked() )
         return false;
 
-    css::uno::Reference< css::awt::XWindow > xContainerWindow = xFrame->getContainerWindow();
+    cpo::uno::Reference< css::awt::XWindow > xContainerWindow = xFrame->getContainerWindow();
 
-    css::uno::Reference< css::frame::XController > xStartModule = css::frame::StartModule::createWithParentWindow(
+    cpo::uno::Reference< css::frame::XController > xStartModule = css::frame::StartModule::createWithParentWindow(
                         xContext, xContainerWindow);
 
     // Attention: You MUST(!) call setComponent() before you call attachFrame().
-    css::uno::Reference< css::awt::XWindow > xBackingWin(xStartModule, css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::awt::XWindow > xBackingWin(xStartModule, cpo::uno::UNO_QUERY);
     xFrame->setComponent(xBackingWin, xStartModule);
     xStartModule->attachFrame(xFrame);
     xContainerWindow->setVisible(true);
@@ -540,18 +541,18 @@ bool CloseDispatcher::implts_establishBackingMode()
 
 bool CloseDispatcher::implts_terminateApplication()
 {
-    css::uno::Reference< cpo::uno::XComponentContext > xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext > xContext;
     {
         SolarMutexGuard g;
         xContext = m_xContext;
     }
 
-    css::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create( xContext );
+    cpo::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create( xContext );
 
     return xDesktop->terminate();
 }
 
-void CloseDispatcher::implts_notifyResultListener(const css::uno::Reference< css::frame::XDispatchResultListener >& xListener,
+void CloseDispatcher::implts_notifyResultListener(const cpo::uno::Reference< css::frame::XDispatchResultListener >& xListener,
                                                         sal_Int16                                                   nState   ,
                                                   const cpo::uno::Any&                                              aResult  )
 {
@@ -559,14 +560,14 @@ void CloseDispatcher::implts_notifyResultListener(const css::uno::Reference< css
         return;
 
     css::frame::DispatchResultEvent aEvent(
-        css::uno::Reference< cpo::uno::XInterface >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY),
+        cpo::uno::Reference< cpo::uno::XInterface >(static_cast< ::cppu::OWeakObject* >(this), cpo::uno::UNO_QUERY),
         nState,
         aResult);
 
     xListener->dispatchFinished(aEvent);
 }
 
-css::uno::Reference< css::frame::XFrame > CloseDispatcher::static_impl_searchRightTargetFrame(const css::uno::Reference< css::frame::XFrame >& xFrame ,
+cpo::uno::Reference< css::frame::XFrame > CloseDispatcher::static_impl_searchRightTargetFrame(const cpo::uno::Reference< css::frame::XFrame >& xFrame ,
                                                                                               std::u16string_view                           sTarget)
 {
     if (o3tl::equalsIgnoreAsciiCase(sTarget, u"_self"))
@@ -574,7 +575,7 @@ css::uno::Reference< css::frame::XFrame > CloseDispatcher::static_impl_searchRig
 
     OSL_ENSURE(sTarget.empty(), "CloseDispatch used for unexpected target. Magic things will happen now .-)");
 
-    css::uno::Reference< css::frame::XFrame > xTarget = xFrame;
+    cpo::uno::Reference< css::frame::XFrame > xTarget = xFrame;
     while(true)
     {
         // a) top frames will be closed
@@ -582,8 +583,8 @@ css::uno::Reference< css::frame::XFrame > CloseDispatcher::static_impl_searchRig
             return xTarget;
 
         // b) even child frame containing top level windows (e.g. query designer of database) will be closed
-        css::uno::Reference< css::awt::XWindow >    xWindow        = xTarget->getContainerWindow();
-        css::uno::Reference< css::awt::XTopWindow > xTopWindowCheck(xWindow, css::uno::UNO_QUERY);
+        cpo::uno::Reference< css::awt::XWindow >    xWindow        = xTarget->getContainerWindow();
+        cpo::uno::Reference< css::awt::XTopWindow > xTopWindowCheck(xWindow, cpo::uno::UNO_QUERY);
         if (xTopWindowCheck.is())
         {
             // b1) Note: Toolkit interface XTopWindow sometimes is used by real VCL-child-windows also .-)
@@ -600,7 +601,7 @@ css::uno::Reference< css::frame::XFrame > CloseDispatcher::static_impl_searchRig
         // c) try to find better results on parent frame
         //    If no parent frame exists (because this frame is used outside the desktop tree)
         //    the given frame must be used directly.
-        css::uno::Reference< css::frame::XFrame > xParent = xTarget->getCreator();
+        cpo::uno::Reference< css::frame::XFrame > xParent = xTarget->getCreator();
         if ( ! xParent.is())
             return xTarget;
 

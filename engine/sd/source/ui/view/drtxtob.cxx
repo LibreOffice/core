@@ -67,6 +67,7 @@ using namespace sd;
 #include <sdslots.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace sd {
 

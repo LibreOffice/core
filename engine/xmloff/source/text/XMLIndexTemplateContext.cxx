@@ -43,7 +43,7 @@ using namespace ::xmloff::token;
 
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::beans::PropertyValues;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::cpo::uno::Sequence;
 using ::cpo::uno::Any;
 using ::com::sun::star::container::XIndexReplace;
@@ -94,7 +94,7 @@ void XMLIndexTemplateContext::addTemplateEntry(
 
 void XMLIndexTemplateContext::startFastElement(
     sal_Int32 /*nElement*/,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     // process two attributes: style-name, outline-level
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
@@ -192,9 +192,9 @@ SvXMLEnumMapEntry<TemplateTokenType> const aTemplateTokenTypeMap[] =
     { XML_TOKEN_INVALID, TemplateTokenType(0) }
 };
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLIndexTemplateContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLIndexTemplateContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& )
 {
     SvXMLImportContext* pContext = nullptr;
 

@@ -28,9 +28,10 @@
 #include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace ::xmloff::token;
 
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 
 namespace {
 

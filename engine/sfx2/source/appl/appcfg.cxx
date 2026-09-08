@@ -50,7 +50,7 @@
 #include <comphelper/kit.hxx>
 #include <objshimp.hxx>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 namespace {
 

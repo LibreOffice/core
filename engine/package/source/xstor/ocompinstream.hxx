@@ -44,7 +44,7 @@ class OInputCompStream : public cppu::WeakImplHelper < css::io::XInputStream
 protected:
     OWriteStream_Impl* m_pImpl;
     rtl::Reference<comphelper::RefCountedMutex> m_xMutex;
-    css::uno::Reference < css::io::XInputStream > m_xStream;
+    cpo::uno::Reference < css::io::XInputStream > m_xStream;
     comphelper::ByteReader* m_pByteReader;
     std::unique_ptr<::comphelper::OInterfaceContainerHelper3<css::lang::XEventListener>> m_pInterfaceContainer;
     cpo::uno::Sequence < css::beans::PropertyValue > m_aProperties;
@@ -53,11 +53,11 @@ protected:
 
 public:
     OInputCompStream( OWriteStream_Impl& pImpl,
-                      css::uno::Reference< css::io::XInputStream > xStream,
+                      cpo::uno::Reference< css::io::XInputStream > xStream,
                       const cpo::uno::Sequence< css::beans::PropertyValue >& aProps,
                       sal_Int32 nStorageType );
 
-    OInputCompStream( css::uno::Reference< css::io::XInputStream > xStream,
+    OInputCompStream( cpo::uno::Reference< css::io::XInputStream > xStream,
                       const cpo::uno::Sequence< css::beans::PropertyValue >& aProps,
                       sal_Int32 nStorageType );
 
@@ -76,13 +76,13 @@ public:
     virtual void closeInput(  ) override;
 
     //XStream
-    virtual css::uno::Reference< css::io::XInputStream > getInputStream(  ) override;
-    virtual css::uno::Reference< css::io::XOutputStream > getOutputStream(  ) override;
+    virtual cpo::uno::Reference< css::io::XInputStream > getInputStream(  ) override;
+    virtual cpo::uno::Reference< css::io::XOutputStream > getOutputStream(  ) override;
 
     //XComponent
     virtual void dispose(  ) override;
-    virtual void addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-    virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+    virtual void addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& xListener ) override;
+    virtual void removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
     //XRelationshipAccess
     virtual bool hasByID( const OUString& sID ) override;
@@ -97,13 +97,13 @@ public:
     virtual void clearRelationships(  ) override;
 
     //XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo() override;
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo() override;
     virtual void setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
     virtual cpo::uno::Any getPropertyValue( const OUString& PropertyName ) override;
-    virtual void addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
-    virtual void removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
-    virtual void addVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
-    virtual void removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+    virtual void addPropertyChangeListener( const OUString& aPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
+    virtual void removePropertyChangeListener( const OUString& aPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
+    virtual void addVetoableChangeListener( const OUString& PropertyName, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+    virtual void removeVetoableChangeListener( const OUString& PropertyName, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
     // comphelper::ByteReader
     virtual sal_Int32 readSomeBytes(sal_Int8* aData, sal_Int32 nBytesToRead) override;

@@ -41,7 +41,7 @@ namespace logging
 {
 
     using ::com::sun::star::logging::XLogger;
-    using ::com::sun::star::uno::Reference;
+    using ::cpo::uno::Reference;
     using ::cpo::uno::XComponentContext;
     using ::com::sun::star::lang::XServiceInfo;
     using ::cpo::uno::Sequence;

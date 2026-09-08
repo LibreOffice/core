@@ -121,11 +121,11 @@ private:
 
 public:
     OListBoxModel(
-        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
+        const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     OListBoxModel(
         const OListBoxModel* _pOriginal,
-        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
+        const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     virtual ~OListBoxModel() override;
 
@@ -158,9 +158,9 @@ private:
     // XPersistObject
     virtual OUString    getServiceName() override;
     virtual void
-        write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
+        write(const cpo::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
     virtual void
-        read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
+        read(const cpo::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
 
     // OControlModel's property handling
     virtual void describeFixedProperties(
@@ -189,7 +189,7 @@ private:
     virtual cpo::uno::Any   translateControlValueToValidatableValue( ) const override;
     virtual bool            commitControlValueToDbColumn( bool _bPostReset ) override;
 
-    virtual void            onConnectedDbColumn( const css::uno::Reference< cpo::uno::XInterface >& _rxForm ) override;
+    virtual void            onConnectedDbColumn( const cpo::uno::Reference< cpo::uno::XInterface >& _rxForm ) override;
     virtual void            onDisconnectedDbColumn() override;
 
     virtual cpo::uno::Any   getDefaultForReset() const override;
@@ -201,7 +201,7 @@ private:
     virtual void    stringItemListChanged( ControlModelLock& _rInstanceLock ) override;
     virtual void    refreshInternalEntryList() override;
 
-    virtual css::uno::Reference< css::util::XCloneable > createClone(  ) override;
+    virtual cpo::uno::Reference< css::util::XCloneable > createClone(  ) override;
 
     void init();
     cpo::uno::Any getCurrentSingleValue() const;
@@ -250,7 +250,7 @@ private:
     cpo::uno::Any                           m_aCurrentSelection;
     Idle                                    m_aChangeIdle;
 
-    css::uno::Reference< css::awt::XListBox >
+    cpo::uno::Reference< css::awt::XListBox >
                                             m_xAggregateListBox;
 
     ::rtl::Reference< ::comphelper::AsyncEventNotifier >
@@ -261,7 +261,7 @@ protected:
     virtual cpo::uno::Sequence< cpo::uno::Type>   _getTypes() override;
 
 public:
-    explicit OListBoxControl(const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory);
+    explicit OListBoxControl(const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory);
     virtual ~OListBoxControl() override;
 
     // UNO binding
@@ -275,8 +275,8 @@ public:
     virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
 // XChangeBroadcaster
-        virtual void addChangeListener(const css::uno::Reference< css::form::XChangeListener>& _rxListener) override;
-    virtual void removeChangeListener(const css::uno::Reference< css::form::XChangeListener>& _rxListener) override;
+        virtual void addChangeListener(const cpo::uno::Reference< css::form::XChangeListener>& _rxListener) override;
+    virtual void removeChangeListener(const cpo::uno::Reference< css::form::XChangeListener>& _rxListener) override;
 
 // XFocusListener
     virtual void focusGained(const css::awt::FocusEvent& _rEvent) override;
@@ -292,10 +292,10 @@ public:
     virtual void disposing() override;
 
 // XListBox
-    virtual void addItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
-    virtual void removeItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
-    virtual void addActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
-    virtual void removeActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
+    virtual void addItemListener( const cpo::uno::Reference< css::awt::XItemListener >& l ) override;
+    virtual void removeItemListener( const cpo::uno::Reference< css::awt::XItemListener >& l ) override;
+    virtual void addActionListener( const cpo::uno::Reference< css::awt::XActionListener >& l ) override;
+    virtual void removeActionListener( const cpo::uno::Reference< css::awt::XActionListener >& l ) override;
     virtual void addItem( const OUString& aItem, ::sal_Int16 nPos ) override;
     virtual void addItems( const cpo::uno::Sequence< OUString >& aItems, ::sal_Int16 nPos ) override;
     virtual void removeItems( ::sal_Int16 nPos, ::sal_Int16 nCount ) override;

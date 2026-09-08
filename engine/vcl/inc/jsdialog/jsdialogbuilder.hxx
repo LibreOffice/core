@@ -46,7 +46,7 @@ class JSDropTarget final
     : public comphelper::WeakComponentImplHelper<
           css::datatransfer::dnd::XDropTarget, css::lang::XInitialization, css::lang::XServiceInfo>
 {
-    std::vector<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> m_aListeners;
+    std::vector<cpo::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> m_aListeners;
 
 public:
     JSDropTarget();
@@ -56,9 +56,9 @@ public:
 
     // XDropTarget
     virtual void addDropTargetListener(
-        const css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>&) override;
+        const cpo::uno::Reference<css::datatransfer::dnd::XDropTargetListener>&) override;
     virtual void removeDropTargetListener(
-        const css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>&) override;
+        const cpo::uno::Reference<css::datatransfer::dnd::XDropTargetListener>&) override;
     virtual bool isActive() override;
     virtual void setActive(bool active) override;
     virtual sal_Int8 getDefaultActions() override;
@@ -144,15 +144,15 @@ public:
     JSInstanceBuilder(weld::Widget* pParent, vcl::Window* pVclParent, std::u16string_view rUIRoot,
                       const OUString& rUIFile, Type eBuilderType, sal_uInt64 nKitWindowId = 0,
                       const std::u16string_view& sTypeOfJSON = u"",
-                      const css::uno::Reference<css::frame::XFrame>& rFrame
-                      = css::uno::Reference<css::frame::XFrame>());
+                      const cpo::uno::Reference<css::frame::XFrame>& rFrame
+                      = cpo::uno::Reference<css::frame::XFrame>());
 
     static std::unique_ptr<JSInstanceBuilder>
     CreateDialogBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile);
 
     static std::unique_ptr<JSInstanceBuilder>
     CreateNotebookbarBuilder(vcl::Window* pParent, const OUString& rUIRoot, const OUString& rUIFile,
-                             const css::uno::Reference<css::frame::XFrame>& rFrame,
+                             const cpo::uno::Reference<css::frame::XFrame>& rFrame,
                              sal_uInt64 nWindowId = 0);
     static std::unique_ptr<JSInstanceBuilder>
     CreateSidebarBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile,
@@ -363,7 +363,7 @@ public:
         }
     }
 
-    virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget> get_drop_target() override
+    virtual cpo::uno::Reference<css::datatransfer::dnd::XDropTarget> get_drop_target() override
     {
         if (!m_xDropTarget)
             m_xDropTarget.set(new JSDropTarget);
@@ -726,7 +726,7 @@ public:
     virtual void set_item_icon_name(const OUString& rIdent, const OUString& rIconName) override;
     using JSWidget<SalInstanceToolbar, ::ToolBox>::set_item_image;
     virtual void set_item_image(const OUString& rIdent,
-                                const css::uno::Reference<css::graphic::XGraphic>& rImage) override;
+                                const cpo::uno::Reference<css::graphic::XGraphic>& rImage) override;
 };
 
 class JSTextView final : public JSWidget<SalInstanceTextView, ::VclMultiLineEdit>
@@ -866,7 +866,7 @@ public:
 
     virtual void set_label(const OUString& rText) override;
     virtual void set_image(VirtualDevice* pDevice) override;
-    virtual void set_image(const css::uno::Reference<css::graphic::XGraphic>& rImage) override;
+    virtual void set_image(const cpo::uno::Reference<css::graphic::XGraphic>& rImage) override;
     virtual void do_set_active(bool active) override;
 };
 
@@ -951,7 +951,7 @@ public:
     JSImage(JSDialogSender* pSender, FixedImage* pImage, SalInstanceBuilder* pBuilder,
             bool bTakeOwnership);
     virtual void set_image(VirtualDevice* pDevice) override;
-    virtual void set_image(const css::uno::Reference<css::graphic::XGraphic>& rImage) override;
+    virtual void set_image(const cpo::uno::Reference<css::graphic::XGraphic>& rImage) override;
     virtual void set_from_icon_name(const OUString& rIconName) override;
 };
 

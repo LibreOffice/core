@@ -21,7 +21,7 @@
 class MWAWImportFilter : public writerperfect::ImportFilter<OdtGenerator>
 {
 public:
-    explicit MWAWImportFilter(const css::uno::Reference<cpo::uno::XComponentContext>& rxContext)
+    explicit MWAWImportFilter(const cpo::uno::Reference<cpo::uno::XComponentContext>& rxContext)
         : writerperfect::ImportFilter<OdtGenerator>(rxContext)
     {
     }

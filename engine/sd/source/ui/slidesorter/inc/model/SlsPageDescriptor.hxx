@@ -21,7 +21,7 @@
 
 #include <model/SlsVisualState.hxx>
 #include <tools/gen.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <memory>
 
@@ -59,7 +59,7 @@ public:
             or use (x-1)/2 magic).
     */
     PageDescriptor (
-        const css::uno::Reference<css::drawing::XDrawPage>& rxPage,
+        const cpo::uno::Reference<css::drawing::XDrawPage>& rxPage,
         SdPage* pPage,
         const sal_Int32 nIndex);
 
@@ -71,7 +71,7 @@ public:
 
     /** Return the page that is represented by the descriptor as XDrawPage reference.
     */
-    const css::uno::Reference<css::drawing::XDrawPage>& GetXDrawPage() const { return mxPage;}
+    const cpo::uno::Reference<css::drawing::XDrawPage>& GetXDrawPage() const { return mxPage;}
 
     /** Returns the index of the page as it is displayed in the view as page
         number.  The value may differ from the index returned by the
@@ -115,7 +115,7 @@ public:
 
 private:
     SdPage* mpPage;
-    css::uno::Reference<css::drawing::XDrawPage> mxPage;
+    cpo::uno::Reference<css::drawing::XDrawPage> mxPage;
     SdrPage const* mpMasterPage;
 
     /** This index is displayed as page number in the view.  It may or may

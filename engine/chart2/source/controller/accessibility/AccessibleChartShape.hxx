@@ -38,7 +38,7 @@ public:
 
     // ________ XAccessibleContext ________
     virtual sal_Int64 getAccessibleChildCount() override;
-    virtual css::uno::Reference< css::accessibility::XAccessible >
+    virtual cpo::uno::Reference< css::accessibility::XAccessible >
         getAccessibleChild( sal_Int64 i ) override;
     virtual sal_Int16 getAccessibleRole() override;
     virtual OUString getAccessibleDescription() override;
@@ -48,7 +48,7 @@ public:
     virtual css::awt::Rectangle implGetBounds() override;
 
     // ________ XAccessibleComponent ________
-    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
     virtual sal_Int32 getForeground() override;
     virtual sal_Int32 getBackground() override;
 

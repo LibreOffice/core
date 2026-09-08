@@ -49,7 +49,7 @@ namespace com::sun::star::drawing
 class XDrawPage;
 }
 
-namespace com::sun::star::uno
+namespace cpo::uno
 {
 template <class interface_type> class Reference;
 }
@@ -143,8 +143,8 @@ public:
     double getViewTime() const;
     void setViewTime(double fNew);
 
-    const css::uno::Reference<css::drawing::XDrawPage>& getVisualizedPage() const;
-    void setVisualizedPage(const css::uno::Reference<css::drawing::XDrawPage>& rNew);
+    const cpo::uno::Reference<css::drawing::XDrawPage>& getVisualizedPage() const;
+    void setVisualizedPage(const cpo::uno::Reference<css::drawing::XDrawPage>& rNew);
 
     /// On-demand prepared Object to View transformation and its inverse for convenience
     const basegfx::B2DHomMatrix& getObjectToViewTransformation() const;

@@ -200,7 +200,7 @@ struct FactoryInfo
         };
 
     private:
-        css::uno::Reference< css::util::XStringSubstitution > const & getStringSubstitution()
+        cpo::uno::Reference< css::util::XStringSubstitution > const & getStringSubstitution()
         {
             if ( !xSubstVars.is() )
             {
@@ -219,7 +219,7 @@ struct FactoryInfo
         bool            bChangedDefaultFilter       :1;
         bool            bDefaultFilterReadonly      :1;
 
-        css::uno::Reference< css::util::XStringSubstitution >  xSubstVars;
+        cpo::uno::Reference< css::util::XStringSubstitution >  xSubstVars;
 };
 
 }
@@ -884,16 +884,16 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByServiceName(std::u
 SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByURL(const OUString&                                 sURL            ,
                                                                   const cpo::uno::Sequence< css::beans::PropertyValue >& lMediaDescriptor)
 {
-    const css::uno::Reference< cpo::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
+    const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
 
-    css::uno::Reference< css::container::XNameAccess > xFilterCfg;
-    css::uno::Reference< css::container::XNameAccess > xTypeCfg;
+    cpo::uno::Reference< css::container::XNameAccess > xFilterCfg;
+    cpo::uno::Reference< css::container::XNameAccess > xTypeCfg;
     try
     {
         xFilterCfg.set(
-            xContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.document.FilterFactory"_ustr, xContext), css::uno::UNO_QUERY);
+            xContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.document.FilterFactory"_ustr, xContext), cpo::uno::UNO_QUERY);
         xTypeCfg.set(
-            xContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.document.TypeDetection"_ustr, xContext), css::uno::UNO_QUERY);
+            xContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.document.TypeDetection"_ustr, xContext), cpo::uno::UNO_QUERY);
     }
     catch(const cpo::uno::RuntimeException&)
         { throw; }
@@ -927,7 +927,7 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByURL(const OUString
     {
         // no :-(
         // start flat detection of URL
-        css::uno::Reference< css::document::XTypeDetection > xDetect(xTypeCfg, css::uno::UNO_QUERY);
+        cpo::uno::Reference< css::document::XTypeDetection > xDetect(xTypeCfg, cpo::uno::UNO_QUERY);
         sTypeName = xDetect->queryTypeByURL(sURL);
     }
 
@@ -956,9 +956,9 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByURL(const OUString
     return EFactory::UNKNOWN_FACTORY;
 }
 
-SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByModel(const css::uno::Reference< css::frame::XModel >& xModel)
+SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByModel(const cpo::uno::Reference< css::frame::XModel >& xModel)
 {
-    css::uno::Reference< css::lang::XServiceInfo > xInfo(xModel, css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::lang::XServiceInfo > xInfo(xModel, cpo::uno::UNO_QUERY);
     if (!xInfo.is())
         return EFactory::UNKNOWN_FACTORY;
 

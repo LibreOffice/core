@@ -54,27 +54,27 @@ class XMLTextFrameContext : public SvXMLImportContext, public MultiImageImportHe
     bool m_HasAutomaticStyleWithoutParentStyle;
     bool m_bSupportsReplacement;
 
-    bool CreateIfNotThere( css::uno::Reference < css::beans::XPropertySet >& rPropSet );
+    bool CreateIfNotThere( cpo::uno::Reference < css::beans::XPropertySet >& rPropSet );
 
 protected:
     /// helper to get the created xShape instance, needs to be overridden
     void removeGraphicFromImportContext(const SvXMLImportContext& rContext) override;
     OUString getGraphicPackageURLFromImportContext(const SvXMLImportContext& rContext) const override;
     OUString getMimeTypeFromImportContext(const SvXMLImportContext& rContext) const override;
-    css::uno::Reference<css::graphic::XGraphic> getGraphicFromImportContext(const SvXMLImportContext& rContext) const override;
+    cpo::uno::Reference<css::graphic::XGraphic> getGraphicFromImportContext(const SvXMLImportContext& rContext) const override;
 
 public:
 
 
     XMLTextFrameContext( SvXMLImport& rImport,
-            const css::uno::Reference<
+            const cpo::uno::Reference<
                 css::xml::sax::XFastAttributeList > & xAttrList,
             css::text::TextContentAnchorType eDfltAnchorType );
 
     virtual void endFastElement(sal_Int32 nElement) override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
     void SetHyperlink( const OUString& rHRef,
                        const OUString& rName,
@@ -83,10 +83,10 @@ public:
 
     css::text::TextContentAnchorType GetAnchorType() const;
 
-    css::uno::Reference < css::text::XTextContent > GetTextContent() const;
+    cpo::uno::Reference < css::text::XTextContent > GetTextContent() const;
 
     // Frame "to character": anchor moves from first to last char after saving (#i33242#)
-    css::uno::Reference < css::drawing::XShape > GetShape() const;
+    cpo::uno::Reference < css::drawing::XShape > GetShape() const;
 };
 
 

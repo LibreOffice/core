@@ -63,13 +63,13 @@ public:
     ~SwOLEObj() COVERITY_NOEXCEPT_FALSE;
 
     bool UnloadObject();
-    static bool UnloadObject( css::uno::Reference< css::embed::XEmbeddedObject > const & xObj,
+    static bool UnloadObject( cpo::uno::Reference< css::embed::XEmbeddedObject > const & xObj,
                                 const SwDoc* pDoc,
                                 sal_Int64 nAspect );
 
     OUString GetDescription();
 
-    css::uno::Reference < css::embed::XEmbeddedObject > const & GetOleRef();
+    cpo::uno::Reference < css::embed::XEmbeddedObject > const & GetOleRef();
     svt::EmbeddedObjectRef& GetObject();
     const OUString& GetCurrentPersistName() const { return m_aName; }
     OUString GetStyleString();

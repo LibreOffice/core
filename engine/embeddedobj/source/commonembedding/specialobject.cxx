@@ -34,6 +34,7 @@
 #include <specialobject.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 
 OSpecialEmbeddedObject::OSpecialEmbeddedObject( const uno::Reference< cpo::uno::XComponentContext >& rxContext, const cpo::uno::Sequence< beans::NamedValue >& aObjectProps )

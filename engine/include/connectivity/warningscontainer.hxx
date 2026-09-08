@@ -23,7 +23,7 @@
 #include <config_options.h>
 #include <connectivity/dbtoolsdllapi.hxx>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <utility>
 
 namespace com::sun::star::sdbc { class SQLException; }
@@ -41,15 +41,15 @@ namespace dbtools
     class UNLESS_MERGELIBS(OOO_DLLPUBLIC_DBTOOLS) WarningsContainer
     {
     private:
-        css::uno::Reference< css::sdbc::XWarningsSupplier >   m_xExternalWarnings;
+        cpo::uno::Reference< css::sdbc::XWarningsSupplier >   m_xExternalWarnings;
         cpo::uno::Any                                         m_aOwnWarnings;
 
     public:
         WarningsContainer() {}
-        WarningsContainer( css::uno::Reference< css::sdbc::XWarningsSupplier > _xExternalWarnings )
+        WarningsContainer( cpo::uno::Reference< css::sdbc::XWarningsSupplier > _xExternalWarnings )
             :m_xExternalWarnings(std::move( _xExternalWarnings )) {}
 
-        void setExternalWarnings( const css::uno::Reference< css::sdbc::XWarningsSupplier >& _rxExternalWarnings )
+        void setExternalWarnings( const cpo::uno::Reference< css::sdbc::XWarningsSupplier >& _rxExternalWarnings )
         {
             m_xExternalWarnings = _rxExternalWarnings;
         }
@@ -66,7 +66,7 @@ namespace dbtools
         void appendWarning(
             const OUString& _rWarning,
             const char* _pAsciiSQLState,
-            const css::uno::Reference< cpo::uno::XInterface >& _rxContext );
+            const cpo::uno::Reference< cpo::uno::XInterface >& _rxContext );
 
         void appendWarning(const css::sdbc::SQLException& _rWarning);
         void appendWarning(const css::sdbc::SQLWarning& _rWarning);

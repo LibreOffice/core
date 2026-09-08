@@ -100,7 +100,7 @@ IMPL_LINK_NOARG(AccessibilityCheckEntry, FixButtonClicked, weld::Button&, void)
 }
 
 AccessibilityCheckLevel::AccessibilityCheckLevel(weld::Box* pParent,
-                                                 css::uno::Reference<css::ui::XSidebar> xSidebar)
+                                                 cpo::uno::Reference<css::ui::XSidebar> xSidebar)
     : m_xBuilder(Application::CreateBuilder(pParent, u"svx/ui/accessibilitychecklevel.ui"_ustr,
                                             false,
                                             reinterpret_cast<sal_uInt64>(SfxViewShell::Current())))
@@ -170,7 +170,7 @@ void AccessibilityCheckLevel::hide(size_t nGroupIndex) { m_xExpanders[nGroupInde
 
 std::unique_ptr<PanelLayout>
 A11yCheckIssuesPanel::Create(weld::Widget* pParent, SfxBindings* pBindings,
-                             css::uno::Reference<css::ui::XSidebar> xSidebar)
+                             cpo::uno::Reference<css::ui::XSidebar> xSidebar)
 {
     if (pParent == nullptr)
         throw css::lang::IllegalArgumentException(
@@ -179,7 +179,7 @@ A11yCheckIssuesPanel::Create(weld::Widget* pParent, SfxBindings* pBindings,
 }
 
 A11yCheckIssuesPanel::A11yCheckIssuesPanel(weld::Widget* pParent, SfxBindings* pBindings,
-                                           css::uno::Reference<css::ui::XSidebar> xSidebar)
+                                           cpo::uno::Reference<css::ui::XSidebar> xSidebar)
     : PanelLayout(pParent, u"A11yCheckIssuesPanel"_ustr,
                   u"modules/swriter/ui/a11ycheckissuespanel.ui"_ustr)
     , mxUpdateBox(m_xBuilder->weld_box(u"updateBox"_ustr))

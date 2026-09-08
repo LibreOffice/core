@@ -48,17 +48,17 @@ namespace comphelper
     private:
         cpo::uno::WeakReference< cpo::uno::XInterface >
                 m_aListener;
-        css::uno::Reference< cpo::uno::XInterface >
+        cpo::uno::Reference< cpo::uno::XInterface >
                 m_xBroadcaster;
 
     protected:
-        css::uno::Reference< cpo::uno::XInterface >
+        cpo::uno::Reference< cpo::uno::XInterface >
                 getListener( ) const
         {
             return m_aListener.get();
         }
 
-        const css::uno::Reference< cpo::uno::XInterface >&
+        const cpo::uno::Reference< cpo::uno::XInterface >&
                 getBroadcaster( ) const
         {
             return m_xBroadcaster;
@@ -72,8 +72,8 @@ namespace comphelper
 
     protected:
         OWeakListenerAdapterBase(
-            const css::uno::Reference< cpo::uno::XWeak >& _rxListener,
-            css::uno::Reference< cpo::uno::XInterface > _xBroadcaster
+            const cpo::uno::Reference< cpo::uno::XWeak >& _rxListener,
+            cpo::uno::Reference< cpo::uno::XInterface > _xBroadcaster
         )
             :m_aListener    (  _rxListener )
             ,m_xBroadcaster (std::move( _xBroadcaster ))
@@ -106,14 +106,14 @@ namespace comphelper
             as this can't be done in a generic way</p>
         */
         OWeakListenerAdapter(
-            const css::uno::Reference< cpo::uno::XWeak >& _rxListener,
-            const css::uno::Reference< BROADCASTER >& _rxBroadcaster
+            const cpo::uno::Reference< cpo::uno::XWeak >& _rxListener,
+            const cpo::uno::Reference< BROADCASTER >& _rxBroadcaster
         );
 
     protected:
-        css::uno::Reference< LISTENER > getListener( ) const
+        cpo::uno::Reference< LISTENER > getListener( ) const
         {
-            return  css::uno::Reference< LISTENER >( OWeakListenerAdapterBase::getListener(), css::uno::UNO_QUERY );
+            return  cpo::uno::Reference< LISTENER >( OWeakListenerAdapterBase::getListener(), cpo::uno::UNO_QUERY );
         }
 
         // XEventListener overridables
@@ -137,8 +137,8 @@ namespace comphelper
     {
     public:
         OWeakEventListenerAdapter(
-            css::uno::Reference< cpo::uno::XWeak > const & _rxListener,
-            css::uno::Reference< css::lang::XComponent > const & _rxBroadcaster
+            cpo::uno::Reference< cpo::uno::XWeak > const & _rxListener,
+            cpo::uno::Reference< css::lang::XComponent > const & _rxBroadcaster
         );
 
         // nothing to do except an own ctor - the forwarding of the "disposing" is already done
@@ -155,8 +155,8 @@ namespace comphelper
 
     template< class BROADCASTER, class LISTENER >
     OWeakListenerAdapter< BROADCASTER, LISTENER >::OWeakListenerAdapter(
-        const css::uno::Reference< cpo::uno::XWeak >& _rxListener,
-        const css::uno::Reference< BROADCASTER >& _rxBroadcaster
+        const cpo::uno::Reference< cpo::uno::XWeak >& _rxListener,
+        const cpo::uno::Reference< BROADCASTER >& _rxBroadcaster
     )
         : OWeakListenerAdapterBase( _rxListener, _rxBroadcaster )
     {
@@ -166,7 +166,7 @@ namespace comphelper
     template< class BROADCASTER, class LISTENER >
     void OWeakListenerAdapter< BROADCASTER, LISTENER >::disposing( const css::lang::EventObject& _rSource )
     {
-        css::uno::Reference< LISTENER > xListener( getListener() );
+        cpo::uno::Reference< LISTENER > xListener( getListener() );
         if ( xListener.is() )
             xListener->disposing( _rSource );
     }

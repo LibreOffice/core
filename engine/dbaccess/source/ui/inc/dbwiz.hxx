@@ -53,7 +53,7 @@ public:
     */
     ODbTypeWizDialog(weld::Window* pParent
         ,SfxItemSet const * _pItems
-        ,const css::uno::Reference< cpo::uno::XComponentContext >& _rxORB
+        ,const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxORB
         ,const cpo::uno::Any& _aDataSourceName
         );
     virtual ~ODbTypeWizDialog() override;
@@ -62,8 +62,8 @@ public:
     virtual SfxItemSet* getWriteOutputSet() override;
 
     // forwards to ODbDataSourceAdministrationHelper
-    virtual css::uno::Reference< cpo::uno::XComponentContext > getORB() const override;
-    virtual std::pair< css::uno::Reference< css::sdbc::XConnection >,bool> createConnection() override;
+    virtual cpo::uno::Reference< cpo::uno::XComponentContext > getORB() const override;
+    virtual std::pair< cpo::uno::Reference< css::sdbc::XConnection >,bool> createConnection() override;
     virtual OUString getDatasourceType(const SfxItemSet& _rSet) const override;
     virtual void clearPassword() override;
     virtual void saveDatasource() override;

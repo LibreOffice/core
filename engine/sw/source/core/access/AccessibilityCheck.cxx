@@ -57,6 +57,7 @@
 #include <unostyle.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 namespace sw
 {

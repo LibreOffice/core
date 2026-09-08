@@ -99,13 +99,13 @@ class FWK_DLLPUBLIC Desktop final : private cppu::BaseMutex,
     private:
 
         /** used temporary to know which listener was already called or not. */
-        typedef ::std::vector< css::uno::Reference< css::frame::XTerminateListener > > TTerminateListenerList;
+        typedef ::std::vector< cpo::uno::Reference< css::frame::XTerminateListener > > TTerminateListenerList;
 
     // public methods
     public:
 
         //  constructor / destructor
-                 Desktop( css::uno::Reference< cpo::uno::XComponentContext >  xContext );
+                 Desktop( cpo::uno::Reference< cpo::uno::XComponentContext >  xContext );
         virtual ~Desktop(                                                                    ) override;
 
         void constructorInit();
@@ -176,7 +176,7 @@ class FWK_DLLPUBLIC Desktop final : private cppu::BaseMutex,
 
             @threadsafe yes
          */
-        virtual void addTerminateListener( const css::uno::Reference< css::frame::XTerminateListener >& xListener ) override;
+        virtual void addTerminateListener( const cpo::uno::Reference< css::frame::XTerminateListener >& xListener ) override;
 
         /**
             @interface  XDesktop
@@ -196,59 +196,59 @@ class FWK_DLLPUBLIC Desktop final : private cppu::BaseMutex,
 
             @threadsafe yes
          */
-        virtual void removeTerminateListener( const css::uno::Reference< css::frame::XTerminateListener >& xListener ) override;
+        virtual void removeTerminateListener( const cpo::uno::Reference< css::frame::XTerminateListener >& xListener ) override;
 
-        virtual css::uno::Reference< css::container::XEnumerationAccess >           getComponents              (                                                                                 ) override;
-        virtual css::uno::Reference< css::lang::XComponent >                        getCurrentComponent        (                                                                                 ) override;
-        virtual css::uno::Reference< css::frame::XFrame >                           getCurrentFrame            (                                                                                 ) override;
+        virtual cpo::uno::Reference< css::container::XEnumerationAccess >           getComponents              (                                                                                 ) override;
+        virtual cpo::uno::Reference< css::lang::XComponent >                        getCurrentComponent        (                                                                                 ) override;
+        virtual cpo::uno::Reference< css::frame::XFrame >                           getCurrentFrame            (                                                                                 ) override;
 
         //  XComponentLoader
-        virtual css::uno::Reference< css::lang::XComponent >                        loadComponentFromURL       ( const OUString&                                         sURL             ,
+        virtual cpo::uno::Reference< css::lang::XComponent >                        loadComponentFromURL       ( const OUString&                                         sURL             ,
                                                                                                                           const OUString&                                         sTargetFrameName ,
                                                                                                                                 sal_Int32                                                nSearchFlags     ,
                                                                                                                           const cpo::uno::Sequence< css::beans::PropertyValue >&         lArguments       ) override;
 
         //  XDispatchProvider
-        virtual css::uno::Reference< css::frame::XDispatch >                        queryDispatch              ( const css::util::URL&                                          aURL             ,
+        virtual cpo::uno::Reference< css::frame::XDispatch >                        queryDispatch              ( const css::util::URL&                                          aURL             ,
                                                                                                                           const OUString&                                         sTargetFrameName ,
                                                                                                                                 sal_Int32                                                nSearchFlags     ) override;
-        virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > >  queryDispatches            ( const cpo::uno::Sequence< css::frame::DispatchDescriptor >&    lQueries         ) override;
+        virtual cpo::uno::Sequence< cpo::uno::Reference< css::frame::XDispatch > >  queryDispatches            ( const cpo::uno::Sequence< css::frame::DispatchDescriptor >&    lQueries         ) override;
 
         // XDispatchProviderInterception
-        virtual void                                                                registerDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor) override;
-        virtual void                                                                releaseDispatchProviderInterceptor ( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor) override;
+        virtual void                                                                registerDispatchProviderInterceptor( const cpo::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor) override;
+        virtual void                                                                releaseDispatchProviderInterceptor ( const cpo::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor) override;
 
         //  XFramesSupplier
-        virtual css::uno::Reference< css::frame::XFrames >                          getFrames                  (                                                                                 ) override;
-        virtual css::uno::Reference< css::frame::XFrame >                           getActiveFrame             (                                                                                 ) override;
-        virtual void                                                                setActiveFrame             ( const css::uno::Reference< css::frame::XFrame >&               xFrame           ) override;
+        virtual cpo::uno::Reference< css::frame::XFrames >                          getFrames                  (                                                                                 ) override;
+        virtual cpo::uno::Reference< css::frame::XFrame >                           getActiveFrame             (                                                                                 ) override;
+        virtual void                                                                setActiveFrame             ( const cpo::uno::Reference< css::frame::XFrame >&               xFrame           ) override;
 
         //   XFrame
         //  Attention: findFrame() is implemented only! Other methods make no sense for our desktop!
-        virtual css::uno::Reference< css::frame::XFrame >                           findFrame                  ( const OUString&                                         sTargetFrameName ,
+        virtual cpo::uno::Reference< css::frame::XFrame >                           findFrame                  ( const OUString&                                         sTargetFrameName ,
                                                                                                                                 sal_Int32                                                nSearchFlags     ) override;
-        virtual void                                                                initialize                 ( const css::uno::Reference< css::awt::XWindow >&                xWindow          ) override;
-        virtual css::uno::Reference< css::awt::XWindow >                            getContainerWindow         (                                                                                 ) override;
-        virtual void                                                                setCreator                 ( const css::uno::Reference< css::frame::XFramesSupplier >&      xCreator         ) override;
-        virtual css::uno::Reference< css::frame::XFramesSupplier >                  getCreator                 (                                                                                 ) override;
+        virtual void                                                                initialize                 ( const cpo::uno::Reference< css::awt::XWindow >&                xWindow          ) override;
+        virtual cpo::uno::Reference< css::awt::XWindow >                            getContainerWindow         (                                                                                 ) override;
+        virtual void                                                                setCreator                 ( const cpo::uno::Reference< css::frame::XFramesSupplier >&      xCreator         ) override;
+        virtual cpo::uno::Reference< css::frame::XFramesSupplier >                  getCreator                 (                                                                                 ) override;
         virtual OUString                                                     getName                    (                                                                                 ) override;
         virtual void                                                                setName                    ( const OUString&                                         sName            ) override;
         virtual bool                                                            isTop                      (                                                                                 ) override;
         virtual void                                                                activate                   (                                                                                 ) override;
         virtual void                                                                deactivate                 (                                                                                 ) override;
         virtual bool                                                            isActive                   (                                                                                 ) override;
-        virtual bool                                                            setComponent               ( const css::uno::Reference< css::awt::XWindow >&                xComponentWindow ,
-                                                                                                                          const css::uno::Reference< css::frame::XController >&          xController      ) override;
-        virtual css::uno::Reference< css::awt::XWindow >                            getComponentWindow         (                                                                                 ) override;
-        virtual css::uno::Reference< css::frame::XController >                      getController              (                                                                                 ) override;
+        virtual bool                                                            setComponent               ( const cpo::uno::Reference< css::awt::XWindow >&                xComponentWindow ,
+                                                                                                                          const cpo::uno::Reference< css::frame::XController >&          xController      ) override;
+        virtual cpo::uno::Reference< css::awt::XWindow >                            getComponentWindow         (                                                                                 ) override;
+        virtual cpo::uno::Reference< css::frame::XController >                      getController              (                                                                                 ) override;
         virtual void                                                                contextChanged             (                                                                                 ) override;
-        virtual void                                                                addFrameActionListener     ( const css::uno::Reference< css::frame::XFrameActionListener >& xListener        ) override;
-        virtual void                                                                removeFrameActionListener  ( const css::uno::Reference< css::frame::XFrameActionListener >& xListener        ) override;
+        virtual void                                                                addFrameActionListener     ( const cpo::uno::Reference< css::frame::XFrameActionListener >& xListener        ) override;
+        virtual void                                                                removeFrameActionListener  ( const cpo::uno::Reference< css::frame::XFrameActionListener >& xListener        ) override;
 
         //   XComponent
         virtual void disposing() override;
-        virtual void                                                                addEventListener           ( const css::uno::Reference< css::lang::XEventListener >&        xListener        ) override;
-        virtual void                                                                removeEventListener        ( const css::uno::Reference< css::lang::XEventListener >&        xListener        ) override;
+        virtual void                                                                addEventListener           ( const cpo::uno::Reference< css::lang::XEventListener >&        xListener        ) override;
+        virtual void                                                                removeEventListener        ( const cpo::uno::Reference< css::lang::XEventListener >&        xListener        ) override;
 
         //   XDispatchResultListener
         virtual void dispatchFinished      ( const css::frame::DispatchResultEvent&                    aEvent     ) override;
@@ -257,16 +257,16 @@ class FWK_DLLPUBLIC Desktop final : private cppu::BaseMutex,
         virtual void                                                                disposing                  ( const css::lang::EventObject&                                  aSource          ) override;
 
         //   XInteractionHandler
-        virtual void                                                                handle                     ( const css::uno::Reference< css::task::XInteractionRequest >&   xRequest         ) override;
+        virtual void                                                                handle                     ( const cpo::uno::Reference< css::task::XInteractionRequest >&   xRequest         ) override;
 
         // css.frame.XUntitledNumbers
-        virtual ::sal_Int32 leaseNumber( const css::uno::Reference< cpo::uno::XInterface >& xComponent ) override;
+        virtual ::sal_Int32 leaseNumber( const cpo::uno::Reference< cpo::uno::XInterface >& xComponent ) override;
 
         // css.frame.XUntitledNumbers
         virtual void releaseNumber( ::sal_Int32 nNumber ) override;
 
         // css.frame.XUntitledNumbers
-        virtual void releaseNumberForComponent( const css::uno::Reference< cpo::uno::XInterface >& xComponent ) override;
+        virtual void releaseNumberForComponent( const cpo::uno::Reference< cpo::uno::XInterface >& xComponent ) override;
 
         // css.frame.XUntitledNumbers
         virtual OUString getUntitledPrefix() override;
@@ -290,9 +290,9 @@ class FWK_DLLPUBLIC Desktop final : private cppu::BaseMutex,
         virtual void                                                getFastPropertyValue            (       cpo::uno::Any&  aValue          ,
                                                                                                                      sal_Int32       nHandle         ) const override;
         virtual ::cppu::IPropertyArrayHelper&                       getInfoHelper                   (                                       ) override;
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo              (                                       ) override;
+        virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo              (                                       ) override;
 
-        css::uno::Reference< css::lang::XComponent >            impl_getFrameComponent          ( const css::uno::Reference< css::frame::XFrame >&  xFrame          ) const;
+        cpo::uno::Reference< css::lang::XComponent >            impl_getFrameComponent          ( const cpo::uno::Reference< css::frame::XFrame >&  xFrame          ) const;
 
         /** calls queryTermination() on every registered termination listener.
          *
@@ -384,7 +384,7 @@ class FWK_DLLPUBLIC Desktop final : private cppu::BaseMutex,
           */
         bool m_bSession;
 
-        css::uno::Reference< cpo::uno::XComponentContext >              m_xContext;               /// reference to factory, which has create this instance
+        cpo::uno::Reference< cpo::uno::XComponentContext >              m_xContext;               /// reference to factory, which has create this instance
         FrameContainer                                                  m_aChildTaskContainer;    /// array of child tasks (children of desktop are tasks; and tasks are also frames - But pure frames are not accepted!)
         comphelper::OMultiTypeInterfaceContainerHelper2                 m_aListenerContainer;     /// container for ALL Listener
         rtl::Reference< OFrames >                                       m_xFramesHelper;          /// helper for XFrames, XIndexAccess, XElementAccess and implementation of a childcontainer!
@@ -394,19 +394,19 @@ class FWK_DLLPUBLIC Desktop final : private cppu::BaseMutex,
         std::unique_ptr<SvtCommandOptions>                              m_xCommandOptions;        /// ref counted class to support disabling commands defined by configuration file
         OUString                                                        m_sName;
         OUString                                                        m_sTitle;
-        css::uno::Reference< css::frame::XDispatchRecorderSupplier >    m_xDispatchRecorderSupplier;
+        cpo::uno::Reference< css::frame::XDispatchRecorderSupplier >    m_xDispatchRecorderSupplier;
 
         /** special terminate listener to close pipe and block external requests
           * during/after termination process is/was running
           */
-        css::uno::Reference< css::frame::XTerminateListener > m_xPipeTerminator;
+        cpo::uno::Reference< css::frame::XTerminateListener > m_xPipeTerminator;
 
         /** special terminate listener shown inside system tray (quick starter)
           * Will hinder the office on shutdown ... but wish to allow closing
           * of open documents. And because that's different to a normal terminate listener
           * it has to be handled special .-)
           */
-        css::uno::Reference< css::frame::XTerminateListener > m_xQuickLauncher;
+        cpo::uno::Reference< css::frame::XTerminateListener > m_xQuickLauncher;
 
         /** special terminate listener which loads images asynchronous for current open documents.
           * Because internally it uses blocking system APIs... it can't be guaranteed that
@@ -415,7 +415,7 @@ class FWK_DLLPUBLIC Desktop final : private cppu::BaseMutex,
           * but at least on terminate we have to wait for all those blocked requests.
           * So these implementation must be a special terminate listener too .-(
           */
-        css::uno::Reference< css::frame::XTerminateListener > m_xSWThreadManager;
+        cpo::uno::Reference< css::frame::XTerminateListener > m_xSWThreadManager;
 
         /** special terminate listener shutting down the SfxApplication.
           * Because these desktop instance closes documents and informs listener
@@ -430,16 +430,16 @@ class FWK_DLLPUBLIC Desktop final : private cppu::BaseMutex,
           * notification as really last one ... Otherwise it can happen that asynchronous
           * shutdown will be faster then all other code around Desktop.terminate() .-))
           */
-        css::uno::Reference< css::frame::XTerminateListener > m_xSfxTerminator;
+        cpo::uno::Reference< css::frame::XTerminateListener > m_xSfxTerminator;
 
         rtl::Reference< ::comphelper::NumberedCollection > m_xTitleNumberGenerator;
 
-        std::vector<css::uno::Reference<css::frame::XTerminateListener>> m_xComponentDllListeners;
+        std::vector<cpo::uno::Reference<css::frame::XTerminateListener>> m_xComponentDllListeners;
 
 };      //  class Desktop
 
 FWK_DLLPUBLIC const rtl::Reference<Desktop> & getDesktop(
-    css::uno::Reference<cpo::uno::XComponentContext> const & context);
+    cpo::uno::Reference<cpo::uno::XComponentContext> const & context);
 
 }       //  namespace framework
 

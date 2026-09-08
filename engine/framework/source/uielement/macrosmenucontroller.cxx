@@ -30,7 +30,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/securityoptions.hxx>
 
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::frame;
@@ -56,7 +56,7 @@ cpo::uno::Sequence< OUString > MacrosMenuController::getSupportedServiceNames()
     return { SERVICENAME_POPUPMENUCONTROLLER };
 }
 
-MacrosMenuController::MacrosMenuController( const css::uno::Reference< cpo::uno::XComponentContext >& xContext ) :
+MacrosMenuController::MacrosMenuController( const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext ) :
     svt::PopupMenuControllerBase( xContext ),
     m_xContext( xContext)
 {

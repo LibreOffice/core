@@ -91,7 +91,7 @@
 
 using namespace ::com::sun::star;
 using namespace view;
-using namespace uno;
+using namespace ::cpo;
 using namespace ::cpo::uno;
 using namespace util;
 using namespace ucb;
@@ -1171,7 +1171,7 @@ void ODocumentDefinition::onCommandInsert( const OUString& _sURL, const Referenc
     aGuard.clear();
 }
 
-bool ODocumentDefinition::save(bool _bApprove, const css::uno::Reference<css::awt::XTopWindow>& rDialogParent)
+bool ODocumentDefinition::save(bool _bApprove, const cpo::uno::Reference<css::awt::XTopWindow>& rDialogParent)
 {
     // default handling: instantiate an interaction handler and let it handle the parameter request
     if ( !m_bOpenInDesign )
@@ -1269,7 +1269,7 @@ void ODocumentDefinition::saveAs()
         if ( m_pImpl->m_aProps.aTitle.isEmpty() )
         {
             aGuard.clear();
-            save(false, css::uno::Reference<css::awt::XTopWindow>()); // (false) : we don't want an approve dialog
+            save(false, cpo::uno::Reference<css::awt::XTopWindow>()); // (false) : we don't want an approve dialog
             return;
         }
     }

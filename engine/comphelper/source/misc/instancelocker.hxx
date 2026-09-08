@@ -56,8 +56,8 @@ public:
 
 // XComponent
     virtual void dispose() override;
-    virtual void addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-    virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+    virtual void addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& xListener ) override;
+    virtual void removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
 // XInitialization
     virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
@@ -74,8 +74,8 @@ class OLockListener : public ::cppu::WeakImplHelper< css::util::XCloseListener,
                                                      css::frame::XTerminateListener >
 {
     std::mutex m_aMutex;
-    css::uno::Reference< cpo::uno::XInterface > m_xInstance;
-    css::uno::Reference< css::embed::XActionsApproval > m_xApproval;
+    cpo::uno::Reference< cpo::uno::XInterface > m_xInstance;
+    cpo::uno::Reference< css::embed::XActionsApproval > m_xApproval;
 
     cpo::uno::WeakReference< css::lang::XComponent > m_xWrapper;
 
@@ -86,9 +86,9 @@ class OLockListener : public ::cppu::WeakImplHelper< css::util::XCloseListener,
 
 public:
     OLockListener(  cpo::uno::WeakReference< css::lang::XComponent > xWrapper,
-                    css::uno::Reference< cpo::uno::XInterface > xInstance,
+                    cpo::uno::Reference< cpo::uno::XInterface > xInstance,
                     sal_Int32 nMode,
-                    css::uno::Reference< css::embed::XActionsApproval > xApproval );
+                    cpo::uno::Reference< css::embed::XActionsApproval > xApproval );
 
     virtual ~OLockListener() override;
 

@@ -28,7 +28,7 @@ namespace basic
 
 class SfxScriptLibraryContainer final : public SfxLibraryContainer
 {
-    css::uno::Reference< css::container::XNameAccess > mxCodeNameAccess;
+    cpo::uno::Reference< css::container::XNameAccess > mxCodeNameAccess;
 
     // Methods to distinguish between different library types
     virtual rtl::Reference<SfxLibrary> implCreateLibrary( const OUString& aName ) override;
@@ -39,17 +39,17 @@ class SfxScriptLibraryContainer final : public SfxLibraryContainer
     virtual bool isLibraryElementValid(const cpo::uno::Any& rElement) const override;
     virtual void writeLibraryElement
     (
-        const css::uno::Reference< css::container::XNameContainer>& xLibrary,
+        const cpo::uno::Reference< css::container::XNameContainer>& xLibrary,
         const OUString& aElementName,
-        const css::uno::Reference< css::io::XOutputStream >& xOutput
+        const cpo::uno::Reference< css::io::XOutputStream >& xOutput
     ) override;
 
     virtual cpo::uno::Any importLibraryElement
     (
-        const css::uno::Reference< css::container::XNameContainer>& xLibrary,
+        const cpo::uno::Reference< css::container::XNameContainer>& xLibrary,
         const OUString& aElementName,
         const OUString& aFile,
-        const css::uno::Reference< css::io::XInputStream >& xElementStream ) override;
+        const cpo::uno::Reference< css::io::XInputStream >& xElementStream ) override;
 
     virtual void importFromOldStorage( const OUString& aFile ) override;
 
@@ -58,13 +58,13 @@ class SfxScriptLibraryContainer final : public SfxLibraryContainer
 
     // Password encryption
     virtual bool implStorePasswordLibrary( SfxLibrary* pLib, const OUString& aName,
-                        const css::uno::Reference< css::embed::XStorage>& xStorage, const css::uno::Reference< css::task::XInteractionHandler >& Handler ) override;
+                        const cpo::uno::Reference< css::embed::XStorage>& xStorage, const cpo::uno::Reference< css::task::XInteractionHandler >& Handler ) override;
 
     // New variant for library export
     virtual bool implStorePasswordLibrary( SfxLibrary* pLib, const OUString& aName,
-                        const css::uno::Reference< css::embed::XStorage >& xStorage,
+                        const cpo::uno::Reference< css::embed::XStorage >& xStorage,
                         const OUString& aTargetURL,
-                        const css::uno::Reference< css::ucb::XSimpleFileAccess3 >& rToUseSFI, const css::uno::Reference< css::task::XInteractionHandler >& Handler ) override;
+                        const cpo::uno::Reference< css::ucb::XSimpleFileAccess3 >& rToUseSFI, const cpo::uno::Reference< css::task::XInteractionHandler >& Handler ) override;
 
     virtual bool implLoadPasswordLibrary( SfxLibrary* pLib, const OUString& Name,
                                           bool bVerifyPasswordOnly,
@@ -80,7 +80,7 @@ class SfxScriptLibraryContainer final : public SfxLibraryContainer
 
 public:
     SfxScriptLibraryContainer();
-    SfxScriptLibraryContainer( const css::uno::Reference< css::embed::XStorage >& xStorage );
+    SfxScriptLibraryContainer( const cpo::uno::Reference< css::embed::XStorage >& xStorage );
 
 
     // Methods XLibraryContainerPassword
@@ -119,21 +119,21 @@ class SfxScriptLibrary final : public SfxScriptLibrary_BASE
     virtual void storeResources() override;
     virtual void storeResourcesAsURL( const OUString& URL, const OUString& NewName ) override;
     virtual void storeResourcesToURL( const OUString& URL,
-        const css::uno::Reference< css::task::XInteractionHandler >& xHandler ) override;
-    virtual void storeResourcesToStorage( const css::uno::Reference< css::embed::XStorage >& xStorage ) override;
+        const cpo::uno::Reference< css::task::XInteractionHandler >& xHandler ) override;
+    virtual void storeResourcesToStorage( const cpo::uno::Reference< css::embed::XStorage >& xStorage ) override;
     virtual bool isLoadedStorable() override;
 
 public:
     SfxScriptLibrary
     (
         ModifiableHelper& _rModifiable,
-        const css::uno::Reference< css::ucb::XSimpleFileAccess3 >& xSFI
+        const cpo::uno::Reference< css::ucb::XSimpleFileAccess3 >& xSFI
     );
 
     SfxScriptLibrary
     (
         ModifiableHelper& _rModifiable,
-        const css::uno::Reference< css::ucb::XSimpleFileAccess3 >& xSFI,
+        const cpo::uno::Reference< css::ucb::XSimpleFileAccess3 >& xSFI,
         const OUString& aLibInfoFileURL, const OUString& aStorageURL, bool ReadOnly
     );
 

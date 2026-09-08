@@ -30,9 +30,9 @@
 #include <comphelper/base64.hxx>
 #include <comphelper/sequence.hxx>
 
-using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace ::cpo::uno;
 
 constexpr OUString gsFullPathProperty             ( u"FullPath"_ustr );

@@ -30,7 +30,7 @@
 #include <vcl/vclptr.hxx>
 
 namespace com::sun::star::embed { class XEmbeddedObject; }
-namespace com::sun::star::uno { template <typename > class Reference; }
+namespace cpo::uno { template <typename > class Reference; }
 namespace vcl { class Window; }
 
 class SfxInPlaceClient_Impl;
@@ -63,8 +63,8 @@ public:
 
     SfxViewShell*       GetViewShell() const { return m_pViewSh; }
     vcl::Window*        GetEditWin() const { return m_pEditWin; }
-    const css::uno::Reference < css::embed::XEmbeddedObject >& GetObject() const;
-    void                SetObject( const css::uno::Reference < css::embed::XEmbeddedObject >& rObject );
+    const cpo::uno::Reference < css::embed::XEmbeddedObject >& GetObject() const;
+    void                SetObject( const cpo::uno::Reference < css::embed::XEmbeddedObject >& rObject );
     void                SetObjectState( sal_Int32 );
     bool                IsObjectUIActive() const;
     bool                IsObjectInPlaceActive() const;
@@ -77,7 +77,7 @@ public:
     double              GetScaleWidth() const;
     double              GetScaleHeight() const;
     void                Invalidate();
-    static SfxInPlaceClient* GetClient( SfxObjectShell const * pDoc, const css::uno::Reference < css::embed::XEmbeddedObject >& xObject );
+    static SfxInPlaceClient* GetClient( SfxObjectShell const * pDoc, const cpo::uno::Reference < css::embed::XEmbeddedObject >& xObject );
     sal_Int64           GetAspect() const;
     sal_Int64           GetObjectMiscStatus() const;
     ErrCodeMsg          DoVerb(sal_Int32 nVerb);

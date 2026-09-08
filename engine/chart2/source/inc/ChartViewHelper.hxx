@@ -20,7 +20,7 @@
 
 #include <rtl/ref.hxx>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 namespace com::sun::star::chart2
 {
@@ -35,7 +35,7 @@ namespace ChartViewHelper
 {
 void setViewToDirtyState(const rtl::Reference<ChartModel>& xChartModel);
 
-void setViewToDirtyState_UNO(const css::uno::Reference<css::chart2::XChartDocument>& xChartModel);
+void setViewToDirtyState_UNO(const cpo::uno::Reference<css::chart2::XChartDocument>& xChartModel);
 };
 
 } //namespace chart

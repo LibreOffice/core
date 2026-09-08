@@ -35,7 +35,7 @@ class RegressionEquationItemConverter final : public ItemConverter
 {
 public:
     RegressionEquationItemConverter(
-        const css::uno::Reference< css::beans::XPropertySet > & rPropertySet,
+        const cpo::uno::Reference< css::beans::XPropertySet > & rPropertySet,
         SfxItemPool& rItemPool,
         SdrModel& rDrawModel,
         const rtl::Reference< ChartModel > & xChartModel,

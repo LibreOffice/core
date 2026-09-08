@@ -48,8 +48,8 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::xmloff::token;
 
 #define GET_PROP_TYPE( f ) static_cast<sal_uInt16>((f & XML_TYPE_PROP_MASK) >> XML_TYPE_PROP_SHIFT)
@@ -457,7 +457,7 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
 
 struct SvXMLExportPropertyMapper::Impl
 {
-    typedef std::map<css::uno::Reference<css::beans::XPropertySetInfo>, std::unique_ptr<FilterPropertiesInfo_Impl>> CacheType;
+    typedef std::map<cpo::uno::Reference<css::beans::XPropertySetInfo>, std::unique_ptr<FilterPropertiesInfo_Impl>> CacheType;
     CacheType maCache;
 
     rtl::Reference<SvXMLExportPropertyMapper> mxNextMapper;

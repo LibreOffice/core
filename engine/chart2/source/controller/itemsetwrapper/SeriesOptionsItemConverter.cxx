@@ -38,6 +38,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
+using namespace ::cpo;
 
 namespace chart::wrapper
 {

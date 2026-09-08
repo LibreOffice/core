@@ -49,11 +49,11 @@ typedef std::shared_ptr< VbaCommandBarHelper > VbaCommandBarHelperRef;
 class VbaCommandBarHelper
 {
 private:
-    css::uno::Reference< cpo::uno::XComponentContext > mxContext;
-    css::uno::Reference< css::frame::XModel > mxModel;
-    css::uno::Reference< css::ui::XUIConfigurationManager > m_xDocCfgMgr; // current document
-    css::uno::Reference< css::ui::XUIConfigurationManager > m_xAppCfgMgr;
-    css::uno::Reference< css::container::XNameAccess > m_xWindowState;
+    cpo::uno::Reference< cpo::uno::XComponentContext > mxContext;
+    cpo::uno::Reference< css::frame::XModel > mxModel;
+    cpo::uno::Reference< css::ui::XUIConfigurationManager > m_xDocCfgMgr; // current document
+    cpo::uno::Reference< css::ui::XUIConfigurationManager > m_xAppCfgMgr;
+    cpo::uno::Reference< css::container::XNameAccess > m_xWindowState;
     OUString maModuleId;
 
     /// @throws cpo::uno::RuntimeException
@@ -62,30 +62,30 @@ private:
     bool hasToolbar( const OUString& sResourceUrl, std::u16string_view sName );
 public:
     /// @throws cpo::uno::RuntimeException
-    VbaCommandBarHelper( css::uno::Reference< cpo::uno::XComponentContext > xContext, css::uno::Reference< css::frame::XModel > xModel );
+    VbaCommandBarHelper( cpo::uno::Reference< cpo::uno::XComponentContext > xContext, cpo::uno::Reference< css::frame::XModel > xModel );
 
-    const css::uno::Reference< css::frame::XModel >& getModel() const { return mxModel; }
+    const cpo::uno::Reference< css::frame::XModel >& getModel() const { return mxModel; }
 
     /// @throws cpo::uno::RuntimeException
-    const css::uno::Reference< css::container::XNameAccess >& getPersistentWindowState() const
+    const cpo::uno::Reference< css::container::XNameAccess >& getPersistentWindowState() const
     {
         return m_xWindowState;
     }
     /// @throws cpo::uno::RuntimeException
-    css::uno::Reference< css::container::XIndexAccess > getSettings( const OUString& sResourceUrl );
+    cpo::uno::Reference< css::container::XIndexAccess > getSettings( const OUString& sResourceUrl );
     /// @throws cpo::uno::RuntimeException
     void removeSettings( const OUString& sResourceUrl );
     /// @throws cpo::uno::RuntimeException
-    void ApplyTempChange( const OUString& sResourceUrl, const css::uno::Reference< css::container::XIndexAccess >& xSettings);
+    void ApplyTempChange( const OUString& sResourceUrl, const cpo::uno::Reference< css::container::XIndexAccess >& xSettings);
 
     /// @throws cpo::uno::RuntimeException
-    css::uno::Reference< css::frame::XLayoutManager > getLayoutManager() const;
+    cpo::uno::Reference< css::frame::XLayoutManager > getLayoutManager() const;
 
     const OUString& getModuleId() const { return maModuleId; }
     /// @throws cpo::uno::RuntimeException
-    OUString findToolbarByName( const css::uno::Reference< css::container::XNameAccess >& xNameAccess, const OUString& sName );
+    OUString findToolbarByName( const cpo::uno::Reference< css::container::XNameAccess >& xNameAccess, const OUString& sName );
     /// @throws cpo::uno::RuntimeException
-    static sal_Int32 findControlByName( const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess, std::u16string_view sName, bool bMenu );
+    static sal_Int32 findControlByName( const cpo::uno::Reference< css::container::XIndexAccess >& xIndexAccess, std::u16string_view sName, bool bMenu );
     static OUString generateCustomURL();
 };
 

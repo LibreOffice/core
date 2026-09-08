@@ -17,7 +17,7 @@
 namespace vcl
 {
 VCL_DLLPUBLIC BinaryDataContainer convertUnoBinaryDataContainer(
-    css::uno::Reference<css::util::XBinaryDataContainer> const& rxBinaryDataContainer);
+    cpo::uno::Reference<css::util::XBinaryDataContainer> const& rxBinaryDataContainer);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

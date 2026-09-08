@@ -30,6 +30,7 @@
 #include <utility>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 SwBreakIt* g_pBreakIt = nullptr;
 

@@ -148,7 +148,7 @@ private:
 
     MainSequencePtr mpMainSequence;
 
-    css::uno::Reference< css::drawing::XShape > mxLastTargetShape;
+    cpo::uno::Reference< css::drawing::XShape > mxLastTargetShape;
     sal_Int32 mnLastGroupId;
     ImplSVEvent* mnPostExpandEvent;
     ImplSVEvent* mnPostCollapseEvent;
@@ -162,7 +162,7 @@ private:
 
 OUString getPropertyName( sal_Int32 nPropertyType );
 
-OUString getShapeDescription( const css::uno::Reference< css::drawing::XShape >& xShape, bool bWithText );
+OUString getShapeDescription( const cpo::uno::Reference< css::drawing::XShape >& xShape, bool bWithText );
 
 }
 

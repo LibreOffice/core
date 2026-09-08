@@ -44,7 +44,7 @@ protected:
 
 public:
 
-    ScriptBackendDb( css::uno::Reference<cpo::uno::XComponentContext> const &  xContext,
+    ScriptBackendDb( cpo::uno::Reference<cpo::uno::XComponentContext> const &  xContext,
                         OUString const & url);
 };
 

@@ -34,7 +34,7 @@
 #include <comphelper/kit.hxx>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo::uno;
 
 constexpr OUString SIDEBARGRADIENT = u"sidebargradient"_ustr;
 
@@ -64,7 +64,7 @@ const sal_Int32 AreaPropertyPanelBase::DEFAULT_BORDER = 0;
 
 AreaPropertyPanelBase::AreaPropertyPanelBase(
     weld::Widget* pParent,
-    const css::uno::Reference<css::frame::XFrame>& rxFrame)
+    const cpo::uno::Reference<css::frame::XFrame>& rxFrame)
     : PanelLayout(pParent, u"AreaPropertyPanel"_ustr, u"svx/ui/sidebararea.ui"_ustr),
       mxFrame(rxFrame),
       meLastXFS(static_cast<sal_uInt16>(-1)),

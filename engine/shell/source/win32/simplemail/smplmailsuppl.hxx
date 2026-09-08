@@ -43,7 +43,7 @@ public:
     ~CSmplMailSuppl( ) override;
 
     // XSimpleMailClientSupplier
-    virtual css::uno::Reference< css::system::XSimpleMailClient > SAL_CALL querySimpleMailClient(  ) override;
+    virtual cpo::uno::Reference< css::system::XSimpleMailClient > SAL_CALL querySimpleMailClient(  ) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) override;

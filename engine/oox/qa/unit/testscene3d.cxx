@@ -28,6 +28,7 @@
 #include <vcl/bitmap.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 /// Covers tests for scene3d import and export, available since LO 24.8., see tdf#70039
 class TestScene3d : public UnoApiXmlTest

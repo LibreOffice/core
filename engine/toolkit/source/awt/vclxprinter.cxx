@@ -72,9 +72,9 @@ rtl::Reference< VCLXDevice > const &  VCLXPrinterPropertySet::GetDevice()
     return mxPrnDevice;
 }
 
-css::uno::Reference< css::beans::XPropertySetInfo > VCLXPrinterPropertySet::getPropertySetInfo(  )
+cpo::uno::Reference< css::beans::XPropertySetInfo > VCLXPrinterPropertySet::getPropertySetInfo(  )
 {
-    static css::uno::Reference< css::beans::XPropertySetInfo >  xInfo( createPropertySetInfo( getInfoHelper() ) );
+    static cpo::uno::Reference< css::beans::XPropertySetInfo >  xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
 }
 
@@ -272,7 +272,7 @@ void VCLXPrinter::terminate(  )
     mxListener.reset();
 }
 
-css::uno::Reference< css::awt::XDevice > VCLXPrinter::startPage(  )
+cpo::uno::Reference< css::awt::XDevice > VCLXPrinter::startPage(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -308,7 +308,7 @@ VCLXInfoPrinter::~VCLXInfoPrinter()
 }
 
 // css::awt::XInfoPrinter
-css::uno::Reference< css::awt::XDevice > VCLXInfoPrinter::createDevice(  )
+cpo::uno::Reference< css::awt::XDevice > VCLXInfoPrinter::createDevice(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -337,15 +337,15 @@ OUString VCLXPrinterServer::getDefaultPrinterName()
     return Printer::GetDefaultPrinterName();
 }
 
-css::uno::Reference< css::awt::XPrinter > VCLXPrinterServer::createPrinter( const OUString& rPrinterName )
+cpo::uno::Reference< css::awt::XPrinter > VCLXPrinterServer::createPrinter( const OUString& rPrinterName )
 {
-    css::uno::Reference< css::awt::XPrinter > xP = new VCLXPrinter( rPrinterName );
+    cpo::uno::Reference< css::awt::XPrinter > xP = new VCLXPrinter( rPrinterName );
     return xP;
 }
 
-css::uno::Reference< css::awt::XInfoPrinter > VCLXPrinterServer::createInfoPrinter( const OUString& rPrinterName )
+cpo::uno::Reference< css::awt::XInfoPrinter > VCLXPrinterServer::createInfoPrinter( const OUString& rPrinterName )
 {
-    css::uno::Reference< css::awt::XInfoPrinter > xP = new VCLXInfoPrinter( rPrinterName );
+    cpo::uno::Reference< css::awt::XInfoPrinter > xP = new VCLXInfoPrinter( rPrinterName );
     return xP;
 }
 

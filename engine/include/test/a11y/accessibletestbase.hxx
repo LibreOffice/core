@@ -22,7 +22,7 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/frame/XDesktop2.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <comphelper/OAccessible.hxx>
 
 #include <vcl/ITiledRenderable.hxx>
@@ -38,13 +38,13 @@ namespace test
 class OOO_DLLPUBLIC_TEST AccessibleTestBase : public test::BootstrapFixture
 {
 private:
-    void collectText(const css::uno::Reference<css::accessibility::XAccessibleContext>& xContext,
+    void collectText(const cpo::uno::Reference<css::accessibility::XAccessibleContext>& xContext,
                      rtl::OUStringBuffer& buffer, bool onlyChildren = false);
 
 protected:
-    css::uno::Reference<css::frame::XDesktop2> mxDesktop;
-    css::uno::Reference<css::lang::XComponent> mxDocument;
-    css::uno::Reference<css::awt::XWindow> mxWindow;
+    cpo::uno::Reference<css::frame::XDesktop2> mxDesktop;
+    cpo::uno::Reference<css::lang::XComponent> mxDocument;
+    cpo::uno::Reference<css::awt::XWindow> mxWindow;
 
     static bool isDocumentRole(const sal_Int16 role);
 
@@ -52,17 +52,17 @@ protected:
     virtual void loadFromSrc(const rtl::OUString& sSrcPath);
     void close();
     rtl::Reference<comphelper::OAccessible> getWindowAccessible();
-    virtual css::uno::Reference<css::accessibility::XAccessibleContext>
+    virtual cpo::uno::Reference<css::accessibility::XAccessibleContext>
     getDocumentAccessibleContext();
 
-    static css::uno::Reference<css::accessibility::XAccessibleContext> getPreviousFlowingSibling(
-        const css::uno::Reference<css::accessibility::XAccessibleContext>& xContext);
-    static css::uno::Reference<css::accessibility::XAccessibleContext> getNextFlowingSibling(
-        const css::uno::Reference<css::accessibility::XAccessibleContext>& xContext);
+    static cpo::uno::Reference<css::accessibility::XAccessibleContext> getPreviousFlowingSibling(
+        const cpo::uno::Reference<css::accessibility::XAccessibleContext>& xContext);
+    static cpo::uno::Reference<css::accessibility::XAccessibleContext> getNextFlowingSibling(
+        const cpo::uno::Reference<css::accessibility::XAccessibleContext>& xContext);
 
     /** Collects contents of @p xContext in a dummy markup form */
     OUString
-    collectText(const css::uno::Reference<css::accessibility::XAccessibleContext>& xContext);
+    collectText(const cpo::uno::Reference<css::accessibility::XAccessibleContext>& xContext);
 
     /** Collects contents of the current document */
     OUString collectText() { return collectText(getDocumentAccessibleContext()); }
@@ -75,8 +75,8 @@ protected:
         pTiledRenderable->postKeyEvent(eType, nCharCode, nKeyCode);
     }
 
-    static css::uno::Reference<css::accessibility::XAccessibleContext> getFirstRelationTargetOfType(
-        const css::uno::Reference<css::accessibility::XAccessibleContext>& xContext,
+    static cpo::uno::Reference<css::accessibility::XAccessibleContext> getFirstRelationTargetOfType(
+        const cpo::uno::Reference<css::accessibility::XAccessibleContext>& xContext,
         css::accessibility::AccessibleRelationType relationType);
 
     /**
@@ -92,24 +92,24 @@ protected:
      * There is no guarantee on *which* children are returned if there are more than
      * @c AccessibilityTools::MAX_CHILDREN -- yet they will always be the same in a given context.
      */
-    virtual std::deque<css::uno::Reference<css::accessibility::XAccessibleContext>>
-    getAllChildren(const css::uno::Reference<css::accessibility::XAccessibleContext>& xContext);
+    virtual std::deque<cpo::uno::Reference<css::accessibility::XAccessibleContext>>
+    getAllChildren(const cpo::uno::Reference<css::accessibility::XAccessibleContext>& xContext);
 
-    void dumpA11YTree(const css::uno::Reference<css::accessibility::XAccessibleContext>& xContext,
+    void dumpA11YTree(const cpo::uno::Reference<css::accessibility::XAccessibleContext>& xContext,
                       const int depth = 0);
-    void dumpA11YTree(const css::uno::Reference<css::accessibility::XAccessible>& xAccessible,
+    void dumpA11YTree(const cpo::uno::Reference<css::accessibility::XAccessible>& xAccessible,
                       const int depth = 0);
 
-    css::uno::Reference<css::accessibility::XAccessibleContext>
-    getItemFromName(const css::uno::Reference<css::accessibility::XAccessibleContext>& xMenuCtx,
+    cpo::uno::Reference<css::accessibility::XAccessibleContext>
+    getItemFromName(const cpo::uno::Reference<css::accessibility::XAccessibleContext>& xMenuCtx,
                     std::u16string_view name);
     bool
-    activateMenuItem(const css::uno::Reference<css::accessibility::XAccessibleAction>& xAction);
+    activateMenuItem(const cpo::uno::Reference<css::accessibility::XAccessibleAction>& xAction);
     /* just convenience not to have to query accessibility::XAccessibleAction manually */
-    bool activateMenuItem(const css::uno::Reference<css::accessibility::XAccessibleContext>& xCtx)
+    bool activateMenuItem(const cpo::uno::Reference<css::accessibility::XAccessibleContext>& xCtx)
     {
-        return activateMenuItem(css::uno::Reference<css::accessibility::XAccessibleAction>(
-            xCtx, css::uno::UNO_QUERY_THROW));
+        return activateMenuItem(cpo::uno::Reference<css::accessibility::XAccessibleAction>(
+            xCtx, cpo::uno::UNO_QUERY_THROW));
     }
 
     /* convenience to get a menu item from a list of menu item names.  Unlike
@@ -118,8 +118,8 @@ protected:
      * the next one, to account for the fact menus might not be fully populated before being
      * activated. */
     template <typename... Ts>
-    css::uno::Reference<css::accessibility::XAccessibleContext>
-    getItemFromName(const css::uno::Reference<css::accessibility::XAccessibleContext>& xMenuCtx,
+    cpo::uno::Reference<css::accessibility::XAccessibleContext>
+    getItemFromName(const cpo::uno::Reference<css::accessibility::XAccessibleContext>& xMenuCtx,
                     std::u16string_view name, Ts... names)
     {
         auto item = getItemFromName(xMenuCtx, name);
@@ -132,7 +132,7 @@ protected:
      * @see getItemFromName() */
     template <typename... Ts>
     bool
-    activateMenuItem(const css::uno::Reference<css::accessibility::XAccessibleContext>& xMenuCtx,
+    activateMenuItem(const cpo::uno::Reference<css::accessibility::XAccessibleContext>& xMenuCtx,
                      Ts... names)
     {
         auto item = getItemFromName(xMenuCtx, names...);
@@ -145,7 +145,7 @@ protected:
     template <typename... Ts> bool activateMenuItem(Ts... names)
     {
         auto menuBar = AccessibilityTools::getAccessibleObjectForRole(
-            css::uno::Reference<css::accessibility::XAccessibleContext>(getWindowAccessible()),
+            cpo::uno::Reference<css::accessibility::XAccessibleContext>(getWindowAccessible()),
             css::accessibility::AccessibleRole::MENU_BAR);
         CPPUNIT_ASSERT(menuBar.is());
         return activateMenuItem(menuBar, names...);
@@ -162,11 +162,11 @@ protected:
      *
      * @see AccessibilityTools::getAccessibleObjectForPredicate()
      */
-    static css::uno::Reference<css::accessibility::XAccessibleContext>
-    getFocusedObject(const css::uno::Reference<css::accessibility::XAccessibleContext>& xCtx);
+    static cpo::uno::Reference<css::accessibility::XAccessibleContext>
+    getFocusedObject(const cpo::uno::Reference<css::accessibility::XAccessibleContext>& xCtx);
 
-    static inline css::uno::Reference<css::accessibility::XAccessibleContext>
-    getFocusedObject(const css::uno::Reference<css::accessibility::XAccessible>& xAcc)
+    static inline cpo::uno::Reference<css::accessibility::XAccessibleContext>
+    getFocusedObject(const cpo::uno::Reference<css::accessibility::XAccessible>& xAcc)
     {
         return getFocusedObject(xAcc->getAccessibleContext());
     }
@@ -191,13 +191,13 @@ protected:
      * If @p pEventPosterHelper is @c nullptr, this function will try to construct one from
      * @p xRoot.  @see EventPosterHelper.
      */
-    static css::uno::Reference<css::accessibility::XAccessibleContext>
-    tabTo(const css::uno::Reference<css::accessibility::XAccessible>& xRoot, const sal_Int16 role,
+    static cpo::uno::Reference<css::accessibility::XAccessibleContext>
+    tabTo(const cpo::uno::Reference<css::accessibility::XAccessible>& xRoot, const sal_Int16 role,
           const std::u16string_view name,
           const EventPosterHelperBase* pEventPosterHelper = nullptr);
 
-    static bool tabTo(const css::uno::Reference<css::accessibility::XAccessible>& xRoot,
-                      const css::uno::Reference<css::accessibility::XAccessibleContext>& xChild,
+    static bool tabTo(const cpo::uno::Reference<css::accessibility::XAccessible>& xRoot,
+                      const cpo::uno::Reference<css::accessibility::XAccessibleContext>& xChild,
                       const EventPosterHelperBase* pEventPosterHelper = nullptr);
 
 #if !defined(MACOSX)
@@ -206,29 +206,29 @@ protected:
     {
     private:
         bool mbAutoClose;
-        css::uno::Reference<css::awt::XDialog2> mxDialog2;
+        cpo::uno::Reference<css::awt::XDialog2> mxDialog2;
         rtl::Reference<comphelper::OAccessible> mpAccessible;
 
     public:
-        Dialog(const css::uno::Reference<css::awt::XDialog2>& xDialog2, bool bAutoClose = true);
+        Dialog(const cpo::uno::Reference<css::awt::XDialog2>& xDialog2, bool bAutoClose = true);
         virtual ~Dialog();
 
         void setAutoClose(bool bAutoClose) { mbAutoClose = bAutoClose; }
 
-        css::uno::Reference<css::accessibility::XAccessible> getAccessible() const
+        cpo::uno::Reference<css::accessibility::XAccessible> getAccessible() const
         {
             return mpAccessible;
         }
 
         void close(sal_Int32 result = VclResponseType::RET_CANCEL);
 
-        css::uno::Reference<css::accessibility::XAccessibleContext>
+        cpo::uno::Reference<css::accessibility::XAccessibleContext>
         tabTo(const sal_Int16 role, const std::u16string_view name)
         {
             return AccessibleTestBase::tabTo(getAccessible(), role, name, this);
         }
 
-        bool tabTo(const css::uno::Reference<css::accessibility::XAccessibleContext>& xChild)
+        bool tabTo(const cpo::uno::Reference<css::accessibility::XAccessibleContext>& xChild)
         {
             return AccessibleTestBase::tabTo(getAccessible(), xChild, this);
         }

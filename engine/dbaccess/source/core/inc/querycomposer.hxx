@@ -46,15 +46,15 @@ namespace dbaccess
         std::vector< OUString>                                   m_aOrders;
         OUString m_sOrgFilter;
         OUString m_sOrgOrder;
-        css::uno::Reference< css::sdb::XSingleSelectQueryComposer> m_xComposer;
-        css::uno::Reference< css::sdb::XSingleSelectQueryComposer> m_xComposerHelper;
+        cpo::uno::Reference< css::sdb::XSingleSelectQueryComposer> m_xComposer;
+        cpo::uno::Reference< css::sdb::XSingleSelectQueryComposer> m_xComposerHelper;
 
     protected:
         virtual void disposing() override;
         virtual ~OQueryComposer() override;
     public:
 
-        OQueryComposer( const css::uno::Reference< css::sdbc::XConnection>& _xConnection );
+        OQueryComposer( const cpo::uno::Reference< css::sdbc::XConnection>& _xConnection );
 
         // css::lang::XTypeProvider
         virtual cpo::uno::Sequence< cpo::uno::Type > getTypes() override;
@@ -75,16 +75,16 @@ namespace dbaccess
         virtual OUString getFilter(  ) override;
         virtual cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > > getStructuredFilter(  ) override;
         virtual OUString getOrder(  ) override;
-        virtual void appendFilterByColumn( const css::uno::Reference< css::beans::XPropertySet >& column ) override;
-        virtual void appendOrderByColumn( const css::uno::Reference< css::beans::XPropertySet >& column, bool ascending ) override;
+        virtual void appendFilterByColumn( const cpo::uno::Reference< css::beans::XPropertySet >& column ) override;
+        virtual void appendOrderByColumn( const cpo::uno::Reference< css::beans::XPropertySet >& column, bool ascending ) override;
         virtual void setFilter( const OUString& filter ) override;
         virtual void setOrder( const OUString& order ) override;
         // XTablesSupplier
-        virtual css::uno::Reference< css::container::XNameAccess > getTables(  ) override;
+        virtual cpo::uno::Reference< css::container::XNameAccess > getTables(  ) override;
         // XColumnsSupplier
-        virtual css::uno::Reference< css::container::XNameAccess > getColumns(  ) override;
+        virtual cpo::uno::Reference< css::container::XNameAccess > getColumns(  ) override;
         // XParametersSupplier
-        virtual css::uno::Reference< css::container::XIndexAccess > getParameters(  ) override;
+        virtual cpo::uno::Reference< css::container::XIndexAccess > getParameters(  ) override;
     };
 }
 

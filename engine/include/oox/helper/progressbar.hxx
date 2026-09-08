@@ -22,7 +22,7 @@
 
 #include <memory>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <oox/dllapi.h>
 #include <rtl/ustring.hxx>
 
@@ -83,7 +83,7 @@ class OOX_DLLPUBLIC ProgressBar final : public IProgressBar
 {
 public:
     explicit            ProgressBar(
-                            const css::uno::Reference< css::task::XStatusIndicator >& rxIndicator,
+                            const cpo::uno::Reference< css::task::XStatusIndicator >& rxIndicator,
                             const OUString& rText );
 
     virtual             ~ProgressBar() override;
@@ -94,7 +94,7 @@ public:
     virtual void        setPosition( double fPosition ) override;
 
 private:
-    css::uno::Reference< css::task::XStatusIndicator >
+    cpo::uno::Reference< css::task::XStatusIndicator >
                         mxIndicator;
     double              mfPosition;
 };
@@ -106,7 +106,7 @@ class OOX_DLLPUBLIC SegmentProgressBar final : public ISegmentProgressBar
 {
 public:
     explicit            SegmentProgressBar(
-                            const css::uno::Reference< css::task::XStatusIndicator >& rxIndicator,
+                            const cpo::uno::Reference< css::task::XStatusIndicator >& rxIndicator,
                             const OUString& rText );
 
     /** Returns the current position of the progress bar segment. */

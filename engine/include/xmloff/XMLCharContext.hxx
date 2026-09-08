@@ -23,7 +23,7 @@
 #include <xmloff/dllapi.h>
 #include <xmloff/xmlictxt.hxx>
 
-namespace com::sun::star::uno { template <typename > class Reference; }
+namespace cpo::uno { template <typename > class Reference; }
 
 class UNLESS_MERGELIBS(XMLOFF_DLLPUBLIC) XMLCharContext : public SvXMLImportContext
 {
@@ -36,7 +36,7 @@ public:
 
     XMLCharContext(
             SvXMLImport& rImport,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
+            const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
             sal_Unicode c,
             bool bCount );
     XMLCharContext(

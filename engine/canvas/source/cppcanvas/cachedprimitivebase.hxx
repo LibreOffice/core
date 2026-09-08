@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cachedbitmap.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>

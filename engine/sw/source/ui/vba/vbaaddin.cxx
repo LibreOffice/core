@@ -23,6 +23,7 @@
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 SwVbaAddin::SwVbaAddin( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< cpo::uno::XComponentContext >& rContext, OUString aFileURL ) :
     SwVbaAddin_BASE( rParent, rContext ), msFileURL(std::move( aFileURL )), mbInstalled( true )

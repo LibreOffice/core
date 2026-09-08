@@ -22,7 +22,7 @@
 #include <config_options.h>
 #include <framework/fwkdllapi.h>
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <memory>
 
@@ -76,7 +76,7 @@ namespace framework
 
         /** provides access to a UNO interface for the XUndoManager implementation. Used when throwing exceptions.
         */
-        virtual css::uno::Reference< css::document::XUndoManager >
+        virtual cpo::uno::Reference< css::document::XUndoManager >
                                         getThis() = 0;
 
     protected:
@@ -123,7 +123,7 @@ namespace framework
         void            enterUndoContext( const OUString& i_title, IMutexGuard& i_instanceLock );
         void            enterHiddenUndoContext( IMutexGuard& i_instanceLock );
         void            leaveUndoContext( IMutexGuard& i_instanceLock );
-        void            addUndoAction( const css::uno::Reference< css::document::XUndoAction >& i_action, IMutexGuard& i_instanceLock );
+        void            addUndoAction( const cpo::uno::Reference< css::document::XUndoAction >& i_action, IMutexGuard& i_instanceLock );
         void            undo( IMutexGuard& i_instanceLock );
         void            redo( IMutexGuard& i_instanceLock );
         bool            isUndoPossible() const;
@@ -137,8 +137,8 @@ namespace framework
         void            clear( IMutexGuard& i_instanceLock );
         void            clearRedo( IMutexGuard& i_instanceLock );
         void            reset( IMutexGuard& i_instanceLock );
-        void            addUndoManagerListener( const css::uno::Reference< css::document::XUndoManagerListener >& i_listener );
-        void            removeUndoManagerListener( const css::uno::Reference< css::document::XUndoManagerListener >& i_listener );
+        void            addUndoManagerListener( const cpo::uno::Reference< css::document::XUndoManagerListener >& i_listener );
+        void            removeUndoManagerListener( const cpo::uno::Reference< css::document::XUndoManagerListener >& i_listener );
 
         // XLockable, base of XUndoManager, equivalents
         void            lock();
@@ -146,8 +146,8 @@ namespace framework
         bool            isLocked();
 
         // XModifyBroadcaster equivalents
-        void            addModifyListener( const css::uno::Reference< css::util::XModifyListener >& i_listener );
-        void            removeModifyListener( const css::uno::Reference< css::util::XModifyListener >& i_listener );
+        void            addModifyListener( const cpo::uno::Reference< css::util::XModifyListener >& i_listener );
+        void            removeModifyListener( const cpo::uno::Reference< css::util::XModifyListener >& i_listener );
 
     private:
         std::unique_ptr< UndoManagerHelper_Impl >   m_xImpl;

@@ -77,6 +77,7 @@
 #include <unotxdoc.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace sw {
 
@@ -1298,10 +1299,10 @@ SwXTextRange::CreateXTextRange(
 
 namespace sw {
 
-css::uno::Reference< SwXText >
+cpo::uno::Reference< SwXText >
 CreateParentXText(SwDoc & rDoc, const SwPosition& rPos)
 {
-    css::uno::Reference< SwXText > xParentText;
+    cpo::uno::Reference< SwXText > xParentText;
     SwStartNode* pSttNode = rPos.GetNode().StartOfSectionNode();
     while(pSttNode && pSttNode->IsSectionNode())
     {

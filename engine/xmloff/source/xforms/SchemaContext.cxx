@@ -29,7 +29,7 @@
 
 #include <com/sun/star/xforms/XDataTypeRepository.hpp>
 
-using com::sun::star::uno::Reference;
+using cpo::uno::Reference;
 using com::sun::star::xml::sax::XFastAttributeList;
 using com::sun::star::xforms::XDataTypeRepository;
 using namespace xmloff::token;

@@ -37,8 +37,8 @@ namespace dbaxml
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::container;
-    using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+    using namespace ::cpo;
+    using namespace ::cpo::uno;
     using namespace ::com::sun::star::sdbcx;
     using namespace ::com::sun::star::xml::sax;
     using namespace xmloff::token;
@@ -96,8 +96,8 @@ OXMLTable::~OXMLTable()
 
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > OXMLTable::createFastChildContext(
-            sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > OXMLTable::createFastChildContext(
+            sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
 

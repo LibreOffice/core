@@ -52,7 +52,7 @@
 #include <comphelper/errcode.hxx>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Type.h>
 #include <o3tl/typed_flags_set.hxx>

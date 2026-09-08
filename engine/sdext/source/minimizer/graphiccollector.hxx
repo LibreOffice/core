@@ -54,10 +54,10 @@ class GraphicCollector
 
     struct GraphicUser
     {
-        css::uno::Reference< css::drawing::XShape >       mxShape;            // if mbFillBitmap is false the xShape has
-        css::uno::Reference< css::beans::XPropertySet >   mxPropertySet;      // to be used otherwise the PropertySet
-        css::uno::Reference< css::beans::XPropertySet >   mxPagePropertySet;
-        css::uno::Reference< css::graphic::XGraphic > mxGraphic;
+        cpo::uno::Reference< css::drawing::XShape >       mxShape;            // if mbFillBitmap is false the xShape has
+        cpo::uno::Reference< css::beans::XPropertySet >   mxPropertySet;      // to be used otherwise the PropertySet
+        cpo::uno::Reference< css::beans::XPropertySet >   mxPagePropertySet;
+        cpo::uno::Reference< css::graphic::XGraphic > mxGraphic;
 
         css::text::GraphicCrop         maGraphicCropLogic;
         css::awt::Size                 maLogicalSize;
@@ -77,15 +77,15 @@ class GraphicCollector
             : maLogicalSize( rUser.maLogicalSize ), mbRemoveCropArea( false ), maGraphicCropLogic( 0, 0, 0, 0 ) { maUser.push_back( rUser ); };
     };
 
-    static const css::awt::DeviceInfo& GetDeviceInfo( const css::uno::Reference< cpo::uno::XComponentContext >& rxFact );
-    static css::awt::Size GetOriginalSize( const css::uno::Reference< cpo::uno::XComponentContext >& rxMSF,
-                const css::uno::Reference< css::graphic::XGraphic >& rxGraphic );
+    static const css::awt::DeviceInfo& GetDeviceInfo( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxFact );
+    static css::awt::Size GetOriginalSize( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxMSF,
+                const cpo::uno::Reference< css::graphic::XGraphic >& rxGraphic );
 
     // collecting graphic instances, the downside of this method is that every graphic is swapped in
-    static void CollectGraphics( const css::uno::Reference< cpo::uno::XComponentContext >& rxMSF, const css::uno::Reference< css::frame::XModel >& rxModel,
+    static void CollectGraphics( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxMSF, const cpo::uno::Reference< css::frame::XModel >& rxModel,
         const GraphicSettings& rGraphicSettings, std::vector< GraphicEntity >& io_rGraphicList );
     // counting graphics without swapping in graphics
-    static void CountGraphics( const css::uno::Reference< cpo::uno::XComponentContext >& rxMSF, const css::uno::Reference< css::frame::XModel >& rxModel,
+    static void CountGraphics( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxMSF, const cpo::uno::Reference< css::frame::XModel >& rxModel,
         const GraphicSettings& rGraphicSettings, sal_Int32& rGraphics );
 };
 

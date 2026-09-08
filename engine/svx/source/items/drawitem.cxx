@@ -22,6 +22,7 @@
 #include <utility>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 
 SfxPoolItem* SvxColorListItem::CreateDefault() { return new  SvxColorListItem ;}

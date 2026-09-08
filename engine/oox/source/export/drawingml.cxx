@@ -151,7 +151,7 @@ using namespace ::css::drawing;
 using namespace ::css::i18n;
 using namespace ::css::style;
 using namespace ::css::text;
-using namespace ::css::uno;
+using namespace ::cpo;
 using namespace ::cpo::uno;
 using namespace ::css::container;
 using namespace ::com::sun::star::drawing::EnhancedCustomShapeSegmentCommand;
@@ -215,12 +215,12 @@ GraphicExportCache& GraphicExportCache::get()
     return staticGraphicExportCache;
 }
 
-static cpo::uno::Any getLineDash( const css::uno::Reference<css::frame::XModel>& xModel, const OUString& rDashName )
+static cpo::uno::Any getLineDash( const cpo::uno::Reference<css::frame::XModel>& xModel, const OUString& rDashName )
     {
-        css::uno::Reference<css::lang::XMultiServiceFactory> xFact(xModel, css::uno::UNO_QUERY);
-        css::uno::Reference<css::container::XNameAccess> xNameAccess(
+        cpo::uno::Reference<css::lang::XMultiServiceFactory> xFact(xModel, cpo::uno::UNO_QUERY);
+        cpo::uno::Reference<css::container::XNameAccess> xNameAccess(
             xFact->createInstance(u"com.sun.star.drawing.DashTable"_ustr),
-            css::uno::UNO_QUERY );
+            cpo::uno::UNO_QUERY );
         if(xNameAccess.is())
         {
             if (!xNameAccess->hasByName(rDashName))
@@ -341,8 +341,8 @@ bool DrawingML::GetPropertyAndState( const Reference< XPropertySet >& rXProperty
 }
 
 bool DrawingML::GetDirectProperty(
-    const css::uno::Reference<css::beans::XPropertySet>& rXPropSet,
-    const css::uno::Reference<css::beans::XPropertyState>& rXPropState, const OUString& aName)
+    const cpo::uno::Reference<css::beans::XPropertySet>& rXPropSet,
+    const cpo::uno::Reference<css::beans::XPropertyState>& rXPropState, const OUString& aName)
 {
     PropertyState state;
     return GetPropertyAndState(rXPropSet, rXPropState, aName, state)
@@ -1677,7 +1677,7 @@ OUString DrawingML::writeGraphicToStorage(const Graphic& rGraphic , bool bRelPat
     return aExporter.writeToStorage(rGraphic, bRelPathToMedia, eHint);
 }
 
-void DrawingML::WriteMediaNonVisualProperties(const css::uno::Reference<css::drawing::XShape>& xShape)
+void DrawingML::WriteMediaNonVisualProperties(const cpo::uno::Reference<css::drawing::XShape>& xShape)
 {
     SdrMediaObj* pMediaObj = dynamic_cast<SdrMediaObj*>(SdrObject::getSdrObjectFromXShape(xShape));
     if (!pMediaObj)
@@ -2475,7 +2475,7 @@ void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sa
             bFlipHWrite, bFlipVWrite, ExportRotateClockwisify(nRotation + nCameraRotation), IsGroupShape( rXShape ));
 }
 
-static OUString lcl_GetTarget(const css::uno::Reference<css::frame::XModel>& xModel, std::u16string_view rURL)
+static OUString lcl_GetTarget(const cpo::uno::Reference<css::frame::XModel>& xModel, std::u16string_view rURL)
 {
     Reference<drawing::XDrawPagesSupplier> xDPS(xModel, uno::UNO_QUERY_THROW);
     Reference<drawing::XDrawPages> xDrawPages(xDPS->getDrawPages(), uno::UNO_SET_THROW);
@@ -2977,7 +2977,7 @@ void DrawingML::WriteRunProperties(const Reference<XPropertySet>& rRun, sal_Int3
     mpFS->endElementNS( XML_a, nElement );
 }
 
-OUString DrawingML::GetFieldValue( const css::uno::Reference< css::text::XTextRange >& rRun, bool& bIsURLField )
+OUString DrawingML::GetFieldValue( const cpo::uno::Reference< css::text::XTextRange >& rRun, bool& bIsURLField )
 {
     Reference< XPropertySet > rXPropSet( rRun, UNO_QUERY );
     OUString aFieldType, aFieldValue;
@@ -3143,7 +3143,7 @@ OUString DrawingML::GetDatetimeTypeFromDateTime(SvxDateFormat eDate, SvxTimeForm
 
 void DrawingML::WriteRun( const Reference< XTextRange >& rRun,
                           bool& rbOverridingCharHeight, sal_Int32& rnCharHeight,
-                          const css::uno::Reference< css::beans::XPropertySet >& rXShapePropSet)
+                          const cpo::uno::Reference< css::beans::XPropertySet >& rXShapePropSet)
 {
     Reference< XPropertySet > rXPropSet( rRun, UNO_QUERY );
     sal_Int16 nLevel = -1;
@@ -3778,9 +3778,9 @@ bool DrawingML::WriteParagraphProperties(const Reference<XTextContent>& rParagra
     return true;
 }
 
-void DrawingML::WriteLstStyle(const css::uno::Reference<css::text::XTextContent>& rParagraph,
+void DrawingML::WriteLstStyle(const cpo::uno::Reference<css::text::XTextContent>& rParagraph,
                                bool& rbOverridingCharHeight, sal_Int32& rnCharHeight,
-                               const css::uno::Reference<css::beans::XPropertySet>& rXShapePropSet,
+                               const cpo::uno::Reference<css::beans::XPropertySet>& rXShapePropSet,
                                sal_Int32 nElement)
 {
     Reference<XEnumerationAccess> xAccess(rParagraph, UNO_QUERY);
@@ -3860,9 +3860,9 @@ uno::Reference<container::XEnumeration> GetOutlinerTextFormatParaEnum(const uno:
 }
 }
 
-void DrawingML::WriteLstStyles(const css::uno::Reference<css::text::XTextContent>& rParagraph,
+void DrawingML::WriteLstStyles(const cpo::uno::Reference<css::text::XTextContent>& rParagraph,
                                bool& rbOverridingCharHeight, sal_Int32& rnCharHeight,
-                               const css::uno::Reference<css::beans::XPropertySet>& rXShapePropSet)
+                               const cpo::uno::Reference<css::beans::XPropertySet>& rXShapePropSet)
 {
     mpFS->startElementNS(XML_a, XML_lstStyle);
 
@@ -3925,7 +3925,7 @@ void DrawingML::WriteLstStyles(const css::uno::Reference<css::text::XTextContent
 
 void DrawingML::WriteParagraph( const Reference< XTextContent >& rParagraph,
                                 bool& rbOverridingCharHeight, sal_Int32& rnCharHeight,
-                                const css::uno::Reference< css::beans::XPropertySet >& rXShapePropSet)
+                                const cpo::uno::Reference< css::beans::XPropertySet >& rXShapePropSet)
 {
     Reference< XEnumerationAccess > access( rParagraph, UNO_QUERY );
     if( !access.is() )
@@ -3975,7 +3975,7 @@ void DrawingML::WriteParagraph( const Reference< XTextContent >& rParagraph,
     mpFS->endElementNS( XML_a, XML_p );
 }
 
-bool DrawingML::IsFontworkShape(const css::uno::Reference<css::beans::XPropertySet>& rXShapePropSet)
+bool DrawingML::IsFontworkShape(const cpo::uno::Reference<css::beans::XPropertySet>& rXShapePropSet)
 {
     bool bResult(false);
     if (rXShapePropSet.is())
@@ -4007,7 +4007,7 @@ bool DrawingML::IsFontworkShape(const css::uno::Reference<css::beans::XPropertyS
 }
 
 // Output text body properties
-void DrawingML::WriteBodyProps(const css::uno::Reference< cpo::uno::XInterface >& rXIface,
+void DrawingML::WriteBodyProps(const cpo::uno::Reference< cpo::uno::XInterface >& rXIface,
         sal_Int32 nXmlNamespace, bool bIsFontworkShape,
         sal_Int32 nTop, sal_Int32 nBottom, sal_Int32 nLeft, sal_Int32 nRight)
 {
@@ -4379,11 +4379,11 @@ void DrawingML::WriteBodyProps(const css::uno::Reference< cpo::uno::XInterface >
     sal_Int32 nColSpacing = -1;
     if (GetProperty(rXPropSet, u"TextColumns"_ustr))
     {
-        if (css::uno::Reference<css::text::XTextColumns> xCols{ mAny, css::uno::UNO_QUERY })
+        if (cpo::uno::Reference<css::text::XTextColumns> xCols{ mAny, cpo::uno::UNO_QUERY })
         {
             nCols = xCols->getColumnCount();
-            if (css::uno::Reference<css::beans::XPropertySet> xProps{ mAny,
-                                                                      css::uno::UNO_QUERY })
+            if (cpo::uno::Reference<css::beans::XPropertySet> xProps{ mAny,
+                                                                      cpo::uno::UNO_QUERY })
             {
                 if (GetProperty(xProps, u"AutomaticDistance"_ustr))
                     mAny >>= nColSpacing;
@@ -5942,7 +5942,7 @@ bool DrawingML::WriteGraphicClipCustomGeometry(const Reference<XPropertySet>& rX
 }
 
 // version for SdrPathObj
-void DrawingML::WritePolyPolygon(const css::uno::Reference<css::drawing::XShape>& rXShape,
+void DrawingML::WritePolyPolygon(const cpo::uno::Reference<css::drawing::XShape>& rXShape,
                                  const bool bClosed)
 {
     tools::PolyPolygon aPolyPolygon = EscherPropertyContainer::GetPolyPolygon(rXShape);
@@ -6620,7 +6620,7 @@ void DrawingML::WriteTextGlowEffect(const Reference< XPropertySet >& rXPropSet)
     WriteShapeEffect(u"glowtext", aGlowProps);
 }
 
-void DrawingML::WriteSoftEdgeEffect(const css::uno::Reference<css::beans::XPropertySet>& rXPropSet)
+void DrawingML::WriteSoftEdgeEffect(const cpo::uno::Reference<css::beans::XPropertySet>& rXPropSet)
 {
     if (!rXPropSet->getPropertySetInfo()->hasPropertyByName(u"SoftEdgeRadius"_ustr))
     {
@@ -7009,7 +7009,7 @@ OString DrawingML::WriteWdpPicture( const OUString& rFileId, const Sequence< sal
     return OUStringToOString(aId, RTL_TEXTENCODING_UTF8);
 }
 
-void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rXShape, sal_Int32 nDiagramId, sal_Int32 nShapeId)
+void DrawingML::WriteDiagram(const cpo::uno::Reference<css::drawing::XShape>& rXShape, sal_Int32 nDiagramId, sal_Int32 nShapeId)
 {
     SdrObject* pObj = SdrObject::getSdrObjectFromXShape(rXShape);
     if (nullptr == pObj)
@@ -7162,10 +7162,10 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
 
         // store size and position of background shape instead of group shape
         // as some shapes may be outside
-        css::uno::Reference<css::drawing::XShapes> xShapes(rXShape, uno::UNO_QUERY);
+        cpo::uno::Reference<css::drawing::XShapes> xShapes(rXShape, uno::UNO_QUERY);
         if (xShapes.is() && xShapes->hasElements())
         {
-            css::uno::Reference<css::drawing::XShape> xShapeBg(xShapes->getByIndex(0),
+            cpo::uno::Reference<css::drawing::XShape> xShapeBg(xShapes->getByIndex(0),
                                                                uno::UNO_QUERY);
             awt::Point aPos = xShapeBg->getPosition();
             awt::Size aSize = xShapeBg->getSize();

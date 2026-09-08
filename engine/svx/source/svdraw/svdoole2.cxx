@@ -85,6 +85,7 @@
 #include <bitmaps.hlst>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 static uno::Reference < beans::XPropertySet > lcl_getFrame_throw(const SdrOle2Obj* _pObject)
 {
@@ -404,7 +405,7 @@ void SdrLightEmbeddedClient_Impl::deactivatedInplace()
 void SdrLightEmbeddedClient_Impl::deactivatedUI()
 {
     SolarMutexGuard aGuard;
-    css::uno::Reference< css::frame::XLayoutManager > xLayoutManager(getLayoutManager());
+    cpo::uno::Reference< css::frame::XLayoutManager > xLayoutManager(getLayoutManager());
     if ( xLayoutManager.is() )
     {
         static constexpr OUString aMenuBarURL = u"private:resource/menubar/menubar"_ustr;
@@ -1448,7 +1449,7 @@ void SdrOle2Obj::handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage)
     }
 }
 
-void SdrOle2Obj::SetObjRef( const css::uno::Reference < css::embed::XEmbeddedObject >& rNewObjRef )
+void SdrOle2Obj::SetObjRef( const cpo::uno::Reference < css::embed::XEmbeddedObject >& rNewObjRef )
 {
     DBG_ASSERT( !rNewObjRef.is() || !mpImpl->mxObjRef.GetObject().is(), "SetObjRef called on already initialized object!");
     if( rNewObjRef == mpImpl->mxObjRef.GetObject() )

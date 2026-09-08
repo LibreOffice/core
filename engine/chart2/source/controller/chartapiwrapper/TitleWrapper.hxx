@@ -69,8 +69,8 @@ public:
 
     // ____ XComponent ____
     virtual void dispose() override;
-    virtual void addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-    virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+    virtual void addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& xListener ) override;
+    virtual void removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
     // character properties have to be handled differently (via the XFormattedString elements)
     void getFastCharacterPropertyValue( std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle, cpo::uno::Any& rValue );
@@ -81,21 +81,21 @@ public:
     virtual void setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
     virtual cpo::uno::Any getPropertyValue( const OUString& PropertyName ) override;
 
-    virtual void addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
-    virtual void removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
+    virtual void addPropertyChangeListener( const OUString& aPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
+    virtual void removePropertyChangeListener( const OUString& aPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
 
     virtual css::beans::PropertyState getPropertyState( const OUString& PropertyName ) override;
 
     virtual void setPropertyToDefault( const OUString& PropertyName ) override;
     virtual cpo::uno::Any getPropertyDefault( const OUString& aPropertyName ) override;
 
-    virtual css::uno::Reference< css::beans::XPropertySet > getInnerPropertySet() override;
+    virtual cpo::uno::Reference< css::beans::XPropertySet > getInnerPropertySet() override;
 
     virtual const cpo::uno::Sequence< css::beans::Property >& getPropertySequence() override;
     virtual std::vector< std::unique_ptr<WrappedProperty> > createWrappedProperties() override;
 
 private:
-    css::uno::Reference< css::chart2::XTitle > getTitleObject();
+    cpo::uno::Reference< css::chart2::XTitle > getTitleObject();
 
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
     ::comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_aEventListenerContainer;

@@ -27,6 +27,7 @@
 #include <sfx2/sfxresid.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 SfxCharmapContainer::SfxCharmapContainer(weld::Builder& rBuilder, const VclPtr<VirtualDevice>& rVirDev, bool bLockGridSizes)
     : m_aRecentCharView{SvxCharView(rVirDev),

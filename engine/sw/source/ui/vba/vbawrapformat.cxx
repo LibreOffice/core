@@ -29,6 +29,7 @@
 
 using namespace ooo::vba;
 using namespace com::sun::star;
+using namespace ::cpo;
 
 SwVbaWrapFormat::SwVbaWrapFormat( cpo::uno::Sequence< cpo::uno::Any > const& aArgs, uno::Reference< cpo::uno::XComponentContext >const& xContext ) : SwVbaWrapFormat_BASE( getXSomethingFromArgs< XHelperInterface >( aArgs, 0 ), xContext ), m_xShape( getXSomethingFromArgs< drawing::XShape >( aArgs, 1, false ) ), mnWrapFormatType( 0 ), mnSide( word::WdWrapSideType::wdWrapBoth )
 {

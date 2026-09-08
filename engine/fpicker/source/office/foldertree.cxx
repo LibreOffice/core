@@ -18,7 +18,7 @@
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::ucb;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 using namespace ::svt;
 

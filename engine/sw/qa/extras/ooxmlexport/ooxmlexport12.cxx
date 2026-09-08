@@ -20,7 +20,8 @@
 #include <com/sun/star/util/XRefreshable.hpp>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 class Test : public SwModelTestBase
 {

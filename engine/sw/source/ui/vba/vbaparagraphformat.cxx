@@ -32,6 +32,7 @@
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 const sal_Int16 CHARACTER_INDENT_FACTOR = 12;
 const sal_Int16 PERCENT100 = 100;

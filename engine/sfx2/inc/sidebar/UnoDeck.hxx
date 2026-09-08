@@ -27,7 +27,7 @@ class SfxUnoDeck final : public cppu::WeakImplHelper<css::ui::XDeck>
 
 public:
 
-    SfxUnoDeck(css::uno::Reference<css::frame::XFrame>, OUString );
+    SfxUnoDeck(cpo::uno::Reference<css::frame::XFrame>, OUString );
 
     virtual OUString getId() override;
 
@@ -37,7 +37,7 @@ public:
     virtual bool isActive() override;
     virtual void activate( const bool bActivate ) override;
 
-    virtual css::uno::Reference<css::ui::XPanels> getPanels() override;
+    virtual cpo::uno::Reference<css::ui::XPanels> getPanels() override;
 
     virtual sal_Int32 getOrderIndex() override;
     virtual void setOrderIndex( const sal_Int32 newOrderIndex ) override;
@@ -48,7 +48,7 @@ public:
 
 private:
 
-    const css::uno::Reference<css::frame::XFrame> xFrame;
+    const cpo::uno::Reference<css::frame::XFrame> xFrame;
     sfx2::sidebar::SidebarController* getSidebarController();
 
     const OUString mDeckId;

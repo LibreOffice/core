@@ -20,7 +20,7 @@
 #pragma once
 
 #include <sal/types.h>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <memory>
 #include <vector>
 

@@ -47,7 +47,7 @@ namespace sfx2
 {
 
 
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
     using namespace ::com::sun::star::ui::dialogs;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
@@ -846,7 +846,7 @@ namespace sfx2
 
     }
 
-    TSortedFilterList::TSortedFilterList(const css::uno::Reference< css::container::XEnumeration >& xFilterList)
+    TSortedFilterList::TSortedFilterList(const cpo::uno::Reference< css::container::XEnumeration >& xFilterList)
         : m_nIterator(0)
     {
         if (!xFilterList.is())

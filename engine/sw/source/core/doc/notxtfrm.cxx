@@ -85,6 +85,7 @@
 #include <svx/sdr/contact/displayinfo.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 static bool GetRealURL( const SwGrfNode& rNd, OUString& rText )
 {

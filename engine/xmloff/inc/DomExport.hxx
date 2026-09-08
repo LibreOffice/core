@@ -22,10 +22,10 @@
 
 class SvXMLExport;
 namespace com::sun::star {
-    namespace uno { template<typename T> class Reference; }
     namespace xml::dom { class XDocument; }
 }
+namespace cpo::uno { template<typename T> class Reference; }
 
-void exportDom( SvXMLExport&, const css::uno::Reference<css::xml::dom::XDocument>& );
+void exportDom( SvXMLExport&, const cpo::uno::Reference<css::xml::dom::XDocument>& );
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

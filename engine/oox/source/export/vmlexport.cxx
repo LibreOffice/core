@@ -58,6 +58,7 @@
 using namespace sax_fastparser;
 using namespace oox::vml;
 using namespace com::sun::star;
+using namespace ::cpo;
 
 const sal_Int32 Tag_Container = 44444;
 const sal_Int32 Tag_Commit = 44445;

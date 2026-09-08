@@ -105,6 +105,7 @@
 #include <flddat.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace sw::util;
 
 static OString OutTBLBorderLine(RtfExport const& rExport, const editeng::SvxBorderLine* pLine,

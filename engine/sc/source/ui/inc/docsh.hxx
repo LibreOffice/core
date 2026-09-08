@@ -109,11 +109,11 @@ class SAL_DLLPUBLIC_RTTI ScDocShell final: public SfxObjectShell, public SfxList
 
     std::unique_ptr<ScDocShellModificator, o3tl::default_delete<ScDocShellModificator>> m_pModificator; // #109979#; is used to load XML (created in BeforeXMLLoading and destroyed in AfterXMLLoading)
 
-    css::uno::Reference< ooo::vba::excel::XWorkbook> mxAutomationWorkbookObject;
+    cpo::uno::Reference< ooo::vba::excel::XWorkbook> mxAutomationWorkbookObject;
 
     // Only used by Vba helper functions
-    css::uno::Reference<css::script::vba::XVBAScriptListener>   m_xVBAListener;
-    css::uno::Reference<css::datatransfer::XTransferable2>      m_xClipData;
+    cpo::uno::Reference<css::script::vba::XVBAScriptListener>   m_xVBAListener;
+    cpo::uno::Reference<css::datatransfer::XTransferable2>      m_xClipData;
 
     void          InitItems();
     void          DoEnterHandler();
@@ -131,10 +131,10 @@ class SAL_DLLPUBLIC_RTTI ScDocShell final: public SfxObjectShell, public SfxList
                         ScDocShell & mrDocShell;
     };
 
-    bool ImportFrom(SfxMedium&, const css::uno::Reference<css::text::XTextRange>&) override;
+    bool ImportFrom(SfxMedium&, const cpo::uno::Reference<css::text::XTextRange>&) override;
 
-    bool          LoadXML( SfxMedium* pMedium, const css::uno::Reference< css::embed::XStorage >& );
-    bool          SaveXML( SfxMedium* pMedium, const css::uno::Reference< css::embed::XStorage >& );
+    bool          LoadXML( SfxMedium* pMedium, const cpo::uno::Reference< css::embed::XStorage >& );
+    bool          SaveXML( SfxMedium* pMedium, const cpo::uno::Reference< css::embed::XStorage >& );
     SCTAB         GetSaveTab();
 
     friend bool TestImportDBF(SvStream &rStream);
@@ -154,7 +154,7 @@ class SAL_DLLPUBLIC_RTTI ScDocShell final: public SfxObjectShell, public SfxList
     void          UnlockDocument_Impl(sal_uInt16 nNew);
 
     void          EnableSharedSettings( bool bEnable );
-    css::uno::Reference< css::frame::XModel > LoadSharedDocument();
+    cpo::uno::Reference< css::frame::XModel > LoadSharedDocument();
 
     void          UseSheetSaveEntries();
 
@@ -192,7 +192,7 @@ public:
     virtual std::set<Color> GetDocColors() override;
     virtual std::shared_ptr<model::ColorSet> GetThemeColors() override;
 
-    virtual bool    InitNew( const css::uno::Reference< css::embed::XStorage >& ) override;
+    virtual bool    InitNew( const cpo::uno::Reference< css::embed::XStorage >& ) override;
     virtual bool    Load( SfxMedium& rMedium ) override;
     virtual bool    LoadFrom( SfxMedium& rMedium ) override;
     virtual bool    ConvertFrom( SfxMedium &rMedium ) override;
@@ -229,8 +229,8 @@ public:
     ScDocument&     GetDocument()   { return *m_pDocument; }
     ScDocFunc&      GetDocFunc()    { return *m_pDocFunc; }
 
-    css::uno::Reference<css::datatransfer::XTransferable2> const & GetClipData() const { return m_xClipData; }
-    void SetClipData(const css::uno::Reference<css::datatransfer::XTransferable2>& xTransferable) { m_xClipData = xTransferable; }
+    cpo::uno::Reference<css::datatransfer::XTransferable2> const & GetClipData() const { return m_xClipData; }
+    void SetClipData(const cpo::uno::Reference<css::datatransfer::XTransferable2>& xTransferable) { m_xClipData = xTransferable; }
 
     SfxPrinter*     GetPrinter( bool bCreateIfNotExist = true );
     sal_uInt16      SetPrinter( VclPtr<SfxPrinter> const & pNewPrinter, SfxPrinterChangeFlags nDiffFlags = SFX_PRINTER_ALL );
@@ -463,7 +463,7 @@ public:
 
     void SnapVisArea( tools::Rectangle& rRect ) const;
 
-    SC_DLLPUBLIC void RegisterAutomationWorkbookObject(css::uno::Reference< ooo::vba::excel::XWorkbook > const& xWorkbook);
+    SC_DLLPUBLIC void RegisterAutomationWorkbookObject(cpo::uno::Reference< ooo::vba::excel::XWorkbook > const& xWorkbook);
 
     ScModelObj* GetModel() const { return static_cast<ScModelObj*>(SfxObjectShell::GetModel().get()); }
 

@@ -23,7 +23,7 @@
 #include <optional>
 #include <com/sun/star/beans/Optional.hpp>
 #include <com/sun/star/deployment/XPackage.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ustring.hxx>
 
@@ -39,7 +39,7 @@ OUString generateIdentifier(
 }
 
 OUString getIdentifier(
-    css::uno::Reference< css::deployment::XPackage > const & package)
+    cpo::uno::Reference< css::deployment::XPackage > const & package)
 {
     OSL_ASSERT(package.is());
     css::beans::Optional< OUString > id(package->getIdentifier());

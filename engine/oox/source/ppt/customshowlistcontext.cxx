@@ -25,7 +25,7 @@
 #include <sax/fastattribs.hxx>
 
 using namespace ::oox::core;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::xml::sax;
 
 namespace oox::ppt {
@@ -38,7 +38,7 @@ class CustomShowContext : public ::oox::core::FragmentHandler2
 
 public:
     CustomShowContext( ::oox::core::FragmentHandler2 const & rParent,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttribs,
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttribs,
             std::vector< CustomShow >& rCustomShowList );
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) override;

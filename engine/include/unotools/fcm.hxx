@@ -22,13 +22,13 @@
 #include <com/sun/star/frame/XController2.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/util/XModifiable2.hpp>
 
 namespace utl
 {
-inline void ConnectModelController(const css::uno::Reference<css::frame::XModel>& xModel,
-                                   const css::uno::Reference<css::frame::XController>& xController)
+inline void ConnectModelController(const cpo::uno::Reference<css::frame::XModel>& xModel,
+                                   const cpo::uno::Reference<css::frame::XController>& xController)
 {
     xController->attachModel(xModel);
     xModel->connectController(xController);
@@ -37,9 +37,9 @@ inline void ConnectModelController(const css::uno::Reference<css::frame::XModel>
 
 // Introduce frame/controller/model to each other
 inline void
-ConnectFrameControllerModel(const css::uno::Reference<css::frame::XFrame>& xFrame,
-                            const css::uno::Reference<css::frame::XController2>& xController,
-                            const css::uno::Reference<css::frame::XModel>& xModel)
+ConnectFrameControllerModel(const cpo::uno::Reference<css::frame::XFrame>& xFrame,
+                            const cpo::uno::Reference<css::frame::XController2>& xController,
+                            const cpo::uno::Reference<css::frame::XModel>& xModel)
 {
     auto xModifiable = xModel.query<css::util::XModifiable2>();
     bool bOldModifiable = false;

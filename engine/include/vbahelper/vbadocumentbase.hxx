@@ -20,7 +20,7 @@
 #define INCLUDED_VBAHELPER_VBADOCUMENTBASE_HXX
 
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/XInterface.hpp>
 #include <ooo/vba/XDocumentBase.hpp>
@@ -45,12 +45,12 @@ typedef InheritedHelperInterfaceWeakImpl< ooo::vba::XDocumentBase > VbaDocumentB
 class VBAHELPER_DLLPUBLIC VbaDocumentBase : public VbaDocumentBase_BASE
 {
 protected:
-    css::uno::Reference< cpo::uno::XInterface > mxVBProject;
+    cpo::uno::Reference< cpo::uno::XInterface > mxVBProject;
 protected:
     virtual css::frame::XModel* getModel() const = 0;
 public:
-    VbaDocumentBase(    const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
-    VbaDocumentBase(    cpo::uno::Sequence< cpo::uno::Any > const& aArgs, css::uno::Reference< cpo::uno::XComponentContext >const& xContext );
+    VbaDocumentBase(    const cpo::uno::Reference< ov::XHelperInterface >& xParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext );
+    VbaDocumentBase(    cpo::uno::Sequence< cpo::uno::Any > const& aArgs, cpo::uno::Reference< cpo::uno::XComponentContext >const& xContext );
 
     // Attributes
     virtual OUString getName() override;
@@ -74,7 +74,7 @@ public:
     virtual OUString getServiceImplName() override;
     virtual cpo::uno::Sequence<OUString> getServiceNames() override;
 
-    static OUString getNameFromModel( const css::uno::Reference< css::frame::XModel >& xModel );
+    static OUString getNameFromModel( const cpo::uno::Reference< css::frame::XModel >& xModel );
 };
 
 #endif // INCLUDED_VBAHELPER_VBADOCUMENTBASE_HXX

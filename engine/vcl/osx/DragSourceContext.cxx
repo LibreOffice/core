@@ -23,7 +23,7 @@
 
 using namespace com::sun::star::datatransfer::dnd;
 using namespace com::sun::star::datatransfer::dnd::DNDConstants;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cppu;
 
 DragSourceContext::DragSourceContext() :

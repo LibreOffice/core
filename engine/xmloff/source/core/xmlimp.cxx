@@ -97,8 +97,8 @@
 using ::com::sun::star::beans::XPropertySetInfo;
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::container;
@@ -485,7 +485,7 @@ namespace {
         virtual ~L10nMapper() override {}
 
     public:
-        static css::uno::Reference< XMap > load(const uno::Reference<css::embed::XStorage> &xStorage)
+        static cpo::uno::Reference< XMap > load(const uno::Reference<css::embed::XStorage> &xStorage)
         {
             try {
                 OUString streamName = u"l10n"_ustr;
@@ -493,7 +493,7 @@ namespace {
                 {
                     auto xIn = xStorage->openStreamElement(streamName, css::embed::ElementModes::READ|css::embed::ElementModes::NOCREATE);
                     if (!xIn)
-                        return css::uno::Reference< XMap >();
+                        return cpo::uno::Reference< XMap >();
 
                     auto xInStrm = uno::Reference<css::io::XInputStream>(xIn, UNO_QUERY_THROW);
 
@@ -515,9 +515,9 @@ namespace {
                         aLocales = aL10nLang.getFallbackStrings(true);
                     }
                     else
-                        aLocales = LanguageTag(css::uno::Reference< css::lang::XLocalizable >(
+                        aLocales = LanguageTag(cpo::uno::Reference< css::lang::XLocalizable >(
                                                    css::configuration::theDefaultProvider::get(xContext),
-                                                   css::uno::UNO_QUERY_THROW)->getLocale()).getFallbackStrings(true);
+                                                   cpo::uno::UNO_QUERY_THROW)->getLocale()).getFallbackStrings(true);
                     OUString aLocale; // cached best locale match
 
                     // Format is <opt-prefix|string>\nlocale\t<translated-string>\n<repeat>\n\n
@@ -572,7 +572,7 @@ namespace {
 
                     xTextStrm->closeInput();
 
-                    auto xMap = css::uno::Reference< XMap >(pMap);
+                    auto xMap = cpo::uno::Reference< XMap >(pMap);
 
                     return xMap;
                 }
@@ -581,7 +581,7 @@ namespace {
             {
                 DBG_UNHANDLED_EXCEPTION("xmloff.core", "exception getting BuildId");
             }
-            return css::uno::Reference< XMap >();
+            return cpo::uno::Reference< XMap >();
         }
 
         // XMap
@@ -639,7 +639,7 @@ namespace {
 }
 
 SvXMLImport::SvXMLImport(
-    const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
+    const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
     OUString const & implementationName,
     SvXMLImportFlags nImportFlags,
     const cpo::uno::Sequence< OUString > & sSupportedServiceNames )
@@ -694,7 +694,7 @@ SvXMLImport::~SvXMLImport() noexcept
     cleanup();
 }
 
-bool SvXMLImport::addEmbeddedFont(const css::uno::Reference< css::io::XInputStream >& stream,
+bool SvXMLImport::addEmbeddedFont(const cpo::uno::Reference< css::io::XInputStream >& stream,
                                   const OUString& fontName, std::u16string_view extra,
                                   std::vector<unsigned char> const & key, bool eot)
 {
@@ -708,10 +708,10 @@ namespace
     class setFastDocumentHandlerGuard
     {
     private:
-        css::uno::Reference<css::xml::sax::XFastParser> mxParser;
+        cpo::uno::Reference<css::xml::sax::XFastParser> mxParser;
     public:
-        setFastDocumentHandlerGuard(css::uno::Reference<css::xml::sax::XFastParser> Parser,
-                                    const css::uno::Reference<css::xml::sax::XFastDocumentHandler>& Handler)
+        setFastDocumentHandlerGuard(cpo::uno::Reference<css::xml::sax::XFastParser> Parser,
+                                    const cpo::uno::Reference<css::xml::sax::XFastDocumentHandler>& Handler)
             : mxParser(std::move(Parser))
         {
             mxParser->setFastDocumentHandler(Handler);
@@ -1268,7 +1268,7 @@ void SvXMLImport::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArgume
 
     uno::Reference<lang::XInitialization> const xInit(mxParser, uno::UNO_QUERY_THROW);
 
-    css::uno::Reference< XMap > xMap = L10nMapper::load(GetSourceStorage());
+    cpo::uno::Reference< XMap > xMap = L10nMapper::load(GetSourceStorage());
     cpo::uno::Sequence< cpo::uno::Any > args{
         cpo::uno::Any(u"IgnoreMissingNSDecl"_ustr),
         cpo::uno::Any(xMap) };

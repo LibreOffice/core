@@ -79,10 +79,10 @@ namespace dbaccess
         std::unique_ptr<ORowSetDataColumns>     m_pColumns;         // represent the select columns
         ::cppu::OBroadcastHelper&               m_rBHelper;         // must be set from the derived classes
         // is used when the formatkey for database types is set
-        css::uno::Reference< css::util::XNumberFormatTypes>   m_xNumberFormatTypes;
+        cpo::uno::Reference< css::util::XNumberFormatTypes>   m_xNumberFormatTypes;
         std::unique_ptr<OEmptyCollection>       m_pEmptyCollection;
 
-        css::uno::Reference< cpo::uno::XComponentContext>   m_aContext;
+        cpo::uno::Reference< cpo::uno::XComponentContext>   m_aContext;
         ::connectivity::SQLError                m_aErrors;
 
         sal_Int32                               m_nLastColumnIndex; // the last column ask for, used for wasNull()
@@ -97,7 +97,7 @@ namespace dbaccess
 
     protected:
         ORowSetBase(
-            const css::uno::Reference<cpo::uno::XComponentContext>& _rContext,
+            const cpo::uno::Reference<cpo::uno::XComponentContext>& _rContext,
             ::cppu::OBroadcastHelper& _rBHelper,
             ::osl::Mutex* _pMutex
         );
@@ -224,7 +224,7 @@ namespace dbaccess
         virtual void disposing();
 
     // css::beans::XPropertySet
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override
+        virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override
         {
             return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
         }
@@ -246,13 +246,13 @@ namespace dbaccess
         virtual void clearWarnings(  ) override;
 
     // css::sdbc::XResultSetMetaDataSupplier
-        virtual css::uno::Reference< css::sdbc::XResultSetMetaData > getMetaData(  ) override;
+        virtual cpo::uno::Reference< css::sdbc::XResultSetMetaData > getMetaData(  ) override;
 
     // css::sdbc::XColumnLocate
         virtual sal_Int32 findColumn( const OUString& columnName ) override;
 
     // css::sdbcx::XColumnsSupplier
-        virtual css::uno::Reference< css::container::XNameAccess > getColumns(  ) override;
+        virtual cpo::uno::Reference< css::container::XNameAccess > getColumns(  ) override;
 
     // css::sdbc::XRow
         virtual bool wasNull(  ) override;
@@ -268,13 +268,13 @@ namespace dbaccess
         virtual css::util::Date getDate( sal_Int32 columnIndex ) override;
         virtual css::util::Time getTime( sal_Int32 columnIndex ) override;
         virtual css::util::DateTime getTimestamp( sal_Int32 columnIndex ) override;
-        virtual css::uno::Reference< css::io::XInputStream > getBinaryStream( sal_Int32 columnIndex ) override;
-        virtual css::uno::Reference< css::io::XInputStream > getCharacterStream( sal_Int32 columnIndex ) override;
-        virtual cpo::uno::Any getObject( sal_Int32 columnIndex, const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
-        virtual css::uno::Reference< css::sdbc::XRef > getRef( sal_Int32 columnIndex ) override;
-        virtual css::uno::Reference< css::sdbc::XBlob > getBlob( sal_Int32 columnIndex ) override;
-        virtual css::uno::Reference< css::sdbc::XClob > getClob( sal_Int32 columnIndex ) override;
-        virtual css::uno::Reference< css::sdbc::XArray > getArray( sal_Int32 columnIndex ) override;
+        virtual cpo::uno::Reference< css::io::XInputStream > getBinaryStream( sal_Int32 columnIndex ) override;
+        virtual cpo::uno::Reference< css::io::XInputStream > getCharacterStream( sal_Int32 columnIndex ) override;
+        virtual cpo::uno::Any getObject( sal_Int32 columnIndex, const cpo::uno::Reference< css::container::XNameAccess >& typeMap ) override;
+        virtual cpo::uno::Reference< css::sdbc::XRef > getRef( sal_Int32 columnIndex ) override;
+        virtual cpo::uno::Reference< css::sdbc::XBlob > getBlob( sal_Int32 columnIndex ) override;
+        virtual cpo::uno::Reference< css::sdbc::XClob > getClob( sal_Int32 columnIndex ) override;
+        virtual cpo::uno::Reference< css::sdbc::XArray > getArray( sal_Int32 columnIndex ) override;
 
     // css::sdbcx::XRowLocate
         virtual cpo::uno::Any getBookmark(  ) override;
@@ -302,12 +302,12 @@ namespace dbaccess
         virtual bool rowUpdated(  ) override;
         virtual bool rowInserted(  ) override;
         virtual bool rowDeleted(  ) override;
-        virtual css::uno::Reference< cpo::uno::XInterface > getStatement(  ) override;
+        virtual cpo::uno::Reference< cpo::uno::XInterface > getStatement(  ) override;
 
     // css::sdbc::XRowSet
         virtual void execute(  ) override = 0;
-        virtual void addRowSetListener( const css::uno::Reference< css::sdbc::XRowSetListener >& listener ) override = 0;
-        virtual void removeRowSetListener( const css::uno::Reference< css::sdbc::XRowSetListener >& listener ) override = 0;
+        virtual void addRowSetListener( const cpo::uno::Reference< css::sdbc::XRowSetListener >& listener ) override = 0;
+        virtual void removeRowSetListener( const cpo::uno::Reference< css::sdbc::XRowSetListener >& listener ) override = 0;
 
         // is called when the rowset is going to delete this bookmark _rBookmark
         void onDeleteRow( const cpo::uno::Any& _rBookmark );

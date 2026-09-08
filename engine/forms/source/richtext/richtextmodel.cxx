@@ -44,7 +44,7 @@
 namespace frm
 {
     using namespace comphelper;
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
 using namespace cpo::uno;
     using namespace ::com::sun::star::awt;
     using namespace ::com::sun::star::lang;
@@ -283,7 +283,7 @@ using namespace cpo::uno;
         );
     }
 
-    css::uno::Reference< css::util::XCloneable > ORichTextModel::createClone()
+    cpo::uno::Reference< css::util::XCloneable > ORichTextModel::createClone()
 {
     rtl::Reference<ORichTextModel> pClone = new ORichTextModel(this, getContext());
     pClone->clonedFrom(this);

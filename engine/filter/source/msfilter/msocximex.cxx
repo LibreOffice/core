@@ -31,6 +31,7 @@
 #include <utility>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 constexpr OUString sWW8_form( u"WW-Standard"_ustr );
 

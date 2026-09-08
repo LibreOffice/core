@@ -34,7 +34,7 @@
 #include <stdio.h>
 #include <string.h>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 void MapReturn(sal_uInt32 ret0, sal_uInt32 ret1, typelib_TypeDescription *pReturnTypeDescr, bool bRegisterReturn, sal_uInt32 *pRegisterReturn)
 {

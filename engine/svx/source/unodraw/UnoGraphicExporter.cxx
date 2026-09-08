@@ -77,8 +77,8 @@
 using namespace ::comphelper;
 using namespace ::cppu;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::drawing;
@@ -93,10 +93,10 @@ namespace {
         OUString maFilterName;
         OUString maMediaType;
         URL maURL;
-        css::uno::Reference< css::io::XOutputStream >         mxOutputStream;
-        css::uno::Reference< css::graphic::XGraphicRenderer > mxGraphicRenderer;
-        css::uno::Reference< css::task::XStatusIndicator >    mxStatusIndicator;
-        css::uno::Reference< css::task::XInteractionHandler > mxInteractionHandler;
+        cpo::uno::Reference< css::io::XOutputStream >         mxOutputStream;
+        cpo::uno::Reference< css::graphic::XGraphicRenderer > mxGraphicRenderer;
+        cpo::uno::Reference< css::task::XStatusIndicator >    mxStatusIndicator;
+        cpo::uno::Reference< css::task::XInteractionHandler > mxInteractionHandler;
 
         sal_Int32 mnWidth;
         sal_Int32 mnHeight;
@@ -1070,7 +1070,7 @@ bool GraphicExporter::filter( const Sequence< PropertyValue >& aDescriptor )
     if ( aSettings.mxInteractionHandler.is() && ( nStatus != ERRCODE_NONE ) )
     {
         Any aInteraction;
-        Sequence< css::uno::Reference< css::task::XInteractionContinuation > > lContinuations{
+        Sequence< cpo::uno::Reference< css::task::XInteractionContinuation > > lContinuations{
             new ::comphelper::OInteractionApprove()
         };
 

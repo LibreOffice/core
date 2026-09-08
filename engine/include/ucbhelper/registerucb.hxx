@@ -25,7 +25,7 @@
 
 #include <ucbhelper/ucbhelperdllapi.h>
 
-namespace com::sun::star::uno { template <class interface_type> class Reference; }
+namespace cpo::uno { template <class interface_type> class Reference; }
 namespace com::sun::star {
     namespace ucb { class XContentProviderManager; }
 }
@@ -83,8 +83,8 @@ typedef std::vector< ContentProviderData > ContentProviderDataList;
  */
 
 UCBHELPER_DLLPUBLIC bool registerAtUcb(
-    css::uno::Reference< css::ucb::XContentProviderManager > const & rManager,
-    css::uno::Reference< cpo::uno::XComponentContext > const & rxContext,
+    cpo::uno::Reference< css::ucb::XContentProviderManager > const & rManager,
+    cpo::uno::Reference< cpo::uno::XComponentContext > const & rxContext,
     OUString const & rName,
     OUString const & rArguments,
     OUString const & rTemplate);

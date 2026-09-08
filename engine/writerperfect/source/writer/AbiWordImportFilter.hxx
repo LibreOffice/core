@@ -21,7 +21,7 @@
 class AbiWordImportFilter : public writerperfect::ImportFilter<OdtGenerator>
 {
 public:
-    explicit AbiWordImportFilter(const css::uno::Reference<cpo::uno::XComponentContext>& rxContext)
+    explicit AbiWordImportFilter(const cpo::uno::Reference<cpo::uno::XComponentContext>& rxContext)
         : writerperfect::ImportFilter<OdtGenerator>(rxContext)
     {
     }

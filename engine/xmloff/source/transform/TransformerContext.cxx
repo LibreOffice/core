@@ -26,7 +26,7 @@
 #include "TransformerContext.hxx"
 
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::xml::sax;
 
 bool XMLTransformerContext::HasQName( sal_uInt16 nPrefix,

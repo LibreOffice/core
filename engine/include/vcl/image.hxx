@@ -30,7 +30,7 @@
 class ImplImage;
 
 namespace com::sun::star::graphic { class XGraphic; }
-namespace com::sun::star::uno { template <class interface_type> class Reference; }
+namespace cpo::uno { template <class interface_type> class Reference; }
 
 #define IMAGELIST_IMAGE_NOTFOUND (sal_uInt16(0xFFFF))
 
@@ -42,7 +42,7 @@ class SAL_WARN_UNUSED VCL_DLLPUBLIC Image
 public:
     Image();
     explicit Image(Bitmap const & rBitmap);
-    explicit Image(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic);
+    explicit Image(cpo::uno::Reference<css::graphic::XGraphic> const & rxGraphic);
     explicit Image(OUString const & rPNGFileUrl);
     explicit Image(StockImage, OUString const & rPNGFilePath);
 

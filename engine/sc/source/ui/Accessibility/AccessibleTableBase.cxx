@@ -33,6 +33,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
+using namespace ::cpo;
 
 ScAccessibleTableBase::ScAccessibleTableBase(const uno::Reference<XAccessible>& rxParent,
                                              ScDocument* pDoc, const ScRange& rRange)

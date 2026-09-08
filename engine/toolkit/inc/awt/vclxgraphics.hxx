@@ -79,24 +79,24 @@ public:
     OutputDevice*   GetOutputDevice() const { return mpOutputDevice; }
 
     // css::awt::XGraphics Attributes
-    virtual css::uno::Reference< css::awt::XDevice > getDevice() override;
+    virtual cpo::uno::Reference< css::awt::XDevice > getDevice() override;
     virtual void setTextColor( ::sal_Int32 _textcolor ) override;
     virtual void setTextFillColor( ::sal_Int32 _textfillcolor ) override;
     virtual void setLineColor( ::sal_Int32 _linecolor ) override;
     virtual void setFillColor( ::sal_Int32 _fillcolor ) override;
     virtual void setRasterOp( css::awt::RasterOperation _rasterop ) override;
-    virtual void setFont( const css::uno::Reference< css::awt::XFont >& _font ) override;
+    virtual void setFont( const cpo::uno::Reference< css::awt::XFont >& _font ) override;
     virtual css::awt::SimpleFontMetric getFontMetric() override;
 
     // css::awt::XGraphics Methods
     virtual void selectFont( const css::awt::FontDescriptor& aDescription ) override;
-    virtual void setClipRegion( const css::uno::Reference< css::awt::XRegion >& Clipping ) override;
-    virtual void intersectClipRegion( const css::uno::Reference< css::awt::XRegion >& xClipping ) override;
+    virtual void setClipRegion( const cpo::uno::Reference< css::awt::XRegion >& Clipping ) override;
+    virtual void intersectClipRegion( const cpo::uno::Reference< css::awt::XRegion >& xClipping ) override;
     virtual void push(  ) override;
     virtual void pop(  ) override;
     virtual void clear( const css::awt::Rectangle& aRect ) override;
-    virtual void copy( const css::uno::Reference< css::awt::XDevice >& xSource, ::sal_Int32 nSourceX, ::sal_Int32 nSourceY, ::sal_Int32 nSourceWidth, ::sal_Int32 nSourceHeight, ::sal_Int32 nDestX, ::sal_Int32 nDestY, ::sal_Int32 nDestWidth, ::sal_Int32 nDestHeight ) override;
-    virtual void draw( const css::uno::Reference< css::awt::XDisplayBitmap >& xBitmapHandle, ::sal_Int32 SourceX, ::sal_Int32 SourceY, ::sal_Int32 SourceWidth, ::sal_Int32 SourceHeight, ::sal_Int32 DestX, ::sal_Int32 DestY, ::sal_Int32 DestWidth, ::sal_Int32 DestHeight ) override;
+    virtual void copy( const cpo::uno::Reference< css::awt::XDevice >& xSource, ::sal_Int32 nSourceX, ::sal_Int32 nSourceY, ::sal_Int32 nSourceWidth, ::sal_Int32 nSourceHeight, ::sal_Int32 nDestX, ::sal_Int32 nDestY, ::sal_Int32 nDestWidth, ::sal_Int32 nDestHeight ) override;
+    virtual void draw( const cpo::uno::Reference< css::awt::XDisplayBitmap >& xBitmapHandle, ::sal_Int32 SourceX, ::sal_Int32 SourceY, ::sal_Int32 SourceWidth, ::sal_Int32 SourceHeight, ::sal_Int32 DestX, ::sal_Int32 DestY, ::sal_Int32 DestWidth, ::sal_Int32 DestHeight ) override;
     virtual void drawPixel( ::sal_Int32 X, ::sal_Int32 Y ) override;
     virtual void drawLine( ::sal_Int32 X1, ::sal_Int32 Y1, ::sal_Int32 X2, ::sal_Int32 Y2 ) override;
     virtual void drawRect( ::sal_Int32 X, ::sal_Int32 Y, ::sal_Int32 Width, ::sal_Int32 Height ) override;
@@ -111,7 +111,7 @@ public:
     virtual void drawGradient( ::sal_Int32 nX, ::sal_Int32 nY, ::sal_Int32 nWidth, ::sal_Int32 Height, const css::awt::Gradient& aGradient ) override;
     virtual void drawText( ::sal_Int32 X, ::sal_Int32 Y, const OUString& Text ) override;
     virtual void drawTextArray( ::sal_Int32 X, ::sal_Int32 Y, const OUString& Text, const cpo::uno::Sequence< ::sal_Int32 >& Longs ) override;
-    virtual void drawImage( ::sal_Int32 nX, ::sal_Int32 nY, ::sal_Int32 nWidth, ::sal_Int32 nHeight, ::sal_Int16 nStyle, const css::uno::Reference< css::graphic::XGraphic >& aGraphic ) override;
+    virtual void drawImage( ::sal_Int32 nX, ::sal_Int32 nY, ::sal_Int32 nWidth, ::sal_Int32 nHeight, ::sal_Int16 nStyle, const cpo::uno::Reference< css::graphic::XGraphic >& aGraphic ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

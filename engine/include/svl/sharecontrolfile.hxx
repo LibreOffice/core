@@ -35,11 +35,11 @@ namespace svt {
 
 class SVL_DLLPUBLIC ShareControlFile final : public LockFileCommon
 {
-    css::uno::Reference< css::io::XStream >       m_xStream;
-    css::uno::Reference< css::io::XInputStream >  m_xInputStream;
-    css::uno::Reference< css::io::XOutputStream > m_xOutputStream;
-    css::uno::Reference< css::io::XSeekable >     m_xSeekable;
-    css::uno::Reference< css::io::XTruncate >     m_xTruncate;
+    cpo::uno::Reference< css::io::XStream >       m_xStream;
+    cpo::uno::Reference< css::io::XInputStream >  m_xInputStream;
+    cpo::uno::Reference< css::io::XOutputStream > m_xOutputStream;
+    cpo::uno::Reference< css::io::XSeekable >     m_xSeekable;
+    cpo::uno::Reference< css::io::XTruncate >     m_xTruncate;
 
     std::vector< LockFileEntry >                  m_aUsersData;
 

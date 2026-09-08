@@ -47,7 +47,8 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 using ::oox::core::XmlFilterBase;
 

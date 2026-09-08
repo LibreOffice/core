@@ -94,20 +94,20 @@ namespace comphelper
     {
         cpo::uno::Any const
                     m_aRequest;         /// the request we represent
-        std::vector< css::uno::Reference< css::task::XInteractionContinuation > >
+        std::vector< cpo::uno::Reference< css::task::XInteractionContinuation > >
                     m_aContinuations;   /// all registered continuations
 
     public:
         OInteractionRequest(cpo::uno::Any aRequestDescription);
         OInteractionRequest(cpo::uno::Any aRequestDescription,
-            std::vector<css::uno::Reference<css::task::XInteractionContinuation>>&& rContinuations);
+            std::vector<cpo::uno::Reference<css::task::XInteractionContinuation>>&& rContinuations);
 
         /// add a new continuation
-        void addContinuation(const css::uno::Reference< css::task::XInteractionContinuation >& _rxContinuation);
+        void addContinuation(const cpo::uno::Reference< css::task::XInteractionContinuation >& _rxContinuation);
 
     // XInteractionRequest
         virtual cpo::uno::Any getRequest(  ) override;
-        virtual cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > getContinuations(  ) override;
+        virtual cpo::uno::Sequence< cpo::uno::Reference< css::task::XInteractionContinuation > > getContinuations(  ) override;
     };
 
 }   // namespace comphelper

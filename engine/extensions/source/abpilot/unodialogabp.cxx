@@ -30,7 +30,7 @@
 namespace abp
 {
     using namespace ::com::sun::star;
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
 using namespace cpo::uno;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::ui::dialogs;
@@ -84,7 +84,7 @@ using namespace cpo::uno;
         }
     }
 
-    std::unique_ptr<weld::DialogController> OABSPilotUno::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
+    std::unique_ptr<weld::DialogController> OABSPilotUno::createDialog(const cpo::uno::Reference<css::awt::XWindow>& rParent)
     {
         return std::make_unique<OAddressBookSourcePilot>(Application::GetFrameWeld(rParent), m_aContext);
     }

@@ -55,7 +55,7 @@
 
 constexpr OUString SERVICE_NAME = u"com.sun.star.ucb.SimpleFileAccess"_ustr;
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::io;
@@ -105,11 +105,11 @@ public:
     virtual css::util::DateTime SAL_CALL getDateTimeModified( const OUString& FileURL ) override;
     virtual cpo::uno::Sequence< OUString > SAL_CALL getFolderContents( const OUString& FolderURL, bool bIncludeFolders ) override;
     virtual bool SAL_CALL exists( const OUString& FileURL ) override;
-    virtual css::uno::Reference< css::io::XInputStream > SAL_CALL openFileRead( const OUString& FileURL ) override;
-    virtual css::uno::Reference< css::io::XOutputStream > SAL_CALL openFileWrite( const OUString& FileURL ) override;
-    virtual css::uno::Reference< css::io::XStream > SAL_CALL openFileReadWrite( const OUString& FileURL ) override;
-    virtual void SAL_CALL setInteractionHandler( const css::uno::Reference< css::task::XInteractionHandler >& Handler ) override;
-    virtual void SAL_CALL writeFile( const OUString& FileURL, const css::uno::Reference< css::io::XInputStream >& data ) override;
+    virtual cpo::uno::Reference< css::io::XInputStream > SAL_CALL openFileRead( const OUString& FileURL ) override;
+    virtual cpo::uno::Reference< css::io::XOutputStream > SAL_CALL openFileWrite( const OUString& FileURL ) override;
+    virtual cpo::uno::Reference< css::io::XStream > SAL_CALL openFileReadWrite( const OUString& FileURL ) override;
+    virtual void SAL_CALL setInteractionHandler( const cpo::uno::Reference< css::task::XInteractionHandler >& Handler ) override;
+    virtual void SAL_CALL writeFile( const OUString& FileURL, const cpo::uno::Reference< css::io::XInputStream >& data ) override;
     virtual bool SAL_CALL isHidden( const OUString& FileURL ) override;
     virtual void SAL_CALL setHidden( const OUString& FileURL, bool bHidden ) override;
 

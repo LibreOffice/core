@@ -38,7 +38,7 @@
 
 using namespace connectivity;
 using namespace connectivity::file;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdb;
 using namespace ::com::sun::star::container;
@@ -431,7 +431,7 @@ OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode const * pPredicateNo
                  ) );
             ::dbtools::throwGenericSQLException( sError, nullptr );
         }
-        css::uno::Reference< css::beans::XPropertySet> xCol;
+        cpo::uno::Reference< css::beans::XPropertySet> xCol;
         try
         {
             if (m_orgColumns->getByName(aColumnName) >>= xCol)

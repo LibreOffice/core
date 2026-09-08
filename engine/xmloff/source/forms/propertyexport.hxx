@@ -68,11 +68,11 @@ namespace xmloff
     protected:
         IFormsExportContext&    m_rContext;
 
-        const css::uno::Reference< css::beans::XPropertySet >
+        const cpo::uno::Reference< css::beans::XPropertySet >
                                 m_xProps;
-        const css::uno::Reference< css::beans::XPropertySetInfo >
+        const cpo::uno::Reference< css::beans::XPropertySetInfo >
                                 m_xPropertyInfo;
-        const css::uno::Reference< css::beans::XPropertyState >
+        const cpo::uno::Reference< css::beans::XPropertyState >
                                 m_xPropertyState;
 
         // caching
@@ -87,7 +87,7 @@ namespace xmloff
                 the property set to be exported
         */
         OPropertyExport(IFormsExportContext& _rContext,
-            const css::uno::Reference< css::beans::XPropertySet >& _rxProps);
+            const cpo::uno::Reference< css::beans::XPropertySet >& _rxProps);
 
     protected:
         /** examines a property set given for all properties which's value are to made persistent

@@ -37,7 +37,7 @@ class ChartThemePanel final : public PanelLayout,
 {
 public:
     static std::unique_ptr<PanelLayout>
-    Create(weld::Widget* pParent, const css::uno::Reference<css::frame::XFrame>& rxFrame,
+    Create(weld::Widget* pParent, const cpo::uno::Reference<css::frame::XFrame>& rxFrame,
            ChartController* pController);
 
     void DataChanged(const DataChangedEvent& rEvent) override;
@@ -52,20 +52,20 @@ public:
     }
 
     // constructor/destructor
-    ChartThemePanel(weld::Widget* pParent, const css::uno::Reference<css::frame::XFrame>& rxFrame,
+    ChartThemePanel(weld::Widget* pParent, const cpo::uno::Reference<css::frame::XFrame>& rxFrame,
                     ChartController* pController);
     ~ChartThemePanel() override;
 
     void updateData() override;
     void modelInvalid() override;
 
-    void updateModel(css::uno::Reference<css::frame::XModel> xModel) override;
+    void updateModel(cpo::uno::Reference<css::frame::XModel> xModel) override;
 
 private:
     rtl::Reference<ChartModel> mxModel;
     ChartController* mpController;
 
-    css::uno::Reference<css::util::XModifyListener> mxModifyListener;
+    cpo::uno::Reference<css::util::XModifyListener> mxModifyListener;
 
     bool mbModelValid;
 

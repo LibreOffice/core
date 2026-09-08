@@ -12,6 +12,7 @@
 #include <cppuhelper/queryinterface.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 namespace model::style
 {

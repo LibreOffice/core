@@ -23,7 +23,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/drawing/ColorTable.hpp>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <comphelper/processfactory.hxx>
@@ -53,12 +53,12 @@ private:
 ColorNameMap::ColorNameMap()
 {
     cpo::uno::Sequence<OUString> aNames;
-    css::uno::Reference<css::container::XNameAccess> xNA;
+    cpo::uno::Reference<css::container::XNameAccess> xNA;
 
     try
     {
         // Create color table in which to look up the given color.
-        css::uno::Reference<css::container::XNameContainer> xColorTable
+        cpo::uno::Reference<css::container::XNameContainer> xColorTable
             = css::drawing::ColorTable::create(comphelper::getProcessComponentContext());
 
         // Get list of color names in order to iterate over the color table.

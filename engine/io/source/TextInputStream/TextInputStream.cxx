@@ -39,7 +39,7 @@
 namespace cpo::uno { class XComponentContext; }
 
 using namespace ::cppu;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::io;

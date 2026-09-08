@@ -45,7 +45,7 @@ class AccessibleIconChoiceCtrlEntry final : public AccessibleIconChoiceCtrlEntry
     VclPtr<SvtIconChoiceCtrl>           m_pIconCtrl;
     sal_Int32                           m_nIndex;
 
-    css::uno::Reference< css::accessibility::XAccessible > m_xParent;
+    cpo::uno::Reference< css::accessibility::XAccessible > m_xParent;
 
     tools::Rectangle               GetBoundingBox_Impl() const;
     bool                IsAlive_Impl() const;
@@ -81,7 +81,7 @@ public:
     */
     AccessibleIconChoiceCtrlEntry( SvtIconChoiceCtrl& _rIconCtrl,
                                    sal_Int32 _nPos,
-                                   const css::uno::Reference< css::accessibility::XAccessible >& _xParent );
+                                   const cpo::uno::Reference< css::accessibility::XAccessible >& _xParent );
 
     // XServiceInfo
     virtual OUString getImplementationName() override;
@@ -93,18 +93,18 @@ public:
 
     // XAccessibleContext
     virtual sal_Int64 getAccessibleChildCount(  ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleChild( sal_Int64 i ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleParent(  ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > getAccessibleChild( sal_Int64 i ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > getAccessibleParent(  ) override;
     virtual sal_Int64 getAccessibleIndexInParent(  ) override;
     virtual sal_Int16 getAccessibleRole(  ) override;
     virtual OUString getAccessibleDescription(  ) override;
     virtual OUString getAccessibleName(  ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > getAccessibleRelationSet(  ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessibleRelationSet > getAccessibleRelationSet(  ) override;
     virtual sal_Int64 getAccessibleStateSet(  ) override;
     virtual css::lang::Locale getLocale(  ) override;
 
     // XAccessibleComponent
-    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
     virtual css::awt::Point getLocationOnScreen(  ) override;
     virtual void grabFocus(  ) override;
     virtual sal_Int32 getForeground(  ) override;
@@ -134,7 +134,7 @@ public:
     virtual sal_Int32 getAccessibleActionCount(  ) override;
     virtual bool doAccessibleAction( sal_Int32 nIndex ) override;
     virtual OUString getAccessibleActionDescription( sal_Int32 nIndex ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessibleKeyBinding > getAccessibleActionKeyBinding( sal_Int32 nIndex ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessibleKeyBinding > getAccessibleActionKeyBinding( sal_Int32 nIndex ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

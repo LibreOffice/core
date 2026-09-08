@@ -40,7 +40,7 @@ namespace framework{
     @param  eMode
                 force opening of the configuration access in readonly or in read/write mode
  */
-ConfigAccess::ConfigAccess( /*IN*/ css::uno::Reference< cpo::uno::XComponentContext > xContext,
+ConfigAccess::ConfigAccess( /*IN*/ cpo::uno::Reference< cpo::uno::XComponentContext > xContext,
                             /*IN*/ OUString                                     sRoot )
     : m_xContext    (std::move( xContext))
     , m_sRoot       (std::move( sRoot    ))
@@ -103,7 +103,7 @@ void ConfigAccess::open( /*IN*/ EOpenMode eMode )
     closeImpl();
 
     // create the configuration provider, which provides sub access points
-    css::uno::Reference< css::lang::XMultiServiceFactory > xConfigProvider = css::configuration::theDefaultProvider::get(m_xContext);
+    cpo::uno::Reference< css::lang::XMultiServiceFactory > xConfigProvider = css::configuration::theDefaultProvider::get(m_xContext);
     css::beans::PropertyValue aParam;
     aParam.Name    = u"nodepath"_ustr;
     aParam.Value <<= m_sRoot;
@@ -145,7 +145,7 @@ void ConfigAccess::closeImpl()
     // check already closed configuration
     if (m_xConfig.is())
     {
-        css::uno::Reference< css::util::XChangesBatch > xFlush(m_xConfig, css::uno::UNO_QUERY);
+        cpo::uno::Reference< css::util::XChangesBatch > xFlush(m_xConfig, cpo::uno::UNO_QUERY);
         if (xFlush.is())
             xFlush->commitChanges();
         m_xConfig.clear();
@@ -172,7 +172,7 @@ void ConfigAccess::closeImpl()
 
     @return A c++(!) reference to the uno instance of the configuration access point.
  */
-const css::uno::Reference< cpo::uno::XInterface >& ConfigAccess::cfg()
+const cpo::uno::Reference< cpo::uno::XInterface >& ConfigAccess::cfg()
 {
     // must be synchronized from outside!
     // => no lock here ...

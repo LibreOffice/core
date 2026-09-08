@@ -45,7 +45,7 @@ using osl::FileBase;
 
 using namespace cppu;
 using namespace com::sun::star::system::SimpleMailClientFlags;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::configuration;
@@ -84,7 +84,7 @@ void appendShellWord(OStringBuffer & buffer, OUString const & word, bool strict)
         throw cpo::uno::Exception(
             ("Could not convert \"" + word + "\" to encoding #"
              + OUString::number(osl_getThreadTextEncoding())),
-            css::uno::Reference<cpo::uno::XInterface>());
+            cpo::uno::Reference<cpo::uno::XInterface>());
     }
     buffer.append('\'');
     for (sal_Int32 i = 0; i != sys.getLength(); ++i) {
@@ -94,7 +94,7 @@ void appendShellWord(OStringBuffer & buffer, OUString const & word, bool strict)
             if (strict) {
                 throw cpo::uno::Exception(
                     "Could not convert word containing NUL, \"" + word + "\"",
-                    css::uno::Reference<cpo::uno::XInterface>());
+                    cpo::uno::Reference<cpo::uno::XInterface>());
             }
             break;
         case '\'':

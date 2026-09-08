@@ -51,7 +51,7 @@ public:
     void collectShapes();
 
     // XEnumerationAccess
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
+    virtual cpo::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
 
     // XElementAccess
     virtual cpo::uno::Type SAL_CALL getElementType() override;
@@ -89,10 +89,10 @@ class ScVbaButtons : public ScVbaGraphicObjectsBase
 public:
     /// @throws cpo::uno::RuntimeException
     explicit ScVbaButtons(
-        const css::uno::Reference< ov::XHelperInterface >& rxParent,
-        const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
-        const css::uno::Reference< css::frame::XModel >& rxModel,
-        const css::uno::Reference< css::sheet::XSpreadsheet >& rxSheet,
+        const cpo::uno::Reference< ov::XHelperInterface >& rxParent,
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+        const cpo::uno::Reference< css::frame::XModel >& rxModel,
+        const cpo::uno::Reference< css::sheet::XSpreadsheet >& rxSheet,
         bool bOptionButtons);
 
     VBAHELPER_DECL_XHELPERINTERFACE

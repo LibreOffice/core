@@ -92,7 +92,7 @@ class XMLTextListsHelper
             note that the ID namespace for numbered-paragraph and regular list
             is distinct; we never combine a list and a n-p
          */
-        css::uno::Reference< css::container::XIndexReplace>
+        cpo::uno::Reference< css::container::XIndexReplace>
         EnsureNumberedParagraph(
             SvXMLImport & i_rImport,
             const OUString& i_ListId,
@@ -112,9 +112,9 @@ class XMLTextListsHelper
             @param o_rRestartNumbering   set to true if no style (defaulting)
             @param io_rSetDefaults  set to true if no style (defaulting)
          */
-        static css::uno::Reference< css::container::XIndexReplace> MakeNumRule(
+        static cpo::uno::Reference< css::container::XIndexReplace> MakeNumRule(
             SvXMLImport & i_rImport,
-            const css::uno::Reference< css::container::XIndexReplace>& i_xNumRule,
+            const cpo::uno::Reference< css::container::XIndexReplace>& i_xNumRule,
             std::u16string_view i_ParentStyleName,
             const OUString& i_StyleName,
             sal_Int16 & io_rLevel,
@@ -174,7 +174,7 @@ class XMLTextListsHelper
         typedef ::std::vector<
                     ::std::pair<
                         OUString,
-                        css::uno::Reference< css::container::XIndexReplace > > > NumParaList_t;
+                        cpo::uno::Reference< css::container::XIndexReplace > > > NumParaList_t;
         ::std::map< OUString, NumParaList_t > mNPLists;
 
 };

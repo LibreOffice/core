@@ -68,13 +68,13 @@ namespace dbaui
         TColumns                        m_aDestColumns; ///< container for new created columns
         TColumnVector                   m_vDestVector;
 
-        css::uno::Reference< css::beans::XPropertySet >       m_xTable;       ///< dest table
-        css::uno::Reference< css::container::XNameAccess>     m_xTables;      ///< container
+        cpo::uno::Reference< css::beans::XPropertySet >       m_xTable;       ///< dest table
+        cpo::uno::Reference< css::container::XNameAccess>     m_xTables;      ///< container
         SharedConnection                                      m_xConnection;  ///< dest conn
 
         std::shared_ptr<IUpdateHelper>                    m_pUpdateHelper;
-        css::uno::Reference< css::util::XNumberFormatter >    m_xFormatter;   ///< a number formatter working with the connection's NumberFormatsSupplier
-        css::uno::Reference< cpo::uno::XComponentContext>     m_xContext;
+        cpo::uno::Reference< css::util::XNumberFormatter >    m_xFormatter;   ///< a number formatter working with the connection's NumberFormatsSupplier
+        cpo::uno::Reference< cpo::uno::XComponentContext>     m_xContext;
         css::util::Date                                       m_aNullDate;
 
         SvNumberFormatter*  m_pFormatter;
@@ -129,8 +129,8 @@ namespace dbaui
     public:
         ODatabaseExport(
             const SharedConnection& _rxConnection,
-            const css::uno::Reference< css::util::XNumberFormatter >& _rxNumberF,
-            const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
+            const cpo::uno::Reference< css::util::XNumberFormatter >& _rxNumberF,
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
             SvStream& _rInputStream
         );
 
@@ -138,8 +138,8 @@ namespace dbaui
         ODatabaseExport(
             sal_Int32 nRows,
             TPositions&& _rColumnPositions,
-            const css::uno::Reference< css::util::XNumberFormatter >& _rxNumberF,
-            const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
+            const cpo::uno::Reference< css::util::XNumberFormatter >& _rxNumberF,
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
             const TColumnVector* rList,
             const OTypeInfoMap* _pInfoMap,
             bool _bAutoIncrementEnabled,
@@ -153,8 +153,8 @@ namespace dbaui
         void enableCheckOnly() { m_bCheckOnly = true; }
         bool isCheckEnabled() const { return m_bCheckOnly; }
 
-        static css::uno::Reference< css::sdbc::XPreparedStatement > createPreparedStatement( const css::uno::Reference< css::sdbc::XDatabaseMetaData>& _xMetaData
-                                                       ,const css::uno::Reference< css::beans::XPropertySet>& _xDestTable
+        static cpo::uno::Reference< css::sdbc::XPreparedStatement > createPreparedStatement( const cpo::uno::Reference< css::sdbc::XDatabaseMetaData>& _xMetaData
+                                                       ,const cpo::uno::Reference< css::beans::XPropertySet>& _xDestTable
                                                        ,const TPositions& _rvColumnPositions);
     };
 }

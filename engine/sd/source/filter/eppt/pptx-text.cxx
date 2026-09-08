@@ -57,10 +57,11 @@
 #include <vcl/svapp.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
-static css::uno::Reference< css::i18n::XBreakIterator > xPPTBreakIter;
+static cpo::uno::Reference< css::i18n::XBreakIterator > xPPTBreakIter;
 
-PortionObj::PortionObj(const css::uno::Reference< css::beans::XPropertySet > & rXPropSet,
+PortionObj::PortionObj(const cpo::uno::Reference< css::beans::XPropertySet > & rXPropSet,
                 FontCollection& rFontCollection)
     : meCharColor(css::beans::PropertyState_AMBIGUOUS_VALUE)
     , meCharHeight(css::beans::PropertyState_AMBIGUOUS_VALUE)
@@ -80,7 +81,7 @@ PortionObj::PortionObj(const css::uno::Reference< css::beans::XPropertySet > & r
     ImplGetPortionValues( rFontCollection, false );
 }
 
-PortionObj::PortionObj(css::uno::Reference< css::text::XTextRange > & rXTextRange,
+PortionObj::PortionObj(cpo::uno::Reference< css::text::XTextRange > & rXTextRange,
                            bool bLast, FontCollection& rFontCollection)
     : meCharColor(css::beans::PropertyState_AMBIGUOUS_VALUE)
     , meCharHeight(css::beans::PropertyState_AMBIGUOUS_VALUE)
@@ -110,8 +111,8 @@ PortionObj::PortionObj(css::uno::Reference< css::text::XTextRange > & rXTextRang
     mpFieldEntry = nullptr;
     sal_uInt32 nFieldType = 0;
 
-    mXPropSet.set( rXTextRange, css::uno::UNO_QUERY );
-    mXPropState.set( rXTextRange, css::uno::UNO_QUERY );
+    mXPropSet.set( rXTextRange, cpo::uno::UNO_QUERY );
+    mXPropState.set( rXTextRange, cpo::uno::UNO_QUERY );
 
     bool bPropSetsValid = ( mXPropSet.is() && mXPropState.is() );
     if ( bPropSetsValid )
@@ -492,8 +493,8 @@ sal_uInt32 PortionObj::ImplCalculateTextPositions( sal_uInt32 nCurrentTextPositi
 //  bit24->27   text field sub type (optional)
 //     23->     PPT Textfield needs a placeholder
 
-sal_uInt32 PortionObj::ImplGetTextField( css::uno::Reference< css::text::XTextRange > & ,
-    const css::uno::Reference< css::beans::XPropertySet > & rXPropSet, OUString& rURL )
+sal_uInt32 PortionObj::ImplGetTextField( cpo::uno::Reference< css::text::XTextRange > & ,
+    const cpo::uno::Reference< css::beans::XPropertySet > & rXPropSet, OUString& rURL )
 {
     sal_uInt32 nRetValue = 0;
     sal_Int32 nFormat;
@@ -505,12 +506,12 @@ sal_uInt32 PortionObj::ImplGetTextField( css::uno::Reference< css::text::XTextRa
         {
             if ( GetPropertyValue( aAny, rXPropSet, *aTextFieldType, true ) )
             {
-                css::uno::Reference< css::text::XTextField > aXTextField;
+                cpo::uno::Reference< css::text::XTextField > aXTextField;
                 if ( aAny >>= aXTextField )
                 {
                     if ( aXTextField.is() )
                     {
-                        css::uno::Reference< css::beans::XPropertySet > xFieldPropSet( aXTextField, css::uno::UNO_QUERY );
+                        cpo::uno::Reference< css::beans::XPropertySet > xFieldPropSet( aXTextField, cpo::uno::UNO_QUERY );
                         if ( xFieldPropSet.is() )
                         {
                             OUString aFieldKind( aXTextField->getPresentation( true ) );
@@ -647,7 +648,7 @@ PortionObj& PortionObj::operator=( const PortionObj& rPortionObj )
     return *this;
 }
 
-ParagraphObj::ParagraphObj(const css::uno::Reference< css::beans::XPropertySet > & rXPropSet,
+ParagraphObj::ParagraphObj(const cpo::uno::Reference< css::beans::XPropertySet > & rXPropSet,
     PPTExBulletProvider* pProv)
     : mnTextSize(0)
     , mbFirstParagraph(false)
@@ -673,7 +674,7 @@ ParagraphObj::ParagraphObj(const css::uno::Reference< css::beans::XPropertySet >
     ImplGetParagraphValues( pProv, false );
 }
 
-ParagraphObj::ParagraphObj(css::uno::Reference< css::text::XTextContent > const & rXTextContent,
+ParagraphObj::ParagraphObj(cpo::uno::Reference< css::text::XTextContent > const & rXTextContent,
     ParaFlags aParaFlags, FontCollection& rFontCollection, PPTExBulletProvider& rProv )
     : mnTextSize(0)
     , mbIsBullet(false)
@@ -702,22 +703,22 @@ ParagraphObj::ParagraphObj(css::uno::Reference< css::text::XTextContent > const 
     nBulletFlags = 0;
     nParaFlags = 0;
 
-    mXPropSet.set( rXTextContent, css::uno::UNO_QUERY );
+    mXPropSet.set( rXTextContent, cpo::uno::UNO_QUERY );
 
-    mXPropState.set( rXTextContent, css::uno::UNO_QUERY );
+    mXPropState.set( rXTextContent, cpo::uno::UNO_QUERY );
 
     if ( !(mXPropSet.is() && mXPropState.is()) )
         return;
 
-    css::uno::Reference< css::container::XEnumerationAccess > aXTextPortionEA( rXTextContent, css::uno::UNO_QUERY );
+    cpo::uno::Reference< css::container::XEnumerationAccess > aXTextPortionEA( rXTextContent, cpo::uno::UNO_QUERY );
     if ( aXTextPortionEA.is() )
     {
-        css::uno::Reference< css::container::XEnumeration > aXTextPortionE( aXTextPortionEA->createEnumeration() );
+        cpo::uno::Reference< css::container::XEnumeration > aXTextPortionE( aXTextPortionEA->createEnumeration() );
         if ( aXTextPortionE.is() )
         {
             while ( aXTextPortionE->hasMoreElements() )
             {
-                css::uno::Reference< css::text::XTextRange > aXCursorText;
+                cpo::uno::Reference< css::text::XTextRange > aXCursorText;
                 cpo::uno::Any aAny( aXTextPortionE->nextElement() );
                 if ( aAny >>= aXCursorText )
                 {
@@ -782,7 +783,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider* pBuProv, sal_Int1
     if ( GetPropertyValue( aAny, mXPropSet, u"NumberingIsNumber"_ustr ) )
         aAny >>= bNumberingIsNumber;
 
-    css::uno::Reference< css::container::XIndexReplace > aXIndexReplace;
+    cpo::uno::Reference< css::container::XIndexReplace > aXIndexReplace;
 
     if ( bIsBullet && ImplGetPropertyValue( u"NumberingRules"_ustr, bGetPropStateValue ) )
     {
@@ -1260,21 +1261,21 @@ ImplTextObj::ImplTextObj( int nInstance )
 {
 }
 
-TextObj::TextObj( css::uno::Reference< css::text::XSimpleText > const & rXTextRef,
+TextObj::TextObj( cpo::uno::Reference< css::text::XSimpleText > const & rXTextRef,
             int nInstance, FontCollection& rFontCollection, PPTExBulletProvider& rProv ):
     mpImplTextObj(std::make_shared<ImplTextObj>(nInstance))
 {
-    css::uno::Reference< css::container::XEnumerationAccess > aXTextParagraphEA( rXTextRef, css::uno::UNO_QUERY );
+    cpo::uno::Reference< css::container::XEnumerationAccess > aXTextParagraphEA( rXTextRef, cpo::uno::UNO_QUERY );
 
     if ( aXTextParagraphEA.is()  )
     {
-        css::uno::Reference< css::container::XEnumeration > aXTextParagraphE( aXTextParagraphEA->createEnumeration() );
+        cpo::uno::Reference< css::container::XEnumeration > aXTextParagraphE( aXTextParagraphEA->createEnumeration() );
         if ( aXTextParagraphE.is() )
         {
             ParaFlags aParaFlags;
             while ( aXTextParagraphE->hasMoreElements() )
             {
-                css::uno::Reference< css::text::XTextContent > aXParagraph;
+                cpo::uno::Reference< css::text::XTextContent > aXParagraph;
                 cpo::uno::Any aAny( aXTextParagraphE->nextElement() );
                 if ( aAny >>= aXParagraph )
                 {

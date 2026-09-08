@@ -77,6 +77,7 @@
 #include <memory>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace formula;
 
 #define ADDIN_MAXSTRLEN 256

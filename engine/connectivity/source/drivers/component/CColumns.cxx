@@ -22,15 +22,15 @@
 
 using namespace connectivity::component;
 using namespace connectivity;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 
-css::uno::Reference< css::beans::XPropertySet > OComponentColumns::createObject(const OUString& _rName)
+cpo::uno::Reference< css::beans::XPropertySet > OComponentColumns::createObject(const OUString& _rName)
 {
     ::rtl::Reference<OSQLColumns> aCols = m_pTable->getTableColumns();
 
     OSQLColumns::const_iterator aIter = find(aCols->begin(),aCols->end(),_rName,::comphelper::UStringMixEqual(isCaseSensitive()));
-    css::uno::Reference< css::beans::XPropertySet > xRet;
+    cpo::uno::Reference< css::beans::XPropertySet > xRet;
     if(aIter != aCols->end())
         xRet = *aIter;
     return xRet;

@@ -57,7 +57,7 @@
 
 using namespace comphelper;
 using namespace dbtools;
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace css::sdb;
 using namespace css::sdbc;
@@ -121,7 +121,7 @@ Reference< XNumberFormatsSupplier > StandardFormatsSupplier::get( const Referenc
             // somebody used the small time frame where the mutex was not locked to create and set
             // the supplier
             return xSupplier;
-        s_xDefaultFormatsSupplier = css::uno::Reference<cpo::uno::XWeak>(pSupplier);
+        s_xDefaultFormatsSupplier = cpo::uno::Reference<cpo::uno::XWeak>(pSupplier);
     }
     return pSupplier;
 }
@@ -189,7 +189,7 @@ void OFormattedControl::keyPressed(const css::awt::KeyEvent& e)
     if( !xSet.is() )
         return;
     Reference<XFormComponent>  xFComp(xSet, UNO_QUERY);
-    css::uno::Reference<cpo::uno::XInterface>  xParent = xFComp->getParent();
+    cpo::uno::Reference<cpo::uno::XInterface>  xParent = xFComp->getParent();
     if( !xParent.is() )
         return;
     Reference<css::beans::XPropertySet>  xFormSet(xParent, UNO_QUERY);
@@ -232,7 +232,7 @@ IMPL_LINK_NOARG(OFormattedControl, OnKeyPressed, void*, void)
 {
     m_nKeyEvent = nullptr;
     Reference<XFormComponent>  xFComp(getModel(), UNO_QUERY);
-    css::uno::Reference<cpo::uno::XInterface>  xParent = xFComp->getParent();
+    cpo::uno::Reference<cpo::uno::XInterface>  xParent = xFComp->getParent();
     Reference<XSubmit>  xSubmit(xParent, UNO_QUERY);
     if (xSubmit.is())
         xSubmit->submit( Reference<XControl> (), css::awt::MouseEvent() );
@@ -284,7 +284,7 @@ OFormattedModel::~OFormattedModel()
 }
 
 // XCloneable
-css::uno::Reference< css::util::XCloneable > OFormattedModel::createClone()
+cpo::uno::Reference< css::util::XCloneable > OFormattedModel::createClone()
 {
     rtl::Reference<OFormattedModel> pClone = new OFormattedModel(this, getContext());
     pClone->clonedFrom(this);
@@ -491,8 +491,8 @@ Reference<XNumberFormatsSupplier>  OFormattedModel::calcFormFormatsSupplier() co
     Reference<XForm>  xNextParentForm(xParent, UNO_QUERY);
     while (!xNextParentForm.is() && xParent.is())
     {
-        xParent.set(xParent->getParent(), css::uno::UNO_QUERY);
-        xNextParentForm.set(xParent, css::uno::UNO_QUERY);
+        xParent.set(xParent->getParent(), cpo::uno::UNO_QUERY);
+        xNextParentForm.set(xParent, cpo::uno::UNO_QUERY);
     }
     if (!xNextParentForm.is())
     {

@@ -74,27 +74,27 @@ namespace fileaccess {
         virtual css::util::DateTime SAL_CALL
         getTimestamp( sal_Int32 columnIndex ) override;
 
-        virtual css::uno::Reference< css::io::XInputStream > SAL_CALL
+        virtual cpo::uno::Reference< css::io::XInputStream > SAL_CALL
         getBinaryStream( sal_Int32 columnIndex ) override;
 
-        virtual css::uno::Reference< css::io::XInputStream > SAL_CALL
+        virtual cpo::uno::Reference< css::io::XInputStream > SAL_CALL
         getCharacterStream( sal_Int32 columnIndex ) override;
 
         virtual cpo::uno::Any SAL_CALL
         getObject(
             sal_Int32 columnIndex,
-            const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
+            const cpo::uno::Reference< css::container::XNameAccess >& typeMap ) override;
 
-        virtual css::uno::Reference< css::sdbc::XRef > SAL_CALL
+        virtual cpo::uno::Reference< css::sdbc::XRef > SAL_CALL
         getRef( sal_Int32 columnIndex ) override;
 
-        virtual css::uno::Reference< css::sdbc::XBlob > SAL_CALL
+        virtual cpo::uno::Reference< css::sdbc::XBlob > SAL_CALL
         getBlob( sal_Int32 columnIndex ) override;
 
-        virtual css::uno::Reference< css::sdbc::XClob > SAL_CALL
+        virtual cpo::uno::Reference< css::sdbc::XClob > SAL_CALL
         getClob( sal_Int32 columnIndex ) override;
 
-        virtual css::uno::Reference< css::sdbc::XArray > SAL_CALL
+        virtual cpo::uno::Reference< css::sdbc::XArray > SAL_CALL
         getArray( sal_Int32 columnIndex ) override;
 
     private:
@@ -102,7 +102,7 @@ namespace fileaccess {
         cpo::uno::Sequence< cpo::uno::Any >                m_aValueMap;
         bool                                               m_nWasNull;
         TaskManager*                                       m_pMyShell;
-        css::uno::Reference< css::script::XTypeConverter > m_xTypeConverter;
+        cpo::uno::Reference< css::script::XTypeConverter > m_xTypeConverter;
 
         bool isIndexOutOfBounds( sal_Int32 nIndex ) const;
         template<typename T>

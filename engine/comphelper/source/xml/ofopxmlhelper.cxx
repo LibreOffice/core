@@ -37,6 +37,7 @@
 #define FORMAT_MAX_ID CONTENTTYPE_FORMAT
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace comphelper {
 
@@ -60,12 +61,12 @@ public:
     // XDocumentHandler
     virtual void startDocument() override;
     virtual void endDocument() override;
-    virtual void startElement( const OUString& aName, const css::uno::Reference< css::xml::sax::XAttributeList >& xAttribs ) override;
+    virtual void startElement( const OUString& aName, const cpo::uno::Reference< css::xml::sax::XAttributeList >& xAttribs ) override;
     virtual void endElement( const OUString& aName ) override;
     virtual void characters( const OUString& aChars ) override;
     virtual void ignorableWhitespace( const OUString& aWhitespaces ) override;
     virtual void processingInstruction( const OUString& aTarget, const OUString& aData ) override;
-    virtual void setDocumentLocator( const css::uno::Reference< css::xml::sax::XLocator >& xLocator ) override;
+    virtual void setDocumentLocator( const cpo::uno::Reference< css::xml::sax::XLocator >& xLocator ) override;
 };
 
 }

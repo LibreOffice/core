@@ -113,26 +113,26 @@ namespace connectivity::sdbcx
             // ::cppu::OComponentHelper
             virtual void disposing() override;
             // XPropertySet
-            virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+            virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
             // XColumnsSupplier
-            virtual css::uno::Reference< css::container::XNameAccess > getColumns(  ) override;
+            virtual cpo::uno::Reference< css::container::XNameAccess > getColumns(  ) override;
             // XKeysSupplier
-            virtual css::uno::Reference< css::container::XIndexAccess > getKeys(  ) override;
+            virtual cpo::uno::Reference< css::container::XIndexAccess > getKeys(  ) override;
             // XNamed
             virtual OUString getName() override;
             virtual void setName( const OUString& aName ) override;
             // XDataDescriptorFactory
-            virtual css::uno::Reference< css::beans::XPropertySet > createDataDescriptor() override;
+            virtual cpo::uno::Reference< css::beans::XPropertySet > createDataDescriptor() override;
             // XIndexesSupplier
-            virtual css::uno::Reference< css::container::XNameAccess > getIndexes(  ) override;
+            virtual cpo::uno::Reference< css::container::XNameAccess > getIndexes(  ) override;
             // XRename
             virtual void rename( const OUString& newName ) override;
             // XAlterTable
-            virtual void alterColumnByName( const OUString& colName, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
-            virtual void alterColumnByIndex( sal_Int32 index, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
+            virtual void alterColumnByName( const OUString& colName, const cpo::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
+            virtual void alterColumnByIndex( sal_Int32 index, const cpo::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
 
             // helper method
-            virtual css::uno::Reference< css::sdbc::XDatabaseMetaData> getMetaData() const;
+            virtual cpo::uno::Reference< css::sdbc::XDatabaseMetaData> getMetaData() const;
         };
 
 }

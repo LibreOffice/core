@@ -25,6 +25,7 @@
 
 using namespace ooo::vba;
 using namespace com::sun::star;
+using namespace ::cpo;
 
 ScVbaFillFormat::ScVbaFillFormat( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< cpo::uno::XComponentContext >& xContext, const uno::Reference< drawing::XShape >& xShape ) : ScVbaFillFormat_BASE( xParent, xContext ), m_xShape( xShape )
 {

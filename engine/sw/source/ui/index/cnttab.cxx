@@ -80,8 +80,8 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
 using namespace com::sun::star::ui::dialogs;
+using namespace ::cpo;
 using namespace ::cpo::uno;
 using namespace ::sfx2;
 
@@ -170,7 +170,7 @@ protected:
     std::vector<tools::Long>               GetOptimalColWidths() const;
 
 public:
-    SwEntryBrowseBox(const css::uno::Reference<css::awt::XWindow> &rParent);
+    SwEntryBrowseBox(const cpo::uno::Reference<css::awt::XWindow> &rParent);
     virtual ~SwEntryBrowseBox() override;
     virtual void                    dispose() override;
     void                            ReadEntries(SvStream& rInStr);
@@ -190,7 +190,7 @@ class SwAutoMarkDlg_Impl : public weld::GenericDialogController
 
     std::unique_ptr<weld::Button> m_xOKPB;
     std::unique_ptr<weld::Container> m_xTable;
-    css::uno::Reference<css::awt::XWindow> m_xTableCtrlParent;
+    cpo::uno::Reference<css::awt::XWindow> m_xTableCtrlParent;
     VclPtr<SwEntryBrowseBox> m_xEntriesBB;
 
     DECL_LINK(OkHdl, weld::Button&, void);
@@ -3820,7 +3820,7 @@ void SwTOXStylesTabPage::Modify()
 #define ITEM_CASE           6
 #define ITEM_WORDONLY       7
 
-SwEntryBrowseBox::SwEntryBrowseBox(const css::uno::Reference<css::awt::XWindow> &rParent)
+SwEntryBrowseBox::SwEntryBrowseBox(const cpo::uno::Reference<css::awt::XWindow> &rParent)
     : svt::EditBrowseBox(VCLUnoHelper::GetWindow(rParent), EditBrowseBoxFlags::NONE, WB_TABSTOP | WB_BORDER,
                          BrowserMode::KEEPHIGHLIGHT |
                          BrowserMode::COLUMNSELECTION |

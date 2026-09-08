@@ -17,6 +17,7 @@
 #include <com/sun/star/container/XNamed.hpp>
 
 using namespace css;
+using namespace ::cpo;
 
 namespace sc_apitest
 {

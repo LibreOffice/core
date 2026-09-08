@@ -29,7 +29,7 @@ typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XParagraphFormat > SwV
 class SwVbaParagraphFormat : public SwVbaParagraphFormat_BASE
 {
 private:
-    css::uno::Reference< css::beans::XPropertySet > mxParaProps;
+    cpo::uno::Reference< css::beans::XPropertySet > mxParaProps;
 
 private:
     static css::style::LineSpacing getOOoLineSpacing( float _lineSpace, sal_Int16 mode );
@@ -42,7 +42,7 @@ private:
     static sal_Int32 getMSWordAlignment( css::style::ParagraphAdjust _alignment );
 
 public:
-    SwVbaParagraphFormat( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< cpo::uno::XComponentContext >& rContext, css::uno::Reference< css::beans::XPropertySet > xParaProps );
+    SwVbaParagraphFormat( const cpo::uno::Reference< ooo::vba::XHelperInterface >& rParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& rContext, cpo::uno::Reference< css::beans::XPropertySet > xParaProps );
     virtual ~SwVbaParagraphFormat() override;
 
     // Attributes

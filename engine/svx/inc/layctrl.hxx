@@ -23,7 +23,7 @@
 class SvxTableToolBoxControl final : public svt::PopupWindowController
 {
 public:
-    SvxTableToolBoxControl(const css::uno::Reference<cpo::uno::XComponentContext>& rContext);
+    SvxTableToolBoxControl(const cpo::uno::Reference<cpo::uno::XComponentContext>& rContext);
     virtual ~SvxTableToolBoxControl() override;
 
     virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;
@@ -43,7 +43,7 @@ public:
 class SvxColumnsToolBoxControl final : public svt::PopupWindowController
 {
 public:
-    SvxColumnsToolBoxControl(const css::uno::Reference<cpo::uno::XComponentContext>& rContext);
+    SvxColumnsToolBoxControl(const cpo::uno::Reference<cpo::uno::XComponentContext>& rContext);
     virtual ~SvxColumnsToolBoxControl() override;
 
     virtual std::unique_ptr<WeldToolbarPopup> weldPopupWindow() override;

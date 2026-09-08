@@ -31,17 +31,17 @@
 class SdXMLShapeLinkContext : public SvXMLShapeContext
 {
     // the parent shape group this link is placed in
-    css::uno::Reference< css::drawing::XShapes > mxParent;
+    cpo::uno::Reference< css::drawing::XShapes > mxParent;
 
 public:
 
     SdXMLShapeLinkContext( SvXMLImport& rImport,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
-        css::uno::Reference< css::drawing::XShapes > xShapes);
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+        cpo::uno::Reference< css::drawing::XShapes > xShapes);
     virtual ~SdXMLShapeLinkContext() override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

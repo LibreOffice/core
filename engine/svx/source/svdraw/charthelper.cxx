@@ -30,6 +30,7 @@
 #include <sdr/primitive2d/primitivefactory2d.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 void ChartHelper::updateChart( const uno::Reference< ::frame::XModel >& rXModel )
 {

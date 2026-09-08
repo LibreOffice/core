@@ -66,15 +66,15 @@ class SoundHandler : public comphelper::WeakImplHelper<css::lang::XServiceInfo,
         //  XNotifyingDispatch
         virtual void dispatchWithNotification(const css::util::URL&                                             aURL      ,
                                                        const cpo::uno::Sequence< css::beans::PropertyValue >&            lArguments,
-                                                       const css::uno::Reference< css::frame::XDispatchResultListener >& xListener ) override;
+                                                       const cpo::uno::Reference< css::frame::XDispatchResultListener >& xListener ) override;
 
         //  XDispatch
         virtual void dispatch              (   const   css::util::URL&                                     aURL        ,
                                                         const   cpo::uno::Sequence< css::beans::PropertyValue >&    lArguments  ) override;
         // not supported !
-        virtual void addStatusListener     (   const   css::uno::Reference< css::frame::XStatusListener >& /*xListener*/   ,
+        virtual void addStatusListener     (   const   cpo::uno::Reference< css::frame::XStatusListener >& /*xListener*/   ,
                                                         const   css::util::URL&                                     /*aURL*/        ) override {};
-        virtual void removeStatusListener  (   const   css::uno::Reference< css::frame::XStatusListener >& /*xListener*/   ,
+        virtual void removeStatusListener  (   const   cpo::uno::Reference< css::frame::XStatusListener >& /*xListener*/   ,
                                                         const   css::util::URL&                                     /*aURL*/        ) override {};
 
         //  XExtendedFilterDetection
@@ -92,10 +92,10 @@ class SoundHandler : public comphelper::WeakImplHelper<css::lang::XServiceInfo,
     private:
 
         bool m_bError;
-        css::uno::Reference< cpo::uno::XInterface >                m_xSelfHold         ;   // we must protect us against dying during async(!) dispatch() call!
-        css::uno::Reference< css::media::XPlayer >                 m_xPlayer           ;   // uses avmedia player to play sounds...
+        cpo::uno::Reference< cpo::uno::XInterface >                m_xSelfHold         ;   // we must protect us against dying during async(!) dispatch() call!
+        cpo::uno::Reference< css::media::XPlayer >                 m_xPlayer           ;   // uses avmedia player to play sounds...
 
-        css::uno::Reference< css::frame::XDispatchResultListener > m_xListener         ;
+        cpo::uno::Reference< css::frame::XDispatchResultListener > m_xListener         ;
         Idle m_aUpdateIdle;
 
 };      //  class SoundHandler

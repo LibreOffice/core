@@ -88,6 +88,7 @@ class librdf_NamedGraph;
 class librdf_Repository;
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 typedef std::map< OUString, ::rtl::Reference<librdf_NamedGraph> >
     NamedGraphMap_t;

@@ -35,7 +35,7 @@ class ScAccessiblePreviewHeaderCell final
                                          css::accessibility::XAccessibleValue>
 {
 public:
-    ScAccessiblePreviewHeaderCell( const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
+    ScAccessiblePreviewHeaderCell( const cpo::uno::Reference<css::accessibility::XAccessible>& rxParent,
                             ScPreviewShell* pViewShell,
                             const ScAddress& rCellPos, bool bIsColHdr, bool bIsRowHdr,
                             sal_Int32 nIndex );
@@ -63,14 +63,14 @@ public:
 
     //=====  XAccessibleComponent  ============================================
 
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > SAL_CALL
                             getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
     virtual void SAL_CALL   grabFocus() override;
 
     //=====  XAccessibleContext  ==============================================
 
     virtual sal_Int64 SAL_CALL getAccessibleChildCount() override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > SAL_CALL
                             getAccessibleChild( sal_Int64 i ) override;
     virtual sal_Int64 SAL_CALL getAccessibleIndexInParent() override;
     virtual sal_Int64 SAL_CALL getAccessibleStateSet() override;

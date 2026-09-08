@@ -52,7 +52,7 @@
 #include <com/sun/star/text/XTextViewCursor.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/XComponentContext.hpp>
 #include <cpo/uno/XInterface.hpp>
@@ -93,25 +93,25 @@
 
 namespace
 {
-cpo::uno::Sequence<css::uno::Reference<scriptinterop::XElement>> enumerateElements(
-    css::uno::Reference<css::text::XText> const & text,
-    css::uno::Reference<scriptinterop::XElement> const & parent);
+cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XElement>> enumerateElements(
+    cpo::uno::Reference<css::text::XText> const & text,
+    cpo::uno::Reference<scriptinterop::XElement> const & parent);
 
-css::uno::Reference<scriptinterop::XElement> siblingContent(
-    css::uno::Reference<css::text::XTextContent> const & content,
-    css::uno::Reference<scriptinterop::XElement> const & parent, bool forward);
+cpo::uno::Reference<scriptinterop::XElement> siblingContent(
+    cpo::uno::Reference<css::text::XTextContent> const & content,
+    cpo::uno::Reference<scriptinterop::XElement> const & parent, bool forward);
 
 class SelectionImpl : public cppu::WeakImplHelper<scriptinterop::XSelection>
 {
 public:
-    explicit SelectionImpl(css::uno::Reference<css::container::XIndexAccess> const& ranges)
+    explicit SelectionImpl(cpo::uno::Reference<css::container::XIndexAccess> const& ranges)
         : ranges_(ranges)
     {
     }
 
-    css::uno::Reference<cpo::uno::XInterface> SAL_CALL getuno() override { return ranges_; }
+    cpo::uno::Reference<cpo::uno::XInterface> SAL_CALL getuno() override { return ranges_; }
 
-    cpo::uno::Sequence<css::uno::Reference<scriptinterop::XRangeElement>> getRangeElements()
+    cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XRangeElement>> getRangeElements()
         override;
 
     OUString SAL_CALL getText() override
@@ -120,7 +120,7 @@ public:
         auto const n = ranges_->getCount();
         for (sal_Int32 i = 0; i != n; ++i)
         {
-            css::uno::Reference<css::text::XTextRange> range;
+            cpo::uno::Reference<css::text::XTextRange> range;
             if (!(ranges_->getByIndex(i) >>= range) || !range.is())
             {
                 throw cpo::uno::RuntimeException(
@@ -140,7 +140,7 @@ public:
         auto const n = ranges_->getCount();
         for (sal_Int32 i = 0; i != n; ++i)
         {
-            css::uno::Reference<css::text::XTextRange> range;
+            cpo::uno::Reference<css::text::XTextRange> range;
             if (!(ranges_->getByIndex(i) >>= range) || !range.is())
             {
                 throw cpo::uno::RuntimeException(
@@ -151,14 +151,14 @@ public:
     }
 
 private:
-    css::uno::Reference<css::container::XIndexAccess> ranges_;
+    cpo::uno::Reference<css::container::XIndexAccess> ranges_;
 };
 
 // Trivial single-element XIndexAccess wrapper so the XRangeBuilder can hand a single XTextRange
 // to SelectionImpl without depending on Writer's own SwXTextRanges service:
 class SingleRangeIndex: public cppu::WeakImplHelper<css::container::XIndexAccess> {
 public:
-    explicit SingleRangeIndex(css::uno::Reference<css::text::XTextRange> const & range):
+    explicit SingleRangeIndex(cpo::uno::Reference<css::text::XTextRange> const & range):
         range_(range) {}
 
     sal_Int32 getCount() override { return 1; }
@@ -177,19 +177,19 @@ public:
     bool hasElements() override { return true; }
 
 private:
-    css::uno::Reference<css::text::XTextRange> range_;
+    cpo::uno::Reference<css::text::XTextRange> range_;
 };
 
 class RangeBuilderImpl: public cppu::WeakImplHelper<scriptinterop::XRangeBuilder> {
 public:
-    css::uno::Reference<scriptinterop::XRangeBuilder> addElement(
-        css::uno::Reference<scriptinterop::XElement> const & element) override
+    cpo::uno::Reference<scriptinterop::XRangeBuilder> addElement(
+        cpo::uno::Reference<scriptinterop::XElement> const & element) override
     {
         if (!element.is()) {
             throw cpo::uno::RuntimeException(u"addElement: the element must not be null"_ustr);
         }
-        css::uno::Reference<css::text::XTextRange> const range(
-            element->getuno(), css::uno::UNO_QUERY);
+        cpo::uno::Reference<css::text::XTextRange> const range(
+            element->getuno(), cpo::uno::UNO_QUERY);
         if (!range.is()) {
             throw cpo::uno::RuntimeException(
                 u"addElement: only text elements can be added to a range"_ustr);
@@ -198,8 +198,8 @@ public:
         return this;
     }
 
-    css::uno::Reference<scriptinterop::XRangeBuilder> addElementRange(
-        css::uno::Reference<scriptinterop::XText> const & text, sal_Int32 startOffset,
+    cpo::uno::Reference<scriptinterop::XRangeBuilder> addElementRange(
+        cpo::uno::Reference<scriptinterop::XText> const & text, sal_Int32 startOffset,
         sal_Int32 endOffsetInclusive) override
     {
         if (!text.is()) {
@@ -212,8 +212,8 @@ public:
                 + OUString::number(startOffset) + ", endOffsetInclusive="
                 + OUString::number(endOffsetInclusive));
         }
-        css::uno::Reference<css::text::XTextRange> const para(
-            text->getuno(), css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::text::XTextRange> const para(
+            text->getuno(), cpo::uno::UNO_QUERY_THROW);
         auto const host = para->getText();
         if (!host.is()) {
             throw cpo::uno::RuntimeException(
@@ -230,7 +230,7 @@ public:
         return this;
     }
 
-    css::uno::Reference<scriptinterop::XSelection> build() override {
+    cpo::uno::Reference<scriptinterop::XSelection> build() override {
         if (!cursor_.is()) {
             throw cpo::uno::RuntimeException(
                 u"build: add at least one element or element range first"_ustr);
@@ -240,8 +240,8 @@ public:
 
 private:
     void extend(
-        css::uno::Reference<css::text::XTextRange> const & start,
-        css::uno::Reference<css::text::XTextRange> const & end)
+        cpo::uno::Reference<css::text::XTextRange> const & start,
+        cpo::uno::Reference<css::text::XTextRange> const & end)
     {
         if (!start.is() || !end.is()) {
             throw cpo::uno::RuntimeException(u"the element covers no text"_ustr);
@@ -259,23 +259,23 @@ private:
         cursor_->gotoRange(end, true);
     }
 
-    css::uno::Reference<css::text::XTextCursor> cursor_;
+    cpo::uno::Reference<css::text::XTextCursor> cursor_;
 };
 
 class TextImpl: public cppu::WeakImplHelper<scriptinterop::XText> {
 public:
     explicit TextImpl(
-        css::uno::Reference<scriptinterop::XElement> const & parent,
-        css::uno::Reference<css::text::XTextContent> const & content,
+        cpo::uno::Reference<scriptinterop::XElement> const & parent,
+        cpo::uno::Reference<css::text::XTextContent> const & content,
         scriptinterop::ElementType reportedType):
         parent_(parent), content_(content), reportedType_(reportedType)
     {
-        if (css::uno::Reference<css::container::XEnumerationAccess> const ea{
-                content_, css::uno::UNO_QUERY})
+        if (cpo::uno::Reference<css::container::XEnumerationAccess> const ea{
+                content_, cpo::uno::UNO_QUERY})
         {
             auto const en = ea->createEnumeration();
             while (en.is() && en->hasMoreElements()) {
-                css::uno::Reference<css::text::XTextRange> portion;
+                cpo::uno::Reference<css::text::XTextRange> portion;
                 en->nextElement() >>= portion;
                 if (portion.is()) {
                     runs_.push_back(portion);
@@ -284,9 +284,9 @@ public:
         }
     }
 
-    css::uno::Reference<cpo::uno::XInterface> getuno() override { return content_; }
+    cpo::uno::Reference<cpo::uno::XInterface> getuno() override { return content_; }
 
-    css::uno::Reference<scriptinterop::XText> appendText(OUString const & text) override {
+    cpo::uno::Reference<scriptinterop::XText> appendText(OUString const & text) override {
         auto const whole = wholeRange();
         auto const host = whole->getText();
         host->insertString(host->createTextCursorByRange(whole->getEnd()), text, false);
@@ -295,16 +295,16 @@ public:
 
     // TODO: return a detached deep copy, not this; mutations on the "copy" write back to the live
     // element:
-    css::uno::Reference<scriptinterop::XElement> copy() override { return this; }
+    cpo::uno::Reference<scriptinterop::XElement> copy() override { return this; }
 
-    css::uno::Reference<scriptinterop::XText> deleteText(
+    cpo::uno::Reference<scriptinterop::XText> deleteText(
         sal_Int32 startOffset, sal_Int32 endOffsetInclusive) override
     {
         subRange(startOffset, endOffsetInclusive)->setString(OUString());
         return this;
     }
 
-    css::uno::Reference<scriptinterop::XText> editAsText() override { return this; }
+    cpo::uno::Reference<scriptinterop::XText> editAsText() override { return this; }
 
     OUString getFontFamily(sal_Int32 offset) override {
         OUString name;
@@ -321,14 +321,14 @@ public:
     // A text portion has no true siblings in our model (paragraph.getChild only exposes one Text
     // child), so both sides are null; TODO: real sibling walk once inline images and breaks join
     // the paragraph's child list:
-    css::uno::Reference<scriptinterop::XElement> getNextSibling() override { return nullptr; }
+    cpo::uno::Reference<scriptinterop::XElement> getNextSibling() override { return nullptr; }
 
-    css::uno::Reference<scriptinterop::XElement> getParent() override { return parent_; }
+    cpo::uno::Reference<scriptinterop::XElement> getParent() override { return parent_; }
 
-    css::uno::Reference<scriptinterop::XElement> getPreviousSibling() override { return nullptr; }
+    cpo::uno::Reference<scriptinterop::XElement> getPreviousSibling() override { return nullptr; }
 
     OUString getText() override {
-        return css::uno::Reference<css::text::XTextRange>(content_, css::uno::UNO_QUERY_THROW)
+        return cpo::uno::Reference<css::text::XTextRange>(content_, cpo::uno::UNO_QUERY_THROW)
             ->getString();
     }
 
@@ -355,7 +355,7 @@ public:
         return cpo::uno::Sequence(v.data(), v.size());
     }
 
-    css::uno::Reference<scriptinterop::XText> insertText(sal_Int32 offset, OUString const & text)
+    cpo::uno::Reference<scriptinterop::XText> insertText(sal_Int32 offset, OUString const & text)
         override
     {
         auto const whole = wholeRange();
@@ -395,26 +395,26 @@ public:
         return underline != css::awt::FontUnderline::NONE;
     }
 
-    css::uno::Reference<scriptinterop::XText> setBold(bool value) override {
+    cpo::uno::Reference<scriptinterop::XText> setBold(bool value) override {
         setBoldOn(wholeRange(), value);
         return this;
     }
 
-    css::uno::Reference<scriptinterop::XText> setBoldRange(
+    cpo::uno::Reference<scriptinterop::XText> setBoldRange(
         sal_Int32 startOffset, sal_Int32 endOffsetInclusive, bool value) override
     {
         setBoldOn(subRange(startOffset, endOffsetInclusive), value);
         return this;
     }
 
-    css::uno::Reference<scriptinterop::XText> setFontFamily(OUString const & fontFamilyName)
+    cpo::uno::Reference<scriptinterop::XText> setFontFamily(OUString const & fontFamilyName)
         override
     {
         setFontFamilyOn(wholeRange(), fontFamilyName);
         return this;
     }
 
-    css::uno::Reference<scriptinterop::XText> setFontFamilyRange(
+    cpo::uno::Reference<scriptinterop::XText> setFontFamilyRange(
         sal_Int32 startOffset, sal_Int32 endOffsetInclusive, OUString const & fontFamilyName)
         override
     {
@@ -422,55 +422,55 @@ public:
         return this;
     }
 
-    css::uno::Reference<scriptinterop::XText> setItalic(bool value) override {
+    cpo::uno::Reference<scriptinterop::XText> setItalic(bool value) override {
         setItalicOn(wholeRange(), value);
         return this;
     }
 
-    css::uno::Reference<scriptinterop::XText> setItalicRange(
+    cpo::uno::Reference<scriptinterop::XText> setItalicRange(
         sal_Int32 startOffset, sal_Int32 endOffsetInclusive, bool value) override
     {
         setItalicOn(subRange(startOffset, endOffsetInclusive), value);
         return this;
     }
 
-    css::uno::Reference<scriptinterop::XText> setLinkUrl(OUString const & url) override {
+    cpo::uno::Reference<scriptinterop::XText> setLinkUrl(OUString const & url) override {
         setLinkUrlOn(wholeRange(), url);
         return this;
     }
 
-    css::uno::Reference<scriptinterop::XText> setLinkUrlRange(
+    cpo::uno::Reference<scriptinterop::XText> setLinkUrlRange(
         sal_Int32 startOffset, sal_Int32 endOffsetInclusive, OUString const & url) override
     {
         setLinkUrlOn(subRange(startOffset, endOffsetInclusive), url);
         return this;
     }
 
-    css::uno::Reference<scriptinterop::XText> setStrikethrough(bool value) override {
+    cpo::uno::Reference<scriptinterop::XText> setStrikethrough(bool value) override {
         setStrikethroughOn(wholeRange(), value);
         return this;
     }
 
-    css::uno::Reference<scriptinterop::XText> setStrikethroughRange(
+    cpo::uno::Reference<scriptinterop::XText> setStrikethroughRange(
         sal_Int32 startOffset, sal_Int32 endOffsetInclusive, bool value) override
     {
         setStrikethroughOn(subRange(startOffset, endOffsetInclusive), value);
         return this;
     }
 
-    css::uno::Reference<scriptinterop::XText> setText(OUString const & text) override {
+    cpo::uno::Reference<scriptinterop::XText> setText(OUString const & text) override {
         wholeRange()->setString(text);
         return this;
     }
 
-    css::uno::Reference<scriptinterop::XText> setTextAlignment(
+    cpo::uno::Reference<scriptinterop::XText> setTextAlignment(
         scriptinterop::TextAlignment textAlignment) override
     {
         setTextAlignmentOn(wholeRange(), textAlignment);
         return this;
     }
 
-    css::uno::Reference<scriptinterop::XText> setTextAlignmentRange(
+    cpo::uno::Reference<scriptinterop::XText> setTextAlignmentRange(
         sal_Int32 startOffset, sal_Int32 endOffsetInclusive,
         scriptinterop::TextAlignment textAlignment) override
     {
@@ -478,12 +478,12 @@ public:
         return this;
     }
 
-    css::uno::Reference<scriptinterop::XText> setUnderline(bool value) override {
+    cpo::uno::Reference<scriptinterop::XText> setUnderline(bool value) override {
         setUnderlineOn(wholeRange(), value);
         return this;
     }
 
-    css::uno::Reference<scriptinterop::XText> setUnderlineRange(
+    cpo::uno::Reference<scriptinterop::XText> setUnderlineRange(
         sal_Int32 startOffset, sal_Int32 endOffsetInclusive, bool value) override
     {
         setUnderlineOn(subRange(startOffset, endOffsetInclusive), value);
@@ -491,7 +491,7 @@ public:
     }
 
 private:
-    css::uno::Reference<css::text::XTextRange> runAt(sal_Int32 offset) {
+    cpo::uno::Reference<css::text::XTextRange> runAt(sal_Int32 offset) {
         if (runs_.empty()) {
             throw cpo::uno::RuntimeException(u"the text has no content at this offset"_ustr);
         }
@@ -507,11 +507,11 @@ private:
     }
 
     static cpo::uno::Any getProp(
-        css::uno::Reference<css::text::XTextRange> const & range, std::u16string_view apiMethod,
+        cpo::uno::Reference<css::text::XTextRange> const & range, std::u16string_view apiMethod,
         std::u16string_view apiAttribute, OUString const & name)
     {
-        css::uno::Reference<css::beans::XPropertySet> const props(
-            range, css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::beans::XPropertySet> const props(
+            range, cpo::uno::UNO_QUERY_THROW);
         auto const info(props->getPropertySetInfo());
         if (!info.is() || !info->hasPropertyByName(name)) {
             throw cpo::uno::RuntimeException(
@@ -520,11 +520,11 @@ private:
         return props->getPropertyValue(name);
     }
 
-    css::uno::Reference<css::text::XTextRange> wholeRange() {
-        return css::uno::Reference<css::text::XTextRange>(content_, css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::text::XTextRange> wholeRange() {
+        return cpo::uno::Reference<css::text::XTextRange>(content_, cpo::uno::UNO_QUERY_THROW);
     }
 
-    css::uno::Reference<css::text::XTextRange> subRange(
+    cpo::uno::Reference<css::text::XTextRange> subRange(
         sal_Int32 startOffset, sal_Int32 endOffsetInclusive)
     {
         auto const whole = wholeRange();
@@ -535,44 +535,44 @@ private:
     }
 
     static void setProp(
-        css::uno::Reference<css::text::XTextRange> const & range, OUString const & name,
+        cpo::uno::Reference<css::text::XTextRange> const & range, OUString const & name,
         cpo::uno::Any const & value)
     {
-        css::uno::Reference<css::beans::XPropertySet>(range, css::uno::UNO_QUERY_THROW)
+        cpo::uno::Reference<css::beans::XPropertySet>(range, cpo::uno::UNO_QUERY_THROW)
             ->setPropertyValue(name, value);
     }
 
-    static void setBoldOn(css::uno::Reference<css::text::XTextRange> const & range, bool value) {
+    static void setBoldOn(cpo::uno::Reference<css::text::XTextRange> const & range, bool value) {
         setProp(range, u"CharWeight"_ustr, cpo::uno::Any(
             static_cast<float>(value ? css::awt::FontWeight::BOLD : css::awt::FontWeight::NORMAL)));
     }
 
     static void setFontFamilyOn(
-        css::uno::Reference<css::text::XTextRange> const & range, OUString const & fontFamilyName)
+        cpo::uno::Reference<css::text::XTextRange> const & range, OUString const & fontFamilyName)
     {
         setProp(range, u"CharFontName"_ustr, cpo::uno::Any(fontFamilyName));
     }
 
-    static void setItalicOn(css::uno::Reference<css::text::XTextRange> const & range, bool value) {
+    static void setItalicOn(cpo::uno::Reference<css::text::XTextRange> const & range, bool value) {
         setProp(range, u"CharPosture"_ustr, cpo::uno::Any(
             value ? css::awt::FontSlant_ITALIC : css::awt::FontSlant_NONE));
     }
 
     static void setLinkUrlOn(
-        css::uno::Reference<css::text::XTextRange> const & range, OUString const & url)
+        cpo::uno::Reference<css::text::XTextRange> const & range, OUString const & url)
     {
         setProp(range, u"HyperLinkURL"_ustr, cpo::uno::Any(url));
     }
 
     static void setStrikethroughOn(
-        css::uno::Reference<css::text::XTextRange> const & range, bool value)
+        cpo::uno::Reference<css::text::XTextRange> const & range, bool value)
     {
         setProp(range, u"CharStrikeout"_ustr, cpo::uno::Any(static_cast<sal_Int16>(
             value ? css::awt::FontStrikeout::SINGLE : css::awt::FontStrikeout::NONE)));
     }
 
     static void setTextAlignmentOn(
-        css::uno::Reference<css::text::XTextRange> const & range,
+        cpo::uno::Reference<css::text::XTextRange> const & range,
         scriptinterop::TextAlignment textAlignment)
     {
         sal_Int16 escape = 0;
@@ -595,45 +595,45 @@ private:
         setProp(range, u"CharEscapementHeight"_ustr, cpo::uno::Any(height));
     }
 
-    static void setUnderlineOn(css::uno::Reference<css::text::XTextRange> const & range, bool value)
+    static void setUnderlineOn(cpo::uno::Reference<css::text::XTextRange> const & range, bool value)
     {
         setProp(range, u"CharUnderline"_ustr, cpo::uno::Any(static_cast<sal_Int16>(
             value ? css::awt::FontUnderline::SINGLE : css::awt::FontUnderline::NONE)));
     }
 
-    css::uno::Reference<scriptinterop::XElement> parent_;
-    css::uno::Reference<css::text::XTextContent> content_;
+    cpo::uno::Reference<scriptinterop::XElement> parent_;
+    cpo::uno::Reference<css::text::XTextContent> content_;
     scriptinterop::ElementType reportedType_;
-    std::vector<css::uno::Reference<css::text::XTextRange>> runs_;
+    std::vector<cpo::uno::Reference<css::text::XTextRange>> runs_;
 };
 
 class ParagraphImpl : public cppu::WeakImplHelper<scriptinterop::XParagraph>
 {
 public:
     explicit ParagraphImpl(
-        css::uno::Reference<scriptinterop::XElement> const & parent,
-        css::uno::Reference<css::text::XTextContent> const& content)
+        cpo::uno::Reference<scriptinterop::XElement> const & parent,
+        cpo::uno::Reference<css::text::XTextContent> const& content)
         : parent_(parent), content_(content)
     {
     }
 
-    css::uno::Reference<cpo::uno::XInterface> SAL_CALL getuno() override { return content_; }
+    cpo::uno::Reference<cpo::uno::XInterface> SAL_CALL getuno() override { return content_; }
 
-    css::uno::Reference<scriptinterop::XText> asText() override {
+    cpo::uno::Reference<scriptinterop::XText> asText() override {
         return new TextImpl(parent_, content_, getType());
     }
 
     // TODO: return a detached deep copy, not this; mutations on the "copy" write back to the live
     // element:
-    css::uno::Reference<scriptinterop::XElement> copy() override { return this; }
+    cpo::uno::Reference<scriptinterop::XElement> copy() override { return this; }
 
-    css::uno::Reference<scriptinterop::XText> editAsText() override {
+    cpo::uno::Reference<scriptinterop::XText> editAsText() override {
         return asText();
     }
 
     scriptinterop::HorizontalAlignment getAlignment() override {
-        css::uno::Reference<css::beans::XPropertySet> const props(
-            content_, css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::beans::XPropertySet> const props(
+            content_, cpo::uno::UNO_QUERY_THROW);
         auto const info(props->getPropertySetInfo());
         if (!info.is() || !info->hasPropertyByName(u"ParaAdjust"_ustr)) {
             return scriptinterop::HorizontalAlignment_LEFT;
@@ -654,7 +654,7 @@ public:
 
     // TODO: model inline images, page breaks and horizontal rules as additional children (each of
     // those splits the surrounding text into more Text children too):
-    css::uno::Reference<scriptinterop::XElement> getChild(sal_Int32 index) override {
+    cpo::uno::Reference<scriptinterop::XElement> getChild(sal_Int32 index) override {
         if (index != 0) {
             return nullptr;
         }
@@ -662,15 +662,15 @@ public:
     }
 
     scriptinterop::GlyphType getGlyphType() override {
-        css::uno::Reference<css::beans::XPropertySet> const props(
-            content_, css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::beans::XPropertySet> const props(
+            content_, cpo::uno::UNO_QUERY_THROW);
         auto const info(props->getPropertySetInfo());
         if (!info.is() || !info->hasPropertyByName(u"NumberingRules"_ustr)
             || !info->hasPropertyByName(u"NumberingLevel"_ustr))
         {
             return scriptinterop::GlyphType_BULLET;
         }
-        css::uno::Reference<css::container::XIndexAccess> rules;
+        cpo::uno::Reference<css::container::XIndexAccess> rules;
         props->getPropertyValue(u"NumberingRules"_ustr) >>= rules;
         sal_Int16 level = 0;
         props->getPropertyValue(u"NumberingLevel"_ustr) >>= level;
@@ -717,8 +717,8 @@ public:
     }
 
     scriptinterop::ParagraphHeading getHeading() override {
-        css::uno::Reference<css::beans::XPropertySet> const props(
-            content_, css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::beans::XPropertySet> const props(
+            content_, cpo::uno::UNO_QUERY_THROW);
         auto const info(props->getPropertySetInfo());
         if (!info.is() || !info->hasPropertyByName(u"ParaStyleName"_ustr)) {
             return scriptinterop::ParagraphHeading_NORMAL;
@@ -753,8 +753,8 @@ public:
     }
 
     double getIndentStart() override {
-        css::uno::Reference<css::beans::XPropertySet> const props(
-            content_, css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::beans::XPropertySet> const props(
+            content_, cpo::uno::UNO_QUERY_THROW);
         auto const info(props->getPropertySetInfo());
         if (!info.is() || !info->hasPropertyByName(u"ParaLeftMargin"_ustr)) {
             return 0.0;
@@ -765,8 +765,8 @@ public:
     }
 
     OUString getListId() override {
-        css::uno::Reference<css::beans::XPropertySet> const props(
-            content_, css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::beans::XPropertySet> const props(
+            content_, cpo::uno::UNO_QUERY_THROW);
         auto const info(props->getPropertySetInfo());
         if (!info.is() || !info->hasPropertyByName(u"ListId"_ustr)) {
             return {};
@@ -777,8 +777,8 @@ public:
     }
 
     sal_Int32 getNestingLevel() override {
-        css::uno::Reference<css::beans::XPropertySet> const props(
-            content_, css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::beans::XPropertySet> const props(
+            content_, cpo::uno::UNO_QUERY_THROW);
         auto const info(props->getPropertySetInfo());
         if (!info.is() || !info->hasPropertyByName(u"NumberingLevel"_ustr)) {
             return 0;
@@ -788,27 +788,27 @@ public:
         return level;
     }
 
-    css::uno::Reference<scriptinterop::XElement> getNextSibling() override {
+    cpo::uno::Reference<scriptinterop::XElement> getNextSibling() override {
         return siblingContent(content_, parent_, true);
     }
 
     sal_Int32 getNumChildren() override { return 1; }
 
-    css::uno::Reference<scriptinterop::XElement> getParent() override { return parent_; }
+    cpo::uno::Reference<scriptinterop::XElement> getParent() override { return parent_; }
 
-    css::uno::Reference<scriptinterop::XElement> getPreviousSibling() override {
+    cpo::uno::Reference<scriptinterop::XElement> getPreviousSibling() override {
         return siblingContent(content_, parent_, false);
     }
 
     OUString SAL_CALL getText() override
     {
-        return css::uno::Reference<css::text::XTextRange>(content_, css::uno::UNO_QUERY_THROW)
+        return cpo::uno::Reference<css::text::XTextRange>(content_, cpo::uno::UNO_QUERY_THROW)
             ->getString();
     }
 
     scriptinterop::ElementType getType() override {
-        css::uno::Reference<css::beans::XPropertySet> const props(
-            content_, css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::beans::XPropertySet> const props(
+            content_, cpo::uno::UNO_QUERY_THROW);
         auto const info(props->getPropertySetInfo());
         if (info.is() && info->hasPropertyByName(u"NumberingIsNumber"_ustr)) {
             bool numbered = false;
@@ -821,8 +821,8 @@ public:
     }
 
     bool isLeftToRight() override {
-        css::uno::Reference<css::beans::XPropertySet> const props(
-            content_, css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::beans::XPropertySet> const props(
+            content_, cpo::uno::UNO_QUERY_THROW);
         auto const info(props->getPropertySetInfo());
         if (!info.is() || !info->hasPropertyByName(u"WritingMode"_ustr)) {
             throw cpo::uno::RuntimeException(
@@ -834,29 +834,29 @@ public:
     }
 
 private:
-    css::uno::Reference<scriptinterop::XElement> parent_;
-    css::uno::Reference<css::text::XTextContent> content_;
+    cpo::uno::Reference<scriptinterop::XElement> parent_;
+    cpo::uno::Reference<css::text::XTextContent> content_;
 };
 
 class TableCellImpl: public cppu::WeakImplHelper<scriptinterop::XTableCell> {
 public:
     explicit TableCellImpl(
-        css::uno::Reference<scriptinterop::XElement> const & parent,
-        css::uno::Reference<css::text::XText> const & text):
+        cpo::uno::Reference<scriptinterop::XElement> const & parent,
+        cpo::uno::Reference<css::text::XText> const & text):
         parent_(parent), text_(text) {}
 
-    css::uno::Reference<cpo::uno::XInterface> getuno() override { return text_; }
+    cpo::uno::Reference<cpo::uno::XInterface> getuno() override { return text_; }
 
     // TODO: return a detached deep copy, not this; mutations on the "copy" write back to the live
     // element:
-    css::uno::Reference<scriptinterop::XElement> copy() override { return this; }
+    cpo::uno::Reference<scriptinterop::XElement> copy() override { return this; }
 
-    css::uno::Reference<scriptinterop::XElement> getChild(sal_Int32 index) override {
+    cpo::uno::Reference<scriptinterop::XElement> getChild(sal_Int32 index) override {
         auto const list = getChildren();
         return index >= 0 && index < list.getLength() ? list[index] : nullptr;
     }
 
-    cpo::uno::Sequence<css::uno::Reference<scriptinterop::XElement>> getChildren() override {
+    cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XElement>> getChildren() override {
         return enumerateElements(text_, this);
     }
 
@@ -866,16 +866,16 @@ public:
     sal_Int32 getColSpan() override { return 1; }
 
     // TODO: real sibling walk that steps through the containing row's cells:
-    css::uno::Reference<scriptinterop::XElement> getNextSibling() override { return nullptr; }
+    cpo::uno::Reference<scriptinterop::XElement> getNextSibling() override { return nullptr; }
 
     sal_Int32 getNumChildren() override { return getChildren().getLength(); }
 
-    css::uno::Reference<scriptinterop::XElement> getParent() override { return parent_; }
+    cpo::uno::Reference<scriptinterop::XElement> getParent() override { return parent_; }
 
-    css::uno::Reference<scriptinterop::XElement> getPreviousSibling() override { return nullptr; }
+    cpo::uno::Reference<scriptinterop::XElement> getPreviousSibling() override { return nullptr; }
 
     sal_Int32 getRowSpan() override {
-        css::uno::Reference<css::beans::XPropertySet> const props(text_, css::uno::UNO_QUERY);
+        cpo::uno::Reference<css::beans::XPropertySet> const props(text_, cpo::uno::UNO_QUERY);
         if (!props.is()) {
             return 1;
         }
@@ -898,23 +898,23 @@ public:
     }
 
 private:
-    css::uno::Reference<scriptinterop::XElement> parent_;
-    css::uno::Reference<css::text::XText> text_;
+    cpo::uno::Reference<scriptinterop::XElement> parent_;
+    cpo::uno::Reference<css::text::XText> text_;
 };
 
 class TableRowImpl: public cppu::WeakImplHelper<scriptinterop::XTableRow> {
 public:
     TableRowImpl(
-        css::uno::Reference<scriptinterop::XElement> const & parent,
-        css::uno::Reference<css::text::XTextTable> const & table, sal_Int32 rowIndex):
+        cpo::uno::Reference<scriptinterop::XElement> const & parent,
+        cpo::uno::Reference<css::text::XTextTable> const & table, sal_Int32 rowIndex):
         parent_(parent), table_(table), rowIndex_(rowIndex) {}
 
-    css::uno::Reference<cpo::uno::XInterface> getuno() override {
+    cpo::uno::Reference<cpo::uno::XInterface> getuno() override {
         if (!table_.is()) {
             throw cpo::uno::RuntimeException(u"getuno: the row is not part of a table"_ustr);
         }
         auto const rows = table_->getRows();
-        css::uno::Reference<cpo::uno::XInterface> row;
+        cpo::uno::Reference<cpo::uno::XInterface> row;
         if (rows.is() && rowIndex_ >= 0 && rowIndex_ < rows->getCount()) {
             rows->getByIndex(rowIndex_) >>= row;
         }
@@ -923,14 +923,14 @@ public:
 
     // TODO: return a detached deep copy, not this; mutations on the "copy" write back to the live
     // element:
-    css::uno::Reference<scriptinterop::XElement> copy() override { return this; }
+    cpo::uno::Reference<scriptinterop::XElement> copy() override { return this; }
 
-    css::uno::Reference<scriptinterop::XTableCell> getCell(sal_Int32 index) override {
-        css::uno::Reference<css::table::XCellRange> const range(
-            table_, css::uno::UNO_QUERY_THROW);
-        css::uno::Reference<css::text::XText> text;
+    cpo::uno::Reference<scriptinterop::XTableCell> getCell(sal_Int32 index) override {
+        cpo::uno::Reference<css::table::XCellRange> const range(
+            table_, cpo::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::text::XText> text;
         try {
-            text.set(range->getCellByPosition(index, rowIndex_), css::uno::UNO_QUERY);
+            text.set(range->getCellByPosition(index, rowIndex_), cpo::uno::UNO_QUERY);
         } catch (css::lang::IndexOutOfBoundsException const &) {
             return {};
         }
@@ -941,16 +941,16 @@ public:
         return new TableCellImpl(this, text);
     }
 
-    css::uno::Reference<scriptinterop::XElement> getChild(sal_Int32 index) override {
+    cpo::uno::Reference<scriptinterop::XElement> getChild(sal_Int32 index) override {
         return getCell(index);
     }
 
     // TODO: real sibling walk that steps through the containing table's rows:
-    css::uno::Reference<scriptinterop::XElement> getNextSibling() override { return nullptr; }
+    cpo::uno::Reference<scriptinterop::XElement> getNextSibling() override { return nullptr; }
 
-    css::uno::Reference<scriptinterop::XElement> getParent() override { return parent_; }
+    cpo::uno::Reference<scriptinterop::XElement> getParent() override { return parent_; }
 
-    css::uno::Reference<scriptinterop::XElement> getPreviousSibling() override { return nullptr; }
+    cpo::uno::Reference<scriptinterop::XElement> getPreviousSibling() override { return nullptr; }
 
     scriptinterop::ElementType getType() override { return scriptinterop::ElementType_TABLE_ROW; }
 
@@ -963,10 +963,10 @@ public:
         // Probe cell positions to find how many cells this row actually addresses; the table's
         // column count over-reports for rows with horizontally merged cells, because it always
         // reflects the first row:
-        css::uno::Reference<css::table::XCellRange> const range(table_, css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::table::XCellRange> const range(table_, cpo::uno::UNO_QUERY_THROW);
         sal_Int32 count = 0;
         for (;;) {
-            css::uno::Reference<css::table::XCell> cell;
+            cpo::uno::Reference<css::table::XCell> cell;
             try {
                 cell = range->getCellByPosition(count, rowIndex_);
             } catch (css::lang::IndexOutOfBoundsException const &) {
@@ -998,23 +998,23 @@ public:
     }
 
 private:
-    css::uno::Reference<scriptinterop::XElement> parent_;
-    css::uno::Reference<css::text::XTextTable> table_;
+    cpo::uno::Reference<scriptinterop::XElement> parent_;
+    cpo::uno::Reference<css::text::XTextTable> table_;
     sal_Int32 rowIndex_;
 };
 
 class TableImpl: public cppu::WeakImplHelper<scriptinterop::XTable> {
 public:
     explicit TableImpl(
-        css::uno::Reference<scriptinterop::XElement> const & parent,
-        css::uno::Reference<css::text::XTextTable> const & table):
+        cpo::uno::Reference<scriptinterop::XElement> const & parent,
+        cpo::uno::Reference<css::text::XTextTable> const & table):
         parent_(parent), table_(table) {}
 
-    css::uno::Reference<cpo::uno::XInterface> getuno() override { return table_; }
+    cpo::uno::Reference<cpo::uno::XInterface> getuno() override { return table_; }
 
     // TODO: return a detached deep copy, not this; mutations on the "copy" write back to the live
     // element:
-    css::uno::Reference<scriptinterop::XElement> copy() override { return this; }
+    cpo::uno::Reference<scriptinterop::XElement> copy() override { return this; }
 
     scriptinterop::ElementType getType() override { return scriptinterop::ElementType_TABLE; }
 
@@ -1029,26 +1029,26 @@ public:
         return rows->getCount();
     }
 
-    css::uno::Reference<scriptinterop::XTableRow> getRow(sal_Int32 index) override {
+    cpo::uno::Reference<scriptinterop::XTableRow> getRow(sal_Int32 index) override {
         if (index < 0 || index >= getNumRows()) {
             return {};
         }
         return new TableRowImpl(this, table_, index);
     }
 
-    css::uno::Reference<scriptinterop::XElement> getChild(sal_Int32 index) override {
+    cpo::uno::Reference<scriptinterop::XElement> getChild(sal_Int32 index) override {
         return getRow(index);
     }
 
-    css::uno::Reference<scriptinterop::XElement> getNextSibling() override {
+    cpo::uno::Reference<scriptinterop::XElement> getNextSibling() override {
         return siblingContent(table_, parent_, true);
     }
 
     sal_Int32 getNumChildren() override { return getNumRows(); }
 
-    css::uno::Reference<scriptinterop::XElement> getParent() override { return parent_; }
+    cpo::uno::Reference<scriptinterop::XElement> getParent() override { return parent_; }
 
-    css::uno::Reference<scriptinterop::XElement> getPreviousSibling() override {
+    cpo::uno::Reference<scriptinterop::XElement> getPreviousSibling() override {
         return siblingContent(table_, parent_, false);
     }
 
@@ -1070,32 +1070,32 @@ public:
     }
 
 private:
-    css::uno::Reference<scriptinterop::XElement> parent_;
-    css::uno::Reference<css::text::XTextTable> table_;
+    cpo::uno::Reference<scriptinterop::XElement> parent_;
+    cpo::uno::Reference<css::text::XTextTable> table_;
 };
 
-cpo::uno::Sequence<css::uno::Reference<scriptinterop::XElement>> enumerateElements(
-    css::uno::Reference<css::text::XText> const & text,
-    css::uno::Reference<scriptinterop::XElement> const & parent)
+cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XElement>> enumerateElements(
+    cpo::uno::Reference<css::text::XText> const & text,
+    cpo::uno::Reference<scriptinterop::XElement> const & parent)
 {
-    std::vector<css::uno::Reference<scriptinterop::XElement>> v;
-    if (css::uno::Reference<css::container::XEnumerationAccess> const ea{text, css::uno::UNO_QUERY})
+    std::vector<cpo::uno::Reference<scriptinterop::XElement>> v;
+    if (cpo::uno::Reference<css::container::XEnumerationAccess> const ea{text, cpo::uno::UNO_QUERY})
     {
         auto const en = ea->createEnumeration();
         while (en.is() && en->hasMoreElements()) {
-            css::uno::Reference<css::text::XTextContent> xtc;
+            cpo::uno::Reference<css::text::XTextContent> xtc;
             en->nextElement() >>= xtc;
             if (!xtc.is()) {
                 continue;
             }
-            css::uno::Reference<css::lang::XServiceInfo> const info(xtc, css::uno::UNO_QUERY);
+            cpo::uno::Reference<css::lang::XServiceInfo> const info(xtc, cpo::uno::UNO_QUERY);
             if (!info.is()) {
                 continue;
             }
             if (info->supportsService(u"com.sun.star.text.Paragraph"_ustr)) {
                 v.emplace_back(new ParagraphImpl(parent, xtc));
             } else if (info->supportsService(u"com.sun.star.text.TextTable"_ustr)) {
-                css::uno::Reference<css::text::XTextTable> const table(xtc, css::uno::UNO_QUERY);
+                cpo::uno::Reference<css::text::XTextTable> const table(xtc, cpo::uno::UNO_QUERY);
                 if (table.is()) {
                     v.emplace_back(new TableImpl(parent, table));
                 }
@@ -1105,14 +1105,14 @@ cpo::uno::Sequence<css::uno::Reference<scriptinterop::XElement>> enumerateElemen
     return cpo::uno::Sequence(v.data(), v.size());
 }
 
-css::uno::Reference<scriptinterop::XElement> siblingContent(
-    css::uno::Reference<css::text::XTextContent> const & content,
-    css::uno::Reference<scriptinterop::XElement> const & parent, bool forward)
+cpo::uno::Reference<scriptinterop::XElement> siblingContent(
+    cpo::uno::Reference<css::text::XTextContent> const & content,
+    cpo::uno::Reference<scriptinterop::XElement> const & parent, bool forward)
 {
     if (!content.is()) {
         return nullptr;
     }
-    css::uno::Reference<css::text::XTextRange> const range(content, css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::text::XTextRange> const range(content, cpo::uno::UNO_QUERY);
     if (!range.is()) {
         return nullptr;
     }
@@ -1122,13 +1122,13 @@ css::uno::Reference<scriptinterop::XElement> siblingContent(
     }
     auto const list = enumerateElements(host, parent);
     auto const n = list.getLength();
-    css::uno::Reference<cpo::uno::XInterface> const self(content, css::uno::UNO_QUERY);
+    cpo::uno::Reference<cpo::uno::XInterface> const self(content, cpo::uno::UNO_QUERY);
     for (sal_Int32 i = 0; i != n; ++i) {
         auto const & elem = list[i];
         if (!elem.is()) {
             continue;
         }
-        css::uno::Reference<cpo::uno::XInterface> const other(elem->getuno(), css::uno::UNO_QUERY);
+        cpo::uno::Reference<cpo::uno::XInterface> const other(elem->getuno(), cpo::uno::UNO_QUERY);
         if (self.get() == other.get()) {
             auto const j = forward ? i + 1 : i - 1;
             return j >= 0 && j < n ? list[j] : nullptr;
@@ -1139,30 +1139,30 @@ css::uno::Reference<scriptinterop::XElement> siblingContent(
 
 // Walk the containing XText's paragraphs and return the one whose extent covers `marker`s start;
 // null if the walk finds no paragraph or if the ranges live in different Text hosts:
-css::uno::Reference<css::text::XTextContent> findContainingParagraph(
-    css::uno::Reference<css::text::XTextRange> const & marker)
+cpo::uno::Reference<css::text::XTextContent> findContainingParagraph(
+    cpo::uno::Reference<css::text::XTextRange> const & marker)
 {
     assert(marker.is());
     auto const containingText = marker->getText();
     if (!containingText.is()) {
         throw cpo::uno::RuntimeException(u"the text position is not part of the document"_ustr);
     }
-    css::uno::Reference<css::text::XTextRangeCompare> const cmp(
-        containingText, css::uno::UNO_QUERY_THROW);
-    css::uno::Reference<css::container::XEnumerationAccess> const ea(
-        containingText, css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::text::XTextRangeCompare> const cmp(
+        containingText, cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::container::XEnumerationAccess> const ea(
+        containingText, cpo::uno::UNO_QUERY_THROW);
     auto const en = ea->createEnumeration();
     while (en.is() && en->hasMoreElements()) {
-        css::uno::Reference<css::text::XTextContent> xtc;
+        cpo::uno::Reference<css::text::XTextContent> xtc;
         en->nextElement() >>= xtc;
         if (!xtc.is()) {
             continue;
         }
-        css::uno::Reference<css::lang::XServiceInfo> const info(xtc, css::uno::UNO_QUERY);
+        cpo::uno::Reference<css::lang::XServiceInfo> const info(xtc, cpo::uno::UNO_QUERY);
         if (!info.is() || !info->supportsService(u"com.sun.star.text.Paragraph"_ustr)) {
             continue;
         }
-        css::uno::Reference<css::text::XTextRange> const paraRange(xtc, css::uno::UNO_QUERY);
+        cpo::uno::Reference<css::text::XTextRange> const paraRange(xtc, cpo::uno::UNO_QUERY);
         if (!paraRange.is()) {
             continue;
         }
@@ -1183,15 +1183,15 @@ css::uno::Reference<css::text::XTextContent> findContainingParagraph(
 
 class RangeElementImpl: public cppu::WeakImplHelper<scriptinterop::XRangeElement> {
 public:
-    explicit RangeElementImpl(css::uno::Reference<css::text::XTextRange> const & range):
+    explicit RangeElementImpl(cpo::uno::Reference<css::text::XTextRange> const & range):
         range_(range), paragraph_(findContainingParagraph(range))
     {
         rangeLen_ = range->getString().getLength();
         if (!paragraph_.is()) {
             return;
         }
-        css::uno::Reference<css::text::XTextRange> const paraRange(
-            paragraph_, css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::text::XTextRange> const paraRange(
+            paragraph_, cpo::uno::UNO_QUERY_THROW);
         paragraphLen_ = paraRange->getString().getLength();
         auto const host = paraRange->getText();
         if (!host.is()) {
@@ -1205,9 +1205,9 @@ public:
         startOffset_ = probe->getString().getLength();
     }
 
-    css::uno::Reference<cpo::uno::XInterface> getuno() override { return range_; }
+    cpo::uno::Reference<cpo::uno::XInterface> getuno() override { return range_; }
 
-    css::uno::Reference<scriptinterop::XParagraph> getElement() override {
+    cpo::uno::Reference<scriptinterop::XParagraph> getElement() override {
         if (!paragraph_.is()) {
             throw cpo::uno::RuntimeException(
                 u"getElement: this range element is not inside a paragraph"_ustr);
@@ -1237,8 +1237,8 @@ public:
     }
 
 private:
-    css::uno::Reference<css::text::XTextRange> range_;
-    css::uno::Reference<css::text::XTextContent> paragraph_;
+    cpo::uno::Reference<css::text::XTextRange> range_;
+    cpo::uno::Reference<css::text::XTextContent> paragraph_;
     sal_Int32 startOffset_ = 0;
     sal_Int32 rangeLen_ = 0;
     sal_Int32 paragraphLen_ = 0;
@@ -1249,31 +1249,31 @@ private:
 // extent, so a paragraph that lies fully inside the raw range becomes a non-partial element and
 // the first and last paragraphs become partial ones:
 void splitAtParagraphBoundaries(
-    css::uno::Reference<css::text::XTextRange> const & range,
-    std::vector<css::uno::Reference<scriptinterop::XRangeElement>> & out)
+    cpo::uno::Reference<css::text::XTextRange> const & range,
+    std::vector<cpo::uno::Reference<scriptinterop::XRangeElement>> & out)
 {
     assert(range.is());
     auto const host = range->getText();
     if (!host.is()) {
         throw cpo::uno::RuntimeException(u"the selected range is not part of the document"_ustr);
     }
-    css::uno::Reference<css::text::XTextRangeCompare> const cmp(host, css::uno::UNO_QUERY_THROW);
-    css::uno::Reference<css::container::XEnumerationAccess> const ea(
-        host, css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::text::XTextRangeCompare> const cmp(host, cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::container::XEnumerationAccess> const ea(
+        host, cpo::uno::UNO_QUERY_THROW);
     auto const rStart = range->getStart();
     auto const rEnd = range->getEnd();
     auto const en = ea->createEnumeration();
     while (en.is() && en->hasMoreElements()) {
-        css::uno::Reference<css::text::XTextContent> xtc;
+        cpo::uno::Reference<css::text::XTextContent> xtc;
         en->nextElement() >>= xtc;
         if (!xtc.is()) {
             continue;
         }
-        css::uno::Reference<css::lang::XServiceInfo> const info(xtc, css::uno::UNO_QUERY);
+        cpo::uno::Reference<css::lang::XServiceInfo> const info(xtc, cpo::uno::UNO_QUERY);
         if (!info.is() || !info->supportsService(u"com.sun.star.text.Paragraph"_ustr)) {
             continue;
         }
-        css::uno::Reference<css::text::XTextRange> const pRange(xtc, css::uno::UNO_QUERY);
+        cpo::uno::Reference<css::text::XTextRange> const pRange(xtc, cpo::uno::UNO_QUERY);
         if (!pRange.is()) {
             continue;
         }
@@ -1302,12 +1302,12 @@ void splitAtParagraphBoundaries(
     }
 }
 
-cpo::uno::Sequence<css::uno::Reference<scriptinterop::XRangeElement>>
+cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XRangeElement>>
 SelectionImpl::getRangeElements() {
-    std::vector<css::uno::Reference<scriptinterop::XRangeElement>> v;
+    std::vector<cpo::uno::Reference<scriptinterop::XRangeElement>> v;
     auto const n = ranges_->getCount();
     for (sal_Int32 i = 0; i != n; ++i) {
-        css::uno::Reference<css::text::XTextRange> range;
+        cpo::uno::Reference<css::text::XTextRange> range;
         if (!(ranges_->getByIndex(i) >>= range) || !range.is()) {
             throw cpo::uno::RuntimeException(
                 u"getRangeElements: the selection contains something other than text"_ustr);
@@ -1319,11 +1319,11 @@ SelectionImpl::getRangeElements() {
 
 class CursorImpl: public cppu::WeakImplHelper<scriptinterop::XCursor> {
 public:
-    explicit CursorImpl(css::uno::Reference<css::frame::XModel> const & model): model_(model) {}
+    explicit CursorImpl(cpo::uno::Reference<css::frame::XModel> const & model): model_(model) {}
 
-    css::uno::Reference<cpo::uno::XInterface> getuno() override { return viewCursor(); }
+    cpo::uno::Reference<cpo::uno::XInterface> getuno() override { return viewCursor(); }
 
-    css::uno::Reference<scriptinterop::XParagraph> getElement() override {
+    cpo::uno::Reference<scriptinterop::XParagraph> getElement() override {
         auto const para = findContainingParagraph(viewCursor());
         if (!para.is()) {
             throw cpo::uno::RuntimeException(
@@ -1339,7 +1339,7 @@ public:
             throw cpo::uno::RuntimeException(
                 u"getOffset: the cursor is not inside a paragraph"_ustr);
         }
-        css::uno::Reference<css::text::XTextRange> const paraRange(para, css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::text::XTextRange> const paraRange(para, cpo::uno::UNO_QUERY_THROW);
         auto const host = paraRange->getText();
         if (!host.is()) {
             throw cpo::uno::RuntimeException(
@@ -1354,7 +1354,7 @@ public:
         return probe->getString().getLength();
     }
 
-    css::uno::Reference<scriptinterop::XText> getSurroundingText() override {
+    cpo::uno::Reference<scriptinterop::XText> getSurroundingText() override {
         auto const para = findContainingParagraph(viewCursor());
         if (!para.is()) {
             throw cpo::uno::RuntimeException(
@@ -1376,9 +1376,9 @@ public:
     }
 
 private:
-    css::uno::Reference<css::text::XTextViewCursor> viewCursor() {
-        css::uno::Reference<css::text::XTextViewCursorSupplier> const sup(
-            model_->getCurrentController(), css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::text::XTextViewCursor> viewCursor() {
+        cpo::uno::Reference<css::text::XTextViewCursorSupplier> const sup(
+            model_->getCurrentController(), cpo::uno::UNO_QUERY_THROW);
         auto const c = sup->getViewCursor();
         if (!c.is()) {
             throw cpo::uno::RuntimeException(u"the document view has no cursor"_ustr);
@@ -1386,35 +1386,35 @@ private:
         return c;
     }
 
-    css::uno::Reference<css::frame::XModel> model_;
+    cpo::uno::Reference<css::frame::XModel> model_;
 };
 
 class FootnoteSectionImpl: public cppu::WeakImplHelper<scriptinterop::XContainerElement> {
 public:
-    explicit FootnoteSectionImpl(css::uno::Reference<css::text::XText> const & text):
+    explicit FootnoteSectionImpl(cpo::uno::Reference<css::text::XText> const & text):
         text_(text) {}
 
-    css::uno::Reference<cpo::uno::XInterface> getuno() override { return text_; }
+    cpo::uno::Reference<cpo::uno::XInterface> getuno() override { return text_; }
 
     // TODO: return a detached deep copy, not this; mutations on the "copy" write back to the live
     // element:
-    css::uno::Reference<scriptinterop::XElement> copy() override { return this; }
+    cpo::uno::Reference<scriptinterop::XElement> copy() override { return this; }
 
-    css::uno::Reference<scriptinterop::XElement> getChild(sal_Int32 index) override {
+    cpo::uno::Reference<scriptinterop::XElement> getChild(sal_Int32 index) override {
         auto const list = enumerateElements(text_, this);
         return index >= 0 && index < list.getLength() ? list[index] : nullptr;
     }
 
     // TODO: a footnote section is not part of a sibling list in our model:
-    css::uno::Reference<scriptinterop::XElement> getNextSibling() override { return nullptr; }
+    cpo::uno::Reference<scriptinterop::XElement> getNextSibling() override { return nullptr; }
 
     sal_Int32 getNumChildren() override { return enumerateElements(text_, this).getLength(); }
 
     // TODO: no natural container for a footnote section in scriptinterop (GAS's Document analogue
     // would be that parent, but we do not model it):
-    css::uno::Reference<scriptinterop::XElement> getParent() override { return nullptr; }
+    cpo::uno::Reference<scriptinterop::XElement> getParent() override { return nullptr; }
 
-    css::uno::Reference<scriptinterop::XElement> getPreviousSibling() override { return nullptr; }
+    cpo::uno::Reference<scriptinterop::XElement> getPreviousSibling() override { return nullptr; }
 
     OUString getText() override {
         if (!text_.is()) {
@@ -1428,83 +1428,83 @@ public:
     }
 
 private:
-    css::uno::Reference<css::text::XText> text_;
+    cpo::uno::Reference<css::text::XText> text_;
 };
 
 class FootnoteImpl: public cppu::WeakImplHelper<scriptinterop::XFootnote> {
 public:
-    explicit FootnoteImpl(css::uno::Reference<css::text::XFootnote> const & footnote):
+    explicit FootnoteImpl(cpo::uno::Reference<css::text::XFootnote> const & footnote):
         footnote_(footnote) {}
 
-    css::uno::Reference<cpo::uno::XInterface> getuno() override { return footnote_; }
+    cpo::uno::Reference<cpo::uno::XInterface> getuno() override { return footnote_; }
 
     // TODO: return a detached deep copy, not this; mutations on the "copy" write back to the live
     // element:
-    css::uno::Reference<scriptinterop::XElement> copy() override { return this; }
+    cpo::uno::Reference<scriptinterop::XElement> copy() override { return this; }
 
-    css::uno::Reference<scriptinterop::XContainerElement> getFootnoteContents() override {
+    cpo::uno::Reference<scriptinterop::XContainerElement> getFootnoteContents() override {
         return new FootnoteSectionImpl(
-            css::uno::Reference<css::text::XText>(footnote_, css::uno::UNO_QUERY_THROW));
+            cpo::uno::Reference<css::text::XText>(footnote_, cpo::uno::UNO_QUERY_THROW));
     }
 
     // TODO: footnotes are surfaced via Document.getFootnotes rather than a sibling walk in our
     // model:
-    css::uno::Reference<scriptinterop::XElement> getNextSibling() override { return nullptr; }
+    cpo::uno::Reference<scriptinterop::XElement> getNextSibling() override { return nullptr; }
 
     // TODO: GAS's Footnote.getParent is the paragraph anchoring the footnote; scriptinterop does
     // not currently track that link:
-    css::uno::Reference<scriptinterop::XElement> getParent() override { return nullptr; }
+    cpo::uno::Reference<scriptinterop::XElement> getParent() override { return nullptr; }
 
-    css::uno::Reference<scriptinterop::XElement> getPreviousSibling() override { return nullptr; }
+    cpo::uno::Reference<scriptinterop::XElement> getPreviousSibling() override { return nullptr; }
 
     OUString getText() override {
-        return css::uno::Reference<css::text::XText>(footnote_, css::uno::UNO_QUERY_THROW)
+        return cpo::uno::Reference<css::text::XText>(footnote_, cpo::uno::UNO_QUERY_THROW)
             ->getString();
     }
 
     scriptinterop::ElementType getType() override { return scriptinterop::ElementType_FOOTNOTE; }
 
 private:
-    css::uno::Reference<css::text::XFootnote> footnote_;
+    cpo::uno::Reference<css::text::XFootnote> footnote_;
 };
 
 class BodyImpl: public cppu::WeakImplHelper<scriptinterop::XBody> {
 public:
     explicit BodyImpl(
-        css::uno::Reference<css::frame::XModel> const & model,
-        css::uno::Reference<css::text::XText> const & text):
+        cpo::uno::Reference<css::frame::XModel> const & model,
+        cpo::uno::Reference<css::text::XText> const & text):
         model_(model), text_(text) {}
 
-    css::uno::Reference<scriptinterop::XParagraph> appendListItem(OUString const & text) override {
+    cpo::uno::Reference<scriptinterop::XParagraph> appendListItem(OUString const & text) override {
         return appendImpl(text, u"List Number"_ustr);
     }
 
-    css::uno::Reference<scriptinterop::XParagraph> appendParagraph(OUString const & text) override {
+    cpo::uno::Reference<scriptinterop::XParagraph> appendParagraph(OUString const & text) override {
         return appendImpl(text, u""_ustr);
     }
 
     // TODO: return a detached deep copy, not this; mutations on the "copy" write back to the live
     // element:
-    css::uno::Reference<scriptinterop::XElement> copy() override { return this; }
+    cpo::uno::Reference<scriptinterop::XElement> copy() override { return this; }
 
-    css::uno::Reference<cpo::uno::XInterface> getuno() override { return text_; }
+    cpo::uno::Reference<cpo::uno::XInterface> getuno() override { return text_; }
 
-    css::uno::Reference<scriptinterop::XElement> getChild(sal_Int32 index) override {
+    cpo::uno::Reference<scriptinterop::XElement> getChild(sal_Int32 index) override {
         auto const list = getChildren();
         return index >= 0 && index < list.getLength() ? list[index] : nullptr;
     }
 
-    cpo::uno::Sequence<css::uno::Reference<scriptinterop::XElement>> getChildren() override {
+    cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XElement>> getChildren() override {
         return enumerateElements(text_, this);
     }
 
-    css::uno::Reference<scriptinterop::XElement> getNextSibling() override { return nullptr; }
+    cpo::uno::Reference<scriptinterop::XElement> getNextSibling() override { return nullptr; }
 
     sal_Int32 getNumChildren() override { return getChildren().getLength(); }
 
-    css::uno::Reference<scriptinterop::XElement> getParent() override { return nullptr; }
+    cpo::uno::Reference<scriptinterop::XElement> getParent() override { return nullptr; }
 
-    css::uno::Reference<scriptinterop::XElement> getPreviousSibling() override { return nullptr; }
+    cpo::uno::Reference<scriptinterop::XElement> getPreviousSibling() override { return nullptr; }
 
     OUString getText() override {
         if (!text_.is()) {
@@ -1518,7 +1518,7 @@ public:
     }
 
 private:
-    css::uno::Reference<scriptinterop::XParagraph> appendImpl(
+    cpo::uno::Reference<scriptinterop::XParagraph> appendImpl(
         OUString const & text, OUString const & paraStyle)
     {
         if (!text_.is()) {
@@ -1528,19 +1528,19 @@ private:
         text_->insertControlCharacter(
             cursor, css::text::ControlCharacter::PARAGRAPH_BREAK, false);
         text_->insertString(cursor, text, false);
-        css::uno::Reference<css::text::XTextContent> lastParagraph;
-        if (css::uno::Reference<css::container::XEnumerationAccess> const ea{
-                text_, css::uno::UNO_QUERY})
+        cpo::uno::Reference<css::text::XTextContent> lastParagraph;
+        if (cpo::uno::Reference<css::container::XEnumerationAccess> const ea{
+                text_, cpo::uno::UNO_QUERY})
         {
             auto const en = ea->createEnumeration();
             while (en.is() && en->hasMoreElements()) {
-                css::uno::Reference<css::text::XTextContent> xtc;
+                cpo::uno::Reference<css::text::XTextContent> xtc;
                 en->nextElement() >>= xtc;
                 if (!xtc.is()) {
                     continue;
                 }
-                css::uno::Reference<css::lang::XServiceInfo> const info(
-                    xtc, css::uno::UNO_QUERY);
+                cpo::uno::Reference<css::lang::XServiceInfo> const info(
+                    xtc, cpo::uno::UNO_QUERY);
                 if (!info.is() || !info->supportsService(u"com.sun.star.text.Paragraph"_ustr)) {
                     continue;
                 }
@@ -1551,8 +1551,8 @@ private:
             throw cpo::uno::RuntimeException(u"appending the paragraph failed"_ustr);
         }
         if (!paraStyle.isEmpty()) {
-            css::uno::Reference<css::beans::XPropertySet> const props(
-                lastParagraph, css::uno::UNO_QUERY_THROW);
+            cpo::uno::Reference<css::beans::XPropertySet> const props(
+                lastParagraph, cpo::uno::UNO_QUERY_THROW);
             try {
                 props->setPropertyValue(u"ParaStyleName"_ustr, cpo::uno::Any(paraStyle));
             } catch (css::lang::IllegalArgumentException const &) {
@@ -1565,12 +1565,12 @@ private:
         return new ParagraphImpl(this, lastParagraph);
     }
 
-    void applyBulletNumbering(css::uno::Reference<css::beans::XPropertySet> const & props) {
-        css::uno::Reference<css::lang::XMultiServiceFactory> const factory(
-            model_, css::uno::UNO_QUERY_THROW);
-        css::uno::Reference<css::container::XIndexReplace> const rules(
+    void applyBulletNumbering(cpo::uno::Reference<css::beans::XPropertySet> const & props) {
+        cpo::uno::Reference<css::lang::XMultiServiceFactory> const factory(
+            model_, cpo::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::container::XIndexReplace> const rules(
             factory->createInstance(u"com.sun.star.text.NumberingRules"_ustr),
-            css::uno::UNO_QUERY_THROW);
+            cpo::uno::UNO_QUERY_THROW);
         if (rules->getCount() == 0) {
             throw cpo::uno::RuntimeException(
                 u"appendListItem: the document provides no bullet list formatting"_ustr);
@@ -1586,26 +1586,26 @@ private:
         props->setPropertyValue(u"NumberingIsNumber"_ustr, cpo::uno::Any(true));
     }
 
-    css::uno::Reference<css::frame::XModel> model_;
-    css::uno::Reference<css::text::XText> text_;
+    cpo::uno::Reference<css::frame::XModel> model_;
+    cpo::uno::Reference<css::text::XText> text_;
 };
 
 class DocumentImpl : public cppu::WeakImplHelper<scriptinterop::XDocument>
 {
 public:
-    explicit DocumentImpl(css::uno::Reference<css::frame::XModel> const& model)
+    explicit DocumentImpl(cpo::uno::Reference<css::frame::XModel> const& model)
         : model_(model)
     {
     }
 
-    css::uno::Reference<cpo::uno::XInterface> SAL_CALL getuno() override { return model_; }
+    cpo::uno::Reference<cpo::uno::XInterface> SAL_CALL getuno() override { return model_; }
 
-    css::uno::Reference<scriptinterop::XSelection> SAL_CALL getSelection() override
+    cpo::uno::Reference<scriptinterop::XSelection> SAL_CALL getSelection() override
     {
-        css::uno::Reference<css::text::XTextDocument> const doc(model_, css::uno::UNO_QUERY_THROW);
-        css::uno::Reference<css::view::XSelectionSupplier> const sup(
-            doc->getCurrentController(), css::uno::UNO_QUERY_THROW);
-        css::uno::Reference<css::container::XIndexAccess> ranges;
+        cpo::uno::Reference<css::text::XTextDocument> const doc(model_, cpo::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::view::XSelectionSupplier> const sup(
+            doc->getCurrentController(), cpo::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::container::XIndexAccess> ranges;
         sup->getSelection() >>= ranges;
         if (!ranges.is()) {
             return {};
@@ -1613,7 +1613,7 @@ public:
         bool anyContent = false;
         auto const n = ranges->getCount();
         for (sal_Int32 i = 0; i != n; ++i) {
-            css::uno::Reference<css::text::XTextRange> range;
+            cpo::uno::Reference<css::text::XTextRange> range;
             if (!(ranges->getByIndex(i) >>= range) || !range.is()) {
                 return {};
             }
@@ -1628,33 +1628,33 @@ public:
         return new SelectionImpl(ranges);
     }
 
-    css::uno::Reference<scriptinterop::XBody> getBody() override
+    cpo::uno::Reference<scriptinterop::XBody> getBody() override
     {
-        css::uno::Reference<css::text::XTextDocument> const doc(model_, css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::text::XTextDocument> const doc(model_, cpo::uno::UNO_QUERY_THROW);
         return new BodyImpl(model_, doc->getText());
     }
 
-    css::uno::Reference<scriptinterop::XCursor> getCursor() override
+    cpo::uno::Reference<scriptinterop::XCursor> getCursor() override
     {
         return new CursorImpl(model_);
     }
 
-    css::uno::Reference<scriptinterop::XRangeBuilder> newRange() override {
+    cpo::uno::Reference<scriptinterop::XRangeBuilder> newRange() override {
         return new RangeBuilderImpl;
     }
 
-    void setSelection(css::uno::Reference<scriptinterop::XSelection> const & selection) override {
+    void setSelection(cpo::uno::Reference<scriptinterop::XSelection> const & selection) override {
         if (!selection.is()) {
             throw cpo::uno::RuntimeException(u"setSelection: the selection must not be null"_ustr);
         }
-        css::uno::Reference<css::view::XSelectionSupplier> const sup(
-            model_->getCurrentController(), css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::view::XSelectionSupplier> const sup(
+            model_->getCurrentController(), cpo::uno::UNO_QUERY_THROW);
         // Writer's select typically only recognises its own SwXTextRanges; when our XSelection
         // wraps a single XTextRange, unwrap and pass that directly so Writer accepts it:
-        css::uno::Reference<css::container::XIndexAccess> const idx(
-            selection->getuno(), css::uno::UNO_QUERY);
+        cpo::uno::Reference<css::container::XIndexAccess> const idx(
+            selection->getuno(), cpo::uno::UNO_QUERY);
         if (idx.is() && idx->getCount() == 1) {
-            css::uno::Reference<css::text::XTextRange> range;
+            cpo::uno::Reference<css::text::XTextRange> range;
             idx->getByIndex(0) >>= range;
             if (range.is()) {
                 sup->select(cpo::uno::Any(range));
@@ -1664,10 +1664,10 @@ public:
         sup->select(cpo::uno::Any(selection->getuno()));
     }
 
-    cpo::uno::Sequence<css::uno::Reference<scriptinterop::XFootnote>> getFootnotes() override {
-        std::vector<css::uno::Reference<scriptinterop::XFootnote>> v;
-        css::uno::Reference<css::text::XFootnotesSupplier> const sup(
-            model_, css::uno::UNO_QUERY_THROW);
+    cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XFootnote>> getFootnotes() override {
+        std::vector<cpo::uno::Reference<scriptinterop::XFootnote>> v;
+        cpo::uno::Reference<css::text::XFootnotesSupplier> const sup(
+            model_, cpo::uno::UNO_QUERY_THROW);
         auto const idx = sup->getFootnotes();
         if (!idx.is()) {
             throw cpo::uno::RuntimeException(
@@ -1675,7 +1675,7 @@ public:
         }
         auto const n = idx->getCount();
         for (sal_Int32 i = 0; i != n; ++i) {
-            css::uno::Reference<css::text::XFootnote> footnote;
+            cpo::uno::Reference<css::text::XFootnote> footnote;
             if (!(idx->getByIndex(i) >>= footnote) || !footnote.is()) {
                 throw cpo::uno::RuntimeException(
                     u"getFootnotes: the document's footnote list contains something that is not a"
@@ -1689,19 +1689,19 @@ public:
     void SAL_CALL insertImage(cpo::uno::Sequence<sal_Int8> const& data,
                               scriptinterop::ImageOptions const& opts) override
     {
-        css::uno::Reference<css::text::XTextDocument> const doc(model_, css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::text::XTextDocument> const doc(model_, cpo::uno::UNO_QUERY_THROW);
         auto const componentCtx = comphelper::getProcessComponentContext();
         auto const smgr = componentCtx->getServiceManager();
         // Stage the bytes in a TempFile to give GraphicProvider a file URL:
-        css::uno::Reference<css::io::XTempFile> const tmp(
+        cpo::uno::Reference<css::io::XTempFile> const tmp(
             smgr->createInstanceWithContext(u"com.sun.star.io.TempFile"_ustr, componentCtx),
-            css::uno::UNO_QUERY_THROW);
+            cpo::uno::UNO_QUERY_THROW);
         tmp->getOutputStream()->writeBytes(data);
         tmp->getOutputStream()->closeOutput();
-        css::uno::Reference<css::graphic::XGraphicProvider> const gp(
+        cpo::uno::Reference<css::graphic::XGraphicProvider> const gp(
             smgr->createInstanceWithContext(u"com.sun.star.graphic.GraphicProvider"_ustr,
                                             componentCtx),
-            css::uno::UNO_QUERY_THROW);
+            cpo::uno::UNO_QUERY_THROW);
         cpo::uno::Sequence<css::beans::PropertyValue> loaderArgs{
             { u"URL"_ustr, 0, cpo::uno::Any(tmp->getUri()), {} }
         };
@@ -1710,13 +1710,13 @@ public:
         {
             throw cpo::uno::RuntimeException(u"insertImage: failed to load graphic"_ustr);
         }
-        css::uno::Reference<css::lang::XMultiServiceFactory> const docFactory(
-            doc, css::uno::UNO_QUERY_THROW);
-        css::uno::Reference<css::text::XTextContent> const graphic(
+        cpo::uno::Reference<css::lang::XMultiServiceFactory> const docFactory(
+            doc, cpo::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::text::XTextContent> const graphic(
             docFactory->createInstance(u"com.sun.star.text.TextGraphicObject"_ustr),
-            css::uno::UNO_QUERY_THROW);
-        css::uno::Reference<css::beans::XPropertySet> const props(
-            graphic, css::uno::UNO_QUERY_THROW);
+            cpo::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::beans::XPropertySet> const props(
+            graphic, cpo::uno::UNO_QUERY_THROW);
         props->setPropertyValue(u"Graphic"_ustr, cpo::uno::Any(xgraphic));
         // Width and Height are in 1/100 mm:
         props->setPropertyValue(
@@ -1725,8 +1725,8 @@ public:
                                                     std::round(opts.heightCm * 1000))));
         props->setPropertyValue(u"AnchorType"_ustr,
                                 cpo::uno::Any(css::text::TextContentAnchorType_AS_CHARACTER));
-        css::uno::Reference<css::text::XTextViewCursorSupplier> const cursorSupplier(
-            doc->getCurrentController(), css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::text::XTextViewCursorSupplier> const cursorSupplier(
+            doc->getCurrentController(), cpo::uno::UNO_QUERY_THROW);
         auto const cursor = cursorSupplier->getViewCursor();
         if (!cursor.is())
         {
@@ -1736,14 +1736,14 @@ public:
     }
 
 private:
-    css::uno::Reference<css::frame::XModel> model_;
+    cpo::uno::Reference<css::frame::XModel> model_;
 };
 }
 
 namespace scriptinterop::detail
 {
-css::uno::Reference<scriptinterop::XDocument>
-createDocument(css::uno::Reference<css::frame::XModel> const& model)
+cpo::uno::Reference<scriptinterop::XDocument>
+createDocument(cpo::uno::Reference<css::frame::XModel> const& model)
 {
     return new DocumentImpl(model);
 }

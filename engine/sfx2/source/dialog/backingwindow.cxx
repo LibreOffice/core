@@ -59,9 +59,9 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::document;
+using namespace ::cpo;
 using namespace ::cpo::uno;
+using namespace ::com::sun::star::document;
 
 class BrandImage final : public weld::CustomWidgetController
 {
@@ -490,7 +490,7 @@ void BackingWindow::GetFocus()
     InterimItemWindow::GetFocus();
 }
 
-void BackingWindow::setOwningFrame( const css::uno::Reference< css::frame::XFrame >& xFrame )
+void BackingWindow::setOwningFrame( const cpo::uno::Reference< css::frame::XFrame >& xFrame )
 {
     mxFrame = xFrame;
     if( ! mbInitControls )
@@ -505,7 +505,7 @@ void BackingWindow::setOwningFrame( const css::uno::Reference< css::frame::XFram
         mxDropTarget->setActive(true);
     }
 
-    css::uno::Reference<XFramesSupplier> xFramesSupplier(mxDesktopDispatchProvider, UNO_QUERY);
+    cpo::uno::Reference<XFramesSupplier> xFramesSupplier(mxDesktopDispatchProvider, UNO_QUERY);
     if (xFramesSupplier)
         xFramesSupplier->setActiveFrame(mxFrame);
 }

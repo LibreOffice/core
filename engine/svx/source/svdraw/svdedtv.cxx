@@ -1042,8 +1042,8 @@ bool SdrEditView::InsertObjectAtView(SdrObject* pObj, SdrPageView& rPV, SdrInser
         rPV.GetObjList()->InsertObject(pObj, SAL_MAX_SIZE);
     }
 
-    css::uno::Reference<lang::XServiceInfo> xServices(GetModel().getUnoModel(),
-                                                      css::uno::UNO_QUERY);
+    cpo::uno::Reference<lang::XServiceInfo> xServices(GetModel().getUnoModel(),
+                                                      cpo::uno::UNO_QUERY);
     if (xServices.is() && (xServices->supportsService(u"com.sun.star.sheet.SpreadsheetDocument"_ustr) ||
                            xServices->supportsService(u"com.sun.star.text.TextDocument"_ustr)))
     {

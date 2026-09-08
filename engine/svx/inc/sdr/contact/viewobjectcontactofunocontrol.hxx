@@ -22,7 +22,7 @@
 
 #include <svx/sdr/contact/viewobjectcontactofsdrobj.hxx>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <rtl/ref.hxx>
 
 namespace vcl { class Window; }
@@ -53,16 +53,16 @@ namespace sdr::contact {
         ViewObjectContactOfUnoControl( ObjectContact& _rObjectContact, ViewContactOfUnoControl& _rViewContact );
 
         /// returns the ->XControl instance belonging to the instance, creates it if necessary
-        css::uno::Reference< css::awt::XControl >
+        cpo::uno::Reference< css::awt::XControl >
                 getControl();
 
         /** retrieves a temporary XControl instance, whose parent is the given device
             @seealso SdrUnoObj::GetTemporaryControlForWindow
         */
-        static css::uno::Reference< css::awt::XControl >
+        static cpo::uno::Reference< css::awt::XControl >
             getTemporaryControlForWindow(
                 const vcl::Window& _rWindow,
-                css::uno::Reference< css::awt::XControlContainer >& _inout_ControlContainer,
+                cpo::uno::Reference< css::awt::XControlContainer >& _inout_ControlContainer,
                 const SdrUnoObj& _rUnoObject
             );
 

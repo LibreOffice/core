@@ -31,7 +31,7 @@
 #include <algorithm>
 #include <string_view>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 
@@ -104,7 +104,7 @@ namespace SvtDynamicMenuOptions
 {
 
 static Sequence< OUString > lcl_GetPropertyNames(
-        css::uno::Reference<css::container::XHierarchicalNameAccess> const & xHierarchyAccess,
+        cpo::uno::Reference<css::container::XHierarchicalNameAccess> const & xHierarchyAccess,
         sal_uInt32& nNewCount, sal_uInt32& nWizardCount );
 
 std::vector< SvtDynMenuEntry > GetMenu( EDynamicMenuType eMenu )
@@ -213,7 +213,7 @@ static void lcl_SortAndExpandPropertyNames( const Sequence< OUString >& lSource,
     @return     A list of configuration key names is returned.
 *//*-*****************************************************************************************************/
 static Sequence< OUString > lcl_GetPropertyNames(
-        css::uno::Reference<css::container::XHierarchicalNameAccess> const & xHierarchyAccess,
+        cpo::uno::Reference<css::container::XHierarchicalNameAccess> const & xHierarchyAccess,
         sal_uInt32& nNewCount, sal_uInt32& nWizardCount )
 {
     // First get ALL names of current existing list items in configuration!

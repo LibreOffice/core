@@ -33,6 +33,7 @@
 
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace ::xmloff::token;
 
 
@@ -166,7 +167,7 @@ void SvXMLAutoStylePoolP::exportStyleAttributes(
 }
 
 void SvXMLAutoStylePoolP::exportStyleContent(
-        const css::uno::Reference< css::xml::sax::XDocumentHandler > &,
+        const cpo::uno::Reference< css::xml::sax::XDocumentHandler > &,
         XmlStyleFamily nFamily,
         const std::vector< XMLPropertyState >& rProperties,
         const SvXMLExportPropertyMapper& rPropExp,

@@ -36,8 +36,8 @@ typedef InheritedHelperInterfaceWeakImpl< ov::msforms::XControl > ControlImpl_BA
 class ScVbaControl : public ControlImpl_BASE
 {
 private:
-    css::uno::Reference< css::lang::XEventListener > m_xEventListener;
-    css::uno::Reference< css::awt::XControl > m_xEmptyFormControl;
+    cpo::uno::Reference< css::lang::XEventListener > m_xEventListener;
+    cpo::uno::Reference< css::awt::XControl > m_xEmptyFormControl;
 protected:
     // awt control has nothing similar to Tag property of Mso controls,
     // whether it is necessary is another question
@@ -45,17 +45,17 @@ protected:
 
     OUString m_sLibraryAndCodeName;
     std::unique_ptr< ov::AbstractGeometryAttributes > mpGeometryHelper;
-    css::uno::Reference< css::beans::XPropertySet > m_xProps;
-    css::uno::Reference< cpo::uno::XInterface > m_xControl;
-    css::uno::Reference< css::frame::XModel > m_xModel;
+    cpo::uno::Reference< css::beans::XPropertySet > m_xProps;
+    cpo::uno::Reference< cpo::uno::XInterface > m_xControl;
+    cpo::uno::Reference< css::frame::XModel > m_xModel;
 
     /// @throws cpo::uno::RuntimeException
-    css::uno::Reference< css::awt::XVclWindowPeer > getWindowPeer();
+    cpo::uno::Reference< css::awt::XVclWindowPeer > getWindowPeer();
     void fireChangeEvent();
     void fireClickEvent();
 public:
-    ScVbaControl( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
-                    css::uno::Reference< cpo::uno::XInterface >  xControl, css::uno::Reference< css::frame::XModel > xModel, std::unique_ptr<ov::AbstractGeometryAttributes> pHelper );
+    ScVbaControl( const cpo::uno::Reference< ov::XHelperInterface >& xParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
+                    cpo::uno::Reference< cpo::uno::XInterface >  xControl, cpo::uno::Reference< css::frame::XModel > xModel, std::unique_ptr<ov::AbstractGeometryAttributes> pHelper );
     virtual ~ScVbaControl() override;
     // This class will own the helper, so make sure it is allocated from
     // the heap
@@ -80,7 +80,7 @@ public:
     virtual void Move( double Left, double Top, const cpo::uno::Any& Width, const cpo::uno::Any& Height ) override;
     virtual void fireEvent( const css::script::ScriptEvent& evt ) override;
 
-    virtual css::uno::Reference< cpo::uno::XInterface > getObject() override;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > getObject() override;
     virtual OUString getControlSource() override;
     virtual void setControlSource( const OUString& _controlsource ) override;
     virtual OUString getRowSource() override;
@@ -123,17 +123,17 @@ public:
 namespace ScVbaControlFactory
 {
     /// @throws cpo::uno::RuntimeException
-    css::uno::Reference< ov::msforms::XControl > createShapeControl(
-        const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
-        const css::uno::Reference< css::drawing::XControlShape >& xControlShape,
-        const css::uno::Reference< css::frame::XModel >& xModel );
+    cpo::uno::Reference< ov::msforms::XControl > createShapeControl(
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
+        const cpo::uno::Reference< css::drawing::XControlShape >& xControlShape,
+        const cpo::uno::Reference< css::frame::XModel >& xModel );
 
     /// @throws cpo::uno::RuntimeException
-    css::uno::Reference< ov::msforms::XControl > createUserformControl(
-        const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
-        const css::uno::Reference< css::awt::XControl >& xControl,
-        const css::uno::Reference< css::awt::XControl >& xDialog,
-        const css::uno::Reference< css::frame::XModel >& xModel,
+    cpo::uno::Reference< ov::msforms::XControl > createUserformControl(
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
+        const cpo::uno::Reference< css::awt::XControl >& xControl,
+        const cpo::uno::Reference< css::awt::XControl >& xDialog,
+        const cpo::uno::Reference< css::frame::XModel >& xModel,
         double fOffsetX, double fOffsetY );
 }
 

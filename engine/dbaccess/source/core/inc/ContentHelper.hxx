@@ -94,9 +94,9 @@ namespace dbaccess
     protected:
         ::comphelper::OInterfaceContainerHelper3<css::ucb::XContentEventListener> m_aContentListeners;
         PropertyChangeListenerContainer         m_aPropertyChangeListeners;
-        css::uno::Reference< cpo::uno::XInterface >
+        cpo::uno::Reference< cpo::uno::XInterface >
                                                 m_xParentContainer;
-        const css::uno::Reference< cpo::uno::XComponentContext >
+        const cpo::uno::Reference< cpo::uno::XComponentContext >
                                                 m_aContext;
         const ::connectivity::SQLError          m_aErrorHelper;
         TContentPtr                             m_pImpl;
@@ -118,8 +118,8 @@ namespace dbaccess
 
     public:
 
-        OContentHelper( const css::uno::Reference< cpo::uno::XComponentContext >& _xORB
-                        ,const css::uno::Reference< cpo::uno::XInterface >&   _xParentContainer
+        OContentHelper( const cpo::uno::Reference< cpo::uno::XComponentContext >& _xORB
+                        ,const cpo::uno::Reference< cpo::uno::XInterface >&   _xParentContainer
                         ,TContentPtr _pImpl
                     );
 
@@ -132,19 +132,19 @@ namespace dbaccess
         virtual OUString getImplementationName(  ) override;
 
         // XContent
-        virtual css::uno::Reference< css::ucb::XContentIdentifier > getIdentifier(  ) override ;
+        virtual cpo::uno::Reference< css::ucb::XContentIdentifier > getIdentifier(  ) override ;
         virtual OUString getContentType(  ) override ;
-        virtual void addContentEventListener( const css::uno::Reference< css::ucb::XContentEventListener >& Listener ) override ;
-        virtual void removeContentEventListener( const css::uno::Reference< css::ucb::XContentEventListener >& Listener ) override ;
+        virtual void addContentEventListener( const cpo::uno::Reference< css::ucb::XContentEventListener >& Listener ) override ;
+        virtual void removeContentEventListener( const cpo::uno::Reference< css::ucb::XContentEventListener >& Listener ) override ;
 
         // XCommandProcessor
         virtual sal_Int32 createCommandIdentifier(  ) override ;
-        virtual cpo::uno::Any execute( const css::ucb::Command& aCommand, sal_Int32 CommandId, const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment ) override ;
+        virtual cpo::uno::Any execute( const css::ucb::Command& aCommand, sal_Int32 CommandId, const cpo::uno::Reference< css::ucb::XCommandEnvironment >& Environment ) override ;
         virtual void abort( sal_Int32 CommandId ) override ;
 
         // XPropertiesChangeNotifier
-        virtual void addPropertiesChangeListener( const cpo::uno::Sequence< OUString >& PropertyNames, const css::uno::Reference< css::beans::XPropertiesChangeListener >& Listener ) override ;
-        virtual void removePropertiesChangeListener( const cpo::uno::Sequence< OUString >& PropertyNames, const css::uno::Reference< css::beans::XPropertiesChangeListener >& Listener ) override ;
+        virtual void addPropertiesChangeListener( const cpo::uno::Sequence< OUString >& PropertyNames, const cpo::uno::Reference< css::beans::XPropertiesChangeListener >& Listener ) override ;
+        virtual void removePropertiesChangeListener( const cpo::uno::Sequence< OUString >& PropertyNames, const cpo::uno::Reference< css::beans::XPropertiesChangeListener >& Listener ) override ;
 
         // XPropertyContainer
         virtual void addProperty( const OUString& Name, sal_Int16 Attributes, const cpo::uno::Any& DefaultValue ) override ;
@@ -154,17 +154,17 @@ namespace dbaccess
         virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
         // css::container::XChild
-        virtual css::uno::Reference< cpo::uno::XInterface > getParent(  ) override;
-        virtual void setParent( const css::uno::Reference< cpo::uno::XInterface >& Parent ) override;
+        virtual cpo::uno::Reference< cpo::uno::XInterface > getParent(  ) override;
+        virtual void setParent( const cpo::uno::Reference< cpo::uno::XInterface >& Parent ) override;
 
         // XRename
         virtual void rename( const OUString& newName ) override;
 
         const ContentProperties& getContentProperties() const { return m_pImpl->m_aProps; }
-        css::uno::Reference< css::sdbc::XRow >
+        cpo::uno::Reference< css::sdbc::XRow >
             getPropertyValues( const cpo::uno::Sequence< css::beans::Property >& rProperties );
 
-        const css::uno::Reference< cpo::uno::XComponentContext >& getContext() const { return m_aContext; }
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& getContext() const { return m_aContext; }
 
         const TContentPtr& getImpl() const { return m_pImpl; }
 

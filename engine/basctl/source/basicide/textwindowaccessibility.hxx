@@ -25,7 +25,7 @@
 #include <vcl/texteng.hxx>
 #include <vcl/textview.hxx>
 #include <vcl/window.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
 #include <com/sun/star/accessibility/XAccessibleMultiLineText.hpp>
@@ -150,10 +150,10 @@ private:
 
     virtual sal_Int64 getAccessibleChildCount() override;
 
-    virtual css::uno::Reference< css::accessibility::XAccessible >
+    virtual cpo::uno::Reference< css::accessibility::XAccessible >
     getAccessibleChild(sal_Int64 i) override;
 
-    virtual css::uno::Reference< css::accessibility::XAccessible >
+    virtual cpo::uno::Reference< css::accessibility::XAccessible >
     getAccessibleParent() override;
 
     virtual sal_Int64 getAccessibleIndexInParent() override;
@@ -165,14 +165,14 @@ private:
     virtual OUString getAccessibleName() override;
 
     virtual
-    css::uno::Reference< css::accessibility::XAccessibleRelationSet >
+    cpo::uno::Reference< css::accessibility::XAccessibleRelationSet >
     getAccessibleRelationSet() override;
 
     virtual sal_Int64 getAccessibleStateSet() override;
 
     virtual css::lang::Locale getLocale() override;
 
-    virtual css::uno::Reference< css::accessibility::XAccessible >
+    virtual cpo::uno::Reference< css::accessibility::XAccessible >
     getAccessibleAtPoint(css::awt::Point const & rPoint) override;
 
     virtual void grabFocus() override;
@@ -405,18 +405,18 @@ public:
 
     sal_Int32 retrieveParagraphLineWithCursor( Paragraph const * pParagraph );
 
-    css::uno::Reference< css::accessibility::XAccessibleRelationSet >
+    cpo::uno::Reference< css::accessibility::XAccessibleRelationSet >
     retrieveParagraphRelationSet( Paragraph const * pParagraph );
 
 private:
     virtual sal_Int64 getAccessibleChildCount() override;
 
-    virtual css::uno::Reference< css::accessibility::XAccessible >
+    virtual cpo::uno::Reference< css::accessibility::XAccessible >
     getAccessibleChild(sal_Int64 i) override;
 
     virtual ::sal_Int16 getAccessibleRole() override;
 
-    virtual css::uno::Reference< css::accessibility::XAccessible >
+    virtual cpo::uno::Reference< css::accessibility::XAccessible >
     getAccessibleAtPoint(css::awt::Point const & rPoint) override;
 
     virtual void FillAccessibleStateSet( sal_Int64& rStateSet ) override;
@@ -441,7 +441,7 @@ private:
     // Must be called with both the external (Solar) and internal mutex
     // locked:
     // Throws cpo::uno::RuntimeException.
-    css::uno::Reference< css::accessibility::XAccessible >
+    cpo::uno::Reference< css::accessibility::XAccessible >
     getAccessibleChild(Paragraphs::iterator const & rIt);
 
     // Must be called with both the external (Solar) and internal mutex

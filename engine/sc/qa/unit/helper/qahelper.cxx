@@ -56,8 +56,8 @@
 #include <com/sun/star/document/MacroExecMode.hpp>
 
 using namespace com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 FormulaGrammarSwitch::FormulaGrammarSwitch(ScDocument* pDoc, formula::FormulaGrammar::Grammar eGrammar) :
     mpDoc(pDoc), meOldGrammar(pDoc->GetGrammar())

@@ -10,7 +10,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <docmodel/color/ComplexColor.hxx>
 #include <comphelper/string.hxx>

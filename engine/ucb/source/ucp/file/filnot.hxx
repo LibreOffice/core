@@ -36,24 +36,24 @@ namespace fileaccess {
     {
     private:
         TaskManager* m_pMyShell;
-        css::uno::Reference< css::ucb::XContent > m_xCreatorContent;
-        css::uno::Reference< css::ucb::XContentIdentifier > m_xCreatorId;
-        css::uno::Reference< css::ucb::XContentIdentifier > m_xOldId;
-        std::vector< css::uno::Reference< css::ucb::XContentEventListener > > m_sListeners;
+        cpo::uno::Reference< css::ucb::XContent > m_xCreatorContent;
+        cpo::uno::Reference< css::ucb::XContentIdentifier > m_xCreatorId;
+        cpo::uno::Reference< css::ucb::XContentIdentifier > m_xOldId;
+        std::vector< cpo::uno::Reference< css::ucb::XContentEventListener > > m_sListeners;
     public:
 
         ContentEventNotifier(
             TaskManager* pMyShell,
-            const css::uno::Reference< css::ucb::XContent >& xCreatorContent,
-            const css::uno::Reference< css::ucb::XContentIdentifier >& xCreatorId,
-            std::vector< css::uno::Reference< css::ucb::XContentEventListener > >&& sListeners );
+            const cpo::uno::Reference< css::ucb::XContent >& xCreatorContent,
+            const cpo::uno::Reference< css::ucb::XContentIdentifier >& xCreatorId,
+            std::vector< cpo::uno::Reference< css::ucb::XContentEventListener > >&& sListeners );
 
         ContentEventNotifier(
             TaskManager* pMyShell,
-            const css::uno::Reference< css::ucb::XContent >& xCreatorContent,
-            const css::uno::Reference< css::ucb::XContentIdentifier >& xCreatorId,
-            const css::uno::Reference< css::ucb::XContentIdentifier >& xOldId,
-            std::vector< css::uno::Reference< css::ucb::XContentEventListener > >&& sListeners );
+            const cpo::uno::Reference< css::ucb::XContent >& xCreatorContent,
+            const cpo::uno::Reference< css::ucb::XContentIdentifier >& xCreatorId,
+            const cpo::uno::Reference< css::ucb::XContentIdentifier >& xOldId,
+            std::vector< cpo::uno::Reference< css::ucb::XContentEventListener > >&& sListeners );
 
         void notifyChildInserted( const OUString& aChildName ) const;
         void notifyDeleted() const;
@@ -65,12 +65,12 @@ namespace fileaccess {
     class PropertySetInfoChangeNotifier
     {
     private:
-        css::uno::Reference< css::ucb::XContent > m_xCreatorContent;
-        std::vector< css::uno::Reference< css::beans::XPropertySetInfoChangeListener > > m_sListeners;
+        cpo::uno::Reference< css::ucb::XContent > m_xCreatorContent;
+        std::vector< cpo::uno::Reference< css::beans::XPropertySetInfoChangeListener > > m_sListeners;
     public:
         PropertySetInfoChangeNotifier(
-            const css::uno::Reference< css::ucb::XContent >& xCreatorContent,
-            std::vector< css::uno::Reference< css::beans::XPropertySetInfoChangeListener > >&& sListeners );
+            const cpo::uno::Reference< css::ucb::XContent >& xCreatorContent,
+            std::vector< cpo::uno::Reference< css::beans::XPropertySetInfoChangeListener > >&& sListeners );
 
         void notifyPropertyAdded( const OUString & aPropertyName ) const;
         void notifyPropertyRemoved( const OUString & aPropertyName ) const;
@@ -78,16 +78,16 @@ namespace fileaccess {
 
 
     typedef std::unordered_map< OUString,
-                           std::vector< css::uno::Reference< css::beans::XPropertiesChangeListener > > >  ListenerMap;
+                           std::vector< cpo::uno::Reference< css::beans::XPropertiesChangeListener > > >  ListenerMap;
 
     class PropertyChangeNotifier
     {
     private:
-        css::uno::Reference< css::ucb::XContent > m_xCreatorContent;
+        cpo::uno::Reference< css::ucb::XContent > m_xCreatorContent;
         ListenerMap m_aListeners;
     public:
         PropertyChangeNotifier(
-            const css::uno::Reference< css::ucb::XContent >& xCreatorContent,
+            const cpo::uno::Reference< css::ucb::XContent >& xCreatorContent,
             ListenerMap&& pListeners );
 
         void notifyPropertyChanged(

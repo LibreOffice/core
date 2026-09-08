@@ -31,7 +31,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cpo/uno/Any.hxx>
 #include <cpo/uno/Exception.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/XComponentContext.hpp>
@@ -166,7 +166,7 @@ private:
     stoc::uriproc::UriReference m_base;
 };
 
-css::uno::Reference< css::uri::XUriReference > parseGeneric(
+cpo::uno::Reference< css::uri::XUriReference > parseGeneric(
     OUString const & scheme, std::u16string_view schemeSpecificPart)
 {
     size_t len = schemeSpecificPart.size();
@@ -284,7 +284,7 @@ class Factory:
 {
 public:
     explicit Factory(
-        css::uno::Reference< cpo::uno::XComponentContext > context):
+        cpo::uno::Reference< cpo::uno::XComponentContext > context):
         m_context(std::move(context)) {}
 
     Factory(const Factory&) = delete;
@@ -297,20 +297,20 @@ public:
     virtual cpo::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() override;
 
-    virtual css::uno::Reference< css::uri::XUriReference > SAL_CALL
+    virtual cpo::uno::Reference< css::uri::XUriReference > SAL_CALL
     parse(OUString const & uriReference) override;
 
-    virtual css::uno::Reference< css::uri::XUriReference > SAL_CALL
+    virtual cpo::uno::Reference< css::uri::XUriReference > SAL_CALL
     makeAbsolute(
-        css::uno::Reference< css::uri::XUriReference > const & baseUriReference,
-        css::uno::Reference< css::uri::XUriReference > const & uriReference,
+        cpo::uno::Reference< css::uri::XUriReference > const & baseUriReference,
+        cpo::uno::Reference< css::uri::XUriReference > const & uriReference,
         bool processAdditionalSpecialSegments,
         css::uri::RelativeUriExcessParentSegments excessParentSegments) override;
 
-    virtual css::uno::Reference< css::uri::XUriReference > SAL_CALL
+    virtual cpo::uno::Reference< css::uri::XUriReference > SAL_CALL
     makeRelative(
-        css::uno::Reference< css::uri::XUriReference > const & baseUriReference,
-        css::uno::Reference< css::uri::XUriReference > const & uriReference,
+        cpo::uno::Reference< css::uri::XUriReference > const & baseUriReference,
+        cpo::uno::Reference< css::uri::XUriReference > const & uriReference,
         bool preferAuthorityOverRelativePath,
         bool preferAbsoluteOverRelativePath,
         bool encodeRetainedSpecialSegments) override;
@@ -318,11 +318,11 @@ public:
 private:
     virtual ~Factory() override {}
 
-    css::uno::Reference< css::uri::XUriReference > clone(
-        css::uno::Reference< css::uri::XUriReference > const & uriReference)
+    cpo::uno::Reference< css::uri::XUriReference > clone(
+        cpo::uno::Reference< css::uri::XUriReference > const & uriReference)
     { return parse(uriReference->getUriReference()); }
 
-    css::uno::Reference< cpo::uno::XComponentContext > m_context;
+    cpo::uno::Reference< cpo::uno::XComponentContext > m_context;
 };
 
 OUString Factory::getImplementationName()
@@ -341,7 +341,7 @@ cpo::uno::Sequence< OUString > Factory::getSupportedServiceNames()
     return s;
 }
 
-css::uno::Reference< css::uri::XUriReference > Factory::parse(
+cpo::uno::Reference< css::uri::XUriReference > Factory::parse(
     OUString const & uriReference)
 {
     sal_Int32 fragment = uriReference.indexOf('#');
@@ -377,12 +377,12 @@ css::uno::Reference< css::uri::XUriReference > Factory::parse(
     } else {
         schemeSpecificPart = uriReference.copy(0, fragment);
     }
-    css::uno::Reference< css::uri::XUriSchemeParser > parser;
+    cpo::uno::Reference< css::uri::XUriSchemeParser > parser;
     if (!serviceName.isEmpty()) {
-        css::uno::Reference< css::lang::XMultiComponentFactory > factory(
+        cpo::uno::Reference< css::lang::XMultiComponentFactory > factory(
             m_context->getServiceManager());
         if (factory.is()) {
-            css::uno::Reference< cpo::uno::XInterface > service;
+            cpo::uno::Reference< cpo::uno::XInterface > service;
             try {
                 service = factory->createInstanceWithContext(
                     serviceName, m_context);
@@ -396,11 +396,11 @@ css::uno::Reference< css::uri::XUriReference > Factory::parse(
                     anyEx);
             }
             if (service.is()) {
-                parser.set( service, css::uno::UNO_QUERY_THROW);
+                parser.set( service, cpo::uno::UNO_QUERY_THROW);
             }
         }
     }
-    css::uno::Reference< css::uri::XUriReference > uriRef(
+    cpo::uno::Reference< css::uri::XUriReference > uriRef(
         parser.is()
         ? parser->parse(scheme, schemeSpecificPart)
         : parseGeneric(scheme, schemeSpecificPart));
@@ -410,9 +410,9 @@ css::uno::Reference< css::uri::XUriReference > Factory::parse(
     return uriRef;
 }
 
-css::uno::Reference< css::uri::XUriReference > Factory::makeAbsolute(
-    css::uno::Reference< css::uri::XUriReference > const & baseUriReference,
-    css::uno::Reference< css::uri::XUriReference > const & uriReference,
+cpo::uno::Reference< css::uri::XUriReference > Factory::makeAbsolute(
+    cpo::uno::Reference< css::uri::XUriReference > const & baseUriReference,
+    cpo::uno::Reference< css::uri::XUriReference > const & uriReference,
     bool processAdditionalSpecialSegments,
     css::uri::RelativeUriExcessParentSegments excessParentSegments)
 {
@@ -569,9 +569,9 @@ css::uno::Reference< css::uri::XUriReference > Factory::makeAbsolute(
     }
 }
 
-css::uno::Reference< css::uri::XUriReference > Factory::makeRelative(
-    css::uno::Reference< css::uri::XUriReference > const & baseUriReference,
-    css::uno::Reference< css::uri::XUriReference > const & uriReference,
+cpo::uno::Reference< css::uri::XUriReference > Factory::makeRelative(
+    cpo::uno::Reference< css::uri::XUriReference > const & baseUriReference,
+    cpo::uno::Reference< css::uri::XUriReference > const & uriReference,
     bool preferAuthorityOverRelativePath,
     bool preferAbsoluteOverRelativePath,
     bool encodeRetainedSpecialSegments)

@@ -48,7 +48,7 @@
 #include <comphelper/kit.hxx>
 #include <comphelper/propertyvalue.hxx>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
@@ -57,7 +57,7 @@ using namespace ::com::sun::star;
 
 // For End Line Controller
 
-SvxLineStyleToolBoxControl::SvxLineStyleToolBoxControl( const css::uno::Reference<cpo::uno::XComponentContext>& rContext )
+SvxLineStyleToolBoxControl::SvxLineStyleToolBoxControl( const cpo::uno::Reference<cpo::uno::XComponentContext>& rContext )
     : svt::PopupWindowController( rContext, nullptr, OUString() )
 {
     addStatusListener(u".uno:LineDash"_ustr);
@@ -225,7 +225,7 @@ namespace {
 class SvxLineEndToolBoxControl final : public svt::PopupWindowController
 {
 public:
-    explicit SvxLineEndToolBoxControl( const css::uno::Reference<cpo::uno::XComponentContext>& rContext );
+    explicit SvxLineEndToolBoxControl( const cpo::uno::Reference<cpo::uno::XComponentContext>& rContext );
 
     // XInitialization
     virtual void initialize( const cpo::uno::Sequence<cpo::uno::Any>& rArguments ) override;
@@ -466,7 +466,7 @@ void SvxLineEndWindow::statusChanged( const css::frame::FeatureStateEvent& rEven
         return;
 
     // The list of line ends (LineEndList) has changed
-    css::uno::Reference< cpo::uno::XWeak > xWeak;
+    cpo::uno::Reference< cpo::uno::XWeak > xWeak;
     if ( rEvent.State >>= xWeak )
     {
         mpLineEndList.set( static_cast< XLineEndList* >( xWeak.get() ) );
@@ -477,7 +477,7 @@ void SvxLineEndWindow::statusChanged( const css::frame::FeatureStateEvent& rEven
     }
 }
 
-SvxLineEndToolBoxControl::SvxLineEndToolBoxControl( const css::uno::Reference<cpo::uno::XComponentContext>& rContext )
+SvxLineEndToolBoxControl::SvxLineEndToolBoxControl( const cpo::uno::Reference<cpo::uno::XComponentContext>& rContext )
     : svt::PopupWindowController( rContext, nullptr, OUString() )
 {
 }

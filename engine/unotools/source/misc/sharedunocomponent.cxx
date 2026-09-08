@@ -32,9 +32,9 @@ namespace utl
 {
 
     using ::cpo::uno::XInterface;
-    using ::com::sun::star::uno::Reference;
+    using ::cpo::uno::Reference;
     using ::cpo::uno::Exception;
-    using ::com::sun::star::uno::UNO_QUERY;
+    using ::cpo::uno::UNO_QUERY;
     using ::com::sun::star::lang::EventObject;
     using ::com::sun::star::util::XCloseable;
     using ::com::sun::star::util::XCloseListener;

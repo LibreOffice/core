@@ -18,7 +18,7 @@ namespace apitest
 class OOO_DLLPUBLIC_TEST XCellRangesQuery
 {
 public:
-    virtual css::uno::Reference<cpo::uno::XInterface> init() = 0;
+    virtual cpo::uno::Reference<cpo::uno::XInterface> init() = 0;
 
     //Testcases
     void testQueryColumnDifference();

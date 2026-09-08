@@ -150,8 +150,8 @@ class ScXMLImport: public SvXMLImport
 
     std::unique_ptr<XMLNumberFormatAttributesExportHelper> pNumberFormatAttributesExportHelper;
     std::unique_ptr<ScMyStyleNumberFormats> pStyleNumberFormats;
-    css::uno::Reference <css::util::XNumberFormats> xNumberFormats;
-    css::uno::Reference <css::util::XNumberFormatTypes> xNumberFormatTypes;
+    cpo::uno::Reference <css::util::XNumberFormats> xNumberFormats;
+    cpo::uno::Reference <css::util::XNumberFormatTypes> xNumberFormatTypes;
 
     rtl::Reference<ScCellRangesObj> mxSheetCellRanges; // css::sheet::XSheetCellRangeContainer
 
@@ -172,13 +172,13 @@ protected:
     // This method is called after the namespace map has been updated, but
     // before a context for the current element has been pushed.
     virtual SvXMLImportContext *CreateFastContext( sal_Int32 nElement,
-        const ::css::uno::Reference< ::css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const ::cpo::uno::Reference< ::css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     virtual XMLShapeImportHelper* CreateShapeImport() override;
 
 public:
     ScXMLImport(
-        const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& rContext,
         OUString const & implementationName, SvXMLImportFlags nImportFlag,
         const cpo::uno::Sequence< OUString > & sSupportedServiceNames = {});
 
@@ -257,7 +257,7 @@ public:
     ScMyStylesImportHelper* GetStylesImportHelper() { return pStylesImportHelper.get(); }
     sal_Int32 SetCurrencySymbol(const sal_Int32 nKey, std::u16string_view rCurrency);
     bool IsCurrencySymbol(const sal_Int32 nNumberFormat, std::u16string_view sCurrencySymbol, std::u16string_view sBankSymbol);
-    void SetType(const css::uno::Reference <css::beans::XPropertySet>& rProperties,
+    void SetType(const cpo::uno::Reference <css::beans::XPropertySet>& rProperties,
         sal_Int32& rNumberFormat,
         const sal_Int16 nCellType,
         std::u16string_view rCurrency);
@@ -281,7 +281,7 @@ public:
     void SetStylesToRangesFinished();
 
     // XImporter
-    virtual void SAL_CALL setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
+    virtual void SAL_CALL setTargetDocument( const cpo::uno::Reference< css::lang::XComponent >& xDoc ) override;
 
     virtual void SAL_CALL startDocument() override;
     virtual void SAL_CALL endDocument() override;

@@ -54,9 +54,9 @@ class OLEHandler : public LoggedProperties
 
     css::text::WrapTextMode     m_nWrapMode;
 
-    css::uno::Reference<css::drawing::XShape> m_xShape;
+    cpo::uno::Reference<css::drawing::XShape> m_xShape;
 
-    css::uno::Reference<css::io::XInputStream> m_xInputStream;
+    cpo::uno::Reference<css::io::XInputStream> m_xInputStream;
     DomainMapper& m_rDomainMapper;
 
     // Properties
@@ -67,14 +67,14 @@ public:
     explicit OLEHandler(DomainMapper& rDomainMapper);
     virtual ~OLEHandler() override;
 
-    const css::uno::Reference<css::drawing::XShape>& getShape() const { return m_xShape; };
+    const cpo::uno::Reference<css::drawing::XShape>& getShape() const { return m_xShape; };
 
     bool isOLEObject() const { return m_xInputStream.is(); }
 
     /// In case of a valid CLSID, import the native data to the previously created empty OLE object.
-    void importStream(const css::uno::Reference<cpo::uno::XComponentContext>& xComponentContext,
-                      const css::uno::Reference<css::text::XTextDocument>& xTextDocument,
-                      const css::uno::Reference<css::text::XTextContent>& xOLE);
+    void importStream(const cpo::uno::Reference<cpo::uno::XComponentContext>& xComponentContext,
+                      const cpo::uno::Reference<css::text::XTextDocument>& xTextDocument,
+                      const cpo::uno::Reference<css::text::XTextContent>& xOLE);
 
     /// Get the CLSID of the OLE object, in case we can find one based on m_sProgId.
     OUString getCLSID() const;
@@ -86,7 +86,7 @@ public:
     OUString copyOLEOStream(rtl::Reference<SwXTextDocument> const& xTextDocument);
 
     css::awt::Size getSize() const;
-    css::uno::Reference<css::graphic::XGraphic> getReplacement() const;
+    cpo::uno::Reference<css::graphic::XGraphic> getReplacement() const;
 
 };
 }

@@ -126,10 +126,10 @@ namespace connectivity
 
     public:
         OTableHelper(   sdbcx::OCollection* _pTables,
-                        const css::uno::Reference< css::sdbc::XConnection >& _xConnection,
+                        const cpo::uno::Reference< css::sdbc::XConnection >& _xConnection,
                         bool _bCase);
         OTableHelper(   sdbcx::OCollection* _pTables,
-                        const css::uno::Reference< css::sdbc::XConnection >& _xConnection,
+                        const cpo::uno::Reference< css::sdbc::XConnection >& _xConnection,
                         bool _bCase,
                         const OUString& Name,
                         const OUString& Type,
@@ -138,14 +138,14 @@ namespace connectivity
                         const OUString& CatalogName = OUString()
             );
 
-        virtual css::uno::Reference< css::sdbc::XDatabaseMetaData> getMetaData() const override;
-        css::uno::Reference< css::sdbc::XConnection> const & getConnection() const;
+        virtual cpo::uno::Reference< css::sdbc::XDatabaseMetaData> getMetaData() const override;
+        cpo::uno::Reference< css::sdbc::XConnection> const & getConnection() const;
 
         // XRename
         virtual void rename( const OUString& newName ) override;
 
         // XAlterTable
-        virtual void alterColumnByIndex( sal_Int32 index, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
+        virtual void alterColumnByIndex( sal_Int32 index, const cpo::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
         // XNamed
         virtual OUString getName() override;
 
@@ -156,10 +156,10 @@ namespace connectivity
         std::shared_ptr<sdbcx::KeyProperties> getKeyProperties(const OUString& _sName) const;
         void addKey(const OUString& _sName,const std::shared_ptr<sdbcx::KeyProperties>& _aKeyProperties);
 
-        css::uno::Reference< css::sdb::tools::XTableRename> const &      getRenameService() const;
-        css::uno::Reference< css::sdb::tools::XTableAlteration> const &  getAlterService() const;
-        css::uno::Reference< css::sdb::tools::XKeyAlteration> const &    getKeyService() const;
-        css::uno::Reference< css::sdb::tools::XIndexAlteration> const &  getIndexService() const;
+        cpo::uno::Reference< css::sdb::tools::XTableRename> const &      getRenameService() const;
+        cpo::uno::Reference< css::sdb::tools::XTableAlteration> const &  getAlterService() const;
+        cpo::uno::Reference< css::sdb::tools::XKeyAlteration> const &    getKeyService() const;
+        cpo::uno::Reference< css::sdb::tools::XIndexAlteration> const &  getIndexService() const;
     };
 }
 #endif // INCLUDED_CONNECTIVITY_TTABLEHELPER_HXX

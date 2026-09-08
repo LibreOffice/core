@@ -36,6 +36,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::lang;
+using namespace ::cpo;
 
 constexpr OUString FILTER_OPTIONS_NAME = u"FilterOptions"_ustr;
 

@@ -20,7 +20,7 @@
 #include "PageColumnControl.hxx"
 #include <vcl/toolbox.hxx>
 
-PageColumnPopup::PageColumnPopup(const css::uno::Reference<cpo::uno::XComponentContext>& rContext)
+PageColumnPopup::PageColumnPopup(const cpo::uno::Reference<cpo::uno::XComponentContext>& rContext)
     : PopupWindowController(rContext, nullptr, OUString())
 {
 }

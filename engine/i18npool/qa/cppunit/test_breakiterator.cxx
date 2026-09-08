@@ -22,6 +22,7 @@
 #include <string_view>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 class TestBreakIterator : public test::BootstrapFixtureBase
 {

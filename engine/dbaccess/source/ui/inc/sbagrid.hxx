@@ -50,7 +50,7 @@ namespace dbaui
         StatusMultiplexerArray      m_aStatusMultiplexer;
 
     public:
-        SbaXGridControl(const css::uno::Reference< cpo::uno::XComponentContext >&);
+        SbaXGridControl(const cpo::uno::Reference< cpo::uno::XComponentContext >&);
         virtual ~SbaXGridControl() override;
 
         // UNO
@@ -67,13 +67,13 @@ namespace dbaui
 
         // css::frame::XDispatch
         virtual void dispatch(const css::util::URL& aURL, const cpo::uno::Sequence< css::beans::PropertyValue >& aArgs) override;
-        virtual void addStatusListener(const css::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) override;
-        virtual void removeStatusListener(const css::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) override;
+        virtual void addStatusListener(const cpo::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) override;
+        virtual void removeStatusListener(const cpo::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) override;
 
         // css::lang::XComponent
         virtual void dispose() override;
 
-        virtual void createPeer(const css::uno::Reference< css::awt::XToolkit > & rToolkit, const css::uno::Reference< css::awt::XWindowPeer > & rParentPeer) override;
+        virtual void createPeer(const cpo::uno::Reference< css::awt::XToolkit > & rToolkit, const cpo::uno::Reference< css::awt::XWindowPeer > & rParentPeer) override;
 
     protected:
         virtual rtl::Reference<FmXGridPeer> imp_CreatePeer(vcl::Window* pParent) override;
@@ -89,7 +89,7 @@ namespace dbaui
             SbaURLCompare>  m_aStatusListeners;
 
     public:
-        SbaXGridPeer(const css::uno::Reference< cpo::uno::XComponentContext >&);
+        SbaXGridPeer(const cpo::uno::Reference< cpo::uno::XComponentContext >&);
         virtual ~SbaXGridPeer() override;
 
         // UNO
@@ -101,18 +101,18 @@ namespace dbaui
 
         // css::frame::XDispatch
         virtual void dispatch(const css::util::URL& aURL, const cpo::uno::Sequence< css::beans::PropertyValue >& aArgs) override;
-        virtual void addStatusListener(const css::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) override;
-        virtual void removeStatusListener(const css::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) override;
+        virtual void addStatusListener(const cpo::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) override;
+        virtual void removeStatusListener(const cpo::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) override;
 
         // css::frame::XDispatchProvider
-        virtual css::uno::Reference< css::frame::XDispatch >  queryDispatch(const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags) override;
+        virtual cpo::uno::Reference< css::frame::XDispatch >  queryDispatch(const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags) override;
 
         // css::lang::XComponent
         virtual void dispose() override;
 
     private:
         virtual VclPtr<FmGridControl>  imp_CreateControl(vcl::Window* pParent, WinBits nStyle) override;
-        void NotifyStatusChanged(const css::util::URL& aUrl, const css::uno::Reference< css::frame::XStatusListener > & xControl);
+        void NotifyStatusChanged(const css::util::URL& aUrl, const cpo::uno::Reference< css::frame::XStatusListener > & xControl);
 
         // for any execution of XDispatch::dispatch
         struct DispatchArgs
@@ -198,7 +198,7 @@ namespace dbaui
         bool                          m_bActivatingForDrop;
 
     public:
-        SbaGridControl(css::uno::Reference< cpo::uno::XComponentContext > const & _rM, Window* pParent, FmXGridPeer* _pPeer, WinBits nBits);
+        SbaGridControl(cpo::uno::Reference< cpo::uno::XComponentContext > const & _rM, Window* pParent, FmXGridPeer* _pPeer, WinBits nBits);
         virtual ~SbaGridControl() override;
         virtual void dispose() override;
 
@@ -253,10 +253,10 @@ namespace dbaui
         virtual void onColumnChange() override;
 
         // get a fields property set from a model pos
-        css::uno::Reference< css::beans::XPropertySet >  getField(sal_uInt16 nModelPos);
+        cpo::uno::Reference< css::beans::XPropertySet >  getField(sal_uInt16 nModelPos);
 
         // get my data source
-        css::uno::Reference< css::beans::XPropertySet >  getDataSource() const;
+        cpo::uno::Reference< css::beans::XPropertySet >  getDataSource() const;
 
         // drag events
         void DoColumnDrag(sal_uInt16 nColumnPos);

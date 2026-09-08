@@ -35,8 +35,8 @@
 #include <comphelper/sequence.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
@@ -303,7 +303,7 @@ void StdTabController::activateTabOrder(  )
     Reference< XControl >  xC( mxControlContainer, UNO_QUERY );
     Reference< XVclContainerPeer >  xVclContainerPeer;
     if ( xC.is() )
-        xVclContainerPeer.set(xC->getPeer(), css::uno::UNO_QUERY);
+        xVclContainerPeer.set(xC->getPeer(), cpo::uno::UNO_QUERY);
     if ( !xC.is() || !xVclContainerPeer.is() )
         return;
 

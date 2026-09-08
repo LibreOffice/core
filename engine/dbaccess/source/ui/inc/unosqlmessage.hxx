@@ -36,7 +36,7 @@ class OSQLMessageDialog final
     // </properties>
 
 public:
-    OSQLMessageDialog(const css::uno::Reference< cpo::uno::XComponentContext >& _rxORB);
+    OSQLMessageDialog(const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxORB);
 
     // XTypeProvider
     virtual cpo::uno::Sequence<sal_Int8> getImplementationId(  ) override;
@@ -46,7 +46,7 @@ public:
     virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
     // XPropertySet
-    virtual css::uno::Reference<css::beans::XPropertySetInfo>  getPropertySetInfo() override;
+    virtual cpo::uno::Reference<css::beans::XPropertySetInfo>  getPropertySetInfo() override;
     virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
     // OPropertyArrayUsageHelper
@@ -60,7 +60,7 @@ private:
     virtual bool convertFastPropertyValue( cpo::uno::Any& _rConvertedValue, cpo::uno::Any& _rOldValue, sal_Int32 _nHandle, const cpo::uno::Any& _rValue) override;
 
     // OGenericUnoDialog overridables
-    virtual std::unique_ptr<weld::DialogController> createDialog(const css::uno::Reference<css::awt::XWindow>& rParent) override;
+    virtual std::unique_ptr<weld::DialogController> createDialog(const cpo::uno::Reference<css::awt::XWindow>& rParent) override;
 };
 
 }   // namespace dbaui

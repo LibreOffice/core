@@ -100,6 +100,7 @@
 #include <SwXTextDefaults.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace oox;
 
 namespace writerfilter::dmapper{

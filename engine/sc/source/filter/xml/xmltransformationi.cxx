@@ -17,6 +17,7 @@
 #include <document.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace xmloff::token;
 
 ScXMLTransformationsContext::ScXMLTransformationsContext(ScXMLImport& rImport)

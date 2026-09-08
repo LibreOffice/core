@@ -38,7 +38,7 @@ namespace abp
         OUString m_sDataSourceName;
 
     public:
-        explicit OABSPilotUno(const css::uno::Reference< cpo::uno::XComponentContext >& _rxORB);
+        explicit OABSPilotUno(const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxORB);
 
     private:
         // XServiceInfo
@@ -46,7 +46,7 @@ namespace abp
         virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
         // XPropertySet
-        virtual css::uno::Reference< css::beans::XPropertySetInfo>  getPropertySetInfo() override;
+        virtual cpo::uno::Reference< css::beans::XPropertySetInfo>  getPropertySetInfo() override;
         virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
         // OPropertyArrayUsageHelper
@@ -60,7 +60,7 @@ namespace abp
 
         using svt::OGenericUnoDialog::execute;
         // OGenericUnoDialog overridables
-        virtual std::unique_ptr<weld::DialogController> createDialog(const css::uno::Reference<css::awt::XWindow>& rParent) override;
+        virtual std::unique_ptr<weld::DialogController> createDialog(const cpo::uno::Reference<css::awt::XWindow>& rParent) override;
         virtual void executedDialog(sal_Int16 _nExecutionResult) override;
     };
 

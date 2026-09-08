@@ -75,9 +75,9 @@ namespace connectivity::sdbcx
         // ::cppu::OComponentHelper
         virtual void disposing() override;
         // XPropertySet
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+        virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
         // XUsersSupplier
-        virtual css::uno::Reference< css::container::XNameAccess > getUsers(  ) override;
+        virtual cpo::uno::Reference< css::container::XNameAccess > getUsers(  ) override;
         // XAuthorizable
         virtual sal_Int32 getPrivileges( const OUString& objName, sal_Int32 objType ) override;
         virtual sal_Int32 getGrantablePrivileges( const OUString& objName, sal_Int32 objType ) override;

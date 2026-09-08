@@ -26,6 +26,7 @@
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 
 // form controls use other property name as the remaining OOo API

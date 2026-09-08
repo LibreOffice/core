@@ -24,7 +24,7 @@ using namespace com::sun::star;
 namespace vcl
 {
 bool ImportPDF(SvStream& rStream, Graphic& rGraphic, sal_Int32 nPageIndex,
-               const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler,
+               const cpo::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler,
                bool& bEncrypted)
 {
     BinaryDataContainer aDataContainer
@@ -309,7 +309,7 @@ findLinks(const std::unique_ptr<vcl::pdf::PDFiumPage>& pPage,
 } // end anonymous namespace
 
 size_t ImportPDFUnloaded(SvStream& rStream, std::vector<PDFGraphicResult>& rGraphics,
-                         const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler,
+                         const cpo::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler,
                          const OUString& rPassword)
 {
     bool bEncrypted;
@@ -387,7 +387,7 @@ size_t ImportPDFUnloaded(SvStream& rStream, std::vector<PDFGraphicResult>& rGrap
 }
 
 size_t ImportPDFUnloaded(const OUString& rURL, std::vector<PDFGraphicResult>& rGraphics,
-                         const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler,
+                         const cpo::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler,
                          const OUString& rPassword)
 {
     std::unique_ptr<SvStream> xStream(

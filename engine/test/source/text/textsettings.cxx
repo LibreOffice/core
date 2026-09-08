@@ -18,18 +18,18 @@
 
 namespace
 {
-bool extstsProperty(css::uno::Reference<css::beans::XPropertySet> const& rxPropertySet,
+bool extstsProperty(cpo::uno::Reference<css::beans::XPropertySet> const& rxPropertySet,
                     OUString const& rPropertyName)
 {
-    css::uno::Reference<css::beans::XPropertySetInfo> xPropertySetInfo(
+    cpo::uno::Reference<css::beans::XPropertySetInfo> xPropertySetInfo(
         rxPropertySet->getPropertySetInfo());
     return xPropertySetInfo->hasPropertyByName(rPropertyName);
 }
 
-bool isPropertyReadOnly(css::uno::Reference<css::beans::XPropertySet> const& rxPropertySet,
+bool isPropertyReadOnly(cpo::uno::Reference<css::beans::XPropertySet> const& rxPropertySet,
                         std::u16string_view rPropertyName)
 {
-    css::uno::Reference<css::beans::XPropertySetInfo> xPropertySetInfo(
+    cpo::uno::Reference<css::beans::XPropertySetInfo> xPropertySetInfo(
         rxPropertySet->getPropertySetInfo());
     const cpo::uno::Sequence<css::beans::Property> xProperties = xPropertySetInfo->getProperties();
 
@@ -42,7 +42,7 @@ bool isPropertyReadOnly(css::uno::Reference<css::beans::XPropertySet> const& rxP
     return false;
 }
 // [property] string PrinterName;
-void testPrinterName(css::uno::Reference<css::beans::XPropertySet> const& rxSettings)
+void testPrinterName(cpo::uno::Reference<css::beans::XPropertySet> const& rxSettings)
 {
     static constexpr OUString rPropertyName(u"PrinterName"_ustr);
 
@@ -65,7 +65,7 @@ void testPrinterName(css::uno::Reference<css::beans::XPropertySet> const& rxSett
 }
 
 // [optional, property] short PrinterIndependentLayout;
-void testPrinterIndependentLayout(css::uno::Reference<css::beans::XPropertySet> const& rxSettings)
+void testPrinterIndependentLayout(cpo::uno::Reference<css::beans::XPropertySet> const& rxSettings)
 {
     static constexpr OUString rPropertyName(u"PrinterIndependentLayout"_ustr);
 
@@ -89,7 +89,7 @@ void testPrinterIndependentLayout(css::uno::Reference<css::beans::XPropertySet> 
 }
 
 // [optional, property] com::sun::star::i18n::XForbiddenCharacters ForbiddenCharacters;
-void testForbiddenCharacters(css::uno::Reference<css::beans::XPropertySet> const& rxSettings)
+void testForbiddenCharacters(cpo::uno::Reference<css::beans::XPropertySet> const& rxSettings)
 {
     static constexpr OUString rPropertyName(u"ForbiddenCharacters"_ustr);
 
@@ -99,7 +99,7 @@ void testForbiddenCharacters(css::uno::Reference<css::beans::XPropertySet> const
     CPPUNIT_ASSERT_MESSAGE("Property is read-only but shouldn't be",
                            !isPropertyReadOnly(rxSettings, rPropertyName));
 
-    css::uno::Reference<css::i18n::XForbiddenCharacters> aValue_Get;
+    cpo::uno::Reference<css::i18n::XForbiddenCharacters> aValue_Get;
 
     CPPUNIT_ASSERT_MESSAGE("Unable to get PropertyValue",
                            rxSettings->getPropertyValue(rPropertyName) >>= aValue_Get);
@@ -112,7 +112,7 @@ namespace apitest
 TextSettings::~TextSettings() {}
 void TextSettings::testSettingsProperties()
 {
-    css::uno::Reference<css::beans::XPropertySet> xSettings(init(), css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::beans::XPropertySet> xSettings(init(), cpo::uno::UNO_QUERY_THROW);
 
     testForbiddenCharacters(xSettings);
     //testShortOptionalProperty(xSettings, "LinkUpdateMode");

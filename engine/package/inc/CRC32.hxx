@@ -20,7 +20,7 @@
 #define INCLUDED_PACKAGE_INC_CRC32_HXX
 
 #include <cpo/uno/Sequence.h>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 
 namespace com::sun::star {
     namespace io { class XInputStream; }
@@ -32,7 +32,7 @@ public:
     CRC32();
 
     /// @throws cpo::uno::RuntimeException
-    sal_Int64 updateStream (css::uno::Reference < css::io::XInputStream > const & xStream);
+    sal_Int64 updateStream (cpo::uno::Reference < css::io::XInputStream > const & xStream);
     /// @throws cpo::uno::RuntimeException
     void updateSegment(const cpo::uno::Sequence< sal_Int8 > &b, sal_Int32 len);
     void updateSegment(const sal_Int8* b, sal_Int32 len);

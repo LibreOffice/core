@@ -54,7 +54,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::logging;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::unopkg;
 
@@ -561,8 +561,8 @@ extern "C" int unopkg_main()
         logger->log(LogLevel::INFO, "$1$ done.", APP_NAME);
         //Force to release all bridges which connect us to the child processes
         dp_misc::disposeBridges(xLocalComponentContext);
-        css::uno::Reference<css::lang::XComponent>(
-            xLocalComponentContext, css::uno::UNO_QUERY_THROW)->dispose();
+        cpo::uno::Reference<css::lang::XComponent>(
+            xLocalComponentContext, cpo::uno::UNO_QUERY_THROW)->dispose();
         return 0;
     }
     catch (const ucb::CommandFailedException &e)
@@ -596,8 +596,8 @@ extern "C" int unopkg_main()
         logFatal(logger.get(), LogLevel::SEVERE, u"$1$ failed."_ustr, u"" APP_NAME ""_ustr);
     dp_misc::disposeBridges(xLocalComponentContext);
     if (xLocalComponentContext.is()) {
-        css::uno::Reference<css::lang::XComponent>(
-            xLocalComponentContext, css::uno::UNO_QUERY_THROW)->dispose();
+        cpo::uno::Reference<css::lang::XComponent>(
+            xLocalComponentContext, cpo::uno::UNO_QUERY_THROW)->dispose();
     }
     return 1;
 }

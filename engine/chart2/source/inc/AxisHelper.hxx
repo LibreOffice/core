@@ -40,14 +40,14 @@ class Diagram;
 class AxisHelper
 {
 public:
-    static css::uno::Reference< css::chart2::XScaling > createLinearScaling();
-    static css::uno::Reference< css::chart2::XScaling > createLogarithmicScaling( double fBase = 10.0 );
+    static cpo::uno::Reference< css::chart2::XScaling > createLinearScaling();
+    static cpo::uno::Reference< css::chart2::XScaling > createLogarithmicScaling( double fBase = 10.0 );
 
     static css::chart2::ScaleData createDefaultScale();
 
     static void removeExplicitScaling( css::chart2::ScaleData& rScaleData );
 
-    static bool isLogarithmic( const css::uno::Reference< css::chart2::XScaling >& xScaling );
+    static bool isLogarithmic( const cpo::uno::Reference< css::chart2::XScaling >& xScaling );
 
     static void checkDateAxis( css::chart2::ScaleData& rScale, ExplicitCategoriesProvider* pExplicitCategoriesProvider, bool bChartTypeAllowsDateAxis );
     static css::chart2::ScaleData getDateCheckedScale( const rtl::Reference< ::chart::Axis >& xAxis, ChartModel& rModel );
@@ -61,7 +61,7 @@ public:
     static rtl::Reference< ::chart::Axis >
         createAxis( sal_Int32 nDimensionIndex, bool bMainAxis
                 , const rtl::Reference< ::chart::Diagram >& xDiagram
-                , const css::uno::Reference< cpo::uno::XComponentContext >& xContext
+                , const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext
                 , ReferenceSizeProvider * pRefSizeProvider = nullptr );
 
     static rtl::Reference< ::chart::Axis >
@@ -69,12 +69,12 @@ public:
             sal_Int32 nDimensionIndex
             , sal_Int32 nAxisIndex // 0==main or 1==secondary axis
             , const rtl::Reference< ::chart::BaseCoordinateSystem >& xCooSys
-            , const css::uno::Reference< cpo::uno::XComponentContext > & xContext
+            , const cpo::uno::Reference< cpo::uno::XComponentContext > & xContext
             , ReferenceSizeProvider * pRefSizeProvider = nullptr );
 
     static void showAxis( sal_Int32 nDimensionIndex, bool bMainAxis
                 , const rtl::Reference< ::chart::Diagram >& xDiagram
-                , const css::uno::Reference< cpo::uno::XComponentContext >& xContext
+                , const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext
                 , ReferenceSizeProvider * pRefSizeProvider = nullptr );
 
     static void showGrid( sal_Int32 nDimensionIndex, sal_Int32 nCooSysIndex, bool bMainGrid
@@ -179,7 +179,7 @@ public:
     static bool changeVisibilityOfAxes( const rtl::Reference< ::chart::Diagram>& xDiagram
                         , const cpo::uno::Sequence< bool >& rOldExistenceList
                         , const cpo::uno::Sequence< bool >& rNewExistenceList
-                        , const css::uno::Reference< cpo::uno::XComponentContext >& xContext
+                        , const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext
                         , ReferenceSizeProvider * pRefSizeProvider );
 
     static bool shouldAxisBeDisplayed( const rtl::Reference< ::chart::Axis >& xAxis

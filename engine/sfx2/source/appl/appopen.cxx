@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
@@ -98,8 +98,8 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::container;
@@ -218,7 +218,7 @@ ErrCode CheckPasswd_Impl
 
                 if ( bIsEncrypted )
                 {
-                    css::uno::Reference<css::awt::XWindow> xWin(pDoc ? pDoc->GetDialogParent(pFile) : nullptr);
+                    cpo::uno::Reference<css::awt::XWindow> xWin(pDoc ? pDoc->GetDialogParent(pFile) : nullptr);
                     if (xWin)
                         xWin->setVisible(true);
 
@@ -388,7 +388,7 @@ ErrCodeMsg SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const OUStrin
     xDoc->SetModified(false);
     xDoc->ResetError();
 
-    css::uno::Reference< css::frame::XModel >  xModel = xDoc->GetModel();
+    cpo::uno::Reference< css::frame::XModel >  xModel = xDoc->GetModel();
     if ( xModel.is() )
     {
         std::unique_ptr<SfxItemSet> pNew = xDoc->GetMedium()->GetItemSet().Clone();

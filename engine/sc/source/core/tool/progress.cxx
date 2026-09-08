@@ -36,6 +36,7 @@
 #include <scresid.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 static ScProgress theDummyInterpretProgress;
 SfxProgress*    ScProgress::pGlobalProgress = nullptr;

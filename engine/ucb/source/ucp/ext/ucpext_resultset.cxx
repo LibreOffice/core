@@ -29,7 +29,7 @@ namespace ucb::ucp::ext
 {
 
 
-    using ::com::sun::star::uno::Reference;
+    using ::cpo::uno::Reference;
     using ::cpo::uno::XComponentContext;
     using ::com::sun::star::ucb::OpenCommandArgument2;
     using ::com::sun::star::ucb::XCommandEnvironment;

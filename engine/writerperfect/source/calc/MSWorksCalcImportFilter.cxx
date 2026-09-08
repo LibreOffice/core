@@ -36,12 +36,13 @@
 #include <utility>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace MSWorksCalcImportFilterInternal
 {
 /// returns the list of stream name present in a folder
 static uno::Reference<sdbc::XResultSet>
-getResultSet(const css::uno::Reference<css::ucb::XContent>& xPackageContent)
+getResultSet(const cpo::uno::Reference<css::ucb::XContent>& xPackageContent)
 {
     try
     {
@@ -73,7 +74,7 @@ class FolderStream : public librevenge::RVNGInputStream
 {
 public:
     //! constructor
-    explicit FolderStream(css::uno::Reference<css::ucb::XContent> xContent)
+    explicit FolderStream(cpo::uno::Reference<css::ucb::XContent> xContent)
         : m_xContent(std::move(xContent))
     {
     }
@@ -298,9 +299,9 @@ bool MSWorksCalcImportFilter::filter(
     const cpo::uno::Sequence<css::beans::PropertyValue>& rDescriptor)
 {
     OUString sUrl;
-    css::uno::Reference<css::io::XInputStream> xInputStream;
-    css::uno::Reference<ucb::XContent> xContent;
-    css::uno::Reference<css::awt::XWindow> xDialogParent;
+    cpo::uno::Reference<css::io::XInputStream> xInputStream;
+    cpo::uno::Reference<ucb::XContent> xContent;
+    cpo::uno::Reference<css::awt::XWindow> xDialogParent;
 
     for (const auto& rValue : rDescriptor)
     {
@@ -321,16 +322,16 @@ bool MSWorksCalcImportFilter::filter(
     }
 
     // An XML import service: what we push sax messages to...
-    css::uno::Reference<XInterface> xInternalFilter
+    cpo::uno::Reference<XInterface> xInternalFilter
         = getXContext()->getServiceManager()->createInstanceWithContext(
             writerperfect::DocumentHandlerFor<OdsGenerator>::name(), getXContext());
     assert(xInternalFilter);
-    css::uno::Reference<css::xml::sax::XFastDocumentHandler> xInternalHandler(xInternalFilter,
-                                                                              css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::xml::sax::XFastDocumentHandler> xInternalHandler(xInternalFilter,
+                                                                              cpo::uno::UNO_QUERY);
     assert(xInternalHandler);
 
     // The XImporter sets up an empty target document for XDocumentHandler to write to...
-    css::uno::Reference<css::document::XImporter> xImporter(xInternalHandler, css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::document::XImporter> xImporter(xInternalHandler, cpo::uno::UNO_QUERY);
     assert(xImporter);
     xImporter->setTargetDocument(getTargetDocument());
 
@@ -363,12 +364,12 @@ bool MSWorksCalcImportFilter::filter(
         if (checkForFM3)
         {
             // check if the format file exists
-            const css::uno::Reference<container::XChild> xChild(xContent, uno::UNO_QUERY);
+            const cpo::uno::Reference<container::XChild> xChild(xContent, uno::UNO_QUERY);
             if (xChild.is())
             {
                 OUString sWM3Name;
                 OUString sFM3Name;
-                const css::uno::Reference<ucb::XContent> xPackageContent(xChild->getParent(),
+                const cpo::uno::Reference<ucb::XContent> xPackageContent(xChild->getParent(),
                                                                          uno::UNO_QUERY);
                 uno::Reference<sdbc::XResultSet> xResultSet
                     = MSWorksCalcImportFilterInternal::getResultSet(xPackageContent);

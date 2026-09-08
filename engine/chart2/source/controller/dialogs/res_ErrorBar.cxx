@@ -36,6 +36,7 @@
 #define CHART_LB_FUNCTION_ERROR_MARGIN  3
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace
 {

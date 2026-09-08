@@ -21,6 +21,7 @@
 #include "vbapivotcache.hxx"
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace ::ooo::vba;
 
 ScVbaPivotCache::ScVbaPivotCache( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< cpo::uno::XComponentContext >& xContext,  uno::Reference< sheet::XDataPilotTable > xTable ) : PivotCacheImpl_BASE( xParent, xContext ), m_xTable(std::move( xTable ))

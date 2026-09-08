@@ -34,7 +34,7 @@
 #include <mutex>
 #include <numeric>
 
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::i18n;
 using namespace com::sun::star::lang;
@@ -604,7 +604,7 @@ namespace
     struct TransBody
     {
         OUString Name;
-        css::uno::Reference< css::i18n::XExtendedTransliteration > Body;
+        cpo::uno::Reference< css::i18n::XExtendedTransliteration > Body;
     };
 }
 

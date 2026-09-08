@@ -34,9 +34,9 @@ private:
 
     virtual void
     WriteEntryToStream(std::unique_lock<std::mutex>& rGuard, const LockFileEntry& aEntry,
-                       const css::uno::Reference<css::io::XOutputStream>& xStream) override;
+                       const cpo::uno::Reference<css::io::XOutputStream>& xStream) override;
 
-    virtual css::uno::Reference<css::io::XInputStream>
+    virtual cpo::uno::Reference<css::io::XInputStream>
     OpenStream(std::unique_lock<std::mutex>& rGuard) override;
 
     virtual LockFileEntry GetLockDataImpl(std::unique_lock<std::mutex>& rGuard) override;

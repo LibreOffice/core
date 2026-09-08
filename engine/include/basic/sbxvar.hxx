@@ -24,7 +24,7 @@
 #include <basic/sbxcore.hxx>
 #include <basic/basicdllapi.h>
 #include <cpo/uno/XInterface.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <algorithm>
 #include <cstddef>
@@ -243,7 +243,7 @@ class BASIC_DLLPUBLIC SbxVariable : public SbxValue
     friend class SbMethod;
 
     OUString         m_aDeclareClassName;
-    css::uno::Reference< cpo::uno::XInterface > m_xComListener;
+    cpo::uno::Reference< cpo::uno::XInterface > m_xComListener;
     StarBASIC*       m_pComListenerParentBasic = nullptr;
     std::unique_ptr<SfxBroadcaster>  mpBroadcaster; // Broadcaster, if needed
     OUString         maName;            // Name, if available
@@ -298,7 +298,7 @@ public:
 
     SAL_DLLPRIVATE const OUString& GetDeclareClassName() const;
     SAL_DLLPRIVATE void SetDeclareClassName( const OUString& );
-    SAL_DLLPRIVATE void SetComListener( const css::uno::Reference< cpo::uno::XInterface >& xComListener,
+    SAL_DLLPRIVATE void SetComListener( const cpo::uno::Reference< cpo::uno::XInterface >& xComListener,
                          StarBASIC* pParentBasic );
     SAL_DLLPRIVATE void ClearComListener();
 

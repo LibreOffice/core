@@ -38,7 +38,7 @@
 #include "uiobject.hxx"
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo::uno;
 
 static int gDefaultWidth;
 
@@ -238,7 +238,7 @@ void TabBar::CreateTabItem(weld::Toolbar& rItem, const DeckDescriptor& rDeckDesc
     rItem.set_item_tooltip_text(u"toggle"_ustr, rDeckDescriptor.msHelpText + sShortcut);
 }
 
-css::uno::Reference<css::graphic::XGraphic> TabBar::GetItemImage(const DeckDescriptor& rDeckDescriptor) const
+cpo::uno::Reference<css::graphic::XGraphic> TabBar::GetItemImage(const DeckDescriptor& rDeckDescriptor) const
 {
     return Tools::GetImage(
         rDeckDescriptor.msIconURL,

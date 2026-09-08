@@ -36,7 +36,7 @@ namespace http_dav_ucp
     public:
 
         DAVAuthListener_Impl(
-            css::uno::Reference<css::ucb::XCommandEnvironment> xEnv,
+            cpo::uno::Reference<css::ucb::XCommandEnvironment> xEnv,
             OUString inURL )
             : m_xEnv(std::move( xEnv )), m_aURL(std::move( inURL ))
         {
@@ -49,7 +49,7 @@ namespace http_dav_ucp
                                   bool bCanUseSystemCredentials ) override;
     private:
 
-        const css::uno::Reference< css::ucb::XCommandEnvironment > m_xEnv;
+        const cpo::uno::Reference< css::ucb::XCommandEnvironment > m_xEnv;
         const OUString m_aURL;
 
         OUString m_aPrevPassword;

@@ -27,7 +27,7 @@
 #include <com/sun/star/testuno/Test.hpp>
 #include <com/sun/star/testuno/XTest.hpp>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Type.hxx>
@@ -159,7 +159,7 @@ bool checkAnyEnum(cpo::uno::Any const& value)
 }
 
 bool checkAnyStruct(cpo::uno::Any const& value,
-                    css::uno::Reference<cpo::uno::XInterface> const& object)
+                    cpo::uno::Reference<cpo::uno::XInterface> const& object)
 {
     return value.getValueType() == cppu::UnoType<css::testuno::Struct>::get()
            && *o3tl::forceAccess<css::testuno::Struct>(value)
@@ -199,13 +199,13 @@ bool checkAnyException(cpo::uno::Any const& value)
 }
 
 bool checkAnyInterface(cpo::uno::Any const& value,
-                       css::uno::Reference<css::testuno::XTest> const& object)
+                       cpo::uno::Reference<css::testuno::XTest> const& object)
 {
     return value.getValueType() == cppu::UnoType<css::testuno::XTest>::get()
-           && *o3tl::forceAccess<css::uno::Reference<css::testuno::XTest>>(value) == object;
+           && *o3tl::forceAccess<cpo::uno::Reference<css::testuno::XTest>>(value) == object;
 }
 
-void doExecuteTest(css::uno::Reference<css::testuno::XTest> const& test)
+void doExecuteTest(cpo::uno::Reference<css::testuno::XTest> const& test)
 {
     {
         bool const val = test->getBoolean();
@@ -629,7 +629,7 @@ void doExecuteTest(css::uno::Reference<css::testuno::XTest> const& test)
     }
     {
         auto const val = test->getNull();
-        verify(val == css::uno::Reference<css::testuno::XTest>());
+        verify(val == cpo::uno::Reference<css::testuno::XTest>());
         bool const ok = test->isNull(val);
         verify(ok);
     }
@@ -651,7 +651,7 @@ void doExecuteTest(css::uno::Reference<css::testuno::XTest> const& test)
         cpo::uno::Sequence<OUString> value15;
         css::testuno::Enum value16;
         css::testuno::Struct value17;
-        css::uno::Reference<css::testuno::XTest> value18;
+        cpo::uno::Reference<css::testuno::XTest> value18;
         test->getOut(value1, value2, value3, value4, value5, value6, value7, value8, value9,
                      value10, value11, value12, value13, value14, value15, value16, value17,
                      value18);
@@ -728,7 +728,7 @@ private:
 class JobExecutorThread : public salhelper::Thread
 {
 public:
-    JobExecutorThread(css::uno::Reference<css::task::XJobExecutor> const& object)
+    JobExecutorThread(cpo::uno::Reference<css::task::XJobExecutor> const& object)
         : Thread("jobexecutor")
         , object_(object)
     {
@@ -737,7 +737,7 @@ public:
 private:
     void execute() override { object_->trigger(u"executor thread"_ustr); }
 
-    css::uno::Reference<css::task::XJobExecutor> object_;
+    cpo::uno::Reference<css::task::XJobExecutor> object_;
 };
 
 class Test : public cppu::WeakImplHelper<css::lang::XServiceInfo, css::testuno::XTest>
@@ -1034,7 +1034,7 @@ class Test : public cppu::WeakImplHelper<css::lang::XServiceInfo, css::testuno::
 
     cpo::uno::Any SAL_CALL getAnyInterface() override
     {
-        return cpo::uno::Any(css::uno::Reference<css::testuno::XTest>(this));
+        return cpo::uno::Any(cpo::uno::Reference<css::testuno::XTest>(this));
     }
 
     bool SAL_CALL isAnyInterface(cpo::uno::Any const& value) override
@@ -1360,9 +1360,9 @@ class Test : public cppu::WeakImplHelper<css::lang::XServiceInfo, css::testuno::
                   };
     }
 
-    css::uno::Reference<css::testuno::XTest> SAL_CALL getNull() override { return {}; }
+    cpo::uno::Reference<css::testuno::XTest> SAL_CALL getNull() override { return {}; }
 
-    bool SAL_CALL isNull(css::uno::Reference<css::testuno::XTest> const& value) override
+    bool SAL_CALL isNull(cpo::uno::Reference<css::testuno::XTest> const& value) override
     {
         return !value;
     }
@@ -1373,7 +1373,7 @@ class Test : public cppu::WeakImplHelper<css::lang::XServiceInfo, css::testuno::
                          OUString& value12, cpo::uno::Type& value13, cpo::uno::Any& value14,
                          cpo::uno::Sequence<OUString>& value15, css::testuno::Enum& value16,
                          css::testuno::Struct& value17,
-                         css::uno::Reference<css::testuno::XTest>& value18) override
+                         cpo::uno::Reference<css::testuno::XTest>& value18) override
     {
         value1 = true;
         value2 = -12;
@@ -1423,7 +1423,7 @@ class Test : public cppu::WeakImplHelper<css::lang::XServiceInfo, css::testuno::
         throw cpo::uno::RuntimeException(u"test"_ustr);
     }
 
-    void SAL_CALL passJob(css::uno::Reference<css::task::XJob> const& object) override
+    void SAL_CALL passJob(cpo::uno::Reference<css::task::XJob> const& object) override
     {
         try
         {
@@ -1435,7 +1435,7 @@ class Test : public cppu::WeakImplHelper<css::lang::XServiceInfo, css::testuno::
         }
     }
 
-    void SAL_CALL passJobExecutor(css::uno::Reference<css::task::XJobExecutor> const& object,
+    void SAL_CALL passJobExecutor(cpo::uno::Reference<css::task::XJobExecutor> const& object,
                                   bool newThread) override
     {
         if (newThread)
@@ -1450,16 +1450,16 @@ class Test : public cppu::WeakImplHelper<css::lang::XServiceInfo, css::testuno::
         }
     }
 
-    void SAL_CALL passInterface(css::uno::Reference<cpo::uno::XInterface> const& object) override
+    void SAL_CALL passInterface(cpo::uno::Reference<cpo::uno::XInterface> const& object) override
     {
-        css::uno::Reference<css::task::XJob>(object, css::uno::UNO_QUERY_THROW)
+        cpo::uno::Reference<css::task::XJob>(object, cpo::uno::UNO_QUERY_THROW)
             ->execute({ { u"name"_ustr, cpo::uno::Any(u"queried job"_ustr) } });
-        css::uno::Reference<css::task::XJobExecutor>(object, css::uno::UNO_QUERY_THROW)
+        cpo::uno::Reference<css::task::XJobExecutor>(object, cpo::uno::UNO_QUERY_THROW)
             ->trigger(u"queried executor"_ustr);
     }
 
     bool SAL_CALL
-    checkAttributes(css::uno::Reference<css::testuno::XAttributes> const& object) override
+    checkAttributes(cpo::uno::Reference<css::testuno::XAttributes> const& object) override
     {
         auto const ok1 = object->getLongAttribute() == 789;
         verify(ok1);
@@ -1484,7 +1484,7 @@ class Test : public cppu::WeakImplHelper<css::lang::XServiceInfo, css::testuno::
         return t->value;
     }
 
-    void SAL_CALL executeTest(css::uno::Reference<css::testuno::XTest> const& test) override
+    void SAL_CALL executeTest(cpo::uno::Reference<css::testuno::XTest> const& test) override
     {
         doExecuteTest(test);
     }
@@ -1495,7 +1495,7 @@ class Test : public cppu::WeakImplHelper<css::lang::XServiceInfo, css::testuno::
 class BridgeTest : public cppu::WeakImplHelper<css::task::XJob>
 {
 public:
-    explicit BridgeTest(css::uno::Reference<cpo::uno::XComponentContext> const& context)
+    explicit BridgeTest(cpo::uno::Reference<cpo::uno::XComponentContext> const& context)
         : context_(context)
     {
     }
@@ -1534,7 +1534,7 @@ private:
         {
             throw cpo::uno::RuntimeException(u"cannot map from C++ to UNO"_ustr);
         }
-        css::uno::Reference<css::testuno::XTest> ifcCpp;
+        cpo::uno::Reference<css::testuno::XTest> ifcCpp;
         uno2cpp.mapInterface(reinterpret_cast<void**>(&ifcCpp), ifcUno.get(),
                              cppu::UnoType<css::testuno::XTest>::get());
         if (!ifcCpp.is())
@@ -1552,7 +1552,7 @@ private:
         return cpo::uno::Any(true);
     }
 
-    css::uno::Reference<cpo::uno::XComponentContext> context_;
+    cpo::uno::Reference<cpo::uno::XComponentContext> context_;
 };
 }
 

@@ -23,6 +23,7 @@
 #include <cppuhelper/implbase.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace ooo::vba;
 
 constexpr OUString SVALUE( u"MultiPageValue"_ustr );

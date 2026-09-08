@@ -31,6 +31,7 @@
 #include <o3tl/unit_conversion.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 namespace chart
 {
@@ -79,7 +80,7 @@ getFirstParagraphProperties(uno::Reference<text::XText> const& xText)
 DataTableView::DataTableView(
     rtl::Reference<::chart::ChartModel> const& xChartModel,
     rtl::Reference<DataTable> const& rDataTableModel,
-    css::uno::Reference<cpo::uno::XComponentContext> const& rComponentContext,
+    cpo::uno::Reference<cpo::uno::XComponentContext> const& rComponentContext,
     bool bAlignAxisValuesWithColumns)
     : m_xChartModel(xChartModel)
     , m_xDataTableModel(rDataTableModel)
@@ -157,7 +158,7 @@ void DataTableView::setCellCharAndParagraphProperties(
                                    cpo::uno::Any(style::ParagraphAdjust_CENTER));
 }
 
-void DataTableView::setCellProperties(const css::uno::Reference<beans::XPropertySet>& xPropertySet,
+void DataTableView::setCellProperties(const cpo::uno::Reference<beans::XPropertySet>& xPropertySet,
                                       bool bLeft, bool bTop, bool bRight, bool bBottom)
 {
     std::vector<OUString> aPropNames;

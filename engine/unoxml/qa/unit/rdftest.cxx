@@ -28,6 +28,7 @@
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 namespace
 {
@@ -62,7 +63,7 @@ inline void assertStatementEqual(const rdf::Statement& rExpected, const rdf::Sta
 CPPUNIT_TEST_FIXTURE(RDFStreamTest, testCVE_2012_0037)
 {
     const uno::Reference<cpo::uno::XComponentContext> xContext(comphelper::getProcessComponentContext(),
-                                                          css::uno::UNO_SET_THROW);
+                                                          cpo::uno::UNO_SET_THROW);
     const uno::Reference<css::ucb::XSimpleFileAccess> xFileAccess(
         xContext->getServiceManager()->createInstanceWithContext(
             u"com.sun.star.ucb.SimpleFileAccess"_ustr, xContext),
@@ -101,7 +102,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDFa)
 
     OUString aText(u"behold, for I am the content."_ustr);
     const uno::Reference<cpo::uno::XComponentContext> xContext(comphelper::getProcessComponentContext(),
-                                                          css::uno::UNO_SET_THROW);
+                                                          cpo::uno::UNO_SET_THROW);
     uno::Reference<css::rdf::XLiteral> xLitText = rdf::Literal::create(xContext, aText);
     xTextRange->setString(aText);
 
@@ -202,7 +203,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDFa)
 CPPUNIT_TEST_FIXTURE(RDFStreamTest, testSPARQL)
 {
     const uno::Reference<cpo::uno::XComponentContext> xContext(comphelper::getProcessComponentContext(),
-                                                          css::uno::UNO_SET_THROW);
+                                                          cpo::uno::UNO_SET_THROW);
     const uno::Reference<css::ucb::XSimpleFileAccess> xFileAccess(
         xContext->getServiceManager()->createInstanceWithContext(
             u"com.sun.star.ucb.SimpleFileAccess"_ustr, xContext),
@@ -346,7 +347,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testSPARQL)
 CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDF)
 {
     const uno::Reference<cpo::uno::XComponentContext> xContext(comphelper::getProcessComponentContext(),
-                                                          css::uno::UNO_SET_THROW);
+                                                          cpo::uno::UNO_SET_THROW);
     uno::Reference<rdf::XRepository> xRepo = rdf::Repository::create(xContext);
     uno::Reference<rdf::XDocumentRepository> xDocRepo(xRepo, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDocRepo);
@@ -396,7 +397,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDF)
     }
 
     // 6. foo graph in getGraphNames
-    cpo::uno::Sequence<css::uno::Reference<css::rdf::XURI>> xURI = xDocRepo->getGraphNames();
+    cpo::uno::Sequence<cpo::uno::Reference<css::rdf::XURI>> xURI = xDocRepo->getGraphNames();
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(1), xURI.size());
     CPPUNIT_ASSERT_EQUAL(xFoo->getStringValue(), xURI[0]->getStringValue());
 
@@ -720,7 +721,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDFa2)
         CPPUNIT_ASSERT(xDocRepo);
 
         const uno::Reference<cpo::uno::XComponentContext> xContext(
-            comphelper::getProcessComponentContext(), css::uno::UNO_SET_THROW);
+            comphelper::getProcessComponentContext(), cpo::uno::UNO_SET_THROW);
         uno::Reference<css::rdf::XURI> xFoo = rdf::URI::create(xContext, u"uri:foo"_ustr);
         uno::Reference<css::rdf::XURI> xBase = rdf::URI::create(xContext, u"base-uri:"_ustr);
         uno::Reference<css::rdf::XURI> xBar = rdf::URI::create(xContext, u"uri:bar"_ustr);
@@ -952,7 +953,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDFa2)
 CPPUNIT_TEST_FIXTURE(RDFStreamTest, testTdf123293)
 {
     const uno::Reference<cpo::uno::XComponentContext> xContext(comphelper::getProcessComponentContext(),
-                                                          css::uno::UNO_SET_THROW);
+                                                          cpo::uno::UNO_SET_THROW);
     const uno::Reference<css::ucb::XSimpleFileAccess> xFileAccess(
         xContext->getServiceManager()->createInstanceWithContext(
             u"com.sun.star.ucb.SimpleFileAccess"_ustr, xContext),
@@ -987,7 +988,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testDocumentMetadataAccess)
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(1), xRepo->getGraphNames().size());
 
     const uno::Reference<cpo::uno::XComponentContext> xContext(comphelper::getProcessComponentContext(),
-                                                          css::uno::UNO_SET_THROW);
+                                                          cpo::uno::UNO_SET_THROW);
     uno::Reference<css::rdf::XURI> xManifest
         = rdf::URI::createNS(xContext, sBaseURI, u"manifest.rdf"_ustr);
     uno::Reference<css::rdf::XURI> xFoo = rdf::URI::create(xContext, u"uri:foo"_ustr);

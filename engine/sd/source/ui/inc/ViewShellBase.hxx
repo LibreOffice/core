@@ -123,7 +123,7 @@ public:
     /** Return a new renderer that can be used for example for printing the
         document.
     */
-    virtual css::uno::Reference<css::view::XRenderable> GetRenderable() override;
+    virtual cpo::uno::Reference<css::view::XRenderable> GetRenderable() override;
 
     /// Forwarded to the print manager.
     virtual SfxPrinter* GetPrinter (bool bCreate = false) override;

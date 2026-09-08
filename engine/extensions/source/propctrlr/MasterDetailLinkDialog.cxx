@@ -27,7 +27,7 @@ namespace pcr
 {
 
 
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
 using namespace cpo::uno;
     using namespace ::com::sun::star::beans;
 
@@ -74,7 +74,7 @@ using namespace cpo::uno;
         return new ::cppu::OPropertyArrayHelper(aProps);
     }
 
-    std::unique_ptr<weld::DialogController> MasterDetailLinkDialog::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
+    std::unique_ptr<weld::DialogController> MasterDetailLinkDialog::createDialog(const cpo::uno::Reference<css::awt::XWindow>& rParent)
     {
         return std::make_unique<FormLinkDialog>(Application::GetFrameWeld(rParent), m_xDetail,
                                                 m_xMaster, m_aContext, m_sExplanation,

@@ -31,7 +31,7 @@
 #include <workwin.hxx>
 #include <comphelper/kit.hxx>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 constexpr OUString USERITEM_NAME = u"UserItem"_ustr;
@@ -129,7 +129,7 @@ void SfxModelessDialogController::Deactivate()
 {
     if (!m_xImpl)
         return;
-    m_pBindings->SetActiveFrame(css::uno::Reference< css::frame::XFrame>());
+    m_pBindings->SetActiveFrame(cpo::uno::Reference< css::frame::XFrame>());
 }
 
 SfxModelessDialogController::~SfxModelessDialogController()

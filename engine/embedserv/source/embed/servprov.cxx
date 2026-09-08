@@ -59,7 +59,7 @@ static void o2u_attachCurrentThread()
 
 // EmbedServer_Impl
 
-EmbedServer_Impl::EmbedServer_Impl( const css::uno::Reference<css::lang::XMultiServiceFactory>& xFactory):
+EmbedServer_Impl::EmbedServer_Impl( const cpo::uno::Reference<css::lang::XMultiServiceFactory>& xFactory):
     m_xFactory( xFactory)
 {
     m_pOLEFactories.reserve(std::size(guidList));
@@ -91,7 +91,7 @@ cpo::uno::Sequence<OUString> EmbedServer_Impl::getSupportedServiceNames()
 
 // EmbedProviderFactory_Impl
 
-EmbedProviderFactory_Impl::EmbedProviderFactory_Impl(const css::uno::Reference<css::lang::XMultiServiceFactory>& xFactory, const GUID& guid)
+EmbedProviderFactory_Impl::EmbedProviderFactory_Impl(const cpo::uno::Reference<css::lang::XMultiServiceFactory>& xFactory, const GUID& guid)
     : m_refCount( 0 )
     , m_guid( guid )
     , m_xFactory( xFactory )
@@ -179,7 +179,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 embedserv_EmbedServer(
     cpo::uno::XComponentContext* context, cpo::uno::Sequence<cpo::uno::Any> const& )
 {
-    auto msf = css::uno::Reference<css::lang::XMultiServiceFactory>(context->getServiceManager(), css::uno::UNO_QUERY_THROW);
+    auto msf = cpo::uno::Reference<css::lang::XMultiServiceFactory>(context->getServiceManager(), cpo::uno::UNO_QUERY_THROW);
     return cppu::acquire(new EmbedServer_Impl(msf));
 }
 

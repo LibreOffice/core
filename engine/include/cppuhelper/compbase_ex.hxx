@@ -68,9 +68,9 @@ public:
         SAL_NOEXCEPT SAL_OVERRIDE;
     virtual void dispose() SAL_OVERRIDE;
     virtual void addEventListener(
-        css::uno::Reference< css::lang::XEventListener > const & xListener ) SAL_OVERRIDE;
+        cpo::uno::Reference< css::lang::XEventListener > const & xListener ) SAL_OVERRIDE;
     virtual void removeEventListener(
-        css::uno::Reference< css::lang::XEventListener > const & xListener ) SAL_OVERRIDE;
+        cpo::uno::Reference< css::lang::XEventListener > const & xListener ) SAL_OVERRIDE;
 };
 
 /** Implementation helper base class for components. Inherits from ::cppu::OWeakAggObject and
@@ -101,9 +101,9 @@ public:
         SAL_NOEXCEPT SAL_OVERRIDE;
     virtual void dispose() SAL_OVERRIDE;
     virtual void addEventListener(
-        css::uno::Reference< css::lang::XEventListener > const & xListener ) SAL_OVERRIDE;
+        cpo::uno::Reference< css::lang::XEventListener > const & xListener ) SAL_OVERRIDE;
     virtual void removeEventListener(
-        css::uno::Reference< css::lang::XEventListener > const & xListener ) SAL_OVERRIDE;
+        cpo::uno::Reference< css::lang::XEventListener > const & xListener ) SAL_OVERRIDE;
 };
 
 /** WeakComponentImplHelper

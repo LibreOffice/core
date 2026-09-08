@@ -29,7 +29,7 @@ using namespace ::com::sun::star;
 
 namespace connectivity::writer
 {
-css::uno::Reference<css::beans::XPropertySet> OWriterTables::createObject(const OUString& rName)
+cpo::uno::Reference<css::beans::XPropertySet> OWriterTables::createObject(const OUString& rName)
 {
     rtl::Reference<OWriterTable> pTable
         = new OWriterTable(this,

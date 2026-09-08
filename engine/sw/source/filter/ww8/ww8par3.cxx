@@ -75,6 +75,7 @@
 #include <officecfg/Office/Common.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace sw::types;
 using namespace sw::mark;
 

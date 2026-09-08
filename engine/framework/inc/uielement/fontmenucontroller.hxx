@@ -31,7 +31,7 @@ namespace framework
         using svt::PopupMenuControllerBase::disposing;
 
         public:
-            FontMenuController( const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
+            FontMenuController( const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext );
             virtual ~FontMenuController() override;
 
             /* interface XServiceInfo */
@@ -53,10 +53,10 @@ namespace framework
 
         private:
             virtual void impl_setPopupMenu(std::unique_lock<std::mutex>& rGuard) override;
-            void fillPopupMenu( const cpo::uno::Sequence< OUString >& rFontNameSeq, css::uno::Reference< css::awt::XPopupMenu > const & rPopupMenu );
+            void fillPopupMenu( const cpo::uno::Sequence< OUString >& rFontNameSeq, cpo::uno::Reference< css::awt::XPopupMenu > const & rPopupMenu );
 
             OUString                                        m_aFontFamilyName;
-            css::uno::Reference< css::frame::XDispatch >    m_xFontListDispatch;
+            cpo::uno::Reference< css::frame::XDispatch >    m_xFontListDispatch;
     };
 }
 

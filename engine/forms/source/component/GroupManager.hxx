@@ -83,21 +83,21 @@ namespace frm
 
 class OGroupComp
 {
-    css::uno::Reference< css::beans::XPropertySet>    m_xComponent;
-    css::uno::Reference< css::awt::XControlModel>     m_xControlModel;
+    cpo::uno::Reference< css::beans::XPropertySet>    m_xComponent;
+    cpo::uno::Reference< css::awt::XControlModel>     m_xControlModel;
     sal_Int32   m_nPos;
     sal_Int16   m_nTabIndex;
 
     friend class OGroupCompLess;
 
 public:
-    OGroupComp(const css::uno::Reference< css::beans::XPropertySet>& rxElement, sal_Int32 nInsertPos );
+    OGroupComp(const cpo::uno::Reference< css::beans::XPropertySet>& rxElement, sal_Int32 nInsertPos );
     OGroupComp();
 
     bool operator==( const OGroupComp& rComp ) const;
 
-    const css::uno::Reference< css::beans::XPropertySet>& GetComponent() const { return m_xComponent; }
-    const css::uno::Reference< css::awt::XControlModel>&   GetControlModel() const { return m_xControlModel; }
+    const cpo::uno::Reference< css::beans::XPropertySet>& GetComponent() const { return m_xComponent; }
+    const cpo::uno::Reference< css::awt::XControlModel>&   GetControlModel() const { return m_xControlModel; }
 
     sal_Int32   GetPos() const { return m_nPos; }
     sal_Int16   GetTabIndex() const { return m_nTabIndex; }
@@ -106,14 +106,14 @@ public:
 
 class OGroupCompAcc
 {
-    css::uno::Reference< css::beans::XPropertySet>    m_xComponent;
+    cpo::uno::Reference< css::beans::XPropertySet>    m_xComponent;
 
     OGroupComp                                      m_aGroupComp;
 
     friend class OGroupCompAccLess;
 
 public:
-    OGroupCompAcc(const css::uno::Reference< css::beans::XPropertySet>& rxElement, OGroupComp _aGroupComp );
+    OGroupCompAcc(const cpo::uno::Reference< css::beans::XPropertySet>& rxElement, OGroupComp _aGroupComp );
 
     bool operator==( const OGroupCompAcc& rCompAcc ) const;
 
@@ -134,12 +134,12 @@ public:
     explicit OGroup(OUString sGroupName);
 
     const OUString& GetGroupName() const { return m_aGroupName; }
-    cpo::uno::Sequence< css::uno::Reference< css::awt::XControlModel>  > GetControlModels() const;
+    cpo::uno::Sequence< cpo::uno::Reference< css::awt::XControlModel>  > GetControlModels() const;
 
-    void InsertComponent( const css::uno::Reference< css::beans::XPropertySet>& rxElement );
-    void RemoveComponent( const css::uno::Reference< css::beans::XPropertySet>& rxElement );
+    void InsertComponent( const cpo::uno::Reference< css::beans::XPropertySet>& rxElement );
+    void RemoveComponent( const cpo::uno::Reference< css::beans::XPropertySet>& rxElement );
     sal_uInt16 Count() const { return sal::static_int_cast< sal_uInt16 >(m_aCompArray.size()); }
-    const css::uno::Reference< css::beans::XPropertySet>& GetObject( sal_uInt16 nP ) const
+    const cpo::uno::Reference< css::beans::XPropertySet>& GetObject( sal_uInt16 nP ) const
         { return m_aCompArray[nP].GetComponent(); }
 };
 
@@ -154,16 +154,16 @@ class OGroupManager : public ::cppu::WeakImplHelper< css::beans::XPropertyChange
     OGroupArr       m_aGroupArr;            // Sort all Components by group
     OActiveGroups   m_aActiveGroupMap;      // This map contains all indices of all groups with more than 1 element
 
-    css::uno::Reference< css::container::XContainer >
+    cpo::uno::Reference< css::container::XContainer >
                     m_xContainer;
 
     // Helper functions
-    void InsertElement( const css::uno::Reference< css::beans::XPropertySet>& rxElement );
-    void RemoveElement( const css::uno::Reference< css::beans::XPropertySet>& rxElement );
-    void removeFromGroupMap(const OUString& _sGroupName,const css::uno::Reference< css::beans::XPropertySet>& _xSet);
+    void InsertElement( const cpo::uno::Reference< css::beans::XPropertySet>& rxElement );
+    void RemoveElement( const cpo::uno::Reference< css::beans::XPropertySet>& rxElement );
+    void removeFromGroupMap(const OUString& _sGroupName,const cpo::uno::Reference< css::beans::XPropertySet>& _xSet);
 
 public:
-    explicit OGroupManager(const css::uno::Reference< css::container::XContainer >& _rxContainer);
+    explicit OGroupManager(const cpo::uno::Reference< css::container::XContainer >& _rxContainer);
     virtual ~OGroupManager() override;
 
 // css::lang::XEventListener
@@ -179,11 +179,11 @@ public:
 
 // Other functions
     sal_Int32 getGroupCount() const;
-    void getGroup(sal_Int32 nGroup, cpo::uno::Sequence< css::uno::Reference< css::awt::XControlModel> >& _rGroup, OUString& Name);
-    void getGroupByName(const OUString& Name, cpo::uno::Sequence< css::uno::Reference< css::awt::XControlModel> >& _rGroup);
-    cpo::uno::Sequence< css::uno::Reference< css::awt::XControlModel> > getControlModels() const;
+    void getGroup(sal_Int32 nGroup, cpo::uno::Sequence< cpo::uno::Reference< css::awt::XControlModel> >& _rGroup, OUString& Name);
+    void getGroupByName(const OUString& Name, cpo::uno::Sequence< cpo::uno::Reference< css::awt::XControlModel> >& _rGroup);
+    cpo::uno::Sequence< cpo::uno::Reference< css::awt::XControlModel> > getControlModels() const;
 
-    static OUString GetGroupName( const css::uno::Reference< css::beans::XPropertySet>& xComponent );
+    static OUString GetGroupName( const cpo::uno::Reference< css::beans::XPropertySet>& xComponent );
 };
 
 

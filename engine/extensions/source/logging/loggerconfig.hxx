@@ -39,8 +39,8 @@ namespace logging
         run, be moved to the logger implementation - not sure if it's the best place.
     */
     void    initializeLoggerFromConfiguration(
-                const css::uno::Reference<cpo::uno::XComponentContext>& _rContext,
-                const css::uno::Reference< css::logging::XLogger >& _rxLogger
+                const cpo::uno::Reference<cpo::uno::XComponentContext>& _rContext,
+                const cpo::uno::Reference< css::logging::XLogger >& _rxLogger
             );
 
 

@@ -22,7 +22,7 @@
 
 #include <svl/svldllapi.h>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 
 namespace svt
@@ -30,10 +30,10 @@ namespace svt
 
 
     SVL_DLLPUBLIC void addFolderPicker(
-        const css::uno::Reference< cpo::uno::XInterface >& _rxPicker );
+        const cpo::uno::Reference< cpo::uno::XInterface >& _rxPicker );
 
     SVL_DLLPUBLIC void addFilePicker(
-        const css::uno::Reference< cpo::uno::XInterface >& _rxPicker );
+        const cpo::uno::Reference< cpo::uno::XInterface >& _rxPicker );
 
 
 }   // namespace svt

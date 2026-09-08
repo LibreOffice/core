@@ -96,7 +96,7 @@ class SVXCORE_DLLPUBLIC SdrGrafObj final : public SdrRectObj
     bool mbIsSignatureLineShowSignDate;
     bool mbIsSignatureLineCanAddComment;
     bool mbSignatureLineIsSigned;
-    css::uno::Reference<css::graphic::XGraphic> mpSignatureLineUnsignedGraphic;
+    cpo::uno::Reference<css::graphic::XGraphic> mpSignatureLineUnsignedGraphic;
 
     std::unique_ptr<css::drawing::BarCode> mpBarCode;
     SAL_DLLPRIVATE void                    ImpRegisterLink();
@@ -126,7 +126,7 @@ public:
     const GraphicObject&    GetGraphicObject(bool bForceSwapIn = false) const;
     SAL_DLLPRIVATE const GraphicObject*    GetReplacementGraphicObject() const;
     // An exploded view of a pdf page as a draw document.
-    SAL_DLLPRIVATE css::uno::Reference<css::lang::XComponent> GetReplacementGraphicModel() const;
+    SAL_DLLPRIVATE cpo::uno::Reference<css::lang::XComponent> GetReplacementGraphicModel() const;
 
     SAL_DLLPRIVATE void                    NbcSetGraphic(const Graphic& rGrf);
     void                    SetGraphic(const Graphic& rGrf);
@@ -199,7 +199,7 @@ public:
     // Access to GrafAnimationAllowed flag
     SAL_DLLPRIVATE void SetGrafAnimationAllowed(bool bNew);
 
-    SAL_DLLPRIVATE css::uno::Reference< css::io::XInputStream > getInputStream() const;
+    SAL_DLLPRIVATE cpo::uno::Reference< css::io::XInputStream > getInputStream() const;
 
     // #i103116# FullDrag support
     SAL_DLLPRIVATE virtual rtl::Reference<SdrObject> getFullDragClone() const override;
@@ -271,12 +271,12 @@ public:
 
     bool isSignatureLineCanAddComment() const { return mbIsSignatureLineCanAddComment; }
 
-    css::uno::Reference<css::graphic::XGraphic> const & getSignatureLineUnsignedGraphic() const
+    cpo::uno::Reference<css::graphic::XGraphic> const & getSignatureLineUnsignedGraphic() const
     {
         return mpSignatureLineUnsignedGraphic;
     }
 
-    void setSignatureLineUnsignedGraphic(const css::uno::Reference<css::graphic::XGraphic>& rGraphic)
+    void setSignatureLineUnsignedGraphic(const cpo::uno::Reference<css::graphic::XGraphic>& rGraphic)
     {
         mpSignatureLineUnsignedGraphic = rGraphic;
     }

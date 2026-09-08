@@ -75,8 +75,8 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::io;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::view;
@@ -447,7 +447,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
             sal_Int32 nOpenBookmarkLevels = -1;
             bool bSignPDF = false;
             OUString sSignLocation, sSignReason, sSignContact, sSignPassword;
-            css::uno::Reference<css::security::XCertificate> aSignCertificate;
+            cpo::uno::Reference<css::security::XCertificate> aSignCertificate;
             OUString sSignTSA;
             bool bExportPlaceholders = false;
             bool bUseReferenceXObject = false;

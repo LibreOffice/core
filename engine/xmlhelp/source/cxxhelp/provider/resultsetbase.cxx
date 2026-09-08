@@ -19,7 +19,7 @@
 
 #include <ucbhelper/contentidentifier.hxx>
 #include <com/sun/star/sdbc/SQLException.hpp>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <ucbhelper/resultsetmetadata.hxx>
 #include <cppuhelper/queryinterface.hxx>
@@ -29,6 +29,7 @@
 
 using namespace chelp;
 using namespace com::sun::star;
+using namespace ::cpo;
 
 ResultSetBase::ResultSetBase( uno::Reference< cpo::uno::XComponentContext >  xContext,
                               uno::Reference< ucb::XContentProvider >  xProvider,

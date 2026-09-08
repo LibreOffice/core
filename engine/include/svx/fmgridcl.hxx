@@ -101,7 +101,7 @@ class SAL_WARN_UNUSED UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) FmGridControl : public
 
 public:
     FmGridControl(
-        const css::uno::Reference< cpo::uno::XComponentContext >&,
+        const cpo::uno::Reference< cpo::uno::XComponentContext >&,
         vcl::Window* pParent,
         FmXGridPeer* _pPeer,
         WinBits nBits);
@@ -167,16 +167,16 @@ protected:
 
     // Initialize columns
     // a.) only by column description
-    void InitColumnsByModels(const css::uno::Reference< css::container::XIndexContainer >& xColumns);
+    void InitColumnsByModels(const cpo::uno::Reference< css::container::XIndexContainer >& xColumns);
     // b.) during alivemode by database fields
-    virtual void InitColumnsByFields(const css::uno::Reference< css::container::XIndexAccess >& xFields) override;
+    virtual void InitColumnsByFields(const cpo::uno::Reference< css::container::XIndexAccess >& xFields) override;
 
             // some kind of impl version (for one single column) of our version of InitColumnsByFields
             static void InitColumnByField(
                     DbGridColumn* _pColumn,
-                    const css::uno::Reference< css::beans::XPropertySet >& _rxColumnModel,
-                    const css::uno::Reference< css::container::XNameAccess >& _rxFieldsByNames,
-                    const css::uno::Reference< css::container::XIndexAccess >& _rxFieldsByIndex
+                    const cpo::uno::Reference< css::beans::XPropertySet >& _rxColumnModel,
+                    const cpo::uno::Reference< css::container::XNameAccess >& _rxFieldsByNames,
+                    const cpo::uno::Reference< css::container::XIndexAccess >& _rxFieldsByIndex
                 );
 
     FmXGridPeer* GetPeer() const {return m_pPeer;}

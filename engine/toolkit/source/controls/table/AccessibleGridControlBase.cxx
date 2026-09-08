@@ -35,6 +35,7 @@
 using ::cpo::uno::Sequence;
 using ::cpo::uno::Any;
 
+using namespace ::cpo;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using namespace ::comphelper;
@@ -46,7 +47,7 @@ namespace accessibility {
 using namespace com::sun::star::accessibility::AccessibleStateType;
 
 AccessibleGridControlBase::AccessibleGridControlBase(
-    css::uno::Reference<css::accessibility::XAccessible> xParent, svt::table::TableControl& rTable,
+    cpo::uno::Reference<css::accessibility::XAccessible> xParent, svt::table::TableControl& rTable,
     AccessibleTableControlObjType eObjType)
     : m_xParent(std::move(xParent))
     , m_aTable(rTable)
@@ -66,7 +67,7 @@ void AccessibleGridControlBase::disposing()
 
 // css::accessibility::XAccessibleContext
 
-css::uno::Reference< css::accessibility::XAccessible > AccessibleGridControlBase::getAccessibleParent()
+cpo::uno::Reference< css::accessibility::XAccessible > AccessibleGridControlBase::getAccessibleParent()
 {
     SolarMutexGuard g;
 
@@ -90,7 +91,7 @@ OUString AccessibleGridControlBase::getAccessibleName()
     return m_aTable.GetAccessibleObjectName(m_eObjType, 0, 0);
 }
 
-css::uno::Reference< css::accessibility::XAccessibleRelationSet >
+cpo::uno::Reference< css::accessibility::XAccessibleRelationSet >
 AccessibleGridControlBase::getAccessibleRelationSet()
 {
    SolarMutexGuard g;
@@ -116,7 +117,7 @@ lang::Locale AccessibleGridControlBase::getLocale()
     ensureAlive();
     if( m_xParent.is() )
     {
-        css::uno::Reference< css::accessibility::XAccessibleContext >
+        cpo::uno::Reference< css::accessibility::XAccessibleContext >
             xParentContext( m_xParent->getAccessibleContext() );
         if( xParentContext.is() )
             return xParentContext->getLocale();
@@ -143,7 +144,7 @@ bool AccessibleGridControlBase::implIsShowing()
     bool bShowing = false;
     if( m_xParent.is() )
     {
-        css::uno::Reference< css::accessibility::XAccessibleComponent >
+        cpo::uno::Reference< css::accessibility::XAccessibleComponent >
             xParentComp( m_xParent->getAccessibleContext(), uno::UNO_QUERY );
         if( xParentComp.is() )
             bShowing = implGetBoundingBox().Overlaps(
@@ -223,7 +224,7 @@ sal_Int16 AccessibleGridControlBase::getAccessibleRole()
     return nRole;
 }
 
-css::uno::Reference<css::accessibility::XAccessible > AccessibleGridControlBase::getAccessibleAtPoint( const css::awt::Point& )
+cpo::uno::Reference<css::accessibility::XAccessible > AccessibleGridControlBase::getAccessibleAtPoint( const css::awt::Point& )
 {
     return nullptr;
 }

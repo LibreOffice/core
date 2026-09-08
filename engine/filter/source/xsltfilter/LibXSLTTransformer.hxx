@@ -94,13 +94,13 @@ namespace XSLT
         static const char* const PARAM_DOCTYPE_PUBLIC;
 
         // the UNO ServiceFactory
-        css::uno::Reference<cpo::uno::XComponentContext> m_xContext;
+        cpo::uno::Reference<cpo::uno::XComponentContext> m_xContext;
 
-        css::uno::Reference<css::io::XInputStream> m_rInputStream;
+        cpo::uno::Reference<css::io::XInputStream> m_rInputStream;
 
-        css::uno::Reference<css::io::XOutputStream> m_rOutputStream;
+        cpo::uno::Reference<css::io::XOutputStream> m_rOutputStream;
 
-        typedef ::std::deque<css::uno::Reference<css::io::XStreamListener> > ListenerList;
+        typedef ::std::deque<cpo::uno::Reference<css::io::XStreamListener> > ListenerList;
 
         ListenerList m_listeners;
 
@@ -123,7 +123,7 @@ namespace XSLT
     public:
 
         // ctor...
-        LibXSLTTransformer(css::uno::Reference<cpo::uno::XComponentContext> x);
+        LibXSLTTransformer(cpo::uno::Reference<cpo::uno::XComponentContext> x);
 
         //  XServiceInfo
         virtual bool supportsService(const OUString& sServiceName) override;
@@ -132,19 +132,19 @@ namespace XSLT
 
         // XActiveDataSink
         virtual void
-        setInputStream(const css::uno::Reference<css::io::XInputStream>& inputStream) override;
-        virtual css::uno::Reference<css::io::XInputStream>
+        setInputStream(const cpo::uno::Reference<css::io::XInputStream>& inputStream) override;
+        virtual cpo::uno::Reference<css::io::XInputStream>
         getInputStream() override;
         // XActiveDataSource
         virtual void
-        setOutputStream(const css::uno::Reference<css::io::XOutputStream>& outputStream) override;
-        virtual css::uno::Reference<css::io::XOutputStream>
+        setOutputStream(const cpo::uno::Reference<css::io::XOutputStream>& outputStream) override;
+        virtual cpo::uno::Reference<css::io::XOutputStream>
         getOutputStream() override;
         // XActiveDataControl
         virtual void
-        addListener(const css::uno::Reference<css::io::XStreamListener>& listener) override;
+        addListener(const cpo::uno::Reference<css::io::XStreamListener>& listener) override;
         virtual void
-        removeListener(const css::uno::Reference<css::io::XStreamListener>& listener) override;
+        removeListener(const cpo::uno::Reference<css::io::XStreamListener>& listener) override;
         virtual void
         start() override;
         virtual void
@@ -166,7 +166,7 @@ namespace XSLT
         const ::std::map<const char*, OString>&
         getParameters() const { return m_parameters; }
 
-        const css::uno::Reference<cpo::uno::XComponentContext>&
+        const cpo::uno::Reference<cpo::uno::XComponentContext>&
         getComponentContext() const {
             return m_xContext;
         }

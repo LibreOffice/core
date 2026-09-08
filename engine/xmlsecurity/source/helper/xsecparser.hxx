@@ -112,13 +112,13 @@ private:
     /*
      * the next XDocumentHandler on the SAX chain
      */
-    css::uno::Reference<
+    cpo::uno::Reference<
         css::xml::sax::XDocumentHandler > m_xNextHandler;
 
     XMLSignatureHelper& m_rXMLSignatureHelper;
 
-    OUString HandleIdAttr(css::uno::Reference<css::xml::sax::XAttributeList> const& xAttrs);
-    static OUString getIdAttr(const css::uno::Reference<
+    OUString HandleIdAttr(cpo::uno::Reference<css::xml::sax::XAttributeList> const& xAttrs);
+    static OUString getIdAttr(const cpo::uno::Reference<
             css::xml::sax::XAttributeList >& xAttribs );
 
 public:
@@ -133,7 +133,7 @@ public:
 
     virtual void SAL_CALL startElement(
         const OUString& aName,
-        const css::uno::Reference<
+        const cpo::uno::Reference<
             css::xml::sax::XAttributeList >& xAttribs ) override;
 
     virtual void SAL_CALL endElement( const OUString& aName ) override;
@@ -147,7 +147,7 @@ public:
         const OUString& aData ) override;
 
     virtual void SAL_CALL setDocumentLocator(
-        const css::uno::Reference<
+        const cpo::uno::Reference<
             css::xml::sax::XLocator >& xLocator ) override;
 
     /*

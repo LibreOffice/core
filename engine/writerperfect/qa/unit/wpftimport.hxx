@@ -9,13 +9,13 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 namespace com::sun::star::io
 {
 class XInputStream;
 }
 
-css::uno::Reference<css::io::XInputStream> createDummyInput();
+cpo::uno::Reference<css::io::XInputStream> createDummyInput();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

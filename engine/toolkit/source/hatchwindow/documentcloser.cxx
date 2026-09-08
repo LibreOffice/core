@@ -36,6 +36,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace {
 
@@ -45,7 +46,7 @@ class ODocumentCloser : public ::cppu::WeakImplHelper< css::lang::XComponent,
                                                         css::lang::XServiceInfo >
 {
     std::mutex m_aMutex;
-    css::uno::Reference< css::frame::XFrame > m_xFrame;
+    cpo::uno::Reference< css::frame::XFrame > m_xFrame;
     ::comphelper::OInterfaceContainerHelper4<lang::XEventListener> m_aListenersContainer; // list of listeners
 
     bool m_bDisposed;
@@ -55,8 +56,8 @@ public:
 
 // XComponent
     virtual void dispose() override;
-    virtual void addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-    virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+    virtual void addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& xListener ) override;
+    virtual void removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
 // XServiceInfo
     virtual OUString getImplementationName(  ) override;

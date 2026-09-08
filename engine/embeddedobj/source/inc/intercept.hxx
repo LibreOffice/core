@@ -53,13 +53,13 @@ public:
 
     virtual void
     addStatusListener(
-        const css::uno::Reference<
+        const cpo::uno::Reference<
         css::frame::XStatusListener >& Control,
         const css::util::URL& URL ) override;
 
     virtual void
     removeStatusListener(
-        const css::uno::Reference<
+        const cpo::uno::Reference<
         css::frame::XStatusListener >& Control,
         const css::util::URL& URL ) override;
 
@@ -68,7 +68,7 @@ public:
     getInterceptedURLs(  ) override;
 
     //XDispatchProvider ( inherited by XDispatchProviderInterceptor )
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
     css::frame::XDispatch >
     queryDispatch(
         const css::util::URL& URL,
@@ -76,7 +76,7 @@ public:
         sal_Int32 SearchFlags ) override;
 
     virtual cpo::uno::Sequence<
-    css::uno::Reference<
+    cpo::uno::Reference<
     css::frame::XDispatch > >
     queryDispatches(
         const cpo::uno::Sequence<
@@ -84,22 +84,22 @@ public:
 
 
     //XDispatchProviderInterceptor
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
     css::frame::XDispatchProvider >
     getSlaveDispatchProvider(  ) override;
 
     virtual void
     setSlaveDispatchProvider(
-        const css::uno::Reference<
+        const cpo::uno::Reference<
         css::frame::XDispatchProvider >& NewDispatchProvider ) override;
 
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
     css::frame::XDispatchProvider >
     getMasterDispatchProvider(  ) override;
 
     virtual void
     setMasterDispatchProvider(
-        const css::uno::Reference<
+        const cpo::uno::Reference<
         css::frame::XDispatchProvider >& NewSupplier ) override;
 
 
@@ -109,8 +109,8 @@ private:
 
     embeddedobj::DocumentHolder*   m_pDocHolder;
 
-    css::uno::Reference< css::frame::XDispatchProvider > m_xSlaveDispatchProvider;
-    css::uno::Reference< css::frame::XDispatchProvider > m_xMasterDispatchProvider;
+    cpo::uno::Reference< css::frame::XDispatchProvider > m_xSlaveDispatchProvider;
+    cpo::uno::Reference< css::frame::XDispatchProvider > m_xMasterDispatchProvider;
 
     static const cpo::uno::Sequence< OUString > m_aInterceptedURL;
 

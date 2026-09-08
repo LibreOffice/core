@@ -51,7 +51,7 @@ public:
 
     // XAccessibleContext
     virtual sal_Int64 getAccessibleChildCount(  ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleChild( sal_Int64 i ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > getAccessibleChild( sal_Int64 i ) override;
     virtual sal_Int16 getAccessibleRole(  ) override;
     virtual OUString getAccessibleDescription(  ) override;
     virtual OUString getAccessibleName(  ) override;
@@ -62,7 +62,7 @@ public:
     void clearAccessibleSelection(  ) override;
     void selectAllAccessibleChildren(  ) override;
     sal_Int64 getSelectedAccessibleChildCount(  ) override;
-    css::uno::Reference< css::accessibility::XAccessible > getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
+    cpo::uno::Reference< css::accessibility::XAccessible > getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
     void deselectAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
 };
 

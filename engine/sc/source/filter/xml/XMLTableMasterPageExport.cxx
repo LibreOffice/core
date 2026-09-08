@@ -31,7 +31,8 @@
 #include "xmlexprt.hxx"
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::beans;
 using namespace xmloff::token;
@@ -61,7 +62,7 @@ void XMLTableMasterPageExport::exportHeaderFooterContent(
     }
 }
 
-void XMLTableMasterPageExport::exportHeaderFooter(const css::uno::Reference < css::sheet::XHeaderFooterContent >& xHeaderFooter,
+void XMLTableMasterPageExport::exportHeaderFooter(const cpo::uno::Reference < css::sheet::XHeaderFooterContent >& xHeaderFooter,
                                                     const XMLTokenEnum aName,
                                                     const bool bDisplay)
 {

@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SFX2_SOURCE_APPL_NEWHELP_HXX
 #define INCLUDED_SFX2_SOURCE_APPL_NEWHELP_HXX
 
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <com/sun/star/frame/XFrame2.hpp>
 
 #include <rtl/ustrbuf.hxx>
@@ -155,7 +155,7 @@ private:
 
     OUString                       aFactory;
 
-    css::uno::Reference< css::i18n::XBreakIterator >
+    cpo::uno::Reference< css::i18n::XBreakIterator >
                                    xBreakIterator;
 
     void ClearSearchResults();
@@ -351,11 +351,11 @@ private:
     VclPtr<SfxHelpWindow_Impl>     xHelpWin;
     VclPtr<vcl::Window>            pTextWin;
     std::shared_ptr<sfx2::SearchDialog> m_xSrchDlg;
-    css::uno::Reference < css::frame::XFrame2 >
+    cpo::uno::Reference < css::frame::XFrame2 >
                             xFrame;
-    css::uno::Reference< css::i18n::XBreakIterator >
+    cpo::uno::Reference< css::i18n::XBreakIterator >
                             xBreakIterator;
-    css::uno::Reference< cpo::uno::XInterface >
+    cpo::uno::Reference< cpo::uno::XInterface >
                             xConfiguration;
     bool                    bIsDebug;
     bool                    bIsIndexOn;
@@ -366,9 +366,9 @@ private:
     void                    InitToolBoxImages();
     void                    InitOnStartupBox();
 
-    css::uno::Reference< css::i18n::XBreakIterator > const &
+    cpo::uno::Reference< css::i18n::XBreakIterator > const &
                             GetBreakIterator();
-    css::uno::Reference< css::text::XTextRange >
+    cpo::uno::Reference< css::text::XTextRange >
                             getCursor() const;
     bool                    isHandledKey( const vcl::KeyCode& _rKeyCode );
 
@@ -389,7 +389,7 @@ public:
     virtual void            GetFocus() override;
     virtual void            DataChanged( const DataChangedEvent& rDCEvt ) override;
 
-    const css::uno::Reference < css::frame::XFrame2 >&
+    const cpo::uno::Reference < css::frame::XFrame2 >&
                             getFrame() const { return xFrame; }
 
     void                    SetSelectHdl(const Link<const OUString&, void>& rLink) { xToolBox->connect_clicked(rLink); }
@@ -414,11 +414,11 @@ friend class SfxHelpIndexWindow_Impl;
     std::unique_ptr<weld::Paned> m_xContainer;
     std::unique_ptr<weld::Container> m_xHelpPaneWindow;
     std::unique_ptr<weld::Container> m_xHelpTextWindow;
-    css::uno::Reference<css::awt::XWindow> m_xHelpTextXWindow;
+    cpo::uno::Reference<css::awt::XWindow> m_xHelpTextXWindow;
 
-    css::uno::Reference < css::awt::XWindow >
+    cpo::uno::Reference < css::awt::XWindow >
                                 xWindow;
-    css::uno::Reference < css::frame::XFrame2 >
+    cpo::uno::Reference < css::frame::XFrame2 >
                                 xFrame;
 
     std::unique_ptr<SfxHelpIndexWindow_Impl> xIndexWin;
@@ -450,15 +450,15 @@ friend class SfxHelpIndexWindow_Impl;
     DECL_LINK(ResizeHdl, const Size&, void);
 
 public:
-    SfxHelpWindow_Impl( const css::uno::Reference < css::frame::XFrame2 >& rFrame,
+    SfxHelpWindow_Impl( const cpo::uno::Reference < css::frame::XFrame2 >& rFrame,
                         vcl::Window* pParent );
     virtual ~SfxHelpWindow_Impl() override;
     virtual void dispose() override;
 
     virtual bool        PreNotify( NotifyEvent& rNEvt ) override;
 
-    void                setContainerWindow( const css::uno::Reference < css::awt::XWindow >& xWin );
-    css::uno::Reference < css::frame::XFrame2 > const &
+    void                setContainerWindow( const cpo::uno::Reference < css::awt::XWindow >& xWin );
+    cpo::uno::Reference < css::frame::XFrame2 > const &
                         getTextFrame() const { return pTextWin->getFrame(); }
 
     void                SetFactory( const OUString& rFactory );

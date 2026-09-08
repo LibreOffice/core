@@ -59,7 +59,7 @@ protected:
     void checkConnected ();
 
 public:
-    explicit OTempFileService (css::uno::Reference< cpo::uno::XComponentContext > const & context);
+    explicit OTempFileService (cpo::uno::Reference< cpo::uno::XComponentContext > const & context);
 
     //Methods
     //  XTypeProvider
@@ -91,19 +91,19 @@ public:
     virtual sal_Int64 getPosition(  ) override;
     virtual sal_Int64 getLength(  ) override;
     // XStream
-    virtual css::uno::Reference< css::io::XInputStream > getInputStream(  ) override;
-    virtual css::uno::Reference< css::io::XOutputStream > getOutputStream(  ) override;
+    virtual cpo::uno::Reference< css::io::XInputStream > getInputStream(  ) override;
+    virtual cpo::uno::Reference< css::io::XOutputStream > getOutputStream(  ) override;
     // XTruncate
     virtual void truncate() override;
 
     // XPropertySet
-    virtual ::css::uno::Reference< ::css::beans::XPropertySetInfo > getPropertySetInfo() override;
+    virtual ::cpo::uno::Reference< ::css::beans::XPropertySetInfo > getPropertySetInfo() override;
     virtual void setPropertyValue( const ::rtl::OUString& aPropertyName, const ::cpo::uno::Any& aValue ) override;
     virtual ::cpo::uno::Any getPropertyValue( const ::rtl::OUString& PropertyName ) override;
-    virtual void addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::css::uno::Reference< ::css::beans::XPropertyChangeListener >& xListener ) override;
-    virtual void removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::css::uno::Reference< ::css::beans::XPropertyChangeListener >& aListener ) override;
-    virtual void addVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::css::uno::Reference< ::css::beans::XVetoableChangeListener >& aListener ) override;
-    virtual void removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::css::uno::Reference< ::css::beans::XVetoableChangeListener >& aListener ) override;
+    virtual void addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::cpo::uno::Reference< ::css::beans::XPropertyChangeListener >& xListener ) override;
+    virtual void removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::cpo::uno::Reference< ::css::beans::XPropertyChangeListener >& aListener ) override;
+    virtual void addVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::cpo::uno::Reference< ::css::beans::XVetoableChangeListener >& aListener ) override;
+    virtual void removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::cpo::uno::Reference< ::css::beans::XVetoableChangeListener >& aListener ) override;
     // XFastPropertySet
     virtual void setFastPropertyValue( ::sal_Int32 nHandle, const ::cpo::uno::Any& aValue ) override;
     virtual ::cpo::uno::Any getFastPropertyValue( ::sal_Int32 nHandle ) override;

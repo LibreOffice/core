@@ -88,6 +88,7 @@
 #include <strings.hrc>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 class SdImportTest2 : public SdModelTestBase
 {
@@ -1368,7 +1369,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf114821)
 
     // These Labels have custom position, so the exported LabelPlacement (reference point) by MSO is OUTSIDE/OUTEND
     // Check the first label
-    const css::uno::Reference<css::beans::XPropertySet> aPropSet0(
+    const cpo::uno::Reference<css::beans::XPropertySet> aPropSet0(
         aSeriesSeq[0]->getDataPointByIndex(0));
     CPPUNIT_ASSERT(aPropSet0.is());
     sal_Int32 aPlacement;
@@ -1376,14 +1377,14 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf114821)
     CPPUNIT_ASSERT_EQUAL(css::chart::DataLabelPlacement::OUTSIDE, aPlacement);
 
     // Check the second label
-    const css::uno::Reference<css::beans::XPropertySet> aPropSet1(
+    const cpo::uno::Reference<css::beans::XPropertySet> aPropSet1(
         aSeriesSeq[0]->getDataPointByIndex(1));
     CPPUNIT_ASSERT(aPropSet1.is());
     aPropSet1->getPropertyValue(u"LabelPlacement"_ustr) >>= aPlacement;
     CPPUNIT_ASSERT_EQUAL(css::chart::DataLabelPlacement::OUTSIDE, aPlacement);
 
     // Check the third label
-    const css::uno::Reference<css::beans::XPropertySet> aPropSet2(
+    const cpo::uno::Reference<css::beans::XPropertySet> aPropSet2(
         aSeriesSeq[0]->getDataPointByIndex(2));
     CPPUNIT_ASSERT(aPropSet2.is());
     aPropSet2->getPropertyValue(u"LabelPlacement"_ustr) >>= aPlacement;
@@ -2323,7 +2324,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf153012)
     cpo::uno::Sequence<uno::Reference<chart2::XDataSeries>> aSeriesSeq(xDSCnt->getDataSeries());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aSeriesSeq.getLength());
 
-    css::uno::Reference<css::beans::XPropertySet> xPropSet1(aSeriesSeq[0]->getDataPointByIndex(1),
+    cpo::uno::Reference<css::beans::XPropertySet> xPropSet1(aSeriesSeq[0]->getDataPointByIndex(1),
                                                             uno::UNO_SET_THROW);
     Color aFillColor;
     xPropSet1->getPropertyValue(u"FillColor"_ustr) >>= aFillColor;

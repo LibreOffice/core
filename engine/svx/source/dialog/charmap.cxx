@@ -50,8 +50,8 @@
 #include <rtl/ustrbuf.hxx>
 
 using namespace ::com::sun::star::accessibility;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star;
 
 sal_uInt32& SvxShowCharSet::getSelectedChar()
@@ -270,7 +270,7 @@ void SvxShowCharSet::ContextMenuSelect(std::u16string_view rIdent)
 
 void SvxShowCharSet::CopyToClipboard(const OUString& rOUStr)
 {
-    css::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipboard =
+    cpo::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipboard =
         css::datatransfer::clipboard::SystemClipboard::create(comphelper::getProcessComponentContext());
 
     if (!xClipboard.is())
@@ -282,7 +282,7 @@ void SvxShowCharSet::CopyToClipboard(const OUString& rOUStr)
     {
         xClipboard->setContents( pDataObj, nullptr );
 
-        css::uno::Reference<css::datatransfer::clipboard::XFlushableClipboard> xFlushableClipboard(xClipboard, css::uno::UNO_QUERY);
+        cpo::uno::Reference<css::datatransfer::clipboard::XFlushableClipboard> xFlushableClipboard(xClipboard, cpo::uno::UNO_QUERY);
         if( xFlushableClipboard.is() )
             xFlushableClipboard->flushClipboard();
     }

@@ -71,20 +71,20 @@ namespace
         return rPool.GetMetric( nWhich );
     }
 
-    css::uno::Reference< css::document::XUndoManager > getUndoManager( const css::uno::Reference< css::frame::XFrame >& rxFrame )
+    cpo::uno::Reference< css::document::XUndoManager > getUndoManager( const cpo::uno::Reference< css::frame::XFrame >& rxFrame )
     {
-        const css::uno::Reference< css::frame::XController > xController = rxFrame->getController();
+        const cpo::uno::Reference< css::frame::XController > xController = rxFrame->getController();
         if ( xController.is() )
         {
-            const css::uno::Reference< css::frame::XModel > xModel = xController->getModel();
+            const cpo::uno::Reference< css::frame::XModel > xModel = xController->getModel();
             if ( xModel.is() )
             {
-                const css::uno::Reference< css::document::XUndoManagerSupplier > xSuppUndo( xModel, css::uno::UNO_QUERY_THROW );
-                return css::uno::Reference< css::document::XUndoManager >( xSuppUndo->getUndoManager(), css::uno::UNO_SET_THROW );
+                const cpo::uno::Reference< css::document::XUndoManagerSupplier > xSuppUndo( xModel, cpo::uno::UNO_QUERY_THROW );
+                return cpo::uno::Reference< css::document::XUndoManager >( xSuppUndo->getUndoManager(), cpo::uno::UNO_SET_THROW );
             }
         }
 
-        return css::uno::Reference< css::document::XUndoManager > ();
+        return cpo::uno::Reference< css::document::XUndoManager > ();
     }
 }
 
@@ -405,7 +405,7 @@ IMPL_LINK( PageMarginControl, SelectMarginHdl, weld::Button&, rControl, void )
         return;
 
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();
-    const css::uno::Reference<css::document::XUndoManager> xUndoManager(pViewFrm ? getUndoManager(pViewFrm->GetFrame().GetFrameInterface()) : nullptr);
+    const cpo::uno::Reference<css::document::XUndoManager> xUndoManager(pViewFrm ? getUndoManager(pViewFrm->GetFrame().GetFrameInterface()) : nullptr);
     if ( xUndoManager.is() )
         xUndoManager->enterUndoContext( u""_ustr );
 

@@ -33,6 +33,7 @@
 #include <cpo/uno/XComponentContext.hpp>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace {
 
@@ -68,7 +69,7 @@ protected:
     virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // XGalleryThemeProvider
-    virtual css::uno::Reference< css::gallery::XGalleryTheme > insertNewByName( const OUString& ThemeName ) override;
+    virtual cpo::uno::Reference< css::gallery::XGalleryTheme > insertNewByName( const OUString& ThemeName ) override;
     virtual void removeByName( const OUString& ThemeName ) override;
 
 private:

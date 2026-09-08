@@ -39,11 +39,11 @@ public:
     cpo::uno::Any getWindowHandle( const cpo::uno::Sequence< sal_Int8 >& ProcessId, sal_Int16 SystemType ) override;
 
     // css::awt::XTopWindow
-    void addTopWindowListener( const css::uno::Reference< css::awt::XTopWindowListener >& rxListener ) override;
-    void removeTopWindowListener( const css::uno::Reference< css::awt::XTopWindowListener >& rxListener ) override;
+    void addTopWindowListener( const cpo::uno::Reference< css::awt::XTopWindowListener >& rxListener ) override;
+    void removeTopWindowListener( const cpo::uno::Reference< css::awt::XTopWindowListener >& rxListener ) override;
     void toFront() override;
     void toBack() override;
-    void setMenuBar( const css::uno::Reference< css::awt::XMenuBar >& xMenu ) override;
+    void setMenuBar( const cpo::uno::Reference< css::awt::XMenuBar >& xMenu ) override;
 
     // XTopWindow2
     virtual bool getIsMaximized() override;

@@ -37,7 +37,8 @@
 #include <vector>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::accessibility;
 
 #define RULER_OFF           3

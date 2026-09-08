@@ -78,8 +78,8 @@ bool SvxGalleryItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 /* nMemberId
 
     sal_Int8 nType(0);
     OUString aURL, aFilterName;
-    css::uno::Reference< css::lang::XComponent > xDrawing;
-    css::uno::Reference< css::graphic::XGraphic > xGraphic;
+    cpo::uno::Reference< css::lang::XComponent > xDrawing;
+    cpo::uno::Reference< css::graphic::XGraphic > xGraphic;
 
     for (const css::beans::PropertyValue& rProp : aSeq)
     {

@@ -50,8 +50,8 @@
 #include <o3tl/sorted_vector.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::i18n;
 using ::com::sun::star::awt::FontDescriptor;
@@ -447,14 +447,14 @@ void UnoControlModel::dispose(  )
     OPropertySetHelper::disposing(aGuard);
 }
 
-void UnoControlModel::addEventListener( const css::uno::Reference< css::lang::XEventListener >& rxListener )
+void UnoControlModel::addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& rxListener )
 {
     std::unique_lock aGuard( m_aMutex );
 
     maDisposeListeners.addInterface( rxListener );
 }
 
-void UnoControlModel::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& rxListener )
+void UnoControlModel::removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& rxListener )
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -519,11 +519,11 @@ OUString UnoControlModel::getServiceName(  )
     return OUString();
 }
 
-void UnoControlModel::write( const css::uno::Reference< css::io::XObjectOutputStream >& OutStream )
+void UnoControlModel::write( const cpo::uno::Reference< css::io::XObjectOutputStream >& OutStream )
 {
     std::unique_lock aGuard( m_aMutex );
 
-    css::uno::Reference< css::io::XMarkableStream > xMark( OutStream, css::uno::UNO_QUERY );
+    cpo::uno::Reference< css::io::XMarkableStream > xMark( OutStream, cpo::uno::UNO_QUERY );
     DBG_ASSERT( xMark.is(), "write: no css::io::XMarkableStream!" );
 
     OutStream->writeShort( UNOCONTROL_STREAMVERSION );
@@ -749,11 +749,11 @@ void UnoControlModel::write( const css::uno::Reference< css::io::XObjectOutputSt
     }
 }
 
-void UnoControlModel::read( const css::uno::Reference< css::io::XObjectInputStream >& InStream )
+void UnoControlModel::read( const cpo::uno::Reference< css::io::XObjectInputStream >& InStream )
 {
     std::unique_lock aGuard( m_aMutex );
 
-    css::uno::Reference< css::io::XMarkableStream > xMark( InStream, css::uno::UNO_QUERY );
+    cpo::uno::Reference< css::io::XMarkableStream > xMark( InStream, cpo::uno::UNO_QUERY );
     DBG_ASSERT( xMark.is(), "read: no css::io::XMarkableStream!" );
 
     short nVersion = InStream->readShort();
@@ -1249,10 +1249,10 @@ void UnoControlModel::setFastPropertyValueImpl( std::unique_lock<std::mutex>& rG
 }
 
 // css::beans::XMultiPropertySet
-css::uno::Reference< css::beans::XPropertySetInfo > UnoControlModel::getPropertySetInfo(  )
+cpo::uno::Reference< css::beans::XPropertySetInfo > UnoControlModel::getPropertySetInfo(  )
 {
     OSL_FAIL( "UnoControlModel::getPropertySetInfo() not possible!" );
-    return css::uno::Reference< css::beans::XPropertySetInfo >();
+    return cpo::uno::Reference< css::beans::XPropertySetInfo >();
 }
 
 void UnoControlModel::setPropertyValues( const cpo::uno::Sequence< OUString >& rPropertyNames, const cpo::uno::Sequence< cpo::uno::Any >& Values )

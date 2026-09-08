@@ -34,7 +34,7 @@ namespace com::sun::star::graphic { class XPrimitive2D; }
 // using default parameters and graphic::XPrimitive2DRenderer
 
 Bitmap VCL_DLLPUBLIC convertPrimitive2DSequenceToBitmap(
-    const std::deque< css::uno::Reference< css::graphic::XPrimitive2D > >& rSequence,
+    const std::deque< cpo::uno::Reference< css::graphic::XPrimitive2D > >& rSequence,
     const basegfx::B2DRange& rTargetRange,
     const sal_uInt32 nMaximumQuadraticPixels = 500000,
     const o3tl::Length eTargetUnit = o3tl::Length::mm100,
@@ -58,7 +58,7 @@ private:
     // on demand created content
     bool                        mbSequenceCreated;
     basegfx::B2DRange           maRange;
-    std::deque< css::uno::Reference< css::graphic::XPrimitive2D > > maSequence;
+    std::deque< cpo::uno::Reference< css::graphic::XPrimitive2D > > maSequence;
     Bitmap                      maReplacement;
     size_t                      mNestedBitmapSize;
     VectorGraphicDataType meType;
@@ -101,7 +101,7 @@ public:
 
     /// data read and evtl. on demand creation
     const basegfx::B2DRange& getRange() const;
-    const std::deque<css::uno::Reference<css::graphic::XPrimitive2D>>& getPrimitive2DSequence() const;
+    const std::deque<cpo::uno::Reference<css::graphic::XPrimitive2D>>& getPrimitive2DSequence() const;
     Bitmap getBitmap(const Size& pixelSize) const;
     const Bitmap& getReplacement() const;
     BitmapChecksum GetChecksum() const;

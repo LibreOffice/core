@@ -49,7 +49,7 @@ namespace sfx2
 {
 
 
-    using ::com::sun::star::uno::Reference;
+    using ::cpo::uno::Reference;
     using ::com::sun::star::task::XInteractionHandler;
     using ::cpo::uno::Any;
     using ::cpo::uno::Sequence;
@@ -61,7 +61,7 @@ namespace sfx2
     using ::com::sun::star::document::XEmbeddedScripts;
     using ::com::sun::star::script::XLibraryContainer;
     using ::com::sun::star::container::XNameAccess;
-    using ::com::sun::star::uno::UNO_QUERY_THROW;
+    using ::cpo::uno::UNO_QUERY_THROW;
 
     namespace MacroExecMode = ::com::sun::star::document::MacroExecMode;
 

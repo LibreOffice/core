@@ -22,7 +22,7 @@
 #define INCLUDED_SVX_SOURCE_INC_GRAPHCTLACCESSIBLECONTEXT_HXX
 
 #include <cppuhelper/compbase.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
@@ -66,7 +66,7 @@ public:
     void Notify( SfxBroadcaster& aBC, const SfxHint& aHint ) override;
 
     // XAccessibleComponent
-    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleAtPoint( const css::awt::Point& rPoint ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > getAccessibleAtPoint( const css::awt::Point& rPoint ) override;
     virtual void grabFocus() override;
 
     virtual sal_Int32 getForeground() override;
@@ -75,12 +75,12 @@ public:
 
     // XAccessibleContext
     virtual sal_Int64 getAccessibleChildCount() override;
-    virtual css::uno::Reference< css::accessibility::XAccessible> getAccessibleChild (sal_Int64 nIndex) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible> getAccessibleParent() override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible> getAccessibleChild (sal_Int64 nIndex) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible> getAccessibleParent() override;
     virtual sal_Int16 getAccessibleRole() override;
     virtual OUString getAccessibleDescription() override;
     virtual OUString getAccessibleName() override;
-    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet> getAccessibleRelationSet() override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessibleRelationSet> getAccessibleRelationSet() override;
     virtual sal_Int64 getAccessibleStateSet() override;
     virtual css::lang::Locale getLocale() override;
 
@@ -98,7 +98,7 @@ public:
     virtual void clearAccessibleSelection() override;
     virtual void selectAllAccessibleChildren() override;
     virtual sal_Int64 getSelectedAccessibleChildCount() override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
     virtual void deselectAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
 
     // IAccessibleViewforwarder
@@ -124,7 +124,7 @@ private:
     /// @throws css::lang::IndexOutOfBoundsException
     SdrObject* getSdrObject( sal_Int64 nIndex );
 
-    css::uno::Reference< css::accessibility::XAccessible > getAccessible( const SdrObject* pObj );
+    cpo::uno::Reference< css::accessibility::XAccessible > getAccessible( const SdrObject* pObj );
 
     /** Description of this object.  This is not a constant because it can
         be set from the outside.

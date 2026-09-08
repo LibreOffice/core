@@ -93,7 +93,7 @@ namespace comphelper
 
             The default implementation returns <NULL/>.
         */
-        static css::uno::Reference< cpo::uno::XInterface >
+        static cpo::uno::Reference< cpo::uno::XInterface >
                 getComponent();
 
     private:

@@ -33,7 +33,7 @@ namespace logging
 {
 
 
-    using ::com::sun::star::uno::Reference;
+    using ::cpo::uno::Reference;
     using ::cpo::uno::XComponentContext;
     using ::com::sun::star::logging::LogRecord;
     using ::com::sun::star::logging::XLogFormatter;
@@ -84,7 +84,7 @@ namespace logging
         {
             try
             {
-                Reference< XLogFormatter > xFormatter( PlainTextFormatter::create( m_xContext ), css::uno::UNO_SET_THROW );
+                Reference< XLogFormatter > xFormatter( PlainTextFormatter::create( m_xContext ), cpo::uno::UNO_SET_THROW );
                 setFormatter( xFormatter );
             }
             catch( const Exception& )
@@ -129,7 +129,7 @@ namespace logging
 
         try
         {
-            Reference< XLogFormatter > xFormatter( getFormatter(), css::uno::UNO_SET_THROW );
+            Reference< XLogFormatter > xFormatter( getFormatter(), cpo::uno::UNO_SET_THROW );
             OUString sEntry( xFormatter->format( _rRecord ) );
             _out_rEntry = OUStringToOString( sEntry, getTextEncoding() );
             return true;
@@ -146,7 +146,7 @@ namespace logging
     {
         try
         {
-            Reference< XLogFormatter > xFormatter( getFormatter(), css::uno::UNO_SET_THROW );
+            Reference< XLogFormatter > xFormatter( getFormatter(), cpo::uno::UNO_SET_THROW );
             OUString sHead( xFormatter->getHead() );
             _out_rHead = OUStringToOString( sHead, getTextEncoding() );
             return true;
@@ -163,7 +163,7 @@ namespace logging
     {
         try
         {
-            Reference< XLogFormatter > xFormatter( getFormatter(), css::uno::UNO_SET_THROW );
+            Reference< XLogFormatter > xFormatter( getFormatter(), cpo::uno::UNO_SET_THROW );
             OUString sTail( xFormatter->getTail() );
             _out_rTail = OUStringToOString( sTail, getTextEncoding() );
             return true;

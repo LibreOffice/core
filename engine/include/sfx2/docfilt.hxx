@@ -31,7 +31,7 @@
 #include <string_view>
 
 namespace com::sun::star::embed { class XStorage; }
-namespace com::sun::star::uno { template <typename > class Reference; }
+namespace cpo::uno { template <typename > class Reference; }
 
 class SotStorage;
 
@@ -119,7 +119,7 @@ public:
     /// @throws css::lang::WrappedTargetException
     /// @throws cpo::uno::RuntimeException
     static OUString GetTypeFromStorage(
-        const css::uno::Reference<css::embed::XStorage>& xStorage );
+        const cpo::uno::Reference<css::embed::XStorage>& xStorage );
     bool IsEnabled() const  { return mbEnabled; }
 };
 

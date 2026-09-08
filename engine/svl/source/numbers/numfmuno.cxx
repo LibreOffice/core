@@ -40,6 +40,7 @@
 #include <utility>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 constexpr OUString PROPERTYNAME_FMTSTR = u"FormatString"_ustr;
 constexpr OUString PROPERTYNAME_LOCALE = u"Locale"_ustr;

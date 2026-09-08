@@ -54,7 +54,7 @@
 #define SERVICE_NAME "com.sun.star.ts.TestManagerImpl"
 
 
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace css::registry;
 using namespace css::lang;
 using namespace css::container;

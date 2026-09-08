@@ -37,6 +37,7 @@
 #include <sfx2/viewsh.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 namespace svx::SignatureLineHelper
 {

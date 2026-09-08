@@ -33,18 +33,18 @@ namespace dbaui
     */
     class OFilePickerInteractionHandler final : public OFilePickerInteractionHandler_Base
     {
-        css::uno::Reference< css::task::XInteractionHandler >
+        cpo::uno::Reference< css::task::XInteractionHandler >
                     m_xMaster;      // our master handler
         bool        m_bDoesNotExist;
 
     public:
-        explicit OFilePickerInteractionHandler( const css::uno::Reference< css::task::XInteractionHandler >& _rxMaster );
+        explicit OFilePickerInteractionHandler( const cpo::uno::Reference< css::task::XInteractionHandler >& _rxMaster );
 
         bool isDoesNotExist() const { return m_bDoesNotExist; }
 
     private:
         // XInteractionHandler
-        virtual void handle( const css::uno::Reference< css::task::XInteractionRequest >& _rxRequest ) override;
+        virtual void handle( const cpo::uno::Reference< css::task::XInteractionRequest >& _rxRequest ) override;
 
         virtual ~OFilePickerInteractionHandler() override;
     };

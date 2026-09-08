@@ -37,6 +37,7 @@
 #include <utility>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace ooo::vba;
 
 
@@ -203,7 +204,7 @@ lcl_controlsWrapper( const uno::Reference< awt::XControl >& xDlg )
 ScVbaControls::ScVbaControls(
         const uno::Reference< XHelperInterface >& xParent,
         const uno::Reference< cpo::uno::XComponentContext >& xContext,
-        const css::uno::Reference< awt::XControl >& xDialog,
+        const cpo::uno::Reference< awt::XControl >& xDialog,
         uno::Reference< frame::XModel > xModel,
         double fOffsetX, double fOffsetY ) :
     ControlsImpl_BASE( xParent, xContext, lcl_controlsWrapper( xDialog  ) ),

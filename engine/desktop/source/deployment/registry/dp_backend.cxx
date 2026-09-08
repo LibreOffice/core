@@ -49,8 +49,8 @@
 
 using namespace ::dp_misc;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::ucb;
 
 namespace dp_registry::backend {
@@ -415,8 +415,8 @@ bool Package::isBundle()
 
 
 ::sal_Int32 Package::checkPrerequisites(
-        const css::uno::Reference< css::task::XAbortChannel >&,
-        const css::uno::Reference< css::ucb::XCommandEnvironment >&,
+        const cpo::uno::Reference< css::task::XAbortChannel >&,
+        const cpo::uno::Reference< css::ucb::XCommandEnvironment >&,
         bool)
 {
     if (m_bRemoved)
@@ -426,7 +426,7 @@ bool Package::isBundle()
 
 
 bool Package::checkDependencies(
-        const css::uno::Reference< css::ucb::XCommandEnvironment >& )
+        const cpo::uno::Reference< css::ucb::XCommandEnvironment >& )
 {
     if (m_bRemoved)
         throw deployment::ExtensionRemovedException();

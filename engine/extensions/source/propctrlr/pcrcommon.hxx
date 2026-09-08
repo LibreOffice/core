@@ -72,19 +72,19 @@ namespace pcr
 
 #define DECLARE_XCOMPONENT() \
     virtual void dispose(  ) override; \
-    virtual void addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override; \
-    virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+    virtual void addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& xListener ) override; \
+    virtual void removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
 #define IMPLEMENT_FORWARD_XCOMPONENT( classname, baseclass ) \
     void classname::dispose(  ) \
     { \
     baseclass::WeakComponentImplHelperBase::dispose(); \
     } \
-    void classname::addEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener ) \
+    void classname::addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& Listener ) \
     { \
         baseclass::WeakComponentImplHelperBase::addEventListener( Listener ); \
     } \
-    void classname::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener ) \
+    void classname::removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& Listener ) \
     { \
         baseclass::WeakComponentImplHelperBase::removeEventListener( Listener ); \
     } \

@@ -57,7 +57,7 @@
 #include <cppuhelper/implbase.hxx>
 
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::beans;
@@ -114,7 +114,7 @@ private:
 
         try
         {
-            const css::uno::Reference<cpo::uno::XComponentContext>& context(
+            const cpo::uno::Reference<cpo::uno::XComponentContext>& context(
                 comphelper::getProcessComponentContext());
             Reference< XScriptListener > const xScriptListener(
                 context->getServiceManager()->createInstanceWithContext(
@@ -1196,7 +1196,7 @@ FmUndoModelReplaceAction::~FmUndoModelReplaceAction()
 }
 
 
-void FmUndoModelReplaceAction::DisposeElement( const css::uno::Reference< css::awt::XControlModel>& xReplaced )
+void FmUndoModelReplaceAction::DisposeElement( const cpo::uno::Reference< css::awt::XControlModel>& xReplaced )
 {
     Reference< XComponent >  xComp(xReplaced, UNO_QUERY);
     if (xComp.is())
@@ -1218,7 +1218,7 @@ void FmUndoModelReplaceAction::Undo()
         Reference< XChild > xCurrentAsChild( xCurrentModel, UNO_QUERY );
         Reference< XNameContainer > xCurrentsParent;
         if ( xCurrentAsChild.is() )
-            xCurrentsParent.set(xCurrentAsChild->getParent(), css::uno::UNO_QUERY);
+            xCurrentsParent.set(xCurrentAsChild->getParent(), cpo::uno::UNO_QUERY);
         DBG_ASSERT( xCurrentsParent.is(), "FmUndoModelReplaceAction::Undo: invalid current model!" );
 
         if ( xCurrentsParent.is() )

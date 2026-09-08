@@ -28,7 +28,7 @@
 
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 namespace chart::sidebar {
@@ -41,7 +41,7 @@ enum class ErrorBarDirection
     NEGATIVE
 };
 
-css::uno::Reference<css::beans::XPropertySet> getErrorBarPropSet(
+cpo::uno::Reference<css::beans::XPropertySet> getErrorBarPropSet(
         const rtl::Reference<::chart::ChartModel>& xModel, std::u16string_view rCID)
 {
     return ObjectIdentifier::getObjectPropertySet(rCID, xModel);
@@ -50,7 +50,7 @@ css::uno::Reference<css::beans::XPropertySet> getErrorBarPropSet(
 bool showPositiveError(const rtl::Reference<::chart::ChartModel>& xModel,
         std::u16string_view rCID)
 {
-    css::uno::Reference<css::beans::XPropertySet> xPropSet =
+    cpo::uno::Reference<css::beans::XPropertySet> xPropSet =
         getErrorBarPropSet(xModel, rCID);
 
     if (!xPropSet.is())
@@ -69,7 +69,7 @@ bool showPositiveError(const rtl::Reference<::chart::ChartModel>& xModel,
 bool showNegativeError(const rtl::Reference<::chart::ChartModel>& xModel,
         std::u16string_view rCID)
 {
-    css::uno::Reference<css::beans::XPropertySet> xPropSet =
+    cpo::uno::Reference<css::beans::XPropertySet> xPropSet =
         getErrorBarPropSet(xModel, rCID);
 
     if (!xPropSet.is())
@@ -88,7 +88,7 @@ bool showNegativeError(const rtl::Reference<::chart::ChartModel>& xModel,
 void setShowPositiveError(const rtl::Reference<::chart::ChartModel>& xModel,
         std::u16string_view rCID, bool bShow)
 {
-    css::uno::Reference<css::beans::XPropertySet> xPropSet =
+    cpo::uno::Reference<css::beans::XPropertySet> xPropSet =
         getErrorBarPropSet(xModel, rCID);
 
     if (!xPropSet.is())
@@ -100,7 +100,7 @@ void setShowPositiveError(const rtl::Reference<::chart::ChartModel>& xModel,
 void setShowNegativeError(const rtl::Reference<::chart::ChartModel>& xModel,
         std::u16string_view rCID, bool bShow)
 {
-    css::uno::Reference<css::beans::XPropertySet> xPropSet =
+    cpo::uno::Reference<css::beans::XPropertySet> xPropSet =
         getErrorBarPropSet(xModel, rCID);
 
     if (!xPropSet.is())
@@ -128,7 +128,7 @@ ErrorBarTypeMap const aErrorBarType[] = {
 sal_Int32 getTypePos(const rtl::Reference<::chart::ChartModel>& xModel,
         std::u16string_view rCID)
 {
-    css::uno::Reference<css::beans::XPropertySet> xPropSet =
+    cpo::uno::Reference<css::beans::XPropertySet> xPropSet =
         getErrorBarPropSet(xModel, rCID);
 
     if (!xPropSet.is())
@@ -154,7 +154,7 @@ sal_Int32 getTypePos(const rtl::Reference<::chart::ChartModel>& xModel,
 void setTypePos(const rtl::Reference<::chart::ChartModel>& xModel,
         std::u16string_view rCID, sal_Int32 nPos)
 {
-    css::uno::Reference<css::beans::XPropertySet> xPropSet =
+    cpo::uno::Reference<css::beans::XPropertySet> xPropSet =
         getErrorBarPropSet(xModel, rCID);
 
     if (!xPropSet.is())
@@ -173,7 +173,7 @@ void setTypePos(const rtl::Reference<::chart::ChartModel>& xModel,
 double getValue(const rtl::Reference<::chart::ChartModel>& xModel,
         std::u16string_view rCID, ErrorBarDirection eDir)
 {
-    css::uno::Reference<css::beans::XPropertySet> xPropSet =
+    cpo::uno::Reference<css::beans::XPropertySet> xPropSet =
         getErrorBarPropSet(xModel, rCID);
 
     if (!xPropSet.is())
@@ -197,7 +197,7 @@ double getValue(const rtl::Reference<::chart::ChartModel>& xModel,
 void setValue(const rtl::Reference<::chart::ChartModel>& xModel,
         std::u16string_view rCID, double nVal, ErrorBarDirection eDir)
 {
-    css::uno::Reference<css::beans::XPropertySet> xPropSet =
+    cpo::uno::Reference<css::beans::XPropertySet> xPropSet =
         getErrorBarPropSet(xModel, rCID);
 
     if (!xPropSet.is())
@@ -212,8 +212,8 @@ void setValue(const rtl::Reference<::chart::ChartModel>& xModel,
 
 OUString getCID(const rtl::Reference<::chart::ChartModel>& xModel)
 {
-    css::uno::Reference<css::frame::XController> xController(xModel->getCurrentController());
-    css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(xController, css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::frame::XController> xController(xModel->getCurrentController());
+    cpo::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(xController, cpo::uno::UNO_QUERY);
     if (!xSelectionSupplier.is())
         return OUString();
 
@@ -386,7 +386,7 @@ void ChartErrorBarPanel::doUpdateModel(const rtl::Reference<::chart::ChartModel>
     mxModel->addModifyListener(mxListener);
 }
 
-void ChartErrorBarPanel::updateModel(css::uno::Reference<css::frame::XModel> xModel)
+void ChartErrorBarPanel::updateModel(cpo::uno::Reference<css::frame::XModel> xModel)
 {
     ::chart::ChartModel* pModel = dynamic_cast<::chart::ChartModel*>(xModel.get());
     assert(!xModel || pModel);

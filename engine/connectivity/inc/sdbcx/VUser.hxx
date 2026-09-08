@@ -74,7 +74,7 @@ namespace connectivity::sdbcx
         //XTypeProvider
         virtual cpo::uno::Sequence< cpo::uno::Type > getTypes(  ) override;
         // XPropertySet
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+        virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
         // XUser
         virtual void changePassword( const OUString& objPassword, const OUString& newPassword ) override;
         // XAuthorizable
@@ -83,7 +83,7 @@ namespace connectivity::sdbcx
         virtual void grantPrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) override;
         virtual void revokePrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) override;
         // XGroupsSupplier
-        virtual css::uno::Reference< css::container::XNameAccess > getGroups(  ) override;
+        virtual cpo::uno::Reference< css::container::XNameAccess > getGroups(  ) override;
 
         // XNamed
         virtual OUString getName(  ) override;

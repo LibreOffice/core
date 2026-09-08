@@ -37,7 +37,7 @@
 
 using namespace comphelper;
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace css::beans;
 using namespace css::frame;
 using namespace css::frame;
@@ -205,7 +205,7 @@ void SignSignatureLineDialog::Apply()
                               xValidGraphic, xInvalidGraphic, m_xEditComment->get_text());
 }
 
-css::uno::Reference<css::graphic::XGraphic> SignSignatureLineDialog::getSignedGraphic(bool bValid)
+cpo::uno::Reference<css::graphic::XGraphic> SignSignatureLineDialog::getSignedGraphic(bool bValid)
 {
     // Read svg and replace placeholder texts
     OUString aSvgImage(svx::SignatureLineHelper::getSignatureImage());

@@ -28,7 +28,7 @@ class XMLTextListBlockContext : public SvXMLImportContext
 {
     XMLTextImportHelper&    mrTxtImport;
 
-    css::uno::Reference< css::container::XIndexReplace > mxNumRules;
+    cpo::uno::Reference< css::container::XIndexReplace > mxNumRules;
 
     // text:style-name property of <list> element
     OUString         msListStyleName;
@@ -51,22 +51,22 @@ public:
     XMLTextListBlockContext(
                 SvXMLImport& rImport,
                 XMLTextImportHelper& rTxtImp,
-                const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
+                const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
                 const bool bRestartNumberingAtSubList = false );
     virtual ~XMLTextListBlockContext() override;
 
     virtual void endFastElement(sal_Int32 nElement) override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     sal_Int16 GetLevel() const { return mnLevel; }
     bool IsRestartNumbering() const { return mbRestartNumbering; }
     void ResetRestartNumbering() { mbRestartNumbering = false; }
 
     /// does this list have (possibly inherited from parent) list-style-name?
-    const css::uno::Reference < css::container::XIndexReplace >& GetNumRules() const
+    const cpo::uno::Reference < css::container::XIndexReplace >& GetNumRules() const
         { return mxNumRules; }
 
     const OUString& GetListId() const { return msListId;}

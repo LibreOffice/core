@@ -39,7 +39,7 @@ class MiscUtils
 {
 public:
 
-static cpo::uno::Sequence< OUString > allOpenTDocUrls( const  css::uno::Reference< cpo::uno::XComponentContext >& xCtx)
+static cpo::uno::Sequence< OUString > allOpenTDocUrls( const  cpo::uno::Reference< cpo::uno::XComponentContext >& xCtx)
 {
     cpo::uno::Sequence< OUString > result;
     try
@@ -48,7 +48,7 @@ static cpo::uno::Sequence< OUString > allOpenTDocUrls( const  css::uno::Referenc
         {
             return result;
         }
-        css::uno::Reference < css::ucb::XSimpleFileAccess3 > xSFA( css::ucb::SimpleFileAccess::create(xCtx) );
+        cpo::uno::Reference < css::ucb::XSimpleFileAccess3 > xSFA( css::ucb::SimpleFileAccess::create(xCtx) );
         result = xSFA->getFolderContents( u"vnd.sun.star.tdoc:/"_ustr, true );
     }
     catch ( cpo::uno::Exception& )
@@ -57,19 +57,19 @@ static cpo::uno::Sequence< OUString > allOpenTDocUrls( const  css::uno::Referenc
     return result;
 }
 
-static OUString xModelToTdocUrl( const css::uno::Reference< css::frame::XModel >& xModel,
-                                 const css::uno::Reference< cpo::uno::XComponentContext >& xContext )
+static OUString xModelToTdocUrl( const cpo::uno::Reference< css::frame::XModel >& xModel,
+                                 const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext )
 {
-    css::uno::Reference< css::lang::XMultiComponentFactory > xMCF(
+    cpo::uno::Reference< css::lang::XMultiComponentFactory > xMCF(
         xContext->getServiceManager() );
-    css::uno::Reference<
+    cpo::uno::Reference<
             css::frame::XTransientDocumentsDocumentContentFactory > xDocFac;
     try
     {
         xDocFac.set(xMCF->createInstanceWithContext(
                         u"com.sun.star.frame.TransientDocumentsDocumentContentFactory"_ustr,
                         xContext ),
-                    css::uno::UNO_QUERY );
+                    cpo::uno::UNO_QUERY );
     }
     catch ( cpo::uno::Exception const & )
     {
@@ -80,7 +80,7 @@ static OUString xModelToTdocUrl( const css::uno::Reference< css::frame::XModel >
     {
         try
         {
-            css::uno::Reference< css::ucb::XContent > xContent(
+            cpo::uno::Reference< css::ucb::XContent > xContent(
                 xDocFac->createDocumentContent( xModel ) );
             return xContent->getIdentifier()->getContentIdentifier();
         }
@@ -94,7 +94,7 @@ static OUString xModelToTdocUrl( const css::uno::Reference< css::frame::XModel >
     return OUString();
 }
 
-static css::uno::Reference< css::frame::XModel > tDocUrlToModel( const OUString& url )
+static cpo::uno::Reference< css::frame::XModel > tDocUrlToModel( const OUString& url )
 {
     cpo::uno::Any result;
 
@@ -112,8 +112,8 @@ static css::uno::Reference< css::frame::XModel > tDocUrlToModel( const OUString&
         // carry on, empty value will be returned
     }
 
-    css::uno::Reference< css::frame::XModel > xModel(
-        result, css::uno::UNO_QUERY );
+    cpo::uno::Reference< css::frame::XModel > xModel(
+        result, cpo::uno::UNO_QUERY );
 
     return xModel;
 }

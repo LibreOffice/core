@@ -70,7 +70,7 @@ class OComponentAccess final : public ::cppu::WeakImplHelper< css::container::XE
             @onerror    Do nothing and reset this object to default with an empty list.
         *//*-*****************************************************************************************************/
 
-        OComponentAccess( const css::uno::Reference< css::frame::XDesktop >& xOwner );
+        OComponentAccess( const cpo::uno::Reference< css::frame::XDesktop >& xOwner );
 
         //  XEnumerationAccess
 
@@ -85,7 +85,7 @@ class OComponentAccess final : public ::cppu::WeakImplHelper< css::container::XE
                         An NULL-reference, other way.
         *//*-*****************************************************************************************************/
 
-        virtual css::uno::Reference< css::container::XEnumeration > createEnumeration() override;
+        virtual cpo::uno::Reference< css::container::XEnumeration > createEnumeration() override;
 
         //  XElementAccess
 
@@ -135,8 +135,8 @@ class OComponentAccess final : public ::cppu::WeakImplHelper< css::container::XE
                                          and must collect all information.
         *//*-*****************************************************************************************************/
 
-        static void impl_collectAllChildComponents(    const   css::uno::Reference< css::frame::XFramesSupplier >&            xNode           ,
-                                                        std::vector< css::uno::Reference< css::lang::XComponent > >&   seqComponents   );
+        static void impl_collectAllChildComponents(    const   cpo::uno::Reference< css::frame::XFramesSupplier >&            xNode           ,
+                                                        std::vector< cpo::uno::Reference< css::lang::XComponent > >&   seqComponents   );
 
         /*-****************************************************************************************************
             @short      get the component of a frame
@@ -150,7 +150,7 @@ class OComponentAccess final : public ::cppu::WeakImplHelper< css::container::XE
             @onerror    A null reference is returned.
         *//*-*****************************************************************************************************/
 
-        static css::uno::Reference< css::lang::XComponent > impl_getFrameComponent( const css::uno::Reference< css::frame::XFrame >& xFrame );
+        static cpo::uno::Reference< css::lang::XComponent > impl_getFrameComponent( const cpo::uno::Reference< css::frame::XFrame >& xFrame );
 
         cpo::uno::WeakReference< css::frame::XDesktop >     m_xOwner;   /// weak reference to the desktop object!
 

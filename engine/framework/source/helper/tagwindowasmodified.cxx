@@ -40,7 +40,7 @@ TagWindowAsModified::~TagWindowAsModified()
 
 void TagWindowAsModified::initialize(const cpo::uno::Sequence< cpo::uno::Any >& lArguments)
 {
-    css::uno::Reference< css::frame::XFrame > xFrame;
+    cpo::uno::Reference< css::frame::XFrame > xFrame;
 
     if (lArguments.hasElements())
         lArguments[0] >>= xFrame;
@@ -106,16 +106,16 @@ void TagWindowAsModified::disposing(const css::lang::EventObject& aEvent)
     }
 }
 
-void TagWindowAsModified::impl_update (const css::uno::Reference< css::frame::XFrame >& xFrame)
+void TagWindowAsModified::impl_update (const cpo::uno::Reference< css::frame::XFrame >& xFrame)
 {
     if (!xFrame)
         return;
 
-    css::uno::Reference< css::awt::XWindow >       xWindow     = xFrame->getContainerWindow ();
-    css::uno::Reference< css::frame::XController > xController = xFrame->getController ();
-    css::uno::Reference< css::util::XModifiable >  xModel;
+    cpo::uno::Reference< css::awt::XWindow >       xWindow     = xFrame->getContainerWindow ();
+    cpo::uno::Reference< css::frame::XController > xController = xFrame->getController ();
+    cpo::uno::Reference< css::util::XModifiable >  xModel;
     if (xController.is ())
-        xModel = css::uno::Reference< css::util::XModifiable >(xController->getModel(), css::uno::UNO_QUERY);
+        xModel = cpo::uno::Reference< css::util::XModifiable >(xController->getModel(), cpo::uno::UNO_QUERY);
 
     if (!xWindow || !xModel)
         return;

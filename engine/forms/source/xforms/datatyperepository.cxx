@@ -33,7 +33,7 @@
 namespace xforms
 {
 
-    using ::com::sun::star::uno::Reference;
+    using ::cpo::uno::Reference;
     using ::cpo::uno::Any;
     using ::cpo::uno::Type;
     using ::cpo::uno::Sequence;

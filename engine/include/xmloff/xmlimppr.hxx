@@ -34,7 +34,7 @@ namespace com::sun::star::beans { class XTolerantMultiPropertySet; }
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::container { class XNameContainer; }
 namespace cpo::uno { class Any; }
-namespace com::sun::star::uno { template <typename > class Reference; }
+namespace cpo::uno { template <typename > class Reference; }
 namespace cpo::uno { template <typename > class Sequence; }
 namespace com::sun::star::xml::sax { class XFastAttributeList; }
 #if defined __GNUC__ // gcc does not like visibility annotation on enum
@@ -96,7 +96,7 @@ public:
       */
     void importXML(
             ::std::vector< XMLPropertyState >& rProperties,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+            const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
             const SvXMLUnitConverter& rUnitConverter,
             const SvXMLNamespaceMap& rNamespaceMap,
             sal_uInt32 nPropType,
@@ -117,12 +117,12 @@ public:
 
     void CheckSpecialContext(
             const ::std::vector< XMLPropertyState >& rProperties,
-            const css::uno::Reference< css::beans::XPropertySet >& rPropSet,
+            const cpo::uno::Reference< css::beans::XPropertySet >& rPropSet,
             ContextID_Index_Pair* pSpecialContextIds ) const;
 
     bool FillPropertySet(
             const ::std::vector< XMLPropertyState >& rProperties,
-            const css::uno::Reference< css::beans::XPropertySet >& rPropSet,
+            const cpo::uno::Reference< css::beans::XPropertySet >& rPropSet,
             ContextID_Index_Pair* pSpecialContextIds = nullptr ) const;
 
     void FillPropertySequence(
@@ -138,8 +138,8 @@ public:
      * Exceptions will be asserted. */
     static bool FillPropertySet_(
         const ::std::vector<XMLPropertyState> & rProperties,
-        const css::uno::Reference< css::beans::XPropertySet> & rPropSet,
-        const css::uno::Reference< css::beans::XPropertySetInfo> & rPropSetInfo,
+        const cpo::uno::Reference< css::beans::XPropertySet> & rPropSet,
+        const cpo::uno::Reference< css::beans::XPropertySetInfo> & rPropSetInfo,
         const rtl::Reference<XMLPropertySetMapper> & rPropMapper,
         SvXMLImport& rImport,
 
@@ -151,8 +151,8 @@ public:
      * If unsuccessful, set return value. */
     static bool FillMultiPropertySet_(
         const ::std::vector<XMLPropertyState> & rProperties,
-        const css::uno::Reference< css::beans::XMultiPropertySet> & rMultiPropSet,
-        const css::uno::Reference< css::beans::XPropertySetInfo> & rPropSetInfo,
+        const cpo::uno::Reference< css::beans::XMultiPropertySet> & rMultiPropSet,
+        const cpo::uno::Reference< css::beans::XPropertySetInfo> & rPropSetInfo,
         const rtl::Reference<XMLPropertySetMapper> & rPropMapper,
 
         // parameters for use by txtstyli.cxx; allows efficient
@@ -163,7 +163,7 @@ public:
      * If unsuccessful, set return value. */
     static bool FillTolerantMultiPropertySet_(
         const ::std::vector<XMLPropertyState> & rProperties,
-        const css::uno::Reference< css::beans::XTolerantMultiPropertySet> & rTolPropSet,
+        const cpo::uno::Reference< css::beans::XTolerantMultiPropertySet> & rTolPropSet,
         const rtl::Reference<XMLPropertySetMapper> & rPropMapper,
         SvXMLImport& rImport,
 
@@ -174,7 +174,7 @@ public:
 
     static void PrepareForMultiPropertySet_(
         const ::std::vector<XMLPropertyState> & rProperties,
-        const css::uno::Reference< css::beans::XPropertySetInfo> & rPropSetInfo,
+        const cpo::uno::Reference< css::beans::XPropertySetInfo> & rPropSetInfo,
         const rtl::Reference<XMLPropertySetMapper> & rPropMapper,
         ContextID_Index_Pair* pSpecialContextIds,
         cpo::uno::Sequence< OUString >& rNames,
@@ -188,7 +188,7 @@ private:
         sal_uInt32 nPropType,
         sal_Int32 nStartIdx,
         sal_Int32 nEndIdx,
-        css::uno::Reference< css::container::XNameContainer >& xAttrContainer,
+        cpo::uno::Reference< css::container::XNameContainer >& xAttrContainer,
         const OUString& sAttrName,
         const OUString& aNamespaceURI,
         const OUString& sValue) const;
@@ -204,7 +204,7 @@ inline const rtl::Reference< XMLPropertySetMapper >&
 namespace xmloff {
 
 bool IsIgnoreFillStyleNamedItem(
-        css::uno::Reference<css::beans::XPropertySet> const& xProps,
+        cpo::uno::Reference<css::beans::XPropertySet> const& xProps,
         css::drawing::FillStyle nExpectedFillStyle);
 
 }

@@ -50,6 +50,7 @@
 #include <svx/svdview.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace
 {

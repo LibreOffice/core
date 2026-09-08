@@ -50,7 +50,7 @@ class DispatchRecorderSupplier final : public  ::cppu::WeakImplHelper<
                     from there and not created internally. But we release our
                     reference to it if we die.
          */
-        css::uno::Reference< css::frame::XDispatchRecorder > m_xDispatchRecorder;
+        cpo::uno::Reference< css::frame::XDispatchRecorder > m_xDispatchRecorder;
 
     // uno interface
 
@@ -63,11 +63,11 @@ class DispatchRecorderSupplier final : public  ::cppu::WeakImplHelper<
 
         // XDispatchRecorderSupplier
 
-        virtual void                                                 setDispatchRecorder( const css::uno::Reference< css::frame::XDispatchRecorder >& xRecorder   ) override;
-        virtual css::uno::Reference< css::frame::XDispatchRecorder > getDispatchRecorder(                                                                         ) override;
+        virtual void                                                 setDispatchRecorder( const cpo::uno::Reference< css::frame::XDispatchRecorder >& xRecorder   ) override;
+        virtual cpo::uno::Reference< css::frame::XDispatchRecorder > getDispatchRecorder(                                                                         ) override;
         virtual void                                                 dispatchAndRecord  ( const css::util::URL&                                       aURL        ,
                                                                                                    const cpo::uno::Sequence< css::beans::PropertyValue >&      lArguments  ,
-                                                                                                   const css::uno::Reference< css::frame::XDispatch >&         xDispatcher ) override;
+                                                                                                   const cpo::uno::Reference< css::frame::XDispatch >&         xDispatcher ) override;
 
     // native interface
 

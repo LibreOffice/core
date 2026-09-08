@@ -58,11 +58,11 @@ using namespace ::com::sun::star::script;
 constexpr OUString SB_RTLNAME = u"@SBRTL"_ustr;
 //  i#i68894#
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
-using com::sun::star::uno::Reference;
+using cpo::uno::Reference;
 using cpo::uno::Any;
-using com::sun::star::uno::UNO_QUERY;
+using cpo::uno::UNO_QUERY;
 using com::sun::star::lang::XMultiServiceFactory;
 
 

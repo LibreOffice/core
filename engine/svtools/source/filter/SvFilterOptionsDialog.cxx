@@ -42,6 +42,7 @@
 #include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace {
 
@@ -63,7 +64,7 @@ class SvFilterOptionsDialog : public cppu::WeakImplHelper
     uno::Reference< lang::XComponent >
         mxSourceDocument;
 
-    css::uno::Reference<css::awt::XWindow> mxParent;
+    cpo::uno::Reference<css::awt::XWindow> mxParent;
     FieldUnit       meFieldUnit;
     bool            mbExportSelection;
     bool            mbGraphicsSource;

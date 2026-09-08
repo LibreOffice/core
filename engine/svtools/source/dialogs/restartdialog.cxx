@@ -13,7 +13,7 @@
 
 #include <com/sun/star/task/OfficeRestartManager.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/XComponentContext.hpp>
 #include <svtools/restartdialog.hxx>
 #include <tools/link.hxx>
@@ -94,7 +94,7 @@ IMPL_LINK_NOARG(RestartDialog, hdlNo, weld::Button&, void)
 }
 
 bool svtools::executeRestartDialog(
-    css::uno::Reference< cpo::uno::XComponentContext > const & context,
+    cpo::uno::Reference< cpo::uno::XComponentContext > const & context,
     weld::Window* parent, RestartReason reason)
 {
     auto xRestartManager = css::task::OfficeRestartManager::get(context);
@@ -103,7 +103,7 @@ bool svtools::executeRestartDialog(
     RestartDialog aDlg(parent, reason);
     if (aDlg.run()) {
         xRestartManager->requestRestart(
-            css::uno::Reference< css::task::XInteractionHandler >());
+            cpo::uno::Reference< css::task::XInteractionHandler >());
         return true;
     }
     return false;

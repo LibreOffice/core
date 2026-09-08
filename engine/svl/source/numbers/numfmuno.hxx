@@ -50,8 +50,8 @@ public:
 
     // XNumberFormatter
     virtual void attachNumberFormatsSupplier(
-                            const css::uno::Reference< css::util::XNumberFormatsSupplier >& xSupplier ) override;
-    virtual css::uno::Reference< css::util::XNumberFormatsSupplier >
+                            const cpo::uno::Reference< css::util::XNumberFormatsSupplier >& xSupplier ) override;
+    virtual cpo::uno::Reference< css::util::XNumberFormatsSupplier >
                             getNumberFormatsSupplier() override;
     virtual sal_Int32 detectNumberFormat( sal_Int32 nKey, const OUString& aString ) override;
     virtual double convertStringToNumber( sal_Int32 nKey, const OUString& aString ) override;
@@ -95,7 +95,7 @@ public:
 
 
     // XNumberFormats
-    virtual css::uno::Reference< css::beans::XPropertySet >
+    virtual cpo::uno::Reference< css::beans::XPropertySet >
                             getByKey( sal_Int32 nKey ) override;
     virtual cpo::uno::Sequence< sal_Int32 > queryKeys( sal_Int16 nType,
                             const css::lang::Locale& nLocale, bool bCreate ) override;
@@ -144,23 +144,23 @@ public:
     virtual         ~SvNumberFormatObj() override;
 
     // XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo >
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo >
                             getPropertySetInfo(  ) override;
     virtual void   setPropertyValue( const OUString& aPropertyName,
                                     const cpo::uno::Any& aValue ) override;
     virtual cpo::uno::Any getPropertyValue(
                                     const OUString& PropertyName ) override;
     virtual void   addPropertyChangeListener( const OUString& aPropertyName,
-                                    const css::uno::Reference<
+                                    const cpo::uno::Reference<
                                         css::beans::XPropertyChangeListener >& xListener ) override;
     virtual void   removePropertyChangeListener( const OUString& aPropertyName,
-                                    const css::uno::Reference<
+                                    const cpo::uno::Reference<
                                         css::beans::XPropertyChangeListener >& aListener ) override;
     virtual void   addVetoableChangeListener( const OUString& PropertyName,
-                                    const css::uno::Reference<
+                                    const cpo::uno::Reference<
                                         css::beans::XVetoableChangeListener >& aListener ) override;
     virtual void   removeVetoableChangeListener( const OUString& PropertyName,
-                                    const css::uno::Reference<
+                                    const cpo::uno::Reference<
                                         css::beans::XVetoableChangeListener >& aListener ) override;
 
     // XPropertyAccess
@@ -191,23 +191,23 @@ public:
 
 
     // XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo >
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo >
                             getPropertySetInfo(  ) override;
     virtual void   setPropertyValue( const OUString& aPropertyName,
                                     const cpo::uno::Any& aValue ) override;
     virtual cpo::uno::Any getPropertyValue(
                                     const OUString& PropertyName ) override;
     virtual void   addPropertyChangeListener( const OUString& aPropertyName,
-                                    const css::uno::Reference<
+                                    const cpo::uno::Reference<
                                         css::beans::XPropertyChangeListener >& xListener ) override;
     virtual void   removePropertyChangeListener( const OUString& aPropertyName,
-                                    const css::uno::Reference<
+                                    const cpo::uno::Reference<
                                         css::beans::XPropertyChangeListener >& aListener ) override;
     virtual void   addVetoableChangeListener( const OUString& PropertyName,
-                                    const css::uno::Reference<
+                                    const cpo::uno::Reference<
                                         css::beans::XVetoableChangeListener >& aListener ) override;
     virtual void   removeVetoableChangeListener( const OUString& PropertyName,
-                                    const css::uno::Reference<
+                                    const cpo::uno::Reference<
                                         css::beans::XVetoableChangeListener >& aListener ) override;
 
     // XServiceInfo

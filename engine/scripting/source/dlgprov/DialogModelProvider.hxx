@@ -38,7 +38,7 @@ class DialogModelProvider:
         css::lang::XServiceInfo>
 {
 public:
-    explicit DialogModelProvider(css::uno::Reference< cpo::uno::XComponentContext > const & context);
+    explicit DialogModelProvider(cpo::uno::Reference< cpo::uno::XComponentContext > const & context);
 private:
     // css::lang::XInitialization:
     virtual void SAL_CALL initialize(const cpo::uno::Sequence< cpo::uno::Any > & aArguments) override;
@@ -64,13 +64,13 @@ private:
     virtual bool SAL_CALL supportsService(const OUString & ServiceName) override;
     virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
     virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
     virtual cpo::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
-    virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
-    virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
-    virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
-    virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+    virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
+    virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
+    virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+    virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
 private:
     DialogModelProvider(const DialogModelProvider &) = delete;
@@ -78,9 +78,9 @@ private:
 
     // destructor is private and will be called indirectly by the release call    virtual ~DialogModelProvider() {}
 
-    css::uno::Reference< cpo::uno::XComponentContext >      m_xContext;
-    css::uno::Reference< css::container::XNameContainer>    m_xDialogModel;
-    css::uno::Reference< css::beans::XPropertySet>          m_xDialogModelProp;
+    cpo::uno::Reference< cpo::uno::XComponentContext >      m_xContext;
+    cpo::uno::Reference< css::container::XNameContainer>    m_xDialogModel;
+    cpo::uno::Reference< css::beans::XPropertySet>          m_xDialogModelProp;
 };
 } // closing anonymous implementation namespace
 

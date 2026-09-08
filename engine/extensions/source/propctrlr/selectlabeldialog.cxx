@@ -41,7 +41,7 @@ namespace pcr
 {
 
 
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
 using namespace cpo::uno;
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::beans;

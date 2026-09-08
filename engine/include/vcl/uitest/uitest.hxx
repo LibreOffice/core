@@ -29,7 +29,7 @@ namespace UITest
 
     bool executeCommandForProvider(
         const OUString& rCommand,
-        const css::uno::Reference< css::frame::XDispatchProvider >& xProvider);
+        const cpo::uno::Reference< css::frame::XDispatchProvider >& xProvider);
 
     bool executeDialog(const OUString& rCommand);
 

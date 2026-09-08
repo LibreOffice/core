@@ -32,6 +32,7 @@
 #include "deffuncname.hxx"
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 constexpr OUString ADDIN_SERVICE = u"com.sun.star.sheet.AddIn"_ustr;
 constexpr OUString MY_SERVICE = u"com.sun.star.sheet.addin.DateFunctions"_ustr;

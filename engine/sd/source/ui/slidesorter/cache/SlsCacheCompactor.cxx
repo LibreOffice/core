@@ -28,7 +28,7 @@
 #include <officecfg/Office/Impress.hxx>
 #include <utility>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 namespace {
 

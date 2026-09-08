@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <filter/msfilter/msfilterdllapi.h>
 
 namespace com::sun::star {
@@ -47,33 +47,33 @@ namespace com::sun::star {
 class MSFILTER_DLLPUBLIC SvxMSConvertOCXControls
 {
 public:
-    SvxMSConvertOCXControls( css::uno::Reference< css::frame::XModel > xModel );
+    SvxMSConvertOCXControls( cpo::uno::Reference< css::frame::XModel > xModel );
     virtual ~SvxMSConvertOCXControls();
 
     virtual bool InsertControl(
-        const css::uno::Reference<
+        const cpo::uno::Reference<
         css::form::XFormComponent >& /*rFComp*/,
         const css::awt::Size& /*rSize*/,
-        css::uno::Reference<
+        cpo::uno::Reference<
         css::drawing::XShape >* /*pShape*/,
         bool /*bFloatingCtrl*/ ) {return false;}
 
     /*begin: Backwards compatibility with office 95 import, modify later*/
-    const css::uno::Reference< css::lang::XMultiServiceFactory > & GetServiceFactory();
+    const cpo::uno::Reference< css::lang::XMultiServiceFactory > & GetServiceFactory();
 protected:
-    const css::uno::Reference< css::drawing::XShapes > &  GetShapes();
+    const cpo::uno::Reference< css::drawing::XShapes > &  GetShapes();
 
-    const css::uno::Reference< css::container::XIndexContainer > &  GetFormComps();
+    const cpo::uno::Reference< css::container::XIndexContainer > &  GetFormComps();
 
-    css::uno::Reference< css::frame::XModel >               mxModel;
+    cpo::uno::Reference< css::frame::XModel >               mxModel;
 
     // cached interfaces
-    css::uno::Reference< css::drawing::XDrawPage >          xDrawPage;
-    css::uno::Reference< css::drawing::XShapes >            xShapes;
-    css::uno::Reference< css::lang::XMultiServiceFactory >  xServiceFactory;
+    cpo::uno::Reference< css::drawing::XDrawPage >          xDrawPage;
+    cpo::uno::Reference< css::drawing::XShapes >            xShapes;
+    cpo::uno::Reference< css::lang::XMultiServiceFactory >  xServiceFactory;
 
     // the only form
-    css::uno::Reference< css::container::XIndexContainer >  xFormComps;
+    cpo::uno::Reference< css::container::XIndexContainer >  xFormComps;
 
     virtual void GetDrawPage();
 };

@@ -31,7 +31,7 @@
 
 namespace com::sun::star::beans { struct NamedValue; }
 namespace com::sun::star::container { class XNameAccess; }
-namespace com::sun::star::uno { template <typename > class Reference; }
+namespace cpo::uno { template <typename > class Reference; }
 namespace cpo::uno { template <typename > class Sequence; }
 
 class ErrCode;
@@ -58,8 +58,8 @@ public:
 
     SAL_DLLPRIVATE static void ReadFilters_Impl( bool bUpdate=false );
     SAL_DLLPRIVATE static void ReadSingleFilter_Impl( const OUString& rName,
-                            const css::uno::Reference< css::container::XNameAccess >& xTypeCFG,
-                            const css::uno::Reference< css::container::XNameAccess >& xFilterCFG,
+                            const cpo::uno::Reference< css::container::XNameAccess >& xTypeCFG,
+                            const cpo::uno::Reference< css::container::XNameAccess >& xFilterCFG,
                             bool bUpdate );
     SAL_DLLPRIVATE static std::shared_ptr<const SfxFilter> GetDefaultFilter_Impl( std::u16string_view );
 };

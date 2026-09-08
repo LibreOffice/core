@@ -65,6 +65,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 //////////////////////////////////////////////////////////////////////////////
 

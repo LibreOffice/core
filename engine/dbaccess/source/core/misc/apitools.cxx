@@ -20,7 +20,7 @@
 #include <apitools.hxx>
 #include <sal/log.hxx>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace cppu;
 using namespace osl;

@@ -64,13 +64,13 @@ inline constexpr OUString UNODIALOG_PROPERTY_PARENT = u"ParentWindow"_ustr;
 
         // <properties>
         OUString                                         m_sTitle;   /// title of the dialog
-        css::uno::Reference<css::awt::XWindow>           m_xParent;  /// parent window
+        cpo::uno::Reference<css::awt::XWindow>           m_xParent;  /// parent window
         // </properties>
 
-        css::uno::Reference<cpo::uno::XComponentContext> m_aContext;
+        cpo::uno::Reference<cpo::uno::XComponentContext> m_aContext;
 
     protected:
-        OGenericUnoDialog(const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext);
+        OGenericUnoDialog(const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxContext);
         virtual ~OGenericUnoDialog() override;
 
     public:
@@ -103,7 +103,7 @@ inline constexpr OUString UNODIALOG_PROPERTY_PARENT = u"ParentWindow"_ustr;
             but the application-wide solar mutex is (to guard the not thread-safe ctor of the dialog).
             @param      pParent     the parent window for the new dialog
         */
-        virtual std::unique_ptr<weld::DialogController> createDialog(const css::uno::Reference<css::awt::XWindow>& rParent) = 0;
+        virtual std::unique_ptr<weld::DialogController> createDialog(const cpo::uno::Reference<css::awt::XWindow>& rParent) = 0;
 
         /// called to destroy the dialog used. deletes m_pDialog and resets it to NULL
         void destroyDialog();

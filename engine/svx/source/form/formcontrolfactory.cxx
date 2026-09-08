@@ -56,10 +56,10 @@ namespace svxform
 {
 
 
-    using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::UNO_QUERY;
-    using ::com::sun::star::uno::UNO_QUERY_THROW;
-    using ::com::sun::star::uno::UNO_SET_THROW;
+    using ::cpo::uno::Reference;
+    using ::cpo::uno::UNO_QUERY;
+    using ::cpo::uno::UNO_QUERY_THROW;
+    using ::cpo::uno::UNO_SET_THROW;
     using ::cpo::uno::Exception;
     using ::cpo::uno::Any;
     using ::cpo::uno::Sequence;
@@ -176,12 +176,12 @@ namespace svxform
                 Reference< XChild > xChild( _rxControlModel, UNO_QUERY );
                 Reference< XPropertySet > xForm;
                 if ( xChild.is() )
-                    xForm.set(xChild->getParent(), css::uno::UNO_QUERY);
+                    xForm.set(xChild->getParent(), cpo::uno::UNO_QUERY);
 
                 if ( Reference< XGridColumnFactory >( xForm, UNO_QUERY ).is() )
                 {   // hmm. the model is a grid column, in real
-                    xChild.set(xForm, css::uno::UNO_QUERY);
-                    xForm.set(xChild->getParent(), css::uno::UNO_QUERY);
+                    xChild.set(xForm, cpo::uno::UNO_QUERY);
+                    xForm.set(xChild->getParent(), cpo::uno::UNO_QUERY);
                 }
 
                 OSL_ENSURE( xForm.is(), "lcl_getDataSourceIndirectProperties: could not determine the form!" );
@@ -192,7 +192,7 @@ namespace svxform
 
                 Reference< XPropertySet > xDsProperties;
                 if ( !sDataSourceName.isEmpty() )
-                    xDsProperties.set(getDataSource( sDataSourceName, _rContext ), css::uno::UNO_QUERY);
+                    xDsProperties.set(getDataSource( sDataSourceName, _rContext ), cpo::uno::UNO_QUERY);
                 if ( xDsProperties.is() )
                     xDsProperties->getPropertyValue(u"Info"_ustr) >>= aInfo;
             }

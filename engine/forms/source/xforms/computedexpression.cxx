@@ -32,7 +32,7 @@
 #include <unotools/textsearch.hxx>
 #include <comphelper/processfactory.hxx>
 
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using com::sun::star::xml::xpath::XPathAPI;
 using com::sun::star::xml::xpath::XXPathAPI;
 using com::sun::star::xml::xpath::XPathExtension;

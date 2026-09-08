@@ -25,16 +25,16 @@ class XMLChartPropertyContext : public SvXMLPropertySetContext
 public:
 
     XMLChartPropertyContext( SvXMLImport& rImport, sal_Int32 nElement,
-                             const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
+                             const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
                              sal_uInt32 nFamily,
                              ::std::vector< XMLPropertyState >& rProps,
                              SvXMLImportPropertyMapper* pMapper );
     virtual ~XMLChartPropertyContext() override;
 
     using SvXMLPropertySetContext::createFastChildContext;
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
         ::std::vector< XMLPropertyState > &rProperties,
         const XMLPropertyState& rProp ) override;
 

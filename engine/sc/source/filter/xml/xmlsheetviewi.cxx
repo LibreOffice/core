@@ -21,6 +21,7 @@
 #include <xmloff/xmltoken.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace xmloff::token;
 
 ScXMLSheetViewsContext::ScXMLSheetViewsContext(ScXMLImport& rImport)

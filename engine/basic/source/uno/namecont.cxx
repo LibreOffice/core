@@ -75,8 +75,8 @@ namespace basic
 
 using namespace com::sun::star::document;
 using namespace com::sun::star::container;
-using namespace com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::io;
 using namespace com::sun::star::ucb;
@@ -91,7 +91,7 @@ using namespace com::sun::star::deployment;
 using namespace com::sun::star;
 using namespace cppu;
 
-using com::sun::star::uno::Reference;
+using cpo::uno::Reference;
 
 // #i34411: Flag for error handling during migration
 static bool GbMigrationSuppressErrors = false;
@@ -1300,7 +1300,7 @@ bool SfxLibraryContainer::implStorePasswordLibrary( SfxLibrary*,
 bool SfxLibraryContainer::implStorePasswordLibrary(
     SfxLibrary* /*pLib*/,
     const OUString& /*aName*/,
-    const css::uno::Reference< css::embed::XStorage >& /*xStorage*/,
+    const cpo::uno::Reference< css::embed::XStorage >& /*xStorage*/,
     const OUString& /*aTargetURL*/,
     const Reference< XSimpleFileAccess3 >& /*xToUseSFI*/,
     const uno::Reference< task::XInteractionHandler >&  )
@@ -2119,7 +2119,7 @@ Reference< XNameContainer > SfxLibraryContainer::createLibrary( const OUString& 
     return createLibrary_Impl(Name, o3tl::temporary(std::unique_lock(m_aMutex)));
 }
 
-css::uno::Reference<css::container::XNameContainer>
+cpo::uno::Reference<css::container::XNameContainer>
 SfxLibraryContainer::createLibrary_Impl(const OUString& Name, std::unique_lock<std::mutex>& guard)
 {
     rtl::Reference<SfxLibrary> pNewLib = implCreateLibrary( Name );
@@ -2144,7 +2144,7 @@ Reference< XNameAccess > SfxLibraryContainer::createLibraryLink
     return createLibraryLink_Impl(Name, StorageURL, ReadOnly, o3tl::temporary(std::unique_lock(m_aMutex)));
 }
 
-css::uno::Reference<css::container::XNameAccess>
+cpo::uno::Reference<css::container::XNameAccess>
 SfxLibraryContainer::createLibraryLink_Impl(const OUString& Name, const OUString& StorageURL,
                                             bool ReadOnly, std::unique_lock<std::mutex>& guard)
 {
@@ -2868,7 +2868,7 @@ void SfxLibraryContainer::broadcastVBAScriptEvent( sal_Int32 nIdentifier, const 
 }
 
 // Methods XPropertySet
-css::uno::Reference<css::beans::XPropertySetInfo> SfxLibraryContainer::getPropertySetInfo()
+cpo::uno::Reference<css::beans::XPropertySetInfo> SfxLibraryContainer::getPropertySetInfo()
 {
     return uno::Reference<beans::XPropertySetInfo>();
 }

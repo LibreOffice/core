@@ -43,12 +43,12 @@ class OFSStreamContainer : public cppu::OWeakObject,
 {
     std::mutex m_aMutex;
 
-    css::uno::Reference< css::io::XStream >               m_xStream;
-    css::uno::Reference< css::io::XSeekable >             m_xSeekable;
-    css::uno::Reference< css::io::XInputStream >          m_xInputStream;
-    css::uno::Reference< css::io::XOutputStream >         m_xOutputStream;
-    css::uno::Reference< css::io::XTruncate >             m_xTruncate;
-    css::uno::Reference< css::io::XAsyncOutputMonitor >   m_xAsyncOutputMonitor;
+    cpo::uno::Reference< css::io::XStream >               m_xStream;
+    cpo::uno::Reference< css::io::XSeekable >             m_xSeekable;
+    cpo::uno::Reference< css::io::XInputStream >          m_xInputStream;
+    cpo::uno::Reference< css::io::XOutputStream >         m_xOutputStream;
+    cpo::uno::Reference< css::io::XTruncate >             m_xTruncate;
+    cpo::uno::Reference< css::io::XAsyncOutputMonitor >   m_xAsyncOutputMonitor;
 
     bool m_bDisposed;
     bool m_bInputClosed;
@@ -58,7 +58,7 @@ class OFSStreamContainer : public cppu::OWeakObject,
     cpo::uno::Sequence<cpo::uno::Type> m_aTypes;
 
 public:
-    explicit OFSStreamContainer( const css::uno::Reference < css::io::XStream >& xStream );
+    explicit OFSStreamContainer( const cpo::uno::Reference < css::io::XStream >& xStream );
     virtual ~OFSStreamContainer() override;
 
     // XInterface
@@ -71,13 +71,13 @@ public:
     virtual cpo::uno::Sequence< sal_Int8 > getImplementationId() override;
 
     // XStream
-    virtual css::uno::Reference< css::io::XInputStream > getInputStream(  ) override;
-    virtual css::uno::Reference< css::io::XOutputStream > getOutputStream(  ) override;
+    virtual cpo::uno::Reference< css::io::XInputStream > getInputStream(  ) override;
+    virtual cpo::uno::Reference< css::io::XOutputStream > getOutputStream(  ) override;
 
     // XComponent
     virtual void dispose() override;
-    virtual void addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-    virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+    virtual void addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& xListener ) override;
+    virtual void removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
     // XSeekable
     virtual void seek( sal_Int64 location ) override;

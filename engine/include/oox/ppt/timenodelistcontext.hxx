@@ -37,7 +37,7 @@ namespace oox::ppt {
     public:
         virtual ~TimeNodeContext() noexcept override;
 
-        static rtl::Reference<TimeNodeContext> makeContext( ::oox::core::FragmentHandler2 const & rParent, sal_Int32  aElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttribs, const TimeNodePtr & pNode );
+        static rtl::Reference<TimeNodeContext> makeContext( ::oox::core::FragmentHandler2 const & rParent, sal_Int32  aElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttribs, const TimeNodePtr & pNode );
 
     protected:
         TimeNodeContext( ::oox::core::FragmentHandler2 const & rParent, sal_Int32  aElement, TimeNodePtr pNode ) noexcept;

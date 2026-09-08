@@ -49,6 +49,7 @@
 #define DEBUG_DUMPER 0
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 namespace {
 
@@ -70,7 +71,7 @@ void dumpFillGradientNameAsAttribute(std::u16string_view sGradName, xmlTextWrite
 void dumpFillGradientAsElement(const css::awt::Gradient& rGradient, xmlTextWriterPtr xmlWriter);
 void dumpFillHatchAsElement(const css::drawing::Hatch& rHatch, xmlTextWriterPtr xmlWriter);
 void dumpFillBackgroundAsAttribute(bool bBackground, xmlTextWriterPtr xmlWriter);
-void dumpFillBitmapAsElement(const css::uno::Reference<css::awt::XBitmap>& xBitmap, xmlTextWriterPtr xmlWriter);
+void dumpFillBitmapAsElement(const cpo::uno::Reference<css::awt::XBitmap>& xBitmap, xmlTextWriterPtr xmlWriter);
 void dumpFillBitmapPositionOffsetXAsAttribute(sal_Int32 aBitmapPositionOffsetX, xmlTextWriterPtr xmlWriter);
 void dumpFillBitmapPositionOffsetYAsAttribute(sal_Int32 aBitmapPositionOffsetY, xmlTextWriterPtr xmlWriter);
 void dumpFillBitmapOffsetXAsAttribute(sal_Int32 aBitmapOffsetX, xmlTextWriterPtr xmlWriter);
@@ -168,17 +169,17 @@ void dumpPositionAsAttribute(const css::awt::Point& rPoint, xmlTextWriterPtr xml
 void dumpSizeAsAttribute(const css::awt::Size& rSize, xmlTextWriterPtr xmlWriter);
 
 // the rest
-void dumpShapeDescriptorAsAttribute( const css::uno::Reference< css::drawing::XShapeDescriptor >& xDescr, xmlTextWriterPtr xmlWriter );
-void dumpXShape(const css::uno::Reference< css::drawing::XShape >& xShape, xmlTextWriterPtr xmlWriter, bool bDumpInteropProperties);
-void dumpXShapes( const css::uno::Reference< css::drawing::XShapes >& xShapes, xmlTextWriterPtr xmlWriter, bool bDumpInteropProperties );
-void dumpTextPropertiesService(const css::uno::Reference< css::beans::XPropertySet >& xPropSet, xmlTextWriterPtr xmlWriter);
-void dumpFillPropertiesService(const css::uno::Reference< css::beans::XPropertySet >& xPropSet, xmlTextWriterPtr xmlWriter);
-void dumpLinePropertiesService(const css::uno::Reference< css::beans::XPropertySet >& xPropSet, xmlTextWriterPtr xmlWriter);
-void dumpShadowPropertiesService(const css::uno::Reference< css::beans::XPropertySet >& xPropSet, xmlTextWriterPtr xmlWriter);
-void dumpPolyPolygonDescriptorService(const css::uno::Reference< css::beans::XPropertySet >& xPropSet, xmlTextWriterPtr xmlWriter);
-void dumpShapeService(const css::uno::Reference< css::beans::XPropertySet >& xPropSet, xmlTextWriterPtr xmlWriter, bool bDumpInteropProperties);
-void dumpPolyPolygonBezierDescriptorService(const css::uno::Reference< css::beans::XPropertySet >& xPropSet, xmlTextWriterPtr xmlWriter);
-void dumpCustomShapeService(const css::uno::Reference< css::beans::XPropertySet >& xPropSet, xmlTextWriterPtr xmlWriter);
+void dumpShapeDescriptorAsAttribute( const cpo::uno::Reference< css::drawing::XShapeDescriptor >& xDescr, xmlTextWriterPtr xmlWriter );
+void dumpXShape(const cpo::uno::Reference< css::drawing::XShape >& xShape, xmlTextWriterPtr xmlWriter, bool bDumpInteropProperties);
+void dumpXShapes( const cpo::uno::Reference< css::drawing::XShapes >& xShapes, xmlTextWriterPtr xmlWriter, bool bDumpInteropProperties );
+void dumpTextPropertiesService(const cpo::uno::Reference< css::beans::XPropertySet >& xPropSet, xmlTextWriterPtr xmlWriter);
+void dumpFillPropertiesService(const cpo::uno::Reference< css::beans::XPropertySet >& xPropSet, xmlTextWriterPtr xmlWriter);
+void dumpLinePropertiesService(const cpo::uno::Reference< css::beans::XPropertySet >& xPropSet, xmlTextWriterPtr xmlWriter);
+void dumpShadowPropertiesService(const cpo::uno::Reference< css::beans::XPropertySet >& xPropSet, xmlTextWriterPtr xmlWriter);
+void dumpPolyPolygonDescriptorService(const cpo::uno::Reference< css::beans::XPropertySet >& xPropSet, xmlTextWriterPtr xmlWriter);
+void dumpShapeService(const cpo::uno::Reference< css::beans::XPropertySet >& xPropSet, xmlTextWriterPtr xmlWriter, bool bDumpInteropProperties);
+void dumpPolyPolygonBezierDescriptorService(const cpo::uno::Reference< css::beans::XPropertySet >& xPropSet, xmlTextWriterPtr xmlWriter);
+void dumpCustomShapeService(const cpo::uno::Reference< css::beans::XPropertySet >& xPropSet, xmlTextWriterPtr xmlWriter);
 
 
 int writeCallback(void* pContext, const char* sBuffer, int nLen)

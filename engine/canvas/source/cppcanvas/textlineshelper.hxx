@@ -10,7 +10,7 @@
 #pragma once
 
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <RenderState.hxx>
 #include <basegfx/vector/b2dsize.hxx>
 

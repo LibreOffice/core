@@ -93,8 +93,8 @@ namespace dbtools
 
     // calculates the default numberformat for a given datatype and a give language
     OOO_DLLPUBLIC_DBTOOLS
-    sal_Int32 getDefaultNumberFormat(const css::uno::Reference< css::beans::XPropertySet >& _xColumn,
-                                     const css::uno::Reference< css::util::XNumberFormatTypes >& _xTypes,
+    sal_Int32 getDefaultNumberFormat(const cpo::uno::Reference< css::beans::XPropertySet >& _xColumn,
+                                     const cpo::uno::Reference< css::util::XNumberFormatTypes >& _xTypes,
                                      const css::lang::Locale& _rLocale);
 
     // calculates the default numberformat for a given datatype and a give language
@@ -104,7 +104,7 @@ namespace dbtools
     sal_Int32 getDefaultNumberFormat(sal_Int32 _nDataType,
                                      sal_Int32 _nScale,
                                      bool _bIsCurrency,
-                                     const css::uno::Reference< css::util::XNumberFormatTypes >& _xTypes,
+                                     const cpo::uno::Reference< css::util::XNumberFormatTypes >& _xTypes,
                                      const css::lang::Locale& _rLocale);
 
 
@@ -143,10 +143,10 @@ namespace dbtools
 
     */
     OOO_DLLPUBLIC_DBTOOLS
-    css::uno::Reference< css::sdbc::XConnection> connectRowset(
-        const css::uno::Reference< css::sdbc::XRowSet>& _rxRowSet,
-        const css::uno::Reference< cpo::uno::XComponentContext>& _rxContext,
-        const css::uno::Reference< css::awt::XWindow>& _rxParent
+    cpo::uno::Reference< css::sdbc::XConnection> connectRowset(
+        const cpo::uno::Reference< css::sdbc::XRowSet>& _rxRowSet,
+        const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxContext,
+        const cpo::uno::Reference< css::awt::XWindow>& _rxParent
     );
 
     /** ensures that a row set has a valid ActiveConnection, if possible
@@ -168,46 +168,46 @@ namespace dbtools
         </ul>
     */
     OOO_DLLPUBLIC_DBTOOLS SharedConnection    ensureRowSetConnection(
-        const css::uno::Reference< css::sdbc::XRowSet>& _rxRowSet,
-        const css::uno::Reference< cpo::uno::XComponentContext>& _rxContext,
-        const css::uno::Reference< css::awt::XWindow>& _rxParent
+        const cpo::uno::Reference< css::sdbc::XRowSet>& _rxRowSet,
+        const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxContext,
+        const cpo::uno::Reference< css::awt::XWindow>& _rxParent
     );
 
     /** returns the connection the RowSet is currently working with (which is the ActiveConnection property)
 
         @throws cpo::uno::RuntimeException
     */
-    OOO_DLLPUBLIC_DBTOOLS css::uno::Reference< css::sdbc::XConnection> getConnection(const css::uno::Reference< css::sdbc::XRowSet>& _rxRowSet);
-    OOO_DLLPUBLIC_DBTOOLS css::uno::Reference< css::sdbc::XConnection> getConnection_withFeedback(
+    OOO_DLLPUBLIC_DBTOOLS cpo::uno::Reference< css::sdbc::XConnection> getConnection(const cpo::uno::Reference< css::sdbc::XRowSet>& _rxRowSet);
+    OOO_DLLPUBLIC_DBTOOLS cpo::uno::Reference< css::sdbc::XConnection> getConnection_withFeedback(
             const OUString& _rDataSourceName,
             const OUString& _rUser,
             const OUString& _rPwd,
-            const css::uno::Reference< cpo::uno::XComponentContext>& _rxContext,
-            const css::uno::Reference< css::awt::XWindow>& _rxParent);
+            const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxContext,
+            const cpo::uno::Reference< css::awt::XWindow>& _rxParent);
 
 
     /** determines whether the given component is part of a document which is an embedded database
         document (such as a form)
     */
     OOO_DLLPUBLIC_DBTOOLS bool    isEmbeddedInDatabase(
-                const css::uno::Reference< cpo::uno::XInterface >& _rxComponent,
-                css::uno::Reference< css::sdbc::XConnection >& _rxActualConnection
+                const cpo::uno::Reference< cpo::uno::XInterface >& _rxComponent,
+                cpo::uno::Reference< css::sdbc::XConnection >& _rxActualConnection
             );
 
     /** returns the columns of the named table of the given connection
     */
-    OOO_DLLPUBLIC_DBTOOLS css::uno::Reference< css::container::XNameAccess> getTableFields(
-        const css::uno::Reference< css::sdbc::XConnection>& _rxConn,
+    OOO_DLLPUBLIC_DBTOOLS cpo::uno::Reference< css::container::XNameAccess> getTableFields(
+        const cpo::uno::Reference< css::sdbc::XConnection>& _rxConn,
         const OUString& _rName
     );
 
     /** returns the primary key columns of the table
     */
-    OOO_DLLPUBLIC_DBTOOLS css::uno::Reference< css::container::XNameAccess> getPrimaryKeyColumns_throw(
+    OOO_DLLPUBLIC_DBTOOLS cpo::uno::Reference< css::container::XNameAccess> getPrimaryKeyColumns_throw(
         const cpo::uno::Any& i_aTable
     );
-    OOO_DLLPUBLIC_DBTOOLS css::uno::Reference< css::container::XNameAccess> getPrimaryKeyColumns_throw(
-        const css::uno::Reference< css::beans::XPropertySet >& i_xTable
+    OOO_DLLPUBLIC_DBTOOLS cpo::uno::Reference< css::container::XNameAccess> getPrimaryKeyColumns_throw(
+        const cpo::uno::Reference< css::beans::XPropertySet >& i_xTable
     );
 
     /** get fields for a result set given by a "command descriptor"
@@ -250,12 +250,12 @@ namespace dbtools
             the container of the columns (aka fields) of the object
     */
     OOO_DLLPUBLIC_DBTOOLS
-    css::uno::Reference< css::container::XNameAccess >
+    cpo::uno::Reference< css::container::XNameAccess >
         getFieldsByCommandDescriptor(
-            const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
+            const cpo::uno::Reference< css::sdbc::XConnection >& _rxConnection,
             const sal_Int32 _nCommandType,
             const OUString& _rCommand,
-            css::uno::Reference< css::lang::XComponent >& _rxKeepFieldsAlive,
+            cpo::uno::Reference< css::lang::XComponent >& _rxKeepFieldsAlive,
             SQLExceptionInfo* _pErrorInfo = nullptr
         );
 
@@ -289,7 +289,7 @@ namespace dbtools
     */
     OOO_DLLPUBLIC_DBTOOLS cpo::uno::Sequence< OUString >
         getFieldNamesByCommandDescriptor(
-            const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
+            const cpo::uno::Reference< css::sdbc::XConnection >& _rxConnection,
             const sal_Int32 _nCommandType,
             const OUString& _rCommand,
             SQLExceptionInfo* _pErrorInfo = nullptr
@@ -302,13 +302,13 @@ namespace dbtools
     OOO_DLLPUBLIC_DBTOOLS
     css::sdbc::SQLException prependErrorInfo(
         const css::sdbc::SQLException& _rChainedException,
-        const css::uno::Reference< cpo::uno::XInterface >& _rxContext,
+        const cpo::uno::Reference< cpo::uno::XInterface >& _rxContext,
         const OUString& _rAdditionalError,
         const StandardSQLState _eSQLState = StandardSQLState::ERROR_UNSPECIFIED);
 
     /** search the parent hierarchy for a data source.
     */
-    OOO_DLLPUBLIC_DBTOOLS css::uno::Reference< css::sdbc::XDataSource> findDataSource(const css::uno::Reference< cpo::uno::XInterface >& _xParent);
+    OOO_DLLPUBLIC_DBTOOLS cpo::uno::Reference< css::sdbc::XDataSource> findDataSource(const cpo::uno::Reference< cpo::uno::XInterface >& _xParent);
 
     /** determines the value of a boolean data source setting, given by ASCII name
 
@@ -318,11 +318,11 @@ namespace dbtools
             the ASCII name of the setting
     */
     OOO_DLLPUBLIC_DBTOOLS bool getBooleanDataSourceSetting(
-            const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
+            const cpo::uno::Reference< css::sdbc::XConnection >& _rxConnection,
             const char* _pAsciiSettingName
         );
     OOO_DLLPUBLIC_DBTOOLS bool getBooleanDataSourceSetting(
-            const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
+            const cpo::uno::Reference< css::sdbc::XConnection >& _rxConnection,
             const OUString& rSettingName
         );
 
@@ -332,7 +332,7 @@ namespace dbtools
             instead of spreading this knowledge through all callers.
     */
     OOO_DLLPUBLIC_DBTOOLS
-    bool isDataSourcePropertyEnabled(const css::uno::Reference< cpo::uno::XInterface>& _xProp,
+    bool isDataSourcePropertyEnabled(const cpo::uno::Reference< cpo::uno::XInterface>& _xProp,
                                      const OUString& _sProperty,
                                            bool _bDefault);
 
@@ -352,12 +352,12 @@ namespace dbtools
     */
     OOO_DLLPUBLIC_DBTOOLS
     bool    getDataSourceSetting(
-        const css::uno::Reference< cpo::uno::XInterface >& _rxDataSource,
+        const cpo::uno::Reference< cpo::uno::XInterface >& _rxDataSource,
         const OUString& _sSettingsName,
         cpo::uno::Any& /* [out] */ _rSettingsValue
     );
 
-    OOO_DLLPUBLIC_DBTOOLS OUString getDefaultReportEngineServiceName(const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory);
+    OOO_DLLPUBLIC_DBTOOLS OUString getDefaultReportEngineServiceName(const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory);
 
     /** quote the given name with the given quote string.
     */
@@ -366,7 +366,7 @@ namespace dbtools
     /** quote the given table name (which may contain a catalog and a schema) according to the rules provided by the meta data
     */
     OOO_DLLPUBLIC_DBTOOLS
-    OUString quoteTableName(const css::uno::Reference< css::sdbc::XDatabaseMetaData>& _rxMeta
+    OUString quoteTableName(const cpo::uno::Reference< css::sdbc::XDatabaseMetaData>& _rxMeta
                                     , const OUString& _rName
                                     ,EComposeRule _eComposeRule);
 
@@ -378,7 +378,7 @@ namespace dbtools
         @param  _rName              (out parameter) upon return, contains the table name
         @param  _eComposeRule       where do you need the name for
     */
-    OOO_DLLPUBLIC_DBTOOLS void qualifiedNameComponents(const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _rxConnMetaData,
+    OOO_DLLPUBLIC_DBTOOLS void qualifiedNameComponents(const cpo::uno::Reference< css::sdbc::XDatabaseMetaData >& _rxConnMetaData,
         const OUString& _rQualifiedName, OUString& _rCatalog, OUString& _rSchema, OUString& _rName,EComposeRule _eComposeRule);
 
     /** calculate a NumberFormatsSupplier for use with a given connection
@@ -389,10 +389,10 @@ namespace dbtools
         @param      _rxFactory      required (only of _bAllowDefault is true) for creating the DatabaseEnvironment.
         @return     the formatter all object related to the given connection should work with.
     */
-    OOO_DLLPUBLIC_DBTOOLS css::uno::Reference< css::util::XNumberFormatsSupplier> getNumberFormats(
-        const css::uno::Reference< css::sdbc::XConnection>& _rxConn,
+    OOO_DLLPUBLIC_DBTOOLS cpo::uno::Reference< css::util::XNumberFormatsSupplier> getNumberFormats(
+        const cpo::uno::Reference< css::sdbc::XConnection>& _rxConn,
         bool _bAllowDefault = false,
-        const css::uno::Reference< cpo::uno::XComponentContext>& _rxContext = css::uno::Reference< cpo::uno::XComponentContext>()
+        const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxContext = cpo::uno::Reference< cpo::uno::XComponentContext>()
     );
 
     /** create a css::sdb::XSingleSelectQueryComposer which represents
@@ -403,10 +403,10 @@ namespace dbtools
         This implies that a connection will be set on the RowSet if needed.
         (need to changes this sometimes ...)
     */
-    OOO_DLLPUBLIC_DBTOOLS css::uno::Reference< css::sdb::XSingleSelectQueryComposer > getCurrentSettingsComposer(
-        const css::uno::Reference< css::beans::XPropertySet>& _rxRowSetProps,
-        const css::uno::Reference< cpo::uno::XComponentContext>& _rxContext,
-        const css::uno::Reference< css::awt::XWindow>& _rxParent
+    OOO_DLLPUBLIC_DBTOOLS cpo::uno::Reference< css::sdb::XSingleSelectQueryComposer > getCurrentSettingsComposer(
+        const cpo::uno::Reference< css::beans::XPropertySet>& _rxRowSetProps,
+        const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxContext,
+        const cpo::uno::Reference< css::awt::XWindow>& _rxParent
     );
 
     /** transfer and translate properties between two FormComponents
@@ -415,28 +415,28 @@ namespace dbtools
         @param      _rLocale    the locale for converting number related properties
     */
     OOO_DLLPUBLIC_DBTOOLS void TransferFormComponentProperties(
-        const css::uno::Reference< css::beans::XPropertySet>& _rxOld,
-        const css::uno::Reference< css::beans::XPropertySet>& _rxNew,
+        const cpo::uno::Reference< css::beans::XPropertySet>& _rxOld,
+        const cpo::uno::Reference< css::beans::XPropertySet>& _rxNew,
         const css::lang::Locale& _rLocale
         );
 
     /** check if the property "Privileges" supports css::sdbcx::Privilege::INSERT
         @param      _rxCursorSet    the property set
     */
-    OOO_DLLPUBLIC_DBTOOLS bool canInsert(const css::uno::Reference< css::beans::XPropertySet>& _rxCursorSet);
+    OOO_DLLPUBLIC_DBTOOLS bool canInsert(const cpo::uno::Reference< css::beans::XPropertySet>& _rxCursorSet);
     /** check if the property "Privileges" supports css::sdbcx::Privilege::UPDATE
         @param      _rxCursorSet    the property set
     */
-    OOO_DLLPUBLIC_DBTOOLS bool canUpdate(const css::uno::Reference< css::beans::XPropertySet>& _rxCursorSet);
+    OOO_DLLPUBLIC_DBTOOLS bool canUpdate(const cpo::uno::Reference< css::beans::XPropertySet>& _rxCursorSet);
     /** check if the property "Privileges" supports css::sdbcx::Privilege::DELETE
         @param      _rxCursorSet    the property set
     */
-    OOO_DLLPUBLIC_DBTOOLS bool canDelete(const css::uno::Reference< css::beans::XPropertySet>& _rxCursorSet);
+    OOO_DLLPUBLIC_DBTOOLS bool canDelete(const cpo::uno::Reference< css::beans::XPropertySet>& _rxCursorSet);
 
 
     /** compose a complete table name from its up to three parts, regarding to the database meta data composing rules
     */
-    OOO_DLLPUBLIC_DBTOOLS OUString composeTableName( const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _rxMetaData,
+    OOO_DLLPUBLIC_DBTOOLS OUString composeTableName( const cpo::uno::Reference< css::sdbc::XDatabaseMetaData >& _rxMetaData,
                             const OUString& _rCatalog,
                             const OUString& _rSchema,
                             const OUString& _rName,
@@ -450,7 +450,7 @@ namespace dbtools
         in the data source which the connection belongs to.
     */
     OOO_DLLPUBLIC_DBTOOLS OUString composeTableNameForSelect(
-                            const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
+                            const cpo::uno::Reference< css::sdbc::XConnection >& _rxConnection,
                             const OUString& _rCatalog,
                             const OUString& _rSchema,
                             const OUString& _rName );
@@ -462,8 +462,8 @@ namespace dbtools
         in the data source which the connection belongs to.
     */
     OOO_DLLPUBLIC_DBTOOLS OUString composeTableNameForSelect(
-                            const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
-                            const css::uno::Reference< css::beans::XPropertySet>& _xTable );
+                            const cpo::uno::Reference< css::sdbc::XConnection >& _rxConnection,
+                            const cpo::uno::Reference< css::beans::XPropertySet>& _xTable );
 
     /** compose the table name out of the property set which must support the properties from the service <member scope= "css::sdbcx">table</member>
         @param  _xMetaData
@@ -472,17 +472,17 @@ namespace dbtools
             The table.
     */
     OOO_DLLPUBLIC_DBTOOLS OUString composeTableName(
-        const css::uno::Reference< css::sdbc::XDatabaseMetaData>& _xMetaData,
-        const css::uno::Reference< css::beans::XPropertySet>& _xTable,
+        const cpo::uno::Reference< css::sdbc::XDatabaseMetaData>& _xMetaData,
+        const cpo::uno::Reference< css::beans::XPropertySet>& _xTable,
         EComposeRule _eComposeRule,
         bool _bQuote);
 
 
-    OOO_DLLPUBLIC_DBTOOLS sal_Int32 getSearchColumnFlag( const css::uno::Reference< css::sdbc::XConnection>& _rxConn,
+    OOO_DLLPUBLIC_DBTOOLS sal_Int32 getSearchColumnFlag( const cpo::uno::Reference< css::sdbc::XConnection>& _rxConn,
                                     sal_Int32 _nDataType);
     // return the datasource for the given datasource name
-    OOO_DLLPUBLIC_DBTOOLS css::uno::Reference< css::sdbc::XDataSource> getDataSource(const OUString& _rsDataSourceName,
-                        const css::uno::Reference< cpo::uno::XComponentContext>& _rxContext);
+    OOO_DLLPUBLIC_DBTOOLS cpo::uno::Reference< css::sdbc::XDataSource> getDataSource(const OUString& _rsDataSourceName,
+                        const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxContext);
 
     /** search for a name that is NOT in the NameAcces
         @param  _rxSupplier
@@ -495,7 +495,7 @@ namespace dbtools
             A name which doesn't exist in the collection.
     */
     OOO_DLLPUBLIC_DBTOOLS
-    OUString createUniqueName(const css::uno::Reference< css::sdbcx::XTablesSupplier>& _rxSupplier,
+    OUString createUniqueName(const cpo::uno::Reference< css::sdbcx::XTablesSupplier>& _rxSupplier,
                                      const OUString& _rBaseName,
                                      bool _bStartWithNumber = true);
 
@@ -510,7 +510,7 @@ namespace dbtools
             A name which doesn't exist in the collection.
     */
     OOO_DLLPUBLIC_DBTOOLS
-    OUString createUniqueName(const css::uno::Reference< css::container::XNameAccess>& _rxContainer,
+    OUString createUniqueName(const cpo::uno::Reference< css::container::XNameAccess>& _rxContainer,
                                      const OUString& _rBaseName,
                                      bool _bStartWithNumber = true);
 
@@ -541,8 +541,8 @@ namespace dbtools
 
     OOO_DLLPUBLIC_DBTOOLS
     void showError( const SQLExceptionInfo& _rInfo,
-                    const css::uno::Reference< css::awt::XWindow>& _pParent,
-                    const css::uno::Reference< cpo::uno::XComponentContext>& _rxContext);
+                    const cpo::uno::Reference< css::awt::XWindow>& _pParent,
+                    const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxContext);
 
     /** implements <method scope="com.sun.star.sdb">XRowUpdate::updateObject</method>
         <p>The object which is to be set is analyzed, and in case it is a simlpe scalar type for which there
@@ -557,7 +557,7 @@ namespace dbtools
             <TRUE/> if the update request was successfully re-routed to one of the other updateXXX methods
     */
     OOO_DLLPUBLIC_DBTOOLS
-    bool implUpdateObject(  const css::uno::Reference< css::sdbc::XRowUpdate >& _rxUpdatedObject,
+    bool implUpdateObject(  const cpo::uno::Reference< css::sdbc::XRowUpdate >& _rxUpdatedObject,
                                 const sal_Int32 _nColumnIndex,
                                 const cpo::uno::Any& _rValue);
 
@@ -568,10 +568,10 @@ namespace dbtools
         @param _aParametersSet  contains which parameters have to asked for and which already have set.
     */
     OOO_DLLPUBLIC_DBTOOLS
-    void askForParameters(  const css::uno::Reference< css::sdb::XSingleSelectQueryComposer >& _xComposer,
-                            const css::uno::Reference< css::sdbc::XParameters>& _xParameters,
-                            const css::uno::Reference< css::sdbc::XConnection>& _xConnection,
-                            const css::uno::Reference< css::task::XInteractionHandler >& _rxHandler,
+    void askForParameters(  const cpo::uno::Reference< css::sdb::XSingleSelectQueryComposer >& _xComposer,
+                            const cpo::uno::Reference< css::sdbc::XParameters>& _xParameters,
+                            const cpo::uno::Reference< css::sdbc::XConnection>& _xConnection,
+                            const cpo::uno::Reference< css::task::XInteractionHandler >& _rxHandler,
                             const ::std::vector<bool, std::allocator<bool> >& _aParametersSet = ::std::vector<bool, std::allocator<bool> >());
 
     /** call the appropriate set method for the specific sql type @see css::sdbc::DataType
@@ -584,7 +584,7 @@ namespace dbtools
         @throws cpo::uno::RuntimeException
     */
     OOO_DLLPUBLIC_DBTOOLS
-    void setObjectWithInfo( const css::uno::Reference< css::sdbc::XParameters>& _xParameters,
+    void setObjectWithInfo( const cpo::uno::Reference< css::sdbc::XParameters>& _xParameters,
                             sal_Int32 parameterIndex,
                             const cpo::uno::Any& x,
                             sal_Int32 sqlType,
@@ -600,7 +600,7 @@ namespace dbtools
         @throws cpo::uno::RuntimeException
     */
     OOO_DLLPUBLIC_DBTOOLS
-    void setObjectWithInfo( const css::uno::Reference< css::sdbc::XParameters>& _xParameters,
+    void setObjectWithInfo( const cpo::uno::Reference< css::sdbc::XParameters>& _xParameters,
                             sal_Int32 parameterIndex,
                             const ::connectivity::ORowSetValue& x,
                             sal_Int32 sqlType,
@@ -620,7 +620,7 @@ namespace dbtools
             <TRUE/> if the update request was successfully re-routed to one of the other updateXXX methods
     */
     OOO_DLLPUBLIC_DBTOOLS
-    bool implSetObject( const css::uno::Reference< css::sdbc::XParameters>& _rxParameters,
+    bool implSetObject( const cpo::uno::Reference< css::sdbc::XParameters>& _rxParameters,
                             const sal_Int32 _nColumnIndex,
                             const cpo::uno::Any& _rValue);
 
@@ -633,8 +633,8 @@ namespace dbtools
             The scale will also be added when the value is 0.
     */
     OOO_DLLPUBLIC_DBTOOLS
-    OUString createStandardCreateStatement(  const css::uno::Reference< css::beans::XPropertySet >& descriptor,
-                                                    const css::uno::Reference< css::sdbc::XConnection>& _xConnection,
+    OUString createStandardCreateStatement(  const cpo::uno::Reference< css::beans::XPropertySet >& descriptor,
+                                                    const cpo::uno::Reference< css::sdbc::XConnection>& _xConnection,
                                                     ISQLStatementHelper* _pHelper,
                                                     std::u16string_view _sCreatePattern);
 
@@ -645,8 +645,8 @@ namespace dbtools
             The connection.
     */
     OOO_DLLPUBLIC_DBTOOLS
-    OUString createStandardKeyStatement( const css::uno::Reference< css::beans::XPropertySet >& descriptor,
-                                                const css::uno::Reference< css::sdbc::XConnection>& _xConnection);
+    OUString createStandardKeyStatement( const cpo::uno::Reference< css::beans::XPropertySet >& descriptor,
+                                                const cpo::uno::Reference< css::sdbc::XConnection>& _xConnection);
 
     /** creates the standard sql statement for the type part of a create or alter table statement.
         @param  _pHelper
@@ -657,8 +657,8 @@ namespace dbtools
             The connection.
     */
     OOO_DLLPUBLIC_DBTOOLS
-    OUString createStandardTypePart(     const css::uno::Reference< css::beans::XPropertySet >& descriptor
-                                                ,const css::uno::Reference< css::sdbc::XConnection>& _xConnection
+    OUString createStandardTypePart(     const cpo::uno::Reference< css::beans::XPropertySet >& descriptor
+                                                ,const cpo::uno::Reference< css::sdbc::XConnection>& _xConnection
                                                 ,std::u16string_view _sCreatePattern = {});
 
     /** creates the standard sql statement for the column part of a create table statement.
@@ -672,8 +672,8 @@ namespace dbtools
             Allow to add special SQL constructs.
     */
     OOO_DLLPUBLIC_DBTOOLS
-    OUString createStandardColumnPart(   const css::uno::Reference< css::beans::XPropertySet >& descriptor
-                                                ,const css::uno::Reference< css::sdbc::XConnection>& _xConnection
+    OUString createStandardColumnPart(   const cpo::uno::Reference< css::beans::XPropertySet >& descriptor
+                                                ,const cpo::uno::Reference< css::sdbc::XConnection>& _xConnection
                                                 ,ISQLStatementHelper* _pHelper = nullptr
                                                 ,std::u16string_view _sCreatePattern = {});
 
@@ -688,8 +688,8 @@ namespace dbtools
             The CREATE TABLE statement.
     */
     OOO_DLLPUBLIC_DBTOOLS
-    OUString createSqlCreateTableStatement(  const css::uno::Reference< css::beans::XPropertySet >& descriptor
-                                                    ,const css::uno::Reference< css::sdbc::XConnection>& _xConnection);
+    OUString createSqlCreateTableStatement(  const cpo::uno::Reference< css::beans::XPropertySet >& descriptor
+                                                    ,const cpo::uno::Reference< css::sdbc::XConnection>& _xConnection);
 
     /** creates a SDBC column with the help of getColumns.
         @param  _xTable
@@ -708,9 +708,9 @@ namespace dbtools
             The data type of the column.
     */
     OOO_DLLPUBLIC_DBTOOLS
-    css::uno::Reference< css::beans::XPropertySet>
-            createSDBCXColumn(  const css::uno::Reference< css::beans::XPropertySet>& _xTable,
-                                const css::uno::Reference< css::sdbc::XConnection>& _xConnection,
+    cpo::uno::Reference< css::beans::XPropertySet>
+            createSDBCXColumn(  const cpo::uno::Reference< css::beans::XPropertySet>& _xTable,
+                                const cpo::uno::Reference< css::sdbc::XConnection>& _xConnection,
                                 const OUString& _rName,
                                 bool _bCase,
                                 bool _bQueryForInfo,
@@ -728,10 +728,10 @@ namespace dbtools
         @return
             The datadefinition object.
     */
-    OOO_DLLPUBLIC_DBTOOLS css::uno::Reference< css::sdbcx::XTablesSupplier> getDataDefinitionByURLAndConnection(
+    OOO_DLLPUBLIC_DBTOOLS cpo::uno::Reference< css::sdbcx::XTablesSupplier> getDataDefinitionByURLAndConnection(
             const OUString& _rsUrl,
-            const css::uno::Reference< css::sdbc::XConnection>& _xConnection,
-            const css::uno::Reference< cpo::uno::XComponentContext>& _rxContext);
+            const cpo::uno::Reference< css::sdbc::XConnection>& _xConnection,
+            const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxContext);
 
     /** returns the table privileges to the given parameters
         @param  _xMetaData
@@ -744,7 +744,7 @@ namespace dbtools
             contains the table name
     */
     OOO_DLLPUBLIC_DBTOOLS
-    sal_Int32 getTablePrivileges(const css::uno::Reference< css::sdbc::XDatabaseMetaData>& _xMetaData,
+    sal_Int32 getTablePrivileges(const cpo::uno::Reference< css::sdbc::XDatabaseMetaData>& _xMetaData,
                                  const OUString& _sCatalog,
                                  const OUString& _sSchema,
                                  const OUString& _sTable);
@@ -764,7 +764,7 @@ namespace dbtools
             The information about the column(s).
     */
     OOO_DLLPUBLIC_DBTOOLS
-    void collectColumnInformation(  const css::uno::Reference< css::sdbc::XConnection>& _xConnection,
+    void collectColumnInformation(  const cpo::uno::Reference< css::sdbc::XConnection>& _xConnection,
                                     std::u16string_view _sComposedTableName,
                                     std::u16string_view _rName,
                                     ColumnInformationMap& _rInfo);
@@ -797,8 +797,8 @@ namespace dbtools
             the field
     */
     OOO_DLLPUBLIC_DBTOOLS bool isAggregateColumn(
-            const css::uno::Reference< css::sdb::XSingleSelectQueryComposer > &_xComposer,
-            const css::uno::Reference< css::beans::XPropertySet > &_xField
+            const cpo::uno::Reference< css::sdb::XSingleSelectQueryComposer > &_xComposer,
+            const cpo::uno::Reference< css::beans::XPropertySet > &_xField
         );
 
     /** is this column an aggregate?
@@ -809,7 +809,7 @@ namespace dbtools
             name of the column
     */
     OOO_DLLPUBLIC_DBTOOLS bool isAggregateColumn(
-            const css::uno::Reference< css::container::XNameAccess > &_xColumns,
+            const cpo::uno::Reference< css::container::XNameAccess > &_xColumns,
             const OUString &_sName
         );
 
@@ -818,7 +818,7 @@ namespace dbtools
         @param _xColumn
     */
     OOO_DLLPUBLIC_DBTOOLS bool isAggregateColumn(
-            const css::uno::Reference< css::beans::XPropertySet > &_xColumn
+            const cpo::uno::Reference< css::beans::XPropertySet > &_xColumn
         );
 
 }   // namespace dbtools

@@ -40,7 +40,7 @@
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <cpo/uno/Exception.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/XComponentContext.hpp>
@@ -139,11 +139,11 @@ bool askForRetry(cpo::uno::Any const & rException)
     if (comphelper::IsContextFlagActive(u"DontEnableJava"_ustr))
         return false;
 
-    css::uno::Reference< cpo::uno::XCurrentContext > xContext(
+    cpo::uno::Reference< cpo::uno::XCurrentContext > xContext(
         cpo::uno::getCurrentContext());
     if (xContext.is())
     {
-        css::uno::Reference< css::task::XInteractionHandler > xHandler;
+        cpo::uno::Reference< css::task::XInteractionHandler > xHandler;
         xContext->getValueByName(u"java-vm.interaction-handler"_ustr)
             >>= xHandler;
         if (xHandler.is())
@@ -161,29 +161,29 @@ bool askForRetry(cpo::uno::Any const & rException)
 // set to manual (i.e. not to none)
 /// @throws cpo::uno::Exception
 void getINetPropsFromConfig(stoc_javavm::JVM * pjvm,
-                            const css::uno::Reference<css::lang::XMultiComponentFactory> & xSMgr,
-                            const css::uno::Reference<cpo::uno::XComponentContext> &xCtx )
+                            const cpo::uno::Reference<css::lang::XMultiComponentFactory> & xSMgr,
+                            const cpo::uno::Reference<cpo::uno::XComponentContext> &xCtx )
 {
-    css::uno::Reference<cpo::uno::XInterface> xConfRegistry = xSMgr->createInstanceWithContext(
+    cpo::uno::Reference<cpo::uno::XInterface> xConfRegistry = xSMgr->createInstanceWithContext(
             u"com.sun.star.configuration.ConfigurationRegistry"_ustr,
             xCtx );
     if(!xConfRegistry.is()) throw cpo::uno::RuntimeException(u"javavm.cxx: couldn't get ConfigurationRegistry"_ustr, nullptr);
 
-    css::uno::Reference<css::registry::XSimpleRegistry> xConfRegistry_simple(xConfRegistry, css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::registry::XSimpleRegistry> xConfRegistry_simple(xConfRegistry, cpo::uno::UNO_QUERY_THROW);
     xConfRegistry_simple->open(u"org.openoffice.Inet"_ustr, true, false);
-    css::uno::Reference<css::registry::XRegistryKey> xRegistryRootKey = xConfRegistry_simple->getRootKey();
+    cpo::uno::Reference<css::registry::XRegistryKey> xRegistryRootKey = xConfRegistry_simple->getRootKey();
 
 //  if ooInetProxyType is not 0 then read the settings
-    css::uno::Reference<css::registry::XRegistryKey> proxyEnable= xRegistryRootKey->openKey(u"Settings/ooInetProxyType"_ustr);
+    cpo::uno::Reference<css::registry::XRegistryKey> proxyEnable= xRegistryRootKey->openKey(u"Settings/ooInetProxyType"_ustr);
     if( proxyEnable.is() && 0 != proxyEnable->getLongValue())
     {
         // read http proxy name
-        css::uno::Reference<css::registry::XRegistryKey> httpProxy_name = xRegistryRootKey->openKey(u"Settings/ooInetHTTPProxyName"_ustr);
+        cpo::uno::Reference<css::registry::XRegistryKey> httpProxy_name = xRegistryRootKey->openKey(u"Settings/ooInetHTTPProxyName"_ustr);
         if(httpProxy_name.is() && !httpProxy_name->getStringValue().isEmpty()) {
             OUString httpHost = "http.proxyHost=" + httpProxy_name->getStringValue();
 
             // read http proxy port
-            css::uno::Reference<css::registry::XRegistryKey> httpProxy_port = xRegistryRootKey->openKey(u"Settings/ooInetHTTPProxyPort"_ustr);
+            cpo::uno::Reference<css::registry::XRegistryKey> httpProxy_port = xRegistryRootKey->openKey(u"Settings/ooInetHTTPProxyPort"_ustr);
             if(httpProxy_port.is() && httpProxy_port->getLongValue()) {
                 OUString httpPort = "http.proxyPort=" + OUString::number(httpProxy_port->getLongValue());
 
@@ -193,12 +193,12 @@ void getINetPropsFromConfig(stoc_javavm::JVM * pjvm,
         }
 
         // read https proxy name
-        css::uno::Reference<css::registry::XRegistryKey> httpsProxy_name = xRegistryRootKey->openKey(u"Settings/ooInetHTTPSProxyName"_ustr);
+        cpo::uno::Reference<css::registry::XRegistryKey> httpsProxy_name = xRegistryRootKey->openKey(u"Settings/ooInetHTTPSProxyName"_ustr);
         if(httpsProxy_name.is() && !httpsProxy_name->getStringValue().isEmpty()) {
             OUString httpsHost = "https.proxyHost=" + httpsProxy_name->getStringValue();
 
             // read https proxy port
-            css::uno::Reference<css::registry::XRegistryKey> httpsProxy_port = xRegistryRootKey->openKey(u"Settings/ooInetHTTPSProxyPort"_ustr);
+            cpo::uno::Reference<css::registry::XRegistryKey> httpsProxy_port = xRegistryRootKey->openKey(u"Settings/ooInetHTTPSProxyPort"_ustr);
             if(httpsProxy_port.is() && httpsProxy_port->getLongValue()) {
                 OUString httpsPort = "https.proxyPort=" + OUString::number(httpsProxy_port->getLongValue());
 
@@ -208,7 +208,7 @@ void getINetPropsFromConfig(stoc_javavm::JVM * pjvm,
         }
 
         // read  nonProxyHosts
-        css::uno::Reference<css::registry::XRegistryKey> nonProxies_name = xRegistryRootKey->openKey(u"Settings/ooInetNoProxy"_ustr);
+        cpo::uno::Reference<css::registry::XRegistryKey> nonProxies_name = xRegistryRootKey->openKey(u"Settings/ooInetNoProxy"_ustr);
         if(nonProxies_name.is() && !nonProxies_name->getStringValue().isEmpty()) {
             OUString value = nonProxies_name->getStringValue();
             // replace the separator ";" by "|"
@@ -225,19 +225,19 @@ void getINetPropsFromConfig(stoc_javavm::JVM * pjvm,
 /// @throws cpo::uno::Exception
 void getDefaultLocaleFromConfig(
     stoc_javavm::JVM * pjvm,
-    const css::uno::Reference<css::lang::XMultiComponentFactory> & xSMgr,
-    const css::uno::Reference<cpo::uno::XComponentContext> &xCtx )
+    const cpo::uno::Reference<css::lang::XMultiComponentFactory> & xSMgr,
+    const cpo::uno::Reference<cpo::uno::XComponentContext> &xCtx )
 {
-    css::uno::Reference<cpo::uno::XInterface> xConfRegistry =
+    cpo::uno::Reference<cpo::uno::XInterface> xConfRegistry =
         xSMgr->createInstanceWithContext( u"com.sun.star.configuration.ConfigurationRegistry"_ustr, xCtx );
     if(!xConfRegistry.is())
         throw cpo::uno::RuntimeException(
             u"javavm.cxx: couldn't get ConfigurationRegistry"_ustr, nullptr);
 
-    css::uno::Reference<css::registry::XSimpleRegistry> xConfRegistry_simple(
-        xConfRegistry, css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::registry::XSimpleRegistry> xConfRegistry_simple(
+        xConfRegistry, cpo::uno::UNO_QUERY_THROW);
     xConfRegistry_simple->open(u"org.openoffice.Setup"_ustr, true, false);
-    css::uno::Reference<css::registry::XRegistryKey> xRegistryRootKey = xConfRegistry_simple->getRootKey();
+    cpo::uno::Reference<css::registry::XRegistryKey> xRegistryRootKey = xConfRegistry_simple->getRootKey();
 
     // Since 1.7 Java knows DISPLAY and FORMAT locales, which match our UI and
     // system locale. See
@@ -246,7 +246,7 @@ void getDefaultLocaleFromConfig(
     // https://docs.oracle.com/javase/7/docs/api/java/util/Locale.html
 
     // Read UI language/locale.
-    css::uno::Reference<css::registry::XRegistryKey> xUILocale = xRegistryRootKey->openKey(u"L10N/ooLocale"_ustr);
+    cpo::uno::Reference<css::registry::XRegistryKey> xUILocale = xRegistryRootKey->openKey(u"L10N/ooLocale"_ustr);
     if(xUILocale.is() && !xUILocale->getStringValue().isEmpty()) {
         LanguageTag aLanguageTag( xUILocale->getStringValue());
         OUString language;
@@ -291,7 +291,7 @@ void getDefaultLocaleFromConfig(
     }
 
     // Read system locale.
-    css::uno::Reference<css::registry::XRegistryKey> xLocale = xRegistryRootKey->openKey(u"L10N/ooSetupSystemLocale"_ustr);
+    cpo::uno::Reference<css::registry::XRegistryKey> xLocale = xRegistryRootKey->openKey(u"L10N/ooSetupSystemLocale"_ustr);
     if(xLocale.is() && !xLocale->getStringValue().isEmpty()) {
         LanguageTag aLanguageTag( xLocale->getStringValue());
         OUString language;
@@ -325,12 +325,12 @@ void getDefaultLocaleFromConfig(
 /// @throws cpo::uno::Exception
 void getJavaPropsFromJavaSettings(
     stoc_javavm::JVM * pjvm,
-    const css::uno::Reference<cpo::uno::XComponentContext> &xCtx)
+    const cpo::uno::Reference<cpo::uno::XComponentContext> &xCtx)
 {
-    css::uno::Reference<css::lang::XMultiServiceFactory> xConfigProvider(
+    cpo::uno::Reference<css::lang::XMultiServiceFactory> xConfigProvider(
         xCtx->getValueByName(
             u"/singletons/com.sun.star.configuration.theDefaultProvider"_ustr),
-        css::uno::UNO_QUERY);
+        cpo::uno::UNO_QUERY);
 
     if (!xConfigProvider.is())
         throw cpo::uno::RuntimeException(
@@ -339,10 +339,10 @@ void getJavaPropsFromJavaSettings(
     css::beans::NamedValue aPath(u"nodepath"_ustr, cpo::uno::Any(u"org.openoffice.Office.Java/VirtualMachine"_ustr));
     cpo::uno::Sequence<cpo::uno::Any> aArguments{ cpo::uno::Any(aPath) };
 
-    css::uno::Reference<css::container::XNameAccess> xConfigAccess(xConfigProvider->createInstanceWithArguments(
+    cpo::uno::Reference<css::container::XNameAccess> xConfigAccess(xConfigProvider->createInstanceWithArguments(
             u"com.sun.star.configuration.ConfigurationAccess"_ustr,
             aArguments),
-        css::uno::UNO_QUERY);
+        cpo::uno::UNO_QUERY);
 
     if (!xConfigAccess.is())
         throw cpo::uno::RuntimeException(
@@ -350,16 +350,16 @@ void getJavaPropsFromJavaSettings(
 
     if (xConfigAccess->hasByName(u"InstrumentationAgents"_ustr))
     {
-        css::uno::Reference<css::container::XNameAccess> xAgentAccess;
+        cpo::uno::Reference<css::container::XNameAccess> xAgentAccess;
         xConfigAccess->getByName(u"InstrumentationAgents"_ustr) >>= xAgentAccess;
         if (xAgentAccess.is() && xAgentAccess->hasElements())
         {
             OUString sScheme(u"vnd.sun.star.expand:"_ustr);
-            css::uno::Reference<css::util::XMacroExpander> exp = css::util::theMacroExpander::get(xCtx);
+            cpo::uno::Reference<css::util::XMacroExpander> exp = css::util::theMacroExpander::get(xCtx);
             cpo::uno::Sequence<OUString> aAgents = xAgentAccess->getElementNames();
             for (auto const & sAgent : aAgents)
             {
-                css::uno::Reference<css::container::XNameAccess> xAgent;
+                cpo::uno::Reference<css::container::XNameAccess> xAgent;
                 xAgentAccess->getByName(sAgent) >>= xAgent;
                 if (!xAgent->hasByName(u"URL"_ustr))
                 {
@@ -423,8 +423,8 @@ void setTimeZone(stoc_javavm::JVM * pjvm) noexcept {
 /// @throws cpo::uno::Exception
 void initVMConfiguration(
     stoc_javavm::JVM * pjvm,
-    const css::uno::Reference<css::lang::XMultiComponentFactory> & xSMgr,
-    const css::uno::Reference<cpo::uno::XComponentContext > &xCtx)
+    const cpo::uno::Reference<css::lang::XMultiComponentFactory> & xSMgr,
+    const cpo::uno::Reference<cpo::uno::XComponentContext > &xCtx)
 {
     stoc_javavm::JVM jvm;
     try {
@@ -490,7 +490,7 @@ private:
 }
 
 JavaVirtualMachine::JavaVirtualMachine(
-    css::uno::Reference< cpo::uno::XComponentContext > xContext):
+    cpo::uno::Reference< cpo::uno::XComponentContext > xContext):
     WeakComponentImplHelper(m_aMutex),
     m_xContext(std::move(xContext)),
     m_bDisposed(false),
@@ -1041,7 +1041,7 @@ JavaVirtualMachine::~JavaVirtualMachine()
 
 void SAL_CALL JavaVirtualMachine::disposing()
 {
-    css::uno::Reference< css::container::XContainer > xContainer1;
+    cpo::uno::Reference< css::container::XContainer > xContainer1;
     {
         osl::MutexGuard aGuard(m_aMutex);
         m_bDisposed = true;
@@ -1062,10 +1062,10 @@ void JavaVirtualMachine::registerConfigChangesListener()
 {
     try
     {
-        css::uno::Reference< css::lang::XMultiServiceFactory > xConfigProvider(
+        cpo::uno::Reference< css::lang::XMultiServiceFactory > xConfigProvider(
             m_xContext->getValueByName(
                 u"/singletons/com.sun.star.configuration.theDefaultProvider"_ustr),
-            css::uno::UNO_QUERY);
+            cpo::uno::UNO_QUERY);
 
         if (xConfigProvider.is())
         {
@@ -1080,7 +1080,7 @@ void JavaVirtualMachine::registerConfigChangesListener()
                     xConfigProvider->createInstanceWithArguments(
                         u"com.sun.star.configuration.ConfigurationAccess"_ustr,
                         aArguments),
-                    css::uno::UNO_QUERY);
+                    cpo::uno::UNO_QUERY);
 
             if (m_xInetConfiguration.is())
                 m_xInetConfiguration->addContainerListener(this);
@@ -1191,7 +1191,7 @@ void JavaVirtualMachine::setINetSettingsInVM(bool set_reset)
 }
 
 void JavaVirtualMachine::setUpUnoVirtualMachine(JNIEnv * environment) {
-    css::uno::Reference< css::util::XMacroExpander > exp = css::util::theMacroExpander::get(m_xContext);
+    cpo::uno::Reference< css::util::XMacroExpander > exp = css::util::theMacroExpander::get(m_xContext);
     OUString baseUrl;
     try {
         baseUrl = exp->expandMacros(u"$URE_INTERNAL_JAVA_DIR/"_ustr);

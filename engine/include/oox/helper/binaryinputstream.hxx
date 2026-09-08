@@ -24,7 +24,7 @@
 #include <memory>
 #include <vector>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <oox/dllapi.h>
 #include <oox/helper/binarystreambase.hxx>
 #include <oox/helper/helper.hxx>
@@ -246,7 +246,7 @@ public:
             of this wrapper or when close() is called.
      */
     explicit            BinaryXInputStream(
-                            const css::uno::Reference< css::io::XInputStream >& rxInStrm,
+                            const cpo::uno::Reference< css::io::XInputStream >& rxInStrm,
                             bool bAutoClose );
 
     virtual             ~BinaryXInputStream() override;
@@ -269,7 +269,7 @@ public:
 
 private:
     StreamDataSequence  maBuffer;       ///< Data buffer used in readMemory() function.
-    css::uno::Reference< css::io::XInputStream >
+    cpo::uno::Reference< css::io::XInputStream >
                         mxInStrm;       ///< Reference to the input stream.
     bool                mbAutoClose;    ///< True = automatically close stream on destruction.
 };

@@ -25,6 +25,7 @@
 namespace oox::xls::nsv
 {
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace
 {

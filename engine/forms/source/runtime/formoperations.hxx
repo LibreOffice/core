@@ -59,14 +59,14 @@ namespace frm
         class MethodGuard;
 
     private:
-        css::uno::Reference<cpo::uno::XComponentContext>                      m_xContext;
-        css::uno::Reference< css::form::runtime::XFormController >            m_xController;
-        css::uno::Reference< css::sdbc::XRowSet >                             m_xCursor;
-        css::uno::Reference< css::sdbc::XResultSetUpdate >                    m_xUpdateCursor;
-        css::uno::Reference< css::beans::XPropertySet >                       m_xCursorProperties;
-        css::uno::Reference< css::form::XLoadable >                           m_xLoadableForm;
-        css::uno::Reference< css::form::runtime::XFeatureInvalidation >       m_xFeatureInvalidation;
-        mutable css::uno::Reference< css::sdb::XSingleSelectQueryComposer >   m_xParser;
+        cpo::uno::Reference<cpo::uno::XComponentContext>                      m_xContext;
+        cpo::uno::Reference< css::form::runtime::XFormController >            m_xController;
+        cpo::uno::Reference< css::sdbc::XRowSet >                             m_xCursor;
+        cpo::uno::Reference< css::sdbc::XResultSetUpdate >                    m_xUpdateCursor;
+        cpo::uno::Reference< css::beans::XPropertySet >                       m_xCursorProperties;
+        cpo::uno::Reference< css::form::XLoadable >                           m_xLoadableForm;
+        cpo::uno::Reference< css::form::runtime::XFeatureInvalidation >       m_xFeatureInvalidation;
+        mutable cpo::uno::Reference< css::sdb::XSingleSelectQueryComposer >   m_xParser;
 
         bool    m_bInitializedParser;
         bool    m_bActiveControlModified;
@@ -77,7 +77,7 @@ namespace frm
     #endif
 
     public:
-        explicit FormOperations( const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext );
+        explicit FormOperations( const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxContext );
 
         struct MethodAccess { friend class MethodGuard; private: MethodAccess() { } };
 
@@ -110,11 +110,11 @@ namespace frm
         virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
         // XFormOperations
-        virtual css::uno::Reference< css::sdbc::XRowSet > getCursor() override;
-        virtual css::uno::Reference< css::sdbc::XResultSetUpdate > getUpdateCursor() override;
-        virtual css::uno::Reference< css::form::runtime::XFormController > getController() override;
-        virtual css::uno::Reference< css::form::runtime::XFeatureInvalidation > getFeatureInvalidation() override;
-        virtual void setFeatureInvalidation(const css::uno::Reference< css::form::runtime::XFeatureInvalidation > & the_value) override;
+        virtual cpo::uno::Reference< css::sdbc::XRowSet > getCursor() override;
+        virtual cpo::uno::Reference< css::sdbc::XResultSetUpdate > getUpdateCursor() override;
+        virtual cpo::uno::Reference< css::form::runtime::XFormController > getController() override;
+        virtual cpo::uno::Reference< css::form::runtime::XFeatureInvalidation > getFeatureInvalidation() override;
+        virtual void setFeatureInvalidation(const cpo::uno::Reference< css::form::runtime::XFeatureInvalidation > & the_value) override;
         virtual css::form::runtime::FeatureState getState(::sal_Int16 Feature) override;
         virtual bool isEnabled(::sal_Int16 Feature) override;
         virtual void execute(::sal_Int16 Feature) override;
@@ -143,8 +143,8 @@ namespace frm
 
     private:
         // service constructors
-        void    createWithFormController( const css::uno::Reference< css::form::runtime::XFormController >& _rxController );
-        void    createWithForm( const css::uno::Reference< css::form::XForm >& _rxForm );
+        void    createWithFormController( const cpo::uno::Reference< css::form::runtime::XFormController >& _rxController );
+        void    createWithForm( const cpo::uno::Reference< css::form::XForm >& _rxForm );
 
         /** checks whether the instance is already disposed, and throws an exception if so
         */
@@ -214,7 +214,7 @@ namespace frm
             @precond
                 m_xController.is()
         */
-        css::uno::Reference< css::beans::XPropertySet >
+        cpo::uno::Reference< css::beans::XPropertySet >
                     impl_getCurrentBoundField_nothrow( ) const;
 
         /** returns the control model of the current control
@@ -225,7 +225,7 @@ namespace frm
             @precond
                 m_xController.is()
         */
-        css::uno::Reference< css::awt::XControlModel >
+        cpo::uno::Reference< css::awt::XControlModel >
                     impl_getCurrentControlModel_throw() const;
 
         /// determines if we have a valid cursor
@@ -236,7 +236,7 @@ namespace frm
             A grid control can have columns which are currently hidden, so the index of a
             column in the view is not necessarily the same as its index in the model.
         */
-        static sal_Int32   impl_gridView2ModelPos_nothrow( const css::uno::Reference< css::container::XIndexAccess >& _rxColumns, sal_Int16 _nViewPos );
+        static sal_Int32   impl_gridView2ModelPos_nothrow( const cpo::uno::Reference< css::container::XIndexAccess >& _rxColumns, sal_Int16 _nViewPos );
 
         /** moves our cursor one position to the left, caring for different possible
             cursor states.
@@ -302,7 +302,7 @@ namespace frm
         {
         public:
             impl_appendOrderByColumn_throw(const FormOperations *pFO,
-                                           css::uno::Reference< css::beans::XPropertySet > xField,
+                                           cpo::uno::Reference< css::beans::XPropertySet > xField,
                                            bool bUp)
                 : m_pFO(pFO)
                 , m_xField(std::move(xField))
@@ -312,7 +312,7 @@ namespace frm
             void operator()() { m_pFO->m_xParser->appendOrderByColumn(m_xField, m_bUp); }
         private:
             const FormOperations *m_pFO;
-            css::uno::Reference< css::beans::XPropertySet > m_xField;
+            cpo::uno::Reference< css::beans::XPropertySet > m_xField;
             bool m_bUp;
         };
 
@@ -321,8 +321,8 @@ namespace frm
         {
         public:
             impl_appendFilterByColumn_throw(const FormOperations *pFO,
-                                            css::uno::Reference< css::sdb::XSingleSelectQueryComposer > xParser,
-                                            css::uno::Reference< css::beans::XPropertySet > xField)
+                                            cpo::uno::Reference< css::sdb::XSingleSelectQueryComposer > xParser,
+                                            cpo::uno::Reference< css::beans::XPropertySet > xField)
                 : m_pFO(pFO)
                 , m_xParser(std::move(xParser))
                 , m_xField(std::move(xField))
@@ -336,8 +336,8 @@ namespace frm
             }
         private:
             const FormOperations *m_pFO;
-            css::uno::Reference< css::sdb::XSingleSelectQueryComposer > m_xParser;
-            css::uno::Reference< css::beans::XPropertySet > m_xField;
+            cpo::uno::Reference< css::sdb::XSingleSelectQueryComposer > m_xParser;
+            cpo::uno::Reference< css::beans::XPropertySet > m_xField;
         };
 
     private:
@@ -346,7 +346,7 @@ namespace frm
 
     public:
 
-        css::uno::Reference<css::awt::XWindow> GetDialogParent() const;
+        cpo::uno::Reference<css::awt::XWindow> GetDialogParent() const;
 
         class MethodGuard
         {

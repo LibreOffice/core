@@ -22,7 +22,7 @@
 #include <sal/types.h>
 #include <rtl/ref.hxx>
 
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/XNamedNodeMap.hpp>
 
@@ -51,42 +51,42 @@ namespace DOM
         /**
         Retrieves a node specified by local name
         */
-        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL getNamedItem(OUString const& name) override;
+        virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL getNamedItem(OUString const& name) override;
 
         /**
         Retrieves a node specified by local name and namespace URI.
         */
-        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL getNamedItemNS(
+        virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL getNamedItemNS(
                 OUString const& namespaceURI, OUString const& localName) override;
 
         /**
         Returns the indexth item in the map.
         */
-        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL item(sal_Int32 index) override;
+        virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL item(sal_Int32 index) override;
 
         /**
         Removes a node specified by name.
         */
-        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL
+        virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL
             removeNamedItem(OUString const& name) override;
 
         /**
         // Removes a node specified by local name and namespace URI.
         */
-        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL removeNamedItemNS(
+        virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL removeNamedItemNS(
                 OUString const& namespaceURI, OUString const& localName) override;
 
         /**
         // Adds a node using its nodeName attribute.
         */
-        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL
-            setNamedItem(css::uno::Reference< css::xml::dom::XNode > const& arg) override;
+        virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL
+            setNamedItem(cpo::uno::Reference< css::xml::dom::XNode > const& arg) override;
 
         /**
         Adds a node using its namespaceURI and localName.
         */
-        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL
-            setNamedItemNS(css::uno::Reference< css::xml::dom::XNode > const& arg) override;
+        virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL
+            setNamedItemNS(cpo::uno::Reference< css::xml::dom::XNode > const& arg) override;
     };
 }
 

@@ -40,11 +40,11 @@ protected:
     std::unique_ptr<weld::Builder> m_xBuilder;
     std::unique_ptr<weld::Container> m_xTopLevel;
     std::unique_ptr<weld::Container> m_xContainer;
-    css::uno::Reference<css::frame::XFrame> m_xFrame;
+    cpo::uno::Reference<css::frame::XFrame> m_xFrame;
     rtl::Reference<svt::FrameStatusListener> m_xStatusListener;
 
 public:
-    WeldToolbarPopup(css::uno::Reference<css::frame::XFrame> xFrame,
+    WeldToolbarPopup(cpo::uno::Reference<css::frame::XFrame> xFrame,
                      weld::Widget* pParent, const OUString& rUIFile, const OUString& rId);
     virtual ~WeldToolbarPopup();
     weld::Container* getTopLevel() { return m_xTopLevel.get(); }
@@ -84,12 +84,12 @@ public:
 class SVT_DLLPUBLIC InterimToolbarPopup final : public DropdownDockingWindow
 {
 private:
-    css::uno::Reference<css::frame::XFrame> m_xFrame;
+    cpo::uno::Reference<css::frame::XFrame> m_xFrame;
     std::unique_ptr<weld::Builder> m_xBuilder;
     std::unique_ptr<weld::Container> m_xContainer;
     std::unique_ptr<WeldToolbarPopup> m_xPopup;
 public:
-    InterimToolbarPopup(const css::uno::Reference<css::frame::XFrame>& rFrame, vcl::Window* pParent,
+    InterimToolbarPopup(const cpo::uno::Reference<css::frame::XFrame>& rFrame, vcl::Window* pParent,
                         std::unique_ptr<WeldToolbarPopup> xPopup, bool bTearable = false);
     virtual void dispose() override;
     virtual ~InterimToolbarPopup() override;

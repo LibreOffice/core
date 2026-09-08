@@ -246,7 +246,7 @@ public:
      */
     sal_Int32 addInterface(
         const sal_Int32 & rKey,
-        const css::uno::Reference< cpo::uno::XInterface > & r );
+        const cpo::uno::Reference< cpo::uno::XInterface > & r );
 
     /**
       Remove an element from the container specified with the key.
@@ -257,7 +257,7 @@ public:
      */
     sal_Int32 removeInterface(
         const sal_Int32 & rKey,
-        const css::uno::Reference< cpo::uno::XInterface > & rxIFace );
+        const cpo::uno::Reference< cpo::uno::XInterface > & rxIFace );
 
     /**
       Call disposing on all objects in the container that
@@ -424,22 +424,22 @@ public:
     /** Ignored if the property is not bound. */
     virtual void addPropertyChangeListener(
         const ::rtl::OUString& aPropertyName,
-        const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener) SAL_OVERRIDE;
+        const cpo::uno::Reference< css::beans::XPropertyChangeListener >& aListener) SAL_OVERRIDE;
 
     /** Ignored if the property is not bound. */
     virtual void removePropertyChangeListener(
         const ::rtl::OUString& aPropertyName,
-        const css::uno::Reference < css::beans::XPropertyChangeListener >& aListener) SAL_OVERRIDE;
+        const cpo::uno::Reference < css::beans::XPropertyChangeListener >& aListener) SAL_OVERRIDE;
 
     /** Ignored if the property is not constrained. */
     virtual void addVetoableChangeListener(
         const ::rtl::OUString& aPropertyName,
-        const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener) SAL_OVERRIDE;
+        const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener) SAL_OVERRIDE;
 
     /** Ignored if the property is not constrained. */
     virtual void removeVetoableChangeListener(
         const ::rtl::OUString& aPropertyName,
-        const css::uno::Reference< css::beans::XVetoableChangeListener > & aListener ) SAL_OVERRIDE;
+        const cpo::uno::Reference< css::beans::XVetoableChangeListener > & aListener ) SAL_OVERRIDE;
 
     /**
        Throw UnknownPropertyException or PropertyVetoException if the property with the name
@@ -466,19 +466,19 @@ public:
 
     virtual void addPropertiesChangeListener(
         const cpo::uno::Sequence< ::rtl::OUString >& PropertyNames,
-        const css::uno::Reference< css::beans::XPropertiesChangeListener >& Listener ) SAL_OVERRIDE;
+        const cpo::uno::Reference< css::beans::XPropertiesChangeListener >& Listener ) SAL_OVERRIDE;
 
     virtual void removePropertiesChangeListener(
-        const css::uno::Reference< css::beans::XPropertiesChangeListener >& Listener ) SAL_OVERRIDE;
+        const cpo::uno::Reference< css::beans::XPropertiesChangeListener >& Listener ) SAL_OVERRIDE;
 
     virtual void firePropertiesChangeEvent(
         const cpo::uno::Sequence< ::rtl::OUString >& PropertyNames,
-        const css::uno::Reference< css::beans::XPropertiesChangeListener > & Listener ) SAL_OVERRIDE;
+        const cpo::uno::Reference< css::beans::XPropertiesChangeListener > & Listener ) SAL_OVERRIDE;
 
     /**
        The property sequence is created in the call. The interface isn't used after the call.
      */
-    static css::uno::Reference < css::beans::XPropertySetInfo >
+    static cpo::uno::Reference < css::beans::XPropertySetInfo >
         createPropertySetInfo( IPropertyArrayHelper & rProperties );
 protected:
     /**

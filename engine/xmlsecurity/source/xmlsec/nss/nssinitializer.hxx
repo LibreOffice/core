@@ -35,18 +35,18 @@ class ONSSInitializer : public cppu::WeakImplHelper
 >
 {
 protected:
-    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
     static OUString m_sNSSPath;
     static bool m_bIsNSSinitialized;
 
     ONSSInitializer();
 
 public:
-    explicit ONSSInitializer(css::uno::Reference<cpo::uno::XComponentContext> xContext);
+    explicit ONSSInitializer(cpo::uno::Reference<cpo::uno::XComponentContext> xContext);
     virtual ~ONSSInitializer() override;
 
-    static bool initNSS( const css::uno::Reference< cpo::uno::XComponentContext > &rxContext );
-    static const OUString & getMozillaCurrentProfile(const css::uno::Reference< cpo::uno::XComponentContext > &rxContext, bool bSetActive = false);
+    static bool initNSS( const cpo::uno::Reference< cpo::uno::XComponentContext > &rxContext );
+    static const OUString & getMozillaCurrentProfile(const cpo::uno::Reference< cpo::uno::XComponentContext > &rxContext, bool bSetActive = false);
 
     /* XNSSInitializer */
     virtual OUString SAL_CALL getNSSPath() override;
@@ -54,10 +54,10 @@ public:
     virtual cpo::uno::Sequence<css::xml::crypto::NSSProfile> SAL_CALL getNSSProfiles() override;
 
     /* XDigestContextSupplier */
-    virtual css::uno::Reference< css::xml::crypto::XDigestContext > SAL_CALL getDigestContext( ::sal_Int32 nDigestID, const cpo::uno::Sequence< css::beans::NamedValue >& aParams ) override;
+    virtual cpo::uno::Reference< css::xml::crypto::XDigestContext > SAL_CALL getDigestContext( ::sal_Int32 nDigestID, const cpo::uno::Sequence< css::beans::NamedValue >& aParams ) override;
 
     /* XCipherContextSupplier */
-    virtual css::uno::Reference< css::xml::crypto::XCipherContext > SAL_CALL getCipherContext( ::sal_Int32 nCipherID, const cpo::uno::Sequence< ::sal_Int8 >& aKey, const cpo::uno::Sequence< ::sal_Int8 >& aInitializationVector, bool bEncryption, const cpo::uno::Sequence< css::beans::NamedValue >& aParams ) override;
+    virtual cpo::uno::Reference< css::xml::crypto::XCipherContext > SAL_CALL getCipherContext( ::sal_Int32 nCipherID, const cpo::uno::Sequence< ::sal_Int8 >& aKey, const cpo::uno::Sequence< ::sal_Int8 >& aInitializationVector, bool bEncryption, const cpo::uno::Sequence< css::beans::NamedValue >& aParams ) override;
 
     /* XServiceInfo */
     virtual OUString SAL_CALL getImplementationName() override;

@@ -818,9 +818,9 @@ public:
     bool deleteUserData(UserDataID aID);
 
     // access to the UNO representation of the shape
-    css::uno::Reference< css::drawing::XShape > getUnoShape();
+    cpo::uno::Reference< css::drawing::XShape > getUnoShape();
 
-    static SdrObject* getSdrObjectFromXShape( const css::uno::Reference< cpo::uno::XInterface >& xInt );
+    static SdrObject* getSdrObjectFromXShape( const cpo::uno::Reference< cpo::uno::XInterface >& xInt );
 
     // notifies a change in the given property, to all applicable listeners registered at the associated SvxShape
     //
@@ -912,7 +912,7 @@ public:
     ///
     /// The implementation _must_ call the same method of its parent
     /// class (preferably as the first step)!
-    virtual void setUnoShape( const css::uno::Reference< css::drawing::XShape >& _rxUnoShape );
+    virtual void setUnoShape( const cpo::uno::Reference< css::drawing::XShape >& _rxUnoShape );
 
     const cpo::uno::WeakReference< css::drawing::XShape >& getWeakUnoShape() const { return maWeakUnoShape; }
 

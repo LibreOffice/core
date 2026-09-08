@@ -44,7 +44,7 @@
 
 using namespace dbaccess;
 using namespace dbtools;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
@@ -163,13 +163,13 @@ void lcl_createDefinitionObject(const OUString& _rName
 
 }
 
-css::uno::Reference< css::beans::XPropertySet > OTableContainer::createObject(const OUString& _rName)
+cpo::uno::Reference< css::beans::XPropertySet > OTableContainer::createObject(const OUString& _rName)
 {
     Reference<XColumnsSupplier > xSup;
     if(m_xMasterContainer.is() && m_xMasterContainer->hasByName(_rName))
         xSup.set(m_xMasterContainer->getByName(_rName),UNO_QUERY);
 
-    css::uno::Reference< css::beans::XPropertySet > xRet;
+    cpo::uno::Reference< css::beans::XPropertySet > xRet;
     if ( m_xMetaData.is() )
     {
         Reference<XPropertySet> xTableDefinition;
@@ -261,7 +261,7 @@ Reference< XPropertySet > OTableContainer::createDescriptor()
 }
 
 // XAppend
-css::uno::Reference< css::beans::XPropertySet > OTableContainer::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
+cpo::uno::Reference< css::beans::XPropertySet > OTableContainer::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     // append the new table with a create stmt
     OUString aName = getString(descriptor->getPropertyValue(PROPERTY_NAME));
@@ -400,7 +400,7 @@ void OTableContainer::elementInserted( const ContainerEvent& Event )
     {
         if(!m_xMasterContainer.is() || m_xMasterContainer->hasByName(sName))
         {
-            css::uno::Reference< css::beans::XPropertySet > xName = createObject(sName);
+            cpo::uno::Reference< css::beans::XPropertySet > xName = createObject(sName);
             insertElement(sName,xName);
             // and notify our listeners
             ContainerEvent aEvent(static_cast<XContainer*>(this), Any(sName), Any(xName), Any());

@@ -64,6 +64,7 @@
 
 using namespace linguistic;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 // white space list: obtained from the fonts.config.txt of a Linux system.
 const sal_Unicode aWhiteSpaces[] =

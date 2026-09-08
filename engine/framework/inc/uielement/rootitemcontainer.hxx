@@ -52,7 +52,7 @@ class RootItemContainer final : private cppu::BaseMutex,
 
     public:
         RootItemContainer();
-        RootItemContainer( const css::uno::Reference< css::container::XIndexAccess >& rItemAccessContainer );
+        RootItemContainer( const cpo::uno::Reference< css::container::XIndexAccess >& rItemAccessContainer );
         virtual ~RootItemContainer() override;
 
         // XInterface
@@ -87,8 +87,8 @@ class RootItemContainer final : private cppu::BaseMutex,
         virtual bool hasElements() override;
 
         // XSingleComponentFactory
-        virtual css::uno::Reference< cpo::uno::XInterface > createInstanceWithContext( const css::uno::Reference< cpo::uno::XComponentContext >& Context ) override;
-        virtual css::uno::Reference< cpo::uno::XInterface > createInstanceWithArgumentsAndContext( const cpo::uno::Sequence< cpo::uno::Any >& Arguments, const css::uno::Reference< cpo::uno::XComponentContext >& Context ) override;
+        virtual cpo::uno::Reference< cpo::uno::XInterface > createInstanceWithContext( const cpo::uno::Reference< cpo::uno::XComponentContext >& Context ) override;
+        virtual cpo::uno::Reference< cpo::uno::XInterface > createInstanceWithArgumentsAndContext( const cpo::uno::Sequence< cpo::uno::Any >& Arguments, const cpo::uno::Reference< cpo::uno::XComponentContext >& Context ) override;
 
     private:
         //  OPropertySetHelper
@@ -102,14 +102,14 @@ class RootItemContainer final : private cppu::BaseMutex,
         virtual void                                                getFastPropertyValue( cpo::uno::Any&    aValue          ,
                                                                                                    sal_Int32                    nHandle         ) const override;
         virtual ::cppu::IPropertyArrayHelper&                       getInfoHelper() override;
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo() override;
+        virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo() override;
 
         static cpo::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescriptor();
 
         RootItemContainer& operator=( const RootItemContainer& ) = delete;
         RootItemContainer( const RootItemContainer& ) = delete;
 
-        rtl::Reference< ItemContainer > deepCopyContainer( const css::uno::Reference< css::container::XIndexAccess >& rSubContainer );
+        rtl::Reference< ItemContainer > deepCopyContainer( const cpo::uno::Reference< css::container::XIndexAccess >& rSubContainer );
 
         mutable ShareableMutex                                            m_aShareMutex;
         std::vector< cpo::uno::Sequence< css::beans::PropertyValue > >    m_aItemVector;

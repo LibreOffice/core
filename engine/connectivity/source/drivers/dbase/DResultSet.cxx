@@ -33,7 +33,7 @@ using namespace ::comphelper;
 using namespace connectivity::dbase;
 using namespace connectivity::file;
 using namespace ::cppu;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
@@ -196,7 +196,7 @@ void ODbaseResultSet::release() noexcept
     ODbaseResultSet_BASE2::release();
 }
 
-css::uno::Reference< css::beans::XPropertySetInfo > ODbaseResultSet::getPropertySetInfo(  )
+cpo::uno::Reference< css::beans::XPropertySetInfo > ODbaseResultSet::getPropertySetInfo(  )
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }

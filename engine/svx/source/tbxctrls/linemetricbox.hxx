@@ -30,7 +30,7 @@ private:
     sal_Int64       nCurValue;
     MapUnit         eDestPoolUnit;
     FieldUnit       eDlgUnit;
-    css::uno::Reference< css::frame::XFrame > mxFrame;
+    cpo::uno::Reference< css::frame::XFrame > mxFrame;
 
     DECL_LINK(ModifyHdl, weld::MetricSpinButton&, void);
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
@@ -42,7 +42,7 @@ private:
 
 public:
     SvxMetricField( vcl::Window* pParent,
-                    const css::uno::Reference< css::frame::XFrame >& rFrame );
+                    const cpo::uno::Reference< css::frame::XFrame >& rFrame );
     virtual void dispose() override;
     virtual ~SvxMetricField() override;
 

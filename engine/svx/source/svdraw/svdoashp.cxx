@@ -92,6 +92,7 @@
 #include <EnhancedCustomShapeEngine.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 static void lcl_ShapeSegmentFromBinary( drawing::EnhancedCustomShapeSegment& rSegInfo, sal_uInt16 nSDat )
 {

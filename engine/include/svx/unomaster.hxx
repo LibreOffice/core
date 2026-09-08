@@ -36,7 +36,7 @@ public:
     virtual bool queryAggregation( const cpo::uno::Type & rType, cpo::uno::Any& aAny ) = 0;
 
     /// @throws cpo::uno::RuntimeException
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) = 0;
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) = 0;
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::beans::PropertyVetoException
     /// @throws css::lang::IllegalArgumentException

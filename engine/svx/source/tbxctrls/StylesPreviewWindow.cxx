@@ -130,7 +130,7 @@ StylePreviewCache::JsonStylePreviewCacheClear StylePreviewCache::gJsonIdleClear;
 
 StyleStatusListener::StyleStatusListener(
     StylesPreviewWindow_Base* pPreviewControl,
-    const css::uno::Reference<css::frame::XDispatchProvider>& xDispatchProvider)
+    const cpo::uno::Reference<css::frame::XDispatchProvider>& xDispatchProvider)
     : SfxStatusListener(xDispatchProvider, SID_STYLE_FAMILY2, u".uno:ParaStyle"_ustr)
     , m_pPreviewControl(pPreviewControl)
 {
@@ -205,8 +205,8 @@ bool StylesPreviewWindow_Base::Command(const CommandEvent& rEvent)
     {
         cpo::uno::Sequence<css::beans::PropertyValue> aArgs(0);
 
-        const css::uno::Reference<css::frame::XDispatchProvider> xProvider(m_xFrame,
-                                                                           css::uno::UNO_QUERY);
+        const cpo::uno::Reference<css::frame::XDispatchProvider> xProvider(m_xFrame,
+                                                                           cpo::uno::UNO_QUERY);
         SfxToolBoxControl::Dispatch(
             xProvider,
             rIdent == "update" ? u".uno:StyleUpdateByExample"_ustr : u".uno:EditStyle"_ustr, aArgs);
@@ -428,7 +428,7 @@ void StyleItemController::DrawText(vcl::RenderContext& rRenderContext)
 
 StylesPreviewWindow_Base::StylesPreviewWindow_Base(
     weld::Builder& xBuilder, const StylePreviewList& rDefaultStyles,
-    const css::uno::Reference<css::frame::XFrame>& xFrame)
+    const cpo::uno::Reference<css::frame::XFrame>& xFrame)
     : m_xFrame(xFrame)
     , m_xStylesView(xBuilder.weld_icon_view(u"stylesview"_ustr))
     , m_aUpdateTask(*this)
@@ -442,8 +442,8 @@ StylesPreviewWindow_Base::StylesPreviewWindow_Base(
     m_xStylesView->connect_get_image(LINK(this, StylesPreviewWindow_Base, GetPreviewImage));
     m_xStylesView->connect_query_tooltip(LINK(this, StylesPreviewWindow_Base, QueryTooltip));
 
-    const css::uno::Reference<css::frame::XDispatchProvider> xProvider(m_xFrame,
-                                                                       css::uno::UNO_QUERY);
+    const cpo::uno::Reference<css::frame::XDispatchProvider> xProvider(m_xFrame,
+                                                                       cpo::uno::UNO_QUERY);
     m_xStatusListener = new StyleStatusListener(this, xProvider);
 
     m_pStylePoolChangeListener.reset(new StylePoolChangeListener(this));
@@ -487,8 +487,8 @@ IMPL_LINK(StylesPreviewWindow_Base, Selected, weld::IconView&, rIconView, void)
         comphelper::makePropertyValue(u"Style"_ustr, pStyle->commonName),
         comphelper::makePropertyValue(u"FamilyName"_ustr, lcl_GetStyleFamilyName(pStyle->eFamily))
     };
-    const css::uno::Reference<css::frame::XDispatchProvider> xProvider(m_xFrame,
-                                                                       css::uno::UNO_QUERY);
+    const cpo::uno::Reference<css::frame::XDispatchProvider> xProvider(m_xFrame,
+                                                                       cpo::uno::UNO_QUERY);
     SfxToolBoxControl::Dispatch(xProvider, u".uno:StyleApply"_ustr, aArgs);
 }
 
@@ -502,8 +502,8 @@ IMPL_LINK(StylesPreviewWindow_Base, DoubleClick, weld::IconView&, rIconView, boo
         comphelper::makePropertyValue(u"Param"_ustr, pStyle->commonName),
         comphelper::makePropertyValue(u"Family"_ustr, sal_Int16(pStyle->eFamily))
     };
-    const css::uno::Reference<css::frame::XDispatchProvider> xProvider(m_xFrame,
-                                                                       css::uno::UNO_QUERY);
+    const cpo::uno::Reference<css::frame::XDispatchProvider> xProvider(m_xFrame,
+                                                                       cpo::uno::UNO_QUERY);
     SfxToolBoxControl::Dispatch(xProvider, u".uno:EditStyle"_ustr, aArgs);
 
     return true;
@@ -681,8 +681,8 @@ StylePaneFormatFilter lcl_GetStylePaneFormatFilter(SfxObjectShell* pDocShell)
 
     try
     {
-        css::uno::Reference<css::beans::XPropertySet> xDocProps(pDocShell->GetModel(),
-                                                                css::uno::UNO_QUERY);
+        cpo::uno::Reference<css::beans::XPropertySet> xDocProps(pDocShell->GetModel(),
+                                                                cpo::uno::UNO_QUERY);
         if (!xDocProps.is()
             || !xDocProps->getPropertySetInfo()->hasPropertyByName(u"InteropGrabBag"_ustr))
             return aFilter;
@@ -881,7 +881,7 @@ void StylesPreviewWindow_Base::UpdateStylesList()
 
 StylesPreviewWindow_Impl::StylesPreviewWindow_Impl(
     vcl::Window* pParent, const StylePreviewList& rDefaultStyles,
-    const css::uno::Reference<css::frame::XFrame>& xFrame)
+    const cpo::uno::Reference<css::frame::XFrame>& xFrame)
     : InterimItemWindow(pParent, u"svx/ui/stylespreview.ui"_ustr, u"ApplyStyleBox"_ustr, true,
                         reinterpret_cast<sal_uInt64>(SfxViewShell::Current()))
     , StylesPreviewWindow_Base(*m_xBuilder, rDefaultStyles, xFrame)

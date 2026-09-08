@@ -36,6 +36,7 @@
 #include "tdoc_content.hxx"
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace tdoc_ucp;
 
 namespace tdoc_ucp

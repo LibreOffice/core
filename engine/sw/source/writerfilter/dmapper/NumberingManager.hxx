@@ -48,7 +48,7 @@ class ListLevel : public PropertyMap
     sal_Int16                                     m_nXChFollow;      //LN_IXCHFOLLOW
     std::optional<OUString>                       m_sBulletChar;
     css::awt::Size                         m_aGraphicSize;
-    css::uno::Reference<css::awt::XBitmap> m_xGraphicBitmap;
+    cpo::uno::Reference<css::awt::XBitmap> m_xGraphicBitmap;
     std::optional<sal_Int32>               m_nTabstop;
     tools::SvRef< StyleSheetEntry >          m_pParaStyle;
     bool m_bHasValues = false;
@@ -71,7 +71,7 @@ public:
     void SetBulletChar( const OUString& sValue ) { m_sBulletChar = sValue; };
     void SetGraphicSize( const css::awt::Size& aValue ) { m_aGraphicSize = aValue; };
 
-    void SetGraphicBitmap(css::uno::Reference<css::awt::XBitmap> const& xGraphicBitmap)
+    void SetGraphicBitmap(cpo::uno::Reference<css::awt::XBitmap> const& xGraphicBitmap)
         { m_xGraphicBitmap = xGraphicBitmap; }
     void SetParaStyle( const tools::SvRef< StyleSheetEntry >& pStyle );
 
@@ -105,11 +105,11 @@ public:
 
     void SetId(sal_Int32 nId);
     sal_Int32 GetId() const { return m_nId;}
-    void SetShape(css::uno::Reference<css::drawing::XShape> const& xShape);
-    const css::uno::Reference<css::drawing::XShape>& GetShape() const { return m_xShape; }
+    void SetShape(cpo::uno::Reference<css::drawing::XShape> const& xShape);
+    const cpo::uno::Reference<css::drawing::XShape>& GetShape() const { return m_xShape; }
 private:
     sal_Int32 m_nId;
-    css::uno::Reference<css::drawing::XShape> m_xShape;
+    cpo::uno::Reference<css::drawing::XShape> m_xShape;
 };
 
 class AbstractListDef : public virtual SvRefBase
@@ -172,7 +172,7 @@ private:
     AbstractListDef::Pointer             m_pAbstractDef;
 
     // Cache for the UNO numbering rules
-    css::uno::Reference< css::container::XIndexReplace > m_xNumRules;
+    cpo::uno::Reference< css::container::XIndexReplace > m_xNumRules;
 
     /// mapped list style name
     OUString m_StyleName;
@@ -189,14 +189,14 @@ public:
 
     // Mapping functions
     const OUString & GetStyleName() const { return m_StyleName; };
-    const OUString & GetStyleName(sal_Int32 nId, css::uno::Reference<css::container::XNameContainer> const& xStyles, const DomainMapper& rDMapper);
+    const OUString & GetStyleName(sal_Int32 nId, cpo::uno::Reference<css::container::XNameContainer> const& xStyles, const DomainMapper& rDMapper);
 
     cpo::uno::Sequence< cpo::uno::Sequence<css::beans::PropertyValue> > GetMergedPropertyValues();
 
     sal_uInt16 GetChapterNumberingWeight() const;
     void CreateNumberingRules(DomainMapper& rDMapper, rtl::Reference<SwXTextDocument> const& xTextDoc, sal_Int16 nOutline);
 
-    const css::uno::Reference<css::container::XIndexReplace>& GetNumberingRules() const { return m_xNumRules; }
+    const cpo::uno::Reference<css::container::XIndexReplace>& GetNumberingRules() const { return m_xNumRules; }
 
 };
 

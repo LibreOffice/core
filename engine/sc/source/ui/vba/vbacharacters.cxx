@@ -25,6 +25,7 @@
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 ScVbaCharacters::ScVbaCharacters( const uno::Reference< XHelperInterface >& xParent,
                                   const uno::Reference< cpo::uno::XComponentContext >& xContext,

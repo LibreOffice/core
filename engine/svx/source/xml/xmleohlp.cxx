@@ -55,8 +55,8 @@ using namespace ::cppu;
 using namespace ::utl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::document;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
@@ -677,7 +677,7 @@ bool SvXMLEmbeddedObjectHelper::hasElements()
 
 namespace svx {
 
-    void DropUnusedNamedItems(css::uno::Reference<cpo::uno::XInterface> const& xModel)
+    void DropUnusedNamedItems(cpo::uno::Reference<cpo::uno::XInterface> const& xModel)
     {
         uno::Reference<lang::XMultiServiceFactory> const xModelFactory(xModel, uno::UNO_QUERY);
         assert(xModelFactory.is());

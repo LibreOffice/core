@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <filter/msfilter/msfilterdllapi.h>
 #include <sal/types.h>
 
@@ -46,7 +46,7 @@ public:
     SvxMSExportOLEObjects( sal_uInt32 nCnvrtFlgs ) : nConvertFlags(nCnvrtFlgs) {}
 
     void ExportOLEObject( svt::EmbeddedObjectRef const & rObj, SotStorage& rDestStg );
-    void ExportOLEObject( const css::uno::Reference < css::embed::XEmbeddedObject>& rObj, SotStorage& rDestStg );
+    void ExportOLEObject( const cpo::uno::Reference < css::embed::XEmbeddedObject>& rObj, SotStorage& rDestStg );
 };
 
 

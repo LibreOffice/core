@@ -42,7 +42,7 @@
 
 using namespace ::oox::core;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using ::com::sun::star::table::BorderLine2;
@@ -289,7 +289,7 @@ static void applyTableCellProperties( const Reference < css::table::XCell >& rxC
 }
 
 void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, const ::oox::drawingml::TextListStylePtr& pMasterTextListStyle,
-    const css::uno::Reference < css::table::XCell >& rxCell, const TableProperties& rTableProperties,
+    const cpo::uno::Reference < css::table::XCell >& rxCell, const TableProperties& rTableProperties,
     const TableStyle& rTableStyle, sal_Int32 nColumn, sal_Int32 nMaxColumn, sal_Int32 nRow, sal_Int32 nMaxRow )
 {
     TableStyle& rTable( const_cast< TableStyle& >( rTableStyle ) );

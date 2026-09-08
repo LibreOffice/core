@@ -25,7 +25,7 @@
 
 namespace cpo::uno { class XComponentContext; }
 
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::xforms;
 using namespace com::sun::star::xml::xpath;

@@ -35,11 +35,11 @@ namespace svxform
 
     namespace
     {
-        using ::com::sun::star::uno::Reference;
+        using ::cpo::uno::Reference;
         using ::cpo::uno::XInterface;
         using ::com::sun::star::container::XChild;
         using ::com::sun::star::frame::XModel;
-        using ::com::sun::star::uno::UNO_QUERY;
+        using ::cpo::uno::UNO_QUERY;
         using ::com::sun::star::frame::XModule;
 
 
@@ -66,7 +66,7 @@ namespace svxform
         }
     }
 
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
     using namespace ::com::sun::star::frame;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::container;

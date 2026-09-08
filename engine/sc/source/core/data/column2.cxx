@@ -440,7 +440,7 @@ tools::Long ScColumn::GetNeededSize(
 
         if ( aSet.Get(EE_PARA_HYPHENATE).GetValue() ) {
 
-            css::uno::Reference<css::linguistic2::XHyphenator> xXHyphenator( LinguMgr::GetHyphenator() );
+            cpo::uno::Reference<css::linguistic2::XHyphenator> xXHyphenator( LinguMgr::GetHyphenator() );
             pEngine->SetHyphenator( xXHyphenator );
         }
 

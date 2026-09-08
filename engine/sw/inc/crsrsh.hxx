@@ -857,8 +857,8 @@ public:
 
     // get smart tags at current cursor position
     void GetSmartTagTerm( std::vector< OUString >& rSmartTagTypes,
-                          cpo::uno::Sequence< css::uno::Reference< css::container::XStringKeyMap > >& rStringKeyMaps,
-                          css::uno::Reference<css::text::XTextRange>& rRange ) const;
+                          cpo::uno::Sequence< cpo::uno::Reference< css::container::XStringKeyMap > >& rStringKeyMaps,
+                          cpo::uno::Reference<css::text::XTextRange>& rRange ) const;
 
     bool IsPageAtPos( const Point &rPt ) const;
 

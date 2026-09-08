@@ -31,7 +31,7 @@ class AccessibleTabListBoxTable final
 private:
     VclPtr<SvHeaderTabListBox>     m_pTabListBox;
 
-    css::uno::Reference< css::accessibility::XAccessible >  m_xCurChild;
+    cpo::uno::Reference< css::accessibility::XAccessible >  m_xCurChild;
 
     void                    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
     DECL_LINK(        WindowEventListener, VclWindowEvent&, void );
@@ -67,7 +67,7 @@ public:
         @param rxParent  XAccessible interface of the parent object.
         @param rBox  The HeaderTabListBox control. */
     AccessibleTabListBoxTable(
-        const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
+        const cpo::uno::Reference< css::accessibility::XAccessible >& rxParent,
         SvHeaderTabListBox& rBox );
 
 private:
@@ -84,7 +84,7 @@ public:
     void clearAccessibleSelection(  ) override;
     void selectAllAccessibleChildren(  ) override;
     sal_Int64 getSelectedAccessibleChildCount(  ) override;
-    css::uno::Reference< css::accessibility::XAccessible > getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
+    cpo::uno::Reference< css::accessibility::XAccessible > getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
     void deselectAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
 };
 

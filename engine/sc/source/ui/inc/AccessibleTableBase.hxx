@@ -33,7 +33,7 @@ class ScAccessibleTableBase
 {
 public:
     ScAccessibleTableBase(
-        const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
+        const cpo::uno::Reference<css::accessibility::XAccessible>& rxParent,
         ScDocument* pDoc,
         const ScRange& rRange);
 protected:
@@ -74,11 +74,11 @@ public:
                 getAccessibleColumnExtentAt( sal_Int32 nRow, sal_Int32 nColumn ) override;
 
     /// Returns the row headers as an AccessibleTable.
-    virtual css::uno::Reference< css::accessibility::XAccessibleTable > SAL_CALL
+    virtual cpo::uno::Reference< css::accessibility::XAccessibleTable > SAL_CALL
                 getAccessibleRowHeaders(  ) override;
 
     /// Returns the column headers as an AccessibleTable.
-    virtual css::uno::Reference< css::accessibility::XAccessibleTable > SAL_CALL
+    virtual cpo::uno::Reference< css::accessibility::XAccessibleTable > SAL_CALL
                 getAccessibleColumnHeaders(  ) override;
 
     /// Returns the selected rows in a table.
@@ -98,15 +98,15 @@ public:
                 isAccessibleColumnSelected( sal_Int32 nColumn ) override;
 
     /// Returns the Accessible at a specified row and column in the table.
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > SAL_CALL
                 getAccessibleCellAt( sal_Int32 nRow, sal_Int32 nColumn ) override;
 
     /// Returns the caption for the table.
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > SAL_CALL
                 getAccessibleCaption(  ) override;
 
     /// Returns the summary description of the table.
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > SAL_CALL
                 getAccessibleSummary(  ) override;
 
     /// Returns a boolean value indicating whether the accessible at a specified row and column is selected.
@@ -136,7 +136,7 @@ public:
 
     /// Return the specified child or NULL if index is invalid.
     /// override to calculate this on demand
-    virtual css::uno::Reference< css::accessibility::XAccessible> SAL_CALL
+    virtual cpo::uno::Reference< css::accessibility::XAccessible> SAL_CALL
         getAccessibleChild(sal_Int64 nIndex) override;
     virtual bool SAL_CALL selectRow( sal_Int32 row ) override;
     virtual bool SAL_CALL selectColumn( sal_Int32 column ) override;
@@ -154,7 +154,7 @@ protected:
 
 public:
     /// Return NULL to indicate that an empty relation set.
-    virtual css::uno::Reference<css::accessibility::XAccessibleRelationSet> SAL_CALL
+    virtual cpo::uno::Reference<css::accessibility::XAccessibleRelationSet> SAL_CALL
         getAccessibleRelationSet() override;
 
     /// Return the set of current states.
@@ -179,7 +179,7 @@ public:
     virtual sal_Int64 SAL_CALL
         getSelectedAccessibleChildCount(  ) override;
 
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > SAL_CALL
         getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
 
     virtual void SAL_CALL

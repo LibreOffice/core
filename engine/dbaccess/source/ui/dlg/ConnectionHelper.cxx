@@ -61,7 +61,7 @@
 namespace dbaui
 {
     using namespace ::com::sun::star;
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
 using namespace cpo::uno;
     using namespace ::com::sun::star::ucb;
     using namespace ::com::sun::star::ui::dialogs;
@@ -245,7 +245,7 @@ using namespace cpo::uno;
                 HWND hWnd = nullptr;
 
                 weld::Window* pDialog = GetFrameWeld();
-                css::uno::Reference<css::awt::XSystemDependentWindowPeer> xSysDepWin(pDialog->GetXWindow(), css::uno::UNO_QUERY);
+                cpo::uno::Reference<css::awt::XSystemDependentWindowPeer> xSysDepWin(pDialog->GetXWindow(), cpo::uno::UNO_QUERY);
                 if (xSysDepWin.is())
                 {
                     cpo::uno::Sequence<sal_Int8> aProcessIdent(16);

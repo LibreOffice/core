@@ -46,15 +46,15 @@ namespace dbaccess
         virtual void makeNewStatement( ) override;
         virtual ~OptimisticSet() override;
     public:
-        OptimisticSet(const css::uno::Reference< cpo::uno::XComponentContext>& _rContext,
-                      const css::uno::Reference< css::sdbc::XConnection>& i_xConnection,
-                      const css::uno::Reference< css::sdb::XSingleSelectQueryAnalyzer >& _xComposer,
+        OptimisticSet(const cpo::uno::Reference< cpo::uno::XComponentContext>& _rContext,
+                      const cpo::uno::Reference< css::sdbc::XConnection>& i_xConnection,
+                      const cpo::uno::Reference< css::sdb::XSingleSelectQueryAnalyzer >& _xComposer,
                       const ORowSetValueVector& _aParameterValueForCache,
                       sal_Int32 i_nMaxRows,
                       sal_Int32& o_nRowCount);
 
         // late ctor which can throw exceptions
-        virtual void construct(const css::uno::Reference< css::sdbc::XResultSet>& _xDriverSet,const OUString& i_sRowSetFilter) override;
+        virtual void construct(const cpo::uno::Reference< css::sdbc::XResultSet>& _xDriverSet,const OUString& i_sRowSetFilter) override;
 
         // css::sdbc::XResultSetUpdate
         virtual void updateRow(const ORowSetRow& _rInsertRow,const ORowSetRow& _rOriginalRow,const connectivity::OSQLTable& _xTable   ) override;

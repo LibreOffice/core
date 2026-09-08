@@ -32,7 +32,7 @@
 #include <tools/time.hxx>
 #include <tools/datetime.hxx>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/xforms/XModel.hpp>
 #include <com/sun/star/xml/dom/XNode.hpp>
@@ -46,7 +46,7 @@
 
 // C interface
 
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace com::sun::star::xml::dom;
 using namespace com::sun::star::xforms;
 using namespace com::sun::star::lang;

@@ -53,6 +53,7 @@
 #include <com/sun/star/text/XTextRange.hpp>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace SwUnoCursorHelper {
 
@@ -166,19 +167,19 @@ SwXFlatParagraph::removeVetoableChangeListener(
 }
 
 
-css::uno::Reference< css::container::XStringKeyMap > SAL_CALL SwXFlatParagraph::getMarkupInfoContainer()
+cpo::uno::Reference< css::container::XStringKeyMap > SAL_CALL SwXFlatParagraph::getMarkupInfoContainer()
 {
     return SwXTextMarkup::getMarkupInfoContainer();
 }
 
 void SAL_CALL SwXFlatParagraph::commitTextRangeMarkup(::sal_Int32 nType, const OUString & aIdentifier, const uno::Reference< text::XTextRange> & xRange,
-                                                      const css::uno::Reference< css::container::XStringKeyMap > & xMarkupInfoContainer)
+                                                      const cpo::uno::Reference< css::container::XStringKeyMap > & xMarkupInfoContainer)
 {
     SolarMutexGuard aGuard;
     SwXTextMarkup::commitTextRangeMarkup( nType, aIdentifier, xRange,  xMarkupInfoContainer );
 }
 
-void SAL_CALL SwXFlatParagraph::commitStringMarkup(::sal_Int32 nType, const OUString & rIdentifier, ::sal_Int32 nStart, ::sal_Int32 nLength, const css::uno::Reference< css::container::XStringKeyMap > & rxMarkupInfoContainer)
+void SAL_CALL SwXFlatParagraph::commitStringMarkup(::sal_Int32 nType, const OUString & rIdentifier, ::sal_Int32 nStart, ::sal_Int32 nLength, const cpo::uno::Reference< css::container::XStringKeyMap > & rxMarkupInfoContainer)
 {
     SolarMutexGuard aGuard;
     SwXTextMarkup::commitStringMarkup( nType, rIdentifier, nStart, nLength,  rxMarkupInfoContainer );

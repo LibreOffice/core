@@ -20,7 +20,7 @@
 #pragma once
 
 #include <cpo/uno/Any.h>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 
 namespace com::sun::star::beans
 {
@@ -39,7 +39,7 @@ struct VLineProperties
     cpo::uno::Any LineCap; //type drawing::LineCap for property UNO_NAME_LINECAP
 
     VLineProperties();
-    void initFromPropertySet(const css::uno::Reference<css::beans::XPropertySet>& xProp);
+    void initFromPropertySet(const cpo::uno::Reference<css::beans::XPropertySet>& xProp);
 
     bool isLineVisible() const;
 };

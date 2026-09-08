@@ -65,6 +65,7 @@
 #include <memory>
 
 using namespace oox;
+using namespace ::cpo;
 
 static OUString lcl_GetVbaTabName( SCTAB n )
 {

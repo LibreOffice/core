@@ -39,7 +39,7 @@
 namespace svx
 {
     using namespace ::com::sun::star;
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
     using namespace ::com::sun::star::ucb;
     using namespace ::cpo::uno;
     using namespace ::svt;
@@ -59,7 +59,7 @@ namespace svx
         m_xURL->DisableHistory();
         m_xURL->SetFilter(u"*.odb");
 
-        const css::uno::Reference < cpo::uno::XComponentContext >& xContext(::comphelper::getProcessComponentContext());
+        const cpo::uno::Reference < cpo::uno::XComponentContext >& xContext(::comphelper::getProcessComponentContext());
         m_xReadWriteAccess = css::configuration::ReadWriteAccess::create(xContext, u"*"_ustr);
 
         m_xName->connect_changed( LINK(this, ODocumentLinkDialog, OnEntryModified) );

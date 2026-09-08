@@ -42,8 +42,8 @@ private:
     OUString     aFileName;
     OUString     aFilterName;
     OUString     aFilterOptions;
-    css::uno::Reference< css::io::XInputStream > xInputStream;
-    css::uno::Reference< css::awt::XWindow > xDialogParent;
+    cpo::uno::Reference< css::io::XInputStream > xInputStream;
+    cpo::uno::Reference< css::awt::XWindow > xDialogParent;
     bool         bExport;
 
 public:
@@ -61,10 +61,10 @@ public:
     virtual sal_Int16 SAL_CALL execute() override;
 
                             // XImporter
-    virtual void SAL_CALL   setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
+    virtual void SAL_CALL   setTargetDocument( const cpo::uno::Reference< css::lang::XComponent >& xDoc ) override;
 
                             // XExporter
-    virtual void SAL_CALL   setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
+    virtual void SAL_CALL   setSourceDocument( const cpo::uno::Reference< css::lang::XComponent >& xDoc ) override;
 
                             // XInitialization
     virtual void SAL_CALL   initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments) override;

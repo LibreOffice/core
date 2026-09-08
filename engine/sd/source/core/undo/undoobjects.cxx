@@ -57,7 +57,7 @@ UndoRemovePresObjectImpl::UndoRemovePresObjectImpl( SdrObject& rObject )
 
     if( pPage->hasAnimationNode() )
     {
-        css::uno::Reference< css::drawing::XShape > xShape( rObject.getUnoShape(), css::uno::UNO_QUERY );
+        cpo::uno::Reference< css::drawing::XShape > xShape( rObject.getUnoShape(), cpo::uno::UNO_QUERY );
         if( pPage->getMainSequence()->hasEffect( xShape ) )
         {
             mpUndoAnimation.reset(
@@ -180,7 +180,7 @@ UndoObjectSetText::UndoObjectSetText( SdrObject& rObject, sal_Int32 nText )
     SdPage* pPage = dynamic_cast< SdPage* >( rObject.getSdrPageFromSdrObject() );
     if( pPage && pPage->hasAnimationNode() )
     {
-        css::uno::Reference< css::drawing::XShape > xShape( rObject.getUnoShape(), css::uno::UNO_QUERY );
+        cpo::uno::Reference< css::drawing::XShape > xShape( rObject.getUnoShape(), cpo::uno::UNO_QUERY );
         if( pPage->getMainSequence()->hasEffect( xShape ) )
         {
             mpUndoAnimation.reset(

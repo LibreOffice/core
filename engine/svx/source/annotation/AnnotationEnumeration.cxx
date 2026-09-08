@@ -27,6 +27,7 @@
 #include <svx/annotation/AnnotationEnumeration.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 namespace sdr::annotation
 {
@@ -41,7 +42,7 @@ public:
 
     // css::office::XAnnotationEnumeration:
     virtual bool hasMoreElements() override;
-    virtual css::uno::Reference<css::office::XAnnotation> nextElement() override;
+    virtual cpo::uno::Reference<css::office::XAnnotation> nextElement() override;
 
 private:
     // destructor is private and will be called indirectly by the release call    virtual ~AnnotationEnumeration() {}
@@ -67,7 +68,7 @@ AnnotationEnumeration::AnnotationEnumeration(AnnotationVector&& rAnnotations)
 // css::office::XAnnotationEnumeration:
 bool AnnotationEnumeration::hasMoreElements() { return maIter != maAnnotations.end(); }
 
-css::uno::Reference<css::office::XAnnotation> AnnotationEnumeration::nextElement()
+cpo::uno::Reference<css::office::XAnnotation> AnnotationEnumeration::nextElement()
 {
     if (maIter == maAnnotations.end())
         throw css::container::NoSuchElementException();

@@ -11,12 +11,12 @@
 
 #include <sal/config.h>
 
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <cpo/uno/XInterface.hpp>
 
 #include <svx/svxdllapi.h>
 
-SVXCORE_DLLPUBLIC css::uno::Reference<cpo::uno::XInterface>
+SVXCORE_DLLPUBLIC cpo::uno::Reference<cpo::uno::XInterface>
 SvxXTextColumns_createInstance() noexcept;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

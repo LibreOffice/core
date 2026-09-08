@@ -34,7 +34,7 @@
 #include <xmloff/xmlement.hxx>
 
 using namespace ::com::sun::star;
-
+using namespace ::cpo;
 using namespace ::xmloff::token;
 
 SvXMLEnumMapEntry<drawing::HatchStyle> const pXML_HatchStyle_Enum[] =

@@ -26,15 +26,15 @@
 class CSerializationAppXML : public CSerialization
 {
 private:
-    css::uno::Reference<css::io::XPipe> m_xBuffer;
+    cpo::uno::Reference<css::io::XPipe> m_xBuffer;
 
-    void serialize_node(const css::uno::Reference<css::xml::dom::XNode>& aNode);
+    void serialize_node(const cpo::uno::Reference<css::xml::dom::XNode>& aNode);
 
 public:
     CSerializationAppXML();
 
     virtual void serialize() override;
-    virtual css::uno::Reference<css::io::XInputStream> getInputStream() override;
+    virtual cpo::uno::Reference<css::io::XInputStream> getInputStream() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

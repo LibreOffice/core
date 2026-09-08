@@ -90,9 +90,9 @@ bool ReferenceCasting::VisitCXXConstructExpr(const CXXConstructExpr* cce)
     // don't bother processing anything in the Reference.h file. Makes my life easier when debugging this.
     StringRef aFileName
         = getFilenameOfLocation(compiler.getSourceManager().getSpellingLoc(cce->getBeginLoc()));
-    if (loplugin::isSamePathname(aFileName, SRCDIR "/include/com/sun/star/uno/Reference.h"))
+    if (loplugin::isSamePathname(aFileName, SRCDIR "/include/cpo/uno/Reference.h"))
         return true;
-    if (loplugin::isSamePathname(aFileName, SRCDIR "/include/com/sun/star/uno/Reference.hxx"))
+    if (loplugin::isSamePathname(aFileName, SRCDIR "/include/cpo/uno/Reference.hxx"))
         return true;
 
     if (cce->getNumArgs() == 0)
@@ -172,7 +172,7 @@ bool ReferenceCasting::VisitCXXConstructExpr(const CXXConstructExpr* cce)
             constructorArg0 = parenExpr->getSubExpr();
             continue;
         }
-        // for the "uno::Reference<X>(*this, UNO_QUERY)" case
+        // for the "cpo::uno::Reference<X>(*this, UNO_QUERY)" case
         if (auto unaryOper = dyn_cast<UnaryOperator>(constructorArg0))
         {
             if (unaryOper->getOpcode() == UO_Deref)
@@ -237,9 +237,9 @@ bool ReferenceCasting::VisitCXXMemberCallExpr(const CXXMemberCallExpr* mce)
     // don't bother processing anything in the Reference.h file. Makes my life easier when debugging this.
     StringRef aFileName
         = getFilenameOfLocation(compiler.getSourceManager().getSpellingLoc(mce->getBeginLoc()));
-    if (loplugin::isSamePathname(aFileName, SRCDIR "/include/com/sun/star/uno/Reference.h"))
+    if (loplugin::isSamePathname(aFileName, SRCDIR "/include/cpo/uno/Reference.h"))
         return true;
-    if (loplugin::isSamePathname(aFileName, SRCDIR "/include/com/sun/star/uno/Reference.hxx"))
+    if (loplugin::isSamePathname(aFileName, SRCDIR "/include/cpo/uno/Reference.hxx"))
         return true;
 
     if (mce->getNumArgs() == 0)
@@ -359,9 +359,9 @@ bool ReferenceCasting::VisitCallExpr(const CallExpr* ce)
     // don't bother processing anything in the Reference.h file. Makes my life easier when debugging this.
     StringRef aFileName
         = getFilenameOfLocation(compiler.getSourceManager().getSpellingLoc(ce->getBeginLoc()));
-    if (loplugin::isSamePathname(aFileName, SRCDIR "/include/com/sun/star/uno/Reference.h"))
+    if (loplugin::isSamePathname(aFileName, SRCDIR "/include/cpo/uno/Reference.h"))
         return true;
-    if (loplugin::isSamePathname(aFileName, SRCDIR "/include/com/sun/star/uno/Reference.hxx"))
+    if (loplugin::isSamePathname(aFileName, SRCDIR "/include/cpo/uno/Reference.hxx"))
         return true;
 
     // look for calls to Reference<T>::query(x)

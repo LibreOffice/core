@@ -46,9 +46,9 @@ using namespace ::svt::uno;
 
 namespace {
 
-    using css::uno::Reference;
+    using cpo::uno::Reference;
     using cpo::uno::XInterface;
-    using css::uno::UNO_QUERY;
+    using cpo::uno::UNO_QUERY;
     using cpo::uno::Any;
     using cpo::uno::Sequence;
     using css::ui::dialogs::XWizard;
@@ -89,14 +89,14 @@ namespace {
                     , public Wizard_PBase
     {
     public:
-        explicit Wizard( const css::uno::Reference< cpo::uno::XComponentContext >& i_rContext );
+        explicit Wizard( const cpo::uno::Reference< cpo::uno::XComponentContext >& i_rContext );
 
         // lang::XServiceInfo
         virtual OUString getImplementationName() override;
         virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
         // beans::XPropertySet
-        virtual css::uno::Reference< beans::XPropertySetInfo >  getPropertySetInfo() override;
+        virtual cpo::uno::Reference< beans::XPropertySetInfo >  getPropertySetInfo() override;
         virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
         // OPropertyArrayUsageHelper
@@ -105,8 +105,8 @@ namespace {
         // ui::dialogs::XWizard
         virtual OUString getHelpURL() override;
         virtual void setHelpURL( const OUString& _helpurl ) override;
-        virtual css::uno::Reference< awt::XWindow > getDialogWindow() override;
-        virtual css::uno::Reference< ui::dialogs::XWizardPage > getCurrentPage(  ) override;
+        virtual cpo::uno::Reference< awt::XWindow > getDialogWindow() override;
+        virtual cpo::uno::Reference< ui::dialogs::XWizardPage > getCurrentPage(  ) override;
         virtual void enableButton( ::sal_Int16 WizardButton, bool Enable ) override;
         virtual void setDefaultButton( ::sal_Int16 WizardButton ) override;
         virtual bool travelNext(  ) override;
@@ -128,11 +128,11 @@ namespace {
         virtual ~Wizard() override;
 
     protected:
-        virtual std::unique_ptr<weld::DialogController> createDialog(const css::uno::Reference<css::awt::XWindow>& rParent) override;
+        virtual std::unique_ptr<weld::DialogController> createDialog(const cpo::uno::Reference<css::awt::XWindow>& rParent) override;
 
     private:
         cpo::uno::Sequence< cpo::uno::Sequence< sal_Int16 > >         m_aWizardSteps;
-        css::uno::Reference< ui::dialogs::XWizardController >    m_xController;
+        cpo::uno::Reference< ui::dialogs::XWizardController >    m_xController;
         OUString                                            m_sHelpURL;
     };
 
@@ -242,7 +242,7 @@ namespace {
             return _rHelpURL;
     }
 
-    std::unique_ptr<weld::DialogController> Wizard::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
+    std::unique_ptr<weld::DialogController> Wizard::createDialog(const cpo::uno::Reference<css::awt::XWindow>& rParent)
     {
         auto xDialog = std::make_unique<WizardShell>(Application::GetFrameWeld(rParent), m_xController, m_aWizardSteps);
         xDialog->set_help_id(lcl_getHelpId(m_sHelpURL));

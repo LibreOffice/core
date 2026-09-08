@@ -32,7 +32,7 @@
 #include <oox/token/tokens.hxx>
 
 using namespace ::oox::core;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 namespace oox::drawingml {
 

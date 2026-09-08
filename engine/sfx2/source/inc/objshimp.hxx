@@ -49,9 +49,9 @@ struct SfxObjectShell_Impl final : public ::sfx2::IMacroDocumentAccess
     std::unique_ptr<::comphelper::EmbeddedObjectContainer> mxObjectContainer;
     SfxBasicManagerHolder aBasicManager;
     SfxObjectShell&     rDocShell;
-    css::uno::Reference< css::script::XStorageBasedLibraryContainer >
+    cpo::uno::Reference< css::script::XStorageBasedLibraryContainer >
                         xBasicLibraries;
-    css::uno::Reference< css::script::XStorageBasedLibraryContainer >
+    cpo::uno::Reference< css::script::XStorageBasedLibraryContainer >
                         xDialogLibraries;
     ::sfx2::DocumentMacroMode
                         aMacroMode;
@@ -114,7 +114,7 @@ struct SfxObjectShell_Impl final : public ::sfx2::IMacroDocumentAccess
     MapUnit             m_nMapUnit;
 
     bool                m_bCreateTempStor;
-    css::uno::Reference< css::embed::XStorage > m_xDocStorage;
+    cpo::uno::Reference< css::embed::XStorage > m_xDocStorage;
 
     bool                m_bIsInit;
 
@@ -147,11 +147,11 @@ struct SfxObjectShell_Impl final : public ::sfx2::IMacroDocumentAccess
     virtual OUString getDocumentLocation() const override;
     virtual bool documentStorageHasMacros() const override;
     virtual bool macroCallsSeenWhileLoading() const override;
-    virtual css::uno::Reference< css::document::XEmbeddedScripts > getEmbeddedDocumentScripts() const override;
+    virtual cpo::uno::Reference< css::document::XEmbeddedScripts > getEmbeddedDocumentScripts() const override;
     virtual SignatureState getScriptingSignatureState() override;
 
     virtual bool hasTrustedScriptingSignature(
-        const css::uno::Reference<css::task::XInteractionHandler>& _rxInteraction) override;
+        const cpo::uno::Reference<css::task::XInteractionHandler>& _rxInteraction) override;
 };
 
 #endif

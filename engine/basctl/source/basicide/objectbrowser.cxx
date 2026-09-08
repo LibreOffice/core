@@ -582,15 +582,15 @@ void OpenDoxygenDocumentation(const vcl::Window* pParent, const IdeSymbolInfo& r
 
     try
     {
-        css::uno::Reference<cpo::uno::XComponentContext> xContext
+        cpo::uno::Reference<cpo::uno::XComponentContext> xContext
             = comphelper::getProcessComponentContext();
-        css::uno::Reference<css::lang::XMultiComponentFactory> xServiceManager
+        cpo::uno::Reference<css::lang::XMultiComponentFactory> xServiceManager
             = xContext->getServiceManager();
 
-        css::uno::Reference<css::system::XSystemShellExecute> xSystemShell(
+        cpo::uno::Reference<css::system::XSystemShellExecute> xSystemShell(
             xServiceManager->createInstanceWithContext(
                 u"com.sun.star.system.SystemShellExecute"_ustr, xContext),
-            css::uno::UNO_QUERY_THROW);
+            cpo::uno::UNO_QUERY_THROW);
 
         xSystemShell->execute(sUrl, OUString(), css::system::SystemShellExecuteFlags::URIS_ONLY);
     }

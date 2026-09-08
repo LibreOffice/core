@@ -26,7 +26,7 @@
 namespace xmloff
 {
 
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::script;
     using namespace ::com::sun::star::container;
@@ -121,7 +121,7 @@ namespace xmloff
         MapPropertySet2ScriptSequence::const_iterator aRegisteredEventsPos;
         for (sal_Int32 i=0; i<nCount; ++i)
         {
-            xCurrent.set(_rxContainer->getByIndex(i), css::uno::UNO_QUERY);
+            xCurrent.set(_rxContainer->getByIndex(i), cpo::uno::UNO_QUERY);
             if (xCurrent.is())
             {
                 aRegisteredEventsPos = m_aEvents.find(xCurrent);

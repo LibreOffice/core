@@ -15,7 +15,7 @@
 
 namespace document = css::document;
 namespace frame = css::frame;
-namespace uno = css::uno;
+namespace uno = cpo::uno;
 
 namespace writerperfect::test
 {

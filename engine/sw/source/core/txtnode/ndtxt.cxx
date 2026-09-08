@@ -95,6 +95,7 @@
 #include <names.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 typedef std::vector<SwTextAttr*> SwpHts;
 

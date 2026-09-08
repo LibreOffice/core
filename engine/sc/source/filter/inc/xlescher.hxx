@@ -416,8 +416,8 @@ class XclControlHelper
 {
 public:
     /** Returns the API control model from the passed API shape object. */
-    static css::uno::Reference< css::awt::XControlModel >
-                        GetControlModel( css::uno::Reference< css::drawing::XShape > const & xShape );
+    static cpo::uno::Reference< css::awt::XControlModel >
+                        GetControlModel( cpo::uno::Reference< css::drawing::XShape > const & xShape );
 
     /** Fills the macro descriptor according to the passed macro name. */
     static bool         FillMacroDescriptor(

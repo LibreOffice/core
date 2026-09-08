@@ -34,7 +34,7 @@
 #include "CellBorderStyleControl.hxx"
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo::uno;
 
 constexpr OUString SETBORDERSTYLE = u"SetBorderStyle"_ustr;
 constexpr OUString LINESTYLE = u"LineStyle"_ustr;
@@ -45,7 +45,7 @@ namespace sc::sidebar {
 
 CellAppearancePropertyPanel::CellAppearancePropertyPanel(
     weld::Widget* pParent,
-    const css::uno::Reference<css::frame::XFrame>& rxFrame,
+    const cpo::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
 :   PanelLayout(pParent, u"CellAppearancePropertyPanel"_ustr, u"modules/scalc/ui/sidebarcellappearance.ui"_ustr),
 
@@ -178,7 +178,7 @@ IMPL_LINK_NOARG(CellAppearancePropertyPanel, TbxLineStyleMenuHdl, const OUString
 
 std::unique_ptr<PanelLayout> CellAppearancePropertyPanel::Create (
     weld::Widget* pParent,
-    const css::uno::Reference<css::frame::XFrame>& rxFrame,
+    const cpo::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
 {
     if (pParent == nullptr)

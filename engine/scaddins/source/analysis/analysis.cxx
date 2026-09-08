@@ -36,6 +36,7 @@ constexpr OUString ADDIN_SERVICE = u"com.sun.star.sheet.AddIn"_ustr;
 constexpr OUString MY_SERVICE = u"com.sun.star.sheet.addin.Analysis"_ustr;
 
 using namespace                 ::com::sun::star;
+using namespace ::cpo;
 using namespace sca::analysis;
 
 OUString AnalysisAddIn::GetFuncDescrStr(const TranslateId* pResId, sal_uInt16 nStrIndex)

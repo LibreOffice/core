@@ -31,7 +31,7 @@ public:
                            const OUString& rQName,
                               bool bCreateControl );
 
-    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void StartElement( const cpo::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 
     virtual void EndElement() override;
 };

@@ -24,7 +24,7 @@
 
 #include <span>
 #include <vector>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <com/sun/star/beans/PropertyValues.hpp>
 
 
@@ -79,13 +79,13 @@ class XMLIndexTemplateContext : public SvXMLImportContext
     bool bTOC;
 
     // PropertySet of current index
-    css::uno::Reference<css::beans::XPropertySet> & rPropertySet;
+    cpo::uno::Reference<css::beans::XPropertySet> & rPropertySet;
 
 public:
     template<typename EnumT>
     XMLIndexTemplateContext(
         SvXMLImport& rImport,
-        css::uno::Reference<css::beans::XPropertySet> & rPropSet,
+        cpo::uno::Reference<css::beans::XPropertySet> & rPropSet,
         const SvXMLEnumMapEntry<EnumT>* aLevelNameMap,
         enum ::xmloff::token::XMLTokenEnum eLevelAttrName,
         std::span<const OUString> aLevelStylePropNameMap,
@@ -96,7 +96,7 @@ public:
                 eLevelAttrName, aLevelStylePropNameMap, aAllowedTokenTypes, bTOC_) {}
     XMLIndexTemplateContext(
         SvXMLImport& rImport,
-        css::uno::Reference<css::beans::XPropertySet> & rPropSet,
+        cpo::uno::Reference<css::beans::XPropertySet> & rPropSet,
         const SvXMLEnumMapEntry<sal_uInt16>* aLevelNameMap,
         enum ::xmloff::token::XMLTokenEnum eLevelAttrName,
         std::span<const OUString> aLevelStylePropNameMap,
@@ -113,13 +113,13 @@ protected:
 
     virtual void startFastElement(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     virtual void endFastElement(sal_Int32 nElement) override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -73,17 +73,17 @@ struct OWriteStream_Impl
     OWriteStream*   m_pAntiImpl;
     std::optional<utl::TempFileFast> m_oTempFile;
 
-    css::uno::Reference< css::io::XStream > m_xCacheStream;
-    css::uno::Reference< css::io::XSeekable > m_xCacheSeek;
+    cpo::uno::Reference< css::io::XStream > m_xCacheStream;
+    cpo::uno::Reference< css::io::XSeekable > m_xCacheSeek;
 
     std::vector< OInputCompStream* > m_aInputStreamsVector;
 
     bool                        m_bHasDataToFlush;    // only modified elements will be sent to the original content
     bool                        m_bFlushed;      // sending the streams is coordinated by the root storage of the package
 
-    css::uno::Reference< css::packages::XDataSinkEncrSupport > m_xPackageStream;
+    cpo::uno::Reference< css::packages::XDataSinkEncrSupport > m_xPackageStream;
 
-    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
     OStorage_Impl* m_pParent;
 
@@ -97,29 +97,29 @@ struct OWriteStream_Impl
 
     bool m_bCompressedSetExplicit;
 
-    css::uno::Reference< css::lang::XSingleServiceFactory > m_xPackage;
+    cpo::uno::Reference< css::lang::XSingleServiceFactory > m_xPackage;
 
     bool m_bHasInsertedStreamOptimization;
 
     sal_Int32 m_nStorageType;
 
     // Relations info related data, stored in *.rels file in OFOPXML format
-    css::uno::Reference< css::io::XInputStream > m_xOrigRelInfoStream;
+    cpo::uno::Reference< css::io::XInputStream > m_xOrigRelInfoStream;
     cpo::uno::Sequence< cpo::uno::Sequence< css::beans::StringPair > > m_aOrigRelInfo;
     bool m_bOrigRelInfoBroken;
 
     cpo::uno::Sequence< cpo::uno::Sequence< css::beans::StringPair > > m_aNewRelInfo;
-    css::uno::Reference< css::io::XInputStream > m_xNewRelInfoStream;
+    cpo::uno::Reference< css::io::XInputStream > m_xNewRelInfoStream;
     sal_Int16 m_nRelInfoStatus;
     sal_Int32 m_nRelId;
 
 private:
-    void GetFilledTempFileIfNo( const css::uno::Reference< css::io::XInputStream >& xStream );
+    void GetFilledTempFileIfNo( const cpo::uno::Reference< css::io::XInputStream >& xStream );
     void FillTempGetFileName();
-    css::uno::Reference< css::io::XStream >       GetTempFileAsStream();
-    css::uno::Reference< css::io::XInputStream >  GetTempFileAsInputStream();
+    cpo::uno::Reference< css::io::XStream >       GetTempFileAsStream();
+    cpo::uno::Reference< css::io::XInputStream >  GetTempFileAsInputStream();
 
-    css::uno::Reference< css::io::XStream > GetStream_Impl( sal_Int32 nStreamMode,
+    cpo::uno::Reference< css::io::XStream > GetStream_Impl( sal_Int32 nStreamMode,
                                                                                         bool bHierarchyAccess );
 
     /// @throws css::packages::NoEncryptionException
@@ -133,14 +133,14 @@ private:
 public:
     OWriteStream_Impl(
                 OStorage_Impl* pParent,
-                const css::uno::Reference< css::packages::XDataSinkEncrSupport >& xPackageStream,
-                const css::uno::Reference< css::lang::XSingleServiceFactory >& xPackage,
-                css::uno::Reference< cpo::uno::XComponentContext > xContext,
+                const cpo::uno::Reference< css::packages::XDataSinkEncrSupport >& xPackageStream,
+                const cpo::uno::Reference< css::lang::XSingleServiceFactory >& xPackage,
+                cpo::uno::Reference< cpo::uno::XComponentContext > xContext,
                 bool bForceEncrypted,
                 sal_Int32 nStorageType,
                 bool bDefaultCompress,
-                css::uno::Reference< css::io::XInputStream > xRelInfoStream =
-                    css::uno::Reference< css::io::XInputStream >() );
+                cpo::uno::Reference< css::io::XInputStream > xRelInfoStream =
+                    cpo::uno::Reference< css::io::XInputStream >() );
 
     ~OWriteStream_Impl();
 
@@ -154,7 +154,7 @@ public:
 
     void InsertIntoPackageFolder(
             const OUString& aName,
-            const css::uno::Reference< css::container::XNameContainer >& xParentPackageFolder );
+            const cpo::uno::Reference< css::container::XNameContainer >& xParentPackageFolder );
 
     void SetToBeCommited() { m_bFlushed = true; }
 
@@ -170,7 +170,7 @@ public:
     void DisposeWrappers();
 
     void InsertStreamDirectly(
-            const css::uno::Reference< css::io::XInputStream >& xInStream,
+            const cpo::uno::Reference< css::io::XInputStream >& xInStream,
             const cpo::uno::Sequence< css::beans::PropertyValue >& aProps );
 
     void Commit();
@@ -180,36 +180,36 @@ public:
 
     cpo::uno::Sequence< cpo::uno::Sequence< css::beans::StringPair > > GetAllRelationshipsIfAny();
 
-    void CopyInternallyTo_Impl( const css::uno::Reference< css::io::XStream >& xDestStream,
+    void CopyInternallyTo_Impl( const cpo::uno::Reference< css::io::XStream >& xDestStream,
                                 const ::comphelper::SequenceAsHashMap& aEncryptionData );
-    void CopyInternallyTo_Impl( const css::uno::Reference< css::io::XStream >& xDestStream );
+    void CopyInternallyTo_Impl( const cpo::uno::Reference< css::io::XStream >& xDestStream );
 
-    css::uno::Reference< css::io::XStream > GetStream(
+    cpo::uno::Reference< css::io::XStream > GetStream(
                         sal_Int32 nStreamMode,
                         const ::comphelper::SequenceAsHashMap& aEncryptionData,
                         bool bHierarchyAccess );
 
-    css::uno::Reference< css::io::XStream > GetStream(
+    cpo::uno::Reference< css::io::XStream > GetStream(
                         sal_Int32 nStreamMode,
                         bool bHierarchyAccess );
 
-    css::uno::Reference< css::io::XInputStream > GetRawInStream();
-    css::uno::Reference< css::io::XInputStream > GetPlainRawInStream();
+    cpo::uno::Reference< css::io::XInputStream > GetRawInStream();
+    cpo::uno::Reference< css::io::XInputStream > GetPlainRawInStream();
 
     void InputStreamDisposed( OInputCompStream* pStream );
 
     void CreateReadonlyCopyBasedOnData(
-                    const css::uno::Reference< css::io::XInputStream >& xDataToCopy,
+                    const cpo::uno::Reference< css::io::XInputStream >& xDataToCopy,
                     const cpo::uno::Sequence< css::beans::PropertyValue >& aProps,
-                    css::uno::Reference< css::io::XStream >& xTargetStream );
+                    cpo::uno::Reference< css::io::XStream >& xTargetStream );
 
-    void GetCopyOfLastCommit( css::uno::Reference< css::io::XStream >& xTargetStream );
+    void GetCopyOfLastCommit( cpo::uno::Reference< css::io::XStream >& xTargetStream );
     void GetCopyOfLastCommit(
-                  css::uno::Reference< css::io::XStream >& xTargetStream,
+                  cpo::uno::Reference< css::io::XStream >& xTargetStream,
                             const ::comphelper::SequenceAsHashMap& aEncryptionData );
 
     void CommitStreamRelInfo(
-                    const css::uno::Reference< css::embed::XStorage >& xRelStorage,
+                    const cpo::uno::Reference< css::embed::XStorage >& xRelStorage,
                     std::u16string_view aOrigStreamName,
                     std::u16string_view aNewStreamName );
 
@@ -236,9 +236,9 @@ class OWriteStream : public css::lang::XTypeProvider
     friend struct OWriteStream_Impl;
 
 protected:
-    css::uno::Reference < css::io::XInputStream > m_xInStream;
-    css::uno::Reference < css::io::XOutputStream > m_xOutStream;
-    css::uno::Reference < css::io::XSeekable > m_xSeekable;
+    cpo::uno::Reference < css::io::XInputStream > m_xInStream;
+    cpo::uno::Reference < css::io::XOutputStream > m_xOutStream;
+    cpo::uno::Reference < css::io::XSeekable > m_xSeekable;
 
     OWriteStream_Impl* m_pImpl;
     rtl::Reference<comphelper::RefCountedMutex> m_xSharedMutex;
@@ -253,11 +253,11 @@ protected:
     bool m_bTransacted;
 
     OWriteStream( OWriteStream_Impl& rImpl, bool bTransacted );
-    OWriteStream( OWriteStream_Impl& rImpl, css::uno::Reference< css::io::XStream > const & xStream, bool bTransacted );
+    OWriteStream( OWriteStream_Impl& rImpl, cpo::uno::Reference< css::io::XStream > const & xStream, bool bTransacted );
 
     void CloseOutput_Impl();
 
-    void CopyToStreamInternally_Impl( const css::uno::Reference< css::io::XStream >& xStream );
+    void CopyToStreamInternally_Impl( const cpo::uno::Reference< css::io::XStream >& xStream );
 
     void ModifyParentUnlockMutex_Impl(osl::ClearableMutexGuard& aGuard);
 
@@ -294,16 +294,16 @@ public:
     virtual sal_Int64 getLength() override;
 
     //XStream
-    virtual css::uno::Reference< css::io::XInputStream > getInputStream(  ) override;
-    virtual css::uno::Reference< css::io::XOutputStream > getOutputStream(  ) override;
+    virtual cpo::uno::Reference< css::io::XInputStream > getInputStream(  ) override;
+    virtual cpo::uno::Reference< css::io::XOutputStream > getOutputStream(  ) override;
 
     // XTruncate
     virtual void truncate() override;
 
     //XComponent
     virtual void dispose() override;
-    virtual void addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-    virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+    virtual void addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& xListener ) override;
+    virtual void removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
     //XEncryptionProtectedSource
     virtual void setEncryptionPassword( const OUString& aPass ) override;
@@ -326,13 +326,13 @@ public:
     virtual void clearRelationships(  ) override;
 
     //XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo() override;
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo() override;
     virtual void setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
     virtual cpo::uno::Any getPropertyValue( const OUString& PropertyName ) override;
-    virtual void addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
-    virtual void removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
-    virtual void addVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
-    virtual void removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+    virtual void addPropertyChangeListener( const OUString& aPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
+    virtual void removePropertyChangeListener( const OUString& aPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
+    virtual void addVetoableChangeListener( const OUString& PropertyName, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+    virtual void removeVetoableChangeListener( const OUString& PropertyName, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
     // XTransactedObject
     virtual void commit() override;
@@ -340,9 +340,9 @@ public:
 
     // XTransactionBroadcaster
     virtual void addTransactionListener(
-            const css::uno::Reference< css::embed::XTransactionListener >& aListener ) override;
+            const cpo::uno::Reference< css::embed::XTransactionListener >& aListener ) override;
     virtual void removeTransactionListener(
-            const css::uno::Reference< css::embed::XTransactionListener >& aListener ) override;
+            const cpo::uno::Reference< css::embed::XTransactionListener >& aListener ) override;
 
     // comphelper::ByteReader
     virtual sal_Int32 readSomeBytes(sal_Int8* aData, sal_Int32 nBytesToRead) override;

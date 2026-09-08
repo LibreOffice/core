@@ -78,6 +78,7 @@
 #include <strings.hrc>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 SFX_IMPL_NAMED_VIEWFACTORY(SwView, "Default")
 {

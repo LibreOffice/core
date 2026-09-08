@@ -77,8 +77,8 @@
 #include <svx/xdef.hxx>
 #include <officecfg/Office/Common.hxx>
 
-using namespace com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace com::sun::star;
 using namespace comphelper;
 
@@ -2418,16 +2418,16 @@ SfxChildWinInfo SvxSearchDialogWrapper::GetInfo() const
 
 static void lcl_SetSearchLabelWindow(const OUString& rStr, const SfxViewFrame& rViewFrame)
 {
-    css::uno::Reference< css::beans::XPropertySet > xPropSet(
-            rViewFrame.GetFrame().GetFrameInterface(), css::uno::UNO_QUERY_THROW);
-    css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
+    cpo::uno::Reference< css::beans::XPropertySet > xPropSet(
+            rViewFrame.GetFrame().GetFrameInterface(), cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
     xPropSet->getPropertyValue(u"LayoutManager"_ustr) >>= xLayoutManager;
-    css::uno::Reference< css::ui::XUIElement > xUIElement =
+    cpo::uno::Reference< css::ui::XUIElement > xUIElement =
         xLayoutManager->getElement(u"private:resource/toolbar/findbar"_ustr);
     if (!xUIElement.is())
         return;
-    css::uno::Reference< css::awt::XWindow > xWindow(
-            xUIElement->getRealInterface(), css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference< css::awt::XWindow > xWindow(
+            xUIElement->getRealInterface(), cpo::uno::UNO_QUERY_THROW);
     VclPtr< ToolBox > pToolBox = static_cast<ToolBox*>( VCLUnoHelper::GetWindow(xWindow) );
     for (ToolBox::ImplToolItems::size_type i = 0; pToolBox && i < pToolBox->GetItemCount(); ++i)
     {
@@ -2462,18 +2462,18 @@ OUString SvxSearchDialogWrapper::GetSearchLabel()
     if (!pViewFrame)
         return OUString();
 
-    css::uno::Reference< css::beans::XPropertySet > xPropSet(
-            pViewFrame->GetFrame().GetFrameInterface(), css::uno::UNO_QUERY_THROW);
-    css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
+    cpo::uno::Reference< css::beans::XPropertySet > xPropSet(
+            pViewFrame->GetFrame().GetFrameInterface(), cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
     xPropSet->getPropertyValue(u"LayoutManager"_ustr) >>= xLayoutManager;
     if (!xLayoutManager.is())
         return OUString();
-    css::uno::Reference< css::ui::XUIElement > xUIElement =
+    cpo::uno::Reference< css::ui::XUIElement > xUIElement =
         xLayoutManager->getElement(u"private:resource/toolbar/findbar"_ustr);
     if (!xUIElement.is())
         return OUString();
-    css::uno::Reference< css::awt::XWindow > xWindow(
-            xUIElement->getRealInterface(), css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference< css::awt::XWindow > xWindow(
+            xUIElement->getRealInterface(), cpo::uno::UNO_QUERY_THROW);
     VclPtr< ToolBox > pToolBox = static_cast<ToolBox*>( VCLUnoHelper::GetWindow(xWindow) );
     for (ToolBox::ImplToolItems::size_type i = 0; pToolBox && i < pToolBox->GetItemCount(); ++i)
     {

@@ -43,7 +43,7 @@ namespace pcr
     {
     private:
         bool                            m_bConstructed;
-        css::uno::Reference< css::inspection::XObjectInspectorUI >
+        cpo::uno::Reference< css::inspection::XObjectInspectorUI >
                                         m_xInspectorUI;
 
     public:
@@ -58,17 +58,17 @@ namespace pcr
         virtual cpo::uno::Sequence< OUString > getSupportedServiceNames () override;
 
         // XPropertyControlObserver
-        virtual void focusGained( const css::uno::Reference< css::inspection::XPropertyControl >& Control ) override;
-        virtual void valueChanged( const css::uno::Reference< css::inspection::XPropertyControl >& Control ) override;
+        virtual void focusGained( const cpo::uno::Reference< css::inspection::XPropertyControl >& Control ) override;
+        virtual void valueChanged( const cpo::uno::Reference< css::inspection::XPropertyControl >& Control ) override;
 
         // XInitialization
         virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
         // Service constructors
-        void    create( const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxUI );
+        void    create( const cpo::uno::Reference< css::inspection::XObjectInspectorUI >& _rxUI );
 
-        static vcl::Window* impl_getVclControlWindow_nothrow( const css::uno::Reference< css::inspection::XPropertyControl >& _rxControl );
-        static OUString impl_getHelpText_nothrow( const css::uno::Reference< css::inspection::XPropertyControl >& _rxControl );
+        static vcl::Window* impl_getVclControlWindow_nothrow( const cpo::uno::Reference< css::inspection::XPropertyControl >& _rxControl );
+        static OUString impl_getHelpText_nothrow( const cpo::uno::Reference< css::inspection::XPropertyControl >& _rxControl );
     };
 
 

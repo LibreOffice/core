@@ -25,7 +25,7 @@
 namespace com::sun::star::registry {
     class XRegistryKey;
 }
-namespace com::sun::star::uno { template <typename > class Reference; }
+namespace cpo::uno { template <typename > class Reference; }
 
 namespace stoc_impreg {
 
@@ -33,9 +33,9 @@ namespace stoc_impreg {
 // css::registry::MergeConflictException,
 // cpo::uno::RuntimeException:
 void mergeKeys(
-    css::uno::Reference< css::registry::XRegistryKey >
+    cpo::uno::Reference< css::registry::XRegistryKey >
         const & xDest,
-    css::uno::Reference< css::registry::XRegistryKey >
+    cpo::uno::Reference< css::registry::XRegistryKey >
         const & xSource);
 
 }

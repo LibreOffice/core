@@ -45,7 +45,7 @@ namespace frm
     class ControlFeatureInterception
     {
     private:
-        css::uno::Reference< css::frame::XDispatchProviderInterceptor >
+        cpo::uno::Reference< css::frame::XDispatchProviderInterceptor >
                                               m_xFirstDispatchInterceptor;
         ::std::unique_ptr< UrlTransformer >   m_pUrlTransformer;
 
@@ -55,26 +55,26 @@ namespace frm
         const UrlTransformer& getTransformer() const { return *m_pUrlTransformer; }
 
     public:
-        ControlFeatureInterception( const css::uno::Reference< cpo::uno::XComponentContext >& _rxORB );
+        ControlFeatureInterception( const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxORB );
 
         // XDispatchProviderInterception
         /// @throws cpo::uno::RuntimeException
-        void registerDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& Interceptor );
+        void registerDispatchProviderInterceptor( const cpo::uno::Reference< css::frame::XDispatchProviderInterceptor >& Interceptor );
         /// @throws cpo::uno::RuntimeException
-        void releaseDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& Interceptor );
+        void releaseDispatchProviderInterceptor( const cpo::uno::Reference< css::frame::XDispatchProviderInterceptor >& Interceptor );
 
         // XComponent
         void dispose();
 
         /** queries the interceptor chain for the given dispatch, with a blank target frame and no frame search flags
         */
-        css::uno::Reference< css::frame::XDispatch >
+        cpo::uno::Reference< css::frame::XDispatch >
             queryDispatch( const css::util::URL& _rURL );
 
         /** queries the interceptor chain for the URL given as ASCII string,
             with a blank target frame and no frame search flags
         */
-        css::uno::Reference< css::frame::XDispatch >
+        cpo::uno::Reference< css::frame::XDispatch >
             queryDispatch( const OUString& _rURL );
     };
 

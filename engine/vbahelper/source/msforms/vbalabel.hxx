@@ -30,7 +30,7 @@ typedef cppu::ImplInheritanceHelper< ScVbaControl, ov::msforms::XLabel, css::scr
 class ScVbaLabel : public LabelImpl_BASE
 {
 public:
-    ScVbaLabel( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext, const css::uno::Reference< cpo::uno::XInterface >& xControl, const css::uno::Reference< css::frame::XModel >& xModel, std::unique_ptr<ov::AbstractGeometryAttributes> pGeomHelper  );
+    ScVbaLabel( const cpo::uno::Reference< ov::XHelperInterface >& xParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext, const cpo::uno::Reference< cpo::uno::XInterface >& xControl, const cpo::uno::Reference< css::frame::XModel >& xModel, std::unique_ptr<ov::AbstractGeometryAttributes> pGeomHelper  );
    // Attributes
     virtual cpo::uno::Any getValue() override;
     virtual void setValue( const cpo::uno::Any& _value ) override;
@@ -38,7 +38,7 @@ public:
     virtual void setCaption( const OUString& _caption ) override;
     virtual OUString getAccelerator() override;
     virtual void setAccelerator( const OUString& _accelerator ) override;
-    virtual css::uno::Reference< ov::msforms::XNewFont > getFont() override;
+    virtual cpo::uno::Reference< ov::msforms::XNewFont > getFont() override;
     virtual sal_Int32 getBackColor() override;
     virtual void setBackColor( sal_Int32 nBackColor ) override;
     virtual bool getAutoSize() override;

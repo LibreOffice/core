@@ -33,7 +33,7 @@
 using namespace ::xmloff::token;
 
 using ::cpo::uno::Sequence;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::com::sun::star::beans::PropertyValue;
 
 
@@ -56,7 +56,7 @@ XMLIndexTabStopEntryContext::~XMLIndexTabStopEntryContext()
 
 void XMLIndexTabStopEntryContext::startFastElement(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     // process three attributes: type, position, leader char
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )

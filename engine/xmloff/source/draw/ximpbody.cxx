@@ -43,10 +43,11 @@
 #include <comphelper/diagnose_ex.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace ::xmloff::token;
 
 SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes > const & rShapes)
 :   SdXMLGenericPageContext( rImport, xAttrList, rShapes )
 ,   mbHadSMILNodes( false )
@@ -263,8 +264,8 @@ SdXMLDrawPageContext::~SdXMLDrawPageContext()
 {
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler >  SdXMLDrawPageContext::createFastChildContext(sal_Int32 nElement,
-        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList)
+cpo::uno::Reference< css::xml::sax::XFastContextHandler >  SdXMLDrawPageContext::createFastChildContext(sal_Int32 nElement,
+        const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList)
 {
     // some special objects inside draw:page context
     switch(nElement)
@@ -341,7 +342,7 @@ class SdXMLSectionContext : public SvXMLImportContext
 
 public:
     SdXMLSectionContext(SvXMLImport& rImport,
-                        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList)
+                        const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList)
         : SvXMLImportContext(rImport)
     {
         for (auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList))
@@ -353,9 +354,9 @@ public:
         }
     }
 
-    css::uno::Reference<css::xml::sax::XFastContextHandler> createFastChildContext(
+    cpo::uno::Reference<css::xml::sax::XFastContextHandler> createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList) override
+        const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList) override
     {
         if (nElement == XML_ELEMENT(LO_EXT, XML_SECTION_SLIDE))
         {
@@ -384,9 +385,9 @@ public:
     {
     }
 
-    css::uno::Reference<css::xml::sax::XFastContextHandler> createFastChildContext(
+    cpo::uno::Reference<css::xml::sax::XFastContextHandler> createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList) override
+        const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList) override
     {
         if (nElement == XML_ELEMENT(LO_EXT, XML_SECTION))
         {
@@ -449,9 +450,9 @@ SdXMLBodyContext::~SdXMLBodyContext()
 {
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLBodyContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLBodyContext::createFastChildContext(
      sal_Int32 nElement,
-     const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+     const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     switch (nElement)
     {

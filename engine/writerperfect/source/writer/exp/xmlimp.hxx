@@ -83,21 +83,21 @@ class XMLImport : public cppu::WeakImplHelper<css::xml::sax::XDocumentHandler>
     librevenge::RVNGPropertyListVector maCoverImages;
     /// Author, date, etc -- overwrites what would be from the document out of the box.
     librevenge::RVNGPropertyList maMetaData;
-    const css::uno::Reference<cpo::uno::XComponentContext>& mxContext;
-    css::uno::Reference<css::uri::XUriReferenceFactory> mxUriReferenceFactory;
+    const cpo::uno::Reference<cpo::uno::XComponentContext>& mxContext;
+    cpo::uno::Reference<css::uri::XUriReferenceFactory> mxUriReferenceFactory;
     OUString maMediaDir;
     bool mbIsInPageSpan;
     const std::vector<FixedLayoutPage>& mrPageMetafiles;
 
 public:
-    XMLImport(const css::uno::Reference<cpo::uno::XComponentContext>& xContext,
+    XMLImport(const cpo::uno::Reference<cpo::uno::XComponentContext>& xContext,
               librevenge::RVNGTextInterface& rGenerator, const OUString& rURL,
               const cpo::uno::Sequence<css::beans::PropertyValue>& rDescriptor,
               const std::vector<FixedLayoutPage>& rPageMetafiles);
 
     rtl::Reference<XMLImportContext>
     CreateContext(std::u16string_view rName,
-                  const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs);
+                  const cpo::uno::Reference<css::xml::sax::XAttributeList>& xAttribs);
 
     librevenge::RVNGTextInterface& GetGenerator() const;
     std::map<OUString, librevenge::RVNGPropertyList>& GetAutomaticTextStyles();
@@ -120,7 +120,7 @@ public:
     const librevenge::RVNGPropertyList& GetMetaData() const;
     PopupState FillPopupData(const OUString& rURL, librevenge::RVNGPropertyList& rPropList);
     const std::vector<FixedLayoutPage>& GetPageMetafiles() const;
-    const css::uno::Reference<cpo::uno::XComponentContext>& GetComponentContext() const;
+    const cpo::uno::Reference<cpo::uno::XComponentContext>& GetComponentContext() const;
 
     bool GetIsInPageSpan() const { return mbIsInPageSpan; }
     void HandlePageSpan(const librevenge::RVNGPropertyList& rPropertyList);
@@ -130,13 +130,13 @@ public:
     void SAL_CALL endDocument() override;
     void SAL_CALL
     startElement(const OUString& rName,
-                 const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
+                 const cpo::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
     void SAL_CALL endElement(const OUString& rName) override;
     void SAL_CALL characters(const OUString& rChars) override;
     void SAL_CALL ignorableWhitespace(const OUString& rWhitespaces) override;
     void SAL_CALL processingInstruction(const OUString& rTarget, const OUString& rData) override;
     void SAL_CALL
-    setDocumentLocator(const css::uno::Reference<css::xml::sax::XLocator>& xLocator) override;
+    setDocumentLocator(const cpo::uno::Reference<css::xml::sax::XLocator>& xLocator) override;
 };
 
 } // namespace writerperfect::exp

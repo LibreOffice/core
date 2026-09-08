@@ -89,8 +89,8 @@ public:
                                    sal_Int8 sourceActions,
                                    sal_Int32 cursor,
                                    sal_Int32 image,
-                                   const css::uno::Reference< css::datatransfer::XTransferable >& transferable,
-                                   const css::uno::Reference< css::datatransfer::dnd::XDragSourceListener >& listener ) override;
+                                   const cpo::uno::Reference< css::datatransfer::XTransferable >& transferable,
+                                   const cpo::uno::Reference< css::datatransfer::dnd::XDragSourceListener >& listener ) override;
 
   // XServiceInfo
   virtual OUString getImplementationName() override;
@@ -102,20 +102,20 @@ public:
 
 public:
   // The context notifies the XDragSourceListeners
-  css::uno::Reference< css::datatransfer::dnd::XDragSourceContext > mXCurrentContext;
+  cpo::uno::Reference< css::datatransfer::dnd::XDragSourceContext > mXCurrentContext;
 
   id mView;
   AquaSalFrame* mpFrame;
   NSEvent* mLastMouseEventBeforeStartDrag;
   DragSourceHelper* mDragSourceHelper;
   css::awt::MouseEvent mMouseEvent;
-  css::uno::Reference< css::datatransfer::XTransferable > mXTransferable;
-  css::uno::Reference< css::datatransfer::dnd::XDragSourceListener > mXDragSrcListener;
+  cpo::uno::Reference< css::datatransfer::XTransferable > mXTransferable;
+  cpo::uno::Reference< css::datatransfer::dnd::XDragSourceListener > mXDragSrcListener;
   // The mouse button that set off the drag and drop operation
   short m_MouseButton;
   sal_Int8 mDragSourceActions;
 
-  static css::uno::Reference< css::datatransfer::XTransferable > g_XTransferable;
+  static cpo::uno::Reference< css::datatransfer::XTransferable > g_XTransferable;
   static NSView* g_DragSourceView;
   static bool    g_DropSuccessSet;
   static bool    g_DropSuccess;

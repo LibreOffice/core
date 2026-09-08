@@ -17,7 +17,7 @@
 namespace comphelper
 {
 // Returns a new context layer that assigns the given boolean value to the name
-inline css::uno::Reference<cpo::uno::XCurrentContext> NewFlagContext(const OUString& sName,
+inline cpo::uno::Reference<cpo::uno::XCurrentContext> NewFlagContext(const OUString& sName,
                                                                      bool bValue = true)
 {
     class SetFlagContext : public cppu::WeakImplHelper<cpo::uno::XCurrentContext>
@@ -41,13 +41,13 @@ inline css::uno::Reference<cpo::uno::XCurrentContext> NewFlagContext(const OUStr
     private:
         OUString msName;
         bool mbValue;
-        css::uno::Reference<cpo::uno::XCurrentContext> mxNext = cpo::uno::getCurrentContext();
+        cpo::uno::Reference<cpo::uno::XCurrentContext> mxNext = cpo::uno::getCurrentContext();
     };
     return new SetFlagContext(sName, bValue);
 }
 
 // A specialization for preventing "Java must be enabled" interaction
-inline css::uno::Reference<cpo::uno::XCurrentContext> NoEnableJavaInteractionContext()
+inline cpo::uno::Reference<cpo::uno::XCurrentContext> NoEnableJavaInteractionContext()
 {
     return NewFlagContext(u"DontEnableJava"_ustr);
 }

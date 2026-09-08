@@ -145,8 +145,8 @@
 
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::document::CmisProperty;
 using ::com::sun::star::frame::XFrame;
@@ -213,8 +213,8 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
     comphelper::OInterfaceContainerHelper3<document::XDocumentEventListener>  m_aDocumentEventListeners2;
     comphelper::OInterfaceContainerHelper3<document::XStorageChangeListener>  m_aStorageChangeListeners;
     comphelper::OInterfaceContainerHelper3<util::XCloseListener>  m_aCloseListeners;
-    std::unordered_map<css::uno::Reference< css::drawing::XShape >,
-                       std::vector<css::uno::Reference< css::document::XShapeEventListener >>> maShapeListeners;
+    std::unordered_map<cpo::uno::Reference< css::drawing::XShape >,
+                       std::vector<cpo::uno::Reference< css::document::XShapeEventListener >>> maShapeListeners;
     Reference< XInterface >                                    m_xParent                ;
     Reference< frame::XController >                            m_xCurrent               ;
     Reference< document::XDocumentProperties >                 m_xDocumentProperties    ;
@@ -925,7 +925,7 @@ bool SfxBaseModel::attachResource( const   OUString&                   rURL    ,
                 pObjectShell->SetPendingLinkUpdateInfobar();
                 for (const auto& rEntry : aRemoteContent)
                 {
-                    css::uno::Reference<css::beans::XPropertySet> xControl;
+                    cpo::uno::Reference<css::beans::XPropertySet> xControl;
                     if (rEntry.Value >>= xControl)
                         pObjectShell->AddDeferredFormControlImage(xControl, rEntry.Name);
                 }
@@ -2561,7 +2561,7 @@ void SfxBaseModel::removeEventListener( const Reference< document::XEventListene
 
 //  XShapeEventBroadcaster
 
-void SfxBaseModel::addShapeEventListener( const css::uno::Reference< css::drawing::XShape >& xShape, const Reference< document::XShapeEventListener >& xListener )
+void SfxBaseModel::addShapeEventListener( const cpo::uno::Reference< css::drawing::XShape >& xShape, const Reference< document::XShapeEventListener >& xListener )
 {
     assert(xShape.is() && "no shape?");
     SfxModelGuard aGuard( *this, SfxModelGuard::E_INITIALIZING );
@@ -2573,7 +2573,7 @@ void SfxBaseModel::addShapeEventListener( const css::uno::Reference< css::drawin
 //  XShapeEventBroadcaster
 
 
-void SfxBaseModel::removeShapeEventListener( const css::uno::Reference< css::drawing::XShape >& xShape, const Reference< document::XShapeEventListener >& xListener )
+void SfxBaseModel::removeShapeEventListener( const cpo::uno::Reference< css::drawing::XShape >& xShape, const Reference< document::XShapeEventListener >& xListener )
 {
     SfxModelGuard aGuard( *this );
 

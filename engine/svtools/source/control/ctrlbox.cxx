@@ -1492,7 +1492,7 @@ void SvtLineListBox::ImpGetLine( tools::Long nLine1, tools::Long nLine2, tools::
 }
 
 SvtLineListBox::SvtLineListBox(std::unique_ptr<weld::MenuButton> pControl)
-    : WeldToolbarPopup(css::uno::Reference<css::frame::XFrame>(), pControl.get(), u"svt/ui/linewindow.ui"_ustr, u"line_popup_window"_ustr)
+    : WeldToolbarPopup(cpo::uno::Reference<css::frame::XFrame>(), pControl.get(), u"svt/ui/linewindow.ui"_ustr, u"line_popup_window"_ustr)
     , m_xControl(std::move(pControl))
     , m_xNoneButton(m_xBuilder->weld_button(u"none_line_button"_ustr))
     , m_xLineIV(m_xBuilder->weld_icon_view(u"iconview_lines"_ustr))

@@ -62,7 +62,7 @@ namespace framework
                           public  LayoutManager_PBase
     {
         public:
-            LayoutManager( const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
+            LayoutManager( const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext );
             virtual ~LayoutManager() override;
 
             /** declaration of XInterface, XTypeProvider, XServiceInfo */
@@ -85,16 +85,16 @@ namespace framework
             }
 
             // XLayoutManager
-            virtual void attachFrame( const css::uno::Reference< css::frame::XFrame >& Frame ) override;
+            virtual void attachFrame( const cpo::uno::Reference< css::frame::XFrame >& Frame ) override;
             virtual void reset() override;
             virtual css::awt::Rectangle getCurrentDockingArea(  ) override;
-            virtual css::uno::Reference< css::ui::XDockingAreaAcceptor > getDockingAreaAcceptor() override;
-            virtual void setDockingAreaAcceptor( const css::uno::Reference< css::ui::XDockingAreaAcceptor >& xDockingAreaAcceptor ) final override;
+            virtual cpo::uno::Reference< css::ui::XDockingAreaAcceptor > getDockingAreaAcceptor() override;
+            virtual void setDockingAreaAcceptor( const cpo::uno::Reference< css::ui::XDockingAreaAcceptor >& xDockingAreaAcceptor ) final override;
             virtual void createElement( const OUString& aName ) override;
             virtual void destroyElement( const OUString& aName ) override;
             virtual bool requestElement( const OUString& ResourceURL ) override;
-            virtual css::uno::Reference< css::ui::XUIElement > getElement( const OUString& aName ) override;
-            virtual cpo::uno::Sequence< css::uno::Reference< css::ui::XUIElement > > getElements(  ) override;
+            virtual cpo::uno::Reference< css::ui::XUIElement > getElement( const OUString& aName ) override;
+            virtual cpo::uno::Sequence< cpo::uno::Reference< css::ui::XUIElement > > getElements(  ) override;
             virtual bool showElement( const OUString& aName ) override;
             virtual bool hideElement( const OUString& aName ) override;
             virtual bool dockWindow( const OUString& aName, css::ui::DockingArea DockingArea, const css::awt::Point& Pos ) override;
@@ -119,7 +119,7 @@ namespace framework
 
             // XMenuBarMergingAcceptor
 
-            virtual bool setMergedMenuBar( const css::uno::Reference< css::container::XIndexAccess >& xMergedMenuBar ) override;
+            virtual bool setMergedMenuBar( const cpo::uno::Reference< css::container::XIndexAccess >& xMergedMenuBar ) override;
             virtual void removeMergedMenuBar(  ) override;
 
             //  XWindowListener
@@ -141,8 +141,8 @@ namespace framework
             virtual void elementReplaced( const css::ui::ConfigurationEvent& Event ) override;
 
             //  XLayoutManagerEventBroadcaster
-            virtual void addLayoutManagerEventListener( const css::uno::Reference< css::frame::XLayoutManagerListener >& aLayoutManagerListener ) override;
-            virtual void removeLayoutManagerEventListener( const css::uno::Reference< css::frame::XLayoutManagerListener >& aLayoutManagerListener ) override;
+            virtual void addLayoutManagerEventListener( const cpo::uno::Reference< css::frame::XLayoutManagerListener >& aLayoutManagerListener ) override;
+            virtual void removeLayoutManagerEventListener( const cpo::uno::Reference< css::frame::XLayoutManagerListener >& aLayoutManagerListener ) override;
 
             DECL_LINK( MenuBarClose, void *, void);
             DECL_LINK( WindowEventListener, VclWindowEvent&, void );
@@ -152,9 +152,9 @@ namespace framework
 
             /// Reading of settings - shared with ToolbarLayoutManager.
             static bool readWindowStateData( const OUString& rName, UIElement& rElementData,
-                    const css::uno::Reference< css::container::XNameAccess > &rPersistentWindowState,
+                    const cpo::uno::Reference< css::container::XNameAccess > &rPersistentWindowState,
                     std::unique_ptr<GlobalSettings> &rGlobalSettings, bool &bInGlobalSettings,
-                    const css::uno::Reference< cpo::uno::XComponentContext > &rComponentContext );
+                    const cpo::uno::Reference< cpo::uno::XComponentContext > &rComponentContext );
 
         private:
             DECL_LINK(AsyncLayoutHdl, Timer *, void);
@@ -175,17 +175,17 @@ namespace framework
 
             //  query
 
-            css::uno::Reference< css::ui::XUIElement > implts_findElement( std::u16string_view aName );
+            cpo::uno::Reference< css::ui::XUIElement > implts_findElement( std::u16string_view aName );
 
             bool implts_readWindowStateData( const OUString& rName, UIElement& rElementData );
             void implts_writeWindowStateData( const OUString& rName, const UIElement& rElementData );
             void implts_destroyElements();
             void implts_toggleFloatingUIElementsVisibility( bool bActive );
             void implts_reparentChildWindows();
-            css::uno::Reference< css::ui::XUIElement > implts_createDockingWindow( const OUString& aElementName );
+            cpo::uno::Reference< css::ui::XUIElement > implts_createDockingWindow( const OUString& aElementName );
 
             bool implts_isEmbeddedLayoutManager() const;
-            css::uno::Reference< css::ui::XUIElement > implts_createElement( const OUString& aName );
+            cpo::uno::Reference< css::ui::XUIElement > implts_createElement( const OUString& aName );
 
             // layouting methods
             bool implts_resizeContainerWindow( const css::awt::Size& rContainerSize, const css::awt::Point& rComponentPos );
@@ -213,7 +213,7 @@ namespace framework
 
             /// @throws cpo::uno::RuntimeException
             void    implts_setInplaceMenuBar(
-                        const css::uno::Reference< css::container::XIndexAccess >& xMergedMenuBar );
+                        const cpo::uno::Reference< css::container::XIndexAccess >& xMergedMenuBar );
             /// @throws cpo::uno::RuntimeException
             void    implts_resetInplaceMenuBar();
 
@@ -227,15 +227,15 @@ namespace framework
             virtual void                                                setFastPropertyValue_NoBroadcast( sal_Int32                        nHandle         ,
                                                                                                                 const cpo::uno::Any&  aValue          ) override;
             virtual ::cppu::IPropertyArrayHelper&                       getInfoHelper() override;
-            virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo() override;
+            virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo() override;
 
-            css::uno::Reference< cpo::uno::XComponentContext >             m_xContext; /** reference to factory, which has created this instance. */
-            css::uno::Reference< css::util::XURLTransformer >              m_xURLTransformer;
-            css::uno::Reference< css::frame::XFrame >                      m_xFrame;
-            css::uno::Reference< css::ui::XUIConfigurationManager >        m_xModuleCfgMgr;
-            css::uno::Reference< css::ui::XUIConfigurationManager >        m_xDocCfgMgr;
-            css::uno::Reference< css::awt::XWindow >                       m_xContainerWindow;
-            css::uno::Reference< css::awt::XTopWindow2 >                   m_xContainerTopWindow;
+            cpo::uno::Reference< cpo::uno::XComponentContext >             m_xContext; /** reference to factory, which has created this instance. */
+            cpo::uno::Reference< css::util::XURLTransformer >              m_xURLTransformer;
+            cpo::uno::Reference< css::frame::XFrame >                      m_xFrame;
+            cpo::uno::Reference< css::ui::XUIConfigurationManager >        m_xModuleCfgMgr;
+            cpo::uno::Reference< css::ui::XUIConfigurationManager >        m_xDocCfgMgr;
+            cpo::uno::Reference< css::awt::XWindow >                       m_xContainerWindow;
+            cpo::uno::Reference< css::awt::XTopWindow2 >                   m_xContainerTopWindow;
             sal_Int32                                                      m_nLockCount;
             bool                                                           m_bInplaceMenuSet;
             bool                                                           m_bMenuVisible;
@@ -248,16 +248,16 @@ namespace framework
             bool                                                           m_bPreserveContentSize;
             bool                                                           m_bMenuBarCloseButton;
             css::awt::Rectangle                                            m_aDockingArea;
-            css::uno::Reference< css::ui::XDockingAreaAcceptor >           m_xDockingAreaAcceptor;
+            cpo::uno::Reference< css::ui::XDockingAreaAcceptor >           m_xDockingAreaAcceptor;
             rtl::Reference< MenuBarManager >                               m_xInplaceMenuBar;
             rtl::Reference< MenuBarWrapper >                               m_xMenuBar;
             UIElement                                                      m_aStatusBarElement;
             UIElement                                                      m_aProgressBarElement;
             rtl::Reference< ProgressBarWrapper >                           m_xProgressBarBackup;
-            css::uno::Reference< css::frame::XModuleManager2 >             m_xModuleManager;
-            css::uno::Reference< css::ui::XUIElementFactoryManager >       m_xUIElementFactoryManager;
-            css::uno::Reference< css::container::XNameAccess >             m_xPersistentWindowState;
-            css::uno::Reference< css::container::XNameAccess >             m_xPersistentWindowStateSupplier;
+            cpo::uno::Reference< css::frame::XModuleManager2 >             m_xModuleManager;
+            cpo::uno::Reference< css::ui::XUIElementFactoryManager >       m_xUIElementFactoryManager;
+            cpo::uno::Reference< css::container::XNameAccess >             m_xPersistentWindowState;
+            cpo::uno::Reference< css::container::XNameAccess >             m_xPersistentWindowStateSupplier;
             std::unique_ptr<GlobalSettings>                                m_pGlobalSettings;
             OUString                                                       m_aModuleIdentifier;
             Timer                                                          m_aAsyncLayoutTimer;

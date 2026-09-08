@@ -42,28 +42,28 @@ public:
      * Calc which has a million elements, if not more. */
     static const sal_Int32 MAX_CHILDREN = 500;
 
-    static css::uno::Reference<css::accessibility::XAccessibleContext>
+    static cpo::uno::Reference<css::accessibility::XAccessibleContext>
     getAccessibleObjectForPredicate(
-        const css::uno::Reference<css::accessibility::XAccessibleContext>& xCtx,
+        const cpo::uno::Reference<css::accessibility::XAccessibleContext>& xCtx,
         const std::function<
-            bool(const css::uno::Reference<css::accessibility::XAccessibleContext>&)>& cPredicate);
-    static css::uno::Reference<css::accessibility::XAccessibleContext>
+            bool(const cpo::uno::Reference<css::accessibility::XAccessibleContext>&)>& cPredicate);
+    static cpo::uno::Reference<css::accessibility::XAccessibleContext>
     getAccessibleObjectForPredicate(
-        const css::uno::Reference<css::accessibility::XAccessible>& xAcc,
+        const cpo::uno::Reference<css::accessibility::XAccessible>& xAcc,
         const std::function<
-            bool(const css::uno::Reference<css::accessibility::XAccessibleContext>&)>& cPredicate);
+            bool(const cpo::uno::Reference<css::accessibility::XAccessibleContext>&)>& cPredicate);
 
-    static css::uno::Reference<css::accessibility::XAccessibleContext> getAccessibleObjectForId(
-        const css::uno::Reference<css::accessibility::XAccessibleContext>& xCtx,
+    static cpo::uno::Reference<css::accessibility::XAccessibleContext> getAccessibleObjectForId(
+        const cpo::uno::Reference<css::accessibility::XAccessibleContext>& xCtx,
         std::u16string_view sId);
-    static css::uno::Reference<css::accessibility::XAccessibleContext>
-    getAccessibleObjectForId(const css::uno::Reference<css::accessibility::XAccessible>& xacc,
+    static cpo::uno::Reference<css::accessibility::XAccessibleContext>
+    getAccessibleObjectForId(const cpo::uno::Reference<css::accessibility::XAccessible>& xacc,
                              std::u16string_view sId);
 
-    static css::uno::Reference<css::accessibility::XAccessibleContext> getAccessibleObjectForRole(
-        const css::uno::Reference<css::accessibility::XAccessibleContext>& xCtx, sal_Int16 role);
-    static css::uno::Reference<css::accessibility::XAccessibleContext>
-    getAccessibleObjectForRole(const css::uno::Reference<css::accessibility::XAccessible>& xacc,
+    static cpo::uno::Reference<css::accessibility::XAccessibleContext> getAccessibleObjectForRole(
+        const cpo::uno::Reference<css::accessibility::XAccessibleContext>& xCtx, sal_Int16 role);
+    static cpo::uno::Reference<css::accessibility::XAccessibleContext>
+    getAccessibleObjectForRole(const cpo::uno::Reference<css::accessibility::XAccessible>& xacc,
                                sal_Int16 role);
 
     /**
@@ -80,11 +80,11 @@ public:
      * @endcode
      *
      * @see AccessibilityTools::getAccessibleObjectForPredicate() */
-    static css::uno::Reference<css::accessibility::XAccessibleContext> getAccessibleObjectForName(
-        const css::uno::Reference<css::accessibility::XAccessibleContext>& xCtx,
+    static cpo::uno::Reference<css::accessibility::XAccessibleContext> getAccessibleObjectForName(
+        const cpo::uno::Reference<css::accessibility::XAccessibleContext>& xCtx,
         const sal_Int16 role, std::u16string_view name);
-    static inline css::uno::Reference<css::accessibility::XAccessibleContext>
-    getAccessibleObjectForName(const css::uno::Reference<css::accessibility::XAccessible>& xAcc,
+    static inline cpo::uno::Reference<css::accessibility::XAccessibleContext>
+    getAccessibleObjectForName(const cpo::uno::Reference<css::accessibility::XAccessible>& xAcc,
                                const sal_Int16 role, std::u16string_view name)
     {
         return getAccessibleObjectForName(xAcc->getAccessibleContext(), role, name);
@@ -127,8 +127,8 @@ public:
     /* TODO: reimplement as IDDFS or BFS?  Not sure the additional complexity/performance costs
      *       warrant it. */
     template <typename... Ts>
-    static css::uno::Reference<css::accessibility::XAccessibleContext> getAccessibleObjectForName(
-        const css::uno::Reference<css::accessibility::XAccessibleContext>& xCtx,
+    static cpo::uno::Reference<css::accessibility::XAccessibleContext> getAccessibleObjectForName(
+        const cpo::uno::Reference<css::accessibility::XAccessibleContext>& xCtx,
         const sal_Int16 role, std::u16string_view name, Ts... args)
     {
         auto nChildren = xCtx->getAccessibleChildCount();
@@ -156,17 +156,17 @@ public:
     }
 
     template <typename... Ts>
-    static inline css::uno::Reference<css::accessibility::XAccessibleContext>
-    getAccessibleObjectForName(const css::uno::Reference<css::accessibility::XAccessible>& xAcc,
+    static inline cpo::uno::Reference<css::accessibility::XAccessibleContext>
+    getAccessibleObjectForName(const cpo::uno::Reference<css::accessibility::XAccessible>& xAcc,
                                const sal_Int16 role, std::u16string_view name, Ts... args)
     {
         return getAccessibleObjectForName(xAcc->getAccessibleContext(), role, name, args...);
     }
 
-    static bool equals(const css::uno::Reference<css::accessibility::XAccessible>& xacc1,
-                       const css::uno::Reference<css::accessibility::XAccessible>& xacc2);
-    static bool equals(const css::uno::Reference<css::accessibility::XAccessibleContext>& xctx1,
-                       const css::uno::Reference<css::accessibility::XAccessibleContext>& xctx2);
+    static bool equals(const cpo::uno::Reference<css::accessibility::XAccessible>& xacc1,
+                       const cpo::uno::Reference<css::accessibility::XAccessible>& xacc2);
+    static bool equals(const cpo::uno::Reference<css::accessibility::XAccessibleContext>& xctx1,
+                       const cpo::uno::Reference<css::accessibility::XAccessibleContext>& xctx2);
 
     /**
      * @brief Compares the accessible name against a string
@@ -179,9 +179,9 @@ public:
      * sure the accessible you are comparing is not subject to those suffixes under debugging,
      * always use this function instead of direct comparison.
      */
-    static bool nameEquals(const css::uno::Reference<css::accessibility::XAccessibleContext>& xCtx,
+    static bool nameEquals(const cpo::uno::Reference<css::accessibility::XAccessibleContext>& xCtx,
                            const std::u16string_view name);
-    static bool nameEquals(const css::uno::Reference<css::accessibility::XAccessible>& xAcc,
+    static bool nameEquals(const cpo::uno::Reference<css::accessibility::XAccessible>& xAcc,
                            const std::u16string_view name)
     {
         return nameEquals(xAcc->getAccessibleContext(), name);
@@ -191,7 +191,7 @@ public:
     static OUString getEventIdName(const sal_Int16 event_id);
     static OUString getRelationTypeName(AccessibleRelationType rel_type);
 
-    template <typename T> static std::string debugString(const css::uno::Reference<T>& x)
+    template <typename T> static std::string debugString(const cpo::uno::Reference<T>& x)
     {
         return debugString(x.get());
     }
@@ -277,14 +277,14 @@ CPPUNIT_NS_BEGIN
 /* How to generate those automatically?  We don't want to match all types
  * not to mess up cppunit for types we don't support */
 #define AT_ASSERTION_TRAITS(T)                                                                     \
-    template <> struct assertion_traits<css::uno::Reference<T>>                                    \
+    template <> struct assertion_traits<cpo::uno::Reference<T>>                                    \
     {                                                                                              \
-        static bool equal(const css::uno::Reference<T>& x, const css::uno::Reference<T>& y)        \
+        static bool equal(const cpo::uno::Reference<T>& x, const cpo::uno::Reference<T>& y)        \
         {                                                                                          \
             return AccessibilityTools::equals(x, y);                                               \
         }                                                                                          \
                                                                                                    \
-        static std::string toString(const css::uno::Reference<T>& x)                               \
+        static std::string toString(const cpo::uno::Reference<T>& x)                               \
         {                                                                                          \
             return AccessibilityTools::debugString(x);                                             \
         }                                                                                          \

@@ -72,32 +72,32 @@ public:
     virtual bool SAL_CALL createDataSourcePossible(
         const cpo::uno::Sequence< css::beans::PropertyValue >& aArguments ) override;
 
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
         css::chart2::data::XDataSource > SAL_CALL createDataSource(
             const cpo::uno::Sequence< css::beans::PropertyValue >& aArguments ) override;
 
     virtual cpo::uno::Sequence<
         css::beans::PropertyValue > SAL_CALL detectArguments(
-            const css::uno::Reference< css::chart2::data::XDataSource >& xDataSource ) override;
+            const cpo::uno::Reference< css::chart2::data::XDataSource >& xDataSource ) override;
 
     virtual bool SAL_CALL createDataSequenceByRangeRepresentationPossible(
         const OUString& aRangeRepresentation ) override;
 
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
         css::chart2::data::XDataSequence > SAL_CALL createDataSequenceByRangeRepresentation(
             const OUString& aRangeRepresentation ) override;
 
-    virtual css::uno::Reference<css::chart2::data::XDataSequence> SAL_CALL
+    virtual cpo::uno::Reference<css::chart2::data::XDataSequence> SAL_CALL
         createDataSequenceByValueArray( const OUString& aRole, const OUString& aRangeRepresentation,
             const OUString& aRoleQualifier ) override;
 
-    virtual css::uno::Reference< css::sheet::XRangeSelection > SAL_CALL getRangeSelection() override;
+    virtual cpo::uno::Reference< css::sheet::XRangeSelection > SAL_CALL getRangeSelection() override;
 
     // XSheetDataProvider
     virtual bool SAL_CALL createDataSequenceByFormulaTokensPossible(
         const cpo::uno::Sequence< css::sheet::FormulaToken >& aTokens ) override;
 
-    virtual css::uno::Reference< css::chart2::data::XDataSequence >
+    virtual cpo::uno::Reference< css::chart2::data::XDataSequence >
         SAL_CALL createDataSequenceByFormulaTokens(
             const cpo::uno::Sequence< css::sheet::FormulaToken >& aTokens ) override;
 
@@ -107,7 +107,7 @@ public:
     virtual OUString SAL_CALL convertRangeFromXML( const OUString& sXMLRange ) override;
 
     // XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo> SAL_CALL
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo> SAL_CALL
         getPropertySetInfo() override;
 
     virtual void SAL_CALL setPropertyValue(
@@ -119,19 +119,19 @@ public:
 
     virtual void SAL_CALL addPropertyChangeListener(
             const OUString& rPropertyName,
-            const css::uno::Reference< css::beans::XPropertyChangeListener>& xListener) override;
+            const cpo::uno::Reference< css::beans::XPropertyChangeListener>& xListener) override;
 
     virtual void SAL_CALL removePropertyChangeListener(
             const OUString& rPropertyName,
-            const css::uno::Reference< css::beans::XPropertyChangeListener>& rListener) override;
+            const cpo::uno::Reference< css::beans::XPropertyChangeListener>& rListener) override;
 
     virtual void SAL_CALL addVetoableChangeListener(
             const OUString& rPropertyName,
-            const css::uno::Reference< css::beans::XVetoableChangeListener>& rListener) override;
+            const cpo::uno::Reference< css::beans::XVetoableChangeListener>& rListener) override;
 
     virtual void SAL_CALL removeVetoableChangeListener(
             const OUString& rPropertyName,
-            const css::uno::Reference< css::beans::XVetoableChangeListener>& rListener) override;
+            const cpo::uno::Reference< css::beans::XVetoableChangeListener>& rListener) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -163,7 +163,7 @@ public:
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
     // XDataSource
-    virtual cpo::uno::Sequence< css::uno::Reference<
+    virtual cpo::uno::Sequence< cpo::uno::Reference<
             css::chart2::data::XLabeledDataSequence > > SAL_CALL
         getDataSequences() override;
 
@@ -178,12 +178,12 @@ public:
 
     // implementation
 
-    void AddLabeledSequence(const css::uno::Reference < css::chart2::data::XLabeledDataSequence >& xNew);
+    void AddLabeledSequence(const cpo::uno::Reference < css::chart2::data::XLabeledDataSequence >& xNew);
 
 private:
 
     ScDocument*                 m_pDocument;
-    std::vector < css::uno::Reference< css::chart2::data::XLabeledDataSequence > > m_aLabeledSequences;
+    std::vector < cpo::uno::Reference< css::chart2::data::XLabeledDataSequence > > m_aLabeledSequences;
 
 };
 
@@ -238,7 +238,7 @@ public:
     virtual void SAL_CALL setRange(sal_Int32 nStart, sal_Int32 nEnd) override;
 
     // XPropertySet
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
         css::beans::XPropertySetInfo> SAL_CALL
         getPropertySetInfo() override;
 
@@ -251,28 +251,28 @@ public:
 
     virtual void SAL_CALL addPropertyChangeListener(
             const OUString& rPropertyName,
-            const css::uno::Reference< css::beans::XPropertyChangeListener>& xListener) override;
+            const cpo::uno::Reference< css::beans::XPropertyChangeListener>& xListener) override;
 
     virtual void SAL_CALL removePropertyChangeListener(
             const OUString& rPropertyName,
-            const css::uno::Reference< css::beans::XPropertyChangeListener>& rListener) override;
+            const cpo::uno::Reference< css::beans::XPropertyChangeListener>& rListener) override;
 
     virtual void SAL_CALL addVetoableChangeListener(
             const OUString& rPropertyName,
-            const css::uno::Reference< css::beans::XVetoableChangeListener>& rListener) override;
+            const cpo::uno::Reference< css::beans::XVetoableChangeListener>& rListener) override;
 
     virtual void SAL_CALL removeVetoableChangeListener(
             const OUString& rPropertyName,
-            const css::uno::Reference<  css::beans::XVetoableChangeListener>& rListener) override;
+            const cpo::uno::Reference<  css::beans::XVetoableChangeListener>& rListener) override;
 
     // XCloneable
-    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone() override;
+    virtual cpo::uno::Reference< css::util::XCloneable > SAL_CALL createClone() override;
 
     // XModifyBroadcaster
     virtual void SAL_CALL addModifyListener(
-        const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+        const cpo::uno::Reference< css::util::XModifyListener >& aListener ) override;
     virtual void SAL_CALL removeModifyListener(
-        const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+        const cpo::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

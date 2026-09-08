@@ -54,8 +54,8 @@ namespace basic
 
 using namespace com::sun::star::container;
 using namespace com::sun::star::io;
-using namespace com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::script;
@@ -542,17 +542,17 @@ static void setStreamKey( const uno::Reference< io::XStream >& xStream, const OU
 bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib,
                                                           const OUString& aName,
                                                           const uno::Reference< embed::XStorage >& xStorage,
-                                                          const css::uno::Reference< css::task::XInteractionHandler >& xHandler )
+                                                          const cpo::uno::Reference< css::task::XInteractionHandler >& xHandler )
 {
     Reference< XSimpleFileAccess3 > xDummySFA;
     return implStorePasswordLibrary( pLib, aName, xStorage, OUString(), xDummySFA, xHandler );
 }
 
 bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, const OUString& aName,
-                                                          const css::uno::Reference< css::embed::XStorage >& xStorage,
+                                                          const cpo::uno::Reference< css::embed::XStorage >& xStorage,
                                                           const OUString& aTargetURL,
                                                           const Reference< XSimpleFileAccess3 >& rToUseSFI,
-                                                          const css::uno::Reference< css::task::XInteractionHandler >& xHandler )
+                                                          const cpo::uno::Reference< css::task::XInteractionHandler >& xHandler )
 {
     bool bExport = !aTargetURL.isEmpty();
 
@@ -1150,7 +1150,7 @@ void SfxScriptLibrary::storeResourcesAsURL
     ( const OUString&, const OUString& )
 {}
 
-void SfxScriptLibrary::storeResourcesToStorage( const css::uno::Reference
+void SfxScriptLibrary::storeResourcesToStorage( const cpo::uno::Reference
     < css::embed::XStorage >& )
 {
     // No resources

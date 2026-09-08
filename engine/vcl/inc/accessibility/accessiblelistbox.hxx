@@ -37,7 +37,7 @@ class AccessibleListBox
                                          css::accessibility::XAccessibleSelection>
 {
 
-    css::uno::Reference< css::accessibility::XAccessible > m_xParent;
+    cpo::uno::Reference< css::accessibility::XAccessible > m_xParent;
     // OComponentHelper overridables
     /** this function is called upon disposing the component */
     virtual void   disposing() override;
@@ -62,7 +62,7 @@ public:
             is our parent accessible object
     */
     AccessibleListBox(SvTreeListBox& _rListBox,
-                       const css::uno::Reference< css::accessibility::XAccessible >& _xParent );
+                       const cpo::uno::Reference< css::accessibility::XAccessible >& _xParent );
 
     virtual ~AccessibleListBox() override;
 
@@ -74,8 +74,8 @@ public:
 
     // XAccessibleContext
     virtual sal_Int64 getAccessibleChildCount(  ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleChild( sal_Int64 i ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleParent(  ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > getAccessibleChild( sal_Int64 i ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > getAccessibleParent(  ) override;
     virtual sal_Int16 getAccessibleRole(  ) override;
     virtual OUString getAccessibleDescription(  ) override;
     virtual OUString getAccessibleName(  ) override;
@@ -86,7 +86,7 @@ public:
     void clearAccessibleSelection(  ) override;
     void selectAllAccessibleChildren(  ) override;
     sal_Int64 getSelectedAccessibleChildCount(  ) override;
-    css::uno::Reference< css::accessibility::XAccessible > getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
+    cpo::uno::Reference< css::accessibility::XAccessible > getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
     void deselectAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
 
 private:

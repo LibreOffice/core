@@ -46,6 +46,8 @@
 #include <memory>
 #include <swuiexp.hxx>
 
+using namespace ::cpo;
+
 void SwFieldEditDlg::EnsureSelection(SwField *pCurField, SwFieldMgr &rMgr)
 {
     if (m_pSh->CursorInsideInputField())

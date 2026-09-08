@@ -23,7 +23,8 @@
 #include <unotxdoc.hxx>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 class Test : public SwModelTestBase
 {
@@ -1027,12 +1028,12 @@ CPPUNIT_TEST_FIXTURE(Test, testConditionalText4)
 CPPUNIT_TEST_FIXTURE(Test, testTdf142464_ampm)
 {
     auto verify = [this]() {
-        css::uno::Reference<css::text::XTextFieldsSupplier> xTextFieldsSupplier(
-            mxComponent, css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::text::XTextFieldsSupplier> xTextFieldsSupplier(
+            mxComponent, cpo::uno::UNO_QUERY_THROW);
         auto xFieldsAccess(xTextFieldsSupplier->getTextFields());
         auto xFields(xFieldsAccess->createEnumeration());
-        css::uno::Reference<css::text::XTextField> xField(xFields->nextElement(),
-                                                          css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::text::XTextField> xField(xFields->nextElement(),
+                                                          cpo::uno::UNO_QUERY_THROW);
 
         // Without the fix in place, this would have failed with:
         //   - Expected: 12:32 PM

@@ -36,7 +36,7 @@ private:
     FuExecuteInteraction(ViewShell& rViewSh, ::sd::Window* pWin, ::sd::View* pView,
                          SdDrawDocument& rDoc, SfxRequest& rReq);
 
-    css::uno::Reference<css::media::XPlayer> mxPlayer;
+    cpo::uno::Reference<css::media::XPlayer> mxPlayer;
 };
 
 } // end of namespace sd

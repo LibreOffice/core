@@ -11,7 +11,7 @@
 #define INCLUDED_TEST_SHEET_XLABELRANGES_HXX
 
 #include <cpo/uno/XInterface.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <test/testdllapi.hxx>
 
@@ -20,7 +20,7 @@ namespace apitest
 class OOO_DLLPUBLIC_TEST XLabelRanges
 {
 public:
-    virtual css::uno::Reference<cpo::uno::XInterface> init() = 0;
+    virtual cpo::uno::Reference<cpo::uno::XInterface> init() = 0;
 
     void testAddNew();
     void testRemoveByIndex();

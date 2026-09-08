@@ -32,11 +32,11 @@ class ImpOptimizer : public OptimizationStats
 {
 private:
 
-    css::uno::Reference< cpo::uno::XComponentContext >    mxContext;
-    css::uno::Reference< css::frame::XModel >             mxModel;
-    css::uno::Reference< css::frame::XDispatch >          mxStatusDispatcher;
-    css::uno::Reference<css::frame::XFrame>               mxDocumentFrame;
-    css::uno::Reference<css::awt::XWindow>                mxDialogParentWindow;
+    cpo::uno::Reference< cpo::uno::XComponentContext >    mxContext;
+    cpo::uno::Reference< css::frame::XModel >             mxModel;
+    cpo::uno::Reference< css::frame::XDispatch >          mxStatusDispatcher;
+    cpo::uno::Reference<css::frame::XFrame>               mxDocumentFrame;
+    cpo::uno::Reference<css::awt::XWindow>                mxDialogParentWindow;
 
     bool        mbJPEGCompression;
     sal_Int32   mnJPEGQuality;
@@ -57,8 +57,8 @@ private:
 
 public:
 
-        ImpOptimizer( const css::uno::Reference< cpo::uno::XComponentContext >& rXFactory,
-            const css::uno::Reference< css::frame::XModel >& rxModel );
+        ImpOptimizer( const cpo::uno::Reference< cpo::uno::XComponentContext >& rXFactory,
+            const cpo::uno::Reference< css::frame::XModel >& rxModel );
         ~ImpOptimizer();
 
         void     Optimize( const cpo::uno::Sequence< css::beans::PropertyValue >& rArguments );

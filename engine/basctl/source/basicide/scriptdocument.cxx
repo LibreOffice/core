@@ -73,17 +73,17 @@
 namespace basctl
 {
     using ::cpo::uno::Sequence;
-    using ::com::sun::star::uno::Reference;
+    using ::cpo::uno::Reference;
     using ::com::sun::star::frame::XModel;
     using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::script::XLibraryContainer;
     using ::com::sun::star::script::XStorageBasedLibraryContainer;
-    using ::com::sun::star::uno::UNO_QUERY_THROW;
-    using ::com::sun::star::uno::UNO_SET_THROW;
+    using ::cpo::uno::UNO_QUERY_THROW;
+    using ::cpo::uno::UNO_SET_THROW;
     using ::cpo::uno::Exception;
     using ::com::sun::star::container::XNameContainer;
     using ::com::sun::star::container::NoSuchElementException;
-    using ::com::sun::star::uno::UNO_QUERY;
+    using ::cpo::uno::UNO_QUERY;
     using ::com::sun::star::task::XStatusIndicator;
     using ::cpo::uno::Any;
     using ::com::sun::star::script::XLibraryContainer2;

@@ -28,7 +28,7 @@
 #include <rtl/ref.hxx>
 
 using namespace cppu;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
@@ -211,21 +211,21 @@ Any ConstItemContainer::getPropertyValue( const OUString& PropertyName )
     throw UnknownPropertyException(PropertyName);
 }
 
-void ConstItemContainer::addPropertyChangeListener( const OUString&, const css::uno::Reference< css::beans::XPropertyChangeListener >& )
+void ConstItemContainer::addPropertyChangeListener( const OUString&, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& )
 {
 }
 
-void ConstItemContainer::removePropertyChangeListener( const OUString&, const css::uno::Reference< css::beans::XPropertyChangeListener >& )
-{
-    // Only read-only properties - do nothing
-}
-
-void ConstItemContainer::addVetoableChangeListener( const OUString&, const css::uno::Reference< css::beans::XVetoableChangeListener >& )
+void ConstItemContainer::removePropertyChangeListener( const OUString&, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& )
 {
     // Only read-only properties - do nothing
 }
 
-void ConstItemContainer::removeVetoableChangeListener( const OUString&, const css::uno::Reference< css::beans::XVetoableChangeListener >& )
+void ConstItemContainer::addVetoableChangeListener( const OUString&, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& )
+{
+    // Only read-only properties - do nothing
+}
+
+void ConstItemContainer::removeVetoableChangeListener( const OUString&, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& )
 {
     // Only read-only properties - do nothing
 }

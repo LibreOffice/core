@@ -31,7 +31,7 @@ using namespace com::sun::star;
 
 namespace framework{
 
-InterceptionHelper::InterceptionHelper(const css::uno::Reference< css::frame::XFrame >&            xOwner,
+InterceptionHelper::InterceptionHelper(const cpo::uno::Reference< css::frame::XFrame >&            xOwner,
                                        rtl::Reference< DispatchProvider >  xSlave)
     : m_xOwnerWeak  (xOwner                       )
     , m_xSlave      (std::move(xSlave                       ))
@@ -42,11 +42,11 @@ InterceptionHelper::~InterceptionHelper()
 {
 }
 
-css::uno::Reference< css::frame::XDispatch > InterceptionHelper::queryDispatch(const css::util::URL&  aURL            ,
+cpo::uno::Reference< css::frame::XDispatch > InterceptionHelper::queryDispatch(const css::util::URL&  aURL            ,
                                                                                         const OUString& sTargetFrameName,
                                                                                               sal_Int32        nSearchFlags    )
 {
-    css::uno::Reference<css::frame::XDispatchProvider> xInterceptor;
+    cpo::uno::Reference<css::frame::XDispatchProvider> xInterceptor;
     // SAFE {
     {
         SolarMutexGuard aReadLock;
@@ -82,15 +82,15 @@ css::uno::Reference< css::frame::XDispatch > InterceptionHelper::queryDispatch(c
     }
     // } SAFE
 
-    css::uno::Reference< css::frame::XDispatch > xReturn;
+    cpo::uno::Reference< css::frame::XDispatch > xReturn;
     if (xInterceptor.is())
         xReturn = xInterceptor->queryDispatch(aURL, sTargetFrameName, nSearchFlags);
     return xReturn;
 }
 
-cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > InterceptionHelper::queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor )
+cpo::uno::Sequence< cpo::uno::Reference< css::frame::XDispatch > > InterceptionHelper::queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor )
 {
-    cpo::uno::Sequence<css::uno::Reference<css::frame::XDispatch>> lDispatches(lDescriptor.getLength());
+    cpo::uno::Sequence<cpo::uno::Reference<css::frame::XDispatch>> lDispatches(lDescriptor.getLength());
     std::transform(lDescriptor.begin(), lDescriptor.end(), lDispatches.getArray(),
                    [this](const css::frame::DispatchDescriptor& r)
                    { return queryDispatch(r.FeatureURL, r.FrameName, r.SearchFlags); });
@@ -98,10 +98,10 @@ cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > InterceptionH
     return lDispatches;
 }
 
-void InterceptionHelper::registerDispatchProviderInterceptor(const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor)
+void InterceptionHelper::registerDispatchProviderInterceptor(const cpo::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor)
 {
     // reject incorrect calls of this interface method
-    css::uno::Reference< css::frame::XDispatchProvider > xThis(this);
+    cpo::uno::Reference< css::frame::XDispatchProvider > xThis(this);
     if (!xInterceptor.is())
         throw cpo::uno::RuntimeException(u"NULL references not allowed as in parameter"_ustr, xThis);
 
@@ -111,7 +111,7 @@ void InterceptionHelper::registerDispatchProviderInterceptor(const css::uno::Ref
     InterceptorInfo aInfo;
 
     aInfo.xInterceptor = xInterceptor;
-    css::uno::Reference< css::frame::XInterceptorInfo > xInfo(xInterceptor, css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::frame::XInterceptorInfo > xInfo(xInterceptor, cpo::uno::UNO_QUERY);
     if (xInfo.is())
         aInfo.lURLPattern = xInfo->getInterceptedURLs();
     else
@@ -137,8 +137,8 @@ void InterceptionHelper::registerDispatchProviderInterceptor(const css::uno::Ref
     // insert it before any other existing interceptor - means at the beginning of our list.
     else
     {
-        css::uno::Reference< css::frame::XDispatchProvider >            xSlaveD = m_lInterceptionRegs.begin()->xInterceptor;
-        css::uno::Reference< css::frame::XDispatchProviderInterceptor > xSlaveI (xSlaveD , css::uno::UNO_QUERY);
+        cpo::uno::Reference< css::frame::XDispatchProvider >            xSlaveD = m_lInterceptionRegs.begin()->xInterceptor;
+        cpo::uno::Reference< css::frame::XDispatchProviderInterceptor > xSlaveI (xSlaveD , cpo::uno::UNO_QUERY);
 
         xInterceptor->setMasterDispatchProvider(xThis             );
         xInterceptor->setSlaveDispatchProvider (xSlaveD           );
@@ -147,7 +147,7 @@ void InterceptionHelper::registerDispatchProviderInterceptor(const css::uno::Ref
         m_lInterceptionRegs.push_front(std::move(aInfo));
     }
 
-    css::uno::Reference< css::frame::XFrame > xOwner(m_xOwnerWeak.get(), css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::frame::XFrame > xOwner(m_xOwnerWeak.get(), cpo::uno::UNO_QUERY);
 
     aWriteLock.clear();
     // } SAFE
@@ -158,10 +158,10 @@ void InterceptionHelper::registerDispatchProviderInterceptor(const css::uno::Ref
         xOwner->contextChanged();
 }
 
-void InterceptionHelper::releaseDispatchProviderInterceptor(const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor)
+void InterceptionHelper::releaseDispatchProviderInterceptor(const cpo::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor)
 {
     // reject wrong calling of this interface method
-    css::uno::Reference< css::frame::XDispatchProvider > xThis(this);
+    cpo::uno::Reference< css::frame::XDispatchProvider > xThis(this);
     if (!xInterceptor.is())
         throw cpo::uno::RuntimeException(u"NULL references not allowed as in parameter"_ustr, xThis);
 
@@ -176,10 +176,10 @@ void InterceptionHelper::releaseDispatchProviderInterceptor(const css::uno::Refe
     InterceptorList::iterator pIt = m_lInterceptionRegs.findByReference(xInterceptor);
     if (pIt != m_lInterceptionRegs.end())
     {
-        css::uno::Reference< css::frame::XDispatchProvider >            xSlaveD  = xInterceptor->getSlaveDispatchProvider();
-        css::uno::Reference< css::frame::XDispatchProvider >            xMasterD = xInterceptor->getMasterDispatchProvider();
-        css::uno::Reference< css::frame::XDispatchProviderInterceptor > xSlaveI  (xSlaveD                                  , css::uno::UNO_QUERY);
-        css::uno::Reference< css::frame::XDispatchProviderInterceptor > xMasterI (xMasterD                                 , css::uno::UNO_QUERY);
+        cpo::uno::Reference< css::frame::XDispatchProvider >            xSlaveD  = xInterceptor->getSlaveDispatchProvider();
+        cpo::uno::Reference< css::frame::XDispatchProvider >            xMasterD = xInterceptor->getMasterDispatchProvider();
+        cpo::uno::Reference< css::frame::XDispatchProviderInterceptor > xSlaveI  (xSlaveD                                  , cpo::uno::UNO_QUERY);
+        cpo::uno::Reference< css::frame::XDispatchProviderInterceptor > xMasterI (xMasterD                                 , cpo::uno::UNO_QUERY);
 
         if (xMasterI.is())
             xMasterI->setSlaveDispatchProvider(xSlaveD);
@@ -198,13 +198,13 @@ void InterceptionHelper::releaseDispatchProviderInterceptor(const css::uno::Refe
             }
         }
 
-        xInterceptor->setSlaveDispatchProvider (css::uno::Reference< css::frame::XDispatchProvider >());
-        xInterceptor->setMasterDispatchProvider(css::uno::Reference< css::frame::XDispatchProvider >());
+        xInterceptor->setSlaveDispatchProvider (cpo::uno::Reference< css::frame::XDispatchProvider >());
+        xInterceptor->setMasterDispatchProvider(cpo::uno::Reference< css::frame::XDispatchProvider >());
 
         m_lInterceptionRegs.erase(pIt);
     }
 
-    css::uno::Reference< css::frame::XFrame > xOwner(m_xOwnerWeak.get(), css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::frame::XFrame > xOwner(m_xOwnerWeak.get(), cpo::uno::UNO_QUERY);
 
     aWriteLock.clear();
     // } SAFE
@@ -223,13 +223,13 @@ void InterceptionHelper::disposing(const css::lang::EventObject& aEvent)
     SolarMutexResettableGuard aReadLock;
 
     // check call... we accept such disposing calls only from our owner frame.
-    css::uno::Reference< css::frame::XFrame > xOwner(m_xOwnerWeak.get(), css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::frame::XFrame > xOwner(m_xOwnerWeak.get(), cpo::uno::UNO_QUERY);
     if (aEvent.Source != xOwner)
         return;
 
     // Because every interceptor hold at least one reference to us ... and we destruct this list
     // of interception objects ... we should hold ourself alive .-)
-    css::uno::Reference< css::frame::XDispatchProvider > xThis(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference< css::frame::XDispatchProvider > xThis(static_cast< ::cppu::OWeakObject* >(this), cpo::uno::UNO_QUERY_THROW);
 
     // We need a full copy of all currently registered interceptor objects.
     // Otherwise we can't iterate over this vector without the risk, that our iterator will be invalid.
@@ -243,7 +243,7 @@ void InterceptionHelper::disposing(const css::lang::EventObject& aEvent)
     {
         if (elem.xInterceptor.is())
         {
-            css::uno::Reference< css::frame::XDispatchProviderInterceptor > xInterceptor(elem.xInterceptor, css::uno::UNO_QUERY_THROW);
+            cpo::uno::Reference< css::frame::XDispatchProviderInterceptor > xInterceptor(elem.xInterceptor, cpo::uno::UNO_QUERY_THROW);
             releaseDispatchProviderInterceptor(xInterceptor);
             elem.xInterceptor.clear();
         }

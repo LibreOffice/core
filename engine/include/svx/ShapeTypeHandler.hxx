@@ -32,7 +32,7 @@ namespace accessibility { class AccessibleShape; }
 namespace accessibility { class AccessibleShapeInfo; }
 namespace accessibility { class AccessibleShapeTreeInfo; }
 namespace com::sun::star::drawing { class XShape; }
-namespace com::sun::star::uno { template <typename > class Reference; }
+namespace cpo::uno { template <typename > class Reference; }
 
 namespace accessibility {
 
@@ -96,7 +96,7 @@ public:
              set or the referenced object does not support the
              XShapeDescriptor interface.
      */
-    ShapeTypeId GetTypeId (const css::uno::Reference<
+    ShapeTypeId GetTypeId (const cpo::uno::Reference<
         css::drawing::XShape>& rxShape) const;
 
     /**  Create a new accessible object for the given shape.
@@ -130,7 +130,7 @@ public:
     ///
     /// @throws cpo::uno::RuntimeException
     static OUString CreateAccessibleBaseName (
-        const css::uno::Reference< css::drawing::XShape >& rxShape);
+        const cpo::uno::Reference< css::drawing::XShape >& rxShape);
 
 private:
     // Declare default constructor, copy constructor, destructor, and
@@ -169,7 +169,7 @@ private:
              Returns the slot id of the shape with the given service name or
              0 when the service name is not known.
      */
-    SVX_DLLPRIVATE ShapeTypeId GetSlotId(const css::uno::Reference<
+    SVX_DLLPRIVATE ShapeTypeId GetSlotId(const cpo::uno::Reference<
         css::drawing::XShape>& rxShape) const;
 };
 

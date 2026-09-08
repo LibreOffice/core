@@ -21,7 +21,7 @@
 #define INCLUDED_OOX_HELPER_PROPERTYSET_HXX
 
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <oox/dllapi.h>
 #include <rtl/ustring.hxx>
@@ -61,7 +61,7 @@ public:
 
     /** Constructs a property set wrapper with the passed UNO property set. */
     explicit     PropertySet(
-                            const css::uno::Reference< css::beans::XPropertySet >& rxPropSet )
+                            const cpo::uno::Reference< css::beans::XPropertySet >& rxPropSet )
                                 { set( rxPropSet ); }
 
     /** Constructs a property set wrapper after querying the XPropertySet interface. */
@@ -69,12 +69,12 @@ public:
     explicit     PropertySet( const Type& rObject ) { set( rObject ); }
 
     /** Sets the passed UNO property set and releases the old UNO property set. */
-    void                set( const css::uno::Reference< css::beans::XPropertySet >& rxPropSet );
+    void                set( const cpo::uno::Reference< css::beans::XPropertySet >& rxPropSet );
 
     /** Queries the passed object (interface or any) for an XPropertySet and releases the old UNO property set. */
     template< typename Type >
     void         set( const Type& rObject )
-                            { set( css::uno::Reference< css::beans::XPropertySet >( rObject, css::uno::UNO_QUERY ) ); }
+                            { set( cpo::uno::Reference< css::beans::XPropertySet >( rObject, cpo::uno::UNO_QUERY ) ); }
 
     /** Returns true, if the contained XPropertySet interface is valid. */
     bool         is() const { return mxPropSet.is(); }
@@ -135,11 +135,11 @@ private:
     bool                implSetPropertyValue( const OUString& rPropName, const cpo::uno::Any& rValue );
 
 private:
-    css::uno::Reference< css::beans::XPropertySet >
+    cpo::uno::Reference< css::beans::XPropertySet >
                         mxPropSet;          ///< The mandatory property set interface.
-    css::uno::Reference< css::beans::XMultiPropertySet >
+    cpo::uno::Reference< css::beans::XMultiPropertySet >
                         mxMultiPropSet;     ///< The optional multi property set interface.
-    css::uno::Reference< css::beans::XPropertySetInfo >
+    cpo::uno::Reference< css::beans::XPropertySetInfo >
                         mxPropSetInfo;      ///< Property information.
 };
 

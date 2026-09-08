@@ -48,7 +48,7 @@ class OImageControlModel final
     bool                                              m_bExternalGraphic;
     bool                                              m_bReadOnly;
     OUString                                          m_sImageURL;
-    css::uno::Reference< css::graphic::XGraphicObject >
+    cpo::uno::Reference< css::graphic::XGraphicObject >
                                                       m_xGraphicObject;
     OUString                                          m_sDocumentURL;
 
@@ -59,11 +59,11 @@ class OImageControlModel final
 
 public:
     OImageControlModel(
-        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
+        const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     OImageControlModel(
         const OImageControlModel* _pOriginal,
-        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
+        const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     virtual ~OImageControlModel() override;
 
@@ -84,15 +84,15 @@ public:
 
     // XPersistObject
     virtual OUString getServiceName() override;
-    virtual void write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
-    virtual void read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
+    virtual void write(const cpo::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
+    virtual void read(const cpo::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
 
     // XImageProducerSupplier
-    virtual css::uno::Reference< css::awt::XImageProducer> getImageProducer() override;
+    virtual cpo::uno::Reference< css::awt::XImageProducer> getImageProducer() override;
 
     // XImageProducer
-    virtual void addConsumer( const css::uno::Reference< css::awt::XImageConsumer >& xConsumer ) override;
-    virtual void removeConsumer( const css::uno::Reference< css::awt::XImageConsumer >& xConsumer ) override;
+    virtual void addConsumer( const cpo::uno::Reference< css::awt::XImageConsumer >& xConsumer ) override;
+    virtual void removeConsumer( const cpo::uno::Reference< css::awt::XImageConsumer >& xConsumer ) override;
     virtual void startProduction(  ) override;
 
     // OControlModel's property handling
@@ -109,7 +109,7 @@ public:
 
 private:
     // OBoundControlModel overridables
-    virtual void            onConnectedDbColumn( const css::uno::Reference< cpo::uno::XInterface >& _rxForm ) override;
+    virtual void            onConnectedDbColumn( const cpo::uno::Reference< cpo::uno::XInterface >& _rxForm ) override;
     virtual void            onDisconnectedDbColumn() override;
     virtual cpo::uno::Any   translateDbColumnToControlValue( ) override;
     virtual bool            commitControlValueToDbColumn( bool _bPostReset ) override;
@@ -121,7 +121,7 @@ private:
 
     virtual void            resetNoBroadcast() override;
 
-    virtual css::uno::Reference< css::util::XCloneable > createClone(  ) override;
+    virtual cpo::uno::Reference< css::util::XCloneable > createClone(  ) override;
 
     void implConstruct();
 
@@ -152,7 +152,7 @@ private:
     virtual cpo::uno::Sequence< cpo::uno::Type> _getTypes() override;
 
 public:
-    explicit OImageControlControl(const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory);
+    explicit OImageControlControl(const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory);
 
     // UNO
     DECLARE_UNO3_AGG_DEFAULTS( OImageControlControl, OBoundControl )
@@ -174,8 +174,8 @@ public:
     virtual void mouseExited(const css::awt::MouseEvent& e) override;
 
     // XModifyBroadcaster
-    virtual void addModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
-    virtual void removeModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+    virtual void addModifyListener( const cpo::uno::Reference< css::util::XModifyListener >& aListener ) override;
+    virtual void removeModifyListener( const cpo::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
     // OComponentHelper
     virtual void disposing() override;

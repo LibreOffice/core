@@ -15,7 +15,7 @@ class StylePropertiesContext : public SvXMLPropertySetContext
 {
 public:
     StylePropertiesContext(SvXMLImport& rImport, sal_Int32 nElement,
-                           const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+                           const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                            sal_uInt32 nFamily, std::vector<XMLPropertyState>& rProps,
                            SvXMLImportPropertyMapper* pMap);
 
@@ -23,8 +23,8 @@ public:
 
     using SvXMLPropertySetContext::createFastChildContext;
 
-    virtual css::uno::Reference<css::xml::sax::XFastContextHandler> createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+    virtual cpo::uno::Reference<css::xml::sax::XFastContextHandler> createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
         std::vector<XMLPropertyState>& rProperties, const XMLPropertyState& rProperty) override;
 };
 

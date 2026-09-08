@@ -62,8 +62,8 @@ namespace connectivity::ado
 
         ADORecordset*                   m_pRecordSet;
         OStatement_Base*                m_pStmt;
-        css::uno::Reference< cpo::uno::XInterface>    m_xStatement;
-        css::uno::Reference< css::sdbc::XResultSetMetaData>        m_xMetaData;
+        cpo::uno::Reference< cpo::uno::XInterface>    m_xStatement;
+        cpo::uno::Reference< css::sdbc::XResultSetMetaData>        m_xMetaData;
         std::vector<OLEVariant>       m_aBookmarks;
         OLEVariant                      m_aValue;
         long m_nRowPos;
@@ -124,7 +124,7 @@ namespace connectivity::ado
 
         // late constructor
         void construct();
-        void setMetaData(const css::uno::Reference< css::sdbc::XResultSetMetaData>& _xMetaData) { m_xMetaData = _xMetaData;}
+        void setMetaData(const cpo::uno::Reference< css::sdbc::XResultSetMetaData>& _xMetaData) { m_xMetaData = _xMetaData;}
 
         virtual OUString getImplementationName(  ) override;
         virtual bool supportsService( const OUString& ServiceName ) override;
@@ -139,7 +139,7 @@ namespace connectivity::ado
         //XTypeProvider
         virtual cpo::uno::Sequence< cpo::uno::Type > getTypes(  ) override;
         // XPropertySet
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+        virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
         // XResultSet
         virtual bool next(  ) override;
         virtual bool isBeforeFirst(  ) override;
@@ -158,7 +158,7 @@ namespace connectivity::ado
         virtual bool rowUpdated(  ) override;
         virtual bool rowInserted(  ) override;
         virtual bool rowDeleted(  ) override;
-        virtual css::uno::Reference< cpo::uno::XInterface > getStatement(  ) override;
+        virtual cpo::uno::Reference< cpo::uno::XInterface > getStatement(  ) override;
         // XRow
         virtual bool wasNull(  ) override;
         virtual OUString getString( sal_Int32 columnIndex ) override;
@@ -173,15 +173,15 @@ namespace connectivity::ado
         virtual css::util::Date getDate( sal_Int32 columnIndex ) override;
         virtual css::util::Time getTime( sal_Int32 columnIndex ) override;
         virtual css::util::DateTime getTimestamp( sal_Int32 columnIndex ) override;
-        virtual css::uno::Reference< css::io::XInputStream > getBinaryStream( sal_Int32 columnIndex ) override;
-        virtual css::uno::Reference< css::io::XInputStream > getCharacterStream( sal_Int32 columnIndex ) override;
-        virtual cpo::uno::Any getObject( sal_Int32 columnIndex, const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
-        virtual css::uno::Reference< css::sdbc::XRef > getRef( sal_Int32 columnIndex ) override;
-        virtual css::uno::Reference< css::sdbc::XBlob > getBlob( sal_Int32 columnIndex ) override;
-        virtual css::uno::Reference< css::sdbc::XClob > getClob( sal_Int32 columnIndex ) override;
-        virtual css::uno::Reference< css::sdbc::XArray > getArray( sal_Int32 columnIndex ) override;
+        virtual cpo::uno::Reference< css::io::XInputStream > getBinaryStream( sal_Int32 columnIndex ) override;
+        virtual cpo::uno::Reference< css::io::XInputStream > getCharacterStream( sal_Int32 columnIndex ) override;
+        virtual cpo::uno::Any getObject( sal_Int32 columnIndex, const cpo::uno::Reference< css::container::XNameAccess >& typeMap ) override;
+        virtual cpo::uno::Reference< css::sdbc::XRef > getRef( sal_Int32 columnIndex ) override;
+        virtual cpo::uno::Reference< css::sdbc::XBlob > getBlob( sal_Int32 columnIndex ) override;
+        virtual cpo::uno::Reference< css::sdbc::XClob > getClob( sal_Int32 columnIndex ) override;
+        virtual cpo::uno::Reference< css::sdbc::XArray > getArray( sal_Int32 columnIndex ) override;
         // XResultSetMetaDataSupplier
-        virtual css::uno::Reference< css::sdbc::XResultSetMetaData > getMetaData(  ) override;
+        virtual cpo::uno::Reference< css::sdbc::XResultSetMetaData > getMetaData(  ) override;
         // XCancellable
         virtual void cancel(  ) override;
         // XCloseable
@@ -210,8 +210,8 @@ namespace connectivity::ado
         virtual void updateDate( sal_Int32 columnIndex, const css::util::Date& x ) override;
         virtual void updateTime( sal_Int32 columnIndex, const css::util::Time& x ) override;
         virtual void updateTimestamp( sal_Int32 columnIndex, const css::util::DateTime& x ) override;
-        virtual void updateBinaryStream( sal_Int32 columnIndex, const css::uno::Reference< css::io::XInputStream >& x, sal_Int32 length ) override;
-        virtual void updateCharacterStream( sal_Int32 columnIndex, const css::uno::Reference< css::io::XInputStream >& x, sal_Int32 length ) override;
+        virtual void updateBinaryStream( sal_Int32 columnIndex, const cpo::uno::Reference< css::io::XInputStream >& x, sal_Int32 length ) override;
+        virtual void updateCharacterStream( sal_Int32 columnIndex, const cpo::uno::Reference< css::io::XInputStream >& x, sal_Int32 length ) override;
         virtual void updateObject( sal_Int32 columnIndex, const cpo::uno::Any& x ) override;
         virtual void updateNumericObject( sal_Int32 columnIndex, const cpo::uno::Any& x, sal_Int32 scale ) override;
         // XColumnLocate

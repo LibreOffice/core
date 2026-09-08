@@ -185,8 +185,8 @@ public:
     void                Copy();
     void                Paste();
 
-    SAL_DLLPRIVATE void Copy( css::uno::Reference< css::datatransfer::clipboard::XClipboard > const & rxClipboard );
-    SAL_DLLPRIVATE void Paste( css::uno::Reference< css::datatransfer::clipboard::XClipboard > const & rxClipboard );
+    SAL_DLLPRIVATE void Copy( cpo::uno::Reference< css::datatransfer::clipboard::XClipboard > const & rxClipboard );
+    SAL_DLLPRIVATE void Paste( cpo::uno::Reference< css::datatransfer::clipboard::XClipboard > const & rxClipboard );
 
     void                Undo();
     void                Redo();

@@ -20,6 +20,7 @@
 #include <com/sun/star/util/XChangesBatch.hpp>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace ::cpo::uno;
 
 namespace

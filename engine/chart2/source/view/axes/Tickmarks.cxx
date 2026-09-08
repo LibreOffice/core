@@ -27,6 +27,7 @@
 #include <utility>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using ::basegfx::B2DVector;
 
 namespace chart {

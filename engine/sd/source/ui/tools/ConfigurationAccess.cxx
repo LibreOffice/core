@@ -29,7 +29,7 @@
 #include <sal/log.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 namespace sdtools {
@@ -81,7 +81,7 @@ Any ConfigurationAccess::GetConfigurationNode (
 }
 
 Any ConfigurationAccess::GetConfigurationNode (
-    const css::uno::Reference<css::container::XHierarchicalNameAccess>& rxNode,
+    const cpo::uno::Reference<css::container::XHierarchicalNameAccess>& rxNode,
     const OUString& sPathToNode)
 {
     if (sPathToNode.isEmpty())

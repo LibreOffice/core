@@ -28,7 +28,7 @@
 #include <com/sun/star/i18n/ScriptType.hpp>
 
 using namespace utl;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 static LanguageType lcl_LanguageOfType(sal_Int16 nType, LanguageType eWestern, LanguageType eCJK, LanguageType eCTL)

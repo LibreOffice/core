@@ -299,7 +299,7 @@ void Edit::ImplInit(vcl::Window* pParent, WinBits nStyle)
     SetPointer( PointerStyle::Text );
     ApplySettings(*GetOutDev());
 
-    css::uno::Reference<css::datatransfer::dnd::XDragGestureRecognizer> xDGR = GetDropTarget();
+    cpo::uno::Reference<css::datatransfer::dnd::XDragGestureRecognizer> xDGR = GetDropTarget();
     if ( xDGR.is() )
     {
         xDGR->addDragGestureListener( mxDnDListener );
@@ -642,7 +642,7 @@ void Edit::ImplDelete( const Selection& rSelection, sal_uInt8 nDirection, sal_uI
 
     if ( !aSelection.Len() )
     {
-        css::uno::Reference<css::i18n::XBreakIterator> xBI = ImplGetBreakIterator();
+        cpo::uno::Reference<css::i18n::XBreakIterator> xBI = ImplGetBreakIterator();
         if ( nDirection == EDIT_DEL_LEFT )
         {
             if ( nMode == EDIT_DELMODE_RESTOFWORD )
@@ -706,14 +706,14 @@ OUString Edit::ImplGetValidString( const OUString& rString )
     return aValidString;
 }
 
-css::uno::Reference<css::i18n::XBreakIterator> const& Edit::ImplGetBreakIterator()
+cpo::uno::Reference<css::i18n::XBreakIterator> const& Edit::ImplGetBreakIterator()
 {
     if (!mxBreakIterator)
         mxBreakIterator = css::i18n::BreakIterator::create(::comphelper::getProcessComponentContext());
     return mxBreakIterator;
 }
 
-css::uno::Reference<css::i18n::XExtendedInputSequenceChecker> const& Edit::ImplGetInputSequenceChecker()
+cpo::uno::Reference<css::i18n::XExtendedInputSequenceChecker> const& Edit::ImplGetInputSequenceChecker()
 {
     if (!mxISC.is())
         mxISC = css::i18n::InputSequenceChecker::create(::comphelper::getProcessComponentContext());
@@ -767,7 +767,7 @@ void Edit::ImplInsertText( const OUString& rStr, const Selection* pNewSel, bool 
 
         // determine if input-sequence-checking should be applied or not
 
-        css::uno::Reference<css::i18n::XBreakIterator> xBI = ImplGetBreakIterator();
+        cpo::uno::Reference<css::i18n::XBreakIterator> xBI = ImplGetBreakIterator();
         bool bIsInputSequenceChecking = rStr.getLength() == 1 &&
                 officecfg::Office::Common::I18N::CTL::CTLFont::get() &&
                 officecfg::Office::Common::I18N::CTL::CTLSequenceChecking::get() &&
@@ -776,7 +776,7 @@ void Edit::ImplInsertText( const OUString& rStr, const Selection* pNewSel, bool 
 
         if (bIsInputSequenceChecking)
         {
-            css::uno::Reference <css::i18n::XExtendedInputSequenceChecker> xISC = ImplGetInputSequenceChecker();
+            cpo::uno::Reference <css::i18n::XExtendedInputSequenceChecker> xISC = ImplGetInputSequenceChecker();
             if (xISC.is())
             {
                 sal_Unicode cChar = rStr[0];
@@ -1207,22 +1207,22 @@ void Edit::ImplCopyToSelectionClipboard()
 {
     if ( GetSelection().Len() )
     {
-        css::uno::Reference<css::datatransfer::clipboard::XClipboard> aSelection(GetSystemPrimarySelection());
+        cpo::uno::Reference<css::datatransfer::clipboard::XClipboard> aSelection(GetSystemPrimarySelection());
         ImplCopy( aSelection );
     }
 }
 
-void Edit::ImplCopy(css::uno::Reference<css::datatransfer::clipboard::XClipboard> const & rxClipboard)
+void Edit::ImplCopy(cpo::uno::Reference<css::datatransfer::clipboard::XClipboard> const & rxClipboard)
 {
     vcl::unohelper::TextDataObject::CopyStringTo( GetSelected(), rxClipboard );
 }
 
-void Edit::ImplPaste(css::uno::Reference<css::datatransfer::clipboard::XClipboard> const & rxClipboard)
+void Edit::ImplPaste(cpo::uno::Reference<css::datatransfer::clipboard::XClipboard> const & rxClipboard)
 {
     if ( !rxClipboard.is() )
         return;
 
-    css::uno::Reference<css::datatransfer::XTransferable> xDataObj;
+    cpo::uno::Reference<css::datatransfer::XTransferable> xDataObj;
 
     try
         {
@@ -1297,7 +1297,7 @@ void Edit::MouseButtonDown( const MouseEvent& rMEvt )
         }
         else if ( rMEvt.GetClicks() == 2 )
         {
-            css::uno::Reference <css::i18n::XBreakIterator> xBI = ImplGetBreakIterator();
+            cpo::uno::Reference <css::i18n::XBreakIterator> xBI = ImplGetBreakIterator();
             css::i18n::Boundary aBoundary = xBI->getWordBoundary( maText.toString(), aSelection.Max(),
                      GetSettings().GetLanguageTag().getLocale(), css::i18n::WordType::ANYWORD_IGNOREWHITESPACES, true );
             ImplSetSelection( Selection( aBoundary.startPos, aBoundary.endPos ) );
@@ -1326,7 +1326,7 @@ void Edit::MouseButtonUp( const MouseEvent& rMEvt )
     else if ( rMEvt.IsMiddle() && !mbReadOnly &&
               ( GetSettings().GetMouseSettings().GetMiddleButtonAction() == MouseMiddleButtonAction::PasteSelection ) )
     {
-        css::uno::Reference<css::datatransfer::clipboard::XClipboard> aSelection(GetSystemPrimarySelection());
+        cpo::uno::Reference<css::datatransfer::clipboard::XClipboard> aSelection(GetSystemPrimarySelection());
         ImplPaste( aSelection );
         Modify();
     }
@@ -1474,7 +1474,7 @@ bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
                 if ( !rKEvt.GetKeyCode().IsMod2() )
                 {
                     ImplClearLayoutData();
-                    css::uno::Reference<css::i18n::XBreakIterator> xBI = ImplGetBreakIterator();
+                    cpo::uno::Reference<css::i18n::XBreakIterator> xBI = ImplGetBreakIterator();
 
                     Selection aSel( maSelection );
                     bool bWord = rKEvt.GetKeyCode().IsMod1();
@@ -1927,11 +1927,11 @@ void Edit::Command( const CommandEvent& rCEvt )
         {
             // only paste if text available in clipboard
             bool bData = false;
-            css::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipboard = GetClipboard();
+            cpo::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipboard = GetClipboard();
 
             if ( xClipboard.is() )
             {
-                css::uno::Reference<css::datatransfer::XTransferable> xDataObj;
+                cpo::uno::Reference<css::datatransfer::XTransferable> xDataObj;
                 {
                     SolarMutexReleaser aReleaser;
                     xDataObj = xClipboard->getContents();
@@ -2497,14 +2497,14 @@ void Edit::Copy()
 {
     if ( !mbPassword )
     {
-        css::uno::Reference<css::datatransfer::clipboard::XClipboard> aClipboard(GetClipboard());
+        cpo::uno::Reference<css::datatransfer::clipboard::XClipboard> aClipboard(GetClipboard());
         ImplCopy( aClipboard );
     }
 }
 
 void Edit::Paste()
 {
-    css::uno::Reference<css::datatransfer::clipboard::XClipboard> aClipboard(GetClipboard());
+    cpo::uno::Reference<css::datatransfer::clipboard::XClipboard> aClipboard(GetClipboard());
     ImplPaste( aClipboard );
 }
 
@@ -2782,7 +2782,7 @@ void Edit::drop( const css::datatransfer::dnd::DropTargetDropEvent& rDTDE )
         aSel.Max() = mpDDInfo->nDropPos;
         ImplSetSelection( aSel );
 
-        css::uno::Reference<css::datatransfer::XTransferable> xDataObj = rDTDE.Transferable;
+        cpo::uno::Reference<css::datatransfer::XTransferable> xDataObj = rDTDE.Transferable;
         if ( xDataObj.is() )
         {
             css::datatransfer::DataFlavor aFlavor;

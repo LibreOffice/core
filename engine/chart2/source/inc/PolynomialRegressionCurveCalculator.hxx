@@ -37,7 +37,7 @@ public:
 
 protected:
     virtual OUString ImplGetRepresentation(
-        const css::uno::Reference<css::util::XNumberFormatter>& xNumFormatter,
+        const cpo::uno::Reference<css::util::XNumberFormatter>& xNumFormatter,
         sal_Int32 nNumberFormatKey, sal_Int32* pFormulaMaxWidth = nullptr ) const override;
 
     virtual double getCurveValue( double x ) override;

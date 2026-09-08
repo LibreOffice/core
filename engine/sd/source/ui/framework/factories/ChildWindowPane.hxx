@@ -70,7 +70,7 @@ public:
     /** The local getWindow() first calls GetWindow() to provide a valid
         window pointer before forwarding the call to the base class.
     */
-    virtual css::uno::Reference<css::awt::XWindow> getWindow() override;
+    virtual cpo::uno::Reference<css::awt::XWindow> getWindow() override;
 
     // XEventListener
 

@@ -25,7 +25,7 @@
 #include "IVistaFilePickerInternalNotify.hxx"
 
 #include <com/sun/star/ui/dialogs/XFilePickerListener.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/multicontainer2.hxx>
@@ -107,10 +107,10 @@ class VistaFilePickerEventHandler : public ::cppu::BaseMutex
         // XFilePickerNotifier
 
         /// @throws cpo::uno::RuntimeException
-        virtual void addFilePickerListener( const css::uno::Reference< css::ui::dialogs::XFilePickerListener >& xListener );
+        virtual void addFilePickerListener( const cpo::uno::Reference< css::ui::dialogs::XFilePickerListener >& xListener );
 
         /// @throws cpo::uno::RuntimeException
-        virtual void removeFilePickerListener( const css::uno::Reference< css::ui::dialogs::XFilePickerListener >& xListener );
+        virtual void removeFilePickerListener( const cpo::uno::Reference< css::ui::dialogs::XFilePickerListener >& xListener );
 
 
         // native interface

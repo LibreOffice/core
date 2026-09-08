@@ -200,13 +200,13 @@ STDMETHODIMP VistaFilePickerEventHandler::OnControlActivating(IFileDialogCustomi
 }
 
 
-void VistaFilePickerEventHandler::addFilePickerListener( const css::uno::Reference< css::ui::dialogs::XFilePickerListener >& xListener )
+void VistaFilePickerEventHandler::addFilePickerListener( const cpo::uno::Reference< css::ui::dialogs::XFilePickerListener >& xListener )
 {
     m_lListener.addInterface(cppu::UnoType<css::ui::dialogs::XFilePickerListener>::get(), xListener);
 }
 
 
-void VistaFilePickerEventHandler::removeFilePickerListener( const css::uno::Reference< css::ui::dialogs::XFilePickerListener >& xListener )
+void VistaFilePickerEventHandler::removeFilePickerListener( const cpo::uno::Reference< css::ui::dialogs::XFilePickerListener >& xListener )
 {
     m_lListener.removeInterface(cppu::UnoType<css::ui::dialogs::XFilePickerListener>::get(), xListener);
 }
@@ -240,7 +240,7 @@ void doRequest(Request& rRequest)
 {
     const ::sal_Int32 nEventID   = rRequest.getRequest();
     const ::sal_Int16 nControlID = rRequest.getArgumentOrDefault(PROP_CONTROL_ID, ::sal_Int16(0));
-    const css::uno::Reference< css::ui::dialogs::XFilePickerListener > xListener = rRequest.getArgumentOrDefault(PROP_PICKER_LISTENER, css::uno::Reference< css::ui::dialogs::XFilePickerListener >());
+    const cpo::uno::Reference< css::ui::dialogs::XFilePickerListener > xListener = rRequest.getArgumentOrDefault(PROP_PICKER_LISTENER, cpo::uno::Reference< css::ui::dialogs::XFilePickerListener >());
 
     if ( ! xListener.is())
         return;
@@ -288,7 +288,7 @@ void VistaFilePickerEventHandler::impl_sendEvent(  EEventType eEventType,
     {
         try
         {
-            css::uno::Reference< css::ui::dialogs::XFilePickerListener > xListener (
+            cpo::uno::Reference< css::ui::dialogs::XFilePickerListener > xListener (
                 static_cast< css::ui::dialogs::XFilePickerListener* >(pIterator.next()));
 
             Request rRequest;

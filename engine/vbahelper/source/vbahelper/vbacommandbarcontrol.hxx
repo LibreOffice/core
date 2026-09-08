@@ -35,8 +35,8 @@ class ScVbaCommandBarControl : public CommandBarControl_BASE
 protected:
     VbaCommandBarHelperRef pCBarHelper;
     OUString               m_sResourceUrl;
-    css::uno::Reference< css::container::XIndexAccess > m_xCurrentSettings;
-    css::uno::Reference< css::container::XIndexAccess > m_xBarSettings;
+    cpo::uno::Reference< css::container::XIndexAccess > m_xCurrentSettings;
+    cpo::uno::Reference< css::container::XIndexAccess > m_xBarSettings;
     cpo::uno::Sequence< css::beans::PropertyValue >     m_aPropertyValues;
 
     sal_Int32           m_nPosition;
@@ -47,7 +47,7 @@ private:
 
 public:
     /// @throws cpo::uno::RuntimeException
-    ScVbaCommandBarControl( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext, css::uno::Reference< css::container::XIndexAccess > xSettings, VbaCommandBarHelperRef pHelper, css::uno::Reference< css::container::XIndexAccess > xBarSettings, OUString sResourceUrl );
+    ScVbaCommandBarControl( const cpo::uno::Reference< ov::XHelperInterface >& xParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext, cpo::uno::Reference< css::container::XIndexAccess > xSettings, VbaCommandBarHelperRef pHelper, cpo::uno::Reference< css::container::XIndexAccess > xBarSettings, OUString sResourceUrl );
 
     // Attributes
     virtual OUString getCaption() override;
@@ -79,7 +79,7 @@ class ScVbaCommandBarPopup : public CommandBarPopup_BASE
 {
 public:
     /// @throws cpo::uno::RuntimeException
-    ScVbaCommandBarPopup( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xSettings, const VbaCommandBarHelperRef& pHelper, const css::uno::Reference< css::container::XIndexAccess >& xBarSettings, const OUString& sResourceUrl, sal_Int32 nPosition );
+    ScVbaCommandBarPopup( const cpo::uno::Reference< ov::XHelperInterface >& xParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext, const cpo::uno::Reference< css::container::XIndexAccess >& xSettings, const VbaCommandBarHelperRef& pHelper, const cpo::uno::Reference< css::container::XIndexAccess >& xBarSettings, const OUString& sResourceUrl, sal_Int32 nPosition );
 
     virtual sal_Int32 getType() override
     {
@@ -95,7 +95,7 @@ class ScVbaCommandBarButton : public CommandBarButton_BASE
 {
 public:
     /// @throws cpo::uno::RuntimeException
-    ScVbaCommandBarButton( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xSettings, const VbaCommandBarHelperRef& pHelper, const css::uno::Reference< css::container::XIndexAccess >& xBarSettings, const OUString& sResourceUrl, sal_Int32 nPosition );
+    ScVbaCommandBarButton( const cpo::uno::Reference< ov::XHelperInterface >& xParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext, const cpo::uno::Reference< css::container::XIndexAccess >& xSettings, const VbaCommandBarHelperRef& pHelper, const cpo::uno::Reference< css::container::XIndexAccess >& xBarSettings, const OUString& sResourceUrl, sal_Int32 nPosition );
 
     virtual sal_Int32 getType() override
     {

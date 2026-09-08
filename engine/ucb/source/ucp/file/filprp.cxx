@@ -24,7 +24,7 @@
 
 using namespace fileaccess;
 using namespace com::sun::star;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::cpo::uno;
 
 XPropertySetInfo_impl::XPropertySetInfo_impl( TaskManager* pMyShell,const OUString& aUnqPath )

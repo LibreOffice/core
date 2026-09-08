@@ -182,9 +182,9 @@ public:
     virtual std::vector< ViewLegendEntry > createLegendEntries(
             const css::awt::Size& rEntryKeyAspectRatio,
             css::chart2::LegendPosition eLegendPosition,
-            const css::uno::Reference< css::beans::XPropertySet >& xTextProperties,
+            const cpo::uno::Reference< css::beans::XPropertySet >& xTextProperties,
             const rtl::Reference<SvxShapeGroupAnyD>& xTarget,
-            const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
             ChartModel& rModel
                 ) override;
 
@@ -207,21 +207,21 @@ public:
     std::vector< ViewLegendEntry > createLegendEntriesForSeries(
             const css::awt::Size& rEntryKeyAspectRatio,
             const VDataSeries& rSeries,
-            const css::uno::Reference< css::beans::XPropertySet >& xTextProperties,
+            const cpo::uno::Reference< css::beans::XPropertySet >& xTextProperties,
             const rtl::Reference<SvxShapeGroupAnyD>& xTarget,
-            const css::uno::Reference< cpo::uno::XComponentContext >& xContext
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext
                 );
 
     std::vector<ViewLegendSymbol> createSymbols(
               const css::awt::Size& rEntryKeyAspectRatio
             , const rtl::Reference<SvxShapeGroupAnyD>& xTarget
-            , const css::uno::Reference<cpo::uno::XComponentContext>& xContext);
+            , const cpo::uno::Reference<cpo::uno::XComponentContext>& xContext);
 
     std::vector<ViewLegendSymbol> createSymbolsForSeries(
               const css::awt::Size& rEntryKeyAspectRatio
             , const VDataSeries& rSeries
             , const rtl::Reference<SvxShapeGroupAnyD>& xTarget
-            , const css::uno::Reference<cpo::uno::XComponentContext>& xContext);
+            , const cpo::uno::Reference<cpo::uno::XComponentContext>& xContext);
 
     std::vector<VDataSeries*> getAllSeries();
     std::vector<VDataSeries const*> getAllSeries() const;
@@ -235,9 +235,9 @@ public:
 
     // Methods for number formats and color schemes
 
-    void setNumberFormatsSupplier( const css::uno::Reference< css::util::XNumberFormatsSupplier > & xNumFmtSupplier );
+    void setNumberFormatsSupplier( const cpo::uno::Reference< css::util::XNumberFormatsSupplier > & xNumFmtSupplier );
 
-    void setColorScheme( const css::uno::Reference< css::chart2::XColorScheme >& xColorScheme );
+    void setColorScheme( const cpo::uno::Reference< css::chart2::XColorScheme >& xColorScheme );
 
     void setExplicitCategoriesProvider( ExplicitCategoriesProvider* pExplicitCategoriesProvider );
 
@@ -361,7 +361,7 @@ protected:
     void createErrorBar(
           const rtl::Reference<SvxShapeGroupAnyD>& xTarget
         , const css::drawing::Position3D & rPos
-        , const css::uno::Reference< css::beans::XPropertySet > & xErrorBarProperties
+        , const cpo::uno::Reference< css::beans::XPropertySet > & xErrorBarProperties
         , const VDataSeries& rVDataSeries
         , sal_Int32 nIndex
         , bool bVertical
@@ -381,7 +381,7 @@ protected:
           const css::drawing::Position3D& rPos0
         , const css::drawing::Position3D& rPos1
         , const rtl::Reference<SvxShapeGroupAnyD>& rTarget
-        , const css::uno::Reference< css::beans::XPropertySet >& rErrorBorderProp );
+        , const cpo::uno::Reference< css::beans::XPropertySet >& rErrorBorderProp );
 
     void createErrorBar_X( const css::drawing::Position3D& rUnscaledLogicPosition
         , VDataSeries& rVDataSeries, sal_Int32 nPointIndex
@@ -398,9 +398,9 @@ protected:
         , bool bMaySkipPointsInRegressionCalculation );
 
     void createRegressionCurveEquationShapes( const OUString & rEquationCID
-        , const css::uno::Reference< css::beans::XPropertySet > & xEquationProperties
+        , const cpo::uno::Reference< css::beans::XPropertySet > & xEquationProperties
         , const rtl::Reference<SvxShapeGroupAnyD>& xEquationTarget
-        , const css::uno::Reference< css::chart2::XRegressionCurveCalculator > & xRegressionCurveCalculator
+        , const cpo::uno::Reference< css::chart2::XRegressionCurveCalculator > & xRegressionCurveCalculator
         , css::awt::Point aDefaultPos );
 
     virtual PlottingPositionHelper& getPlottingPositionHelper( sal_Int32 nAxisIndex ) const;//nAxisIndex indicates whether the position belongs to the main axis ( nAxisIndex==0 ) or secondary axis ( nAxisIndex==1 )
@@ -422,7 +422,7 @@ protected:
 
     std::unique_ptr< NumberFormatterWrapper > m_apNumberFormatterWrapper;
 
-    css::uno::Reference< css::chart2::XColorScheme >    m_xColorScheme;
+    cpo::uno::Reference< css::chart2::XColorScheme >    m_xColorScheme;
 
     ExplicitCategoriesProvider*    m_pExplicitCategoriesProvider;
 

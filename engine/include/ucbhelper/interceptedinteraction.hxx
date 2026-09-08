@@ -124,7 +124,7 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public InterceptedInteraction
                     expecting th handle() was overwritten by
                     a derived class.
          */
-        css::uno::Reference< css::task::XInteractionHandler > m_xInterceptedHandler;
+        cpo::uno::Reference< css::task::XInteractionHandler > m_xInterceptedHandler;
 
 
         /** @short  these list contains the requests, which should be intercepted.
@@ -152,7 +152,7 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public InterceptedInteraction
                     the outside interaction handler, which should
                     be intercepted here.
          */
-        void setInterceptedHandler(const css::uno::Reference< css::task::XInteractionHandler >& xInterceptedHandler);
+        void setInterceptedHandler(const cpo::uno::Reference< css::task::XInteractionHandler >& xInterceptedHandler);
 
 
         /** @short  set a new list of intercepted interactions.
@@ -179,8 +179,8 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public InterceptedInteraction
             @return A valid reference to the continuation, if it could be located...
                     or an empty reference otherwise.
          */
-        static css::uno::Reference< css::task::XInteractionContinuation > extractContinuation(
-                    const cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > >& lContinuations,
+        static cpo::uno::Reference< css::task::XInteractionContinuation > extractContinuation(
+                    const cpo::uno::Sequence< cpo::uno::Reference< css::task::XInteractionContinuation > >& lContinuations,
                     const cpo::uno::Type&                                                                                             aType         );
 
 
@@ -217,7 +217,7 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public InterceptedInteraction
                     will be used automatically for this request!
          */
         virtual EInterceptionState intercepted(const InterceptedRequest&                                                             rRequest   ,
-                                               const css::uno::Reference< css::task::XInteractionRequest >& xOrgRequest);
+                                               const cpo::uno::Reference< css::task::XInteractionRequest >& xOrgRequest);
 
 
     // uno interface
@@ -241,7 +241,7 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public InterceptedInteraction
             @param  xRequest
                     the interaction request, which should be intercepted.
          */
-        virtual void handle(const css::uno::Reference< css::task::XInteractionRequest >& xRequest) override;
+        virtual void handle(const cpo::uno::Reference< css::task::XInteractionRequest >& xRequest) override;
 
 
     // helper
@@ -251,7 +251,7 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public InterceptedInteraction
         /** @short  implements the default handling:
                     - intercept or forward to internal handler.
          */
-        UCBHELPER_DLLPRIVATE void impl_handleDefault(const css::uno::Reference< css::task::XInteractionRequest >& xRequest);
+        UCBHELPER_DLLPRIVATE void impl_handleDefault(const cpo::uno::Reference< css::task::XInteractionRequest >& xRequest);
 
 
         /** @short  implements the interception of requests.
@@ -271,7 +271,7 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public InterceptedInteraction
             @return A identifier, which indicates if the request was intercepted,
                     the continuation was found and selected... or not.
          */
-        UCBHELPER_DLLPRIVATE EInterceptionState impl_interceptRequest(const css::uno::Reference< css::task::XInteractionRequest >& xRequest);
+        UCBHELPER_DLLPRIVATE EInterceptionState impl_interceptRequest(const cpo::uno::Reference< css::task::XInteractionRequest >& xRequest);
 };
 
 } // namespace ucbhelper

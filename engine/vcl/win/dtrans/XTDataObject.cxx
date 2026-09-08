@@ -41,7 +41,7 @@
 
 using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::datatransfer::clipboard;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::lang;
 
@@ -88,7 +88,7 @@ class AsyncDereference : public cppu::WeakImplHelper<css::awt::XCallback>
     Reference<XTransferable> maTransferable;
 
 public:
-    AsyncDereference(css::uno::Reference<css::datatransfer::XTransferable> const & rTransferable)
+    AsyncDereference(cpo::uno::Reference<css::datatransfer::XTransferable> const & rTransferable)
         : maTransferable(rTransferable)
     {}
 

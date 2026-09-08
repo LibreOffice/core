@@ -41,8 +41,8 @@ template< typename PROPERTYTYPE >
 class WrappedSeriesOrDiagramProperty : public WrappedProperty
 {
 public:
-    virtual PROPERTYTYPE getValueFromSeries( const css::uno::Reference< css::beans::XPropertySet >& xSeriesPropertySet ) const =0;
-    virtual void setValueToSeries( const css::uno::Reference< css::beans::XPropertySet >& xSeriesPropertySet, const PROPERTYTYPE & aNewValue ) const =0;
+    virtual PROPERTYTYPE getValueFromSeries( const cpo::uno::Reference< css::beans::XPropertySet >& xSeriesPropertySet ) const =0;
+    virtual void setValueToSeries( const cpo::uno::Reference< css::beans::XPropertySet >& xSeriesPropertySet, const PROPERTYTYPE & aNewValue ) const =0;
 
     explicit WrappedSeriesOrDiagramProperty( const OUString& rName, const cpo::uno::Any& rDefaulValue
         , std::shared_ptr<Chart2ModelContact> spChart2ModelContact
@@ -98,7 +98,7 @@ public:
             }
         }
     }
-    virtual void setPropertyValue( const cpo::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override
+    virtual void setPropertyValue( const cpo::uno::Any& rOuterValue, const cpo::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override
     {
         PROPERTYTYPE aNewValue = PROPERTYTYPE();
         if( ! (rOuterValue >>= aNewValue) )
@@ -122,7 +122,7 @@ public:
         }
     }
 
-    virtual cpo::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override
+    virtual cpo::uno::Any getPropertyValue( const cpo::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override
     {
         if( m_ePropertyType == DIAGRAM )
         {
@@ -145,7 +145,7 @@ public:
         }
     }
 
-    virtual cpo::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& /* xInnerPropertyState */ ) const override
+    virtual cpo::uno::Any getPropertyDefault( const cpo::uno::Reference< css::beans::XPropertyState >& /* xInnerPropertyState */ ) const override
     {
         return m_aDefaultValue;
     }

@@ -38,6 +38,7 @@
 #include <comphelper/processfactory.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 const int CharactersBeforeAndAfter = 40;
 const OUString KitPageEntryPrefix = u"-$#~"_ustr;
@@ -130,7 +131,7 @@ SFX_IMPL_DOCKINGWINDOW(QuickFindPanelWrapper, SID_QUICKFIND);
 
 std::unique_ptr<PanelLayout>
 QuickFindPanel::Create(weld::Widget* pParent,
-                       const css::uno::Reference<css::frame::XFrame>& rxFrame,
+                       const cpo::uno::Reference<css::frame::XFrame>& rxFrame,
                        SfxBindings* pBindings)
 {
     if (pParent == nullptr)

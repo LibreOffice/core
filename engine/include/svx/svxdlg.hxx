@@ -57,7 +57,7 @@ class AbstractFmShowColsDialog : public VclAbstractDialog
 protected:
     virtual ~AbstractFmShowColsDialog() override = default;
 public:
-     virtual void SetColumns(const css::uno::Reference< css::container::XIndexContainer>& xCols)= 0;
+     virtual void SetColumns(const cpo::uno::Reference< css::container::XIndexContainer>& xCols)= 0;
 };
 
 class AbstractSvxZoomDialog : public VclAbstractDialog
@@ -143,7 +143,7 @@ class AbstractSvxNewDictionaryDialog :public VclAbstractDialog
 protected:
     virtual ~AbstractSvxNewDictionaryDialog() override = default;
 public:
-    virtual css::uno::Reference< css::linguistic2::XDictionary >  GetNewDictionary() = 0;
+    virtual cpo::uno::Reference< css::linguistic2::XDictionary >  GetNewDictionary() = 0;
 };
 
 class AbstractSvxNameDialog : public VclAbstractDialog
@@ -403,9 +403,9 @@ public:
                                                                         const SdrView* pView,
                                                                         sal_uInt32 nResId )=0;
     virtual VclPtr<SfxAbstractDialog>       CreateCharMapDialog(weld::Window* pParent, const SfxItemSet& rAttr,
-                                                                const css::uno::Reference<css::frame::XFrame>& rFrame) = 0;
+                                                                const cpo::uno::Reference<css::frame::XFrame>& rFrame) = 0;
     virtual VclPtr<SfxAbstractDialog>       CreateEventConfigDialog(weld::Widget* pParent, std::unique_ptr<const SfxItemSet> xAttr,
-                                                                    const css::uno::Reference< css::frame::XFrame >& rFrame) = 0;
+                                                                    const cpo::uno::Reference< css::frame::XFrame >& rFrame) = 0;
     virtual VclPtr<AbstractSvxPostItDialog>    CreateSvxPostItDialog(weld::Widget* pParent, const SfxItemSet& rCoreSet, bool bPrevNext = false) = 0;
     virtual VclPtr<VclAbstractDialog>          CreateSvxScriptOrgDialog(weld::Window* pParent, const OUString& rLanguage) override = 0;
 
@@ -414,18 +414,18 @@ public:
     virtual VclPtr<AbstractSecurityOptionsDialog> CreateSvxSecurityOptionsDialog(weld::Window* pParent) override = 0;
 
     virtual VclPtr<AbstractScriptSelectorDialog> CreateScriptSelectorDialog(weld::Window* pParent,
-            const css::uno::Reference< css::frame::XFrame >& rxFrame) override = 0;
+            const cpo::uno::Reference< css::frame::XFrame >& rxFrame) override = 0;
 
     virtual VclPtr<AbstractMacroManagerDialog> CreateMacroManagerDialog(weld::Window* pParent,
-            const css::uno::Reference< css::frame::XFrame >& rxFrame) override = 0;
+            const cpo::uno::Reference< css::frame::XFrame >& rxFrame) override = 0;
 
     virtual void ShowAsyncScriptErrorDialog(weld::Window* pParent, const cpo::uno::Any& rException) override = 0;
 
     virtual VclPtr<VclAbstractDialog> CreateSvxMacroAssignDlg(
                 weld::Window* _pParent,
-                const css::uno::Reference< css::frame::XFrame >& _rxDocumentFrame,
+                const cpo::uno::Reference< css::frame::XFrame >& _rxDocumentFrame,
                 const bool _bUnoDialogMode,
-                const css::uno::Reference< css::container::XNameReplace >& _rxEvents,
+                const cpo::uno::Reference< css::container::XNameReplace >& _rxEvents,
                 const sal_uInt16 _nInitiallySelectedEvent
             ) = 0;
 

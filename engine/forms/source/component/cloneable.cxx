@@ -28,7 +28,7 @@ namespace frm
 
 
     using namespace ::comphelper;
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
     using namespace ::com::sun::star::util;
 
 
@@ -41,7 +41,7 @@ namespace frm
 
         if (auto xAggregateCloneable = query_aggregation<XCloneable>(_pOriginal->m_xAggregate))
         {
-            xAggregateClone.set(xAggregateCloneable->createClone(), css::uno::UNO_QUERY);
+            xAggregateClone.set(xAggregateCloneable->createClone(), cpo::uno::UNO_QUERY);
             DBG_ASSERT( xAggregateClone.is(), "OCloneableAggregation::createAggregateClone: invalid clone returned by the aggregate!" );
         }
         else {

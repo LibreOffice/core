@@ -35,7 +35,7 @@
 #include <slideshow.hxx>
 #include <ViewShell.hxx>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::presentation;
 
 namespace sd {

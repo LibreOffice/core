@@ -26,6 +26,7 @@
 #include "blowfishcontext.hxx"
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 // static
 uno::Reference< xml::crypto::XCipherContext > BlowfishCFB8CipherContext::Create( const cpo::uno::Sequence< sal_Int8 >& aDerivedKey, const cpo::uno::Sequence< sal_Int8 >& aInitVector, bool bEncrypt )

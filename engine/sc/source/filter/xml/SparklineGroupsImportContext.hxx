@@ -53,21 +53,21 @@ private:
     Color maMarkersColor = COL_TRANSPARENT;
 
     void
-    fillSparklineGroupID(css::uno::Reference<css::xml::sax::XFastAttributeList> const& xAttrList);
+    fillSparklineGroupID(cpo::uno::Reference<css::xml::sax::XFastAttributeList> const& xAttrList);
     void fillSparklineGroupAttributes(
-        css::uno::Reference<css::xml::sax::XFastAttributeList> const& xAttrList);
+        cpo::uno::Reference<css::xml::sax::XFastAttributeList> const& xAttrList);
     void fillSparklineAttributes(
         SparklineImportData& rImportData,
-        css::uno::Reference<css::xml::sax::XFastAttributeList> const& xAttrList);
+        cpo::uno::Reference<css::xml::sax::XFastAttributeList> const& xAttrList);
 
     void insertSparklines();
 
 public:
     SparklineGroupsImportContext(ScXMLImport& rImport);
 
-    css::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
+    cpo::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
         sal_Int32 nElement,
-        css::uno::Reference<css::xml::sax::XFastAttributeList> const& xAttrList) override;
+        cpo::uno::Reference<css::xml::sax::XFastAttributeList> const& xAttrList) override;
 
     void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };

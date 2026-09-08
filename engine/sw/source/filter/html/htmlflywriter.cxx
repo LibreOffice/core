@@ -70,6 +70,7 @@
 #include "htmlreqifreader.hxx"
 
 using namespace css;
+using namespace ::cpo;
 
 const HtmlFrmOpts HTML_FRMOPTS_IMG_ALL        =
     HtmlFrmOpts::Alt |

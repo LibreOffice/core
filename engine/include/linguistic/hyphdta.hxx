@@ -62,7 +62,7 @@ public:
     virtual bool
         isAlternativeSpelling() override;
 
-    static css::uno::Reference <css::linguistic2::XHyphenatedWord> UNLESS_MERGELIBS(LNG_DLLPUBLIC) CreateHyphenatedWord(
+    static cpo::uno::Reference <css::linguistic2::XHyphenatedWord> UNLESS_MERGELIBS(LNG_DLLPUBLIC) CreateHyphenatedWord(
         const OUString &rWord, LanguageType nLang, sal_Int16 nHyphenationPos,
         const OUString &rHyphenatedWord, sal_Int16 nHyphenPos );
 };
@@ -98,7 +98,7 @@ public:
     virtual cpo::uno::Sequence< sal_Int16 >
         getHyphenationPositions() override;
 
-    static css::uno::Reference < css::linguistic2::XPossibleHyphens > UNLESS_MERGELIBS(LNG_DLLPUBLIC) CreatePossibleHyphens
+    static cpo::uno::Reference < css::linguistic2::XPossibleHyphens > UNLESS_MERGELIBS(LNG_DLLPUBLIC) CreatePossibleHyphens
         (const OUString &rWord, LanguageType nLang,
          const OUString &rHyphWord,
          const cpo::uno::Sequence< sal_Int16 > &rPositions);

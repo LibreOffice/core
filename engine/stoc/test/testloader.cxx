@@ -37,7 +37,7 @@
 #define _MAX_PATH PATH_MAX
 #endif
 
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace css::loader;
 using namespace css::lang;

@@ -40,6 +40,7 @@
 namespace chart
 {
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace ::rtl::math;
 using namespace ::com::sun::star::chart2;
 

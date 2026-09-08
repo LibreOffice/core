@@ -40,25 +40,25 @@ namespace utl
     class UNOTOOLS_DLLPUBLIC OConfigurationNode : public ::utl::OEventListenerAdapter
     {
     private:
-        css::uno::Reference< css::container::XHierarchicalNameAccess >
+        cpo::uno::Reference< css::container::XHierarchicalNameAccess >
                     m_xHierarchyAccess;     /// accessing children grandchildren (mandatory interface of our UNO object)
-        css::uno::Reference< css::container::XNameAccess >
+        cpo::uno::Reference< css::container::XNameAccess >
                     m_xDirectAccess;        /// accessing children  (mandatory interface of our UNO object)
-        css::uno::Reference< css::container::XNameReplace >
+        cpo::uno::Reference< css::container::XNameReplace >
                     m_xReplaceAccess;       /// replacing child values
-        css::uno::Reference< css::container::XNameContainer >
+        cpo::uno::Reference< css::container::XNameContainer >
                     m_xContainerAccess;     /// modifying set nodes  (optional interface of our UNO object)
         bool        m_bEscapeNames;         /// escape names before accessing children ?
 
-        OConfigurationNode  insertNode(const OUString& _rName,const css::uno::Reference< cpo::uno::XInterface >& _xNode) const noexcept;
+        OConfigurationNode  insertNode(const OUString& _rName,const cpo::uno::Reference< cpo::uno::XInterface >& _xNode) const noexcept;
 
     protected:
         /// constructs a node object with an interface representing a node
         OConfigurationNode(
-            const css::uno::Reference< cpo::uno::XInterface >& _rxNode
+            const cpo::uno::Reference< cpo::uno::XInterface >& _rxNode
         );
 
-        const css::uno::Reference< css::container::XNameAccess >&
+        const cpo::uno::Reference< css::container::XNameAccess >&
             getUNONode() const { return m_xDirectAccess; }
 
     public:
@@ -161,12 +161,12 @@ namespace utl
     */
     class UNOTOOLS_DLLPUBLIC OConfigurationTreeRoot final : public OConfigurationNode
     {
-        css::uno::Reference< css::util::XChangesBatch >
+        cpo::uno::Reference< css::util::XChangesBatch >
                                 m_xCommitter;
         /** ctor for a readonly node
         */
         OConfigurationTreeRoot(
-            const css::uno::Reference< cpo::uno::XInterface >& _rxRootNode
+            const cpo::uno::Reference< cpo::uno::XInterface >& _rxRootNode
         );
 
     public:
@@ -188,7 +188,7 @@ namespace utl
         /** creates a configuration tree for the given path in the given mode
         */
         OConfigurationTreeRoot(
-            const css::uno::Reference<cpo::uno::XComponentContext> & i_rContext,
+            const cpo::uno::Reference<cpo::uno::XComponentContext> & i_rContext,
             const OUString& i_rNodePath,
             const bool i_bUpdatable
         );
@@ -208,7 +208,7 @@ namespace utl
             @see    createWithServiceFactory
         */
         static OConfigurationTreeRoot createWithProvider(
-                const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxConfProvider,
+                const cpo::uno::Reference< css::lang::XMultiServiceFactory >& _rxConfProvider,
                 const OUString& _rPath,
                 CREATION_MODE _eMode
             );
@@ -224,7 +224,7 @@ namespace utl
             @param      _rPath          path to the node the object should represent
             @param      _eMode          specifies which privileges should be applied when retrieving the node
         */
-        static OConfigurationTreeRoot createWithComponentContext(const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
+        static OConfigurationTreeRoot createWithComponentContext(const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
             const OUString& _rPath, CREATION_MODE _eMode = CM_UPDATABLE);
 
         /** tolerant version of the <member>createWithServiceFactory</member>
@@ -233,7 +233,7 @@ namespace utl
             the configuration could be initialized, errors in the creation of the specific node (e.g. because the
             given node path does not exist) are still asserted.</p>
         */
-        static OConfigurationTreeRoot tryCreateWithComponentContext( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+        static OConfigurationTreeRoot tryCreateWithComponentContext( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
             const OUString& _rPath, CREATION_MODE _eMode = CM_UPDATABLE );
 
         /** commit all changes made on the subtree the object is the root for<p/>

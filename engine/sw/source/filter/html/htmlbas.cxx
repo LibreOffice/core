@@ -29,7 +29,7 @@
 #include <svtools/htmlkywd.hxx>
 
 #include <com/sun/star/document/XEventsSupplier.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/script/XStorageBasedLibraryContainer.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 
@@ -43,8 +43,8 @@
 #include "swhtml.hxx"
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::container;
 
 HTMLOutEvent const aBodyEventTable[] =

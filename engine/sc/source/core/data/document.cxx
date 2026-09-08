@@ -109,6 +109,7 @@
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace WritingMode2 = ::com::sun::star::text::WritingMode2;
 using ::cpo::uno::Sequence;

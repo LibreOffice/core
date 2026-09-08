@@ -60,7 +60,7 @@ public:
     virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
     // XImporter
-    virtual void setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
+    virtual void setTargetDocument( const cpo::uno::Reference< css::lang::XComponent >& xDoc ) override;
 
     // XFilter
     virtual bool filter( const cpo::uno::Sequence< css::beans::PropertyValue >& aDescriptor ) override;

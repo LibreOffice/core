@@ -73,6 +73,7 @@
 using ::cpo::uno::Any;
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace ::xmloff::token;
 
 #define MAP_(name,prefix,token,type,context)  { name, prefix, token, type, context, SvtSaveOptions::ODFSVER_010, false }
@@ -1986,7 +1987,7 @@ void XMLPageExportPropertyMapper::handleElementItem(
         case CTF_PAGE_SOUND_URL:
             {
                 OUString aSoundURL;
-                css::uno::Reference<css::presentation::XSoundReference> xSound;
+                cpo::uno::Reference<css::presentation::XSoundReference> xSound;
                 if( rProperty.maValue >>= xSound )
                 {
                     if( xSound.is() )

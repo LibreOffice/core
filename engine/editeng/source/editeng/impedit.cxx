@@ -49,6 +49,7 @@
 #include <boost/property_tree/ptree.hpp>
 
 using namespace css;
+using namespace ::cpo;
 
 #define SCRLRANGE   20  // Scroll 1/20 of the width/height, when in QueryDrop
 

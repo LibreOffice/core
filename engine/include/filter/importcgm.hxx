@@ -16,7 +16,7 @@
 class SvStream;
 
 FILTER_DLLPUBLIC sal_uInt32
-ImportCGM(SvStream& rIn, css::uno::Reference<css::frame::XModel> const& rXModel,
-          css::uno::Reference<css::task::XStatusIndicator> const& aXStatInd);
+ImportCGM(SvStream& rIn, cpo::uno::Reference<css::frame::XModel> const& rXModel,
+          cpo::uno::Reference<css::task::XStatusIndicator> const& aXStatInd);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

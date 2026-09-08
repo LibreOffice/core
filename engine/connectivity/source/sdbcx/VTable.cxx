@@ -31,7 +31,7 @@ using namespace ::connectivity;
 using namespace ::connectivity::sdbcx;
 using namespace ::dbtools;
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
@@ -273,7 +273,7 @@ void OTable::alterColumnByIndex( sal_Int32 /*index*/, const Reference< XProperty
     throwFeatureNotImplementedSQLException( u"XAlterTable::alterColumnByIndex"_ustr, *this );
 }
 
-css::uno::Reference< css::beans::XPropertySetInfo > OTable::getPropertySetInfo(  )
+cpo::uno::Reference< css::beans::XPropertySetInfo > OTable::getPropertySetInfo(  )
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }

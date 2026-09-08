@@ -63,7 +63,7 @@ class PowerPointExport final : public XmlFilterBase, public PPTWriterBase
     friend class PowerPointShapeExport;
 public:
 
-    PowerPointExport(const css::uno::Reference<cpo::uno::XComponentContext> & rContext, const cpo::uno::Sequence<cpo::uno::Any>& rArguments);
+    PowerPointExport(const cpo::uno::Reference<cpo::uno::XComponentContext> & rContext, const cpo::uno::Sequence<cpo::uno::Any>& rArguments);
 
     virtual ~PowerPointExport() override;
 
@@ -81,7 +81,7 @@ public:
     static const char* GetCornerDirection( sal_uInt8 nDirection );
     static const char* Get8Direction( sal_uInt8 nDirection );
 
-    sal_Int32 GetShapeID(const css::uno::Reference<css::drawing::XShape>& rXShape);
+    sal_Int32 GetShapeID(const cpo::uno::Reference<css::drawing::XShape>& rXShape);
     sal_Int32 GetNextAnimationNodeID();
 
     void embedEffectAudio(const FSHelperPtr& pFS, const OUString& sUrl, OUString& sRelId, OUString& sName);
@@ -89,13 +89,13 @@ public:
 private:
 
     virtual void ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_uInt16 nMode,
-                                 bool bHasBackground, css::uno::Reference< css::beans::XPropertySet > const & aXBackgroundPropSet ) override;
+                                 bool bHasBackground, cpo::uno::Reference< css::beans::XPropertySet > const & aXBackgroundPropSet ) override;
     virtual void ImplWriteNotes( sal_uInt32 nPageNum ) override;
-    virtual void ImplWriteSlideMaster( sal_uInt32 nPageNum, css::uno::Reference< css::beans::XPropertySet > const & aXBackgroundPropSet ) override;
+    virtual void ImplWriteSlideMaster( sal_uInt32 nPageNum, cpo::uno::Reference< css::beans::XPropertySet > const & aXBackgroundPropSet ) override;
     void ImplWritePPTXLayout( sal_Int32 nOffset, sal_uInt32 nMasterNum, const OUString& aSlideName );
     void ImplWritePPTXLayoutWithContent(
         sal_Int32 nOffset, sal_uInt32 nMasterNum, const OUString& aSlideName,
-        css::uno::Reference<css::beans::XPropertySet> const& aXBackgroundPropSet);
+        cpo::uno::Reference<css::beans::XPropertySet> const& aXBackgroundPropSet);
     void WriteLayoutClrMapOvr(const ::sax_fastparser::FSHelperPtr& pFS, sal_uInt32 nMasterNum);
     static void WriteDefaultColorSchemes(const FSHelperPtr& pFS);
     void WriteTheme( sal_Int32 nThemeNum, const model::Theme* pTheme );
@@ -105,7 +105,7 @@ private:
     virtual ::oox::ole::VbaProject* implCreateVbaProject() const override;
     void WriteNotesMaster();
     void WritePageGuidExtLst( const FSHelperPtr& pFS,
-                              const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
+                              const cpo::uno::Reference< css::beans::XPropertySet >& rXPropSet );
 
     bool WriteComments( sal_uInt32 nPageNum );
     /** Writes the comments of one slide into the newer comment part.
@@ -113,7 +113,7 @@ private:
         Returns true when the slide had any comments.
      */
     bool WriteModernComments(sal_uInt32 nPageNum);
-    void ImplWriteBackground( const ::sax_fastparser::FSHelperPtr& pFS, const css::uno::Reference< css::beans::XPropertySet >& aXBackgroundPropSet );
+    void ImplWriteBackground( const ::sax_fastparser::FSHelperPtr& pFS, const cpo::uno::Reference< css::beans::XPropertySet >& aXBackgroundPropSet );
     void WriteTransition( const ::sax_fastparser::FSHelperPtr& pFS );
 
     sal_Int32 GetLayoutFileId( sal_Int32 nOffset, sal_uInt32 nMasterNum );
@@ -141,8 +141,8 @@ private:
         @param rXShape Master placeholder shape
         @returns Placeholder index
     */
-    sal_Int32 GetOrCreatePlaceholderIndex(const css::uno::Reference<css::drawing::XShape>& rXShape);
-    css::uno::Reference<css::drawing::XShape> GetReferencedPlaceholderXShape(const PlaceholderType eType, PageType ePageType) const;
+    sal_Int32 GetOrCreatePlaceholderIndex(const cpo::uno::Reference<css::drawing::XShape>& rXShape);
+    cpo::uno::Reference<css::drawing::XShape> GetReferencedPlaceholderXShape(const PlaceholderType eType, PageType ePageType) const;
     void WritePlaceholderReferenceShapes(PowerPointShapeExport& rDML, PageType ePageType);
     /** Writes the master page's content placeholders into the layout they belong on */
     void WriteLayoutContentPlaceholders(PowerPointShapeExport& rDML);
@@ -150,7 +150,7 @@ private:
     void WriteMasterOwnPlaceholders(PowerPointShapeExport& rDML, sal_uInt32 nMasterNum);
 
     /// The form controls of the page being written, which go out after its shapes.
-    std::vector<css::uno::Reference<css::drawing::XShape>> maControlShapes;
+    std::vector<cpo::uno::Reference<css::drawing::XShape>> maControlShapes;
     sal_Int32 mnActiveXControls = 0;
     sal_Int32 mnVmlDrawings = 0;
 
@@ -213,7 +213,7 @@ private:
 
     sal_Int32 mnPlaceholderIndexMax; ///< Last used placeholder index
     /// Map of placeholder indexes for Master placeholders
-    std::unordered_map< css::uno::Reference<css::drawing::XShape>, sal_Int32 > maPlaceholderShapeToIndexMap;
+    std::unordered_map< cpo::uno::Reference<css::drawing::XShape>, sal_Int32 > maPlaceholderShapeToIndexMap;
 
     // Get author id to remove personal info
     size_t GetInfoID( const OUString& sPersonalInfo ) const { return mpAuthorIDs->GetInfoID(sPersonalInfo); }

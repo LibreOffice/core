@@ -10,7 +10,7 @@
 #pragma once
 
 #include <librevenge-stream/librevenge-stream.h>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include "writerperfectdllapi.h"
 #include <tools/long.hxx>
 #include <memory>
@@ -27,14 +27,14 @@ class WRITERPERFECT_DLLPUBLIC DirectoryStream final : public librevenge::RVNGInp
     struct Impl;
 
 public:
-    explicit DirectoryStream(const css::uno::Reference<css::ucb::XContent>& xContent);
+    explicit DirectoryStream(const cpo::uno::Reference<css::ucb::XContent>& xContent);
     virtual ~DirectoryStream() override;
 
-    static bool isDirectory(const css::uno::Reference<css::ucb::XContent>& xContent);
+    static bool isDirectory(const cpo::uno::Reference<css::ucb::XContent>& xContent);
     static std::unique_ptr<DirectoryStream>
-    createForParent(const css::uno::Reference<css::ucb::XContent>& xContent);
+    createForParent(const cpo::uno::Reference<css::ucb::XContent>& xContent);
 
-    css::uno::Reference<css::ucb::XContent> getContent() const;
+    cpo::uno::Reference<css::ucb::XContent> getContent() const;
 
     virtual bool isStructured() override;
     SAL_DLLPRIVATE virtual unsigned subStreamCount() override;

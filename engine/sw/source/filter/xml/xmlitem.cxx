@@ -26,6 +26,7 @@
 #include <hintids.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 SwXMLItemSetContext::SwXMLItemSetContext( SvXMLImport& rImp, sal_Int32 /*nElement*/,
                                           const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
@@ -50,7 +51,7 @@ SwXMLItemSetContext::~SwXMLItemSetContext()
     }
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SwXMLItemSetContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SwXMLItemSetContext::createFastChildContext(
     sal_Int32 nElement,
     const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
 {

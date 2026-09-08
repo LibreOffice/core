@@ -66,8 +66,9 @@
 #include <sfx2/kit/helper.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 
 namespace sd::sidebar {
 
@@ -88,7 +89,7 @@ enum eFillStyle
 SlideBackground::SlideBackground(
     weld::Widget* pParent,
     ViewShellBase& rBase,
-    css::uno::Reference<css::frame::XFrame> xFrame,
+    cpo::uno::Reference<css::frame::XFrame> xFrame,
     SfxBindings* pBindings) :
     PanelLayout( pParent, u"SlideBackgroundPanel"_ustr, u"modules/simpress/ui/sidebarslidebackground.ui"_ustr ),
     mrBase( rBase ),

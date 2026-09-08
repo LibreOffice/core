@@ -38,7 +38,7 @@
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/XInterface.hpp>
@@ -59,7 +59,7 @@
 
 namespace {
 
-using css::uno::Reference;
+using cpo::uno::Reference;
 
 class EmptyNodeList:
     public cppu::WeakImplHelper<css::xml::dom::XNodeList>
@@ -72,7 +72,7 @@ public:
 
     virtual ::sal_Int32 getLength() override;
 
-    virtual css::uno::Reference< css::xml::dom::XNode >
+    virtual cpo::uno::Reference< css::xml::dom::XNode >
     item(::sal_Int32 index) override;
 };
 
@@ -82,14 +82,14 @@ EmptyNodeList::EmptyNodeList() {}
     return 0;
 }
 
-css::uno::Reference< css::xml::dom::XNode > EmptyNodeList::item(::sal_Int32)
+cpo::uno::Reference< css::xml::dom::XNode > EmptyNodeList::item(::sal_Int32)
 {
     throw cpo::uno::RuntimeException(u"bad EmptyNodeList com.sun.star.xml.dom.XNodeList.item call"_ustr,
         static_cast< ::cppu::OWeakObject * >(this));
 }
 
 OUString getNodeValue(
-    css::uno::Reference< css::xml::dom::XNode > const & node)
+    cpo::uno::Reference< css::xml::dom::XNode > const & node)
 {
     OSL_ASSERT(node.is());
     try {
@@ -120,17 +120,17 @@ public:
         dp_registry::backend::bundle::NoDescriptionException.
      */
     ExtensionDescription(
-        const css::uno::Reference<cpo::uno::XComponentContext>& xContext,
+        const cpo::uno::Reference<cpo::uno::XComponentContext>& xContext,
         std::u16string_view installDir,
-        const css::uno::Reference< css::ucb::XCommandEnvironment >& xCmdEnv);
+        const cpo::uno::Reference< css::ucb::XCommandEnvironment >& xCmdEnv);
 
-    const css::uno::Reference<css::xml::dom::XNode>& getRootElement() const
+    const cpo::uno::Reference<css::xml::dom::XNode>& getRootElement() const
     {
         return m_xRoot;
     }
 
 private:
-    css::uno::Reference<css::xml::dom::XNode> m_xRoot;
+    cpo::uno::Reference<css::xml::dom::XNode> m_xRoot;
 };
 
 class NoDescriptionException
@@ -143,22 +143,22 @@ class FileDoesNotExistFilter
 
 {
     bool m_bExist;
-    css::uno::Reference< css::ucb::XCommandEnvironment > m_xCommandEnv;
+    cpo::uno::Reference< css::ucb::XCommandEnvironment > m_xCommandEnv;
 
 public:
     explicit FileDoesNotExistFilter(
-        const css::uno::Reference< css::ucb::XCommandEnvironment >& xCmdEnv);
+        const cpo::uno::Reference< css::ucb::XCommandEnvironment >& xCmdEnv);
 
     bool exist() { return m_bExist;}
     // XCommandEnvironment
-    virtual css::uno::Reference<css::task::XInteractionHandler >
+    virtual cpo::uno::Reference<css::task::XInteractionHandler >
     getInteractionHandler() override;
-    virtual css::uno::Reference<css::ucb::XProgressHandler >
+    virtual cpo::uno::Reference<css::ucb::XProgressHandler >
     getProgressHandler() override;
 
     // XInteractionHandler
     virtual void handle(
-        css::uno::Reference<css::task::XInteractionRequest > const & xRequest ) override;
+        cpo::uno::Reference<css::task::XInteractionRequest > const & xRequest ) override;
 };
 
 ExtensionDescription::ExtensionDescription(
@@ -224,7 +224,7 @@ ExtensionDescription::ExtensionDescription(
                 sDescriptionUri + " does not contain the root element <description>.", nullptr);
         }
 
-        m_xRoot.set(xRoot, css::uno::UNO_QUERY_THROW);
+        m_xRoot.set(xRoot, cpo::uno::UNO_QUERY_THROW);
         OUString nsDescription = xRoot->getNamespaceURI();
 
         //check if this namespace is supported
@@ -314,8 +314,8 @@ DescriptionInfoset getDescriptionInfoset(std::u16string_view sExtensionFolderURL
 }
 
 DescriptionInfoset::DescriptionInfoset(
-    css::uno::Reference< cpo::uno::XComponentContext > const & context,
-    css::uno::Reference< css::xml::dom::XNode > const & element):
+    cpo::uno::Reference< cpo::uno::XComponentContext > const & context,
+    cpo::uno::Reference< css::xml::dom::XNode > const & element):
     m_context(context),
     m_element(element)
 {
@@ -334,7 +334,7 @@ DescriptionInfoset::~DescriptionInfoset() {}
 
 OUString DescriptionInfoset::getNodeValueFromExpression(OUString const & expression) const
 {
-    css::uno::Reference< css::xml::dom::XNode > n;
+    cpo::uno::Reference< css::xml::dom::XNode > n;
     if (m_element.is()) {
         try {
             n = m_xpath->selectSingleNode(m_element, expression);
@@ -361,17 +361,17 @@ void DescriptionInfoset::checkDenylist() const
     {
         {u"nodepath"_ustr, cpo::uno::Any(u"/org.openoffice.Office.ExtensionDependencies/Extensions"_ustr)}
     }));
-    css::uno::Reference< css::container::XNameAccess > denylist(
+    cpo::uno::Reference< css::container::XNameAccess > denylist(
         (css::configuration::theDefaultProvider::get(m_context)
          ->createInstanceWithArguments(
              u"com.sun.star.configuration.ConfigurationAccess"_ustr, args)),
-        css::uno::UNO_QUERY_THROW);
+        cpo::uno::UNO_QUERY_THROW);
 
     // check first if a denylist entry is available
     if (!(denylist.is() && denylist->hasByName(*id)))        return;
 
-    css::uno::Reference< css::beans::XPropertySet > extProps(
-        denylist->getByName(*id), css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference< css::beans::XPropertySet > extProps(
+        denylist->getByName(*id), cpo::uno::UNO_QUERY_THROW);
 
     cpo::uno::Any anyValue = extProps->getPropertyValue(u"Versions"_ustr);
 
@@ -390,43 +390,43 @@ void DescriptionInfoset::checkDenylist() const
 
     OString xmlDependencies = OUStringToOString(udeps, RTL_TEXTENCODING_UNICODE);
 
-    css::uno::Reference< css::xml::dom::XDocumentBuilder> docbuilder(
+    cpo::uno::Reference< css::xml::dom::XDocumentBuilder> docbuilder(
         m_context->getServiceManager()->createInstanceWithContext(u"com.sun.star.xml.dom.DocumentBuilder"_ustr, m_context),
-        css::uno::UNO_QUERY_THROW);
+        cpo::uno::UNO_QUERY_THROW);
 
     cpo::uno::Sequence< sal_Int8 > byteSeq(reinterpret_cast<const sal_Int8*>(xmlDependencies.getStr()), xmlDependencies.getLength());
 
-    css::uno::Reference< css::io::XInputStream> inputstream( css::io::SequenceInputStream::createStreamFromSequence(m_context, byteSeq),
-                                                             css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference< css::io::XInputStream> inputstream( css::io::SequenceInputStream::createStreamFromSequence(m_context, byteSeq),
+                                                             cpo::uno::UNO_QUERY_THROW);
 
-    css::uno::Reference< css::xml::dom::XDocument > xDocument(docbuilder->parse(inputstream));
-    css::uno::Reference< css::xml::dom::XElement > xElement(xDocument->getDocumentElement());
-    css::uno::Reference< css::xml::dom::XNodeList > xDeps(xElement->getChildNodes());
+    cpo::uno::Reference< css::xml::dom::XDocument > xDocument(docbuilder->parse(inputstream));
+    cpo::uno::Reference< css::xml::dom::XElement > xElement(xDocument->getDocumentElement());
+    cpo::uno::Reference< css::xml::dom::XNodeList > xDeps(xElement->getChildNodes());
     sal_Int32 nLen = xDeps->getLength();
 
     // get the parent xml document  of current description info for the import
-    css::uno::Reference< css::xml::dom::XDocument > xCurrentDescInfo(m_element->getOwnerDocument());
+    cpo::uno::Reference< css::xml::dom::XDocument > xCurrentDescInfo(m_element->getOwnerDocument());
 
     // get dependency node of current description info to merge the new dependencies from the denylist
-    css::uno::Reference< css::xml::dom::XNode > xCurrentDeps(
+    cpo::uno::Reference< css::xml::dom::XNode > xCurrentDeps(
         m_xpath->selectSingleNode(m_element, u"desc:dependencies"_ustr));
 
     // if no dependency node exists, create a new one in the current description info
     if (!xCurrentDeps.is()) {
-        css::uno::Reference< css::xml::dom::XNode > xNewDepNode(
+        cpo::uno::Reference< css::xml::dom::XNode > xNewDepNode(
             xCurrentDescInfo->createElementNS(
                 u"http://openoffice.org/extensions/description/2006"_ustr,
-                u"dependencies"_ustr), css::uno::UNO_QUERY_THROW);
+                u"dependencies"_ustr), cpo::uno::UNO_QUERY_THROW);
         m_element->appendChild(xNewDepNode);
         xCurrentDeps = m_xpath->selectSingleNode(m_element, u"desc:dependencies"_ustr);
     }
 
     for (sal_Int32 i=0; i<nLen; i++) {
-        css::uno::Reference< css::xml::dom::XNode > xNode(xDeps->item(i));
-        css::uno::Reference< css::xml::dom::XElement > xDep(xNode, css::uno::UNO_QUERY);
+        cpo::uno::Reference< css::xml::dom::XNode > xNode(xDeps->item(i));
+        cpo::uno::Reference< css::xml::dom::XElement > xDep(xNode, cpo::uno::UNO_QUERY);
         if (xDep.is()) {
             // found valid denylist dependency, import the node first and append it to the existing dependency node
-            css::uno::Reference< css::xml::dom::XNode > importedNode = xCurrentDescInfo->importNode(xNode, true);
+            cpo::uno::Reference< css::xml::dom::XNode > importedNode = xCurrentDescInfo->importNode(xNode, true);
             xCurrentDeps->appendChild(importedNode);
         }
     }
@@ -459,7 +459,7 @@ cpo::uno::Sequence< OUString > DescriptionInfoset::getSupportedPlatforms() const
     }
 
     //Check if the <platform> element was provided. If not the default is "all" platforms
-    css::uno::Reference< css::xml::dom::XNode > nodePlatform(
+    cpo::uno::Reference< css::xml::dom::XNode > nodePlatform(
         m_xpath->selectSingleNode(m_element, u"desc:platform"_ustr));
     if (!nodePlatform.is())
     {
@@ -483,7 +483,7 @@ cpo::uno::Sequence< OUString > DescriptionInfoset::getSupportedPlatforms() const
     return comphelper::containerToSequence(vec);
 }
 
-css::uno::Reference< css::xml::dom::XNodeList >
+cpo::uno::Reference< css::xml::dom::XNodeList >
 DescriptionInfoset::getDependencies() const {
     if (m_element.is()) {
         try {
@@ -520,7 +520,7 @@ OUString DescriptionInfoset::getIconURL( bool bHighContrast ) const
 ::std::optional< OUString > DescriptionInfoset::getOptionalValue(
     OUString const & expression) const
 {
-    css::uno::Reference< css::xml::dom::XNode > n;
+    cpo::uno::Reference< css::xml::dom::XNode > n;
     if (m_element.is()) {
         try {
             n = m_xpath->selectSingleNode(m_element, expression);
@@ -536,7 +536,7 @@ OUString DescriptionInfoset::getIconURL( bool bHighContrast ) const
 cpo::uno::Sequence< OUString > DescriptionInfoset::getUrls(
     OUString const & expression) const
 {
-    css::uno::Reference< css::xml::dom::XNodeList > ns;
+    cpo::uno::Reference< css::xml::dom::XNodeList > ns;
     if (m_element.is()) {
         try {
             ns = m_xpath->selectNodeList(m_element, expression);
@@ -554,14 +554,14 @@ cpo::uno::Sequence< OUString > DescriptionInfoset::getUrls(
 
 std::pair< OUString, OUString > DescriptionInfoset::getLocalizedPublisherNameAndURL() const
 {
-    css::uno::Reference< css::xml::dom::XNode > node =
+    cpo::uno::Reference< css::xml::dom::XNode > node =
         getLocalizedChild(u"desc:publisher"_ustr);
 
     OUString sPublisherName;
     OUString sURL;
     if (node.is())
     {
-        css::uno::Reference< css::xml::dom::XNode > xPathName;
+        cpo::uno::Reference< css::xml::dom::XNode > xPathName;
         try {
             xPathName = m_xpath->selectSingleNode(node, u"text()"_ustr);
         } catch (const css::xml::xpath::XPathException &) {
@@ -571,7 +571,7 @@ std::pair< OUString, OUString > DescriptionInfoset::getLocalizedPublisherNameAnd
         if (xPathName.is())
             sPublisherName = xPathName->getNodeValue();
 
-        css::uno::Reference< css::xml::dom::XNode > xURL;
+        cpo::uno::Reference< css::xml::dom::XNode > xURL;
         try {
             xURL = m_xpath->selectSingleNode(node, u"@xlink:href"_ustr);
         } catch (const css::xml::xpath::XPathException &) {
@@ -586,11 +586,11 @@ std::pair< OUString, OUString > DescriptionInfoset::getLocalizedPublisherNameAnd
 
 OUString DescriptionInfoset::getLocalizedDisplayName() const
 {
-    css::uno::Reference< css::xml::dom::XNode > node =
+    cpo::uno::Reference< css::xml::dom::XNode > node =
         getLocalizedChild(u"desc:display-name"_ustr);
     if (node.is())
     {
-        css::uno::Reference< css::xml::dom::XNode > xtext;
+        cpo::uno::Reference< css::xml::dom::XNode > xtext;
         try {
             xtext = m_xpath->selectSingleNode(node, u"text()"_ustr);
         } catch (const css::xml::xpath::XPathException &) {
@@ -612,7 +612,7 @@ OUString DescriptionInfoset::getLocalizedLicenseURL() const
 DescriptionInfoset::getSimpleLicenseAttributes() const
 {
     //Check if the node exist
-    css::uno::Reference< css::xml::dom::XNode > n;
+    cpo::uno::Reference< css::xml::dom::XNode > n;
     if (m_element.is()) {
         try {
             n = m_xpath->selectSingleNode(m_element, u"/desc:description/desc:registration/desc:simple-license/@accept-by"_ustr);
@@ -648,19 +648,19 @@ OUString DescriptionInfoset::getLocalizedDescriptionURL() const
     return getLocalizedHREFAttrFromChild(u"/desc:description/desc:extension-description"_ustr, nullptr);
 }
 
-css::uno::Reference< css::xml::dom::XNode >
+cpo::uno::Reference< css::xml::dom::XNode >
 DescriptionInfoset::getLocalizedChild( const OUString & sParent) const
 {
     if ( ! m_element.is() || sParent.isEmpty())
-        return css::uno::Reference< css::xml::dom::XNode > ();
+        return cpo::uno::Reference< css::xml::dom::XNode > ();
 
-    css::uno::Reference< css::xml::dom::XNode > xParent;
+    cpo::uno::Reference< css::xml::dom::XNode > xParent;
     try {
         xParent = m_xpath->selectSingleNode(m_element, sParent);
     } catch (const css::xml::xpath::XPathException &) {
         // ignore
     }
-    css::uno::Reference<css::xml::dom::XNode> nodeMatch;
+    cpo::uno::Reference<css::xml::dom::XNode> nodeMatch;
     if (xParent.is())
     {
         nodeMatch = matchLanguageTag(xParent, getOfficeLanguageTag().getBcp47());
@@ -684,12 +684,12 @@ DescriptionInfoset::getLocalizedChild( const OUString & sParent) const
     return nodeMatch;
 }
 
-css::uno::Reference<css::xml::dom::XNode>
+cpo::uno::Reference<css::xml::dom::XNode>
 DescriptionInfoset::matchLanguageTag(
-    css::uno::Reference< css::xml::dom::XNode > const & xParent, std::u16string_view rTag) const
+    cpo::uno::Reference< css::xml::dom::XNode > const & xParent, std::u16string_view rTag) const
 {
     OSL_ASSERT(xParent.is());
-    css::uno::Reference<css::xml::dom::XNode> nodeMatch;
+    cpo::uno::Reference<css::xml::dom::XNode> nodeMatch;
 
     //first try exact match for lang
     const OUString exp1(OUString::Concat("*[@lang=\"") + rTag + "\"]");
@@ -714,14 +714,14 @@ DescriptionInfoset::matchLanguageTag(
     return nodeMatch;
 }
 
-css::uno::Reference<css::xml::dom::XNode>
-DescriptionInfoset::getChildWithDefaultLocale(css::uno::Reference< css::xml::dom::XNode >
+cpo::uno::Reference<css::xml::dom::XNode>
+DescriptionInfoset::getChildWithDefaultLocale(cpo::uno::Reference< css::xml::dom::XNode >
                                     const & xParent) const
 {
     OSL_ASSERT(xParent.is());
     if ( xParent->getNodeName() == "simple-license" )
     {
-        css::uno::Reference<css::xml::dom::XNode> nodeDefault;
+        cpo::uno::Reference<css::xml::dom::XNode> nodeDefault;
         try {
             nodeDefault = m_xpath->selectSingleNode(xParent, u"@default-license-id"_ustr);
         } catch (const css::xml::xpath::XPathException &) {
@@ -753,7 +753,7 @@ OUString DescriptionInfoset::getLocalizedHREFAttrFromChild(
     OUString const & sXPathParent, bool * out_bParentExists)
     const
 {
-    css::uno::Reference< css::xml::dom::XNode > node =
+    cpo::uno::Reference< css::xml::dom::XNode > node =
         getLocalizedChild(sXPathParent);
 
     OUString sURL;
@@ -761,7 +761,7 @@ OUString DescriptionInfoset::getLocalizedHREFAttrFromChild(
     {
         if (out_bParentExists)
             *out_bParentExists = true;
-        css::uno::Reference< css::xml::dom::XNode > xURL;
+        cpo::uno::Reference< css::xml::dom::XNode > xURL;
         try {
             xURL = m_xpath->selectSingleNode(node, u"@xlink:href"_ustr);
         } catch (const css::xml::xpath::XPathException &) {

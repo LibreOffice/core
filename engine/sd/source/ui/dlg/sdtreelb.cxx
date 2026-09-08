@@ -68,6 +68,7 @@
 #include <Window.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 namespace {
 
@@ -123,7 +124,7 @@ bool SdPageObjsTLV::SdPageObjsTransferable::GetData( const css::datatransfer::Da
     }
 }
 
-SdPageObjsTLV::SdPageObjsTransferable* SdPageObjsTLV::SdPageObjsTransferable::getImplementation( const css::uno::Reference< cpo::uno::XInterface >& rxData )
+SdPageObjsTLV::SdPageObjsTransferable* SdPageObjsTLV::SdPageObjsTransferable::getImplementation( const cpo::uno::Reference< cpo::uno::XInterface >& rxData )
     noexcept
 {
     return dynamic_cast<SdPageObjsTLV::SdPageObjsTransferable*>(rxData.get());
@@ -1122,7 +1123,7 @@ void SdPageObjsTLV::SetViewFrame(const SfxViewFrame* pViewFrame)
 {
     if (sd::ViewShellBase* pBase = sd::ViewShellBase::GetViewShellBase(pViewFrame))
     {
-        css::uno::Reference< css::frame::XFrame > xFrame;
+        cpo::uno::Reference< css::frame::XFrame > xFrame;
         if (std::shared_ptr<sd::ViewShell> xViewShell = pBase->GetMainViewShell())
         {
             if (SfxViewFrame* pFrame = xViewShell->GetViewFrame())

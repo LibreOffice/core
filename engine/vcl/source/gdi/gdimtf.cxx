@@ -48,6 +48,7 @@
 #include <comphelper/processfactory.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 namespace {
 

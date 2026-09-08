@@ -10,7 +10,7 @@
 #ifndef INCLUDED_TEST_SHEET_XSPREADSHEETDOCUMENT_HXX
 #define INCLUDED_TEST_SHEET_XSPREADSHEETDOCUMENT_HXX
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 namespace apitest {
 
@@ -19,7 +19,7 @@ class XSpreadsheetDocument
 public:
     XSpreadsheetDocument(sal_Int32 nSheets) : mnSheets(nSheets) {}
 
-    virtual css::uno::Reference< cpo::uno::XInterface > init() = 0;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > init() = 0;
 
     void testGetSheets();
 

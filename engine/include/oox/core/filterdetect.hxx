@@ -24,7 +24,7 @@
 
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/xml/sax/XFastDocumentHandler.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <oox/dllapi.h>
@@ -57,22 +57,22 @@ enum class OOXMLVariant {
 class FilterDetectDocHandler final : public ::cppu::WeakImplHelper< css::xml::sax::XFastDocumentHandler >
 {
 public:
-    explicit            FilterDetectDocHandler( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext, OUString& rFilter, OUString aFileName );
+    explicit            FilterDetectDocHandler( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext, OUString& rFilter, OUString aFileName );
     virtual             ~FilterDetectDocHandler() override;
 
     // XFastDocumentHandler
     virtual void startDocument() override;
     virtual void endDocument() override;
     virtual void processingInstruction( const OUString& rTarget, const OUString& rData ) override;
-    virtual void setDocumentLocator( const css::uno::Reference< css::xml::sax::XLocator >& xLocator ) override;
+    virtual void setDocumentLocator( const cpo::uno::Reference< css::xml::sax::XLocator >& xLocator ) override;
 
     // XFastContextHandler
-    virtual void startFastElement( sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
-    virtual void startUnknownElement( const OUString& Namespace, const OUString& Name, const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
+    virtual void startFastElement( sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
+    virtual void startUnknownElement( const OUString& Namespace, const OUString& Name, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
     virtual void endFastElement( sal_Int32 Element ) override;
     virtual void endUnknownElement( const OUString& Namespace, const OUString& Name ) override;
-    virtual css::uno::Reference< XFastContextHandler > createFastChildContext( sal_Int32 Element, const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
-    virtual css::uno::Reference< XFastContextHandler > createUnknownChildContext( const OUString& Namespace, const OUString& Name, const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
+    virtual cpo::uno::Reference< XFastContextHandler > createFastChildContext( sal_Int32 Element, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
+    virtual cpo::uno::Reference< XFastContextHandler > createUnknownChildContext( const OUString& Namespace, const OUString& Name, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
     virtual void characters( const OUString& aChars ) override;
 
 private:
@@ -92,7 +92,7 @@ private:
     ContextVector       maContextStack;
     OUString            maTargetPath;
     OOXMLVariant        maOOXMLVariant;
-    css::uno::Reference< cpo::uno::XComponentContext > mxContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext > mxContext;
 };
 
 
@@ -100,7 +100,7 @@ class OOX_DLLPUBLIC FilterDetect final : public ::cppu::WeakImplHelper<css::docu
 {
 public:
     /// @throws cpo::uno::RuntimeException
-    explicit            FilterDetect( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+    explicit            FilterDetect( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
     virtual             ~FilterDetect() override;
 
     /** Tries to extract an unencrypted ZIP package from the passed media
@@ -126,7 +126,7 @@ public:
         is stored in the property 'ComponentData' of the media descriptor and
         its input stream is returned.
      */
-    css::uno::Reference< css::io::XInputStream >
+    cpo::uno::Reference< css::io::XInputStream >
                         extractUnencryptedPackage( comphelper::SequenceAsHashMap& rMediaDesc ) const;
 
     // com.sun.star.lang.XServiceInfo interface -------------------------------
@@ -157,7 +157,7 @@ public:
                         detect( cpo::uno::Sequence< css::beans::PropertyValue >& rMediaDescSeq ) override;
 
 private:
-    css::uno::Reference< cpo::uno::XComponentContext > mxContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext > mxContext;
 };
 
 

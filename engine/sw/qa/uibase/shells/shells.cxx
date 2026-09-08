@@ -53,7 +53,8 @@
 
 using namespace std::string_literals;
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 /// Covers sw/source/uibase/shells/ fixes.
 class SwUibaseShellsTest : public SwModelTestBase

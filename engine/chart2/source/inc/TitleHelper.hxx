@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include "Title.hxx"
@@ -62,13 +62,13 @@ public:
         createTitle(  eTitleType nTitleIndex
                     , const OUString& rTitleText
                     , const rtl::Reference< ::chart::ChartModel >& xModel
-                    , const css::uno::Reference< cpo::uno::XComponentContext > & xContext
+                    , const cpo::uno::Reference< cpo::uno::XComponentContext > & xContext
                     , ReferenceSizeProvider * pRefSizeProvider = nullptr );
     static rtl::Reference< ::chart::Title >
           createOrShowTitle(  eTitleType nTitleIndex
                     , const OUString& rTitleText
                     , const rtl::Reference< ::chart::ChartModel >& xModel
-                    , const css::uno::Reference< cpo::uno::XComponentContext > & xContex );
+                    , const cpo::uno::Reference< cpo::uno::XComponentContext > & xContex );
 
     static void removeTitle( eTitleType nTitleIndex
                     , const rtl::Reference< ::chart::ChartModel >& xModel );
@@ -76,10 +76,10 @@ public:
     static OUString getCompleteString( const rtl::Reference< ::chart::Title >& xTitle );
     static OUString getUnstackedStr( const OUString& rNewText );
     static void setFormattedString( const rtl::Reference< ::chart::Title >& xTitle,
-        const cpo::uno::Sequence< css::uno::Reference< css::chart2::XFormattedString > >& aNewFormattedTitle );
+        const cpo::uno::Sequence< cpo::uno::Reference< css::chart2::XFormattedString > >& aNewFormattedTitle );
     static void setCompleteString( const OUString& rNewText
         , const rtl::Reference< ::chart::Title >& xTitle
-        , const css::uno::Reference< cpo::uno::XComponentContext > & xContext
+        , const cpo::uno::Reference< cpo::uno::XComponentContext > & xContext
         , const float * pDefaultCharHeight = nullptr
         , bool bDialogTitle = false );
 

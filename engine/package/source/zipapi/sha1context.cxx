@@ -26,6 +26,7 @@
 #include "sha1context.hxx"
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 // static
 uno::Reference<xml::crypto::XDigestContext> StarOfficeSHA1DigestContext::Create()

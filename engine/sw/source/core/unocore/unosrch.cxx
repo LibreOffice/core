@@ -38,6 +38,7 @@
 #include <unordered_map>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 class SwSearchProperties_Impl
 {

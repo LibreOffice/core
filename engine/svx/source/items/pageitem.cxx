@@ -109,9 +109,9 @@ namespace
         sal_uInt32 n = SvxNumberingTypeTable::FindIndex(eNumType);
         if (n != RESARRAY_INDEX_NOTFOUND)
             return SvxNumberingTypeTable::GetString(n);
-        const css::uno::Reference<cpo::uno::XComponentContext>& xContext = comphelper::getProcessComponentContext();
-        css::uno::Reference<css::text::XDefaultNumberingProvider> xDefNum = css::text::DefaultNumberingProvider::create(xContext);
-        css::uno::Reference<css::text::XNumberingTypeInfo> xInfo(xDefNum, css::uno::UNO_QUERY);
+        const cpo::uno::Reference<cpo::uno::XComponentContext>& xContext = comphelper::getProcessComponentContext();
+        cpo::uno::Reference<css::text::XDefaultNumberingProvider> xDefNum = css::text::DefaultNumberingProvider::create(xContext);
+        cpo::uno::Reference<css::text::XNumberingTypeInfo> xInfo(xDefNum, cpo::uno::UNO_QUERY);
         if (!xInfo.is())
             return OUString();
         return xInfo->getNumberingIdentifier(eNumType);

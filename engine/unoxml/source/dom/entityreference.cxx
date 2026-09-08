@@ -21,7 +21,7 @@
 
 #include <string.h>
 
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace css::xml::dom;
 
 namespace DOM

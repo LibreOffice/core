@@ -260,7 +260,7 @@ namespace xforms
         cpo::uno::Any m_aMaxLength;
         // </properties>
         // helper to check URL validity
-        css::uno::Reference<css::util::XURLTransformer> m_xURLTransformer;
+        cpo::uno::Reference<css::util::XURLTransformer> m_xURLTransformer;
 
     public:
         OAnyURIType( const OUString& _rName, sal_Int16 _nTypeClass /* = css::xsd::DataTypeClass::anyURI */ );

@@ -21,7 +21,7 @@
 #include "undobj.hxx"
 #include <rtl/ustring.hxx>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 class SwDoc;
 
@@ -39,16 +39,16 @@ class SwUndoParagraphSigning final : public SwUndo
 {
 private:
     SwDoc& m_rDoc;
-    css::uno::Reference<css::text::XTextField> m_xField;
-    css::uno::Reference<css::text::XTextContent> m_xParent;
+    cpo::uno::Reference<css::text::XTextField> m_xField;
+    cpo::uno::Reference<css::text::XTextContent> m_xParent;
     OUString m_signature;
     OUString m_usage;
     OUString m_display;
     const bool m_bRemove;
 
 public:
-    SwUndoParagraphSigning(SwDoc& rDoc, css::uno::Reference<css::text::XTextField> xField,
-                           css::uno::Reference<css::text::XTextContent> xParent,
+    SwUndoParagraphSigning(SwDoc& rDoc, cpo::uno::Reference<css::text::XTextField> xField,
+                           cpo::uno::Reference<css::text::XTextContent> xParent,
                            const bool bRemove);
 
     virtual void UndoImpl(::sw::UndoRedoContext&) override;

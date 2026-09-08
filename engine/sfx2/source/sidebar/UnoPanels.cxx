@@ -23,6 +23,7 @@
 #include <algorithm>
 
 using namespace css;
+using namespace ::cpo;
 using namespace ::sfx2::sidebar;
 
 SfxUnoPanels::SfxUnoPanels(uno::Reference<frame::XFrame> _xFrame, const OUString& deckId):

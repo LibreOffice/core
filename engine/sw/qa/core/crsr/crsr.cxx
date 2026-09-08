@@ -27,7 +27,8 @@
 #include <formatcontentcontrol.hxx>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 /// Covers sw/source/core/crsr/ fixes.
 class SwCoreCrsrTest : public SwModelTestBase

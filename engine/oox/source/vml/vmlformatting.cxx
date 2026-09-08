@@ -55,6 +55,7 @@ namespace oox::vml {
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::geometry;
+using namespace ::cpo;
 
 using ::oox::drawingml::Color;
 using ::oox::drawingml::FillProperties;

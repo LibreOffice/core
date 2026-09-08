@@ -132,6 +132,8 @@
 
 using namespace sw::mark;
 using namespace com::sun::star;
+using namespace ::cpo;
+
 namespace {
 
 void collectUIInformation(const OUString& rAction, const OUString& aParameters)

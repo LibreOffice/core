@@ -23,7 +23,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <sal/log.hxx>
 
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::xmloff::token::XML_CHANGE_ID;
 
 
@@ -43,7 +43,7 @@ XMLChangeImportContext::~XMLChangeImportContext()
 
 void XMLChangeImportContext::startFastElement(
     sal_Int32 /*nElement*/,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {

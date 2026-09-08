@@ -65,8 +65,8 @@ class SwXMLTableContext : public XMLTextTableContext
     std::vector<ColumnWidthInfo> m_aColumnWidths;
     std::optional<std::vector<OUString>> m_xColumnDefaultCellStyleNames;
 
-    css::uno::Reference< css::text::XTextCursor > m_xOldCursor;
-    css::uno::Reference< css::text::XTextContent > m_xTextContent;
+    cpo::uno::Reference< css::text::XTextCursor > m_xOldCursor;
+    cpo::uno::Reference< css::text::XTextContent > m_xTextContent;
 
     std::unique_ptr<SwXMLTableRows_Impl> m_pRows;
 
@@ -142,15 +142,15 @@ public:
 
 
     SwXMLTableContext( SwXMLImport& rImport,
-                       const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList );
+                       const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList );
     SwXMLTableContext( SwXMLImport& rImport,
                        SwXMLTableContext *pTable );
 
     virtual ~SwXMLTableContext() override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 Element,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
 
     SwXMLImport& GetSwImport() { return static_cast<SwXMLImport&>(GetImport()); }
 

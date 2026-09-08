@@ -90,7 +90,7 @@ namespace connectivity
         {
         public:
             OOperandAttr(sal_uInt16 _nPos,
-                         const css::uno::Reference< css::beans::XPropertySet>& _xColumn);
+                         const cpo::uno::Reference< css::beans::XPropertySet>& _xColumn);
 
         };
 

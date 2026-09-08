@@ -57,7 +57,7 @@ using namespace ::com::sun::star::ui::dialogs::ExtendedFilePickerElementIds;
 using namespace ::com::sun::star::ui::dialogs::CommonFilePickerElementIds;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo;
 using namespace ::cpo::uno;
 
 namespace
@@ -464,7 +464,7 @@ void SalAquaFilePicker::disposing( const lang::EventObject& aEvent )
 {
     SolarMutexGuard aGuard;
 
-    uno::Reference<XFilePickerListener> xFilePickerListener( aEvent.Source, css::uno::UNO_QUERY );
+    uno::Reference<XFilePickerListener> xFilePickerListener( aEvent.Source, cpo::uno::UNO_QUERY );
 
     if( xFilePickerListener.is() )
         removeFilePickerListener( xFilePickerListener );

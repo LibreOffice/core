@@ -34,7 +34,7 @@ struct DESKTOP_DEPLOYMENTMISC_DLLPUBLIC StrTitle
         return rContent.getPropertyValue(u"Title"_ustr).get<OUString>();
     }
     // just return titles - the ucbhelper should have a simpler API for this [!]
-    static css::uno::Reference< css::sdbc::XResultSet >
+    static cpo::uno::Reference< css::sdbc::XResultSet >
         createCursor( ::ucbhelper::Content &rContent,
                       ucbhelper::ResultSetInclude eInclude )
     {
@@ -46,7 +46,7 @@ struct DESKTOP_DEPLOYMENTMISC_DLLPUBLIC StrTitle
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC bool create_ucb_content(
     ::ucbhelper::Content * ucb_content,
     OUString const & url,
-    css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
+    cpo::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
     bool throw_exc = true );
 
 
@@ -55,13 +55,13 @@ DESKTOP_DEPLOYMENTMISC_DLLPUBLIC bool create_ucb_content(
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC bool create_folder(
     ::ucbhelper::Content * ucb_content,
     OUString const & url,
-    css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
+    cpo::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
     bool throw_exc = true );
 
 
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC bool erase_path(
     OUString const & url,
-    css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
+    cpo::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
     bool throw_exc = true );
 
 

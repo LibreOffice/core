@@ -136,7 +136,7 @@ void SVGFontExport::implCollectGlyphs()
                 if( !aText.isEmpty() )
                 {
                     GlyphSet& rGlyphSet = implGetGlyphSet( pVDev->GetFont() );
-                    css::uno::Reference< css::i18n::XBreakIterator > xBI(
+                    cpo::uno::Reference< css::i18n::XBreakIterator > xBI(
                         vcl::unohelper::CreateBreakIterator() );
 
                     if( xBI.is() )

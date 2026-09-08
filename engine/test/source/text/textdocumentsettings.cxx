@@ -11,9 +11,9 @@
 #include <test/unoapi_property_testers.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
-using namespace css::uno;
+using namespace ::cpo::uno;
 
 namespace apitest
 {
@@ -21,8 +21,8 @@ TextDocumentSettings::~TextDocumentSettings() {}
 
 void TextDocumentSettings::testDocumentSettingsProperties()
 {
-    css::uno::Reference<css::beans::XPropertySet> xDocumentSettings(init(),
-                                                                    css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::beans::XPropertySet> xDocumentSettings(init(),
+                                                                    cpo::uno::UNO_QUERY_THROW);
 
     testBooleanOptionalProperty(xDocumentSettings, u"ChartAutoUpdate"_ustr);
     testBooleanOptionalProperty(xDocumentSettings, u"AddParaTableSpacing"_ustr);

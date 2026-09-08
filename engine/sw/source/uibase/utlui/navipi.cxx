@@ -55,7 +55,7 @@
 #include <content.hxx>
 #include <vcl/jsdialog/executor.hxx>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::frame;
 
 // Filter the control characters out of the Outline-Entry
@@ -402,7 +402,7 @@ void SwNavigationPI::ZoomIn()
 }
 
 std::unique_ptr<PanelLayout> SwNavigationPI::Create(weld::Widget* pParent,
-    const css::uno::Reference<css::frame::XFrame>& rxFrame,
+    const cpo::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
 {
     if( pParent == nullptr )
@@ -430,7 +430,7 @@ namespace
 }
 
 SwNavigationPI::SwNavigationPI(weld::Widget* pParent,
-    const css::uno::Reference<css::frame::XFrame>& rxFrame,
+    const cpo::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* _pBindings, SfxNavigator* pNavigatorDlg)
     : PanelLayout(pParent, u"NavigatorPanel"_ustr, u"modules/swriter/ui/navigatorpanel.ui"_ustr,
                   reinterpret_cast<sal_uInt64>(lcl_GetNavigatorViewShell(_pBindings)))

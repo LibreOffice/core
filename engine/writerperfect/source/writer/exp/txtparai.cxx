@@ -101,11 +101,11 @@ public:
 
     rtl::Reference<XMLImportContext>
     CreateChildContext(const OUString& rName,
-                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
+                       const cpo::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
 
     void SAL_CALL
     startElement(const OUString& rName,
-                 const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
+                 const cpo::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
     void SAL_CALL characters(const OUString& rChars) override;
 
 private:
@@ -124,13 +124,13 @@ XMLSpanContext::XMLSpanContext(XMLImport& rImport,
 }
 
 rtl::Reference<XMLImportContext> XMLSpanContext::CreateChildContext(
-    const OUString& rName, const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
+    const OUString& rName, const cpo::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
     return CreateParagraphOrSpanChildContext(GetImport(), rName, m_aPropertyList);
 }
 
 void XMLSpanContext::startElement(
-    const OUString& /*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs)
+    const OUString& /*rName*/, const cpo::uno::Reference<css::xml::sax::XAttributeList>& xAttribs)
 {
     for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
     {
@@ -168,7 +168,7 @@ public:
 
     rtl::Reference<XMLImportContext>
     CreateChildContext(const OUString& rName,
-                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
+                       const cpo::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
 
     void SAL_CALL endElement(const OUString& rName) override;
 
@@ -226,7 +226,7 @@ XMLRubyContext::XMLRubyContext(XMLImport& rImport,
 }
 
 rtl::Reference<XMLImportContext> XMLRubyContext::CreateChildContext(
-    const OUString& rName, const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
+    const OUString& rName, const cpo::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
     if (rName == "text:ruby-base")
         return new XMLRubyBaseContext(GetImport(), *this);
@@ -281,7 +281,7 @@ public:
 
     void SAL_CALL
     startElement(const OUString& rName,
-                 const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
+                 const cpo::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
 };
 }
 
@@ -293,7 +293,7 @@ XMLLineBreakContext::XMLLineBreakContext(XMLImport& rImport,
 
 void XMLLineBreakContext::startElement(
     const OUString& /*rName*/,
-    const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
+    const cpo::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
     GetImport().GetGenerator().openSpan(GetPropertyList());
     GetImport().GetGenerator().insertLineBreak();
@@ -310,7 +310,7 @@ public:
 
     void SAL_CALL
     startElement(const OUString& rName,
-                 const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
+                 const cpo::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
 };
 }
 
@@ -322,7 +322,7 @@ XMLSpaceContext::XMLSpaceContext(XMLImport& rImport,
 
 void XMLSpaceContext::startElement(
     const OUString& /*rName*/,
-    const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
+    const cpo::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
     GetImport().GetGenerator().openSpan(GetPropertyList());
     GetImport().GetGenerator().insertSpace();
@@ -339,7 +339,7 @@ public:
 
     void SAL_CALL
     startElement(const OUString& rName,
-                 const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
+                 const cpo::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
 };
 }
 
@@ -350,7 +350,7 @@ XMLTabContext::XMLTabContext(XMLImport& rImport, const librevenge::RVNGPropertyL
 
 void XMLTabContext::startElement(
     const OUString& /*rName*/,
-    const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
+    const cpo::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
     GetImport().GetGenerator().openSpan(GetPropertyList());
     GetImport().GetGenerator().insertTab();
@@ -367,11 +367,11 @@ public:
                                  const librevenge::RVNGPropertyList& rPropertyList);
     rtl::Reference<XMLImportContext>
     CreateChildContext(const OUString& rName,
-                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
+                       const cpo::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
 
     void SAL_CALL
     startElement(const OUString& rName,
-                 const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
+                 const cpo::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
     void SAL_CALL endElement(const OUString& rName) override;
     void SAL_CALL characters(const OUString& rChars) override;
 
@@ -392,13 +392,13 @@ XMLTextFrameHyperlinkContext::XMLTextFrameHyperlinkContext(
 }
 
 rtl::Reference<XMLImportContext> XMLTextFrameHyperlinkContext::CreateChildContext(
-    const OUString& rName, const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
+    const OUString& rName, const cpo::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
     return CreateParagraphOrSpanChildContext(GetImport(), rName, m_aPropertyList);
 }
 
 void XMLTextFrameHyperlinkContext::startElement(
-    const OUString& /*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs)
+    const OUString& /*rName*/, const cpo::uno::Reference<css::xml::sax::XAttributeList>& xAttribs)
 {
     librevenge::RVNGPropertyList aPropertyList;
     for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
@@ -454,11 +454,11 @@ public:
     XMLHyperlinkContext(XMLImport& rImport, const librevenge::RVNGPropertyList& rPropertyList);
     rtl::Reference<XMLImportContext>
     CreateChildContext(const OUString& rName,
-                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
+                       const cpo::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
 
     void SAL_CALL
     startElement(const OUString& rName,
-                 const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
+                 const cpo::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
     void SAL_CALL endElement(const OUString& rName) override;
     void SAL_CALL characters(const OUString& rChars) override;
 
@@ -479,13 +479,13 @@ XMLHyperlinkContext::XMLHyperlinkContext(XMLImport& rImport,
 }
 
 rtl::Reference<XMLImportContext> XMLHyperlinkContext::CreateChildContext(
-    const OUString& rName, const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
+    const OUString& rName, const cpo::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
     return CreateParagraphOrSpanChildContext(GetImport(), rName, m_aPropertyList);
 }
 
 void XMLHyperlinkContext::startElement(
-    const OUString& /*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs)
+    const OUString& /*rName*/, const cpo::uno::Reference<css::xml::sax::XAttributeList>& xAttribs)
 {
     librevenge::RVNGPropertyList aPropertyList;
     for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)
@@ -539,7 +539,7 @@ XMLParaContext::XMLParaContext(XMLImport& rImport, bool bTopLevel)
 }
 
 rtl::Reference<XMLImportContext> XMLParaContext::CreateChildContext(
-    const OUString& rName, const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
+    const OUString& rName, const cpo::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
     if (rName == "text:a")
         return new XMLHyperlinkContext(GetImport(), m_aTextPropertyList);
@@ -551,7 +551,7 @@ rtl::Reference<XMLImportContext> XMLParaContext::CreateChildContext(
 }
 
 void XMLParaContext::startElement(
-    const OUString& /*rName*/, const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs)
+    const OUString& /*rName*/, const cpo::uno::Reference<css::xml::sax::XAttributeList>& xAttribs)
 {
     librevenge::RVNGPropertyList aPropertyList;
     for (sal_Int16 i = 0; i < xAttribs->getLength(); ++i)

@@ -65,7 +65,7 @@ using pyuno::NOT_NULL;
 using pyuno::Runtime;
 using pyuno::PyThreadAttach;
 
-using com::sun::star::uno::Reference;
+using cpo::uno::Reference;
 using cpo::uno::XInterface;
 using cpo::uno::Sequence;
 using cpo::uno::XComponentContext;
@@ -305,7 +305,7 @@ pyuno_Loader_get_implementation(
         Runtime runtime;
 
         PyRef pyCtx = runtime.any2PyObject(
-            cpo::uno::Any( css::uno::Reference(ctx) ) );
+            cpo::uno::Any( cpo::uno::Reference(ctx) ) );
 
         PyRef clazz = getObjectFromLoaderModule( "Loader" );
         PyRef args ( PyTuple_New( 1 ), SAL_NO_ACQUIRE, NOT_NULL );

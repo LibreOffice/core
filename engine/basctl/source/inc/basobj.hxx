@@ -34,7 +34,7 @@ namespace weld { class Widget; class Window; }
 
 namespace basctl
 {
-    void            Organize(weld::Window* pParent, const css::uno::Reference<css::frame::XFrame>& xDocFrame, sal_Int16 tabId);
+    void            Organize(weld::Window* pParent, const cpo::uno::Reference<css::frame::XFrame>& xDocFrame, sal_Int16 tabId);
 
     // help methods for the general use:
     SbMethod*       CreateMacro( SbModule* pModule, const OUString& rMacroName );
@@ -55,8 +55,8 @@ namespace basctl
     // libraries
 
     cpo::uno::Sequence< OUString > GetMergedLibraryNames(
-        const css::uno::Reference< css::script::XLibraryContainer >& xModLibContainer,
-        const css::uno::Reference< css::script::XLibraryContainer >& xDlgLibContainer );
+        const cpo::uno::Reference< css::script::XLibraryContainer >& xModLibContainer,
+        const cpo::uno::Reference< css::script::XLibraryContainer >& xDlgLibContainer );
 
     /** renames a module
 
@@ -69,10 +69,10 @@ namespace basctl
     // new methods for macros
 
     OUString        ChooseMacro(weld::Window* pParent,
-        const css::uno::Reference< css::frame::XModel >& rxLimitToDocument, const css::uno::Reference< css::frame::XFrame >& xDocFrame,
+        const cpo::uno::Reference< css::frame::XModel >& rxLimitToDocument, const cpo::uno::Reference< css::frame::XFrame >& xDocFrame,
         bool bChooseOnly );
-    inline OUString ChooseMacro(weld::Window* pParent, const css::uno::Reference<css::frame::XModel>& rLimitToDocument)
-    { return ChooseMacro(pParent, rLimitToDocument, css::uno::Reference< css::frame::XFrame >(), false/*bChooseOnly*/); }
+    inline OUString ChooseMacro(weld::Window* pParent, const cpo::uno::Reference<css::frame::XModel>& rLimitToDocument)
+    { return ChooseMacro(pParent, rLimitToDocument, cpo::uno::Reference< css::frame::XFrame >(), false/*bChooseOnly*/); }
 
     /// @throws css::container::NoSuchElementException
     /// @throws cpo::uno::RuntimeException

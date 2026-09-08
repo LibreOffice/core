@@ -20,7 +20,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/Frame.hpp>
 #include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>
 
@@ -65,7 +65,7 @@ SfxPartChildWnd_Impl::SfxPartChildWnd_Impl
 
 SfxPartChildWnd_Impl::~SfxPartChildWnd_Impl()
 {
-    css::uno::Reference< css::frame::XFrame > xFrame = GetFrame();
+    cpo::uno::Reference< css::frame::XFrame > xFrame = GetFrame();
 
     // If xFrame=NULL release pMgr! Because this window lives longer then the manager!
     // In these case we got a xFrame->dispose() call from outside ... and has release our
@@ -97,13 +97,13 @@ SfxPartDockWnd_Impl::SfxPartDockWnd_Impl
 )
     : SfxDockingWindow( pBind, pChildWin, pParent, nBits )
 {
-    css::uno::Reference < css::frame::XFrame2 > xFrame = css::frame::Frame::create(
+    cpo::uno::Reference < css::frame::XFrame2 > xFrame = css::frame::Frame::create(
             ::comphelper::getProcessComponentContext() );
     xFrame->initialize( VCLUnoHelper::GetInterface ( this ) );
 
     try
     {
-        css::uno::Reference< css::beans::XPropertySet > xLMPropSet( xFrame->getLayoutManager(), css::uno::UNO_QUERY_THROW );
+        cpo::uno::Reference< css::beans::XPropertySet > xLMPropSet( xFrame->getLayoutManager(), cpo::uno::UNO_QUERY_THROW );
 
         xLMPropSet->setPropertyValue( u"AutomaticToolbars"_ustr, cpo::uno::Any( false ));
     }
@@ -115,13 +115,13 @@ SfxPartDockWnd_Impl::SfxPartDockWnd_Impl
     {
     }
 
-    pChildWin->SetFrame( css::uno::Reference<css::frame::XFrame>(xFrame,css::uno::UNO_QUERY_THROW) );
+    pChildWin->SetFrame( cpo::uno::Reference<css::frame::XFrame>(xFrame,cpo::uno::UNO_QUERY_THROW) );
     if ( pBind->GetDispatcher() )
     {
-        css::uno::Reference < css::frame::XFramesSupplier >
-                xSupp ( pBind->GetDispatcher()->GetFrame()->GetFrame().GetFrameInterface(), css::uno::UNO_QUERY );
+        cpo::uno::Reference < css::frame::XFramesSupplier >
+                xSupp ( pBind->GetDispatcher()->GetFrame()->GetFrame().GetFrameInterface(), cpo::uno::UNO_QUERY );
         if ( xSupp.is() )
-            xSupp->getFrames()->append( css::uno::Reference<css::frame::XFrame>(xFrame, css::uno::UNO_QUERY_THROW) );
+            xSupp->getFrames()->append( cpo::uno::Reference<css::frame::XFrame>(xFrame, cpo::uno::UNO_QUERY_THROW) );
     }
     else {
         OSL_FAIL("Bindings without Dispatcher!");
@@ -135,10 +135,10 @@ bool SfxPartDockWnd_Impl::QueryClose()
     SfxChildWindow* pChild = GetChildWindow_Impl();
     if( pChild )
     {
-        css::uno::Reference< css::frame::XFrame > xFrame = pChild->GetFrame();
+        cpo::uno::Reference< css::frame::XFrame > xFrame = pChild->GetFrame();
         if( xFrame.is() )
         {
-            css::uno::Reference< css::frame::XController >  xCtrl = xFrame->getController();
+            cpo::uno::Reference< css::frame::XController >  xCtrl = xFrame->getController();
             if( xCtrl.is() )
                 bClose = xCtrl->suspend( true );
         }
@@ -155,7 +155,7 @@ bool SfxPartDockWnd_Impl::EventNotify( NotifyEvent& rEvt )
         SfxChildWindow* pChild = GetChildWindow_Impl();
         if( pChild )
         {
-            css::uno::Reference< css::frame::XFrame > xFrame = pChild->GetFrame();
+            cpo::uno::Reference< css::frame::XFrame > xFrame = pChild->GetFrame();
             if( xFrame.is() )
                 xFrame->activate();
         }

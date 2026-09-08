@@ -71,6 +71,7 @@
 #define SFX_CLIENTACTIVATE_TIMEOUT 100
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 namespace {
 
@@ -877,7 +878,7 @@ bool SfxInPlaceClient::IsObjectInPlaceActive() const
 }
 
 
-SfxInPlaceClient* SfxInPlaceClient::GetClient( SfxObjectShell const * pDoc, const css::uno::Reference < css::embed::XEmbeddedObject >& xObject )
+SfxInPlaceClient* SfxInPlaceClient::GetClient( SfxObjectShell const * pDoc, const cpo::uno::Reference < css::embed::XEmbeddedObject >& xObject )
 {
     for ( SfxViewFrame* pFrame = SfxViewFrame::GetFirst(pDoc); pFrame; pFrame=SfxViewFrame::GetNext(*pFrame,pDoc) )
     {

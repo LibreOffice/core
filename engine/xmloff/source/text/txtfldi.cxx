@@ -74,8 +74,8 @@
 #include <comphelper/diagnose_ex.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
@@ -1146,9 +1146,9 @@ void XMLDatabaseFieldImportContext::ProcessAttribute(
     }
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLDatabaseFieldImportContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLDatabaseFieldImportContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     if (nElement == XML_ELEMENT(FORM, XML_CONNECTION_RESOURCE) )
     {
@@ -1719,7 +1719,7 @@ void XMLUserDocInfoImportContext::ProcessAttribute(
 }
 
 void XMLUserDocInfoImportContext::PrepareField(
-        const css::uno::Reference<css::beans::XPropertySet> & xPropertySet)
+        const cpo::uno::Reference<css::beans::XPropertySet> & xPropertySet)
 {
     if ( !aName.isEmpty() )
     {
@@ -2333,9 +2333,9 @@ XMLMacroFieldImportContext::XMLMacroFieldImportContext(
 {
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLMacroFieldImportContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLMacroFieldImportContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
     if ( nElement == XML_ELEMENT(OFFICE, XML_EVENT_LISTENERS) )
     {
@@ -2596,9 +2596,9 @@ XMLDdeFieldDeclsImportContext::XMLDdeFieldDeclsImportContext(SvXMLImport& rImpor
 {
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLDdeFieldDeclsImportContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLDdeFieldDeclsImportContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
     if ( nElement == XML_ELEMENT(TEXT, XML_DDE_CONNECTION_DECL) )
     {
@@ -2840,7 +2840,7 @@ void XMLPageNameFieldImportContext::ProcessAttribute( sal_Int32 nAttrToken,
 
 /// prepare XTextField for insertion into document
 void XMLPageNameFieldImportContext::PrepareField(
-        const css::uno::Reference<css::beans::XPropertySet> &)
+        const cpo::uno::Reference<css::beans::XPropertySet> &)
 {
 }
 
@@ -3163,7 +3163,7 @@ void XMLAnnotationImportContext::ProcessAttribute(
         XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttrToken, sAttrValue);
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLAnnotationImportContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLAnnotationImportContext::createFastChildContext(
     sal_Int32 nElement,
     const uno::Reference< xml::sax::XFastAttributeList>& xAttrList )
 {
@@ -3488,8 +3488,8 @@ static bool lcl_ProcessLabel(
     return bValid;
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLDropDownFieldImportContext::createFastChildContext(
-    sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLDropDownFieldImportContext::createFastChildContext(
+    sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     if( nElement == XML_ELEMENT(TEXT, XML_LABEL) )
     {
@@ -3630,7 +3630,7 @@ void XMLDateTimeFieldImportContext::ProcessAttribute( sal_Int32 nAttrToken,
 
 /// prepare XTextField for insertion into document
 void XMLDateTimeFieldImportContext::PrepareField(
-        const css::uno::Reference<
+        const cpo::uno::Reference<
         css::beans::XPropertySet> &)
 {
 }

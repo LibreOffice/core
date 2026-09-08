@@ -65,7 +65,7 @@ bool ThumbnailView::renameItem(ThumbnailViewItem&, const OUString&)
     return false;
 }
 
-static css::uno::Reference<css::embed::XHierarchicalStorageAccess>
+static cpo::uno::Reference<css::embed::XHierarchicalStorageAccess>
 getStorageAccess(const OUString& URL, sal_Int32 format)
 {
     auto xFactory = css::embed::StorageFactory::create(comphelper::getProcessComponentContext());
@@ -76,8 +76,8 @@ getStorageAccess(const OUString& URL, sal_Int32 format)
         .queryThrow<css::embed::XHierarchicalStorageAccess>();
 }
 
-static css::uno::Reference<css::io::XInputStream>
-getHierarchicalStream(const css::uno::Reference<css::embed::XHierarchicalStorageAccess>& xStorage,
+static cpo::uno::Reference<css::io::XInputStream>
+getHierarchicalStream(const cpo::uno::Reference<css::embed::XHierarchicalStorageAccess>& xStorage,
                       const OUString& name)
 {
     auto xStream
@@ -85,7 +85,7 @@ getHierarchicalStream(const css::uno::Reference<css::embed::XHierarchicalStorage
     return xStream->getInputStream();
 }
 
-static css::uno::Reference<css::io::XInputStream>
+static cpo::uno::Reference<css::io::XInputStream>
 getFirstHierarchicalStream(const OUString& URL, sal_Int32 format,
                            std::initializer_list<OUString> names)
 {
@@ -105,7 +105,7 @@ getFirstHierarchicalStream(const OUString& URL, sal_Int32 format,
     return {};
 }
 
-static css::uno::Reference<css::io::XInputStream>
+static cpo::uno::Reference<css::io::XInputStream>
 getFirstStreamByRelType(const OUString& URL, std::initializer_list<OUString> types)
 {
     auto xStorage(getStorageAccess(URL, css::embed::StorageFormats::OFOPXML));
@@ -135,8 +135,8 @@ getFirstStreamByRelType(const OUString& URL, std::initializer_list<OUString> typ
 Bitmap ThumbnailView::readThumbnail(const OUString &msURL)
 {
     using namespace ::com::sun::star;
-    using namespace ::com::sun::star::uno;
-    using namespace cpo::uno;
+    using namespace ::cpo;
+    using namespace ::cpo::uno;
 
     // Load the thumbnail from a template document.
     uno::Reference<io::XInputStream> xIStream;
@@ -336,7 +336,7 @@ void ThumbnailView::ImplDeleteItems()
         if (xItemAcc.is())
         {
             cpo::uno::Any aOldAny, aNewAny;
-            aOldAny <<= css::uno::Reference<css::accessibility::XAccessible>(pItem->GetAccessible());
+            aOldAny <<= cpo::uno::Reference<css::accessibility::XAccessible>(pItem->GetAccessible());
             ImplFireAccessibleEvent( css::accessibility::AccessibleEventId::CHILD, aOldAny, aNewAny );
 
             xItemAcc->dispose();
@@ -478,9 +478,9 @@ void ThumbnailView::CalculateItemPositions(bool bScrollBarUsed)
         {
             cpo::uno::Any aOldAny, aNewAny;
             if (bIsVisible)
-                aNewAny <<= css::uno::Reference<css::accessibility::XAccessible>(rItem.GetAccessible());
+                aNewAny <<= cpo::uno::Reference<css::accessibility::XAccessible>(rItem.GetAccessible());
             else
-                aOldAny <<= css::uno::Reference<css::accessibility::XAccessible>(rItem.GetAccessible());
+                aOldAny <<= cpo::uno::Reference<css::accessibility::XAccessible>(rItem.GetAccessible());
             ImplFireAccessibleEvent(css::accessibility::AccessibleEventId::CHILD, aOldAny, aNewAny);
         }
     };
@@ -1191,7 +1191,7 @@ void ThumbnailView::SelectItem( sal_uInt16 nItemId )
     if( pItemAcc )
     {
         cpo::uno::Any aOldAny, aNewAny;
-        aNewAny <<= css::uno::Reference<css::accessibility::XAccessible>( pItemAcc );
+        aNewAny <<= cpo::uno::Reference<css::accessibility::XAccessible>( pItemAcc );
         ImplFireAccessibleEvent( css::accessibility::AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, aOldAny, aNewAny );
     }
 
@@ -1264,7 +1264,7 @@ void ThumbnailView::filterItems(const std::function<bool (const ThumbnailViewIte
                 {
                     cpo::uno::Any aOldAny, aNewAny;
 
-                    aOldAny <<= css::uno::Reference<css::accessibility::XAccessible>(pItem->GetAccessible());
+                    aOldAny <<= cpo::uno::Reference<css::accessibility::XAccessible>(pItem->GetAccessible());
                     ImplFireAccessibleEvent( css::accessibility::AccessibleEventId::CHILD, aOldAny, aNewAny );
                 }
 

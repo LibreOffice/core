@@ -22,19 +22,19 @@
 #include <rtl/ustring.hxx>
 
 namespace com::sun::star {
-    namespace uno { template<typename T> class Reference; }
     namespace container { class XNameContainer; }
     namespace xml::dom { class XDocumentBuilder; }
 }
+namespace cpo::uno { template<typename T> class Reference; }
 
 
 bool isValidQName( const OUString& sName,
-                   const css::uno::Reference<css::container::XNameContainer>& xNamespaces );
+                   const cpo::uno::Reference<css::container::XNameContainer>& xNamespaces );
 
 bool isValidPrefixName( const OUString& sName,
-                        const css::uno::Reference<css::container::XNameContainer>& xNamespaces );
+                        const cpo::uno::Reference<css::container::XNameContainer>& xNamespaces );
 
-css::uno::Reference<css::xml::dom::XDocumentBuilder> getDocumentBuilder();
+cpo::uno::Reference<css::xml::dom::XDocumentBuilder> getDocumentBuilder();
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

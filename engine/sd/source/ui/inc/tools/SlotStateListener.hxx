@@ -49,7 +49,7 @@ public:
     */
     SlotStateListener (
         Link<const OUString&,void> const & rCallback,
-        const css::uno::Reference<css::frame::XDispatchProvider>& rxDispatchProvider,
+        const cpo::uno::Reference<css::frame::XDispatchProvider>& rxDispatchProvider,
         const OUString& rSlotName);
 
     /** The constructor de-registers all remaining listeners.  Usually a prior
@@ -70,7 +70,7 @@ public:
         @throws DisposedException
     */
     void ConnectToDispatchProvider (
-        const css::uno::Reference<css::frame::XDispatchProvider>& rxDispatchProvider);
+        const cpo::uno::Reference<css::frame::XDispatchProvider>& rxDispatchProvider);
 
     /** Observe the slot specified by the given name.  Note that
         ConnectToFrame() has to have been called earlier.
@@ -127,7 +127,7 @@ private:
 
     /** Return an XDispatch object for the given URL.
     */
-    css::uno::Reference<css::frame::XDispatch>
+    cpo::uno::Reference<css::frame::XDispatch>
         GetDispatch (
             const css::util::URL& rURL) const;
 };

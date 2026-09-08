@@ -12,7 +12,7 @@
 
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -36,8 +36,8 @@ public:
     {
     }
 
-    virtual css::uno::Reference<cpo::uno::XInterface> init() = 0;
-    virtual css::uno::Reference<cpo::uno::XInterface> getXNamedRanges(sal_Int32 nSheet = 0) = 0;
+    virtual cpo::uno::Reference<cpo::uno::XInterface> init() = 0;
+    virtual cpo::uno::Reference<cpo::uno::XInterface> getXNamedRanges(sal_Int32 nSheet = 0) = 0;
 
     // XNamedRanges
     void testAddNewByName();
@@ -47,7 +47,7 @@ public:
 
 protected:
     ~XNamedRanges(){};
-    css::uno::Reference<css::sheet::XSpreadsheet> xSheet;
+    cpo::uno::Reference<css::sheet::XSpreadsheet> xSheet;
 
 private:
     OUString maNameToRemove;

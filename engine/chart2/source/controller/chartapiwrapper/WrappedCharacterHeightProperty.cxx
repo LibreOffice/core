@@ -25,7 +25,7 @@
 #include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::cpo::uno::Any;
 
 namespace chart::wrapper

@@ -49,12 +49,12 @@ class GlobalSettings_Access : public ::cppu::WeakImplHelper<
                                   css::lang::XEventListener>
 {
     public:
-        explicit GlobalSettings_Access( css::uno::Reference< cpo::uno::XComponentContext > xContext );
+        explicit GlobalSettings_Access( cpo::uno::Reference< cpo::uno::XComponentContext > xContext );
 
         // XComponent
         virtual void dispose() override;
-        virtual void addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-        virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+        virtual void addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& xListener ) override;
+        virtual void removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
         // XEventListener
         virtual void disposing( const css::lang::EventObject& Source ) override;
@@ -73,13 +73,13 @@ class GlobalSettings_Access : public ::cppu::WeakImplHelper<
         OUString                                                  m_aPropStatesEnabled;
         OUString                                                  m_aPropLocked;
         OUString                                                  m_aPropDocked;
-        css::uno::Reference< css::container::XNameAccess >        m_xConfigAccess;
-        css::uno::Reference< cpo::uno::XComponentContext>         m_xContext;
+        cpo::uno::Reference< css::container::XNameAccess >        m_xConfigAccess;
+        cpo::uno::Reference< cpo::uno::XComponentContext>         m_xContext;
 };
 
 }
 
-GlobalSettings_Access::GlobalSettings_Access( css::uno::Reference< cpo::uno::XComponentContext > xContext ) :
+GlobalSettings_Access::GlobalSettings_Access( cpo::uno::Reference< cpo::uno::XComponentContext > xContext ) :
     m_bDisposed( false ),
     m_bConfigRead( false ),
     m_aNodeRefStates( u"States"_ustr ),
@@ -98,11 +98,11 @@ void GlobalSettings_Access::dispose()
     m_bDisposed = true;
 }
 
-void GlobalSettings_Access::addEventListener( const css::uno::Reference< css::lang::XEventListener >& )
+void GlobalSettings_Access::addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& )
 {
 }
 
-void GlobalSettings_Access::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& )
+void GlobalSettings_Access::removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& )
 {
 }
 
@@ -167,7 +167,7 @@ bool GlobalSettings_Access::GetToolbarStateInfo( GlobalSettings::StateInfo eStat
     try
     {
         cpo::uno::Any a = m_xConfigAccess->getByName( m_aNodeRefStates );
-        css::uno::Reference< css::container::XNameAccess > xNameAccess;
+        cpo::uno::Reference< css::container::XNameAccess > xNameAccess;
         if ( a >>= xNameAccess )
         {
             if ( eStateInfo == GlobalSettings::STATEINFO_LOCKED )
@@ -195,7 +195,7 @@ void GlobalSettings_Access::impl_initConfigAccess()
     {
         if ( m_xContext.is() )
         {
-            css::uno::Reference< css::lang::XMultiServiceFactory > xConfigProvider =
+            cpo::uno::Reference< css::lang::XMultiServiceFactory > xConfigProvider =
                  css::configuration::theDefaultProvider::get( m_xContext );
 
             cpo::uno::Sequence<cpo::uno::Any> aArgs(comphelper::InitAnyPropertySequence(
@@ -204,11 +204,11 @@ void GlobalSettings_Access::impl_initConfigAccess()
             }));
             m_xConfigAccess.set(xConfigProvider->createInstanceWithArguments(
                                     SERVICENAME_CFGREADACCESS, aArgs ),
-                                css::uno::UNO_QUERY );
+                                cpo::uno::UNO_QUERY );
 
-            css::uno::Reference< css::lang::XComponent >(
-                xConfigProvider, css::uno::UNO_QUERY_THROW )->addEventListener(
-                    css::uno::Reference< css::lang::XEventListener >(this));
+            cpo::uno::Reference< css::lang::XComponent >(
+                xConfigProvider, cpo::uno::UNO_QUERY_THROW )->addEventListener(
+                    cpo::uno::Reference< css::lang::XEventListener >(this));
         }
     }
     catch ( const css::lang::WrappedTargetException& )
@@ -221,13 +221,13 @@ void GlobalSettings_Access::impl_initConfigAccess()
 
 //  global class
 
-static GlobalSettings_Access* GetGlobalSettings( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext )
+static GlobalSettings_Access* GetGlobalSettings( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext )
 {
     static rtl::Reference<GlobalSettings_Access> pStaticSettings = new GlobalSettings_Access( rxContext );
     return pStaticSettings.get();
 }
 
-GlobalSettings::GlobalSettings( css::uno::Reference< cpo::uno::XComponentContext > xContext ) :
+GlobalSettings::GlobalSettings( cpo::uno::Reference< cpo::uno::XComponentContext > xContext ) :
     m_xContext(std::move( xContext ))
 {
 }

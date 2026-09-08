@@ -29,8 +29,8 @@ using ::com::sun::star::beans::XMultiPropertySet;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::beans::XPropertySetInfo;
 using ::cpo::uno::Any;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::UNO_QUERY;
+using ::cpo::uno::Reference;
+using ::cpo::uno::UNO_QUERY;
 
 
 MultiPropertySetHelper::MultiPropertySetHelper(

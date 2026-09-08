@@ -32,8 +32,8 @@ private:
 
 public:
     /// @throws cpo::uno::RuntimeException
-    SwVbaAddin(const css::uno::Reference<ooo::vba::XHelperInterface>& rParent,
-               const css::uno::Reference<cpo::uno::XComponentContext>& rContext, OUString aFileURL);
+    SwVbaAddin(const cpo::uno::Reference<ooo::vba::XHelperInterface>& rParent,
+               const cpo::uno::Reference<cpo::uno::XComponentContext>& rContext, OUString aFileURL);
     virtual ~SwVbaAddin() override;
 
     // Attributes

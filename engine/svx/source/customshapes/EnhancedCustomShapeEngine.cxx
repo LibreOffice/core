@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -48,8 +48,8 @@
 #include <cppuhelper/supportsservice.hxx>
 
 using namespace css;
-using namespace css::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 class SdrObject;
 class SdrObjCustomShape;
@@ -65,7 +65,7 @@ EnhancedCustomShapeEngine::EnhancedCustomShapeEngine(const cpo::uno::Sequence< c
         {
             if ( aProp.Name == "CustomShape" )
             {
-                css::uno::Reference<css::drawing::XShape> xShape;
+                cpo::uno::Reference<css::drawing::XShape> xShape;
                 aProp.Value >>= xShape;
                 // the only two subclasses of SdrObject we see here are SdrObjCustomShape and SwDrawVirtObj
                 // and we only return useful data for SdrObjCustomShape

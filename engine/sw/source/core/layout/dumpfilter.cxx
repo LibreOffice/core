@@ -22,6 +22,7 @@
 #include <libxml/xmlwriter.h>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace
 {

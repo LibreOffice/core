@@ -45,7 +45,7 @@ public:
     static const sal_uInt16 INPUTSTRING_PRECISION;
 
     /// ctor with service manager and language/country enum
-    SvNumberFormatter(const css::uno::Reference<cpo::uno::XComponentContext>& rxContext,
+    SvNumberFormatter(const cpo::uno::Reference<cpo::uno::XComponentContext>& rxContext,
                       LanguageType eLang);
 
     ~SvNumberFormatter();
@@ -537,7 +537,7 @@ public:
 
 private:
     mutable ::osl::Mutex m_aMutex;
-    css::uno::Reference<cpo::uno::XComponentContext> m_xContext;
+    cpo::uno::Reference<cpo::uno::XComponentContext> m_xContext;
     const LanguageType IniLnge; // Initialized setting language/country
     SvNFFormatData m_aFormatData;
     SvNFEngine::Accessor m_aRWPolicy;
@@ -557,7 +557,7 @@ private:
     // Generate additional formats provided by i18n
     SVL_DLLPRIVATE void ImpGenerateAdditionalFormats(
         sal_uInt32 CLOffset,
-        css::uno::Reference<css::i18n::XNumberFormatCode> const& rNumberFormatCode);
+        cpo::uno::Reference<css::i18n::XNumberFormatCode> const& rNumberFormatCode);
 
     // Test whether format code already exists, then return index key,
     // otherwise NUMBERFORMAT_ENTRY_NOT_FOUND

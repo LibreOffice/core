@@ -50,8 +50,8 @@ namespace frm
 
     protected:
     // XSQLErrorBroadcaster
-        virtual void addSQLErrorListener( const css::uno::Reference< css::sdb::XSQLErrorListener >& _rListener ) override;
-        virtual void removeSQLErrorListener( const css::uno::Reference< css::sdb::XSQLErrorListener >& _rListener ) override;
+        virtual void addSQLErrorListener( const cpo::uno::Reference< css::sdb::XSQLErrorListener >& _rListener ) override;
+        virtual void removeSQLErrorListener( const cpo::uno::Reference< css::sdb::XSQLErrorListener >& _rListener ) override;
     };
 
 

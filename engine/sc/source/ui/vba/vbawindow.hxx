@@ -35,15 +35,15 @@ class ScVbaWindow : public WindowImpl_BASE
 {
 private:
     rtl::Reference<ScModelObj> m_xModel;
-    css::uno::Reference< ov::excel::XPane > m_xPane;
+    cpo::uno::Reference< ov::excel::XPane > m_xPane;
 
     void init();
     /// @throws cpo::uno::RuntimeException
-    css::uno::Reference< css::beans::XPropertySet > getControllerProps() const;
+    cpo::uno::Reference< css::beans::XPropertySet > getControllerProps() const;
     /// @throws cpo::uno::RuntimeException
-    css::uno::Reference< css::beans::XPropertySet > getFrameProps() const;
+    cpo::uno::Reference< css::beans::XPropertySet > getFrameProps() const;
     /// @throws cpo::uno::RuntimeException
-    css::uno::Reference< css::awt::XDevice > getDevice() const;
+    cpo::uno::Reference< css::awt::XDevice > getDevice() const;
 
 protected:
     void SplitAtDefinedPosition( sal_Int32 nColumns, sal_Int32 nRows );
@@ -55,19 +55,19 @@ public:
 public:
     /// @throws cpo::uno::RuntimeException
     ScVbaWindow(
-        const css::uno::Reference< ov::XHelperInterface >& xParent,
-        const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
+        const cpo::uno::Reference< ov::XHelperInterface >& xParent,
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
         const rtl::Reference< ScModelObj >& xModel,
-        const css::uno::Reference< css::frame::XController >& xController );
+        const cpo::uno::Reference< css::frame::XController >& xController );
     /// @throws cpo::uno::RuntimeException
     ScVbaWindow(
         const cpo::uno::Sequence< cpo::uno::Any >& aArgs,
-        const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext );
 
     // XWindow
-    virtual css::uno::Reference< ov::excel::XRange > SAL_CALL ActiveCell(  ) override;
-     virtual css::uno::Reference< ov::excel::XPane > SAL_CALL ActivePane() override;
-    virtual css::uno::Reference< ov::excel::XWorksheet > SAL_CALL ActiveSheet(  ) override;
+    virtual cpo::uno::Reference< ov::excel::XRange > SAL_CALL ActiveCell(  ) override;
+     virtual cpo::uno::Reference< ov::excel::XPane > SAL_CALL ActivePane() override;
+    virtual cpo::uno::Reference< ov::excel::XWorksheet > SAL_CALL ActiveSheet(  ) override;
     virtual void SAL_CALL setCaption( const cpo::uno::Any& _caption ) override;
     virtual cpo::uno::Any SAL_CALL getCaption() override;
     virtual bool SAL_CALL getDisplayGridlines() override;
@@ -100,7 +100,7 @@ public:
     virtual void SAL_CALL setScrollColumn( const cpo::uno::Any& _scrollcolumn ) override ;
     virtual cpo::uno::Any SAL_CALL getView() override;
     virtual void SAL_CALL setView( const cpo::uno::Any& _view ) override;
-    virtual css::uno::Reference< ov::excel::XRange > SAL_CALL getVisibleRange() override;
+    virtual cpo::uno::Reference< ov::excel::XRange > SAL_CALL getVisibleRange() override;
     virtual cpo::uno::Any SAL_CALL getWindowState() override;
     virtual void SAL_CALL setWindowState( const cpo::uno::Any& _windowstate ) override;
     virtual cpo::uno::Any SAL_CALL getZoom() override;
@@ -116,7 +116,7 @@ public:
     virtual void SAL_CALL Activate(  ) override;
     virtual void SAL_CALL Close( const cpo::uno::Any& SaveChanges, const cpo::uno::Any& FileName, const cpo::uno::Any& RouteWorkBook ) override;
     virtual cpo::uno::Any SAL_CALL Selection(  ) override;
-    virtual css::uno::Reference< ov::excel::XRange > SAL_CALL RangeSelection() override;
+    virtual cpo::uno::Reference< ov::excel::XRange > SAL_CALL RangeSelection() override;
     virtual sal_Int32 SAL_CALL PointsToScreenPixelsX(sal_Int32 _points) override;
     virtual sal_Int32 SAL_CALL PointsToScreenPixelsY(sal_Int32 _points) override;
     virtual void SAL_CALL PrintOut( const cpo::uno::Any& From, const cpo::uno::Any&To, const cpo::uno::Any& Copies, const cpo::uno::Any& Preview, const cpo::uno::Any& ActivePrinter, const cpo::uno::Any& PrintToFile, const cpo::uno::Any& Collate, const cpo::uno::Any& PrToFileName ) override;

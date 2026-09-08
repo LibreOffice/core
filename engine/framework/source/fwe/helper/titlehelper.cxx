@@ -42,14 +42,15 @@
 
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace css::frame;
 
 namespace framework{
 
-TitleHelper::TitleHelper(css::uno::Reference< cpo::uno::XComponentContext > xContext,
-                        const css::uno::Reference< cpo::uno::XInterface >& xOwner,
-                        const css::uno::Reference< css::frame::XUntitledNumbers >& xNumbers)
+TitleHelper::TitleHelper(cpo::uno::Reference< cpo::uno::XComponentContext > xContext,
+                        const cpo::uno::Reference< cpo::uno::XInterface >& xOwner,
+                        const cpo::uno::Reference< css::frame::XUntitledNumbers >& xNumbers)
     :
       m_xContext        (std::move(xContext))
     , m_xOwner          (xOwner)
@@ -57,16 +58,16 @@ TitleHelper::TitleHelper(css::uno::Reference< cpo::uno::XComponentContext > xCon
     , m_bExternalTitle  (false)
     , m_nLeasedNumber   (css::frame::UntitledNumbersConst::INVALID_NUMBER)
 {
-    if (css::uno::Reference<css::frame::XModel> xModel{ xOwner, css::uno::UNO_QUERY })
+    if (cpo::uno::Reference<css::frame::XModel> xModel{ xOwner, cpo::uno::UNO_QUERY })
     {
         impl_startListeningForModel (xModel);
     }
-    else if (css::uno::Reference<css::frame::XController> xController{ xOwner,
-                                                                       css::uno::UNO_QUERY })
+    else if (cpo::uno::Reference<css::frame::XController> xController{ xOwner,
+                                                                       cpo::uno::UNO_QUERY })
     {
         impl_startListeningForController (xController);
     }
-    else if (css::uno::Reference<css::frame::XFrame> xFrame{ xOwner, css::uno::UNO_QUERY })
+    else if (cpo::uno::Reference<css::frame::XFrame> xFrame{ xOwner, cpo::uno::UNO_QUERY })
     {
         impl_startListeningForFrame (xFrame);
     }
@@ -114,13 +115,13 @@ void TitleHelper::setTitle(const OUString& sTitle)
     impl_sendTitleChangedEvent ();
 }
 
-void TitleHelper::addTitleChangeListener(const css::uno::Reference< css::frame::XTitleChangeListener >& xListener)
+void TitleHelper::addTitleChangeListener(const cpo::uno::Reference< css::frame::XTitleChangeListener >& xListener)
 {
     std::unique_lock aLock(m_aMutex);
     m_aTitleChangeListeners.addInterface( aLock, xListener );
 }
 
-void TitleHelper::removeTitleChangeListener(const css::uno::Reference< css::frame::XTitleChangeListener >& xListener)
+void TitleHelper::removeTitleChangeListener(const cpo::uno::Reference< css::frame::XTitleChangeListener >& xListener)
 {
     std::unique_lock aLock(m_aMutex);
     m_aTitleChangeListeners.removeInterface( aLock, xListener );
@@ -128,7 +129,7 @@ void TitleHelper::removeTitleChangeListener(const css::uno::Reference< css::fram
 
 void TitleHelper::titleChanged(const css::frame::TitleChangedEvent& aEvent)
 {
-    css::uno::Reference< css::frame::XTitle > xSubTitle;
+    cpo::uno::Reference< css::frame::XTitle > xSubTitle;
     // SYNCHRONIZED ->
     {
         std::unique_lock aLock(m_aMutex);
@@ -150,12 +151,12 @@ void TitleHelper::documentEventOccured(const css::document::DocumentEvent& aEven
       && ! aEvent.EventName.equalsIgnoreAsciiCase("OnTitleChanged"))
         return;
 
-    css::uno::Reference< css::frame::XModel > xOwner;
+    cpo::uno::Reference< css::frame::XModel > xOwner;
     // SYNCHRONIZED ->
     {
         std::unique_lock aLock(m_aMutex);
 
-        xOwner.set(m_xOwner, css::uno::UNO_QUERY);
+        xOwner.set(m_xOwner, cpo::uno::UNO_QUERY);
     }
     // <- SYNCHRONIZED
 
@@ -172,12 +173,12 @@ void TitleHelper::documentEventOccured(const css::document::DocumentEvent& aEven
 
 void TitleHelper::frameAction(const css::frame::FrameActionEvent& aEvent)
 {
-    css::uno::Reference< css::frame::XFrame > xOwner;
+    cpo::uno::Reference< css::frame::XFrame > xOwner;
     // SYNCHRONIZED ->
     {
         std::unique_lock aLock(m_aMutex);
 
-        xOwner.set(m_xOwner, css::uno::UNO_QUERY);
+        xOwner.set(m_xOwner, cpo::uno::UNO_QUERY);
     }
     // <- SYNCHRONIZED
 
@@ -199,8 +200,8 @@ void TitleHelper::frameAction(const css::frame::FrameActionEvent& aEvent)
 
 void TitleHelper::disposing(const css::lang::EventObject& aEvent)
 {
-    css::uno::Reference< cpo::uno::XInterface >         xOwner;
-    css::uno::Reference< css::frame::XUntitledNumbers > xNumbers;
+    cpo::uno::Reference< cpo::uno::XInterface >         xOwner;
+    cpo::uno::Reference< css::frame::XUntitledNumbers > xNumbers;
     ::sal_Int32                                         nLeasedNumber;
     // SYNCHRONIZED ->
     {
@@ -215,7 +216,7 @@ void TitleHelper::disposing(const css::lang::EventObject& aEvent)
     if ( ! xOwner.is ())
         return;
 
-    css::uno::Reference< css::frame::XFrame > xFrame(xOwner, css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::frame::XFrame > xFrame(xOwner, cpo::uno::UNO_QUERY);
     if (xFrame.is())
         xFrame->removeFrameActionListener(this);
 
@@ -241,7 +242,7 @@ void TitleHelper::disposing(const css::lang::EventObject& aEvent)
 
 void TitleHelper::impl_sendTitleChangedEvent ()
 {
-    css::uno::Reference<cpo::uno::XInterface> xOwner;
+    cpo::uno::Reference<cpo::uno::XInterface> xOwner;
     OUString sTitle;
     // SYNCHRONIZED ->
     {
@@ -280,7 +281,7 @@ void TitleHelper::impl_sendTitleChangedEvent ()
 
 void TitleHelper::impl_updateTitle (bool init)
 {
-    css::uno::Reference<cpo::uno::XInterface> xOwner;
+    cpo::uno::Reference<cpo::uno::XInterface> xOwner;
 
     // SYNCHRONIZED ->
     {
@@ -290,32 +291,32 @@ void TitleHelper::impl_updateTitle (bool init)
     }
     // <- SYNCHRONIZED
 
-    if (css::uno::Reference<css::frame::XModel3> xModel{ xOwner, css::uno::UNO_QUERY })
+    if (cpo::uno::Reference<css::frame::XModel3> xModel{ xOwner, cpo::uno::UNO_QUERY })
     {
         impl_updateTitleForModel (xModel, init);
     }
-    else if (css::uno::Reference<css::frame::XController> xController{ xOwner,
-                                                                       css::uno::UNO_QUERY })
+    else if (cpo::uno::Reference<css::frame::XController> xController{ xOwner,
+                                                                       cpo::uno::UNO_QUERY })
     {
         impl_updateTitleForController (xController, init);
     }
-    else if (css::uno::Reference<css::frame::XFrame> xFrame{ xOwner, css::uno::UNO_QUERY })
+    else if (cpo::uno::Reference<css::frame::XFrame> xFrame{ xOwner, cpo::uno::UNO_QUERY })
     {
         impl_updateTitleForFrame (xFrame, init);
     }
 }
 
-static OUString getURLFromModel(const css::uno::Reference< css::frame::XModel3 >& xModel)
+static OUString getURLFromModel(const cpo::uno::Reference< css::frame::XModel3 >& xModel)
 {
-    if (css::uno::Reference<css::frame::XStorable> xURLProvider{ xModel, css::uno::UNO_QUERY })
+    if (cpo::uno::Reference<css::frame::XStorable> xURLProvider{ xModel, cpo::uno::UNO_QUERY })
         return xURLProvider->getLocation();
     return {};
 }
 
-void TitleHelper::impl_updateTitleForModel (const css::uno::Reference< css::frame::XModel3 >& xModel, bool init)
+void TitleHelper::impl_updateTitleForModel (const cpo::uno::Reference< css::frame::XModel3 >& xModel, bool init)
 {
-    css::uno::Reference< cpo::uno::XInterface >         xOwner;
-    css::uno::Reference< css::frame::XUntitledNumbers > xNumbers;
+    cpo::uno::Reference< cpo::uno::XInterface >         xOwner;
+    cpo::uno::Reference< css::frame::XUntitledNumbers > xNumbers;
     ::sal_Int32                                         nLeasedNumber;
     // SYNCHRONIZED ->
     {
@@ -394,10 +395,10 @@ void TitleHelper::impl_updateTitleForModel (const css::uno::Reference< css::fram
         impl_sendTitleChangedEvent ();
 }
 
-void TitleHelper::impl_updateTitleForController (const css::uno::Reference< css::frame::XController >& xController, bool init)
+void TitleHelper::impl_updateTitleForController (const cpo::uno::Reference< css::frame::XController >& xController, bool init)
 {
-    css::uno::Reference< cpo::uno::XInterface >         xOwner;
-    css::uno::Reference< css::frame::XUntitledNumbers > xNumbers;
+    cpo::uno::Reference< cpo::uno::XInterface >         xOwner;
+    cpo::uno::Reference< css::frame::XUntitledNumbers > xNumbers;
     ::sal_Int32                                         nLeasedNumber;
     // SYNCHRONIZED ->
     {
@@ -426,10 +427,10 @@ void TitleHelper::impl_updateTitleForController (const css::uno::Reference< css:
     if (nLeasedNumber == css::frame::UntitledNumbersConst::INVALID_NUMBER)
         nLeasedNumber = xNumbers->leaseNumber (xOwner);
 
-    css::uno::Reference< css::frame::XTitle > xModelTitle(xController->getModel (), css::uno::UNO_QUERY);
-    css::uno::Reference< css::frame::XModel > xModel = xController->getModel ();
+    cpo::uno::Reference< css::frame::XTitle > xModelTitle(xController->getModel (), cpo::uno::UNO_QUERY);
+    cpo::uno::Reference< css::frame::XModel > xModel = xController->getModel ();
     if (!xModelTitle.is ())
-        xModelTitle.set(xController, css::uno::UNO_QUERY);
+        xModelTitle.set(xController, cpo::uno::UNO_QUERY);
     if (xModelTitle.is ())
     {
         sTitle.append      (xModelTitle->getTitle ());
@@ -474,7 +475,7 @@ void TitleHelper::impl_updateTitleForController (const css::uno::Reference< css:
         impl_sendTitleChangedEvent ();
 }
 
-void TitleHelper::impl_updateTitleForFrame (const css::uno::Reference< css::frame::XFrame >& xFrame, bool init)
+void TitleHelper::impl_updateTitleForFrame (const cpo::uno::Reference< css::frame::XFrame >& xFrame, bool init)
 {
     if ( ! xFrame.is ())
         return;
@@ -490,7 +491,7 @@ void TitleHelper::impl_updateTitleForFrame (const css::uno::Reference< css::fram
     }
     // <- SYNCHRONIZED
 
-    css::uno::Reference< cpo::uno::XInterface > xComponent = xFrame->getController ();
+    cpo::uno::Reference< cpo::uno::XInterface > xComponent = xFrame->getController ();
     if ( ! xComponent.is ())
         xComponent = xFrame->getComponentWindow ();
 
@@ -525,9 +526,9 @@ void TitleHelper::impl_updateTitleForFrame (const css::uno::Reference< css::fram
 
 // static
 void TitleHelper::impl_appendComponentTitle (      OUStringBuffer&                       sTitle    ,
-                                             const css::uno::Reference< cpo::uno::XInterface >& xComponent)
+                                             const cpo::uno::Reference< cpo::uno::XInterface >& xComponent)
 {
-    css::uno::Reference< css::frame::XTitle > xTitle(xComponent, css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::frame::XTitle > xTitle(xComponent, cpo::uno::UNO_QUERY);
 
     // Note: Title has to be used (even if it's empty) if the right interface is supported.
     if (xTitle.is ())
@@ -551,8 +552,8 @@ void TitleHelper::impl_appendProductName (OUStringBuffer& sTitle)
 
 void TitleHelper::impl_appendModuleName (OUStringBuffer& sTitle)
 {
-    css::uno::Reference< cpo::uno::XInterface >        xOwner;
-    css::uno::Reference< cpo::uno::XComponentContext > xContext;
+    cpo::uno::Reference< cpo::uno::XInterface >        xOwner;
+    cpo::uno::Reference< cpo::uno::XComponentContext > xContext;
     // SYNCHRONIZED ->
     {
         std::unique_lock aLock(m_aMutex);
@@ -564,7 +565,7 @@ void TitleHelper::impl_appendModuleName (OUStringBuffer& sTitle)
 
     try
     {
-        css::uno::Reference< css::frame::XModuleManager2 > xModuleManager =
+        cpo::uno::Reference< css::frame::XModuleManager2 > xModuleManager =
             css::frame::ModuleManager::create(xContext);
 
         const OUString                 sID     = xModuleManager->identify(xOwner);
@@ -601,37 +602,37 @@ void TitleHelper::impl_appendDebugVersion (OUStringBuffer&)
 }
 #endif
 
-void TitleHelper::impl_startListeningForModel (const css::uno::Reference< css::frame::XModel >& xModel)
+void TitleHelper::impl_startListeningForModel (const cpo::uno::Reference< css::frame::XModel >& xModel)
 {
-    css::uno::Reference< css::document::XDocumentEventBroadcaster > xBroadcaster(xModel, css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::document::XDocumentEventBroadcaster > xBroadcaster(xModel, cpo::uno::UNO_QUERY);
     if ( ! xBroadcaster.is ())
         return;
 
     xBroadcaster->addDocumentEventListener (static_cast< css::document::XDocumentEventListener* >(this));
 }
 
-void TitleHelper::impl_startListeningForController (const css::uno::Reference< css::frame::XController >& xController)
+void TitleHelper::impl_startListeningForController (const cpo::uno::Reference< css::frame::XController >& xController)
 {
     xController->addEventListener (static_cast< css::lang::XEventListener* > (static_cast< css::frame::XFrameActionListener* > (this) ) );
-    css::uno::Reference< css::frame::XTitle > xSubTitle(xController->getModel (), css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::frame::XTitle > xSubTitle(xController->getModel (), cpo::uno::UNO_QUERY);
     impl_setSubTitle (xSubTitle);
 }
 
-void TitleHelper::impl_startListeningForFrame (const css::uno::Reference< css::frame::XFrame >& xFrame)
+void TitleHelper::impl_startListeningForFrame (const cpo::uno::Reference< css::frame::XFrame >& xFrame)
 {
     xFrame->addFrameActionListener(this  );
     impl_updateListeningForFrame  (xFrame);
 }
 
-void TitleHelper::impl_updateListeningForFrame (const css::uno::Reference< css::frame::XFrame >& xFrame)
+void TitleHelper::impl_updateListeningForFrame (const cpo::uno::Reference< css::frame::XFrame >& xFrame)
 {
-    css::uno::Reference< css::frame::XTitle > xSubTitle(xFrame->getController (), css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::frame::XTitle > xSubTitle(xFrame->getController (), cpo::uno::UNO_QUERY);
     impl_setSubTitle (xSubTitle);
 }
 
-void TitleHelper::impl_setSubTitle (const css::uno::Reference< css::frame::XTitle >& xSubTitle)
+void TitleHelper::impl_setSubTitle (const cpo::uno::Reference< css::frame::XTitle >& xSubTitle)
 {
-    css::uno::Reference< css::frame::XTitle > xOldSubTitle;
+    cpo::uno::Reference< css::frame::XTitle > xOldSubTitle;
     // SYNCHRONIZED ->
     {
         std::unique_lock aLock(m_aMutex);
@@ -645,9 +646,9 @@ void TitleHelper::impl_setSubTitle (const css::uno::Reference< css::frame::XTitl
     }
     // <- SYNCHRONIZED
 
-    css::uno::Reference< css::frame::XTitleChangeBroadcaster > xOldBroadcaster(xOldSubTitle                                          , css::uno::UNO_QUERY      );
-    css::uno::Reference< css::frame::XTitleChangeBroadcaster > xNewBroadcaster(xSubTitle                                             , css::uno::UNO_QUERY      );
-    css::uno::Reference< css::frame::XTitleChangeListener >    xThis(this);
+    cpo::uno::Reference< css::frame::XTitleChangeBroadcaster > xOldBroadcaster(xOldSubTitle                                          , cpo::uno::UNO_QUERY      );
+    cpo::uno::Reference< css::frame::XTitleChangeBroadcaster > xNewBroadcaster(xSubTitle                                             , cpo::uno::UNO_QUERY      );
+    cpo::uno::Reference< css::frame::XTitleChangeListener >    xThis(this);
 
     if (xOldBroadcaster.is())
         xOldBroadcaster->removeTitleChangeListener (xThis);

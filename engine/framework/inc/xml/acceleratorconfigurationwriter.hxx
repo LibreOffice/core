@@ -34,7 +34,7 @@ class AcceleratorConfigurationWriter final
     private:
 
         /** @short  needed to write the xml configuration. */
-        css::uno::Reference< css::xml::sax::XDocumentHandler > m_xConfig;
+        cpo::uno::Reference< css::xml::sax::XDocumentHandler > m_xConfig;
 
         /** @short  reference to the outside container, where this
                     writer must work on. */
@@ -55,7 +55,7 @@ class AcceleratorConfigurationWriter final
                     used to write the configuration there.
           */
         AcceleratorConfigurationWriter(const AcceleratorCache&                                       rContainer,
-                                       css::uno::Reference< css::xml::sax::XDocumentHandler >        xConfig   );
+                                       cpo::uno::Reference< css::xml::sax::XDocumentHandler >        xConfig   );
 
         /** @short  does nothing real ... */
         ~AcceleratorConfigurationWriter();
@@ -70,7 +70,7 @@ class AcceleratorConfigurationWriter final
         /** @short  TODO */
         static void impl_ts_writeKeyCommandPair(const css::awt::KeyEvent&                                     aKey    ,
                                          const OUString&                                        sCommand,
-                                         const css::uno::Reference< css::xml::sax::XDocumentHandler >& xConfig );
+                                         const cpo::uno::Reference< css::xml::sax::XDocumentHandler >& xConfig );
 };
 
 } // namespace framework

@@ -29,6 +29,7 @@
 #include <sal/log.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 // no. of visual data elements in a SwCTB ( fixed )
 const short nVisualData = 5;
@@ -190,7 +191,7 @@ bool SwCTBWrapper::ImportCustomToolBar( SfxObjectShell& rDocSh )
     {
         try
         {
-            css::uno::Reference<css::ui::XUIConfigurationManager> xCfgMgr;
+            cpo::uno::Reference<css::ui::XUIConfigurationManager> xCfgMgr;
             if (!comphelper::IsFuzzing())
             {
                 const uno::Reference< cpo::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
@@ -470,7 +471,7 @@ bool SwCTB::ImportCustomToolBar( SwCTBWrapper& rWrapper, CustomToolBarImportHelp
     return bRes;
 }
 
-bool SwCTB::ImportMenuTB( SwCTBWrapper& rWrapper, const css::uno::Reference< css::container::XIndexContainer >& xIndexContainer, CustomToolBarImportHelper& rHelper )
+bool SwCTB::ImportMenuTB( SwCTBWrapper& rWrapper, const cpo::uno::Reference< css::container::XIndexContainer >& xIndexContainer, CustomToolBarImportHelper& rHelper )
 {
     for ( auto& rItem : m_rTBC )
     {
@@ -507,7 +508,7 @@ bool SwTBC::Read( SvStream &rS )
 }
 
 bool
-SwTBC::ImportToolBarControl( SwCTBWrapper& rWrapper, const css::uno::Reference< css::container::XIndexContainer >& toolbarcontainer, CustomToolBarImportHelper& helper, bool bIsMenuBar )
+SwTBC::ImportToolBarControl( SwCTBWrapper& rWrapper, const cpo::uno::Reference< css::container::XIndexContainer >& toolbarcontainer, CustomToolBarImportHelper& helper, bool bIsMenuBar )
 {
     // cmtFci       0x1 Command based on a built-in command. See CidFci.
     // cmtMacro     0x2 Macro command. See CidMacro.

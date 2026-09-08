@@ -31,7 +31,7 @@ class ZipPackageFolderEnumeration final
     ContentHash::const_iterator aIterator;
 
 public:
-    //ZipPackageFolderEnumeration (unordered_map < OUString, css::uno::Reference < css::container::XNamed >, hashFunc, eqFunc > &rInput);
+    //ZipPackageFolderEnumeration (unordered_map < OUString, cpo::uno::Reference < css::container::XNamed >, hashFunc, eqFunc > &rInput);
     ZipPackageFolderEnumeration(ContentHash& rInput);
     virtual ~ZipPackageFolderEnumeration() override;
 

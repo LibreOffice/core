@@ -20,7 +20,7 @@
 class EBookImportFilter : public writerperfect::ImportFilter<OdtGenerator>
 {
 public:
-    explicit EBookImportFilter(const css::uno::Reference<cpo::uno::XComponentContext>& rxContext)
+    explicit EBookImportFilter(const cpo::uno::Reference<cpo::uno::XComponentContext>& rxContext)
         : writerperfect::ImportFilter<OdtGenerator>(rxContext)
     {
     }

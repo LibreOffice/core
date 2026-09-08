@@ -70,7 +70,7 @@ struct Style
     {
     }
 
-    css::uno::Reference< css::xml::sax::XAttributeList > createElement();
+    cpo::uno::Reference< css::xml::sax::XAttributeList > createElement();
 };
 class StyleBag
 {
@@ -81,22 +81,22 @@ public:
 
     OUString getStyleId( Style const & rStyle );
 
-    void dump( css::uno::Reference< css::xml::sax::XExtendedDocumentHandler >
+    void dump( cpo::uno::Reference< css::xml::sax::XExtendedDocumentHandler >
                const & xOut );
 };
 
 class ElementDescriptor
     : public ::xmlscript::XMLElement
 {
-    css::uno::Reference< css::beans::XPropertySet > _xProps;
-    css::uno::Reference< css::beans::XPropertyState > _xPropState;
-    css::uno::Reference< css::frame::XModel > _xDocument;
+    cpo::uno::Reference< css::beans::XPropertySet > _xProps;
+    cpo::uno::Reference< css::beans::XPropertyState > _xPropState;
+    cpo::uno::Reference< css::frame::XModel > _xDocument;
 
 public:
     ElementDescriptor(
-        css::uno::Reference< css::beans::XPropertySet > xProps,
-        css::uno::Reference< css::beans::XPropertyState > xPropState,
-        OUString const & name, css::uno::Reference< css::frame::XModel > xDocument )
+        cpo::uno::Reference< css::beans::XPropertySet > xProps,
+        cpo::uno::Reference< css::beans::XPropertyState > xPropState,
+        OUString const & name, cpo::uno::Reference< css::frame::XModel > xDocument )
         : XMLElement( name )
         , _xProps(std::move( xProps ))
         , _xPropState(std::move( xPropState ))
@@ -168,7 +168,7 @@ public:
         OUString const & rAttrName, bool bValue )
         { addAttribute( rAttrName, OUString::boolean(bValue) ); }
     void addNumberFormatAttr(
-        css::uno::Reference< css::beans::XPropertySet >
+        cpo::uno::Reference< css::beans::XPropertySet >
         const & xFormatProperties );
 
     void readEvents();

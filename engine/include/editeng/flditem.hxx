@@ -41,7 +41,7 @@ class EDITENG_DLLPUBLIC SvxFieldData
 {
 public:
 
-    static SvxFieldData* Create(const css::uno::Reference<css::text::XTextContent>& xContent);
+    static SvxFieldData* Create(const cpo::uno::Reference<css::text::XTextContent>& xContent);
 
     static constexpr auto CLASS_ID = css::text::textfield::Type::UNSPECIFIED;
     virtual sal_Int32  GetClassId() const { return CLASS_ID; }

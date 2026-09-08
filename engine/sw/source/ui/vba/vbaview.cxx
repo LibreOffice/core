@@ -45,6 +45,7 @@
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 const sal_Int32 DEFAULT_BODY_DISTANCE = 500;
 

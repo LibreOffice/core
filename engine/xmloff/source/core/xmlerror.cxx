@@ -24,7 +24,7 @@
 #include <com/sun/star/xml/sax/XLocator.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/kit.hxx>
@@ -34,7 +34,7 @@
 
 using ::cpo::uno::Any;
 using ::cpo::uno::Sequence;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::com::sun::star::xml::sax::XLocator;
 using ::com::sun::star::xml::sax::SAXParseException;
 

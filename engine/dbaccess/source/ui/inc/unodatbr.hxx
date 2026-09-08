@@ -61,14 +61,14 @@ namespace dbaui
                 ,public IControlActionListener
                 ,public IContextMenuProvider
     {
-        css::uno::Reference< css::i18n::XCollator >   m_xCollator;
-        css::uno::Reference< css::frame::XFrame >     m_xCurrentFrameParent;
-        css::uno::Reference< css::awt::XWindow >      m_xMainToolbar;
+        cpo::uno::Reference< css::i18n::XCollator >   m_xCollator;
+        cpo::uno::Reference< css::frame::XFrame >     m_xCurrentFrameParent;
+        cpo::uno::Reference< css::awt::XWindow >      m_xMainToolbar;
 
         struct ExternalFeature
         {
             css::util::URL              aURL;
-            css::uno::Reference< css::frame::XDispatch >
+            cpo::uno::Reference< css::frame::XDispatch >
                                         xDispatcher;
             bool                        bEnabled;
 
@@ -106,7 +106,7 @@ namespace dbaui
         virtual OUString getPrivateTitle( ) const override;
     // attribute access
     public:
-        SbaTableQueryBrowser(const css::uno::Reference< cpo::uno::XComponentContext >& _rM);
+        SbaTableQueryBrowser(const cpo::uno::Reference< cpo::uno::XComponentContext >& _rM);
         virtual ~SbaTableQueryBrowser() override;
 
         enum EntryType
@@ -142,7 +142,7 @@ namespace dbaui
 
         // css::frame::XController
         virtual bool suspend(bool bSuspend) override;
-        virtual void attachFrame(const css::uno::Reference< css::frame::XFrame > & xFrame) override;
+        virtual void attachFrame(const cpo::uno::Reference< css::frame::XFrame > & xFrame) override;
 
         // css::lang::XComponent
         virtual void        disposing() override;
@@ -156,8 +156,8 @@ namespace dbaui
         // XSelectionSupplier
         virtual bool select( const cpo::uno::Any& aSelection ) override;
         virtual cpo::uno::Any getSelection(  ) override;
-        virtual void addSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
-        virtual void removeSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
+        virtual void addSelectionChangeListener( const cpo::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
+        virtual void removeSelectionChangeListener( const cpo::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
 
         // XServiceInfo
         virtual OUString getImplementationName() override;
@@ -171,11 +171,11 @@ namespace dbaui
         virtual void frameAction(const css::frame::FrameActionEvent& aEvent) override;
 
         // XScriptInvocationContext
-        virtual css::uno::Reference< css::document::XEmbeddedScripts > getScriptContainer() override;
+        virtual cpo::uno::Reference< css::document::XEmbeddedScripts > getScriptContainer() override;
 
         // XContextMenuInterception
-        virtual void registerContextMenuInterceptor( const css::uno::Reference< css::ui::XContextMenuInterceptor >& Interceptor ) override;
-        virtual void releaseContextMenuInterceptor( const css::uno::Reference< css::ui::XContextMenuInterceptor >& Interceptor ) override;
+        virtual void registerContextMenuInterceptor( const cpo::uno::Reference< css::ui::XContextMenuInterceptor >& Interceptor ) override;
+        virtual void releaseContextMenuInterceptor( const cpo::uno::Reference< css::ui::XContextMenuInterceptor >& Interceptor ) override;
 
         // XDatabaseRegistrationsListener
         virtual void registeredDatabaseLocation( const css::sdb::DatabaseRegistrationEvent& Event ) override;
@@ -184,18 +184,18 @@ namespace dbaui
 
     private:
         // SbaXDataBrowserController overridable
-        virtual bool     InitializeForm( const css::uno::Reference< css::beans::XPropertySet >& i_formProperties ) override;
+        virtual bool     InitializeForm( const cpo::uno::Reference< css::beans::XPropertySet >& i_formProperties ) override;
 
-        void             InitializeGridModel(const css::uno::Reference< css::form::XFormComponent > & xGrid);
+        void             InitializeGridModel(const cpo::uno::Reference< css::form::XFormComponent > & xGrid);
 
         virtual bool     preReloadForm() override;
         virtual void     postReloadForm() override;
 
-        virtual void addModelListeners(const css::uno::Reference< css::awt::XControlModel > & _xGridControlModel) override;
-        virtual void removeModelListeners(const css::uno::Reference< css::awt::XControlModel > & _xGridControlModel) override;
+        virtual void addModelListeners(const cpo::uno::Reference< css::awt::XControlModel > & _xGridControlModel) override;
+        virtual void removeModelListeners(const cpo::uno::Reference< css::awt::XControlModel > & _xGridControlModel) override;
 
-        virtual void AddColumnListener(const css::uno::Reference< css::beans::XPropertySet > & xCol) override;
-        virtual void RemoveColumnListener(const css::uno::Reference< css::beans::XPropertySet > & xCol) override;
+        virtual void AddColumnListener(const cpo::uno::Reference< css::beans::XPropertySet > & xCol) override;
+        virtual void RemoveColumnListener(const cpo::uno::Reference< css::beans::XPropertySet > & xCol) override;
 
         virtual void LoadFinished(bool _bWasSynch) override;
 
@@ -240,7 +240,7 @@ namespace dbaui
         // select the path of the entry (which must be an entry without children)
         void        selectPath(const weld::TreeIter* pEntry, bool bSelect = true);
 
-        virtual void loadMenu(const css::uno::Reference< css::frame::XFrame >& _xFrame) override;
+        virtual void loadMenu(const cpo::uno::Reference< css::frame::XFrame >& _xFrame) override;
 
         // check the state of the external slot given, update any UI elements if necessary
         void implCheckExternalSlot( sal_uInt16 _nId );
@@ -291,13 +291,13 @@ namespace dbaui
         */
         void        closeConnection(const weld::TreeIter& rEntry, bool bDisposeConnection = true);
 
-        void        populateTree(const css::uno::Reference< css::container::XNameAccess>& xNameAccess, const weld::TreeIter& rParent, EntryType eEntryType);
+        void        populateTree(const cpo::uno::Reference< css::container::XNameAccess>& xNameAccess, const weld::TreeIter& rParent, EntryType eEntryType);
         void        initializeTreeModel();
 
         /** search in the tree for query- or tablecontainer equal to this interface and return
             this container entry
         */
-        std::unique_ptr<weld::TreeIter> getEntryFromContainer(const css::uno::Reference<css::container::XNameAccess>& rxNameAccess);
+        std::unique_ptr<weld::TreeIter> getEntryFromContainer(const cpo::uno::Reference<css::container::XNameAccess>& rxNameAccess);
 
         // return true when there is connection available
         bool ensureConnection(const weld::TreeIter* pDSEntry, void * pDSData, SharedConnection& rConnection);
@@ -417,7 +417,7 @@ namespace dbaui
         void copyEntry(const weld::TreeIter& rEntry);
 
         // remove all grid columns and dispose them
-        static void clearGridColumns(const css::uno::Reference< css::container::XNameContainer >& _xColContainer);
+        static void clearGridColumns(const cpo::uno::Reference< css::container::XNameContainer >& _xColContainer);
 
         /** checks if the currently displayed entry changed
             @param  rName

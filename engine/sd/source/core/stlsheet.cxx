@@ -79,7 +79,7 @@
 
 using ::osl::MutexGuard;
 using ::com::sun::star::table::BorderLine;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
@@ -316,7 +316,7 @@ bool SdStyleSheet::IsUsed() const
 
         if( maModifyListeners.getLength(aGuard) )
         {
-            std::vector<css::uno::Reference<XModifyListener>> aModifyListeners( maModifyListeners.getElements(aGuard) );
+            std::vector<cpo::uno::Reference<XModifyListener>> aModifyListeners( maModifyListeners.getElements(aGuard) );
             bResult = std::any_of(aModifyListeners.begin(), aModifyListeners.end(),
                 [](const Reference<XInterface>& rListener) {
                     Reference< XStyle > xStyle( rListener, UNO_QUERY );
@@ -1000,11 +1000,11 @@ void SdStyleSheet::setPropertyValue_Impl(const OUString& aPropertyName, const cp
 
     if (pEntry->nWID == OWN_ATTR_TEXTCOLUMNS)
     {
-        if (css::uno::Reference<css::text::XTextColumns> xColumns; aValue >>= xColumns)
+        if (cpo::uno::Reference<css::text::XTextColumns> xColumns; aValue >>= xColumns)
         {
             rStyleSet.Put(SfxInt16Item(SDRATTR_TEXTCOLUMNS_NUMBER, xColumns->getColumnCount()));
-            if (css::uno::Reference<css::beans::XPropertySet> xPropSet{ xColumns,
-                                                                        css::uno::UNO_QUERY })
+            if (cpo::uno::Reference<css::beans::XPropertySet> xPropSet{ xColumns,
+                                                                        cpo::uno::UNO_QUERY })
             {
                 auto aVal = xPropSet->getPropertyValue(u"AutomaticDistance"_ustr);
                 if (sal_Int32 nSpacing; aVal >>= nSpacing)
@@ -1138,9 +1138,9 @@ cpo::uno::Any SdStyleSheet::getPropertyValue_Impl(const OUString& PropertyName)
         const SfxItemSet& rStyleSet = GetItemSet();
 
         auto xIf = SvxXTextColumns_createInstance();
-        css::uno::Reference<css::text::XTextColumns> xCols(xIf, css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::text::XTextColumns> xCols(xIf, cpo::uno::UNO_QUERY_THROW);
         xCols->setColumnCount(rStyleSet.Get(SDRATTR_TEXTCOLUMNS_NUMBER).GetValue());
-        css::uno::Reference<css::beans::XPropertySet> xProp(xIf, css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::beans::XPropertySet> xProp(xIf, cpo::uno::UNO_QUERY_THROW);
         xProp->setPropertyValue(
             u"AutomaticDistance"_ustr,
             cpo::uno::Any(rStyleSet.Get(SDRATTR_TEXTCOLUMNS_SPACING).GetValue()));
@@ -1269,9 +1269,9 @@ SAL_CALL SdStyleSheet::getPropertyValues(const cpo::uno::Sequence<OUString>& aPr
     return aValues;
 }
 
-void SAL_CALL SdStyleSheet::addPropertiesChangeListener(const cpo::uno::Sequence<OUString>&, const css::uno::Reference<css::beans::XPropertiesChangeListener>&) {}
-void SAL_CALL SdStyleSheet::removePropertiesChangeListener(const css::uno::Reference<css::beans::XPropertiesChangeListener>&) {}
-void SAL_CALL SdStyleSheet::firePropertiesChangeEvent(const cpo::uno::Sequence<OUString>&, const css::uno::Reference<css::beans::XPropertiesChangeListener>&) {}
+void SAL_CALL SdStyleSheet::addPropertiesChangeListener(const cpo::uno::Sequence<OUString>&, const cpo::uno::Reference<css::beans::XPropertiesChangeListener>&) {}
+void SAL_CALL SdStyleSheet::removePropertiesChangeListener(const cpo::uno::Reference<css::beans::XPropertiesChangeListener>&) {}
+void SAL_CALL SdStyleSheet::firePropertiesChangeEvent(const cpo::uno::Sequence<OUString>&, const cpo::uno::Reference<css::beans::XPropertiesChangeListener>&) {}
 
 // XPropertyState
 

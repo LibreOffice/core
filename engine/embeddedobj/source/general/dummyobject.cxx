@@ -36,6 +36,7 @@
 
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 
 void ODummyEmbeddedObject::CheckInit_WrongState()

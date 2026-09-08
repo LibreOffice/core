@@ -119,7 +119,7 @@ class CustomShapeProperties final
 public:
     CustomShapeProperties();
 
-    void pushToPropSet( const css::uno::Reference < css::beans::XPropertySet > & xPropSet,
+    void pushToPropSet( const cpo::uno::Reference < css::beans::XPropertySet > & xPropSet,
                         const css::awt::Size &aSize );
 
     sal_Int32 getShapePresetType() const { return mnShapePresetType; }

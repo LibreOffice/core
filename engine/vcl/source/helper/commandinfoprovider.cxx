@@ -36,7 +36,7 @@
 #include <com/sun/star/awt/KeyModifier.hpp>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 namespace vcl::CommandInfoProvider {
@@ -44,7 +44,7 @@ namespace vcl::CommandInfoProvider {
 static Reference<container::XNameAccess> GetCommandDescription()
 {
     static WeakReference<container::XNameAccess> xWeakRef;
-    css::uno::Reference<container::XNameAccess> xRef(xWeakRef);
+    cpo::uno::Reference<container::XNameAccess> xRef(xWeakRef);
 
     if (!xRef.is())
     {
@@ -58,7 +58,7 @@ static Reference<container::XNameAccess> GetCommandDescription()
 static Reference<ui::XModuleUIConfigurationManagerSupplier> GetModuleConfigurationSupplier()
 {
     static WeakReference<ui::XModuleUIConfigurationManagerSupplier> xWeakRef;
-    css::uno::Reference<ui::XModuleUIConfigurationManagerSupplier> xRef(xWeakRef);
+    cpo::uno::Reference<ui::XModuleUIConfigurationManagerSupplier> xRef(xWeakRef);
 
     if (!xRef.is())
     {
@@ -72,7 +72,7 @@ static Reference<ui::XModuleUIConfigurationManagerSupplier> GetModuleConfigurati
 static Reference<ui::XAcceleratorConfiguration> GetGlobalAcceleratorConfiguration()
 {
     static WeakReference<ui::XAcceleratorConfiguration> xWeakRef;
-    css::uno::Reference<ui::XAcceleratorConfiguration> xRef(xWeakRef);
+    cpo::uno::Reference<ui::XAcceleratorConfiguration> xRef(xWeakRef);
 
     if (!xRef.is())
     {
@@ -104,7 +104,7 @@ static Reference<ui::XAcceleratorConfiguration> GetDocumentAcceleratorConfigurat
 
 static Reference<ui::XAcceleratorConfiguration> GetModuleAcceleratorConfiguration(const Reference<frame::XFrame>& rxFrame)
 {
-    css::uno::Reference<css::ui::XAcceleratorConfiguration> curModuleAcceleratorConfiguration;
+    cpo::uno::Reference<css::ui::XAcceleratorConfiguration> curModuleAcceleratorConfiguration;
     try
     {
         Reference<ui::XModuleUIConfigurationManagerSupplier> xSupplier(GetModuleConfigurationSupplier());
@@ -460,7 +460,7 @@ bool IsExperimental(const OUString& rsCommandName, const OUString& rModuleName)
 OUString GetModuleIdentifier(const Reference<frame::XFrame>& rxFrame)
 {
     static WeakReference<frame::XModuleManager2> xWeakRef;
-    css::uno::Reference<frame::XModuleManager2> xRef(xWeakRef);
+    cpo::uno::Reference<frame::XModuleManager2> xRef(xWeakRef);
 
     if (!xRef.is())
     {

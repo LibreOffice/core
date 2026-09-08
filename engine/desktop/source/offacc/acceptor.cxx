@@ -33,7 +33,7 @@
 using namespace css::bridge;
 using namespace css::connection;
 using namespace css::lang;
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 namespace desktop
@@ -81,12 +81,12 @@ Acceptor::~Acceptor()
         std::unique_lock g(m_aMutex);
     }
     for (;;) {
-        css::uno::Reference< css::bridge::XBridge > b(m_bridges.remove());
+        cpo::uno::Reference< css::bridge::XBridge > b(m_bridges.remove());
         if (!b.is()) {
             break;
         }
-        css::uno::Reference< css::lang::XComponent >(
-            b, css::uno::UNO_QUERY_THROW)->dispose();
+        cpo::uno::Reference< css::lang::XComponent >(
+            b, cpo::uno::UNO_QUERY_THROW)->dispose();
     }
 }
 

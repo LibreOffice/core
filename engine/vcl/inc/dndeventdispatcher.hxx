@@ -47,28 +47,28 @@ class DNDEventDispatcher final : public ::cppu::WeakImplHelper<
      */
 
     /// @throws cpo::uno::RuntimeException
-    static sal_Int32 fireDragEnterEvent( vcl::Window *pWindow, const css::uno::Reference< css::datatransfer::dnd::XDropTargetDragContext >& xContext,
+    static sal_Int32 fireDragEnterEvent( vcl::Window *pWindow, const cpo::uno::Reference< css::datatransfer::dnd::XDropTargetDragContext >& xContext,
         const sal_Int8 nDropAction, const Point& rLocation, const sal_Int8 nSourceAction,
         const cpo::uno::Sequence< css::datatransfer::DataFlavor >& aFlavorList );
 
     /// @throws cpo::uno::RuntimeException
-    static sal_Int32 fireDragOverEvent( vcl::Window *pWindow, const css::uno::Reference< css::datatransfer::dnd::XDropTargetDragContext >& xContext,
+    static sal_Int32 fireDragOverEvent( vcl::Window *pWindow, const cpo::uno::Reference< css::datatransfer::dnd::XDropTargetDragContext >& xContext,
         const sal_Int8 nDropAction, const Point& rLocation, const sal_Int8 nSourceAction );
 
     /// @throws cpo::uno::RuntimeException
     static sal_Int32 fireDragExitEvent( vcl::Window *pWindow );
 
     /// @throws cpo::uno::RuntimeException
-    static sal_Int32 fireDropActionChangedEvent( vcl::Window *pWindow, const css::uno::Reference< css::datatransfer::dnd::XDropTargetDragContext >& xContext,
+    static sal_Int32 fireDropActionChangedEvent( vcl::Window *pWindow, const cpo::uno::Reference< css::datatransfer::dnd::XDropTargetDragContext >& xContext,
         const sal_Int8 nDropAction, const Point& rLocation, const sal_Int8 nSourceAction );
 
     /// @throws cpo::uno::RuntimeException
-    static sal_Int32 fireDropEvent( vcl::Window *pWindow, const css::uno::Reference< css::datatransfer::dnd::XDropTargetDropContext >& xContext,
+    static sal_Int32 fireDropEvent( vcl::Window *pWindow, const cpo::uno::Reference< css::datatransfer::dnd::XDropTargetDropContext >& xContext,
         const sal_Int8 nDropAction, const Point& rLocation, const sal_Int8 nSourceAction,
-        const css::uno::Reference< css::datatransfer::XTransferable >& xTransferable );
+        const cpo::uno::Reference< css::datatransfer::XTransferable >& xTransferable );
 
     /// @throws cpo::uno::RuntimeException
-    static sal_Int32 fireDragGestureEvent( vcl::Window *pWindow, const css::uno::Reference< css::datatransfer::dnd::XDragSource >& xSource,
+    static sal_Int32 fireDragGestureEvent( vcl::Window *pWindow, const cpo::uno::Reference< css::datatransfer::dnd::XDragSource >& xSource,
         const cpo::uno::Any& event, const Point& rOrigin, const sal_Int8 nDragAction );
 
 public:

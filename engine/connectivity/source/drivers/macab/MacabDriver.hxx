@@ -109,19 +109,19 @@ namespace connectivity::macab
         ::osl::Mutex                m_aMutex;           // mutex is need to control member access
         OWeakRefArray               m_xConnections;     // vector containing a list of all the
                                                         //  MacabConnection objects for this Driver
-        css::uno::Reference< cpo::uno::XComponentContext >
+        cpo::uno::Reference< cpo::uno::XComponentContext >
                                     m_xContext;       // the multi-service factory
         MacabImplModule             m_aImplModule;
 
     public:
-        css::uno::Reference< cpo::uno::XComponentContext > const &
+        cpo::uno::Reference< cpo::uno::XComponentContext > const &
         getComponentContext() const { return m_xContext; }
 
         /** returns the path of our configuration settings
         */
         static OUString  impl_getConfigurationSettingsPath();
 
-        explicit MacabDriver(const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext);
+        explicit MacabDriver(const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxContext);
     protected:
 
         // OComponentHelper
@@ -133,7 +133,7 @@ namespace connectivity::macab
         virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
         // XDriver
-        virtual css::uno::Reference< css::sdbc::XConnection > connect( const OUString& url, const cpo::uno::Sequence< css::beans::PropertyValue >& info ) override;
+        virtual cpo::uno::Reference< css::sdbc::XConnection > connect( const OUString& url, const cpo::uno::Sequence< css::beans::PropertyValue >& info ) override;
         virtual bool acceptsURL( const OUString& url ) override;
         virtual cpo::uno::Sequence< css::sdbc::DriverPropertyInfo > getPropertyInfo( const OUString& url, const cpo::uno::Sequence< css::beans::PropertyValue >& info ) override;
         virtual sal_Int32 getMajorVersion() override;

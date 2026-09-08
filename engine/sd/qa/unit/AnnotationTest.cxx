@@ -35,6 +35,7 @@
 #include <DrawViewShell.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 class AnnotationTest : public SdModelTestBase
 {

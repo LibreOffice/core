@@ -30,7 +30,7 @@
 #include <string.h>
 
 using namespace connectivity::odbc;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::util;
@@ -129,7 +129,7 @@ void OTools::getValue(  OConnection const * _pConnection,
                         sal_Int32 columnIndex,
                         SQLSMALLINT _nType,
                         bool &_bWasNull,
-                        const css::uno::Reference< cpo::uno::XInterface >& _xInterface,
+                        const cpo::uno::Reference< cpo::uno::XInterface >& _xInterface,
                         void* _pValue,
                         SQLLEN _nSize)
 {

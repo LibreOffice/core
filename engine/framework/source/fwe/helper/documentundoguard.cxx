@@ -28,9 +28,9 @@
 namespace framework
 {
 
-    using ::com::sun::star::uno::Reference;
+    using ::cpo::uno::Reference;
     using ::cpo::uno::XInterface;
-    using ::com::sun::star::uno::UNO_QUERY;
+    using ::cpo::uno::UNO_QUERY;
     using ::cpo::uno::Exception;
     using ::com::sun::star::document::XUndoManagerSupplier;
     using ::com::sun::star::document::XUndoManager;
@@ -165,7 +165,7 @@ namespace framework
         {
             Reference< XUndoManagerSupplier > xUndoSupplier( i_undoSupplierComponent, UNO_QUERY );
             if ( xUndoSupplier.is() )
-                mxUndoManager.set( xUndoSupplier->getUndoManager(), css::uno::UNO_SET_THROW );
+                mxUndoManager.set( xUndoSupplier->getUndoManager(), cpo::uno::UNO_SET_THROW );
 
             if ( mxUndoManager.is() )
                 mxContextListener.set( new UndoManagerContextListener( mxUndoManager ) );

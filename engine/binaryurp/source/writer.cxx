@@ -290,11 +290,11 @@ void Writer::sendRequest(
             &buf,
             cpo::uno::TypeDescription(
                 cppu::UnoType<
-                    css::uno::Reference< cpo::uno::XCurrentContext > >::get()),
+                    cpo::uno::Reference< cpo::uno::XCurrentContext > >::get()),
             BinaryAny(
                 cpo::uno::TypeDescription(
                     cppu::UnoType<
-                        css::uno::Reference<
+                        cpo::uno::Reference<
                             cpo::uno::XCurrentContext > >::get()),
                 &cc.m_pUnoI));
     }
@@ -434,7 +434,7 @@ void Writer::sendMessage(std::vector< unsigned char > const & buffer) {
             cpo::uno::Any exc(cppu::getCaughtException());
             throw css::lang::WrappedTargetRuntimeException(
                 "Binary URP write raised IO exception: " + e.Message,
-                css::uno::Reference< cpo::uno::XInterface >(), exc);
+                cpo::uno::Reference< cpo::uno::XInterface >(), exc);
         }
         n -= k;
         if (n == 0) {

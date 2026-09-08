@@ -113,16 +113,16 @@ class CuiConfigGroupListBox
     std::unique_ptr<SvxConfigGroupBoxResource_Impl> xImp;
     CuiConfigFunctionListBox* m_pFunctionListBox;
     SfxGroupInfoArr_Impl aArr;
-    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
-    css::uno::Reference< css::frame::XFrame > m_xFrame;
+    cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+    cpo::uno::Reference< css::frame::XFrame > m_xFrame;
     std::unique_ptr<weld::TreeView> m_xTreeView;
     std::unique_ptr<weld::TreeIter> m_xScratchIter;
 
-    static css::uno::Reference< cpo::uno::XInterface  > getDocumentModel(
-        css::uno::Reference< cpo::uno::XComponentContext > const & xCtx,
+    static cpo::uno::Reference< cpo::uno::XInterface  > getDocumentModel(
+        cpo::uno::Reference< cpo::uno::XComponentContext > const & xCtx,
         std::u16string_view docName);
 
-    void FillScriptList(const css::uno::Reference< css::script::browse::XBrowseNode >& xRootNode,
+    void FillScriptList(const cpo::uno::Reference< css::script::browse::XBrowseNode >& xRootNode,
                         const weld::TreeIter* pParentEntry);
 
     DECL_LINK(ExpandingHdl, const weld::TreeIter&, bool);
@@ -138,15 +138,15 @@ public:
     ~CuiConfigGroupListBox();
     void                ClearAll();
 
-    void                Init(const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
-                             const css::uno::Reference< css::frame::XFrame >&          xFrame);
+    void                Init(const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
+                             const cpo::uno::Reference< css::frame::XFrame >&          xFrame);
     void                SetFunctionListBox( CuiConfigFunctionListBox *pBox )
                         { m_pFunctionListBox = pBox; }
     void                GroupSelected();
 
     static OUString GetImage(
-        const css::uno::Reference< css::script::browse::XBrowseNode >& node,
-        css::uno::Reference< cpo::uno::XComponentContext > const & xCtx,
+        const cpo::uno::Reference< css::script::browse::XBrowseNode >& node,
+        cpo::uno::Reference< cpo::uno::XComponentContext > const & xCtx,
         bool bIsRootNode);
 };
 
@@ -173,7 +173,7 @@ class SvxScriptSelectorDialog : public weld::GenericDialogController
 
 public:
     SvxScriptSelectorDialog(weld::Window* pParent,
-                            const css::uno::Reference< css::frame::XFrame >& xFrame);
+                            const cpo::uno::Reference< css::frame::XFrame >& xFrame);
     virtual ~SvxScriptSelectorDialog() override;
 
     OUString    GetScriptURL() const;

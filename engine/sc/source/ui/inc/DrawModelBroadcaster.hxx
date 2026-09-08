@@ -34,7 +34,7 @@ class ScDrawModelBroadcaster final : public SfxListener,
 {
     mutable std::mutex maListenerMutex;
     ::comphelper::OInterfaceContainerHelper4<css::document::XEventListener> maEventListeners;
-    std::unordered_map<css::uno::Reference< css::drawing::XShape >, css::uno::Reference< css::document::XShapeEventListener >> maShapeListeners;
+    std::unordered_map<cpo::uno::Reference< css::drawing::XShape >, cpo::uno::Reference< css::document::XShapeEventListener >> maShapeListeners;
     SdrModel *mpDrawModel;
 
 public:
@@ -43,11 +43,11 @@ public:
     virtual ~ScDrawModelBroadcaster() override;
 
     // css::document::XEventBroadcaster
-    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::document::XEventListener >& xListener ) override;
-    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::document::XEventListener >& xListener ) override;
+    virtual void SAL_CALL addEventListener( const cpo::uno::Reference< css::document::XEventListener >& xListener ) override;
+    virtual void SAL_CALL removeEventListener( const cpo::uno::Reference< css::document::XEventListener >& xListener ) override;
     // css::document::XShapeEventBroadcaster
-    virtual void SAL_CALL addShapeEventListener( const css::uno::Reference< css::drawing::XShape >& xShape, const css::uno::Reference< css::document::XShapeEventListener >& xListener ) override;
-    virtual void SAL_CALL removeShapeEventListener( const css::uno::Reference< css::drawing::XShape >& xShape, const css::uno::Reference< css::document::XShapeEventListener >& xListener ) override;
+    virtual void SAL_CALL addShapeEventListener( const cpo::uno::Reference< css::drawing::XShape >& xShape, const cpo::uno::Reference< css::document::XShapeEventListener >& xListener ) override;
+    virtual void SAL_CALL removeShapeEventListener( const cpo::uno::Reference< css::drawing::XShape >& xShape, const cpo::uno::Reference< css::document::XShapeEventListener >& xListener ) override;
 
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 };

@@ -712,7 +712,7 @@ public:
     void SetExtraDescent(gfx::Length nNew) { m_nExtraDescent = std::max(m_nExtraDescent, nNew); }
 
     // Calls HyphenateWord() of Hyphenator
-    css::uno::Reference< css::linguistic2::XHyphenatedWord >
+    cpo::uno::Reference< css::linguistic2::XHyphenatedWord >
                 HyphWord( const OUString &rText, const sal_Int32 nMinTrail );
     const css::beans::PropertyValues & GetHyphValues() const;
 

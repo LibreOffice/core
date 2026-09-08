@@ -248,8 +248,8 @@
 #include <cpo/uno/Any.h>
 #include <cpo/uno/Any.hxx>
 #include <cpo/uno/Exception.hpp>
-#include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.h>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.h>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Type.h>

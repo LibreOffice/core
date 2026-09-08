@@ -51,10 +51,10 @@ namespace pcr
     {
         OUString                         aName;
         BrowserLinePointer                      pLine;
-        css::uno::Reference< css::inspection::XPropertyHandler >
+        cpo::uno::Reference< css::inspection::XPropertyHandler >
                                                 xHandler;
 
-        ListBoxLine( OUString _aName, BrowserLinePointer _pLine, css::uno::Reference< css::inspection::XPropertyHandler > _xHandler )
+        ListBoxLine( OUString _aName, BrowserLinePointer _pLine, cpo::uno::Reference< css::inspection::XPropertyHandler > _xHandler )
             : aName(std::move( _aName )),
               pLine(std::move( _pLine )),
               xHandler(std::move( _xHandler ))
@@ -74,7 +74,7 @@ namespace pcr
         ListBoxLines                m_aLines;
         IPropertyLineListener*      m_pLineListener;
         IPropertyControlObserver*   m_pControlObserver;
-        css::uno::Reference< css::inspection::XPropertyControl >
+        cpo::uno::Reference< css::inspection::XPropertyControl >
                                     m_xActiveControl;
         sal_uInt16                  m_nTheNameSize;
         int                         m_nRowHeight;
@@ -103,7 +103,7 @@ namespace pcr
 
         void                        SetPropertyValue( const OUString& rEntryName, const cpo::uno::Any& rValue, bool _bUnknownValue );
         sal_uInt16                  GetPropertyPos( std::u16string_view rEntryName ) const;
-        css::uno::Reference< css::inspection::XPropertyControl >
+        cpo::uno::Reference< css::inspection::XPropertyControl >
                                     GetPropertyControl( const OUString& rEntryName );
         void                        EnablePropertyControls( const OUString& _rEntryName, sal_Int16 _nControls, bool _bEnable );
         void                        EnablePropertyLine( const OUString& _rEntryName, bool _bEnable );
@@ -112,11 +112,11 @@ namespace pcr
         void                        CommitModified( );
 
         /// @throws cpo::uno::RuntimeException
-        void               focusGained( const css::uno::Reference< css::inspection::XPropertyControl >& Control );
+        void               focusGained( const cpo::uno::Reference< css::inspection::XPropertyControl >& Control );
         /// @throws cpo::uno::RuntimeException
-        void               valueChanged( const css::uno::Reference< css::inspection::XPropertyControl >& Control );
+        void               valueChanged( const cpo::uno::Reference< css::inspection::XPropertyControl >& Control );
         /// @throws cpo::uno::RuntimeException
-        void               activateNextControl( const css::uno::Reference< css::inspection::XPropertyControl >& CurrentControl );
+        void               activateNextControl( const cpo::uno::Reference< css::inspection::XPropertyControl >& CurrentControl );
 
     private:
         // IButtonClickListener
@@ -126,7 +126,7 @@ namespace pcr
             @param _rxControl
                 The control to lookup. Must denote a control of one of the lines in ->m_aLines
         */
-        sal_uInt16  impl_getControlPos( const css::uno::Reference< css::inspection::XPropertyControl >& _rxControl ) const;
+        sal_uInt16  impl_getControlPos( const cpo::uno::Reference< css::inspection::XPropertyControl >& _rxControl ) const;
 
         /** sets the given property value at the given control, after converting it as necessary
             @param _rLine

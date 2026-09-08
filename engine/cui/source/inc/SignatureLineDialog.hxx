@@ -11,12 +11,12 @@
 #include "SignatureLineDialogBase.hxx"
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 class SignatureLineDialog : public SignatureLineDialogBase
 {
 public:
-    SignatureLineDialog(weld::Widget* pParent, css::uno::Reference<css::frame::XModel> xModel,
+    SignatureLineDialog(weld::Widget* pParent, cpo::uno::Reference<css::frame::XModel> xModel,
                         bool bEditExisting);
 
     void Apply();
@@ -29,7 +29,7 @@ private:
     std::unique_ptr<weld::CheckButton> m_xCheckboxCanAddComments;
     std::unique_ptr<weld::CheckButton> m_xCheckboxShowSignDate;
 
-    css::uno::Reference<css::beans::XPropertySet> m_xExistingShapeProperties;
+    cpo::uno::Reference<css::beans::XPropertySet> m_xExistingShapeProperties;
     OUString m_aSignatureLineId;
 };
 

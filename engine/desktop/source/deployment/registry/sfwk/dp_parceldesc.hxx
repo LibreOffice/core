@@ -42,7 +42,7 @@ public:
     virtual void endDocument() override;
 
     virtual void startElement( const OUString& aName,
-        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttribs ) override;
+        const cpo::uno::Reference< css::xml::sax::XAttributeList > & xAttribs ) override;
 
     virtual void endElement( const OUString & aName ) override;
 
@@ -54,7 +54,7 @@ public:
         const OUString & aTarget, const OUString & aData ) override;
 
     virtual void setDocumentLocator(
-        const css::uno::Reference< css::xml::sax::XLocator >& xLocator ) override;
+        const cpo::uno::Reference< css::xml::sax::XLocator >& xLocator ) override;
 };
 }
 

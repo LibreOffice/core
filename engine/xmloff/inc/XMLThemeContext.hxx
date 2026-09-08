@@ -22,18 +22,18 @@ class Theme;
 class XMLThemeContext final : public SvXMLImportContext
 {
     // Any UNO object that has the "Theme" property - usually XPage (master page) or XModel
-    css::uno::Reference<cpo::uno::XInterface> m_xObjectWithThemeProperty;
+    cpo::uno::Reference<cpo::uno::XInterface> m_xObjectWithThemeProperty;
     std::shared_ptr<model::Theme> mpTheme;
 
 public:
     XMLThemeContext(SvXMLImport& rImport,
-                    css::uno::Reference<css::xml::sax::XFastAttributeList> const& xAttrList,
-                    css::uno::Reference<cpo::uno::XInterface> const& xObjectWithThemeProperty);
+                    cpo::uno::Reference<css::xml::sax::XFastAttributeList> const& xAttrList,
+                    cpo::uno::Reference<cpo::uno::XInterface> const& xObjectWithThemeProperty);
     ~XMLThemeContext();
 
-    css::uno::Reference<css::xml::sax::XFastContextHandler> createFastChildContext(
+    cpo::uno::Reference<css::xml::sax::XFastContextHandler> createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttribs) override;
+        const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xAttribs) override;
 };
 
 /// Imports the theme colors of a theme
@@ -44,13 +44,13 @@ class XMLThemeColorsContext final : public SvXMLImportContext
 
 public:
     XMLThemeColorsContext(SvXMLImport& rImport,
-                          css::uno::Reference<css::xml::sax::XFastAttributeList> const& xAttrList,
+                          cpo::uno::Reference<css::xml::sax::XFastAttributeList> const& xAttrList,
                           model::Theme& mrTheme);
     ~XMLThemeColorsContext();
 
-    css::uno::Reference<css::xml::sax::XFastContextHandler> createFastChildContext(
+    cpo::uno::Reference<css::xml::sax::XFastContextHandler> createFastChildContext(
         sal_Int32 nElement,
-        css::uno::Reference<css::xml::sax::XFastAttributeList> const& xAttribs) override;
+        cpo::uno::Reference<css::xml::sax::XFastAttributeList> const& xAttribs) override;
 };
 
 /// Imports a color for a color table
@@ -58,7 +58,7 @@ class XMLColorContext final : public SvXMLImportContext
 {
 public:
     XMLColorContext(SvXMLImport& rImport,
-                    css::uno::Reference<css::xml::sax::XFastAttributeList> const& xAttrList,
+                    cpo::uno::Reference<css::xml::sax::XFastAttributeList> const& xAttrList,
                     const std::shared_ptr<model::ColorSet>& rpColorSet);
 };
 

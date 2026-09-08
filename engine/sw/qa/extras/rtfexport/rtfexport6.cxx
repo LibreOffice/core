@@ -35,6 +35,7 @@
 #include <comphelper/scopeguard.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 namespace
 {

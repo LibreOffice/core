@@ -44,11 +44,11 @@ private:
 
     FltCallDialogParameter&    mrFltCallPara;
 
-    const css::uno::Reference< cpo::uno::XComponentContext >
+    const cpo::uno::Reference< cpo::uno::XComponentContext >
                                mxContext;
-    const css::uno::Reference< css::lang::XComponent >&
+    const cpo::uno::Reference< css::lang::XComponent >&
                                mxSourceDocument;
-    const css::uno::Reference< css::graphic::XGraphic >&
+    const cpo::uno::Reference< css::graphic::XGraphic >&
                                mxGraphic;
 
     OUString            msEstimatedSizePix1;
@@ -81,11 +81,11 @@ private:
     // for pixel graphics it always contains the pixel count
     css::awt::Size      maResolution;       // it always contains the number of pixels per meter
 
-    css::uno::Reference< css::drawing::XShape >
+    cpo::uno::Reference< css::drawing::XShape >
                         mxShape;
-    css::uno::Reference< css::drawing::XShapes >
+    cpo::uno::Reference< css::drawing::XShapes >
                         mxShapes;
-    css::uno::Reference< css::drawing::XDrawPage >
+    cpo::uno::Reference< css::drawing::XDrawPage >
                         mxPage;
 
     weld::Scale* mpSbCompression;
@@ -174,10 +174,10 @@ private:
 
 public:
     ExportDialog( FltCallDialogParameter& rPara,
-        css::uno::Reference< cpo::uno::XComponentContext > xContext,
-        const css::uno::Reference< css::lang::XComponent >& rxSourceDocument,
+        cpo::uno::Reference< cpo::uno::XComponentContext > xContext,
+        const cpo::uno::Reference< css::lang::XComponent >& rxSourceDocument,
         bool bExportSelection, bool bIsExportVectorFormat, bool bGraphicsSource,
-        const css::uno::Reference< css::graphic::XGraphic >& rxGraphic);
+        const cpo::uno::Reference< css::graphic::XGraphic >& rxGraphic);
     virtual ~ExportDialog() override;
 };
 

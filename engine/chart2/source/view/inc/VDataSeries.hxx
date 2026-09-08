@@ -42,14 +42,14 @@ class DataSeries;
 class VDataSequence
 {
 public:
-    void init( const css::uno::Reference<css::chart2::data::XDataSequence>& xModel );
+    void init( const cpo::uno::Reference<css::chart2::data::XDataSequence>& xModel );
     bool is() const;
     void clear();
     double getValue( sal_Int32 index ) const;
     sal_Int32 detectNumberFormatKey( sal_Int32 index ) const;
     sal_Int32 getLength() const;
 
-    css::uno::Reference<css::chart2::data::XDataSequence> m_xModel;
+    cpo::uno::Reference<css::chart2::data::XDataSequence> m_xModel;
     mutable cpo::uno::Sequence<double> m_aValues;
 };
 
@@ -66,8 +66,8 @@ public:
     const rtl::Reference<::chart::DataSeries>& getModel() const;
 
     void setCategoryXAxis();
-    void setXValues( const css::uno::Reference<css::chart2::data::XDataSequence>& xValues );
-    void setXValuesIfNone( const css::uno::Reference<css::chart2::data::XDataSequence>& xValues );
+    void setXValues( const cpo::uno::Reference<css::chart2::data::XDataSequence>& xValues );
+    void setXValuesIfNone( const cpo::uno::Reference<css::chart2::data::XDataSequence>& xValues );
     void setParticle( const OUString& rSeriesParticle );
     void setGlobalSeriesIndex( sal_Int32 nGlobalSeriesIndex );
     void setPageReferenceSize( const css::awt::Size & rPageRefSize );
@@ -111,15 +111,15 @@ public:
     bool isLabelCustomPos( sal_Int32 nPointIndex ) const;
     css::awt::Size getLabelCustomSize(sal_Int32 nPointIndex) const;
 
-    css::uno::Reference<css::beans::XPropertySet> getPropertiesOfPoint( sal_Int32 index ) const;
+    cpo::uno::Reference<css::beans::XPropertySet> getPropertiesOfPoint( sal_Int32 index ) const;
 
-    const css::uno::Reference<css::beans::XPropertySet> & getPropertiesOfSeries() const;
+    const cpo::uno::Reference<css::beans::XPropertySet> & getPropertiesOfSeries() const;
 
     css::chart2::Symbol* getSymbolProperties( sal_Int32 index ) const;
 
-    css::uno::Reference<css::beans::XPropertySet> getXErrorBarProperties( sal_Int32 index ) const;
+    cpo::uno::Reference<css::beans::XPropertySet> getXErrorBarProperties( sal_Int32 index ) const;
 
-    css::uno::Reference<css::beans::XPropertySet> getYErrorBarProperties( sal_Int32 index ) const;
+    cpo::uno::Reference<css::beans::XPropertySet> getYErrorBarProperties( sal_Int32 index ) const;
 
     bool hasPointOwnColor( sal_Int32 index ) const;
 
@@ -200,7 +200,7 @@ public: //member
 
 private: //member
     rtl::Reference<::chart::DataSeries> m_xDataSeries;
-    css::uno::Reference<css::beans::XPropertySet> m_xDataSeriesProps; // cached
+    cpo::uno::Reference<css::beans::XPropertySet> m_xDataSeriesProps; // cached
 
     //all points given by the model data (here are not only the visible points meant)
     sal_Int32       m_nPointCount;

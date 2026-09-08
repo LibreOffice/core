@@ -44,7 +44,8 @@
 #include <unotools/saveopt.hxx>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 namespace
 {
@@ -1279,7 +1280,7 @@ CPPUNIT_TEST_FIXTURE(Test, testListLabelPDFExport)
     cpo::uno::Sequence<beans::PropertyValue> aFilterData(
         comphelper::InitPropertySequence({ { u"PDFUACompliance"_ustr, cpo::uno::Any(true) } }));
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
-    css::uno::Reference<frame::XStorable> xStorable(mxComponent, css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<frame::XStorable> xStorable(mxComponent, cpo::uno::UNO_QUERY_THROW);
     xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 
     // Parse the export result with pdfium.
@@ -1686,7 +1687,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTableOfContentLinksHaveContentSet)
     cpo::uno::Sequence<beans::PropertyValue> aFilterData(
         comphelper::InitPropertySequence({ { u"PDFUACompliance"_ustr, cpo::uno::Any(true) } }));
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
-    css::uno::Reference<frame::XStorable> xStorable(mxComponent, css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<frame::XStorable> xStorable(mxComponent, cpo::uno::UNO_QUERY_THROW);
     xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 
     // Parse the export result with pdfium.
@@ -1750,7 +1751,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf143311)
     cpo::uno::Sequence<beans::PropertyValue> aFilterData(
         comphelper::InitPropertySequence({ { u"PDFUACompliance"_ustr, cpo::uno::Any(true) } }));
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
-    css::uno::Reference<frame::XStorable> xStorable(mxComponent, css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<frame::XStorable> xStorable(mxComponent, cpo::uno::UNO_QUERY_THROW);
     xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 
     vcl::filter::PDFDocument aDocument;

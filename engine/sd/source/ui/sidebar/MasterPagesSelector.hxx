@@ -68,7 +68,7 @@ public:
     // Sidebar
     MasterPagesSelector(weld::Widget* pParent, SdDrawDocument& rDocument, ViewShellBase& rBase,
                         std::shared_ptr<MasterPageContainer> pContainer,
-                        css::uno::Reference<css::ui::XSidebar> xSidebar,
+                        cpo::uno::Reference<css::ui::XSidebar> xSidebar,
                         const OUString& rUIFileName, const OUString& rIconViewId);
 
     // Notebookbar
@@ -172,7 +172,7 @@ protected:
     virtual void ExecuteCommand(const OUString& rIdent);
 
 private:
-    css::uno::Reference<css::ui::XSidebar> mxSidebar;
+    cpo::uno::Reference<css::ui::XSidebar> mxSidebar;
     UpdateTask maUpdateTask;
 
     /** The offset between ValueSet index and MasterPageContainer::Token

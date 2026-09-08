@@ -24,6 +24,7 @@
 #include <canvas.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 typedef comphelper::WeakComponentImplHelper<css::rendering::XMtfRenderer, css::lang::XServiceInfo> MtfRendererBase;
 
@@ -33,7 +34,7 @@ class MtfRenderer : public MtfRendererBase
 {
 public:
     MtfRenderer (cpo::uno::Sequence<cpo::uno::Any> const& args,
-                 css::uno::Reference<cpo::uno::XComponentContext> const&);
+                 cpo::uno::Reference<cpo::uno::XComponentContext> const&);
 
     // XMtfRenderer iface
     sal_Int64 draw (sal_Int64 pOutputDevice, sal_Int64 pMeta, double fScaleX, double fScaleY) override;

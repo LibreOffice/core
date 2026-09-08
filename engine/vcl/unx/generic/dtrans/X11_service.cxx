@@ -29,7 +29,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 using namespace cppu;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::datatransfer::clipboard;
@@ -50,7 +50,7 @@ Sequence< OUString > x11::Xdnd_dropTarget_getSupportedServiceNames()
     return { u"com.sun.star.datatransfer.dnd.X11DropTarget"_ustr };
 }
 
-css::uno::Reference<css::datatransfer::clipboard::XClipboard>
+cpo::uno::Reference<css::datatransfer::clipboard::XClipboard>
 X11SalInstance::CreateClipboard(const Sequence<Any>& arguments)
 {
     if ( o3tl::IsRunningUnitTest() || o3tl::IsRunningUITest() )
@@ -65,21 +65,21 @@ X11SalInstance::CreateClipboard(const Sequence<Any>& arguments)
     } else if (arguments.getLength() != 1 || !(arguments[0] >>= sel)) {
         throw css::lang::IllegalArgumentException(
             u"bad X11SalInstance::CreateClipboard arguments"_ustr,
-            css::uno::Reference<cpo::uno::XInterface>(), -1);
+            cpo::uno::Reference<cpo::uno::XInterface>(), -1);
     }
     Atom nSelection = rManager.getAtom(sel);
 
-    std::unordered_map< Atom, css::uno::Reference< XClipboard > >::iterator it = m_aInstances.find( nSelection );
+    std::unordered_map< Atom, cpo::uno::Reference< XClipboard > >::iterator it = m_aInstances.find( nSelection );
     if( it != m_aInstances.end() )
         return it->second;
 
-    css::uno::Reference<css::datatransfer::clipboard::XClipboard> pClipboard = X11Clipboard::create( rManager, nSelection );
+    cpo::uno::Reference<css::datatransfer::clipboard::XClipboard> pClipboard = X11Clipboard::create( rManager, nSelection );
     m_aInstances[ nSelection ] = pClipboard;
 
     return pClipboard;
 }
 
-css::uno::Reference<css::datatransfer::dnd::XDragSource>
+cpo::uno::Reference<css::datatransfer::dnd::XDragSource>
 X11SalInstance::ImplCreateDragSource(const SystemEnvData&)
 {
     rtl::Reference<SelectionManagerHolder> xSelectionManagerHolder = new SelectionManagerHolder();
@@ -88,7 +88,7 @@ X11SalInstance::ImplCreateDragSource(const SystemEnvData&)
     return xSelectionManagerHolder;
 }
 
-css::uno::Reference<css::datatransfer::dnd::XDropTarget>
+cpo::uno::Reference<css::datatransfer::dnd::XDropTarget>
 X11SalInstance::ImplCreateDropTarget(const SystemEnvData& rSysEnv)
 {
     rtl::Reference<X11DropTarget> xDropTarget = new X11DropTarget();

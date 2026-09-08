@@ -37,14 +37,14 @@ class SmPropertiesPanel : public PanelLayout
 {
 public:
     static std::unique_ptr<PanelLayout>
-    Create(weld::Widget& rParent, const css::uno::Reference<css::frame::XFrame>& xFrame);
-    SmPropertiesPanel(weld::Widget& rParent, const css::uno::Reference<css::frame::XFrame>& xFrame);
+    Create(weld::Widget& rParent, const cpo::uno::Reference<css::frame::XFrame>& xFrame);
+    SmPropertiesPanel(weld::Widget& rParent, const cpo::uno::Reference<css::frame::XFrame>& xFrame);
     ~SmPropertiesPanel();
 
 private:
     DECL_LINK(ButtonClickHandler, weld::Button&, void);
 
-    css::uno::Reference<css::frame::XFrame> mxFrame;
+    cpo::uno::Reference<css::frame::XFrame> mxFrame;
 
     std::unique_ptr<weld::Button> mpFormatFontsButton;
     std::unique_ptr<weld::Button> mpFormatFontSizeButton;

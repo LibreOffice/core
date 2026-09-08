@@ -30,7 +30,7 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 
 using namespace ::com::sun::star::drawing;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::beans;
@@ -93,9 +93,9 @@ XMLTextFrameHyperlinkContext::~XMLTextFrameHyperlinkContext()
 {
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextFrameHyperlinkContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextFrameHyperlinkContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
     XMLTextFrameContext *pTextFrameContext = nullptr;

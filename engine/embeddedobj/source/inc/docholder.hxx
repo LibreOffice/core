@@ -57,15 +57,15 @@ private:
     OCommonEmbeddedObject* m_pEmbedObj;
 
     rtl::Reference<Interceptor>        m_xInterceptor;
-    css::uno::Reference< css::frame::XDispatchProviderInterceptor > m_xOutplaceInterceptor;
+    cpo::uno::Reference< css::frame::XDispatchProviderInterceptor > m_xOutplaceInterceptor;
 
-    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
-    css::uno::Reference< css::util::XCloseable > m_xComponent;
+    cpo::uno::Reference< css::util::XCloseable > m_xComponent;
 
-    css::uno::Reference< css::frame::XFrame > m_xFrame;
-    css::uno::Reference< css::awt::XWindow > m_xOwnWindow; // set for inplace objects
-    css::uno::Reference< css::awt::XWindow > m_xHatchWindow; // set for inplace objects
+    cpo::uno::Reference< css::frame::XFrame > m_xFrame;
+    cpo::uno::Reference< css::awt::XWindow > m_xOwnWindow; // set for inplace objects
+    cpo::uno::Reference< css::awt::XWindow > m_xHatchWindow; // set for inplace objects
 
     css::awt::Rectangle m_aObjRect;
     css::frame::BorderWidths m_aBorderWidths;
@@ -85,7 +85,7 @@ private:
     cpo::uno::Sequence< cpo::uno::Any > m_aOutplaceFrameProps;
 
 
-    css::uno::Reference< css::frame::XFrame > const & GetDocFrame();
+    cpo::uno::Reference< css::frame::XFrame > const & GetDocFrame();
     bool LoadDocToFrame( bool );
 
     css::awt::Rectangle CalculateBorderedArea( const css::awt::Rectangle& aRect );
@@ -93,35 +93,35 @@ private:
 
     void ResizeWindows_Impl( const css::awt::Rectangle& aHatchRect );
 
-    css::uno::Reference< css::container::XIndexAccess > RetrieveOwnMenu_Impl();
+    cpo::uno::Reference< css::container::XIndexAccess > RetrieveOwnMenu_Impl();
     bool MergeMenus_Impl(
-                const css::uno::Reference< css::frame::XLayoutManager >& xOwnLM,
-                const css::uno::Reference< css::frame::XLayoutManager >& xContLM,
-                const css::uno::Reference< css::frame::XDispatchProvider >& xContDisp,
+                const cpo::uno::Reference< css::frame::XLayoutManager >& xOwnLM,
+                const cpo::uno::Reference< css::frame::XLayoutManager >& xContLM,
+                const cpo::uno::Reference< css::frame::XDispatchProvider >& xContDisp,
                 const OUString& aContModuleName );
 
 public:
     /// @throws cpo::uno::Exception
     static void FindConnectPoints(
-        const css::uno::Reference< css::container::XIndexAccess >& xMenu,
+        const cpo::uno::Reference< css::container::XIndexAccess >& xMenu,
         sal_Int32 nConnectPoints[2] );
 
     /// @throws cpo::uno::Exception
-    static css::uno::Reference< css::container::XIndexAccess > MergeMenusForInplace(
-        const css::uno::Reference< css::container::XIndexAccess >& xContMenu,
-        const css::uno::Reference< css::frame::XDispatchProvider >& xContDisp,
+    static cpo::uno::Reference< css::container::XIndexAccess > MergeMenusForInplace(
+        const cpo::uno::Reference< css::container::XIndexAccess >& xContMenu,
+        const cpo::uno::Reference< css::frame::XDispatchProvider >& xContDisp,
         const OUString& aContModuleName,
-        const css::uno::Reference< css::container::XIndexAccess >& xOwnMenu,
-        const css::uno::Reference< css::frame::XDispatchProvider >& xOwnDisp );
+        const cpo::uno::Reference< css::container::XIndexAccess >& xOwnMenu,
+        const cpo::uno::Reference< css::frame::XDispatchProvider >& xOwnDisp );
 
 
-    DocumentHolder( css::uno::Reference< cpo::uno::XComponentContext > xContext,
+    DocumentHolder( cpo::uno::Reference< cpo::uno::XComponentContext > xContext,
                     OCommonEmbeddedObject* pEmbObj );
     virtual ~DocumentHolder() override;
 
     OCommonEmbeddedObject* GetEmbedObject() { return m_pEmbedObj; }
 
-    void SetComponent( const css::uno::Reference< css::util::XCloseable >& xDoc, bool bReadOnly );
+    void SetComponent( const cpo::uno::Reference< css::util::XCloseable >& xDoc, bool bReadOnly );
     void ResizeHatchWindow();
     void FreeOffice();
 
@@ -143,19 +143,19 @@ public:
 
     void PlaceFrame( const css::awt::Rectangle& aNewRect );
 
-    static bool SetFrameLMVisibility( const css::uno::Reference< css::frame::XFrame >& xFrame,
+    static bool SetFrameLMVisibility( const cpo::uno::Reference< css::frame::XFrame >& xFrame,
                                     bool bVisible );
 
-    bool ShowInplace( const css::uno::Reference< css::awt::XWindowPeer >& xParent,
+    bool ShowInplace( const cpo::uno::Reference< css::awt::XWindowPeer >& xParent,
                       const css::awt::Rectangle& aRectangleToShow,
-                      const css::uno::Reference< css::frame::XDispatchProvider >& xContainerDP );
+                      const cpo::uno::Reference< css::frame::XDispatchProvider >& xContainerDP );
 
     bool ShowUI(
-        const css::uno::Reference< css::frame::XLayoutManager >& xContainerLM,
-        const css::uno::Reference< css::frame::XDispatchProvider >& xContainerDP,
+        const cpo::uno::Reference< css::frame::XLayoutManager >& xContainerLM,
+        const cpo::uno::Reference< css::frame::XDispatchProvider >& xContainerDP,
         const OUString& aContModuleName );
     bool HideUI(
-        const css::uno::Reference< css::frame::XLayoutManager >& xContainerLM );
+        const cpo::uno::Reference< css::frame::XLayoutManager >& xContainerLM );
 
     void Show();
 
@@ -165,13 +165,13 @@ public:
     sal_Int32 GetMapUnit( sal_Int64 nAspect );
 
     void SetOutplaceDispatchInterceptor(
-        const css::uno::Reference< css::frame::XDispatchProviderInterceptor >&
+        const cpo::uno::Reference< css::frame::XDispatchProviderInterceptor >&
                                                                                             xOutplaceInterceptor )
     {
         m_xOutplaceInterceptor = xOutplaceInterceptor;
     }
 
-    const css::uno::Reference< css::util::XCloseable >& GetComponent() const { return m_xComponent; }
+    const cpo::uno::Reference< css::util::XCloseable >& GetComponent() const { return m_xComponent; }
 
 // XEventListener
     virtual void disposing( const css::lang::EventObject& Source ) override;
@@ -191,7 +191,7 @@ public:
     virtual void notifyEvent( const css::document::EventObject& Event ) override;
 
 // XBorderResizeListener
-    virtual void borderWidthsChanged( const css::uno::Reference< cpo::uno::XInterface >& aObject, const css::frame::BorderWidths& aNewSize ) override;
+    virtual void borderWidthsChanged( const cpo::uno::Reference< cpo::uno::XInterface >& aObject, const css::frame::BorderWidths& aNewSize ) override;
 
 // XHatchWindowController
     virtual void requestPositioning( const css::awt::Rectangle& aRect ) override;

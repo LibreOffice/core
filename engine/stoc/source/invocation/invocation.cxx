@@ -47,7 +47,7 @@
 #include <memory>
 #include <vector>
 
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace css::lang;
 using namespace css::script;

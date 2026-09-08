@@ -32,7 +32,7 @@
 #include <sal/log.hxx>
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4

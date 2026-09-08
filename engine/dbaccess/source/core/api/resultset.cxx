@@ -37,7 +37,7 @@
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
@@ -47,8 +47,8 @@ using namespace dbaccess;
 using namespace dbtools;
 
 
-OResultSet::OResultSet(const css::uno::Reference< css::sdbc::XResultSet >& _xResultSet,
-                       const css::uno::Reference< cpo::uno::XInterface >& _xStatement,
+OResultSet::OResultSet(const cpo::uno::Reference< css::sdbc::XResultSet >& _xResultSet,
+                       const cpo::uno::Reference< cpo::uno::XInterface >& _xStatement,
                        bool _bCaseSensitive)
            :OResultSetBase(m_aMutex)
            ,OPropertySetHelper(OResultSetBase::rBHelper)
@@ -62,9 +62,9 @@ OResultSet::OResultSet(const css::uno::Reference< css::sdbc::XResultSet >& _xRes
     try
     {
         m_aStatement = _xStatement;
-        m_xDelegatorResultSetUpdate.set(m_xDelegatorResultSet, css::uno::UNO_QUERY);
-        m_xDelegatorRow.set(m_xDelegatorResultSet, css::uno::UNO_QUERY);
-        m_xDelegatorRowUpdate.set(m_xDelegatorResultSet, css::uno::UNO_QUERY);
+        m_xDelegatorResultSetUpdate.set(m_xDelegatorResultSet, cpo::uno::UNO_QUERY);
+        m_xDelegatorRow.set(m_xDelegatorResultSet, cpo::uno::UNO_QUERY);
+        m_xDelegatorRowUpdate.set(m_xDelegatorResultSet, cpo::uno::UNO_QUERY);
 
         Reference< XPropertySet > xSet(m_xDelegatorResultSet, UNO_QUERY);
         sal_Int32 nResultSetType(0);

@@ -29,7 +29,7 @@
 
 // Accessibility ==============================================================
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using ::com::sun::star::accessibility::XAccessible;
 using namespace ::com::sun::star::accessibility;

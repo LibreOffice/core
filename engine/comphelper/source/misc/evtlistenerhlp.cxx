@@ -21,13 +21,13 @@
 
 namespace comphelper
 {
-    OEventListenerHelper::OEventListenerHelper(const css::uno::Reference< css::lang::XEventListener>&
+    OEventListenerHelper::OEventListenerHelper(const cpo::uno::Reference< css::lang::XEventListener>&
             _rxListener) : m_xListener(_rxListener)
     {
     }
     void OEventListenerHelper::disposing( const css::lang::EventObject& Source )
     {
-        css::uno::Reference< css::lang::XEventListener> xRef = m_xListener;
+        cpo::uno::Reference< css::lang::XEventListener> xRef = m_xListener;
         if(xRef.is())
             xRef->disposing(Source);
     }

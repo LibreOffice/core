@@ -30,7 +30,7 @@
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 
 using namespace com::sun::star;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::document;
 using namespace com::sun::star::xml::sax;
@@ -43,17 +43,17 @@ namespace {
 class XMLScriptChildContext : public SvXMLImportContext
 {
 private:
-    css::uno::Reference< css::frame::XModel >                 m_xModel;
-    css::uno::Reference< css::document::XEmbeddedScripts >    m_xDocumentScripts;
+    cpo::uno::Reference< css::frame::XModel >                 m_xModel;
+    cpo::uno::Reference< css::document::XEmbeddedScripts >    m_xDocumentScripts;
     OUString m_aLanguage;
 
 public:
     XMLScriptChildContext( SvXMLImport& rImport,
-        const css::uno::Reference< css::frame::XModel>& rxModel,
+        const cpo::uno::Reference< css::frame::XModel>& rxModel,
         OUString aLanguage );
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
-            sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+            sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
 }
@@ -67,8 +67,8 @@ XMLScriptChildContext::XMLScriptChildContext( SvXMLImport& rImport,
 {
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLScriptChildContext::createFastChildContext(
-            sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLScriptChildContext::createFastChildContext(
+            sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
     if ( m_xDocumentScripts.is() )
     {   // document supports embedding scripts/macros
@@ -96,9 +96,9 @@ XMLScriptContext::~XMLScriptContext()
 {
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLScriptContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLScriptContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     if ( nElement == XML_ELEMENT(OFFICE, XML_SCRIPT) )
     {

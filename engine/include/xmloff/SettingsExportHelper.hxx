@@ -27,7 +27,7 @@
 
 #include <xmloff/dllapi.h>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::formula { struct SymbolDescriptor; }
@@ -48,7 +48,7 @@ class UNLESS_MERGELIBS(XMLOFF_DLLPUBLIC) XMLSettingsExportHelper
 {
     ::xmloff::XMLSettingsExportContext& m_rContext;
 
-    css::uno::Reference< css::util::XStringSubstitution > mxStringSubstitution;
+    cpo::uno::Reference< css::util::XStringSubstitution > mxStringSubstitution;
 
     void ManipulateSetting( cpo::uno::Any& rAny, std::u16string_view rName ) const;
 
@@ -73,17 +73,17 @@ class UNLESS_MERGELIBS(XMLOFF_DLLPUBLIC) XMLSettingsExportHelper
                         const OUString& rName,
                         const bool bNameAccess) const;
     void exportNameAccess(
-        const css::uno::Reference<css::container::XNameAccess>& rNamed,
+        const cpo::uno::Reference<css::container::XNameAccess>& rNamed,
         const OUString& rName) const;
     void exportIndexAccess(
-        const css::uno::Reference<css::container::XIndexAccess>& rIndexed,
+        const cpo::uno::Reference<css::container::XIndexAccess>& rIndexed,
         const OUString& rName) const;
 
     void exportSymbolDescriptors(
                     const cpo::uno::Sequence < css::formula::SymbolDescriptor > &rProps,
                     const OUString& rName) const;
     void exportForbiddenCharacters(
-                    const css::uno::Reference<css::i18n::XForbiddenCharacters>& xForbChars,
+                    const cpo::uno::Reference<css::i18n::XForbiddenCharacters>& xForbChars,
                     const OUString& rName) const;
 
 public:

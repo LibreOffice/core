@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 namespace com::sun::star {
     namespace ucb {
@@ -37,8 +37,8 @@ class LibraryContainer
 public:
     static OUString get_libname(
         OUString const & url,
-        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
-        css::uno::Reference<cpo::uno::XComponentContext> const & xContext );
+        cpo::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
+        cpo::uno::Reference<cpo::uno::XComponentContext> const & xContext );
 };
 
 }

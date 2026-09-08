@@ -65,7 +65,7 @@ class SwDropCapsPict final : public weld::CustomWidgetController
     SvxFont         maCJKFont;
     SvxFont         maCTLFont;
     Size            maTextSize;
-    css::uno::Reference< css::i18n::XBreakIterator >   m_xBreak;
+    cpo::uno::Reference< css::i18n::XBreakIterator >   m_xBreak;
 
     virtual void    Paint(vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle &rRect) override;
     void            CheckScript();

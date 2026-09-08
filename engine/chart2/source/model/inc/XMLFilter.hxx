@@ -52,7 +52,7 @@ class XMLFilter : public
         css::lang::XServiceInfo >
 {
 public:
-    explicit XMLFilter( css::uno::Reference< cpo::uno::XComponentContext > const & xContext );
+    explicit XMLFilter( cpo::uno::Reference< cpo::uno::XComponentContext > const & xContext );
     virtual ~XMLFilter() override;
 
     /// XServiceInfo declarations
@@ -68,11 +68,11 @@ protected:
 
     // ____ XImporter ____
     virtual void setTargetDocument(
-        const css::uno::Reference< css::lang::XComponent >& Document ) override;
+        const cpo::uno::Reference< css::lang::XComponent >& Document ) override;
 
     // ____ XExporter ____
     virtual void setSourceDocument(
-        const css::uno::Reference< css::lang::XComponent >& Document ) override;
+        const cpo::uno::Reference< css::lang::XComponent >& Document ) override;
 
     void setDocumentHandler(const OUString& _sDocumentHandler) { m_sDocumentHandler = _sDocumentHandler; }
 
@@ -89,33 +89,33 @@ private:
     // methods
 
     /// @return a warning code, or 0 for successful operation
-    ErrCode impl_Import( const css::uno::Reference< css::lang::XComponent > & xDocumentComp,
+    ErrCode impl_Import( const cpo::uno::Reference< css::lang::XComponent > & xDocumentComp,
                            const cpo::uno::Sequence< css::beans::PropertyValue > & aMediaDescriptor );
     /// @return a warning code, or 0 for successful operation
     ErrCode impl_ImportStream(
         const OUString & rStreamName,
         const OUString & rServiceName,
-        const css::uno::Reference< css::embed::XStorage > & xStorage,
-        const css::uno::Reference< css::lang::XMultiComponentFactory > & xFactory,
-        const css::uno::Reference<css::document::XGraphicStorageHandler> & xGraphicStorageHandler,
-        css::uno::Reference< css::beans::XPropertySet > const & xPropSet );
+        const cpo::uno::Reference< css::embed::XStorage > & xStorage,
+        const cpo::uno::Reference< css::lang::XMultiComponentFactory > & xFactory,
+        const cpo::uno::Reference<css::document::XGraphicStorageHandler> & xGraphicStorageHandler,
+        cpo::uno::Reference< css::beans::XPropertySet > const & xPropSet );
 
     /// @return a warning code, or 0 for successful operation
-    ErrCode impl_Export( const css::uno::Reference< css::lang::XComponent > & xDocumentComp,
+    ErrCode impl_Export( const cpo::uno::Reference< css::lang::XComponent > & xDocumentComp,
                            const cpo::uno::Sequence< css::beans::PropertyValue > & aMediaDescriptor );
     /// @return a warning code, or 0 for successful operation
     ErrCode impl_ExportStream(
         const OUString & rStreamName,
         const OUString & rServiceName,
-        const css::uno::Reference< css::embed::XStorage > & xStorage,
-        const css::uno::Reference< css::xml::sax::XWriter >& xActiveDataSource,
-        const css::uno::Reference< css::lang::XMultiServiceFactory > & xFactory,
+        const cpo::uno::Reference< css::embed::XStorage > & xStorage,
+        const cpo::uno::Reference< css::xml::sax::XWriter >& xActiveDataSource,
+        const cpo::uno::Reference< css::lang::XMultiServiceFactory > & xFactory,
         const cpo::uno::Sequence< cpo::uno::Any > & rFilterProperties );
 
     // members
-    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
-    css::uno::Reference< css::lang::XComponent >       m_xTargetDoc;
-    css::uno::Reference< css::lang::XComponent >       m_xSourceDoc;
+    cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+    cpo::uno::Reference< css::lang::XComponent >       m_xTargetDoc;
+    cpo::uno::Reference< css::lang::XComponent >       m_xSourceDoc;
 
     cpo::uno::Sequence<css::beans::PropertyValue> m_aMediaDescriptor;
 
@@ -128,7 +128,7 @@ class XMLReportFilterHelper final : public XMLFilter
     virtual void isOasisFormat(const cpo::uno::Sequence< css::beans::PropertyValue >& _rMediaDescriptor,
                                bool & _rOutOASIS ) override;
 public:
-    explicit XMLReportFilterHelper( css::uno::Reference< cpo::uno::XComponentContext > const & _xContext )
+    explicit XMLReportFilterHelper( cpo::uno::Reference< cpo::uno::XComponentContext > const & _xContext )
                             :XMLFilter(_xContext)
     {}
 protected:
@@ -139,7 +139,7 @@ protected:
     }
     // ____ XImporter ____
     virtual void setTargetDocument(
-        const css::uno::Reference< css::lang::XComponent >& Document ) override
+        const cpo::uno::Reference< css::lang::XComponent >& Document ) override
     {
         setDocumentHandler( u"com.sun.star.comp.report.ImportDocumentHandler"_ustr );
         XMLFilter::setTargetDocument(Document);
@@ -147,7 +147,7 @@ protected:
 
     // ____ XExporter ____
     virtual void setSourceDocument(
-        const css::uno::Reference< css::lang::XComponent >& Document ) override
+        const cpo::uno::Reference< css::lang::XComponent >& Document ) override
     {
         setDocumentHandler( u"com.sun.star.comp.report.ExportDocumentHandler"_ustr );
         XMLFilter::setSourceDocument(Document);

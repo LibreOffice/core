@@ -93,7 +93,7 @@ public:
         default unit for numerical measures, the XML measure unit is
         the default unit for textual measures */
     SvXMLUnitConverter(
-        const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
         sal_Int16 eCoreMeasureUnit /*css::util::MeasureUnit*/,
         sal_Int16 eXMLMeasureUnit /*css::util::MeasureUnit*/,
         SvtSaveOptions::ODFSaneDefaultVersion const nODFVersion);
@@ -115,7 +115,7 @@ public:
     SvtSaveOptions::ODFSaneDefaultVersion getSaneDefaultVersion() const;
 
     /** gets XNumberingTypeInfo */
-    const css::uno::Reference< css::text::XNumberingTypeInfo >& getNumTypeInfo() const;
+    const cpo::uno::Reference< css::text::XNumberingTypeInfo >& getNumTypeInfo() const;
 
     /** convert string to measure with meCoreMeasureUnit,
         using optional min and max values*/
@@ -226,7 +226,7 @@ public:
 
     /** get the Null Date of the XModel and set it to the UnitConverter */
     bool setNullDate (
-        const css::uno::Reference <css::frame::XModel>& xModel);
+        const cpo::uno::Reference <css::frame::XModel>& xModel);
 
     /** convert double to ISO Date Time String */
     void convertDateTime( OUStringBuffer& rBuffer,
@@ -287,9 +287,9 @@ public:
                                   sal_Int16 nType );
 
     static void convertPropertySet(cpo::uno::Sequence<css::beans::PropertyValue>& rProps,
-                        const css::uno::Reference<css::beans::XPropertySet>& aProperties,
+                        const cpo::uno::Reference<css::beans::XPropertySet>& aProperties,
                         const std::initializer_list<std::u16string_view>* pOmitFalseValues = nullptr);
-    static void convertPropertySet(css::uno::Reference<css::beans::XPropertySet> const & rProperties,
+    static void convertPropertySet(cpo::uno::Reference<css::beans::XPropertySet> const & rProperties,
                         const cpo::uno::Sequence<css::beans::PropertyValue>& aProps);
 
     OUString encodeStyleName( const OUString& rName,

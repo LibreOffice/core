@@ -62,12 +62,12 @@ namespace dbaccess
                         public ::cppu::OPropertySetHelper,
                         public ::comphelper::OPropertyArrayUsageHelper < OResultSet >
     {
-        css::uno::Reference< cpo::uno::XInterface>            m_aStatement;
+        cpo::uno::Reference< cpo::uno::XInterface>            m_aStatement;
 
-        css::uno::Reference< css::sdbc::XResultSet >          m_xDelegatorResultSet;
-        css::uno::Reference< css::sdbc::XResultSetUpdate >    m_xDelegatorResultSetUpdate;
-        css::uno::Reference< css::sdbc::XRow >                m_xDelegatorRow;
-        css::uno::Reference< css::sdbc::XRowUpdate >          m_xDelegatorRowUpdate;
+        cpo::uno::Reference< css::sdbc::XResultSet >          m_xDelegatorResultSet;
+        cpo::uno::Reference< css::sdbc::XResultSetUpdate >    m_xDelegatorResultSetUpdate;
+        cpo::uno::Reference< css::sdbc::XRow >                m_xDelegatorRow;
+        cpo::uno::Reference< css::sdbc::XRowUpdate >          m_xDelegatorRowUpdate;
 
         ::dbtools::WarningsContainer    m_aWarnings;
         std::unique_ptr<OColumns>       m_pColumns;
@@ -75,8 +75,8 @@ namespace dbaccess
         bool                        m_bIsBookmarkable : 1;
 
     public:
-        OResultSet(const css::uno::Reference< css::sdbc::XResultSet >& _xResultSet,
-                   const css::uno::Reference< cpo::uno::XInterface >& _xStatement,
+        OResultSet(const cpo::uno::Reference< css::sdbc::XResultSet >& _xResultSet,
+                   const cpo::uno::Reference< cpo::uno::XInterface >& _xStatement,
                    bool _bCaseSensitive);
         virtual ~OResultSet() override;
 
@@ -101,7 +101,7 @@ namespace dbaccess
         virtual void close(  ) override;
 
     // css::beans::XPropertySet
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+        virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
 
     // comphelper::OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
@@ -125,13 +125,13 @@ namespace dbaccess
         virtual void clearWarnings(  ) override;
 
     // css::sdbc::XResultSetMetaDataSupplier
-        virtual css::uno::Reference< css::sdbc::XResultSetMetaData > getMetaData(  ) override;
+        virtual cpo::uno::Reference< css::sdbc::XResultSetMetaData > getMetaData(  ) override;
 
     // css::sdbc::XColumnLocate
         virtual sal_Int32 findColumn( const OUString& columnName ) override;
 
     // css::sdbcx::XColumnsSupplier
-        virtual css::uno::Reference< css::container::XNameAccess > getColumns(  ) override;
+        virtual cpo::uno::Reference< css::container::XNameAccess > getColumns(  ) override;
 
     // css::sdbc::XRow
         virtual bool wasNull(  ) override;
@@ -147,13 +147,13 @@ namespace dbaccess
         virtual css::util::Date getDate( sal_Int32 columnIndex ) override;
         virtual css::util::Time getTime( sal_Int32 columnIndex ) override;
         virtual css::util::DateTime getTimestamp( sal_Int32 columnIndex ) override;
-        virtual css::uno::Reference< css::io::XInputStream > getBinaryStream( sal_Int32 columnIndex ) override;
-        virtual css::uno::Reference< css::io::XInputStream > getCharacterStream( sal_Int32 columnIndex ) override;
-        virtual cpo::uno::Any getObject( sal_Int32 columnIndex, const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
-        virtual css::uno::Reference< css::sdbc::XRef > getRef( sal_Int32 columnIndex ) override;
-        virtual css::uno::Reference< css::sdbc::XBlob > getBlob( sal_Int32 columnIndex ) override;
-        virtual css::uno::Reference< css::sdbc::XClob > getClob( sal_Int32 columnIndex ) override;
-        virtual css::uno::Reference< css::sdbc::XArray > getArray( sal_Int32 columnIndex ) override;
+        virtual cpo::uno::Reference< css::io::XInputStream > getBinaryStream( sal_Int32 columnIndex ) override;
+        virtual cpo::uno::Reference< css::io::XInputStream > getCharacterStream( sal_Int32 columnIndex ) override;
+        virtual cpo::uno::Any getObject( sal_Int32 columnIndex, const cpo::uno::Reference< css::container::XNameAccess >& typeMap ) override;
+        virtual cpo::uno::Reference< css::sdbc::XRef > getRef( sal_Int32 columnIndex ) override;
+        virtual cpo::uno::Reference< css::sdbc::XBlob > getBlob( sal_Int32 columnIndex ) override;
+        virtual cpo::uno::Reference< css::sdbc::XClob > getClob( sal_Int32 columnIndex ) override;
+        virtual cpo::uno::Reference< css::sdbc::XArray > getArray( sal_Int32 columnIndex ) override;
 
     // css::sdbc::XResultSet
         virtual bool next(  ) override;
@@ -173,7 +173,7 @@ namespace dbaccess
         virtual bool rowUpdated(  ) override;
         virtual bool rowInserted(  ) override;
         virtual bool rowDeleted(  ) override;
-        virtual css::uno::Reference< cpo::uno::XInterface > getStatement(  ) override;
+        virtual cpo::uno::Reference< cpo::uno::XInterface > getStatement(  ) override;
 
     // css::sdbcx::XRowLocate
         virtual cpo::uno::Any getBookmark(  ) override;
@@ -205,8 +205,8 @@ namespace dbaccess
         virtual void updateDate( sal_Int32 columnIndex, const css::util::Date& x ) override;
         virtual void updateTime( sal_Int32 columnIndex, const css::util::Time& x ) override;
         virtual void updateTimestamp( sal_Int32 columnIndex, const css::util::DateTime& x ) override;
-        virtual void updateBinaryStream( sal_Int32 columnIndex, const css::uno::Reference< css::io::XInputStream >& x, sal_Int32 length ) override;
-        virtual void updateCharacterStream( sal_Int32 columnIndex, const css::uno::Reference< css::io::XInputStream >& x, sal_Int32 length ) override;
+        virtual void updateBinaryStream( sal_Int32 columnIndex, const cpo::uno::Reference< css::io::XInputStream >& x, sal_Int32 length ) override;
+        virtual void updateCharacterStream( sal_Int32 columnIndex, const cpo::uno::Reference< css::io::XInputStream >& x, sal_Int32 length ) override;
         virtual void updateObject( sal_Int32 columnIndex, const cpo::uno::Any& x ) override;
         virtual void updateNumericObject( sal_Int32 columnIndex, const cpo::uno::Any& x, sal_Int32 scale ) override;
 

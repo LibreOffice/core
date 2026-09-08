@@ -29,7 +29,7 @@
 #include <sfx2/msg.hxx>
 #include <swslots.hxx>
 
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace sfx2::sidebar;
 
 namespace {

@@ -31,7 +31,7 @@
 #include <com/sun/star/xml/dom/events/XDocumentEvent.hpp>
 #include <com/sun/star/xml/dom/events/XMutationEvent.hpp>
 
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace css::xml::dom;
 using namespace css::xml::dom::events;
 

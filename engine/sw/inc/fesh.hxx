@@ -216,7 +216,7 @@ private:
     /// table copied to the clipboard by the last private copy
     bool m_bTableCopied;
 
-    SwFlyFrame *FindFlyFrame( const css::uno::Reference < css::embed::XEmbeddedObject >&  ) const;
+    SwFlyFrame *FindFlyFrame( const cpo::uno::Reference < css::embed::XEmbeddedObject >&  ) const;
 
     /// Terminate actions for all shells and call ChangeLink.
     void EndAllActionAndCall();
@@ -444,7 +444,7 @@ public:
      If the values are not allowed, the formatting clips and determines scaling.
      See CalcAndSetScale().
      The @return value is the applied size. */
-    Size RequestObjectResize( const SwRect &rRect, const css::uno::Reference < css::embed::XEmbeddedObject >& );
+    Size RequestObjectResize( const SwRect &rRect, const cpo::uno::Reference < css::embed::XEmbeddedObject >& );
 
     /// The layout has been changed, so the active object has to be moved after that
     virtual void MoveObjectIfActive( svt::EmbeddedObjectRef& xObj, const Point& rOffset );
@@ -473,7 +473,7 @@ public:
     UIName GetFlyName() const;
 
     /// get reference to OLE object (if there is one) for selected FlyFrame
-    css::uno::Reference < css::embed::XEmbeddedObject > GetOleRef() const;
+    cpo::uno::Reference < css::embed::XEmbeddedObject > GetOleRef() const;
 
     /// Created unique name for frame.
     SW_DLLPUBLIC UIName GetUniqueGrfName() const;
@@ -600,7 +600,7 @@ public:
     // --> #i972#
     /** for starmath formulas anchored 'as char' it aligns it baseline to baseline
      changing the previous vertical orientation */
-    void AlignFormulaToBaseline( const css::uno::Reference < css::embed::XEmbeddedObject >& xObj );
+    void AlignFormulaToBaseline( const cpo::uno::Reference < css::embed::XEmbeddedObject >& xObj );
 
     /// Provide information about content situated closes to given Point.
     Point GetContentPos( const Point& rPoint, bool bNext ) const;
@@ -629,8 +629,8 @@ public:
 
     SW_DLLPUBLIC const SwRect& GetAnyCurRect( CurRectType eType,
                                  const Point* pPt = nullptr,
-                                 const css::uno::Reference < css::embed::XEmbeddedObject >& =
-                                 css::uno::Reference < css::embed::XEmbeddedObject >() ) const;
+                                 const cpo::uno::Reference < css::embed::XEmbeddedObject >& =
+                                 cpo::uno::Reference < css::embed::XEmbeddedObject >() ) const;
 
     /// Page number of the page containing Point, O if no page.
     sal_uInt16 GetPageNumber( const Point &rPoint ) const;

@@ -32,7 +32,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::xml;
 using namespace ::com::sun::star::xml::sax;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::beans;
@@ -174,9 +174,9 @@ SdXMLShowsContext::~SdXMLShowsContext()
     }
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLShowsContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLShowsContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     if( nElement == XML_ELEMENT(PRESENTATION, XML_SHOW) )
     {

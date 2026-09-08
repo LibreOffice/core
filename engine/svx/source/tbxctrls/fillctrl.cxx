@@ -44,7 +44,7 @@ constexpr OUString TMP_STR_END = u"]"_ustr;
 #include <memory>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::util;
 
 namespace {
@@ -589,7 +589,7 @@ VclPtr<InterimItemWindow> SvxFillToolBoxControl::CreateItemWindow(vcl::Window *p
     return VclPtr<InterimItemWindow>();
 }
 
-FillControl::FillControl(vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame>& rFrame)
+FillControl::FillControl(vcl::Window* pParent, const cpo::uno::Reference<css::frame::XFrame>& rFrame)
     : InterimItemWindow(pParent, u"svx/ui/fillctrlbox.ui"_ustr, u"FillCtrlBox"_ustr)
     , mxLbFillType(m_xBuilder->weld_combo_box(u"type"_ustr))
     , mxToolBoxColor(m_xBuilder->weld_toolbar(u"color"_ustr))

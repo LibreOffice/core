@@ -21,7 +21,7 @@
 
 #include <memory>
 
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <sot/storage.hxx>
 #include <tools/date.hxx>
 #include <tools/time.hxx>
@@ -112,7 +112,7 @@ class SwgReaderOption
     // Whether undo objects should be recorded for the imported changes. When
     // false the import runs with undo recording switched off.
     bool m_bRecordUndo = false;
-    css::uno::Reference<css::io::XInputStream> m_xInputStream;
+    cpo::uno::Reference<css::io::XInputStream> m_xInputStream;
 public:
     void ResetAllFormatsOnly() { m_bFrameFormats = m_bPageDescs = m_bTextFormats = m_bNumRules = m_bMerge = false; }
     bool IsFormatsOnly() const { return m_bFrameFormats || m_bPageDescs || m_bTextFormats || m_bNumRules || m_bMerge; }
@@ -139,8 +139,8 @@ public:
     void SetASCIIOpts( const SwAsciiOptions& rOpts ) { m_aASCIIOpts = rOpts; }
     void ResetASCIIOpts() { m_aASCIIOpts.Reset(); }
 
-    css::uno::Reference<css::io::XInputStream>& GetInputStream() { return m_xInputStream; }
-    void SetInputStream(const css::uno::Reference<css::io::XInputStream>& xInputStream)
+    cpo::uno::Reference<css::io::XInputStream>& GetInputStream() { return m_xInputStream; }
+    void SetInputStream(const cpo::uno::Reference<css::io::XInputStream>& xInputStream)
     {
         m_xInputStream = xInputStream;
     }
@@ -154,7 +154,7 @@ class SW_DLLPUBLIC SwReader: public SwDocFac
 {
     SvStream* mpStrm;
     rtl::Reference<SotStorage> mpStg;
-    css::uno::Reference < css::embed::XStorage > mxStg;
+    cpo::uno::Reference < css::embed::XStorage > mxStg;
     SfxMedium* mpMedium;     // Who wants to obtain a Medium (W4W).
 
     SwPaM* mpCursor;
@@ -175,7 +175,7 @@ public:
     // Document and position in document are taken from SwPaM.
     SwReader( SvStream&, OUString aFilename, const OUString& rBaseURL, SwPaM& );
     SwReader( SfxMedium&, OUString aFilename, SwPaM& );
-    SwReader( css::uno::Reference < css::embed::XStorage > , OUString aFilename, SwPaM& );
+    SwReader( cpo::uno::Reference < css::embed::XStorage > , OUString aFilename, SwPaM& );
 
     // The only export interface is SwReader::Read(...)!!!
     ErrCodeMsg Read( const Reader& );
@@ -243,7 +243,7 @@ class SW_DLLPUBLIC Reader
 protected:
     SvStream* m_pStream;
     rtl::Reference<SotStorage> m_pStorage;
-    css::uno::Reference < css::embed::XStorage > m_xStorage;
+    cpo::uno::Reference < css::embed::XStorage > m_xStorage;
     SfxMedium* m_pMedium;     // Who wants to obtain a Medium (W4W).
 
     SwgReaderOption m_aOption;
@@ -483,7 +483,7 @@ public:
 
     virtual ErrCodeMsg Write( SwPaM&, SfxMedium&, const OUString* );
             ErrCodeMsg Write( SwPaM&, SvStream&,  const OUString* );
-    virtual ErrCodeMsg Write( SwPaM&, const css::uno::Reference < css::embed::XStorage >&, const OUString*, SfxMedium* = nullptr );
+    virtual ErrCodeMsg Write( SwPaM&, const cpo::uno::Reference < css::embed::XStorage >&, const OUString*, SfxMedium* = nullptr );
     virtual ErrCodeMsg Write( SwPaM&, SotStorage&, const OUString* );
 
     virtual void SetupFilterOptions(SfxMedium& rMedium);
@@ -531,7 +531,7 @@ class SW_DLLPUBLIC StgWriter : public Writer
 {
 protected:
     rtl::Reference<SotStorage> m_pStg;
-    css::uno::Reference < css::embed::XStorage > m_xStg;
+    cpo::uno::Reference < css::embed::XStorage > m_xStg;
 
     // Create error at call.
     virtual ErrCode WriteStream() override;
@@ -545,7 +545,7 @@ public:
 
     virtual bool IsStgWriter() const override;
 
-    virtual ErrCodeMsg Write( SwPaM&, const css::uno::Reference < css::embed::XStorage >&, const OUString*, SfxMedium* = nullptr ) override;
+    virtual ErrCodeMsg Write( SwPaM&, const cpo::uno::Reference < css::embed::XStorage >&, const OUString*, SfxMedium* = nullptr ) override;
     virtual ErrCodeMsg Write( SwPaM&, SotStorage&, const OUString* ) override;
 
     SotStorage& GetStorage() const       { return *m_pStg; }
@@ -556,7 +556,7 @@ public:
 class SW_DLLPUBLIC SwWriter
 {
     SvStream* m_pStrm;
-    css::uno::Reference < css::embed::XStorage > m_xStg;
+    cpo::uno::Reference < css::embed::XStorage > m_xStg;
     SfxMedium* m_pMedium;
 
     SwPaM* m_pOutPam;
@@ -572,7 +572,7 @@ public:
     SwWriter( SvStream&, SwDoc & );
     SwWriter( SvStream&, SwPaM &, bool bWriteAll = false );
 
-    SwWriter( css::uno::Reference < css::embed::XStorage > , SwDoc& );
+    SwWriter( cpo::uno::Reference < css::embed::XStorage > , SwDoc& );
 
     SwWriter( SfxMedium&, SwCursorShell &, bool bWriteAll );
     SwWriter( SfxMedium&, SwDoc & );

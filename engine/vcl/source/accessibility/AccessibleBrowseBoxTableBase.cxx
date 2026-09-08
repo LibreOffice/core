@@ -23,7 +23,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
 
-using css::uno::Reference;
+using cpo::uno::Reference;
 using cpo::uno::Sequence;
 using cpo::uno::Any;
 

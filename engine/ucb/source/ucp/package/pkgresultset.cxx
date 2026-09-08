@@ -32,6 +32,7 @@
 #include "pkgresultset.hxx"
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 using namespace package_ucp;
 

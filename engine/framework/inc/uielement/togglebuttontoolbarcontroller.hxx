@@ -47,8 +47,8 @@ class ToggleButtonToolbarController final : public ComplexToolbarController
             ToggleDropDownButton
         };
 
-        ToggleButtonToolbarController( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
-                                       const css::uno::Reference< css::frame::XFrame >& rFrame,
+        ToggleButtonToolbarController( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+                                       const cpo::uno::Reference< css::frame::XFrame >& rFrame,
                                        ToolBox* pToolBar,
                                        ToolBoxItemId nID,
                                        Style eStyle,
@@ -56,7 +56,7 @@ class ToggleButtonToolbarController final : public ComplexToolbarController
         virtual ~ToggleButtonToolbarController() override;
 
         // XToolbarController
-        virtual css::uno::Reference< css::awt::XWindow > createPopupWindow() override;
+        virtual cpo::uno::Reference< css::awt::XWindow > createPopupWindow() override;
 
     private:
         virtual void executeControlCommand( const css::frame::ControlCommand& rControlCommand ) override;

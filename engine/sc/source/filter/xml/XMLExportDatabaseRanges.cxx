@@ -53,6 +53,7 @@
 constexpr OUString SC_USERLIST = u"UserList"_ustr;
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace xmloff::token;
 
 void writeSort(ScXMLExport& mrExport, const ScSortParam& aParam, const ScRange& aRange, const ScDocument& rDoc)

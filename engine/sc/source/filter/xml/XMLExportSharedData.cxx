@@ -22,6 +22,7 @@
 #include <osl/diagnose.h>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 ScMySharedData::ScMySharedData(const sal_Int32 nTempTableCount) :
     nLastColumns(nTempTableCount, 0),

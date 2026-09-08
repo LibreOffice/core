@@ -40,42 +40,42 @@ typedef InheritedHelperInterfaceWeakImpl< ov::excel::XWorksheet >  WorksheetImpl
 
 class ScVbaWorksheet : public WorksheetImpl_BASE
 {
-    css::uno::Reference< css::sheet::XSpreadsheet > mxSheet;
-    css::uno::Reference< css::frame::XModel > mxModel;
+    cpo::uno::Reference< css::sheet::XSpreadsheet > mxSheet;
+    cpo::uno::Reference< css::frame::XModel > mxModel;
     rtl::Reference<ScVbaChartObjects> mxCharts;
-    css::uno::Reference< ov::excel::XHyperlinks > mxHlinks;
+    cpo::uno::Reference< ov::excel::XHyperlinks > mxHlinks;
     ::rtl::Reference< ScVbaSheetObjectsBase > mxButtons[2];
     bool mbVeryHidden;
 
     /// @throws cpo::uno::RuntimeException
-    css::uno::Reference< ov::excel::XWorksheet > getSheetAtOffset(SCTAB offset);
+    cpo::uno::Reference< ov::excel::XWorksheet > getSheetAtOffset(SCTAB offset);
     /// @throws cpo::uno::RuntimeException
-    css::uno::Reference< ov::excel::XRange > getSheetRange();
+    cpo::uno::Reference< ov::excel::XRange > getSheetRange();
 
-    css::uno::Reference< css::container::XNameAccess > getFormControls() const;
+    cpo::uno::Reference< css::container::XNameAccess > getFormControls() const;
     cpo::uno::Any getControlShape( std::u16string_view sName );
 
     cpo::uno::Any getButtons( const cpo::uno::Any &rIndex, bool bOptionButtons );
 
 public:
     /// @throws cpo::uno::RuntimeException
-    ScVbaWorksheet( const css::uno::Reference< ov::XHelperInterface >& xParent,
-        const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
-        css::uno::Reference< css::sheet::XSpreadsheet > xSheet,
-        css::uno::Reference< css::frame::XModel > xModel )  ;
+    ScVbaWorksheet( const cpo::uno::Reference< ov::XHelperInterface >& xParent,
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
+        cpo::uno::Reference< css::sheet::XSpreadsheet > xSheet,
+        cpo::uno::Reference< css::frame::XModel > xModel )  ;
     /// @throws css::lang::IllegalArgumentException
     /// @throws cpo::uno::RuntimeException
-    ScVbaWorksheet( cpo::uno::Sequence< cpo::uno::Any > const& aArgs, css::uno::Reference< cpo::uno::XComponentContext >const& xContext );
+    ScVbaWorksheet( cpo::uno::Sequence< cpo::uno::Any > const& aArgs, cpo::uno::Reference< cpo::uno::XComponentContext >const& xContext );
 
     virtual ~ScVbaWorksheet() override;
 
-    const css::uno::Reference< css::frame::XModel >& getModel() const
+    const cpo::uno::Reference< css::frame::XModel >& getModel() const
     { return mxModel; }
-    const css::uno::Reference< css::sheet::XSpreadsheet >& getSheet() const
+    const cpo::uno::Reference< css::sheet::XSpreadsheet >& getSheet() const
     { return mxSheet; }
     static const cpo::uno::Sequence<sal_Int8>& getUnoTunnelId();
-    css::uno::Reference< ov::excel::XWorksheet > createSheetCopyInNewDoc( const OUString& );
-    css::uno::Reference< ov::excel::XWorksheet > createSheetCopy(css::uno::Reference< ov::excel::XWorksheet> const & xSheet, bool bAfter);
+    cpo::uno::Reference< ov::excel::XWorksheet > createSheetCopyInNewDoc( const OUString& );
+    cpo::uno::Reference< ov::excel::XWorksheet > createSheetCopy(cpo::uno::Reference< ov::excel::XWorksheet> const & xSheet, bool bAfter);
 
     // Attributes
     virtual OUString SAL_CALL getName() override;
@@ -88,14 +88,14 @@ public:
     virtual bool SAL_CALL getProtectContents() override;
     virtual bool SAL_CALL getProtectDrawingObjects() override;
     virtual bool SAL_CALL getProtectScenarios() override;
-    virtual css::uno::Reference< ov::excel::XRange > SAL_CALL getUsedRange() override ;
+    virtual cpo::uno::Reference< ov::excel::XRange > SAL_CALL getUsedRange() override ;
     virtual cpo::uno::Any SAL_CALL ChartObjects( const cpo::uno::Any& Index ) override;
-    virtual css::uno::Reference< ov::excel::XOutline > SAL_CALL Outline( ) override;
-    virtual css::uno::Reference< ov::excel::XPageSetup > SAL_CALL PageSetup( ) override;
+    virtual cpo::uno::Reference< ov::excel::XOutline > SAL_CALL Outline( ) override;
+    virtual cpo::uno::Reference< ov::excel::XPageSetup > SAL_CALL PageSetup( ) override;
     virtual cpo::uno::Any SAL_CALL HPageBreaks( const cpo::uno::Any& aIndex ) override;
     virtual cpo::uno::Any SAL_CALL VPageBreaks( const cpo::uno::Any& aIndex ) override;
-    virtual css::uno::Reference< ov::excel::XWorksheet > SAL_CALL getNext() override;
-    virtual css::uno::Reference< ov::excel::XWorksheet > SAL_CALL getPrevious() override;
+    virtual cpo::uno::Reference< ov::excel::XWorksheet > SAL_CALL getNext() override;
+    virtual cpo::uno::Reference< ov::excel::XWorksheet > SAL_CALL getPrevious() override;
      virtual sal_Int16 SAL_CALL getIndex() override;
      virtual sal_Int32 SAL_CALL getEnableSelection() override;
      virtual void SAL_CALL setEnableSelection( sal_Int32 nSelection ) override;
@@ -105,7 +105,7 @@ public:
     // Methods
     virtual void SAL_CALL Activate() override;
     virtual void SAL_CALL Select() override;
-    virtual css::uno::Reference< ov::excel::XRange > SAL_CALL Range( const cpo::uno::Any& Cell1, const cpo::uno::Any& Cell2 ) override;
+    virtual cpo::uno::Reference< ov::excel::XRange > SAL_CALL Range( const cpo::uno::Any& Cell1, const cpo::uno::Any& Cell2 ) override;
     virtual void SAL_CALL Move( const cpo::uno::Any& Before, const cpo::uno::Any& After ) override ;
      virtual void SAL_CALL Copy( const cpo::uno::Any& Before, const cpo::uno::Any& After ) override;
     virtual void SAL_CALL Paste( const cpo::uno::Any& Destination, const cpo::uno::Any& Link ) override;
@@ -116,9 +116,9 @@ public:
     virtual void SAL_CALL Calculate(  ) override;
     virtual void SAL_CALL CheckSpelling( const cpo::uno::Any& CustomDictionary,const cpo::uno::Any& IgnoreUppercase,const cpo::uno::Any& AlwaysSuggest, const cpo::uno::Any& SpellingLang ) override;
     // Hacks (?)
-    virtual css::uno::Reference< ov::excel::XRange > SAL_CALL Cells( const cpo::uno::Any &nRow, const cpo::uno::Any &nCol ) override;
-    virtual css::uno::Reference< ov::excel::XRange > SAL_CALL Rows(const cpo::uno::Any& aIndex ) override;
-    virtual css::uno::Reference< ov::excel::XRange > SAL_CALL Columns(const cpo::uno::Any& aIndex ) override;
+    virtual cpo::uno::Reference< ov::excel::XRange > SAL_CALL Cells( const cpo::uno::Any &nRow, const cpo::uno::Any &nCol ) override;
+    virtual cpo::uno::Reference< ov::excel::XRange > SAL_CALL Rows(const cpo::uno::Any& aIndex ) override;
+    virtual cpo::uno::Reference< ov::excel::XRange > SAL_CALL Columns(const cpo::uno::Any& aIndex ) override;
 
     virtual cpo::uno::Any SAL_CALL Evaluate( const OUString& Name ) override;
     virtual cpo::uno::Any SAL_CALL PivotTables( const cpo::uno::Any& Index ) override;
@@ -143,7 +143,7 @@ public:
     virtual bool SAL_CALL getEnableCalculation(  ) override;
     virtual void SAL_CALL ShowDataForm(  ) override;
     // XInvocation
-    virtual css::uno::Reference< css::beans::XIntrospectionAccess > SAL_CALL getIntrospection(  ) override;
+    virtual cpo::uno::Reference< css::beans::XIntrospectionAccess > SAL_CALL getIntrospection(  ) override;
     virtual cpo::uno::Any SAL_CALL invoke( const OUString& aFunctionName, const cpo::uno::Sequence< cpo::uno::Any >& aParams, cpo::uno::Sequence< ::sal_Int16 >& aOutParamIndex, cpo::uno::Sequence< cpo::uno::Any >& aOutParam ) override;
     virtual void SAL_CALL setValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
     virtual cpo::uno::Any SAL_CALL getValue( const OUString& aPropertyName ) override;

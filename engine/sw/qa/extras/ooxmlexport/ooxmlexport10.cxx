@@ -39,7 +39,8 @@
 #include <unotxdoc.hxx>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 class Test : public SwModelTestBase
 {
@@ -226,7 +227,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf162916_nastyTOC, "tdf162916_nastyTOC.docx")
     auto xSupplier(mxComponent.queryThrow<css::text::XDocumentIndexesSupplier>());
     auto xIndexes = xSupplier->getDocumentIndexes();
     auto xTOCIndex(xIndexes->getByIndex(0).queryThrow<css::beans::XPropertySet>());
-    css::uno::Reference<css::container::XIndexReplace> xLevelFormats;
+    cpo::uno::Reference<css::container::XIndexReplace> xLevelFormats;
     CPPUNIT_ASSERT(xTOCIndex->getPropertyValue(u"LevelFormat"_ustr) >>= xLevelFormats);
 
     const auto checkPropVal = [](const auto& expected, const css::beans::PropertyValues& entry,

@@ -27,6 +27,7 @@
 #include <swtypes.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 // Load Document
 void InitDrawModelAndDocShell(SwDocShell* pSwDocShell, SwDrawModel* pSwDrawDocument)

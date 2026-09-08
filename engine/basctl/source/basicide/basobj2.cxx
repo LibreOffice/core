@@ -48,9 +48,9 @@ namespace basctl
 {
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::container;
+using namespace ::cpo;
 using namespace ::cpo::uno;
+using namespace ::com::sun::star::container;
 
 extern "C" {
     SAL_DLLPUBLIC_EXPORT rtl_uString* basicide_choose_macro(void* pParent, void* pOnlyInDocument_AsXModel, void* pDocFrame_AsXFrame, bool bChooseOnly )
@@ -71,7 +71,7 @@ extern "C" {
     }
 }
 
-void Organize(weld::Window* pParent, const css::uno::Reference<css::frame::XFrame>& xDocFrame, sal_Int16 tabId)
+void Organize(weld::Window* pParent, const cpo::uno::Reference<css::frame::XFrame>& xDocFrame, sal_Int16 tabId)
 {
     EnsureIde();
 

@@ -72,7 +72,7 @@
 #include <utility>
 #include <vcl/TypeSerializer.hxx>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
@@ -2183,7 +2183,7 @@ void TransferableDataHelper::StopClipboardListening( )
     }
 }
 
-TransferableDataHelper TransferableDataHelper::CreateFromClipboard(const css::uno::Reference<css::datatransfer::clipboard::XClipboard>& rClipboard)
+TransferableDataHelper TransferableDataHelper::CreateFromClipboard(const cpo::uno::Reference<css::datatransfer::clipboard::XClipboard>& rClipboard)
 {
     TransferableDataHelper  aRet;
 

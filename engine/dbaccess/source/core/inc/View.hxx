@@ -38,7 +38,7 @@ namespace dbaccess
     {
     public:
         View(
-            const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
+            const cpo::uno::Reference< css::sdbc::XConnection >& _rxConnection,
             bool _bCaseSensitive,
             const OUString& _rCatalogName,
             const OUString& _rSchemaName,
@@ -60,7 +60,7 @@ namespace dbaccess
         virtual void getFastPropertyValue( cpo::uno::Any& _rValue, sal_Int32 _nHandle ) const override;
 
     private:
-         css::uno::Reference< css::sdb::tools::XViewAccess>     m_xViewAccess;
+         cpo::uno::Reference< css::sdb::tools::XViewAccess>     m_xViewAccess;
         sal_Int32                                               m_nCommandHandle;
     private:
         using View_Base::getFastPropertyValue;

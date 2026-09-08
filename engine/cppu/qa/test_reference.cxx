@@ -30,9 +30,9 @@ namespace
 
 using ::cpo::uno::Type;
 using ::cpo::uno::Any;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::cpo::uno::RuntimeException;
-using ::com::sun::star::uno::UNO_SET_THROW;
+using ::cpo::uno::UNO_SET_THROW;
 
 class Foo: public Interface1
 {
@@ -49,12 +49,12 @@ public:
     {
         if (_type == cppu::UnoType<XInterface>::get())
         {
-            return cpo::uno::Any(css::uno::Reference<cpo::uno::XInterface>(
+            return cpo::uno::Any(cpo::uno::Reference<cpo::uno::XInterface>(
                 this));
         }
         if (_type == cppu::UnoType<Interface1>::get())
         {
-            return cpo::uno::Any(css::uno::Reference<Interface1>(this));
+            return cpo::uno::Any(cpo::uno::Reference<Interface1>(this));
         }
 
         return Any();
@@ -97,36 +97,36 @@ struct Derived: public Base2, public Base3 {
 };
 
 // The special case using the conversion operator instead:
-css::uno::Reference< cpo::uno::XInterface > testUpcast1(
-    css::uno::Reference< Derived > const & ref)
+cpo::uno::Reference< cpo::uno::XInterface > testUpcast1(
+    cpo::uno::Reference< Derived > const & ref)
 {
     Base1::static_type(); // prevent loplugin:unreffun firing
     return ref;
 }
 
 // The normal up-cast case:
-css::uno::Reference< Base1 > testUpcast2(
-    css::uno::Reference< Base2 > const & ref)
+cpo::uno::Reference< Base1 > testUpcast2(
+    cpo::uno::Reference< Base2 > const & ref)
 { return ref; }
 
 // Commenting this in should cause a compiler error due to an ambiguous up-cast:
 /*
-css::uno::Reference< Base1 > testFailingUpcast3(
-    css::uno::Reference< Derived > const & ref)
+cpo::uno::Reference< Base1 > testFailingUpcast3(
+    cpo::uno::Reference< Derived > const & ref)
 { return ref; }
 */
 
 // Commenting this in should cause a compiler error due to a down-cast:
 /*
-css::uno::Reference< Base2 > testFailingUpcast4(
-    css::uno::Reference< Base1 > const & ref)
+cpo::uno::Reference< Base2 > testFailingUpcast4(
+    cpo::uno::Reference< Base1 > const & ref)
 { return ref; }
 */
 
 // Commenting this in should cause a compiler error due to a down-cast:
 /*
-css::uno::Reference< Base1 > testFailingUpcast5(
-    css::uno::Reference< cpo::uno::XInterface > const & ref)
+cpo::uno::Reference< Base1 > testFailingUpcast5(
+    cpo::uno::Reference< cpo::uno::XInterface > const & ref)
 { return ref; }
 */
 
@@ -190,8 +190,8 @@ void Test::testUnoSetThrow()
 // functions being unused:
 void Test::testUpcastCompilation()
 {
-    testUpcast1(css::uno::Reference< Derived >());
-    testUpcast2(css::uno::Reference< Base2 >());
+    testUpcast1(cpo::uno::Reference< Derived >());
+    testUpcast2(cpo::uno::Reference< Base2 >());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

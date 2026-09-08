@@ -84,7 +84,7 @@
 #include <frozen/unordered_map.h>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::util;
 
@@ -134,7 +134,7 @@ void SfxStatusDispatcher::sendStatusChanged(const OUString& rURL, const css::fra
     if (!pContnr)
         return;
     pContnr->forEach(aGuard,
-        [&rEvent](const css::uno::Reference<css::frame::XStatusListener>& xListener)
+        [&rEvent](const cpo::uno::Reference<css::frame::XStatusListener>& xListener)
         {
             xListener->statusChanged(rEvent);
         }
@@ -148,7 +148,7 @@ void SfxStatusDispatcher::dispatch( const css::util::URL&, const cpo::uno::Seque
 void SfxStatusDispatcher::dispatchWithNotification(
     const css::util::URL&,
     const cpo::uno::Sequence< css::beans::PropertyValue >&,
-    const css::uno::Reference< css::frame::XDispatchResultListener >& )
+    const cpo::uno::Reference< css::frame::XDispatchResultListener >& )
 {
 }
 
@@ -156,7 +156,7 @@ SfxStatusDispatcher::SfxStatusDispatcher()
 {
 }
 
-void SfxStatusDispatcher::addStatusListener(const css::uno::Reference< css::frame::XStatusListener > & aListener, const css::util::URL& aURL)
+void SfxStatusDispatcher::addStatusListener(const cpo::uno::Reference< css::frame::XStatusListener > & aListener, const css::util::URL& aURL)
 {
     {
         std::unique_lock aGuard(maMutex);
@@ -173,7 +173,7 @@ void SfxStatusDispatcher::addStatusListener(const css::uno::Reference< css::fram
     }
 }
 
-void SfxStatusDispatcher::removeStatusListener( const css::uno::Reference< css::frame::XStatusListener > & aListener, const css::util::URL& aURL )
+void SfxStatusDispatcher::removeStatusListener( const cpo::uno::Reference< css::frame::XStatusListener > & aListener, const css::util::URL& aURL )
 {
     std::unique_lock aGuard(maMutex);
     maListeners.removeInterface( aGuard, aURL.Complete, aListener );
@@ -218,10 +218,10 @@ SfxOfficeDispatch::~SfxOfficeDispatch()
 namespace {
 std::unique_ptr< cpo::uno::ContextLayer > EnsureJavaContext()
 {
-    css::uno::Reference< cpo::uno::XCurrentContext > xContext(cpo::uno::getCurrentContext());
+    cpo::uno::Reference< cpo::uno::XCurrentContext > xContext(cpo::uno::getCurrentContext());
     if (xContext.is())
     {
-        css::uno::Reference< css::task::XInteractionHandler > xHandler;
+        cpo::uno::Reference< css::task::XInteractionHandler > xHandler;
         xContext->getValueByName(JAVA_INTERACTION_HANDLER_NAME) >>= xHandler;
         if (xHandler.is())
             return nullptr; // No need to add new layer: JavaContext already present
@@ -249,20 +249,20 @@ void SfxOfficeDispatch::dispatch( const css::util::URL& aURL, const cpo::uno::Se
             SolarMutexGuard aGuard;
             vcl::solarthread::syncExecute([this, &aURL, &aArgs]() {
                 pImpl->dispatch(aURL, aArgs,
-                                css::uno::Reference<css::frame::XDispatchResultListener>());
+                                cpo::uno::Reference<css::frame::XDispatchResultListener>());
             });
         }
         else
         {
             pImpl->dispatch(aURL, aArgs,
-                            css::uno::Reference<css::frame::XDispatchResultListener>());
+                            cpo::uno::Reference<css::frame::XDispatchResultListener>());
         }
     }
 }
 
 void SfxOfficeDispatch::dispatchWithNotification( const css::util::URL& aURL,
         const cpo::uno::Sequence< css::beans::PropertyValue >& aArgs,
-        const css::uno::Reference< css::frame::XDispatchResultListener >& rListener )
+        const cpo::uno::Reference< css::frame::XDispatchResultListener >& rListener )
 {
     // ControllerItem is the Impl class
     if ( pImpl )
@@ -274,7 +274,7 @@ void SfxOfficeDispatch::dispatchWithNotification( const css::util::URL& aURL,
     }
 }
 
-void SfxOfficeDispatch::addStatusListener(const css::uno::Reference< css::frame::XStatusListener > & aListener, const css::util::URL& aURL)
+void SfxOfficeDispatch::addStatusListener(const cpo::uno::Reference< css::frame::XStatusListener > & aListener, const css::util::URL& aURL)
 {
     {
         std::unique_lock aGuard(maMutex);
@@ -297,7 +297,7 @@ sal_uInt16 SfxOfficeDispatch::GetId() const
     return pImpl ? pImpl->GetId() : 0;
 }
 
-void SfxOfficeDispatch::SetFrame(const css::uno::Reference< css::frame::XFrame >& xFrame)
+void SfxOfficeDispatch::SetFrame(const cpo::uno::Reference< css::frame::XFrame >& xFrame)
 {
     if ( pImpl )
         pImpl->SetFrame( xFrame );
@@ -397,7 +397,7 @@ SfxDispatchController_Impl::~SfxDispatchController_Impl()
     }
 }
 
-void SfxDispatchController_Impl::SetFrame(const css::uno::Reference< css::frame::XFrame >& _xFrame)
+void SfxDispatchController_Impl::SetFrame(const cpo::uno::Reference< css::frame::XFrame >& _xFrame)
 {
     xFrame = _xFrame;
 }
@@ -569,7 +569,7 @@ void collectUIInformation(const util::URL& rURL, const cpo::uno::Sequence< css::
 
 void SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
         const cpo::uno::Sequence< css::beans::PropertyValue >& aArgs,
-        const css::uno::Reference< css::frame::XDispatchResultListener >& rListener )
+        const cpo::uno::Reference< css::frame::XDispatchResultListener >& rListener )
 {
     collectUIInformation(aURL, aArgs);
 
@@ -663,7 +663,7 @@ void SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
         el.Value <<= aURL.Mark;
     }
 
-    css::uno::Reference< css::frame::XFrame > xFrameRef(xFrame.get(), css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::frame::XFrame > xFrameRef(xFrame.get(), cpo::uno::UNO_QUERY);
     if (! xFrameRef.is() && pDispatcher)
     {
         SfxViewFrame* pViewFrame = pDispatcher->GetFrame();
@@ -797,7 +797,7 @@ SfxDispatcher* SfxDispatchController_Impl::GetDispatcher()
     return pDispatcher;
 }
 
-void SfxDispatchController_Impl::addStatusListener(const css::uno::Reference< css::frame::XStatusListener > & aListener, const css::util::URL& aURL)
+void SfxDispatchController_Impl::addStatusListener(const cpo::uno::Reference< css::frame::XStatusListener > & aListener, const css::util::URL& aURL)
 {
     SolarMutexGuard aGuard;
     if ( !pDispatch )

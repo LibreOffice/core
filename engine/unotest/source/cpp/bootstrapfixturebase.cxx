@@ -17,6 +17,7 @@
 #endif
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 // NB. this constructor is called before any tests are run, once for each
 // test function in a rather non-intuitive way. This is why all the 'real'

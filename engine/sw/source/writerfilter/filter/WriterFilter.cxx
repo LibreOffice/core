@@ -51,6 +51,7 @@
 #include <SwXDocumentSettings.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 static OUString lcl_GetExceptionMessageRec(xml::sax::SAXException const& e);
 

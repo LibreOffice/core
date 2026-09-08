@@ -197,10 +197,10 @@ class SAL_WARN_UNUSED UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) FmXGridControl  :publi
 protected:
     bool        m_bInDraw;
 
-    css::uno::Reference< cpo::uno::XComponentContext >    m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext >    m_xContext;
 
 public:
-    FmXGridControl(const css::uno::Reference< cpo::uno::XComponentContext >&);
+    FmXGridControl(const cpo::uno::Reference< cpo::uno::XComponentContext >&);
     virtual ~FmXGridControl() override;
 
     // UNO binding
@@ -220,16 +220,16 @@ public:
     virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
 // css::awt::XControl
-    virtual void createPeer(const css::uno::Reference< css::awt::XToolkit >& _rToolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent) override;
-    virtual bool setModel(const css::uno::Reference< css::awt::XControlModel >& Model) override;
+    virtual void createPeer(const cpo::uno::Reference< css::awt::XToolkit >& _rToolkit, const cpo::uno::Reference< css::awt::XWindowPeer >& Parent) override;
+    virtual bool setModel(const cpo::uno::Reference< css::awt::XControlModel >& Model) override;
     virtual void setDesignMode(bool bOn) override;
 
 // css::awt::XView
     virtual void draw( sal_Int32 x, sal_Int32 y ) override;
 
 // css::form::XBoundComponent
-    virtual void addUpdateListener(const css::uno::Reference< css::form::XUpdateListener >& l) override;
-    virtual void removeUpdateListener(const css::uno::Reference< css::form::XUpdateListener >& l) override;
+    virtual void addUpdateListener(const cpo::uno::Reference< css::form::XUpdateListener >& l) override;
+    virtual void removeUpdateListener(const cpo::uno::Reference< css::form::XUpdateListener >& l) override;
     virtual bool commit() override;
 
 // css::container::XElementAccess
@@ -237,15 +237,15 @@ public:
     virtual bool hasElements(  ) override;
 
 // css::container::XEnumerationAccess
-    virtual css::uno::Reference< css::container::XEnumeration >  createEnumeration() override;
+    virtual cpo::uno::Reference< css::container::XEnumeration >  createEnumeration() override;
 
 // css::container::XIndexAccess
     virtual sal_Int32 getCount() override;
     virtual cpo::uno::Any getByIndex(sal_Int32 _rIndex) override;
 
 // css::form::XGridControl
-    virtual void addGridControlListener( const css::uno::Reference< css::form::XGridControlListener >& _listener ) override;
-    virtual void removeGridControlListener( const css::uno::Reference< css::form::XGridControlListener >& _listener ) override;
+    virtual void addGridControlListener( const cpo::uno::Reference< css::form::XGridControlListener >& _listener ) override;
+    virtual void removeGridControlListener( const cpo::uno::Reference< css::form::XGridControlListener >& _listener ) override;
 
 // css::form::XGrid (base of XGridControl)
     virtual sal_Int16 getCurrentColumnPosition() override;
@@ -259,8 +259,8 @@ public:
     virtual OUString GetComponentServiceName() const override;
 
 // css::util::XModifyBroadcaster
-    virtual void addModifyListener(const css::uno::Reference< css::util::XModifyListener >& l) override;
-    virtual void removeModifyListener(const css::uno::Reference< css::util::XModifyListener >& l) override;
+    virtual void addModifyListener(const cpo::uno::Reference< css::util::XModifyListener >& l) override;
+    virtual void removeModifyListener(const cpo::uno::Reference< css::util::XModifyListener >& l) override;
 
 // css::util::XModeSelector
     virtual void setMode(const OUString& Mode) override;
@@ -269,22 +269,22 @@ public:
     virtual bool supportsMode(const OUString& Mode) override;
 
 // css::container::XContainer
-    virtual void addContainerListener(const css::uno::Reference< css::container::XContainerListener >& l) override;
-    virtual void removeContainerListener(const css::uno::Reference< css::container::XContainerListener >& l) override;
+    virtual void addContainerListener(const cpo::uno::Reference< css::container::XContainerListener >& l) override;
+    virtual void removeContainerListener(const cpo::uno::Reference< css::container::XContainerListener >& l) override;
 
 // css::frame::XDispatchProvider
-    virtual css::uno::Reference< css::frame::XDispatch >  queryDispatch(const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags) override;
-    virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch >  > queryDispatches(const cpo::uno::Sequence< css::frame::DispatchDescriptor >& aDescripts) override;
+    virtual cpo::uno::Reference< css::frame::XDispatch >  queryDispatch(const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags) override;
+    virtual cpo::uno::Sequence< cpo::uno::Reference< css::frame::XDispatch >  > queryDispatches(const cpo::uno::Sequence< css::frame::DispatchDescriptor >& aDescripts) override;
 
 // css::frame::XDispatchProviderInterception
-    virtual void registerDispatchProviderInterceptor(const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor) override;
-    virtual void releaseDispatchProviderInterceptor(const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor) override;
+    virtual void registerDispatchProviderInterceptor(const cpo::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor) override;
+    virtual void releaseDispatchProviderInterceptor(const cpo::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor) override;
 
 // css::view::XSelectionSupplier
     virtual bool select( const cpo::uno::Any& aSelection ) override;
     virtual cpo::uno::Any getSelection(  ) override;
-    virtual void addSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
-    virtual void removeSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
+    virtual void addSelectionChangeListener( const cpo::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
+    virtual void removeSelectionChangeListener( const cpo::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
 
 // css::awt::XWindow
     virtual void setFocus() override;
@@ -320,12 +320,12 @@ class SAL_WARN_UNUSED UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) FmXGridPeer:
         css::view::XSelectionSupplier>
 {
 protected:
-    css::uno::Reference< cpo::uno::XComponentContext >    m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext >    m_xContext;
     std::mutex                                            m_aMutex;
 
 private:
-    css::uno::Reference< css::container::XIndexContainer >    m_xColumns;
-    css::uno::Reference< css::sdbc::XRowSet >                 m_xCursor;
+    cpo::uno::Reference< css::container::XIndexContainer >    m_xColumns;
+    cpo::uno::Reference< css::sdbc::XRowSet >                 m_xCursor;
     ::comphelper::OInterfaceContainerHelper4<css::util::XModifyListener> m_aModifyListeners;
     ::comphelper::OInterfaceContainerHelper4<css::form::XUpdateListener> m_aUpdateListeners;
     ::comphelper::OInterfaceContainerHelper4<css::container::XContainerListener> m_aContainerListeners;
@@ -335,13 +335,13 @@ private:
     OUString                m_aMode;
     sal_Int32               m_nCursorListening;
 
-    css::uno::Reference< css::frame::XDispatchProviderInterceptor >   m_xFirstDispatchInterceptor;
+    cpo::uno::Reference< css::frame::XDispatchProviderInterceptor >   m_xFirstDispatchInterceptor;
 
     bool                                m_bInterceptingDispatch;
 
     std::unique_ptr<bool[]>                 m_pStateCache;
         // one bool for each supported url
-    std::unique_ptr<css::uno::Reference< css::frame::XDispatch >[]>   m_pDispatchers;
+    std::unique_ptr<cpo::uno::Reference< css::frame::XDispatch >[]>   m_pDispatchers;
         // one dispatcher for each supported url
         // (I would like to have a vector here but including the stl in an exported file seems
         // very risky to me...)
@@ -351,15 +351,15 @@ private:
     std::unique_ptr<GridListenerDelegator>  m_pGridListener;
 
 public:
-    FmXGridPeer(const css::uno::Reference< cpo::uno::XComponentContext >&);
+    FmXGridPeer(const cpo::uno::Reference< cpo::uno::XComponentContext >&);
     virtual ~FmXGridPeer() override;
 
     // late constructor, to always be called after the real constructor!
     void Create(vcl::Window* pParent, WinBits nStyle);
 
 // css::form::XGridPeer
-    virtual css::uno::Reference< css::container::XIndexContainer > getColumns(  ) override;
-    virtual void setColumns( const css::uno::Reference< css::container::XIndexContainer >& aColumns ) override final;
+    virtual cpo::uno::Reference< css::container::XIndexContainer > getColumns(  ) override;
+    virtual void setColumns( const cpo::uno::Reference< css::container::XIndexContainer >& aColumns ) override final;
 
 // css::lang::XComponent
     virtual void dispose() override;
@@ -368,8 +368,8 @@ public:
     virtual void disposing(const css::lang::EventObject& Source) override;
 
 // css::form::XBoundComponent
-    virtual void addUpdateListener(const css::uno::Reference< css::form::XUpdateListener >& l) override;
-    virtual void removeUpdateListener(const css::uno::Reference< css::form::XUpdateListener >& l) override;
+    virtual void addUpdateListener(const cpo::uno::Reference< css::form::XUpdateListener >& l) override;
+    virtual void removeUpdateListener(const cpo::uno::Reference< css::form::XUpdateListener >& l) override;
     virtual bool commit() override;
 
 // css::container::XElementAccess
@@ -377,7 +377,7 @@ public:
     virtual bool hasElements(  ) override;
 
 // css::container::XEnumerationAccess
-    virtual css::uno::Reference< css::container::XEnumeration > createEnumeration() override;
+    virtual cpo::uno::Reference< css::container::XEnumeration > createEnumeration() override;
 
 // css::container::XIndexAccess
     virtual sal_Int32 getCount() override;
@@ -408,8 +408,8 @@ public:
     virtual cpo::uno::Any getProperty( const OUString& PropertyName ) override;
 
 // css::form::XGridControl
-    virtual void addGridControlListener( const css::uno::Reference< css::form::XGridControlListener >& _listener ) override;
-    virtual void removeGridControlListener( const css::uno::Reference< css::form::XGridControlListener >& _listener ) override;
+    virtual void addGridControlListener( const cpo::uno::Reference< css::form::XGridControlListener >& _listener ) override;
+    virtual void removeGridControlListener( const cpo::uno::Reference< css::form::XGridControlListener >& _listener ) override;
 
 // css::form::XGrid (base of XGridControl)
     virtual sal_Int16 getCurrentColumnPosition() override;
@@ -420,12 +420,12 @@ public:
     virtual cpo::uno::Sequence< cpo::uno::Any > queryFieldData( sal_Int32 nRow, const cpo::uno::Type& xType ) override;
 
 // css::sdb::XRowSetSupplier
-    virtual css::uno::Reference< css::sdbc::XRowSet >  getRowSet() override;
-    virtual void setRowSet(const css::uno::Reference< css::sdbc::XRowSet >& xDataSource) override final;
+    virtual cpo::uno::Reference< css::sdbc::XRowSet >  getRowSet() override;
+    virtual void setRowSet(const cpo::uno::Reference< css::sdbc::XRowSet >& xDataSource) override final;
 
 // css::util::XModifyBroadcaster
-    virtual void addModifyListener(const css::uno::Reference< css::util::XModifyListener >& l) override;
-    virtual void removeModifyListener(const css::uno::Reference< css::util::XModifyListener >& l) override;
+    virtual void addModifyListener(const cpo::uno::Reference< css::util::XModifyListener >& l) override;
+    virtual void removeModifyListener(const cpo::uno::Reference< css::util::XModifyListener >& l) override;
 
 // UnoControl
     virtual void setDesignMode(bool bOn) override;
@@ -437,7 +437,7 @@ public:
     void CellModified();
 
 // PropertyListening
-    void updateGrid(const css::uno::Reference< css::sdbc::XRowSet >& _rDatabaseCursor);
+    void updateGrid(const cpo::uno::Reference< css::sdbc::XRowSet >& _rDatabaseCursor);
     void startCursorListening();
     void stopCursorListening();
 
@@ -448,8 +448,8 @@ public:
     virtual bool supportsMode(const OUString& Mode) override;
 
 // css::container::XContainer
-    virtual void addContainerListener(const css::uno::Reference< css::container::XContainerListener >& l) override;
-    virtual void removeContainerListener(const css::uno::Reference< css::container::XContainerListener >& l) override;
+    virtual void addContainerListener(const cpo::uno::Reference< css::container::XContainerListener >& l) override;
+    virtual void removeContainerListener(const cpo::uno::Reference< css::container::XContainerListener >& l) override;
 
     void columnVisible(DbGridColumn const * pColumn);
     void columnHidden(DbGridColumn const * pColumn);
@@ -458,12 +458,12 @@ public:
     virtual void draw( sal_Int32 x, sal_Int32 y ) override;
 
 // css::frame::XDispatchProvider
-    virtual css::uno::Reference< css::frame::XDispatch >  queryDispatch(const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags) override;
-    virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch >  > queryDispatches(const cpo::uno::Sequence< css::frame::DispatchDescriptor >& aDescripts) override;
+    virtual cpo::uno::Reference< css::frame::XDispatch >  queryDispatch(const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags) override;
+    virtual cpo::uno::Sequence< cpo::uno::Reference< css::frame::XDispatch >  > queryDispatches(const cpo::uno::Sequence< css::frame::DispatchDescriptor >& aDescripts) override;
 
 // css::frame::XDispatchProviderInterception
-    virtual void registerDispatchProviderInterceptor(const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor) override;
-    virtual void releaseDispatchProviderInterceptor(const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor) override;
+    virtual void registerDispatchProviderInterceptor(const cpo::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor) override;
+    virtual void releaseDispatchProviderInterceptor(const cpo::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor) override;
 
 // css::frame::XStatusListener
     virtual void statusChanged(const css::frame::FeatureStateEvent& Event) override;
@@ -475,8 +475,8 @@ public:
 // css::view::XSelectionSupplier
     virtual bool select( const cpo::uno::Any& aSelection ) override;
     virtual cpo::uno::Any getSelection(  ) override;
-    virtual void addSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
-    virtual void removeSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
+    virtual void addSelectionChangeListener( const cpo::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
+    virtual void removeSelectionChangeListener( const cpo::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
 
 protected:
     virtual VclPtr<FmGridControl>  imp_CreateControl(vcl::Window* pParent, WinBits nStyle);
@@ -492,8 +492,8 @@ protected:
         Instead it may use addColumnListeners and removeColumnListeners which are called in all
         the cases.
     */
-    void addColumnListeners(const css::uno::Reference< css::beans::XPropertySet >& xCol);
-    void removeColumnListeners(const css::uno::Reference< css::beans::XPropertySet >& xCol);
+    void addColumnListeners(const cpo::uno::Reference< css::beans::XPropertySet >& xCol);
+    void removeColumnListeners(const cpo::uno::Reference< css::beans::XPropertySet >& xCol);
 
     void selectionChanged();
     void columnChanged();

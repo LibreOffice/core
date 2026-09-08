@@ -39,6 +39,7 @@
 #include <com/sun/star/sheet/DateType.hpp>
 
 using namespace css;
+using namespace ::cpo;
 
 namespace {
 

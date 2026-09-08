@@ -28,7 +28,7 @@
 #include <vcl/weld.hxx>
 
 using namespace com::sun::star;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 
 TextConvWrapper::TextConvWrapper( weld::Widget* pWindow,
         const Reference< cpo::uno::XComponentContext >& rxContext,

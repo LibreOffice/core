@@ -14,7 +14,7 @@
 #include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteException.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
 #include <comphelper/processfactory.hxx>
 #include <rtl/ustring.hxx>
@@ -82,7 +82,7 @@ void URITools::openURI(const OUString& sURI, bool bHandleSystemShellExecuteExcep
 IMPL_LINK_NOARG(URITools, onOpenURI, Timer*, void)
 {
     std::unique_ptr<URITools> guard(this);
-    css::uno::Reference< css::system::XSystemShellExecute > exec(
+    cpo::uno::Reference< css::system::XSystemShellExecute > exec(
         css::system::SystemShellExecute::create(comphelper::getProcessComponentContext()));
     for (sal_Int32 flags = css::system::SystemShellExecuteFlags::URIS_ONLY;;) {
         try {

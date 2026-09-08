@@ -24,7 +24,7 @@
 #include <unordered_set>
 
 #include <com/sun/star/table/CellAddress.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
@@ -150,8 +150,8 @@ namespace formula
         virtual IFunctionManager*   getFunctionManager() = 0;
         virtual ::std::unique_ptr<FormulaTokenArray> convertToTokenArray(const cpo::uno::Sequence< css::sheet::FormulaToken >& _aTokenList) = 0;
 
-        virtual css::uno::Reference< css::sheet::XFormulaParser> getFormulaParser() const = 0;
-        virtual css::uno::Reference< css::sheet::XFormulaOpCodeMapper> getFormulaOpCodeMapper() const = 0;
+        virtual cpo::uno::Reference< css::sheet::XFormulaParser> getFormulaParser() const = 0;
+        virtual cpo::uno::Reference< css::sheet::XFormulaOpCodeMapper> getFormulaOpCodeMapper() const = 0;
         virtual css::table::CellAddress getReferencePosition() const = 0;
 
         virtual void setDispatcherLock( bool bLock ) = 0;

@@ -21,7 +21,7 @@
 
 #include <sal/config.h>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <basegfx/vector/b2dsize.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
 
@@ -42,7 +42,7 @@ void jpeg_svstream_dest (j_compress_ptr cinfo, void* outfile);
 bool    WriteJPEG( JPEGWriter* pJPEGWriter, void* pOutputStream,
                    tools::Long nWidth, tools::Long nHeight, basegfx::B2DSize const &  aPPI, bool bGreyScale,
                    tools::Long nQualityPercent, tools::Long aChromaSubsampling,
-                   css::uno::Reference<css::task::XStatusIndicator> const & status);
+                   cpo::uno::Reference<css::task::XStatusIndicator> const & status);
 
 void    ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream,
                   GraphicFilterImportFlags nImportFlags,

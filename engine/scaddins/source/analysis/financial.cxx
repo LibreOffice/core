@@ -25,7 +25,7 @@
 
 using namespace sca::analysis;
 
-double SAL_CALL AnalysisAddIn::getAmordegrc( const css::uno::Reference< css::beans::XPropertySet >& xOpt,
+double SAL_CALL AnalysisAddIn::getAmordegrc( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt,
     double fCost, sal_Int32 nDate, sal_Int32 nFirstPer, double fRestVal,
     double fPer, double fRate, const cpo::uno::Any& rOB )
 {
@@ -38,7 +38,7 @@ double SAL_CALL AnalysisAddIn::getAmordegrc( const css::uno::Reference< css::bea
 }
 
 
-double SAL_CALL AnalysisAddIn::getAmorlinc( const css::uno::Reference< css::beans::XPropertySet >& xOpt,
+double SAL_CALL AnalysisAddIn::getAmorlinc( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt,
     double fCost, sal_Int32 nDate, sal_Int32 nFirstPer, double fRestVal,
     double fPer, double fRate, const cpo::uno::Any& rOB )
 {
@@ -51,7 +51,7 @@ double SAL_CALL AnalysisAddIn::getAmorlinc( const css::uno::Reference< css::bean
 }
 
 
-double SAL_CALL AnalysisAddIn::getAccrint( const css::uno::Reference< css::beans::XPropertySet >& xOpt,
+double SAL_CALL AnalysisAddIn::getAccrint( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt,
     sal_Int32 nIssue, sal_Int32 /*nFirstInter*/, sal_Int32 nSettle, double fRate,
     const cpo::uno::Any &rVal, sal_Int32 nFreq, const cpo::uno::Any& rOB )
 {
@@ -65,7 +65,7 @@ double SAL_CALL AnalysisAddIn::getAccrint( const css::uno::Reference< css::beans
 }
 
 
-double SAL_CALL AnalysisAddIn::getAccrintm( const css::uno::Reference< css::beans::XPropertySet >& xOpt,
+double SAL_CALL AnalysisAddIn::getAccrintm( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt,
     sal_Int32 nIssue, sal_Int32 nSettle, double fRate, const cpo::uno::Any& rVal, const cpo::uno::Any& rOB )
 {
     double      fVal = aAnyConv.getDouble( xOpt, rVal, 1000.0 );
@@ -78,7 +78,7 @@ double SAL_CALL AnalysisAddIn::getAccrintm( const css::uno::Reference< css::bean
 }
 
 
-double SAL_CALL AnalysisAddIn::getReceived( const css::uno::Reference< css::beans::XPropertySet >& xOpt,
+double SAL_CALL AnalysisAddIn::getReceived( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt,
     sal_Int32 nSettle, sal_Int32 nMat, double fInvest, double fDisc, const cpo::uno::Any& rOB )
 {
     if( fInvest <= 0.0 || fDisc <= 0.0 || nSettle >= nMat )
@@ -89,7 +89,7 @@ double SAL_CALL AnalysisAddIn::getReceived( const css::uno::Reference< css::bean
 }
 
 
-double SAL_CALL AnalysisAddIn::getDisc( const css::uno::Reference< css::beans::XPropertySet >& xOpt,
+double SAL_CALL AnalysisAddIn::getDisc( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt,
     sal_Int32 nSettle, sal_Int32 nMat, double fPrice, double fRedemp, const cpo::uno::Any& rOB )
 {
     if( fPrice <= 0.0 || fRedemp <= 0.0 || nSettle >= nMat )
@@ -99,7 +99,7 @@ double SAL_CALL AnalysisAddIn::getDisc( const css::uno::Reference< css::beans::X
 }
 
 
-double SAL_CALL AnalysisAddIn::getDuration( const css::uno::Reference< css::beans::XPropertySet >& xOpt,
+double SAL_CALL AnalysisAddIn::getDuration( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt,
     sal_Int32 nSettle, sal_Int32 nMat, double fCoup, double fYield, sal_Int32 nFreq, const cpo::uno::Any& rOB )
 {
     if( fCoup < 0.0 || fYield < 0.0 || isFreqInvalid(nFreq) || nSettle >= nMat )
@@ -198,7 +198,7 @@ double SAL_CALL AnalysisAddIn::getCumipmt( double fRate, sal_Int32 nNumPeriods, 
 }
 
 
-double SAL_CALL AnalysisAddIn::getPrice( const css::uno::Reference< css::beans::XPropertySet >& xOpt,
+double SAL_CALL AnalysisAddIn::getPrice( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt,
     sal_Int32 nSettle, sal_Int32 nMat, double fRate, double fYield, double fRedemp, sal_Int32 nFreq,
     const cpo::uno::Any& rOB )
 {
@@ -210,7 +210,7 @@ double SAL_CALL AnalysisAddIn::getPrice( const css::uno::Reference< css::beans::
 }
 
 
-double SAL_CALL AnalysisAddIn::getPricedisc( const css::uno::Reference< css::beans::XPropertySet >& xOpt,
+double SAL_CALL AnalysisAddIn::getPricedisc( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt,
     sal_Int32 nSettle, sal_Int32 nMat, double fDisc, double fRedemp, const cpo::uno::Any& rOB )
 {
     if( fDisc <= 0.0 || fRedemp <= 0.0 || nSettle >= nMat )
@@ -221,7 +221,7 @@ double SAL_CALL AnalysisAddIn::getPricedisc( const css::uno::Reference< css::bea
 }
 
 
-double SAL_CALL AnalysisAddIn::getPricemat( const css::uno::Reference< css::beans::XPropertySet >& xOpt,
+double SAL_CALL AnalysisAddIn::getPricemat( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt,
     sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nIssue, double fRate, double fYield, const cpo::uno::Any& rOB )
 {
     if( fRate < 0.0 || fYield < 0.0 || nSettle >= nMat )
@@ -243,7 +243,7 @@ double SAL_CALL AnalysisAddIn::getPricemat( const css::uno::Reference< css::bean
 }
 
 
-double SAL_CALL AnalysisAddIn::getMduration( const css::uno::Reference< css::beans::XPropertySet >& xOpt,
+double SAL_CALL AnalysisAddIn::getMduration( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt,
     sal_Int32 nSettle, sal_Int32 nMat, double fCoup, double fYield, sal_Int32 nFreq, const cpo::uno::Any& rOB )
 {
     if( fCoup < 0.0 || fYield < 0.0 || isFreqInvalid(nFreq) )
@@ -306,7 +306,7 @@ double SAL_CALL AnalysisAddIn::getDollarde( double fDollarFrac, sal_Int32 nFrac 
 }
 
 
-double SAL_CALL AnalysisAddIn::getYield( const css::uno::Reference< css::beans::XPropertySet >& xOpt,
+double SAL_CALL AnalysisAddIn::getYield( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt,
     sal_Int32 nSettle, sal_Int32 nMat, double fCoup, double fPrice, double fRedemp, sal_Int32 nFreq, const cpo::uno::Any& rOB )
 {
     if( fCoup < 0.0 || fPrice <= 0.0 || fRedemp <= 0.0 || isFreqInvalid(nFreq) || nSettle >= nMat )
@@ -317,7 +317,7 @@ double SAL_CALL AnalysisAddIn::getYield( const css::uno::Reference< css::beans::
 }
 
 
-double SAL_CALL AnalysisAddIn::getYielddisc( const css::uno::Reference< css::beans::XPropertySet >& xOpt,
+double SAL_CALL AnalysisAddIn::getYielddisc( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt,
     sal_Int32 nSettle, sal_Int32 nMat, double fPrice, double fRedemp, const cpo::uno::Any& rOB )
 {
     if( fPrice <= 0.0 || fRedemp <= 0.0 || nSettle >= nMat )
@@ -332,7 +332,7 @@ double SAL_CALL AnalysisAddIn::getYielddisc( const css::uno::Reference< css::bea
 }
 
 
-double SAL_CALL AnalysisAddIn::getYieldmat( const css::uno::Reference< css::beans::XPropertySet >& xOpt,
+double SAL_CALL AnalysisAddIn::getYieldmat( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt,
     sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nIssue, double fRate, double fPrice, const cpo::uno::Any& rOB )
 {
     if( fPrice <= 0.0 || fRate < 0.0 || nSettle >= nMat || nSettle < nIssue)
@@ -343,7 +343,7 @@ double SAL_CALL AnalysisAddIn::getYieldmat( const css::uno::Reference< css::bean
 }
 
 
-double SAL_CALL AnalysisAddIn::getTbilleq( const css::uno::Reference< css::beans::XPropertySet >& xOpt,
+double SAL_CALL AnalysisAddIn::getTbilleq( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt,
     sal_Int32 nSettle, sal_Int32 nMat, double fDisc )
 {
     nMat++;
@@ -358,7 +358,7 @@ double SAL_CALL AnalysisAddIn::getTbilleq( const css::uno::Reference< css::beans
 }
 
 
-double SAL_CALL AnalysisAddIn::getTbillprice( const css::uno::Reference< css::beans::XPropertySet >& xOpt,
+double SAL_CALL AnalysisAddIn::getTbillprice( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt,
     sal_Int32 nSettle, sal_Int32 nMat, double fDisc )
 {
     if( fDisc <= 0.0 || nSettle > nMat )
@@ -376,7 +376,7 @@ double SAL_CALL AnalysisAddIn::getTbillprice( const css::uno::Reference< css::be
 }
 
 
-double SAL_CALL AnalysisAddIn::getTbillyield( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fPrice )
+double SAL_CALL AnalysisAddIn::getTbillyield( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fPrice )
 {
     sal_Int32   nDiff = GetDiffDate360( xOpt, nSettle, nMat, true );
     nDiff++;
@@ -398,7 +398,7 @@ double SAL_CALL AnalysisAddIn::getTbillyield( const css::uno::Reference< css::be
 
 SAL_WNOUNREACHABLE_CODE_PUSH
 
-double SAL_CALL AnalysisAddIn::getOddfprice( const css::uno::Reference< css::beans::XPropertySet >& xOpt,
+double SAL_CALL AnalysisAddIn::getOddfprice( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt,
     sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nIssue, sal_Int32 nFirstCoup,
     double fRate, double fYield, double fRedemp, sal_Int32 nFreq, const cpo::uno::Any& rOB )
 {
@@ -416,7 +416,7 @@ SAL_WNOUNREACHABLE_CODE_POP
 
 SAL_WNOUNREACHABLE_CODE_PUSH
 
-double SAL_CALL AnalysisAddIn::getOddfyield( const css::uno::Reference< css::beans::XPropertySet >& xOpt,
+double SAL_CALL AnalysisAddIn::getOddfyield( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt,
     sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nIssue, sal_Int32 nFirstCoup,
     double fRate, double fPrice, double fRedemp, sal_Int32 nFreq, const cpo::uno::Any& rOB )
 {
@@ -430,7 +430,7 @@ double SAL_CALL AnalysisAddIn::getOddfyield( const css::uno::Reference< css::bea
 
 SAL_WNOUNREACHABLE_CODE_POP
 
-double SAL_CALL AnalysisAddIn::getOddlprice( const css::uno::Reference< css::beans::XPropertySet >& xOpt,
+double SAL_CALL AnalysisAddIn::getOddlprice( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt,
     sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nLastInterest,
     double fRate, double fYield, double fRedemp, sal_Int32 nFreq, const cpo::uno::Any& rOB )
 {
@@ -443,7 +443,7 @@ double SAL_CALL AnalysisAddIn::getOddlprice( const css::uno::Reference< css::bea
 }
 
 
-double SAL_CALL AnalysisAddIn::getOddlyield( const css::uno::Reference< css::beans::XPropertySet >& xOpt,
+double SAL_CALL AnalysisAddIn::getOddlyield( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt,
     sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nLastInterest,
     double fRate, double fPrice, double fRedemp, sal_Int32 nFreq, const cpo::uno::Any& rOB )
 {
@@ -517,7 +517,7 @@ static double lcl_sca_XirrResult_Deriv1( const ScaDoubleList& rValues, const Sca
 // XIRR calculation
 
 double SAL_CALL AnalysisAddIn::getXirr(
-    const css::uno::Reference< css::beans::XPropertySet >& xOpt, const cpo::uno::Sequence< cpo::uno::Sequence< double > >& rValues, const cpo::uno::Sequence< cpo::uno::Sequence< sal_Int32 > >& rDates, const cpo::uno::Any& rGuessRate )
+    const cpo::uno::Reference< css::beans::XPropertySet >& xOpt, const cpo::uno::Sequence< cpo::uno::Sequence< double > >& rValues, const cpo::uno::Sequence< cpo::uno::Sequence< sal_Int32 > >& rDates, const cpo::uno::Any& rGuessRate )
 {
     ScaDoubleList aValues, aDates;
     aValues.Append( rValues );
@@ -601,7 +601,7 @@ double SAL_CALL AnalysisAddIn::getXnpv(
 }
 
 
-double SAL_CALL AnalysisAddIn::getIntrate( const css::uno::Reference< css::beans::XPropertySet >& xOpt,
+double SAL_CALL AnalysisAddIn::getIntrate( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt,
     sal_Int32 nSettle, sal_Int32 nMat, double fInvest, double fRedemp, const cpo::uno::Any& rOB )
 {
     if( fInvest <= 0.0 || fRedemp <= 0.0 || nSettle >= nMat )
@@ -612,7 +612,7 @@ double SAL_CALL AnalysisAddIn::getIntrate( const css::uno::Reference< css::beans
 }
 
 
-double SAL_CALL AnalysisAddIn::getCoupncd( const css::uno::Reference< css::beans::XPropertySet >& xOpt,
+double SAL_CALL AnalysisAddIn::getCoupncd( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt,
     sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, const cpo::uno::Any& rOB )
 {
     double fRet = GetCoupncd( GetNullDate( xOpt ), nSettle, nMat, nFreq, getDateMode( xOpt, rOB ) );
@@ -620,7 +620,7 @@ double SAL_CALL AnalysisAddIn::getCoupncd( const css::uno::Reference< css::beans
 }
 
 
-double SAL_CALL AnalysisAddIn::getCoupdays( const css::uno::Reference< css::beans::XPropertySet >& xOpt,
+double SAL_CALL AnalysisAddIn::getCoupdays( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt,
     sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, const cpo::uno::Any& rOB )
 {
     double fRet = GetCoupdays( GetNullDate( xOpt ), nSettle, nMat, nFreq, getDateMode( xOpt, rOB ) );
@@ -628,7 +628,7 @@ double SAL_CALL AnalysisAddIn::getCoupdays( const css::uno::Reference< css::bean
 }
 
 
-double SAL_CALL AnalysisAddIn::getCoupdaysnc( const css::uno::Reference< css::beans::XPropertySet >& xOpt,
+double SAL_CALL AnalysisAddIn::getCoupdaysnc( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt,
     sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, const cpo::uno::Any& rOB )
 {
     double fRet = GetCoupdaysnc( GetNullDate( xOpt ), nSettle, nMat, nFreq, getDateMode( xOpt, rOB ) );
@@ -636,7 +636,7 @@ double SAL_CALL AnalysisAddIn::getCoupdaysnc( const css::uno::Reference< css::be
 }
 
 
-double SAL_CALL AnalysisAddIn::getCoupdaybs( const css::uno::Reference< css::beans::XPropertySet >& xOpt,
+double SAL_CALL AnalysisAddIn::getCoupdaybs( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt,
     sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, const cpo::uno::Any& rOB )
 {
     double fRet = GetCoupdaybs( GetNullDate( xOpt ), nSettle, nMat, nFreq, getDateMode( xOpt, rOB ) );
@@ -644,7 +644,7 @@ double SAL_CALL AnalysisAddIn::getCoupdaybs( const css::uno::Reference< css::bea
 }
 
 
-double SAL_CALL AnalysisAddIn::getCouppcd( const css::uno::Reference< css::beans::XPropertySet >& xOpt,
+double SAL_CALL AnalysisAddIn::getCouppcd( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt,
     sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, const cpo::uno::Any& rOB )
 {
     double fRet = GetCouppcd( GetNullDate( xOpt ), nSettle, nMat, nFreq, getDateMode( xOpt, rOB ) );
@@ -652,7 +652,7 @@ double SAL_CALL AnalysisAddIn::getCouppcd( const css::uno::Reference< css::beans
 }
 
 
-double SAL_CALL AnalysisAddIn::getCoupnum( const css::uno::Reference< css::beans::XPropertySet >& xOpt,
+double SAL_CALL AnalysisAddIn::getCoupnum( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt,
     sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, const cpo::uno::Any& rOB )
 {
     double fRet = GetCoupnum( GetNullDate( xOpt ), nSettle, nMat, nFreq, getDateMode( xOpt, rOB ) );

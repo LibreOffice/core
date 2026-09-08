@@ -24,7 +24,7 @@
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/awt/Size.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <sal/log.hxx>
 #include <comphelper/diagnose_ex.hxx>
@@ -42,7 +42,7 @@
 #include <oox/token/tokens.hxx>
 
 using namespace ::oox::core;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::text;

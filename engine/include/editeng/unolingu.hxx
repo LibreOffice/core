@@ -22,7 +22,7 @@
 
 #include <rtl/ustring.hxx>
 #include <rtl/ref.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <editeng/editengdllapi.h>
 
 namespace com::sun::star::linguistic2 { class XDictionary; }
@@ -43,44 +43,44 @@ class EDITENG_DLLPUBLIC LinguMgr
 {
     friend class LinguMgrExitLstnr;
 
-    static css::uno::Reference< css::linguistic2::XLinguServiceManager2 >     xLngSvcMgr;
-    static css::uno::Reference< css::linguistic2::XSpellChecker >             xSpell;
-    static css::uno::Reference< css::linguistic2::XHyphenator >               xHyph;
-    static css::uno::Reference< css::linguistic2::XThesaurus >                xThes;
-    static css::uno::Reference< css::linguistic2::XSearchableDictionaryList > xDicList;
-    static css::uno::Reference< css::linguistic2::XLinguProperties >          xProp;
+    static cpo::uno::Reference< css::linguistic2::XLinguServiceManager2 >     xLngSvcMgr;
+    static cpo::uno::Reference< css::linguistic2::XSpellChecker >             xSpell;
+    static cpo::uno::Reference< css::linguistic2::XHyphenator >               xHyph;
+    static cpo::uno::Reference< css::linguistic2::XThesaurus >                xThes;
+    static cpo::uno::Reference< css::linguistic2::XSearchableDictionaryList > xDicList;
+    static cpo::uno::Reference< css::linguistic2::XLinguProperties >          xProp;
 
-    static css::uno::Reference< css::linguistic2::XDictionary >               xIgnoreAll;
-    static css::uno::Reference< css::linguistic2::XDictionary >               xChangeAll;
+    static cpo::uno::Reference< css::linguistic2::XDictionary >               xIgnoreAll;
+    static cpo::uno::Reference< css::linguistic2::XDictionary >               xChangeAll;
 
     static rtl::Reference<LinguMgrExitLstnr>           pExitLstnr;
     static bool                                        bExiting;
 
-    static css::uno::Reference< css::linguistic2::XSpellChecker >             GetSpell();
-    static css::uno::Reference< css::linguistic2::XHyphenator >               GetHyph();
-    static css::uno::Reference< css::linguistic2::XThesaurus >                GetThes();
-    static css::uno::Reference< css::linguistic2::XSearchableDictionaryList > GetDicList();
-    static css::uno::Reference< css::linguistic2::XLinguProperties >          GetProp();
-    static css::uno::Reference< css::linguistic2::XDictionary >               GetStandard();
-    static css::uno::Reference< css::linguistic2::XDictionary >               GetIgnoreAll();
-    static css::uno::Reference< css::linguistic2::XDictionary >               GetChangeAll();
+    static cpo::uno::Reference< css::linguistic2::XSpellChecker >             GetSpell();
+    static cpo::uno::Reference< css::linguistic2::XHyphenator >               GetHyph();
+    static cpo::uno::Reference< css::linguistic2::XThesaurus >                GetThes();
+    static cpo::uno::Reference< css::linguistic2::XSearchableDictionaryList > GetDicList();
+    static cpo::uno::Reference< css::linguistic2::XLinguProperties >          GetProp();
+    static cpo::uno::Reference< css::linguistic2::XDictionary >               GetStandard();
+    static cpo::uno::Reference< css::linguistic2::XDictionary >               GetIgnoreAll();
+    static cpo::uno::Reference< css::linguistic2::XDictionary >               GetChangeAll();
 
     LinguMgr(const LinguMgr &) = delete;
     LinguMgr & operator = (const LinguMgr &) = delete;
 
 public:
 
-    static css::uno::Reference< css::linguistic2::XSpellChecker >             GetSpellChecker();
-    static css::uno::Reference< css::linguistic2::XHyphenator >               GetHyphenator();
-    static css::uno::Reference< css::linguistic2::XThesaurus >                GetThesaurus();
-    static css::uno::Reference< css::linguistic2::XSearchableDictionaryList > GetDictionaryList();
-    static css::uno::Reference< css::linguistic2::XLinguProperties >          GetLinguPropertySet();
+    static cpo::uno::Reference< css::linguistic2::XSpellChecker >             GetSpellChecker();
+    static cpo::uno::Reference< css::linguistic2::XHyphenator >               GetHyphenator();
+    static cpo::uno::Reference< css::linguistic2::XThesaurus >                GetThesaurus();
+    static cpo::uno::Reference< css::linguistic2::XSearchableDictionaryList > GetDictionaryList();
+    static cpo::uno::Reference< css::linguistic2::XLinguProperties >          GetLinguPropertySet();
 
-    static css::uno::Reference< css::linguistic2::XLinguServiceManager2 >     GetLngSvcMgr();
+    static cpo::uno::Reference< css::linguistic2::XLinguServiceManager2 >     GetLngSvcMgr();
 
-    static css::uno::Reference< css::linguistic2::XDictionary >               GetStandardDic();
-    static css::uno::Reference< css::linguistic2::XDictionary >               GetIgnoreAllList();
-    static css::uno::Reference< css::linguistic2::XDictionary >               GetChangeAllList();
+    static cpo::uno::Reference< css::linguistic2::XDictionary >               GetStandardDic();
+    static cpo::uno::Reference< css::linguistic2::XDictionary >               GetIgnoreAllList();
+    static cpo::uno::Reference< css::linguistic2::XDictionary >               GetChangeAllList();
 };
 
 
@@ -106,7 +106,7 @@ inline SvxAlternativeSpelling::SvxAlternativeSpelling() :
 
 
 EDITENG_DLLPUBLIC SvxAlternativeSpelling SvxGetAltSpelling(
-        const css::uno::Reference< css::linguistic2::XHyphenatedWord > & rHyphWord );
+        const cpo::uno::Reference< css::linguistic2::XHyphenatedWord > & rHyphWord );
 
 EDITENG_DLLPUBLIC short SvxDicError(weld::Window *pParent, linguistic::DictionaryError nError);
 

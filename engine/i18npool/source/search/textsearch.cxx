@@ -37,7 +37,7 @@
 #include <unicode/regex.h>
 
 using namespace ::com::sun::star::util;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::i18n;
@@ -206,7 +206,7 @@ void TextSearch::setOptions2( const SearchOptions2& rOptions )
             if (maskSimpleRegexTrans(transliterateFlags) !=
                     maskSimpleTrans(transliterateFlags))
             {
-                css::uno::Reference< XExtendedTransliteration > xTranslitPattern(
+                cpo::uno::Reference< XExtendedTransliteration > xTranslitPattern(
                          Transliteration::create( m_xContext ));
                 if (xTranslitPattern.is())
                 {

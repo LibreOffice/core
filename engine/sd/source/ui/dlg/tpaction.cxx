@@ -59,7 +59,8 @@
 #include <algorithm>
 
 using namespace ::com::sun::star;
-using namespace com::sun::star::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 #define DOCUMENT_TOKEN '#'
 

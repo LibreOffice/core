@@ -22,16 +22,16 @@
 
 using namespace connectivity;
 using namespace connectivity::sdbcx;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::container;
 using namespace dbaccess;
 
 
-css::uno::Reference< css::beans::XPropertySet > OIndexes::createObject(const OUString& _rName)
+cpo::uno::Reference< css::beans::XPropertySet > OIndexes::createObject(const OUString& _rName)
 {
-    css::uno::Reference< css::beans::XPropertySet > xRet;
+    cpo::uno::Reference< css::beans::XPropertySet > xRet;
     if ( m_xIndexes.is() && m_xIndexes->hasByName(_rName) )
         xRet.set(m_xIndexes->getByName(_rName),UNO_QUERY);
     else
@@ -50,7 +50,7 @@ Reference< XPropertySet > OIndexes::createDescriptor()
 }
 
 // XAppend
-css::uno::Reference< css::beans::XPropertySet > OIndexes::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
+cpo::uno::Reference< css::beans::XPropertySet > OIndexes::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     Reference<XAppend> xData( m_xIndexes,UNO_QUERY);
     if ( !xData.is() )

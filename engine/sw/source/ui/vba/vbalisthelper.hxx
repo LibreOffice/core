@@ -22,10 +22,10 @@ typedef std::shared_ptr< SwVbaListHelper > SwVbaListHelperRef;
 class SwVbaListHelper
 {
 private:
-    css::uno::Reference< css::text::XTextDocument > mxTextDocument;
-    css::uno::Reference< css::container::XIndexReplace > mxNumberingRules;
-    css::uno::Reference< css::container::XNameContainer > mxStyleFamily;
-    css::uno::Reference< css::beans::XPropertySet > mxStyleProps;
+    cpo::uno::Reference< css::text::XTextDocument > mxTextDocument;
+    cpo::uno::Reference< css::container::XIndexReplace > mxNumberingRules;
+    cpo::uno::Reference< css::container::XNameContainer > mxStyleFamily;
+    cpo::uno::Reference< css::beans::XPropertySet > mxStyleProps;
     sal_Int32 mnGalleryType;
     sal_Int32 mnTemplateType;
     OUString msStyleName;
@@ -57,10 +57,10 @@ private:
 
 public:
     /// @throws cpo::uno::RuntimeException
-    SwVbaListHelper( css::uno::Reference< css::text::XTextDocument > xTextDoc, sal_Int32 nGalleryType, sal_Int32 nTemplateType );
+    SwVbaListHelper( cpo::uno::Reference< css::text::XTextDocument > xTextDoc, sal_Int32 nGalleryType, sal_Int32 nTemplateType );
 
     sal_Int32 getGalleryType() const { return mnGalleryType; }
-    const css::uno::Reference< css::container::XIndexReplace >& getNumberingRules() const { return mxNumberingRules; }
+    const cpo::uno::Reference< css::container::XIndexReplace >& getNumberingRules() const { return mxNumberingRules; }
     /// @throws cpo::uno::RuntimeException
     cpo::uno::Any getPropertyValueWithNameAndLevel( sal_Int32 nLevel, const OUString& sName );
     /// @throws cpo::uno::RuntimeException

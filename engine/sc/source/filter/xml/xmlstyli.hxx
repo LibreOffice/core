@@ -91,10 +91,10 @@ public:
             XMLTableStylesContext& rStyles, XmlStyleFamily nFamily, bool bDefaultStyle = false );
     virtual ~XMLTableStyleContext() override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
-    virtual void FillPropertySet(const css::uno::Reference<
+    virtual void FillPropertySet(const cpo::uno::Reference<
                 css::beans::XPropertySet > & rPropSet ) override;
 
     virtual void SetDefaults() override;
@@ -115,11 +115,11 @@ private:
 
 class XMLTableStylesContext : public SvXMLStylesContext
 {
-    css::uno::Reference< css::container::XNameContainer > xCellStyles;
-    css::uno::Reference< css::container::XNameContainer > xColumnStyles;
-    css::uno::Reference< css::container::XNameContainer > xRowStyles;
-    css::uno::Reference< css::container::XNameContainer > xTableStyles;
-    css::uno::Reference< css::container::XNameContainer > xGraphicStyles;
+    cpo::uno::Reference< css::container::XNameContainer > xCellStyles;
+    cpo::uno::Reference< css::container::XNameContainer > xColumnStyles;
+    cpo::uno::Reference< css::container::XNameContainer > xRowStyles;
+    cpo::uno::Reference< css::container::XNameContainer > xTableStyles;
+    cpo::uno::Reference< css::container::XNameContainer > xGraphicStyles;
     sal_Int32 nNumberFormatIndex;
     sal_Int32 nConditionalFormatIndex;
     sal_Int32 nCellStyleIndex;
@@ -141,12 +141,12 @@ protected:
     virtual SvXMLStyleContext *CreateStyleStyleChildContext(
             XmlStyleFamily nFamily,
             sal_Int32 nElement,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
+            const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
 
     using SvXMLStylesContext::CreateDefaultStyleStyleChildContext;
     virtual SvXMLStyleContext *CreateDefaultStyleStyleChildContext(
         XmlStyleFamily nFamily, sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
 
 public:
 
@@ -157,7 +157,7 @@ public:
 
     virtual SvXMLImportPropertyMapper* GetImportPropertyMapper(
                         XmlStyleFamily nFamily ) const override;
-    virtual css::uno::Reference< css::container::XNameContainer >
+    virtual cpo::uno::Reference< css::container::XNameContainer >
         GetStylesContainer( XmlStyleFamily nFamily ) const override;
     virtual OUString GetServiceName( XmlStyleFamily nFamily ) const override;
 
@@ -168,12 +168,12 @@ class ScXMLMasterStylesContext : public SvXMLStylesContext
 {
 protected:
     virtual SvXMLStyleContext *CreateStyleChildContext( sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
 
     using SvXMLStylesContext::CreateStyleStyleChildContext;
     virtual SvXMLStyleContext *CreateStyleStyleChildContext( XmlStyleFamily nFamily,
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
 
     virtual bool InsertStyleFamily( XmlStyleFamily nFamily ) const override;
 
@@ -187,7 +187,7 @@ public:
 
 class ScMasterPageContext : public XMLTextMasterPageContext
 {
-    css::uno::Reference<css::beans::XPropertySet> xPropSet;
+    cpo::uno::Reference<css::beans::XPropertySet> xPropSet;
     bool                bContainsRightHeader;
     bool                bContainsRightFooter;
 
@@ -196,13 +196,13 @@ public:
 
 
     ScMasterPageContext( SvXMLImport& rImport, sal_Int32 nElement,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
+            const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
             bool bOverwrite );
     virtual ~ScMasterPageContext() override;
 
     virtual SvXMLImportContext *CreateHeaderFooterContext(
             sal_Int32 nElement,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
+            const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
             const bool bFooter,
             const bool bLeft,
             const bool bFirst ) override;
@@ -224,7 +224,7 @@ public:
 
     // override FillPropertySet to store style information
     virtual void FillPropertySet(
-            const css::uno::Reference< css::beans::XPropertySet > & rPropSet ) override;
+            const cpo::uno::Reference< css::beans::XPropertySet > & rPropSet ) override;
 };
 
 class ScShapeStyleContext : public XMLShapeStyleContext

@@ -23,7 +23,7 @@
 #include <editeng/svxenum.hxx>
 #include <i18nlangtag/lang.h>
 #include <rtl/ustring.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <vcl/weld.hxx>
 
 // forward ---------------------------------------------------------------
@@ -50,9 +50,9 @@ private:
 
     weld::Widget* pWin;
     std::unique_ptr<weld::WaitObject> xWait;
-    css::uno::Reference<
+    cpo::uno::Reference<
         cpo::uno::XInterface >             xLast;  // result of last spelling/hyphenation attempt
-    css::uno::Reference<
+    cpo::uno::Reference<
         css::linguistic2::XHyphenator >    xHyph;
     bool        bOtherCntnt : 1; // set => Check special sections initially
     bool        bReverse    : 1; // Reverse spell check
@@ -73,16 +73,16 @@ public:
     SvxSpellWrapper( weld::Widget* pWn,
                      const bool bStart, const bool bIsAllRight );
     SvxSpellWrapper( weld::Widget* pWn,
-                     css::uno::Reference< css::linguistic2::XHyphenator > const &xHyphenator,
+                     cpo::uno::Reference< css::linguistic2::XHyphenator > const &xHyphenator,
                      const bool bStart, const bool bOther );
 
     virtual ~SvxSpellWrapper();
 
     static sal_Int16    CheckSpellLang(
-                            css::uno::Reference< css::linguistic2::XSpellChecker > const & xSpell,
+                            cpo::uno::Reference< css::linguistic2::XSpellChecker > const & xSpell,
                             LanguageType nLang );
     static sal_Int16    CheckHyphLang(
-                            css::uno::Reference< css::linguistic2::XHyphenator >const & xHyph,
+                            cpo::uno::Reference< css::linguistic2::XHyphenator >const & xHyph,
                             LanguageType nLang );
 
     static void         ShowLanguageErrors();
@@ -93,16 +93,16 @@ public:
     bool     IsAllRight() const { return bAllRight; }
 
 protected:
-    const css::uno::Reference< cpo::uno::XInterface >&
+    const cpo::uno::Reference< cpo::uno::XInterface >&
                      GetLast() const { return xLast; }
-    void             SetLast(const css::uno::Reference< cpo::uno::XInterface >  &xNewLast)
+    void             SetLast(const cpo::uno::Reference< cpo::uno::XInterface >  &xNewLast)
                             { xLast = xNewLast; }
     virtual bool SpellMore();               // examine further documents?
     virtual void SpellStart( SvxSpellArea eSpell ); // Preparing the area
     virtual void SpellContinue();     // Check Areas
                                           // Result available through GetLast
     virtual void ReplaceAll( const OUString &rNewText ); //Replace word from the replace list
-    static css::uno::Reference< css::linguistic2::XDictionary >
+    static cpo::uno::Reference< css::linguistic2::XDictionary >
                  GetAllRightDic();
     virtual void SpellEnd();                        // Finish area
     virtual void InsertHyphen( const sal_Int32 nPos ); // Insert hyphen

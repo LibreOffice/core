@@ -31,7 +31,7 @@
 
 #include <unomodel.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Any.hxx>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/util/CloseVetoException.hpp>
@@ -49,8 +49,8 @@
 #include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 namespace {
 
@@ -125,7 +125,7 @@ private:
     InitializationState meInitializationState;
 
     std::unique_ptr<MasterPageContainerQueue> mpRequestQueue;
-    css::uno::Reference<css::frame::XModel> mxModel;
+    cpo::uno::Reference<css::frame::XModel> mxModel;
     SdDrawDocument* mpDocument;
     PreviewRenderer maPreviewRenderer;
     /** Remember whether the first page object has already been used to

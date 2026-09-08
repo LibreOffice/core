@@ -40,7 +40,7 @@
 #include <officecfg/Office/Common.hxx>
 #include "ChartGradientsPanel.hxx"
 
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 namespace chart::sidebar {

@@ -47,7 +47,7 @@
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <cpo/uno/Any.h>
 #include <com/sun/star/task/ErrorCodeRequest2.hpp>
 
@@ -118,8 +118,8 @@
 #include <memory>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::frame;
@@ -1527,9 +1527,9 @@ bool SfxObjectShell::UnTrustedScript(const OUString& rScriptURL)
         return false;
 
     // ensure URL Escape Codes are decoded
-    css::uno::Reference<css::uri::XUriReference> uri(
+    cpo::uno::Reference<css::uri::XUriReference> uri(
         css::uri::UriReferenceFactory::create(comphelper::getProcessComponentContext())->parse(rScriptURL));
-    css::uno::Reference<css::uri::XVndSunStarScriptUrl> sfUri(uri, css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::uri::XVndSunStarScriptUrl> sfUri(uri, cpo::uno::UNO_QUERY);
 
     if (!sfUri.is())
         return false;
@@ -1774,9 +1774,9 @@ bool SfxObjectShell::AdjustMacroMode()
     return pImpl->aMacroMode.adjustMacroMode( xInteraction );
 }
 
-css::uno::Reference<css::awt::XWindow> SfxObjectShell::GetDialogParent( SfxMedium const * pLoadingMedium )
+cpo::uno::Reference<css::awt::XWindow> SfxObjectShell::GetDialogParent( SfxMedium const * pLoadingMedium )
 {
-    css::uno::Reference<css::awt::XWindow> xWindow;
+    cpo::uno::Reference<css::awt::XWindow> xWindow;
     SfxItemSet& rSet = pLoadingMedium ? pLoadingMedium->GetItemSet() : GetMedium()->GetItemSet();
     const SfxUnoFrameItem* pUnoItem = rSet.GetItem(SID_FILLFRAME, false);
     if ( pUnoItem )
@@ -1817,7 +1817,7 @@ css::uno::Reference<css::awt::XWindow> SfxObjectShell::GetDialogParent( SfxMediu
         if ( !pHiddenItem || !pHiddenItem->GetValue() )
         {
             xWindow->setVisible(true);
-            css::uno::Reference<css::awt::XTopWindow> xTopWindow(xWindow, uno::UNO_QUERY);
+            cpo::uno::Reference<css::awt::XTopWindow> xTopWindow(xWindow, uno::UNO_QUERY);
             SAL_WARN_IF(!xTopWindow, "sfx.appl", "XTopWindow not available from XWindow");
             if (xTopWindow)
                 xTopWindow->toFront();
@@ -1958,7 +1958,7 @@ SignatureState SfxObjectShell_Impl::getScriptingSignatureState()
 }
 
 bool SfxObjectShell_Impl::hasTrustedScriptingSignature(
-    const css::uno::Reference<css::task::XInteractionHandler>& _rxInteraction)
+    const cpo::uno::Reference<css::task::XInteractionHandler>& _rxInteraction)
 {
     bool bResult = false;
 

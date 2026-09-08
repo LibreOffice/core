@@ -89,7 +89,7 @@ public:
     }
 protected:
     css::beans::PropertyState ePropState;
-    css::uno::Reference < css::beans::XPropertyState > mXPropState;
+    cpo::uno::Reference < css::beans::XPropertyState > mXPropState;
 
     bool    ImplGetPropertyValue( const OUString& rString, bool bGetPropertyState );
 };
@@ -117,8 +117,8 @@ class PortionObj final : public PropStateValue
 
         void            ImplClear();
         void            ImplConstruct( const PortionObj& rPortionObj );
-        static sal_uInt32 ImplGetTextField( css::uno::Reference< css::text::XTextRange > & rXTextRangeRef,
-                            const css::uno::Reference< css::beans::XPropertySet > & rXPropSetRef, OUString& rURL );
+        static sal_uInt32 ImplGetTextField( cpo::uno::Reference< css::text::XTextRange > & rXTextRangeRef,
+                            const cpo::uno::Reference< css::beans::XPropertySet > & rXPropSetRef, OUString& rURL );
         sal_uInt32      ImplCalculateTextPositions( sal_uInt32 nCurrentTextPosition );
         void            ImplGetPortionValues( FontCollection& rFontCollection, bool bGetPropStateValue );
 
@@ -145,9 +145,9 @@ class PortionObj final : public PropStateValue
         std::unique_ptr<sal_uInt16[]> mpText;
         std::unique_ptr<FieldEntry> mpFieldEntry;
 
-                        PortionObj( css::uno::Reference< css::text::XTextRange > & rXTextRangeRef,
+                        PortionObj( cpo::uno::Reference< css::text::XTextRange > & rXTextRangeRef,
                                         bool bLast, FontCollection& rFontCollection );
-                        PortionObj( const css::uno::Reference< css::beans::XPropertySet > & rXPropSetRef,
+                        PortionObj( const cpo::uno::Reference< css::beans::XPropertySet > & rXPropSetRef,
                                         FontCollection& rFontCollection );
                         PortionObj( const PortionObj& rPortionObj );
                         ~PortionObj();
@@ -209,11 +209,11 @@ class ParagraphObj : public PropStateValue, public SOParagraph
         bool                                mbParagraphPunctation;
         sal_uInt16                              mnBiDi;
 
-                        ParagraphObj( css::uno::Reference< css::text::XTextContent > const & rXTextContentRef,
+                        ParagraphObj( cpo::uno::Reference< css::text::XTextContent > const & rXTextContentRef,
                             ParaFlags, FontCollection& rFontCollection,
                                 PPTExBulletProvider& rBuProv );
                         ParagraphObj( const ParagraphObj& rParargraphObj ) = delete;
-                        ParagraphObj( const css::uno::Reference< css::beans::XPropertySet > & rXPropSetRef,
+                        ParagraphObj( const cpo::uno::Reference< css::beans::XPropertySet > & rXPropSetRef,
                                       PPTExBulletProvider* pBuProv );
 
     bool empty() const { return mvPortions.empty(); }
@@ -240,7 +240,7 @@ class TextObj
     void            ImplCalculateTextPositions();
 
 public:
-    TextObj( css::uno::Reference< css::text::XSimpleText > const &
+    TextObj( cpo::uno::Reference< css::text::XSimpleText > const &
             rXText, int nInstance, FontCollection& rFontCollection, PPTExBulletProvider& rBuProv );
 
     ParagraphObj*   GetParagraph(int idx);

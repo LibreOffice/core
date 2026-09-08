@@ -21,7 +21,7 @@
 #include <ChartDocumentWrapper.hxx>
 #include <com/sun/star/util/XRefreshable.hpp>
 
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::cpo::uno::Any;
 using namespace ::com::sun::star;
 

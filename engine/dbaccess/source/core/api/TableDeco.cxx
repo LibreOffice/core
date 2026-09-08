@@ -36,7 +36,7 @@
 #include <ContainerMediator.hxx>
 
 using namespace dbaccess;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
@@ -522,7 +522,7 @@ Reference< XPropertySet > ODBTableDecorator::createDataDescriptor(  )
     OSL_ENSURE( xFactory.is(), "ODBTableDecorator::createDataDescriptor: invalid table!" );
     Reference< XColumnsSupplier > xColsSupp;
     if ( xFactory.is() )
-        xColsSupp.set(xFactory->createDataDescriptor(), css::uno::UNO_QUERY);
+        xColsSupp.set(xFactory->createDataDescriptor(), cpo::uno::UNO_QUERY);
 
     return new ODBTableDecorator(
         m_xConnection,

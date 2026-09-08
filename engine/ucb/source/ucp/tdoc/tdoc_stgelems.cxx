@@ -38,6 +38,7 @@
 #include "tdoc_stgelems.hxx"
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace tdoc_ucp;
 
 

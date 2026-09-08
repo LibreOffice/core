@@ -39,11 +39,11 @@ namespace dbaccess
                                public css::lang::XServiceInfo
     {
         std::unique_ptr<OColumns>  m_pColumns;
-        css::uno::Reference< css::sdbc::XParameters > m_xAggregateAsParameters;
+        cpo::uno::Reference< css::sdbc::XParameters > m_xAggregateAsParameters;
 
     public:
         OPreparedStatement(const rtl::Reference< OConnection > & _xConn,
-                           const css::uno::Reference< cpo::uno::XInterface > & _xStatement);
+                           const cpo::uno::Reference< cpo::uno::XInterface > & _xStatement);
         virtual ~OPreparedStatement() override;
 
     // css::lang::XTypeProvider
@@ -64,16 +64,16 @@ namespace dbaccess
         virtual void disposing() override;
 
     // css::sdbc::XPreparedStatement
-        virtual css::uno::Reference< css::sdbc::XResultSet > executeQuery(  ) override;
+        virtual cpo::uno::Reference< css::sdbc::XResultSet > executeQuery(  ) override;
         virtual sal_Int32 executeUpdate(  ) override;
         virtual bool execute(  ) override;
-        virtual css::uno::Reference< css::sdbc::XConnection > getConnection(  ) override;
+        virtual cpo::uno::Reference< css::sdbc::XConnection > getConnection(  ) override;
 
     // css::sdbcx::XColumnsSupplier
-        virtual css::uno::Reference< css::container::XNameAccess > getColumns(  ) override;
+        virtual cpo::uno::Reference< css::container::XNameAccess > getColumns(  ) override;
 
     // css::sdbc::XResultSetMetaDataSupplier
-        virtual css::uno::Reference< css::sdbc::XResultSetMetaData > getMetaData(  ) override;
+        virtual cpo::uno::Reference< css::sdbc::XResultSetMetaData > getMetaData(  ) override;
 
     // css::sdbc::XParameters
         virtual void setNull( sal_Int32 parameterIndex, sal_Int32 sqlType ) override;
@@ -90,14 +90,14 @@ namespace dbaccess
         virtual void setDate( sal_Int32 parameterIndex, const css::util::Date& x ) override;
         virtual void setTime( sal_Int32 parameterIndex, const css::util::Time& x ) override;
         virtual void setTimestamp( sal_Int32 parameterIndex, const css::util::DateTime& x ) override;
-        virtual void setBinaryStream( sal_Int32 parameterIndex, const css::uno::Reference< css::io::XInputStream >& x, sal_Int32 length ) override;
-        virtual void setCharacterStream( sal_Int32 parameterIndex, const css::uno::Reference< css::io::XInputStream >& x, sal_Int32 length ) override;
+        virtual void setBinaryStream( sal_Int32 parameterIndex, const cpo::uno::Reference< css::io::XInputStream >& x, sal_Int32 length ) override;
+        virtual void setCharacterStream( sal_Int32 parameterIndex, const cpo::uno::Reference< css::io::XInputStream >& x, sal_Int32 length ) override;
         virtual void setObject( sal_Int32 parameterIndex, const cpo::uno::Any& x ) override;
         virtual void setObjectWithInfo( sal_Int32 parameterIndex, const cpo::uno::Any& x, sal_Int32 targetSqlType, sal_Int32 scale ) override;
-        virtual void setRef( sal_Int32 parameterIndex, const css::uno::Reference< css::sdbc::XRef >& x ) override;
-        virtual void setBlob( sal_Int32 parameterIndex, const css::uno::Reference< css::sdbc::XBlob >& x ) override;
-        virtual void setClob( sal_Int32 parameterIndex, const css::uno::Reference< css::sdbc::XClob >& x ) override;
-        virtual void setArray( sal_Int32 parameterIndex, const css::uno::Reference< css::sdbc::XArray >& x ) override;
+        virtual void setRef( sal_Int32 parameterIndex, const cpo::uno::Reference< css::sdbc::XRef >& x ) override;
+        virtual void setBlob( sal_Int32 parameterIndex, const cpo::uno::Reference< css::sdbc::XBlob >& x ) override;
+        virtual void setClob( sal_Int32 parameterIndex, const cpo::uno::Reference< css::sdbc::XClob >& x ) override;
+        virtual void setArray( sal_Int32 parameterIndex, const cpo::uno::Reference< css::sdbc::XArray >& x ) override;
         virtual void clearParameters(  ) override;
     };
 }

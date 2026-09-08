@@ -32,7 +32,7 @@
 
 using namespace comphelper;
 using namespace frm;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
@@ -48,7 +48,7 @@ OFormattedFieldWrapper::OFormattedFieldWrapper(const Reference<XComponentContext
 {
 }
 
-css::uno::Reference<cpo::uno::XInterface> OFormattedFieldWrapper::createFormattedFieldWrapper(const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory, bool bActAsFormatted, OUString const & implementationName)
+cpo::uno::Reference<cpo::uno::XInterface> OFormattedFieldWrapper::createFormattedFieldWrapper(const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory, bool bActAsFormatted, OUString const & implementationName)
 {
     rtl::Reference<OFormattedFieldWrapper> pRef = new OFormattedFieldWrapper(_rxFactory,
                                                                              implementationName);
@@ -73,7 +73,7 @@ css::uno::Reference<cpo::uno::XInterface> OFormattedFieldWrapper::createFormatte
         pRef->m_xAggregate->setDelegator(static_cast<XWeak*>(pRef.get()));
     }
 
-    css::uno::Reference<cpo::uno::XInterface> xRef(*pRef);
+    cpo::uno::Reference<cpo::uno::XInterface> xRef(*pRef);
 
     return xRef;
 }
@@ -116,7 +116,7 @@ OFormattedFieldWrapper::~OFormattedFieldWrapper()
 {
     // release the aggregated object (if any)
     if (m_xAggregate.is())
-        m_xAggregate->setDelegator(css::uno::Reference<cpo::uno::XInterface> ());
+        m_xAggregate->setDelegator(cpo::uno::Reference<cpo::uno::XInterface> ());
 
 }
 
@@ -319,7 +319,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_form_OFormattedFieldWrapper_get_implementation(cpo::uno::XComponentContext* component,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
-    css::uno::Reference<cpo::uno::XInterface> inst(
+    cpo::uno::Reference<cpo::uno::XInterface> inst(
         OFormattedFieldWrapper::createFormattedFieldWrapper(
             component, false, u"com.sun.star.form.OFormattedFieldWrapper"_ustr));
     inst->acquire();
@@ -330,7 +330,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT cpo::uno::XInterface*
 com_sun_star_comp_forms_OFormattedFieldWrapper_ForcedFormatted_get_implementation(cpo::uno::XComponentContext* component,
         cpo::uno::Sequence<cpo::uno::Any> const &)
 {
-    css::uno::Reference<cpo::uno::XInterface> inst(
+    cpo::uno::Reference<cpo::uno::XInterface> inst(
         OFormattedFieldWrapper::createFormattedFieldWrapper(
             component, true, u"com.sun.star.comp.forms.OFormattedFieldWrapper_ForcedFormatted"_ustr));
     inst->acquire();

@@ -25,7 +25,7 @@
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlexp.hxx>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <rtl/ustring.hxx>
 #include <svl/zforlist.hxx>
 #include <com/sun/star/util/NumberFormat.hpp>
@@ -36,6 +36,7 @@
 #include <osl/diagnose.h>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace xmloff::token;
 
 constexpr OUString gsStandardFormat(u"StandardFormat"_ustr);
@@ -44,16 +45,16 @@ constexpr OUString gsCurrencySymbol(u"CurrencySymbol"_ustr);
 constexpr OUString gsCurrencyAbbreviation(u"CurrencyAbbreviation"_ustr);
 
 XMLNumberFormatAttributesExportHelper::XMLNumberFormatAttributesExportHelper(
-            css::uno::Reference< css::util::XNumberFormatsSupplier > const & xTempNumberFormatsSupplier)
-    : m_xNumberFormats(xTempNumberFormatsSupplier.is() ? xTempNumberFormatsSupplier->getNumberFormats() : css::uno::Reference< css::util::XNumberFormats > ()),
+            cpo::uno::Reference< css::util::XNumberFormatsSupplier > const & xTempNumberFormatsSupplier)
+    : m_xNumberFormats(xTempNumberFormatsSupplier.is() ? xTempNumberFormatsSupplier->getNumberFormats() : cpo::uno::Reference< css::util::XNumberFormats > ()),
     m_pExport(nullptr)
 {
 }
 
 XMLNumberFormatAttributesExportHelper::XMLNumberFormatAttributesExportHelper(
-            css::uno::Reference< css::util::XNumberFormatsSupplier > const & xTempNumberFormatsSupplier,
+            cpo::uno::Reference< css::util::XNumberFormatsSupplier > const & xTempNumberFormatsSupplier,
             SvXMLExport& rTempExport )
-:   m_xNumberFormats(xTempNumberFormatsSupplier.is() ? xTempNumberFormatsSupplier->getNumberFormats() : css::uno::Reference< css::util::XNumberFormats > ()),
+:   m_xNumberFormats(xTempNumberFormatsSupplier.is() ? xTempNumberFormatsSupplier->getNumberFormats() : cpo::uno::Reference< css::util::XNumberFormats > ()),
     m_pExport(&rTempExport),
     m_sAttrValue(rTempExport.GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_OFFICE, GetXMLToken(XML_VALUE))),
     m_sAttrDateValue(rTempExport.GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_OFFICE, GetXMLToken(XML_DATE_VALUE))),

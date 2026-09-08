@@ -27,11 +27,11 @@
 
 class ComEnumerationWrapper : public ::cppu::WeakImplHelper<css::container::XEnumeration>
 {
-    css::uno::Reference<css::script::XInvocation> m_xInvocation;
+    cpo::uno::Reference<css::script::XInvocation> m_xInvocation;
     sal_Int32 m_nCurInd;
 
 public:
-    explicit ComEnumerationWrapper(css::uno::Reference<css::script::XInvocation> xInvocation)
+    explicit ComEnumerationWrapper(cpo::uno::Reference<css::script::XInvocation> xInvocation)
         : m_xInvocation(std::move(xInvocation))
         , m_nCurInd(0)
     {

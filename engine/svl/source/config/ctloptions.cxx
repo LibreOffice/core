@@ -37,7 +37,7 @@
 #include <officecfg/Office/Common.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 #define CFG_READONLY_DEFAULT false

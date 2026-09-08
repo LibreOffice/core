@@ -165,7 +165,7 @@ private:
 
     DECL_LINK(OnSearchProgress, const FmSearchProgress*, void);
 
-    void initCommon(const css::uno::Reference<css::sdbc::XResultSet>& _rxCursor);
+    void initCommon(const cpo::uno::Reference<css::sdbc::XResultSet>& _rxCursor);
 };
 
 inline void FmSearchDialog::SetActiveField(const OUString& strField)

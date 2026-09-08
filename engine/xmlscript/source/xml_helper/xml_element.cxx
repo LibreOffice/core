@@ -23,7 +23,7 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
 using namespace com::sun::star;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 
 namespace xmlscript
 {

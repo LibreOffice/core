@@ -24,7 +24,7 @@
 #include <rtl/ustrbuf.hxx>
 
 using namespace css::awt;
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 namespace comphelper

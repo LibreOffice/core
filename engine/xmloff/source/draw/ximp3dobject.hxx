@@ -35,13 +35,13 @@ class SdXML3DObjectContext : public SdXMLShapeContext
 public:
 
     SdXML3DObjectContext( SvXMLImport& rImport,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
-        css::uno::Reference< css::drawing::XShapes > const & rShapes);
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+        cpo::uno::Reference< css::drawing::XShapes > const & rShapes);
     virtual ~SdXML3DObjectContext() override;
 
     virtual void startFastElement(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
 // dr3d:3dcube context
@@ -54,13 +54,13 @@ class SdXML3DCubeObjectShapeContext : public SdXML3DObjectContext
 public:
 
     SdXML3DCubeObjectShapeContext( SvXMLImport& rImport,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
-        css::uno::Reference< css::drawing::XShapes > const & rShapes);
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+        cpo::uno::Reference< css::drawing::XShapes > const & rShapes);
     virtual ~SdXML3DCubeObjectShapeContext() override;
 
     virtual void startFastElement(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
 // dr3d:3dsphere context
@@ -73,13 +73,13 @@ class SdXML3DSphereObjectShapeContext : public SdXML3DObjectContext
 public:
 
     SdXML3DSphereObjectShapeContext( SvXMLImport& rImport,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
-        css::uno::Reference< css::drawing::XShapes > const & rShapes);
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+        cpo::uno::Reference< css::drawing::XShapes > const & rShapes);
     virtual ~SdXML3DSphereObjectShapeContext() override;
 
     virtual void startFastElement(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
 // polygonbased context
@@ -92,13 +92,13 @@ class SdXML3DPolygonBasedShapeContext : public SdXML3DObjectContext
 public:
 
     SdXML3DPolygonBasedShapeContext( SvXMLImport& rImport,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
-        css::uno::Reference< css::drawing::XShapes > const & rShapes);
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+        cpo::uno::Reference< css::drawing::XShapes > const & rShapes);
     virtual ~SdXML3DPolygonBasedShapeContext() override;
 
     virtual void startFastElement(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
 // dr3d:3dlathe context
@@ -108,13 +108,13 @@ class SdXML3DLatheObjectShapeContext : public SdXML3DPolygonBasedShapeContext
 public:
 
     SdXML3DLatheObjectShapeContext( SvXMLImport& rImport,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
-        css::uno::Reference< css::drawing::XShapes > const & rShapes);
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+        cpo::uno::Reference< css::drawing::XShapes > const & rShapes);
     virtual ~SdXML3DLatheObjectShapeContext() override;
 
     virtual void startFastElement(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
 // dr3d:3dextrude context
@@ -124,13 +124,13 @@ class SdXML3DExtrudeObjectShapeContext : public SdXML3DPolygonBasedShapeContext
 public:
 
     SdXML3DExtrudeObjectShapeContext( SvXMLImport& rImport,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
-        css::uno::Reference< css::drawing::XShapes > const & rShapes);
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+        cpo::uno::Reference< css::drawing::XShapes > const & rShapes);
     virtual ~SdXML3DExtrudeObjectShapeContext() override;
 
     virtual void startFastElement(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

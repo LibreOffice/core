@@ -43,14 +43,14 @@ class UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) OEnumerationByName final :
                                                           css::lang::XEventListener    >
 {
     std::variant<cpo::uno::Sequence< OUString >, std::vector<OUString>> m_aNames;
-    css::uno::Reference< css::container::XNameAccess >  m_xAccess;
+    cpo::uno::Reference< css::container::XNameAccess >  m_xAccess;
     sal_Int32                                           m_nPos;
     bool                                                m_bListening;
     std::mutex m_aLock;
 
 public:
-    OEnumerationByName(css::uno::Reference< css::container::XNameAccess > _xAccess);
-    OEnumerationByName(css::uno::Reference< css::container::XNameAccess > _xAccess,
+    OEnumerationByName(cpo::uno::Reference< css::container::XNameAccess > _xAccess);
+    OEnumerationByName(cpo::uno::Reference< css::container::XNameAccess > _xAccess,
                        std::vector<OUString>             _aNames  );
     virtual ~OEnumerationByName() override;
 
@@ -73,13 +73,13 @@ class COMPHELPER_DLLPUBLIC OEnumerationByIndex final :
                           public ::cppu::WeakImplHelper< css::container::XEnumeration ,
                                                            css::lang::XEventListener    >
 {
-    css::uno::Reference< css::container::XIndexAccess > m_xAccess;
+    cpo::uno::Reference< css::container::XIndexAccess > m_xAccess;
     sal_Int32                                         m_nPos;
     bool                                          m_bListening;
     std::mutex m_aLock;
 
 public:
-    OEnumerationByIndex(css::uno::Reference< css::container::XIndexAccess > _xAccess);
+    OEnumerationByIndex(cpo::uno::Reference< css::container::XIndexAccess > _xAccess);
     virtual ~OEnumerationByIndex() override;
 
     virtual bool hasMoreElements(  ) override;

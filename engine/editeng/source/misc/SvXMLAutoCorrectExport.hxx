@@ -27,10 +27,10 @@ private:
     const SvxAutocorrWordList   *pAutocorr_List;
 public:
     SvXMLAutoCorrectExport(
-        const css::uno::Reference< cpo::uno::XComponentContext > & xContext,
+        const cpo::uno::Reference< cpo::uno::XComponentContext > & xContext,
         const SvxAutocorrWordList * pNewAutocorr_List,
         const OUString &rFileName,
-        css::uno::Reference< css::xml::sax::XDocumentHandler> const &rHandler);
+        cpo::uno::Reference< css::xml::sax::XDocumentHandler> const &rHandler);
 
     ErrCode exportDoc(enum ::xmloff::token::XMLTokenEnum eClass = ::xmloff::token::XML_TOKEN_INVALID) override;
     void ExportAutoStyles_() override {}
@@ -46,10 +46,10 @@ private:
     const SvStringsISortDtor & rList;
 public:
     SvXMLExceptionListExport(
-        const css::uno::Reference< cpo::uno::XComponentContext > & xContext,
+        const cpo::uno::Reference< cpo::uno::XComponentContext > & xContext,
         const SvStringsISortDtor &rNewList,
         const OUString &rFileName,
-        css::uno::Reference< css::xml::sax::XDocumentHandler> const &rHandler);
+        cpo::uno::Reference< css::xml::sax::XDocumentHandler> const &rHandler);
 
     ErrCode exportDoc(enum ::xmloff::token::XMLTokenEnum eClass = ::xmloff::token::XML_TOKEN_INVALID) override;
     void ExportAutoStyles_() override {}

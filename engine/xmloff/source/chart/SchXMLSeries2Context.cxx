@@ -61,9 +61,10 @@
 #include <algorithm> // std::find_if
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace ::xmloff::token;
 
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::cpo::uno::Sequence;
 
 namespace
@@ -79,7 +80,7 @@ public:
                           ::std::vector< OUString > & rAddresses );
     virtual void startFastElement(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
 SchXMLDomain2Context::SchXMLDomain2Context(
@@ -92,7 +93,7 @@ SchXMLDomain2Context::SchXMLDomain2Context(
 
 void SchXMLDomain2Context::startFastElement(
     sal_Int32 /*nElement*/,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
@@ -306,7 +307,7 @@ SchXMLSeries2Context::~SchXMLSeries2Context()
 }
 
 void SchXMLSeries2Context::startFastElement (sal_Int32 /*Element*/,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     // parse attributes
     mnAttachedAxis = 1;
@@ -684,9 +685,9 @@ void SchXMLSeries2Context::endFastElement(sal_Int32 )
     maPostponedSequences.clear();
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLSeries2Context::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLSeries2Context::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
     SvXMLImportContext* pContext = nullptr;
 

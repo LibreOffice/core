@@ -78,8 +78,8 @@
 #include <com/sun/star/reflection/XStructTypeDescription.hpp>
 #include <com/sun/star/reflection/XTypeDescription.hpp>
 #include <cpo/uno/DeploymentException.hpp>
-#include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.h>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
 #include <comphelper/sequence.hxx>
 #include <cpo/uno/Any.hxx>

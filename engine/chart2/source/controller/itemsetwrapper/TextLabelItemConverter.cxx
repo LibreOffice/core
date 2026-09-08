@@ -50,7 +50,8 @@
 
 using namespace com::sun::star;
 using namespace com::sun::star::chart2;
-using com::sun::star::uno::Reference;
+using namespace ::cpo;
+using cpo::uno::Reference;
 using namespace ::chart::DataSeriesProperties;
 
 namespace chart::wrapper {

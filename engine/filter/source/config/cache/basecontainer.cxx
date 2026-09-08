@@ -321,7 +321,7 @@ bool BaseContainer::hasElements()
 }
 
 
-css::uno::Reference< css::container::XEnumeration > BaseContainer::createSubSetEnumerationByQuery(const OUString& /* sQuery */ )
+cpo::uno::Reference< css::container::XEnumeration > BaseContainer::createSubSetEnumerationByQuery(const OUString& /* sQuery */ )
 {
     OSL_FAIL("not pure virtual ... but not really implemented .-)");
 
@@ -329,7 +329,7 @@ css::uno::Reference< css::container::XEnumeration > BaseContainer::createSubSetE
 }
 
 
-css::uno::Reference< css::container::XEnumeration > BaseContainer::createSubSetEnumerationByProperties(const cpo::uno::Sequence< css::beans::NamedValue >& lProperties)
+cpo::uno::Reference< css::container::XEnumeration > BaseContainer::createSubSetEnumerationByProperties(const cpo::uno::Sequence< css::beans::NamedValue >& lProperties)
 {
     std::vector<OUString>                               lKeys;
 
@@ -411,14 +411,14 @@ void BaseContainer::flush()
 }
 
 
-void BaseContainer::addFlushListener(const css::uno::Reference< css::util::XFlushListener >& xListener)
+void BaseContainer::addFlushListener(const cpo::uno::Reference< css::util::XFlushListener >& xListener)
 {
     std::unique_lock g(m_aMutex);
     m_lListener.addInterface(g, xListener);
 }
 
 
-void BaseContainer::removeFlushListener(const css::uno::Reference< css::util::XFlushListener >& xListener)
+void BaseContainer::removeFlushListener(const cpo::uno::Reference< css::util::XFlushListener >& xListener)
 {
     std::unique_lock g(m_aMutex);
     m_lListener.removeInterface(g, xListener);

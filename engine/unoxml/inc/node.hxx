@@ -30,7 +30,7 @@
 
 #include <sax/fastattribs.hxx>
 
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <cpo/uno/Sequence.h>
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/XNodeList.hpp>
@@ -47,7 +47,7 @@ namespace DOM
 {
     struct Context
     {
-        Context( const css::uno::Reference< css::xml::sax::XFastDocumentHandler >& i_xHandler,
+        Context( const cpo::uno::Reference< css::xml::sax::XFastDocumentHandler >& i_xHandler,
                  sax_fastparser::FastTokenHandlerBase* pTokenHandler ) :
             maNamespaces( 1, std::vector<Namespace>() ),
             maNamespaceMap(101),
@@ -72,8 +72,8 @@ namespace DOM
         NamespaceVectorType                 maNamespaces;
         NamespaceMapType                    maNamespaceMap;
         ::rtl::Reference<sax_fastparser::FastAttributeList> mxAttribList;
-        css::uno::Reference<css::xml::sax::XFastContextHandler>      mxCurrentHandler;
-        css::uno::Reference<css::xml::sax::XFastDocumentHandler>     mxDocHandler;
+        cpo::uno::Reference<css::xml::sax::XFastContextHandler>      mxCurrentHandler;
+        cpo::uno::Reference<css::xml::sax::XFastDocumentHandler>     mxDocHandler;
         rtl::Reference<sax_fastparser::FastTokenHandlerBase>         mxTokenHandler;
     };
 
@@ -113,11 +113,11 @@ namespace DOM
 
         void dispatchSubtreeModified();
 
-        void checkNoParent(css::uno::Reference< css::xml::dom::XNode >const& xNode);
+        void checkNoParent(cpo::uno::Reference< css::xml::dom::XNode >const& xNode);
 
         static void checkNoParent(const xmlNodePtr pNode);
 
-        void checkSameOwner(css::uno::Reference< css::xml::dom::XNode >const& xNode);
+        void checkSameOwner(cpo::uno::Reference< css::xml::dom::XNode >const& xNode);
 
     public:
 
@@ -128,7 +128,7 @@ namespace DOM
         virtual CDocument & GetOwnerDocument();
 
         // recursively create SAX events
-        virtual void saxify(const css::uno::Reference< css::xml::sax::XDocumentHandler >& i_xHandler);
+        virtual void saxify(const cpo::uno::Reference< css::xml::sax::XDocumentHandler >& i_xHandler);
 
         // recursively create SAX events
         virtual void fastSaxify( Context& io_rContext );
@@ -142,35 +142,35 @@ namespace DOM
         /**
         Adds the node newChild to the end of the list of children of this node.
         */
-        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL
-            appendChild(css::uno::Reference< css::xml::dom::XNode > const& xNewChild) override;
+        virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL
+            appendChild(cpo::uno::Reference< css::xml::dom::XNode > const& xNewChild) override;
 
         /**
         Returns a duplicate of this node, i.e., serves as a generic copy
         constructor for nodes.
         */
-        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL cloneNode(bool deep) override;
+        virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL cloneNode(bool deep) override;
 
         /**
         A NamedNodeMap containing the attributes of this node
         (if it is an Element) or null otherwise.
         */
-        virtual css::uno::Reference< css::xml::dom::XNamedNodeMap > SAL_CALL getAttributes() override;
+        virtual cpo::uno::Reference< css::xml::dom::XNamedNodeMap > SAL_CALL getAttributes() override;
 
         /**
         A NodeList that contains all children of this node.
         */
-        virtual css::uno::Reference< css::xml::dom::XNodeList > SAL_CALL getChildNodes() override;
+        virtual cpo::uno::Reference< css::xml::dom::XNodeList > SAL_CALL getChildNodes() override;
 
         /**
         The first child of this node.
         */
-        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL getFirstChild() override;
+        virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL getFirstChild() override;
 
         /**
         The last child of this node.
         */
-        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL getLastChild() override;
+        virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL getLastChild() override;
 
         /**
         Returns the local part of the qualified name of this node.
@@ -185,7 +185,7 @@ namespace DOM
         /**
         The node immediately following this node.
         */
-        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL getNextSibling() override;
+        virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL getNextSibling() override;
 
         /**
         The name of this node, depending on its type; see the table above.
@@ -207,12 +207,12 @@ namespace DOM
         /**
         The Document object associated with this node.
         */
-        virtual css::uno::Reference< css::xml::dom::XDocument > SAL_CALL getOwnerDocument() override;
+        virtual cpo::uno::Reference< css::xml::dom::XDocument > SAL_CALL getOwnerDocument() override;
 
         /**
         The parent of this node.
         */
-        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL getParentNode() override;
+        virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL getParentNode() override;
 
         /**
         The namespace prefix of this node, or null if it is unspecified.
@@ -222,7 +222,7 @@ namespace DOM
         /**
         The node immediately preceding this node.
         */
-        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL getPreviousSibling() override;
+        virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL getPreviousSibling() override;
 
         /**
         Returns whether this node (if it is an element) has any attributes.
@@ -237,8 +237,8 @@ namespace DOM
         /**
         Inserts the node newChild before the existing child node refChild.
         */
-        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL insertBefore(
-                const css::uno::Reference< css::xml::dom::XNode >& newChild, const css::uno::Reference< css::xml::dom::XNode >& refChild) override;
+        virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL insertBefore(
+                const cpo::uno::Reference< css::xml::dom::XNode >& newChild, const cpo::uno::Reference< css::xml::dom::XNode >& refChild) override;
 
         /**
         Tests whether the DOM implementation implements a specific feature and
@@ -259,14 +259,14 @@ namespace DOM
         Removes the child node indicated by oldChild from the list of children,
         and returns it.
         */
-        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL removeChild(const css::uno::Reference< css::xml::dom::XNode >& oldChild) override;
+        virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL removeChild(const cpo::uno::Reference< css::xml::dom::XNode >& oldChild) override;
 
         /**
         Replaces the child node oldChild with newChild in the list of children,
         and returns the oldChild node.
         */
-        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL replaceChild(
-                const css::uno::Reference< css::xml::dom::XNode >& newChild, const css::uno::Reference< css::xml::dom::XNode >& oldChild) override;
+        virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL replaceChild(
+                const cpo::uno::Reference< css::xml::dom::XNode >& newChild, const cpo::uno::Reference< css::xml::dom::XNode >& oldChild) override;
 
         /**
         The value of this node, depending on its type; see the table above.
@@ -281,14 +281,14 @@ namespace DOM
 
         // --- XEventTarget
         virtual void SAL_CALL addEventListener(const OUString& eventType,
-            const css::uno::Reference< css::xml::dom::events::XEventListener >& listener,
+            const cpo::uno::Reference< css::xml::dom::events::XEventListener >& listener,
             bool useCapture) override;
 
         virtual void SAL_CALL removeEventListener(const OUString& eventType,
-            const css::uno::Reference< css::xml::dom::events::XEventListener >& listener,
+            const cpo::uno::Reference< css::xml::dom::events::XEventListener >& listener,
             bool useCapture) override;
 
-        virtual bool SAL_CALL dispatchEvent(const css::uno::Reference< css::xml::dom::events::XEvent >& evt) override;
+        virtual bool SAL_CALL dispatchEvent(const cpo::uno::Reference< css::xml::dom::events::XEvent >& evt) override;
     };
 
     /// eliminate redundant namespace declarations

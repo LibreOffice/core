@@ -25,6 +25,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace ::ooo::vba;
 
 VbaWindowBase::VbaWindowBase(

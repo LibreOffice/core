@@ -29,7 +29,7 @@ using namespace xmloff::token;
 
 namespace dbaxml
 {
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
 
 OXMLDatabaseDescription::OXMLDatabaseDescription( ODBFilter& rImport ) :
     SvXMLImportContext( rImport )
@@ -42,8 +42,8 @@ OXMLDatabaseDescription::~OXMLDatabaseDescription()
 
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > OXMLDatabaseDescription::createFastChildContext(
-            sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > OXMLDatabaseDescription::createFastChildContext(
+            sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
 

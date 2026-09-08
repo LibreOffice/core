@@ -37,6 +37,7 @@
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 const sal_Int16 CUSTOM_CHAR = 5;
 

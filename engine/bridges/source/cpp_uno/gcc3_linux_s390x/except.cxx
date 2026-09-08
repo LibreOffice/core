@@ -35,7 +35,7 @@
 
 using namespace ::std;
 using namespace ::osl;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::cpo::uno;
 using namespace ::__cxxabiv1;
 

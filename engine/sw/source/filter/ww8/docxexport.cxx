@@ -114,6 +114,7 @@
 using namespace sax_fastparser;
 using namespace ::comphelper;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace ::oox;
 
 using oox::vml::VMLExport;
@@ -458,7 +459,7 @@ OString DocxExport::OutputChart( uno::Reference< frame::XModel > const & xModel,
     // TODO: With Chart extracted this cannot really happen since
     // no Chart could've been added at all
     oox::drawingml::ChartExport aChartExport(XML_w, pChartFS, xModel, &m_rFilter, oox::drawingml::DOCUMENT_DOCX);
-    css::uno::Reference<css::util::XModifiable> xModifiable(xModel, css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::util::XModifiable> xModifiable(xModel, cpo::uno::UNO_QUERY);
     const bool bOldModified = xModifiable && xModifiable->isModified();
 
     // Currently, content in ../embeddings is simply grab-bagged as OOEmbeddings
@@ -2029,7 +2030,7 @@ void DocxExport::WriteWebSettings()
     if (!xPropSetInfo->hasPropertyByName(UNO_NAME_MISC_OBJ_INTEROPGRABBAG))
         return;
 
-    css::uno::Reference<css::xml::dom::XDocument> xWebSettingsDom;
+    cpo::uno::Reference<css::xml::dom::XDocument> xWebSettingsDom;
     cpo::uno::Sequence<beans::PropertyValue> propList;
     m_xTextDoc->getPropertyValue(UNO_NAME_MISC_OBJ_INTEROPGRABBAG) >>= propList;
     auto pProp = std::find_if(std::cbegin(propList), std::cend(propList),
@@ -2131,8 +2132,8 @@ void DocxExport::WriteEmbeddings()
             continue;
 
         OUString contentType;
-        if (css::uno::Reference<css::beans::XPropertySet> xProps{ embeddingsStream,
-                                                                  css::uno::UNO_QUERY })
+        if (cpo::uno::Reference<css::beans::XPropertySet> xProps{ embeddingsStream,
+                                                                  cpo::uno::UNO_QUERY })
         {
             try
             {

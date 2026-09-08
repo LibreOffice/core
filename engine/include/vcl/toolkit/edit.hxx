@@ -33,7 +33,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/dndhelp.hxx>
 #include <vcl/vclptr.hxx>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 
 namespace com::sun::star::i18n {
     class XBreakIterator;
@@ -83,8 +83,8 @@ private:
     Link<Edit&,bool>    maActivateHdl;
     std::unique_ptr<VclBuilder> mpUIBuilder;
 
-    css::uno::Reference<css::i18n::XBreakIterator> mxBreakIterator;
-    css::uno::Reference<css::i18n::XExtendedInputSequenceChecker> mxISC;
+    cpo::uno::Reference<css::i18n::XBreakIterator> mxBreakIterator;
+    cpo::uno::Reference<css::i18n::XExtendedInputSequenceChecker> mxISC;
     rtl::Reference<vcl::unohelper::DragAndDropWrapper> mxDnDListener;
 
     SAL_DLLPRIVATE bool        ImplTruncateToMaxLen( OUString&, sal_Int32 nSelectionLen ) const;
@@ -107,11 +107,11 @@ private:
     SAL_DLLPRIVATE void        ImplHideDDCursor();
     SAL_DLLPRIVATE bool        ImplHandleKeyEvent( const KeyEvent& rKEvt );
     SAL_DLLPRIVATE void        ImplCopyToSelectionClipboard();
-    SAL_DLLPRIVATE void        ImplCopy(css::uno::Reference<css::datatransfer::clipboard::XClipboard> const & rxClipboard);
-    SAL_DLLPRIVATE void        ImplPaste(css::uno::Reference<css::datatransfer::clipboard::XClipboard> const & rxClipboard);
+    SAL_DLLPRIVATE void        ImplCopy(cpo::uno::Reference<css::datatransfer::clipboard::XClipboard> const & rxClipboard);
+    SAL_DLLPRIVATE void        ImplPaste(cpo::uno::Reference<css::datatransfer::clipboard::XClipboard> const & rxClipboard);
     SAL_DLLPRIVATE tools::Long        ImplGetTextYPosition() const;
-    SAL_DLLPRIVATE css::uno::Reference<css::i18n::XExtendedInputSequenceChecker> const& ImplGetInputSequenceChecker();
-    SAL_DLLPRIVATE css::uno::Reference<css::i18n::XBreakIterator> const& ImplGetBreakIterator();
+    SAL_DLLPRIVATE cpo::uno::Reference<css::i18n::XExtendedInputSequenceChecker> const& ImplGetInputSequenceChecker();
+    SAL_DLLPRIVATE cpo::uno::Reference<css::i18n::XBreakIterator> const& ImplGetBreakIterator();
     SAL_DLLPRIVATE void        filterText();
 
 protected:

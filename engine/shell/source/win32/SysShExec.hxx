@@ -42,12 +42,12 @@ class CSysShExec :
             css::system::XSystemShellExecute,
             css::lang::XServiceInfo >
 {
-    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
     // to put back all the inits with COINIT_MULTITHREADED if needed
     int mnNbCallCoInitializeExForReinit;
 
 public:
-    explicit CSysShExec(const css::uno::Reference< cpo::uno::XComponentContext >& xContext);
+    explicit CSysShExec(const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext);
     ~CSysShExec();
 
 

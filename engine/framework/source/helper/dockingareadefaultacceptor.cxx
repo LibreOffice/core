@@ -28,12 +28,12 @@ namespace framework{
 
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::cppu;
 
 //  constructor
 
-DockingAreaDefaultAcceptor::DockingAreaDefaultAcceptor( const   css::uno::Reference< XFrame >&      xOwner  )
+DockingAreaDefaultAcceptor::DockingAreaDefaultAcceptor( const   cpo::uno::Reference< XFrame >&      xOwner  )
         :   m_xOwner        ( xOwner    )
 {
 }
@@ -45,14 +45,14 @@ DockingAreaDefaultAcceptor::~DockingAreaDefaultAcceptor()
 }
 
 //  XDockingAreaAcceptor
-css::uno::Reference< css::awt::XWindow > DockingAreaDefaultAcceptor::getContainerWindow()
+cpo::uno::Reference< css::awt::XWindow > DockingAreaDefaultAcceptor::getContainerWindow()
 {
     SolarMutexGuard g;
 
     // Try to "lock" the frame for access to taskscontainer.
-    css::uno::Reference< XFrame > xFrame( m_xOwner );
+    cpo::uno::Reference< XFrame > xFrame( m_xOwner );
     //TODO: check xFrame for null?
-    css::uno::Reference< css::awt::XWindow > xContainerWindow( xFrame->getContainerWindow() );
+    cpo::uno::Reference< css::awt::XWindow > xContainerWindow( xFrame->getContainerWindow() );
 
     return xContainerWindow;
 }
@@ -60,18 +60,18 @@ css::uno::Reference< css::awt::XWindow > DockingAreaDefaultAcceptor::getContaine
 bool DockingAreaDefaultAcceptor::requestDockingAreaSpace( const css::awt::Rectangle& RequestedSpace )
 {
     // Try to "lock" the frame for access to taskscontainer.
-    css::uno::Reference< XFrame > xFrame( m_xOwner );
+    cpo::uno::Reference< XFrame > xFrame( m_xOwner );
 
     if ( !xFrame.is() )
         return false;
 
-    css::uno::Reference< css::awt::XWindow > xContainerWindow( xFrame->getContainerWindow() );
-    css::uno::Reference< css::awt::XWindow > xComponentWindow( xFrame->getComponentWindow() );
+    cpo::uno::Reference< css::awt::XWindow > xContainerWindow( xFrame->getContainerWindow() );
+    cpo::uno::Reference< css::awt::XWindow > xComponentWindow( xFrame->getComponentWindow() );
 
     if ( !xContainerWindow.is() || !xComponentWindow.is() )
         return false;
 
-    css::uno::Reference< css::awt::XDevice > xDevice( xContainerWindow, css::uno::UNO_QUERY );
+    cpo::uno::Reference< css::awt::XDevice > xDevice( xContainerWindow, cpo::uno::UNO_QUERY );
     // Convert relative size to output size.
     css::awt::Rectangle  aRectangle  = xContainerWindow->getPosSize();
     css::awt::DeviceInfo aInfo       = xDevice->getInfo();
@@ -93,17 +93,17 @@ void DockingAreaDefaultAcceptor::setDockingAreaSpace( const css::awt::Rectangle&
     SolarMutexGuard g;
 
     // Try to "lock" the frame for access to taskscontainer.
-    css::uno::Reference< XFrame > xFrame( m_xOwner );
+    cpo::uno::Reference< XFrame > xFrame( m_xOwner );
     if ( !xFrame.is() )
         return;
 
-    css::uno::Reference< css::awt::XWindow > xContainerWindow( xFrame->getContainerWindow() );
-    css::uno::Reference< css::awt::XWindow > xComponentWindow( xFrame->getComponentWindow() );
+    cpo::uno::Reference< css::awt::XWindow > xContainerWindow( xFrame->getContainerWindow() );
+    cpo::uno::Reference< css::awt::XWindow > xComponentWindow( xFrame->getComponentWindow() );
 
     if ( !(xContainerWindow.is() && xComponentWindow.is()) )
         return;
 
-    css::uno::Reference< css::awt::XDevice > xDevice( xContainerWindow, css::uno::UNO_QUERY );
+    cpo::uno::Reference< css::awt::XDevice > xDevice( xContainerWindow, cpo::uno::UNO_QUERY );
     // Convert relative size to output size.
     css::awt::Rectangle  aRectangle  = xContainerWindow->getPosSize();
     css::awt::DeviceInfo aInfo       = xDevice->getInfo();

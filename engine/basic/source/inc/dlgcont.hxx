@@ -39,17 +39,17 @@ class SfxDialogLibraryContainer final : public SfxLibraryContainer
     virtual bool isLibraryElementValid(const cpo::uno::Any& rElement) const override;
     virtual void writeLibraryElement
     (
-        const css::uno::Reference< css::container::XNameContainer>& xLibrary,
+        const cpo::uno::Reference< css::container::XNameContainer>& xLibrary,
         const OUString& aElementName,
-        const css::uno::Reference< css::io::XOutputStream >& xOutput
+        const cpo::uno::Reference< css::io::XOutputStream >& xOutput
     ) override;
 
     virtual cpo::uno::Any importLibraryElement
     (
-        const css::uno::Reference< css::container::XNameContainer>& xLibrary,
+        const cpo::uno::Reference< css::container::XNameContainer>& xLibrary,
         const OUString& aElementName,
         const OUString& aFile,
-        const css::uno::Reference< css::io::XInputStream >& xElementStream ) override;
+        const cpo::uno::Reference< css::io::XInputStream >& xElementStream ) override;
 
     virtual void importFromOldStorage( const OUString& aFile ) override;
 
@@ -64,14 +64,14 @@ class SfxDialogLibraryContainer final : public SfxLibraryContainer
 
 public:
     SfxDialogLibraryContainer();
-    SfxDialogLibraryContainer( const css::uno::Reference< css::embed::XStorage >& xStorage );
+    SfxDialogLibraryContainer( const cpo::uno::Reference< css::embed::XStorage >& xStorage );
 
     // Methods XStorageBasedLibraryContainer
     virtual void storeLibrariesToStorage(
-        const css::uno::Reference< css::embed::XStorage >& RootStorage ) override;
+        const cpo::uno::Reference< css::embed::XStorage >& RootStorage ) override;
 
     // Resource handling
-    css::uno::Reference< css::resource::XStringResourcePersistence >
+    cpo::uno::Reference< css::resource::XStringResourcePersistence >
         implCreateStringResource( class SfxDialogLibrary* pDialog );
 
     // Methods XServiceInfo
@@ -88,7 +88,7 @@ typedef cppu::ImplInheritanceHelper<SfxLibrary, css::resource::XStringResourceSu
 class SfxDialogLibrary final : public SfxDialogLibrary_BASE
 {
     SfxDialogLibraryContainer*                                        m_pParent;
-    css::uno::Reference< css::resource::XStringResourcePersistence>   m_xStringResourcePersistence;
+    cpo::uno::Reference< css::resource::XStringResourcePersistence>   m_xStringResourcePersistence;
     OUString                                                          m_aName;
 
     // Provide modify state including resources
@@ -96,8 +96,8 @@ class SfxDialogLibrary final : public SfxDialogLibrary_BASE
     virtual void storeResources() override;
     virtual void storeResourcesAsURL( const OUString& URL, const OUString& NewName ) override;
     virtual void storeResourcesToURL( const OUString& URL,
-        const css::uno::Reference< css::task::XInteractionHandler >& xHandler  ) override;
-    virtual void storeResourcesToStorage( const css::uno::Reference
+        const cpo::uno::Reference< css::task::XInteractionHandler >& xHandler  ) override;
+    virtual void storeResourcesToStorage( const cpo::uno::Reference
         < css::embed::XStorage >& xStorage ) override;
 
 public:
@@ -105,7 +105,7 @@ public:
     (
         ModifiableHelper& _rModifiable,
         OUString aName,
-        const css::uno::Reference< css::ucb::XSimpleFileAccess3 >& xSFI,
+        const cpo::uno::Reference< css::ucb::XSimpleFileAccess3 >& xSFI,
         SfxDialogLibraryContainer* pParent
     );
 
@@ -113,19 +113,19 @@ public:
     (
         ModifiableHelper& _rModifiable,
         OUString aName,
-        const css::uno::Reference< css::ucb::XSimpleFileAccess3 >& xSFI,
+        const cpo::uno::Reference< css::ucb::XSimpleFileAccess3 >& xSFI,
         const OUString& aLibInfoFileURL, const OUString& aStorageURL, bool ReadOnly,
         SfxDialogLibraryContainer* pParent
     );
 
     // XStringResourceSupplier
-    virtual css::uno::Reference< css::resource::XStringResourceResolver >
+    virtual cpo::uno::Reference< css::resource::XStringResourceResolver >
         getStringResource(  ) override;
 
     const OUString& getName() const
         { return m_aName; }
 
-    const css::uno::Reference< css::resource::XStringResourcePersistence >&
+    const cpo::uno::Reference< css::resource::XStringResourcePersistence >&
         getStringResourcePersistence() const
     {
         return m_xStringResourcePersistence;

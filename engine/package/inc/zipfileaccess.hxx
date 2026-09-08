@@ -41,15 +41,15 @@ class OZipFileAccess final : public ::cppu::WeakImplHelper<
                         css::lang::XServiceInfo >
 {
     rtl::Reference<comphelper::RefCountedMutex> m_aMutexHolder;
-    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
-    css::uno::Reference< css::io::XInputStream > m_xContentStream;
+    cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+    cpo::uno::Reference< css::io::XInputStream > m_xContentStream;
     std::optional<ZipFile> m_pZipFile;
     std::unique_ptr<::comphelper::OInterfaceContainerHelper3<css::lang::XEventListener>> m_pListenersContainer;
     bool m_bDisposed;
     bool m_bOwnContent;
 
 public:
-    OZipFileAccess( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+    OZipFileAccess( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
     virtual ~OZipFileAccess() override;
 
@@ -69,12 +69,12 @@ public:
     virtual bool hasElements(  ) override;
 
     // XZipFileAccess
-    virtual css::uno::Reference< css::io::XInputStream > getStreamByPattern( const OUString& aPattern ) override;
+    virtual cpo::uno::Reference< css::io::XInputStream > getStreamByPattern( const OUString& aPattern ) override;
 
     // XComponent
     virtual void dispose(  ) override;
-    virtual void addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-    virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+    virtual void addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& xListener ) override;
+    virtual void removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
     // XServiceInfo
     virtual OUString getImplementationName() override;

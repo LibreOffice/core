@@ -51,11 +51,11 @@ namespace pcr
 {
 
 
-    using ::com::sun::star::uno::Reference;
+    using ::cpo::uno::Reference;
     using ::cpo::uno::XInterface;
-    using ::com::sun::star::uno::UNO_QUERY;
-    using ::com::sun::star::uno::UNO_QUERY_THROW;
-    using ::com::sun::star::uno::UNO_SET_THROW;
+    using ::cpo::uno::UNO_QUERY;
+    using ::cpo::uno::UNO_QUERY_THROW;
+    using ::cpo::uno::UNO_SET_THROW;
     using ::cpo::uno::Exception;
     using ::cpo::uno::RuntimeException;
     using ::cpo::uno::Any;
@@ -233,9 +233,9 @@ namespace pcr
         // XPropertyHandler overriables
         virtual Any                         getPropertyValue( const OUString& _rPropertyName ) override;
         virtual void                        setPropertyValue( const OUString& _rPropertyName, const Any& _rValue ) override;
-        virtual LineDescriptor              describePropertyLine( const OUString& _rPropertyName, const css::uno::Reference< css::inspection::XPropertyControlFactory >& _rxControlFactory ) override;
-        virtual void                        addPropertyChangeListener( const css::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener ) override;
-        virtual void                        removePropertyChangeListener( const css::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener ) override;
+        virtual LineDescriptor              describePropertyLine( const OUString& _rPropertyName, const cpo::uno::Reference< css::inspection::XPropertyControlFactory >& _rxControlFactory ) override;
+        virtual void                        addPropertyChangeListener( const cpo::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener ) override;
+        virtual void                        removePropertyChangeListener( const cpo::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener ) override;
         virtual Sequence< OUString >        getActuatingProperties( ) override;
         virtual void                        actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& _rOldValue, const Reference< XObjectInspectorUI >& _rxInspectorUI, bool _bFirstTimeInit ) override;
 

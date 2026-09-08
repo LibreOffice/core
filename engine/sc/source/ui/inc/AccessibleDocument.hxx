@@ -46,7 +46,7 @@ class ScAccessibleDocument final
 {
 public:
     ScAccessibleDocument(
-        const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
+        const cpo::uno::Reference<css::accessibility::XAccessible>& rxParent,
         ScTabViewShell* pViewShell,
         ScSplitPos eSplitPos);
 
@@ -70,7 +70,7 @@ public:
 
     ///=====  XAccessibleComponent  ============================================
 
-    virtual css::uno::Reference< css::accessibility::XAccessible >
+    virtual cpo::uno::Reference< css::accessibility::XAccessible >
         SAL_CALL getAccessibleAtPoint(
         const css::awt::Point& rPoint ) override;
 
@@ -83,7 +83,7 @@ public:
         getAccessibleChildCount() override;
 
     /// Return the specified child or NULL if index is invalid.
-    virtual css::uno::Reference< css::accessibility::XAccessible> SAL_CALL
+    virtual cpo::uno::Reference< css::accessibility::XAccessible> SAL_CALL
         getAccessibleChild(sal_Int64 nIndex) override;
 
     /// Return the set of current states.
@@ -111,7 +111,7 @@ public:
     virtual sal_Int64 SAL_CALL
         getSelectedAccessibleChildCount(  ) override;
 
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
         css::accessibility::XAccessible > SAL_CALL
         getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
 
@@ -162,7 +162,7 @@ public:
 
     rtl::Reference<utl::AccessibleRelationSetHelper> GetRelationSet(const ScAddress* pAddress) const;
 
-    css::uno::Reference< css::accessibility::XAccessible >
+    cpo::uno::Reference< css::accessibility::XAccessible >
         GetAccessibleSpreadsheet();
 
 protected:
@@ -186,7 +186,7 @@ private:
     rtl::Reference<ScAccessibleSpreadsheet> mpAccessibleSpreadsheet;
     std::unique_ptr<ScChildrenShapes> mpChildrenShapes;
     rtl::Reference<ScAccessibleEditObject> mpTempAccEdit;
-    css::uno::Reference<css::accessibility::XAccessible> mxTempAcc;
+    cpo::uno::Reference<css::accessibility::XAccessible> mxTempAcc;
     tools::Rectangle maVisArea;
     bool mbCompleteSheetSelected;
 
@@ -200,8 +200,8 @@ private:
 
     bool IsDefunc(sal_Int64 nParentStates);
 
-    void AddChild(const css::uno::Reference<css::accessibility::XAccessible>& xAcc, bool bFireEvent);
-    void RemoveChild(const css::uno::Reference<css::accessibility::XAccessible>& xAcc, bool bFireEvent);
+    void AddChild(const cpo::uno::Reference<css::accessibility::XAccessible>& xAcc, bool bFireEvent);
+    void RemoveChild(const cpo::uno::Reference<css::accessibility::XAccessible>& xAcc, bool bFireEvent);
 
     OUString GetCurrentCellName() const;
     static const OUString & GetCurrentCellDescription();

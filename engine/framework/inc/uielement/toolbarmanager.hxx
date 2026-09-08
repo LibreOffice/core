@@ -62,7 +62,7 @@ public:
     virtual ~ToolBarManagerImpl() = default;
     virtual void Init() = 0;
     virtual void Destroy() = 0;
-    virtual css::uno::Reference<css::awt::XWindow> GetInterface() = 0;
+    virtual cpo::uno::Reference<css::awt::XWindow> GetInterface() = 0;
     virtual void InsertItem(ToolBoxItemId nId,
                             const OUString& rCommandURL,
                             const OUString& rTooltip,
@@ -108,12 +108,12 @@ typedef ::cppu::WeakImplHelper<
 class ToolBarManager final : public ToolbarManager_Base
 {
     public:
-        ToolBarManager( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
-                        const css::uno::Reference< css::frame::XFrame >& rFrame,
+        ToolBarManager( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+                        const cpo::uno::Reference< css::frame::XFrame >& rFrame,
                         OUString aResourceName,
                         ToolBox* pToolBar );
-        ToolBarManager( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
-                        const css::uno::Reference< css::frame::XFrame >& rFrame,
+        ToolBarManager( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+                        const cpo::uno::Reference< css::frame::XFrame >& rFrame,
                         OUString aResourceName,
                         weld::Toolbar* pToolBar,
                         weld::Builder* pBuilder );
@@ -134,13 +134,13 @@ class ToolBarManager final : public ToolbarManager_Base
 
         // XComponent
         void dispose() override;
-        void addEventListener( const css::uno::Reference< XEventListener >& xListener ) override;
-        void removeEventListener( const css::uno::Reference< XEventListener >& xListener ) override;
+        void addEventListener( const cpo::uno::Reference< XEventListener >& xListener ) override;
+        void removeEventListener( const cpo::uno::Reference< XEventListener >& xListener ) override;
 
         void CheckAndUpdateImages();
         void RequestImages();
-        void FillToolbar( const css::uno::Reference< css::container::XIndexAccess >& rToolBarData,
-                          const css::uno::Reference< css::container::XIndexAccess >& rContextData,
+        void FillToolbar( const cpo::uno::Reference< css::container::XIndexAccess >& rToolBarData,
+                          const cpo::uno::Reference< css::container::XIndexAccess >& rContextData,
                           const OUString& rContextToolbarName );
         void FillAddonToolbar( const cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > >& rAddonToolbar );
         void FillOverflowToolbar( ToolBox const * pParent );
@@ -166,8 +166,8 @@ class ToolBarManager final : public ToolbarManager_Base
         {
             OUString                                            aToolbarResName;
             ExecuteCommand                                      nCmd;
-            css::uno::Reference< css::frame::XLayoutManager >   xLayoutManager;
-            css::uno::Reference< css::awt::XWindow >            xWindow;
+            cpo::uno::Reference< css::frame::XLayoutManager >   xLayoutManager;
+            cpo::uno::Reference< css::awt::XWindow >            xWindow;
         };
 
     public:
@@ -190,7 +190,7 @@ class ToolBarManager final : public ToolbarManager_Base
 
     private:
         void Init();
-        void FillToolbarFromContainer(const css::uno::Reference< css::container::XIndexAccess >& rItemContainer,
+        void FillToolbarFromContainer(const cpo::uno::Reference< css::container::XIndexAccess >& rItemContainer,
                                       const OUString& rResourceName, ToolBoxItemId& nId, ToolBoxItemId& nAddonId);
         void ToggleButton(const OUString& rResourceName, std::u16string_view rCommand);
         void AddCustomizeMenuItems(ToolBox const * pToolBar);
@@ -199,19 +199,19 @@ class ToolBarManager final : public ToolbarManager_Base
         void CreateControllers();
         void UpdateControllers();
         //for update controller via Support Visible
-        void UpdateController( const css::uno::Reference< css::frame::XToolbarController >& xController);
+        void UpdateController( const cpo::uno::Reference< css::frame::XToolbarController >& xController);
         //end
         void AddFrameActionListener();
         void RefreshImages();
         static ToolBoxItemBits ConvertStyleToToolboxItemBits( sal_Int32 nStyle );
-        css::uno::Reference< css::frame::XModel > GetModelFromFrame() const;
+        cpo::uno::Reference< css::frame::XModel > GetModelFromFrame() const;
         bool IsPluginMode() const;
         void HandleClick(ClickAction eAction);
         void setToolBarImage(const Image& _aImage,const CommandToInfoMap::const_iterator& _pIter);
         void impl_elementChanged(bool _bRemove,const css::ui::ConfigurationEvent& Event );
 
-        typedef std::unordered_map< ToolBoxItemId, css::uno::Reference< css::frame::XStatusListener > >  ToolBarControllerMap;
-        typedef ::std::vector< css::uno::Reference< css::frame::XSubToolbarController > >             SubToolBarControllerVector;
+        typedef std::unordered_map< ToolBoxItemId, cpo::uno::Reference< css::frame::XStatusListener > >  ToolBarControllerMap;
+        typedef ::std::vector< cpo::uno::Reference< css::frame::XSubToolbarController > >             SubToolBarControllerVector;
         typedef std::unordered_map<OUString, SubToolBarControllerVector>                                                SubToolBarToSubToolBarControllerMap;
 
         bool m_bDisposed : 1,
@@ -229,15 +229,15 @@ class ToolBarManager final : public ToolbarManager_Base
         OUString                                                     m_aResourceName;
         OUString                                                     m_aContextResourceName;
 
-        css::uno::Reference< css::util::XURLTransformer >            m_xURLTransformer;
-        css::uno::Reference< css::frame::XFrame >                    m_xFrame;
+        cpo::uno::Reference< css::util::XURLTransformer >            m_xURLTransformer;
+        cpo::uno::Reference< css::frame::XFrame >                    m_xFrame;
         ToolBarControllerMap                                         m_aControllerMap;
         std::mutex                                                   m_mutex;
         comphelper::OInterfaceContainerHelper4<XEventListener>       m_aListenerContainer;
-        css::uno::Reference< cpo::uno::XComponentContext >           m_xContext;
-        css::uno::Reference< css::frame::XUIControllerFactory >      m_xToolbarControllerFactory;
-        css::uno::Reference< css::ui::XImageManager >                m_xModuleImageManager;
-        css::uno::Reference< css::ui::XImageManager >                m_xDocImageManager;
+        cpo::uno::Reference< cpo::uno::XComponentContext >           m_xContext;
+        cpo::uno::Reference< css::frame::XUIControllerFactory >      m_xToolbarControllerFactory;
+        cpo::uno::Reference< css::ui::XImageManager >                m_xModuleImageManager;
+        cpo::uno::Reference< css::ui::XImageManager >                m_xDocImageManager;
 
         CommandToInfoMap                                             m_aCommandMap;
         SubToolBarToSubToolBarControllerMap                          m_aSubToolBarControllerMap;

@@ -45,7 +45,7 @@ namespace oox::xls {
 
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::text;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 static sal_Int32 lcl_ToHorizAlign( sal_Int32 nAlign )

@@ -32,12 +32,13 @@
 #include <unoparagraph.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 namespace writerfilter::dmapper
 {
 void TableManager::clearData() {}
 
-void TableManager::openCell(const css::uno::Reference<css::text::XTextRange>& rHandle,
+void TableManager::openCell(const cpo::uno::Reference<css::text::XTextRange>& rHandle,
                             const TablePropertyMapPtr& pProps)
 {
 #ifdef DBG_UTIL
@@ -304,7 +305,7 @@ bool TableManager::sprm(Sprm& rSprm)
     return bRet;
 }
 
-void TableManager::closeCell(const css::uno::Reference<css::text::XTextRange>& rHandle)
+void TableManager::closeCell(const cpo::uno::Reference<css::text::XTextRange>& rHandle)
 {
 #ifdef DBG_UTIL
     TagLogger::getInstance().startElement("tablemanager.closeCell");
@@ -658,7 +659,7 @@ bool TableManager::isInTable()
     return bInTable;
 }
 
-void TableManager::handle(const css::uno::Reference<css::text::XTextRange>& rHandle)
+void TableManager::handle(const cpo::uno::Reference<css::text::XTextRange>& rHandle)
 {
 #ifdef DBG_UTIL
     TagLogger::getInstance().startElement("tablemanager.handle");
@@ -685,7 +686,7 @@ void TableManager::endRow()
     sal_uInt32 nGridBefore = getCurrentGridBefore();
     if (pTableData && nGridBefore > 0 && pTableData->getCurrentRow()->getCellCount() > 0)
     {
-        const css::uno::Reference<css::text::XTextRange>& xRowStart
+        const cpo::uno::Reference<css::text::XTextRange>& xRowStart
             = pTableData->getCurrentRow()->getCellStart(0);
         if (xRowStart.is())
         {

@@ -16,7 +16,7 @@
 
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::embed { class XStorage; }
-namespace com::sun::star::uno { template <typename > class Reference; }
+namespace cpo::uno { template <typename > class Reference; }
 
 // Scans list of properties for certain URL properties that could refer
 // to internal objects, and initializes from these.
@@ -26,12 +26,12 @@ public:
   virtual cpo::uno::Sequence<css::beans::PropertyValue>
     filterStreamsFromStorage(
         OUString const & referer,
-        const css::uno::Reference< css::embed::XStorage > &xStorage,
+        const cpo::uno::Reference< css::embed::XStorage > &xStorage,
         const cpo::uno::Sequence<css::beans::PropertyValue>& aConfigProps ) = 0;
   // Export objects and update properties with relative URLs into this storage
   virtual cpo::uno::Sequence<css::beans::PropertyValue>
     filterStreamsToStorage(
-        const css::uno::Reference< css::embed::XStorage > &xStorage,
+        const cpo::uno::Reference< css::embed::XStorage > &xStorage,
         const cpo::uno::Sequence<css::beans::PropertyValue>& aConfigProps ) = 0;
 
 protected:

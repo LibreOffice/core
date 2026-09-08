@@ -35,7 +35,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/XInterface.hpp>
@@ -169,8 +169,8 @@ struct Bridge::SubStub {
 
 Bridge::Bridge(
     rtl::Reference< BridgeFactory > const & factory, OUString name,
-    css::uno::Reference< css::connection::XConnection > const & connection,
-    css::uno::Reference< css::bridge::XInstanceProvider > provider):
+    cpo::uno::Reference< css::connection::XConnection > const & connection,
+    cpo::uno::Reference< css::bridge::XInstanceProvider > provider):
     factory_(factory), name_(std::move(name)), connection_(connection),
     provider_(std::move(provider)),
     binaryUno_(u"" UNO_LB_UNO ""_ustr),
@@ -182,7 +182,7 @@ Bridge::Bridge(
     protPropOid_(u"UrpProtocolProperties"_ustr),
     protPropType_(
         cppu::UnoType<
-            css::uno::Reference< css::bridge::XProtocolProperties > >::get()),
+            cpo::uno::Reference< css::bridge::XProtocolProperties > >::get()),
     protPropRequest_(u"com.sun.star.bridge.XProtocolProperties::requestChange"_ustr),
     protPropCommit_(u"com.sun.star.bridge.XProtocolProperties::commitChange"_ustr),
     state_(STATE_INITIAL), threadPool_(nullptr), currentContextMode_(false),
@@ -777,7 +777,7 @@ void Bridge::handleCommitChangeRequest(
                 cpo::uno::Any(
                     css::bridge::InvalidProtocolChangeException(
                         u"InvalidProtocolChangeException"_ustr,
-                        css::uno::Reference< cpo::uno::XInterface >(), pp,
+                        cpo::uno::Reference< cpo::uno::XInterface >(), pp,
                         1)));
             break;
         }
@@ -843,7 +843,7 @@ Bridge::~Bridge() {
     dispose();
 }
 
-css::uno::Reference< cpo::uno::XInterface > Bridge::getInstance(
+cpo::uno::Reference< cpo::uno::XInterface > Bridge::getInstance(
     OUString const & sInstanceName)
 {
     if (sInstanceName.isEmpty()) {
@@ -887,7 +887,7 @@ css::uno::Reference< cpo::uno::XInterface > Bridge::getInstance(
             "initial object queryInterface for OID \"" + sInstanceName
             + "\" returned null css.uno.XInterface ANY");
     }
-    return css::uno::Reference< cpo::uno::XInterface >(
+    return cpo::uno::Reference< cpo::uno::XInterface >(
         static_cast< cpo::uno::XInterface * >(
             binaryToCppMapping_.mapInterface(
                 val,
@@ -918,7 +918,7 @@ void Bridge::dispose() {
 }
 
 void Bridge::addEventListener(
-    css::uno::Reference< css::lang::XEventListener > const & xListener)
+    cpo::uno::Reference< css::lang::XEventListener > const & xListener)
 {
     assert(xListener.is());
     {
@@ -934,7 +934,7 @@ void Bridge::addEventListener(
 }
 
 void Bridge::removeEventListener(
-    css::uno::Reference< css::lang::XEventListener > const & aListener)
+    cpo::uno::Reference< css::lang::XEventListener > const & aListener)
 {
     std::lock_guard g(mutex_);
     Listeners::iterator i(

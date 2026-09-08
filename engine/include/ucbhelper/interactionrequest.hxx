@@ -86,12 +86,12 @@ public:
       * @param rContinuations contains the possible continuations.
       */
     void setContinuations(
-        const cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > & rContinuations );
+        const cpo::uno::Sequence< cpo::uno::Reference< css::task::XInteractionContinuation > > & rContinuations );
 
     // XInteractionRequest
     virtual cpo::uno::Any
     getRequest() override;
-    virtual cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > >
+    virtual cpo::uno::Sequence< cpo::uno::Reference< css::task::XInteractionContinuation > >
     getContinuations() override;
 
     // Non-interface methods.

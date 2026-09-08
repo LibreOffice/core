@@ -130,7 +130,7 @@ public:
     SchAttribTabDlg(weld::Window* pParent, const SfxItemSet* pAttr,
                     const ObjectPropertiesDialogParameter& rDialogParameter,
                     const ViewElementListProvider* pViewElementListProvider,
-                    const css::uno::Reference< css::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
+                    const cpo::uno::Reference< css::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
     virtual ~SchAttribTabDlg() override;
 
     //pSymbolShapeProperties: Properties to be set on the symbollist shapes

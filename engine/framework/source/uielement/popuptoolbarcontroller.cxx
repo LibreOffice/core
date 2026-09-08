@@ -53,9 +53,9 @@ namespace framework
 
 
 PopupMenuToolbarController::PopupMenuToolbarController(
-    const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
+    const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
     OUString aPopupCommand )
-    : ToolBarBase( xContext, css::uno::Reference< css::frame::XFrame >(), /*aCommandURL*/OUString() )
+    : ToolBarBase( xContext, cpo::uno::Reference< css::frame::XFrame >(), /*aCommandURL*/OUString() )
     , m_bHasController( false )
     , m_bResourceURL( false )
     , m_aPopupCommand(std::move( aPopupCommand ))
@@ -69,8 +69,8 @@ void PopupMenuToolbarController::disposing(std::unique_lock<std::mutex>& rGuard)
         comphelper::unique_unlock aUnlock(rGuard);
         if( m_xPopupMenuController.is() )
         {
-            css::uno::Reference< css::lang::XComponent > xComponent(
-                m_xPopupMenuController, css::uno::UNO_QUERY );
+            cpo::uno::Reference< css::lang::XComponent > xComponent(
+                m_xPopupMenuController, cpo::uno::UNO_QUERY );
             if( xComponent.is() )
             {
                 try
@@ -148,10 +148,10 @@ void PopupMenuToolbarController::statusChanged( const css::frame::FeatureStateEv
     }
 }
 
-css::uno::Reference< css::awt::XWindow >
+cpo::uno::Reference< css::awt::XWindow >
 PopupMenuToolbarController::createPopupWindow()
 {
-    css::uno::Reference< css::awt::XWindow > xRet;
+    cpo::uno::Reference< css::awt::XWindow > xRet;
 
     std::unique_lock aGuard( m_aMutex );
     if ( !m_bHasController )
@@ -173,7 +173,7 @@ PopupMenuToolbarController::createPopupWindow()
     // different level, for now just hold it here so it won't crash.
     rtl::Reference< VCLXPopupMenu > xKeepAlivePopupMenu ( m_xPopupMenu );
     sal_uInt16 nId = xKeepAlivePopupMenu->execute(
-        css::uno::Reference< css::awt::XWindowPeer >( getParent(), css::uno::UNO_QUERY ),
+        cpo::uno::Reference< css::awt::XWindowPeer >( getParent(), cpo::uno::UNO_QUERY ),
         vcl::unohelper::ConvertToAWTRect( pToolBox->GetItemRect( m_nToolBoxId ) ),
         ( eAlign == WindowAlign::Top || eAlign == WindowAlign::Bottom ) ?
             css::awt::PopupMenuDirection::EXECUTE_DOWN :
@@ -223,12 +223,12 @@ void PopupMenuToolbarController::createPopupMenuController()
                 aArgs.getArray()[nAppendIndex] <<= comphelper::makePropertyValue(u"ResourceURL"_ustr, m_aPopupCommand);
 
                 m_xPopupMenuController.set( m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-                    u"com.sun.star.comp.framework.ResourceMenuController"_ustr, aArgs, m_xContext), css::uno::UNO_QUERY_THROW );
+                    u"com.sun.star.comp.framework.ResourceMenuController"_ustr, aArgs, m_xContext), cpo::uno::UNO_QUERY_THROW );
             }
             else
             {
                 m_xPopupMenuController.set( m_xPopupMenuFactory->createInstanceWithArgumentsAndContext(
-                    m_aPopupCommand, aArgs, m_xContext), css::uno::UNO_QUERY_THROW );
+                    m_aPopupCommand, aArgs, m_xContext), cpo::uno::UNO_QUERY_THROW );
             }
 
             m_xPopupMenuController->setPopupMenu( m_xPopupMenu );
@@ -243,7 +243,7 @@ void PopupMenuToolbarController::createPopupMenuController()
 
 
 GenericPopupToolbarController::GenericPopupToolbarController(
-    const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
+    const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
     const cpo::uno::Sequence< cpo::uno::Any >& rxArgs )
     : PopupMenuToolbarController( xContext )
     , m_bReplaceWithLast( false )
@@ -355,7 +355,7 @@ class SaveToolbarController : public cppu::ImplInheritanceHelper< PopupMenuToolb
                                                                   css::util::XModifyListener >
 {
 public:
-    explicit SaveToolbarController( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+    explicit SaveToolbarController( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
     // XInitialization
     virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
@@ -387,13 +387,13 @@ public:
 private:
     bool m_bReadOnly;
     bool m_bModified;
-    css::uno::Reference< css::frame::XStorable > m_xStorable;
-    css::uno::Reference< css::util::XModifiable > m_xModifiable;
+    cpo::uno::Reference< css::frame::XStorable > m_xStorable;
+    cpo::uno::Reference< css::util::XModifiable > m_xModifiable;
 };
 
 } // namespace
 
-SaveToolbarController::SaveToolbarController( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext )
+SaveToolbarController::SaveToolbarController( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext )
     : ImplInheritanceHelper( rxContext, u".uno:SaveAsMenu"_ustr )
     , m_bReadOnly( false )
     , m_bModified( false )
@@ -405,23 +405,23 @@ void SaveToolbarController::initialize( const cpo::uno::Sequence< cpo::uno::Any 
     PopupMenuToolbarController::initialize( aArguments );
 
     // Also listen to the status of the slot used for read-only case
-    m_aListenerMap.emplace(u".uno:SaveAs"_ustr, css::uno::Reference<css::frame::XDispatch>());
+    m_aListenerMap.emplace(u".uno:SaveAs"_ustr, cpo::uno::Reference<css::frame::XDispatch>());
 
     ToolBox* pToolBox = nullptr;
     ToolBoxItemId nId;
     if ( !getToolboxId( nId, &pToolBox ) )
         return;
 
-    css::uno::Reference< css::frame::XController > xController = m_xFrame->getController();
+    cpo::uno::Reference< css::frame::XController > xController = m_xFrame->getController();
     if ( xController.is() )
-        m_xModifiable.set( xController->getModel(), css::uno::UNO_QUERY );
+        m_xModifiable.set( xController->getModel(), cpo::uno::UNO_QUERY );
 
     if ( m_xModifiable.is() && pToolBox->GetItemCommand( nId ) == m_aCommandURL )
         // Will also enable the save as only mode.
-        m_xStorable.set( m_xModifiable, css::uno::UNO_QUERY );
+        m_xStorable.set( m_xModifiable, cpo::uno::UNO_QUERY );
     else if ( !m_xModifiable.is() )
         // Can be in table/query design.
-        m_xModifiable.set( xController, css::uno::UNO_QUERY );
+        m_xModifiable.set( xController, cpo::uno::UNO_QUERY );
     else
         // Simple save button, without the dropdown.
         pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) & ~ ToolBoxItemBits::DROPDOWN );
@@ -556,7 +556,7 @@ namespace {
 class NewToolbarController : public cppu::ImplInheritanceHelper<PopupMenuToolbarController, css::frame::XSubToolbarController>
 {
 public:
-    explicit NewToolbarController( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+    explicit NewToolbarController( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
     // XServiceInfo
     OUString getImplementationName() override;
@@ -586,7 +586,7 @@ private:
 } // namespace
 
 NewToolbarController::NewToolbarController(
-    const css::uno::Reference< cpo::uno::XComponentContext >& xContext )
+    const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext )
     : ImplInheritanceHelper( xContext )
     , m_nMenuId( 0 )
 {

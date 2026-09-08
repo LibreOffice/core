@@ -11,7 +11,7 @@
 #include "cmis_resultset.hxx"
 
 using namespace com::sun::star::ucb;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 
 namespace cmis
 {

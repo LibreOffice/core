@@ -60,7 +60,7 @@ SfxGlobalNameItem* SfxGlobalNameItem::Clone(SfxItemPool *) const
 // virtual
 bool SfxGlobalNameItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 )
 {
-    css::uno::Reference < css::script::XTypeConverter > xConverter
+    cpo::uno::Reference < css::script::XTypeConverter > xConverter
             ( css::script::Converter::create( ::comphelper::getProcessComponentContext() ));
     cpo::uno::Sequence< sal_Int8 > aSeq;
     cpo::uno::Any aNew;

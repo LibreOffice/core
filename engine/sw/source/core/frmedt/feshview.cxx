@@ -109,6 +109,7 @@
 #define SCROLLVAL 75
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 SwFlyFrame *GetFlyFromMarked( const SdrMarkList *pLst, SwViewShell *pSh )
 {

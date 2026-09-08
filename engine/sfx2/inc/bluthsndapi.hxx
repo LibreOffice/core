@@ -19,7 +19,7 @@
 class SfxBluetoothModel:public SfxMailModel
 {
 public:
-    SendMailResult      SaveAndSend( const css::uno::Reference< css::frame::XFrame >& xFrame );
+    SendMailResult      SaveAndSend( const cpo::uno::Reference< css::frame::XFrame >& xFrame );
     SendMailResult      Send();
 };
 

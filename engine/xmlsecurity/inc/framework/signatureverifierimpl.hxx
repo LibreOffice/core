@@ -48,7 +48,7 @@ class SignatureVerifierImpl final : public SignatureVerifierImpl_Base
  ******************************************************************************/
 {
 private:
-    css::uno::Reference< css::xml::crypto::XXMLSecurityContext > m_xXMLSecurityContext;
+    cpo::uno::Reference< css::xml::crypto::XXMLSecurityContext > m_xXMLSecurityContext;
 
     virtual void notifyResultListener() const override;
     virtual void startEngine( const rtl::Reference<XMLSignatureTemplateImpl>& xSignatureTemplate) override;
@@ -59,9 +59,9 @@ public:
 
     /* XSignatureVerifyResultBroadcaster */
     virtual void SAL_CALL addSignatureVerifyResultListener(
-        const css::uno::Reference< css::xml::crypto::sax::XSignatureVerifyResultListener >& listener ) override;
+        const cpo::uno::Reference< css::xml::crypto::sax::XSignatureVerifyResultListener >& listener ) override;
     virtual void SAL_CALL removeSignatureVerifyResultListener(
-        const css::uno::Reference< css::xml::crypto::sax::XSignatureVerifyResultListener >& listener ) override;
+        const cpo::uno::Reference< css::xml::crypto::sax::XSignatureVerifyResultListener >& listener ) override;
 
     /* XInitialization */
     virtual void SAL_CALL initialize(
@@ -72,8 +72,8 @@ public:
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
-    void updateSignature( const css::uno::Reference< css::xml::crypto::XXMLSignature >& xSignature,
-                          const css::uno::Reference< css::xml::crypto::XXMLSecurityContext >& xContext ) { m_xXMLSignature = xSignature; m_xXMLSecurityContext = xContext; }
+    void updateSignature( const cpo::uno::Reference< css::xml::crypto::XXMLSignature >& xSignature,
+                          const cpo::uno::Reference< css::xml::crypto::XXMLSecurityContext >& xContext ) { m_xXMLSignature = xSignature; m_xXMLSecurityContext = xContext; }
 };
 
 /// @throws cpo::uno::RuntimeException

@@ -162,7 +162,7 @@ public:
     virtual void statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
 
     // XToolbarController
-    virtual css::uno::Reference<css::awt::XWindow> createItemWindow(const css::uno::Reference<css::awt::XWindow>& rParent) override;
+    virtual cpo::uno::Reference<css::awt::XWindow> createItemWindow(const cpo::uno::Reference<css::awt::XWindow>& rParent) override;
 
     // XInitialization
     virtual void initialize(const cpo::uno::Sequence<cpo::uno::Any>& aArguments) override;
@@ -213,7 +213,7 @@ class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) SvxColorToolBoxControl final : public 
     weld::Window* GetParentFrame() const;
 
 public:
-    explicit SvxColorToolBoxControl( const css::uno::Reference<cpo::uno::XComponentContext>& rContext );
+    explicit SvxColorToolBoxControl( const cpo::uno::Reference<cpo::uno::XComponentContext>& rContext );
     virtual ~SvxColorToolBoxControl() override;
 
     // XInitialization
@@ -266,7 +266,7 @@ public:
                                     std::vector<sal_uInt16>& rCurrencyList,
                                     std::vector<sfx::CurrencyID> const& rCurrencyIDs);
 
-    explicit SvxCurrencyToolBoxControl( const css::uno::Reference<cpo::uno::XComponentContext>& rContext );
+    explicit SvxCurrencyToolBoxControl( const cpo::uno::Reference<cpo::uno::XComponentContext>& rContext );
     virtual ~SvxCurrencyToolBoxControl() override;
 
     /** XToolbarController **/

@@ -43,6 +43,7 @@
 #include <utility>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace ::ooo::vba;
 using namespace ::ooo::vba::excel::XlChartType;
 using namespace ::ooo::vba::excel::XlRowCol;
@@ -64,7 +65,7 @@ constexpr OUString DIM3D(u"Dim3D"_ustr);
 constexpr OUString HASMAINTITLE(u"HasMainTitle"_ustr);
 constexpr OUString HASLEGEND(u"HasLegend"_ustr);
 
-ScVbaChart::ScVbaChart( const css::uno::Reference< ov::XHelperInterface >& _xParent, const css::uno::Reference< cpo::uno::XComponentContext >& _xContext, const css::uno::Reference< css::lang::XComponent >& _xChartComponent, css::uno::Reference< css::table::XTableChart >  _xTableChart ) : ChartImpl_BASE( _xParent, _xContext ), mxTableChart(std::move( _xTableChart ))
+ScVbaChart::ScVbaChart( const cpo::uno::Reference< ov::XHelperInterface >& _xParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& _xContext, const cpo::uno::Reference< css::lang::XComponent >& _xChartComponent, cpo::uno::Reference< css::table::XTableChart >  _xTableChart ) : ChartImpl_BASE( _xParent, _xContext ), mxTableChart(std::move( _xTableChart ))
 {
     mxChartDocument.set( _xChartComponent, uno::UNO_QUERY_THROW ) ;
     // #TODO is it possible that the XPropertySet interface is not set
@@ -558,7 +559,7 @@ ScVbaChart::Activate()
 }
 
 void SAL_CALL
-ScVbaChart::setSourceData( const css::uno::Reference< ::ooo::vba::excel::XRange >& _xCalcRange, const cpo::uno::Any& _aPlotBy )
+ScVbaChart::setSourceData( const cpo::uno::Reference< ::ooo::vba::excel::XRange >& _xCalcRange, const cpo::uno::Any& _aPlotBy )
 {
     try
     {

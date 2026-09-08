@@ -69,7 +69,7 @@ public:
     virtual void updateData() override;
     virtual void modelInvalid() override;
 
-    virtual void updateModel(css::uno::Reference<css::frame::XModel> xModel) override;
+    virtual void updateModel(cpo::uno::Reference<css::frame::XModel> xModel) override;
 
     virtual rtl::Reference<::chart::ChartTypeTemplate> getCurrentTemplate() const override;
 
@@ -90,7 +90,7 @@ private:
 
     vcl::EnumContext maContext;
 
-    css::uno::Reference<css::util::XModifyListener> mxListener;
+    cpo::uno::Reference<css::util::XModifyListener> mxListener;
 
     bool mbModelValid;
 

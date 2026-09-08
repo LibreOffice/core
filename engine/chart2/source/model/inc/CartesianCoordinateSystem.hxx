@@ -34,7 +34,7 @@ public:
     virtual OUString getViewServiceName() override;
 
     // ____ XCloneable ____
-    virtual css::uno::Reference<css::util::XCloneable> createClone() override;
+    virtual cpo::uno::Reference<css::util::XCloneable> createClone() override;
 
     // ____ XServiceInfo ____
     virtual OUString getImplementationName() override;

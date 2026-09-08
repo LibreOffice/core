@@ -54,17 +54,17 @@ public:
     virtual void SAL_CALL   gotoOffset( sal_Int32 nColumnOffset, sal_Int32 nRowOffset ) override;
 
                             // XSheetCellRange
-    virtual css::uno::Reference< css::sheet::XSpreadsheet > SAL_CALL
+    virtual cpo::uno::Reference< css::sheet::XSpreadsheet > SAL_CALL
                             getSpreadsheet() override;
 
                             // XCellRange
-    virtual css::uno::Reference< css::table::XCell > SAL_CALL
+    virtual cpo::uno::Reference< css::table::XCell > SAL_CALL
                             getCellByPosition( sal_Int32 nColumn, sal_Int32 nRow ) override;
-    virtual css::uno::Reference< css::table::XCellRange > SAL_CALL
+    virtual cpo::uno::Reference< css::table::XCellRange > SAL_CALL
                             getCellRangeByPosition( sal_Int32 nLeft, sal_Int32 nTop,
                                 sal_Int32 nRight, sal_Int32 nBottom ) override;
     using ScCellRangeObj::getCellRangeByName;
-    virtual css::uno::Reference< css::table::XCellRange > SAL_CALL
+    virtual cpo::uno::Reference< css::table::XCellRange > SAL_CALL
                             getCellRangeByName( const OUString& aRange ) override;
 
                             // XServiceInfo

@@ -66,14 +66,14 @@ namespace connectivity::sdbcx
         std::unique_ptr<OCollection> m_pGroups;
         std::unique_ptr<OCollection> m_pUsers;
 
-        css::uno::Reference< css::sdbc::XDatabaseMetaData > m_xMetaData; // just to make things easier
+        cpo::uno::Reference< css::sdbc::XDatabaseMetaData > m_xMetaData; // just to make things easier
 
         /** builds the name which should be used to access the object later on in the collection.
             Will only be called in fillNames.
             @param  _xRow
                 The current row from the resultset given to fillNames.
         */
-        virtual OUString buildName(  const css::uno::Reference< css::sdbc::XRow >& _xRow);
+        virtual OUString buildName(  const cpo::uno::Reference< css::sdbc::XRow >& _xRow);
 
         /** fills a vector with the necessary names which can be used in combination with the collections.
             For each row buildName will be called.
@@ -82,10 +82,10 @@ namespace connectivity::sdbcx
             @param  _rNames
                 The vector who will be filled.
         */
-        void fillNames(css::uno::Reference< css::sdbc::XResultSet >& _xResult,::std::vector< OUString>& _rNames);
+        void fillNames(cpo::uno::Reference< css::sdbc::XResultSet >& _xResult,::std::vector< OUString>& _rNames);
 
     public:
-        OCatalog(const css::uno::Reference< css::sdbc::XConnection> &_xConnection);
+        OCatalog(const cpo::uno::Reference< css::sdbc::XConnection> &_xConnection);
         virtual ~OCatalog() override;
 
         DECLARE_SERVICE_INFO();
@@ -101,13 +101,13 @@ namespace connectivity::sdbcx
         // ::cppu::OComponentHelper
         virtual void disposing() override;
         // XTablesSupplier
-        virtual css::uno::Reference< css::container::XNameAccess > getTables(  ) override;
+        virtual cpo::uno::Reference< css::container::XNameAccess > getTables(  ) override;
         // XViewsSupplier
-        virtual css::uno::Reference< css::container::XNameAccess > getViews(  ) override;
+        virtual cpo::uno::Reference< css::container::XNameAccess > getViews(  ) override;
         // XUsersSupplier
-        virtual css::uno::Reference< css::container::XNameAccess > getUsers(  ) override;
+        virtual cpo::uno::Reference< css::container::XNameAccess > getUsers(  ) override;
         // XGroupsSupplier
-        virtual css::uno::Reference< css::container::XNameAccess > getGroups(  ) override;
+        virtual cpo::uno::Reference< css::container::XNameAccess > getGroups(  ) override;
 
     };
 

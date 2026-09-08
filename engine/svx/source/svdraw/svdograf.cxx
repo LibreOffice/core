@@ -69,6 +69,7 @@
 #include <svx/unoapi.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 class SdrGraphicLink : public sfx2::SvBaseLink
 {
@@ -363,7 +364,7 @@ const GraphicObject* SdrGrafObj::GetReplacementGraphicObject() const
     return mpReplacementGraphicObject.get();
 }
 
-css::uno::Reference<css::lang::XComponent> SdrGrafObj::GetReplacementGraphicModel() const
+cpo::uno::Reference<css::lang::XComponent> SdrGrafObj::GetReplacementGraphicModel() const
 {
     if (!mpGraphicObject)
         return nullptr;

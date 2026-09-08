@@ -64,12 +64,12 @@ public:
     // css::xml::sax::XFastContextHandler:
     virtual void startFastElement
     (::sal_Int32 Element,
-     const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override;
+     const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override;
 
     virtual void startUnknownElement
     (const OUString & Namespace,
      const OUString & Name,
-     const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override;
+     const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override;
 
     virtual void endFastElement(::sal_Int32 Element) override;
 
@@ -77,24 +77,24 @@ public:
     (const OUString & Namespace,
      const OUString & Name) override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler >
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler >
     createFastChildContext
     (::sal_Int32 Element,
-     const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override;
+     const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler >
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler >
     createUnknownChildContext
     (const OUString & Namespace,
      const OUString & Name,
-     const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override;
+     const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override;
 
     virtual void characters(const OUString & aChars) override;
 
-    css::uno::Reference< css::drawing::XShape > getShape();
+    cpo::uno::Reference< css::drawing::XShape > getShape();
 
-    void setDrawPage(const css::uno::Reference< css::drawing::XDrawPage > & the_value);
+    void setDrawPage(const cpo::uno::Reference< css::drawing::XDrawPage > & the_value);
 
-    void setModel(const css::uno::Reference< css::frame::XModel > & the_value);
+    void setModel(const cpo::uno::Reference< css::frame::XModel > & the_value);
 
     void setRelationFragmentPath(const OUString & the_value);
 
@@ -111,10 +111,10 @@ public:
     bool isWordProcessingGroupShape() const { return mxWpgContext ? true : false; }
     bool isWordprocessingCanvas() const { return mxWordprocessingCanvasContext ? true : false; }
 
-    void setDocumentProperties(const css::uno::Reference<css::document::XDocumentProperties>& xDocProps);
+    void setDocumentProperties(const cpo::uno::Reference<css::document::XDocumentProperties>& xDocProps);
     void setMediaDescriptor(const cpo::uno::Sequence<css::beans::PropertyValue>& rMediaDescriptor);
 
-    void setGraphicMapper(css::uno::Reference<css::graphic::XGraphicMapper> const & rGraphicMapper);
+    void setGraphicMapper(cpo::uno::Reference<css::graphic::XGraphicMapper> const & rGraphicMapper);
 
     void setTheme(const oox::drawingml::ThemePtr& pTheme) { mpThemePtr = pTheme; }
     const oox::drawingml::ThemePtr& getTheme() const { return mpThemePtr; }
@@ -137,31 +137,31 @@ private:
     typedef rtl::Reference<drawingml::GraphicShapeContext>
     GraphicShapeContextPtr;
     rtl::Reference<vml::DrawingFragment> mxDrawingFragmentHandler;
-    css::uno::Reference<XFastContextHandler> mxGraphicShapeContext;
+    cpo::uno::Reference<XFastContextHandler> mxGraphicShapeContext;
     rtl::Reference<drawingml::DiagramGraphicDataContext> mxDiagramShapeContext;
     rtl::Reference<LockedCanvasContext> mxLockedCanvasContext;
     rtl::Reference<WordprocessingCanvasContext> mxWordprocessingCanvasContext;
     rtl::Reference<WpsContext> mxWpsContext;
-    css::uno::Reference<css::drawing::XShape> mxSavedShape;
+    cpo::uno::Reference<css::drawing::XShape> mxSavedShape;
     rtl::Reference<WpgContext> mxWpgContext;
     rtl::Reference<drawingml::ChartGraphicDataContext> mxChartShapeContext;
-    css::uno::Reference<css::document::XDocumentProperties> mxDocumentProperties;
+    cpo::uno::Reference<css::document::XDocumentProperties> mxDocumentProperties;
     cpo::uno::Sequence<css::beans::PropertyValue> maMediaDescriptor;
 
     ::rtl::Reference< ShapeFilterBase > mxShapeFilterBase;
     drawingml::ThemePtr mpThemePtr;
-    css::uno::Reference<css::drawing::XDrawPage> mxDrawPage;
+    cpo::uno::Reference<css::drawing::XDrawPage> mxDrawPage;
     OUString msRelationFragmentPath;
 
-    css::uno::Reference<XFastContextHandler> const & getGraphicShapeContext(::sal_Int32 Element);
-    css::uno::Reference<XFastContextHandler> getChartShapeContext(::sal_Int32 Element);
-    css::uno::Reference<XFastContextHandler> getDrawingShapeContext();
-    css::uno::Reference<XFastContextHandler> getDiagramShapeContext();
-    css::uno::Reference<XFastContextHandler> getLockedCanvasContext(sal_Int32 nElement);
-    css::uno::Reference<XFastContextHandler> getWordprocessingCanvasContext(sal_Int32 nElement);
-    css::uno::Reference<XFastContextHandler> getWpsContext(sal_Int32 nStartElement, sal_Int32 nElement);
-    css::uno::Reference<XFastContextHandler> getWpgContext(sal_Int32 nElement);
-    css::uno::Reference<XFastContextHandler> getContextHandler(sal_Int32 nElement = 0);
+    cpo::uno::Reference<XFastContextHandler> const & getGraphicShapeContext(::sal_Int32 Element);
+    cpo::uno::Reference<XFastContextHandler> getChartShapeContext(::sal_Int32 Element);
+    cpo::uno::Reference<XFastContextHandler> getDrawingShapeContext();
+    cpo::uno::Reference<XFastContextHandler> getDiagramShapeContext();
+    cpo::uno::Reference<XFastContextHandler> getLockedCanvasContext(sal_Int32 nElement);
+    cpo::uno::Reference<XFastContextHandler> getWordprocessingCanvasContext(sal_Int32 nElement);
+    cpo::uno::Reference<XFastContextHandler> getWpsContext(sal_Int32 nStartElement, sal_Int32 nElement);
+    cpo::uno::Reference<XFastContextHandler> getWpgContext(sal_Int32 nElement);
+    cpo::uno::Reference<XFastContextHandler> getContextHandler(sal_Int32 nElement = 0);
 
     void applyFontRefColor(const oox::drawingml::ShapePtr& pShape,
                            const oox::drawingml::Color& rFontRefColor);

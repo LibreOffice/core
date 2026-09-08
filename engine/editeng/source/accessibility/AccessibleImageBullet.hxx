@@ -23,7 +23,7 @@
 #include <comphelper/OAccessible.hxx>
 #include <cppuhelper/implbase.hxx>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 
@@ -42,23 +42,23 @@ class AccessibleImageBullet final
 
 public:
     /// Create accessible object for given parent
-    AccessibleImageBullet(css::uno::Reference<css::accessibility::XAccessible> xParent,
+    AccessibleImageBullet(cpo::uno::Reference<css::accessibility::XAccessible> xParent,
                           sal_Int64 nIndexInParent);
 
     // XAccessibleContext
     virtual sal_Int64 getAccessibleChildCount() override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleChild( sal_Int64 i ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleParent() override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > getAccessibleChild( sal_Int64 i ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > getAccessibleParent() override;
     virtual sal_Int64 getAccessibleIndexInParent() override;
     virtual sal_Int16 getAccessibleRole() override;
     virtual OUString getAccessibleDescription() override;
     virtual OUString getAccessibleName() override;
-    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > getAccessibleRelationSet() override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessibleRelationSet > getAccessibleRelationSet() override;
     virtual sal_Int64 getAccessibleStateSet() override;
     virtual css::lang::Locale getLocale() override;
 
     // XAccessibleComponent
-    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
     virtual void grabFocus(  ) override;
     virtual sal_Int32 getForeground(  ) override;
     virtual sal_Int32 getBackground(  ) override;
@@ -152,7 +152,7 @@ private:
     sal_Int64 mnStateSet = 0;
 
     /// The shape we're the accessible for (unguarded)
-    css::uno::Reference< css::accessibility::XAccessible > mxParent;
+    cpo::uno::Reference< css::accessibility::XAccessible > mxParent;
 };
 
 } // end of namespace accessibility

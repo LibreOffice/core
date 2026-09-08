@@ -50,7 +50,7 @@
 #define OUTPUT_DRAWMODE_CONTRAST    (DrawModeFlags::SettingsLine | DrawModeFlags::SettingsFill | DrawModeFlags::SettingsText | DrawModeFlags::SettingsGradient)
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::accessibility;
 
 // Control for display and selection of the corner points and
@@ -1583,7 +1583,7 @@ void limitWidthForSidebar(SvxRelativeField& rMetricSpinButton)
     limitWidthForSidebar(rSpinButton);
 }
 
-void padWidthForSidebar(weld::Toolbar& rToolbar, const css::uno::Reference<css::frame::XFrame>& rFrame)
+void padWidthForSidebar(weld::Toolbar& rToolbar, const cpo::uno::Reference<css::frame::XFrame>& rFrame)
 {
     static int nColumnWidth = -1;
     static vcl::ImageType eSize;

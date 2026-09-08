@@ -36,13 +36,13 @@ namespace dp_manager {
 
 typedef std::unordered_map<
     OUString,
-    std::vector<css::uno::Reference<css::deployment::XPackage> > > id2extensions;
+    std::vector<cpo::uno::Reference<css::deployment::XPackage> > > id2extensions;
 
 class ExtensionManager : private cppu::BaseMutex,
         public ::cppu::WeakComponentImplHelper< css::deployment::XExtensionManager, css::lang::XServiceInfo >
 {
 public:
-    explicit ExtensionManager( css::uno::Reference< cpo::uno::XComponentContext >const& xContext);
+    explicit ExtensionManager( cpo::uno::Reference< cpo::uno::XComponentContext >const& xContext);
     virtual     ~ExtensionManager() override;
 
     void check();
@@ -57,84 +57,84 @@ public:
 
 //    XModifyBroadcaster
     virtual void addModifyListener(
-       css::uno::Reference<css::util::XModifyListener> const & xListener ) override;
+       cpo::uno::Reference<css::util::XModifyListener> const & xListener ) override;
     virtual void removeModifyListener(
-       css::uno::Reference<css::util::XModifyListener> const & xListener ) override;
+       cpo::uno::Reference<css::util::XModifyListener> const & xListener ) override;
 
 //XExtensionManager
     virtual cpo::uno::Sequence<
-        css::uno::Reference<css::deployment::XPackageTypeInfo> >
+        cpo::uno::Reference<css::deployment::XPackageTypeInfo> >
         getSupportedPackageTypes() override;
 
-    virtual css::uno::Reference<css::task::XAbortChannel>
+    virtual cpo::uno::Reference<css::task::XAbortChannel>
     createAbortChannel() override;
 
-    virtual css::uno::Reference<css::deployment::XPackage> addExtension(
+    virtual cpo::uno::Reference<css::deployment::XPackage> addExtension(
         OUString const & url,
         cpo::uno::Sequence<css::beans::NamedValue> const & properties,
         OUString const & repository,
-        css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
-        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
+        cpo::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
+        cpo::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
 
     virtual void removeExtension(
         OUString const & identifier,
         OUString const & filename,
         OUString const & repository,
-        css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
-        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
+        cpo::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
+        cpo::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
 
     virtual void enableExtension(
-        css::uno::Reference<css::deployment::XPackage> const & extension,
-        css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
-        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
+        cpo::uno::Reference<css::deployment::XPackage> const & extension,
+        cpo::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
+        cpo::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
 
     virtual void disableExtension(
-        css::uno::Reference<css::deployment::XPackage> const & extension,
-        css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
-        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
+        cpo::uno::Reference<css::deployment::XPackage> const & extension,
+        cpo::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
+        cpo::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
 
     virtual sal_Int32 checkPrerequisitesAndEnable(
-        css::uno::Reference<css::deployment::XPackage> const & extension,
-        css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
-        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
+        cpo::uno::Reference<css::deployment::XPackage> const & extension,
+        cpo::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
+        cpo::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
 
-    virtual cpo::uno::Sequence< css::uno::Reference<css::deployment::XPackage> >
+    virtual cpo::uno::Sequence< cpo::uno::Reference<css::deployment::XPackage> >
         getDeployedExtensions(
         OUString const & repository,
-        css::uno::Reference<css::task::XAbortChannel> const &,
-        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
+        cpo::uno::Reference<css::task::XAbortChannel> const &,
+        cpo::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
 
-    virtual css::uno::Reference< css::deployment::XPackage>
+    virtual cpo::uno::Reference< css::deployment::XPackage>
         getDeployedExtension(
         OUString const & repository,
         OUString const & identifier,
         OUString const & filename,
-        css::uno::Reference< css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
+        cpo::uno::Reference< css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
 
-    virtual cpo::uno::Sequence<css::uno::Reference<css::deployment::XPackage> >
+    virtual cpo::uno::Sequence<cpo::uno::Reference<css::deployment::XPackage> >
     getExtensionsWithSameIdentifier(
         OUString const & identifier,
         OUString const & filename,
-        css::uno::Reference< css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
+        cpo::uno::Reference< css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
 
-    virtual cpo::uno::Sequence< cpo::uno::Sequence<css::uno::Reference<css::deployment::XPackage> > >
+    virtual cpo::uno::Sequence< cpo::uno::Sequence<cpo::uno::Reference<css::deployment::XPackage> > >
         getAllExtensions(
-        css::uno::Reference<css::task::XAbortChannel> const &,
-        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
+        cpo::uno::Reference<css::task::XAbortChannel> const &,
+        cpo::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
 
     virtual void reinstallDeployedExtensions(
         bool force, OUString const & repository,
-        css::uno::Reference< css::task::XAbortChannel> const & xAbortChannel,
-        css::uno::Reference< css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
+        cpo::uno::Reference< css::task::XAbortChannel> const & xAbortChannel,
+        cpo::uno::Reference< css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
 
     virtual bool synchronize(
-        css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
-        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
+        cpo::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
+        cpo::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
 
-    virtual cpo::uno::Sequence<css::uno::Reference<css::deployment::XPackage> >
+    virtual cpo::uno::Sequence<cpo::uno::Reference<css::deployment::XPackage> >
     getExtensionsWithUnacceptedLicenses(
         OUString const & repository,
-        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv) override;
+        cpo::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv) override;
 
     virtual bool isReadOnlyRepository(OUString const & repository) override;
 
@@ -142,8 +142,8 @@ private:
 
     static OUString StrSyncRepository() { return DpResId(RID_STR_SYNCHRONIZING_REPOSITORY); }
 
-    css::uno::Reference< cpo::uno::XComponentContext> m_xContext;
-    css::uno::Reference<css::deployment::XPackageManagerFactory> m_xPackageManagerFactory;
+    cpo::uno::Reference< cpo::uno::XComponentContext> m_xContext;
+    cpo::uno::Reference<css::deployment::XPackageManagerFactory> m_xPackageManagerFactory;
 
     //only to be used within addExtension
     std::mutex m_addMutex;
@@ -153,58 +153,58 @@ private:
      */
     std::vector< OUString > m_repositoryNames;
 
-    css::uno::Reference<css::deployment::XPackageManager> getUserRepository();
-    css::uno::Reference<css::deployment::XPackageManager> getSharedRepository();
-    css::uno::Reference<css::deployment::XPackageManager> getBundledRepository();
-    css::uno::Reference<css::deployment::XPackageManager> getTmpRepository();
-    css::uno::Reference<css::deployment::XPackageManager> getBakRepository();
+    cpo::uno::Reference<css::deployment::XPackageManager> getUserRepository();
+    cpo::uno::Reference<css::deployment::XPackageManager> getSharedRepository();
+    cpo::uno::Reference<css::deployment::XPackageManager> getBundledRepository();
+    cpo::uno::Reference<css::deployment::XPackageManager> getTmpRepository();
+    cpo::uno::Reference<css::deployment::XPackageManager> getBakRepository();
 
     bool isUserDisabled(OUString const & identifier,
                         OUString const & filename);
 
     static bool isUserDisabled(
-        cpo::uno::Sequence<css::uno::Reference<css::deployment::XPackage> > const & seqExtSameId);
+        cpo::uno::Sequence<cpo::uno::Reference<css::deployment::XPackage> > const & seqExtSameId);
 
     void activateExtension(
         OUString const & identifier,
         OUString const & fileName,
         bool bUserDisabled, bool bStartup,
-        css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
-        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv);
+        cpo::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
+        cpo::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv);
 
     static void activateExtension(
-        cpo::uno::Sequence<css::uno::Reference<css::deployment::XPackage> > const & seqExt,
+        cpo::uno::Sequence<cpo::uno::Reference<css::deployment::XPackage> > const & seqExt,
         bool bUserDisabled, bool bStartup,
-        css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
-        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv );
+        cpo::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
+        cpo::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv );
 
-    std::vector<css::uno::Reference<css::deployment::XPackage> >
+    std::vector<cpo::uno::Reference<css::deployment::XPackage> >
     getExtensionsWithSameId(OUString  const & identifier,
                             OUString const & fileName);
 
-    css::uno::Reference<css::deployment::XPackage> backupExtension(
+    cpo::uno::Reference<css::deployment::XPackage> backupExtension(
         OUString const & identifier, OUString const & fileName,
-        css::uno::Reference<css::deployment::XPackageManager> const & xPackageManager,
-        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv);
+        cpo::uno::Reference<css::deployment::XPackageManager> const & xPackageManager,
+        cpo::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv);
 
     void checkInstall(
         OUString const & displayName,
-        css::uno::Reference<css::ucb::XCommandEnvironment> const & cmdEnv);
+        cpo::uno::Reference<css::ucb::XCommandEnvironment> const & cmdEnv);
 
     void checkUpdate(
         OUString const & newVersion,
         OUString const & newDisplayName,
-        css::uno::Reference<css::deployment::XPackage> const & oldExtension,
-        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv);
+        cpo::uno::Reference<css::deployment::XPackage> const & oldExtension,
+        cpo::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv);
 
     void addExtensionsToMap(
         id2extensions & mapExt,
-        cpo::uno::Sequence<css::uno::Reference<css::deployment::XPackage> > const & seqExt,
+        cpo::uno::Sequence<cpo::uno::Reference<css::deployment::XPackage> > const & seqExt,
         std::u16string_view repository);
 
     /// @throws css::lang::IllegalArgumentException
     /// @throws cpo::uno::RuntimeException
-    css::uno::Reference<css::deployment::XPackageManager>
+    cpo::uno::Reference<css::deployment::XPackageManager>
     getPackageManager(std::u16string_view repository);
 
     /// @throws css::deployment::DeploymentException
@@ -213,12 +213,12 @@ private:
     /// @throws css::lang::IllegalArgumentException
     /// @throws cpo::uno::RuntimeException
     bool doChecksForAddExtension(
-        css::uno::Reference<css::deployment::XPackageManager> const & xPackageMgr,
+        cpo::uno::Reference<css::deployment::XPackageManager> const & xPackageMgr,
         cpo::uno::Sequence<css::beans::NamedValue> const & properties,
-        css::uno::Reference<css::deployment::XPackage> const & xTmpExtension,
-        css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
-        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
-        css::uno::Reference<css::deployment::XPackage> & out_existingExtension );
+        cpo::uno::Reference<css::deployment::XPackage> const & xTmpExtension,
+        cpo::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
+        cpo::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
+        cpo::uno::Reference<css::deployment::XPackage> & out_existingExtension );
 
 };
 

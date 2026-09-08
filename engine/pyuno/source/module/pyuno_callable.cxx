@@ -24,7 +24,7 @@
 #include <com/sun/star/script/XInvocation2.hpp>
 
 using cpo::uno::Sequence;
-using com::sun::star::uno::Reference;
+using cpo::uno::Reference;
 using cpo::uno::Any;
 using cpo::uno::RuntimeException;
 using com::sun::star::script::XInvocation2;

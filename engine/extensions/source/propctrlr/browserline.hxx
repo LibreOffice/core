@@ -54,7 +54,7 @@ namespace pcr
         std::unique_ptr<weld::Label> m_xFtTitle;
         std::unique_ptr<weld::Button> m_xBrowseButton;
         std::unique_ptr<weld::Button> m_xAdditionalBrowseButton;
-        css::uno::Reference< css::inspection::XPropertyControl >
+        cpo::uno::Reference< css::inspection::XPropertyControl >
                                 m_xControl;
         weld::Container*        m_pInitialControlParent;
         weld::Box*              m_pParent;
@@ -72,8 +72,8 @@ namespace pcr
                      weld::Container* pInitialControlParent);
         ~OBrowserLine();
 
-        void setControl( const css::uno::Reference< css::inspection::XPropertyControl >& rxControl );
-        const css::uno::Reference< css::inspection::XPropertyControl >& getControl() const
+        void setControl( const cpo::uno::Reference< css::inspection::XPropertyControl >& rxControl );
+        const cpo::uno::Reference< css::inspection::XPropertyControl >& getControl() const
         {
             return m_xControl;
         }
@@ -97,7 +97,7 @@ namespace pcr
 
         bool                GrabFocus();
         void                ShowBrowseButton( const OUString& rImageURL, bool bPrimary );
-        void                ShowBrowseButton( const css::uno::Reference<css::graphic::XGraphic>& rGraphic, bool bPrimary );
+        void                ShowBrowseButton( const cpo::uno::Reference<css::graphic::XGraphic>& rGraphic, bool bPrimary );
         void                ShowBrowseButton( bool bPrimary );
         void                HideBrowseButton( bool bPrimary );
 

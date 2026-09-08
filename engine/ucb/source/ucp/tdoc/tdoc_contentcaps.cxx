@@ -69,6 +69,7 @@ namespace com::sun::star::embed {
 }
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace tdoc_ucp;
 
 

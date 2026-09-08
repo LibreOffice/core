@@ -30,6 +30,7 @@
 #include <com/sun/star/sheet/XVolatileResult.hpp>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 SC_SIMPLE_SERVICE_INFO( ScAddInListener, u"ScAddInListener"_ustr, u"stardiv.one.sheet.AddInListener"_ustr )
 

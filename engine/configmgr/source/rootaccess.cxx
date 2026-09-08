@@ -26,7 +26,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Type.hxx>
 #include <cpo/uno/XInterface.hpp>
@@ -83,7 +83,7 @@ void RootAccess::initBroadcaster(
     for (auto const& changesListener : changesListeners_)
     {
         cppu::OWeakObject* pSource = this;
-        css::uno::Reference< cpo::uno::XInterface > xBase( pSource, css::uno::UNO_QUERY );
+        cpo::uno::Reference< cpo::uno::XInterface > xBase( pSource, cpo::uno::UNO_QUERY );
         broadcaster->addChangesNotification(
             changesListener,
             css::util::ChangesEvent(
@@ -110,7 +110,7 @@ void RootAccess::setAlive(bool b) {
 }
 
 void RootAccess::addChangesListener(
-    css::uno::Reference< css::util::XChangesListener > const & aListener)
+    cpo::uno::Reference< css::util::XChangesListener > const & aListener)
 {
     assert(thisIs(IS_ANY));
     {
@@ -132,7 +132,7 @@ void RootAccess::addChangesListener(
 }
 
 void RootAccess::removeChangesListener(
-    css::uno::Reference< css::util::XChangesListener > const & aListener)
+    cpo::uno::Reference< css::util::XChangesListener > const & aListener)
 {
     assert(thisIs(IS_ANY));
     osl::MutexGuard g(*lock_);

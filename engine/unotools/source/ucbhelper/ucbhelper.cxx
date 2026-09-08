@@ -37,7 +37,7 @@
 #include <com/sun/star/ucb/XUniversalContentBroker.hpp>
 #include <cpo/uno/Any.hxx>
 #include <cpo/uno/Exception.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <comphelper/processfactory.hxx>
@@ -83,8 +83,8 @@ std::vector<OUString> getContents(OUString const & url) {
         std::vector<OUString> cs;
         ucbhelper::Content c(content(url));
         cpo::uno::Sequence<OUString> args { u"Title"_ustr };
-        css::uno::Reference<css::sdbc::XResultSet> res( c.createCursor(args), css::uno::UNO_SET_THROW);
-        css::uno::Reference<css::ucb::XContentAccess> acc( res, css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::sdbc::XResultSet> res( c.createCursor(args), cpo::uno::UNO_SET_THROW);
+        cpo::uno::Reference<css::ucb::XContentAccess> acc( res, cpo::uno::UNO_QUERY_THROW);
         while (res->next()) {
             cs.push_back(acc->queryContentIdentifierString());
         }
@@ -114,13 +114,13 @@ DateTime convert(css::util::DateTime const & dt) {
 
 }
 
-css::uno::Reference< css::ucb::XCommandEnvironment > utl::UCBContentHelper::getDefaultCommandEnvironment()
+cpo::uno::Reference< css::ucb::XCommandEnvironment > utl::UCBContentHelper::getDefaultCommandEnvironment()
 {
-    css::uno::Reference< css::task::XInteractionHandler > xIH(
+    cpo::uno::Reference< css::task::XInteractionHandler > xIH(
         css::task::InteractionHandler::createWithParent(
             comphelper::getProcessComponentContext(), nullptr ) );
 
-    css::uno::Reference< css::ucb::XProgressHandler > xProgress;
+    cpo::uno::Reference< css::ucb::XProgressHandler > xProgress;
     rtl::Reference<ucbhelper::CommandEnvironment> pCommandEnv =
         new ::ucbhelper::CommandEnvironment(
             new comphelper::SimpleFileAccessInteraction( xIH ), xProgress );
@@ -375,7 +375,7 @@ bool utl::UCBContentHelper::EqualURLs(
     if (url1.isEmpty() || url2.isEmpty()) {
         return false;
     }
-    css::uno::Reference< css::ucb::XUniversalContentBroker > ucb(
+    cpo::uno::Reference< css::ucb::XUniversalContentBroker > ucb(
         css::ucb::UniversalContentBroker::create(
             comphelper::getProcessComponentContext()));
     return
@@ -386,8 +386,8 @@ bool utl::UCBContentHelper::EqualURLs(
 }
 
 bool utl::UCBContentHelper::ensureFolder(
-    const css::uno::Reference< cpo::uno::XComponentContext >& xCtx,
-    const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv,
+    const cpo::uno::Reference< cpo::uno::XComponentContext >& xCtx,
+    const cpo::uno::Reference< css::ucb::XCommandEnvironment >& xEnv,
     std::u16string_view rFolder, ucbhelper::Content & result) noexcept
 {
     try

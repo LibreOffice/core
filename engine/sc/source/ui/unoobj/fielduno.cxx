@@ -47,6 +47,7 @@
 #include <com/sun/star/text/textfield/Type.hpp>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 namespace {
 

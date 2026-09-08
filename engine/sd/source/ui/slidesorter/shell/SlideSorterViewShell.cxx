@@ -64,7 +64,7 @@ using namespace ::sd::slidesorter;
 #include <sdslots.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 using ::sd::framework::FrameworkHelper;
 using ::vcl::EnumContext;
@@ -269,7 +269,7 @@ SlideSorterViewShell::CreateAccessibleDocumentView(::sd::Window* pWindow)
     return pAccessibleView;
 }
 
-void SlideSorterViewShell::SwitchViewFireFocus(const css::uno::Reference< css::accessibility::XAccessible >& xAcc )
+void SlideSorterViewShell::SwitchViewFireFocus(const cpo::uno::Reference< css::accessibility::XAccessible >& xAcc )
 {
     if (xAcc)
     {

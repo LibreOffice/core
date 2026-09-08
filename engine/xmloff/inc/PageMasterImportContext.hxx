@@ -41,14 +41,14 @@ public:
             bool bDefaultStyle);
     virtual ~PageStyleContext() override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
     // don't call this
     virtual void FillPropertySet(
-            const css::uno::Reference< css::beans::XPropertySet > & rPropSet ) override;
+            const cpo::uno::Reference< css::beans::XPropertySet > & rPropSet ) override;
     void FillPropertySet_PageStyle(
-            const css::uno::Reference< css::beans::XPropertySet > & rPropSet,
+            const cpo::uno::Reference< css::beans::XPropertySet > & rPropSet,
             XMLPropStyleContext * pDrawingPageStyle);
 
     //text grid enhancement

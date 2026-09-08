@@ -89,8 +89,8 @@ OUString OrcusFormatDetect::detect(cpo::uno::Sequence<css::beans::PropertyValue>
     else
         return OUString();
 
-    css::uno::Reference<css::io::XInputStream> xInputStream(
-        aMediaDescriptor[utl::MediaDescriptor::PROP_INPUTSTREAM], css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::io::XInputStream> xInputStream(
+        aMediaDescriptor[utl::MediaDescriptor::PROP_INPUTSTREAM], cpo::uno::UNO_QUERY);
 
     CopiedTempStream aTemp(xInputStream);
     auto aContent = toFileContent(aTemp.getFileName());

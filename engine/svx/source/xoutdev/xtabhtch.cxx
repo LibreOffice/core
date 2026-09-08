@@ -37,6 +37,7 @@
 #include <memory>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 XHatchList::XHatchList(const OUString& rPath, const OUString& rReferer)
   : XPropertyList( XPropertyListType::Hatch, rPath, rReferer )

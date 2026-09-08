@@ -22,7 +22,7 @@
 // Only used for logging
 void setErrorRecorder();
 //ToDo
-//void setErrorRecorder(const css::uno::Reference< css::xml::crypto::XXMLEncryptionTemplate >& xTemplate);
+//void setErrorRecorder(const cpo::uno::Reference< css::xml::crypto::XXMLEncryptionTemplate >& xTemplate);
 void clearErrorRecorder();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -42,7 +42,7 @@
 #endif
 
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::cpo::uno;
 
 namespace
@@ -589,7 +589,7 @@ void unoInterfaceProxyDispatch(
       {
         ::cpo::uno::RuntimeException aExc(
             "illegal member type description!",
-            ::com::sun::star::uno::Reference< ::cpo::uno::XInterface >() );
+            ::cpo::uno::Reference< ::cpo::uno::XInterface >() );
 
         Type const & rExcType = cppu::UnoType<decltype(aExc)>::get();
         // binary identical null reference

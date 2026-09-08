@@ -35,6 +35,7 @@
 #include "vbafont.hxx"
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace ::ooo::vba;
 
 constexpr OUString gaListenerType = u"XActionListener"_ustr;

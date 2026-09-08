@@ -39,6 +39,7 @@
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 ScVbaComment::ScVbaComment(
         const uno::Reference< XHelperInterface >& xParent,

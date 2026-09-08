@@ -56,8 +56,8 @@
 #include <xmloff/table/XMLTableImport.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
 
@@ -68,14 +68,14 @@ class SdXMLDrawingPagePropertySetContext : public SvXMLPropertySetContext
 public:
 
     SdXMLDrawingPagePropertySetContext( SvXMLImport& rImport, sal_Int32 nElement,
-                 const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+                 const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
                  ::std::vector< XMLPropertyState > &rProps,
                  SvXMLImportPropertyMapper* pMap );
 
     using SvXMLPropertySetContext::createFastChildContext;
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
         ::std::vector< XMLPropertyState > &rProperties,
         const XMLPropertyState& rProp ) override;
 };
@@ -91,9 +91,9 @@ SdXMLDrawingPagePropertySetContext::SdXMLDrawingPagePropertySetContext(
 {
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLDrawingPagePropertySetContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLDrawingPagePropertySetContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
     ::std::vector< XMLPropertyState > &rProperties,
     const XMLPropertyState& rProp )
 {
@@ -132,8 +132,8 @@ public:
         SvXMLImport& rImport,
         SvXMLStylesContext& rStyles);
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
     virtual void Finish( bool bOverwrite ) override;
 };
@@ -184,9 +184,9 @@ SdXMLDrawingPageStyleContext::SdXMLDrawingPageStyleContext(
 {
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLDrawingPageStyleContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLDrawingPageStyleContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     if( nElement == XML_ELEMENT(STYLE, XML_DRAWING_PAGE_PROPERTIES) )
     {
@@ -384,9 +384,9 @@ SdXMLPageMasterContext::SdXMLPageMasterContext(
 
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLPageMasterContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLPageMasterContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     if(nElement == XML_ELEMENT(STYLE, XML_PAGE_LAYOUT_PROPERTIES))
     {
@@ -411,9 +411,9 @@ SdXMLPresentationPageLayoutContext::SdXMLPresentationPageLayoutContext(
     // for differences in search-methods
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLPresentationPageLayoutContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLPresentationPageLayoutContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContextRef xContext;
 
@@ -902,9 +902,9 @@ void SdXMLMasterPageContext::endFastElement(sal_Int32 nElement)
     GetImport().GetShapeImport()->endPage(GetLocalShapesContext());
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLMasterPageContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLMasterPageContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     switch (nElement)
     {
@@ -1410,9 +1410,9 @@ SdXMLMasterStylesContext::SdXMLMasterStylesContext(
 {
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLMasterStylesContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLMasterStylesContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     if( nElement == XML_ELEMENT(DRAW, XML_LAYER_SET) )
     {
@@ -1461,7 +1461,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLMasterStylesConte
 }
 
 SdXMLHeaderFooterDeclContext::SdXMLHeaderFooterDeclContext(SvXMLImport& rImport,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
     : SvXMLStyleContext( rImport )
     , mbFixed(false)
 {
@@ -1521,7 +1521,7 @@ void SdXMLHeaderFooterDeclContext::characters( const OUString& rChars )
 namespace xmloff {
 
 bool IsIgnoreFillStyleNamedItem(
-        css::uno::Reference<css::beans::XPropertySet> const& xProps,
+        cpo::uno::Reference<css::beans::XPropertySet> const& xProps,
         drawing::FillStyle const nExpectedFillStyle)
 {
     assert(xProps.is());

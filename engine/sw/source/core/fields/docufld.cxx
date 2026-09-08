@@ -96,8 +96,8 @@
 #define URL_DECODE  INetURLObject::DecodeMechanism::Unambiguous
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 SwPageNumberFieldType::SwPageNumberFieldType()
     : SwFieldType( SwFieldIds::PageNumber ),

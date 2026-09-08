@@ -47,7 +47,7 @@
 
 
 using namespace com::sun::star;
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace css::loader;
 using namespace css::beans;

@@ -29,10 +29,10 @@ class ScVbaCondition : public InheritedHelperInterfaceWeakImpl< Ifc... >
 {
 typedef InheritedHelperInterfaceWeakImpl< Ifc... > ScVbaCondition_BASE;
 protected:
-    css::uno::Reference< css::sheet::XCellRangeAddressable > mxAddressable;
-    css::uno::Reference< css::sheet::XSheetCondition > mxSheetCondition;
+    cpo::uno::Reference< css::sheet::XCellRangeAddressable > mxAddressable;
+    cpo::uno::Reference< css::sheet::XSheetCondition > mxSheetCondition;
 public:
-    ScVbaCondition(  const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext > & xContext, css::uno::Reference< css::sheet::XSheetCondition >  _xSheetCondition );
+    ScVbaCondition(  const cpo::uno::Reference< ov::XHelperInterface >& xParent, const cpo::uno::Reference< cpo::uno::XComponentContext > & xContext, cpo::uno::Reference< css::sheet::XSheetCondition >  _xSheetCondition );
 
     /// @throws css::script::BasicErrorException
     static css::sheet::ConditionOperator retrieveAPIOperator( const cpo::uno::Any& _aOperator);

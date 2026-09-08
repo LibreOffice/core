@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_MNEMONIC_HXX
 #define INCLUDED_VCL_MNEMONIC_HXX
 
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <rtl/ustring.hxx>
 #include <vcl/dllapi.h>
 
@@ -56,7 +56,7 @@ class VCL_DLLPUBLIC MnemonicGenerator
     sal_Unicode m_cMnemonic;
     // 0 == Mnemonic; >0 == count of characters
     sal_uInt8               maMnemonics[MAX_MNEMONICS];
-    css::uno::Reference< css::i18n::XCharacterClassification > mxCharClass;
+    cpo::uno::Reference< css::i18n::XCharacterClassification > mxCharClass;
 
     SAL_DLLPRIVATE static sal_uInt16 ImplGetMnemonicIndex( sal_Unicode c );
     SAL_DLLPRIVATE sal_Unicode ImplFindMnemonic( const OUString& rKey );
@@ -69,7 +69,7 @@ public:
 
     void                RegisterMnemonic( const OUString& rKey );
     [[nodiscard]] OUString CreateMnemonic(const OUString& rKey);
-    css::uno::Reference< css::i18n::XCharacterClassification > const & GetCharClass();
+    cpo::uno::Reference< css::i18n::XCharacterClassification > const & GetCharClass();
 
     // returns a string where all '~'-characters and CJK mnemonics of the form (~A) are completely removed
     static OUString EraseAllMnemonicChars( const OUString& rStr );

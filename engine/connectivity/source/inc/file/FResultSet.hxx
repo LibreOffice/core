@@ -96,10 +96,10 @@ namespace connectivity::file
         sal_Int32                               m_nFetchDirection;
         sal_Int32                               m_nResultSetConcurrency;
 
-        css::uno::Reference< cpo::uno::XInterface>            m_xStatement;
+        cpo::uno::Reference< cpo::uno::XInterface>            m_xStatement;
         rtl::Reference< OResultSetMetaData>                   m_xMetaData;
-        css::uno::Reference< css::container::XNameAccess>     m_xColNames; // table columns
-        css::uno::Reference< css::container::XIndexAccess>    m_xColsIdx; // table columns
+        cpo::uno::Reference< css::container::XNameAccess>     m_xColNames; // table columns
+        cpo::uno::Reference< css::container::XIndexAccess>    m_xColsIdx; // table columns
 
 
         sal_Int32                               m_nRowPos;
@@ -147,7 +147,7 @@ namespace connectivity::file
         using OResultSet_BASE::rBHelper;
 
         bool Move(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOffset, bool bRetrieveData);
-        virtual bool fillIndexValues(const css::uno::Reference< css::sdbcx::XColumnsSupplier> &_xIndex);
+        virtual bool fillIndexValues(const cpo::uno::Reference< css::sdbcx::XColumnsSupplier> &_xIndex);
 
         // OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
@@ -169,7 +169,7 @@ namespace connectivity::file
         //XTypeProvider
         virtual cpo::uno::Sequence< cpo::uno::Type > getTypes(  ) override;
         // XPropertySet
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+        virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
         // XResultSet
         virtual bool next(  ) override;
         virtual bool isBeforeFirst(  ) override;
@@ -188,7 +188,7 @@ namespace connectivity::file
         virtual bool rowUpdated(  ) override;
         virtual bool rowInserted(  ) override;
         virtual bool rowDeleted(  ) override;
-        virtual css::uno::Reference< cpo::uno::XInterface > getStatement(  ) override;
+        virtual cpo::uno::Reference< cpo::uno::XInterface > getStatement(  ) override;
         // XRow
         virtual bool wasNull(  ) override;
         virtual OUString getString( sal_Int32 columnIndex ) override;
@@ -203,15 +203,15 @@ namespace connectivity::file
         virtual css::util::Date getDate( sal_Int32 columnIndex ) override;
         virtual css::util::Time getTime( sal_Int32 columnIndex ) override;
         virtual css::util::DateTime getTimestamp( sal_Int32 columnIndex ) override;
-        virtual css::uno::Reference< css::io::XInputStream > getBinaryStream( sal_Int32 columnIndex ) override;
-        virtual css::uno::Reference< css::io::XInputStream > getCharacterStream( sal_Int32 columnIndex ) override;
-        virtual cpo::uno::Any getObject( sal_Int32 columnIndex, const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
-        virtual css::uno::Reference< css::sdbc::XRef > getRef( sal_Int32 columnIndex ) override;
-        virtual css::uno::Reference< css::sdbc::XBlob > getBlob( sal_Int32 columnIndex ) override;
-        virtual css::uno::Reference< css::sdbc::XClob > getClob( sal_Int32 columnIndex ) override;
-        virtual css::uno::Reference< css::sdbc::XArray > getArray( sal_Int32 columnIndex ) override;
+        virtual cpo::uno::Reference< css::io::XInputStream > getBinaryStream( sal_Int32 columnIndex ) override;
+        virtual cpo::uno::Reference< css::io::XInputStream > getCharacterStream( sal_Int32 columnIndex ) override;
+        virtual cpo::uno::Any getObject( sal_Int32 columnIndex, const cpo::uno::Reference< css::container::XNameAccess >& typeMap ) override;
+        virtual cpo::uno::Reference< css::sdbc::XRef > getRef( sal_Int32 columnIndex ) override;
+        virtual cpo::uno::Reference< css::sdbc::XBlob > getBlob( sal_Int32 columnIndex ) override;
+        virtual cpo::uno::Reference< css::sdbc::XClob > getClob( sal_Int32 columnIndex ) override;
+        virtual cpo::uno::Reference< css::sdbc::XArray > getArray( sal_Int32 columnIndex ) override;
         // XResultSetMetaDataSupplier
-        virtual css::uno::Reference< css::sdbc::XResultSetMetaData > getMetaData(  ) override;
+        virtual cpo::uno::Reference< css::sdbc::XResultSetMetaData > getMetaData(  ) override;
         // XCancellable
         virtual void cancel(  ) override;
         // XCloseable
@@ -240,8 +240,8 @@ namespace connectivity::file
         virtual void updateDate( sal_Int32 columnIndex, const css::util::Date& x ) override;
         virtual void updateTime( sal_Int32 columnIndex, const css::util::Time& x ) override;
         virtual void updateTimestamp( sal_Int32 columnIndex, const css::util::DateTime& x ) override;
-        virtual void updateBinaryStream( sal_Int32 columnIndex, const css::uno::Reference< css::io::XInputStream >& x, sal_Int32 length ) override;
-        virtual void updateCharacterStream( sal_Int32 columnIndex, const css::uno::Reference< css::io::XInputStream >& x, sal_Int32 length ) override;
+        virtual void updateBinaryStream( sal_Int32 columnIndex, const cpo::uno::Reference< css::io::XInputStream >& x, sal_Int32 length ) override;
+        virtual void updateCharacterStream( sal_Int32 columnIndex, const cpo::uno::Reference< css::io::XInputStream >& x, sal_Int32 length ) override;
         virtual void updateObject( sal_Int32 columnIndex, const cpo::uno::Any& x ) override;
         virtual void updateNumericObject( sal_Int32 columnIndex, const cpo::uno::Any& x, sal_Int32 scale ) override;
         // XColumnLocate
@@ -273,9 +273,9 @@ namespace connectivity::file
         static void setBoundedColumns(const OValueRefRow& _rRow,
                                 const OValueRefRow& _rSelectRow,
                                 const ::rtl::Reference<connectivity::OSQLColumns>& _rxColumns,
-                                const css::uno::Reference< css::container::XIndexAccess>& _xNames,
+                                const cpo::uno::Reference< css::container::XIndexAccess>& _xNames,
                                 bool _bSetColumnMapping,
-                                const css::uno::Reference< css::sdbc::XDatabaseMetaData>& _xMetaData,
+                                const cpo::uno::Reference< css::sdbc::XDatabaseMetaData>& _xMetaData,
                                 std::vector<sal_Int32>& _rColMapping);
 
         // IResultSetHelper

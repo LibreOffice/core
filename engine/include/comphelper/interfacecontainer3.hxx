@@ -69,7 +69,7 @@ public:
     /** Return the next element of the iterator. Calling this method if
         hasMoreElements() has returned false, is an error.
      */
-    css::uno::Reference<ListenerT> const& next();
+    cpo::uno::Reference<ListenerT> const& next();
 
     /** Removes the current element (the last one returned by next())
         from the underlying container. Calling this method before
@@ -80,7 +80,7 @@ public:
 
 private:
     OInterfaceContainerHelper3<ListenerT>& rCont;
-    o3tl::cow_wrapper<std::vector<css::uno::Reference<ListenerT>>,
+    o3tl::cow_wrapper<std::vector<cpo::uno::Reference<ListenerT>>,
                       o3tl::ThreadSafeRefCountingPolicy>
         maData;
     sal_Int32 nRemain;
@@ -90,7 +90,7 @@ private:
 };
 
 template <class ListenerT>
-const css::uno::Reference<ListenerT>& OInterfaceIteratorHelper3<ListenerT>::next()
+const cpo::uno::Reference<ListenerT>& OInterfaceIteratorHelper3<ListenerT>::next()
 {
     nRemain--;
     return (*std::as_const(maData))[nRemain];
@@ -134,7 +134,7 @@ public:
     /**
       Return all interfaces added to this container.
      **/
-    std::vector<css::uno::Reference<ListenerT>> getElements() const;
+    std::vector<cpo::uno::Reference<ListenerT>> getElements() const;
 
     /** Inserts an element into the container.  The position is not specified, thus it is not
         specified in which order events are fired.
@@ -152,7 +152,7 @@ public:
         @return
                 the new count of elements in the container
     */
-    sal_Int32 addInterface(const css::uno::Reference<ListenerT>& rxIFace);
+    sal_Int32 addInterface(const cpo::uno::Reference<ListenerT>& rxIFace);
     /** Removes an element from the container.  It uses interface equality to remove the interface.
 
         @param rxIFace
@@ -160,10 +160,10 @@ public:
         @return
                 the new count of elements in the container
     */
-    sal_Int32 removeInterface(const css::uno::Reference<ListenerT>& rxIFace);
+    sal_Int32 removeInterface(const cpo::uno::Reference<ListenerT>& rxIFace);
     /** Return an interface by index
     */
-    const css::uno::Reference<ListenerT>& getInterface(sal_Int32 nIndex) const;
+    const cpo::uno::Reference<ListenerT>& getInterface(sal_Int32 nIndex) const;
     /**
       Call disposing on all object in the container that
       support XEventListener. Then clear the container.
@@ -182,7 +182,7 @@ public:
 
         @tparam FuncT unary functor type, let your compiler deduce this for you
         @param func unary functor object expecting an argument of type
-                    css::uno::Reference<ListenerT>
+                    cpo::uno::Reference<ListenerT>
     */
     template <typename FuncT> inline void forEach(FuncT const& func);
 
@@ -212,18 +212,18 @@ public:
 
 private:
     friend class OInterfaceIteratorHelper3<ListenerT>;
-    o3tl::cow_wrapper<std::vector<css::uno::Reference<ListenerT>>,
+    o3tl::cow_wrapper<std::vector<cpo::uno::Reference<ListenerT>>,
                       o3tl::ThreadSafeRefCountingPolicy>
         maData;
     ::osl::Mutex& mrMutex;
     OInterfaceContainerHelper3(const OInterfaceContainerHelper3&) = delete;
     OInterfaceContainerHelper3& operator=(const OInterfaceContainerHelper3&) = delete;
 
-    static o3tl::cow_wrapper<std::vector<css::uno::Reference<ListenerT>>,
+    static o3tl::cow_wrapper<std::vector<cpo::uno::Reference<ListenerT>>,
                              o3tl::ThreadSafeRefCountingPolicy>&
     DEFAULT()
     {
-        static o3tl::cow_wrapper<std::vector<css::uno::Reference<ListenerT>>,
+        static o3tl::cow_wrapper<std::vector<cpo::uno::Reference<ListenerT>>,
                                  o3tl::ThreadSafeRefCountingPolicy>
             SINGLETON;
         return SINGLETON;
@@ -244,7 +244,7 @@ private:
         {
         }
 
-        void operator()(const css::uno::Reference<ListenerT>& listener) const
+        void operator()(const cpo::uno::Reference<ListenerT>& listener) const
         {
             (listener.get()->*m_pMethod)(m_rEvent);
         }
@@ -297,10 +297,10 @@ template <class ListenerT> sal_Int32 OInterfaceContainerHelper3<ListenerT>::getL
 }
 
 template <class ListenerT>
-std::vector<css::uno::Reference<ListenerT>>
+std::vector<cpo::uno::Reference<ListenerT>>
 OInterfaceContainerHelper3<ListenerT>::getElements() const
 {
-    std::vector<css::uno::Reference<ListenerT>> rVec;
+    std::vector<cpo::uno::Reference<ListenerT>> rVec;
     osl::MutexGuard aGuard(mrMutex);
     rVec = *maData;
     return rVec;
@@ -308,7 +308,7 @@ OInterfaceContainerHelper3<ListenerT>::getElements() const
 
 template <class ListenerT>
 sal_Int32
-OInterfaceContainerHelper3<ListenerT>::addInterface(const css::uno::Reference<ListenerT>& rListener)
+OInterfaceContainerHelper3<ListenerT>::addInterface(const cpo::uno::Reference<ListenerT>& rListener)
 {
     assert(rListener.is());
     osl::MutexGuard aGuard(mrMutex);
@@ -319,14 +319,14 @@ OInterfaceContainerHelper3<ListenerT>::addInterface(const css::uno::Reference<Li
 
 template <class ListenerT>
 sal_Int32 OInterfaceContainerHelper3<ListenerT>::removeInterface(
-    const css::uno::Reference<ListenerT>& rListener)
+    const cpo::uno::Reference<ListenerT>& rListener)
 {
     assert(rListener.is());
     osl::MutexGuard aGuard(mrMutex);
 
     // It is not valid to compare the pointer directly, but it's faster.
     auto it = std::find_if(maData->begin(), maData->end(),
-                           [&rListener](const css::uno::Reference<cpo::uno::XInterface>& rItem) {
+                           [&rListener](const cpo::uno::Reference<cpo::uno::XInterface>& rItem) {
                                return rItem.get() == rListener.get();
                            });
 
@@ -341,7 +341,7 @@ sal_Int32 OInterfaceContainerHelper3<ListenerT>::removeInterface(
 }
 
 template <class ListenerT>
-const css::uno::Reference<ListenerT>&
+const cpo::uno::Reference<ListenerT>&
 OInterfaceContainerHelper3<ListenerT>::getInterface(sal_Int32 nIndex) const
 {
     osl::MutexGuard aGuard(mrMutex);

@@ -36,6 +36,7 @@
 namespace chart
 {
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 CreationWizardUnoDlg::CreationWizardUnoDlg(uno::Reference<cpo::uno::XComponentContext> xContext)
     : OComponentHelper(m_aMutex)
@@ -188,7 +189,7 @@ IMPL_STATIC_LINK_NOARG(CreationWizardUnoDlg, InstallKitNotifierHdl, void*, vcl::
     return SfxViewShell::Current();
 }
 
-void CreationWizardUnoDlg::startExecuteModal( const css::uno::Reference<css::ui::dialogs::XDialogClosedListener>& xListener )
+void CreationWizardUnoDlg::startExecuteModal( const cpo::uno::Reference<css::ui::dialogs::XDialogClosedListener>& xListener )
 {
     SolarMutexGuard aSolarGuard;
     createDialogOnDemand();
@@ -207,7 +208,7 @@ void CreationWizardUnoDlg::startExecuteModal( const css::uno::Reference<css::ui:
     weld::DialogController::runAsync(m_xDialog, [xListener, xThat](sal_Int32 nResult){
             if( xListener.is() )
             {
-                ::css::uno::Reference< ::cpo::uno::XInterface > xSource;
+                ::cpo::uno::Reference< ::cpo::uno::XInterface > xSource;
                 // Notify UNO listener to perform correct action depending on the result
                 css::ui::dialogs::DialogClosedEvent aEvent( xSource, nResult );
                 xListener->dialogClosed( aEvent );

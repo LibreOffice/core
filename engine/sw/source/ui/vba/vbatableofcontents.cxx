@@ -23,6 +23,7 @@
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 SwVbaTableOfContents::SwVbaTableOfContents( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< cpo::uno::XComponentContext >& rContext, uno::Reference< text::XTextDocument >  xDoc, uno::Reference< text::XDocumentIndex >  xDocumentIndex ) :
     SwVbaTableOfContents_BASE( rParent, rContext ), mxTextDocument(std::move( xDoc )), mxDocumentIndex(std::move( xDocumentIndex ))

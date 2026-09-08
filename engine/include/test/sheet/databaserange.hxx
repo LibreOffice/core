@@ -11,7 +11,7 @@
 #define INCLUDED_TEST_SHEET_DATABASERANGE_HXX
 
 #include <cpo/uno/XInterface.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <test/testdllapi.hxx>
 
 namespace apitest
@@ -19,7 +19,7 @@ namespace apitest
 class OOO_DLLPUBLIC_TEST DatabaseRange
 {
 public:
-    virtual css::uno::Reference<cpo::uno::XInterface> init(const OUString& rDBName) = 0;
+    virtual cpo::uno::Reference<cpo::uno::XInterface> init(const OUString& rDBName) = 0;
 
     void testMoveCells();
     void testKeepFormats();

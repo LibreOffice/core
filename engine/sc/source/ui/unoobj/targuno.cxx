@@ -47,6 +47,7 @@
 #include <algorithm>
 
 using  namespace ::com::sun::star;
+using namespace ::cpo;
 
 const TranslateId aTypeResIds[SC_LINKTARGETTYPE_COUNT] =
 {

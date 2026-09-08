@@ -69,13 +69,13 @@ struct DispatchInfo
 {
     css::util::URL                                  TargetURL;
     cpo::uno::Sequence< css::beans::PropertyValue > Arguments;
-    css::uno::Reference< css::frame::XDispatch >    Dispatch;
+    cpo::uno::Reference< css::frame::XDispatch >    Dispatch;
 };
 
 struct CommandInfo
 {
     css::util::URL                               URL;
-    css::uno::Reference< css::frame::XDispatch > Dispatch;
+    cpo::uno::Reference< css::frame::XDispatch > Dispatch;
 
     explicit CommandInfo( const OUString &rURL )
     {
@@ -175,7 +175,7 @@ GalleryBrowser::GalleryBrowser(
     m_xTransformer.set(
         m_xContext->getServiceManager()->createInstanceWithContext(
             u"com.sun.star.util.URLTransformer"_ustr, m_xContext ),
-        css::uno::UNO_QUERY );
+        cpo::uno::UNO_QUERY );
 
     mxIconButton->connect_toggled( LINK( this, GalleryBrowser, SelectTbxHdl ) );
     mxListButton->connect_toggled( LINK( this, GalleryBrowser, SelectTbxHdl ) );
@@ -737,7 +737,7 @@ bool GalleryBrowser::ShowContextMenu(const CommandEvent& rCEvt)
 
     ImplSelectItemId( nItemId );
 
-    css::uno::Reference< css::frame::XFrame > xFrame( GetFrame() );
+    cpo::uno::Reference< css::frame::XFrame > xFrame( GetFrame() );
     if ( !xFrame.is() )
         return false;
 
@@ -803,7 +803,7 @@ bool GalleryBrowser::KeyInput(const KeyEvent& rKEvt)
                 // Inserting a gallery item in the document must be dispatched
                 if( bValidURL )
                 {
-                    DispatchAdd(css::uno::Reference<css::frame::XDispatch>(), css::util::URL());
+                    DispatchAdd(cpo::uno::Reference<css::frame::XDispatch>(), css::util::URL());
                     return true;
                 }
             }
@@ -1251,10 +1251,10 @@ void GalleryBrowser::ImplSelectItemId(sal_uInt32 nItemId)
     }
 }
 
-css::uno::Reference< css::frame::XFrame >
+cpo::uno::Reference< css::frame::XFrame >
 GalleryBrowser::GetFrame()
 {
-    css::uno::Reference< css::frame::XFrame > xFrame;
+    cpo::uno::Reference< css::frame::XFrame > xFrame;
     SfxViewFrame* pCurrentViewFrame = SfxViewFrame::Current();
     if ( pCurrentViewFrame )
     {
@@ -1266,7 +1266,7 @@ GalleryBrowser::GetFrame()
 }
 
 void GalleryBrowser::DispatchAdd(
-    const css::uno::Reference< css::frame::XDispatch > &rxDispatch,
+    const cpo::uno::Reference< css::frame::XDispatch > &rxDispatch,
     const css::util::URL &rURL)
 {
     Point aSelPos;
@@ -1277,13 +1277,13 @@ void GalleryBrowser::DispatchAdd(
 
     mnCurActionPos = nItemId - 1;
 
-    css::uno::Reference< css::frame::XDispatch > xDispatch( rxDispatch );
+    cpo::uno::Reference< css::frame::XDispatch > xDispatch( rxDispatch );
     css::util::URL aURL = rURL;
 
     if ( !xDispatch.is() )
     {
-        css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider(
-            GetFrame(), css::uno::UNO_QUERY );
+        cpo::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider(
+            GetFrame(), cpo::uno::UNO_QUERY );
         if ( !xDispatchProvider.is() || !m_xTransformer.is() )
             return;
 
@@ -1300,8 +1300,8 @@ void GalleryBrowser::DispatchAdd(
 
     sal_Int8 nType = 0;
     OUString aFilterName;
-    css::uno::Reference< css::lang::XComponent > xDrawing;
-    css::uno::Reference< css::graphic::XGraphic > xGraphic;
+    cpo::uno::Reference< css::lang::XComponent > xDrawing;
+    cpo::uno::Reference< css::graphic::XGraphic > xGraphic;
 
     aFilterName = GetFilterName();
 
@@ -1675,7 +1675,7 @@ void GalleryThemePopup::Execute(
 
 void GalleryThemePopup::ExecutePopup(weld::Widget* pParent, const ::Point &rPos)
 {
-    css::uno::Reference< css::frame::XStatusListener > xThis( this );
+    cpo::uno::Reference< css::frame::XStatusListener > xThis( this );
 
     const SgaObjKind eObjKind = mpTheme->GetObjectKind( mnObjectPos );
     INetURLObject    aURL;
@@ -1707,9 +1707,9 @@ void GalleryThemePopup::ExecutePopup(weld::Widget* pParent, const ::Point &rPos)
     }
 
     // update status
-    css::uno::Reference< css::frame::XDispatchProvider> xDispatchProvider(
-        GalleryBrowser::GetFrame(), css::uno::UNO_QUERY );
-    css::uno::Reference< css::util::XURLTransformer > xTransformer(
+    cpo::uno::Reference< css::frame::XDispatchProvider> xDispatchProvider(
+        GalleryBrowser::GetFrame(), cpo::uno::UNO_QUERY );
+    cpo::uno::Reference< css::util::XURLTransformer > xTransformer(
         mpBrowser->GetURLTransformer() );
     for ( auto& rInfo : m_aCommandInfo )
     {

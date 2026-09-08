@@ -77,8 +77,8 @@
 
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::table;
@@ -333,7 +333,7 @@ public:
             const Reference< xml::sax::XFastAttributeList > & xAttrList,
             SwXMLTableContext *pTable );
 
-    virtual css::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
+    virtual cpo::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
             sal_Int32 nElement,
             const Reference< xml::sax::XFastAttributeList > & xAttrList ) override;
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
@@ -532,7 +532,7 @@ inline void SwXMLTableCellContext_Impl::InsertContent(
     m_bHasTableContent = true;
 }
 
-css::uno::Reference<css::xml::sax::XFastContextHandler> SwXMLTableCellContext_Impl::createFastChildContext(
+cpo::uno::Reference<css::xml::sax::XFastContextHandler> SwXMLTableCellContext_Impl::createFastChildContext(
         sal_Int32 nElement,
         const Reference< xml::sax::XFastAttributeList > & xAttrList )
 {
@@ -730,8 +730,8 @@ public:
             SwXMLImport& rImport,
             SwXMLTableContext *pTable );
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
-        sal_Int32 Element, const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 Element, const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
 
     SwXMLImport& GetSwImport() { return static_cast<SwXMLImport&>(GetImport()); }
 };
@@ -746,8 +746,8 @@ SwXMLTableColsContext_Impl::SwXMLTableColsContext_Impl(
 {
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SwXMLTableColsContext_Impl::createFastChildContext(
-    sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList )
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SwXMLTableColsContext_Impl::createFastChildContext(
+    sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
 
@@ -777,7 +777,7 @@ public:
             const Reference< xml::sax::XFastAttributeList > & xAttrList,
             SwXMLTableContext *pTable, bool bInHead=false );
 
-    virtual css::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL createFastChildContext( sal_Int32 nElement,
+    virtual cpo::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL createFastChildContext( sal_Int32 nElement,
             const Reference< xml::sax::XFastAttributeList > & xAttrList ) override;
 
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
@@ -839,7 +839,7 @@ void SwXMLTableRowContext_Impl::endFastElement(sal_Int32 )
     }
 }
 
-css::uno::Reference<css::xml::sax::XFastContextHandler> SwXMLTableRowContext_Impl::createFastChildContext(
+cpo::uno::Reference<css::xml::sax::XFastContextHandler> SwXMLTableRowContext_Impl::createFastChildContext(
         sal_Int32 nElement,
         const Reference< xml::sax::XFastAttributeList > & xAttrList )
 {
@@ -887,7 +887,7 @@ public:
             SwXMLTableContext *pTable,
             bool bHead );
 
-    virtual css::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
+    virtual cpo::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
             sal_Int32 nElement,
             const Reference< xml::sax::XFastAttributeList > & xAttrList ) override;
 
@@ -905,7 +905,7 @@ SwXMLTableRowsContext_Impl::SwXMLTableRowsContext_Impl( SwXMLImport& rImport,
 {
 }
 
-css::uno::Reference<css::xml::sax::XFastContextHandler> SwXMLTableRowsContext_Impl::createFastChildContext(
+cpo::uno::Reference<css::xml::sax::XFastContextHandler> SwXMLTableRowsContext_Impl::createFastChildContext(
     sal_Int32 nElement,
     const Reference< xml::sax::XFastAttributeList > & xAttrList )
 {
@@ -1319,7 +1319,7 @@ SwXMLTableContext::~SwXMLTableContext()
     GetImport().GetTextImport()->RedlineAdjustStartNodeCursor();
 }
 
-css::uno::Reference<css::xml::sax::XFastContextHandler> SwXMLTableContext::createFastChildContext(
+cpo::uno::Reference<css::xml::sax::XFastContextHandler> SwXMLTableContext::createFastChildContext(
     sal_Int32 nElement,
     const Reference< xml::sax::XFastAttributeList > & xAttrList )
 {

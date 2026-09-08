@@ -40,10 +40,11 @@
 #include <com/sun/star/util/XSortable.hpp>
 
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 namespace sc_apitest
 {

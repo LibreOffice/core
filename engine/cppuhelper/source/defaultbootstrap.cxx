@@ -13,7 +13,7 @@
 
 #include <cpo/uno/DeploymentException.hpp>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/component_context.hxx>
@@ -44,7 +44,7 @@ OUString getBootstrapVariable(
 
 }
 
-css::uno::Reference< cpo::uno::XComponentContext >
+cpo::uno::Reference< cpo::uno::XComponentContext >
 cppu::defaultBootstrap_InitialComponentContext(OUString const & iniUri)
 {
     rtl::Bootstrap bs(iniUri);
@@ -62,13 +62,13 @@ cppu::defaultBootstrap_InitialComponentContext(OUString const & iniUri)
         cppu::ContextEntry_Init(
             u"/singletons/com.sun.star.lang.theServiceManager"_ustr,
             cpo::uno::Any(
-                css::uno::Reference< cpo::uno::XInterface >(
+                cpo::uno::Reference< cpo::uno::XInterface >(
                     static_cast< cppu::OWeakObject * >(smgr.get()))),
             false),
         cppu::ContextEntry_Init(
             u"/singletons/com.sun.star.reflection.theTypeDescriptionManager"_ustr,
             cpo::uno::Any(
-                css::uno::Reference< cpo::uno::XInterface >(
+                cpo::uno::Reference< cpo::uno::XInterface >(
                     static_cast< cppu::OWeakObject * >(tmgr.get()))),
             false),
         cppu::ContextEntry_Init( //TODO: from services.rdb?
@@ -78,14 +78,14 @@ cppu::defaultBootstrap_InitialComponentContext(OUString const & iniUri)
             true)
     };
     smgr->addSingletonContextEntries(&context_values);
-    css::uno::Reference< cpo::uno::XComponentContext > context(
+    cpo::uno::Reference< cpo::uno::XComponentContext > context(
         createComponentContext(context_values.data(), context_values.size()));
     smgr->setContext(context);
     cppu::installTypeDescriptionManager(tmgr);
     return context;
 }
 
-css::uno::Reference< cpo::uno::XComponentContext >
+cpo::uno::Reference< cpo::uno::XComponentContext >
 cppu::defaultBootstrap_InitialComponentContext()
 {
     return defaultBootstrap_InitialComponentContext(getUnoIniUri());

@@ -37,10 +37,10 @@ namespace chart
 {
 
 using namespace com::sun::star;
-using namespace com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using ::cpo::uno::Any;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::cpo::uno::Sequence;
 
 SelectorListBox::SelectorListBox(vcl::Window* pParent)

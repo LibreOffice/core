@@ -61,7 +61,7 @@
 #include <svx/ColorSets.hxx>
 #include <comphelper/kit.hxx>
 #include <comphelper/string.hxx>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <com/sun/star/sheet/XCellRangeData.hpp>
 #include <sfx2/kit/helper.hxx>
 #include <scabstdlg.hxx>
@@ -74,6 +74,8 @@
 #include <svx/dialog/ThemeColorEditDialog.hxx>
 #include <svx/ColorSets.hxx>
 #include <dialogs/SelectSheetViewDialog.hxx>
+
+using namespace ::cpo;
 
 namespace
 {

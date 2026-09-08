@@ -24,7 +24,7 @@
 #include <rtl/ref.hxx>
 #include <xmloff/dllapi.h>
 #include <rtl/ustring.hxx>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <xmloff/maptype.hxx>
 #include <xmloff/styleexp.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -116,8 +116,8 @@ class XMLOFF_DLLPUBLIC XMLTextParagraphExport : public XMLStyleExport
     std::vector<sal_Int32> maDocumentNodeOrder;
     bool bInDocumentNodeOrderCollection = false;
 
-    o3tl::sorted_vector<css::uno::Reference<css::text::XTextFrame>> maFrameRecurseGuard;
-    o3tl::sorted_vector<css::uno::Reference<css::drawing::XShape>> maShapeRecurseGuard;
+    o3tl::sorted_vector<cpo::uno::Reference<css::text::XTextFrame>> maFrameRecurseGuard;
+    o3tl::sorted_vector<cpo::uno::Reference<css::drawing::XShape>> maShapeRecurseGuard;
 
     bool mbCollected;
 
@@ -128,9 +128,9 @@ public:
 
 
     void exportTextRangeSpan(
-            const css::uno::Reference< css::text::XTextRange > & rTextRange,
-            css::uno::Reference< css::beans::XPropertySet > const & xPropSet,
-            css::uno::Reference < css::beans::XPropertySetInfo > & xPropSetInfo,
+            const cpo::uno::Reference< css::text::XTextRange > & rTextRange,
+            cpo::uno::Reference< css::beans::XPropertySet > const & xPropSet,
+            cpo::uno::Reference < css::beans::XPropertySetInfo > & xPropSetInfo,
             const bool bIsUICharStyle,
             const bool bHasAutoStyle,
             const OUString& sStyle,
@@ -192,125 +192,125 @@ public:
     }
 
     OUString FindTextStyle(
-            const css::uno::Reference< css::beans::XPropertySet > & rPropSet,
+            const cpo::uno::Reference< css::beans::XPropertySet > & rPropSet,
             bool& rbHasCharStyle,
             bool& rbHasAutoStyle,
             const XMLPropertyState** pAddState = nullptr,
             const OUString* pParentName = nullptr) const;
 
     void exportTextRangeEnumeration(
-        const css::uno::Reference< css::container::XEnumeration > & rRangeEnum,
+        const cpo::uno::Reference< css::container::XEnumeration > & rRangeEnum,
         bool bAutoStyles, bool bProgress, bool & rPrevCharIsSpace);
 
 protected:
 
     XMLShapeExportFlags addTextFrameAttributes(
-        const css::uno::Reference< css::beans::XPropertySet >& rPropSet,
+        const cpo::uno::Reference< css::beans::XPropertySet >& rPropSet,
         bool bShape,
         basegfx::B2DPoint* pCenter = nullptr,
         OUString *pMinHeightValue = nullptr,
         OUString *pMinWidthValue = nullptr );
 
     virtual void exportStyleAttributes(
-        const css::uno::Reference< css::style::XStyle > & rStyle ) override final;
+        const cpo::uno::Reference< css::style::XStyle > & rStyle ) override final;
 
     void exportPageFrames( bool bProgress );
     void exportFrameFrames( bool bAutoStyles, bool bProgress,
-            const css::uno::Reference< css::text::XTextFrame >& rParentTxtFrame );
+            const cpo::uno::Reference< css::text::XTextFrame >& rParentTxtFrame );
 
     void exportNumStyles( bool bUsed );
 
     void exportText(
-        const css::uno::Reference <
+        const cpo::uno::Reference <
             css::text::XText > & rText,
         bool bAutoStyles, bool bProgress, bool bExportParagraph, TextPNS eExtensionNS = TextPNS::ODF );
 
     void exportText(
-        const css::uno::Reference< css::text::XText > & rText,
-        const css::uno::Reference< css::text::XTextSection > & rBaseSection,
+        const cpo::uno::Reference< css::text::XText > & rText,
+        const cpo::uno::Reference< css::text::XTextSection > & rBaseSection,
         bool bAutoStyles, bool bProgress, bool bExportParagraph );
 
     void exportTextContentEnumeration(
-        const css::uno::Reference< css::container::XEnumeration > & rContentEnum,
+        const cpo::uno::Reference< css::container::XEnumeration > & rContentEnum,
         bool bAutoStyles,
-        const css::uno::Reference< css::text::XTextSection > & rBaseSection,
+        const cpo::uno::Reference< css::text::XTextSection > & rBaseSection,
         bool bProgress,
         bool bExportParagraph = true,
-        const css::uno::Reference< css::beans::XPropertySet > *pRangePropSet = nullptr,
+        const cpo::uno::Reference< css::beans::XPropertySet > *pRangePropSet = nullptr,
         TextPNS eExtensionNS = TextPNS::ODF);
     void exportParagraph(
-        const css::uno::Reference< css::text::XTextContent > & rTextContent,
+        const cpo::uno::Reference< css::text::XTextContent > & rTextContent,
         bool bAutoStyles, bool bProgress,
         bool bExportParagraph,
         MultiPropertySetHelper& rPropSetHelper,
         TextPNS eExtensionNS);
 
     virtual void exportTable(
-        const css::uno::Reference< css::text::XTextContent > & rTextContent,
+        const cpo::uno::Reference< css::text::XTextContent > & rTextContent,
         bool bAutoStyles, bool bProgress );
 
     void exportTextField(
-        const css::uno::Reference< css::text::XTextRange > & rTextRange,
+        const cpo::uno::Reference< css::text::XTextRange > & rTextRange,
         bool bAutoStyles, bool bProgress, bool * pPrevCharIsSpace);
 
     void exportTextField(
-        const css::uno::Reference< css::text::XTextField> & xTextField,
+        const cpo::uno::Reference< css::text::XTextField> & xTextField,
         const bool bAutoStyles, const bool bProgress,
         bool * pPrevCharIsSpace);
 
     void exportTextFieldStartEnd(
-        const css::uno::Reference< css::beans::XPropertySet > & xPropSet,
+        const cpo::uno::Reference< css::beans::XPropertySet > & xPropSet,
         const bool bAutoStyles);
 
     void exportAnyTextFrame(
-        const css::uno::Reference< css::text::XTextContent > & rTextContent,
+        const cpo::uno::Reference< css::text::XTextContent > & rTextContent,
         FrameType eTxpe,
         bool bAutoStyles, bool bProgress, bool bExportContent,
-        const css::uno::Reference< css::beans::XPropertySet > *pRangePropSet );
+        const cpo::uno::Reference< css::beans::XPropertySet > *pRangePropSet );
     void _exportTextFrame(
-        const css::uno::Reference< css::beans::XPropertySet > & rPropSet,
-        const css::uno::Reference< css::beans::XPropertySetInfo > & rPropSetInfo,
+        const cpo::uno::Reference< css::beans::XPropertySet > & rPropSet,
+        const cpo::uno::Reference< css::beans::XPropertySetInfo > & rPropSetInfo,
         bool bProgress );
     inline void exportTextFrame(
-        const css::uno::Reference< css::text::XTextContent > & rTextContent,
+        const cpo::uno::Reference< css::text::XTextContent > & rTextContent,
         bool bAutoStyles, bool bProgress, bool bExportContent,
-        const css::uno::Reference< css::beans::XPropertySet > *pRangePropSet = nullptr );
+        const cpo::uno::Reference< css::beans::XPropertySet > *pRangePropSet = nullptr );
     inline void exportShape(
-        const css::uno::Reference< css::text::XTextContent > & rTextContent,
+        const cpo::uno::Reference< css::text::XTextContent > & rTextContent,
         bool bAutoStyles,
-        const css::uno::Reference< css::beans::XPropertySet > *pRangePropSet = nullptr  );
+        const cpo::uno::Reference< css::beans::XPropertySet > *pRangePropSet = nullptr  );
 
     void exportContour(
-        const css::uno::Reference< css::beans::XPropertySet > & rPropSet,
-        const css::uno::Reference< css::beans::XPropertySetInfo > & rPropSetInfo );
+        const cpo::uno::Reference< css::beans::XPropertySet > & rPropSet,
+        const cpo::uno::Reference< css::beans::XPropertySetInfo > & rPropSetInfo );
     void _exportTextGraphic(
-        const css::uno::Reference< css::beans::XPropertySet > & rPropSet,
-        const css::uno::Reference< css::beans::XPropertySetInfo > & rPropSetInfo );
+        const cpo::uno::Reference< css::beans::XPropertySet > & rPropSet,
+        const cpo::uno::Reference< css::beans::XPropertySetInfo > & rPropSetInfo );
     inline void exportTextGraphic(
-        const css::uno::Reference< css::text::XTextContent > & rTextContent,
+        const cpo::uno::Reference< css::text::XTextContent > & rTextContent,
         bool bAutoStyles,
-        const css::uno::Reference< css::beans::XPropertySet > *pRangePropSet = nullptr  );
+        const cpo::uno::Reference< css::beans::XPropertySet > *pRangePropSet = nullptr  );
 
     virtual void _collectTextEmbeddedAutoStyles(
-        const css::uno::Reference< css::beans::XPropertySet > & rPropSet );
+        const cpo::uno::Reference< css::beans::XPropertySet > & rPropSet );
     virtual void _exportTextEmbedded(
-        const css::uno::Reference< css::beans::XPropertySet > & rPropSet,
-        const css::uno::Reference< css::beans::XPropertySetInfo > & rPropSetInfo );
+        const cpo::uno::Reference< css::beans::XPropertySet > & rPropSet,
+        const cpo::uno::Reference< css::beans::XPropertySetInfo > & rPropSetInfo );
     inline void exportTextEmbedded(
-        const css::uno::Reference< css::text::XTextContent > & rTextContent,
+        const cpo::uno::Reference< css::text::XTextContent > & rTextContent,
         bool bAutoStyles,
-        const css::uno::Reference< css::beans::XPropertySet > *pRangePropSet = nullptr  );
+        const cpo::uno::Reference< css::beans::XPropertySet > *pRangePropSet = nullptr  );
 
     /// export a footnote and styles
     void exportTextFootnote(
-        const css::uno::Reference< css::beans::XPropertySet > & rPropSet,
+        const cpo::uno::Reference< css::beans::XPropertySet > & rPropSet,
         const OUString& sString,
         bool bAutoStyles, bool bProgress );
 
     /// helper for exportTextFootnote
     void exportTextFootnoteHelper(
-        const css::uno::Reference< css::text::XFootnote > & rPropSet,
-        const css::uno::Reference< css::text::XText> & rText,
+        const cpo::uno::Reference< css::text::XFootnote > & rPropSet,
+        const cpo::uno::Reference< css::text::XText> & rText,
         const OUString& sString,
         bool bAutoStyles,
         bool bIsEndnote, bool bProgress );
@@ -319,21 +319,21 @@ protected:
     void exportTextFootnoteConfiguration();
 
     void exportTextFootnoteConfigurationHelper(
-        const css::uno::Reference< css::beans::XPropertySet> & rFootnoteSupplier,
+        const cpo::uno::Reference< css::beans::XPropertySet> & rFootnoteSupplier,
         bool bIsEndnote);
 
     void exportTextMark(
-        const css::uno::Reference< css::beans::XPropertySet> & xPropSet,
+        const cpo::uno::Reference< css::beans::XPropertySet> & xPropSet,
         const OUString& rProperty,
         const enum ::xmloff::token::XMLTokenEnum pElements[],
         bool bAutoStyles);
 
     void exportSoftPageBreak();
 
-    void exportTextLineBreak(const css::uno::Reference<css::beans::XPropertySet>& xPropSet);
+    void exportTextLineBreak(const cpo::uno::Reference<css::beans::XPropertySet>& xPropSet);
 
     void exportTextRange(
-        const css::uno::Reference< css::text::XTextRange > & rTextRange,
+        const cpo::uno::Reference< css::text::XTextRange > & rTextRange,
         bool bAutoStyles,
         bool& rPrevCharWasSpace,
         FieldmarkType& openFieldmarkType );
@@ -344,8 +344,8 @@ protected:
     /// check if current section or current list has changed;
     /// calls exportListChange as appropriate
     void exportListAndSectionChange(
-        css::uno::Reference< css::text::XTextSection > & rOldSection,
-        const css::uno::Reference< css::text::XTextSection > & rNewSection,
+        cpo::uno::Reference< css::text::XTextSection > & rOldSection,
+        const cpo::uno::Reference< css::text::XTextSection > & rNewSection,
         const XMLTextNumRuleInfo& rOldList,
         const XMLTextNumRuleInfo& rNewList,
         bool bAutoStyles );
@@ -353,32 +353,32 @@ protected:
     /// overload for exportListAndSectionChange;
     /// takes new content rather than new section.
     void exportListAndSectionChange(
-        css::uno::Reference< css::text::XTextSection > & rOldSection,
-        const css::uno::Reference< css::text::XTextContent > & rNewContent,
+        cpo::uno::Reference< css::text::XTextSection > & rOldSection,
+        const cpo::uno::Reference< css::text::XTextContent > & rNewContent,
         const XMLTextNumRuleInfo& rOldList,
         const XMLTextNumRuleInfo& rNewList,
         bool bAutoStyles );
     void exportListAndSectionChange(
-        css::uno::Reference< css::text::XTextSection > & rOldSection,
+        cpo::uno::Reference< css::text::XTextSection > & rOldSection,
         MultiPropertySetHelper& rPropSetHelper,
         sal_Int16 nTextSectionId,
-        const css::uno::Reference< css::text::XTextContent > & rNewContent,
+        const cpo::uno::Reference< css::text::XTextContent > & rNewContent,
         const XMLTextNumRuleInfo& rOldList,
         const XMLTextNumRuleInfo& rNewList,
         bool bAutoStyles );
 
     /// export a ruby
     void exportRuby(
-        const css::uno::Reference< css::beans::XPropertySet> & rPortionPropSet,
+        const cpo::uno::Reference< css::beans::XPropertySet> & rPortionPropSet,
         bool bAutoStyles );
 
     /// export a text:meta
     void exportMeta(
-        const css::uno::Reference< css::beans::XPropertySet> & i_xPortion,
+        const cpo::uno::Reference< css::beans::XPropertySet> & i_xPortion,
         bool i_bAutoStyles, bool i_isProgress, bool & rPrevCharIsSpace);
 
     /// Exports a <loext:content-control> element.
-    void ExportContentControl(const css::uno::Reference<css::beans::XPropertySet>& xPortion,
+    void ExportContentControl(const cpo::uno::Reference<css::beans::XPropertySet>& xPortion,
                               bool bAutoStyles, bool isProgress, bool& rPrevCharIsSpace);
 
     bool isAutoStylesCollected() const { return mbCollected; }
@@ -397,17 +397,17 @@ public:
     void Add(
         XmlStyleFamily nFamily,
         MultiPropertySetHelper& rPropSetHelper,
-        const css::uno::Reference< css::beans::XPropertySet > & rPropSet );
+        const cpo::uno::Reference< css::beans::XPropertySet > & rPropSet );
     void Add(
         XmlStyleFamily nFamily,
-        const css::uno::Reference< css::beans::XPropertySet > & rPropSet,
+        const cpo::uno::Reference< css::beans::XPropertySet > & rPropSet,
         std::span<const XMLPropertyState> aAddStates = {},
         bool bCheckParent = false );
 
     /// find style name for specified family and parent
     OUString Find(
         XmlStyleFamily nFamily,
-        const css::uno::Reference< css::beans::XPropertySet > & rPropSet,
+        const cpo::uno::Reference< css::beans::XPropertySet > & rPropSet,
         const OUString& rParent,
         const std::span<const XMLPropertyState> aAddStates = {} ) const;
 
@@ -428,7 +428,7 @@ public:
 
     /// export the (text field) declarations for a particular XText
     void exportTextDeclarations(
-        const css::uno::Reference< css::text::XText > & rText );
+        const cpo::uno::Reference< css::text::XText > & rText );
 
     /// export all declarations
     void exportUsedDeclarations();
@@ -439,7 +439,7 @@ public:
 
     /// Export the list of change information (enclosed by <tracked-changes>)
     /// (or the necessary automatic styles)
-    void exportTrackedChanges(const css::uno::Reference< css::text::XText > & rText,
+    void exportTrackedChanges(const cpo::uno::Reference< css::text::XText > & rText,
                               bool bAutoStyle );
 
     /// Record tracked changes for this particular XText
@@ -448,7 +448,7 @@ public:
     /// be exported separately via the exportTrackedChanges(bool,
     /// Reference<XText>) method.
     void recordTrackedChangesForXText(
-        const css::uno::Reference< css::text::XText > & rText );
+        const cpo::uno::Reference< css::text::XText > & rText );
 
 
     /// Stop recording tracked changes.
@@ -464,7 +464,7 @@ public:
 
     // This method collects all automatic styles for the given XText
     void collectTextAutoStyles(
-        const css::uno::Reference< css::text::XText > & rText,
+        const cpo::uno::Reference< css::text::XText > & rText,
         bool bIsProgress = false,
         bool bExportParagraph = true )
     {
@@ -472,8 +472,8 @@ public:
     }
 
     void collectTextAutoStyles(
-        const css::uno::Reference< css::text::XText > & rText,
-        const css::uno::Reference< css::text::XTextSection > & rBaseSection,
+        const cpo::uno::Reference< css::text::XText > & rText,
+        const cpo::uno::Reference< css::text::XTextSection > & rBaseSection,
         bool bIsProgress )
     {
         exportText( rText, rBaseSection, true, bIsProgress, true/*bExportParagraph*/ );
@@ -484,15 +484,15 @@ public:
     // This method exports all automatic styles that have been collected.
     void exportTextAutoStyles();
 
-    void exportEvents( const css::uno::Reference< css::beans::XPropertySet > & rPropSet );
+    void exportEvents( const cpo::uno::Reference< css::beans::XPropertySet > & rPropSet );
 
     // Implement Title/Description Elements UI (#i73249#)
-    void exportTitleAndDescription( const css::uno::Reference< css::beans::XPropertySet > & rPropSet,
-                                    const css::uno::Reference< css::beans::XPropertySetInfo > & rPropSetInfo );
+    void exportTitleAndDescription( const cpo::uno::Reference< css::beans::XPropertySet > & rPropSet,
+                                    const cpo::uno::Reference< css::beans::XPropertySetInfo > & rPropSetInfo );
 
     // This method exports the given XText
     void exportText(
-        const css::uno::Reference< css::text::XText > & rText,
+        const cpo::uno::Reference< css::text::XText > & rText,
         bool bIsProgress = false,
         bool bExportParagraph = true, TextPNS eExtensionNS = TextPNS::ODF)
     {
@@ -500,8 +500,8 @@ public:
     }
 
     void exportText(
-        const css::uno::Reference< css::text::XText > & rText,
-        const css::uno::Reference< css::text::XTextSection > & rBaseSection,
+        const cpo::uno::Reference< css::text::XText > & rText,
+        const cpo::uno::Reference< css::text::XTextSection > & rBaseSection,
         bool bIsProgress)
     {
         exportText( rText, rBaseSection, false, bIsProgress, true/*bExportParagraph*/ );
@@ -535,7 +535,7 @@ public:
      * XMLSectionExport, which is only available here.
      */
     void PreventExportOfControlsInMuteSections(
-        const css::uno::Reference< css::container::XIndexAccess> & rShapes,
+        const cpo::uno::Reference< css::container::XIndexAccess> & rShapes,
         const rtl::Reference<xmloff::OFormLayerXMLExport>& xFormExport );
 
     SinglePropertySetInfoCache& GetCharStyleNamesPropInfoCache() { return m_aCharStyleNamesPropInfoCache; }
@@ -545,8 +545,8 @@ public:
     void PopTextListsHelper();
 
 private:
-    void RecordNodeIndex(const css::uno::Reference<css::text::XTextContent>& xTextContent);
-    bool ShouldSkipListId(const css::uno::Reference<css::text::XTextContent>& xTextContent);
+    void RecordNodeIndex(const cpo::uno::Reference<css::text::XTextContent>& xTextContent);
+    bool ShouldSkipListId(const cpo::uno::Reference<css::text::XTextContent>& xTextContent);
     bool ExportListId() const;
 
         XMLTextParagraphExport(XMLTextParagraphExport const &) = delete;
@@ -560,36 +560,36 @@ inline const XMLTextListAutoStylePool&
 }
 
 inline void XMLTextParagraphExport::exportTextFrame(
-        const css::uno::Reference< css::text::XTextContent > & rTextContent,
+        const cpo::uno::Reference< css::text::XTextContent > & rTextContent,
         bool bAutoStyles, bool bIsProgress, bool bExportContent,
-        const css::uno::Reference< css::beans::XPropertySet > *pRangePropSet)
+        const cpo::uno::Reference< css::beans::XPropertySet > *pRangePropSet)
 {
     exportAnyTextFrame( rTextContent, FrameType::Text, bAutoStyles, bIsProgress,
                         bExportContent, pRangePropSet );
 }
 
 inline void XMLTextParagraphExport::exportTextGraphic(
-        const css::uno::Reference< css::text::XTextContent > & rTextContent,
+        const cpo::uno::Reference< css::text::XTextContent > & rTextContent,
         bool bAutoStyles,
-        const css::uno::Reference< css::beans::XPropertySet > *pRangePropSet )
+        const cpo::uno::Reference< css::beans::XPropertySet > *pRangePropSet )
 {
     exportAnyTextFrame( rTextContent, FrameType::Graphic, bAutoStyles, false,
                         true, pRangePropSet );
 }
 
 inline void XMLTextParagraphExport::exportTextEmbedded(
-        const css::uno::Reference< css::text::XTextContent > & rTextContent,
+        const cpo::uno::Reference< css::text::XTextContent > & rTextContent,
         bool bAutoStyles,
-        const css::uno::Reference< css::beans::XPropertySet > *pRangePropSet )
+        const cpo::uno::Reference< css::beans::XPropertySet > *pRangePropSet )
 {
     exportAnyTextFrame( rTextContent, FrameType::Embedded, bAutoStyles, false,
                         true, pRangePropSet );
 }
 
 inline void XMLTextParagraphExport::exportShape(
-        const css::uno::Reference< css::text::XTextContent > & rTextContent,
+        const cpo::uno::Reference< css::text::XTextContent > & rTextContent,
         bool bAutoStyles,
-        const css::uno::Reference< css::beans::XPropertySet > *pRangePropSet )
+        const cpo::uno::Reference< css::beans::XPropertySet > *pRangePropSet )
 {
     exportAnyTextFrame( rTextContent, FrameType::Shape, bAutoStyles, false,
                         true, pRangePropSet );

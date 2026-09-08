@@ -30,7 +30,7 @@
 #include <vcl/svapp.hxx>
 
 using namespace cppu;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
@@ -39,7 +39,7 @@ using namespace com::sun::star::beans;
 namespace framework
 {
 
-RootActionTriggerContainer::RootActionTriggerContainer(css::uno::Reference<css::awt::XPopupMenu> xMenu,
+RootActionTriggerContainer::RootActionTriggerContainer(cpo::uno::Reference<css::awt::XPopupMenu> xMenu,
                                                        const OUString* pMenuIdentifier)
     : m_bContainerCreated(false)
     , m_xMenu(std::move(xMenu))

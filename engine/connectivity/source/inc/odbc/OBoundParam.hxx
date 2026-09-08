@@ -69,7 +69,7 @@ namespace connectivity::odbc
         // setInputStream
         // Sets the input stream for the bound parameter
 
-        void setInputStream(const css::uno::Reference< css::io::XInputStream>& inputStream,
+        void setInputStream(const cpo::uno::Reference< css::io::XInputStream>& inputStream,
                             sal_Int32 len)
         {
             paramInputStream = inputStream;
@@ -85,7 +85,7 @@ namespace connectivity::odbc
         // getInputStream
         // Gets the input stream for the bound parameter
 
-        const css::uno::Reference< css::io::XInputStream>& getInputStream () const
+        const cpo::uno::Reference< css::io::XInputStream>& getInputStream () const
         {
             return paramInputStream;
         }
@@ -113,7 +113,7 @@ namespace connectivity::odbc
                                  // parameter.  Note that this
                                  // data is in native format.
 
-        css::uno::Reference< css::io::XInputStream> paramInputStream;
+        cpo::uno::Reference< css::io::XInputStream> paramInputStream;
         cpo::uno::Sequence< sal_Int8 > aSequence;
                                     // When an input stream is
                                     // bound to a parameter, a

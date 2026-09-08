@@ -49,8 +49,8 @@ class XmlFilterAdaptor final : public cppu::WeakImplHelper
     css::lang::XServiceInfo
 >
 {
-    css::uno::Reference< cpo::uno::XComponentContext > mxContext;
-    css::uno::Reference< css::lang::XComponent > mxDoc;
+    cpo::uno::Reference< cpo::uno::XComponentContext > mxContext;
+    cpo::uno::Reference< css::lang::XComponent > mxDoc;
     OUString msFilterName;
     cpo::uno::Sequence< OUString > msUserData;
     OUString msTemplateName;
@@ -65,7 +65,7 @@ class XmlFilterAdaptor final : public cppu::WeakImplHelper
 
 public:
 
-    explicit XmlFilterAdaptor( css::uno::Reference< cpo::uno::XComponentContext > xContext)
+    explicit XmlFilterAdaptor( cpo::uno::Reference< cpo::uno::XComponentContext > xContext)
         : mxContext(std::move(xContext))
         , meType(FILTER_IMPORT)
     {
@@ -80,12 +80,12 @@ public:
 
     // XExporter
 
-    virtual void setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
+    virtual void setSourceDocument( const cpo::uno::Reference< css::lang::XComponent >& xDoc ) override;
 
 
     // XImporter
 
-    virtual void setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
+    virtual void setTargetDocument( const cpo::uno::Reference< css::lang::XComponent >& xDoc ) override;
 
 
     // XInitialization

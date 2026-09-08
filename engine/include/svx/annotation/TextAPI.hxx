@@ -44,7 +44,7 @@ public:
     void SetText(OutlinerParaObject const& rText);
     OUString GetText() const;
 
-    static TextApiObject* getImplementation(const css::uno::Reference<css::text::XText>&);
+    static TextApiObject* getImplementation(const cpo::uno::Reference<css::text::XText>&);
 
 private:
     std::unique_ptr<TextAPIEditSource> mpSource;

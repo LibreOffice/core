@@ -20,7 +20,7 @@
 #pragma once
 
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <rtl/ref.hxx>
 
 namespace com::sun::star::chart2 { class XInternalDataProvider; }
@@ -56,7 +56,7 @@ class ChartModel;
         static void applyModelContentToModel(
             const rtl::Reference<::chart::ChartModel> & i_model,
             const rtl::Reference<::chart::ChartModel> & i_modelToCopyFrom,
-            const css::uno::Reference< css::chart2::XInternalDataProvider > & i_data );
+            const cpo::uno::Reference< css::chart2::XInternalDataProvider > & i_data );
 
         void dispose();
 
@@ -65,7 +65,7 @@ class ChartModel;
 
     private:
         rtl::Reference<::chart::ChartModel>                       m_xModelClone;
-        css::uno::Reference< css::chart2::XInternalDataProvider > m_xDataClone;
+        cpo::uno::Reference< css::chart2::XInternalDataProvider > m_xDataClone;
         cpo::uno::Any                                             m_aSelection;
     };
 

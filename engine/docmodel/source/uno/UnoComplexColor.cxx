@@ -12,6 +12,7 @@
 #include <docmodel/color/ComplexColorJSON.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 sal_Int32 UnoComplexColor::getType() { return sal_Int32(maColor.getType()); }
 

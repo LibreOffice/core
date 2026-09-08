@@ -50,6 +50,7 @@
 #include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 // class SdLayer
 #define WID_LAYER_LOCKED    1
@@ -560,7 +561,7 @@ cpo::uno::Any SAL_CALL SdLayerManager::getByName( const OUString& aName )
     if( pLayer == nullptr )
         throw container::NoSuchElementException();
 
-    return cpo::uno::Any( css::uno::Reference< css::drawing::XLayer>(GetLayer(pLayer)) );
+    return cpo::uno::Any( cpo::uno::Reference< css::drawing::XLayer>(GetLayer(pLayer)) );
 }
 
 cpo::uno::Sequence< OUString > SAL_CALL SdLayerManager::getElementNames()

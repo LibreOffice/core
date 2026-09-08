@@ -26,7 +26,7 @@ namespace connectivity::writer
 class ODriver : public file::OFileDriver
 {
 public:
-    ODriver(const css::uno::Reference<cpo::uno::XComponentContext>& _rxContext)
+    ODriver(const cpo::uno::Reference<cpo::uno::XComponentContext>& _rxContext)
         : file::OFileDriver(_rxContext)
     {
     }
@@ -35,7 +35,7 @@ public:
     OUString getImplementationName() override;
 
     // XDriver
-    css::uno::Reference<css::sdbc::XConnection>
+    cpo::uno::Reference<css::sdbc::XConnection>
     connect(const OUString& url,
             const cpo::uno::Sequence<css::beans::PropertyValue>& info) override;
     bool acceptsURL(const OUString& url) override;

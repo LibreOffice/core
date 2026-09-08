@@ -23,7 +23,7 @@
 #include <ContentHelper.hxx>
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::io;

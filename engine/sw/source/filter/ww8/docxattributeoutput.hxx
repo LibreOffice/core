@@ -500,7 +500,7 @@ private:
     ///
     /// @see WriteOLE2Obj()
     void FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size& rSize, const SwFlyFrameFormat* pOLEFrameFormat, SwOLENode* pOLENode, const SdrObject* pSdrObj = nullptr);
-    void WriteSrcRect(const css::uno::Reference<css::beans::XPropertySet>& xShapePropSet,
+    void WriteSrcRect(const cpo::uno::Reference<css::beans::XPropertySet>& xShapePropSet,
                       const SwFrameFormat* pFrameFormat);
     void WriteOLE2Obj( const SdrObject* pSdrObj, SwOLENode& rNode, const Size& rSize, const SwFlyFrameFormat* pFlyFrameFormat, const sal_Int8 nFormulaAlignment);
     bool WriteOLEChart( const SdrObject* pSdrObj, const Size& rSize, const SwFlyFrameFormat* pFlyFrameFormat);
@@ -1153,11 +1153,11 @@ public:
 
     /// VMLTextExport
     virtual void WriteOutliner(const OutlinerParaObject& rParaObj) override;
-    virtual void WriteVMLTextBox(css::uno::Reference<css::drawing::XShape> xShape) override;
+    virtual void WriteVMLTextBox(cpo::uno::Reference<css::drawing::XShape> xShape) override;
     /// DMLTextExport
-    virtual void WriteTextBox(css::uno::Reference<css::drawing::XShape> xShape) override;
-    virtual css::uno::Reference<css::text::XTextFrame> GetUnoTextFrame(
-        css::uno::Reference<css::drawing::XShape> xShape) override;
+    virtual void WriteTextBox(cpo::uno::Reference<css::drawing::XShape> xShape) override;
+    virtual cpo::uno::Reference<css::text::XTextFrame> GetUnoTextFrame(
+        cpo::uno::Reference<css::drawing::XShape> xShape) override;
     virtual oox::drawingml::DrawingML& GetDrawingML() override;
     virtual bool MaybeOutputBrushItem(SfxItemSet const&) override;
 

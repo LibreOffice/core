@@ -72,6 +72,7 @@ using namespace com::sun::star;
 using namespace com::sun::star::i18n;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::util;
+using namespace ::cpo;
 using namespace ::comphelper;
 
 namespace

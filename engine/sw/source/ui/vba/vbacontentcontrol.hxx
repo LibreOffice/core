@@ -28,8 +28,8 @@ private:
 
 public:
     /// @throws cpo::uno::RuntimeException
-    SwVbaContentControl(const css::uno::Reference<ooo::vba::XHelperInterface>& rParent,
-                        const css::uno::Reference<cpo::uno::XComponentContext>& rContext,
+    SwVbaContentControl(const cpo::uno::Reference<ooo::vba::XHelperInterface>& rParent,
+                        const cpo::uno::Reference<cpo::uno::XComponentContext>& rContext,
                         const rtl::Reference<SwXTextDocument>& xTextDocument,
                         std::shared_ptr<SwContentControl> pContentControl);
     ~SwVbaContentControl() override;
@@ -91,7 +91,7 @@ public:
     OUString SAL_CALL getRepeatingSectionItemTitle() override;
     void SAL_CALL setRepeatingSectionItemTitle(const OUString& rSet) override;
 
-    css::uno::Reference<ooo::vba::word::XRange> SAL_CALL getRange() override;
+    cpo::uno::Reference<ooo::vba::word::XRange> SAL_CALL getRange() override;
 
     OUString SAL_CALL getTag() override;
     void SAL_CALL setTag(const OUString& rSet) override;

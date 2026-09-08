@@ -35,12 +35,12 @@ namespace basctl
     using ::com::sun::star::document::XDocumentEventListener;
     using ::com::sun::star::document::DocumentEvent;
     using ::cpo::uno::XComponentContext;
-    using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::UNO_QUERY_THROW;
+    using ::cpo::uno::Reference;
+    using ::cpo::uno::UNO_QUERY_THROW;
     using ::cpo::uno::Exception;
     using ::com::sun::star::frame::XModel;
     using ::com::sun::star::frame::theGlobalEventBroadcaster;
-    using ::com::sun::star::uno::UNO_QUERY;
+    using ::cpo::uno::UNO_QUERY;
 
     // DocumentEventNotifier::Impl
 

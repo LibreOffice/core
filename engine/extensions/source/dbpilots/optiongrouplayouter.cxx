@@ -40,7 +40,7 @@ namespace dbp
 #define OFFSET              300
 #define MIN_WIDTH           600
 
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
 using namespace cpo::uno;
     using namespace ::com::sun::star::drawing;
     using namespace ::com::sun::star::beans;

@@ -21,7 +21,8 @@
 
 using css::beans::XPropertySet;
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 class Chart2GeometryTest : public ChartTest
 {

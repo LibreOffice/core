@@ -124,13 +124,13 @@ struct OStorage_Impl
     std::unordered_map<OUString, std::vector<SotElement_Impl*>> m_aChildrenMap;
     std::vector< SotElement_Impl* > m_aDeletedVector;
 
-    css::uno::Reference< css::container::XNameContainer > m_xPackageFolder;
+    cpo::uno::Reference< css::container::XNameContainer > m_xPackageFolder;
 
-    css::uno::Reference< css::lang::XSingleServiceFactory > m_xPackage;
-    css::uno::Reference< cpo::uno::XComponentContext >  m_xContext;
+    cpo::uno::Reference< css::lang::XSingleServiceFactory > m_xPackage;
+    cpo::uno::Reference< cpo::uno::XComponentContext >  m_xContext;
 
     // valid only for root storage
-    css::uno::Reference< css::io::XInputStream > m_xInputStream; // ??? may be stored in properties
+    cpo::uno::Reference< css::io::XInputStream > m_xInputStream; // ??? may be stored in properties
     rtl::Reference< SwitchablePersistenceStream > m_xStream; // ??? may be stored in properties
     cpo::uno::Sequence< css::beans::PropertyValue > m_xProperties;
     bool m_bHasCommonEncryptionData;
@@ -154,28 +154,28 @@ struct OStorage_Impl
     SotElement_Impl* m_pRelStorElement;
     rtl::Reference< OStorage > m_xRelStorage;
     cpo::uno::Sequence< cpo::uno::Sequence< css::beans::StringPair > > m_aRelInfo;
-    css::uno::Reference< css::io::XInputStream > m_xNewRelInfoStream;
+    cpo::uno::Reference< css::io::XInputStream > m_xNewRelInfoStream;
     sal_Int16 m_nRelInfoStatus;
 
     // Constructors
-    OStorage_Impl(  css::uno::Reference< css::io::XInputStream > const & xInputStream,
+    OStorage_Impl(  cpo::uno::Reference< css::io::XInputStream > const & xInputStream,
                     sal_Int32 nMode,
                     const cpo::uno::Sequence< css::beans::PropertyValue >& xProperties,
-                    css::uno::Reference< cpo::uno::XComponentContext > const & xContext,
+                    cpo::uno::Reference< cpo::uno::XComponentContext > const & xContext,
                     sal_Int32 nStorageType );
 
-    OStorage_Impl(  css::uno::Reference< css::io::XStream > const & xStream,
+    OStorage_Impl(  cpo::uno::Reference< css::io::XStream > const & xStream,
                     sal_Int32 nMode,
                     const cpo::uno::Sequence< css::beans::PropertyValue >& xProperties,
-                    css::uno::Reference< cpo::uno::XComponentContext > const & xContext,
+                    cpo::uno::Reference< cpo::uno::XComponentContext > const & xContext,
                     sal_Int32 nStorageType );
 
     // constructor for a substorage
     OStorage_Impl(  OStorage_Impl* pParent,
                     sal_Int32 nMode,
-                    css::uno::Reference< css::container::XNameContainer > const & xPackageFolder,
-                    css::uno::Reference< css::lang::XSingleServiceFactory > xPackage,
-                    css::uno::Reference< cpo::uno::XComponentContext > const & xContext,
+                    cpo::uno::Reference< css::container::XNameContainer > const & xPackageFolder,
+                    cpo::uno::Reference< css::lang::XSingleServiceFactory > xPackage,
+                    cpo::uno::Reference< cpo::uno::XComponentContext > const & xContext,
                     sal_Int32 nStorageType );
 
     ~OStorage_Impl();
@@ -191,11 +191,11 @@ struct OStorage_Impl
     void GetStorageProperties();
 
     cpo::uno::Sequence< cpo::uno::Sequence< css::beans::StringPair > > GetAllRelationshipsIfAny();
-    void CopyLastCommitTo( const css::uno::Reference< css::embed::XStorage >& xNewStor );
+    void CopyLastCommitTo( const cpo::uno::Reference< css::embed::XStorage >& xNewStor );
 
     void InsertIntoPackageFolder(
             const OUString& aName,
-            const css::uno::Reference< css::container::XNameContainer >& xParentPackageFolder );
+            const cpo::uno::Reference< css::container::XNameContainer >& xParentPackageFolder );
 
     void Commit();
     void Revert();
@@ -203,17 +203,17 @@ struct OStorage_Impl
     /// @throws css::packages::NoEncryptionException
     ::comphelper::SequenceAsHashMap GetCommonRootEncryptionData();
 
-    void CopyToStorage( const css::uno::Reference< css::embed::XStorage >& xDest,
+    void CopyToStorage( const cpo::uno::Reference< css::embed::XStorage >& xDest,
                         bool bDirect );
     void CopyStorageElement( SotElement_Impl* pElement,
-                            const css::uno::Reference< css::embed::XStorage >& xDest,
+                            const cpo::uno::Reference< css::embed::XStorage >& xDest,
                             const OUString& aName,
                             bool bDirect );
 
     SotElement_Impl* FindElement( const OUString& rName );
 
     SotElement_Impl* InsertStream( const OUString& aName, bool bEncr );
-    void InsertRawStream( const OUString& aName, const css::uno::Reference< css::io::XInputStream >& xInStream );
+    void InsertRawStream( const OUString& aName, const cpo::uno::Reference< css::io::XInputStream >& xInStream );
 
     std::unique_ptr<OStorage_Impl> CreateNewStorageImpl( sal_Int32 nStorageMode );
     SotElement_Impl* InsertStorage( const OUString& aName, sal_Int32 nStorageMode );
@@ -239,18 +239,18 @@ struct OStorage_Impl
                     const OUString& aStreamName,
                     bool bPassProvided,
                     const ::comphelper::SequenceAsHashMap& aEncryptionData,
-                    css::uno::Reference< css::io::XStream >& xTargetStream );
+                    cpo::uno::Reference< css::io::XStream >& xTargetStream );
 
     void RemoveStreamRelInfo( std::u16string_view aOriginalName );
     void CreateRelStorage();
     void CommitStreamRelInfo( std::u16string_view rName, SotElement_Impl const * pStreamElement );
-    css::uno::Reference< css::io::XInputStream > GetRelInfoStreamForName(
+    cpo::uno::Reference< css::io::XInputStream > GetRelInfoStreamForName(
         std::u16string_view aName );
-    void CommitRelInfo( const css::uno::Reference< css::container::XNameContainer >& xNewPackageFolder );
+    void CommitRelInfo( const cpo::uno::Reference< css::container::XNameContainer >& xNewPackageFolder );
 
     static void completeStorageStreamCopy_Impl(
-        const css::uno::Reference< css::io::XStream >& xSource,
-        const css::uno::Reference< css::io::XStream >& xDest,
+        const cpo::uno::Reference< css::io::XStream >& xSource,
+        const cpo::uno::Reference< css::io::XStream >& xDest,
         sal_Int32 nStorageType,
         const cpo::uno::Sequence< cpo::uno::Sequence< css::beans::StringPair > >& aRelInfo );
 
@@ -288,20 +288,20 @@ class OStorage final : public css::lang::XTypeProvider
     void BroadcastTransaction( sal_Int8 nMessage );
 
     void MakeLinkToSubComponent_Impl(
-                    const css::uno::Reference< css::lang::XComponent >& xComponent );
+                    const cpo::uno::Reference< css::lang::XComponent >& xComponent );
 
 public:
 
-    OStorage(   css::uno::Reference< css::io::XInputStream > const & xInputStream,
+    OStorage(   cpo::uno::Reference< css::io::XInputStream > const & xInputStream,
                 sal_Int32 nMode,
                 const cpo::uno::Sequence< css::beans::PropertyValue >& xProperties,
-                css::uno::Reference< cpo::uno::XComponentContext > const & xContext,
+                cpo::uno::Reference< cpo::uno::XComponentContext > const & xContext,
                 sal_Int32 nStorageType );
 
-    OStorage(   css::uno::Reference< css::io::XStream > const & xStream,
+    OStorage(   cpo::uno::Reference< css::io::XStream > const & xStream,
                 sal_Int32 nMode,
                 const cpo::uno::Sequence< css::beans::PropertyValue >& xProperties,
-                css::uno::Reference< cpo::uno::XComponentContext > const & xContext,
+                cpo::uno::Reference< cpo::uno::XComponentContext > const & xContext,
                 sal_Int32 nStorageType );
 
     OStorage(   OStorage_Impl* pImpl, bool bReadOnlyWrap );
@@ -310,7 +310,7 @@ public:
 
     void InternalDispose( bool bNotifyImpl );
 
-    void ChildIsDisposed( const css::uno::Reference< cpo::uno::XInterface >& xChild );
+    void ChildIsDisposed( const cpo::uno::Reference< cpo::uno::XInterface >& xChild );
 
     sal_Int32 GetRefCount_Impl() const { return m_refCount; }
 
@@ -330,32 +330,32 @@ public:
 
     //  XStorage
 
-    virtual void copyToStorage( const css::uno::Reference< css::embed::XStorage >& xDest ) override;
+    virtual void copyToStorage( const cpo::uno::Reference< css::embed::XStorage >& xDest ) override;
 
-    virtual css::uno::Reference< css::io::XStream > openStreamElement(
+    virtual cpo::uno::Reference< css::io::XStream > openStreamElement(
             const OUString& aStreamName, sal_Int32 nOpenMode ) override;
 
-    virtual css::uno::Reference< css::io::XStream > openEncryptedStreamElement(
+    virtual cpo::uno::Reference< css::io::XStream > openEncryptedStreamElement(
             const OUString& aStreamName, sal_Int32 nOpenMode, const OUString& aPass ) override;
 
-    virtual css::uno::Reference< css::embed::XStorage > openStorageElement(
+    virtual cpo::uno::Reference< css::embed::XStorage > openStorageElement(
             const OUString& aStorName, sal_Int32 nStorageMode ) override final;
 
     rtl::Reference< OStorage > openStorageElement2(
             const OUString& aStorName, sal_Int32 nStorageMode );
 
-    virtual css::uno::Reference< css::io::XStream > cloneStreamElement(
+    virtual cpo::uno::Reference< css::io::XStream > cloneStreamElement(
             const OUString& aStreamName ) override;
 
-    virtual css::uno::Reference< css::io::XStream > cloneEncryptedStreamElement(
+    virtual cpo::uno::Reference< css::io::XStream > cloneEncryptedStreamElement(
             const OUString& aStreamName, const OUString& aPass ) override;
 
     virtual void copyLastCommitTo(
-            const css::uno::Reference< css::embed::XStorage >& xTargetStorage ) override;
+            const cpo::uno::Reference< css::embed::XStorage >& xTargetStorage ) override;
 
     virtual void copyStorageElementLastCommitTo(
             const OUString& aStorName,
-            const css::uno::Reference< css::embed::XStorage >& xTargetStorage ) override;
+            const cpo::uno::Reference< css::embed::XStorage >& xTargetStorage ) override;
 
     virtual bool isStreamElement( const OUString& aElementName ) override;
 
@@ -366,29 +366,29 @@ public:
     virtual void renameElement( const OUString& rEleName, const OUString& rNewName ) override;
 
     virtual void copyElementTo(    const OUString& aElementName,
-                                        const css::uno::Reference< css::embed::XStorage >& xDest,
+                                        const cpo::uno::Reference< css::embed::XStorage >& xDest,
                                         const OUString& aNewName ) override;
 
     virtual void moveElementTo(    const OUString& aElementName,
-                                        const css::uno::Reference< css::embed::XStorage >& xDest,
+                                        const cpo::uno::Reference< css::embed::XStorage >& xDest,
                                         const OUString& rNewName ) override;
 
     //  XStorage2
 
-    virtual css::uno::Reference< css::io::XStream > openEncryptedStream( const OUString& sStreamName, ::sal_Int32 nOpenMode, const cpo::uno::Sequence< css::beans::NamedValue >& aEncryptionData ) override;
+    virtual cpo::uno::Reference< css::io::XStream > openEncryptedStream( const OUString& sStreamName, ::sal_Int32 nOpenMode, const cpo::uno::Sequence< css::beans::NamedValue >& aEncryptionData ) override;
 
-    virtual css::uno::Reference< css::io::XStream > cloneEncryptedStream( const OUString& sStreamName, const cpo::uno::Sequence< css::beans::NamedValue >& aEncryptionData ) override;
+    virtual cpo::uno::Reference< css::io::XStream > cloneEncryptedStream( const OUString& sStreamName, const cpo::uno::Sequence< css::beans::NamedValue >& aEncryptionData ) override;
 
     //  XStorageRawAccess
 
-    virtual css::uno::Reference< css::io::XInputStream > getPlainRawStreamElement(
+    virtual cpo::uno::Reference< css::io::XInputStream > getPlainRawStreamElement(
             const OUString& sStreamName ) override;
 
-    virtual css::uno::Reference< css::io::XInputStream > getRawEncrStreamElement(
+    virtual cpo::uno::Reference< css::io::XInputStream > getRawEncrStreamElement(
             const OUString& sStreamName ) override;
 
     virtual void insertRawEncrStreamElement( const OUString& aStreamName,
-                                const css::uno::Reference< css::io::XInputStream >& xInStream ) override;
+                                const cpo::uno::Reference< css::io::XInputStream >& xInStream ) override;
 
     // XTransactedObject
     virtual void commit() override;
@@ -397,10 +397,10 @@ public:
 
     // XTransactionBroadcaster
     virtual void addTransactionListener(
-            const css::uno::Reference< css::embed::XTransactionListener >& aListener ) override;
+            const cpo::uno::Reference< css::embed::XTransactionListener >& aListener ) override;
 
     virtual void removeTransactionListener(
-            const css::uno::Reference< css::embed::XTransactionListener >& aListener ) override;
+            const cpo::uno::Reference< css::embed::XTransactionListener >& aListener ) override;
 
     //  XModifiable
 
@@ -409,10 +409,10 @@ public:
     virtual void setModified( bool bModified ) override;
 
     virtual void addModifyListener(
-            const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+            const cpo::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
     virtual void removeModifyListener(
-            const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+            const cpo::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
     //  XNameAccess
 
@@ -431,10 +431,10 @@ public:
     virtual void dispose() override;
 
     virtual void addEventListener(
-            const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
+            const cpo::uno::Reference< css::lang::XEventListener >& xListener ) override;
 
     virtual void removeEventListener(
-            const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
+            const cpo::uno::Reference< css::lang::XEventListener >& xListener ) override;
 
     //  XEncryptionProtectedSource
 
@@ -457,7 +457,7 @@ public:
 
     //  XPropertySet
 
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo() override;
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo() override;
 
     virtual void setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
 
@@ -465,32 +465,32 @@ public:
 
     virtual void addPropertyChangeListener(
             const OUString& aPropertyName,
-            const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
+            const cpo::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
 
     virtual void removePropertyChangeListener(
             const OUString& aPropertyName,
-            const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
+            const cpo::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
 
     virtual void addVetoableChangeListener(
             const OUString& PropertyName,
-            const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+            const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
-    virtual void removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+    virtual void removeVetoableChangeListener( const OUString& PropertyName, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
     //  XOptimizedStorage
-    virtual void insertRawNonEncrStreamElementDirect( const OUString& sStreamName, const css::uno::Reference< css::io::XInputStream >& xInStream ) override;
+    virtual void insertRawNonEncrStreamElementDirect( const OUString& sStreamName, const cpo::uno::Reference< css::io::XInputStream >& xInStream ) override;
 
-    virtual void insertStreamElementDirect( const OUString& sStreamName, const css::uno::Reference< css::io::XInputStream >& xInStream, const cpo::uno::Sequence< css::beans::PropertyValue >& aProps ) override;
+    virtual void insertStreamElementDirect( const OUString& sStreamName, const cpo::uno::Reference< css::io::XInputStream >& xInStream, const cpo::uno::Sequence< css::beans::PropertyValue >& aProps ) override;
 
-    virtual void copyElementDirectlyTo( const OUString& sSourceName, const css::uno::Reference< css::embed::XOptimizedStorage >& xTargetStorage, const OUString& sTargetName ) override;
+    virtual void copyElementDirectlyTo( const OUString& sSourceName, const cpo::uno::Reference< css::embed::XOptimizedStorage >& xTargetStorage, const OUString& sTargetName ) override;
 
-    virtual void writeAndAttachToStream( const css::uno::Reference< css::io::XStream >& xStream ) override;
+    virtual void writeAndAttachToStream( const cpo::uno::Reference< css::io::XStream >& xStream ) override;
 
     virtual void attachToURL( const OUString& sURL, bool bReadOnly ) override;
 
     virtual cpo::uno::Any getElementPropertyValue( const OUString& sElementName, const OUString& sPropertyName ) override;
 
-    virtual void copyStreamElementData( const OUString& sStreamName, const css::uno::Reference< css::io::XStream >& xTargetStream ) override;
+    virtual void copyStreamElementData( const OUString& sStreamName, const cpo::uno::Reference< css::io::XStream >& xTargetStream ) override;
 
     // XRelationshipAccess
     virtual bool hasByID( const OUString& sID ) override;
@@ -514,14 +514,14 @@ public:
     virtual void clearRelationships(  ) override;
 
     // XHierarchicalStorageAccess
-    virtual css::uno::Reference< css::embed::XExtendedStorageStream > openStreamElementByHierarchicalName( const OUString& sStreamPath, ::sal_Int32 nOpenMode ) override;
+    virtual cpo::uno::Reference< css::embed::XExtendedStorageStream > openStreamElementByHierarchicalName( const OUString& sStreamPath, ::sal_Int32 nOpenMode ) override;
 
-    virtual css::uno::Reference< css::embed::XExtendedStorageStream > openEncryptedStreamElementByHierarchicalName( const OUString& sStreamName, ::sal_Int32 nOpenMode, const OUString& sPassword ) override;
+    virtual cpo::uno::Reference< css::embed::XExtendedStorageStream > openEncryptedStreamElementByHierarchicalName( const OUString& sStreamName, ::sal_Int32 nOpenMode, const OUString& sPassword ) override;
 
     virtual void removeStreamElementByHierarchicalName( const OUString& sElementPath ) override;
 
     // XHierarchicalStorageAccess2
-    virtual css::uno::Reference< css::embed::XExtendedStorageStream > openEncryptedStreamByHierarchicalName( const OUString& sStreamName, ::sal_Int32 nOpenMode, const cpo::uno::Sequence< css::beans::NamedValue >& aEncryptionData ) override;
+    virtual cpo::uno::Reference< css::embed::XExtendedStorageStream > openEncryptedStreamByHierarchicalName( const OUString& sStreamName, ::sal_Int32 nOpenMode, const cpo::uno::Sequence< css::beans::NamedValue >& aEncryptionData ) override;
 };
 
 #endif

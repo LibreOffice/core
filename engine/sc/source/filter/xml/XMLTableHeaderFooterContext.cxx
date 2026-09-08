@@ -31,8 +31,8 @@
 #include <unonames.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::beans;
@@ -103,9 +103,9 @@ XMLTableHeaderFooterContext::~XMLTableHeaderFooterContext()
 {
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTableHeaderFooterContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLTableHeaderFooterContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     if (xHeaderFooterContent.is())
     {
@@ -209,9 +209,9 @@ XMLHeaderFooterRegionContext::~XMLHeaderFooterRegionContext()
 {
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLHeaderFooterRegionContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLHeaderFooterRegionContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext(nullptr);
 

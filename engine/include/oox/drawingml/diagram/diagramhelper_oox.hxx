@@ -61,12 +61,12 @@ class DiagramHelper_oox final : public svx::diagram::DiagramHelper_svx
     // shape geometry is not changed. nOldHeight is the height that xOldShapehad
     // sizes alone.
     static void moveDiagramModelDataFromOldToNewXShape(
-        const css::uno::Reference<css::drawing::XShape>& xOldShape,
-        const css::uno::Reference<css::drawing::XShape>& xNewShape, tools::Long nOldHeight);
+        const cpo::uno::Reference<css::drawing::XShape>& xOldShape,
+        const cpo::uno::Reference<css::drawing::XShape>& xNewShape, tools::Long nOldHeight);
 
 protected:
     // access associated SdrObjGroup/XShape/RootShape
-    virtual css::uno::Reference< css::drawing::XShape >& accessRootShape() override;
+    virtual cpo::uno::Reference< css::drawing::XShape >& accessRootShape() override;
 
 public:
     DiagramHelper_oox(
@@ -105,10 +105,10 @@ public:
     virtual std::shared_ptr< svx::diagram::DiagramDataState > extractDiagramDataState() const override;
     virtual void applyDiagramDataState(const std::shared_ptr< svx::diagram::DiagramDataState >& rState) override;
 
-    void doAnchor(css::uno::Reference<css::drawing::XShape>& rTarget);
+    void doAnchor(cpo::uno::Reference<css::drawing::XShape>& rTarget);
 
     // make DiagramNodes use FitSize in edit mode
-    void applyTextFitToSizeToDiagramNodes(const css::uno::Reference<css::drawing::XShape>& rTarget,
+    void applyTextFitToSizeToDiagramNodes(const cpo::uno::Reference<css::drawing::XShape>& rTarget,
                                           bool bKeepFontScale);
     const std::shared_ptr< ::oox::drawingml::Theme >& getOrCreateThemePtr(
         const rtl::Reference< oox::shape::ShapeFilterBase>& rxFilter ) const;
@@ -121,9 +121,9 @@ public:
     virtual bool checkMinimalDataDoms() const override;
 
     // helpers to write some specific DiagramDoms
-    void writeDiagramOOXData(DrawingML& rOriginalDrawingML, css::uno::Reference<css::io::XOutputStream>& xOutputStream, std::u16string_view rDrawingRelId) const;
-    void writeDiagramReducedOOXData(css::uno::Reference<css::io::XOutputStream>& xOutputStream) const;
-    void writeDiagramOOXDrawing(DrawingML& rOriginalDrawingML, css::uno::Reference<css::io::XOutputStream>& xOutputStream) const;
+    void writeDiagramOOXData(DrawingML& rOriginalDrawingML, cpo::uno::Reference<css::io::XOutputStream>& xOutputStream, std::u16string_view rDrawingRelId) const;
+    void writeDiagramReducedOOXData(cpo::uno::Reference<css::io::XOutputStream>& xOutputStream) const;
+    void writeDiagramOOXDrawing(DrawingML& rOriginalDrawingML, cpo::uno::Reference<css::io::XOutputStream>& xOutputStream) const;
 
     // needed to create DiagramHelper_oox in svx' SdrObjGroup copy constructor
     virtual DiagramHelper_oox* clone() const override;

@@ -73,10 +73,10 @@ private:
     */
     void postError(css::task::InteractionClassification classif, const char* kind, ErrCode code, const OUString &message);
 
-    bool handleIOException(const css::uno::Reference<css::task::XInteractionRequest>& rRequest);
-    bool handleNetworkException(const cpo::uno::Sequence<css::uno::Reference<css::task::XInteractionContinuation>> &rContinuations, const cpo::uno::Any& rRequest);
-    bool handlePasswordRequest(const cpo::uno::Sequence<css::uno::Reference<css::task::XInteractionContinuation>> &rContinuations, const cpo::uno::Any& rRequest);
-    static bool handleFilterOptionsRequest(const cpo::uno::Sequence<css::uno::Reference<css::task::XInteractionContinuation>> &rContinuations, const cpo::uno::Any& rRequest);
+    bool handleIOException(const cpo::uno::Reference<css::task::XInteractionRequest>& rRequest);
+    bool handleNetworkException(const cpo::uno::Sequence<cpo::uno::Reference<css::task::XInteractionContinuation>> &rContinuations, const cpo::uno::Any& rRequest);
+    bool handlePasswordRequest(const cpo::uno::Sequence<cpo::uno::Reference<css::task::XInteractionContinuation>> &rContinuations, const cpo::uno::Any& rRequest);
+    static bool handleFilterOptionsRequest(const cpo::uno::Sequence<cpo::uno::Reference<css::task::XInteractionContinuation>> &rContinuations, const cpo::uno::Any& rRequest);
 
 public:
     void SetPassword(char const* pPassword);
@@ -96,9 +96,9 @@ public:
 
     virtual void initialize(cpo::uno::Sequence<cpo::uno::Any > const & rArguments) override;
 
-    virtual void handle(css::uno::Reference<css::task::XInteractionRequest> const & rRequest) override;
+    virtual void handle(cpo::uno::Reference<css::task::XInteractionRequest> const & rRequest) override;
 
-    virtual bool handleInteractionRequest(const css::uno::Reference<css::task::XInteractionRequest>& Request) override;
+    virtual bool handleInteractionRequest(const cpo::uno::Reference<css::task::XInteractionRequest>& Request) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

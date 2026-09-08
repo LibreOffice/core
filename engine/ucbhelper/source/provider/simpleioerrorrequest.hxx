@@ -53,7 +53,7 @@ public:
     SimpleIOErrorRequest( const css::ucb::IOErrorCode eError,
                           const cpo::uno::Sequence< cpo::uno::Any > & rArgs,
                           const OUString & rMessage,
-                          const css::uno::Reference< css::ucb::XCommandProcessor > & xContext
+                          const cpo::uno::Reference< css::ucb::XCommandProcessor > & xContext
                          );
 };
 

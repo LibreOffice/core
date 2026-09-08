@@ -17,14 +17,14 @@ namespace com::sun::star::beans
 {
 class XMaterialHolder;
 }
-namespace com::sun::star::uno
+namespace cpo::uno
 {
 template <typename> class Reference;
 }
 
 namespace vcl::pdf
 {
-VCL_DLLPUBLIC css::uno::Reference<css::beans::XMaterialHolder>
+VCL_DLLPUBLIC cpo::uno::Reference<css::beans::XMaterialHolder>
 initEncryption(const OUString& i_rOwnerPassword, const OUString& i_rUserPassword);
 }
 

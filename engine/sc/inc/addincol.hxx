@@ -21,7 +21,7 @@
 
 #include <memory>
 #include <cpo/uno/Any.h>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <cpo/uno/Sequence.h>
 #include <formula/errorcodes.hxx>
 #include <i18nlangtag/lang.h>
@@ -91,7 +91,7 @@ private:
     OUString            aUpperLocal;        ///< for entering formulas
     OUString            aUpperEnglish;      ///< for Function Wizard and tooltips
     OUString            aDescription;
-    css::uno::Reference< css::reflection::XIdlMethod> xFunction;
+    cpo::uno::Reference< css::reflection::XIdlMethod> xFunction;
     cpo::uno::Any       aObject;
     sal_Int32           nArgCount;
     std::unique_ptr<ScAddInArgDesc[]>
@@ -106,7 +106,7 @@ public:
                 ScUnoAddInFuncData( const OUString& rNam, const OUString& rLoc,
                                     OUString aDesc,
                                     sal_uInt16 nCat, OUString ,
-                                    css::uno::Reference< css::reflection::XIdlMethod> aFunc,
+                                    cpo::uno::Reference< css::reflection::XIdlMethod> aFunc,
                                     cpo::uno::Any aO,
                                     sal_Int32 nAC, const ScAddInArgDesc* pAD,
                                     sal_Int32 nCP );
@@ -117,7 +117,7 @@ public:
     const OUString&  GetUpperName() const        { return aUpperName; }
     const OUString&  GetUpperLocal() const       { return aUpperLocal; }
     const OUString&  GetUpperEnglish() const     { return aUpperEnglish; }
-    const css::uno::Reference< css::reflection::XIdlMethod>&   GetFunction() const
+    const cpo::uno::Reference< css::reflection::XIdlMethod>&   GetFunction() const
                                                         { return xFunction; }
     const cpo::uno::Any& GetObject() const   { return aObject; }
     sal_Int32               GetArgumentCount() const    { return nArgCount; }
@@ -131,7 +131,7 @@ public:
     bool                    GetExcelName( const LanguageTag& rDestLang, OUString& rRetExcelName,
                                           bool bFallbackToAny = true ) const;
 
-    void    SetFunction( const css::uno::Reference< css::reflection::XIdlMethod>& rNewFunc,
+    void    SetFunction( const cpo::uno::Reference< css::reflection::XIdlMethod>& rNewFunc,
                          const cpo::uno::Any& rNewObj );
     void    SetArguments( sal_Int32 nNewCount, const ScAddInArgDesc* pNewDescs );
     void    SetCallerPos( sal_Int32 nNewPos );
@@ -154,8 +154,8 @@ private:
 
     void        Initialize();
     void        ReadConfiguration();
-    void        ReadFromAddIn( const css::uno::Reference< cpo::uno::XInterface>& xInterface );
-    void        UpdateFromAddIn( const css::uno::Reference< cpo::uno::XInterface>& xInterface,
+    void        ReadFromAddIn( const cpo::uno::Reference< cpo::uno::XInterface>& xInterface );
+    void        UpdateFromAddIn( const cpo::uno::Reference< cpo::uno::XInterface>& xInterface,
                                 std::u16string_view rServiceName );
     void        LoadComponent( const ScUnoAddInFuncData& rFuncData );
 
@@ -198,7 +198,7 @@ private:
     const ScUnoAddInFuncData*   pFuncData;
     cpo::uno::Sequence<cpo::uno::Any>         aArgs;
     cpo::uno::Sequence<cpo::uno::Any>         aVarArg;
-    css::uno::Reference<cpo::uno::XInterface> xCaller;
+    cpo::uno::Reference<cpo::uno::XInterface> xCaller;
     ScDocument&                 mrDoc;
     bool                        bValidCount;
     // result:
@@ -207,7 +207,7 @@ private:
     double                      fValue;
     OUString                    aString;
     ScMatrixRef                 xMatrix;
-    css::uno::Reference<css::sheet::XVolatileResult> xVarRes;
+    cpo::uno::Reference<css::sheet::XVolatileResult> xVarRes;
 
     void            ExecuteCallWithArgs(cpo::uno::Sequence<cpo::uno::Any>& rCallArgs);
 
@@ -218,7 +218,7 @@ public:
                     ~ScUnoAddInCall();
 
     bool                NeedsCaller() const;
-    void                SetCaller( const css::uno::Reference<cpo::uno::XInterface>& rInterface );
+    void                SetCaller( const cpo::uno::Reference<cpo::uno::XInterface>& rInterface );
     void                SetCallerFromObjectShell( const SfxObjectShell* pSh );
 
     bool                ValidParamCount() { return bValidCount;}
@@ -236,7 +236,7 @@ public:
     double              GetValue() const        { return fValue; }
     const OUString&     GetString() const       { return aString; }
     const ScMatrixRef&  GetMatrix() const       { return xMatrix;}
-    const css::uno::Reference<css::sheet::XVolatileResult>&
+    const cpo::uno::Reference<css::sheet::XVolatileResult>&
                         GetVarRes() const       { return xVarRes; }
 };
 

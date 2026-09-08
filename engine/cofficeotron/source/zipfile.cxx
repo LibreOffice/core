@@ -41,7 +41,7 @@ struct ZipArchive::Impl
 {
     rtl::Reference<comphelper::RefCountedMutex> mutexHolder;
     cpo::uno::Sequence<sal_Int8> data;
-    css::uno::Reference<css::io::XInputStream> stream;
+    cpo::uno::Reference<css::io::XInputStream> stream;
     std::unique_ptr<ZipFile> zip;
     std::vector<ZipEntryInfo> infoList;
     std::map<std::string, OUString> pathByName;
@@ -88,7 +88,7 @@ bool ZipArchive::open(const std::string& path, std::string& error)
     try
     {
         impl->zip = std::make_unique<ZipFile>(
-            impl->mutexHolder, impl->stream, css::uno::Reference<cpo::uno::XComponentContext>(),
+            impl->mutexHolder, impl->stream, cpo::uno::Reference<cpo::uno::XComponentContext>(),
             true /* initialise */, false /* force recovery */, ZipFile::Checks::Default);
     }
     catch (const cpo::uno::Exception& exception)
@@ -152,7 +152,7 @@ const ZipEntryInfo* ZipArchive::extract(const std::string& name, std::string& ou
 
     try
     {
-        css::uno::Reference<css::io::XInputStream> input = impl->zip->getInputStream(
+        cpo::uno::Reference<css::io::XInputStream> input = impl->zip->getInputStream(
             entry->second, rtl::Reference<EncryptionData>(), std::nullopt, impl->mutexHolder);
 
         cpo::uno::Sequence<sal_Int8> buffer;

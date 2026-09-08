@@ -41,11 +41,11 @@ namespace logging
         // <attributes>
         rtl_TextEncoding            m_eEncoding;
         sal_Int32                   m_nLevel;
-        css::uno::Reference< css::logging::XLogFormatter >
+        cpo::uno::Reference< css::logging::XLogFormatter >
                                     m_xFormatter;
         // <//attributes>
 
-        css::uno::Reference< cpo::uno::XComponentContext >
+        cpo::uno::Reference< cpo::uno::XComponentContext >
                                     m_xContext;
         ::osl::Mutex&               m_rMutex;
         ::cppu::OBroadcastHelper&   m_rBHelper;
@@ -53,7 +53,7 @@ namespace logging
 
     public:
         LogHandlerHelper(
-            const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
             ::osl::Mutex& _rMutex,
             ::cppu::OBroadcastHelper& _rBHelper
         );
@@ -67,10 +67,10 @@ namespace logging
         rtl_TextEncoding
                 getTextEncoding() const { return m_eEncoding; }
 
-        const css::uno::Reference< css::logging::XLogFormatter >&
+        const cpo::uno::Reference< css::logging::XLogFormatter >&
                 getFormatter() const { return m_xFormatter; }
         void
-                setFormatter( const css::uno::Reference< css::logging::XLogFormatter >& _rxFormatter )
+                setFormatter( const cpo::uno::Reference< css::logging::XLogFormatter >& _rxFormatter )
                 {
                     m_xFormatter = _rxFormatter;
                 }

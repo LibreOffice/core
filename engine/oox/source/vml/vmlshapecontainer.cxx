@@ -28,7 +28,7 @@ namespace oox::vml {
 
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::drawing;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 namespace {
 

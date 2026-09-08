@@ -38,6 +38,7 @@
 #include <comphelper/processfactory.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace comphelper;
 
 using ::std::vector;

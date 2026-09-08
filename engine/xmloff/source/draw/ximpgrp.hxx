@@ -27,22 +27,22 @@
 class SdXMLGroupShapeContext : public SdXMLShapeContext
 {
     // the shape group this group is working on
-    css::uno::Reference< css::drawing::XShapes > mxChildren;
+    cpo::uno::Reference< css::drawing::XShapes > mxChildren;
 
 public:
 
     SdXMLGroupShapeContext( SvXMLImport& rImport,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
-        css::uno::Reference< css::drawing::XShapes > const & rShapes,
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+        cpo::uno::Reference< css::drawing::XShapes > const & rShapes,
         bool bTemporaryShape);
     virtual ~SdXMLGroupShapeContext() override;
 
     virtual void startFastElement(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
     virtual void endFastElement(sal_Int32 nElement) override;
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

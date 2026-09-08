@@ -11,7 +11,7 @@
 
 #include "wpftqahelperdllapi.h"
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 
 #include <rtl/ustring.hxx>
@@ -53,19 +53,19 @@ namespace test
 class WPFTQAHELPER_DLLPUBLIC WpftLoader
 {
 public:
-    WpftLoader(const OUString& rURL, const css::uno::Reference<css::document::XFilter>& rxFilter,
+    WpftLoader(const OUString& rURL, const cpo::uno::Reference<css::document::XFilter>& rxFilter,
                const OUString& rFactoryURL,
-               const css::uno::Reference<css::frame::XDesktop2>& rxDesktop,
-               const css::uno::Reference<css::container::XNameAccess>& rxTypeMap,
-               const css::uno::Reference<cpo::uno::XComponentContext>& rxContext);
-    WpftLoader(const css::uno::Reference<css::io::XInputStream>& rxInputStream,
-               const css::uno::Reference<css::document::XFilter>& rxFilter,
+               const cpo::uno::Reference<css::frame::XDesktop2>& rxDesktop,
+               const cpo::uno::Reference<css::container::XNameAccess>& rxTypeMap,
+               const cpo::uno::Reference<cpo::uno::XComponentContext>& rxContext);
+    WpftLoader(const cpo::uno::Reference<css::io::XInputStream>& rxInputStream,
+               const cpo::uno::Reference<css::document::XFilter>& rxFilter,
                const OUString& rFactoryURL,
-               const css::uno::Reference<css::frame::XDesktop2>& rxDesktop,
-               const css::uno::Reference<cpo::uno::XComponentContext>& rxContext);
+               const cpo::uno::Reference<css::frame::XDesktop2>& rxDesktop,
+               const cpo::uno::Reference<cpo::uno::XComponentContext>& rxContext);
     ~WpftLoader();
 
-    const css::uno::Reference<css::lang::XComponent>& getDocument() const;
+    const cpo::uno::Reference<css::lang::XComponent>& getDocument() const;
 
 private:
     bool impl_load();
@@ -76,14 +76,14 @@ private:
 
 private:
     const OUString m_aURL;
-    const css::uno::Reference<css::io::XInputStream> m_xInputStream;
+    const cpo::uno::Reference<css::io::XInputStream> m_xInputStream;
     const OUString m_aFactoryURL;
-    const css::uno::Reference<css::document::XFilter> m_xFilter;
-    const css::uno::Reference<css::frame::XDesktop2> m_xDesktop;
-    const css::uno::Reference<css::container::XNameAccess> m_xTypeMap;
-    const css::uno::Reference<cpo::uno::XComponentContext> m_xContext;
-    css::uno::Reference<css::lang::XComponent> m_xDoc;
-    css::uno::Reference<css::frame::XFrame> m_xFrame;
+    const cpo::uno::Reference<css::document::XFilter> m_xFilter;
+    const cpo::uno::Reference<css::frame::XDesktop2> m_xDesktop;
+    const cpo::uno::Reference<css::container::XNameAccess> m_xTypeMap;
+    const cpo::uno::Reference<cpo::uno::XComponentContext> m_xContext;
+    cpo::uno::Reference<css::lang::XComponent> m_xDoc;
+    cpo::uno::Reference<css::frame::XFrame> m_xFrame;
 };
 }
 }

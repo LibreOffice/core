@@ -20,7 +20,7 @@
 #pragma once
 
 #include <xmloff/xmlictxt.hxx>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 
@@ -43,13 +43,13 @@ class XMLIndexTitleTemplateContext : public SvXMLImportContext
     OUStringBuffer sContent;
 
     // TOC property set
-    css::uno::Reference<css::beans::XPropertySet> & rTOCPropertySet;
+    cpo::uno::Reference<css::beans::XPropertySet> & rTOCPropertySet;
 
 public:
 
      XMLIndexTitleTemplateContext(
         SvXMLImport& rImport,
-        css::uno::Reference<css::beans::XPropertySet> & rPropSet);
+        cpo::uno::Reference<css::beans::XPropertySet> & rPropSet);
 
     virtual ~XMLIndexTitleTemplateContext() override;
 
@@ -58,7 +58,7 @@ protected:
     /** process parameters */
     virtual void startFastElement(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     /** set values */
     virtual void endFastElement(sal_Int32 nElement) override;

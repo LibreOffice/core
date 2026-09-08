@@ -29,7 +29,7 @@
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <com/sun/star/sheet/DataPilotFieldSortMode.hpp>
 
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace css::sheet;
 
 ScItemValue::ScItemValue(OUString aName, SCCOL nColumn, PivotFunc nFunctionMask) :

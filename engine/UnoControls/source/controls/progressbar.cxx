@@ -26,8 +26,8 @@
 
 using namespace ::cppu;
 using namespace ::osl;
-using namespace ::com::sun::star::uno;
-using namespace css::uno;
+using namespace ::cpo::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::awt;
 
 namespace unocontrols {

@@ -57,8 +57,8 @@
 #include <vcl/idletask.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 class ScFiltersTest3 : public ScModelTestBase
 {
@@ -1858,13 +1858,13 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf128951)
     createScDoc();
 
     // 2. Create a new sheet instance
-    css::uno::Reference<css::lang::XMultiServiceFactory> xFac(mxComponent,
-                                                              css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::lang::XMultiServiceFactory> xFac(mxComponent,
+                                                              cpo::uno::UNO_QUERY_THROW);
     auto xSheet = xFac->createInstance(u"com.sun.star.sheet.Spreadsheet"_ustr);
 
     // 3. Insert sheet into the spreadsheet (was throwing IllegalArgumentException)
-    css::uno::Reference<css::sheet::XSpreadsheetDocument> xDoc(mxComponent,
-                                                               css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::sheet::XSpreadsheetDocument> xDoc(mxComponent,
+                                                               cpo::uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_NO_THROW(
         xDoc->getSheets()->insertByName(u"mustNotThrow"_ustr, cpo::uno::Any(xSheet)));
 }
@@ -2004,9 +2004,9 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf130725)
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
 
     // 2. Insert 0.0042 into a cell as a formula, to force the conversion from string to double
-    css::uno::Reference<css::sheet::XCellRangesAccess> xSheets(xDoc->getSheets(),
-                                                               css::uno::UNO_QUERY_THROW);
-    css::uno::Reference<css::table::XCell> xCell = xSheets->getCellByPosition(0, 0, 0);
+    cpo::uno::Reference<css::sheet::XCellRangesAccess> xSheets(xDoc->getSheets(),
+                                                               cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::table::XCell> xCell = xSheets->getCellByPosition(0, 0, 0);
     xCell->setFormula(u"0.0042"_ustr); // this assumes en-US locale
 
     // 3. Check that the value is the nearest double-precision representation of the decimal 0.0042

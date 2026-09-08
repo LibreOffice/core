@@ -54,7 +54,7 @@ namespace basctl
 {
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::resource;
 
@@ -187,7 +187,7 @@ void Shell::CopyDialogResources(
     io_xISP = ::xmlscript::exportDialogModel( xDialogModel, xContext, rDestDoc.isDocument() ? rDestDoc.getDocument() : Reference< frame::XModel >() );
 }
 
-void OrganizeDialog::SetCurrentEntry(const css::uno::Reference<css::frame::XFrame>& xDocFrame)
+void OrganizeDialog::SetCurrentEntry(const cpo::uno::Reference<css::frame::XFrame>& xDocFrame)
 {
     if (!xDocFrame)
         return;
@@ -203,7 +203,7 @@ void OrganizeDialog::SetCurrentEntry(const css::uno::Reference<css::frame::XFram
 }
 
 // OrganizeDialog
-OrganizeDialog::OrganizeDialog(weld::Window* pParent, const css::uno::Reference<css::frame::XFrame>& xDocFrame, sal_Int16 tabId)
+OrganizeDialog::OrganizeDialog(weld::Window* pParent, const cpo::uno::Reference<css::frame::XFrame>& xDocFrame, sal_Int16 tabId)
     : GenericDialogController(pParent, u"modules/BasicIDE/ui/organizedialog.ui"_ustr, u"OrganizeDialog"_ustr)
     , m_xTabCtrl(m_xBuilder->weld_notebook(u"tabcontrol"_ustr))
     , m_xModulePage(new ObjectPage(m_xTabCtrl->get_page(u"modules"_ustr), u"ModulePage"_ustr, BrowseMode::Modules, this))

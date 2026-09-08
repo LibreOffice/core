@@ -45,28 +45,28 @@ class HyphenatorDispatcher :
     typedef std::map< LanguageType, LangSvcEntries_Hyph_Ptr_t >     HyphSvcByLangMap_t;
     HyphSvcByLangMap_t      aSvcMap;
 
-    css::uno::Reference< css::linguistic2::XLinguProperties >          xPropSet;
-    css::uno::Reference< css::linguistic2::XSearchableDictionaryList > xDicList;
+    cpo::uno::Reference< css::linguistic2::XLinguProperties >          xPropSet;
+    cpo::uno::Reference< css::linguistic2::XSearchableDictionaryList > xDicList;
 
     LngSvcMgr      &rMgr;
 
     HyphenatorDispatcher(const HyphenatorDispatcher &) = delete;
     HyphenatorDispatcher & operator = (const HyphenatorDispatcher &) = delete;
 
-    inline const css::uno::Reference< css::linguistic2::XLinguProperties > &
+    inline const cpo::uno::Reference< css::linguistic2::XLinguProperties > &
             GetPropSet();
-    inline const css::uno::Reference< css::linguistic2::XSearchableDictionaryList > &
+    inline const cpo::uno::Reference< css::linguistic2::XSearchableDictionaryList > &
             GetDicList();
 
     void    ClearSvcList();
 
     static rtl::Reference< linguistic::HyphenatedWord >
             buildHyphWord( const OUString& rOrigWord,
-                const css::uno::Reference< css::linguistic2::XDictionaryEntry> &xEntry,
+                const cpo::uno::Reference< css::linguistic2::XDictionaryEntry> &xEntry,
                 LanguageType nLang, sal_Int16 nMaxLeading );
 
     static rtl::Reference< linguistic::PossibleHyphens >
-            buildPossHyphens( const css::uno::Reference< css::linguistic2::XDictionaryEntry > &xEntry,
+            buildPossHyphens( const cpo::uno::Reference< css::linguistic2::XDictionaryEntry > &xEntry,
                     LanguageType nLanguage );
 
 public:
@@ -80,17 +80,17 @@ public:
         hasLocale( const css::lang::Locale& aLocale ) override;
 
     // XHyphenator
-    virtual css::uno::Reference< css::linguistic2::XHyphenatedWord >
+    virtual cpo::uno::Reference< css::linguistic2::XHyphenatedWord >
         hyphenate( const OUString& aWord,
                 const css::lang::Locale& aLocale,
                 sal_Int16 nMaxLeading,
                 const cpo::uno::Sequence< ::css::beans::PropertyValue >& aProperties ) override;
-    virtual css::uno::Reference< css::linguistic2::XHyphenatedWord >
+    virtual cpo::uno::Reference< css::linguistic2::XHyphenatedWord >
         queryAlternativeSpelling( const OUString& aWord,
                 const css::lang::Locale& aLocale,
                 sal_Int16 nIndex,
                 const cpo::uno::Sequence< ::css::beans::PropertyValue >& aProperties ) override;
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
             css::linguistic2::XPossibleHyphens >
         createPossibleHyphens(
                 const OUString& aWord,
@@ -106,7 +106,7 @@ public:
 };
 
 
-inline const css::uno::Reference< css::linguistic2::XLinguProperties > &
+inline const cpo::uno::Reference< css::linguistic2::XLinguProperties > &
         HyphenatorDispatcher::GetPropSet()
 {
     if (!xPropSet.is())
@@ -115,7 +115,7 @@ inline const css::uno::Reference< css::linguistic2::XLinguProperties > &
 }
 
 
-inline const css::uno::Reference< css::linguistic2::XSearchableDictionaryList > &
+inline const cpo::uno::Reference< css::linguistic2::XSearchableDictionaryList > &
         HyphenatorDispatcher::GetDicList()
 {
     if (!xDicList.is())

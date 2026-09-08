@@ -62,6 +62,7 @@
 #include <unomodel.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 #define ANSI_CHARSET            0
 #define SYMBOL_CHARSET          2
@@ -541,7 +542,7 @@ bool PPTWriter::ImplCloseDocument()
 
 bool PropValue::GetPropertyValue(
     cpo::uno::Any& rAny,
-    const css::uno::Reference< css::beans::XPropertySet > & rXPropSet,
+    const cpo::uno::Reference< css::beans::XPropertySet > & rXPropSet,
     const OUString& rString,
     bool bTestPropertyAvailability )
 {
@@ -551,7 +552,7 @@ bool PropValue::GetPropertyValue(
         bRetValue = false;
         try
         {
-            css::uno::Reference< css::beans::XPropertySetInfo >  aXPropSetInfo( rXPropSet->getPropertySetInfo() );
+            cpo::uno::Reference< css::beans::XPropertySetInfo >  aXPropSetInfo( rXPropSet->getPropertySetInfo() );
             if ( aXPropSetInfo.is() )
                 bRetValue = aXPropSetInfo->hasPropertyByName( rString );
         }
@@ -577,13 +578,13 @@ bool PropValue::GetPropertyValue(
 }
 
 css::beans::PropertyState PropValue::GetPropertyState(
-    const css::uno::Reference< css::beans::XPropertySet > & rXPropSet,
+    const cpo::uno::Reference< css::beans::XPropertySet > & rXPropSet,
     const OUString& rPropertyName )
 {
     css::beans::PropertyState eRetValue = css::beans::PropertyState_AMBIGUOUS_VALUE;
     try
     {
-        css::uno::Reference< css::beans::XPropertyState > aXPropState( rXPropSet, css::uno::UNO_QUERY );
+        cpo::uno::Reference< css::beans::XPropertyState > aXPropState( rXPropSet, cpo::uno::UNO_QUERY );
         if ( aXPropState.is() )
             eRetValue = aXPropState->getPropertyState( rPropertyName );
     }
@@ -599,7 +600,7 @@ bool PropValue::ImplGetPropertyValue( const OUString& rString )
     return GetPropertyValue( mAny, mXPropSet, rString );
 }
 
-bool PropValue::ImplGetPropertyValue( const css::uno::Reference< css::beans::XPropertySet > & aXPropSet, const OUString& rString )
+bool PropValue::ImplGetPropertyValue( const cpo::uno::Reference< css::beans::XPropertySet > & aXPropSet, const OUString& rString )
 {
     return GetPropertyValue( mAny, aXPropSet, rString );
 }
@@ -609,7 +610,7 @@ bool PropStateValue::ImplGetPropertyValue( const OUString& rString, bool bGetPro
     ePropState = css::beans::PropertyState_AMBIGUOUS_VALUE;
     bool bRetValue = true;
 #ifdef UNX
-    css::uno::Reference< css::beans::XPropertySetInfo >
+    cpo::uno::Reference< css::beans::XPropertySetInfo >
             aXPropSetInfo( mXPropSet->getPropertySetInfo() );
     if ( !aXPropSetInfo.is() )
             return false;
@@ -869,11 +870,11 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
                     // not possible to export the 'embossed' flag
                     if ( ( GetCurrentGroupLevel() > 0 ) && ( GetCurrentGroupIndex() >= 1 ) )
                     {
-                        css::uno::Reference< css::drawing::XShape > aGroupedShape( GetCurrentGroupAccess()->getByIndex( GetCurrentGroupIndex() - 1 ), uno::UNO_QUERY );
+                        cpo::uno::Reference< css::drawing::XShape > aGroupedShape( GetCurrentGroupAccess()->getByIndex( GetCurrentGroupIndex() - 1 ), uno::UNO_QUERY );
                         if( aGroupedShape.is() )
                         {
-                            css::uno::Reference< css::beans::XPropertySet > aPropSetOfNextShape
-                                ( aGroupedShape, css::uno::UNO_QUERY );
+                            cpo::uno::Reference< css::beans::XPropertySet > aPropSetOfNextShape
+                                ( aGroupedShape, cpo::uno::UNO_QUERY );
                             if ( aPropSetOfNextShape.is() )
                             {
                                 if ( PropValue::GetPropertyValue( aAny, aPropSetOfNextShape,
@@ -954,7 +955,7 @@ bool PPTWriter::ImplGetText()
 {
     mnTextSize = 0;
     mbFontIndependentLineSpacing = false;
-    mXText.set( mXShape, css::uno::UNO_QUERY );
+    mXText.set( mXShape, cpo::uno::UNO_QUERY );
 
     if ( mXText.is() )
     {
@@ -1408,7 +1409,7 @@ void PPTWriter::ImplWriteClickAction( SvStream& rSt, css::presentation::ClickAct
             // The allowed bit lives on the shape's SdAnimationInfo, not on a
             // property, so read the click sound from the model to get its URL
             // and allowed state together.
-            css::uno::Reference<css::drawing::XShape> xShape(mXPropSet, css::uno::UNO_QUERY);
+            cpo::uno::Reference<css::drawing::XShape> xShape(mXPropSet, cpo::uno::UNO_QUERY);
             SdrObject* pObj = SdrObject::getSdrObjectFromXShape(xShape);
             if ( SdAnimationInfo* pInfo = pObj ? SdDrawDocument::GetShapeUserData(*pObj) : nullptr )
                 nSoundRef = maSoundCollection.GetId(
@@ -1510,7 +1511,7 @@ void PPTWriter::ImplWriteClickAction( SvStream& rSt, css::presentation::ClickAct
     for ( int i = 0; i < 4; i++, rSt.WriteUInt32( 0 ) ) ;
 }
 
-bool PPTWriter::ImplGetEffect( const css::uno::Reference< css::beans::XPropertySet > & rPropSet,
+bool PPTWriter::ImplGetEffect( const cpo::uno::Reference< css::beans::XPropertySet > & rPropSet,
                                 css::presentation::AnimationEffect& eEffect,
                                 css::presentation::AnimationEffect& eTextEffect,
                                 bool& bIsSound )
@@ -1687,8 +1688,8 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
 
             if ( bGroup )
             {
-                css::uno::Reference< css::container::XIndexAccess >
-                    aXIndexAccess( mXShape, css::uno::UNO_QUERY );
+                cpo::uno::Reference< css::container::XIndexAccess >
+                    aXIndexAccess( mXShape, cpo::uno::UNO_QUERY );
                 if ( EnterGroup( aXIndexAccess ) )
                 {
                     std::unique_ptr<SvMemoryStream> pTmp;
@@ -1968,10 +1969,10 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             }
             else if ( mType == "drawing.Control" )
             {
-                css::uno::Reference< css::drawing::XControlShape  > aXControlShape( mXShape, css::uno::UNO_QUERY );
+                cpo::uno::Reference< css::drawing::XControlShape  > aXControlShape( mXShape, cpo::uno::UNO_QUERY );
                 if ( !aXControlShape.is() )
                     continue;
-                css::uno::Reference< css::awt::XControlModel > aXControlModel( aXControlShape->getControl() );
+                cpo::uno::Reference< css::awt::XControlModel > aXControlModel( aXControlShape->getControl() );
                 if ( !aXControlModel.is() )
                     continue;
 
@@ -1979,7 +1980,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 try
                 {
                     // try to get the aspect when available
-                    css::uno::Reference< css::beans::XPropertySet > xShapeProps( mXShape, css::uno::UNO_QUERY_THROW );
+                    cpo::uno::Reference< css::beans::XPropertySet > xShapeProps( mXShape, cpo::uno::UNO_QUERY_THROW );
                     xShapeProps->getPropertyValue(u"Aspect"_ustr) >>= nAspect;
                 }
                 catch( cpo::uno::Exception& )
@@ -2233,7 +2234,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 }
                 else
                 {
-                    mXText.set( mXShape, css::uno::UNO_QUERY );
+                    mXText.set( mXShape, cpo::uno::UNO_QUERY );
 
                     if ( mXText.is() )
                         mnTextSize = mXText->getString().getLength();
@@ -2562,7 +2563,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     try
                     {
                         // try to get the aspect when available
-                        css::uno::Reference< css::beans::XPropertySet > xShapeProps( mXShape, css::uno::UNO_QUERY_THROW );
+                        cpo::uno::Reference< css::beans::XPropertySet > xShapeProps( mXShape, cpo::uno::UNO_QUERY_THROW );
                         xShapeProps->getPropertyValue(u"Aspect"_ustr) >>= nAspect;
                     }
                     catch( cpo::uno::Exception& )

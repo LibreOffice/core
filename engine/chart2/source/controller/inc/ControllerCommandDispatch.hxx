@@ -57,7 +57,7 @@ class ControllerCommandDispatch final : public impl::ControllerCommandDispatch_B
 {
 public:
     explicit ControllerCommandDispatch(
-        const css::uno::Reference< cpo::uno::XComponentContext > & xContext,
+        const cpo::uno::Reference< cpo::uno::XComponentContext > & xContext,
         ChartController* pController, CommandDispatchContainer* pContainer );
     virtual ~ControllerCommandDispatch() override;
 
@@ -84,7 +84,7 @@ protected:
 
     virtual void fireStatusEvent(
         const OUString & rURL,
-        const css::uno::Reference< css::frame::XStatusListener > & xSingleListener ) override;
+        const cpo::uno::Reference< css::frame::XStatusListener > & xSingleListener ) override;
 
     // ____ XModifyListener ____
     virtual void modified(
@@ -97,15 +97,15 @@ protected:
 private:
     void fireStatusEventForURLImpl(
         const OUString & rURL,
-        const css::uno::Reference< css::frame::XStatusListener > & xSingleListener );
+        const cpo::uno::Reference< css::frame::XStatusListener > & xSingleListener );
 
     void updateCommandAvailability();
 
     bool isShapeControllerCommandAvailable( const OUString& rCommand );
 
     rtl::Reference<ChartController> m_xChartController;
-    css::uno::Reference< css::view::XSelectionSupplier > m_xSelectionSupplier;
-    css::uno::Reference< css::frame::XDispatch > m_xDispatch;
+    cpo::uno::Reference< css::view::XSelectionSupplier > m_xSelectionSupplier;
+    cpo::uno::Reference< css::frame::XDispatch > m_xDispatch;
 
     std::unique_ptr< impl::ModelState > m_apModelState;
     std::unique_ptr< impl::ControllerState > m_apControllerState;

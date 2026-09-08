@@ -71,7 +71,7 @@ namespace dbaccess
         virtual void release() noexcept override;
 
     // css::beans::XPropertySet
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+        virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
 
     // cppu::OComponentHelper
         virtual void disposing() override;
@@ -105,11 +105,11 @@ namespace dbaccess
             A column descriptor object is used to append new columns to the collection. If such an append
             actually happened, columnAppended is called afterwards.
         */
-        virtual css::uno::Reference< css::beans::XPropertySet > createColumnDescriptor() = 0;
+        virtual cpo::uno::Reference< css::beans::XPropertySet > createColumnDescriptor() = 0;
 
         /** notifies that a column, created from a column descriptor, has been appended
         */
-        virtual void columnAppended( const css::uno::Reference< css::beans::XPropertySet >& _rxSourceDescriptor ) = 0;
+        virtual void columnAppended( const cpo::uno::Reference< css::beans::XPropertySet >& _rxSourceDescriptor ) = 0;
 
         /** notifies that a column with a given name has been dropped
         */
@@ -129,7 +129,7 @@ namespace dbaccess
         OContainerMediator*     m_pMediator;
 
         // comes from the driver can be null
-        css::uno::Reference< css::container::XNameAccess >    m_xDrvColumns;
+        cpo::uno::Reference< css::container::XNameAccess >    m_xDrvColumns;
         cpo::uno::WeakReference< cpo::uno::XInterface >       m_xParent;
         IColumnFactory*                                       m_pColFactoryImpl;
         ::connectivity::sdbcx::IRefreshableColumns*           m_pRefreshColumns;
@@ -140,13 +140,13 @@ namespace dbaccess
 
     protected:
         virtual void impl_refresh() override;
-        virtual css::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
-        virtual css::uno::Reference< css::beans::XPropertySet > createDescriptor() override;
-        virtual css::uno::Reference< css::beans::XPropertySet > appendObject( const OUString& _rForName, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
+        virtual cpo::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
+        virtual cpo::uno::Reference< css::beans::XPropertySet > createDescriptor() override;
+        virtual cpo::uno::Reference< css::beans::XPropertySet > appendObject( const OUString& _rForName, const cpo::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
         virtual void dropObject(sal_Int32 _nPos, const OUString& _sElementName) override;
 
     public:
-        css::uno::Reference< css::beans::XPropertySet > createBaseObject(const OUString& _rName)
+        cpo::uno::Reference< css::beans::XPropertySet > createBaseObject(const OUString& _rName)
         {
             return OColumns_BASE::createObject(_rName);
         }
@@ -178,7 +178,7 @@ namespace dbaccess
         OColumns(
             ::cppu::OWeakObject& _rParent,
             ::osl::Mutex& _rMutex,
-            css::uno::Reference< css::container::XNameAccess > _xDrvColumns,
+            cpo::uno::Reference< css::container::XNameAccess > _xDrvColumns,
             bool _bCaseSensitive,
             const std::vector< OUString> &_rVector,
             IColumnFactory* _pColFactory,
@@ -201,8 +201,8 @@ namespace dbaccess
         virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
         // css::container::XChild
-        virtual css::uno::Reference< cpo::uno::XInterface > getParent(  ) override;
-        virtual void setParent( const css::uno::Reference< cpo::uno::XInterface >& Parent ) override;
+        virtual cpo::uno::Reference< cpo::uno::XInterface > getParent(  ) override;
+        virtual void setParent( const cpo::uno::Reference< cpo::uno::XInterface >& Parent ) override;
 
         void append(const OUString& rName, OColumn*);
         void clearColumns();

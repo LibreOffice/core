@@ -25,6 +25,7 @@
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 /// @throws css::script::BasicErrorException
 static ScVbaFormatConditions*
@@ -43,7 +44,7 @@ ScVbaFormatCondition::ScVbaFormatCondition( const uno::Reference< XHelperInterfa
                                             uno::Reference< excel::XFormatConditions >  _xFormatConditions,
                                             uno::Reference< css::beans::XPropertySet >  _xPropertySet )
     : ScVbaFormatCondition_BASE( xParent, xContext,
-                                 uno::Reference< sheet::XSheetCondition >( _xSheetConditionalEntry, css::uno::UNO_QUERY_THROW ) ),
+                                 uno::Reference< sheet::XSheetCondition >( _xSheetConditionalEntry, cpo::uno::UNO_QUERY_THROW ) ),
                                  moFormatConditions(std::move( _xFormatConditions )), mxStyle(std::move( _xStyle )), mxParentRangePropertySet(std::move( _xPropertySet ))
 {
         mxSheetConditionalEntries = lcl_getScVbaFormatConditionsPtr( moFormatConditions )->getSheetConditionalEntries();

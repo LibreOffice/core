@@ -115,8 +115,8 @@ class ToolBarMerger
                                        std::u16string_view rMergeCommandParameter );
 
         static rtl::Reference<::cppu::OWeakObject> CreateController(
-            const css::uno::Reference< cpo::uno::XComponentContext > & rxContext,
-            const css::uno::Reference< css::frame::XFrame > & xFrame,
+            const cpo::uno::Reference< cpo::uno::XComponentContext > & rxContext,
+            const cpo::uno::Reference< css::frame::XFrame > & xFrame,
             ToolBox*        pToolbar,
             const OUString& rCommandURL,
             ToolBoxItemId   nId,

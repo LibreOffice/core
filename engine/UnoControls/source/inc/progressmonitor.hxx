@@ -57,7 +57,7 @@ using ProgressMonitor_BASE = cppu::ImplInheritanceHelper<BaseContainerControl,
 class ProgressMonitor final : public ProgressMonitor_BASE
 {
 public:
-    ProgressMonitor( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+    ProgressMonitor( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
     virtual ~ProgressMonitor() override;
 
@@ -113,11 +113,11 @@ public:
     //  XButton
 
     virtual void addActionListener(
-        const css::uno::Reference< css::awt::XActionListener >& xListener
+        const cpo::uno::Reference< css::awt::XActionListener >& xListener
     ) override;
 
     virtual void removeActionListener(
-        const css::uno::Reference< css::awt::XActionListener >& xListener
+        const cpo::uno::Reference< css::awt::XActionListener >& xListener
     ) override;
 
     virtual void setLabel( const OUString& sLabel ) override;
@@ -135,13 +135,13 @@ public:
     //  XControl
 
     virtual void createPeer(
-        const css::uno::Reference< css::awt::XToolkit     >& xToolkit ,
-        const css::uno::Reference< css::awt::XWindowPeer  >& xParent
+        const cpo::uno::Reference< css::awt::XToolkit     >& xToolkit ,
+        const cpo::uno::Reference< css::awt::XWindowPeer  >& xParent
     ) override;
 
-    virtual bool setModel( const css::uno::Reference< css::awt::XControlModel >& xModel ) override;
+    virtual bool setModel( const cpo::uno::Reference< css::awt::XControlModel >& xModel ) override;
 
-    virtual css::uno::Reference< css::awt::XControlModel > getModel() override;
+    virtual cpo::uno::Reference< css::awt::XControlModel > getModel() override;
 
     //  XComponent
 
@@ -158,7 +158,7 @@ public:
 private:
     virtual void impl_paint( sal_Int32 nX ,
                              sal_Int32 nY ,
-                             const css::uno::Reference< css::awt::XGraphics >& xGraphics ) override;
+                             const cpo::uno::Reference< css::awt::XGraphics >& xGraphics ) override;
 
     using BaseControl::impl_recalcLayout;
 

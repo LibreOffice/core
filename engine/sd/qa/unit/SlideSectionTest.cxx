@@ -19,6 +19,7 @@
 #include <sdpage.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 // Size + membership implies set equality, and avoids needing an ostream
 // overload for std::set<SdPage*> purely to satisfy CPPUNIT_ASSERT_EQUAL.

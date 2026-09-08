@@ -45,7 +45,7 @@
 #endif
 
 using namespace com::sun::star;
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace css::registry;
 using namespace css::lang;

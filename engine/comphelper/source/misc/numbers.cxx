@@ -28,14 +28,14 @@
 namespace comphelper
 {
 
-sal_Int16 getNumberFormatType(const css::uno::Reference<css::util::XNumberFormats>& xFormats, sal_Int32 nKey)
+sal_Int16 getNumberFormatType(const cpo::uno::Reference<css::util::XNumberFormats>& xFormats, sal_Int32 nKey)
 {
     sal_Int16 nReturn(css::util::NumberFormat::UNDEFINED);
     if (xFormats.is())
     {
         try
         {
-            css::uno::Reference<css::beans::XPropertySet> xFormat(xFormats->getByKey(nKey));
+            cpo::uno::Reference<css::beans::XPropertySet> xFormat(xFormats->getByKey(nKey));
             if (xFormat.is())
                 xFormat->getPropertyValue(u"Type"_ustr) >>= nReturn;
         }
@@ -48,23 +48,23 @@ sal_Int16 getNumberFormatType(const css::uno::Reference<css::util::XNumberFormat
 }
 
 
-sal_Int16 getNumberFormatType(const css::uno::Reference<css::util::XNumberFormatter>& xFormatter, sal_Int32 nKey)
+sal_Int16 getNumberFormatType(const cpo::uno::Reference<css::util::XNumberFormatter>& xFormatter, sal_Int32 nKey)
 {
     OSL_ENSURE(xFormatter.is(), "getNumberFormatType : the formatter isn't valid !");
-    css::uno::Reference<css::util::XNumberFormatsSupplier> xSupplier( xFormatter->getNumberFormatsSupplier());
+    cpo::uno::Reference<css::util::XNumberFormatsSupplier> xSupplier( xFormatter->getNumberFormatsSupplier());
     OSL_ENSURE(xSupplier.is(), "getNumberFormatType : the formatter doesn't implement a supplier !");
-    css::uno::Reference<css::util::XNumberFormats> xFormats( xSupplier->getNumberFormats());
+    cpo::uno::Reference<css::util::XNumberFormats> xFormats( xSupplier->getNumberFormats());
     return getNumberFormatType(xFormats, nKey);
 }
 
 
-cpo::uno::Any getNumberFormatDecimals(const css::uno::Reference<css::util::XNumberFormats>& xFormats, sal_Int32 nKey)
+cpo::uno::Any getNumberFormatDecimals(const cpo::uno::Reference<css::util::XNumberFormats>& xFormats, sal_Int32 nKey)
 {
     if (xFormats.is())
     {
         try
         {
-            css::uno::Reference<css::beans::XPropertySet> xFormat( xFormats->getByKey(nKey));
+            cpo::uno::Reference<css::beans::XPropertySet> xFormat( xFormats->getByKey(nKey));
             if (xFormat.is())
             {
                 return xFormat->getPropertyValue( u"Decimals"_ustr );
@@ -79,7 +79,7 @@ cpo::uno::Any getNumberFormatDecimals(const css::uno::Reference<css::util::XNumb
 }
 
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::beans;

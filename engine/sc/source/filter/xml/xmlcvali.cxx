@@ -29,6 +29,7 @@
 #include <com/sun/star/sheet/TableValidationVisibility.hpp>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace xmloff::token;
 using namespace ::formula;
 
@@ -62,8 +63,8 @@ public:
     ScXMLContentValidationContext( ScXMLImport& rImport,
                         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList );
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
 
@@ -87,9 +88,9 @@ public:
                         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScXMLContentValidationContext* pValidationContext);
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
 };
@@ -110,9 +111,9 @@ public:
                         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScXMLContentValidationContext* pValidationContext);
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
 };
@@ -128,9 +129,9 @@ public:
                         const rtl::Reference<sax_fastparser::FastAttributeList>& rAttrList,
                         ScXMLContentValidationContext* pValidationContext);
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
     virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
 };
 
@@ -441,9 +442,9 @@ ScXMLHelpMessageContext::ScXMLHelpMessageContext( ScXMLImport& rImport,
     }
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > ScXMLHelpMessageContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > ScXMLHelpMessageContext::createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
     SvXMLImportContext *pContext = nullptr;
 
@@ -495,9 +496,9 @@ ScXMLErrorMessageContext::ScXMLErrorMessageContext( ScXMLImport& rImport,
     }
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > ScXMLErrorMessageContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > ScXMLErrorMessageContext::createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
     SvXMLImportContext *pContext = nullptr;
 
@@ -544,8 +545,8 @@ ScXMLErrorMacroContext::ScXMLErrorMacroContext( ScXMLImport& rImport,
     }
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler >  ScXMLErrorMacroContext::createFastChildContext(
-    sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
+cpo::uno::Reference< css::xml::sax::XFastContextHandler >  ScXMLErrorMacroContext::createFastChildContext(
+    sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
     SvXMLImportContext *pContext = nullptr;
 

@@ -40,6 +40,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 static const SvxItemPropertySet* ImplGetSvxTextPortionPropertySet()
 {

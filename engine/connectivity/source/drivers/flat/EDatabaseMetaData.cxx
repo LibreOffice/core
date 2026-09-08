@@ -30,7 +30,7 @@ using namespace ::comphelper;
 
 using namespace connectivity;
 using namespace connectivity::flat;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbcx;
@@ -165,7 +165,7 @@ Reference< XResultSet > OFlatDatabaseMetaData::getColumns(
     {
         if (match(tableNamePattern, rTabName, '\0'))
         {
-            Reference<XColumnsSupplier> xTable(xNames->getByName(rTabName), css::uno::UNO_QUERY);
+            Reference<XColumnsSupplier> xTable(xNames->getByName(rTabName), cpo::uno::UNO_QUERY);
             aRow[3] = new ORowSetValueDecorator(rTabName);
 
             Reference< XNameAccess> xColumns = xTable->getColumns();

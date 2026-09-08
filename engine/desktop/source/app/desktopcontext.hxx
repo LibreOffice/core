@@ -27,13 +27,13 @@ namespace desktop
     class DesktopContext: public cppu::WeakImplHelper< cpo::uno::XCurrentContext >
     {
     public:
-    explicit DesktopContext( const css::uno::Reference< cpo::uno::XCurrentContext > & ctx);
+    explicit DesktopContext( const cpo::uno::Reference< cpo::uno::XCurrentContext > & ctx);
 
         // XCurrentContext
         virtual cpo::uno::Any getValueByName( const OUString& Name ) override;
 
     private:
-            css::uno::Reference< cpo::uno::XCurrentContext > m_xNextContext;
+            cpo::uno::Reference< cpo::uno::XCurrentContext > m_xNextContext;
     };
 }
 

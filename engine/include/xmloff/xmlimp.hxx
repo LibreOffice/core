@@ -157,19 +157,19 @@ public:
     SvXMLLegacyToFastDocHandler( rtl::Reference< SvXMLImport > xImport );
 
     // XImporter
-    virtual void setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
+    virtual void setTargetDocument( const cpo::uno::Reference< css::lang::XComponent >& xDoc ) override;
 
     // css::xml::sax::XDocumentHandler
     virtual void startDocument() override;
     virtual void endDocument() override;
     virtual void startElement(const OUString& aName,
-        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttribs) override;
+        const cpo::uno::Reference< css::xml::sax::XAttributeList > & xAttribs) override;
     virtual void endElement(const OUString& aName) override;
     virtual void characters(const OUString& aChars) override;
     virtual void ignorableWhitespace(const OUString& aWhitespaces) override;
     virtual void processingInstruction(const OUString& aTarget,
                                                 const OUString& aData) override;
-    virtual void setDocumentLocator(const css::uno::Reference< css::xml::sax::XLocator > & xLocator) override;
+    virtual void setDocumentLocator(const cpo::uno::Reference< css::xml::sax::XLocator > & xLocator) override;
 };
 
 class XMLOFF_DLLPUBLIC SAL_LOPLUGIN_ANNOTATE("crosscast") SvXMLImport : public cppu::WeakImplHelper<
@@ -183,12 +183,12 @@ class XMLOFF_DLLPUBLIC SAL_LOPLUGIN_ANNOTATE("crosscast") SvXMLImport : public c
     friend class SvXMLImportContext;
     friend class SvXMLLegacyToFastDocHandler;
 
-    css::uno::Reference< css::xml::sax::XLocator > mxLocator;
-    css::uno::Reference< css::frame::XModel > mxModel;
-    css::uno::Reference< css::util::XNumberFormatsSupplier > mxNumberFormatsSupplier;
-    css::uno::Reference< css::document::XGraphicStorageHandler > mxGraphicStorageHandler;
-    css::uno::Reference< css::document::XEmbeddedObjectResolver > mxEmbeddedResolver;
-    css::uno::Reference< css::beans::XPropertySet > mxImportInfo;
+    cpo::uno::Reference< css::xml::sax::XLocator > mxLocator;
+    cpo::uno::Reference< css::frame::XModel > mxModel;
+    cpo::uno::Reference< css::util::XNumberFormatsSupplier > mxNumberFormatsSupplier;
+    cpo::uno::Reference< css::document::XGraphicStorageHandler > mxGraphicStorageHandler;
+    cpo::uno::Reference< css::document::XEmbeddedObjectResolver > mxEmbeddedResolver;
+    cpo::uno::Reference< css::beans::XPropertySet > mxImportInfo;
 
     rtl::Reference< XMLTextImportHelper >             mxTextImport;
     rtl::Reference< XMLShapeImportHelper >            mxShapeImport;
@@ -200,14 +200,14 @@ class XMLOFF_DLLPUBLIC SAL_LOPLUGIN_ANNOTATE("crosscast") SvXMLImport : public c
     rtl::Reference<SvXMLStylesContext> mxAutoStyles;
     rtl::Reference<SvXMLStylesContext> mxMasterStyles;
 
-    css::uno::Reference< css::container::XNameContainer > mxGradientHelper;
-    css::uno::Reference< css::container::XNameContainer > mxHatchHelper;
-    css::uno::Reference< css::container::XNameContainer > mxBitmapHelper;
-    css::uno::Reference< css::container::XNameContainer > mxTransGradientHelper;
-    css::uno::Reference< css::container::XNameContainer > mxMarkerHelper;
-    css::uno::Reference< css::container::XNameContainer > mxDashHelper;
-    css::uno::Reference< css::container::XNameContainer > mxNumberStyles;
-    css::uno::Reference< css::lang::XEventListener > mxEventListener;
+    cpo::uno::Reference< css::container::XNameContainer > mxGradientHelper;
+    cpo::uno::Reference< css::container::XNameContainer > mxHatchHelper;
+    cpo::uno::Reference< css::container::XNameContainer > mxBitmapHelper;
+    cpo::uno::Reference< css::container::XNameContainer > mxTransGradientHelper;
+    cpo::uno::Reference< css::container::XNameContainer > mxMarkerHelper;
+    cpo::uno::Reference< css::container::XNameContainer > mxDashHelper;
+    cpo::uno::Reference< css::container::XNameContainer > mxNumberStyles;
+    cpo::uno::Reference< css::lang::XEventListener > mxEventListener;
 
     std::unique_ptr<SvXMLImport_Impl>  mpImpl;            // dummy
 
@@ -225,10 +225,10 @@ class XMLOFF_DLLPUBLIC SAL_LOPLUGIN_ANNOTATE("crosscast") SvXMLImport : public c
 
     SvXMLImportFlags  mnImportFlags;
     std::set< OUString > m_embeddedFontUrlsKnown;
-    css::uno::Reference< css::xml::sax::XFastParser > mxParser;
+    cpo::uno::Reference< css::xml::sax::XFastParser > mxParser;
     rtl::Reference< SvXMLImportFastNamespaceHandler > maNamespaceHandler;
     rtl::Reference < comphelper::AttributeList > maNamespaceAttrList;
-    css::uno::Reference< css::xml::sax::XFastDocumentHandler > mxFastDocumentHandler;
+    cpo::uno::Reference< css::xml::sax::XFastDocumentHandler > mxFastDocumentHandler;
     static rtl::Reference< xmloff::token::FastTokenHandler > xTokenHandler;
     static std::unordered_map< sal_Int32, std::pair< OUString, OUString > > aNamespaceMap;
     static std::unordered_map< OUString, OUString > aNamespaceURIPrefixMap;
@@ -240,10 +240,10 @@ public:
     static std::optional<SvXMLNamespaceMap> processNSAttributes(
         std::optional<SvXMLNamespaceMap> & rpNamespaceMap,
         SvXMLImport *const pImport,
-        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList);
+        const cpo::uno::Reference< css::xml::sax::XAttributeList >& xAttrList);
 private:
 
-    css::uno::Reference< css::task::XStatusIndicator > mxStatusIndicator;
+    cpo::uno::Reference< css::task::XStatusIndicator > mxStatusIndicator;
 
     // tdf#69060 & tdf#137643 import embedded fonts and activate them in a
     // batch in EmbeddedFontsManager's dtor
@@ -259,7 +259,7 @@ protected:
     // before a context for the current element has been pushed.
     // This base class implementation returns a context that ignores everything.
     virtual SvXMLImportContext *CreateFastContext( sal_Int32 Element,
-        const ::css::uno::Reference< ::css::xml::sax::XFastAttributeList >& xAttrList );
+        const ::cpo::uno::Reference< ::css::xml::sax::XFastAttributeList >& xAttrList );
 
     virtual XMLTextImportHelper* CreateTextImport();
     void ClearTextImport() { mxTextImport = nullptr; }
@@ -277,14 +277,14 @@ protected:
 
     bool IsODFVersionConsistent( const OUString& aODFVersion );
 
-    const css::uno::Reference< css::document::XEmbeddedObjectResolver >& GetEmbeddedResolver() const { return mxEmbeddedResolver; }
-    inline void SetEmbeddedResolver( css::uno::Reference< css::document::XEmbeddedObjectResolver > const & _xEmbeddedResolver );
+    const cpo::uno::Reference< css::document::XEmbeddedObjectResolver >& GetEmbeddedResolver() const { return mxEmbeddedResolver; }
+    inline void SetEmbeddedResolver( cpo::uno::Reference< css::document::XEmbeddedObjectResolver > const & _xEmbeddedResolver );
 
-    const css::uno::Reference<css::document::XGraphicStorageHandler> & GetGraphicStorageHandler() const
+    const cpo::uno::Reference<css::document::XGraphicStorageHandler> & GetGraphicStorageHandler() const
     {
         return mxGraphicStorageHandler;
     }
-    void SetGraphicStorageHandler(css::uno::Reference<css::document::XGraphicStorageHandler> const & rxGraphicStorageHandler);
+    void SetGraphicStorageHandler(cpo::uno::Reference<css::document::XGraphicStorageHandler> const & rxGraphicStorageHandler);
 
     void CreateNumberFormatsSupplier_();
     void CreateDataStylesImport_();
@@ -295,7 +295,7 @@ public:
      * @param sSupportedServiceNames if this is empty we default to our normal supported service names
      */
     SvXMLImport(
-        const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
         OUString const & implementationName,
         SvXMLImportFlags nImportFlags = SvXMLImportFlags::ALL,
         const cpo::uno::Sequence< OUString > & sSupportedServiceNames = {});
@@ -309,38 +309,38 @@ public:
     virtual void characters(const OUString& aChars) override final;
     virtual void processingInstruction(const OUString& aTarget,
                                                 const OUString& aData) override final;
-    virtual void setDocumentLocator(const css::uno::Reference< css::xml::sax::XLocator > & xLocator) override final;
+    virtual void setDocumentLocator(const cpo::uno::Reference< css::xml::sax::XLocator > & xLocator) override final;
 
     // ::css::xml::sax::XFastContextHandler
     virtual void startFastElement(sal_Int32 Element,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override final;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override final;
     virtual void startUnknownElement(const OUString & Namespace,
         const OUString & Name,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override final;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override final;
     virtual void endFastElement(sal_Int32 Element) override final;
     virtual void endUnknownElement(const OUString & Namespace,
         const OUString & Name) override final;
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler >
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler >
     createFastChildContext(sal_Int32 Element,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override final;
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler >
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override final;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler >
     createUnknownChildContext(const OUString & Namespace, const OUString & Name,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override final;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override final;
 
     // XFastParser
     virtual void parseStream( const css::xml::sax::InputSource& aInputSource ) override final;
-    virtual void setFastDocumentHandler( const css::uno::Reference< css::xml::sax::XFastDocumentHandler >& Handler ) override final;
-    virtual void setTokenHandler( const css::uno::Reference< css::xml::sax::XFastTokenHandler >& Handler ) override final;
+    virtual void setFastDocumentHandler( const cpo::uno::Reference< css::xml::sax::XFastDocumentHandler >& Handler ) override final;
+    virtual void setTokenHandler( const cpo::uno::Reference< css::xml::sax::XFastTokenHandler >& Handler ) override final;
     virtual void registerNamespace( const OUString& NamespaceURL, sal_Int32 NamespaceToken ) override final;
     virtual OUString getNamespaceURL( const OUString& rPrefix ) override final;
-    virtual void setErrorHandler( const css::uno::Reference< css::xml::sax::XErrorHandler >& Handler ) override final;
-    virtual void setEntityResolver( const css::uno::Reference< css::xml::sax::XEntityResolver >& Resolver ) override final;
+    virtual void setErrorHandler( const cpo::uno::Reference< css::xml::sax::XErrorHandler >& Handler ) override final;
+    virtual void setEntityResolver( const cpo::uno::Reference< css::xml::sax::XEntityResolver >& Resolver ) override final;
     virtual void setLocale( const css::lang::Locale& rLocale ) override final;
-    virtual void setNamespaceHandler( const css::uno::Reference< css::xml::sax::XFastNamespaceHandler >& Handler) override final;
+    virtual void setNamespaceHandler( const cpo::uno::Reference< css::xml::sax::XFastNamespaceHandler >& Handler) override final;
     virtual void setCustomEntityNames( const ::cpo::uno::Sequence< ::css::beans::Pair<::rtl::OUString, ::rtl::OUString> >& replacements )  override final;
 
     // XImporter
-    virtual void setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
+    virtual void setTargetDocument( const cpo::uno::Reference< css::lang::XComponent >& xDoc ) override;
 
     // XFilter
     virtual bool filter( const cpo::uno::Sequence< css::beans::PropertyValue >& aDescriptor ) override;
@@ -375,7 +375,7 @@ public:
     inline rtl::Reference< ::xmloff::OFormLayerXMLImport > const & GetFormImport();
 
     // get XPropertySet with import information
-    const css::uno::Reference< css::beans::XPropertySet >& getImportInfo() const { return mxImportInfo; }
+    const cpo::uno::Reference< css::beans::XPropertySet >& getImportInfo() const { return mxImportInfo; }
 
     // get import helper for events
     XMLEventImportHelper& GetEventImport();
@@ -391,38 +391,38 @@ public:
     const SvXMLNamespaceMap& GetNamespaceMap() const { return *mxNamespaceMap; }
     const SvXMLUnitConverter& GetMM100UnitConverter() const { return *mpUnitConv; }
         SvXMLUnitConverter& GetMM100UnitConverter() { return *mpUnitConv; }
-    const css::uno::Reference< css::xml::sax::XLocator > & GetLocator() const { return mxLocator; }
-    const css::uno::Reference< css::frame::XModel > &
+    const cpo::uno::Reference< css::xml::sax::XLocator > & GetLocator() const { return mxLocator; }
+    const cpo::uno::Reference< css::frame::XModel > &
         GetModel() const { return mxModel; }
 
-    const css::uno::Reference< css::container::XNameContainer > & GetGradientHelper();
-    const css::uno::Reference< css::container::XNameContainer > & GetHatchHelper();
-    const css::uno::Reference< css::container::XNameContainer > & GetBitmapHelper();
-    const css::uno::Reference< css::container::XNameContainer > & GetTransGradientHelper();
-    const css::uno::Reference< css::container::XNameContainer > & GetMarkerHelper();
-    const css::uno::Reference< css::container::XNameContainer > & GetDashHelper();
-    inline css::uno::Reference< css::util::XNumberFormatsSupplier > & GetNumberFormatsSupplier();
-    void SetNumberFormatsSupplier(const css::uno::Reference< css::util::XNumberFormatsSupplier >& _xNumberFormatSupplier)
+    const cpo::uno::Reference< css::container::XNameContainer > & GetGradientHelper();
+    const cpo::uno::Reference< css::container::XNameContainer > & GetHatchHelper();
+    const cpo::uno::Reference< css::container::XNameContainer > & GetBitmapHelper();
+    const cpo::uno::Reference< css::container::XNameContainer > & GetTransGradientHelper();
+    const cpo::uno::Reference< css::container::XNameContainer > & GetMarkerHelper();
+    const cpo::uno::Reference< css::container::XNameContainer > & GetDashHelper();
+    inline cpo::uno::Reference< css::util::XNumberFormatsSupplier > & GetNumberFormatsSupplier();
+    void SetNumberFormatsSupplier(const cpo::uno::Reference< css::util::XNumberFormatsSupplier >& _xNumberFormatSupplier)
     {
         mxNumberFormatsSupplier = _xNumberFormatSupplier;
     }
 
-    css::uno::Reference<css::graphic::XGraphic> loadGraphicByURL(OUString const& rURL,
+    cpo::uno::Reference<css::graphic::XGraphic> loadGraphicByURL(OUString const& rURL,
                                                                  sal_Int32 nPageNum = -1);
-    css::uno::Reference<css::graphic::XGraphic> loadGraphicFromBase64(css::uno::Reference<css::io::XOutputStream> const & rxOutputStream,
+    cpo::uno::Reference<css::graphic::XGraphic> loadGraphicFromBase64(cpo::uno::Reference<css::io::XOutputStream> const & rxOutputStream,
                                                                       sal_Int32 nPageNum = -1);
 
-    css::uno::Reference< css::io::XOutputStream > GetStreamForGraphicObjectURLFromBase64() const;
+    cpo::uno::Reference< css::io::XOutputStream > GetStreamForGraphicObjectURLFromBase64() const;
 
     bool IsPackageURL( std::u16string_view rURL ) const;
     OUString ResolveEmbeddedObjectURL( const OUString& rURL,
                                        std::u16string_view rClassId );
-    css::uno::Reference< css::io::XOutputStream >
+    cpo::uno::Reference< css::io::XOutputStream >
         GetStreamForEmbeddedObjectURLFromBase64() const;
     OUString ResolveEmbeddedObjectURLFromBase64();
 
     // get source storage we're importing from (if available)
-    css::uno::Reference< css::embed::XStorage > const &
+    cpo::uno::Reference< css::embed::XStorage > const &
           GetSourceStorage() const;
 
     void AddStyleDisplayName( XmlStyleFamily nFamily,
@@ -474,7 +474,7 @@ public:
         /// original exception message (if applicable)
         const OUString& rExceptionMessage,
         /// error location (if applicable)
-        const css::uno::Reference< css::xml::sax::XLocator> & rLocator );
+        const cpo::uno::Reference< css::xml::sax::XLocator> & rLocator );
 
     void SetError(
         sal_Int32 nId,
@@ -486,7 +486,7 @@ public:
 
     ::comphelper::UnoInterfaceToUniqueIdentifierMapper& getInterfaceToIdentifierMapper();
 
-    css::uno::Reference< cpo::uno::XComponentContext > const &
+    cpo::uno::Reference< cpo::uno::XComponentContext > const &
     GetComponentContext() const;
 
     // Convert drawing object positions from OOo file format to OASIS file format and vice versa (#i28749#)
@@ -498,12 +498,12 @@ public:
     OUString GetDocumentBase() const;
 
     /// set the XmlId attribute of given UNO object (for RDF metadata)
-    void SetXmlId(css::uno::Reference<
+    void SetXmlId(cpo::uno::Reference<
                   cpo::uno::XInterface> const & i_xIfc,
                   OUString const & i_rXmlId);
 
     /// Add a RDFa statement; parameters are XML attribute values
-    void AddRDFa( const css::uno::Reference< css::rdf::XMetadatable>& i_xObject,
+    void AddRDFa( const cpo::uno::Reference< css::rdf::XMetadatable>& i_xObject,
                   OUString const & i_rAbout,
                   OUString const & i_rProperty,
                   OUString const & i_rContent,
@@ -587,7 +587,7 @@ public:
     bool embeddedFontAlreadyProcessed( const OUString& url );
 
     // see EmbeddedFontsManager::addEmbeddedFont
-    bool addEmbeddedFont( const css::uno::Reference< css::io::XInputStream >& stream,
+    bool addEmbeddedFont( const cpo::uno::Reference< css::io::XInputStream >& stream,
         const OUString& fontName, std::u16string_view extra,
         std::vector< unsigned char > const & key, bool eot);
 
@@ -632,18 +632,18 @@ inline rtl::Reference< ::xmloff::OFormLayerXMLImport > const & SvXMLImport::GetF
 }
 
 inline void SvXMLImport::SetEmbeddedResolver(
-    css::uno::Reference< css::document::XEmbeddedObjectResolver > const & _xEmbeddedResolver )
+    cpo::uno::Reference< css::document::XEmbeddedObjectResolver > const & _xEmbeddedResolver )
 {
     mxEmbeddedResolver = _xEmbeddedResolver;
 }
 
 inline void SvXMLImport::SetGraphicStorageHandler(
-    css::uno::Reference<css::document::XGraphicStorageHandler> const & rxGraphicStorageHandler)
+    cpo::uno::Reference<css::document::XGraphicStorageHandler> const & rxGraphicStorageHandler)
 {
     mxGraphicStorageHandler = rxGraphicStorageHandler;
 }
 
-inline css::uno::Reference< css::util::XNumberFormatsSupplier > & SvXMLImport::GetNumberFormatsSupplier()
+inline cpo::uno::Reference< css::util::XNumberFormatsSupplier > & SvXMLImport::GetNumberFormatsSupplier()
 {
     if ( ! mxNumberFormatsSupplier.is() && mxModel.is() )
         CreateNumberFormatsSupplier_();

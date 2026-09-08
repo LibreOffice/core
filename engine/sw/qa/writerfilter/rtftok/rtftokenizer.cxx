@@ -12,6 +12,7 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace
 {

@@ -13,7 +13,7 @@
 #include <SpecialCharacters.hxx>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace ::cpo::uno;
 
 // Define the index of sheets in the test document

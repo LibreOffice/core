@@ -24,8 +24,8 @@
 class CSubmissionPost : public CSubmission
 {
 public:
-    CSubmissionPost(std::u16string_view aURL, const css::uno::Reference< css::xml::dom::XDocumentFragment >& aFragment);
-    virtual SubmissionResult submit(const css::uno::Reference< css::task::XInteractionHandler >& aInteractionHandler) override;
+    CSubmissionPost(std::u16string_view aURL, const cpo::uno::Reference< css::xml::dom::XDocumentFragment >& aFragment);
+    virtual SubmissionResult submit(const cpo::uno::Reference< css::task::XInteractionHandler >& aInteractionHandler) override;
 
 };
 

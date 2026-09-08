@@ -38,7 +38,7 @@ namespace sdr::contact {
 
 
     using ::com::sun::star::awt::XControl;
-    using ::com::sun::star::uno::Reference;
+    using ::cpo::uno::Reference;
     using ::com::sun::star::awt::XControlContainer;
     using ::com::sun::star::awt::XControlModel;
 

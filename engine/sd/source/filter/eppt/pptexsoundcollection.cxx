@@ -41,7 +41,7 @@ ExSoundEntry::ExSoundEntry(OUString aString)
     try
     {
         ::ucbhelper::Content aCnt( aSoundURL,
-            css::uno::Reference< css::ucb::XCommandEnvironment >(),
+            cpo::uno::Reference< css::ucb::XCommandEnvironment >(),
             comphelper::getProcessComponentContext() );
         sal_Int64 nVal = 0;
         aCnt.getPropertyValue(u"Size"_ustr) >>= nVal;
@@ -99,7 +99,7 @@ void ExSoundEntry::Write( SvStream& rSt, sal_uInt32 nId ) const
     try
     {
         ::ucbhelper::Content aLoadContentIfExists( aSoundURL,
-            css::uno::Reference< css::ucb::XCommandEnvironment >(),
+            cpo::uno::Reference< css::ucb::XCommandEnvironment >(),
             comphelper::getProcessComponentContext() );
 
         // create SoundContainer

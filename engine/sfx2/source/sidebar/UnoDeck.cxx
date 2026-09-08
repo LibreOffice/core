@@ -22,6 +22,7 @@
 #include <vcl/svapp.hxx>
 
 using namespace css;
+using namespace ::cpo;
 using namespace ::sfx2::sidebar;
 
 SfxUnoDeck::SfxUnoDeck(uno::Reference<frame::XFrame> _xFrame, OUString deckId):

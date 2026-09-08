@@ -30,7 +30,7 @@ namespace connectivity::calc
     class OCalcDatabaseMetaData :   public component::OComponentDatabaseMetaData
     {
         virtual OUString getURL(  ) override;
-        virtual css::uno::Reference< css::sdbc::XResultSet > getTables( const cpo::uno::Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern, const cpo::uno::Sequence< OUString >& types ) override;
+        virtual cpo::uno::Reference< css::sdbc::XResultSet > getTables( const cpo::uno::Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern, const cpo::uno::Sequence< OUString >& types ) override;
     protected:
         virtual ~OCalcDatabaseMetaData() override;
     public:

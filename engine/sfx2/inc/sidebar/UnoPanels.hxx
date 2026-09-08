@@ -23,7 +23,7 @@ class SfxUnoPanels final : public cppu::WeakImplHelper<css::ui::XPanels>
 
 public:
 
-    SfxUnoPanels(css::uno::Reference<css::frame::XFrame>, const OUString&);
+    SfxUnoPanels(cpo::uno::Reference<css::frame::XFrame>, const OUString&);
 
 // XPanels
     virtual OUString getDeckId() override;
@@ -48,7 +48,7 @@ public:
 
 private:
 
-    const css::uno::Reference<css::frame::XFrame> xFrame;
+    const cpo::uno::Reference<css::frame::XFrame> xFrame;
     sfx2::sidebar::SidebarController* getSidebarController();
     const OUString& mDeckId;
 

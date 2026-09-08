@@ -62,6 +62,7 @@
 #include "switchpersistencestream.hxx"
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 // static
 void OStorage_Impl::completeStorageStreamCopy_Impl(
@@ -374,7 +375,7 @@ void OStorage_Impl::OpenOwnPackage()
             cpo::uno::Sequence< cpo::uno::Any > aArguments( 2 );
             auto pArguments = aArguments.getArray();
             if ( m_nStorageMode & embed::ElementModes::WRITE )
-                pArguments[ 0 ] <<= css::uno::Reference< css::io::XStream >(m_xStream);
+                pArguments[ 0 ] <<= cpo::uno::Reference< css::io::XStream >(m_xStream);
             else
             {
                 SAL_WARN_IF( !m_xInputStream.is(), "package.xstor", "Input stream must be set for readonly access!" );

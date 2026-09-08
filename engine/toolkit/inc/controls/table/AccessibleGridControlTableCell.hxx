@@ -46,7 +46,7 @@ public:
     virtual OUString getAccessibleName() override;
 
 protected:
-    AccessibleGridControlCell(const css::uno::Reference<css::accessibility::XAccessible>& _rxParent,
+    AccessibleGridControlCell(const cpo::uno::Reference<css::accessibility::XAccessible>& _rxParent,
                               svt::table::TableControl& _rTable, sal_Int32 _nRowPos,
                               sal_uInt16 _nColPos, AccessibleTableControlObjType _eType);
 
@@ -72,7 +72,7 @@ private:
 
 public:
     AccessibleGridControlTableCell(
-        const css::uno::Reference<css::accessibility::XAccessible>& _rxParent,
+        const cpo::uno::Reference<css::accessibility::XAccessible>& _rxParent,
         svt::table::TableControl& _rTable, sal_Int32 _nRowId, sal_uInt16 _nColId);
 
     /** @return  The index of this object among the parent's children. */
@@ -91,7 +91,7 @@ public:
     /** @return
                 The XAccessible interface of the specified child.
         */
-    virtual css::uno::Reference<css::accessibility::XAccessible>
+    virtual cpo::uno::Reference<css::accessibility::XAccessible>
         getAccessibleChild(sal_Int64 nChildIndex) override;
 
     /** Return a bitset of states of the current object.

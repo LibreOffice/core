@@ -33,7 +33,7 @@ namespace framework
             GraphicNameAccess();
             virtual ~GraphicNameAccess() override;
 
-            void addElement( const OUString& rName, const css::uno::Reference< css::graphic::XGraphic >& rElement );
+            void addElement( const OUString& rName, const cpo::uno::Reference< css::graphic::XGraphic >& rElement );
 
             // XNameAccess
             virtual cpo::uno::Any getByName( const OUString& aName ) override;
@@ -45,7 +45,7 @@ namespace framework
             virtual cpo::uno::Type getElementType(  ) override;
 
         private:
-            typedef std::unordered_map<OUString, css::uno::Reference< css::graphic::XGraphic >> NameGraphicHashMap;
+            typedef std::unordered_map<OUString, cpo::uno::Reference< css::graphic::XGraphic >> NameGraphicHashMap;
             NameGraphicHashMap              m_aNameToElementMap;
             cpo::uno::Sequence< OUString >  m_aSeq;
     };

@@ -104,11 +104,11 @@ private:
     ///=====  XAccessibleTable  ================================================
 
     /// Returns the row headers as an AccessibleTable.
-    virtual css::uno::Reference< css::accessibility::XAccessibleTable > SAL_CALL
+    virtual cpo::uno::Reference< css::accessibility::XAccessibleTable > SAL_CALL
                 getAccessibleRowHeaders(  ) override;
 
     /// Returns the column headers as an AccessibleTable.
-    virtual css::uno::Reference< css::accessibility::XAccessibleTable > SAL_CALL
+    virtual cpo::uno::Reference< css::accessibility::XAccessibleTable > SAL_CALL
                 getAccessibleColumnHeaders(  ) override;
 
     /// Returns the selected rows in a table.
@@ -128,7 +128,7 @@ private:
                 isAccessibleColumnSelected( sal_Int32 nColumn ) override;
 
     /// Returns the Accessible at a specified row and column in the table.
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > SAL_CALL
                 getAccessibleCellAt( sal_Int32 nRow, sal_Int32 nColumn ) override;
 
     rtl::Reference<ScAccessibleCell> GetAccessibleCellAt(sal_Int32 nRow, sal_Int32 nColumn);
@@ -139,7 +139,7 @@ private:
 
     ///=====  XAccessibleComponent  ============================================
 
-    virtual css::uno::Reference< css::accessibility::XAccessible >
+    virtual cpo::uno::Reference< css::accessibility::XAccessible >
         SAL_CALL getAccessibleAtPoint(
         const css::awt::Point& rPoint ) override;
 
@@ -152,7 +152,7 @@ private:
     ///=====  XAccessibleContext  ==============================================
 
     /// Return NULL to indicate that an empty relation set.
-    virtual css::uno::Reference<css::accessibility::XAccessibleRelationSet> SAL_CALL
+    virtual cpo::uno::Reference<css::accessibility::XAccessibleRelationSet> SAL_CALL
         getAccessibleRelationSet() override;
 
     /// Return the set of current states.
@@ -173,7 +173,7 @@ private:
     virtual sal_Int64 SAL_CALL
         getSelectedAccessibleChildCount(  ) override;
 
-    virtual css::uno::Reference<css::accessibility::XAccessible > SAL_CALL
+    virtual cpo::uno::Reference<css::accessibility::XAccessible > SAL_CALL
         getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
 
     virtual void SAL_CALL

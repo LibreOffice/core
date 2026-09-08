@@ -40,6 +40,7 @@
 #include <xmloff/xmlnamespace.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace ::xmloff::token;
 
 namespace {
@@ -48,29 +49,29 @@ namespace {
 class XMLDocumentBuilderContext : public SvXMLImportContext
 {
 private:
-    css::uno::Reference< css::xml::dom::XSAXDocumentBuilder2> mxDocBuilder;
+    cpo::uno::Reference< css::xml::dom::XSAXDocumentBuilder2> mxDocBuilder;
     SvXMLMetaDocumentContext *const m_pTopLevel;
 
 public:
     XMLDocumentBuilderContext(SvXMLImport& rImport, sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
-        css::uno::Reference<css::xml::dom::XSAXDocumentBuilder2> xDocBuilder,
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+        cpo::uno::Reference<css::xml::dom::XSAXDocumentBuilder2> xDocBuilder,
         SvXMLMetaDocumentContext * pTopLevel);
 
     virtual void characters( const OUString& aChars ) override;
 
     virtual void startFastElement( sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     virtual void endFastElement( sal_Int32 nElement ) override;
 
     virtual void startUnknownElement( const OUString& Namespace, const OUString& Name,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
 
     virtual void endUnknownElement( const OUString& Namespace, const OUString& Name ) override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
 };
 

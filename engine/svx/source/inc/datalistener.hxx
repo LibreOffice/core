@@ -57,7 +57,7 @@ namespace svxform
         virtual void frameAction( const css::frame::FrameActionEvent& Action ) override;
 
         // xml::dom::events::XEventListener
-        virtual void handleEvent( const css::uno::Reference< css::xml::dom::events::XEvent >& evt ) override;
+        virtual void handleEvent( const cpo::uno::Reference< css::xml::dom::events::XEvent >& evt ) override;
 
         // lang::XEventListener
         virtual void disposing( const css::lang::EventObject& Source ) override;

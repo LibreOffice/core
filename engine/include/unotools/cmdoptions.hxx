@@ -25,7 +25,7 @@
 #include <unotools/options.hxx>
 #include <memory>
 
-namespace com::sun::star::uno
+namespace cpo::uno
 {
 template <typename> class Reference;
 }
@@ -97,7 +97,7 @@ public:
                                         notified, if configuration was changed.
     **-***************************************************************************************************/
 
-    void EstablishFrameCallback(const css::uno::Reference<css::frame::XFrame>& xFrame);
+    void EstablishFrameCallback(const cpo::uno::Reference<css::frame::XFrame>& xFrame);
 
 private:
     std::shared_ptr<SvtCommandOptions_Impl> m_pImpl;

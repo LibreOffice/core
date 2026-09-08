@@ -40,12 +40,12 @@ namespace frm
     private:
         static sal_Int32    s_nInstanceCount;
         static ::osl::Mutex s_aMutex;
-        static css::uno::Reference< css::util::XNumberFormatsSupplier >
+        static cpo::uno::Reference< css::util::XNumberFormatsSupplier >
                             s_xStandardFormats;
 
         sal_Int32           m_nFormatEnumPropertyHandle;
         const sal_Int16     m_nTableId;
-        css::uno::Reference< css::beans::XFastPropertySet >
+        cpo::uno::Reference< css::beans::XFastPropertySet >
                             m_xAggregate;
 
     protected:
@@ -54,14 +54,14 @@ namespace frm
             pass the same value here share one table.</p>
         */
         OLimitedFormats(
-            const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
             const sal_Int16 _nClassId
             );
         ~OLimitedFormats();
 
     protected:
         void setAggregateSet(
-            const css::uno::Reference< css::beans::XFastPropertySet >& _rxAggregate,
+            const cpo::uno::Reference< css::beans::XFastPropertySet >& _rxAggregate,
             sal_Int32 _nOriginalPropertyHandle
         );
 
@@ -75,11 +75,11 @@ namespace frm
         void        setFormatKeyPropertyValue( const cpo::uno::Any& _rNewValue );
         // setFormatKeyPropertyValue should only be called with a value got from convertFormatKeyPropertyValue!
 
-        const css::uno::Reference< css::util::XNumberFormatsSupplier >&
+        const cpo::uno::Reference< css::util::XNumberFormatsSupplier >&
                     getFormatsSupplier() const { return s_xStandardFormats; }
 
     private:
-        void acquireSupplier(const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext);
+        void acquireSupplier(const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxContext);
         void releaseSupplier();
 
         static void ensureTableInitialized(const sal_Int16 _nTableId);

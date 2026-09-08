@@ -40,7 +40,7 @@ struct GraphicProperties
     OUString                m_sMediaMimeType;
     bool                    mbIsCustomShape = false;
     bool                    mbIsExtruded = false;
-    css::uno::Reference<css::io::XInputStream> m_xMediaStream; ///< Audio/Video input stream.
+    cpo::uno::Reference<css::io::XInputStream> m_xMediaStream; ///< Audio/Video input stream.
 
     /** Writes the properties to the passed property map. */
     void                pushToPropMap(

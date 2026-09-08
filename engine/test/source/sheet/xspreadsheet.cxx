@@ -12,10 +12,11 @@
 #include <com/sun/star/sheet/XSheetCellCursor.hpp>
 #include <com/sun/star/sheet/XSheetCellRange.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 using namespace com::sun::star;
-using namespace com::sun::star::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 
 namespace apitest {

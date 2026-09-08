@@ -107,15 +107,15 @@ public:
     void dispose(  ) override;
 
     // css::awt::XButton
-    void addActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
-    void removeActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
+    void addActionListener( const cpo::uno::Reference< css::awt::XActionListener >& l ) override;
+    void removeActionListener( const cpo::uno::Reference< css::awt::XActionListener >& l ) override;
     void setLabel( const OUString& Label ) override;
     void setActionCommand( const OUString& Command ) override;
 
     // css::awt::XToggleButton
     // css::awt::XItemEventBroadcaster
-    void addItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
-    void removeItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
+    void addItemListener( const cpo::uno::Reference< css::awt::XItemListener >& l ) override;
+    void removeItemListener( const cpo::uno::Reference< css::awt::XItemListener >& l ) override;
 
     // css::awt::XLayoutConstrains
     css::awt::Size getMinimumSize(  ) override;
@@ -152,16 +152,16 @@ public:
     void dispose(  ) override;
 
     // css::awt::XCheckBox
-    void addItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
-    void removeItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
+    void addItemListener( const cpo::uno::Reference< css::awt::XItemListener >& l ) override;
+    void removeItemListener( const cpo::uno::Reference< css::awt::XItemListener >& l ) override;
     sal_Int16 getState(  ) override;
     void setState( sal_Int16 n ) override;
     void setLabel( const OUString& Label ) override;
     void enableTriState( bool b ) override;
 
     // css::awt::XButton:
-    void addActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
-    void removeActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
+    void addActionListener( const cpo::uno::Reference< css::awt::XActionListener >& l ) override;
+    void removeActionListener( const cpo::uno::Reference< css::awt::XActionListener >& l ) override;
     void setActionCommand( const OUString& Command ) override;
 
     // css::awt::XLayoutConstrains
@@ -200,15 +200,15 @@ public:
     void dispose(  ) override;
 
     // css::awt::XRadioButton
-    void addItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
-    void removeItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
+    void addItemListener( const cpo::uno::Reference< css::awt::XItemListener >& l ) override;
+    void removeItemListener( const cpo::uno::Reference< css::awt::XItemListener >& l ) override;
     bool getState(  ) override;
     void setState( bool b ) override;
     void setLabel( const OUString& Label ) override;
 
     // css::awt::XButton:
-    void addActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
-    void removeActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
+    void addActionListener( const cpo::uno::Reference< css::awt::XActionListener >& l ) override;
+    void removeActionListener( const cpo::uno::Reference< css::awt::XActionListener >& l ) override;
     void setActionCommand( const OUString& Command ) override;
 
     // css::awt::XLayoutConstrains
@@ -248,8 +248,8 @@ public:
     OUString getURL(  ) override;
     void setAlignment( sal_Int16 nAlign ) override;
     sal_Int16 getAlignment(  ) override;
-    void addActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
-    void removeActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
+    void addActionListener( const cpo::uno::Reference< css::awt::XActionListener >& l ) override;
+    void removeActionListener( const cpo::uno::Reference< css::awt::XActionListener >& l ) override;
 
     // css::awt::XLayoutConstrains
     css::awt::Size getMinimumSize(  ) override;
@@ -307,8 +307,8 @@ public:
     void dispose(  ) override;
 
     // css::awt::XScrollbar
-    void addAdjustmentListener( const css::uno::Reference< css::awt::XAdjustmentListener >& l ) override;
-    void removeAdjustmentListener( const css::uno::Reference< css::awt::XAdjustmentListener >& l ) override;
+    void addAdjustmentListener( const cpo::uno::Reference< css::awt::XAdjustmentListener >& l ) override;
+    void removeAdjustmentListener( const cpo::uno::Reference< css::awt::XAdjustmentListener >& l ) override;
     void setValue( sal_Int32 n ) override;
     void setValues( sal_Int32 nValue, sal_Int32 nVisible, sal_Int32 nMax ) override;
     sal_Int32 getValue(  ) override;
@@ -367,8 +367,8 @@ public:
     void dispose(  ) override;
 
     // css::awt::XTextComponent
-    void addTextListener( const css::uno::Reference< css::awt::XTextListener >& l ) override;
-    void removeTextListener( const css::uno::Reference< css::awt::XTextListener >& l ) override;
+    void addTextListener( const cpo::uno::Reference< css::awt::XTextListener >& l ) override;
+    void removeTextListener( const cpo::uno::Reference< css::awt::XTextListener >& l ) override;
     void setText( const OUString& aText ) override;
     void insertText( const css::awt::Selection& Sel, const OUString& Text ) override;
     OUString getText(  ) override;
@@ -417,8 +417,8 @@ public:
     virtual ~VCLXMultiLineEdit() override;
 
     // css::awt::XTextComponent
-    void addTextListener( const css::uno::Reference< css::awt::XTextListener >& l ) override;
-    void removeTextListener( const css::uno::Reference< css::awt::XTextListener >& l ) override;
+    void addTextListener( const cpo::uno::Reference< css::awt::XTextListener >& l ) override;
+    void removeTextListener( const cpo::uno::Reference< css::awt::XTextListener >& l ) override;
     void setText( const OUString& aText ) override;
     void insertText( const css::awt::Selection& Sel, const OUString& Text ) override;
     OUString getText(  ) override;
@@ -467,8 +467,8 @@ public:
 
 
     // css::awt::XSpinField
-    void addSpinListener( const css::uno::Reference< css::awt::XSpinListener >& l ) override;
-    void removeSpinListener( const css::uno::Reference< css::awt::XSpinListener >& l ) override;
+    void addSpinListener( const cpo::uno::Reference< css::awt::XSpinListener >& l ) override;
+    void removeSpinListener( const cpo::uno::Reference< css::awt::XSpinListener >& l ) override;
     void up(  ) override;
     void down(  ) override;
     void first(  ) override;
@@ -494,7 +494,7 @@ public:
     cpo::uno::Any getProperty( const OUString& PropertyName ) override;
 
 protected:
-    void    setFormatsSupplier(const css::uno::Reference< css::util::XNumberFormatsSupplier > & xSupplier);
+    void    setFormatsSupplier(const cpo::uno::Reference< css::util::XNumberFormatsSupplier > & xSupplier);
     sal_Int32   getFormatKey() const;
     void    setFormatKey(sal_Int32 nKey);
 
@@ -572,10 +572,10 @@ public:
     void dispose(  ) override;
 
     // css::awt::XListBox
-    void addItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
-    void removeItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
-    void addActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
-    void removeActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
+    void addItemListener( const cpo::uno::Reference< css::awt::XItemListener >& l ) override;
+    void removeItemListener( const cpo::uno::Reference< css::awt::XItemListener >& l ) override;
+    void addActionListener( const cpo::uno::Reference< css::awt::XActionListener >& l ) override;
+    void removeActionListener( const cpo::uno::Reference< css::awt::XActionListener >& l ) override;
     void addItem( const OUString& aItem, sal_Int16 nPos ) override;
     void addItems( const cpo::uno::Sequence< OUString >& aItems, sal_Int16 nPos ) override;
     void removeItems( sal_Int16 nPos, sal_Int16 nCount ) override;
@@ -645,10 +645,10 @@ public:
     void dispose(  ) override;
 
     // css::awt::XComboBox
-    void addItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
-    void removeItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
-    void addActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
-    void removeActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
+    void addItemListener( const cpo::uno::Reference< css::awt::XItemListener >& l ) override;
+    void removeItemListener( const cpo::uno::Reference< css::awt::XItemListener >& l ) override;
+    void addActionListener( const cpo::uno::Reference< css::awt::XActionListener >& l ) override;
+    void removeActionListener( const cpo::uno::Reference< css::awt::XActionListener >& l ) override;
     void addItem( const OUString& aItem, sal_Int16 nPos ) override;
     void addItems( const cpo::uno::Sequence< OUString >& aItems, sal_Int16 nPos ) override;
     void removeItems( sal_Int16 nPos, sal_Int16 nCount ) override;

@@ -19,7 +19,7 @@
 #ifndef INCLUDED_VBAHELPER_VBADIALOGBASE_HXX
 #define INCLUDED_VBAHELPER_VBADIALOGBASE_HXX
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <ooo/vba/XDialogBase.hpp>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -43,13 +43,13 @@ class VBAHELPER_DLLPUBLIC VbaDialogBase : public VbaDialogBase_BASE
 {
     sal_Int32 mnIndex;
 public:
-    VbaDialogBase( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext, sal_Int32 nIndex ):VbaDialogBase_BASE( xParent, xContext ), mnIndex( nIndex ) {}
+    VbaDialogBase( const cpo::uno::Reference< ov::XHelperInterface >& xParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext, sal_Int32 nIndex ):VbaDialogBase_BASE( xParent, xContext ), mnIndex( nIndex ) {}
 
     // Methods
     virtual void Show() override;
     virtual OUString mapIndexToName( sal_Int32 nIndex ) = 0;
 
-    virtual css::uno::Reference< css::frame::XModel > getModel() const = 0;
+    virtual cpo::uno::Reference< css::frame::XModel > getModel() const = 0;
 };
 
 #endif // INCLUDED_VBAHELPER_VBADIALOGBASE_HXX

@@ -47,8 +47,8 @@
 #include <comphelper/diagnose_ex.hxx>
 
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star;
 
 namespace sd::slidesorter::controller {
@@ -73,7 +73,7 @@ Listener::Listener (
         mrSlideSorter.GetModel().GetDocument()->getUnoModel());
     if (xBroadcaster.is())
     {
-        xBroadcaster->addEventListener(css::uno::Reference< css::document::XEventListener >(this));
+        xBroadcaster->addEventListener(cpo::uno::Reference< css::document::XEventListener >(this));
         mbListeningToUNODocument = true;
     }
 
@@ -141,7 +141,7 @@ void Listener::ReleaseListeners()
         rtl::Reference<SdXImpressDocument> xBroadcaster(
             mrSlideSorter.GetModel().GetDocument()->getUnoModel());
         if (xBroadcaster.is())
-            xBroadcaster->removeEventListener(css::uno::Reference< css::document::XEventListener >(this));
+            xBroadcaster->removeEventListener(cpo::uno::Reference< css::document::XEventListener >(this));
 
         // Remove the dispose listener.
         if (xBroadcaster.is())

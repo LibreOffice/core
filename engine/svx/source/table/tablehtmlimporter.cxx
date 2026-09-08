@@ -42,7 +42,7 @@
 #include <svtools/htmltokn.h>
 #include <svtools/parhtml.hxx>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::container;

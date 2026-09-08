@@ -152,14 +152,14 @@ public:
     bool checkMinimalDataDoms() const;
 
     // helpers to write some specific DiagramDoms
-    void writeDiagramOOXData(DrawingML& rOriginalDrawingML, css::uno::Reference<css::io::XOutputStream>& xOutputStream, std::u16string_view rDrawingRelId) const;
-    void writeDiagramReducedOOXData(css::uno::Reference<css::io::XOutputStream>& xOutputStream) const;
-    void writeDiagramOOXDrawing(DrawingML& rOriginalDrawingML, css::uno::Reference<css::io::XOutputStream>& xOutputStream) const;
+    void writeDiagramOOXData(DrawingML& rOriginalDrawingML, cpo::uno::Reference<css::io::XOutputStream>& xOutputStream, std::u16string_view rDrawingRelId) const;
+    void writeDiagramReducedOOXData(cpo::uno::Reference<css::io::XOutputStream>& xOutputStream) const;
+    void writeDiagramOOXDrawing(DrawingML& rOriginalDrawingML, cpo::uno::Reference<css::io::XOutputStream>& xOutputStream) const;
 
 private:
     // helpers
-    css::uno::Reference<css::xml::dom::XDocument> convertAndSet(std::u16string_view rDOM, svx::diagram::DomMapFlag aDomMapFlag);
-    css::uno::Reference<css::xml::dom::XDocument> convertAndSet(std::u16string_view rData, svx::diagram::DomMapFlag aDomMapFlag, bool bAdd);
+    cpo::uno::Reference<css::xml::dom::XDocument> convertAndSet(std::u16string_view rDOM, svx::diagram::DomMapFlag aDomMapFlag);
+    cpo::uno::Reference<css::xml::dom::XDocument> convertAndSet(std::u16string_view rData, svx::diagram::DomMapFlag aDomMapFlag, bool bAdd);
 
     // This contains groups of shapes: automatic font size is the same in each group.
     oox::core::NamedShapePairs maDiagramFontHeights;

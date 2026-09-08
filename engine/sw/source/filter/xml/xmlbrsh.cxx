@@ -34,7 +34,8 @@
 #include "xmlexpit.hxx"
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::xmloff::token;
 
 void SwXMLBrushItemImportContext::ProcessAttrs(
@@ -73,9 +74,9 @@ void SwXMLBrushItemImportContext::ProcessAttrs(
 
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SwXMLBrushItemImportContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SwXMLBrushItemImportContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
     if ((nElement & TOKEN_MASK) == xmloff::token::XML_BINARY_DATA)
     {

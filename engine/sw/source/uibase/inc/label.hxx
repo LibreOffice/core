@@ -71,7 +71,7 @@ public:
     }
 
     void UpdateGroup( const OUString &rMake ) {ReplaceGroup_( rMake );}
-    static void UpdateFieldInformation(css::uno::Reference< css::frame::XModel> const & xModel,
+    static void UpdateFieldInformation(cpo::uno::Reference< css::frame::XModel> const & xModel,
                                        const SwLabItem& rItem);
     const OUString& GetBusinessCardStr() const {return m_sBusinessCardDlg;}
 

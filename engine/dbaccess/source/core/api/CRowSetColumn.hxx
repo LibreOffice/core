@@ -31,10 +31,10 @@ namespace dbaccess
 
     {
     public:
-        ORowSetColumn(  const css::uno::Reference < css::sdbc::XResultSetMetaData >& _xMetaData,
-                        const css::uno::Reference < css::sdbc::XRow >& _xRow,
+        ORowSetColumn(  const cpo::uno::Reference < css::sdbc::XResultSetMetaData >& _xMetaData,
+                        const cpo::uno::Reference < css::sdbc::XRow >& _xRow,
                         sal_Int32 _nPos,
-                        const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _rxDBMeta,
+                        const cpo::uno::Reference< css::sdbc::XDatabaseMetaData >& _rxDBMeta,
                         const OUString& _rDescription,
                         const OUString& i_sLabel,
                         const std::function<const ::connectivity::ORowSetValue& (sal_Int32)> &_getValue);

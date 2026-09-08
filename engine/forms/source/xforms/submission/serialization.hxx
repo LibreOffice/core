@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/xml/dom/XDocumentFragment.hpp>
 
@@ -30,7 +30,7 @@ Serialize an XObject
 class CSerialization
 {
 protected:
-    css::uno::Reference<css::xml::dom::XDocumentFragment> m_aFragment;
+    cpo::uno::Reference<css::xml::dom::XDocumentFragment> m_aFragment;
 
 public:
     virtual ~CSerialization() {}
@@ -38,7 +38,7 @@ public:
     /**
     sets the XObject that is to serialized
     */
-    void setSource(const css::uno::Reference<css::xml::dom::XDocumentFragment>& aFragment)
+    void setSource(const cpo::uno::Reference<css::xml::dom::XDocumentFragment>& aFragment)
     {
         m_aFragment = aFragment;
     }
@@ -54,7 +54,7 @@ public:
     bytes read.
     returns -1 on error
     */
-    virtual css::uno::Reference<css::io::XInputStream> getInputStream() = 0;
+    virtual cpo::uno::Reference<css::io::XInputStream> getInputStream() = 0;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

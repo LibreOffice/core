@@ -109,6 +109,7 @@ ScRange lcl_getSubRangeByIndex( const ScRange& rRange, sal_Int32 nIndex )
 } // anonymous namespace
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 ScExtraEditViewManager::~ScExtraEditViewManager()
 {
@@ -2266,8 +2267,8 @@ class ScTextEditOverlayObject : public sdr::overlay::OverlayObject, public EditV
     virtual void EditViewSelectionChange() override;
     virtual OutputDevice& EditViewOutputDevice() const override;
     virtual Point EditViewPointerPosPixel() const override;
-    virtual css::uno::Reference<css::datatransfer::clipboard::XClipboard> GetClipboard() const override;
-    virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget> GetDropTarget() override;
+    virtual cpo::uno::Reference<css::datatransfer::clipboard::XClipboard> GetClipboard() const override;
+    virtual cpo::uno::Reference<css::datatransfer::dnd::XDropTarget> GetDropTarget() override;
     virtual void EditViewInputContext(const InputContext& rInputContext) override;
     virtual void EditViewCursorRect(const tools::Rectangle& rRect, int nExtTextInputWidth) override;
 
@@ -2440,13 +2441,13 @@ Point ScTextEditOverlayObject::EditViewPointerPosPixel() const
     return pActiveWin->GetPointerPosPixel();
 }
 
-css::uno::Reference<css::datatransfer::clipboard::XClipboard> ScTextEditOverlayObject::GetClipboard() const
+cpo::uno::Reference<css::datatransfer::clipboard::XClipboard> ScTextEditOverlayObject::GetClipboard() const
 {
     ScGridWindow* pActiveWin(static_cast<ScGridWindow*>(mrScTabView.GetWindowByPos(maScSplitPos)));
     return pActiveWin->GetClipboard();
 }
 
-css::uno::Reference<css::datatransfer::dnd::XDropTarget> ScTextEditOverlayObject::GetDropTarget()
+cpo::uno::Reference<css::datatransfer::dnd::XDropTarget> ScTextEditOverlayObject::GetDropTarget()
 {
     ScGridWindow* pActiveWin(static_cast<ScGridWindow*>(mrScTabView.GetWindowByPos(maScSplitPos)));
     return pActiveWin->GetDropTarget();

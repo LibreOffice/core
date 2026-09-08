@@ -28,7 +28,7 @@
 #include <vector>
 #include <deque>
 #include <basic/basicdllapi.h>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <com/sun/star/script/ModuleType.hpp>
 
@@ -61,7 +61,7 @@ class BASIC_DLLPUBLIC_SCRIPTING SbModule : public SbxObject
     SbModule(const SbModule&) = delete;
     SbModule& operator=(const SbModule&) = delete;
 protected:
-    css::uno::Reference< css::script::XInvocation > mxWrapper;
+    cpo::uno::Reference< css::script::XInvocation > mxWrapper;
     OUString            aOUSource;
     OUString            aComment;
     std::shared_ptr<SbiImage> pImage;  // the Image
@@ -130,7 +130,7 @@ public:
     bool isClassModule() const { return GetModuleType() == css::script::ModuleType::CLASS; }
     SAL_DLLPRIVATE void AddVarName( const OUString& aName );
     SAL_DLLPRIVATE void RemoveVars();
-    css::uno::Reference< css::script::XInvocation > const & GetUnoModule();
+    cpo::uno::Reference< css::script::XInvocation > const & GetUnoModule();
     bool     createCOMWrapperForIface( cpo::uno::Any& o_rRetAny, SbClassModuleObject* pProxyClassModuleObject );
     void     GetCodeCompleteDataFromParse(CodeCompleteDataCache& aCache);
     const SbxArrayRef& GetMethods() const { return pMethods;}

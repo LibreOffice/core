@@ -38,13 +38,13 @@ protected:
     virtual ScModelObj* getModel() const override { return mxModel.get(); }
 
 public:
-    ScVbaWorkbook(  const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
+    ScVbaWorkbook(  const cpo::uno::Reference< ov::XHelperInterface >& xParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
             rtl::Reference< ScModelObj > const & xModel );
-    ScVbaWorkbook(  cpo::uno::Sequence< cpo::uno::Any > const& aArgs, css::uno::Reference< cpo::uno::XComponentContext >const& xContext );
+    ScVbaWorkbook(  cpo::uno::Sequence< cpo::uno::Any > const& aArgs, cpo::uno::Reference< cpo::uno::XComponentContext >const& xContext );
 
     // Attributes
     virtual bool SAL_CALL getProtectStructure() override;
-    virtual css::uno::Reference< ov::excel::XWorksheet > SAL_CALL getActiveSheet() override;
+    virtual cpo::uno::Reference< ov::excel::XWorksheet > SAL_CALL getActiveSheet() override;
     virtual bool SAL_CALL getPrecisionAsDisplayed() override;
     virtual void SAL_CALL setPrecisionAsDisplayed( bool _precisionAsDisplayed ) override;
     virtual OUString SAL_CALL getAuthor() override;

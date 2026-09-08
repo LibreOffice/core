@@ -24,7 +24,7 @@ namespace sw
 /// separated by spaces. A declaration in any other form is skipped.
 inline void RegisterDataBindingNamespaces(
     std::u16string_view aPrefixMappings,
-    const css::uno::Reference<css::xml::xpath::XXPathAPI>& xXPathAPI)
+    const cpo::uno::Reference<css::xml::xpath::XXPathAPI>& xXPathAPI)
 {
     for (const auto& rDeclaration : comphelper::string::split(aPrefixMappings, ' '))
     {

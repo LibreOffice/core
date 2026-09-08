@@ -43,8 +43,8 @@
 #include <vector>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::drawing;
 
 namespace sd {
@@ -271,11 +271,11 @@ Any SAL_CALL SdUnoDrawView::getSelection()
 }
 
 void SAL_CALL SdUnoDrawView::addSelectionChangeListener (
-    const css::uno::Reference<css::view::XSelectionChangeListener>&)
+    const cpo::uno::Reference<css::view::XSelectionChangeListener>&)
 {}
 
 void SAL_CALL SdUnoDrawView::removeSelectionChangeListener (
-    const css::uno::Reference<css::view::XSelectionChangeListener>&)
+    const cpo::uno::Reference<css::view::XSelectionChangeListener>&)
 {}
 
 void SdUnoDrawView::setFastPropertyValue (

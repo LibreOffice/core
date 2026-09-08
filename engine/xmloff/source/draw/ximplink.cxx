@@ -25,6 +25,7 @@
 #include <xmloff/xmltoken.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace ::xmloff::token;
 
 
@@ -48,9 +49,9 @@ SdXMLShapeLinkContext::~SdXMLShapeLinkContext()
 {
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLShapeLinkContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLShapeLinkContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLShapeContext* pContext = XMLShapeImportHelper::CreateGroupChildContext( GetImport(), nElement, xAttrList, mxParent);
 

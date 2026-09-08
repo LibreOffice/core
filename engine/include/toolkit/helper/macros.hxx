@@ -91,7 +91,7 @@ void ClassName::disposing( const css::lang::EventObject& ) \
     g.unlock(); \
     while( aIt.hasMoreElements() ) \
     { \
-        css::uno::Reference<InterfaceName> xListener(aIt.next()); \
+        cpo::uno::Reference<InterfaceName> xListener(aIt.next()); \
         try \
         { \
             xListener->MethodName( aMulti ); \
@@ -121,7 +121,7 @@ void ClassName::disposing( const css::lang::EventObject& ) \
     g.unlock(); \
     while( aIt.hasMoreElements() ) \
     { \
-        css::uno::Reference<InterfaceName> xListener(aIt.next()); \
+        cpo::uno::Reference<InterfaceName> xListener(aIt.next()); \
         try \
         { \
             xListener->MethodName( aMulti ); \

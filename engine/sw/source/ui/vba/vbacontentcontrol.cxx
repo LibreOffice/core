@@ -24,6 +24,7 @@
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 /**
  * Content controls are the modern version of FormFields, providing inline functionality similar

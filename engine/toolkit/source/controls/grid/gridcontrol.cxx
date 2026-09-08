@@ -41,8 +41,8 @@
 #include <helper/unopropertyarrayhelper.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::awt::grid;
 using namespace ::com::sun::star::lang;
@@ -70,7 +70,7 @@ namespace
 }
 
 
-UnoGridModel::UnoGridModel( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext )
+UnoGridModel::UnoGridModel( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext )
         :UnoControlModel( rxContext )
 {
     ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
@@ -431,13 +431,13 @@ bool UnoGridControl::isRowSelected(::sal_Int32 index)
 }
 
 
-void UnoGridControl::addSelectionListener(const css::uno::Reference< css::awt::grid::XGridSelectionListener > & listener)
+void UnoGridControl::addSelectionListener(const cpo::uno::Reference< css::awt::grid::XGridSelectionListener > & listener)
 {
     m_aSelectionListeners.addInterface( listener );
 }
 
 
-void UnoGridControl::removeSelectionListener(const css::uno::Reference< css::awt::grid::XGridSelectionListener > & listener)
+void UnoGridControl::removeSelectionListener(const cpo::uno::Reference< css::awt::grid::XGridSelectionListener > & listener)
 {
     m_aSelectionListeners.removeInterface( listener );
 }

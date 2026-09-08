@@ -19,6 +19,7 @@
 #include <unordered_map>
 
 using namespace css;
+using namespace ::cpo;
 
 namespace
 {
@@ -60,17 +61,17 @@ protected:
     }
 
     // XGraphicMapper
-    css::uno::Reference<css::graphic::XGraphic> findGraphic(const OUString& rId) override
+    cpo::uno::Reference<css::graphic::XGraphic> findGraphic(const OUString& rId) override
     {
         auto aIterator = maGraphicMap.find(rId);
 
         if (aIterator == maGraphicMap.end())
-            return css::uno::Reference<css::graphic::XGraphic>();
+            return cpo::uno::Reference<css::graphic::XGraphic>();
 
         return aIterator->second;
     }
     void putGraphic(const OUString& rId,
-                             css::uno::Reference<css::graphic::XGraphic> const& rGraphic) override
+                             cpo::uno::Reference<css::graphic::XGraphic> const& rGraphic) override
     {
         maGraphicMap.emplace(rId, rGraphic);
     }

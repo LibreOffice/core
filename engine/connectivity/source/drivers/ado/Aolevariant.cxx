@@ -33,7 +33,7 @@
 #include <com/sun/star/bridge/oleautomation/Decimal.hpp>
 
 using namespace com::sun::star::beans;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::bridge::oleautomation;
 using namespace connectivity::ado;

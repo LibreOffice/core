@@ -23,7 +23,7 @@
 #include <editeng/editengdllapi.h>
 #include <editeng/ESelection.hxx>
 
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <optional>
 
 namespace com::sun::star {
@@ -41,14 +41,14 @@ class Outliner;
 class TextChainingUtils
 {
 public:
-    static css::uno::Reference< css::datatransfer::XTransferable> CreateTransferableFromText(Outliner const *);
+    static cpo::uno::Reference< css::datatransfer::XTransferable> CreateTransferableFromText(Outliner const *);
 
     static std::optional<OutlinerParaObject> JuxtaposeParaObject(
-            css::uno::Reference< css::datatransfer::XTransferable > const & xOverflowingContent,
+            cpo::uno::Reference< css::datatransfer::XTransferable > const & xOverflowingContent,
             Outliner *,
             OutlinerParaObject const *);
     static std::optional<OutlinerParaObject> DeeplyMergeParaObject(
-            css::uno::Reference< css::datatransfer::XTransferable > const & xOverflowingContent,
+            cpo::uno::Reference< css::datatransfer::XTransferable > const & xOverflowingContent,
             Outliner *,
             OutlinerParaObject const *);
 };
@@ -62,13 +62,13 @@ public:
 class OverflowingText
 {
 public:
-    OverflowingText(css::uno::Reference< css::datatransfer::XTransferable > xOverflowingContent);
+    OverflowingText(cpo::uno::Reference< css::datatransfer::XTransferable > xOverflowingContent);
 
     std::optional<OutlinerParaObject> JuxtaposeParaObject(Outliner *, OutlinerParaObject const *);
     std::optional<OutlinerParaObject> DeeplyMergeParaObject(Outliner *, OutlinerParaObject const *);
 
 private:
-    css::uno::Reference< css::datatransfer::XTransferable > mxOverflowingContent;
+    cpo::uno::Reference< css::datatransfer::XTransferable > mxOverflowingContent;
 };
 
 class NonOverflowingText
@@ -120,7 +120,7 @@ public:
     std::optional<OutlinerParaObject> CreateMergedUnderflowParaObject(Outliner *, OutlinerParaObject const *);
 
 private:
-    css::uno::Reference< css::datatransfer::XTransferable > mxUnderflowingTxt;
+    cpo::uno::Reference< css::datatransfer::XTransferable > mxUnderflowingTxt;
 
     bool mbIsDeepMerge;
 };

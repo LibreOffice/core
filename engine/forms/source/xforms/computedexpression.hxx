@@ -20,7 +20,7 @@
 #pragma once
 
 #include <rtl/ustring.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 // forward declarations
 namespace com::sun::star
@@ -54,7 +54,7 @@ protected:
     bool mbIsSimple;
 
     /// the result from the last bind
-    css::uno::Reference<css::xml::xpath::XXPathObject> mxResult;
+    cpo::uno::Reference<css::xml::xpath::XXPathObject> mxResult;
 
 
     /// implementation of isSimpleExpression
@@ -65,7 +65,7 @@ protected:
     const OUString& _getExpressionForEvaluation() const { return msExpression; }
 
     /// obtain a (suitable) XPathAPI implementation
-    static css::uno::Reference<css::xml::xpath::XXPathAPI> _getXPathAPI(const xforms::EvaluationContext& aContext);
+    static cpo::uno::Reference<css::xml::xpath::XXPathAPI> _getXPathAPI(const xforms::EvaluationContext& aContext);
 
     /// evaluate the expression relative to the content node.
     bool _evaluate( const xforms::EvaluationContext& rContext,
@@ -107,7 +107,7 @@ public:
     // get the result of this expression as string/bool/...
     // (Results will be based on the last call of evaluate(..). The caller
     // must call evaluate to ensure current results.)
-    css::uno::Reference<css::xml::xpath::XXPathObject> const & getXPath() const { return mxResult;}
+    cpo::uno::Reference<css::xml::xpath::XXPathObject> const & getXPath() const { return mxResult;}
     bool getBool( bool bDefault = false ) const;
     OUString getString() const;
 

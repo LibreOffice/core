@@ -81,7 +81,7 @@ using ::com::sun::star::beans::NamedValue;
 using ::com::sun::star::container::XEnumerationAccess;
 using ::com::sun::star::container::XEnumeration;
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::animations;

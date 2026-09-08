@@ -27,7 +27,7 @@ typedef cppu::ImplInheritanceHelper< ScVbaShape, ov::msforms::XLine > LineShapeI
 class ScVbaLineShape : public LineShapeImpl_BASE
 {
 public:
-    ScVbaLineShape( const css::uno::Reference< cpo::uno::XComponentContext >& xContext, const css::uno::Reference< css::drawing::XShape >& xShape, const css::uno::Reference< css::drawing::XShapes >& xShapes, const css::uno::Reference< css::frame::XModel >& xModel );
+    ScVbaLineShape( const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext, const cpo::uno::Reference< css::drawing::XShape >& xShape, const cpo::uno::Reference< css::drawing::XShapes >& xShapes, const cpo::uno::Reference< css::frame::XModel >& xModel );
 
 };
 

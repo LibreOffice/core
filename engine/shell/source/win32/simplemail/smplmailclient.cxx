@@ -44,8 +44,8 @@
 #include <process.h>
 #include <vector>
 
-using css::uno::UNO_QUERY;
-using css::uno::Reference;
+using cpo::uno::UNO_QUERY;
+using cpo::uno::Reference;
 using cpo::uno::Exception;
 using cpo::uno::Sequence;
 using css::lang::IllegalArgumentException;

@@ -28,7 +28,7 @@
 #include "FormPropOOoTContext.hxx"
 #include <osl/diagnose.h>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
 
@@ -42,7 +42,7 @@ public:
     XMLFormPropValueTContext_Impl( XMLTransformerBase& rTransformer,
                            const OUString& rQName );
 
-    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void StartElement( const cpo::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 
     virtual void EndElement() override;
 

@@ -30,9 +30,9 @@ namespace dbaui
     class OColumnControlWindow : public OFieldDescControl
     {
         css::lang::Locale      m_aLocale;
-        css::uno::Reference< cpo::uno::XComponentContext> m_xContext;
-        css::uno::Reference< css::sdbc::XConnection>          m_xConnection;
-        mutable css::uno::Reference< css::util::XNumberFormatter >    m_xFormatter;   // a number formatter working with the connection's NumberFormatsSupplier
+        cpo::uno::Reference< cpo::uno::XComponentContext> m_xContext;
+        cpo::uno::Reference< css::sdbc::XConnection>          m_xConnection;
+        mutable cpo::uno::Reference< css::util::XNumberFormatter >    m_xFormatter;   // a number formatter working with the connection's NumberFormatsSupplier
 
         OTypeInfoMap                m_aDestTypeInfo;
         std::vector<OTypeInfoMap::iterator> m_aDestTypeInfoIndex;
@@ -46,7 +46,7 @@ namespace dbaui
         virtual void        DeactivateAggregate( EControlType eType ) override;
 
         virtual css::lang::Locale  GetLocale() const override;
-        virtual css::uno::Reference< css::util::XNumberFormatter > GetFormatter() const override;
+        virtual cpo::uno::Reference< css::util::XNumberFormatter > GetFormatter() const override;
         virtual TOTypeInfoSP        getTypeInfo(sal_Int32 _nPos) override;
         virtual bool                isAutoIncrementValueEnabled() const override;
         virtual OUString            getAutoIncrementValue() const override;
@@ -54,12 +54,12 @@ namespace dbaui
 
     public:
         OColumnControlWindow(weld::Container* pParent,
-                             const css::uno::Reference< cpo::uno::XComponentContext>& _rxContext);
+                             const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxContext);
 
-        void setConnection(const css::uno::Reference< css::sdbc::XConnection>& _xCon);
+        void setConnection(const cpo::uno::Reference< css::sdbc::XConnection>& _xCon);
 
-        virtual css::uno::Reference< css::sdbc::XDatabaseMetaData> getMetaData() override;
-        virtual css::uno::Reference< css::sdbc::XConnection> getConnection() override;
+        virtual cpo::uno::Reference< css::sdbc::XDatabaseMetaData> getMetaData() override;
+        virtual cpo::uno::Reference< css::sdbc::XConnection> getConnection() override;
         virtual const OTypeInfoMap* getTypeInfo() const override;
         TOTypeInfoSP const & getDefaultTyp() const;
     };
@@ -69,7 +69,7 @@ namespace dbaui
         std::unique_ptr<OColumnControlWindow> m_xControl;
     public:
         OColumnControlTopLevel(vcl::Window* pParent,
-                               const css::uno::Reference< cpo::uno::XComponentContext>& _rxContext);
+                               const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxContext);
         virtual void dispose() override;
 
         OColumnControlWindow& GetControl() { return *m_xControl; }

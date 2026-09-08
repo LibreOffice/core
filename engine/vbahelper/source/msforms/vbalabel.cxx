@@ -21,9 +21,10 @@
 #include "vbanewfont.hxx"
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace ooo::vba;
 
-ScVbaLabel::ScVbaLabel(  const css::uno::Reference< XHelperInterface >& xParent, const uno::Reference< cpo::uno::XComponentContext >& xContext, const uno::Reference< cpo::uno::XInterface >& xControl, const uno::Reference< frame::XModel >& xModel, std::unique_ptr<ov::AbstractGeometryAttributes> pGeomHelper )
+ScVbaLabel::ScVbaLabel(  const cpo::uno::Reference< XHelperInterface >& xParent, const uno::Reference< cpo::uno::XComponentContext >& xContext, const uno::Reference< cpo::uno::XInterface >& xControl, const uno::Reference< frame::XModel >& xModel, std::unique_ptr<ov::AbstractGeometryAttributes> pGeomHelper )
     : LabelImpl_BASE( xParent, xContext, xControl, xModel, std::move(pGeomHelper) )
 {
 }

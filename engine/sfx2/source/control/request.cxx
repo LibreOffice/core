@@ -46,6 +46,7 @@
 
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 struct SfxRequest_Impl: public SfxListener
 
@@ -72,8 +73,8 @@ struct SfxRequest_Impl: public SfxListener
     SfxViewFrame*   pViewFrame;
     int m_nKitViewId = -1;
 
-    css::uno::Reference< css::frame::XDispatchRecorder > xRecorder;
-    css::uno::Reference< css::util::XURLTransformer > xTransform;
+    cpo::uno::Reference< css::frame::XDispatchRecorder > xRecorder;
+    cpo::uno::Reference< css::util::XURLTransformer > xTransform;
 
     explicit SfxRequest_Impl( SfxRequest *pOwner )
         : pAnti( pOwner)
@@ -374,7 +375,7 @@ void SfxRequest::Record_Impl
 (
     SfxShell&       rSh,    // the <SfxShell>, which has executed the Request
     const SfxSlot&  rSlot,  // the <SfxSlot>, which has executed the Request
-    const css::uno::Reference< css::frame::XDispatchRecorder >& xRecorder,
+    const cpo::uno::Reference< css::frame::XDispatchRecorder >& xRecorder,
     SfxViewFrame* pViewFrame
 )
 
@@ -670,7 +671,7 @@ bool SfxRequest::IsDone() const
 }
 
 
-css::uno::Reference< css::frame::XDispatchRecorder > SfxRequest::GetMacroRecorder(const SfxViewFrame& rView)
+cpo::uno::Reference< css::frame::XDispatchRecorder > SfxRequest::GetMacroRecorder(const SfxViewFrame& rView)
 
 /*  [Description]
 
@@ -682,16 +683,16 @@ css::uno::Reference< css::frame::XDispatchRecorder > SfxRequest::GetMacroRecorde
 */
 
 {
-    css::uno::Reference< css::frame::XDispatchRecorder > xRecorder;
+    cpo::uno::Reference< css::frame::XDispatchRecorder > xRecorder;
 
-    css::uno::Reference< css::beans::XPropertySet > xSet(
+    cpo::uno::Reference< css::beans::XPropertySet > xSet(
         rView.GetFrame().GetFrameInterface(),
-        css::uno::UNO_QUERY);
+        cpo::uno::UNO_QUERY);
 
     if(xSet.is())
     {
         cpo::uno::Any aProp = xSet->getPropertyValue(u"DispatchRecorderSupplier"_ustr);
-        css::uno::Reference< css::frame::XDispatchRecorderSupplier > xSupplier;
+        cpo::uno::Reference< css::frame::XDispatchRecorderSupplier > xSupplier;
         aProp >>= xSupplier;
         if(xSupplier.is())
             xRecorder = xSupplier->getDispatchRecorder();

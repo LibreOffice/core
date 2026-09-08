@@ -30,7 +30,7 @@ namespace framework
         using svt::PopupMenuControllerBase::disposing;
 
         public:
-            HeaderMenuController( const css::uno::Reference< cpo::uno::XComponentContext >& xContext, bool _bFooter = false );
+            HeaderMenuController( const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext, bool _bFooter = false );
             virtual ~HeaderMenuController() override;
 
             /* interface XServiceInfo */
@@ -48,9 +48,9 @@ namespace framework
             virtual void disposing( const css::lang::EventObject& Source ) override;
 
         private:
-            void fillPopupMenu( const css::uno::Reference< css::frame::XModel >& rModel, css::uno::Reference< css::awt::XPopupMenu > const & rPopupMenu );
+            void fillPopupMenu( const cpo::uno::Reference< css::frame::XModel >& rModel, cpo::uno::Reference< css::awt::XPopupMenu > const & rPopupMenu );
 
-            css::uno::Reference< css::frame::XModel > m_xModel;
+            cpo::uno::Reference< css::frame::XModel > m_xModel;
             bool                                      m_bFooter;
     };
 }

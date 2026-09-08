@@ -58,9 +58,9 @@ public:
         @param _xFocusWindow    The window that gets all the focus events.
         @param eObjType         Object type */
     AccessibleBrowseBoxBase(
-        const css::uno::Reference<css::accessibility::XAccessible>& xParent,
+        const cpo::uno::Reference<css::accessibility::XAccessible>& xParent,
         ::vcl::IAccessibleTableProvider& rBrowseBox,
-        const css::uno::Reference<css::awt::XWindow>& xFocusWindow,
+        const cpo::uno::Reference<css::awt::XWindow>& xFocusWindow,
         AccessibleBrowseBoxObjType eObjType );
 
     /** Constructor sets specified name and description.
@@ -71,9 +71,9 @@ public:
         @param rName            The name of this object.
         @param rDescription     The description text of this object. */
     AccessibleBrowseBoxBase(
-        css::uno::Reference< css::accessibility::XAccessible > xParent,
+        cpo::uno::Reference< css::accessibility::XAccessible > xParent,
         ::vcl::IAccessibleTableProvider& rBrowseBox,
-        css::uno::Reference< css::awt::XWindow >  _xFocusWindow,
+        cpo::uno::Reference< css::awt::XWindow >  _xFocusWindow,
         AccessibleBrowseBoxObjType eObjType,
         OUString  rName,
         OUString  rDescription );
@@ -90,7 +90,7 @@ protected:
 public:
     // XAccessibleContext
     /** @return  A reference to the parent accessible object. */
-    virtual css::uno::Reference<css::accessibility::XAccessible > getAccessibleParent() override;
+    virtual cpo::uno::Reference<css::accessibility::XAccessible > getAccessibleParent() override;
 
     /** @return
             The description of this object.
@@ -105,7 +105,7 @@ public:
     /** @return
             The relation set (the BrowseBox does not have one).
     */
-    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > getAccessibleRelationSet() override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessibleRelationSet > getAccessibleRelationSet() override;
 
     /** @return  The set of current states. */
     virtual sal_Int64 getAccessibleStateSet() override;
@@ -142,7 +142,7 @@ public:
     /** @return
             The accessible child rendered under the given point.
     */
-    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleAtPoint( const css::awt::Point& rPoint ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > getAccessibleAtPoint( const css::awt::Point& rPoint ) override;
 
     // XServiceInfo
 
@@ -214,13 +214,13 @@ protected:
     // members
 
     /** The parent accessible object. */
-    css::uno::Reference< css::accessibility::XAccessible > mxParent;
+    cpo::uno::Reference< css::accessibility::XAccessible > mxParent;
     /** The VCL BrowseBox control. */
     ::vcl::IAccessibleTableProvider* mpBrowseBox;
 
     /** This is the window which get all the nice focus events
     */
-    css::uno::Reference< css::awt::XWindow > m_xFocusWindow;
+    cpo::uno::Reference< css::awt::XWindow > m_xFocusWindow;
 
 private:
     /** Localized name. */

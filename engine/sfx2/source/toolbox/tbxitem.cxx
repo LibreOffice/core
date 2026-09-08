@@ -22,7 +22,7 @@
 #include <ctime>
 #endif
 
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/util/URL.hpp>
@@ -62,7 +62,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::frame::status;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::util;
 using namespace ::cpo::uno;
 

@@ -29,7 +29,7 @@ namespace textconversiondlgs
 {
 using namespace ::com::sun::star;
 
-ChineseTranslation_UnoDialog::ChineseTranslation_UnoDialog(const css::uno::Reference< css::awt::XWindow >& xParentWindow)
+ChineseTranslation_UnoDialog::ChineseTranslation_UnoDialog(const cpo::uno::Reference< css::awt::XWindow >& xParentWindow)
 {
     m_xParentWindow = xParentWindow;
 }

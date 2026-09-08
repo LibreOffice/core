@@ -1122,12 +1122,9 @@ bool isSmartPointerType(QualType qt)
     // case the type-as-written is derived from one of these types (tools::SvRef is
     // final, but the rest are not):
     auto const tc2 = loplugin::TypeCheck(qt);
-    // need to this formatting to make css->cpo transition work nicely
-    // clang-format off
     if (tc2.ClassOrStruct("unique_ptr").StdNamespace()
            || tc2.ClassOrStruct("shared_ptr").StdNamespace()
-           || tc2.Class("Reference").Namespace("uno")
-                .Namespace("star").Namespace("sun").Namespace("com").GlobalNamespace()
+           || tc2.Class("Reference").Namespace("uno").Namespace("cpo").GlobalNamespace()
            || tc2.Class("Reference").Namespace("rtl").GlobalNamespace()
            || tc2.Class("SvRef").Namespace("tools").GlobalNamespace()
            || tc2.Class("WeakReference").Namespace("tools").GlobalNamespace()
@@ -1139,7 +1136,6 @@ bool isSmartPointerType(QualType qt)
     {
         return true;
     }
-    // clang-format on
     return false;
 }
 
@@ -1161,12 +1157,9 @@ bool isSmartPointerType(const Expr* e)
     // case the type-as-written is derived from one of these types (tools::SvRef is
     // final, but the rest are not):
     auto const tc2 = loplugin::TypeCheck(e->getType());
-    // need to this formatting to make css->cpo transition work nicely
-    // clang-format off
     if (tc2.ClassOrStruct("unique_ptr").StdNamespace()
            || tc2.ClassOrStruct("shared_ptr").StdNamespace()
-           || tc2.Class("Reference").Namespace("uno")
-                .Namespace("star").Namespace("sun").Namespace("com").GlobalNamespace()
+           || tc2.Class("Reference").Namespace("uno").Namespace("cpo").GlobalNamespace()
            || tc2.Class("Reference").Namespace("rtl").GlobalNamespace()
            || tc2.Class("SvRef").Namespace("tools").GlobalNamespace()
            || tc2.Class("WeakReference").Namespace("tools").GlobalNamespace()
@@ -1178,7 +1171,6 @@ bool isSmartPointerType(const Expr* e)
     {
         return true;
     }
-    // clang-format on
     return false;
 }
 

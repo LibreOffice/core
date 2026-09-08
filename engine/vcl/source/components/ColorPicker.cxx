@@ -49,7 +49,7 @@ public:
 
 private:
     Color m_aColor;
-    css::uno::Reference<css::awt::XWindow> m_xParent;
+    cpo::uno::Reference<css::awt::XWindow> m_xParent;
 };
 
 constexpr OUString COLOR_PROPERTY_NAME = u"Color"_ustr;

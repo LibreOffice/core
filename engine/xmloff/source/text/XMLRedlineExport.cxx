@@ -47,6 +47,7 @@
 
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace ::xmloff::token;
 
 using ::com::sun::star::beans::PropertyValue;
@@ -59,7 +60,7 @@ using ::com::sun::star::text::XText;
 using ::com::sun::star::text::XTextContent;
 using ::com::sun::star::text::XTextSection;
 using ::cpo::uno::Any;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::cpo::uno::Sequence;
 
 

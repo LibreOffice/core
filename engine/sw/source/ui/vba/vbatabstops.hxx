@@ -28,19 +28,19 @@ typedef CollTestImplHelper< ooo::vba::word::XTabStops > SwVbaTabStops_BASE;
 class SwVbaTabStops : public SwVbaTabStops_BASE
 {
 private:
-    css::uno::Reference< css::beans::XPropertySet > mxParaProps;
+    cpo::uno::Reference< css::beans::XPropertySet > mxParaProps;
 
 public:
     /// @throws cpo::uno::RuntimeException
-    SwVbaTabStops( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext > & xContext, const css::uno::Reference< css::beans::XPropertySet >& xParaProps );
+    SwVbaTabStops( const cpo::uno::Reference< ov::XHelperInterface >& xParent, const cpo::uno::Reference< cpo::uno::XComponentContext > & xContext, const cpo::uno::Reference< css::beans::XPropertySet >& xParaProps );
 
     // Methods
-    virtual css::uno::Reference< ::ooo::vba::word::XTabStop > SAL_CALL Add( float Position, const cpo::uno::Any& Alignment, const cpo::uno::Any& Leader ) override;
+    virtual cpo::uno::Reference< ::ooo::vba::word::XTabStop > SAL_CALL Add( float Position, const cpo::uno::Any& Alignment, const cpo::uno::Any& Leader ) override;
     virtual void SAL_CALL ClearAll(  ) override;
 
     // XEnumerationAccess
     virtual cpo::uno::Type SAL_CALL getElementType() override;
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
+    virtual cpo::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
 
     // SwVbaTabStops_BASE
     virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) override;

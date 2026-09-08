@@ -16,7 +16,7 @@
 #include <com/sun/star/i18n/IndexEntrySupplier.hpp>
 #include <com/sun/star/i18n/XExtendedIndexEntrySupplier.hpp>
 #include <com/sun/star/lang/Locale.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/bootstrap.hxx>
 
@@ -59,7 +59,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    css::uno::Reference<css::i18n::XExtendedIndexEntrySupplier> supplier_;
+    cpo::uno::Reference<css::i18n::XExtendedIndexEntrySupplier> supplier_;
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(IndexEntry);

@@ -50,7 +50,7 @@ public:
     dumpEnhancedCustomShapeParameter(const css::drawing::EnhancedCustomShapeParameter& aParameter);
 
     // EnhancedCustomShapeExtrusion.idl
-    void dumpEnhancedCustomShapeExtrusionService(const css::uno::Reference< css::beans::XPropertySet >& xPropSet);
+    void dumpEnhancedCustomShapeExtrusionService(const cpo::uno::Reference< css::beans::XPropertySet >& xPropSet);
     void dumpExtrusionAsAttribute(bool bExtrusion);
     void dumpBrightnessAsAttribute(double aBrightness);
     void dumpDepthAsElement(const css::drawing::EnhancedCustomShapeParameterPair& aDepth);
@@ -76,7 +76,7 @@ public:
     void dumpExtrusionColorAsAttribute(bool bExtrusionColor);
 
     // EnhancedCustomShapeGeometry.idl
-    void dumpEnhancedCustomShapeGeometryService(const css::uno::Reference< css::beans::XPropertySet >& xPropSet);
+    void dumpEnhancedCustomShapeGeometryService(const cpo::uno::Reference< css::beans::XPropertySet >& xPropSet);
     void dumpTypeAsAttribute(std::u16string_view sType);
     void dumpViewBoxAsElement(css::awt::Rectangle aViewBox);
     void dumpMirroredXAsAttribute(bool bMirroredX); // also used in EnhancedCustomShapeHandle
@@ -90,7 +90,7 @@ public:
     void dumpHandlesAsElement(const cpo::uno::Sequence< css::beans::PropertyValues >& aHandles);
 
     // EnhancedCustomShapeHandle.idl
-    void dumpEnhancedCustomShapeHandleService(const css::uno::Reference< css::beans::XPropertySet >& xPropSet);
+    void dumpEnhancedCustomShapeHandleService(const cpo::uno::Reference< css::beans::XPropertySet >& xPropSet);
     void dumpSwitchedAsAttribute(bool bSwitched);
     void dumpPositionAsElement(const css::drawing::EnhancedCustomShapeParameterPair& aPosition);
     void dumpPolarAsElement(const css::drawing::EnhancedCustomShapeParameterPair& aPolar);
@@ -106,7 +106,7 @@ public:
     void dumpRadiusRangeMaximumAsElement(const css::drawing::EnhancedCustomShapeParameter& aRadiusRangeMaximum);
 
     // EnhancedCustomShapePath.idl
-    void dumpEnhancedCustomShapePathService(const css::uno::Reference< css::beans::XPropertySet >& xPropSet);
+    void dumpEnhancedCustomShapePathService(const cpo::uno::Reference< css::beans::XPropertySet >& xPropSet);
     void dumpCoordinatesAsElement(const cpo::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair >& aCoordinates);
     void dumpSegmentsAsElement(const cpo::uno::Sequence< css::drawing::EnhancedCustomShapeSegment >& aSegments);
     void dumpStretchXAsAttribute(sal_Int32 aStretchX);
@@ -121,7 +121,7 @@ public:
     void dumpSubViewSizeAsElement(const cpo::uno::Sequence< css::awt::Size >& aSubViewSize);
 
     // EnhancedCustomShapePath.idl
-    void dumpEnhancedCustomShapeTextPathService(const css::uno::Reference< css::beans::XPropertySet >& xPropSet);
+    void dumpEnhancedCustomShapeTextPathService(const cpo::uno::Reference< css::beans::XPropertySet >& xPropSet);
     void dumpTextPathAsAttribute(bool bTextPath);
     void dumpTextPathModeAsAttribute(css::drawing::EnhancedCustomShapeTextPathMode eTextPathMode);
     void dumpScaleXAsAttribute(bool bScaleX);

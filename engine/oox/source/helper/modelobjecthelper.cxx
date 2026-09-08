@@ -36,8 +36,8 @@ namespace oox {
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 ObjectContainer::ObjectContainer( const Reference< XMultiServiceFactory >& rxModelFactory, OUString aServiceName ) :
     mxModelFactory( rxModelFactory ),

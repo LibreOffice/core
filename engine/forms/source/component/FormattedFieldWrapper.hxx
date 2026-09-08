@@ -43,7 +43,7 @@ typedef ::cppu::WeakAggImplHelper3  <   css::io::XPersistObject
 
 class OFormattedFieldWrapper final : public OFormattedFieldWrapper_Base
 {
-    css::uno::Reference< cpo::uno::XComponentContext> m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext> m_xContext;
     OUString m_implementationName;
 
     rtl::Reference< OEditBaseModel >      m_xAggregate; // either OEditModel or OFormattedModel
@@ -52,7 +52,7 @@ class OFormattedFieldWrapper final : public OFormattedFieldWrapper_Base
     // if we act as formatted this is used to write the EditModel part
     rtl::Reference< OEditBaseModel >     m_xFormattedPart;
 
-    OFormattedFieldWrapper(const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory,
+    OFormattedFieldWrapper(const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory,
                            OUString const & implementationName);
 
     virtual ~OFormattedFieldWrapper() override;
@@ -62,7 +62,7 @@ public:
     // to read and write the FormattedModel part
     // if bActAsFormatted is false, the state is undetermined until somebody calls
     // ::read or does anything which requires a living aggregate
-    static css::uno::Reference<cpo::uno::XInterface> createFormattedFieldWrapper(const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory, bool bActAsFormatted, OUString const & implementationName);
+    static cpo::uno::Reference<cpo::uno::XInterface> createFormattedFieldWrapper(const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory, bool bActAsFormatted, OUString const & implementationName);
 
     // UNO
     DECLARE_UNO3_AGG_DEFAULTS(OFormattedFieldWrapper, OWeakAggObject)
@@ -75,11 +75,11 @@ public:
 
     // XPersistObject
     virtual OUString getServiceName() override;
-    virtual void write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
-    virtual void read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
+    virtual void write(const cpo::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
+    virtual void read(const cpo::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
 
     // XCloneable
-    virtual css::uno::Reference< css::util::XCloneable > createClone(  ) override;
+    virtual cpo::uno::Reference< css::util::XCloneable > createClone(  ) override;
 
 private:
     /// ensure we're in a defined state, which means a FormattedModel _OR_ an EditModel

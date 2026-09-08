@@ -31,7 +31,7 @@ void XMLBodyContentContext::endElement(const OUString& /*rName*/)
 }
 
 rtl::Reference<XMLImportContext> XMLBodyContentContext::CreateChildContext(
-    const OUString& rName, const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
+    const OUString& rName, const cpo::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
     return CreateTextChildContext(GetImport(), rName, true);
 }

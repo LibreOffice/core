@@ -149,8 +149,8 @@ public:
     /** constructs the container.
     */
     ODefinitionContainer(
-          const css::uno::Reference< cpo::uno::XComponentContext >& _xORB
-        , const css::uno::Reference< cpo::uno::XInterface >&  _xParentContainer
+          const cpo::uno::Reference< cpo::uno::XComponentContext >& _xORB
+        , const cpo::uno::Reference< cpo::uno::XInterface >&  _xParentContainer
         , const TContentPtr& _pImpl
         , bool _bCheckSlash = true
         );
@@ -170,7 +170,7 @@ public:
     virtual bool hasElements(  ) override;
 
 // css::container::XEnumerationAccess
-    virtual css::uno::Reference< css::container::XEnumeration > createEnumeration(  ) override;
+    virtual cpo::uno::Reference< css::container::XEnumeration > createEnumeration(  ) override;
 
 // css::container::XIndexAccess
     virtual sal_Int32 getCount(  ) override;
@@ -189,12 +189,12 @@ public:
     virtual bool hasByName( const OUString& aName ) override;
 
 // css::container::XContainer
-    virtual void addContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) override;
-    virtual void removeContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) override;
+    virtual void addContainerListener( const cpo::uno::Reference< css::container::XContainerListener >& xListener ) override;
+    virtual void removeContainerListener( const cpo::uno::Reference< css::container::XContainerListener >& xListener ) override;
 
     // XContainerApproveBroadcaster
-    virtual void addContainerApproveListener( const css::uno::Reference< css::container::XContainerApproveListener >& Listener ) override;
-    virtual void removeContainerApproveListener( const css::uno::Reference< css::container::XContainerApproveListener >& Listener ) override;
+    virtual void addContainerApproveListener( const cpo::uno::Reference< css::container::XContainerApproveListener >& Listener ) override;
+    virtual void removeContainerApproveListener( const cpo::uno::Reference< css::container::XContainerApproveListener >& Listener ) override;
 
 // css::lang::XEventListener
     virtual void disposing( const css::lang::EventObject& Source ) override;
@@ -212,7 +212,7 @@ protected:
         @param      _rName          the name the object has within the container
         @return                     the newly created object or an empty reference if something went wrong
     */
-    virtual css::uno::Reference< css::ucb::XContent > createObject(
+    virtual cpo::uno::Reference< css::ucb::XContent > createObject(
         const OUString& _rName) = 0;
 
     /** get the object specified by the given name. If desired, the object will be read if not already done so.<BR>
@@ -223,7 +223,7 @@ protected:
         @throws                         NoSuchElementException if there is no object with the given name.
         @see    createObject
     */
-    css::uno::Reference< css::ucb::XContent >
+    cpo::uno::Reference< css::ucb::XContent >
                 implGetByName(const OUString& _rName, bool _bCreateIfNecessary);
 
     /** quickly checks if there already is an element with a given name. No access to the configuration occurs, i.e.
@@ -246,7 +246,7 @@ protected:
     */
     void    implAppend(
         const OUString& _rName,
-        const css::uno::Reference< css::ucb::XContent >& _rxNewObject
+        const cpo::uno::Reference< css::ucb::XContent >& _rxNewObject
         );
 
     /** remove all references to an object from the container. No plausibility checks are done, e.g. whether
@@ -272,7 +272,7 @@ protected:
     */
     void implReplace(
         const OUString& _rName,
-        const css::uno::Reference< css::ucb::XContent >& _rxNewObject
+        const cpo::uno::Reference< css::ucb::XContent >& _rxNewObject
         );
 
     /** notifies our container/approve listeners
@@ -280,20 +280,20 @@ protected:
     void notifyByName(
             ::osl::ResettableMutexGuard& _rGuard,
             const OUString& _rName,
-            const css::uno::Reference< css::ucb::XContent >& _xNewElement,
-            const css::uno::Reference< css::ucb::XContent >& xOldElement,
+            const cpo::uno::Reference< css::ucb::XContent >& _xNewElement,
+            const cpo::uno::Reference< css::ucb::XContent >& xOldElement,
             ContainerOperation _eOperation,
             ListenerType _eType
         );
 
-    operator css::uno::Reference< cpo::uno::XInterface > () const
+    operator cpo::uno::Reference< cpo::uno::XInterface > () const
     {
         return const_cast< XContainer* >( static_cast< const XContainer* >( this ) );
     }
 
 private:
-    void    addObjectListener(const css::uno::Reference< css::ucb::XContent >& _xNewObject);
-    void    removeObjectListener(const css::uno::Reference< css::ucb::XContent >& _xNewObject);
+    void    addObjectListener(const cpo::uno::Reference< css::ucb::XContent >& _xNewObject);
+    void    removeObjectListener(const cpo::uno::Reference< css::ucb::XContent >& _xNewObject);
 
     /** approve that the object given may be inserted into the container.
         Should be overridden by derived classes,
@@ -309,7 +309,7 @@ private:
     */
     void approveNewObject(
             const OUString& _sName,
-            const css::uno::Reference< css::ucb::XContent >& _rxObject
+            const cpo::uno::Reference< css::ucb::XContent >& _rxObject
         ) const;
 
     bool impl_haveAnyListeners_nothrow() const

@@ -87,7 +87,7 @@ MSODocumentLockFile::~MSODocumentLockFile() {}
 
 void MSODocumentLockFile::WriteEntryToStream(
     std::unique_lock<std::mutex>& /*rGuard*/, const LockFileEntry& aEntry,
-    const css::uno::Reference<css::io::XOutputStream>& xOutput)
+    const cpo::uno::Reference<css::io::XOutputStream>& xOutput)
 {
     // Reallocate the date with the right size, different lock file size for different components
     int nLockFileSize = m_eAppType == AppType::Word ? MSO_WORD_LOCKFILE_SIZE
@@ -180,10 +180,10 @@ void MSODocumentLockFile::WriteEntryToStream(
     xOutput->writeBytes(aData);
 }
 
-css::uno::Reference<css::io::XInputStream>
+cpo::uno::Reference<css::io::XInputStream>
 MSODocumentLockFile::OpenStream(std::unique_lock<std::mutex>& /*rGuard*/)
 {
-    css::uno::Reference<css::ucb::XCommandEnvironment> xEnv;
+    cpo::uno::Reference<css::ucb::XCommandEnvironment> xEnv;
     ::ucbhelper::Content aSourceContent(GetURL(), xEnv, comphelper::getProcessComponentContext());
 
     // the file can be opened readonly, no locking will be done
@@ -193,7 +193,7 @@ MSODocumentLockFile::OpenStream(std::unique_lock<std::mutex>& /*rGuard*/)
 LockFileEntry MSODocumentLockFile::GetLockDataImpl(std::unique_lock<std::mutex>& rGuard)
 {
     LockFileEntry aResult;
-    css::uno::Reference<css::io::XInputStream> xInput = OpenStream(rGuard);
+    cpo::uno::Reference<css::io::XInputStream> xInput = OpenStream(rGuard);
     if (!xInput.is())
         throw cpo::uno::RuntimeException();
 

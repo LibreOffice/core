@@ -22,6 +22,7 @@
 
 #include <algorithm>
 
+using namespace ::cpo;
 using namespace css;
 using namespace ::sfx2::sidebar;
 

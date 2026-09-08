@@ -71,22 +71,22 @@ class UIConfigElementWrapperBase : private cppu::BaseMutex,
 
         // XComponent
         virtual  void dispose() override = 0;
-        virtual  void addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-        virtual  void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+        virtual  void addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& xListener ) override;
+        virtual  void removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
         // XInitialization
         virtual  void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
         // XUIElementSettings
         virtual  void updateSettings() override = 0;
-        virtual  css::uno::Reference< css::container::XIndexAccess > getSettings( bool bWriteable ) override;
-        virtual  void setSettings( const css::uno::Reference< css::container::XIndexAccess >& UISettings ) override;
+        virtual  cpo::uno::Reference< css::container::XIndexAccess > getSettings( bool bWriteable ) override;
+        virtual  void setSettings( const cpo::uno::Reference< css::container::XIndexAccess >& UISettings ) override;
 
         // XUIElement
-        virtual  css::uno::Reference< css::frame::XFrame > getFrame() override;
+        virtual  cpo::uno::Reference< css::frame::XFrame > getFrame() override;
         virtual  OUString getResourceURL() override;
         virtual  ::sal_Int16 getType() override;
-        virtual  css::uno::Reference< cpo::uno::XInterface > getRealInterface() override = 0;
+        virtual  cpo::uno::Reference< cpo::uno::XInterface > getRealInterface() override = 0;
 
         // XUpdatable
         virtual  void update() override;
@@ -115,7 +115,7 @@ class UIConfigElementWrapperBase : private cppu::BaseMutex,
         virtual  void                                                getFastPropertyValue( cpo::uno::Any&    aValue          ,
                                                                                                    sal_Int32                    nHandle         ) const override;
         virtual  ::cppu::IPropertyArrayHelper&                       getInfoHelper() override;
-        virtual  css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo() override;
+        virtual  cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo() override;
 
         virtual  void impl_fillNewData();
 
@@ -129,10 +129,10 @@ class UIConfigElementWrapperBase : private cppu::BaseMutex,
                                                                                                 m_bDisposed : 1,
                                                                                                 m_bNoClose : 1;
         OUString                                                                                m_aResourceURL;
-        css::uno::Reference< css::ui::XUIConfigurationManager >         m_xConfigSource;
-        css::uno::Reference< css::container::XIndexAccess >             m_xConfigData;
+        cpo::uno::Reference< css::ui::XUIConfigurationManager >         m_xConfigSource;
+        cpo::uno::Reference< css::container::XIndexAccess >             m_xConfigData;
         cpo::uno::WeakReference< css::frame::XFrame >                   m_xWeakFrame;
-        css::uno::Reference< css::awt::XMenuBar >                       m_xMenuBar;
+        cpo::uno::Reference< css::awt::XMenuBar >                       m_xMenuBar;
         comphelper::OMultiTypeInterfaceContainerHelper2                 m_aListenerContainer;   /// container for ALL Listener
 };
 

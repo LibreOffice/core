@@ -26,10 +26,10 @@ namespace connectivity::dbase
     class ODbaseColumns : public file::OColumns
     {
     protected:
-        virtual css::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
+        virtual cpo::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
         virtual void impl_refresh() override;
-        virtual css::uno::Reference< css::beans::XPropertySet > createDescriptor() override;
-        virtual css::uno::Reference< css::beans::XPropertySet > appendObject( const OUString& _rForName, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
+        virtual cpo::uno::Reference< css::beans::XPropertySet > createDescriptor() override;
+        virtual cpo::uno::Reference< css::beans::XPropertySet > appendObject( const OUString& _rForName, const cpo::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
         virtual void dropObject(sal_Int32 _nPos, const OUString& _sElementName) override;
     public:
         ODbaseColumns(file::OFileTable* _pTable,

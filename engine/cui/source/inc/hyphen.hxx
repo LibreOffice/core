@@ -22,7 +22,7 @@
 
 #include <vcl/weld.hxx>
 #include <sfx2/basedlgs.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
 #include <com/sun/star/linguistic2/XPossibleHyphens.hpp>
 
@@ -32,8 +32,8 @@ class SvxHyphenWordDialog : public SfxDialogController
 {
     OUString            m_aLabel;
     SvxSpellWrapper     *const m_pHyphWrapper;
-    css::uno::Reference< css::linguistic2::XHyphenator >        m_xHyphenator;
-    css::uno::Reference< css::linguistic2::XPossibleHyphens >   m_xPossHyph;
+    cpo::uno::Reference< css::linguistic2::XHyphenator >        m_xHyphenator;
+    cpo::uno::Reference< css::linguistic2::XPossibleHyphens >   m_xPossHyph;
     OUString            m_aEditWord;      // aEditWord and aWordEdit.GetText() differ only by the character for the current selected hyphenation position
     OUString            m_aActWord;           // actual word to be hyphenated
     LanguageType        m_nActLanguage;       // and its language
@@ -73,7 +73,7 @@ class SvxHyphenWordDialog : public SfxDialogController
 public:
     SvxHyphenWordDialog(OUString aWord, LanguageType nLang,
                         weld::Widget* pParent,
-                        css::uno::Reference<css::linguistic2::XHyphenator> const &xHyphen,
+                        cpo::uno::Reference<css::linguistic2::XHyphenator> const &xHyphen,
                         SvxSpellWrapper* pWrapper);
     virtual ~SvxHyphenWordDialog() override;
 

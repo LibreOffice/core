@@ -22,7 +22,7 @@
 #include <fmservs.hxx>
 #include <cpo/uno/Sequence.hxx>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::cpo::uno;
 
 

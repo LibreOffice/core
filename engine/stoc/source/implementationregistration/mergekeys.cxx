@@ -27,7 +27,7 @@
 
 #include "mergekeys.hxx"
 
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star;
 using namespace ::cpo::uno;
 

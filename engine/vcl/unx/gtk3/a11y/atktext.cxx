@@ -86,7 +86,7 @@ scroll_type_from_scroll_type(AtkScrollType type)
 /*****************************************************************************/
 
 static gchar *
-adjust_boundaries( css::uno::Reference<css::accessibility::XAccessibleText> const & pText,
+adjust_boundaries( cpo::uno::Reference<css::accessibility::XAccessibleText> const & pText,
                    accessibility::TextSegment const & rTextSegment,
                    AtkTextBoundary  boundary_type,
                    gint * start_offset, gint * end_offset )
@@ -167,7 +167,7 @@ adjust_boundaries( css::uno::Reference<css::accessibility::XAccessibleText> cons
 /*****************************************************************************/
 
 /// @throws uno::RuntimeException
-static css::uno::Reference<css::accessibility::XAccessibleText>
+static cpo::uno::Reference<css::accessibility::XAccessibleText>
     getText( AtkText *pText )
 {
     AtkObjectWrapper *pWrap = ATK_OBJECT_WRAPPER( pText );
@@ -175,19 +175,19 @@ static css::uno::Reference<css::accessibility::XAccessibleText>
     {
         if( !pWrap->mpText.is() )
         {
-            pWrap->mpText.set(pWrap->mpContext, css::uno::UNO_QUERY);
+            pWrap->mpText.set(pWrap->mpContext, cpo::uno::UNO_QUERY);
         }
 
         return pWrap->mpText;
     }
 
-    return css::uno::Reference<css::accessibility::XAccessibleText>();
+    return cpo::uno::Reference<css::accessibility::XAccessibleText>();
 }
 
 /*****************************************************************************/
 
 /// @throws uno::RuntimeException
-static css::uno::Reference<css::accessibility::XAccessibleTextMarkup>
+static cpo::uno::Reference<css::accessibility::XAccessibleTextMarkup>
     getTextMarkup( AtkText *pText )
 {
     AtkObjectWrapper *pWrap = ATK_OBJECT_WRAPPER( pText );
@@ -195,19 +195,19 @@ static css::uno::Reference<css::accessibility::XAccessibleTextMarkup>
     {
         if( !pWrap->mpTextMarkup.is() )
         {
-            pWrap->mpTextMarkup.set(pWrap->mpContext, css::uno::UNO_QUERY);
+            pWrap->mpTextMarkup.set(pWrap->mpContext, cpo::uno::UNO_QUERY);
         }
 
         return pWrap->mpTextMarkup;
     }
 
-    return css::uno::Reference<css::accessibility::XAccessibleTextMarkup>();
+    return cpo::uno::Reference<css::accessibility::XAccessibleTextMarkup>();
 }
 
 /*****************************************************************************/
 
 /// @throws uno::RuntimeException
-static css::uno::Reference<css::accessibility::XAccessibleTextAttributes>
+static cpo::uno::Reference<css::accessibility::XAccessibleTextAttributes>
     getTextAttributes( AtkText *pText )
 {
     AtkObjectWrapper *pWrap = ATK_OBJECT_WRAPPER( pText );
@@ -215,19 +215,19 @@ static css::uno::Reference<css::accessibility::XAccessibleTextAttributes>
     {
         if( !pWrap->mpTextAttributes.is() )
         {
-            pWrap->mpTextAttributes.set(pWrap->mpContext, css::uno::UNO_QUERY);
+            pWrap->mpTextAttributes.set(pWrap->mpContext, cpo::uno::UNO_QUERY);
         }
 
         return pWrap->mpTextAttributes;
     }
 
-    return css::uno::Reference<css::accessibility::XAccessibleTextAttributes>();
+    return cpo::uno::Reference<css::accessibility::XAccessibleTextAttributes>();
 }
 
 /*****************************************************************************/
 
 /// @throws uno::RuntimeException
-static css::uno::Reference<css::accessibility::XAccessibleMultiLineText>
+static cpo::uno::Reference<css::accessibility::XAccessibleMultiLineText>
     getMultiLineText( AtkText *pText )
 {
     AtkObjectWrapper *pWrap = ATK_OBJECT_WRAPPER( pText );
@@ -235,13 +235,13 @@ static css::uno::Reference<css::accessibility::XAccessibleMultiLineText>
     {
         if( !pWrap->mpMultiLineText.is() )
         {
-            pWrap->mpMultiLineText.set(pWrap->mpContext, css::uno::UNO_QUERY);
+            pWrap->mpMultiLineText.set(pWrap->mpContext, cpo::uno::UNO_QUERY);
         }
 
         return pWrap->mpMultiLineText;
     }
 
-    return css::uno::Reference<css::accessibility::XAccessibleMultiLineText>();
+    return cpo::uno::Reference<css::accessibility::XAccessibleMultiLineText>();
 }
 
 /*****************************************************************************/
@@ -258,7 +258,7 @@ text_wrapper_get_text (AtkText *text,
     g_return_val_if_fail( (end_offset == -1) || (end_offset >= start_offset), nullptr );
 
     try {
-        css::uno::Reference<css::accessibility::XAccessibleText> pText
+        cpo::uno::Reference<css::accessibility::XAccessibleText> pText
             = getText( text );
         if( pText.is() )
         {
@@ -291,7 +291,7 @@ text_wrapper_get_text_after_offset (AtkText          *text,
                                     gint             *end_offset)
 {
     try {
-        css::uno::Reference<css::accessibility::XAccessibleText> pText
+        cpo::uno::Reference<css::accessibility::XAccessibleText> pText
             = getText( text );
         if( pText.is() )
         {
@@ -314,7 +314,7 @@ text_wrapper_get_text_at_offset (AtkText          *text,
                                  gint             *end_offset)
 {
     try {
-        css::uno::Reference<css::accessibility::XAccessibleText> pText
+        cpo::uno::Reference<css::accessibility::XAccessibleText> pText
             = getText( text );
         if( pText.is() )
         {
@@ -328,7 +328,7 @@ text_wrapper_get_text_at_offset (AtkText          *text,
                       ATK_TEXT_BOUNDARY_LINE_END == boundary_type)
                )
             {
-                css::uno::Reference<
+                cpo::uno::Reference<
                     css::accessibility::XAccessibleMultiLineText> pMultiLineText
                         = getMultiLineText( text );
                 if( pMultiLineText.is() )
@@ -376,7 +376,7 @@ text_wrapper_get_text_before_offset (AtkText          *text,
                                      gint             *end_offset)
 {
     try {
-        css::uno::Reference<css::accessibility::XAccessibleText> pText
+        cpo::uno::Reference<css::accessibility::XAccessibleText> pText
             = getText( text );
         if( pText.is() )
         {
@@ -397,7 +397,7 @@ text_wrapper_get_caret_offset (AtkText          *text)
     gint offset = -1;
 
     try {
-        css::uno::Reference<css::accessibility::XAccessibleText> pText
+        cpo::uno::Reference<css::accessibility::XAccessibleText> pText
             = getText( text );
         if( pText.is() )
             offset = pText->getCaretPosition();
@@ -414,7 +414,7 @@ text_wrapper_set_caret_offset (AtkText *text,
                                gint     offset)
 {
     try {
-        css::uno::Reference<css::accessibility::XAccessibleText> pText
+        cpo::uno::Reference<css::accessibility::XAccessibleText> pText
             = getText( text );
         if( pText.is() )
             return pText->setCaretPosition( offset );
@@ -428,7 +428,7 @@ text_wrapper_set_caret_offset (AtkText *text,
 
 // #i92232#
 static AtkAttributeSet*
-handle_text_markup_as_run_attribute( css::uno::Reference<css::accessibility::XAccessibleTextMarkup> const & pTextMarkup,
+handle_text_markup_as_run_attribute( cpo::uno::Reference<css::accessibility::XAccessibleTextMarkup> const & pTextMarkup,
                                      const gint nTextMarkupType,
                                      const gint offset,
                                      AtkAttributeSet* pSet,
@@ -511,13 +511,13 @@ text_wrapper_get_run_attributes( AtkText        *text,
     try {
         bool bOffsetsAreValid = false;
 
-        css::uno::Reference<css::accessibility::XAccessibleText> pText
+        cpo::uno::Reference<css::accessibility::XAccessibleText> pText
             = getText( text );
         if( pText.is())
         {
             cpo::uno::Sequence< beans::PropertyValue > aAttributeList;
 
-            css::uno::Reference<css::accessibility::XAccessibleTextAttributes>
+            cpo::uno::Reference<css::accessibility::XAccessibleTextAttributes>
                 pTextAttributes = getTextAttributes( text );
             if(pTextAttributes.is()) // Text attributes are available for paragraphs only
             {
@@ -547,7 +547,7 @@ text_wrapper_get_run_attributes( AtkText        *text,
         // #i92232#
         // - add special handling for tracked changes and refactor the
         //   corresponding code for handling misspelled text.
-        css::uno::Reference<css::accessibility::XAccessibleTextMarkup>
+        cpo::uno::Reference<css::accessibility::XAccessibleTextMarkup>
             pTextMarkup = getTextMarkup( text );
         if( pTextMarkup.is() )
         {
@@ -601,7 +601,7 @@ text_wrapper_get_default_attributes( AtkText *text )
     AtkAttributeSet *pSet = nullptr;
 
     try {
-        css::uno::Reference<css::accessibility::XAccessibleTextAttributes>
+        cpo::uno::Reference<css::accessibility::XAccessibleTextAttributes>
             pTextAttributes = getTextAttributes( text );
         if( pTextAttributes.is() )
         {
@@ -639,7 +639,7 @@ text_wrapper_get_character_extents( AtkText          *text,
     *x = *y = *width = *height = -1;
 
     try {
-        css::uno::Reference<css::accessibility::XAccessibleText> pText
+        cpo::uno::Reference<css::accessibility::XAccessibleText> pText
             = getText( text );
         if( pText.is() )
         {
@@ -673,7 +673,7 @@ text_wrapper_get_character_count (AtkText *text)
     gint rv = 0;
 
     try {
-        css::uno::Reference<css::accessibility::XAccessibleText> pText
+        cpo::uno::Reference<css::accessibility::XAccessibleText> pText
             = getText( text );
         if( pText.is() )
             rv = pText->getCharacterCount();
@@ -692,7 +692,7 @@ text_wrapper_get_offset_at_point (AtkText     *text,
                                   AtkCoordType coords)
 {
     try {
-        css::uno::Reference<css::accessibility::XAccessibleText> pText
+        cpo::uno::Reference<css::accessibility::XAccessibleText> pText
             = getText( text );
         if( pText.is() )
         {
@@ -725,7 +725,7 @@ text_wrapper_get_n_selections (AtkText *text)
     gint rv = 0;
 
     try {
-        css::uno::Reference<css::accessibility::XAccessibleText> pText
+        cpo::uno::Reference<css::accessibility::XAccessibleText> pText
             = getText( text );
         if( pText.is() )
             rv = ( pText->getSelectionEnd() > pText->getSelectionStart() ) ? 1 : 0;
@@ -746,7 +746,7 @@ text_wrapper_get_selection (AtkText *text,
     g_return_val_if_fail( selection_num == 0, FALSE );
 
     try {
-        css::uno::Reference<css::accessibility::XAccessibleText> pText
+        cpo::uno::Reference<css::accessibility::XAccessibleText> pText
             = getText( text );
         if( pText.is() )
         {
@@ -772,7 +772,7 @@ text_wrapper_add_selection (AtkText *text,
     //        existing adjacent selection ?
 
     try {
-        css::uno::Reference<css::accessibility::XAccessibleText> pText
+        cpo::uno::Reference<css::accessibility::XAccessibleText> pText
             = getText( text );
         if( pText.is() )
             return pText->setSelection( start_offset, end_offset ); // ?
@@ -791,7 +791,7 @@ text_wrapper_remove_selection (AtkText *text,
     g_return_val_if_fail( selection_num == 0, FALSE );
 
     try {
-        css::uno::Reference<css::accessibility::XAccessibleText> xText = getText(text);
+        cpo::uno::Reference<css::accessibility::XAccessibleText> xText = getText(text);
         if (!xText.is())
             return false;
 
@@ -814,7 +814,7 @@ text_wrapper_set_selection (AtkText *text,
     g_return_val_if_fail( selection_num == 0, FALSE );
 
     try {
-        css::uno::Reference<css::accessibility::XAccessibleText> pText
+        cpo::uno::Reference<css::accessibility::XAccessibleText> pText
             = getText( text );
         if( pText.is() )
             return pText->setSelection( start_offset, end_offset );
@@ -833,7 +833,7 @@ text_wrapper_scroll_substring_to(AtkText       *text,
                                  AtkScrollType  scroll_type)
 {
     try {
-        css::uno::Reference<css::accessibility::XAccessibleText> pText
+        cpo::uno::Reference<css::accessibility::XAccessibleText> pText
             = getText( text );
 
         if( pText.is() )

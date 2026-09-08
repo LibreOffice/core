@@ -25,7 +25,7 @@
 
 namespace com::sun::star::beans { class XPropertySet; }
 namespace com::sun::star::frame { class XModel; }
-namespace com::sun::star::uno { template <class interface_type> class Reference; }
+namespace cpo::uno { template <class interface_type> class Reference; }
 
 
 namespace comphelper {
@@ -37,11 +37,11 @@ namespace comphelper {
     {
         /** retrieves the UI title of the given document
         */
-        COMPHELPER_DLLPUBLIC OUString  getDocumentTitle( const css::uno::Reference< css::frame::XModel >& _rxDocument );
+        COMPHELPER_DLLPUBLIC OUString  getDocumentTitle( const cpo::uno::Reference< css::frame::XModel >& _rxDocument );
 
         /** notify that this document contains a macro event handler
         */
-        COMPHELPER_DLLPUBLIC void notifyMacroEventRead( const css::uno::Reference< css::frame::XModel >& _rxDocument );
+        COMPHELPER_DLLPUBLIC void notifyMacroEventRead( const cpo::uno::Reference< css::frame::XModel >& _rxDocument );
 
         /** notify that this document contains a form control with a remote
             image URL that was deferred during import. The control reference
@@ -49,8 +49,8 @@ namespace comphelper {
             post-load when the user allows updates.
         */
         COMPHELPER_DLLPUBLIC void notifyRemoteContentFound(
-            const css::uno::Reference< css::frame::XModel >& _rxDocument,
-            const css::uno::Reference< css::beans::XPropertySet >& _rxControl,
+            const cpo::uno::Reference< css::frame::XModel >& _rxDocument,
+            const cpo::uno::Reference< css::beans::XPropertySet >& _rxControl,
             const OUString& _rURL );
     }
 

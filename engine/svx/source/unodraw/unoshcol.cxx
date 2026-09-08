@@ -27,8 +27,8 @@
 #include <shapecollection.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 SvxShapeCollection::SvxShapeCollection() noexcept
 {
@@ -113,14 +113,14 @@ void SvxShapeCollection::dispose()
 }
 
 // XComponent
-void SvxShapeCollection::addEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener )
+void SvxShapeCollection::addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener )
 {
     std::unique_lock g(m_aMutex);
     maEventListeners.addInterface( g, aListener );
 }
 
 // XComponent
-void SvxShapeCollection::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener )
+void SvxShapeCollection::removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener )
 {
     std::unique_lock g(m_aMutex);
     maEventListeners.removeInterface( g, aListener );
@@ -158,7 +158,7 @@ cpo::uno::Any SvxShapeCollection::getByIndex( sal_Int32 Index )
     return cpo::uno::Any( xShape );
 }
 
-std::vector<css::uno::Reference<css::drawing::XShape>> SvxShapeCollection::getAllShapes() const
+std::vector<cpo::uno::Reference<css::drawing::XShape>> SvxShapeCollection::getAllShapes() const
 {
     std::unique_lock g(m_aMutex);
     return maShapeContainer;

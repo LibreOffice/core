@@ -28,6 +28,7 @@
 
 using namespace ::xmloff::token;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 class Test : public test::BootstrapFixture {
 public:

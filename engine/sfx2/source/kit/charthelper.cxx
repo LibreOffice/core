@@ -25,21 +25,22 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
-css::uno::Reference<css::frame::XController>& KitChartHelper::GetXController() const
+cpo::uno::Reference<css::frame::XController>& KitChartHelper::GetXController() const
 {
     if(!mxController.is() && mpViewShell)
     {
         SfxInPlaceClient* pIPClient = mpViewShell->GetIPClient();
         if (pIPClient)
         {
-            const css::uno::Reference< ::css::embed::XEmbeddedObject >& xEmbObj = pIPClient->GetObject();
+            const cpo::uno::Reference< ::css::embed::XEmbeddedObject >& xEmbObj = pIPClient->GetObject();
             if( xEmbObj.is() )
             {
-                ::css::uno::Reference< ::css::chart2::XChartDocument > xChart( xEmbObj->getComponent(), uno::UNO_QUERY );
+                ::cpo::uno::Reference< ::css::chart2::XChartDocument > xChart( xEmbObj->getComponent(), uno::UNO_QUERY );
                 if( xChart.is() )
                 {
-                    ::css::uno::Reference< ::css::frame::XController > xChartController = xChart->getCurrentController();
+                    ::cpo::uno::Reference< ::css::frame::XController > xChartController = xChart->getCurrentController();
                     if( xChartController.is() )
                     {
                         mxController = std::move(xChartController);
@@ -56,13 +57,13 @@ vcl::Window* KitChartHelper::GetWindow()
 {
     if (!mpWindow)
     {
-        ::css::uno::Reference< ::css::frame::XController >& xChartController = GetXController();
+        ::cpo::uno::Reference< ::css::frame::XController >& xChartController = GetXController();
         if( xChartController.is() )
         {
-            ::css::uno::Reference< ::css::frame::XFrame > xFrame = xChartController->getFrame();
+            ::cpo::uno::Reference< ::css::frame::XFrame > xFrame = xChartController->getFrame();
             if (xFrame.is())
             {
-                ::css::uno::Reference< ::css::awt::XWindow > xDockerWin = xFrame->getContainerWindow();
+                ::cpo::uno::Reference< ::css::awt::XWindow > xDockerWin = xFrame->getContainerWindow();
                 vcl::Window* pParent = VCLUnoHelper::GetWindow( xDockerWin );
                 if (pParent)
                 {

@@ -65,14 +65,14 @@ namespace frm
 
         // ImageProducer stuff
         // Store the image in a graphic object to make it accessible via graphic cache using graphic ID.
-        css::uno::Reference< css::graphic::XGraphicObject > m_xGraphicObject;
+        cpo::uno::Reference< css::graphic::XGraphicObject > m_xGraphicObject;
         std::unique_ptr<SfxMedium>          m_pMedium;     // Download medium
         rtl::Reference<ImageProducer>       m_xProducer;
         bool                                m_bDispatchUrlInternal; // property: is not allowed to set : 1
         bool                                m_bProdStarted : 1;
 
         // XSubmission stuff
-        css::uno::Reference< css::form::submission::XSubmission >
+        cpo::uno::Reference< css::form::submission::XSubmission >
                                                 m_xSubmissionDelegate;
 
         DECL_LINK( DownloadDoneLink, void*, void );
@@ -89,14 +89,14 @@ namespace frm
 
     public:
         OClickableImageBaseModel(
-            const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory,
+            const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory,
             const OUString& _rUnoControlModelTypeName,
             const OUString& _rDefault
         );
 
         OClickableImageBaseModel (
         const OClickableImageBaseModel* _pOriginal,
-        const   css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
+        const   cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
         );
 
         virtual ~OClickableImageBaseModel() override;
@@ -110,7 +110,7 @@ namespace frm
         virtual void disposing() override;
 
         // css::form::XImageProducerSupplier
-        virtual css::uno::Reference< css::awt::XImageProducer> getImageProducer() override { return m_xProducer; }
+        virtual cpo::uno::Reference< css::awt::XImageProducer> getImageProducer() override { return m_xProducer; }
 
         // OPropertySetHelper
         virtual void getFastPropertyValue(cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
@@ -127,13 +127,13 @@ namespace frm
         virtual cpo::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const override;
 
         // XImageProducer
-        virtual void addConsumer( const css::uno::Reference< css::awt::XImageConsumer >& xConsumer ) override;
-        virtual void removeConsumer( const css::uno::Reference< css::awt::XImageConsumer >& xConsumer ) override;
+        virtual void addConsumer( const cpo::uno::Reference< css::awt::XImageConsumer >& xConsumer ) override;
+        virtual void removeConsumer( const cpo::uno::Reference< css::awt::XImageConsumer >& xConsumer ) override;
         virtual void startProduction(  ) override;
 
         // XSubmissionSupplier
-        virtual css::uno::Reference< css::form::submission::XSubmission > getSubmission() override;
-        virtual void setSubmission( const css::uno::Reference< css::form::submission::XSubmission >& _submission ) override;
+        virtual cpo::uno::Reference< css::form::submission::XSubmission > getSubmission() override;
+        virtual void setSubmission( const cpo::uno::Reference< css::form::submission::XSubmission >& _submission ) override;
 
         // XServiceInfo
         virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
@@ -199,9 +199,9 @@ namespace frm
 
         // XSubmission
         virtual void submit(  ) override;
-        virtual void submitWithInteraction( const css::uno::Reference< css::task::XInteractionHandler >& aHandler ) override;
-        virtual void addSubmissionVetoListener( const css::uno::Reference< css::form::submission::XSubmissionVetoListener >& listener ) override;
-        virtual void removeSubmissionVetoListener( const css::uno::Reference< css::form::submission::XSubmissionVetoListener >& listener ) override;
+        virtual void submitWithInteraction( const cpo::uno::Reference< css::task::XInteractionHandler >& aHandler ) override;
+        virtual void addSubmissionVetoListener( const cpo::uno::Reference< css::form::submission::XSubmissionVetoListener >& listener ) override;
+        virtual void removeSubmissionVetoListener( const cpo::uno::Reference< css::form::submission::XSubmissionVetoListener >& listener ) override;
 
         // XServiceInfo
         virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
@@ -211,7 +211,7 @@ namespace frm
 
     public:
         OClickableImageBaseControl(
-            const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory,
+            const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory,
             const OUString& _aService);
         virtual ~OClickableImageBaseControl() override;
 
@@ -224,12 +224,12 @@ namespace frm
         virtual void disposing() override;
 
         // css::form::XApproveActionBroadcaster
-        virtual void addApproveActionListener(const css::uno::Reference< css::form::XApproveActionListener>& _rxListener) override;
-        virtual void removeApproveActionListener(const css::uno::Reference< css::form::XApproveActionListener>& _rxListener) override;
+        virtual void addApproveActionListener(const cpo::uno::Reference< css::form::XApproveActionListener>& _rxListener) override;
+        virtual void removeApproveActionListener(const cpo::uno::Reference< css::form::XApproveActionListener>& _rxListener) override;
 
         // XDispatchProviderInterception
-        virtual void registerDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& Interceptor ) override;
-        virtual void releaseDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& Interceptor ) override;
+        virtual void registerDispatchProviderInterceptor( const cpo::uno::Reference< css::frame::XDispatchProviderInterceptor >& Interceptor ) override;
+        virtual void releaseDispatchProviderInterceptor( const cpo::uno::Reference< css::frame::XDispatchProviderInterceptor >& Interceptor ) override;
 
     protected:
         virtual void actionPerformed_Impl( bool bNotifyListener, const css::awt::MouseEvent& rEvt );
@@ -250,7 +250,7 @@ namespace frm
     private:
         void implSubmit(
             const css::awt::MouseEvent& _rEvent,
-            const css::uno::Reference< css::task::XInteractionHandler >& aHandler
+            const cpo::uno::Reference< css::task::XInteractionHandler >& aHandler
         );
     };
 
@@ -262,7 +262,7 @@ namespace frm
         // The mutex is not locked, pCompImpl stays valid in any case
         virtual void processEvent( ::cppu::OComponentHelper *pCompImpl,
                                 const css::lang::EventObject*,
-                                const css::uno::Reference< css::awt::XControl>&,
+                                const cpo::uno::Reference< css::awt::XControl>&,
                                 bool ) override;
 
     public:

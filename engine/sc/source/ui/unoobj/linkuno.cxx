@@ -46,6 +46,7 @@
 #include <vector>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace formula;
 using ::cpo::uno::Any;
 using ::cpo::uno::Sequence;

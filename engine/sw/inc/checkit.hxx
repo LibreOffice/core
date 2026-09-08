@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 
 namespace com::sun::star::i18n
 {
@@ -30,7 +30,7 @@ class XExtendedInputSequenceChecker;
 class SwCheckIt
 {
 public:
-    css::uno::Reference<css::i18n::XExtendedInputSequenceChecker> xCheck;
+    cpo::uno::Reference<css::i18n::XExtendedInputSequenceChecker> xCheck;
 
     SwCheckIt();
 };

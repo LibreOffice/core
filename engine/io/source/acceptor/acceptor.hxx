@@ -23,7 +23,7 @@
 #include <osl/socket.hxx>
 #include <mutex>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 namespace com::sun::star::connection { class XConnection; }
 
@@ -35,7 +35,7 @@ namespace io_acceptor {
         PipeAcceptor( OUString sPipeName, OUString sConnectionDescription );
 
         void init();
-        css::uno::Reference < css::connection::XConnection >  accept(  );
+        cpo::uno::Reference < css::connection::XConnection >  accept(  );
 
         void stopAccepting();
 
@@ -56,7 +56,7 @@ namespace io_acceptor {
                         OUString sConnectionDescription );
 
         void init();
-        css::uno::Reference < css::connection::XConnection > accept();
+        cpo::uno::Reference < css::connection::XConnection > accept();
 
         void stopAccepting();
 

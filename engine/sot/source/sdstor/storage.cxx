@@ -36,11 +36,12 @@
 #include <tools/urlobj.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <comphelper/fileformat.h>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 
 #include <memory>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 std::unique_ptr<SvStream> SotTempStream::Create( const OUString & rName, StreamMode nMode )
 {
@@ -613,7 +614,7 @@ bool SotStorage::IsOLEStorage( SvStream* pStream )
     return Storage::IsStorageFile( pStream );
 }
 
-rtl::Reference<SotStorage> SotStorage::OpenOLEStorage( const css::uno::Reference < css::embed::XStorage >& xStorage,
+rtl::Reference<SotStorage> SotStorage::OpenOLEStorage( const cpo::uno::Reference < css::embed::XStorage >& xStorage,
                                         const OUString& rEleName, StreamMode nMode )
 {
     sal_Int32 nEleMode = embed::ElementModes::SEEKABLEREAD;
@@ -649,7 +650,7 @@ rtl::Reference<SotStorage> SotStorage::OpenOLEStorage( const css::uno::Reference
     return new SotStorage( pStream.release(), true );
 }
 
-SotClipboardFormatId SotStorage::GetFormatID( const css::uno::Reference < css::embed::XStorage >& xStorage )
+SotClipboardFormatId SotStorage::GetFormatID( const cpo::uno::Reference < css::embed::XStorage >& xStorage )
 {
     uno::Reference< beans::XPropertySet > xProps( xStorage, uno::UNO_QUERY );
     if ( !xProps.is() )
@@ -675,7 +676,7 @@ SotClipboardFormatId SotStorage::GetFormatID( const css::uno::Reference < css::e
     return SotClipboardFormatId::NONE;
 }
 
-sal_Int32 SotStorage::GetVersion( const css::uno::Reference < css::embed::XStorage >& xStorage )
+sal_Int32 SotStorage::GetVersion( const cpo::uno::Reference < css::embed::XStorage >& xStorage )
 {
     SotClipboardFormatId nSotFormatID = SotStorage::GetFormatID( xStorage );
     switch( nSotFormatID )

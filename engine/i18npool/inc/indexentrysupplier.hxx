@@ -39,7 +39,7 @@ class IndexEntrySupplier final : public cppu::WeakImplHelper
 >
 {
 public:
-    IndexEntrySupplier( const css::uno::Reference < cpo::uno::XComponentContext >& rxContext );
+    IndexEntrySupplier( const cpo::uno::Reference < cpo::uno::XComponentContext >& rxContext );
 
     // Methods
     virtual cpo::uno::Sequence < css::lang::Locale > getLocaleList() override;
@@ -77,12 +77,12 @@ public:
     virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
 private:
-    css::uno::Reference < css::i18n::XExtendedIndexEntrySupplier > xIES;
-    css::uno::Reference < cpo::uno::XComponentContext > m_xContext;
+    cpo::uno::Reference < css::i18n::XExtendedIndexEntrySupplier > xIES;
+    cpo::uno::Reference < cpo::uno::XComponentContext > m_xContext;
     /// @throws cpo::uno::RuntimeException
     bool createLocaleSpecificIndexEntrySupplier(std::u16string_view name);
     /// @throws cpo::uno::RuntimeException
-    css::uno::Reference < css::i18n::XExtendedIndexEntrySupplier > const & getLocaleSpecificIndexEntrySupplier(
+    cpo::uno::Reference < css::i18n::XExtendedIndexEntrySupplier > const & getLocaleSpecificIndexEntrySupplier(
         const css::lang::Locale& rLocale, const OUString& rSortAlgorithm);
 
     css::lang::Locale aLocale;

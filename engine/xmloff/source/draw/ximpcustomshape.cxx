@@ -21,7 +21,7 @@
 #include <o3tl/any.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <xmloff/xmltoken.hxx>
 #include <EnhancedCustomShapeToken.hxx>
@@ -52,7 +52,7 @@ using namespace ::xmloff::EnhancedCustomShapeToken;
 
 
 XMLEnhancedCustomShapeContext::XMLEnhancedCustomShapeContext( SvXMLImport& rImport,
-            css::uno::Reference< css::drawing::XShape >& rxShape,
+            cpo::uno::Reference< css::drawing::XShape >& rxShape,
             std::vector< css::beans::PropertyValue >& rCustomShapeGeometry ) :
         SvXMLImportContext( rImport ),
         mrUnitConverter( rImport.GetMM100UnitConverter() ),
@@ -877,7 +877,7 @@ static void GetAdjustmentValues( std::vector< css::beans::PropertyValue >& rDest
 
 void XMLEnhancedCustomShapeContext::startFastElement(
     sal_Int32 /*nElement*/,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     sal_Int32               nAttrNumber;
     std::optional<std::string_view> oSpecularityValue; // for postpone extrusion-specularity
@@ -1334,9 +1334,9 @@ void XMLEnhancedCustomShapeContext::endFastElement(sal_Int32 )
         SdXMLCustomShapePropertyMerge( mrCustomShapeGeometry, maHandles, EASGet( EAS_Handles ) );
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLEnhancedCustomShapeContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLEnhancedCustomShapeContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     EnhancedCustomShapeTokenEnum aTokenEnum = EASGet( nElement );
     if ( aTokenEnum == EAS_equation )

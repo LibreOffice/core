@@ -49,8 +49,8 @@
 #include <editeng/brushitem.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 /* Implementation of Macros test */
 
@@ -307,10 +307,10 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testPasswordProtectedUnicodeString)
     }
 
     // Unlock and load the library, to regenerate the image on save
-    css::uno::Reference<css::document::XEmbeddedScripts> xES(mxComponent, UNO_QUERY_THROW);
-    css::uno::Reference<css::script::XLibraryContainer> xLC(xES->getBasicLibraries(),
+    cpo::uno::Reference<css::document::XEmbeddedScripts> xES(mxComponent, UNO_QUERY_THROW);
+    cpo::uno::Reference<css::script::XLibraryContainer> xLC(xES->getBasicLibraries(),
                                                             UNO_QUERY_THROW);
-    css::uno::Reference<css::script::XLibraryContainerPassword> xPasswd(xLC, UNO_QUERY_THROW);
+    cpo::uno::Reference<css::script::XLibraryContainerPassword> xPasswd(xLC, UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xPasswd->isLibraryPasswordProtected(sLibName));
     CPPUNIT_ASSERT(!xPasswd->isLibraryPasswordVerified(sLibName));
     CPPUNIT_ASSERT(xPasswd->verifyLibraryPassword(sLibName, u"password"_ustr));
@@ -350,10 +350,10 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testPasswordProtectedArrayInUserType)
     }
 
     // Unlock and load the library, to regenerate the image on save
-    css::uno::Reference<css::document::XEmbeddedScripts> xES(mxComponent, UNO_QUERY_THROW);
-    css::uno::Reference<css::script::XLibraryContainer> xLC(xES->getBasicLibraries(),
+    cpo::uno::Reference<css::document::XEmbeddedScripts> xES(mxComponent, UNO_QUERY_THROW);
+    cpo::uno::Reference<css::script::XLibraryContainer> xLC(xES->getBasicLibraries(),
         UNO_QUERY_THROW);
-    css::uno::Reference<css::script::XLibraryContainerPassword> xPasswd(xLC, UNO_QUERY_THROW);
+    cpo::uno::Reference<css::script::XLibraryContainerPassword> xPasswd(xLC, UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xPasswd->isLibraryPasswordProtected(sLibName));
     CPPUNIT_ASSERT(!xPasswd->isLibraryPasswordVerified(sLibName));
     CPPUNIT_ASSERT(xPasswd->verifyLibraryPassword(sLibName, u"password"_ustr));
@@ -729,7 +729,7 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf107572)
     createScDoc();
 
     // insert initial library
-    css::uno::Reference<css::document::XEmbeddedScripts> xDocScr(mxComponent, UNO_QUERY_THROW);
+    cpo::uno::Reference<css::document::XEmbeddedScripts> xDocScr(mxComponent, UNO_QUERY_THROW);
     auto xLibs = xDocScr->getBasicLibraries();
     auto xLibrary = xLibs->createLibrary(u"TestLibrary"_ustr);
     xLibrary->insertByName(
@@ -809,7 +809,7 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testShapeLayerId)
     createScDoc();
 
     // insert initial library
-    css::uno::Reference<css::document::XEmbeddedScripts> xDocScr(mxComponent, UNO_QUERY_THROW);
+    cpo::uno::Reference<css::document::XEmbeddedScripts> xDocScr(mxComponent, UNO_QUERY_THROW);
     auto xLibs = xDocScr->getBasicLibraries();
     auto xLibrary = xLibs->createLibrary(u"TestLibrary"_ustr);
     xLibrary->insertByName(
@@ -844,7 +844,7 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testFunctionAccessIndirect)
 
     const OUString aReference = "'" + aFileName + "'#$Sheet1.A1";
 
-    css::uno::Reference<css::sheet::XFunctionAccess> xFunc(
+    cpo::uno::Reference<css::sheet::XFunctionAccess> xFunc(
         comphelper::getProcessServiceFactory()->createInstance(u"com.sun.star.sheet.FunctionAccess"_ustr),
         UNO_QUERY_THROW);
 
@@ -859,7 +859,7 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf147122)
 {
     createScDoc();
 
-    css::uno::Reference<css::document::XEmbeddedScripts> xDocScr(mxComponent, UNO_QUERY_THROW);
+    cpo::uno::Reference<css::document::XEmbeddedScripts> xDocScr(mxComponent, UNO_QUERY_THROW);
     auto xLibs = xDocScr->getBasicLibraries();
     auto xLibrary = xLibs->createLibrary(u"TestLibrary"_ustr);
     xLibrary->insertByName(
@@ -891,7 +891,7 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf154803)
 {
     createScDoc();
 
-    css::uno::Reference<css::document::XEmbeddedScripts> xDocScr(mxComponent, UNO_QUERY_THROW);
+    cpo::uno::Reference<css::document::XEmbeddedScripts> xDocScr(mxComponent, UNO_QUERY_THROW);
     auto xLibs = xDocScr->getBasicLibraries();
     auto xLibrary = xLibs->createLibrary(u"TestLibrary"_ustr);
     xLibrary->insertByName(
@@ -923,7 +923,7 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf116127)
 {
     createScDoc();
 
-    css::uno::Reference<css::document::XEmbeddedScripts> xDocScr(mxComponent, UNO_QUERY_THROW);
+    cpo::uno::Reference<css::document::XEmbeddedScripts> xDocScr(mxComponent, UNO_QUERY_THROW);
     auto xLibs = xDocScr->getBasicLibraries();
     auto xLibrary = xLibs->createLibrary(u"TestLibrary"_ustr);
     xLibrary->insertByName(

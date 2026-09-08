@@ -29,7 +29,7 @@ namespace dbaccess
     using namespace dbtools;
     using namespace comphelper;
     using namespace connectivity;
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::sdb;
     using namespace ::com::sun::star::script;
@@ -71,7 +71,7 @@ namespace dbaccess
         OPrivateColumns_Base::disposing();
     }
 
-    css::uno::Reference< css::beans::XPropertySet > OPrivateColumns::createObject(const OUString& _rName)
+    cpo::uno::Reference< css::beans::XPropertySet > OPrivateColumns::createObject(const OUString& _rName)
     {
         if ( m_aColumns.is() )
         {
@@ -87,14 +87,14 @@ namespace dbaccess
         return nullptr;
     }
 
-    css::uno::Reference< css::beans::XPropertySet > OPrivateTables::createObject(const OUString& _rName)
+    cpo::uno::Reference< css::beans::XPropertySet > OPrivateTables::createObject(const OUString& _rName)
     {
         if ( !m_aTables.empty() )
         {
             OSQLTables::iterator aIter = m_aTables.find(_rName);
             OSL_ENSURE(aIter != m_aTables.end(),"Table not found!");
             OSL_ENSURE(aIter->second.is(),"Table is null!");
-            return css::uno::Reference< css::beans::XPropertySet >(m_aTables.find(_rName)->second,UNO_QUERY);
+            return cpo::uno::Reference< css::beans::XPropertySet >(m_aTables.find(_rName)->second,UNO_QUERY);
         }
         return nullptr;
     }

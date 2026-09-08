@@ -21,7 +21,7 @@ XMLImportContext::XMLImportContext(XMLImport& rImport)
 }
 
 rtl::Reference<XMLImportContext> XMLImportContext::CreateChildContext(
-    const OUString& rName, const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs)
+    const OUString& rName, const cpo::uno::Reference<css::xml::sax::XAttributeList>& xAttribs)
 {
     return mrImport.CreateContext(rName, xAttribs);
 }
@@ -32,7 +32,7 @@ void XMLImportContext::endDocument() {}
 
 void XMLImportContext::startElement(
     const OUString& /*rName*/,
-    const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
+    const cpo::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
 }
 
@@ -47,7 +47,7 @@ void XMLImportContext::processingInstruction(const OUString& /*rTarget*/, const 
 }
 
 void XMLImportContext::setDocumentLocator(
-    const css::uno::Reference<css::xml::sax::XLocator>& /*xLocator*/)
+    const cpo::uno::Reference<css::xml::sax::XLocator>& /*xLocator*/)
 {
 }
 

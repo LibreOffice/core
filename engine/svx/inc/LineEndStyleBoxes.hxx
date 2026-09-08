@@ -46,7 +46,7 @@ public:
                       std::unique_ptr<weld::ComboBox> xEndBox,
                       std::function<void(const XLineStartItem&)> aSetLineStart,
                       std::function<void(const XLineEndItem&)> aSetLineEnd,
-                      css::uno::Reference<css::frame::XFrame> xFrame);
+                      cpo::uno::Reference<css::frame::XFrame> xFrame);
     ~LineEndStyleBoxes();
 
     /// Takes the state of SID_ATTR_LINE_START, SID_ATTR_LINE_END and
@@ -68,7 +68,7 @@ private:
     End maEnd;
     std::function<void(const XLineStartItem&)> maSetLineStart;
     std::function<void(const XLineEndItem&)> maSetLineEnd;
-    css::uno::Reference<css::frame::XFrame> mxFrame;
+    cpo::uno::Reference<css::frame::XFrame> mxFrame;
 
     // the current list of available line ends
     XLineEndListRef mxLineEndList;

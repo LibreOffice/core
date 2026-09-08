@@ -21,7 +21,7 @@
 
 #include <rtl/ustring.hxx>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/XComponentContext.hpp>
 
@@ -59,8 +59,8 @@ typedef std::unordered_map< OUString, OUString >    StringHashMap;
 class UUIInteractionHelper
 {
 private:
-    css::uno::Reference< cpo::uno::XComponentContext >      m_xContext;
-    css::uno::Reference< css::awt::XWindow >                m_xWindowParam;
+    cpo::uno::Reference< cpo::uno::XComponentContext >      m_xContext;
+    cpo::uno::Reference< css::awt::XWindow >                m_xWindowParam;
     OUString                                                m_aContextParam;
     StringHashMap                                           m_aTypedCustomHandlers;
     UUIInteractionHelper(UUIInteractionHelper const &) = delete;
@@ -68,20 +68,20 @@ private:
 
 public:
     explicit UUIInteractionHelper(
-        css::uno::Reference< cpo::uno::XComponentContext > xContext);
+        cpo::uno::Reference< cpo::uno::XComponentContext > xContext);
 
-    const css::uno::Reference<css::awt::XWindow> & GetParentWindow() const { return m_xWindowParam; }
-    void SetParentWindow(const css::uno::Reference<css::awt::XWindow>& rWindow) { m_xWindowParam = rWindow; }
+    const cpo::uno::Reference<css::awt::XWindow> & GetParentWindow() const { return m_xWindowParam; }
+    void SetParentWindow(const cpo::uno::Reference<css::awt::XWindow>& rWindow) { m_xWindowParam = rWindow; }
 
     void setContext(OUString const & context) { m_aContextParam = context; }
 
     ~UUIInteractionHelper();
 
-    bool handleRequest( css::uno::Reference< css::task::XInteractionRequest > const & rRequest);
+    bool handleRequest( cpo::uno::Reference< css::task::XInteractionRequest > const & rRequest);
 
     css::beans::Optional< OUString >
     getStringFromRequest(
-            css::uno::Reference< css::task::XInteractionRequest > const & rRequest);
+            cpo::uno::Reference< css::task::XInteractionRequest > const & rRequest);
 
     // Helper.
     static OUString
@@ -92,7 +92,7 @@ public:
 private:
     bool
     handleRequest_impl(
-        css::uno::Reference< css::task::XInteractionRequest > const & rRequest,
+        cpo::uno::Reference< css::task::XInteractionRequest > const & rRequest,
         bool bObtainErrorStringOnly,
         bool & bHasErrorString,
         OUString & rErrorString);
@@ -101,61 +101,61 @@ private:
 
     css::beans::Optional< OUString >
     getStringFromRequest_impl(
-        css::uno::Reference< css::task::XInteractionRequest > const & rRequest);
+        cpo::uno::Reference< css::task::XInteractionRequest > const & rRequest);
 
     static void getstringfromrequest(void* pHandleData, void* pInteractionHandler);
 
-    const css::uno::Reference< css::awt::XWindow>&
+    const cpo::uno::Reference< css::awt::XWindow>&
     getParentXWindow() const;
 
-    css::uno::Reference< css::task::XInteractionHandler2 >
+    cpo::uno::Reference< css::task::XInteractionHandler2 >
     getInteractionHandler() const;
 
     bool    handleTypedHandlerImplementations(
-                css::uno::Reference< css::task::XInteractionRequest > const &  rRequest
+                cpo::uno::Reference< css::task::XInteractionRequest > const &  rRequest
             );
 
     static bool
     isInformationalErrorMessageRequest(
         cpo::uno::Sequence<
-            css::uno::Reference< css::task::XInteractionContinuation > > const &  rContinuations);
+            cpo::uno::Reference< css::task::XInteractionContinuation > > const &  rContinuations);
 
     bool
     handleInteractiveIOException(
-        css::uno::Reference< css::task::XInteractionRequest > const & rRequest,
+        cpo::uno::Reference< css::task::XInteractionRequest > const & rRequest,
         bool bObtainErrorStringOnly,
         bool & bHasErrorString,
         OUString & rErrorString);
 
     bool
     handleAuthenticationRequest(
-        css::uno::Reference< css::task::XInteractionRequest > const & rRequest);
+        cpo::uno::Reference< css::task::XInteractionRequest > const & rRequest);
 
     bool
     handleCertificateValidationRequest(
-        css::uno::Reference< css::task::XInteractionRequest > const & rRequest);
+        cpo::uno::Reference< css::task::XInteractionRequest > const & rRequest);
 
     void
     handleNameClashResolveRequest(
         css::ucb::NameClashResolveRequest const & rRequest,
         cpo::uno::Sequence<
-            css::uno::Reference< css::task::XInteractionContinuation > > const & rContinuations);
+            cpo::uno::Reference< css::task::XInteractionContinuation > > const & rContinuations);
 
     bool
     handleMasterPasswordRequest(
-        css::uno::Reference< css::task::XInteractionRequest > const & rRequest);
+        cpo::uno::Reference< css::task::XInteractionRequest > const & rRequest);
 
     bool
     handlePasswordRequest(
-        css::uno::Reference< css::task::XInteractionRequest > const & rRequest);
+        cpo::uno::Reference< css::task::XInteractionRequest > const & rRequest);
 
     bool
     handleNoSuchFilterRequest(
-        css::uno::Reference< css::task::XInteractionRequest > const & rRequest);
+        cpo::uno::Reference< css::task::XInteractionRequest > const & rRequest);
 
     bool
     handleFilterOptionsRequest(
-        css::uno::Reference<
+        cpo::uno::Reference<
             css::task::XInteractionRequest > const & rRequest);
 
     void
@@ -164,7 +164,7 @@ private:
         ErrCode nErrorCode,
         std::vector< OUString > const & rArguments,
         cpo::uno::Sequence<
-            css::uno::Reference< css::task::XInteractionContinuation > > const &  rContinuations,
+            cpo::uno::Reference< css::task::XInteractionContinuation > > const &  rContinuations,
         bool bObtainErrorStringOnly,
         bool & bHasErrorString,
         OUString & rErrorString);
@@ -173,7 +173,7 @@ private:
     handleGenericErrorRequest(
         ErrCodeMsg nErrorCode,
         cpo::uno::Sequence<
-            css::uno::Reference< css::task::XInteractionContinuation > > const &  rContinuations,
+            cpo::uno::Reference< css::task::XInteractionContinuation > > const &  rContinuations,
         bool bObtainErrorStringOnly,
         bool & bHasErrorString,
         OUString & rErrorString);
@@ -181,39 +181,39 @@ private:
     void
     handleMacroConfirmRequest(
         const OUString& aDocumentURL,
-        const css::uno::Reference< css::embed::XStorage >& xZipStorage,
+        const cpo::uno::Reference< css::embed::XStorage >& xZipStorage,
         const OUString& aDocumentVersion,
         const cpo::uno::Sequence< css::security::DocumentSignatureInformation >& aSignInfo,
         cpo::uno::Sequence<
-            css::uno::Reference< css::task::XInteractionContinuation > > const &  rContinuations);
+            cpo::uno::Reference< css::task::XInteractionContinuation > > const &  rContinuations);
 
     void
     handleBrokenPackageRequest(
         std::vector< OUString > const & rArguments,
         cpo::uno::Sequence<
-            css::uno::Reference< css::task::XInteractionContinuation > > const & rContinuations,
+            cpo::uno::Reference< css::task::XInteractionContinuation > > const & rContinuations,
         bool bObtainErrorStringOnly,
         bool & bHasErrorString,
         OUString & rErrorString);
 
     bool handleFontsDisallowEditingRequest(
-        const css::uno::Reference<css::task::XInteractionRequest>& rRequest);
+        const cpo::uno::Reference<css::task::XInteractionRequest>& rRequest);
 
     bool handleLockedDocumentRequest(
-        css::uno::Reference< css::task::XInteractionRequest > const & rRequest);
+        cpo::uno::Reference< css::task::XInteractionRequest > const & rRequest);
 
     bool handleChangedByOthersRequest(
-        css::uno::Reference<
+        cpo::uno::Reference<
             css::task::XInteractionRequest > const & rRequest);
 
     bool handleLockFileProblemRequest(
-        css::uno::Reference< css::task::XInteractionRequest > const & rRequest);
+        cpo::uno::Reference< css::task::XInteractionRequest > const & rRequest);
 
     bool handleReloadEditableRequest(
-        css::uno::Reference<css::task::XInteractionRequest> const& rRequest);
+        cpo::uno::Reference<css::task::XInteractionRequest> const& rRequest);
 
     bool handleCustomRequest(
-                const css::uno::Reference< css::task::XInteractionRequest >& i_rRequest,
+                const cpo::uno::Reference< css::task::XInteractionRequest >& i_rRequest,
                 const OUString& i_rServiceName
             ) const;
 
@@ -221,12 +221,12 @@ private:
     handleAuthFallbackRequest(
             const OUString & instructions,
             const OUString & url,
-            cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > const & rContinuations );
+            cpo::uno::Sequence< cpo::uno::Reference< css::task::XInteractionContinuation > > const & rContinuations );
 
     void
     handleLoadReadOnlyRequest(
         const OUString& sDocumentURL,
-        cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > const & rContinuations);
+        cpo::uno::Sequence< cpo::uno::Reference< css::task::XInteractionContinuation > > const & rContinuations);
 };
 
 class ErrorResource

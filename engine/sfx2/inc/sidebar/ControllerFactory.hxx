@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <vcl/toolbox.hxx>
 
 namespace com::sun::star::awt { class XWindow; }
@@ -40,33 +40,33 @@ namespace sfx2::sidebar {
 class ControllerFactory
 {
 public:
-    static css::uno::Reference<css::lang::XComponent> CreateImageController(
-        const css::uno::Reference<css::frame::XFrame>& rxFrame,
-        const css::uno::Reference<css::awt::XWindow>& rxParentWindow);
+    static cpo::uno::Reference<css::lang::XComponent> CreateImageController(
+        const cpo::uno::Reference<css::frame::XFrame>& rxFrame,
+        const cpo::uno::Reference<css::awt::XWindow>& rxParentWindow);
 
-    static css::uno::Reference<css::frame::XToolbarController> CreateToolBoxController(
+    static cpo::uno::Reference<css::frame::XToolbarController> CreateToolBoxController(
         ToolBox* pToolBox,
         const ToolBoxItemId nItemId,
         const OUString& rsCommandName,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame,
-        const css::uno::Reference<css::frame::XController>& rxController,
-        const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
+        const cpo::uno::Reference<css::frame::XFrame>& rxFrame,
+        const cpo::uno::Reference<css::frame::XController>& rxController,
+        const cpo::uno::Reference<css::awt::XWindow>& rxParentWindow,
         const sal_Int32 nItemWidth, bool bSideBar);
 
-    static css::uno::Reference<css::frame::XToolbarController> CreateToolBoxController(
+    static cpo::uno::Reference<css::frame::XToolbarController> CreateToolBoxController(
         weld::Toolbar& rToolbar,
         weld::Builder& rBuilder,
         const OUString& rsCommandName,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame,
-        const css::uno::Reference<css::frame::XController>& rxController,
+        const cpo::uno::Reference<css::frame::XFrame>& rxFrame,
+        const cpo::uno::Reference<css::frame::XController>& rxController,
         bool bSideBar);
 
 private:
-    static css::uno::Reference<css::frame::XToolbarController> CreateToolBarController(
-        const css::uno::Reference<css::awt::XWindow>& rToolbar,
+    static cpo::uno::Reference<css::frame::XToolbarController> CreateToolBarController(
+        const cpo::uno::Reference<css::awt::XWindow>& rToolbar,
         const OUString& rsCommandName,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame,
-        const css::uno::Reference<css::frame::XController>& rxController,
+        const cpo::uno::Reference<css::frame::XFrame>& rxFrame,
+        const cpo::uno::Reference<css::frame::XController>& rxController,
         const sal_Int32 nWidth, bool bSideBar);
 };
 

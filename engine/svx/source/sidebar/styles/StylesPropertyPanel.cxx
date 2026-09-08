@@ -13,13 +13,13 @@
 #include "StylesPropertyPanel.hxx"
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo::uno;
 
 namespace svx::sidebar {
 
 std::unique_ptr<PanelLayout> StylesPropertyPanel::Create (
     weld::Widget* pParent,
-    const css::uno::Reference<css::frame::XFrame>& rxFrame)
+    const cpo::uno::Reference<css::frame::XFrame>& rxFrame)
 {
     if (pParent == nullptr)
         throw lang::IllegalArgumentException(u"no parent Window given to StylesPropertyPanel::Create"_ustr, nullptr, 0);
@@ -29,7 +29,7 @@ std::unique_ptr<PanelLayout> StylesPropertyPanel::Create (
     return std::make_unique<StylesPropertyPanel>(pParent, rxFrame);
 }
 
-StylesPropertyPanel::StylesPropertyPanel(weld::Widget* pParent, const css::uno::Reference<css::frame::XFrame>& rxFrame)
+StylesPropertyPanel::StylesPropertyPanel(weld::Widget* pParent, const cpo::uno::Reference<css::frame::XFrame>& rxFrame)
     : PanelLayout(pParent, u"SidebarStylesPanel"_ustr, u"svx/ui/sidebarstylespanel.ui"_ustr)
     , m_xFontStyleFt(m_xBuilder->weld_label(u"fontstyleft"_ustr))
     , m_xFontStyle(m_xBuilder->weld_toolbar(u"fontstyletoolbox"_ustr))

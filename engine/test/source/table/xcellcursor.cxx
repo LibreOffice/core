@@ -17,12 +17,13 @@
 #include <com/sun/star/table/XCellCursor.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <cppunit/TestAssert.h>
 
 using namespace com::sun::star;
-using namespace com::sun::star::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 namespace apitest
 {

@@ -52,9 +52,9 @@ public:
     const TableModelRef& getModel() const;
 
     // XCellRange
-    virtual css::uno::Reference< css::table::XCell > getCellByPosition( sal_Int32 nColumn, sal_Int32 nRow ) override;
-    virtual css::uno::Reference< css::table::XCellRange > getCellRangeByPosition( sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom ) override;
-    virtual css::uno::Reference< css::table::XCellRange > getCellRangeByName( const OUString& aRange ) override;
+    virtual cpo::uno::Reference< css::table::XCell > getCellByPosition( sal_Int32 nColumn, sal_Int32 nRow ) override;
+    virtual cpo::uno::Reference< css::table::XCellRange > getCellRangeByPosition( sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom ) override;
+    virtual cpo::uno::Reference< css::table::XCellRange > getCellRangeByName( const OUString& aRange ) override;
 
     // XNamed
     virtual OUString getName() override;

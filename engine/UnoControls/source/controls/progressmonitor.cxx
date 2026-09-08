@@ -33,8 +33,8 @@
 
 using namespace ::cppu;
 using namespace ::osl;
-using namespace ::com::sun::star::uno;
-using namespace css::uno;
+using namespace ::cpo::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::awt;
 
@@ -47,7 +47,7 @@ constexpr OUString DEFAULT_BUTTONLABEL = u"Abbrechen"_ustr;
 
 namespace unocontrols {
 
-ProgressMonitor::ProgressMonitor( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext )
+ProgressMonitor::ProgressMonitor( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext )
     : ProgressMonitor_BASE(rxContext)
 {
     // It's not allowed to work with member in this method (refcounter !!!)
@@ -255,7 +255,7 @@ sal_Int32 ProgressMonitor::getValue ()
 }
 
 //  XButton
-void ProgressMonitor::addActionListener ( const css::uno::Reference< XActionListener > & rListener )
+void ProgressMonitor::addActionListener ( const cpo::uno::Reference< XActionListener > & rListener )
 {
     // Ready for multithreading
     MutexGuard aGuard ( m_aMutex );
@@ -267,7 +267,7 @@ void ProgressMonitor::addActionListener ( const css::uno::Reference< XActionList
 }
 
 //  XButton
-void ProgressMonitor::removeActionListener ( const css::uno::Reference< XActionListener > & rListener )
+void ProgressMonitor::removeActionListener ( const cpo::uno::Reference< XActionListener > & rListener )
 {
     // Ready for multithreading
     MutexGuard aGuard ( m_aMutex );
@@ -356,7 +356,7 @@ css::awt::Size ProgressMonitor::calcAdjustedSize ( const css::awt::Size& /*rNewS
 }
 
 //  XControl
-void ProgressMonitor::createPeer ( const css::uno::Reference< XToolkit > & rToolkit, const css::uno::Reference< XWindowPeer > & rParent    )
+void ProgressMonitor::createPeer ( const cpo::uno::Reference< XToolkit > & rToolkit, const cpo::uno::Reference< XWindowPeer > & rParent    )
 {
     if (!getPeer().is())
     {
@@ -371,18 +371,18 @@ void ProgressMonitor::createPeer ( const css::uno::Reference< XToolkit > & rTool
 }
 
 //  XControl
-bool ProgressMonitor::setModel ( const css::uno::Reference< XControlModel > & /*rModel*/ )
+bool ProgressMonitor::setModel ( const cpo::uno::Reference< XControlModel > & /*rModel*/ )
 {
     // We have no model.
     return false;
 }
 
 //  XControl
-css::uno::Reference< XControlModel > ProgressMonitor::getModel ()
+cpo::uno::Reference< XControlModel > ProgressMonitor::getModel ()
 {
     // We have no model.
     // return (XControlModel*)this;
-    return css::uno::Reference< XControlModel >  ();
+    return cpo::uno::Reference< XControlModel >  ();
 }
 
 //  XComponent
@@ -435,7 +435,7 @@ void ProgressMonitor::setPosSize ( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth,
 }
 
 //  protected method
-void ProgressMonitor::impl_paint ( sal_Int32 nX, sal_Int32 nY, const css::uno::Reference< XGraphics > & rGraphics )
+void ProgressMonitor::impl_paint ( sal_Int32 nX, sal_Int32 nY, const cpo::uno::Reference< XGraphics > & rGraphics )
 {
     if (!rGraphics.is())
         return;
@@ -590,7 +590,7 @@ void ProgressMonitor::impl_recalcLayout ()
 
     // All childcontrols make an implicit repaint in setPosSize()!
     // Make it also for this 3D-line ...
-    css::uno::Reference< XGraphics >  xGraphics = impl_getGraphicsPeer ();
+    cpo::uno::Reference< XGraphics >  xGraphics = impl_getGraphicsPeer ();
 
     xGraphics->setLineColor ( PROGRESSMONITOR_LINECOLOR_SHADOW  );
     xGraphics->drawLine     ( m_a3DLine.X, m_a3DLine.Y, m_a3DLine.X+m_a3DLine.Width, m_a3DLine.Y );

@@ -47,7 +47,7 @@ public:
     // ____ XScaling ____
     virtual double doScaling( double value ) override;
 
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
         css::chart2::XScaling >
         getInverseScaling() override;
 
@@ -81,7 +81,7 @@ public:
     virtual double
     doScaling( double value ) override;
 
-    virtual css::uno::Reference< css::chart2::XScaling >
+    virtual cpo::uno::Reference< css::chart2::XScaling >
     getInverseScaling() override;
 
     // ____ XServiceName ____
@@ -112,7 +112,7 @@ public:
     // ____ XScaling ____
     virtual double doScaling( double value ) override;
 
-    virtual css::uno::Reference< css::chart2::XScaling >
+    virtual cpo::uno::Reference< css::chart2::XScaling >
         getInverseScaling() override;
 
     // ____ XServiceName ____
@@ -144,7 +144,7 @@ public:
         virtual double
     doScaling( double value ) override;
 
-     virtual css::uno::Reference< css::chart2::XScaling >
+     virtual cpo::uno::Reference< css::chart2::XScaling >
     getInverseScaling() override;
 
     // ____ XServiceName ____

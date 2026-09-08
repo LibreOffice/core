@@ -19,7 +19,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SQLPARSE_HXX
 #define INCLUDED_CONNECTIVITY_SQLPARSE_HXX
 
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <connectivity/sqlnode.hxx>
 #include <connectivity/IParseContext.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
@@ -134,15 +134,15 @@ namespace connectivity
         OUString                     m_sFieldName;   // current field name for a predicate
         OUString                     m_sErrorMessage;// current error msg
 
-        css::uno::Reference< css::beans::XPropertySet >
+        cpo::uno::Reference< css::beans::XPropertySet >
                                     m_xField;       // current field
-        css::uno::Reference< css::util::XNumberFormatter >
+        cpo::uno::Reference< css::util::XNumberFormatter >
                                     m_xFormatter;   // current number formatter
         sal_Int32                   m_nFormatKey;   // numberformat, which should be used
         sal_Int32                   m_nDateFormatKey;
-        css::uno::Reference< cpo::uno::XComponentContext >    m_xContext;
-        css::uno::Reference< css::i18n::XCharacterClassification> m_xCharClass;
-        static tools::DeleteOnDeinit<css::uno::Reference< css::i18n::XLocaleData4>>& getLocaleData();
+        cpo::uno::Reference< cpo::uno::XComponentContext >    m_xContext;
+        cpo::uno::Reference< css::i18n::XCharacterClassification> m_xCharClass;
+        static tools::DeleteOnDeinit<cpo::uno::Reference< css::i18n::XLocaleData4>>& getLocaleData();
 
         // convert a string into double trim it to scale of _nscale and then transform it back to string
         OUString stringToDouble(const OUString& _rValue,sal_Int16 _nScale);
@@ -159,7 +159,7 @@ namespace connectivity
     public:
         // if NULL, a default context will be used
         // the context must live as long as the parser
-        OSQLParser(css::uno::Reference< cpo::uno::XComponentContext > xContext,
+        OSQLParser(cpo::uno::Reference< cpo::uno::XComponentContext > xContext,
                    const IParseContext* _pContext = nullptr,
                    const IParseContext* _pNeutral = nullptr);
         ~OSQLParser();
@@ -173,8 +173,8 @@ namespace connectivity
         // set bUseRealName to false if you pass a xField that comes from where you got that field,
         // as opposed from to from yourself.
         std::unique_ptr<OSQLParseNode> predicateTree(OUString& rErrorMessage, const OUString& rStatement,
-                       const css::uno::Reference< css::util::XNumberFormatter > & xFormatter,
-                       const css::uno::Reference< css::beans::XPropertySet > & xField,
+                       const cpo::uno::Reference< css::util::XNumberFormatter > & xFormatter,
+                       const cpo::uno::Reference< css::beans::XPropertySet > & xField,
                        bool bUseRealName = true);
 
         // Access to the context

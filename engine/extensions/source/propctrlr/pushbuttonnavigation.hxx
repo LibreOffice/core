@@ -32,7 +32,7 @@ namespace pcr
 
     class PushButtonNavigation final
     {
-        css::uno::Reference< css::beans::XPropertySet >
+        cpo::uno::Reference< css::beans::XPropertySet >
                     m_xControlModel;
         bool        m_bIsPushButton;
 
@@ -42,7 +42,7 @@ namespace pcr
                 the control model which is or will be bound
         */
         explicit PushButtonNavigation(
-            const css::uno::Reference< css::beans::XPropertySet >& _rxControlModel
+            const cpo::uno::Reference< css::beans::XPropertySet >& _rxControlModel
         );
 
         /** returns the current value of the "ButtonType" property, taking into account

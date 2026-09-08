@@ -56,7 +56,7 @@ namespace connectivity
     // manages the active connections and the connections in the pool
 
     // typedef for the internal structure
-    typedef std::vector< css::uno::Reference< css::sdbc::XPooledConnection> > TPooledConnections;
+    typedef std::vector< cpo::uno::Reference< css::sdbc::XPooledConnection> > TPooledConnections;
 
      // contains the currently pooled connections
     struct TConnectionPool
@@ -94,10 +94,10 @@ namespace connectivity
     struct TActiveConnectionInfo
     {
         TConnectionMap::iterator aPos;
-        css::uno::Reference< css::sdbc::XPooledConnection> xPooledConnection;
+        cpo::uno::Reference< css::sdbc::XPooledConnection> xPooledConnection;
     };
 
-    typedef std::map< css::uno::Reference< css::sdbc::XConnection>,
+    typedef std::map< cpo::uno::Reference< css::sdbc::XConnection>,
                         TActiveConnectionInfo> TActiveConnectionMap;
 
     class OConnectionPool : public ::cppu::WeakImplHelper< css::beans::XPropertyChangeListener>
@@ -108,16 +108,16 @@ namespace connectivity
         std::mutex              m_aMutex;
         ::rtl::Reference<OPoolTimer>    m_xInvalidator;         // invalidates the connection pool when shot
 
-        css::uno::Reference< css::sdbc::XDriver >             m_xDriver;      // the one and only driver for this connectionpool
-        css::uno::Reference< cpo::uno::XInterface >           m_xDriverNode;  // config node entry
-        css::uno::Reference< css::reflection::XProxyFactory > m_xProxyFactory;
+        cpo::uno::Reference< css::sdbc::XDriver >             m_xDriver;      // the one and only driver for this connectionpool
+        cpo::uno::Reference< cpo::uno::XInterface >           m_xDriverNode;  // config node entry
+        cpo::uno::Reference< css::reflection::XProxyFactory > m_xProxyFactory;
         sal_Int32               m_nTimeOut;
         sal_Int32               m_nALiveCount;
 
     private:
-        css::uno::Reference< css::sdbc::XConnection> createNewConnection(const OUString& _rURL,
+        cpo::uno::Reference< css::sdbc::XConnection> createNewConnection(const OUString& _rURL,
                                 const cpo::uno::Sequence< css::beans::PropertyValue >& _rInfo);
-        css::uno::Reference< css::sdbc::XConnection> getPooledConnection(TConnectionMap::iterator const & _rIter);
+        cpo::uno::Reference< css::sdbc::XConnection> getPooledConnection(TConnectionMap::iterator const & _rIter);
         // calculate the timeout and the corresponding ALiveCount
         void calculateTimeOuts();
 
@@ -125,15 +125,15 @@ namespace connectivity
         // the dtor will be called from the last instance  (last release call)
         virtual ~OConnectionPool() override;
     public:
-        OConnectionPool(const css::uno::Reference< css::sdbc::XDriver >& _xDriver,
-                        const css::uno::Reference< cpo::uno::XInterface >& _xDriverNode,
-                        const css::uno::Reference< css::reflection::XProxyFactory >& _rxProxyFactory);
+        OConnectionPool(const cpo::uno::Reference< css::sdbc::XDriver >& _xDriver,
+                        const cpo::uno::Reference< cpo::uno::XInterface >& _xDriverNode,
+                        const cpo::uno::Reference< css::reflection::XProxyFactory >& _rxProxyFactory);
 
         // delete all refs
         void clear(bool _bDispose);
         /// @throws css::sdbc::SQLException
         /// @throws cpo::uno::RuntimeException
-        css::uno::Reference< css::sdbc::XConnection > getConnectionWithInfo( const OUString& url, const cpo::uno::Sequence< css::beans::PropertyValue >& info );
+        cpo::uno::Reference< css::sdbc::XConnection > getConnectionWithInfo( const OUString& url, const cpo::uno::Sequence< css::beans::PropertyValue >& info );
         // XEventListener
         virtual void disposing( const css::lang::EventObject& Source ) override;
         // XPropertyChangeListener

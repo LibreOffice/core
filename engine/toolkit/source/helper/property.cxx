@@ -40,7 +40,7 @@
 
 using ::cpo::uno::Any;
 using ::cpo::uno::Sequence;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::com::sun::star::awt::XDevice;
 using ::com::sun::star::awt::FontDescriptor;
 using ::com::sun::star::style::VerticalAlignment;

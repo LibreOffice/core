@@ -41,7 +41,7 @@
 #include <vector>
 #include <utility>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 #define VERSION 1

@@ -107,17 +107,17 @@ inline void RetrieveTypeNameFromResourceURL( std::u16string_view aResourceURL, O
 
 class LanguageGuessingHelper
 {
-    mutable css::uno::Reference< css::linguistic2::XLanguageGuessing >    m_xLanguageGuesser;
-    css::uno::Reference< cpo::uno::XComponentContext >                    m_xContext;
+    mutable cpo::uno::Reference< css::linguistic2::XLanguageGuessing >    m_xLanguageGuesser;
+    cpo::uno::Reference< cpo::uno::XComponentContext >                    m_xContext;
 
 public:
-    LanguageGuessingHelper(css::uno::Reference< cpo::uno::XComponentContext > _xContext) : m_xContext(std::move(_xContext)){}
+    LanguageGuessingHelper(cpo::uno::Reference< cpo::uno::XComponentContext > _xContext) : m_xContext(std::move(_xContext)){}
 
-    css::uno::Reference< css::linguistic2::XLanguageGuessing > const &  GetGuesser() const;
+    cpo::uno::Reference< css::linguistic2::XLanguageGuessing > const &  GetGuesser() const;
 };
 
 void FillLangItems( std::set< OUString > &rLangItems,
-        const css::uno::Reference< css::frame::XFrame > &rxFrame,
+        const cpo::uno::Reference< css::frame::XFrame > &rxFrame,
         const LanguageGuessingHelper & rLangGuessHelper,
         SvtScriptType    nScriptType,
         const OUString & rCurLang,
@@ -143,7 +143,7 @@ class WeakContainerListener final : public ::cppu::WeakImplHelper<css::container
         cpo::uno::WeakReference<css::container::XContainerListener> mxOwner;
 
     public:
-        WeakContainerListener(css::uno::Reference<css::container::XContainerListener> const & xOwner)
+        WeakContainerListener(cpo::uno::Reference<css::container::XContainerListener> const & xOwner)
             : mxOwner(xOwner)
         {
         }
@@ -151,24 +151,24 @@ class WeakContainerListener final : public ::cppu::WeakImplHelper<css::container
         // container.XContainerListener
         virtual void elementInserted(const css::container::ContainerEvent& rEvent) override
         {
-            css::uno::Reference<css::container::XContainerListener> xOwner(mxOwner.get(),
-                css::uno::UNO_QUERY);
+            cpo::uno::Reference<css::container::XContainerListener> xOwner(mxOwner.get(),
+                cpo::uno::UNO_QUERY);
             if (xOwner.is())
                 xOwner->elementInserted(rEvent);
         }
 
         virtual void elementRemoved(const css::container::ContainerEvent& rEvent) override
         {
-            css::uno::Reference<css::container::XContainerListener> xOwner(mxOwner.get(),
-                css::uno::UNO_QUERY);
+            cpo::uno::Reference<css::container::XContainerListener> xOwner(mxOwner.get(),
+                cpo::uno::UNO_QUERY);
             if (xOwner.is())
                 xOwner->elementRemoved(rEvent);
         }
 
         virtual void elementReplaced(const css::container::ContainerEvent& rEvent) override
         {
-            css::uno::Reference<css::container::XContainerListener> xOwner(mxOwner.get(),
-                css::uno::UNO_QUERY);
+            cpo::uno::Reference<css::container::XContainerListener> xOwner(mxOwner.get(),
+                cpo::uno::UNO_QUERY);
             if (xOwner.is())
                 xOwner->elementReplaced(rEvent);
         }
@@ -176,8 +176,8 @@ class WeakContainerListener final : public ::cppu::WeakImplHelper<css::container
         // lang.XEventListener
         virtual void disposing(const css::lang::EventObject& rEvent) override
         {
-            css::uno::Reference<css::container::XContainerListener> xOwner(mxOwner.get(),
-                css::uno::UNO_QUERY);
+            cpo::uno::Reference<css::container::XContainerListener> xOwner(mxOwner.get(),
+                cpo::uno::UNO_QUERY);
             if (xOwner.is())
                 xOwner->disposing(rEvent);
 
@@ -190,7 +190,7 @@ class WeakChangesListener final : public ::cppu::WeakImplHelper<css::util::XChan
         cpo::uno::WeakReference<css::util::XChangesListener> mxOwner;
 
     public:
-        WeakChangesListener(css::uno::Reference<css::util::XChangesListener> const & xOwner)
+        WeakChangesListener(cpo::uno::Reference<css::util::XChangesListener> const & xOwner)
             : mxOwner(xOwner)
         {
         }
@@ -198,8 +198,8 @@ class WeakChangesListener final : public ::cppu::WeakImplHelper<css::util::XChan
         // util.XChangesListener
         virtual void changesOccurred(const css::util::ChangesEvent& rEvent) override
         {
-            css::uno::Reference<css::util::XChangesListener> xOwner(mxOwner.get(),
-                css::uno::UNO_QUERY);
+            cpo::uno::Reference<css::util::XChangesListener> xOwner(mxOwner.get(),
+                cpo::uno::UNO_QUERY);
             if (xOwner.is())
                 xOwner->changesOccurred(rEvent);
         }
@@ -207,8 +207,8 @@ class WeakChangesListener final : public ::cppu::WeakImplHelper<css::util::XChan
         // lang.XEventListener
         virtual void disposing(const css::lang::EventObject& rEvent) override
         {
-            css::uno::Reference<css::util::XChangesListener> xOwner(mxOwner.get(),
-                css::uno::UNO_QUERY);
+            cpo::uno::Reference<css::util::XChangesListener> xOwner(mxOwner.get(),
+                cpo::uno::UNO_QUERY);
             if (xOwner.is())
                 xOwner->disposing(rEvent);
 
@@ -221,15 +221,15 @@ class WeakDocumentEventListener final : public ::cppu::WeakImplHelper<css::docum
         cpo::uno::WeakReference<css::document::XDocumentEventListener> mxOwner;
 
     public:
-        WeakDocumentEventListener(css::uno::Reference<css::document::XDocumentEventListener> const & xOwner)
+        WeakDocumentEventListener(cpo::uno::Reference<css::document::XDocumentEventListener> const & xOwner)
             : mxOwner(xOwner)
         {
         }
 
         virtual void documentEventOccured(const css::document::DocumentEvent& rEvent) override
         {
-            css::uno::Reference<css::document::XDocumentEventListener> xOwner(mxOwner.get(),
-                css::uno::UNO_QUERY);
+            cpo::uno::Reference<css::document::XDocumentEventListener> xOwner(mxOwner.get(),
+                cpo::uno::UNO_QUERY);
             if (xOwner.is())
                 xOwner->documentEventOccured(rEvent);
 
@@ -238,25 +238,25 @@ class WeakDocumentEventListener final : public ::cppu::WeakImplHelper<css::docum
         // lang.XEventListener
         virtual void disposing(const css::lang::EventObject& rEvent) override
         {
-            css::uno::Reference<css::document::XDocumentEventListener> xOwner(mxOwner.get(),
-                css::uno::UNO_QUERY);
+            cpo::uno::Reference<css::document::XDocumentEventListener> xOwner(mxOwner.get(),
+                cpo::uno::UNO_QUERY);
             if (xOwner.is())
                 xOwner->disposing(rEvent);
 
         }
 };
 
-css::uno::Reference<css::ui::XContextChangeEventListener>
+cpo::uno::Reference<css::ui::XContextChangeEventListener>
 GetFirstListenerWith_Impl(
-    css::uno::Reference<cpo::uno::XComponentContext> const & xComponentContext,
-    css::uno::Reference<cpo::uno::XInterface> const& xEventFocus,
-    std::function<bool (css::uno::Reference<css::ui::XContextChangeEventListener> const&)> const& rPredicate);
+    cpo::uno::Reference<cpo::uno::XComponentContext> const & xComponentContext,
+    cpo::uno::Reference<cpo::uno::XInterface> const& xEventFocus,
+    std::function<bool (cpo::uno::Reference<css::ui::XContextChangeEventListener> const&)> const& rPredicate);
 
 extern auto (*g_pGetMultiplexerListener)(
-    css::uno::Reference<cpo::uno::XComponentContext> const & xComponentContext,
-    css::uno::Reference<cpo::uno::XInterface> const&,
-    std::function<bool (css::uno::Reference<css::ui::XContextChangeEventListener> const&)> const&)
-    -> css::uno::Reference<css::ui::XContextChangeEventListener>;
+    cpo::uno::Reference<cpo::uno::XComponentContext> const & xComponentContext,
+    cpo::uno::Reference<cpo::uno::XInterface> const&,
+    std::function<bool (cpo::uno::Reference<css::ui::XContextChangeEventListener> const&)> const&)
+    -> cpo::uno::Reference<css::ui::XContextChangeEventListener>;
 
 } // namespace framework
 

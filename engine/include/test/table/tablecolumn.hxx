@@ -12,7 +12,7 @@
 #include <cpo/uno/XInterface.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <test/testdllapi.hxx>
 
@@ -21,8 +21,8 @@ namespace apitest
 class OOO_DLLPUBLIC_TEST TableColumn
 {
 public:
-    virtual css::uno::Reference<cpo::uno::XInterface> init() = 0;
-    void setSpreadsheet(const css::uno::Reference<css::sheet::XSpreadsheet>& r_xSheet)
+    virtual cpo::uno::Reference<cpo::uno::XInterface> init() = 0;
+    void setSpreadsheet(const cpo::uno::Reference<css::sheet::XSpreadsheet>& r_xSheet)
     {
         m_xSheet = r_xSheet;
     }
@@ -33,7 +33,7 @@ protected:
     ~TableColumn() {}
 
 private:
-    css::uno::Reference<css::sheet::XSpreadsheet> m_xSheet;
+    cpo::uno::Reference<css::sheet::XSpreadsheet> m_xSheet;
 };
 
 } // namespace apitest

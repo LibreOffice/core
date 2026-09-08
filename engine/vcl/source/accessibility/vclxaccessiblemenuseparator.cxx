@@ -22,7 +22,7 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 
 using namespace ::com::sun::star::accessibility;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star;
 using namespace ::cpo::uno;
 

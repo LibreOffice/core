@@ -34,7 +34,8 @@ namespace chart
 {
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
-using ::com::sun::star::uno::Reference;
+using namespace ::cpo;
+using ::cpo::uno::Reference;
 
 VAxisBase::VAxisBase( sal_Int32 nDimensionIndex, sal_Int32 nDimensionCount
                      , const AxisProperties& rAxisProperties
@@ -245,7 +246,7 @@ void VAxisBase::updateUnscaledValuesAtTicks( TickIter& rIter )
 void VAxisBase::createDataTableView(std::vector<std::unique_ptr<VSeriesPlotter>>& /*rSeriesPlotterList*/,
                                     uno::Reference<util::XNumberFormatsSupplier> const& /*xNumberFormatsSupplier*/,
                                     rtl::Reference<::chart::ChartModel> const& /*xChartDoc*/,
-                                    css::uno::Reference<cpo::uno::XComponentContext> const& /*rComponentContext*/)
+                                    cpo::uno::Reference<cpo::uno::XComponentContext> const& /*rComponentContext*/)
 {
 }
 

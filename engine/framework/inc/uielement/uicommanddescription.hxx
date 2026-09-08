@@ -39,7 +39,7 @@ typedef comphelper::WeakComponentImplHelper< css::lang::XServiceInfo,
 class UICommandDescription : public UICommandDescription_BASE
 {
     public:
-        UICommandDescription( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+        UICommandDescription( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
         virtual ~UICommandDescription() override;
 
         virtual OUString getImplementationName() override
@@ -75,19 +75,19 @@ public:
                                     OUString > ModuleToCommandFileMap;
 
         typedef std::unordered_map< OUString,
-                                    css::uno::Reference< css::container::XNameAccess > > UICommandsHashMap;
+                                    cpo::uno::Reference< css::container::XNameAccess > > UICommandsHashMap;
 
     protected:
-        UICommandDescription( const css::uno::Reference< cpo::uno::XComponentContext>& rxContext, bool  );
+        UICommandDescription( const cpo::uno::Reference< cpo::uno::XComponentContext>& rxContext, bool  );
         void impl_fillElements(const char* _pName);
         void ensureGenericUICommandsForLanguage(const LanguageTag& rLanguage);
 
         OUString                                                  m_aPrivateResourceURL;
-        css::uno::Reference< cpo::uno::XComponentContext >        m_xContext;
+        cpo::uno::Reference< cpo::uno::XComponentContext >        m_xContext;
         ModuleToCommandFileMap                                    m_aModuleToCommandFileMap;
         std::map<LanguageTag, UICommandsHashMap>                  m_aUICommandsHashMap;
-        std::map<LanguageTag, css::uno::Reference< css::container::XNameAccess > > m_xGenericUICommands;
-        css::uno::Reference< css::frame::XModuleManager2 >        m_xModuleManager;
+        std::map<LanguageTag, cpo::uno::Reference< css::container::XNameAccess > > m_xGenericUICommands;
+        cpo::uno::Reference< css::frame::XModuleManager2 >        m_xModuleManager;
 };
 
 } // namespace framework

@@ -28,8 +28,8 @@ private:
 
 public:
     /// @throws cpo::uno::RuntimeException
-    SwVbaFormField(const css::uno::Reference<ooo::vba::XHelperInterface>& rParent,
-                   const css::uno::Reference<cpo::uno::XComponentContext>& rContext,
+    SwVbaFormField(const cpo::uno::Reference<ooo::vba::XHelperInterface>& rParent,
+                   const cpo::uno::Reference<cpo::uno::XComponentContext>& rContext,
                    const rtl::Reference<SwXTextDocument>& xTextDocument,
                    sw::mark::Fieldmark& rFormField);
     ~SwVbaFormField() override;
@@ -42,7 +42,7 @@ public:
     cpo::uno::Any SAL_CALL TextInput() override;
     cpo::uno::Any SAL_CALL Previous() override;
     cpo::uno::Any SAL_CALL Next() override;
-    css::uno::Reference<ooo::vba::word::XRange> SAL_CALL Range() override;
+    cpo::uno::Reference<ooo::vba::word::XRange> SAL_CALL Range() override;
 
     // Indicates which of the three form fields this is: oovbaapi/ooo/vba/word/WdFieldType.idl
     sal_Int32 SAL_CALL getType() override;

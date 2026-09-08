@@ -140,6 +140,7 @@
 #include <names.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 using ::com::sun::star::frame::XModel;
 using ::com::sun::star::container::XNameAccess;
@@ -2976,7 +2977,7 @@ void SwXFrame::attachToRange(uno::Reference<text::XTextRange> const& xTextRange,
                 // store main document name to show in the title bar
                 if (SwDocShell* pShell = pDoc->GetDocShell())
                 {
-                    uno::Reference< frame::XTitle > xModelTitle( pShell->GetModel(), css::uno::UNO_QUERY );
+                    uno::Reference< frame::XTitle > xModelTitle( pShell->GetModel(), cpo::uno::UNO_QUERY );
                     if( xModelTitle.is() )
                         xIPObj->setContainerName( xModelTitle->getTitle() );
                 }
@@ -3015,7 +3016,7 @@ void SwXFrame::attachToRange(uno::Reference<text::XTextRange> const& xTextRange,
                 SwDocShell* pShell = pDoc->GetDocShell();
                 if( xObj.is() && pShell )
                 {
-                    uno::Reference< frame::XTitle > xModelTitle( pShell->GetModel(), css::uno::UNO_QUERY );
+                    uno::Reference< frame::XTitle > xModelTitle( pShell->GetModel(), cpo::uno::UNO_QUERY );
                     if( xModelTitle.is() )
                         xObj->setContainerName( xModelTitle->getTitle() );
                 }

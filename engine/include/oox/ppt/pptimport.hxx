@@ -24,7 +24,7 @@
 #include <memory>
 #include <vector>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <oox/core/filterbase.hxx>
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
@@ -45,7 +45,7 @@ class PowerPointImport final : public oox::core::XmlFilterBase
 {
 public:
     /// @throws cpo::uno::RuntimeException
-    PowerPointImport( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+    PowerPointImport( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
     virtual ~PowerPointImport() override;
 
     // from FilterBase

@@ -40,8 +40,8 @@ CPPUNIT_TEST_FIXTURE(VclTextLayoutTest, testBreakLines_invalid_softbreak)
     const OUString sTestStr = u"textline_ text_"_ustr;
     const auto nTextWidth = device->GetTextWidth(u"text"_ustr);
 
-    css::uno::Reference<css::linguistic2::XHyphenator> xHyph;
-    css::uno::Reference<css::i18n::XBreakIterator> xBI = vcl::unohelper::CreateBreakIterator();
+    cpo::uno::Reference<css::linguistic2::XHyphenator> xHyph;
+    cpo::uno::Reference<css::i18n::XBreakIterator> xBI = vcl::unohelper::CreateBreakIterator();
 
     // softbreak cannot be greater than the string length
 
@@ -65,13 +65,13 @@ CPPUNIT_TEST_FIXTURE(VclTextLayoutTest, testBreakLines_hyphens)
     const OUString sTestStr = u"textline text-moretext"_ustr;
     const auto nTextWidth = device->GetTextWidth(u"textline text-moretex"_ustr);
 
-    css::uno::Reference<cpo::uno::XComponentContext> xContext(
+    cpo::uno::Reference<cpo::uno::XComponentContext> xContext(
         comphelper::getProcessComponentContext());
-    css::uno::Reference<css::linguistic2::XLinguServiceManager2> xLinguMgr
+    cpo::uno::Reference<css::linguistic2::XLinguServiceManager2> xLinguMgr
         = css::linguistic2::LinguServiceManager::create(xContext);
 
-    css::uno::Reference<css::linguistic2::XHyphenator> xHyph = xLinguMgr->getHyphenator();
-    css::uno::Reference<css::i18n::XBreakIterator> xBI = vcl::unohelper::CreateBreakIterator();
+    cpo::uno::Reference<css::linguistic2::XHyphenator> xHyph = xLinguMgr->getHyphenator();
+    cpo::uno::Reference<css::i18n::XBreakIterator> xBI = vcl::unohelper::CreateBreakIterator();
 
     auto[nBreakPos, nLineWidth]
         = aTextLayout.BreakLine(nTextWidth, sTestStr, xHyph, xBI, true, nTextWidth, 13, 12);
@@ -91,13 +91,13 @@ CPPUNIT_TEST_FIXTURE(VclTextLayoutTest, testBreakLines_hyphen_word_under_two_cha
     const OUString sTestStr = u"textline text-moretext"_ustr;
     const auto nTextWidth = device->GetTextWidth(u"te-moretex"_ustr);
 
-    css::uno::Reference<cpo::uno::XComponentContext> xContext(
+    cpo::uno::Reference<cpo::uno::XComponentContext> xContext(
         comphelper::getProcessComponentContext());
-    css::uno::Reference<css::linguistic2::XLinguServiceManager2> xLinguMgr
+    cpo::uno::Reference<css::linguistic2::XLinguServiceManager2> xLinguMgr
         = css::linguistic2::LinguServiceManager::create(xContext);
 
-    css::uno::Reference<css::linguistic2::XHyphenator> xHyph = xLinguMgr->getHyphenator();
-    css::uno::Reference<css::i18n::XBreakIterator> xBI = vcl::unohelper::CreateBreakIterator();
+    cpo::uno::Reference<css::linguistic2::XHyphenator> xHyph = xLinguMgr->getHyphenator();
+    cpo::uno::Reference<css::i18n::XBreakIterator> xBI = vcl::unohelper::CreateBreakIterator();
 
     auto[nBreakPos, nLineWidth]
         = aTextLayout.BreakLine(nTextWidth, sTestStr, xHyph, xBI, true, nTextWidth, 2, 10);

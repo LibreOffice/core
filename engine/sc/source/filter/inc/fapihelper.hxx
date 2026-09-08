@@ -20,7 +20,7 @@
 #pragma once
 
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <osl/diagnose.h>
 #include <tools/color.hxx>
@@ -51,23 +51,23 @@ public:
                             VectorToSequence( const ::std::vector< Type >& rVector );
 
     /** Returns the service name provided via the XServiceName interface, or an empty string on error. */
-    static OUString GetServiceName( const css::uno::Reference< cpo::uno::XInterface >& xInt );
+    static OUString GetServiceName( const cpo::uno::Reference< cpo::uno::XInterface >& xInt );
 
     /** Returns the multi service factory from a document shell. */
-    static css::uno::Reference< css::lang::XMultiServiceFactory > GetServiceFactory( const SfxObjectShell* pShell );
+    static cpo::uno::Reference< css::lang::XMultiServiceFactory > GetServiceFactory( const SfxObjectShell* pShell );
 
     /** Creates an instance from the passed service name, using the passed service factory. */
-    static css::uno::Reference< cpo::uno::XInterface > CreateInstance(
-                            const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory,
+    static cpo::uno::Reference< cpo::uno::XInterface > CreateInstance(
+                            const cpo::uno::Reference< css::lang::XMultiServiceFactory >& xFactory,
                             const OUString& rServiceName );
 
     /** Creates an instance from the passed service name, using the service factory of the passed object. */
-    static css::uno::Reference< cpo::uno::XInterface > CreateInstance(
+    static cpo::uno::Reference< cpo::uno::XInterface > CreateInstance(
                             const SfxObjectShell* pShell,
                             const OUString& rServiceName );
 
     /** Creates an instance from the passed service name, using the process service factory. */
-    static css::uno::Reference< cpo::uno::XInterface > CreateInstance( const OUString& rServiceName );
+    static cpo::uno::Reference< cpo::uno::XInterface > CreateInstance( const OUString& rServiceName );
 
     /** Opens a password dialog and returns the encryption data.
         @return  The encryption data or an empty sequence on 'Cancel' or any error. */
@@ -105,10 +105,10 @@ class ScfPropertySet
 public:
     explicit     ScfPropertySet() {}
     /** Constructs a property set wrapper with the passed UNO property set. */
-    explicit     ScfPropertySet( const css::uno::Reference< css::beans::XPropertySet > & xPropSet ) { Set( xPropSet ); }
+    explicit     ScfPropertySet( const cpo::uno::Reference< css::beans::XPropertySet > & xPropSet ) { Set( xPropSet ); }
     /** Constructs a property set wrapper after querying the XPropertySet interface. */
     template< typename InterfaceType >
-    explicit     ScfPropertySet( const css::uno::Reference< InterfaceType >& xInterface ) { Set( xInterface ); }
+    explicit     ScfPropertySet( const cpo::uno::Reference< InterfaceType >& xInterface ) { Set( xInterface ); }
 
                         ~ScfPropertySet();
     //TODO:
@@ -118,17 +118,17 @@ public:
     ScfPropertySet & operator =(ScfPropertySet &&) = default;
 
     /** Sets the passed UNO property set and releases the old UNO property set. */
-    void                Set( css::uno::Reference< css::beans::XPropertySet > const & xPropSet );
+    void                Set( cpo::uno::Reference< css::beans::XPropertySet > const & xPropSet );
     /** Queries the passed interface for an XPropertySet and releases the old UNO property set. */
     template< typename InterfaceType >
-    void         Set( css::uno::Reference< InterfaceType > xInterface )
-                            { Set( css::uno::Reference< css::beans::XPropertySet >( xInterface, css::uno::UNO_QUERY ) ); }
+    void         Set( cpo::uno::Reference< InterfaceType > xInterface )
+                            { Set( cpo::uno::Reference< css::beans::XPropertySet >( xInterface, cpo::uno::UNO_QUERY ) ); }
 
     /** Returns true, if the contained XPropertySet interface is valid. */
     bool         Is() const { return mxPropSet.is(); }
 
     /** Returns the contained XPropertySet interface. */
-    const css::uno::Reference< css::beans::XPropertySet >& GetApiPropertySet() const { return mxPropSet; }
+    const cpo::uno::Reference< css::beans::XPropertySet >& GetApiPropertySet() const { return mxPropSet; }
 
     /** Returns the service name provided via the XServiceName interface, or an empty string on error. */
     OUString     GetServiceName() const;
@@ -192,8 +192,8 @@ public:
     void                SetProperties( const cpo::uno::Sequence< OUString > & rPropNames, const cpo::uno::Sequence< cpo::uno::Any >& rValues );
 
 private:
-    css::uno::Reference< css::beans::XPropertySet >       mxPropSet;          /// The mandatory property set interface.
-    css::uno::Reference< css::beans::XMultiPropertySet >  mxMultiPropSet;     /// The optional multi property set interface.
+    cpo::uno::Reference< css::beans::XPropertySet >       mxPropSet;          /// The mandatory property set interface.
+    cpo::uno::Reference< css::beans::XMultiPropertySet >  mxMultiPropSet;     /// The optional multi property set interface.
 };
 
 /** Generic helper class for reading from and writing to property sets.

@@ -13,7 +13,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/util/XChangesBatch.hpp>
 
 #include <comphelper/processfactory.hxx>
@@ -21,8 +21,8 @@
 #include <cppunit/TestAssert.h>
 
 using namespace com::sun::star;
-using namespace com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 namespace apitest
 {
@@ -40,15 +40,15 @@ void GlobalSheetSettings::testGlobalSheetSettingsProperties()
 
         cpo::uno::Sequence<cpo::uno::Any> args{ cpo::uno::Any(
             css::beans::NamedValue(u"nodepath"_ustr, cpo::uno::Any(regNodeName))) };
-        css::uno::Reference<beans::XPropertySet> xRegNodeRO(
+        cpo::uno::Reference<beans::XPropertySet> xRegNodeRO(
             configProvider->createInstanceWithArguments(
                 u"com.sun.star.configuration.ConfigurationAccess"_ustr, args),
-            css::uno::UNO_QUERY_THROW);
-        css::uno::Reference<beans::XPropertySet> xRegNodeRW(
+            cpo::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<beans::XPropertySet> xRegNodeRW(
             configProvider->createInstanceWithArguments(
                 u"com.sun.star.configuration.ConfigurationUpdateAccess"_ustr, args),
-            css::uno::UNO_QUERY_THROW);
-        css::uno::Reference<css::util::XChangesBatch> xBatch(xRegNodeRW, css::uno::UNO_QUERY_THROW);
+            cpo::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::util::XChangesBatch> xBatch(xRegNodeRW, cpo::uno::UNO_QUERY_THROW);
 
         // 1. Check initial value
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sMessage.getStr(), aOrigValue,

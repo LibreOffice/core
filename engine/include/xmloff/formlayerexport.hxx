@@ -32,7 +32,7 @@ namespace com::sun::star::awt {
 
 namespace com::sun::star::drawing { class XDrawPage; }
 namespace com::sun::star::beans { class XPropertySet; }
-namespace com::sun::star::uno { template <typename > class Reference; }
+namespace cpo::uno { template <typename > class Reference; }
 
 class SvXMLExport;
 
@@ -71,7 +71,7 @@ namespace xmloff
             @see examineForms
         */
         bool seekPage(
-            const css::uno::Reference< css::drawing::XDrawPage >& _rxDrawPage);
+            const cpo::uno::Reference< css::drawing::XDrawPage >& _rxDrawPage);
 
         /** get the id for the given control
 
@@ -85,7 +85,7 @@ namespace xmloff
 
         */
         SAL_DLLPRIVATE OUString getControlId(
-            const css::uno::Reference< css::beans::XPropertySet >& _rxControl);
+            const cpo::uno::Reference< css::beans::XPropertySet >& _rxControl);
 
         /** retrieves the style name for the control's number style.
 
@@ -99,7 +99,7 @@ namespace xmloff
             @see seekPage
         */
         SAL_DLLPRIVATE OUString getControlNumberStyle(
-            const css::uno::Reference< css::beans::XPropertySet >& _rxControl );
+            const cpo::uno::Reference< css::beans::XPropertySet >& _rxControl );
 
         /** examines the forms collection given.
 
@@ -109,7 +109,7 @@ namespace xmloff
                 the draw page to examine. The object will be queried for a com.sun.star.form::XFormsSupplier
                 interface to obtain the forms container.
         */
-        void examineForms(const css::uno::Reference< css::drawing::XDrawPage >& _rxDrawPage);
+        void examineForms(const cpo::uno::Reference< css::drawing::XDrawPage >& _rxDrawPage);
 
         /** exports the structure of a form layer
 
@@ -130,7 +130,7 @@ namespace xmloff
                 the draw page to examine. The object will be queried for a com.sun.star.form::XFormsSupplier
                 interface to obtain the forms container.
         */
-        void exportForms(const css::uno::Reference< css::drawing::XDrawPage >& _rxDrawPage);
+        void exportForms(const cpo::uno::Reference< css::drawing::XDrawPage >& _rxDrawPage);
 
         /** exports the XForms model data
         */
@@ -138,7 +138,7 @@ namespace xmloff
 
         /** determines whether the given page contains logical forms
         */
-        static bool pageContainsForms( const css::uno::Reference< css::drawing::XDrawPage >& _rxDrawPage );
+        static bool pageContainsForms( const cpo::uno::Reference< css::drawing::XDrawPage >& _rxDrawPage );
 
         /** determines whether the given page contains XForm instances
         */
@@ -159,7 +159,7 @@ namespace xmloff
             to the form layer exporter.<br/>
             Of course you have to do this before calling <member>exportForms</member></p>
         */
-        SAL_DLLPRIVATE void excludeFromExport( const css::uno::Reference< css::awt::XControlModel >& _rxControl );
+        SAL_DLLPRIVATE void excludeFromExport( const cpo::uno::Reference< css::awt::XControlModel >& _rxControl );
     };
 
 

@@ -27,14 +27,14 @@
 class XMLAnimationsContext final : public SvXMLImportContext
 {
 public:
-    css::uno::Reference<css::beans::XPropertySet> mxLastShape;
+    cpo::uno::Reference<css::beans::XPropertySet> mxLastShape;
     OUString maLastShapeId;
 
     XMLAnimationsContext(SvXMLImport& rImport);
 
-    virtual css::uno::Reference<css::xml::sax::XFastContextHandler> createFastChildContext(
+    virtual cpo::uno::Reference<css::xml::sax::XFastContextHandler> createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference<css::xml::sax::XFastAttributeList>& AttrList) override;
+        const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& AttrList) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

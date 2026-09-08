@@ -30,8 +30,8 @@ namespace dp_manager
 class ExtensionProperties final
 {
     OUString m_propFileUrl;
-    const css::uno::Reference<css::ucb::XCommandEnvironment> m_xCmdEnv;
-    const css::uno::Reference<cpo::uno::XComponentContext> m_xContext;
+    const cpo::uno::Reference<css::ucb::XCommandEnvironment> m_xCmdEnv;
+    const cpo::uno::Reference<cpo::uno::XComponentContext> m_xContext;
     ::std::optional<OUString> m_prop_suppress_license;
     ::std::optional<OUString> m_prop_extension_update;
 
@@ -39,13 +39,13 @@ class ExtensionProperties final
 
 public:
     ExtensionProperties(std::u16string_view urlExtension,
-                        css::uno::Reference<css::ucb::XCommandEnvironment> const& xCmdEnv,
-                        css::uno::Reference<cpo::uno::XComponentContext> const& xContext);
+                        cpo::uno::Reference<css::ucb::XCommandEnvironment> const& xCmdEnv,
+                        cpo::uno::Reference<cpo::uno::XComponentContext> const& xContext);
 
     ExtensionProperties(std::u16string_view urlExtension,
                         cpo::uno::Sequence<css::beans::NamedValue> const& properties,
-                        css::uno::Reference<css::ucb::XCommandEnvironment> const& xCmdEnv,
-                        css::uno::Reference<cpo::uno::XComponentContext> const& xContext);
+                        cpo::uno::Reference<css::ucb::XCommandEnvironment> const& xCmdEnv,
+                        cpo::uno::Reference<cpo::uno::XComponentContext> const& xContext);
 
     void write();
 

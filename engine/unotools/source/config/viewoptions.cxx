@@ -60,7 +60,7 @@ SvtViewOptions::SvtViewOptions( EViewType eType, OUString sViewName )
                             ::comphelper::getProcessComponentContext(),
                             u"org.openoffice.Office.Views"_ustr,
                             ::comphelper::EConfigurationModes::Standard),
-                     css::uno::UNO_QUERY);
+                     cpo::uno::UNO_QUERY);
         if (m_xRoot.is())
             m_xRoot->getByName(m_sListName) >>= m_xSet;
     }
@@ -116,7 +116,7 @@ void SvtViewOptions::Delete()
 {
     try
     {
-        css::uno::Reference< css::container::XNameContainer > xSet(m_xSet, css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference< css::container::XNameContainer > xSet(m_xSet, cpo::uno::UNO_QUERY_THROW);
         xSet->removeByName(m_sViewName);
         ::comphelper::ConfigurationHelper::flush(m_xRoot);
     }
@@ -141,9 +141,9 @@ OUString SvtViewOptions::GetWindowState() const
     OUString sWindowState;
     try
     {
-        css::uno::Reference< css::beans::XPropertySet > xNode(
+        cpo::uno::Reference< css::beans::XPropertySet > xNode(
             impl_getSetNode(m_sViewName, false),
-            css::uno::UNO_QUERY);
+            cpo::uno::UNO_QUERY);
         if (xNode.is())
             xNode->getPropertyValue(PROPERTY_WINDOWSTATE) >>= sWindowState;
     }
@@ -173,9 +173,9 @@ void SvtViewOptions::SetWindowState( const OUString& sState )
 {
     try
     {
-        css::uno::Reference< css::beans::XPropertySet > xNode(
+        cpo::uno::Reference< css::beans::XPropertySet > xNode(
             impl_getSetNode(m_sViewName, true),
-            css::uno::UNO_QUERY_THROW);
+            cpo::uno::UNO_QUERY_THROW);
         xNode->setPropertyValue(PROPERTY_WINDOWSTATE, cpo::uno::Any(sState));
         ::comphelper::ConfigurationHelper::flush(m_xRoot);
     }
@@ -196,9 +196,9 @@ OUString SvtViewOptions::GetPageID() const
     OUString sID;
     try
     {
-        css::uno::Reference< css::beans::XPropertySet > xNode(
+        cpo::uno::Reference< css::beans::XPropertySet > xNode(
             impl_getSetNode(m_sViewName, false),
-            css::uno::UNO_QUERY);
+            cpo::uno::UNO_QUERY);
         if (xNode.is())
             xNode->getPropertyValue(PROPERTY_PAGEID) >>= sID;
     }
@@ -221,9 +221,9 @@ void SvtViewOptions::SetPageID(const OUString& rID)
 
     try
     {
-        css::uno::Reference< css::beans::XPropertySet > xNode(
+        cpo::uno::Reference< css::beans::XPropertySet > xNode(
             impl_getSetNode(m_sViewName, true),
-            css::uno::UNO_QUERY_THROW);
+            cpo::uno::UNO_QUERY_THROW);
         xNode->setPropertyValue(PROPERTY_PAGEID, cpo::uno::Any(rID));
         ::comphelper::ConfigurationHelper::flush(m_xRoot);
     }
@@ -250,9 +250,9 @@ SvtViewOptions::State SvtViewOptions::GetVisible() const
     State eState = STATE_NONE;
     try
     {
-        css::uno::Reference< css::beans::XPropertySet > xNode(
+        cpo::uno::Reference< css::beans::XPropertySet > xNode(
             impl_getSetNode(m_sViewName, false),
-            css::uno::UNO_QUERY);
+            cpo::uno::UNO_QUERY);
         if (xNode.is())
         {
             bool bVisible = false;
@@ -279,9 +279,9 @@ void SvtViewOptions::SetVisible( bool bVisible )
 
     try
     {
-        css::uno::Reference< css::beans::XPropertySet > xNode(
+        cpo::uno::Reference< css::beans::XPropertySet > xNode(
             impl_getSetNode(m_sViewName, true),
-            css::uno::UNO_QUERY_THROW);
+            cpo::uno::UNO_QUERY_THROW);
         xNode->setPropertyValue(PROPERTY_VISIBLE, cpo::uno::Any(bVisible));
         ::comphelper::ConfigurationHelper::flush(m_xRoot);
     }
@@ -306,10 +306,10 @@ cpo::uno::Sequence< css::beans::NamedValue > SvtViewOptions::GetUserData() const
 {
     try
     {
-        css::uno::Reference< css::container::XNameAccess > xNode(
+        cpo::uno::Reference< css::container::XNameAccess > xNode(
             impl_getSetNode(m_sViewName, false),
-            css::uno::UNO_QUERY); // no _THROW ! because we don't create missing items here. So we have to live with zero references .-)
-        css::uno::Reference< css::container::XNameAccess > xUserData;
+            cpo::uno::UNO_QUERY); // no _THROW ! because we don't create missing items here. So we have to live with zero references .-)
+        cpo::uno::Reference< css::container::XNameAccess > xUserData;
         if (xNode.is())
             xNode->getByName(PROPERTY_USERDATA) >>= xUserData;
         if (xUserData.is())
@@ -337,10 +337,10 @@ void SvtViewOptions::SetUserData( const cpo::uno::Sequence< css::beans::NamedVal
 {
     try
     {
-        css::uno::Reference< css::container::XNameAccess > xNode(
+        cpo::uno::Reference< css::container::XNameAccess > xNode(
             impl_getSetNode(m_sViewName, true),
-            css::uno::UNO_QUERY_THROW);
-        css::uno::Reference< css::container::XNameContainer > xUserData;
+            cpo::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference< css::container::XNameContainer > xUserData;
         xNode->getByName(PROPERTY_USERDATA) >>= xUserData;
         if (xUserData.is())
         {
@@ -365,10 +365,10 @@ cpo::uno::Any SvtViewOptions::GetUserItem( const OUString& sItemName ) const
     cpo::uno::Any aItem;
     try
     {
-        css::uno::Reference< css::container::XNameAccess > xNode(
+        cpo::uno::Reference< css::container::XNameAccess > xNode(
             impl_getSetNode(m_sViewName, false),
-            css::uno::UNO_QUERY);
-        css::uno::Reference< css::container::XNameAccess > xUserData;
+            cpo::uno::UNO_QUERY);
+        cpo::uno::Reference< css::container::XNameAccess > xUserData;
         if (xNode.is())
             xNode->getByName(PROPERTY_USERDATA) >>= xUserData;
         if (xUserData.is())
@@ -390,10 +390,10 @@ void SvtViewOptions::SetUserItem( const OUString& sItemName  ,
 {
     try
     {
-        css::uno::Reference< css::container::XNameAccess > xNode(
+        cpo::uno::Reference< css::container::XNameAccess > xNode(
             impl_getSetNode(m_sViewName, true),
-            css::uno::UNO_QUERY_THROW);
-        css::uno::Reference< css::container::XNameContainer > xUserData;
+            cpo::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference< css::container::XNameContainer > xUserData;
         xNode->getByName(PROPERTY_USERDATA) >>= xUserData;
         if (xUserData.is())
         {
@@ -421,10 +421,10 @@ void SvtViewOptions::SetUserItem( const OUString& sItemName  ,
 
     @param          "sNode", name of new entry
 *//*-*************************************************************************************************************/
-css::uno::Reference< cpo::uno::XInterface > SvtViewOptions::impl_getSetNode( const OUString& sNode           ,
+cpo::uno::Reference< cpo::uno::XInterface > SvtViewOptions::impl_getSetNode( const OUString& sNode           ,
                                                                                             bool         bCreateIfMissing) const
 {
-    css::uno::Reference< cpo::uno::XInterface > xNode;
+    cpo::uno::Reference< cpo::uno::XInterface > xNode;
 
     try
     {

@@ -68,10 +68,10 @@ public:
     virtual sal_Int64 SAL_CALL
         getAccessibleChildCount() override;
 
-    virtual css::uno::Reference< css::accessibility::XAccessible> SAL_CALL
+    virtual cpo::uno::Reference< css::accessibility::XAccessible> SAL_CALL
         getAccessibleChild (sal_Int64 nIndex) override;
 
-    virtual css::uno::Reference< css::accessibility::XAccessible> SAL_CALL
+    virtual cpo::uno::Reference< css::accessibility::XAccessible> SAL_CALL
         getAccessibleParent() override;
 
     virtual sal_Int64 SAL_CALL
@@ -86,7 +86,7 @@ public:
     virtual OUString SAL_CALL
         getAccessibleName() override;
 
-    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet> SAL_CALL
+    virtual cpo::uno::Reference< css::accessibility::XAccessibleRelationSet> SAL_CALL
         getAccessibleRelationSet() override;
 
     virtual sal_Int64 SAL_CALL
@@ -99,7 +99,7 @@ public:
     virtual css::awt::Rectangle implGetBounds() override;
 
     //=====  XAccessibleComponent  ================================================
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > SAL_CALL
         getAccessibleAtPoint (
             const css::awt::Point& aPoint) override;
 

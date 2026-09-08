@@ -9,7 +9,7 @@
 #pragma once
 
 #include <o3tl/any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/animations/XAnimationNode.hpp>
 
@@ -19,8 +19,8 @@ struct Cond
 {
     OString msDelay;
     const char* mpEvent;
-    css::uno::Reference<css::drawing::XShape> mxShape;
-    css::uno::Reference<css::animations::XAnimationNode> mxNode;
+    cpo::uno::Reference<css::drawing::XShape> mxShape;
+    cpo::uno::Reference<css::animations::XAnimationNode> mxNode;
 
     Cond(const cpo::uno::Any& rAny, bool bIsMainSeqChild);
 

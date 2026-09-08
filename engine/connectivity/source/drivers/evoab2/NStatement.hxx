@@ -192,7 +192,7 @@ namespace connectivity::evoab
         // other methods
         OEvoabConnection* getOwnConnection() const { return m_xConnection.get(); }
 
-        using OCommonStatement_IBase::operator css::uno::Reference< cpo::uno::XInterface >;
+        using OCommonStatement_IBase::operator cpo::uno::Reference< cpo::uno::XInterface >;
 
     protected:
         explicit OCommonStatement( OEvoabConnection* _pConnection );
@@ -208,7 +208,7 @@ namespace connectivity::evoab
         virtual cpo::uno::Sequence< cpo::uno::Type > getTypes(  ) override;
 
         // XPropertySet
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+        virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
 
         // XWarningsSupplier
         virtual cpo::uno::Any getWarnings(  ) override;
@@ -225,14 +225,14 @@ namespace connectivity::evoab
         QueryData
             impl_getEBookQuery_throw( const OUString& _rSql );
 
-        css::uno::Reference< css::sdbc::XResultSet >
+        cpo::uno::Reference< css::sdbc::XResultSet >
             impl_executeQuery_throw( const OUString& _rSql );
 
-        css::uno::Reference< css::sdbc::XResultSet >
+        cpo::uno::Reference< css::sdbc::XResultSet >
             impl_executeQuery_throw( const QueryData& _rData );
 
-        css::uno::Reference< css::sdbc::XConnection >
-            impl_getConnection() { return css::uno::Reference< css::sdbc::XConnection >( m_xConnection ); }
+        cpo::uno::Reference< css::sdbc::XConnection >
+            impl_getConnection() { return cpo::uno::Reference< css::sdbc::XConnection >( m_xConnection ); }
 
         OUString
             impl_getColumnRefColumnName_throw( const ::connectivity::OSQLParseNode& _rColumnRef );
@@ -265,10 +265,10 @@ namespace connectivity::evoab
         DECLARE_SERVICE_INFO();
 
         // XStatement
-        virtual css::uno::Reference< css::sdbc::XResultSet > executeQuery( const OUString& sql ) override ;
+        virtual cpo::uno::Reference< css::sdbc::XResultSet > executeQuery( const OUString& sql ) override ;
         virtual sal_Int32 executeUpdate( const OUString& sql ) override ;
         virtual bool execute( const OUString& sql ) override ;
-        virtual css::uno::Reference< css::sdbc::XConnection > getConnection(  ) override ;
+        virtual cpo::uno::Reference< css::sdbc::XConnection > getConnection(  ) override ;
     };
 }
 

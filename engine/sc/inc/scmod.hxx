@@ -28,7 +28,7 @@
 #include "global.hxx"
 #include "shellids.hxx"
 #include <unotools/options.hxx>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 
 #include <vector>
 #include <map>
@@ -105,7 +105,7 @@ class UNLESS_MERGELIBS(SAL_DLLPUBLIC_RTTI) ScModule final : public SfxModule, pu
     // a way to find existing Dialogs for a given parent Window of the slot type
     std::map<sal_uInt16, std::vector<std::pair<std::shared_ptr<SfxDialogController>, weld::Window*>>> m_mapRefController;
 
-    css::uno::Reference< ooo::vba::XSinkCaller > mxAutomationApplicationEventsCaller;
+    cpo::uno::Reference< ooo::vba::XSinkCaller > mxAutomationApplicationEventsCaller;
 
 public:
                     SFX_DECL_INTERFACE(SCID_APP)
@@ -236,7 +236,7 @@ public:
     SC_DLLPUBLIC void   UnregisterRefController(sal_uInt16 nSlotId, const std::shared_ptr<SfxDialogController>& rWnd);
     SC_DLLPUBLIC std::shared_ptr<SfxDialogController> Find1RefWindow(sal_uInt16 nSlotId, const weld::Window *pWndAncestor);
 
-    SC_DLLPUBLIC void RegisterAutomationApplicationEventsCaller(css::uno::Reference< ooo::vba::XSinkCaller > const& xCaller);
+    SC_DLLPUBLIC void RegisterAutomationApplicationEventsCaller(cpo::uno::Reference< ooo::vba::XSinkCaller > const& xCaller);
     SC_DLLPUBLIC void CallAutomationApplicationEventSinks(const OUString& Method, cpo::uno::Sequence< cpo::uno::Any >& Arguments);
 
     static auto get() { return static_cast<ScModule*>(SfxApplication::GetModule(SfxToolsModule::Calc)); }

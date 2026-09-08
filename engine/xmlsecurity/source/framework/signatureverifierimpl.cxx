@@ -41,8 +41,8 @@ void SignatureVerifierImpl::notifyResultListener() const
  *  notifyResultListener -- notifies the listener about the verify result.
  ******************************************************************************/
 {
-    css::uno::Reference< css::xml::crypto::sax::XSignatureVerifyResultListener >
-        xSignatureVerifyResultListener ( m_xResultListener , css::uno::UNO_QUERY ) ;
+    cpo::uno::Reference< css::xml::crypto::sax::XSignatureVerifyResultListener >
+        xSignatureVerifyResultListener ( m_xResultListener , cpo::uno::UNO_QUERY ) ;
 
     xSignatureVerifyResultListener->signatureVerified( m_nSecurityId, m_nStatus );
 }
@@ -58,10 +58,10 @@ void SignatureVerifierImpl::startEngine( const rtl::Reference<XMLSignatureTempla
  *  elements) to be verified.
  ******************************************************************************/
 {
-    css::uno::Reference< css::xml::crypto::XXMLSignatureTemplate > xResultTemplate;
+    cpo::uno::Reference< css::xml::crypto::XXMLSignatureTemplate > xResultTemplate;
     try
     {
-        xResultTemplate = m_xXMLSignature->validate(css::uno::Reference<css::xml::crypto::XXMLSignatureTemplate>(xSignatureTemplate), m_xXMLSecurityContext);
+        xResultTemplate = m_xXMLSignature->validate(cpo::uno::Reference<css::xml::crypto::XXMLSignatureTemplate>(xSignatureTemplate), m_xXMLSecurityContext);
         m_nStatus = xResultTemplate->getStatus();
     }
     catch( cpo::uno::Exception& )
@@ -72,14 +72,14 @@ void SignatureVerifierImpl::startEngine( const rtl::Reference<XMLSignatureTempla
 
 /* XSignatureVerifyResultBroadcaster */
 void SAL_CALL SignatureVerifierImpl::addSignatureVerifyResultListener(
-    const css::uno::Reference< css::xml::crypto::sax::XSignatureVerifyResultListener >& listener )
+    const cpo::uno::Reference< css::xml::crypto::sax::XSignatureVerifyResultListener >& listener )
 {
     m_xResultListener = listener;
     tryToPerform();
 }
 
 void SAL_CALL SignatureVerifierImpl::removeSignatureVerifyResultListener(
-    const css::uno::Reference< css::xml::crypto::sax::XSignatureVerifyResultListener >&)
+    const cpo::uno::Reference< css::xml::crypto::sax::XSignatureVerifyResultListener >&)
 {
 }
 

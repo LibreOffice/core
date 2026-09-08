@@ -90,8 +90,8 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::linguistic2;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::beans;
 
 #define CHAR_LEFT_ARROW u'\x25C0'

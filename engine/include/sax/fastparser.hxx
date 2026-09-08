@@ -51,14 +51,14 @@ public:
 
     // XFastParser
     virtual void parseStream( const css::xml::sax::InputSource& aInputSource ) override;
-    virtual void setFastDocumentHandler( const css::uno::Reference< css::xml::sax::XFastDocumentHandler >& Handler ) override;
-    virtual void setTokenHandler( const css::uno::Reference< css::xml::sax::XFastTokenHandler >& Handler ) override;
+    virtual void setFastDocumentHandler( const cpo::uno::Reference< css::xml::sax::XFastDocumentHandler >& Handler ) override;
+    virtual void setTokenHandler( const cpo::uno::Reference< css::xml::sax::XFastTokenHandler >& Handler ) override;
     virtual void registerNamespace( const OUString& NamespaceURL, sal_Int32 NamespaceToken ) override;
     virtual OUString getNamespaceURL( const OUString& rPrefix ) override;
-    virtual void setErrorHandler( const css::uno::Reference< css::xml::sax::XErrorHandler >& Handler ) override;
-    virtual void setEntityResolver( const css::uno::Reference< css::xml::sax::XEntityResolver >& Resolver ) override;
+    virtual void setErrorHandler( const cpo::uno::Reference< css::xml::sax::XErrorHandler >& Handler ) override;
+    virtual void setEntityResolver( const cpo::uno::Reference< css::xml::sax::XEntityResolver >& Resolver ) override;
     virtual void setLocale( const css::lang::Locale& rLocale ) override;
-    virtual void setNamespaceHandler( const css::uno::Reference< css::xml::sax::XFastNamespaceHandler >& Handler) override;
+    virtual void setNamespaceHandler( const cpo::uno::Reference< css::xml::sax::XFastNamespaceHandler >& Handler) override;
     virtual void setCustomEntityNames( const ::cpo::uno::Sequence< ::css::beans::Pair<::rtl::OUString, ::rtl::OUString> >& replacements )  override;
 
     // XServiceInfo

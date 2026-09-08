@@ -44,7 +44,7 @@ public:
 
     void add( const CustomAnimationEffectPtr& pEffect );
 
-    SD_DLLPUBLIC css::uno::Reference< css::animations::XAnimationNode > create( const OUString& rstrSubType );
+    SD_DLLPUBLIC cpo::uno::Reference< css::animations::XAnimationNode > create( const OUString& rstrSubType );
 
     const OUString& getPresetId() const { return maPresetId; }
     const OUString& getLabel() const { return maLabel; }
@@ -93,7 +93,7 @@ public:
     */
     static const CustomAnimationPresets& getCustomAnimationPresets();
 
-    SAL_DLLPRIVATE css::uno::Reference< css::animations::XAnimationNode > getRandomPreset( sal_Int16 nPresetClass ) const;
+    SAL_DLLPRIVATE cpo::uno::Reference< css::animations::XAnimationNode > getRandomPreset( sal_Int16 nPresetClass ) const;
 
     CustomAnimationPresetPtr getEffectDescriptor( const OUString& rPresetId ) const;
 
@@ -112,12 +112,12 @@ private:
     SAL_DLLPRIVATE void importEffects();
     SAL_DLLPRIVATE void importResources();
 
-    SAL_DLLPRIVATE void importPresets( const css::uno::Reference< css::lang::XMultiServiceFactory >& xConfigProvider, const OUString& rNodePath, PresetCategoryList& rPresetMap  );
+    SAL_DLLPRIVATE void importPresets( const cpo::uno::Reference< css::lang::XMultiServiceFactory >& xConfigProvider, const OUString& rNodePath, PresetCategoryList& rPresetMap  );
 
     SAL_DLLPRIVATE static const OUString& translateName( const OUString& rId, const UStringMap& rNameMap );
 
 private:
-    css::uno::Reference< css::animations::XAnimationNode > mxRootNode;
+    cpo::uno::Reference< css::animations::XAnimationNode > mxRootNode;
     EffectDescriptorMap maEffectDescriptorMap;
     UStringMap maEffectNameMap;
     UStringMap maPropertyNameMap;
@@ -133,9 +133,9 @@ private:
 };
 
 
-css::uno::Reference< css::animations::XAnimationNode > implImportEffects( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceFactory, const OUString& rPath );
+cpo::uno::Reference< css::animations::XAnimationNode > implImportEffects( const cpo::uno::Reference< css::lang::XMultiServiceFactory >& xServiceFactory, const OUString& rPath );
 
-void implImportLabels( const css::uno::Reference< css::lang::XMultiServiceFactory >& xConfigProvider, const OUString& rNodePath, UStringMap& rStringMap );
+void implImportLabels( const cpo::uno::Reference< css::lang::XMultiServiceFactory >& xConfigProvider, const OUString& rNodePath, UStringMap& rStringMap );
 
 }
 

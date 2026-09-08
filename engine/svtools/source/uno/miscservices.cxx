@@ -26,7 +26,7 @@
 #include "fpicker.hxx"
 
 using namespace ::com::sun::star;
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace css::lang;
 
 namespace

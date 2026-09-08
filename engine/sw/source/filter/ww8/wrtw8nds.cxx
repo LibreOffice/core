@@ -118,6 +118,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;
+using namespace ::cpo;
 using namespace sw::util;
 using namespace sw::types;
 using namespace sw::mark;

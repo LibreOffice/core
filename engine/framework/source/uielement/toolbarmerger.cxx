@@ -68,6 +68,7 @@ const char16_t TOOLBARCONTROLLER_FIXEDTEXT[] = u"FixedText";
 const char   TOOLBOXITEM_SEPARATOR_STR[]   = "private:separator";
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 /**
  Check whether a module identifier is part of a context

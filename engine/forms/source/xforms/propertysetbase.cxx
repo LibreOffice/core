@@ -21,10 +21,10 @@
 #include "propertysetbase.hxx"
 
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 using cpo::uno::Any;
-using com::sun::star::uno::Reference;
+using cpo::uno::Reference;
 using cpo::uno::Exception;
 using com::sun::star::lang::IllegalArgumentException;
 using com::sun::star::beans::Property;

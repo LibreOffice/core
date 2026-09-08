@@ -52,7 +52,8 @@
 
 using namespace css;
 using namespace css::graphic;
-using namespace css::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 /// RAII class to init / shut down libxmlsec.
 class Xmlsec

@@ -235,7 +235,7 @@ public:
     /**
       Receives a shape.
      */
-    virtual void startShape(css::uno::Reference<css::drawing::XShape> const& xShape) = 0;
+    virtual void startShape(cpo::uno::Reference<css::drawing::XShape> const& xShape) = 0;
 
     virtual void endShape() = 0;
 

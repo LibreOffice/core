@@ -25,6 +25,7 @@
 #include "descriptionimp.hxx"
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace ::xmloff::token;
 
 
@@ -41,9 +42,9 @@ SdXMLGroupShapeContext::~SdXMLGroupShapeContext()
 {
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLGroupShapeContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLGroupShapeContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     // #i68101#
     if( nElement == XML_ELEMENT(SVG, XML_TITLE) ||
@@ -71,7 +72,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLGroupShapeContext
 }
 
 void SdXMLGroupShapeContext::startFastElement (sal_Int32 /*nElement*/,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/)
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/)
 {
     // create new group shape and add it to rShapes, use it
     // as base for the new group import

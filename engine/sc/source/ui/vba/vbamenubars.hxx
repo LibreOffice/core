@@ -18,16 +18,16 @@ typedef CollTestImplHelper< ov::excel::XMenuBars > MenuBars_BASE;
 class ScVbaMenuBars : public MenuBars_BASE
 {
 private:
-    css::uno::Reference< ov::XCommandBars > m_xCommandBars;
+    cpo::uno::Reference< ov::XCommandBars > m_xCommandBars;
 
 public:
     /// @throws cpo::uno::RuntimeException
-    ScVbaMenuBars( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext, css::uno::Reference< ov::XCommandBars > xCommandBars );
+    ScVbaMenuBars( const cpo::uno::Reference< ov::XHelperInterface >& xParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext, cpo::uno::Reference< ov::XCommandBars > xCommandBars );
     virtual ~ScVbaMenuBars() override;
 
     // XEnumerationAccess
     virtual cpo::uno::Type SAL_CALL getElementType() override;
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
+    virtual cpo::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
     virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) override;
 
     virtual sal_Int32 SAL_CALL getCount() override;

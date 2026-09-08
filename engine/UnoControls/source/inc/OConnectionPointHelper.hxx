@@ -77,15 +77,15 @@ public:
 
     virtual cpo::uno::Type getConnectionType() override;
 
-    virtual css::uno::Reference< css::lang::XConnectionPointContainer > getConnectionPointContainer() override;
+    virtual cpo::uno::Reference< css::lang::XConnectionPointContainer > getConnectionPointContainer() override;
 
     virtual void advise(
-        const css::uno::Reference< cpo::uno::XInterface >& xListener
+        const cpo::uno::Reference< cpo::uno::XInterface >& xListener
     ) override;
 
-    virtual void unadvise( const css::uno::Reference< cpo::uno::XInterface >& xListener ) override;
+    virtual void unadvise( const cpo::uno::Reference< cpo::uno::XInterface >& xListener ) override;
 
-    virtual cpo::uno::Sequence< css::uno::Reference< cpo::uno::XInterface > > getConnections() override;
+    virtual cpo::uno::Sequence< cpo::uno::Reference< cpo::uno::XInterface > > getConnections() override;
 
 private:
     bool impl_LockContainer();
@@ -99,7 +99,7 @@ private:
                                                                                             // It is a ring-reference => and must be a wekreference!
     OConnectionPointContainerHelper*                                  m_pContainerImplementation;
     cpo::uno::Type                                                    m_aInterfaceType;
-    css::uno::Reference< cpo::uno::XInterface >                       m_xLock;
+    cpo::uno::Reference< cpo::uno::XInterface >                       m_xLock;
 };
 
 }

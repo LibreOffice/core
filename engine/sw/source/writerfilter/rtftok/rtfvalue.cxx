@@ -12,6 +12,7 @@
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 namespace writerfilter::rtftok
 {

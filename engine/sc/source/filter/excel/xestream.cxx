@@ -87,7 +87,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sheet;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo;
 using namespace ::cpo::uno;
 using namespace ::formula;
 using namespace ::oox;
@@ -1142,9 +1142,9 @@ bool XclExpXmlStream::exportDocument()
             rtl::Reference<SotStorage> pVBAStorage(new SotStorage(aVbaStream));
             aExport.exportVBA( pVBAStorage.get() );
             aVbaStream.Seek(0);
-            css::uno::Reference<css::io::XInputStream> xVBAStream(
+            cpo::uno::Reference<css::io::XInputStream> xVBAStream(
                     new utl::OInputStreamWrapper(aVbaStream));
-            css::uno::Reference<css::io::XOutputStream> xVBAOutput =
+            cpo::uno::Reference<css::io::XOutputStream> xVBAOutput =
                 openFragmentStream(u"xl/vbaProject.bin"_ustr, u"application/vnd.ms-office.vbaProject"_ustr);
             comphelper::OStorageHelper::CopyInputToOutput(xVBAStream, xVBAOutput);
 

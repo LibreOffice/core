@@ -38,7 +38,7 @@ class SbPropertyValues final : public SbPropertyValuesHelper
 {
     SbPropertyValueArr_Impl m_aPropVals;
     SbPropertyInfoArr_Impl m_aPropInfos;
-    css::uno::Reference< css::beans::XPropertySetInfo > m_xInfo;
+    cpo::uno::Reference< css::beans::XPropertySetInfo > m_xInfo;
 
 private:
     size_t GetIndex_Impl( const OUString &rPropName ) const;
@@ -48,7 +48,7 @@ public:
     virtual                 ~SbPropertyValues() override;
 
     // XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo >
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo >
         getPropertySetInfo() override;
     virtual void   setPropertyValue(
                                 const OUString& aPropertyName,
@@ -56,16 +56,16 @@ public:
     virtual cpo::uno::Any getPropertyValue( const OUString& PropertyName ) override;
     virtual void   addPropertyChangeListener(
                                 const OUString& aPropertyName,
-                                const css::uno::Reference< css::beans::XPropertyChangeListener >& ) override;
+                                const cpo::uno::Reference< css::beans::XPropertyChangeListener >& ) override;
     virtual void   removePropertyChangeListener(
                                 const OUString& aPropertyName,
-                                const css::uno::Reference< css::beans::XPropertyChangeListener >& ) override;
+                                const cpo::uno::Reference< css::beans::XPropertyChangeListener >& ) override;
     virtual void   addVetoableChangeListener(
                                 const OUString& aPropertyName,
-                                const css::uno::Reference< css::beans::XVetoableChangeListener >& ) override;
+                                const cpo::uno::Reference< css::beans::XVetoableChangeListener >& ) override;
     virtual void   removeVetoableChangeListener(
                                 const OUString& aPropertyName,
-                                const css::uno::Reference< css::beans::XVetoableChangeListener >& ) override;
+                                const cpo::uno::Reference< css::beans::XVetoableChangeListener >& ) override;
 
     // XPropertyAccess
     virtual cpo::uno::Sequence< css::beans::PropertyValue > getPropertyValues() override;

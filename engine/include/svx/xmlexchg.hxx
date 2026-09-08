@@ -41,7 +41,7 @@ namespace svx
 
         OUString szName;
         OUString szServiceName;
-        css::uno::Reference< css::beans::XPropertySet >   xPropSet;
+        cpo::uno::Reference< css::beans::XPropertySet >   xPropSet;
 
         OXFormsDescriptor() {}
         OXFormsDescriptor( const OXFormsDescriptor &rhs ) { *this=rhs; }

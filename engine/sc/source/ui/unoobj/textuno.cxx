@@ -49,6 +49,7 @@
 #include <scmod.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 static const SvxItemPropertySet * lcl_GetHdFtPropertySet()
 {

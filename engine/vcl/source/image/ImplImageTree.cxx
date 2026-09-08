@@ -62,6 +62,7 @@
 #include <bitmap/BitmapLightenFilter.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 bool ImageRequestParameters::convertToDarkTheme()
 {

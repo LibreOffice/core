@@ -62,8 +62,8 @@ class SVGExport : public SvXMLExport
 
 public:
 
-    SVGExport( const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
-                const css::uno::Reference< css::xml::sax::XDocumentHandler >& rxHandler,
+    SVGExport( const cpo::uno::Reference< cpo::uno::XComponentContext >& rContext,
+                const cpo::uno::Reference< css::xml::sax::XDocumentHandler >& rxHandler,
                 const cpo::uno::Sequence< css::beans::PropertyValue >& rFilterData );
 
     virtual ~SVGExport() override;
@@ -93,18 +93,18 @@ class ObjectRepresentation
 {
 private:
 
-    css::uno::Reference< cpo::uno::XInterface >         mxObject;
+    cpo::uno::Reference< cpo::uno::XInterface >         mxObject;
     std::unique_ptr<GDIMetaFile>    mxMtf;
 
 public:
     ObjectRepresentation();
-    ObjectRepresentation(const css::uno::Reference< cpo::uno::XInterface >& rxIf,
+    ObjectRepresentation(const cpo::uno::Reference< cpo::uno::XInterface >& rxIf,
                          const GDIMetaFile& rMtf);
     ObjectRepresentation(const ObjectRepresentation& rPresentation);
 
     ObjectRepresentation& operator=(const ObjectRepresentation& rPresentation);
 
-    const css::uno::Reference< cpo::uno::XInterface >&    GetObject() const { return mxObject; }
+    const cpo::uno::Reference< cpo::uno::XInterface >&    GetObject() const { return mxObject; }
     bool                              HasRepresentation() const { return static_cast<bool>(mxMtf); }
     const GDIMetaFile&                GetRepresentation() const { return *mxMtf; }
 };
@@ -162,12 +162,12 @@ class SVGFilter : public cppu::WeakImplHelper < css::document::XFilter,
                                                  css::document::XExtendedFilterDetection, css::lang::XServiceInfo >
 {
 public:
-    typedef std::unordered_map< css::uno::Reference< XInterface >, ObjectRepresentation >    ObjectMap;
-    typedef std::unordered_set< css::uno::Reference< XInterface > >                          ObjectSet;
+    typedef std::unordered_map< cpo::uno::Reference< XInterface >, ObjectRepresentation >    ObjectMap;
+    typedef std::unordered_set< cpo::uno::Reference< XInterface > >                          ObjectSet;
 
     typedef std::unordered_set< sal_Unicode, HashUChar >                           UCharSet;
     typedef std::unordered_map< OUString, UCharSet >                               UCharSetMap;
-    typedef std::unordered_map< css::uno::Reference< css::drawing::XDrawPage >, UCharSetMap > UCharSetMapMap;
+    typedef std::unordered_map< cpo::uno::Reference< css::drawing::XDrawPage >, UCharSetMap > UCharSetMapMap;
 
     typedef std::unordered_set< ObjectRepresentation, HashBitmap, EqualityBitmap > MetaBitmapActionSet;
 
@@ -175,7 +175,7 @@ private:
 
     /// Generally use members
 
-    css::uno::Reference< cpo::uno::XComponentContext > mxContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext > mxContext;
     SvXMLElementExport*                 mpSVGDoc;
     rtl::Reference<SVGExport>           mpSVGExport;
     SVGFontExport*                      mpSVGFontExport;
@@ -183,15 +183,15 @@ private:
     bool                                mbSinglePage;
     sal_Int32                           mnVisiblePage;
     ObjectMap*                          mpObjects;
-    css::uno::Reference< css::lang::XComponent > mxSrcDoc;
-    css::uno::Reference< css::lang::XComponent > mxDstDoc;
+    cpo::uno::Reference< css::lang::XComponent > mxSrcDoc;
+    cpo::uno::Reference< css::lang::XComponent > mxDstDoc;
     // #i124608# explicit ShapeSelection for export when export of the selection is wanted
-    css::uno::Reference< css::drawing::XShapes > maShapeSelection;
+    cpo::uno::Reference< css::drawing::XShapes > maShapeSelection;
     bool                                mbExportShapeSelection;
     cpo::uno::Sequence< css::beans::PropertyValue > maFilterData;
-    css::uno::Reference< css::drawing::XDrawPage > mxDefaultPage;
-    css::uno::Reference<css::task::XStatusIndicator> mxStatusIndicator;
-    std::vector< css::uno::Reference< css::drawing::XDrawPage > > mSelectedPages;
+    cpo::uno::Reference< css::drawing::XDrawPage > mxDefaultPage;
+    cpo::uno::Reference<css::task::XStatusIndicator> mxStatusIndicator;
+    std::vector< cpo::uno::Reference< css::drawing::XDrawPage > > mSelectedPages;
     bool                                mbIsPreview;
     bool                                mbShouldCompress;
 
@@ -207,27 +207,27 @@ private:
     PagePropertySet                     mVisiblePagePropSet;
     OUString                            msClipPathId;
     UCharSetMapMap                      mTextFieldCharSets;
-    css::uno::Reference< css::drawing::XDrawPage > mCreateOjectsCurrentMasterPage;
-    std::unordered_map< css::uno::Reference< css::drawing::XDrawPage >, OUString >
+    cpo::uno::Reference< css::drawing::XDrawPage > mCreateOjectsCurrentMasterPage;
+    std::unordered_map< cpo::uno::Reference< css::drawing::XDrawPage >, OUString >
                                         mTextShapeIdListMap;
     MetaBitmapActionSet                 mEmbeddedBitmapActionSet;
     ObjectMap                           mEmbeddedBitmapActionMap;
     MetaBitmapActionMap                 maBitmapActionMap;
     PatternPropertySet                  maPatterProps;
-    std::vector< css::uno::Reference< css::drawing::XDrawPage > > mMasterPageTargets;
+    std::vector< cpo::uno::Reference< css::drawing::XDrawPage > > mMasterPageTargets;
 
     Link<EditFieldInfo*,void>           maOldFieldHdl;
     Link<EditFieldInfo*,void>           maNewFieldHdl;
 
     /// @throws cpo::uno::RuntimeException
     bool                            implExport( const cpo::uno::Sequence< css::beans::PropertyValue >& rDescriptor );
-    bool                            implExportImpressOrDraw( const css::uno::Reference< css::io::XOutputStream >& rxOStm );
-    bool                            implExportWriterOrCalc( const css::uno::Reference< css::io::XOutputStream >& rxOStm );
-    bool                            implExportWriterTextGraphic( const css::uno::Reference< css::view::XSelectionSupplier >& xSelectionSupplier );
+    bool                            implExportImpressOrDraw( const cpo::uno::Reference< css::io::XOutputStream >& rxOStm );
+    bool                            implExportWriterOrCalc( const cpo::uno::Reference< css::io::XOutputStream >& rxOStm );
+    bool                            implExportWriterTextGraphic( const cpo::uno::Reference< css::view::XSelectionSupplier >& xSelectionSupplier );
 
-    static css::uno::Reference< css::xml::sax::XWriter > implCreateExportDocumentHandler( const css::uno::Reference< css::io::XOutputStream >& rxOStm );
+    static cpo::uno::Reference< css::xml::sax::XWriter > implCreateExportDocumentHandler( const cpo::uno::Reference< css::io::XOutputStream >& rxOStm );
 
-    void                            implGetPagePropSet( const css::uno::Reference< css::drawing::XDrawPage > & rxPage );
+    void                            implGetPagePropSet( const cpo::uno::Reference< css::drawing::XDrawPage > & rxPage );
     void                            implGenerateMetaData();
     void                            implExportTextShapeIndex();
     void                            implEmbedBulletGlyphs();
@@ -244,40 +244,40 @@ private:
                                                                          sal_Int32 nDocWidth, sal_Int32 nDocHeight);
     void                            implExportAnimations();
 
-    bool                            implExportMasterPages( const std::vector< css::uno::Reference< css::drawing::XDrawPage > >& rxPages,
+    bool                            implExportMasterPages( const std::vector< cpo::uno::Reference< css::drawing::XDrawPage > >& rxPages,
                                                                sal_Int32 nFirstPage, sal_Int32 nLastPage );
-    void                            implExportDrawPages( const std::vector< css::uno::Reference< css::drawing::XDrawPage > >& rxPages,
+    void                            implExportDrawPages( const std::vector< cpo::uno::Reference< css::drawing::XDrawPage > >& rxPages,
                                                              sal_Int32 nFirstPage, sal_Int32 nLastPage );
     bool                            implExportPage( std::u16string_view sPageId,
-                                                        const css::uno::Reference< css::drawing::XDrawPage > & rxPage,
-                                                        const css::uno::Reference< css::drawing::XShapes > & xShapes,
+                                                        const cpo::uno::Reference< css::drawing::XDrawPage > & rxPage,
+                                                        const cpo::uno::Reference< css::drawing::XShapes > & xShapes,
                                                         bool bMaster );
 
-    bool                            implExportShapes( const css::uno::Reference< css::drawing::XShapes >& rxShapes,
+    bool                            implExportShapes( const cpo::uno::Reference< css::drawing::XShapes >& rxShapes,
                                                           bool bMaster );
-    bool                            implExportShape( const css::uno::Reference< css::drawing::XShape >& rxShape,
+    bool                            implExportShape( const cpo::uno::Reference< css::drawing::XShape >& rxShape,
                                                          bool bMaster );
 
     bool                            implCreateObjects();
-    bool                            implCreateObjectsFromShapes( const css::uno::Reference< css::drawing::XDrawPage > & rxPage, const css::uno::Reference< css::drawing::XShapes >& rxShapes );
-    bool                            implCreateObjectsFromShape( const css::uno::Reference< css::drawing::XDrawPage > & rxPage, const css::uno::Reference< css::drawing::XShape >& rxShape );
-    void                            implCreateObjectsFromBackground( const css::uno::Reference< css::drawing::XDrawPage >& rxMasterPage );
+    bool                            implCreateObjectsFromShapes( const cpo::uno::Reference< css::drawing::XDrawPage > & rxPage, const cpo::uno::Reference< css::drawing::XShapes >& rxShapes );
+    bool                            implCreateObjectsFromShape( const cpo::uno::Reference< css::drawing::XDrawPage > & rxPage, const cpo::uno::Reference< css::drawing::XShape >& rxShape );
+    void                            implCreateObjectsFromBackground( const cpo::uno::Reference< css::drawing::XDrawPage >& rxMasterPage );
 
-    static OUString                 implGetClassFromShape( const css::uno::Reference< css::drawing::XShape >& rxShape );
-    void                            implRegisterInterface( const css::uno::Reference< XInterface >& rxIf );
-    const OUString &                implGetValidIDFromInterface( const css::uno::Reference< XInterface >& rxIf );
-    static OUString                 implGetInterfaceName( const css::uno::Reference< XInterface >& rxIf );
+    static OUString                 implGetClassFromShape( const cpo::uno::Reference< css::drawing::XShape >& rxShape );
+    void                            implRegisterInterface( const cpo::uno::Reference< XInterface >& rxIf );
+    const OUString &                implGetValidIDFromInterface( const cpo::uno::Reference< XInterface >& rxIf );
+    static OUString                 implGetInterfaceName( const cpo::uno::Reference< XInterface >& rxIf );
     bool                            implLookForFirstVisiblePage();
     static cpo::uno::Any            implSafeGetPagePropSet( const OUString & sPropertyName,
-                                                                const css::uno::Reference< css::beans::XPropertySet > & rxPropSet,
-                                                                const css::uno::Reference< css::beans::XPropertySetInfo > & rxPropSetInfo );
+                                                                const cpo::uno::Reference< css::beans::XPropertySet > & rxPropSet,
+                                                                const cpo::uno::Reference< css::beans::XPropertySetInfo > & rxPropSetInfo );
     DECL_LINK( CalcFieldHdl, EditFieldInfo*, void );
 
     bool filterImpressOrDraw( const cpo::uno::Sequence< css::beans::PropertyValue >& rDescriptor );
     bool filterWriterOrCalc( const cpo::uno::Sequence< css::beans::PropertyValue >& rDescriptor );
 
-    css::uno::Reference<css::frame::XController> getSourceController() const;
-    css::uno::Reference<css::frame::XController> fillDrawImpressSelectedPages();
+    cpo::uno::Reference<css::frame::XController> getSourceController() const;
+    cpo::uno::Reference<css::frame::XController> fillDrawImpressSelectedPages();
 
 protected:
 
@@ -286,17 +286,17 @@ protected:
     virtual void cancel( ) override;
 
     // XImporter
-    virtual void setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
+    virtual void setTargetDocument( const cpo::uno::Reference< css::lang::XComponent >& xDoc ) override;
 
     // XExporter
-    virtual void setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
+    virtual void setSourceDocument( const cpo::uno::Reference< css::lang::XComponent >& xDoc ) override;
 
     // XExtendedFilterDetection
     virtual OUString detect( cpo::uno::Sequence< css::beans::PropertyValue >& io_rDescriptor ) override;
 
 public:
 
-    explicit SVGFilter( const css::uno::Reference< cpo::uno::XComponentContext >& rxCtx );
+    explicit SVGFilter( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxCtx );
     virtual    ~SVGFilter() override;
 
     //  XServiceInfo

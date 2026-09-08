@@ -13,14 +13,14 @@
 #include <vcl/weld.hxx>
 
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 class QrCodeGenDialog : public weld::GenericDialogController
 {
 public:
-    QrCodeGenDialog(weld::Widget* pParent, css::uno::Reference<css::frame::XModel> xModel,
+    QrCodeGenDialog(weld::Widget* pParent, cpo::uno::Reference<css::frame::XModel> xModel,
                     bool bEditExisting);
 
     virtual short run() override;
@@ -33,7 +33,7 @@ public:
 #endif
 
 private:
-    css::uno::Reference<css::frame::XModel> m_xModel;
+    cpo::uno::Reference<css::frame::XModel> m_xModel;
     std::unique_ptr<weld::TextView> m_xEdittext;
     std::unique_ptr<weld::RadioButton> m_xECC[4];
     std::unique_ptr<weld::SpinButton> m_xSpinBorder;
@@ -43,7 +43,7 @@ private:
     weld::Widget* mpParent;
 #endif
 
-    css::uno::Reference<css::beans::XPropertySet> m_xExistingShapeProperties;
+    cpo::uno::Reference<css::beans::XPropertySet> m_xExistingShapeProperties;
 
     void GetErrorCorrection(tools::Long);
 };

@@ -48,7 +48,7 @@ class ContentProvider : public ::ucbhelper::ContentProviderImplHelper
     std::unordered_map<OUString, Package*> m_aPackages;
 
 public:
-    explicit ContentProvider( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+    explicit ContentProvider( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
     virtual ~ContentProvider() override;
 
     // XInterface
@@ -68,14 +68,14 @@ public:
     virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XContentProvider
-    virtual css::uno::Reference< css::ucb::XContent > SAL_CALL
-    queryContent( const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier ) override;
+    virtual cpo::uno::Reference< css::ucb::XContent > SAL_CALL
+    queryContent( const cpo::uno::Reference< css::ucb::XContentIdentifier >& Identifier ) override;
 
 
     // Non-interface methods.
 
 
-    css::uno::Reference< css::container::XHierarchicalNameAccess >
+    cpo::uno::Reference< css::container::XHierarchicalNameAccess >
     createPackage( const PackageUri & rParam );
     void
     removePackage( const OUString & rName );

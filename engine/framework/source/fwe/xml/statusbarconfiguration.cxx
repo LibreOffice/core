@@ -27,7 +27,7 @@
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::container;

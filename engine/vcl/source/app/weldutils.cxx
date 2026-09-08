@@ -492,18 +492,18 @@ PatternFormatter::~PatternFormatter()
 WidgetStatusListener::WidgetStatusListener(weld::Widget* widget, const OUString& aCommand)
     : mWidget(widget)
 {
-    const css::uno::Reference<cpo::uno::XComponentContext>& xContext
+    const cpo::uno::Reference<cpo::uno::XComponentContext>& xContext
         = ::comphelper::getProcessComponentContext();
-    css::uno::Reference<css::frame::XDesktop2> xDesktop = css::frame::Desktop::create(xContext);
+    cpo::uno::Reference<css::frame::XDesktop2> xDesktop = css::frame::Desktop::create(xContext);
 
-    css::uno::Reference<css::frame::XFrame> xFrame(xDesktop->getActiveFrame());
+    cpo::uno::Reference<css::frame::XFrame> xFrame(xDesktop->getActiveFrame());
     if (!xFrame.is())
         xFrame = xDesktop;
 
     mxFrame = std::move(xFrame);
 
     maCommandURL.Complete = aCommand;
-    css::uno::Reference<css::util::XURLTransformer> xParser
+    cpo::uno::Reference<css::util::XURLTransformer> xParser
         = css::util::URLTransformer::create(xContext);
     xParser->parseStrict(maCommandURL);
 }
@@ -513,8 +513,8 @@ void WidgetStatusListener::startListening()
     if (mxDispatch.is())
         mxDispatch->removeStatusListener(this, maCommandURL);
 
-    css::uno::Reference<css::frame::XDispatchProvider> xDispatchProvider(mxFrame,
-                                                                         css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::frame::XDispatchProvider> xDispatchProvider(mxFrame,
+                                                                         cpo::uno::UNO_QUERY);
     if (!xDispatchProvider.is())
         return;
 

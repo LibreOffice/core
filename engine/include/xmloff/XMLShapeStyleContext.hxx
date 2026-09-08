@@ -45,13 +45,13 @@ public:
         XmlStyleFamily nFamily);
     virtual ~XMLShapeStyleContext() override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
     virtual void Finish( bool bOverwrite ) override;
 
     virtual void FillPropertySet(
-            const css::uno::Reference< css::beans::XPropertySet > & rPropSet ) override;
+            const cpo::uno::Reference< css::beans::XPropertySet > & rPropSet ) override;
 };
 
 #endif // INCLUDED_XMLOFF_XMLSHAPESTYLECONTEXT_HXX

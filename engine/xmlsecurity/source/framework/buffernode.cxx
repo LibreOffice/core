@@ -26,7 +26,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <utility>
 
-BufferNode::BufferNode( css::uno::Reference< css::xml::wrapper::XXMLElementWrapper > xXMLElement )
+BufferNode::BufferNode( cpo::uno::Reference< css::xml::wrapper::XXMLElementWrapper > xXMLElement )
     :m_pParent(nullptr),
      m_pBlocker(nullptr),
      m_bAllReceived(false),
@@ -615,7 +615,7 @@ const BufferNode* BufferNode::getNextNodeByTreeOrder() const
 }
 
 
-void BufferNode::setXMLElement( const css::uno::Reference< css::xml::wrapper::XXMLElementWrapper >& xXMLElement )
+void BufferNode::setXMLElement( const cpo::uno::Reference< css::xml::wrapper::XXMLElementWrapper >& xXMLElement )
 {
     m_xXMLElement = xXMLElement;
 }

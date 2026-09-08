@@ -23,7 +23,7 @@
 #include <map>
 
 #include <com/sun/star/awt/DeviceInfo.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <oox/dllapi.h>
 #include <oox/helper/binarystreambase.hxx>
 #include <oox/helper/helper.hxx>
@@ -55,14 +55,14 @@ namespace oox {
  */
 
 typedef std::tuple<std::shared_ptr<ImpGraphic>, sal_Int32, sal_Int32, sal_Int16> ColorChangeKey;
-typedef std::map<ColorChangeKey, css::uno::Reference<css::graphic::XGraphic>> ColorChangeCache;
+typedef std::map<ColorChangeKey, cpo::uno::Reference<css::graphic::XGraphic>> ColorChangeCache;
 
 class OOX_DLLPUBLIC GraphicHelper
 {
 public:
     explicit            GraphicHelper(
-                            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
-                            const css::uno::Reference< css::frame::XFrame >& rxTargetFrame,
+                            const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+                            const cpo::uno::Reference< css::frame::XFrame >& rxTargetFrame,
                             StorageRef xStorage );
     virtual             ~GraphicHelper();
 
@@ -122,44 +122,44 @@ public:
     // Graphics and graphic objects  ------------------------------------------
 
     /** Imports a graphic from the passed input stream. */
-    css::uno::Reference< css::graphic::XGraphic >
+    cpo::uno::Reference< css::graphic::XGraphic >
                         importGraphic(
-                            const css::uno::Reference< css::io::XInputStream >& rxInStrm,
+                            const cpo::uno::Reference< css::io::XInputStream >& rxInStrm,
                             const WmfExternal* pExtHeader = nullptr,
                             const bool bLazyLoad = true ) const;
 
     /** Imports a graphic from the passed binary memory block. */
-    css::uno::Reference< css::graphic::XGraphic >
+    cpo::uno::Reference< css::graphic::XGraphic >
                         importGraphic( const StreamDataSequence& rGraphicData ) const;
 
     /** Imports a graphic from the storage stream with the passed path and name. */
-    css::uno::Reference< css::graphic::XGraphic >
+    cpo::uno::Reference< css::graphic::XGraphic >
                         importEmbeddedGraphic(
                             const OUString& rStreamName,
                             const WmfExternal* pExtHeader = nullptr ) const;
 
     /** calculates the original size of a graphic which is necessary to be able to calculate cropping values
         @return The original Graphic size in 100thmm */
-    css::awt::Size getOriginalSize( const css::uno::Reference< css::graphic::XGraphic >& rxGraphic ) const;
+    css::awt::Size getOriginalSize( const cpo::uno::Reference< css::graphic::XGraphic >& rxGraphic ) const;
 
-    void setGraphicMapper(css::uno::Reference<css::graphic::XGraphicMapper> const & rxGraphicMapper);
+    void setGraphicMapper(cpo::uno::Reference<css::graphic::XGraphicMapper> const & rxGraphicMapper);
 
     void initializeGraphicMapperIfNeeded() const;
 
-    css::uno::Reference<css::graphic::XGraphic> getCachedColorChangeGraphic(const ColorChangeKey& rKey) const;
-    void addGraphicToColorChangeCache(const ColorChangeKey& rKey, const css::uno::Reference<css::graphic::XGraphic>& xGraphic) const;
+    cpo::uno::Reference<css::graphic::XGraphic> getCachedColorChangeGraphic(const ColorChangeKey& rKey) const;
+    void addGraphicToColorChangeCache(const ColorChangeKey& rKey, const cpo::uno::Reference<css::graphic::XGraphic>& xGraphic) const;
 
 private:
 
-    css::uno::Reference< cpo::uno::XComponentContext > mxContext;
-    css::uno::Reference< css::graphic::XGraphicProvider2 > mxGraphicProvider;
+    cpo::uno::Reference< cpo::uno::XComponentContext > mxContext;
+    cpo::uno::Reference< css::graphic::XGraphicProvider2 > mxGraphicProvider;
     VclPtr<OutputDevice> mxDefaultOutputDevice;
     css::awt::DeviceInfo maDeviceInfo; ///< Current output device info.
     ::std::map< sal_Int32, ::Color >  maSystemPalette;  ///< Maps system colors (XML tokens) to RGB color values.
     StorageRef          mxStorage;                  ///< Storage containing embedded graphics.
     double              mfPixelPerHmmX;             ///< Number of screen pixels per 1/100 mm in X direction.
     double              mfPixelPerHmmY;             ///< Number of screen pixels per 1/100 mm in Y direction.
-    css::uno::Reference<css::graphic::XGraphicMapper> mxGraphicMapper;
+    cpo::uno::Reference<css::graphic::XGraphicMapper> mxGraphicMapper;
     mutable ColorChangeCache maColorChangeCache;
 };
 

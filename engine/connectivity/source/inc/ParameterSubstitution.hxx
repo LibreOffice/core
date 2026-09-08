@@ -35,13 +35,13 @@ namespace connectivity
     class ParameterSubstitution final : public ParameterSubstitution_BASE
     {
         ::osl::Mutex                                          m_aMutex;
-        css::uno::Reference< cpo::uno::XComponentContext >    m_xContext;
+        cpo::uno::Reference< cpo::uno::XComponentContext >    m_xContext;
         cpo::uno::WeakReference< css::sdbc::XConnection >     m_xConnection;
 
         ParameterSubstitution( const ParameterSubstitution& ) = delete;
         ParameterSubstitution& operator=( const ParameterSubstitution& ) = delete;
     public:
-        ParameterSubstitution(css::uno::Reference< cpo::uno::XComponentContext > _rContext );
+        ParameterSubstitution(cpo::uno::Reference< cpo::uno::XComponentContext > _rContext );
     private:
 
         // XServiceInfo

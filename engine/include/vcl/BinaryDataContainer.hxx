@@ -64,7 +64,7 @@ public:
     SAL_DLLPRIVATE std::unique_ptr<SvStream> getAsStream() const;
 
     // Returns the data as a readonly stream open for reading
-    SAL_DLLPRIVATE css::uno::Reference<css::io::XInputStream> getAsXInputStream() const;
+    SAL_DLLPRIVATE cpo::uno::Reference<css::io::XInputStream> getAsXInputStream() const;
 
     /// writes the contents to the given stream
     std::size_t writeToStream(SvStream& rStream) const;

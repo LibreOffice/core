@@ -21,7 +21,7 @@
 #ifndef INCLUDED_OOX_PPT_SLIDETRANSITION_HXX
 #define INCLUDED_OOX_PPT_SLIDETRANSITION_HXX
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
 #include <sal/types.h>
 
@@ -40,7 +40,7 @@ namespace oox::ppt {
         explicit SlideTransition(std::u16string_view );
 
         void setSlideProperties( PropertyMap& props );
-        void setTransitionFilterProperties( const css::uno::Reference< css::animations::XTransitionFilter > & xFilter );
+        void setTransitionFilterProperties( const cpo::uno::Reference< css::animations::XTransitionFilter > & xFilter );
 
         /// Set one of standard values for slide transition duration
         void setOoxTransitionSpeed( sal_Int32 nToken );

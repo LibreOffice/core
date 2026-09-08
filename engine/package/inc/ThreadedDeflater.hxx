@@ -22,7 +22,7 @@
 
 #include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <comphelper/threadpool.hxx>
 #include <memory>
 #include <vector>
@@ -52,7 +52,7 @@ public:
     // Unlike with Deflater class, bNoWrap is always true.
     ThreadedDeflater(sal_Int32 nSetLevel);
     ~ThreadedDeflater();
-    void deflateWrite(const css::uno::Reference<css::io::XInputStream>& xInStream,
+    void deflateWrite(const cpo::uno::Reference<css::io::XInputStream>& xInStream,
                       const std::function<void(const cpo::uno::Sequence<sal_Int8>&, sal_Int32)>&
                           rProcessInputFunc,
                       const std::function<void(const cpo::uno::Sequence<sal_Int8>&, sal_Int32)>&

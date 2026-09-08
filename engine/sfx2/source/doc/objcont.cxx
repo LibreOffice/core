@@ -18,7 +18,7 @@
  */
 
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <com/sun/star/document/DocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
@@ -65,7 +65,7 @@
 #include <helpids.h>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo;
 using namespace ::cpo::uno;
 
 

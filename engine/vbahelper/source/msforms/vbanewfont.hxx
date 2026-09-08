@@ -28,7 +28,7 @@ class VbaNewFont : public cppu::WeakImplHelper<ov::msforms::XNewFont>
 {
 public:
     /// @throws cpo::uno::RuntimeException
-    explicit VbaNewFont(const css::uno::Reference<css::beans::XPropertySet>& rxModelProps);
+    explicit VbaNewFont(const cpo::uno::Reference<css::beans::XPropertySet>& rxModelProps);
 
     // XNewFont attributes
     virtual OUString getName() override;
@@ -49,7 +49,7 @@ public:
     virtual void setStrikethrough(bool bStrikethrough) override;
 
 private:
-    css::uno::Reference<css::beans::XPropertySet> mxProps;
+    cpo::uno::Reference<css::beans::XPropertySet> mxProps;
 };
 
 #endif

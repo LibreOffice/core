@@ -59,8 +59,8 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::script::vba;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 using ::comphelper::ConfigurationHelper;
 

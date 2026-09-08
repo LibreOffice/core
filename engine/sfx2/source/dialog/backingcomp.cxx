@@ -69,10 +69,10 @@ class BackingComp : public  css::lang::XTypeProvider
 {
 private:
     /** reference to the component window. */
-    css::uno::Reference< css::awt::XWindow > m_xWindow;
+    cpo::uno::Reference< css::awt::XWindow > m_xWindow;
 
     /** the owner frame of this component. */
-    css::uno::Reference< css::frame::XFrame > m_xFrame;
+    cpo::uno::Reference< css::frame::XFrame > m_xFrame;
 
     Size m_aInitialWindowMinSize;
 
@@ -98,13 +98,13 @@ public:
     virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& lArgs ) override;
 
     // XController
-    virtual void attachFrame( const css::uno::Reference< css::frame::XFrame >& xFrame ) override;
-    virtual bool attachModel( const css::uno::Reference< css::frame::XModel >& xModel ) override;
+    virtual void attachFrame( const cpo::uno::Reference< css::frame::XFrame >& xFrame ) override;
+    virtual bool attachModel( const cpo::uno::Reference< css::frame::XModel >& xModel ) override;
     virtual bool suspend( bool bSuspend ) override;
     virtual cpo::uno::Any getViewData() override;
     virtual void restoreViewData( const cpo::uno::Any& aData ) override;
-    virtual css::uno::Reference< css::frame::XModel > getModel() override;
-    virtual css::uno::Reference< css::frame::XFrame > getFrame() override;
+    virtual cpo::uno::Reference< css::frame::XModel > getModel() override;
+    virtual cpo::uno::Reference< css::frame::XFrame > getFrame() override;
 
     // XKeyListener
     virtual void keyPressed ( const css::awt::KeyEvent& aEvent ) override;
@@ -115,17 +115,17 @@ public:
 
     // XComponent
     virtual void dispose            (                                                                   ) override;
-    virtual void addEventListener   ( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-    virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
+    virtual void addEventListener   ( const cpo::uno::Reference< css::lang::XEventListener >& xListener ) override;
+    virtual void removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& xListener ) override;
 
     // XDispatchProvider
-    virtual css::uno::Reference< css::frame::XDispatch > queryDispatch( const css::util::URL& aURL, const OUString& sTargetFrameName , sal_Int32 nSearchFlags ) override;
-    virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptions    ) override;
+    virtual cpo::uno::Reference< css::frame::XDispatch > queryDispatch( const css::util::URL& aURL, const OUString& sTargetFrameName , sal_Int32 nSearchFlags ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Reference< css::frame::XDispatch > > queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptions    ) override;
 
     // XDispatch
     virtual void dispatch( const css::util::URL& aURL, const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments ) override;
-    virtual void addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xListener, const css::util::URL& aURL ) override;
-    virtual void removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xListener, const css::util::URL& aURL ) override;
+    virtual void addStatusListener( const cpo::uno::Reference< css::frame::XStatusListener >& xListener, const css::util::URL& aURL ) override;
+    virtual void removeStatusListener( const cpo::uno::Reference< css::frame::XStatusListener >& xListener, const css::util::URL& aURL ) override;
 };
 
 BackingComp::BackingComp()
@@ -217,7 +217,7 @@ cpo::uno::Sequence< cpo::uno::Type > BackingComp::getTypes()
 {
     static cppu::OTypeCollection aTypeCollection = [this]() {
         SolarMutexGuard aGuard;
-        css::uno::Reference<css::lang::XTypeProvider> xProvider(m_xWindow, css::uno::UNO_QUERY);
+        cpo::uno::Reference<css::lang::XTypeProvider> xProvider(m_xWindow, cpo::uno::UNO_QUERY);
 
         cpo::uno::Sequence<cpo::uno::Type> lWindowTypes;
         if (xProvider.is())
@@ -320,7 +320,7 @@ cpo::uno::Sequence< OUString > BackingComp::getSupportedServiceNames()
                 reparenting of our component window on demand!
 */
 
-void BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::frame::XFrame >& xFrame )
+void BackingComp::attachFrame( /*IN*/ const cpo::uno::Reference< css::frame::XFrame >& xFrame )
 {
     /* SAFE */
     SolarMutexGuard aGuard;
@@ -343,7 +343,7 @@ void BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::frame::XFr
     m_xFrame = xFrame;
 
     // initialize the component and its parent window
-    css::uno::Reference< css::awt::XWindow > xParentWindow = xFrame->getContainerWindow();
+    cpo::uno::Reference< css::awt::XWindow > xParentWindow = xFrame->getContainerWindow();
     VclPtr< WorkWindow > pParent = static_cast<WorkWindow*>(VCLUnoHelper::GetWindow(xParentWindow));
     VclPtr< vcl::Window > pWindow = VCLUnoHelper::GetWindow(m_xWindow);
 
@@ -355,8 +355,8 @@ void BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::frame::XFr
     }
 
     // create the menu bar for the backing component
-    css::uno::Reference< css::beans::XPropertySet > xPropSet(m_xFrame, css::uno::UNO_QUERY_THROW);
-    css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
+    cpo::uno::Reference< css::beans::XPropertySet > xPropSet(m_xFrame, cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
     xPropSet->getPropertyValue(u"LayoutManager"_ustr) >>= xLayoutManager;
     if (xLayoutManager.is())
     {
@@ -408,7 +408,7 @@ void BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::frame::XFr
     return  <FALSE/> every time.
  */
 
-bool BackingComp::attachModel( /*IN*/ const css::uno::Reference< css::frame::XModel >& )
+bool BackingComp::attachModel( /*IN*/ const cpo::uno::Reference< css::frame::XModel >& )
 {
     return false;
 }
@@ -422,9 +422,9 @@ bool BackingComp::attachModel( /*IN*/ const css::uno::Reference< css::frame::XMo
     return  An empty reference every time.
  */
 
-css::uno::Reference< css::frame::XModel > BackingComp::getModel()
+cpo::uno::Reference< css::frame::XModel > BackingComp::getModel()
 {
-    return css::uno::Reference< css::frame::XModel >();
+    return cpo::uno::Reference< css::frame::XModel >();
 }
 
 
@@ -458,7 +458,7 @@ void BackingComp::restoreViewData( /*IN*/ const cpo::uno::Any& )
             Can be null, if attachFrame() was not called before.
  */
 
-css::uno::Reference< css::frame::XFrame > BackingComp::getFrame()
+cpo::uno::Reference< css::frame::XFrame > BackingComp::getFrame()
 {
     /* SAFE { */
     SolarMutexGuard aGuard;
@@ -536,7 +536,7 @@ void BackingComp::dispose()
 
     if (m_xFrame.is())
     {
-        css::uno::Reference< css::awt::XWindow > xParentWindow = m_xFrame->getContainerWindow();
+        cpo::uno::Reference< css::awt::XWindow > xParentWindow = m_xFrame->getContainerWindow();
         VclPtr< WorkWindow > pParent = static_cast<WorkWindow*>(VCLUnoHelper::GetWindow(xParentWindow));
         if (pParent)
         {
@@ -571,7 +571,7 @@ void BackingComp::dispose()
                 We must inform it about this unsupported feature.
  */
 
-void BackingComp::addEventListener( /*IN*/ const css::uno::Reference< css::lang::XEventListener >& )
+void BackingComp::addEventListener( /*IN*/ const cpo::uno::Reference< css::lang::XEventListener >& )
 {
     throw cpo::uno::RuntimeException(
             u"not supported"_ustr,
@@ -587,7 +587,7 @@ void BackingComp::addEventListener( /*IN*/ const css::uno::Reference< css::lang:
                 not used.
  */
 
-void BackingComp::removeEventListener( /*IN*/ const css::uno::Reference< css::lang::XEventListener >& )
+void BackingComp::removeEventListener( /*IN*/ const cpo::uno::Reference< css::lang::XEventListener >& )
 {
 }
 
@@ -620,7 +620,7 @@ void BackingComp::initialize( /*IN*/ const cpo::uno::Sequence< cpo::uno::Any >& 
                 u"already initialized"_ustr,
                 getXWeak());
 
-    css::uno::Reference< css::awt::XWindow > xParentWindow;
+    cpo::uno::Reference< css::awt::XWindow > xParentWindow;
     if (
         (lArgs.getLength()!=1         ) ||
         (!(lArgs[0] >>= xParentWindow)) ||
@@ -669,22 +669,22 @@ void BackingComp::keyReleased( /*IN*/ const css::awt::KeyEvent& )
 }
 
 // XDispatchProvider
-css::uno::Reference< css::frame::XDispatch > BackingComp::queryDispatch( const css::util::URL& aURL, const OUString& /*sTargetFrameName*/, sal_Int32 /*nSearchFlags*/ )
+cpo::uno::Reference< css::frame::XDispatch > BackingComp::queryDispatch( const css::util::URL& aURL, const OUString& /*sTargetFrameName*/, sal_Int32 /*nSearchFlags*/ )
 {
-    css::uno::Reference< css::frame::XDispatch > xDispatch;
+    cpo::uno::Reference< css::frame::XDispatch > xDispatch;
     if ( aURL.Protocol == "vnd.org.libreoffice.recentdocs:" )
         xDispatch = this;
 
     return xDispatch;
 }
 
-cpo::uno::Sequence < css::uno::Reference< css::frame::XDispatch > > BackingComp::queryDispatches( const cpo::uno::Sequence < css::frame::DispatchDescriptor >& seqDescripts )
+cpo::uno::Sequence < cpo::uno::Reference< css::frame::XDispatch > > BackingComp::queryDispatches( const cpo::uno::Sequence < css::frame::DispatchDescriptor >& seqDescripts )
 {
     sal_Int32 nCount = seqDescripts.getLength();
-    cpo::uno::Sequence < css::uno::Reference < XDispatch > > lDispatcher( nCount );
+    cpo::uno::Sequence < cpo::uno::Reference < XDispatch > > lDispatcher( nCount );
 
     std::transform(seqDescripts.begin(), seqDescripts.end(), lDispatcher.getArray(),
-        [this](const css::frame::DispatchDescriptor& rDesc) -> css::uno::Reference<XDispatch> {
+        [this](const css::frame::DispatchDescriptor& rDesc) -> cpo::uno::Reference<XDispatch> {
             return queryDispatch(rDesc.FeatureURL, rDesc.FrameName, rDesc.SearchFlags); });
 
     return lDispatcher;
@@ -705,7 +705,7 @@ void BackingComp::dispatch( const css::util::URL& aURL, const cpo::uno::Sequence
     pBack->clearRecentFileList();
 
     // Recalculate minimum width
-    css::uno::Reference< css::awt::XWindow > xParentWindow = m_xFrame->getContainerWindow();
+    cpo::uno::Reference< css::awt::XWindow > xParentWindow = m_xFrame->getContainerWindow();
     VclPtr< WorkWindow > pParent = static_cast<WorkWindow*>(VCLUnoHelper::GetWindow(xParentWindow));
     if( pParent )
     {
@@ -715,11 +715,11 @@ void BackingComp::dispatch( const css::util::URL& aURL, const cpo::uno::Sequence
     }
 }
 
-void BackingComp::addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& /*xControl*/, const css::util::URL& /*aURL*/ )
+void BackingComp::addStatusListener( const cpo::uno::Reference< css::frame::XStatusListener >& /*xControl*/, const css::util::URL& /*aURL*/ )
 {
 }
 
-void BackingComp::removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& /*xControl*/, const css::util::URL& /*aURL*/ )
+void BackingComp::removeStatusListener( const cpo::uno::Reference< css::frame::XStatusListener >& /*xControl*/, const css::util::URL& /*aURL*/ )
 {
 }
 

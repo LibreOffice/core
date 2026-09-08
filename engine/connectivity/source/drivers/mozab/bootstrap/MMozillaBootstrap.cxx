@@ -23,13 +23,13 @@
 #include "MMozillaBootstrap.hxx"
 #include "MNSProfileDiscover.hxx"
 
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::mozilla;
 using namespace connectivity::mozab;
 
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::cpo::uno::Sequence;
 
 MozillaBootstrap::MozillaBootstrap()
@@ -120,7 +120,7 @@ OUString MozillaBootstrap::setCurrentProfile( css::mozilla::MozillaProductType, 
 }
 
 // XProxyRunner
-::sal_Int32 MozillaBootstrap::Run( const css::uno::Reference< css::mozilla::XCodeProxy >& )
+::sal_Int32 MozillaBootstrap::Run( const cpo::uno::Reference< css::mozilla::XCodeProxy >& )
 {
     return -1;
 }

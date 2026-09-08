@@ -18,7 +18,7 @@
  */
 
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -40,6 +40,7 @@
 
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 
 bool ConvertBufferToFormat( void* pBuf,

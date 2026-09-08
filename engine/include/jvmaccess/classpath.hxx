@@ -37,7 +37,7 @@
 
 namespace cpo::uno { class XComponentContext; }
 
-namespace com::sun::star::uno
+namespace cpo::uno
 {
 template <typename> class Reference;
 }
@@ -75,7 +75,7 @@ namespace ClassPath
    @throws cpo::uno::RuntimeException
  */
 JVMACCESS_DLLPUBLIC jobjectArray
-translateToUrls(css::uno::Reference<cpo::uno::XComponentContext> const& context,
+translateToUrls(cpo::uno::Reference<cpo::uno::XComponentContext> const& context,
                 JNIEnv* environment, std::u16string_view classPath);
 }
 }

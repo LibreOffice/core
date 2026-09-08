@@ -21,7 +21,7 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XEventListener.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <ooo/vba/msforms/XShape.hpp>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -53,11 +53,11 @@ class VBAHELPER_DLLPUBLIC ScVbaShape : public ScVbaShape_BASE
 {
 protected:
     ov::ShapeHelper m_aShapeHelper;
-    css::uno::Reference< css::drawing::XShape > m_xShape;
-    css::uno::Reference< css::drawing::XShapes > m_xShapes;
-    css::uno::Reference< css::beans::XPropertySet > m_xPropertySet;
+    cpo::uno::Reference< css::drawing::XShape > m_xShape;
+    cpo::uno::Reference< css::drawing::XShapes > m_xShapes;
+    cpo::uno::Reference< css::beans::XPropertySet > m_xPropertySet;
     sal_Int32 m_nType;
-    css::uno::Reference< css::frame::XModel > m_xModel;
+    cpo::uno::Reference< css::frame::XModel > m_xModel;
     void addListeners();
     /// @throws cpo::uno::RuntimeException
     void removeShapeListener();
@@ -68,13 +68,13 @@ protected:
 public:
     /// @throws css::lang::IllegalArgumentException
     /// @throws cpo::uno::RuntimeException
-    ScVbaShape( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext, css::uno::Reference< css::drawing::XShape >  xShape, css::uno::Reference< css::drawing::XShapes > xShapes, css::uno::Reference< css::frame::XModel > xModel, sal_Int32 nType );
+    ScVbaShape( const cpo::uno::Reference< ov::XHelperInterface >& xParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext, cpo::uno::Reference< css::drawing::XShape >  xShape, cpo::uno::Reference< css::drawing::XShapes > xShapes, cpo::uno::Reference< css::frame::XModel > xModel, sal_Int32 nType );
     virtual ~ScVbaShape() override;
 
     /// @throws cpo::uno::RuntimeException
-    static sal_Int32 getType( const css::uno::Reference< css::drawing::XShape >& rShape );
+    static sal_Int32 getType( const cpo::uno::Reference< css::drawing::XShape >& rShape );
 
-    static sal_Int32 getAutoShapeType( const css::uno::Reference< css::drawing::XShape >& rShape );
+    static sal_Int32 getAutoShapeType( const cpo::uno::Reference< css::drawing::XShape >& rShape );
 
     // Attributes
     virtual OUString getName() override;
@@ -95,9 +95,9 @@ public:
     virtual sal_Int32 getType() override;
     virtual double getRotation() override;
     virtual void setRotation( double _rotation ) override;
-    virtual css::uno::Reference< ov::msforms::XLineFormat > getLine() override;
-    virtual css::uno::Reference< ov::msforms::XFillFormat > getFill() override;
-    virtual css::uno::Reference< ov::msforms::XPictureFormat > getPictureFormat() override;
+    virtual cpo::uno::Reference< ov::msforms::XLineFormat > getLine() override;
+    virtual cpo::uno::Reference< ov::msforms::XFillFormat > getFill() override;
+    virtual cpo::uno::Reference< ov::msforms::XPictureFormat > getPictureFormat() override;
     virtual bool getLockAspectRatio() override;
     virtual void setLockAspectRatio( bool _lockaspectratio ) override;
     virtual bool getLockAnchor() override;

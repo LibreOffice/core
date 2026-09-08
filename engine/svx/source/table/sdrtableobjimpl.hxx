@@ -26,7 +26,7 @@
 
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <sal/types.h>
@@ -46,7 +46,7 @@ public:
     std::unique_ptr<TableLayouter> mpLayouter;
     CellPos maEditPos;
     TableStyleSettings maTableStyle;
-    css::uno::Reference< css::container::XIndexAccess > mxTableStyle;
+    cpo::uno::Reference< css::container::XIndexAccess > mxTableStyle;
     std::vector<std::unique_ptr<SdrUndoAction>> maUndos;
     bool mbSkipChangeLayout;
 

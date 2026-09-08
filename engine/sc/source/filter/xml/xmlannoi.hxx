@@ -49,9 +49,9 @@ struct ScXMLAnnotationStyleEntry
 
 struct ScXMLAnnotationData
 {
-    css::uno::Reference< css::drawing::XShape >
+    cpo::uno::Reference< css::drawing::XShape >
                         mxShape;
-    css::uno::Reference< css::drawing::XShapes >
+    cpo::uno::Reference< css::drawing::XShapes >
                         mxShapes;
     OUString     maAuthor;
     OUString     maCreateDate;
@@ -75,24 +75,24 @@ public:
 
     ScXMLAnnotationContext( ScXMLImport& rImport,
                         sal_Int32 nElement,
-                        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+                        const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
                         ScXMLAnnotationData& rAnnotationData);
 
     virtual ~ScXMLAnnotationContext() override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
-    virtual void SAL_CALL startFastElement(sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList) override;
+    virtual void SAL_CALL startFastElement(sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList) override;
 
     virtual void SAL_CALL characters( const OUString& rChars ) override;
 
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
     void SetShape(
-        const css::uno::Reference< css::drawing::XShape >& rxShape,
-        const css::uno::Reference< css::drawing::XShapes >& rxShapes,
+        const cpo::uno::Reference< css::drawing::XShape >& rxShape,
+        const cpo::uno::Reference< css::drawing::XShapes >& rxShapes,
         const OUString& rStyleName, const OUString& rTextStyle );
 
     void AddContentStyle( XmlStyleFamily nFamily, const OUString& rName, const ESelection& rSelection );

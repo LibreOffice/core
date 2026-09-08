@@ -31,7 +31,7 @@ namespace {
 class SmartTagMenuController : public svt::PopupMenuControllerBase
 {
 public:
-    explicit SmartTagMenuController( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+    explicit SmartTagMenuController( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
     // XStatusListener
     virtual void statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
@@ -48,11 +48,11 @@ private:
     bool MenuSelect(sal_uInt16 nMyId);
     struct InvokeAction
     {
-        css::uno::Reference< css::smarttags::XSmartTagAction > m_xAction;
-        css::uno::Reference< css::container::XStringKeyMap > m_xSmartTagProperties;
+        cpo::uno::Reference< css::smarttags::XSmartTagAction > m_xAction;
+        cpo::uno::Reference< css::container::XStringKeyMap > m_xSmartTagProperties;
         sal_uInt32 m_nActionID;
-        InvokeAction( css::uno::Reference< css::smarttags::XSmartTagAction > xAction,
-                      css::uno::Reference< css::container::XStringKeyMap > xSmartTagProperties,
+        InvokeAction( cpo::uno::Reference< css::smarttags::XSmartTagAction > xAction,
+                      cpo::uno::Reference< css::container::XStringKeyMap > xSmartTagProperties,
                       sal_uInt32 nActionID ) : m_xAction(std::move( xAction )), m_xSmartTagProperties(std::move( xSmartTagProperties )), m_nActionID( nActionID ) {}
     };
     std::vector< InvokeAction > m_aInvokeActions;
@@ -61,7 +61,7 @@ private:
 
 }
 
-SmartTagMenuController::SmartTagMenuController( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext )
+SmartTagMenuController::SmartTagMenuController( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext )
     : svt::PopupMenuControllerBase( rxContext )
 {
 }
@@ -74,11 +74,11 @@ void SmartTagMenuController::statusChanged( const css::frame::FeatureStateEvent&
     if ( !rEvent.IsEnabled || !( rEvent.State >>= aProperties ) )
         return;
 
-    cpo::uno::Sequence< cpo::uno::Sequence< css::uno::Reference< css::smarttags::XSmartTagAction > > > aActionComponents;
+    cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Reference< css::smarttags::XSmartTagAction > > > aActionComponents;
     cpo::uno::Sequence< cpo::uno::Sequence< sal_Int32 > > aActionIndices;
-    cpo::uno::Sequence< css::uno::Reference< css::container::XStringKeyMap > > aStringKeyMaps;
-    css::uno::Reference< css::text::XTextRange > xTextRange;
-    css::uno::Reference< css::frame::XController > xController;
+    cpo::uno::Sequence< cpo::uno::Reference< css::container::XStringKeyMap > > aStringKeyMaps;
+    cpo::uno::Reference< css::text::XTextRange > xTextRange;
+    cpo::uno::Reference< css::frame::XController > xController;
     css::lang::Locale aLocale;
     OUString aApplicationName;
     OUString aRangeText;
@@ -114,28 +114,28 @@ void SmartTagMenuController::FillMenu()
     sal_uInt16 nMenuId = 1;
     sal_uInt16 nSubMenuId = MN_ST_INSERT_START;
 
-    const cpo::uno::Sequence< cpo::uno::Sequence< css::uno::Reference< css::smarttags::XSmartTagAction > > >& rActionComponentsSequence = m_pSmartTagItem->GetActionComponentsSequence();
+    const cpo::uno::Sequence< cpo::uno::Sequence< cpo::uno::Reference< css::smarttags::XSmartTagAction > > >& rActionComponentsSequence = m_pSmartTagItem->GetActionComponentsSequence();
     const cpo::uno::Sequence< cpo::uno::Sequence< sal_Int32 > >& rActionIndicesSequence = m_pSmartTagItem->GetActionIndicesSequence();
-    const cpo::uno::Sequence< css::uno::Reference< css::container::XStringKeyMap > >& rStringKeyMaps = m_pSmartTagItem->GetStringKeyMaps();
+    const cpo::uno::Sequence< cpo::uno::Reference< css::container::XStringKeyMap > >& rStringKeyMaps = m_pSmartTagItem->GetStringKeyMaps();
     const css::lang::Locale& rLocale = m_pSmartTagItem->GetLocale();
     const OUString aApplicationName = m_pSmartTagItem->GetApplicationName();
     const OUString aRangeText = m_pSmartTagItem->GetRangeText();
-    const css::uno::Reference< css::text::XTextRange >& xTextRange = m_pSmartTagItem->GetTextRange();
-    const css::uno::Reference< css::frame::XController >& xController = m_pSmartTagItem->GetController();
+    const cpo::uno::Reference< css::text::XTextRange >& xTextRange = m_pSmartTagItem->GetTextRange();
+    const cpo::uno::Reference< css::frame::XController >& xController = m_pSmartTagItem->GetController();
 
     for ( sal_Int32 i = 0; i < rActionComponentsSequence.getLength(); ++i )
     {
-        css::uno::Reference< css::container::XStringKeyMap > xSmartTagProperties = rStringKeyMaps[i];
+        cpo::uno::Reference< css::container::XStringKeyMap > xSmartTagProperties = rStringKeyMaps[i];
 
         // Get all actions references associated with the current smart tag type
-        const cpo::uno::Sequence< css::uno::Reference< css::smarttags::XSmartTagAction > >& rActionComponents = rActionComponentsSequence[i];
+        const cpo::uno::Sequence< cpo::uno::Reference< css::smarttags::XSmartTagAction > >& rActionComponents = rActionComponentsSequence[i];
         const cpo::uno::Sequence< sal_Int32 >& rActionIndices = rActionIndicesSequence[i];
 
         if ( !rActionComponents.hasElements() || !rActionIndices.hasElements() )
             continue;
 
         // Ask first entry for the smart tag type caption
-        css::uno::Reference< css::smarttags::XSmartTagAction > xFirstAction = rActionComponents[0];
+        cpo::uno::Reference< css::smarttags::XSmartTagAction > xFirstAction = rActionComponents[0];
 
         if ( !xFirstAction.is() )
             continue;
@@ -210,7 +210,7 @@ bool SmartTagMenuController::MenuSelect(sal_uInt16 nMyId)
     nMyId -= MN_ST_INSERT_START;
 
     // Compute SmartTag lib index and action index
-    css::uno::Reference< css::smarttags::XSmartTagAction > xSmartTagAction = m_aInvokeActions[nMyId].m_xAction;
+    cpo::uno::Reference< css::smarttags::XSmartTagAction > xSmartTagAction = m_aInvokeActions[nMyId].m_xAction;
 
     if (!xSmartTagAction.is())
         return false;

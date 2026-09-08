@@ -29,6 +29,7 @@
 #include <generalfunction.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace xmloff::token;
 
 ScDocument* ScXMLConverter::GetScDocument( const uno::Reference< frame::XModel >& xModel )

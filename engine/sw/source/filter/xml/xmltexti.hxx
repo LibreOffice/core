@@ -32,31 +32,31 @@ protected:
     virtual SvXMLImportContext *CreateTableChildContext(
                 SvXMLImport& rImport,
                 sal_Int32 nElement,
-                const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
+                const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
 
 public:
     SwXMLTextImportHelper(
-            const css::uno::Reference<css::frame::XModel>& rModel,
+            const cpo::uno::Reference<css::frame::XModel>& rModel,
             SwXMLImport& rImport,
-            const css::uno::Reference<css::beans::XPropertySet>& rInfoSet,
+            const cpo::uno::Reference<css::beans::XPropertySet>& rInfoSet,
             bool bInsertM, bool bStylesOnlyM,
             bool bBlockM, bool bOrganizerM );
     virtual ~SwXMLTextImportHelper() override;
 
-    virtual css::uno::Reference<css::beans::XPropertySet>
+    virtual cpo::uno::Reference<css::beans::XPropertySet>
             createAndInsertOLEObject( SvXMLImport& rImport,
                                       const OUString& rHRef,
                                       const OUString& rStyleName,
                                       const OUString& rTableName,
                                       sal_Int32 nWidth, sal_Int32 nHeight ) override;
-    virtual css::uno::Reference<css::beans::XPropertySet>
+    virtual cpo::uno::Reference<css::beans::XPropertySet>
             createAndInsertOOoLink( SvXMLImport& rImport,
                                       const OUString& rHRef,
                                       const OUString& rStyleName,
                                       const OUString& rTableName,
                                       sal_Int32 nWidth, sal_Int32 nHeight ) override;
 
-    virtual css::uno::Reference<css::beans::XPropertySet>
+    virtual cpo::uno::Reference<css::beans::XPropertySet>
         createAndInsertFloatingFrame(
             const OUString &rName,
             const OUString &rHRef,
@@ -77,8 +77,8 @@ public:
         bool bMergeLastPara,         /// merge last paragraph
         const OUString& rStyleName,
         const OUString& rAutoName) override;
-    virtual css::uno::Reference<css::text::XTextCursor> RedlineCreateText(
-            css::uno::Reference<css::text::XTextCursor> & rOldCursor, /// needed to get the document
+    virtual cpo::uno::Reference<css::text::XTextCursor> RedlineCreateText(
+            cpo::uno::Reference<css::text::XTextCursor> & rOldCursor, /// needed to get the document
             const OUString& rId) override;    /// ID used to RedlineAdd() call
     virtual void RedlineSetCursor(
         const OUString& rId,         /// ID used to RedlineAdd() call

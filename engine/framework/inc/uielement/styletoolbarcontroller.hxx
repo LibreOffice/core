@@ -33,14 +33,14 @@ namespace framework {
 class StyleDispatcher final : public cppu::WeakImplHelper< css::frame::XDispatch, css::frame::XStatusListener >
 {
 public:
-    StyleDispatcher( const css::uno::Reference< css::frame::XFrame >& rFrame,
-                     css::uno::Reference< css::util::XURLTransformer > xUrlTransformer,
+    StyleDispatcher( const cpo::uno::Reference< css::frame::XFrame >& rFrame,
+                     cpo::uno::Reference< css::util::XURLTransformer > xUrlTransformer,
                      const css::util::URL& rURL );
 
     // XDispatch
     void dispatch( const css::util::URL& rURL, const cpo::uno::Sequence< css::beans::PropertyValue >& rArguments ) override;
-    void addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& rListener, const css::util::URL& rURL ) override;
-    void removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& rListener, const css::util::URL& rURL ) override;
+    void addStatusListener( const cpo::uno::Reference< css::frame::XStatusListener >& rListener, const css::util::URL& rURL ) override;
+    void removeStatusListener( const cpo::uno::Reference< css::frame::XStatusListener >& rListener, const css::util::URL& rURL ) override;
 
     // XStatusListener
     void statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
@@ -50,19 +50,19 @@ public:
 
 private:
     OUString m_aStyleName, m_aCommand, m_aStatusCommand;
-    css::uno::Reference< css::util::XURLTransformer > m_xUrlTransformer;
-    css::uno::Reference< css::frame::XDispatchProvider > m_xFrame;
-    css::uno::Reference< css::frame::XDispatch > m_xStyleApplyStatusDispatch;
-    css::uno::Reference< css::frame::XDispatch > m_xStyleFamilyStatusDispatch;
-    css::uno::Reference< css::frame::XStatusListener > m_xOwner;
+    cpo::uno::Reference< css::util::XURLTransformer > m_xUrlTransformer;
+    cpo::uno::Reference< css::frame::XDispatchProvider > m_xFrame;
+    cpo::uno::Reference< css::frame::XDispatch > m_xStyleApplyStatusDispatch;
+    cpo::uno::Reference< css::frame::XDispatch > m_xStyleFamilyStatusDispatch;
+    cpo::uno::Reference< css::frame::XStatusListener > m_xOwner;
     bool m_bStyleApplyEnabled = true; // If this is disabled, style family state is irrelevant
 };
 
 class StyleToolbarController final : public svt::ToolboxController
 {
 public:
-    StyleToolbarController( const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
-                            const css::uno::Reference< css::frame::XFrame >& rFrame,
+    StyleToolbarController( const cpo::uno::Reference< cpo::uno::XComponentContext >& rContext,
+                            const cpo::uno::Reference< css::frame::XFrame >& rFrame,
                             const OUString& rCommand );
 
     // XUpdatable

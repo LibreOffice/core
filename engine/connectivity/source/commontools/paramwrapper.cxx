@@ -39,7 +39,7 @@ namespace dbtools::param
 {
 
 
-    using ::com::sun::star::uno::Reference;
+    using ::cpo::uno::Reference;
     using ::com::sun::star::sdbc::XParameters;
     using ::cpo::uno::Sequence;
     using ::cpo::uno::Type;
@@ -51,7 +51,7 @@ namespace dbtools::param
     using ::com::sun::star::beans::XPropertySetInfo;
     using ::com::sun::star::beans::Property;
     using ::cpo::uno::Exception;
-    using ::com::sun::star::uno::UNO_QUERY_THROW;
+    using ::cpo::uno::UNO_QUERY_THROW;
     using ::cpo::uno::Any;
     using ::com::sun::star::sdbc::SQLException;
     using ::com::sun::star::lang::WrappedTargetException;
@@ -106,7 +106,7 @@ namespace dbtools::param
             if (!a.hasValue()
                 && aType == cppu::UnoType<css::lang::XTypeProvider>::get())
             {
-                a <<= css::uno::Reference<css::lang::XTypeProvider>(this);
+                a <<= cpo::uno::Reference<css::lang::XTypeProvider>(this);
             }
         }
         return a;
@@ -261,7 +261,7 @@ namespace dbtools::param
     ParameterWrapperContainer::ParameterWrapperContainer( const Reference< XSingleSelectQueryAnalyzer >& _rxComposer )
     {
         Reference< XParametersSupplier > xSuppParams( _rxComposer, UNO_QUERY_THROW );
-        Reference< XIndexAccess > xParameters( xSuppParams->getParameters(), css::uno::UNO_SET_THROW );
+        Reference< XIndexAccess > xParameters( xSuppParams->getParameters(), cpo::uno::UNO_SET_THROW );
         sal_Int32 nParamCount( xParameters->getCount() );
         m_aParameters.reserve( nParamCount );
         for ( sal_Int32 i=0; i<nParamCount; ++i )

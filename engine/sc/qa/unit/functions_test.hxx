@@ -12,7 +12,7 @@
 
 #include "helper/scfiltertestbase.hxx"
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 class SCQAHELPER_DLLPUBLIC FunctionsTest : public ScFilterTestBase
 {

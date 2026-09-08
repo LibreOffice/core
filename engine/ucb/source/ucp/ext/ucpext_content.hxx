@@ -50,22 +50,22 @@ namespace ucb::ucp::ext
     {
     public:
         Content(
-            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
             ::ucbhelper::ContentProviderImplHelper* pProvider,
-            const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier
+            const cpo::uno::Reference< css::ucb::XContentIdentifier >& Identifier
         );
 
-        static css::uno::Reference< css::sdbc::XRow >
+        static cpo::uno::Reference< css::sdbc::XRow >
             getArtificialNodePropertyValues(
-                const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+                const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                 const cpo::uno::Sequence< css::beans::Property >& rProperties,
                 const OUString& rTitle
             );
 
-        css::uno::Reference< css::sdbc::XRow >
+        cpo::uno::Reference< css::sdbc::XRow >
             getPropertyValues(
                 const cpo::uno::Sequence< css::beans::Property >& rProperties,
-                const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv
+                const cpo::uno::Reference< css::ucb::XCommandEnvironment >& xEnv
             );
 
         static OUString
@@ -97,7 +97,7 @@ namespace ucb::ucp::ext
                 execute(
                     const css::ucb::Command& aCommand,
                     sal_Int32 CommandId,
-                    const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment
+                    const cpo::uno::Reference< css::ucb::XCommandEnvironment >& Environment
                 ) override;
 
         virtual void SAL_CALL
@@ -106,8 +106,8 @@ namespace ucb::ucp::ext
                 ) override;
 
     private:
-        virtual cpo::uno::Sequence< css::beans::Property > getProperties( const css::uno::Reference< css::ucb::XCommandEnvironment >& i_rEnv ) override;
-        virtual cpo::uno::Sequence< css::ucb::CommandInfo > getCommands( const css::uno::Reference< css::ucb::XCommandEnvironment >& i_rEnv ) override;
+        virtual cpo::uno::Sequence< css::beans::Property > getProperties( const cpo::uno::Reference< css::ucb::XCommandEnvironment >& i_rEnv ) override;
+        virtual cpo::uno::Sequence< css::ucb::CommandInfo > getCommands( const cpo::uno::Reference< css::ucb::XCommandEnvironment >& i_rEnv ) override;
 
         cpo::uno::Sequence< cpo::uno::Any >
             setPropertyValues(

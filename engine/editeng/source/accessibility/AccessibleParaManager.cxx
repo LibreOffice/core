@@ -21,7 +21,7 @@
 
 // Global header
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <o3tl/safeint.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>

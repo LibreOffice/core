@@ -258,7 +258,7 @@ protected:
 public:
     ToolBox(vcl::Window* pParent, WinBits nStyle = 0);
     ToolBox(vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription,
-        const css::uno::Reference<css::frame::XFrame> &rFrame = css::uno::Reference<css::frame::XFrame>());
+        const cpo::uno::Reference<css::frame::XFrame> &rFrame = cpo::uno::Reference<css::frame::XFrame>());
     virtual             ~ToolBox() override;
     virtual void        dispose() override;
 
@@ -297,7 +297,7 @@ public:
 
     /// Insert a command (like '.uno:Save').
     virtual void        InsertItem( const OUString& rCommand,
-                                    const css::uno::Reference<css::frame::XFrame>& rFrame,
+                                    const cpo::uno::Reference<css::frame::XFrame>& rFrame,
                                     ToolBoxItemBits nBits,
                                     const Size& rRequestedSize,
                                     ImplToolItems::size_type nPos = APPEND );

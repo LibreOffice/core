@@ -89,7 +89,7 @@ JSDropTarget::JSDropTarget() {}
 void JSDropTarget::initialize(const cpo::uno::Sequence<cpo::uno::Any>& /*rArgs*/) {}
 
 void JSDropTarget::addDropTargetListener(
-    const css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>& xListener)
+    const cpo::uno::Reference<css::datatransfer::dnd::XDropTargetListener>& xListener)
 {
     std::unique_lock aGuard(m_aMutex);
 
@@ -97,7 +97,7 @@ void JSDropTarget::addDropTargetListener(
 }
 
 void JSDropTarget::removeDropTargetListener(
-    const css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>& xListener)
+    const cpo::uno::Reference<css::datatransfer::dnd::XDropTargetListener>& xListener)
 {
     std::unique_lock aGuard(m_aMutex);
 
@@ -131,7 +131,7 @@ cpo::uno::Sequence<OUString> JSDropTarget::getSupportedServiceNames()
 void JSDropTarget::fire_drop(const css::datatransfer::dnd::DropTargetDropEvent& dtde)
 {
     std::unique_lock aGuard(m_aMutex);
-    std::vector<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> aListeners(
+    std::vector<cpo::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> aListeners(
         m_aListeners);
     aGuard.unlock();
 
@@ -144,7 +144,7 @@ void JSDropTarget::fire_drop(const css::datatransfer::dnd::DropTargetDropEvent& 
 void JSDropTarget::fire_dragEnter(const css::datatransfer::dnd::DropTargetDragEnterEvent& dtde)
 {
     std::unique_lock aGuard(m_aMutex);
-    std::vector<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> aListeners(
+    std::vector<cpo::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> aListeners(
         m_aListeners);
     aGuard.unlock();
 
@@ -274,7 +274,7 @@ JSInstanceBuilder::JSInstanceBuilder(weld::Widget* pParent, vcl::Window* pVclPar
                                      std::u16string_view rUIRoot, const OUString& rUIFile,
                                      JSInstanceBuilder::Type eBuilderType, sal_uInt64 nKitWindowId,
                                      const std::u16string_view& sTypeOfJSON,
-                                     const css::uno::Reference<css::frame::XFrame>& rFrame)
+                                     const cpo::uno::Reference<css::frame::XFrame>& rFrame)
     : SalInstanceBuilder(pVclParent ? pVclParent : extract_sal_widget(pParent), rUIRoot, rUIFile,
                          rFrame)
     , m_nWindowId(0)
@@ -328,7 +328,7 @@ std::unique_ptr<JSInstanceBuilder> JSInstanceBuilder::CreateDialogBuilder(weld::
 
 std::unique_ptr<JSInstanceBuilder> JSInstanceBuilder::CreateNotebookbarBuilder(
     vcl::Window* pParent, const OUString& rUIRoot, const OUString& rUIFile,
-    const css::uno::Reference<css::frame::XFrame>& rFrame, sal_uInt64 nWindowId)
+    const cpo::uno::Reference<css::frame::XFrame>& rFrame, sal_uInt64 nWindowId)
 {
     return std::make_unique<JSInstanceBuilder>(nullptr, pParent, rUIRoot, rUIFile,
                                                JSInstanceBuilder::Type::Notebookbar, nWindowId, u"",
@@ -1732,7 +1732,7 @@ void JSToolbar::set_item_icon_name(const OUString& rIdent, const OUString& rIcon
 }
 
 void JSToolbar::set_item_image(const OUString& rIdent,
-                               const css::uno::Reference<css::graphic::XGraphic>& rImage)
+                               const cpo::uno::Reference<css::graphic::XGraphic>& rImage)
 {
     SalInstanceToolbar::set_item_image(rIdent, rImage);
     if (rIdent == u".uno:ChartColorPalette"_ustr)
@@ -2154,7 +2154,7 @@ void JSMenuButton::set_image(VirtualDevice* pDevice)
     sendUpdate();
 }
 
-void JSMenuButton::set_image(const css::uno::Reference<css::graphic::XGraphic>& rImage)
+void JSMenuButton::set_image(const cpo::uno::Reference<css::graphic::XGraphic>& rImage)
 {
     SalInstanceMenuButton::set_image(rImage);
     sendUpdate();
@@ -2271,7 +2271,7 @@ void JSImage::set_image(VirtualDevice* pDevice)
     sendUpdate();
 }
 
-void JSImage::set_image(const css::uno::Reference<css::graphic::XGraphic>& rImage)
+void JSImage::set_image(const cpo::uno::Reference<css::graphic::XGraphic>& rImage)
 {
     SalInstanceImage::set_image(rImage);
     sendUpdate();

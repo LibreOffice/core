@@ -157,8 +157,8 @@ namespace toolkit
         virtual void setPushButtonFont( const css::awt::FontDescriptor& _pushbuttonfont ) override;
         virtual css::awt::FontDescriptor getFieldFont() override;
         virtual void setFieldFont( const css::awt::FontDescriptor& _fieldfont ) override;
-        virtual void addStyleChangeListener( const css::uno::Reference< css::awt::XStyleChangeListener >& Listener ) override;
-        virtual void removeStyleChangeListener( const css::uno::Reference< css::awt::XStyleChangeListener >& Listener ) override;
+        virtual void addStyleChangeListener( const cpo::uno::Reference< css::awt::XStyleChangeListener >& Listener ) override;
+        virtual void removeStyleChangeListener( const cpo::uno::Reference< css::awt::XStyleChangeListener >& Listener ) override;
 
     private:
         void ImplSetStyleFont( void (StyleSettings::*i_pSetter)( vcl::Font const &),

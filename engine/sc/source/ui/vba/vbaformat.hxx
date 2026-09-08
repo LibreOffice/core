@@ -41,18 +41,18 @@ class ScVbaFormat : public InheritedHelperInterfaceWeakImpl< Ifc... >
 typedef InheritedHelperInterfaceWeakImpl< Ifc... > ScVbaFormat_BASE;
     css::lang::Locale m_aDefaultLocale;
 protected:
-    css::uno::Reference< css::beans::XPropertySet > mxPropertySet;
-    css::uno::Reference< css::util::XNumberFormatsSupplier > mxNumberFormatsSupplier;
-    css::uno::Reference< css::util::XNumberFormats > xNumberFormats;
-    css::uno::Reference< css::util::XNumberFormatTypes > xNumberFormatTypes;
+    cpo::uno::Reference< css::beans::XPropertySet > mxPropertySet;
+    cpo::uno::Reference< css::util::XNumberFormatsSupplier > mxNumberFormatsSupplier;
+    cpo::uno::Reference< css::util::XNumberFormats > xNumberFormats;
+    cpo::uno::Reference< css::util::XNumberFormatTypes > xNumberFormatTypes;
     rtl::Reference< ScModelObj > mxModel;
-    css::uno::Reference< css::beans::XPropertyState > xPropertyState;
+    cpo::uno::Reference< css::beans::XPropertyState > xPropertyState;
     bool mbCheckAmbiguoity;
     bool mbAddIndent;
     /// @throws css::script::BasicErrorException
     bool isAmbiguous(const OUString& _sPropertyName);
     /// @throws cpo::uno::RuntimeException
-    css::uno::Reference< css::beans::XPropertyState > const &  getXPropertyState();
+    cpo::uno::Reference< css::beans::XPropertyState > const &  getXPropertyState();
     /// @throws css::script::BasicErrorException
     /// @throws cpo::uno::RuntimeException
     void initializeNumberFormats();
@@ -63,8 +63,8 @@ protected:
     virtual ScCellRangesBase* getCellRangesBase();
 public:
     /// @throws css::script::BasicErrorException
-    ScVbaFormat( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext > & xContext, css::uno::Reference< css::beans::XPropertySet >  _xPropertySet, const rtl::Reference<ScModelObj>& xModel, bool bCheckAmbiguoity );
-    virtual css::uno::Reference< ov::XHelperInterface > thisHelperIface() = 0;
+    ScVbaFormat( const cpo::uno::Reference< ov::XHelperInterface >& xParent, const cpo::uno::Reference< cpo::uno::XComponentContext > & xContext, cpo::uno::Reference< css::beans::XPropertySet >  _xPropertySet, const rtl::Reference<ScModelObj>& xModel, bool bCheckAmbiguoity );
+    virtual cpo::uno::Reference< ov::XHelperInterface > thisHelperIface() = 0;
      /// @throws cpo::uno::RuntimeException
      void SAL_CALL setAddIndent( const cpo::uno::Any& BAddIndent) { BAddIndent >>= mbAddIndent; }
      /// @throws cpo::uno::RuntimeException
@@ -75,10 +75,10 @@ public:
     virtual cpo::uno::Any SAL_CALL Borders( const cpo::uno::Any& Index );
     /// @throws css::script::BasicErrorException
     /// @throws cpo::uno::RuntimeException
-    virtual css::uno::Reference< ::ooo::vba::excel::XFont > SAL_CALL Font(  );
+    virtual cpo::uno::Reference< ::ooo::vba::excel::XFont > SAL_CALL Font(  );
     /// @throws css::script::BasicErrorException
     /// @throws cpo::uno::RuntimeException
-    virtual css::uno::Reference< ::ooo::vba::excel::XInterior > SAL_CALL Interior(  );
+    virtual cpo::uno::Reference< ::ooo::vba::excel::XInterior > SAL_CALL Interior(  );
     /// @throws css::script::BasicErrorException
     /// @throws cpo::uno::RuntimeException
     virtual void SAL_CALL setNumberFormat( const cpo::uno::Any& NumberFormat );

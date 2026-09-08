@@ -85,9 +85,9 @@ private:
     void                ImplFillSignaturesBox();
     void                ImplShowSignaturesDetails();
 
-    css::uno::Reference<css::security::XCertificate> getCertificate(const SignatureInformation& rInfo);
-    css::uno::Reference<css::xml::crypto::XSecurityEnvironment> getSecurityEnvironmentForCertificate(
-        const css::uno::Reference<css::security::XCertificate>& xCert);
+    cpo::uno::Reference<css::security::XCertificate> getCertificate(const SignatureInformation& rInfo);
+    cpo::uno::Reference<css::xml::crypto::XSecurityEnvironment> getSecurityEnvironmentForCertificate(
+        const cpo::uno::Reference<css::security::XCertificate>& xCert);
 
     //Checks if adding is allowed.
     //See the spec at specs/www/appwide/security/Electronic_Signatures_and_Security.sxw
@@ -98,7 +98,7 @@ private:
     bool canAddRemove();
 
 public:
-    DigitalSignaturesDialog(weld::Window* pParent, const css::uno::Reference<
+    DigitalSignaturesDialog(weld::Window* pParent, const cpo::uno::Reference<
         cpo::uno::XComponentContext >& rxCtx, DocumentSignatureMode eMode,
         bool bReadOnly, OUString sODFVersion, bool bHasDocumentSignature,
         SfxViewShell* pViewShell);
@@ -108,9 +108,9 @@ public:
     bool    Init();
 
             // Set the storage which should be signed or verified
-    void    SetStorage( const css::uno::Reference < css::embed::XStorage >& rxStore );
-    void    SetSignatureStream( const css::uno::Reference < css::io::XStream >& rxStream );
-    void    SetScriptingSignatureStream( const css::uno::Reference < css::io::XStream >& rxStream );
+    void    SetStorage( const cpo::uno::Reference < css::embed::XStorage >& rxStore );
+    void    SetSignatureStream( const cpo::uno::Reference < css::io::XStream >& rxStream );
+    void    SetScriptingSignatureStream( const cpo::uno::Reference < css::io::XStream >& rxStream );
 
     // Execute the dialog...
     void    beforeRun();

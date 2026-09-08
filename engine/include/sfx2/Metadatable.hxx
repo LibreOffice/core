@@ -115,7 +115,7 @@ public:
         note: if IsInUndo or IsInClipboard return true,
         MakeUnoObject <em>must not</em> be called!
      */
-    virtual css::uno::Reference< css::rdf::XMetadatable > MakeUnoObject() = 0;
+    virtual cpo::uno::Reference< css::rdf::XMetadatable > MakeUnoObject() = 0;
 
 private:
     Metadatable(const Metadatable&) = delete;
@@ -158,7 +158,7 @@ protected:
     /// get the core object corresponding to this UNO object.
     virtual Metadatable * GetCoreObject() = 0;
     /// get the XModel for the document
-    virtual css::uno::Reference< css::frame::XModel >
+    virtual cpo::uno::Reference< css::frame::XModel >
         GetModel() = 0;
 
 };

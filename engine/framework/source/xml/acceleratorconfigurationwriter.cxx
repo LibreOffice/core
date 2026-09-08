@@ -34,7 +34,7 @@
 namespace framework{
 
 AcceleratorConfigurationWriter::AcceleratorConfigurationWriter(const AcceleratorCache&                                       rContainer,
-                                                               css::uno::Reference< css::xml::sax::XDocumentHandler >  xConfig   )
+                                                               cpo::uno::Reference< css::xml::sax::XDocumentHandler >  xConfig   )
     : m_xConfig     (std::move(xConfig                      ))
     , m_rContainer  (rContainer                   )
 {
@@ -46,7 +46,7 @@ AcceleratorConfigurationWriter::~AcceleratorConfigurationWriter()
 
 void AcceleratorConfigurationWriter::flush()
 {
-    css::uno::Reference< css::xml::sax::XExtendedDocumentHandler > xExtendedCFG(m_xConfig, css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference< css::xml::sax::XExtendedDocumentHandler > xExtendedCFG(m_xConfig, cpo::uno::UNO_QUERY_THROW);
 
     // prepare attribute list
     rtl::Reference<::comphelper::AttributeList> pAttribs = new ::comphelper::AttributeList;
@@ -90,7 +90,7 @@ void AcceleratorConfigurationWriter::flush()
 // static
 void AcceleratorConfigurationWriter::impl_ts_writeKeyCommandPair(const css::awt::KeyEvent&                                     aKey    ,
                                                                  const OUString&                                        sCommand,
-                                                                 const css::uno::Reference< css::xml::sax::XDocumentHandler >& xConfig )
+                                                                 const cpo::uno::Reference< css::xml::sax::XDocumentHandler >& xConfig )
 {
     rtl::Reference<::comphelper::AttributeList> pAttribs = new ::comphelper::AttributeList;
 

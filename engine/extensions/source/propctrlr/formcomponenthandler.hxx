@@ -57,13 +57,13 @@ namespace pcr
     {
     private:
         /// access to property states
-        css::uno::Reference< css::beans::XPropertyState >             m_xPropertyState;
+        cpo::uno::Reference< css::beans::XPropertyState >             m_xPropertyState;
         /// the parent of our component
-        css::uno::Reference< cpo::uno::XInterface >                   m_xObjectParent;
+        cpo::uno::Reference< cpo::uno::XInterface >                   m_xObjectParent;
 
         /// the database connection. Owned by us if and only if we created it ourself.
         mutable ::dbtools::SharedConnection                           m_xRowSetConnection;
-        css::uno::Reference< css::sdbc::XRowSet >                     m_xRowSet;
+        cpo::uno::Reference< css::sdbc::XRowSet >                     m_xRowSet;
         /** helper component encapsulating the handling for the QueryDesign component for
             interactively designing an SQL command
         */
@@ -85,13 +85,13 @@ namespace pcr
 
     public:
         explicit FormComponentPropertyHandler(
-            const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxContext
         );
 
         DECLARE_XINTERFACE( )
 
         // XPropertySet
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+        virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
 
     protected:
         virtual ~FormComponentPropertyHandler() override;
@@ -109,14 +109,14 @@ namespace pcr
         virtual cpo::uno::Any                          convertToPropertyValue( const OUString& _rPropertyName, const cpo::uno::Any& _rControlValue ) override;
         virtual cpo::uno::Any                          convertToControlValue( const OUString& _rPropertyName, const cpo::uno::Any& _rPropertyValue, const cpo::uno::Type& _rControlValueType ) override;
         virtual css::beans::PropertyState              getPropertyState( const OUString& _rPropertyName ) override;
-        virtual void                                   addPropertyChangeListener( const css::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener ) override;
-        virtual void                                   removePropertyChangeListener( const css::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener ) override;
+        virtual void                                   addPropertyChangeListener( const cpo::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener ) override;
+        virtual void                                   removePropertyChangeListener( const cpo::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener ) override;
         virtual cpo::uno::Sequence< OUString >         getSupersededProperties() override;
         virtual cpo::uno::Sequence< OUString >         getActuatingProperties() override;
-        virtual css::inspection::LineDescriptor        describePropertyLine( const OUString& _rPropertyName, const css::uno::Reference< css::inspection::XPropertyControlFactory >& _rxControlFactory ) override;
+        virtual css::inspection::LineDescriptor        describePropertyLine( const OUString& _rPropertyName, const cpo::uno::Reference< css::inspection::XPropertyControlFactory >& _rxControlFactory ) override;
         virtual css::inspection::InteractiveSelectionResult
-                                                       onInteractivePropertySelection( const OUString& _rPropertyName, bool _bPrimary, cpo::uno::Any& _rData, const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI ) override;
-        virtual void                                   actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const cpo::uno::Any& _rNewValue, const cpo::uno::Any& _rOldValue, const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI, bool _bFirstTimeInit ) override;
+                                                       onInteractivePropertySelection( const OUString& _rPropertyName, bool _bPrimary, cpo::uno::Any& _rData, const cpo::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI ) override;
+        virtual void                                   actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const cpo::uno::Any& _rNewValue, const cpo::uno::Any& _rOldValue, const cpo::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI, bool _bFirstTimeInit ) override;
         virtual bool                               suspend( bool _bSuspend ) override;
 
         // PropertyHandler
@@ -156,11 +156,11 @@ namespace pcr
 
             Normally, at least one of those methods should succeed.
         */
-        css::uno::Reference< css::sdbc::XRowSet > impl_getRowSet_throw( ) const;
+        cpo::uno::Reference< css::sdbc::XRowSet > impl_getRowSet_throw( ) const;
 
         /** nothrow-version of ->impl_getRowSet_throw
         */
-        css::uno::Reference< css::sdbc::XRowSet > impl_getRowSet_nothrow( ) const;
+        cpo::uno::Reference< css::sdbc::XRowSet > impl_getRowSet_nothrow( ) const;
 
         /** connects the row set belonging to our introspected data aware form component,
             and remembers the connection in ->m_xRowSetConnection.
@@ -185,7 +185,7 @@ namespace pcr
         */
         void impl_describeCursorSource_nothrow(
                 css::inspection::LineDescriptor& _out_rProperty,
-                const css::uno::Reference< css::inspection::XPropertyControlFactory >& _rxControlFactory
+                const cpo::uno::Reference< css::inspection::XPropertyControlFactory >& _rxControlFactory
             ) const;
 
         /** describes the UI for selecting a table name
@@ -207,7 +207,7 @@ namespace pcr
             @precond
                 m_xRowSetConnection is not <NULL/>
         */
-        void impl_fillQueryNames_throw( const css::uno::Reference< css::container::XNameAccess >& _xQueryNames
+        void impl_fillQueryNames_throw( const cpo::uno::Reference< css::container::XNameAccess >& _xQueryNames
                     ,std::vector< OUString >& _out_rNames
                     ,std::u16string_view _sName = std::u16string_view() ) const;
 
@@ -219,7 +219,7 @@ namespace pcr
         */
         void impl_describeListSourceUI_throw(
                 css::inspection::LineDescriptor& _out_rDescriptor,
-                const css::uno::Reference< css::inspection::XPropertyControlFactory >& _rxControlFactory
+                const cpo::uno::Reference< css::inspection::XPropertyControlFactory >& _rxControlFactory
             ) const;
 
         /** displays a database-related error to the user
@@ -350,7 +350,7 @@ namespace pcr
             The ->XComponentContext in which we were created is examined for a value
             named "ControlContext", and this value is returned.
         */
-        css::uno::Reference< css::awt::XControlContainer >
+        cpo::uno::Reference< css::awt::XControlContainer >
             impl_getContextControlContainer_nothrow() const;
 
         /** opens a query design window for interactively designing the SQL command of a
@@ -380,7 +380,7 @@ namespace pcr
             @param _rxInspectorUI
                 provides access to the property browser UI. Must not be <NULL/>.
         */
-        void impl_updateDependentProperty_nothrow( PropertyId _nPropId, const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI ) const;
+        void impl_updateDependentProperty_nothrow( PropertyId _nPropId, const cpo::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI ) const;
 
         /** determines whether the given form has a valid data source signature.
 
@@ -395,7 +395,7 @@ namespace pcr
                 lead to rejection
         */
         static bool impl_hasValidDataSourceSignature_nothrow(
-                const css::uno::Reference< css::beans::XPropertySet >& _xFormProperties,
+                const cpo::uno::Reference< css::beans::XPropertySet >& _xFormProperties,
                 bool _bAllowEmptyDataSourceName );
 
         /** returns the URL of our context document

@@ -58,7 +58,7 @@
 #include <utility>
 
 using namespace ::dbaui;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
@@ -386,8 +386,8 @@ public:
     // ICopyTableSourceObject overridables
     virtual OUString            getQualifiedObjectName() const override;
     virtual bool                isView() const override;
-    virtual void                copyUISettingsTo( const css::uno::Reference< css::beans::XPropertySet >& _rxObject ) const override;
-    virtual void                copyFilterAndSortingTo(const css::uno::Reference< css::sdbc::XConnection >& _xConnection, const css::uno::Reference< css::beans::XPropertySet >& _rxObject ) const override;
+    virtual void                copyUISettingsTo( const cpo::uno::Reference< css::beans::XPropertySet >& _rxObject ) const override;
+    virtual void                copyFilterAndSortingTo(const cpo::uno::Reference< css::sdbc::XConnection >& _xConnection, const cpo::uno::Reference< css::beans::XPropertySet >& _rxObject ) const override;
     virtual cpo::uno::Sequence< OUString >
                                 getColumnNames() const override;
     virtual cpo::uno::Sequence< OUString >

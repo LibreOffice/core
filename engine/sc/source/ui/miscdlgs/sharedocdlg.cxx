@@ -36,6 +36,7 @@
 #include <viewdata.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 IMPL_LINK(ScShareDocumentDlg, SizeAllocated, const Size&, rSize, void)
 {

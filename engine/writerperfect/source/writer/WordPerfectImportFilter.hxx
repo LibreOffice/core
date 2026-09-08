@@ -26,14 +26,14 @@ class WordPerfectImportFilter
                                   css::document::XExtendedFilterDetection,
                                   css::lang::XInitialization, css::lang::XServiceInfo>
 {
-    css::uno::Reference<cpo::uno::XComponentContext> mxContext;
-    css::uno::Reference<css::lang::XComponent> mxDoc;
+    cpo::uno::Reference<cpo::uno::XComponentContext> mxContext;
+    cpo::uno::Reference<css::lang::XComponent> mxDoc;
 
     /// @throws cpo::uno::RuntimeException
     bool importImpl(const cpo::uno::Sequence<css::beans::PropertyValue>& aDescriptor);
 
 public:
-    explicit WordPerfectImportFilter(css::uno::Reference<cpo::uno::XComponentContext> xContext)
+    explicit WordPerfectImportFilter(cpo::uno::Reference<cpo::uno::XComponentContext> xContext)
         : mxContext(std::move(xContext))
     {
     }
@@ -45,7 +45,7 @@ public:
 
     // XImporter
     virtual void SAL_CALL
-    setTargetDocument(const css::uno::Reference<css::lang::XComponent>& xDoc) override;
+    setTargetDocument(const cpo::uno::Reference<css::lang::XComponent>& xDoc) override;
 
     //XExtendedFilterDetection
     virtual OUString SAL_CALL

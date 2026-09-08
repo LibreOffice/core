@@ -9,7 +9,7 @@
 
 #include <cppuhelper/bootstrap.hxx>
 #include <cpo/uno/XComponentContext.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
@@ -18,7 +18,7 @@
 #include <rtl/ustring.hxx>
 
 using namespace com::sun::star;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::frame;
 

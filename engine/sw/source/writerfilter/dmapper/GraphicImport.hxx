@@ -167,21 +167,21 @@ class GraphicImport : public LoggedProperties, public LoggedTable
     std::optional<sal_Int32> m_oEffectExtentBottom;
     std::optional<css::text::GraphicCrop> m_oCrop;
 
-    css::uno::Reference<cpo::uno::XComponentContext>     m_xComponentContext;
+    cpo::uno::Reference<cpo::uno::XComponentContext>     m_xComponentContext;
     rtl::Reference<SwXTextDocument> m_xTextDoc;
     rtl::Reference<SwXTextGraphicObject> m_xGraphicObject;
-    css::uno::Reference<css::drawing::XShape> m_xShape;
+    cpo::uno::Reference<css::drawing::XShape> m_xShape;
 
     void ProcessShapeOptions(Value const & val);
 
     rtl::Reference<SwXTextGraphicObject>
-            createGraphicObject(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic,
-                                css::uno::Reference<css::beans::XPropertySet> const & xShapeProps);
+            createGraphicObject(cpo::uno::Reference<css::graphic::XGraphic> const & rxGraphic,
+                                cpo::uno::Reference<css::beans::XPropertySet> const & xShapeProps);
 
     void putPropertyToFrameGrabBag( const OUString& sPropertyName, const cpo::uno::Any& aPropertyValue );
 
 public:
-    explicit GraphicImport( css::uno::Reference<cpo::uno::XComponentContext>  xComponentContext,
+    explicit GraphicImport( cpo::uno::Reference<cpo::uno::XComponentContext>  xComponentContext,
                             rtl::Reference<SwXTextDocument> xTextDoc,
                             DomainMapper& rDomainMapper,
                             GraphicImportType & rGraphicImportType,
@@ -193,8 +193,8 @@ public:
     // BinaryObj
     virtual void data(const sal_uInt8* buffer, size_t len) override;
 
-    css::uno::Reference<css::text::XTextContent> GetGraphicObject();
-    const css::uno::Reference<css::drawing::XShape>& GetXShapeObject() const { return m_xShape;}
+    cpo::uno::Reference<css::text::XTextContent> GetGraphicObject();
+    const cpo::uno::Reference<css::drawing::XShape>& GetXShapeObject() const { return m_xShape;}
     bool IsGraphic() const;
     sal_Int32 GetLeftMarginOrig() const;
 
@@ -223,7 +223,7 @@ public:
     virtual void lcl_table(Id name,
                            const writerfilter::Reference<Table>::Pointer_t& ref) override;
     virtual void lcl_substream(Id name, const writerfilter::Reference<Stream>::Pointer_t& ref) override;
-    virtual void lcl_startShape(css::uno::Reference<css::drawing::XShape> const& xShape) override;
+    virtual void lcl_startShape(cpo::uno::Reference<css::drawing::XShape> const& xShape) override;
     virtual void lcl_startTextBoxContent() override {};
     virtual void lcl_endTextBoxContent() override {};
     virtual void lcl_endShape() override;
@@ -239,12 +239,12 @@ public:
     void setYSize(sal_Int32 _nYSize);
     sal_uInt32 getYSize() const;
     bool isYSizeValid() const;
-    void applyMargins(const css::uno::Reference< css::beans::XPropertySet >& xGraphicObjectProperties) const;
-    void applyPosition(const css::uno::Reference< css::beans::XPropertySet >& xGraphicObjectProperties) const;
-    void applyRelativePosition(const css::uno::Reference< css::beans::XPropertySet >& xGraphicObjectProperties, bool bRelativeOnly = false) const;
-    void applyZOrder(css::uno::Reference<css::beans::XPropertySet> const & xGraphicObjectProperties) const;
-    void applyName(css::uno::Reference<css::beans::XPropertySet> const & xGraphicObjectProperties) const;
-    void applyHyperlink(css::uno::Reference<css::beans::XPropertySet> const & xShapeProps, bool bIsShape);
+    void applyMargins(const cpo::uno::Reference< css::beans::XPropertySet >& xGraphicObjectProperties) const;
+    void applyPosition(const cpo::uno::Reference< css::beans::XPropertySet >& xGraphicObjectProperties) const;
+    void applyRelativePosition(const cpo::uno::Reference< css::beans::XPropertySet >& xGraphicObjectProperties, bool bRelativeOnly = false) const;
+    void applyZOrder(cpo::uno::Reference<css::beans::XPropertySet> const & xGraphicObjectProperties) const;
+    void applyName(cpo::uno::Reference<css::beans::XPropertySet> const & xGraphicObjectProperties) const;
+    void applyHyperlink(cpo::uno::Reference<css::beans::XPropertySet> const & xShapeProps, bool bIsShape);
     /// Getter for m_aInteropGrabBag, but also merges in the values from other members if they are set.
     comphelper::SequenceAsHashMap const & getInteropGrabBag();
 };

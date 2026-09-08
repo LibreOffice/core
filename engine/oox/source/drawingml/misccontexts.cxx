@@ -35,7 +35,7 @@
 #include <docmodel/color/ComplexColor.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using ::oox::core::ContextHandler2;
 using ::oox::core::ContextHandlerRef;
 

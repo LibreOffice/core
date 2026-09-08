@@ -51,8 +51,8 @@ public:
 public:
     VclBuilder(vcl::Window* pParent, std::u16string_view sUIRootDir, const OUString& sUIFile,
                OUString sID = {},
-               css::uno::Reference<css::frame::XFrame> xFrame
-               = css::uno::Reference<css::frame::XFrame>(),
+               cpo::uno::Reference<css::frame::XFrame> xFrame
+               = cpo::uno::Reference<css::frame::XFrame>(),
                bool bLegacy = true);
     virtual ~VclBuilder();
     ///releases references and disposes all children.
@@ -234,7 +234,7 @@ private:
     };
 
     /// XFrame to be able to extract labels and other properties of the UNO commands (like of .uno:Bold).
-    css::uno::Reference<css::frame::XFrame> m_xFrame;
+    cpo::uno::Reference<css::frame::XFrame> m_xFrame;
 
 private:
     // tweak newly inserted child depending on window type

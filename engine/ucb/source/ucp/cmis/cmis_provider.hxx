@@ -24,7 +24,7 @@ private:
     std::map< std::pair< OUString, OUString >, libcmis::Session* > m_aSessionCache;
 
 public:
-    explicit ContentProvider( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+    explicit ContentProvider( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
     virtual ~ContentProvider() override;
 
     // XInterface
@@ -44,8 +44,8 @@ public:
     virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XContentProvider
-    virtual css::uno::Reference< css::ucb::XContent > SAL_CALL
-    queryContent( const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier ) override;
+    virtual cpo::uno::Reference< css::ucb::XContent > SAL_CALL
+    queryContent( const cpo::uno::Reference< css::ucb::XContentIdentifier >& Identifier ) override;
 
     libcmis::Session* getSession( const OUString& sBindingUrl, const OUString& sUsername );
     void registerSession( const OUString& sBindingUrl, const OUString& sUsername, libcmis::Session* pSession );

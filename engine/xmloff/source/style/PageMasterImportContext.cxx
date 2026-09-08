@@ -43,8 +43,8 @@
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::lang;
 
 //
@@ -121,9 +121,9 @@ PageStyleContext::~PageStyleContext()
 {
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > PageStyleContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > PageStyleContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     if( nElement == XML_ELEMENT(STYLE, XML_HEADER_STYLE) ||
         nElement == XML_ELEMENT(STYLE, XML_FOOTER_STYLE) )

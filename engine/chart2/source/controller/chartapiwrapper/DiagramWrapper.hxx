@@ -76,16 +76,16 @@ public:
 
     // ____ XComponent ____
     virtual void dispose() override;
-    virtual void addEventListener( const css::uno::Reference<
+    virtual void addEventListener( const cpo::uno::Reference<
                                             css::lang::XEventListener >& xListener ) override;
-    virtual void removeEventListener( const css::uno::Reference<
+    virtual void removeEventListener( const cpo::uno::Reference<
                                                css::lang::XEventListener >& aListener ) override;
 
     // ____ XDiagram ____
     virtual OUString getDiagramType() override;
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
         css::beans::XPropertySet > getDataRowProperties( sal_Int32 nRow ) override;
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
         css::beans::XPropertySet > getDataPointProperties( sal_Int32 nCol, sal_Int32 nRow ) override;
 
     // ____ XShape (base of XDiagram) ____
@@ -98,67 +98,67 @@ public:
     virtual OUString getShapeType() override;
 
     // ____ XAxisSupplier ____
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
         css::chart::XAxis > getAxis( sal_Int32 nDimensionIndex ) override;
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
         css::chart::XAxis > getSecondaryAxis( sal_Int32 nDimensionIndex ) override;
 
     // ____ XAxisZSupplier ____
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
         css::drawing::XShape > getZAxisTitle() override;
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
         css::beans::XPropertySet > getZMainGrid() override;
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
         css::beans::XPropertySet > getZHelpGrid() override;
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
         css::beans::XPropertySet > getZAxis() override;
 
     // ____ XTwoAxisXSupplier ____
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
         css::beans::XPropertySet > getSecondaryXAxis() override;
 
     // ____ XAxisXSupplier (base of XTwoAxisXSupplier) ____
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
         css::drawing::XShape > getXAxisTitle() override;
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
         css::beans::XPropertySet > getXAxis() override;
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
         css::beans::XPropertySet > getXMainGrid() override;
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
         css::beans::XPropertySet > getXHelpGrid() override;
 
     // ____ XTwoAxisYSupplier ____
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
         css::beans::XPropertySet > getSecondaryYAxis() override;
 
     // ____ XAxisYSupplier (base of XTwoAxisYSupplier) ____
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
         css::drawing::XShape > getYAxisTitle() override;
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
         css::beans::XPropertySet > getYAxis() override;
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
         css::beans::XPropertySet > getYHelpGrid() override;
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
         css::beans::XPropertySet > getYMainGrid() override;
 
    // ____ XSecondAxisTitleSupplier ____
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
         css::drawing::XShape > getSecondXAxisTitle() override;
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
         css::drawing::XShape > getSecondYAxisTitle() override;
 
     // ____ XStatisticDisplay ____
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
         css::beans::XPropertySet > getUpBar() override;
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
         css::beans::XPropertySet > getDownBar() override;
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
         css::beans::XPropertySet > getMinMaxLine() override;
 
     // ____ X3DDisplay ____
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
         css::beans::XPropertySet > getWall() override;
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
         css::beans::XPropertySet > getFloor() override;
 
     // ____ X3DDefaultSetter ____
@@ -178,8 +178,8 @@ public:
     virtual css::awt::Rectangle calculateDiagramPositionIncludingAxesAndAxisTitles(  ) override;
 
     // ____ XDiagramProvider ____
-    virtual css::uno::Reference< css::chart2::XDiagram > getDiagram() override;
-    virtual void setDiagram( const css::uno::Reference< css::chart2::XDiagram >& xDiagram ) override;
+    virtual cpo::uno::Reference< css::chart2::XDiagram > getDiagram() override;
+    virtual void setDiagram( const cpo::uno::Reference< css::chart2::XDiagram >& xDiagram ) override;
 
     rtl::Reference< ::chart::Diagram > getUnderlyingDiagram();
 
@@ -187,7 +187,7 @@ protected:
     // ____ WrappedPropertySet ____
     virtual const cpo::uno::Sequence< css::beans::Property >& getPropertySequence() override;
     virtual std::vector< std::unique_ptr<WrappedProperty> > createWrappedProperties() override;
-    virtual css::uno::Reference< css::beans::XPropertySet > getInnerPropertySet() override;
+    virtual cpo::uno::Reference< css::beans::XPropertySet > getInnerPropertySet() override;
 
 private:
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;

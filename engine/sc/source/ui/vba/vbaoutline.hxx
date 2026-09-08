@@ -29,10 +29,10 @@ typedef InheritedHelperInterfaceWeakImpl< ov::excel::XOutline > ScVbaOutline_BAS
 
 class ScVbaOutline :  public ScVbaOutline_BASE
 {
-    css::uno::Reference< css::sheet::XSheetOutline > mxOutline;
+    cpo::uno::Reference< css::sheet::XSheetOutline > mxOutline;
 public:
-    ScVbaOutline( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
-         css::uno::Reference<css::sheet::XSheetOutline>  outline): ScVbaOutline_BASE( xParent, xContext) , mxOutline(std::move(outline))
+    ScVbaOutline( const cpo::uno::Reference< ov::XHelperInterface >& xParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
+         cpo::uno::Reference<css::sheet::XSheetOutline>  outline): ScVbaOutline_BASE( xParent, xContext) , mxOutline(std::move(outline))
     {}
 
     virtual void SAL_CALL ShowLevels( const cpo::uno::Any& RowLevels, const cpo::uno::Any& ColumnLevels ) override ;

@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <i18nlangtag/lang.h>
 #include <i18nutil/transliteration.hxx>
 #include <unotools/syslocale.hxx>
@@ -135,7 +135,7 @@ public:
  */
 class OnDemandCalendarWrapper
 {
-    css::uno::Reference<cpo::uno::XComponentContext> m_xContext;
+    cpo::uno::Reference<cpo::uno::XComponentContext> m_xContext;
     css::lang::Locale aEnglishLocale;
     css::lang::Locale aLocale;
     mutable css::lang::Locale aLastAnyLocale;
@@ -150,7 +150,7 @@ public:
         aLastAnyLocale = aEnglishLocale;
     }
 
-    void init(const css::uno::Reference<cpo::uno::XComponentContext>& rxContext,
+    void init(const cpo::uno::Reference<cpo::uno::XComponentContext>& rxContext,
               const css::lang::Locale& rLocale)
     {
         m_xContext = rxContext;
@@ -199,7 +199,7 @@ public:
  */
 class OnDemandTransliterationWrapper
 {
-    css::uno::Reference<cpo::uno::XComponentContext> m_xContext;
+    cpo::uno::Reference<cpo::uno::XComponentContext> m_xContext;
     LanguageType eLanguage;
     TransliterationFlags nType;
     mutable std::optional<::utl::TransliterationWrapper> moTransliterate;
@@ -217,7 +217,7 @@ public:
 
     bool isInitialized() const { return bInitialized; }
 
-    void init(const css::uno::Reference<cpo::uno::XComponentContext>& rxContext, LanguageType eLang)
+    void init(const cpo::uno::Reference<cpo::uno::XComponentContext>& rxContext, LanguageType eLang)
     {
         m_xContext = rxContext;
         nType = TransliterationFlags::IGNORE_CASE;
@@ -252,11 +252,11 @@ public:
  */
 class OnDemandNativeNumberWrapper
 {
-    css::uno::Reference<cpo::uno::XComponentContext> m_xContext;
+    cpo::uno::Reference<cpo::uno::XComponentContext> m_xContext;
     mutable std::optional<NativeNumberWrapper> moNativeNumber;
 
 public:
-    OnDemandNativeNumberWrapper(const css::uno::Reference<cpo::uno::XComponentContext>& rContext)
+    OnDemandNativeNumberWrapper(const cpo::uno::Reference<cpo::uno::XComponentContext>& rContext)
         : m_xContext(rContext)
     {
     }
@@ -292,7 +292,7 @@ public:
     {
     }
 
-    void changeLocale(const css::uno::Reference<cpo::uno::XComponentContext>& xContext,
+    void changeLocale(const cpo::uno::Reference<cpo::uno::XComponentContext>& xContext,
                       const LanguageTag& rLanguageTag)
     {
         // check for existing match

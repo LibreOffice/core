@@ -29,11 +29,11 @@ class ORadioButtonModel final : public OReferenceValueComponent
 {
 public:
     ORadioButtonModel(
-        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
+        const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     ORadioButtonModel(
         const ORadioButtonModel* _pOriginal,
-        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
+        const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     virtual ~ORadioButtonModel() override;
 
@@ -49,9 +49,9 @@ public:
     // XPersistObject
     virtual OUString    getServiceName() override;
     virtual void
-        write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
+        write(const cpo::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
     virtual void
-        read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
+        read(const cpo::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
 
     // OPropertyChangeListener
     virtual void _propertyChanged(const css::beans::PropertyChangeEvent& evt) override;
@@ -69,7 +69,7 @@ private:
 
     void SetSiblingPropsTo(const OUString& rPropName, const cpo::uno::Any& rValue);
 
-    virtual css::uno::Reference< css::util::XCloneable > createClone(  ) override;
+    virtual cpo::uno::Reference< css::util::XCloneable > createClone(  ) override;
 
     void setControlSource();
 };
@@ -77,7 +77,7 @@ private:
 class ORadioButtonControl: public OBoundControl
 {
 public:
-    explicit ORadioButtonControl(const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory);
+    explicit ORadioButtonControl(const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory);
 
     // XServiceInfo
     OUString getImplementationName() override

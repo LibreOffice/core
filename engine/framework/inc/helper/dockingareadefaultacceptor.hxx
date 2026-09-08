@@ -46,12 +46,12 @@ class DockingAreaDefaultAcceptor final : public ::cppu::WeakImplHelper< css::ui:
             @onerror    Do nothing and reset this object to default with an empty list.
         *//*-*****************************************************************************************************/
 
-         DockingAreaDefaultAcceptor(    const css::uno::Reference< css::frame::XFrame >& xOwner );
+         DockingAreaDefaultAcceptor(    const cpo::uno::Reference< css::frame::XFrame >& xOwner );
         virtual ~DockingAreaDefaultAcceptor() override;
 
         //  XDockingAreaAcceptor
 
-        virtual css::uno::Reference< css::awt::XWindow > getContainerWindow() override;
+        virtual cpo::uno::Reference< css::awt::XWindow > getContainerWindow() override;
         virtual bool requestDockingAreaSpace( const css::awt::Rectangle& RequestedSpace ) override;
         virtual void setDockingAreaSpace( const css::awt::Rectangle& BorderSpace ) override;
 

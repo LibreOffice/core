@@ -56,9 +56,9 @@ class XMLTransformerBase : public cppu::WeakImplHelper<css::xml::sax::XExtendedD
 {
     friend class XMLTransformerContext;
 
-    css::uno::Reference< css::xml::sax::XDocumentHandler >            m_xHandler;     // the handlers
-    css::uno::Reference< css::beans::XPropertySet >                   m_xPropSet;
-    css::uno::Reference< css::i18n::XCharacterClassification >        xCharClass;
+    cpo::uno::Reference< css::xml::sax::XDocumentHandler >            m_xHandler;     // the handlers
+    cpo::uno::Reference< css::beans::XPropertySet >                   m_xPropSet;
+    cpo::uno::Reference< css::i18n::XCharacterClassification >        xCharClass;
 
     OUString m_aExtPathPrefix;
     OUString m_aClass;
@@ -70,7 +70,7 @@ class XMLTransformerBase : public cppu::WeakImplHelper<css::xml::sax::XExtendedD
     XMLTransformerTokenMap const m_TokenMap;
 
 protected:
-    css::uno::Reference< css::frame::XModel >     mxModel;
+    cpo::uno::Reference< css::frame::XModel >     mxModel;
 
     // This method is called after the namespace map has been updated, but
     // before a context for the current element has been pushed.
@@ -87,13 +87,13 @@ public:
     virtual void startDocument() override;
     virtual void endDocument() override;
     virtual void startElement(const OUString& aName,
-                              const css::uno::Reference< css::xml::sax::XAttributeList > & xAttribs) override;
+                              const cpo::uno::Reference< css::xml::sax::XAttributeList > & xAttribs) override;
     virtual void endElement(const OUString& aName) override;
     virtual void characters(const OUString& aChars) override;
     virtual void ignorableWhitespace(const OUString& aWhitespaces) override;
     virtual void processingInstruction(const OUString& aTarget,
                                        const OUString& aData) override;
-    virtual void setDocumentLocator(const css::uno::Reference< css::xml::sax::XLocator > & xLocator) override;
+    virtual void setDocumentLocator(const cpo::uno::Reference< css::xml::sax::XLocator > & xLocator) override;
 
     // css::xml::sax::XExtendedDocumentHandler
     virtual void startCDATA() override;
@@ -106,9 +106,9 @@ public:
     virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
     // C++
-    const css::uno::Reference< css::xml::sax::XDocumentHandler > & GetDocHandler() const { return m_xHandler; }
+    const cpo::uno::Reference< css::xml::sax::XDocumentHandler > & GetDocHandler() const { return m_xHandler; }
 
-    const css::uno::Reference< css::beans::XPropertySet > & GetPropertySet() const { return m_xPropSet; }
+    const cpo::uno::Reference< css::beans::XPropertySet > & GetPropertySet() const { return m_xPropSet; }
 
 
     SvXMLNamespaceMap& GetNamespaceMap() { return *m_pNamespaceMap; }
@@ -125,7 +125,7 @@ public:
                                              bool bForm = false ) = 0;
 
 
-    XMLMutableAttributeList *ProcessAttrList( css::uno::Reference< css::xml::sax::XAttributeList >& rAttrList,
+    XMLMutableAttributeList *ProcessAttrList( cpo::uno::Reference< css::xml::sax::XAttributeList >& rAttrList,
                          sal_uInt16 nActionMap, bool bClone );
 
     static bool ReplaceSingleInchWithIn( OUString& rValue );

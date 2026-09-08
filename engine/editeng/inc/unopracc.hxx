@@ -38,7 +38,7 @@ public:
     virtual ~SvxAccessibleTextPropertySet() noexcept override;
 
     // XTextRange
-    virtual css::uno::Reference<css::text::XText> getText() override;
+    virtual cpo::uno::Reference<css::text::XText> getText() override;
 
     virtual cpo::uno::Any queryInterface(const cpo::uno::Type& rType) override;
     virtual void acquire() noexcept override;

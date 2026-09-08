@@ -75,7 +75,7 @@ protected:
     sal_Int64               GetChildCount() const;
 
     rtl::Reference<comphelper::OAccessible> GetChild(sal_Int64 i);
-    css::uno::Reference< css::accessibility::XAccessible > GetChildAt( const css::awt::Point& rPoint );
+    cpo::uno::Reference< css::accessibility::XAccessible > GetChildAt( const css::awt::Point& rPoint );
 
     void                    InsertChild( sal_Int32 i );
     void                    RemoveChild( sal_Int32 i );

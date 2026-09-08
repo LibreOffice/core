@@ -26,6 +26,7 @@
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 SwVbaListLevel::SwVbaListLevel( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< cpo::uno::XComponentContext >& rContext, SwVbaListHelperRef  pHelper, sal_Int32 nLevel ) : SwVbaListLevel_BASE( rParent, rContext ), m_pListHelper(std::move( pHelper )), mnLevel( nLevel )
 {

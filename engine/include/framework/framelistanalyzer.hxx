@@ -22,7 +22,7 @@
 #include <config_options.h>
 #include <framework/fwkdllapi.h>
 #include <o3tl/typed_flags_set.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <vector>
 
@@ -69,10 +69,10 @@ class UNLESS_MERGELIBS(FWK_DLLPUBLIC) FrameListAnalyzer final
     public:
 
         /** provides access to the frame container, which should be analyzed. */
-        const css::uno::Reference< css::frame::XFramesSupplier >& m_xSupplier;
+        const cpo::uno::Reference< css::frame::XFramesSupplier >& m_xSupplier;
 
         /** hold the reference frame, which is used e.g. to detect other frames with the same model. */
-        const css::uno::Reference< css::frame::XFrame >& m_xReferenceFrame;
+        const cpo::uno::Reference< css::frame::XFrame >& m_xReferenceFrame;
 
         /** enable/disable some special analyzing steps.
             see impl_analyze() for further information. */
@@ -81,19 +81,19 @@ class UNLESS_MERGELIBS(FWK_DLLPUBLIC) FrameListAnalyzer final
         /** contains all frames, which uses the same model like the reference frame.
             Will be filled only if m_eDetectMode has set the flag FrameAnalyzerFlags::Model.
             The reference frame is never part of this list! */
-        std::vector< css::uno::Reference< css::frame::XFrame > > m_lModelFrames;
+        std::vector< cpo::uno::Reference< css::frame::XFrame > > m_lModelFrames;
 
         /** contains all frames, which does not contain the same model like the reference frame.
             Filling of it can't be suppressed by m_eDetectMode.
             The reference frame is never part of this list!
             All frames inside this list are visible ones. */
-        std::vector< css::uno::Reference< css::frame::XFrame > > m_lOtherVisibleFrames;
+        std::vector< cpo::uno::Reference< css::frame::XFrame > > m_lOtherVisibleFrames;
 
         /** contains all frames, which does not contain the same model like the reference frame.
             Filling of it can't be suppressed by m_eDetectMode.
             The reference frame is never part of this list!
             All frames inside this list are hidden ones. */
-        std::vector< css::uno::Reference< css::frame::XFrame > > m_lOtherHiddenFrames;
+        std::vector< cpo::uno::Reference< css::frame::XFrame > > m_lOtherHiddenFrames;
 
         /** points to the help frame.
             Will be set only, if any other frame (means different from the reference frame)
@@ -118,7 +118,7 @@ class UNLESS_MERGELIBS(FWK_DLLPUBLIC) FrameListAnalyzer final
             Analyzing of the help frame ignores the visible state of any frame.
             But note: a hidden help frame indicates a wrong state!
          */
-        css::uno::Reference< css::frame::XFrame > m_xHelp;
+        cpo::uno::Reference< css::frame::XFrame > m_xHelp;
 
         /** points to the frame, which contains the backing component.
             Will be set only, if any other frame (means different from the reference frame)
@@ -144,7 +144,7 @@ class UNLESS_MERGELIBS(FWK_DLLPUBLIC) FrameListAnalyzer final
             Analyzing of the help frame ignores the visible state of any frame.
             But note: a hidden backing mode frame indicates a wrong state!
          */
-        css::uno::Reference< css::frame::XFrame > m_xBackingComponent;
+        cpo::uno::Reference< css::frame::XFrame > m_xBackingComponent;
 
         /** is set to true only, if the reference frame is a hidden one.
             This value is undefined if m_eDetectMode doesn't have set the flag FrameAnalyzerFlags::Hidden! */
@@ -181,8 +181,8 @@ class UNLESS_MERGELIBS(FWK_DLLPUBLIC) FrameListAnalyzer final
                     analyze steps. Note: Some member values will be undefined, if
                     an analyze step will be disabled.
          */
-                 FrameListAnalyzer( const css::uno::Reference< css::frame::XFramesSupplier >& xSupplier       ,
-                                    const css::uno::Reference< css::frame::XFrame >&          xReferenceFrame ,
+                 FrameListAnalyzer( const cpo::uno::Reference< css::frame::XFramesSupplier >& xSupplier       ,
+                                    const cpo::uno::Reference< css::frame::XFrame >&          xReferenceFrame ,
                                           FrameAnalyzerFlags                                  eDetectMode     );
                  ~FrameListAnalyzer();
 

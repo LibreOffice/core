@@ -44,8 +44,8 @@ class BibStatusDispatch
 {
 public:
     css::util::URL                 aURL;
-    css::uno::Reference< css::frame::XStatusListener >    xListener;
-                        BibStatusDispatch( css::util::URL _aURL, css::uno::Reference< css::frame::XStatusListener > xRef )
+    cpo::uno::Reference< css::frame::XStatusListener >    xListener;
+                        BibStatusDispatch( css::util::URL _aURL, cpo::uno::Reference< css::frame::XStatusListener > xRef )
                             : aURL(std::move( _aURL ))
                             , xListener(std::move( xRef ))
                         {}
@@ -64,17 +64,17 @@ class BibFrameController_Impl : public cppu::WeakImplHelper <
 friend class BibFrameCtrl_Impl;
     rtl::Reference<BibFrameCtrl_Impl>                         m_xImpl;
     BibStatusDispatchArr                                      m_aStatusListeners;
-    css::uno::Reference< css::awt::XWindow >                  m_xWindow;
-    css::uno::Reference< css::frame::XFrame >                 m_xFrame;
+    cpo::uno::Reference< css::awt::XWindow >                  m_xWindow;
+    cpo::uno::Reference< css::frame::XFrame >                 m_xFrame;
     bool                                                      m_bDisposing;
     rtl::Reference<BibDataManager>                            m_xDatMan;
     VclPtr<vcl::Window>                                       m_xLastQueriedFocusWin;
 
     DECL_LINK( DisposeHdl, void*, void );
 
-    static bool                 SaveModified(const css::uno::Reference< css::form::runtime::XFormController>& xController);
+    static bool                 SaveModified(const cpo::uno::Reference< css::form::runtime::XFormController>& xController);
 public:
-                                BibFrameController_Impl( css::uno::Reference< css::awt::XWindow > xComponent,
+                                BibFrameController_Impl( cpo::uno::Reference< css::awt::XWindow > xComponent,
                                                         BibDataManager* pDatMan);
                                 virtual ~BibFrameController_Impl() override;
 
@@ -88,27 +88,27 @@ public:
     virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
                                 // css::frame::XController
-    virtual void                attachFrame( const css::uno::Reference< css::frame::XFrame > & xFrame ) override;
-    virtual bool            attachModel( const css::uno::Reference< css::frame::XModel > & xModel ) override;
+    virtual void                attachFrame( const cpo::uno::Reference< css::frame::XFrame > & xFrame ) override;
+    virtual bool            attachModel( const cpo::uno::Reference< css::frame::XModel > & xModel ) override;
     virtual bool            suspend( bool bSuspend ) override;
     virtual cpo::uno::Any       getViewData() override;
     virtual void                restoreViewData( const cpo::uno::Any& Value ) override;
-    virtual css::uno::Reference< css::frame::XFrame > getFrame() override;
-    virtual css::uno::Reference< css::frame::XModel > getModel() override;
+    virtual cpo::uno::Reference< css::frame::XFrame > getFrame() override;
+    virtual cpo::uno::Reference< css::frame::XModel > getModel() override;
 
                                 // css::lang::XComponent
     virtual void                dispose() override;
-    virtual void                addEventListener( const css::uno::Reference< css::lang::XEventListener > & aListener ) override;
-    virtual void                removeEventListener( const css::uno::Reference< css::lang::XEventListener > & aListener ) override;
+    virtual void                addEventListener( const cpo::uno::Reference< css::lang::XEventListener > & aListener ) override;
+    virtual void                removeEventListener( const cpo::uno::Reference< css::lang::XEventListener > & aListener ) override;
 
                                 // css::frame::XDispatchProvider
-    virtual css::uno::Reference< css::frame::XDispatch >          queryDispatch( const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags) override;
-    virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch >  > queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& aDescripts) override;
+    virtual cpo::uno::Reference< css::frame::XDispatch >          queryDispatch( const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags) override;
+    virtual cpo::uno::Sequence< cpo::uno::Reference< css::frame::XDispatch >  > queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& aDescripts) override;
 
                                 //class css::frame::XDispatch
     virtual void                dispatch(const css::util::URL& aURL, const cpo::uno::Sequence< css::beans::PropertyValue >& aArgs) override;
-    virtual void                addStatusListener(const css::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) override;
-    virtual void                removeStatusListener(const css::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) override;
+    virtual void                addStatusListener(const cpo::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) override;
+    virtual void                removeStatusListener(const cpo::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) override;
 
                                 // css::frame::XDispatchInformationProvider
     virtual cpo::uno::Sequence< ::sal_Int16 > getSupportedCommandGroups(  ) override;

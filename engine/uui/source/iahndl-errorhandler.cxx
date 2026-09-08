@@ -41,6 +41,7 @@
 #include <string_view>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 namespace {
 

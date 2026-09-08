@@ -34,6 +34,7 @@
 #include <officecfg/Office/Common.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 // TODO: do not create OLE objects that represent OOo documents
 

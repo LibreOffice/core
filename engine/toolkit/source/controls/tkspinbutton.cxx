@@ -30,7 +30,7 @@
 
 #include <helper/unopropertyarrayhelper.hxx>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::lang;
@@ -45,13 +45,13 @@ protected:
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
-    explicit UnoSpinButtonModel( const css::uno::Reference< cpo::uno::XComponentContext >& i_factory );
+    explicit UnoSpinButtonModel( const cpo::uno::Reference< cpo::uno::XComponentContext >& i_factory );
     UnoSpinButtonModel(const UnoSpinButtonModel & rOther) : UnoControlModel(rOther) {}
 
     rtl::Reference<UnoControlModel> Clone() const override { return new UnoSpinButtonModel( *this ); }
 
     // XMultiPropertySet
-    css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+    cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
 
     // XPersistObject
     OUString getServiceName() override;
@@ -82,7 +82,7 @@ public:
     DECLARE_UNO3_AGG_DEFAULTS( UnoSpinButtonControl, UnoControlBase )
     cpo::uno::Any  queryAggregation( const cpo::uno::Type & rType ) override;
 
-    void createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
+    void createPeer( const cpo::uno::Reference< css::awt::XToolkit >& Toolkit, const cpo::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
     void disposing( const css::lang::EventObject& Source ) override { UnoControlBase::disposing( Source ); }
     void dispose(  ) override;
 
@@ -93,8 +93,8 @@ public:
     void adjustmentValueChanged( const css::awt::AdjustmentEvent& rEvent ) override;
 
     // XSpinValue
-    virtual void addAdjustmentListener( const css::uno::Reference< css::awt::XAdjustmentListener >& listener ) override;
-    virtual void removeAdjustmentListener( const css::uno::Reference< css::awt::XAdjustmentListener >& listener ) override;
+    virtual void addAdjustmentListener( const cpo::uno::Reference< css::awt::XAdjustmentListener >& listener ) override;
+    virtual void removeAdjustmentListener( const cpo::uno::Reference< css::awt::XAdjustmentListener >& listener ) override;
     virtual void setValue( sal_Int32 value ) override;
     virtual void setValues( sal_Int32 minValue, sal_Int32 maxValue, sal_Int32 currentValue ) override;
     virtual sal_Int32 getValue(  ) override;
@@ -116,7 +116,7 @@ public:
     //= UnoSpinButtonModel
 
 
-    UnoSpinButtonModel::UnoSpinButtonModel( const css::uno::Reference< cpo::uno::XComponentContext >& i_factory )
+    UnoSpinButtonModel::UnoSpinButtonModel( const cpo::uno::Reference< cpo::uno::XComponentContext >& i_factory )
         :UnoControlModel( i_factory )
     {
         ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );

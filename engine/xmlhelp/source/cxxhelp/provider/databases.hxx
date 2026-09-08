@@ -138,7 +138,7 @@ namespace chelp {
                  const OUString& productName,
                  const OUString& productVersion,
                  const OUString& styleSheet,
-                 css::uno::Reference< cpo::uno::XComponentContext > const & xContext );
+                 cpo::uno::Reference< cpo::uno::XComponentContext > const & xContext );
 
         ~Databases();
 
@@ -168,7 +168,7 @@ namespace chelp {
         /**
          *  The following method returns the Collator for the given language-country combination
          */
-        css::uno::Reference< css::i18n::XCollator >
+        cpo::uno::Reference< css::i18n::XCollator >
         getCollator(std::unique_lock<std::mutex>& rGuard, const OUString& Language);
 
         /**
@@ -198,11 +198,11 @@ namespace chelp {
          *  Has the purpose of forcing the jarfile to stay open
          */
 
-        css::uno::Reference< css::container::XHierarchicalNameAccess >
+        cpo::uno::Reference< css::container::XHierarchicalNameAccess >
         jarFile(std::unique_lock<std::mutex>& rGuard, std::u16string_view jar,
                  const OUString& Language );
 
-        css::uno::Reference< css::container::XHierarchicalNameAccess >
+        cpo::uno::Reference< css::container::XHierarchicalNameAccess >
         findJarFileForPath( const OUString& jar, const OUString& Language,
             const OUString& path, OUString* o_pExtensionPath = nullptr,
             OUString* o_pExtensionRegistryPath = nullptr );
@@ -222,13 +222,13 @@ namespace chelp {
         OUString expandURL( std::unique_lock<std::mutex>& rGuard, const OUString& aURL );
 
         static OUString expandURL( const OUString& aURL,
-            const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext );
 
     private:
 
         std::mutex                                               m_aMutex;
-        css::uno::Reference< cpo::uno::XComponentContext >       m_xContext;
-        css::uno::Reference< css::ucb::XSimpleFileAccess3 >      m_xSFA;
+        cpo::uno::Reference< cpo::uno::XComponentContext >       m_xContext;
+        cpo::uno::Reference< css::ucb::XSimpleFileAccess3 >      m_xSFA;
 
         bool   m_bShowBasic;
 
@@ -267,7 +267,7 @@ namespace chelp {
         typedef
         std::unordered_map<
              OUString,
-             css::uno::Reference< css::i18n::XCollator > > CollatorTable;
+             cpo::uno::Reference< css::i18n::XCollator > > CollatorTable;
         CollatorTable    m_aCollatorTable;
 
 
@@ -305,34 +305,34 @@ namespace chelp {
         static ExtensionHelpExistenceMap    aHelpExistenceMap;
 
     public:
-        ExtensionIteratorBase( css::uno::Reference< cpo::uno::XComponentContext > const & xContext,
+        ExtensionIteratorBase( cpo::uno::Reference< cpo::uno::XComponentContext > const & xContext,
             Databases& rDatabases, OUString aInitialModule, OUString aLanguage );
         ExtensionIteratorBase( Databases& rDatabases, OUString  aInitialModule,
             OUString  aLanguage );
         void init();
 
     private:
-        static css::uno::Reference< css::deployment::XPackage > implGetHelpPackageFromPackage
-            ( const css::uno::Reference< css::deployment::XPackage >& xPackage,
-              css::uno::Reference< css::deployment::XPackage >& o_xParentPackageBundle );
+        static cpo::uno::Reference< css::deployment::XPackage > implGetHelpPackageFromPackage
+            ( const cpo::uno::Reference< css::deployment::XPackage >& xPackage,
+              cpo::uno::Reference< css::deployment::XPackage >& o_xParentPackageBundle );
 
     protected:
-        css::uno::Reference< css::deployment::XPackage > implGetNextUserHelpPackage
-            ( css::uno::Reference< css::deployment::XPackage >& o_xParentPackageBundle );
-        css::uno::Reference< css::deployment::XPackage > implGetNextSharedHelpPackage
-            ( css::uno::Reference< css::deployment::XPackage >& o_xParentPackageBundle );
-        css::uno::Reference< css::deployment::XPackage > implGetNextBundledHelpPackage
-        ( css::uno::Reference< css::deployment::XPackage >& o_xParentPackageBundle );
+        cpo::uno::Reference< css::deployment::XPackage > implGetNextUserHelpPackage
+            ( cpo::uno::Reference< css::deployment::XPackage >& o_xParentPackageBundle );
+        cpo::uno::Reference< css::deployment::XPackage > implGetNextSharedHelpPackage
+            ( cpo::uno::Reference< css::deployment::XPackage >& o_xParentPackageBundle );
+        cpo::uno::Reference< css::deployment::XPackage > implGetNextBundledHelpPackage
+        ( cpo::uno::Reference< css::deployment::XPackage >& o_xParentPackageBundle );
         OUString implGetFileFromPackage( std::u16string_view rFileExtension,
-            const css::uno::Reference< css::deployment::XPackage >& xPackage );
+            const cpo::uno::Reference< css::deployment::XPackage >& xPackage );
         OUString implGetFileFromPackage(std::unique_lock<std::mutex>& rGuard,
             std::u16string_view rFileExtension,
-            const css::uno::Reference< css::deployment::XPackage >& xPackage );
+            const cpo::uno::Reference< css::deployment::XPackage >& xPackage );
         void implGetLanguageVectorFromPackage( ::std::vector< OUString > &rv,
-            const css::uno::Reference< css::deployment::XPackage >& xPackage );
+            const cpo::uno::Reference< css::deployment::XPackage >& xPackage );
 
-        css::uno::Reference< cpo::uno::XComponentContext >    m_xContext;
-        css::uno::Reference< css::ucb::XSimpleFileAccess3 >   m_xSFA;
+        cpo::uno::Reference< cpo::uno::XComponentContext >    m_xContext;
+        cpo::uno::Reference< css::ucb::XSimpleFileAccess3 >   m_xSFA;
         Databases&                                            m_rDatabases;
 
         IteratorState                                         m_eState;
@@ -340,15 +340,15 @@ namespace chelp {
         OUString                                              m_aInitialModule;
         OUString                                              m_aLanguage;
 
-        cpo::uno::Sequence< css::uno::Reference
+        cpo::uno::Sequence< cpo::uno::Reference
             < css::deployment::XPackage > >                   m_aUserPackagesSeq;
         bool                                                  m_bUserPackagesLoaded;
 
-        cpo::uno::Sequence< css::uno::Reference
+        cpo::uno::Sequence< cpo::uno::Reference
             < css::deployment::XPackage > >                   m_aSharedPackagesSeq;
         bool                                                  m_bSharedPackagesLoaded;
 
-        cpo::uno::Sequence< css::uno::Reference
+        cpo::uno::Sequence< cpo::uno::Reference
             < css::deployment::XPackage > >                   m_aBundledPackagesSeq;
         bool                                                  m_bBundledPackagesLoaded;
 
@@ -361,7 +361,7 @@ namespace chelp {
     class DataBaseIterator : public ExtensionIteratorBase
     {
     public:
-        DataBaseIterator( css::uno::Reference< cpo::uno::XComponentContext > const & xContext,
+        DataBaseIterator( cpo::uno::Reference< cpo::uno::XComponentContext > const & xContext,
             Databases& rDatabases, const OUString& aInitialModule, const OUString& aLanguage, bool bHelpText )
                 : ExtensionIteratorBase( xContext, rDatabases, aInitialModule, aLanguage )
                 , m_bHelpText( bHelpText )
@@ -376,7 +376,7 @@ namespace chelp {
 
     private:
         helpdatafileproxy::Hdf* implGetHdfFromPackage(
-            const css::uno::Reference< css::deployment::XPackage >& xPackage,
+            const cpo::uno::Reference< css::deployment::XPackage >& xPackage,
             OUString* o_pExtensionPath, OUString* o_pExtensionRegistryPath );
 
         bool                                                                        m_bHelpText;
@@ -386,7 +386,7 @@ namespace chelp {
     class KeyDataBaseFileIterator : public ExtensionIteratorBase
     {
     public:
-        KeyDataBaseFileIterator( css::uno::Reference< cpo::uno::XComponentContext > const & xContext,
+        KeyDataBaseFileIterator( cpo::uno::Reference< cpo::uno::XComponentContext > const & xContext,
             Databases& rDatabases, const OUString& aInitialModule, const OUString& aLanguage )
                 : ExtensionIteratorBase( xContext, rDatabases, aInitialModule, aLanguage )
         {}
@@ -395,27 +395,27 @@ namespace chelp {
 
     private:
         OUString implGetDbFileFromPackage(std::unique_lock<std::mutex>& rGuard,
-            const css::uno::Reference< css::deployment::XPackage >& xPackage );
+            const cpo::uno::Reference< css::deployment::XPackage >& xPackage );
 
     }; // end class KeyDataBaseFileIterator
 
     class JarFileIterator : public ExtensionIteratorBase
     {
     public:
-        JarFileIterator( css::uno::Reference< cpo::uno::XComponentContext > const & xContext,
+        JarFileIterator( cpo::uno::Reference< cpo::uno::XComponentContext > const & xContext,
             Databases& rDatabases, const OUString& aInitialModule, const OUString& aLanguage )
                 : ExtensionIteratorBase( xContext, rDatabases, aInitialModule, aLanguage )
         {}
 
-        css::uno::Reference< css::container::XHierarchicalNameAccess >
+        cpo::uno::Reference< css::container::XHierarchicalNameAccess >
             nextJarFile(std::unique_lock<std::mutex>& rGuard,
-                css::uno::Reference<css::deployment::XPackage>& o_xParentPackageBundle,
+                cpo::uno::Reference<css::deployment::XPackage>& o_xParentPackageBundle,
                             OUString* o_pExtensionPath, OUString* o_pExtensionRegistryPath );
 
     private:
-        css::uno::Reference< css::container::XHierarchicalNameAccess >
+        cpo::uno::Reference< css::container::XHierarchicalNameAccess >
             implGetJarFromPackage(std::unique_lock<std::mutex>& rGuard,
-                const css::uno::Reference< css::deployment::XPackage >& xPackage,
+                const cpo::uno::Reference< css::deployment::XPackage >& xPackage,
                 OUString* o_pExtensionPath, OUString* o_pExtensionRegistryPath );
 
     }; // end class JarFileIterator
@@ -432,7 +432,7 @@ namespace chelp {
 
     private:
         OUString implGetIndexFolderFromPackage( bool& o_rbTemporary,
-            const css::uno::Reference< css::deployment::XPackage >& xPackage );
+            const cpo::uno::Reference< css::deployment::XPackage >& xPackage );
 
     }; // end class KeyDataBaseFileIterator
 

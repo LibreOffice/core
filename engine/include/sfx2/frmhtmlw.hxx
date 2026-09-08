@@ -33,7 +33,7 @@ namespace com::sun::star {
 }
 
 namespace com::sun::star::beans { class XPropertySet; }
-namespace com::sun::star::uno { template <class interface_type> class Reference; }
+namespace cpo::uno { template <class interface_type> class Reference; }
 
 class SFX2_DLLPUBLIC SfxFrameHTMLWriter
 {
@@ -48,12 +48,12 @@ class SFX2_DLLPUBLIC SfxFrameHTMLWriter
 
 public:
     static void Out_DocInfo( SvStream& rStrm, const OUString& rBaseURL,
-            const css::uno::Reference< css::document::XDocumentProperties>&,
+            const cpo::uno::Reference< css::document::XDocumentProperties>&,
             const char *pIndent,
             OUString *pNonConvertableChars = nullptr );
 
     static void Out_FrameDescriptor(
-        SvStream&, const OUString& rBaseURL, const css::uno::Reference < css::beans::XPropertySet >& xSet);
+        SvStream&, const OUString& rBaseURL, const cpo::uno::Reference < css::beans::XPropertySet >& xSet);
 };
 
 inline void SfxFrameHTMLWriter::OutMeta( SvStream& rStrm,

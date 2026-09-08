@@ -74,8 +74,8 @@
 
 using namespace ::dp_misc;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::logging;
 
@@ -1477,9 +1477,9 @@ Sequence< Reference<deployment::XPackage> > PackageManagerImpl::getExtensionsWit
 }
 
 sal_Int32 PackageManagerImpl::checkPrerequisites(
-    css::uno::Reference<css::deployment::XPackage> const & extension,
-    css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
-    css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
+    cpo::uno::Reference<css::deployment::XPackage> const & extension,
+    cpo::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
+    cpo::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
 {
     try
     {

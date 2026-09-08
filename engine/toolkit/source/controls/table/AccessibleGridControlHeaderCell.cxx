@@ -26,7 +26,7 @@ namespace accessibility
 {
     using namespace ::com::sun::star::accessibility;
     using namespace ::com::sun::star::lang;
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
     using namespace ::vcl;
 
 AccessibleGridControlHeaderCell::AccessibleGridControlHeaderCell(sal_Int32 _nColumnRowId,

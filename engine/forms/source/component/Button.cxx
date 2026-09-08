@@ -41,7 +41,7 @@ namespace frm
 {
 
 using namespace comphelper;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
@@ -117,7 +117,7 @@ void OButtonModel::describeFixedProperties( Sequence< Property >& _rProps ) cons
 }
 
 
-css::uno::Reference< css::util::XCloneable > OButtonModel::createClone()
+cpo::uno::Reference< css::util::XCloneable > OButtonModel::createClone()
 {
     rtl::Reference<OButtonModel> pClone = new OButtonModel(this, getContext());
     pClone->clonedFrom(this);

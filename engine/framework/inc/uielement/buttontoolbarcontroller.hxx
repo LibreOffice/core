@@ -45,7 +45,7 @@ class ButtonToolbarController final : public css::frame::XStatusListener,
                                 public ::cppu::OWeakObject
 {
     public:
-        ButtonToolbarController( css::uno::Reference< cpo::uno::XComponentContext > xContext,
+        ButtonToolbarController( cpo::uno::Reference< cpo::uno::XComponentContext > xContext,
                                  ToolBox* pToolBar,
                                  OUString aCommand );
         virtual ~ButtonToolbarController() override;
@@ -63,8 +63,8 @@ class ButtonToolbarController final : public css::frame::XStatusListener,
 
         // XComponent
         virtual void dispose() override;
-        virtual void addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-        virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+        virtual void addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& xListener ) override;
+        virtual void removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
         // XEventListener
         virtual void disposing( const css::lang::EventObject& Source ) override;
@@ -76,16 +76,16 @@ class ButtonToolbarController final : public css::frame::XStatusListener,
         virtual void execute( sal_Int16 KeyModifier ) override;
         virtual void click() override;
         virtual void doubleClick() override;
-        virtual css::uno::Reference< css::awt::XWindow > createPopupWindow() override;
-        virtual css::uno::Reference< css::awt::XWindow > createItemWindow( const css::uno::Reference< css::awt::XWindow >& Parent ) override;
+        virtual cpo::uno::Reference< css::awt::XWindow > createPopupWindow() override;
+        virtual cpo::uno::Reference< css::awt::XWindow > createItemWindow( const cpo::uno::Reference< css::awt::XWindow >& Parent ) override;
 
     private:
         bool                                                   m_bInitialized : 1,
                                                                m_bDisposed : 1;
         OUString                                               m_aCommandURL;
-        css::uno::Reference< css::frame::XFrame >              m_xFrame;
-        css::uno::Reference< cpo::uno::XComponentContext >     m_xContext;
-        css::uno::Reference< css::util::XURLTransformer >      m_xURLTransformer;
+        cpo::uno::Reference< css::frame::XFrame >              m_xFrame;
+        cpo::uno::Reference< cpo::uno::XComponentContext >     m_xContext;
+        cpo::uno::Reference< css::util::XURLTransformer >      m_xURLTransformer;
         VclPtr<ToolBox>                                        m_pToolbar;
 };
 

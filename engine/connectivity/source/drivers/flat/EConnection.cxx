@@ -32,7 +32,7 @@ using namespace connectivity::file;
 typedef connectivity::file::OConnection  OConnection_B;
 
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
@@ -128,7 +128,7 @@ Reference< XDatabaseMetaData > OFlatConnection::getMetaData(  )
     return xMetaData;
 }
 
-css::uno::Reference< XTablesSupplier > OFlatConnection::createCatalog()
+cpo::uno::Reference< XTablesSupplier > OFlatConnection::createCatalog()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     rtl::Reference< connectivity::sdbcx::OCatalog > xTab = m_xCatalog;

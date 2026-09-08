@@ -25,15 +25,15 @@
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
 SvXMLAutoCorrectExport::SvXMLAutoCorrectExport(
-    const css::uno::Reference< cpo::uno::XComponentContext > & xContext,
+    const cpo::uno::Reference< cpo::uno::XComponentContext > & xContext,
     const SvxAutocorrWordList *  pNewAutocorr_List,
     const OUString &rFileName,
-    css::uno::Reference< css::xml::sax::XDocumentHandler> const &rHandler)
+    cpo::uno::Reference< css::xml::sax::XDocumentHandler> const &rHandler)
 :   SvXMLExport( xContext, u""_ustr, rFileName, util::MeasureUnit::CM, rHandler ),
     pAutocorr_List( pNewAutocorr_List )
 {
@@ -70,10 +70,10 @@ ErrCode SvXMLAutoCorrectExport::exportDoc(enum XMLTokenEnum /*eClass*/)
 }
 
 SvXMLExceptionListExport::SvXMLExceptionListExport(
-    const css::uno::Reference< cpo::uno::XComponentContext > & xContext,
+    const cpo::uno::Reference< cpo::uno::XComponentContext > & xContext,
     const SvStringsISortDtor &rNewList,
     const OUString &rFileName,
-    css::uno::Reference< css::xml::sax::XDocumentHandler> const &rHandler)
+    cpo::uno::Reference< css::xml::sax::XDocumentHandler> const &rHandler)
 :   SvXMLExport( xContext, u""_ustr, rFileName, util::MeasureUnit::CM, rHandler ),
     rList( rNewList )
 {

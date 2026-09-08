@@ -26,6 +26,7 @@
 namespace cpo::uno { class XComponentContext; }
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using ::cpo::uno::Sequence;
 using ::com::sun::star::beans::Property;
 

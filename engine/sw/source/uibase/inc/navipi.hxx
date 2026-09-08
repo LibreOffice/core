@@ -51,7 +51,7 @@ class SwNavigationPI final : public PanelLayout
     ::sfx2::sidebar::ControllerItem m_aPageStats;
     ::sfx2::sidebar::ControllerItem m_aNavElement;
 
-    css::uno::Reference<css::frame::XFrame> m_xFrame;
+    cpo::uno::Reference<css::frame::XFrame> m_xFrame;
 
     std::unique_ptr<weld::Toolbar> m_xContent1ToolBox;
     std::unique_ptr<weld::Toolbar> m_xContent2ToolBox;
@@ -133,10 +133,10 @@ class SwNavigationPI final : public PanelLayout
 public:
 
     static std::unique_ptr<PanelLayout> Create(weld::Widget* pParent,
-            const css::uno::Reference< css::frame::XFrame >& rxFrame,
+            const cpo::uno::Reference< css::frame::XFrame >& rxFrame,
             SfxBindings* pBindings);
     SwNavigationPI(weld::Widget* pParent,
-            const css::uno::Reference< css::frame::XFrame >& rxFrame,
+            const cpo::uno::Reference< css::frame::XFrame >& rxFrame,
             SfxBindings* _pBindings, SfxNavigator* pNavigatorDlg);
     virtual ~SwNavigationPI() override;
 

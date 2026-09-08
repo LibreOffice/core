@@ -79,7 +79,7 @@ typedef struct {
 class TextConversion_ko final : public TextConversionService
 {
 public:
-    TextConversion_ko( const css::uno::Reference < cpo::uno::XComponentContext >& rxContext );
+    TextConversion_ko( const cpo::uno::Reference < cpo::uno::XComponentContext >& rxContext );
 
         // Methods
         css::i18n::TextConversionResult
@@ -101,9 +101,9 @@ public:
 
 private:
         // Hangul/Hanja system dictionary
-        css::uno::Reference < css::linguistic2::XConversionDictionary > xCD;
+        cpo::uno::Reference < css::linguistic2::XConversionDictionary > xCD;
         // Hangul/Hanja user defined dictionary list
-        css::uno::Reference < css::linguistic2::XConversionDictionaryList > xCDL;
+        cpo::uno::Reference < css::linguistic2::XConversionDictionaryList > xCDL;
         sal_Int32 maxLeftLength;
         sal_Int32 maxRightLength;
         static cpo::uno::Sequence< OUString >
@@ -116,7 +116,7 @@ private:
 class TextConversion_zh final : public TextConversionService
 {
 public:
-    TextConversion_zh( const css::uno::Reference < cpo::uno::XComponentContext >& rxContext );
+    TextConversion_zh( const cpo::uno::Reference < cpo::uno::XComponentContext >& rxContext );
 
         // Methods
         css::i18n::TextConversionResult
@@ -137,7 +137,7 @@ public:
             sal_Int32 nTextConversionOptions ) override;
 private:
         // user defined dictionary list
-        css::uno::Reference < css::linguistic2::XConversionDictionaryList > xCDL;
+        cpo::uno::Reference < css::linguistic2::XConversionDictionaryList > xCDL;
         OUString getWordConversion(std::u16string_view aText,
             sal_Int32 nStartPos, sal_Int32 nLength, bool toSChinese, sal_Int32 nConversionOptions, cpo::uno::Sequence <sal_Int32>& offset);
         static OUString getCharConversion(std::u16string_view aText, sal_Int32 nStartPos, sal_Int32 nLength, bool toSChinese, sal_Int32 nConversionOptions);

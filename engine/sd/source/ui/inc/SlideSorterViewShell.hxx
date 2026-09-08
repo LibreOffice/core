@@ -168,7 +168,7 @@ public:
     */
     void RemoveSelectionChangeListener (const Link<LinkParamNone*,void>& rListener);
 
-    virtual css::uno::Reference<css::drawing::XDrawSubController> CreateSubController() override;
+    virtual cpo::uno::Reference<css::drawing::XDrawSubController> CreateSubController() override;
 
     /** Create an accessible object representing the specified window.
         @param pWindow
@@ -180,7 +180,7 @@ public:
     virtual rtl::Reference<comphelper::OAccessible>
     CreateAccessibleDocumentView(::sd::Window* pWindow) override;
     // handle SlideSorterView specially because AccessibleSlideSorterView doesn't inherit from AccessibleDocumentViewBase
-    virtual void SwitchViewFireFocus( const css::uno::Reference< css::accessibility::XAccessible >& xAcc ) override;
+    virtual void SwitchViewFireFocus( const cpo::uno::Reference< css::accessibility::XAccessible >& xAcc ) override;
 
     // Exported for unit test
     SD_DLLPUBLIC SlideSorter& GetSlideSorter() const;

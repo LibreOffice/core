@@ -33,6 +33,7 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace xmloff::token;
 
 XMLTableShapeImportHelper::XMLTableShapeImportHelper( ScXMLImport& rImp ) :

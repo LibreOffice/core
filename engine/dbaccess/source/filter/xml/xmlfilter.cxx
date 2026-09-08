@@ -63,7 +63,8 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::io;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::cpo::uno;
@@ -470,7 +471,7 @@ public:
 }
 
 SvXMLImportContext* ODBFilter::CreateFastContext(sal_Int32 nElement,
-        const ::css::uno::Reference< ::css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
+        const ::cpo::uno::Reference< ::css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
     SvXMLImportContext *pContext = nullptr;
 

@@ -50,6 +50,7 @@
 #include <vcl/filter/PngImageReader.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 class SdOOXMLExportTest1 : public SdModelTestBase
 {

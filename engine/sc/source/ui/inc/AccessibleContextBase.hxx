@@ -23,7 +23,7 @@
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <comphelper/OAccessible.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.h>
@@ -39,7 +39,7 @@ class ScAccessibleContextBase : public comphelper::OAccessible, public SfxListen
 
 public:
     ScAccessibleContextBase(
-        css::uno::Reference<css::accessibility::XAccessible> xParent,
+        cpo::uno::Reference<css::accessibility::XAccessible> xParent,
         const sal_Int16 aRole);
 
     virtual void Init();
@@ -74,7 +74,7 @@ public:
     ///=====  XAccessibleContext  ==============================================
 
     /// Return a reference to the parent.
-    virtual css::uno::Reference< css::accessibility::XAccessible> SAL_CALL
+    virtual cpo::uno::Reference< css::accessibility::XAccessible> SAL_CALL
         getAccessibleParent() override;
 
     /// Return this object's role.
@@ -90,7 +90,7 @@ public:
         getAccessibleName() override;
 
     /// Return NULL to indicate that an empty relation set.
-    virtual css::uno::Reference<css::accessibility::XAccessibleRelationSet> SAL_CALL
+    virtual cpo::uno::Reference<css::accessibility::XAccessibleRelationSet> SAL_CALL
         getAccessibleRelationSet() override;
 
     /// Return the set of current states.
@@ -136,7 +136,7 @@ public:
     /// Use this method to set initial Description without notification
     void SetDescription(const OUString& rDesc) { msDescription = rDesc; }
 
-    void SetParent(const css::uno::Reference<css::accessibility::XAccessible>& rParent) { mxParent = rParent; }
+    void SetParent(const cpo::uno::Reference<css::accessibility::XAccessible>& rParent) { mxParent = rParent; }
 
 protected:
     /// Calls all FocusListener to tell they that the focus is gained.
@@ -148,7 +148,7 @@ protected:
     bool IsDefunc() const { return rBHelper.bDisposed; }
 
     /// Reference to the parent object.
-    css::uno::Reference<css::accessibility::XAccessible> mxParent;
+    cpo::uno::Reference<css::accessibility::XAccessible> mxParent;
 
 private:
     /** Description of this object.  This is not a constant because it can

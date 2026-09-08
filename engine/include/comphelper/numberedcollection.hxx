@@ -33,7 +33,7 @@
 #include <vector>
 
 namespace cpo::uno { class XInterface; }
-namespace com::sun::star::uno { template <class interface_type> class Reference; }
+namespace cpo::uno { template <class interface_type> class Reference; }
 
 namespace comphelper{
 
@@ -90,7 +90,7 @@ class UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) NumberedCollection final :
             @param  xOwner
                     the new owner of this collection.
          */
-        void setOwner (const css::uno::Reference< cpo::uno::XInterface >& xOwner);
+        void setOwner (const cpo::uno::Reference< cpo::uno::XInterface >& xOwner);
 
 
         /** set the localized prefix to be used for untitled components.
@@ -106,7 +106,7 @@ class UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) NumberedCollection final :
 
 
         /** @see css.frame.XUntitledNumbers */
-        virtual ::sal_Int32 leaseNumber(const css::uno::Reference< cpo::uno::XInterface >& xComponent) override;
+        virtual ::sal_Int32 leaseNumber(const cpo::uno::Reference< cpo::uno::XInterface >& xComponent) override;
 
 
         /** @see css.frame.XUntitledNumbers */
@@ -114,7 +114,7 @@ class UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) NumberedCollection final :
 
 
         /** @see css.frame.XUntitledNumbers */
-        virtual void releaseNumberForComponent(const css::uno::Reference< cpo::uno::XInterface >& xComponent) override;
+        virtual void releaseNumberForComponent(const cpo::uno::Reference< cpo::uno::XInterface >& xComponent) override;
 
 
         /** @see css.frame.XUntitledNumbers */

@@ -29,7 +29,7 @@
 class SfxFrame_Impl : public SfxBroadcaster
 {
 public:
-    css::uno::Reference< css::frame::XFrame > xFrame;
+    cpo::uno::Reference< css::frame::XFrame > xFrame;
     bool                      mbHasTitle;
     SfxViewFrame*             pCurrentViewFrame;
     SfxFrameDescriptor*       pDescr;

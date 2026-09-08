@@ -28,11 +28,11 @@ public:
 
     static std::unique_ptr<PanelLayout> Create (
         weld::Widget* pParent,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame);
+        const cpo::uno::Reference<css::frame::XFrame>& rxFrame);
 
     StylesPropertyPanel(
         weld::Widget* pParent,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame);
+        const cpo::uno::Reference<css::frame::XFrame>& rxFrame);
 };
 
 } //end of namespace svx::sidebar

@@ -57,6 +57,7 @@
 #include <utility>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 
 SfxPoolItem* SwFormatINetFormat::CreateDefault() { return new SwFormatINetFormat; }
@@ -790,7 +791,7 @@ bool Meta::IsInContent() const
     return pTextNode == nullptr || pTextNode->IsInContent();
 }
 
-css::uno::Reference< css::rdf::XMetadatable > Meta::MakeUnoObject()
+cpo::uno::Reference< css::rdf::XMetadatable > Meta::MakeUnoObject()
 {
     return SwXMeta::CreateXMeta(*this, {}, {});
 }

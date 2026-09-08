@@ -54,7 +54,7 @@ namespace svx
         OSingleFeatureDispatcher(
             css::util::URL _aFeatureURL,
             const sal_Int16 _nFormFeature,
-            const css::uno::Reference< css::form::runtime::XFormOperations >& _rxFormOperations,
+            const cpo::uno::Reference< css::form::runtime::XFormOperations >& _rxFormOperations,
             ::osl::Mutex& _rMutex
         );
 
@@ -65,8 +65,8 @@ namespace svx
     private:
         // XDispatch
         virtual void dispatch( const css::util::URL& _rURL, const cpo::uno::Sequence< css::beans::PropertyValue >& _rArguments ) override;
-        virtual void addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& _rxControl, const css::util::URL& _rURL ) override;
-        virtual void removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& _rxControl, const css::util::URL& _rURL ) override;
+        virtual void addStatusListener( const cpo::uno::Reference< css::frame::XStatusListener >& _rxControl, const css::util::URL& _rURL ) override;
+        virtual void removeStatusListener( const cpo::uno::Reference< css::frame::XStatusListener >& _rxControl, const css::util::URL& _rURL ) override;
 
         /** notifies our current state to one or all listeners
 
@@ -79,7 +79,7 @@ namespace svx
                 for actually doing the notification(s)
         */
         void    notifyStatus(
-                    const css::uno::Reference< css::frame::XStatusListener >& _rxListener,
+                    const cpo::uno::Reference< css::frame::XStatusListener >& _rxListener,
                     ::osl::ClearableMutexGuard& _rFreeForNotification
                 );
 
@@ -93,7 +93,7 @@ namespace svx
 
         ::osl::Mutex&                       m_rMutex;
         ::comphelper::OInterfaceContainerHelper3<css::frame::XStatusListener>  m_aStatusListeners;
-        css::uno::Reference< css::form::runtime::XFormOperations >
+        cpo::uno::Reference< css::form::runtime::XFormOperations >
                                             m_xFormOperations;
         const css::util::URL                m_aFeatureURL;
         cpo::uno::Any                       m_aLastKnownState;

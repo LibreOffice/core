@@ -22,7 +22,7 @@
 
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Type.hxx>
 #include <rtl/ustring.hxx>
@@ -58,7 +58,7 @@ public:
 
     OUString getAccessibleActionDescription (sal_Int32 nIndex) override;
 
-    css::uno::Reference<
+    cpo::uno::Reference<
         css::accessibility::XAccessibleKeyBinding> getAccessibleActionKeyBinding (
             sal_Int32 nIndex) override;
 

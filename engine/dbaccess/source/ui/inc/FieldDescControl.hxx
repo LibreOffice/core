@@ -129,7 +129,7 @@ namespace dbaui
         virtual void        ActivateAggregate( EControlType eType );
         virtual void        DeactivateAggregate( EControlType eType );
 
-        virtual css::uno::Reference< css::util::XNumberFormatter > GetFormatter() const = 0;
+        virtual cpo::uno::Reference< css::util::XNumberFormatter > GetFormatter() const = 0;
 
         virtual css::lang::Locale               GetLocale() const = 0;
 
@@ -164,8 +164,8 @@ namespace dbaui
 
         void GrabFocus();
 
-        virtual css::uno::Reference< css::sdbc::XDatabaseMetaData> getMetaData() = 0;
-        virtual css::uno::Reference< css::sdbc::XConnection> getConnection() = 0;
+        virtual cpo::uno::Reference< css::sdbc::XDatabaseMetaData> getMetaData() = 0;
+        virtual cpo::uno::Reference< css::sdbc::XConnection> getConnection() = 0;
 
         OUString getControlDefault( const OFieldDescription* pFieldDescr, bool _bCheck = true) const;
         // tdf#138409 take the control default in the UI Locale format, e.g. 12,34 and return a string

@@ -52,6 +52,7 @@
 
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 
 constexpr std::pair<sal_uInt16, OUString> aUnlocalized[] =

@@ -43,7 +43,7 @@ private:
 
 public:
     SwHyphWrapper( SwView& rView,
-                   css::uno::Reference< css::linguistic2::XHyphenator > const &rxHyph,
+                   cpo::uno::Reference< css::linguistic2::XHyphenator > const &rxHyph,
                    bool bStart, bool bOther, bool bSelect );
     virtual ~SwHyphWrapper() override;
 };

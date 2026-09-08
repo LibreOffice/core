@@ -22,7 +22,7 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/container/XEnumeration.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 namespace com::sun::star {
     namespace container { class XIndexAccess; }
@@ -32,7 +32,7 @@ namespace com::sun::star {
 class Enumeration
     : public cppu::WeakImplHelper<css::container::XEnumeration>
 {
-    css::uno::Reference<css::container::XIndexAccess> mxContainer;
+    cpo::uno::Reference<css::container::XIndexAccess> mxContainer;
     sal_Int32 mnIndex;
 
 public:

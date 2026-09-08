@@ -64,12 +64,12 @@ private:
                                 /// @throws cpo::uno::RuntimeException
                                 /// @throws css::lang::IllegalArgumentException
     sal_Int32                   getDateMode(
-                                    const css::uno::Reference< css::beans::XPropertySet >& xPropSet,
+                                    const cpo::uno::Reference< css::beans::XPropertySet >& xPropSet,
                                     const cpo::uno::Any& rAny );
 
 public:
     explicit                    AnalysisAddIn(
-                                    const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
+                                    const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext );
 
     OUString AnalysisResId(TranslateId aId);
 
@@ -106,19 +106,19 @@ public:
     //  methods from own interfaces start here
 
                             // XAnalysis
-//    virtual double SAL_CALL       get_Test( const css::uno::Reference< css::beans::XPropertySet >&, sal_Int32 nMode, double f1, double f2, double f3 ) throw( cpo::uno::RuntimeException );
+//    virtual double SAL_CALL       get_Test( const cpo::uno::Reference< css::beans::XPropertySet >&, sal_Int32 nMode, double f1, double f2, double f3 ) throw( cpo::uno::RuntimeException );
 
-    virtual sal_Int32 SAL_CALL  getWorkday( const css::uno::Reference< css::beans::XPropertySet >&, sal_Int32 nStartDate, sal_Int32 nDays, const cpo::uno::Any& aHDay ) override;
-    virtual double SAL_CALL     getYearfrac( const css::uno::Reference< css::beans::XPropertySet >&, sal_Int32 nStartDate, sal_Int32 nEndDate, const cpo::uno::Any& aMode ) override;
-    virtual sal_Int32 SAL_CALL  getEdate( const css::uno::Reference< css::beans::XPropertySet >&, sal_Int32 nStartDate, sal_Int32 nMonths ) override;
-    virtual sal_Int32 SAL_CALL  getWeeknum( const css::uno::Reference< css::beans::XPropertySet >&, sal_Int32 nStartDate, sal_Int32 nMode ) override;
-    virtual sal_Int32 SAL_CALL  getEomonth( const css::uno::Reference< css::beans::XPropertySet >&, sal_Int32 nStartDate, sal_Int32 nMonths ) override;
-    virtual sal_Int32 SAL_CALL  getNetworkdays( const css::uno::Reference< css::beans::XPropertySet >&, sal_Int32 nStartDate, sal_Int32 nEndDate, const cpo::uno::Any& aHDay ) override;
+    virtual sal_Int32 SAL_CALL  getWorkday( const cpo::uno::Reference< css::beans::XPropertySet >&, sal_Int32 nStartDate, sal_Int32 nDays, const cpo::uno::Any& aHDay ) override;
+    virtual double SAL_CALL     getYearfrac( const cpo::uno::Reference< css::beans::XPropertySet >&, sal_Int32 nStartDate, sal_Int32 nEndDate, const cpo::uno::Any& aMode ) override;
+    virtual sal_Int32 SAL_CALL  getEdate( const cpo::uno::Reference< css::beans::XPropertySet >&, sal_Int32 nStartDate, sal_Int32 nMonths ) override;
+    virtual sal_Int32 SAL_CALL  getWeeknum( const cpo::uno::Reference< css::beans::XPropertySet >&, sal_Int32 nStartDate, sal_Int32 nMode ) override;
+    virtual sal_Int32 SAL_CALL  getEomonth( const cpo::uno::Reference< css::beans::XPropertySet >&, sal_Int32 nStartDate, sal_Int32 nMonths ) override;
+    virtual sal_Int32 SAL_CALL  getNetworkdays( const cpo::uno::Reference< css::beans::XPropertySet >&, sal_Int32 nStartDate, sal_Int32 nEndDate, const cpo::uno::Any& aHDay ) override;
 
     virtual sal_Int32 SAL_CALL  getIseven( sal_Int32 nVal ) override;
     virtual sal_Int32 SAL_CALL  getIsodd( sal_Int32 nVal ) override;
 
-    virtual double SAL_CALL     getMultinomial( const css::uno::Reference< css::beans::XPropertySet >& xOpt, const cpo::uno::Sequence< cpo::uno::Sequence< sal_Int32 > >& aVLst, const cpo::uno::Sequence< cpo::uno::Any >& aOptVLst ) override;
+    virtual double SAL_CALL     getMultinomial( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt, const cpo::uno::Sequence< cpo::uno::Sequence< sal_Int32 > >& aVLst, const cpo::uno::Sequence< cpo::uno::Any >& aOptVLst ) override;
     virtual double SAL_CALL     getSeriessum( double fX, double fN, double fM, const cpo::uno::Sequence< cpo::uno::Sequence< double > >& aCoeffList ) override;
     virtual double SAL_CALL     getQuotient( double fNum, double fDenum ) override;
 
@@ -127,36 +127,36 @@ public:
 
     virtual double SAL_CALL     getRandbetween( double fMin, double fMax ) override;
 
-    virtual double SAL_CALL     getGcd( const css::uno::Reference< css::beans::XPropertySet >& xOpt, const cpo::uno::Sequence< cpo::uno::Sequence< double > >& aVLst, const cpo::uno::Sequence< cpo::uno::Any >& aOptVLst ) override;
-    virtual double SAL_CALL     getLcm( const css::uno::Reference< css::beans::XPropertySet >& xOpt, const cpo::uno::Sequence< cpo::uno::Sequence< double > >& aVLst, const cpo::uno::Sequence< cpo::uno::Any >& aOptVLst ) override;
+    virtual double SAL_CALL     getGcd( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt, const cpo::uno::Sequence< cpo::uno::Sequence< double > >& aVLst, const cpo::uno::Sequence< cpo::uno::Any >& aOptVLst ) override;
+    virtual double SAL_CALL     getLcm( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt, const cpo::uno::Sequence< cpo::uno::Sequence< double > >& aVLst, const cpo::uno::Sequence< cpo::uno::Any >& aOptVLst ) override;
 
     virtual double SAL_CALL     getBesseli( double fNum, sal_Int32 nOrder ) override;
     virtual double SAL_CALL     getBesselj( double fNum, sal_Int32 nOrder ) override;
     virtual double SAL_CALL     getBesselk( double fNum, sal_Int32 nOrder ) override;
     virtual double SAL_CALL     getBessely( double fNum, sal_Int32 nOrder ) override;
 
-    virtual OUString SAL_CALL     getBin2Oct( const css::uno::Reference< css::beans::XPropertySet >& xOpt, const OUString& aNum, const cpo::uno::Any& rPlaces ) override;
+    virtual OUString SAL_CALL     getBin2Oct( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt, const OUString& aNum, const cpo::uno::Any& rPlaces ) override;
     virtual double SAL_CALL     getBin2Dec( const OUString& aNum ) override;
-    virtual OUString SAL_CALL     getBin2Hex( const css::uno::Reference< css::beans::XPropertySet >& xOpt, const OUString& aNum, const cpo::uno::Any& rPlaces ) override;
+    virtual OUString SAL_CALL     getBin2Hex( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt, const OUString& aNum, const cpo::uno::Any& rPlaces ) override;
 
-    virtual OUString SAL_CALL     getOct2Bin( const css::uno::Reference< css::beans::XPropertySet >& xOpt, const OUString& aNum, const cpo::uno::Any& rPlaces ) override;
+    virtual OUString SAL_CALL     getOct2Bin( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt, const OUString& aNum, const cpo::uno::Any& rPlaces ) override;
     virtual double SAL_CALL     getOct2Dec( const OUString& aNum ) override;
-    virtual OUString SAL_CALL     getOct2Hex( const css::uno::Reference< css::beans::XPropertySet >& xOpt, const OUString& aNum, const cpo::uno::Any& rPlaces ) override;
+    virtual OUString SAL_CALL     getOct2Hex( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt, const OUString& aNum, const cpo::uno::Any& rPlaces ) override;
 
-    virtual OUString SAL_CALL     getDec2Bin( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 fNum, const cpo::uno::Any& rPlaces ) override;
-    virtual OUString SAL_CALL     getDec2Oct( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 fNum, const cpo::uno::Any& rPlaces ) override;
-    virtual OUString SAL_CALL     getDec2Hex( const css::uno::Reference< css::beans::XPropertySet >& xOpt, double fNum, const cpo::uno::Any& rPlaces ) override;
+    virtual OUString SAL_CALL     getDec2Bin( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 fNum, const cpo::uno::Any& rPlaces ) override;
+    virtual OUString SAL_CALL     getDec2Oct( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 fNum, const cpo::uno::Any& rPlaces ) override;
+    virtual OUString SAL_CALL     getDec2Hex( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt, double fNum, const cpo::uno::Any& rPlaces ) override;
 
-    virtual OUString SAL_CALL     getHex2Bin( const css::uno::Reference< css::beans::XPropertySet >& xOpt, const OUString& aNum, const cpo::uno::Any& rPlaces ) override;
+    virtual OUString SAL_CALL     getHex2Bin( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt, const OUString& aNum, const cpo::uno::Any& rPlaces ) override;
     virtual double SAL_CALL     getHex2Dec( const OUString& aNum ) override;
-    virtual OUString SAL_CALL     getHex2Oct( const css::uno::Reference< css::beans::XPropertySet >& xOpt, const OUString& aNum, const cpo::uno::Any& rPlaces ) override;
+    virtual OUString SAL_CALL     getHex2Oct( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt, const OUString& aNum, const cpo::uno::Any& rPlaces ) override;
 
-    virtual sal_Int32 SAL_CALL  getDelta( const css::uno::Reference< css::beans::XPropertySet >& xOpt, double fNum1, const cpo::uno::Any& rNum2 ) override;
+    virtual sal_Int32 SAL_CALL  getDelta( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt, double fNum1, const cpo::uno::Any& rNum2 ) override;
 
-    virtual double SAL_CALL     getErf( const css::uno::Reference< css::beans::XPropertySet >& xOpt, double fLowerLimit, const cpo::uno::Any& rUpperLimit ) override;
+    virtual double SAL_CALL     getErf( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt, double fLowerLimit, const cpo::uno::Any& rUpperLimit ) override;
     virtual double SAL_CALL     getErfc( double fLowerLimit ) override;
 
-    virtual sal_Int32 SAL_CALL  getGestep( const css::uno::Reference< css::beans::XPropertySet >& xOpt, double fNum, const cpo::uno::Any& rStep ) override;
+    virtual sal_Int32 SAL_CALL  getGestep( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt, double fNum, const cpo::uno::Any& rStep ) override;
 
     virtual double SAL_CALL     getFactdouble( sal_Int32 nNum ) override;
 
@@ -171,11 +171,11 @@ public:
     virtual OUString SAL_CALL     getImln( const OUString& aNum ) override;
     virtual OUString SAL_CALL     getImlog10( const OUString& aNum ) override;
     virtual OUString SAL_CALL     getImlog2( const OUString& aNum ) override;
-    virtual OUString SAL_CALL     getImproduct( const css::uno::Reference< css::beans::XPropertySet >& xOpt, const cpo::uno::Sequence< cpo::uno::Sequence< OUString > >& aNum1, const cpo::uno::Sequence< cpo::uno::Any >& aNumList ) override;
+    virtual OUString SAL_CALL     getImproduct( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt, const cpo::uno::Sequence< cpo::uno::Sequence< OUString > >& aNum1, const cpo::uno::Sequence< cpo::uno::Any >& aNumList ) override;
     virtual double SAL_CALL     getImreal( const OUString& aNum ) override;
     virtual OUString SAL_CALL     getImsin( const OUString& aNum ) override;
     virtual OUString SAL_CALL     getImsub( const OUString& aNum1, const OUString& aNum2 ) override;
-    virtual OUString SAL_CALL     getImsum( const css::uno::Reference< css::beans::XPropertySet >& xOpt, const cpo::uno::Sequence< cpo::uno::Sequence< OUString > >& aNum1, const cpo::uno::Sequence< cpo::uno::Any >& aFollowingPars ) override;
+    virtual OUString SAL_CALL     getImsum( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt, const cpo::uno::Sequence< cpo::uno::Sequence< OUString > >& aNum1, const cpo::uno::Sequence< cpo::uno::Any >& aFollowingPars ) override;
 
     virtual OUString SAL_CALL     getImsqrt( const OUString& aNum ) override;
     virtual OUString SAL_CALL     getImtan( const OUString& aNum ) override;
@@ -190,42 +190,42 @@ public:
 
     virtual double SAL_CALL     getConvert( double fVal, const OUString& aFromUnit, const OUString& aToUnit ) override;
 
-    virtual double SAL_CALL     getAmordegrc( const css::uno::Reference< css::beans::XPropertySet >&, double fCost, sal_Int32 nDate, sal_Int32 nFirstPer, double fRestVal, double fPer, double fRate, const cpo::uno::Any& rOptBase ) override;
-    virtual double SAL_CALL     getAmorlinc( const css::uno::Reference< css::beans::XPropertySet >&, double fCost, sal_Int32 nDate, sal_Int32 nFirstPer, double fRestVal, double fPer, double fRate, const cpo::uno::Any& rOptBase ) override;
-    virtual double SAL_CALL     getAccrint( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nIssue, sal_Int32 nFirstInter, sal_Int32 nSettle, double fRate, const cpo::uno::Any& rVal, sal_Int32 nFreq, const cpo::uno::Any& rOptBase ) override;
-    virtual double SAL_CALL     getAccrintm( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nIssue, sal_Int32 nSettle, double fRate, const cpo::uno::Any& rVal, const cpo::uno::Any& rOptBase ) override;
-    virtual double SAL_CALL     getReceived( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fInvest, double fDisc, const cpo::uno::Any& rOptBase ) override;
-    virtual double SAL_CALL     getDisc( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fPrice, double fRedemp, const cpo::uno::Any& rOptBase ) override;
-    virtual double SAL_CALL     getDuration( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fCoup, double fYield, sal_Int32 nFreq, const cpo::uno::Any& rOptBase ) override;
+    virtual double SAL_CALL     getAmordegrc( const cpo::uno::Reference< css::beans::XPropertySet >&, double fCost, sal_Int32 nDate, sal_Int32 nFirstPer, double fRestVal, double fPer, double fRate, const cpo::uno::Any& rOptBase ) override;
+    virtual double SAL_CALL     getAmorlinc( const cpo::uno::Reference< css::beans::XPropertySet >&, double fCost, sal_Int32 nDate, sal_Int32 nFirstPer, double fRestVal, double fPer, double fRate, const cpo::uno::Any& rOptBase ) override;
+    virtual double SAL_CALL     getAccrint( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nIssue, sal_Int32 nFirstInter, sal_Int32 nSettle, double fRate, const cpo::uno::Any& rVal, sal_Int32 nFreq, const cpo::uno::Any& rOptBase ) override;
+    virtual double SAL_CALL     getAccrintm( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nIssue, sal_Int32 nSettle, double fRate, const cpo::uno::Any& rVal, const cpo::uno::Any& rOptBase ) override;
+    virtual double SAL_CALL     getReceived( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fInvest, double fDisc, const cpo::uno::Any& rOptBase ) override;
+    virtual double SAL_CALL     getDisc( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fPrice, double fRedemp, const cpo::uno::Any& rOptBase ) override;
+    virtual double SAL_CALL     getDuration( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fCoup, double fYield, sal_Int32 nFreq, const cpo::uno::Any& rOptBase ) override;
     virtual double SAL_CALL     getEffect( double fNominal, sal_Int32 nPeriods ) override;
     virtual double SAL_CALL     getCumprinc( double fRate, sal_Int32 nNumPeriods, double fVal, sal_Int32 nStartPer, sal_Int32 nEndPer, sal_Int32 nPayType ) override;
     virtual double SAL_CALL     getCumipmt( double fRate, sal_Int32 nNumPeriods, double fVal, sal_Int32 nStartPer, sal_Int32 nEndPer, sal_Int32 nPayType ) override;
-    virtual double SAL_CALL     getPrice( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fRate, double fYield, double fRedemp, sal_Int32 nFreq, const cpo::uno::Any& rOptBase ) override;
-    virtual double SAL_CALL     getPricedisc( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fDisc, double fRedemp, const cpo::uno::Any& rOptBase ) override;
-    virtual double SAL_CALL     getPricemat( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nIssue, double fRate, double fYield, const cpo::uno::Any& rOptBase ) override;
-    virtual double SAL_CALL     getMduration( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fCoup, double fYield, sal_Int32 nFreq, const cpo::uno::Any& rOptBase ) override;
+    virtual double SAL_CALL     getPrice( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fRate, double fYield, double fRedemp, sal_Int32 nFreq, const cpo::uno::Any& rOptBase ) override;
+    virtual double SAL_CALL     getPricedisc( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fDisc, double fRedemp, const cpo::uno::Any& rOptBase ) override;
+    virtual double SAL_CALL     getPricemat( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nIssue, double fRate, double fYield, const cpo::uno::Any& rOptBase ) override;
+    virtual double SAL_CALL     getMduration( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fCoup, double fYield, sal_Int32 nFreq, const cpo::uno::Any& rOptBase ) override;
     virtual double SAL_CALL     getNominal( double fRate, sal_Int32 nPeriods ) override;
     virtual double SAL_CALL     getDollarfr( double fDollarDec, sal_Int32 nFrac ) override;
     virtual double SAL_CALL     getDollarde( double fDollarFrac, sal_Int32 nFrac ) override;
-    virtual double SAL_CALL     getYield( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fCoup, double fPrice, double fRedemp, sal_Int32 nFreq, const cpo::uno::Any& rOptBase ) override;
-    virtual double SAL_CALL     getYielddisc( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fPrice, double fRedemp, const cpo::uno::Any& rOptBase ) override;
-    virtual double SAL_CALL     getYieldmat( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nIssue, double fRate, double fPrice, const cpo::uno::Any& rOptBase ) override;
-    virtual double SAL_CALL     getTbilleq( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fDisc ) override;
-    virtual double SAL_CALL     getTbillprice( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fDisc ) override;
-    virtual double SAL_CALL     getTbillyield( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fPrice ) override;
-    virtual double SAL_CALL     getOddfprice( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nIssue, sal_Int32 nFirstCoup, double fRate, double fYield, double fRedemp, sal_Int32 nFreq, const cpo::uno::Any& rOptBase ) override;
-    virtual double SAL_CALL     getOddfyield( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nIssue, sal_Int32 nFirstCoup, double fRate, double fPrice, double fRedemp, sal_Int32 nFreq, const cpo::uno::Any& rOptBase ) override;
-    virtual double SAL_CALL     getOddlprice( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nLastInterest, double fRate, double fYield, double fRedemp, sal_Int32 nFreq, const cpo::uno::Any& rOptBase ) override;
-    virtual double SAL_CALL     getOddlyield( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nLastInterest, double fRate, double fPrice, double fRedemp, sal_Int32 nFreq, const cpo::uno::Any& rOptBase) override;
-    virtual double SAL_CALL     getXirr( const css::uno::Reference< css::beans::XPropertySet >& xOpt, const cpo::uno::Sequence< cpo::uno::Sequence< double > >& rValues, const cpo::uno::Sequence< cpo::uno::Sequence< sal_Int32 > >& rDates, const cpo::uno::Any& rGuess ) override;
+    virtual double SAL_CALL     getYield( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fCoup, double fPrice, double fRedemp, sal_Int32 nFreq, const cpo::uno::Any& rOptBase ) override;
+    virtual double SAL_CALL     getYielddisc( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fPrice, double fRedemp, const cpo::uno::Any& rOptBase ) override;
+    virtual double SAL_CALL     getYieldmat( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nIssue, double fRate, double fPrice, const cpo::uno::Any& rOptBase ) override;
+    virtual double SAL_CALL     getTbilleq( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fDisc ) override;
+    virtual double SAL_CALL     getTbillprice( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fDisc ) override;
+    virtual double SAL_CALL     getTbillyield( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fPrice ) override;
+    virtual double SAL_CALL     getOddfprice( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nIssue, sal_Int32 nFirstCoup, double fRate, double fYield, double fRedemp, sal_Int32 nFreq, const cpo::uno::Any& rOptBase ) override;
+    virtual double SAL_CALL     getOddfyield( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nIssue, sal_Int32 nFirstCoup, double fRate, double fPrice, double fRedemp, sal_Int32 nFreq, const cpo::uno::Any& rOptBase ) override;
+    virtual double SAL_CALL     getOddlprice( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nLastInterest, double fRate, double fYield, double fRedemp, sal_Int32 nFreq, const cpo::uno::Any& rOptBase ) override;
+    virtual double SAL_CALL     getOddlyield( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nLastInterest, double fRate, double fPrice, double fRedemp, sal_Int32 nFreq, const cpo::uno::Any& rOptBase) override;
+    virtual double SAL_CALL     getXirr( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt, const cpo::uno::Sequence< cpo::uno::Sequence< double > >& rValues, const cpo::uno::Sequence< cpo::uno::Sequence< sal_Int32 > >& rDates, const cpo::uno::Any& rGuess ) override;
     virtual double SAL_CALL     getXnpv( double fRate, const cpo::uno::Sequence< cpo::uno::Sequence< double > >& rValues, const cpo::uno::Sequence< cpo::uno::Sequence< sal_Int32 > >& rDates ) override;
-    virtual double SAL_CALL     getIntrate( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fInvest, double fRedemp, const cpo::uno::Any& rOptBase ) override;
-    virtual double SAL_CALL     getCoupncd( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, const cpo::uno::Any& rOptBase ) override;
-    virtual double SAL_CALL     getCoupdays( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, const cpo::uno::Any& rOptBase ) override;
-    virtual double SAL_CALL     getCoupdaysnc( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, const cpo::uno::Any& rOptBase ) override;
-    virtual double SAL_CALL     getCoupdaybs( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, const cpo::uno::Any& rOptBase ) override;
-    virtual double SAL_CALL     getCouppcd( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, const cpo::uno::Any& rOptBase ) override;
-    virtual double SAL_CALL     getCoupnum( const css::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, const cpo::uno::Any& rOptBase ) override;
+    virtual double SAL_CALL     getIntrate( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fInvest, double fRedemp, const cpo::uno::Any& rOptBase ) override;
+    virtual double SAL_CALL     getCoupncd( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, const cpo::uno::Any& rOptBase ) override;
+    virtual double SAL_CALL     getCoupdays( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, const cpo::uno::Any& rOptBase ) override;
+    virtual double SAL_CALL     getCoupdaysnc( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, const cpo::uno::Any& rOptBase ) override;
+    virtual double SAL_CALL     getCoupdaybs( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, const cpo::uno::Any& rOptBase ) override;
+    virtual double SAL_CALL     getCouppcd( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, const cpo::uno::Any& rOptBase ) override;
+    virtual double SAL_CALL     getCoupnum( const cpo::uno::Reference< css::beans::XPropertySet >& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, const cpo::uno::Any& rOptBase ) override;
     virtual double SAL_CALL     getFvschedule( double fPrinc, const cpo::uno::Sequence< cpo::uno::Sequence< double > >& rSchedule ) override;
 };
 

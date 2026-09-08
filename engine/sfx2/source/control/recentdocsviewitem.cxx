@@ -37,8 +37,8 @@
 
 using namespace basegfx;
 using namespace com::sun::star;
-using namespace com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace drawinglayer::primitive2d;
 using namespace drawinglayer::processor2d;
 

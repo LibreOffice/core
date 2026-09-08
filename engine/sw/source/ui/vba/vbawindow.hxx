@@ -36,10 +36,10 @@ class SwVbaWindow : public WindowImpl_BASE
 public:
     /// @throws cpo::uno::RuntimeException
     SwVbaWindow(
-        const css::uno::Reference< ov::XHelperInterface >& xParent,
-        const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
+        const cpo::uno::Reference< ov::XHelperInterface >& xParent,
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
         const rtl::Reference< SwXTextDocument >& xModel,
-        const css::uno::Reference< css::frame::XController >& xController );
+        const cpo::uno::Reference< css::frame::XController >& xController );
 
     // Attributes
     virtual cpo::uno::Any SAL_CALL getView() override;

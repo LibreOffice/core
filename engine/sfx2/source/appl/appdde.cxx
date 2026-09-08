@@ -84,6 +84,7 @@ public:
     bool lcl_IsDocument( std::u16string_view rContent )
     {
         using namespace com::sun::star;
+        using namespace ::cpo;
 
         bool bRet = false;
         INetURLObject aObj( rContent );

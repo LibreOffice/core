@@ -21,7 +21,7 @@
 
 #include <osl/mutex.hxx>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <rtl/ref.hxx>
 #include <map>
 #include <memory>

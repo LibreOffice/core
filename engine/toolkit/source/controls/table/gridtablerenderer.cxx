@@ -36,8 +36,8 @@
 namespace svt::table
 {
     using ::cpo::uno::Any;
-    using ::css::uno::Reference;
-    using ::css::uno::UNO_QUERY;
+    using ::cpo::uno::Reference;
+    using ::cpo::uno::UNO_QUERY;
     using ::cpo::uno::XInterface;
     using ::cpo::uno::TypeClass_INTERFACE;
     using ::css::graphic::XGraphic;

@@ -40,7 +40,7 @@ namespace dbaui
     class UnoDataBrowserView final : public ODataView, public ::utl::OEventListenerAdapter
     {
         rtl::Reference< SbaXGridControl >                         m_xGrid;            // our grid's UNO representation
-        css::uno::Reference< css::awt::XControlContainer >        m_xMe;              // our own UNO representation
+        cpo::uno::Reference< css::awt::XControlContainer >        m_xMe;              // our own UNO representation
         VclPtr<InterimDBTreeListBox>   m_pTreeView;
         VclPtr<Splitter>               m_pSplitter;
         mutable VclPtr<SbaGridControl> m_pVclControl;  // our grid's VCL representation
@@ -53,12 +53,12 @@ namespace dbaui
 
         UnoDataBrowserView( vcl::Window* pParent,
                             IController& _rController,
-                            const css::uno::Reference< cpo::uno::XComponentContext >& );
+                            const cpo::uno::Reference< cpo::uno::XComponentContext >& );
         virtual ~UnoDataBrowserView() override;
         virtual void dispose() override;
 
         /// late construction
-        void Construct(const css::uno::Reference< css::awt::XControlModel >& xModel);
+        void Construct(const cpo::uno::Reference< css::awt::XControlModel >& xModel);
 
         /** as columns may be hidden there is a difference between a columns model pos and its view pos
             so we you may use these translation function
@@ -72,7 +72,7 @@ namespace dbaui
         void    showStatus( const OUString& _rStatus );
         void    hideStatus();
 
-        const css::uno::Reference< css::awt::XControlContainer >& getContainer() const { return m_xMe; }
+        const cpo::uno::Reference< css::awt::XControlContainer >& getContainer() const { return m_xMe; }
 
     private:
         virtual bool PreNotify( NotifyEvent& rNEvt ) override;

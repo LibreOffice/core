@@ -28,8 +28,8 @@ class InformationDialog : public weld::MessageDialogController, public Configura
 {
 public:
 
-    InformationDialog( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
-                       const css::uno::Reference<css::awt::XWindow>& rxDialogParent, const OUString& rSaveAsURL,
+    InformationDialog( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+                       const cpo::uno::Reference<css::awt::XWindow>& rxDialogParent, const OUString& rSaveAsURL,
                        bool& bOpenNewDocument, sal_Int64 nSourceSize, sal_Int64 nDestSize, sal_Int64 nApproxDest );
     ~InformationDialog();
 

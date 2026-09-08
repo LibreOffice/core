@@ -13,7 +13,7 @@
 #include <com/sun/star/sheet/XSheetAnnotations.hpp>
 #include <cpo/uno/XInterface.hpp>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <test/testdllapi.hxx>
 #include <tools/long.hxx>
@@ -23,8 +23,8 @@ namespace apitest {
 class OOO_DLLPUBLIC_TEST XSheetAnnotations
 {
 public:
-    virtual css::uno::Reference< cpo::uno::XInterface > init() = 0;
-    virtual css::uno::Reference< css::sheet::XSheetAnnotations> getAnnotations(tools::Long nIndex) = 0;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > init() = 0;
+    virtual cpo::uno::Reference< css::sheet::XSheetAnnotations> getAnnotations(tools::Long nIndex) = 0;
 
     // XSheetAnnotations
     void testIndex();

@@ -26,7 +26,7 @@
 namespace comphelper
 {
 
-OEnumerationByName::OEnumerationByName(css::uno::Reference<css::container::XNameAccess> _xAccess)
+OEnumerationByName::OEnumerationByName(cpo::uno::Reference<css::container::XNameAccess> _xAccess)
     :m_aNames(_xAccess->getElementNames())
     ,m_xAccess(std::move(_xAccess))
     ,m_nPos(0)
@@ -36,7 +36,7 @@ OEnumerationByName::OEnumerationByName(css::uno::Reference<css::container::XName
 }
 
 
-OEnumerationByName::OEnumerationByName(css::uno::Reference<css::container::XNameAccess> _xAccess,
+OEnumerationByName::OEnumerationByName(cpo::uno::Reference<css::container::XNameAccess> _xAccess,
                                        std::vector<OUString> _aNames  )
     :m_aNames(std::move(_aNames))
     ,m_xAccess(std::move(_xAccess))
@@ -106,7 +106,7 @@ void OEnumerationByName::impl_startDisposeListening()
         return;
 
     osl_atomic_increment(&m_refCount);
-    css::uno::Reference< css::lang::XComponent > xDisposable(m_xAccess, css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::lang::XComponent > xDisposable(m_xAccess, cpo::uno::UNO_QUERY);
     if (xDisposable.is())
     {
         xDisposable->addEventListener(this);
@@ -122,7 +122,7 @@ void OEnumerationByName::impl_stopDisposeListening()
         return;
 
     osl_atomic_increment(&m_refCount);
-    css::uno::Reference< css::lang::XComponent > xDisposable(m_xAccess, css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::lang::XComponent > xDisposable(m_xAccess, cpo::uno::UNO_QUERY);
     if (xDisposable.is())
     {
         xDisposable->removeEventListener(this);
@@ -148,7 +148,7 @@ const OUString& OEnumerationByName::getElement(sal_Int32 nIndex) const
 }
 
 
-OEnumerationByIndex::OEnumerationByIndex(css::uno::Reference< css::container::XIndexAccess > _xAccess)
+OEnumerationByIndex::OEnumerationByIndex(cpo::uno::Reference< css::container::XIndexAccess > _xAccess)
     :m_xAccess(std::move(_xAccess))
     ,m_nPos(0)
     ,m_bListening(false)
@@ -217,7 +217,7 @@ void OEnumerationByIndex::impl_startDisposeListening()
         return;
 
     osl_atomic_increment(&m_refCount);
-    css::uno::Reference< css::lang::XComponent > xDisposable(m_xAccess, css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::lang::XComponent > xDisposable(m_xAccess, cpo::uno::UNO_QUERY);
     if (xDisposable.is())
     {
         xDisposable->addEventListener(this);
@@ -233,7 +233,7 @@ void OEnumerationByIndex::impl_stopDisposeListening()
         return;
 
     osl_atomic_increment(&m_refCount);
-    css::uno::Reference< css::lang::XComponent > xDisposable(m_xAccess, css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::lang::XComponent > xDisposable(m_xAccess, cpo::uno::UNO_QUERY);
     if (xDisposable.is())
     {
         xDisposable->removeEventListener(this);

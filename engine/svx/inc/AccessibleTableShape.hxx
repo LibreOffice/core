@@ -59,7 +59,7 @@ public:
 
     // XAccessibleContext
     virtual sal_Int64 getAccessibleChildCount( ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleChild( sal_Int64 i ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > getAccessibleChild( sal_Int64 i ) override;
     virtual sal_Int16 getAccessibleRole() override;
 
     // XAccessibleTable
@@ -69,15 +69,15 @@ public:
     virtual OUString getAccessibleColumnDescription( sal_Int32 nColumn ) override;
     virtual sal_Int32 getAccessibleRowExtentAt( sal_Int32 nRow, sal_Int32 nColumn ) override;
     virtual sal_Int32 getAccessibleColumnExtentAt( sal_Int32 nRow, sal_Int32 nColumn ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessibleTable > getAccessibleRowHeaders(  ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessibleTable > getAccessibleColumnHeaders(  ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessibleTable > getAccessibleRowHeaders(  ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessibleTable > getAccessibleColumnHeaders(  ) override;
     virtual cpo::uno::Sequence< sal_Int32 > getSelectedAccessibleRows(  ) override;
     virtual cpo::uno::Sequence< sal_Int32 > getSelectedAccessibleColumns(  ) override;
     virtual bool isAccessibleRowSelected( sal_Int32 nRow ) override;
     virtual bool isAccessibleColumnSelected( sal_Int32 nColumn ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleCellAt( sal_Int32 nRow, sal_Int32 nColumn ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleCaption(  ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleSummary(  ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > getAccessibleCellAt( sal_Int32 nRow, sal_Int32 nColumn ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > getAccessibleCaption(  ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > getAccessibleSummary(  ) override;
     virtual bool isAccessibleSelected( sal_Int32 nRow, sal_Int32 nColumn ) override;
     virtual sal_Int64 getAccessibleIndex( sal_Int32 nRow, sal_Int32 nColumn ) override;
     virtual sal_Int32 getAccessibleRow( sal_Int64 nChildIndex ) override;
@@ -89,7 +89,7 @@ public:
     virtual void clearAccessibleSelection(  ) override;
     virtual void selectAllAccessibleChildren(  ) override;
     virtual sal_Int64 getSelectedAccessibleChildCount(  ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
     virtual void deselectAccessibleChild( sal_Int64 nChildIndex ) override;
     // XAccessibleTableSelection
     virtual bool selectRow( sal_Int32 row ) override ;
@@ -152,23 +152,23 @@ public:
     AccessibleTableHeaderShape& operator=(const AccessibleTableHeaderShape&) = delete;
 
     // XAccessible
-    virtual css::uno::Reference< css::accessibility::XAccessibleContext> getAccessibleContext( ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessibleContext> getAccessibleContext( ) override;
 
     // XAccessibleContext
     virtual sal_Int64 getAccessibleChildCount(  ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleChild( sal_Int64 i ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleParent(  ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > getAccessibleChild( sal_Int64 i ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > getAccessibleParent(  ) override;
     virtual sal_Int64 getAccessibleIndexInParent(  ) override;
     virtual sal_Int16 getAccessibleRole(  ) override;
     virtual OUString getAccessibleDescription(  ) override;
     virtual OUString getAccessibleName(  ) override;
     virtual sal_Int64 getAccessibleStateSet(  ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > getAccessibleRelationSet(  ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessibleRelationSet > getAccessibleRelationSet(  ) override;
     virtual css::lang::Locale getLocale(  ) override;
 
     //XAccessibleComponent
     virtual bool containsPoint( const css::awt::Point& aPoint ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
     virtual css::awt::Rectangle getBounds(  ) override;
     virtual css::awt::Point getLocation(  ) override;
     virtual css::awt::Point getLocationOnScreen(  ) override;
@@ -184,15 +184,15 @@ public:
     virtual OUString getAccessibleColumnDescription( sal_Int32 nColumn ) override;
     virtual sal_Int32 getAccessibleRowExtentAt( sal_Int32 nRow, sal_Int32 nColumn ) override;
     virtual sal_Int32 getAccessibleColumnExtentAt( sal_Int32 nRow, sal_Int32 nColumn ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessibleTable > getAccessibleRowHeaders(  ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessibleTable > getAccessibleColumnHeaders(  ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessibleTable > getAccessibleRowHeaders(  ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessibleTable > getAccessibleColumnHeaders(  ) override;
     virtual cpo::uno::Sequence< sal_Int32 > getSelectedAccessibleRows(  ) override;
     virtual cpo::uno::Sequence< sal_Int32 > getSelectedAccessibleColumns(  ) override;
     virtual bool isAccessibleRowSelected( sal_Int32 nRow ) override;
     virtual bool isAccessibleColumnSelected( sal_Int32 nColumn ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleCellAt( sal_Int32 nRow, sal_Int32 nColumn ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleCaption(  ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleSummary(  ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > getAccessibleCellAt( sal_Int32 nRow, sal_Int32 nColumn ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > getAccessibleCaption(  ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > getAccessibleSummary(  ) override;
     virtual bool isAccessibleSelected( sal_Int32 nRow, sal_Int32 nColumn ) override;
     virtual sal_Int64 getAccessibleIndex( sal_Int32 nRow, sal_Int32 nColumn ) override;
     virtual sal_Int32 getAccessibleRow( sal_Int64 nChildIndex ) override;

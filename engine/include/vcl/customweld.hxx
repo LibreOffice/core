@@ -105,11 +105,11 @@ public:
     }
     virtual int GetSurroundingText(OUString& /*rSurrounding*/) { return -1; }
     virtual bool DeleteSurroundingText(const Selection& /*rRange*/) { return false; }
-    css::uno::Reference<css::datatransfer::dnd::XDropTarget> GetDropTarget()
+    cpo::uno::Reference<css::datatransfer::dnd::XDropTarget> GetDropTarget()
     {
         return m_pDrawingArea->get_drop_target();
     }
-    css::uno::Reference<css::datatransfer::clipboard::XClipboard> GetClipboard() const
+    cpo::uno::Reference<css::datatransfer::clipboard::XClipboard> GetClipboard() const
     {
         return m_pDrawingArea->get_clipboard();
     }

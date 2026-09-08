@@ -101,7 +101,8 @@
 #include <com/sun/star/frame/XFrame.hpp>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::presentation;
 
 namespace {
@@ -1628,7 +1629,7 @@ bool ViewShell::RelocateToParentWindow (vcl::Window* pParentWindow)
     return true;
 }
 
-void ViewShell::SwitchViewFireFocus(const css::uno::Reference< css::accessibility::XAccessible >& xAcc )
+void ViewShell::SwitchViewFireFocus(const cpo::uno::Reference< css::accessibility::XAccessible >& xAcc )
 {
     if (xAcc)
     {

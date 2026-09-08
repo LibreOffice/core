@@ -30,7 +30,7 @@ class SFX2_DLLPUBLIC KitChartHelper
 {
 private:
     SfxViewShell* mpViewShell;
-    mutable css::uno::Reference<css::frame::XController> mxController;
+    mutable cpo::uno::Reference<css::frame::XController> mxController;
     VclPtr<vcl::Window> mpWindow;
 
 public:
@@ -39,7 +39,7 @@ public:
         , mpWindow(nullptr)
     {}
 
-    css::uno::Reference<css::frame::XController>& GetXController() const;
+    cpo::uno::Reference<css::frame::XController>& GetXController() const;
     vcl::Window* GetWindow();
     tools::Rectangle GetChartBoundingBox();
     void Invalidate();
@@ -88,7 +88,7 @@ private:
 
     const SfxViewShell* mpViewShell;
     const SfxInPlaceClient* mpIPClient = nullptr; // not nullptr when the object is valid
-    css::uno::Reference<css::frame::XFrame> mxFrame; // not empty when the object is valid
+    cpo::uno::Reference<css::frame::XFrame> mxFrame; // not empty when the object is valid
     VclPtr<vcl::Window> mpGraphicWindow;
     VclPtr<vcl::Window> mpWidgetWindow;
 };

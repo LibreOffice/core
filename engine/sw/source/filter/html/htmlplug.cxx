@@ -78,6 +78,7 @@
 #include <svtools/HtmlWriter.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 
 #define HTML_DFLT_EMBED_WIDTH (o3tl::toTwips(125, o3tl::Length::mm10))

@@ -1025,7 +1025,7 @@ bool ImpEditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView
                     aCurSel = MoveCursor(rKeyEvent, pEditView, &aNewCursorFlags);
 
                     if ( aCurSel.HasRange() ) {
-                        css::uno::Reference<css::datatransfer::clipboard::XClipboard> aSelection(GetSystemPrimarySelection());
+                        cpo::uno::Reference<css::datatransfer::clipboard::XClipboard> aSelection(GetSystemPrimarySelection());
                         pEditView->getImpl().CutCopy( aSelection, false );
                     }
 

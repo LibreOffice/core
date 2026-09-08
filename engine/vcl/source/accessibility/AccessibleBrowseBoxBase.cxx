@@ -32,10 +32,11 @@
 #include <vcl/svapp.hxx>
 
 
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::cpo::uno::Sequence;
 using ::cpo::uno::Any;
 
+using namespace ::cpo;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using namespace ::comphelper;
@@ -46,9 +47,9 @@ using namespace com::sun::star::accessibility::AccessibleStateType;
 // Ctor/Dtor/disposing
 
 AccessibleBrowseBoxBase::AccessibleBrowseBoxBase(
-    const css::uno::Reference<css::accessibility::XAccessible>& xParent,
+    const cpo::uno::Reference<css::accessibility::XAccessible>& xParent,
     ::vcl::IAccessibleTableProvider& rBrowseBox,
-    const css::uno::Reference<css::awt::XWindow>& xFocusWindow, AccessibleBrowseBoxObjType eObjType)
+    const cpo::uno::Reference<css::awt::XWindow>& xFocusWindow, AccessibleBrowseBoxObjType eObjType)
     : AccessibleBrowseBoxBase(xParent, rBrowseBox, xFocusWindow, eObjType,
                               rBrowseBox.GetAccessibleObjectName(eObjType),
                               rBrowseBox.GetAccessibleObjectDescription(eObjType))
@@ -56,9 +57,9 @@ AccessibleBrowseBoxBase::AccessibleBrowseBoxBase(
 }
 
 AccessibleBrowseBoxBase::AccessibleBrowseBoxBase(
-        css::uno::Reference< css::accessibility::XAccessible >  rxParent,
+        cpo::uno::Reference< css::accessibility::XAccessible >  rxParent,
         ::vcl::IAccessibleTableProvider&                      rBrowseBox,
-        css::uno::Reference< css::awt::XWindow >  _xFocusWindow,
+        cpo::uno::Reference< css::awt::XWindow >  _xFocusWindow,
         AccessibleBrowseBoxObjType      eObjType,
         OUString           rName,
         OUString           rDescription ) :
@@ -140,7 +141,7 @@ lang::Locale AccessibleBrowseBoxBase::getLocale()
     ensureIsAlive();
     if( mxParent.is() )
     {
-        css::uno::Reference< css::accessibility::XAccessibleContext >
+        cpo::uno::Reference< css::accessibility::XAccessibleContext >
             xParentContext( mxParent->getAccessibleContext() );
         if( xParentContext.is() )
             return xParentContext->getLocale();
@@ -221,7 +222,7 @@ bool AccessibleBrowseBoxBase::implIsShowing()
     bool bShowing = false;
     if( mxParent.is() )
     {
-        css::uno::Reference< css::accessibility::XAccessibleComponent >
+        cpo::uno::Reference< css::accessibility::XAccessibleComponent >
             xParentComp( mxParent->getAccessibleContext(), uno::UNO_QUERY );
         if( xParentComp.is() )
             bShowing = implGetBoundingBox().Overlaps(

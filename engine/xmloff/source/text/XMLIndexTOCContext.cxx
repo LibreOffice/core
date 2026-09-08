@@ -47,12 +47,12 @@
 #include <osl/diagnose.h>
 
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::text;
 using namespace ::xmloff::token;
 
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::lang::IllegalArgumentException;
 
@@ -118,7 +118,7 @@ XMLIndexTOCContext::~XMLIndexTOCContext()
 
 void XMLIndexTOCContext::startFastElement(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     if (!bValid)
         return;
@@ -273,9 +273,9 @@ void XMLIndexTOCContext::endFastElement(sal_Int32 )
     GetImport().GetTextImport()->RedlineAdjustStartNodeCursor();
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLIndexTOCContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLIndexTOCContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
     SvXMLImportContextRef xContext;
 

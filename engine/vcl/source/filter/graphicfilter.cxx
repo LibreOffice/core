@@ -68,7 +68,7 @@
 #include <filter/WebpReader.hxx>
 #include <filter/WebpWriter.hxx>
 #include <osl/module.hxx>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <com/sun/star/awt/Size.hpp>
 #include <cpo/uno/XInterface.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
@@ -434,7 +434,7 @@ ErrCode GraphicFilter::CanImportGraphic( std::u16string_view rMainUrl, SvStream&
 ErrCode GraphicFilter::ImportGraphic(
     Graphic& rGraphic, const INetURLObject& rPath, sal_uInt16 nFormat,
     sal_uInt16 * pDeterminedFormat, GraphicFilterImportFlags nImportFlags,
-    const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler)
+    const cpo::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler)
 {
     SAL_WARN_IF( rPath.GetProtocol() == INetProtocol::NotValid, "vcl.filter", "GraphicFilter::ImportGraphic() : ProtType == INetProtocol::NotValid" );
 
@@ -1073,7 +1073,7 @@ ErrCode GraphicFilter::readEMF(SvStream & rStream, Graphic & rGraphic, GfxLinkTy
 
 ErrCode GraphicFilter::readPDF(
    SvStream& rStream, Graphic& rGraphic, GfxLinkType& rLinkType, sal_Int32 nPageIndex,
-   const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler,
+   const cpo::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler,
                                BinaryDataContainer& rpGraphicContent)
 {
     bool bEncrypted;
@@ -1272,7 +1272,7 @@ ErrCode GraphicFilter::ImportGraphic(Graphic& rGraphic, std::u16string_view rPat
                                      SvStream& rIStream, sal_uInt16 nFormat,
                                      sal_uInt16* pDeterminedFormat,
                                      GraphicFilterImportFlags nImportFlags, sal_Int32 nPageIndex,
-                                     const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler)
+                                     const cpo::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler)
 {
     OUString aFilterName;
     sal_uInt64 nStreamBegin;
@@ -1739,23 +1739,23 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, std::u16string_vi
                     // do the normal GDIMetaFile export instead
                     try
                     {
-                        const css::uno::Reference< cpo::uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
+                        const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
 
-                        css::uno::Reference< css::xml::sax::XDocumentHandler > xSaxWriter(
-                            css::xml::sax::Writer::create( xContext ), css::uno::UNO_QUERY_THROW);
+                        cpo::uno::Reference< css::xml::sax::XDocumentHandler > xSaxWriter(
+                            css::xml::sax::Writer::create( xContext ), cpo::uno::UNO_QUERY_THROW);
                         cpo::uno::Sequence< cpo::uno::Any > aArguments{ cpo::uno::Any(
                             aConfigItem.GetFilterData()) };
-                        css::uno::Reference< css::svg::XSVGWriter > xSVGWriter(
+                        cpo::uno::Reference< css::svg::XSVGWriter > xSVGWriter(
                             xContext->getServiceManager()->createInstanceWithArgumentsAndContext( u"com.sun.star.svg.SVGWriter"_ustr, aArguments, xContext),
-                                css::uno::UNO_QUERY );
+                                cpo::uno::UNO_QUERY );
                         if( xSaxWriter.is() && xSVGWriter.is() )
                         {
-                            css::uno::Reference< css::io::XActiveDataSource > xActiveDataSource(
-                                xSaxWriter, css::uno::UNO_QUERY );
+                            cpo::uno::Reference< css::io::XActiveDataSource > xActiveDataSource(
+                                xSaxWriter, cpo::uno::UNO_QUERY );
 
                             if( xActiveDataSource.is() )
                             {
-                                const css::uno::Reference< cpo::uno::XInterface > xStmIf(
+                                const cpo::uno::Reference< cpo::uno::XInterface > xStmIf(
                                     getXWeak( new ImpFilterOutputStream( *rTempStm ) ) );
 
                                 SvMemoryStream aMemStm( 65535, 65535 );
@@ -1764,8 +1764,8 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, std::u16string_vi
                                 SvmWriter aWriter( aMemStm );
                                 aWriter.Write( aGraphic.GetGDIMetaFile() );
 
-                                xActiveDataSource->setOutputStream( css::uno::Reference< css::io::XOutputStream >(
-                                    xStmIf, css::uno::UNO_QUERY ) );
+                                xActiveDataSource->setOutputStream( cpo::uno::Reference< css::io::XOutputStream >(
+                                    xStmIf, cpo::uno::UNO_QUERY ) );
                                 cpo::uno::Sequence< sal_Int8 > aMtfSeq( static_cast<sal_Int8 const *>(aMemStm.GetData()), aMemStm.Tell() );
                                 xSVGWriter->write( xSaxWriter, aMtfSeq );
                             }
@@ -1895,7 +1895,7 @@ GraphicFilter& GraphicFilter::GetGraphicFilter()
 ErrCode GraphicFilter::LoadGraphic(const OUString &rPath, const OUString &rFilterName,
                  Graphic& rGraphic, GraphicFilter* pFilter,
                  sal_uInt16* pDeterminedFormat,
-                 const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler)
+                 const cpo::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler)
 {
     if ( !pFilter )
         pFilter = &GetGraphicFilter();

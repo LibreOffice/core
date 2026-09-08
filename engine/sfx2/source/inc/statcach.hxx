@@ -37,7 +37,7 @@ class SfxDispatcher;
 class BindDispatch_Impl final : public ::cppu::WeakImplHelper< css::frame::XStatusListener >
 {
 friend class SfxStateCache;
-    css::uno::Reference< css::frame::XDispatch >   xDisp;
+    cpo::uno::Reference< css::frame::XDispatch >   xDisp;
     css::util::URL                     aURL;
     css::frame::FeatureStateEvent      aStatus;
     SfxStateCache*          pCache;
@@ -45,7 +45,7 @@ friend class SfxStateCache;
 
 public:
                             BindDispatch_Impl(
-                                css::uno::Reference< css::frame::XDispatch > xDisp,
+                                cpo::uno::Reference< css::frame::XDispatch > xDisp,
                                 css::util::URL aURL,
                                 SfxStateCache* pStateCache, const SfxSlot* pSlot );
 
@@ -64,7 +64,7 @@ friend class BindDispatch_Impl;
                             mxDispatch;
     sal_uInt16              nId;           // Slot-Id
     SfxControllerItem*      pInternalController;
-    css::uno::Reference < css::frame::XDispatch > xMyDispatch;
+    cpo::uno::Reference < css::frame::XDispatch > xMyDispatch;
     SfxControllerItem*      pController;    // Pointer to first bound Controller (interlinked with each other)
     SfxSlotServer           aSlotServ;      // SlotServer, SlotPtr = 0 -> not on Stack
     const SfxPoolItem*      pLastItem;      // Last sent Item, never -1
@@ -84,10 +84,10 @@ public:
 
     sal_uInt16                  GetId() const;
 
-    const SfxSlotServer*    GetSlotServer( SfxDispatcher &rDispat, const css::uno::Reference< css::frame::XDispatchProvider > & xProv );
+    const SfxSlotServer*    GetSlotServer( SfxDispatcher &rDispat, const cpo::uno::Reference< css::frame::XDispatchProvider > & xProv );
     const SfxSlotServer*    GetSlotServer( SfxDispatcher &rDispat )
-                            { return GetSlotServer( rDispat, css::uno::Reference< css::frame::XDispatchProvider > () ); }
-    css::uno::Reference< css::frame::XDispatch >          GetDispatch() const;
+                            { return GetSlotServer( rDispat, cpo::uno::Reference< css::frame::XDispatchProvider > () ); }
+    cpo::uno::Reference< css::frame::XDispatch >          GetDispatch() const;
     sal_Int16               Dispatch( const SfxItemSet* pSet, bool bForceSynchron );
     bool                    IsControllerDirty() const
                             { return bCtrlDirty; }
@@ -105,10 +105,10 @@ public:
                             { DBG_ASSERT( !pInternalController, "Only one internal controller allowed!" ); pInternalController = pCtrl; }
     void                    ReleaseInternalController() { pInternalController = nullptr; }
     SfxControllerItem*      GetInternalController() const { return pInternalController; }
-    const css::uno::Reference < css::frame::XDispatch >&
+    const cpo::uno::Reference < css::frame::XDispatch >&
                             GetInternalDispatch() const
                             { return xMyDispatch; }
-    void                    SetInternalDispatch( const css::uno::Reference < css::frame::XDispatch >& rDisp )
+    void                    SetInternalDispatch( const cpo::uno::Reference < css::frame::XDispatch >& rDisp )
                             { xMyDispatch = rDisp; }
 };
 

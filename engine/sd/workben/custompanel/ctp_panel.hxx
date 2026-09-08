@@ -42,20 +42,20 @@ namespace sd::colortoolpanel
     {
     public:
         SingleColorPanel(
-            const css::uno::Reference< cpo::uno::XComponentContext >& i_rContext,
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& i_rContext,
             const rtl::Reference< ConfigurationController >& i_rConfigController,
-            const css::uno::Reference< css::drawing::framework::XResourceId >& i_rResourceId
+            const cpo::uno::Reference< css::drawing::framework::XResourceId >& i_rResourceId
         );
 
         // XToolPanel
-        virtual css::uno::Reference< css::awt::XWindow > SAL_CALL getWindow(  ) throw (cpo::uno::RuntimeException);
-        virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL createAccessible( const css::uno::Reference< css::accessibility::XAccessible >& ParentAccessible ) throw (cpo::uno::RuntimeException);
+        virtual cpo::uno::Reference< css::awt::XWindow > SAL_CALL getWindow(  ) throw (cpo::uno::RuntimeException);
+        virtual cpo::uno::Reference< css::accessibility::XAccessible > SAL_CALL createAccessible( const cpo::uno::Reference< css::accessibility::XAccessible >& ParentAccessible ) throw (cpo::uno::RuntimeException);
 
         // XView
         // (no methods)
 
         // XResource
-        virtual css::uno::Reference< css::drawing::framework::XResourceId > SAL_CALL getResourceId(  ) throw (cpo::uno::RuntimeException);
+        virtual cpo::uno::Reference< css::drawing::framework::XResourceId > SAL_CALL getResourceId(  ) throw (cpo::uno::RuntimeException);
         virtual bool SAL_CALL isAnchorOnly(  ) throw (cpo::uno::RuntimeException);
 
         // XPaintListener
@@ -71,9 +71,9 @@ namespace sd::colortoolpanel
         ~SingleColorPanel();
 
     private:
-        css::uno::Reference< cpo::uno::XComponentContext >            m_xContext;
-        css::uno::Reference< css::drawing::framework::XResourceId >   m_xResourceId;
-        css::uno::Reference< css::awt::XWindow >                      m_xWindow;
+        cpo::uno::Reference< cpo::uno::XComponentContext >            m_xContext;
+        cpo::uno::Reference< css::drawing::framework::XResourceId >   m_xResourceId;
+        cpo::uno::Reference< css::awt::XWindow >                      m_xWindow;
     };
 
 } } // namespace sd::colortoolpanel

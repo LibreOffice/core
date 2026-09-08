@@ -45,6 +45,7 @@
 #include <utility>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace hierarchy_ucp;
 
 
@@ -171,7 +172,7 @@ public:
     getPendingChanges() override;
 private:
     template<class T>
-    css::uno::Reference<T> ensureOrigInterface(css::uno::Reference<T>& x);
+    cpo::uno::Reference<T> ensureOrigInterface(cpo::uno::Reference<T>& x);
 };
 
 }
@@ -461,7 +462,7 @@ bool HierarchyDataSource::createConfigPath(
 // HierarchyDataAccess Implementation.
 
 template<class T>
-css::uno::Reference<T> HierarchyDataAccess::ensureOrigInterface(css::uno::Reference<T>& x)
+cpo::uno::Reference<T> HierarchyDataAccess::ensureOrigInterface(cpo::uno::Reference<T>& x)
 {
     if ( x.is() )
         return x;

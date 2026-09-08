@@ -23,14 +23,14 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 
 using ::com::sun::star::beans::XPropertySet;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::text;
 using namespace ::xmloff::token;
@@ -49,7 +49,7 @@ XMLSectionSourceImportContext::~XMLSectionSourceImportContext()
 }
 
 void XMLSectionSourceImportContext::startFastElement( sal_Int32 /*nElement*/,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     OUString sURL;
     OUString sFilterName;

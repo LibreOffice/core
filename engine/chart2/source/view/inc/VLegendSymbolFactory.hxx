@@ -19,7 +19,7 @@
 #pragma once
 
 #include "LegendEntryProvider.hxx"
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <rtl/ref.hxx>
 #include <svx/unoshape.hxx>
 
@@ -41,7 +41,7 @@ namespace chart::VLegendSymbolFactory
             const css::awt::Size& rEntryKeyAspectRatio,
             const rtl::Reference<SvxShapeGroupAnyD>& rSymbolContainer,
             LegendSymbolStyle eStyle,
-            const css::uno::Reference< css::beans::XPropertySet > & xLegendEntryProperties,
+            const cpo::uno::Reference< css::beans::XPropertySet > & xLegendEntryProperties,
             PropertyType ePropertyType,
             const cpo::uno::Any& rExplicitSymbol /*should contain a css::chart2::Symbol without automatic symbol if the charttype does support symbols else empty*/);
 

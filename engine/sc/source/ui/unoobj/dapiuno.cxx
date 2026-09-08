@@ -70,14 +70,15 @@
 
 using namespace com::sun::star;
 using namespace com::sun::star::sheet;
+using namespace ::cpo;
 
 using ::cpo::uno::Any;
 using ::cpo::uno::Exception;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::cpo::uno::RuntimeException;
 using ::cpo::uno::Sequence;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
+using ::cpo::uno::UNO_QUERY;
+using ::cpo::uno::UNO_QUERY_THROW;
 
 using ::com::sun::star::container::ElementExistException;
 using ::com::sun::star::container::NoSuchElementException;

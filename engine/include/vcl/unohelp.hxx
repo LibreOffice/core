@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_UNOHELP_HXX
 #define INCLUDED_VCL_UNOHELP_HXX
 
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
@@ -36,8 +36,8 @@ namespace com::sun::star::i18n {
 
 namespace vcl::unohelper
 {
-VCL_DLLPUBLIC css::uno::Reference < css::i18n::XBreakIterator > CreateBreakIterator();
-css::uno::Reference < css::i18n::XCharacterClassification> CreateCharacterClassification();
+VCL_DLLPUBLIC cpo::uno::Reference < css::i18n::XBreakIterator > CreateBreakIterator();
+cpo::uno::Reference < css::i18n::XCharacterClassification> CreateCharacterClassification();
 VCL_DLLPUBLIC float               ConvertFontWidth( FontWidth eWidth );
 VCL_DLLPUBLIC FontWidth           ConvertFontWidth( float f );
 VCL_DLLPUBLIC float               ConvertFontWeight( FontWeight eWeight );

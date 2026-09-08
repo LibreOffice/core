@@ -28,9 +28,9 @@ typedef InheritedHelperInterfaceWeakImpl< ov::excel::XWorksheetFunction > ScVbaW
 class ScVbaWSFunction :  public ScVbaWSFunction_BASE
 {
 public:
-    ScVbaWSFunction( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext);
+    ScVbaWSFunction( const cpo::uno::Reference< ov::XHelperInterface >& xParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext);
 
-    virtual css::uno::Reference< css::beans::XIntrospectionAccess >  SAL_CALL getIntrospection() override;
+    virtual cpo::uno::Reference< css::beans::XIntrospectionAccess >  SAL_CALL getIntrospection() override;
     virtual cpo::uno::Any  SAL_CALL invoke(const OUString& FunctionName, const cpo::uno::Sequence< cpo::uno::Any >& Params, cpo::uno::Sequence< sal_Int16 >& OutParamIndex, cpo::uno::Sequence< cpo::uno::Any >& OutParam) override;
     virtual void  SAL_CALL setValue(const OUString& PropertyName, const cpo::uno::Any& Value) override;
     virtual cpo::uno::Any  SAL_CALL getValue(const OUString& PropertyName) override;

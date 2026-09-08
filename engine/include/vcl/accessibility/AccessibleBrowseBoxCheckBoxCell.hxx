@@ -35,7 +35,7 @@ private:
     virtual sal_Int64 implCreateStateSet() override;
 
 public:
-    AccessibleCheckBoxCell(const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
+    AccessibleCheckBoxCell(const cpo::uno::Reference< css::accessibility::XAccessible >& _rxParent,
                             ::vcl::IAccessibleTableProvider& _rBrowseBox,
                             sal_Int32 _nRowPos,
                             sal_uInt16 _nColPos,
@@ -44,7 +44,7 @@ public:
 
     // XAccessibleContext
     virtual sal_Int64 getAccessibleChildCount(  ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleChild( sal_Int64 i ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > getAccessibleChild( sal_Int64 i ) override;
     virtual OUString getImplementationName() override;
     virtual sal_Int64 getAccessibleIndexInParent(  ) override;
 

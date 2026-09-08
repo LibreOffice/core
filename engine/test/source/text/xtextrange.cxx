@@ -15,6 +15,7 @@
 #include <cppunit/TestAssert.h>
 
 using namespace css;
+using namespace ::cpo;
 
 namespace apitest
 {

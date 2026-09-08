@@ -65,6 +65,7 @@
 #include <libxml/xpathInternals.h>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 /// Testsuite for the document signing feature.
 class SigningTest : public UnoApiXmlTest

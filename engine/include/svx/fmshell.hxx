@@ -32,7 +32,7 @@
 #include <svx/ifaceids.hxx>
 #include <svl/hint.hxx>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 class FmFormModel;
 class FmFormPage;
@@ -128,14 +128,14 @@ public:
 
     // helper methods for implementing XFormLayerAccess
     SdrUnoObj* GetFormControl(
-        const css::uno::Reference< css::awt::XControlModel >& _rxModel,
+        const cpo::uno::Reference< css::awt::XControlModel >& _rxModel,
         const SdrView& _rView,
         const OutputDevice& _rDevice,
-        css::uno::Reference< css::awt::XControl >& _out_rxControl
+        cpo::uno::Reference< css::awt::XControl >& _out_rxControl
     ) const;
 
-    static css::uno::Reference< css::form::runtime::XFormController > GetFormController(
-        const css::uno::Reference< css::form::XForm >& _rxForm,
+    static cpo::uno::Reference< css::form::runtime::XFormController > GetFormController(
+        const cpo::uno::Reference< css::form::XForm >& _rxForm,
         const SdrView& _rView,
         const OutputDevice& _rDevice
     );

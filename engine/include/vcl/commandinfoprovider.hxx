@@ -66,26 +66,26 @@ namespace vcl::CommandInfoProvider {
     VCL_DLLPUBLIC OUString GetTooltipForCommand (
         const OUString& rsCommandName,
         const cpo::uno::Sequence<css::beans::PropertyValue>& rProperties,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame);
+        const cpo::uno::Reference<css::frame::XFrame>& rxFrame);
 
     /** Returns the shortcut for a command in human-readable form */
     VCL_DLLPUBLIC OUString GetCommandShortcut (const OUString& rCommandName,
-                                               const css::uno::Reference<css::frame::XFrame>& rxFrame);
+                                               const cpo::uno::Reference<css::frame::XFrame>& rxFrame);
 
     VCL_DLLPUBLIC KeyCode GetCommandKeyCodeShortcut (const OUString& rCommandName,
-                                                     const css::uno::Reference<css::frame::XFrame>& rxFrame);
+                                                     const cpo::uno::Reference<css::frame::XFrame>& rxFrame);
 
     VCL_DLLPUBLIC OUString GetRealCommandForCommand(const cpo::uno::Sequence<css::beans::PropertyValue>& rProperties);
 
-    VCL_DLLPUBLIC css::uno::Reference<css::graphic::XGraphic> GetXGraphicForCommand(
+    VCL_DLLPUBLIC cpo::uno::Reference<css::graphic::XGraphic> GetXGraphicForCommand(
         const OUString& rsCommandName,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame,
+        const cpo::uno::Reference<css::frame::XFrame>& rxFrame,
         vcl::ImageType eImageType = vcl::ImageType::Small,
         vcl::ImageWritingDirection eImageDir = vcl::ImageWritingDirection::DontCare);
 
     VCL_DLLPUBLIC Image GetImageForCommand(
         const OUString& rsCommandName,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame,
+        const cpo::uno::Reference<css::frame::XFrame>& rxFrame,
         vcl::ImageType eImageType = vcl::ImageType::Small,
         vcl::ImageWritingDirection eImageDir = vcl::ImageWritingDirection::DontCare);
 
@@ -101,7 +101,7 @@ namespace vcl::CommandInfoProvider {
         const OUString& rsCommandName,
         const OUString& rModuleName);
 
-    VCL_DLLPUBLIC OUString GetModuleIdentifier(const css::uno::Reference<css::frame::XFrame>& rxFrame);
+    VCL_DLLPUBLIC OUString GetModuleIdentifier(const cpo::uno::Reference<css::frame::XFrame>& rxFrame);
 }
 
 #endif // INCLUDED_VCL_COMMANDINFOPROVIDER_HXX

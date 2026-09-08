@@ -11,7 +11,7 @@
 #define INCLUDED_TEST_SHEET_XUSEDAREACURSOR_HXX
 
 #include <cpo/uno/XInterface.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <test/testdllapi.hxx>
 
 namespace apitest
@@ -19,8 +19,8 @@ namespace apitest
 class OOO_DLLPUBLIC_TEST XUsedAreaCursor
 {
 public:
-    virtual css::uno::Reference<cpo::uno::XInterface> init() = 0;
-    virtual css::uno::Reference<cpo::uno::XInterface> getXSpreadsheet() = 0;
+    virtual cpo::uno::Reference<cpo::uno::XInterface> init() = 0;
+    virtual cpo::uno::Reference<cpo::uno::XInterface> getXSpreadsheet() = 0;
     virtual ~XUsedAreaCursor() {}
 
     void testGotoStartOfUsedArea();

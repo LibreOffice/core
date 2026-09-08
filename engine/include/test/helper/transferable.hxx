@@ -20,7 +20,7 @@ namespace helper
 namespace transferable
 {
 OString OOO_DLLPUBLIC_TEST getTextSelection(
-    const css::uno::Reference<css::datatransfer::XTransferable>& xTransferable, OString mimeType);
+    const cpo::uno::Reference<css::datatransfer::XTransferable>& xTransferable, OString mimeType);
 } // namespace transferable
 } // namespace helper
 } // namespace apitest

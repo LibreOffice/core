@@ -31,7 +31,7 @@
 #include "base.hxx"
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace css::lang;
 using namespace css::reflection;
@@ -178,7 +178,7 @@ Any IdlReflectionServiceImpl::getByHierarchicalName( const OUString & rName )
             OSL_ASSERT( (*o3tl::forceAccess<Reference<XInterface>>(aRet))->queryInterface(
                 cppu::UnoType<XTypeDescription>::get()).hasValue() );
 
-            css::uno::Reference< css::reflection::XConstantTypeDescription >
+            cpo::uno::Reference< css::reflection::XConstantTypeDescription >
                 ctd;
             if (aRet >>= ctd)
             {

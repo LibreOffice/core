@@ -32,7 +32,7 @@
 #include <comphelper/sequence.hxx>
 
 using namespace utl;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 //      ScAppOptions - Application Options

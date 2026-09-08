@@ -43,7 +43,7 @@ static constexpr sal_Int32 NAMESPACE(sal_Int32 x) { return x >> 16; }
 static constexpr sal_Int32 TOKEN(sal_Int32 x) { return x & 0xffff; }
 
 namespace sax_fastparser {
-    FastSaxSerializer::FastSaxSerializer( const css::uno::Reference< css::io::XOutputStream >& xOutputStream )
+    FastSaxSerializer::FastSaxSerializer( const cpo::uno::Reference< css::io::XOutputStream >& xOutputStream )
         : mbMarkStackEmpty(true)
         , mpDoubleStr(nullptr)
         , mnDoubleStrCapacity(RTL_STR_MAX_VALUEOFDOUBLE)
@@ -418,7 +418,7 @@ namespace sax_fastparser {
         write("/>");
     }
 
-    css::uno::Reference< css::io::XOutputStream > const & FastSaxSerializer::getOutputStream() const
+    cpo::uno::Reference< css::io::XOutputStream > const & FastSaxSerializer::getOutputStream() const
     {
         return maCachedOutputStream.getOutputStream();
     }

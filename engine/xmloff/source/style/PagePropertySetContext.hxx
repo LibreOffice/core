@@ -34,7 +34,7 @@ class PagePropertySetContext : public SvXMLPropertySetContext
 
 public:
     PagePropertySetContext( SvXMLImport& rImport, sal_Int32 nElement,
-                 const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+                 const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
                  sal_uInt32 nFam,
                  ::std::vector< XMLPropertyState > &rProps,
                  SvXMLImportPropertyMapper* pMap,
@@ -44,9 +44,9 @@ public:
     virtual ~PagePropertySetContext() override;
 
     using SvXMLPropertySetContext::createFastChildContext;
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
         ::std::vector< XMLPropertyState > &rProperties,
         const XMLPropertyState& rProp ) override;
 };

@@ -20,7 +20,7 @@
 
 
 #include <com/sun/star/container/XIndexReplace.hpp>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <xmloff/xmlictxt.hxx>
 #include "txthints.hxx"
 
@@ -35,7 +35,7 @@ namespace com::sun::star {
 
 class XMLParaContext : public SvXMLImportContext
 {
-    css::uno::Reference < css::text::XTextRange > xStart;
+    cpo::uno::Reference < css::text::XTextRange > xStart;
     OUString             sStyleName;
     OUString             m_sXmlId;
     OUString             m_sAbout;
@@ -61,12 +61,12 @@ public:
 
     XMLParaContext( SvXMLImport& rImport,
             sal_Int32 nElement,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList );
+            const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList );
 
     virtual void endFastElement(sal_Int32 nElement) override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
     virtual void characters( const OUString& rChars ) override;
 
@@ -81,22 +81,22 @@ class XMLNumberedParaContext : public SvXMLImportContext
     /// text:list-id
     OUString m_ListId;
     /// text:style-name
-    css::uno::Reference< css::container::XIndexReplace > m_xNumRules;
+    cpo::uno::Reference< css::container::XIndexReplace > m_xNumRules;
 
 public:
 
 
     XMLNumberedParaContext( SvXMLImport& i_rImport,
             sal_Int32 nElement,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList > & i_xAttrList );
+            const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & i_xAttrList );
 
     virtual void endFastElement(sal_Int32 nElement) override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
     sal_Int16 GetLevel() const { return m_Level; }
-    const css::uno::Reference< css::container::XIndexReplace >& GetNumRules() const
+    const cpo::uno::Reference< css::container::XIndexReplace >& GetNumRules() const
         { return m_xNumRules; }
     const OUString& GetListId() const { return m_ListId; }
     sal_Int16 GetStartValue() const { return m_StartValue; }
@@ -121,23 +121,23 @@ public:
     XMLImpSpanContext_Impl(
             SvXMLImport& rImport,
             sal_Int32 nElement,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
+            const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
             XMLHints_Impl& rHints,
             bool& rIgnLeadSpace,
             sal_uInt8 nSFConvFlags
                           );
 
-    static css::uno::Reference< css::xml::sax::XFastContextHandler > CreateSpanContext(
+    static cpo::uno::Reference< css::xml::sax::XFastContextHandler > CreateSpanContext(
             SvXMLImport& rImport,
             sal_Int32 nElement,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
+            const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
             XMLHints_Impl& rHints,
             bool& rIgnLeadSpace,
             sal_uInt8 nStarFontsConvFlags = 0
              );
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
     virtual void endFastElement( sal_Int32 nElement ) override;
     virtual void characters( const OUString& rChars ) override;

@@ -13,6 +13,7 @@
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace
 {

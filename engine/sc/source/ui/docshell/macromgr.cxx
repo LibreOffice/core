@@ -30,7 +30,8 @@
 #include <com/sun/star/script/XLibraryContainer.hpp>
 
 using namespace ::com::sun::star;
-using ::com::sun::star::uno::Reference;
+using namespace ::cpo;
+using ::cpo::uno::Reference;
 
 /**
  * A simple container to keep track of cells that depend on basic modules

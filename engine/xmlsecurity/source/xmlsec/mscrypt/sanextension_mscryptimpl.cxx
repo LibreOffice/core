@@ -32,7 +32,7 @@
 #include "sanextension_mscryptimpl.hxx"
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno ;
+using namespace ::cpo::uno ;
 using namespace ::com::sun::star::security ;
 using namespace ::cpo::uno;
 using ::com::sun::star::security::XCertificateExtension ;

@@ -41,7 +41,7 @@ namespace
 }
 using namespace ::com::sun::star::lang;
 using namespace comphelper;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using ::com::sun::star::accessibility::XAccessible;
 using namespace ::com::sun::star::accessibility;
 
@@ -122,7 +122,7 @@ sal_Int64 AccessibleBrowseBoxTableCell::getAccessibleChildCount()
 }
 
 /** @return  The XAccessible interface of the specified child. */
-css::uno::Reference< css::accessibility::XAccessible >
+cpo::uno::Reference< css::accessibility::XAccessible >
     AccessibleBrowseBoxTableCell::getAccessibleChild( sal_Int64 )
 {
     throw css::lang::IndexOutOfBoundsException();

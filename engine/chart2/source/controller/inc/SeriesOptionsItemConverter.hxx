@@ -35,7 +35,7 @@ class SeriesOptionsItemConverter final : public ItemConverter
 public:
     SeriesOptionsItemConverter(
         const rtl::Reference<::chart::ChartModel> & xChartModel,
-        css::uno::Reference< cpo::uno::XComponentContext > xContext,
+        cpo::uno::Reference< cpo::uno::XComponentContext > xContext,
         const rtl::Reference<::chart::DataSeries> & rPropertySet,
         SfxItemPool& rItemPool );
     virtual ~SeriesOptionsItemConverter() override;
@@ -49,7 +49,7 @@ protected:
 
 private:
     rtl::Reference<::chart::ChartModel>  m_xChartModel;
-    css::uno::Reference< cpo::uno::XComponentContext>   m_xCC;
+    cpo::uno::Reference< cpo::uno::XComponentContext>   m_xCC;
 
     bool m_bAttachToMainAxis;
     bool m_bSupportingOverlapAndGapWidthProperties;

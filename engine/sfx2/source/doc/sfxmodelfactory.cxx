@@ -33,9 +33,9 @@ namespace sfx2
 {
 
 
-    using ::com::sun::star::uno::Reference;
+    using ::cpo::uno::Reference;
     using ::cpo::uno::XInterface;
-    using ::com::sun::star::uno::UNO_QUERY;
+    using ::cpo::uno::UNO_QUERY;
     using ::cpo::uno::Any;
     using ::cpo::uno::Sequence;
     using ::com::sun::star::beans::NamedValue;
@@ -65,9 +65,9 @@ namespace sfx2
     }
 
 
-    css::uno::Reference<cpo::uno::XInterface> createSfxModelInstance(
+    cpo::uno::Reference<cpo::uno::XInterface> createSfxModelInstance(
         const cpo::uno::Sequence<cpo::uno::Any> & _rArguments,
-        std::function<css::uno::Reference<cpo::uno::XInterface>(SfxModelFlags)> creationFunc)
+        std::function<cpo::uno::Reference<cpo::uno::XInterface>(SfxModelFlags)> creationFunc)
     {
         ::comphelper::NamedValueCollection aArgs( _rArguments );
         const bool bEmbeddedObject = aArgs.getOrDefault( u"EmbeddedObject"_ustr, false );

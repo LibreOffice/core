@@ -55,7 +55,7 @@
 #include <string_view>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo::uno;
 
 namespace
 {

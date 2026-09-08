@@ -26,7 +26,7 @@ namespace connectivity::flat
     class OFlatColumns : public file::OColumns
     {
     protected:
-        virtual css::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
+        virtual cpo::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
     public:
         OFlatColumns(file::OFileTable* _pTable,
                         ::osl::Mutex& _rMutex,

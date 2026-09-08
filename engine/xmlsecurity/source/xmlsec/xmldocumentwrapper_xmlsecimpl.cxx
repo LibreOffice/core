@@ -33,6 +33,7 @@
 #endif
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 #define STRXMLNS "xmlns"
 
@@ -777,7 +778,7 @@ void SAL_CALL XMLDocumentWrapper_XmlSecImpl::generateSAXEvents(
 }
 
 void SAL_CALL XMLDocumentWrapper_XmlSecImpl::rebuildIDLink(
-    const css::uno::Reference< css::xml::wrapper::XXMLElementWrapper >& node )
+    const cpo::uno::Reference< css::xml::wrapper::XXMLElementWrapper >& node )
 {
     xmlNodePtr pNode = checkElement( node );
     rebuildIDLink(pNode);

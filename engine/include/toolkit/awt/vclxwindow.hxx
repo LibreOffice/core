@@ -129,8 +129,8 @@ public:
 
     // css::lang::XComponent
     void dispose(  ) override;
-    void addEventListener( const css::uno::Reference< css::lang::XEventListener >& rxListener ) override;
-    void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& rxListener ) override;
+    void addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& rxListener ) override;
+    void removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& rxListener ) override;
 
     // css::awt::XWindow
     void setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, sal_Int16 Flags ) override;
@@ -138,28 +138,28 @@ public:
     void setVisible( bool Visible ) override;
     void setEnable( bool Enable ) override;
     void setFocus(  ) override;
-    void addWindowListener( const css::uno::Reference< css::awt::XWindowListener >& rrxListener ) override;
-    void removeWindowListener( const css::uno::Reference< css::awt::XWindowListener >& rrxListener ) override;
-    void addFocusListener( const css::uno::Reference< css::awt::XFocusListener >& rrxListener ) override;
-    void removeFocusListener( const css::uno::Reference< css::awt::XFocusListener >& rrxListener ) override;
-    void addKeyListener( const css::uno::Reference< css::awt::XKeyListener >& rrxListener ) override;
-    void removeKeyListener( const css::uno::Reference< css::awt::XKeyListener >& rrxListener ) override;
-    void addMouseListener( const css::uno::Reference< css::awt::XMouseListener >& rrxListener ) override;
-    void removeMouseListener( const css::uno::Reference< css::awt::XMouseListener >& rrxListener ) override;
-    void addMouseMotionListener( const css::uno::Reference< css::awt::XMouseMotionListener >& rrxListener ) override;
-    void removeMouseMotionListener( const css::uno::Reference< css::awt::XMouseMotionListener >& rrxListener ) override;
-    void addPaintListener( const css::uno::Reference< css::awt::XPaintListener >& rrxListener ) override;
-    void removePaintListener( const css::uno::Reference< css::awt::XPaintListener >& rrxListener ) override;
+    void addWindowListener( const cpo::uno::Reference< css::awt::XWindowListener >& rrxListener ) override;
+    void removeWindowListener( const cpo::uno::Reference< css::awt::XWindowListener >& rrxListener ) override;
+    void addFocusListener( const cpo::uno::Reference< css::awt::XFocusListener >& rrxListener ) override;
+    void removeFocusListener( const cpo::uno::Reference< css::awt::XFocusListener >& rrxListener ) override;
+    void addKeyListener( const cpo::uno::Reference< css::awt::XKeyListener >& rrxListener ) override;
+    void removeKeyListener( const cpo::uno::Reference< css::awt::XKeyListener >& rrxListener ) override;
+    void addMouseListener( const cpo::uno::Reference< css::awt::XMouseListener >& rrxListener ) override;
+    void removeMouseListener( const cpo::uno::Reference< css::awt::XMouseListener >& rrxListener ) override;
+    void addMouseMotionListener( const cpo::uno::Reference< css::awt::XMouseMotionListener >& rrxListener ) override;
+    void removeMouseMotionListener( const cpo::uno::Reference< css::awt::XMouseMotionListener >& rrxListener ) override;
+    void addPaintListener( const cpo::uno::Reference< css::awt::XPaintListener >& rrxListener ) override;
+    void removePaintListener( const cpo::uno::Reference< css::awt::XPaintListener >& rrxListener ) override;
 
     // css::awt::XWindowPeer
-    css::uno::Reference< css::awt::XToolkit > getToolkit(  ) override;
-    void setPointer( const css::uno::Reference< css::awt::XPointer >& Pointer ) override;
+    cpo::uno::Reference< css::awt::XToolkit > getToolkit(  ) override;
+    void setPointer( const cpo::uno::Reference< css::awt::XPointer >& Pointer ) override;
     void setBackground( sal_Int32 Color ) override;
     void invalidate( sal_Int16 Flags ) override;
     void invalidateRect( const css::awt::Rectangle& Rect, sal_Int16 Flags ) override;
 
     // css::awt::XVclWindowPeer
-    bool isChild( const css::uno::Reference< css::awt::XWindowPeer >& Peer ) override;
+    bool isChild( const cpo::uno::Reference< css::awt::XWindowPeer >& Peer ) override;
     void setDesignMode( bool bOn ) override;
     bool isDesignMode(  ) override;
     void enableClipSiblings( bool bClip ) override;
@@ -175,15 +175,15 @@ public:
     css::awt::Size calcAdjustedSize( const css::awt::Size& aNewSize ) override;
 
     // css::awt::XView
-    bool setGraphics( const css::uno::Reference< css::awt::XGraphics >& aDevice ) override;
-    css::uno::Reference< css::awt::XGraphics > getGraphics(  ) override;
+    bool setGraphics( const cpo::uno::Reference< css::awt::XGraphics >& aDevice ) override;
+    cpo::uno::Reference< css::awt::XGraphics > getGraphics(  ) override;
     css::awt::Size getSize(  ) override;
     void draw( sal_Int32 nX, sal_Int32 nY ) override;
     void setZoom( float fZoomX, float fZoomY ) override;
 
     // css::awt::XDockableWindow
-    void addDockableWindowListener( const css::uno::Reference< css::awt::XDockableWindowListener >& xListener ) override;
-    void removeDockableWindowListener( const css::uno::Reference< css::awt::XDockableWindowListener >& xListener ) override;
+    void addDockableWindowListener( const cpo::uno::Reference< css::awt::XDockableWindowListener >& xListener ) override;
+    void removeDockableWindowListener( const cpo::uno::Reference< css::awt::XDockableWindowListener >& xListener ) override;
     void enableDocking( bool bEnable ) override;
     bool isFloating(  ) override;
     void setFloatingMode( bool bFloating ) override;
@@ -207,7 +207,7 @@ public:
     bool hasPropertyByName( const OUString& Name ) override;
 
     // XStyleSettingsSupplier
-    virtual css::uno::Reference< css::awt::XStyleSettings > getStyleSettings() override;
+    virtual cpo::uno::Reference< css::awt::XStyleSettings > getStyleSettings() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

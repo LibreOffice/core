@@ -51,7 +51,7 @@ class SvXMLMetaExport final : public cppu::WeakImplHelper<
 {
 private:
     SvXMLExport& mrExport;
-    css::uno::Reference< css::document::XDocumentProperties> mxDocProps;
+    cpo::uno::Reference< css::document::XDocumentProperties> mxDocProps;
     /// counts levels of the xml document. necessary for special handling.
     int m_level;
     /// preserved namespaces. necessary because we do not write the root node.
@@ -69,7 +69,7 @@ private:
 
 public:
     SvXMLMetaExport( SvXMLExport& i_rExport,
-        css::uno::Reference< css::document::XDocumentProperties> i_xDocProps);
+        cpo::uno::Reference< css::document::XDocumentProperties> i_xDocProps);
 
     virtual ~SvXMLMetaExport() override;
 
@@ -83,7 +83,7 @@ public:
     virtual void startDocument() override;
     virtual void endDocument() override;
     virtual void startElement(const OUString & i_rName,
-        const css::uno::Reference<
+        const cpo::uno::Reference<
                 css::xml::sax::XAttributeList > & i_xAttribs) override;
     virtual void endElement(const OUString & i_rName) override;
     virtual void characters(const OUString & i_rChars) override;
@@ -92,7 +92,7 @@ public:
     virtual void processingInstruction(
         const OUString & i_rTarget, const OUString & i_rData) override;
     virtual void setDocumentLocator(
-        const css::uno::Reference<
+        const cpo::uno::Reference<
                 css::xml::sax::XLocator > & i_xLocator) override;
 
 };

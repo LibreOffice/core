@@ -58,7 +58,7 @@ public:
     void endParagraphGroup() override;
     void startCharacterGroup() override;
     void endCharacterGroup() override;
-    void startShape(css::uno::Reference<css::drawing::XShape> const& xShape) override;
+    void startShape(cpo::uno::Reference<css::drawing::XShape> const& xShape) override;
     void endShape() override;
     void startTextBoxContent() override;
     void endTextBoxContent() override;
@@ -84,7 +84,7 @@ protected:
     virtual void lcl_endParagraphGroup() = 0;
     virtual void lcl_startCharacterGroup() = 0;
     virtual void lcl_endCharacterGroup() = 0;
-    virtual void lcl_startShape(css::uno::Reference<css::drawing::XShape> const& xShape) = 0;
+    virtual void lcl_startShape(cpo::uno::Reference<css::drawing::XShape> const& xShape) = 0;
     virtual void lcl_endShape() = 0;
     virtual void lcl_startTextBoxContent() = 0;
     virtual void lcl_endTextBoxContent() = 0;

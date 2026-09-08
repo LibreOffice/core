@@ -34,10 +34,10 @@
 namespace dbaccess
 {
 
-    using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::UNO_QUERY;
-    using ::com::sun::star::uno::UNO_QUERY_THROW;
-    using ::com::sun::star::uno::UNO_SET_THROW;
+    using ::cpo::uno::Reference;
+    using ::cpo::uno::UNO_QUERY;
+    using ::cpo::uno::UNO_QUERY_THROW;
+    using ::cpo::uno::UNO_SET_THROW;
     using ::cpo::uno::Exception;
     using ::cpo::uno::RuntimeException;
     using ::cpo::uno::Sequence;
@@ -62,7 +62,7 @@ namespace dbaccess
     {
         void lcl_dispatchScriptURL_throw(
             ::unotools::WeakReference< ODatabaseDocument > const & xWeakDocument,
-            css::uno::Reference< css::util::XURLTransformer > const & xURLTransformer,
+            cpo::uno::Reference< css::util::XURLTransformer > const & xURLTransformer,
             const OUString& _rScriptURL, const DocumentEvent& _rTrigger )
         {
             rtl::Reference< ODatabaseDocument > xDocument( xWeakDocument.get() );

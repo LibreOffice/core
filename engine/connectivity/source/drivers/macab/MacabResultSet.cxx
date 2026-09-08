@@ -38,7 +38,7 @@
 
 using namespace connectivity::macab;
 using namespace cppu;
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace css::lang;
 using namespace css::beans;
@@ -187,7 +187,7 @@ Sequence<  Type > MacabResultSet::getTypes()
     return comphelper::concatSequences(aTypes.getTypes(), MacabResultSet_BASE::getTypes());
 }
 
-css::uno::Reference< css::beans::XPropertySetInfo > MacabResultSet::getPropertySetInfo(  )
+cpo::uno::Reference< css::beans::XPropertySetInfo > MacabResultSet::getPropertySetInfo(  )
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }

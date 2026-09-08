@@ -77,6 +77,7 @@
 #include <vbahelper/vbahelper.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace ::ooo::vba;
 
 
@@ -227,7 +228,7 @@ getCurrentDocCtx( const OUString& ctxName, const uno::Reference< cpo::uno::XComp
 {
     uno::Reference< frame::XModel > xModel;
     // try fallback to calling doc
-    css::uno::Reference< css::container::XNameAccess > xNameAccess( xContext, css::uno::UNO_QUERY_THROW );
+    cpo::uno::Reference< css::container::XNameAccess > xNameAccess( xContext, cpo::uno::UNO_QUERY_THROW );
     xModel.set( xNameAccess->getByName( ctxName ), uno::UNO_QUERY_THROW );
     return xModel;
 }
@@ -582,23 +583,23 @@ OUString VBAToRegexp(const OUString &rIn)
     return sResult.makeStringAndClear( );
 }
 
-static double getPixelToMeterConversionFactor( const css::uno::Reference< css::awt::XDevice >& xDevice, bool bVertical)
+static double getPixelToMeterConversionFactor( const cpo::uno::Reference< css::awt::XDevice >& xDevice, bool bVertical)
 {
     return bVertical ? xDevice->getInfo().PixelPerMeterY : xDevice->getInfo().PixelPerMeterX;
 }
 
-double PointsToPixels( const css::uno::Reference< css::awt::XDevice >& xDevice, double fPoints, bool bVertical)
+double PointsToPixels( const cpo::uno::Reference< css::awt::XDevice >& xDevice, double fPoints, bool bVertical)
 {
     double fConvertFactor = getPixelToMeterConversionFactor( xDevice, bVertical );
     return o3tl::convert(fPoints, o3tl::Length::pt, o3tl::Length::m) * fConvertFactor;
 }
-double PixelsToPoints( const css::uno::Reference< css::awt::XDevice >& xDevice, double fPixels, bool bVertical)
+double PixelsToPoints( const cpo::uno::Reference< css::awt::XDevice >& xDevice, double fPixels, bool bVertical)
 {
     double fConvertFactor = getPixelToMeterConversionFactor( xDevice, bVertical );
     return o3tl::convert(fPixels / fConvertFactor, o3tl::Length::m, o3tl::Length::pt);
 }
 
-ConcreteXShapeGeometryAttributes::ConcreteXShapeGeometryAttributes( const css::uno::Reference< css::drawing::XShape >& xShape )
+ConcreteXShapeGeometryAttributes::ConcreteXShapeGeometryAttributes( const cpo::uno::Reference< css::drawing::XShape >& xShape )
   : m_aShapeHelper( xShape )
 {
 }
@@ -942,7 +943,7 @@ void ConcreteXShapeGeometryAttributes::setWidth( double nWidth)
 }
 
 
-ShapeHelper::ShapeHelper( css::uno::Reference< css::drawing::XShape > _xShape)
+ShapeHelper::ShapeHelper( cpo::uno::Reference< css::drawing::XShape > _xShape)
     : xShape(std::move( _xShape ))
 {
     if( !xShape.is() )
@@ -1000,7 +1001,7 @@ void ShapeHelper::setTop(double _fTop)
 void DebugHelper::basicexception( const cpo::uno::Exception& ex, ErrCode err, std::u16string_view /*additionalArgument*/ )
 {
     // #TODO #FIXME ( do we want to support additionalArg here )
-    throw css::script::BasicErrorException( ex.Message, css::uno::Reference< cpo::uno::XInterface >(), sal_uInt32(err), OUString() );
+    throw css::script::BasicErrorException( ex.Message, cpo::uno::Reference< cpo::uno::XInterface >(), sal_uInt32(err), OUString() );
 }
 
 void DebugHelper::basicexception( ErrCode err,  std::u16string_view additionalArgument )
@@ -1017,7 +1018,7 @@ void DebugHelper::runtimeexception( ErrCode err )
 {
     // #TODO #FIXME ( do we want to support additionalArg here )
     throw cpo::uno::RuntimeException( cpo::uno::Exception().Message + " " + OUString::number(sal_uInt32(err)),
-                                      css::uno::Reference< cpo::uno::XInterface >() );
+                                      cpo::uno::Reference< cpo::uno::XInterface >() );
 }
 
 Millimeter::Millimeter():m_nMillimeter(0) {}

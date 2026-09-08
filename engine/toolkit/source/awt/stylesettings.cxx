@@ -34,7 +34,7 @@
 
 namespace toolkit
 {
-    using ::com::sun::star::uno::Reference;
+    using ::cpo::uno::Reference;
     using ::cpo::uno::RuntimeException;
     using ::com::sun::star::lang::DisposedException;
     using ::com::sun::star::lang::EventObject;

@@ -13,7 +13,7 @@ excludelist:
     - com/sun/star/frame/XFrame.hpp
     framework/source/fwe/classes/addonmenu.cxx:
     # Actually used
-    - com/sun/star/uno/Reference.hxx
+    - cpo/uno/Reference.hxx
     - com/sun/star/beans/PropertyValue.hpp
     framework/source/fwe/helper/undomanagerhelper.cxx:
     # Actually used

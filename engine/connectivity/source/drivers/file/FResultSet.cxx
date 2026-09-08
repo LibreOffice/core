@@ -48,7 +48,7 @@ using namespace connectivity;
 using namespace connectivity::file;
 using namespace ::cppu;
 using namespace dbtools;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
@@ -58,7 +58,7 @@ using namespace com::sun::star::container;
 
 namespace
 {
-    void lcl_throwError(TranslateId pErrorId, const css::uno::Reference< cpo::uno::XInterface>& _xContext)
+    void lcl_throwError(TranslateId pErrorId, const cpo::uno::Reference< cpo::uno::XInterface>& _xContext)
     {
         ::connectivity::SharedResources aResources;
         const OUString sMessage = aResources.getResourceString(pErrorId);

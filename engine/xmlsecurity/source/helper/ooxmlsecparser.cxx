@@ -21,6 +21,7 @@
 #include <sal/log.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 class OOXMLSecParser::Context
 {
@@ -41,7 +42,7 @@ class OOXMLSecParser::Context
         virtual ~Context() = default;
 
         virtual void StartElement(
-            css::uno::Reference<css::xml::sax::XAttributeList> const& /*xAttrs*/)
+            cpo::uno::Reference<css::xml::sax::XAttributeList> const& /*xAttrs*/)
         {
         }
 
@@ -73,7 +74,7 @@ class OOXMLSecParser::UnknownContext
         }
 
         virtual void StartElement(
-            css::uno::Reference<css::xml::sax::XAttributeList> const& xAttrs) override
+            cpo::uno::Reference<css::xml::sax::XAttributeList> const& xAttrs) override
         {
             m_rParser.HandleIdAttr(xAttrs);
         }
@@ -113,7 +114,7 @@ class OOXMLSecParser::ReferencedContextImpl
         {
         }
 
-        OUString CheckIdAttrReferenced(css::uno::Reference<css::xml::sax::XAttributeList> const& xAttrs)
+        OUString CheckIdAttrReferenced(cpo::uno::Reference<css::xml::sax::XAttributeList> const& xAttrs)
         {
             OUString const id(m_rParser.HandleIdAttr(xAttrs));
             if (!id.isEmpty() && m_rParser.m_pXSecController->haveReferenceForId(id))
@@ -273,7 +274,7 @@ class OOXMLSecParser::DsKeyInfoContext
         }
 
         virtual void StartElement(
-            css::uno::Reference<css::xml::sax::XAttributeList> const& xAttrs) override
+            cpo::uno::Reference<css::xml::sax::XAttributeList> const& xAttrs) override
         {
             m_rParser.HandleIdAttr(xAttrs);
         }
@@ -309,7 +310,7 @@ class OOXMLSecParser::DsSignatureValueContext
         }
 
         virtual void StartElement(
-            css::uno::Reference<css::xml::sax::XAttributeList> const& xAttrs) override
+            cpo::uno::Reference<css::xml::sax::XAttributeList> const& xAttrs) override
         {
             m_rParser.HandleIdAttr(xAttrs);
         }
@@ -341,7 +342,7 @@ class OOXMLSecParser::DsDigestValueContext
         }
 
         virtual void StartElement(
-            css::uno::Reference<css::xml::sax::XAttributeList> const& /*xAttrs*/) override
+            cpo::uno::Reference<css::xml::sax::XAttributeList> const& /*xAttrs*/) override
         {
             m_rValue.clear();
         }
@@ -368,7 +369,7 @@ class OOXMLSecParser::DsDigestMethodContext
         }
 
         virtual void StartElement(
-            css::uno::Reference<css::xml::sax::XAttributeList> const& xAttrs) override
+            cpo::uno::Reference<css::xml::sax::XAttributeList> const& xAttrs) override
         {
             OUString ouAlgorithm = xAttrs->getValueByName(u"Algorithm"_ustr);
 
@@ -407,7 +408,7 @@ class OOXMLSecParser::DsTransformContext
         }
 
         virtual void StartElement(
-            css::uno::Reference<css::xml::sax::XAttributeList> const& xAttrs) override
+            cpo::uno::Reference<css::xml::sax::XAttributeList> const& xAttrs) override
         {
             OUString aAlgorithm = xAttrs->getValueByName(u"Algorithm"_ustr);
 
@@ -465,7 +466,7 @@ class OOXMLSecParser::DsReferenceContext
         }
 
         virtual void StartElement(
-            css::uno::Reference<css::xml::sax::XAttributeList> const& xAttrs) override
+            cpo::uno::Reference<css::xml::sax::XAttributeList> const& xAttrs) override
         {
             m_rParser.HandleIdAttr(xAttrs);
 
@@ -533,7 +534,7 @@ class OOXMLSecParser::DsSignatureMethodContext
         }
 
         virtual void StartElement(
-            css::uno::Reference<css::xml::sax::XAttributeList> const& xAttrs) override
+            cpo::uno::Reference<css::xml::sax::XAttributeList> const& xAttrs) override
         {
             OUString ouAlgorithm = xAttrs->getValueByName(u"Algorithm"_ustr);
             if (ouAlgorithm == ALGO_ECDSASHA1 || ouAlgorithm == ALGO_ECDSASHA256
@@ -555,7 +556,7 @@ class OOXMLSecParser::DsSignedInfoContext
         }
 
         virtual void StartElement(
-            css::uno::Reference<css::xml::sax::XAttributeList> const& xAttrs) override
+            cpo::uno::Reference<css::xml::sax::XAttributeList> const& xAttrs) override
         {
             m_rParser.HandleIdAttr(xAttrs);
         }
@@ -727,7 +728,7 @@ class OOXMLSecParser::XadesSignedSignaturePropertiesContext
         }
 
         virtual void StartElement(
-            css::uno::Reference<css::xml::sax::XAttributeList> const& xAttrs) override
+            cpo::uno::Reference<css::xml::sax::XAttributeList> const& xAttrs) override
         {
             CheckIdAttrReferenced(xAttrs);
         }
@@ -761,7 +762,7 @@ class OOXMLSecParser::XadesSignedPropertiesContext
         }
 
         virtual void StartElement(
-            css::uno::Reference<css::xml::sax::XAttributeList> const& xAttrs) override
+            cpo::uno::Reference<css::xml::sax::XAttributeList> const& xAttrs) override
         {
             CheckIdAttrReferenced(xAttrs);
         }
@@ -791,7 +792,7 @@ class OOXMLSecParser::XadesQualifyingPropertiesContext
         }
 
         virtual void StartElement(
-            css::uno::Reference<css::xml::sax::XAttributeList> const& xAttrs) override
+            cpo::uno::Reference<css::xml::sax::XAttributeList> const& xAttrs) override
         {
             CheckIdAttrReferenced(xAttrs);
         }
@@ -867,7 +868,7 @@ class OOXMLSecParser::MsodigsigSignatureInfoV1Context
         }
 
         virtual void StartElement(
-            css::uno::Reference<css::xml::sax::XAttributeList> const& xAttrs) override
+            cpo::uno::Reference<css::xml::sax::XAttributeList> const& xAttrs) override
         {
             CheckIdAttrReferenced(xAttrs);
         }
@@ -975,7 +976,7 @@ class OOXMLSecParser::DsSignaturePropertyContext
         }
 
         virtual void StartElement(
-            css::uno::Reference<css::xml::sax::XAttributeList> const& xAttrs) override
+            cpo::uno::Reference<css::xml::sax::XAttributeList> const& xAttrs) override
         {
             m_Id = CheckIdAttrReferenced(xAttrs);
         }
@@ -1031,7 +1032,7 @@ class OOXMLSecParser::DsSignaturePropertiesContext
         }
 
         virtual void StartElement(
-            css::uno::Reference<css::xml::sax::XAttributeList> const& xAttrs) override
+            cpo::uno::Reference<css::xml::sax::XAttributeList> const& xAttrs) override
         {
             CheckIdAttrReferenced(xAttrs);
         }
@@ -1060,7 +1061,7 @@ class OOXMLSecParser::DsManifestContext
         }
 
         virtual void StartElement(
-            css::uno::Reference<css::xml::sax::XAttributeList> const& xAttrs) override
+            cpo::uno::Reference<css::xml::sax::XAttributeList> const& xAttrs) override
         {
             CheckIdAttrReferenced(xAttrs);
         }
@@ -1102,7 +1103,7 @@ class OOXMLSecParser::DsObjectContext
         }
 
         virtual void StartElement(
-            css::uno::Reference<css::xml::sax::XAttributeList> const& xAttrs) override
+            cpo::uno::Reference<css::xml::sax::XAttributeList> const& xAttrs) override
         {
             OUString const id(CheckIdAttrReferenced(xAttrs));
             if (id == "idValidSigLnImg")
@@ -1180,7 +1181,7 @@ class OOXMLSecParser::DsSignatureContext
         }
 
         virtual void StartElement(
-            css::uno::Reference<css::xml::sax::XAttributeList> const& xAttrs) override
+            cpo::uno::Reference<css::xml::sax::XAttributeList> const& xAttrs) override
         {
             OUString const ouIdAttr(m_rParser.HandleIdAttr(xAttrs));
             m_rParser.m_rXMLSignatureHelper.StartVerifySignatureElement();
@@ -1237,7 +1238,7 @@ OOXMLSecParser::~OOXMLSecParser()
 {
 }
 
-OUString OOXMLSecParser::HandleIdAttr(css::uno::Reference<css::xml::sax::XAttributeList> const& xAttrs)
+OUString OOXMLSecParser::HandleIdAttr(cpo::uno::Reference<css::xml::sax::XAttributeList> const& xAttrs)
 {
     OUString const aId = xAttrs->getValueByName(u"Id"_ustr);
     if (!aId.isEmpty())

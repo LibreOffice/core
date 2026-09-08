@@ -11,7 +11,7 @@
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <sfx2/kit/helper.hxx>
 #include <test/a11y/AccessibilityTools.hxx>
@@ -30,12 +30,12 @@ void test::EventPosterHelper::postExtTextEventAsync(COKitExtTextInputType eType,
 }
 
 void test::AccessibleEventPosterHelper::setWindow(
-    css::uno::Reference<css::accessibility::XAccessible> xAcc)
+    cpo::uno::Reference<css::accessibility::XAccessible> xAcc)
 {
     while (auto xParent = xAcc->getAccessibleContext()->getAccessibleParent())
         xAcc = xParent;
     assert(xAcc);
-    css::uno::Reference<css::accessibility::XAccessibleContext> xAccContext
+    cpo::uno::Reference<css::accessibility::XAccessibleContext> xAccContext
         = xAcc->getAccessibleContext();
     assert(xAccContext.is());
     rtl::Reference<VCLXAccessibleComponent> pVCLAccComponent

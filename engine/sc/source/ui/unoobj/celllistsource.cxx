@@ -38,7 +38,7 @@ namespace calc
 
 #define PROP_HANDLE_RANGE_ADDRESS  1
 
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
 using namespace cpo::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::table;
@@ -296,7 +296,7 @@ using namespace cpo::uno;
         aEvent.Source.set(*this);
 
         m_aListEntryListeners.forEach(aGuard,
-            [&aEvent] (const css::uno::Reference<css::form::binding::XListEntryListener>& l)
+            [&aEvent] (const cpo::uno::Reference<css::form::binding::XListEntryListener>& l)
             {
                 try
                 {

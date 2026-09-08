@@ -48,7 +48,7 @@ bool SfxObjectShellItem::QueryValue( cpo::uno::Any& rVal, sal_uInt8 /*nMemberId*
     }
     else
     {
-        rVal <<= css::uno::Reference< css::frame::XModel >();
+        rVal <<= cpo::uno::Reference< css::frame::XModel >();
     }
     return true;
 }
@@ -57,7 +57,7 @@ bool SfxObjectShellItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 /*nMembe
 {
     // This item MUST have a model. Please don't change this, there are UNO-based
     // implementations which need it!!
-    css::uno::Reference< css::frame::XModel > xModel;
+    cpo::uno::Reference< css::frame::XModel > xModel;
 
     if ( rVal >>= xModel )
     {

@@ -26,7 +26,7 @@
 
 namespace dbaxml
 {
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
     using namespace xmloff::token;
 
 OXMLDataSourceSettings::OXMLDataSourceSettings( ODBFilter& rImport ) :
@@ -40,8 +40,8 @@ OXMLDataSourceSettings::~OXMLDataSourceSettings()
 
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > OXMLDataSourceSettings::createFastChildContext(
-            sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > OXMLDataSourceSettings::createFastChildContext(
+            sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
 

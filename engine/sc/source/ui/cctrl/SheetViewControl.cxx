@@ -33,7 +33,7 @@ void SheetViewControl::StateChangedAtToolBoxControl(sal_uInt16 nSID, SfxItemStat
     ToolBox& rToolBox = GetToolBox();
     SheetViewBox* pSheetViewBox = static_cast<SheetViewBox*>(rToolBox.GetItemWindow(nId));
 
-    css::uno::Reference<css::frame::XFrame> xFrame = getFrameInterface();
+    cpo::uno::Reference<css::frame::XFrame> xFrame = getFrameInterface();
     SfxViewShell* pShell = SfxViewShell::Get(xFrame->getController());
     ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pShell);
     if (!pTabViewShell)

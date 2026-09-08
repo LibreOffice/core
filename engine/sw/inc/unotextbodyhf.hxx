@@ -75,14 +75,14 @@ public:
     virtual bool SAL_CALL hasElements() override;
 
     // XEnumerationAccess
-    virtual css::uno::Reference< css::container::XEnumeration >  SAL_CALL
+    virtual cpo::uno::Reference< css::container::XEnumeration >  SAL_CALL
         createEnumeration() override;
     rtl::Reference< SwXParagraphEnumeration > createParagraphEnumeration();
 
     // XSimpleText
     virtual rtl::Reference< SwXTextCursor > createXTextCursor() override;
     virtual rtl::Reference< SwXTextCursor > createXTextCursorByRange(
-            const ::css::uno::Reference< ::css::text::XTextRange >& aTextPosition ) override;
+            const ::cpo::uno::Reference< ::css::text::XTextRange >& aTextPosition ) override;
 
 private:
     rtl::Reference< SwXTextCursor > createXTextCursorByRangeImpl(SwUnoInternalPaM& rPam);
@@ -137,13 +137,13 @@ public:
     virtual bool SAL_CALL hasElements() override;
 
     // XEnumerationAccess
-    virtual css::uno::Reference< css::container::XEnumeration >  SAL_CALL
+    virtual cpo::uno::Reference< css::container::XEnumeration >  SAL_CALL
         createEnumeration() override;
 
     // XSimpleText
     virtual rtl::Reference< SwXTextCursor > createXTextCursor() override;
     virtual rtl::Reference< SwXTextCursor > createXTextCursorByRange(
-            const ::css::uno::Reference< ::css::text::XTextRange >& aTextPosition ) override;
+            const ::cpo::uno::Reference< ::css::text::XTextRange >& aTextPosition ) override;
 private:
     rtl::Reference< SwXTextCursor > createXTextCursorByRangeImpl(SwUnoInternalPaM& rPam);
 };

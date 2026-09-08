@@ -33,7 +33,7 @@
 namespace xmloff
 {
 
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
 using namespace cpo::uno;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::xml;
@@ -50,9 +50,9 @@ using namespace cpo::uno;
     {
     }
 
-    css::uno::Reference< css::xml::sax::XFastContextHandler > OFormsRootImport::createFastChildContext(
+    cpo::uno::Reference< css::xml::sax::XFastContextHandler > OFormsRootImport::createFastChildContext(
         sal_Int32 _nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList )
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList )
     {
         SvXMLImportContext* pRet = nullptr;
         try

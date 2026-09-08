@@ -57,21 +57,21 @@ private:
 
 public:
     // XAccessible
-    virtual css::uno::Reference<com::sun::star::accessibility::XAccessibleContext>
+    virtual cpo::uno::Reference<com::sun::star::accessibility::XAccessibleContext>
         getAccessibleContext() override final;
 
     // XAccessibleEventBroadcaster
-    virtual void addAccessibleEventListener( const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener ) override;
-    virtual void removeAccessibleEventListener( const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener ) override;
+    virtual void addAccessibleEventListener( const cpo::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener ) override;
+    virtual void removeAccessibleEventListener( const cpo::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener ) override;
 
     // XAccessibleContext - still waiting to be overwritten
     virtual sal_Int64 getAccessibleChildCount(  ) override = 0;
-    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleChild( sal_Int64 i ) override = 0;
-    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleParent(  ) override = 0;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > getAccessibleChild( sal_Int64 i ) override = 0;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > getAccessibleParent(  ) override = 0;
     virtual sal_Int16 getAccessibleRole(  ) override = 0;
     virtual OUString getAccessibleDescription(  ) override = 0;
     virtual OUString getAccessibleName(  ) override = 0;
-    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > getAccessibleRelationSet(  ) override = 0;
+    virtual cpo::uno::Reference< css::accessibility::XAccessibleRelationSet > getAccessibleRelationSet(  ) override = 0;
     virtual sal_Int64 getAccessibleStateSet(  ) override = 0;
 
     // XAccessibleContext2 - default implementation
@@ -130,7 +130,7 @@ protected:
 
     /** shortcut for retrieving the context of the parent (returned by getAccessibleParent)
     */
-    css::uno::Reference< css::accessibility::XAccessibleContext >
+    cpo::uno::Reference< css::accessibility::XAccessibleContext >
                 implGetParentContext();
 
     // access to the base class' broadcast helper/mutex

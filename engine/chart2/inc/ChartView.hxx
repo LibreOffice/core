@@ -103,7 +103,7 @@ private:
 
 public:
     ChartView() = delete;
-    ChartView(css::uno::Reference<cpo::uno::XComponentContext> xContext, ChartModel& rModel);
+    ChartView(cpo::uno::Reference<cpo::uno::XComponentContext> xContext, ChartModel& rModel);
 
     virtual ~ChartView() override;
 
@@ -153,10 +153,10 @@ public:
 
     // css::util::XModeChangeBroadcaster
 
-    virtual void addModeChangeListener( const css::uno::Reference< css::util::XModeChangeListener >& _rxListener ) override;
-    virtual void removeModeChangeListener( const css::uno::Reference< css::util::XModeChangeListener >& _rxListener ) override;
-    virtual void addModeChangeApproveListener( const css::uno::Reference< css::util::XModeChangeApproveListener >& _rxListener ) override;
-    virtual void removeModeChangeApproveListener( const css::uno::Reference< css::util::XModeChangeApproveListener >& _rxListener ) override;
+    virtual void addModeChangeListener( const cpo::uno::Reference< css::util::XModeChangeListener >& _rxListener ) override;
+    virtual void removeModeChangeListener( const cpo::uno::Reference< css::util::XModeChangeListener >& _rxListener ) override;
+    virtual void addModeChangeApproveListener( const cpo::uno::Reference< css::util::XModeChangeApproveListener >& _rxListener ) override;
+    virtual void removeModeChangeApproveListener( const cpo::uno::Reference< css::util::XModeChangeApproveListener >& _rxListener ) override;
 
     // css::util::XUpdatable
     virtual void update() override;
@@ -166,17 +166,17 @@ public:
     virtual void updateHard() override;
 
     // css::beans::XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
     virtual void setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
     virtual cpo::uno::Any getPropertyValue( const OUString& PropertyName ) override;
-    virtual void addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
-    virtual void removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
-    virtual void addVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
-    virtual void removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+    virtual void addPropertyChangeListener( const OUString& aPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
+    virtual void removePropertyChangeListener( const OUString& aPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
+    virtual void addVetoableChangeListener( const OUString& PropertyName, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+    virtual void removeVetoableChangeListener( const OUString& PropertyName, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
     // css::lang::XMultiServiceFactory
-    virtual css::uno::Reference< cpo::uno::XInterface > createInstance( const OUString& aServiceSpecifier ) override;
-    virtual css::uno::Reference< cpo::uno::XInterface > createInstanceWithArguments(
+    virtual cpo::uno::Reference< cpo::uno::XInterface > createInstance( const OUString& aServiceSpecifier ) override;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > createInstanceWithArguments(
         const OUString& ServiceSpecifier, const cpo::uno::Sequence< cpo::uno::Any >& Arguments ) override;
     virtual cpo::uno::Sequence< OUString > getAvailableServiceNames() override;
 
@@ -185,7 +185,7 @@ public:
 
     void setViewDirty();
 
-    css::uno::Reference<cpo::uno::XComponentContext> const& getComponentContext() { return m_xCC;}
+    cpo::uno::Reference<cpo::uno::XComponentContext> const& getComponentContext() { return m_xCC;}
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
@@ -201,14 +201,14 @@ public:
             , const rtl::Reference<::chart::ChartModel>& xChartDoc);
 
     static sal_Int32 getExplicitPercentageNumberFormatKeyForDataLabel(
-            const css::uno::Reference< css::beans::XPropertySet >& xSeriesOrPointProp
-            , const css::uno::Reference< css::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
+            const cpo::uno::Reference< css::beans::XPropertySet >& xSeriesOrPointProp
+            , const cpo::uno::Reference< css::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
 
 private: //methods
     void createShapes();
     void createShapes2D( const css::awt::Size& rPageSize );
     bool createAxisTitleShapes2D( CreateShapeParam2D& rParam, const css::awt::Size& rPageSize, bool bHasRelativeSize );
-    void getMetaFile( const css::uno::Reference< css::io::XOutputStream >& xOutStream
+    void getMetaFile( const cpo::uno::Reference< css::io::XOutputStream >& xOutStream
                       , bool bUseHighContrast );
     SdrPage* getSdrPage();
 
@@ -226,23 +226,23 @@ private: //methods
 private: //member
     std::mutex m_aMutex;
 
-    css::uno::Reference< cpo::uno::XComponentContext> m_xCC;
+    cpo::uno::Reference< cpo::uno::XComponentContext> m_xCC;
 
     ChartModel& mrChartModel;
 
-    css::uno::Reference< css::lang::XMultiServiceFactory>
+    cpo::uno::Reference< css::lang::XMultiServiceFactory>
             m_xShapeFactory;
     rtl::Reference<SvxDrawPage>
             m_xDrawPage;
     rtl::Reference<SvxShapeGroupAnyD>
             mxRootShape;
 
-    css::uno::Reference< cpo::uno::XInterface > m_xDashTable;
-    css::uno::Reference< cpo::uno::XInterface > m_xGradientTable;
-    css::uno::Reference< cpo::uno::XInterface > m_xHatchTable;
-    css::uno::Reference< cpo::uno::XInterface > m_xBitmapTable;
-    css::uno::Reference< cpo::uno::XInterface > m_xTransGradientTable;
-    css::uno::Reference< cpo::uno::XInterface > m_xMarkerTable;
+    cpo::uno::Reference< cpo::uno::XInterface > m_xDashTable;
+    cpo::uno::Reference< cpo::uno::XInterface > m_xGradientTable;
+    cpo::uno::Reference< cpo::uno::XInterface > m_xHatchTable;
+    cpo::uno::Reference< cpo::uno::XInterface > m_xBitmapTable;
+    cpo::uno::Reference< cpo::uno::XInterface > m_xTransGradientTable;
+    cpo::uno::Reference< cpo::uno::XInterface > m_xMarkerTable;
 
     std::shared_ptr< DrawModelWrapper > m_pDrawModelWrapper;
 

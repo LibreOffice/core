@@ -53,8 +53,8 @@
 #include <DrawController.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::graphic;
@@ -66,24 +66,24 @@ namespace {
 
 class SdGRFFilter_ImplInteractionHdl : public ::cppu::WeakImplHelper< css::task::XInteractionHandler >
 {
-    css::uno::Reference< css::task::XInteractionHandler > m_xInter;
+    cpo::uno::Reference< css::task::XInteractionHandler > m_xInter;
     ErrCode nFilterError;
 
     public:
 
-    explicit SdGRFFilter_ImplInteractionHdl( css::uno::Reference< css::task::XInteractionHandler > xInteraction ) :
+    explicit SdGRFFilter_ImplInteractionHdl( cpo::uno::Reference< css::task::XInteractionHandler > xInteraction ) :
         m_xInter(std::move( xInteraction )),
         nFilterError( ERRCODE_NONE )
         {}
 
     ErrCode const & GetErrorCode() const { return nFilterError; };
 
-    virtual void SAL_CALL   handle( const css::uno::Reference< css::task::XInteractionRequest >& ) override;
+    virtual void SAL_CALL   handle( const cpo::uno::Reference< css::task::XInteractionRequest >& ) override;
 };
 
 }
 
-void SdGRFFilter_ImplInteractionHdl::handle( const css::uno::Reference< css::task::XInteractionRequest >& xRequest )
+void SdGRFFilter_ImplInteractionHdl::handle( const cpo::uno::Reference< css::task::XInteractionRequest >& xRequest )
 {
     if( !m_xInter.is() )
         return;

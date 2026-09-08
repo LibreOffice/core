@@ -31,7 +31,7 @@
 #include "myucp_datasupplier.hxx"
 #include "myucp_resultset.hxx"
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::container;

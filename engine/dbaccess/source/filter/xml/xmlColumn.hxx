@@ -27,8 +27,8 @@ namespace dbaxml
     class ODBFilter;
     class OXMLColumn : public SvXMLImportContext
     {
-        css::uno::Reference< css::container::XNameAccess > m_xParentContainer;
-        css::uno::Reference< css::beans::XPropertySet >    m_xTable;
+        cpo::uno::Reference< css::container::XNameAccess > m_xParentContainer;
+        cpo::uno::Reference< css::beans::XPropertySet >    m_xTable;
 
         OUString      m_sName;
         OUString      m_sStyleName;
@@ -41,9 +41,9 @@ namespace dbaxml
     public:
 
         OXMLColumn( ODBFilter& rImport
-                    ,const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList
-                    ,const css::uno::Reference< css::container::XNameAccess >& _xParentContainer
-                    ,const css::uno::Reference< css::beans::XPropertySet >&    _xTable
+                    ,const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList
+                    ,const cpo::uno::Reference< css::container::XNameAccess >& _xParentContainer
+                    ,const cpo::uno::Reference< css::beans::XPropertySet >&    _xTable
                     );
         virtual ~OXMLColumn() override;
         virtual void endFastElement(sal_Int32 nElement) override;

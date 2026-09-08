@@ -93,7 +93,7 @@ public:
     void    g_close_endTryClose();
     void    g_close_endTryClose_doClose();
 /// @throws cpo::uno::RuntimeException
-    void    g_addCloseListener( const css::uno::Reference< css::util::XCloseListener > & xListener );
+    void    g_addCloseListener( const cpo::uno::Reference< css::util::XCloseListener > & xListener );
 
 private:
     virtual bool    impl_canStartApiCall() override;

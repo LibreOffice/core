@@ -31,7 +31,7 @@
 #include <vcl/keycod.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/vclreferencebase.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <tools/json_writer.hxx>
 #include <list>
@@ -308,8 +308,8 @@ public:
     // through SetItemImage stays the bitmap shown natively; this graphic keeps
     // the original vector form so it can be serialized as SVG. An empty
     // reference means the item has no vector source.
-    void SetItemImageGraphic( sal_uInt16 nItemId, const css::uno::Reference<css::graphic::XGraphic>& rGraphic );
-    css::uno::Reference<css::graphic::XGraphic> GetItemImageGraphic( sal_uInt16 nItemId ) const;
+    void SetItemImageGraphic( sal_uInt16 nItemId, const cpo::uno::Reference<css::graphic::XGraphic>& rGraphic );
+    cpo::uno::Reference<css::graphic::XGraphic> GetItemImageGraphic( sal_uInt16 nItemId ) const;
 
     void SetItemCommand( sal_uInt16 nItemId, const OUString& rCommand );
     OUString GetItemCommand( sal_uInt16 nItemId ) const;

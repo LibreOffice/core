@@ -26,17 +26,17 @@ namespace dbaccess
 {
     class OIndexes : public connectivity::OIndexesHelper
     {
-        css::uno::Reference< css::container::XNameAccess > m_xIndexes;
+        cpo::uno::Reference< css::container::XNameAccess > m_xIndexes;
     protected:
-        virtual css::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
-        virtual css::uno::Reference< css::beans::XPropertySet > createDescriptor() override;
-        virtual css::uno::Reference< css::beans::XPropertySet > appendObject( const OUString& _rForName, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
+        virtual cpo::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
+        virtual cpo::uno::Reference< css::beans::XPropertySet > createDescriptor() override;
+        virtual cpo::uno::Reference< css::beans::XPropertySet > appendObject( const OUString& _rForName, const cpo::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
         virtual void dropObject(sal_Int32 _nPos, const OUString& _sElementName) override;
     public:
         OIndexes(connectivity::OTableHelper* _pTable,
                  ::osl::Mutex& _rMutex,
                  const std::vector< OUString> &_rVector,
-                 css::uno::Reference< css::container::XNameAccess >  _rxIndexes
+                 cpo::uno::Reference< css::container::XNameAccess >  _rxIndexes
                  ) : connectivity::OIndexesHelper(_pTable,_rMutex,_rVector)
             ,m_xIndexes(std::move(_rxIndexes))
         {}

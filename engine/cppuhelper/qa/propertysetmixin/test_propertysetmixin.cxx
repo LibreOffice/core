@@ -40,7 +40,7 @@
 #include <com/sun/star/beans/XVetoableChangeListener.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Type.hxx>
@@ -177,25 +177,25 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    css::uno::Reference< test::cppuhelper::propertysetmixin::XSupplier >
+    cpo::uno::Reference< test::cppuhelper::propertysetmixin::XSupplier >
     getCppSupplier() const;
 
-    css::uno::Reference< test::cppuhelper::propertysetmixin::XSupplier >
+    cpo::uno::Reference< test::cppuhelper::propertysetmixin::XSupplier >
     getJavaSupplier() const;
 
     void testEmpty1(
-        css::uno::Reference< test::cppuhelper::propertysetmixin::XSupplier >
+        cpo::uno::Reference< test::cppuhelper::propertysetmixin::XSupplier >
         const & supplier) const;
 
     void testEmpty2(
-        css::uno::Reference< test::cppuhelper::propertysetmixin::XSupplier >
+        cpo::uno::Reference< test::cppuhelper::propertysetmixin::XSupplier >
         const & supplier) const;
 
     void testFull(
-        css::uno::Reference< test::cppuhelper::propertysetmixin::XSupplier >
+        cpo::uno::Reference< test::cppuhelper::propertysetmixin::XSupplier >
         const & supplier) const;
 
-    css::uno::Reference< cpo::uno::XComponentContext > m_context;
+    cpo::uno::Reference< cpo::uno::XComponentContext > m_context;
 };
 
 void Test::setUp() {
@@ -204,50 +204,50 @@ void Test::setUp() {
 }
 
 void Test::tearDown() {
-    css::uno::Reference< css::lang::XComponent >(
-        m_context, css::uno::UNO_QUERY_THROW)->dispose();
+    cpo::uno::Reference< css::lang::XComponent >(
+        m_context, cpo::uno::UNO_QUERY_THROW)->dispose();
 }
 
-css::uno::Reference< test::cppuhelper::propertysetmixin::XSupplier >
+cpo::uno::Reference< test::cppuhelper::propertysetmixin::XSupplier >
 Test::getCppSupplier() const
 {
     return test::cppuhelper::propertysetmixin::CppSupplier::create(m_context);
 }
 
-css::uno::Reference< test::cppuhelper::propertysetmixin::XSupplier >
+cpo::uno::Reference< test::cppuhelper::propertysetmixin::XSupplier >
 Test::getJavaSupplier() const
 {
     return test::cppuhelper::propertysetmixin::JavaSupplier::create(m_context);
 }
 
 void Test::testEmpty1(
-    css::uno::Reference< test::cppuhelper::propertysetmixin::XSupplier >
+    cpo::uno::Reference< test::cppuhelper::propertysetmixin::XSupplier >
     const & supplier) const
 {
-    css::uno::Reference< css::lang::XComponent > empty1(
-        supplier->getEmpty1(), css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference< css::lang::XComponent > empty1(
+        supplier->getEmpty1(), cpo::uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT(
-        !css::uno::Reference< css::beans::XPropertySet >(
-            empty1, css::uno::UNO_QUERY).is());
+        !cpo::uno::Reference< css::beans::XPropertySet >(
+            empty1, cpo::uno::UNO_QUERY).is());
     CPPUNIT_ASSERT(
-        !css::uno::Reference< css::beans::XFastPropertySet >(
-            empty1, css::uno::UNO_QUERY).is());
+        !cpo::uno::Reference< css::beans::XFastPropertySet >(
+            empty1, cpo::uno::UNO_QUERY).is());
     CPPUNIT_ASSERT(
-        !css::uno::Reference< css::beans::XPropertyAccess >(
-            empty1, css::uno::UNO_QUERY).is());
+        !cpo::uno::Reference< css::beans::XPropertyAccess >(
+            empty1, cpo::uno::UNO_QUERY).is());
     empty1->dispose();
 }
 
 void Test::testEmpty2(
-    css::uno::Reference< test::cppuhelper::propertysetmixin::XSupplier >
+    cpo::uno::Reference< test::cppuhelper::propertysetmixin::XSupplier >
     const & supplier) const
 {
-    css::uno::Reference< css::lang::XComponent > empty2(
-        supplier->getEmpty2(), css::uno::UNO_QUERY_THROW);
-    css::uno::Reference< css::beans::XPropertySet > empty2p(
-        empty2, css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::lang::XComponent > empty2(
+        supplier->getEmpty2(), cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference< css::beans::XPropertySet > empty2p(
+        empty2, cpo::uno::UNO_QUERY);
     CPPUNIT_ASSERT(empty2p.is());
-    css::uno::Reference< css::beans::XPropertySetInfo > info(
+    cpo::uno::Reference< css::beans::XPropertySetInfo > info(
         empty2p->getPropertySetInfo());
     CPPUNIT_ASSERT(info.is());
     CPPUNIT_ASSERT_EQUAL(
@@ -282,8 +282,8 @@ void Test::testEmpty2(
     rtl::Reference vetoListener2(new VetoListener);
     empty2p->addVetoableChangeListener(OUString(), vetoListener2.get());
     empty2p->removeVetoableChangeListener(OUString(), vetoListener2.get());
-    css::uno::Reference< css::beans::XFastPropertySet > empty2f(
-        empty2, css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::beans::XFastPropertySet > empty2f(
+        empty2, cpo::uno::UNO_QUERY);
     CPPUNIT_ASSERT(empty2f.is());
     try {
         empty2f->setFastPropertyValue(-1, cpo::uno::Any());
@@ -301,8 +301,8 @@ void Test::testEmpty2(
         empty2f->getFastPropertyValue(0);
         CPPUNIT_FAIL("exception expected");
     } catch (css::beans::UnknownPropertyException &) {}
-    css::uno::Reference< css::beans::XPropertyAccess > empty2a(
-        empty2, css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::beans::XPropertyAccess > empty2a(
+        empty2, cpo::uno::UNO_QUERY);
     CPPUNIT_ASSERT(empty2a.is());
     CPPUNIT_ASSERT_EQUAL(
         static_cast< sal_Int32 >(0), empty2a->getPropertyValues().getLength());
@@ -341,12 +341,12 @@ void Test::testEmpty2(
     try {
         empty2p->addPropertyChangeListener(
             OUString(),
-            css::uno::Reference< css::beans::XPropertyChangeListener >());
+            cpo::uno::Reference< css::beans::XPropertyChangeListener >());
     } catch (cpo::uno::RuntimeException &) {}
     try {
         empty2p->addVetoableChangeListener(
             OUString(),
-            css::uno::Reference< css::beans::XVetoableChangeListener >());
+            cpo::uno::Reference< css::beans::XVetoableChangeListener >());
     } catch (cpo::uno::RuntimeException &) {}
     CPPUNIT_ASSERT_EQUAL(3, boundListener1->count());
     CPPUNIT_ASSERT_EQUAL(1, boundListener2->count());
@@ -355,15 +355,15 @@ void Test::testEmpty2(
 }
 
 void Test::testFull(
-    css::uno::Reference< test::cppuhelper::propertysetmixin::XSupplier >
+    cpo::uno::Reference< test::cppuhelper::propertysetmixin::XSupplier >
     const & supplier) const
 {
-    css::uno::Reference< test::cppuhelper::propertysetmixin::XTest3 > full(
-        supplier->getFull(), css::uno::UNO_QUERY_THROW);
-    css::uno::Reference< css::beans::XPropertySet > fullp(
-        full, css::uno::UNO_QUERY);
+    cpo::uno::Reference< test::cppuhelper::propertysetmixin::XTest3 > full(
+        supplier->getFull(), cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference< css::beans::XPropertySet > fullp(
+        full, cpo::uno::UNO_QUERY);
     CPPUNIT_ASSERT(fullp.is());
-    css::uno::Reference< css::beans::XPropertySetInfo > info(
+    cpo::uno::Reference< css::beans::XPropertySetInfo > info(
         fullp->getPropertySetInfo());
     CPPUNIT_ASSERT(info.is());
     CPPUNIT_ASSERT_EQUAL(
@@ -496,8 +496,8 @@ void Test::testFull(
             OUString("first"));
         CPPUNIT_FAIL("exception expected");
     } catch (css::beans::UnknownPropertyException &) {}
-    css::uno::Reference< css::beans::XFastPropertySet > fullf(
-        full, css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::beans::XFastPropertySet > fullf(
+        full, cpo::uno::UNO_QUERY);
     CPPUNIT_ASSERT(fullf.is());
     CPPUNIT_ASSERT_EQUAL(
         cpo::uno::Any(static_cast< sal_Int32 >(-100)),
@@ -513,8 +513,8 @@ void Test::testFull(
     try {
         fullf->setFastPropertyValue(-1, cpo::uno::Any());
     } catch (css::beans::UnknownPropertyException &) {}
-    css::uno::Reference< css::beans::XPropertyAccess > fulla(
-        full, css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::beans::XPropertyAccess > fulla(
+        full, cpo::uno::UNO_QUERY);
     CPPUNIT_ASSERT(fulla.is());
     cpo::uno::Sequence< css::beans::PropertyValue > vs(
         fulla->getPropertyValues());
@@ -552,7 +552,7 @@ void Test::testFull(
         static_cast< sal_Int32 >(100), full->getSecond().Value.Value.Value);
     CPPUNIT_ASSERT(!full->getSecond().Value.IsDefaulted);
     CPPUNIT_ASSERT(full->getSecond().IsAmbiguous);
-    css::uno::Reference< css::beans::XPropertyChangeListener > boundListener(
+    cpo::uno::Reference< css::beans::XPropertyChangeListener > boundListener(
         new BoundListener);
     fullp->addPropertyChangeListener(
         OUString("First"), boundListener);
@@ -590,7 +590,7 @@ void Test::testFull(
             boundListener);
         CPPUNIT_FAIL("exception expected");
     } catch (css::beans::UnknownPropertyException &) {}
-    css::uno::Reference< css::beans::XVetoableChangeListener > vetoListener(
+    cpo::uno::Reference< css::beans::XVetoableChangeListener > vetoListener(
         new VetoListener);
     fullp->addVetoableChangeListener(
         OUString("First"), vetoListener);

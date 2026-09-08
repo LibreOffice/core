@@ -33,14 +33,14 @@
 using namespace comphelper;
 using namespace connectivity;
 using namespace connectivity::ado;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::container;
 
 
-css::uno::Reference< css::beans::XPropertySet > OGroups::createObject(const OUString& _rName)
+cpo::uno::Reference< css::beans::XPropertySet > OGroups::createObject(const OUString& _rName)
 {
     return new OAdoGroup(m_pCatalog,isCaseSensitive(),_rName);
 }
@@ -56,7 +56,7 @@ Reference< XPropertySet > OGroups::createDescriptor()
 }
 
 // XAppend
-css::uno::Reference< css::beans::XPropertySet > OGroups::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
+cpo::uno::Reference< css::beans::XPropertySet > OGroups::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     OAdoGroup* pGroup = dynamic_cast<OAdoGroup*>(descriptor.get());
     if ( pGroup == nullptr )

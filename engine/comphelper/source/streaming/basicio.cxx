@@ -25,8 +25,8 @@ namespace comphelper
 {
 
 
-const css::uno::Reference<css::io::XObjectOutputStream>& operator << (
-        const css::uno::Reference<css::io::XObjectOutputStream>& _rxOutStream,
+const cpo::uno::Reference<css::io::XObjectOutputStream>& operator << (
+        const cpo::uno::Reference<css::io::XObjectOutputStream>& _rxOutStream,
         const css::awt::FontDescriptor& _rFont)
 {
     _rxOutStream->writeUTF( _rFont.Name );
@@ -50,8 +50,8 @@ const css::uno::Reference<css::io::XObjectOutputStream>& operator << (
 
 // FontDescriptor
 
-const css::uno::Reference<css::io::XObjectInputStream>& operator >> (
-        const css::uno::Reference<css::io::XObjectInputStream>& _rxInStream,
+const cpo::uno::Reference<css::io::XObjectInputStream>& operator >> (
+        const cpo::uno::Reference<css::io::XObjectInputStream>& _rxInStream,
         css::awt::FontDescriptor& _rFont)
 {
     // writing the FontDescriptor
@@ -75,84 +75,84 @@ const css::uno::Reference<css::io::XObjectInputStream>& operator >> (
 }
 
 
-const css::uno::Reference<css::io::XObjectInputStream>& operator >> (const css::uno::Reference<css::io::XObjectInputStream>& _rxInStream, bool& _rVal)
+const cpo::uno::Reference<css::io::XObjectInputStream>& operator >> (const cpo::uno::Reference<css::io::XObjectInputStream>& _rxInStream, bool& _rVal)
 {
     _rVal = _rxInStream->readBoolean();
     return _rxInStream;
 }
 
 
-const css::uno::Reference<css::io::XObjectOutputStream>& operator << (const css::uno::Reference<css::io::XObjectOutputStream>& _rxOutStream, bool _bVal)
+const cpo::uno::Reference<css::io::XObjectOutputStream>& operator << (const cpo::uno::Reference<css::io::XObjectOutputStream>& _rxOutStream, bool _bVal)
 {
     _rxOutStream->writeBoolean(_bVal);
     return _rxOutStream;
 }
 
 
-const css::uno::Reference<css::io::XObjectInputStream>& operator >> (const css::uno::Reference<css::io::XObjectInputStream>& _rxInStream, OUString& rStr)
+const cpo::uno::Reference<css::io::XObjectInputStream>& operator >> (const cpo::uno::Reference<css::io::XObjectInputStream>& _rxInStream, OUString& rStr)
 {
     rStr = _rxInStream->readUTF();
     return _rxInStream;
 }
 
 
-const css::uno::Reference<css::io::XObjectOutputStream>& operator << (const css::uno::Reference<css::io::XObjectOutputStream>& _rxOutStream, const OUString& rStr)
+const cpo::uno::Reference<css::io::XObjectOutputStream>& operator << (const cpo::uno::Reference<css::io::XObjectOutputStream>& _rxOutStream, const OUString& rStr)
 {
     _rxOutStream->writeUTF(rStr);
     return _rxOutStream;
 }
 
 
-const css::uno::Reference<css::io::XObjectInputStream>& operator >> (const css::uno::Reference<css::io::XObjectInputStream>& _rxInStream, sal_Int16& _rValue)
+const cpo::uno::Reference<css::io::XObjectInputStream>& operator >> (const cpo::uno::Reference<css::io::XObjectInputStream>& _rxInStream, sal_Int16& _rValue)
 {
     _rValue = _rxInStream->readShort();
     return _rxInStream;
 }
 
 
-const css::uno::Reference<css::io::XObjectOutputStream>& operator << (const css::uno::Reference<css::io::XObjectOutputStream>& _rxOutStream, sal_Int16 _nValue)
+const cpo::uno::Reference<css::io::XObjectOutputStream>& operator << (const cpo::uno::Reference<css::io::XObjectOutputStream>& _rxOutStream, sal_Int16 _nValue)
 {
     _rxOutStream->writeShort(_nValue);
     return _rxOutStream;
 }
 
 
-const css::uno::Reference<css::io::XObjectInputStream>& operator >> (const css::uno::Reference<css::io::XObjectInputStream>& _rxInStream, sal_uInt16& _rValue)
+const cpo::uno::Reference<css::io::XObjectInputStream>& operator >> (const cpo::uno::Reference<css::io::XObjectInputStream>& _rxInStream, sal_uInt16& _rValue)
 {
     _rValue = _rxInStream->readShort();
     return _rxInStream;
 }
 
 
-const css::uno::Reference<css::io::XObjectOutputStream>& operator << (const css::uno::Reference<css::io::XObjectOutputStream>& _rxOutStream, sal_uInt16 _nValue)
+const cpo::uno::Reference<css::io::XObjectOutputStream>& operator << (const cpo::uno::Reference<css::io::XObjectOutputStream>& _rxOutStream, sal_uInt16 _nValue)
 {
     _rxOutStream->writeShort(_nValue);
     return _rxOutStream;
 }
 
 
-const css::uno::Reference<css::io::XObjectInputStream>& operator >> (const css::uno::Reference<css::io::XObjectInputStream>& _rxInStream, sal_uInt32& _rValue)
+const cpo::uno::Reference<css::io::XObjectInputStream>& operator >> (const cpo::uno::Reference<css::io::XObjectInputStream>& _rxInStream, sal_uInt32& _rValue)
 {
     _rValue = _rxInStream->readLong();
     return _rxInStream;
 }
 
 
-const css::uno::Reference<css::io::XObjectOutputStream>& operator << (const css::uno::Reference<css::io::XObjectOutputStream>& _rxOutStream, sal_uInt32 _nValue)
+const cpo::uno::Reference<css::io::XObjectOutputStream>& operator << (const cpo::uno::Reference<css::io::XObjectOutputStream>& _rxOutStream, sal_uInt32 _nValue)
 {
     _rxOutStream->writeLong(_nValue);
     return _rxOutStream;
 }
 
 
-const css::uno::Reference<css::io::XObjectInputStream>& operator >> (const css::uno::Reference<css::io::XObjectInputStream>& _rxInStream, sal_Int32& _rValue)
+const cpo::uno::Reference<css::io::XObjectInputStream>& operator >> (const cpo::uno::Reference<css::io::XObjectInputStream>& _rxInStream, sal_Int32& _rValue)
 {
     _rValue = _rxInStream->readLong();
     return _rxInStream;
 }
 
 
-const css::uno::Reference<css::io::XObjectOutputStream>& operator << (const css::uno::Reference<css::io::XObjectOutputStream>& _rxOutStream, sal_Int32 _nValue)
+const cpo::uno::Reference<css::io::XObjectOutputStream>& operator << (const cpo::uno::Reference<css::io::XObjectOutputStream>& _rxOutStream, sal_Int32 _nValue)
 {
     _rxOutStream->writeLong(_nValue);
     return _rxOutStream;

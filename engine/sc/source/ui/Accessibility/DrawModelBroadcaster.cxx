@@ -23,6 +23,7 @@
 #include <svx/svdobj.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 ScDrawModelBroadcaster::ScDrawModelBroadcaster( SdrModel *pDrawModel ) :
     mpDrawModel( pDrawModel )
@@ -50,7 +51,7 @@ void SAL_CALL ScDrawModelBroadcaster::removeEventListener( const uno::Reference<
 }
 
 void SAL_CALL ScDrawModelBroadcaster::addShapeEventListener(
-                const css::uno::Reference< css::drawing::XShape >& xShape,
+                const cpo::uno::Reference< css::drawing::XShape >& xShape,
                 const uno::Reference< document::XShapeEventListener >& xListener )
 {
     assert(xShape.is() && "no shape?");
@@ -61,7 +62,7 @@ void SAL_CALL ScDrawModelBroadcaster::addShapeEventListener(
 }
 
 void SAL_CALL ScDrawModelBroadcaster::removeShapeEventListener(
-                const css::uno::Reference< css::drawing::XShape >& xShape,
+                const cpo::uno::Reference< css::drawing::XShape >& xShape,
                 const uno::Reference< document::XShapeEventListener >& xListener )
 {
     std::scoped_lock aGuard(maListenerMutex);
@@ -87,7 +88,7 @@ void ScDrawModelBroadcaster::Notify( SfxBroadcaster&,
 
     std::unique_lock aGuard(maListenerMutex);
     maEventListeners.forEach(aGuard,
-        [&aEvent](const css::uno::Reference<document::XEventListener>& xListener)
+        [&aEvent](const cpo::uno::Reference<document::XEventListener>& xListener)
         {
             xListener->notifyEvent(aEvent);
         }

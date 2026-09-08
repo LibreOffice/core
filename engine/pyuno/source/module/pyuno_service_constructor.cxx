@@ -34,8 +34,8 @@ namespace
 {
 struct PyUNO_service_constructor_Internals
 {
-    css::uno::Reference<css::reflection::XServiceTypeDescription2> xService;
-    css::uno::Reference<css::reflection::XServiceConstructorDescription> xConstructor;
+    cpo::uno::Reference<css::reflection::XServiceTypeDescription2> xService;
+    cpo::uno::Reference<css::reflection::XServiceConstructorDescription> xConstructor;
     // The parameter types are lazily converted to TypeDescriptions when the constructor is first
     // called.
     bool bTypesInitialized = false;
@@ -51,7 +51,7 @@ void PyUNO_service_constructor_Internals::ensureParamTypes()
     if (bTypesInitialized)
         return;
 
-    cpo::uno::Sequence<css::uno::Reference<css::reflection::XParameter>> aParams
+    cpo::uno::Sequence<cpo::uno::Reference<css::reflection::XParameter>> aParams
         = xConstructor->getParameters();
 
     for (const auto& xParameter : aParams)
@@ -131,7 +131,7 @@ PyObject* PyUNO_service_constructor_call(PyObject* self, PyObject* args,
     {
         Runtime runtime;
         cpo::uno::Any contextAny = runtime.pyObject2Any(PyTuple_GetItem(args, 0));
-        css::uno::Reference<cpo::uno::XComponentContext> xContext;
+        cpo::uno::Reference<cpo::uno::XComponentContext> xContext;
 
         if (!(contextAny >>= xContext) || !xContext.is())
         {
@@ -158,7 +158,7 @@ PyObject* PyUNO_service_constructor_call(PyObject* self, PyObject* args,
                 = runtime.getImpl()->cargo->xTypeConverter->convertTo(param, pDestType->pWeakRef);
         }
 
-        css::uno::Reference<cpo::uno::XInterface> xInterface
+        cpo::uno::Reference<cpo::uno::XInterface> xInterface
             = xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
                 me->members.xService->getName(), aParams, xContext);
         return runtime.any2PyObject(cpo::uno::Any(std::move(xInterface))).getAcquired();
@@ -265,8 +265,8 @@ PyTypeObject PyUNO_service_constructor_Type = {
 }
 
 PyRef PyUNO_service_constructor_new(
-    const css::uno::Reference<css::reflection::XServiceTypeDescription2>& xService,
-    const css::uno::Reference<css::reflection::XServiceConstructorDescription>& xConstructor)
+    const cpo::uno::Reference<css::reflection::XServiceTypeDescription2>& xService,
+    const cpo::uno::Reference<css::reflection::XServiceConstructorDescription>& xConstructor)
 {
     OSL_ENSURE(xService.is(), "xService must be valid");
     OSL_ENSURE(xConstructor.is(), "xConstructor must be valid");

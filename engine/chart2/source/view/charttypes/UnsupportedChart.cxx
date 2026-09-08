@@ -52,7 +52,7 @@ namespace chart
 {
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 
 UnsupportedChart::UnsupportedChart(const rtl::Reference<ChartType>& xChartTypeModel)
     : VSeriesPlotter(xChartTypeModel, 2, false)

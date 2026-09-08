@@ -101,8 +101,8 @@ using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::text;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::view;
 
@@ -574,7 +574,7 @@ void IndexTabPage_Impl::InitializeIndex()
         AppendConfigToken(aURL, true);
 
         Content aCnt( aURL.makeStringAndClear(), Reference< css::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
-        css::uno::Reference< css::beans::XPropertySetInfo > xInfo = aCnt.getProperties();
+        cpo::uno::Reference< css::beans::XPropertySetInfo > xInfo = aCnt.getProperties();
         if ( xInfo->hasPropertyByName( PROPERTY_ANCHORREF ) )
         {
             cpo::uno::Sequence< OUString > aPropSeq{ PROPERTY_KEYWORDLIST, PROPERTY_KEYWORDREF,
@@ -2167,7 +2167,7 @@ void SfxHelpTextWindow_Impl::CloseFrame()
     bIsInClose = true;
     try
     {
-        css::uno::Reference< css::util::XCloseable > xCloseable  ( xFrame, css::uno::UNO_QUERY );
+        cpo::uno::Reference< css::util::XCloseable > xCloseable  ( xFrame, cpo::uno::UNO_QUERY );
         if (xCloseable.is())
             xCloseable->close(true);
     }
@@ -2403,7 +2403,7 @@ void SfxHelpWindow_Impl::openDone(std::u16string_view sURL    ,
 
 
 SfxHelpWindow_Impl::SfxHelpWindow_Impl(
-    const css::uno::Reference < css::frame::XFrame2 >& rFrame,
+    const cpo::uno::Reference < css::frame::XFrame2 >& rFrame,
     vcl::Window* pParent ) :
 
     ResizableDockingWindow(pParent),
@@ -2574,7 +2574,7 @@ void SfxHelpWindow_Impl::DoAction(std::u16string_view  rActionId)
             try
             {
                 Content aCnt( aURL, Reference< css::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
-                css::uno::Reference< css::beans::XPropertySetInfo > xInfo = aCnt.getProperties();
+                cpo::uno::Reference< css::beans::XPropertySetInfo > xInfo = aCnt.getProperties();
                 if ( xInfo->hasPropertyByName( PROPERTY_TITLE ) )
                 {
                     cpo::uno::Any aAny = aCnt.getPropertyValue( PROPERTY_TITLE );

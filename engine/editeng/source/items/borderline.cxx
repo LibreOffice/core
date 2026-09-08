@@ -72,7 +72,7 @@ bool SvxBorderLine::setComplexColorFromAny(cpo::uno::Any const& rValue)
     if (!rValue.hasValue())
         return true;
 
-    css::uno::Reference<css::util::XComplexColor> xComplexColor;
+    cpo::uno::Reference<css::util::XComplexColor> xComplexColor;
     if (!(rValue >>= xComplexColor))
         return false;
 

@@ -120,7 +120,7 @@
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <cpo/uno/Any.h>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.h>
 #include <cpo/uno/Sequence.hxx>

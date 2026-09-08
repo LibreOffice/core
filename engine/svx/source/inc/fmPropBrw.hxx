@@ -47,17 +47,17 @@ class FmPropBrw final : public SfxModelessDialogController, public SfxController
     OUString        m_sLastActivePage;
     std::unique_ptr<weld::Box> m_xDialogBox;
     std::unique_ptr<weld::Container> m_xContainer;
-    css::uno::Reference< cpo::uno::XComponentContext >
+    cpo::uno::Reference< cpo::uno::XComponentContext >
                     m_xInspectorContext;
-    css::uno::Reference< cpo::uno::XComponentContext >
+    cpo::uno::Reference< cpo::uno::XComponentContext >
                     m_xORB;
-    css::uno::Reference< css::frame::XFrame2 >
+    cpo::uno::Reference< css::frame::XFrame2 >
                     m_xMeAsFrame;
-    css::uno::Reference< cpo::uno::XInterface >
+    cpo::uno::Reference< cpo::uno::XInterface >
                     m_xLastKnownDocument;
-    css::uno::Reference< css::inspection::XObjectInspectorModel >
+    cpo::uno::Reference< css::inspection::XObjectInspectorModel >
                     m_xInspectorModel;
-    css::uno::Reference< css::frame::XController >
+    cpo::uno::Reference< css::frame::XController >
                     m_xBrowserController;
 
     virtual void StateChangedAtToolBoxControl(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState) override;
@@ -73,7 +73,7 @@ class FmPropBrw final : public SfxModelessDialogController, public SfxController
 
 public:
     FmPropBrw(
-        const css::uno::Reference< cpo::uno::XComponentContext >& _xORB,
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& _xORB,
         SfxBindings* pBindings,
         SfxChildWindow* pMgr,
         weld::Window* pParent,

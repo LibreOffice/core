@@ -29,11 +29,11 @@
 #include <sfx2/viewsh.hxx>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo::uno;
 
 
 void ContextChangeEventMultiplexer::NotifyContextChange (
-    const css::uno::Reference<css::frame::XController>& rxController,
+    const cpo::uno::Reference<css::frame::XController>& rxController,
     const vcl::EnumContext::Context eContext)
 {
     if (!(rxController.is() && rxController->getFrame().is()))
@@ -44,7 +44,7 @@ void ContextChangeEventMultiplexer::NotifyContextChange (
         GetModuleName(rxController->getFrame()),
         vcl::EnumContext::GetContextName(eContext));
 
-    css::uno::Reference<css::ui::XContextChangeEventMultiplexer> xMultiplexer (
+    cpo::uno::Reference<css::ui::XContextChangeEventMultiplexer> xMultiplexer (
         css::ui::ContextChangeEventMultiplexer::get(
             ::comphelper::getProcessComponentContext()));
     if (xMultiplexer.is())
@@ -68,7 +68,7 @@ void ContextChangeEventMultiplexer::NotifyContextChange (
 
 
 OUString ContextChangeEventMultiplexer::GetModuleName (
-    const css::uno::Reference<css::frame::XFrame>& rxFrame)
+    const cpo::uno::Reference<css::frame::XFrame>& rxFrame)
 {
     try
     {

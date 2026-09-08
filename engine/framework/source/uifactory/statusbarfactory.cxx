@@ -22,7 +22,7 @@
 
 #include <cppuhelper/supportsservice.hxx>
 
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::beans;
 using namespace ::com::sun::star::ui;
@@ -34,7 +34,7 @@ namespace {
 class StatusBarFactory :  public MenuBarFactory
 {
 public:
-    explicit StatusBarFactory( const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
+    explicit StatusBarFactory( const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext );
 
     virtual OUString getImplementationName() override
     {
@@ -52,10 +52,10 @@ public:
     }
 
     // XUIElementFactory
-    virtual css::uno::Reference< css::ui::XUIElement > createUIElement( const OUString& ResourceURL, const cpo::uno::Sequence< css::beans::PropertyValue >& Args ) override;
+    virtual cpo::uno::Reference< css::ui::XUIElement > createUIElement( const OUString& ResourceURL, const cpo::uno::Sequence< css::beans::PropertyValue >& Args ) override;
 };
 
-StatusBarFactory::StatusBarFactory( const css::uno::Reference< cpo::uno::XComponentContext >& xContext ) :
+StatusBarFactory::StatusBarFactory( const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext ) :
     MenuBarFactory( xContext )
 {
 }

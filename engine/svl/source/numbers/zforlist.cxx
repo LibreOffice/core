@@ -59,7 +59,7 @@
 #include <set>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
 using namespace ::cpo::uno;
@@ -623,7 +623,7 @@ void SvNumberFormatter::ReplaceSystemCL( LanguageType eOldLanguage )
     pStdFormat->SetLastInsertKey( sal_uInt16(nLastKey - nCLOffset), SvNumberformat::FormatterPrivateAccess() );
 
     // append new system additional formats
-    css::uno::Reference< css::i18n::XNumberFormatCode > xNFC = i18n::NumberFormatMapper::create( m_xContext );
+    cpo::uno::Reference< css::i18n::XNumberFormatCode > xNFC = i18n::NumberFormatMapper::create( m_xContext );
     ImpGenerateAdditionalFormats( nCLOffset, xNFC );
 }
 
@@ -2916,7 +2916,7 @@ void SvNFFormatData::ImpGenerateFormats(SvNFLanguageData& rCurrentLanguage, cons
     }
 
     css::lang::Locale aLocale = rCurrentLanguage.GetLanguageTag().getLocale();
-    css::uno::Reference< css::i18n::XNumberFormatCode > xNFC = i18n::NumberFormatMapper::create(rCurrentLanguage.GetComponentContext());
+    cpo::uno::Reference< css::i18n::XNumberFormatCode > xNFC = i18n::NumberFormatMapper::create(rCurrentLanguage.GetComponentContext());
     sal_Int32 nIdx;
 
     // Number
@@ -3382,7 +3382,7 @@ void SvNFFormatData::ImpGenerateFormats(SvNFLanguageData& rCurrentLanguage, cons
 
 void SvNFFormatData::ImpGenerateAdditionalFormats(SvNFLanguageData& rCurrentLanguage,
             const NativeNumberWrapper& rNatNum, sal_uInt32 CLOffset,
-            css::uno::Reference< css::i18n::XNumberFormatCode > const & rNumberFormatCode,
+            cpo::uno::Reference< css::i18n::XNumberFormatCode > const & rNumberFormatCode,
             bool bAfterChangingSystemCL )
 {
     SvNumberformat* pStdFormat = GetFormatEntry( CLOffset + ZF_STANDARD );
@@ -3457,7 +3457,7 @@ void SvNFFormatData::ImpGenerateAdditionalFormats(SvNFLanguageData& rCurrentLang
 }
 
 void SvNumberFormatter::ImpGenerateAdditionalFormats( sal_uInt32 CLOffset,
-            css::uno::Reference< css::i18n::XNumberFormatCode > const & rNumberFormatCode )
+            cpo::uno::Reference< css::i18n::XNumberFormatCode > const & rNumberFormatCode )
 {
     m_aFormatData.ImpGenerateAdditionalFormats(m_aCurrentLanguage, GetNatNum(), CLOffset, rNumberFormatCode, /*bAfterChangingSystemCL*/true);
 }

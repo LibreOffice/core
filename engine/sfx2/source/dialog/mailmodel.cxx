@@ -37,7 +37,7 @@
 #include <com/sun/star/system/SimpleMailClientFlags.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
@@ -64,8 +64,8 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::system;
 
@@ -124,9 +124,9 @@ SfxMailModel::SaveResult SfxMailModel::ShowFilterOptionsDialog(
     try
     {
         cpo::uno::Sequence < beans::PropertyValue > aProps;
-        css::uno::Reference< css::container::XNameAccess > xFilterCFG(
+        cpo::uno::Reference< css::container::XNameAccess > xFilterCFG(
                     xSMGR->createInstance( u"com.sun.star.document.FilterFactory"_ustr ), uno::UNO_QUERY );
-        css::uno::Reference< css::util::XModifiable > xModifiable( xModel, css::uno::UNO_QUERY );
+        cpo::uno::Reference< css::util::XModifiable > xModifiable( xModel, cpo::uno::UNO_QUERY );
 
         if ( !xFilterCFG.is() )
             return eRet;
@@ -230,19 +230,19 @@ SfxMailModel::SaveResult SfxMailModel::ShowFilterOptionsDialog(
 
 SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
     const OUString& aSaveFileName,
-    const css::uno::Reference< cpo::uno::XInterface >& xFrameOrModel,
+    const cpo::uno::Reference< cpo::uno::XInterface >& xFrameOrModel,
     const OUString& rType,
     OUString& rFileNamePath )
 {
     SaveResult  eRet( SAVE_ERROR );
     bool        bSendAsPDF = ( rType == PDF_DOCUMENT_TYPE );
 
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR  = ::comphelper::getProcessServiceFactory();
-    const css::uno::Reference< cpo::uno::XComponentContext >& xContext  = ::comphelper::getProcessComponentContext();
+    cpo::uno::Reference< css::lang::XMultiServiceFactory > xSMGR  = ::comphelper::getProcessServiceFactory();
+    const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext  = ::comphelper::getProcessComponentContext();
     if (!xContext.is())
         return eRet;
 
-    css::uno::Reference< css::frame::XModuleManager2 > xModuleManager( css::frame::ModuleManager::create(xContext) );
+    cpo::uno::Reference< css::frame::XModuleManager2 > xModuleManager( css::frame::ModuleManager::create(xContext) );
 
     OUString aModule;
     try
@@ -257,11 +257,11 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
     {
     }
 
-    css::uno::Reference< css::frame::XFrame > xFrame( xFrameOrModel, css::uno::UNO_QUERY );
-    css::uno::Reference< css::frame::XModel > xModel( xFrameOrModel, css::uno::UNO_QUERY );
+    cpo::uno::Reference< css::frame::XFrame > xFrame( xFrameOrModel, cpo::uno::UNO_QUERY );
+    cpo::uno::Reference< css::frame::XModel > xModel( xFrameOrModel, cpo::uno::UNO_QUERY );
     if ( xFrame.is() )
     {
-        css::uno::Reference< css::frame::XController > xController = xFrame->getController();
+        cpo::uno::Reference< css::frame::XController > xController = xFrame->getController();
         if ( xController.is() )
             xModel = xController->getModel();
     }
@@ -273,8 +273,8 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
         bool bHasLocation( false );
         bool bStoreTo( false );
 
-        css::uno::Reference< css::util::XModifiable > xModifiable( xModel, css::uno::UNO_QUERY );
-        css::uno::Reference< css::frame::XStorable > xStorable( xModel, css::uno::UNO_QUERY );
+        cpo::uno::Reference< css::util::XModifiable > xModifiable( xModel, cpo::uno::UNO_QUERY );
+        cpo::uno::Reference< css::frame::XStorable > xStorable( xModel, cpo::uno::UNO_QUERY );
 
         if ( xModifiable.is() )
             bModified = xModifiable->isModified();
@@ -298,9 +298,9 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
             OUString aFileName;
             OUString aExtension;
 
-            css::uno::Reference< css::container::XContainerQuery > xContainerQuery(
+            cpo::uno::Reference< css::container::XContainerQuery > xContainerQuery(
                 xSMGR->createInstance( u"com.sun.star.document.FilterFactory"_ustr ),
-                css::uno::UNO_QUERY );
+                cpo::uno::UNO_QUERY );
 
             if ( bStoreTo )
             {
@@ -322,7 +322,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                     pQuery[2].Value <<= sal_Int32(0x80042); // SfxFilterFlags: EXPORT ALIEN 3RDPARTY
                 }
 
-                css::uno::Reference< css::container::XEnumeration > xEnumeration =
+                cpo::uno::Reference< css::container::XEnumeration > xEnumeration =
                     xContainerQuery->createSubSetEnumerationByProperties( aQuery );
 
                 if ( xEnumeration->hasMoreElements() )
@@ -369,8 +369,8 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                         aFilterName = aFilterPropsHM.getUnpackedValueOrDefault(
                                                     u"ooSetupFactoryDefaultFilter"_ustr,
                                                     OUString() );
-                        css::uno::Reference< css::container::XNameAccess > xNameAccess(
-                            xContainerQuery, css::uno::UNO_QUERY );
+                        cpo::uno::Reference< css::container::XNameAccess > xNameAccess(
+                            xContainerQuery, cpo::uno::UNO_QUERY );
                         if ( xNameAccess.is() )
                         {
                             ::comphelper::SequenceAsHashMap aFilterPropsHM2( xNameAccess->getByName( aFilterName ) );
@@ -402,9 +402,9 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
             }
             else
             {
-                css::uno::Reference< container::XNameAccess > xTypeDetection(
+                cpo::uno::Reference< container::XNameAccess > xTypeDetection(
                     xSMGR->createInstance( u"com.sun.star.document.TypeDetection"_ustr ),
-                    css::uno::UNO_QUERY );
+                    cpo::uno::UNO_QUERY );
 
 
                 if ( xTypeDetection.is() )
@@ -477,9 +477,9 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
 
             bool bNeedsPreparation = false;
             css::util::URL aPrepareURL;
-            css::uno::Reference< css::frame::XDispatch > xPrepareDispatch;
-            css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider( xFrame, css::uno::UNO_QUERY );
-            css::uno::Reference< css::util::XURLTransformer > xURLTransformer( css::util::URLTransformer::create( xContext ) );
+            cpo::uno::Reference< css::frame::XDispatch > xPrepareDispatch;
+            cpo::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider( xFrame, cpo::uno::UNO_QUERY );
+            cpo::uno::Reference< css::util::XURLTransformer > xURLTransformer( css::util::URLTransformer::create( xContext ) );
             if( !bSendAsPDF )
             {
                 try
@@ -555,7 +555,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
 
                         if ( xDispatchProvider.is() )
                         {
-                            css::uno::Reference< css::frame::XDispatch > xDispatch(
+                            cpo::uno::Reference< css::frame::XDispatch > xDispatch(
                                 xDispatchProvider->queryDispatch( aURL, OUString(), 0 ));
                             if ( xDispatch.is() )
                             {
@@ -640,15 +640,15 @@ void SfxMailModel::AddToAddress( const OUString& rAddress )
     }
 }
 
-SfxMailModel::SendMailResult SfxMailModel::Send( const css::uno::Reference< css::frame::XFrame >& xFrame )
+SfxMailModel::SendMailResult SfxMailModel::Send( const cpo::uno::Reference< css::frame::XFrame >& xFrame )
 {
     OSL_ENSURE(!maAttachedDocuments.empty(),"No document added!");
     SendMailResult  eResult = SEND_MAIL_ERROR;
     if ( !maAttachedDocuments.empty() )
     {
-        const css::uno::Reference < XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
+        const cpo::uno::Reference < XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
 
-        css::uno::Reference< XSimpleMailClientSupplier >    xSimpleMailClientSupplier;
+        cpo::uno::Reference< XSimpleMailClientSupplier >    xSimpleMailClientSupplier;
 
         // Prefer the SimpleSystemMail service if available
         try {
@@ -668,7 +668,7 @@ SfxMailModel::SendMailResult SfxMailModel::Send( const css::uno::Reference< css:
 
         if ( xSimpleMailClientSupplier.is() )
         {
-            css::uno::Reference< XSimpleMailClient > xSimpleMailClient = xSimpleMailClientSupplier->querySimpleMailClient();
+            cpo::uno::Reference< XSimpleMailClient > xSimpleMailClient = xSimpleMailClientSupplier->querySimpleMailClient();
 
             if ( !xSimpleMailClient.is() )
             {
@@ -677,7 +677,7 @@ SfxMailModel::SendMailResult SfxMailModel::Send( const css::uno::Reference< css:
             }
 
             // we have a simple mail client
-            css::uno::Reference< XSimpleMailMessage > xSimpleMailMessage = xSimpleMailClient->createSimpleMailMessage();
+            cpo::uno::Reference< XSimpleMailMessage > xSimpleMailMessage = xSimpleMailClient->createSimpleMailMessage();
             if ( xSimpleMailMessage.is() )
             {
                 sal_Int32 nSendFlags = SimpleMailClientFlags::DEFAULTS;
@@ -739,7 +739,7 @@ SfxMailModel::SendMailResult SfxMailModel::Send( const css::uno::Reference< css:
 
                 if ( !bSend )
                 {
-                    css::uno::Reference< css::awt::XWindow > xParentWindow = xFrame->getContainerWindow();
+                    cpo::uno::Reference< css::awt::XWindow > xParentWindow = xFrame->getContainerWindow();
 
                     SolarMutexGuard aGuard;
 
@@ -759,7 +759,7 @@ SfxMailModel::SendMailResult SfxMailModel::Send( const css::uno::Reference< css:
     return eResult;
 }
 
-SfxMailModel::SendMailResult SfxMailModel::SaveAndSend( const css::uno::Reference< css::frame::XFrame >& xFrame, const OUString& rTypeName )
+SfxMailModel::SendMailResult SfxMailModel::SaveAndSend( const cpo::uno::Reference< css::frame::XFrame >& xFrame, const OUString& rTypeName )
 {
     SaveResult      eSaveResult;
     SendMailResult  eResult = SEND_MAIL_ERROR;

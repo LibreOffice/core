@@ -38,11 +38,11 @@ namespace dbaui
 {
     namespace DataSourceInfoConverter
     {
-        void convert(const css::uno::Reference< cpo::uno::XComponentContext> & xContext,
+        void convert(const cpo::uno::Reference< cpo::uno::XComponentContext> & xContext,
                      const ::dbaccess::ODsnTypeCollection* _pCollection,
                      std::u16string_view _sOldURLPrefix,
                      std::u16string_view _sNewURLPrefix,
-                     const css::uno::Reference< css::beans::XPropertySet >& _xDatasource);
+                     const cpo::uno::Reference< css::beans::XPropertySet >& _xDatasource);
     };
     class IItemSetHelper;
     // ODbDataSourceAdministrationHelper
@@ -52,12 +52,12 @@ namespace dbaui
         typedef std::map<sal_Int32, OUString> MapInt2String;
 
     private:
-        css::uno::Reference< cpo::uno::XComponentContext >
+        cpo::uno::Reference< cpo::uno::XComponentContext >
                                 m_xContext;                 /// service factory
-        css::uno::Reference< css::sdb::XDatabaseContext >
+        cpo::uno::Reference< css::sdb::XDatabaseContext >
                                 m_xDatabaseContext;     /// database context we're working in
-        css::uno::Reference< css::beans::XPropertySet >   m_xDatasource;
-        css::uno::Reference< css::frame::XModel >         m_xModel;
+        cpo::uno::Reference< css::beans::XPropertySet >   m_xDatasource;
+        cpo::uno::Reference< css::frame::XModel >         m_xModel;
 
         cpo::uno::Any              m_aDataSourceOrName;
 
@@ -67,7 +67,7 @@ namespace dbaui
         IItemSetHelper*         m_pItemSetHelper;
     public:
 
-        ODbDataSourceAdministrationHelper(const css::uno::Reference< cpo::uno::XComponentContext >& _xORB,
+        ODbDataSourceAdministrationHelper(const cpo::uno::Reference< cpo::uno::XComponentContext >& _xORB,
                                           weld::Window* pParent, weld::Window* pTopParent,
                                           IItemSetHelper* _pItemSetHelper);
 
@@ -84,20 +84,20 @@ namespace dbaui
         /// clear the password in the current data source's item set
         void        clearPassword();
 
-        const css::uno::Reference< cpo::uno::XComponentContext >& getORB() const { return m_xContext; }
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& getORB() const { return m_xContext; }
 
         /** creates a new connection. The caller is responsible to dispose it !!!!
         */
-        std::pair< css::uno::Reference< css::sdbc::XConnection >,bool>      createConnection();
+        std::pair< cpo::uno::Reference< css::sdbc::XConnection >,bool>      createConnection();
 
         /** return the corresponding driver for the selected URL
         */
-        css::uno::Reference< css::sdbc::XDriver >         getDriver();
-        css::uno::Reference< css::sdbc::XDriver >         getDriver(const OUString& _sURL);
+        cpo::uno::Reference< css::sdbc::XDriver >         getDriver();
+        cpo::uno::Reference< css::sdbc::XDriver >         getDriver(const OUString& _sURL);
 
         /** returns the data source the dialog is currently working with
         */
-        css::uno::Reference< css::beans::XPropertySet > const &  getCurrentDataSource();
+        cpo::uno::Reference< css::beans::XPropertySet > const &  getCurrentDataSource();
 
         void setDataSourceOrName( const cpo::uno::Any& _rDataSourceOrName );
 
@@ -124,7 +124,7 @@ namespace dbaui
                 The item set to fill.
         */
         void translateProperties(
-                const css::uno::Reference< css::beans::XPropertySet >& _rxSource,
+                const cpo::uno::Reference< css::beans::XPropertySet >& _rxSource,
                 SfxItemSet& _rDest);
 
         /** translate SfxItems into properties of a UNO data source
@@ -135,7 +135,7 @@ namespace dbaui
         */
         void translateProperties(
                 const SfxItemSet& _rSource,
-                const css::uno::Reference< css::beans::XPropertySet >& _rxDest);
+                const cpo::uno::Reference< css::beans::XPropertySet >& _rxDest);
 
         bool saveChanges(const SfxItemSet& _rSource);
     private:
@@ -150,7 +150,7 @@ namespace dbaui
         static cpo::uno::Any implTranslateProperty(const SfxPoolItem* _pItem);
 
         /// translate the given SfxPoolItem into an <type scope="com.sun.star.Any">uno</type>, set it (under the given name) on the given property set
-        static void implTranslateProperty(const css::uno::Reference< css::beans::XPropertySet >& _rxSet, const OUString& _rName, const SfxPoolItem* _pItem);
+        static void implTranslateProperty(const cpo::uno::Reference< css::beans::XPropertySet >& _rxSet, const OUString& _rName, const SfxPoolItem* _pItem);
 
         /** check if the data source described by the given set needs authentication<p/>
             The return value depends on the data source type only.

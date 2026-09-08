@@ -27,15 +27,15 @@
 using OInputSeekStream_BASE = cppu::ImplInheritanceHelper<OInputCompStream, css::io::XSeekable>;
 class OInputSeekStream final : public OInputSeekStream_BASE
 {
-    css::uno::Reference < css::io::XSeekable > m_xSeekable;
+    cpo::uno::Reference < css::io::XSeekable > m_xSeekable;
 
 public:
     OInputSeekStream( OWriteStream_Impl& pImpl,
-                      css::uno::Reference < css::io::XInputStream > const & xStream,
+                      cpo::uno::Reference < css::io::XInputStream > const & xStream,
                       const cpo::uno::Sequence< css::beans::PropertyValue >& aProps,
                       sal_Int32 nStorageType );
 
-    OInputSeekStream( css::uno::Reference < css::io::XInputStream > const & xStream,
+    OInputSeekStream( cpo::uno::Reference < css::io::XInputStream > const & xStream,
                       const cpo::uno::Sequence< css::beans::PropertyValue >& aProps,
                       sal_Int32 nStorageType );
 

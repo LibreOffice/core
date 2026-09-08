@@ -21,7 +21,8 @@
 #include <com/sun/star/container/XNamed.hpp>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 namespace
 {

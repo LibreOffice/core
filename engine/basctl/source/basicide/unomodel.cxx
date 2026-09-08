@@ -67,6 +67,7 @@ namespace basctl
 {
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 SIDEModel::SIDEModel( SfxObjectShell *pObjSh )
     : cppu::ImplInheritanceHelper<SfxBaseModel, css::lang::XServiceInfo>(pObjSh)
@@ -115,7 +116,7 @@ void  SIDEModel::notImplemented()
 }
 
 // XModel
-css::uno::Reference< cpo::uno::XInterface > SIDEModel::getCurrentSelection()
+cpo::uno::Reference< cpo::uno::XInterface > SIDEModel::getCurrentSelection()
 {
     SolarMutexGuard aGuard;
     Shell* pShell = GetShell();

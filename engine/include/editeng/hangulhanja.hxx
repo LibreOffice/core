@@ -109,7 +109,7 @@ namespace editeng
     public:
         HangulHanjaConversion(
             weld::Widget* pUIParent,
-            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
             const css::lang::Locale& _rSourceLocale,
             const css::lang::Locale& _rTargetLocale,
             const vcl::Font* _pTargetFont,

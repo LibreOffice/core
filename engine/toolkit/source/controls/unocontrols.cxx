@@ -54,10 +54,10 @@
 using namespace css;
 using namespace css::awt;
 using namespace css::lang;
-using namespace css::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using ::com::sun::star::graphic::XGraphic;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using namespace ::toolkit;
 
 uno::Reference< graphic::XGraphic >
@@ -67,7 +67,7 @@ ImageHelper::getGraphicAndGraphicObjectFromURL_nothrow( uno::Reference< graphic:
     return ImageHelper::getGraphicFromURL_nothrow( _rURL, u""_ustr );
 }
 
-css::uno::Reference< css::graphic::XGraphic >
+cpo::uno::Reference< css::graphic::XGraphic >
 ImageHelper::getGraphicFromURL_nothrow( const OUString& _rURL, OUString const & referer )
 {
     uno::Reference< graphic::XGraphic > xGraphic;
@@ -3345,7 +3345,7 @@ void UnoSpinFieldControl::createPeer( const uno::Reference< awt::XToolkit > & rx
 }
 
     // css::awt::XSpinField
-void UnoSpinFieldControl::addSpinListener( const css::uno::Reference< css::awt::XSpinListener >& l )
+void UnoSpinFieldControl::addSpinListener( const cpo::uno::Reference< css::awt::XSpinListener >& l )
 {
     maSpinListeners.addInterface( l );
     if( getPeer().is() && maSpinListeners.getLength() == 1 )
@@ -3355,7 +3355,7 @@ void UnoSpinFieldControl::addSpinListener( const css::uno::Reference< css::awt::
     }
 }
 
-void UnoSpinFieldControl::removeSpinListener( const css::uno::Reference< css::awt::XSpinListener >& l )
+void UnoSpinFieldControl::removeSpinListener( const cpo::uno::Reference< css::awt::XSpinListener >& l )
 {
     if( getPeer().is() && maSpinListeners.getLength() == 1 )
     {

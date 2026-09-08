@@ -326,7 +326,7 @@ private:
 
     void InvalidateAtWindow(const tools::Rectangle& rRect);
 
-    css::uno::Reference<css::datatransfer::clipboard::XClipboard> GetClipboard() const;
+    cpo::uno::Reference<css::datatransfer::clipboard::XClipboard> GetClipboard() const;
 
     void SetBroadcastKitViewCursor(bool bSet)
     {
@@ -384,8 +384,8 @@ public:
     bool            MouseMove( const MouseEvent& rMouseEvent );
     bool            Command(const CommandEvent& rCEvt);
 
-    void            CutCopy( css::uno::Reference< css::datatransfer::clipboard::XClipboard > const & rxClipboard, bool bCut );
-    void            Paste( css::uno::Reference< css::datatransfer::clipboard::XClipboard > const & rxClipboard, bool bUseSpecial = false, SotClipboardFormatId format = SotClipboardFormatId::NONE);
+    void            CutCopy( cpo::uno::Reference< css::datatransfer::clipboard::XClipboard > const & rxClipboard, bool bCut );
+    void            Paste( cpo::uno::Reference< css::datatransfer::clipboard::XClipboard > const & rxClipboard, bool bUseSpecial = false, SotClipboardFormatId format = SotClipboardFormatId::NONE);
 
     void SetVisDocStartPos(const Point& rPos) { maVisDocStartPos = rPos; }
 
@@ -585,11 +585,11 @@ private:
     EEHorizontalTextDirection meDefaultHorizontalTextDirection;
 
     sal_Int32 mnBigTextObjectStart;
-    css::uno::Reference<css::linguistic2::XSpellChecker>  mxSpeller;
-    css::uno::Reference<css::linguistic2::XHyphenator>    mxHyphenator;
+    cpo::uno::Reference<css::linguistic2::XSpellChecker>  mxSpeller;
+    cpo::uno::Reference<css::linguistic2::XHyphenator>    mxHyphenator;
     std::unique_ptr<SpellInfo> mpSpellInfo;
-    mutable css::uno::Reference <css::i18n::XBreakIterator> mxBI;
-    mutable css::uno::Reference <css::i18n::XExtendedInputSequenceChecker> mxISC;
+    mutable cpo::uno::Reference <css::i18n::XBreakIterator> mxBI;
+    mutable cpo::uno::Reference <css::i18n::XExtendedInputSequenceChecker> mxISC;
 
     std::unique_ptr<ConvInfo> mpConvInfo;
 
@@ -687,7 +687,7 @@ private:
 
     EditTextObject      CreateTextObject(EditSelection aSelection, SfxItemPool*, bool bAllowBigObjects = false, sal_Int32 nBigObjStart = 0);
     EditSelection       InsertTextObject( const EditTextObject&, EditPaM aPaM );
-    EditSelection       PasteText( css::uno::Reference< css::datatransfer::XTransferable > const & rxDataObj, const OUString& rBaseURL, const EditPaM& rPaM, bool bUseSpecial, SotClipboardFormatId format = SotClipboardFormatId::NONE);
+    EditSelection       PasteText( cpo::uno::Reference< css::datatransfer::XTransferable > const & rxDataObj, const OUString& rBaseURL, const EditPaM& rPaM, bool bUseSpecial, SotClipboardFormatId format = SotClipboardFormatId::NONE);
 
     void                CheckPageOverflow();
 
@@ -879,10 +879,10 @@ private:
         return GetParaPortions().SafeGetObject(nPos);
     }
 
-    css::uno::Reference< css::datatransfer::XTransferable > CreateTransferable( const EditSelection& rSelection );
+    cpo::uno::Reference< css::datatransfer::XTransferable > CreateTransferable( const EditSelection& rSelection );
 
-    css::uno::Reference < css::i18n::XBreakIterator > const & ImplGetBreakIterator() const;
-    css::uno::Reference < css::i18n::XExtendedInputSequenceChecker > const & ImplGetInputSequenceChecker() const;
+    cpo::uno::Reference < css::i18n::XBreakIterator > const & ImplGetBreakIterator() const;
+    cpo::uno::Reference < css::i18n::XExtendedInputSequenceChecker > const & ImplGetInputSequenceChecker() const;
 
     void ImplUpdateOverflowingParaNum(tools::Long);
     void ImplUpdateOverflowingLineNum(tools::Long, sal_uInt32, tools::Long);
@@ -1205,13 +1205,13 @@ public:
     EditView*           GetActiveView() const   { return mpActiveView; }
     void                SetActiveView( EditView* pView );
 
-    css::uno::Reference< css::linguistic2::XSpellChecker > const &
+    cpo::uno::Reference< css::linguistic2::XSpellChecker > const &
                         GetSpeller();
-    void                SetSpeller( css::uno::Reference< css::linguistic2::XSpellChecker > const &xSpl )
+    void                SetSpeller( cpo::uno::Reference< css::linguistic2::XSpellChecker > const &xSpl )
                             { mxSpeller = xSpl; }
-    const css::uno::Reference< css::linguistic2::XHyphenator >&
+    const cpo::uno::Reference< css::linguistic2::XHyphenator >&
                         GetHyphenator() const { return mxHyphenator; }
-    void                SetHyphenator( css::uno::Reference< css::linguistic2::XHyphenator > const &xHyph )
+    void                SetHyphenator( cpo::uno::Reference< css::linguistic2::XHyphenator > const &xHyph )
                             { mxHyphenator = xHyph; }
 
     void GetAllMisspellRanges( std::vector<editeng::MisspellRanges>& rRanges ) const;
@@ -1233,7 +1233,7 @@ public:
     /// Bring the WrongList of the input content node up to date synchronously, skipping view invalidation.
     void EnsureWrongListForPaint(ContentNode* pNode);
     EESpellState        StartThesaurus(EditView* pEditView, weld::Widget* pDialogParent);
-    css::uno::Reference< css::linguistic2::XSpellAlternatives >
+    cpo::uno::Reference< css::linguistic2::XSpellAlternatives >
                         ImpSpell( EditView* pEditView );
 
     // text conversion functions
@@ -1250,7 +1250,7 @@ public:
     bool                IsInputSequenceCheckingRequired( sal_Unicode nChar, const EditSelection& rCurSel ) const;
 
     //find the next error within the given selection - forward only!
-    css::uno::Reference< css::linguistic2::XSpellAlternatives >
+    cpo::uno::Reference< css::linguistic2::XSpellAlternatives >
                         ImpFindNextError(EditSelection& rSelection);
     //spell and return a sentence
     bool                SpellSentence(EditView const & rView, svx::SpellPortions& rToFill );
@@ -1262,12 +1262,12 @@ public:
     void                AddPortionIterated(
                           EditView const & rEditView,
                           const EditSelection &rSel,
-                          const css::uno::Reference< css::linguistic2::XSpellAlternatives >& xAlt,
+                          const cpo::uno::Reference< css::linguistic2::XSpellAlternatives >& xAlt,
                           svx::SpellPortions& rToFill);
     //adds one portion to the SpellPortions
     void                AddPortion(
                             const EditSelection &rSel,
-                            const css::uno::Reference< css::linguistic2::XSpellAlternatives >& xAlt,
+                            const cpo::uno::Reference< css::linguistic2::XSpellAlternatives >& xAlt,
                             svx::SpellPortions& rToFill,
                             bool bIsField );
 

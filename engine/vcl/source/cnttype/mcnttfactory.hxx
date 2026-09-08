@@ -35,7 +35,7 @@ public:
 
     // XMimeContentTypeFactory
 
-    virtual css::uno::Reference< css::datatransfer::XMimeContentType > createMimeContentType( const OUString& aContentType ) override;
+    virtual cpo::uno::Reference< css::datatransfer::XMimeContentType > createMimeContentType( const OUString& aContentType ) override;
 
     // XServiceInfo
 

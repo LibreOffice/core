@@ -39,7 +39,7 @@
 #include <vector>
 #include <map>
 
-void registerComponentToBeDisposedForBasic( const css::uno::Reference< css::lang::XComponent >& xComponent, StarBASIC* pBasic );
+void registerComponentToBeDisposedForBasic( const cpo::uno::Reference< css::lang::XComponent >& xComponent, StarBASIC* pBasic );
 
 class StructRefInfo
 {
@@ -101,11 +101,11 @@ public:
 
 class SbUnoObject: public SbxObject
 {
-    css::uno::Reference< css::beans::XIntrospectionAccess > mxUnoAccess;
-    css::uno::Reference< css::beans::XMaterialHolder > mxMaterialHolder;
-    css::uno::Reference< css::script::XInvocation > mxInvocation;
-    css::uno::Reference< css::beans::XExactName > mxExactName;
-    css::uno::Reference< css::beans::XExactName > mxExactNameInvocation;
+    cpo::uno::Reference< css::beans::XIntrospectionAccess > mxUnoAccess;
+    cpo::uno::Reference< css::beans::XMaterialHolder > mxMaterialHolder;
+    cpo::uno::Reference< css::script::XInvocation > mxInvocation;
+    cpo::uno::Reference< css::beans::XExactName > mxExactName;
+    cpo::uno::Reference< css::beans::XExactName > mxExactNameInvocation;
     bool bNeedIntrospection;
     bool bNativeCOMObject;
     cpo::uno::Any maTmpUnoObj; // Only to save obj for doIntrospection!
@@ -134,8 +134,8 @@ public:
 
     // give out value
     cpo::uno::Any getUnoAny();
-    const css::uno::Reference< css::beans::XIntrospectionAccess >& getIntrospectionAccess() const { return mxUnoAccess; }
-    const css::uno::Reference< css::script::XInvocation >& getInvocation() const { return mxInvocation; }
+    const cpo::uno::Reference< css::beans::XIntrospectionAccess >& getIntrospectionAccess() const { return mxUnoAccess; }
+    const cpo::uno::Reference< css::script::XInvocation >& getInvocation() const { return mxInvocation; }
 
     void Notify( SfxBroadcaster&, const SfxHint& rHint ) override;
 
@@ -156,7 +156,7 @@ class SbUnoMethod final : public SbxMethod
     friend void clearUnoMethods();
     friend void clearUnoMethodsForBasic( StarBASIC const * pBasic );
 
-    css::uno::Reference< css::reflection::XIdlMethod > m_xUnoMethod;
+    cpo::uno::Reference< css::reflection::XIdlMethod > m_xUnoMethod;
     std::unique_ptr<cpo::uno::Sequence< css::reflection::ParamInfo >> pParamInfoSeq;
 
     // #67781 reference to the previous and the next method in the method list
@@ -167,7 +167,7 @@ class SbUnoMethod final : public SbxMethod
 
 public:
 
-    SbUnoMethod( const OUString& aName_, SbxDataType eSbxType, css::uno::Reference< css::reflection::XIdlMethod > const & xUnoMethod_,
+    SbUnoMethod( const OUString& aName_, SbxDataType eSbxType, cpo::uno::Reference< css::reflection::XIdlMethod > const & xUnoMethod_,
         bool bInvocation );
     virtual ~SbUnoMethod() override;
     virtual SbxInfo* GetInfo() override;
@@ -216,13 +216,13 @@ public:
 // wrapper for a uno-class
 class SbUnoClass final : public SbxObject
 {
-    const css::uno::Reference< css::reflection::XIdlClass >   m_xClass;
+    const cpo::uno::Reference< css::reflection::XIdlClass >   m_xClass;
 
 public:
     SbUnoClass( const OUString& aName_ )
         : SbxObject( aName_ )
     {}
-    SbUnoClass( const OUString& aName_, css::uno::Reference< css::reflection::XIdlClass > xClass_ )
+    SbUnoClass( const OUString& aName_, cpo::uno::Reference< css::reflection::XIdlClass > xClass_ )
         : SbxObject( aName_ )
         , m_xClass(std::move( xClass_ ))
     {}
@@ -231,7 +231,7 @@ public:
     virtual SbxVariable* Find( const OUString&, SbxClassType ) override;
 
 
-    const css::uno::Reference< css::reflection::XIdlClass >& getUnoClass() const { return m_xClass; }
+    const cpo::uno::Reference< css::reflection::XIdlClass >& getUnoClass() const { return m_xClass; }
 
 };
 
@@ -244,12 +244,12 @@ SbUnoClass* findUnoClass( const OUString& rName );
 // Wrapper for UNO Service
 class SbUnoService final : public SbxObject
 {
-    const css::uno::Reference< css::reflection::XServiceTypeDescription2 > m_xServiceTypeDesc;
+    const cpo::uno::Reference< css::reflection::XServiceTypeDescription2 > m_xServiceTypeDesc;
     bool m_bNeedsInit;
 
 public:
     SbUnoService( const OUString& aName_,
-        css::uno::Reference< css::reflection::XServiceTypeDescription2 >  xServiceTypeDesc )
+        cpo::uno::Reference< css::reflection::XServiceTypeDescription2 >  xServiceTypeDesc )
             : SbxObject( aName_ )
             , m_xServiceTypeDesc(std::move( xServiceTypeDesc ))
             , m_bNeedsInit( true )
@@ -267,15 +267,15 @@ class SbUnoServiceCtor final : public SbxMethod
 {
     friend class SbUnoService;
 
-    css::uno::Reference< css::reflection::XServiceConstructorDescription > m_xServiceCtorDesc;
+    cpo::uno::Reference< css::reflection::XServiceConstructorDescription > m_xServiceCtorDesc;
 
 public:
 
-    SbUnoServiceCtor( const OUString& aName_, css::uno::Reference< css::reflection::XServiceConstructorDescription > const & xServiceCtorDesc );
+    SbUnoServiceCtor( const OUString& aName_, cpo::uno::Reference< css::reflection::XServiceConstructorDescription > const & xServiceCtorDesc );
     virtual ~SbUnoServiceCtor() override;
     virtual SbxInfo* GetInfo() override;
 
-    const css::uno::Reference< css::reflection::XServiceConstructorDescription >& getServiceCtorDesc() const
+    const cpo::uno::Reference< css::reflection::XServiceConstructorDescription >& getServiceCtorDesc() const
         { return m_xServiceCtorDesc; }
 };
 
@@ -382,7 +382,7 @@ public:
 
 SbxVariable* getDefaultProp( SbxVariable* pRef );
 
-css::uno::Reference< cpo::uno::XInterface > createComListener( const cpo::uno::Any& aControlAny,
+cpo::uno::Reference< cpo::uno::XInterface > createComListener( const cpo::uno::Any& aControlAny,
                                                                const OUString& aVBAType,
                                                                std::u16string_view aPrefix,
                                                                const SbxObjectRef& xScopeObj );

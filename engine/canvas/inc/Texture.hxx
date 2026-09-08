@@ -21,7 +21,7 @@
 #include <sal/config.h>
 
 #include <com/sun/star/geometry/AffineMatrix2D.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <vcl/bitmap.hxx>
 #include <rtl/ref.hxx>
 

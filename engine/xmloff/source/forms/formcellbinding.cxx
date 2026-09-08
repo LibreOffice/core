@@ -34,7 +34,7 @@
 namespace xmloff
 {
 
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
 using namespace cpo::uno;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::frame;
@@ -47,11 +47,11 @@ using namespace cpo::uno;
 
 namespace
 {
-    using ::com::sun::star::uno::Reference;
+    using ::cpo::uno::Reference;
     using ::cpo::uno::XInterface;
     using ::com::sun::star::container::XChild;
     using ::com::sun::star::frame::XModel;
-    using ::com::sun::star::uno::UNO_QUERY;
+    using ::cpo::uno::UNO_QUERY;
 
     template< class TYPE >
     Reference< TYPE > getTypedModelNode( const Reference< XInterface >& _rxModelNode )
@@ -97,7 +97,7 @@ FormCellBindingHelper::FormCellBindingHelper( const Reference< XPropertySet >& _
     OSL_ENSURE( m_xControlModel.is(), "FormCellBindingHelper::FormCellBindingHelper: invalid control model!" );
 
     if ( !m_xDocument.is() )
-        m_xDocument.set(getDocument( m_xControlModel ), css::uno::UNO_QUERY);
+        m_xDocument.set(getDocument( m_xControlModel ), cpo::uno::UNO_QUERY);
     OSL_ENSURE( m_xDocument.is(), "FormCellBindingHelper::FormCellBindingHelper: Did not find the spreadsheet document!" );
 }
 
@@ -150,7 +150,7 @@ Reference< XValueBinding > FormCellBindingHelper::createCellBindingFromStringAdd
         _bUseIntegerBinding ? SERVICE_LISTINDEXCELLBINDING : SERVICE_CELLVALUEBINDING,
         PROPERTY_BOUND_CELL,
         Any( aAddress )
-    ), css::uno::UNO_QUERY);
+    ), cpo::uno::UNO_QUERY);
 
     return xBinding;
 }
@@ -168,7 +168,7 @@ Reference< XListEntrySource > FormCellBindingHelper::createCellListSourceFromStr
         SERVICE_CELLRANGELISTSOURCE,
         PROPERTY_LIST_CELL_RANGE,
         Any( aRangeAddress )
-    ), css::uno::UNO_QUERY);
+    ), cpo::uno::UNO_QUERY);
 
     return xSource;
 }

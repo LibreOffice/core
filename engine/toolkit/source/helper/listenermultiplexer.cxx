@@ -152,7 +152,7 @@ void TabListenerMultiplexer::changed( sal_Int32 evt, const cpo::uno::Sequence< c
     g.unlock();
     while( aIt.hasMoreElements() )
     {
-        css::uno::Reference<css::awt::XTabListener> xListener(aIt.next());
+        cpo::uno::Reference<css::awt::XTabListener> xListener(aIt.next());
         try
         {
             xListener->changed( aMulti, evt2 );

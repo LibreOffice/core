@@ -29,8 +29,8 @@ namespace svt::uno
 {
 
 
-    using css::uno::Reference;
-    using css::uno::UNO_SET_THROW;
+    using cpo::uno::Reference;
+    using cpo::uno::UNO_SET_THROW;
     using cpo::uno::Exception;
     using css::ui::dialogs::XWizardController;
     using css::awt::XWindow;
@@ -50,10 +50,10 @@ namespace svt::uno
         try
         {
             // Plug a toplevel SalFrame into the native page which can host our awt widgetry
-            css::uno::Reference<css::awt::XWindow> xChildFrame = pParent->CreateChildFrame();
+            cpo::uno::Reference<css::awt::XWindow> xChildFrame = pParent->CreateChildFrame();
             m_xWizardPage.set(m_xController->createPage(xChildFrame, i_nPageId), UNO_SET_THROW);
 
-            css::uno::Reference<css::awt::XWindow> xPageWindow(m_xWizardPage->getWindow(), UNO_SET_THROW);
+            cpo::uno::Reference<css::awt::XWindow> xPageWindow(m_xWizardPage->getWindow(), UNO_SET_THROW);
 
             // tdf#132110 use the current size of the child as the size request
             css::awt::Rectangle aChildRect = xPageWindow->getPosSize();

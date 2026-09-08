@@ -23,7 +23,7 @@
 #include <sax/fastattribs.hxx>
 #include <utility>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::xml;
 using namespace ::com::sun::star::xml::sax;
@@ -64,7 +64,7 @@ FastAttributeList::FastAttributeList( sax_fastparser::FastTokenHandlerBase *pTok
     maAttributeValues.push_back( 0 );
 }
 
-FastAttributeList::FastAttributeList( const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList )
+FastAttributeList::FastAttributeList( const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList )
 {
     const auto& rOther = castToFastAttributeList(xAttrList);
     mpTokenHandler = rOther.mpTokenHandler;
@@ -76,7 +76,7 @@ FastAttributeList::FastAttributeList( const css::uno::Reference< css::xml::sax::
     maUnknownAttributes = rOther.maUnknownAttributes;
 }
 
-css::uno::Reference< ::css::util::XCloneable > FastAttributeList::createClone()
+cpo::uno::Reference< ::css::util::XCloneable > FastAttributeList::createClone()
 {
     return new FastAttributeList(this);
 }
@@ -145,7 +145,7 @@ void FastAttributeList::addUnknown( const OString& rName, const OString& value )
     maUnknownAttributes.emplace_back( rName, value );
 }
 
-void FastAttributeList::add( const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList )
+void FastAttributeList::add( const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList )
 {
     const auto& rOther = castToFastAttributeList(xAttrList);
     add(rOther);

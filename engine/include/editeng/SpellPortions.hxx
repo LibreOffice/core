@@ -22,7 +22,7 @@
 
 #include <i18nlangtag/lang.h>
 #include <rtl/ustring.hxx>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <com/sun/star/linguistic2/SingleProofreadingError.hpp>
 #include <vector>
 
@@ -44,10 +44,10 @@ struct SpellPortion
     /** for wrong words this reference is filled with the error information otherwise
         it's an empty reference
      */
-    css::uno::Reference< css::linguistic2::XSpellAlternatives> xAlternatives;
+    cpo::uno::Reference< css::linguistic2::XSpellAlternatives> xAlternatives;
     /** provides access to the grammar checker interface
      */
-    css::uno::Reference< css::linguistic2::XProofreader > xGrammarChecker;
+    cpo::uno::Reference< css::linguistic2::XProofreader > xGrammarChecker;
     /** contains the proposed dialog title if the proof reading component provides one.
      */
     OUString   sDialogTitle;

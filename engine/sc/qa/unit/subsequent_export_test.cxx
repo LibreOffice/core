@@ -42,8 +42,8 @@
 #include <unotools/saveopt.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 class ScExportTest : public ScModelTestBase
 {

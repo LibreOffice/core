@@ -160,6 +160,7 @@
 #include <unotxdoc.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace sw::util;
 using namespace sw::types;
 using namespace nsHdFtFlags;
@@ -540,7 +541,7 @@ rtl::Reference<SdrObject> SwMSDffManager::ImportOLE( sal_uInt32 nOLEId,
     {
         rtl::Reference<SotStorage> xSrc = xSrcStg->OpenSotStorage(sStorageName);
         OSL_ENSURE(m_rReader.m_xFormImpl, "No Form Implementation!");
-        css::uno::Reference< css::drawing::XShape > xShape;
+        cpo::uno::Reference< css::drawing::XShape > xShape;
         if ( (!(m_rReader.m_bIsHeader || m_rReader.m_bIsFooter)) &&
             m_rReader.m_xFormImpl->ReadOCXStream(xSrc,&xShape,true))
         {

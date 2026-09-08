@@ -29,8 +29,8 @@ namespace pcr
 {
 
 
-    using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::UNO_SET_THROW;
+    using ::cpo::uno::Reference;
+    using ::cpo::uno::UNO_SET_THROW;
     using ::cpo::uno::Exception;
     using ::cpo::uno::Any;
     using ::com::sun::star::awt::KeyEvent;

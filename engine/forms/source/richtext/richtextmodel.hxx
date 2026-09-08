@@ -52,17 +52,17 @@ namespace frm
     {
     public:
         ORichTextModel(
-            const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
+            const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
         );
         ORichTextModel(
             const ORichTextModel* _pOriginal,
-            const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
+            const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
         );
         virtual ~ORichTextModel() override;
 
     private:
         // <properties>
-        css::uno::Reference< css::awt::XDevice >
+        cpo::uno::Reference< css::awt::XDevice >
                                     m_xReferenceDevice;
         cpo::uno::Any  m_aTabStop;
         cpo::uno::Any  m_aBackgroundColor;
@@ -103,7 +103,7 @@ namespace frm
                                     m_aModifyListeners;
 
     public:
-        static  RichTextEngine* getEditEngine( const css::uno::Reference< css::awt::XControlModel >& _rxModel );
+        static  RichTextEngine* getEditEngine( const cpo::uno::Reference< css::awt::XControlModel >& _rxModel );
 
         // UNO
         DECLARE_UNO3_AGG_DEFAULTS( ORichTextModel, OControlModel )
@@ -120,15 +120,15 @@ namespace frm
         DECLARE_XTYPEPROVIDER()
 
         // XCloneable
-        virtual css::uno::Reference< css::util::XCloneable > createClone(  ) override;
+        virtual cpo::uno::Reference< css::util::XCloneable > createClone(  ) override;
 
         // XUnoTunnel
         virtual sal_Int64 getSomething( const cpo::uno::Sequence< sal_Int8 >& aIdentifier ) override;
         static const cpo::uno::Sequence<sal_Int8> & getUnoTunnelId();
 
         // XModifyBroadcaster
-        virtual void addModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
-        virtual void removeModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+        virtual void addModifyListener( const cpo::uno::Reference< css::util::XModifyListener >& aListener ) override;
+        virtual void removeModifyListener( const cpo::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
         // XPropertySet and friends
         virtual void getFastPropertyValue(cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;

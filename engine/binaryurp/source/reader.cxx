@@ -28,7 +28,7 @@
 #include <com/sun/star/io/IOException.hpp>
 #include <cpo/uno/Any.hxx>
 #include <cpo/uno/Exception.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Type.hxx>
@@ -58,7 +58,7 @@ namespace binaryurp {
 namespace {
 
 cpo::uno::Sequence< sal_Int8 > read(
-    css::uno::Reference< css::connection::XConnection > const & connection,
+    cpo::uno::Reference< css::connection::XConnection > const & connection,
     sal_uInt32 size, bool eofOk)
 {
     assert(connection.is());
@@ -99,7 +99,7 @@ Reader::~Reader() {}
 void Reader::execute() {
     try {
         bridge_->sendRequestChangeRequest();
-        css::uno::Reference< css::connection::XConnection > con(
+        cpo::uno::Reference< css::connection::XConnection > con(
             bridge_->getConnection());
         for (;;) {
             cpo::uno::Sequence< sal_Int8 > s(read(con, 8, true));
@@ -297,7 +297,7 @@ void Reader::readMessage(Unmarshal & unmarshal) {
                 if (!(type.equals(
                           cpo::uno::TypeDescription(
                               cppu::UnoType<
-                                  css::uno::Reference<
+                                  cpo::uno::Reference<
                                       cpo::uno::XInterface > >::get()))
                       && (cpo::uno::TypeDescription(
                               *static_cast<
@@ -306,7 +306,7 @@ void Reader::readMessage(Unmarshal & unmarshal) {
                           equals(
                               cpo::uno::TypeDescription(
                                   cppu::UnoType<
-                                      css::uno::Reference<
+                                      cpo::uno::Reference<
                                           cpo::uno::XInterface > >::get())))))
                 {
                     throw cpo::uno::RuntimeException(

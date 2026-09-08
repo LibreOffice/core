@@ -330,7 +330,7 @@ excludelist:
     - com/sun/star/beans/XPropertyState.hpp
     chart2/source/view/inc/VLineProperties.hxx:
     # base class has to be a complete type
-    - com/sun/star/uno/Reference.h
+    - cpo/uno/Reference.h
     chart2/source/view/axes/DateScaling.hxx:
     # base class has to be a complete type
     - com/sun/star/chart2/XScaling.hpp

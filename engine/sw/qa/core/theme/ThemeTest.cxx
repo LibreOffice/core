@@ -30,6 +30,7 @@
 #include <vcl/transfer.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 namespace
 {
@@ -605,11 +606,11 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testTdf162715_customTransferable)
 
     // Create a transferable from another document with another custom theme,
     // and insert (paste) its content over the selection:
-    css::uno::Reference<css::datatransfer::XTransferable> xTransferable(
+    cpo::uno::Reference<css::datatransfer::XTransferable> xTransferable(
         new TestSimpleFileTransferable(createFileURL(u"theme_bar.odt")));
-    css::uno::Reference<css::frame::XModel> xModel(mxComponent, css::uno::UNO_QUERY_THROW);
-    css::uno::Reference<css::datatransfer::XTransferableSupplier> xTS(
-        xModel->getCurrentController(), css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::frame::XModel> xModel(mxComponent, cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::datatransfer::XTransferableSupplier> xTS(
+        xModel->getCurrentController(), cpo::uno::UNO_QUERY_THROW);
     xTS->insertTransferable(xTransferable);
 
     // Check that the paste is successful (the text has been replaced):
@@ -628,7 +629,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testTdf162715_customTransferable)
 
 CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testTdf162715_ownTransferable)
 {
-    css::uno::Reference<css::datatransfer::XTransferable> xTransferable;
+    cpo::uno::Reference<css::datatransfer::XTransferable> xTransferable;
     {
         // Given a document with a custom theme:
         createSwDoc("theme_bar.odt");
@@ -650,9 +651,9 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testTdf162715_ownTransferable)
         CPPUNIT_ASSERT_EQUAL(u"Theme bar"_ustr, pWrtShell->GetSelText());
 
         // Create a normal Writer's transferable out of the selection:
-        css::uno::Reference<css::frame::XModel> xModel(mxComponent, css::uno::UNO_QUERY_THROW);
-        css::uno::Reference<css::datatransfer::XTransferableSupplier> xTS(
-            xModel->getCurrentController(), css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::frame::XModel> xModel(mxComponent, cpo::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::datatransfer::XTransferableSupplier> xTS(
+            xModel->getCurrentController(), cpo::uno::UNO_QUERY_THROW);
         xTransferable = xTS->getTransferable();
     }
     {
@@ -676,9 +677,9 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testTdf162715_ownTransferable)
         CPPUNIT_ASSERT_EQUAL(u"Theme foo"_ustr, pWrtShell->GetSelText());
 
         // Insert (paste) the previously created transferable's content over the selection:
-        css::uno::Reference<css::frame::XModel> xModel(mxComponent, css::uno::UNO_QUERY_THROW);
-        css::uno::Reference<css::datatransfer::XTransferableSupplier> xTS(
-            xModel->getCurrentController(), css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::frame::XModel> xModel(mxComponent, cpo::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::datatransfer::XTransferableSupplier> xTS(
+            xModel->getCurrentController(), cpo::uno::UNO_QUERY_THROW);
         xTS->insertTransferable(xTransferable);
 
         // Check that the paste is successful (the text has been replaced):

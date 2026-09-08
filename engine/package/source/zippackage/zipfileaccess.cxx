@@ -38,6 +38,7 @@
 #include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 OZipFileAccess::OZipFileAccess( const uno::Reference< cpo::uno::XComponentContext >& rxContext )
 : m_aMutexHolder( new comphelper::RefCountedMutex )

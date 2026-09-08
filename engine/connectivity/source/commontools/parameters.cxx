@@ -42,7 +42,7 @@
 
 namespace dbtools
 {
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
 using namespace cpo::uno;
     using namespace ::com::sun::star::sdb;
     using namespace ::com::sun::star::sdbc;
@@ -793,7 +793,7 @@ using namespace cpo::uno;
 
         Reference< XColumnsSupplier > xColumnSupp;
         if ( _bFromComposer )
-            xColumnSupp.set(m_xComposer, css::uno::UNO_QUERY);
+            xColumnSupp.set(m_xComposer, cpo::uno::UNO_QUERY);
         else
             xColumnSupp.set( m_xComponent.get(),UNO_QUERY);
         if ( xColumnSupp.is() )
@@ -827,10 +827,10 @@ using namespace cpo::uno;
                     getCurrentSettingsComposer( xParent, m_xContext, nullptr ),
                     SharedQueryComposer::TakeOwnership
                 );
-                xParentColSupp.set(m_xParentComposer, css::uno::UNO_QUERY);
+                xParentColSupp.set(m_xParentComposer, cpo::uno::UNO_QUERY);
             }
             else
-                xParentColSupp.set(xParent, css::uno::UNO_QUERY);
+                xParentColSupp.set(xParent, cpo::uno::UNO_QUERY);
 
             // get the columns of the parent
             if ( xParentColSupp.is() )
@@ -1105,7 +1105,7 @@ using namespace cpo::uno;
     }
 
 
-    void ParameterManager::setBinaryStream( sal_Int32 _nIndex, const css::uno::Reference< css::io::XInputStream>& x, sal_Int32 length )
+    void ParameterManager::setBinaryStream( sal_Int32 _nIndex, const cpo::uno::Reference< css::io::XInputStream>& x, sal_Int32 length )
     {
         ::osl::MutexGuard aGuard(m_rMutex);
         OSL_ENSURE(m_xInnerParamUpdate.is(), "ParameterManager::XParameters::setXXX: no XParameters access to the RowSet!");
@@ -1116,7 +1116,7 @@ using namespace cpo::uno;
     }
 
 
-    void ParameterManager::setCharacterStream( sal_Int32 _nIndex, const css::uno::Reference< css::io::XInputStream>& x, sal_Int32 length )
+    void ParameterManager::setCharacterStream( sal_Int32 _nIndex, const cpo::uno::Reference< css::io::XInputStream>& x, sal_Int32 length )
     {
         ::osl::MutexGuard aGuard(m_rMutex);
         OSL_ENSURE(m_xInnerParamUpdate.is(), "ParameterManager::XParameters::setXXX: no XParameters access to the RowSet!");
@@ -1149,7 +1149,7 @@ using namespace cpo::uno;
     }
 
 
-    void ParameterManager::setRef( sal_Int32 _nIndex, const css::uno::Reference< css::sdbc::XRef>& x )
+    void ParameterManager::setRef( sal_Int32 _nIndex, const cpo::uno::Reference< css::sdbc::XRef>& x )
     {
         ::osl::MutexGuard aGuard(m_rMutex);
         OSL_ENSURE(m_xInnerParamUpdate.is(), "ParameterManager::XParameters::setXXX: no XParameters access to the RowSet!");
@@ -1160,7 +1160,7 @@ using namespace cpo::uno;
     }
 
 
-    void ParameterManager::setBlob( sal_Int32 _nIndex, const css::uno::Reference< css::sdbc::XBlob>& x )
+    void ParameterManager::setBlob( sal_Int32 _nIndex, const cpo::uno::Reference< css::sdbc::XBlob>& x )
     {
         ::osl::MutexGuard aGuard(m_rMutex);
         OSL_ENSURE(m_xInnerParamUpdate.is(), "ParameterManager::XParameters::setXXX: no XParameters access to the RowSet!");
@@ -1171,7 +1171,7 @@ using namespace cpo::uno;
     }
 
 
-    void ParameterManager::setClob( sal_Int32 _nIndex, const css::uno::Reference< css::sdbc::XClob>& x )
+    void ParameterManager::setClob( sal_Int32 _nIndex, const cpo::uno::Reference< css::sdbc::XClob>& x )
     {
         ::osl::MutexGuard aGuard(m_rMutex);
         OSL_ENSURE(m_xInnerParamUpdate.is(), "ParameterManager::XParameters::setXXX: no XParameters access to the RowSet!");
@@ -1182,7 +1182,7 @@ using namespace cpo::uno;
     }
 
 
-    void ParameterManager::setArray( sal_Int32 _nIndex, const css::uno::Reference< css::sdbc::XArray>& x )
+    void ParameterManager::setArray( sal_Int32 _nIndex, const cpo::uno::Reference< css::sdbc::XArray>& x )
     {
         ::osl::MutexGuard aGuard(m_rMutex);
         OSL_ENSURE(m_xInnerParamUpdate.is(), "ParameterManager::XParameters::setXXX: no XParameters access to the RowSet!");

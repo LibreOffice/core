@@ -263,19 +263,19 @@ protected:
 
 public:
                                 XclObjAny( XclExpObjectManager& rObjMgr,
-                                    const css::uno::Reference< css::drawing::XShape >& rShape, ScDocument* pDoc);
+                                    const cpo::uno::Reference< css::drawing::XShape >& rShape, ScDocument* pDoc);
     virtual                     ~XclObjAny() override;
 
-    const css::uno::Reference< css::drawing::XShape >&
+    const cpo::uno::Reference< css::drawing::XShape >&
                                 GetShape() const { return mxShape; }
 
     virtual void                Save( XclExpStream& rStrm ) override;
     virtual void                SaveXml( XclExpXmlStream& rStrm ) override;
     static void                 WriteFromTo( XclExpXmlStream& rStrm, const XclObjAny& rObj );
-    static void                 WriteFromTo( XclExpXmlStream& rStrm, const css::uno::Reference< css::drawing::XShape >& rShape, SCTAB nTab );
+    static void                 WriteFromTo( XclExpXmlStream& rStrm, const cpo::uno::Reference< css::drawing::XShape >& rShape, SCTAB nTab );
 
 private:
-    css::uno::Reference< css::drawing::XShape >
+    cpo::uno::Reference< css::drawing::XShape >
                                 mxShape;
     ScDocument* mpDoc;
 };

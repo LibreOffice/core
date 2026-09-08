@@ -54,7 +54,7 @@ excludelist:
     - com/sun/star/xml/dom/XNodeList.hpp
     forms/source/xforms/propertysetbase.cxx:
     # Actually used
-    - com/sun/star/uno/Reference.hxx
+    - cpo/uno/Reference.hxx
     forms/source/xforms/submission.cxx:
     # Actually used
     - com/sun/star/xforms/XModel.hpp
@@ -62,7 +62,7 @@ excludelist:
     - com/sun/star/task/XInteractionHandler.hpp
     forms/source/xforms/unohelper.cxx:
     # Actually used
-    - com/sun/star/uno/Reference.hxx
+    - cpo/uno/Reference.hxx
     - com/sun/star/beans/XPropertySet.hpp
     forms/source/xforms/submission/serialization_urlencoded.cxx:
     # Actually used

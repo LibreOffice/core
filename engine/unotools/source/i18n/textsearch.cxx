@@ -36,7 +36,7 @@
 #include <mutex>
 
 using namespace ::com::sun::star::util;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::lang;
 
 namespace utl
@@ -93,7 +93,7 @@ namespace
     {
         std::mutex mutex;
         i18nutil::SearchOptions2 Options;
-        css::uno::Reference< css::util::XTextSearch2 > xTextSearch;
+        cpo::uno::Reference< css::util::XTextSearch2 > xTextSearch;
     };
 }
 

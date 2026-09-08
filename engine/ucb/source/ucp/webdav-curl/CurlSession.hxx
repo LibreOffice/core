@@ -25,7 +25,7 @@ class CurlSession : public DAVSession
 private:
     /// mutex required to access all other non-const members
     ::std::mutex m_Mutex;
-    css::uno::Reference<cpo::uno::XComponentContext> const m_xContext;
+    cpo::uno::Reference<cpo::uno::XComponentContext> const m_xContext;
     /// flags may be passed to constructor, e.g. "KeepAlive"
     cpo::uno::Sequence<css::beans::NamedValue> const m_Flags;
     CurlUri const m_URI;
@@ -50,7 +50,7 @@ private:
     friend struct CurlProcessor;
 
 public:
-    explicit CurlSession(css::uno::Reference<cpo::uno::XComponentContext> xContext,
+    explicit CurlSession(cpo::uno::Reference<cpo::uno::XComponentContext> xContext,
                          ::rtl::Reference<DAVSessionFactory> const& rpFactory, OUString const& rURI,
                          cpo::uno::Sequence<css::beans::NamedValue> const& rFlags,
                          ::ucbhelper::InternetProxyDecider const& rProxyDecider);
@@ -83,35 +83,35 @@ public:
         -> void override;
 
     virtual auto GET(OUString const& rURIReference, DAVRequestEnvironment const& rEnv)
-        -> css::uno::Reference<css::io::XInputStream> override;
+        -> cpo::uno::Reference<css::io::XInputStream> override;
 
     virtual auto GET(OUString const& rURIReference,
-                     css::uno::Reference<css::io::XOutputStream>& rxOutStream,
+                     cpo::uno::Reference<css::io::XOutputStream>& rxOutStream,
                      DAVRequestEnvironment const& rEnv) -> void override;
 
     virtual auto GET(OUString const& rURIReference, ::std::vector<OUString> const& rHeaderNames,
                      DAVResource& io_rResource, DAVRequestEnvironment const& rEnv)
-        -> css::uno::Reference<css::io::XInputStream> override;
+        -> cpo::uno::Reference<css::io::XInputStream> override;
 
     virtual auto GET(OUString const& rURIReference,
-                     css::uno::Reference<css::io::XOutputStream>& rxOutStream,
+                     cpo::uno::Reference<css::io::XOutputStream>& rxOutStream,
                      ::std::vector<OUString> const& rHeaderNames, DAVResource& io_rResource,
                      DAVRequestEnvironment const& rEnv) -> void override;
 
     virtual auto PUT(OUString const& rURIReference,
-                     css::uno::Reference<css::io::XInputStream> const& rxInStream,
+                     cpo::uno::Reference<css::io::XInputStream> const& rxInStream,
                      DAVRequestEnvironment const& rEnv) -> void override;
 
     virtual auto POST(OUString const& rURIReference, OUString const& rContentType,
                       OUString const& rReferer,
-                      css::uno::Reference<css::io::XInputStream> const& rxInStream,
+                      cpo::uno::Reference<css::io::XInputStream> const& rxInStream,
                       DAVRequestEnvironment const& rEnv)
-        -> css::uno::Reference<css::io::XInputStream> override;
+        -> cpo::uno::Reference<css::io::XInputStream> override;
 
     virtual auto POST(OUString const& rURIReference, OUString const& rContentType,
                       OUString const& rReferer,
-                      css::uno::Reference<css::io::XInputStream> const& rxInStream,
-                      css::uno::Reference<css::io::XOutputStream>& rxOutStream,
+                      cpo::uno::Reference<css::io::XInputStream> const& rxInStream,
+                      cpo::uno::Reference<css::io::XOutputStream>& rxOutStream,
                       DAVRequestEnvironment const& rEnv) -> void override;
 
     virtual auto MKCOL(OUString const& rURIReference, DAVRequestEnvironment const& rEnv)

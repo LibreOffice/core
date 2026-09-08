@@ -98,10 +98,10 @@ class PropValue
     protected:
 
         cpo::uno::Any                                    mAny;
-        css::uno::Reference< css::beans::XPropertySet >  mXPropSet;
+        cpo::uno::Reference< css::beans::XPropertySet >  mXPropSet;
 
         bool    ImplGetPropertyValue( const OUString& rString );
-        bool    ImplGetPropertyValue( const css::uno::Reference
+        bool    ImplGetPropertyValue( const cpo::uno::Reference
                         < css::beans::XPropertySet > &, const OUString& );
 
     public:
@@ -110,12 +110,12 @@ class PropValue
 
         static bool GetPropertyValue(
             cpo::uno::Any& rAny,
-            const css::uno::Reference< css::beans::XPropertySet > &,
+            const cpo::uno::Reference< css::beans::XPropertySet > &,
             const OUString& rPropertyName,
             bool bTestPropertyAvailability = false );
 
         static css::beans::PropertyState GetPropertyState(
-            const css::uno::Reference < css::beans::XPropertySet > &,
+            const cpo::uno::Reference < css::beans::XPropertySet > &,
             const OUString& rPropertyName );
 };
 
@@ -250,10 +250,10 @@ struct PPTExCharSheet
 
                 explicit PPTExCharSheet( int nInstance );
 
-                void    SetStyleSheet( const css::uno::Reference< css::beans::XPropertySet > &,
+                void    SetStyleSheet( const cpo::uno::Reference< css::beans::XPropertySet > &,
                                         FontCollection& rFontCollection, int nLevel );
                 void    Write( SvStream& rSt, sal_uInt16 nLev, bool bSimpleText,
-                            const css::uno::Reference< css::beans::XPropertySet > & rPagePropSet );
+                            const cpo::uno::Reference< css::beans::XPropertySet > & rPagePropSet );
 
 };
 
@@ -291,10 +291,10 @@ struct PPTExParaSheet
                 PPTExParaLevel  maParaLevel[ 5 ];
                 PPTExParaSheet( int nInstance, sal_uInt16 nDefaultTab, PPTExBulletProvider* pProv );
 
-                void    SetStyleSheet( const css::uno::Reference< css::beans::XPropertySet > &,
+                void    SetStyleSheet( const cpo::uno::Reference< css::beans::XPropertySet > &,
                                         FontCollection& rFontCollection, int nLevel, const PPTExCharLevel& rCharLevel );
                 void    Write( SvStream& rSt, sal_uInt16 nLev, bool bSimpleText,
-                    const css::uno::Reference< css::beans::XPropertySet > & rPagePropSet );
+                    const cpo::uno::Reference< css::beans::XPropertySet > & rPagePropSet );
 };
 
 class PPTExStyleSheet
@@ -310,7 +310,7 @@ class PPTExStyleSheet
 
                 PPTExParaSheet& GetParaSheet( int nInstance ) { return *mpParaSheet[ nInstance ]; };
 
-                void            SetStyleSheet( const css::uno::Reference< css::beans::XPropertySet > &,
+                void            SetStyleSheet( const cpo::uno::Reference< css::beans::XPropertySet > &,
                                                 FontCollection& rFontCollection, int nInstance, int nLevel );
                 bool        IsHardAttribute( sal_uInt32 nInstance, sal_uInt32 nLevel, PPTExTextAttr eAttr, sal_uInt32 nValue );
 
@@ -322,16 +322,16 @@ class PPTWriterBase : public PropValue, public GroupTable
 {
 protected:
     rtl::Reference< SdXImpressDocument >                      mXModel;
-    css::uno::Reference< css::task::XStatusIndicator >        mXStatusIndicator;
+    cpo::uno::Reference< css::task::XStatusIndicator >        mXStatusIndicator;
 
     bool            mbStatusIndicator;
 
-    css::uno::Reference< css::drawing::XDrawPages >           mXDrawPages;
-    css::uno::Reference< css::drawing::XDrawPage >            mXDrawPage;
-    css::uno::Reference< css::beans::XPropertySet >           mXPagePropSet;
-    css::uno::Reference< css::beans::XPropertySet >           mXBackgroundPropSet;
-    css::uno::Reference< css::drawing::XShapes >              mXShapes;
-    css::uno::Reference< css::drawing::XShape >               mXShape;
+    cpo::uno::Reference< css::drawing::XDrawPages >           mXDrawPages;
+    cpo::uno::Reference< css::drawing::XDrawPage >            mXDrawPage;
+    cpo::uno::Reference< css::beans::XPropertySet >           mXPagePropSet;
+    cpo::uno::Reference< css::beans::XPropertySet >           mXBackgroundPropSet;
+    cpo::uno::Reference< css::drawing::XShapes >              mXShapes;
+    cpo::uno::Reference< css::drawing::XShape >               mXShape;
     css::awt::Size         maSize;
     css::awt::Point        maPosition;
     ::tools::Rectangle           maRect;
@@ -360,9 +360,9 @@ protected:
     FontCollection      maFontCollection;
 
     virtual void ImplWriteSlide( sal_uInt32 /* nPageNum */, sal_uInt32 /* nMasterNum */, sal_uInt16 /* nMode */,
-                                 bool /* bHasBackground */, css::uno::Reference< css::beans::XPropertySet > const & /* aXBackgroundPropSet */ ) {}
+                                 bool /* bHasBackground */, cpo::uno::Reference< css::beans::XPropertySet > const & /* aXBackgroundPropSet */ ) {}
     virtual void ImplWriteNotes( sal_uInt32 nPageNum ) = 0;
-    virtual void ImplWriteSlideMaster( sal_uInt32 /* nPageNum */, css::uno::Reference< css::beans::XPropertySet > const & /* aXBackgroundPropSet */ ) {}
+    virtual void ImplWriteSlideMaster( sal_uInt32 /* nPageNum */, cpo::uno::Reference< css::beans::XPropertySet > const & /* aXBackgroundPropSet */ ) {}
 
     virtual void exportPPTPre( const std::vector< css::beans::PropertyValue >& ) {}
     virtual void exportPPTPost() {}
@@ -384,7 +384,7 @@ protected:
 public:
     PPTWriterBase();
     PPTWriterBase( const rtl::Reference< SdXImpressDocument > & rModel,
-                   const css::uno::Reference< css::task::XStatusIndicator > & rStatInd );
+                   const cpo::uno::Reference< css::task::XStatusIndicator > & rStatInd );
 
     virtual ~PPTWriterBase();
 
@@ -397,10 +397,10 @@ public:
 
     bool GetPresObj() const { return mbPresObj; }
 
-    static PHLayout const & GetLayout( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
+    static PHLayout const & GetLayout( const cpo::uno::Reference< css::beans::XPropertySet >& rXPropSet );
     static PHLayout const & GetLayout( sal_Int32 nOffset );
-    static sal_Int32 GetLayoutOffset( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
-    static sal_Int32 GetLayoutOffsetFixed( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
+    static sal_Int32 GetLayoutOffset( const cpo::uno::Reference< css::beans::XPropertySet >& rXPropSet );
+    static sal_Int32 GetLayoutOffsetFixed( const cpo::uno::Reference< css::beans::XPropertySet >& rXPropSet );
 
     bool CreateSlide( sal_uInt32 nPageNum );
     bool CreateSlideMaster( sal_uInt32 nPageNum );

@@ -60,7 +60,7 @@
 #include <string_view>
 #include <unordered_map>
 
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::io;
 using namespace com::sun::star::embed;
@@ -92,40 +92,40 @@ public:
         return {u"com.sun.star.ui.UIConfigurationManager"_ustr};
     }
 
-    explicit UIConfigurationManager( css::uno::Reference< cpo::uno::XComponentContext > xContext );
+    explicit UIConfigurationManager( cpo::uno::Reference< cpo::uno::XComponentContext > xContext );
 
     // XComponent
     virtual void dispose() override;
-    virtual void addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-    virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+    virtual void addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& xListener ) override;
+    virtual void removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
     // XUIConfiguration
-    virtual void addConfigurationListener( const css::uno::Reference< css::ui::XUIConfigurationListener >& Listener ) override;
-    virtual void removeConfigurationListener( const css::uno::Reference< css::ui::XUIConfigurationListener >& Listener ) override;
+    virtual void addConfigurationListener( const cpo::uno::Reference< css::ui::XUIConfigurationListener >& Listener ) override;
+    virtual void removeConfigurationListener( const cpo::uno::Reference< css::ui::XUIConfigurationListener >& Listener ) override;
 
     // XUIConfigurationManager
     virtual void reset() override;
     virtual cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > > getUIElementsInfo( sal_Int16 ElementType ) override;
-    virtual css::uno::Reference< css::container::XIndexContainer > createSettings(  ) override;
+    virtual cpo::uno::Reference< css::container::XIndexContainer > createSettings(  ) override;
     virtual bool hasSettings( const OUString& ResourceURL ) override;
-    virtual css::uno::Reference< css::container::XIndexAccess > getSettings( const OUString& ResourceURL, bool bWriteable ) override;
-    virtual void replaceSettings( const OUString& ResourceURL, const css::uno::Reference< css::container::XIndexAccess >& aNewData ) override;
+    virtual cpo::uno::Reference< css::container::XIndexAccess > getSettings( const OUString& ResourceURL, bool bWriteable ) override;
+    virtual void replaceSettings( const OUString& ResourceURL, const cpo::uno::Reference< css::container::XIndexAccess >& aNewData ) override;
     virtual void removeSettings( const OUString& ResourceURL ) override;
-    virtual void insertSettings( const OUString& NewResourceURL, const css::uno::Reference< css::container::XIndexAccess >& aNewData ) override;
-    virtual css::uno::Reference< cpo::uno::XInterface > getImageManager() override;
-    virtual css::uno::Reference< css::ui::XAcceleratorConfiguration > getShortCutManager() override;
-    virtual css::uno::Reference< css::ui::XAcceleratorConfiguration > createShortCutManager() override;
-    virtual css::uno::Reference< cpo::uno::XInterface > getEventsManager() override;
+    virtual void insertSettings( const OUString& NewResourceURL, const cpo::uno::Reference< css::container::XIndexAccess >& aNewData ) override;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > getImageManager() override;
+    virtual cpo::uno::Reference< css::ui::XAcceleratorConfiguration > getShortCutManager() override;
+    virtual cpo::uno::Reference< css::ui::XAcceleratorConfiguration > createShortCutManager() override;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > getEventsManager() override;
 
     // XUIConfigurationPersistence
     virtual void reload() override;
     virtual void store() override;
-    virtual void storeToStorage( const css::uno::Reference< css::embed::XStorage >& Storage ) override;
+    virtual void storeToStorage( const cpo::uno::Reference< css::embed::XStorage >& Storage ) override;
     virtual bool isModified() override;
     virtual bool isReadOnly() override;
 
     // XUIConfigurationStorage
-    virtual void setStorage( const css::uno::Reference< css::embed::XStorage >& Storage ) override;
+    virtual void setStorage( const cpo::uno::Reference< css::embed::XStorage >& Storage ) override;
     virtual bool hasStorage() override;
 
 private:
@@ -153,7 +153,7 @@ private:
         OUString aName;
         bool          bModified;        // has been changed since last storing
         bool          bDefault;         // default settings
-        css::uno::Reference< css::container::XIndexAccess > xSettings;
+        cpo::uno::Reference< css::container::XIndexAccess > xSettings;
     };
 
     struct UIElementType;
@@ -172,7 +172,7 @@ private:
         bool                                                              bShouldReloadRWOnStore;
         sal_Int16                                                         nElementType;
         UIElementDataHashMap                                              aElementsHashMap;
-        css::uno::Reference< css::embed::XStorage > xStorage;
+        cpo::uno::Reference< css::embed::XStorage > xStorage;
     };
 
     typedef std::vector< UIElementType > UIElementTypesVector;
@@ -185,22 +185,22 @@ private:
     void            impl_preloadUIElementTypeList( sal_Int16 nElementType );
     UIElementData*  impl_findUIElementData( const OUString& aResourceURL, sal_Int16 nElementType, bool bLoad = true );
     void            impl_requestUIElementData( sal_Int16 nElementType, UIElementData& aUIElementData );
-    void            impl_storeElementTypeData( css::uno::Reference< css::embed::XStorage > const & xStorage, UIElementType& rElementType, bool bResetModifyState = true );
+    void            impl_storeElementTypeData( cpo::uno::Reference< css::embed::XStorage > const & xStorage, UIElementType& rElementType, bool bResetModifyState = true );
     void            impl_resetElementTypeData( UIElementType& rDocElementType, ConfigEventNotifyContainer& rRemoveNotifyContainer );
     void            impl_reloadElementTypeData( UIElementType& rDocElementType, ConfigEventNotifyContainer& rRemoveNotifyContainer, ConfigEventNotifyContainer& rReplaceNotifyContainer );
 
     UIElementTypesVector                                      m_aUIElements;
-    css::uno::Reference< css::embed::XStorage >               m_xDocConfigStorage;
+    cpo::uno::Reference< css::embed::XStorage >               m_xDocConfigStorage;
     bool                                                      m_bReadOnly;
     bool                                                      m_bModified;
     bool                                                      m_bDisposed;
     OUString                                                  m_aPropUIName;
-    css::uno::Reference< cpo::uno::XComponentContext >        m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext >        m_xContext;
     std::mutex                                                m_mutex;
     comphelper::OInterfaceContainerHelper4<css::lang::XEventListener>               m_aEventListeners;
     comphelper::OInterfaceContainerHelper4<css::ui::XUIConfigurationListener>       m_aConfigListeners;
     rtl::Reference< ImageManager >                            m_xImageManager;
-    css::uno::Reference< css::ui::XAcceleratorConfiguration > m_xAccConfig;
+    cpo::uno::Reference< css::ui::XAcceleratorConfiguration > m_xAccConfig;
 };
 
 // important: The order and position of the elements must match the constant
@@ -673,7 +673,7 @@ void UIConfigurationManager::impl_Initialize()
     }
 }
 
-UIConfigurationManager::UIConfigurationManager( css::uno::Reference< cpo::uno::XComponentContext > xContext ) :
+UIConfigurationManager::UIConfigurationManager( cpo::uno::Reference< cpo::uno::XComponentContext > xContext ) :
       m_bReadOnly( true )
     , m_bModified( false )
     , m_bDisposed( false )
@@ -1375,7 +1375,7 @@ bool UIConfigurationManager::isReadOnly()
 void UIConfigurationManager::implts_notifyContainerListener( const ConfigurationEvent& aEvent, NotifyOp eOp )
 {
     std::unique_lock aGuard(m_mutex);
-    m_aConfigListeners.forEach(aGuard, [&eOp, &aEvent](const css::uno::Reference<XUIConfigurationListener>& l) {
+    m_aConfigListeners.forEach(aGuard, [&eOp, &aEvent](const cpo::uno::Reference<XUIConfigurationListener>& l) {
         switch ( eOp )
         {
             case NotifyOp_Replace:

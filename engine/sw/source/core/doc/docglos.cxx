@@ -42,6 +42,7 @@
 #include <poolfmt.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 void SwDoc::ReplaceUserDefinedDocumentProperties(
         const uno::Reference<document::XDocumentProperties>& xSourceDocProps)

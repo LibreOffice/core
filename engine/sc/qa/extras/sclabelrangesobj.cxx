@@ -20,12 +20,12 @@
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <cpo/uno/XInterface.hpp>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <cppu/unotype.hxx>
 
-using namespace css;
-using namespace css::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace com::sun::star;
 
 namespace sc_apitest

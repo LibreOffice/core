@@ -36,7 +36,7 @@
 
 using namespace css;
 using namespace css::lang;
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace css::accessibility;
 

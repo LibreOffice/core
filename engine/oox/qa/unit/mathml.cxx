@@ -12,6 +12,7 @@
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 /// oox mathml tests.
 class OoxMathmlTest : public UnoApiTest

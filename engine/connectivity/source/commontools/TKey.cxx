@@ -25,7 +25,7 @@
 #include <connectivity/TTableHelper.hxx>
 
 using namespace connectivity;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::sdbc;
 
 OTableKeyHelper::OTableKeyHelper(OTableHelper* _pTable) : connectivity::sdbcx::OKey(true)

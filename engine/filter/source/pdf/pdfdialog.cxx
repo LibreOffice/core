@@ -23,7 +23,7 @@
 #include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
@@ -56,14 +56,14 @@ Sequence< OUString > PDFDialog::getSupportedServiceNames()
     return { u"com.sun.star.document.PDFDialog"_ustr };
 }
 
-std::unique_ptr<weld::DialogController> PDFDialog::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
+std::unique_ptr<weld::DialogController> PDFDialog::createDialog(const cpo::uno::Reference<css::awt::XWindow>& rParent)
 {
     if( mxSrcDoc.is() )
         return std::make_unique<ImpPDFTabDialog>(Application::GetFrameWeld(rParent), maFilterData, mxSrcDoc);
     return nullptr;
 }
 
-std::shared_ptr<SfxTabDialogController> PDFDialog::createAsyncDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
+std::shared_ptr<SfxTabDialogController> PDFDialog::createAsyncDialog(const cpo::uno::Reference<css::awt::XWindow>& rParent)
 {
     if( mxSrcDoc.is() )
         return std::make_shared<ImpPDFTabDialog>(Application::GetFrameWeld(rParent), maFilterData, mxSrcDoc);
@@ -77,7 +77,7 @@ void PDFDialog::executedDialog( sal_Int16 nExecutionResult )
     destroyDialog();
 }
 
-void PDFDialog::runAsync(const css::uno::Reference< css::ui::dialogs::XDialogClosedListener >& xListener)
+void PDFDialog::runAsync(const cpo::uno::Reference< css::ui::dialogs::XDialogClosedListener >& xListener)
 {
     rtl::Reference<PDFDialog> xThis(this); // keep alive, 'this' may be droped otherwise
     SfxTabDialogController::runAsync(m_xAsyncDialog, [xThis, xListener](sal_Int32 nResponse) {

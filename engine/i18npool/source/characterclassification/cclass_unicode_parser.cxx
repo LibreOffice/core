@@ -33,7 +33,7 @@
 #include <string.h>
 #include <string_view>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
 

@@ -38,7 +38,7 @@
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <com/sun/star/sheet/DataPilotFieldSortMode.hpp>
 
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace css::sheet;
 
 ScPivotCalcFieldDlg::ScPivotCalcFieldDlg(weld::Window* pParent, ScViewData& rData,

@@ -78,14 +78,14 @@ namespace fileaccess
             bool m_bHandled;
             TaskHandlerErr m_nErrorCode;
             sal_Int32 m_nMinorCode;
-            css::uno::Reference< css::task::XInteractionHandler > m_xInteractionHandler;
-            css::uno::Reference< css::ucb::XCommandEnvironment >  m_xCommandEnvironment;
+            cpo::uno::Reference< css::task::XInteractionHandler > m_xInteractionHandler;
+            cpo::uno::Reference< css::ucb::XCommandEnvironment >  m_xCommandEnvironment;
 
 
         public:
 
             explicit TaskHandling(
-                css::uno::Reference< css::ucb::XCommandEnvironment > xCommandEnv )
+                cpo::uno::Reference< css::ucb::XCommandEnvironment > xCommandEnv )
                 : m_bHandled( false ),
                   m_nErrorCode( TaskHandlerErr::NO_ERROR ),
                   m_nMinorCode( 0 ),
@@ -126,7 +126,7 @@ namespace fileaccess
                 return m_nMinorCode;
             }
 
-            css::uno::Reference< css::task::XInteractionHandler > const &
+            cpo::uno::Reference< css::task::XInteractionHandler > const &
             getInteractionHandler()
             {
                 if( ! m_xInteractionHandler.is() && m_xCommandEnvironment.is() )
@@ -135,7 +135,7 @@ namespace fileaccess
                 return m_xInteractionHandler;
             }
 
-            const css::uno::Reference< css::ucb::XCommandEnvironment >&
+            const cpo::uno::Reference< css::ucb::XCommandEnvironment >&
             getCommandEnvironment() const
             {
                 return m_xCommandEnvironment;
@@ -207,21 +207,21 @@ namespace fileaccess
             std::vector< Notifier* > notifier;
 
             // Three views on the PersistentPropertySet
-            css::uno::Reference< css::ucb::XPersistentPropertySet >   xS;
-            css::uno::Reference< css::beans::XPropertyContainer >     xC;
-            css::uno::Reference< css::beans::XPropertyAccess >        xA;
+            cpo::uno::Reference< css::ucb::XPersistentPropertySet >   xS;
+            cpo::uno::Reference< css::beans::XPropertyContainer >     xC;
+            cpo::uno::Reference< css::beans::XPropertyAccess >        xA;
         };
 
         typedef std::unordered_map< OUString,UnqPathData > ContentMap;
 
-        TaskManager( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+        TaskManager( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                FileProvider* pProvider, bool bWithConfig );
         ~TaskManager();
 
         /// @throws css::ucb::DuplicateCommandIdentifierException
         void startTask(
             sal_Int32 CommandId,
-            const css::uno::Reference< css::ucb::XCommandEnvironment >&  xCommandEnv );
+            const cpo::uno::Reference< css::ucb::XCommandEnvironment >&  xCommandEnv );
 
         sal_Int32 getCommandId();
 
@@ -256,7 +256,7 @@ namespace fileaccess
          */
 
         void handleTask( sal_Int32 CommandId,
-                                  const css::uno::Reference< css::task::XInteractionRequest >& request );
+                                  const cpo::uno::Reference< css::task::XInteractionRequest >& request );
 
         /**
          *  Clears any error which are set on the commandid
@@ -307,14 +307,14 @@ namespace fileaccess
 
         void page( sal_Int32 CommandId,
                             const OUString& aUnqPath,
-                            const css::uno::Reference< css::io::XOutputStream >& xOutputStream );
+                            const cpo::uno::Reference< css::io::XOutputStream >& xOutputStream );
 
 
         /**
          *  Given a file URL aUnqPath, this methods returns a XInputStream which reads from the open file.
          */
 
-        css::uno::Reference< css::io::XInputStream >
+        cpo::uno::Reference< css::io::XInputStream >
         open( sal_Int32 CommandId,
               const OUString& aUnqPath,
               bool bLock );
@@ -325,7 +325,7 @@ namespace fileaccess
          *  to read and write from/to the file.
          */
 
-        css::uno::Reference< css::io::XStream >
+        cpo::uno::Reference< css::io::XStream >
         open_rw( sal_Int32 CommandId,
                  const OUString& aUnqPath,
                  bool bLock );
@@ -336,7 +336,7 @@ namespace fileaccess
          *  to file URL aUnqPath
          */
 
-        css::uno::Reference< css::ucb::XDynamicResultSet >
+        cpo::uno::Reference< css::ucb::XDynamicResultSet >
         ls( sal_Int32 CommandId,
             const OUString& aUnqPath,
             const sal_Int32 OpenMode,
@@ -349,11 +349,11 @@ namespace fileaccess
          */
 
         // Info for commands
-        css::uno::Reference< css::ucb::XCommandInfo >
+        cpo::uno::Reference< css::ucb::XCommandInfo >
         info_c();
 
         // Info for the properties
-        css::uno::Reference< css::beans::XPropertySetInfo >
+        cpo::uno::Reference< css::beans::XPropertySetInfo >
         info_p( const OUString& aUnqPath );
 
 
@@ -371,7 +371,7 @@ namespace fileaccess
          *  Returns an XRow object containing the values in the requested order.
          */
 
-        css::uno::Reference< css::sdbc::XRow >
+        cpo::uno::Reference< css::sdbc::XRow >
         getv( sal_Int32 CommandId,
               const OUString& aUnqPath,
               const cpo::uno::Sequence< css::beans::Property >& properties );
@@ -439,7 +439,7 @@ namespace fileaccess
         mkfil( sal_Int32 CommandId,
                const OUString& aFileName,
                bool OverWrite,
-               const css::uno::Reference< css::io::XInputStream >& aInputStream );
+               const cpo::uno::Reference< css::io::XInputStream >& aInputStream );
 
 
         /**
@@ -451,7 +451,7 @@ namespace fileaccess
         write( sal_Int32 CommandId,
                const OUString& aUnqPath,
                bool OverWrite,
-               const css::uno::Reference< css::io::XInputStream >& aInputStream );
+               const cpo::uno::Reference< css::io::XInputStream >& aInputStream );
 
 
         void insertDefaultProperties( const OUString& aUnqPath );
@@ -473,8 +473,8 @@ namespace fileaccess
 
 
         FileProvider*                                             m_pProvider;
-        css::uno::Reference< cpo::uno::XComponentContext >        m_xContext;
-        css::uno::Reference< css::ucb::XPropertySetRegistry >     m_xFileRegistry;
+        cpo::uno::Reference< cpo::uno::XComponentContext >        m_xContext;
+        cpo::uno::Reference< css::ucb::XPropertySetRegistry >     m_xFileRegistry;
 
     private:
 
@@ -560,7 +560,7 @@ namespace fileaccess
               osl::DirectoryItem& DirItem,
               OUString& aUnqPath,
               bool&      bIsRegular,
-              css::uno::Reference< css::sdbc::XRow > & row );
+              cpo::uno::Reference< css::sdbc::XRow > & row );
 
 
         /**

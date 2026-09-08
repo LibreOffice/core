@@ -75,6 +75,7 @@
 #include <COKit/COKit.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 namespace {
 
@@ -706,7 +707,7 @@ void ScViewFunc::PasteFromSystem(bool useSavedPrefs)
     UpdateInputLine();
 
     vcl::Window* pWin = GetActiveWin();
-    css::uno::Reference<css::datatransfer::XTransferable2> xTransferable2(ScTabViewShell::GetClipData(pWin));
+    cpo::uno::Reference<css::datatransfer::XTransferable2> xTransferable2(ScTabViewShell::GetClipData(pWin));
     const ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard(xTransferable2);
     // keep a reference in case the clipboard is changed during PasteFromClip
     const ScDrawTransferObj* pDrawClip = ScDrawTransferObj::GetOwnClipboard(xTransferable2);

@@ -53,7 +53,7 @@ protected:
     virtual sal_Int64 getAccessibleChildCount() override;
 
     /** @return  The XAccessible interface of the specified child. */
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
         css::accessibility::XAccessible >
     getAccessibleChild( sal_Int64 nChildIndex ) override;
 
@@ -62,7 +62,7 @@ protected:
     /** @return
             The accessible child rendered under the given point.
     */
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
         css::accessibility::XAccessible >
     getAccessibleAtPoint( const css::awt::Point& rPoint ) override;
 

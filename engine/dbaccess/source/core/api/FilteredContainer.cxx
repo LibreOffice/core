@@ -33,7 +33,7 @@
 namespace dbaccess
 {
     using namespace dbtools;
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
 using namespace cpo::uno;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::sdbc;
@@ -382,7 +382,7 @@ static sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, std::
         }
     }
 
-    OUString OFilteredContainer::getNameForObject(const css::uno::Reference< css::beans::XPropertySet >& _xObject)
+    OUString OFilteredContainer::getNameForObject(const cpo::uno::Reference< css::beans::XPropertySet >& _xObject)
     {
         OSL_ENSURE( _xObject.is(), "OFilteredContainer::getNameForObject: Object is NULL!" );
         return ::dbtools::composeTableName( m_xMetaData, _xObject, ::dbtools::EComposeRule::InDataManipulation, false );

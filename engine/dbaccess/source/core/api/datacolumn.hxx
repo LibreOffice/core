@@ -34,16 +34,16 @@ namespace dbaccess
                         public css::sdb::XColumn,
                         public css::sdb::XColumnUpdate
     {
-        css::uno::Reference < css::sdbc::XRow >       m_xRow;
-        css::uno::Reference < css::sdbc::XRowUpdate > m_xRowUpdate;
+        cpo::uno::Reference < css::sdbc::XRow >       m_xRow;
+        cpo::uno::Reference < css::sdbc::XRowUpdate > m_xRowUpdate;
     protected:
         virtual ~ODataColumn() override;
     public:
-        ODataColumn  (const css::uno::Reference < css::sdbc::XResultSetMetaData >& _xMetaData,
-                      const css::uno::Reference < css::sdbc::XRow >& _xRow,
-                      const css::uno::Reference < css::sdbc::XRowUpdate >& _xRowUpdate,
+        ODataColumn  (const cpo::uno::Reference < css::sdbc::XResultSetMetaData >& _xMetaData,
+                      const cpo::uno::Reference < css::sdbc::XRow >& _xRow,
+                      const cpo::uno::Reference < css::sdbc::XRowUpdate >& _xRowUpdate,
                       sal_Int32 _nPos,
-                      const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _rxDBMeta);
+                      const cpo::uno::Reference< css::sdbc::XDatabaseMetaData >& _rxDBMeta);
 
     // css::lang::XTypeProvider
         virtual cpo::uno::Sequence< cpo::uno::Type > getTypes() override;
@@ -75,13 +75,13 @@ namespace dbaccess
         virtual css::util::Date getDate(  ) override;
         virtual css::util::Time getTime(  ) override;
         virtual css::util::DateTime getTimestamp(  ) override;
-        virtual css::uno::Reference< css::io::XInputStream > getBinaryStream(  ) override;
-        virtual css::uno::Reference< css::io::XInputStream > getCharacterStream(  ) override;
-        virtual cpo::uno::Any getObject( const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
-        virtual css::uno::Reference< css::sdbc::XRef > getRef(  ) override;
-        virtual css::uno::Reference< css::sdbc::XBlob > getBlob(  ) override;
-        virtual css::uno::Reference< css::sdbc::XClob > getClob(  ) override;
-        virtual css::uno::Reference< css::sdbc::XArray > getArray(  ) override;
+        virtual cpo::uno::Reference< css::io::XInputStream > getBinaryStream(  ) override;
+        virtual cpo::uno::Reference< css::io::XInputStream > getCharacterStream(  ) override;
+        virtual cpo::uno::Any getObject( const cpo::uno::Reference< css::container::XNameAccess >& typeMap ) override;
+        virtual cpo::uno::Reference< css::sdbc::XRef > getRef(  ) override;
+        virtual cpo::uno::Reference< css::sdbc::XBlob > getBlob(  ) override;
+        virtual cpo::uno::Reference< css::sdbc::XClob > getClob(  ) override;
+        virtual cpo::uno::Reference< css::sdbc::XArray > getArray(  ) override;
 
     // css::sdb::XColumnUpdate
         virtual void updateNull(  ) override;
@@ -97,8 +97,8 @@ namespace dbaccess
         virtual void updateDate( const css::util::Date& x ) override;
         virtual void updateTime( const css::util::Time& x ) override;
         virtual void updateTimestamp( const css::util::DateTime& x ) override;
-        virtual void updateBinaryStream( const css::uno::Reference< css::io::XInputStream >& x, sal_Int32 length ) override;
-        virtual void updateCharacterStream( const css::uno::Reference< css::io::XInputStream >& x, sal_Int32 length ) override;
+        virtual void updateBinaryStream( const cpo::uno::Reference< css::io::XInputStream >& x, sal_Int32 length ) override;
+        virtual void updateCharacterStream( const cpo::uno::Reference< css::io::XInputStream >& x, sal_Int32 length ) override;
         virtual void updateObject( const cpo::uno::Any& x ) override;
         virtual void updateNumericObject( const cpo::uno::Any& x, sal_Int32 scale ) override;
     };

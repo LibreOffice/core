@@ -26,7 +26,7 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
-using com::sun::star::uno::Reference;
+using cpo::uno::Reference;
 using cpo::uno::Sequence;
 using com::sun::star::lang::XServiceInfo;
 using com::sun::star::system::XSimpleMailClientSupplier;

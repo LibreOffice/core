@@ -28,19 +28,19 @@ private:
 
 public:
     /// @throws cpo::uno::RuntimeException
-    SwVbaContentControlListEntries(const css::uno::Reference<ov::XHelperInterface>& xParent,
-                                   const css::uno::Reference<cpo::uno::XComponentContext>& xContext,
+    SwVbaContentControlListEntries(const cpo::uno::Reference<ov::XHelperInterface>& xParent,
+                                   const cpo::uno::Reference<cpo::uno::XComponentContext>& xContext,
                                    std::shared_ptr<SwContentControl> pCC);
 
     // XContentControlListEntries
-    css::uno::Reference<ooo::vba::word::XContentControlListEntry> SAL_CALL
+    cpo::uno::Reference<ooo::vba::word::XContentControlListEntry> SAL_CALL
     Add(const OUString& rName, const cpo::uno::Any& rValue, const cpo::uno::Any& rIndex) override;
     void SAL_CALL Clear() override;
     sal_Int32 SAL_CALL getCount() override;
 
     // XEnumerationAccess
     cpo::uno::Type SAL_CALL getElementType() override;
-    css::uno::Reference<css::container::XEnumeration> SAL_CALL createEnumeration() override;
+    cpo::uno::Reference<css::container::XEnumeration> SAL_CALL createEnumeration() override;
 
     // SwVbaContentControlListEntries_BASE
     cpo::uno::Any createCollectionObject(const cpo::uno::Any& aSource) override;

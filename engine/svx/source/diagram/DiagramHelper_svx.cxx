@@ -49,6 +49,7 @@
 #include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace {
 
@@ -527,7 +528,7 @@ void DiagramHelper_svx::disconnectFromSdrObjGroup(bool bEnableUndo)
 }
 
 void DiagramHelper_svx::connectToSdrObjGroup(
-    const css::uno::Reference< css::drawing::XShape >& rTarget,
+    const cpo::uno::Reference< css::drawing::XShape >& rTarget,
     std::shared_ptr< svx::diagram::DiagramHelper_svx >* mpDiagramHelperFromUndo)
 {
     SdrObjGroup* pRootObject(nullptr);

@@ -38,6 +38,7 @@
 #include "../inc/urihelper.hxx"
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace package_ucp;
 
 // DataSupplier Implementation.

@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <xmloff/xmltoken.hxx>
 
 namespace com::sun::star::io { class XInputStream; }
@@ -34,11 +34,11 @@ public:
 
     XMLBase64Export( SvXMLExport& rExport );
 
-    bool exportXML( const css::uno::Reference < css::io::XInputStream > & rIn );
-    bool exportElement( const css::uno::Reference < css::io::XInputStream > & rIn,
+    bool exportXML( const cpo::uno::Reference < css::io::XInputStream > & rIn );
+    bool exportElement( const cpo::uno::Reference < css::io::XInputStream > & rIn,
             enum ::xmloff::token::XMLTokenEnum eName );
     bool exportOfficeBinaryDataElement(
-            const css::uno::Reference < css::io::XInputStream > & rIn );
+            const cpo::uno::Reference < css::io::XInputStream > & rIn );
 };
 
 

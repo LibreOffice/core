@@ -54,6 +54,7 @@
 #include <vector>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace ::xmloff::token;
 using namespace ::svt;
 
@@ -238,7 +239,7 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
 
 SvXMLNumFmtExport::SvXMLNumFmtExport(
                        SvXMLExport& rExp,
-                       const css::uno::Reference< css::util::XNumberFormatsSupplier >& rSupp,
+                       const cpo::uno::Reference< css::util::XNumberFormatsSupplier >& rSupp,
                        OUString aPrefix ) :
     m_rExport( rExp ),
     m_sPrefix(std::move( aPrefix )),

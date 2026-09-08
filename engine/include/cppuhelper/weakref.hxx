@@ -24,7 +24,7 @@
 
 #include <cstddef>
 
-#include "com/sun/star/uno/Reference.hxx"
+#include "cpo/uno/Reference.hxx"
 #include "cpo/uno/XInterface.hpp"
 #include "cppuhelper/cppuhelperdllapi.h"
 
@@ -65,7 +65,7 @@ public:
 
         @param xInt another hard interface reference
     */
-    WeakReferenceHelper( const css::uno::Reference< cpo::uno::XInterface > & xInt );
+    WeakReferenceHelper( const cpo::uno::Reference< cpo::uno::XInterface > & xInt );
 
     /** Initialize this reference with the hard interface reference xWeak. This
          is faster than the XInterface constructor because we can skip doing an
@@ -73,7 +73,7 @@ public:
 
         @param xWeak another hard interface reference
     */
-    WeakReferenceHelper( const css::uno::Reference< cpo::uno::XWeak > & xWeak );
+    WeakReferenceHelper( const cpo::uno::Reference< cpo::uno::XWeak > & xWeak );
 
     /** Releases this reference.
     */
@@ -94,7 +94,7 @@ public:
         @param xInt another hard reference
     */
     WeakReferenceHelper & operator = (
-            const css::uno::Reference< cpo::uno::XInterface > & xInt );
+            const cpo::uno::Reference< cpo::uno::XInterface > & xInt );
 
     /** Releases this reference and takes over hard reference xWeak. This
          is faster than the XInterface constructor because we can skip doing an
@@ -103,7 +103,7 @@ public:
         @param xWeak another hard reference
     */
     WeakReferenceHelper & operator = (
-            const css::uno::Reference< cpo::uno::XWeak > & xWeak );
+            const cpo::uno::Reference< cpo::uno::XWeak > & xWeak );
 
     /** Returns true if both weak refs reference to the same object.
 
@@ -117,13 +117,13 @@ public:
 
          @return hard reference or null, if the weakly referenced interface has gone
     */
-    css::uno::Reference< cpo::uno::XInterface > get() const;
+    cpo::uno::Reference< cpo::uno::XInterface > get() const;
 
     /**  Gets a hard reference to the object.
 
          @return hard reference or null, if the weakly referenced interface has gone
     */
-    operator css::uno::Reference< cpo::uno::XInterface > () const
+    operator cpo::uno::Reference< cpo::uno::XInterface > () const
         { return get(); }
 
     /** Releases this reference.
@@ -161,7 +161,7 @@ public:
 
         @param rRef another hard ref
     */
-    WeakReference( const css::uno::Reference< interface_type > & rRef )
+    WeakReference( const cpo::uno::Reference< interface_type > & rRef )
         : WeakReferenceHelper( rRef )
         {}
 
@@ -172,7 +172,7 @@ public:
         @param xInt another hard reference
     */
     WeakReference & operator = (
-            const css::uno::Reference< interface_type > & xInt )
+            const cpo::uno::Reference< interface_type > & xInt )
         { WeakReferenceHelper::operator=(xInt); return *this; }
 
     /** Releases this reference and takes over hard reference xWeak. This
@@ -182,15 +182,15 @@ public:
         @param xWeak another hard reference
     */
     WeakReference & operator = (
-            const css::uno::Reference< cpo::uno::XWeak > & xWeak )
+            const cpo::uno::Reference< cpo::uno::XWeak > & xWeak )
         { WeakReferenceHelper::operator=(xWeak); return *this; }
 
     /**  Gets a hard reference to the object.
 
          @return hard reference or null, if the weakly referenced interface has gone
     */
-    operator css::uno::Reference< interface_type > () const
-        { return css::uno::Reference< interface_type >::query( get() ); }
+    operator cpo::uno::Reference< interface_type > () const
+        { return cpo::uno::Reference< interface_type >::query( get() ); }
 };
 
 }

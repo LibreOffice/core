@@ -31,6 +31,7 @@
 #include <unicode/ucsdet.h>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 static bool IsDocShellRegistered()
 {
@@ -93,7 +94,7 @@ std::shared_ptr<const SfxFilter> SwIoSystem::GetFilterOfFormat(std::u16string_vi
     return nullptr;
 }
 
-bool SwIoSystem::IsValidStgFilter( const css::uno::Reference < css::embed::XStorage >& rStg, const SfxFilter& rFilter)
+bool SwIoSystem::IsValidStgFilter( const cpo::uno::Reference < css::embed::XStorage >& rStg, const SfxFilter& rFilter)
 {
     bool bRet = false;
     try

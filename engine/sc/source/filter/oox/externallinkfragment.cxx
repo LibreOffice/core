@@ -32,7 +32,7 @@
 namespace oox::xls {
 
 using namespace ::com::sun::star::sheet;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::oox::core;
 

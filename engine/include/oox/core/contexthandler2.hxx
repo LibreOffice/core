@@ -175,15 +175,15 @@ public:
 
 protected:
     /** Must be called from createFastChildContext() in derived classes. */
-    css::uno::Reference< css::xml::sax::XFastContextHandler >
+    cpo::uno::Reference< css::xml::sax::XFastContextHandler >
                         implCreateChildContext(
                             sal_Int32 nElement,
-                            const css::uno::Reference< css::xml::sax::XFastAttributeList >& rxAttribs );
+                            const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& rxAttribs );
 
     /** Must be called from startFastElement() in derived classes. */
     void                implStartElement(
                             sal_Int32 nElement,
-                            const css::uno::Reference< css::xml::sax::XFastAttributeList >& rxAttribs );
+                            const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& rxAttribs );
 
     /** Must be called from characters() in derived classes. */
     void                implCharacters( std::u16string_view rChars );
@@ -250,14 +250,14 @@ public:
 
     // com.sun.star.xml.sax.XFastContextHandler interface ---------------------
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler >
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler >
                         createFastChildContext(
                             sal_Int32 nElement,
-                            const css::uno::Reference< css::xml::sax::XFastAttributeList >& rxAttribs ) final override;
+                            const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& rxAttribs ) final override;
 
     virtual void startFastElement(
                             sal_Int32 nElement,
-                            const css::uno::Reference< css::xml::sax::XFastAttributeList >& rxAttribs ) final override;
+                            const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& rxAttribs ) final override;
 
     virtual void characters( const OUString& rChars ) final override;
 

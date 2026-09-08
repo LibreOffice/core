@@ -26,7 +26,7 @@
 #include <xmloff/xmlimp.hxx>
 
 using namespace css::lang;
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace css::xml::dom;
 using namespace css::xml::sax;

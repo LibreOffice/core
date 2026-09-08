@@ -29,8 +29,8 @@
 
 using namespace css;
 using namespace ::com::sun::star::sdbc;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 namespace sc
 {

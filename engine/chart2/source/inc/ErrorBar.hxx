@@ -80,14 +80,14 @@ public:
     virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo >
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo >
         getPropertySetInfo() override;
     virtual void setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
     virtual cpo::uno::Any getPropertyValue( const OUString& PropertyName ) override;
-    virtual void addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
-    virtual void removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
-    virtual void addVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
-    virtual void removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+    virtual void addPropertyChangeListener( const OUString& aPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
+    virtual void removePropertyChangeListener( const OUString& aPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
+    virtual void addVetoableChangeListener( const OUString& PropertyName, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+    virtual void removeVetoableChangeListener( const OUString& PropertyName, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
     // XPropertyState
     virtual css::beans::PropertyState getPropertyState( const OUString& rPropName ) override;
@@ -100,13 +100,13 @@ private:
     ErrorBar( const ErrorBar & rOther );
 
     // ____ XCloneable ____
-    virtual css::uno::Reference< css::util::XCloneable > createClone() override;
+    virtual cpo::uno::Reference< css::util::XCloneable > createClone() override;
 
     // ____ XModifyBroadcaster ____
     virtual void addModifyListener(
-        const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+        const cpo::uno::Reference< css::util::XModifyListener >& aListener ) override;
     virtual void removeModifyListener(
-        const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+        const cpo::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
     // ____ XModifyListener ____
     virtual void modified(
@@ -117,12 +117,12 @@ private:
         const css::lang::EventObject& Source ) override;
 
     // ____ XDataSink ____
-    virtual void setData( const cpo::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > >& aData ) override;
+    virtual void setData( const cpo::uno::Sequence< cpo::uno::Reference< css::chart2::data::XLabeledDataSequence > >& aData ) override;
 
     // ____ XDataSource ____
-    virtual cpo::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > getDataSequences() override;
+    virtual cpo::uno::Sequence< cpo::uno::Reference< css::chart2::data::XLabeledDataSequence > > getDataSequences() override;
 
-    typedef std::vector< css::uno::Reference<
+    typedef std::vector< cpo::uno::Reference<
             css::chart2::data::XLabeledDataSequence > > tDataSequenceContainer;
     tDataSequenceContainer m_aDataSequences;
 

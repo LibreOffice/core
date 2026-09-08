@@ -22,7 +22,7 @@
 #include <osl/diagnose.h>
 #include <rtl/ref.hxx>
 
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace css::xml::dom;
 
 namespace DOM

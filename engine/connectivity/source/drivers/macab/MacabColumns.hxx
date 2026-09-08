@@ -29,7 +29,7 @@ namespace connectivity::macab
     protected:
         MacabTable* m_pTable;
 
-        virtual css::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
+        virtual cpo::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
         virtual void impl_refresh() override;
 
     public:

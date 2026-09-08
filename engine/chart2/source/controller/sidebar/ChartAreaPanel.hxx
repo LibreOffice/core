@@ -31,13 +31,13 @@ class ChartAreaPanel : public svx::sidebar::AreaPropertyPanelBase,
 public:
     static std::unique_ptr<PanelLayout> Create(
         weld::Widget* pParent,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame,
+        const cpo::uno::Reference<css::frame::XFrame>& rxFrame,
         ChartController* pController);
 
     // constructor/destructor
     ChartAreaPanel(
         weld::Widget* pParent,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame,
+        const cpo::uno::Reference<css::frame::XFrame>& rxFrame,
         ChartController* pController);
 
     virtual ~ChartAreaPanel() override;
@@ -56,12 +56,12 @@ public:
 
     virtual void selectionChanged(bool bCorrectType) override;
 
-    virtual void updateModel(css::uno::Reference<css::frame::XModel> xModel) override;
+    virtual void updateModel(cpo::uno::Reference<css::frame::XModel> xModel) override;
 
 private:
 
     rtl::Reference<::chart::ChartModel> mxModel;
-    css::uno::Reference<css::util::XModifyListener> mxListener;
+    cpo::uno::Reference<css::util::XModifyListener> mxListener;
     rtl::Reference<ChartSidebarSelectionListener> mxSelectionListener;
 
     void Initialize();

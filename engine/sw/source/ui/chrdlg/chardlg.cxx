@@ -37,7 +37,7 @@
 #include <vcl/tabs.hrc>
 
 using namespace ::com::sun::star::ui::dialogs;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::sfx2;
 
 SwCharDlg::SwCharDlg(weld::Window* pParent, SwView& rView, const SfxItemSet& rCoreSet,

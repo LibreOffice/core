@@ -21,7 +21,7 @@
 #define INCLUDED_SVL_INSTRM_HXX
 
 #include <svl/svldllapi.h>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <tools/stream.hxx>
 #include <memory>
 
@@ -35,8 +35,8 @@ class SvDataPipe_Impl;
 
 class SVL_DLLPUBLIC SvInputStream final : public SvStream
 {
-    css::uno::Reference< css::io::XInputStream >   m_xStream;
-    css::uno::Reference< css::io::XSeekable >      m_xSeekable;
+    cpo::uno::Reference< css::io::XInputStream >   m_xStream;
+    cpo::uno::Reference< css::io::XSeekable >      m_xSeekable;
     std::unique_ptr<SvDataPipe_Impl>               m_pPipe;
     sal_uInt64                                     m_nSeekedFrom;
 
@@ -53,7 +53,7 @@ class SVL_DLLPUBLIC SvInputStream final : public SvStream
     SVL_DLLPRIVATE virtual void SetSize(sal_uInt64) override;
 
 public:
-    SvInputStream( css::uno::Reference< css::io::XInputStream > xTheStream );
+    SvInputStream( cpo::uno::Reference< css::io::XInputStream > xTheStream );
 
     virtual ~SvInputStream() override;
 };

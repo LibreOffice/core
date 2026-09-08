@@ -49,7 +49,7 @@
 #endif
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 /*
  * Class:     com_sun_star_comp_helper_SharedLibraryLoader

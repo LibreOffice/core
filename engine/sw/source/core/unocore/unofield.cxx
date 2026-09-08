@@ -90,6 +90,7 @@
 #include <vector>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 // case-corrected version of the first part for the service names (see #i67811)
 constexpr OUString COM_TEXT_FLDMASTER_CC = u"com.sun.star.text.fieldmaster."_ustr;
@@ -2784,7 +2785,7 @@ rtl::Reference<SwXFieldMaster> SwXTextFieldMasters::getFieldMasterByName(const O
     if( SwFieldIds::Unknown == nResId )
         throw container::NoSuchElementException(
             "SwXTextFieldMasters::getByName(" + rName + ")",
-            css::uno::Reference<cpo::uno::XInterface>());
+            cpo::uno::Reference<cpo::uno::XInterface>());
 
     sName = sName.copy(std::min(sTypeName.getLength()+1, sName.getLength()));
     auto& rDoc = GetDoc();
@@ -2792,7 +2793,7 @@ rtl::Reference<SwXFieldMaster> SwXTextFieldMasters::getFieldMasterByName(const O
     if(!pType)
         throw container::NoSuchElementException(
             "SwXTextFieldMasters::getByName(" + rName + ")",
-            css::uno::Reference<cpo::uno::XInterface>());
+            cpo::uno::Reference<cpo::uno::XInterface>());
 
     rtl::Reference<SwXFieldMaster> const xRet =
             SwXFieldMaster::CreateXFieldMaster(&rDoc, pType);
@@ -3112,7 +3113,7 @@ cpo::uno::Any SAL_CALL SwXFieldEnumeration::nextElement()
     if (m_pImpl->m_nNextIndex >= static_cast<sal_Int32>(m_pImpl->m_Items.size()))
         throw container::NoSuchElementException(
             u"SwXFieldEnumeration::nextElement"_ustr,
-            css::uno::Reference<cpo::uno::XInterface>());
+            cpo::uno::Reference<cpo::uno::XInterface>());
 
     uno::Reference< text::XTextField >  &rxField =
         m_pImpl->m_Items[ m_pImpl->m_nNextIndex++ ];

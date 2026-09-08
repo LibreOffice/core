@@ -81,7 +81,7 @@ namespace framework
         return sKeyBuffer.makeStringAndClear();
     }
 
-XMLBasedAcceleratorConfiguration::XMLBasedAcceleratorConfiguration(const css::uno::Reference< cpo::uno::XComponentContext >& xContext)
+XMLBasedAcceleratorConfiguration::XMLBasedAcceleratorConfiguration(const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext)
     : m_xContext      (xContext                     )
     , m_aPresetHandler(xContext                     )
 {
@@ -218,8 +218,8 @@ void XMLBasedAcceleratorConfiguration::removeCommandFromAllKeyEvents(const OUStr
 
 void XMLBasedAcceleratorConfiguration::reload()
 {
-    css::uno::Reference< css::io::XStream > xStream;
-    css::uno::Reference< css::io::XStream > xStreamNoLang;
+    cpo::uno::Reference< css::io::XStream > xStream;
+    cpo::uno::Reference< css::io::XStream > xStreamNoLang;
     {
         SolarMutexGuard g;
         xStream = m_aPresetHandler.openTarget(TARGET_CURRENT,
@@ -231,7 +231,7 @@ void XMLBasedAcceleratorConfiguration::reload()
         catch(const css::io::IOException&) {} // does not have to exist
     }
 
-    css::uno::Reference< css::io::XInputStream > xIn;
+    cpo::uno::Reference< css::io::XInputStream > xIn;
     if (xStream.is())
         xIn = xStream->getInputStream();
     if (!xIn.is())
@@ -259,14 +259,14 @@ void XMLBasedAcceleratorConfiguration::reload()
 
 void XMLBasedAcceleratorConfiguration::store()
 {
-    css::uno::Reference< css::io::XStream > xStream;
+    cpo::uno::Reference< css::io::XStream > xStream;
     {
         SolarMutexGuard g;
         xStream = m_aPresetHandler.openTarget(TARGET_CURRENT,
                css::embed::ElementModes::READWRITE); // open or create!
     }
 
-    css::uno::Reference< css::io::XOutputStream > xOut;
+    cpo::uno::Reference< css::io::XOutputStream > xOut;
     if (xStream.is())
         xOut = xStream->getOutputStream();
 
@@ -283,12 +283,12 @@ void XMLBasedAcceleratorConfiguration::store()
     m_aPresetHandler.commitUserChanges();
 }
 
-void XMLBasedAcceleratorConfiguration::storeToStorage(const css::uno::Reference< css::embed::XStorage >& xStorage)
+void XMLBasedAcceleratorConfiguration::storeToStorage(const cpo::uno::Reference< css::embed::XStorage >& xStorage)
 {
     // no fallback from read/write to readonly!
-    css::uno::Reference< css::io::XStream > xStream = xStorage->openStreamElement(TARGET_CURRENT, css::embed::ElementModes::READWRITE);
+    cpo::uno::Reference< css::io::XStream > xStream = xStorage->openStreamElement(TARGET_CURRENT, css::embed::ElementModes::READWRITE);
 
-    css::uno::Reference< css::io::XOutputStream > xOut;
+    cpo::uno::Reference< css::io::XOutputStream > xOut;
     if (xStream.is())
         xOut = xStream->getOutputStream();
 
@@ -313,7 +313,7 @@ bool XMLBasedAcceleratorConfiguration::isReadOnly()
     return m_aPresetHandler.isReadOnly();
 }
 
-void XMLBasedAcceleratorConfiguration::setStorage(const css::uno::Reference< css::embed::XStorage >& /*xStorage*/)
+void XMLBasedAcceleratorConfiguration::setStorage(const cpo::uno::Reference< css::embed::XStorage >& /*xStorage*/)
 {
     SAL_INFO("fwk.accelerators", "XMLBasedAcceleratorConfiguration::setStorage(): implement this HACK .-)");
 }
@@ -324,12 +324,12 @@ bool XMLBasedAcceleratorConfiguration::hasStorage()
     return false;
 }
 
-void XMLBasedAcceleratorConfiguration::addConfigurationListener(const css::uno::Reference< css::ui::XUIConfigurationListener >& /*xListener*/)
+void XMLBasedAcceleratorConfiguration::addConfigurationListener(const cpo::uno::Reference< css::ui::XUIConfigurationListener >& /*xListener*/)
 {
     SAL_INFO("fwk.accelerators", "XMLBasedAcceleratorConfiguration::addConfigurationListener(): implement me");
 }
 
-void XMLBasedAcceleratorConfiguration::removeConfigurationListener(const css::uno::Reference< css::ui::XUIConfigurationListener >& /*xListener*/)
+void XMLBasedAcceleratorConfiguration::removeConfigurationListener(const cpo::uno::Reference< css::ui::XUIConfigurationListener >& /*xListener*/)
 {
     SAL_INFO("fwk.accelerators", "XMLBasedAcceleratorConfiguration::removeConfigurationListener(): implement me");
 }
@@ -344,12 +344,12 @@ void XMLBasedAcceleratorConfiguration::reset()
     reload();
 }
 
-void XMLBasedAcceleratorConfiguration::addResetListener(const css::uno::Reference< css::form::XResetListener >& /*xListener*/)
+void XMLBasedAcceleratorConfiguration::addResetListener(const cpo::uno::Reference< css::form::XResetListener >& /*xListener*/)
 {
     SAL_INFO("fwk.accelerators", "XMLBasedAcceleratorConfiguration::addResetListener(): implement me");
 }
 
-void XMLBasedAcceleratorConfiguration::removeResetListener(const css::uno::Reference< css::form::XResetListener >& /*xListener*/)
+void XMLBasedAcceleratorConfiguration::removeResetListener(const cpo::uno::Reference< css::form::XResetListener >& /*xListener*/)
 {
     SAL_INFO("fwk.accelerators", "XMLBasedAcceleratorConfiguration::removeResetListener(): implement me");
 }
@@ -360,16 +360,16 @@ void XMLBasedAcceleratorConfiguration::changesOccurred()
     reload();
 }
 
-void XMLBasedAcceleratorConfiguration::impl_ts_load(const css::uno::Reference< css::io::XInputStream >& xStream)
+void XMLBasedAcceleratorConfiguration::impl_ts_load(const cpo::uno::Reference< css::io::XInputStream >& xStream)
 {
-    css::uno::Reference< cpo::uno::XComponentContext > xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext > xContext;
     {
         SolarMutexGuard g;
         xContext = m_xContext;
         m_pWriteCache.reset();
     }
 
-    css::uno::Reference< css::io::XSeekable > xSeek(xStream, css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::io::XSeekable > xSeek(xStream, cpo::uno::UNO_QUERY);
     if (xSeek.is())
         xSeek->seek(0);
 
@@ -383,7 +383,7 @@ void XMLBasedAcceleratorConfiguration::impl_ts_load(const css::uno::Reference< c
     rtl::Reference<SaxNamespaceFilter> pFilter = new SaxNamespaceFilter(pReader);
 
     // connect parser, filter and stream
-    css::uno::Reference< css::xml::sax::XParser > xParser = css::xml::sax::Parser::create(xContext);
+    cpo::uno::Reference< css::xml::sax::XParser > xParser = css::xml::sax::Parser::create(xContext);
     xParser->setDocumentHandler(pFilter);
 
     css::xml::sax::InputSource aSource;
@@ -393,11 +393,11 @@ void XMLBasedAcceleratorConfiguration::impl_ts_load(const css::uno::Reference< c
     xParser->parseStream(aSource);
 }
 
-void XMLBasedAcceleratorConfiguration::impl_ts_save(const css::uno::Reference< css::io::XOutputStream >& xStream)
+void XMLBasedAcceleratorConfiguration::impl_ts_save(const cpo::uno::Reference< css::io::XOutputStream >& xStream)
 {
     bool bChanged;
     AcceleratorCache aCache;
-    css::uno::Reference< cpo::uno::XComponentContext > xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext > xContext;
     {
         SolarMutexGuard g;
         bChanged = (m_pWriteCache != nullptr);
@@ -408,20 +408,20 @@ void XMLBasedAcceleratorConfiguration::impl_ts_save(const css::uno::Reference< c
         xContext = m_xContext;
     }
 
-    css::uno::Reference< css::io::XTruncate > xClearable(xStream, css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference< css::io::XTruncate > xClearable(xStream, cpo::uno::UNO_QUERY_THROW);
     xClearable->truncate();
 
     // TODO can be removed if seek(0) is done by truncate() automatically!
-    css::uno::Reference< css::io::XSeekable > xSeek(xStream, css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::io::XSeekable > xSeek(xStream, cpo::uno::UNO_QUERY);
     if (xSeek.is())
         xSeek->seek(0);
 
     // combine writer/cache/stream etcpp.
-    css::uno::Reference< css::xml::sax::XWriter > xWriter = css::xml::sax::Writer::create(xContext);
+    cpo::uno::Reference< css::xml::sax::XWriter > xWriter = css::xml::sax::Writer::create(xContext);
     xWriter->setOutputStream(xStream);
 
     // write into the stream
-    css::uno::Reference< css::xml::sax::XDocumentHandler > xHandler(xWriter, css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference< css::xml::sax::XDocumentHandler > xHandler(xWriter, cpo::uno::UNO_QUERY_THROW);
     AcceleratorConfigurationWriter aWriter(aCache, xHandler);
     aWriter.flush();
 
@@ -470,12 +470,12 @@ OUString XMLBasedAcceleratorConfiguration::impl_ts_getLocale()
 *
 *******************************************************************************/
 
-XCUBasedAcceleratorConfiguration::XCUBasedAcceleratorConfiguration(css::uno::Reference< cpo::uno::XComponentContext > xContext)
+XCUBasedAcceleratorConfiguration::XCUBasedAcceleratorConfiguration(cpo::uno::Reference< cpo::uno::XComponentContext > xContext)
                                 : m_xContext      (std::move(xContext                     ))
 {
     m_xCfg.set(
              ::comphelper::ConfigurationHelper::openConfig( m_xContext, u"org.openoffice.Office.Accelerators"_ustr, ::comphelper::EConfigurationModes::AllLocales ),
-             css::uno::UNO_QUERY );
+             cpo::uno::UNO_QUERY );
 }
 
 XCUBasedAcceleratorConfiguration::~XCUBasedAcceleratorConfiguration()
@@ -729,7 +729,7 @@ void XCUBasedAcceleratorConfiguration::reload()
     SolarMutexGuard g;
 
     bool bPreferred;
-    css::uno::Reference< css::container::XNameAccess > xAccess;
+    cpo::uno::Reference< css::container::XNameAccess > xAccess;
 
     bPreferred = true;
     m_aPrimaryReadCache = AcceleratorCache();
@@ -763,19 +763,19 @@ void XCUBasedAcceleratorConfiguration::store()
     impl_ts_save(bPreferred);
 }
 
-void XCUBasedAcceleratorConfiguration::storeToStorage(const css::uno::Reference< css::embed::XStorage >& xStorage)
+void XCUBasedAcceleratorConfiguration::storeToStorage(const cpo::uno::Reference< css::embed::XStorage >& xStorage)
 {
     // use m_aCache + old AcceleratorXMLWriter to store data directly on storage given as parameter ...
     if (!xStorage.is())
         return;
 
     tools::Long nOpenModes = css::embed::ElementModes::READWRITE;
-    css::uno::Reference< css::embed::XStorage > xAcceleratorTypeStorage = xStorage->openStorageElement(u"accelerator"_ustr, nOpenModes);
+    cpo::uno::Reference< css::embed::XStorage > xAcceleratorTypeStorage = xStorage->openStorageElement(u"accelerator"_ustr, nOpenModes);
     if (!xAcceleratorTypeStorage.is())
         return;
 
-    css::uno::Reference< css::io::XStream > xStream = xAcceleratorTypeStorage->openStreamElement(u"current"_ustr, nOpenModes);
-    css::uno::Reference< css::io::XOutputStream > xOut;
+    cpo::uno::Reference< css::io::XStream > xStream = xAcceleratorTypeStorage->openStreamElement(u"current"_ustr, nOpenModes);
+    cpo::uno::Reference< css::io::XOutputStream > xOut;
     if (xStream.is())
         xOut = xStream->getOutputStream();
     if (!xOut.is())
@@ -809,17 +809,17 @@ void XCUBasedAcceleratorConfiguration::storeToStorage(const css::uno::Reference<
         }
     }
 
-    css::uno::Reference< css::io::XTruncate > xClearable(xOut, css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference< css::io::XTruncate > xClearable(xOut, cpo::uno::UNO_QUERY_THROW);
     xClearable->truncate();
-    css::uno::Reference< css::io::XSeekable > xSeek(xOut, css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::io::XSeekable > xSeek(xOut, cpo::uno::UNO_QUERY);
     if (xSeek.is())
         xSeek->seek(0);
 
-    css::uno::Reference< css::xml::sax::XWriter > xWriter = css::xml::sax::Writer::create(m_xContext);
+    cpo::uno::Reference< css::xml::sax::XWriter > xWriter = css::xml::sax::Writer::create(m_xContext);
     xWriter->setOutputStream(xOut);
 
     // write into the stream
-    css::uno::Reference< css::xml::sax::XDocumentHandler > xHandler(xWriter, css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference< css::xml::sax::XDocumentHandler > xHandler(xWriter, cpo::uno::UNO_QUERY_THROW);
     AcceleratorConfigurationWriter aWriter(aCache, xHandler);
     aWriter.flush();
 }
@@ -834,7 +834,7 @@ bool XCUBasedAcceleratorConfiguration::isReadOnly()
     return false;
 }
 
-void XCUBasedAcceleratorConfiguration::setStorage(const css::uno::Reference< css::embed::XStorage >& /*xStorage*/)
+void XCUBasedAcceleratorConfiguration::setStorage(const cpo::uno::Reference< css::embed::XStorage >& /*xStorage*/)
 {
     SAL_INFO("fwk.accelerators", "XCUBasedAcceleratorConfiguration::setStorage(): implement this HACK .-)");
 }
@@ -845,42 +845,42 @@ bool XCUBasedAcceleratorConfiguration::hasStorage()
     return false;
 }
 
-void XCUBasedAcceleratorConfiguration::addConfigurationListener(const css::uno::Reference< css::ui::XUIConfigurationListener >& /*xListener*/)
+void XCUBasedAcceleratorConfiguration::addConfigurationListener(const cpo::uno::Reference< css::ui::XUIConfigurationListener >& /*xListener*/)
 {
     SAL_INFO("fwk.accelerators", "XCUBasedAcceleratorConfiguration::addConfigurationListener(): implement me");
 }
 
-void XCUBasedAcceleratorConfiguration::removeConfigurationListener(const css::uno::Reference< css::ui::XUIConfigurationListener >& /*xListener*/)
+void XCUBasedAcceleratorConfiguration::removeConfigurationListener(const cpo::uno::Reference< css::ui::XUIConfigurationListener >& /*xListener*/)
 {
     SAL_INFO("fwk.accelerators", "XCUBasedAcceleratorConfiguration::removeConfigurationListener(): implement me");
 }
 
 void XCUBasedAcceleratorConfiguration::reset()
 {
-    css::uno::Reference< css::container::XNamed > xNamed(m_xCfg, css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::container::XNamed > xNamed(m_xCfg, cpo::uno::UNO_QUERY);
     OUString sConfig = xNamed->getName();
     if ( sConfig == "Global" )
     {
         m_xCfg.set(
             ::comphelper::ConfigurationHelper::openConfig( m_xContext, CFG_ENTRY_GLOBAL, ::comphelper::EConfigurationModes::AllLocales ),
-            css::uno::UNO_QUERY );
+            cpo::uno::UNO_QUERY );
         XCUBasedAcceleratorConfiguration::reload();
     }
     else if ( sConfig == "Modules" )
     {
         m_xCfg.set(
             ::comphelper::ConfigurationHelper::openConfig( m_xContext, CFG_ENTRY_MODULES, ::comphelper::EConfigurationModes::AllLocales ),
-            css::uno::UNO_QUERY );
+            cpo::uno::UNO_QUERY );
         XCUBasedAcceleratorConfiguration::reload();
     }
 }
 
-void XCUBasedAcceleratorConfiguration::addResetListener(const css::uno::Reference< css::form::XResetListener >& /*xListener*/)
+void XCUBasedAcceleratorConfiguration::addResetListener(const cpo::uno::Reference< css::form::XResetListener >& /*xListener*/)
 {
     SAL_INFO("fwk.accelerators", "XCUBasedAcceleratorConfiguration::addResetListener(): implement me");
 }
 
-void XCUBasedAcceleratorConfiguration::removeResetListener(const css::uno::Reference< css::form::XResetListener >& /*xListener*/)
+void XCUBasedAcceleratorConfiguration::removeResetListener(const cpo::uno::Reference< css::form::XResetListener >& /*xListener*/)
 {
     SAL_INFO("fwk.accelerators", "XCUBasedAcceleratorConfiguration::removeResetListener(): implement me");
 }
@@ -889,7 +889,7 @@ void XCUBasedAcceleratorConfiguration::changesOccurred(const css::util::ChangesE
 {
     SAL_INFO( "fwk.accelerators", "XCUBasedAcceleratorConfiguration::changesOccurred()" );
 
-    css::uno::Reference< css::container::XHierarchicalNameAccess > xHAccess;
+    cpo::uno::Reference< css::container::XHierarchicalNameAccess > xHAccess;
     aReceivedEvents.Base >>= xHAccess;
     if (! xHAccess.is ())
         return;
@@ -936,23 +936,23 @@ void XCUBasedAcceleratorConfiguration::disposing(const css::lang::EventObject& /
 {
 }
 
-void XCUBasedAcceleratorConfiguration::impl_ts_load( bool bPreferred, const css::uno::Reference< css::container::XNameAccess >& xCfg )
+void XCUBasedAcceleratorConfiguration::impl_ts_load( bool bPreferred, const cpo::uno::Reference< css::container::XNameAccess >& xCfg )
 {
     AcceleratorCache aReadCache;
-    css::uno::Reference< css::container::XNameAccess > xAccess;
+    cpo::uno::Reference< css::container::XNameAccess > xAccess;
     if ( m_sGlobalOrModules == "Global" )
         xCfg->getByName(CFG_ENTRY_GLOBAL) >>= xAccess;
     else if ( m_sGlobalOrModules == "Modules" )
     {
-        css::uno::Reference< css::container::XNameAccess > xModules;
+        cpo::uno::Reference< css::container::XNameAccess > xModules;
         xCfg->getByName(CFG_ENTRY_MODULES) >>= xModules;
         xModules->getByName(m_sModuleCFG) >>= xAccess;
     }
 
     const OUString sIsoLang       = impl_ts_getLocale();
 
-    css::uno::Reference< css::container::XNameAccess > xKey;
-    css::uno::Reference< css::container::XNameAccess > xCommand;
+    cpo::uno::Reference< css::container::XNameAccess > xKey;
+    cpo::uno::Reference< css::container::XNameAccess > xCommand;
     if (xAccess.is())
     {
         cpo::uno::Sequence< OUString > lKeys = xAccess->getElementNames();
@@ -1120,10 +1120,10 @@ void XCUBasedAcceleratorConfiguration::impl_ts_save(bool bPreferred)
 
 void XCUBasedAcceleratorConfiguration::insertKeyToConfiguration( const css::awt::KeyEvent& aKeyEvent, const OUString& sCommand, const bool bPreferred )
 {
-    css::uno::Reference< css::container::XNameAccess > xAccess;
-    css::uno::Reference< css::container::XNameContainer > xContainer;
-    css::uno::Reference< css::lang::XSingleServiceFactory > xFac;
-    css::uno::Reference< cpo::uno::XInterface > xInst;
+    cpo::uno::Reference< css::container::XNameAccess > xAccess;
+    cpo::uno::Reference< css::container::XNameContainer > xContainer;
+    cpo::uno::Reference< css::lang::XSingleServiceFactory > xFac;
+    cpo::uno::Reference< cpo::uno::XInterface > xInst;
 
     if ( bPreferred )
         m_xCfg->getByName(CFG_ENTRY_PRIMARY) >>= xAccess;
@@ -1134,11 +1134,11 @@ void XCUBasedAcceleratorConfiguration::insertKeyToConfiguration( const css::awt:
         xAccess->getByName(CFG_ENTRY_GLOBAL) >>= xContainer;
     else if ( m_sGlobalOrModules == CFG_ENTRY_MODULES )
     {
-        css::uno::Reference< css::container::XNameContainer > xModules;
+        cpo::uno::Reference< css::container::XNameContainer > xModules;
         xAccess->getByName(CFG_ENTRY_MODULES) >>= xModules;
         if ( !xModules->hasByName(m_sModuleCFG) )
         {
-            xFac.set(xModules, css::uno::UNO_QUERY);
+            xFac.set(xModules, cpo::uno::UNO_QUERY);
             xInst = xFac->createInstance();
             xModules->insertByName(m_sModuleCFG, cpo::uno::Any(xInst));
         }
@@ -1146,11 +1146,11 @@ void XCUBasedAcceleratorConfiguration::insertKeyToConfiguration( const css::awt:
     }
 
     const OUString sKey = lcl_getKeyString(aKeyEvent);
-    css::uno::Reference< css::container::XNameAccess > xKey;
-    css::uno::Reference< css::container::XNameContainer > xCommand;
+    cpo::uno::Reference< css::container::XNameAccess > xKey;
+    cpo::uno::Reference< css::container::XNameContainer > xCommand;
     if ( !xContainer->hasByName(sKey) )
     {
-        xFac.set(xContainer, css::uno::UNO_QUERY);
+        xFac.set(xContainer, cpo::uno::UNO_QUERY);
         xInst = xFac->createInstance();
         xContainer->insertByName(sKey, cpo::uno::Any(xInst));
     }
@@ -1166,8 +1166,8 @@ void XCUBasedAcceleratorConfiguration::insertKeyToConfiguration( const css::awt:
 
 void XCUBasedAcceleratorConfiguration::removeKeyFromConfiguration( const css::awt::KeyEvent& aKeyEvent, const bool bPreferred )
 {
-    css::uno::Reference< css::container::XNameAccess > xAccess;
-    css::uno::Reference< css::container::XNameContainer > xContainer;
+    cpo::uno::Reference< css::container::XNameAccess > xAccess;
+    cpo::uno::Reference< css::container::XNameContainer > xContainer;
 
     if ( bPreferred )
         m_xCfg->getByName(CFG_ENTRY_PRIMARY) >>= xAccess;
@@ -1178,7 +1178,7 @@ void XCUBasedAcceleratorConfiguration::removeKeyFromConfiguration( const css::aw
         xAccess->getByName(CFG_ENTRY_GLOBAL) >>= xContainer;
     else if ( m_sGlobalOrModules == CFG_ENTRY_MODULES )
     {
-        css::uno::Reference< css::container::XNameAccess > xModules;
+        cpo::uno::Reference< css::container::XNameAccess > xModules;
         xAccess->getByName(CFG_ENTRY_MODULES) >>= xModules;
         if ( !xModules->hasByName(m_sModuleCFG) )
             return;
@@ -1194,8 +1194,8 @@ void XCUBasedAcceleratorConfiguration::reloadChanged( const OUString& sPrimarySe
     if ( sGlobalModules != m_sGlobalOrModules )
         return;
 
-    css::uno::Reference< css::container::XNameAccess > xAccess;
-    css::uno::Reference< css::container::XNameContainer > xContainer;
+    cpo::uno::Reference< css::container::XNameAccess > xAccess;
+    cpo::uno::Reference< css::container::XNameContainer > xContainer;
 
     m_xCfg->getByName(sPrimarySecondary) >>= xAccess;
     if ( sGlobalModules == CFG_ENTRY_GLOBAL )
@@ -1205,7 +1205,7 @@ void XCUBasedAcceleratorConfiguration::reloadChanged( const OUString& sPrimarySe
         if ( sModule != m_sModuleCFG )
             return;
 
-        css::uno::Reference< css::container::XNameAccess > xModules;
+        cpo::uno::Reference< css::container::XNameAccess > xModules;
         xAccess->getByName(CFG_ENTRY_MODULES) >>= xModules;
         if ( !xModules->hasByName(sModule) )
             return;
@@ -1235,8 +1235,8 @@ void XCUBasedAcceleratorConfiguration::reloadChanged( const OUString& sPrimarySe
              aKeyEvent.Modifiers |= css::awt::KeyModifier::MOD3;
     }
 
-    css::uno::Reference< css::container::XNameAccess > xKey;
-    css::uno::Reference< css::container::XNameAccess > xCommand;
+    cpo::uno::Reference< css::container::XNameAccess > xKey;
+    cpo::uno::Reference< css::container::XNameAccess > xCommand;
     OUString sCommand;
 
     if (xContainer->hasByName(sKey))

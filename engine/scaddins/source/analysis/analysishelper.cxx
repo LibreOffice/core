@@ -38,6 +38,7 @@
 #include "deffuncname.hxx"
 
 using namespace                 ::com::sun::star;
+using namespace ::cpo;
 using namespace sca::analysis;
 
 #define UNIQUE              false   // function name does not exist in Calc

@@ -73,7 +73,7 @@ class CloseDispatcher final : public  ::cppu::WeakImplHelper<
         /** @short reference to a uno service manager,
                    which can be used to create own needed
                    uno resources. */
-        css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+        cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
         /** @short  reference to the target frame, which should be
                     closed by this dispatch. */
@@ -89,10 +89,10 @@ class CloseDispatcher final : public  ::cppu::WeakImplHelper<
         EOperation m_eOperation;
 
         /** @short  for asynchronous operations we must hold us self alive! */
-        css::uno::Reference< cpo::uno::XInterface > m_xSelfHold;
+        cpo::uno::Reference< cpo::uno::XInterface > m_xSelfHold;
 
         /** @short  held alive for internally asynchronous operations! */
-        css::uno::Reference< css::frame::XDispatchResultListener > m_xResultListener;
+        cpo::uno::Reference< css::frame::XDispatchResultListener > m_xResultListener;
 
         VclPtr<SystemWindow> m_pSysWindow;
 
@@ -115,8 +115,8 @@ class CloseDispatcher final : public  ::cppu::WeakImplHelper<
             @param  sTarget
                     help us to find the right target for this close operation.
          */
-        CloseDispatcher(css::uno::Reference< cpo::uno::XComponentContext >        xContext  ,
-                        const css::uno::Reference< css::frame::XFrame >&          xFrame ,
+        CloseDispatcher(cpo::uno::Reference< cpo::uno::XComponentContext >        xContext  ,
+                        const cpo::uno::Reference< css::frame::XFrame >&          xFrame ,
                         std::u16string_view                                       sTarget);
 
         /** @short  does nothing real. */
@@ -129,14 +129,14 @@ class CloseDispatcher final : public  ::cppu::WeakImplHelper<
         // XNotifyingDispatch
         virtual void dispatchWithNotification( const css::util::URL&                                             aURL      ,
                                                         const cpo::uno::Sequence< css::beans::PropertyValue >&            lArguments,
-                                                        const css::uno::Reference< css::frame::XDispatchResultListener >& xListener ) override;
+                                                        const cpo::uno::Reference< css::frame::XDispatchResultListener >& xListener ) override;
 
         // XDispatch
         virtual void dispatch            ( const css::util::URL&                                     aURL      ,
                                                     const cpo::uno::Sequence< css::beans::PropertyValue >&    lArguments) override;
-        virtual void addStatusListener   ( const css::uno::Reference< css::frame::XStatusListener >& xListener ,
+        virtual void addStatusListener   ( const cpo::uno::Reference< css::frame::XStatusListener >& xListener ,
                                                     const css::util::URL&                                     aURL      ) override;
-        virtual void removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xListener ,
+        virtual void removeStatusListener( const cpo::uno::Reference< css::frame::XStatusListener >& xListener ,
                                                     const css::util::URL&                                     aURL      ) override;
 
         // XDispatchInformationProvider
@@ -172,7 +172,7 @@ class CloseDispatcher final : public  ::cppu::WeakImplHelper<
             @return [boolean]
                     true if closing was successful.
          */
-        bool implts_prepareFrameForClosing(const css::uno::Reference< css::frame::XFrame >& xFrame,
+        bool implts_prepareFrameForClosing(const cpo::uno::Reference< css::frame::XFrame >& xFrame,
                                            bool                                   bCloseAllOtherViewsToo,
                                            bool&                                  bControllerSuspended  );
 
@@ -228,7 +228,7 @@ class CloseDispatcher final : public  ::cppu::WeakImplHelper<
             @param  aResult
                     not used yet really ...
          */
-        void implts_notifyResultListener(const css::uno::Reference< css::frame::XDispatchResultListener >& xListener,
+        void implts_notifyResultListener(const cpo::uno::Reference< css::frame::XDispatchResultListener >& xListener,
                                                sal_Int16                                                   nState   ,
                                          const cpo::uno::Any&                                              aResult  );
 
@@ -251,7 +251,7 @@ class CloseDispatcher final : public  ::cppu::WeakImplHelper<
                     give us an idea how this target frame must be searched.
         */
 
-        static css::uno::Reference< css::frame::XFrame > static_impl_searchRightTargetFrame(const css::uno::Reference< css::frame::XFrame >& xFrame ,
+        static cpo::uno::Reference< css::frame::XFrame > static_impl_searchRightTargetFrame(const cpo::uno::Reference< css::frame::XFrame >& xFrame ,
                                                                                             std::u16string_view                        sTarget);
 
 }; // class CloseDispatcher

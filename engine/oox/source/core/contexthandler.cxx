@@ -24,7 +24,7 @@
 
 namespace oox::core {
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::xml::sax;
 
 ContextHandler::ContextHandler( const ContextHandler& rParent ) :

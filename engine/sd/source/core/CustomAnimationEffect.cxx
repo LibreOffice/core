@@ -82,7 +82,7 @@
 #include <utility>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::animations;
@@ -131,7 +131,7 @@ private:
     MainSequence* mpMainSequence;
 };
 
-CustomAnimationEffect::CustomAnimationEffect( const css::uno::Reference< css::animations::XAnimationNode >& xNode )
+CustomAnimationEffect::CustomAnimationEffect( const cpo::uno::Reference< css::animations::XAnimationNode >& xNode )
 :   mnNodeType(-1),
     mnPresetClass(-1),
     mnFill(AnimationFill::HOLD),
@@ -155,7 +155,7 @@ CustomAnimationEffect::CustomAnimationEffect( const css::uno::Reference< css::an
     setNode( xNode );
 }
 
-void CustomAnimationEffect::setNode( const css::uno::Reference< css::animations::XAnimationNode >& xNode )
+void CustomAnimationEffect::setNode( const cpo::uno::Reference< css::animations::XAnimationNode >& xNode )
 {
     mxNode = xNode;
     mxAudio.clear();
@@ -839,7 +839,7 @@ void CustomAnimationEffect::setAutoReverse( bool bAutoReverse )
     }
 }
 
-void CustomAnimationEffect::replaceNode( const css::uno::Reference< css::animations::XAnimationNode >& xNode )
+void CustomAnimationEffect::replaceNode( const cpo::uno::Reference< css::animations::XAnimationNode >& xNode )
 {
     sal_Int16 nNodeType = mnNodeType;
     Any aTarget = maTarget;
@@ -1664,7 +1664,7 @@ EffectSequenceHelper::EffectSequenceHelper()
 {
 }
 
-EffectSequenceHelper::EffectSequenceHelper( css::uno::Reference< css::animations::XTimeContainer > xSequenceRoot )
+EffectSequenceHelper::EffectSequenceHelper( cpo::uno::Reference< css::animations::XTimeContainer > xSequenceRoot )
 : mxSequenceRoot(std::move( xSequenceRoot )), mnSequenceType( EffectNodeType::DEFAULT )
 {
     Reference< XAnimationNode > xNode( mxSequenceRoot, UNO_QUERY_THROW );
@@ -1985,7 +1985,7 @@ void EffectSequenceHelper::implRebuild()
     }
 }
 
-stl_CustomAnimationEffect_search_node_predict::stl_CustomAnimationEffect_search_node_predict( const css::uno::Reference< css::animations::XAnimationNode >& xSearchNode )
+stl_CustomAnimationEffect_search_node_predict::stl_CustomAnimationEffect_search_node_predict( const cpo::uno::Reference< css::animations::XAnimationNode >& xSearchNode )
 : mxSearchNode( xSearchNode )
 {
 }
@@ -2128,7 +2128,7 @@ EffectSequence::iterator EffectSequenceHelper::find( const CustomAnimationEffect
     return std::find( maEffects.begin(), maEffects.end(), pEffect );
 }
 
-CustomAnimationEffectPtr EffectSequenceHelper::findEffect( const css::uno::Reference< css::animations::XAnimationNode >& xNode ) const
+CustomAnimationEffectPtr EffectSequenceHelper::findEffect( const cpo::uno::Reference< css::animations::XAnimationNode >& xNode ) const
 {
     CustomAnimationEffectPtr pEffect;
 
@@ -2184,7 +2184,7 @@ bool EffectSequenceHelper::disposeShape( const Reference< XShape >& xShape )
     return bChanges;
 }
 
-bool EffectSequenceHelper::hasEffect( const css::uno::Reference< css::drawing::XShape >& xShape )
+bool EffectSequenceHelper::hasEffect( const cpo::uno::Reference< css::drawing::XShape >& xShape )
 {
     return std::any_of(maEffects.begin(), maEffects.end(),
         [&xShape](const CustomAnimationEffectPtr& rxEffect) { return rxEffect->getTargetShape() == xShape; });
@@ -2872,7 +2872,7 @@ void EffectSequenceHelper::notify_listeners()
     std::for_each( maListeners.begin(), maListeners.end(), aFunc );
 }
 
-void EffectSequenceHelper::create( const css::uno::Reference< css::animations::XAnimationNode >& xNode )
+void EffectSequenceHelper::create( const cpo::uno::Reference< css::animations::XAnimationNode >& xNode )
 {
     DBG_ASSERT( xNode.is(), "sd::EffectSequenceHelper::create(), illegal argument" );
 
@@ -3059,7 +3059,7 @@ MainSequence::MainSequence()
     init();
 }
 
-MainSequence::MainSequence( const css::uno::Reference< css::animations::XAnimationNode >& xNode )
+MainSequence::MainSequence( const cpo::uno::Reference< css::animations::XAnimationNode >& xNode )
     : mxTimingRootNode( xNode, UNO_QUERY )
     , maTimer("sd MainSequence maTimer")
     , mbTimerMode( false )
@@ -3088,7 +3088,7 @@ void MainSequence::init()
     createMainSequence();
 }
 
-void MainSequence::reset( const css::uno::Reference< css::animations::XAnimationNode >& xTimingRootNode )
+void MainSequence::reset( const cpo::uno::Reference< css::animations::XAnimationNode >& xTimingRootNode )
 {
     reset();
 
@@ -3190,7 +3190,7 @@ void MainSequence::reset()
     }
 }
 
-InteractiveSequencePtr MainSequence::createInteractiveSequence( const css::uno::Reference< css::drawing::XShape >& xShape )
+InteractiveSequencePtr MainSequence::createInteractiveSequence( const cpo::uno::Reference< css::drawing::XShape >& xShape )
 {
     InteractiveSequencePtr pIS;
 
@@ -3213,7 +3213,7 @@ InteractiveSequencePtr MainSequence::createInteractiveSequence( const css::uno::
     return pIS;
 }
 
-CustomAnimationEffectPtr MainSequence::findEffect( const css::uno::Reference< css::animations::XAnimationNode >& xNode ) const
+CustomAnimationEffectPtr MainSequence::findEffect( const cpo::uno::Reference< css::animations::XAnimationNode >& xNode ) const
 {
     CustomAnimationEffectPtr pEffect = EffectSequenceHelper::findEffect( xNode );
 
@@ -3286,7 +3286,7 @@ bool MainSequence::disposeShape( const Reference< XShape >& xShape )
     return bChanges;
 }
 
-bool MainSequence::hasEffect( const css::uno::Reference< css::drawing::XShape >& xShape )
+bool MainSequence::hasEffect( const cpo::uno::Reference< css::drawing::XShape >& xShape )
 {
     if( EffectSequenceHelper::hasEffect( xShape ) )
         return true;
@@ -3421,7 +3421,7 @@ void MainSequence::notify_change()
     notify_listeners();
 }
 
-bool MainSequence::setTrigger( const CustomAnimationEffectPtr& pEffect, const css::uno::Reference< css::drawing::XShape >& xTriggerShape )
+bool MainSequence::setTrigger( const CustomAnimationEffectPtr& pEffect, const cpo::uno::Reference< css::drawing::XShape >& xTriggerShape )
 {
     EffectSequenceHelper* pOldSequence = pEffect->getEffectSequence();
 

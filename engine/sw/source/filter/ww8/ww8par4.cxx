@@ -63,6 +63,7 @@ struct OLE_MFP
 }
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 static bool SwWw8ReadScaling(tools::Long& rX, tools::Long& rY, rtl::Reference<SotStorage> const & rSrc1)
 {

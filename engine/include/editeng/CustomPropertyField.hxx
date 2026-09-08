@@ -39,7 +39,7 @@ public:
     virtual std::unique_ptr<SvxFieldData> Clone() const override;
     virtual bool operator==(const SvxFieldData&) const override;
 
-    const OUString & GetFormatted(css::uno::Reference<css::document::XDocumentProperties> const & xDocumentProperties);
+    const OUString & GetFormatted(cpo::uno::Reference<css::document::XDocumentProperties> const & xDocumentProperties);
 
     OUString const & GetName() const
     {

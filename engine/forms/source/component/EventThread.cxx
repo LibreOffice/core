@@ -27,7 +27,7 @@
 namespace frm
 {
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::lang;
@@ -137,7 +137,7 @@ void OComponentEventThread::run()
     acquire( );
 
     // Hold on to ourselves, so that we're not deleted if a dispose is called at some point in time
-    css::uno::Reference<cpo::uno::XInterface> xThis(static_cast<XWeak*>(this));
+    cpo::uno::Reference<cpo::uno::XInterface> xThis(static_cast<XWeak*>(this));
 
     do
     {
@@ -167,7 +167,7 @@ void OComponentEventThread::run()
                 Reference<XControl>  xControl;
                 if ( xControlAdapter.is() )
                     xControl.set(
-                        xControlAdapter->queryAdapted(), css::uno::UNO_QUERY);
+                        xControlAdapter->queryAdapted(), cpo::uno::UNO_QUERY);
 
                 if( xComp.is() )
                     processEvent( xComp.get(), pEvt.get(), xControl, bFlag );

@@ -37,12 +37,12 @@ void Options::ReadFromConfig(bool i_bFile)
     Options aOldValues(*this);
 
     // get the configuration service
-    css::uno::Reference<css::lang::XMultiServiceFactory> xConfigProvider;
-    css::uno::Reference<css::container::XNameAccess> xConfigAccess;
+    cpo::uno::Reference<css::lang::XMultiServiceFactory> xConfigProvider;
+    cpo::uno::Reference<css::container::XNameAccess> xConfigAccess;
     try
     {
         // get service provider
-        const css::uno::Reference<cpo::uno::XComponentContext>& xContext(
+        const cpo::uno::Reference<cpo::uno::XComponentContext>& xContext(
             comphelper::getProcessComponentContext());
         // create configuration hierarchical access name
         try
@@ -58,11 +58,11 @@ void Options::ReadFromConfig(bool i_bFile)
             xConfigAccess.set(xConfigProvider->createInstanceWithArguments(
                                   u"com.sun.star.configuration.ConfigurationAccess"_ustr,
                                   { cpo::uno::Any(aVal) }),
-                              css::uno::UNO_QUERY);
+                              cpo::uno::UNO_QUERY);
             if (xConfigAccess.is())
             {
-                css::uno::Reference<css::beans::XPropertySet> xSet(xConfigAccess,
-                                                                   css::uno::UNO_QUERY);
+                cpo::uno::Reference<css::beans::XPropertySet> xSet(xConfigAccess,
+                                                                   cpo::uno::UNO_QUERY);
                 if (xSet.is())
                 {
                     sal_Int32 nValue = 0;

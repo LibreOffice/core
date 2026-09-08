@@ -77,6 +77,7 @@
 #include <COKit/COKit.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 #define SC_GROWY_SMALL_EXTRA    100
 #define SC_GROWY_BIG_EXTRA      200
@@ -4314,7 +4315,7 @@ void ScViewData::UpdateOutlinerFlags( Outliner& rOutl ) const
 
     if ( bOnlineSpell )
     {
-        css::uno::Reference<css::linguistic2::XSpellChecker> xXSpellChecker1( LinguMgr::GetSpellChecker() );
+        cpo::uno::Reference<css::linguistic2::XSpellChecker> xXSpellChecker1( LinguMgr::GetSpellChecker() );
         rOutl.SetSpeller( xXSpellChecker1 );
     }
 

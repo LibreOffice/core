@@ -37,7 +37,7 @@
 #include <comphelper/processfactory.hxx>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 namespace chart::sidebar {
@@ -241,10 +241,10 @@ OUString getSeriesLabel(const rtl::Reference<::chart::ChartModel>& xModel, std::
     return xSeries->getLabelForRole(xChartType->getRoleOfSequenceForSeriesLabel());
 }
 
-OUString getCID(const css::uno::Reference<css::frame::XModel>& xModel)
+OUString getCID(const cpo::uno::Reference<css::frame::XModel>& xModel)
 {
-    css::uno::Reference<css::frame::XController> xController(xModel->getCurrentController());
-    css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(xController, css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::frame::XController> xController(xModel->getCurrentController());
+    cpo::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(xController, cpo::uno::UNO_QUERY);
     if (!xSelectionSupplier.is())
         return OUString();
 
@@ -315,7 +315,7 @@ ChartSeriesPanel::~ChartSeriesPanel()
 void ChartSeriesPanel::Initialize()
 {
     mxModel->addModifyListener(mxListener);
-    css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(mxModel->getCurrentController(), css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(mxModel->getCurrentController(), cpo::uno::UNO_QUERY);
     if (xSelectionSupplier.is())
         xSelectionSupplier->addSelectionChangeListener(mxSelectionListener);
 
@@ -406,8 +406,8 @@ void ChartSeriesPanel::doUpdateModel(const rtl::Reference<::chart::ChartModel>& 
         mxModel->removeModifyListener(mxListener);
     }
 
-    css::uno::Reference<css::view::XSelectionSupplier> oldSelectionSupplier(
-        mxModel->getCurrentController(), css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::view::XSelectionSupplier> oldSelectionSupplier(
+        mxModel->getCurrentController(), cpo::uno::UNO_QUERY);
     if (oldSelectionSupplier.is()) {
         oldSelectionSupplier->removeSelectionChangeListener(mxSelectionListener);
     }
@@ -420,12 +420,12 @@ void ChartSeriesPanel::doUpdateModel(const rtl::Reference<::chart::ChartModel>& 
 
     mxModel->addModifyListener(mxListener);
 
-    css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(mxModel->getCurrentController(), css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(mxModel->getCurrentController(), cpo::uno::UNO_QUERY);
     if (xSelectionSupplier.is())
         xSelectionSupplier->addSelectionChangeListener(mxSelectionListener);
 }
 
-void ChartSeriesPanel::updateModel(css::uno::Reference<css::frame::XModel> xModel)
+void ChartSeriesPanel::updateModel(cpo::uno::Reference<css::frame::XModel> xModel)
 {
     ::chart::ChartModel* pModel = dynamic_cast<::chart::ChartModel*>(xModel.get());
     assert(!xModel || pModel);

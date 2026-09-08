@@ -56,7 +56,7 @@ protected:
     std::shared_ptr<T> m_xAsyncDialog;
 
 protected:
-    OGenericUnoAsyncDialog(const css::uno::Reference<cpo::uno::XComponentContext>& _rxContext)
+    OGenericUnoAsyncDialog(const cpo::uno::Reference<cpo::uno::XComponentContext>& _rxContext)
         : OGenericUnoAsyncDialogBase(_rxContext)
     {
     }
@@ -69,7 +69,7 @@ public:
     }
 
     virtual void startExecuteModal(
-        const css::uno::Reference<css::ui::dialogs::XDialogClosedListener>& xListener) override
+        const cpo::uno::Reference<css::ui::dialogs::XDialogClosedListener>& xListener) override
     {
         SolarMutexGuard aSolarGuard;
 
@@ -100,7 +100,7 @@ public:
 
 protected:
     virtual std::shared_ptr<T>
-    createAsyncDialog(const css::uno::Reference<css::awt::XWindow>& /*rParent*/)
+    createAsyncDialog(const cpo::uno::Reference<css::awt::XWindow>& /*rParent*/)
     {
         return nullptr;
     }
@@ -113,7 +113,7 @@ protected:
     }
 
     virtual void
-    runAsync(const css::uno::Reference<css::ui::dialogs::XDialogClosedListener>& /*xListener*/)
+    runAsync(const cpo::uno::Reference<css::ui::dialogs::XDialogClosedListener>& /*xListener*/)
     {
     }
 

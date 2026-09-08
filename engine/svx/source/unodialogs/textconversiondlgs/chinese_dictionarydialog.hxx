@@ -48,7 +48,7 @@ class DictionaryList
 public:
     DictionaryList(std::unique_ptr<weld::TreeView> xTreeView);
 
-    void init(const css::uno::Reference< css::linguistic2::XConversionDictionary>& xDictionary,
+    void init(const cpo::uno::Reference< css::linguistic2::XConversionDictionary>& xDictionary,
         weld::Entry *pED_Term, weld::Entry *pED_Mapping, weld::ComboBox *pLB_Property);
 
     void deleteAll();
@@ -87,7 +87,7 @@ private:
     OUString getPropertyTypeName( sal_Int16 nConversionPropertyType /*linguistic2::ConversionPropertyType*/ ) const;
 
 public:
-    css::uno::Reference<css::linguistic2::XConversionDictionary>  m_xDictionary;
+    cpo::uno::Reference<css::linguistic2::XConversionDictionary>  m_xDictionary;
 
 private:
     std::unique_ptr<weld::TreeView> m_xControl;
@@ -124,7 +124,7 @@ private:
     DECL_LINK(SizeAllocHdl, const Size&, void);
 
     void initDictionaryControl(DictionaryList *pList,
-        const css::uno::Reference< css::linguistic2::XConversionDictionary>& xDictionary);
+        const cpo::uno::Reference< css::linguistic2::XConversionDictionary>& xDictionary);
 
     void updateAfterDirectionChange();
     void updateButtons();

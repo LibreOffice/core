@@ -26,9 +26,9 @@ namespace
 {
 OUString getCID(const rtl::Reference<::chart::ChartModel>& xModel)
 {
-    css::uno::Reference<css::frame::XController> xController(xModel->getCurrentController());
-    css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(xController,
-                                                                          css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::frame::XController> xController(xModel->getCurrentController());
+    cpo::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(xController,
+                                                                          cpo::uno::UNO_QUERY);
     if (!xSelectionSupplier.is())
         return OUString();
 
@@ -41,8 +41,8 @@ OUString getCID(const rtl::Reference<::chart::ChartModel>& xModel)
         {
             pController->select(
                 cpo::uno::Any(ObjectIdentifier::createClassifiedIdentifier(OBJECTTYPE_PAGE, u"")));
-            xSelectionSupplier = css::uno::Reference<css::view::XSelectionSupplier>(
-                xController, css::uno::UNO_QUERY);
+            xSelectionSupplier = cpo::uno::Reference<css::view::XSelectionSupplier>(
+                xController, cpo::uno::UNO_QUERY);
             if (xSelectionSupplier.is())
                 aAny = xSelectionSupplier->getSelection();
         }
@@ -57,17 +57,17 @@ OUString getCID(const rtl::Reference<::chart::ChartModel>& xModel)
     return aCID;
 }
 
-css::uno::Reference<css::beans::XPropertySet>
+cpo::uno::Reference<css::beans::XPropertySet>
 getPropSet(const rtl::Reference<::chart::ChartModel>& xModel)
 {
     OUString aCID = getCID(xModel);
-    css::uno::Reference<css::beans::XPropertySet> xPropSet
+    cpo::uno::Reference<css::beans::XPropertySet> xPropSet
         = ObjectIdentifier::getObjectPropertySet(aCID, xModel);
 
     ObjectType eType = ObjectIdentifier::getObjectType(aCID);
     if (eType == OBJECTTYPE_DIAGRAM)
     {
-        css::uno::Reference<css::chart2::XDiagram> xDiagram(xPropSet, css::uno::UNO_QUERY);
+        cpo::uno::Reference<css::chart2::XDiagram> xDiagram(xPropSet, cpo::uno::UNO_QUERY);
         if (!xDiagram.is())
             return xPropSet;
 
@@ -124,8 +124,8 @@ void ChartEffectPanel::Initialize()
 {
     mxModel->addModifyListener(mxListener);
 
-    css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(
-        mxModel->getCurrentController(), css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(
+        mxModel->getCurrentController(), cpo::uno::UNO_QUERY);
     if (xSelectionSupplier.is())
         xSelectionSupplier->addSelectionChangeListener(mxSelectionListener);
 
@@ -135,7 +135,7 @@ void ChartEffectPanel::Initialize()
 void ChartEffectPanel::setGlowColor(const XColorItem& rItem)
 {
     PreventUpdate aProtector(mbUpdate);
-    const css::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
+    const cpo::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
     if (!xPropSet.is())
         return;
 
@@ -145,7 +145,7 @@ void ChartEffectPanel::setGlowColor(const XColorItem& rItem)
 void ChartEffectPanel::setGlowRadius(const SdrMetricItem& rItem)
 {
     PreventUpdate aProtector(mbUpdate);
-    css::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
+    cpo::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
     if (!xPropSet.is())
         return;
 
@@ -155,7 +155,7 @@ void ChartEffectPanel::setGlowRadius(const SdrMetricItem& rItem)
 void ChartEffectPanel::setGlowTransparency(const SdrPercentItem& rItem)
 {
     PreventUpdate aProtector(mbUpdate);
-    css::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
+    cpo::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
     if (!xPropSet.is())
         return;
 
@@ -165,7 +165,7 @@ void ChartEffectPanel::setGlowTransparency(const SdrPercentItem& rItem)
 void ChartEffectPanel::setSoftEdgeRadius(const SdrMetricItem& rItem)
 {
     PreventUpdate aProtector(mbUpdate);
-    const css::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
+    const cpo::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
     if (!xPropSet.is())
         return;
 
@@ -177,11 +177,11 @@ void ChartEffectPanel::updateData()
     if (!mbUpdate || !mbModelValid)
         return;
 
-    const css::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
+    const cpo::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
     if (!xPropSet.is())
         return;
 
-    const css::uno::Reference<css::beans::XPropertySetInfo> xInfo(xPropSet->getPropertySetInfo());
+    const cpo::uno::Reference<css::beans::XPropertySetInfo> xInfo(xPropSet->getPropertySetInfo());
     if (!xInfo.is())
         return;
 
@@ -225,8 +225,8 @@ void ChartEffectPanel::doUpdateModel(const rtl::Reference<::chart::ChartModel>& 
     {
         mxModel->removeModifyListener(mxListener);
 
-        css::uno::Reference<css::view::XSelectionSupplier> oldSelectionSupplier(
-            mxModel->getCurrentController(), css::uno::UNO_QUERY);
+        cpo::uno::Reference<css::view::XSelectionSupplier> oldSelectionSupplier(
+            mxModel->getCurrentController(), cpo::uno::UNO_QUERY);
         if (oldSelectionSupplier.is())
         {
             oldSelectionSupplier->removeSelectionChangeListener(mxSelectionListener);
@@ -241,13 +241,13 @@ void ChartEffectPanel::doUpdateModel(const rtl::Reference<::chart::ChartModel>& 
 
     mxModel->addModifyListener(mxListener);
 
-    css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(
-        mxModel->getCurrentController(), css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(
+        mxModel->getCurrentController(), cpo::uno::UNO_QUERY);
     if (xSelectionSupplier.is())
         xSelectionSupplier->addSelectionChangeListener(mxSelectionListener);
 }
 
-void ChartEffectPanel::updateModel(css::uno::Reference<css::frame::XModel> xModel)
+void ChartEffectPanel::updateModel(cpo::uno::Reference<css::frame::XModel> xModel)
 {
     ::chart::ChartModel* pModel = dynamic_cast<::chart::ChartModel*>(xModel.get());
     assert(!xModel || pModel);

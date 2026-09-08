@@ -40,6 +40,7 @@
 #include <utility>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 namespace package_ucp
 {
@@ -217,7 +218,7 @@ ContentProvider::createPackage( const PackageUri & rURI )
             m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
                 u"com.sun.star.packages.comp.ZipPackage"_ustr,
                 aArguments, m_xContext ),
-            css::uno::UNO_QUERY_THROW );
+            cpo::uno::UNO_QUERY_THROW );
     }
     catch ( cpo::uno::RuntimeException const & )
     {

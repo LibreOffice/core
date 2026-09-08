@@ -34,6 +34,7 @@
 #include <sal/log.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 AtkListener::AtkListener( AtkObjectWrapper* pWrapper ) : mpWrapper( pWrapper )
 {
@@ -115,7 +116,7 @@ static AtkObject *getObjFromAny( const cpo::uno::Any &rAny )
 
 // Updates the child list held to provide the old IndexInParent on children_changed::remove
 void AtkListener::updateChildList(
-    css::uno::Reference<css::accessibility::XAccessibleContext> const &
+    cpo::uno::Reference<css::accessibility::XAccessibleContext> const &
         pContext)
 {
     m_aChildList.clear();
@@ -125,10 +126,10 @@ void AtkListener::updateChildList(
         || (nStateSet & accessibility::AccessibleStateType::MANAGES_DESCENDANTS) )
         return;
 
-    css::uno::Reference<css::accessibility::XAccessibleContext3> xContext3(pContext, css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::accessibility::XAccessibleContext3> xContext3(pContext, cpo::uno::UNO_QUERY);
     if (xContext3.is())
     {
-        m_aChildList = comphelper::sequenceToContainer<std::vector<css::uno::Reference< css::accessibility::XAccessible >>>(xContext3->getAccessibleChildren());
+        m_aChildList = comphelper::sequenceToContainer<std::vector<cpo::uno::Reference< css::accessibility::XAccessible >>>(xContext3->getAccessibleChildren());
     }
     else
     {

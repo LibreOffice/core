@@ -65,7 +65,7 @@ struct ScMyShape
     ScAddress       aEndAddress;
     sal_Int32       nEndX;
     sal_Int32       nEndY;
-    css::uno::Reference<css::drawing::XShape> xShape;
+    cpo::uno::Reference<css::drawing::XShape> xShape;
 
     bool operator<(const ScMyShape& aShape) const;
 };
@@ -92,7 +92,7 @@ public:
 
 struct ScMyNoteShape
 {
-    css::uno::Reference<css::drawing::XShape> xShape;
+    cpo::uno::Reference<css::drawing::XShape> xShape;
     ScAddress aPos;
 
     bool operator<(const ScMyNoteShape& aNote) const;
@@ -315,8 +315,8 @@ class ScMyNotEmptyCellsIterator
     ScMyNotEmptyCellsIterator(const ScMyNotEmptyCellsIterator&) = delete;
     const ScMyNotEmptyCellsIterator& operator=(const ScMyNotEmptyCellsIterator&) = delete;
 
-    css::uno::Reference<css::sheet::XSpreadsheet> xTable;
-    css::uno::Reference<css::table::XCellRange> xCellRange;
+    cpo::uno::Reference<css::sheet::XSpreadsheet> xTable;
+    cpo::uno::Reference<css::table::XCellRange> xCellRange;
     ScAddress                           aLastAddress;
 
     ScMyShapesContainer*                pShapes;
@@ -360,7 +360,7 @@ public:
                                     { pDetectiveOp = pNewDetectiveOp; }
 
     void                        SetCurrentTable(ScDocument& rDoc, const SCTAB nTable,
-                                    const css::uno::Reference<css::sheet::XSpreadsheet>& rxTable);
+                                    const cpo::uno::Reference<css::sheet::XSpreadsheet>& rxTable);
     void                        SkipTable(SCTAB nSkip);
 
     bool                        GetNext(ScDocument& rDoc, ScMyCell& aCell, ScFormatRangeStyles* pCellStyles);

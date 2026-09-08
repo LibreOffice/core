@@ -28,6 +28,7 @@
 namespace chart
 {
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 FixedNumberFormatter::FixedNumberFormatter(
                 const uno::Reference< util::XNumberFormatsSupplier >& xSupplier

@@ -19,7 +19,7 @@
 
 #include "XMLChangedRegionImportContext.hxx"
 #include "XMLChangeElementImportContext.hxx"
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
 
@@ -34,7 +34,7 @@
 
 using namespace ::xmloff::token;
 
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::com::sun::star::text::XTextCursor;
 using namespace ::com::sun::star;
 
@@ -51,7 +51,7 @@ XMLChangedRegionImportContext::~XMLChangedRegionImportContext()
 
 void XMLChangedRegionImportContext::startFastElement(
     sal_Int32 /*nElement*/,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     // process attributes: id
     bool bHaveXmlId( false );
@@ -85,8 +85,8 @@ void XMLChangedRegionImportContext::startFastElement(
     }
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLChangedRegionImportContext::createFastChildContext(
-    sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLChangedRegionImportContext::createFastChildContext(
+    sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContextRef xContext;
 

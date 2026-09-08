@@ -40,6 +40,7 @@
 #include <docmodel/uno/UnoGradientTools.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace ::cppu;
 
 namespace {
@@ -597,7 +598,7 @@ uno::Reference< container::XNameContainer > SvxUnoXBitmapTable_createInstance( X
 cpo::uno::Any SvxUnoXBitmapTable::getAny( const XPropertyEntry* pEntry ) const
 {
     auto xBitmapEntry = static_cast<const XBitmapEntry*>(pEntry);
-    css::uno::Reference<css::awt::XBitmap> xBitmap(xBitmapEntry->GetGraphicObject().GetGraphic().GetXGraphic(), uno::UNO_QUERY);
+    cpo::uno::Reference<css::awt::XBitmap> xBitmap(xBitmapEntry->GetGraphicObject().GetGraphic().GetXGraphic(), uno::UNO_QUERY);
     return cpo::uno::Any(xBitmap);
 }
 

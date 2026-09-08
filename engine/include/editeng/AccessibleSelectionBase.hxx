@@ -52,7 +52,7 @@ public:
     virtual void clearAccessibleSelection(  ) override final;
     virtual void selectAllAccessibleChildren(  ) override final;
     virtual sal_Int64 getSelectedAccessibleChildCount(  ) override final;
-    virtual css::uno::Reference< css::accessibility::XAccessible > getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex ) override final;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex ) override final;
     virtual void deselectAccessibleChild( sal_Int64 nSelectedChildIndex ) override final;
 
 public:

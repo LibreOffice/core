@@ -24,7 +24,7 @@
 #include <customshowlist.hxx>
 #include <slideshow.hxx>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::presentation;
 
 /** replaces a slide from all custom shows with a new one or removes a slide from

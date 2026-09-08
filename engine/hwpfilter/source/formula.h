@@ -37,7 +37,7 @@ public:
         trim();
     }
 
-    void setDocumentHandler(css::uno::Reference < css::xml::sax::XDocumentHandler > const & xHandler )
+    void setDocumentHandler(cpo::uno::Reference < css::xml::sax::XDocumentHandler > const & xHandler )
     {
           m_rxDocumentHandler = xHandler;
     }
@@ -66,7 +66,7 @@ private:
      void makeBlock(Node *res);
 
 private:
-     css::uno::Reference< css::xml::sax::XDocumentHandler >  m_rxDocumentHandler;
+     cpo::uno::Reference< css::xml::sax::XDocumentHandler >  m_rxDocumentHandler;
      rtl::Reference<AttributeListImpl> mxList;
      char *eq;
 };

@@ -22,7 +22,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <cpo/uno/XComponentContext.hpp>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <rtl/ustring.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 
@@ -43,15 +43,15 @@ class TaskCreator final
     // member
     private:
 
-        css::uno::Reference< cpo::uno::XComponentContext >  m_xContext;
+        cpo::uno::Reference< cpo::uno::XComponentContext >  m_xContext;
 
     // interface
     public:
 
-                 TaskCreator( css::uno::Reference< cpo::uno::XComponentContext > xContext );
+                 TaskCreator( cpo::uno::Reference< cpo::uno::XComponentContext > xContext );
                  ~TaskCreator(                                                                     );
 
-        css::uno::Reference< css::frame::XFrame > createTask( const OUString& sName, const comphelper::SequenceAsHashMap& rDescriptor );
+        cpo::uno::Reference< css::frame::XFrame > createTask( const OUString& sName, const comphelper::SequenceAsHashMap& rDescriptor );
 
 }; // class TaskCreator
 

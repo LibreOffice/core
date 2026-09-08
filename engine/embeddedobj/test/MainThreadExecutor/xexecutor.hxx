@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/task/XJob.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -30,11 +30,11 @@
 class UNOMainThreadExecutor : public ::cppu::WeakImplHelper< css::task::XJob,
                                                              css::lang::XServiceInfo >
 {
-    css::uno::Reference< css::lang::XMultiServiceFactory > m_xFactory;
+    cpo::uno::Reference< css::lang::XMultiServiceFactory > m_xFactory;
 
 public:
     explicit UNOMainThreadExecutor(
-        const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory )
+        const cpo::uno::Reference< css::lang::XMultiServiceFactory >& xFactory )
     : m_xFactory( xFactory )
     {
     }
@@ -43,9 +43,9 @@ public:
 
     static OUString impl_staticGetImplementationName();
 
-    static css::uno::Reference< cpo::uno::XInterface >
+    static cpo::uno::Reference< cpo::uno::XInterface >
         impl_staticCreateSelfInstance(
-            const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager );
+            const cpo::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager );
 
     // XJob
     virtual cpo::uno::Any execute( const cpo::uno::Sequence< css::beans::NamedValue >& Arguments ) throw (css::lang::IllegalArgumentException, cpo::uno::Exception, cpo::uno::RuntimeException);
@@ -59,12 +59,12 @@ public:
 
 class MainThreadExecutor_Impl
 {
-    css::uno::Reference< css::task::XJob > m_xJob;
+    cpo::uno::Reference< css::task::XJob > m_xJob;
     cpo::uno::Sequence< css::beans::NamedValue > m_aArgs;
 
     bool m_bExecuted;
 public:
-    MainThreadExecutor_Impl( const css::uno::Reference< css::task::XJob >& xJob,
+    MainThreadExecutor_Impl( const cpo::uno::Reference< css::task::XJob >& xJob,
                              const cpo::uno::Sequence< css::beans::NamedValue >& aArguments );
 
     void execute();

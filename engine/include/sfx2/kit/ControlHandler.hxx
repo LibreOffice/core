@@ -48,17 +48,17 @@ public:
 
                 if (aControlRectHMM.Contains(aPointHmm))
                 {
-                    css::uno::Reference<css::awt::XControl> xControl
+                    cpo::uno::Reference<css::awt::XControl> xControl
                         = pUnoObect->GetUnoControl(*pDrawView, *rMainWindow.GetOutDev());
                     if (!xControl.is())
                         return false;
 
-                    css::uno::Reference<css::awt::XWindow> xControlWindow(xControl,
-                                                                          css::uno::UNO_QUERY);
+                    cpo::uno::Reference<css::awt::XWindow> xControlWindow(xControl,
+                                                                          cpo::uno::UNO_QUERY);
                     if (!xControlWindow.is())
                         return false;
 
-                    css::uno::Reference<css::awt::XWindowPeer> xWindowPeer(xControl->getPeer());
+                    cpo::uno::Reference<css::awt::XWindowPeer> xWindowPeer(xControl->getPeer());
 
                     VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(xWindowPeer);
                     if (pWindow)
@@ -103,20 +103,20 @@ public:
                                vcl::Window const& rMainWindow, VirtualDevice& rDevice,
                                tools::Rectangle const& rTileRectHMM, double scaleX, double scaleY)
     {
-        css::uno::Reference<css::awt::XControl> xControl
+        cpo::uno::Reference<css::awt::XControl> xControl
             = pUnoObect->GetUnoControl(*pDrawView, *rMainWindow.GetOutDev());
         if (!xControl.is())
             return;
 
-        css::uno::Reference<css::awt::XWindow> xControlWindow(xControl, css::uno::UNO_QUERY);
+        cpo::uno::Reference<css::awt::XWindow> xControlWindow(xControl, cpo::uno::UNO_QUERY);
         if (!xControlWindow.is())
             return;
 
-        css::uno::Reference<css::awt::XGraphics> xGraphics(rDevice.CreateUnoGraphics());
+        cpo::uno::Reference<css::awt::XGraphics> xGraphics(rDevice.CreateUnoGraphics());
         if (!xGraphics.is())
             return;
 
-        css::uno::Reference<css::awt::XView> xControlView(xControl, css::uno::UNO_QUERY);
+        cpo::uno::Reference<css::awt::XView> xControlView(xControl, cpo::uno::UNO_QUERY);
         if (!xControlView.is())
             return;
 

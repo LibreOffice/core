@@ -26,14 +26,14 @@ typedef cppu::ImplInheritanceHelper< ScVbaShape, ov::msforms::XTextBoxShape > Te
 
 class ScVbaTextBoxShape : public TextBoxShapeImpl_BASE
 {
-    css::uno::Reference< css::text::XTextRange > m_xTextRange;
+    cpo::uno::Reference< css::text::XTextRange > m_xTextRange;
 public:
-    ScVbaTextBoxShape( const css::uno::Reference< cpo::uno::XComponentContext >& xContext, const css::uno::Reference< css::drawing::XShape >& xShape, const css::uno::Reference< css::drawing::XShapes >& xShapes, const css::uno::Reference< css::frame::XModel >& xModel );
+    ScVbaTextBoxShape( const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext, const cpo::uno::Reference< css::drawing::XShape >& xShape, const cpo::uno::Reference< css::drawing::XShapes >& xShapes, const cpo::uno::Reference< css::frame::XModel >& xModel );
 
    // Attributes
     virtual OUString SAL_CALL getText() override;
     virtual void SAL_CALL setText( const OUString& _text ) override;
-    virtual css::uno::Reference< ov::excel::XCharacters > SAL_CALL characters( const cpo::uno::Any& Start, const cpo::uno::Any& Length ) override;
+    virtual cpo::uno::Reference< ov::excel::XCharacters > SAL_CALL characters( const cpo::uno::Any& Start, const cpo::uno::Any& Length ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

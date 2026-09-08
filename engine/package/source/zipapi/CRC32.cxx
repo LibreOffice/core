@@ -22,7 +22,7 @@
 #include <rtl/crc.h>
 #include <com/sun/star/io/XInputStream.hpp>
 
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace com::sun::star::io;
 using namespace ::cpo::uno;
 

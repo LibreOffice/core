@@ -56,6 +56,7 @@
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace ::xmloff::token;
 using cpo::uno::Any;
 

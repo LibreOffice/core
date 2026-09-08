@@ -32,7 +32,7 @@ namespace com::sun::star {
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace cpo::uno { template <class E> class Sequence; }
 namespace cpo::uno { class XInterface; }
-namespace com::sun::star::uno { template <class interface_type> class Reference; }
+namespace cpo::uno { template <class interface_type> class Reference; }
 
 
 namespace comphelper
@@ -47,8 +47,8 @@ namespace comphelper
     class SynchronousDispatch
     {
     public:
-        static COMPHELPER_DLLPUBLIC css::uno::Reference< css::lang::XComponent > dispatch(
-            const css::uno::Reference< cpo::uno::XInterface > &xStartPoint,
+        static COMPHELPER_DLLPUBLIC cpo::uno::Reference< css::lang::XComponent > dispatch(
+            const cpo::uno::Reference< cpo::uno::XInterface > &xStartPoint,
             const OUString &sURL,
             const OUString &sTarget,
             const cpo::uno::Sequence< css::beans::PropertyValue > &lArguments );

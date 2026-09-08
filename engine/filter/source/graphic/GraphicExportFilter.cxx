@@ -35,6 +35,7 @@
 #include <vcl/glyphitemcache.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 GraphicExportFilter::GraphicExportFilter( uno::Reference< cpo::uno::XComponentContext > xContext  )
     : mxContext(std::move(xContext))
@@ -205,8 +206,8 @@ bool GraphicExportFilter::filterRenderDocument() const
 
 bool GraphicExportFilter::filterExportShape(
         const cpo::uno::Sequence< css::beans::PropertyValue > & rDescriptor,
-        const css::uno::Reference< css::drawing::XShapes > & rxShapes,
-        const css::uno::Reference< css::drawing::XShape > & rxShape ) const
+        const cpo::uno::Reference< css::drawing::XShapes > & rxShapes,
+        const cpo::uno::Reference< css::drawing::XShape > & rxShape ) const
 {
     uno::Reference< lang::XComponent > xSourceDoc;
     if (rxShapes.is())

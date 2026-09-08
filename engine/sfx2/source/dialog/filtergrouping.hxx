@@ -38,7 +38,7 @@ namespace sfx2
         sal_Int32 m_nIterator;
 
     public:
-        explicit TSortedFilterList(const css::uno::Reference< css::container::XEnumeration >& xFilterList);
+        explicit TSortedFilterList(const cpo::uno::Reference< css::container::XEnumeration >& xFilterList);
         std::shared_ptr<const SfxFilter> First();
         std::shared_ptr<const SfxFilter> Next();
 
@@ -52,7 +52,7 @@ namespace sfx2
     */
     void appendFiltersForSave(
         TSortedFilterList& _rFilterMatcher,
-        const css::uno::Reference< css::ui::dialogs::XFilterManager >& _rFilterManager,
+        const cpo::uno::Reference< css::ui::dialogs::XFilterManager >& _rFilterManager,
         OUString& /* [out] */ _rFirstNonEmpty,
         FileDialogHelper_Impl& _rFileDlgImpl,
         std::u16string_view _rFactory
@@ -60,7 +60,7 @@ namespace sfx2
 
     void appendExportFilters(
         TSortedFilterList& _rFilterMatcher,
-        const css::uno::Reference< css::ui::dialogs::XFilterManager >& _rFilterManager,
+        const cpo::uno::Reference< css::ui::dialogs::XFilterManager >& _rFilterManager,
         OUString& /* [out] */ _rFirstNonEmpty,
         FileDialogHelper_Impl& _rFileDlgImpl
         );
@@ -71,7 +71,7 @@ namespace sfx2
     */
     void appendFiltersForOpen(
         TSortedFilterList& _rFilterMatcher,
-        const css::uno::Reference< css::ui::dialogs::XFilterManager >& _rFilterManager,
+        const cpo::uno::Reference< css::ui::dialogs::XFilterManager >& _rFilterManager,
         OUString& /* [out] */ _rFirstNonEmpty,
         FileDialogHelper_Impl& _rFileDlgImpl
     );

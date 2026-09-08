@@ -57,12 +57,12 @@ public:
 
     /** Converts the portion and replaces or appends to the passed XText. */
     void                convert(
-                            const css::uno::Reference< css::text::XText >& rxText,
+                            const cpo::uno::Reference< css::text::XText >& rxText,
                             bool bReplace );
     void                convert( ScEditEngineDefaulter& rEE, ESelection& rSelection, const oox::xls::Font* pFont );
 
     void                writeFontProperties(
-                            const css::uno::Reference< css::text::XText >& rxText ) const;
+                            const cpo::uno::Reference< css::text::XText >& rxText ) const;
 
 private:
     OUString            maText;         /// Portion text.
@@ -234,7 +234,7 @@ public:
     /** Converts the string and writes it into the passed XText, replace old contents of the text object,.
         @param rxText  The XText interface of the target object.
      */
-    void                convert( const css::uno::Reference< css::text::XText >& rxText );
+    void                convert( const cpo::uno::Reference< css::text::XText >& rxText );
     EditTextObject      convert( ScEditEngineDefaulter& rEE, const oox::xls::Font* pFont );
 
     RichStringPortion& getPortion(sal_Int32 nPortionIdx) { return maTextPortions[nPortionIdx]; }

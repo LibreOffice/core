@@ -20,7 +20,7 @@
 #pragma once
 
 #include "XMLIndexSourceBaseContext.hxx"
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 
 
 namespace com::sun::star {
@@ -43,7 +43,7 @@ public:
 
     XMLIndexTOCSourceContext(
         SvXMLImport& rImport,
-        css::uno::Reference<css::beans::XPropertySet> & rPropSet);
+        cpo::uno::Reference<css::beans::XPropertySet> & rPropSet);
 
     virtual ~XMLIndexTOCSourceContext() override;
 
@@ -53,9 +53,9 @@ protected:
 
     virtual void endFastElement(sal_Int32 nElement) override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

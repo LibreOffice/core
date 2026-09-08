@@ -41,20 +41,20 @@ namespace dbaui
     {
     protected:
         // <properties>
-        css::uno::Reference< css::sdb::XSingleSelectQueryComposer >
+        cpo::uno::Reference< css::sdb::XSingleSelectQueryComposer >
                         m_xComposer;
-        css::uno::Reference< css::sdbc::XRowSet >
+        cpo::uno::Reference< css::sdbc::XRowSet >
                         m_xRowSet;
         // </properties>
 
     protected:
-        explicit ComposerDialog(const css::uno::Reference< cpo::uno::XComponentContext >& _rxORB);
+        explicit ComposerDialog(const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxORB);
         virtual ~ComposerDialog() override;
 
     public:
         virtual cpo::uno::Sequence<sal_Int8> getImplementationId() override;
 
-        virtual css::uno::Reference< css::beans::XPropertySetInfo>  getPropertySetInfo() override;
+        virtual cpo::uno::Reference< css::beans::XPropertySetInfo>  getPropertySetInfo() override;
         virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
 
@@ -62,13 +62,13 @@ namespace dbaui
         // own overridables
         virtual std::unique_ptr<weld::GenericDialogController> createComposerDialog(
             weld::Window* _pParent,
-            const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
-            const css::uno::Reference< css::container::XNameAccess >& _rxColumns
+            const cpo::uno::Reference< css::sdbc::XConnection >& _rxConnection,
+            const cpo::uno::Reference< css::container::XNameAccess >& _rxColumns
         ) = 0;
 
     private:
         // OGenericUnoDialog overridables
-        virtual std::unique_ptr<weld::DialogController> createDialog(const css::uno::Reference<css::awt::XWindow>& rParent) override;
+        virtual std::unique_ptr<weld::DialogController> createDialog(const cpo::uno::Reference<css::awt::XWindow>& rParent) override;
     };
 
     // RowsetFilterDialog
@@ -76,7 +76,7 @@ namespace dbaui
     {
     public:
         explicit RowsetFilterDialog(
-            const css::uno::Reference< cpo::uno::XComponentContext >& _rxORB
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxORB
         );
 
         DECLARE_SERVICE_INFO();
@@ -85,8 +85,8 @@ namespace dbaui
         // own overridables
         virtual std::unique_ptr<weld::GenericDialogController> createComposerDialog(
             weld::Window* _pParent,
-            const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
-            const css::uno::Reference< css::container::XNameAccess >& _rxColumns
+            const cpo::uno::Reference< css::sdbc::XConnection >& _rxConnection,
+            const cpo::uno::Reference< css::container::XNameAccess >& _rxColumns
         ) override;
 
         // OGenericUnoDialog overridables
@@ -100,7 +100,7 @@ namespace dbaui
     {
     public:
         explicit RowsetOrderDialog(
-            const css::uno::Reference< cpo::uno::XComponentContext >& _rxORB
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxORB
         );
 
         DECLARE_SERVICE_INFO();
@@ -109,8 +109,8 @@ namespace dbaui
         // own overridables
         virtual std::unique_ptr<weld::GenericDialogController> createComposerDialog(
             weld::Window* _pParent,
-            const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
-            const css::uno::Reference< css::container::XNameAccess >& _rxColumns
+            const cpo::uno::Reference< css::sdbc::XConnection >& _rxConnection,
+            const cpo::uno::Reference< css::container::XNameAccess >& _rxColumns
         ) override;
 
         // OGenericUnoDialog overridables

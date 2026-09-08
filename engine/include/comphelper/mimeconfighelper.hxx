@@ -20,7 +20,7 @@
 #ifndef INCLUDED_COMPHELPER_MIMECONFIGHELPER_HXX
 #define INCLUDED_COMPHELPER_MIMECONFIGHELPER_HXX
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <mutex>
 
@@ -39,18 +39,18 @@ namespace comphelper {
 class COMPHELPER_DLLPUBLIC MimeConfigurationHelper
 {
     std::mutex                                             m_aMutex;
-    css::uno::Reference< cpo::uno::XComponentContext >     m_xContext;
-    css::uno::Reference< css::lang::XMultiServiceFactory > m_xConfigProvider;
+    cpo::uno::Reference< cpo::uno::XComponentContext >     m_xContext;
+    cpo::uno::Reference< css::lang::XMultiServiceFactory > m_xConfigProvider;
 
-    css::uno::Reference< css::container::XNameAccess > m_xObjectConfig;
-    css::uno::Reference< css::container::XNameAccess > m_xVerbsConfig;
-    css::uno::Reference< css::container::XNameAccess > m_xMediaTypeConfig;
+    cpo::uno::Reference< css::container::XNameAccess > m_xObjectConfig;
+    cpo::uno::Reference< css::container::XNameAccess > m_xVerbsConfig;
+    cpo::uno::Reference< css::container::XNameAccess > m_xMediaTypeConfig;
 
-    css::uno::Reference< css::container::XNameAccess > m_xFilterFactory;
+    cpo::uno::Reference< css::container::XNameAccess > m_xFilterFactory;
 
 public:
 
-    MimeConfigurationHelper( css::uno::Reference< cpo::uno::XComponentContext > xContext );
+    MimeConfigurationHelper( cpo::uno::Reference< cpo::uno::XComponentContext > xContext );
 
 
     static OUString GetStringClassIDRepresentation( const cpo::uno::Sequence< sal_Int8 >& aClassID );
@@ -58,9 +58,9 @@ public:
     static cpo::uno::Sequence< sal_Int8 > GetSequenceClassIDRepresentation( std::u16string_view aClassID );
 
 
-    css::uno::Reference< css::container::XNameAccess > GetObjConfiguration();
-    css::uno::Reference< css::container::XNameAccess > GetVerbsConfiguration();
-    css::uno::Reference< css::container::XNameAccess > GetMediaTypeConfiguration();
+    cpo::uno::Reference< css::container::XNameAccess > GetObjConfiguration();
+    cpo::uno::Reference< css::container::XNameAccess > GetVerbsConfiguration();
+    cpo::uno::Reference< css::container::XNameAccess > GetMediaTypeConfiguration();
 
 
     OUString GetDocServiceNameFromFilter( const OUString& aFilterName );
@@ -69,7 +69,7 @@ public:
 
     cpo::uno::Sequence< css::beans::NamedValue > GetObjPropsFromConfigEntry(
                         const cpo::uno::Sequence< sal_Int8 >& aClassID,
-                        const css::uno::Reference< css::container::XNameAccess >& xObjectProps );
+                        const cpo::uno::Reference< css::container::XNameAccess >& xObjectProps );
 
     bool GetVerbByShortcut( const OUString& aVerbShortcut,
                                 css::embed::VerbDescriptor& aDescriptor );
@@ -100,7 +100,7 @@ public:
     OUString GetFactoryNameByMediaType( const OUString& aMediaType );
 
     // typedetection related
-    css::uno::Reference< css::container::XNameAccess > GetFilterFactory();
+    cpo::uno::Reference< css::container::XNameAccess > GetFilterFactory();
 
     OUString UpdateMediaDescriptorWithFilterName(
                         cpo::uno::Sequence< css::beans::PropertyValue >& aMediaDescr,
@@ -120,7 +120,7 @@ public:
     OUString GetExportFilterFromImportFilter( const OUString& aImportFilterName );
 
     static cpo::uno::Sequence< css::beans::PropertyValue > SearchForFilter(
-                        const css::uno::Reference< css::container::XContainerQuery >& xFilterQuery,
+                        const cpo::uno::Reference< css::container::XContainerQuery >& xFilterQuery,
                         const cpo::uno::Sequence< css::beans::NamedValue >& aSearchRequest,
                         SfxFilterFlags nMustFlags,
                         SfxFilterFlags nDontFlags );
@@ -131,7 +131,7 @@ public:
                                                 sal_uInt8 b8, sal_uInt8 b9, sal_uInt8 b10, sal_uInt8 b11,
                                                 sal_uInt8 b12, sal_uInt8 b13, sal_uInt8 b14, sal_uInt8 b15 );
 private:
-    css::uno::Reference< css::container::XNameAccess >
+    cpo::uno::Reference< css::container::XNameAccess >
                                             GetConfigurationByPathImpl( const OUString& aPath );
 };
 

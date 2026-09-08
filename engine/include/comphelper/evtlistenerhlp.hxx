@@ -38,7 +38,7 @@ namespace comphelper
     {
         cpo::uno::WeakReference< css::lang::XEventListener> m_xListener;
     public:
-        OEventListenerHelper(const css::uno::Reference< css::lang::XEventListener>& _rxListener);
+        OEventListenerHelper(const cpo::uno::Reference< css::lang::XEventListener>& _rxListener);
         virtual void disposing( const css::lang::EventObject& Source ) override;
     };
 

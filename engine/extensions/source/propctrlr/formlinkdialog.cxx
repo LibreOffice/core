@@ -45,7 +45,7 @@ namespace pcr
 {
 
 
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
 using namespace cpo::uno;
     using namespace ::com::sun::star::sdb;
     using namespace ::com::sun::star::sdbc;
@@ -498,9 +498,9 @@ using namespace cpo::uno;
                         continue;
 
                     xKeyColumns.clear();
-                    xKeyColSupp.set(xKey, css::uno::UNO_QUERY);
+                    xKeyColSupp.set(xKey, cpo::uno::UNO_QUERY);
                     if ( xKeyColSupp.is() )
-                        xKeyColumns.set(xKeyColSupp->getColumns(), css::uno::UNO_QUERY);
+                        xKeyColumns.set(xKeyColSupp->getColumns(), cpo::uno::UNO_QUERY);
                     OSL_ENSURE( xKeyColumns.is(), "FormLinkDialog::getExistingRelation: could not obtain the columns for the key!" );
 
                     if ( !xKeyColumns.is() )

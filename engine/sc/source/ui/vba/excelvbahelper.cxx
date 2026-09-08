@@ -53,6 +53,7 @@
 #include <com/sun/star/script/ModuleType.hpp>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace ::ooo::vba;
 
 namespace ooo::vba::excel {
@@ -244,7 +245,7 @@ void implnPasteSpecial( const uno::Reference< frame::XModel>& xModel, InsertDele
 }
 
 ScDocShell*
-getDocShell( const css::uno::Reference< css::frame::XModel>& xModel )
+getDocShell( const cpo::uno::Reference< css::frame::XModel>& xModel )
 {
     uno::Reference< cpo::uno::XInterface > xIf( xModel, uno::UNO_QUERY_THROW );
     ScModelObj* pModel = comphelper::getFromUnoTunnel< ScModelObj >( xIf );
@@ -256,7 +257,7 @@ getDocShell( const css::uno::Reference< css::frame::XModel>& xModel )
 }
 
 ScTabViewShell*
-getBestViewShell( const css::uno::Reference< css::frame::XModel>& xModel )
+getBestViewShell( const cpo::uno::Reference< css::frame::XModel>& xModel )
 {
     ScDocShell* pDocShell = getDocShell( xModel );
     if ( pDocShell )
@@ -397,7 +398,7 @@ void setUpDocumentModules( const uno::Reference< sheet::XSpreadsheetDocument >& 
 }
 
 void ExportAsFixedFormatHelper(
-    const uno::Reference< frame::XModel >& xModel, const css::uno::Reference< XApplication >& xApplication,
+    const uno::Reference< frame::XModel >& xModel, const cpo::uno::Reference< XApplication >& xApplication,
     const cpo::uno::Any& Type, const cpo::uno::Any& FileName, const cpo::uno::Any& Quality,
     const cpo::uno::Any& IncludeDocProperties, const cpo::uno::Any& From,
     const cpo::uno::Any& To, const cpo::uno::Any& OpenAfterPublish)

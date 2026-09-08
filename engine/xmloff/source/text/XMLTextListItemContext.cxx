@@ -34,8 +34,8 @@
 
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::xmloff::token;
 
 
@@ -119,9 +119,9 @@ void XMLTextListItemContext::endFastElement(sal_Int32 )
     rTxtImport.GetTextListHelper().SetListItem( nullptr );
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextListItemContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextListItemContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
 

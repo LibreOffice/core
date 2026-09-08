@@ -13,7 +13,7 @@
 #include <vcl/weld.hxx>
 
 #include <cpo/uno/XInterface.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 /** Document model tree handler
  *
@@ -24,7 +24,7 @@ class DocumentModelTreeHandler
 {
 private:
     std::unique_ptr<weld::TreeView>& mpDocumentModelTree;
-    css::uno::Reference<cpo::uno::XInterface> mxDocument;
+    cpo::uno::Reference<cpo::uno::XInterface> mxDocument;
 
     // Clears all children of a tree node, where the parent is
     // identified by the input tree iter.
@@ -35,18 +35,18 @@ private:
 
 public:
     DocumentModelTreeHandler(std::unique_ptr<weld::TreeView>& pDocumentModelTree,
-                             css::uno::Reference<cpo::uno::XInterface> xDocument);
+                             cpo::uno::Reference<cpo::uno::XInterface> xDocument);
 
     DECL_LINK(ExpandingHandler, const weld::TreeIter&, bool);
 
     void inspectDocument();
 
-    static css::uno::Reference<cpo::uno::XInterface> getObjectByID(OUString const& rID);
+    static cpo::uno::Reference<cpo::uno::XInterface> getObjectByID(OUString const& rID);
 
     void dispose();
 
     // selects the input object if it exists in the DOM tree view
-    void selectObject(css::uno::Reference<cpo::uno::XInterface> const& xInterface);
+    void selectObject(cpo::uno::Reference<cpo::uno::XInterface> const& xInterface);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

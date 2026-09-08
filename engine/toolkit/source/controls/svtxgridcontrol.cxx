@@ -40,10 +40,10 @@
 
 #include <algorithm>
 
-using css::uno::Reference;
+using cpo::uno::Reference;
 using cpo::uno::Exception;
-using css::uno::UNO_QUERY;
-using css::uno::UNO_QUERY_THROW;
+using cpo::uno::UNO_QUERY;
+using cpo::uno::UNO_QUERY_THROW;
 using cpo::uno::Any;
 using cpo::uno::Sequence;
 using css::awt::grid::XGridSelectionListener;
@@ -443,8 +443,8 @@ void SVTXGridControl::impl_checkTableModelInit()
     m_bTableModelInitCompleted = true;
 
     // ensure default columns exist, if they have not previously been added
-    Reference< XGridDataModel > const xDataModel( m_xTableModel->getDataModel(), css::uno::UNO_SET_THROW );
-    Reference< XGridColumnModel > const xColumnModel( m_xTableModel->getColumnModel(), css::uno::UNO_SET_THROW );
+    Reference< XGridDataModel > const xDataModel( m_xTableModel->getDataModel(), cpo::uno::UNO_SET_THROW );
+    Reference< XGridColumnModel > const xColumnModel( m_xTableModel->getColumnModel(), cpo::uno::UNO_SET_THROW );
 
     sal_Int32 const nDataColumnCount = xDataModel->getColumnCount();
     if ( ( nDataColumnCount > 0 ) && ( xColumnModel->getColumnCount() == 0 ) )

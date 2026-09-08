@@ -26,28 +26,28 @@
 #include <ucbhelper/content.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace css::ucb;
 using namespace css::task;
 using namespace css::io;
 using namespace ucbhelper;
 
 
-CSubmissionPut::CSubmissionPut(std::u16string_view aURL, const css::uno::Reference< css::xml::dom::XDocumentFragment >& aFragment)
+CSubmissionPut::CSubmissionPut(std::u16string_view aURL, const cpo::uno::Reference< css::xml::dom::XDocumentFragment >& aFragment)
     : CSubmission(aURL, aFragment)
 {
 }
 
-CSubmission::SubmissionResult CSubmissionPut::submit(const css::uno::Reference< css::task::XInteractionHandler >& aInteractionHandler)
+CSubmission::SubmissionResult CSubmissionPut::submit(const cpo::uno::Reference< css::task::XInteractionHandler >& aInteractionHandler)
 {
-    css::uno::Reference< XCommandEnvironment > aEnvironment;
+    cpo::uno::Reference< XCommandEnvironment > aEnvironment;
     std::unique_ptr< CSerialization > apSerialization(createSerialization(aInteractionHandler,aEnvironment));
 
     try {
         ucbhelper::Content aContent(m_aURLObj.GetMainURL(INetURLObject::DecodeMechanism::NONE), aEnvironment, comphelper::getProcessComponentContext());
 
         // insert serialized data to content -> PUT
-        css::uno::Reference< XInputStream > aInStream = apSerialization->getInputStream();
+        cpo::uno::Reference< XInputStream > aInStream = apSerialization->getInputStream();
         aContent.writeStream(aInStream, true);
         //aContent.closeStream();
 

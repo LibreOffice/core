@@ -47,7 +47,7 @@ class DataPoint final :
         public ::property::OPropertySet
 {
 public:
-    explicit DataPoint( const css::uno::Reference< css::beans::XPropertySet > & rParentProperties );
+    explicit DataPoint( const cpo::uno::Reference< css::beans::XPropertySet > & rParentProperties );
     virtual ~DataPoint() override;
 
     /// merge XInterface implementations
@@ -68,23 +68,23 @@ private:
           const cpo::uno::Any& rValue ) override;
 
     // ____ XPropertySet ____
-    virtual css::uno::Reference< css::beans::XPropertySetInfo >
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo >
         getPropertySetInfo() override;
 
     // ____ XCloneable ____
     // Note: m_xParentProperties are not cloned!
-    virtual css::uno::Reference< css::util::XCloneable > createClone() override;
+    virtual cpo::uno::Reference< css::util::XCloneable > createClone() override;
 
     // ____ XChild ____
-    virtual css::uno::Reference< cpo::uno::XInterface > getParent() override;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > getParent() override;
     virtual void setParent(
-        const css::uno::Reference< cpo::uno::XInterface >& Parent ) override;
+        const cpo::uno::Reference< cpo::uno::XInterface >& Parent ) override;
 
     // ____ XModifyBroadcaster ____
     virtual void addModifyListener(
-        const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+        const cpo::uno::Reference< css::util::XModifyListener >& aListener ) override;
     virtual void removeModifyListener(
-        const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+        const cpo::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
     // ____ XModifyListener ____
     virtual void modified(

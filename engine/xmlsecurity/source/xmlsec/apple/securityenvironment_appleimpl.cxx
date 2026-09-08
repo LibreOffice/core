@@ -20,6 +20,7 @@
 #include <svl/applekeychain.hxx>
 
 using namespace css;
+using namespace cpo;
 using css::security::XCertificate;
 using svl::crypto::CFRef;
 

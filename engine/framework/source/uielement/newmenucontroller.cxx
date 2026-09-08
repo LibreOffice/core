@@ -48,7 +48,7 @@
 constexpr OUString aSlotNewDocDirect = u".uno:AddDirect"_ustr;
 constexpr OUString aSlotAutoPilot = u".uno:AutoPilotMenu"_ustr;
 
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::frame;
@@ -79,8 +79,8 @@ private:
     bool m_bEnabled = false;
 };
 
-bool isSlotActive(const OUString& slot, const css::uno::Reference<css::frame::XFrame>& frame,
-    const css::uno::Reference<css::util::XURLTransformer>& transformer)
+bool isSlotActive(const OUString& slot, const cpo::uno::Reference<css::frame::XFrame>& frame,
+    const cpo::uno::Reference<css::util::XURLTransformer>& transformer)
 {
     if (auto provider = frame.query<css::frame::XDispatchProvider>())
     {
@@ -313,7 +313,7 @@ void NewMenuController::retrieveShortcutsFromConfiguration(
     }
 }
 
-NewMenuController::NewMenuController( const css::uno::Reference< cpo::uno::XComponentContext >& xContext ) :
+NewMenuController::NewMenuController( const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext ) :
     svt::PopupMenuControllerBase( xContext ),
     m_bShowImages( true ),
     m_bNewMenu( false ),

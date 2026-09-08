@@ -40,8 +40,8 @@ bool DRAWINGLAYERCORE_DLLPUBLIC arePrimitive2DReferencesEqual(const Primitive2DR
     and using compare operator
  */
 bool DRAWINGLAYERCORE_DLLPUBLIC
-arePrimitive2DReferencesEqual(const css::uno::Reference<css::graphic::XPrimitive2D>& rA,
-                              const css::uno::Reference<css::graphic::XPrimitive2D>& rB);
+arePrimitive2DReferencesEqual(const cpo::uno::Reference<css::graphic::XPrimitive2D>& rA,
+                              const cpo::uno::Reference<css::graphic::XPrimitive2D>& rB);
 
 OUString DRAWINGLAYERCORE_DLLPUBLIC idToString(sal_uInt32 nId);
 

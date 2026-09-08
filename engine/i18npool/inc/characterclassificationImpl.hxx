@@ -37,7 +37,7 @@ class CharacterClassificationImpl final : public cppu::WeakImplHelper
 {
 public:
 
-    CharacterClassificationImpl( const css::uno::Reference < cpo::uno::XComponentContext >& rxContext );
+    CharacterClassificationImpl( const cpo::uno::Reference < cpo::uno::XComponentContext >& rxContext );
     virtual ~CharacterClassificationImpl() override;
 
     virtual OUString toUpper( const OUString& Text,
@@ -70,11 +70,11 @@ public:
 private:
     struct lookupTableItem {
         lookupTableItem(css::lang::Locale _aLocale, OUString _aName,
-                        css::uno::Reference < XCharacterClassification > _xCI) :
+                        cpo::uno::Reference < XCharacterClassification > _xCI) :
             aLocale(std::move(_aLocale)), aName(std::move(_aName)), xCI(std::move(_xCI)) {};
         css::lang::Locale aLocale;
         OUString aName;
-        css::uno::Reference < XCharacterClassification > xCI;
+        cpo::uno::Reference < XCharacterClassification > xCI;
         bool equals(const css::lang::Locale& rLocale) const {
             return aLocale.Language == rLocale.Language &&
                 aLocale.Country == rLocale.Country &&
@@ -84,11 +84,11 @@ private:
     std::vector<lookupTableItem> lookupTable;
     std::optional<lookupTableItem> cachedItem;
 
-    css::uno::Reference < cpo::uno::XComponentContext > m_xContext;
-    css::uno::Reference < XCharacterClassification > xUCI;
+    cpo::uno::Reference < cpo::uno::XComponentContext > m_xContext;
+    cpo::uno::Reference < XCharacterClassification > xUCI;
 
     /// @throws cpo::uno::RuntimeException
-    css::uno::Reference < XCharacterClassification > const & getLocaleSpecificCharacterClassification(const css::lang::Locale& rLocale);
+    cpo::uno::Reference < XCharacterClassification > const & getLocaleSpecificCharacterClassification(const css::lang::Locale& rLocale);
     bool createLocaleSpecificCharacterClassification(const OUString& serviceName, const css::lang::Locale& rLocale);
 
 };

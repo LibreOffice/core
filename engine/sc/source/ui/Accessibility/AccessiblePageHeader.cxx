@@ -44,10 +44,11 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
+using namespace ::cpo;
 
 const sal_uInt8     MAX_AREAS = 3;
 
-ScAccessiblePageHeader::ScAccessiblePageHeader( const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
+ScAccessiblePageHeader::ScAccessiblePageHeader( const cpo::uno::Reference<css::accessibility::XAccessible>& rxParent,
                             ScPreviewShell* pViewShell, bool bHeader, sal_Int32 nIndex ) :
 ScAccessibleContextBase( rxParent, bHeader ? AccessibleRole::HEADER : AccessibleRole::FOOTER ),
     mpViewShell( pViewShell ),

@@ -74,8 +74,8 @@
     <DisplayString Condition="pType->eTypeClass == 15">{*((sal_Int32*)pData),d} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_ENUM -->
     <DisplayString Condition="pType->eTypeClass == 19">{*((cpo::uno::Exception*)pData)} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_EXCEPTION -->
     <DisplayString Condition="pType->eTypeClass == 20">{**((uno_Sequence**)pData)} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_SEQUENCE -->
-    <DisplayString Condition="pType->eTypeClass == 22 &amp;&amp; !((com::sun::star::uno::BaseReference*)pData)->_pInterface">{*(com::sun::star::uno::BaseReference*)pData} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_INTERFACE -->
-    <DisplayString Condition="pType->eTypeClass == 22 &amp;&amp; ((com::sun::star::uno::BaseReference*)pData)->_pInterface">{*((com::sun::star::uno::BaseReference*)pData)->_pInterface} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_INTERFACE -->
+    <DisplayString Condition="pType->eTypeClass == 22 &amp;&amp; !((cpo::uno::BaseReference*)pData)->_pInterface">{*(cpo::uno::BaseReference*)pData} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_INTERFACE -->
+    <DisplayString Condition="pType->eTypeClass == 22 &amp;&amp; ((cpo::uno::BaseReference*)pData)->_pInterface">{*((cpo::uno::BaseReference*)pData)->_pInterface} ({*pType->pTypeName,sub})</DisplayString><!-- typelib_TypeClass_INTERFACE -->
     <DisplayString>{pType->eTypeClass,en} ({*pType->pTypeName,sub})</DisplayString>
     <Expand HideRawView="true">
       <Item Name="pType">pType</Item>
@@ -97,7 +97,7 @@
       <Item Name="pData" Condition="pType->eTypeClass == 15">(sal_Int32*)pData</Item><!-- typelib_TypeClass_ENUM -->
       <Item Name="pData" Condition="pType->eTypeClass == 19">(cpo::uno::Exception*)pData</Item><!-- typelib_TypeClass_EXCEPTION -->
       <Item Name="pData" Condition="pType->eTypeClass == 20">(uno_Sequence**)pData</Item><!-- typelib_TypeClass_SEQUENCE -->
-      <Item Name="pData" Condition="pType->eTypeClass == 22">(com::sun::star::uno::BaseReference*)pData</Item><!-- typelib_TypeClass_INTERFACE -->
+      <Item Name="pData" Condition="pType->eTypeClass == 22">(cpo::uno::BaseReference*)pData</Item><!-- typelib_TypeClass_INTERFACE -->
       <Item Name="pData" Condition="pType->eTypeClass &lt; 1 || (pType->eTypeClass &gt; 15 &amp;&amp; pType->eTypeClass &lt; 19) || pType->eTypeClass == 21 || pType->eTypeClass &gt; 22">pData</Item>
 
       <Item Name="pReserved">pReserved</Item>
@@ -297,11 +297,11 @@
   <Type Name="SwFormat">
     <DisplayString>Format: "{m_aFormatName,sub}"</DisplayString>
   </Type>
-  <Type Name="com::sun::star::uno::BaseReference">
+  <Type Name="cpo::uno::BaseReference">
     <DisplayString Condition="_pInterface == nullptr">empty</DisplayString>
     <DisplayString>{{{_pInterface}}}</DisplayString>
   </Type>
-  <Type Name="com::sun::star::uno::Reference &lt; * &gt;">
+  <Type Name="cpo::uno::Reference &lt; * &gt;">
     <DisplayString Condition="_pInterface == nullptr">empty</DisplayString>
     <DisplayString>{{{reinterpret_cast &lt; $T1 * &gt;(_pInterface)}}}</DisplayString>
     <Expand>

@@ -33,25 +33,25 @@ typedef ::cppu::ImplInheritanceHelper<VbaGlobalsBase, ov::word::XGlobals> SwVbaG
 class SwVbaGlobals : public SwVbaGlobals_BASE
 {
 private:
-    css::uno::Reference<ooo::vba::word::XApplication> mxApplication;
+    cpo::uno::Reference<ooo::vba::word::XApplication> mxApplication;
 
     /// @throws cpo::uno::RuntimeException
-    css::uno::Reference<ooo::vba::word::XApplication> const& getApplication();
+    cpo::uno::Reference<ooo::vba::word::XApplication> const& getApplication();
 
 public:
     SwVbaGlobals(cpo::uno::Sequence<cpo::uno::Any> const& aArgs,
-                 css::uno::Reference<cpo::uno::XComponentContext> const& rxContext);
+                 cpo::uno::Reference<cpo::uno::XComponentContext> const& rxContext);
     virtual ~SwVbaGlobals() override;
 
     // XGlobals
     virtual OUString SAL_CALL getName() override;
-    virtual css::uno::Reference<ooo::vba::word::XSystem> SAL_CALL getSystem() override;
-    virtual css::uno::Reference<ov::word::XDocument> SAL_CALL getActiveDocument() override;
-    virtual css::uno::Reference<ov::word::XWindow> SAL_CALL getActiveWindow() override;
-    virtual css::uno::Reference<ooo::vba::word::XOptions> SAL_CALL getOptions() override;
-    virtual css::uno::Reference<ooo::vba::word::XSelection> SAL_CALL getSelection() override;
-    virtual css::uno::Reference<ooo::vba::word::XGlobals> SAL_CALL getWord() override;
-    virtual css::uno::Reference<ooo::vba::word::XWordBasic> SAL_CALL getWordBasic() override;
+    virtual cpo::uno::Reference<ooo::vba::word::XSystem> SAL_CALL getSystem() override;
+    virtual cpo::uno::Reference<ov::word::XDocument> SAL_CALL getActiveDocument() override;
+    virtual cpo::uno::Reference<ov::word::XWindow> SAL_CALL getActiveWindow() override;
+    virtual cpo::uno::Reference<ooo::vba::word::XOptions> SAL_CALL getOptions() override;
+    virtual cpo::uno::Reference<ooo::vba::word::XSelection> SAL_CALL getSelection() override;
+    virtual cpo::uno::Reference<ooo::vba::word::XGlobals> SAL_CALL getWord() override;
+    virtual cpo::uno::Reference<ooo::vba::word::XWordBasic> SAL_CALL getWordBasic() override;
     virtual cpo::uno::Any SAL_CALL CommandBars(const cpo::uno::Any& aIndex) override;
     virtual cpo::uno::Any SAL_CALL Documents(const cpo::uno::Any& aIndex) override;
     virtual cpo::uno::Any SAL_CALL Addins(const cpo::uno::Any& aIndex) override;

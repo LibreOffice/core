@@ -47,7 +47,7 @@ struct MenuItemData
     void*           nUserValue;             // User value
     MenuUserDataReleaseFunction aUserValueReleaseFunc;   // called when MenuItemData is destroyed
     Image           aImage;                 // Image
-    css::uno::Reference<css::graphic::XGraphic> xImageGraphic; // vector source of aImage, if any
+    cpo::uno::Reference<css::graphic::XGraphic> xImageGraphic; // vector source of aImage, if any
     vcl::KeyCode    aAccelKey;              // Accelerator-Key
     bool            bChecked;               // Checked
     bool            bEnabled;               // Enabled

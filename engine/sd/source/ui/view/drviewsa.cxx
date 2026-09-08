@@ -74,7 +74,8 @@
 #include <memory>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using vcl::EnumContext;
 
 namespace sd {
@@ -375,9 +376,9 @@ void DrawViewShell::Init (bool bIsMainViewShell)
         StartListening (*GetDocSh());
 }
 
-css::uno::Reference<css::drawing::XDrawSubController> DrawViewShell::CreateSubController()
+cpo::uno::Reference<css::drawing::XDrawSubController> DrawViewShell::CreateSubController()
 {
-    css::uno::Reference<css::drawing::XDrawSubController> xSubController;
+    cpo::uno::Reference<css::drawing::XDrawSubController> xSubController;
 
     if (IsMainViewShell())
     {

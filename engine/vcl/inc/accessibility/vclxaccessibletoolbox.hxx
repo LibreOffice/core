@@ -57,8 +57,8 @@ private:
     virtual void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
     virtual void    ProcessWindowChildEvent( const VclWindowEvent& rVclWindowEvent ) override;
 
-    virtual css::uno::Reference< css::accessibility::XAccessible > GetChildAccessible( const VclWindowEvent& rVclWindowEvent ) override;
-    css::uno::Reference< css::accessibility::XAccessible > GetItemWindowAccessible( const VclWindowEvent& rVclWindowEvent );
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > GetChildAccessible( const VclWindowEvent& rVclWindowEvent ) override;
+    cpo::uno::Reference< css::accessibility::XAccessible > GetItemWindowAccessible( const VclWindowEvent& rVclWindowEvent );
 
     // XComponent
     virtual void disposing() override;
@@ -72,8 +72,8 @@ public:
 
     // XAccessibleContext
     virtual sal_Int64 getAccessibleChildCount(  ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleChild( sal_Int64 i ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > getAccessibleChild( sal_Int64 i ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
 
     // XAccessibleSelection
     virtual void selectAccessibleChild( sal_Int64 nChildIndex ) override;
@@ -81,7 +81,7 @@ public:
     virtual void clearAccessibleSelection(  ) override;
     virtual void selectAllAccessibleChildren(  ) override;
     virtual sal_Int64 getSelectedAccessibleChildCount(  ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
     virtual void deselectAccessibleChild( sal_Int64 nChildIndex ) override;
 
 private:

@@ -69,6 +69,7 @@
 #define UNIT_MAX_ID     UNIT_PIXEL
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 static sal_Int16 GetFilterFormat(std::u16string_view rExt)
 {
@@ -551,10 +552,10 @@ bool ExportDialog::IsTempExportAvailable() const
 }
 
 ExportDialog::ExportDialog(FltCallDialogParameter& rPara,
-    css::uno::Reference< cpo::uno::XComponentContext > xContext,
-    const css::uno::Reference< css::lang::XComponent >& rxSourceDocument,
+    cpo::uno::Reference< cpo::uno::XComponentContext > xContext,
+    const cpo::uno::Reference< css::lang::XComponent >& rxSourceDocument,
     bool bExportSelection, bool bIsPixelFormat, bool bGraphicsSource,
-    const css::uno::Reference< css::graphic::XGraphic >& rxGraphic)
+    const cpo::uno::Reference< css::graphic::XGraphic >& rxGraphic)
     : GenericDialogController(rPara.pWindow, u"svt/ui/graphicexport.ui"_ustr, u"GraphicExportDialog"_ustr)
     , mrFltCallPara(rPara)
     , mxContext(std::move(xContext))

@@ -13,6 +13,7 @@
 #include <cppuhelper/supportsservice.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using uno::Reference;
 using lang::XServiceInfo;
 using lang::XTypeProvider;

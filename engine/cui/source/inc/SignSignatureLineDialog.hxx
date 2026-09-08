@@ -13,12 +13,12 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/security/XCertificate.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 class SignSignatureLineDialog : public SignatureLineDialogBase
 {
 public:
-    SignSignatureLineDialog(weld::Widget* pParent, css::uno::Reference<css::frame::XModel> xModel);
+    SignSignatureLineDialog(weld::Widget* pParent, cpo::uno::Reference<css::frame::XModel> xModel);
 
     void Apply();
 
@@ -33,9 +33,9 @@ private:
     std::unique_ptr<weld::Label> m_xLabelHintText;
     std::unique_ptr<weld::Label> m_xLabelAddComment;
 
-    css::uno::Reference<css::beans::XPropertySet> m_xShapeProperties;
-    css::uno::Reference<css::security::XCertificate> m_xSelectedCertifate;
-    css::uno::Reference<css::graphic::XGraphic> m_xSignatureImage;
+    cpo::uno::Reference<css::beans::XPropertySet> m_xShapeProperties;
+    cpo::uno::Reference<css::security::XCertificate> m_xSelectedCertifate;
+    cpo::uno::Reference<css::graphic::XGraphic> m_xSignatureImage;
     OUString m_aSignatureLineId;
     OUString m_aSuggestedSignerName;
     OUString m_aSuggestedSignerTitle;
@@ -43,7 +43,7 @@ private:
     OUString m_sOriginalImageBtnLabel;
 
     void ValidateFields();
-    css::uno::Reference<css::graphic::XGraphic> getSignedGraphic(bool bValid);
+    cpo::uno::Reference<css::graphic::XGraphic> getSignedGraphic(bool bValid);
 
     DECL_LINK(clearImage, weld::Button&, void);
     DECL_LINK(loadImage, weld::Button&, void);

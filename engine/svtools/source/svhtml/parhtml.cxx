@@ -43,6 +43,7 @@
 #include <utility>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 
 const sal_Int32 MAX_LEN( 1024 );

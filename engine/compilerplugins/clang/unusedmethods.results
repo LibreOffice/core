@@ -41,19 +41,19 @@ connectivity/inc/sdbcx/VUser.hxx:62
 connectivity/source/drivers/evoab2/NResultSet.hxx:60
     rtl::OString connectivity::evoab::OEvoabVersionHelper::getUserName(void *)
 connectivity/source/drivers/evoab2/NResultSetMetaData.hxx:49
-    com::sun::star::uno::Reference<com::sun::star::sdbc::XResultSetMetaData> connectivity::evoab::OEvoabResultSetMetaData::operator Reference()
+    cpo::uno::Reference<com::sun::star::sdbc::XResultSetMetaData> connectivity::evoab::OEvoabResultSetMetaData::operator Reference()
 connectivity/source/drivers/odbc/OResultSet.cxx:90
      (anonymous namespace)::CharsBindData::CharsBindData(const void *,type-parameter-?-?...)
 connectivity/source/drivers/odbc/OResultSet.cxx:95
      (anonymous namespace)::CharsBindData::CharsBindData(const type-parameter-?-? &)
 connectivity/source/inc/calc/CDriver.hxx:30
-    com::sun::star::uno::Reference<cpo::uno::XInterface> connectivity::calc::ODriver_CreateInstance(const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> &)
+    cpo::uno::Reference<cpo::uno::XInterface> connectivity::calc::ODriver_CreateInstance(const cpo::uno::Reference<com::sun::star::lang::XMultiServiceFactory> &)
 connectivity/source/inc/dbase/DDriver.hxx:29
-    com::sun::star::uno::Reference<cpo::uno::XInterface> connectivity::dbase::ODriver_CreateInstance(const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> &)
+    cpo::uno::Reference<cpo::uno::XInterface> connectivity::dbase::ODriver_CreateInstance(const cpo::uno::Reference<com::sun::star::lang::XMultiServiceFactory> &)
 connectivity/source/inc/dbase/dindexnode.hxx:64
     _Bool connectivity::dbase::ONDXKey::operator<(const connectivity::dbase::ONDXKey &) const
 connectivity/source/inc/flat/EDriver.hxx:29
-    com::sun::star::uno::Reference<cpo::uno::XInterface> connectivity::flat::ODriver_CreateInstance(const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> &)
+    cpo::uno::Reference<cpo::uno::XInterface> connectivity::flat::ODriver_CreateInstance(const cpo::uno::Reference<com::sun::star::lang::XMultiServiceFactory> &)
 connectivity/source/inc/OColumn.hxx:103
     _Bool connectivity::OColumn::isReadOnly() const
 connectivity/source/inc/OColumn.hxx:104
@@ -63,7 +63,7 @@ connectivity/source/inc/OColumn.hxx:105
 connectivity/source/inc/odbc/OConnection.hxx:118
     connectivity::odbc::ODBCDriver * connectivity::odbc::OConnection::getDriver() const
 connectivity/source/inc/odbc/ODriver.hxx:75
-    const com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> & connectivity::odbc::ODBCDriver::getContext() const
+    const cpo::uno::Reference<com::sun::star::uno::XComponentContext> & connectivity::odbc::ODBCDriver::getContext() const
 connectivity/source/inc/odbc/OFunctions.hxx:92
     short connectivity::odbc::Functions::GetEnvAttr(void *,int,void *,int,int *) const
 connectivity/source/inc/odbc/OFunctions.hxx:178
@@ -85,7 +85,7 @@ cppuhelper/inc/interfacecontainer4.hxx:93
 cppuhelper/inc/interfacecontainer4.hxx:142
     int cppuhelper::OInterfaceContainerHelper4::getLength(std::unique_lock<std::mutex> &) const
 cppuhelper/inc/interfacecontainer4.hxx:150
-    std::vector<com::sun::star::uno::Reference<type-parameter-?-?>, std::allocator<com::sun::star::uno::Reference<type-parameter-?-?> > > cppuhelper::OInterfaceContainerHelper4::getElements(std::unique_lock<std::mutex> &) const
+    std::vector<cpo::uno::Reference<type-parameter-?-?>, std::allocator<cpo::uno::Reference<type-parameter-?-?> > > cppuhelper::OInterfaceContainerHelper4::getElements(std::unique_lock<std::mutex> &) const
 cppuhelper/inc/interfacecontainer4.hxx:195
     void cppuhelper::OInterfaceContainerHelper4::clear(std::unique_lock<std::mutex> &)
 cppuhelper/inc/interfacecontainer4.hxx:210
@@ -97,7 +97,7 @@ cppuhelper/inc/interfacecontainer4.hxx:235
 cppuhelper/inc/interfacecontainer4.hxx:270
      cppuhelper::OInterfaceContainerHelper4::NotifySingleListener::NotifySingleListener<EventT>(void (type-parameter-?-?::*)(const type-parameter-?-? &),const type-parameter-?-? &)
 cppuhelper/inc/interfacecontainer4.hxx:277
-    void cppuhelper::OInterfaceContainerHelper4::NotifySingleListener::operator()(const com::sun::star::uno::Reference<type-parameter-?-?> &) const
+    void cppuhelper::OInterfaceContainerHelper4::NotifySingleListener::operator()(const cpo::uno::Reference<type-parameter-?-?> &) const
 cui/source/dialogs/SpellAttrib.hxx:73
     _Bool svx::SpellErrorDescription::operator==(const struct svx::SpellErrorDescription &) const
 cui/source/inc/fileextcheckdlg.hxx:32
@@ -173,7 +173,7 @@ embeddedobj/source/msole/olecomponent.hxx:74
 embeddedobj/source/msole/olecomponent.hxx:75
     void OleComponent::Dispose()
 embeddedobj/source/msole/olecomponent.hxx:79
-     OleComponent::OleComponent(const com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> &,OleEmbeddedObject *)
+     OleComponent::OleComponent(const cpo::uno::Reference<com::sun::star::uno::XComponentContext> &,OleEmbeddedObject *)
 embeddedobj/source/msole/olecomponent.hxx:84
     OleComponent * OleComponent::createEmbeddedCopyOfLink()
 embeddedobj/source/msole/olecomponent.hxx:86
@@ -189,7 +189,7 @@ embeddedobj/source/msole/olecomponent.hxx:96
 embeddedobj/source/msole/olecomponent.hxx:97
     void OleComponent::CreateNewEmbeddedObject(const cpo::uno::Sequence<signed char> &)
 embeddedobj/source/msole/olecomponent.hxx:98
-    void OleComponent::CreateObjectFromData(const com::sun::star::uno::Reference<com::sun::star::datatransfer::XTransferable> &)
+    void OleComponent::CreateObjectFromData(const cpo::uno::Reference<com::sun::star::datatransfer::XTransferable> &)
 embeddedobj/source/msole/olecomponent.hxx:100
     void OleComponent::CreateObjectFromFile(const rtl::OUString &)
 embeddedobj/source/msole/olecomponent.hxx:101
@@ -235,7 +235,7 @@ embeddedobj/source/msole/olecomponent.hxx:130
 extensions/source/scanner/scanner.hxx:73
     void ScannerManager::SetData(void *)
 extensions/source/scanner/scanner.hxx:77
-    com::sun::star::uno::Reference<cpo::uno::XInterface> ScannerManager_CreateInstance(const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> &)
+    cpo::uno::Reference<cpo::uno::XInterface> ScannerManager_CreateInstance(const cpo::uno::Reference<com::sun::star::lang::XMultiServiceFactory> &)
 filter/source/svg/svgwriter.hxx:337
     Color SVGActionWriter::ImplGetColorWithIntensity(const Color &,unsigned short)
 hwpfilter/source/hiodev.h:62
@@ -523,15 +523,15 @@ include/comphelper/AccessibleImplementationHelper.hxx:42
 include/comphelper/automationinvokedzone.hxx:26
      comphelper::Automation::AutomationInvokedZone::AutomationInvokedZone()
 include/comphelper/basicio.hxx:49
-    const com::sun::star::uno::Reference<com::sun::star::io::XObjectInputStream> & comphelper::operator>>(const com::sun::star::uno::Reference<com::sun::star::io::XObjectInputStream> &,unsigned int &)
+    const cpo::uno::Reference<com::sun::star::io::XObjectInputStream> & comphelper::operator>>(const cpo::uno::Reference<com::sun::star::io::XObjectInputStream> &,unsigned int &)
 include/comphelper/basicio.hxx:50
-    const com::sun::star::uno::Reference<com::sun::star::io::XObjectOutputStream> & comphelper::operator<<(const com::sun::star::uno::Reference<com::sun::star::io::XObjectOutputStream> &,unsigned int)
+    const cpo::uno::Reference<com::sun::star::io::XObjectOutputStream> & comphelper::operator<<(const cpo::uno::Reference<com::sun::star::io::XObjectOutputStream> &,unsigned int)
 include/comphelper/configuration.hxx:288
     void comphelper::ConfigurationLocalizedProperty::set(const type-parameter-?-? &,const std::shared_ptr<comphelper::ConfigurationChanges> &)
 include/comphelper/configuration.hxx:311
-    _Bool comphelper::ConfigurationGroup::isReadOnly(const com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> &)
+    _Bool comphelper::ConfigurationGroup::isReadOnly(const cpo::uno::Reference<com::sun::star::uno::XComponentContext> &)
 include/comphelper/configuration.hxx:332
-    com::sun::star::uno::Reference<com::sun::star::container::XHierarchicalNameReplace> comphelper::ConfigurationGroup::get(const std::shared_ptr<comphelper::ConfigurationChanges> &)
+    cpo::uno::Reference<com::sun::star::container::XHierarchicalNameReplace> comphelper::ConfigurationGroup::get(const std::shared_ptr<comphelper::ConfigurationChanges> &)
 include/comphelper/crashzone.hxx:57
     const struct std::atomic<unsigned int> & CrashZone::enterCount()
 include/comphelper/errcode.hxx:185
@@ -697,17 +697,17 @@ include/comphelper/unique_unlock.hxx:27
 include/comphelper/unique_unlock.hxx:39
     comphelper::unique_unlock<Mutex> comphelper::<deduction guide for unique_unlock>(const comphelper::unique_unlock<Mutex> &)
 include/comphelper/unwrapargs.hxx:51
-    void comphelper::detail::unwrapArgs(const cpo::uno::Sequence<cpo::uno::Any> &,int,const com::sun::star::uno::Reference<cpo::uno::XInterface> &)
+    void comphelper::detail::unwrapArgs(const cpo::uno::Sequence<cpo::uno::Any> &,int,const cpo::uno::Reference<cpo::uno::XInterface> &)
 include/comphelper/xmlsechelper.hxx:64
-    com::sun::star::uno::Reference<com::sun::star::security::XCertificate> comphelper::xmlsec::FindCertInContext(const com::sun::star::uno::Reference<com::sun::star::xml::crypto::XXMLSecurityContext> &,const rtl::OUString &)
+    cpo::uno::Reference<com::sun::star::security::XCertificate> comphelper::xmlsec::FindCertInContext(const cpo::uno::Reference<com::sun::star::xml::crypto::XXMLSecurityContext> &,const rtl::OUString &)
 include/connectivity/dbcharset.hxx:137
     const dbtools::OCharsetMap::CharsetIterator & dbtools::OCharsetMap::CharsetIterator::operator--()
 include/connectivity/dbmetadata.hxx:54
      dbtools::DatabaseMetaData::DatabaseMetaData()
 include/connectivity/dbmetadata.hxx:83
-    void dbtools::DatabaseMetaData::reset(const com::sun::star::uno::Reference<com::sun::star::sdbc::XConnection> &)
+    void dbtools::DatabaseMetaData::reset(const cpo::uno::Reference<com::sun::star::sdbc::XConnection> &)
 include/connectivity/dbtools.hxx:500
-    rtl::OUString dbtools::createUniqueName(const com::sun::star::uno::Reference<com::sun::star::sdbcx::XTablesSupplier> &,const rtl::OUString &,_Bool)
+    rtl::OUString dbtools::createUniqueName(const cpo::uno::Reference<com::sun::star::sdbcx::XTablesSupplier> &,const rtl::OUString &,_Bool)
 include/connectivity/FValue.hxx:344
     unsigned char connectivity::ORowSetValue::getUInt8() const
 include/connectivity/FValue.hxx:426
@@ -743,9 +743,9 @@ include/docmodel/theme/Theme.hxx:173
 include/docmodel/theme/Theme.hxx:190
     std::vector<Color> model::Theme::GetColors() const
 include/docmodel/uno/UnoChartColorStyle.hxx:40
-    com::sun::star::uno::Reference<com::sun::star::chart2::XChartColorStyle> model::style::createXChartColorStyle(const struct model::ColorStyleSet &)
+    cpo::uno::Reference<com::sun::star::chart2::XChartColorStyle> model::style::createXChartColorStyle(const struct model::ColorStyleSet &)
 include/docmodel/uno/UnoChartStyle.hxx:47
-    com::sun::star::uno::Reference<com::sun::star::chart2::XChartStyle> model::style::createXChartStyle(const struct model::StyleSet &)
+    cpo::uno::Reference<com::sun::star::chart2::XChartStyle> model::style::createXChartStyle(const struct model::StyleSet &)
 include/drawinglayer/geometry/viewinformation2d.hxx:172
     Color drawinglayer::geometry::ViewInformation2D::getAutoColor() const
 include/drawinglayer/primitive2d/baseprimitive2d.hxx:139
@@ -857,7 +857,7 @@ include/oox/export/DMLPresetShapeExport.hxx:128
 include/oox/export/drawingml.hxx:362
     _Bool oox::drawingml::DrawingML::EqualGradients(const struct com::sun::star::awt::Gradient2 &,const struct com::sun::star::awt::Gradient2 &)
 include/oox/export/drawingml.hxx:419
-    _Bool oox::drawingml::DrawingML::WriteCharColor(const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> &)
+    _Bool oox::drawingml::DrawingML::WriteCharColor(const cpo::uno::Reference<com::sun::star::beans::XPropertySet> &)
 include/oox/export/drawingml.hxx:575
     Color oox::drawingml::DrawingML::ColorWithIntensity(unsigned int,unsigned int)
 include/oox/helper/attributelist.hxx:69
@@ -885,9 +885,9 @@ include/oox/helper/containerhelper.hxx:126
 include/oox/helper/propertymap.hxx:60
     int oox::PropertyMap::getPropertyId(std::basic_string_view<char16_t>)
 include/oox/helper/propertymap.hxx:115
-    void oox::PropertyMap::dumpCode(const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> &)
+    void oox::PropertyMap::dumpCode(const cpo::uno::Reference<com::sun::star::beans::XPropertySet> &)
 include/oox/helper/propertymap.hxx:116
-    void oox::PropertyMap::dumpData(const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> &)
+    void oox::PropertyMap::dumpData(const cpo::uno::Reference<com::sun::star::beans::XPropertySet> &)
 include/oox/helper/propertyset.hxx:110
     _Bool oox::PropertySet::setProperty(int,Color)
 include/oox/ppt/slidepersist.hxx:93
@@ -1385,7 +1385,7 @@ include/vcl/toolkit/treelist.hxx:171
 include/vcl/toolkit/treelistbox.hxx:372
     void SvTreeListBox::RemoveSelection()
 include/vcl/toolkit/unowrap.hxx:64
-    com::sun::star::uno::Reference<com::sun::star::awt::XPopupMenu> UnoWrapperBase::CreateMenuInterface(PopupMenu *)
+    cpo::uno::Reference<com::sun::star::awt::XPopupMenu> UnoWrapperBase::CreateMenuInterface(PopupMenu *)
 include/vcl/txtattr.hxx:56
     _Bool TextAttrib::operator!=(const TextAttrib &) const
 include/vcl/uitest/uiobject.hxx:139
@@ -1491,7 +1491,7 @@ include/vcl/weld.hxx:3293
 include/vcl/weld.hxx:3379
     rtl::OUString weld::MessageDialogController::get_secondary_text() const
 include/vcl/weldutils.hxx:195
-    const com::sun::star::uno::Reference<com::sun::star::frame::XFrame> & weld::WidgetStatusListener::getFrame() const
+    const cpo::uno::Reference<com::sun::star::frame::XFrame> & weld::WidgetStatusListener::getFrame() const
 include/vcl/weldutils.hxx:347
     void weld::DateFormatter::CursorChangedHdl(weld::Entry &)
 include/vcl/weldutils.hxx:347
@@ -1541,7 +1541,7 @@ oox/inc/drawingml/textparagraphproperties.hxx:98
 oox/source/drawingml/diagram/diagram.hxx:63
     oox::drawingml::SmartArtDiagram & oox::drawingml::DiagramLayout::getDiagram()
 oox/source/drawingml/diagram/diagram.hxx:161
-    com::sun::star::uno::Reference<com::sun::star::xml::dom::XDocument> oox::drawingml::SmartArtDiagram::convertAndSet(std::basic_string_view<char16_t>,enum svx::diagram::DomMapFlag)
+    cpo::uno::Reference<com::sun::star::xml::dom::XDocument> oox::drawingml::SmartArtDiagram::convertAndSet(std::basic_string_view<char16_t>,enum svx::diagram::DomMapFlag)
 oox/source/drawingml/diagram/diagramlayoutatoms.hxx:347
     const rtl::OUString & oox::drawingml::LayoutNode::getStyleLabel() const
 oox/source/drawingml/diagram/diagramlayoutatoms.hxx:355
@@ -1581,17 +1581,17 @@ sc/inc/address.hxx:651
 sc/inc/address.hxx:661
     std::basic_ostream<type-parameter-?-?, type-parameter-?-?> & operator<<(std::basic_ostream<type-parameter-?-?, type-parameter-?-?> &,const ScRange &)
 sc/inc/appluno.hxx:37
-    com::sun::star::uno::Reference<cpo::uno::XInterface> ScSpreadsheetSettings_CreateInstance(const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> &)
+    cpo::uno::Reference<cpo::uno::XInterface> ScSpreadsheetSettings_CreateInstance(const cpo::uno::Reference<com::sun::star::lang::XMultiServiceFactory> &)
 sc/inc/appluno.hxx:40
-    com::sun::star::uno::Reference<cpo::uno::XInterface> ScRecentFunctionsObj_CreateInstance(const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> &)
+    cpo::uno::Reference<cpo::uno::XInterface> ScRecentFunctionsObj_CreateInstance(const cpo::uno::Reference<com::sun::star::lang::XMultiServiceFactory> &)
 sc/inc/appluno.hxx:43
-    com::sun::star::uno::Reference<cpo::uno::XInterface> ScFunctionListObj_CreateInstance(const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> &)
+    cpo::uno::Reference<cpo::uno::XInterface> ScFunctionListObj_CreateInstance(const cpo::uno::Reference<com::sun::star::lang::XMultiServiceFactory> &)
 sc/inc/bigrange.hxx:70
     _Bool ScBigAddress::operator!=(const ScBigAddress &) const
 sc/inc/calcconfig.hxx:80
     _Bool ScCalcConfig::operator!=(const struct ScCalcConfig &) const
 sc/inc/cellsuno.hxx:613
-    com::sun::star::uno::Reference<com::sun::star::table::XCellRange> ScCellRangeObj::getCellRangeByName(const rtl::OUString &,const struct ScAddress::Details &)
+    cpo::uno::Reference<com::sun::star::table::XCellRange> ScCellRangeObj::getCellRangeByName(const rtl::OUString &,const struct ScAddress::Details &)
 sc/inc/cellvalue.hxx:132
     _Bool ScRefCellValue::operator==(const struct ScRefCellValue &) const
 sc/inc/column.hxx:133
@@ -1627,7 +1627,7 @@ sc/inc/formulacell.hxx:558
 sc/inc/formulaopt.hxx:78
     _Bool ScFormulaOptions::operator!=(const ScFormulaOptions &) const
 sc/inc/funcuno.hxx:35
-    com::sun::star::uno::Reference<cpo::uno::XInterface> ScFunctionAccess_CreateInstance(const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> &)
+    cpo::uno::Reference<cpo::uno::XInterface> ScFunctionAccess_CreateInstance(const cpo::uno::Reference<com::sun::star::lang::XMultiServiceFactory> &)
 sc/inc/kahan.hxx:207
     _Bool KahanSum::operator<(const KahanSum &) const
 sc/inc/kahan.hxx:211
@@ -1641,7 +1641,7 @@ sc/inc/kahan.hxx:217
 sc/inc/kahan.hxx:219
     _Bool KahanSum::operator>=(const KahanSum &) const
 sc/inc/miscuno.hxx:168
-    void ScUnoHelpFunctions::SetOptionalPropertyValue(const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> &,const char *,const type-parameter-?-? &)
+    void ScUnoHelpFunctions::SetOptionalPropertyValue(const cpo::uno::Reference<com::sun::star::beans::XPropertySet> &,const char *,const type-parameter-?-? &)
 sc/inc/mtvcellfunc.hxx:40
     mdds::mtv::soa::detail::iterator_base<struct mdds::mtv::soa::multi_type_vector<struct sc::CellStoreTraits>::iterator_trait> sc::ProcessFormula(const mdds::mtv::soa::detail::iterator_base<struct mdds::mtv::soa::multi_type_vector<struct sc::CellStoreTraits>::iterator_trait> &,mdds::mtv::soa::multi_type_vector<struct sc::CellStoreTraits> &,int,int,std::function<void (unsigned long, ScFormulaCell *)>)
 sc/inc/mtvelements.hxx:78
@@ -1983,7 +1983,7 @@ sd/source/ui/inc/PaneShells.hxx:50
 sd/source/ui/inc/PaneShells.hxx:67
     void sd::LeftDrawPaneShell::RegisterInterface(const SfxModule *)
 sd/source/ui/inc/RemoteServer.hxx:54
-    void sd::RemoteServer::presentationStarted(const com::sun::star::uno::Reference<com::sun::star::presentation::XSlideShowController> &)
+    void sd::RemoteServer::presentationStarted(const cpo::uno::Reference<com::sun::star::presentation::XSlideShowController> &)
 sd/source/ui/inc/RemoteServer.hxx:56
     void sd::RemoteServer::presentationStopped()
 sd/source/ui/remotecontrol/ZeroconfService.hxx:34
@@ -2325,7 +2325,7 @@ sw/inc/viscrs.hxx:252
 sw/qa/extras/layout/layout6.cxx:2685
     int main()
 sw/qa/inc/swmodeltestbase.hxx:164
-    com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> SwModelTestBase::getParagraphAnchoredObject(const int,const com::sun::star::uno::Reference<com::sun::star::text::XTextRange> &) const
+    cpo::uno::Reference<com::sun::star::beans::XPropertySet> SwModelTestBase::getParagraphAnchoredObject(const int,const cpo::uno::Reference<com::sun::star::text::XTextRange> &) const
 sw/source/core/access/accportions.cxx:59
     unsigned long FindLastBreak(const std::vector<type-parameter-?-?, std::allocator<type-parameter-?-?> > &,type-parameter-?-?)
 sw/source/core/inc/AccessibilityIssue.hxx:82
@@ -2361,7 +2361,7 @@ sw/source/ui/dialog/swdlgfact.cxx:110
 sw/source/ui/dialog/swdlgfact.cxx:110
      (anonymous namespace)::AbstractDialogImpl_NoSync::AbstractDialogImpl_BASE(SwView &)
 sw/source/ui/dialog/swdlgfact.cxx:110
-     (anonymous namespace)::AbstractDialogImpl_NoSync::AbstractDialogImpl_BASE(SwView &,com::sun::star::uno::Reference<com::sun::star::sdbc::XDataSource> &,com::sun::star::uno::Reference<com::sun::star::sdbcx::XColumnsSupplier> &,const struct SwDBData &)
+     (anonymous namespace)::AbstractDialogImpl_NoSync::AbstractDialogImpl_BASE(SwView &,cpo::uno::Reference<com::sun::star::sdbc::XDataSource> &,cpo::uno::Reference<com::sun::star::sdbcx::XColumnsSupplier> &,const struct SwDBData &)
 sw/source/ui/dialog/swdlgfact.cxx:110
      (anonymous namespace)::AbstractDialogImpl_NoSync::AbstractDialogImpl_BASE(weld::Widget *&,sw::mark::DateFieldmark *&,SwDoc &)
 sw/source/ui/dialog/swdlgfact.cxx:110
@@ -2385,7 +2385,7 @@ sw/source/uibase/inc/swcont.hxx:81
 sw/source/uibase/inc/swcont.hxx:82
     _Bool SwContent::operator==(const SwContent &) const
 sw/source/uibase/inc/unomod.hxx:38
-    com::sun::star::uno::Reference<cpo::uno::XInterface> SwXModule_CreateInstance(const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> &)
+    cpo::uno::Reference<cpo::uno::XInterface> SwXModule_CreateInstance(const cpo::uno::Reference<com::sun::star::lang::XMultiServiceFactory> &)
 sw/source/uibase/sidebar/ThemePanel.hxx:47
     _Bool sw::sidebar::ThemePanel::LinkStubDoubleClickHdl(void *,weld::TreeView &)
 sw/source/writerfilter/dmapper/CellColorHandler.hxx:74
@@ -2409,7 +2409,7 @@ ucb/source/inc/regexpmap.hxx:289
 ucb/source/ucp/gio/gio_mount.cxx:37
     void * ooo_mount_operation_get_instance_private(struct OOoMountOperation *)
 unoxml/inc/node.hxx:116
-    void DOM::CNode::checkNoParent(const com::sun::star::uno::Reference<com::sun::star::xml::dom::XNode> &)
+    void DOM::CNode::checkNoParent(const cpo::uno::Reference<com::sun::star::xml::dom::XNode> &)
 vcl/inc/bitmap/ScanlineTools.hxx:22
     void vcl::bitmap::ScanlineTransformer::skipPixel(unsigned int)
 vcl/inc/ControlCacheKey.hxx:34
@@ -2421,7 +2421,7 @@ vcl/inc/ControlCacheKey.hxx:49
 vcl/inc/ControlCacheKey.hxx:81
     unsigned long ControlCacheHashFunction::operator()(const ControlCacheKey &) const
 vcl/inc/dndhelper.hxx:34
-    void vcl::OleDnDHelper(const com::sun::star::uno::Reference<com::sun::star::lang::XInitialization> &,long,enum vcl::DragOrDrop)
+    void vcl::OleDnDHelper(const cpo::uno::Reference<com::sun::star::lang::XInitialization> &,long,enum vcl::DragOrDrop)
 vcl/inc/driverblocklist.hxx:26
     _Bool DriverBlocklist::IsDeviceBlocked(const rtl::OUString &,enum DriverBlocklist::VersionType,std::basic_string_view<char16_t>,std::basic_string_view<char16_t>,const rtl::OUString &)
 vcl/inc/driverblocklist.hxx:45
@@ -2557,8 +2557,8 @@ vcl/unx/gtk3/gloactiongroup.cxx:51
 vcl/unx/gtk3/glomenu.cxx:32
     void * g_lo_menu_get_instance_private(struct GLOMenu *)
 xmlsecurity/inc/framework/signatureverifierimpl.hxx:75
-    void SignatureVerifierImpl::updateSignature(const com::sun::star::uno::Reference<com::sun::star::xml::crypto::XXMLSignature> &,const com::sun::star::uno::Reference<com::sun::star::xml::crypto::XXMLSecurityContext> &)
+    void SignatureVerifierImpl::updateSignature(const cpo::uno::Reference<com::sun::star::xml::crypto::XXMLSignature> &,const cpo::uno::Reference<com::sun::star::xml::crypto::XXMLSecurityContext> &)
 xmlsecurity/inc/framework/xmlsignaturetemplateimpl.hxx:92
-    com::sun::star::uno::Reference<cpo::uno::XInterface> XMLSignatureTemplateImpl::impl_createInstance(const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> &)
+    cpo::uno::Reference<cpo::uno::XInterface> XMLSignatureTemplateImpl::impl_createInstance(const cpo::uno::Reference<com::sun::star::lang::XMultiServiceFactory> &)
 xmlsecurity/source/xmlsec/nss/nssinitializer.hxx:45
-     ONSSInitializer::ONSSInitializer(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext>)
+     ONSSInitializer::ONSSInitializer(cpo::uno::Reference<com::sun::star::uno::XComponentContext>)

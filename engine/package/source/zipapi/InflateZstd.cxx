@@ -10,7 +10,7 @@
 #include <package/InflateZstd.hxx>
 #include <string.h>
 
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::cpo::uno;
 using namespace ZipUtils;
 

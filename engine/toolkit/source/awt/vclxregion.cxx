@@ -79,7 +79,7 @@ void VCLXRegion::xOrRectangle( const css::awt::Rectangle& rRect )
     maRegion.XOr(vcl::unohelper::ConvertToVCLRect(rRect));
 }
 
-void VCLXRegion::unionRegion( const css::uno::Reference< css::awt::XRegion >& rxRegion )
+void VCLXRegion::unionRegion( const cpo::uno::Reference< css::awt::XRegion >& rxRegion )
 {
     std::scoped_lock aGuard( maMutex );
 
@@ -87,7 +87,7 @@ void VCLXRegion::unionRegion( const css::uno::Reference< css::awt::XRegion >& rx
         maRegion.Union( VCLUnoHelper::GetRegion( rxRegion ) );
 }
 
-void VCLXRegion::intersectRegion( const css::uno::Reference< css::awt::XRegion >& rxRegion )
+void VCLXRegion::intersectRegion( const cpo::uno::Reference< css::awt::XRegion >& rxRegion )
 {
     std::scoped_lock aGuard( maMutex );
 
@@ -95,7 +95,7 @@ void VCLXRegion::intersectRegion( const css::uno::Reference< css::awt::XRegion >
         maRegion.Intersect( VCLUnoHelper::GetRegion( rxRegion ) );
 }
 
-void VCLXRegion::excludeRegion( const css::uno::Reference< css::awt::XRegion >& rxRegion )
+void VCLXRegion::excludeRegion( const cpo::uno::Reference< css::awt::XRegion >& rxRegion )
 {
     std::scoped_lock aGuard( maMutex );
 
@@ -103,7 +103,7 @@ void VCLXRegion::excludeRegion( const css::uno::Reference< css::awt::XRegion >& 
         maRegion.Exclude( VCLUnoHelper::GetRegion( rxRegion ) );
 }
 
-void VCLXRegion::xOrRegion( const css::uno::Reference< css::awt::XRegion >& rxRegion )
+void VCLXRegion::xOrRegion( const cpo::uno::Reference< css::awt::XRegion >& rxRegion )
 {
     std::scoped_lock aGuard( maMutex );
 

@@ -39,7 +39,7 @@ public:
     /** Return the com::sun::star::awt::XWindow of the
         pane that is used to display a view.
     */
-    virtual css::uno::Reference<css::awt::XWindow> getWindow() = 0;
+    virtual cpo::uno::Reference<css::awt::XWindow> getWindow() = 0;
 };
 
 } // end of namespace sd::framework

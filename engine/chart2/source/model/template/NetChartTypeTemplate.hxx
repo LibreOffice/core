@@ -28,7 +28,7 @@ class NetChartTypeTemplate : public ChartTypeTemplate
 {
 public:
     explicit NetChartTypeTemplate(
-        css::uno::Reference< cpo::uno::XComponentContext > const & xContext,
+        cpo::uno::Reference< cpo::uno::XComponentContext > const & xContext,
         const OUString & rServiceName,
         StackMode eStackMode,
         bool bSymbols,

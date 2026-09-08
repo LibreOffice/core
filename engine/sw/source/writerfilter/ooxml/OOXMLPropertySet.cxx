@@ -30,6 +30,7 @@
 namespace writerfilter::ooxml
 {
 using namespace com::sun::star;
+using namespace ::cpo;
 
 OOXMLProperty::OOXMLProperty(Id id, const OOXMLValue& pValue,
                              OOXMLProperty::Type_t eType)
@@ -290,9 +291,9 @@ OOXMLValue OOXMLValue::createString(const OUString& bValue)
 }
 
 // static
-OOXMLValue OOXMLValue::createShape(const css::uno::Reference<css::drawing::XShape>& xShape)
+OOXMLValue OOXMLValue::createShape(const cpo::uno::Reference<css::drawing::XShape>& xShape)
 {
-    return OOXMLValue(VariantType(std::in_place_type<css::uno::Reference<css::drawing::XShape>>, xShape));
+    return OOXMLValue(VariantType(std::in_place_type<cpo::uno::Reference<css::drawing::XShape>>, xShape));
 }
 
 // static

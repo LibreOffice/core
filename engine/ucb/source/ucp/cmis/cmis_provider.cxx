@@ -19,6 +19,7 @@
 #include "cmis_repo_content.hxx"
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 namespace cmis
 {

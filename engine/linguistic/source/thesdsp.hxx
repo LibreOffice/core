@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <cpo/uno/Sequence.h>
 
 #include <com/sun/star/linguistic2/XLinguProperties.hpp>
@@ -42,12 +42,12 @@ class ThesaurusDispatcher :
     typedef std::map< LanguageType, LangSvcEntries_Thes_Ptr_t >     ThesSvcByLangMap_t;
     ThesSvcByLangMap_t      aSvcMap;
 
-    css::uno::Reference< css::linguistic2::XLinguProperties >     xPropSet;
+    cpo::uno::Reference< css::linguistic2::XLinguProperties >     xPropSet;
 
     ThesaurusDispatcher(const ThesaurusDispatcher &) = delete;
     ThesaurusDispatcher & operator = (const ThesaurusDispatcher &) = delete;
 
-    inline const css::uno::Reference< css::linguistic2::XLinguProperties > &
+    inline const cpo::uno::Reference< css::linguistic2::XLinguProperties > &
             GetPropSet();
 
     void    ClearSvcList();
@@ -63,7 +63,7 @@ public:
         hasLocale( const css::lang::Locale& aLocale ) override;
 
     // XThesaurus
-    virtual cpo::uno::Sequence< css::uno::Reference< css::linguistic2::XMeaning > >
+    virtual cpo::uno::Sequence< cpo::uno::Reference< css::linguistic2::XMeaning > >
         queryMeanings( const OUString& aTerm,
                 const css::lang::Locale& aLocale,
                 const cpo::uno::Sequence< ::css::beans::PropertyValue >& aProperties ) override;
@@ -77,7 +77,7 @@ public:
 };
 
 
-inline const css::uno::Reference< css::linguistic2::XLinguProperties > &
+inline const cpo::uno::Reference< css::linguistic2::XLinguProperties > &
         ThesaurusDispatcher::GetPropSet()
 {
     if (!xPropSet.is())

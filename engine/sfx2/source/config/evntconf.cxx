@@ -35,10 +35,11 @@
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/frame/theGlobalEventBroadcaster.hpp>
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 SfxEventNamesList& SfxEventNamesList::operator=( const SfxEventNamesList& ) = default;
 

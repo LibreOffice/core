@@ -28,7 +28,7 @@
 #include <vcl/graphictools.hxx>
 #include <xmloff/xmlexp.hxx>
 
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
@@ -191,12 +191,12 @@ class SVGTextWriter final
     SVGActionWriter& mrActionWriter;
     VclPtr<VirtualDevice>                       mpVDev;
     bool                                        mbIsTextShapeStarted;
-    css::uno::Reference<css::text::XText>       mrTextShape;
+    cpo::uno::Reference<css::text::XText>       mrTextShape;
     OUString                                    msShapeId;
-    css::uno::Reference<css::container::XEnumeration> mrParagraphEnumeration;
-    css::uno::Reference<css::text::XTextContent> mrCurrentTextParagraph;
-    css::uno::Reference<css::container::XEnumeration> mrTextPortionEnumeration;
-    css::uno::Reference<css::text::XTextRange>  mrCurrentTextPortion;
+    cpo::uno::Reference<css::container::XEnumeration> mrParagraphEnumeration;
+    cpo::uno::Reference<css::text::XTextContent> mrCurrentTextParagraph;
+    cpo::uno::Reference<css::container::XEnumeration> mrTextPortionEnumeration;
+    cpo::uno::Reference<css::text::XTextRange>  mrCurrentTextPortion;
     const GDIMetaFile*                          mpTextEmbeddedBitmapMtf;
     MapMode*                                    mpTargetMapMode;
     std::unique_ptr<SvXMLElementExport>         mpTextShapeElem;
@@ -264,7 +264,7 @@ class SVGTextWriter final
         mpTargetMapMode = &rTargetMapMode;
     }
 
-    void setTextShape( const css::uno::Reference<css::text::XText>& rxText,
+    void setTextShape( const cpo::uno::Reference<css::text::XText>& rxText,
                        const GDIMetaFile* pTextEmbeddedBitmapMtf )
     {
         mrTextShape.set( rxText );
@@ -282,8 +282,8 @@ class SVGTextWriter final
     template< typename SubType >
     bool implGetTextPositionFromBitmap( const MetaAction* pAction, Point& raPos, bool& rbEmpty );
 
-    void implRegisterInterface( const css::uno::Reference< cpo::uno::XInterface >& rxIf );
-    const OUString & implGetValidIDFromInterface( const css::uno::Reference< cpo::uno::XInterface >& rxIf );
+    void implRegisterInterface( const cpo::uno::Reference< cpo::uno::XInterface >& rxIf );
+    const OUString & implGetValidIDFromInterface( const cpo::uno::Reference< cpo::uno::XInterface >& rxIf );
 };
 
 
@@ -338,12 +338,12 @@ private:
     void                    ImplWriteMask( GDIMetaFile& rMtf, const Point& rDestPt, const Size& rDestSize, const Gradient& rGradient, sal_uInt32 nWriteFlags, const basegfx::BColorStops* pColorStops);
     void                    ImplWriteText( const Point& rPos, const OUString& rText, KernArraySpan pDXArray, tools::Long nWidth );
     void                    ImplWriteText( const Point& rPos, const OUString& rText, KernArraySpan pDXArray, tools::Long nWidth, Color aTextColor );
-    void                    ImplWriteBmp( const Bitmap& rBmp, const Point& rPt, const Size& rSz, const Point& rSrcPt, const Size& rSrcSz, const css::uno::Reference<css::drawing::XShape>* pShape);
+    void                    ImplWriteBmp( const Bitmap& rBmp, const Point& rPt, const Size& rSz, const Point& rSrcPt, const Size& rSrcSz, const cpo::uno::Reference<css::drawing::XShape>* pShape);
 
     void                    ImplWriteActions( const GDIMetaFile& rMtf,
                                               sal_uInt32 nWriteFlags,
                                               const OUString& aElementId,
-                                              const css::uno::Reference< css::drawing::XShape >* pXShape = nullptr,
+                                              const cpo::uno::Reference< css::drawing::XShape >* pXShape = nullptr,
                                               const GDIMetaFile* pTextEmbeddedBitmapMtf = nullptr );
 
     vcl::Font               ImplSetCorrectFontHeight() const;
@@ -362,7 +362,7 @@ public:
                                            const GDIMetaFile& rMtf,
                                            sal_uInt32 nWriteFlags,
                                            const OUString& aElementId = u""_ustr,
-                                           const css::uno::Reference< css::drawing::XShape >* pXShape = nullptr,
+                                           const cpo::uno::Reference< css::drawing::XShape >* pXShape = nullptr,
                                            const GDIMetaFile* pTextEmbeddedBitmapMtf = nullptr );
 
     void                    SetEmbeddedBitmapRefs( const MetaBitmapActionMap* pEmbeddedBitmapsMap );
@@ -375,16 +375,16 @@ public:
 class SVGWriter : public cppu::WeakImplHelper< css::svg::XSVGWriter, css::lang::XServiceInfo >
 {
 private:
-    css::uno::Reference< cpo::uno::XComponentContext > mxContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext > mxContext;
     cpo::uno::Sequence< css::beans::PropertyValue >    maFilterData;
 
 public:
     explicit SVGWriter( const cpo::uno::Sequence<cpo::uno::Any>& args,
-                        const css::uno::Reference< cpo::uno::XComponentContext >& rxCtx );
+                        const cpo::uno::Reference< cpo::uno::XComponentContext >& rxCtx );
     virtual ~SVGWriter() override;
 
     // XSVGWriter
-    virtual void write( const css::uno::Reference<css::xml::sax::XDocumentHandler>& rxDocHandler,
+    virtual void write( const cpo::uno::Reference<css::xml::sax::XDocumentHandler>& rxDocHandler,
                                  const cpo::uno::Sequence<sal_Int8>& rMtfSeq ) override;
 
     //  XServiceInfo

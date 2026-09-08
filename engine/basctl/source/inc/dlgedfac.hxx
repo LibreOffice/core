@@ -29,12 +29,12 @@ namespace basctl
 
 class DlgEdFactory
 {
-    const css::uno::Reference<css::frame::XModel> mxModel;
+    const cpo::uno::Reference<css::frame::XModel> mxModel;
 
     void ImplDestroy();
 
 public:
-    DlgEdFactory(css::uno::Reference<css::frame::XModel> xModel);
+    DlgEdFactory(cpo::uno::Reference<css::frame::XModel> xModel);
     ~DlgEdFactory();
 
     DECL_LINK(MakeObject, SdrObjCreatorParams, rtl::Reference<SdrObject>);

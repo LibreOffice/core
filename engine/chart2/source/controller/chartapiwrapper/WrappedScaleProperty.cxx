@@ -30,9 +30,10 @@
 #include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using ::cpo::uno::Any;
 using namespace ::com::sun::star::chart2;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::cpo::uno::Sequence;
 using ::com::sun::star::chart::TimeIncrement;
 

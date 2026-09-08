@@ -37,25 +37,25 @@ class BaseCommandEnv
                                       css::task::XInteractionHandler,
                                       css::ucb::XProgressHandler >
 {
-    css::uno::Reference< css::task::XInteractionHandler> m_forwardHandler;
+    cpo::uno::Reference< css::task::XInteractionHandler> m_forwardHandler;
 protected:
     void handle_(bool approve,
-                 css::uno::Reference< css::task::XInteractionRequest> const & xRequest );
+                 cpo::uno::Reference< css::task::XInteractionRequest> const & xRequest );
 public:
     virtual ~BaseCommandEnv() override;
     BaseCommandEnv();
     explicit BaseCommandEnv(
-        css::uno::Reference< css::task::XInteractionHandler> const & handler);
+        cpo::uno::Reference< css::task::XInteractionHandler> const & handler);
 
     // XCommandEnvironment
-    virtual css::uno::Reference<css::task::XInteractionHandler >
+    virtual cpo::uno::Reference<css::task::XInteractionHandler >
     getInteractionHandler() override;
-    virtual css::uno::Reference<css::ucb::XProgressHandler >
+    virtual cpo::uno::Reference<css::ucb::XProgressHandler >
     getProgressHandler() override;
 
     // XInteractionHandler
     virtual void handle(
-        css::uno::Reference<css::task::XInteractionRequest > const & xRequest ) override;
+        cpo::uno::Reference<css::task::XInteractionRequest > const & xRequest ) override;
 
     // XProgressHandler
     virtual void push( cpo::uno::Any const & Status ) override;
@@ -67,11 +67,11 @@ class TmpRepositoryCommandEnv : public BaseCommandEnv
 {
 public:
     TmpRepositoryCommandEnv();
-    explicit TmpRepositoryCommandEnv(css::uno::Reference< css::task::XInteractionHandler> const & handler);
+    explicit TmpRepositoryCommandEnv(cpo::uno::Reference< css::task::XInteractionHandler> const & handler);
 
 // XInteractionHandler
     virtual void handle(
-        css::uno::Reference<css::task::XInteractionRequest > const & xRequest ) override;
+        cpo::uno::Reference<css::task::XInteractionRequest > const & xRequest ) override;
 
 };
 
@@ -86,13 +86,13 @@ private:
     bool m_bSuppressLicense;
 public:
     LicenseCommandEnv(
-        css::uno::Reference< css::task::XInteractionHandler> const & handler,
+        cpo::uno::Reference< css::task::XInteractionHandler> const & handler,
         bool bSuppressLicense,
         OUString repository);
 
 // XInteractionHandler
     virtual void handle(
-        css::uno::Reference<css::task::XInteractionRequest > const & xRequest ) override;
+        cpo::uno::Reference<css::task::XInteractionRequest > const & xRequest ) override;
 
 };
 
@@ -104,11 +104,11 @@ class NoLicenseCommandEnv : public BaseCommandEnv
 {
 
 public:
-    explicit NoLicenseCommandEnv(css::uno::Reference< css::task::XInteractionHandler> const & handler);
+    explicit NoLicenseCommandEnv(cpo::uno::Reference< css::task::XInteractionHandler> const & handler);
 
 // XInteractionHandler
     virtual void handle(
-        css::uno::Reference<css::task::XInteractionRequest > const & xRequest ) override;
+        cpo::uno::Reference<css::task::XInteractionRequest > const & xRequest ) override;
 
 };
 
@@ -126,7 +126,7 @@ public:
     SilentCheckPrerequisitesCommandEnv();
     // XInteractionHandler
     virtual void handle(
-        css::uno::Reference<css::task::XInteractionRequest > const & xRequest ) override;
+        cpo::uno::Reference<css::task::XInteractionRequest > const & xRequest ) override;
 
     // Set to true if a PlatformException or a DependencyException were handled.
     cpo::uno::Any m_Exception;

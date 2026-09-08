@@ -27,7 +27,7 @@
 
 namespace
 {
-namespace uno = css::uno;
+namespace uno = cpo::uno;
 
 class DrawingImportFilter : public writerperfect::ImportFilter<OdgGenerator>
 {

@@ -136,8 +136,8 @@
 
 using namespace ::oox::core;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::text;
@@ -1197,7 +1197,7 @@ Reference< XShape > const & Shape::createAndInsert(
         ::oox::core::XmlFilterBase& rFilterBase,
         const OUString& rServiceName,
         const Theme* pTheme,
-        const css::uno::Reference< css::drawing::XShapes >& rxShapes,
+        const cpo::uno::Reference< css::drawing::XShapes >& rxShapes,
         bool bClearText,
         const oox::drawingml::ShapePtr& pPlaceholder,
         basegfx::B2DHomMatrix& aParentTransformation,

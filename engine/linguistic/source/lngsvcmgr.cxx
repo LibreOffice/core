@@ -54,6 +54,7 @@
 #include "gciterator.hxx"
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace linguistic;
 
 cpo::uno::Sequence< OUString > static GetLangSvcList( const cpo::uno::Any &rVal );
@@ -942,10 +943,10 @@ template<typename T> uno::Reference<T> createLinguisticInstance(
     // embedded script the legacy UNO API notice is about:
     auto const aSuppression = comphelper::suppressLegacyApiWarning();
 
-    uno::Reference<lang::XSingleComponentFactory> xCompFactory(rCurrent, css::uno::UNO_QUERY);
+    uno::Reference<lang::XSingleComponentFactory> xCompFactory(rCurrent, cpo::uno::UNO_QUERY);
     if (xCompFactory.is())
         return uno::Reference<T>(xCompFactory->createInstanceWithContext(rContext), uno::UNO_QUERY_THROW);
-    uno::Reference<lang::XSingleServiceFactory> xFactory(rCurrent, css::uno::UNO_QUERY);
+    uno::Reference<lang::XSingleServiceFactory> xFactory(rCurrent, cpo::uno::UNO_QUERY);
     if (xFactory)
         return uno::Reference<T>(xFactory->createInstance(), uno::UNO_QUERY_THROW);
     return nullptr;
@@ -1108,10 +1109,10 @@ void LngSvcMgr::GetAvailableThesSvcs_Impl()
         uno::Reference< lang::XSingleComponentFactory > xCompFactory;
         uno::Reference< lang::XSingleServiceFactory > xFactory;
 
-        xCompFactory.set(aCurrent, css::uno::UNO_QUERY);
+        xCompFactory.set(aCurrent, cpo::uno::UNO_QUERY);
         if (!xCompFactory.is())
         {
-            xFactory.set(aCurrent, css::uno::UNO_QUERY);
+            xFactory.set(aCurrent, cpo::uno::UNO_QUERY);
         }
         if ( xCompFactory.is() || xFactory.is() )
         {

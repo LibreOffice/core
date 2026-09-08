@@ -25,7 +25,7 @@
 #include "TransformerBase.hxx"
 #include <osl/diagnose.h>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
 

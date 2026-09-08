@@ -50,7 +50,7 @@ class CachedContentResultSet
     private:
         std::optional<css::ucb::FetchResult>
                                          m_pResult;
-        css::uno::Reference< css::ucb::XContentIdentifierMapping >
+        cpo::uno::Reference< css::ucb::XContentIdentifierMapping >
                                          m_xContentIdentifierMapping;
         std::optional<cpo::uno::Sequence< bool >>  m_pMappedReminder;
 
@@ -68,7 +68,7 @@ class CachedContentResultSet
         cpo::uno::Sequence< bool >& getMappedReminder();
 
     public:
-        CCRS_Cache( const css::uno::Reference<
+        CCRS_Cache( const cpo::uno::Reference<
                 css::ucb::XContentIdentifierMapping > & xMapping );
         ~CCRS_Cache();
 
@@ -97,31 +97,31 @@ class CachedContentResultSet
         getContentIdentifierString( sal_Int32 nRow );
 
         /// @throws cpo::uno::RuntimeException
-        css::uno::Reference< css::ucb::XContentIdentifier >
+        cpo::uno::Reference< css::ucb::XContentIdentifier >
         getContentIdentifier( sal_Int32 nRow );
 
         /// @throws cpo::uno::RuntimeException
-        css::uno::Reference< css::ucb::XContent >
+        cpo::uno::Reference< css::ucb::XContent >
         getContent( sal_Int32 nRow );
     };
 
     //members
 
-    css::uno::Reference< cpo::uno::XComponentContext >
+    cpo::uno::Reference< cpo::uno::XComponentContext >
                             m_xContext;
 
     //different Interfaces from Origin:
-    css::uno::Reference< css::ucb::XFetchProvider >
+    cpo::uno::Reference< css::ucb::XFetchProvider >
                             m_xFetchProvider; //XFetchProvider-interface from m_xOrigin
 
-    css::uno::Reference< css::ucb::XFetchProviderForContentAccess >
+    cpo::uno::Reference< css::ucb::XFetchProviderForContentAccess >
                             m_xFetchProviderForContentAccess; //XFetchProviderForContentAccess-interface from m_xOrigin
 
     rtl::Reference< CCRS_PropertySetInfo >
                             m_xMyPropertySetInfo;
 
 
-    css::uno::Reference< css::ucb::XContentIdentifierMapping >
+    cpo::uno::Reference< css::ucb::XContentIdentifierMapping >
                             m_xContentIdentifierMapping;// can be used for remote optimized ContentAccess
 
     //some Properties and helping variables
@@ -176,9 +176,9 @@ private:
 
 public:
     CachedContentResultSet(
-                        const css::uno::Reference< cpo::uno::XComponentContext > &         rxContext,
-                        const css::uno::Reference< css::sdbc::XResultSet > &               xOrigin,
-                        const css::uno::Reference< css::ucb::XContentIdentifierMapping > & xContentIdentifierMapping );
+                        const cpo::uno::Reference< cpo::uno::XComponentContext > &         rxContext,
+                        const cpo::uno::Reference< css::sdbc::XResultSet > &               xOrigin,
+                        const cpo::uno::Reference< css::ucb::XContentIdentifierMapping > & xContentIdentifierMapping );
 
     virtual ~CachedContentResultSet() override;
 
@@ -228,10 +228,10 @@ public:
     virtual OUString
     queryContentIdentifierStringImpl(std::unique_lock<std::mutex>& rGuard) override;
 
-    virtual css::uno::Reference<css::ucb::XContentIdentifier>
+    virtual cpo::uno::Reference<css::ucb::XContentIdentifier>
     queryContentIdentifierImpl(std::unique_lock<std::mutex>& rGuard) override;
 
-    virtual css::uno::Reference<css::ucb::XContent>
+    virtual cpo::uno::Reference<css::ucb::XContent>
     queryContentImpl(std::unique_lock<std::mutex>& rGuard) override;
 
 
@@ -271,7 +271,7 @@ public:
     rowInserted() override;
     virtual bool SAL_CALL
     rowDeleted() override;
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
                 cpo::uno::XInterface > SAL_CALL
     getStatement() override;
 
@@ -317,26 +317,26 @@ public:
     virtual css::util::DateTime SAL_CALL
     getTimestamp( sal_Int32 columnIndex ) override;
 
-    virtual css::uno::Reference< css::io::XInputStream > SAL_CALL
+    virtual cpo::uno::Reference< css::io::XInputStream > SAL_CALL
     getBinaryStream( sal_Int32 columnIndex ) override;
 
-    virtual css::uno::Reference< css::io::XInputStream > SAL_CALL
+    virtual cpo::uno::Reference< css::io::XInputStream > SAL_CALL
     getCharacterStream( sal_Int32 columnIndex ) override;
 
     virtual cpo::uno::Any SAL_CALL
     getObject( sal_Int32 columnIndex,
-               const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
+               const cpo::uno::Reference< css::container::XNameAccess >& typeMap ) override;
 
-    virtual css::uno::Reference< css::sdbc::XRef > SAL_CALL
+    virtual cpo::uno::Reference< css::sdbc::XRef > SAL_CALL
     getRef( sal_Int32 columnIndex ) override;
 
-    virtual css::uno::Reference< css::sdbc::XBlob > SAL_CALL
+    virtual cpo::uno::Reference< css::sdbc::XBlob > SAL_CALL
     getBlob( sal_Int32 columnIndex ) override;
 
-    virtual css::uno::Reference< css::sdbc::XClob > SAL_CALL
+    virtual cpo::uno::Reference< css::sdbc::XClob > SAL_CALL
     getClob( sal_Int32 columnIndex ) override;
 
-    virtual css::uno::Reference< css::sdbc::XArray > SAL_CALL
+    virtual cpo::uno::Reference< css::sdbc::XArray > SAL_CALL
     getArray( sal_Int32 columnIndex ) override;
 
 
@@ -345,9 +345,9 @@ public:
 
 private:
     bool m_bTriedToGetTypeConverter;
-    css::uno::Reference< css::script::XTypeConverter > m_xTypeConverter;
+    cpo::uno::Reference< css::script::XTypeConverter > m_xTypeConverter;
 
-    const css::uno::Reference<
+    const cpo::uno::Reference<
         css::script::XTypeConverter >& getTypeConverter(std::unique_lock<std::mutex>& rGuard);
 
     template<typename T> T rowOriginGet(
@@ -360,11 +360,11 @@ class CachedContentResultSetFactory final :
                     css::lang::XServiceInfo,
                     css::ucb::XCachedContentResultSetFactory>
 {
-    css::uno::Reference< cpo::uno::XComponentContext >    m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext >    m_xContext;
 
 public:
 
-    CachedContentResultSetFactory( const css::uno::Reference< cpo::uno::XComponentContext > & rxContext);
+    CachedContentResultSetFactory( const cpo::uno::Reference< cpo::uno::XComponentContext > & rxContext);
 
     virtual ~CachedContentResultSetFactory() override;
 
@@ -375,10 +375,10 @@ public:
 
     // XCachedContentResultSetFactory
 
-    virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL
+    virtual cpo::uno::Reference< css::sdbc::XResultSet > SAL_CALL
     createCachedContentResultSet(
-            const css::uno::Reference< css::sdbc::XResultSet > & xSource,
-            const css::uno::Reference< css::ucb::XContentIdentifierMapping > & xMapping ) override;
+            const cpo::uno::Reference< css::sdbc::XResultSet > & xSource,
+            const cpo::uno::Reference< css::ucb::XContentIdentifierMapping > & xMapping ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

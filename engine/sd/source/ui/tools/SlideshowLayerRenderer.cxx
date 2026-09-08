@@ -77,6 +77,7 @@ SystemGraphicsData getiOSGraphicsData(unsigned char* pBuffer, long width, long h
 #endif
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace sd
 {

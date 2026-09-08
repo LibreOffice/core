@@ -60,13 +60,13 @@ private:
 
     EntryHash       aEntries;
     ByteGrabber     aGrabber;
-    css::uno::Reference < css::io::XInputStream > xStream;
-    const css::uno::Reference < cpo::uno::XComponentContext > m_xContext;
+    cpo::uno::Reference < css::io::XInputStream > xStream;
+    const cpo::uno::Reference < cpo::uno::XComponentContext > m_xContext;
 
     bool bRecoveryMode;
 
     // aMediaType parameter is used only for raw stream header creation
-    css::uno::Reference < css::io::XInputStream >  createStreamForZipEntry(
+    cpo::uno::Reference < css::io::XInputStream >  createStreamForZipEntry(
             const rtl::Reference<comphelper::RefCountedMutex>& aMutexHolder,
             ZipEntry const & rEntry,
             const ::rtl::Reference < EncryptionData > &rData,
@@ -75,7 +75,7 @@ private:
             const bool bUseBufferedStream = true,
             const OUString& aMediaType = OUString() );
 
-    css::uno::Reference<css::io::XInputStream> checkValidPassword(
+    cpo::uno::Reference<css::io::XInputStream> checkValidPassword(
             ZipEntry const& rEntry, rtl::Reference<EncryptionData> const& rData,
             sal_Int64 nDecryptedSize,
             rtl::Reference<comphelper::RefCountedMutex> const& rMutexHolder);
@@ -104,8 +104,8 @@ private:
 public:
 
     ZipFile( rtl::Reference<comphelper::RefCountedMutex> aMutexHolder,
-             css::uno::Reference < css::io::XInputStream > const &xInput,
-             css::uno::Reference < cpo::uno::XComponentContext > xContext,
+             cpo::uno::Reference < css::io::XInputStream > const &xInput,
+             cpo::uno::Reference < cpo::uno::XComponentContext > xContext,
              bool bInitialise,
              bool bForceRecover,
              Checks checks);
@@ -114,20 +114,20 @@ public:
 
     EntryHash& GetEntryHash() { return aEntries; }
 
-    void setInputStream ( const css::uno::Reference < css::io::XInputStream >& xNewStream );
-    css::uno::Reference< css::io::XInputStream > getRawData(
+    void setInputStream ( const cpo::uno::Reference < css::io::XInputStream >& xNewStream );
+    cpo::uno::Reference< css::io::XInputStream > getRawData(
             ZipEntry& rEntry,
             const ::rtl::Reference < EncryptionData > &rData,
             ::std::optional<sal_Int64> oDecryptedSize,
             const rtl::Reference<comphelper::RefCountedMutex>& aMutexHolder,
             const bool bUseBufferedStream = true );
 
-    static css::uno::Reference< css::xml::crypto::XDigestContext > StaticGetDigestContextForChecksum(
-            const css::uno::Reference< cpo::uno::XComponentContext >& xArgContext,
+    static cpo::uno::Reference< css::xml::crypto::XDigestContext > StaticGetDigestContextForChecksum(
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& xArgContext,
             const ::rtl::Reference< EncryptionData >& xEncryptionData );
 
-    static css::uno::Reference< css::xml::crypto::XCipherContext > StaticGetCipher(
-            const css::uno::Reference< cpo::uno::XComponentContext >& xArgContext,
+    static cpo::uno::Reference< css::xml::crypto::XCipherContext > StaticGetCipher(
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& xArgContext,
             const ::rtl::Reference< EncryptionData >& xEncryptionData,
             bool bEncrypt );
 
@@ -143,32 +143,32 @@ public:
                                      sal_Int32 &rStartKeyGenID,
                                      sal_Int32 &rSize,
                                      OUString& aMediaType,
-                                     const css::uno::Reference < css::io::XInputStream >& rStream );
+                                     const cpo::uno::Reference < css::io::XInputStream >& rStream );
 
-    static css::uno::Reference< css::io::XInputStream > StaticGetDataFromRawStream(
+    static cpo::uno::Reference< css::io::XInputStream > StaticGetDataFromRawStream(
             const rtl::Reference<comphelper::RefCountedMutex>& aMutexHolder,
-            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
-            const css::uno::Reference< css::io::XInputStream >& xStream,
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+            const cpo::uno::Reference< css::io::XInputStream >& xStream,
             const ::rtl::Reference < EncryptionData > &rData );
 
     static bool StaticHasValidPassword (
-            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
             const cpo::uno::Sequence< sal_Int8 > &aReadBuffer,
             const ::rtl::Reference < EncryptionData > &rData );
 
-    css::uno::Reference< css::io::XInputStream > getInputStream(
+    cpo::uno::Reference< css::io::XInputStream > getInputStream(
             ZipEntry& rEntry,
             const ::rtl::Reference < EncryptionData > &rData,
             ::std::optional<sal_Int64> oDecryptedSize,
             const rtl::Reference<comphelper::RefCountedMutex>& aMutexHolder );
 
-    css::uno::Reference< css::io::XInputStream > getDataStream(
+    cpo::uno::Reference< css::io::XInputStream > getDataStream(
             ZipEntry& rEntry,
             const ::rtl::Reference < EncryptionData > &rData,
             ::std::optional<sal_Int64> oEncryptedSize,
             const rtl::Reference<comphelper::RefCountedMutex>& aMutexHolder );
 
-    css::uno::Reference< css::io::XInputStream > getWrappedRawStream(
+    cpo::uno::Reference< css::io::XInputStream > getWrappedRawStream(
             ZipEntry& rEntry,
             const ::rtl::Reference < EncryptionData > &rData,
             sal_Int64 nDecryptedSize,

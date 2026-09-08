@@ -21,7 +21,7 @@
 
 #include <sal/config.h>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <rtl/ustring.hxx>
 
 namespace com::sun::star {
@@ -31,9 +31,9 @@ namespace cpo::uno { class XComponentContext; }
 
 namespace dp_registry {
 
-css::uno::Reference<css::deployment::XPackageRegistry> create(
+cpo::uno::Reference<css::deployment::XPackageRegistry> create(
     OUString const & context, OUString const & cachePath,
-    css::uno::Reference<cpo::uno::XComponentContext> const & xComponentContext);
+    cpo::uno::Reference<cpo::uno::XComponentContext> const & xComponentContext);
 
 }
 

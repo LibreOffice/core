@@ -23,14 +23,14 @@
 #include <dbdata.hxx>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo::uno;
 
 // namespace open
 
 namespace sc::sidebar
 {
 ScDatabasePropertyPanel::ScDatabasePropertyPanel(weld::Widget* pParent,
-                                                 const css::uno::Reference<css::frame::XFrame>&,
+                                                 const cpo::uno::Reference<css::frame::XFrame>&,
                                                  SfxBindings* pBindings)
     : PanelLayout(pParent, u"DatabasePropertyPanel"_ustr,
                   u"modules/scalc/ui/sidebardatabase.ui"_ustr)
@@ -78,7 +78,7 @@ void ScDatabasePropertyPanel::Initialize()
 
 std::unique_ptr<PanelLayout>
 ScDatabasePropertyPanel::Create(weld::Widget* pParent,
-                                const css::uno::Reference<css::frame::XFrame>& rxFrame,
+                                const cpo::uno::Reference<css::frame::XFrame>& rxFrame,
                                 SfxBindings* pBindings)
 {
     if (pParent == nullptr)

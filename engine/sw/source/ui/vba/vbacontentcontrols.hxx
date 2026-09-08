@@ -22,17 +22,17 @@ class SwVbaContentControls : public SwVbaContentControls_BASE
 {
 public:
     /// @throws cpo::uno::RuntimeException
-    SwVbaContentControls(const css::uno::Reference<ov::XHelperInterface>& xParent,
-                         const css::uno::Reference<cpo::uno::XComponentContext>& xContext,
+    SwVbaContentControls(const cpo::uno::Reference<ov::XHelperInterface>& xParent,
+                         const cpo::uno::Reference<cpo::uno::XComponentContext>& xContext,
                          const rtl::Reference<SwXTextDocument>& xTextDocument, const OUString& rTag,
                          const OUString& rTitle);
 
     // XContentControls
-    //css::uno::Reference<ooo::vba::word::XContentControl> SAL_CALL Add(const cpo::uno::Any& Type, const cpo::uno::Any& Range) override;
+    //cpo::uno::Reference<ooo::vba::word::XContentControl> SAL_CALL Add(const cpo::uno::Any& Type, const cpo::uno::Any& Range) override;
 
     // XEnumerationAccess
     cpo::uno::Type SAL_CALL getElementType() override;
-    css::uno::Reference<css::container::XEnumeration> SAL_CALL createEnumeration() override;
+    cpo::uno::Reference<css::container::XEnumeration> SAL_CALL createEnumeration() override;
 
     // SwVbaContentControls_BASE
     cpo::uno::Any createCollectionObject(const cpo::uno::Any& aSource) override;

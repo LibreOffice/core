@@ -41,6 +41,7 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 
 using namespace css;
+using namespace ::cpo;
 
 RtfSdrExport::RtfSdrExport(RtfExport& rExport)
     : EscherEx(std::make_shared<EscherExGlobal>(), nullptr)

@@ -17,7 +17,7 @@
 #include <com/sun/star/container/XSet.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/reflection/XTypeDescriptionEnumerationAccess.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <compbase2.hxx>
 #include <rtl/ref.hxx>
 #include <sal/types.h>
@@ -50,7 +50,7 @@ public:
 
     cpo::uno::Any find(OUString const & name);
 
-    css::uno::Reference< css::reflection::XTypeDescription > resolve(
+    cpo::uno::Reference< css::reflection::XTypeDescription > resolve(
         OUString const & name);
 
 private:
@@ -72,7 +72,7 @@ private:
 
     virtual bool hasElements() override;
 
-    virtual css::uno::Reference< css::container::XEnumeration >
+    virtual cpo::uno::Reference< css::container::XEnumeration >
     createEnumeration() override;
 
     virtual bool has(cpo::uno::Any const & aElement) override;
@@ -81,7 +81,7 @@ private:
 
     virtual void remove(cpo::uno::Any const & aElement) override;
 
-    virtual css::uno::Reference< css::reflection::XTypeDescriptionEnumeration >
+    virtual cpo::uno::Reference< css::reflection::XTypeDescriptionEnumeration >
     createTypeDescriptionEnumeration(
         OUString const & moduleName,
         cpo::uno::Sequence< cpo::uno::TypeClass > const & types,

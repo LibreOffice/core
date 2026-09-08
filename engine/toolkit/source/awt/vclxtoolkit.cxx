@@ -37,7 +37,7 @@
 #include <com/sun/star/awt/KeyEvent.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/XComponentContext.hpp>
 #include <cpo/uno/XInterface.hpp>
@@ -435,8 +435,8 @@ class VCLXToolkit : public comphelper::WeakComponentImplHelper<
                     css::awt::XToolkitRobot,
                     css::lang::XServiceInfo >
 {
-    css::uno::Reference< css::datatransfer::clipboard::XClipboard > mxClipboard;
-    css::uno::Reference< css::datatransfer::clipboard::XClipboard > mxSelection;
+    cpo::uno::Reference< css::datatransfer::clipboard::XClipboard > mxClipboard;
+    cpo::uno::Reference< css::datatransfer::clipboard::XClipboard > mxSelection;
 
     ::comphelper::OInterfaceContainerHelper4<css::awt::XTopWindowListener> m_aTopWindowListeners;
     ::comphelper::OInterfaceContainerHelper4<css::awt::XKeyHandler> m_aKeyHandlers;
@@ -464,7 +464,7 @@ protected:
 
     static vcl::Window* ImplCreateWindow( rtl::Reference<VCLXWindow>* ppNewComp, const css::awt::WindowDescriptor& rDescriptor, vcl::Window* pParent,
                              WinBits nWinBits, MessBoxStyle nMessBoxStyle );
-    static css::uno::Reference< css::awt::XWindowPeer > ImplCreateWindow( const css::awt::WindowDescriptor& Descriptor,
+    static cpo::uno::Reference< css::awt::XWindowPeer > ImplCreateWindow( const css::awt::WindowDescriptor& Descriptor,
                              MessBoxStyle nForceMessBoxStyle );
 
 public:
@@ -487,24 +487,24 @@ public:
     virtual void waitUntilAllIdlesDispatched() override;
 
     // css::awt::XToolkit
-    css::uno::Reference< css::awt::XWindowPeer >  getDesktopWindow(  ) override;
+    cpo::uno::Reference< css::awt::XWindowPeer >  getDesktopWindow(  ) override;
     css::awt::Rectangle                                        getWorkArea(  ) override;
-    css::uno::Reference< css::awt::XWindowPeer >  createWindow( const css::awt::WindowDescriptor& Descriptor ) override;
-    cpo::uno::Sequence< css::uno::Reference< css::awt::XWindowPeer > > createWindows( const cpo::uno::Sequence< css::awt::WindowDescriptor >& Descriptors ) override;
-    css::uno::Reference< css::awt::XDevice >      createScreenCompatibleDevice( sal_Int32 Width, sal_Int32 Height ) override;
-    css::uno::Reference< css::awt::XRegion >      createRegion(  ) override;
+    cpo::uno::Reference< css::awt::XWindowPeer >  createWindow( const css::awt::WindowDescriptor& Descriptor ) override;
+    cpo::uno::Sequence< cpo::uno::Reference< css::awt::XWindowPeer > > createWindows( const cpo::uno::Sequence< css::awt::WindowDescriptor >& Descriptors ) override;
+    cpo::uno::Reference< css::awt::XDevice >      createScreenCompatibleDevice( sal_Int32 Width, sal_Int32 Height ) override;
+    cpo::uno::Reference< css::awt::XRegion >      createRegion(  ) override;
 
     // css::awt::XSystemChildFactory
-    css::uno::Reference< css::awt::XWindowPeer > createSystemChild( const cpo::uno::Any& Parent, const cpo::uno::Sequence< sal_Int8 >& ProcessId, sal_Int16 SystemType ) override;
+    cpo::uno::Reference< css::awt::XWindowPeer > createSystemChild( const cpo::uno::Any& Parent, const cpo::uno::Sequence< sal_Int8 >& ProcessId, sal_Int16 SystemType ) override;
 
     // css::awt::XMessageBoxFactory
-    virtual css::uno::Reference< css::awt::XMessageBox > createMessageBox( const css::uno::Reference< css::awt::XWindowPeer >& aParent, css::awt::MessageBoxType eType, ::sal_Int32 aButtons, const OUString& aTitle, const OUString& aMessage ) override;
+    virtual cpo::uno::Reference< css::awt::XMessageBox > createMessageBox( const cpo::uno::Reference< css::awt::XWindowPeer >& aParent, css::awt::MessageBoxType eType, ::sal_Int32 aButtons, const OUString& aTitle, const OUString& aMessage ) override;
 
     // css::awt::XDataTransfer
-    css::uno::Reference< css::datatransfer::dnd::XDragGestureRecognizer > getDragGestureRecognizer( const css::uno::Reference< css::awt::XWindow >& window ) override;
-    css::uno::Reference< css::datatransfer::dnd::XDragSource > getDragSource( const css::uno::Reference< css::awt::XWindow >& window ) override;
-    css::uno::Reference< css::datatransfer::dnd::XDropTarget > getDropTarget( const css::uno::Reference< css::awt::XWindow >& window ) override;
-    css::uno::Reference< css::datatransfer::clipboard::XClipboard > getClipboard( const OUString& clipboardName ) override;
+    cpo::uno::Reference< css::datatransfer::dnd::XDragGestureRecognizer > getDragGestureRecognizer( const cpo::uno::Reference< css::awt::XWindow >& window ) override;
+    cpo::uno::Reference< css::datatransfer::dnd::XDragSource > getDragSource( const cpo::uno::Reference< css::awt::XWindow >& window ) override;
+    cpo::uno::Reference< css::datatransfer::dnd::XDropTarget > getDropTarget( const cpo::uno::Reference< css::awt::XWindow >& window ) override;
+    cpo::uno::Reference< css::datatransfer::clipboard::XClipboard > getClipboard( const OUString& clipboardName ) override;
 
     // css::lang::XServiceInfo
     OUString getImplementationName(  ) override;
@@ -515,42 +515,42 @@ public:
 
     virtual ::sal_Int32 getTopWindowCount() override;
 
-    virtual css::uno::Reference< css::awt::XTopWindow >
+    virtual cpo::uno::Reference< css::awt::XTopWindow >
     getTopWindow(::sal_Int32 nIndex) override;
 
-    virtual css::uno::Reference< css::awt::XTopWindow >
+    virtual cpo::uno::Reference< css::awt::XTopWindow >
     getActiveTopWindow() override;
 
     virtual void addTopWindowListener(
-        css::uno::Reference<
+        cpo::uno::Reference<
         css::awt::XTopWindowListener > const & rListener) override;
 
     virtual void removeTopWindowListener(
-        css::uno::Reference<
+        cpo::uno::Reference<
         css::awt::XTopWindowListener > const & rListener) override;
 
     virtual void addKeyHandler(
-        css::uno::Reference<
+        cpo::uno::Reference<
         css::awt::XKeyHandler > const & rHandler) override;
 
     virtual void removeKeyHandler(
-        css::uno::Reference<
+        cpo::uno::Reference<
         css::awt::XKeyHandler > const & rHandler) override;
 
     virtual void addFocusListener(
-        css::uno::Reference<
+        cpo::uno::Reference<
         css::awt::XFocusListener > const & rListener) override;
 
     virtual void removeFocusListener(
-        css::uno::Reference<
+        cpo::uno::Reference<
         css::awt::XFocusListener > const & rListener) override;
 
     virtual void fireFocusGained(
-        css::uno::Reference<
+        cpo::uno::Reference<
         cpo::uno::XInterface > const & source) override;
 
     virtual void fireFocusLost(
-        css::uno::Reference<
+        cpo::uno::Reference<
         cpo::uno::XInterface > const & source) override;
 
     // css::awt::XReschedule:
@@ -829,7 +829,7 @@ static void ToolkitWorkerFunction( void* pArgs )
 {
     osl_setThreadName("VCLXToolkit VCL main thread");
 
-    css::uno::Reference<css::lang::XMultiServiceFactory> xServiceManager;
+    cpo::uno::Reference<css::lang::XMultiServiceFactory> xServiceManager;
     try
     {
         xServiceManager = ::comphelper::getProcessServiceFactory();
@@ -839,10 +839,10 @@ static void ToolkitWorkerFunction( void* pArgs )
     }
     if (!xServiceManager.is())
     {
-        css::uno::Reference<cpo::uno::XComponentContext> xContext =
+        cpo::uno::Reference<cpo::uno::XComponentContext> xContext =
             ::cppu::defaultBootstrap_InitialComponentContext();
 
-        xServiceManager.set( xContext->getServiceManager(), css::uno::UNO_QUERY_THROW );
+        xServiceManager.set( xContext->getServiceManager(), cpo::uno::UNO_QUERY_THROW );
         // set global process service factory used by unotools config helpers
         ::comphelper::setProcessServiceFactory( xServiceManager );
     }
@@ -936,9 +936,9 @@ void VCLXToolkit::disposing(std::unique_lock<std::mutex>& rGuard)
 }
 
 
-css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::getDesktopWindow(  )
+cpo::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::getDesktopWindow(  )
 {
-    css::uno::Reference< css::awt::XWindowPeer > xRef;
+    cpo::uno::Reference< css::awt::XWindowPeer > xRef;
     // 07/00: AppWindow doesn't exist anymore...
     return xRef;
 }
@@ -955,12 +955,12 @@ css::awt::Rectangle VCLXToolkit::getWorkArea(  )
     return aNotherRect;
 }
 
-css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::createWindow( const css::awt::WindowDescriptor& rDescriptor )
+cpo::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::createWindow( const css::awt::WindowDescriptor& rDescriptor )
 {
     return ImplCreateWindow( rDescriptor, MessBoxStyle::NONE );
 }
 
-css::uno::Reference< css::awt::XDevice > VCLXToolkit::createScreenCompatibleDevice( sal_Int32 Width, sal_Int32 Height )
+cpo::uno::Reference< css::awt::XDevice > VCLXToolkit::createScreenCompatibleDevice( sal_Int32 Width, sal_Int32 Height )
 {
     rtl::Reference<VCLXVirtualDevice> pVDev = new VCLXVirtualDevice;
 
@@ -973,9 +973,9 @@ css::uno::Reference< css::awt::XDevice > VCLXToolkit::createScreenCompatibleDevi
     return pVDev;
 }
 
-css::uno::Reference< css::awt::XRegion > VCLXToolkit::createRegion(  )
+cpo::uno::Reference< css::awt::XRegion > VCLXToolkit::createRegion(  )
 {
-    css::uno::Reference< css::awt::XRegion >  xRef = new VCLXRegion;
+    cpo::uno::Reference< css::awt::XRegion >  xRef = new VCLXRegion;
     return xRef;
 }
 
@@ -1062,8 +1062,8 @@ public:
     void elementReplaced( const css::container::ContainerEvent& rEvent ) override;
 
     // XItemEventBroadcaster
-    virtual void addItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
-    virtual void removeItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
+    virtual void addItemListener( const cpo::uno::Reference< css::awt::XItemListener >& l ) override;
+    virtual void removeItemListener( const cpo::uno::Reference< css::awt::XItemListener >& l ) override;
 
     // XPropertyChangeListener
     virtual void propertyChange( const css::beans::PropertyChangeEvent& evt ) override;
@@ -1128,9 +1128,9 @@ void SVTXRoadmap::propertyChange( const css::beans::PropertyChangeEvent& evt )
     if ( !pField )
         return;
 
-    css::uno::Reference< cpo::uno::XInterface > xRoadmapItem = evt.Source;
+    cpo::uno::Reference< cpo::uno::XInterface > xRoadmapItem = evt.Source;
     sal_Int32 nID = 0;
-    css::uno::Reference< css::beans::XPropertySet > xPropertySet( xRoadmapItem, css::uno::UNO_QUERY );
+    cpo::uno::Reference< css::beans::XPropertySet > xPropertySet( xRoadmapItem, cpo::uno::UNO_QUERY );
     cpo::uno::Any aValue = xPropertySet->getPropertyValue(u"ID"_ustr);
     aValue >>= nID;
 
@@ -1158,12 +1158,12 @@ void SVTXRoadmap::propertyChange( const css::beans::PropertyChangeEvent& evt )
         // TODO handle Interactive appropriately
 }
 
-void SVTXRoadmap::addItemListener( const css::uno::Reference< css::awt::XItemListener >& l )
+void SVTXRoadmap::addItemListener( const cpo::uno::Reference< css::awt::XItemListener >& l )
 {
     maItemListeners.addInterface( l );
 }
 
-void SVTXRoadmap::removeItemListener( const css::uno::Reference< css::awt::XItemListener >& l )
+void SVTXRoadmap::removeItemListener( const cpo::uno::Reference< css::awt::XItemListener >& l )
 {
     maItemListeners.removeInterface( l );
 }
@@ -1171,9 +1171,9 @@ void SVTXRoadmap::removeItemListener( const css::uno::Reference< css::awt::XItem
 RMItemData SVTXRoadmap::GetRMItemData( const css::container::ContainerEvent& _rEvent )
 {
     RMItemData aCurRMItemData;
-    css::uno::Reference< cpo::uno::XInterface > xRoadmapItem;
+    cpo::uno::Reference< cpo::uno::XInterface > xRoadmapItem;
     _rEvent.Element >>= xRoadmapItem;
-    css::uno::Reference< css::beans::XPropertySet > xPropertySet( xRoadmapItem, css::uno::UNO_QUERY );
+    cpo::uno::Reference< css::beans::XPropertySet > xPropertySet( xRoadmapItem, cpo::uno::UNO_QUERY );
     if ( xPropertySet.is() )
     {
         cpo::uno::Any aValue = xPropertySet->getPropertyValue(u"Label"_ustr);
@@ -1497,7 +1497,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( rtl::Reference<VCLXWindow>* ppNewCom
                 // #i70217# Don't always create a new component object. It's possible that VCL has called
                 // GetComponentInterface( true ) in the Dialog ctor itself (see Window::IsTopWindow() )
                 // which creates a component object.
-                css::uno::Reference< css::awt::XWindowPeer > xWinPeer = pNewWindow->GetComponentInterface( false );
+                cpo::uno::Reference< css::awt::XWindowPeer > xWinPeer = pNewWindow->GetComponentInterface( false );
                 if ( xWinPeer.is() )
                     *ppNewComp = dynamic_cast< VCLXDialog* >( xWinPeer.get() );
                 else
@@ -1625,7 +1625,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( rtl::Reference<VCLXWindow>* ppNewCom
                         if ((pParent == nullptr) && rDescriptor.Parent.is())
                         {
                             // try to get a system dependent window handle
-                            css::uno::Reference< css::awt::XSystemDependentWindowPeer > xSystemDepParent(rDescriptor.Parent, css::uno::UNO_QUERY);
+                            cpo::uno::Reference< css::awt::XSystemDependentWindowPeer > xSystemDepParent(rDescriptor.Parent, cpo::uno::UNO_QUERY);
 
                             if (xSystemDepParent.is())
                             {
@@ -1788,13 +1788,13 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( rtl::Reference<VCLXWindow>* ppNewCom
 }
 
 // static
-css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
+cpo::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
     const css::awt::WindowDescriptor& rDescriptor,
     MessBoxStyle nForceMessBoxStyle )
 {
     SolarMutexGuard aSolarGuard;
 
-    css::uno::Reference< css::awt::XVclWindowPeer > xRef;
+    cpo::uno::Reference< css::awt::XVclWindowPeer > xRef;
 
     VclPtr<vcl::Window> pParent;
     if ( rDescriptor.Parent.is() )
@@ -1859,10 +1859,10 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
     return xRef;
 }
 
-cpo::uno::Sequence< css::uno::Reference< css::awt::XWindowPeer > > VCLXToolkit::createWindows( const cpo::uno::Sequence< css::awt::WindowDescriptor >& rDescriptors )
+cpo::uno::Sequence< cpo::uno::Reference< css::awt::XWindowPeer > > VCLXToolkit::createWindows( const cpo::uno::Sequence< css::awt::WindowDescriptor >& rDescriptors )
 {
     sal_uInt32 nComponents = rDescriptors.getLength();
-    cpo::uno::Sequence< css::uno::Reference< css::awt::XWindowPeer > > aSeq( nComponents );
+    cpo::uno::Sequence< cpo::uno::Reference< css::awt::XWindowPeer > > aSeq( nComponents );
     for ( sal_uInt32 n = 0; n < nComponents; n++ )
     {
         css::awt::WindowDescriptor aDescr = rDescriptors.getConstArray()[n];
@@ -1877,7 +1877,7 @@ cpo::uno::Sequence< css::uno::Reference< css::awt::XWindowPeer > > VCLXToolkit::
 }
 
 // css::awt::XSystemChildFactory
-css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::createSystemChild( const cpo::uno::Any& Parent, const cpo::uno::Sequence< sal_Int8 >& /*ProcessId*/, sal_Int16 nSystemType )
+cpo::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::createSystemChild( const cpo::uno::Any& Parent, const cpo::uno::Sequence< sal_Int8 >& /*ProcessId*/, sal_Int16 nSystemType )
 {
     VclPtr<vcl::Window> pChildWindow;
     if ( nSystemType == SYSTEM_DEPENDENT_TYPE )
@@ -1952,8 +1952,8 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::createSystemChild( con
 }
 
 // css::awt::XMessageBoxFactory
-css::uno::Reference< css::awt::XMessageBox > VCLXToolkit::createMessageBox(
-    const css::uno::Reference< css::awt::XWindowPeer >& aParent,
+cpo::uno::Reference< css::awt::XMessageBox > VCLXToolkit::createMessageBox(
+    const cpo::uno::Reference< css::awt::XWindowPeer >& aParent,
     css::awt::MessageBoxType eType,
     ::sal_Int32 aButtons,
     const OUString& aTitle,
@@ -2002,9 +2002,9 @@ css::uno::Reference< css::awt::XMessageBox > VCLXToolkit::createMessageBox(
     aDescriptor.ParentIndex       = -1;
     aDescriptor.Parent            = aParent;
     aDescriptor.WindowAttributes  = nWindowAttributes;
-    css::uno::Reference< css::awt::XMessageBox > xMsgBox(
-        ImplCreateWindow( aDescriptor, nAddWinBits ), css::uno::UNO_QUERY );
-    css::uno::Reference< css::awt::XWindow > xWindow( xMsgBox, css::uno::UNO_QUERY );
+    cpo::uno::Reference< css::awt::XMessageBox > xMsgBox(
+        ImplCreateWindow( aDescriptor, nAddWinBits ), cpo::uno::UNO_QUERY );
+    cpo::uno::Reference< css::awt::XWindow > xWindow( xMsgBox, cpo::uno::UNO_QUERY );
     if ( xMsgBox.is() && xWindow.is() )
     {
         VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow );
@@ -2019,7 +2019,7 @@ css::uno::Reference< css::awt::XMessageBox > VCLXToolkit::createMessageBox(
     return xMsgBox;
 }
 
-css::uno::Reference< css::datatransfer::dnd::XDragGestureRecognizer > VCLXToolkit::getDragGestureRecognizer( const css::uno::Reference< css::awt::XWindow >& window )
+cpo::uno::Reference< css::datatransfer::dnd::XDragGestureRecognizer > VCLXToolkit::getDragGestureRecognizer( const cpo::uno::Reference< css::awt::XWindow >& window )
 {
     SolarMutexGuard g;
 
@@ -2028,10 +2028,10 @@ css::uno::Reference< css::datatransfer::dnd::XDragGestureRecognizer > VCLXToolki
     if( pWindow )
         return pWindow->GetDropTarget();
 
-    return css::uno::Reference< css::datatransfer::dnd::XDragGestureRecognizer >();
+    return cpo::uno::Reference< css::datatransfer::dnd::XDragGestureRecognizer >();
 }
 
-css::uno::Reference< css::datatransfer::dnd::XDragSource > VCLXToolkit::getDragSource( const css::uno::Reference< css::awt::XWindow >& window )
+cpo::uno::Reference< css::datatransfer::dnd::XDragSource > VCLXToolkit::getDragSource( const cpo::uno::Reference< css::awt::XWindow >& window )
 {
     SolarMutexGuard g;
 
@@ -2040,10 +2040,10 @@ css::uno::Reference< css::datatransfer::dnd::XDragSource > VCLXToolkit::getDragS
     if( pWindow )
         return pWindow->GetDragSource();
 
-    return css::uno::Reference< css::datatransfer::dnd::XDragSource >();
+    return cpo::uno::Reference< css::datatransfer::dnd::XDragSource >();
 }
 
-css::uno::Reference< css::datatransfer::dnd::XDropTarget > VCLXToolkit::getDropTarget( const css::uno::Reference< css::awt::XWindow >& window )
+cpo::uno::Reference< css::datatransfer::dnd::XDropTarget > VCLXToolkit::getDropTarget( const cpo::uno::Reference< css::awt::XWindow >& window )
 {
     SolarMutexGuard g;
 
@@ -2052,10 +2052,10 @@ css::uno::Reference< css::datatransfer::dnd::XDropTarget > VCLXToolkit::getDropT
     if( pWindow )
         return pWindow->GetDropTarget();
 
-    return css::uno::Reference< css::datatransfer::dnd::XDropTarget >();
+    return cpo::uno::Reference< css::datatransfer::dnd::XDropTarget >();
 }
 
-css::uno::Reference< css::datatransfer::clipboard::XClipboard > VCLXToolkit::getClipboard( const OUString& clipboardName )
+cpo::uno::Reference< css::datatransfer::clipboard::XClipboard > VCLXToolkit::getClipboard( const OUString& clipboardName )
 {
     if( clipboardName.isEmpty() )
     {
@@ -2074,7 +2074,7 @@ css::uno::Reference< css::datatransfer::clipboard::XClipboard > VCLXToolkit::get
         return mxSelection;
     }
 
-    return css::uno::Reference< css::datatransfer::clipboard::XClipboard >();
+    return cpo::uno::Reference< css::datatransfer::clipboard::XClipboard >();
 }
 
 // XServiceInfo
@@ -2104,29 +2104,29 @@ cpo::uno::Sequence< OUString > VCLXToolkit::getSupportedServiceNames()
 }
 
 // virtual
-css::uno::Reference< css::awt::XTopWindow >
+cpo::uno::Reference< css::awt::XTopWindow >
 VCLXToolkit::getTopWindow(::sal_Int32 nIndex)
 {
     vcl::Window * p = ::Application::GetTopWindow(static_cast< tools::Long >(nIndex));
         // XXX  numeric overflow
-    return css::uno::Reference< css::awt::XTopWindow >(
+    return cpo::uno::Reference< css::awt::XTopWindow >(
         p == nullptr ? nullptr : static_cast< css::awt::XWindow * >(p->GetWindowPeer()),
-        css::uno::UNO_QUERY);
+        cpo::uno::UNO_QUERY);
 }
 
 // virtual
-css::uno::Reference< css::awt::XTopWindow >
+cpo::uno::Reference< css::awt::XTopWindow >
 VCLXToolkit::getActiveTopWindow()
 {
     vcl::Window * p = ::Application::GetActiveTopWindow();
-    return css::uno::Reference< css::awt::XTopWindow >(
+    return cpo::uno::Reference< css::awt::XTopWindow >(
         p == nullptr ? nullptr : static_cast< css::awt::XWindow * >(p->GetWindowPeer()),
-        css::uno::UNO_QUERY);
+        cpo::uno::UNO_QUERY);
 }
 
 // virtual
 void VCLXToolkit::addTopWindowListener(
-    css::uno::Reference< css::awt::XTopWindowListener > const & rListener)
+    cpo::uno::Reference< css::awt::XTopWindowListener > const & rListener)
 {
     OSL_ENSURE(rListener.is(), "Null rListener");
     std::unique_lock aGuard(m_aMutex);
@@ -2147,7 +2147,7 @@ void VCLXToolkit::addTopWindowListener(
 
 // virtual
 void VCLXToolkit::removeTopWindowListener(
-    css::uno::Reference< css::awt::XTopWindowListener > const & rListener)
+    cpo::uno::Reference< css::awt::XTopWindowListener > const & rListener)
 {
     std::unique_lock aGuard(m_aMutex);
     if (!m_bDisposed
@@ -2161,7 +2161,7 @@ void VCLXToolkit::removeTopWindowListener(
 
 // virtual
 void VCLXToolkit::addKeyHandler(
-    css::uno::Reference< css::awt::XKeyHandler > const & rHandler)
+    cpo::uno::Reference< css::awt::XKeyHandler > const & rHandler)
 {
     OSL_ENSURE(rHandler.is(), "Null rHandler");
     std::unique_lock aGuard(m_aMutex);
@@ -2181,7 +2181,7 @@ void VCLXToolkit::addKeyHandler(
 
 // virtual
 void VCLXToolkit::removeKeyHandler(
-    css::uno::Reference< css::awt::XKeyHandler > const & rHandler)
+    cpo::uno::Reference< css::awt::XKeyHandler > const & rHandler)
 {
     std::unique_lock aGuard(m_aMutex);
     if (!m_bDisposed
@@ -2194,7 +2194,7 @@ void VCLXToolkit::removeKeyHandler(
 
 // virtual
 void VCLXToolkit::addFocusListener(
-    css::uno::Reference< css::awt::XFocusListener > const & rListener)
+    cpo::uno::Reference< css::awt::XFocusListener > const & rListener)
 {
     OSL_ENSURE(rListener.is(), "Null rListener");
     std::unique_lock aGuard(m_aMutex);
@@ -2215,7 +2215,7 @@ void VCLXToolkit::addFocusListener(
 
 // virtual
 void VCLXToolkit::removeFocusListener(
-    css::uno::Reference< css::awt::XFocusListener > const & rListener)
+    cpo::uno::Reference< css::awt::XFocusListener > const & rListener)
 {
     std::unique_lock aGuard(m_aMutex);
     if (!m_bDisposed
@@ -2229,14 +2229,14 @@ void VCLXToolkit::removeFocusListener(
 
 // virtual
 void VCLXToolkit::fireFocusGained(
-    css::uno::Reference<
+    cpo::uno::Reference<
     cpo::uno::XInterface > const &)
 {
 }
 
 // virtual
 void VCLXToolkit::fireFocusLost(
-    css::uno::Reference<
+    cpo::uno::Reference<
     cpo::uno::XInterface > const &)
 {
 }
@@ -2314,7 +2314,7 @@ void VCLXToolkit::callTopWindowListeners(
     css::lang::EventObject aAwtEvent(
         static_cast< css::awt::XWindow * >(pWindow->GetWindowPeer()));
     m_aTopWindowListeners.forEach(aGuard,
-        [&pFn, &aAwtEvent](const css::uno::Reference<css::awt::XTopWindowListener> & xListener)
+        [&pFn, &aAwtEvent](const cpo::uno::Reference<css::awt::XTopWindowListener> & xListener)
         {
             try
             {
@@ -2387,7 +2387,7 @@ void VCLXToolkit::callFocusListeners(::VclSimpleEvent const * pEvent,
     // Ignore the interior of compound controls when determining the
     // window that gets the focus next (see implementation in
     // vclxwindow.cxx for mapping between VCL and UNO AWT event):
-    css::uno::Reference< cpo::uno::XInterface > xNext;
+    cpo::uno::Reference< cpo::uno::XInterface > xNext;
     vcl::Window * pFocus = ::Application::GetFocusWindow();
     for (vcl::Window * p = pFocus; p != nullptr; p = p->GetParent())
         if (!p->IsCompoundControl())
@@ -2402,7 +2402,7 @@ void VCLXToolkit::callFocusListeners(::VclSimpleEvent const * pEvent,
         static_cast<sal_Int16>(pWindow->GetGetFocusFlags()),
         xNext, false);
     m_aFocusListeners.forEach(aGuard,
-        [bGained, &aAwtEvent] (const css::uno::Reference<css::awt::XFocusListener> & xListener)
+        [bGained, &aAwtEvent] (const cpo::uno::Reference<css::awt::XFocusListener> & xListener)
         {
             try
             {
@@ -2492,7 +2492,7 @@ void VCLXToolkit::waitUntilAllIdlesDispatched()
 
 void VCLXToolkit::keyPress( const css::awt::KeyEvent & aKeyEvent )
 {
-    css::uno::Reference<css::awt::XWindow> xWindow ( aKeyEvent.Source, css::uno::UNO_QUERY_THROW );
+    cpo::uno::Reference<css::awt::XWindow> xWindow ( aKeyEvent.Source, cpo::uno::UNO_QUERY_THROW );
     VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow );
     if( !pWindow )
         throw cpo::uno::RuntimeException( u"invalid event source"_ustr );
@@ -2503,7 +2503,7 @@ void VCLXToolkit::keyPress( const css::awt::KeyEvent & aKeyEvent )
 
 void VCLXToolkit::keyRelease( const css::awt::KeyEvent & aKeyEvent )
 {
-    css::uno::Reference<css::awt::XWindow> xWindow ( aKeyEvent.Source, css::uno::UNO_QUERY_THROW );
+    cpo::uno::Reference<css::awt::XWindow> xWindow ( aKeyEvent.Source, cpo::uno::UNO_QUERY_THROW );
     VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow );
     if( !pWindow )
         throw cpo::uno::RuntimeException( u"invalid event source"_ustr );
@@ -2515,7 +2515,7 @@ void VCLXToolkit::keyRelease( const css::awt::KeyEvent & aKeyEvent )
 
 void VCLXToolkit::mousePress( const css::awt::MouseEvent & aMouseEvent )
 {
-    css::uno::Reference<css::awt::XWindow> xWindow ( aMouseEvent.Source, css::uno::UNO_QUERY_THROW );
+    cpo::uno::Reference<css::awt::XWindow> xWindow ( aMouseEvent.Source, cpo::uno::UNO_QUERY_THROW );
     VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow );
     if( !pWindow )
         throw cpo::uno::RuntimeException( u"invalid event source"_ustr );
@@ -2526,7 +2526,7 @@ void VCLXToolkit::mousePress( const css::awt::MouseEvent & aMouseEvent )
 
 void VCLXToolkit::mouseRelease( const css::awt::MouseEvent & aMouseEvent )
 {
-    css::uno::Reference<css::awt::XWindow> xWindow ( aMouseEvent.Source, css::uno::UNO_QUERY_THROW );
+    cpo::uno::Reference<css::awt::XWindow> xWindow ( aMouseEvent.Source, cpo::uno::UNO_QUERY_THROW );
     VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow );
     if( !pWindow )
         throw cpo::uno::RuntimeException( u"invalid event source"_ustr );
@@ -2537,7 +2537,7 @@ void VCLXToolkit::mouseRelease( const css::awt::MouseEvent & aMouseEvent )
 
 void VCLXToolkit::mouseMove( const css::awt::MouseEvent & aMouseEvent )
 {
-    css::uno::Reference<css::awt::XWindow> xWindow ( aMouseEvent.Source, css::uno::UNO_QUERY_THROW );
+    cpo::uno::Reference<css::awt::XWindow> xWindow ( aMouseEvent.Source, cpo::uno::UNO_QUERY_THROW );
     VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow );
     if( !pWindow )
         throw cpo::uno::RuntimeException( u"invalid event source"_ustr );

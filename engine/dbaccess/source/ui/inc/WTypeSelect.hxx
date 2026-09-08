@@ -37,7 +37,7 @@ namespace dbaui
         virtual void        CellModified(sal_Int32 nRow, sal_uInt16 nColId ) override;
 
         virtual css::lang::Locale  GetLocale() const override;
-        virtual css::uno::Reference< css::util::XNumberFormatter > GetFormatter() const override;
+        virtual cpo::uno::Reference< css::util::XNumberFormatter > GetFormatter() const override;
         virtual TOTypeInfoSP        getTypeInfo(sal_Int32 _nPos) override;
         virtual const OTypeInfoMap* getTypeInfo() const override;
         virtual bool                isAutoIncrementValueEnabled() const override;
@@ -47,8 +47,8 @@ namespace dbaui
         OWizTypeSelectControl(weld::Container* pPage, OWizTypeSelect* pParentTabPage);
         virtual ~OWizTypeSelectControl() override;
 
-        virtual css::uno::Reference< css::sdbc::XDatabaseMetaData> getMetaData() override;
-        virtual css::uno::Reference< css::sdbc::XConnection> getConnection() override;
+        virtual cpo::uno::Reference< css::sdbc::XDatabaseMetaData> getMetaData() override;
+        virtual cpo::uno::Reference< css::sdbc::XConnection> getConnection() override;
     };
 
     // Wizard Page: OWizTypeSelectList

@@ -23,8 +23,8 @@ private:
 
 public:
     /// @throws cpo::uno::RuntimeException
-    SwVbaFormFieldTextInput(const css::uno::Reference<ooo::vba::XHelperInterface>& rParent,
-                            const css::uno::Reference<cpo::uno::XComponentContext>& rContext,
+    SwVbaFormFieldTextInput(const cpo::uno::Reference<ooo::vba::XHelperInterface>& rParent,
+                            const cpo::uno::Reference<cpo::uno::XComponentContext>& rContext,
                             sw::mark::Fieldmark& rFormField);
     ~SwVbaFormFieldTextInput() override;
 

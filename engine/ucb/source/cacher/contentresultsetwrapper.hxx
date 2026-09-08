@@ -57,19 +57,19 @@ protected:
     std::mutex              m_aMutex;
 
     //different Interfaces from Origin:
-    css::uno::Reference< css::sdbc::XResultSet >
+    cpo::uno::Reference< css::sdbc::XResultSet >
                             m_xResultSetOrigin;
-    css::uno::Reference< css::sdbc::XRow >
+    cpo::uno::Reference< css::sdbc::XRow >
                             m_xRowOrigin; //XRow-interface from m_xOrigin
                             //!! call impl_init_xRowOrigin() bevor you access this member
-    css::uno::Reference< css::ucb::XContentAccess >
+    cpo::uno::Reference< css::ucb::XContentAccess >
                             m_xContentAccessOrigin; //XContentAccess-interface from m_xOrigin
                             //!! call impl_init_xContentAccessOrigin() bevor you access this member
-    css::uno::Reference< css::beans::XPropertySet >
+    cpo::uno::Reference< css::beans::XPropertySet >
                             m_xPropertySetOrigin; //XPropertySet-interface from m_xOrigin
                             //!! call impl_init_xPropertySetOrigin() bevor you access this member
 
-    css::uno::Reference< css::beans::XPropertySetInfo >
+    cpo::uno::Reference< css::beans::XPropertySetInfo >
                             m_xPropertySetInfo;
                             //call impl_initPropertySetInfo() bevor you access this member
 
@@ -79,7 +79,7 @@ private:
     rtl::Reference<ContentResultSetWrapperListener>
                             m_xMyListenerImpl;
 
-    css::uno::Reference< css::sdbc::XResultSetMetaData >
+    cpo::uno::Reference< css::sdbc::XResultSetMetaData >
                             m_xMetaDataFromOrigin; //XResultSetMetaData from m_xOrigin
 
     //management of listeners
@@ -100,7 +100,7 @@ private:
 protected:
 
 
-    ContentResultSetWrapper( css::uno::Reference< css::sdbc::XResultSet > const & xOrigin );
+    ContentResultSetWrapper( cpo::uno::Reference< css::sdbc::XResultSet > const & xOrigin );
 
     virtual ~ContentResultSetWrapper() override;
 
@@ -151,10 +151,10 @@ public:
     dispose() override final;
 
     virtual void SAL_CALL
-    addEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener ) override;
+    addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& Listener ) override;
 
     virtual void SAL_CALL
-    removeEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener ) override;
+    removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& Listener ) override;
 
 
     //XCloseable
@@ -165,15 +165,15 @@ public:
 
     //XResultSetMetaDataSupplier
 
-    virtual css::uno::Reference< css::sdbc::XResultSetMetaData > SAL_CALL
+    virtual cpo::uno::Reference< css::sdbc::XResultSetMetaData > SAL_CALL
     getMetaData() override;
 
 
     // XPropertySet
 
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
     getPropertySetInfo() override final;
-    const css::uno::Reference< css::beans::XPropertySetInfo > &
+    const cpo::uno::Reference< css::beans::XPropertySetInfo > &
     getPropertySetInfoImpl(std::unique_lock<std::mutex>& rGuard);
 
     virtual void SAL_CALL
@@ -188,19 +188,19 @@ public:
 
     virtual void SAL_CALL
     addPropertyChangeListener( const OUString& aPropertyName,
-                               const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
+                               const cpo::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
 
     virtual void SAL_CALL
     removePropertyChangeListener( const OUString& aPropertyName,
-                                  const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
+                                  const cpo::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
 
     virtual void SAL_CALL
     addVetoableChangeListener( const OUString& PropertyName,
-                               const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+                               const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
     virtual void SAL_CALL
     removeVetoableChangeListener( const OUString& PropertyName,
-                                  const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+                                  const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
 
     // own methods
@@ -226,14 +226,14 @@ public:
     virtual OUString
     queryContentIdentifierStringImpl(std::unique_lock<std::mutex>& rGuard);
 
-    virtual css::uno::Reference< css::ucb::XContentIdentifier > SAL_CALL
+    virtual cpo::uno::Reference< css::ucb::XContentIdentifier > SAL_CALL
     queryContentIdentifier() override final;
-    virtual css::uno::Reference< css::ucb::XContentIdentifier >
+    virtual cpo::uno::Reference< css::ucb::XContentIdentifier >
     queryContentIdentifierImpl(std::unique_lock<std::mutex>& rGuard);
 
-    virtual css::uno::Reference< css::ucb::XContent > SAL_CALL
+    virtual cpo::uno::Reference< css::ucb::XContent > SAL_CALL
     queryContent() override final;
-    virtual css::uno::Reference<css::ucb::XContent>
+    virtual cpo::uno::Reference<css::ucb::XContent>
     queryContentImpl(std::unique_lock<std::mutex>& rGuard);
 
 
@@ -273,7 +273,7 @@ public:
     rowInserted() override;
     virtual bool SAL_CALL
     rowDeleted() override;
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
                 cpo::uno::XInterface > SAL_CALL
     getStatement() override;
 
@@ -319,26 +319,26 @@ public:
     virtual css::util::DateTime SAL_CALL
     getTimestamp( sal_Int32 columnIndex ) override;
 
-    virtual css::uno::Reference< css::io::XInputStream > SAL_CALL
+    virtual cpo::uno::Reference< css::io::XInputStream > SAL_CALL
     getBinaryStream( sal_Int32 columnIndex ) override;
 
-    virtual css::uno::Reference< css::io::XInputStream > SAL_CALL
+    virtual cpo::uno::Reference< css::io::XInputStream > SAL_CALL
     getCharacterStream( sal_Int32 columnIndex ) override;
 
     virtual cpo::uno::Any SAL_CALL
     getObject( sal_Int32 columnIndex,
-               const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
+               const cpo::uno::Reference< css::container::XNameAccess >& typeMap ) override;
 
-    virtual css::uno::Reference< css::sdbc::XRef > SAL_CALL
+    virtual cpo::uno::Reference< css::sdbc::XRef > SAL_CALL
     getRef( sal_Int32 columnIndex ) override;
 
-    virtual css::uno::Reference< css::sdbc::XBlob > SAL_CALL
+    virtual cpo::uno::Reference< css::sdbc::XBlob > SAL_CALL
     getBlob( sal_Int32 columnIndex ) override;
 
-    virtual css::uno::Reference< css::sdbc::XClob > SAL_CALL
+    virtual cpo::uno::Reference< css::sdbc::XClob > SAL_CALL
     getClob( sal_Int32 columnIndex ) override;
 
-    virtual css::uno::Reference< css::sdbc::XArray > SAL_CALL
+    virtual cpo::uno::Reference< css::sdbc::XArray > SAL_CALL
     getArray( sal_Int32 columnIndex ) override;
 };
 

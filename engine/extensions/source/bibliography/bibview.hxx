@@ -33,7 +33,7 @@ namespace bib
         VclPtr<BibView> mpBibView;
     protected:
         // FormControlContainer
-        virtual css::uno::Reference< css::awt::XControlContainer >
+        virtual cpo::uno::Reference< css::awt::XControlContainer >
                             getControlContainer() override;
         // XLoadListener equivalents
         virtual void        _loaded( const css::lang::EventObject& _rEvent ) override;
@@ -49,7 +49,7 @@ namespace bib
     {
     private:
         BibDataManager*                                   m_pDatMan;
-        css::uno::Reference< css::form::XLoadable>        m_xDatMan;
+        cpo::uno::Reference< css::form::XLoadable>        m_xDatMan;
         VclPtr<BibGeneralPage>                            m_pGeneralPage;
         BibViewFormControlContainer                       m_aFormControlContainer;
 

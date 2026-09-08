@@ -23,6 +23,7 @@
 #include <vcl/svapp.hxx>
 
 using namespace css;
+using namespace ::cpo;
 using namespace ::sfx2::sidebar;
 
 SfxUnoPanel::SfxUnoPanel(uno::Reference<frame::XFrame> _xFrame, OUString panelId, OUString deckId):

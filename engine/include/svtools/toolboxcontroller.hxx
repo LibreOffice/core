@@ -71,15 +71,15 @@ class SVT_DLLPUBLIC ToolboxController :
     private:
         bool  m_bSupportVisible;
     public:
-        ToolboxController( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
-                           const css::uno::Reference< css::frame::XFrame >& xFrame,
+        ToolboxController( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+                           const cpo::uno::Reference< css::frame::XFrame >& xFrame,
                            OUString aCommandURL );
         ToolboxController();
         virtual ~ToolboxController() override;
 
-        css::uno::Reference< css::frame::XFrame > getFrameInterface() const;
-        const css::uno::Reference< cpo::uno::XComponentContext >& getContext() const;
-        css::uno::Reference< css::frame::XLayoutManager > getLayoutManager() const;
+        cpo::uno::Reference< css::frame::XFrame > getFrameInterface() const;
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& getContext() const;
+        cpo::uno::Reference< css::frame::XLayoutManager > getLayoutManager() const;
 
         void updateStatus( const OUString& rCommandURL );
         void updateStatus();
@@ -100,8 +100,8 @@ class SVT_DLLPUBLIC ToolboxController :
         virtual void execute( sal_Int16 KeyModifier ) override;
         virtual void click() override;
         virtual void doubleClick() override;
-        virtual css::uno::Reference< css::awt::XWindow > createPopupWindow() override;
-        virtual css::uno::Reference< css::awt::XWindow > createItemWindow( const css::uno::Reference< css::awt::XWindow >& Parent ) override;
+        virtual cpo::uno::Reference< css::awt::XWindow > createPopupWindow() override;
+        virtual cpo::uno::Reference< css::awt::XWindow > createItemWindow( const cpo::uno::Reference< css::awt::XWindow >& Parent ) override;
         // OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
 
@@ -122,20 +122,20 @@ class SVT_DLLPUBLIC ToolboxController :
         bool getToolboxId( ToolBoxItemId& rItemId, ToolBox** ppToolBox );
         struct Listener
         {
-            Listener( css::util::URL _aURL, css::uno::Reference< css::frame::XDispatch > _xDispatch ) :
+            Listener( css::util::URL _aURL, cpo::uno::Reference< css::frame::XDispatch > _xDispatch ) :
                 aURL(std::move( _aURL )), xDispatch(std::move( _xDispatch )) {}
 
             css::util::URL aURL;
-            css::uno::Reference< css::frame::XDispatch > xDispatch;
+            cpo::uno::Reference< css::frame::XDispatch > xDispatch;
         };
 
         struct DispatchInfo
         {
-            css::uno::Reference< css::frame::XDispatch > mxDispatch;
+            cpo::uno::Reference< css::frame::XDispatch > mxDispatch;
             const css::util::URL maURL;
             const cpo::uno::Sequence< css::beans::PropertyValue > maArgs;
 
-            DispatchInfo( css::uno::Reference< css::frame::XDispatch > xDispatch,
+            DispatchInfo( cpo::uno::Reference< css::frame::XDispatch > xDispatch,
                           css::util::URL aURL,
                           const cpo::uno::Sequence< css::beans::PropertyValue >& rArgs )
                 : mxDispatch(std::move( xDispatch ))
@@ -147,7 +147,7 @@ class SVT_DLLPUBLIC ToolboxController :
         DECL_DLLPRIVATE_STATIC_LINK( ToolboxController, ExecuteHdl_Impl, void*, void );
 
         typedef std::unordered_map< OUString,
-                                    css::uno::Reference< css::frame::XDispatch > > URLToDispatchMap;
+                                    cpo::uno::Reference< css::frame::XDispatch > > URLToDispatchMap;
 
         // methods to support status forwarder, known by the old sfx2 toolbox controller implementation
         void addStatusListener( const OUString& rCommandURL );
@@ -156,20 +156,20 @@ class SVT_DLLPUBLIC ToolboxController :
         void unbindListener();
 
         // TODO remove
-        const css::uno::Reference< css::util::XURLTransformer >& getURLTransformer() const { return m_xUrlTransformer;}
+        const cpo::uno::Reference< css::util::XURLTransformer >& getURLTransformer() const { return m_xUrlTransformer;}
         // TODO remove
-        const css::uno::Reference< css::awt::XWindow >& getParent() const { return m_xParentWindow;}
+        const cpo::uno::Reference< css::awt::XWindow >& getParent() const { return m_xParentWindow;}
 
         bool                                                      m_bInitialized,
                                                                   m_bSidebar;
         ToolBoxItemId                                             m_nToolBoxId;
-        css::uno::Reference< css::frame::XFrame >                 m_xFrame;
-        css::uno::Reference< cpo::uno::XComponentContext >        m_xContext;
+        cpo::uno::Reference< css::frame::XFrame >                 m_xFrame;
+        cpo::uno::Reference< cpo::uno::XComponentContext >        m_xContext;
         OUString                                                  m_aCommandURL;
         URLToDispatchMap                                          m_aListenerMap;
 
-        css::uno::Reference< css::awt::XWindow >                  m_xParentWindow;
-        css::uno::Reference< css::util::XURLTransformer >         m_xUrlTransformer;
+        cpo::uno::Reference< css::awt::XWindow >                  m_xParentWindow;
+        cpo::uno::Reference< css::util::XURLTransformer >         m_xUrlTransformer;
         OUString                                                  m_sModuleName;
         weld::Toolbar*                                            m_pToolbar;
         weld::Builder*                                            m_pBuilder;

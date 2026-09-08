@@ -52,7 +52,7 @@
 #include <charfmt.hxx>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo::uno;
 
 const WhichRangesContainer SwDropCapsPage::s_aPageRg(svl::Items<RES_PARATR_DROP, RES_PARATR_DROP>);
 

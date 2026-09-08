@@ -41,8 +41,9 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::io;
 using namespace cppu;
+using namespace ::cpo;
 
-ZipPackageFolder::ZipPackageFolder( const css::uno::Reference < cpo::uno::XComponentContext >& xContext,
+ZipPackageFolder::ZipPackageFolder( const cpo::uno::Reference < cpo::uno::XComponentContext >& xContext,
                                     sal_Int32 nFormat,
                                     bool bAllowRemoveOnInsert )
 {

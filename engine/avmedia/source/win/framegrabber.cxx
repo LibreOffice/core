@@ -49,6 +49,7 @@ constexpr LONGLONG SEEK_TOLERANCE = 10000000;
 constexpr LONGLONG MAX_FRAMES_TO_SKIP = 10;
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace avmedia::win {
 

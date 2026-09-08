@@ -22,7 +22,7 @@
 
 #include <vector>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <oox/drawingml/shape.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/ppt/slidepersist.hxx>
@@ -69,7 +69,7 @@ public:
             oox::core::XmlFilterBase& rFilterBase,
             const SlidePersist& rPersist,
             const oox::drawingml::Theme* pTheme,
-            const css::uno::Reference< css::drawing::XShapes >& rxShapes,
+            const cpo::uno::Reference< css::drawing::XShapes >& rxShapes,
             basegfx::B2DHomMatrix& aTransformation,
             ::oox::drawingml::ShapeIdMap* pShapeMap );
 

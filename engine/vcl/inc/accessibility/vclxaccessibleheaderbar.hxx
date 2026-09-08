@@ -37,7 +37,7 @@ public:
 
     // XAccessibleContext
     virtual sal_Int64 getAccessibleChildCount() override;
-    virtual css::uno::Reference<css::accessibility::XAccessible>
+    virtual cpo::uno::Reference<css::accessibility::XAccessible>
         getAccessibleChild(sal_Int64 i) override;
     virtual sal_Int16 getAccessibleRole() override;
 

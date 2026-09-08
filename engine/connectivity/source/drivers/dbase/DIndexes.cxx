@@ -27,10 +27,10 @@ using namespace utl;
 using namespace ::connectivity;
 using namespace ::dbtools;
 using namespace ::connectivity::dbase;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::beans;
 
-css::uno::Reference< css::beans::XPropertySet > ODbaseIndexes::createObject(const OUString& _rName)
+cpo::uno::Reference< css::beans::XPropertySet > ODbaseIndexes::createObject(const OUString& _rName)
 {
     OUString sFile = m_pTable->getConnection()->getURL() +
         OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DELIMITER) +
@@ -79,7 +79,7 @@ Reference< XPropertySet > ODbaseIndexes::createDescriptor()
 }
 
 // XAppend
-css::uno::Reference< css::beans::XPropertySet > ODbaseIndexes::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
+cpo::uno::Reference< css::beans::XPropertySet > ODbaseIndexes::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     ODbaseIndex* pIndex = dynamic_cast<ODbaseIndex*>(descriptor.get());
     if(pIndex)

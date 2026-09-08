@@ -39,13 +39,13 @@ namespace pdfi
     class PDFIHybridAdaptor : public PDFIHybridAdaptorBase
     {
     private:
-        css::uno::Reference<
+        cpo::uno::Reference<
             cpo::uno::XComponentContext >  m_xContext;
-        css::uno::Reference<
+        cpo::uno::Reference<
             css::frame::XModel >           m_xModel;
 
     public:
-        explicit PDFIHybridAdaptor( const css::uno::Reference<
+        explicit PDFIHybridAdaptor( const cpo::uno::Reference<
                                           cpo::uno::XComponentContext >& xContext );
 
         // XFilter
@@ -53,7 +53,7 @@ namespace pdfi
         virtual void SAL_CALL cancel() override;
 
         // XImporter
-        virtual void SAL_CALL setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDocument ) override;
+        virtual void SAL_CALL setTargetDocument( const cpo::uno::Reference< css::lang::XComponent >& xDocument ) override;
 
         OUString SAL_CALL getImplementationName() override;
 

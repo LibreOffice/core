@@ -23,7 +23,7 @@
 #include "currentcontextchecker.hxx"
 
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/XCurrentContext.hpp>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -66,7 +66,7 @@ testtools::bridgetest::CurrentContextChecker::CurrentContextChecker() {}
 testtools::bridgetest::CurrentContextChecker::~CurrentContextChecker() {}
 
 bool testtools::bridgetest::CurrentContextChecker::perform(
-    css::uno::Reference<
+    cpo::uno::Reference<
         ::test::testtools::bridgetest::XCurrentContextChecker > const & other,
     ::sal_Int32 setSteps, ::sal_Int32 checkSteps)
 {
@@ -79,13 +79,13 @@ bool testtools::bridgetest::CurrentContextChecker::perform(
 }
 
 bool testtools::bridgetest::CurrentContextChecker::performCheck(
-    css::uno::Reference<
+    cpo::uno::Reference<
         ::test::testtools::bridgetest::XCurrentContextChecker > const & other,
     ::sal_Int32 setSteps, ::sal_Int32 checkSteps)
 {
     OSL_ASSERT(other.is() && checkSteps >= 0);
     if (checkSteps == 0) {
-        css::uno::Reference< cpo::uno::XCurrentContext > context(
+        cpo::uno::Reference< cpo::uno::XCurrentContext > context(
             cpo::uno::getCurrentContext());
         if (!context.is()) {
             return false;

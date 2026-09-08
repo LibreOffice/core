@@ -28,7 +28,7 @@
 
 using namespace connectivity::flat;
 using namespace connectivity::file;
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace css::beans;
 using namespace css::sdbcx;

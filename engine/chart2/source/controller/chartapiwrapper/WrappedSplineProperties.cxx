@@ -95,7 +95,7 @@ public:
         }
         return bHasDetectableInnerValue;
     }
-    void setPropertyValue( const cpo::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& /*xInnerPropertySet*/ ) const override
+    void setPropertyValue( const cpo::uno::Any& rOuterValue, const cpo::uno::Reference< css::beans::XPropertySet >& /*xInnerPropertySet*/ ) const override
     {
         PROPERTYTYPE aNewValue;
         if( ! (rOuterValue >>= aNewValue) )
@@ -128,7 +128,7 @@ public:
         }
     }
 
-    cpo::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& /*xInnerPropertySet*/ ) const override
+    cpo::uno::Any getPropertyValue( const cpo::uno::Reference< css::beans::XPropertySet >& /*xInnerPropertySet*/ ) const override
     {
         bool bHasAmbiguousValue = false;
         PROPERTYTYPE aValue;
@@ -139,7 +139,7 @@ public:
         return m_aOuterValue;
     }
 
-    cpo::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& /*xInnerPropertyState*/ ) const override
+    cpo::uno::Any getPropertyDefault( const cpo::uno::Reference< css::beans::XPropertyState >& /*xInnerPropertyState*/ ) const override
     {
         return m_aDefaultValue;
     }

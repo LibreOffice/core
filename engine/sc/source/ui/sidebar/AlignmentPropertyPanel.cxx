@@ -31,7 +31,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo::uno;
 
 // namespace open
 
@@ -39,7 +39,7 @@ namespace sc::sidebar {
 
 AlignmentPropertyPanel::AlignmentPropertyPanel(
     weld::Widget* pParent,
-    const css::uno::Reference<css::frame::XFrame>& rxFrame,
+    const cpo::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
     : PanelLayout(pParent, u"AlignmentPropertyPanel"_ustr, u"modules/scalc/ui/sidebaralignment.ui"_ustr)
     , mxFTLeftIndent(m_xBuilder->weld_label(u"leftindentlabel"_ustr))
@@ -193,7 +193,7 @@ IMPL_LINK_NOARG(AlignmentPropertyPanel, CBOXWrapTextClkHdl, weld::Toggleable&, v
 
 std::unique_ptr<PanelLayout> AlignmentPropertyPanel::Create (
     weld::Widget* pParent,
-    const css::uno::Reference<css::frame::XFrame>& rxFrame,
+    const cpo::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
 {
     if (pParent == nullptr)

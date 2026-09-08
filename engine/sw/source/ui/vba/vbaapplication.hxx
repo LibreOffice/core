@@ -50,26 +50,26 @@ typedef cppu::ImplInheritanceHelper< VbaApplicationBase, ooo::vba::word::XApplic
 
 class SwVbaApplication : public SwVbaApplication_BASE
 {
-    std::vector<css::uno::Reference< ooo::vba::XSink >> mvSinks;
+    std::vector<cpo::uno::Reference< ooo::vba::XSink >> mvSinks;
 
 public:
-    explicit SwVbaApplication( css::uno::Reference< cpo::uno::XComponentContext >& xContext );
+    explicit SwVbaApplication( cpo::uno::Reference< cpo::uno::XComponentContext >& xContext );
     virtual ~SwVbaApplication() override;
 
-    sal_uInt32 AddSink( const css::uno::Reference< ooo::vba::XSink >& xSink );
+    sal_uInt32 AddSink( const cpo::uno::Reference< ooo::vba::XSink >& xSink );
     void RemoveSink( sal_uInt32 nNumber );
 
     rtl::Reference<SwVbaWindow> getActiveSwVbaWindow();
-    css::uno::Reference< cpo::uno::XComponentContext > const & getContext() const;
+    cpo::uno::Reference< cpo::uno::XComponentContext > const & getContext() const;
 
     // XApplication
     virtual OUString SAL_CALL getName() override;
-    virtual css::uno::Reference< ooo::vba::word::XSystem > SAL_CALL getSystem() override;
-    virtual css::uno::Reference< ov::word::XDocument > SAL_CALL getActiveDocument() override;
-    virtual css::uno::Reference< ov::word::XWindow > SAL_CALL getActiveWindow() override;
-    virtual css::uno::Reference< ooo::vba::word::XOptions > SAL_CALL getOptions() override;
-    virtual css::uno::Reference< ooo::vba::word::XSelection > SAL_CALL getSelection() override;
-    virtual css::uno::Reference< ooo::vba::word::XWordBasic > SAL_CALL getWordBasic() override;
+    virtual cpo::uno::Reference< ooo::vba::word::XSystem > SAL_CALL getSystem() override;
+    virtual cpo::uno::Reference< ov::word::XDocument > SAL_CALL getActiveDocument() override;
+    virtual cpo::uno::Reference< ov::word::XWindow > SAL_CALL getActiveWindow() override;
+    virtual cpo::uno::Reference< ooo::vba::word::XOptions > SAL_CALL getOptions() override;
+    virtual cpo::uno::Reference< ooo::vba::word::XSelection > SAL_CALL getSelection() override;
+    virtual cpo::uno::Reference< ooo::vba::word::XWordBasic > SAL_CALL getWordBasic() override;
     virtual cpo::uno::Any SAL_CALL CommandBars( const cpo::uno::Any& aIndex ) override;
     virtual cpo::uno::Any SAL_CALL Documents( const cpo::uno::Any& aIndex ) override;
     virtual cpo::uno::Any SAL_CALL Addins( const cpo::uno::Any& aIndex ) override;
@@ -116,7 +116,7 @@ public:
     // XConnectable
     virtual OUString SAL_CALL GetIIDForClassItselfNotCoclass() override;
     virtual ov::TypeAndIID SAL_CALL GetConnectionPoint() override;
-    virtual css::uno::Reference<ov::XConnectionPoint> SAL_CALL FindConnectionPoint() override;
+    virtual cpo::uno::Reference<ov::XConnectionPoint> SAL_CALL FindConnectionPoint() override;
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;

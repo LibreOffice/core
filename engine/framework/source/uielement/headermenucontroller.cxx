@@ -37,7 +37,7 @@
 
 //  Defines
 
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::frame;
@@ -67,7 +67,7 @@ cpo::uno::Sequence< OUString > HeaderMenuController::getSupportedServiceNames()
     return { SERVICENAME_POPUPMENUCONTROLLER };
 }
 
-HeaderMenuController::HeaderMenuController( const css::uno::Reference< cpo::uno::XComponentContext >& xContext, bool _bFooter ) :
+HeaderMenuController::HeaderMenuController( const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext, bool _bFooter ) :
     svt::PopupMenuControllerBase( xContext )
     ,m_bFooter(_bFooter)
 {

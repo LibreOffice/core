@@ -76,8 +76,8 @@
 #include <memory>
 
 using namespace com::sun::star;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::UNO_QUERY;
+using ::cpo::uno::Reference;
 using ::cpo::uno::Sequence;
 using ::com::sun::star::lang::XServiceInfo;
 using ::com::sun::star::beans::XPropertySet;
@@ -1905,14 +1905,14 @@ void XclExpChartObj::SaveXml( XclExpXmlStream& rStrm )
     pDrawing->endElement( FSNS( XML_xdr, XML_twoCellAnchor ) );
 }
 
-css::uno::Reference<css::chart::XChartDocument> XclExpChartObj::GetChartDoc() const
+cpo::uno::Reference<css::chart::XChartDocument> XclExpChartObj::GetChartDoc() const
 {
     SdrObject* pObj = SdrObject::getSdrObjectFromXShape(mxShape);
     if (!pObj || pObj->GetObjIdentifier() != SdrObjKind::OLE2)
         return {};
     // May load here - makes sure that we are working with actually loaded OLE object
-    return css::uno::Reference<css::chart::XChartDocument>(
-        static_cast<SdrOle2Obj*>(pObj)->getXModel(), css::uno::UNO_QUERY);
+    return cpo::uno::Reference<css::chart::XChartDocument>(
+        static_cast<SdrOle2Obj*>(pObj)->getXModel(), cpo::uno::UNO_QUERY);
 }
 
 XclExpNote::XclExpNote(const XclExpRoot& rRoot, const ScAddress& rScPos,
@@ -2168,7 +2168,7 @@ XclMacroHelper::SetMacroLink( const OUString& rMacroName )
     return false;
 }
 
-XclExpShapeObj::XclExpShapeObj( XclExpObjectManager& rRoot, css::uno::Reference< css::drawing::XShape > const & xShape, ScDocument* pDoc ) :
+XclExpShapeObj::XclExpShapeObj( XclExpObjectManager& rRoot, cpo::uno::Reference< css::drawing::XShape > const & xShape, ScDocument* pDoc ) :
     XclObjAny( rRoot, xShape, pDoc ),
     XclMacroHelper( rRoot )
 {

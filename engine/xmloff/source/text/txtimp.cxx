@@ -73,8 +73,8 @@
 using ::com::sun::star::ucb::XAnyCompare;
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::frame;
@@ -2174,7 +2174,7 @@ bool XMLTextImportHelper::hasCurrentFieldCtx() const
     return !m_xImpl->m_FieldStack.empty();
 }
 
-void XMLTextImportHelper::setCurrentFieldParamsTo(css::uno::Reference< css::text::XFormField> const &xFormField)
+void XMLTextImportHelper::setCurrentFieldParamsTo(cpo::uno::Reference< css::text::XFormField> const &xFormField)
 {
     assert(!m_xImpl->m_FieldStack.empty());
     if (xFormField.is())

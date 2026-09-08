@@ -14,13 +14,13 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/sheet/XFunctionDescriptions.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <cppunit/TestAssert.h>
 
-using namespace css;
 using namespace com::sun::star;
-using namespace com::sun::star::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 namespace apitest
 {

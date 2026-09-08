@@ -69,8 +69,8 @@
 
 //      using namespace
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
@@ -2529,7 +2529,7 @@ void LayoutManager::implts_createMSCompatibleMenuBar( const OUString& aName )
     assert(nFormsMenu != -1);
 
     // Create the MS compatible Form menu
-    css::uno::Reference< css::ui::XUIElement > xFormsMenu = implts_createElement( u"private:resource/menubar/mscompatibleformsmenu"_ustr );
+    cpo::uno::Reference< css::ui::XUIElement > xFormsMenu = implts_createElement( u"private:resource/menubar/mscompatibleformsmenu"_ustr );
     if(!xFormsMenu.is())
         return;
 

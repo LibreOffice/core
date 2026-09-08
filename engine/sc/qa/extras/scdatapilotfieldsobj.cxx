@@ -27,9 +27,11 @@
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 using namespace css;
+using namespace ::cpo;
+
 namespace sc_apitest
 {
 class ScDataPilotFieldsObj : public UnoApiTest,

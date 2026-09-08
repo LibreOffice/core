@@ -50,7 +50,7 @@
 
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::linguistic2;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::cpo::uno;
 
 OUString GetDicInfoStr( std::u16string_view rName, const LanguageType nLang, bool bNeg )

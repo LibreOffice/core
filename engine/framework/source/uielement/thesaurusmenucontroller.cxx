@@ -36,7 +36,7 @@ namespace {
 class ThesaurusMenuController : public svt::PopupMenuControllerBase
 {
 public:
-    explicit ThesaurusMenuController( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+    explicit ThesaurusMenuController( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
     // XStatusListener
     virtual void statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
@@ -49,14 +49,14 @@ private:
     void fillPopupMenu();
     void getMeanings( std::vector< OUString >& rSynonyms, const OUString& rWord, const css::lang::Locale& rLocale, size_t nMaxSynonms );
     OUString getThesImplName( const css::lang::Locale& rLocale ) const;
-    css::uno::Reference< css::linguistic2::XLinguServiceManager2 > m_xLinguServiceManager;
-    css::uno::Reference< css::linguistic2::XThesaurus > m_xThesaurus;
+    cpo::uno::Reference< css::linguistic2::XLinguServiceManager2 > m_xLinguServiceManager;
+    cpo::uno::Reference< css::linguistic2::XThesaurus > m_xThesaurus;
     OUString m_aLastWord;
 };
 
 }
 
-ThesaurusMenuController::ThesaurusMenuController( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext ) :
+ThesaurusMenuController::ThesaurusMenuController( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext ) :
     svt::PopupMenuControllerBase( rxContext ),
     m_xLinguServiceManager( css::linguistic2::LinguServiceManager::create( rxContext ) ),
     m_xThesaurus( m_xLinguServiceManager->getThesaurus() )
@@ -88,15 +88,15 @@ void ThesaurusMenuController::fillPopupMenu()
         return;
 
     SvtLinguConfig aCfg;
-    css::uno::Reference<css::graphic::XGraphic> xGraphic;
+    cpo::uno::Reference<css::graphic::XGraphic> xGraphic;
     OUString aThesImplName( getThesImplName( aLocale ) );
     OUString aSynonymsImageUrl( aCfg.GetSynonymsContextImage( aThesImplName ) );
     if (!aThesImplName.isEmpty() && !aSynonymsImageUrl.isEmpty())
     {
         try
         {
-            const css::uno::Reference<cpo::uno::XComponentContext>& xContext(::comphelper::getProcessComponentContext());
-            css::uno::Reference<css::graphic::XGraphicProvider> xProvider(css::graphic::GraphicProvider::create(xContext));
+            const cpo::uno::Reference<cpo::uno::XComponentContext>& xContext(::comphelper::getProcessComponentContext());
+            cpo::uno::Reference<css::graphic::XGraphicProvider> xProvider(css::graphic::GraphicProvider::create(xContext));
             xGraphic = xProvider->queryGraphic({ comphelper::makePropertyValue(u"URL"_ustr, aSynonymsImageUrl) });
         }
         catch (const cpo::uno::Exception&)
@@ -134,7 +134,7 @@ void ThesaurusMenuController::getMeanings( std::vector< OUString >& rSynonyms, c
 
     try
     {
-        const cpo::uno::Sequence< css::uno::Reference< css::linguistic2::XMeaning > > aMeaningSeq(
+        const cpo::uno::Sequence< cpo::uno::Reference< css::linguistic2::XMeaning > > aMeaningSeq(
             m_xThesaurus->queryMeanings( rWord, rLocale, cpo::uno::Sequence< css::beans::PropertyValue >() ) );
 
         for ( const auto& xMeaning : aMeaningSeq )

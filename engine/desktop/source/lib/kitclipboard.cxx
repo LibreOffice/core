@@ -25,8 +25,8 @@
 #include <desktop/kitclipboard.hxx>
 
 using namespace css;
-using namespace css::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 /* static */ osl::Mutex KitClipboardFactory::gMutex;
 /* static */ bool KitClipboardFactory::gHasGlobalProvider = false;

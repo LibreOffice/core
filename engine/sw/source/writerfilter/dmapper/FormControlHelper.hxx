@@ -23,7 +23,7 @@
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XFormField.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include "FieldTypes.hxx"
 #include <rtl/ref.hxx>
 
@@ -41,7 +41,7 @@ public:
                       FFDataHandler::Pointer_t pFFData);
     ~FormControlHelper() override;
 
-    void insertControl(css::uno::Reference<css::text::XTextRange> const& xTextRange);
+    void insertControl(cpo::uno::Reference<css::text::XTextRange> const& xTextRange);
     void processField(rtl::Reference<SwXFieldmark> const& xFormField);
     bool hasFFDataHandler() const { return (m_pFFData != nullptr); }
 
@@ -50,14 +50,14 @@ private:
     FieldId m_eFieldId;
     css::awt::Size maSize;
     rtl::Reference<SwFmDrawPage> mxDrawPage;
-    css::uno::Reference<css::form::XForm> mxForm;
-    css::uno::Reference<css::form::XFormComponent> mxFormComponent;
+    cpo::uno::Reference<css::form::XForm> mxForm;
+    cpo::uno::Reference<css::form::XFormComponent> mxFormComponent;
     rtl::Reference<SwXTextDocument> mxTextDocument;
 
     rtl::Reference<SwFmDrawPage> const& getDrawPage();
-    css::uno::Reference<css::form::XForm> const& getForm();
-    css::uno::Reference<css::container::XIndexContainer> getFormComps();
-    bool createCheckbox(css::uno::Reference<css::text::XTextRange> const& xTextRange,
+    cpo::uno::Reference<css::form::XForm> const& getForm();
+    cpo::uno::Reference<css::container::XIndexContainer> getFormComps();
+    bool createCheckbox(cpo::uno::Reference<css::text::XTextRange> const& xTextRange,
                         const OUString& rControlName);
 };
 }

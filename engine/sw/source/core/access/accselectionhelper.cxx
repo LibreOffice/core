@@ -29,14 +29,14 @@
 #include <vcl/svapp.hxx>
 #include <flyfrm.hxx>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <fmtanchr.hxx>
 
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 using ::com::sun::star::accessibility::XAccessible;
 using ::com::sun::star::accessibility::XAccessibleContext;

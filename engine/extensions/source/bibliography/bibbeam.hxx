@@ -36,7 +36,7 @@ namespace bib
             :public BibSplitWindow
             ,public FormControlContainer
     {
-            css::uno::Reference< css::frame::XController >            m_xController;
+            cpo::uno::Reference< css::frame::XController >            m_xController;
 
             BibDataManager*         pDatMan;
             VclPtr<BibToolBar>      pToolBar;
@@ -48,17 +48,17 @@ namespace bib
             void                    createGridWin();
 
             // FormControlContainer ----------
-            virtual css::uno::Reference< css::awt::XControlContainer >
+            virtual cpo::uno::Reference< css::awt::XControlContainer >
                     getControlContainer() override;
         public:
-            css::uno::Reference< css::frame::XDispatchProviderInterception >
+            cpo::uno::Reference< css::frame::XDispatchProviderInterception >
                     getDispatchProviderInterception() const;
 
             BibBeamer(vcl::Window* pParent,BibDataManager* pDatMan );
             virtual ~BibBeamer() override;
             virtual void dispose() override;
 
-            void    SetXController(const css::uno::Reference< css::frame::XController > &);
+            void    SetXController(const cpo::uno::Reference< css::frame::XController > &);
 
             virtual void            GetFocus() override;
     };

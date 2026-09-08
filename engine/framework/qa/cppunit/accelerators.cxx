@@ -17,6 +17,7 @@
 #include <array>
 
 using namespace css;
+using namespace ::cpo;
 
 class AcceleratorsTest : public UnoApiTest
 {

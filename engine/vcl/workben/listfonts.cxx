@@ -324,7 +324,7 @@ private:
     void Init() override;
     void DeInit() override;
 
-    css::uno::Reference<css::lang::XMultiServiceFactory> xServiceManager;
+    cpo::uno::Reference<css::lang::XMultiServiceFactory> xServiceManager;
     bool mbStdOut = false;
     bool mbShowFeatures = false;
     OUString maFilename;
@@ -513,7 +513,7 @@ void ListFonts::Init()
     }
 
     auto xContext = cppu::defaultBootstrap_InitialComponentContext();
-    xServiceManager.set(xContext->getServiceManager(), css::uno::UNO_QUERY);
+    xServiceManager.set(xContext->getServiceManager(), cpo::uno::UNO_QUERY);
 
     if (!xServiceManager.is())
         Application::Abort(u"Bootstrap failure - no service manager"_ustr);
@@ -525,8 +525,8 @@ void ListFonts::Init()
 
 void ListFonts::DeInit()
 {
-    auto xContext = css::uno::Reference<css::lang::XComponent>(
-        comphelper::getProcessComponentContext(), css::uno::UNO_QUERY_THROW);
+    auto xContext = cpo::uno::Reference<css::lang::XComponent>(
+        comphelper::getProcessComponentContext(), cpo::uno::UNO_QUERY_THROW);
     xContext->dispose();
     ::comphelper::setProcessServiceFactory(nullptr);
 }

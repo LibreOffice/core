@@ -33,7 +33,7 @@
 #include <dp_backenddb.hxx>
 
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 
@@ -49,10 +49,10 @@ BackendDb::BackendDb(
 
 void BackendDb::save()
 {
-    const Reference<css::io::XActiveDataSource> xDataSource(m_doc,css::uno::UNO_QUERY_THROW);
+    const Reference<css::io::XActiveDataSource> xDataSource(m_doc,cpo::uno::UNO_QUERY_THROW);
     std::vector<sal_Int8> bytes;
     xDataSource->setOutputStream(::xmlscript::createOutputStream(&bytes));
-    const Reference<css::io::XActiveDataControl> xDataControl(m_doc,css::uno::UNO_QUERY_THROW);
+    const Reference<css::io::XActiveDataControl> xDataControl(m_doc,cpo::uno::UNO_QUERY_THROW);
     xDataControl->start();
 
     const Reference<css::io::XInputStream> xData(
@@ -61,7 +61,7 @@ void BackendDb::save()
     ucbDb.writeStream(xData, true /*replace existing*/);
 }
 
-css::uno::Reference<css::xml::dom::XDocument> const & BackendDb::getDocument()
+cpo::uno::Reference<css::xml::dom::XDocument> const & BackendDb::getDocument()
 {
     if (!m_doc.is())
     {
@@ -73,7 +73,7 @@ css::uno::Reference<css::xml::dom::XDocument> const & BackendDb::getDocument()
         if (err == ::osl::File::E_None)
         {
             ::ucbhelper::Content descContent(
-                m_urlDb, css::uno::Reference<css::ucb::XCommandEnvironment>(),
+                m_urlDb, cpo::uno::Reference<css::ucb::XCommandEnvironment>(),
                 m_xContext);
             Reference<css::io::XInputStream> xIn = descContent.openStream();
             m_doc = xDocBuilder->parse(xIn);
@@ -268,7 +268,7 @@ void BackendDb::writeVectorOfPair(
     std::u16string_view sPairTagName,
     std::u16string_view sFirstTagName,
     std::u16string_view sSecondTagName,
-    css::uno::Reference<css::xml::dom::XNode> const & xParent)
+    cpo::uno::Reference<css::xml::dom::XNode> const & xParent)
 {
     try{
         if (vecPairs.empty())
@@ -283,7 +283,7 @@ void BackendDb::writeVectorOfPair(
 
         xParent->appendChild(
             Reference<css::xml::dom::XNode>(
-                vectorNode, css::uno::UNO_QUERY_THROW));
+                vectorNode, cpo::uno::UNO_QUERY_THROW));
         for (auto const& vecPair : vecPairs)
         {
             const Reference<css::xml::dom::XElement> pairNode(
@@ -291,35 +291,35 @@ void BackendDb::writeVectorOfPair(
 
             vectorNode->appendChild(
                 Reference<css::xml::dom::XNode>(
-                    pairNode, css::uno::UNO_QUERY_THROW));
+                    pairNode, cpo::uno::UNO_QUERY_THROW));
 
             const Reference<css::xml::dom::XElement> firstNode(
                 doc->createElementNS(sNameSpace, sPrefix + sFirstTagName));
 
             pairNode->appendChild(
                 Reference<css::xml::dom::XNode>(
-                    firstNode, css::uno::UNO_QUERY_THROW));
+                    firstNode, cpo::uno::UNO_QUERY_THROW));
 
             const Reference<css::xml::dom::XText> firstTextNode(
                 doc->createTextNode( vecPair.first));
 
             firstNode->appendChild(
                 Reference<css::xml::dom::XNode>(
-                    firstTextNode, css::uno::UNO_QUERY_THROW));
+                    firstTextNode, cpo::uno::UNO_QUERY_THROW));
 
             const Reference<css::xml::dom::XElement> secondNode(
                 doc->createElementNS(sNameSpace, sPrefix + sSecondTagName));
 
             pairNode->appendChild(
                 Reference<css::xml::dom::XNode>(
-                    secondNode, css::uno::UNO_QUERY_THROW));
+                    secondNode, cpo::uno::UNO_QUERY_THROW));
 
             const Reference<css::xml::dom::XText> secondTextNode(
                 doc->createTextNode( vecPair.second));
 
             secondNode->appendChild(
                 Reference<css::xml::dom::XNode>(
-                    secondTextNode, css::uno::UNO_QUERY_THROW));
+                    secondTextNode, cpo::uno::UNO_QUERY_THROW));
         }
     }
     catch(const cpo::uno::Exception &)
@@ -397,17 +397,17 @@ void BackendDb::writeSimpleList(
 
         xParent->appendChild(
             Reference<css::xml::dom::XNode>(
-                listNode, css::uno::UNO_QUERY_THROW));
+                listNode, cpo::uno::UNO_QUERY_THROW));
 
         for (auto const& elem : list)
         {
             const Reference<css::xml::dom::XNode> memberNode(
-                doc->createElementNS(sNameSpace, sPrefix + sMemberTagName), css::uno::UNO_QUERY_THROW);
+                doc->createElementNS(sNameSpace, sPrefix + sMemberTagName), cpo::uno::UNO_QUERY_THROW);
 
             listNode->appendChild(memberNode);
 
             const Reference<css::xml::dom::XNode> textNode(
-                doc->createTextNode(elem), css::uno::UNO_QUERY_THROW);
+                doc->createTextNode(elem), cpo::uno::UNO_QUERY_THROW);
 
             memberNode->appendChild(textNode);
         }

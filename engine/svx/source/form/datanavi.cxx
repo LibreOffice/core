@@ -55,7 +55,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::frame;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::xml::dom::events;
 using namespace ::svx;
@@ -1977,14 +1977,14 @@ namespace svxform
             m_aUpdateTimer.Start();
     }
 
-    void DataNavigatorWindow::AddContainerBroadcaster( const css::uno::Reference< css::container::XContainer >& xContainer )
+    void DataNavigatorWindow::AddContainerBroadcaster( const cpo::uno::Reference< css::container::XContainer >& xContainer )
     {
         xContainer->addContainerListener( Reference< XContainerListener >(m_xDataListener) );
         m_aContainerList.push_back( xContainer );
     }
 
 
-    void DataNavigatorWindow::AddEventBroadcaster( const css::uno::Reference< css::xml::dom::events::XEventTarget >& xTarget )
+    void DataNavigatorWindow::AddEventBroadcaster( const cpo::uno::Reference< css::xml::dom::events::XEventTarget >& xTarget )
     {
         Reference< XEventListener > xListener = m_xDataListener;
         xTarget->addEventListener( EVENTTYPE_CHARDATA, xListener, true );

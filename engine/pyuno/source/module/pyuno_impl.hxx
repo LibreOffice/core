@@ -122,15 +122,15 @@ int PyUNOStruct_initType();
 
 PyRef PyUNO_new (
     const cpo::uno::Any & targetInterface,
-    const css::uno::Reference<css::lang::XSingleServiceFactory> & ssf );
+    const cpo::uno::Reference<css::lang::XSingleServiceFactory> & ssf );
 
 PyRef PyUNOStruct_new (
     const cpo::uno::Any &targetInterface,
-    const  css::uno::Reference<css::lang::XSingleServiceFactory> &ssf );
+    const  cpo::uno::Reference<css::lang::XSingleServiceFactory> &ssf );
 
 struct PyUNOInternals
 {
-    css::uno::Reference <css::script::XInvocation2> xInvocation;
+    cpo::uno::Reference <css::script::XInvocation2> xInvocation;
     cpo::uno::Any wrappedObject;
 };
 
@@ -141,11 +141,11 @@ typedef struct
 } PyUNO;
 
 PyObject* PyUNO_iterator_new (
-    const css::uno::Reference<css::container::XEnumeration>& xEnumeration);
+    const cpo::uno::Reference<css::container::XEnumeration>& xEnumeration);
 
 struct PyUNO_iterator_Internals
 {
-    css::uno::Reference <css::container::XEnumeration> xEnumeration;
+    cpo::uno::Reference <css::container::XEnumeration> xEnumeration;
 };
 
 typedef struct
@@ -155,11 +155,11 @@ typedef struct
 } PyUNO_iterator;
 
 PyObject* PyUNO_list_iterator_new (
-    const css::uno::Reference<css::container::XIndexAccess> &xIndexAccess);
+    const cpo::uno::Reference<css::container::XIndexAccess> &xIndexAccess);
 
 struct PyUNO_list_iterator_Internals
 {
-    css::uno::Reference <css::container::XIndexAccess> xIndexAccess;
+    cpo::uno::Reference <css::container::XIndexAccess> xIndexAccess;
     int index;
 };
 
@@ -178,12 +178,12 @@ OUString pyString2ustring( PyObject *str );
 void raiseInvocationTargetExceptionWhenNeeded( const Runtime &runtime );
 
 PyRef PyUNO_callable_new (
-    const css::uno::Reference<css::script::XInvocation2> &xInv,
+    const cpo::uno::Reference<css::script::XInvocation2> &xInv,
     const OUString &methodName );
 
 PyRef PyUNO_service_constructor_new(
-    const css::uno::Reference<css::reflection::XServiceTypeDescription2>& xService,
-    const css::uno::Reference<css::reflection::XServiceConstructorDescription>& xConstructor);
+    const cpo::uno::Reference<css::reflection::XServiceTypeDescription2>& xService,
+    const cpo::uno::Reference<css::reflection::XServiceConstructorDescription>& xConstructor);
 
 PyObject* PyUNO_Type_new (const char *typeName , cpo::uno::TypeClass t , const Runtime &r );
 PyObject* PyUNO_Enum_new( const char *enumBase, const char *enumValue, const Runtime &r );
@@ -218,13 +218,13 @@ bool isInstanceOfStructOrException( PyObject *obj);
 
 struct RuntimeCargo
 {
-    css::uno::Reference< css::lang::XSingleServiceFactory > xInvocation;
-    css::uno::Reference< css::script::XTypeConverter> xTypeConverter;
-    css::uno::Reference< cpo::uno::XComponentContext > xContext;
-    css::uno::Reference< css::reflection::XIdlReflection > xCoreReflection;
-    css::uno::Reference< css::container::XHierarchicalNameAccess > xTdMgr;
-    css::uno::Reference< css::script::XInvocationAdapterFactory2 > xAdapterFactory;
-    css::uno::Reference< css::beans::XIntrospection > xIntrospection;
+    cpo::uno::Reference< css::lang::XSingleServiceFactory > xInvocation;
+    cpo::uno::Reference< css::script::XTypeConverter> xTypeConverter;
+    cpo::uno::Reference< cpo::uno::XComponentContext > xContext;
+    cpo::uno::Reference< css::reflection::XIdlReflection > xCoreReflection;
+    cpo::uno::Reference< css::container::XHierarchicalNameAccess > xTdMgr;
+    cpo::uno::Reference< css::script::XInvocationAdapterFactory2 > xAdapterFactory;
+    cpo::uno::Reference< css::beans::XIntrospection > xIntrospection;
     PyRef dictUnoModule;
     osl::Module testModule;
     osl::Module unoTestModule;
@@ -247,7 +247,7 @@ public:
 
     /// @throws cpo::uno::RuntimeException
     static PyRef create(
-        const css::uno::Reference< cpo::uno::XComponentContext > & xContext );
+        const cpo::uno::Reference< cpo::uno::XComponentContext > & xContext );
 };
 
 
@@ -273,7 +273,7 @@ public:
     virtual ~Adapter() override;
 
     // XInvocation
-    virtual css::uno::Reference< css::beans::XIntrospectionAccess >
+    virtual cpo::uno::Reference< css::beans::XIntrospectionAccess >
            SAL_CALL getIntrospection(  ) override;
     virtual cpo::uno::Any SAL_CALL invoke(
         const OUString& aFunctionName,

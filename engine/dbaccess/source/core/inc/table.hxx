@@ -44,8 +44,8 @@ namespace dbaccess
     private:
         ::rtl::Reference< OContainerMediator >                m_pColumnMediator;
 
-        css::uno::Reference< css::container::XNameAccess >    m_xColumnDefinitions;
-        css::uno::Reference< css::container::XNameAccess >    m_xDriverColumns;
+        cpo::uno::Reference< css::container::XNameAccess >    m_xColumnDefinitions;
+        cpo::uno::Reference< css::container::XNameAccess >    m_xDriverColumns;
 
     // <properties>
         sal_Int32                                             m_nPrivileges;
@@ -57,8 +57,8 @@ namespace dbaccess
 
         // IColumnFactory
         virtual rtl::Reference<OColumn> createColumn(const OUString& _rName) const override;
-        virtual css::uno::Reference< css::beans::XPropertySet > createColumnDescriptor() override;
-        virtual void columnAppended( const css::uno::Reference< css::beans::XPropertySet >& _rxSourceDescriptor ) override;
+        virtual cpo::uno::Reference< css::beans::XPropertySet > createColumnDescriptor() override;
+        virtual void columnAppended( const cpo::uno::Reference< css::beans::XPropertySet >& _rxSourceDescriptor ) override;
         virtual void columnDropped(const OUString& _sName) override;
 
         /** creates the column collection for the table
@@ -93,17 +93,17 @@ namespace dbaccess
             @throws css::sdbc::SQLException
         */
         ODBTable(connectivity::sdbcx::OCollection* _pTables
-                ,const css::uno::Reference< css::sdbc::XConnection >& _rxConn
+                ,const cpo::uno::Reference< css::sdbc::XConnection >& _rxConn
                 ,const OUString& _rCatalog
                 , const OUString& _rSchema
                 , const OUString& _rName
                 ,const OUString& _rType
                 , const OUString& _rDesc
-                ,const css::uno::Reference< css::container::XNameAccess >& _rxColumnDefinitions);
+                ,const cpo::uno::Reference< css::container::XNameAccess >& _rxColumnDefinitions);
 
         /// @throws css::sdbc::SQLException
         ODBTable(connectivity::sdbcx::OCollection* _pTables
-                ,const css::uno::Reference< css::sdbc::XConnection >& _rxConn);
+                ,const cpo::uno::Reference< css::sdbc::XConnection >& _rxConn);
         virtual ~ODBTable() override;
 
         // ODescriptor
@@ -125,7 +125,7 @@ namespace dbaccess
         virtual void rename( const OUString& _rNewName ) override;
 
     // css::sdbcx::XAlterTable,
-        virtual void alterColumnByName( const OUString& _rName, const css::uno::Reference< css::beans::XPropertySet >& _rxDescriptor ) override;
+        virtual void alterColumnByName( const OUString& _rName, const cpo::uno::Reference< css::beans::XPropertySet >& _rxDescriptor ) override;
 
     private:
         using OTable_Base::createArrayHelper;

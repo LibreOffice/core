@@ -38,6 +38,7 @@ namespace svt
 
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 static bool lcl_isNamedRange( const OUString& sAddress, const uno::Reference< frame::XModel >& xModel, css::table::CellRangeAddress& aAddress )
 {
@@ -67,7 +68,7 @@ static bool lcl_isNamedRange( const OUString& sAddress, const uno::Reference< fr
 
 
 void
-BindableControlHelper::ApplyListSourceAndBindableData( const css::uno::Reference< css::frame::XModel >& xModel, const css::uno::Reference< cpo::uno::XInterface >& rObj, const OUString& rsCtrlSource, const OUString& rsRowSource, sal_uInt16 nRefTab )
+BindableControlHelper::ApplyListSourceAndBindableData( const cpo::uno::Reference< css::frame::XModel >& xModel, const cpo::uno::Reference< cpo::uno::XInterface >& rObj, const OUString& rsCtrlSource, const OUString& rsRowSource, sal_uInt16 nRefTab )
 {
 // XBindable etc.
     uno::Reference< lang::XMultiServiceFactory > xFac;

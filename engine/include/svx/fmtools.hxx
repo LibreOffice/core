@@ -49,33 +49,33 @@ enum class SdrObjKind : sal_uInt16;
 
 // displaying a database exception for the user
 // display info about a simple css::sdbc::SQLException
-void displayException(const css::sdbc::SQLException&, const css::uno::Reference<css::awt::XWindow>& rParent);
-SVXCORE_DLLPUBLIC void displayException(const css::sdb::SQLContext&, const css::uno::Reference<css::awt::XWindow>& rParent);
-void displayException(const css::sdb::SQLErrorEvent&, const css::uno::Reference<css::awt::XWindow>& rParent);
-void displayException(const cpo::uno::Any&, const css::uno::Reference<css::awt::XWindow>& rParent);
+void displayException(const css::sdbc::SQLException&, const cpo::uno::Reference<css::awt::XWindow>& rParent);
+SVXCORE_DLLPUBLIC void displayException(const css::sdb::SQLContext&, const cpo::uno::Reference<css::awt::XWindow>& rParent);
+void displayException(const css::sdb::SQLErrorEvent&, const cpo::uno::Reference<css::awt::XWindow>& rParent);
+void displayException(const cpo::uno::Any&, const cpo::uno::Reference<css::awt::XWindow>& rParent);
 
-sal_Int32 getElementPos(const css::uno::Reference< css::container::XIndexAccess>& xCont, const css::uno::Reference< cpo::uno::XInterface>& xElement);
+sal_Int32 getElementPos(const cpo::uno::Reference< css::container::XIndexAccess>& xCont, const cpo::uno::Reference< cpo::uno::XInterface>& xElement);
 
-SVXCORE_DLLPUBLIC OUString getLabelName(const css::uno::Reference< css::beans::XPropertySet>& xControlModel);
+SVXCORE_DLLPUBLIC OUString getLabelName(const cpo::uno::Reference< css::beans::XPropertySet>& xControlModel);
 
 
-// = class CursorWrapper - a helper class which works in common with a css::uno::Reference<XDatabaseUpdateCursor>,
+// = class CursorWrapper - a helper class which works in common with a cpo::uno::Reference<XDatabaseUpdateCursor>,
 //                          XDatabaseBookmarkCursor and XDatabaseDirectCursor each
 
 
 class SAL_WARN_UNUSED CursorWrapper
 {
 private:
-    css::uno::Reference< cpo::uno::XInterface>                m_xGeneric;
-    css::uno::Reference< css::sdbc::XResultSet>               m_xMoveOperations;
-    css::uno::Reference< css::sdbcx::XRowLocate>              m_xBookmarkOperations;
-    css::uno::Reference< css::sdbcx::XColumnsSupplier>        m_xColumnsSupplier;
-    css::uno::Reference< css::beans::XPropertySet>            m_xPropertyAccess;
+    cpo::uno::Reference< cpo::uno::XInterface>                m_xGeneric;
+    cpo::uno::Reference< css::sdbc::XResultSet>               m_xMoveOperations;
+    cpo::uno::Reference< css::sdbcx::XRowLocate>              m_xBookmarkOperations;
+    cpo::uno::Reference< css::sdbcx::XColumnsSupplier>        m_xColumnsSupplier;
+    cpo::uno::Reference< css::beans::XPropertySet>            m_xPropertyAccess;
 
 public:
     // Construction/Destruction
-    CursorWrapper(const css::uno::Reference< css::sdbc::XRowSet>& _rxCursor, bool bUseCloned = false);
-    UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) CursorWrapper(const css::uno::Reference< css::sdbc::XResultSet>& _rxCursor, bool bUseCloned = false);
+    CursorWrapper(const cpo::uno::Reference< css::sdbc::XRowSet>& _rxCursor, bool bUseCloned = false);
+    UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) CursorWrapper(const cpo::uno::Reference< css::sdbc::XResultSet>& _rxCursor, bool bUseCloned = false);
         // if bUseCloned == true, the cursor is first doubled over the XCloneable interface (which it must implement)
         // and then used
 
@@ -87,15 +87,15 @@ public:
     bool is() const { return m_xMoveOperations.is(); }
     bool Is() const { return m_xMoveOperations.is(); }
 
-    operator const css::uno::Reference< cpo::uno::XInterface>& () const{ return m_xGeneric; }
+    operator const cpo::uno::Reference< cpo::uno::XInterface>& () const{ return m_xGeneric; }
 
     // 'Conversions'
-    CursorWrapper& operator=(const css::uno::Reference< css::sdbc::XRowSet>& xCursor);
-    operator const css::uno::Reference< css::sdbc::XResultSet>& () const          { return m_xMoveOperations; }
+    CursorWrapper& operator=(const cpo::uno::Reference< css::sdbc::XRowSet>& xCursor);
+    operator const cpo::uno::Reference< css::sdbc::XResultSet>& () const          { return m_xMoveOperations; }
 
-    const css::uno::Reference< css::beans::XPropertySet >&        getPropertySet() const      { return m_xPropertyAccess; }
+    const cpo::uno::Reference< css::beans::XPropertySet >&        getPropertySet() const      { return m_xPropertyAccess; }
 
-    // css::uno::Reference< css::sdbcx::XRowLocate>
+    // cpo::uno::Reference< css::sdbcx::XRowLocate>
     /// @throws css::sdbc::SQLException
     /// @throws cpo::uno::RuntimeException
     cpo::uno::Any getBookmark()
@@ -121,9 +121,9 @@ public:
     bool rowDeleted()                       { return m_xMoveOperations->rowDeleted(); }
     // css::sdbcx::XColumnsSupplier
     /// @throws cpo::uno::RuntimeException
-    css::uno::Reference< css::container::XNameAccess> getColumns() const { return m_xColumnsSupplier->getColumns(); }
+    cpo::uno::Reference< css::container::XNameAccess> getColumns() const { return m_xColumnsSupplier->getColumns(); }
 private:
-    void ImplConstruct(const css::uno::Reference< css::sdbc::XResultSet>& _rxCursor, bool bUseCloned);
+    void ImplConstruct(const cpo::uno::Reference< css::sdbc::XResultSet>& _rxCursor, bool bUseCloned);
 };
 
 
@@ -147,12 +147,12 @@ protected:
 
 class SAL_WARN_UNUSED FmXDisposeMultiplexer final : public cppu::WeakImplHelper< css::lang::XEventListener >
 {
-    css::uno::Reference< css::lang::XComponent>       m_xObject;
+    cpo::uno::Reference< css::lang::XComponent>       m_xObject;
     FmXDisposeListener* m_pListener;
 
     virtual ~FmXDisposeMultiplexer() override;
 public:
-    FmXDisposeMultiplexer(FmXDisposeListener* _pListener, const css::uno::Reference< css::lang::XComponent>& _rxObject);
+    FmXDisposeMultiplexer(FmXDisposeListener* _pListener, const cpo::uno::Reference< css::lang::XComponent>& _rxObject);
 
 // css::lang::XEventListener
     virtual void disposing( const css::lang::EventObject& Source ) override;
@@ -160,15 +160,15 @@ public:
     void dispose();
 };
 
-SdrObjKind getControlTypeByObject(const css::uno::Reference< css::lang::XServiceInfo>& _rxObject);
+SdrObjKind getControlTypeByObject(const cpo::uno::Reference< css::lang::XServiceInfo>& _rxObject);
     // get the object type (OBJ_FM_...) from the services the object supports
 
 
-bool isRowSetAlive(const css::uno::Reference< cpo::uno::XInterface>& _rxRowSet);
+bool isRowSetAlive(const cpo::uno::Reference< cpo::uno::XInterface>& _rxRowSet);
     // checks if the css::sdbcx::XColumnsSupplier provided by _rxRowSet supplies any columns
 
 
-typedef ::o3tl::sorted_vector< css::uno::Reference< cpo::uno::XInterface > > InterfaceBag;
+typedef ::o3tl::sorted_vector< cpo::uno::Reference< cpo::uno::XInterface > > InterfaceBag;
 
 #endif // INCLUDED_SVX_FMTOOLS_HXX
 

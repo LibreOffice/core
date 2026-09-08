@@ -45,6 +45,7 @@
 #include <textcontentcontrol.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 bool SwWrtShell::MoveBookMark( BookMarkMove eFuncId, const ::sw::mark::MarkBase* const pMark)
 {

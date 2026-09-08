@@ -31,6 +31,7 @@
 #include <documentsignaturehelper.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 // XUriBinding
 
@@ -38,7 +39,7 @@ UriBindingHelper::UriBindingHelper()
 {
 }
 
-UriBindingHelper::UriBindingHelper( const css::uno::Reference < css::embed::XStorage >& rxStorage, const uno::Reference<io::XStream>& xScriptingSignatureStream )
+UriBindingHelper::UriBindingHelper( const cpo::uno::Reference < css::embed::XStorage >& rxStorage, const uno::Reference<io::XStream>& xScriptingSignatureStream )
 {
     mxStorage = rxStorage;
     mxScriptingSignatureStream = xScriptingSignatureStream;
@@ -63,7 +64,7 @@ uno::Reference< io::XInputStream > SAL_CALL UriBindingHelper::getUriBinding( con
     return xInputStream;
 }
 
-uno::Reference < io::XInputStream > UriBindingHelper::OpenInputStream( const uno::Reference < embed::XStorage >& rxStore, const OUString& rURI, const css::uno::Reference<css::io::XStream>& xScriptingSignatureStream )
+uno::Reference < io::XInputStream > UriBindingHelper::OpenInputStream( const uno::Reference < embed::XStorage >& rxStore, const OUString& rURI, const cpo::uno::Reference<css::io::XStream>& xScriptingSignatureStream )
 {
     OSL_ASSERT(!rURI.isEmpty());
     uno::Reference < io::XInputStream > xInStream;

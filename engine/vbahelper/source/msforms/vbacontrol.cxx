@@ -63,6 +63,7 @@
 #include <utility>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace ooo::vba;
 
 uno::Reference< css::awt::XVclWindowPeer >
@@ -130,7 +131,7 @@ ScVbaControlListener::disposing( const lang::EventObject& )
 
 //ScVbaControl
 
-ScVbaControl::ScVbaControl( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< cpo::uno::XComponentContext >& xContext, uno::Reference< ::cpo::uno::XInterface > xControl, css::uno::Reference< css::frame::XModel > xModel, std::unique_ptr<ov::AbstractGeometryAttributes> pGeomHelper )
+ScVbaControl::ScVbaControl( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< cpo::uno::XComponentContext >& xContext, uno::Reference< ::cpo::uno::XInterface > xControl, cpo::uno::Reference< css::frame::XModel > xModel, std::unique_ptr<ov::AbstractGeometryAttributes> pGeomHelper )
     : ControlImpl_BASE( xParent, xContext ), m_xControl(std::move( xControl )), m_xModel(std::move( xModel ))
 {
     //add listener

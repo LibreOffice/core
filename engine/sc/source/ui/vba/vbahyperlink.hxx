@@ -36,12 +36,12 @@ public:
     /// @throws cpo::uno::RuntimeException
     ScVbaHyperlink(
         const cpo::uno::Sequence< cpo::uno::Any >& rArgs,
-        const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
     /// @throws cpo::uno::RuntimeException
     ScVbaHyperlink(
-        const css::uno::Reference< ov::XHelperInterface >& rxAnchor,
-        const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+        const cpo::uno::Reference< ov::XHelperInterface >& rxAnchor,
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
         const cpo::uno::Any& rAddress, const cpo::uno::Any& rSubAddress,
         const cpo::uno::Any& rScreenTip, const cpo::uno::Any& rTextToDisplay );
 
@@ -59,8 +59,8 @@ public:
     virtual OUString SAL_CALL getTextToDisplay() override;
     virtual void SAL_CALL setTextToDisplay( const OUString& rTextToDisplay ) override;
     virtual sal_Int32 SAL_CALL getType() override;
-    virtual css::uno::Reference< ov::excel::XRange > SAL_CALL getRange() override;
-    virtual css::uno::Reference< ov::msforms::XShape > SAL_CALL getShape() override;
+    virtual cpo::uno::Reference< ov::excel::XRange > SAL_CALL getRange() override;
+    virtual cpo::uno::Reference< ov::msforms::XShape > SAL_CALL getShape() override;
 
     // XHelperInterface
     VBAHELPER_DECL_XHELPERINTERFACE
@@ -76,8 +76,8 @@ private:
     void setUrlComponents( const UrlComponents& rUrlComp );
 
 private:
-    css::uno::Reference< css::table::XCell > mxCell;
-    css::uno::Reference< css::beans::XPropertySet > mxTextField;
+    cpo::uno::Reference< css::table::XCell > mxCell;
+    cpo::uno::Reference< css::beans::XPropertySet > mxTextField;
     OUString maScreenTip;
     tools::Long mnType;
 };

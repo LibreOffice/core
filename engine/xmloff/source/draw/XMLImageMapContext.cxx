@@ -19,7 +19,7 @@
 
 #include <XMLImageMapContext.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -47,8 +47,8 @@ using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::beans::XPropertySetInfo;
 using ::com::sun::star::container::XIndexContainer;
 using ::com::sun::star::lang::XMultiServiceFactory;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::UNO_QUERY;
+using ::cpo::uno::Reference;
+using ::cpo::uno::UNO_QUERY;
 using ::cpo::uno::XInterface;
 using ::cpo::uno::Any;
 using ::com::sun::star::document::XEventsSupplier;
@@ -76,24 +76,24 @@ public:
 
     XMLImageMapObjectContext(
         SvXMLImport& rImport,
-        css::uno::Reference<css::container::XIndexContainer> const & xMap,
+        cpo::uno::Reference<css::container::XIndexContainer> const & xMap,
         const char* pServiceName);
 
     virtual void startFastElement( sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     virtual void endFastElement(sal_Int32 nElement) override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
 protected:
 
     virtual void ProcessAttribute(const sax_fastparser::FastAttributeList::FastAttributeIter &);
 
     virtual void Prepare(
-        css::uno::Reference<css::beans::XPropertySet> & rPropertySet);
+        cpo::uno::Reference<css::beans::XPropertySet> & rPropertySet);
 };
 
 }
@@ -124,7 +124,7 @@ XMLImageMapObjectContext::XMLImageMapObjectContext(
 }
 
 void XMLImageMapObjectContext::startFastElement( sal_Int32 /*nElement*/,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
         ProcessAttribute(aIter);
@@ -145,9 +145,9 @@ void XMLImageMapObjectContext::endFastElement(sal_Int32 )
     // else: not valid -> don't create and insert
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLImageMapObjectContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLImageMapObjectContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
     switch (nElement)
     {
@@ -223,14 +223,14 @@ public:
 
     XMLImageMapRectangleContext(
         SvXMLImport& rImport,
-        css::uno::Reference<css::container::XIndexContainer> const & xMap);
+        cpo::uno::Reference<css::container::XIndexContainer> const & xMap);
 
 protected:
     virtual void ProcessAttribute(
         const sax_fastparser::FastAttributeList::FastAttributeIter &) override;
 
     virtual void Prepare(
-        css::uno::Reference<css::beans::XPropertySet> & rPropertySet) override;
+        cpo::uno::Reference<css::beans::XPropertySet> & rPropertySet) override;
 };
 
 }
@@ -319,13 +319,13 @@ public:
 
     XMLImageMapPolygonContext(
         SvXMLImport& rImport,
-        css::uno::Reference<css::container::XIndexContainer> const & xMap);
+        cpo::uno::Reference<css::container::XIndexContainer> const & xMap);
 
 protected:
     virtual void ProcessAttribute(const sax_fastparser::FastAttributeList::FastAttributeIter &) override;
 
     virtual void Prepare(
-        css::uno::Reference<css::beans::XPropertySet> & rPropertySet) override;
+        cpo::uno::Reference<css::beans::XPropertySet> & rPropertySet) override;
 };
 
 }
@@ -399,14 +399,14 @@ public:
 
     XMLImageMapCircleContext(
         SvXMLImport& rImport,
-        css::uno::Reference<css::container::XIndexContainer> const & xMap);
+        cpo::uno::Reference<css::container::XIndexContainer> const & xMap);
 
 protected:
     virtual void ProcessAttribute(
         const sax_fastparser::FastAttributeList::FastAttributeIter &) override;
 
     virtual void Prepare(
-        css::uno::Reference<css::beans::XPropertySet> & rPropertySet) override;
+        cpo::uno::Reference<css::beans::XPropertySet> & rPropertySet) override;
 };
 
 }
@@ -501,9 +501,9 @@ XMLImageMapContext::~XMLImageMapContext()
 {
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLImageMapContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLImageMapContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
     switch (nElement)
     {

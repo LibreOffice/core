@@ -38,7 +38,7 @@ public:
 
     // KeyboardFocusListener
     virtual void focusedObjectChanged(
-        const css::uno::Reference<css::accessibility::XAccessible>& xAccessible) override;
+        const cpo::uno::Reference<css::accessibility::XAccessible>& xAccessible) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

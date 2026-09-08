@@ -55,13 +55,13 @@ using MainContextRef = std::unique_ptr<GMainContext, detail::MainContextUnref>;
 
 struct OOoMountOperation
 {
-    friend GMountOperation *ooo_mount_operation_new(ucb::ucp::gio::glib::MainContextRef &&, const css::uno::Reference< css::ucb::XCommandEnvironment >&);
+    friend GMountOperation *ooo_mount_operation_new(ucb::ucp::gio::glib::MainContextRef &&, const cpo::uno::Reference< css::ucb::XCommandEnvironment >&);
     friend void ooo_mount_operation_finalize(GObject *);
 
     GMountOperation parent_instance;
 
     ucb::ucp::gio::glib::MainContextRef context;
-    css::uno::Reference< css::ucb::XCommandEnvironment > xEnv;
+    cpo::uno::Reference< css::ucb::XCommandEnvironment > xEnv;
     OUString m_aPrevUsername;
     OUString m_aPrevPassword;
 
@@ -84,7 +84,7 @@ struct OOoMountOperationClass
 
 
 GType            ooo_mount_operation_get_type();
-GMountOperation *ooo_mount_operation_new(ucb::ucp::gio::glib::MainContextRef && context, const css::uno::Reference< css::ucb::XCommandEnvironment >& rEnv);
+GMountOperation *ooo_mount_operation_new(ucb::ucp::gio::glib::MainContextRef && context, const cpo::uno::Reference< css::ucb::XCommandEnvironment >& rEnv);
 
 G_END_DECLS
 

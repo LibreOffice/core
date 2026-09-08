@@ -77,13 +77,13 @@ namespace xmloff
                                                         // while reading our element
 
         /// the parent container to insert the new element into
-        css::uno::Reference< css::container::XNameContainer >
+        cpo::uno::Reference< css::container::XNameContainer >
                                     m_xParentContainer;
 
         /// the element we're creating. Valid after StartElement
-        css::uno::Reference< css::beans::XPropertySet >
+        cpo::uno::Reference< css::beans::XPropertySet >
                                     m_xElement;
-        css::uno::Reference< css::beans::XPropertySetInfo >
+        cpo::uno::Reference< css::beans::XPropertySetInfo >
                                     m_xInfo;
 
         bool                        m_bImplicitGenericAttributeHandling;
@@ -101,17 +101,17 @@ namespace xmloff
         */
         OElementImport(
             OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager,
-            const css::uno::Reference< css::container::XNameContainer >& _rxParentContainer
+            const cpo::uno::Reference< css::container::XNameContainer >& _rxParentContainer
         );
         virtual ~OElementImport() override;
 
     protected:
         // SvXMLImportContext overridables
-        virtual void startFastElement( sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        virtual void startFastElement( sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
         virtual void endFastElement(sal_Int32 nElement) override;
-        virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+        virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
             sal_Int32 nElement,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+            const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
         // OPropertyImport overridables
         virtual bool handleAttribute(sal_Int32 nElement, const OUString& _rValue) override;
@@ -125,7 +125,7 @@ namespace xmloff
 
             <p>The default implementation uses <member>m_xORB</member> to create an object with <member>m_sServiceName</member>.
         */
-        virtual css::uno::Reference< css::beans::XPropertySet >
+        virtual cpo::uno::Reference< css::beans::XPropertySet >
                         createElement();
 
     protected:
@@ -175,7 +175,7 @@ namespace xmloff
 
         // we fake the attributes our base class gets: we add the attributes of the outer wrapper
         // element which encloses us
-        css::uno::Reference< css::xml::sax::XFastAttributeList >
+        cpo::uno::Reference< css::xml::sax::XFastAttributeList >
                                         m_xOuterAttributes;
 
         /** the address of the calc cell which the control model should be bound to,
@@ -196,31 +196,31 @@ namespace xmloff
         // for use by derived classes only
         OControlImport(
             OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager,
-            const css::uno::Reference< css::container::XNameContainer >& _rxParentContainer
+            const cpo::uno::Reference< css::container::XNameContainer >& _rxParentContainer
             );
 
     public:
         OControlImport(
             OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager,
-            const css::uno::Reference< css::container::XNameContainer >& _rxParentContainer,
+            const cpo::uno::Reference< css::container::XNameContainer >& _rxParentContainer,
             OControlElement::ElementType _eType
         );
 
         // SvXMLImportContext overridables
-        virtual void startFastElement( sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        virtual void startFastElement( sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
         virtual void endFastElement(sal_Int32 nElement) override;
 
         // OPropertyImport overridables
         virtual bool handleAttribute(sal_Int32 nElement, const OUString& _rValue) override;
 
-        void addOuterAttributes(const css::uno::Reference< css::xml::sax::XFastAttributeList >& _rxOuterAttribs);
+        void addOuterAttributes(const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& _rxOuterAttribs);
 
     protected:
         void setElementType(OControlElement::ElementType _eType) { m_eElementType = _eType; }
 
     protected:
         static void implTranslateValueProperty(
-            const css::uno::Reference< css::beans::XPropertySetInfo >& _rxPropInfo,
+            const cpo::uno::Reference< css::beans::XPropertySetInfo >& _rxPropInfo,
             css::beans::PropertyValue& /* [in/out] */ _rPropValue);
 
         virtual OUString determineDefaultServiceName() const override;
@@ -249,7 +249,7 @@ namespace xmloff
     protected:
 
         // OElementImport overridables
-        virtual css::uno::Reference< css::beans::XPropertySet >
+        virtual cpo::uno::Reference< css::beans::XPropertySet >
                         createElement() override;
     };
 
@@ -261,7 +261,7 @@ namespace xmloff
     //= OImagePositionImport
     class OImagePositionImport : public OControlImport
     {
-        css::uno::Reference<css::graphic::XGraphic> m_xGraphic;
+        cpo::uno::Reference<css::graphic::XGraphic> m_xGraphic;
         sal_Int16   m_nImagePosition;
         sal_Int16   m_nImageAlign;
         bool    m_bHaveImagePosition;
@@ -269,7 +269,7 @@ namespace xmloff
     public:
         OImagePositionImport(
             OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager,
-            const css::uno::Reference< css::container::XNameContainer >& _rxParentContainer,
+            const cpo::uno::Reference< css::container::XNameContainer >& _rxParentContainer,
             OControlElement::ElementType _eType
         );
 
@@ -277,7 +277,7 @@ namespace xmloff
         // SvXMLImportContext overridables
         virtual void startFastElement(
             sal_Int32 nElement,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList >& _rxAttrList) override;
+            const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& _rxAttrList) override;
 
         // OPropertyImport overridables
         virtual bool handleAttribute(sal_Int32 nElement, const OUString& _rValue) override;
@@ -291,13 +291,13 @@ namespace xmloff
     public:
         OReferredControlImport(
             OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager,
-            const css::uno::Reference< css::container::XNameContainer >& _rxParentContainer
+            const cpo::uno::Reference< css::container::XNameContainer >& _rxParentContainer
         );
 
         // SvXMLImportContext overridables
         virtual void startFastElement(
             sal_Int32 nElement,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList >& _rxAttrList) override;
+            const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& _rxAttrList) override;
 
         // OPropertyImport overridables
         virtual bool handleAttribute(sal_Int32 nElement, const OUString& _rValue) override;
@@ -309,7 +309,7 @@ namespace xmloff
     public:
         OPasswordImport(
             OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager,
-            const css::uno::Reference< css::container::XNameContainer >& _rxParentContainer,
+            const cpo::uno::Reference< css::container::XNameContainer >& _rxParentContainer,
             OControlElement::ElementType _eType
         );
 
@@ -323,7 +323,7 @@ namespace xmloff
     public:
         ORadioImport(
             OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager,
-            const css::uno::Reference< css::container::XNameContainer >& _rxParentContainer,
+            const cpo::uno::Reference< css::container::XNameContainer >& _rxParentContainer,
             OControlElement::ElementType _eType
         );
 
@@ -341,7 +341,7 @@ namespace xmloff
     public:
         OURLReferenceImport(
             OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager,
-            const css::uno::Reference< css::container::XNameContainer >& _rxParentContainer,
+            const cpo::uno::Reference< css::container::XNameContainer >& _rxParentContainer,
             OControlElement::ElementType _eType
         );
 
@@ -359,7 +359,7 @@ namespace xmloff
     public:
         OButtonImport(
             OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager,
-            const css::uno::Reference< css::container::XNameContainer >& _rxParentContainer,
+            const cpo::uno::Reference< css::container::XNameContainer >& _rxParentContainer,
             OControlElement::ElementType _eType
         );
 
@@ -367,7 +367,7 @@ namespace xmloff
         // SvXMLImportContext overridables
         virtual void startFastElement(
             sal_Int32 nElement,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList >& _rxAttrList) override;
+            const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& _rxAttrList) override;
     };
 
     //= OValueRangeImport
@@ -382,7 +382,7 @@ namespace xmloff
     public:
         OValueRangeImport(
             OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager,
-            const css::uno::Reference< css::container::XNameContainer >& _rxParentContainer,
+            const cpo::uno::Reference< css::container::XNameContainer >& _rxParentContainer,
             OControlElement::ElementType _eType
         );
 
@@ -390,7 +390,7 @@ namespace xmloff
         // SvXMLImportContext overridables
         virtual void startFastElement(
             sal_Int32 nElement,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList >& _rxAttrList ) override;
+            const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& _rxAttrList ) override;
 
         // OPropertyImport overridables
         virtual bool handleAttribute(sal_Int32 nElement, const OUString& _rValue) override;
@@ -403,24 +403,24 @@ namespace xmloff
     class OTextLikeImport : public OControlImport
     {
     private:
-        css::uno::Reference< css::text::XTextCursor >   m_xCursor;
-        css::uno::Reference< css::text::XTextCursor >   m_xOldCursor;
+        cpo::uno::Reference< css::text::XTextCursor >   m_xCursor;
+        cpo::uno::Reference< css::text::XTextCursor >   m_xOldCursor;
         bool                                                                    m_bEncounteredTextPara;
 
     public:
         OTextLikeImport(
             OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager,
-            const css::uno::Reference< css::container::XNameContainer >& _rxParentContainer,
+            const cpo::uno::Reference< css::container::XNameContainer >& _rxParentContainer,
             OControlElement::ElementType _eType
         );
 
         // SvXMLImportContext overridables
         virtual void startFastElement(
             sal_Int32 nElement,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList >& _rxAttrList) override;
-        virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+            const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& _rxAttrList) override;
+        virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
             sal_Int32 nElement,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+            const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
         virtual void endFastElement(sal_Int32 nElement) override;
 
     private:
@@ -460,17 +460,17 @@ namespace xmloff
     public:
         OListAndComboImport(
             OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager,
-            const css::uno::Reference< css::container::XNameContainer >& _rxParentContainer,
+            const cpo::uno::Reference< css::container::XNameContainer >& _rxParentContainer,
             OControlElement::ElementType _eType
         );
 
         // SvXMLImportContext overridables
         virtual void startFastElement( sal_Int32 nElement,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override;
+            const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& ) override;
         virtual void endFastElement(sal_Int32 nElement) override;
-        virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+        virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
             sal_Int32 nElement,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+            const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
         // OPropertyImport overridables
         virtual bool handleAttribute(sal_Int32 nElement, const OUString& _rValue) override;
@@ -503,7 +503,7 @@ namespace xmloff
             OListAndComboImportRef _xListBox);
 
         virtual void startFastElement( sal_Int32 nElement,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override;
+            const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& ) override;
     };
 
     //= OComboItemImport
@@ -521,7 +521,7 @@ namespace xmloff
     protected:
         // SvXMLImportContext overridables
         virtual void startFastElement( sal_Int32 nElement,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override;
+            const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& ) override;
     };
 
 
@@ -534,26 +534,26 @@ namespace xmloff
     template <class BASE>
     class OColumnImport : public BASE
     {
-        css::uno::Reference< css::form::XGridColumnFactory >
+        cpo::uno::Reference< css::form::XGridColumnFactory >
                     m_xColumnFactory;
 
     public:
         OColumnImport(OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager,
-                const css::uno::Reference< css::container::XNameContainer >& _rxParentContainer,
+                const cpo::uno::Reference< css::container::XNameContainer >& _rxParentContainer,
                 OControlElement::ElementType _eType);
 
     protected:
         // OElementImport overridables
-        virtual css::uno::Reference< css::beans::XPropertySet >
+        virtual cpo::uno::Reference< css::beans::XPropertySet >
                         createElement() override;
     };
 
     //= OColumnWrapperImport
     class OColumnWrapperImport : public SvXMLImportContext
     {
-        css::uno::Reference< css::xml::sax::XFastAttributeList >
+        cpo::uno::Reference< css::xml::sax::XFastAttributeList >
                                 m_xOwnAttributes;
-        css::uno::Reference< css::container::XNameContainer >
+        cpo::uno::Reference< css::container::XNameContainer >
                                 m_xParentContainer;
         OFormLayerXMLImport_Impl&   m_rFormImport;
         IEventAttacherManager&  m_rEventManager;
@@ -561,15 +561,15 @@ namespace xmloff
     public:
         OColumnWrapperImport(OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager,
                 sal_Int32 nElement,
-                const css::uno::Reference< css::container::XNameContainer >& _rxParentContainer);
+                const cpo::uno::Reference< css::container::XNameContainer >& _rxParentContainer);
 
         // SvXMLImportContext overridables
-        virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+        virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
             sal_Int32 nElement,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+            const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
         virtual void startFastElement(
             sal_Int32 nElement,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList >& _rxAttrList) override;
+            const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& _rxAttrList) override;
     private:
         OControlImport* implCreateChildContext(
             sal_Int32 nElement,
@@ -583,20 +583,20 @@ namespace xmloff
     public:
         OGridImport(
             OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager,
-            const css::uno::Reference< css::container::XNameContainer >& _rxParentContainer,
+            const cpo::uno::Reference< css::container::XNameContainer >& _rxParentContainer,
             OControlElement::ElementType _eType);
 
         // SvXMLImportContext overridables
-        virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+        virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
             sal_Int32 nElement,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+            const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
         virtual void endFastElement(sal_Int32 nElement) override;
 
     private:
         // OElementImport overridables
-        virtual css::uno::Reference< css::beans::XPropertySet > createElement() override;
+        virtual cpo::uno::Reference< css::beans::XPropertySet > createElement() override;
 
-        css::uno::Reference< css::container::XNameContainer >  m_xMeAsContainer;
+        cpo::uno::Reference< css::container::XNameContainer >  m_xMeAsContainer;
     };
 
     /** helper class importing a single &lt;form:form&gt; element
@@ -606,30 +606,30 @@ namespace xmloff
     public:
         OFormImport(
             OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager,
-            const css::uno::Reference< css::container::XNameContainer >& _rxParentContainer
+            const cpo::uno::Reference< css::container::XNameContainer >& _rxParentContainer
         );
 
     private:
         // SvXMLImportContext overridables
         virtual void startFastElement(
             sal_Int32 nElement,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList) override;
+            const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList) override;
         virtual void endFastElement(sal_Int32 nElement) override;
 
-        virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
-            sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+        virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+            sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
         // OPropertyImport overridables
         virtual bool handleAttribute(sal_Int32 nElement, const OUString& _rValue) override;
 
         // OElementImport overridables
-        virtual css::uno::Reference< css::beans::XPropertySet >
+        virtual cpo::uno::Reference< css::beans::XPropertySet >
                         createElement() override;
 
         virtual OUString determineDefaultServiceName() const override;
         void implTranslateStringListProperty(const OUString& _rPropertyName, const OUString& _rValue);
 
-        css::uno::Reference< css::container::XNameContainer > m_xMeAsContainer;
+        cpo::uno::Reference< css::container::XNameContainer > m_xMeAsContainer;
     };
 
     //= OXMLDataSourceImport
@@ -637,27 +637,27 @@ namespace xmloff
     {
     public:
         OXMLDataSourceImport( SvXMLImport& _rImport
-                    ,const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList
-                    ,const css::uno::Reference< css::beans::XPropertySet >& _xElement);
+                    ,const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList
+                    ,const cpo::uno::Reference< css::beans::XPropertySet >& _xElement);
     };
 
     //= OColumnImport
     template <class BASE>
     OColumnImport< BASE >::OColumnImport(OFormLayerXMLImport_Impl& _rImport,
             IEventAttacherManager& _rEventManager,
-            const css::uno::Reference< css::container::XNameContainer >& _rxParentContainer,
+            const cpo::uno::Reference< css::container::XNameContainer >& _rxParentContainer,
             OControlElement::ElementType _eType)
         :BASE(_rImport, _rEventManager, _rxParentContainer, _eType)
-        ,m_xColumnFactory(_rxParentContainer, css::uno::UNO_QUERY)
+        ,m_xColumnFactory(_rxParentContainer, cpo::uno::UNO_QUERY)
     {
         OSL_ENSURE(m_xColumnFactory.is(), "OColumnImport::OColumnImport: invalid parent container (no factory)!");
     }
 
     // OElementImport overridables
     template <class BASE>
-    css::uno::Reference< css::beans::XPropertySet > OColumnImport< BASE >::createElement()
+    cpo::uno::Reference< css::beans::XPropertySet > OColumnImport< BASE >::createElement()
     {
-        css::uno::Reference< css::beans::XPropertySet > xReturn;
+        cpo::uno::Reference< css::beans::XPropertySet > xReturn;
         // no call to the base class' method. We have to use the grid column factory
         if (m_xColumnFactory.is())
         {

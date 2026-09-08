@@ -40,8 +40,8 @@ public:
     AccessibleOutlineView (
         ::sd::Window* pSdWindow,
         ::sd::OutlineViewShell* pViewShell,
-        const css::uno::Reference<css::frame::XController>& rxController,
-        const css::uno::Reference<css::accessibility::XAccessible>& rxParent);
+        const cpo::uno::Reference<css::frame::XController>& rxController,
+        const cpo::uno::Reference<css::accessibility::XAccessible>& rxParent);
 
     virtual ~AccessibleOutlineView() override;
 
@@ -58,7 +58,7 @@ public:
     virtual sal_Int64 SAL_CALL
         getAccessibleChildCount() override;
 
-    virtual css::uno::Reference< css::accessibility::XAccessible> SAL_CALL
+    virtual cpo::uno::Reference< css::accessibility::XAccessible> SAL_CALL
         getAccessibleChild (sal_Int64 nIndex) override;
     virtual OUString SAL_CALL
         getAccessibleName() override;
@@ -66,11 +66,11 @@ public:
 
     virtual void SAL_CALL
         addAccessibleEventListener (
-            const css::uno::Reference<css::accessibility::XAccessibleEventListener >& xListener) override;
+            const cpo::uno::Reference<css::accessibility::XAccessibleEventListener >& xListener) override;
 
     virtual void SAL_CALL
         removeAccessibleEventListener (
-            const css::uno::Reference<css::accessibility::XAccessibleEventListener >& xListener) override;
+            const cpo::uno::Reference<css::accessibility::XAccessibleEventListener >& xListener) override;
 
     //=====  XServiceInfo  ====================================================
 

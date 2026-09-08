@@ -33,11 +33,11 @@ namespace frm
 
     public:
         OSpinButtonModel(
-            const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
+            const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
         );
         OSpinButtonModel(
             const OSpinButtonModel* _pOriginal,
-            const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
+            const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
         );
         virtual ~OSpinButtonModel() override;
 
@@ -48,11 +48,11 @@ namespace frm
 
         // XPersistObject
         virtual OUString getServiceName() override;
-        virtual void write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
-        virtual void read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
+        virtual void write(const cpo::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
+        virtual void read(const cpo::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
 
         // XCloneable
-        virtual css::uno::Reference< css::util::XCloneable > createClone(  ) override;
+        virtual cpo::uno::Reference< css::util::XCloneable > createClone(  ) override;
 
         // XPropertyState
         virtual cpo::uno::Any getPropertyDefaultByHandle( sal_Int32 _nHandle ) const override;

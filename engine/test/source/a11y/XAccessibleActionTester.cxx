@@ -19,7 +19,7 @@
 
 #include <cppunit/TestAssert.h>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <test/a11y/XAccessibleActionTester.hxx>
 

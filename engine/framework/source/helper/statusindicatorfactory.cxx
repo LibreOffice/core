@@ -45,7 +45,7 @@ sal_Int32 StatusIndicatorFactory::m_nInReschedule = 0;  ///< static counter for 
 
 constexpr OUString PROGRESS_RESOURCE = u"private:resource/progressbar/progressbar"_ustr;
 
-StatusIndicatorFactory::StatusIndicatorFactory(css::uno::Reference< cpo::uno::XComponentContext >  xContext)
+StatusIndicatorFactory::StatusIndicatorFactory(cpo::uno::Reference< cpo::uno::XComponentContext >  xContext)
     : m_xContext          (std::move(xContext ))
     , m_bAllowReschedule  (false)
     , m_bAllowParentShow  (false)
@@ -63,8 +63,8 @@ void StatusIndicatorFactory::initialize(const cpo::uno::Sequence< cpo::uno::Any 
     if (lArguments.hasElements()) {
         std::scoped_lock g(m_mutex);
 
-        css::uno::Reference< css::frame::XFrame > xTmpFrame;
-        css::uno::Reference< css::awt::XWindow > xTmpWindow;
+        cpo::uno::Reference< css::frame::XFrame > xTmpFrame;
+        cpo::uno::Reference< css::awt::XWindow > xTmpWindow;
         bool b1 = lArguments[0] >>= xTmpFrame;
         bool b2 = lArguments[0] >>= xTmpWindow;
         if (lArguments.getLength() == 3 && b1) {
@@ -81,8 +81,8 @@ void StatusIndicatorFactory::initialize(const cpo::uno::Sequence< cpo::uno::Any 
            // it's an old-style initialisation using properties
             ::comphelper::SequenceAsHashMap lArgs(lArguments);
 
-            m_xFrame             = lArgs.getUnpackedValueOrDefault(u"Frame"_ustr            , css::uno::Reference< css::frame::XFrame >());
-            m_xPluggWindow       = lArgs.getUnpackedValueOrDefault(u"Window"_ustr           , css::uno::Reference< css::awt::XWindow >() );
+            m_xFrame             = lArgs.getUnpackedValueOrDefault(u"Frame"_ustr            , cpo::uno::Reference< css::frame::XFrame >());
+            m_xPluggWindow       = lArgs.getUnpackedValueOrDefault(u"Window"_ustr           , cpo::uno::Reference< css::awt::XWindow >() );
             m_bAllowParentShow   = lArgs.getUnpackedValueOrDefault(u"AllowParentShow"_ustr  , false );
             m_bDisableReschedule = lArgs.getUnpackedValueOrDefault(u"DisableReschedule"_ustr, false );
        }
@@ -94,7 +94,7 @@ void StatusIndicatorFactory::initialize(const cpo::uno::Sequence< cpo::uno::Any 
     impl_createProgress();
 }
 
-css::uno::Reference< css::task::XStatusIndicator > StatusIndicatorFactory::createStatusIndicator()
+cpo::uno::Reference< css::task::XStatusIndicator > StatusIndicatorFactory::createStatusIndicator()
 {
     return new StatusIndicator(this);
 }
@@ -105,11 +105,11 @@ void StatusIndicatorFactory::update()
     m_bAllowReschedule = true;
 }
 
-void StatusIndicatorFactory::start(const css::uno::Reference< css::task::XStatusIndicator >& xChild,
+void StatusIndicatorFactory::start(const cpo::uno::Reference< css::task::XStatusIndicator >& xChild,
                                    const OUString&                                    sText ,
                                          sal_Int32                                           nRange)
 {
-    css::uno::Reference< css::task::XStatusIndicator > xProgress;
+    cpo::uno::Reference< css::task::XStatusIndicator > xProgress;
     // SAFE -> ----------------------------------
     {
         std::scoped_lock aWriteLock(m_mutex);
@@ -135,10 +135,10 @@ void StatusIndicatorFactory::start(const css::uno::Reference< css::task::XStatus
     impl_reschedule(true);
 }
 
-void StatusIndicatorFactory::reset(const css::uno::Reference< css::task::XStatusIndicator >& xChild)
+void StatusIndicatorFactory::reset(const cpo::uno::Reference< css::task::XStatusIndicator >& xChild)
 {
-    css::uno::Reference< css::task::XStatusIndicator > xActive;
-    css::uno::Reference< css::task::XStatusIndicator > xProgress;
+    cpo::uno::Reference< css::task::XStatusIndicator > xActive;
+    cpo::uno::Reference< css::task::XStatusIndicator > xProgress;
     // SAFE -> ----------------------------------
     {
         std::scoped_lock aReadLock(m_mutex);
@@ -167,10 +167,10 @@ void StatusIndicatorFactory::reset(const css::uno::Reference< css::task::XStatus
     impl_reschedule(true);
 }
 
-void StatusIndicatorFactory::end(const css::uno::Reference< css::task::XStatusIndicator >& xChild)
+void StatusIndicatorFactory::end(const cpo::uno::Reference< css::task::XStatusIndicator >& xChild)
 {
-    css::uno::Reference< css::task::XStatusIndicator > xActive;
-    css::uno::Reference< css::task::XStatusIndicator > xProgress;
+    cpo::uno::Reference< css::task::XStatusIndicator > xActive;
+    cpo::uno::Reference< css::task::XStatusIndicator > xProgress;
     OUString sText;
     sal_Int32 nValue = 0;
     // SAFE -> ----------------------------------
@@ -222,11 +222,11 @@ void StatusIndicatorFactory::end(const css::uno::Reference< css::task::XStatusIn
     impl_reschedule(true);
 }
 
-void StatusIndicatorFactory::setText(const css::uno::Reference< css::task::XStatusIndicator >& xChild,
+void StatusIndicatorFactory::setText(const cpo::uno::Reference< css::task::XStatusIndicator >& xChild,
                                      const OUString&                                    sText )
 {
-    css::uno::Reference< css::task::XStatusIndicator > xActive;
-    css::uno::Reference< css::task::XStatusIndicator > xProgress;
+    cpo::uno::Reference< css::task::XStatusIndicator > xActive;
+    cpo::uno::Reference< css::task::XStatusIndicator > xProgress;
     // SAFE -> ----------------------------------
     {
         std::scoped_lock aWriteLock(m_mutex);
@@ -253,12 +253,12 @@ void StatusIndicatorFactory::setText(const css::uno::Reference< css::task::XStat
     impl_reschedule(true);
 }
 
-void StatusIndicatorFactory::setValue( const css::uno::Reference< css::task::XStatusIndicator >& xChild ,
+void StatusIndicatorFactory::setValue( const cpo::uno::Reference< css::task::XStatusIndicator >& xChild ,
                                              sal_Int32                                           nValue )
 {
     sal_Int32 nOldValue = 0;
-    css::uno::Reference< css::task::XStatusIndicator > xActive;
-    css::uno::Reference< css::task::XStatusIndicator > xProgress;
+    cpo::uno::Reference< css::task::XStatusIndicator > xActive;
+    cpo::uno::Reference< css::task::XStatusIndicator > xProgress;
     // SAFE -> ----------------------------------
     {
         std::scoped_lock aWriteLock(m_mutex);
@@ -300,9 +300,9 @@ void StatusIndicatorFactory::startThreads()
 
 void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
 {
-    css::uno::Reference< css::frame::XFrame > xFrame;
-    css::uno::Reference< css::awt::XWindow >  xPluggWindow;
-    css::uno::Reference< cpo::uno::XComponentContext > xContext;
+    cpo::uno::Reference< css::frame::XFrame > xFrame;
+    cpo::uno::Reference< css::awt::XWindow >  xPluggWindow;
+    cpo::uno::Reference< cpo::uno::XComponentContext > xContext;
     // SAFE -> ----------------------------------
     {
         std::scoped_lock aReadLock(m_mutex);
@@ -316,7 +316,7 @@ void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
     }
     // <- SAFE ----------------------------------
 
-    css::uno::Reference< css::awt::XWindow > xParentWindow;
+    cpo::uno::Reference< css::awt::XWindow > xParentWindow;
     if (xFrame.is())
         xParentWindow = xFrame->getContainerWindow();
     else
@@ -325,7 +325,7 @@ void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
     // don't disturb user in case he put the loading document into the background!
     // Suppress any setVisible() or toFront() call in case the initial show was
     // already made.
-    css::uno::Reference< css::awt::XWindow2 > xVisibleCheck(xParentWindow, css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::awt::XWindow2 > xVisibleCheck(xParentWindow, cpo::uno::UNO_QUERY);
     bool bIsVisible = false;
     if (xVisibleCheck.is())
         bIsVisible = xVisibleCheck->isVisible();
@@ -338,10 +338,10 @@ void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
 
     // Check if the layout manager has been set to invisible state. It this case we are also
     // not allowed to set the frame visible!
-    css::uno::Reference< css::beans::XPropertySet > xPropSet(xFrame, css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::beans::XPropertySet > xPropSet(xFrame, cpo::uno::UNO_QUERY);
     if (xPropSet.is())
     {
-        css::uno::Reference< css::frame::XLayoutManager2 > xLayoutManager;
+        cpo::uno::Reference< css::frame::XLayoutManager2 > xLayoutManager;
         xPropSet->getPropertyValue(FramePropNames[FramePropHandle::LayoutManager]) >>= xLayoutManager;
         if (xLayoutManager.is())
         {
@@ -359,8 +359,8 @@ void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
     bool bHiddenDoc = false;
     if (xFrame.is())
     {
-        css::uno::Reference< css::frame::XController > xController;
-        css::uno::Reference< css::frame::XModel >      xModel;
+        cpo::uno::Reference< css::frame::XController > xController;
+        cpo::uno::Reference< css::frame::XModel >      xModel;
         xController = xFrame->getController();
         if (xController.is())
             xModel = xController->getModel();
@@ -395,8 +395,8 @@ void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
 
 void StatusIndicatorFactory::impl_createProgress()
 {
-    css::uno::Reference< css::frame::XFrame > xFrame;
-    css::uno::Reference< css::awt::XWindow > xWindow;
+    cpo::uno::Reference< css::frame::XFrame > xFrame;
+    cpo::uno::Reference< css::awt::XWindow > xWindow;
     // SAFE -> ----------------------------------
     {
         std::scoped_lock aReadLock(m_mutex);
@@ -406,7 +406,7 @@ void StatusIndicatorFactory::impl_createProgress()
     }
     // <- SAFE ----------------------------------
 
-    css::uno::Reference< css::task::XStatusIndicator > xProgress;
+    cpo::uno::Reference< css::task::XStatusIndicator > xProgress;
 
     if (xWindow.is())
     {
@@ -416,10 +416,10 @@ void StatusIndicatorFactory::impl_createProgress()
     else if (xFrame.is())
     {
         // use frame layouted progress implementation
-        css::uno::Reference< css::beans::XPropertySet > xPropSet(xFrame, css::uno::UNO_QUERY);
+        cpo::uno::Reference< css::beans::XPropertySet > xPropSet(xFrame, cpo::uno::UNO_QUERY);
         if (xPropSet.is())
         {
-            css::uno::Reference< css::frame::XLayoutManager2 > xLayoutManager;
+            cpo::uno::Reference< css::frame::XLayoutManager2 > xLayoutManager;
             xPropSet->getPropertyValue(FramePropNames[FramePropHandle::LayoutManager]) >>= xLayoutManager;
             if (xLayoutManager.is())
             {
@@ -428,9 +428,9 @@ void StatusIndicatorFactory::impl_createProgress()
                 xLayoutManager->createElement( sPROGRESS_RESOURCE );
                 xLayoutManager->hideElement( sPROGRESS_RESOURCE );
 
-                css::uno::Reference< css::ui::XUIElement > xProgressBar = xLayoutManager->getElement(sPROGRESS_RESOURCE);
+                cpo::uno::Reference< css::ui::XUIElement > xProgressBar = xLayoutManager->getElement(sPROGRESS_RESOURCE);
                 if (xProgressBar.is())
-                    xProgress.set(xProgressBar->getRealInterface(), css::uno::UNO_QUERY);
+                    xProgress.set(xProgressBar->getRealInterface(), cpo::uno::UNO_QUERY);
                 xLayoutManager->unlock();
             }
         }
@@ -442,7 +442,7 @@ void StatusIndicatorFactory::impl_createProgress()
 
 void StatusIndicatorFactory::impl_showProgress()
 {
-    css::uno::Reference< css::frame::XFrame > xFrame;
+    cpo::uno::Reference< css::frame::XFrame > xFrame;
     // SAFE -> ----------------------------------
     {
         std::scoped_lock aReadLock(m_mutex);
@@ -451,16 +451,16 @@ void StatusIndicatorFactory::impl_showProgress()
     }
     // <- SAFE ----------------------------------
 
-    css::uno::Reference< css::task::XStatusIndicator > xProgress;
+    cpo::uno::Reference< css::task::XStatusIndicator > xProgress;
 
     if (!xFrame.is())
         return;
 
     // use frame layouted progress implementation
-    css::uno::Reference< css::beans::XPropertySet > xPropSet(xFrame, css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::beans::XPropertySet > xPropSet(xFrame, cpo::uno::UNO_QUERY);
     if (xPropSet.is())
     {
-        css::uno::Reference< css::frame::XLayoutManager2 > xLayoutManager;
+        cpo::uno::Reference< css::frame::XLayoutManager2 > xLayoutManager;
         xPropSet->getPropertyValue(FramePropNames[FramePropHandle::LayoutManager]) >>= xLayoutManager;
         if (xLayoutManager.is())
         {
@@ -471,9 +471,9 @@ void StatusIndicatorFactory::impl_showProgress()
             xLayoutManager->createElement( sPROGRESS_RESOURCE );
             xLayoutManager->showElement( sPROGRESS_RESOURCE );
 
-            css::uno::Reference< css::ui::XUIElement > xProgressBar = xLayoutManager->getElement(sPROGRESS_RESOURCE);
+            cpo::uno::Reference< css::ui::XUIElement > xProgressBar = xLayoutManager->getElement(sPROGRESS_RESOURCE);
             if (xProgressBar.is())
-                xProgress.set(xProgressBar->getRealInterface(), css::uno::UNO_QUERY);
+                xProgress.set(xProgressBar->getRealInterface(), cpo::uno::UNO_QUERY);
         }
     }
 
@@ -483,7 +483,7 @@ void StatusIndicatorFactory::impl_showProgress()
 
 void StatusIndicatorFactory::impl_hideProgress()
 {
-    css::uno::Reference< css::frame::XFrame > xFrame;
+    cpo::uno::Reference< css::frame::XFrame > xFrame;
     // SAFE -> ----------------------------------
     {
         std::scoped_lock aReadLock(m_mutex);
@@ -495,10 +495,10 @@ void StatusIndicatorFactory::impl_hideProgress()
     if (xFrame.is())
     {
         // use frame layouted progress implementation
-        css::uno::Reference< css::beans::XPropertySet > xPropSet(xFrame, css::uno::UNO_QUERY);
+        cpo::uno::Reference< css::beans::XPropertySet > xPropSet(xFrame, cpo::uno::UNO_QUERY);
         if (xPropSet.is())
         {
-            css::uno::Reference< css::frame::XLayoutManager2 > xLayoutManager;
+            cpo::uno::Reference< css::frame::XLayoutManager2 > xLayoutManager;
             xPropSet->getPropertyValue(FramePropNames[FramePropHandle::LayoutManager]) >>= xLayoutManager;
             if (xLayoutManager.is())
                 xLayoutManager->hideElement( PROGRESS_RESOURCE );

@@ -36,9 +36,9 @@ class RTFPicture;
 class RTFValue : public Value, public virtual SvRefBase
 {
     RTFValue(int nValue, OUString sValue, const RTFSprms* pAttributes, const RTFSprms* pSprms,
-             css::uno::Reference<css::drawing::XShape> xShape,
-             css::uno::Reference<css::io::XInputStream> xStream,
-             css::uno::Reference<css::embed::XEmbeddedObject> xObject, bool bForceString,
+             cpo::uno::Reference<css::drawing::XShape> xShape,
+             cpo::uno::Reference<css::io::XInputStream> xStream,
+             cpo::uno::Reference<css::embed::XEmbeddedObject> xObject, bool bForceString,
              const RTFShape* pShape, const RTFPicture* pPicture);
 
 public:
@@ -48,9 +48,9 @@ public:
     RTFValue(OUString sValue, bool bForce = false);
     explicit RTFValue(const RTFSprms& rAttributes);
     RTFValue(const RTFSprms& rAttributes, const RTFSprms& rSprms);
-    explicit RTFValue(css::uno::Reference<css::drawing::XShape> xShape);
-    explicit RTFValue(css::uno::Reference<css::io::XInputStream> xStream);
-    explicit RTFValue(css::uno::Reference<css::embed::XEmbeddedObject> xObject);
+    explicit RTFValue(cpo::uno::Reference<css::drawing::XShape> xShape);
+    explicit RTFValue(cpo::uno::Reference<css::io::XInputStream> xStream);
+    explicit RTFValue(cpo::uno::Reference<css::embed::XEmbeddedObject> xObject);
     explicit RTFValue(const RTFShape& aShape);
     explicit RTFValue(const RTFPicture& rPicture);
     explicit RTFValue(css::text::GraphicCrop const& rCrop);
@@ -78,9 +78,9 @@ private:
     OUString m_sValue;
     mutable tools::SvRef<RTFSprms> m_pAttributes;
     mutable tools::SvRef<RTFSprms> m_pSprms;
-    css::uno::Reference<css::drawing::XShape> m_xShape;
-    css::uno::Reference<css::io::XInputStream> m_xStream;
-    css::uno::Reference<css::embed::XEmbeddedObject> m_xObject;
+    cpo::uno::Reference<css::drawing::XShape> m_xShape;
+    cpo::uno::Reference<css::io::XInputStream> m_xStream;
+    cpo::uno::Reference<css::embed::XEmbeddedObject> m_xObject;
     bool m_bForceString = false;
     mutable tools::SvRef<RTFShape> m_pShape;
     mutable tools::SvRef<RTFPicture> m_pPicture;

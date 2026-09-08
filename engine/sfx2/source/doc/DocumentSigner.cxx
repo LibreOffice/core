@@ -24,6 +24,7 @@
 #include <com/sun/star/io/XStream.hpp>
 
 using namespace css;
+using namespace ::cpo;
 
 namespace sfx2
 {

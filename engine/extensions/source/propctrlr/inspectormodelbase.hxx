@@ -63,7 +63,7 @@ namespace pcr
         DECLARE_XTYPEPROVIDER()
 
         // css::beans::XPropertySet and friends
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+        virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
         virtual ::cppu::IPropertyArrayHelper & getInfoHelper() override;
         virtual bool convertFastPropertyValue( cpo::uno::Any & rConvertedValue, cpo::uno::Any & rOldValue, sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
         virtual void setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;

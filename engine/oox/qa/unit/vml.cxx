@@ -23,6 +23,7 @@
 #include <com/sun/star/drawing/ColorMode.hpp>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 /// oox vml tests.
 class OoxVmlTest : public UnoApiTest

@@ -34,6 +34,7 @@
 #include <vcl/window.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 int TBBase::nIndent = 0;
 
@@ -84,7 +85,7 @@ void CustomToolBarImportHelper::addIcon( const uno::Reference< graphic::XGraphic
     iconcommands.push_back( item );
 }
 
-CustomToolBarImportHelper::CustomToolBarImportHelper( SfxObjectShell& rDocShell,  const css::uno::Reference< css::ui::XUIConfigurationManager>& rxAppCfgMgr ) : mrDocSh( rDocShell )
+CustomToolBarImportHelper::CustomToolBarImportHelper( SfxObjectShell& rDocShell,  const cpo::uno::Reference< css::ui::XUIConfigurationManager>& rxAppCfgMgr ) : mrDocSh( rDocShell )
 {
     m_xCfgSupp.set( mrDocSh.GetModel(), uno::UNO_QUERY_THROW );
     m_xAppCfgMgr.set( rxAppCfgMgr, uno::UNO_SET_THROW );

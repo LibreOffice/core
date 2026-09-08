@@ -28,6 +28,7 @@
 #include <cpo/uno/Exception.hpp>
 
 using namespace css;
+using namespace ::cpo;
 
 namespace chart
 {

@@ -277,7 +277,7 @@ using namespace vcl;
 using namespace desktop;
 using namespace utl;
 using namespace bridge;
-using namespace uno;
+using namespace ::cpo;
 using namespace ::cpo::uno;
 using namespace lang;
 
@@ -869,20 +869,20 @@ OUString lcl_getCurrentDocumentMimeType(const COKitDocumentImpl* pDocument)
 }
 
 // Gets an undo manager to enter and exit undo context. Needed by ToggleOrientation
-css::uno::Reference< css::document::XUndoManager > getUndoManager( const css::uno::Reference< css::frame::XFrame >& rxFrame )
+cpo::uno::Reference< css::document::XUndoManager > getUndoManager( const cpo::uno::Reference< css::frame::XFrame >& rxFrame )
 {
-    const css::uno::Reference< css::frame::XController > xController = rxFrame->getController();
+    const cpo::uno::Reference< css::frame::XController > xController = rxFrame->getController();
     if ( xController.is() )
     {
-        const css::uno::Reference< css::frame::XModel > xModel = xController->getModel();
+        const cpo::uno::Reference< css::frame::XModel > xModel = xController->getModel();
         if ( xModel.is() )
         {
-            const css::uno::Reference< css::document::XUndoManagerSupplier > xSuppUndo( xModel, css::uno::UNO_QUERY_THROW );
-            return css::uno::Reference< css::document::XUndoManager >( xSuppUndo->getUndoManager(), css::uno::UNO_SET_THROW );
+            const cpo::uno::Reference< css::document::XUndoManagerSupplier > xSuppUndo( xModel, cpo::uno::UNO_QUERY_THROW );
+            return cpo::uno::Reference< css::document::XUndoManager >( xSuppUndo->getUndoManager(), cpo::uno::UNO_SET_THROW );
         }
     }
 
-    return css::uno::Reference< css::document::XUndoManager > ();
+    return cpo::uno::Reference< css::document::XUndoManager > ();
 }
 
 // Adjusts page margins for Writer doc. Needed by ToggleOrientation
@@ -928,7 +928,7 @@ void ExecuteOrientationChange()
     // This should be in sync with MINBODY in sw/source/uibase/sidebar/PageMarginControl.hxx
     constexpr tools::Long MINBODY = o3tl::toTwips(1, o3tl::Length::mm);
 
-    css::uno::Reference< css::document::XUndoManager > mxUndoManager(
+    cpo::uno::Reference< css::document::XUndoManager > mxUndoManager(
                 getUndoManager( pViewFrm->GetFrame().GetFrameInterface() ) );
 
     if ( mxUndoManager.is() )
@@ -1071,11 +1071,11 @@ cpo::uno::Sequence<css::lang::Locale> setLanguageToolConfig()
                 uno::UNO_QUERY_THROW);
             uno::Reference<linguistic2::XSupportedLocales> xSuppLoc(xGC, uno::UNO_QUERY_THROW);
 
-            css::uno::Reference<css::linguistic2::XLinguServiceManager2> xLangSrv =
+            cpo::uno::Reference<css::linguistic2::XLinguServiceManager2> xLangSrv =
                 css::linguistic2::LinguServiceManager::create(xContext);
             if (xLangSrv.is())
             {
-                css::uno::Reference<css::linguistic2::XSpellChecker> xSpell = xLangSrv->getSpellChecker();
+                cpo::uno::Reference<css::linguistic2::XSpellChecker> xSpell = xLangSrv->getSpellChecker();
                 if (xSpell.is())
                 {
                     Sequence<OUString> aEmpty;
@@ -4150,14 +4150,14 @@ class FunctionBasedURPInstanceProvider
     : public ::cppu::WeakImplHelper<css::bridge::XInstanceProvider>
 {
 private:
-    css::uno::Reference<cpo::uno::XComponentContext> m_rContext;
+    cpo::uno::Reference<cpo::uno::XComponentContext> m_rContext;
 
 public:
     FunctionBasedURPInstanceProvider(
-        const css::uno::Reference<cpo::uno::XComponentContext>& rxContext);
+        const cpo::uno::Reference<cpo::uno::XComponentContext>& rxContext);
 
     // XInstanceProvider
-    virtual css::uno::Reference<cpo::uno::XInterface>
+    virtual cpo::uno::Reference<cpo::uno::XInterface>
         getInstance(const OUString& aName) override;
 };
 
@@ -4320,7 +4320,7 @@ static bool joinThreads(JoinThreads eCategory)
         return false;
 
     // Grammar checker thread
-    css::uno::Reference<css::linguistic2::XLinguServiceManager2> xLangSrv =
+    cpo::uno::Reference<css::linguistic2::XLinguServiceManager2> xLangSrv =
         css::linguistic2::LinguServiceManager::create(xContext);
 
     auto joinable = dynamic_cast<comphelper::COKit::ThreadJoinable *>(xLangSrv.get());
@@ -4343,10 +4343,10 @@ static bool joinThreads(JoinThreads eCategory)
     }
 
     // Ensure configmgr's write thread is down
-    css::uno::Reference< css::util::XFlushable >(
+    cpo::uno::Reference< css::util::XFlushable >(
         css::configuration::theDefaultProvider::get(
             comphelper::getProcessComponentContext()),
-        css::uno::UNO_QUERY_THROW)->flush();
+        cpo::uno::UNO_QUERY_THROW)->flush();
 
     drawinglayer::primitive2d::BufferedDecompositionFlusher::shutdown();
 
@@ -5884,7 +5884,7 @@ static void doc_postWindowKeyEvent(COKitDocument* /*pThis*/, unsigned nKitWindow
 // an error just return a 0 length result if there is no shape selected, so we
 // continue to generate an error if a shape is selected, but could not provide
 // an svg.
-static bool doc_hasShapeSelection(const css::uno::Reference<css::lang::XComponent>& rComponent)
+static bool doc_hasShapeSelection(const cpo::uno::Reference<css::lang::XComponent>& rComponent)
 {
     uno::Reference<frame::XModel> xModel(rComponent, uno::UNO_QUERY);
     if (!xModel.is())
@@ -6013,11 +6013,11 @@ class DispatchResultListener : public cppu::WeakImplHelper<css::frame::XDispatch
     const std::shared_ptr<CallbackFlushHandler> mpCallback; ///< Callback to call.
     const std::chrono::steady_clock::time_point mSaveTime; //< The time we started saving.
     const bool mbWasModified; //< Whether or not the document was modified before saving.
-    const css::uno::Reference<css::lang::XComponent> mxComponent; //< The document the command ran on.
+    const cpo::uno::Reference<css::lang::XComponent> mxComponent; //< The document the command ran on.
 
 public:
     DispatchResultListener(const char* pCommand, std::shared_ptr<CallbackFlushHandler> pCallback,
-                           bool bWasModified, css::uno::Reference<css::lang::XComponent> xComponent)
+                           bool bWasModified, cpo::uno::Reference<css::lang::XComponent> xComponent)
         : maCommand(pCommand)
         , mpCallback(std::move(pCallback))
         , mSaveTime(std::chrono::steady_clock::now())
@@ -7280,11 +7280,11 @@ static bool doc_exportPages(COKitDocument* pThis, const char* pParts, const char
 }
 
 static bool getFromTransferable(
-    const css::uno::Reference<css::datatransfer::XTransferable> &xTransferable,
+    const cpo::uno::Reference<css::datatransfer::XTransferable> &xTransferable,
     std::string_view aInMimeType, OString &aRet);
 
 static bool encodeImageAsHTML(
-    const css::uno::Reference<css::datatransfer::XTransferable> &xTransferable,
+    const cpo::uno::Reference<css::datatransfer::XTransferable> &xTransferable,
     std::string_view aMimeType, OString &aRet)
 {
     if (!getFromTransferable(xTransferable, aMimeType, aRet))
@@ -7310,7 +7310,7 @@ static bool encodeImageAsHTML(
 }
 
 static bool encodeTextAsHTML(
-    const css::uno::Reference<css::datatransfer::XTransferable> &xTransferable,
+    const cpo::uno::Reference<css::datatransfer::XTransferable> &xTransferable,
     std::string_view aMimeType, OString &aRet)
 {
     if (!getFromTransferable(xTransferable, aMimeType, aRet))
@@ -7328,7 +7328,7 @@ static bool encodeTextAsHTML(
 }
 
 static bool getFromTransferable(
-    const css::uno::Reference<css::datatransfer::XTransferable> &xTransferable,
+    const cpo::uno::Reference<css::datatransfer::XTransferable> &xTransferable,
     std::string_view aInMimeType, OString &aRet)
 {
     OString aMimeType(aInMimeType);
@@ -7429,7 +7429,7 @@ static std::string doc_getTextSelection(COKitDocument* pThis, std::string_view a
         return {};
     }
 
-    css::uno::Reference<css::datatransfer::XTransferable> xTransferable = pDoc->getSelection();
+    cpo::uno::Reference<css::datatransfer::XTransferable> xTransferable = pDoc->getSelection();
     if (!xTransferable)
     {
         SetLastExceptionMsg(u"No selection available"_ustr);
@@ -7461,14 +7461,14 @@ static COKitSelectionType doc_getSelectionType(COKitDocument* pThis)
         return COKitSelectionType::NONE;
     }
 
-    css::uno::Reference<css::datatransfer::XTransferable> xTransferable = pDoc->getSelection();
+    cpo::uno::Reference<css::datatransfer::XTransferable> xTransferable = pDoc->getSelection();
     if (!xTransferable)
     {
         SetLastExceptionMsg(u"No selection available"_ustr);
         return COKitSelectionType::NONE;
     }
 
-    css::uno::Reference<css::datatransfer::XTransferable2> xTransferable2(xTransferable, css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::datatransfer::XTransferable2> xTransferable2(xTransferable, cpo::uno::UNO_QUERY);
     if (xTransferable2.is() && xTransferable2->isComplex())
         return COKitSelectionType::COMPLEX;
 
@@ -7499,14 +7499,14 @@ static COKitSelection doc_getSelectionTypeAndText(COKitDocument* pThis, const ch
         return {};
     }
 
-    css::uno::Reference<css::datatransfer::XTransferable> xTransferable = pDoc->getSelection();
+    cpo::uno::Reference<css::datatransfer::XTransferable> xTransferable = pDoc->getSelection();
     if (!xTransferable)
     {
         SetLastExceptionMsg(u"No selection available"_ustr);
         return {};
     }
 
-    css::uno::Reference<css::datatransfer::XTransferable2> xTransferable2(xTransferable, css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::datatransfer::XTransferable2> xTransferable2(xTransferable, cpo::uno::UNO_QUERY);
     if (xTransferable2.is() && xTransferable2->isComplex())
         return { COKitSelectionType::COMPLEX, {} };
 
@@ -7541,7 +7541,7 @@ static std::vector<COKitClipboardItem> fetchClipboardContents(const char **pMime
         return {};
     }
 
-    css::uno::Reference<css::datatransfer::XTransferable> xTransferable = xClip->getContents();
+    cpo::uno::Reference<css::datatransfer::XTransferable> xTransferable = xClip->getContents();
     SAL_INFO("kit", "Got from clip: " << xClip.get() << " transferable: " << xTransferable);
     if (!xTransferable)
     {
@@ -7937,10 +7937,10 @@ static std::string getLanguages(const char* pCommand)
     if (xContext.is())
     {
         // SpellChecker
-        css::uno::Reference<css::linguistic2::XLinguServiceManager2> xLangSrv = css::linguistic2::LinguServiceManager::create(xContext);
+        cpo::uno::Reference<css::linguistic2::XLinguServiceManager2> xLangSrv = css::linguistic2::LinguServiceManager::create(xContext);
         if (xLangSrv.is())
         {
-            css::uno::Reference<css::linguistic2::XSpellChecker> xSpell = xLangSrv->getSpellChecker();
+            cpo::uno::Reference<css::linguistic2::XSpellChecker> xSpell = xLangSrv->getSpellChecker();
             if (xSpell.is())
                 aLocales = xSpell->getLocales();
         }
@@ -8146,7 +8146,7 @@ static void addStyleEntry(boost::property_tree::ptree& rChildren,
     rChildren.push_back(std::make_pair("", aChild));
 }
 
-static std::string getComponentStyles(const css::uno::Reference<css::lang::XComponent>& rComponent,
+static std::string getComponentStyles(const cpo::uno::Reference<css::lang::XComponent>& rComponent,
                                 COKitDocumentType docType, const char* pCommand)
 {
     boost::property_tree::ptree aTree;
@@ -9703,7 +9703,7 @@ static void lo_status_indicator_callback(void *data, comphelper::COKit::statusIn
 /// Used by preloadData (COKit) for providing different shortcuts for different languages.
 static void preLoadShortCutAccelerators()
 {
-    std::unordered_map<OUString, css::uno::Reference<css::ui::XAcceleratorConfiguration>>& acceleratorConfs = KitHelper::getAcceleratorConfs();
+    std::unordered_map<OUString, cpo::uno::Reference<css::ui::XAcceleratorConfiguration>>& acceleratorConfs = KitHelper::getAcceleratorConfs();
     cpo::uno::Sequence<OUString> installedLocales(officecfg::Setup::Office::InstalledLocales::get()->getElementNames());
     OUString actualLang = officecfg::Setup::L10N::ooLocale::get();
 
@@ -9799,12 +9799,12 @@ static void preloadData()
 
     // preload all available dictionaries
     linguistic2::DictionaryList::create(comphelper::getProcessComponentContext());
-    css::uno::Reference<css::linguistic2::XLinguServiceManager> xLngSvcMgr =
+    cpo::uno::Reference<css::linguistic2::XLinguServiceManager> xLngSvcMgr =
         css::linguistic2::LinguServiceManager::create(comphelper::getProcessComponentContext());
-    css::uno::Reference<linguistic2::XSpellChecker> xSpellChecker(xLngSvcMgr->getSpellChecker());
+    cpo::uno::Reference<linguistic2::XSpellChecker> xSpellChecker(xLngSvcMgr->getSpellChecker());
 
     std::cerr << "Preloading local dictionaries: ";
-    css::uno::Reference<linguistic2::XSupportedLocales> xSpellLocales(xSpellChecker, css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<linguistic2::XSupportedLocales> xSpellLocales(xSpellChecker, cpo::uno::UNO_QUERY_THROW);
     cpo::uno::Sequence< css::lang::Locale > aLocales = xSpellLocales->getLocales();
     for (const auto& it : aLocales)
     {
@@ -9818,13 +9818,13 @@ static void preloadData()
     // (when loading dictionaries of just non-Asian locales). Creating a XCalendar4 of one Asian locale
     // will cheaply load this missing "others" locale library. Appending an Asian locale in
     // KIT_ALLOWLIST_LANGUAGES env-var also works but at the cost of loading that dictionary.
-    css::uno::Reference< css::i18n::XCalendar4 > xCal = css::i18n::LocaleCalendar2::create(comphelper::getProcessComponentContext());
+    cpo::uno::Reference< css::i18n::XCalendar4 > xCal = css::i18n::LocaleCalendar2::create(comphelper::getProcessComponentContext());
     css::lang::Locale aAsianLocale = { u"hi"_ustr, u"IN"_ustr, {} };
     xCal->loadDefaultCalendar(aAsianLocale);
 
     // preload all available thesauri
-    css::uno::Reference<linguistic2::XThesaurus> xThesaurus(xLngSvcMgr->getThesaurus());
-    css::uno::Reference<linguistic2::XSupportedLocales> xThesLocales(xThesaurus, css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<linguistic2::XThesaurus> xThesaurus(xLngSvcMgr->getThesaurus());
+    cpo::uno::Reference<linguistic2::XSupportedLocales> xThesLocales(xThesaurus, cpo::uno::UNO_QUERY_THROW);
     aLocales = xThesLocales->getLocales();
     std::cerr << "Preloading local thesauri: ";
     for (const auto& it : aLocales)
@@ -9836,8 +9836,8 @@ static void preloadData()
     std::cerr << "\n";
 
     // preload all available hyphenators
-    css::uno::Reference<linguistic2::XHyphenator> xHyphenator(xLngSvcMgr->getHyphenator());
-    css::uno::Reference<linguistic2::XSupportedLocales> xHyphLocales(xHyphenator, css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<linguistic2::XHyphenator> xHyphenator(xLngSvcMgr->getHyphenator());
+    cpo::uno::Reference<linguistic2::XSupportedLocales> xHyphLocales(xHyphenator, cpo::uno::UNO_QUERY_THROW);
     aLocales = xHyphLocales->getLocales();
     std::cerr << "Preloading local hyphenators: ";
     for (auto &it : std::as_const(aLocales))
@@ -9851,13 +9851,13 @@ static void preloadData()
     std::cerr << "Preloading breakiterator\n";
     if (aLocales.getLength())
     {
-        css::uno::Reference< css::i18n::XBreakIterator > xBreakIterator = css::i18n::BreakIterator::create(xContext);
+        cpo::uno::Reference< css::i18n::XBreakIterator > xBreakIterator = css::i18n::BreakIterator::create(xContext);
         css::i18n::LineBreakUserOptions aUserOptions;
         css::i18n::LineBreakHyphenationOptions aHyphOptions( LinguMgr::GetHyphenator(), cpo::uno::Sequence<beans::PropertyValue>(), 1 );
         xBreakIterator->getLineBreak(u""_ustr, /*nMaxBreakPos*/0, aLocales[0], /*nMinBreakPos*/0, aHyphOptions, aUserOptions);
     }
 
-    css::uno::Reference< css::ui::XAcceleratorConfiguration > xGlobalCfg = css::ui::GlobalAcceleratorConfiguration::create(
+    cpo::uno::Reference< css::ui::XAcceleratorConfiguration > xGlobalCfg = css::ui::GlobalAcceleratorConfiguration::create(
         comphelper::getProcessComponentContext());
     xGlobalCfg->getAllKeyEvents();
 
@@ -9877,10 +9877,10 @@ static void preloadData()
     std::cerr << "Preload fonts\n";
 
     // Initialize fonts.
-    css::uno::Reference<css::linguistic2::XLinguServiceManager2> xLangSrv = css::linguistic2::LinguServiceManager::create(xContext);
+    cpo::uno::Reference<css::linguistic2::XLinguServiceManager2> xLangSrv = css::linguistic2::LinguServiceManager::create(xContext);
     if (xLangSrv.is())
     {
-        css::uno::Reference<css::linguistic2::XSpellChecker> xSpell = xLangSrv->getSpellChecker();
+        cpo::uno::Reference<css::linguistic2::XSpellChecker> xSpell = xLangSrv->getSpellChecker();
         if (xSpell.is())
             aLocales = xSpell->getLocales();
     }
@@ -9970,8 +9970,8 @@ static void preloadData()
         }
 
         uno::Reference<frame::XModel> xModel(xComp, uno::UNO_QUERY);
-        css::uno::Reference<css::frame::XController> xController(xModel ? xModel->getCurrentController() : nullptr);
-        css::uno::Reference<css::frame::XFrame> xFrame(xController ? xController->getFrame() : nullptr);
+        cpo::uno::Reference<css::frame::XController> xController(xModel ? xModel->getCurrentController() : nullptr);
+        cpo::uno::Reference<css::frame::XFrame> xFrame(xController ? xController->getFrame() : nullptr);
         SAL_WARN_IF(!xFrame, "kit", "Unable to get ImageList for:" << component.factory);
         if (xFrame)
         {
@@ -10357,13 +10357,13 @@ static int lo_initialize(COKit* pThis, const char* pAppPath, const char* pUserPr
                 if (!xContext.is())
                     throw cpo::uno::DeploymentException(u"preInit: XComponentContext is not created"_ustr);
 
-                css::uno::Reference< cpo::uno::XInterface > xService;
+                cpo::uno::Reference< cpo::uno::XInterface > xService;
                 xContext->getValueByName(u"/singletons/com.sun.star.lang.theServiceManager"_ustr) >>= xService;
                 if (!xService.is())
                     throw cpo::uno::DeploymentException(u"preInit: XMultiComponentFactory is not created"_ustr);
 
-                css::uno::Reference<css::lang::XInitialization> aService(
-                    xService, css::uno::UNO_QUERY_THROW);
+                cpo::uno::Reference<css::lang::XInitialization> aService(
+                    xService, cpo::uno::UNO_QUERY_THROW);
 
                 // pre-requisites:
                 // In order to load implementations and invoke

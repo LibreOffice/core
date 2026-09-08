@@ -39,7 +39,8 @@
 #include <xmloff/odffields.hxx>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 class Test : public SwModelTestBase
 {
@@ -1193,7 +1194,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf157136)
         // 1st paragraph - block content control
         auto xRun = getRun(getParagraph(1), 1);
         auto xContentControl
-            = getProperty<css::uno::Reference<css::text::XTextRange>>(xRun, u"ContentControl"_ustr);
+            = getProperty<cpo::uno::Reference<css::text::XTextRange>>(xRun, u"ContentControl"_ustr);
         CPPUNIT_ASSERT_EQUAL(u"Click or tap here to enter text."_ustr,
                              xContentControl->getString());
         // Without the fix in place, this would fail with
@@ -1207,7 +1208,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf157136)
         // 2nd paragraph - inline content control
         auto xRun = getRun(getParagraph(2), 1);
         auto xContentControl
-            = getProperty<css::uno::Reference<css::text::XTextRange>>(xRun, u"ContentControl"_ustr);
+            = getProperty<cpo::uno::Reference<css::text::XTextRange>>(xRun, u"ContentControl"_ustr);
         CPPUNIT_ASSERT_EQUAL(u"Click or tap here to enter text."_ustr,
                              xContentControl->getString());
         CPPUNIT_ASSERT_EQUAL(u"Placeholder Text"_ustr,
@@ -1221,7 +1222,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf157136)
         // 1st paragraph - becomes inline content control after roundtrip
         auto xRun = getRun(getParagraph(1), 1);
         auto xContentControl
-            = getProperty<css::uno::Reference<css::text::XTextRange>>(xRun, u"ContentControl"_ustr);
+            = getProperty<cpo::uno::Reference<css::text::XTextRange>>(xRun, u"ContentControl"_ustr);
         CPPUNIT_ASSERT_EQUAL(u"Click or tap here to enter text."_ustr,
                              xContentControl->getString());
         CPPUNIT_ASSERT_EQUAL(u"Placeholder Text"_ustr,
@@ -1232,7 +1233,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf157136)
         // 2nd paragraph - inline content control
         auto xRun = getRun(getParagraph(2), 1);
         auto xContentControl
-            = getProperty<css::uno::Reference<css::text::XTextRange>>(xRun, u"ContentControl"_ustr);
+            = getProperty<cpo::uno::Reference<css::text::XTextRange>>(xRun, u"ContentControl"_ustr);
         CPPUNIT_ASSERT_EQUAL(u"Click or tap here to enter text."_ustr,
                              xContentControl->getString());
         CPPUNIT_ASSERT_EQUAL(u"Placeholder Text"_ustr,

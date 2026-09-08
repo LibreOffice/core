@@ -32,7 +32,8 @@
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::datatransfer::clipboard;
 using namespace ::com::sun::star::datatransfer::dnd;
 using namespace ::com::sun::star;

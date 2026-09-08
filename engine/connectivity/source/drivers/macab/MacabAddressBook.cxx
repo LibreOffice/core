@@ -31,7 +31,7 @@
 #include <connectivity/CommonTools.hxx>
 
 using namespace connectivity::macab;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 namespace {
 

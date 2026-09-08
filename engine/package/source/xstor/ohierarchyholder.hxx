@@ -73,7 +73,7 @@ public:
 
     void RemoveElement( const ::rtl::Reference< OHierarchyElement_Impl >& aRef );
 
-    css::uno::Reference< css::embed::XExtendedStorageStream >
+    cpo::uno::Reference< css::embed::XExtendedStorageStream >
         GetStreamHierarchically( sal_Int32 nStorageMode,
                                 std::vector<OUString>& aPath,
                                 sal_Int32 nStreamMode,
@@ -102,7 +102,7 @@ public:
 
     static std::vector<OUString> GetListPathFromString( std::u16string_view aPath );
 
-    css::uno::Reference< css::embed::XExtendedStorageStream >
+    cpo::uno::Reference< css::embed::XExtendedStorageStream >
         GetStreamHierarchically( sal_Int32 nStorageMode,
                                 std::vector<OUString>& aListPath,
                                 sal_Int32 nStreamMode,

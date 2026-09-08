@@ -81,18 +81,18 @@ public:
 
     // ____ XDataSeries ____
     /// @see css::chart2::XDataSeries
-    virtual css::uno::Reference< css::beans::XPropertySet >
+    virtual cpo::uno::Reference< css::beans::XPropertySet >
         getDataPointByIndex( sal_Int32 nIndex ) override;
     virtual void resetDataPoint( sal_Int32 nIndex ) override;
     virtual void resetAllDataPoints() override;
 
     // ____ XDataSink ____
     /// @see css::chart2::data::XDataSink
-    virtual void setData( const cpo::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > >& aData ) override;
+    virtual void setData( const cpo::uno::Sequence< cpo::uno::Reference< css::chart2::data::XLabeledDataSequence > >& aData ) override;
 
     // ____ XDataSource ____
     /// @see css::chart2::data::XDataSource
-    virtual cpo::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > getDataSequences() override;
+    virtual cpo::uno::Sequence< cpo::uno::Reference< css::chart2::data::XLabeledDataSequence > > getDataSequences() override;
 
     // ____ OPropertySet ____
     virtual void GetDefaultValue( sal_Int32 nHandle, cpo::uno::Any& rAny ) const override;
@@ -105,7 +105,7 @@ public:
 
     // ____ XPropertySet ____
     /// @see css::beans::XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo >
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo >
         getPropertySetInfo() override;
 
     /// make original interface function visible again
@@ -114,23 +114,23 @@ public:
     // ____ XRegressionCurveContainer ____
     /// @see css::chart2::XRegressionCurveContainer
     virtual void addRegressionCurve(
-        const css::uno::Reference< css::chart2::XRegressionCurve >& aRegressionCurve ) override;
+        const cpo::uno::Reference< css::chart2::XRegressionCurve >& aRegressionCurve ) override;
     virtual void removeRegressionCurve(
-        const css::uno::Reference< css::chart2::XRegressionCurve >& aRegressionCurve ) override;
-    virtual cpo::uno::Sequence< css::uno::Reference< css::chart2::XRegressionCurve > > getRegressionCurves() override;
+        const cpo::uno::Reference< css::chart2::XRegressionCurve >& aRegressionCurve ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Reference< css::chart2::XRegressionCurve > > getRegressionCurves() override;
     virtual void setRegressionCurves(
-        const cpo::uno::Sequence< css::uno::Reference< css::chart2::XRegressionCurve > >& aRegressionCurves ) override;
+        const cpo::uno::Sequence< cpo::uno::Reference< css::chart2::XRegressionCurve > >& aRegressionCurves ) override;
 
     // ____ XCloneable ____
-    virtual css::uno::Reference< css::util::XCloneable > createClone() override;
+    virtual cpo::uno::Reference< css::util::XCloneable > createClone() override;
 
     // ____ XModifyBroadcaster ____
     virtual void addModifyListener(
-        const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+        const cpo::uno::Reference< css::util::XModifyListener >& aListener ) override;
     virtual void removeModifyListener(
-        const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+        const cpo::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
-    typedef std::vector< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > tDataSequenceContainer;
+    typedef std::vector< cpo::uno::Reference< css::chart2::data::XLabeledDataSequence > > tDataSequenceContainer;
 
     void setData( const tDataSequenceContainer& aData );
     const tDataSequenceContainer & getDataSequences2() const { return m_aDataSequences; }
@@ -153,7 +153,7 @@ public:
 
     bool hasPointOwnColor(
         sal_Int32 nPointIndex
-        , const css::uno::Reference< css::beans::XPropertySet >& xDataPointProperties //may be NULL this is just for performance
+        , const cpo::uno::Reference< css::beans::XPropertySet >& xDataPointProperties //may be NULL this is just for performance
          );
 
     // returns true if AttributedDataPoints contains nPointIndex and the
@@ -190,9 +190,9 @@ public:
 
     sal_Int32 getExplicitNumberFormatKeyForDataLabel();
 
-    void setCalculatedYSequence(css::uno::Reference<css::chart2::data::XLabeledDataSequence> const& xSequence);
+    void setCalculatedYSequence(cpo::uno::Reference<css::chart2::data::XLabeledDataSequence> const& xSequence);
 
-    css::uno::Reference<css::chart2::data::XLabeledDataSequence> getCalculatedYSequence() const;
+    cpo::uno::Reference<css::chart2::data::XLabeledDataSequence> getCalculatedYSequence() const;
 
     void clearCalculatedYSequence();
 
@@ -220,14 +220,14 @@ private:
     tDataSequenceContainer        m_aDataSequences;
 
     typedef std::map< sal_Int32,
-        css::uno::Reference< css::beans::XPropertySet > > tDataPointAttributeContainer;
+        cpo::uno::Reference< css::beans::XPropertySet > > tDataPointAttributeContainer;
     tDataPointAttributeContainer  m_aAttributedDataPoints;
 
     tRegressionCurveContainerType m_aRegressionCurves;
 
     rtl::Reference<ModifyEventForwarder> m_xModifyEventForwarder;
 
-    css::uno::Reference<css::chart2::data::XLabeledDataSequence> m_xCalculatedYSequence;
+    cpo::uno::Reference<css::chart2::data::XLabeledDataSequence> m_xCalculatedYSequence;
 };
 
 const tPropertyValueMap & StaticDataSeriesDefaults();

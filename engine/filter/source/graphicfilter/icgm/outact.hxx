@@ -54,15 +54,15 @@ class CGMImpressOutAct
 
     CGM*                        mpCGM;
 
-    css::uno::Reference< css::drawing::XDrawPages >               maXDrawPages;
-    css::uno::Reference< css::drawing::XDrawPage >                maXDrawPage;
+    cpo::uno::Reference< css::drawing::XDrawPages >               maXDrawPages;
+    cpo::uno::Reference< css::drawing::XDrawPage >                maXDrawPage;
 
-    css::uno::Reference< css::lang::XMultiServiceFactory >        maXMultiServiceFactory;
-    css::uno::Reference< css::drawing::XShape >                   maXShape;
+    cpo::uno::Reference< css::lang::XMultiServiceFactory >        maXMultiServiceFactory;
+    cpo::uno::Reference< css::drawing::XShape >                   maXShape;
 
-    css::uno::Reference< css::beans::XPropertySet >               maXPropSet;
-    css::uno::Reference< css::drawing::XShapes >                  maXShapes;
-    std::vector<css::uno::Reference<css::document::XActionLockable>> maLockedNewXShapes;
+    cpo::uno::Reference< css::beans::XPropertySet >               maXPropSet;
+    cpo::uno::Reference< css::drawing::XShapes >                  maXShapes;
+    std::vector<cpo::uno::Reference<css::document::XActionLockable>> maLockedNewXShapes;
 
     sal_uInt32                      nFinalTextCount;
 
@@ -71,9 +71,9 @@ class CGMImpressOutAct
     void                        ImplSetOrientation( FloatPoint const & RefPoint, double Orientation );
     void                        ImplSetLineBundle();
     void                        ImplSetFillBundle();
-    void                        ImplSetTextBundle( const css::uno::Reference< css::beans::XPropertySet > & );
+    void                        ImplSetTextBundle( const cpo::uno::Reference< css::beans::XPropertySet > & );
 public:
-                                CGMImpressOutAct( CGM&, const css::uno::Reference< css::frame::XModel > & );
+                                CGMImpressOutAct( CGM&, const cpo::uno::Reference< css::frame::XModel > & );
                                 ~CGMImpressOutAct();
     void                        InsertPage();
     void                        BeginGroup();

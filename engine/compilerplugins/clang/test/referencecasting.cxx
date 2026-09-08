@@ -19,69 +19,69 @@
 #include "cppuhelper/weak.hxx"
 #include "rtl/ref.hxx"
 
-void test1(const css::uno::Reference<css::io::XStreamListener>& a)
+void test1(const cpo::uno::Reference<css::io::XStreamListener>& a)
 {
     // expected-error@+1 {{the source reference is already a subtype of the destination reference, just use = [loplugin:referencecasting]}}
-    css::uno::Reference<css::lang::XEventListener> b(a, css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::lang::XEventListener> b(a, cpo::uno::UNO_QUERY);
     // expected-error@+1 {{the source reference is already a subtype of the destination reference, just use = [loplugin:referencecasting]}}
-    auto c = css::uno::Reference<css::lang::XEventListener>::query(a);
+    auto c = cpo::uno::Reference<css::lang::XEventListener>::query(a);
 }
 
 namespace test2
 {
-css::uno::Reference<css::io::XStreamListener> getListener();
+cpo::uno::Reference<css::io::XStreamListener> getListener();
 
 void test()
 {
     // expected-error@+1 {{the source reference is already a subtype of the destination reference, just use = [loplugin:referencecasting]}}
-    css::uno::Reference<css::lang::XEventListener> b(getListener(), css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::lang::XEventListener> b(getListener(), cpo::uno::UNO_QUERY);
 }
 }
 
 namespace test3
 {
-void callListener(css::uno::Reference<cpo::uno::XInterface> const&);
+void callListener(cpo::uno::Reference<cpo::uno::XInterface> const&);
 
-void test(css::uno::Reference<css::io::XStreamListener> const& l)
+void test(cpo::uno::Reference<css::io::XStreamListener> const& l)
 {
     // expected-error@+1 {{the source reference is already a subtype of the destination reference, just use = [loplugin:referencecasting]}}
-    callListener(css::uno::Reference<css::lang::XEventListener>(l, css::uno::UNO_QUERY));
+    callListener(cpo::uno::Reference<css::lang::XEventListener>(l, cpo::uno::UNO_QUERY));
 }
 }
 
-void test4(const css::uno::Reference<css::io::XStreamListener>& a)
+void test4(const cpo::uno::Reference<css::io::XStreamListener>& a)
 {
     // no warning expected, used to reject null references
-    css::uno::Reference<css::lang::XEventListener> b(a, css::uno::UNO_SET_THROW);
+    cpo::uno::Reference<css::lang::XEventListener> b(a, cpo::uno::UNO_SET_THROW);
 }
 
 // no warning expected
 namespace test5
 {
-void test(css::uno::Reference<css::io::XStreamListener> l)
+void test(cpo::uno::Reference<css::io::XStreamListener> l)
 {
-    css::uno::Reference<cpo::uno::XInterface> a = l;
+    cpo::uno::Reference<cpo::uno::XInterface> a = l;
 }
 }
 
 namespace test6
 {
-void test(css::uno::Reference<css::io::XStreamListener> l)
+void test(cpo::uno::Reference<css::io::XStreamListener> l)
 {
-    css::uno::Reference<css::lang::XEventListener> a;
+    cpo::uno::Reference<css::lang::XEventListener> a;
     // expected-error@+1 {{the source reference is already a subtype of the destination reference, just use = [loplugin:referencecasting]}}
-    a.set(l, css::uno::UNO_QUERY);
+    a.set(l, cpo::uno::UNO_QUERY);
 }
 }
 
 namespace test7
 {
-void test(css::uno::Reference<css::io::XStreamListener> l)
+void test(cpo::uno::Reference<css::io::XStreamListener> l)
 {
     // expected-error@+1 {{unnecessary get() call [loplugin:referencecasting]}}
-    css::uno::Reference<css::lang::XEventListener> a(l.get(), css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::lang::XEventListener> a(l.get(), cpo::uno::UNO_QUERY);
     // expected-error@+1 {{unnecessary get() call [loplugin:referencecasting]}}
-    a.set(l.get(), css::uno::UNO_QUERY);
+    a.set(l.get(), cpo::uno::UNO_QUERY);
 }
 
 class FooStream : public css::io::XStreamListener
@@ -91,20 +91,20 @@ class FooStream : public css::io::XStreamListener
 void test(rtl::Reference<FooStream> l)
 {
     // expected-error@+1 {{unnecessary get() call [loplugin:referencecasting]}}
-    css::uno::Reference<css::io::XStreamListener> a(l.get());
+    cpo::uno::Reference<css::io::XStreamListener> a(l.get());
     // expected-error@+1 {{the source reference is already a subtype of the destination reference, just use = [loplugin:referencecasting]}}
-    a.set(l.get(), css::uno::UNO_QUERY);
+    a.set(l.get(), cpo::uno::UNO_QUERY);
     // expected-error@+1 {{unnecessary get() call [loplugin:referencecasting]}}
     a.set(l.get());
     // expected-error@+1 {{the source reference is already a subtype of the destination reference, just use = [loplugin:referencecasting]}}
-    css::uno::Reference<css::io::XStreamListener> b(l.get(), css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::io::XStreamListener> b(l.get(), cpo::uno::UNO_QUERY);
     // no warning expected
-    css::uno::Reference<css::lang::XTypeProvider> c(l.get(), css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::lang::XTypeProvider> c(l.get(), cpo::uno::UNO_QUERY);
     // no warning expected
-    css::uno::Reference<css::io::XStreamListener> a2 = l;
+    cpo::uno::Reference<css::io::XStreamListener> a2 = l;
     (void)a2;
 }
-cpo::uno::Sequence<css::uno::Reference<css::io::XStreamListener>> getContinuations()
+cpo::uno::Sequence<cpo::uno::Reference<css::io::XStreamListener>> getContinuations()
 {
     rtl::Reference<FooStream> noel1;
     // expected-error@+1 {{unnecessary get() call [loplugin:referencecasting]}}
@@ -117,9 +117,9 @@ namespace test8
 void test(css::io::XStreamListener* l)
 {
     // expected-error@+1 {{the source reference is already a subtype of the destination reference, just use = [loplugin:referencecasting]}}
-    css::uno::Reference<css::lang::XEventListener> a(l, css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::lang::XEventListener> a(l, cpo::uno::UNO_QUERY);
     // expected-error@+1 {{the source reference is already a subtype of the destination reference, just use = [loplugin:referencecasting]}}
-    a.set(l, css::uno::UNO_QUERY);
+    a.set(l, cpo::uno::UNO_QUERY);
 }
 }
 
@@ -132,9 +132,9 @@ class StatusbarController : public css::io::XStreamListener, public ::cppu::OWea
 
 void test(StatusbarController* pController)
 {
-    css::uno::Reference<css::io::XStreamListener> xController;
+    cpo::uno::Reference<css::io::XStreamListener> xController;
     // expected-error@+1 {{the source reference is already a subtype of the destination reference, just use = [loplugin:referencecasting]}}
-    xController.set(static_cast<::cppu::OWeakObject*>(pController), css::uno::UNO_QUERY);
+    xController.set(static_cast<::cppu::OWeakObject*>(pController), cpo::uno::UNO_QUERY);
 }
 }
 
@@ -146,8 +146,8 @@ class Foo : public css::lang::XTypeProvider, public css::lang::XComponent
     virtual ~Foo();
     void bar()
     {
-        css::uno::Reference<css::lang::XEventListener> xSource(
-            static_cast<css::lang::XTypeProvider*>(this), css::uno::UNO_QUERY);
+        cpo::uno::Reference<css::lang::XEventListener> xSource(
+            static_cast<css::lang::XTypeProvider*>(this), cpo::uno::UNO_QUERY);
     }
 };
 }
@@ -157,35 +157,35 @@ namespace test11
 {
 void test(css::io::XStreamListener* l)
 {
-    css::uno::Reference<css::lang::XEventListener> a(l, SAL_NO_ACQUIRE);
+    cpo::uno::Reference<css::lang::XEventListener> a(l, SAL_NO_ACQUIRE);
     a.set(l, SAL_NO_ACQUIRE);
 }
 }
 
 // no warning expected: querying for XInterface (instead of doing an upcast) has special semantics,
 // to check for UNO object equivalence.
-void test12(const css::uno::Reference<css::io::XStreamListener>& a)
+void test12(const cpo::uno::Reference<css::io::XStreamListener>& a)
 {
-    css::uno::Reference<cpo::uno::XInterface> b(a, css::uno::UNO_QUERY);
+    cpo::uno::Reference<cpo::uno::XInterface> b(a, cpo::uno::UNO_QUERY);
 }
 
 // no warning expected: querying for XInterface (instead of doing an upcast) has special semantics,
 // to check for UNO object equivalence.
 struct Test13
 {
-    css::uno::Reference<cpo::uno::XInterface> m_xNormalizedIFace;
-    void newObject(const css::uno::Reference<cpo::uno::XInterface>& _rxIFace)
+    cpo::uno::Reference<cpo::uno::XInterface> m_xNormalizedIFace;
+    void newObject(const cpo::uno::Reference<cpo::uno::XInterface>& _rxIFace)
     {
-        m_xNormalizedIFace.set(_rxIFace, css::uno::UNO_QUERY);
+        m_xNormalizedIFace.set(_rxIFace, cpo::uno::UNO_QUERY);
     }
 };
 
-void test14(cpo::uno::Sequence<css::uno::Reference<css::io::XStreamListener>> seq)
+void test14(cpo::uno::Sequence<cpo::uno::Reference<css::io::XStreamListener>> seq)
 {
     for (sal_Int32 i = 0; i < seq.getLength(); ++i)
     {
         // expected-error@+1 {{the source reference is already a subtype of the destination reference, just use = [loplugin:referencecasting]}}
-        css::uno::Reference<css::io::XStreamListener> xDataSeries(seq[i], css::uno::UNO_QUERY);
+        cpo::uno::Reference<css::io::XStreamListener> xDataSeries(seq[i], cpo::uno::UNO_QUERY);
     }
 }
 
@@ -194,22 +194,22 @@ namespace test15
 class Foo : public cppu::WeakImplHelper<css::lang::XComponent, css::io::XInputStream>
 {
     virtual ~Foo();
-    css::uno::Reference<css::lang::XTypeProvider> bar()
+    cpo::uno::Reference<css::lang::XTypeProvider> bar()
     {
         // expected-error@+1 {{the source reference is already a subtype of the destination reference, just use = [loplugin:referencecasting]}}
-        return css::uno::Reference<css::lang::XTypeProvider>(
-            static_cast<css::lang::XTypeProvider*>(this), css::uno::UNO_QUERY);
+        return cpo::uno::Reference<css::lang::XTypeProvider>(
+            static_cast<css::lang::XTypeProvider*>(this), cpo::uno::UNO_QUERY);
     }
-    css::uno::Reference<css::io::XInputStream> bar2()
+    cpo::uno::Reference<css::io::XInputStream> bar2()
     {
         // expected-error@+1 {{the source reference is already a subtype of the destination reference, just use = [loplugin:referencecasting]}}
-        return css::uno::Reference<css::io::XInputStream>(static_cast<css::io::XInputStream*>(this),
-                                                          css::uno::UNO_QUERY);
+        return cpo::uno::Reference<css::io::XInputStream>(static_cast<css::io::XInputStream*>(this),
+                                                          cpo::uno::UNO_QUERY);
     }
-    css::uno::Reference<css::io::XInputStream> bar3()
+    cpo::uno::Reference<css::io::XInputStream> bar3()
     {
         // expected-error@+1 {{the source reference is already a subtype of the destination reference, just use = [loplugin:referencecasting]}}
-        return css::uno::Reference<css::io::XInputStream>(*this, css::uno::UNO_QUERY);
+        return cpo::uno::Reference<css::io::XInputStream>(*this, cpo::uno::UNO_QUERY);
     }
 };
 }

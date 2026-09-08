@@ -58,6 +58,7 @@
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 // Global data of the DrawingEngine
 SdrGlobalData::SdrGlobalData()

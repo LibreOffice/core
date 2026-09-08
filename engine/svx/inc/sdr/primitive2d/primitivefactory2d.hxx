@@ -35,17 +35,17 @@ public:
     PrimitiveFactory2D() {}
 
     // Methods from XPrimitiveFactory2D
-    virtual cpo::uno::Sequence<css::uno::Reference<css::graphic::XPrimitive2D>>
+    virtual cpo::uno::Sequence<cpo::uno::Reference<css::graphic::XPrimitive2D>>
         createPrimitivesFromXShape(
-            const css::uno::Reference<css::drawing::XShape>& xShape,
+            const cpo::uno::Reference<css::drawing::XShape>& xShape,
             const cpo::uno::Sequence<css::beans::PropertyValue>& aParms) override;
-    virtual cpo::uno::Sequence<css::uno::Reference<css::graphic::XPrimitive2D>>
+    virtual cpo::uno::Sequence<cpo::uno::Reference<css::graphic::XPrimitive2D>>
         createPrimitivesFromXDrawPage(
-            const css::uno::Reference<css::drawing::XDrawPage>& xDrawPage,
+            const cpo::uno::Reference<css::drawing::XDrawPage>& xDrawPage,
             const cpo::uno::Sequence<css::beans::PropertyValue>& aParms) override;
 
     static void createPrimitivesFromXShape(
-        const css::uno::Reference<css::drawing::XShape>& xShape,
+        const cpo::uno::Reference<css::drawing::XShape>& xShape,
         const cpo::uno::Sequence<css::beans::PropertyValue>& /*aParms*/,
         drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor);
 

@@ -58,7 +58,7 @@ const SCSIZE ASCIIDLG_MAXROWS                = MAXROWCOUNT;
 // is quoted.
 constexpr sal_uInt32 kMaxEmbeddedLinefeeds = 500;
 
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 namespace {

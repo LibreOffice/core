@@ -153,6 +153,7 @@
 #include <sfx2/viewfrm.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 void ScDocFunc::NotifyDrawUndo( std::unique_ptr<SdrUndoAction> pUndoAction)
 {

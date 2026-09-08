@@ -39,7 +39,7 @@ typedef ::cppu::WeakComponentImplHelper<
 
 class PackageManagerImpl final : private cppu::BaseMutex, public t_pm_helper
 {
-    css::uno::Reference<cpo::uno::XComponentContext> m_xComponentContext;
+    cpo::uno::Reference<cpo::uno::XComponentContext> m_xComponentContext;
     OUString m_context;
     OUString m_registrationData;
     OUString m_registrationData_expanded;
@@ -51,15 +51,15 @@ class PackageManagerImpl final : private cppu::BaseMutex, public t_pm_helper
     std::unique_ptr< ActivePackages > m_activePackagesDB;
     //This mutex is only used for synchronization in addPackage
     std::mutex m_addMutex;
-    css::uno::Reference<css::ucb::XProgressHandler> m_xLogFile;
+    cpo::uno::Reference<css::ucb::XProgressHandler> m_xLogFile;
     inline void logIntern( cpo::uno::Any const & status );
     void fireModified();
 
-    css::uno::Reference<css::deployment::XPackageRegistry> m_xRegistry;
+    cpo::uno::Reference<css::deployment::XPackageRegistry> m_xRegistry;
 
     void initRegistryBackends();
     void initActivationLayer(
-        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv );
+        cpo::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv );
     OUString detectMediaType(
         ::ucbhelper::Content const & ucbContent, bool throw_exc = true );
     OUString insertToActivationLayer(
@@ -71,40 +71,40 @@ class PackageManagerImpl final : private cppu::BaseMutex, public t_pm_helper
         OUString const & id, ActivePackages::Data const & dbData );
 
     static void deletePackageFromCache(
-        css::uno::Reference<css::deployment::XPackage> const & xPackage,
+        cpo::uno::Reference<css::deployment::XPackage> const & xPackage,
         OUString const & destFolder );
 
     bool isInstalled(
-        css::uno::Reference<css::deployment::XPackage> const & package);
+        cpo::uno::Reference<css::deployment::XPackage> const & package);
 
     bool synchronizeRemovedExtensions(
-        css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
-        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv);
+        cpo::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
+        cpo::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv);
 
     bool synchronizeAddedExtensions(
-        css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
-        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv);
+        cpo::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
+        cpo::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv);
 
     class CmdEnvWrapperImpl
         : public ::cppu::WeakImplHelper< css::ucb::XCommandEnvironment,
                                           css::ucb::XProgressHandler >
     {
-        css::uno::Reference<css::ucb::XProgressHandler> m_xLogFile;
-        css::uno::Reference<css::ucb::XProgressHandler> m_xUserProgress;
-        css::uno::Reference<css::task::XInteractionHandler>
+        cpo::uno::Reference<css::ucb::XProgressHandler> m_xLogFile;
+        cpo::uno::Reference<css::ucb::XProgressHandler> m_xUserProgress;
+        cpo::uno::Reference<css::task::XInteractionHandler>
         m_xUserInteractionHandler;
 
     public:
         virtual ~CmdEnvWrapperImpl() override;
         CmdEnvWrapperImpl(
-            css::uno::Reference<css::ucb::XCommandEnvironment>
+            cpo::uno::Reference<css::ucb::XCommandEnvironment>
             const & xUserCmdEnv,
-            css::uno::Reference<css::ucb::XProgressHandler> const & xLogFile );
+            cpo::uno::Reference<css::ucb::XProgressHandler> const & xLogFile );
 
         // XCommandEnvironment
-        virtual css::uno::Reference<css::task::XInteractionHandler>
+        virtual cpo::uno::Reference<css::task::XInteractionHandler>
         getInteractionHandler() override;
-        virtual css::uno::Reference<css::ucb::XProgressHandler>
+        virtual cpo::uno::Reference<css::ucb::XProgressHandler>
         getProgressHandler() override;
 
         // XProgressHandler
@@ -118,7 +118,7 @@ class PackageManagerImpl final : private cppu::BaseMutex, public t_pm_helper
 
     virtual ~PackageManagerImpl() override;
     PackageManagerImpl(
-        css::uno::Reference<cpo::uno::XComponentContext> xComponentContext, OUString context )
+        cpo::uno::Reference<cpo::uno::XComponentContext> xComponentContext, OUString context )
         : t_pm_helper( m_aMutex ),
           m_xComponentContext(std::move( xComponentContext )),
           m_context(std::move( context )),
@@ -126,89 +126,89 @@ class PackageManagerImpl final : private cppu::BaseMutex, public t_pm_helper
         {}
 
 public:
-    static css::uno::Reference<css::deployment::XPackageManager> create(
-        css::uno::Reference<cpo::uno::XComponentContext>
+    static cpo::uno::Reference<css::deployment::XPackageManager> create(
+        cpo::uno::Reference<cpo::uno::XComponentContext>
         const & xComponentContext, OUString const & context );
 
     // XComponent
     virtual void dispose() override;
     virtual void addEventListener(
-        css::uno::Reference<css::lang::XEventListener> const & xListener ) override;
+        cpo::uno::Reference<css::lang::XEventListener> const & xListener ) override;
     virtual void removeEventListener(
-        css::uno::Reference<css::lang::XEventListener> const & xListener ) override;
+        cpo::uno::Reference<css::lang::XEventListener> const & xListener ) override;
 
     // XModifyBroadcaster
     virtual void addModifyListener(
-        css::uno::Reference<css::util::XModifyListener> const & xListener ) override;
+        cpo::uno::Reference<css::util::XModifyListener> const & xListener ) override;
     virtual void removeModifyListener(
-        css::uno::Reference<css::util::XModifyListener> const & xListener ) override;
+        cpo::uno::Reference<css::util::XModifyListener> const & xListener ) override;
 
     // XPackageManager
     virtual OUString getContext() override;
     virtual cpo::uno::Sequence<
-        css::uno::Reference<css::deployment::XPackageTypeInfo> >
+        cpo::uno::Reference<css::deployment::XPackageTypeInfo> >
     getSupportedPackageTypes() override;
 
-    virtual css::uno::Reference<css::task::XAbortChannel>
+    virtual cpo::uno::Reference<css::task::XAbortChannel>
     createAbortChannel() override;
 
-    virtual css::uno::Reference<css::deployment::XPackage> addPackage(
+    virtual cpo::uno::Reference<css::deployment::XPackage> addPackage(
         OUString const & url,
         cpo::uno::Sequence<css::beans::NamedValue> const & properties,
         OUString const & mediaType,
-        css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
-        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
+        cpo::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
+        cpo::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
 
-    virtual css::uno::Reference<css::deployment::XPackage> importExtension(
-        css::uno::Reference<css::deployment::XPackage> const & extension,
-        css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
-        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
+    virtual cpo::uno::Reference<css::deployment::XPackage> importExtension(
+        cpo::uno::Reference<css::deployment::XPackage> const & extension,
+        cpo::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
+        cpo::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
 
     virtual void removePackage(
         OUString const & id, OUString const & fileName,
-        css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
-        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
+        cpo::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
+        cpo::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
 
     OUString getDeployPath( ActivePackages::Data const & data );
-    css::uno::Reference<css::deployment::XPackage> getDeployedPackage_(
+    cpo::uno::Reference<css::deployment::XPackage> getDeployedPackage_(
         OUString const & id, OUString const & fileName,
-        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv );
-    css::uno::Reference<css::deployment::XPackage> getDeployedPackage_(
+        cpo::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv );
+    cpo::uno::Reference<css::deployment::XPackage> getDeployedPackage_(
         std::u16string_view id, ActivePackages::Data const & data,
-        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
+        cpo::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
         bool ignoreAlienPlatforms = false );
-    virtual css::uno::Reference<css::deployment::XPackage>
+    virtual cpo::uno::Reference<css::deployment::XPackage>
     getDeployedPackage(
         OUString const & id, OUString const & fileName,
-        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
+        cpo::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
 
-    cpo::uno::Sequence< css::uno::Reference<css::deployment::XPackage> >
+    cpo::uno::Sequence< cpo::uno::Reference<css::deployment::XPackage> >
     getDeployedPackages_(
-        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv );
-    virtual cpo::uno::Sequence< css::uno::Reference<css::deployment::XPackage> >
+        cpo::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv );
+    virtual cpo::uno::Sequence< cpo::uno::Reference<css::deployment::XPackage> >
     getDeployedPackages(
-        css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
-        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
+        cpo::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
+        cpo::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
 
     virtual void reinstallDeployedPackages(
         bool force,
-        css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
-        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
+        cpo::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
+        cpo::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
 
     virtual bool isReadOnly(  ) override;
 
     virtual bool synchronize(
-        css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
-        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
+        cpo::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
+        cpo::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
 
-    virtual cpo::uno::Sequence<css::uno::Reference<css::deployment::XPackage> >
+    virtual cpo::uno::Sequence<cpo::uno::Reference<css::deployment::XPackage> >
     getExtensionsWithUnacceptedLicenses(
-        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv) override;
+        cpo::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv) override;
 
     virtual sal_Int32 checkPrerequisites(
-        css::uno::Reference<css::deployment::XPackage> const & extension,
-        css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
-        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
+        cpo::uno::Reference<css::deployment::XPackage> const & extension,
+        cpo::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
+        cpo::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv ) override;
         };
 
 

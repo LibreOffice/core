@@ -37,7 +37,7 @@ using namespace ::com::sun::star::text;
 using namespace ::xmloff::token;
 
 using ::com::sun::star::beans::PropertyValue;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::cpo::uno::Sequence;
 
 
@@ -75,7 +75,7 @@ const SvXMLEnumMapEntry<sal_uInt16> aChapterDisplayMap[] =
 
 void XMLIndexChapterInfoEntryContext::startFastElement(
     sal_Int32 /*nElement*/,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     // handle both, style name and bibliography info
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )

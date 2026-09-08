@@ -45,7 +45,7 @@ public:
     void copyMacrosIntoINetFormat(SwFormatINetFormat& aFormat);
 
     void
-    copyMacrosFromNameReplace(css::uno::Reference<css::container::XNameReplace> const& xReplace);
+    copyMacrosFromNameReplace(cpo::uno::Reference<css::container::XNameReplace> const& xReplace);
 };
 
 // SwEventDescriptor for

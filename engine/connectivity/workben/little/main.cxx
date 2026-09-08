@@ -36,15 +36,15 @@
 using namespace connectivity;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace com::sun::star::beans;
 using namespace cppu;
 
 
 void main( int argc, char * argv[] )
 {
-    css::uno::Reference< css::sdbc::XConnection>  m_xConnection;
-    css::uno::Reference< css::sdbc::XDriver>      m_xDriver;
+    cpo::uno::Reference< css::sdbc::XConnection>  m_xConnection;
+    cpo::uno::Reference< css::sdbc::XDriver>      m_xDriver;
 
     try{
         Reference< css::lang::XMultiServiceFactory > xFac =

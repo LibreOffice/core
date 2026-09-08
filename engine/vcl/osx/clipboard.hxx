@@ -86,10 +86,10 @@ public:
 
   // XClipboard
 
-  virtual css::uno::Reference<css::datatransfer::XTransferable> getContents() override;
+  virtual cpo::uno::Reference<css::datatransfer::XTransferable> getContents() override;
 
-  virtual void setContents(css::uno::Reference<css::datatransfer::XTransferable> const & xTransferable,
-                                    css::uno::Reference<css::datatransfer::clipboard::XClipboardOwner> const & xClipboardOwner) override;
+  virtual void setContents(cpo::uno::Reference<css::datatransfer::XTransferable> const & xTransferable,
+                                    cpo::uno::Reference<css::datatransfer::clipboard::XClipboardOwner> const & xClipboardOwner) override;
 
   virtual OUString getName() override;
 
@@ -99,8 +99,8 @@ public:
 
   // XClipboardNotifier
 
-  virtual void addClipboardListener(css::uno::Reference<css::datatransfer::clipboard::XClipboardListener> const & listener) override;
-  virtual void removeClipboardListener(css::uno::Reference<css::datatransfer::clipboard::XClipboardListener> const & listener) override;
+  virtual void addClipboardListener(cpo::uno::Reference<css::datatransfer::clipboard::XClipboardListener> const & listener) override;
+  virtual void removeClipboardListener(cpo::uno::Reference<css::datatransfer::clipboard::XClipboardListener> const & listener) override;
 
   // XFlushableClipboard
 
@@ -118,8 +118,8 @@ public:
 
   /* Notify the current clipboard owner that he is no longer the clipboard owner.
    */
-  void fireLostClipboardOwnershipEvent(css::uno::Reference<css::datatransfer::clipboard::XClipboardOwner> const & oldOwner,
-                                       css::uno::Reference<css::datatransfer::XTransferable> const & oldContent);
+  void fireLostClipboardOwnershipEvent(cpo::uno::Reference<css::datatransfer::clipboard::XClipboardOwner> const & oldOwner,
+                                       cpo::uno::Reference<css::datatransfer::XTransferable> const & oldContent);
 
   void pasteboardChangedOwner();
 
@@ -135,10 +135,10 @@ private:
   void fireClipboardChangedEvent();
 
 private:
-  css::uno::Reference<css::datatransfer::XMimeContentTypeFactory> mrXMimeCntFactory;
-  std::list<css::uno::Reference<css::datatransfer::clipboard::XClipboardListener>> mClipboardListeners;
-  css::uno::Reference<css::datatransfer::XTransferable> mXClipboardContent;
-  css::uno::Reference<css::datatransfer::clipboard::XClipboardOwner> mXClipboardOwner;
+  cpo::uno::Reference<css::datatransfer::XMimeContentTypeFactory> mrXMimeCntFactory;
+  std::list<cpo::uno::Reference<css::datatransfer::clipboard::XClipboardListener>> mClipboardListeners;
+  cpo::uno::Reference<css::datatransfer::XTransferable> mXClipboardContent;
+  cpo::uno::Reference<css::datatransfer::clipboard::XClipboardOwner> mXClipboardOwner;
   DataFlavorMapperPtr_t mpDataFlavorMapper;
   bool mIsSystemPasteboard;
   NSPasteboard* mPasteboard;

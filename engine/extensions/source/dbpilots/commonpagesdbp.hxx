@@ -32,7 +32,7 @@ namespace dbp
         std::unique_ptr<weld::Button> m_xSearchDatabase;
         std::unique_ptr<weld::Container> m_xSourceBox;
 
-        css::uno::Reference< css::sdb::XDatabaseContext >
+        cpo::uno::Reference< css::sdb::XDatabaseContext >
                                 m_xDSContext;
 
     public:
@@ -51,8 +51,8 @@ namespace dbp
         DECL_LINK( OnListboxDoubleClicked, weld::TreeView&, bool );
         DECL_LINK( OnSearchClicked, weld::Button&, void );
 
-        void implFillTables(const css::uno::Reference< css::sdbc::XConnection >&
-                        _rxConn = css::uno::Reference< css::sdbc::XConnection >());
+        void implFillTables(const cpo::uno::Reference< css::sdbc::XConnection >&
+                        _rxConn = cpo::uno::Reference< css::sdbc::XConnection >());
 
         // OControlWizardPage overridables
         virtual bool    canAdvance() const override;

@@ -24,6 +24,7 @@
 #include <test/commontesttools.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 class Test : public SwModelTestBase
 {

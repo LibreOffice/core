@@ -51,7 +51,7 @@
 #include <unordered_map>
 #include <vector>
 
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
@@ -1232,7 +1232,7 @@ typedef comphelper::WeakComponentImplHelper< css::container::XNameAccess,
 class WindowStateConfiguration : public WindowStateConfiguration_BASE
 {
 public:
-    explicit WindowStateConfiguration( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+    explicit WindowStateConfiguration( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
     virtual ~WindowStateConfiguration() override;
 
     virtual OUString getImplementationName() override
@@ -1265,10 +1265,10 @@ public:
                                 OUString > ModuleToWindowStateFileMap;
 
     typedef std::unordered_map< OUString,
-                                css::uno::Reference< css::container::XNameAccess > > ModuleToWindowStateConfigHashMap;
+                                cpo::uno::Reference< css::container::XNameAccess > > ModuleToWindowStateConfigHashMap;
 
 private:
-    css::uno::Reference< cpo::uno::XComponentContext>         m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext>         m_xContext;
     ModuleToWindowStateFileMap                                m_aModuleToFileHashMap;
     ModuleToWindowStateConfigHashMap                          m_aModuleToWindowStateHashMap;
 };
@@ -1276,7 +1276,7 @@ private:
 WindowStateConfiguration::WindowStateConfiguration( const Reference< XComponentContext >& rxContext ) :
     m_xContext( rxContext )
 {
-    css::uno::Reference< css::frame::XModuleManager2 > xModuleManager =
+    cpo::uno::Reference< css::frame::XModuleManager2 > xModuleManager =
         ModuleManager::create( m_xContext );
     Reference< XNameAccess > xEmptyNameAccess;
     Sequence< OUString > aElementNames;

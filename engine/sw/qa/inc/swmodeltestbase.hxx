@@ -62,7 +62,7 @@ protected:
     xmlBufferPtr mpXmlBuffer;
 
     /// Copy&paste helper.
-    void paste(std::u16string_view aFilename, const OUString& aInstance, css::uno::Reference<css::text::XTextRange> const& xTextRange);
+    void paste(std::u16string_view aFilename, const OUString& aInstance, cpo::uno::Reference<css::text::XTextRange> const& xTextRange);
 
 public:
     SwModelTestBase(const OUString& pTestDocumentPath = OUString());
@@ -97,18 +97,18 @@ protected:
     OUString getBodyText() const;
 
     /// Get a family of styles, see com.sun.star.style.StyleFamilies for possible values.
-    css::uno::Reference<css::container::XNameAccess> getStyles(const OUString& aFamily);
+    cpo::uno::Reference<css::container::XNameAccess> getStyles(const OUString& aFamily);
 
     /// Get a family of auto styles, see com.sun.star.style.StyleFamilies for possible values.
-    css::uno::Reference<css::style::XAutoStyleFamily> getAutoStyles(const OUString& aFamily);
+    cpo::uno::Reference<css::style::XAutoStyleFamily> getAutoStyles(const OUString& aFamily);
 
     /// Similar to parseExport(), but this gives the xmlDocPtr of the layout dump.
-    xmlDocUniquePtr parseLayoutDump(const css::uno::Reference< css::lang::XComponent >& xComponent = nullptr);
+    xmlDocUniquePtr parseLayoutDump(const cpo::uno::Reference< css::lang::XComponent >& xComponent = nullptr);
 
     template< typename T >
     T getProperty( const cpo::uno::Any& obj, const OUString& name ) const
     {
-        css::uno::Reference< css::beans::XPropertySet > properties( obj, css::uno::UNO_QUERY_THROW );
+        cpo::uno::Reference< css::beans::XPropertySet > properties( obj, cpo::uno::UNO_QUERY_THROW );
         T data;
         if (!cpo::uno::fromAny(properties->getPropertyValue(name), &data))
         {
@@ -120,9 +120,9 @@ protected:
     }
 
     template< typename T >
-    T getProperty( const css::uno::Reference< cpo::uno::XInterface >& obj, const OUString& name ) const
+    T getProperty( const cpo::uno::Reference< cpo::uno::XInterface >& obj, const OUString& name ) const
     {
-        css::uno::Reference< css::beans::XPropertySet > properties( obj, css::uno::UNO_QUERY_THROW );
+        cpo::uno::Reference< css::beans::XPropertySet > properties( obj, cpo::uno::UNO_QUERY_THROW );
         T data = T();
         if (!(properties->getPropertyValue(name) >>= data))
         {
@@ -133,59 +133,59 @@ protected:
         return data;
     }
 
-    bool isPropertyVoid(const css::uno::Reference<cpo::uno::XInterface>& object, const OUString& name) const
+    bool isPropertyVoid(const cpo::uno::Reference<cpo::uno::XInterface>& object, const OUString& name) const
     {
         if (!hasProperty(object, name))
             return false;
 
-        css::uno::Reference< css::beans::XPropertySet > properties(object, css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference< css::beans::XPropertySet > properties(object, cpo::uno::UNO_QUERY_THROW);
         return !properties->getPropertyValue(name).hasValue();
     }
 
-    bool hasProperty(const css::uno::Reference<cpo::uno::XInterface>& obj, const OUString& name) const;
+    bool hasProperty(const cpo::uno::Reference<cpo::uno::XInterface>& obj, const OUString& name) const;
 
     css::xml::AttributeData getUserDefineAttribute(const cpo::uno::Any& obj, const OUString& name, const OUString& rValue) const;
 
-    int getParagraphs( css::uno::Reference<css::text::XText> const & xText );
+    int getParagraphs( cpo::uno::Reference<css::text::XText> const & xText );
 
     /// Get number of paragraphs of the document.
     int getParagraphs();
 
-    css::uno::Reference<css::text::XTextContent> getParagraphOrTable(int number, css::uno::Reference<css::text::XText> const & xText = css::uno::Reference<css::text::XText>()) const;
+    cpo::uno::Reference<css::text::XTextContent> getParagraphOrTable(int number, cpo::uno::Reference<css::text::XText> const & xText = cpo::uno::Reference<css::text::XText>()) const;
 
     // Get paragraph (counted from 1), optionally check it contains the given text.
-    css::uno::Reference< css::text::XTextRange > getParagraph( int number, const OUString& content = OUString() ) const;
+    cpo::uno::Reference< css::text::XTextRange > getParagraph( int number, const OUString& content = OUString() ) const;
 
     sal_Int16 getNumberingTypeOfParagraph(int nPara);
 
-    css::uno::Reference<css::text::XTextRange> getParagraphOfText(int number, css::uno::Reference<css::text::XText> const & xText, const OUString& content = OUString()) const;
+    cpo::uno::Reference<css::text::XTextRange> getParagraphOfText(int number, cpo::uno::Reference<css::text::XText> const & xText, const OUString& content = OUString()) const;
 
     /// get nth object/fly that is anchored AT paragraph
-    css::uno::Reference<css::beans::XPropertySet> getParagraphAnchoredObject(
-        int const index, css::uno::Reference<css::text::XTextRange> const & xPara) const;
+    cpo::uno::Reference<css::beans::XPropertySet> getParagraphAnchoredObject(
+        int const index, cpo::uno::Reference<css::text::XTextRange> const & xPara) const;
 
     /// Get run (counted from 1) of a paragraph, optionally check it contains the given text.
-    css::uno::Reference<css::text::XTextRange> getRun(css::uno::Reference<css::text::XTextRange> const & xParagraph, int number, const OUString& content = OUString()) const;
+    cpo::uno::Reference<css::text::XTextRange> getRun(cpo::uno::Reference<css::text::XTextRange> const & xParagraph, int number, const OUString& content = OUString()) const;
 
     /// Get math formula string of a run.
-    OUString getFormula(css::uno::Reference<css::text::XTextRange> const & xRun) const;
+    OUString getFormula(cpo::uno::Reference<css::text::XTextRange> const & xRun) const;
 
     /// get cell of a table; table can be retrieved with getParagraphOrTable
-    css::uno::Reference<css::table::XCell> getCell(
-            css::uno::Reference<cpo::uno::XInterface> const& xTableIfc,
+    cpo::uno::Reference<css::table::XCell> getCell(
+            cpo::uno::Reference<cpo::uno::XInterface> const& xTableIfc,
             OUString const& rCell, OUString const& rContent = OUString());
 
     /// Get shape (counted from 1)
-    css::uno::Reference<css::drawing::XShape> getShape(int number);
+    cpo::uno::Reference<css::drawing::XShape> getShape(int number);
 
     /// Select shape (counted from 1)
     void selectShape(int number);
 
     /// Get shape by name
-    css::uno::Reference<css::drawing::XShape> getShapeByName(std::u16string_view aName);
+    cpo::uno::Reference<css::drawing::XShape> getShapeByName(std::u16string_view aName);
 
     /// Get TextFrame by name
-    css::uno::Reference<css::drawing::XShape> getTextFrameByName(const OUString& aName);
+    cpo::uno::Reference<css::drawing::XShape> getTextFrameByName(const OUString& aName);
 
     void saveAndReload(TestFilter eFilter, const char* pPassword = nullptr);
 

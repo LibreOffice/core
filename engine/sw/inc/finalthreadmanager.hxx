@@ -41,7 +41,7 @@ class FinalThreadManager final : public ::cppu::WeakImplHelper< css::lang::XServ
                                                            css::frame::XTerminateListener2 >
 {
 public:
-    explicit FinalThreadManager(css::uno::Reference< cpo::uno::XComponentContext > context);
+    explicit FinalThreadManager(cpo::uno::Reference< cpo::uno::XComponentContext > context);
 
     // css::lang::XServiceInfo:
     virtual OUString SAL_CALL getImplementationName() override;
@@ -49,8 +49,8 @@ public:
     virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // css::util::XJobManager:
-    virtual void SAL_CALL registerJob(const css::uno::Reference< css::util::XCancellable > & Job) override;
-    virtual void SAL_CALL releaseJob(const css::uno::Reference< css::util::XCancellable > & Job) override;
+    virtual void SAL_CALL registerJob(const cpo::uno::Reference< css::util::XCancellable > & Job) override;
+    virtual void SAL_CALL releaseJob(const cpo::uno::Reference< css::util::XCancellable > & Job) override;
     virtual void SAL_CALL cancelAllJobs() override;
 
     // css::frame::XTerminateListener2
@@ -71,11 +71,11 @@ private:
 
     void registerAsListenerAtDesktop();
 
-    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
     osl::Mutex maMutex;
 
-    std::list< css::uno::Reference< css::util::XCancellable > > maThreads;
+    std::list< cpo::uno::Reference< css::util::XCancellable > > maThreads;
     std::unique_ptr<CancelJobsThread> mpCancelJobsThread;
     TerminateOfficeThread* mpTerminateOfficeThread;
     std::unique_ptr<SwPauseThreadStarting, o3tl::default_delete<SwPauseThreadStarting>> mpPauseThreadStarting;

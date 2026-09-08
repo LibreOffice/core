@@ -34,19 +34,19 @@ namespace svxform
     class DataColumn
     {
         // interfaces needed for sddb::Column
-        css::uno::Reference< css::beans::XPropertySet>    m_xPropertySet;
+        cpo::uno::Reference< css::beans::XPropertySet>    m_xPropertySet;
         // interfaces needed for sdb::DataColumn
-        css::uno::Reference< css::sdb::XColumn>           m_xColumn;
-        css::uno::Reference< css::sdb::XColumnUpdate>     m_xColumnUpdate;
+        cpo::uno::Reference< css::sdb::XColumn>           m_xColumn;
+        cpo::uno::Reference< css::sdb::XColumnUpdate>     m_xColumnUpdate;
 
     public:
-        DataColumn(const css::uno::Reference< css::beans::XPropertySet>& _rxIFace);
+        DataColumn(const cpo::uno::Reference< css::beans::XPropertySet>& _rxIFace);
         // if the object behind _rxIFace doesn't fully support the DataColumn service,
         // (which is checked via the supported interfaces) _all_ members will be set to
         // void !, even if the object has some of the needed interfaces.
 
         // 'conversions'
-        const css::uno::Reference< css::sdb::XColumn>& getColumn() const
+        const cpo::uno::Reference< css::sdb::XColumn>& getColumn() const
         {
             return m_xColumn;
         }

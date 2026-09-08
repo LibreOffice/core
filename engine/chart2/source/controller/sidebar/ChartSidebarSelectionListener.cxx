@@ -45,10 +45,10 @@ void ChartSidebarSelectionListener::selectionChanged(const css::lang::EventObjec
 
     bool bCorrectObjectSelected = false;
 
-    css::uno::Reference<css::frame::XController> xController(rEvent.Source, css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::frame::XController> xController(rEvent.Source, cpo::uno::UNO_QUERY);
     if (xController.is())
     {
-        css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(xController, css::uno::UNO_QUERY);
+        cpo::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(xController, cpo::uno::UNO_QUERY);
         if (xSelectionSupplier.is())
         {
             cpo::uno::Any aAny = xSelectionSupplier->getSelection();

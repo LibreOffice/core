@@ -30,7 +30,7 @@ class SvxDrawPage;
 
 class ImplEESdrObject
 {
-    css::uno::Reference< css::drawing::XShape >           mXShape;
+    cpo::uno::Reference< css::drawing::XShape >           mXShape;
     cpo::uno::Any       mAny;
     tools::Rectangle           maRect;
     OUString            mType;
@@ -44,10 +44,10 @@ class ImplEESdrObject
 
     void Init();
 public:
-    css::uno::Reference< css::beans::XPropertySet >   mXPropSet;
+    cpo::uno::Reference< css::beans::XPropertySet >   mXPropSet;
 
     ImplEESdrObject(ImplEESdrWriter& rEx, const SdrObject& rObj, bool bOOXML, sal_uInt32 nId = 0);
-    ImplEESdrObject( const css::uno::Reference< css::drawing::XShape >& rShape );
+    ImplEESdrObject( const cpo::uno::Reference< css::drawing::XShape >& rShape );
     ~ImplEESdrObject();
 
     bool ImplGetPropertyValue( const OUString& rString );
@@ -55,7 +55,7 @@ public:
     sal_Int32 ImplGetInt32PropertyValue( const OUString& rStr )
     { return ImplGetPropertyValue( rStr ) ? *o3tl::doAccess<sal_Int32>(mAny) : 0; }
 
-    const css::uno::Reference< css::drawing::XShape >&    GetShapeRef() const     { return mXShape; }
+    const cpo::uno::Reference< css::drawing::XShape >&    GetShapeRef() const     { return mXShape; }
     const cpo::uno::Any&       GetUsrAny() const       { return mAny; }
     const OUString&     GetType() const         { return mType; }
     void                SetType( const OUString& rS ) { mType = rS; }
@@ -97,7 +97,7 @@ class ImplEESdrWriter
 {
     EscherEx*           mpEscherEx;
     rtl::Reference< SvxDrawPage >        mXDrawPage;
-    css::uno::Reference< css::drawing::XShapes >          mXShapes;
+    cpo::uno::Reference< css::drawing::XShapes >          mXShapes;
     SvStream*           mpPicStrm;
     // own extensions
     EscherExHostAppData*    mpHostAppData;
@@ -112,7 +112,7 @@ class ImplEESdrWriter
     void                ImplWriteAdditionalText(
                             ImplEESdrObject& rObj );
     sal_uInt32          ImplEnterAdditionalTextGroup(
-                            const css::uno::Reference< css::drawing::XShape >& rShape,
+                            const cpo::uno::Reference< css::drawing::XShape >& rShape,
                             const tools::Rectangle* pBoundRect );
     void                ImplFlushSolverContainer();
 
@@ -123,7 +123,7 @@ public:
     static Size         ImplMapSize( const Size& rSize );
     EscherExHostAppData* ImplGetHostData() { return mpHostAppData; }
     bool                ImplInitPage( const SdrPage& rPage );
-    bool                ImplInitUnoShapes( const css::uno::Reference< css::drawing::XShapes >& rxShapes );
+    bool                ImplInitUnoShapes( const cpo::uno::Reference< css::drawing::XShapes >& rxShapes );
     void                ImplWriteCurrentPage( bool ooxmlExport );
     sal_uInt32          ImplWriteTheShape( ImplEESdrObject& rObj, bool ooxmlExport );
     void                ImplExitPage();

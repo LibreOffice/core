@@ -36,8 +36,8 @@
 
 using namespace com::sun::star;
 using namespace com::sun::star::io;
-using namespace com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace com::sun::star::packages::zip::ZipConstants;
 
 /** This class is used to write Zip files
@@ -196,7 +196,7 @@ void ZipOutputStream::finish()
     }
 }
 
-const css::uno::Reference< css::io::XOutputStream >& ZipOutputStream::getStream() const
+const cpo::uno::Reference< css::io::XOutputStream >& ZipOutputStream::getStream() const
 {
     return m_xStream;
 }

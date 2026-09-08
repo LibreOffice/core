@@ -70,7 +70,7 @@ public:
     virtual ~GraphicDescriptor() noexcept override;
 
     void init( const OUString& rURL );
-    void init( const css::uno::Reference< css::io::XInputStream >& rxIStm, const OUString& rURL );
+    void init( const cpo::uno::Reference< css::io::XInputStream >& rxIStm, const OUString& rURL );
 
     static rtl::Reference<::comphelper::PropertySetInfo> createPropertySetInfo();
 

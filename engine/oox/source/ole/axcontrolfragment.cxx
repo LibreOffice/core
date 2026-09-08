@@ -34,7 +34,7 @@
 namespace oox::ole {
 
 using namespace ::com::sun::star::io;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 using ::oox::core::ContextHandler2;
 using ::oox::core::ContextHandlerRef;

@@ -28,8 +28,8 @@
 
 using namespace ::cppu;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 namespace sd {
 
@@ -58,11 +58,11 @@ Any SAL_CALL SdUnoOutlineView::getSelection()
 }
 
 void SAL_CALL SdUnoOutlineView::addSelectionChangeListener (
-    const css::uno::Reference<css::view::XSelectionChangeListener>&)
+    const cpo::uno::Reference<css::view::XSelectionChangeListener>&)
 {}
 
 void SAL_CALL SdUnoOutlineView::removeSelectionChangeListener (
-    const css::uno::Reference<css::view::XSelectionChangeListener>&)
+    const cpo::uno::Reference<css::view::XSelectionChangeListener>&)
 {}
 
 //----- XDrawView -------------------------------------------------------------

@@ -530,7 +530,7 @@ namespace sw
         class DrawingOLEAdaptor
         {
         private:
-            css::uno::Reference < css::embed::XEmbeddedObject > mxIPRef;
+            cpo::uno::Reference < css::embed::XEmbeddedObject > mxIPRef;
             SfxObjectShell& mrPers;
             const Graphic* mpGraphic;
         public:

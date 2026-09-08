@@ -63,11 +63,11 @@ public:
 
     rtl::Reference<XMLImportContext>
     CreateChildContext(const OUString& rName,
-                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
+                       const cpo::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
 
     void SAL_CALL
     startElement(const OUString& rName,
-                 const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
+                 const cpo::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
     void SAL_CALL endElement(const OUString& rName) override;
 
 private:
@@ -83,14 +83,14 @@ XMLFootnoteBodyImportContext::XMLFootnoteBodyImportContext(
 }
 
 rtl::Reference<XMLImportContext> XMLFootnoteBodyImportContext::CreateChildContext(
-    const OUString& rName, const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
+    const OUString& rName, const cpo::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
     return CreateTextChildContext(GetImport(), rName);
 }
 
 void XMLFootnoteBodyImportContext::startElement(
     const OUString& /*rName*/,
-    const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
+    const cpo::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
     GetImport().GetGenerator().openFootnote(m_rProperties);
 }
@@ -106,7 +106,7 @@ XMLFootnoteImportContext::XMLFootnoteImportContext(XMLImport& rImport)
 }
 
 rtl::Reference<XMLImportContext> XMLFootnoteImportContext::CreateChildContext(
-    const OUString& rName, const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
+    const OUString& rName, const cpo::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
     if (rName == "text:note-citation")
         return new XMLTextNoteCitationContext(GetImport(), m_aProperties);
@@ -118,7 +118,7 @@ rtl::Reference<XMLImportContext> XMLFootnoteImportContext::CreateChildContext(
 
 void XMLFootnoteImportContext::startElement(
     const OUString& /*rName*/,
-    const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
+    const cpo::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
 }
 } // namespace writerperfect::exp

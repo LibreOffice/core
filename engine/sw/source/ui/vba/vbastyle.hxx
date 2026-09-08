@@ -36,22 +36,22 @@ class SwVbaStyle : public SwVbaStyle_BASE
 {
 private:
     rtl::Reference< SwXTextDocument > mxModel;
-    css::uno::Reference< css::beans::XPropertySet > mxStyleProps;
-    css::uno::Reference< css::style::XStyle > mxStyle;
+    cpo::uno::Reference< css::beans::XPropertySet > mxStyleProps;
+    cpo::uno::Reference< css::style::XStyle > mxStyle;
 public:
     /// @throws css::script::BasicErrorException
     /// @throws cpo::uno::RuntimeException
-    SwVbaStyle( const css::uno::Reference< ov::XHelperInterface >& xParent,
-                const css::uno::Reference< cpo::uno::XComponentContext > & xContext,
+    SwVbaStyle( const cpo::uno::Reference< ov::XHelperInterface >& xParent,
+                const cpo::uno::Reference< cpo::uno::XComponentContext > & xContext,
                 rtl::Reference< SwXTextDocument > xModel,
-                const css::uno::Reference< css::beans::XPropertySet >& _xPropertySet );
+                const cpo::uno::Reference< css::beans::XPropertySet >& _xPropertySet );
 
     /// @throws cpo::uno::RuntimeException
-    static void setStyle( const css::uno::Reference< css::beans::XPropertySet >& xParaProps, const cpo::uno::Any& xStyle );
+    static void setStyle( const cpo::uno::Reference< css::beans::XPropertySet >& xParaProps, const cpo::uno::Any& xStyle );
     /// @throws cpo::uno::RuntimeException
-    static LanguageType getLanguageID( const css::uno::Reference< css::beans::XPropertySet >& xTCProps );
+    static LanguageType getLanguageID( const cpo::uno::Reference< css::beans::XPropertySet >& xTCProps );
     /// @throws cpo::uno::RuntimeException
-    static void setLanguageID( const css::uno::Reference< css::beans::XPropertySet >& xTCProps, LanguageType _languageid );
+    static void setLanguageID( const cpo::uno::Reference< css::beans::XPropertySet >& xTCProps, LanguageType _languageid );
 
     // Attributes
     virtual OUString SAL_CALL getName() override;
@@ -59,10 +59,10 @@ public:
     virtual ::sal_Int32 SAL_CALL getLanguageID( ) override;
     virtual void SAL_CALL setLanguageID( ::sal_Int32 _languageid ) override;
     virtual ::sal_Int32 SAL_CALL getType() override;
-    virtual css::uno::Reference< ooo::vba::word::XFont > SAL_CALL getFont() override;
+    virtual cpo::uno::Reference< ooo::vba::word::XFont > SAL_CALL getFont() override;
     virtual OUString SAL_CALL getNameLocal() override;
     virtual void SAL_CALL setNameLocal( const OUString& _namelocal ) override;
-    virtual css::uno::Reference< ::ooo::vba::word::XParagraphFormat > SAL_CALL getParagraphFormat() override;
+    virtual cpo::uno::Reference< ::ooo::vba::word::XParagraphFormat > SAL_CALL getParagraphFormat() override;
     virtual bool SAL_CALL getAutomaticallyUpdate() override;
     virtual void SAL_CALL setAutomaticallyUpdate( bool _automaticallyupdate ) override;
     virtual cpo::uno::Any SAL_CALL getBaseStyle() override;

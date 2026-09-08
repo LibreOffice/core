@@ -97,8 +97,8 @@
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
-#include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.h>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/XInterface.hpp>
 #include <comphelper/comphelperdllapi.h>

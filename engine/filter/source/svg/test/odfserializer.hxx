@@ -19,15 +19,15 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 
 namespace svgi
 {
 /// Creates a XDocumentHandler that serializes directly to an XOutputStream
-css::uno::Reference<css::xml::sax::XDocumentHandler>
-createSerializer(const css::uno::Reference<css::io::XOutputStream>&);
+cpo::uno::Reference<css::xml::sax::XDocumentHandler>
+createSerializer(const cpo::uno::Reference<css::io::XOutputStream>&);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

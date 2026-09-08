@@ -58,7 +58,7 @@ public:
     void initialize( ChartController& rChartController,
                      const rtl::Reference<::chart::ChartModel>& xChartModel,
                      const rtl::Reference<::chart::ChartView>& xChartView,
-                     const css::uno::Reference< css::accessibility::XAccessible >& xParent,
+                     const cpo::uno::Reference< css::accessibility::XAccessible >& xParent,
                      ChartWindow* pNewChartWindow);
     // used to disconnect from view
     void initialize();
@@ -71,7 +71,7 @@ public:
 
     // ________ XAccessibleContext ________
     virtual OUString getAccessibleDescription() override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleParent() override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > getAccessibleParent() override;
     virtual sal_Int64 getAccessibleIndexInParent() override;
     virtual OUString getAccessibleName() override;
     virtual sal_Int16 getAccessibleRole() override;

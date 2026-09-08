@@ -104,7 +104,7 @@ void LinePropertiesHelper::AddDefaultsToMap(
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LINE_CAP, drawing::LineCap_BUTT );
 }
 
-bool LinePropertiesHelper::IsLineVisible( const css::uno::Reference<
+bool LinePropertiesHelper::IsLineVisible( const cpo::uno::Reference<
         css::beans::XPropertySet >& xLineProperties )
 {
     bool bRet = false;
@@ -132,7 +132,7 @@ bool LinePropertiesHelper::IsLineVisible( const css::uno::Reference<
     return bRet;
 }
 
-void LinePropertiesHelper::SetLineVisible( const css::uno::Reference<
+void LinePropertiesHelper::SetLineVisible( const cpo::uno::Reference<
     css::beans::XPropertySet >& xLineProperties )
 {
     try
@@ -156,7 +156,7 @@ void LinePropertiesHelper::SetLineVisible( const css::uno::Reference<
     }
 }
 
-void LinePropertiesHelper::SetLineInvisible( const css::uno::Reference<
+void LinePropertiesHelper::SetLineInvisible( const cpo::uno::Reference<
     css::beans::XPropertySet >& xLineProperties )
 {
     try
@@ -175,7 +175,7 @@ void LinePropertiesHelper::SetLineInvisible( const css::uno::Reference<
     }
 }
 
-void LinePropertiesHelper::SetLineColor( const css::uno::Reference<
+void LinePropertiesHelper::SetLineColor( const cpo::uno::Reference<
      css::beans::XPropertySet >& xLineProperties, sal_Int32 nColor  )
 {
     try

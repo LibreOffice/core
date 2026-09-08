@@ -36,6 +36,7 @@
 #include <memory>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 XLineEndList::XLineEndList( const OUString& rPath, const OUString& rReferer )
     : XPropertyList( XPropertyListType::LineEnd, rPath, rReferer )

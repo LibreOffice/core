@@ -21,7 +21,7 @@
 
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -64,9 +64,9 @@ class SAL_DLLPUBLIC_TEMPLATE InheritedHelperInterfaceImpl : public Ifc...
 {
 protected:
     cpo::uno::WeakReference< ov::XHelperInterface > mxParent;
-    css::uno::Reference< cpo::uno::XComponentContext > mxContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext > mxContext;
 public:
-    InheritedHelperInterfaceImpl( const css::uno::Reference< ov::XHelperInterface >& xParent, css::uno::Reference< cpo::uno::XComponentContext > xContext ) : mxParent( xParent ), mxContext(std::move( xContext )) {}
+    InheritedHelperInterfaceImpl( const cpo::uno::Reference< ov::XHelperInterface >& xParent, cpo::uno::Reference< cpo::uno::XComponentContext > xContext ) : mxParent( xParent ), mxContext(std::move( xContext )) {}
     virtual OUString getServiceImplName() = 0;
     virtual cpo::uno::Sequence<OUString> getServiceNames() = 0;
 
@@ -75,12 +75,12 @@ public:
     {
         return 0x53756E4F;
     }
-    virtual css::uno::Reference< ov::XHelperInterface > getParent(  ) override { return mxParent; }
+    virtual cpo::uno::Reference< ov::XHelperInterface > getParent(  ) override { return mxParent; }
 
     virtual cpo::uno::Any Application(  ) override {
             // The application could certainly be passed around in the context - seems
             // to make sense
-            css::uno::Reference< css::container::XNameAccess > xNameAccess( mxContext, css::uno::UNO_QUERY_THROW );
+            cpo::uno::Reference< css::container::XNameAccess > xNameAccess( mxContext, cpo::uno::UNO_QUERY_THROW );
             return xNameAccess->getByName( u"Application"_ustr );
     }
 
@@ -103,7 +103,7 @@ class SAL_DLLPUBLIC_TEMPLATE InheritedHelperInterfaceWeakImpl : public Inherited
 {
     typedef InheritedHelperInterfaceImpl< ::cppu::WeakImplHelper< Ifc... > > Base;
 public:
-    InheritedHelperInterfaceWeakImpl( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext ) : Base( xParent, xContext ) {}
+    InheritedHelperInterfaceWeakImpl( const cpo::uno::Reference< ov::XHelperInterface >& xParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext ) : Base( xParent, xContext ) {}
 };
 
 

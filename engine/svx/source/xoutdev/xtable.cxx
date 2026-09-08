@@ -35,6 +35,7 @@
 #include <stack>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 namespace
 {
@@ -410,7 +411,7 @@ bool XPropertyList::Save()
         if (!bHasUnsaveableEntry)
             mbNeedsExportableList = false;
     }
-    css::uno::Reference<css::container::XNameContainer> xExportableNameContainer
+    cpo::uno::Reference<css::container::XNameContainer> xExportableNameContainer
         = mbNeedsExportableList ? rExportableList->createInstance() : createInstance();
 
     return exportPropertyTable(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE),

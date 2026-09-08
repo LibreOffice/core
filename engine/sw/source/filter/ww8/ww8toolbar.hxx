@@ -36,7 +36,7 @@ class SwTBC : public TBBase
 public:
     SwTBC();
     bool Read(SvStream &rS) override;
-    bool ImportToolBarControl( SwCTBWrapper&, const css::uno::Reference< css::container::XIndexContainer >&, CustomToolBarImportHelper&, bool );
+    bool ImportToolBarControl( SwCTBWrapper&, const cpo::uno::Reference< css::container::XIndexContainer >&, CustomToolBarImportHelper&, bool );
     const OUString & GetCustomText();
 };
 
@@ -61,7 +61,7 @@ public:
     bool Read(SvStream &rS) override;
     bool IsMenuToolbar() const;
     bool ImportCustomToolBar( SwCTBWrapper&, CustomToolBarImportHelper& );
-    bool ImportMenuTB( SwCTBWrapper&, const css::uno::Reference< css::container::XIndexContainer >&, CustomToolBarImportHelper& );
+    bool ImportMenuTB( SwCTBWrapper&, const cpo::uno::Reference< css::container::XIndexContainer >&, CustomToolBarImportHelper& );
     OUString const & GetName() { return m_tb.getName().getString(); }
 };
 

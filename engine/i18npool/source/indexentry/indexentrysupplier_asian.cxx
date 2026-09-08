@@ -25,7 +25,7 @@
 #include <indexentrysupplier_asian.hxx>
 #include "data/indexdata_alphanumeric.h"
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::lang;
 
 namespace i18npool {

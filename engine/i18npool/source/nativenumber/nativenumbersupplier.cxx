@@ -37,7 +37,7 @@
 #include <com/sun/star/i18n/NativeNumberMode.hpp>
 #include <com/sun/star/linguistic2/NumberText.hpp>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;

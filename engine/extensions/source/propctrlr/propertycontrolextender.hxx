@@ -37,7 +37,7 @@ namespace pcr
     {
     public:
         explicit PropertyControlExtender(
-            const css::uno::Reference< css::inspection::XPropertyControl >& _rxObservedControl
+            const cpo::uno::Reference< css::inspection::XPropertyControl >& _rxObservedControl
         );
 
         // XKeyListener
@@ -50,8 +50,8 @@ namespace pcr
         virtual ~PropertyControlExtender() override;
 
     private:
-        css::uno::Reference< css::inspection::XPropertyControl > mxControl;
-        css::uno::Reference< css::awt::XWindow > mxControlWindow;
+        cpo::uno::Reference< css::inspection::XPropertyControl > mxControl;
+        cpo::uno::Reference< css::awt::XWindow > mxControlWindow;
     };
 
 

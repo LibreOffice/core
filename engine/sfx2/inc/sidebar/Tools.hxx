@@ -32,22 +32,22 @@ namespace sfx2::sidebar {
 class Tools
 {
 public:
-    static css::uno::Reference<css::graphic::XGraphic> GetImage(
+    static cpo::uno::Reference<css::graphic::XGraphic> GetImage(
         const OUString& rsImageURL,
         const OUString& rsHighContrastImageURL,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame);
+        const cpo::uno::Reference<css::frame::XFrame>& rxFrame);
 
-    static css::uno::Reference<css::graphic::XGraphic> GetImage(
+    static cpo::uno::Reference<css::graphic::XGraphic> GetImage(
         const OUString& rsURL,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame);
+        const cpo::uno::Reference<css::frame::XFrame>& rxFrame);
 
     static css::util::URL GetURL (const OUString& rsCommand);
-    static css::uno::Reference<css::frame::XDispatch> GetDispatch (
-        const css::uno::Reference<css::frame::XFrame>& rxFrame,
+    static cpo::uno::Reference<css::frame::XDispatch> GetDispatch (
+        const cpo::uno::Reference<css::frame::XFrame>& rxFrame,
         const css::util::URL& rURL);
 
     static OUString GetModuleName (
-        const css::uno::Reference<css::frame::XController>& rxFrame);
+        const cpo::uno::Reference<css::frame::XController>& rxFrame);
 };
 
 

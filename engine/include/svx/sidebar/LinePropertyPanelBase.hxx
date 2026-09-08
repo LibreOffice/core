@@ -53,7 +53,7 @@ public:
 
     // constructor/destructor
     LinePropertyPanelBase(weld::Widget* pParent,
-                          const css::uno::Reference<css::frame::XFrame>& rxFrame);
+                          const cpo::uno::Reference<css::frame::XFrame>& rxFrame);
 
     virtual void setLineWidth(const XLineWidthItem& rItem) = 0;
     virtual void setLineStart(const XLineStartItem& rItem) = 0;

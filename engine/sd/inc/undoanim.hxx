@@ -51,7 +51,7 @@ class UndoAnimationPath final : public SdrUndoAction
 {
 public:
     UndoAnimationPath(SdDrawDocument* pDoc, SdPage* pThePage,
-                      const css::uno::Reference<css::animations::XAnimationNode>& xNode);
+                      const cpo::uno::Reference<css::animations::XAnimationNode>& xNode);
     virtual ~UndoAnimationPath() override;
 
     virtual void Undo() override;

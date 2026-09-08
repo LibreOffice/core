@@ -11,7 +11,7 @@
 
 #include <vcl/dllapi.h>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <rtl/ustring.hxx>
 #include <tools/fontenum.hxx>
@@ -28,7 +28,7 @@ namespace com::sun::star::task { class XInteractionHandler; }
 class VCL_DLLPUBLIC EmbeddedFontsManager
 {
 private:
-    css::uno::Reference<css::frame::XModel> m_xDocumentModel;
+    cpo::uno::Reference<css::frame::XModel> m_xDocumentModel;
     std::vector<std::pair<OUString, OUString>> m_aAccumulatedFonts;
 
 public:
@@ -55,7 +55,7 @@ public:
       @param key key to xor the data with, from the start until the key's length (not repeated)
       @param eot whether the data is compressed in Embedded OpenType format
     */
-    bool addEmbeddedFont( const css::uno::Reference< css::io::XInputStream >& stream,
+    bool addEmbeddedFont( const cpo::uno::Reference< css::io::XInputStream >& stream,
         const OUString& fontName, std::u16string_view extra,
         std::vector< unsigned char > const & key, bool eot = false,
         bool bSubsetted = false);
@@ -77,7 +77,7 @@ public:
     */
     static void activateFonts(std::vector<std::pair<OUString, OUString>>& fonts,
                               bool silentlyAllowRestrictedFonts,
-                              const css::uno::Reference<css::task::XInteractionHandler>& xHandler,
+                              const cpo::uno::Reference<css::task::XInteractionHandler>& xHandler,
                               bool& activatedRestrictedFonts);
 
     static bool analyzeTTF(const void* data, tools::Long size, FontWeight& weight);
@@ -112,7 +112,7 @@ public:
 
     static void releaseFonts(const std::vector<std::pair<OUString, OUString>>& fonts);
 
-    EmbeddedFontsManager(const css::uno::Reference<css::frame::XModel>& xModel);
+    EmbeddedFontsManager(const cpo::uno::Reference<css::frame::XModel>& xModel);
     ~EmbeddedFontsManager();
 
     static OUString getFileUrlForTemporaryFont(std::u16string_view name, std::u16string_view suffix);

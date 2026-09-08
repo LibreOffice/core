@@ -21,7 +21,7 @@ class StarOfficeCalcImportFilter : public writerperfect::ImportFilter<OdsGenerat
 {
 public:
     explicit StarOfficeCalcImportFilter(
-        const css::uno::Reference<cpo::uno::XComponentContext>& rxContext)
+        const cpo::uno::Reference<cpo::uno::XComponentContext>& rxContext)
         : writerperfect::ImportFilter<OdsGenerator>(rxContext)
     {
     }

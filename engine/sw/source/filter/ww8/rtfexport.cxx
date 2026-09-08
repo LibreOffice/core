@@ -76,6 +76,7 @@
 #include <txtftn.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 // the default text encoding for the export, if it doesn't fit unicode will
 // be used

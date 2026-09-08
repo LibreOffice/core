@@ -38,14 +38,14 @@
 #include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star::xml::sax;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star;
 
 constexpr OUString XMLN_VERSIONSLIST = u"VersionList.xml"_ustr;
 
 XMLVersionListExport::XMLVersionListExport(
-    const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
+    const cpo::uno::Reference< cpo::uno::XComponentContext >& rContext,
     const cpo::uno::Sequence < css::util::RevisionTag >& rVersions,
     const OUString &rFileName,
     Reference< XDocumentHandler > const &rHandler )
@@ -103,7 +103,7 @@ ErrCode XMLVersionListExport::exportDoc( enum ::xmloff::token::XMLTokenEnum )
 }
 
 XMLVersionListImport::XMLVersionListImport(
-    const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
+    const cpo::uno::Reference< cpo::uno::XComponentContext >& rContext,
     cpo::uno::Sequence < css::util::RevisionTag >& rVersions )
 :   SvXMLImport(rContext, u""_ustr),
     maVersions( rVersions )
@@ -114,7 +114,7 @@ XMLVersionListImport::~XMLVersionListImport() noexcept
 {}
 
 SvXMLImportContext *XMLVersionListImport::CreateFastContext( sal_Int32 nElement,
-        const ::css::uno::Reference< ::css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
+        const ::cpo::uno::Reference< ::css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
     SvXMLImportContext *pContext = nullptr;
 
@@ -134,9 +134,9 @@ XMLVersionListContext::XMLVersionListContext( XMLVersionListImport& rImport)
 XMLVersionListContext::~XMLVersionListContext()
 {}
 
-css::uno::Reference< css::xml::sax::XFastContextHandler >
+cpo::uno::Reference< css::xml::sax::XFastContextHandler >
 XMLVersionListContext::createFastChildContext(sal_Int32 nElement,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList)
+            const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList)
 {
     SvXMLImportContext *pContext = nullptr;
 

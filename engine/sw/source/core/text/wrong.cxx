@@ -27,7 +27,7 @@
 #include <osl/diagnose.h>
 
 SwWrongArea::SwWrongArea( OUString aType, WrongListType listType,
-        css::uno::Reference< css::container::XStringKeyMap > const & xPropertyBag,
+        cpo::uno::Reference< css::container::XStringKeyMap > const & xPropertyBag,
         sal_Int32 nPos,
         sal_Int32 nLen)
 : maType(std::move(aType)), mxPropertyBag(xPropertyBag), mnPos(nPos), mnLen(nLen), mpSubList(nullptr)
@@ -37,7 +37,7 @@ SwWrongArea::SwWrongArea( OUString aType, WrongListType listType,
 }
 
 SwWrongArea::SwWrongArea( OUString aType,
-        css::uno::Reference< css::container::XStringKeyMap > const & xPropertyBag,
+        cpo::uno::Reference< css::container::XStringKeyMap > const & xPropertyBag,
         sal_Int32 nPos,
         sal_Int32 nLen,
         SwWrongList* pSubList)
@@ -620,7 +620,7 @@ bool SwWrongList::LookForEntry( sal_Int32 nBegin, sal_Int32 nEnd ) {
 }
 
 void SwWrongList::Insert( const OUString& rType,
-                          css::uno::Reference< css::container::XStringKeyMap > const & xPropertyBag,
+                          cpo::uno::Reference< css::container::XStringKeyMap > const & xPropertyBag,
                           sal_Int32 nNewPos, sal_Int32 nNewLen )
 {
     auto aIter = std::find_if(maList.begin(), maList.end(),

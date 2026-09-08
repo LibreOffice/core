@@ -55,7 +55,7 @@ using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::task;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 using ::com::sun::star::container::XNameAccess;
@@ -140,7 +140,7 @@ struct FilterBaseImpl
 
     GraphicHelperRef    mxGraphicHelper;        /// Graphic and graphic object handling.
     ModelObjHelperRef   mxModelObjHelper;       /// Tables to create new named drawing objects.
-    std::map<css::uno::Reference<css::lang::XMultiServiceFactory>, ModelObjHelperRef>
+    std::map<cpo::uno::Reference<css::lang::XMultiServiceFactory>, ModelObjHelperRef>
         mxModelObjHelpers;
     OleObjHelperRef     mxOleObjHelper;         /// OLE object handling.
     VbaProjectRef       mxVbaProject;           /// VBA project manager.
@@ -360,7 +360,7 @@ ModelObjectHelper& FilterBase::getModelObjectHelper() const
 }
 
 ModelObjectHelper& FilterBase::getModelObjectHelperForModel(
-    const css::uno::Reference<css::lang::XMultiServiceFactory>& xFactory) const
+    const cpo::uno::Reference<css::lang::XMultiServiceFactory>& xFactory) const
 {
     if (!mxImpl->mxModelObjHelpers.count(xFactory))
         mxImpl->mxModelObjHelpers[xFactory] = std::make_shared<ModelObjectHelper>(xFactory);

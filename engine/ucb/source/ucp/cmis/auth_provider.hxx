@@ -17,13 +17,13 @@ namespace cmis
 {
     class AuthProvider : public libcmis::AuthProvider
     {
-        const css::uno::Reference< css::ucb::XCommandEnvironment>& m_xEnv;
+        const cpo::uno::Reference< css::ucb::XCommandEnvironment>& m_xEnv;
         static cpo::uno::WeakReference< css::ucb::XCommandEnvironment> sm_xEnv;
         OUString m_sUrl;
         OUString m_sBindingUrl;
 
         public:
-            AuthProvider ( const css::uno::Reference< css::ucb::XCommandEnvironment> & xEnv,
+            AuthProvider ( const cpo::uno::Reference< css::ucb::XCommandEnvironment> & xEnv,
                            OUString sUrl,
                            OUString sBindingUrl ):
                 m_xEnv( xEnv ), m_sUrl( std::move(sUrl) ), m_sBindingUrl( std::move(sBindingUrl) ) { }
@@ -38,8 +38,8 @@ namespace cmis
                     const char* /*username*/,
                     const char* /*password*/ );
 
-            static void setXEnv( const css::uno::Reference< css::ucb::XCommandEnvironment>& xEnv );
-            static css::uno::Reference< css::ucb::XCommandEnvironment> getXEnv();
+            static void setXEnv( const cpo::uno::Reference< css::ucb::XCommandEnvironment>& xEnv );
+            static cpo::uno::Reference< css::ucb::XCommandEnvironment> getXEnv();
 
     };
 }

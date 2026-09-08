@@ -30,7 +30,7 @@ class SVT_DLLPUBLIC SvEmbedTransferHelper final : public TransferableHelper
 {
 private:
 
-    css::uno::Reference< css::embed::XEmbeddedObject > m_xObj;
+    cpo::uno::Reference< css::embed::XEmbeddedObject > m_xObj;
     std::optional<Graphic> m_oGraphic;
     sal_Int64 m_nAspect;
 
@@ -42,7 +42,7 @@ private:
 
 public:
     // object, replacement image, and the aspect
-    SvEmbedTransferHelper( const css::uno::Reference< css::embed::XEmbeddedObject >& xObj,
+    SvEmbedTransferHelper( const cpo::uno::Reference< css::embed::XEmbeddedObject >& xObj,
                            const Graphic* pGraphic,
                             sal_Int64 nAspect );
     virtual ~SvEmbedTransferHelper() override;
@@ -50,7 +50,7 @@ public:
     void SetParentShellID( const OUString& rShellID );
 
     static void         FillTransferableObjectDescriptor( TransferableObjectDescriptor& rDesc,
-                            const css::uno::Reference< css::embed::XEmbeddedObject >& xObj,
+                            const cpo::uno::Reference< css::embed::XEmbeddedObject >& xObj,
                             const Graphic* pGraphic,
                             sal_Int64 nAspect );
 };

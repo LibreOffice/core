@@ -30,7 +30,7 @@
 #include <algorithm>
 
 
-using com::sun::star::uno::Reference;
+using cpo::uno::Reference;
 using com::sun::star::xml::dom::XNode;
 using com::sun::star::xml::dom::XNodeList;
 

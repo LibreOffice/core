@@ -38,6 +38,7 @@
 #include <oox/helper/attributelist.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace oox::docprop {
 

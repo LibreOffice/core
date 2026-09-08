@@ -159,7 +159,7 @@
 #include <FilterListBox.hxx>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo;
 using namespace cpo::uno;
 
 struct ScGridWindow::MouseEventState
@@ -3166,7 +3166,7 @@ bool ScGridWindow::PreNotify( NotifyEvent& rNEvt )
         if (pWindow == this)
         {
             SfxViewFrame& rViewFrame = mrViewData.GetViewShell()->GetViewFrame();
-            css::uno::Reference<css::frame::XController> xController = rViewFrame.GetFrame().GetController();
+            cpo::uno::Reference<css::frame::XController> xController = rViewFrame.GetFrame().GetController();
             if (xController.is())
             {
                 ScTabViewObj* pImp = dynamic_cast<ScTabViewObj*>( xController.get() );

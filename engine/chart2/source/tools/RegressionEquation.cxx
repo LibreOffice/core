@@ -39,8 +39,9 @@
 namespace cpo::uno { class XComponentContext; }
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::com::sun::star::beans::Property;
 using ::osl::MutexGuard;
 

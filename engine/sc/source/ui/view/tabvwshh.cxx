@@ -42,6 +42,7 @@
 #include <com/sun/star/embed/EmbedVerbs.hpp>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 void ScTabViewShell::ExecuteObject( const SfxRequest& rReq )
 {

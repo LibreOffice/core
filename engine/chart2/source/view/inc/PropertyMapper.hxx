@@ -24,7 +24,7 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <cpo/uno/Sequence.h>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 
 namespace com::sun::star::beans { class XPropertySet; }
 class SvxShape;
@@ -47,13 +47,13 @@ class PropertyMapper
 {
 public:
     static void setMappedProperties(
-          const css::uno::Reference< css::beans::XPropertySet >& xTarget
-        , const css::uno::Reference< css::beans::XPropertySet >& xSource
+          const cpo::uno::Reference< css::beans::XPropertySet >& xTarget
+        , const cpo::uno::Reference< css::beans::XPropertySet >& xSource
         , const tPropertyNameMap& rMap );
 
     static void setMappedProperties(
           SvxShape& xTarget
-        , const css::uno::Reference< css::beans::XPropertySet >& xSource
+        , const cpo::uno::Reference< css::beans::XPropertySet >& xSource
         , const tPropertyNameMap& rMap );
 
     /**
@@ -62,7 +62,7 @@ public:
      * data to css::text::XTextPortionAppend.
      */
     static cpo::uno::Sequence<css::beans::PropertyValue> getPropVals(
-          const css::uno::Reference< css::beans::XPropertySet >& xSource
+          const cpo::uno::Reference< css::beans::XPropertySet >& xSource
         , const tPropertyNameMap& rMap );
 
     /**
@@ -78,7 +78,7 @@ public:
     static void getValueMap(
           tPropertyNameValueMap& rValueMap
         , const tPropertyNameMap& rNameMap
-        , const css::uno::Reference< css::beans::XPropertySet >& xSourceProp
+        , const cpo::uno::Reference< css::beans::XPropertySet >& xSourceProp
         );
 
     static void getMultiPropertyListsFromValueMap(
@@ -114,7 +114,7 @@ public:
     static const tPropertyNameMap& getPropertyNameMapForTextLabelProperties();
 
     static void getTextLabelMultiPropertyLists(
-                const css::uno::Reference< css::beans::XPropertySet >& xSourceProp
+                const cpo::uno::Reference< css::beans::XPropertySet >& xSourceProp
                 , tNameSequence& rPropNames, tAnySequence& rPropValues
                 , bool bName=true
                 , sal_Int32 nLimitedSpace=-1
@@ -125,7 +125,7 @@ public:
         defaults for auto-grow properties
      */
     static void getPreparedTextShapePropertyLists(
-        const css::uno::Reference< css::beans::XPropertySet >& xSourceProp
+        const cpo::uno::Reference< css::beans::XPropertySet >& xSourceProp
         , tNameSequence& rPropNames
         , tAnySequence& rPropValues );
 };

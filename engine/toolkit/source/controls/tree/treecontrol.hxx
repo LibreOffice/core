@@ -33,7 +33,7 @@ protected:
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
-    explicit UnoTreeModel(const css::uno::Reference<cpo::uno::XComponentContext>& i_factory);
+    explicit UnoTreeModel(const cpo::uno::Reference<cpo::uno::XComponentContext>& i_factory);
     UnoTreeModel(const UnoTreeModel& rOther)
         : UnoControlModel(rOther)
     {
@@ -42,7 +42,7 @@ public:
     rtl::Reference<UnoControlModel> Clone() const override;
 
     // css::beans::XMultiPropertySet
-    css::uno::Reference<css::beans::XPropertySetInfo> getPropertySetInfo() override;
+    cpo::uno::Reference<css::beans::XPropertySetInfo> getPropertySetInfo() override;
 
     // css::io::XPersistObject
     OUString getServiceName() override;

@@ -51,7 +51,7 @@ using namespace css::beans;
 using namespace css::document;
 using namespace css::io;
 using namespace css::lang;
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace ::cpo::uno;
 
 // xmloff/xmlkyd.hxx

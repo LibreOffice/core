@@ -33,7 +33,7 @@
 
 using namespace ::osl;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::cppu;
 using namespace ::com::sun::star::lang;
@@ -51,7 +51,7 @@ AquaSalInstance::CreateClipboard(const Sequence<Any>& i_rArguments)
     return pSalData->mxClipboard;
 }
 
-css::uno::Reference<css::datatransfer::dnd::XDragSource>
+cpo::uno::Reference<css::datatransfer::dnd::XDragSource>
 AquaSalInstance::ImplCreateDragSource(const SystemEnvData& rSysEnv)
 {
     rtl::Reference<DragSource> xDragSource = new DragSource();
@@ -60,7 +60,7 @@ AquaSalInstance::ImplCreateDragSource(const SystemEnvData& rSysEnv)
     return xDragSource;
 }
 
-css::uno::Reference<css::datatransfer::dnd::XDropTarget>
+cpo::uno::Reference<css::datatransfer::dnd::XDropTarget>
 AquaSalInstance::ImplCreateDropTarget(const SystemEnvData& rSysEnv)
 {
     rtl::Reference<DropTarget> xDropTarget = new DropTarget();

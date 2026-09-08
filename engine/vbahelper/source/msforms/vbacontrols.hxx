@@ -31,10 +31,10 @@ class ScVbaControls : public ControlsImpl_BASE
 {
 public:
     ScVbaControls(
-        const css::uno::Reference< ov::XHelperInterface >& xParent,
-        const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
-        const css::uno::Reference< css::awt::XControl >& xDialog,
-        css::uno::Reference< css::frame::XModel > xModel,
+        const cpo::uno::Reference< ov::XHelperInterface >& xParent,
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
+        const cpo::uno::Reference< css::awt::XControl >& xDialog,
+        cpo::uno::Reference< css::frame::XModel > xModel,
         double fOffsetX, double fOffsetY );
     // XControls
     virtual void Move( double cx, double cy ) override;
@@ -43,7 +43,7 @@ public:
 
     // XEnumerationAccess
     virtual cpo::uno::Type getElementType() override;
-    virtual css::uno::Reference< css::container::XEnumeration > createEnumeration() override;
+    virtual cpo::uno::Reference< css::container::XEnumeration > createEnumeration() override;
 
     // ScVbaCollectionBaseImpl
     virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) override;
@@ -52,8 +52,8 @@ public:
     VBAHELPER_DECL_XHELPERINTERFACE
 
 private:
-    css::uno::Reference< css::awt::XControl > mxDialog;
-    css::uno::Reference< css::frame::XModel > mxModel;
+    cpo::uno::Reference< css::awt::XControl > mxDialog;
+    cpo::uno::Reference< css::frame::XModel > mxModel;
     double mfOffsetX;
     double mfOffsetY;
 };

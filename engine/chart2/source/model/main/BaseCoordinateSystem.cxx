@@ -35,7 +35,8 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
 using namespace ::com::sun::star;
-using ::com::sun::star::uno::Reference;
+using namespace ::cpo;
+using ::cpo::uno::Reference;
 using ::cpo::uno::Sequence;
 using ::com::sun::star::beans::Property;
 

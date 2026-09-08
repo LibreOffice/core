@@ -35,9 +35,9 @@ namespace connectivity
 
     class ODriverWrapper final : public ODriverWrapper_BASE
     {
-        css::uno::Reference< cpo::uno::XAggregation >
+        cpo::uno::Reference< cpo::uno::XAggregation >
                             m_xDriverAggregate;
-        css::uno::Reference< css::sdbc::XDriver >
+        cpo::uno::Reference< css::sdbc::XDriver >
                             m_xDriver;
         rtl::Reference<OConnectionPool>
                             m_pConnectionPool;
@@ -48,7 +48,7 @@ namespace connectivity
                 the driver to aggregate. The object will be reset to <NULL/> when returning from the ctor.
         */
         ODriverWrapper(
-            css::uno::Reference< cpo::uno::XAggregation >& _rxAggregateDriver,
+            cpo::uno::Reference< cpo::uno::XAggregation >& _rxAggregateDriver,
             OConnectionPool* _pPool
             );
 
@@ -60,7 +60,7 @@ namespace connectivity
         /// dtor
         virtual ~ODriverWrapper() override;
         // XDriver
-        virtual css::uno::Reference< css::sdbc::XConnection > connect( const OUString& url, const cpo::uno::Sequence< css::beans::PropertyValue >& info ) override;
+        virtual cpo::uno::Reference< css::sdbc::XConnection > connect( const OUString& url, const cpo::uno::Sequence< css::beans::PropertyValue >& info ) override;
         virtual bool acceptsURL( const OUString& url ) override;
         virtual cpo::uno::Sequence< css::sdbc::DriverPropertyInfo > getPropertyInfo( const OUString& url, const cpo::uno::Sequence< css::beans::PropertyValue >& info ) override;
         virtual sal_Int32 getMajorVersion(  ) override;

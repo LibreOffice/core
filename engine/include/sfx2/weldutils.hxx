@@ -13,7 +13,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XToolbarController.hpp>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <tools/link.hxx>
 #include <sfx2/dllapi.h>
 #include <svtools/miscopt.hxx>
@@ -30,8 +30,8 @@ class Toolbar;
 class SFX2_DLLPUBLIC ToolbarUnoDispatcher
 {
 private:
-    css::uno::Reference<css::frame::XFrame> m_xFrame;
-    css::uno::Reference<css::lang::XComponent> m_xImageController;
+    cpo::uno::Reference<css::frame::XFrame> m_xFrame;
+    cpo::uno::Reference<css::lang::XComponent> m_xImageController;
     SvtMiscOptions m_aToolbarOptions;
     weld::Toolbar* m_pToolbar;
     weld::Builder* m_pBuilder;
@@ -44,20 +44,20 @@ private:
     void CreateController(const OUString& rCommand);
     static vcl::ImageType GetIconSize();
 
-    typedef std::map<OUString, css::uno::Reference<css::frame::XToolbarController>>
+    typedef std::map<OUString, cpo::uno::Reference<css::frame::XToolbarController>>
         ControllerContainer;
     ControllerContainer maControllers;
 
 public:
     // fill in the label and icons for actions and dispatch the action on item click
     ToolbarUnoDispatcher(weld::Toolbar& rToolbar, weld::Builder& rBuilder,
-                         const css::uno::Reference<css::frame::XFrame>& rFrame,
+                         const cpo::uno::Reference<css::frame::XFrame>& rFrame,
                          bool bSideBar = true, weld::Label* pFirstLabel = nullptr);
 
-    css::uno::Reference<css::frame::XToolbarController>
+    cpo::uno::Reference<css::frame::XToolbarController>
     GetControllerForCommand(const OUString& rCommand) const;
 
-    const css::uno::Reference<css::frame::XFrame>& GetFrame() const { return m_xFrame; }
+    const cpo::uno::Reference<css::frame::XFrame>& GetFrame() const { return m_xFrame; }
 
     void dispose();
     ~ToolbarUnoDispatcher();

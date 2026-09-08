@@ -102,7 +102,7 @@ namespace drawinglayer::primitive2d
         }
 
         PagePreviewPrimitive2D::PagePreviewPrimitive2D(
-            css::uno::Reference< css::drawing::XDrawPage > xDrawPage,
+            cpo::uno::Reference< css::drawing::XDrawPage > xDrawPage,
             basegfx::B2DHomMatrix aTransform,
             double fContentWidth,
             double fContentHeight,

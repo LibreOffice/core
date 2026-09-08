@@ -34,7 +34,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
 
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::frame;
@@ -48,7 +48,7 @@ class AddonsToolBarFactory :  public ::cppu::WeakImplHelper< css::lang::XService
                                                               css::ui::XUIElementFactory >
 {
 public:
-    explicit AddonsToolBarFactory( const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
+    explicit AddonsToolBarFactory( const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext );
 
     virtual OUString getImplementationName() override
     {
@@ -66,18 +66,18 @@ public:
     }
 
     // XUIElementFactory
-    virtual css::uno::Reference< css::ui::XUIElement > createUIElement( const OUString& ResourceURL, const cpo::uno::Sequence< css::beans::PropertyValue >& Args ) override;
+    virtual cpo::uno::Reference< css::ui::XUIElement > createUIElement( const OUString& ResourceURL, const cpo::uno::Sequence< css::beans::PropertyValue >& Args ) override;
 
     bool hasButtonsInContext( const cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > >& rPropSeq,
-                                  const css::uno::Reference< css::frame::XFrame >& rFrame );
+                                  const cpo::uno::Reference< css::frame::XFrame >& rFrame );
 
 private:
-    css::uno::Reference< cpo::uno::XComponentContext >     m_xContext;
-    css::uno::Reference< css::frame::XModuleManager2 >     m_xModuleManager;
+    cpo::uno::Reference< cpo::uno::XComponentContext >     m_xContext;
+    cpo::uno::Reference< css::frame::XModuleManager2 >     m_xModuleManager;
 };
 
 AddonsToolBarFactory::AddonsToolBarFactory(
-    const css::uno::Reference< cpo::uno::XComponentContext >& xContext ) :
+    const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext ) :
     m_xContext( xContext )
     , m_xModuleManager( ModuleManager::create( xContext ) )
 {

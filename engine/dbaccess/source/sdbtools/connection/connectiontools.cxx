@@ -32,9 +32,9 @@ namespace sdbtools
 {
 
     using namespace ::com::sun::star;
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
 using namespace cpo::uno;
-    using ::com::sun::star::uno::Reference;
+    using ::cpo::uno::Reference;
     using ::com::sun::star::sdb::tools::XTableName;
     using ::com::sun::star::sdb::tools::XObjectNames;
     using ::com::sun::star::sdb::tools::XDataSourceMetaData;

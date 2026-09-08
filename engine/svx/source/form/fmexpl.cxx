@@ -40,7 +40,7 @@
 #include <utility>
 
 using namespace ::svxform;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
@@ -159,12 +159,12 @@ FmEntryData::~FmEntryData()
 }
 
 
-void FmEntryData::newObject( const css::uno::Reference< cpo::uno::XInterface >& _rxIFace )
+void FmEntryData::newObject( const cpo::uno::Reference< cpo::uno::XInterface >& _rxIFace )
 {
     // do not just copy, normalize it
     m_xNormalizedIFace.set( _rxIFace, UNO_QUERY );
-    m_xProperties.set(m_xNormalizedIFace, css::uno::UNO_QUERY);
-    m_xChild.set(m_xNormalizedIFace, css::uno::UNO_QUERY);
+    m_xProperties.set(m_xNormalizedIFace, cpo::uno::UNO_QUERY);
+    m_xChild.set(m_xNormalizedIFace, cpo::uno::UNO_QUERY);
 }
 
 

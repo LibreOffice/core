@@ -27,7 +27,7 @@
 #include <sot/formats.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <svl/style.hxx>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 
 class SfxItemSet;
 class SfxItemPool;
@@ -80,8 +80,8 @@ class SfxAbstractInsertObjectDialog : virtual public VclAbstractDialog
 protected:
     virtual ~SfxAbstractInsertObjectDialog() override = default;
 public:
-    virtual css::uno::Reference < css::embed::XEmbeddedObject > GetObject()=0;
-    virtual css::uno::Reference< css::io::XInputStream > GetIconIfIconified( OUString* pGraphicMediaType )=0;
+    virtual cpo::uno::Reference < css::embed::XEmbeddedObject > GetObject()=0;
+    virtual cpo::uno::Reference< css::io::XInputStream > GetIconIfIconified( OUString* pGraphicMediaType )=0;
     virtual bool IsCreateNew()=0;
 };
 
@@ -143,10 +143,10 @@ public:
     virtual CreateTabPage               GetTabPageCreatorFunc( sal_uInt16 nId ) = 0;
     virtual GetTabPageRanges            GetTabPageRangesFunc( sal_uInt16 nId ) = 0;
     virtual VclPtr<SfxAbstractInsertObjectDialog> CreateInsertObjectDialog(weld::Window* pParent, const OUString& rCommand,
-            const css::uno::Reference < css::embed::XStorage >& xStor,
+            const cpo::uno::Reference < css::embed::XStorage >& xStor,
             const SvObjectServerList* pList )=0;
     virtual VclPtr<VclAbstractDialog>          CreateEditObjectDialog(weld::Window* pParent, const OUString& rCommand,
-            const css::uno::Reference < css::embed::XEmbeddedObject >& xObj )=0;
+            const cpo::uno::Reference < css::embed::XEmbeddedObject >& xObj )=0;
     virtual VclPtr<SfxAbstractPasteDialog>    CreatePasteDialog(weld::Window* pParent) = 0;
     virtual VclPtr<SfxAbstractLinksDialog>    CreateLinksDialog(weld::Window* pParent, sfx2::LinkManager* pMgr, bool bHTML=false, sfx2::SvBaseLink* p=nullptr) = 0;
     virtual VclPtr<VclAbstractDialog>         CreateSvxScriptOrgDialog(weld::Window* pParent,  const OUString& rLanguage) = 0;
@@ -154,11 +154,11 @@ public:
     virtual VclPtr<AbstractSecurityOptionsDialog> CreateSvxSecurityOptionsDialog(weld::Window* pParent) = 0;
 
     virtual VclPtr<AbstractScriptSelectorDialog> CreateScriptSelectorDialog(weld::Window* pParent,
-            const css::uno::Reference< css::frame::XFrame >& rxFrame) = 0;
+            const cpo::uno::Reference< css::frame::XFrame >& rxFrame) = 0;
 
     virtual VclPtr<AbstractMacroManagerDialog>
     CreateMacroManagerDialog(weld::Window* pParent,
-                             const css::uno::Reference<css::frame::XFrame>& rxFrame)
+                             const cpo::uno::Reference<css::frame::XFrame>& rxFrame)
         = 0;
 
     virtual void ShowAsyncScriptErrorDialog( weld::Window* pParent, const cpo::uno::Any& rException ) = 0;

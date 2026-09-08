@@ -62,16 +62,16 @@ private:
     virtual cpo::uno::Sequence< ::sal_Int8 > getMaskDIB(  ) override;
 
     // XGraphicTransformer
-    virtual css::uno::Reference< css::graphic::XGraphic > colorChange(
-        const css::uno::Reference< css::graphic::XGraphic >& rGraphic,
+    virtual cpo::uno::Reference< css::graphic::XGraphic > colorChange(
+        const cpo::uno::Reference< css::graphic::XGraphic >& rGraphic,
         sal_Int32 nColorFrom, sal_Int8 nTolerance, sal_Int32 nColorTo, sal_Int8 nAlphaTo ) override;
 
-    virtual css::uno::Reference< css::graphic::XGraphic > applyDuotone(
-        const css::uno::Reference< css::graphic::XGraphic >& rGraphic,
+    virtual cpo::uno::Reference< css::graphic::XGraphic > applyDuotone(
+        const cpo::uno::Reference< css::graphic::XGraphic >& rGraphic,
         sal_Int32 nColorOne, sal_Int32 nColorTwo ) override;
 
-    virtual css::uno::Reference< css::graphic::XGraphic > applyBrightnessContrast(
-        const css::uno::Reference< css::graphic::XGraphic >& rxGraphic,
+    virtual cpo::uno::Reference< css::graphic::XGraphic > applyBrightnessContrast(
+        const cpo::uno::Reference< css::graphic::XGraphic >& rxGraphic,
         sal_Int32 nBrightness, sal_Int32 nContrast, bool mso ) override;
 
     ::Graphic maGraphic;

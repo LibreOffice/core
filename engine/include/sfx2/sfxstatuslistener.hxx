@@ -37,7 +37,7 @@ class SFX2_DLLPUBLIC SfxStatusListener : public cppu::WeakImplHelper<
 {
     public:
 
-        SfxStatusListener( const css::uno::Reference< css::frame::XDispatchProvider >& rDispatchProvider, sal_uInt16 nSlotId, const OUString& aCommand );
+        SfxStatusListener( const cpo::uno::Reference< css::frame::XDispatchProvider >& rDispatchProvider, sal_uInt16 nSlotId, const OUString& aCommand );
         virtual ~SfxStatusListener() override;
 
         // old methods from SfxControllerItem
@@ -49,8 +49,8 @@ class SFX2_DLLPUBLIC SfxStatusListener : public cppu::WeakImplHelper<
 
         // XComponent
         virtual void dispose() override;
-        virtual void addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-        virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+        virtual void addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& xListener ) override;
+        virtual void removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
         // XEventListener
         virtual void disposing(const css::lang::EventObject& Source) override;
@@ -64,8 +64,8 @@ class SFX2_DLLPUBLIC SfxStatusListener : public cppu::WeakImplHelper<
 
         sal_uInt16                                            m_nSlotID;
         css::util::URL                                        m_aCommand;
-        css::uno::Reference< css::frame::XDispatchProvider >  m_xDispatchProvider;
-        css::uno::Reference< css::frame::XDispatch >          m_xDispatch;
+        cpo::uno::Reference< css::frame::XDispatchProvider >  m_xDispatchProvider;
+        cpo::uno::Reference< css::frame::XDispatch >          m_xDispatch;
 };
 
 #endif // INCLUDED_SFX2_SFXSTATUSLISTENER_HXX

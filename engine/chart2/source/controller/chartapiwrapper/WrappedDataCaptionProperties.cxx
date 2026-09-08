@@ -28,7 +28,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 using namespace ::com::sun::star;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::com::sun::star::beans::Property;
 
 namespace chart::wrapper
@@ -40,8 +40,8 @@ namespace
 class WrappedDataCaptionProperty : public WrappedSeriesOrDiagramProperty< sal_Int32 >
 {
 public:
-    virtual sal_Int32 getValueFromSeries( const css::uno::Reference< css::beans::XPropertySet >& xSeriesPropertySet ) const override;
-    virtual void setValueToSeries( const css::uno::Reference< css::beans::XPropertySet >& xSeriesPropertySet, const sal_Int32& aNewValue ) const override;
+    virtual sal_Int32 getValueFromSeries( const cpo::uno::Reference< css::beans::XPropertySet >& xSeriesPropertySet ) const override;
+    virtual void setValueToSeries( const cpo::uno::Reference< css::beans::XPropertySet >& xSeriesPropertySet, const sal_Int32& aNewValue ) const override;
 
     explicit WrappedDataCaptionProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact,
                                         tSeriesOrDiagramPropertyType ePropertyType );

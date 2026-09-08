@@ -41,12 +41,12 @@ public:
                         SchXMLTable& aTable );
     virtual ~SchXMLTableContext() override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
     virtual void startFastElement(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
     virtual void endFastElement(sal_Int32 nElement) override;
 
     void setRowPermutation( const cpo::uno::Sequence< sal_Int32 > & rPermutation );
@@ -57,14 +57,14 @@ class SchXMLTableHelper
 {
 public:
     static void applyTableToInternalDataProvider( const SchXMLTable& rTable,
-                            const css::uno::Reference< css::chart2::XChartDocument >& xChartDoc );
+                            const cpo::uno::Reference< css::chart2::XChartDocument >& xChartDoc );
 
     /** This function reorders local data to fit the correct data structure.
         Call it after the data series got their styles set.
      */
     static void switchRangesFromOuterToInternalIfNecessary( const SchXMLTable& rTable,
                                   const tSchXMLLSequencesPerIndex & rLSequencesPerIndex,
-                                  const css::uno::Reference< css::chart2::XChartDocument >& xChartDoc,
+                                  const cpo::uno::Reference< css::chart2::XChartDocument >& xChartDoc,
                                   css::chart::ChartDataRowSource eDataRowSource );
 };
 
@@ -85,9 +85,9 @@ public:
                                SchXMLTable& aTable );
     virtual ~SchXMLTableColumnsContext() override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 };
 
 class SchXMLTableColumnContext : public SvXMLImportContext
@@ -101,7 +101,7 @@ public:
     virtual ~SchXMLTableColumnContext() override;
     virtual void startFastElement(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
 // classes for rows
@@ -116,9 +116,9 @@ public:
                             SchXMLTable& aTable );
     virtual ~SchXMLTableRowsContext() override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 };
 
 class SchXMLTableRowContext : public SvXMLImportContext
@@ -131,9 +131,9 @@ public:
                            SchXMLTable& aTable );
     virtual ~SchXMLTableRowContext() override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 };
 
 // classes for cells and their content
@@ -151,12 +151,12 @@ public:
                             SchXMLTable& aTable );
     virtual ~SchXMLTableCellContext() override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
     virtual void startFastElement(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
     virtual void endFastElement(sal_Int32 nElement) override;
 };
 

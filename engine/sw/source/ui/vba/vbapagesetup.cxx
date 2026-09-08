@@ -27,6 +27,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
+using namespace ::cpo;
 
 SwVbaPageSetup::SwVbaPageSetup(const uno::Reference< XHelperInterface >& xParent,
                 const uno::Reference< cpo::uno::XComponentContext >& xContext,

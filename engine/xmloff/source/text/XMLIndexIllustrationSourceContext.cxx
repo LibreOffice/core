@@ -26,7 +26,7 @@
 #include <xmloff/xmluconv.hxx>
 
 using ::com::sun::star::beans::XPropertySet;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::xmloff::token::XML_ILLUSTRATION_INDEX_ENTRY_TEMPLATE;
 using ::xmloff::token::XML_TOKEN_INVALID;
 
@@ -42,9 +42,9 @@ XMLIndexIllustrationSourceContext::~XMLIndexIllustrationSourceContext()
 {
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLIndexIllustrationSourceContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLIndexIllustrationSourceContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     if ( nElement == XML_ELEMENT(TEXT, XML_ILLUSTRATION_INDEX_ENTRY_TEMPLATE) )
     {

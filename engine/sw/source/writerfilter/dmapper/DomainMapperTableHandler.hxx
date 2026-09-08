@@ -25,7 +25,7 @@
 
 namespace writerfilter::dmapper {
 
-typedef cpo::uno::Sequence< css::uno::Reference< css::text::XTextRange > > CellSequence_t;
+typedef cpo::uno::Sequence< cpo::uno::Reference< css::text::XTextRange > > CellSequence_t;
 typedef cpo::uno::Sequence<CellSequence_t> RowSequence_t;
 
 typedef cpo::uno::Sequence< cpo::uno::Sequence<css::beans::PropertyValues> >  CellPropertyValuesSeq_t;
@@ -58,7 +58,7 @@ class DomainMapperTableHandler final : public virtual SvRefBase
 {
     rtl::Reference<SwXText>  m_xText;
     DomainMapper_Impl&      m_rDMapper_Impl;
-    std::vector< css::uno::Reference<css::text::XTextRange> > m_aCellRange;
+    std::vector< cpo::uno::Reference<css::text::XTextRange> > m_aCellRange;
     std::vector<CellSequence_t> m_aRowRanges;
     std::vector<RowSequence_t> m_aTableRanges;
 
@@ -105,13 +105,13 @@ public:
        @param rT     start handle of the cell
        @param pProps properties of the cell
     */
-    void startCell(const css::uno::Reference< css::text::XTextRange > & start, const TablePropertyMapPtr& pProps);
+    void startCell(const cpo::uno::Reference< css::text::XTextRange > & start, const TablePropertyMapPtr& pProps);
     /**
         Handle end of cell.
 
         @param rT    end handle of cell
     */
-    void endCell(const css::uno::Reference< css::text::XTextRange > & end);
+    void endCell(const cpo::uno::Reference< css::text::XTextRange > & end);
 
     DomainMapper_Impl& getDomainMapperImpl();
 };

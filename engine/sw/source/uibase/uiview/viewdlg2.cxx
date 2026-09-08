@@ -45,6 +45,7 @@
 #include <svl/stritem.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 void SwView::ExecDlgExt(SfxRequest& rReq)
 {

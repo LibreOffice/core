@@ -30,7 +30,7 @@ class SchXMLAxisContext : public SvXMLImportContext
 public:
     SchXMLAxisContext( SchXMLImportHelper& rImpHelper,
                        SvXMLImport& rImport,
-                       css::uno::Reference< css::chart::XDiagram > const & xDiagram,
+                       cpo::uno::Reference< css::chart::XDiagram > const & xDiagram,
                        std::vector< SchXMLAxis >& aAxes,
                        OUString& rCategoriesAddress,
                        bool bAddMissingXAxisForNetCharts,
@@ -40,23 +40,23 @@ public:
     virtual ~SchXMLAxisContext() override;
 
     virtual void startFastElement( sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
     virtual void endFastElement(sal_Int32 nElement) override;
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
-    static void CorrectAxisPositions( const css::uno::Reference< css::chart2::XChartDocument >& xNewDoc,
+    static void CorrectAxisPositions( const cpo::uno::Reference< css::chart2::XChartDocument >& xNewDoc,
                           std::u16string_view rChartTypeServiceName,
                           std::u16string_view rODFVersionOfFile,
                           bool bAxisPositionAttributeImported );
 
 private:
     SchXMLImportHelper& m_rImportHelper;
-    css::uno::Reference< css::chart::XDiagram > m_xDiagram;
+    cpo::uno::Reference< css::chart::XDiagram > m_xDiagram;
     SchXMLAxis m_aCurrentAxis;
     std::vector< SchXMLAxis >& m_rAxes;
-    css::uno::Reference< css::beans::XPropertySet > m_xAxisProps;
+    cpo::uno::Reference< css::beans::XPropertySet > m_xAxisProps;
     OUString m_aAutoStyleName;
     OUString& m_rCategoriesAddress;
     sal_Int32 m_nAxisType;//css::chart::ChartAxisType
@@ -67,7 +67,7 @@ private:
     bool m_bAdaptXAxisOrientationForOld2DBarCharts; //to correct different behaviour from older versions
     bool& m_rbAxisPositionAttributeImported;
 
-    css::uno::Reference< css::drawing::XShape > getTitleShape() const;
+    cpo::uno::Reference< css::drawing::XShape > getTitleShape() const;
     void CreateGrid( const OUString& sAutoStyleName, bool bIsMajor );
     void CreateAxis();
     void SetAxisTitle();

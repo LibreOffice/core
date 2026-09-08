@@ -60,9 +60,9 @@ protected:
     // ____ XRangeHighlighter ____
     virtual cpo::uno::Sequence< css::chart2::data::HighlightedRange > getSelectedRanges() override;
     virtual void addSelectionChangeListener(
-        const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
+        const cpo::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
     virtual void removeSelectionChangeListener(
-        const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
+        const cpo::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
 
     // ____ XSelectionChangeListener ____
     virtual void selectionChanged(
@@ -83,16 +83,16 @@ private:
     void determineRanges();
 
     void fillRangesForDiagram( const rtl::Reference< ::chart::Diagram > & xDiagram );
-    void fillRangesForDataSeries( const css::uno::Reference< css::chart2::XDataSeries > & xSeries );
-    void fillRangesForCategories( const css::uno::Reference< css::chart2::XAxis > & xAxis );
+    void fillRangesForDataSeries( const cpo::uno::Reference< css::chart2::XDataSeries > & xSeries );
+    void fillRangesForCategories( const cpo::uno::Reference< css::chart2::XAxis > & xAxis );
     void fillRangesForDataPoint( const rtl::Reference< ::chart::DataSeries > & xDataSeries, sal_Int32 nIndex );
-    void fillRangesForErrorBars( const css::uno::Reference< css::beans::XPropertySet > & xErrorBar,
-                                 const css::uno::Reference< css::chart2::XDataSeries > & xDataSeries );
+    void fillRangesForErrorBars( const cpo::uno::Reference< css::beans::XPropertySet > & xErrorBar,
+                                 const cpo::uno::Reference< css::chart2::XDataSeries > & xDataSeries );
 
-    css::uno::Reference< css::view::XSelectionSupplier >
+    cpo::uno::Reference< css::view::XSelectionSupplier >
         m_xSelectionSupplier;
     rtl::Reference< ::chart::ChartModel > m_xChartModel;
-    css::uno::Reference< css::view::XSelectionChangeListener >
+    cpo::uno::Reference< css::view::XSelectionChangeListener >
         m_xListener;
     cpo::uno::Sequence< css::chart2::data::HighlightedRange >
         m_aSelectedRanges;

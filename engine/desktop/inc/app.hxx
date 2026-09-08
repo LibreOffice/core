@@ -26,7 +26,7 @@
 #include <unotools/bootstrap.hxx>
 #include <com/sun/star/frame/XDesktop2.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 
 #include <memory>
 #include <string_view>
@@ -82,7 +82,7 @@ class Desktop final : public Application
 
         static void             OpenClients();
         static void             OpenDefault();
-        static void             CheckOpenCLCompute(const css::uno::Reference<css::frame::XDesktop2> &);
+        static void             CheckOpenCLCompute(const cpo::uno::Reference<css::frame::XDesktop2> &);
 
         DECL_STATIC_LINK( Desktop, EnableAcceptors_Impl, void*, void);
 
@@ -140,7 +140,7 @@ class Desktop final : public Application
         static OUString         CreateErrorMsgString( utl::Bootstrap::FailureCode nFailureCode,
                                                       const OUString& aFileURL );
 
-        css::uno::Reference<css::task::XStatusIndicator> m_rSplashScreen;
+        cpo::uno::Reference<css::task::XStatusIndicator> m_rSplashScreen;
         void                    OpenSplashScreen();
         void                    CloseSplashScreen();
 

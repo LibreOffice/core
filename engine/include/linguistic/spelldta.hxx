@@ -41,12 +41,12 @@ std::vector< OUString >
 
 void    SeqRemoveNegEntries(
                 std::vector< OUString > &rSeq,
-                css::uno::Reference< css::linguistic2::XSearchableDictionaryList > const &rxDicList,
+                cpo::uno::Reference< css::linguistic2::XSearchableDictionaryList > const &rxDicList,
                 LanguageType nLanguage,
-                std::map<LanguageType, std::vector<css::uno::Reference<css::linguistic2::XDictionary>>>& rDictionaryMap );
+                std::map<LanguageType, std::vector<cpo::uno::Reference<css::linguistic2::XDictionary>>>& rDictionaryMap );
 
 void SearchSimilarText( const OUString &rText, LanguageType nLanguage,
-        css::uno::Reference< css::linguistic2::XSearchableDictionaryList > const &xDicList,
+        cpo::uno::Reference< css::linguistic2::XSearchableDictionaryList > const &xDicList,
         std::vector< OUString > & rDicListProps );
 
 
@@ -85,7 +85,7 @@ public:
     void    UNLESS_MERGELIBS(LNG_DLLPUBLIC) SetWordLanguage(const OUString &rWord, LanguageType nLang);
     void    UNLESS_MERGELIBS(LNG_DLLPUBLIC) SetFailureType(sal_Int16 nTypeP);
     void    UNLESS_MERGELIBS(LNG_DLLPUBLIC) SetAlternatives( const cpo::uno::Sequence< OUString > &rAlt );
-    static css::uno::Reference < css::linguistic2::XSpellAlternatives > UNLESS_MERGELIBS(LNG_DLLPUBLIC) CreateSpellAlternatives(
+    static cpo::uno::Reference < css::linguistic2::XSpellAlternatives > UNLESS_MERGELIBS(LNG_DLLPUBLIC) CreateSpellAlternatives(
         const OUString &rWord, LanguageType nLang, sal_Int16 nTypeP, const cpo::uno::Sequence< OUString > &rAlt );
 };
 

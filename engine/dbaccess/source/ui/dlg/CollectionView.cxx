@@ -47,7 +47,7 @@
 namespace dbaui
 {
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::container;
@@ -58,7 +58,7 @@ using namespace comphelper;
 OCollectionView::OCollectionView(weld::Window* pParent,
                                  const Reference< XContent>& _xContent,
                                  const OUString& _sDefaultName,
-                                 css::uno::Reference< cpo::uno::XComponentContext > _xContext)
+                                 cpo::uno::Reference< cpo::uno::XComponentContext > _xContext)
     : GenericDialogController(pParent, u"dbaccess/ui/collectionviewdialog.ui"_ustr, u"CollectionView"_ustr)
     , m_xContent(_xContent)
     , m_xContext(std::move(_xContext))

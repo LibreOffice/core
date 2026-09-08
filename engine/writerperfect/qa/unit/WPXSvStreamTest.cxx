@@ -17,7 +17,7 @@
 
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/seqstream.hxx>
@@ -28,7 +28,7 @@
 
 namespace io = css::io;
 namespace ucb = css::ucb;
-namespace uno = css::uno;
+namespace uno = cpo::uno;
 
 using std::shared_ptr;
 using std::unique_ptr;
@@ -86,13 +86,13 @@ shared_ptr<RVNGInputStream> lcl_createStreamForURL(const OUString& rURL)
     using uno::UNO_QUERY_THROW;
 
     const Reference<cpo::uno::XComponentContext> xContext(comphelper::getProcessComponentContext(),
-                                                     css::uno::UNO_SET_THROW);
+                                                     cpo::uno::UNO_SET_THROW);
     const Reference<ucb::XSimpleFileAccess> xFileAccess(
         xContext->getServiceManager()->createInstanceWithContext(
             u"com.sun.star.ucb.SimpleFileAccess"_ustr, xContext),
         UNO_QUERY_THROW);
     const Reference<io::XInputStream> xInputStream(xFileAccess->openFileRead(rURL),
-                                                   css::uno::UNO_SET_THROW);
+                                                   cpo::uno::UNO_SET_THROW);
 
     return std::make_shared<WPXSvInputStream>(xInputStream);
 }

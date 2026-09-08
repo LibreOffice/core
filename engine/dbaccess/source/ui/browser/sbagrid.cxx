@@ -55,7 +55,7 @@
 #include <algorithm>
 
 using namespace ::com::sun::star::ui::dialogs;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::beans;
@@ -681,7 +681,7 @@ void SbaGridControl::SetColWidth(sal_uInt16 nColId)
     Reference< XIndexAccess >  xCols = GetPeer()->getColumns();
     Reference< XPropertySet >  xAffectedCol;
     if (xCols.is() && (nModelPos != sal_uInt16(-1)))
-        xAffectedCol.set(xCols->getByIndex(nModelPos), css::uno::UNO_QUERY);
+        xAffectedCol.set(xCols->getByIndex(nModelPos), cpo::uno::UNO_QUERY);
 
     if (!xAffectedCol.is())
         return;
@@ -760,7 +760,7 @@ void SbaGridControl::SetColAttrs(sal_uInt16 nColId)
     Reference< XIndexAccess >  xCols = GetPeer()->getColumns();
     Reference< XPropertySet >  xAffectedCol;
     if (xCols.is() && (nModelPos != sal_uInt16(-1)))
-        xAffectedCol.set(xCols->getByIndex(nModelPos), css::uno::UNO_QUERY);
+        xAffectedCol.set(xCols->getByIndex(nModelPos), cpo::uno::UNO_QUERY);
 
     // get the field the column is bound to
     Reference< XPropertySet >  xField = getField(nModelPos);
@@ -781,7 +781,7 @@ void SbaGridControl::SetBrowserAttrs()
             Any(comphelper::makePropertyValue(u"ParentWindow"_ustr, VCLUnoHelper::GetInterface(this)))
         };
         Reference<XExecutableDialog> xExecute(xContext->getServiceManager()->createInstanceWithArgumentsAndContext(u"com.sun.star.form.ControlFontDialog"_ustr,
-                                              aArguments, xContext), css::uno::UNO_QUERY_THROW);
+                                              aArguments, xContext), cpo::uno::UNO_QUERY_THROW);
         xExecute->execute();
     }
     catch( const Exception& )
@@ -1196,7 +1196,7 @@ sal_Int8 SbaGridControl::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
                 {
                     Reference< css::awt::XTextComponent >  xColControl(
                         xColumnControls->getByIndex(GetViewColumnPos(nCol)),
-                        css::uno::UNO_QUERY);
+                        cpo::uno::UNO_QUERY);
                     if (xColControl.is())
                     {
                         m_bActivatingForDrop = true;

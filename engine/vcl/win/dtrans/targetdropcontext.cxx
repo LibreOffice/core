@@ -21,7 +21,7 @@
 
 using namespace ::com::sun::star::datatransfer::dnd;
 using namespace ::cppu;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::lang;
 
 TargetDropContext::TargetDropContext(DropTarget* p)

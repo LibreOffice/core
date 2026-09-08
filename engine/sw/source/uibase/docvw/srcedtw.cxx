@@ -245,9 +245,9 @@ SwSrcEditWindow::SwSrcEditWindow( vcl::Window* pParent, SwSrcView* pParentView )
     // Using "this" in ctor is a little fishy, but should work here at least as
     // long as there are no derivations:
     m_xListener = new ChangesListener(*this);
-    css::uno::Reference< css::beans::XMultiPropertySet > n(
+    cpo::uno::Reference< css::beans::XMultiPropertySet > n(
         officecfg::Office::Common::Font::SourceViewFont::get(),
-        css::uno::UNO_QUERY_THROW);
+        cpo::uno::UNO_QUERY_THROW);
     {
         std::unique_lock g(mutex_);
         m_xNotifier = n;
@@ -262,7 +262,7 @@ SwSrcEditWindow::~SwSrcEditWindow()
 
 void SwSrcEditWindow::dispose()
 {
-    css::uno::Reference< css::beans::XMultiPropertySet > n;
+    cpo::uno::Reference< css::beans::XMultiPropertySet > n;
     {
         std::unique_lock g(mutex_);
         n = m_xNotifier;

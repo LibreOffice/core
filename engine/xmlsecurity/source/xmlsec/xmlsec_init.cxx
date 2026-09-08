@@ -21,7 +21,7 @@
 #include <xmlsec/nss/crypto.h>
 #endif
 
-using namespace css::uno;
+using namespace ::cpo::uno;
 
 XSECXMLSEC_DLLPUBLIC void initXmlSec()
 {

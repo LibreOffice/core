@@ -43,17 +43,17 @@ class SEInitializer_MSCryptImpl : public cppu::WeakImplHelper
  ******************************************************************************/
 {
 private:
-    css::uno::Reference< cpo::uno::XComponentContext > mxContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext > mxContext;
 
 public:
-    explicit SEInitializer_MSCryptImpl(const css::uno::Reference< cpo::uno::XComponentContext > &rxContext);
+    explicit SEInitializer_MSCryptImpl(const cpo::uno::Reference< cpo::uno::XComponentContext > &rxContext);
     virtual ~SEInitializer_MSCryptImpl() override;
 
     /* XSEInitializer */
-    virtual css::uno::Reference< css::xml::crypto::XXMLSecurityContext >
+    virtual cpo::uno::Reference< css::xml::crypto::XXMLSecurityContext >
         SAL_CALL createSecurityContext( const OUString& certDB ) override;
 
-    virtual void SAL_CALL freeSecurityContext( const css::uno::Reference<
+    virtual void SAL_CALL freeSecurityContext( const cpo::uno::Reference<
         css::xml::crypto::XXMLSecurityContext >& securityContext ) override;
 
     /* XServiceInfo */

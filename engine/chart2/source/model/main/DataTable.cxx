@@ -23,6 +23,7 @@
 #include <algorithm>
 
 using namespace css;
+using namespace ::cpo;
 
 namespace
 {

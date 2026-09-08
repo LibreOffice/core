@@ -223,7 +223,7 @@ bool MoveIt::VisitDeclRefExpr(const DeclRefExpr* declRefExpr)
 }
 
 /// Exclude boring types, so that we don't generate too many low-value conversions.
-/// e.g. for now I ignore ref-counted types like Sequence and OUString and css::uno::Reference,
+/// e.g. for now I ignore ref-counted types like Sequence and OUString and cpo::uno::Reference,
 /// because that generates too many changes
 bool MoveIt::isInterestingType(QualType qt)
 {

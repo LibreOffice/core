@@ -39,8 +39,8 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::util;
 using namespace ::cppu;
 using namespace ::osl;
@@ -77,7 +77,7 @@ cpo::uno::Sequence< OUString > PopupMenuDispatcher::getSupportedServiceNames()
 
 void PopupMenuDispatcher::initialize( const cpo::uno::Sequence< cpo::uno::Any >& lArguments )
 {
-    css::uno::Reference< css::frame::XFrame > xFrame;
+    cpo::uno::Reference< css::frame::XFrame > xFrame;
 
     SolarMutexGuard g;
     for (int a=0; a<lArguments.getLength(); ++a)
@@ -94,7 +94,7 @@ void PopupMenuDispatcher::initialize( const cpo::uno::Sequence< cpo::uno::Any >&
     }
 }
 
-css::uno::Reference< css::frame::XDispatch >
+cpo::uno::Reference< css::frame::XDispatch >
 PopupMenuDispatcher::queryDispatch(
     const css::util::URL&  rURL    ,
     const OUString& sTarget ,
@@ -109,14 +109,14 @@ PopupMenuDispatcher::queryDispatch(
     if ( !m_xUriRefFactory.is() )
         m_xUriRefFactory = css::uri::UriReferenceFactory::create( m_xContext );
 
-    css::uno::Reference< css::container::XNameAccess > xPopupCtrlQuery( m_xPopupCtrlQuery );
+    cpo::uno::Reference< css::container::XNameAccess > xPopupCtrlQuery( m_xPopupCtrlQuery );
     aGuard.clear();
     // --- SAFE ---
 
     if ( !xPopupCtrlQuery.is() )
         return {};
 
-    css::uno::Reference< css::frame::XDispatch > xDispatch;
+    cpo::uno::Reference< css::frame::XDispatch > xDispatch;
 
     try
     {
@@ -136,7 +136,7 @@ PopupMenuDispatcher::queryDispatch(
                 aBaseURL += aURL.subView( nSchemePart+1 );
         }
 
-        css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider;
+        cpo::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider;
 
         // Find popup menu controller using the base URL
         xPopupCtrlQuery->getByName( aBaseURL ) >>= xDispatchProvider;
@@ -155,12 +155,12 @@ PopupMenuDispatcher::queryDispatch(
     return xDispatch;
 }
 
-cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > >
+cpo::uno::Sequence< cpo::uno::Reference< css::frame::XDispatch > >
 PopupMenuDispatcher::queryDispatches(
     const cpo::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor )
 {
     sal_Int32 nCount = lDescriptor.getLength();
-    cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > lDispatcher( nCount );
+    cpo::uno::Sequence< cpo::uno::Reference< css::frame::XDispatch > > lDispatcher( nCount );
     auto lDispatcherRange = asNonConstRange(lDispatcher);
     for( sal_Int32 i=0; i<nCount; ++i )
     {
@@ -227,13 +227,13 @@ void PopupMenuDispatcher::impl_RetrievePopupControllerQuery()
     if ( m_xPopupCtrlQuery.is() )
         return;
 
-    css::uno::Reference< css::frame::XLayoutManager2 > xLayoutManager;
-    css::uno::Reference< css::frame::XFrame > xFrame( m_xWeakFrame );
+    cpo::uno::Reference< css::frame::XLayoutManager2 > xLayoutManager;
+    cpo::uno::Reference< css::frame::XFrame > xFrame( m_xWeakFrame );
 
     if ( !xFrame.is() )
         return;
 
-    css::uno::Reference< css::beans::XPropertySet > xPropSet( xFrame, css::uno::UNO_QUERY );
+    cpo::uno::Reference< css::beans::XPropertySet > xPropSet( xFrame, cpo::uno::UNO_QUERY );
     if ( !xPropSet.is() )
         return;
 
@@ -243,9 +243,9 @@ void PopupMenuDispatcher::impl_RetrievePopupControllerQuery()
 
         if ( xLayoutManager.is() )
         {
-            css::uno::Reference< css::ui::XUIElement > xMenuBar = xLayoutManager->getElement( u"private:resource/menubar/menubar"_ustr );
+            cpo::uno::Reference< css::ui::XUIElement > xMenuBar = xLayoutManager->getElement( u"private:resource/menubar/menubar"_ustr );
 
-            m_xPopupCtrlQuery.set( xMenuBar, css::uno::UNO_QUERY );
+            m_xPopupCtrlQuery.set( xMenuBar, cpo::uno::UNO_QUERY );
         }
     }
     catch ( const cpo::uno::RuntimeException& )

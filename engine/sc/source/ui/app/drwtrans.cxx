@@ -64,6 +64,7 @@
 #include <vcl/svapp.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 constexpr sal_uInt32 SCDRAWTRANS_TYPE_EMBOBJ    = 1;
 constexpr sal_uInt32 SCDRAWTRANS_TYPE_DRAWMODEL = 2;
@@ -460,7 +461,7 @@ bool ScDrawTransferObj::WriteObject( SvStream& rOStm, void* pUserObject, sal_uIn
                 }
 
                 {
-                    css::uno::Reference<css::io::XOutputStream> xDocOut( new utl::OOutputStreamWrapper( rOStm ) );
+                    cpo::uno::Reference<css::io::XOutputStream> xDocOut( new utl::OOutputStreamWrapper( rOStm ) );
                     SvxDrawingLayerExport( pDrawModel, xDocOut );
                 }
 

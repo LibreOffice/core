@@ -33,7 +33,7 @@ namespace svt::table
 {
 
 
-    using css::uno::Reference;
+    using cpo::uno::Reference;
     using css::awt::grid::XGridColumn;
     using cpo::uno::Exception;
     using css::awt::grid::XGridColumnListener;
@@ -165,7 +165,7 @@ namespace svt::table
     UnoGridColumnFacade::UnoGridColumnFacade( UnoControlTableModel const & i_owner, Reference< XGridColumn > const & i_gridColumn )
         :m_pOwner( &i_owner )
         ,m_nDataColumnIndex( -1 )
-        ,m_xGridColumn( i_gridColumn, css::uno::UNO_SET_THROW )
+        ,m_xGridColumn( i_gridColumn, cpo::uno::UNO_SET_THROW )
         ,m_pChangeMultiplexer( new ColumnChangeMultiplexer( *this ) )
     {
         m_xGridColumn->addGridColumnListener( m_pChangeMultiplexer );

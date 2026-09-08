@@ -39,7 +39,7 @@ namespace pcr
     {
     protected:
         // <properties>
-        css::uno::Reference< css::beans::XPropertySet >
+        cpo::uno::Reference< css::beans::XPropertySet >
                                 m_xControlModel;
         // </properties>
 
@@ -48,7 +48,7 @@ namespace pcr
         FontList maFontList;
 
     public:
-        explicit OControlFontDialog(const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext);
+        explicit OControlFontDialog(const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxContext);
         virtual ~OControlFontDialog() override;
 
         // XTypeProvider
@@ -62,7 +62,7 @@ namespace pcr
         virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
          // XPropertySet
-        virtual css::uno::Reference< css::beans::XPropertySetInfo>  getPropertySetInfo() override;
+        virtual cpo::uno::Reference< css::beans::XPropertySetInfo>  getPropertySetInfo() override;
         virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
         // OPropertyArrayUsageHelper
@@ -70,7 +70,7 @@ namespace pcr
 
     protected:
         // OGenericUnoDialog overridables
-        virtual std::unique_ptr<weld::DialogController> createDialog(const css::uno::Reference<css::awt::XWindow>& rParent) override;
+        virtual std::unique_ptr<weld::DialogController> createDialog(const cpo::uno::Reference<css::awt::XWindow>& rParent) override;
         virtual void    executedDialog(sal_Int16 _nExecutionResult) override;
     };
 

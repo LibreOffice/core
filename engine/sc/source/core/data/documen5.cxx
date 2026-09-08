@@ -41,6 +41,7 @@
 #include <charthelper.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 static void lcl_GetChartParameters( const uno::Reference< chart2::XChartDocument >& xChartDoc,
             OUString& rRanges, chart::ChartDataRowSource& rDataRowSource,

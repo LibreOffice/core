@@ -67,7 +67,8 @@
 
 #include <cppuhelper/implbase.hxx>
 
-using com::sun::star::uno::Reference;
+using cpo::uno::Reference;
+using namespace ::cpo;
 using namespace com::sun::star;
 using namespace com::sun::star::script;
 using namespace cppu;

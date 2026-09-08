@@ -77,6 +77,7 @@
 #include <scitems.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 //! Clipping Marks
 
@@ -2099,7 +2100,7 @@ void ScTabViewObj::RangeSelChanged( const OUString& rText )
     aEvent.RangeDescriptor = rText;
 
     // copy on the stack because listener could remove itself
-    const std::vector<css::uno::Reference<css::sheet::XRangeSelectionChangeListener>> listener(aRangeChgListeners);
+    const std::vector<cpo::uno::Reference<css::sheet::XRangeSelectionChangeListener>> listener(aRangeChgListeners);
     for (const auto& rListener : listener)
         rListener->descriptorChanged( aEvent );
 }
@@ -2122,7 +2123,7 @@ cpo::uno::Sequence<OUString> SAL_CALL ScTabViewObj::getSupportedServiceNames()
 
 // XUnoTunnel
 
-css::uno::Reference< css::datatransfer::XTransferable > SAL_CALL ScTabViewObj::getTransferable()
+cpo::uno::Reference< css::datatransfer::XTransferable > SAL_CALL ScTabViewObj::getTransferable()
 {
     SolarMutexGuard aGuard;
     ScEditShell* pShell = dynamic_cast<ScEditShell*>( GetViewShell()->GetViewFrame().GetDispatcher()->GetShell(0)  );
@@ -2146,7 +2147,7 @@ css::uno::Reference< css::datatransfer::XTransferable > SAL_CALL ScTabViewObj::g
     return GetViewShell()->CopyToTransferable();
 }
 
-void SAL_CALL ScTabViewObj::insertTransferable( const css::uno::Reference< css::datatransfer::XTransferable >& xTrans )
+void SAL_CALL ScTabViewObj::insertTransferable( const cpo::uno::Reference< css::datatransfer::XTransferable >& xTrans )
 {
     SolarMutexGuard aGuard;
     ScEditShell* pShell = dynamic_cast<ScEditShell*>( GetViewShell()->GetViewFrame().GetDispatcher()->GetShell(0)  );

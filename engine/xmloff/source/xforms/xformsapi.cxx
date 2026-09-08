@@ -21,7 +21,7 @@
 #include "xformsapi.hxx"
 
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/xforms/XFormsSupplier.hpp>
@@ -40,10 +40,10 @@
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltkmap.hxx>
 
-using com::sun::star::uno::Reference;
+using cpo::uno::Reference;
 using cpo::uno::Sequence;
-using com::sun::star::uno::UNO_QUERY;
-using com::sun::star::uno::UNO_QUERY_THROW;
+using cpo::uno::UNO_QUERY;
+using cpo::uno::UNO_QUERY_THROW;
 using com::sun::star::beans::XPropertySet;
 using com::sun::star::container::XNameAccess;
 using com::sun::star::xforms::XFormsSupplier;

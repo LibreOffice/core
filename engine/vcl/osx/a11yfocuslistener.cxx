@@ -23,7 +23,7 @@
 #include "a11yfocuslistener.hxx"
 
 using namespace ::com::sun::star::accessibility;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 rtl::Reference< AquaA11yFocusListener > AquaA11yFocusListener::theListener;
 

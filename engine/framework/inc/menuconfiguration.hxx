@@ -77,24 +77,24 @@ class MenuConfiguration final
 public:
         MenuConfiguration(
             // use const when giving a UNO reference by reference
-            css::uno::Reference< cpo::uno::XComponentContext >  rxContext );
+            cpo::uno::Reference< cpo::uno::XComponentContext >  rxContext );
 
         ~MenuConfiguration();
 
         /// @throws css::lang::WrappedTargetException
         /// @throws cpo::uno::RuntimeException
-        css::uno::Reference< css::container::XIndexAccess > CreateMenuBarConfigurationFromXML(
-            css::uno::Reference< css::io::XInputStream > const & rInputStream );
+        cpo::uno::Reference< css::container::XIndexAccess > CreateMenuBarConfigurationFromXML(
+            cpo::uno::Reference< css::io::XInputStream > const & rInputStream );
 
         /// @throws css::lang::WrappedTargetException
         /// @throws cpo::uno::RuntimeException
         void StoreMenuBarConfigurationToXML(
-                      css::uno::Reference< css::container::XIndexAccess > const & rMenuBarConfiguration,
-                      css::uno::Reference< css::io::XOutputStream > const & rOutputStream,
+                      cpo::uno::Reference< css::container::XIndexAccess > const & rMenuBarConfiguration,
+                      cpo::uno::Reference< css::io::XOutputStream > const & rOutputStream,
                       bool bIsMenuBar );
 
 private:
-        css::uno::Reference< cpo::uno::XComponentContext> m_xContext;
+        cpo::uno::Reference< cpo::uno::XComponentContext> m_xContext;
 };
 
 }

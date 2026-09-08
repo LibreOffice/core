@@ -22,6 +22,7 @@
 #include "xmlimprt.hxx"
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 ScXMLTableShapesContext::ScXMLTableShapesContext( ScXMLImport& rImport ) :
     ScXMLImportContext( rImport )

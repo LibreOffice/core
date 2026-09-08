@@ -71,8 +71,8 @@
 
 using namespace chelp;
 using namespace com::sun::star;
-using namespace com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace com::sun::star::io;
 using namespace com::sun::star::container;
 using namespace com::sun::star::i18n;
@@ -783,7 +783,7 @@ Reference< XHierarchicalNameAccess > Databases::jarFile(
 
     OUString key = processLang(rGuard, Language) + "/" + jar;
 
-    css::uno::Reference< css::container::XHierarchicalNameAccess > xHNameAccess;
+    cpo::uno::Reference< css::container::XHierarchicalNameAccess > xHNameAccess;
     try
     {
         OUString zipFile;
@@ -1322,7 +1322,7 @@ static bool isLetter( sal_Unicode c )
 }
 
 void ExtensionIteratorBase::implGetLanguageVectorFromPackage( ::std::vector< OUString > &rv,
-    const css::uno::Reference< css::deployment::XPackage >& xPackage )
+    const cpo::uno::Reference< css::deployment::XPackage >& xPackage )
 {
     rv.clear();
     OUString aExtensionPath = xPackage->getURL();

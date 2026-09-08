@@ -54,7 +54,7 @@ namespace frm
         virtual cpo::uno::Any queryAggregation( const cpo::uno::Type& _rType ) override;
 
         // XControl
-        virtual void createPeer( const css::uno::Reference< css::awt::XToolkit >& _rToolkit, const css::uno::Reference< css::awt::XWindowPeer >& _rParent ) override;
+        virtual void createPeer( const cpo::uno::Reference< css::awt::XToolkit >& _rToolkit, const cpo::uno::Reference< css::awt::XWindowPeer >& _rParent ) override;
 
         // XServiceInfo
         virtual OUString getImplementationName() override;
@@ -64,8 +64,8 @@ namespace frm
         DECLARE_XTYPEPROVIDER()
 
         // XDispatchProvider
-        virtual css::uno::Reference< css::frame::XDispatch > queryDispatch( const css::util::URL& _rURL, const OUString& _rTargetFrameName, sal_Int32 _rSearchFlags ) override;
-        virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& Requests ) override;
+        virtual cpo::uno::Reference< css::frame::XDispatch > queryDispatch( const css::util::URL& _rURL, const OUString& _rTargetFrameName, sal_Int32 _rSearchFlags ) override;
+        virtual cpo::uno::Sequence< cpo::uno::Reference< css::frame::XDispatch > > queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& Requests ) override;
 
         // UnoControl
         virtual bool   requiresNewPeer( const OUString& _rPropertyName ) const override;
@@ -86,7 +86,7 @@ namespace frm
         /** factory method
         */
         static rtl::Reference<ORichTextPeer> Create(
-            const css::uno::Reference< css::awt::XControlModel >&         _rxModel,
+            const cpo::uno::Reference< css::awt::XControlModel >&         _rxModel,
             vcl::Window* _pParentWindow,
             WinBits _nStyle
         );
@@ -111,8 +111,8 @@ namespace frm
         virtual void dispose( ) override;
 
         // XDispatchProvider
-        virtual css::uno::Reference< css::frame::XDispatch > queryDispatch( const css::util::URL& _rURL, const OUString& _rTargetFrameName, sal_Int32 _rSearchFlags ) override;
-        virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& Requests ) override;
+        virtual cpo::uno::Reference< css::frame::XDispatch > queryDispatch( const css::util::URL& _rURL, const OUString& _rTargetFrameName, sal_Int32 _rSearchFlags ) override;
+        virtual cpo::uno::Sequence< cpo::uno::Reference< css::frame::XDispatch > > queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& Requests ) override;
 
         // ITextSelectionListener
         virtual void    onSelectionChanged() override;

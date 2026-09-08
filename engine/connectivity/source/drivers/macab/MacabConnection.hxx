@@ -48,7 +48,7 @@ namespace connectivity::macab
 
         MacabAddressBook*                       m_pAddressBook; // the address book
         MacabDriver*                            m_pDriver;      // pointer to the owning driver object
-        css::uno::Reference< css::sdbcx::XTablesSupplier>
+        cpo::uno::Reference< css::sdbcx::XTablesSupplier>
                                                 m_xCatalog;     // needed for the SQL interpreter
 
     private:
@@ -70,24 +70,24 @@ namespace connectivity::macab
         DECLARE_SERVICE_INFO();
 
         // XConnection
-        virtual css::uno::Reference< css::sdbc::XStatement > createStatement(  ) override;
-        virtual css::uno::Reference< css::sdbc::XPreparedStatement > prepareStatement( const OUString& sql ) override;
-        virtual css::uno::Reference< css::sdbc::XPreparedStatement > prepareCall( const OUString& sql ) override;
+        virtual cpo::uno::Reference< css::sdbc::XStatement > createStatement(  ) override;
+        virtual cpo::uno::Reference< css::sdbc::XPreparedStatement > prepareStatement( const OUString& sql ) override;
+        virtual cpo::uno::Reference< css::sdbc::XPreparedStatement > prepareCall( const OUString& sql ) override;
         virtual OUString nativeSQL( const OUString& sql ) override;
         virtual void setAutoCommit( bool autoCommit ) override;
         virtual bool getAutoCommit(  ) override;
         virtual void commit(  ) override;
         virtual void rollback(  ) override;
         virtual bool isClosed(  ) override;
-        virtual css::uno::Reference< css::sdbc::XDatabaseMetaData > getMetaData(  ) override;
+        virtual cpo::uno::Reference< css::sdbc::XDatabaseMetaData > getMetaData(  ) override;
         virtual void setReadOnly( bool readOnly ) override;
         virtual bool isReadOnly(  ) override;
         virtual void setCatalog( const OUString& catalog ) override;
         virtual OUString getCatalog(  ) override;
         virtual void setTransactionIsolation( sal_Int32 level ) override;
         virtual sal_Int32 getTransactionIsolation(  ) override;
-        virtual css::uno::Reference< css::container::XNameAccess > getTypeMap(  ) override;
-        virtual void setTypeMap( const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
+        virtual cpo::uno::Reference< css::container::XNameAccess > getTypeMap(  ) override;
+        virtual void setTypeMap( const cpo::uno::Reference< css::container::XNameAccess >& typeMap ) override;
 
         // XCloseable
         virtual void close(  ) override;
@@ -97,7 +97,7 @@ namespace connectivity::macab
         virtual void clearWarnings(  ) override;
 
         // needed for the SQL interpreter
-        css::uno::Reference< css::sdbcx::XTablesSupplier > createCatalog();
+        cpo::uno::Reference< css::sdbcx::XTablesSupplier > createCatalog();
 
         // accessors
         MacabDriver*         getDriver()         const { return m_pDriver;}

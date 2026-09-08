@@ -40,10 +40,10 @@ public:
 
     ~AquaA11yFocusTracker();
 
-    css::uno::Reference< css::accessibility::XAccessible > const & getFocusedObject() { return m_xFocusedObject; };
+    cpo::uno::Reference< css::accessibility::XAccessible > const & getFocusedObject() { return m_xFocusedObject; };
 
     // sets the currently focus object and notifies the FocusEventListener (if any)
-    void setFocusedObject(const css::uno::Reference< css::accessibility::XAccessible >& xAccessible);
+    void setFocusedObject(const cpo::uno::Reference< css::accessibility::XAccessible >& xAccessible);
 
     // may evolve to add/remove later
     void setFocusListener(const rtl::Reference< KeyboardFocusListener >& aFocusListener) { m_aFocusListener = aFocusListener; };
@@ -76,7 +76,7 @@ protected:
 
 private:
     // the accessible object that has the keyboard focus (if any)
-    css::uno::Reference< css::accessibility::XAccessible > m_xFocusedObject;
+    cpo::uno::Reference< css::accessibility::XAccessible > m_xFocusedObject;
 
     // the listener for focus events
     rtl::Reference< KeyboardFocusListener > m_aFocusListener;

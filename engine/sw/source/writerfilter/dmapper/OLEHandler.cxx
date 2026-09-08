@@ -48,6 +48,7 @@
 namespace writerfilter::dmapper {
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 
 OLEHandler::OLEHandler(DomainMapper& rDomainMapper) :
@@ -138,12 +139,12 @@ css::awt::Size OLEHandler::getSize() const
     return m_xShape->getSize();
 }
 
-css::uno::Reference<css::graphic::XGraphic> OLEHandler::getReplacement() const
+cpo::uno::Reference<css::graphic::XGraphic> OLEHandler::getReplacement() const
 {
     if (!m_xShape)
         return nullptr;
     uno::Reference<beans::XPropertySet> xShapeProps(m_xShape, uno::UNO_QUERY);
-    css::uno::Reference<css::graphic::XGraphic> xReplacement;
+    cpo::uno::Reference<css::graphic::XGraphic> xReplacement;
     xShapeProps->getPropertyValue(getPropertyName(PROP_BITMAP)) >>= xReplacement;
     return xReplacement;
 }

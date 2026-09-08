@@ -71,12 +71,12 @@ namespace pcr
     {
     private:
         typedef std::multimap< sal_Int32, css::beans::Property >  OrderedPropertyMap;
-        typedef std::vector< css::uno::Reference< cpo::uno::XInterface > >
+        typedef std::vector< cpo::uno::Reference< cpo::uno::XInterface > >
                                                                             InterfaceArray;
 
-        css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
-        css::uno::Reference< css::frame::XFrame > m_xFrame;
-        css::uno::Reference< css::awt::XWindow >  m_xView;
+        cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+        cpo::uno::Reference< css::frame::XFrame > m_xFrame;
+        cpo::uno::Reference< css::awt::XWindow >  m_xView;
 
         ::comphelper::OInterfaceContainerHelper2   m_aDisposeListeners;
         ::comphelper::OInterfaceContainerHelper2   m_aControlObservers;
@@ -87,7 +87,7 @@ namespace pcr
         OUString                     m_sPageSelection;
         OUString                     m_sLastValidPageSelection;
 
-        typedef css::uno::Reference< css::inspection::XPropertyHandler >
+        typedef cpo::uno::Reference< css::inspection::XPropertyHandler >
                                                         PropertyHandlerRef;
         typedef std::vector< PropertyHandlerRef >     PropertyHandlerArray;
         typedef std::unordered_map< OUString, PropertyHandlerRef >
@@ -101,7 +101,7 @@ namespace pcr
         std::unique_ptr< ComposedPropertyUIUpdate >   m_pUIRequestComposer;
 
         /// our InspectorModel
-        css::uno::Reference< css::inspection::XObjectInspectorModel >
+        cpo::uno::Reference< css::inspection::XObjectInspectorModel >
                                                         m_xModel;
         /// the object(s) we're currently inspecting
         InterfaceArray                                  m_aInspectedObjects;
@@ -127,18 +127,18 @@ namespace pcr
         virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
         // XController
-        virtual void attachFrame( const css::uno::Reference< css::frame::XFrame >& xFrame ) override;
-        virtual bool attachModel( const css::uno::Reference< css::frame::XModel >& xModel ) override;
+        virtual void attachFrame( const cpo::uno::Reference< css::frame::XFrame >& xFrame ) override;
+        virtual bool attachModel( const cpo::uno::Reference< css::frame::XModel >& xModel ) override;
         virtual bool suspend( bool bSuspend ) override;
         virtual cpo::uno::Any getViewData(  ) override;
         virtual void restoreViewData( const cpo::uno::Any& Data ) override;
-        virtual css::uno::Reference< css::frame::XModel > getModel(  ) override;
-        virtual css::uno::Reference< css::frame::XFrame > getFrame(  ) override;
+        virtual cpo::uno::Reference< css::frame::XModel > getModel(  ) override;
+        virtual cpo::uno::Reference< css::frame::XFrame > getFrame(  ) override;
 
         // XComponent
         virtual void dispose(  ) override;
-        virtual void addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-        virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+        virtual void addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& xListener ) override;
+        virtual void removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
         // XFocusListener
         virtual void focusGained( const css::awt::FocusEvent& _rSource ) override;
@@ -157,11 +157,11 @@ namespace pcr
 
         /** XPropertyControlFactory
         */
-        virtual css::uno::Reference< css::inspection::XPropertyControl > createPropertyControl( ::sal_Int16 ControlType, bool CreateReadOnly ) override;
+        virtual cpo::uno::Reference< css::inspection::XPropertyControl > createPropertyControl( ::sal_Int16 ControlType, bool CreateReadOnly ) override;
 
     public:
         explicit OPropertyBrowserController(
-            const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext);
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxContext);
 
     protected:
         virtual ~OPropertyBrowserController() override;
@@ -171,8 +171,8 @@ namespace pcr
         virtual void    Commit(     const OUString& _rName, const cpo::uno::Any& _rVal ) override;
 
         // IPropertyControlObserver
-        virtual void    focusGained( const css::uno::Reference< css::inspection::XPropertyControl >& Control ) override;
-        virtual void    valueChanged( const css::uno::Reference< css::inspection::XPropertyControl >& Control ) override;
+        virtual void    focusGained( const cpo::uno::Reference< css::inspection::XPropertyControl >& Control ) override;
+        virtual void    valueChanged( const cpo::uno::Reference< css::inspection::XPropertyControl >& Control ) override;
 
         // IPropertyExistenceCheck
         virtual bool hasPropertyByName( const OUString& _rName ) override;
@@ -184,20 +184,20 @@ namespace pcr
         virtual void showPropertyUI( const OUString& _rPropertyName ) override;
         virtual void hidePropertyUI( const OUString& _rPropertyName ) override;
         virtual void showCategory( const OUString& _rCategory, bool _bShow ) override;
-        virtual css::uno::Reference< css::inspection::XPropertyControl > getPropertyControl( const OUString& _rPropertyName ) override;
-        virtual void registerControlObserver( const css::uno::Reference< css::inspection::XPropertyControlObserver >& Observer ) override;
-        virtual void revokeControlObserver( const css::uno::Reference< css::inspection::XPropertyControlObserver >& Observer ) override;
+        virtual cpo::uno::Reference< css::inspection::XPropertyControl > getPropertyControl( const OUString& _rPropertyName ) override;
+        virtual void registerControlObserver( const cpo::uno::Reference< css::inspection::XPropertyControlObserver >& Observer ) override;
+        virtual void revokeControlObserver( const cpo::uno::Reference< css::inspection::XPropertyControlObserver >& Observer ) override;
         virtual void setHelpSectionText( const OUString& HelpText ) override;
 
         // XObjectInspector
-        virtual css::uno::Reference< css::inspection::XObjectInspectorModel > getInspectorModel() override;
-        virtual void setInspectorModel( const css::uno::Reference< css::inspection::XObjectInspectorModel >& _inspectormodel ) override;
-        virtual css::uno::Reference< css::inspection::XObjectInspectorUI > getInspectorUI() override;
-        virtual void inspect( const cpo::uno::Sequence< css::uno::Reference< cpo::uno::XInterface > >& Objects ) override;
+        virtual cpo::uno::Reference< css::inspection::XObjectInspectorModel > getInspectorModel() override;
+        virtual void setInspectorModel( const cpo::uno::Reference< css::inspection::XObjectInspectorModel >& _inspectormodel ) override;
+        virtual cpo::uno::Reference< css::inspection::XObjectInspectorUI > getInspectorUI() override;
+        virtual void inspect( const cpo::uno::Sequence< cpo::uno::Reference< cpo::uno::XInterface > >& Objects ) override;
 
         // XDispatchProvider
-        virtual css::uno::Reference< css::frame::XDispatch > queryDispatch( const css::util::URL& URL, const OUString& TargetFrameName, ::sal_Int32 SearchFlags ) override;
-        virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& Requests ) override;
+        virtual cpo::uno::Reference< css::frame::XDispatch > queryDispatch( const css::util::URL& URL, const OUString& TargetFrameName, ::sal_Int32 SearchFlags ) override;
+        virtual cpo::uno::Sequence< cpo::uno::Reference< css::frame::XDispatch > > queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& Requests ) override;
 
         // XInitialization
         virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
@@ -277,7 +277,7 @@ namespace pcr
         */
         bool impl_findObjectProperty_nothrow( const OUString& _rName, OrderedPropertyMap::const_iterator* _pProperty = nullptr );
 
-        void Construct(const css::uno::Reference<css::awt::XWindow>& rContainerWindow, std::unique_ptr<weld::Builder> xBuilder);
+        void Construct(const cpo::uno::Reference<css::awt::XWindow>& rContainerWindow, std::unique_ptr<weld::Builder> xBuilder);
 
         /** retrieves the property handler for a given property name
             @param  _rPropertyName
@@ -324,7 +324,7 @@ namespace pcr
 
         /** binds the instance to a new model
         */
-        void    impl_bindToNewModel_nothrow( const css::uno::Reference< css::inspection::XObjectInspectorModel >& _rxInspectorModel );
+        void    impl_bindToNewModel_nothrow( const cpo::uno::Reference< css::inspection::XObjectInspectorModel >& _rxInspectorModel );
 
         /** initializes our view, as indicated by the model's view-relevant properties
 
@@ -353,7 +353,7 @@ namespace pcr
 
     private:
         // constructors
-        void    createWithModel( const css::uno::Reference< css::inspection::XObjectInspectorModel >& _rxModel );
+        void    createWithModel( const cpo::uno::Reference< css::inspection::XObjectInspectorModel >& _rxModel );
     };
 
 

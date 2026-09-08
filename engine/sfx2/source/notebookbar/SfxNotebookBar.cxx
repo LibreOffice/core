@@ -35,8 +35,8 @@
 #include <vcl/WeldedTabbedNotebookbar.hxx>
 
 using namespace sfx2;
-using namespace css::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace css::ui;
 using namespace css;
 
@@ -54,7 +54,7 @@ struct NotebookBarViewData
     VclPtr<NotebookBar> m_pNotebookBar;
     std::unique_ptr<ToolbarUnoDispatcher> m_pToolbarUnoDispatcher;
     std::vector<std::unique_ptr<ToolbarUnoDispatcher>> m_aExtraToolbarUnoDispatchers;
-    std::vector<css::uno::Reference<css::lang::XComponent>> m_aExtraPanelControllers;
+    std::vector<cpo::uno::Reference<css::lang::XComponent>> m_aExtraPanelControllers;
 
     ~NotebookBarViewData()
     {
@@ -75,13 +75,13 @@ struct NotebookBarViewData
 
 /** Creates the UNO component which drives the non-toolbar widgets of a welded
     notebookbar panel, handing it the builder of that panel's .ui. */
-css::uno::Reference<css::lang::XComponent>
+cpo::uno::Reference<css::lang::XComponent>
 CreateExtraPanelController(const OUString& rServiceName,
-                           const css::uno::Reference<css::frame::XFrame>& rFrame,
+                           const cpo::uno::Reference<css::frame::XFrame>& rFrame,
                            SfxBindings& rBindings, weld::Toolbar& rToolbar,
                            weld::Builder& rBuilder)
 {
-    css::uno::Reference<css::awt::XWindow> xWidget(
+    cpo::uno::Reference<css::awt::XWindow> xWidget(
         new weld::TransportAsXWindow(&rToolbar, &rBuilder));
 
     css::beans::PropertyValue aFrame;
@@ -100,12 +100,12 @@ CreateExtraPanelController(const OUString& rServiceName,
 
     try
     {
-        const css::uno::Reference<cpo::uno::XComponentContext>& xContext
+        const cpo::uno::Reference<cpo::uno::XComponentContext>& xContext
             = comphelper::getProcessComponentContext();
-        return css::uno::Reference<css::lang::XComponent>(
+        return cpo::uno::Reference<css::lang::XComponent>(
             xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
                 rServiceName, aArguments, xContext),
-            css::uno::UNO_QUERY);
+            cpo::uno::UNO_QUERY);
     }
     catch (const cpo::uno::Exception&)
     {
@@ -162,7 +162,7 @@ public:
 
 static Reference<frame::XLayoutManager> lcl_getLayoutManager( const Reference<frame::XFrame>& xFrame )
 {
-    css::uno::Reference<css::frame::XLayoutManager> xLayoutManager;
+    cpo::uno::Reference<css::frame::XLayoutManager> xLayoutManager;
 
     if (xFrame.is())
     {
@@ -389,7 +389,7 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
     if (!pViewShell)
         return false;
 
-    const css::uno::Reference<cpo::uno::XComponentContext>& xContext = comphelper::getProcessComponentContext();
+    const cpo::uno::Reference<cpo::uno::XComponentContext>& xContext = comphelper::getProcessComponentContext();
     const Reference<frame::XModuleManager> xModuleManager  = frame::ModuleManager::create( xContext );
     OUString aModuleName = xModuleManager->identify( xFrame );
     vcl::EnumContext::Application eApp = vcl::EnumContext::GetApplicationEnum( aModuleName );
@@ -465,7 +465,7 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
         if (rExtra.m_aControllerService.isEmpty())
             continue;
 
-        if (css::uno::Reference<css::lang::XComponent> xController
+        if (cpo::uno::Reference<css::lang::XComponent> xController
             = CreateExtraPanelController(rExtra.m_aControllerService, xFrame,
                                          pViewShell->GetViewFrame().GetBindings(),
                                          *rExtra.m_xToolbar, *rExtra.m_xBuilder))

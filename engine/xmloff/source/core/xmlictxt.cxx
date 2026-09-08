@@ -22,6 +22,7 @@
 #include <cppuhelper/queryinterface.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 SvXMLImportContext::SvXMLImportContext( SvXMLImport& rImp )
     : mrImport(rImp)

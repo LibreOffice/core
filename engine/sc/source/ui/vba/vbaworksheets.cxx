@@ -42,6 +42,7 @@
 #include <preview.hxx>
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 // a map ( or hashmap ) won't do as we need also to preserve the order
 // (as added ) of the items

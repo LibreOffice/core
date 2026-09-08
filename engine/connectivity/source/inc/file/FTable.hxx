@@ -70,10 +70,10 @@ namespace connectivity::file
         virtual bool fetchRow(OValueRefRow& _rRow, const OSQLColumns& _rCols, bool bRetrieveData) = 0;
 
         const ::rtl::Reference<OSQLColumns>& getTableColumns() const {return m_aColumns;}
-        virtual bool InsertRow(OValueRefVector& rRow, const css::uno::Reference< css::container::XIndexAccess>& _xCols);
+        virtual bool InsertRow(OValueRefVector& rRow, const cpo::uno::Reference< css::container::XIndexAccess>& _xCols);
         virtual bool DeleteRow(const OSQLColumns& _rCols);
-        virtual bool UpdateRow(OValueRefVector& rRow, OValueRefRow& pOrgRow,const css::uno::Reference< css::container::XIndexAccess>& _xCols);
-        virtual void addColumn(const css::uno::Reference< css::beans::XPropertySet>& descriptor);
+        virtual bool UpdateRow(OValueRefVector& rRow, OValueRefRow& pOrgRow,const cpo::uno::Reference< css::container::XIndexAccess>& _xCols);
+        virtual void addColumn(const cpo::uno::Reference< css::beans::XPropertySet>& descriptor);
         virtual void dropColumn(sal_Int32 _nPos);
         // refresh the header of file based tables to see changes done by someone
         virtual void refreshHeader();

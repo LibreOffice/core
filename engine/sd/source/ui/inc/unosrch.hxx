@@ -40,12 +40,12 @@ class SdUnoSearchReplaceShape : public css::util::XReplaceable
     css::drawing::XDrawPage* mpPage;
 
 protected:
-    css::uno::Reference< css::text::XTextRange >  Search( const css::uno::Reference< css::text::XTextRange >&  xText, SdUnoSearchReplaceDescriptor* pDescr );
+    cpo::uno::Reference< css::text::XTextRange >  Search( const cpo::uno::Reference< css::text::XTextRange >&  xText, SdUnoSearchReplaceDescriptor* pDescr );
     bool Search( const OUString& rText, sal_Int32& nStartPos, sal_Int32& nEndPos, SdUnoSearchReplaceDescriptor* pDescr ) noexcept;
-    static ESelection GetSelection( const css::uno::Reference< css::text::XTextRange >&  xTextRange ) noexcept;
-    static css::uno::Reference< css::drawing::XShape >  GetShape( const css::uno::Reference< css::text::XTextRange >&  xTextRange ) noexcept;
-    css::uno::Reference< css::drawing::XShape >  GetNextShape( const css::uno::Reference< css::container::XIndexAccess >&  xShapes, const css::uno::Reference< css::drawing::XShape >&  xCurrentShape ) noexcept;
-    css::uno::Reference< css::drawing::XShape >  GetCurrentShape() const noexcept;
+    static ESelection GetSelection( const cpo::uno::Reference< css::text::XTextRange >&  xTextRange ) noexcept;
+    static cpo::uno::Reference< css::drawing::XShape >  GetShape( const cpo::uno::Reference< css::text::XTextRange >&  xTextRange ) noexcept;
+    cpo::uno::Reference< css::drawing::XShape >  GetNextShape( const cpo::uno::Reference< css::container::XIndexAccess >&  xShapes, const cpo::uno::Reference< css::drawing::XShape >&  xCurrentShape ) noexcept;
+    cpo::uno::Reference< css::drawing::XShape >  GetCurrentShape() const noexcept;
 
 public:
     // danger, this c'tor is only usable if the given shape or page is derived
@@ -54,14 +54,14 @@ public:
     virtual ~SdUnoSearchReplaceShape() noexcept;
 
     // XReplaceable
-    virtual css::uno::Reference< css::util::XReplaceDescriptor > SAL_CALL createReplaceDescriptor(  ) override;
-    virtual sal_Int32 SAL_CALL replaceAll( const css::uno::Reference< css::util::XSearchDescriptor >& xDesc ) override;
+    virtual cpo::uno::Reference< css::util::XReplaceDescriptor > SAL_CALL createReplaceDescriptor(  ) override;
+    virtual sal_Int32 SAL_CALL replaceAll( const cpo::uno::Reference< css::util::XSearchDescriptor >& xDesc ) override;
 
     // XSearchable
-    virtual css::uno::Reference< css::util::XSearchDescriptor > SAL_CALL createSearchDescriptor(  ) override;
-    virtual css::uno::Reference< css::container::XIndexAccess > SAL_CALL findAll( const css::uno::Reference< css::util::XSearchDescriptor >& xDesc ) override;
-    virtual css::uno::Reference< cpo::uno::XInterface > SAL_CALL findFirst( const css::uno::Reference< css::util::XSearchDescriptor >& xDesc ) override;
-    virtual css::uno::Reference< cpo::uno::XInterface > SAL_CALL findNext( const css::uno::Reference< cpo::uno::XInterface >& xStartAt, const css::uno::Reference< css::util::XSearchDescriptor >& xDesc ) override;
+    virtual cpo::uno::Reference< css::util::XSearchDescriptor > SAL_CALL createSearchDescriptor(  ) override;
+    virtual cpo::uno::Reference< css::container::XIndexAccess > SAL_CALL findAll( const cpo::uno::Reference< css::util::XSearchDescriptor >& xDesc ) override;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > SAL_CALL findFirst( const cpo::uno::Reference< css::util::XSearchDescriptor >& xDesc ) override;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > SAL_CALL findNext( const cpo::uno::Reference< cpo::uno::XInterface >& xStartAt, const cpo::uno::Reference< css::util::XSearchDescriptor >& xDesc ) override;
 };
 
 /* ================================================================= */
@@ -97,13 +97,13 @@ public:
     virtual void SAL_CALL setReplaceString( const OUString& aReplaceString ) override;
 
     // XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
     virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
     virtual cpo::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
-    virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
-    virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
-    virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
-    virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+    virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
+    virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
+    virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+    virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 };
 
 /* ================================================================= */
@@ -112,10 +112,10 @@ public:
     lets people access it through the XIndexAccess Interface. */
 class SdUnoFindAllAccess final : public ::cppu::WeakImplHelper< css::container::XIndexAccess > // public css::container::XElementAccess
 {
-    cpo::uno::Sequence< css::uno::Reference< cpo::uno::XInterface >  > maSequence;
+    cpo::uno::Sequence< cpo::uno::Reference< cpo::uno::XInterface >  > maSequence;
 
 public:
-    SdUnoFindAllAccess( cpo::uno::Sequence< css::uno::Reference< cpo::uno::XInterface >  > const & rSequence ) noexcept;
+    SdUnoFindAllAccess( cpo::uno::Sequence< cpo::uno::Reference< cpo::uno::XInterface >  > const & rSequence ) noexcept;
     virtual ~SdUnoFindAllAccess() noexcept override;
 
     // XIndexAccess

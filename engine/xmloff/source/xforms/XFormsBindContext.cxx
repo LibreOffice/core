@@ -33,9 +33,9 @@
 
 #include <sal/log.hxx>
 
-using com::sun::star::uno::Reference;
+using cpo::uno::Reference;
 using cpo::uno::Any;
-using com::sun::star::uno::UNO_QUERY;
+using cpo::uno::UNO_QUERY;
 using com::sun::star::container::XNameContainer;
 using com::sun::star::xml::sax::XFastAttributeList;
 using com::sun::star::xforms::XModel2;
@@ -96,7 +96,7 @@ void XFormsBindContext::HandleAttribute( const sax_fastparser::FastAttributeList
 
 void XFormsBindContext::startFastElement(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     // we need to register the namespaces
     Reference<XNameContainer> xContainer(

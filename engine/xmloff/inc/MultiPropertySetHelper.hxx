@@ -91,7 +91,7 @@ public:
      * Call hasPropertiesByName for the provided XPropertySetInfo and build
      * list of allowed properties.
      */
-    void hasProperties(const css::uno::Reference<css::beans::XPropertySetInfo>&);
+    void hasProperties(const cpo::uno::Reference<css::beans::XPropertySetInfo>&);
 
     /**
      * Return whether hasProperties was called
@@ -105,7 +105,7 @@ public:
      * May only be called after hasProperties() was called for the
      * appropriate XPropertySetInfo.
      */
-    void getValues(const css::uno::Reference<css::beans::XMultiPropertySet>&);
+    void getValues(const cpo::uno::Reference<css::beans::XMultiPropertySet>&);
 
     /**
      * Get values from the XPropertySet. This can be much slower than
@@ -115,7 +115,7 @@ public:
      * May only be called after hasProperties() was called for the
      * appropriate XPropertySetInfo.
      */
-    void getValues(const css::uno::Reference<css::beans::XPropertySet>&);
+    void getValues(const cpo::uno::Reference<css::beans::XPropertySet>&);
 
     /**
      * Get a value from the values array.
@@ -142,7 +142,7 @@ public:
      *
      */
     const cpo::uno::Any& getValue(sal_Int16 nIndex,
-                                  const css::uno::Reference<css::beans::XPropertySet>&,
+                                  const cpo::uno::Reference<css::beans::XPropertySet>&,
                                   bool bTryMulti = false);
 
     /**
@@ -156,7 +156,7 @@ public:
      *
      */
     const cpo::uno::Any& getValue(sal_Int16 nIndex,
-                                  const css::uno::Reference<css::beans::XMultiPropertySet>&);
+                                  const cpo::uno::Reference<css::beans::XMultiPropertySet>&);
 
     void resetValues() { pValues = nullptr; }
 };

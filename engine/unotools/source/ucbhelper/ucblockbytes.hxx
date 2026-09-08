@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <osl/conditn.hxx>
 #include <tools/stream.hxx>
@@ -59,9 +59,9 @@ class UcbLockBytes : public SvLockBytes
     osl::Condition          m_aTerminated;
     std::mutex              m_aMutex;
 
-    css::uno::Reference < css::io::XInputStream >  m_xInputStream;
-    css::uno::Reference < css::io::XOutputStream > m_xOutputStream;
-    css::uno::Reference < css::io::XSeekable >     m_xSeekable;
+    cpo::uno::Reference < css::io::XInputStream >  m_xInputStream;
+    cpo::uno::Reference < css::io::XOutputStream > m_xOutputStream;
+    cpo::uno::Reference < css::io::XSeekable >     m_xSeekable;
 
     ErrCode                 m_nError;
 
@@ -75,13 +75,13 @@ protected:
 
 public:
                             // properties: Referer, PostMimeType
-    static UcbLockBytesRef  CreateLockBytes( const css::uno::Reference < css::ucb::XContent >& xContent,
+    static UcbLockBytesRef  CreateLockBytes( const cpo::uno::Reference < css::ucb::XContent >& xContent,
                                             const cpo::uno::Sequence < css::beans::PropertyValue >& rProps,
                                             StreamMode eMode,
-                                            const css::uno::Reference < css::task::XInteractionHandler >& xInter );
+                                            const cpo::uno::Reference < css::task::XInteractionHandler >& xInter );
 
-    static UcbLockBytesRef  CreateInputLockBytes( const css::uno::Reference < css::io::XInputStream >& xContent );
-    static UcbLockBytesRef  CreateLockBytes( const css::uno::Reference < css::io::XStream >& xContent );
+    static UcbLockBytesRef  CreateInputLockBytes( const cpo::uno::Reference < css::io::XInputStream >& xContent );
+    static UcbLockBytesRef  CreateLockBytes( const cpo::uno::Reference < css::io::XStream >& xContent );
 
     // SvLockBytes
     virtual ErrCode         ReadAt(sal_uInt64 nPos, void *pBuffer, std::size_t nCount, std::size_t *pRead) const override;
@@ -97,25 +97,25 @@ public:
                             { return m_nError; }
 
     // calling this method delegates the responsibility to call closeinput to the caller!
-    css::uno::Reference < css::io::XInputStream > getInputStream();
+    cpo::uno::Reference < css::io::XInputStream > getInputStream();
 
-    bool                    setInputStream( const css::uno::Reference < css::io::XInputStream > &rxInputStream );
-    void                    setStream( const css::uno::Reference < css::io::XStream > &rxStream );
+    bool                    setInputStream( const cpo::uno::Reference < css::io::XInputStream > &rxInputStream );
+    void                    setStream( const cpo::uno::Reference < css::io::XStream > &rxStream );
     void                    terminate();
 
-    css::uno::Reference < css::io::XInputStream > getInputStream() const
+    cpo::uno::Reference < css::io::XInputStream > getInputStream() const
                             {
                                 std::unique_lock aGuard( const_cast< UcbLockBytes* >(this)->m_aMutex );
                                 return m_xInputStream;
                             }
 
-    css::uno::Reference < css::io::XOutputStream > getOutputStream() const
+    cpo::uno::Reference < css::io::XOutputStream > getOutputStream() const
                             {
                                 std::unique_lock aGuard( const_cast< UcbLockBytes* >(this)->m_aMutex );
                                 return m_xOutputStream;
                             }
 
-    css::uno::Reference < css::io::XSeekable > getSeekable() const
+    cpo::uno::Reference < css::io::XSeekable > getSeekable() const
                             {
                                 std::unique_lock aGuard( const_cast< UcbLockBytes* >(this)->m_aMutex );
                                 return m_xSeekable;
@@ -128,7 +128,7 @@ public:
 
 private:
     bool                    setInputStreamImpl( std::unique_lock<std::mutex>& rGuard,
-                                                 const css::uno::Reference < css::io::XInputStream > &rxInputStream,
+                                                 const cpo::uno::Reference < css::io::XInputStream > &rxInputStream,
                                                  bool bSetXSeekable = true );
 };
 

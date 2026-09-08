@@ -66,6 +66,7 @@
 #include <vcl/tabs.hrc>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace {
 

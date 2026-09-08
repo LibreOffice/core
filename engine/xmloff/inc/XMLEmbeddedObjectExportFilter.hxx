@@ -29,24 +29,24 @@ class XMLEmbeddedObjectExportFilter final : public cppu::WeakImplHelper<
              css::lang::XServiceInfo,
              css::lang::XInitialization>
 {
-    css::uno::Reference< css::xml::sax::XDocumentHandler >         xHandler;
-    css::uno::Reference< css::xml::sax::XExtendedDocumentHandler > xExtHandler;
+    cpo::uno::Reference< css::xml::sax::XDocumentHandler >         xHandler;
+    cpo::uno::Reference< css::xml::sax::XExtendedDocumentHandler > xExtHandler;
 
 public:
-    XMLEmbeddedObjectExportFilter( const css::uno::Reference< css::xml::sax::XDocumentHandler > & rHandler ) noexcept;
+    XMLEmbeddedObjectExportFilter( const cpo::uno::Reference< css::xml::sax::XDocumentHandler > & rHandler ) noexcept;
     virtual ~XMLEmbeddedObjectExportFilter () noexcept override;
 
     // css::xml::sax::XDocumentHandler
     virtual void startDocument() override;
     virtual void endDocument() override;
     virtual void startElement(const OUString& aName,
-                              const css::uno::Reference< css::xml::sax::XAttributeList > & xAttribs) override;
+                              const cpo::uno::Reference< css::xml::sax::XAttributeList > & xAttribs) override;
     virtual void endElement(const OUString& aName) override;
     virtual void characters(const OUString& aChars) override;
     virtual void ignorableWhitespace(const OUString& aWhitespaces) override;
     virtual void processingInstruction(const OUString& aTarget,
                                        const OUString& aData) override;
-    virtual void setDocumentLocator(const css::uno::Reference< css::xml::sax::XLocator > & xLocator) override;
+    virtual void setDocumentLocator(const cpo::uno::Reference< css::xml::sax::XLocator > & xLocator) override;
 
     // css::xml::sax::XExtendedDocumentHandler
     virtual void startCDATA() override;

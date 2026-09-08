@@ -22,7 +22,7 @@
 
 #include <config_options.h>
 #include <unotools/unotoolsdllapi.h>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <rtl/ref.hxx>
 #include <memory>
 
@@ -44,7 +44,7 @@ namespace utl
     */
     class UNOTOOLS_DLLPUBLIC DisposableComponent
     {
-        css::uno::Reference< css::lang::XComponent >  m_xComponent;
+        cpo::uno::Reference< css::lang::XComponent >  m_xComponent;
 
     public:
         /** constructs a ->DisposableComponent instance
@@ -52,7 +52,7 @@ namespace utl
         @param _rxComponent
             the component whose life time should be controlled by the instance. Must not be <NULL/>.
         */
-        DisposableComponent( const css::uno::Reference< cpo::uno::XInterface >& _rxComponent );
+        DisposableComponent( const cpo::uno::Reference< cpo::uno::XInterface >& _rxComponent );
 
         /** disposes the component represented by the instance
 
@@ -88,7 +88,7 @@ namespace utl
         @param _rxComponent
             the component whose life time should be controlled by the instance. Must not be <NULL/>.
         */
-        CloseableComponent( const css::uno::Reference< cpo::uno::XInterface >& _rxComponent );
+        CloseableComponent( const cpo::uno::Reference< cpo::uno::XInterface >& _rxComponent );
 
         /** destroys resources associated with this instance, and disposes the component
 
@@ -141,7 +141,7 @@ namespace utl
 
     private:
         std::shared_ptr<Component>                            m_xComponent;
-        css::uno::Reference< INTERFACE >            m_xTypedComponent;
+        cpo::uno::Reference< INTERFACE >            m_xTypedComponent;
 
     public:
         enum AssignmentMode
@@ -155,17 +155,17 @@ namespace utl
         {
         }
 
-        explicit SharedUNOComponent( const css::uno::Reference< INTERFACE >& _rxComponent, AssignmentMode eMode = TakeOwnership )
+        explicit SharedUNOComponent( const cpo::uno::Reference< INTERFACE >& _rxComponent, AssignmentMode eMode = TakeOwnership )
         {
             reset( _rxComponent, eMode );
         }
 
-        SharedUNOComponent( const css::uno::BaseReference & _rRef, css::uno::UnoReference_QueryThrow _queryThrow )
+        SharedUNOComponent( const cpo::uno::BaseReference & _rRef, cpo::uno::UnoReference_QueryThrow _queryThrow )
         {
             set( _rRef, _queryThrow );
         }
 
-//        SharedUNOComponent& operator=( const css::uno::Reference< INTERFACE >& _rxComponent );
+//        SharedUNOComponent& operator=( const cpo::uno::Reference< INTERFACE >& _rxComponent );
         // This operator is intentionally not implemented. There is no canonic ownership after this operator
         // would have been applied: Should the SharedUNOComponent have the ownership of the component,
         // or shouldn't it? Hard to guess, and probably wrong in 50 percent of all cases, anyway. So,
@@ -175,23 +175,23 @@ namespace utl
 
         /** assigns a new component, and releases the old one
         */
-        void reset( const css::uno::Reference< INTERFACE >& _rxComponent, AssignmentMode _eMode = TakeOwnership );
+        void reset( const cpo::uno::Reference< INTERFACE >& _rxComponent, AssignmentMode _eMode = TakeOwnership );
 
-        inline bool set( const css::uno::BaseReference& _rRef, css::uno::UnoReference_Query _query );
+        inline bool set( const cpo::uno::BaseReference& _rRef, cpo::uno::UnoReference_Query _query );
 
-        inline void set( const css::uno::BaseReference & _rRef, css::uno::UnoReference_QueryThrow _queryThrow );
+        inline void set( const cpo::uno::BaseReference & _rRef, cpo::uno::UnoReference_QueryThrow _queryThrow );
 
-        inline void set( const css::uno::Reference< INTERFACE >& _rRef, css::uno::UnoReference_SetThrow _setThrow );
-        inline void set( const SharedUNOComponent& _rComp, css::uno::UnoReference_SetThrow _setThrow );
+        inline void set( const cpo::uno::Reference< INTERFACE >& _rRef, cpo::uno::UnoReference_SetThrow _setThrow );
+        inline void set( const SharedUNOComponent& _rComp, cpo::uno::UnoReference_SetThrow _setThrow );
 
         INTERFACE* operator->() const;
 
-        operator const css::uno::Reference< INTERFACE >&() const
+        operator const cpo::uno::Reference< INTERFACE >&() const
         {
             return m_xTypedComponent;
         }
 
-        const css::uno::Reference< INTERFACE >& getTyped() const
+        const cpo::uno::Reference< INTERFACE >& getTyped() const
         {
             return m_xTypedComponent;
         }
@@ -216,7 +216,7 @@ namespace utl
 
     // assignments
     template < class INTERFACE, class COMPONENT >
-    void SharedUNOComponent< INTERFACE, COMPONENT >::reset( const css::uno::Reference< INTERFACE >& _rxComponent, AssignmentMode _eMode )
+    void SharedUNOComponent< INTERFACE, COMPONENT >::reset( const cpo::uno::Reference< INTERFACE >& _rxComponent, AssignmentMode _eMode )
     {
         m_xComponent.reset(_eMode == TakeOwnership ? new COMPONENT( _rxComponent ) : nullptr);
         m_xTypedComponent = _rxComponent;
@@ -225,7 +225,7 @@ namespace utl
     // comparison operators
 
     template < class INTERFACE, class COMPONENT >
-    bool operator==( const SharedUNOComponent< INTERFACE, COMPONENT >& _rLHS, const css::uno::Reference< INTERFACE >& _rRHS )
+    bool operator==( const SharedUNOComponent< INTERFACE, COMPONENT >& _rLHS, const cpo::uno::Reference< INTERFACE >& _rRHS )
     {
         return _rLHS.getTyped() == _rRHS;
     }
@@ -237,19 +237,19 @@ namespace utl
     }
 
     template < class INTERFACE, class COMPONENT >
-    void SharedUNOComponent< INTERFACE, COMPONENT >::set( const css::uno::BaseReference & _rRef, css::uno::UnoReference_QueryThrow _queryThrow )
+    void SharedUNOComponent< INTERFACE, COMPONENT >::set( const cpo::uno::BaseReference & _rRef, cpo::uno::UnoReference_QueryThrow _queryThrow )
     {
-        reset( css::uno::Reference< INTERFACE >( _rRef, _queryThrow ), TakeOwnership );
+        reset( cpo::uno::Reference< INTERFACE >( _rRef, _queryThrow ), TakeOwnership );
     }
 
     template < class INTERFACE, class COMPONENT >
-    void SharedUNOComponent< INTERFACE, COMPONENT >::set( const css::uno::Reference< INTERFACE >& _rRef, css::uno::UnoReference_SetThrow _setThrow )
+    void SharedUNOComponent< INTERFACE, COMPONENT >::set( const cpo::uno::Reference< INTERFACE >& _rRef, cpo::uno::UnoReference_SetThrow _setThrow )
     {
-        reset( css::uno::Reference< INTERFACE >( _rRef, _setThrow ), TakeOwnership );
+        reset( cpo::uno::Reference< INTERFACE >( _rRef, _setThrow ), TakeOwnership );
     }
 
     template < class INTERFACE, class COMPONENT >
-    void SharedUNOComponent< INTERFACE, COMPONENT >::set( const SharedUNOComponent& _rComp, css::uno::UnoReference_SetThrow _setThrow )
+    void SharedUNOComponent< INTERFACE, COMPONENT >::set( const SharedUNOComponent& _rComp, cpo::uno::UnoReference_SetThrow _setThrow )
     {
         *this = _rComp;
         // provoke an exception in case the component is NULL
@@ -257,9 +257,9 @@ namespace utl
     }
 
     template < class INTERFACE, class COMPONENT >
-    bool SharedUNOComponent< INTERFACE, COMPONENT >::set( const css::uno::BaseReference& _rRef, css::uno::UnoReference_Query _query )
+    bool SharedUNOComponent< INTERFACE, COMPONENT >::set( const cpo::uno::BaseReference& _rRef, cpo::uno::UnoReference_Query _query )
     {
-        reset( css::uno::Reference< INTERFACE >( _rRef, _query ) );
+        reset( cpo::uno::Reference< INTERFACE >( _rRef, _query ) );
         return is();
     }
 

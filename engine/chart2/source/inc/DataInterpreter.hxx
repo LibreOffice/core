@@ -36,7 +36,7 @@ class DataSource;
 struct InterpretedData
 {
     std::vector< std::vector< rtl::Reference<::chart::DataSeries> > > Series;
-    css::uno::Reference< css::chart2::data::XLabeledDataSequence > Categories;
+    cpo::uno::Reference< css::chart2::data::XLabeledDataSequence > Categories;
 };
 
 /** offers tooling to interpret different data sources in a structural
@@ -55,10 +55,10 @@ public:
     virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // convenience methods
-    static  OUString GetRole( const css::uno::Reference< css::chart2::data::XDataSequence > & xSeq );
+    static  OUString GetRole( const cpo::uno::Reference< css::chart2::data::XDataSequence > & xSeq );
 
     static void SetRole(
-        const css::uno::Reference< css::chart2::data::XDataSequence > & xSeq,
+        const cpo::uno::Reference< css::chart2::data::XDataSequence > & xSeq,
         const OUString & rRole );
 
     static cpo::uno::Any GetProperty(
@@ -67,13 +67,13 @@ public:
 
     static bool HasCategories(
         const cpo::uno::Sequence< css::beans::PropertyValue > & rArguments,
-        const std::vector< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > & rData );
+        const std::vector< cpo::uno::Reference< css::chart2::data::XLabeledDataSequence > > & rData );
 
     static bool UseCategoriesAsX(
         const cpo::uno::Sequence< css::beans::PropertyValue > & rArguments );
 
-    static std::vector<css::uno::Reference< css::chart2::data::XLabeledDataSequence >> getDataSequences(
-        const css::uno::Reference< css::chart2::data::XDataSource >& xSource);
+    static std::vector<cpo::uno::Reference< css::chart2::data::XLabeledDataSequence >> getDataSequences(
+        const cpo::uno::Reference< css::chart2::data::XDataSource >& xSource);
 
     // ____ DataInterpreter ____
     /** Interprets the given data.
@@ -95,7 +95,7 @@ public:
             creating new ones.
      */
     virtual InterpretedData interpretDataSource(
-        const css::uno::Reference< css::chart2::data::XDataSource >& xSource,
+        const cpo::uno::Reference< css::chart2::data::XDataSource >& xSource,
         const cpo::uno::Sequence< css::beans::PropertyValue >& aArguments,
         const std::vector< rtl::Reference< ::chart::DataSeries > >& aSeriesToReUse );
 

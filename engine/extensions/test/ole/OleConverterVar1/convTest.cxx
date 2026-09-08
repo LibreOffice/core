@@ -37,7 +37,7 @@ extern CComModule _Module;
 
 #include <oletest/XTestSequence.hpp>
 #include <rtl/process.h>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <cppuhelper/servicefactory.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <rtl/string.h>
@@ -51,7 +51,7 @@ END_OBJECT_MAP()
 using namespace com::sun::star::bridge;
 using namespace com::sun::star::bridge::ModelDependent;
 using namespace com::sun::star::lang;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace oletest;
 using namespace cppu;

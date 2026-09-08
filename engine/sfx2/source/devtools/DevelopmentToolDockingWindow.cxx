@@ -23,6 +23,7 @@
 #include "SelectionChangeHandler.hxx"
 
 using namespace css;
+using namespace ::cpo;
 
 DevelopmentToolDockingWindow::DevelopmentToolDockingWindow(SfxBindings* pInputBindings,
                                                            SfxChildWindow* pChildWindow,
@@ -50,7 +51,7 @@ DevelopmentToolDockingWindow::DevelopmentToolDockingWindow(SfxBindings* pInputBi
 
     maDocumentModelTreeHandler.inspectDocument();
     mxSelectionListener.set(new SelectionChangeHandler(xController, this));
-    mxSelectionSupplier.set(xController, css::uno::UNO_QUERY);
+    mxSelectionSupplier.set(xController, cpo::uno::UNO_QUERY);
 
     maObjectInspectorTreeHandler.introspect(mxRoot);
 
@@ -144,7 +145,7 @@ void DevelopmentToolDockingWindow::changeToCurrentSelection()
         cpo::uno::Any aAny = mxSelectionSupplier->getSelection();
         if (aAny.hasValue())
         {
-            auto xInterface = aAny.get<css::uno::Reference<cpo::uno::XInterface>>();
+            auto xInterface = aAny.get<cpo::uno::Reference<cpo::uno::XInterface>>();
             if (xInterface.is())
             {
                 maObjectInspectorTreeHandler.introspect(xInterface);

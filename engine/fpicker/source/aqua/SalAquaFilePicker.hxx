@@ -51,8 +51,8 @@ public:
 
     // XFilePickerNotifier
 
-    virtual void addFilePickerListener( const css::uno::Reference< css::ui::dialogs::XFilePickerListener >& xListener ) override;
-    virtual void removeFilePickerListener( const css::uno::Reference< css::ui::dialogs::XFilePickerListener >& xListener ) override;
+    virtual void addFilePickerListener( const cpo::uno::Reference< css::ui::dialogs::XFilePickerListener >& xListener ) override;
+    virtual void removeFilePickerListener( const cpo::uno::Reference< css::ui::dialogs::XFilePickerListener >& xListener ) override;
 
     // XExecutableDialog functions
 
@@ -142,7 +142,7 @@ private:
 
     virtual void ensureFilterHelper();
 
-    css::uno::Reference< css::ui::dialogs::XFilePickerListener >  m_xListener;
+    cpo::uno::Reference< css::ui::dialogs::XFilePickerListener >  m_xListener;
     FilterHelper *m_pFilterHelper;
     OUString m_sSaveFileName;
     AquaFilePickerDelegate *m_pDelegate;

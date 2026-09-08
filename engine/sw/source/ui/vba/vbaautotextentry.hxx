@@ -31,15 +31,15 @@ typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XAutoTextEntry > SwVba
 class SwVbaAutoTextEntry : public SwVbaAutoTextEntry_BASE
 {
 private:
-    css::uno::Reference< css::text::XAutoTextEntry > mxEntry;
+    cpo::uno::Reference< css::text::XAutoTextEntry > mxEntry;
 
 public:
     /// @throws cpo::uno::RuntimeException
-    SwVbaAutoTextEntry( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< cpo::uno::XComponentContext >& rContext, css::uno::Reference< css::text::XAutoTextEntry > xEntry );
+    SwVbaAutoTextEntry( const cpo::uno::Reference< ooo::vba::XHelperInterface >& rParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& rContext, cpo::uno::Reference< css::text::XAutoTextEntry > xEntry );
     virtual ~SwVbaAutoTextEntry() override;
 
     // XAutoTextEntry
-    virtual css::uno::Reference< ooo::vba::word::XRange > SAL_CALL Insert( const css::uno::Reference< ooo::vba::word::XRange >& _where, const cpo::uno::Any& _richtext ) override;
+    virtual cpo::uno::Reference< ooo::vba::word::XRange > SAL_CALL Insert( const cpo::uno::Reference< ooo::vba::word::XRange >& _where, const cpo::uno::Any& _richtext ) override;
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;
@@ -52,11 +52,11 @@ class SwVbaAutoTextEntries : public SwVbaAutoTextEntries_BASE
 {
 public:
     /// @throws cpo::uno::RuntimeException
-    SwVbaAutoTextEntries( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext > & xContext, const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess );
+    SwVbaAutoTextEntries( const cpo::uno::Reference< ov::XHelperInterface >& xParent, const cpo::uno::Reference< cpo::uno::XComponentContext > & xContext, const cpo::uno::Reference< css::container::XIndexAccess >& xIndexAccess );
 
     // XEnumerationAccess
     virtual cpo::uno::Type SAL_CALL getElementType() override;
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
+    virtual cpo::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
 
     // SwVbaAutoTextEntries_BASE
     virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) override;

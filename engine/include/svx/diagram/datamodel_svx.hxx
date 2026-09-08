@@ -339,18 +339,18 @@ class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) DiagramDataState
 {
     Connections maConnections;
     Points maPoints;
-    std::vector<css::uno::Reference<css::drawing::XShape>> mxShapes;
+    std::vector<cpo::uno::Reference<css::drawing::XShape>> mxShapes;
 
     // The saved Transformation of the shapes
     std::vector<basegfx::B2DHomMatrix> maShapeTransformations;
     basegfx::B2DHomMatrix maTransformation;
 
 public:
-    DiagramDataState(const Connections& aConnections, const Points& aPoints, const css::uno::Reference< css::drawing::XShape >& rRootShape);//, const OUString& rBackgroundShapeModelID);
+    DiagramDataState(const Connections& aConnections, const Points& aPoints, const cpo::uno::Reference< css::drawing::XShape >& rRootShape);//, const OUString& rBackgroundShapeModelID);
 
     const Connections& getConnections() const { return maConnections; }
     const Points& getPoints() const { return maPoints; }
-    const std::vector<css::uno::Reference<css::drawing::XShape>>& getXShapes() const { return mxShapes;}
+    const std::vector<cpo::uno::Reference<css::drawing::XShape>>& getXShapes() const { return mxShapes;}
     const std::vector<basegfx::B2DHomMatrix>& getShapeTransformations() const { return maShapeTransformations; }
     const basegfx::B2DHomMatrix& getTransformation() const { return maTransformation; }
 };
@@ -382,9 +382,9 @@ protected:
 
 public:
     // access associated SdrObjGroup/XShape/RootShape/XModel
-    css::uno::Reference< css::drawing::XShape >& accessRootShape() { return mxRootShape; }
-    const css::uno::Reference< css::drawing::XShape >& accessRootShape() const { return mxRootShape; }
-    const css::uno::Reference< css::frame::XModel >& accessRootModel() const;
+    cpo::uno::Reference< css::drawing::XShape >& accessRootShape() { return mxRootShape; }
+    const cpo::uno::Reference< css::drawing::XShape >& accessRootShape() const { return mxRootShape; }
+    const cpo::uno::Reference< css::frame::XModel >& accessRootModel() const;
 
     virtual ~DiagramData_svx();
 
@@ -426,8 +426,8 @@ public:
     // transition between two nodes, and for a ModelId that names no presentation Point.
     bool isPresentationOfDataNode(std::u16string_view rModelId) const;
 
-    const css::uno::Reference< css::xml::dom::XDocument >& getThemeDocument() const { return mxThemeDocument; }
-    void setThemeDocument( const css::uno::Reference< css::xml::dom::XDocument >& xRef ) { mxThemeDocument = xRef; }
+    const cpo::uno::Reference< css::xml::dom::XDocument >& getThemeDocument() const { return mxThemeDocument; }
+    void setThemeDocument( const cpo::uno::Reference< css::xml::dom::XDocument >& xRef ) { mxThemeDocument = xRef; }
 
     // model modifiers
     // Removes the node that rNodeId leads to. A node that still holds nodes below it stays, unless
@@ -455,10 +455,10 @@ public:
     DiagramDataStatePtr extractDiagramDataState() const;
     void applyDiagramDataState(const DiagramDataStatePtr& rState);
 
-    css::uno::Reference<css::drawing::XShape> getMasterXShapeForPoint(const Point& rPoint,
+    cpo::uno::Reference<css::drawing::XShape> getMasterXShapeForPoint(const Point& rPoint,
                                                                       sal_Int32& rParagraph) const;
     OUString getTextForPoint(const Point& rPoint) const;
-    css::uno::Reference<css::drawing::XShape> getXShapeByModelID(std::u16string_view rModelID) const;
+    cpo::uno::Reference<css::drawing::XShape> getXShapeByModelID(std::u16string_view rModelID) const;
     rtl::Reference<Point> getPointByModelID(std::u16string_view rModelID) const;
 
 protected:
@@ -477,7 +477,7 @@ protected:
     void addConnection(TypeConstant nType, const OUString& sSourceId, const OUString& sDestId);
 
     // remember associated SdrObjGroup/XShape/RootShape
-    css::uno::Reference< css::drawing::XShape > mxRootShape;
+    cpo::uno::Reference< css::drawing::XShape > mxRootShape;
 
     // evtl. existing alternative imported visualization identifier
     ::std::vector<OUString>  maExtDrawings;
@@ -496,7 +496,7 @@ protected:
     //          need to be created in PresentationFragmentHandler::importSlide. If
     //          this needs to be written to a File, please refer to
     //          fileDocxExport::WriteTheme(), look for "OOXTheme"
-    css::uno::Reference< css::xml::dom::XDocument > mxThemeDocument;
+    cpo::uno::Reference< css::xml::dom::XDocument > mxThemeDocument;
 
     // temporary processing data, partially deleted when using build()
     PointsNameMap     maPointsPresNameMap;

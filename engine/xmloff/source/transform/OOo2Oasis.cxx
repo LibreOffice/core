@@ -46,7 +46,7 @@
 #include <cppuhelper/typeprovider.hxx>
 
 using namespace ::xmloff::token;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::xml::sax;
@@ -889,7 +889,7 @@ public:
                               sal_uInt16 nPrefix,
                               ::xmloff::token::XMLTokenEnum eToken  );
 
-    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void StartElement( const cpo::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
     virtual void EndElement() override;
 };
 
@@ -1027,7 +1027,7 @@ public:
     XMLBodyTransformerContext_Impl( XMLTransformerBase& rTransformer,
                            const OUString& rQName );
 
-    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void StartElement( const cpo::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
     virtual void EndElement() override;
 };
 
@@ -1082,7 +1082,7 @@ public:
     XMLTabStopOOoTContext_Impl( XMLTransformerBase& rTransformer,
                            const OUString& rQName );
 
-    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void StartElement( const cpo::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 };
 
 }
@@ -1178,7 +1178,7 @@ public:
                                sal_uInt16 nPrefix,
                             XMLTokenEnum eToken );
 
-    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void StartElement( const cpo::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 };
 
 }
@@ -1244,7 +1244,7 @@ public:
     XMLTableOOoTransformerContext_Impl( XMLTransformerBase& rTransformer,
                            const OUString& rQName );
 
-    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void StartElement( const cpo::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
     virtual void EndElement() override;
 };
 

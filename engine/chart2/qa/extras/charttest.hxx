@@ -65,204 +65,204 @@ public:
     }
 
 
-    css::uno::Reference<css::lang::XComponent> getChartCompFromSheet(sal_Int32 nSheet, sal_Int32 nChart);
-    css::uno::Reference<css::chart2::XChartDocument> getChartDocFromSheet(sal_Int32 nSheet);
-    css::uno::Reference<css::table::XTablePivotCharts> getTablePivotChartsFromSheet(sal_Int32 nSheet);
-    css::uno::Reference<css::chart2::XChartDocument> getPivotChartDocFromSheet(sal_Int32 nSheet);
-    css::uno::Reference<css::chart2::XChartDocument>
-    getPivotChartDocFromSheet(css::uno::Reference<css::table::XTablePivotCharts> const& xTablePivotCharts,
+    cpo::uno::Reference<css::lang::XComponent> getChartCompFromSheet(sal_Int32 nSheet, sal_Int32 nChart);
+    cpo::uno::Reference<css::chart2::XChartDocument> getChartDocFromSheet(sal_Int32 nSheet);
+    cpo::uno::Reference<css::table::XTablePivotCharts> getTablePivotChartsFromSheet(sal_Int32 nSheet);
+    cpo::uno::Reference<css::chart2::XChartDocument> getPivotChartDocFromSheet(sal_Int32 nSheet);
+    cpo::uno::Reference<css::chart2::XChartDocument>
+    getPivotChartDocFromSheet(cpo::uno::Reference<css::table::XTablePivotCharts> const& xTablePivotCharts,
                               sal_Int32 nIndex);
-    css::uno::Reference<css::chart2::XChartType>
-    getChartTypeFromDoc(css::uno::Reference<css::chart2::XChartDocument> const& xChartDoc, sal_Int32 nChartType,
+    cpo::uno::Reference<css::chart2::XChartType>
+    getChartTypeFromDoc(cpo::uno::Reference<css::chart2::XChartDocument> const& xChartDoc, sal_Int32 nChartType,
                         sal_Int32 nCooSys = 0);
-    css::uno::Reference<css::chart2::XAxis> getAxisFromDoc(const css::uno::Reference<css::chart2::XChartDocument>& xChartDoc,
+    cpo::uno::Reference<css::chart2::XAxis> getAxisFromDoc(const cpo::uno::Reference<css::chart2::XChartDocument>& xChartDoc,
                                             sal_Int32 nCooSys, sal_Int32 nAxisDim,
                                             sal_Int32 nAxisIndex);
-    sal_Int32 getNumberOfDataSeries(css::uno::Reference<css::chart2::XChartDocument> const& xChartDoc,
+    sal_Int32 getNumberOfDataSeries(cpo::uno::Reference<css::chart2::XChartDocument> const& xChartDoc,
                                     sal_Int32 nChartType = 0, sal_Int32 nCooSys = 0);
-    css::uno::Reference<css::chart2::XDataSeries>
-    getDataSeriesFromDoc(css::uno::Reference<css::chart2::XChartDocument> const& xChartDoc,
+    cpo::uno::Reference<css::chart2::XDataSeries>
+    getDataSeriesFromDoc(cpo::uno::Reference<css::chart2::XChartDocument> const& xChartDoc,
                          sal_Int32 nDataSeries, sal_Int32 nChartType = 0, sal_Int32 nCooSys = 0);
-    css::uno::Reference<css::chart2::data::XDataSequence>
-    getLabelDataSequenceFromDoc(css::uno::Reference<css::chart2::XChartDocument> const& xChartDoc,
+    cpo::uno::Reference<css::chart2::data::XDataSequence>
+    getLabelDataSequenceFromDoc(cpo::uno::Reference<css::chart2::XChartDocument> const& xChartDoc,
                                 sal_Int32 nDataSeries = 0, sal_Int32 nChartType = 0);
-    css::uno::Reference<css::chart2::data::XDataSequence>
-    getDataSequenceFromDocByRole(css::uno::Reference<css::chart2::XChartDocument> const& xChartDoc,
+    cpo::uno::Reference<css::chart2::data::XDataSequence>
+    getDataSequenceFromDocByRole(cpo::uno::Reference<css::chart2::XChartDocument> const& xChartDoc,
                                  std::u16string_view rRole, sal_Int32 nDataSeries = 0,
                                  sal_Int32 nChartType = 0);
     cpo::uno::Sequence<OUString> getWriterChartColumnDescriptions();
     std::vector<std::vector<double>>
-    getDataSeriesYValuesFromChartType(const css::uno::Reference<css::chart2::XChartType>& xCT);
+    getDataSeriesYValuesFromChartType(const cpo::uno::Reference<css::chart2::XChartType>& xCT);
     std::vector<cpo::uno::Sequence<cpo::uno::Any>>
-    getDataSeriesLabelsFromChartType(const css::uno::Reference<css::chart2::XChartType>& xCT);
-    css::uno::Reference<css::chart::XChartDocument> getChartDocFromDrawImpress(sal_Int32 nPage,
+    getDataSeriesLabelsFromChartType(const cpo::uno::Reference<css::chart2::XChartType>& xCT);
+    cpo::uno::Reference<css::chart::XChartDocument> getChartDocFromDrawImpress(sal_Int32 nPage,
                                                                      sal_Int32 nShape);
-    css::uno::Reference<css::chart::XChartDocument> getChartDocFromWriter(sal_Int32 nShape);
-    OUString getTitleString(const css::uno::Reference<css::chart2::XTitled>& xTitled);
-    sal_Int32 getNumberFormatFromAxis(const css::uno::Reference<css::chart2::XAxis>& xAxis);
-    sal_Int16 getNumberFormatType(const css::uno::Reference<css::chart2::XChartDocument>& xChartDoc,
+    cpo::uno::Reference<css::chart::XChartDocument> getChartDocFromWriter(sal_Int32 nShape);
+    OUString getTitleString(const cpo::uno::Reference<css::chart2::XTitled>& xTitled);
+    sal_Int32 getNumberFormatFromAxis(const cpo::uno::Reference<css::chart2::XAxis>& xAxis);
+    sal_Int16 getNumberFormatType(const cpo::uno::Reference<css::chart2::XChartDocument>& xChartDoc,
                                   sal_Int32 nNumberFormat);
-    css::uno::Reference<css::drawing::XShape>
-    getShapeByName(const css::uno::Reference<css::drawing::XShapes>& rShapes, const OUString& rName,
-                   const std::function<bool(const css::uno::Reference<css::drawing::XShape>&)>& pCondition
+    cpo::uno::Reference<css::drawing::XShape>
+    getShapeByName(const cpo::uno::Reference<css::drawing::XShapes>& rShapes, const OUString& rName,
+                   const std::function<bool(const cpo::uno::Reference<css::drawing::XShape>&)>& pCondition
                    = nullptr);
 };
 
-css::uno::Reference< css::lang::XComponent > ChartTest::getChartCompFromSheet( sal_Int32 nSheet, sal_Int32 nChart )
+cpo::uno::Reference< css::lang::XComponent > ChartTest::getChartCompFromSheet( sal_Int32 nSheet, sal_Int32 nChart )
 {
     // let us assume that we only have one chart per sheet
 
-    css::uno::Reference< css::sheet::XSpreadsheetDocument > xDoc(mxComponent, css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference< css::sheet::XSpreadsheetDocument > xDoc(mxComponent, cpo::uno::UNO_QUERY_THROW);
 
-    css::uno::Reference< css::container::XIndexAccess > xIA(xDoc->getSheets(), css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference< css::container::XIndexAccess > xIA(xDoc->getSheets(), cpo::uno::UNO_QUERY_THROW);
 
-    css::uno::Reference< css::table::XTableChartsSupplier > xChartSupplier( xIA->getByIndex(nSheet), css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference< css::table::XTableChartsSupplier > xChartSupplier( xIA->getByIndex(nSheet), cpo::uno::UNO_QUERY_THROW);
 
-    css::uno::Reference< css::table::XTableCharts > xCharts = xChartSupplier->getCharts();
+    cpo::uno::Reference< css::table::XTableCharts > xCharts = xChartSupplier->getCharts();
     CPPUNIT_ASSERT(xCharts.is());
 
-    css::uno::Reference< css::container::XIndexAccess > xIACharts(xCharts, css::uno::UNO_QUERY_THROW);
-    css::uno::Reference< css::table::XTableChart > xChart( xIACharts->getByIndex(nChart), css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference< css::container::XIndexAccess > xIACharts(xCharts, cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference< css::table::XTableChart > xChart( xIACharts->getByIndex(nChart), cpo::uno::UNO_QUERY_THROW);
 
-    css::uno::Reference< css::document::XEmbeddedObjectSupplier > xEmbObjectSupplier(xChart, css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference< css::document::XEmbeddedObjectSupplier > xEmbObjectSupplier(xChart, cpo::uno::UNO_QUERY_THROW);
 
-    css::uno::Reference< css::lang::XComponent > xChartComp( xEmbObjectSupplier->getEmbeddedObject(), css::uno::UNO_SET_THROW );
+    cpo::uno::Reference< css::lang::XComponent > xChartComp( xEmbObjectSupplier->getEmbeddedObject(), cpo::uno::UNO_SET_THROW );
 
     return xChartComp;
 
 }
 
-css::uno::Reference< css::chart2::XChartDocument > ChartTest::getChartDocFromSheet( sal_Int32 nSheet )
+cpo::uno::Reference< css::chart2::XChartDocument > ChartTest::getChartDocFromSheet( sal_Int32 nSheet )
 {
-    css::uno::Reference< css::chart2::XChartDocument > xChartDoc ( getChartCompFromSheet(nSheet, 0), css::uno::UNO_QUERY_THROW );
+    cpo::uno::Reference< css::chart2::XChartDocument > xChartDoc ( getChartCompFromSheet(nSheet, 0), cpo::uno::UNO_QUERY_THROW );
 
     // Update the chart view, so that its draw page is updated and ready for the test
-    css::uno::Reference<css::frame::XModel> xModel(xChartDoc, css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::frame::XModel> xModel(xChartDoc, cpo::uno::UNO_QUERY_THROW);
     ChartHelper::updateChart(xModel);
 
     return xChartDoc;
 }
 
-css::uno::Reference<css::table::XTablePivotCharts> ChartTest::getTablePivotChartsFromSheet(sal_Int32 nSheet)
+cpo::uno::Reference<css::table::XTablePivotCharts> ChartTest::getTablePivotChartsFromSheet(sal_Int32 nSheet)
 {
-    css::uno::Reference<css::sheet::XSpreadsheetDocument> xDoc(mxComponent, css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::sheet::XSpreadsheetDocument> xDoc(mxComponent, cpo::uno::UNO_QUERY_THROW);
 
-    css::uno::Reference<css::container::XIndexAccess> xIA(xDoc->getSheets(), css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::container::XIndexAccess> xIA(xDoc->getSheets(), cpo::uno::UNO_QUERY_THROW);
 
-    css::uno::Reference<css::table::XTablePivotChartsSupplier> xChartSupplier(xIA->getByIndex(nSheet), css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::table::XTablePivotChartsSupplier> xChartSupplier(xIA->getByIndex(nSheet), cpo::uno::UNO_QUERY_THROW);
 
-    css::uno::Reference<css::table::XTablePivotCharts> xTablePivotCharts = xChartSupplier->getPivotCharts();
+    cpo::uno::Reference<css::table::XTablePivotCharts> xTablePivotCharts = xChartSupplier->getPivotCharts();
     CPPUNIT_ASSERT(xTablePivotCharts.is());
 
     return xTablePivotCharts;
 }
 
-css::uno::Reference<css::chart2::XChartDocument> ChartTest::getPivotChartDocFromSheet(sal_Int32 nSheet)
+cpo::uno::Reference<css::chart2::XChartDocument> ChartTest::getPivotChartDocFromSheet(sal_Int32 nSheet)
 {
-    css::uno::Reference<css::table::XTablePivotCharts> xTablePivotCharts = getTablePivotChartsFromSheet(nSheet);
+    cpo::uno::Reference<css::table::XTablePivotCharts> xTablePivotCharts = getTablePivotChartsFromSheet(nSheet);
 
-    css::uno::Reference<css::container::XIndexAccess> xIACharts(xTablePivotCharts, css::uno::UNO_QUERY_THROW);
-    css::uno::Reference<css::table::XTablePivotChart> xTablePivotChart(xIACharts->getByIndex(0), css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::container::XIndexAccess> xIACharts(xTablePivotCharts, cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::table::XTablePivotChart> xTablePivotChart(xIACharts->getByIndex(0), cpo::uno::UNO_QUERY_THROW);
 
-    css::uno::Reference<css::document::XEmbeddedObjectSupplier> xEmbObjectSupplier(xTablePivotChart, css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::document::XEmbeddedObjectSupplier> xEmbObjectSupplier(xTablePivotChart, cpo::uno::UNO_QUERY_THROW);
 
-    css::uno::Reference<css::lang::XComponent> xChartComp(xEmbObjectSupplier->getEmbeddedObject(), css::uno::UNO_SET_THROW);
-    css::uno::Reference<css::chart2::XChartDocument> xChartDoc(xChartComp, css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::lang::XComponent> xChartComp(xEmbObjectSupplier->getEmbeddedObject(), cpo::uno::UNO_SET_THROW);
+    cpo::uno::Reference<css::chart2::XChartDocument> xChartDoc(xChartComp, cpo::uno::UNO_QUERY_THROW);
     return xChartDoc;
 }
 
-css::uno::Reference<css::chart2::XChartDocument> ChartTest::getPivotChartDocFromSheet(css::uno::Reference<css::table::XTablePivotCharts> const & xTablePivotCharts, sal_Int32 nIndex)
+cpo::uno::Reference<css::chart2::XChartDocument> ChartTest::getPivotChartDocFromSheet(cpo::uno::Reference<css::table::XTablePivotCharts> const & xTablePivotCharts, sal_Int32 nIndex)
 {
-    css::uno::Reference<css::container::XIndexAccess> xIACharts(xTablePivotCharts, css::uno::UNO_QUERY_THROW);
-    css::uno::Reference<css::table::XTablePivotChart> xTablePivotChart(xIACharts->getByIndex(nIndex), css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::container::XIndexAccess> xIACharts(xTablePivotCharts, cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::table::XTablePivotChart> xTablePivotChart(xIACharts->getByIndex(nIndex), cpo::uno::UNO_QUERY_THROW);
 
-    css::uno::Reference<css::document::XEmbeddedObjectSupplier> xEmbObjectSupplier(xTablePivotChart, css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::document::XEmbeddedObjectSupplier> xEmbObjectSupplier(xTablePivotChart, cpo::uno::UNO_QUERY_THROW);
 
-    css::uno::Reference<css::lang::XComponent> xChartComp(xEmbObjectSupplier->getEmbeddedObject(), css::uno::UNO_SET_THROW);
+    cpo::uno::Reference<css::lang::XComponent> xChartComp(xEmbObjectSupplier->getEmbeddedObject(), cpo::uno::UNO_SET_THROW);
 
-    css::uno::Reference<css::chart2::XChartDocument> xChartDoc(xChartComp, css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::chart2::XChartDocument> xChartDoc(xChartComp, cpo::uno::UNO_QUERY_THROW);
     return xChartDoc;
 }
 
-css::uno::Reference< css::chart2::XChartType > ChartTest::getChartTypeFromDoc( css::uno::Reference< css::chart2::XChartDocument > const & xChartDoc,
+cpo::uno::Reference< css::chart2::XChartType > ChartTest::getChartTypeFromDoc( cpo::uno::Reference< css::chart2::XChartDocument > const & xChartDoc,
                                                                 sal_Int32 nChartType, sal_Int32 nCooSys )
 {
     CPPUNIT_ASSERT( xChartDoc.is() );
 
-    css::uno::Reference<css::chart2::XDiagram > xDiagram = xChartDoc->getFirstDiagram();
+    cpo::uno::Reference<css::chart2::XDiagram > xDiagram = xChartDoc->getFirstDiagram();
     CPPUNIT_ASSERT( xDiagram.is() );
 
-    css::uno::Reference< css::chart2::XCoordinateSystemContainer > xCooSysContainer( xDiagram, css::uno::UNO_QUERY_THROW );
+    cpo::uno::Reference< css::chart2::XCoordinateSystemContainer > xCooSysContainer( xDiagram, cpo::uno::UNO_QUERY_THROW );
 
-    cpo::uno::Sequence< css::uno::Reference< css::chart2::XCoordinateSystem > > xCooSysSequence( xCooSysContainer->getCoordinateSystems());
+    cpo::uno::Sequence< cpo::uno::Reference< css::chart2::XCoordinateSystem > > xCooSysSequence( xCooSysContainer->getCoordinateSystems());
     CPPUNIT_ASSERT( xCooSysSequence.getLength() > nCooSys );
 
-    css::uno::Reference< css::chart2::XChartTypeContainer > xChartTypeContainer( xCooSysSequence[nCooSys], css::uno::UNO_QUERY_THROW );
+    cpo::uno::Reference< css::chart2::XChartTypeContainer > xChartTypeContainer( xCooSysSequence[nCooSys], cpo::uno::UNO_QUERY_THROW );
 
-    cpo::uno::Sequence< css::uno::Reference< css::chart2::XChartType > > xChartTypeSequence( xChartTypeContainer->getChartTypes() );
+    cpo::uno::Sequence< cpo::uno::Reference< css::chart2::XChartType > > xChartTypeSequence( xChartTypeContainer->getChartTypes() );
     CPPUNIT_ASSERT( xChartTypeSequence.getLength() > nChartType );
 
     return xChartTypeSequence[nChartType];
 }
 
-css::uno::Reference<css::chart2::XAxis> ChartTest::getAxisFromDoc(
-    const css::uno::Reference<css::chart2::XChartDocument>& xChartDoc, sal_Int32 nCooSys, sal_Int32 nAxisDim, sal_Int32 nAxisIndex )
+cpo::uno::Reference<css::chart2::XAxis> ChartTest::getAxisFromDoc(
+    const cpo::uno::Reference<css::chart2::XChartDocument>& xChartDoc, sal_Int32 nCooSys, sal_Int32 nAxisDim, sal_Int32 nAxisIndex )
 {
-    css::uno::Reference<css::chart2::XDiagram> xDiagram = xChartDoc->getFirstDiagram();
+    cpo::uno::Reference<css::chart2::XDiagram> xDiagram = xChartDoc->getFirstDiagram();
     CPPUNIT_ASSERT(xDiagram.is());
 
-    css::uno::Reference<css::chart2::XCoordinateSystemContainer> xCooSysContainer(xDiagram, css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::chart2::XCoordinateSystemContainer> xCooSysContainer(xDiagram, cpo::uno::UNO_QUERY_THROW);
 
-    cpo::uno::Sequence<css::uno::Reference<css::chart2::XCoordinateSystem> > xCooSysSequence = xCooSysContainer->getCoordinateSystems();
+    cpo::uno::Sequence<cpo::uno::Reference<css::chart2::XCoordinateSystem> > xCooSysSequence = xCooSysContainer->getCoordinateSystems();
     CPPUNIT_ASSERT(xCooSysSequence.getLength() > nCooSys);
 
-    css::uno::Reference<css::chart2::XCoordinateSystem> xCoord = xCooSysSequence[nCooSys];
+    cpo::uno::Reference<css::chart2::XCoordinateSystem> xCoord = xCooSysSequence[nCooSys];
     CPPUNIT_ASSERT(xCoord.is());
 
-    css::uno::Reference<css::chart2::XAxis> xAxis = xCoord->getAxisByDimension(nAxisDim, nAxisIndex);
+    cpo::uno::Reference<css::chart2::XAxis> xAxis = xCoord->getAxisByDimension(nAxisDim, nAxisIndex);
     CPPUNIT_ASSERT(xAxis.is());
 
     return xAxis;
 }
 
-sal_Int32 ChartTest::getNumberOfDataSeries(css::uno::Reference<css::chart2::XChartDocument> const & xChartDoc,
+sal_Int32 ChartTest::getNumberOfDataSeries(cpo::uno::Reference<css::chart2::XChartDocument> const & xChartDoc,
                                 sal_Int32 nChartType, sal_Int32 nCooSys)
 {
-    css::uno::Reference<css::chart2::XChartType> xChartType = getChartTypeFromDoc(xChartDoc, nChartType, nCooSys);
-    css::uno::Reference<css::chart2::XDataSeriesContainer> xDataSeriesContainer(xChartType, css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::chart2::XChartType> xChartType = getChartTypeFromDoc(xChartDoc, nChartType, nCooSys);
+    cpo::uno::Reference<css::chart2::XDataSeriesContainer> xDataSeriesContainer(xChartType, cpo::uno::UNO_QUERY_THROW);
 
-    cpo::uno::Sequence<css::uno::Reference<css::chart2::XDataSeries>> xSeriesSequence(xDataSeriesContainer->getDataSeries());
+    cpo::uno::Sequence<cpo::uno::Reference<css::chart2::XDataSeries>> xSeriesSequence(xDataSeriesContainer->getDataSeries());
     return xSeriesSequence.getLength();
 }
 
-css::uno::Reference< css::chart2::XDataSeries > ChartTest::getDataSeriesFromDoc(css::uno::Reference<css::chart2::XChartDocument> const & xChartDoc,
+cpo::uno::Reference< css::chart2::XDataSeries > ChartTest::getDataSeriesFromDoc(cpo::uno::Reference<css::chart2::XChartDocument> const & xChartDoc,
                                                       sal_Int32 nDataSeries, sal_Int32 nChartType,
                                                       sal_Int32 nCooSys)
 {
-    css::uno::Reference< css::chart2::XChartType > xChartType = getChartTypeFromDoc( xChartDoc, nChartType, nCooSys );
-    css::uno::Reference< css::chart2::XDataSeriesContainer > xDataSeriesContainer( xChartType, css::uno::UNO_QUERY_THROW );
+    cpo::uno::Reference< css::chart2::XChartType > xChartType = getChartTypeFromDoc( xChartDoc, nChartType, nCooSys );
+    cpo::uno::Reference< css::chart2::XDataSeriesContainer > xDataSeriesContainer( xChartType, cpo::uno::UNO_QUERY_THROW );
 
-    cpo::uno::Sequence< css::uno::Reference< css::chart2::XDataSeries > > xSeriesSequence( xDataSeriesContainer->getDataSeries() );
+    cpo::uno::Sequence< cpo::uno::Reference< css::chart2::XDataSeries > > xSeriesSequence( xDataSeriesContainer->getDataSeries() );
     CPPUNIT_ASSERT( xSeriesSequence.getLength() > nDataSeries );
 
-    css::uno::Reference< css::chart2::XDataSeries > xSeries = xSeriesSequence[nDataSeries];
+    cpo::uno::Reference< css::chart2::XDataSeries > xSeries = xSeriesSequence[nDataSeries];
 
     return xSeries;
 }
 
-css::uno::Reference< css::chart2::data::XDataSequence > ChartTest::getLabelDataSequenceFromDoc(
-        css::uno::Reference< css::chart2::XChartDocument > const & xChartDoc,
+cpo::uno::Reference< css::chart2::data::XDataSequence > ChartTest::getLabelDataSequenceFromDoc(
+        cpo::uno::Reference< css::chart2::XChartDocument > const & xChartDoc,
         sal_Int32 nDataSeries, sal_Int32 nChartType )
 {
-    css::uno::Reference< css::chart2::XDataSeries > xDataSeries =
+    cpo::uno::Reference< css::chart2::XDataSeries > xDataSeries =
         getDataSeriesFromDoc( xChartDoc, nDataSeries, nChartType );
     CPPUNIT_ASSERT(xDataSeries.is());
-    css::uno::Reference< css::chart2::data::XDataSource > xDataSource( xDataSeries, css::uno::UNO_QUERY_THROW );
-    const cpo::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > xDataSequences =
+    cpo::uno::Reference< css::chart2::data::XDataSource > xDataSource( xDataSeries, cpo::uno::UNO_QUERY_THROW );
+    const cpo::uno::Sequence< cpo::uno::Reference< css::chart2::data::XLabeledDataSequence > > xDataSequences =
         xDataSource->getDataSequences();
     for(auto const & lds : xDataSequences)
     {
-        css::uno::Reference< css::chart2::data::XDataSequence> xLabelSeq = lds->getLabel();
+        cpo::uno::Reference< css::chart2::data::XDataSequence> xLabelSeq = lds->getLabel();
         if(!xLabelSeq.is())
             continue;
 
@@ -272,20 +272,20 @@ css::uno::Reference< css::chart2::data::XDataSequence > ChartTest::getLabelDataS
     CPPUNIT_FAIL("no Label sequence found");
 }
 
-css::uno::Reference< css::chart2::data::XDataSequence > ChartTest::getDataSequenceFromDocByRole(
-        css::uno::Reference< css::chart2::XChartDocument > const & xChartDoc, std::u16string_view rRole,
+cpo::uno::Reference< css::chart2::data::XDataSequence > ChartTest::getDataSequenceFromDocByRole(
+        cpo::uno::Reference< css::chart2::XChartDocument > const & xChartDoc, std::u16string_view rRole,
         sal_Int32 nDataSeries, sal_Int32 nChartType )
 {
-    css::uno::Reference< css::chart2::XDataSeries > xDataSeries =
+    cpo::uno::Reference< css::chart2::XDataSeries > xDataSeries =
         getDataSeriesFromDoc( xChartDoc, nDataSeries, nChartType );
     CPPUNIT_ASSERT(xDataSeries.is());
-    css::uno::Reference< css::chart2::data::XDataSource > xDataSource( xDataSeries, css::uno::UNO_QUERY_THROW );
-    const cpo::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > xDataSequences =
+    cpo::uno::Reference< css::chart2::data::XDataSource > xDataSource( xDataSeries, cpo::uno::UNO_QUERY_THROW );
+    const cpo::uno::Sequence< cpo::uno::Reference< css::chart2::data::XLabeledDataSequence > > xDataSequences =
         xDataSource->getDataSequences();
     for(auto const & lds : xDataSequences)
     {
-        css::uno::Reference< css::chart2::data::XDataSequence> xLabelSeq = lds->getValues();
-        css::uno::Reference< css::beans::XPropertySet > xProps(xLabelSeq, css::uno::UNO_QUERY);
+        cpo::uno::Reference< css::chart2::data::XDataSequence> xLabelSeq = lds->getValues();
+        cpo::uno::Reference< css::beans::XPropertySet > xProps(xLabelSeq, cpo::uno::UNO_QUERY);
         if(!xProps.is())
             continue;
 
@@ -295,42 +295,42 @@ css::uno::Reference< css::chart2::data::XDataSequence > ChartTest::getDataSequen
             return xLabelSeq;
     }
 
-    return css::uno::Reference< css::chart2::data::XDataSequence > ();
+    return cpo::uno::Reference< css::chart2::data::XDataSequence > ();
 }
 
 cpo::uno::Sequence < OUString > ChartTest::getWriterChartColumnDescriptions()
 {
-    css::uno::Reference<css::drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, css::uno::UNO_QUERY);
-    css::uno::Reference<css::drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
-    css::uno::Reference<css::drawing::XShape> xShape(xDrawPage->getByIndex(0), css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, cpo::uno::UNO_QUERY);
+    cpo::uno::Reference<css::drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+    cpo::uno::Reference<css::drawing::XShape> xShape(xDrawPage->getByIndex(0), cpo::uno::UNO_QUERY);
     CPPUNIT_ASSERT( xShape.is() );
-    css::uno::Reference<css::beans::XPropertySet> xPropertySet(xShape, css::uno::UNO_QUERY);
-    css::uno::Reference< css::chart2::XChartDocument > xChartDoc;
-    xChartDoc.set( xPropertySet->getPropertyValue( u"Model"_ustr ), css::uno::UNO_QUERY );
+    cpo::uno::Reference<css::beans::XPropertySet> xPropertySet(xShape, cpo::uno::UNO_QUERY);
+    cpo::uno::Reference< css::chart2::XChartDocument > xChartDoc;
+    xChartDoc.set( xPropertySet->getPropertyValue( u"Model"_ustr ), cpo::uno::UNO_QUERY );
     CPPUNIT_ASSERT( xChartDoc.is() );
     CPPUNIT_ASSERT( xChartDoc->getDataProvider().is() );
-    css::uno::Reference< css::chart2::XAnyDescriptionAccess > xAnyDescriptionAccess ( xChartDoc->getDataProvider(), css::uno::UNO_QUERY_THROW );
+    cpo::uno::Reference< css::chart2::XAnyDescriptionAccess > xAnyDescriptionAccess ( xChartDoc->getDataProvider(), cpo::uno::UNO_QUERY_THROW );
     cpo::uno::Sequence< OUString > seriesList = xAnyDescriptionAccess->getColumnDescriptions();
     return seriesList;
 }
 
-std::vector<std::vector<double> > ChartTest::getDataSeriesYValuesFromChartType( const css::uno::Reference<css::chart2::XChartType>& xCT )
+std::vector<std::vector<double> > ChartTest::getDataSeriesYValuesFromChartType( const cpo::uno::Reference<css::chart2::XChartType>& xCT )
 {
-    css::uno::Reference<css::chart2::XDataSeriesContainer> xDSCont(xCT, css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::chart2::XDataSeriesContainer> xDSCont(xCT, cpo::uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDSCont.is());
-    const cpo::uno::Sequence<css::uno::Reference<css::chart2::XDataSeries> > aDataSeriesSeq = xDSCont->getDataSeries();
+    const cpo::uno::Sequence<cpo::uno::Reference<css::chart2::XDataSeries> > aDataSeriesSeq = xDSCont->getDataSeries();
 
     std::vector<std::vector<double> > aRet;
-    for (css::uno::Reference<css::chart2::XDataSeries> const & ds : aDataSeriesSeq)
+    for (cpo::uno::Reference<css::chart2::XDataSeries> const & ds : aDataSeriesSeq)
     {
-        css::uno::Reference<css::chart2::data::XDataSource> xDSrc(ds, css::uno::UNO_QUERY);
+        cpo::uno::Reference<css::chart2::data::XDataSource> xDSrc(ds, cpo::uno::UNO_QUERY);
         CPPUNIT_ASSERT(xDSrc.is());
-        const cpo::uno::Sequence<css::uno::Reference<css::chart2::data::XLabeledDataSequence> > aDataSeqs = xDSrc->getDataSequences();
+        const cpo::uno::Sequence<cpo::uno::Reference<css::chart2::data::XLabeledDataSequence> > aDataSeqs = xDSrc->getDataSequences();
         for (auto const & lds : aDataSeqs)
         {
-            css::uno::Reference<css::chart2::data::XDataSequence> xValues = lds->getValues();
+            cpo::uno::Reference<css::chart2::data::XDataSequence> xValues = lds->getValues();
             CPPUNIT_ASSERT(xValues.is());
-            css::uno::Reference<css::beans::XPropertySet> xPropSet(xValues, css::uno::UNO_QUERY);
+            cpo::uno::Reference<css::beans::XPropertySet> xPropSet(xValues, cpo::uno::UNO_QUERY);
             if (!xPropSet.is())
                 continue;
 
@@ -357,25 +357,25 @@ std::vector<std::vector<double> > ChartTest::getDataSeriesYValuesFromChartType( 
     return aRet;
 }
 
-std::vector<cpo::uno::Sequence<cpo::uno::Any> > ChartTest::getDataSeriesLabelsFromChartType( const css::uno::Reference<css::chart2::XChartType>& xCT )
+std::vector<cpo::uno::Sequence<cpo::uno::Any> > ChartTest::getDataSeriesLabelsFromChartType( const cpo::uno::Reference<css::chart2::XChartType>& xCT )
 {
     OUString aLabelRole = xCT->getRoleOfSequenceForSeriesLabel();
 
-    css::uno::Reference<css::chart2::XDataSeriesContainer> xDSCont(xCT, css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::chart2::XDataSeriesContainer> xDSCont(xCT, cpo::uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDSCont.is());
-    const cpo::uno::Sequence<css::uno::Reference<css::chart2::XDataSeries> > aDataSeriesSeq = xDSCont->getDataSeries();
+    const cpo::uno::Sequence<cpo::uno::Reference<css::chart2::XDataSeries> > aDataSeriesSeq = xDSCont->getDataSeries();
 
     std::vector<cpo::uno::Sequence<cpo::uno::Any> > aRet;
     for (auto const & ds : aDataSeriesSeq)
     {
-        css::uno::Reference<css::chart2::data::XDataSource> xDSrc(ds, css::uno::UNO_QUERY);
+        cpo::uno::Reference<css::chart2::data::XDataSource> xDSrc(ds, cpo::uno::UNO_QUERY);
         CPPUNIT_ASSERT(xDSrc.is());
-        const cpo::uno::Sequence<css::uno::Reference<css::chart2::data::XLabeledDataSequence> > aDataSeqs = xDSrc->getDataSequences();
+        const cpo::uno::Sequence<cpo::uno::Reference<css::chart2::data::XLabeledDataSequence> > aDataSeqs = xDSrc->getDataSequences();
         for (auto const & lds : aDataSeqs)
         {
-            css::uno::Reference<css::chart2::data::XDataSequence> xValues = lds->getValues();
+            cpo::uno::Reference<css::chart2::data::XDataSequence> xValues = lds->getValues();
             CPPUNIT_ASSERT(xValues.is());
-            css::uno::Reference<css::beans::XPropertySet> xPropSet(xValues, css::uno::UNO_QUERY);
+            cpo::uno::Reference<css::beans::XPropertySet> xPropSet(xValues, cpo::uno::UNO_QUERY);
             if (!xPropSet.is())
                 continue;
 
@@ -383,9 +383,9 @@ std::vector<cpo::uno::Sequence<cpo::uno::Any> > ChartTest::getDataSeriesLabelsFr
             xPropSet->getPropertyValue(u"Role"_ustr) >>= aRoleName;
             if (aRoleName == aLabelRole)
             {
-                css::uno::Reference<css::chart2::data::XLabeledDataSequence> xLabel = lds;
+                cpo::uno::Reference<css::chart2::data::XLabeledDataSequence> xLabel = lds;
                 CPPUNIT_ASSERT(xLabel.is());
-                css::uno::Reference<css::chart2::data::XDataSequence> xDS2 = xLabel->getLabel();
+                cpo::uno::Reference<css::chart2::data::XDataSequence> xDS2 = xLabel->getLabel();
                 CPPUNIT_ASSERT(xDS2.is());
                 cpo::uno::Sequence<cpo::uno::Any> aData = xDS2->getData();
                 aRet.push_back(aData);
@@ -396,57 +396,57 @@ std::vector<cpo::uno::Sequence<cpo::uno::Any> > ChartTest::getDataSeriesLabelsFr
     return aRet;
 }
 
-css::uno::Reference<css::chart::XChartDocument> ChartTest::getChartDocFromDrawImpress(
+cpo::uno::Reference<css::chart::XChartDocument> ChartTest::getChartDocFromDrawImpress(
     sal_Int32 nPage, sal_Int32 nShape )
 {
-    css::uno::Reference<css::chart::XChartDocument> xEmpty;
+    cpo::uno::Reference<css::chart::XChartDocument> xEmpty;
 
-    css::uno::Reference<css::drawing::XDrawPagesSupplier> xPages(mxComponent, css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::drawing::XDrawPagesSupplier> xPages(mxComponent, cpo::uno::UNO_QUERY);
     if (!xPages.is())
         return xEmpty;
 
-    css::uno::Reference<css::drawing::XDrawPage> xPage(
-        xPages->getDrawPages()->getByIndex(nPage), css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::drawing::XDrawPage> xPage(
+        xPages->getDrawPages()->getByIndex(nPage), cpo::uno::UNO_QUERY_THROW);
 
-    css::uno::Reference<css::beans::XPropertySet> xShapeProps(xPage->getByIndex(nShape), css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::beans::XPropertySet> xShapeProps(xPage->getByIndex(nShape), cpo::uno::UNO_QUERY);
     if (!xShapeProps.is())
         return xEmpty;
 
-    css::uno::Reference<css::frame::XModel> xDocModel;
+    cpo::uno::Reference<css::frame::XModel> xDocModel;
     xShapeProps->getPropertyValue(u"Model"_ustr) >>= xDocModel;
     if (!xDocModel.is())
         return xEmpty;
 
-    css::uno::Reference<css::chart::XChartDocument> xChartDoc(xDocModel, css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::chart::XChartDocument> xChartDoc(xDocModel, cpo::uno::UNO_QUERY);
     return xChartDoc;
 }
 
 
-css::uno::Reference<css::chart::XChartDocument> ChartTest::getChartDocFromWriter( sal_Int32 nShape )
+cpo::uno::Reference<css::chart::XChartDocument> ChartTest::getChartDocFromWriter( sal_Int32 nShape )
 {
     // DO NOT use XDrawPageSupplier since SwVirtFlyDrawObj are not created
     // during import, only in layout!
-    css::uno::Reference<css::text::XTextEmbeddedObjectsSupplier> xEOS(mxComponent, css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::text::XTextEmbeddedObjectsSupplier> xEOS(mxComponent, cpo::uno::UNO_QUERY);
     CPPUNIT_ASSERT(xEOS.is());
-    css::uno::Reference<css::container::XIndexAccess> xEmbeddeds(xEOS->getEmbeddedObjects(), css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::container::XIndexAccess> xEmbeddeds(xEOS->getEmbeddedObjects(), cpo::uno::UNO_QUERY);
     CPPUNIT_ASSERT(xEmbeddeds.is());
 
-    css::uno::Reference<css::beans::XPropertySet> xShapeProps(xEmbeddeds->getByIndex(nShape), css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::beans::XPropertySet> xShapeProps(xEmbeddeds->getByIndex(nShape), cpo::uno::UNO_QUERY);
     CPPUNIT_ASSERT(xShapeProps.is());
 
-    css::uno::Reference<css::frame::XModel> xDocModel;
+    cpo::uno::Reference<css::frame::XModel> xDocModel;
     xShapeProps->getPropertyValue(u"Model"_ustr) >>= xDocModel;
     CPPUNIT_ASSERT(xDocModel.is());
 
-    css::uno::Reference<css::chart::XChartDocument> xChartDoc(xDocModel, css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::chart::XChartDocument> xChartDoc(xDocModel, cpo::uno::UNO_QUERY);
     return xChartDoc;
 }
 
-OUString ChartTest::getTitleString( const css::uno::Reference<css::chart2::XTitled>& xTitled )
+OUString ChartTest::getTitleString( const cpo::uno::Reference<css::chart2::XTitled>& xTitled )
 {
-    css::uno::Reference<css::chart2::XTitle> xTitle = xTitled->getTitleObject();
+    cpo::uno::Reference<css::chart2::XTitle> xTitle = xTitled->getTitleObject();
     CPPUNIT_ASSERT(xTitle.is());
-    const cpo::uno::Sequence<css::uno::Reference<css::chart2::XFormattedString> > aFSSeq = xTitle->getText();
+    const cpo::uno::Sequence<cpo::uno::Reference<css::chart2::XFormattedString> > aFSSeq = xTitle->getText();
     OUStringBuffer aText;
     for (auto const & fs : aFSSeq)
         aText.append(fs->getString());
@@ -454,9 +454,9 @@ OUString ChartTest::getTitleString( const css::uno::Reference<css::chart2::XTitl
     return aText.makeStringAndClear();
 }
 
-sal_Int32 ChartTest::getNumberFormatFromAxis( const css::uno::Reference<css::chart2::XAxis>& xAxis )
+sal_Int32 ChartTest::getNumberFormatFromAxis( const cpo::uno::Reference<css::chart2::XAxis>& xAxis )
 {
-    css::uno::Reference<css::beans::XPropertySet> xPS(xAxis, css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::beans::XPropertySet> xPS(xAxis, cpo::uno::UNO_QUERY);
     CPPUNIT_ASSERT(xPS.is());
     sal_Int32 nNumberFormat = -1;
     bool bSuccess = xPS->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nNumberFormat;
@@ -465,13 +465,13 @@ sal_Int32 ChartTest::getNumberFormatFromAxis( const css::uno::Reference<css::cha
     return nNumberFormat;
 }
 
-sal_Int16 ChartTest::getNumberFormatType( const css::uno::Reference<css::chart2::XChartDocument>& xChartDoc, sal_Int32 nNumberFormat )
+sal_Int16 ChartTest::getNumberFormatType( const cpo::uno::Reference<css::chart2::XChartDocument>& xChartDoc, sal_Int32 nNumberFormat )
 {
-    css::uno::Reference<css::util::XNumberFormatsSupplier> xNFS(xChartDoc, css::uno::UNO_QUERY_THROW);
-    css::uno::Reference<css::util::XNumberFormats> xNumberFormats = xNFS->getNumberFormats();
+    cpo::uno::Reference<css::util::XNumberFormatsSupplier> xNFS(xChartDoc, cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::util::XNumberFormats> xNumberFormats = xNFS->getNumberFormats();
     CPPUNIT_ASSERT(xNumberFormats.is());
 
-    css::uno::Reference<css::beans::XPropertySet> xNumPS = xNumberFormats->getByKey(nNumberFormat);
+    cpo::uno::Reference<css::beans::XPropertySet> xNumPS = xNumberFormats->getByKey(nNumberFormat);
     CPPUNIT_ASSERT(xNumPS.is());
 
     sal_Int16 nType = css::util::NumberFormat::UNDEFINED;
@@ -480,28 +480,28 @@ sal_Int16 ChartTest::getNumberFormatType( const css::uno::Reference<css::chart2:
     return nType;
 }
 
-css::uno::Reference<css::drawing::XShape>
-ChartTest::getShapeByName(const css::uno::Reference<css::drawing::XShapes>& rShapes, const OUString& rName,
-               const std::function<bool(const css::uno::Reference<css::drawing::XShape>&)>& pCondition)
+cpo::uno::Reference<css::drawing::XShape>
+ChartTest::getShapeByName(const cpo::uno::Reference<css::drawing::XShapes>& rShapes, const OUString& rName,
+               const std::function<bool(const cpo::uno::Reference<css::drawing::XShape>&)>& pCondition)
 {
     for (sal_Int32 i = 0; i < rShapes->getCount(); ++i)
     {
-        css::uno::Reference<css::drawing::XShapes> xShapes(rShapes->getByIndex(i), css::uno::UNO_QUERY);
+        cpo::uno::Reference<css::drawing::XShapes> xShapes(rShapes->getByIndex(i), cpo::uno::UNO_QUERY);
         if (xShapes.is())
         {
-            css::uno::Reference<css::drawing::XShape> xRet = getShapeByName(xShapes, rName, pCondition);
+            cpo::uno::Reference<css::drawing::XShape> xRet = getShapeByName(xShapes, rName, pCondition);
             if (xRet.is())
                 return xRet;
         }
-        css::uno::Reference<css::container::XNamed> xNamedShape(rShapes->getByIndex(i), css::uno::UNO_QUERY);
+        cpo::uno::Reference<css::container::XNamed> xNamedShape(rShapes->getByIndex(i), cpo::uno::UNO_QUERY);
         if (xNamedShape->getName() == rName)
         {
-            css::uno::Reference<css::drawing::XShape> xShape(xNamedShape, css::uno::UNO_QUERY);
+            cpo::uno::Reference<css::drawing::XShape> xShape(xNamedShape, cpo::uno::UNO_QUERY);
             if (pCondition == nullptr || pCondition(xShape))
                 return xShape;
         }
     }
-    return css::uno::Reference<css::drawing::XShape>();
+    return cpo::uno::Reference<css::drawing::XShape>();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

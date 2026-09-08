@@ -35,7 +35,7 @@
 
 
 using ::com::sun::star::beans::XPropertySet;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::cpo::uno::Any;
 using namespace ::xmloff::token;
 
@@ -189,9 +189,9 @@ void XMLIndexAlphabeticalSourceContext::endFastElement(sal_Int32 nElement)
     XMLIndexSourceBaseContext::endFastElement(nElement);
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLIndexAlphabeticalSourceContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLIndexAlphabeticalSourceContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     if ( nElement == XML_ELEMENT(TEXT, XML_ALPHABETICAL_INDEX_ENTRY_TEMPLATE) )
     {

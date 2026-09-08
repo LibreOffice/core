@@ -36,7 +36,7 @@ class SvxFieldData;
 
 /// @throws cpo::uno::Exception
 /// @throws cpo::uno::RuntimeException
-css::uno::Reference< cpo::uno::XInterface > EDITENG_DLLPUBLIC SvxUnoTextCreateTextField(
+cpo::uno::Reference< cpo::uno::XInterface > EDITENG_DLLPUBLIC SvxUnoTextCreateTextField(
     std::u16string_view ServiceSpecifier );
 
 class EDITENG_DLLPUBLIC SvxUnoTextField final : public cppu::BaseMutex,
@@ -45,7 +45,7 @@ class EDITENG_DLLPUBLIC SvxUnoTextField final : public cppu::BaseMutex,
                         public css::beans::XPropertySet,
                         public css::lang::XServiceInfo
 {
-    css::uno::Reference< css::text::XTextRange > mxAnchor;
+    cpo::uno::Reference< css::text::XTextRange > mxAnchor;
     const SfxItemPropertySet*   mpPropSet;
     sal_Int32                   mnServiceId;
     std::unique_ptr<SvxUnoFieldData_Impl>        mpImpl;
@@ -53,7 +53,7 @@ class EDITENG_DLLPUBLIC SvxUnoTextField final : public cppu::BaseMutex,
 
 public:
     SvxUnoTextField( sal_Int32 nServiceId ) noexcept;
-    SvxUnoTextField( css::uno::Reference< css::text::XTextRange > xAnchor, const OUString& rPresentation, const SvxFieldData* pFieldData ) noexcept;
+    SvxUnoTextField( cpo::uno::Reference< css::text::XTextRange > xAnchor, const OUString& rPresentation, const SvxFieldData* pFieldData ) noexcept;
     virtual ~SvxUnoTextField() noexcept override;
 
     // Internal
@@ -73,22 +73,22 @@ public:
     virtual OUString getPresentation( bool bShowCommand ) override;
 
     // XTextContent
-    virtual void attach( const css::uno::Reference< css::text::XTextRange >& xTextRange ) override;
-    virtual css::uno::Reference< css::text::XTextRange > getAnchor(  ) override;
+    virtual void attach( const cpo::uno::Reference< css::text::XTextRange >& xTextRange ) override;
+    virtual cpo::uno::Reference< css::text::XTextRange > getAnchor(  ) override;
 
     // css::lang::XComponent
     virtual void dispose() override;
-    virtual void addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-    virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+    virtual void addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& xListener ) override;
+    virtual void removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
     // XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
     virtual void setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
     virtual cpo::uno::Any getPropertyValue( const OUString& PropertyName ) override;
-    virtual void addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
-    virtual void removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
-    virtual void addVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
-    virtual void removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+    virtual void addPropertyChangeListener( const OUString& aPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
+    virtual void removePropertyChangeListener( const OUString& aPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
+    virtual void addVetoableChangeListener( const OUString& PropertyName, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+    virtual void removeVetoableChangeListener( const OUString& PropertyName, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
     // OComponentHelper
     virtual void disposing() override;

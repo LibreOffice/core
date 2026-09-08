@@ -32,7 +32,7 @@ com_sun_star_comp_dbu_OColumnControl_get_implementation(
 
 namespace dbaui
 {
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::beans;

@@ -88,8 +88,8 @@ using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::embed;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::xml::sax;
 
 using ::sax_fastparser::FSHelperPtr;
@@ -268,7 +268,7 @@ void XmlFilterBase::checkDocumentProperties(const Reference<XDocumentProperties>
     mbMSO2007 = true;
 }
 
-void XmlFilterBase::putPropertiesToDocumentGrabBag(const css::uno::Reference<css::lang::XComponent>& xDstDoc,
+void XmlFilterBase::putPropertiesToDocumentGrabBag(const cpo::uno::Reference<css::lang::XComponent>& xDstDoc,
                                                    const comphelper::SequenceAsHashMap& rProperties)
 {
     try
@@ -1142,7 +1142,7 @@ OUString XmlFilterBase::getNamespaceURL(sal_Int32 nNSID) const
     return itr->second;
 }
 
-void XmlFilterBase::importCustomFragments(css::uno::Reference<css::embed::XStorage> const & xDocumentStorage)
+void XmlFilterBase::importCustomFragments(cpo::uno::Reference<css::embed::XStorage> const & xDocumentStorage)
 {
     Reference<XRelationshipAccess> xRelations(xDocumentStorage, UNO_QUERY);
     if (!xRelations.is())

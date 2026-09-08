@@ -24,6 +24,7 @@
 #include <cppuhelper/supportsservice.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 UUIInteractionRequestStringResolver::UUIInteractionRequestStringResolver(
     uno::Reference< cpo::uno::XComponentContext > const &

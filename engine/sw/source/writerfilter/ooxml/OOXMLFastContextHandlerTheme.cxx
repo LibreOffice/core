@@ -13,6 +13,7 @@
 #include <oox/token/namespaces.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace writerfilter::ooxml
 {

@@ -35,7 +35,7 @@ class DlgEditor;
 
 class LocalizationMgr
 {
-    css::uno::Reference< css::resource::XStringResourceManager > m_xStringResourceManager;
+    cpo::uno::Reference< css::resource::XStringResourceManager > m_xStringResourceManager;
 
     Shell*                                                      m_pShell;
 
@@ -57,8 +57,8 @@ class LocalizationMgr
     static sal_Int32 implHandleControlResourceProperties(const cpo::uno::Any& rControlAny,
             std::u16string_view aDialogName,
             std::u16string_view aCtrlName,
-            const css::uno::Reference< css::resource::XStringResourceManager >& xStringResourceManager,
-            const css::uno::Reference< css::resource::XStringResourceResolver >& xSourceStringResolver,
+            const cpo::uno::Reference< css::resource::XStringResourceManager >& xStringResourceManager,
+            const cpo::uno::Reference< css::resource::XStringResourceResolver >& xSourceStringResolver,
             HandleResourceMode eMode );
 
     void enableResourceForAllLibraryDialogs()
@@ -73,9 +73,9 @@ class LocalizationMgr
 
 public:
     LocalizationMgr(Shell*, ScriptDocument , OUString aLibName,
-        const css::uno::Reference < css::resource::XStringResourceManager >& xStringResourceManager );
+        const cpo::uno::Reference < css::resource::XStringResourceManager >& xStringResourceManager );
 
-    const css::uno::Reference< css::resource::XStringResourceManager >& getStringResourceManager() const
+    const cpo::uno::Reference< css::resource::XStringResourceManager >& getStringResourceManager() const
     {
         return m_xStringResourceManager;
     }
@@ -108,41 +108,41 @@ public:
         const cpo::uno::Any& rControlAny, std::u16string_view aCtrlName);
 
     static void setStringResourceAtDialog( const ScriptDocument& rDocument, const OUString& aLibName, std::u16string_view aDlgName,
-        const css::uno::Reference< css::container::XNameContainer >& xDialogModel );
+        const cpo::uno::Reference< css::container::XNameContainer >& xDialogModel );
 
     static void renameStringResourceIDs( const ScriptDocument& rDocument, const OUString& aLibName, std::u16string_view aDlgName,
-        const css::uno::Reference< css::container::XNameContainer >& xDialogModel );
+        const cpo::uno::Reference< css::container::XNameContainer >& xDialogModel );
 
     static void removeResourceForDialog( const ScriptDocument& rDocument, const OUString& aLibName, std::u16string_view aDlgName,
-        const css::uno::Reference< css::container::XNameContainer >& xDialogModel );
+        const cpo::uno::Reference< css::container::XNameContainer >& xDialogModel );
 
-    static css::uno::Reference< css::resource::XStringResourceManager >
-        getStringResourceFromDialogLibrary( const css::uno::Reference< css::container::XNameContainer >& xDialogLib );
+    static cpo::uno::Reference< css::resource::XStringResourceManager >
+        getStringResourceFromDialogLibrary( const cpo::uno::Reference< css::container::XNameContainer >& xDialogLib );
 
     // Clipboard / Drag & Drop
     static void resetResourceForDialog(
-        const css::uno::Reference< css::container::XNameContainer >& xDialogModel,
-        const css::uno::Reference< css::resource::XStringResourceManager >& xStringResourceManager );
+        const cpo::uno::Reference< css::container::XNameContainer >& xDialogModel,
+        const cpo::uno::Reference< css::resource::XStringResourceManager >& xStringResourceManager );
 
     static void setResourceIDsForDialog(
-        const css::uno::Reference< css::container::XNameContainer >& xDialogModel,
-        const css::uno::Reference< css::resource::XStringResourceManager >& xStringResourceManager );
+        const cpo::uno::Reference< css::container::XNameContainer >& xDialogModel,
+        const cpo::uno::Reference< css::resource::XStringResourceManager >& xStringResourceManager );
 
     static void copyResourcesForPastedEditorObject( DlgEditor const * pEditor,
         const cpo::uno::Any& rControlAny, std::u16string_view aCtrlName,
-        const css::uno::Reference< css::resource::XStringResourceResolver >& xSourceStringResolver );
+        const cpo::uno::Reference< css::resource::XStringResourceResolver >& xSourceStringResolver );
 
     static void copyResourceForDroppedDialog(
-        const css::uno::Reference< css::container::XNameContainer >& xDialogModel,
+        const cpo::uno::Reference< css::container::XNameContainer >& xDialogModel,
         std::u16string_view aDialogName,
-        const css::uno::Reference< css::resource::XStringResourceManager >& xStringResourceManager,
-        const css::uno::Reference< css::resource::XStringResourceResolver >& xSourceStringResolver );
+        const cpo::uno::Reference< css::resource::XStringResourceManager >& xStringResourceManager,
+        const cpo::uno::Reference< css::resource::XStringResourceResolver >& xSourceStringResolver );
 
     static void copyResourceForDialog(
-        const css::uno::Reference< css::container::XNameContainer >& xDialogModel,
-        const css::uno::Reference< css::resource::
+        const cpo::uno::Reference< css::container::XNameContainer >& xDialogModel,
+        const cpo::uno::Reference< css::resource::
             XStringResourceResolver >& xSourceStringResolver,
-        const css::uno::Reference< css::resource::
+        const cpo::uno::Reference< css::resource::
             XStringResourceManager >& xTargetStringResourceManager );
 };
 

@@ -51,6 +51,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
+using namespace ::cpo;
 using namespace ::sw::access;
 
 typedef o3tl::sorted_vector< sal_Int32 > Int32Set_Impl;

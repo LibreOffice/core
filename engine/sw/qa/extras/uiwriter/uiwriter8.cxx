@@ -55,7 +55,8 @@
 #include <officecfg/Office/Common.hxx>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 namespace
 {
@@ -2965,16 +2966,16 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf138897)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf136740)
 {
     createSwDoc();
-    css::uno::Reference<css::lang::XMultiServiceFactory> xFact(mxComponent,
-                                                               css::uno::UNO_QUERY_THROW);
-    css::uno::Reference<css::beans::XPropertySet> xTextDefaults(
-        xFact->createInstance(u"com.sun.star.text.Defaults"_ustr), css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::lang::XMultiServiceFactory> xFact(mxComponent,
+                                                               cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::beans::XPropertySet> xTextDefaults(
+        xFact->createInstance(u"com.sun.star.text.Defaults"_ustr), cpo::uno::UNO_QUERY_THROW);
     const cpo::uno::Any aOrig = xTextDefaults->getPropertyValue(u"TabStopDistance"_ustr);
     sal_Int32 nDefTab = aOrig.get<sal_Int32>();
     CPPUNIT_ASSERT(nDefTab != 0);
 
-    css::uno::Reference<css::text::XTextRange> const xParagraph(getParagraphOrTable(1),
-                                                                css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::text::XTextRange> const xParagraph(getParagraphOrTable(1),
+                                                                cpo::uno::UNO_QUERY_THROW);
     xParagraph->setString(u"Foo"_ustr);
 
     CPPUNIT_ASSERT_EQUAL(1, getParagraphs());

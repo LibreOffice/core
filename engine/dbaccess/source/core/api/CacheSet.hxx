@@ -35,10 +35,10 @@ namespace dbaccess
     class OCacheSet : public ::cppu::WeakImplHelper< css::sdbc::XRow>
     {
     protected:
-        css::uno::Reference< css::sdbc::XResultSet>           m_xDriverSet;
-        css::uno::Reference< css::sdbc::XRow>                 m_xDriverRow;
-        css::uno::Reference< css::sdbc::XResultSetMetaData>   m_xSetMetaData;
-        css::uno::Reference< css::sdbc::XConnection>          m_xConnection;
+        cpo::uno::Reference< css::sdbc::XResultSet>           m_xDriverSet;
+        cpo::uno::Reference< css::sdbc::XRow>                 m_xDriverRow;
+        cpo::uno::Reference< css::sdbc::XResultSetMetaData>   m_xSetMetaData;
+        cpo::uno::Reference< css::sdbc::XConnection>          m_xConnection;
 
         std::vector<bool>                       m_aNullable;
         std::vector<bool>                       m_aSignedFlags;
@@ -54,7 +54,7 @@ namespace dbaccess
         virtual ~OCacheSet() override;
 
         static void setParameter(sal_Int32 nPos
-                            ,const css::uno::Reference< css::sdbc::XParameters >& _xParameter
+                            ,const cpo::uno::Reference< css::sdbc::XParameters >& _xParameter
                             ,const connectivity::ORowSetValue& _rValue
                             ,sal_Int32 _nType
                             ,sal_Int32 _nScale
@@ -66,13 +66,13 @@ namespace dbaccess
                             ,std::vector< sal_Int32>& _rOrgValues);
         /// @throws css::sdbc::SQLException
         /// @throws cpo::uno::RuntimeException
-        void fillTableName(const css::uno::Reference< css::beans::XPropertySet>& _xTable);
+        void fillTableName(const cpo::uno::Reference< css::beans::XPropertySet>& _xTable);
 
         OUString getIdentifierQuoteString() const;
     public:
 
         // late constructor
-        virtual void construct(const css::uno::Reference< css::sdbc::XResultSet>& _xDriverSet,const OUString& i_sRowSetFilter);
+        virtual void construct(const cpo::uno::Reference< css::sdbc::XResultSet>& _xDriverSet,const OUString& i_sRowSetFilter);
         virtual void fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition);
 
         // css::sdbc::XRow
@@ -89,13 +89,13 @@ namespace dbaccess
         virtual css::util::Date getDate( sal_Int32 columnIndex ) override;
         virtual css::util::Time getTime( sal_Int32 columnIndex ) override;
         virtual css::util::DateTime getTimestamp( sal_Int32 columnIndex ) override;
-        virtual css::uno::Reference< css::io::XInputStream > getBinaryStream( sal_Int32 columnIndex ) override;
-        virtual css::uno::Reference< css::io::XInputStream > getCharacterStream( sal_Int32 columnIndex ) override;
-        virtual cpo::uno::Any getObject( sal_Int32 columnIndex, const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
-        virtual css::uno::Reference< css::sdbc::XRef > getRef( sal_Int32 columnIndex ) override;
-        virtual css::uno::Reference< css::sdbc::XBlob > getBlob( sal_Int32 columnIndex ) override;
-        virtual css::uno::Reference< css::sdbc::XClob > getClob( sal_Int32 columnIndex ) override;
-        virtual css::uno::Reference< css::sdbc::XArray > getArray( sal_Int32 columnIndex ) override;
+        virtual cpo::uno::Reference< css::io::XInputStream > getBinaryStream( sal_Int32 columnIndex ) override;
+        virtual cpo::uno::Reference< css::io::XInputStream > getCharacterStream( sal_Int32 columnIndex ) override;
+        virtual cpo::uno::Any getObject( sal_Int32 columnIndex, const cpo::uno::Reference< css::container::XNameAccess >& typeMap ) override;
+        virtual cpo::uno::Reference< css::sdbc::XRef > getRef( sal_Int32 columnIndex ) override;
+        virtual cpo::uno::Reference< css::sdbc::XBlob > getBlob( sal_Int32 columnIndex ) override;
+        virtual cpo::uno::Reference< css::sdbc::XClob > getClob( sal_Int32 columnIndex ) override;
+        virtual cpo::uno::Reference< css::sdbc::XArray > getArray( sal_Int32 columnIndex ) override;
         // css::sdbc::XResultSet
         /// @throws css::sdbc::SQLException
         /// @throws cpo::uno::RuntimeException
@@ -161,7 +161,7 @@ namespace dbaccess
         virtual void deleteRow( const ORowSetRow& _rDeleteRow,const connectivity::OSQLTable& _xTable ) = 0;
 
         virtual bool isResultSetChanged() const;
-        virtual void reset(const css::uno::Reference< css::sdbc::XResultSet>& _xDriverSet) = 0;
+        virtual void reset(const cpo::uno::Reference< css::sdbc::XResultSet>& _xDriverSet) = 0;
         virtual void mergeColumnValues(sal_Int32 i_nColumnIndex,ORowSetValueVector::Vector& io_aInsertRow,ORowSetValueVector::Vector& io_aRow,std::vector<sal_Int32>& o_aChangedColumns);
         virtual bool columnValuesUpdated(ORowSetValueVector::Vector& o_aCachedRow,const ORowSetValueVector::Vector& i_aRow);
         virtual bool updateColumnValues(const ORowSetValueVector::Vector& io_aCachedRow,ORowSetValueVector::Vector& io_aRow,const std::vector<sal_Int32>& i_aChangedColumns);

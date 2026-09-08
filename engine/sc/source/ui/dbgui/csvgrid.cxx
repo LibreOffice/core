@@ -93,7 +93,7 @@ std::optional<boost::property_tree::ptree> parseEventJson(std::u16string_view rD
 
 }
 
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 constexpr OUString SEP_PATH = u"Office.Calc/Dialogs/CSVImport"_ustr;

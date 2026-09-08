@@ -58,6 +58,7 @@
 #include <cstdlib>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 static std::ostream& operator<<(std::ostream& os, ViewShellId const & id)
 {

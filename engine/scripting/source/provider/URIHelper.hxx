@@ -40,8 +40,8 @@ class ScriptingFrameworkURIHelper :
 {
 private:
 
-    css::uno::Reference< css::ucb::XSimpleFileAccess3 > m_xSimpleFileAccess;
-    css::uno::Reference<css::uri::XUriReferenceFactory> m_xUriReferenceFactory;
+    cpo::uno::Reference< css::ucb::XSimpleFileAccess3 > m_xSimpleFileAccess;
+    cpo::uno::Reference<css::uri::XUriReferenceFactory> m_xUriReferenceFactory;
 
     OUString m_sLanguage;
     OUString m_sLocation;
@@ -56,7 +56,7 @@ private:
 public:
     /// @throws cpo::uno::RuntimeException
     explicit ScriptingFrameworkURIHelper(
-        const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext );
 
     virtual ~ScriptingFrameworkURIHelper() override;
 

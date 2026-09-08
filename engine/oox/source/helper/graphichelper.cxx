@@ -46,7 +46,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::graphic;
 using namespace ::com::sun::star::io;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo;
 using namespace ::cpo::uno;
 
 namespace {
@@ -312,7 +312,7 @@ awt::Size GraphicHelper::getOriginalSize( const Reference< XGraphic >& xGraphic 
     return aSizeHmm;
 }
 
-void GraphicHelper::setGraphicMapper(css::uno::Reference<css::graphic::XGraphicMapper> const & rGraphicMapper)
+void GraphicHelper::setGraphicMapper(cpo::uno::Reference<css::graphic::XGraphicMapper> const & rGraphicMapper)
 {
     mxGraphicMapper = rGraphicMapper;
 }

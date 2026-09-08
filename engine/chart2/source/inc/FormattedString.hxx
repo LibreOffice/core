@@ -63,13 +63,13 @@ public:
         { ::property::OPropertySet::setPropertyValue(p1, p2); }
     virtual cpo::uno::Any getPropertyValue(const OUString& p1) override
         { return ::property::OPropertySet::getPropertyValue(p1); }
-    virtual void addPropertyChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XPropertyChangeListener>& p2) override
+    virtual void addPropertyChangeListener(const OUString& p1, const cpo::uno::Reference<css::beans::XPropertyChangeListener>& p2) override
         { ::property::OPropertySet::addPropertyChangeListener(p1, p2); }
-    virtual void removePropertyChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XPropertyChangeListener>& p2) override
+    virtual void removePropertyChangeListener(const OUString& p1, const cpo::uno::Reference<css::beans::XPropertyChangeListener>& p2) override
         { ::property::OPropertySet::removePropertyChangeListener(p1, p2); }
-    virtual void addVetoableChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2) override
+    virtual void addVetoableChangeListener(const OUString& p1, const cpo::uno::Reference<css::beans::XVetoableChangeListener>& p2) override
         { ::property::OPropertySet::addVetoableChangeListener(p1, p2); }
-    virtual void removeVetoableChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2) override
+    virtual void removeVetoableChangeListener(const OUString& p1, const cpo::uno::Reference<css::beans::XVetoableChangeListener>& p2) override
         { ::property::OPropertySet::removeVetoableChangeListener(p1, p2); }
 
     explicit FormattedString( const FormattedString & rOther );
@@ -96,17 +96,17 @@ public:
     virtual ::cppu::IPropertyArrayHelper & getInfoHelper() override;
 
     // ____ XPropertySet ____
-    virtual css::uno::Reference< css::beans::XPropertySetInfo >
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo >
         getPropertySetInfo() override;
 
     // ____ XCloneable ____
-    virtual css::uno::Reference< css::util::XCloneable > createClone() override;
+    virtual cpo::uno::Reference< css::util::XCloneable > createClone() override;
 
     // ____ XModifyBroadcaster ____
     virtual void addModifyListener(
-        const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+        const cpo::uno::Reference< css::util::XModifyListener >& aListener ) override;
     virtual void removeModifyListener(
-        const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+        const cpo::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
     // ____ XModifyListener ____
     virtual void modified(

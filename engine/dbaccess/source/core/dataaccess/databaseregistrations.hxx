@@ -24,8 +24,8 @@
 
 namespace dbaccess
 {
-css::uno::Reference<css::sdb::XDatabaseRegistrations>
-createDataSourceRegistrations(const css::uno::Reference<cpo::uno::XComponentContext>& _rxContext);
+cpo::uno::Reference<css::sdb::XDatabaseRegistrations>
+createDataSourceRegistrations(const cpo::uno::Reference<cpo::uno::XComponentContext>& _rxContext);
 
 } // namespace dbaccess
 

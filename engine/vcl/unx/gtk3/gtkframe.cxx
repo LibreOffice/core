@@ -70,6 +70,7 @@
 #include <com/sun/star/util/XModifiable.hpp>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 int GtkSalFrame::m_nFloats = 0;
 
@@ -1270,12 +1271,12 @@ static void session_client_response(GDBusProxy* client_proxy)
 // unset documents "modify" flag so they won't veto closing
 static void clear_modify_and_terminate()
 {
-    const css::uno::Reference<cpo::uno::XComponentContext>& xContext = ::comphelper::getProcessComponentContext();
+    const cpo::uno::Reference<cpo::uno::XComponentContext>& xContext = ::comphelper::getProcessComponentContext();
     uno::Reference<frame::XDesktop> xDesktop(frame::Desktop::create(xContext));
     uno::Reference<css::container::XEnumeration> xComponents = xDesktop->getComponents()->createEnumeration();
     while (xComponents->hasMoreElements())
     {
-        css::uno::Reference<css::util::XModifiable> xModifiable(xComponents->nextElement(), css::uno::UNO_QUERY);
+        cpo::uno::Reference<css::util::XModifiable> xModifiable(xComponents->nextElement(), cpo::uno::UNO_QUERY);
         if (xModifiable)
             xModifiable->setModified(false);
     }
@@ -1289,7 +1290,7 @@ static void session_client_signal(GDBusProxy* client_proxy, const char*, const c
 
     if (g_str_equal (signal_name, "QueryEndSession"))
     {
-        const css::uno::Reference<cpo::uno::XComponentContext>& xContext = ::comphelper::getProcessComponentContext();
+        const cpo::uno::Reference<cpo::uno::XComponentContext>& xContext = ::comphelper::getProcessComponentContext();
         uno::Reference<frame::XDesktop2> xDesktop(frame::Desktop::create(xContext));
 
         bool bModified = false;
@@ -1298,11 +1299,11 @@ static void session_client_signal(GDBusProxy* client_proxy, const char*, const c
         if (UnoWrapperBase* pWrapper = UnoWrapperBase::GetUnoWrapper(false))
         {
             VclPtr<vcl::Window> xThisWindow = pThis->GetWindow();
-            css::uno::Reference<css::container::XIndexAccess> xList = xDesktop->getFrames();
+            cpo::uno::Reference<css::container::XIndexAccess> xList = xDesktop->getFrames();
             sal_Int32 nFrameCount = xList->getCount();
             for (sal_Int32 i = 0; i < nFrameCount; ++i)
             {
-                css::uno::Reference<css::frame::XFrame> xFrame;
+                cpo::uno::Reference<css::frame::XFrame> xFrame;
                 xList->getByIndex(i) >>= xFrame;
                 if (!xFrame)
                     continue;
@@ -1311,10 +1312,10 @@ static void session_client_signal(GDBusProxy* client_proxy, const char*, const c
                    continue;
                 if (xWin->GetFrameWindow() != xThisWindow)
                     continue;
-                css::uno::Reference<css::frame::XController> xController = xFrame->getController();
+                cpo::uno::Reference<css::frame::XController> xController = xFrame->getController();
                 if (!xController)
                     break;
-                css::uno::Reference<css::util::XModifiable> xModifiable(xController->getModel(), css::uno::UNO_QUERY);
+                cpo::uno::Reference<css::util::XModifiable> xModifiable(xController->getModel(), cpo::uno::UNO_QUERY);
                 if (!xModifiable)
                     break;
                 bModified = xModifiable->isModified();
@@ -4425,7 +4426,7 @@ gboolean GtkInstDropTarget::signalDragMotion(GtkWidget *pWidget, GdkDragContext 
 
     if (!m_bInDrag)
     {
-        css::uno::Reference<css::datatransfer::XTransferable> xTransferable;
+        cpo::uno::Reference<css::datatransfer::XTransferable> xTransferable;
         // For LibreOffice internal D&D we provide the Transferable without Gtk
         // intermediaries as a shortcut, see tdf#100097 for how dbaccess depends on this
         if (GtkInstDragSource::g_ActiveDragSource)
@@ -5068,8 +5069,8 @@ sal_uIntPtr GtkSalFrame::GetNativeWindowHandle(GtkWidget *pWidget)
     return 0;
 }
 
-void GtkInstDragSource::set_datatransfer(const css::uno::Reference<css::datatransfer::XTransferable>& rTrans,
-                                     const css::uno::Reference<css::datatransfer::dnd::XDragSourceListener>& rListener)
+void GtkInstDragSource::set_datatransfer(const cpo::uno::Reference<css::datatransfer::XTransferable>& rTrans,
+                                     const cpo::uno::Reference<css::datatransfer::dnd::XDragSourceListener>& rListener)
 {
     m_xListener = rListener;
     m_xTrans = rTrans;
@@ -5091,8 +5092,8 @@ std::vector<GtkTargetEntry> GtkInstDragSource::FormatsToGtk(const cpo::uno::Sequ
 
 void GtkInstDragSource::startDrag(const datatransfer::dnd::DragGestureEvent& rEvent,
                                   sal_Int8 sourceActions, sal_Int32 /*cursor*/, sal_Int32 /*image*/,
-                                  const css::uno::Reference<css::datatransfer::XTransferable>& rTrans,
-                                  const css::uno::Reference<css::datatransfer::dnd::XDragSourceListener>& rListener)
+                                  const cpo::uno::Reference<css::datatransfer::XTransferable>& rTrans,
+                                  const cpo::uno::Reference<css::datatransfer::dnd::XDragSourceListener>& rListener)
 {
     set_datatransfer(rTrans, rListener);
 
@@ -5107,7 +5108,7 @@ void GtkInstDragSource::startDrag(const datatransfer::dnd::DragGestureEvent& rEv
 }
 
 void GtkSalFrame::startDrag(const css::datatransfer::dnd::DragGestureEvent& rEvent,
-                            const css::uno::Reference<css::datatransfer::XTransferable>& rTrans,
+                            const cpo::uno::Reference<css::datatransfer::XTransferable>& rTrans,
                             VclToGtkHelper& rConversionHelper,
                             GdkDragAction sourceActions)
 {

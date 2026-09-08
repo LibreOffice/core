@@ -73,7 +73,7 @@ public:
             It is empty when the node was not found.
     */
     static cpo::uno::Any GetConfigurationNode (
-        const css::uno::Reference<css::container::XHierarchicalNameAccess>& rxNode,
+        const cpo::uno::Reference<css::container::XHierarchicalNameAccess>& rxNode,
         const OUString& rsPathToNode);
 
     /** Write any changes that have been made back to the configuration.
@@ -91,10 +91,10 @@ public:
         const std::vector<cpo::uno::Any>&) > Functor;
 
 private:
-    css::uno::Reference<cpo::uno::XInterface> mxRoot;
+    cpo::uno::Reference<cpo::uno::XInterface> mxRoot;
 
     void Initialize (
-        const css::uno::Reference<css::lang::XMultiServiceFactory>& rxProvider,
+        const cpo::uno::Reference<css::lang::XMultiServiceFactory>& rxProvider,
         const OUString& rsRootName,
         const WriteMode eMode);
 };

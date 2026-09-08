@@ -27,6 +27,7 @@
 #include <vcl/svapp.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 XBitmapEntry* XBitmapList::GetBitmap(tools::Long nIndex) const
 {

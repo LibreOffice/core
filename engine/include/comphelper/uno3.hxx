@@ -109,7 +109,7 @@ namespace comphelper
                 ...
     */
     template <class iface>
-    bool query_aggregation(const css::uno::Reference< cpo::uno::XAggregation >& _rxAggregate, css::uno::Reference<iface>& _rxOut)
+    bool query_aggregation(const cpo::uno::Reference< cpo::uno::XAggregation >& _rxAggregate, cpo::uno::Reference<iface>& _rxOut)
     {
         _rxOut.clear();
         if (_rxAggregate.is())
@@ -126,9 +126,9 @@ namespace comphelper
                 ...
     */
     template <class iface>
-    css::uno::Reference<iface> query_aggregation(const css::uno::Reference< cpo::uno::XAggregation >& _rxAggregate)
+    cpo::uno::Reference<iface> query_aggregation(const cpo::uno::Reference< cpo::uno::XAggregation >& _rxAggregate)
     {
-        css::uno::Reference<iface> _rxOut;
+        cpo::uno::Reference<iface> _rxOut;
         query_aggregation(_rxAggregate, _rxOut);
         return _rxOut;
     }

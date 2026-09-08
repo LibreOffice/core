@@ -48,7 +48,7 @@ namespace dbaccess
         */
         OViewContainer( ::cppu::OWeakObject& _rParent,
                         ::osl::Mutex& _rMutex,
-                        const css::uno::Reference< css::sdbc::XConnection >& _xCon,
+                        const cpo::uno::Reference< css::sdbc::XConnection >& _xCon,
                         bool _bCase,
                         IRefreshListener*   _pRefreshListener,
                         std::atomic<std::size_t>& _nInAppend
@@ -74,9 +74,9 @@ namespace dbaccess
         virtual void elementReplaced( const css::container::ContainerEvent& Event ) override;
 
         // ::connectivity::sdbcx::OCollection
-        virtual ::css::uno::Reference< css::beans::XPropertySet >       createObject(const OUString& _rName) override;
-        virtual css::uno::Reference< css::beans::XPropertySet >   createDescriptor() override;
-        virtual css::uno::Reference< css::beans::XPropertySet > appendObject( const OUString& _rForName, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
+        virtual ::cpo::uno::Reference< css::beans::XPropertySet >       createObject(const OUString& _rName) override;
+        virtual cpo::uno::Reference< css::beans::XPropertySet >   createDescriptor() override;
+        virtual cpo::uno::Reference< css::beans::XPropertySet > appendObject( const OUString& _rForName, const cpo::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
         virtual void dropObject(sal_Int32 _nPos, const OUString& _sElementName) override;
 
         using OFilteredContainer::disposing;

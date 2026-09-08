@@ -27,7 +27,7 @@ namespace com::sun::star::lang { class XComponent; }
 class XMLEmbeddedObjectImportContext final : public SvXMLImportContext
 {
     rtl::Reference<SvXMLImport> mxFastHandler;
-    css::uno::Reference<css::lang::XComponent > xComp;
+    cpo::uno::Reference<css::lang::XComponent > xComp;
 
     OUString sFilterService;
     OUString sCLSID;
@@ -38,23 +38,23 @@ public:
     const OUString& GetFilterCLSID() const { return sCLSID; }
 
     XMLEmbeddedObjectImportContext( SvXMLImport& rImport, sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
 
     virtual ~XMLEmbeddedObjectImportContext() override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
     virtual void startFastElement(
             sal_Int32 nElement,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+            const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     virtual void endFastElement(sal_Int32 nElement) override;
 
     virtual void characters( const OUString& rChars ) override;
 
-    void SetComponent( css::uno::Reference< css::lang::XComponent > const & rComp );
+    void SetComponent( cpo::uno::Reference< css::lang::XComponent > const & rComp );
 
 };
 

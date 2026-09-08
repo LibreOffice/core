@@ -40,6 +40,7 @@
 #include <svtools/embedhlp.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 SvEmbedTransferHelper::SvEmbedTransferHelper( const uno::Reference< embed::XEmbeddedObject >& xObj,
                                               const Graphic* pGraphic,
@@ -197,7 +198,7 @@ void SvEmbedTransferHelper::ObjectReleased()
 }
 
 void SvEmbedTransferHelper::FillTransferableObjectDescriptor( TransferableObjectDescriptor& rDesc,
-    const css::uno::Reference< css::embed::XEmbeddedObject >& xObj,
+    const cpo::uno::Reference< css::embed::XEmbeddedObject >& xObj,
     const Graphic* pGraphic,
     sal_Int64 nAspect )
 {

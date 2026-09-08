@@ -32,6 +32,7 @@
 #include <dbdata.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 const char cURLInsertColumns[] = ".uno:DataSourceBrowser/InsertColumns"; //data into text
 constexpr OUString cURLDocDataSource = u".uno:DataSourceBrowser/DocumentDataSource"_ustr;

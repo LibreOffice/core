@@ -23,17 +23,17 @@
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <sax/tools/converter.hxx>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <tools/debug.hxx>
 
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::beans::XMultiPropertySet;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::com::sun::star::xml::sax::XFastAttributeList;
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::xmloff::token;
 

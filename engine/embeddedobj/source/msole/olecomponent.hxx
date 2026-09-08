@@ -20,7 +20,7 @@
 #pragma once
 
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
@@ -59,7 +59,7 @@ class OleComponent : public ::cppu::WeakImplHelper< css::util::XCloseable, css::
     cpo::uno::Sequence< css::embed::VerbDescriptor > m_aVerbList;
     cpo::uno::Sequence< css::datatransfer::DataFlavor > m_aDataFlavors;
 
-    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
     bool m_bOleInitialized;
 
@@ -76,7 +76,7 @@ class OleComponent : public ::cppu::WeakImplHelper< css::util::XCloseable, css::
 
 
 public:
-    OleComponent( const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
+    OleComponent( const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
                   OleEmbeddedObject* pOleObj );
 
     virtual ~OleComponent() override;
@@ -96,7 +96,7 @@ public:
     void CreateObjectFromClipboard();
     void CreateNewEmbeddedObject( const cpo::uno::Sequence< sal_Int8 >& aSeqCLSID );
     static void CreateObjectFromData(
-                        const css::uno::Reference< css::datatransfer::XTransferable >& xTransfer );
+                        const cpo::uno::Reference< css::datatransfer::XTransferable >& xTransfer );
     void CreateObjectFromFile( const OUString& aFileName );
     void CreateLinkFromFile( const OUString& aFileName );
     void InitEmbeddedCopyOfLink( rtl::Reference<OleComponent> const & pOleLinkComponent );
@@ -131,8 +131,8 @@ public:
 
     // XCloseable
     virtual void close( bool DeliverOwnership ) override;
-    virtual void addCloseListener( const css::uno::Reference< css::util::XCloseListener >& Listener ) override;
-    virtual void removeCloseListener( const css::uno::Reference< css::util::XCloseListener >& Listener ) override;
+    virtual void addCloseListener( const cpo::uno::Reference< css::util::XCloseListener >& Listener ) override;
+    virtual void removeCloseListener( const cpo::uno::Reference< css::util::XCloseListener >& Listener ) override;
 
     // XTransferable
     virtual cpo::uno::Any getTransferData( const css::datatransfer::DataFlavor& aFlavor ) override;
@@ -141,8 +141,8 @@ public:
 
     // XComponent
     virtual void dispose() override;
-    virtual void addEventListener(const css::uno::Reference < css::lang::XEventListener >& aListener) override;
-    virtual void removeEventListener(const css::uno::Reference < css::lang::XEventListener >& aListener) override;
+    virtual void addEventListener(const cpo::uno::Reference < css::lang::XEventListener >& aListener) override;
+    virtual void removeEventListener(const cpo::uno::Reference < css::lang::XEventListener >& aListener) override;
 
     // XUnoTunnel
     virtual sal_Int64 getSomething( const cpo::uno::Sequence< sal_Int8 >& aIdentifier ) override;
@@ -150,8 +150,8 @@ public:
     // XModifiable
     virtual bool isModified() override;
     virtual void setModified( bool bModified ) override;
-    virtual void addModifyListener( const css::uno::Reference < css::util::XModifyListener >& xListener ) override;
-    virtual void removeModifyListener( const css::uno::Reference < css::util::XModifyListener >& xListener) override;
+    virtual void addModifyListener( const cpo::uno::Reference < css::util::XModifyListener >& xListener ) override;
+    virtual void removeModifyListener( const cpo::uno::Reference < css::util::XModifyListener >& xListener) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

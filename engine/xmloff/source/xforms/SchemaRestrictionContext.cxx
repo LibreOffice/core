@@ -41,7 +41,7 @@
 #include <comphelper/diagnose_ex.hxx>
 
 
-using com::sun::star::uno::Reference;
+using cpo::uno::Reference;
 using cpo::uno::Exception;
 using cpo::uno::Any;
 using namespace com::sun::star;

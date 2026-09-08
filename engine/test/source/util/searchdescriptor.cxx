@@ -12,9 +12,10 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 namespace apitest
 {

@@ -65,7 +65,7 @@ namespace basctl
 {
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::io;
@@ -80,7 +80,7 @@ constexpr OUString FilterMask_All = u"*"_ustr;
 
 DialogWindow::DialogWindow(DialogWindowLayout* pParent, ScriptDocument const& rDocument,
                            const OUString& aLibName, const OUString& aName,
-                           css::uno::Reference<css::container::XNameContainer> const& xDialogModel)
+                           cpo::uno::Reference<css::container::XNameContainer> const& xDialogModel)
     : BaseWindow(pParent, rDocument, aLibName, aName)
     ,m_rLayout(*pParent)
     ,m_pEditor(new DlgEditor(*this, m_rLayout, rDocument.isDocument()

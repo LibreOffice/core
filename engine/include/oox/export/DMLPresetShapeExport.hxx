@@ -11,7 +11,7 @@
 #define INCLUDED_OOX_EXPORT_DMLPRESETSHAPEXPORT_HXX
 
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 
 #include <rtl/ustring.hxx>
@@ -49,7 +49,7 @@ class DMLPresetShapeExporter
 {
 private:
     // the shape to export
-    css::uno::Reference<css::drawing::XShape> m_xShape;
+    cpo::uno::Reference<css::drawing::XShape> m_xShape;
     // the DMLwriter
     DrawingML* m_pDMLexporter;
     // the type of the custom shape (diamond/rectangle/circle/triangle...)
@@ -77,7 +77,7 @@ public:
     ~DMLPresetShapeExporter();
 
     DMLPresetShapeExporter(DrawingML* pDMLExporter,
-                           css::uno::Reference<css::drawing::XShape> xShape);
+                           cpo::uno::Reference<css::drawing::XShape> xShape);
 
     // Writes the preset shape to the xml
     bool WriteShape();

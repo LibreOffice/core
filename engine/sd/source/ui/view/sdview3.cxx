@@ -78,8 +78,8 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::datatransfer;
 
@@ -745,7 +745,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
             Reference< XComponent > xComponent = xShell->GetModel();
             xStm->Seek( 0 );
 
-            css::uno::Reference< css::io::XInputStream > xInputStream( new utl::OInputStreamWrapper( *xStm ) );
+            cpo::uno::Reference< css::io::XInputStream > xInputStream( new utl::OInputStreamWrapper( *xStm ) );
             bool bReturn = SvxDrawingLayerImport( pModel, xInputStream, xComponent, "com.sun.star.comp.Impress.XMLOasisImporter" );
 
             if( pModel->GetPageCount() == 0 )

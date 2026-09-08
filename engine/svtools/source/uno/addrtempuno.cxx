@@ -33,7 +33,7 @@ namespace {
 
 #define UNODIALOG_PROPERTY_ID_ALIASES       100
 
-    using namespace css::uno;
+    using namespace ::cpo::uno;
 using namespace cpo::uno;
     using namespace css::util;
     using namespace css::beans;
@@ -70,7 +70,7 @@ using namespace cpo::uno;
 
     protected:
     // OGenericUnoDialog overridables
-        virtual std::unique_ptr<weld::DialogController> createDialog(const css::uno::Reference<css::awt::XWindow>& rParent) override;
+        virtual std::unique_ptr<weld::DialogController> createDialog(const cpo::uno::Reference<css::awt::XWindow>& rParent) override;
 
         virtual void implInitialize(const cpo::uno::Any& _rValue) override;
 
@@ -192,7 +192,7 @@ using namespace cpo::uno;
         OGenericUnoDialog::implInitialize( _rValue );
     }
 
-    std::unique_ptr<weld::DialogController> OAddressBookSourceDialogUno::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
+    std::unique_ptr<weld::DialogController> OAddressBookSourceDialogUno::createDialog(const cpo::uno::Reference<css::awt::XWindow>& rParent)
     {
         weld::Window* pParent = Application::GetFrameWeld(rParent);
         if ( m_xDataSource.is() && !m_sTable.isEmpty() )

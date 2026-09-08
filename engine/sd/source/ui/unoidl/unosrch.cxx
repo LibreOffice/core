@@ -36,6 +36,7 @@
 #include <unosrch.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 #define WID_SEARCH_BACKWARDS    0
 #define WID_SEARCH_CASE         1
@@ -184,7 +185,7 @@ uno::Reference< css::util::XSearchDescriptor > SAL_CALL SdUnoSearchReplaceShape:
     return new SdUnoSearchReplaceDescriptor;
 }
 
-uno::Reference< css::container::XIndexAccess > SAL_CALL SdUnoSearchReplaceShape::findAll( const css::uno::Reference< css::util::XSearchDescriptor >& xDesc )
+uno::Reference< css::container::XIndexAccess > SAL_CALL SdUnoSearchReplaceShape::findAll( const cpo::uno::Reference< css::util::XSearchDescriptor >& xDesc )
 {
     SdUnoSearchReplaceDescriptor* pDescr = dynamic_cast<SdUnoSearchReplaceDescriptor*>( xDesc.get() );
     if( pDescr == nullptr )
@@ -276,7 +277,7 @@ uno::Reference< css::container::XIndexAccess > SAL_CALL SdUnoSearchReplaceShape:
     return xRet;
 }
 
-uno::Reference< cpo::uno::XInterface > SAL_CALL SdUnoSearchReplaceShape::findFirst( const css::uno::Reference< css::util::XSearchDescriptor >& xDesc )
+uno::Reference< cpo::uno::XInterface > SAL_CALL SdUnoSearchReplaceShape::findFirst( const cpo::uno::Reference< css::util::XSearchDescriptor >& xDesc )
 {
     uno::Reference< text::XTextRange > xRange( GetCurrentShape(), uno::UNO_QUERY );
     if( xRange.is() )
@@ -296,7 +297,7 @@ uno::Reference< drawing::XShape >  SdUnoSearchReplaceShape::GetCurrentShape() co
 
 }
 
-uno::Reference< cpo::uno::XInterface > SAL_CALL SdUnoSearchReplaceShape::findNext( const css::uno::Reference< cpo::uno::XInterface >& xStartAt, const css::uno::Reference< css::util::XSearchDescriptor >& xDesc )
+uno::Reference< cpo::uno::XInterface > SAL_CALL SdUnoSearchReplaceShape::findNext( const cpo::uno::Reference< cpo::uno::XInterface >& xStartAt, const cpo::uno::Reference< css::util::XSearchDescriptor >& xDesc )
 {
     SdUnoSearchReplaceDescriptor* pDescr = dynamic_cast<SdUnoSearchReplaceDescriptor*>( xDesc.get() );
 
@@ -440,7 +441,7 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( const uno::
             int ndbg = 0;
             uno::Reference< text::XTextContent >  xParagraph( xParaEnum->nextElement(), uno::UNO_QUERY );
             if( xParagraph.is() )
-                xEnumAccess.set(xParagraph, css::uno::UNO_QUERY);
+                xEnumAccess.set(xParagraph, cpo::uno::UNO_QUERY);
             else
                 xEnumAccess.clear();
 
@@ -726,10 +727,10 @@ cpo::uno::Any SAL_CALL SdUnoSearchReplaceDescriptor::getPropertyValue( const OUS
     return aAny;
 }
 
-void SAL_CALL SdUnoSearchReplaceDescriptor::addPropertyChangeListener( const OUString& , const css::uno::Reference< css::beans::XPropertyChangeListener >&  ) {}
-void SAL_CALL SdUnoSearchReplaceDescriptor::removePropertyChangeListener( const OUString& , const css::uno::Reference< css::beans::XPropertyChangeListener >&  ) {}
-void SAL_CALL SdUnoSearchReplaceDescriptor::addVetoableChangeListener( const OUString& , const css::uno::Reference< css::beans::XVetoableChangeListener >&  ) {}
-void SAL_CALL SdUnoSearchReplaceDescriptor::removeVetoableChangeListener( const OUString& , const css::uno::Reference< css::beans::XVetoableChangeListener >&  ) {}
+void SAL_CALL SdUnoSearchReplaceDescriptor::addPropertyChangeListener( const OUString& , const cpo::uno::Reference< css::beans::XPropertyChangeListener >&  ) {}
+void SAL_CALL SdUnoSearchReplaceDescriptor::removePropertyChangeListener( const OUString& , const cpo::uno::Reference< css::beans::XPropertyChangeListener >&  ) {}
+void SAL_CALL SdUnoSearchReplaceDescriptor::addVetoableChangeListener( const OUString& , const cpo::uno::Reference< css::beans::XVetoableChangeListener >&  ) {}
+void SAL_CALL SdUnoSearchReplaceDescriptor::removeVetoableChangeListener( const OUString& , const cpo::uno::Reference< css::beans::XVetoableChangeListener >&  ) {}
 
 /* ================================================================= */
 

@@ -19,7 +19,7 @@ namespace apitest
 class OOO_DLLPUBLIC_TEST XNamedRange
 {
 public:
-    virtual css::uno::Reference<cpo::uno::XInterface> init() = 0;
+    virtual cpo::uno::Reference<cpo::uno::XInterface> init() = 0;
 
     // XNamedRange
     void testGetContent();
@@ -32,7 +32,7 @@ public:
 protected:
     ~XNamedRange() {}
 
-    virtual css::uno::Reference<css::sheet::XNamedRange> getNamedRange(const OUString&) = 0;
+    virtual cpo::uno::Reference<css::sheet::XNamedRange> getNamedRange(const OUString&) = 0;
 };
 }
 

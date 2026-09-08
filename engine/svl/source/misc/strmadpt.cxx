@@ -34,6 +34,7 @@
 #include <utility>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 class SvDataPipe_Impl
 {
@@ -314,7 +315,7 @@ void SvInputStream::SetSize(sal_uInt64)
     SetError(ERRCODE_IO_NOTSUPPORTED);
 }
 
-SvInputStream::SvInputStream( css::uno::Reference< css::io::XInputStream > xTheStream):
+SvInputStream::SvInputStream( cpo::uno::Reference< css::io::XInputStream > xTheStream):
     m_xStream(std::move(xTheStream)),
     m_nSeekedFrom(STREAM_SEEK_TO_END)
 {

@@ -58,7 +58,7 @@ namespace dbaccess
         cpo::uno::Any               m_aAlignment;           // sal_Int32 (css::awt::TextAlign) or void
         cpo::uno::Any               m_aHelpText;            // the description of the column which is visible in the helptext of the column
         cpo::uno::Any               m_aControlDefault;      // the default value which should be displayed as by a control when moving to a new row
-        css::uno::Reference< css::beans::XPropertySet >
+        cpo::uno::Reference< css::beans::XPropertySet >
                                     m_xControlModel;
         bool                        m_bHidden;
         //  </properties>
@@ -80,7 +80,7 @@ namespace dbaccess
     public:
         /** check if the persistent settings have their default value
         */
-        static bool hasDefaultSettings( const css::uno::Reference< css::beans::XPropertySet >& _rxColumn );
+        static bool hasDefaultSettings( const cpo::uno::Reference< css::beans::XPropertySet >& _rxColumn );
     };
 
 } // namespace dbaccess

@@ -18,7 +18,7 @@
  */
 
 #include "XMLAutoTextContainerEventImport.hxx"
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlnamespace.hxx>
@@ -29,7 +29,7 @@
 
 using namespace ::com::sun::star;
 
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::com::sun::star::container::XNameReplace;
 using ::xmloff::token::XML_EVENT_LISTENERS;
 
@@ -46,9 +46,9 @@ XMLAutoTextContainerEventImport::~XMLAutoTextContainerEventImport()
 {
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLAutoTextContainerEventImport::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLAutoTextContainerEventImport::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& )
 {
     if ( nElement == XML_ELEMENT(OFFICE, XML_EVENT_LISTENERS) )
     {

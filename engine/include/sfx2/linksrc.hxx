@@ -22,7 +22,7 @@
 #include <sfx2/dllapi.h>
 
 #include <tools/ref.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <memory>
 #include <utility>
 
@@ -91,19 +91,19 @@ public:
 
     struct StreamToLoadFrom{
         StreamToLoadFrom(
-            css::uno::Reference<css::io::XInputStream> xInputStream, bool bIsReadOnly )
+            cpo::uno::Reference<css::io::XInputStream> xInputStream, bool bIsReadOnly )
             :m_xInputStreamToLoadFrom(std::move(xInputStream)),
              m_bIsReadOnly(bIsReadOnly)
         {
         }
 
-        css::uno::Reference<css::io::XInputStream>
+        cpo::uno::Reference<css::io::XInputStream>
              m_xInputStreamToLoadFrom;
         bool m_bIsReadOnly;
     };
 
     StreamToLoadFrom getStreamToLoadFrom();
-    void setStreamToLoadFrom(const css::uno::Reference<css::io::XInputStream>& xInputStream, bool bIsReadOnly );
+    void setStreamToLoadFrom(const cpo::uno::Reference<css::io::XInputStream>& xInputStream, bool bIsReadOnly );
     void clearStreamToLoadFrom();
 };
 

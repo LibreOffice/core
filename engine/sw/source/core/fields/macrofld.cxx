@@ -27,6 +27,7 @@
 #include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 SwMacroFieldType::SwMacroFieldType(SwDoc& rDocument)
     : SwFieldType( SwFieldIds::Macro )

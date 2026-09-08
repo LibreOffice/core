@@ -24,7 +24,7 @@
 #include <string_view>
 
 #include <com/sun/star/beans/Optional.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <rtl/ref.hxx>
 #include <o3tl/sorted_vector.hxx>
 
@@ -50,7 +50,7 @@ class RootAccess;
 class Components {
 public:
     static Components & getSingleton(
-        css::uno::Reference< cpo::uno::XComponentContext > const & context);
+        cpo::uno::Reference< cpo::uno::XComponentContext > const & context);
 
     static bool allLocales(std::u16string_view locale);
 
@@ -115,7 +115,7 @@ private:
         Additions *);
 public:
     explicit Components(
-        css::uno::Reference< cpo::uno::XComponentContext > const & context);
+        cpo::uno::Reference< cpo::uno::XComponentContext > const & context);
 
     ~Components();
 private:
@@ -148,7 +148,7 @@ private:
 
     typedef
         config_map<
-            css::uno::Reference<
+            cpo::uno::Reference<
                 css::beans::XPropertySet > >
         ExternalServices;
 
@@ -156,7 +156,7 @@ private:
 
     enum class ModificationTarget { None, File, Dconf };
 
-    css::uno::Reference< cpo::uno::XComponentContext >
+    cpo::uno::Reference< cpo::uno::XComponentContext >
         context_;
     Data data_;
     o3tl::sorted_vector< RootAccess * > roots_;

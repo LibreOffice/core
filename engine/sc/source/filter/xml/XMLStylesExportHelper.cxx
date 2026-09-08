@@ -27,7 +27,7 @@
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/XMLEventExport.hxx>
 #include <xmloff/namespacemap.hxx>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sheet/XSheetCondition.hpp>
 #include <com/sun/star/sheet/TableValidationVisibility.hpp>
@@ -39,6 +39,7 @@
 #include <osl/diagnose.h>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace xmloff::token;
 
 ScMyValidation::ScMyValidation()

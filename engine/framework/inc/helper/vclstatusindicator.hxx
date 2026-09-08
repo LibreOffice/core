@@ -38,7 +38,7 @@ class VCLStatusIndicator final : public  ::cppu::WeakImplHelper< css::task::XSta
 
         /** points to the parent window of this progress and
             hold it alive. */
-        css::uno::Reference< css::awt::XWindow > m_xParentWindow;
+        cpo::uno::Reference< css::awt::XWindow > m_xParentWindow;
 
         /** shows the progress.
 
@@ -59,7 +59,7 @@ class VCLStatusIndicator final : public  ::cppu::WeakImplHelper< css::task::XSta
     public:
 
         /// ctor
-        VCLStatusIndicator(css::uno::Reference< css::awt::XWindow > xParentWindow);
+        VCLStatusIndicator(cpo::uno::Reference< css::awt::XWindow > xParentWindow);
 
         /// dtor
         virtual ~VCLStatusIndicator() override;

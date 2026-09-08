@@ -20,7 +20,7 @@
 
 #include <sal/types.h>
 #include <com/sun/star/beans/NamedValue.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <cpo/uno/XComponentContext.hpp>
 #include <dmapper/resourcemodel.hxx>
@@ -93,14 +93,14 @@ public:
     /**
        Returns fast parser for this stream.
      */
-    virtual css::uno::Reference<css::xml::sax::XFastParser> getFastParser() = 0;
+    virtual cpo::uno::Reference<css::xml::sax::XFastParser> getFastParser() = 0;
 
-    virtual css::uno::Reference<css::io::XInputStream> getDocumentStream() = 0;
+    virtual cpo::uno::Reference<css::io::XInputStream> getDocumentStream() = 0;
 
     /**
        Returns component context for this stream.
      */
-    virtual css::uno::Reference<cpo::uno::XComponentContext> getContext() = 0;
+    virtual cpo::uno::Reference<cpo::uno::XComponentContext> getContext() = 0;
 
     /**
        Returns target URL from relationships for a given id.
@@ -113,7 +113,7 @@ public:
 
     virtual const OUString & getTarget() const = 0;
 
-    virtual css::uno::Reference<css::xml::sax::XFastTokenHandler>
+    virtual cpo::uno::Reference<css::xml::sax::XFastTokenHandler>
     getFastTokenHandler() = 0;
 
 };
@@ -121,23 +121,23 @@ public:
 class OOXMLDocument final : public writerfilter::Reference<Stream>
 {
     OOXMLStream::Pointer_t mpStream;
-    css::uno::Reference<css::task::XStatusIndicator> mxStatusIndicator;
+    cpo::uno::Reference<css::task::XStatusIndicator> mxStatusIndicator;
     writerfilter::Reference<Stream>::Pointer_t mpXFootnoteStream;
     writerfilter::Reference<Stream>::Pointer_t mpXEndnoteStream;
     sal_Int32 mnXNoteId;
 
-    css::uno::Reference<css::frame::XModel> mxModel;
+    cpo::uno::Reference<css::frame::XModel> mxModel;
     rtl::Reference<SwFmDrawPage> mxDrawPage;
-    css::uno::Reference<css::xml::dom::XDocument> mxGlossaryDocDom;
+    cpo::uno::Reference<css::xml::dom::XDocument> mxGlossaryDocDom;
     cpo::uno::Sequence < cpo::uno::Sequence< css::beans::NamedValue > > mxGlossaryDomList;
     /// Stack of shape contexts, 1 element for VML, 1 element / nesting level for drawingML.
     std::stack< rtl::Reference<oox::shape::ShapeContextHandler> > maShapeContexts;
-    css::uno::Reference<css::xml::dom::XDocument> mxThemeDom;
-    cpo::uno::Sequence<css::uno::Reference<css::xml::dom::XDocument> > mxCustomXmlDomList;
-    cpo::uno::Sequence<css::uno::Reference<css::xml::dom::XDocument> > mxCustomXmlDomPropsList;
-    css::uno::Reference<css::xml::dom::XDocument> mxCustomXmlProsDom;
-    css::uno::Reference<css::xml::dom::XDocument> mxWebSettingsDom;
-    css::uno::Reference<css::io::XInputStream> mxEmbeddings;
+    cpo::uno::Reference<css::xml::dom::XDocument> mxThemeDom;
+    cpo::uno::Sequence<cpo::uno::Reference<css::xml::dom::XDocument> > mxCustomXmlDomList;
+    cpo::uno::Sequence<cpo::uno::Reference<css::xml::dom::XDocument> > mxCustomXmlDomPropsList;
+    cpo::uno::Reference<css::xml::dom::XDocument> mxCustomXmlProsDom;
+    cpo::uno::Reference<css::xml::dom::XDocument> mxWebSettingsDom;
+    cpo::uno::Reference<css::io::XInputStream> mxEmbeddings;
     cpo::uno::Sequence < css::beans::PropertyValue > mxEmbeddingsList;
     std::vector<css::beans::PropertyValue> m_aEmbeddings;
     std::set<OUString> maSeenStreams;
@@ -155,7 +155,7 @@ class OOXMLDocument final : public writerfilter::Reference<Stream>
     OUString m_rBaseURL;
     cpo::uno::Sequence<css::beans::PropertyValue> maMediaDescriptor;
     /// Graphic mapper
-    css::uno::Reference<css::graphic::XGraphicMapper> mxGraphicMapper;
+    cpo::uno::Reference<css::graphic::XGraphicMapper> mxGraphicMapper;
     // For a document there is a single theme in document.xml.rels
     // and the same is used by header and footer as well.
     oox::drawingml::ThemePtr mpTheme;
@@ -172,7 +172,7 @@ private:
                                            const writerfilter::Reference<Stream>::Pointer_t& pStream,
                                            sal_uInt32 nId);
 
-    css::uno::Reference<css::xml::dom::XDocument> importSubStream(OOXMLStream::StreamType_t nType);
+    cpo::uno::Reference<css::xml::dom::XDocument> importSubStream(OOXMLStream::StreamType_t nType);
 
     void importSubStreamRelations(const OOXMLStream::Pointer_t& pStream, OOXMLStream::StreamType_t nType);
 
@@ -192,7 +192,7 @@ private:
 
 public:
     OOXMLDocument(OOXMLStream::Pointer_t pStream,
-            css::uno::Reference<css::task::XStatusIndicator> xStatusIndicator,
+            cpo::uno::Reference<css::task::XStatusIndicator> xStatusIndicator,
             bool bSkipImages,
             const cpo::uno::Sequence<css::beans::PropertyValue>& rDescriptor,
             const rtl::Reference<oox::shape::ShapeFilterBase>& rxShapeFilterBase);
@@ -277,11 +277,11 @@ public:
      */
     OUString getTargetForId(const OUString & rId);
 
-    void setModel(const css::uno::Reference<css::frame::XModel>& xModel);
-    const css::uno::Reference<css::frame::XModel>& getModel() const;
+    void setModel(const cpo::uno::Reference<css::frame::XModel>& xModel);
+    const cpo::uno::Reference<css::frame::XModel>& getModel() const;
     void setDrawPage(const rtl::Reference<SwFmDrawPage>& xDrawPage);
     const rtl::Reference<SwFmDrawPage>& getDrawPage() const;
-    css::uno::Reference<css::io::XInputStream> getInputStreamForId(const OUString & rId);
+    cpo::uno::Reference<css::io::XInputStream> getInputStreamForId(const OUString & rId);
     void setXNoteId(const sal_Int32 nId);
     sal_Int32 getXNoteId() const;
     const OUString & getTarget() const;
@@ -295,11 +295,11 @@ public:
     void pushShapeContext();
     /// Pop context of a previously pushed drawingML shape.
     void popShapeContext();
-    const css::uno::Reference<css::xml::dom::XDocument>& getThemeDom() const;
-    const cpo::uno::Sequence<css::uno::Reference<css::xml::dom::XDocument> >& getCustomXmlDomList() const;
-    const cpo::uno::Sequence<css::uno::Reference<css::xml::dom::XDocument> >& getCustomXmlDomPropsList() const;
-    const css::uno::Reference<css::xml::dom::XDocument>& getWebSettingsDom() const;
-    const css::uno::Reference<css::xml::dom::XDocument>& getGlossaryDocDom() const;
+    const cpo::uno::Reference<css::xml::dom::XDocument>& getThemeDom() const;
+    const cpo::uno::Sequence<cpo::uno::Reference<css::xml::dom::XDocument> >& getCustomXmlDomList() const;
+    const cpo::uno::Sequence<cpo::uno::Reference<css::xml::dom::XDocument> >& getCustomXmlDomPropsList() const;
+    const cpo::uno::Reference<css::xml::dom::XDocument>& getWebSettingsDom() const;
+    const cpo::uno::Reference<css::xml::dom::XDocument>& getGlossaryDocDom() const;
     const cpo::uno::Sequence<cpo::uno::Sequence< css::beans::NamedValue> >&  getGlossaryDomList() const;
     const cpo::uno::Sequence<css::beans::PropertyValue >&  getEmbeddingsList() const;
 
@@ -308,7 +308,7 @@ public:
     OUString const& GetDocumentBaseURL() const { return m_rBaseURL; };
     const cpo::uno::Sequence<css::beans::PropertyValue>& getMediaDescriptor() const;
 
-    const css::uno::Reference<css::graphic::XGraphicMapper>& getGraphicMapper() const
+    const cpo::uno::Reference<css::graphic::XGraphicMapper>& getGraphicMapper() const
     {
         return mxGraphicMapper;
     }
@@ -331,8 +331,8 @@ class OOXMLDocumentFactory
 {
 public:
     static OOXMLStream::Pointer_t
-    createStream(const css::uno::Reference<cpo::uno::XComponentContext>& rContext,
-                 const css::uno::Reference<css::io::XInputStream>& rStream,
+    createStream(const cpo::uno::Reference<cpo::uno::XComponentContext>& rContext,
+                 const cpo::uno::Reference<css::io::XInputStream>& rStream,
                  bool bRepairStorage);
 
     static OOXMLStream::Pointer_t
@@ -344,7 +344,7 @@ public:
 
     static OOXMLDocument *
     createDocument(const OOXMLStream::Pointer_t& pStream,
-                 const css::uno::Reference<css::task::XStatusIndicator>& xStatusIndicator,
+                 const cpo::uno::Reference<css::task::XStatusIndicator>& xStatusIndicator,
                  bool bSkipImage, const cpo::uno::Sequence<css::beans::PropertyValue>& rDescriptor);
 
 };

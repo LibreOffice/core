@@ -27,7 +27,7 @@
 using namespace ::svt;
 using namespace css::beans;
 using namespace css::task;
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace ::cpo::uno;
 
 RemoteFilesDialog::RemoteFilesDialog( weld::Window* pParent, PickerFlags nBits )

@@ -29,9 +29,9 @@
 #include <memory>
 
 namespace com::sun::star {
-    namespace uno { template<typename T> class Reference; }
     namespace beans { class XPropertySet; struct PropertyValue; }
 }
+namespace cpo::uno { template<typename T> class Reference; }
 
 class XMLFontAutoStylePool_Impl;
 class SvXMLExport;
@@ -67,7 +67,7 @@ public:
 
     void exportXML();
 
-    void addModelFonts(const css::uno::Reference<css::beans::XPropertySet>& xProps);
+    void addModelFonts(const cpo::uno::Reference<css::beans::XPropertySet>& xProps);
 };
 
 #endif // INCLUDED_XMLOFF_XMLFONTAUTOSTYLEPOOL_HXX

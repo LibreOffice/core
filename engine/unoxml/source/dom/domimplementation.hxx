@@ -21,7 +21,7 @@
 
 #include <sal/types.h>
 
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xml/dom/XDocumentType.hpp>
 #include <com/sun/star/xml/dom/XDOMImplementation.hpp>
@@ -44,12 +44,12 @@ namespace DOM
         /**
         Creates a DOM Document object of the specified type with its document element.
         */
-        virtual css::uno::Reference< css::xml::dom::XDocument > SAL_CALL createDocument(const OUString& namespaceURI, const OUString& qualifiedName, const css::uno::Reference< css::xml::dom::XDocumentType >& doctype) override;
+        virtual cpo::uno::Reference< css::xml::dom::XDocument > SAL_CALL createDocument(const OUString& namespaceURI, const OUString& qualifiedName, const cpo::uno::Reference< css::xml::dom::XDocumentType >& doctype) override;
 
         /**
         Creates an empty DocumentType node.
         */
-        virtual css::uno::Reference< css::xml::dom::XDocumentType > SAL_CALL createDocumentType(const OUString& qualifiedName, const OUString& publicId, const OUString& systemId) override;
+        virtual cpo::uno::Reference< css::xml::dom::XDocumentType > SAL_CALL createDocumentType(const OUString& qualifiedName, const OUString& publicId, const OUString& systemId) override;
 
         /**
         Test if the DOM implementation implements a specific feature.

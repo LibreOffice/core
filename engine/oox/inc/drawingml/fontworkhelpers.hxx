@@ -43,7 +43,7 @@ void resetPropertyValueInVec(std::vector<css::beans::PropertyValue>& rPropVec,
     shape corresponding to the OOXML shape specified by sMSPresetType.
     Precondition: xShape is a custom shape.*/
 void putCustomShapeIntoTextPathMode(
-    const css::uno::Reference<css::drawing::XShape>& xShape,
+    const cpo::uno::Reference<css::drawing::XShape>& xShape,
     const oox::drawingml::CustomShapePropertiesPtr& pCustomShapePropertiesPtr,
     const OUString& sMSPresetType, const bool bFromWordArt);
 
@@ -55,32 +55,32 @@ OString GetVMLFontworkShapetypeMarkup(const MSO_SPT eShapeType);
 /** Collects the properties "CharColor", "CharLumMod", "CharLumOff", "CharColorTheme",
     "CharComplexColor" and "CharTransparence" from the first non-empty run in rXText and puts
     them into rCharPropVec.*/
-void collectCharColorProps(const css::uno::Reference<css::text::XText>& rXText,
+void collectCharColorProps(const cpo::uno::Reference<css::text::XText>& rXText,
                            std::vector<css::beans::PropertyValue>& rCharPropVec);
 
 /** Applies all properties in rTextPropVec excluding "CharInteropGrabBag" to all non-empty runs in
     rXText.*/
 void applyPropsToRuns(const std::vector<css::beans::PropertyValue>& rTextPropVec,
-                      const css::uno::Reference<css::text::XText>& rXText);
+                      const cpo::uno::Reference<css::text::XText>& rXText);
 
 /** Generates the properties "CharColor", "CharLumMod", "CharLumOff", "CharColorTheme",
     "CharComplexColor" and "CharTransparence" from the shape properties "FillColor",
     "FillColorLumMod, "FillColorLumOff", "FillColorTheme", "FillComplexColor" and
     "FillTransparence" and puts them into rCharPropVec.*/
-void createCharFillPropsFromShape(const css::uno::Reference<css::beans::XPropertySet>& rXPropSet,
+void createCharFillPropsFromShape(const cpo::uno::Reference<css::beans::XPropertySet>& rXPropSet,
                                   std::vector<css::beans::PropertyValue>& rCharPropVec);
 
 /** Creates the properties "CharTextFillTextEffect", "CharTextOutlineTextEffect", "CharThemeColor",
     "CharThemeColorShade" or "CharThemeColorTint", and "CharThemeOriginalColor" from the FillFoo and
     LineBar properties of the shape and puts them into rUpdatePropVec.*/
 void createCharInteropGrabBagUpdatesFromShapeProps(
-    const css::uno::Reference<css::beans::XPropertySet>& rXPropSet,
+    const cpo::uno::Reference<css::beans::XPropertySet>& rXPropSet,
     std::vector<css::beans::PropertyValue>& rUpdatePropVec);
 
 /** Puts all properties in rUpdatePropVec into the "CharInteropGrabBag" of all non-empty runs in rXText.
     Existing properties are overwritten.*/
 void applyUpdatesToCharInteropGrabBag(const std::vector<css::beans::PropertyValue>& rUpdatePropVec,
-                                      const css::uno::Reference<css::text::XText>& rXText);
+                                      const cpo::uno::Reference<css::text::XText>& rXText);
 
 // ToDo: This is essentially the same as contained in method DrawingML::WriteOutline. Change it
 // there to use this method too, perhaps move this method to a common location.
@@ -96,7 +96,7 @@ bool createPrstDashFromLineDash(const css::drawing::LineDash& rLineDash,
     Returns false otherwise. rComplexColor is then unchanged or its type is
     model::ThemeColorType::Unknown */
 bool getThemeColorFromShape(const OUString& rPropertyName,
-                            const css::uno::Reference<css::beans::XPropertySet>& xPropertySet,
+                            const cpo::uno::Reference<css::beans::XPropertySet>& xPropertySet,
                             model::ComplexColor& rComplexColor);
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

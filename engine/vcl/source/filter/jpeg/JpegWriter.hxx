@@ -39,7 +39,7 @@ class JPEGWriter final
 
     bool*               mpExpWasGrey;
 
-    css::uno::Reference< css::task::XStatusIndicator > mxStatusIndicator;
+    cpo::uno::Reference< css::task::XStatusIndicator > mxStatusIndicator;
 
 public:
     JPEGWriter( SvStream& rStream,

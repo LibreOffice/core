@@ -34,7 +34,7 @@ class ScAccessiblePageHeaderArea final
 {
 public:
     ScAccessiblePageHeaderArea(
-        const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
+        const cpo::uno::Reference<css::accessibility::XAccessible>& rxParent,
         ScPreviewShell* pViewShell,
         const EditTextObject* pEditObj,
         SvxAdjust eAdjust);
@@ -52,7 +52,7 @@ public:
 
     ///=====  XAccessibleComponent  ============================================
 
-    virtual css::uno::Reference< css::accessibility::XAccessible >
+    virtual cpo::uno::Reference< css::accessibility::XAccessible >
         SAL_CALL getAccessibleAtPoint(
         const css::awt::Point& rPoint ) override;
 
@@ -65,7 +65,7 @@ public:
 
     /// Return the specified child or NULL if index is invalid.
     /// override to calculate this on demand
-    virtual css::uno::Reference< css::accessibility::XAccessible> SAL_CALL
+    virtual cpo::uno::Reference< css::accessibility::XAccessible> SAL_CALL
         getAccessibleChild(sal_Int64 nIndex) override;
 
     /// Return the set of current states.

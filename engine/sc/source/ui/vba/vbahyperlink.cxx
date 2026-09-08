@@ -33,6 +33,7 @@
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 ScVbaHyperlink::ScVbaHyperlink( const cpo::uno::Sequence< cpo::uno::Any >& rArgs,
         const uno::Reference< cpo::uno::XComponentContext >& rxContext ) :

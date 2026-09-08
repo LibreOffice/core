@@ -29,7 +29,8 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 constexpr OUString SELECTWIDTH = u"SelectWidth"_ustr;
 
@@ -57,7 +58,7 @@ namespace
 {
     SvxLineStyleToolBoxControl* getLineStyleToolBoxControl(const ToolbarUnoDispatcher& rToolBoxColor)
     {
-        css::uno::Reference<css::frame::XToolbarController> xController = rToolBoxColor.GetControllerForCommand(u".uno:XLineStyle"_ustr);
+        cpo::uno::Reference<css::frame::XToolbarController> xController = rToolBoxColor.GetControllerForCommand(u".uno:XLineStyle"_ustr);
         SvxLineStyleToolBoxControl* pToolBoxLineStyleControl = dynamic_cast<SvxLineStyleToolBoxControl*>(xController.get());
         return pToolBoxLineStyleControl;
     }

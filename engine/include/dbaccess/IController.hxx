@@ -20,7 +20,7 @@
 #ifndef INCLUDED_DBACCESS_ICONTROLLER_HXX
 #define INCLUDED_DBACCESS_ICONTROLLER_HXX
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <dbaccess/dbaccessdllapi.h>
 #include <rtl/ustring.hxx>
@@ -59,7 +59,7 @@ namespace dbaui
 
             @throws cpo::uno::RuntimeException
         */
-        virtual css::uno::Reference< css::frame::XController >
+        virtual cpo::uno::Reference< css::frame::XController >
                 getXController() = 0;
 
         /** allows interception of user input, aka mouse clicks and key events

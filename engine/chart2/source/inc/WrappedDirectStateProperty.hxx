@@ -29,7 +29,7 @@ public:
     virtual ~WrappedDirectStateProperty() override;
 
     virtual css::beans::PropertyState getPropertyState(
-        const css::uno::Reference<css::beans::XPropertyState>& xInnerPropertyState) const override;
+        const cpo::uno::Reference<css::beans::XPropertyState>& xInnerPropertyState) const override;
 };
 
 } //  namespace chart

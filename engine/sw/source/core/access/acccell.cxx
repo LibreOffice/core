@@ -45,6 +45,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
+using namespace ::cpo;
 using namespace sw::access;
 
 bool SwAccessibleCell::IsSelected()

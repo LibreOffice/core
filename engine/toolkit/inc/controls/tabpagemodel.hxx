@@ -28,13 +28,13 @@ class UnoControlTabPageModel final : public ControlModelContainerBase
     cpo::uno::Any          ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 public:
-    UnoControlTabPageModel( css::uno::Reference< cpo::uno::XComponentContext > const & i_factory);
+    UnoControlTabPageModel( cpo::uno::Reference< cpo::uno::XComponentContext > const & i_factory);
 
     // css::io::XPersistObject
     OUString getServiceName() override;
 
     // css::beans::XMultiPropertySet
-    css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+    cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
     // XInitialization
     virtual void initialize (const cpo::uno::Sequence<cpo::uno::Any>& rArguments) override;
 
@@ -56,11 +56,11 @@ private:
     bool            m_bWindowListener;
 public:
 
-    UnoControlTabPage( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+    UnoControlTabPage( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
     virtual ~UnoControlTabPage() override;
     OUString             GetComponentServiceName() const override;
 
-    void createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
+    void createPeer( const cpo::uno::Reference< css::awt::XToolkit >& Toolkit, const cpo::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
     void disposing( const css::lang::EventObject& Source ) override;
 
      // css::awt::XWindowListener

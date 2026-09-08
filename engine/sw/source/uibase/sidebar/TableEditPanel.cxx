@@ -29,7 +29,7 @@ namespace sw::sidebar
 {
 std::unique_ptr<PanelLayout>
 TableEditPanel::Create(weld::Widget* pParent,
-                       const css::uno::Reference<css::frame::XFrame>& rxFrame,
+                       const cpo::uno::Reference<css::frame::XFrame>& rxFrame,
                        SfxBindings* pBindings)
 {
     if (pParent == nullptr)
@@ -127,7 +127,7 @@ void TableEditPanel::NotifyItemUpdate(const sal_uInt16 nSID, const SfxItemState 
 }
 
 TableEditPanel::TableEditPanel(weld::Widget* pParent,
-                               const css::uno::Reference<css::frame::XFrame>& rxFrame,
+                               const cpo::uno::Reference<css::frame::XFrame>& rxFrame,
                                SfxBindings* pBindings)
     : PanelLayout(pParent, u"TableEditPanel"_ustr, u"modules/swriter/ui/sidebartableedit.ui"_ustr)
     , m_pBindings(pBindings)

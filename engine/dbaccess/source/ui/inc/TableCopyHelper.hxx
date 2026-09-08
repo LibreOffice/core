@@ -136,14 +136,14 @@ namespace dbaui
         */
         void insertTable(
             std::u16string_view i_rSourceDataSource,
-            const css::uno::Reference< css::sdbc::XConnection>& i_rSourceConnection,
+            const cpo::uno::Reference< css::sdbc::XConnection>& i_rSourceConnection,
             const OUString& i_rCommand,
             const sal_Int32 i_nCommandType,
-            const css::uno::Reference< css::sdbc::XResultSet >& i_rSourceRows,
+            const cpo::uno::Reference< css::sdbc::XResultSet >& i_rSourceRows,
             const cpo::uno::Sequence< cpo::uno::Any >& i_rSelection,
             const bool i_bBookmarkSelection,
             std::u16string_view i_rDestDataSource,
-            const css::uno::Reference< css::sdbc::XConnection>& i_rDestConnection
+            const cpo::uno::Reference< css::sdbc::XConnection>& i_rDestConnection
         );
 
     };

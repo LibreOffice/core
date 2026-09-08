@@ -28,6 +28,7 @@
 #include <sal/log.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace xmloff::token;
 
 ScXMLDDELinksContext::ScXMLDDELinksContext( ScXMLImport& rImport ) :

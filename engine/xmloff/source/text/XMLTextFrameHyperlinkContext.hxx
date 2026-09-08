@@ -38,19 +38,19 @@ public:
 
     XMLTextFrameHyperlinkContext( SvXMLImport& rImport,
             sal_Int32 nElement,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
+            const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
             css::text::TextContentAnchorType eDefaultAnchorType );
     virtual ~XMLTextFrameHyperlinkContext() override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
     css::text::TextContentAnchorType GetAnchorType() const;
 
-    css::uno::Reference < css::text::XTextContent > GetTextContent() const;
+    cpo::uno::Reference < css::text::XTextContent > GetTextContent() const;
 
     // Frame "to character": anchor moves from first to last char after saving (#i33242#)
-    css::uno::Reference < css::drawing::XShape > GetShape() const;
+    cpo::uno::Reference < css::drawing::XShape > GetShape() const;
 };
 
 

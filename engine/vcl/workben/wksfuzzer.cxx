@@ -25,15 +25,15 @@ extern "C" int LLVMFuzzerInitialize(int* argc, char*** argv)
     CommonInitialize(argc, argv);
 
     // initialise unconfigured UCB:
-    css::uno::Reference<css::ucb::XUniversalContentBroker> xUcb(
+    cpo::uno::Reference<css::ucb::XUniversalContentBroker> xUcb(
         comphelper::getProcessServiceFactory()->createInstance(
             "com.sun.star.ucb.UniversalContentBroker"),
-        css::uno::UNO_QUERY_THROW);
+        cpo::uno::UNO_QUERY_THROW);
     cpo::uno::Sequence<cpo::uno::Any> aArgs{ cpo::uno::Any(OUString("NoConfig")) };
-    css::uno::Reference<css::ucb::XContentProvider> xFileProvider(
+    cpo::uno::Reference<css::ucb::XContentProvider> xFileProvider(
         comphelper::getProcessServiceFactory()->createInstanceWithArguments(
             "com.sun.star.ucb.FileContentProvider", aArgs),
-        css::uno::UNO_QUERY_THROW);
+        cpo::uno::UNO_QUERY_THROW);
     xUcb->registerContentProvider(xFileProvider, "file", true);
 
     if (__lsan_enable)

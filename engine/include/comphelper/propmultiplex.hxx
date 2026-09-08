@@ -80,7 +80,7 @@ namespace comphelper
     {
         friend class OPropertyChangeListener;
         std::vector< OUString >                         m_aProperties;
-        css::uno::Reference< css::beans::XPropertySet>  m_xSet;
+        cpo::uno::Reference< css::beans::XPropertySet>  m_xSet;
         OPropertyChangeListener*                        m_pListener;
         sal_Int32                                       m_nLockCount;
         bool                                            m_bListening        : 1;
@@ -89,7 +89,7 @@ namespace comphelper
 
         virtual ~OPropertyChangeMultiplexer() override;
     public:
-        OPropertyChangeMultiplexer(OPropertyChangeListener* _pListener, const  css::uno::Reference< css::beans::XPropertySet>& _rxSet, bool _bAutoReleaseSet = true);
+        OPropertyChangeMultiplexer(OPropertyChangeListener* _pListener, const  cpo::uno::Reference< css::beans::XPropertySet>& _rxSet, bool _bAutoReleaseSet = true);
 
     // XEventListener
         virtual void disposing( const  css::lang::EventObject& Source ) override;

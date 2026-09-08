@@ -29,9 +29,10 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
+using namespace ::cpo;
 
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::UNO_QUERY;
+using ::cpo::uno::Reference;
 
 namespace chart
 {

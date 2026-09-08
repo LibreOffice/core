@@ -33,7 +33,7 @@ namespace frm
 {
 using namespace comphelper;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
@@ -57,7 +57,7 @@ OImageButtonModel::OImageButtonModel( const OImageButtonModel* _pOriginal, const
     implInitializeImageURL();
 }
 
-css::uno::Reference< css::util::XCloneable > OImageButtonModel::createClone()
+cpo::uno::Reference< css::util::XCloneable > OImageButtonModel::createClone()
 {
     rtl::Reference<OImageButtonModel> pClone = new OImageButtonModel(this, getContext());
     pClone->clonedFrom(this);

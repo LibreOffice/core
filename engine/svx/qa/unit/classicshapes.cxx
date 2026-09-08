@@ -22,6 +22,7 @@
 #include <com/sun/star/awt/Rectangle.hpp>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace
 {

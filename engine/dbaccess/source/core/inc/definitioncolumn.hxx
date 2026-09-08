@@ -44,7 +44,7 @@ namespace dbaccess
                                   ,public ::comphelper::OPropertyArrayUsageHelper < OTableColumnDescriptor >
                                   ,public TXChild
     {
-        css::uno::Reference< cpo::uno::XInterface >   m_xParent;
+        cpo::uno::Reference< cpo::uno::XInterface >   m_xParent;
         const bool                                    m_bActAsDescriptor;
 
     protected:
@@ -87,8 +87,8 @@ namespace dbaccess
         virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
         // css::container::XChild
-        virtual css::uno::Reference< cpo::uno::XInterface > getParent(  ) override;
-        virtual void setParent( const css::uno::Reference< cpo::uno::XInterface >& Parent ) override;
+        virtual cpo::uno::Reference< cpo::uno::XInterface > getParent(  ) override;
+        virtual void setParent( const cpo::uno::Reference< cpo::uno::XInterface >& Parent ) override;
 
         // ::comphelper::OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
@@ -142,15 +142,15 @@ namespace dbaccess
         OUString m_sLabel;
         // </properties>
 
-        css::uno::Reference< css::beans::XPropertySet >   m_xOriginalTableColumn;
+        cpo::uno::Reference< css::beans::XPropertySet >   m_xOriginalTableColumn;
 
     protected:
         virtual ~OQueryColumn() override;
 
     public:
         OQueryColumn(
-            const css::uno::Reference< css::beans::XPropertySet>& _rxParserColumn,
-            const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
+            const cpo::uno::Reference< css::beans::XPropertySet>& _rxParserColumn,
+            const cpo::uno::Reference< css::sdbc::XConnection >& _rxConnection,
             OUString i_sLabel
         );
 
@@ -166,9 +166,9 @@ namespace dbaccess
         virtual void getFastPropertyValue( cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
 
     private:
-        css::uno::Reference< css::beans::XPropertySet >
+        cpo::uno::Reference< css::beans::XPropertySet >
                 impl_determineOriginalTableColumn(
-                    const css::uno::Reference< css::sdbc::XConnection >& _rxConnection
+                    const cpo::uno::Reference< css::sdbc::XConnection >& _rxConnection
                 );
 
         using ::cppu::OPropertySetHelper::getFastPropertyValue;
@@ -183,13 +183,13 @@ namespace dbaccess
     {
     protected:
         // definition which is provided by a driver!
-        css::uno::Reference< css::beans::XPropertySet >
+        cpo::uno::Reference< css::beans::XPropertySet >
                                 m_xAggregate;
 
         sal_Int32               m_nColTypeID;
 
     protected:
-        OColumnWrapper( const css::uno::Reference< css::beans::XPropertySet >& _rCol, const bool _bNameIsReadOnly );
+        OColumnWrapper( const cpo::uno::Reference< css::beans::XPropertySet >& _rCol, const bool _bNameIsReadOnly );
         virtual ~OColumnWrapper() override;
 
     public:
@@ -226,7 +226,7 @@ namespace dbaccess
         const bool  m_bIsDescriptor;
 
     public:
-        OTableColumnDescriptorWrapper(const css::uno::Reference< css::beans::XPropertySet >& rCol,
+        OTableColumnDescriptorWrapper(const cpo::uno::Reference< css::beans::XPropertySet >& rCol,
             const bool _bPureWrap, const bool _bIsDescriptor );
 
     // css::lang::XTypeProvider
@@ -271,8 +271,8 @@ namespace dbaccess
         virtual ~OTableColumnWrapper() override;
 
     public:
-        OTableColumnWrapper( const css::uno::Reference< css::beans::XPropertySet >& rCol,
-                             const css::uno::Reference< css::beans::XPropertySet >& rColDefinition,
+        OTableColumnWrapper( const cpo::uno::Reference< css::beans::XPropertySet >& rCol,
+                             const cpo::uno::Reference< css::beans::XPropertySet >& rColDefinition,
                              const bool _bPureWrap );
 
     // css::lang::XTypeProvider

@@ -39,7 +39,7 @@
 #include <osl/diagnose.h>
 
 using namespace utl;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace com::sun::star;
 
 Reader *ReadAscii = nullptr, *ReadHTML = nullptr, *ReadXML = nullptr;

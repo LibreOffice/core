@@ -44,6 +44,7 @@
 #include <com/sun/star/i18n/CharType.hpp>
 #include <com/sun/star/i18n/Collator.hpp>
 
+using namespace ::cpo;
 
 namespace comphelper::string {
 

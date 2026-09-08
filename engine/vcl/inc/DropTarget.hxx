@@ -30,7 +30,7 @@ class VCL_DLLPUBLIC DropTarget
     osl::Mutex m_aMutex;
     bool m_bActive;
     sal_Int8 m_nDefaultActions;
-    std::vector<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> m_aListeners;
+    std::vector<cpo::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> m_aListeners;
 
 protected:
     DropTarget();
@@ -45,9 +45,9 @@ public:
 
     // XDropTarget
     virtual void addDropTargetListener(
-        const css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>&) override final;
+        const cpo::uno::Reference<css::datatransfer::dnd::XDropTargetListener>&) override final;
     virtual void removeDropTargetListener(
-        const css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>&) override final;
+        const cpo::uno::Reference<css::datatransfer::dnd::XDropTargetListener>&) override final;
     virtual bool isActive() override final;
     virtual void setActive(bool active) override final;
     virtual sal_Int8 getDefaultActions() override final;

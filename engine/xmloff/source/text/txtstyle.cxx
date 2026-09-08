@@ -40,13 +40,14 @@
 
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::beans;
 using namespace ::xmloff::token;
 
 void XMLTextParagraphExport::exportStyleAttributes(
-        const css::uno::Reference< css::style::XStyle > & rStyle )
+        const cpo::uno::Reference< css::style::XStyle > & rStyle )
 {
     Reference< XPropertySet > xPropSet( rStyle, UNO_QUERY );
     Reference< XPropertySetInfo > xPropSetInfo(

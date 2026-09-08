@@ -27,7 +27,7 @@
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Type.hxx>
 #include <cpo/uno/XInterface.hpp>
@@ -135,7 +135,7 @@ void ChildAccess::release() noexcept {
     Access::release();
 }
 
-css::uno::Reference< cpo::uno::XInterface > ChildAccess::getParent()
+cpo::uno::Reference< cpo::uno::XInterface > ChildAccess::getParent()
 {
     assert(thisIs(IS_ANY));
     osl::MutexGuard g(*lock_);
@@ -143,7 +143,7 @@ css::uno::Reference< cpo::uno::XInterface > ChildAccess::getParent()
     return cppu::getXWeak(parent_.get());
 }
 
-void ChildAccess::setParent(css::uno::Reference< cpo::uno::XInterface > const &)
+void ChildAccess::setParent(cpo::uno::Reference< cpo::uno::XInterface > const &)
 {
     assert(thisIs(IS_ANY));
     osl::MutexGuard g(*lock_);
@@ -244,7 +244,7 @@ cpo::uno::Any ChildAccess::asValue()
                 return child.is() ? child->asValue() : cpo::uno::Any();
             }
         }
-        value <<= css::uno::Reference< cpo::uno::XInterface >(getXWeak());
+        value <<= cpo::uno::Reference< cpo::uno::XInterface >(getXWeak());
     }
     return value;
 }

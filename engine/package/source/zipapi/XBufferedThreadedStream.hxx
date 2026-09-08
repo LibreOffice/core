@@ -28,7 +28,7 @@ class XBufferedThreadedStream : public cppu::WeakImplHelper< css::io::XInputStre
         public comphelper::ByteReader
 {
 private:
-    const css::uno::Reference<XInputStream> mxSrcStream;
+    const cpo::uno::Reference<XInputStream> mxSrcStream;
     sal_Int64 mnPos;                                           /// position in stream
     sal_Int64 mnStreamSize;                                    /// available size of stream
 
@@ -65,7 +65,7 @@ private:
 
 public:
     XBufferedThreadedStream(
-                  const css::uno::Reference<XInputStream>& xSrcStream,
+                  const cpo::uno::Reference<XInputStream>& xSrcStream,
                   sal_Int64 nStreamSize /* cf. sal_Int32 available(); */ );
 
     virtual ~XBufferedThreadedStream() override;

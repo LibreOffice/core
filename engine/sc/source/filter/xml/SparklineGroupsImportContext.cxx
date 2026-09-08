@@ -23,6 +23,7 @@
 
 using namespace xmloff::token;
 using namespace css;
+using namespace ::cpo;
 
 namespace sc
 {

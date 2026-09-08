@@ -22,14 +22,14 @@ XMLSectionContext::XMLSectionContext(XMLImport& rImport)
 }
 
 rtl::Reference<XMLImportContext> XMLSectionContext::CreateChildContext(
-    const OUString& rName, const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
+    const OUString& rName, const cpo::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
     return CreateTextChildContext(GetImport(), rName);
 }
 
 void XMLSectionContext::startElement(
     const OUString& /*rName*/,
-    const css::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
+    const cpo::uno::Reference<css::xml::sax::XAttributeList>& /*xAttribs*/)
 {
     GetImport().GetGenerator().openSection(librevenge::RVNGPropertyList());
 }

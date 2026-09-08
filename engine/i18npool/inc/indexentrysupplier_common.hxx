@@ -39,7 +39,7 @@ class IndexEntrySupplier_Common : public cppu::WeakImplHelper
 >
 {
 public:
-    IndexEntrySupplier_Common( const css::uno::Reference < cpo::uno::XComponentContext >& rxContext );
+    IndexEntrySupplier_Common( const cpo::uno::Reference < cpo::uno::XComponentContext >& rxContext );
     virtual ~IndexEntrySupplier_Common() override;
 
     virtual cpo::uno::Sequence < css::lang::Locale > getLocaleList() override;

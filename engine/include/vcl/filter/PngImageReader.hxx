@@ -16,7 +16,7 @@
 #include <vcl/BinaryDataContainer.hxx>
 #include <vcl/filter/ImportOutput.hxx>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 constexpr sal_uInt64 PNG_SIGNATURE = 0x89504E470D0A1A0A;
 constexpr sal_uInt32 PNG_IHDR_SIGNATURE = 0x49484452;
@@ -48,7 +48,7 @@ namespace vcl
 class VCL_DLLPUBLIC PngImageReader
 {
     SvStream& mrStream;
-    css::uno::Reference<css::task::XStatusIndicator> mxStatusIndicator;
+    cpo::uno::Reference<css::task::XStatusIndicator> mxStatusIndicator;
 
 public:
     PngImageReader(SvStream& rStream);

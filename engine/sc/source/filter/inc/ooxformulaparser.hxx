@@ -79,7 +79,7 @@ public:
 private:
     typedef std::shared_ptr< OOXMLFormulaParserImpl >   ParserImplRef;
 
-    css::uno::Reference< css::lang::XComponent >
+    cpo::uno::Reference< css::lang::XComponent >
                         mxComponent;
     ParserImplRef       mxParserImpl;       /// Implementation of import parser.
 };

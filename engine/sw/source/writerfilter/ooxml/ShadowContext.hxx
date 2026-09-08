@@ -45,7 +45,7 @@ class CallData
     sal_uInt32 m_nLevel;
     CallDataType m_eType;
     sal_Int32 m_nElement;
-    css::uno::Reference<css::xml::sax::XFastAttributeList> m_aAttributes;
+    cpo::uno::Reference<css::xml::sax::XFastAttributeList> m_aAttributes;
 
     //char
     ::rtl::OUString m_aChars;
@@ -57,7 +57,7 @@ class CallData
 public:
     //Start unknown element or context
     CallData(sal_uInt32 nLevel, const ::rtl::OUString& rNameSpace, const ::rtl::OUString& rElement,
-             const css::uno::Reference<css::xml::sax::XFastAttributeList>& rAttributes,
+             const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& rAttributes,
              CallDataType eType)
         : m_nLevel(nLevel)
         , m_eType(eType)
@@ -80,7 +80,7 @@ public:
 
     // start fast element
     CallData(sal_uInt32 nLevel, sal_Int32 nElement,
-             const css::uno::Reference<css::xml::sax::XFastAttributeList>& rAttributes,
+             const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& rAttributes,
              CallDataType eType)
         : m_nLevel(nLevel)
         , m_eType(eType)
@@ -112,7 +112,7 @@ public:
     CallDataType getType() const { return m_eType; }
     sal_Int32 getElement() const { return m_nElement; }
     const ::rtl::OUString& getChars() { return m_aChars; }
-    const css::uno::Reference<css::xml::sax::XFastAttributeList>& getAttributes() const
+    const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& getAttributes() const
     {
         return m_aAttributes;
     }
@@ -123,27 +123,27 @@ class ShadowContext : public ::oox::core::ContextHandler_BASE
 {
 public:
     explicit ShadowContext(::sal_Int32 Element,
-                           const css::uno::Reference<css::xml::sax::XFastAttributeList>& rAttribs);
+                           const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& rAttribs);
     virtual ~ShadowContext() override;
 
     //XFastContextHandler
     virtual void SAL_CALL startFastElement(
         ::sal_Int32 Element,
-        const ::css::uno::Reference<::css::xml::sax::XFastAttributeList>& Attribs) override;
+        const ::cpo::uno::Reference<::css::xml::sax::XFastAttributeList>& Attribs) override;
     virtual void SAL_CALL startUnknownElement(
         const ::rtl::OUString& Namespace, const ::rtl::OUString& Name,
-        const ::css::uno::Reference<::css::xml::sax::XFastAttributeList>& Attribs) override;
+        const ::cpo::uno::Reference<::css::xml::sax::XFastAttributeList>& Attribs) override;
     virtual void SAL_CALL endFastElement(::sal_Int32 Element) override;
     virtual void SAL_CALL endUnknownElement(const ::rtl::OUString& Namespace,
                                             const ::rtl::OUString& Name) override;
-    virtual ::css::uno::Reference<::css::xml::sax::XFastContextHandler>
+    virtual ::cpo::uno::Reference<::css::xml::sax::XFastContextHandler>
         SAL_CALL createFastChildContext(
             ::sal_Int32 Element,
-            const ::css::uno::Reference<::css::xml::sax::XFastAttributeList>& Attribs) override;
-    virtual ::css::uno::Reference<::css::xml::sax::XFastContextHandler>
+            const ::cpo::uno::Reference<::css::xml::sax::XFastAttributeList>& Attribs) override;
+    virtual ::cpo::uno::Reference<::css::xml::sax::XFastContextHandler>
         SAL_CALL createUnknownChildContext(
             const ::rtl::OUString& Namespace, const ::rtl::OUString& Name,
-            const ::css::uno::Reference<::css::xml::sax::XFastAttributeList>& Attribs) override;
+            const ::cpo::uno::Reference<::css::xml::sax::XFastAttributeList>& Attribs) override;
     virtual void SAL_CALL characters(const ::rtl::OUString& aChars) override;
 
     sal_uInt16 getElementLevel() const { return m_nElementLevel; }

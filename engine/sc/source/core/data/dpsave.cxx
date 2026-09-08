@@ -53,6 +53,7 @@
 
 using namespace com::sun::star;
 using namespace com::sun::star::sheet;
+using namespace ::cpo;
 
 #define SC_DPSAVEMODE_DONTKNOW 2
 

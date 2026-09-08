@@ -39,20 +39,20 @@ class StorageHolder final
     public:
 
         /** @short  TODO */
-        typedef ::std::vector< css::uno::Reference< css::embed::XStorage > > TStorageList;
+        typedef ::std::vector< cpo::uno::Reference< css::embed::XStorage > > TStorageList;
 
         typedef ::std::vector< XMLBasedAcceleratorConfiguration* > TStorageListenerList;
 
         struct TStorageInfo
         {
             private:
-                css::uno::Reference< css::embed::XStorage > Storage;
+                cpo::uno::Reference< css::embed::XStorage > Storage;
             public:
                 sal_Int32 UseCount;
                 TStorageListenerList Listener;
 
             public:
-                TStorageInfo(css::uno::Reference<css::embed::XStorage> xStorage)
+                TStorageInfo(cpo::uno::Reference<css::embed::XStorage> xStorage)
                     : Storage(std::move(xStorage))
                     , UseCount(1)
                 {}
@@ -62,7 +62,7 @@ class StorageHolder final
                     Storage.clear();
                 }
 
-                const css::uno::Reference<css::embed::XStorage>& getStorage(const std::unique_lock<std::mutex>&) const
+                const cpo::uno::Reference<css::embed::XStorage>& getStorage(const std::unique_lock<std::mutex>&) const
                 {
                     return Storage;
                 }
@@ -77,7 +77,7 @@ class StorageHolder final
         mutable std::mutex m_mutex;
 
         /** @short  TODO */
-        css::uno::Reference< css::embed::XStorage > m_xRoot;
+        cpo::uno::Reference< css::embed::XStorage > m_xRoot;
 
         /** @short  TODO */
         TPath2StorageInfo m_lStorages;
@@ -99,16 +99,16 @@ class StorageHolder final
 
         /** @short  TODO
          */
-        void setRootStorage(const css::uno::Reference< css::embed::XStorage >& xRoot);
+        void setRootStorage(const cpo::uno::Reference< css::embed::XStorage >& xRoot);
 
         /** @short  TODO
          */
-        css::uno::Reference< css::embed::XStorage > getRootStorage() const;
+        cpo::uno::Reference< css::embed::XStorage > getRootStorage() const;
 
         /** @short  TODO
                     open or get!
          */
-        css::uno::Reference< css::embed::XStorage > openPath(const OUString& sPath    ,
+        cpo::uno::Reference< css::embed::XStorage > openPath(const OUString& sPath    ,
                                                                            sal_Int32        nOpenMode);
 
         /** @short  TODO
@@ -139,15 +139,15 @@ class StorageHolder final
 
         /** @short  TODO
          */
-        OUString getPathOfStorage(const css::uno::Reference< css::embed::XStorage >& xStorage);
+        OUString getPathOfStorage(const cpo::uno::Reference< css::embed::XStorage >& xStorage);
 
         /** @short  TODO
          */
-        css::uno::Reference< css::embed::XStorage > getParentStorage(const css::uno::Reference< css::embed::XStorage >& xChild);
+        cpo::uno::Reference< css::embed::XStorage > getParentStorage(const cpo::uno::Reference< css::embed::XStorage >& xChild);
 
         /** @short  TODO
          */
-        css::uno::Reference< css::embed::XStorage > getParentStorage(const OUString& sChildPath);
+        cpo::uno::Reference< css::embed::XStorage > getParentStorage(const OUString& sChildPath);
 
         /** @short  TODO
          */
@@ -174,7 +174,7 @@ class StorageHolder final
                     a flag field, which set the open mode for this operation.
 
          */
-        static css::uno::Reference< css::embed::XStorage > openSubStorageWithFallback(const css::uno::Reference< css::embed::XStorage >& xBaseStorage  ,
+        static cpo::uno::Reference< css::embed::XStorage > openSubStorageWithFallback(const cpo::uno::Reference< css::embed::XStorage >& xBaseStorage  ,
                                                                                       const OUString&                             sSubStorage   ,
                                                                                       sal_Int32                                    eOpenMode);
 

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_OOX_HELPER_ZIPSTORAGE_HXX
 #define INCLUDED_OOX_HELPER_ZIPSTORAGE_HXX
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <oox/helper/storagebase.hxx>
 #include <rtl/ustring.hxx>
 
@@ -39,27 +39,27 @@ class ZipStorage final : public StorageBase
 {
 public:
     explicit            ZipStorage(
-                            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
-                            const css::uno::Reference< css::io::XInputStream >& rxInStream,
+                            const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+                            const cpo::uno::Reference< css::io::XInputStream >& rxInStream,
                             bool bRepairStorage );
 
     explicit            ZipStorage(
-                            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
-                            const css::uno::Reference< css::io::XStream >& rxStream );
+                            const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+                            const cpo::uno::Reference< css::io::XStream >& rxStream );
 
     virtual             ~ZipStorage() override;
 
 private:
     explicit            ZipStorage(
                             const ZipStorage& rParentStorage,
-                            const css::uno::Reference< css::embed::XStorage >& rxStorage,
+                            const cpo::uno::Reference< css::embed::XStorage >& rxStorage,
                             const OUString& rElementName );
 
     /** Returns true, if the object represents a valid storage. */
     virtual bool        implIsStorage() const override;
 
     /** Returns the com.sun.star.embed.XStorage interface of the current storage. */
-    virtual css::uno::Reference< css::embed::XStorage >
+    virtual cpo::uno::Reference< css::embed::XStorage >
                         implGetXStorage() const override;
 
     /** Returns the names of all elements of this storage. */
@@ -69,18 +69,18 @@ private:
     virtual StorageRef  implOpenSubStorage( const OUString& rElementName, bool bCreateMissing ) override;
 
     /** Opens and returns the specified input stream from the storage. */
-    virtual css::uno::Reference< css::io::XInputStream >
+    virtual cpo::uno::Reference< css::io::XInputStream >
                         implOpenInputStream( const OUString& rElementName ) override;
 
     /** Opens and returns the specified output stream from the storage. */
-    virtual css::uno::Reference< css::io::XOutputStream >
+    virtual cpo::uno::Reference< css::io::XOutputStream >
                         implOpenOutputStream( const OUString& rElementName ) override;
 
     /** Commits the current storage. */
     virtual void        implCommit() const override;
 
 private:
-    css::uno::Reference< css::embed::XStorage >
+    cpo::uno::Reference< css::embed::XStorage >
                         mxStorage;      ///< Storage based on input or output stream.
 };
 

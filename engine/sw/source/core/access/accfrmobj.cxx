@@ -374,7 +374,7 @@ const SwFrame* SwAccessibleChild::GetParent( const bool bInPagePreview ) const
         rtl::Reference<comphelper::OAccessible> pAcc = mpWindow->GetAccessible();
         if (pAcc.is())
         {
-            css::uno::Reference<css::accessibility::XAccessible> xAccParent
+            cpo::uno::Reference<css::accessibility::XAccessible> xAccParent
                 = pAcc->getAccessibleParent();
             if (xAccParent.is())
             {

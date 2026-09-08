@@ -47,12 +47,12 @@ class XUnbufferedStream final : public cppu::WeakImplHelper
 {
     rtl::Reference<comphelper::RefCountedMutex> maMutexHolder;
 
-    css::uno::Reference < css::io::XInputStream > mxZipStream;
-    css::uno::Reference < css::io::XSeekable > mxZipSeek;
+    cpo::uno::Reference < css::io::XInputStream > mxZipStream;
+    cpo::uno::Reference < css::io::XSeekable > mxZipSeek;
     cpo::uno::Sequence < sal_Int8 > maCompBuffer, maHeader;
     ZipEntry maEntry;
     sal_Int32 mnBlockSize;
-    css::uno::Reference< css::xml::crypto::XCipherContext > m_xCipherContext;
+    cpo::uno::Reference< css::xml::crypto::XCipherContext > m_xCipherContext;
     std::unique_ptr<ZipUtils::Inflater> maInflater;
     bool mbRawStream, mbWrappedRaw;
     sal_Int16 mnHeaderToRead;
@@ -62,10 +62,10 @@ class XUnbufferedStream final : public cppu::WeakImplHelper
 
 public:
     XUnbufferedStream(
-                 const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
+                 const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
                  rtl::Reference<comphelper::RefCountedMutex> aMutexHolder,
                  ZipEntry const & rEntry,
-                 css::uno::Reference < css::io::XInputStream > const & xNewZipStream,
+                 cpo::uno::Reference < css::io::XInputStream > const & xNewZipStream,
                  const ::rtl::Reference< EncryptionData >& rData,
                  sal_Int8 nStreamMode,
                  ::std::optional<sal_Int64> oDecryptedSize,
@@ -75,7 +75,7 @@ public:
     // allows to read package raw stream
     XUnbufferedStream(
                  rtl::Reference<comphelper::RefCountedMutex> aMutexHolder,
-                 const css::uno::Reference < css::io::XInputStream >& xRawStream,
+                 const cpo::uno::Reference < css::io::XInputStream >& xRawStream,
                  const ::rtl::Reference< EncryptionData >& rData );
 
     sal_Int64 getSize() const { return mnZipSize; }

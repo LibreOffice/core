@@ -32,33 +32,33 @@ class SAL_NO_VTABLE SAL_DLLPUBLIC_RTTI SAL_LOPLUGIN_ANNOTATE("crosscast") Digita
 {
 public:
     /// Same as signDocumentWithCertificate(), but passes the xModel as well.
-    virtual bool SignModelWithCertificate(const css::uno::Reference<css::frame::XModel>& xModel,
+    virtual bool SignModelWithCertificate(const cpo::uno::Reference<css::frame::XModel>& xModel,
                                           svl::crypto::SigningContext& rSigningContext,
-                                          const css::uno::Reference<css::embed::XStorage>& xStorage,
-                                          const css::uno::Reference<css::io::XStream>& xStream)
+                                          const cpo::uno::Reference<css::embed::XStorage>& xStorage,
+                                          const cpo::uno::Reference<css::io::XStream>& xStream)
         = 0;
 
     /// Async replacement for signDocumentContent().
-    virtual void SignDocumentContentAsync(const css::uno::Reference<css::embed::XStorage>& xStorage,
-                                          const css::uno::Reference<css::io::XStream>& xSignStream,
+    virtual void SignDocumentContentAsync(const cpo::uno::Reference<css::embed::XStorage>& xStorage,
+                                          const cpo::uno::Reference<css::io::XStream>& xSignStream,
                                           SfxViewShell* pViewShell,
                                           const std::function<void(bool)>& rCallback)
         = 0;
 
     /// Async replacement for signScriptingContent().
     virtual void
-    SignScriptingContentAsync(const css::uno::Reference<css::embed::XStorage>& rxStorage,
-                              const css::uno::Reference<css::io::XStream>& xSignStream,
+    SignScriptingContentAsync(const cpo::uno::Reference<css::embed::XStorage>& rxStorage,
+                              const cpo::uno::Reference<css::io::XStream>& xSignStream,
                               const std::function<void(bool)>& rCallback)
         = 0;
 
     /// Create a scripting signature before creating a document signature.
     virtual void
-    SetSignScriptingContent(const css::uno::Reference<css::io::XStream>& xScriptingSignStream)
+    SetSignScriptingContent(const cpo::uno::Reference<css::io::XStream>& xScriptingSignStream)
         = 0;
 
     /// View-aware replacement for selectSigningCertificateWithType().
-    virtual css::uno::Reference<css::security::XCertificate>
+    virtual cpo::uno::Reference<css::security::XCertificate>
     SelectSigningCertificateWithType(SfxViewShell* pViewShell,
                                      const css::security::CertificateKind certificateKind,
                                      OUString& rDescription)

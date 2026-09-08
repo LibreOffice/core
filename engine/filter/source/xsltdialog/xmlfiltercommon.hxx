@@ -28,7 +28,7 @@
 extern OUString string_encode( const OUString & rText );
 extern OUString string_decode( const OUString & rText );
 
-bool copyStreams( const css::uno::Reference< css::io::XInputStream >& xIS, const css::uno::Reference< css::io::XOutputStream >& xOS );
+bool copyStreams( const cpo::uno::Reference< css::io::XInputStream >& xIS, const cpo::uno::Reference< css::io::XOutputStream >& xOS );
 bool createDirectory( std::u16string_view rURL );
 
 

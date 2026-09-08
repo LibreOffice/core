@@ -50,9 +50,9 @@ public:
 
     static std::unique_ptr<PanelLayout> Create(
         weld::Widget* pParent,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame,
+        const cpo::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings,
-        const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
+        const cpo::uno::Reference<css::ui::XSidebar>& rxSidebar);
 
     virtual void HandleContextChange(
         const vcl::EnumContext& rContext) override;
@@ -69,9 +69,9 @@ public:
     // constructor/destructor
     PosSizePropertyPanel(
         weld::Widget* pParent,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame,
+        const cpo::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings,
-        css::uno::Reference<css::ui::XSidebar> xSidebar);
+        cpo::uno::Reference<css::ui::XSidebar> xSidebar);
 
     virtual void GetControlState(
         const sal_uInt16 nSId,
@@ -161,7 +161,7 @@ private:
     bool                                    mbMtrHeightBlanked : 1;
     bool                                    mbMtrAngleBlanked : 1;
 
-    css::uno::Reference<css::ui::XSidebar> mxSidebar;
+    cpo::uno::Reference<css::ui::XSidebar> mxSidebar;
 
     DECL_LINK( ChangePosXHdl, weld::MetricSpinButton&, void );
     DECL_LINK( ChangePosYHdl, weld::MetricSpinButton&, void );

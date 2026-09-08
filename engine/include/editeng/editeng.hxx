@@ -25,7 +25,7 @@
 
 #include <optional>
 
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 
@@ -158,7 +158,7 @@ public:
     typedef std::vector<EditView*> ViewsType;
 
     SAL_DLLPRIVATE EditSelection InsertText(
-        css::uno::Reference<css::datatransfer::XTransferable > const & rxDataObj,
+        cpo::uno::Reference<css::datatransfer::XTransferable > const & rxDataObj,
         const OUString& rBaseURL, const EditPaM& rPaM, bool bUseSpecial,
         SotClipboardFormatId format = SotClipboardFormatId::NONE);
 
@@ -177,7 +177,7 @@ private:
     SAL_DLLPRIVATE const ParaPortion* FindParaPortion(ContentNode const * pNode) const;
     SAL_DLLPRIVATE const ParaPortion* GetPrevVisPortion(const ParaPortion* pCurPortion) const;
 
-    SAL_DLLPRIVATE css::uno::Reference<css::datatransfer::XTransferable>
+    SAL_DLLPRIVATE cpo::uno::Reference<css::datatransfer::XTransferable>
             CreateTransferable(const EditSelection& rSelection);
 
     SAL_DLLPRIVATE EditPaM EndOfWord(const EditPaM& rPaM);
@@ -439,12 +439,12 @@ public:
 
     void            EraseVirtualDevice();
 
-    void            SetSpeller( css::uno::Reference<
+    void            SetSpeller( cpo::uno::Reference<
                             css::linguistic2::XSpellChecker > const &xSpeller );
-    SAL_DLLPRIVATE css::uno::Reference<
+    SAL_DLLPRIVATE cpo::uno::Reference<
         css::linguistic2::XSpellChecker > const &
                     GetSpeller();
-    void            SetHyphenator( css::uno::Reference<
+    void            SetHyphenator( cpo::uno::Reference<
                             css::linguistic2::XHyphenator > const & xHyph );
 
     void GetAllMisspellRanges( std::vector<editeng::MisspellRanges>& rRanges ) const;
@@ -484,7 +484,7 @@ public:
 
     bool            IsRightToLeft( sal_Int32 nPara ) const;
 
-    css::uno::Reference<css::datatransfer::XTransferable> CreateTransferable(const ESelection& rSelection);
+    cpo::uno::Reference<css::datatransfer::XTransferable> CreateTransferable(const ESelection& rSelection);
 
     // MT: Can't create new virtual functions like for ParagraphInserted/Deleted, must be compatible in SRC638, change later...
     SAL_DLLPRIVATE void            SetBeginMovingParagraphsHdl( const Link<MoveParagraphsInfo&,void>& rLink );
@@ -522,7 +522,7 @@ public:
     SAL_DLLPRIVATE static vcl::Font CreateFontFromItemSet( const SfxItemSet& rItemSet, SvtScriptType nScriptType );
     SAL_DLLPRIVATE static SvxFont  CreateSvxFontFromItemSet( const SfxItemSet& rItemSet );
     SAL_DLLPRIVATE static bool     IsPrintable( sal_Unicode c ) { return ( ( c >= 32 ) && ( c != 127 ) ); }
-    static bool     HasValidData( const css::uno::Reference< css::datatransfer::XTransferable >& rTransferable );
+    static bool     HasValidData( const cpo::uno::Reference< css::datatransfer::XTransferable >& rTransferable );
     /** sets a link that is called at the beginning of a drag operation at an edit view */
     SAL_DLLPRIVATE void            SetBeginDropHdl( const Link<EditView*,void>& rLink );
     SAL_DLLPRIVATE Link<EditView*,void> const & GetBeginDropHdl() const;

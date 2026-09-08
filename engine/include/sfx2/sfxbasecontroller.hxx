@@ -87,23 +87,23 @@ public:
     SAL_DLLPRIVATE void ReleaseShell_Impl();
     SAL_DLLPRIVATE void BorderWidthsChanged_Impl();
 
-    css::uno::Reference< css::task::XStatusIndicator > getStatusIndicator(  ) override;
+    cpo::uno::Reference< css::task::XStatusIndicator > getStatusIndicator(  ) override;
 
 
     //  XController2
-    virtual css::uno::Reference< css::awt::XWindow > getComponentWindow() override;
+    virtual cpo::uno::Reference< css::awt::XWindow > getComponentWindow() override;
     virtual OUString getViewControllerName() override;
     virtual cpo::uno::Sequence< css::beans::PropertyValue > getCreationArguments() override;
 
-    virtual css::uno::Reference< css::ui::XSidebarProvider > getSidebar() override;
+    virtual cpo::uno::Reference< css::ui::XSidebarProvider > getSidebar() override;
 
 
     //  XController
 
 
-    virtual void attachFrame( const css::uno::Reference< css::frame::XFrame >& xFrame ) override ;
+    virtual void attachFrame( const cpo::uno::Reference< css::frame::XFrame >& xFrame ) override ;
 
-    virtual bool attachModel( const css::uno::Reference< css::frame::XModel >& xModel ) override ;
+    virtual bool attachModel( const cpo::uno::Reference< css::frame::XModel >& xModel ) override ;
 
     virtual bool suspend( bool bSuspend ) override ;
 
@@ -111,27 +111,27 @@ public:
 
     void restoreViewData( const cpo::uno::Any& aValue ) override ;
 
-    css::uno::Reference< css::frame::XFrame > getFrame() override ;
+    cpo::uno::Reference< css::frame::XFrame > getFrame() override ;
 
-    css::uno::Reference< css::frame::XModel > getModel() override ;
+    cpo::uno::Reference< css::frame::XModel > getModel() override ;
 
 
     //  XDispatchProvider
 
 
-    virtual css::uno::Reference< css::frame::XDispatch > queryDispatch(  const   css::util::URL &    aURL            ,
+    virtual cpo::uno::Reference< css::frame::XDispatch > queryDispatch(  const   css::util::URL &    aURL            ,
                                                                                   const   OUString &   sTargetFrameName,
                                                                                   sal_Int32            eSearchFlags    ) override ;
 
-    virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& seqDescriptor ) override ;
+    virtual cpo::uno::Sequence< cpo::uno::Reference< css::frame::XDispatch > > queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& seqDescriptor ) override ;
 
 
     //  XControllerBorder
 
 
     virtual css::frame::BorderWidths getBorder() override;
-    virtual void addBorderResizeListener( const css::uno::Reference< css::frame::XBorderResizeListener >& xListener ) override;
-    virtual void removeBorderResizeListener( const css::uno::Reference< css::frame::XBorderResizeListener >& xListener ) override;
+    virtual void addBorderResizeListener( const cpo::uno::Reference< css::frame::XBorderResizeListener >& xListener ) override;
+    virtual void removeBorderResizeListener( const cpo::uno::Reference< css::frame::XBorderResizeListener >& xListener ) override;
     virtual css::awt::Rectangle queryBorderedArea( const css::awt::Rectangle& aPreliminaryRectangle ) override;
 
 
@@ -140,16 +140,16 @@ public:
 
     virtual void dispose() override ;
 
-    virtual void addEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override ;
+    virtual void addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener ) override ;
 
-    virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override ;
-    virtual void registerContextMenuInterceptor( const css::uno::Reference< css::ui::XContextMenuInterceptor >& xInterceptor ) override;
-    virtual void releaseContextMenuInterceptor( const css::uno::Reference< css::ui::XContextMenuInterceptor >& xInterceptor ) override;
+    virtual void removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener ) override ;
+    virtual void registerContextMenuInterceptor( const cpo::uno::Reference< css::ui::XContextMenuInterceptor >& xInterceptor ) override;
+    virtual void releaseContextMenuInterceptor( const cpo::uno::Reference< css::ui::XContextMenuInterceptor >& xInterceptor ) override;
 
-    virtual void addKeyHandler( const css::uno::Reference< css::awt::XKeyHandler >& xHandler ) override;
-    virtual void removeKeyHandler( const css::uno::Reference< css::awt::XKeyHandler >& xHandler ) override;
-    virtual void addMouseClickHandler( const css::uno::Reference< css::awt::XMouseClickHandler >& xHandler ) override;
-    virtual void removeMouseClickHandler( const css::uno::Reference< css::awt::XMouseClickHandler >& xHandler ) override;
+    virtual void addKeyHandler( const cpo::uno::Reference< css::awt::XKeyHandler >& xHandler ) override;
+    virtual void removeKeyHandler( const cpo::uno::Reference< css::awt::XKeyHandler >& xHandler ) override;
+    virtual void addMouseClickHandler( const cpo::uno::Reference< css::awt::XMouseClickHandler >& xHandler ) override;
+    virtual void removeMouseClickHandler( const cpo::uno::Reference< css::awt::XMouseClickHandler >& xHandler ) override;
 
 
     //  XDispatchInformationProvider
@@ -161,8 +161,8 @@ public:
     virtual void setTitle( const OUString& sTitle ) override;
 
     // css::frame::XTitleChangeBroadcaster
-    virtual void addTitleChangeListener( const css::uno::Reference< css::frame::XTitleChangeListener >& xListener ) override;
-    virtual void removeTitleChangeListener( const css::uno::Reference< css::frame::XTitleChangeListener >& xListener ) override;
+    virtual void addTitleChangeListener( const cpo::uno::Reference< css::frame::XTitleChangeListener >& xListener ) override;
+    virtual void removeTitleChangeListener( const cpo::uno::Reference< css::frame::XTitleChangeListener >& xListener ) override;
 
     // css::lang::XInitialization
     virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
@@ -186,7 +186,7 @@ public:
     SAL_DLLPRIVATE bool HasKeyListeners_Impl() const;
     SAL_DLLPRIVATE bool HasMouseClickListeners_Impl() const;
     SAL_DLLPRIVATE void SetCreationArguments_Impl( const cpo::uno::Sequence< css::beans::PropertyValue >& i_rCreationArgs );
-    SAL_DLLPRIVATE css::uno::Reference< css::frame::XTitle > impl_getTitleHelper ();
+    SAL_DLLPRIVATE cpo::uno::Reference< css::frame::XTitle > impl_getTitleHelper ();
 
 protected:
     void CopyKitViewCallbackFromFrameCreator();

@@ -84,7 +84,7 @@ using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::text;
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::drawing;
 using ::com::sun::star::view::XSelectionSupplier;
@@ -94,10 +94,10 @@ using ::com::sun::star::container::XEnumerationAccess;
 using ::com::sun::star::container::XEnumeration;
 using ::com::sun::star::text::XText;
 using ::sd::framework::FrameworkHelper;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
+using ::cpo::uno::UNO_QUERY;
+using ::cpo::uno::UNO_QUERY_THROW;
 using ::cpo::uno::Any;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::cpo::uno::Exception;
 
 namespace sd {
@@ -1658,7 +1658,7 @@ static bool getTextSelection(const Reference< XTextRange >& xSelectedText, Refer
     {
         xShape.set( xSelectedText->getText(), UNO_QUERY_THROW );
 
-        css::uno::Reference<css::document::XActionLockable> xLockable(xShape, css::uno::UNO_QUERY);
+        cpo::uno::Reference<css::document::XActionLockable> xLockable(xShape, cpo::uno::UNO_QUERY);
         if (xLockable.is())
             xLockable->addActionLock();
         comphelper::ScopeGuard aGuard([&xLockable]()
@@ -1831,7 +1831,7 @@ void CustomAnimationPane::onAdd()
         bool bFirst = true;
         for( const auto& rTarget : aTargets )
         {
-            css::uno::Reference<css::document::XActionLockable> xLockable(getTargetShape(rTarget), css::uno::UNO_QUERY);
+            cpo::uno::Reference<css::document::XActionLockable> xLockable(getTargetShape(rTarget), cpo::uno::UNO_QUERY);
             if (xLockable.is())
                 xLockable->addActionLock();
             comphelper::ScopeGuard aGuard([&xLockable]()

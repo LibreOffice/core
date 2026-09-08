@@ -41,8 +41,8 @@ private:
 
     bool const          mbCheckForPrivateKey;
 
-    css::uno::Reference< css::xml::crypto::XSecurityEnvironment > mxSecurityEnvironment;
-    css::uno::Reference< css::security::XCertificate > mxCert;
+    cpo::uno::Reference< css::xml::crypto::XSecurityEnvironment > mxSecurityEnvironment;
+    cpo::uno::Reference< css::security::XCertificate > mxCert;
 
     CertificateChooser* mpParentChooser;
 
@@ -55,7 +55,7 @@ private:
     DECL_LINK(ActivatePageHdl, const OUString&, void);
 
 public:
-    CertificateViewer(weld::Window* pParent, const css::uno::Reference< css::xml::crypto::XSecurityEnvironment >& rxSecurityEnvironment, const css::uno::Reference< css::security::XCertificate >& rXCert, bool bCheckForPrivateKey, CertificateChooser* pParentChooser);
+    CertificateViewer(weld::Window* pParent, const cpo::uno::Reference< css::xml::crypto::XSecurityEnvironment >& rxSecurityEnvironment, const cpo::uno::Reference< css::security::XCertificate >& rXCert, bool bCheckForPrivateKey, CertificateChooser* pParentChooser);
     CertificateChooser* GetParentChooser() { return mpParentChooser; }
 };
 
@@ -119,10 +119,10 @@ public:
 
 struct CertPath_UserData
 {
-    css::uno::Reference< css::security::XCertificate > mxCert;
+    cpo::uno::Reference< css::security::XCertificate > mxCert;
     bool const mbValid;
 
-    CertPath_UserData(css::uno::Reference<css::security::XCertificate> xCert, bool bValid)
+    CertPath_UserData(cpo::uno::Reference<css::security::XCertificate> xCert, bool bValid)
         : mxCert(std::move(xCert))
         , mbValid(bValid)
     {
@@ -148,7 +148,7 @@ private:
     DECL_LINK(ViewCertHdl, weld::Button&, void);
     DECL_LINK(CertSelectHdl, weld::TreeView&, void);
     void                InsertCert(const weld::TreeIter* pParent, const OUString& _rName,
-                                   const css::uno::Reference< css::security::XCertificate >& rxCert,
+                                   const cpo::uno::Reference< css::security::XCertificate >& rxCert,
                                    bool bValid);
 
 public:

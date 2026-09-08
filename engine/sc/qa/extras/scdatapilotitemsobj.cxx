@@ -29,9 +29,10 @@
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <cpo/uno/XInterface.hpp>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 namespace sc_apitest
 {

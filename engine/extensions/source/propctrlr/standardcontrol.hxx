@@ -191,8 +191,8 @@ namespace pcr
         virtual weld::Widget* getWidget() override { return getTypedControlWindow(); }
 
         // XHyperlinkControl
-        virtual void addActionListener( const css::uno::Reference< css::awt::XActionListener >& listener ) override;
-        virtual void removeActionListener( const css::uno::Reference< css::awt::XActionListener >& listener ) override;
+        virtual void addActionListener( const cpo::uno::Reference< css::awt::XActionListener >& listener ) override;
+        virtual void removeActionListener( const cpo::uno::Reference< css::awt::XActionListener >& listener ) override;
 
     private:
         // XComponent

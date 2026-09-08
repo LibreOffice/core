@@ -467,7 +467,7 @@ public:
 
     /** Returns the SdrObject from the passed control shape and sets the bounding rectangle. */
     rtl::Reference<SdrObject>        CreateSdrObjectFromShape(
-                            const css::uno::Reference< css::drawing::XShape >& rxShape,
+                            const cpo::uno::Reference< css::drawing::XShape >& rxShape,
                             const tools::Rectangle& rAnchorRect ) const;
 
     /** Sets additional properties to the form control model, calls virtual DoProcessControl(). */
@@ -484,7 +484,7 @@ protected:
     virtual void        DoProcessControl( ScfPropertySet& rPropSet ) const;
 
     void ApplySheetLinkProps() const;
-    mutable css::uno::Reference< css::drawing::XShape >
+    mutable cpo::uno::Reference< css::drawing::XShape >
                                    mxShape;        /// The UNO wrapper of the control shape.
     std::shared_ptr< ScAddress > mxCellLink;     /// Linked cell in the Calc document.
 private:
@@ -978,10 +978,10 @@ private:
 
     /** Inserts the passed control rxFComp into the form. Needs call to SetCurrentForm() before. */
     virtual bool    InsertControl(
-                            const css::uno::Reference<
+                            const cpo::uno::Reference<
                                 css::form::XFormComponent >& rxFormComp,
                             const css::awt::Size& rSize,
-                            css::uno::Reference<
+                            cpo::uno::Reference<
                                 css::drawing::XShape >* pxShape,
                             bool bFloatingCtrl ) override;
 
@@ -993,7 +993,7 @@ private:
         SdrModel&           mrSdrModel;         /// The SdrModel of the drawing manager.
         SdrPage&            mrSdrPage;          /// The SdrPage of the drawing manager.
         XclImpSolverContainer maSolverCont;     /// The solver container for connector rules.
-        css::uno::Reference< css::form::XForm >
+        cpo::uno::Reference< css::form::XForm >
                             mxCtrlForm;         /// Controls form of current drawing page.
         sal_Int32           mnLastCtrlIndex;    /// Last insertion index of a form control (for macro events).
         bool                mbHasCtrlForm;      /// True = mxCtrlForm is initialized (but maybe still null).
@@ -1167,7 +1167,7 @@ public:
     ScRange             GetUsedArea( SCTAB nScTab ) const;
     /** Sets the container to receive overridden shape/ctrl names from
         the filter. */
-    void SetOleNameOverrideInfo( const css::uno::Reference< css::container::XNameContainer >& rxOverrideInfo ) {  mxOleCtrlNameOverride = rxOverrideInfo; }
+    void SetOleNameOverrideInfo( const cpo::uno::Reference< css::container::XNameContainer >& rxOverrideInfo ) {  mxOleCtrlNameOverride = rxOverrideInfo; }
     /** Returns the name of overridden name ( or zero length string ) for
         associated object id. */
     OUString GetOleNameOverride( SCTAB nTab, sal_uInt16 nObjId );
@@ -1177,7 +1177,7 @@ private:
     typedef std::shared_ptr< XclImpSheetDrawing >     XclImpSheetDrawingRef;
     typedef std::map< SCTAB, XclImpSheetDrawingRef >  XclImpSheetDrawingMap;
 
-    css::uno::Reference< css::container::XNameContainer > mxOleCtrlNameOverride;
+    cpo::uno::Reference< css::container::XNameContainer > mxOleCtrlNameOverride;
     DefObjNameMap       maDefObjNames;      /// Default base names for all object types.
     SvMemoryStream      maDggStrm;          /// Copy of global DFF data (DGG container) in memory.
     XclImpSheetDrawingMap maSheetDrawings;  /// Drawing managers of all sheets.

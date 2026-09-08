@@ -31,7 +31,7 @@ namespace cpo::uno { class RuntimeException; }
 namespace cpo::uno { class Type; }
 namespace cpo::uno { class XInterface; }
 
-namespace com::sun::star::uno
+namespace cpo::uno
 {
 
 /** This base class serves as a base class for all template reference classes and

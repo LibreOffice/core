@@ -38,7 +38,7 @@ using namespace ::com::sun::star::text;
 using namespace ::xmloff::token;
 
 using ::com::sun::star::beans::XPropertySet;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::cpo::uno::Any;
 
 XMLIndexTableSourceContext::XMLIndexTableSourceContext(
@@ -122,9 +122,9 @@ void XMLIndexTableSourceContext::endFastElement(sal_Int32 nElement)
     XMLIndexSourceBaseContext::endFastElement(nElement);
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLIndexTableSourceContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLIndexTableSourceContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     if ( nElement == XML_ELEMENT(TEXT, XML_TABLE_INDEX_ENTRY_TEMPLATE) )
     {

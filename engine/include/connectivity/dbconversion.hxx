@@ -23,7 +23,7 @@
 #include <rtl/ustring.hxx>
 
 namespace cpo::uno { class Any; }
-namespace com::sun::star::uno { template <typename > class Reference; }
+namespace cpo::uno { template <typename > class Reference; }
 namespace com::sun::star::util { struct Date; }
 
 namespace com::sun::star
@@ -58,8 +58,8 @@ namespace dbtools::DBTypeConversion
 {
         OOO_DLLPUBLIC_DBTOOLS css::util::Date const & getStandardDate();
         /// @throws css::lang::IllegalArgumentException
-        OOO_DLLPUBLIC_DBTOOLS void setValue(const css::uno::Reference< css::sdb::XColumnUpdate>& xVariant,
-                                    const css::uno::Reference< css::util::XNumberFormatter>& xFormatter,
+        OOO_DLLPUBLIC_DBTOOLS void setValue(const cpo::uno::Reference< css::sdb::XColumnUpdate>& xVariant,
+                                    const cpo::uno::Reference< css::util::XNumberFormatter>& xFormatter,
                                     const css::util::Date& rNullDate,
                                     const OUString& rString,
                                     sal_Int32 nKey,
@@ -67,24 +67,24 @@ namespace dbtools::DBTypeConversion
                                     sal_Int16 nKeyType);
 
         /// @throws css::lang::IllegalArgumentException
-        OOO_DLLPUBLIC_DBTOOLS void setValue(const css::uno::Reference< css::sdb::XColumnUpdate>& xVariant,
+        OOO_DLLPUBLIC_DBTOOLS void setValue(const cpo::uno::Reference< css::sdb::XColumnUpdate>& xVariant,
                              const css::util::Date& rNullDate,
                              const double& rValue,
                              sal_Int16 nKeyType);
 
-        OOO_DLLPUBLIC_DBTOOLS double getValue( const css::uno::Reference< css::sdb::XColumn>& xVariant, const css::util::Date& rNullDate );
+        OOO_DLLPUBLIC_DBTOOLS double getValue( const cpo::uno::Reference< css::sdb::XColumn>& xVariant, const css::util::Date& rNullDate );
 
         // get the columnvalue as string with a default format given by the column or a default format
         // for the type
         OOO_DLLPUBLIC_DBTOOLS OUString getFormattedValue(
-                                        const css::uno::Reference< css::beans::XPropertySet>& _xColumn,
-                                        const css::uno::Reference< css::util::XNumberFormatter>& xFormatter,
+                                        const cpo::uno::Reference< css::beans::XPropertySet>& _xColumn,
+                                        const cpo::uno::Reference< css::util::XNumberFormatter>& xFormatter,
                                         const css::lang::Locale& _rLocale,
                                         const css::util::Date& rNullDate);
 
         OOO_DLLPUBLIC_DBTOOLS OUString getFormattedValue(
-                                        const css::uno::Reference< css::sdb::XColumn>& _xColumn,
-                                        const css::uno::Reference< css::util::XNumberFormatter>& xFormatter,
+                                        const cpo::uno::Reference< css::sdb::XColumn>& _xColumn,
+                                        const cpo::uno::Reference< css::util::XNumberFormatter>& xFormatter,
                                         const css::util::Date& rNullDate,
                                         sal_Int32 nKey,
                                         sal_Int16 nKeyType);
@@ -113,7 +113,7 @@ namespace dbtools::DBTypeConversion
         inline double toNullDate(const css::util::Date& _rNullDate, double _rVal) { return _rVal - toDays(_rNullDate); }
 
         // return the date from the numberformatsupplier or the STANDARD_DATE (1899,12,30)
-        OOO_DLLPUBLIC_DBTOOLS css::util::Date getNULLDate(const css::uno::Reference< css::util::XNumberFormatsSupplier > &xSupplier);
+        OOO_DLLPUBLIC_DBTOOLS css::util::Date getNULLDate(const cpo::uno::Reference< css::util::XNumberFormatsSupplier > &xSupplier);
 
         // return the date in the format %04d-%02d-%02d
         OOO_DLLPUBLIC_DBTOOLS OUString toDateString(const css::util::Date& rDate);
@@ -123,7 +123,7 @@ namespace dbtools::DBTypeConversion
         OOO_DLLPUBLIC_DBTOOLS OUString toDateTimeString(const css::util::DateTime& _rDateTime);
         // return the any in an sql standard format
         OOO_DLLPUBLIC_DBTOOLS OUString toSQLString(sal_Int32 eType, const cpo::uno::Any& _rVal,
-            const css::uno::Reference< css::script::XTypeConverter >&  _rxTypeConverter);
+            const cpo::uno::Reference< css::script::XTypeConverter >&  _rxTypeConverter);
 
         /** converts a Unicode string into a 8-bit string, using the given encoding
 

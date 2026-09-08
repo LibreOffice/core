@@ -30,7 +30,7 @@ namespace oox::ppt {
         : public TimeNodeContext
     {
     public:
-        CommonTimeNodeContext( ::oox::core::FragmentHandler2 const & rParent, sal_Int32  aElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttribs, const TimeNodePtr & pNode);
+        CommonTimeNodeContext( ::oox::core::FragmentHandler2 const & rParent, sal_Int32  aElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttribs, const TimeNodePtr & pNode);
         virtual ~CommonTimeNodeContext( ) noexcept override;
 
         virtual void onEndElement() override;

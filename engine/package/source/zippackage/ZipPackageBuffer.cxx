@@ -26,9 +26,9 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 using namespace ::com::sun::star;
-using namespace com::sun::star::uno;
 using namespace com::sun::star::io;
 using com::sun::star::lang::IllegalArgumentException;
+using namespace ::cpo;
 using namespace ::cpo::uno;
 
 ZipPackageBuffer::ZipPackageBuffer()

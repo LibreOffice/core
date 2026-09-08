@@ -29,15 +29,15 @@ typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XListFormat > SwVbaLis
 class SwVbaListFormat : public SwVbaListFormat_BASE
 {
 private:
-    css::uno::Reference< css::text::XTextRange > mxTextRange;
+    cpo::uno::Reference< css::text::XTextRange > mxTextRange;
 
 public:
     /// @throws cpo::uno::RuntimeException
-    SwVbaListFormat( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< cpo::uno::XComponentContext >& rContext, css::uno::Reference< css::text::XTextRange >  xTextRange );
+    SwVbaListFormat( const cpo::uno::Reference< ooo::vba::XHelperInterface >& rParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& rContext, cpo::uno::Reference< css::text::XTextRange >  xTextRange );
     virtual ~SwVbaListFormat() override;
 
     // Methods
-    virtual void SAL_CALL ApplyListTemplate( const css::uno::Reference< ::ooo::vba::word::XListTemplate >& ListTemplate, const cpo::uno::Any& ContinuePreviousList, const cpo::uno::Any& ApplyTo, const cpo::uno::Any& DefaultListBehavior ) override;
+    virtual void SAL_CALL ApplyListTemplate( const cpo::uno::Reference< ::ooo::vba::word::XListTemplate >& ListTemplate, const cpo::uno::Any& ContinuePreviousList, const cpo::uno::Any& ApplyTo, const cpo::uno::Any& DefaultListBehavior ) override;
     virtual void SAL_CALL ConvertNumbersToText(  ) override;
 
     // XHelperInterface

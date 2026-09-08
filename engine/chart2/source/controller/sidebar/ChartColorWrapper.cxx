@@ -37,13 +37,13 @@ namespace chart::sidebar {
 
 namespace {
 
-OUString getCID(const css::uno::Reference<css::frame::XModel>& xModel)
+OUString getCID(const cpo::uno::Reference<css::frame::XModel>& xModel)
 {
     if (!xModel.is())
         return OUString();
 
-    css::uno::Reference<css::frame::XController> xController(xModel->getCurrentController());
-    css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(xController, css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::frame::XController> xController(xModel->getCurrentController());
+    cpo::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(xController, cpo::uno::UNO_QUERY);
     if (!xSelectionSupplier.is())
         return OUString();
 
@@ -57,18 +57,18 @@ OUString getCID(const css::uno::Reference<css::frame::XModel>& xModel)
     return aCID;
 }
 
-css::uno::Reference<css::beans::XPropertySet> getPropSet(
+cpo::uno::Reference<css::beans::XPropertySet> getPropSet(
         const rtl::Reference<::chart::ChartModel>& xModel)
 {
     OUString aCID = getCID(xModel);
-    css::uno::Reference<css::beans::XPropertySet> xPropSet =
+    cpo::uno::Reference<css::beans::XPropertySet> xPropSet =
         ObjectIdentifier::getObjectPropertySet(aCID, xModel);
 
     ObjectType eType = ObjectIdentifier::getObjectType(aCID);
     if (eType == OBJECTTYPE_DIAGRAM)
     {
-        css::uno::Reference<css::chart2::XDiagram> xDiagram(
-                xPropSet, css::uno::UNO_QUERY);
+        cpo::uno::Reference<css::chart2::XDiagram> xDiagram(
+                xPropSet, cpo::uno::UNO_QUERY);
         if (!xDiagram.is())
             return xPropSet;
 
@@ -92,7 +92,7 @@ ChartColorWrapper::ChartColorWrapper(
 
 void ChartColorWrapper::operator()([[maybe_unused]] const OUString& , const NamedColor& rColor)
 {
-    css::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
+    cpo::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
 
     if (!xPropSet.is())
     {
@@ -118,7 +118,7 @@ void ChartColorWrapper::updateData()
     static constexpr OUString aLineColor = u"LineColor"_ustr;
     static const std::u16string_view aCommands[2] = {u".uno:XLineColor", u".uno:FillColor"};
 
-    css::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
+    cpo::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
     if (!xPropSet.is())
         return;
 
@@ -158,12 +158,12 @@ void ChartLineStyleWrapper::updateModel(const rtl::Reference<::chart::ChartModel
 namespace
 {
     cpo::uno::Any getLineDash(
-            const css::uno::Reference<css::frame::XModel>& xModel, const OUString& rDashName)
+            const cpo::uno::Reference<css::frame::XModel>& xModel, const OUString& rDashName)
     {
-        css::uno::Reference<css::lang::XMultiServiceFactory> xFact(xModel, css::uno::UNO_QUERY);
-        css::uno::Reference<css::container::XNameAccess> xNameAccess(
+        cpo::uno::Reference<css::lang::XMultiServiceFactory> xFact(xModel, cpo::uno::UNO_QUERY);
+        cpo::uno::Reference<css::container::XNameAccess> xNameAccess(
                 xFact->createInstance(u"com.sun.star.drawing.DashTable"_ustr),
-                css::uno::UNO_QUERY );
+                cpo::uno::UNO_QUERY );
         if(xNameAccess.is())
         {
             if (!xNameAccess->hasByName(rDashName))
@@ -178,7 +178,7 @@ namespace
 
 void ChartLineStyleWrapper::updateData()
 {
-    css::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
+    cpo::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
     if (!xPropSet.is())
         return;
 
@@ -208,7 +208,7 @@ void ChartLineStyleWrapper::updateData()
 
 bool ChartLineStyleWrapper::operator()(std::u16string_view rCommand, const cpo::uno::Any& rValue)
 {
-    css::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
+    cpo::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
 
     if (!xPropSet.is())
     {

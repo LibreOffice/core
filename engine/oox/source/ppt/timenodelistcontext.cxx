@@ -53,7 +53,7 @@
 using namespace ::oox::core;
 using namespace ::oox::drawingml;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::presentation;

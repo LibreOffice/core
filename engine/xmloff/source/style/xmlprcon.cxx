@@ -27,6 +27,7 @@
 #include <xmloff/xmlprmap.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 SvXMLPropertySetContext::SvXMLPropertySetContext(
     SvXMLImport& rImp, sal_Int32 /*nElement*/,
@@ -52,9 +53,9 @@ SvXMLPropertySetContext::~SvXMLPropertySetContext()
 {
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SvXMLPropertySetContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SvXMLPropertySetContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     rtl::Reference< XMLPropertySetMapper > aSetMapper(
             mpMapper->getPropertySetMapper() );
@@ -75,9 +76,9 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SvXMLPropertySetContex
     CreateChildContext if the element matches an entry in the
     SvXMLImportItemMapper with the mid flag MID_FLAG_ELEMENT
 */
-css::uno::Reference< css::xml::sax::XFastContextHandler > SvXMLPropertySetContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SvXMLPropertySetContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/,
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/,
     ::std::vector< XMLPropertyState > &/*rProperties*/,
     const XMLPropertyState& /*rProp*/ )
 {

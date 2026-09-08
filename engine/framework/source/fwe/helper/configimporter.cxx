@@ -23,6 +23,7 @@
 #include <com/sun/star/ui/XUIConfigurationManager2.hpp>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace framework
 {

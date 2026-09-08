@@ -49,9 +49,9 @@ public:
     virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
     // XCustomShapeEngine
-    virtual css::uno::Reference<css::drawing::XShape> render() override;
+    virtual cpo::uno::Reference<css::drawing::XShape> render() override;
 
-    std::vector<css::uno::Reference<css::drawing::XCustomShapeHandle>> getInteraction();
+    std::vector<cpo::uno::Reference<css::drawing::XCustomShapeHandle>> getInteraction();
     tools::Rectangle getTextBounds() const;
     basegfx::B2DPolyPolygon getB2DLineGeometry() const;
     rtl::Reference<SdrObject> render2() const;

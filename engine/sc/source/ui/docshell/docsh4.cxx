@@ -123,6 +123,7 @@
 #include <sfx2/kit/helper.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 void ScDocShell::SetInitialLinkUpdate( const SfxMedium* pMed )
 {

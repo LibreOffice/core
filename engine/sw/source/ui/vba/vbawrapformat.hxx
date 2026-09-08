@@ -28,8 +28,8 @@ typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XWrapFormat > SwVbaWra
 class SwVbaWrapFormat : public SwVbaWrapFormat_BASE
 {
 private:
-    css::uno::Reference< css::drawing::XShape > m_xShape;
-    css::uno::Reference< css::beans::XPropertySet > m_xPropertySet;
+    cpo::uno::Reference< css::drawing::XShape > m_xShape;
+    cpo::uno::Reference< css::beans::XPropertySet > m_xPropertySet;
     sal_Int32 mnWrapFormatType;
     sal_Int32 mnSide;
 
@@ -42,7 +42,7 @@ private:
     void setDistance( const OUString& sName, float _distance );
 
 public:
-    SwVbaWrapFormat(  cpo::uno::Sequence< cpo::uno::Any > const& aArgs, css::uno::Reference< cpo::uno::XComponentContext >const& xContext );
+    SwVbaWrapFormat(  cpo::uno::Sequence< cpo::uno::Any > const& aArgs, cpo::uno::Reference< cpo::uno::XComponentContext >const& xContext );
 
     virtual ::sal_Int32 SAL_CALL getType() override;
     virtual void SAL_CALL setType( ::sal_Int32 _type ) override;

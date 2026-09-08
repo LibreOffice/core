@@ -27,6 +27,7 @@
 namespace
 {
 using namespace css;
+using namespace ::cpo;
 
 class TestParsing : public test::BootstrapFixture
 {

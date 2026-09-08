@@ -65,6 +65,7 @@
 #include <names.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 /// @throws lang::IllegalArgumentException
 template<typename T>

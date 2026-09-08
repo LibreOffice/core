@@ -37,12 +37,12 @@ class FileOpenDialog
 
         FilterEntry() : maFlags( 0 ) {}
     };
-    css::uno::Reference < css::ui::dialogs::XFilePicker3 > mxFilePicker;
+    cpo::uno::Reference < css::ui::dialogs::XFilePicker3 > mxFilePicker;
 
     std::vector< FilterEntry > aFilterEntryList;
 
 public:
-        explicit FileOpenDialog( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+        explicit FileOpenDialog( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
         ~FileOpenDialog();
 
         sal_Int16 execute();

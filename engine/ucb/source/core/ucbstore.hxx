@@ -47,12 +47,12 @@ using UcbStore_Base = comphelper::WeakComponentImplHelper <
 
 class UcbStore : public UcbStore_Base
 {
-    css::uno::Reference< cpo::uno::XComponentContext >    m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext >    m_xContext;
     cpo::uno::Sequence< cpo::uno::Any >                   m_aInitArgs;
     rtl::Reference< PropertySetRegistry >                 m_xTheRegistry;
 
 public:
-    explicit UcbStore( const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
+    explicit UcbStore( const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext );
     virtual ~UcbStore() override;
 
     // XServiceInfo
@@ -61,7 +61,7 @@ public:
     virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XPropertySetRegistryFactory
-    virtual css::uno::Reference< css::ucb::XPropertySetRegistry > SAL_CALL
+    virtual cpo::uno::Reference< css::ucb::XPropertySetRegistry > SAL_CALL
     createPropertySetRegistry( const OUString& URL ) override;
 
     // XInitialization
@@ -82,18 +82,18 @@ class PropertySetRegistry : public cppu::WeakImplHelper <
 {
     friend class PersistentPropertySet;
 
-    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
     const cpo::uno::Sequence< cpo::uno::Any >             m_aInitArgs;
     PropertySetMap_Impl               m_aPropSets;
-    css::uno::Reference< css::lang::XMultiServiceFactory > m_xConfigProvider;
-    css::uno::Reference< cpo::uno::XInterface >           m_xRootReadAccess;
-    css::uno::Reference< cpo::uno::XInterface >           m_xRootWriteAccess;
+    cpo::uno::Reference< css::lang::XMultiServiceFactory > m_xConfigProvider;
+    cpo::uno::Reference< cpo::uno::XInterface >           m_xRootReadAccess;
+    cpo::uno::Reference< cpo::uno::XInterface >           m_xRootWriteAccess;
     std::mutex                        m_aMutex;
     bool                              m_bTriedToGetRootReadAccess;
     bool                              m_bTriedToGetRootWriteAccess;
 
 private:
-    const css::uno::Reference< css::lang::XMultiServiceFactory > &
+    const cpo::uno::Reference< css::lang::XMultiServiceFactory > &
     getConfigProvider(std::unique_lock<std::mutex>& l);
 
     void add   ( std::unique_lock<std::mutex>& rCreatorGuard, PersistentPropertySet* pSet );
@@ -104,7 +104,7 @@ private:
 
 public:
     PropertySetRegistry(
-        const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
         const cpo::uno::Sequence< cpo::uno::Any >& rInitArgs);
     virtual ~PropertySetRegistry() override;
 
@@ -115,7 +115,7 @@ public:
     virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XPropertySetRegistry
-    virtual css::uno::Reference< css::ucb::XPersistentPropertySet > SAL_CALL
+    virtual cpo::uno::Reference< css::ucb::XPersistentPropertySet > SAL_CALL
     openPropertySet( const OUString& key, bool create ) override;
     virtual void SAL_CALL
     removePropertySet( const OUString& key ) override;
@@ -135,14 +135,14 @@ public:
     hasByName( const OUString& aName ) override;
 
     // Non-interface methods
-    css::uno::Reference< cpo::uno::XInterface >
+    cpo::uno::Reference< cpo::uno::XInterface >
     getRootConfigReadAccess();
-    css::uno::Reference< cpo::uno::XInterface >
+    cpo::uno::Reference< cpo::uno::XInterface >
     getConfigWriteAccess( const OUString& rPath );
 private:
-    css::uno::Reference< cpo::uno::XInterface >
+    cpo::uno::Reference< cpo::uno::XInterface >
     getRootConfigReadAccessImpl(std::unique_lock<std::mutex>& l);
-    css::uno::Reference< cpo::uno::XInterface >
+    cpo::uno::Reference< cpo::uno::XInterface >
     getConfigWriteAccessImpl( std::unique_lock<std::mutex>& l, const OUString& rPath );
 };
 
@@ -192,12 +192,12 @@ public:
     virtual void SAL_CALL
     dispose() override;
     virtual void SAL_CALL
-    addEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener ) override;
+    addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& Listener ) override;
     virtual void SAL_CALL
-    removeEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener ) override;
+    removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& Listener ) override;
 
     // XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
     getPropertySetInfo() override;
     virtual void SAL_CALL
     setPropertyValue( const OUString& aPropertyName,
@@ -206,19 +206,19 @@ public:
     getPropertyValue( const OUString& PropertyName ) override;
     virtual void SAL_CALL
     addPropertyChangeListener( const OUString& aPropertyName,
-                               const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
+                               const cpo::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
     virtual void SAL_CALL
     removePropertyChangeListener( const OUString& aPropertyName,
-                                  const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
+                                  const cpo::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
     virtual void SAL_CALL
     addVetoableChangeListener( const OUString& PropertyName,
-                               const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+                               const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
     virtual void SAL_CALL
     removeVetoableChangeListener( const OUString& PropertyName,
-                                  const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+                                  const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
     // XPersistentPropertySet
-    virtual css::uno::Reference< css::ucb::XPropertySetRegistry > SAL_CALL
+    virtual cpo::uno::Reference< css::ucb::XPropertySetRegistry > SAL_CALL
     getRegistry() override;
     virtual OUString SAL_CALL
     getKey() override;
@@ -239,9 +239,9 @@ public:
 
     // XPropertySetInfoChangeNotifier
     virtual void SAL_CALL
-    addPropertySetInfoChangeListener( const css::uno::Reference< css::beans::XPropertySetInfoChangeListener >& Listener ) override;
+    addPropertySetInfoChangeListener( const cpo::uno::Reference< css::beans::XPropertySetInfoChangeListener >& Listener ) override;
     virtual void SAL_CALL
-    removePropertySetInfoChangeListener( const css::uno::Reference< css::beans::XPropertySetInfoChangeListener >& Listener ) override;
+    removePropertySetInfoChangeListener( const cpo::uno::Reference< css::beans::XPropertySetInfoChangeListener >& Listener ) override;
 
     // XPropertyAccess
     virtual cpo::uno::Sequence< css::beans::PropertyValue > SAL_CALL

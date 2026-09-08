@@ -41,10 +41,10 @@
 namespace svx
 {
     using ::cpo::uno::Sequence;
-    using ::com::sun::star::uno::Reference;
+    using ::cpo::uno::Reference;
     using ::cpo::uno::XComponentContext;
     using ::com::sun::star::container::XNameAccess;
-    using ::com::sun::star::uno::UNO_QUERY_THROW;
+    using ::cpo::uno::UNO_QUERY_THROW;
     using ::cpo::uno::Exception;
 
     namespace TemplateDescription = ::com::sun::star::ui::dialogs::TemplateDescription;

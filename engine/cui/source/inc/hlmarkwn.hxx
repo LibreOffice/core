@@ -47,7 +47,7 @@ protected:
 
     std::unique_ptr<weld::TreeIter> FindEntry(std::u16string_view aStrName);
     void ClearTree();
-    int FillTree( const css::uno::Reference< css::container::XNameAccess >& xLinks, const weld::TreeIter* pParentEntry =nullptr );
+    int FillTree( const cpo::uno::Reference< css::container::XNameAccess >& xLinks, const weld::TreeIter* pParentEntry =nullptr );
 
     DECL_LINK( ClickApplyHdl_Impl, weld::Button&, void );
     DECL_LINK( DoubleClickApplyHdl_Impl, weld::TreeView&, bool );

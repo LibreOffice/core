@@ -30,17 +30,17 @@ class OSubComponent : public ::cppu::WeakComponentImplHelper<>
 {
 protected:
     // the parent must support the tunnel implementation
-    css::uno::Reference< cpo::uno::XInterface > m_xParent;
+    cpo::uno::Reference< cpo::uno::XInterface > m_xParent;
     virtual ~OSubComponent() override;
 
 public:
     OSubComponent(::osl::Mutex& _rMutex,
-                  const css::uno::Reference< cpo::uno::XInterface >& _xParent);
+                  const cpo::uno::Reference< cpo::uno::XInterface >& _xParent);
 
 // cpo::uno::XInterface
     virtual void release() noexcept override;
 
-    operator css::uno::Reference< cpo::uno::XInterface > () const
+    operator cpo::uno::Reference< cpo::uno::XInterface > () const
         { return static_cast<cpo::uno::XWeak *>(const_cast<OSubComponent *>(this)); }
 
 };

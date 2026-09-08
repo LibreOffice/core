@@ -72,7 +72,7 @@ public:
 
     virtual void startFastElement(
             sal_Int32 nElement,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override final;
+            const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& ) override final;
 
     const OUString&  GetName() const { return maName; }
     const OUString&  GetDisplayName() const { return maDisplayName.getLength() ? maDisplayName : maName; }
@@ -124,13 +124,13 @@ class XMLOFF_DLLPUBLIC SvXMLStylesContext : public SvXMLImportContext
     std::unique_ptr<SvXMLStylesContext_Impl> mpImpl;
 
 
-    css::uno::Reference< css::container::XNameContainer > mxParaStyles;
+    cpo::uno::Reference< css::container::XNameContainer > mxParaStyles;
 
-    css::uno::Reference< css::container::XNameContainer > mxTextStyles;
+    cpo::uno::Reference< css::container::XNameContainer > mxTextStyles;
 
-    css::uno::Reference< css::style::XAutoStyleFamily > mxParaAutoStyles;
+    cpo::uno::Reference< css::style::XAutoStyleFamily > mxParaAutoStyles;
 
-    css::uno::Reference< css::style::XAutoStyleFamily > mxTextAutoStyles;
+    cpo::uno::Reference< css::style::XAutoStyleFamily > mxTextAutoStyles;
 
     mutable std::unique_ptr < SvXMLImportPropertyMapper > mxChartImpPropMapper;
     mutable std::unique_ptr < SvXMLImportPropertyMapper > mxPageImpPropMapper;
@@ -146,15 +146,15 @@ protected:
 
     virtual SvXMLStyleContext *CreateStyleChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
 
     virtual SvXMLStyleContext *CreateStyleStyleChildContext( XmlStyleFamily nFamily,
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList );
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList );
 
     virtual SvXMLStyleContext *CreateDefaultStyleStyleChildContext(
         XmlStyleFamily nFamily, sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList );
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList );
 
     virtual bool InsertStyleFamily( XmlStyleFamily nFamily ) const;
 
@@ -168,8 +168,8 @@ public:
     virtual ~SvXMLStylesContext() override;
 
     // Create child element.
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override final;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override final;
 
     // This allows to add an SvXMLStyleContext to this context from extern
     void AddStyle(SvXMLStyleContext& rNew);
@@ -186,11 +186,11 @@ public:
     virtual SvXMLImportPropertyMapper* GetImportPropertyMapper(
                         XmlStyleFamily nFamily ) const;
 
-    virtual css::uno::Reference< css::container::XNameContainer >
+    virtual cpo::uno::Reference< css::container::XNameContainer >
         GetStylesContainer( XmlStyleFamily nFamily ) const;
     virtual OUString GetServiceName( XmlStyleFamily nFamily ) const;
 
-    css::uno::Reference< css::style::XAutoStyleFamily >
+    cpo::uno::Reference< css::style::XAutoStyleFamily >
         GetAutoStyles( XmlStyleFamily nFamily ) const;
     void CopyAutoStylesToDoc();
     void CopyStylesToDoc( bool bOverwrite, bool bFinish = true );

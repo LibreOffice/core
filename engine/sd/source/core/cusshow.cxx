@@ -24,6 +24,7 @@
 #include <customshowlist.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 /*************************************************************************
 |*
@@ -45,7 +46,7 @@ SdCustomShow::SdCustomShow( const SdCustomShow& rShow )
     aName = rShow.GetName();
 }
 
-SdCustomShow::SdCustomShow(css::uno::Reference< cpo::uno::XInterface > const & xShow )
+SdCustomShow::SdCustomShow(cpo::uno::Reference< cpo::uno::XInterface > const & xShow )
   : mxUnoCustomShow( xShow )
 {
 }

@@ -40,7 +40,7 @@ private: //methods
 private: //member
     ExplicitScaleData     m_aScale;
     ExplicitIncrementData m_aIncrement;
-    css::uno::Reference< css::chart2::XScaling >
+    cpo::uno::Reference< css::chart2::XScaling >
                                                 m_xInverseScaling;
 };
 

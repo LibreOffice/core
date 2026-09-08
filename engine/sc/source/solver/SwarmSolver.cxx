@@ -53,6 +53,7 @@
 #include "strings.hrc"
 
 namespace cpo::uno { class XComponentContext; }
+using namespace ::cpo;
 
 using namespace css;
 

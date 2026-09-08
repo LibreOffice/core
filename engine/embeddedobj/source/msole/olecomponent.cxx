@@ -58,6 +58,7 @@
 #include <string>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace ::comphelper;
 #define     MAX_ENUM_ELE     20
 #define     FORMATS_NUM      3
@@ -1785,7 +1786,7 @@ void OleComponent::setModified( bool bModified )
     }
 }
 
-void OleComponent::addModifyListener( const css::uno::Reference < css::util::XModifyListener >& xListener )
+void OleComponent::addModifyListener( const cpo::uno::Reference < css::util::XModifyListener >& xListener )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -1797,7 +1798,7 @@ void OleComponent::addModifyListener( const css::uno::Reference < css::util::XMo
     m_pInterfaceContainer->addInterface( cppu::UnoType<util::XModifyListener>::get(), xListener );
 }
 
-void OleComponent::removeModifyListener( const css::uno::Reference < css::util::XModifyListener >& xListener)
+void OleComponent::removeModifyListener( const cpo::uno::Reference < css::util::XModifyListener >& xListener)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )

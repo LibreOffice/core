@@ -21,7 +21,7 @@
 
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <connectivity/dbmetadata.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <memory>
 #include <set>
 #include <string_view>
@@ -72,10 +72,10 @@ namespace connectivity
         ::dbtools::DatabaseMetaData                           aMetaData;
         OSQLParser*                                           pParser;
         std::shared_ptr< QueryNameSet >                       pSubQueryHistory;
-        css::uno::Reference< css::util::XNumberFormatter >    xFormatter;
-        css::uno::Reference< css::beans::XPropertySet >       xField;
+        cpo::uno::Reference< css::util::XNumberFormatter >    xFormatter;
+        cpo::uno::Reference< css::beans::XPropertySet >       xField;
         OUString                                              sPredicateTableAlias;
-        css::uno::Reference< css::container::XNameAccess >    xQueries;  // see bParseToSDBCLevel
+        cpo::uno::Reference< css::container::XNameAccess >    xQueries;  // see bParseToSDBCLevel
         const IParseContext&                                  m_rContext;
         OUString            sDecSep;
         bool                bQuote                      : 1;    /// should we quote identifiers?
@@ -84,9 +84,9 @@ namespace connectivity
         bool                bParseToSDBCLevel           : 1;    /// should we create an SDBC-level statement (e.g. with substituted sub queries)?
 
         SQLParseNodeParameter(
-            const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
-            const css::uno::Reference< css::util::XNumberFormatter >& _xFormatter,
-            const css::uno::Reference< css::beans::XPropertySet >& _xField,
+            const cpo::uno::Reference< css::sdbc::XConnection >& _rxConnection,
+            const cpo::uno::Reference< css::util::XNumberFormatter >& _xFormatter,
+            const cpo::uno::Reference< css::beans::XPropertySet >& _xField,
             OUString _sPredicateTableAlias,
             const css::lang::Locale& _rLocale,
             const IParseContext* _pContext,
@@ -299,28 +299,28 @@ namespace connectivity
                 <arg>_pErrorHolder</arg>.
         */
         bool parseNodeToExecutableStatement( OUString& _out_rString,
-            const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
+            const cpo::uno::Reference< css::sdbc::XConnection >& _rxConnection,
             OSQLParser& _rParser,
             css::sdbc::SQLException* _pErrorHolder ) const;
 
         void parseNodeToStr(OUString& rString,
-                            const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
+                            const cpo::uno::Reference< css::sdbc::XConnection >& _rxConnection,
                             const IParseContext* pContext = nullptr,
                             bool _bIntl = false,
                             bool _bQuote= true) const;
 
         // quoted and internationalised
         void parseNodeToPredicateStr(OUString& rString,
-                                     const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
-                                     const css::uno::Reference< css::util::XNumberFormatter > & xFormatter,
+                                     const cpo::uno::Reference< css::sdbc::XConnection >& _rxConnection,
+                                     const cpo::uno::Reference< css::util::XNumberFormatter > & xFormatter,
                                      const css::lang::Locale& rIntl,
                                      const OUString& rDec,
                                      const IParseContext* pContext = nullptr ) const;
 
         void parseNodeToPredicateStr(OUString& rString,
-                                     const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
-                                     const css::uno::Reference< css::util::XNumberFormatter > & xFormatter,
-                                     const css::uno::Reference< css::beans::XPropertySet > & _xField,
+                                     const cpo::uno::Reference< css::sdbc::XConnection >& _rxConnection,
+                                     const cpo::uno::Reference< css::util::XNumberFormatter > & xFormatter,
+                                     const cpo::uno::Reference< css::beans::XPropertySet > & _xField,
                                      const OUString &_sTableAlias,
                                      const css::lang::Locale& rIntl,
                                      const OUString& rStrDec,
@@ -385,7 +385,7 @@ namespace connectivity
                                             cpo::uno::Any &_rCatalog,
                                             OUString &_rSchema,
                                             OUString &_rTable,
-                                            const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _xMetaData);
+                                            const cpo::uno::Reference< css::sdbc::XDatabaseMetaData >& _xMetaData);
 
         // substitute all occurrences of :var or [name] into the dynamic parameter ?
         // _pNode will be modified if parameters exists
@@ -398,9 +398,9 @@ namespace connectivity
     protected:
         // ParseNodeToStr concatenates all Tokens (leaves) of the ParseNodes.
         void parseNodeToStr(OUString& rString,
-                            const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
-                            const css::uno::Reference< css::util::XNumberFormatter > & xFormatter,
-                            const css::uno::Reference< css::beans::XPropertySet > & _xField,
+                            const cpo::uno::Reference< css::sdbc::XConnection >& _rxConnection,
+                            const cpo::uno::Reference< css::util::XNumberFormatter > & xFormatter,
+                            const cpo::uno::Reference< css::beans::XPropertySet > & _xField,
                             const OUString &_sPredicateTableAlias,
                             const css::lang::Locale& rIntl,
                             const IParseContext* pContext,

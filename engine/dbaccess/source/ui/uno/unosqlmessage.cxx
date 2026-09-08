@@ -44,7 +44,7 @@ org_openoffice_comp_dbu_OSQLMessageDialog_get_implementation(
 namespace dbaui
 {
 
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
 using namespace cpo::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
@@ -130,7 +130,7 @@ Reference<XPropertySetInfo>  OSQLMessageDialog::getPropertySetInfo()
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
 
-std::unique_ptr<weld::DialogController> OSQLMessageDialog::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
+std::unique_ptr<weld::DialogController> OSQLMessageDialog::createDialog(const cpo::uno::Reference<css::awt::XWindow>& rParent)
 {
     weld::Window* pParent = Application::GetFrameWeld(rParent);
     if ( m_aException.hasValue() )

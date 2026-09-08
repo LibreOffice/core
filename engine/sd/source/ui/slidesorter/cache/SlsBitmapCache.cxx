@@ -33,7 +33,7 @@
 // configuration does not have a value.
 const sal_Int32 MAXIMAL_CACHE_SIZE = 4*1024L*1024L;
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 namespace sd::slidesorter::cache {
 

@@ -37,6 +37,7 @@
 #endif
 
 using namespace css;
+using namespace ::cpo;
 
 class GraphicTest : public test::BootstrapFixture
 {

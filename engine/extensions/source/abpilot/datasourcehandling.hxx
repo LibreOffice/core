@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/XComponentContext.hpp>
 #include <memory>
 
@@ -48,7 +48,7 @@ namespace abp
 
     public:
         explicit ODataSourceContext(
-            const css::uno::Reference< cpo::uno::XComponentContext >& _rxORB
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxORB
         );
         ~ODataSourceContext();
 
@@ -99,7 +99,7 @@ namespace abp
 
         /// constructs an object which is initially invalid
         explicit ODataSource(
-            const css::uno::Reference< cpo::uno::XComponentContext >& _rxORB
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxORB
         );
 
         /// copy ctor
@@ -164,14 +164,14 @@ namespace abp
         bool    hasTable( const OUString& _rTableName ) const;
 
         /// return the internal data source object
-        css::uno::Reference< css::beans::XPropertySet > getDataSource() const;
+        cpo::uno::Reference< css::beans::XPropertySet > getDataSource() const;
 
 
         /** set a new data source.
             <p>Available to selected clients only</p>
         */
         void        setDataSource(
-             const css::uno::Reference< css::beans::XPropertySet >& _rxDS
+             const cpo::uno::Reference< css::beans::XPropertySet >& _rxDS
             ,const OUString& _sName
         );
     };

@@ -66,7 +66,7 @@ public:
     static void create(SwFrameFormat* pShape, SdrObject* pObject, bool bCopyText = false);
     /// Sets the given textframe as textbox for the given (group member) shape.
     static void set(SwFrameFormat* pShape, SdrObject* pObject,
-                    const css::uno::Reference<css::text::XTextFrame>& xNew);
+                    const cpo::uno::Reference<css::text::XTextFrame>& xNew);
     /// Destroy a TextBox for a shape. If the format has more textboxes
     /// like group shapes, it will destroy only that textbox what belongs
     /// to the given pObject shape.
@@ -127,10 +127,10 @@ public:
                           const SdrObject* pObject = nullptr);
     /// If we have an associated TextFrame, then return that.
     SAL_RET_MAYBENULL static SwFrameFormat*
-    getOtherTextBoxFormat(css::uno::Reference<css::drawing::XShape> const& xShape);
+    getOtherTextBoxFormat(cpo::uno::Reference<css::drawing::XShape> const& xShape);
     /// If we have an associated TextFrame, then return its XTextFrame.
-    static css::uno::Reference<css::text::XTextFrame>
-    getUnoTextFrame(css::uno::Reference<css::drawing::XShape> const& xShape);
+    static cpo::uno::Reference<css::text::XTextFrame>
+    getUnoTextFrame(cpo::uno::Reference<css::drawing::XShape> const& xShape);
     /// Return the textbox rectangle of a draw shape (in relative twips).
     static tools::Rectangle getRelativeTextRectangle(SdrObject* pShape);
 

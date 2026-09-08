@@ -28,7 +28,7 @@
 #include <xmloff/XMLTextListAutoStylePool.hxx>
 
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::cpo::uno;
@@ -48,7 +48,7 @@ XMLTextNumRuleInfo::XMLTextNumRuleInfo()
 
 // Written OpenDocument file format doesn't fit to the created text document (#i69627#)
 void XMLTextNumRuleInfo::Set(
-        const css::uno::Reference < css::text::XTextContent > & xTextContent,
+        const cpo::uno::Reference < css::text::XTextContent > & xTextContent,
         const bool bOutlineStyleAsNormalListStyle,
         const XMLTextListAutoStylePool& rListAutoPool,
         const bool bExportTextNumberElement,

@@ -13,7 +13,7 @@
 
 #include <svtools/svtdllapi.h>
 
-namespace com::sun::star::uno { template <typename > class Reference; }
+namespace cpo::uno { template <typename > class Reference; }
 
 namespace weld { class Window; }
 namespace cpo::uno { class XComponentContext; }
@@ -63,7 +63,7 @@ enum RestartReason {
 
 // Must be called with the solar mutex locked; returns if restart was initiated:
 SVT_DLLPUBLIC bool executeRestartDialog(
-    css::uno::Reference< cpo::uno::XComponentContext > const & context,
+    cpo::uno::Reference< cpo::uno::XComponentContext > const & context,
     weld::Window* parent, RestartReason reason);
 
 }

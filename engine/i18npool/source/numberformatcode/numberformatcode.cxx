@@ -25,7 +25,7 @@
 #include <cppuhelper/supportsservice.hxx>
 
 NumberFormatCodeMapper::NumberFormatCodeMapper(
-            const css::uno::Reference < cpo::uno::XComponentContext >& rxContext )
+            const cpo::uno::Reference < cpo::uno::XComponentContext >& rxContext )
 {
         m_xLocaleData.set( css::i18n::LocaleData2::create( rxContext ) );
 }

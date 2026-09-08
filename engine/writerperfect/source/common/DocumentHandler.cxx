@@ -11,7 +11,7 @@
 
 #include <string.h>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <comphelper/attributelist.hxx>
@@ -107,7 +107,7 @@ static void unescapeXML(const char* s, const unsigned long sz, librevenge::RVNGS
     }
 }
 
-using com::sun::star::uno::Reference;
+using cpo::uno::Reference;
 using com::sun::star::xml::sax::XDocumentHandler;
 
 DocumentHandler::DocumentHandler(Reference<XDocumentHandler> const& xHandler)

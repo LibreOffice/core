@@ -122,26 +122,26 @@ class OSharedConnectionManager : public ::cppu::WeakImplHelper< css::lang::XEven
     };
 
     typedef std::map< TDigestHolder,TConnectionHolder,TDigestLess>        TConnectionMap;      // holds the master connections
-    typedef std::map< css::uno::Reference< css::sdbc::XConnection >,TConnectionMap::iterator>  TSharedConnectionMap;// holds the shared connections
+    typedef std::map< cpo::uno::Reference< css::sdbc::XConnection >,TConnectionMap::iterator>  TSharedConnectionMap;// holds the shared connections
 
     ::osl::Mutex                m_aMutex;
     TConnectionMap              m_aConnections;         // remember the master connection in conjunction with the digest
     TSharedConnectionMap        m_aSharedConnection;    // the shared connections with conjunction with an iterator into the connections map
-    css::uno::Reference< css::reflection::XProxyFactory >  m_xProxyFactory;
+    cpo::uno::Reference< css::reflection::XProxyFactory >  m_xProxyFactory;
 
 protected:
     virtual ~OSharedConnectionManager() override;
 
 public:
-    explicit OSharedConnectionManager(const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext);
+    explicit OSharedConnectionManager(const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxContext);
 
     void disposing( const css::lang::EventObject& Source ) override;
-    css::uno::Reference< css::sdbc::XConnection > getConnection(   const OUString& url,
+    cpo::uno::Reference< css::sdbc::XConnection > getConnection(   const OUString& url,
                                             const OUString& user,
                                             const OUString& password,
                                             const cpo::uno::Sequence< css::beans::PropertyValue >& _aInfo,
                                             ODatabaseSource* _pDataSource);
-    void addEventListener(const css::uno::Reference< css::sdbc::XConnection >& _rxConnection, TConnectionMap::iterator const & _rIter);
+    void addEventListener(const cpo::uno::Reference< css::sdbc::XConnection >& _rxConnection, TConnectionMap::iterator const & _rIter);
 };
 
 
@@ -178,8 +178,8 @@ private:
     ::sfx2::DocumentMacroMode                                         m_aMacroMode;
     sal_Int16                                                         m_nImposedMacroExecMode;
 
-    css::uno::Reference< css::script::XStorageBasedLibraryContainer > m_xBasicLibraries;
-    css::uno::Reference< css::script::XStorageBasedLibraryContainer > m_xDialogLibraries;
+    cpo::uno::Reference< css::script::XStorageBasedLibraryContainer > m_xBasicLibraries;
+    cpo::uno::Reference< css::script::XStorageBasedLibraryContainer > m_xDialogLibraries;
 
     SharedStorage                                                     m_xDocumentStorage;
     ::rtl::Reference< ::sfx2::DocumentStorageModifyListener >         m_pStorageModifyListener;
@@ -215,13 +215,13 @@ private:
 
 public:
     OWeakConnectionArray                                                        m_aConnections;
-    const css::uno::Reference< cpo::uno::XComponentContext >  m_aContext;
+    const cpo::uno::Reference< cpo::uno::XComponentContext >  m_aContext;
 
 public:
     cpo::uno::WeakReference< css::container::XNameAccess >    m_xCommandDefinitions;
     unotools::WeakReference< ::dbaccess::OCommandContainer > m_xTableDefinitions;
 
-    css::uno::Reference< css::util::XNumberFormatsSupplier >
+    cpo::uno::Reference< css::util::XNumberFormatsSupplier >
                                                               m_xNumberFormatsSupplier;
     OUString                                     m_sConnectURL;
     OUString                                     m_sName;        // transient, our creator has to tell us the title
@@ -238,7 +238,7 @@ public:
     bool                                            m_bDocumentReadOnly : 1;
     bool                                            m_bMacroCallsSeenWhileLoading : 1;
     bool                                            m_bAskPassword;
-    css::uno::Reference< css::beans::XPropertyBag >
+    cpo::uno::Reference< css::beans::XPropertyBag >
                                                         m_xSettings;
     cpo::uno::Sequence< OUString >                      m_aTableFilter;
     cpo::uno::Sequence< OUString >                      m_aTableTypeFilter;
@@ -266,14 +266,14 @@ public:
     void commitStorages();
 
     ODatabaseModelImpl(
-        const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
         ODatabaseContext& _pDBContext
     );
     virtual ~ODatabaseModelImpl();
 
     ODatabaseModelImpl(
         OUString _sRegistrationName,
-        const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
         ODatabaseContext& _rDBContext
         );
 
@@ -288,11 +288,11 @@ public:
     const OUString& getURL() const               { return m_sDocumentURL;     }
     const OUString& getDocFileLocation() const   { return m_sDocFileLocation; }
 
-    css::uno::Reference< css::embed::XStorage >
+    cpo::uno::Reference< css::embed::XStorage >
             getStorage( const ObjectType _eType );
 
 // helper
-    const css::uno::Reference< css::util::XNumberFormatsSupplier >&
+    const cpo::uno::Reference< css::util::XNumberFormatsSupplier >&
             getNumberFormatsSupplier();
 
     DocumentEventsData&
@@ -318,7 +318,7 @@ public:
     void    disposeStorages();
 
     /// creates a ->css::embed::StorageFactory
-    css::uno::Reference< css::lang::XSingleServiceFactory >
+    cpo::uno::Reference< css::lang::XSingleServiceFactory >
             createStorageFactory() const;
 
     /// commits our storage
@@ -326,18 +326,18 @@ public:
 
     /// commits a given storage if it's not readonly, ignoring (but asserting) all errors
     bool    commitStorageIfWriteable_ignoreErrors(
-                const css::uno::Reference< css::embed::XStorage >& _rxStorage
+                const cpo::uno::Reference< css::embed::XStorage >& _rxStorage
             );
 
     void clearConnections();
 
-    css::uno::Reference< css::embed::XStorage > const & getOrCreateRootStorage();
-    css::uno::Reference< css::embed::XStorage > const & getRootStorage() const { return m_xDocumentStorage.getTyped(); }
+    cpo::uno::Reference< css::embed::XStorage > const & getOrCreateRootStorage();
+    cpo::uno::Reference< css::embed::XStorage > const & getRootStorage() const { return m_xDocumentStorage.getTyped(); }
     void resetRootStorage() { impl_switchToStorage_throw( nullptr ); }
 
     /** returns the data source. If it doesn't exist it will be created
     */
-    css::uno::Reference< css::sdbc::XDataSource> getOrCreateDataSource();
+    cpo::uno::Reference< css::sdbc::XDataSource> getOrCreateDataSource();
 
     /** returns the model, if there already exists one
     */
@@ -366,7 +366,7 @@ public:
     DocumentStorageAccess*
             getDocumentStorageAccess();
 
-    css::uno::Reference< css::document::XDocumentSubStorageSupplier >
+    cpo::uno::Reference< css::document::XDocumentSubStorageSupplier >
             getDocumentSubStorageSupplier();
 
     void acquire();
@@ -388,7 +388,7 @@ public:
     /** determines whether a given object storage contains macros
     */
     static bool     objectHasMacros(
-                        const css::uno::Reference< css::embed::XStorage >& _rxContainerStorage,
+                        const cpo::uno::Reference< css::embed::XStorage >& _rxContainerStorage,
                         const OUString& _rPersistentName
                     );
 
@@ -425,12 +425,12 @@ public:
         @throws RuntimeException
             if something does wrong, which indicates a server error in the installation
     */
-    css::uno::Reference< css::script::XStorageBasedLibraryContainer >
+    cpo::uno::Reference< css::script::XStorageBasedLibraryContainer >
             getLibraryContainer( bool _bScript );
 
     /** lets our library containers store themselves into the given root storage
     */
-    void    storeLibraryContainersTo( const css::uno::Reference< css::embed::XStorage >& _rxToRootStorage );
+    void    storeLibraryContainersTo( const cpo::uno::Reference< css::embed::XStorage >& _rxToRootStorage );
 
     /** rebases the document to the given storage
 
@@ -442,9 +442,9 @@ public:
         @throws css::lang::RuntimeException
             if any of the invoked operations does so
     */
-    css::uno::Reference< css::embed::XStorage >
+    cpo::uno::Reference< css::embed::XStorage >
             switchToStorage(
-                const css::uno::Reference< css::embed::XStorage >& _rxNewRootStorage
+                const cpo::uno::Reference< css::embed::XStorage >& _rxNewRootStorage
             );
 
     /** returns the macro mode imposed by an external instance, which passed it to attachResource
@@ -465,10 +465,10 @@ public:
     virtual OUString getDocumentLocation() const override;
     virtual bool documentStorageHasMacros() const override;
     virtual bool macroCallsSeenWhileLoading() const override;
-    virtual css::uno::Reference< css::document::XEmbeddedScripts > getEmbeddedDocumentScripts() const override;
+    virtual cpo::uno::Reference< css::document::XEmbeddedScripts > getEmbeddedDocumentScripts() const override;
     virtual SignatureState getScriptingSignatureState() override;
     virtual bool hasTrustedScriptingSignature(
-        const css::uno::Reference<css::task::XInteractionHandler>& _rxInteraction) override;
+        const cpo::uno::Reference<css::task::XInteractionHandler>& _rxInteraction) override;
 
     // IModifiableDocument
     virtual void storageIsModified() override;
@@ -480,8 +480,8 @@ public:
 
 private:
     void    impl_construct_nothrow();
-    css::uno::Reference< css::embed::XStorage > const &
-            impl_switchToStorage_throw( const css::uno::Reference< css::embed::XStorage >& _rxNewRootStorage );
+    cpo::uno::Reference< css::embed::XStorage > const &
+            impl_switchToStorage_throw( const cpo::uno::Reference< css::embed::XStorage >& _rxNewRootStorage );
 
     /** switches to the given document URL, which denotes the logical URL of the document, not necessarily the
         URL where the doc was loaded/recovered from
@@ -506,7 +506,7 @@ protected:
 
     /** returns the component itself
     */
-    virtual css::uno::Reference< cpo::uno::XInterface > getThis() const = 0;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > getThis() const = 0;
 
     ::osl::Mutex& getMutex()
     {

@@ -35,7 +35,7 @@ public:
 public:
     static std::unique_ptr<PanelLayout> Create(
         weld::Widget* pParent,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame,
+        const cpo::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings);
 
     virtual void HandleContextChange(
@@ -55,7 +55,7 @@ public:
     // constructor/destructor
     NumberFormatPropertyPanel(
         weld::Widget* pParent,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame,
+        const cpo::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings);
     virtual ~NumberFormatPropertyPanel() override;
 private:

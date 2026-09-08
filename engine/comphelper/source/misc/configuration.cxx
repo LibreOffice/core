@@ -26,7 +26,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/XLocalizable.hpp>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <comphelper/solarmutex.hxx>
 #include <comphelper/configuration.hxx>
 #include <comphelper/configurationlistener.hxx>
@@ -39,12 +39,12 @@ namespace cpo::uno { class XComponentContext; }
 namespace {
 
 OUString getDefaultLocale(
-    css::uno::Reference< cpo::uno::XComponentContext > const & context)
+    cpo::uno::Reference< cpo::uno::XComponentContext > const & context)
 {
     return LanguageTag(
-        css::uno::Reference< css::lang::XLocalizable >(
+        cpo::uno::Reference< css::lang::XLocalizable >(
             css::configuration::theDefaultProvider::get(context),
-            css::uno::UNO_QUERY_THROW)->
+            cpo::uno::UNO_QUERY_THROW)->
         getLocale()).getBcp47(false);
 }
 
@@ -62,7 +62,7 @@ OUString extendLocalizedPath(std::u16string_view path, OUString const & locale) 
 
 std::shared_ptr< comphelper::ConfigurationChanges >
 comphelper::ConfigurationChanges::create(
-    css::uno::Reference<cpo::uno::XComponentContext> const & context)
+    cpo::uno::Reference<cpo::uno::XComponentContext> const & context)
 {
     return detail::ConfigurationWrapper::get(context).createChanges();
 }
@@ -74,7 +74,7 @@ void comphelper::ConfigurationChanges::commit() const {
 }
 
 comphelper::ConfigurationChanges::ConfigurationChanges(
-    css::uno::Reference< cpo::uno::XComponentContext > const & context):
+    cpo::uno::Reference< cpo::uno::XComponentContext > const & context):
     access_(
         css::configuration::ReadWriteAccess::create(
             context, getDefaultLocale(context)))
@@ -86,30 +86,30 @@ void comphelper::ConfigurationChanges::setPropertyValue(
     access_->replaceByHierarchicalName(path, value);
 }
 
-css::uno::Reference< css::container::XHierarchicalNameReplace >
+cpo::uno::Reference< css::container::XHierarchicalNameReplace >
 comphelper::ConfigurationChanges::getGroup(OUString const & path) const
 {
-    return css::uno::Reference< css::container::XHierarchicalNameReplace >(
-        access_->getByHierarchicalName(path), css::uno::UNO_QUERY_THROW);
+    return cpo::uno::Reference< css::container::XHierarchicalNameReplace >(
+        access_->getByHierarchicalName(path), cpo::uno::UNO_QUERY_THROW);
 }
 
-css::uno::Reference< css::container::XNameContainer >
+cpo::uno::Reference< css::container::XNameContainer >
 comphelper::ConfigurationChanges::getSet(OUString const & path) const
 {
-    return css::uno::Reference< css::container::XNameContainer >(
-        access_->getByHierarchicalName(path), css::uno::UNO_QUERY_THROW);
+    return cpo::uno::Reference< css::container::XNameContainer >(
+        access_->getByHierarchicalName(path), cpo::uno::UNO_QUERY_THROW);
 }
 
 comphelper::detail::ConfigurationWrapper const &
 comphelper::detail::ConfigurationWrapper::get(
-    css::uno::Reference<cpo::uno::XComponentContext> const & context)
+    cpo::uno::Reference<cpo::uno::XComponentContext> const & context)
 {
     static comphelper::detail::ConfigurationWrapper WRAPPER(context);
     return WRAPPER;
 }
 
 comphelper::detail::ConfigurationWrapper::ConfigurationWrapper(
-    css::uno::Reference<cpo::uno::XComponentContext> const & context):
+    cpo::uno::Reference<cpo::uno::XComponentContext> const & context):
     context_(context.is() ? context : comphelper::getProcessComponentContext()),
     access_(css::configuration::ReadWriteAccess::create(context_, u"*"_ustr))
 {}
@@ -134,7 +134,7 @@ cpo::uno::Any comphelper::detail::ConfigurationWrapper::getPropertyValue(std::u1
     // Note that this cache is only used by the officecfg:: auto-generated code, using it for anything
     // else would be unwise because the cache could end up containing stale entries.
     static std::mutex gMutex;
-    static std::unordered_map<OUString, css::uno::Reference< css::container::XNameAccess >> gAccessMap;
+    static std::unordered_map<OUString, cpo::uno::Reference< css::container::XNameAccess >> gAccessMap;
 
     sal_Int32 idx = path.rfind('/');
     assert(idx!=-1);
@@ -148,8 +148,8 @@ cpo::uno::Any comphelper::detail::ConfigurationWrapper::getPropertyValue(std::u1
     if (it == gAccessMap.end())
     {
         // not in the cache, look it up
-        css::uno::Reference<css::container::XNameAccess> access(
-            access_->getByHierarchicalName(parentPath), css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::container::XNameAccess> access(
+            access_->getByHierarchicalName(parentPath), cpo::uno::UNO_QUERY_THROW);
         it = gAccessMap.emplace(parentPath, access).first;
     }
     return it->second->getByName(childName);
@@ -179,18 +179,18 @@ void comphelper::detail::ConfigurationWrapper::setLocalizedPropertyValue(
     batch->setPropertyValue(path, value);
 }
 
-css::uno::Reference< css::container::XHierarchicalNameAccess >
+cpo::uno::Reference< css::container::XHierarchicalNameAccess >
 comphelper::detail::ConfigurationWrapper::getGroupReadOnly(
     OUString const & path) const
 {
-    return css::uno::Reference< css::container::XHierarchicalNameAccess >(
+    return cpo::uno::Reference< css::container::XHierarchicalNameAccess >(
         (css::configuration::ReadOnlyAccess::create(
             context_, getDefaultLocale(context_))->
          getByHierarchicalName(path)),
-        css::uno::UNO_QUERY_THROW);
+        cpo::uno::UNO_QUERY_THROW);
 }
 
-css::uno::Reference< css::container::XHierarchicalNameReplace >
+cpo::uno::Reference< css::container::XHierarchicalNameReplace >
 comphelper::detail::ConfigurationWrapper::getGroupReadWrite(
     std::shared_ptr< ConfigurationChanges > const & batch,
     OUString const & path)
@@ -199,18 +199,18 @@ comphelper::detail::ConfigurationWrapper::getGroupReadWrite(
     return batch->getGroup(path);
 }
 
-css::uno::Reference< css::container::XNameAccess >
+cpo::uno::Reference< css::container::XNameAccess >
 comphelper::detail::ConfigurationWrapper::getSetReadOnly(
     OUString const & path) const
 {
-    return css::uno::Reference< css::container::XNameAccess >(
+    return cpo::uno::Reference< css::container::XNameAccess >(
         (css::configuration::ReadOnlyAccess::create(
             context_, getDefaultLocale(context_))->
          getByHierarchicalName(path)),
-        css::uno::UNO_QUERY_THROW);
+        cpo::uno::UNO_QUERY_THROW);
 }
 
-css::uno::Reference< css::container::XNameContainer >
+cpo::uno::Reference< css::container::XNameContainer >
 comphelper::detail::ConfigurationWrapper::getSetReadWrite(
     std::shared_ptr< ConfigurationChanges > const & batch,
     OUString const & path)

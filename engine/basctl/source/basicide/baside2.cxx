@@ -106,8 +106,8 @@ constexpr OUString FilterMask_All = u"*.*"_ustr;
 } // end anonymous namespace
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace utl;
 using namespace comphelper;

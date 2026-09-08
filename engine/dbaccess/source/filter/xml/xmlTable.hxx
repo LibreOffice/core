@@ -28,8 +28,8 @@ namespace dbaxml
     class OXMLTable : public SvXMLImportContext
     {
     protected:
-        css::uno::Reference< css::container::XNameAccess >    m_xParentContainer;
-        css::uno::Reference< css::beans::XPropertySet >       m_xTable;
+        cpo::uno::Reference< css::container::XNameAccess >    m_xParentContainer;
+        cpo::uno::Reference< css::beans::XPropertySet >       m_xTable;
         OUString m_sFilterStatement;
         OUString m_sOrderStatement;
         OUString m_sName;
@@ -41,25 +41,25 @@ namespace dbaxml
 
         ODBFilter& GetOwnImport();
 
-        static void fillAttributes(     const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList
+        static void fillAttributes(     const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList
                                 ,OUString& _rsCommand
                                 ,OUString& _rsTableName
                                 ,OUString& _rsTableSchema
                                 ,OUString& _rsTableCatalog
                             );
 
-        virtual void setProperties(css::uno::Reference< css::beans::XPropertySet > & _xProp);
+        virtual void setProperties(cpo::uno::Reference< css::beans::XPropertySet > & _xProp);
     public:
 
         OXMLTable( ODBFilter& rImport
-                    ,const css::uno::Reference< css::xml::sax::XFastAttributeList > & _xAttrList
-                    ,css::uno::Reference< css::container::XNameAccess > _xParentContainer
+                    ,const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & _xAttrList
+                    ,cpo::uno::Reference< css::container::XNameAccess > _xParentContainer
                     ,const OUString& _sServiceName
                     );
         virtual ~OXMLTable() override;
 
-        virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
-            sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+        virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+            sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
         virtual void endFastElement(sal_Int32 nElement) override;
     };
 } // namespace dbaxml

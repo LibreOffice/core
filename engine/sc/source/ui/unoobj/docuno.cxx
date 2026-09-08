@@ -153,6 +153,7 @@
 #include <prnsave.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 // #i111553# provides the name of the VBA constant for this document type (e.g. 'ThisExcelDoc' for Calc)
 constexpr OUString SC_UNO_VBAGLOBNAME = u"VBAGlobalConstantName"_ustr;
@@ -1470,7 +1471,7 @@ void ScModelObj::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_vi
         // The document's STANAG marking (empty when unlabelled), for the browser's
         // read-only classification banner. Rendered with the label's provisioned policy.
         rJsonWriter.put("commandName", ".uno:SecurityLabel");
-        const css::uno::Reference<css::frame::XModel> xModel
+        const cpo::uno::Reference<css::frame::XModel> xModel
             = pDocShell ? pDocShell->GetModel() : nullptr;
         const OUString aMarking = xModel.is() ? svx::seclabel::readMarking(xModel) : OUString();
         auto aValues = rJsonWriter.startNode("commandValues");
@@ -1977,11 +1978,11 @@ rtl::Reference<ScTableSheetsObj> ScModelObj::getScSheets()
     return nullptr;
 }
 
-css::uno::Reference< ::css::chart2::data::XDataProvider > SAL_CALL ScModelObj::createDataProvider()
+cpo::uno::Reference< ::css::chart2::data::XDataProvider > SAL_CALL ScModelObj::createDataProvider()
 {
     if (pDocShell)
     {
-        return css::uno::Reference< ::css::chart2::data::XDataProvider > (
+        return cpo::uno::Reference< ::css::chart2::data::XDataProvider > (
             ScServiceProvider::MakeInstance(ScServiceProvider::Type::CHDATAPROV, pDocShell), uno::UNO_QUERY);
     }
     return nullptr;
@@ -3926,7 +3927,7 @@ cpo::uno::Any SAL_CALL ScModelObj::getPropertyValue( const OUString& aPropertyNa
         else if (aPropertyName == SC_UNO_THEME)
         {
             SdrModel& rSdrModel = getSdrModelFromUnoModel();
-            css::uno::Reference<css::util::XTheme> xTheme;
+            cpo::uno::Reference<css::util::XTheme> xTheme;
             auto pTheme = rSdrModel.getTheme();
             if (pTheme)
                 xTheme = model::theme::createXTheme(pTheme);
@@ -3941,7 +3942,7 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScModelObj )
 
 // XMultiServiceFactory
 
-css::uno::Reference<cpo::uno::XInterface> ScModelObj::create(
+cpo::uno::Reference<cpo::uno::XInterface> ScModelObj::create(
     OUString const & aServiceSpecifier,
     cpo::uno::Sequence<cpo::uno::Any> const * arguments)
 {

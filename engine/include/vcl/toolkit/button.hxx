@@ -77,7 +77,7 @@ public:
     const Link<Button*,void>& GetClickHdl() const { return maClickHdl; }
 
     /// Setup handler for UNO commands so that commands like .uno:Something are handled automagically by this button.
-    SAL_DLLPRIVATE void SetCommandHandler(const OUString& aCommand, const css::uno::Reference<css::frame::XFrame>& rFrame);
+    SAL_DLLPRIVATE void SetCommandHandler(const OUString& aCommand, const cpo::uno::Reference<css::frame::XFrame>& rFrame);
 
     void                SetModeImage( const Image& rImage );
     SAL_DLLPRIVATE Image const & GetModeImage( ) const;

@@ -268,8 +268,8 @@ void SlideSectionManager::RemoveSectionSlides(sal_Int32 nSectionIndex)
         if (!xModel.is())
             return;
 
-        css::uno::Reference<css::drawing::XDrawPages> xPages(xModel->getDrawPages(),
-                                                             css::uno::UNO_SET_THROW);
+        cpo::uno::Reference<css::drawing::XDrawPages> xPages(xModel->getDrawPages(),
+                                                             cpo::uno::UNO_SET_THROW);
 
         // Iterate in reverse so that each remove() does not shift the
         // indices of the slides we still have to delete.  OnSlideRemoved
@@ -281,8 +281,8 @@ void SlideSectionManager::RemoveSectionSlides(sal_Int32 nSectionIndex)
             if (xPages->getCount() <= 1)
                 break;
 
-            css::uno::Reference<css::drawing::XDrawPage> xPage(xPages->getByIndex(i),
-                                                               css::uno::UNO_QUERY_THROW);
+            cpo::uno::Reference<css::drawing::XDrawPage> xPage(xPages->getByIndex(i),
+                                                               cpo::uno::UNO_QUERY_THROW);
             xPages->remove(xPage);
         }
     }

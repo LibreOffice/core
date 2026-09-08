@@ -37,7 +37,7 @@ QuietInteraction::QuietInteraction()
 {
 }
 
-void QuietInteraction::handle( const css::uno::Reference< css::task::XInteractionRequest >& xRequest )
+void QuietInteraction::handle( const cpo::uno::Reference< css::task::XInteractionRequest >& xRequest )
 {
     // safe the request for outside analyzing every time!
     cpo::uno::Any aRequest = xRequest->getRequest();
@@ -49,26 +49,26 @@ void QuietInteraction::handle( const css::uno::Reference< css::task::XInteractio
     // analyze the request
     // We need XAbort as possible continuation as minimum!
     // An optional filter selection we can handle too.
-    cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > lContinuations = xRequest->getContinuations();
-    css::uno::Reference< css::task::XInteractionAbort >                              xAbort;
-    css::uno::Reference< css::task::XInteractionApprove >                            xApprove;
-    css::uno::Reference< css::document::XInteractionFilterSelect >                   xFilter;
-    css::uno::Reference< css::document::XInteractionFilterOptions >                  xFOptions;
+    cpo::uno::Sequence< cpo::uno::Reference< css::task::XInteractionContinuation > > lContinuations = xRequest->getContinuations();
+    cpo::uno::Reference< css::task::XInteractionAbort >                              xAbort;
+    cpo::uno::Reference< css::task::XInteractionApprove >                            xApprove;
+    cpo::uno::Reference< css::document::XInteractionFilterSelect >                   xFilter;
+    cpo::uno::Reference< css::document::XInteractionFilterOptions >                  xFOptions;
 
     sal_Int32 nCount=lContinuations.getLength();
     for (sal_Int32 i=0; i<nCount; ++i)
     {
         if ( ! xAbort.is() )
-            xAbort.set( lContinuations[i], css::uno::UNO_QUERY );
+            xAbort.set( lContinuations[i], cpo::uno::UNO_QUERY );
 
         if( ! xApprove.is() )
-            xApprove.set( lContinuations[i], css::uno::UNO_QUERY );
+            xApprove.set( lContinuations[i], cpo::uno::UNO_QUERY );
 
         if ( ! xFilter.is() )
-            xFilter.set( lContinuations[i], css::uno::UNO_QUERY );
+            xFilter.set( lContinuations[i], cpo::uno::UNO_QUERY );
 
         if ( ! xFOptions.is() )
-            xFOptions.set( lContinuations[i], css::uno::UNO_QUERY );
+            xFOptions.set( lContinuations[i], cpo::uno::UNO_QUERY );
     }
 
     // differ between abortable interactions (error, unknown filter...)

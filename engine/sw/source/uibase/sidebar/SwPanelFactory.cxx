@@ -46,7 +46,7 @@
 
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 namespace {
@@ -65,7 +65,7 @@ public:
     SwPanelFactory();
 
     // XUIElementFactory
-    css::uno::Reference<css::ui::XUIElement> SAL_CALL createUIElement(
+    cpo::uno::Reference<css::ui::XUIElement> SAL_CALL createUIElement(
         const OUString& rsResourceURL,
         const cpo::uno::Sequence<css::beans::PropertyValue>& rArguments) override;
 

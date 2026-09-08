@@ -30,7 +30,7 @@ namespace i18npool {
 class BreakIteratorImpl : public BreakIterator
 {
 public:
-    BreakIteratorImpl( const css::uno::Reference < cpo::uno::XComponentContext >& rxContext );
+    BreakIteratorImpl( const cpo::uno::Reference < cpo::uno::XComponentContext >& rxContext );
     BreakIteratorImpl();
     virtual ~BreakIteratorImpl() override;
 
@@ -99,19 +99,19 @@ protected:
 private:
 
     struct lookupTableItem {
-        lookupTableItem(css::lang::Locale _aLocale, css::uno::Reference < XBreakIterator > _xBI) : aLocale(std::move(_aLocale)), xBI(std::move(_xBI)) {};
+        lookupTableItem(css::lang::Locale _aLocale, cpo::uno::Reference < XBreakIterator > _xBI) : aLocale(std::move(_aLocale)), xBI(std::move(_xBI)) {};
         css::lang::Locale aLocale;
-        css::uno::Reference < XBreakIterator > xBI;
+        cpo::uno::Reference < XBreakIterator > xBI;
     };
     std::vector<lookupTableItem>                        lookupTable;
     css::lang::Locale                                   aLocale;
-    css::uno::Reference < XBreakIterator >              xBI;
-    css::uno::Reference < cpo::uno::XComponentContext > m_xContext;
+    cpo::uno::Reference < XBreakIterator >              xBI;
+    cpo::uno::Reference < cpo::uno::XComponentContext > m_xContext;
 
     /// @throws cpo::uno::RuntimeException
     bool createLocaleSpecificBreakIterator( const OUString& aLocaleName );
     /// @throws cpo::uno::RuntimeException
-    const css::uno::Reference < XBreakIterator > & getLocaleSpecificBreakIterator( const css::lang::Locale& rLocale );
+    const cpo::uno::Reference < XBreakIterator > & getLocaleSpecificBreakIterator( const css::lang::Locale& rLocale );
 
 };
 

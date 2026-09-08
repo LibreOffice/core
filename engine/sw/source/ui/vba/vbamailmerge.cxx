@@ -11,8 +11,8 @@
 
 #include <ooo/vba/word/WdMailMergeMainDocType.hpp>
 
-SwVbaMailMerge::SwVbaMailMerge(const css::uno::Reference<ooo::vba::XHelperInterface>& xParent,
-                               const css::uno::Reference<cpo::uno::XComponentContext>& xContext)
+SwVbaMailMerge::SwVbaMailMerge(const cpo::uno::Reference<ooo::vba::XHelperInterface>& xParent,
+                               const cpo::uno::Reference<cpo::uno::XComponentContext>& xContext)
     : SwVbaMailMerge_BASE(xParent, xContext)
     , m_nMainDocType(ooo::vba::word::WdMailMergeMainDocType::wdNotAMergeDocument)
 {
@@ -21,8 +21,8 @@ SwVbaMailMerge::SwVbaMailMerge(const css::uno::Reference<ooo::vba::XHelperInterf
 SwVbaMailMerge::~SwVbaMailMerge() {}
 
 rtl::Reference<SwVbaMailMerge> const&
-SwVbaMailMerge::get(const css::uno::Reference<ooo::vba::XHelperInterface>& xParent,
-                    const css::uno::Reference<cpo::uno::XComponentContext>& xContext)
+SwVbaMailMerge::get(const cpo::uno::Reference<ooo::vba::XHelperInterface>& xParent,
+                    const cpo::uno::Reference<cpo::uno::XComponentContext>& xContext)
 {
     static rtl::Reference<SwVbaMailMerge> xInstance(new SwVbaMailMerge(xParent, xContext));
 

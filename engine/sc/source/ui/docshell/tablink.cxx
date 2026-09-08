@@ -475,9 +475,9 @@ SfxMedium* ScDocumentLoader::CreateMedium( const OUString& rFileName, std::share
 
     if (pInteractionParent)
     {
-        const css::uno::Reference<cpo::uno::XComponentContext>& xContext = comphelper::getProcessComponentContext();
-        css::uno::Reference<css::task::XInteractionHandler> xIHdl(css::task::InteractionHandler::createWithParent(xContext,
-                    pInteractionParent->GetXWindow()), css::uno::UNO_QUERY_THROW);
+        const cpo::uno::Reference<cpo::uno::XComponentContext>& xContext = comphelper::getProcessComponentContext();
+        cpo::uno::Reference<css::task::XInteractionHandler> xIHdl(css::task::InteractionHandler::createWithParent(xContext,
+                    pInteractionParent->GetXWindow()), cpo::uno::UNO_QUERY_THROW);
         pSet->Put(SfxUnoAnyItem(SID_INTERACTIONHANDLER, cpo::uno::Any(xIHdl)));
     }
 
@@ -490,7 +490,7 @@ SfxMedium* ScDocumentLoader::CreateMedium( const OUString& rFileName, std::share
 ScDocumentLoader::ScDocumentLoader(const OUString& rFileName,
                                    OUString& rFilterName, OUString& rOptions,
                                    sal_uInt32 nRekCnt, weld::Window* pInteractionParent,
-                                   const css::uno::Reference<css::io::XInputStream>& xInputStream)
+                                   const cpo::uno::Reference<css::io::XInputStream>& xInputStream)
     : pMedium(nullptr)
 {
     if ( rFilterName.isEmpty() )

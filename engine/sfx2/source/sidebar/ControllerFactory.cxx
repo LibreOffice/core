@@ -34,7 +34,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 namespace sfx2::sidebar {
@@ -155,7 +155,7 @@ Reference<frame::XToolbarController> ControllerFactory::CreateToolBoxController(
     const Reference<frame::XController>& rxController,
     bool bSideBar)
 {
-    css::uno::Reference<css::awt::XWindow> xWidget(new weld::TransportAsXWindow(&rToolbar, &rBuilder));
+    cpo::uno::Reference<css::awt::XWindow> xWidget(new weld::TransportAsXWindow(&rToolbar, &rBuilder));
 
     Reference<frame::XToolbarController> xController(
         CreateToolBarController(

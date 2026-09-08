@@ -50,7 +50,7 @@ namespace connectivity
     /// @throws cpo::uno::RuntimeException
     std::unique_ptr<java_util_Properties> createStringPropertyArray(const cpo::uno::Sequence< css::beans::PropertyValue >& info );
 
-    jobject convertTypeMapToJavaMap(const css::uno::Reference< css::container::XNameAccess > & _rMap);
+    jobject convertTypeMapToJavaMap(const cpo::uno::Reference< css::container::XNameAccess > & _rMap);
 
     /** return if an exception occurred
         the exception will be cleared.
@@ -59,8 +59,8 @@ namespace connectivity
     */
     bool isExceptionOccurred(JNIEnv *pEnv);
 
-    jobject createByteInputStream(const css::uno::Reference< css::io::XInputStream >& x,sal_Int32 length);
-    jobject createCharArrayReader(const css::uno::Reference< css::io::XInputStream >& x,sal_Int32 length);
+    jobject createByteInputStream(const cpo::uno::Reference< css::io::XInputStream >& x,sal_Int32 length);
+    jobject createCharArrayReader(const cpo::uno::Reference< css::io::XInputStream >& x,sal_Int32 length);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

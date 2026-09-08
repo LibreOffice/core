@@ -36,7 +36,7 @@
 #include <frozen/unordered_map.h>
 
 using namespace ::oox::core;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::xml::sax;
 

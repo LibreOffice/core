@@ -26,7 +26,7 @@
 #include <sal/types.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <com/sun/star/lang/Locale.hpp>
 
@@ -334,19 +334,19 @@ COMPHELPER_DLLPUBLIC cpo::uno::Sequence< OUString >
             > 0 - if this string is greater than the string argument
 */
 COMPHELPER_DLLPUBLIC sal_Int32 compareNatural( const OUString &rLHS, const OUString &rRHS,
-    const css::uno::Reference< css::i18n::XCollator > &rCollator,
-    const css::uno::Reference< css::i18n::XBreakIterator > &rBI,
+    const cpo::uno::Reference< css::i18n::XCollator > &rCollator,
+    const cpo::uno::Reference< css::i18n::XBreakIterator > &rBI,
     const css::lang::Locale &rLocale );
 
 class COMPHELPER_DLLPUBLIC NaturalStringSorter
 {
 private:
     css::lang::Locale const                          m_aLocale;
-    css::uno::Reference< css::i18n::XCollator >      m_xCollator;
-    css::uno::Reference< css::i18n::XBreakIterator > m_xBI;
+    cpo::uno::Reference< css::i18n::XCollator >      m_xCollator;
+    cpo::uno::Reference< css::i18n::XBreakIterator > m_xBI;
 public:
     NaturalStringSorter(
-        const css::uno::Reference< cpo::uno::XComponentContext > &rContext,
+        const cpo::uno::Reference< cpo::uno::XComponentContext > &rContext,
         css::lang::Locale aLocale);
     sal_Int32 compare(const OUString &rLHS, const OUString &rRHS) const
     {

@@ -147,7 +147,7 @@
 #include <strings.hxx>
 
 using namespace ::com::sun::star::awt;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
@@ -1018,11 +1018,11 @@ private:
 
         Reference< css::loader::XImplementationLoader > xJavaComponentLoader(
             xSMgr->createInstance(u"com.sun.star.comp.stoc.JavaComponentLoader"_ustr),
-            css::uno::UNO_QUERY_THROW);
+            cpo::uno::UNO_QUERY_THROW);
 
         if (xJavaComponentLoader.is())
         {
-            const css::uno::Reference< css::registry::XRegistryKey > xRegistryKey;
+            const cpo::uno::Reference< css::registry::XRegistryKey > xRegistryKey;
             try
             {
                 xJavaComponentLoader->activate(u""_ustr, u""_ustr, u""_ustr, xRegistryKey);
@@ -1522,10 +1522,10 @@ bool Desktop::InitializeConfiguration()
 
 void Desktop::FlushConfiguration()
 {
-    css::uno::Reference< css::util::XFlushable >(
+    cpo::uno::Reference< css::util::XFlushable >(
         css::configuration::theDefaultProvider::get(
             comphelper::getProcessComponentContext()),
-        css::uno::UNO_QUERY_THROW)->flush();
+        cpo::uno::UNO_QUERY_THROW)->flush();
 }
 
 void Desktop::OverrideSystemSettings( AllSettings& rSettings )
@@ -2088,7 +2088,7 @@ void Desktop::OpenSplashScreen()
         aSplashService = u"com.sun.star.office.PipeSplashScreen"_ustr;
 
     Sequence< Any > aSeq{ Any(true) /* bVisible */, Any(aAppName) };
-    const css::uno::Reference< cpo::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
+    const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
     m_rSplashScreen.set(
         xContext->getServiceManager()->createInstanceWithArgumentsAndContext(aSplashService, aSeq, xContext),
         UNO_QUERY);

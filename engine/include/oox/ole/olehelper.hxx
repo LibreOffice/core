@@ -20,7 +20,7 @@
 #ifndef INCLUDED_OOX_OLE_OLEHELPER_HXX
 #define INCLUDED_OOX_OLE_OLEHELPER_HXX
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <filter/msfilter/msocximex.hxx>
 #include <oox/dllapi.h>
 #include <oox/helper/binarystreambase.hxx>
@@ -135,15 +135,15 @@ class OOX_DLLPUBLIC OleFormCtrlExportHelper final
     std::unique_ptr<::oox::ole::EmbeddedControl> mpControl;
     ::oox::ole::ControlModelBase* mpModel;
     ::oox::GraphicHelper maGrfHelper;
-    css::uno::Reference< css::frame::XModel > mxDocModel;
-    css::uno::Reference< css::awt::XControlModel > mxControlModel;
+    cpo::uno::Reference< css::frame::XModel > mxDocModel;
+    cpo::uno::Reference< css::awt::XControlModel > mxControlModel;
 
     OUString maName;
     OUString maTypeName;
     OUString maFullName;
     OUString maGUID;
 public:
-    OleFormCtrlExportHelper( const css::uno::Reference< cpo::uno::XComponentContext >& rxCtx, const css::uno::Reference< css::frame::XModel >& xDocModel, const css::uno::Reference< css::awt::XControlModel >& xModel );
+    OleFormCtrlExportHelper( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxCtx, const cpo::uno::Reference< css::frame::XModel >& xDocModel, const cpo::uno::Reference< css::awt::XControlModel >& xModel );
     ~OleFormCtrlExportHelper();
 
     std::u16string_view getGUID() const
@@ -157,9 +157,9 @@ public:
     const OUString& getTypeName() const { return maTypeName; }
     const OUString& getName() const { return maName; }
     bool isValid() const { return mpModel != nullptr; }
-    void exportName( const css::uno::Reference< css::io::XOutputStream >& rxOut );
-    void exportCompObj( const css::uno::Reference< css::io::XOutputStream >& rxOut );
-    void exportControl( const css::uno::Reference< css::io::XOutputStream >& rxOut, const css::awt::Size& rSize, bool bAutoClose = false );
+    void exportName( const cpo::uno::Reference< css::io::XOutputStream >& rxOut );
+    void exportCompObj( const cpo::uno::Reference< css::io::XOutputStream >& rxOut );
+    void exportControl( const cpo::uno::Reference< css::io::XOutputStream >& rxOut, const css::awt::Size& rSize, bool bAutoClose = false );
 };
 
 // ideally it would be great to get rid of SvxMSConvertOCXControls
@@ -169,25 +169,25 @@ public:
 // implementation into the sd module itself.
 class OOX_DLLPUBLIC MSConvertOCXControls : public SvxMSConvertOCXControls
 {
-    css::uno::Reference< cpo::uno::XComponentContext > mxCtx;
+    cpo::uno::Reference< cpo::uno::XComponentContext > mxCtx;
     ::oox::GraphicHelper maGrfHelper;
 
 protected:
     bool importControlFromStream( ::oox::BinaryInputStream& rInStrm,
-                                  css::uno::Reference< css::form::XFormComponent > & rxFormComp,
+                                  cpo::uno::Reference< css::form::XFormComponent > & rxFormComp,
                                   std::u16string_view rGuidString );
     bool importControlFromStream( ::oox::BinaryInputStream& rInStrm,
-                                  css::uno::Reference< css::form::XFormComponent > & rxFormComp,
+                                  cpo::uno::Reference< css::form::XFormComponent > & rxFormComp,
                                   const OUString& rGuidString,
                                   sal_Int32 nSize );
 public:
-    MSConvertOCXControls( const css::uno::Reference< css::frame::XModel >& rxModel );
+    MSConvertOCXControls( const cpo::uno::Reference< css::frame::XModel >& rxModel );
     virtual ~MSConvertOCXControls() override;
-    bool ReadOCXStorage( rtl::Reference<SotStorage> const & rSrc1, css::uno::Reference< css::form::XFormComponent > & rxFormComp );
-    bool ReadOCXCtlsStream(rtl::Reference<SotStorageStream> const & rSrc1, css::uno::Reference< css::form::XFormComponent > & rxFormComp,
+    bool ReadOCXStorage( rtl::Reference<SotStorage> const & rSrc1, cpo::uno::Reference< css::form::XFormComponent > & rxFormComp );
+    bool ReadOCXCtlsStream(rtl::Reference<SotStorageStream> const & rSrc1, cpo::uno::Reference< css::form::XFormComponent > & rxFormComp,
                                    sal_Int32 nPos, sal_Int32 nSize );
-    static bool WriteOCXStream( const css::uno::Reference< css::frame::XModel >& rxModel, rtl::Reference<SotStorage> const &rSrc1, const css::uno::Reference< css::awt::XControlModel > &rControlModel, const css::awt::Size& rSize,OUString &rName);
-    static bool WriteOCXExcelKludgeStream( const css::uno::Reference< css::frame::XModel >& rxModel, const css::uno::Reference< css::io::XOutputStream >& xOutStrm, const css::uno::Reference< css::awt::XControlModel > &rControlModel, const css::awt::Size& rSize,OUString &rName);
+    static bool WriteOCXStream( const cpo::uno::Reference< css::frame::XModel >& rxModel, rtl::Reference<SotStorage> const &rSrc1, const cpo::uno::Reference< css::awt::XControlModel > &rControlModel, const css::awt::Size& rSize,OUString &rName);
+    static bool WriteOCXExcelKludgeStream( const cpo::uno::Reference< css::frame::XModel >& rxModel, const cpo::uno::Reference< css::io::XOutputStream >& xOutStrm, const cpo::uno::Reference< css::awt::XControlModel > &rControlModel, const css::awt::Size& rSize,OUString &rName);
 };
 
 

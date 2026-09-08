@@ -574,7 +574,7 @@ struct OpCodeProviderImpl;
 class OpCodeProvider : public FunctionProvider // not derived from WorkbookHelper to make it usable as UNO service
 {
 public:
-    explicit            OpCodeProvider(const css::uno::Reference<css::lang::XMultiServiceFactory>& rxModelFactory,
+    explicit            OpCodeProvider(const cpo::uno::Reference<css::lang::XMultiServiceFactory>& rxModelFactory,
                                        bool bImportFilter);
     virtual             ~OpCodeProvider() override;
 
@@ -606,7 +606,7 @@ class ApiParserWrapper : public OpCodeProvider
 {
 public:
     explicit            ApiParserWrapper(
-                            const css::uno::Reference< css::lang::XMultiServiceFactory >& rxModelFactory,
+                            const cpo::uno::Reference< css::lang::XMultiServiceFactory >& rxModelFactory,
                             const OpCodeProvider& rOpCodeProv );
 
     /** Returns read/write access to the formula parser property set. */
@@ -618,7 +618,7 @@ public:
                             const ScAddress& rRefPos );
 
 private:
-    css::uno::Reference< css::sheet::XFormulaParser >
+    cpo::uno::Reference< css::sheet::XFormulaParser >
                         mxParser;
     PropertySet         maParserProps;
 };

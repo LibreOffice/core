@@ -60,8 +60,8 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace com::sun::star::xml::sax;
 using namespace ::xmloff::token;
 
@@ -540,9 +540,9 @@ ErrCode SmMLImportWrapper::ReadThroughComponentS(const uno::Reference<embed::XSt
 
 // read a component from text
 ErrCode SmMLImportWrapper::ReadThroughComponentMS(
-    std::u16string_view aText, const css::uno::Reference<css::lang::XComponent>& xModelComponent,
-    css::uno::Reference<cpo::uno::XComponentContext> const& rxContext,
-    css::uno::Reference<css::beans::XPropertySet> const& rPropSet)
+    std::u16string_view aText, const cpo::uno::Reference<css::lang::XComponent>& xModelComponent,
+    cpo::uno::Reference<cpo::uno::XComponentContext> const& rxContext,
+    cpo::uno::Reference<css::beans::XPropertySet> const& rPropSet)
 {
     // Needs a storage but checked by caller
     // Needs a model but checked by caller
@@ -1375,7 +1375,7 @@ void SmMLImport::SetConfigurationSettings(const Sequence<PropertyValue>& aConfPr
     }
 }
 
-SmMLImport::SmMLImport(const css::uno::Reference<cpo::uno::XComponentContext>& rContext,
+SmMLImport::SmMLImport(const cpo::uno::Reference<cpo::uno::XComponentContext>& rContext,
                        OUString const& implementationName, SvXMLImportFlags nImportFlags)
     : SvXMLImport(rContext, implementationName, nImportFlags)
     , m_pElementTree(nullptr)

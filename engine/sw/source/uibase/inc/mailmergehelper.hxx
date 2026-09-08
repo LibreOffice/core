@@ -45,9 +45,9 @@ namespace SwMailMergeHelper
 {
     SW_DLLPUBLIC OUString CallSaveAsDialog(weld::Window* pParent, OUString& rFilter);
     SW_DLLPUBLIC bool CheckMailAddress(std::u16string_view aMailAddress);
-    SW_DLLPUBLIC css::uno::Reference<css::mail::XSmtpService> ConnectToSmtpServer(
+    SW_DLLPUBLIC cpo::uno::Reference<css::mail::XSmtpService> ConnectToSmtpServer(
                             SwMailMergeConfigItem const & rConfigItem,
-                            css::uno::Reference<css::mail::XMailService>& xInMailService,
+                            cpo::uno::Reference<css::mail::XMailService>& xInMailService,
                             const OUString& rInMailServerPassword,
                             const OUString& rOutMailServerPassword,
                             weld::Window* pDialogParentWindow = nullptr);
@@ -203,18 +203,18 @@ class SW_DLLPUBLIC SwMailTransferable final :
     virtual bool SAL_CALL isDataFlavorSupported(const css::datatransfer::DataFlavor& aFlavor) override;
 
     //XPropertySet
-    virtual css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
+    virtual cpo::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
     virtual void SAL_CALL setPropertyValue(const OUString& aPropertyName, const cpo::uno::Any& aValue) override;
 
     virtual cpo::uno::Any SAL_CALL getPropertyValue(const OUString& PropertyName) override;
     virtual void SAL_CALL addPropertyChangeListener(const OUString& aPropertyName,
-                                                    const css::uno::Reference<css::beans::XPropertyChangeListener>& xListener) override;
+                                                    const cpo::uno::Reference<css::beans::XPropertyChangeListener>& xListener) override;
     virtual void SAL_CALL removePropertyChangeListener(const OUString& aPropertyName,
-                                                       const css::uno::Reference<css::beans::XPropertyChangeListener >& aListener) override;
+                                                       const cpo::uno::Reference<css::beans::XPropertyChangeListener >& aListener) override;
     virtual void SAL_CALL addVetoableChangeListener(const OUString& PropertyName,
-                                                    const css::uno::Reference<css::beans::XVetoableChangeListener>& aListener) override;
+                                                    const cpo::uno::Reference<css::beans::XVetoableChangeListener>& aListener) override;
     virtual void SAL_CALL removeVetoableChangeListener(const OUString& PropertyName,
-                                                       const css::uno::Reference<css::beans::XVetoableChangeListener>& aListener) override;
+                                                       const cpo::uno::Reference<css::beans::XVetoableChangeListener>& aListener) override;
 
 };
 
@@ -226,7 +226,7 @@ class SW_DLLPUBLIC SwMailMessage final :
     OUString m_sReplyToAddress;
     OUString m_sSubject;
 
-    css::uno::Reference<css::datatransfer::XTransferable> m_xBody;
+    cpo::uno::Reference<css::datatransfer::XTransferable> m_xBody;
 //  css::mail::MailMessageBody m_aBody;
 
     cpo::uno::Sequence<OUString> m_aRecipients;
@@ -246,8 +246,8 @@ public:
     virtual OUString SAL_CALL getSubject() override;
     virtual void SAL_CALL setSubject(const OUString& _subject) override;
 
-    virtual css::uno::Reference<css::datatransfer::XTransferable> SAL_CALL getBody() override;
-    virtual void SAL_CALL setBody(const css::uno::Reference<css::datatransfer::XTransferable>& _body) override;
+    virtual cpo::uno::Reference<css::datatransfer::XTransferable> SAL_CALL getBody() override;
+    virtual void SAL_CALL setBody(const cpo::uno::Reference<css::datatransfer::XTransferable>& _body) override;
 
     // methods
     virtual void SAL_CALL addRecipient( const OUString& sRecipientAddress ) override;

@@ -27,8 +27,8 @@
 namespace com::sun::star {
     namespace embed { class XEmbeddedObject; }
     namespace frame { class XModel; }
-    namespace uno { template <typename > class Reference; }
 }
+namespace cpo::uno { template <typename > class Reference; }
 
 namespace basegfx { class B2DRange; }
 
@@ -36,14 +36,14 @@ class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC ChartHelper
 {
 public:
     /// Use chart's XUpdatable::update() to update values.
-    static void updateChart( const css::uno::Reference< css::frame::XModel >& rXModel );
+    static void updateChart( const cpo::uno::Reference< css::frame::XModel >& rXModel );
 
     // try to access rXModel in case of a chart to get the chart content
     // as sequence of primitives. Return range of primitives (chart size) in rRange;
     // it will be used to embed the chart to the SdrObject transformation. This
     // allows to define possible distances between chart and SDrObject bounds here
     static drawinglayer::primitive2d::Primitive2DContainer tryToGetChartContentAsPrimitive2DSequence(
-        const css::uno::Reference< css::frame::XModel >& rXModel,
+        const cpo::uno::Reference< css::frame::XModel >& rXModel,
         basegfx::B2DRange& rRange);
 
     // #i121334# Allow to switch off line and fill style by setting these as attributes
@@ -53,7 +53,7 @@ public:
     // since this would not be saved/loaded, thus the compatibility will be better when setting it at
     // newly created charts using this method
     static void AdaptDefaultsForChart(
-        const css::uno::Reference < css::embed::XEmbeddedObject > & xEmbObj);
+        const cpo::uno::Reference < css::embed::XEmbeddedObject > & xEmbObj);
 };
 
 #endif // INCLUDED_SVX_CHARTHELPER_HXX

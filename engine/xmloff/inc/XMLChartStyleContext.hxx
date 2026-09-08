@@ -39,11 +39,11 @@ public:
 
     /// is called after all styles have been read to apply styles
     void FillPropertySet(
-        const css::uno::Reference<css::beans::XPropertySet > & rPropSet ) override;
+        const cpo::uno::Reference<css::beans::XPropertySet > & rPropSet ) override;
 
     /// necessary for property context (element-property symbol-image)
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
     bool isEmptyDataStyleName() override { return msDataStyleName.isEmpty(); }
 };

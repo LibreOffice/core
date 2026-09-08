@@ -35,6 +35,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using utl::AccessibleRelationSetHelper;
+using namespace ::cpo;
 
 const SwNoTextNode *SwAccessibleNoTextFrame::GetNoTextNode() const
 {

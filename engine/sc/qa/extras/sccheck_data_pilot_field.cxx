@@ -25,6 +25,7 @@
 //check the DataPilot of Calc.
 
 using namespace css;
+using namespace ::cpo;
 
 namespace sc_apitest
 {

@@ -34,23 +34,23 @@ class AnimationsImportHelperImpl;
 class AnimationNodeContext final : public SvXMLImportContext
 {
     std::shared_ptr<AnimationsImportHelperImpl> mpHelper;
-    css::uno::Reference< css::animations::XAnimationNode > mxNode;
+    cpo::uno::Reference< css::animations::XAnimationNode > mxNode;
 
-    void init_node( const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
+    void init_node( const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
 
 public:
 
     AnimationNodeContext(
-        const css::uno::Reference< css::animations::XAnimationNode >& xParentNode,
+        const cpo::uno::Reference< css::animations::XAnimationNode >& xParentNode,
         SvXMLImport& rImport,
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
         const std::shared_ptr<AnimationsImportHelperImpl>& pImpl = nullptr );
 
-    virtual css::uno::Reference< XFastContextHandler >  createFastChildContext(sal_Int32 Element,
-        const css::uno::Reference<css::xml::sax::XFastAttributeList>& Attribs) override;
+    virtual cpo::uno::Reference< XFastContextHandler >  createFastChildContext(sal_Int32 Element,
+        const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& Attribs) override;
 
-    static void postProcessRootNode( const css::uno::Reference< css::animations::XAnimationNode >& xNode, css::uno::Reference< css::beans::XPropertySet > const & xPageProps );
+    static void postProcessRootNode( const cpo::uno::Reference< css::animations::XAnimationNode >& xNode, cpo::uno::Reference< css::beans::XPropertySet > const & xPageProps );
 };
 
 }

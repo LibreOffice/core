@@ -30,6 +30,7 @@
 
 using namespace ::cppu;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 #define QUERYINT( xint ) \
     if( rType == cppu::UnoType<xint>::get() ) \

@@ -32,7 +32,7 @@
 #include <xmloff/namespacemap.hxx>
 
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 using ::com::sun::star::beans::PropertyValue;

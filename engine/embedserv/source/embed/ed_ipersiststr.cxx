@@ -55,6 +55,7 @@ const sal_Int32 nConstBufferSize = 32000;
 }
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 const wchar_t aOfficeEmbedStreamName[] = L"package_stream";
 const wchar_t aExtentStreamName[] = L"properties_stream";

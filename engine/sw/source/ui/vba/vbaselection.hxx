@@ -38,7 +38,7 @@ class SwVbaSelection : public SwVbaSelection_BASE
 {
 private:
     rtl::Reference< SwXTextDocument > mxModel;
-    css::uno::Reference< css::text::XTextViewCursor > mxTextViewCursor;
+    cpo::uno::Reference< css::text::XTextViewCursor > mxTextViewCursor;
 
 private:
     /// @throws css::script::BasicErrorException
@@ -48,7 +48,7 @@ private:
     /// @throws cpo::uno::RuntimeException
     void NextCell( sal_Int32 nCount, ooo::vba::word::E_DIRECTION eDirection );
     /// @throws cpo::uno::RuntimeException
-    css::uno::Reference< css::text::XTextRange > GetSelectedRange();
+    cpo::uno::Reference< css::text::XTextRange > GetSelectedRange();
     /// @throws cpo::uno::RuntimeException
     void GetSelectedCellRange( OUString& sTLName, OUString& sBRName );
     /// @throws cpo::uno::RuntimeException
@@ -60,13 +60,13 @@ private:
 
 public:
     /// @throws cpo::uno::RuntimeException
-    SwVbaSelection( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< cpo::uno::XComponentContext >& rContext, rtl::Reference< SwXTextDocument > xModel );
+    SwVbaSelection( const cpo::uno::Reference< ooo::vba::XHelperInterface >& rParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& rContext, rtl::Reference< SwXTextDocument > xModel );
     virtual ~SwVbaSelection() override;
 
     // Attribute
     virtual OUString SAL_CALL getText() override;
     virtual void SAL_CALL setText( const OUString& rText ) override;
-    virtual css::uno::Reference< ooo::vba::word::XRange > SAL_CALL getRange() override;
+    virtual cpo::uno::Reference< ooo::vba::word::XRange > SAL_CALL getRange() override;
     virtual void SAL_CALL HomeKey( const cpo::uno::Any& _unit, const cpo::uno::Any& _extend ) override;
     virtual void SAL_CALL EndKey( const cpo::uno::Any& _unit, const cpo::uno::Any& _extend ) override;
     virtual void SAL_CALL TypeText( const OUString& rText ) override;
@@ -79,21 +79,21 @@ public:
     virtual void SAL_CALL InsertParagraph() override;
     virtual void SAL_CALL InsertParagraphBefore() override;
     virtual void SAL_CALL InsertParagraphAfter() override;
-    virtual css::uno::Reference< ooo::vba::word::XParagraphFormat > SAL_CALL getParagraphFormat() override;
-    virtual void SAL_CALL setParagraphFormat( const css::uno::Reference< ooo::vba::word::XParagraphFormat >& rParagraphFormat ) override;
-    virtual css::uno::Reference< ooo::vba::word::XFind > SAL_CALL getFind() override;
+    virtual cpo::uno::Reference< ooo::vba::word::XParagraphFormat > SAL_CALL getParagraphFormat() override;
+    virtual void SAL_CALL setParagraphFormat( const cpo::uno::Reference< ooo::vba::word::XParagraphFormat >& rParagraphFormat ) override;
+    virtual cpo::uno::Reference< ooo::vba::word::XFind > SAL_CALL getFind() override;
     virtual cpo::uno::Any SAL_CALL getStyle() override;
     virtual void SAL_CALL setStyle( const cpo::uno::Any& _xStyle ) override;
-    virtual css::uno::Reference< ooo::vba::word::XFont > SAL_CALL getFont() override;
+    virtual cpo::uno::Reference< ooo::vba::word::XFont > SAL_CALL getFont() override;
     virtual void SAL_CALL TypeBackspace() override;
-    virtual css::uno::Reference< ooo::vba::word::XRange > SAL_CALL GoTo( const cpo::uno::Any& _what, const cpo::uno::Any& _which, const cpo::uno::Any& _count, const cpo::uno::Any& _name ) override;
+    virtual cpo::uno::Reference< ooo::vba::word::XRange > SAL_CALL GoTo( const cpo::uno::Any& _what, const cpo::uno::Any& _which, const cpo::uno::Any& _count, const cpo::uno::Any& _name ) override;
     virtual ::sal_Int32 SAL_CALL getLanguageID( ) override;
     virtual void SAL_CALL setLanguageID( ::sal_Int32 _languageid ) override;
     virtual cpo::uno::Any SAL_CALL Information( sal_Int32 _type ) override;
     virtual void SAL_CALL InsertBreak( const cpo::uno::Any& _breakType ) override;
     virtual cpo::uno::Any SAL_CALL Tables( const cpo::uno::Any& aIndex ) override;
     virtual cpo::uno::Any SAL_CALL Fields( const cpo::uno::Any& aIndex ) override;
-    virtual css::uno::Reference< ooo::vba::word::XHeaderFooter > SAL_CALL getHeaderFooter() override;
+    virtual cpo::uno::Reference< ooo::vba::word::XHeaderFooter > SAL_CALL getHeaderFooter() override;
     virtual cpo::uno::Any SAL_CALL ShapeRange( ) override;
     virtual ::sal_Int32 SAL_CALL getStart() override;
     virtual void SAL_CALL setStart( ::sal_Int32 _start ) override;
@@ -109,7 +109,7 @@ public:
     virtual void SAL_CALL Paste(  ) override;
     virtual void SAL_CALL Collapse( const cpo::uno::Any& Direction ) override;
     virtual void SAL_CALL WholeStory(  ) override;
-    virtual bool SAL_CALL InRange( const css::uno::Reference< ::ooo::vba::word::XRange >& Range ) override;
+    virtual bool SAL_CALL InRange( const cpo::uno::Reference< ::ooo::vba::word::XRange >& Range ) override;
     virtual void SAL_CALL SplitTable() override;
     virtual cpo::uno::Any SAL_CALL Paragraphs( const cpo::uno::Any& aIndex ) override;
 

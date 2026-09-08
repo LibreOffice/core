@@ -26,6 +26,7 @@
 #include <xmlscript/xmldlg_imexp.hxx>
 
 using namespace ::rtl;
+using namespace ::cpo;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::frame;
 

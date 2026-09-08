@@ -38,7 +38,7 @@ public:
                     ScChartLockGuard( ScDocument* pDoc );
                     ~ScChartLockGuard();
 
-    void            AlsoLockThisChart( const css::uno::Reference< css::frame::XModel >& xModel );
+    void            AlsoLockThisChart( const cpo::uno::Reference< css::frame::XModel >& xModel );
 
 private:
     std::vector< cpo::uno::WeakReference< css::frame::XModel > > maChartModels;
@@ -57,7 +57,7 @@ public:
 
     void            StartOrContinueLocking();
     void            StopLocking();
-    void            AlsoLockThisChart( const css::uno::Reference< css::frame::XModel >& xModel );
+    void            AlsoLockThisChart( const cpo::uno::Reference< css::frame::XModel >& xModel );
 
 private:
     ScDocument*                         mpDoc;

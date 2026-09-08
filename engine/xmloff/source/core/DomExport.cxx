@@ -24,7 +24,7 @@
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmlerror.hxx>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/xml/dom/XAttr.hpp>
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/XElement.hpp>
@@ -39,8 +39,8 @@
 #include <vector>
 
 
-using com::sun::star::uno::Reference;
-using com::sun::star::uno::UNO_QUERY_THROW;
+using cpo::uno::Reference;
+using cpo::uno::UNO_QUERY_THROW;
 using std::vector;
 
 using namespace com::sun::star::xml::dom;

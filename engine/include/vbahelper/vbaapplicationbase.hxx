@@ -21,7 +21,7 @@
 
 #include <memory>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <ooo/vba/XApplicationBase.hpp>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -43,14 +43,14 @@ class VBAHELPER_DLLPUBLIC VbaApplicationBase : public ApplicationBase_BASE
     std::unique_ptr<VbaApplicationBase_Impl> m_pImpl;
 
 protected:
-    VbaApplicationBase( const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
+    VbaApplicationBase( const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext );
     virtual ~VbaApplicationBase() override;
 
     /// @throws cpo::uno::RuntimeException
     virtual css::frame::XModel* getCurrentDocument() = 0;
 public:
     // XHelperInterface ( parent is itself )
-    virtual css::uno::Reference< ov::XHelperInterface > getParent(  ) override { return this; }
+    virtual cpo::uno::Reference< ov::XHelperInterface > getParent(  ) override { return this; }
 
     virtual bool getScreenUpdating() override;
     virtual void setScreenUpdating(bool bUpdate) override;

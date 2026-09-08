@@ -37,7 +37,7 @@ typedef ::cppu::WeakImplHelper<
     class MenuBarFactory : public MenuBarFactory_BASE
     {
         public:
-            MenuBarFactory( css::uno::Reference< cpo::uno::XComponentContext > xContext );
+            MenuBarFactory( cpo::uno::Reference< cpo::uno::XComponentContext > xContext );
             virtual ~MenuBarFactory() override;
 
             virtual OUString getImplementationName() override
@@ -57,16 +57,16 @@ typedef ::cppu::WeakImplHelper<
             }
 
             // XUIElementFactory
-            virtual css::uno::Reference< css::ui::XUIElement > createUIElement( const OUString& ResourceURL, const cpo::uno::Sequence< css::beans::PropertyValue >& Args ) override;
+            virtual cpo::uno::Reference< css::ui::XUIElement > createUIElement( const OUString& ResourceURL, const cpo::uno::Sequence< css::beans::PropertyValue >& Args ) override;
 
             static void CreateUIElement(const OUString& ResourceURL
                         ,const cpo::uno::Sequence< css::beans::PropertyValue >& Args
                         ,std::u16string_view ResourceType
-                        ,const css::uno::Reference< css::ui::XUIElement >& _xMenuBar
-                        ,const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext);
+                        ,const cpo::uno::Reference< css::ui::XUIElement >& _xMenuBar
+                        ,const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxContext);
 
         protected:
-            css::uno::Reference< cpo::uno::XComponentContext >     m_xContext;
+            cpo::uno::Reference< cpo::uno::XComponentContext >     m_xContext;
     };
 }
 

@@ -28,7 +28,8 @@
 #include <svtools/toolbarmenu.hxx>
 
 using namespace ::com::sun::star;
-using namespace css::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace css::lang;
 
 

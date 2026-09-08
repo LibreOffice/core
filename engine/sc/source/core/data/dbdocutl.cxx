@@ -29,6 +29,7 @@
 #include <stringutil.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 ScDatabaseDocUtil::StrData::StrData() :
     mbSimpleText(true), mnStrLength(0)

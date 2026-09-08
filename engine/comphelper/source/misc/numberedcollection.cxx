@@ -37,7 +37,7 @@ NumberedCollection::~NumberedCollection()
 }
 
 
-void NumberedCollection::setOwner(const css::uno::Reference< cpo::uno::XInterface >& xOwner)
+void NumberedCollection::setOwner(const cpo::uno::Reference< cpo::uno::XInterface >& xOwner)
 {
     // SYNCHRONIZED ->
     std::scoped_lock aLock(m_aMutex);
@@ -59,7 +59,7 @@ void NumberedCollection::setUntitledPrefix(const OUString& sPrefix)
 }
 
 
-::sal_Int32 NumberedCollection::leaseNumber(const css::uno::Reference< cpo::uno::XInterface >& xComponent)
+::sal_Int32 NumberedCollection::leaseNumber(const cpo::uno::Reference< cpo::uno::XInterface >& xComponent)
 {
     // SYNCHRONIZED ->
     std::scoped_lock aLock(m_aMutex);
@@ -110,7 +110,7 @@ void NumberedCollection::releaseNumber(::sal_Int32 nNumber)
          ++pComponent                          )
     {
         const TNumberedItem&                              rItem = pComponent->second;
-        const css::uno::Reference< cpo::uno::XInterface > xItem = rItem.xItem.get();
+        const cpo::uno::Reference< cpo::uno::XInterface > xItem = rItem.xItem.get();
 
         if ( ! xItem.is ())
         {
@@ -131,7 +131,7 @@ void NumberedCollection::releaseNumber(::sal_Int32 nNumber)
 }
 
 
-void NumberedCollection::releaseNumberForComponent(const css::uno::Reference< cpo::uno::XInterface >& xComponent)
+void NumberedCollection::releaseNumberForComponent(const cpo::uno::Reference< cpo::uno::XInterface >& xComponent)
 {
     // SYNCHRONIZED ->
     std::scoped_lock aLock(m_aMutex);

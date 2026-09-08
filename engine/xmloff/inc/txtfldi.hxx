@@ -25,7 +25,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/text/PageNumberType.hpp>
 #include <com/sun/star/util/DateTime.hpp>
@@ -70,7 +70,7 @@ public:
     /// parses attributes and calls ProcessAttribute
     virtual void startFastElement(
         sal_Int32 nElement,
-        const css::uno::Reference<css::xml::sax::XFastAttributeList> & xAttrList) override;
+        const cpo::uno::Reference<css::xml::sax::XFastAttributeList> & xAttrList) override;
 
     /// create XTextField and insert into document; calls PrepareTextField
     virtual void endFastElement(sal_Int32 nElement) override;
@@ -97,16 +97,16 @@ protected:
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
-        const css::uno::Reference< css::beans::XPropertySet> & xPropertySet) = 0;
+        const cpo::uno::Reference< css::beans::XPropertySet> & xPropertySet) = 0;
 
     /// create field from ServiceName
-    bool CreateField(css::uno::Reference< css::beans::XPropertySet> & xField,
+    bool CreateField(cpo::uno::Reference< css::beans::XPropertySet> & xField,
                          const OUString& sServiceName);
 
     /// force an update of the field's value
     /// call update on optional XUpdatable interface; (disable Fixed property)
     static void ForceUpdate(
-        const css::uno::Reference< css::beans::XPropertySet> & rPropertySet);
+        const cpo::uno::Reference< css::beans::XPropertySet> & rPropertySet);
 };
 
 class XMLSenderFieldImportContext : public XMLTextFieldImportContext
@@ -131,7 +131,7 @@ protected:
     /// start element
     virtual void startFastElement(
         sal_Int32 nElement,
-        const css::uno::Reference<css::xml::sax::XFastAttributeList> & xAttrList) override;
+        const cpo::uno::Reference<css::xml::sax::XFastAttributeList> & xAttrList) override;
 
     /// process attribute values
     virtual void ProcessAttribute( sal_Int32 nAttrToken,
@@ -139,7 +139,7 @@ protected:
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
-        const css::uno::Reference< css::beans::XPropertySet> & xPropertySet) override;
+        const cpo::uno::Reference< css::beans::XPropertySet> & xPropertySet) override;
 };
 
 /** inherit sender field because of fixed attribute in ProcessAttributes */
@@ -159,7 +159,7 @@ private:
     /// start element
     virtual void startFastElement(
         sal_Int32 nElement,
-        const css::uno::Reference<css::xml::sax::XFastAttributeList> & xAttrList) override;
+        const cpo::uno::Reference<css::xml::sax::XFastAttributeList> & xAttrList) override;
 
     /// process attribute values
     virtual void ProcessAttribute( sal_Int32 nAttrToken,
@@ -167,7 +167,7 @@ private:
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
-        const css::uno::Reference< css::beans::XPropertySet> & xPropertySet) override;
+        const cpo::uno::Reference< css::beans::XPropertySet> & xPropertySet) override;
 };
 
 class XMLPlaceholderFieldImportContext final : public XMLTextFieldImportContext
@@ -191,7 +191,7 @@ private:
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
-        const css::uno::Reference< css::beans::XPropertySet> & xPropertySet) override;
+        const cpo::uno::Reference< css::beans::XPropertySet> & xPropertySet) override;
 };
 
 class XMLTimeFieldImportContext : public XMLTextFieldImportContext
@@ -226,7 +226,7 @@ public:
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
-        const css::uno::Reference< css::beans::XPropertySet> & xPropertySet) override;
+        const cpo::uno::Reference< css::beans::XPropertySet> & xPropertySet) override;
 };
 
 /** import date fields (<text:date>);
@@ -267,7 +267,7 @@ public:
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
-        const css::uno::Reference< css::beans::XPropertySet> & xPropertySet) override;
+        const cpo::uno::Reference< css::beans::XPropertySet> & xPropertySet) override;
 };
 
 /** import page number fields (<text:page-number>) */
@@ -297,7 +297,7 @@ public:
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
-        const css::uno::Reference< css::beans::XPropertySet> & xPropertySet) override;
+        const cpo::uno::Reference< css::beans::XPropertySet> & xPropertySet) override;
 };
 
 /** superclass for database fields: handle database and table names */
@@ -334,12 +334,12 @@ public:
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
-        const css::uno::Reference< css::beans::XPropertySet> & xPropertySet) override;
+        const cpo::uno::Reference< css::beans::XPropertySet> & xPropertySet) override;
 
     /// handle database-location children
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 };
 
 /** import database name fields (<text:database-name>) */
@@ -380,7 +380,7 @@ public:
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
-        const css::uno::Reference< css::beans::XPropertySet> & xPropertySet) override;
+        const cpo::uno::Reference< css::beans::XPropertySet> & xPropertySet) override;
 };
 
 /** import database select fields (<text:database-select>) */
@@ -401,7 +401,7 @@ public:
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
-        const css::uno::Reference<
+        const cpo::uno::Reference<
         css::beans::XPropertySet> & xPropertySet) override;
 };
 
@@ -426,7 +426,7 @@ public:
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
-        const css::uno::Reference< css::beans::XPropertySet> & xPropertySet) override;
+        const cpo::uno::Reference< css::beans::XPropertySet> & xPropertySet) override;
 };
 
 /** import docinfo fields with only fixed attribute */
@@ -457,7 +457,7 @@ protected:
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
-        const css::uno::Reference< css::beans::XPropertySet> & xPropertySet) override;
+        const cpo::uno::Reference< css::beans::XPropertySet> & xPropertySet) override;
 
     static OUString MapTokenToServiceName(sal_Int32 nElementToken);
 };
@@ -488,7 +488,7 @@ private:
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
-        const css::uno::Reference< css::beans::XPropertySet> & xPropertySet) override;
+        const cpo::uno::Reference< css::beans::XPropertySet> & xPropertySet) override;
 };
 
 /** import revision field (<text:editing-cycles>) */
@@ -503,7 +503,7 @@ public:
 private:
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
-        const css::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
+        const cpo::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
 };
 
 /** import user docinfo field (<text:user-defined>) */
@@ -528,7 +528,7 @@ private:
     virtual void ProcessAttribute( sal_Int32 nAttrToken,
                                    std::string_view sAttrValue ) override;
     virtual void PrepareField(
-        const css::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
+        const cpo::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
 };
 
 /** import hidden paragraph fields (<text:hidden-paragraph>) */
@@ -552,7 +552,7 @@ private:
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
-        const css::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
+        const cpo::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
 };
 
 /** import conditional text fields (<text:conditional-text>) */
@@ -582,7 +582,7 @@ private:
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
-        const css::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
+        const cpo::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
 };
 
 /** import conditional text fields (<text:hidden-text>) */
@@ -611,7 +611,7 @@ private:
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
-        const css::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
+        const cpo::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
 };
 
 /** import file name fields (<text:file-name>) */
@@ -636,7 +636,7 @@ private:
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
-        const css::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
+        const cpo::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
 };
 
 /** import document template name fields (<text:template-name>) */
@@ -658,7 +658,7 @@ private:
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
-        const css::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
+        const cpo::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
 };
 
 /** import chapter fields (<text:chapter>) */
@@ -679,7 +679,7 @@ private:
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
-        const css::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
+        const cpo::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
 };
 
 /** import count fields (<text:[XXX]-count>) */
@@ -705,7 +705,7 @@ private:
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
-        const css::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
+        const cpo::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
 
     static OUString MapTokenToServiceName(sal_Int32 nElement);
 };
@@ -730,7 +730,7 @@ private:
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
-        const css::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
+        const cpo::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
 };
 
 /** import page variable fields (<text:get-page-variable>) */
@@ -751,7 +751,7 @@ private:
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
-        const css::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
+        const cpo::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
 };
 
 /** import macro fields (<text:execute-macro>) */
@@ -771,9 +771,9 @@ public:
 
 private:
     /// for <office:events> children
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
     /// process attribute values
     virtual void ProcessAttribute( sal_Int32 nAttrToken,
@@ -781,7 +781,7 @@ private:
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
-        const css::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
+        const cpo::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
 };
 
 /** import reference fields (<text:reference-get>) */
@@ -807,7 +807,7 @@ private:
     /// start element
     virtual void startFastElement(
         sal_Int32 nElement,
-        const css::uno::Reference<css::xml::sax::XFastAttributeList> & xAttrList) override;
+        const cpo::uno::Reference<css::xml::sax::XFastAttributeList> & xAttrList) override;
 
     /// process attribute values
     virtual void ProcessAttribute( sal_Int32 nAttrToken,
@@ -815,7 +815,7 @@ private:
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
-        const css::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
+        const cpo::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
 };
 
 /** import dde field declaration container (<text:dde-connection-decls>) */
@@ -825,9 +825,9 @@ public:
 
     XMLDdeFieldDeclsImportContext(SvXMLImport& rImport);
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 };
 
 /** import dde field declaration (<text:dde-connection-decl>) */
@@ -840,7 +840,7 @@ public:
     // create fieldmaster
     virtual void startFastElement(
         sal_Int32 nElement,
-        const css::uno::Reference<css::xml::sax::XFastAttributeList> & xAttrList) override;
+        const cpo::uno::Reference<css::xml::sax::XFastAttributeList> & xAttrList) override;
 };
 
 /** import dde fields (<text:dde-connection>) */
@@ -864,7 +864,7 @@ private:
 
     /// empty method
     virtual void PrepareField(
-        const css::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
+        const cpo::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
 };
 
 /** import sheet name fields (Calc) dde fields (<text:sheet-name>) */
@@ -883,7 +883,7 @@ private:
 
     /// no attributes -> empty method
     virtual void PrepareField(
-        const css::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
+        const cpo::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
 };
 
 /** import page|slide name fields (<text:page-name>) */
@@ -901,7 +901,7 @@ public:
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
-        const css::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
+        const cpo::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
 };
 
 /** import hyperlinks as URL fields (Calc, Impress, Draw) (<office:a>) */
@@ -925,7 +925,7 @@ private:
 
     /// no attributes -> empty method
     virtual void PrepareField(
-        const css::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
+        const cpo::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
 };
 
 /** import bibliography info fields (<text:bibliography-mark>) */
@@ -942,7 +942,7 @@ private:
     /// process attributes (fill aValues)
     virtual void startFastElement(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList) override;
 
     /// empty method; all attributes are handled in StartElement
     virtual void ProcessAttribute( sal_Int32 nAttrToken,
@@ -950,7 +950,7 @@ private:
 
     /// convert aValues into sequence and set property
     virtual void PrepareField(
-        const css::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
+        const cpo::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
 
     static OUString MapBibliographyFieldName(sal_Int32 nElement);
 };
@@ -969,9 +969,9 @@ class XMLAnnotationImportContext final : public XMLTextFieldImportContext
     OUString aDateUTC;
     OUString aResolved;
 
-    css::uno::Reference < css::beans::XPropertySet > mxField;
-    css::uno::Reference < css::text::XTextCursor >  mxCursor;
-    css::uno::Reference < css::text::XTextCursor >  mxOldCursor;
+    cpo::uno::Reference < css::beans::XPropertySet > mxField;
+    cpo::uno::Reference < css::text::XTextCursor >  mxCursor;
+    cpo::uno::Reference < css::text::XTextCursor >  mxOldCursor;
 
     sal_Int32 mnElement;
 
@@ -988,11 +988,11 @@ private:
 
     /// set properties
     virtual void PrepareField(
-        const css::uno::Reference< css::beans::XPropertySet > & xPropertySet) override;
+        const cpo::uno::Reference< css::beans::XPropertySet > & xPropertySet) override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
     virtual void endFastElement(sal_Int32 nElement) override;
 };
 
@@ -1016,7 +1016,7 @@ private:
 
     /// set properties
     virtual void PrepareField(
-        const css::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
+        const cpo::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
 };
 
 /** import measure fields (<text:measure>) */
@@ -1036,7 +1036,7 @@ private:
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
-        const css::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
+        const cpo::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
 };
 
 /** dropdown field (filter legacy) */
@@ -1056,8 +1056,8 @@ public:
     XMLDropDownFieldImportContext(SvXMLImport& rImport,
                                     XMLTextImportHelper& rHlp);
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
 private:
     /// process attribute values
@@ -1066,7 +1066,7 @@ private:
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
-        const css::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
+        const cpo::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
 };
 
 /** import header fields (<draw:header>) */
@@ -1084,7 +1084,7 @@ public:
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
-        const css::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
+        const cpo::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
 };
 
 /** import footer fields (<draw:footer>) */
@@ -1102,7 +1102,7 @@ public:
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
-        const css::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
+        const cpo::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
 };
 
 /** import footer fields (<draw:date-and-time>) */
@@ -1120,7 +1120,7 @@ public:
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
-        const css::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
+        const cpo::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

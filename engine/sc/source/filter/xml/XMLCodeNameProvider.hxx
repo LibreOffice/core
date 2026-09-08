@@ -47,7 +47,7 @@ public:
 
     virtual bool SAL_CALL hasElements() override;
 
-    static void set( const css::uno::Reference< css::container::XNameAccess>& xNameAccess, ScDocument *pDoc );
+    static void set( const cpo::uno::Reference< css::container::XNameAccess>& xNameAccess, ScDocument *pDoc );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

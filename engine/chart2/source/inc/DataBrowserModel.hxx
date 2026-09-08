@@ -21,7 +21,7 @@
 #include "DataSeries.hxx"
 #include "ChartType.hxx"
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <rtl/ref.hxx>
 
 #include <memory>
@@ -129,7 +129,7 @@ public:
     const tDataHeaderVector& getDataHeaders() const { return m_aHeaders;}
 
     tDataHeader getHeaderForSeries(
-        const css::uno::Reference< css::chart2::XDataSeries > &xSeries ) const;
+        const cpo::uno::Reference< css::chart2::XDataSeries > &xSeries ) const;
 
     rtl::Reference< ::chart::DataSeries >
         getDataSeriesByColumn( sal_Int32 nColumn ) const;

@@ -26,12 +26,12 @@ using namespace ::comphelper;
 
 using namespace connectivity::dbase;
 using namespace connectivity;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
 
 
-css::uno::Reference< css::beans::XPropertySet > ODbaseIndexColumns::createObject(const OUString& _rName)
+cpo::uno::Reference< css::beans::XPropertySet > ODbaseIndexColumns::createObject(const OUString& _rName)
 {
     const ODbaseTable* pTable = m_pIndex->getTable();
 
@@ -43,9 +43,9 @@ css::uno::Reference< css::beans::XPropertySet > ODbaseIndexColumns::createObject
         xCol = *aIter;
 
     if(!xCol.is())
-        return css::uno::Reference< css::beans::XPropertySet >();
+        return cpo::uno::Reference< css::beans::XPropertySet >();
 
-    css::uno::Reference< css::beans::XPropertySet > xRet = new sdbcx::OIndexColumn(true,_rName
+    cpo::uno::Reference< css::beans::XPropertySet > xRet = new sdbcx::OIndexColumn(true,_rName
                                                     ,getString(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME)))
                                                     ,OUString()
                                                     ,getINT32(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE)))
@@ -71,7 +71,7 @@ Reference< XPropertySet > ODbaseIndexColumns::createDescriptor()
     return new sdbcx::OIndexColumn(m_pIndex->getTable()->getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers());
 }
 
-css::uno::Reference< css::beans::XPropertySet > ODbaseIndexColumns::appendObject( const OUString& /*_rForName*/, const Reference< XPropertySet >& descriptor )
+cpo::uno::Reference< css::beans::XPropertySet > ODbaseIndexColumns::appendObject( const OUString& /*_rForName*/, const Reference< XPropertySet >& descriptor )
 {
     return cloneDescriptor( descriptor );
 }

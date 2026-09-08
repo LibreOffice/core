@@ -146,7 +146,7 @@ public:
     bool                        InsertURL(const INetURLObject& rURL, sal_uInt32 nInsertPos = SAL_MAX_UINT32);
     SAL_DLLPRIVATE bool         InsertFileOrDirURL(const INetURLObject& rFileOrDirURL, sal_uInt32 nInsertPos);
 
-    SAL_DLLPRIVATE bool         InsertTransferable(const css::uno::Reference< css::datatransfer::XTransferable >& rxTransferable, sal_uInt32 nInsertPos);
+    SAL_DLLPRIVATE bool         InsertTransferable(const cpo::uno::Reference< css::datatransfer::XTransferable >& rxTransferable, sal_uInt32 nInsertPos);
 
     SAL_DLLPRIVATE void         CopyToClipboard(const weld::Widget& rWidget, sal_uInt32 nPos);
 

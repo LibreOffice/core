@@ -38,7 +38,7 @@ public:
                              XMLTransformerOASISEventMap_Impl& rMap,
                              XMLTransformerOASISEventMap_Impl* pMap2    );
 
-    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void StartElement( const cpo::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

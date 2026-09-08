@@ -40,8 +40,8 @@
 #include <officecfg/Office/Common.hxx>
 
 using namespace css;
-using namespace com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::beans;
@@ -99,7 +99,7 @@ public:
 
 private:
     virtual void impl_setPopupMenu(std::unique_lock<std::mutex>& rGuard) override;
-    void fillPopupMenu(std::unique_lock<std::mutex>& rGuard, css::uno::Reference<css::awt::XPopupMenu > const & rPopupMenu );
+    void fillPopupMenu(std::unique_lock<std::mutex>& rGuard, cpo::uno::Reference<css::awt::XPopupMenu > const & rPopupMenu );
     void executeEntry( sal_Int32 nIndex );
     void executeEntryImpl(std::unique_lock<std::mutex>& rGuard, sal_Int32 nIndex);
 
@@ -126,9 +126,9 @@ RecentFilesMenuController::RecentFilesMenuController( const uno::Reference< cpo:
     }
 }
 
-void InsertItem(const css::uno::Reference<css::awt::XPopupMenu>& rPopupMenu,
+void InsertItem(const cpo::uno::Reference<css::awt::XPopupMenu>& rPopupMenu,
                 const OUString& rCommand,
-                const css::uno::Reference<css::frame::XFrame>& rFrame)
+                const cpo::uno::Reference<css::frame::XFrame>& rFrame)
 {
     sal_uInt16 nItemId = rPopupMenu->getItemCount() + 1;
 
@@ -138,7 +138,7 @@ void InsertItem(const css::uno::Reference<css::awt::XPopupMenu>& rPopupMenu,
         auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(rCommand, aModuleName);
         OUString aLabel(vcl::CommandInfoProvider::GetPopupLabelForCommand(aProperties));
         OUString aTooltip(vcl::CommandInfoProvider::GetTooltipForCommand(rCommand, aProperties, rFrame));
-        css::uno::Reference<css::graphic::XGraphic> xGraphic(vcl::CommandInfoProvider::GetXGraphicForCommand(rCommand, rFrame));
+        cpo::uno::Reference<css::graphic::XGraphic> xGraphic(vcl::CommandInfoProvider::GetXGraphicForCommand(rCommand, rFrame));
 
         rPopupMenu->insertItem(nItemId, aLabel, 0, -1);
         rPopupMenu->setItemImage(nItemId, xGraphic, false);

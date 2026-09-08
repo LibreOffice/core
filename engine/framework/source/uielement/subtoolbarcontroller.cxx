@@ -48,7 +48,7 @@ class SubToolBarController : public ToolBarBase
 {
     OUString m_aSubTbName;
     OUString m_aLastCommand;
-    css::uno::Reference< css::ui::XUIElement > m_xUIElement;
+    cpo::uno::Reference< css::ui::XUIElement > m_xUIElement;
     void disposeUIElement();
 public:
     explicit SubToolBarController( const rtl::Reference< cpo::uno::XComponentContext >& rxContext,
@@ -137,7 +137,7 @@ void SubToolBarController::disposeUIElement()
 {
     if ( m_xUIElement.is() )
     {
-        css::uno::Reference< css::lang::XComponent > xComponent( m_xUIElement, css::uno::UNO_QUERY );
+        cpo::uno::Reference< css::lang::XComponent > xComponent( m_xUIElement, cpo::uno::UNO_QUERY );
         xComponent->dispose();
     }
 }
@@ -247,18 +247,18 @@ std::unique_ptr<WeldToolbarPopup> SubToolBarController::weldPopupWindow()
 
     auto pPopup = std::make_unique<SubToolbarControl>(*this, m_pToolbar);
 
-    css::uno::Reference< css::frame::XFrame > xFrame ( getFrameInterface() );
+    cpo::uno::Reference< css::frame::XFrame > xFrame ( getFrameInterface() );
 
     // create element with factory
     static cpo::uno::WeakReference< css::ui::XUIElementFactoryManager > xWeakUIElementFactory;
-    css::uno::Reference< css::ui::XUIElementFactoryManager > xUIElementFactory = xWeakUIElementFactory;
+    cpo::uno::Reference< css::ui::XUIElementFactoryManager > xUIElementFactory = xWeakUIElementFactory;
     if ( !xUIElementFactory.is() )
     {
         xUIElementFactory = css::ui::theUIElementFactoryManager::get( m_xContext );
         xWeakUIElementFactory = xUIElementFactory;
     }
 
-    css::uno::Reference< css::awt::XWindow > xParent = new weld::TransportAsXWindow(pPopup->GetContainer());
+    cpo::uno::Reference< css::awt::XWindow > xParent = new weld::TransportAsXWindow(pPopup->GetContainer());
 
     auto aPropSeq( comphelper::InitPropertySequence( {
         { u"Frame"_ustr, cpo::uno::Any( xFrame ) },
@@ -287,12 +287,12 @@ VclPtr<vcl::Window> SubToolBarController::createVclPopupWindow(vcl::Window* /*pP
     ToolBoxItemId nId;
     if ( getToolboxId( nId, &pToolBox ) )
     {
-        css::uno::Reference< css::frame::XFrame > xFrame ( getFrameInterface() );
+        cpo::uno::Reference< css::frame::XFrame > xFrame ( getFrameInterface() );
 
         // create element with factory
         static cpo::uno::WeakReference< css::ui::XUIElementFactoryManager > xWeakUIElementFactory;
-        css::uno::Reference< css::ui::XUIElement > xUIElement;
-        css::uno::Reference< css::ui::XUIElementFactoryManager > xUIElementFactory = xWeakUIElementFactory;
+        cpo::uno::Reference< css::ui::XUIElement > xUIElement;
+        cpo::uno::Reference< css::ui::XUIElementFactoryManager > xUIElementFactory = xWeakUIElementFactory;
         if ( !xUIElementFactory.is() )
         {
             xUIElementFactory = css::ui::theUIElementFactoryManager::get( m_xContext );
@@ -317,11 +317,11 @@ VclPtr<vcl::Window> SubToolBarController::createVclPopupWindow(vcl::Window* /*pP
 
         if ( xUIElement.is() )
         {
-            css::uno::Reference< css::awt::XWindow > xSubToolBar( xUIElement->getRealInterface(), css::uno::UNO_QUERY );
+            cpo::uno::Reference< css::awt::XWindow > xSubToolBar( xUIElement->getRealInterface(), cpo::uno::UNO_QUERY );
             if ( xSubToolBar.is() )
             {
-                css::uno::Reference< css::awt::XDockableWindow > xDockWindow( xSubToolBar, css::uno::UNO_QUERY );
-                xDockWindow->addDockableWindowListener( css::uno::Reference< css::awt::XDockableWindowListener >(this) );
+                cpo::uno::Reference< css::awt::XDockableWindow > xDockWindow( xSubToolBar, cpo::uno::UNO_QUERY );
+                xDockWindow->addDockableWindowListener( cpo::uno::Reference< css::awt::XDockableWindowListener >(this) );
                 xDockWindow->enableDocking( true );
 
                 // keep reference to UIElement to avoid its destruction
@@ -415,7 +415,7 @@ void SubToolBarController::endPopupMode( const css::awt::EndPopupModeEvent& e )
     OUString aSubToolBarResName;
     if ( m_xUIElement.is() )
     {
-        css::uno::Reference< css::beans::XPropertySet > xPropSet( m_xUIElement, css::uno::UNO_QUERY );
+        cpo::uno::Reference< css::beans::XPropertySet > xPropSet( m_xUIElement, cpo::uno::UNO_QUERY );
         if ( xPropSet.is() )
         {
             try
@@ -435,8 +435,8 @@ void SubToolBarController::endPopupMode( const css::awt::EndPopupModeEvent& e )
     if( !e.bTearoff )
         return;
 
-    css::uno::Reference< css::ui::XUIElement > xUIElement;
-    css::uno::Reference< css::frame::XLayoutManager > xLayoutManager = getLayoutManager();
+    cpo::uno::Reference< css::ui::XUIElement > xUIElement;
+    cpo::uno::Reference< css::frame::XLayoutManager > xLayoutManager = getLayoutManager();
 
     if ( !xLayoutManager.is() )
         return;
@@ -446,8 +446,8 @@ void SubToolBarController::endPopupMode( const css::awt::EndPopupModeEvent& e )
     if ( !xUIElement.is() )
         return;
 
-    css::uno::Reference< css::awt::XWindow > xSubToolBar( xUIElement->getRealInterface(), css::uno::UNO_QUERY );
-    css::uno::Reference< css::beans::XPropertySet > xProp( xUIElement, css::uno::UNO_QUERY );
+    cpo::uno::Reference< css::awt::XWindow > xSubToolBar( xUIElement->getRealInterface(), cpo::uno::UNO_QUERY );
+    cpo::uno::Reference< css::beans::XPropertySet > xProp( xUIElement, cpo::uno::UNO_QUERY );
     if ( !(xSubToolBar.is() && xProp.is()) )
         return;
 

@@ -38,11 +38,11 @@ class SchXMLSeries2Context : public SvXMLImportContext
 {
 private:
     SchXMLImportHelper& mrImportHelper;
-    css::uno::Reference< css::chart2::XChartDocument > mxNewDoc;
+    cpo::uno::Reference< css::chart2::XChartDocument > mxNewDoc;
     ::std::vector< SchXMLAxis >& mrAxes;
     ::std::vector< DataRowPointStyle >& mrStyleVector;
     ::std::vector< RegressionStyle >& mrRegressionStyleVector;
-    css::uno::Reference< css::chart2::XDataSeries > m_xSeries;
+    cpo::uno::Reference< css::chart2::XDataSeries > m_xSeries;
     sal_Int32 mnSeriesIndex;
     sal_Int32 mnDataPointIndex;
     bool m_bStockHasVolume;
@@ -68,7 +68,7 @@ private:
 public:
     SchXMLSeries2Context( SchXMLImportHelper& rImpHelper,
                           SvXMLImport& rImport,
-                          const css::uno::Reference< css::chart2::XChartDocument > & xNewDoc,
+                          const cpo::uno::Reference< css::chart2::XChartDocument > & xNewDoc,
                           std::vector< SchXMLAxis >& rAxes,
                           ::std::vector< DataRowPointStyle >& rStyleVector,
                           ::std::vector< RegressionStyle >& rRegressionStyleVector,
@@ -81,16 +81,16 @@ public:
                           const css::awt::Size & rChartSize );
     virtual ~SchXMLSeries2Context() override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
     virtual void startFastElement(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
     virtual void endFastElement(sal_Int32 nElement) override;
 
     static void initSeriesPropertySets( SeriesDefaultsAndStyles& rSeriesDefaultsAndStyles
-        , const css::uno::Reference< css::frame::XModel >& xChartModel );
+        , const cpo::uno::Reference< css::frame::XModel >& xChartModel );
 
     static void setDefaultsToSeries( SeriesDefaultsAndStyles& rSeriesDefaultsAndStyles );
 

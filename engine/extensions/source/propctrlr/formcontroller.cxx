@@ -32,12 +32,12 @@ namespace pcr
 {
 
 
-    using ::com::sun::star::uno::Reference;
+    using ::cpo::uno::Reference;
     using ::cpo::uno::TypeClass_INTERFACE;
     using ::cpo::uno::TypeClass_STRING;
     using ::cpo::uno::XComponentContext;
     using ::com::sun::star::inspection::XObjectInspectorModel;
-    using ::com::sun::star::uno::UNO_QUERY_THROW;
+    using ::cpo::uno::UNO_QUERY_THROW;
     using ::cpo::uno::Sequence;
     using ::cpo::uno::XInterface;
     using ::com::sun::star::beans::XPropertySetInfo;
@@ -48,7 +48,7 @@ namespace pcr
     using ::cpo::uno::Type;
     using ::com::sun::star::util::VetoException;
     using ::com::sun::star::beans::PropertyVetoException;
-    using ::com::sun::star::uno::UNO_QUERY;
+    using ::cpo::uno::UNO_QUERY;
 
     namespace PropertyAttribute = css::beans::PropertyAttribute;
 

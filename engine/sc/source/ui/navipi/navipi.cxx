@@ -43,9 +43,10 @@
 
 #include <vcl/jsdialog/executor.hxx>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 //  maximum values for UI
 static SCCOL SCNAV_MAXCOL(const ScSheetLimits& rLimits) { return rLimits.GetMaxColCount(); }

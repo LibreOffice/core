@@ -74,7 +74,7 @@ using namespace ::svxform;
 using namespace ::comphelper;
 using namespace ::svt;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
@@ -293,7 +293,7 @@ DbGridColumn::~DbGridColumn()
     Clear();
 }
 
-void DbGridColumn::setModel(const css::uno::Reference< css::beans::XPropertySet >&  _xModel)
+void DbGridColumn::setModel(const cpo::uno::Reference< css::beans::XPropertySet >&  _xModel)
 {
     if ( m_pCell.is() )
         impl_toggleScriptManager_nothrow( false );
@@ -1149,7 +1149,7 @@ OUString DbTextField::GetFormatText(const Reference< XColumn >& _rxField, const 
     if (!_rxField.is())
         return OUString();
 
-    const css::uno::Reference<css::beans::XPropertySet> xPS(_rxField, UNO_QUERY);
+    const cpo::uno::Reference<css::beans::XPropertySet> xPS(_rxField, UNO_QUERY);
     FormattedColumnValue fmter( xFormatter, xPS );
 
     try
@@ -1276,7 +1276,7 @@ void DbFormattedField::Init( BrowserDataWin& rParent, const Reference< XRowSet >
     Any aSupplier( xUnoModel->getPropertyValue(FM_PROP_FORMATSSUPPLIER));
     if (aSupplier.hasValue())
     {
-        m_xSupplier.set(aSupplier, css::uno::UNO_QUERY);
+        m_xSupplier.set(aSupplier, cpo::uno::UNO_QUERY);
         if (m_xSupplier.is())
         {
             // if we take the supplier from the model, then also the key
@@ -2528,7 +2528,7 @@ CellControllerRef DbComboBox::CreateController() const
 
 OUString DbComboBox::GetFormatText(const Reference< css::sdb::XColumn >& _rxField, const Reference< XNumberFormatter >& xFormatter, const Color** /*ppColor*/)
 {
-    const css::uno::Reference<css::beans::XPropertySet> xPS(_rxField, UNO_QUERY);
+    const cpo::uno::Reference<css::beans::XPropertySet> xPS(_rxField, UNO_QUERY);
     ::dbtools::FormattedColumnValue fmter( xFormatter, xPS );
 
     return fmter.getFormattedValue();
@@ -3122,7 +3122,7 @@ void DbFilterField::Update()
 
         Reference< css::sdbcx::XColumnsSupplier >  xSupplyCols(xListCursor, UNO_QUERY);
         Reference< css::container::XIndexAccess >  xFields(xSupplyCols->getColumns(), UNO_QUERY);
-        xDataField.set(xFields->getByIndex(0), css::uno::UNO_QUERY);
+        xDataField.set(xFields->getByIndex(0), cpo::uno::UNO_QUERY);
         if (!xDataField.is())
             return;
     }

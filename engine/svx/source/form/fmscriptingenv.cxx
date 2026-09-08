@@ -49,14 +49,14 @@ namespace svxform
 {
 
 
-    using ::com::sun::star::uno::Reference;
+    using ::cpo::uno::Reference;
     using ::com::sun::star::script::XEventAttacherManager;
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::script::XScriptListener;
     using ::com::sun::star::script::ScriptEvent;
     using ::com::sun::star::lang::EventObject;
     using ::cpo::uno::Any;
-    using ::com::sun::star::uno::UNO_QUERY_THROW;
+    using ::cpo::uno::UNO_QUERY_THROW;
     using ::com::sun::star::lang::DisposedException;
     using ::cpo::uno::RuntimeException;
     using ::cpo::uno::Exception;

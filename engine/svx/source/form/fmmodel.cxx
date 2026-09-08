@@ -31,7 +31,7 @@
 
 #include <optional>
 
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::com::sun::star::container::XNameContainer;
 using namespace svxform;
 

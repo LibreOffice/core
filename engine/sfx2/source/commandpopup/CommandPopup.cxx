@@ -28,6 +28,7 @@
 #include <i18nlangtag/languagetag.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 MenuContentHandler::MenuContentHandler(uno::Reference<frame::XFrame> const& xFrame)
     : m_xContext(comphelper::getProcessComponentContext())
@@ -285,7 +286,7 @@ void CommandListBox::dispatchCommandAndClose(OUString const& rCommand)
 }
 
 void CommandPopupHandler::showPopup(weld::Window* pParent,
-                                    css::uno::Reference<css::frame::XFrame> const& xFrame)
+                                    cpo::uno::Reference<css::frame::XFrame> const& xFrame)
 {
     auto pCommandListBox = std::make_unique<CommandListBox>(pParent, xFrame);
     pCommandListBox->connect_closed(LINK(this, CommandPopupHandler, PopupModeEnd));

@@ -162,7 +162,7 @@ SymbolType VclBuilder::mapStockToSymbol(std::u16string_view sType)
 
 namespace
 {
-    void setupFromActionName(Button *pButton, VclBuilder::stringmap &rMap, const css::uno::Reference<css::frame::XFrame>& rFrame);
+    void setupFromActionName(Button *pButton, VclBuilder::stringmap &rMap, const cpo::uno::Reference<css::frame::XFrame>& rFrame);
 
 #if defined SAL_LOG_WARN
     bool isButtonType(WindowType eType)
@@ -312,7 +312,7 @@ std::unique_ptr<weld::Builder> Application::CreateInterimBuilder(vcl::Window* pP
     {
         // Notebookbar sub controls
         if (jsdialog::isInterimBuilderEnabledForNotebookbar(rUIFile))
-            return JSInstanceBuilder::CreateNotebookbarBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, css::uno::Reference<css::frame::XFrame>(), nKitWindowId);
+            return JSInstanceBuilder::CreateNotebookbarBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, cpo::uno::Reference<css::frame::XFrame>(), nKitWindowId);
         else if (jsdialog::isBuilderEnabledForFormulabar(rUIFile))
             return JSInstanceBuilder::CreateFormulabarBuilder(pParent, AllSettings::GetUIRootDir(),
                                                               rUIFile, nKitWindowId);
@@ -336,7 +336,7 @@ std::unique_ptr<weld::MessageDialog> Application::CreateMessageDialog(weld::Widg
         return ImplGetSVData()->mpDefInst->CreateMessageDialog(pParent, eMessageType, eButtonType, rPrimaryMessage);
 }
 
-weld::Window* Application::GetFrameWeld(const css::uno::Reference<css::awt::XWindow>& rWindow)
+weld::Window* Application::GetFrameWeld(const cpo::uno::Reference<css::awt::XWindow>& rWindow)
 {
     return ImplGetSVData()->mpDefInst->GetFrameWeld(rWindow);
 }
@@ -611,7 +611,7 @@ OUString BuilderBase::finalizeValue(const OString& rContext, const OString& rVal
 void BuilderBase::resetParserState() { m_pParserState.reset(); }
 
 VclBuilder::VclBuilder(vcl::Window* pParent, std::u16string_view sUIDir, const OUString& sUIFile,
-                       OUString sID, css::uno::Reference<css::frame::XFrame> xFrame,
+                       OUString sID, cpo::uno::Reference<css::frame::XFrame> xFrame,
                        bool bLegacy)
     : WidgetBuilder(sUIDir, sUIFile, bLegacy)
     , m_sID(std::move(sID))
@@ -1104,7 +1104,7 @@ namespace
         return extractBoolEntry(rMap, u"clickable"_ustr, false);
     }
 
-    void setupFromActionName(Button *pButton, VclBuilder::stringmap &rMap, const css::uno::Reference<css::frame::XFrame>& rFrame)
+    void setupFromActionName(Button *pButton, VclBuilder::stringmap &rMap, const cpo::uno::Reference<css::frame::XFrame>& rFrame)
     {
         if (!rFrame.is())
             return;

@@ -32,7 +32,7 @@ public:
                                XmlStyleFamily const pFamilies[]);
 
     virtual void
-    FillPropertySet(css::uno::Reference<css::beans::XPropertySet> const& rPropSet) override final;
+    FillPropertySet(cpo::uno::Reference<css::beans::XPropertySet> const& rPropSet) override final;
 
 private:
     std::unique_ptr<ContextID_Index_Pair[]> m_pContextIDs;

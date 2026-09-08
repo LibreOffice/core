@@ -41,7 +41,7 @@
 
 namespace svt
 {
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using ::com::sun::star::util::XNumberFormatter;
 using ::com::sun::star::util::NumberFormatter;
@@ -90,7 +90,7 @@ public:
     sal_Int32 getFormatKey() const { return m_nFormatKey; }
 
 protected:
-    StandardFormatNormalizer(css::uno::Reference<css::util::XNumberFormatter> const& i_formatter,
+    StandardFormatNormalizer(cpo::uno::Reference<css::util::XNumberFormatter> const& i_formatter,
                              ::sal_Int32 const i_numberFormatType);
 
 private:

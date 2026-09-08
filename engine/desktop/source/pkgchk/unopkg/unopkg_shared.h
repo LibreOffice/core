@@ -91,25 +91,25 @@ OUString makeAbsoluteFileUrl(
 
 
 
-css::uno::Reference<css::ucb::XCommandEnvironment> createCmdEnv(
-    css::uno::Reference<cpo::uno::XComponentContext> const & xContext,
+cpo::uno::Reference<css::ucb::XCommandEnvironment> createCmdEnv(
+    cpo::uno::Reference<cpo::uno::XComponentContext> const & xContext,
     bool option_force_overwrite,
     bool option_verbose,
     bool option_suppressLicense);
 
 void printf_packages(
     std::vector<
-    css::uno::Reference<css::deployment::XPackage> > const & allExtensions,
+    cpo::uno::Reference<css::deployment::XPackage> > const & allExtensions,
     std::vector<bool> const & vecUnaccepted,
-    css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
+    cpo::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
     sal_Int32 level = 0 );
 
 
 
 
-css::uno::Reference<cpo::uno::XComponentContext> getUNO(
+cpo::uno::Reference<cpo::uno::XComponentContext> getUNO(
     bool verbose, bool bGui, const OUString& sTempDir,
-    css::uno::Reference<cpo::uno::XComponentContext> & out_LocalComponentContext);
+    cpo::uno::Reference<cpo::uno::XComponentContext> & out_LocalComponentContext);
 
 }
 

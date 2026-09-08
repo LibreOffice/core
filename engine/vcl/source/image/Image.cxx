@@ -29,6 +29,7 @@
 #include <bitmap/BitmapColorizeFilter.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 Image::Image()
 {

@@ -42,7 +42,7 @@ public:
 
 protected:
     // ____ XPropertySet ____
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo() override;
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo() override;
     virtual void setPropertyValue(
         const OUString& aPropertyName,
         const cpo::uno::Any& aValue ) override;
@@ -50,16 +50,16 @@ protected:
         const OUString& PropertyName ) override;
     virtual void addPropertyChangeListener(
         const OUString& aPropertyName,
-        const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
+        const cpo::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
     virtual void removePropertyChangeListener(
         const OUString& aPropertyName,
-        const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
+        const cpo::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
     virtual void addVetoableChangeListener(
         const OUString& PropertyName,
-        const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+        const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
     virtual void removeVetoableChangeListener(
         const OUString& PropertyName,
-        const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+        const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
     // ____ XPropertyState ____
     virtual css::beans::PropertyState getPropertyState(
@@ -72,7 +72,7 @@ protected:
         const OUString& aPropertyName ) override;
 
 private:
-    css::uno::Reference< css::beans::XPropertySetInfo > m_xInfo;
+    cpo::uno::Reference< css::beans::XPropertySetInfo > m_xInfo;
     OUString         m_aColorPropName;
     ::Color          m_nColor;
     bool             m_bIsFillColor;

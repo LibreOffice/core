@@ -39,7 +39,7 @@ class ActionLockGuard final
         std::mutex m_mutex;
 
         /** @short  points to the object, which can be locked from outside. */
-        css::uno::Reference< css::document::XActionLockable > m_xActionLock;
+        cpo::uno::Reference< css::document::XActionLockable > m_xActionLock;
 
         /** @short  knows if a lock exists on the internal lock object
                     forced by this guard instance. */
@@ -79,7 +79,7 @@ class ActionLockGuard final
             @return true, if new resource could be set and locked.
                     false otherwise.
          */
-        bool setResource(const css::uno::Reference< css::document::XActionLockable >& xLock)
+        bool setResource(const cpo::uno::Reference< css::document::XActionLockable >& xLock)
         {
             std::unique_lock g(m_mutex);
 
@@ -109,7 +109,7 @@ class ActionLockGuard final
             // SAFE -> ..........................
             std::unique_lock aMutexLock(m_mutex);
 
-            css::uno::Reference< css::document::XActionLockable > xLock   = m_xActionLock;
+            cpo::uno::Reference< css::document::XActionLockable > xLock   = m_xActionLock;
             bool                                                  bLocked = m_bActionLocked;
 
             m_xActionLock.clear();

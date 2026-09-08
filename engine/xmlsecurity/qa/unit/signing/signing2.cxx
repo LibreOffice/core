@@ -32,6 +32,7 @@
 #include <libxml/xpathInternals.h>
 
 using namespace css;
+using namespace ::cpo;
 
 /// Testsuite for the document signing feature.
 class SigningTest2 : public UnoApiXmlTest

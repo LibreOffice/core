@@ -44,7 +44,7 @@ class DragSource:
       public IDropSource
 
 {
-    css::uno::Reference<cpo::uno::XComponentContext> m_xContext;
+    cpo::uno::Reference<cpo::uno::XComponentContext> m_xContext;
     HWND m_hAppWindow;
 
     // The mouse button that set off the drag and drop operation
@@ -57,8 +57,8 @@ class DragSource:
         sal_Int8 sourceActions,
         sal_Int32 cursor,
         sal_Int32 image,
-        const css::uno::Reference<css::datatransfer::XTransferable >& trans,
-        const css::uno::Reference<css::datatransfer::dnd::XDragSourceListener >& listener);
+        const cpo::uno::Reference<css::datatransfer::XTransferable >& trans,
+        const cpo::uno::Reference<css::datatransfer::dnd::XDragSourceListener >& listener);
 
 public:
     LONG m_RunningDndOperationCount;
@@ -68,7 +68,7 @@ public:
     // the thread ID of the thread which created the window
     DWORD m_threadIdWindow;
     // The context notifies the XDragSourceListener s
-    css::uno::Reference<css::datatransfer::dnd::XDragSourceContext> m_currentContext;
+    cpo::uno::Reference<css::datatransfer::dnd::XDragSourceContext> m_currentContext;
 
     // the wrapper for the Transferable ( startDrag)
     sal::systools::COMReference<IDataObject> m_spDataObject;
@@ -76,7 +76,7 @@ public:
     sal_Int8 m_sourceActions;
 
 public:
-    explicit DragSource(const css::uno::Reference<cpo::uno::XComponentContext>& rxContext);
+    explicit DragSource(const cpo::uno::Reference<cpo::uno::XComponentContext>& rxContext);
     virtual ~DragSource() override;
     DragSource(const DragSource&) = delete;
     DragSource &operator= ( const DragSource&) = delete;
@@ -91,8 +91,8 @@ public:
                                      sal_Int8 sourceActions,
                                      sal_Int32 cursor,
                                      sal_Int32 image,
-                                     const css::uno::Reference<css::datatransfer::XTransferable>& trans,
-                                     const css::uno::Reference<css::datatransfer::dnd::XDragSourceListener>& listener ) override;
+                                     const cpo::uno::Reference<css::datatransfer::XTransferable>& trans,
+                                     const cpo::uno::Reference<css::datatransfer::dnd::XDragSourceListener>& listener ) override;
 
     // XServiceInfo
     virtual OUString getImplementationName(  ) override;

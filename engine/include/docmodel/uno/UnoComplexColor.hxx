@@ -37,15 +37,15 @@ public:
     sal_Int32 getThemeColorType() override;
     OUString getRepresentation() override;
     css::util::Color
-    resolveColor(css::uno::Reference<css::util::XTheme> const& xTheme) override;
+    resolveColor(cpo::uno::Reference<css::util::XTheme> const& xTheme) override;
 };
 
 namespace model::color
 {
-DOCMODEL_DLLPUBLIC css::uno::Reference<css::util::XComplexColor>
+DOCMODEL_DLLPUBLIC cpo::uno::Reference<css::util::XComplexColor>
 createXComplexColor(model::ComplexColor const& rColor);
 DOCMODEL_DLLPUBLIC model::ComplexColor
-getFromXComplexColor(css::uno::Reference<css::util::XComplexColor> const& rxColor);
+getFromXComplexColor(cpo::uno::Reference<css::util::XComplexColor> const& rxColor);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

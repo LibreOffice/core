@@ -27,7 +27,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/script/vba/XVBAMacroResolver.hpp>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <filter/msfilter/msfilterdllapi.h>
@@ -64,7 +64,7 @@ MSFILTER_DLLPUBLIC bool executeMacro( SfxObjectShell* pShell, const OUString& sM
 /// @throws cpo::uno::RuntimeException
 MSFILTER_DLLPUBLIC css::awt::KeyEvent parseKeyEvent( std::u16string_view sKey );
 /// @throws cpo::uno::RuntimeException
-MSFILTER_DLLPUBLIC void applyShortCutKeyBinding ( const css::uno::Reference< css::frame::XModel >& rxDoc, const css::awt::KeyEvent& rKeyEvent, const OUString& sMacro );
+MSFILTER_DLLPUBLIC void applyShortCutKeyBinding ( const cpo::uno::Reference< css::frame::XModel >& rxDoc, const css::awt::KeyEvent& rKeyEvent, const OUString& sMacro );
 
 
 typedef ::cppu::WeakImplHelper<
@@ -103,7 +103,7 @@ public:
                         resolveScriptURLtoVBAMacro( const OUString& rScriptURL ) override;
 
 private:
-    css::uno::Reference< css::frame::XModel > mxModel;
+    cpo::uno::Reference< css::frame::XModel > mxModel;
     SfxObjectShell*     mpObjShell;
     OUString            maProjectName;
 };

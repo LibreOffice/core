@@ -42,7 +42,7 @@ namespace svxform
 {
 
 
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
 using namespace cpo::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
@@ -159,7 +159,7 @@ using namespace cpo::uno;
     }
 
 
-    void OFormComponentObserver::Remove( const css::uno::Reference< cpo::uno::XInterface >& _rxElement )
+    void OFormComponentObserver::Remove( const cpo::uno::Reference< cpo::uno::XInterface >& _rxElement )
     {
         if (IsLocked() || !m_pNavModel)
             return;

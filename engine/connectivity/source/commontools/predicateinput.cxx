@@ -42,13 +42,13 @@ namespace dbtools
     using ::com::sun::star::sdbc::XConnection;
     using ::com::sun::star::util::XNumberFormatsSupplier;
     using ::com::sun::star::util::NumberFormatter;
-    using ::com::sun::star::uno::UNO_QUERY_THROW;
+    using ::cpo::uno::UNO_QUERY_THROW;
     using ::cpo::uno::XComponentContext;
     using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::beans::XPropertySetInfo;
     using ::com::sun::star::lang::Locale;
     using ::cpo::uno::Exception;
-    using ::com::sun::star::uno::Reference;
+    using ::cpo::uno::Reference;
     using ::com::sun::star::i18n::LocaleData;
     using ::com::sun::star::i18n::LocaleDataItem;
     using ::cpo::uno::Any;

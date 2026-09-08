@@ -136,7 +136,7 @@ struct AxisProperties final
     sal_Int32                           m_nAxisType;//REALNUMBER, CATEGORY etc. type css::chart2::AxisType
     bool                                m_bComplexCategories;
     ExplicitCategoriesProvider* m_pExplicitCategoriesProvider;/*no ownership here*/
-    css::uno::Reference<css::chart2::data::XTextualDataSequence> m_xAxisTextProvider; //for categories or series names
+    cpo::uno::Reference<css::chart2::data::XTextualDataSequence> m_xAxisTextProvider; //for categories or series names
     //<- category axes
 
     bool                                m_bLimitSpaceForLabels;
@@ -151,7 +151,7 @@ struct AxisProperties final
 
     void init(bool bCartesian=false);//init from model data (m_xAxisModel)
 
-    void initAxisPositioning( const css::uno::Reference< css::beans::XPropertySet >& xAxisProp );
+    void initAxisPositioning( const cpo::uno::Reference< css::beans::XPropertySet >& xAxisProp );
 
     static TickmarkProperties getBiggestTickmarkProperties();
     TickmarkProperties makeTickmarkPropertiesForComplexCategories( sal_Int32 nTickLength, sal_Int32 nTickStartDistanceToAxis ) const;

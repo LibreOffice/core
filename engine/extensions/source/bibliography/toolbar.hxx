@@ -93,7 +93,7 @@ public:
 };
 
 
-typedef std::vector< css::uno::Reference< css::frame::XStatusListener> > BibToolBarListenerArr;
+typedef std::vector< cpo::uno::Reference< css::frame::XStatusListener> > BibToolBarListenerArr;
 
 class ComboBoxControl final : public InterimItemWindow
 {
@@ -142,7 +142,7 @@ class BibToolBar:   public ToolBox
     private:
 
         BibToolBarListenerArr   aListenerArr;
-        css::uno::Reference< css::frame::XController >  xController;
+        cpo::uno::Reference< css::frame::XController >  xController;
         Idle                    aIdle;
         VclPtr<ComboBoxControl> xSource;
         weld::ComboBox*         pLbSource;
@@ -191,7 +191,7 @@ class BibToolBar:   public ToolBox
 
         ToolBoxItemId  GetChangeSourceId() const { return nTBC_BT_CHANGESOURCE; }
 
-        void    SetXController(const css::uno::Reference< css::frame::XController > &);
+        void    SetXController(const cpo::uno::Reference< css::frame::XController > &);
 
         void    ClearSourceList();
         void    UpdateSourceList(bool bFlag);

@@ -26,7 +26,7 @@
 
 //  Defines
 
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 namespace framework
@@ -49,7 +49,7 @@ cpo::uno::Sequence< OUString > FooterMenuController::getSupportedServiceNames()
     return { SERVICENAME_POPUPMENUCONTROLLER };
 }
 
-FooterMenuController::FooterMenuController( const css::uno::Reference< cpo::uno::XComponentContext >& xContext ) :
+FooterMenuController::FooterMenuController( const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext ) :
     HeaderMenuController( xContext,true )
 {
 }

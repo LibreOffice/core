@@ -38,8 +38,8 @@ class ComplexToolbarController : public svt::ToolboxController
 
 {
     public:
-        ComplexToolbarController( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
-                                  const css::uno::Reference< css::frame::XFrame >& rFrame,
+        ComplexToolbarController( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+                                  const cpo::uno::Reference< css::frame::XFrame >& rFrame,
                                   ToolBox* pToolBar,
                                   ToolBoxItemId   nID,
                                   const OUString& aCommand );
@@ -60,7 +60,7 @@ class ComplexToolbarController : public svt::ToolboxController
 
         struct ExecuteInfo
         {
-            css::uno::Reference< css::frame::XDispatch >     xDispatch;
+            cpo::uno::Reference< css::frame::XDispatch >     xDispatch;
             css::util::URL                                   aTargetURL;
             cpo::uno::Sequence< css::beans::PropertyValue >  aArgs;
         };
@@ -68,15 +68,15 @@ class ComplexToolbarController : public svt::ToolboxController
         struct NotifyInfo
         {
             OUString                                                        aEventName;
-            css::uno::Reference< css::frame::XControlNotificationListener > xNotifyListener;
+            cpo::uno::Reference< css::frame::XControlNotificationListener > xNotifyListener;
             css::util::URL                                                  aSourceURL;
             cpo::uno::Sequence< css::beans::NamedValue >                    aInfoSeq;
         };
 
     protected:
-        css::uno::Reference< css::frame::XDispatch > getDispatchFromCommand( const OUString& aCommand ) const;
+        cpo::uno::Reference< css::frame::XDispatch > getDispatchFromCommand( const OUString& aCommand ) const;
         void addNotifyInfo( const OUString&                                                        aEventName,
-                            const css::uno::Reference< css::frame::XDispatch >& xDispatch,
+                            const cpo::uno::Reference< css::frame::XDispatch >& xDispatch,
                             const cpo::uno::Sequence< css::beans::NamedValue >& rInfo );
 
         virtual void executeControlCommand( const css::frame::ControlCommand& rControlCommand ) = 0;
@@ -90,7 +90,7 @@ class ComplexToolbarController : public svt::ToolboxController
         ToolBoxItemId                                        m_nID;
         bool                                                 m_bMadeInvisible;
         mutable css::util::URL                               m_aURL;
-        css::uno::Reference< css::util::XURLTransformer >    m_xURLTransformer;
+        cpo::uno::Reference< css::util::XURLTransformer >    m_xURLTransformer;
 };
 
 }

@@ -25,14 +25,14 @@ public:
     explicit PopupRequest();
     virtual ~PopupRequest() override;
 
-    css::uno::Reference<css::awt::XCallback> const& getCallback() const { return m_xCallback; }
+    cpo::uno::Reference<css::awt::XCallback> const& getCallback() const { return m_xCallback; }
 
     // ____ XRequestCallback ____
-    virtual void addCallback(const css::uno::Reference<::css::awt::XCallback>& xCallback,
+    virtual void addCallback(const cpo::uno::Reference<::css::awt::XCallback>& xCallback,
                              const cpo::uno::Any& aData) override;
 
 private:
-    css::uno::Reference<css::awt::XCallback> m_xCallback;
+    cpo::uno::Reference<css::awt::XCallback> m_xCallback;
 };
 
 } //  namespace chart

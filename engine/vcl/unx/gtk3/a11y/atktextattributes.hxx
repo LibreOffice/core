@@ -30,7 +30,7 @@ AtkAttributeSet* attribute_set_new_from_property_values(
     AtkText* text);
 
 AtkAttributeSet* attribute_set_new_from_extended_attributes(
-    const css::uno::Reference<css::accessibility::XAccessibleExtendedAttributes>&
+    const cpo::uno::Reference<css::accessibility::XAccessibleExtendedAttributes>&
         rExtendedAttributes);
 
 bool attribute_set_map_to_property_values(

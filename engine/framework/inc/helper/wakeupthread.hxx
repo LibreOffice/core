@@ -21,7 +21,7 @@
 
 #include <sal/config.h>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cppuhelper/weakref.hxx>
 
 namespace com::sun::star::util
@@ -34,10 +34,10 @@ namespace framework
 /// Provides a regular callback to @updatable roughly every 25ms while running
 class WakeUpThread final
 {
-    css::uno::Reference<css::util::XUpdatable> _updatable;
+    cpo::uno::Reference<css::util::XUpdatable> _updatable;
 
 public:
-    WakeUpThread(css::uno::Reference<css::util::XUpdatable> const& updatable);
+    WakeUpThread(cpo::uno::Reference<css::util::XUpdatable> const& updatable);
     void stop();
 
     static void joinThread();

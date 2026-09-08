@@ -748,12 +748,12 @@ sal_Int64 TempFileFastService::getLength()
 
 // XStream
 
-css::uno::Reference< css::io::XInputStream > TempFileFastService::getInputStream()
+cpo::uno::Reference< css::io::XInputStream > TempFileFastService::getInputStream()
 {
     return this;
 }
 
-css::uno::Reference< css::io::XOutputStream > TempFileFastService::getOutputStream()
+cpo::uno::Reference< css::io::XOutputStream > TempFileFastService::getOutputStream()
 {
     return this;
 }

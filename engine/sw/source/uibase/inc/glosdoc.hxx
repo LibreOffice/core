@@ -78,7 +78,7 @@ public:
         @param _rGroupName
             the name of the glossaries group
     */
-    css::uno::Reference< css::text::XAutoTextGroup >
+    cpo::uno::Reference< css::text::XAutoTextGroup >
                             GetAutoTextGroup(
                                 std::u16string_view _rGroupName
                             );
@@ -96,7 +96,7 @@ public:
         @param _rEntryName
             the name of the auto text entry
     */
-    css::uno::Reference< css::text::XAutoTextEntry >
+    cpo::uno::Reference< css::text::XAutoTextEntry >
                             GetAutoTextEntry(
                                 const OUString& _rCompleteGroupName,
                                 const OUString& _rGroupName,

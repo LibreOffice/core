@@ -47,14 +47,14 @@ public:
 
 protected:
     virtual LockFileEntry GetLockDataImpl(std::unique_lock<std::mutex>& rGuard) = 0;
-    virtual void WriteEntryToStream( std::unique_lock<std::mutex>& rGuard, const LockFileEntry& aEntry, const css::uno::Reference< css::io::XOutputStream >& xStream ) = 0;
-    virtual css::uno::Reference< css::io::XInputStream > OpenStream(std::unique_lock<std::mutex>& rGuard);
+    virtual void WriteEntryToStream( std::unique_lock<std::mutex>& rGuard, const LockFileEntry& aEntry, const cpo::uno::Reference< css::io::XOutputStream >& xStream ) = 0;
+    virtual cpo::uno::Reference< css::io::XInputStream > OpenStream(std::unique_lock<std::mutex>& rGuard);
 };
 
 /// Class implementing reading and writing LO lockfiles.
 class SVL_DLLPUBLIC DocumentLockFile final : public GenDocumentLockFile
 {
-    virtual void WriteEntryToStream( std::unique_lock<std::mutex>& rGuard, const LockFileEntry& aEntry, const css::uno::Reference< css::io::XOutputStream >& xStream ) override;
+    virtual void WriteEntryToStream( std::unique_lock<std::mutex>& rGuard, const LockFileEntry& aEntry, const cpo::uno::Reference< css::io::XOutputStream >& xStream ) override;
 
 public:
     DocumentLockFile( std::u16string_view aOrigURL );

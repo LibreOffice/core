@@ -19,7 +19,8 @@
 #include <string_view>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 class Chart2XShapeTest : public ChartTest
 {
@@ -66,9 +67,9 @@ private:
 
 namespace
 {
-OUString getShapeDump(css::uno::Reference<css::chart::XChartDocument> const& doc)
+OUString getShapeDump(cpo::uno::Reference<css::chart::XChartDocument> const& doc)
 {
-    return css::uno::Reference<css::qa::XDumper>(doc, css::uno::UNO_QUERY_THROW)
+    return cpo::uno::Reference<css::qa::XDumper>(doc, cpo::uno::UNO_QUERY_THROW)
         ->dump(u"shapes"_ustr);
 }
 

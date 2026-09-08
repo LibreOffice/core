@@ -54,19 +54,19 @@ public:
     MacrosTest();
     ~MacrosTest();
 
-    css::uno::Reference<css::lang::XComponent>
+    cpo::uno::Reference<css::lang::XComponent>
     loadFromDesktop(const OUString& rURL, const OUString& rDocService = OUString(),
                     const cpo::uno::Sequence<css::beans::PropertyValue>& rExtra_args
                     = cpo::uno::Sequence<css::beans::PropertyValue>());
 
     static cpo::uno::Any
-    dispatchCommand(const css::uno::Reference<css::lang::XComponent>& xComponent,
+    dispatchCommand(const cpo::uno::Reference<css::lang::XComponent>& xComponent,
                     const OUString& rCommand,
                     const cpo::uno::Sequence<css::beans::PropertyValue>& rPropertyValues);
 
     static cpo::uno::Any
-    queryDispatchStatus(css::uno::Reference<css::lang::XComponent> const& xComponent,
-                        css::uno::Reference<cpo::uno::XComponentContext> const& xContext,
+    queryDispatchStatus(cpo::uno::Reference<css::lang::XComponent> const& xComponent,
+                        cpo::uno::Reference<cpo::uno::XComponentContext> const& xContext,
                         OUString const& rURL);
 
     /// Opens rStreamName from rTempFile, assuming it's a ZIP storage.
@@ -76,15 +76,15 @@ public:
     // note: there is no tearDownX509
     void setUpX509(const test::Directories& rDirectories, const OUString& rTestName);
 
-    static bool IsValid(const css::uno::Reference<css::security::XCertificate>& cert,
-                        const css::uno::Reference<css::xml::crypto::XSecurityEnvironment>& env);
-    static css::uno::Reference<css::security::XCertificate> GetValidCertificate(
-        const cpo::uno::Sequence<css::uno::Reference<css::security::XCertificate>>& certs,
-        const css::uno::Reference<css::xml::crypto::XSecurityEnvironment>& env,
+    static bool IsValid(const cpo::uno::Reference<css::security::XCertificate>& cert,
+                        const cpo::uno::Reference<css::xml::crypto::XSecurityEnvironment>& env);
+    static cpo::uno::Reference<css::security::XCertificate> GetValidCertificate(
+        const cpo::uno::Sequence<cpo::uno::Reference<css::security::XCertificate>>& certs,
+        const cpo::uno::Reference<css::xml::crypto::XSecurityEnvironment>& env,
         const cpo::uno::Sequence<css::beans::PropertyValue>& rFilterData = {});
 
 protected:
-    css::uno::Reference<css::frame::XDesktop2> mxDesktop;
+    cpo::uno::Reference<css::frame::XDesktop2> mxDesktop;
 
 private:
     std::unique_ptr<BasicDLL> mpDll;

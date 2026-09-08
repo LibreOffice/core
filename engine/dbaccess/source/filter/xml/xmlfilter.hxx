@@ -45,7 +45,7 @@ private:
     mutable rtl::Reference < XMLPropertySetMapper >   m_xTableStylesPropertySetMapper;
     mutable rtl::Reference < XMLPropertySetMapper >   m_xColumnStylesPropertySetMapper;
     mutable rtl::Reference < XMLPropertySetMapper >   m_xCellStylesPropertySetMapper;
-    css::uno::Reference<css::beans::XPropertySet>     m_xDataSource;
+    cpo::uno::Reference<css::beans::XPropertySet>     m_xDataSource;
     bool                                            m_bNewFormat;
 
     /// @throws RuntimeException
@@ -65,12 +65,12 @@ public:
 protected:
     // SvXMLImport
     virtual SvXMLImportContext *CreateFastContext(sal_Int32 Element,
-        const ::css::uno::Reference< ::css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const ::cpo::uno::Reference< ::css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     virtual ~ODBFilter()  noexcept override;
 public:
 
-    explicit ODBFilter( const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext );
+    explicit ODBFilter( const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxContext );
 
     // XFilter
     virtual bool filter( const cpo::uno::Sequence< css::beans::PropertyValue >& rDescriptor ) override;
@@ -82,7 +82,7 @@ public:
     virtual void SetViewSettings(const cpo::uno::Sequence<css::beans::PropertyValue>& aViewProps) override;
     virtual void SetConfigurationSettings(const cpo::uno::Sequence<css::beans::PropertyValue>& aConfigProps) override;
 
-    const css::uno::Reference<css::beans::XPropertySet>& getDataSource() const { return m_xDataSource; }
+    const cpo::uno::Reference<css::beans::XPropertySet>& getDataSource() const { return m_xDataSource; }
 
     const TPropertyNameMap& getQuerySettings() const { return m_aQuerySettings;}
 

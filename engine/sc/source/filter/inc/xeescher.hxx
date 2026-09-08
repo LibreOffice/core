@@ -171,7 +171,7 @@ public:
 protected:
     /** Tries to get spreadsheet cell link and source range link from the passed shape. */
     void                ConvertSheetLinks(
-                            css::uno::Reference< css::drawing::XShape > const & xShape );
+                            cpo::uno::Reference< css::drawing::XShape > const & xShape );
 
     /** Returns the Excel token array of the cell link, or 0, if no link present. */
     const XclTokenArray* GetCellLinkTokArr() const { return mxCellLink.get(); }
@@ -216,7 +216,7 @@ public:
 class XclExpShapeObj : public XclObjAny, public XclMacroHelper
 {
 public:
-    explicit            XclExpShapeObj( XclExpObjectManager& rRoot, css::uno::Reference< css::drawing::XShape > const & xShape, ScDocument* pDoc );
+    explicit            XclExpShapeObj( XclExpObjectManager& rRoot, cpo::uno::Reference< css::drawing::XShape > const & xShape, ScDocument* pDoc );
     virtual             ~XclExpShapeObj() override;
 private:
     virtual void        WriteSubRecs( XclExpStream& rStrm ) override;
@@ -231,7 +231,7 @@ class XclExpOcxControlObj : public XclObj, public XclExpControlHelper
 public:
     explicit            XclExpOcxControlObj(
                             XclExpObjectManager& rObjMgr,
-                            css::uno::Reference< css::drawing::XShape > const & xShape,
+                            cpo::uno::Reference< css::drawing::XShape > const & xShape,
                             const tools::Rectangle* pChildAnchor,
                             OUString aClassName,
                             sal_uInt32 nStrmStart, sal_uInt32 nStrmSize );
@@ -253,7 +253,7 @@ class XclExpTbxControlObj : public XclObj, public XclMacroHelper
 public:
     explicit            XclExpTbxControlObj(
                             XclExpObjectManager& rObjMgr,
-                            css::uno::Reference< css::drawing::XShape > const & xShape,
+                            cpo::uno::Reference< css::drawing::XShape > const & xShape,
                             const tools::Rectangle* pChildAnchor );
 
     /** Sets the name of a macro attached to this control.
@@ -282,7 +282,7 @@ private:
     void WriteLabelFont(const sax_fastparser::FSHelperPtr& rTarget) const;
 
 private:
-    const css::uno::Reference< css::drawing::XShape > mxShape;
+    const cpo::uno::Reference< css::drawing::XShape > mxShape;
     ScfInt16Vec         maMultiSel;     /// Indexes of all selected entries in a multi selection.
     XclTbxEventType     meEventType;    /// Type of supported macro event.
     sal_Int32           mnHeight;       /// Height of the control.
@@ -323,7 +323,7 @@ class XclExpChartObj : public XclObj, protected XclExpRoot
 public:
     explicit            XclExpChartObj(
                             XclExpObjectManager& rObjMgr,
-                            css::uno::Reference< css::drawing::XShape > const & xShape,
+                            cpo::uno::Reference< css::drawing::XShape > const & xShape,
                             const tools::Rectangle* pChildAnchor,
                             ScDocument* pDoc );
     virtual             ~XclExpChartObj() override;
@@ -332,12 +332,12 @@ public:
     virtual void        Save( XclExpStream& rStrm ) override;
     virtual void        SaveXml( XclExpXmlStream& rStrm ) override;
 
-    css::uno::Reference<css::chart::XChartDocument> GetChartDoc() const;
+    cpo::uno::Reference<css::chart::XChartDocument> GetChartDoc() const;
 
 private:
     typedef std::shared_ptr< XclExpChart > XclExpChartRef;
     XclExpChartRef                                    mxChart;        /// The chart itself (BOF/EOF substream data).
-    css::uno::Reference< css::drawing::XShape >       mxShape;
+    cpo::uno::Reference< css::drawing::XShape >       mxShape;
     ScDocument*                                       mpDoc;
 };
 
@@ -436,7 +436,7 @@ public:
     rtl::Reference< XclExpRecordBase > ProcessDrawing( const SdrPage* pSdrPage, std::unique_ptr<XclExpImgData> pImgData = nullptr);
     /** Processes a collection of UNO shapes and returns the record block
         containing all related records (MSODRAWING, OBJ, TXO, charts, etc.). */
-    rtl::Reference< XclExpRecordBase > ProcessDrawing( const css::uno::Reference< css::drawing::XShapes >& rxShapes );
+    rtl::Reference< XclExpRecordBase > ProcessDrawing( const cpo::uno::Reference< css::drawing::XShapes >& rxShapes );
 
     /** Finalizes the object manager after conversion of all sheets. */
     void                EndDocument();

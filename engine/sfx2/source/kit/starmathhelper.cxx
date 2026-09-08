@@ -35,12 +35,12 @@ KitStarMathHelper::KitStarMathHelper(const SfxViewShell* pViewShell)
         {
             if (const auto& xEmbObj = pIPClient->GetObject())
             {
-                css::uno::Reference<css::lang::XServiceInfo> xComp(xEmbObj->getComponent(),
-                                                                   css::uno::UNO_QUERY);
+                cpo::uno::Reference<css::lang::XServiceInfo> xComp(xEmbObj->getComponent(),
+                                                                   cpo::uno::UNO_QUERY);
                 if (xComp && xComp->supportsService(u"com.sun.star.formula.FormulaProperties"_ustr))
                 {
-                    if (css::uno::Reference<css::frame::XModel> xModel{ xComp,
-                                                                        css::uno::UNO_QUERY })
+                    if (cpo::uno::Reference<css::frame::XModel> xModel{ xComp,
+                                                                        cpo::uno::UNO_QUERY })
                     {
                         if (auto xController = xModel->getCurrentController())
                         {
@@ -109,7 +109,7 @@ vcl::Window* KitStarMathHelper::GetGraphicWindow()
     {
         if (mxFrame)
         {
-            css::uno::Reference<css::awt::XWindow> xDockerWin = mxFrame->getContainerWindow();
+            cpo::uno::Reference<css::awt::XWindow> xDockerWin = mxFrame->getContainerWindow();
             mpGraphicWindow.reset(FindSmGraphicWindow(VCLUnoHelper::GetWindow(xDockerWin)));
         }
     }

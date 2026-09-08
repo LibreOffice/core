@@ -64,6 +64,7 @@
 #include <officecfg/Office/Common.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 // TODO:
 // 5. convert the MapModes that Widows can't handle

@@ -11,7 +11,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <sal/config.h>
 
 namespace com::sun::star::frame
@@ -25,8 +25,8 @@ class XSpreadsheet;
 
 namespace scriptinterop::detail
 {
-css::uno::Reference<XSpreadsheet>
-createSpreadsheet(css::uno::Reference<css::frame::XModel> const& model);
+cpo::uno::Reference<XSpreadsheet>
+createSpreadsheet(cpo::uno::Reference<css::frame::XModel> const& model);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

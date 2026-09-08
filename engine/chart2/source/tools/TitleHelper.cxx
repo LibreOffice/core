@@ -34,7 +34,8 @@ namespace chart
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
-using ::com::sun::star::uno::Reference;
+using namespace ::cpo;
+using ::cpo::uno::Reference;
 
 namespace {
 
@@ -330,7 +331,7 @@ OUString TitleHelper::getUnstackedStr(const OUString& rNewText)
 }
 
 void TitleHelper::setFormattedString( const rtl::Reference< Title >& xTitle,
-    const cpo::uno::Sequence< css::uno::Reference< css::chart2::XFormattedString > >& aNewFormattedTitle )
+    const cpo::uno::Sequence< cpo::uno::Reference< css::chart2::XFormattedString > >& aNewFormattedTitle )
 {
     if (!xTitle.is() || !aNewFormattedTitle.hasElements())
         return;

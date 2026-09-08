@@ -28,7 +28,7 @@ namespace connectivity::macab
 
     class MacabTable : public MacabTable_TYPEDEF
     {
-        css::uno::Reference< css::sdbc::XDatabaseMetaData > m_xMetaData;
+        cpo::uno::Reference< css::sdbc::XDatabaseMetaData > m_xMetaData;
         MacabConnection* m_pConnection;
 
     public:

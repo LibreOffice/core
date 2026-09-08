@@ -17,7 +17,7 @@
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <sal/types.h>
 #include <test/testdllapi.hxx>
@@ -37,8 +37,8 @@ namespace form
  * @param nWidth        The width of the shape.
  * @return  The created XControlShape.
  */
-css::uno::Reference<css::drawing::XControlShape> OOO_DLLPUBLIC_TEST createCommandButton(
-    const css::uno::Reference<css::lang::XComponent>& r_xComponent, const sal_Int32 nX,
+cpo::uno::Reference<css::drawing::XControlShape> OOO_DLLPUBLIC_TEST createCommandButton(
+    const cpo::uno::Reference<css::lang::XComponent>& r_xComponent, const sal_Int32 nX,
     const sal_Int32 nY, const sal_Int32 nHeight, const sal_Int32 nWidth);
 
 /** @brief Create a XControlShape
@@ -51,8 +51,8 @@ css::uno::Reference<css::drawing::XControlShape> OOO_DLLPUBLIC_TEST createComman
  * @param nWidth        The width of the shape.
  * @return  The created XControlShape.
  */
-css::uno::Reference<css::drawing::XControlShape> OOO_DLLPUBLIC_TEST createControlShape(
-    const css::uno::Reference<css::lang::XComponent>& r_xComponent, std::u16string_view r_aKind,
+cpo::uno::Reference<css::drawing::XControlShape> OOO_DLLPUBLIC_TEST createControlShape(
+    const cpo::uno::Reference<css::lang::XComponent>& r_xComponent, std::u16string_view r_aKind,
     const sal_Int32 nX, const sal_Int32 nY, const sal_Int32 nHeight, const sal_Int32 nWidth);
 
 } // namespace form

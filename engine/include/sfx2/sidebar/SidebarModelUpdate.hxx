@@ -16,7 +16,7 @@ namespace com::sun::star::frame
 {
 class XModel;
 }
-namespace com::sun::star::uno
+namespace cpo::uno
 {
 template <typename> class Reference;
 }
@@ -27,7 +27,7 @@ class UNLESS_MERGELIBS(SFX2_DLLPUBLIC) SAL_LOPLUGIN_ANNOTATE("crosscast") Sideba
 {
 public:
     virtual ~SidebarModelUpdate();
-    virtual void updateModel(css::uno::Reference<css::frame::XModel> xModel) = 0;
+    virtual void updateModel(cpo::uno::Reference<css::frame::XModel> xModel) = 0;
 };
 }
 

@@ -494,8 +494,8 @@ public:
     static void invalidateAllViewsKitSheetViewPositions(ScDocShell& rDocShell,
                                                         SCTAB nDefaultViewTab);
     void KitSendFormulabarUpdate(const EditView* pEditView, const OUString& rText, const ESelection& rSelection);
-    css::uno::Reference<css::drawing::XShapes> getSelectedXShapes();
-    SC_DLLPUBLIC static css::uno::Reference<css::datatransfer::XTransferable2> GetClipData(vcl::Window* pWin);
+    cpo::uno::Reference<css::drawing::XShapes> getSelectedXShapes();
+    SC_DLLPUBLIC static cpo::uno::Reference<css::datatransfer::XTransferable2> GetClipData(vcl::Window* pWin);
 
     void InitFormEditData(ScDocShell& rShell);
     void ClearFormEditData();

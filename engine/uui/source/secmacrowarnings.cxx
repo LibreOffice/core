@@ -37,6 +37,7 @@
 
 using namespace ::com::sun::star::security;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace comphelper;
 
 MacroWarning::MacroWarning(weld::Window* pParent, bool _bWithSignatures)
@@ -159,7 +160,7 @@ void MacroWarning::EnableOkBtn(bool bEnable)
     mxEnableBtn->set_tooltip_text(bEnable ? u""_ustr : Translate::get(STR_VERIFY_CERT, aResLocale));
 }
 
-void MacroWarning::SetStorage( const css::uno::Reference < css::embed::XStorage >& rxStore,
+void MacroWarning::SetStorage( const cpo::uno::Reference < css::embed::XStorage >& rxStore,
                                const OUString& aODFVersion,
                                const cpo::uno::Sequence< security::DocumentSignatureInformation >& rInfos )
 {
@@ -185,7 +186,7 @@ void MacroWarning::SetStorage( const css::uno::Reference < css::embed::XStorage 
     mxViewCertBtn->set_visible(false);
 }
 
-void MacroWarning::SetCertificate( const css::uno::Reference< css::security::XCertificate >& _rxCert )
+void MacroWarning::SetCertificate( const cpo::uno::Reference< css::security::XCertificate >& _rxCert )
 {
     mxCert = _rxCert;
     if( mxCert.is() )

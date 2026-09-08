@@ -36,7 +36,7 @@
 class OSXTransferable : public ::cppu::WeakImplHelper<css::datatransfer::XTransferable>
 {
 public:
-  explicit OSXTransferable(css::uno::Reference< css::datatransfer::XMimeContentTypeFactory> const & rXMimeCntFactory,
+  explicit OSXTransferable(cpo::uno::Reference< css::datatransfer::XMimeContentTypeFactory> const & rXMimeCntFactory,
                            DataFlavorMapperPtr_t pDataFlavorMapper,
                            NSPasteboard* pasteboard);
 
@@ -63,7 +63,7 @@ public:
 
 private:
   cpo::uno::Sequence< css::datatransfer::DataFlavor > mFlavorList;
-  css::uno::Reference< css::datatransfer::XMimeContentTypeFactory> mrXMimeCntFactory;
+  cpo::uno::Reference< css::datatransfer::XMimeContentTypeFactory> mrXMimeCntFactory;
   DataFlavorMapperPtr_t mDataFlavorMapper;
   NSPasteboard* mPasteboard;
 };

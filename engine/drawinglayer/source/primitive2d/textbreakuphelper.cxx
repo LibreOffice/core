@@ -201,11 +201,11 @@ namespace drawinglayer::primitive2d
                 return;
 
             Primitive2DContainer aTempResult;
-            static css::uno::Reference< css::i18n::XBreakIterator > xBreakIterator;
+            static cpo::uno::Reference< css::i18n::XBreakIterator > xBreakIterator;
 
             if(!xBreakIterator.is())
             {
-                const css::uno::Reference< cpo::uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
+                const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
                 xBreakIterator = css::i18n::BreakIterator::create(xContext);
             }
 

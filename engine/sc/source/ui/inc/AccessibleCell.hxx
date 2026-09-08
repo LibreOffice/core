@@ -50,7 +50,7 @@ class ScAccessibleCell final
 {
 public:
     static rtl::Reference<ScAccessibleCell> create(
-        const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
+        const cpo::uno::Reference<css::accessibility::XAccessible>& rxParent,
         ScTabViewShell* pViewShell,
         const ScAddress& rCellAddress,
         sal_Int64 nIndex,
@@ -59,7 +59,7 @@ public:
 
 private:
     ScAccessibleCell(
-        const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
+        const cpo::uno::Reference<css::accessibility::XAccessible>& rxParent,
         ScTabViewShell* pViewShell,
         const ScAddress& rCellAddress,
         sal_Int64 nIndex,
@@ -85,7 +85,7 @@ public:
 
     ///=====  XAccessibleComponent  ============================================
 
-    virtual css::uno::Reference< css::accessibility::XAccessible >
+    virtual cpo::uno::Reference< css::accessibility::XAccessible >
         SAL_CALL getAccessibleAtPoint( const css::awt::Point& rPoint ) override;
 
     virtual void SAL_CALL grabFocus(  ) override;
@@ -107,14 +107,14 @@ public:
 
     /// Return the specified child or NULL if index is invalid.
     /// override to calculate this on demand
-    virtual css::uno::Reference< css::accessibility::XAccessible> SAL_CALL
+    virtual cpo::uno::Reference< css::accessibility::XAccessible> SAL_CALL
         getAccessibleChild(sal_Int64 nIndex) override;
 
     /// Return the set of current states.
     virtual sal_Int64 SAL_CALL
         getAccessibleStateSet() override;
 
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
         css::accessibility::XAccessibleRelationSet> SAL_CALL
            getAccessibleRelationSet() override;
 

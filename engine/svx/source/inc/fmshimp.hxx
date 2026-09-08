@@ -57,7 +57,7 @@
 
 struct ImplSVEvent;
 
-typedef std::vector< css::uno::Reference< css::form::XForm > > FmFormArray;
+typedef std::vector< cpo::uno::Reference< css::form::XForm > > FmFormArray;
 
 // catch database exceptions if they occur
 #define DO_SAFE(statement) try { statement; } catch( const Exception& ) { TOOLS_WARN_EXCEPTION("svx", "unhandled exception (I tried to move a cursor (or something like that).)"); }
@@ -98,11 +98,11 @@ namespace weld {
 class FmXBoundFormFieldIterator final : public ::comphelper::IndexAccessIterator
 {
 public:
-    FmXBoundFormFieldIterator(const css::uno::Reference< cpo::uno::XInterface>& _rStartingPoint) : ::comphelper::IndexAccessIterator(_rStartingPoint) { }
+    FmXBoundFormFieldIterator(const cpo::uno::Reference< cpo::uno::XInterface>& _rStartingPoint) : ::comphelper::IndexAccessIterator(_rStartingPoint) { }
 
 private:
-    virtual bool ShouldHandleElement(const css::uno::Reference< cpo::uno::XInterface>& _rElement) override;
-    virtual bool ShouldStepInto(const css::uno::Reference< cpo::uno::XInterface>& _rContainer) const override;
+    virtual bool ShouldHandleElement(const cpo::uno::Reference< cpo::uno::XInterface>& _rElement) override;
+    virtual bool ShouldStepInto(const cpo::uno::Reference< cpo::uno::XInterface>& _rContainer) const override;
 };
 
 class FmFormPage;
@@ -197,18 +197,18 @@ class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) FmXFormShell final : private cppu::Bas
 
     // current form, controller
     // only available in the alive mode
-    css::uno::Reference< css::form::runtime::XFormController >    m_xActiveController;
-    css::uno::Reference< css::form::runtime::XFormController >    m_xNavigationController;
-    css::uno::Reference< css::form::XForm >                       m_xActiveForm;
+    cpo::uno::Reference< css::form::runtime::XFormController >    m_xActiveController;
+    cpo::uno::Reference< css::form::runtime::XFormController >    m_xNavigationController;
+    cpo::uno::Reference< css::form::XForm >                       m_xActiveForm;
 
     // current container of a page
     // only available in the design mode
-    css::uno::Reference< css::container::XIndexAccess>            m_xForms;
+    cpo::uno::Reference< css::container::XIndexAccess>            m_xForms;
 
     // the currently selected objects, as to be displayed in the property browser
     InterfaceBag                                                  m_aCurrentSelection;
     /// the currently selected form, or the form which all currently selected controls belong to, or <NULL/>
-    css::uno::Reference< css::form::XForm >                       m_xCurrentForm;
+    cpo::uno::Reference< css::form::XForm >                       m_xCurrentForm;
     /// the last selection/marking of controls only. Necessary to implement the "Control properties" slot
     InterfaceBag                                                  m_aLastKnownMarkedControls;
 
@@ -217,13 +217,13 @@ class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) FmXFormShell final : private cppu::Bas
         // but only get the number of the field corresponding to the number of the
         // column + <offset>, where the offset depends on the position of the GridControl
         // in the form. So here is a conversion.
-    css::uno::Reference< css::awt::XControlModel>                 m_xLastGridFound;
+    cpo::uno::Reference< css::awt::XControlModel>                 m_xLastGridFound;
      // the frame we live in
-    css::uno::Reference< css::frame::XFrame>                      m_xAttachedFrame;
+    cpo::uno::Reference< css::frame::XFrame>                      m_xAttachedFrame;
     // Administration of external form views (see the SID_FM_VIEW_AS_GRID-slot)
-    css::uno::Reference< css::frame::XController >                m_xExternalViewController;      // the controller for the external form view
-    css::uno::Reference< css::form::runtime::XFormController >    m_xExtViewTriggerController;    // the nav controller at the time the external display was triggered
-    css::uno::Reference< css::sdbc::XResultSet >                  m_xExternalDisplayedForm;       // the form which the external view is based on
+    cpo::uno::Reference< css::frame::XController >                m_xExternalViewController;      // the controller for the external form view
+    cpo::uno::Reference< css::form::runtime::XFormController >    m_xExtViewTriggerController;    // the nav controller at the time the external display was triggered
+    cpo::uno::Reference< css::sdbc::XResultSet >                  m_xExternalDisplayedForm;       // the form which the external view is based on
 
     mutable ::svxform::DocumentType
                     m_eDocumentType;        /// the type of document we're living in
@@ -246,9 +246,9 @@ class UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) FmXFormShell final : private cppu::Bas
 
 public:
     // attribute access
-    SAL_DLLPRIVATE const css::uno::Reference< css::frame::XFrame >&
+    SAL_DLLPRIVATE const cpo::uno::Reference< css::frame::XFrame >&
                 getHostFrame_Lock() const { return m_xAttachedFrame; }
-    SAL_DLLPRIVATE const css::uno::Reference< css::sdbc::XResultSet >&
+    SAL_DLLPRIVATE const cpo::uno::Reference< css::sdbc::XResultSet >&
                 getExternallyDisplayedForm_Lock() const { return m_xExternalDisplayedForm; }
 
     SAL_DLLPRIVATE bool
@@ -294,12 +294,12 @@ public:
     SAL_DLLPRIVATE virtual void invalidateFeatures/*_NoLock*/( const ::std::vector< sal_Int32 >& _rFeatures ) override;
 
     SAL_DLLPRIVATE void ExecuteTabOrderDialog_Lock( // execute SID_FM_TAB_DIALOG
-        const css::uno::Reference< css::awt::XTabControllerModel >& _rxForForm
+        const cpo::uno::Reference< css::awt::XTabControllerModel >& _rxForForm
     );
 
     // stuff
-    SAL_DLLPRIVATE void AddElement_Lock(const css::uno::Reference< cpo::uno::XInterface>& Element);
-    SAL_DLLPRIVATE void RemoveElement_Lock(const css::uno::Reference< cpo::uno::XInterface>& Element);
+    SAL_DLLPRIVATE void AddElement_Lock(const cpo::uno::Reference< cpo::uno::XInterface>& Element);
+    SAL_DLLPRIVATE void RemoveElement_Lock(const cpo::uno::Reference< cpo::uno::XInterface>& Element);
 
     /** updates m_xForms, to be either <NULL/>, if we're in alive mode, or our current page's forms collection,
         if in design mode
@@ -316,21 +316,21 @@ private:
     // form handling
     /// load or unload the forms on a page
     SAL_DLLPRIVATE void loadForms_Lock( FmFormPage* _pPage, const LoadFormsFlags _nBehaviour );
-    SAL_DLLPRIVATE void smartControlReset( const css::uno::Reference< css::container::XIndexAccess >& _rxModels );
+    SAL_DLLPRIVATE void smartControlReset( const cpo::uno::Reference< css::container::XIndexAccess >& _rxModels );
 
 
     SAL_DLLPRIVATE void startListening_Lock();
     SAL_DLLPRIVATE void stopListening_Lock();
 
-    SAL_DLLPRIVATE css::uno::Reference< css::awt::XControl >
+    SAL_DLLPRIVATE cpo::uno::Reference< css::awt::XControl >
         impl_getControl_Lock(
-            const css::uno::Reference< css::awt::XControlModel>& i_rxModel,
+            const cpo::uno::Reference< css::awt::XControlModel>& i_rxModel,
             const FmFormObj& i_rKnownFormObj
         );
 
     // collects in strNames the names of all forms
     SAL_DLLPRIVATE static void impl_collectFormSearchContexts_nothrow_Lock(
-        const css::uno::Reference< cpo::uno::XInterface>& _rxStartingPoint,
+        const cpo::uno::Reference< cpo::uno::XInterface>& _rxStartingPoint,
         std::u16string_view _rCurrentLevelPrefix,
         FmFormArray& _out_rForms,
         ::std::vector< OUString >& _out_rNames );
@@ -342,11 +342,11 @@ private:
 
 public:
     // method for non design mode (alive mode)
-    SAL_DLLPRIVATE void setActiveController_Lock(const css::uno::Reference< css::form::runtime::XFormController>& _xController, bool _bNoSaveOldContent = false);
-    SAL_DLLPRIVATE const css::uno::Reference< css::form::runtime::XFormController>& getActiveController_Lock() const { return m_xActiveController; }
-    SAL_DLLPRIVATE const css::uno::Reference< css::form::runtime::XFormController>& getActiveInternalController_Lock() const { return m_xActiveController == m_xExternalViewController ? m_xExtViewTriggerController : m_xActiveController; }
-    SAL_DLLPRIVATE const css::uno::Reference< css::form::XForm>& getActiveForm_Lock() const { return m_xActiveForm; }
-    SAL_DLLPRIVATE const css::uno::Reference< css::form::runtime::XFormController>& getNavController_Lock() const { return m_xNavigationController; }
+    SAL_DLLPRIVATE void setActiveController_Lock(const cpo::uno::Reference< css::form::runtime::XFormController>& _xController, bool _bNoSaveOldContent = false);
+    SAL_DLLPRIVATE const cpo::uno::Reference< css::form::runtime::XFormController>& getActiveController_Lock() const { return m_xActiveController; }
+    SAL_DLLPRIVATE const cpo::uno::Reference< css::form::runtime::XFormController>& getActiveInternalController_Lock() const { return m_xActiveController == m_xExternalViewController ? m_xExtViewTriggerController : m_xActiveController; }
+    SAL_DLLPRIVATE const cpo::uno::Reference< css::form::XForm>& getActiveForm_Lock() const { return m_xActiveForm; }
+    SAL_DLLPRIVATE const cpo::uno::Reference< css::form::runtime::XFormController>& getNavController_Lock() const { return m_xNavigationController; }
 
     SAL_DLLPRIVATE const svx::ControllerFeatures& getActiveControllerFeatures_Lock() const
         { return m_aActiveControllerFeatures; }
@@ -374,7 +374,7 @@ public:
     SAL_DLLPRIVATE bool setCurrentSelectionFromMark_Lock(const SdrMarkList& rMarkList);
 
     /// returns the currently selected form, or the form which all currently selected controls belong to, or <NULL/>
-    SAL_DLLPRIVATE const css::uno::Reference< css::form::XForm >&
+    SAL_DLLPRIVATE const cpo::uno::Reference< css::form::XForm >&
                 getCurrentForm_Lock() const { return m_xCurrentForm; }
     SAL_DLLPRIVATE void forgetCurrentForm_Lock();
     /// returns whether the last known marking contained only controls
@@ -382,7 +382,7 @@ public:
 
     /// determines whether the current selection consists of exactly the given object
     SAL_DLLPRIVATE bool isSolelySelected_Lock(
-                const css::uno::Reference< cpo::uno::XInterface >& _rxObject
+                const cpo::uno::Reference< cpo::uno::XInterface >& _rxObject
             );
 
     /// handles a MouseButtonDown event of the FmFormView
@@ -418,7 +418,7 @@ public:
     /// enables or disables all conversion slots in a menu, according to the current selection
     SAL_DLLPRIVATE void checkControlConversionSlotsForCurrentSelection_Lock(weld::Menu& rMenu);
     /// executes a control conversion slot for a given object
-    SAL_DLLPRIVATE bool executeControlConversionSlot_Lock(const css::uno::Reference< css::form::XFormComponent >& _rxObject, std::u16string_view rIdent);
+    SAL_DLLPRIVATE bool executeControlConversionSlot_Lock(const cpo::uno::Reference< css::form::XFormComponent >& _rxObject, std::u16string_view rIdent);
     /** executes a control conversion slot for the current selection
         @precond canConvertCurrentSelectionToControl( <arg>_nSlotId</arg> ) must return <TRUE/>
     */
@@ -444,9 +444,9 @@ public:
     SAL_DLLPRIVATE inline bool IsSelectionUpdatePending_Lock() const;
     SAL_DLLPRIVATE void        ForceUpdateSelection_Lock();
 
-    SAL_DLLPRIVATE css::uno::Reference< css::frame::XModel>          getContextDocument_Lock() const;
-    SAL_DLLPRIVATE css::uno::Reference< css::form::XForm>            getInternalForm_Lock(const css::uno::Reference< css::form::XForm>& _xForm) const;
-    SAL_DLLPRIVATE css::uno::Reference< css::sdbc::XResultSet>       getInternalForm_Lock(const css::uno::Reference< css::sdbc::XResultSet>& _xForm) const;
+    SAL_DLLPRIVATE cpo::uno::Reference< css::frame::XModel>          getContextDocument_Lock() const;
+    SAL_DLLPRIVATE cpo::uno::Reference< css::form::XForm>            getInternalForm_Lock(const cpo::uno::Reference< css::form::XForm>& _xForm) const;
+    SAL_DLLPRIVATE cpo::uno::Reference< css::sdbc::XResultSet>       getInternalForm_Lock(const cpo::uno::Reference< css::sdbc::XResultSet>& _xForm) const;
         // if the form belongs to the controller (extern) displaying a grid, the according internal form will
         // be displayed, _xForm else
 
@@ -479,7 +479,7 @@ private:
     SAL_DLLPRIVATE virtual void Notify( const cpo::uno::Sequence< OUString >& _rPropertyNames) override;
     SAL_DLLPRIVATE void implAdjustConfigCache_Lock();
 
-    SAL_DLLPRIVATE css::uno::Reference< css::awt::XControlContainer >
+    SAL_DLLPRIVATE cpo::uno::Reference< css::awt::XControlContainer >
             getControlContainerForView_Lock() const;
 
     /** finds and sets a default for m_xCurrentForm, if it is currently NULL
@@ -489,7 +489,7 @@ private:
     /** sets m_xCurrentForm to the provided form, and updates everything which
         depends on the current form
     */
-    SAL_DLLPRIVATE void impl_updateCurrentForm_Lock( const css::uno::Reference< css::form::XForm >& _rxNewCurForm );
+    SAL_DLLPRIVATE void impl_updateCurrentForm_Lock( const cpo::uno::Reference< css::form::XForm >& _rxNewCurForm );
 
     /** adds or removes ourself as XEventListener at m_xActiveController
     */
@@ -497,11 +497,11 @@ private:
 
     /** add an element
     */
-    SAL_DLLPRIVATE void    impl_AddElement_nothrow(const css::uno::Reference< cpo::uno::XInterface>& Element);
+    SAL_DLLPRIVATE void    impl_AddElement_nothrow(const cpo::uno::Reference< cpo::uno::XInterface>& Element);
 
     /** remove an element
     */
-    SAL_DLLPRIVATE void    impl_RemoveElement_nothrow_Lock(const css::uno::Reference< cpo::uno::XInterface>& Element);
+    SAL_DLLPRIVATE void    impl_RemoveElement_nothrow_Lock(const cpo::uno::Reference< cpo::uno::XInterface>& Element);
 
     SAL_DLLPRIVATE virtual void ImplCommit() override;
 
@@ -550,10 +550,10 @@ class SearchableControlIterator final : public ::comphelper::IndexAccessIterator
 public:
     const OUString& getCurrentValue() const { return m_sCurrentValue; }
 
-    SearchableControlIterator(css::uno::Reference< cpo::uno::XInterface> const & xStartingPoint);
+    SearchableControlIterator(cpo::uno::Reference< cpo::uno::XInterface> const & xStartingPoint);
 
-    virtual bool ShouldHandleElement(const css::uno::Reference< cpo::uno::XInterface>& rElement) override;
-    virtual bool ShouldStepInto(const css::uno::Reference< cpo::uno::XInterface>& xContainer) const override;
+    virtual bool ShouldHandleElement(const cpo::uno::Reference< cpo::uno::XInterface>& rElement) override;
+    virtual bool ShouldStepInto(const cpo::uno::Reference< cpo::uno::XInterface>& xContainer) const override;
     virtual void Invalidate() override { IndexAccessIterator::Invalidate(); m_sCurrentValue.clear(); }
 };
 

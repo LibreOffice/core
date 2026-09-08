@@ -35,7 +35,7 @@
 
 namespace dbaui
 {
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::util;
@@ -314,7 +314,7 @@ static void lcl_removeUnused(const ::comphelper::NamedValueCollection& _aOld,con
             _rDSInfo.remove(val.Name);
 }
 
-void DataSourceInfoConverter::convert(const Reference<XComponentContext> & xContext, const ::dbaccess::ODsnTypeCollection* _pCollection, std::u16string_view _sOldURLPrefix, std::u16string_view _sNewURLPrefix,const css::uno::Reference< css::beans::XPropertySet >& _xDatasource)
+void DataSourceInfoConverter::convert(const Reference<XComponentContext> & xContext, const ::dbaccess::ODsnTypeCollection* _pCollection, std::u16string_view _sOldURLPrefix, std::u16string_view _sNewURLPrefix,const cpo::uno::Reference< css::beans::XPropertySet >& _xDatasource)
 {
     if ( _pCollection->getPrefix(_sOldURLPrefix) == _pCollection->getPrefix(_sNewURLPrefix) )
         return ;

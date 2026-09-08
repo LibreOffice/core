@@ -68,7 +68,7 @@ class PresetHandler
     private:
 
         /** @short  can be used to create on needed uno resources. */
-        css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+        cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
         /** @short  knows the type of provided configuration.
 
@@ -90,11 +90,11 @@ class PresetHandler
                     Further is defined, that m_xWorkingStorageUser
                     is equals to m_xWorkingStorageShare then!
          */
-        css::uno::Reference< css::embed::XStorage > m_xWorkingStorageShare;
+        cpo::uno::Reference< css::embed::XStorage > m_xWorkingStorageShare;
 
         /** @short  global language-independent storage
          */
-        css::uno::Reference< css::embed::XStorage > m_xWorkingStorageNoLang;
+        cpo::uno::Reference< css::embed::XStorage > m_xWorkingStorageNoLang;
 
         /** @short  holds the folder storage of the user layer alive,
                     where the current configuration set exists.
@@ -106,7 +106,7 @@ class PresetHandler
                     Further is defined, that m_xWorkingStorageUser
                     is equals to m_xWorkingStorageShare then!
          */
-        css::uno::Reference< css::embed::XStorage > m_xWorkingStorageUser;
+        cpo::uno::Reference< css::embed::XStorage > m_xWorkingStorageUser;
 
         /** @short  knows the relative path from the root. */
         OUString m_sRelPathShare;
@@ -126,7 +126,7 @@ class PresetHandler
                     points to a uno service manager, which is used internally
                     to create own needed uno resources.
          */
-        PresetHandler(css::uno::Reference< cpo::uno::XComponentContext >  xContext);
+        PresetHandler(cpo::uno::Reference< cpo::uno::XComponentContext >  xContext);
 
         /** @short  copy ctor */
         PresetHandler(const PresetHandler& rCopy);
@@ -151,8 +151,8 @@ class PresetHandler
             @return css::embed::XStorage
                     which represent a root storage.
          */
-        css::uno::Reference< css::embed::XStorage > getOrCreateRootStorageShare();
-        css::uno::Reference< css::embed::XStorage > getOrCreateRootStorageUser();
+        cpo::uno::Reference< css::embed::XStorage > getOrCreateRootStorageShare();
+        cpo::uno::Reference< css::embed::XStorage > getOrCreateRootStorageUser();
 
         /** @short  provides access to the current working storages.
 
@@ -162,7 +162,7 @@ class PresetHandler
             @return css::embed::XStorage
                     which the current working storage.
          */
-        css::uno::Reference< css::embed::XStorage > getWorkingStorageUser() const;
+        cpo::uno::Reference< css::embed::XStorage > getWorkingStorageUser() const;
 
         /** @short  check if there is a parent storage well known for
                     the specified child storage and return it.
@@ -173,8 +173,8 @@ class PresetHandler
             @return css::embed::XStorage
                     A valid storage if a paranet exists. NULL otherwise.
          */
-        css::uno::Reference< css::embed::XStorage > getParentStorageShare();
-        css::uno::Reference< css::embed::XStorage > getParentStorageUser ();
+        cpo::uno::Reference< css::embed::XStorage > getParentStorageShare();
+        cpo::uno::Reference< css::embed::XStorage > getParentStorageUser ();
 
         /** @short  free all internal structures and let this handler
                     work on a new type of configuration sets.
@@ -213,7 +213,7 @@ class PresetHandler
         void connectToResource(      EConfigType                                  eConfigType   ,
                                std::u16string_view                             sResourceType ,
                                std::u16string_view                             sModule       ,
-                               const css::uno::Reference< css::embed::XStorage >& xDocumentRoot ,
+                               const cpo::uno::Reference< css::embed::XStorage >& xDocumentRoot ,
                                const LanguageTag&                                 rLanguageTag  = LanguageTag(LANGUAGE_USER_PRIV_NOTRANSLATE));
 
         /** @short  try to copy the specified preset from the share
@@ -252,7 +252,7 @@ class PresetHandler
 
             @return The opened preset stream ... or NULL if the preset does not exists.
          */
-        css::uno::Reference< css::io::XStream > openPreset(std::u16string_view sPreset);
+        cpo::uno::Reference< css::io::XStream > openPreset(std::u16string_view sPreset);
 
         /** @short  open the specified target as stream object
                     and return it.
@@ -268,7 +268,7 @@ class PresetHandler
             @return The opened target stream ... or NULL if the target does not exists
                     or couldn't be created as new one.
          */
-        css::uno::Reference< css::io::XStream > openTarget(
+        cpo::uno::Reference< css::io::XStream > openTarget(
                 std::u16string_view sTarget, sal_Int32 nMode);
 
         /** @short  do anything which is necessary to flush all changes
@@ -326,7 +326,7 @@ class PresetHandler
 
             @return An opened storage in case method was successful - null otherwise.
          */
-        static css::uno::Reference< css::embed::XStorage > impl_openPathIgnoringErrors(const OUString& sPath ,
+        static cpo::uno::Reference< css::embed::XStorage > impl_openPathIgnoringErrors(const OUString& sPath ,
                                                                                       sal_Int32        eMode ,
                                                                                       bool         bShare);
 
@@ -383,7 +383,7 @@ class PresetHandler
 
             @return An opened storage in case method was successful - null otherwise.
          */
-        static css::uno::Reference< css::embed::XStorage > impl_openLocalizedPathIgnoringErrors(OUString&      sPath         ,
+        static cpo::uno::Reference< css::embed::XStorage > impl_openLocalizedPathIgnoringErrors(OUString&      sPath         ,
                                                                                          sal_Int32             eMode         ,
                                                                                          bool              bShare        ,
                                                                                          OUString&             rLanguageTag  ,
@@ -397,7 +397,7 @@ class PresetHandler
             @return [vector< string >]
                     a list of folder names.
          */
-        static ::std::vector< OUString > impl_getSubFolderNames(const css::uno::Reference< css::embed::XStorage >& xFolder);
+        static ::std::vector< OUString > impl_getSubFolderNames(const cpo::uno::Reference< css::embed::XStorage >& xFolder);
 };
 
 } // namespace framework

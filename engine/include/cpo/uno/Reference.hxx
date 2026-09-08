@@ -23,7 +23,7 @@
 #include <cstddef>
 #include <ostream>
 
-#include "com/sun/star/uno/Reference.h"
+#include "cpo/uno/Reference.h"
 #include "cpo/uno/RuntimeException.hpp"
 #include "cpo/uno/XInterface.hpp"
 #include "cpo/uno/Any.hxx"
@@ -36,7 +36,7 @@ extern "C" CPPU_DLLPUBLIC rtl_uString * cppu_unsatisfied_iset_msg(
     typelib_TypeDescriptionReference * pType )
     SAL_THROW_EXTERN_C();
 
-namespace com::sun::star::uno
+namespace cpo::uno
 {
 
 
@@ -437,15 +437,15 @@ namespace cpo::uno
 {
 
 template< class interface_type >
-inline css::uno::Reference< interface_type > Any::query() const
+inline cpo::uno::Reference< interface_type > Any::query() const
 {
-    return css::uno::Reference< interface_type >(*this, css::uno::UNO_QUERY);
+    return cpo::uno::Reference< interface_type >(*this, cpo::uno::UNO_QUERY);
 }
 
 template< class interface_type >
-inline css::uno::Reference< interface_type > Any::queryThrow() const
+inline cpo::uno::Reference< interface_type > Any::queryThrow() const
 {
-    return css::uno::Reference< interface_type >(*this, css::uno::UNO_QUERY_THROW);
+    return cpo::uno::Reference< interface_type >(*this, cpo::uno::UNO_QUERY_THROW);
 }
 
 }
@@ -454,12 +454,12 @@ namespace std
 {
 
 /**
-  Make css::uno::Reference hashable by default for use in STL containers.
+  Make cpo::uno::Reference hashable by default for use in STL containers.
 */
 template<typename T>
-struct hash<::css::uno::Reference<T>>
+struct hash<::cpo::uno::Reference<T>>
 {
-    std::size_t operator()(::css::uno::Reference<T> const & s) const
+    std::size_t operator()(::cpo::uno::Reference<T> const & s) const
     { return size_t(s.get()); }
 };
 

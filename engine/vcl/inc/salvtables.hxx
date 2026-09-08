@@ -47,8 +47,8 @@ protected:
 
 public:
     SalInstanceBuilder(vcl::Window* pParent, std::u16string_view sUIRoot, const OUString& rUIFile,
-                       const css::uno::Reference<css::frame::XFrame>& rFrame
-                       = css::uno::Reference<css::frame::XFrame>());
+                       const cpo::uno::Reference<css::frame::XFrame>& rFrame
+                       = cpo::uno::Reference<css::frame::XFrame>());
 
     virtual std::unique_ptr<weld::MessageDialog> weld_message_dialog(const OUString& id) override;
 
@@ -171,7 +171,7 @@ public:
     virtual void clear() override;
     virtual void insert(int pos, const OUString& rId, const OUString& rStr,
                         const OUString* pIconName, VirtualDevice* pImageSurface,
-                        const css::uno::Reference<css::graphic::XGraphic>& rImage,
+                        const cpo::uno::Reference<css::graphic::XGraphic>& rImage,
                         TriState eCheckRadioFalse) override;
     virtual void insert_separator(int pos, const OUString& rId) override;
     virtual void set_item_help_id(const OUString& rIdent, const OUString& rHelpId) override;
@@ -366,8 +366,8 @@ public:
 
     virtual ScopedVclPtr<VirtualDevice> create_virtual_device() const override;
 
-    virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget> get_drop_target() override;
-    virtual css::uno::Reference<css::datatransfer::clipboard::XClipboard>
+    virtual cpo::uno::Reference<css::datatransfer::dnd::XDropTarget> get_drop_target() override;
+    virtual cpo::uno::Reference<css::datatransfer::clipboard::XClipboard>
     get_clipboard() const override;
 
     virtual void connect_get_property_tree(const Link<tools::JsonWriter&, void>& rLink) override;
@@ -428,7 +428,7 @@ public:
     virtual void connect_container_focus_changed(const Link<Container&, void>& rLink) override;
     virtual void child_grab_focus() override;
     virtual void move(weld::Widget* pWidget, weld::Container* pNewParent) override;
-    virtual css::uno::Reference<css::awt::XWindow> CreateChildFrame() override;
+    virtual cpo::uno::Reference<css::awt::XWindow> CreateChildFrame() override;
 };
 
 class SalInstanceWindow : public SalInstanceContainer, public virtual weld::Window
@@ -451,7 +451,7 @@ public:
 
     void help();
 
-    virtual css::uno::Reference<css::awt::XWindow> GetXWindow() override;
+    virtual cpo::uno::Reference<css::awt::XWindow> GetXWindow() override;
 
     virtual void resize_to_request() override;
 
@@ -1072,7 +1072,7 @@ public:
 
     virtual void set_image(VirtualDevice* pDevice) override;
 
-    virtual void set_image(const css::uno::Reference<css::graphic::XGraphic>& rImage) override;
+    virtual void set_image(const cpo::uno::Reference<css::graphic::XGraphic>& rImage) override;
 
     virtual void set_from_icon_name(const OUString& rIconName) override;
 
@@ -1376,12 +1376,12 @@ public:
     virtual void set_item_image_mirrored(const OUString& rIdent, bool bMirrored) override;
 
     virtual void set_item_image(const OUString& rIdent,
-                                const css::uno::Reference<css::graphic::XGraphic>& rIcon) override;
+                                const cpo::uno::Reference<css::graphic::XGraphic>& rIcon) override;
 
     virtual void set_item_image(const OUString& rIdent, VirtualDevice* pDevice) override;
 
     virtual void set_item_image(int nIndex,
-                                const css::uno::Reference<css::graphic::XGraphic>& rIcon) override;
+                                const cpo::uno::Reference<css::graphic::XGraphic>& rIcon) override;
 
     virtual void set_item_tooltip_text(int nIndex, const OUString& rTip) override;
 
@@ -1705,7 +1705,7 @@ public:
 
     virtual void set_image(int pos, const OUString& rImage, int col = -1) override;
 
-    virtual void set_image(int pos, const css::uno::Reference<css::graphic::XGraphic>& rImage,
+    virtual void set_image(int pos, const cpo::uno::Reference<css::graphic::XGraphic>& rImage,
                            int col = -1) override;
 
     virtual void set_image(int pos, VirtualDevice& rImage, int col = -1) override;
@@ -1714,7 +1714,7 @@ public:
                            int col = -1) override;
 
     virtual void set_image(const weld::TreeIter& rIter,
-                           const css::uno::Reference<css::graphic::XGraphic>& rImage,
+                           const cpo::uno::Reference<css::graphic::XGraphic>& rImage,
                            int col = -1) override;
 
     virtual void set_image(const weld::TreeIter& rIter, VirtualDevice& rImage,
@@ -2010,7 +2010,7 @@ public:
 
     virtual void set_image(VirtualDevice* pDevice) override;
 
-    virtual void set_image(const css::uno::Reference<css::graphic::XGraphic>& rImage) override;
+    virtual void set_image(const cpo::uno::Reference<css::graphic::XGraphic>& rImage) override;
 
     virtual void set_from_icon_name(const OUString& rIconName) override;
 
@@ -2152,7 +2152,7 @@ public:
 
     virtual void set_image(VirtualDevice* pDevice) override;
 
-    virtual void set_image(const css::uno::Reference<css::graphic::XGraphic>& rImage) override;
+    virtual void set_image(const cpo::uno::Reference<css::graphic::XGraphic>& rImage) override;
 };
 
 class SalInstanceScrolledWindow : public SalInstanceContainer, public virtual weld::ScrolledWindow

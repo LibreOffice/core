@@ -25,6 +25,7 @@
 #include <com/sun/star/util/XBinaryDataContainer.hpp>
 
 using namespace css;
+using namespace ::cpo;
 
 namespace
 {

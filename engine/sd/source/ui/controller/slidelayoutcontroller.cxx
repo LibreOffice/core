@@ -40,7 +40,7 @@
 #include "slidelayoutcontroller.hxx"
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::drawing;
@@ -232,7 +232,7 @@ LayoutToolbarMenu::LayoutToolbarMenu(SlideLayoutController* pControl, weld::Widg
     else
         sSlotStr = u".uno:Undo"_ustr;
 
-    css::uno::Reference<css::graphic::XGraphic> xSlotImage = vcl::CommandInfoProvider::GetXGraphicForCommand(sSlotStr, m_xFrame);
+    cpo::uno::Reference<css::graphic::XGraphic> xSlotImage = vcl::CommandInfoProvider::GetXGraphicForCommand(sSlotStr, m_xFrame);
 
     OUString sSlotTitle;
     if( bInsertPage )

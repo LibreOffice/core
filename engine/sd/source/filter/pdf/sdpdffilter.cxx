@@ -56,6 +56,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 SdPdfFilter::SdPdfFilter(SfxMedium& rMedium, sd::DrawDocShell& rDocShell)
     : SdFilter(rMedium, rDocShell)
@@ -465,7 +466,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestFODGExportPDF(SvStream& rStream)
         xFODGFilter->filter(aDescriptor);
     }
 
-    css::uno::Reference<css::util::XCloseable> xClose(xModel, css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::util::XCloseable> xClose(xModel, cpo::uno::UNO_QUERY);
     xClose->close(false);
 
     return ret;

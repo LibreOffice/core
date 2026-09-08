@@ -36,14 +36,14 @@ namespace ucb::ucp::ext
     {
     public:
         ResultSet(
-            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
             rtl::Reference< Content > i_xContent,
             const css::ucb::OpenCommandArgument2& i_rCommand,
-            const css::uno::Reference< css::ucb::XCommandEnvironment >& i_rEnv
+            const cpo::uno::Reference< css::ucb::XCommandEnvironment >& i_rEnv
         );
 
     private:
-        css::uno::Reference< css::ucb::XCommandEnvironment >  m_xEnvironment;
+        cpo::uno::Reference< css::ucb::XCommandEnvironment >  m_xEnvironment;
         ::rtl::Reference< Content >                           m_xContent;
 
     private:

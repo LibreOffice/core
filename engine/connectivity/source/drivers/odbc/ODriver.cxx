@@ -31,13 +31,13 @@
 #include <utility>
 
 using namespace connectivity::odbc;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 
-ODBCDriver::ODBCDriver(css::uno::Reference< cpo::uno::XComponentContext > _xContext)
+ODBCDriver::ODBCDriver(cpo::uno::Reference< cpo::uno::XComponentContext > _xContext)
     :ODriver_BASE(m_aMutex)
     ,m_xContext(std::move(_xContext))
 {
@@ -325,7 +325,7 @@ bool LoadLibrary_ODBC3(OUString &_rPath)
 class ORealOdbcDriver : public connectivity::odbc::ODBCDriver, public connectivity::odbc::Functions
 {
 public:
-    explicit ORealOdbcDriver(const css::uno::Reference<cpo::uno::XComponentContext>& _rxContext)
+    explicit ORealOdbcDriver(const cpo::uno::Reference<cpo::uno::XComponentContext>& _rxContext)
         : ODBCDriver(_rxContext)
     {
     }

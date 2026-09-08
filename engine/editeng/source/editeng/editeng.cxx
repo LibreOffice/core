@@ -67,7 +67,8 @@
 #endif
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::linguistic2;
 
 
@@ -1805,7 +1806,7 @@ bool EditEngine::IsSimpleCharInput( const KeyEvent& rKeyEvent )
     return ImpEditEngine::IsSimpleCharInput(rKeyEvent);
 }
 
-bool EditEngine::HasValidData( const css::uno::Reference< css::datatransfer::XTransferable >& rTransferable )
+bool EditEngine::HasValidData( const cpo::uno::Reference< css::datatransfer::XTransferable >& rTransferable )
 {
     bool bValidData = false;
 

@@ -27,7 +27,8 @@
 #include <string_view>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 #if defined(X86)
 constexpr double INT_EPS = 2.1;

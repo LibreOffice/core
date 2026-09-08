@@ -28,7 +28,7 @@ ElementCollector::ElementCollector(
     sal_Int32 nBufferId,
     css::xml::crypto::sax::ElementMarkPriority nPriority,
     bool bToModify,
-    css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener > xReferenceResolvedListener)
+    cpo::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener > xReferenceResolvedListener)
     :ElementMark(css::xml::crypto::sax::ConstOfSecurityId::UNDEFINEDSECURITYID, nBufferId),
      m_nPriority(nPriority),
      m_bToModify(bToModify),
@@ -87,7 +87,7 @@ void ElementCollector::notifyListener()
 }
 
 void ElementCollector::setReferenceResolvedListener(
-    const css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener >& xReferenceResolvedListener)
+    const cpo::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener >& xReferenceResolvedListener)
 /****** ElementCollector/setReferenceResolvedListener *************************
  *
  *   NAME

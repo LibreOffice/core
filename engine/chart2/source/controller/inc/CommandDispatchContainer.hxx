@@ -71,7 +71,7 @@ public:
     // handled by other dispatchers.  (Chart is currently the controller
     // itself)
     explicit CommandDispatchContainer(
-        const css::uno::Reference< cpo::uno::XComponentContext > & xContext );
+        const cpo::uno::Reference< cpo::uno::XComponentContext > & xContext );
     ~CommandDispatchContainer();
 
     void setModel(
@@ -91,17 +91,17 @@ public:
 
         <p>If all this fails, return an empty dispatch.</p>
      */
-    css::uno::Reference< css::frame::XDispatch > getDispatchForURL(
+    cpo::uno::Reference< css::frame::XDispatch > getDispatchForURL(
                 const css::util::URL & rURL );
 
-    cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > getDispatchesForURLs(
+    cpo::uno::Sequence< cpo::uno::Reference< css::frame::XDispatch > > getDispatchesForURLs(
                 const cpo::uno::Sequence< css::frame::DispatchDescriptor > & aDescriptors );
 
     void DisposeAndClear();
 
-    static css::uno::Reference< css::frame::XDispatch >
+    static cpo::uno::Reference< css::frame::XDispatch >
         getContainerDispatchForURL(
-            const css::uno::Reference< css::frame::XController > & xChartController,
+            const cpo::uno::Reference< css::frame::XController > & xChartController,
             const css::util::URL & rURL );
 
     ControllerCommandDispatch* getChartDispatcher() const { return m_xChartDispatcher.get(); }
@@ -114,16 +114,16 @@ public:
 private:
     typedef
         std::map< OUString,
-            css::uno::Reference< css::frame::XDispatch > >
+            cpo::uno::Reference< css::frame::XDispatch > >
         tDispatchMap;
 
     typedef
-        std::vector< css::uno::Reference< css::frame::XDispatch > > tDisposeVector;
+        std::vector< cpo::uno::Reference< css::frame::XDispatch > > tDisposeVector;
 
     mutable tDispatchMap m_aCachedDispatches;
     mutable tDisposeVector m_aToBeDisposedDispatches;
 
-    css::uno::Reference< cpo::uno::XComponentContext >    m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext >    m_xContext;
     unotools::WeakReference< ::chart::ChartModel >         m_xModel;
 
     rtl::Reference<ControllerCommandDispatch> m_xChartDispatcher;

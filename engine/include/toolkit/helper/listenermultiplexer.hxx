@@ -81,13 +81,13 @@ public:
     void                        acquire() noexcept override  { mrContext.acquire(); }
     void                        release() noexcept override  { mrContext.release(); }
 
-    void addInterface( const css::uno::Reference<ListenerT>& l)
+    void addInterface( const cpo::uno::Reference<ListenerT>& l)
     {
         std::unique_lock g(m_aMutex);
         maListeners.addInterface(g, l);
     }
 
-    void removeInterface( const css::uno::Reference<ListenerT>& l)
+    void removeInterface( const cpo::uno::Reference<ListenerT>& l)
     {
         std::unique_lock g(m_aMutex);
         maListeners.removeInterface(g, l);
@@ -286,8 +286,8 @@ DECL_LISTENERMULTIPLEXER_END
 //  class TreeEditListenerMultiplexer
 
 DECL_LISTENERMULTIPLEXER_START( TreeEditListenerMultiplexer, css::awt::tree::XTreeEditListener )
-    virtual void nodeEditing( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
-    virtual void nodeEdited( const css::uno::Reference< css::awt::tree::XTreeNode >& Node, const OUString& NewText ) override;
+    virtual void nodeEditing( const cpo::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
+    virtual void nodeEdited( const cpo::uno::Reference< css::awt::tree::XTreeNode >& Node, const OUString& NewText ) override;
 DECL_LISTENERMULTIPLEXER_END
 
 

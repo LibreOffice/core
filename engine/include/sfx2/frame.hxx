@@ -23,7 +23,7 @@
 #include <sfx2/dllapi.h>
 #include <sfx2/shell.hxx>
 #include <sal/types.h>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <cpo/uno/Any.hxx>
 #include <vcl/vclptr.hxx>
 #include <rtl/ustring.hxx>
@@ -77,8 +77,8 @@ private:
     SAL_DLLPRIVATE      SfxFrame( vcl::Window& i_rContainerWindow );
 
 public:
-    static SfxFrame*    Create( const css::uno::Reference< css::frame::XFrame >& xFrame );
-    static css::uno::Reference< css::frame::XFrame >
+    static SfxFrame*    Create( const cpo::uno::Reference< css::frame::XFrame >& xFrame );
+    static cpo::uno::Reference< css::frame::XFrame >
                         CreateBlankFrame();
 
     vcl::Window&        GetWindow() const { return *m_pWindow;}
@@ -97,17 +97,17 @@ public:
     static void         GetDefaultTargetList( TargetList& );
     void                UpdateDescriptor( SfxObjectShell const *pDoc );
     void                Resize();
-    const css::uno::Reference< css::frame::XFrame >&
+    const cpo::uno::Reference< css::frame::XFrame >&
                         GetFrameInterface() const;
     void                Appear();
     void                AppearWithUpdate();
-    css::uno::Reference< css::frame::XController >
+    cpo::uno::Reference< css::frame::XController >
                         GetController() const;
 
     bool                IsInPlace() const;
 
     SAL_DLLPRIVATE void DoClose_Impl();
-    SAL_DLLPRIVATE void SetFrameInterface_Impl( const css::uno::Reference< css::frame::XFrame >& rFrame );
+    SAL_DLLPRIVATE void SetFrameInterface_Impl( const cpo::uno::Reference< css::frame::XFrame >& rFrame );
     SAL_DLLPRIVATE void ReleasingComponent_Impl();
     SAL_DLLPRIVATE void GetViewData_Impl();
     SAL_DLLPRIVATE void SetHasTitle( bool );
@@ -180,15 +180,15 @@ public:
 
 class SFX2_DLLPUBLIC SfxUnoFrameItem final : public SfxPoolItem
 {
-    css::uno::Reference< css::frame::XFrame >
+    cpo::uno::Reference< css::frame::XFrame >
                                 m_xFrame;
 
 public:
                                 static SfxPoolItem* CreateDefault();
                                 DECLARE_ITEM_TYPE_FUNCTION(SfxUnoFrameItem)
                                 SfxUnoFrameItem();
-                                SfxUnoFrameItem( sal_uInt16 nWhich, css::uno::Reference< css::frame::XFrame > i_xFrame );
-    const css::uno::Reference< css::frame::XFrame >&
+                                SfxUnoFrameItem( sal_uInt16 nWhich, cpo::uno::Reference< css::frame::XFrame > i_xFrame );
+    const cpo::uno::Reference< css::frame::XFrame >&
                                 GetFrame() const
                                 { return m_xFrame; }
     virtual bool                operator==( const SfxPoolItem& ) const override;

@@ -23,7 +23,7 @@
 #include <com/sun/star/xml/sax/XWriter.hpp>
 #include <rtl/ref.hxx>
 
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace com::sun::star;
 
 namespace xmlscript

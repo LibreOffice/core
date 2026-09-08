@@ -47,10 +47,10 @@ class DRAWINGLAYER_DLLPUBLIC ControlPrimitive2D final : public BufferedDecomposi
 private:
     /// object's base data
     basegfx::B2DHomMatrix maTransform;
-    css::uno::Reference<css::awt::XControlModel> mxControlModel;
+    cpo::uno::Reference<css::awt::XControlModel> mxControlModel;
 
     /// the created and cached awt::XControl
-    css::uno::Reference<css::awt::XControl> mxXControl;
+    cpo::uno::Reference<css::awt::XControl> mxXControl;
 
     /// the last used scaling, used from getDecomposition for buffering
     basegfx::B2DVector maLastViewScaling;
@@ -81,14 +81,14 @@ public:
         and thus double the XControls.
      */
     ControlPrimitive2D(basegfx::B2DHomMatrix aTransform,
-                       css::uno::Reference<css::awt::XControlModel> xControlModel,
-                       css::uno::Reference<css::awt::XControl> xXControl,
+                       cpo::uno::Reference<css::awt::XControlModel> xControlModel,
+                       cpo::uno::Reference<css::awt::XControl> xXControl,
                        ::std::u16string_view rTitle, ::std::u16string_view rDescription,
                        void const* pAnchorKey);
 
     /// data read access
     const basegfx::B2DHomMatrix& getTransform() const { return maTransform; }
-    const css::uno::Reference<css::awt::XControlModel>& getControlModel() const
+    const cpo::uno::Reference<css::awt::XControlModel>& getControlModel() const
     {
         return mxControlModel;
     }
@@ -100,7 +100,7 @@ public:
         if it does not exist. It may already have been created or even handed over at
         incarnation
      */
-    const css::uno::Reference<css::awt::XControl>& getXControl() const;
+    const cpo::uno::Reference<css::awt::XControl>& getXControl() const;
 
     OUString const& GetAltText() const { return m_AltText; }
 

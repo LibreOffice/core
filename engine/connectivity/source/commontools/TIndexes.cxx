@@ -32,7 +32,7 @@
 #include <rtl/ustrbuf.hxx>
 using namespace connectivity;
 using namespace connectivity::sdbcx;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbcx;
@@ -51,7 +51,7 @@ OIndexesHelper::OIndexesHelper(OTableHelper* _pTable,
 }
 
 
-css::uno::Reference< css::beans::XPropertySet > OIndexesHelper::createObject(const OUString& _rName)
+cpo::uno::Reference< css::beans::XPropertySet > OIndexesHelper::createObject(const OUString& _rName)
 {
     Reference< XConnection> xConnection = m_pTable->getConnection();
     if ( !xConnection.is() )
@@ -123,7 +123,7 @@ Reference< XPropertySet > OIndexesHelper::createDescriptor()
 }
 
 // XAppend
-css::uno::Reference< css::beans::XPropertySet > OIndexesHelper::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
+cpo::uno::Reference< css::beans::XPropertySet > OIndexesHelper::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     Reference< XConnection> xConnection = m_pTable->getConnection();
     if ( !xConnection.is() )

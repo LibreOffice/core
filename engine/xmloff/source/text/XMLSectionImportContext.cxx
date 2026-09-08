@@ -32,7 +32,7 @@
 #include <sax/tools/converter.hxx>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -40,12 +40,12 @@
 
 
 using ::com::sun::star::beans::XPropertySet;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::com::sun::star::xml::sax::XFastAttributeList;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::container::XNamed;
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::text;
 using namespace ::xmloff::token;
@@ -74,7 +74,7 @@ XMLSectionImportContext::~XMLSectionImportContext()
 }
 
 void XMLSectionImportContext::startFastElement( sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     // process attributes
     ProcessAttributes(xAttrList);
@@ -292,9 +292,9 @@ void XMLSectionImportContext::endFastElement(sal_Int32 )
     rHelper->RedlineAdjustStartNodeCursor();
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLSectionImportContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLSectionImportContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     // section-source (-dde) elements
     if ( nElement == XML_ELEMENT(TEXT, XML_SECTION_SOURCE) )

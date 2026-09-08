@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <rtl/ustring.hxx>
 #include <svl/sigstruct.hxx>
 
@@ -47,8 +47,8 @@ enum class DocumentSignatureAlgorithm
 
 struct SignatureStreamHelper
 {
-    css::uno::Reference < css::embed::XStorage >    xSignatureStorage;
-    css::uno::Reference < css::io::XStream >        xSignatureStream;
+    cpo::uno::Reference < css::embed::XStorage >    xSignatureStorage;
+    cpo::uno::Reference < css::io::XStream >        xSignatureStream;
     /// If this is embed::StorageFormats::OFOPXML, then it's expected that xSignatureStream is an empty reference.
     sal_Int32 nStorageFormat;
 
@@ -61,11 +61,11 @@ struct SignatureStreamHelper
 namespace DocumentSignatureHelper
 {
     SignatureStreamHelper OpenSignatureStream(
-        const css::uno::Reference < css::embed::XStorage >& rxStore, sal_Int32 nOpenMode,
+        const cpo::uno::Reference < css::embed::XStorage >& rxStore, sal_Int32 nOpenMode,
         DocumentSignatureMode eDocSigMode );
 
     std::vector< OUString > CreateElementList(
-        const css::uno::Reference < css::embed::XStorage >& rxStore,
+        const cpo::uno::Reference < css::embed::XStorage >& rxStore,
         DocumentSignatureMode eMode,
         const DocumentSignatureAlgorithm mode);
 
@@ -86,12 +86,12 @@ namespace DocumentSignatureHelper
     OUString GetPackageSignatureDefaultStreamName();
 
     /// In case the storage is OOXML, prepend a leading '/' and append content type to the element URIs.
-    void AppendContentTypes(const css::uno::Reference<css::embed::XStorage>& xStorage, std::vector<OUString>& rElements);
+    void AppendContentTypes(const cpo::uno::Reference<css::embed::XStorage>& xStorage, std::vector<OUString>& rElements);
 
     void writeDigestMethod(
-        const css::uno::Reference<css::xml::sax::XDocumentHandler>& xDocumentHandler);
+        const cpo::uno::Reference<css::xml::sax::XDocumentHandler>& xDocumentHandler);
     void writeSignedProperties(
-        const css::uno::Reference<css::xml::sax::XDocumentHandler>& xDocumentHandler,
+        const cpo::uno::Reference<css::xml::sax::XDocumentHandler>& xDocumentHandler,
         const SignatureInformation& signatureInfo,
         const OUString& sDate,
         const bool bWriteSignatureLineData);

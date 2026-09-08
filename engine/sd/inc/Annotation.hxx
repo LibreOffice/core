@@ -36,7 +36,7 @@
 
 class SdrUndoAction;
 
-namespace com::sun::star::uno { template <typename > class Reference; }
+namespace cpo::uno { template <typename > class Reference; }
 
 namespace sd
 {
@@ -48,20 +48,20 @@ std::unique_ptr<SdrUndoAction> CreateUndoInsertOrRemoveAnnotation(rtl::Reference
 class UNLESS_MERGELIBS(SAL_DLLPUBLIC_RTTI) Annotation final : public sdr::annotation::Annotation
 {
 public:
-    explicit Annotation(const css::uno::Reference<cpo::uno::XComponentContext>& context, SdrPage* pPage);
+    explicit Annotation(const cpo::uno::Reference<cpo::uno::XComponentContext>& context, SdrPage* pPage);
     Annotation(const Annotation&) = delete;
     Annotation& operator=(const Annotation&) = delete;
 
     virtual ~Annotation();
 
     // css::beans::XPropertySet:
-    virtual css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
+    virtual cpo::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
     virtual void SAL_CALL setPropertyValue(const OUString & aPropertyName, const cpo::uno::Any & aValue) override;
     virtual cpo::uno::Any SAL_CALL getPropertyValue(const OUString & PropertyName) override;
-    virtual void SAL_CALL addPropertyChangeListener(const OUString & aPropertyName, const css::uno::Reference<css::beans::XPropertyChangeListener> & xListener) override;
-    virtual void SAL_CALL removePropertyChangeListener(const OUString & aPropertyName, const css::uno::Reference<css::beans::XPropertyChangeListener> & aListener) override;
-    virtual void SAL_CALL addVetoableChangeListener(const OUString & PropertyName, const css::uno::Reference<css::beans::XVetoableChangeListener> & aListener) override;
-    virtual void SAL_CALL removeVetoableChangeListener(const OUString & PropertyName, const css::uno::Reference<css::beans::XVetoableChangeListener> & aListener) override;
+    virtual void SAL_CALL addPropertyChangeListener(const OUString & aPropertyName, const cpo::uno::Reference<css::beans::XPropertyChangeListener> & xListener) override;
+    virtual void SAL_CALL removePropertyChangeListener(const OUString & aPropertyName, const cpo::uno::Reference<css::beans::XPropertyChangeListener> & aListener) override;
+    virtual void SAL_CALL addVetoableChangeListener(const OUString & PropertyName, const cpo::uno::Reference<css::beans::XVetoableChangeListener> & aListener) override;
+    virtual void SAL_CALL removeVetoableChangeListener(const OUString & PropertyName, const cpo::uno::Reference<css::beans::XVetoableChangeListener> & aListener) override;
 
     // css::office::XAnnotation:
     virtual cpo::uno::Any SAL_CALL getAnchor() override;

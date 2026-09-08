@@ -19,8 +19,8 @@ class QRCodeContext : public SvXMLImportContext
 {
 public:
     QRCodeContext(SvXMLImport& rImport, sal_Int32 nElement,
-                  const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
-                  const css::uno::Reference<css::drawing::XShape>& rxShape);
+                  const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+                  const cpo::uno::Reference<css::drawing::XShape>& rxShape);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

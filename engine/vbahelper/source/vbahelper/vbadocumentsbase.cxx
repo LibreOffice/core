@@ -43,6 +43,7 @@
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 typedef  std::unordered_map< OUString,
                              sal_Int32 > NameIndexHash;

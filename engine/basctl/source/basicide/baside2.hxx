@@ -76,7 +76,7 @@ private:
 
     rtl::Reference< ChangesListener > listener_;
     std::mutex                        mutex_;
-    css::uno::Reference< css::beans::XMultiPropertySet >
+    cpo::uno::Reference< css::beans::XMultiPropertySet >
                                       notifier_;
 
     tools::Long            nCurTextWidth;
@@ -525,7 +525,7 @@ public:
 class UnoTypeCodeCompletetor
 {
 private:
-    css::uno::Reference< css::reflection::XIdlClass > xClass;
+    cpo::uno::Reference< css::reflection::XIdlClass > xClass;
     bool bCanComplete;
 
     bool CheckField( const OUString& sFieldName );

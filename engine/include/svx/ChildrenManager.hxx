@@ -22,7 +22,7 @@
 
 #include <sal/config.h>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <comphelper/OAccessible.hxx>
 #include <rtl/ref.hxx>
 #include <svx/svxdllapi.h>
@@ -103,7 +103,7 @@ public:
             listeners to be informed.
     */
     ChildrenManager(const rtl::Reference<comphelper::OAccessible>& rpParent,
-                    const css::uno::Reference<css::drawing::XShapes>& rxShapeList,
+                    const cpo::uno::Reference<css::drawing::XShapes>& rxShapeList,
                     const AccessibleShapeTreeInfo& rShapeTreeInfo, AccessibleContextBase& rContext);
 
     /** If there still are managed children these are marked as DEFUNC and
@@ -133,7 +133,7 @@ public:
     rtl::Reference<comphelper::OAccessible> GetChild(sal_Int64 nIndex);
     /// @throws css::lang::IndexOutOfBoundsException
     /// @throws cpo::uno::RuntimeException
-    const css::uno::Reference<css::drawing::XShape>& GetChildShape(sal_Int64 nIndex);
+    const cpo::uno::Reference<css::drawing::XShape>& GetChildShape(sal_Int64 nIndex);
 
     /** Update the child manager.  Take care of a modified set of children
         and modified visible area.  This method can optimize the update
@@ -152,7 +152,7 @@ public:
         @param xShapeList
             The new list of shapes.
     */
-    void SetShapeList(const css::uno::Reference<css::drawing::XShapes>& xShapeList);
+    void SetShapeList(const cpo::uno::Reference<css::drawing::XShapes>& xShapeList);
 
     /** Add an accessible shape.  The difference to the UNO shapes in the
         list passed to the constructor the specified object does not have to

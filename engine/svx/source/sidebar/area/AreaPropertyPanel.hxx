@@ -35,7 +35,7 @@ class AreaPropertyPanel : public AreaPropertyPanelBase
 public:
     static std::unique_ptr<PanelLayout> Create(
         weld::Widget* pParent,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame,
+        const cpo::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings);
 
     SfxBindings* GetBindings() { return mpBindings;}
@@ -43,7 +43,7 @@ public:
     // constructor/destructor
     AreaPropertyPanel(
         weld::Widget* pParent,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame,
+        const cpo::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings);
 
     virtual ~AreaPropertyPanel() override;

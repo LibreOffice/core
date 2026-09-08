@@ -52,15 +52,15 @@ public:
 
     // XRoot
     virtual void startDocument(
-        css::uno::Reference< css::xml::input::XNamespaceMapping > const & xNamespaceMapping ) override;
+        cpo::uno::Reference< css::xml::input::XNamespaceMapping > const & xNamespaceMapping ) override;
     virtual void endDocument() override;
     virtual void processingInstruction(
         OUString const & rTarget, OUString const & rData ) override;
     virtual void setDocumentLocator(
-        css::uno::Reference< css::xml::sax::XLocator > const & xLocator ) override;
-    virtual css::uno::Reference< css::xml::input::XElement > startRootElement(
+        cpo::uno::Reference< css::xml::sax::XLocator > const & xLocator ) override;
+    virtual cpo::uno::Reference< css::xml::input::XElement > startRootElement(
         sal_Int32 nUid, OUString const & rLocalName,
-        css::uno::Reference< css::xml::input::XAttributes > const & xAttributes ) override;
+        cpo::uno::Reference< css::xml::input::XAttributes > const & xAttributes ) override;
 };
 
 class ModuleElement
@@ -69,30 +69,30 @@ class ModuleElement
     rtl::Reference<ModuleImport> mxImport;
 
     OUString const _aLocalName;
-    css::uno::Reference< css::xml::input::XAttributes > _xAttributes;
+    cpo::uno::Reference< css::xml::input::XAttributes > _xAttributes;
     OUStringBuffer _strBuffer{512};
 
 public:
     ModuleElement(
         OUString aLocalName,
-        css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
+        cpo::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ModuleImport * pImport );
     virtual ~ModuleElement() override;
 
     // XElement
-    virtual css::uno::Reference< css::xml::input::XElement > getParent() override;
+    virtual cpo::uno::Reference< css::xml::input::XElement > getParent() override;
     virtual OUString getLocalName() override;
     virtual sal_Int32 getUid() override;
-    virtual css::uno::Reference< css::xml::input::XAttributes > getAttributes() override;
+    virtual cpo::uno::Reference< css::xml::input::XAttributes > getAttributes() override;
     virtual void ignorableWhitespace(
         OUString const & rWhitespaces ) override;
     virtual void characters( OUString const & rChars ) override;
     virtual void processingInstruction(
         OUString const & rTarget, OUString const & rData ) override;
     virtual void endElement() override;
-    virtual css::uno::Reference< css::xml::input::XElement > startChildElement(
+    virtual cpo::uno::Reference< css::xml::input::XElement > startChildElement(
         sal_Int32 nUid, OUString const & rLocalName,
-        css::uno::Reference< css::xml::input::XAttributes > const & xAttributes ) override;
+        cpo::uno::Reference< css::xml::input::XAttributes > const & xAttributes ) override;
 };
 
 }

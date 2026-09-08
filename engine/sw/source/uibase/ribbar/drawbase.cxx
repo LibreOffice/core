@@ -42,6 +42,7 @@
 #include <strings.hrc>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 SwDrawBase::SwDrawBase(SwWrtShell* pSwWrtShell, SwEditWin* pWindow, SwView& rSwView) :
     m_rView(rSwView),

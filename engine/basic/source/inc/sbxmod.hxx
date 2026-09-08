@@ -22,6 +22,6 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <basic/sbstar.hxx>
 
-css::uno::Reference<css::frame::XModel> getDocumentModel(StarBASIC*);
+cpo::uno::Reference<css::frame::XModel> getDocumentModel(StarBASIC*);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

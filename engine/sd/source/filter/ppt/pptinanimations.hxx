@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <rtl/ref.hxx>
 
 #include <vector>
@@ -51,40 +51,40 @@ public:
     int  import( const rtl::Reference< SvxDrawPage >& xPage, const DffRecordHeader& rProgTagContentHd );
 
 private:
-    int  importAnimationContainer( const Atom* pAtom, const css::uno::Reference< css::animations::XAnimationNode >& xParent );
-    int  importTimeContainer( const Atom* pAtom, const css::uno::Reference< css::animations::XAnimationNode >& xNode );
-    int  importAnimationNodeContainer( const Atom* pAtom, const css::uno::Reference< css::animations::XAnimationNode >& xNode );
+    int  importAnimationContainer( const Atom* pAtom, const cpo::uno::Reference< css::animations::XAnimationNode >& xParent );
+    int  importTimeContainer( const Atom* pAtom, const cpo::uno::Reference< css::animations::XAnimationNode >& xNode );
+    int  importAnimationNodeContainer( const Atom* pAtom, const cpo::uno::Reference< css::animations::XAnimationNode >& xNode );
 
-    void importAnimateSetContainer( const Atom* pAtom, const css::uno::Reference< css::animations::XAnimationNode >& xNode );
-    void importAnimateFilterContainer( const Atom* pAtom, const css::uno::Reference< css::animations::XAnimationNode >& xNode );
-    void importAnimateContainer( const Atom* pAtom, const css::uno::Reference< css::animations::XAnimationNode >& xNode );
-    void importAnimateScaleContainer( const Atom* pAtom, const css::uno::Reference< css::animations::XAnimationNode >& xNode );
-    void importAnimateColorContainer( const Atom* pAtom, const css::uno::Reference< css::animations::XAnimationNode >& xNode );
-    void importAnimateRotationContainer( const Atom* pAtom, const css::uno::Reference< css::animations::XAnimationNode >& xNode );
-    void importAnimateMotionContainer( const Atom* pAtom, const css::uno::Reference< css::animations::XAnimationNode >& xNode );
-    void importCommandContainer( const Atom* pAtom, const css::uno::Reference< css::animations::XAnimationNode >& xNode );
-    int  importAudioContainer( const Atom* pAtom, const css::uno::Reference< css::animations::XAnimationNode >& xNode );
+    void importAnimateSetContainer( const Atom* pAtom, const cpo::uno::Reference< css::animations::XAnimationNode >& xNode );
+    void importAnimateFilterContainer( const Atom* pAtom, const cpo::uno::Reference< css::animations::XAnimationNode >& xNode );
+    void importAnimateContainer( const Atom* pAtom, const cpo::uno::Reference< css::animations::XAnimationNode >& xNode );
+    void importAnimateScaleContainer( const Atom* pAtom, const cpo::uno::Reference< css::animations::XAnimationNode >& xNode );
+    void importAnimateColorContainer( const Atom* pAtom, const cpo::uno::Reference< css::animations::XAnimationNode >& xNode );
+    void importAnimateRotationContainer( const Atom* pAtom, const cpo::uno::Reference< css::animations::XAnimationNode >& xNode );
+    void importAnimateMotionContainer( const Atom* pAtom, const cpo::uno::Reference< css::animations::XAnimationNode >& xNode );
+    void importCommandContainer( const Atom* pAtom, const cpo::uno::Reference< css::animations::XAnimationNode >& xNode );
+    int  importAudioContainer( const Atom* pAtom, const cpo::uno::Reference< css::animations::XAnimationNode >& xNode );
 
-    void importAnimationEvents( const Atom* pAtom, const css::uno::Reference< css::animations::XAnimationNode >& xNode );
-    void importAnimationValues( const Atom* pAtom, const css::uno::Reference< css::animations::XAnimationNode >& xNode );
-    void importAnimationActions( const Atom* pAtom, const css::uno::Reference< css::animations::XAnimationNode >& xNode );
-    void importAnimateAttributeTargetContainer( const Atom* pAtom, const css::uno::Reference< css::animations::XAnimationNode >& xNode );
+    void importAnimationEvents( const Atom* pAtom, const cpo::uno::Reference< css::animations::XAnimationNode >& xNode );
+    void importAnimationValues( const Atom* pAtom, const cpo::uno::Reference< css::animations::XAnimationNode >& xNode );
+    void importAnimationActions( const Atom* pAtom, const cpo::uno::Reference< css::animations::XAnimationNode >& xNode );
+    void importAnimateAttributeTargetContainer( const Atom* pAtom, const cpo::uno::Reference< css::animations::XAnimationNode >& xNode );
 
-    void importAnimateKeyPoints( const Atom* pAtom, const css::uno::Reference< css::animations::XAnimationNode >& xNode );
+    void importAnimateKeyPoints( const Atom* pAtom, const cpo::uno::Reference< css::animations::XAnimationNode >& xNode );
     void importPropertySetContainer( const Atom* pAtom,PropertySet& rSet );
     bool importAttributeValue( const Atom* pAtom, cpo::uno::Any& rAny );
     void importAttributeNamesContainer( const Atom* pAtom, OUString& rAttributeNames );
     void importTargetElementContainer( const Atom* pAtom, cpo::uno::Any& rTarget, sal_Int16& nSubType );
 
-    static void fillNode( css::uno::Reference< css::animations::XAnimationNode > const & xTiming, const AnimationNode& rNode, const PropertySet& rSet );
-    static css::uno::Reference< css::animations::XAnimationNode > createNode( const Atom* pAtom, const AnimationNode& rNode );
+    static void fillNode( cpo::uno::Reference< css::animations::XAnimationNode > const & xTiming, const AnimationNode& rNode, const PropertySet& rSet );
+    static cpo::uno::Reference< css::animations::XAnimationNode > createNode( const Atom* pAtom, const AnimationNode& rNode );
 
-    bool convertAnimationNode( const css::uno::Reference< css::animations::XAnimationNode >& xNode, const css::uno::Reference< css::animations::XAnimationNode >& xParent );
+    bool convertAnimationNode( const cpo::uno::Reference< css::animations::XAnimationNode >& xNode, const cpo::uno::Reference< css::animations::XAnimationNode >& xParent );
     cpo::uno::Any  implGetColorAny( sal_Int32 nMode, sal_Int32  nA, sal_Int32 nB, sal_Int32 nC );
     static sal_Int16            implGetColorSpace( sal_Int32 nMode, sal_Int32  nA, sal_Int32 nB, sal_Int32 nC );
 
 private:
-    css::uno::Reference< css::animations::XAnimationNode > mxRootNode;
+    cpo::uno::Reference< css::animations::XAnimationNode > mxRootNode;
 
     ImplSdPPTImport* mpPPTImport;
     SvStream&   mrStCtrl;

@@ -25,7 +25,7 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo;
 using namespace ::cpo::uno;
 
 class Chart2ImportTest2 : public ChartTest
@@ -42,7 +42,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf114179)
     loadFromFile(u"docx/testTdf114179.docx");
     uno::Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xChartDoc.is());
-    css::uno::Reference<chart2::XDiagram> xDiagram;
+    cpo::uno::Reference<chart2::XDiagram> xDiagram;
     xDiagram.set(xChartDoc->getFirstDiagram());
     CPPUNIT_ASSERT_MESSAGE("There is a Diagram.", xDiagram.is());
     awt::Size aPage(0, 0);
@@ -212,7 +212,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testDataPointInheritedColorDOCX)
     loadFromFile(u"docx/data_point_inherited_color.docx");
     uno::Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xChartDoc.is());
-    css::uno::Reference<chart2::XDiagram> xDiagram(xChartDoc->getFirstDiagram(), UNO_SET_THROW);
+    cpo::uno::Reference<chart2::XDiagram> xDiagram(xChartDoc->getFirstDiagram(), UNO_SET_THROW);
 
     Reference<chart2::XDataSeries> xDataSeries = getDataSeriesFromDoc(xChartDoc, 0);
     uno::Reference<beans::XPropertySet> xPropertySet(xDataSeries->getDataPointByIndex(0),
@@ -1995,7 +1995,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf94259)
         CPPUNIT_ASSERT(xAxis.is());
         lcl_assertAngles(xAxis, 0, 90);
         Reference<chart2::XTitle> xAxisTitle
-            = css::uno::Reference<chart2::XTitled>(xAxis, UNO_QUERY_THROW)->getTitleObject();
+            = cpo::uno::Reference<chart2::XTitled>(xAxis, UNO_QUERY_THROW)->getTitleObject();
         Reference<beans::XPropertySet> xAxisTitleProps(xAxisTitle, UNO_QUERY_THROW);
 
         chart2::RelativePosition aRelPos;
@@ -2014,7 +2014,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf94259)
         lcl_assertAngles(xAxis, 0, 270);
 
         Reference<chart2::XTitle> xAxisTitle
-            = css::uno::Reference<chart2::XTitled>(xAxis, UNO_QUERY_THROW)->getTitleObject();
+            = cpo::uno::Reference<chart2::XTitled>(xAxis, UNO_QUERY_THROW)->getTitleObject();
         Reference<beans::XPropertySet> xAxisTitleProps(xAxisTitle, UNO_QUERY_THROW);
 
         chart2::RelativePosition aRelPos;

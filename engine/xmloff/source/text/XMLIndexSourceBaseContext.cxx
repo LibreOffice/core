@@ -33,7 +33,7 @@
 using namespace ::xmloff::token;
 
 using ::com::sun::star::beans::XPropertySet;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::cpo::uno::Any;
 
 
@@ -55,7 +55,7 @@ XMLIndexSourceBaseContext::~XMLIndexSourceBaseContext()
 
 void XMLIndexSourceBaseContext::startFastElement(
     sal_Int32 /*nElement*/,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     // process attributes
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
@@ -96,9 +96,9 @@ void XMLIndexSourceBaseContext::endFastElement(sal_Int32 )
     rIndexPropertySet->setPropertyValue(u"CreateFromChapter"_ustr, cpo::uno::Any(bChapterIndex));
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLIndexSourceBaseContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLIndexSourceBaseContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList)
+    const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList)
 {
     SvXMLImportContextRef xContext;
 

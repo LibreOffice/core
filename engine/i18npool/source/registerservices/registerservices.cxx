@@ -56,6 +56,7 @@
 #include <textconversion.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace i18npool;
 
 #define IMPL_CREATEINSTANCE( ImplName ) \

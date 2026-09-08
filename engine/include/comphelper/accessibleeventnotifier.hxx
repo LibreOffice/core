@@ -23,7 +23,7 @@
 #include <comphelper/comphelperdllapi.h>
 
 namespace cpo::uno { class XInterface; }
-namespace com::sun::star::uno { template <class interface_type> class Reference; }
+namespace cpo::uno { template <class interface_type> class Reference; }
 namespace com::sun::star::accessibility { class XAccessibleEventListener; }
 namespace com::sun::star::accessibility { struct AccessibleEventObject; }
 
@@ -74,7 +74,7 @@ public:
     */
     static void revokeClientNotifyDisposing(
         const TClientId _nClient,
-        const css::uno::Reference< cpo::uno::XInterface >& _rxEventSource );
+        const cpo::uno::Reference< cpo::uno::XInterface >& _rxEventSource );
 
     /** registers a listener for the given client
 
@@ -85,7 +85,7 @@ public:
     */
     static sal_Int32 addEventListener(
         const TClientId _nClient,
-        const css::uno::Reference< css::accessibility::XAccessibleEventListener >& _rxListener );
+        const cpo::uno::Reference< css::accessibility::XAccessibleEventListener >& _rxListener );
 
     /** revokes a listener for the given client
 
@@ -96,7 +96,7 @@ public:
     */
     static sal_Int32 removeEventListener(
         const TClientId _nClient,
-        const css::uno::Reference< css::accessibility::XAccessibleEventListener >& _rxListener );
+        const cpo::uno::Reference< css::accessibility::XAccessibleEventListener >& _rxListener );
 
     /** adds an event, which is to be broadcasted, to the queue
 

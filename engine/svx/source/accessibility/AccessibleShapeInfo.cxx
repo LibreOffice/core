@@ -24,8 +24,8 @@
 namespace accessibility {
 
 AccessibleShapeInfo::AccessibleShapeInfo (
-        css::uno::Reference<css::drawing::XShape> xShape,
-        css::uno::Reference<css::accessibility::XAccessible> xParent,
+        cpo::uno::Reference<css::drawing::XShape> xShape,
+        cpo::uno::Reference<css::accessibility::XAccessible> xParent,
         IAccessibleParent* pChildrenManager)
     : mxShape (std::move(xShape)),
       mxParent (std::move(xParent)),
@@ -36,8 +36,8 @@ AccessibleShapeInfo::AccessibleShapeInfo (
 
 
 AccessibleShapeInfo::AccessibleShapeInfo (
-        css::uno::Reference<css::drawing::XShape> xShape,
-        css::uno::Reference<css::accessibility::XAccessible> xParent)
+        cpo::uno::Reference<css::drawing::XShape> xShape,
+        cpo::uno::Reference<css::accessibility::XAccessible> xParent)
     : mxShape (std::move(xShape)),
       mxParent (std::move(xParent)),
       mpChildrenManager (nullptr)

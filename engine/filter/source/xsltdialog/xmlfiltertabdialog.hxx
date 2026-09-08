@@ -28,7 +28,7 @@ class XMLFilterTabPageXSLT;
 class XMLFilterTabDialog : public weld::GenericDialogController
 {
 public:
-    XMLFilterTabDialog(weld::Window *pParent, const css::uno::Reference< cpo::uno::XComponentContext >& rxContext, const filter_info_impl* pInfo);
+    XMLFilterTabDialog(weld::Window *pParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext, const filter_info_impl* pInfo);
     virtual ~XMLFilterTabDialog() override;
 
     bool onOk();
@@ -36,7 +36,7 @@ public:
     filter_info_impl* getNewFilterInfo() const { return mpNewInfo.get(); }
 
 private:
-    css::uno::Reference< cpo::uno::XComponentContext > mxContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext > mxContext;
 
     DECL_LINK(OkHdl, weld::Button&, void);
 

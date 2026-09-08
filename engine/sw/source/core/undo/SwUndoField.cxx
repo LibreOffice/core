@@ -31,7 +31,7 @@
 #include <utility>
 #include <osl/diagnose.h>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 SwUndoField::SwUndoField(const SwPosition & rPos )

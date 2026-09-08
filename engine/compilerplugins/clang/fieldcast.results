@@ -8,10 +8,10 @@ basctl/source/inc/basidesh.hxx:87
     basctl::Shell pLayout VclPtr<Layout>
     basctl::ModulWindowLayout
 basctl/source/inc/basidesh.hxx:97
-    basctl::Shell m_xLibListener css::uno::Reference<css::container::XContainerListener>
+    basctl::Shell m_xLibListener cpo::uno::Reference<css::container::XContainerListener>
     basctl::ContainerListenerImpl
 basic/source/inc/errobject.hxx:27
-    SbxErrObject m_xErr css::uno::Reference<ooo::vba::XErrObject>
+    SbxErrObject m_xErr cpo::uno::Reference<ooo::vba::XErrObject>
     ErrObject
 basic/source/inc/runtime.hxx:220
     SbiRuntime pMod SbModule *
@@ -32,7 +32,7 @@ bxml/xpath.h:338
     _xmlXPathContext funcLookupData void *
     CLibxml2XFormsExtension
 chart2/source/controller/inc/dlg_CreationWizard_UNO.hxx:108
-    chart::CreationWizardUnoDlg m_xParentWindow css::uno::Reference<css::awt::XWindow>
+    chart::CreationWizardUnoDlg m_xParentWindow cpo::uno::Reference<css::awt::XWindow>
     weld::TransportAsXWindow
 chart2/source/controller/inc/SelectionHelper.hxx:110
     chart::SelectionHelper m_pMarkObj SdrObject *
@@ -89,7 +89,7 @@ extensions/source/update/check/updatecheck.hxx:164
     UpdateCheck m_pThread WorkerThread *
     (anonymous namespace)::UpdateCheckThread
 i18npool/inc/calendarImpl.hxx:103
-    i18npool::CalendarImpl xCalendar css::uno::Reference<css::i18n::XCalendar4>
+    i18npool::CalendarImpl xCalendar cpo::uno::Reference<css::i18n::XCalendar4>
     i18npool::Calendar_gregorian
 include/basegfx/DrawCommands.hxx:121
     gfx::DrawRectangle mpFillGradient std::shared_ptr<GradientInfo>
@@ -146,13 +146,13 @@ include/sfx2/basedlgs.hxx:129
     SfxSingleTabDialogController m_xSfxPage std::unique_ptr<SfxTabPage>
     SfxMacroTabPage
 include/sfx2/devtools/DevelopmentToolDockingWindow.hxx:42
-    DevelopmentToolDockingWindow mxSelectionListener css::uno::Reference<css::view::XSelectionChangeListener>
+    DevelopmentToolDockingWindow mxSelectionListener cpo::uno::Reference<css::view::XSelectionChangeListener>
     SelectionChangeHandler
 include/sfx2/sfxstatuslistener.hxx:69
-    SfxStatusListener m_xDispatch css::uno::Reference<css::frame::XDispatch>
+    SfxStatusListener m_xDispatch cpo::uno::Reference<css::frame::XDispatch>
     SfxOfficeDispatch
 include/sfx2/sidebar/Panel.hxx:102
-    sfx2::sidebar::Panel mxElement css::uno::Reference<css::ui::XUIElement>
+    sfx2::sidebar::Panel mxElement cpo::uno::Reference<css::ui::XUIElement>
     sfx2::sidebar::SidebarPanelBase
 include/sot/storage.hxx:52
     SotStorageStream pOwnStm BaseStorageStream *
@@ -174,7 +174,7 @@ include/svx/AccessibleShape.hxx:391
     SdrOle2Obj
 include/svx/fmsrcimp.hxx:161
     FmSearchEngine m_xSearchCursor CursorWrapper
-    com::sun::star::uno::Reference
+    cpo::uno::Reference
 include/svx/svdhdl.hxx:136
     SdrHdl m_pObj SdrObject *
     SdrEdgeObj
@@ -191,7 +191,7 @@ include/svx/unopage.hxx:65
     SvxDrawPage mpPage SdrPage *
     SdPage
 include/test/a11y/accessibletestbase.hxx:42
-    test::AccessibleTestBase mxDocument css::uno::Reference<css::lang::XComponent>
+    test::AccessibleTestBase mxDocument cpo::uno::Reference<css::lang::XComponent>
     vcl::ITiledRenderable
 include/toolkit/awt/vclxmenu.hxx:59
     VCLXMenu mpMenu VclPtr<Menu>
@@ -257,7 +257,7 @@ lingucomponent/source/languageguessing/simpleguesser.hxx:97
     SimpleGuesser h void *
     (anonymous namespace)::textcat_t
 package/source/xstor/owriteablestream.hxx:241
-    OWriteStream m_xOutStream css::uno::Reference<css::io::XOutputStream>
+    OWriteStream m_xOutStream cpo::uno::Reference<css::io::XOutputStream>
     comphelper::ByteWriter
 pyuno/inc/pyuno.hxx:165
     pyuno::Runtime impl RuntimeImpl *
@@ -290,16 +290,16 @@ sc/source/filter/inc/eeimport.hxx:43
     ScEEImport mpParser std::unique_ptr<ScEEParser>
     ScHTMLParser
 sc/source/ui/inc/AccessibleContextBase.hxx:232
-    ScAccessibleContextBase mxParent css::uno::Reference<css::accessibility::XAccessible>
+    ScAccessibleContextBase mxParent cpo::uno::Reference<css::accessibility::XAccessible>
     ScAccessibleSpreadsheet
 sc/source/ui/vba/vbaformat.hxx:42
-    ScVbaFormat mxPropertySet css::uno::Reference<css::beans::XPropertySet>
+    ScVbaFormat mxPropertySet cpo::uno::Reference<css::beans::XPropertySet>
     ScCellRangesBase
 sc/source/ui/vba/vbaname.hxx:34
-    ScVbaName mxNamedRange css::uno::Reference<css::sheet::XNamedRange>
+    ScVbaName mxNamedRange cpo::uno::Reference<css::sheet::XNamedRange>
     ScNamedRangeObj
 sc/source/ui/vba/vbarange.hxx:79
-    ScVbaRange mxRanges css::uno::Reference<css::sheet::XSheetCellRangeContainer>
+    ScVbaRange mxRanges cpo::uno::Reference<css::sheet::XSheetCellRangeContainer>
     ScCellRangesBase
 sd/inc/Outliner.hxx:283
     SdOutliner mpObj SdrObject *
@@ -314,10 +314,10 @@ sd/source/ui/dlg/sddlgfact.hxx:165
     AbstractBulletDialog_Impl m_xDlg std::shared_ptr<SfxTabDialogController>
     sd::OutlineBulletDlg
 sd/source/ui/inc/DrawViewShell.hxx:497
-    sd::DrawViewShell mxScannerListener css::uno::Reference<css::lang::XEventListener>
+    sd::DrawViewShell mxScannerListener cpo::uno::Reference<css::lang::XEventListener>
     sd::(anonymous namespace)::ScannerEventListener
 sd/source/ui/inc/framework/FrameworkHelper.hxx:301
-    sd::framework::FrameworkHelper mxConfigurationController css::uno::Reference<css::drawing::framework::XConfigurationController>
+    sd::framework::FrameworkHelper mxConfigurationController cpo::uno::Reference<css::drawing::framework::XConfigurationController>
     sd::framework::ConfigurationController
 sd/source/ui/inc/fupoor.hxx:147
     sd::FuPoor mpDocSh DrawDocShell *
@@ -353,7 +353,7 @@ sdext/source/pdfimport/pdfparse/pdfentries.cxx:49
     pdfparse::EmitImplData m_pObjectContainer const PDFContainer *
     pdfparse::PDFFile
 sdext/source/pdfimport/sax/emitcontext.hxx:36
-    pdfi::SaxEmitter m_xDocHdl css::uno::Reference<css::xml::sax::XDocumentHandler>
+    pdfi::SaxEmitter m_xDocHdl cpo::uno::Reference<css::xml::sax::XDocumentHandler>
     SvXMLImport
 sfx2/source/inc/objshimp.hxx:66
     SfxObjectShell_Impl nTime DateTime
@@ -551,7 +551,7 @@ vcl/inc/qt5/QtAccessibleWidget.hxx:185
     QtAccessibleWidget m_pObject QObject *
     QWidget
 vcl/inc/qt5/QtClipboard.hxx:48
-    QtClipboard m_aContents css::uno::Reference<css::datatransfer::XTransferable>
+    QtClipboard m_aContents cpo::uno::Reference<css::datatransfer::XTransferable>
     QtClipboardTransferable
 vcl/inc/qt5/QtMenu.hxx:45
     QtMenu mpVCLMenu VclPtr<Menu>
@@ -626,13 +626,13 @@ writerfilter/source/dmapper/TablePropertiesHandler.hxx:38
     writerfilter::dmapper::TablePropertiesHandler m_pTableManager TableManager *
     writerfilter::dmapper::DomainMapperTableManager
 writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:365
-    writerfilter::ooxml::OOXMLFastContextHandlerTable mCurrentChild css::uno::Reference<css::xml::sax::XFastContextHandler>
+    writerfilter::ooxml::OOXMLFastContextHandlerTable mCurrentChild cpo::uno::Reference<css::xml::sax::XFastContextHandler>
     writerfilter::ooxml::OOXMLFastContextHandler
 writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:536
-    writerfilter::ooxml::OOXMLFastContextHandlerWrapper mxWrappedContext css::uno::Reference<css::xml::sax::XFastContextHandler>
+    writerfilter::ooxml::OOXMLFastContextHandlerWrapper mxWrappedContext cpo::uno::Reference<css::xml::sax::XFastContextHandler>
     writerfilter::ooxml::OOXMLFastContextHandler
 writerperfect/inc/DocumentHandler.hxx:47
-    writerperfect::DocumentHandler mxHandler css::uno::Reference<css::xml::sax::XDocumentHandler>
+    writerperfect::DocumentHandler mxHandler cpo::uno::Reference<css::xml::sax::XDocumentHandler>
     SvXMLImport
 xmloff/source/draw/ximpshap.hxx:555
     SdXMLFrameShapeContext mxImplContext SvXMLImportContextRef
@@ -641,25 +641,25 @@ xmloff/source/text/XMLTextFrameContext.hxx:38
     XMLTextFrameContext m_xImplContext SvXMLImportContextRef
     (anonymous namespace)::XMLTextFrameContext_Impl
 xmloff/source/transform/ControlOOoTContext.hxx:26
-    XMLControlOOoTransformerContext m_xAttrList css::uno::Reference<css::xml::sax::XAttributeList>
+    XMLControlOOoTransformerContext m_xAttrList cpo::uno::Reference<css::xml::sax::XAttributeList>
     XMLMutableAttributeList
 xmloff/source/transform/FormPropOOoTContext.hxx:29
-    XMLFormPropOOoTransformerContext m_xAttrList css::uno::Reference<css::xml::sax::XAttributeList>
+    XMLFormPropOOoTransformerContext m_xAttrList cpo::uno::Reference<css::xml::sax::XAttributeList>
     XMLMutableAttributeList
 xmloff/source/transform/FrameOASISTContext.hxx:26
-    XMLFrameOASISTransformerContext m_xAttrList css::uno::Reference<css::xml::sax::XAttributeList>
+    XMLFrameOASISTransformerContext m_xAttrList cpo::uno::Reference<css::xml::sax::XAttributeList>
     XMLMutableAttributeList
 xmloff/source/transform/MergeElemTContext.hxx:31
-    XMLMergeElemTransformerContext m_xAttrList css::uno::Reference<css::xml::sax::XAttributeList>
+    XMLMergeElemTransformerContext m_xAttrList cpo::uno::Reference<css::xml::sax::XAttributeList>
     XMLMutableAttributeList
 xmloff/source/transform/PersAttrListTContext.hxx:29
-    XMLPersAttrListTContext m_xAttrList css::uno::Reference<css::xml::sax::XAttributeList>
+    XMLPersAttrListTContext m_xAttrList cpo::uno::Reference<css::xml::sax::XAttributeList>
     XMLMutableAttributeList
 xmloff/source/transform/StyleOASISTContext.cxx:63
-    XMLPropertiesTContext_Impl m_xAttrList css::uno::Reference<css::xml::sax::XAttributeList>
+    XMLPropertiesTContext_Impl m_xAttrList cpo::uno::Reference<css::xml::sax::XAttributeList>
     XMLMutableAttributeList
 xmloff/source/transform/StyleOOoTContext.cxx:144
-    (anonymous namespace)::XMLTypedPropertiesOOoTContext_Impl m_xAttrList css::uno::Reference<css::xml::sax::XAttributeList>
+    (anonymous namespace)::XMLTypedPropertiesOOoTContext_Impl m_xAttrList cpo::uno::Reference<css::xml::sax::XAttributeList>
     XMLMutableAttributeList
 xmlscript/source/xmldlg_imexp/imp_share.hxx:199
     xmlscript::ElementBase m_pParent ElementBase *
@@ -668,5 +668,5 @@ xmlscript/source/xmllib_imexp/imp_share.hxx:149
     xmlscript::LibElementBase mxParent rtl::Reference<LibElementBase>
     xmlscript::LibrariesElement
 xmlsecurity/inc/xsecctl.hxx:73
-    InternalSignatureInformation xReferenceResolvedListener css::uno::Reference<css::xml::crypto::sax::XReferenceResolvedListener>
+    InternalSignatureInformation xReferenceResolvedListener cpo::uno::Reference<css::xml::crypto::sax::XReferenceResolvedListener>
     SignatureVerifierImpl

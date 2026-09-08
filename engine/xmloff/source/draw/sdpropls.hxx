@@ -53,13 +53,13 @@ class SvXMLImport;
 class XMLSdPropHdlFactory : public XMLPropertyHandlerFactory
 {
 private:
-    css::uno::Reference< css::frame::XModel > mxModel;
+    cpo::uno::Reference< css::frame::XModel > mxModel;
     SvXMLExport* mpExport;
     SvXMLImport* mpImport;
 
 public:
-    XMLSdPropHdlFactory( css::uno::Reference< css::frame::XModel > xModel, SvXMLExport& rExport );
-    XMLSdPropHdlFactory( css::uno::Reference< css::frame::XModel > xModel, SvXMLImport& rImport );
+    XMLSdPropHdlFactory( cpo::uno::Reference< css::frame::XModel > xModel, SvXMLExport& rExport );
+    XMLSdPropHdlFactory( cpo::uno::Reference< css::frame::XModel > xModel, SvXMLImport& rImport );
     virtual ~XMLSdPropHdlFactory() override;
     virtual const XMLPropertyHandler* GetPropertyHandler( sal_Int32 nType ) const override;
 };
@@ -81,7 +81,7 @@ protected:
     virtual void ContextFilter(
         bool bEnableFoFontFamily,
         ::std::vector< XMLPropertyState >& rProperties,
-        const css::uno::Reference< css::beans::XPropertySet >& rPropSet ) const override;
+        const cpo::uno::Reference< css::beans::XPropertySet >& rPropSet ) const override;
 public:
     XMLShapeExportPropertyMapper( const rtl::Reference< XMLPropertySetMapper >& rMapper, SvXMLExport& rExport );
     virtual ~XMLShapeExportPropertyMapper() override;
@@ -114,7 +114,7 @@ protected:
     virtual void ContextFilter(
         bool bEnableFoFontFamily,
         ::std::vector< XMLPropertyState >& rProperties,
-        const css::uno::Reference< css::beans::XPropertySet >& rPropSet ) const override;
+        const cpo::uno::Reference< css::beans::XPropertySet >& rPropSet ) const override;
 public:
     XMLPageExportPropertyMapper( const rtl::Reference< XMLPropertySetMapper >& rMapper, SvXMLExport& rExport );
     virtual ~XMLPageExportPropertyMapper() override;

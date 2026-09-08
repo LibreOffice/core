@@ -95,14 +95,14 @@ public:
 
     // XAccessibleHypertext
     virtual sal_Int32 SAL_CALL getHyperLinkCount() override;
-    virtual css::uno::Reference< css::accessibility::XAccessibleHyperlink >
+    virtual cpo::uno::Reference< css::accessibility::XAccessibleHyperlink >
     SAL_CALL getHyperLink( sal_Int32 nLinkIndex ) override;
     virtual sal_Int32 SAL_CALL getHyperLinkIndex( sal_Int32 nCharIndex ) override;
 
     SwAccessibleMap *GetAccessibleMap(){ return GetMap();}
 
 public:
-    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet> SAL_CALL
+    virtual cpo::uno::Reference< css::accessibility::XAccessibleRelationSet> SAL_CALL
         getAccessibleRelationSet() override;
 };
 

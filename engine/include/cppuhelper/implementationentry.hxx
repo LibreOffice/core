@@ -49,7 +49,7 @@ struct SAL_WARN_UNUSED ImplementationEntry
         The pModCount parameter is a backwards-compatibility remainder of a
         removed library unloading feature; always set to null.
     */
-     css::uno::Reference< css::lang::XSingleComponentFactory >
+     cpo::uno::Reference< css::lang::XSingleComponentFactory >
      (* createFactory)(
          ComponentFactoryFunc fptr,
          ::rtl::OUString const & rImplementationName,

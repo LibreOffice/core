@@ -98,7 +98,7 @@
 
 using namespace ::css;
 using namespace ::css::beans;
-using namespace ::css::uno;
+using namespace ::cpo;
 using namespace ::cpo::uno;
 using namespace ::css::drawing;
 using namespace ::css::table;
@@ -733,7 +733,7 @@ static sal_Int32 lcl_CircleAngle2CustomShapeEllipseAngleOOX(const sal_Int32 nInt
         return 0;
 }
 
-static OUString lcl_GetTarget(const css::uno::Reference<css::frame::XModel>& xModel,
+static OUString lcl_GetTarget(const cpo::uno::Reference<css::frame::XModel>& xModel,
                               std::u16string_view rURL)
 {
     Reference<drawing::XDrawPagesSupplier> xDPS(xModel, uno::UNO_QUERY_THROW);

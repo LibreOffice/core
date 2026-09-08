@@ -107,8 +107,8 @@ namespace connectivity::dbase
         rtl_TextEncoding m_eEncoding;
 
         void alterColumn(sal_Int32 index,
-                         const css::uno::Reference< css::beans::XPropertySet>& descriptor ,
-                         const css::uno::Reference< css::sdbcx::XDataDescriptorFactory>& xOldColumn );
+                         const cpo::uno::Reference< css::beans::XPropertySet>& descriptor ,
+                         const cpo::uno::Reference< css::sdbcx::XDataDescriptorFactory>& xOldColumn );
         void readHeader();
         void fillColumns();
         OUString createTempFile();
@@ -121,8 +121,8 @@ namespace connectivity::dbase
 
         void WriteMemo(const ORowSetValue& aVariable, std::size_t& rBlockNr);
         bool WriteBuffer();
-        bool UpdateBuffer(OValueRefVector& rRow, const OValueRefRow& pOrgRow, const css::uno::Reference< css::container::XIndexAccess>& _xCols, bool bForceAllFields);
-        css::uno::Reference< css::beans::XPropertySet> isUniqueByColumnName(sal_Int32 _nColumnPos);
+        bool UpdateBuffer(OValueRefVector& rRow, const OValueRefRow& pOrgRow, const cpo::uno::Reference< css::container::XIndexAccess>& _xCols, bool bForceAllFields);
+        cpo::uno::Reference< css::beans::XPropertySet> isUniqueByColumnName(sal_Int32 _nColumnPos);
         bool AllocBuffer();
 
         void throwInvalidDbaseFormat();
@@ -162,8 +162,8 @@ namespace connectivity::dbase
         virtual void disposing() override;
 
         // XAlterTable
-        virtual void alterColumnByName( const OUString& colName, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
-        virtual void alterColumnByIndex( sal_Int32 index, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
+        virtual void alterColumnByName( const OUString& colName, const cpo::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
+        virtual void alterColumnByIndex( sal_Int32 index, const cpo::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
         // XRename
         virtual void rename( const OUString& newName ) override;
 
@@ -171,11 +171,11 @@ namespace connectivity::dbase
         bool    CreateImpl();
 
 
-        virtual bool InsertRow(OValueRefVector& rRow, const css::uno::Reference< css::container::XIndexAccess>& _xCols) override;
+        virtual bool InsertRow(OValueRefVector& rRow, const cpo::uno::Reference< css::container::XIndexAccess>& _xCols) override;
         virtual bool DeleteRow(const OSQLColumns& _rCols) override;
-        virtual bool UpdateRow(OValueRefVector& rRow, OValueRefRow& pOrgRow,const css::uno::Reference< css::container::XIndexAccess>& _xCols) override;
+        virtual bool UpdateRow(OValueRefVector& rRow, OValueRefRow& pOrgRow,const cpo::uno::Reference< css::container::XIndexAccess>& _xCols) override;
 
-        virtual void addColumn(const css::uno::Reference< css::beans::XPropertySet>& descriptor) override;
+        virtual void addColumn(const cpo::uno::Reference< css::beans::XPropertySet>& descriptor) override;
         virtual void dropColumn(sal_Int32 _nPos) override;
 
         static OUString   getEntry(file::OConnection const * _pConnection, std::u16string_view _sURL );
@@ -183,7 +183,7 @@ namespace connectivity::dbase
 
         virtual void refreshHeader() override;
 
-        virtual css::uno::Reference< css::sdbc::XDatabaseMetaData> getMetaData() const override;
+        virtual cpo::uno::Reference< css::sdbc::XDatabaseMetaData> getMetaData() const override;
     };
 
 }

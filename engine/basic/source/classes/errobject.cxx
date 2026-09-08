@@ -30,6 +30,7 @@
 #include <runtime.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace ::ooo;
 
 class ErrObject : public ::cppu::WeakImplHelper< vba::XErrObject,

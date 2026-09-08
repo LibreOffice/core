@@ -22,14 +22,14 @@
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <sal/log.hxx>
 
 
 using ::cpo::uno::Any;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::UNO_QUERY;
+using ::cpo::uno::Reference;
+using ::cpo::uno::UNO_QUERY;
 using ::com::sun::star::beans::XPropertySet;
 
 using ::xmloff::token::XML_HREF;
@@ -48,7 +48,7 @@ XMLAutoMarkFileContext::~XMLAutoMarkFileContext()
 
 void XMLAutoMarkFileContext::startFastElement(
     sal_Int32 /*nElement*/,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     // scan for text:alphabetical-index-auto-mark-file attribute, and if
     // found set value with the document

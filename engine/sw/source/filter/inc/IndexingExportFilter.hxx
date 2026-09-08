@@ -23,7 +23,7 @@ class IndexingExportFilter final
                                   css::lang::XInitialization, css::lang::XServiceInfo>
 {
 private:
-    css::uno::Reference<css::lang::XComponent> m_xSourceDocument;
+    cpo::uno::Reference<css::lang::XComponent> m_xSourceDocument;
 
 public:
     IndexingExportFilter() {}
@@ -36,7 +36,7 @@ public:
 
     // XExporter
     virtual void SAL_CALL
-    setSourceDocument(const css::uno::Reference<css::lang::XComponent>& xDocument) override
+    setSourceDocument(const cpo::uno::Reference<css::lang::XComponent>& xDocument) override
     {
         m_xSourceDocument = xDocument;
     }

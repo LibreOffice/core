@@ -151,7 +151,7 @@ public:
     static OUString             ChooseScript(weld::Window *pParent);
     // if xDocFrame is present, then select that document in the macro organizer by default, otherwise it is typically "Application Macros"
     // that is preselected
-    SAL_DLLPRIVATE static void  MacroOrganizer(weld::Window* pParent, const css::uno::Reference<css::frame::XFrame>& xDocFrame, sal_Int16 nTabId);
+    SAL_DLLPRIVATE static void  MacroOrganizer(weld::Window* pParent, const cpo::uno::Reference<css::frame::XFrame>& xDocFrame, sal_Int16 nTabId);
     static ErrCode              CallBasic( const OUString&, BasicManager*, SbxArray *pArgs, SbxValue *pRet );
     static ErrCode              CallAppBasic( const OUString& i_macroName )
                                 { return CallBasic( i_macroName, SfxApplication::GetBasicManager(), nullptr, nullptr ); }
@@ -184,7 +184,7 @@ public:
     SAL_DLLPRIVATE std::vector<SfxViewFrame*>& GetViewFrames_Impl() const;
     SAL_DLLPRIVATE std::vector<SfxViewShell*>& GetViewShells_Impl() const;
     /* unordered_map<ModuleName+Language, acceleratorConfigurationClassInstance> */
-    SAL_DLLPRIVATE std::unordered_map<OUString, css::uno::Reference<css::ui::XAcceleratorConfiguration>>& GetAcceleratorConfs_Impl() const;
+    SAL_DLLPRIVATE std::unordered_map<OUString, cpo::uno::Reference<css::ui::XAcceleratorConfiguration>>& GetAcceleratorConfs_Impl() const;
     SAL_DLLPRIVATE std::vector<SfxObjectShell*>& GetObjectShells_Impl() const;
     SAL_DLLPRIVATE void         SetViewFrame_Impl(SfxViewFrame *pViewFrame);
 

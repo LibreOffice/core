@@ -69,7 +69,7 @@ class VCL_DLLPUBLIC PDFOutputStream
 {
     public:
     virtual ~PDFOutputStream();
-    virtual void write( const css::uno::Reference< css::io::XOutputStream >& xStream ) = 0;
+    virtual void write( const cpo::uno::Reference< css::io::XOutputStream >& xStream ) = 0;
 };
 
 /** Parameters that are needed when encrypting */
@@ -703,7 +703,7 @@ public:
         sal_uInt32                      DPIx, DPIy;     // how to handle MapMode( MapUnit::MapPixel )
                                                         // 0 here specifies a default handling
         PDFWriter::ColorMode            ColorMode;
-        css::uno::Reference< css::security::XCertificate> SignCertificate;
+        cpo::uno::Reference< css::security::XCertificate> SignCertificate;
         OUString                        SignTSA;
         /// Use reference XObject markup for PDF images.
         bool                            UseReferenceXObject;
@@ -740,7 +740,7 @@ public:
         {}
     };
 
-    VCL_DLLPUBLIC PDFWriter( const PDFWriterContext& rContext, const css::uno::Reference< css::beans::XMaterialHolder >& );
+    VCL_DLLPUBLIC PDFWriter( const PDFWriterContext& rContext, const cpo::uno::Reference< css::beans::XMaterialHolder >& );
     VCL_DLLPUBLIC ~PDFWriter();
 
     /** Returns an OutputDevice for formatting

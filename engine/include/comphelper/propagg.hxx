@@ -196,10 +196,10 @@ class UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) OPropertySetAggregationHelper    :p
     friend class internal::PropertyForwarder;
 
 protected:
-    css::uno::Reference< css::beans::XPropertyState>      m_xAggregateState;
-    css::uno::Reference< css::beans::XPropertySet>        m_xAggregateSet;
-    css::uno::Reference< css::beans::XMultiPropertySet>   m_xAggregateMultiSet;
-    css::uno::Reference< css::beans::XFastPropertySet>    m_xAggregateFastSet;
+    cpo::uno::Reference< css::beans::XPropertyState>      m_xAggregateState;
+    cpo::uno::Reference< css::beans::XPropertySet>        m_xAggregateSet;
+    cpo::uno::Reference< css::beans::XMultiPropertySet>   m_xAggregateMultiSet;
+    cpo::uno::Reference< css::beans::XFastPropertySet>    m_xAggregateFastSet;
 
     std::unique_ptr<internal::PropertyForwarder>          m_pForwarder;
     bool                            m_bListening : 1;
@@ -217,8 +217,8 @@ public:
     virtual cpo::uno::Any getFastPropertyValue(sal_Int32 nHandle) override;
 
 // XPropertySet
-    virtual void           addPropertyChangeListener(const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener) override;
-    virtual void           addVetoableChangeListener(const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener) override;
+    virtual void           addPropertyChangeListener(const OUString& aPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& xListener) override;
+    virtual void           addVetoableChangeListener(const OUString& PropertyName, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener) override;
 
 // XPropertiesChangeListener
     virtual void propertiesChange(const cpo::uno::Sequence< css::beans::PropertyChangeEvent >& evt) override;
@@ -228,7 +228,7 @@ public:
 
 // XMultiPropertySet
     virtual void   setPropertyValues(const cpo::uno::Sequence< OUString >& PropertyNames, const cpo::uno::Sequence< cpo::uno::Any >& Values) override;
-    virtual void   addPropertiesChangeListener(const cpo::uno::Sequence< OUString >& aPropertyNames, const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener) override;
+    virtual void   addPropertiesChangeListener(const cpo::uno::Sequence< OUString >& aPropertyNames, const cpo::uno::Reference< css::beans::XPropertiesChangeListener >& xListener) override;
 
 // XPropertyState
     virtual css::beans::PropertyState getPropertyState(const OUString& PropertyName) override;
@@ -310,7 +310,7 @@ protected:
     /// must be called before aggregation, if aggregation is used
     ///
     /// @throws css::lang::IllegalArgumentException
-    void setAggregation(const css::uno::Reference< cpo::uno::XInterface >&);
+    void setAggregation(const cpo::uno::Reference< cpo::uno::XInterface >&);
     void startListening();
 };
 

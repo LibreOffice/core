@@ -47,7 +47,7 @@ namespace frm
     using ::cpo::uno::Any;
     using ::com::sun::star::beans::PropertyExistException;
     using ::com::sun::star::beans::PropertyValue;
-    using ::com::sun::star::uno::Reference;
+    using ::cpo::uno::Reference;
     using ::com::sun::star::beans::XMultiPropertySet;
     using ::com::sun::star::beans::XPropertySetInfo;
     using ::cpo::uno::RuntimeException;
@@ -196,8 +196,8 @@ namespace frm
         impl_nts_checkDisposed_throw();
 
         // check whether it's removable at all
-        Reference< XMultiPropertySet > xMe( m_rContext.getPropertiesInterface(), css::uno::UNO_SET_THROW );
-        Reference< XPropertySetInfo > xPSI( xMe->getPropertySetInfo(), css::uno::UNO_SET_THROW );
+        Reference< XMultiPropertySet > xMe( m_rContext.getPropertiesInterface(), cpo::uno::UNO_SET_THROW );
+        Reference< XPropertySetInfo > xPSI( xMe->getPropertySetInfo(), cpo::uno::UNO_SET_THROW );
         Property aProperty( xPSI->getPropertyByName( _rName ) );
         if ( ( aProperty.Attributes & PropertyAttribute::REMOVABLE ) == 0 )
             throw NotRemoveableException( _rName, xMe );
@@ -243,8 +243,8 @@ namespace frm
         ::osl::MutexGuard aGuard( m_rContext.getMutex() );
         impl_nts_checkDisposed_throw();
 
-        Reference< XMultiPropertySet > xMe( m_rContext.getPropertiesInterface(), css::uno::UNO_SET_THROW );
-        Reference< XPropertySetInfo > xPSI( xMe->getPropertySetInfo(), css::uno::UNO_SET_THROW );
+        Reference< XMultiPropertySet > xMe( m_rContext.getPropertiesInterface(), cpo::uno::UNO_SET_THROW );
+        Reference< XPropertySetInfo > xPSI( xMe->getPropertySetInfo(), cpo::uno::UNO_SET_THROW );
 
         const Sequence< Property > aProperties( xPSI->getProperties() );
         Sequence< OUString > aPropertyNames( aProperties.getLength() );
@@ -305,7 +305,7 @@ namespace frm
         std::transform(aSortedProps.begin(), aSortedProps.end(),
             aValues.getArray(), SelectValueOfPropertyValue() );
 
-        Reference< XMultiPropertySet > xMe( m_rContext.getPropertiesInterface(), css::uno::UNO_SET_THROW );
+        Reference< XMultiPropertySet > xMe( m_rContext.getPropertiesInterface(), cpo::uno::UNO_SET_THROW );
 
         aGuard.clear();
         xMe->setPropertyValues( aNames, aValues );

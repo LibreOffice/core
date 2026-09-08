@@ -17,7 +17,8 @@
 #include <com/sun/star/document/MacroExecMode.hpp>
 
 using namespace com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 ScDocShellRef ScFilterTestBase::loadDoc(const OUString& rURL, const OUString& rFilter,
                                         const OUString& rUserData, const OUString& rTypeName,

@@ -177,8 +177,8 @@ class OptimizerDialog : public vcl::RoadmapWizardMachine, public ConfigurationAc
 {
 public:
 
-    OptimizerDialog( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext, css::uno::Reference< css::frame::XFrame > const & rxFrame,
-        css::uno::Reference< css::frame::XDispatch > const & rxStatusDispatcher );
+    OptimizerDialog( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext, cpo::uno::Reference< css::frame::XFrame > const & rxFrame,
+        cpo::uno::Reference< css::frame::XDispatch > const & rxStatusDispatcher );
     std::unique_ptr<BuilderPage> createPage(vcl::WizardTypes::WizardState nState) override;
     ~OptimizerDialog();
 
@@ -188,10 +188,10 @@ public:
     bool                mbIsReadonly;
 
 private:
-    css::uno::Reference< css::frame::XFrame >         mxFrame;
-    css::uno::Reference< css::frame::XController >    mxController;
+    cpo::uno::Reference< css::frame::XFrame >         mxFrame;
+    cpo::uno::Reference< css::frame::XController >    mxController;
 
-    css::uno::Reference< css::frame::XDispatch >      mxStatusDispatcher;
+    cpo::uno::Reference< css::frame::XDispatch >      mxStatusDispatcher;
 
     IntroPage* mpPage0;
     SlidesPage* mpPage1;
@@ -234,8 +234,8 @@ public:
     void SetObjectsPage(ObjectsPage* pPage3) { mpPage3 = pPage3; }
     void SetSummaryPage(SummaryPage* pPage4) { mpPage4 = pPage4; }
 
-    css::uno::Reference< css::frame::XDispatch >& GetStatusDispatcher() { return mxStatusDispatcher; };
-    css::uno::Reference< css::frame::XFrame>& GetFrame() { return mxFrame; };
+    cpo::uno::Reference< css::frame::XDispatch >& GetStatusDispatcher() { return mxStatusDispatcher; };
+    cpo::uno::Reference< css::frame::XFrame>& GetFrame() { return mxFrame; };
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -52,14 +52,14 @@ public:
 
     // com.sun.star.xml.sax.XFastContextHandler interface ---------------------
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler >
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler >
                         createFastChildContext(
                             sal_Int32 nElement,
-                            const css::uno::Reference< css::xml::sax::XFastAttributeList >& rxAttribs ) final override;
+                            const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& rxAttribs ) final override;
 
     virtual void startFastElement(
                             sal_Int32 nElement,
-                            const css::uno::Reference< css::xml::sax::XFastAttributeList >& rxAttribs ) final override;
+                            const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& rxAttribs ) final override;
 
     virtual void characters( const OUString& rChars ) final override;
 

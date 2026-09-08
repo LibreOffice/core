@@ -76,8 +76,8 @@ class SwXTextView final : public SwXTextView_Base
     rtl::Reference< SwXTextViewCursor >   mxTextViewCursor;
 
     SdrObject* GetControl(
-        const css::uno::Reference< css::awt::XControlModel > & Model,
-        css::uno::Reference< css::awt::XControl >& xToFill  );
+        const cpo::uno::Reference< css::awt::XControlModel > & Model,
+        cpo::uno::Reference< css::awt::XControl >& xToFill  );
 
     virtual ~SwXTextView() override;
 public:
@@ -86,26 +86,26 @@ public:
     //XSelectionSupplier
     virtual cpo::uno::Any SAL_CALL getSelection() override;
     virtual bool SAL_CALL select(const cpo::uno::Any& rInterface) override;
-    virtual void SAL_CALL addSelectionChangeListener(const css::uno::Reference< css::view::XSelectionChangeListener > & xListener) override;
-    virtual void SAL_CALL removeSelectionChangeListener(const css::uno::Reference< css::view::XSelectionChangeListener > & xListener) override;
+    virtual void SAL_CALL addSelectionChangeListener(const cpo::uno::Reference< css::view::XSelectionChangeListener > & xListener) override;
+    virtual void SAL_CALL removeSelectionChangeListener(const cpo::uno::Reference< css::view::XSelectionChangeListener > & xListener) override;
 
     // XFormLayerAccess
-    virtual css::uno::Reference< css::form::runtime::XFormController > SAL_CALL getFormController( const css::uno::Reference< css::form::XForm >& Form ) override;
+    virtual cpo::uno::Reference< css::form::runtime::XFormController > SAL_CALL getFormController( const cpo::uno::Reference< css::form::XForm >& Form ) override;
     virtual bool SAL_CALL isFormDesignMode(  ) override;
     virtual void SAL_CALL setFormDesignMode( bool DesignMode ) override;
 
     // XControlAccess
-    virtual css::uno::Reference< css::awt::XControl >  SAL_CALL getControl(const css::uno::Reference< css::awt::XControlModel > & Model) override;
+    virtual cpo::uno::Reference< css::awt::XControl >  SAL_CALL getControl(const cpo::uno::Reference< css::awt::XControlModel > & Model) override;
 
     //XTextViewCursorSupplier
-    virtual css::uno::Reference< css::text::XTextViewCursor >  SAL_CALL getViewCursor() override;
+    virtual cpo::uno::Reference< css::text::XTextViewCursor >  SAL_CALL getViewCursor() override;
 
     // XTextViewTextRangeSupplier
-    virtual css::uno::Reference<css::text::XTextRange>
+    virtual cpo::uno::Reference<css::text::XTextRange>
         SAL_CALL createTextRangeByPixelPosition(const css::awt::Point& rPixelPosition) override;
 
     //XViewSettings
-    virtual css::uno::Reference< css::beans::XPropertySet >  SAL_CALL getViewSettings() override;
+    virtual cpo::uno::Reference< css::beans::XPropertySet >  SAL_CALL getViewSettings() override;
 
     //XRubySelection
     virtual cpo::uno::Sequence<
@@ -116,13 +116,13 @@ public:
         cpo::uno::Sequence< css::beans::PropertyValue > >& RubyList, bool bAutomatic ) override;
 
     //XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
     virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
     virtual cpo::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
-    virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
-    virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
-    virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
-    virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+    virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
+    virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
+    virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+    virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -130,11 +130,11 @@ public:
     virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     //XTransferableSupplier
-    virtual css::uno::Reference< css::datatransfer::XTransferable > SAL_CALL getTransferable(  ) override;
-    virtual void SAL_CALL insertTransferable( const css::uno::Reference< css::datatransfer::XTransferable >& xTrans ) override;
+    virtual cpo::uno::Reference< css::datatransfer::XTransferable > SAL_CALL getTransferable(  ) override;
+    virtual void SAL_CALL insertTransferable( const cpo::uno::Reference< css::datatransfer::XTransferable >& xTrans ) override;
 
     // XTransferableTextSupplier
-    virtual css::uno::Reference<css::datatransfer::XTransferable> SAL_CALL getTransferableForTextRange(css::uno::Reference<css::text::XTextRange> const& xTextRange) override;
+    virtual cpo::uno::Reference<css::datatransfer::XTransferable> SAL_CALL getTransferableForTextRange(cpo::uno::Reference<css::text::XTextRange> const& xTextRange) override;
 
     // XDumper
     OUString SAL_CALL dump(const OUString& rKind) override;
@@ -183,7 +183,7 @@ public:
     virtual bool SAL_CALL goRight( sal_Int16 nCount, bool bExpand ) override;
     virtual void SAL_CALL gotoStart( bool bExpand ) override;
     virtual void SAL_CALL gotoEnd( bool bExpand ) override;
-    virtual void SAL_CALL gotoRange( const css::uno::Reference< css::text::XTextRange >& xRange, bool bExpand ) override;
+    virtual void SAL_CALL gotoRange( const cpo::uno::Reference< css::text::XTextRange >& xRange, bool bExpand ) override;
 
     //XPageCursor
     virtual bool SAL_CALL jumpToFirstPage() override;
@@ -196,9 +196,9 @@ public:
     virtual sal_Int16 SAL_CALL getPage() override;
 
     //XTextRange
-    virtual css::uno::Reference< css::text::XText >  SAL_CALL getText() override;
-    virtual css::uno::Reference< css::text::XTextRange > SAL_CALL  getStart() override;
-    virtual css::uno::Reference< css::text::XTextRange > SAL_CALL   getEnd() override;
+    virtual cpo::uno::Reference< css::text::XText >  SAL_CALL getText() override;
+    virtual cpo::uno::Reference< css::text::XTextRange > SAL_CALL  getStart() override;
+    virtual cpo::uno::Reference< css::text::XTextRange > SAL_CALL   getEnd() override;
     virtual OUString SAL_CALL  getString() override;
     virtual void SAL_CALL  setString(const OUString& aString) override;
 
@@ -217,13 +217,13 @@ public:
     virtual void SAL_CALL gotoStartOfLine(bool bExpand) override;
 
     //XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
     virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
     virtual cpo::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
-    virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
-    virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
-    virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
-    virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+    virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
+    virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
+    virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+    virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
     //XPropertyState
     virtual css::beans::PropertyState SAL_CALL getPropertyState( const OUString& PropertyName ) override;

@@ -44,12 +44,12 @@
 
 using namespace comphelper;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::cpo::uno;
 
 CertificateViewer::CertificateViewer(weld::Window* _pParent,
-        const css::uno::Reference< css::xml::crypto::XSecurityEnvironment >& _rxSecurityEnvironment,
-        const css::uno::Reference< css::security::XCertificate >& _rXCert, bool bCheckForPrivateKey,
+        const cpo::uno::Reference< css::xml::crypto::XSecurityEnvironment >& _rxSecurityEnvironment,
+        const cpo::uno::Reference< css::security::XCertificate >& _rXCert, bool bCheckForPrivateKey,
         CertificateChooser* pParentChooser)
     : GenericDialogController(_pParent, u"xmlsec/ui/viewcertdialog.ui"_ustr, u"ViewCertDialog"_ustr)
     , mbCheckForPrivateKey(bCheckForPrivateKey)
@@ -111,7 +111,7 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP(weld::Container* pParent,
     }
 
     // insert data
-    css::uno::Reference< css::security::XCertificate > xCert = mpDlg->mxCert;
+    cpo::uno::Reference< css::security::XCertificate > xCert = mpDlg->mxCert;
 
     OUString sSubjectName(xmlsec::GetContentPart(xCert->getSubjectName(), xCert->getCertificateKind()));
     if (!sSubjectName.isEmpty())
@@ -378,7 +378,7 @@ IMPL_LINK_NOARG(CertificateViewerCertPathTP, CertSelectHdl, weld::TreeView&, voi
 }
 
 void CertificateViewerCertPathTP::InsertCert(const weld::TreeIter* pParent, const OUString& rName,
-                                             const css::uno::Reference< css::security::XCertificate >& rxCert,
+                                             const cpo::uno::Reference< css::security::XCertificate >& rxCert,
                                              bool bValid)
 {
     auto const sImage = bValid ? std::u16string_view(u"" BMP_CERT_OK) : std::u16string_view(u"" BMP_CERT_NOT_OK);

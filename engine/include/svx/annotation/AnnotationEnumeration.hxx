@@ -32,7 +32,7 @@ namespace rtl
 {
 template <class reference_type> class Reference;
 }
-namespace com::sun::star::uno
+namespace cpo::uno
 {
 template <class interface_type> class Reference;
 }
@@ -40,7 +40,7 @@ template <class interface_type> class Reference;
 namespace sdr::annotation
 {
 class Annotation;
-SVXCORE_DLLPUBLIC css::uno::Reference<css::office::XAnnotationEnumeration>
+SVXCORE_DLLPUBLIC cpo::uno::Reference<css::office::XAnnotationEnumeration>
 createAnnotationEnumeration(
     std::vector<rtl::Reference<sdr::annotation::Annotation>>&& xAnnotationVector);
 }

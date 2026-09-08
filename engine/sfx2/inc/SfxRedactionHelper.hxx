@@ -10,7 +10,7 @@
 #ifndef INCLUDED_CUI_SOURCE_INC_SFXREDACTIONHELPER_HXX
 #define INCLUDED_CUI_SOURCE_INC_SFXREDACTIONHELPER_HXX
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
@@ -68,7 +68,7 @@ public:
      * and inserts the shapes into the newly created draw pages.
      * */
     static void
-    addPagesToDraw(const css::uno::Reference<css::lang::XComponent>& xComponent, sal_Int32 nPages,
+    addPagesToDraw(const cpo::uno::Reference<css::lang::XComponent>& xComponent, sal_Int32 nPages,
                    const std::vector<GDIMetaFile>& aMetaFiles,
                    const std::vector<::Size>& aPageSizes, const PageMargins& aPageMargins,
                    const std::vector<std::pair<RedactionTarget, OUString>>& r_aTableTargets,
@@ -85,13 +85,13 @@ public:
      * pages inserted into Draw for redaction.
      * */
     static PageMargins
-    getPageMarginsForWriter(const css::uno::Reference<css::frame::XModel>& xModel);
+    getPageMarginsForWriter(const cpo::uno::Reference<css::frame::XModel>& xModel);
 
     /*
      * Used to get the page margins from the original/source Calc document. Then we apply these values to the
      * pages inserted into Draw for redaction.
      * */
-    static PageMargins getPageMarginsForCalc(const css::uno::Reference<css::frame::XModel>& xModel);
+    static PageMargins getPageMarginsForCalc(const cpo::uno::Reference<css::frame::XModel>& xModel);
 
     /*
      * Used to find the text portions to be redacted. Returns a list of rectangles to cover those
@@ -99,7 +99,7 @@ public:
      * */
     static void searchInMetaFile(const RedactionTarget& rRedactionTarget, const GDIMetaFile& rMtf,
                                  std::vector<tools::Rectangle>& aRedactionRectangles,
-                                 const css::uno::Reference<css::lang::XComponent>& xComponent);
+                                 const cpo::uno::Reference<css::lang::XComponent>& xComponent);
 
     /*
      * Used to find images to be redacted. Returns a list of rectangles to cover those
@@ -111,8 +111,8 @@ public:
     /*
      * Draws a redaction rectangle on the draw page referenced with its page number (0-based)
      * */
-    static void addRedactionRectToPage(const css::uno::Reference<css::lang::XComponent>& xComponent,
-                                       const css::uno::Reference<css::drawing::XDrawPage>& xPage,
+    static void addRedactionRectToPage(const cpo::uno::Reference<css::lang::XComponent>& xComponent,
+                                       const cpo::uno::Reference<css::drawing::XDrawPage>& xPage,
                                        const std::vector<tools::Rectangle>& aNewRectangles,
                                        bool isImage);
 
@@ -122,8 +122,8 @@ public:
      * */
     static void autoRedactPage(const RedactionTarget& rRedactionTarget,
                                const GDIMetaFile& rGDIMetaFile,
-                               const css::uno::Reference<css::drawing::XDrawPage>& xPage,
-                               const css::uno::Reference<css::lang::XComponent>& xComponent);
+                               const cpo::uno::Reference<css::drawing::XDrawPage>& xPage,
+                               const cpo::uno::Reference<css::lang::XComponent>& xComponent);
 
     /// Fill the search options based on the given redaction target
     static void fillSearchOptions(i18nutil::SearchOptions2& rSearchOpt,

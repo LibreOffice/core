@@ -42,7 +42,7 @@ class RequestFilterOptions final : public ::cppu::WeakImplHelper< css::task::XIn
     rtl::Reference<FilterOptionsContinuation>      m_xOptions;
 
 public:
-    RequestFilterOptions( css::uno::Reference< css::frame::XModel > const & rModel,
+    RequestFilterOptions( cpo::uno::Reference< css::frame::XModel > const & rModel,
                               const cpo::uno::Sequence< css::beans::PropertyValue >& rProperties );
 
     bool    isAbort() const { return m_xAbort->wasSelected(); }
@@ -54,7 +54,7 @@ public:
 
     virtual cpo::uno::Any getRequest() override;
 
-    virtual cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation >
+    virtual cpo::uno::Sequence< cpo::uno::Reference< css::task::XInteractionContinuation >
             > getContinuations() override;
 };
 

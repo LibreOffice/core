@@ -19,6 +19,7 @@
 #include <COKit/COKit.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 namespace sdr::annotation
 {
@@ -122,7 +123,7 @@ void Annotation::fromData(const AnnotationData& rData)
     m_SizeExplicit = rData.m_SizeExplicit;
 }
 
-Annotation::Annotation(const css::uno::Reference<cpo::uno::XComponentContext>& rxContext,
+Annotation::Annotation(const cpo::uno::Reference<cpo::uno::XComponentContext>& rxContext,
                        SdrPage* pPage)
     : cppu::PropertySetMixin<office::XAnnotation>(rxContext, IMPLEMENTS_PROPERTY_SET,
                                                   cpo::uno::Sequence<OUString>())

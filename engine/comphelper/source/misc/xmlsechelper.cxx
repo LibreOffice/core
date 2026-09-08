@@ -310,16 +310,16 @@ std::vector< std::pair< OUString, OUString> > parseDN(std::u16string_view rRawSt
         return aStr.makeStringAndClear();
     }
 
-    css::uno::Reference<css::security::XCertificate> FindCertInContext(
-        const css::uno::Reference<css::xml::crypto::XXMLSecurityContext>& xSecurityContext,
+    cpo::uno::Reference<css::security::XCertificate> FindCertInContext(
+        const cpo::uno::Reference<css::xml::crypto::XXMLSecurityContext>& xSecurityContext,
         const OUString& rSHA1Thumbprint)
     {
         if (!xSecurityContext.is())
             return {};
 
-        css::uno::Reference<css::xml::crypto::XSecurityEnvironment> xSE
+        cpo::uno::Reference<css::xml::crypto::XSecurityEnvironment> xSE
             = xSecurityContext->getSecurityEnvironment();
-        cpo::uno::Sequence<css::uno::Reference<css::security::XCertificate>> xCertificates
+        cpo::uno::Sequence<cpo::uno::Reference<css::security::XCertificate>> xCertificates
             = xSE->getPersonalCertificates();
 
         auto aCertsIter = asNonConstRange(xCertificates);

@@ -36,14 +36,14 @@ class ScAddInListener final : public cppu::WeakImplHelper<
                         public SvtBroadcaster
 {
 private:
-    css::uno::Reference<css::sheet::XVolatileResult> xVolRes;
+    cpo::uno::Reference<css::sheet::XVolatileResult> xVolRes;
     cpo::uno::Any aResult;
     std::unique_ptr<ScAddInDocs> pDocs; // documents where this is used
 
     static ::std::vector<rtl::Reference<ScAddInListener>> aAllListeners;
 
     // always allocated via CreateListener
-    ScAddInListener( css::uno::Reference<css::sheet::XVolatileResult> xVR,
+    ScAddInListener( cpo::uno::Reference<css::sheet::XVolatileResult> xVR,
                     ScDocument* pD );
 
 public:
@@ -51,10 +51,10 @@ public:
 
     // create Listener and put it into global list
     static ScAddInListener* CreateListener(
-                                const css::uno::Reference<css::sheet::XVolatileResult>& xVR,
+                                const cpo::uno::Reference<css::sheet::XVolatileResult>& xVR,
                                 ScDocument* pDoc );
 
-    static ScAddInListener* Get( const css::uno::Reference<css::sheet::XVolatileResult>& xVR );
+    static ScAddInListener* Get( const cpo::uno::Reference<css::sheet::XVolatileResult>& xVR );
 
     static void RemoveDocument( ScDocument* pDocument );
 

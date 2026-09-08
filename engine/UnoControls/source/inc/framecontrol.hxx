@@ -40,7 +40,7 @@ class FrameControl final : public FrameControl_BASE     // This order is necessa
 {
 public:
 
-    FrameControl( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+    FrameControl( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
     virtual ~FrameControl() override;
 
@@ -79,15 +79,15 @@ public:
     //  XControl
 
     virtual void createPeer(
-        const css::uno::Reference< css::awt::XToolkit >&      xToolkit ,
-        const css::uno::Reference< css::awt::XWindowPeer >&   xParent
+        const cpo::uno::Reference< css::awt::XToolkit >&      xToolkit ,
+        const cpo::uno::Reference< css::awt::XWindowPeer >&   xParent
     ) override;
 
     virtual bool setModel(
-        const css::uno::Reference< css::awt::XControlModel >& xModel
+        const cpo::uno::Reference< css::awt::XControlModel >& xModel
     ) override;
 
-    virtual css::uno::Reference< css::awt::XControlModel > getModel() override;
+    virtual cpo::uno::Reference< css::awt::XControlModel > getModel() override;
 
     //  XComponent
 
@@ -96,27 +96,27 @@ public:
     //  XView
 
     virtual bool setGraphics(
-        const css::uno::Reference< css::awt::XGraphics >& xDevice
+        const cpo::uno::Reference< css::awt::XGraphics >& xDevice
     ) override;
 
-    virtual css::uno::Reference< css::awt::XGraphics > getGraphics() override;
+    virtual cpo::uno::Reference< css::awt::XGraphics > getGraphics() override;
 
     //  XConnectionPointContainer
 
     virtual cpo::uno::Sequence< cpo::uno::Type > getConnectionPointTypes() override;
 
-    virtual css::uno::Reference< css::lang::XConnectionPoint > queryConnectionPoint(
+    virtual cpo::uno::Reference< css::lang::XConnectionPoint > queryConnectionPoint(
         const cpo::uno::Type& aType
     ) override;
 
     virtual void advise(
         const cpo::uno::Type&                                aType       ,
-        const css::uno::Reference< cpo::uno::XInterface >&    xListener
+        const cpo::uno::Reference< cpo::uno::XInterface >&    xListener
     ) override;
 
     virtual void unadvise(
         const cpo::uno::Type&                                aType ,
-        const css::uno::Reference< cpo::uno::XInterface >&    xListener
+        const cpo::uno::Reference< cpo::uno::XInterface >&    xListener
     ) override;
 
 private:
@@ -144,19 +144,19 @@ private:
 
     //  XPropertySet
 
-    css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo() override;
+    cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo() override;
 
     //  BaseControl
 
     virtual css::awt::WindowDescriptor impl_getWindowDescriptor(
-        const css::uno::Reference< css::awt::XWindowPeer >& xParentPeer
+        const cpo::uno::Reference< css::awt::XWindowPeer >& xParentPeer
     ) override;
 
-    void impl_createFrame(  const css::uno::Reference< css::awt::XWindowPeer >&       xPeer           ,
+    void impl_createFrame(  const cpo::uno::Reference< css::awt::XWindowPeer >&       xPeer           ,
                             const OUString&                                         sURL            ,
                             const cpo::uno::Sequence< css::beans::PropertyValue >&    seqArguments    );
 
-    css::uno::Reference< css::frame::XFrame2 >              m_xFrame;
+    cpo::uno::Reference< css::frame::XFrame2 >              m_xFrame;
     OUString                                                m_sComponentURL;
     cpo::uno::Sequence< css::beans::PropertyValue >         m_seqLoaderArguments;
     rtl::Reference<OConnectionPointContainerHelper>         m_aConnectionPointContainer;

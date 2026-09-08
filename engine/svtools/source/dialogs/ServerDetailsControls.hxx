@@ -11,7 +11,7 @@
 
 #include <vector>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 #include <tools/link.hxx>
 #include <tools/urlobj.hxx>
@@ -121,7 +121,7 @@ class CmisDetailsContainer final : public DetailsContainer
         std::vector< OUString > m_aRepoIds;
         OUString m_sRepoId;
         OUString m_sBinding;
-        css::uno::Reference< css::awt::XWindow > m_xParentDialog;
+        cpo::uno::Reference< css::awt::XWindow > m_xParentDialog;
 
     public:
         CmisDetailsContainer(PlaceEditDialog* pDialog, OUString sBinding);

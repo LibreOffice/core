@@ -58,6 +58,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 class SwXReferenceMark::Impl
 {
@@ -495,7 +496,7 @@ public:
     // XText
     virtual rtl::Reference< SwXTextCursor > createXTextCursor() override;
     virtual rtl::Reference< SwXTextCursor > createXTextCursorByRange(
-            const ::css::uno::Reference< ::css::text::XTextRange >& aTextPosition ) override;
+            const ::cpo::uno::Reference< ::css::text::XTextRange >& aTextPosition ) override;
 };
 
 }
@@ -579,13 +580,13 @@ public:
     // 3 possible states: not attached, attached, disposed
     bool m_bIsDisposed;
     bool m_bIsDescriptor;
-    css::uno::Reference<SwXText> m_xParentText;
+    cpo::uno::Reference<SwXText> m_xParentText;
     rtl::Reference<SwXMetaText> m_xText;
     sw::Meta* m_pMeta;
 
     Impl(SwXMeta& rThis, SwDoc& rDoc,
             ::sw::Meta* const pMeta,
-            css::uno::Reference<SwXText> xParentText,
+            cpo::uno::Reference<SwXText> xParentText,
             std::unique_ptr<TextRangeList_t const> pPortions)
         : m_pTextPortions(std::move(pPortions))
         , m_bIsDisposed(false)
@@ -630,13 +631,13 @@ void SwXMeta::Impl::Notify(const SfxHint& rHint)
     m_EventListeners.disposeAndClear(aGuard, ev);
 }
 
-css::uno::Reference<SwXText> const & SwXMeta::GetParentText() const
+cpo::uno::Reference<SwXText> const & SwXMeta::GetParentText() const
 {
     return m_pImpl->m_xParentText;
 }
 
 SwXMeta::SwXMeta(SwDoc *const pDoc, ::sw::Meta *const pMeta,
-        css::uno::Reference<SwXText> const& xParentText,
+        cpo::uno::Reference<SwXText> const& xParentText,
         std::unique_ptr<TextRangeList_t const> pPortions)
     : m_pImpl( new SwXMeta::Impl(*this, *pDoc, pMeta, xParentText, std::move(pPortions)) )
 {
@@ -664,7 +665,7 @@ SwXMeta::CreateXMeta(SwDoc & rDoc, bool const isField)
 
 rtl::Reference<SwXMeta>
 SwXMeta::CreateXMeta(::sw::Meta & rMeta,
-            const css::uno::Reference<SwXText>& i_xParent,
+            const cpo::uno::Reference<SwXText>& i_xParent,
             std::unique_ptr<TextRangeList_t const> && pPortions)
 {
     // re-use existing SwXMeta
@@ -692,7 +693,7 @@ SwXMeta::CreateXMeta(::sw::Meta & rMeta,
     SwTextNode * const pTextNode( rMeta.GetTextNode() );
     SAL_WARN_IF(!pTextNode, "sw.uno", "CreateXMeta: no text node?");
     if (!pTextNode) { return nullptr; }
-    css::uno::Reference<SwXText> xParentText(i_xParent);
+    cpo::uno::Reference<SwXText> xParentText(i_xParent);
     if (!xParentText.is())
     {
         SwTextMeta * const pTextAttr( rMeta.GetTextAttr() );
@@ -1181,7 +1182,7 @@ inline const ::sw::MetaField* SwXMeta::Impl::GetMetaField() const
 }
 
 SwXMetaField::SwXMetaField(SwDoc *const pDoc, ::sw::Meta *const pMeta,
-        css::uno::Reference<SwXText> const& xParentText,
+        cpo::uno::Reference<SwXText> const& xParentText,
         std::unique_ptr<TextRangeList_t const> pPortions)
     : SwXMetaField_Base(pDoc, pMeta, xParentText, std::move(pPortions))
 {

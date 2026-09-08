@@ -21,7 +21,7 @@ namespace com::sun::star::beans
 {
 class XMaterialHolder;
 }
-namespace com::sun::star::uno
+namespace cpo::uno
 {
 template <typename> class Reference;
 }
@@ -72,7 +72,7 @@ public:
 
     /** Prepares the encryption when the password is entered */
     virtual bool prepareEncryption(
-        const css::uno::Reference<css::beans::XMaterialHolder>& xEncryptionMaterialHolder,
+        const cpo::uno::Reference<css::beans::XMaterialHolder>& xEncryptionMaterialHolder,
         PDFEncryptionProperties& rProperties)
         = 0;
 

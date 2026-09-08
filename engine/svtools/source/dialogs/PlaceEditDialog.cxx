@@ -19,7 +19,7 @@
 
 #include "ServerDetailsControls.hxx"
 
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::cpo::uno;
 
 PlaceEditDialog::PlaceEditDialog(weld::Window* pParent)

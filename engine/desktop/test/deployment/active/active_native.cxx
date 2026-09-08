@@ -38,7 +38,7 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <cpo/uno/DeploymentException.hpp>
 #include <cpo/uno/Exception.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/XComponentContext.hpp>
@@ -65,8 +65,8 @@ public:
     Provider(const Provider&) = delete;
     const Provider& operator=(const Provider&) = delete;
 
-    static css::uno::Reference< cpo::uno::XInterface > static_create(
-        css::uno::Reference< cpo::uno::XComponentContext > const & xContext)
+    static cpo::uno::Reference< cpo::uno::XInterface > static_create(
+        cpo::uno::Reference< cpo::uno::XComponentContext > const & xContext)
     { return static_cast< cppu::OWeakObject * >(new Provider(xContext)); }
 
     static rtl::OUString static_getImplementationName();
@@ -76,7 +76,7 @@ public:
 
 private:
     explicit Provider(
-        css::uno::Reference< cpo::uno::XComponentContext > const & context):
+        cpo::uno::Reference< cpo::uno::XComponentContext > const & context):
         context_(context) { assert(context.is()); }
 
     virtual ~Provider() {}
@@ -91,14 +91,14 @@ private:
     getSupportedServiceNames() override
     { return static_getSupportedServiceNames(); }
 
-    virtual css::uno::Reference< css::frame::XDispatch > queryDispatch(
+    virtual cpo::uno::Reference< css::frame::XDispatch > queryDispatch(
         css::util::URL const &, rtl::OUString const &, sal_Int32) override;
 
-    virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > >
+    virtual cpo::uno::Sequence< cpo::uno::Reference< css::frame::XDispatch > >
     queryDispatches(
         cpo::uno::Sequence< css::frame::DispatchDescriptor > const & Requests) override;
 
-    css::uno::Reference< cpo::uno::XComponentContext > context_;
+    cpo::uno::Reference< cpo::uno::XComponentContext > context_;
 };
 
 rtl::OUString Provider::static_getImplementationName() {
@@ -111,10 +111,10 @@ cpo::uno::Sequence< rtl::OUString > Provider::static_getSupportedServiceNames()
     return cpo::uno::Sequence< rtl::OUString >(&name, 1);
 }
 
-css::uno::Reference< css::frame::XDispatch > Provider::queryDispatch(
+cpo::uno::Reference< css::frame::XDispatch > Provider::queryDispatch(
     css::util::URL const &, rtl::OUString const &, sal_Int32)
 {
-    css::uno::Reference< css::frame::XDispatch > dispatch;
+    cpo::uno::Reference< css::frame::XDispatch > dispatch;
     if (!(context_->getValueByName(
               u"/singletons/com.sun.star.test.deployment."
               "active_native_singleton"_ustr) >>=
@@ -130,11 +130,11 @@ css::uno::Reference< css::frame::XDispatch > Provider::queryDispatch(
     return dispatch;
 }
 
-cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > >
+cpo::uno::Sequence< cpo::uno::Reference< css::frame::XDispatch > >
 Provider::queryDispatches(
     cpo::uno::Sequence< css::frame::DispatchDescriptor > const & Requests)
 {
-    cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > s(
+    cpo::uno::Sequence< cpo::uno::Reference< css::frame::XDispatch > > s(
         Requests.getLength());
     auto const elems = s.getArray();
     for (sal_Int32 i = 0; i < s.getLength(); ++i) {
@@ -153,8 +153,8 @@ public:
     Dispatch(const Dispatch&) = delete;
     const Dispatch& operator=(const Dispatch&) = delete;
 
-    static css::uno::Reference< cpo::uno::XInterface > static_create(
-        css::uno::Reference< cpo::uno::XComponentContext > const & xContext)
+    static cpo::uno::Reference< cpo::uno::XInterface > static_create(
+        cpo::uno::Reference< cpo::uno::XComponentContext > const & xContext)
     { return static_cast< cppu::OWeakObject * >(new Dispatch(xContext)); }
 
     static rtl::OUString static_getImplementationName();
@@ -165,7 +165,7 @@ public:
 
 private:
     explicit Dispatch(
-        css::uno::Reference< cpo::uno::XComponentContext > const & context):
+        cpo::uno::Reference< cpo::uno::XComponentContext > const & context):
         context_(context) { assert(context.is()); }
 
     virtual ~Dispatch() {}
@@ -185,16 +185,16 @@ private:
         cpo::uno::Sequence< css::beans::PropertyValue > const &) override;
 
     virtual void addStatusListener(
-        css::uno::Reference< css::frame::XStatusListener > const &,
+        cpo::uno::Reference< css::frame::XStatusListener > const &,
         css::util::URL const &) override
     {}
 
     virtual void removeStatusListener(
-        css::uno::Reference< css::frame::XStatusListener > const &,
+        cpo::uno::Reference< css::frame::XStatusListener > const &,
         css::util::URL const &) override
     {}
 
-    css::uno::Reference< cpo::uno::XComponentContext > context_;
+    cpo::uno::Reference< cpo::uno::XComponentContext > context_;
 };
 
 rtl::OUString Dispatch::static_getImplementationName() {
@@ -205,20 +205,20 @@ void Dispatch::dispatch(
     css::util::URL const &,
     cpo::uno::Sequence< css::beans::PropertyValue > const &)
 {
-    css::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create(context_);
-    css::uno::Reference< css::frame::XFrame >    xFrame = xDesktop->getCurrentFrame();
-    css::uno::Reference< css::awt::XWindowPeer > xWindowPeer( xFrame->getComponentWindow(), css::uno::UNO_QUERY_THROW );
-    css::uno::Reference< css::awt::XToolkit2 >   xToolkit = css::awt::Toolkit::create(context_);
-    css::uno::Reference< css::awt::XMessageBox > box(
+    cpo::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create(context_);
+    cpo::uno::Reference< css::frame::XFrame >    xFrame = xDesktop->getCurrentFrame();
+    cpo::uno::Reference< css::awt::XWindowPeer > xWindowPeer( xFrame->getComponentWindow(), cpo::uno::UNO_QUERY_THROW );
+    cpo::uno::Reference< css::awt::XToolkit2 >   xToolkit = css::awt::Toolkit::create(context_);
+    cpo::uno::Reference< css::awt::XMessageBox > box(
         xToolkit->createMessageBox(
             xWindowPeer,
             css::awt::MessageBoxType_INFOBOX,
             css::awt::MessageBoxButtons::BUTTONS_OK, u"active"_ustr, u"native"_ustr),
-        css::uno::UNO_SET_THROW);
+        cpo::uno::UNO_SET_THROW);
 
     box->execute();
 
-    css::uno::Reference< css::lang::XComponent > xComponent(box, css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference< css::lang::XComponent > xComponent(box, cpo::uno::UNO_QUERY_THROW);
     xComponent->dispose();
 }
 
@@ -255,14 +255,14 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool component_writeInfo(
         return false;
     }
     try {
-        css::uno::Reference< css::registry::XRegistryKey >(
-            (css::uno::Reference< css::registry::XRegistryKey >(
+        cpo::uno::Reference< css::registry::XRegistryKey >(
+            (cpo::uno::Reference< css::registry::XRegistryKey >(
                 static_cast< css::registry::XRegistryKey * >(pRegistryKey))->
              createKey(
                  "/" + Dispatch::static_getImplementationName() +
                  ("/UNO/SINGLETONS/com.sun.star.test.deployment."
                   "active_native_singleton"))),
-            css::uno::UNO_SET_THROW)->
+            cpo::uno::UNO_SET_THROW)->
             setStringValue(Dispatch::static_getImplementationName());
     } catch (const cpo::uno::Exception & e) {
         SAL_INFO(

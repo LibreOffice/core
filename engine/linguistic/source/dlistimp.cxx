@@ -32,7 +32,7 @@
 #include <comphelper/sequence.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <com/sun/star/linguistic2/DictionaryEventFlags.hpp>
 #include <com/sun/star/linguistic2/DictionaryListEventFlags.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
@@ -49,8 +49,8 @@
 using namespace osl;
 using namespace com::sun::star;
 using namespace com::sun::star::lang;
-using namespace com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
@@ -528,7 +528,7 @@ uno::Reference< XDictionaryEntry >
             bool bSearchPosDics, bool bSearchSpellEntry )
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
-    std::map<LanguageType, std::vector<css::uno::Reference<css::linguistic2::XDictionary>>> aDictionaryMap;
+    std::map<LanguageType, std::vector<cpo::uno::Reference<css::linguistic2::XDictionary>>> aDictionaryMap;
     return SearchDicList( this, rWord, LinguLocaleToLanguage( rLocale ),
                             bSearchPosDics, bSearchSpellEntry, aDictionaryMap );
 }

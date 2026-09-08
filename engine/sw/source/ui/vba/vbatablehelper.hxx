@@ -26,7 +26,7 @@
 class SwVbaTableHelper
 {
 private:
-    css::uno::Reference< css::text::XTextTable > mxTextTable;
+    cpo::uno::Reference< css::text::XTextTable > mxTextTable;
     SwTable* m_pTable;
 
 private:
@@ -40,7 +40,7 @@ private:
 
 public:
     /// @throws cpo::uno::RuntimeException
-    explicit SwVbaTableHelper( css::uno::Reference< css::text::XTextTable > xTextTable );
+    explicit SwVbaTableHelper( cpo::uno::Reference< css::text::XTextTable > xTextTable );
     /// @throws cpo::uno::RuntimeException
     sal_Int32 getTabColumnsCount( sal_Int32 nRowIndex );
     /// @throws cpo::uno::RuntimeException
@@ -58,7 +58,7 @@ public:
     void SetColWidth( sal_Int32 _width, sal_Int32 nCol, sal_Int32 nRow = 0, bool bCurRowOnly  = false );
 
     /// @throws cpo::uno::RuntimeException
-    static SwTable* GetSwTable( const css::uno::Reference< css::text::XTextTable >& xTextTable );
+    static SwTable* GetSwTable( const cpo::uno::Reference< css::text::XTextTable >& xTextTable );
     static OUString getColumnStr( sal_Int32 nCol );
 };
 

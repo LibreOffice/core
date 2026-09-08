@@ -29,7 +29,7 @@ namespace comphelper
 {
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::accessibility;
@@ -61,7 +61,7 @@ void OAccessible::disposing()
     }
 }
 
-css::uno::Reference<com::sun::star::accessibility::XAccessibleContext>
+cpo::uno::Reference<com::sun::star::accessibility::XAccessibleContext>
 OAccessible::getAccessibleContext()
 {
     OExternalLockGuard aGuard(this);

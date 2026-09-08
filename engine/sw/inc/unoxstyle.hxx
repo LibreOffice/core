@@ -75,8 +75,8 @@ class SAL_DLLPUBLIC_RTTI SwXStyle
 protected:
     SfxStyleSheetBasePool* m_pBasePool;
     std::unique_ptr<SwStyleProperties_Impl> m_pPropertiesImpl;
-    css::uno::Reference<css::container::XNameAccess> m_xStyleFamily;
-    css::uno::Reference<css::beans::XPropertySet> m_xStyleData;
+    cpo::uno::Reference<css::container::XNameAccess> m_xStyleFamily;
+    cpo::uno::Reference<css::beans::XPropertySet> m_xStyleData;
 
     template <sal_uInt16>
     void SetPropertyValue(const SfxItemPropertyMapEntry&, const SfxItemPropertySet&,
@@ -117,28 +117,28 @@ public:
     virtual void SAL_CALL setParentStyle(const OUString& aParentStyle) override;
 
     //XPropertySet
-    SW_DLLPUBLIC virtual css::uno::Reference<css::beans::XPropertySetInfo>
+    SW_DLLPUBLIC virtual cpo::uno::Reference<css::beans::XPropertySetInfo>
         SAL_CALL getPropertySetInfo() override;
     virtual void SAL_CALL setPropertyValue(const OUString& aPropertyName,
                                            const cpo::uno::Any& aValue) override;
     virtual cpo::uno::Any SAL_CALL getPropertyValue(const OUString& PropertyName) override;
     virtual void SAL_CALL addPropertyChangeListener(
-        const OUString&, const css::uno::Reference<css::beans::XPropertyChangeListener>&) override
+        const OUString&, const cpo::uno::Reference<css::beans::XPropertyChangeListener>&) override
     {
         OSL_FAIL("not implemented");
     };
     virtual void SAL_CALL removePropertyChangeListener(
-        const OUString&, const css::uno::Reference<css::beans::XPropertyChangeListener>&) override
+        const OUString&, const cpo::uno::Reference<css::beans::XPropertyChangeListener>&) override
     {
         OSL_FAIL("not implemented");
     };
     virtual void SAL_CALL addVetoableChangeListener(
-        const OUString&, const css::uno::Reference<css::beans::XVetoableChangeListener>&) override
+        const OUString&, const cpo::uno::Reference<css::beans::XVetoableChangeListener>&) override
     {
         OSL_FAIL("not implemented");
     };
     virtual void SAL_CALL removeVetoableChangeListener(
-        const OUString&, const css::uno::Reference<css::beans::XVetoableChangeListener>&) override
+        const OUString&, const cpo::uno::Reference<css::beans::XVetoableChangeListener>&) override
     {
         OSL_FAIL("not implemented");
     };
@@ -151,12 +151,12 @@ public:
         SAL_CALL getPropertyValues(const cpo::uno::Sequence<OUString>& aPropertyNames) override;
     virtual void SAL_CALL addPropertiesChangeListener(
         const cpo::uno::Sequence<OUString>&,
-        const css::uno::Reference<css::beans::XPropertiesChangeListener>&) override{};
+        const cpo::uno::Reference<css::beans::XPropertiesChangeListener>&) override{};
     virtual void SAL_CALL removePropertiesChangeListener(
-        const css::uno::Reference<css::beans::XPropertiesChangeListener>&) override{};
+        const cpo::uno::Reference<css::beans::XPropertiesChangeListener>&) override{};
     virtual void SAL_CALL firePropertiesChangeEvent(
         const cpo::uno::Sequence<OUString>&,
-        const css::uno::Reference<css::beans::XPropertiesChangeListener>&) override{};
+        const cpo::uno::Reference<css::beans::XPropertiesChangeListener>&) override{};
 
     //XPropertyState
     virtual css::beans::PropertyState SAL_CALL
@@ -237,7 +237,7 @@ public:
     }
     explicit SwXFrameStyle(SwDoc* pDoc);
 
-    virtual css::uno::Reference<css::container::XNameReplace> SAL_CALL getEvents() override;
+    virtual cpo::uno::Reference<css::container::XNameReplace> SAL_CALL getEvents() override;
 
     //ICoreStyle
     virtual void SetItem(sal_uInt16 eAtr, const SfxPoolItem& rItem) override;

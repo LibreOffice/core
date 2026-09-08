@@ -26,7 +26,7 @@
 
 namespace filter::config{
 
-ContentHandlerFactory::ContentHandlerFactory(const css::uno::Reference< cpo::uno::XComponentContext >& rxContext)
+ContentHandlerFactory::ContentHandlerFactory(const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext)
  : m_xContext(rxContext)
 {
     BaseContainer::init(u"com.sun.star.comp.filter.config.ContentHandlerFactory"_ustr   ,
@@ -40,16 +40,16 @@ ContentHandlerFactory::~ContentHandlerFactory()
 }
 
 
-css::uno::Reference< cpo::uno::XInterface > ContentHandlerFactory::createInstance(const OUString& sHandler)
+cpo::uno::Reference< cpo::uno::XInterface > ContentHandlerFactory::createInstance(const OUString& sHandler)
 {
     return createInstanceWithArguments(sHandler, cpo::uno::Sequence< cpo::uno::Any >());
 }
 
 
-css::uno::Reference< cpo::uno::XInterface > ContentHandlerFactory::createInstanceWithArguments(const OUString&                     sHandler  ,
+cpo::uno::Reference< cpo::uno::XInterface > ContentHandlerFactory::createInstanceWithArguments(const OUString&                     sHandler  ,
                                                                                                         const cpo::uno::Sequence< cpo::uno::Any >& lArguments)
 {
-    css::uno::Reference< cpo::uno::XInterface > xHandler;
+    cpo::uno::Reference< cpo::uno::XInterface > xHandler;
 
     // SAFE ->
     std::unique_lock aLock(m_aMutex);
@@ -63,7 +63,7 @@ css::uno::Reference< cpo::uno::XInterface > ContentHandlerFactory::createInstanc
     xHandler = m_xContext->getServiceManager()->createInstanceWithContext(sHandler, m_xContext);
 
     // initialize filter
-    css::uno::Reference< css::lang::XInitialization > xInit(xHandler, css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::lang::XInitialization > xInit(xHandler, cpo::uno::UNO_QUERY);
     if (xInit.is())
     {
         // format: lInitData[0] = seq<PropertyValue>, which contains all configuration properties of this handler

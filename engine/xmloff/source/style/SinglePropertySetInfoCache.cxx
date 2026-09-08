@@ -21,7 +21,7 @@
 #include <xmloff/SinglePropertySetInfoCache.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::beans::XPropertySetInfo;
 

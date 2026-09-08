@@ -71,12 +71,12 @@ class UCBHELPER_DLLPUBLIC ContentProviderImplHelper :
 
 protected:
     osl::Mutex m_aMutex;
-    css::uno::Reference< cpo::uno::XComponentContext >  m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext >  m_xContext;
 
 private:
     UCBHELPER_DLLPRIVATE void removeContent( ContentImplHelper* pContent );
 
-    UCBHELPER_DLLPRIVATE css::uno::Reference< css::ucb::XPropertySetRegistry >
+    UCBHELPER_DLLPRIVATE cpo::uno::Reference< css::ucb::XPropertySetRegistry >
     getAdditionalPropertySetRegistry();
 
     UCBHELPER_DLLPRIVATE void cleanupRegisteredContents();
@@ -93,7 +93,7 @@ protected:
       *         does not exist.
       */
     rtl::Reference< ContentImplHelper >
-    queryExistingContent( const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier );
+    queryExistingContent( const cpo::uno::Reference< css::ucb::XContentIdentifier >& Identifier );
 
     /**
       * This method returns a content with the given URL, if it already exists.
@@ -121,7 +121,7 @@ protected:
       * @param  the content instance that is to be registered.
      */
     void registerNewContent(
-        const css::uno::Reference< css::ucb::XContent > & xContent );
+        const cpo::uno::Reference< css::ucb::XContent > & xContent );
 
 public:
 
@@ -130,7 +130,7 @@ public:
 
 
     ContentProviderImplHelper(
-                css::uno::Reference< cpo::uno::XComponentContext > xContext );
+                cpo::uno::Reference< cpo::uno::XComponentContext > xContext );
     virtual ~ContentProviderImplHelper() override;
 
 
@@ -159,11 +159,11 @@ public:
       * - Return the possibly existing content.Create and return a new
       *   content, otherwise
       */
-    virtual css::uno::Reference< css::ucb::XContent >
-    queryContent( const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier ) override = 0;
+    virtual cpo::uno::Reference< css::ucb::XContent >
+    queryContent( const cpo::uno::Reference< css::ucb::XContentIdentifier >& Identifier ) override = 0;
     virtual sal_Int32
-    compareContentIds( const css::uno::Reference< css::ucb::XContentIdentifier >& Id1,
-                       const css::uno::Reference< css::ucb::XContentIdentifier >& Id2 ) override;
+    compareContentIds( const cpo::uno::Reference< css::ucb::XContentIdentifier >& Id1,
+                       const cpo::uno::Reference< css::ucb::XContentIdentifier >& Id2 ) override;
 
 
     // Non-interface methods.
@@ -195,7 +195,7 @@ public:
       *         be created in case it does not exist.
       * @return the propertyset containing the Additional Core Properties.
       */
-    css::uno::Reference< css::ucb::XPersistentPropertySet >
+    cpo::uno::Reference< css::ucb::XPersistentPropertySet >
     getAdditionalPropertySet( const OUString& rKey, bool bCreate );
 
     /**

@@ -36,11 +36,11 @@ using UcbContentProviderProxyFactory_Base = comphelper::WeakComponentImplHelper 
                                                 css::ucb::XContentProviderFactory >;
 class UcbContentProviderProxyFactory : public UcbContentProviderProxyFactory_Base
 {
-    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
 public:
     explicit UcbContentProviderProxyFactory(
-            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
     virtual ~UcbContentProviderProxyFactory() override;
 
     // XServiceInfo
@@ -49,7 +49,7 @@ public:
     virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XContentProviderFactory
-    virtual css::uno::Reference< css::ucb::XContentProvider > SAL_CALL
+    virtual cpo::uno::Reference< css::ucb::XContentProvider > SAL_CALL
     createContentProvider( const OUString& Service ) override;
 };
 
@@ -67,16 +67,16 @@ class UcbContentProviderProxy : public UcbContentProviderProxy_BASE
     bool        m_bReplace;
     bool        m_bRegister;
 
-    css::uno::Reference< cpo::uno::XComponentContext >
+    cpo::uno::Reference< cpo::uno::XComponentContext >
                                 m_xContext;
-    css::uno::Reference< css::ucb::XContentProvider >
+    cpo::uno::Reference< css::ucb::XContentProvider >
                                 m_xProvider;
-    css::uno::Reference< css::ucb::XContentProvider >
+    cpo::uno::Reference< css::ucb::XContentProvider >
                                 m_xTargetProvider;
 
 public:
     UcbContentProviderProxy(
-            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
             OUString Service );
     virtual ~UcbContentProviderProxy() override;
 
@@ -92,24 +92,24 @@ public:
     virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XContentProviderSupplier
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
         css::ucb::XContentProvider > SAL_CALL
     getContentProvider() override;
 
     // XContentProvider
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
         css::ucb::XContent > SAL_CALL
-    queryContent( const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier ) override;
+    queryContent( const cpo::uno::Reference< css::ucb::XContentIdentifier >& Identifier ) override;
     virtual sal_Int32 SAL_CALL
-    compareContentIds( const css::uno::Reference< css::ucb::XContentIdentifier >& Id1,
-                       const css::uno::Reference< css::ucb::XContentIdentifier >& Id2 ) override;
+    compareContentIds( const cpo::uno::Reference< css::ucb::XContentIdentifier >& Id1,
+                       const cpo::uno::Reference< css::ucb::XContentIdentifier >& Id2 ) override;
 
     // XParameterizedContentProvider
-    virtual css::uno::Reference< css::ucb::XContentProvider > SAL_CALL
+    virtual cpo::uno::Reference< css::ucb::XContentProvider > SAL_CALL
     registerInstance( const OUString& Template,
                       const OUString& Arguments,
                       bool ReplaceExisting ) override;
-    virtual css::uno::Reference< css::ucb::XContentProvider > SAL_CALL
+    virtual cpo::uno::Reference< css::ucb::XContentProvider > SAL_CALL
     deregisterInstance( const OUString& Template,
                         const OUString& Arguments ) override;
 };

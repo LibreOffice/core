@@ -73,8 +73,8 @@ public:
     virtual void removeByName( const OUString& Name ) override;
 
     // Methods XContainer
-    void addContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) override;
-    void removeContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) override;
+    void addContainerListener( const cpo::uno::Reference< css::container::XContainerListener >& xListener ) override;
+    void removeContainerListener( const cpo::uno::Reference< css::container::XContainerListener >& xListener ) override;
 };
 
 }   // namespace toolkit_namecontainer

@@ -42,7 +42,7 @@
 
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::xml::sax;
@@ -198,11 +198,11 @@ void XMLFootnoteConfigurationImportContext::SetAttribute( sal_Int32 nElement,
     }
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLFootnoteConfigurationImportContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLFootnoteConfigurationImportContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
-    css::uno::Reference< css::xml::sax::XFastContextHandler > xContext;
+    cpo::uno::Reference< css::xml::sax::XFastContextHandler > xContext;
 
     if (bIsEndnote)
         return nullptr;

@@ -23,7 +23,7 @@
 #include <tools/debug.hxx>
 #include <tools/inetmime.hxx>
 #include <tools/stream.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/util/XStringWidth.hpp>
 #include <o3tl/enumarray.hxx>
 #include <osl/diagnose.h>
@@ -48,6 +48,7 @@
 #include <comphelper/string.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 //  INetURLObject
 

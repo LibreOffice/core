@@ -50,7 +50,7 @@ public:
     std::shared_ptr<DeckDescriptor> GetDeckDescriptor(std::u16string_view rsDeckId) const;
     std::shared_ptr<PanelDescriptor> GetPanelDescriptor(std::u16string_view rsPanelId) const;
 
-    void UpdateModel(const css::uno::Reference<css::frame::XModel>& xModel);
+    void UpdateModel(const cpo::uno::Reference<css::frame::XModel>& xModel);
 
     void InitDeckContext(const Context& rContex);
     void SaveDecksSettings(const Context& rContext);
@@ -81,13 +81,13 @@ public:
                                             DeckContextDescriptorContainer& rDeckDescriptors,
                                             const Context& rContext,
                                             const bool bIsDocumentReadOnly,
-                                            const css::uno::Reference<css::frame::XController>& rxController);
+                                            const cpo::uno::Reference<css::frame::XController>& rxController);
 
     const PanelContextDescriptorContainer& GetMatchingPanels(
                                             PanelContextDescriptorContainer& rPanelDescriptors,
                                             const Context& rContext,
                                             std::u16string_view rsDeckId,
-                                            const css::uno::Reference<css::frame::XController>& rxController);
+                                            const cpo::uno::Reference<css::frame::XController>& rxController);
 
     const OUString& GetLastActiveDeck( const Context& rContext );
     const std::map<OUString, OUString>& GetDeckOverrides() {
@@ -124,13 +124,13 @@ private:
                          ContextList& rContextList,
                          const OUString& rsDefaultMenuCommand);
 
-    void ReadLegacyAddons(const css::uno::Reference<css::frame::XController>& rxController);
+    void ReadLegacyAddons(const cpo::uno::Reference<css::frame::XController>& rxController);
     static utl::OConfigurationTreeRoot GetLegacyAddonRootNode(const OUString& rsModuleName);
     static void GetToolPanelNodeNames(std::vector<OUString>& rMatchingNames,
                                const utl::OConfigurationTreeRoot& aRoot);
     bool IsDeckEnabled(std::u16string_view rsDeckId,
                        const Context& rContext,
-                       const css::uno::Reference<css::frame::XController>& rxController);
+                       const cpo::uno::Reference<css::frame::XController>& rxController);
 
     std::shared_ptr<DeckDescriptor> ImplGetDeckDescriptor(std::u16string_view rsDeckId) const;
     std::shared_ptr<PanelDescriptor> ImplGetPanelDescriptor(std::u16string_view rsPanelId) const;

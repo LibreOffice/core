@@ -51,7 +51,10 @@
 // this extern variable is declared in OOXMLStreamImpl.hxx
 OUString customTarget;
 OUString embeddingsTarget;
+
 using namespace ::com::sun::star;
+using namespace ::cpo;
+
 namespace writerfilter::ooxml
 {
 
@@ -479,7 +482,7 @@ namespace {
 // Ensures that the indicator is reset after exiting OOXMLDocument::resolve
 class StatusIndicatorGuard{
 public:
-    explicit StatusIndicatorGuard(css::uno::Reference<css::task::XStatusIndicator> xStatusIndicator)
+    explicit StatusIndicatorGuard(cpo::uno::Reference<css::task::XStatusIndicator> xStatusIndicator)
         :mxStatusIndicator(std::move(xStatusIndicator))
     {
     }
@@ -491,7 +494,7 @@ public:
     }
 
 private:
-    css::uno::Reference<css::task::XStatusIndicator> mxStatusIndicator;
+    cpo::uno::Reference<css::task::XStatusIndicator> mxStatusIndicator;
 };
 }
 

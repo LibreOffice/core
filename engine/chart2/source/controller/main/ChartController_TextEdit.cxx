@@ -55,6 +55,7 @@
 namespace chart
 {
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 void ChartController::executeDispatch_EditText( const Point* pMousePixel )
 {

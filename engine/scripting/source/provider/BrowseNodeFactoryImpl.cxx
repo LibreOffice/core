@@ -43,8 +43,8 @@
 #include <string_view>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::script;
 using namespace ::sf_misc;
 
@@ -286,7 +286,7 @@ std::vector< Reference< browse::XBrowseNode > > getAllBrowseNodes( const Referen
             Reference< frame::XModel > model( MiscUtils::tDocUrlToModel( rDoc ), UNO_SET_THROW );
 
             // #i44599 Check if it's a real document or something special like Hidden/Preview
-            css::uno::Reference< css::frame::XController > xCurrentController = model->getCurrentController();
+            cpo::uno::Reference< css::frame::XController > xCurrentController = model->getCurrentController();
             if( xCurrentController.is() )
             {
                 comphelper::SequenceAsHashMap aMD(model->getArgs());

@@ -32,7 +32,7 @@
 
 using namespace osl;
 using namespace cppu;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
@@ -165,7 +165,7 @@ public:
         {}
     virtual Reference< XInterface > SAL_CALL getInterface() throw(cpo::uno::RuntimeException)
         { return Reference< XInterface >(); }
-    virtual void SAL_CALL setInterface( const css::uno::Reference< cpo::uno::XInterface >& _interface ) throw(cpo::uno::RuntimeException)
+    virtual void SAL_CALL setInterface( const cpo::uno::Reference< cpo::uno::XInterface >& _interface ) throw(cpo::uno::RuntimeException)
         {}
     virtual Any SAL_CALL getAny() throw(cpo::uno::RuntimeException)
         { return _aDummyAny; }

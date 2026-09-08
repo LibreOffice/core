@@ -23,7 +23,7 @@
 #include <sal/config.h>
 
 #include <vector>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <cppuhelper/weakref.hxx>
 #include <osl/diagnose.h>
 
@@ -44,10 +44,10 @@ public:
        @param e
        a non-null reference.
     */
-    void add(css::uno::Reference< T > const & e) {
+    void add(cpo::uno::Reference< T > const & e) {
         OSL_ASSERT(e.is());
         for (auto i = m_list.begin(); i != m_list.end();) {
-            if (css::uno::Reference< T >(*i).is()) {
+            if (cpo::uno::Reference< T >(*i).is()) {
                 ++i;
             } else {
                 i = m_list.erase(i);
@@ -62,15 +62,15 @@ public:
        @return
        a living reference, or null if there are none.
     */
-    css::uno::Reference< T > remove() {
+    cpo::uno::Reference< T > remove() {
         while (!m_list.empty()) {
-            css::uno::Reference< T > r(m_list.back());
+            cpo::uno::Reference< T > r(m_list.back());
             m_list.pop_back();
             if (r.is()) {
                 return r;
             }
         }
-        return css::uno::Reference< T >();
+        return cpo::uno::Reference< T >();
     }
 
 private:

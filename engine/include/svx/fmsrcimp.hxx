@@ -75,7 +75,7 @@ class SAL_WARN_UNUSED FmRecordCountListener final : public FmRecordCountListener
 {
 // attribute
     Link<sal_Int32,void>     m_lnkWhoWantsToKnow;
-    css::uno::Reference< css::beans::XPropertySet >   m_xListening;
+    cpo::uno::Reference< css::beans::XPropertySet >   m_xListening;
 
 // attribute access
 public:
@@ -83,12 +83,12 @@ public:
 
 // methods
 public:
-    FmRecordCountListener(const css::uno::Reference< css::sdbc::XResultSet >& dbcCursor);
+    FmRecordCountListener(const cpo::uno::Reference< css::sdbc::XResultSet >& dbcCursor);
     // the set has to support the sdb::ResultSet service
     virtual ~FmRecordCountListener() override;
 
     //  DECLARE_UNO3_AGG_DEFAULTS(FmPropertyListener, UsrObject)
-    //  virtual bool queryInterface(css::uno::Uik aUik, css::uno::Reference< cpo::uno::XInterface >& rOut);
+    //  virtual bool queryInterface(css::uno::Uik aUik, cpo::uno::Reference< cpo::uno::XInterface >& rOut);
 
     // css::lang::XEventListener
     virtual void disposing(const css::lang::EventObject& Source) override;
@@ -113,12 +113,12 @@ namespace svxform {
     class SAL_WARN_UNUSED ControlTextWrapper
     {
         // attributes
-        css::uno::Reference< cpo::uno::XInterface >   m_xControl;
+        cpo::uno::Reference< cpo::uno::XInterface >   m_xControl;
         // attribute access
     public:
-        const css::uno::Reference< cpo::uno::XInterface >&  getControl() const{ return m_xControl; }
+        const cpo::uno::Reference< cpo::uno::XInterface >&  getControl() const{ return m_xControl; }
     public:
-        ControlTextWrapper(const css::uno::Reference< cpo::uno::XInterface >& _xControl) { m_xControl = _xControl; }
+        ControlTextWrapper(const cpo::uno::Reference< cpo::uno::XInterface >& _xControl) { m_xControl = _xControl; }
         virtual ~ControlTextWrapper() { }
 
         virtual OUString getCurrentText() const = 0;
@@ -126,30 +126,30 @@ namespace svxform {
 
     class SAL_WARN_UNUSED SimpleTextWrapper final : public ControlTextWrapper
     {
-        css::uno::Reference< css::awt::XTextComponent >  m_xText;
+        cpo::uno::Reference< css::awt::XTextComponent >  m_xText;
     public:
-        SimpleTextWrapper(const css::uno::Reference< css::awt::XTextComponent >& _xText);
+        SimpleTextWrapper(const cpo::uno::Reference< css::awt::XTextComponent >& _xText);
         virtual OUString getCurrentText() const override;
     };
 
     class SAL_WARN_UNUSED ListBoxWrapper final : public ControlTextWrapper
     {
-        css::uno::Reference< css::awt::XListBox >  m_xBox;
+        cpo::uno::Reference< css::awt::XListBox >  m_xBox;
     public:
-        ListBoxWrapper(const css::uno::Reference< css::awt::XListBox >& _xBox);
+        ListBoxWrapper(const cpo::uno::Reference< css::awt::XListBox >& _xBox);
         virtual OUString getCurrentText() const override;
     };
 
     class SAL_WARN_UNUSED CheckBoxWrapper final : public ControlTextWrapper
     {
-        css::uno::Reference< css::awt::XCheckBox >  m_xBox;
+        cpo::uno::Reference< css::awt::XCheckBox >  m_xBox;
     public:
-        CheckBoxWrapper(const css::uno::Reference< css::awt::XCheckBox >& _xBox);
+        CheckBoxWrapper(const cpo::uno::Reference< css::awt::XCheckBox >& _xBox);
         virtual OUString getCurrentText() const override;
     };
 }
 
-typedef std::vector< css::uno::Reference< cpo::uno::XInterface> > InterfaceArray;
+typedef std::vector< cpo::uno::Reference< cpo::uno::XInterface> > InterfaceArray;
 
 class SAL_WARN_UNUSED SVX_DLLPUBLIC FmSearchEngine final
 {
@@ -169,7 +169,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC FmSearchEngine final
     // the collection of all interesting fields (or their css::data::XDatabaseVariant interfaces and FormatKeys)
     struct FieldInfo
     {
-        css::uno::Reference< css::sdb::XColumn >          xContents;
+        cpo::uno::Reference< css::sdb::XColumn >          xContents;
     };
 
     typedef std::vector<FieldInfo> FieldCollection;
@@ -271,8 +271,8 @@ public:
         every record as well as at the end of the search.
     */
     FmSearchEngine(
-        const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
-        const css::uno::Reference< css::sdbc::XResultSet >& xCursor,
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
+        const cpo::uno::Reference< css::sdbc::XResultSet >& xCursor,
         std::u16string_view strVisibleFields,
         const InterfaceArray& arrFields);
 
@@ -306,7 +306,7 @@ public:
     /** only valid, if not an (asynchronous) search is running, the next search will then be executed
         on top of the new iterator with the new parameter
     */
-    void SwitchToContext(const css::uno::Reference< css::sdbc::XResultSet >& xCursor, std::u16string_view strVisibleFields, const InterfaceArray& arrFields,
+    void SwitchToContext(const cpo::uno::Reference< css::sdbc::XResultSet >& xCursor, std::u16string_view strVisibleFields, const InterfaceArray& arrFields,
         sal_Int32 nFieldIndex);
 
 private:
@@ -338,7 +338,7 @@ private:
     // moves m_xSearchIterator with respect to direction/overflow cursor
     SVX_DLLPRIVATE bool MoveField(sal_Int32& nPos, FieldCollection::iterator& iter, const FieldCollection::iterator& iterBegin, const FieldCollection::iterator& iterEnd);
     // moves the iterator with respect to the direction/overflow iterator/overflow cursor
-    SVX_DLLPRIVATE void BuildAndInsertFieldInfo(const css::uno::Reference< css::container::XIndexAccess >& xAllFields, sal_Int32 nField);
+    SVX_DLLPRIVATE void BuildAndInsertFieldInfo(const cpo::uno::Reference< css::container::XIndexAccess >& xAllFields, sal_Int32 nField);
 
     void OnSearchTerminated();
     // is used by SearchThread, after the return from this handler the thread removes itself

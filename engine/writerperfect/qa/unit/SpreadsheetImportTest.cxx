@@ -25,7 +25,7 @@
 
 namespace
 {
-namespace uno = css::uno;
+namespace uno = cpo::uno;
 
 class SpreadsheetImportFilter : public writerperfect::ImportFilter<OdsGenerator>
 {

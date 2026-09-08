@@ -36,26 +36,26 @@ class XMLOFF_DLLPUBLIC SvXMLMetaDocumentContext
     : public virtual SvXMLImportContext
 {
 private:
-    css::uno::Reference< css::document::XDocumentProperties> mxDocProps;
-    css::uno::Reference< css::xml::dom::XSAXDocumentBuilder2> mxDocBuilder;
+    cpo::uno::Reference< css::document::XDocumentProperties> mxDocProps;
+    cpo::uno::Reference< css::xml::dom::XSAXDocumentBuilder2> mxDocBuilder;
 
 public:
     SvXMLMetaDocumentContext(SvXMLImport& rImport,
-        css::uno::Reference< css::document::XDocumentProperties> xDocProps);
+        cpo::uno::Reference< css::document::XDocumentProperties> xDocProps);
 
     virtual ~SvXMLMetaDocumentContext() override;
 
     virtual void startFastElement( sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override final;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override final;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
 public:
     void FinishMetaElement();
 
     static void setBuildId(std::u16string_view rGenerator,
-        const css::uno::Reference< css::beans::XPropertySet>& xImportInfo );
+        const cpo::uno::Reference< css::beans::XPropertySet>& xImportInfo );
 };
 
 #endif // _ INCLUDED_XMLOFF_XMLMETAI_HXX

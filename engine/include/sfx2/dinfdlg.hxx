@@ -94,7 +94,7 @@ public:
     DECLARE_ITEM_TYPE_FUNCTION(SfxDocumentInfoItem)
     SfxDocumentInfoItem();
     SfxDocumentInfoItem( const OUString &rFileName,
-        const css::uno::Reference< css::document::XDocumentProperties> & i_xDocProps,
+        const cpo::uno::Reference< css::document::XDocumentProperties> & i_xDocProps,
         const cpo::uno::Sequence< css::document::CmisProperty> & i_cmisProps,
         bool bUseUserData, bool bUseThumbnailSave, sal_Int64 nFileSize );
     SfxDocumentInfoItem( const SfxDocumentInfoItem& );
@@ -102,7 +102,7 @@ public:
 
     /// update i_xDocProps with the data in this object
     void UpdateDocumentInfo(
-        const css::uno::Reference< css::document::XDocumentProperties> & i_xDocProps,
+        const cpo::uno::Reference< css::document::XDocumentProperties> & i_xDocProps,
         bool i_bDoNotUpdateUserDefined = false)
         const;
     bool        isCmisDocument() const { return m_aCmisProperties.hasElements();}

@@ -11,7 +11,7 @@
 #define INCLUDED_SVX_SECLABEL_SECURITYLABELTARGET_HXX
 
 #include <svx/svxdllapi.h>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <rtl/ustring.hxx>
 
 namespace com::sun::star::frame
@@ -56,7 +56,7 @@ public:
     virtual ~SecurityLabelTarget();
 
     /// The document the label applies to (for the app-agnostic storage helpers).
-    virtual css::uno::Reference<css::frame::XModel> getModel() const = 0;
+    virtual cpo::uno::Reference<css::frame::XModel> getModel() const = 0;
 
     /// Render the marking with the requested placements, replacing any prior one.
     virtual void applyMarking(const LabelPlacement& rPlacement) = 0;

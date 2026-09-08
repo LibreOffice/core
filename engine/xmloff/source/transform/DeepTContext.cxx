@@ -24,7 +24,7 @@
 #include "TransformerBase.hxx"
 #include <osl/diagnose.h>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::xml::sax;
 
 void XMLPersElemContentTContext::AddContent( rtl::Reference<XMLTransformerContext> const & pContext )

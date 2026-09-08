@@ -160,7 +160,7 @@ protected:
     SAL_DLLPRIVATE void DoInitialLayout();
 
     SAL_DLLPRIVATE void loadUI(vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription,
-                const css::uno::Reference<css::frame::XFrame> &rFrame);
+                const cpo::uno::Reference<css::frame::XFrame> &rFrame);
 
 public:
     SAL_DLLPRIVATE bool isLayoutEnabled() const;
@@ -176,7 +176,7 @@ public:
     DockingWindow(vcl::Window* pParent, WinBits nStyle, const char* pIdleDebugName = "vcl::DockingWindow maLayoutIdle");
     SAL_DLLPRIVATE DockingWindow(vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription,
         const char* pIdleDebugName = "vcl::DockingWindow maLayoutIdle",
-        const css::uno::Reference<css::frame::XFrame> &rFrame = css::uno::Reference<css::frame::XFrame>());
+        const cpo::uno::Reference<css::frame::XFrame> &rFrame = cpo::uno::Reference<css::frame::XFrame>());
     virtual ~DockingWindow() override;
     virtual void dispose() override;
 
@@ -232,7 +232,7 @@ protected:
     VclPtr<vcl::Window> m_xBox;
 public:
     DropdownDockingWindow(vcl::Window* pParent,
-        const css::uno::Reference<css::frame::XFrame> &rFrame = css::uno::Reference<css::frame::XFrame>(),
+        const cpo::uno::Reference<css::frame::XFrame> &rFrame = cpo::uno::Reference<css::frame::XFrame>(),
         bool bTearable = false);
     virtual ~DropdownDockingWindow() override;
     virtual void dispose() override;
@@ -244,7 +244,7 @@ protected:
     VclPtr<vcl::Window> m_xBox;
 public:
     ResizableDockingWindow(vcl::Window* pParent,
-        const css::uno::Reference<css::frame::XFrame> &rFrame = css::uno::Reference<css::frame::XFrame>());
+        const cpo::uno::Reference<css::frame::XFrame> &rFrame = cpo::uno::Reference<css::frame::XFrame>());
     void InvalidateChildSizeCache();
     ResizableDockingWindow(vcl::Window* pParent, WinBits nStyle);
     virtual ~ResizableDockingWindow() override;

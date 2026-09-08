@@ -81,24 +81,24 @@ protected:
     virtual ::cppu::IPropertyArrayHelper & getInfoHelper() override;
 
     // ____ XPropertySet ____
-    virtual css::uno::Reference< css::beans::XPropertySetInfo >
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo >
         getPropertySetInfo() override;
 
 public:
     // ____ XRegressionCurve ____
-    virtual css::uno::Reference< css::chart2::XRegressionCurveCalculator > getCalculator() override;
-    virtual css::uno::Reference< css::beans::XPropertySet > getEquationProperties() override;
+    virtual cpo::uno::Reference< css::chart2::XRegressionCurveCalculator > getCalculator() override;
+    virtual cpo::uno::Reference< css::beans::XPropertySet > getEquationProperties() override;
     virtual void setEquationProperties(
-        const css::uno::Reference< css::beans::XPropertySet >& xEquationProperties ) override;
+        const cpo::uno::Reference< css::beans::XPropertySet >& xEquationProperties ) override;
 
     // ____ XServiceName ____
     virtual OUString getServiceName() override;
 
     // ____ XModifyBroadcaster ____
     virtual void addModifyListener(
-        const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+        const cpo::uno::Reference< css::util::XModifyListener >& aListener ) override;
     virtual void removeModifyListener(
-        const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+        const cpo::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
     rtl::Reference< RegressionCurveCalculator > getCurveCalculator();
 
@@ -122,7 +122,7 @@ private:
     const tCurveType    m_eRegressionCurveType;
 
     rtl::Reference<ModifyEventForwarder> m_xModifyEventForwarder;
-    css::uno::Reference< css::beans::XPropertySet > m_xEquationProperties;
+    cpo::uno::Reference< css::beans::XPropertySet > m_xEquationProperties;
     void setPropertyMayHaveR2();
 };
 
@@ -137,7 +137,7 @@ public:
     virtual ~MeanValueRegressionCurve() override;
 
     // ____ XCloneable ____
-    virtual css::uno::Reference< css::util::XCloneable > createClone() override;
+    virtual cpo::uno::Reference< css::util::XCloneable > createClone() override;
 
     /// XServiceInfo declarations
     virtual OUString getImplementationName() override;
@@ -153,7 +153,7 @@ public:
     virtual ~LinearRegressionCurve() override;
 
     // ____ XCloneable ____
-    virtual css::uno::Reference< css::util::XCloneable > createClone() override;
+    virtual cpo::uno::Reference< css::util::XCloneable > createClone() override;
 
     /// XServiceInfo declarations
     virtual OUString getImplementationName() override;
@@ -169,7 +169,7 @@ public:
     virtual ~LogarithmicRegressionCurve() override;
 
     // ____ XCloneable ____
-    virtual css::uno::Reference< css::util::XCloneable > createClone() override;
+    virtual cpo::uno::Reference< css::util::XCloneable > createClone() override;
 
     /// XServiceInfo declarations
     virtual OUString getImplementationName() override;
@@ -185,7 +185,7 @@ public:
     virtual ~ExponentialRegressionCurve() override;
 
     // ____ XCloneable ____
-    virtual css::uno::Reference< css::util::XCloneable > createClone() override;
+    virtual cpo::uno::Reference< css::util::XCloneable > createClone() override;
 
     /// XServiceInfo declarations
     virtual OUString getImplementationName() override;
@@ -201,7 +201,7 @@ public:
     virtual ~PotentialRegressionCurve() override;
 
     // ____ XCloneable ____
-    virtual css::uno::Reference< css::util::XCloneable > createClone() override;
+    virtual cpo::uno::Reference< css::util::XCloneable > createClone() override;
 
     /// XServiceInfo declarations
     virtual OUString getImplementationName() override;
@@ -217,7 +217,7 @@ public:
     virtual ~PolynomialRegressionCurve() override;
 
     // ____ XCloneable ____
-    virtual css::uno::Reference< css::util::XCloneable > createClone() override;
+    virtual cpo::uno::Reference< css::util::XCloneable > createClone() override;
 
     /// XServiceInfo declarations
     virtual OUString getImplementationName() override;
@@ -233,7 +233,7 @@ public:
     virtual ~MovingAverageRegressionCurve() override;
 
     // ____ XCloneable ____
-    virtual css::uno::Reference< css::util::XCloneable > createClone() override;
+    virtual cpo::uno::Reference< css::util::XCloneable > createClone() override;
 
     /// XServiceInfo declarations
     virtual OUString getImplementationName() override;

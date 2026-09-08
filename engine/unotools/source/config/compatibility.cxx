@@ -31,13 +31,13 @@
 
 #include <unordered_map>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 
 SvtCompatibility::SvtCompatibility(const OUString& itemName)
     : root(officecfg::Office::Compatibility::AllFileFormats::get())
-    , item(root->getByName(itemName), css::uno::UNO_QUERY_THROW)
+    , item(root->getByName(itemName), cpo::uno::UNO_QUERY_THROW)
 {
 }
 

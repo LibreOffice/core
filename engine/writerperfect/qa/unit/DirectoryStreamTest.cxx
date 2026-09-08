@@ -21,7 +21,7 @@
 #include <com/sun/star/ucb/XContent.hpp>
 
 namespace ucb = css::ucb;
-namespace uno = css::uno;
+namespace uno = cpo::uno;
 
 using std::unique_ptr;
 

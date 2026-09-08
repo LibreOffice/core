@@ -92,7 +92,7 @@ namespace dbaui
         IDatabaseSettingsDialog*   m_pAdminDialog;
         IItemSetHelper*            m_pItemSetHelper;
 
-        css::uno::Reference< cpo::uno::XComponentContext >
+        cpo::uno::Reference< cpo::uno::XComponentContext >
                                    m_xORB;
     public:
         OGenericAdministrationPage(weld::Container* pPage, weld::DialogController* pController, const OUString& rUIXMLDescription, const OUString& rId, const SfxItemSet& rAttrSet);
@@ -114,7 +114,7 @@ namespace dbaui
             @param  _rxORB
                 The service factory.
         */
-        void SetServiceFactory(const css::uno::Reference< cpo::uno::XComponentContext >& rxORB)
+        void SetServiceFactory(const cpo::uno::Reference< cpo::uno::XComponentContext >& rxORB)
         {
             m_xORB = rxORB;
         }

@@ -37,6 +37,7 @@
 namespace chart
 {
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 ViewElementListProvider::ViewElementListProvider( DrawModelWrapper* pDrawModelWrapper )
                         : m_pDrawModelWrapper( pDrawModelWrapper )

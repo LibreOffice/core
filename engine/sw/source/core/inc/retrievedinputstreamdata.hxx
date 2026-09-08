@@ -22,7 +22,7 @@
 #include <tools/link.hxx>
 #include <sal/types.h>
 #include <mutex>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <map>
 #include <memory>
@@ -50,7 +50,7 @@ class SwRetrievedInputStreamDataManager
         struct tData
         {
             std::weak_ptr< SwAsyncRetrieveInputStreamThreadConsumer > mpThreadConsumer;
-            css::uno::Reference<css::io::XInputStream> mxInputStream;
+            cpo::uno::Reference<css::io::XInputStream> mxInputStream;
             bool mbIsStreamReadOnly;
 
             tData()
@@ -69,7 +69,7 @@ class SwRetrievedInputStreamDataManager
         tDataKey ReserveData( std::weak_ptr< SwAsyncRetrieveInputStreamThreadConsumer > const & pThreadConsumer );
 
         void PushData( const tDataKey nDataKey,
-                       css::uno::Reference<css::io::XInputStream> const & xInputStream,
+                       cpo::uno::Reference<css::io::XInputStream> const & xInputStream,
                        const bool bIsStreamReadOnly );
 
         bool PopData( const tDataKey nDataKey,

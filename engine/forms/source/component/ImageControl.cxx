@@ -64,7 +64,7 @@ namespace frm
 {
 using namespace comphelper;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
@@ -180,7 +180,7 @@ OImageControlModel::~OImageControlModel()
 
 // XCloneable
 
-css::uno::Reference< css::util::XCloneable > OImageControlModel::createClone()
+cpo::uno::Reference< css::util::XCloneable > OImageControlModel::createClone()
 {
     rtl::Reference<OImageControlModel> pClone = new OImageControlModel(this, getContext());
     pClone->clonedFrom(this);
@@ -927,7 +927,7 @@ void OImageControlControl::mousePressed(const css::awt::MouseEvent& e)
             if (hasProperty(PROPERTY_BOUNDFIELD, xSet))
                 xBoundField.set(
                     xSet->getPropertyValue(PROPERTY_BOUNDFIELD),
-                    css::uno::UNO_QUERY);
+                    cpo::uno::UNO_QUERY);
             if (!xBoundField.is())
             {
                 // but only if our IMAGE_URL property is handled as if it is transient, which is equivalent to

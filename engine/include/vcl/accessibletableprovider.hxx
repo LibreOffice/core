@@ -89,8 +89,8 @@ public:
     virtual rtl::Reference<comphelper::OAccessible> CreateAccessibleCell(sal_Int32 _nRow,
                                                                          sal_uInt16 _nColumnPos)
         = 0;
-    virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleRowHeader( sal_Int32 _nRow ) = 0;
-    virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleColumnHeader( sal_uInt16 _nColumnPos ) = 0;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > CreateAccessibleRowHeader( sal_Int32 _nRow ) = 0;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > CreateAccessibleColumnHeader( sal_uInt16 _nColumnPos ) = 0;
 
     virtual sal_Int32               GetAccessibleControlCount() const = 0;
     virtual rtl::Reference<comphelper::OAccessible> CreateAccessibleControl(sal_Int32 _nIndex) = 0;

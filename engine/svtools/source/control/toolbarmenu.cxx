@@ -28,7 +28,7 @@
 #include <framestatuslistener.hxx>
 #include <svtools/toolbarmenu.hxx>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
 
@@ -52,7 +52,7 @@ SystemWindow* GetTopMostParentSystemWindow(const vcl::Window& rWindow)
 class ToolbarPopupStatusListener : public svt::FrameStatusListener
 {
 public:
-    ToolbarPopupStatusListener( const css::uno::Reference< css::frame::XFrame >& xFrame,
+    ToolbarPopupStatusListener( const cpo::uno::Reference< css::frame::XFrame >& xFrame,
                                 WeldToolbarPopup& rToolbarPopup );
 
     virtual void dispose() override;
@@ -63,7 +63,7 @@ public:
 
 
 ToolbarPopupStatusListener::ToolbarPopupStatusListener(
-    const css::uno::Reference< css::frame::XFrame >& xFrame,
+    const cpo::uno::Reference< css::frame::XFrame >& xFrame,
     WeldToolbarPopup& rToolbarPopup )
 : svt::FrameStatusListener( ::comphelper::getProcessComponentContext(), xFrame )
 , mpPopup( &rToolbarPopup )
@@ -103,7 +103,7 @@ void InterimToolbarPopup::EndPopupMode()
     GetDockingManager()->EndPopupMode(this);
 }
 
-WeldToolbarPopup::WeldToolbarPopup(css::uno::Reference<css::frame::XFrame> xFrame,
+WeldToolbarPopup::WeldToolbarPopup(cpo::uno::Reference<css::frame::XFrame> xFrame,
                                    weld::Widget* pParent, const OUString& rUIFile,
                                    const OUString& rId)
     : m_xBuilder(Application::CreateBuilder(pParent, rUIFile))
@@ -160,7 +160,7 @@ IMPL_LINK_NOARG(ToolbarPopupContainer, FocusHdl, weld::Widget&, void)
         m_xPopup->GrabFocus();
 }
 
-InterimToolbarPopup::InterimToolbarPopup(const css::uno::Reference<css::frame::XFrame>& rFrame, vcl::Window* pParent,
+InterimToolbarPopup::InterimToolbarPopup(const cpo::uno::Reference<css::frame::XFrame>& rFrame, vcl::Window* pParent,
                                          std::unique_ptr<WeldToolbarPopup> xPopup, bool bTearable)
     : DropdownDockingWindow(pParent, rFrame, bTearable)
     , m_xFrame(rFrame)

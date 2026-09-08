@@ -58,8 +58,8 @@ using namespace ::com::sun::star::ui::dialogs::ExtendedFilePickerElementIds;
 using namespace ::com::sun::star::ui::dialogs::CommonFilePickerElementIds;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 struct FilterEntry
 {
@@ -1531,7 +1531,7 @@ GtkWidget* SalGtkPicker::GetParentWidget(const cpo::uno::Sequence<cpo::uno::Any>
 {
     GtkWidget* pParentWidget = nullptr;
 
-    css::uno::Reference<css::awt::XWindow> xParentWindow;
+    cpo::uno::Reference<css::awt::XWindow> xParentWindow;
     if (rArguments.getLength() > 1)
     {
         rArguments[1] >>= xParentWindow;
@@ -1543,7 +1543,7 @@ GtkWidget* SalGtkPicker::GetParentWidget(const cpo::uno::Sequence<cpo::uno::Any>
             pParentWidget = pGtkXWindow->getGtkWidget();
         else
         {
-            css::uno::Reference<css::awt::XSystemDependentWindowPeer> xSysDepWin(xParentWindow, css::uno::UNO_QUERY);
+            cpo::uno::Reference<css::awt::XSystemDependentWindowPeer> xSysDepWin(xParentWindow, cpo::uno::UNO_QUERY);
             if (xSysDepWin.is())
             {
                 cpo::uno::Sequence<sal_Int8> aProcessIdent(16);
@@ -1977,7 +1977,7 @@ SalGtkFilePicker::~SalGtkFilePicker()
 }
 
 uno::Reference< ui::dialogs::XFilePicker2 >
-GtkInstance::createFilePicker( const css::uno::Reference< cpo::uno::XComponentContext > &xMSF )
+GtkInstance::createFilePicker( const cpo::uno::Reference< cpo::uno::XComponentContext > &xMSF )
 {
     return uno::Reference< ui::dialogs::XFilePicker2 >(
                 new SalGtkFilePicker( xMSF ) );

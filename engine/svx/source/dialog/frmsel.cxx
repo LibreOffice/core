@@ -51,7 +51,7 @@ using namespace ::editeng;
 
 namespace svx {
 
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::cpo::uno::Any;
 using ::com::sun::star::accessibility::XAccessible;
 using namespace ::com::sun::star::accessibility;

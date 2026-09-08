@@ -36,7 +36,7 @@
 #include <oox/token/tokens.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::beans;

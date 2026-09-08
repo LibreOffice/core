@@ -23,20 +23,20 @@
 #include <config_options.h>
 #include <unotools/unotoolsdllapi.h>
 #include <com/sun/star/i18n/NativeNumberXmlAttributes.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 namespace cpo::uno { class XComponentContext; }
 namespace com::sun::star::i18n { class XNativeNumberSupplier2; }
 
 class UNLESS_MERGELIBS(UNOTOOLS_DLLPUBLIC) NativeNumberWrapper
 {
-    css::uno::Reference< css::i18n::XNativeNumberSupplier2 >   xNNS;
+    cpo::uno::Reference< css::i18n::XNativeNumberSupplier2 >   xNNS;
                                 NativeNumberWrapper( const NativeNumberWrapper& ) = delete;
             NativeNumberWrapper&    operator=( const NativeNumberWrapper& ) = delete;
 
 public:
                                 NativeNumberWrapper(
-                                    const css::uno::Reference< cpo::uno::XComponentContext > & rxContext
+                                    const cpo::uno::Reference< cpo::uno::XComponentContext > & rxContext
                                     );
 
                                 ~NativeNumberWrapper();

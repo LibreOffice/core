@@ -36,13 +36,13 @@
 static bool g_bInputCallbacksEnabled = false;
 static bool g_bInputCallbacksRegistered = false;
 
-static css::uno::Reference< css::xml::crypto::XUriBinding > m_xUriBinding ;
+static cpo::uno::Reference< css::xml::crypto::XUriBinding > m_xUriBinding ;
 
 extern "C" {
 
 static int xmlStreamMatch( const char* uri )
 {
-    css::uno::Reference< css::io::XInputStream > xInputStream ;
+    cpo::uno::Reference< css::io::XInputStream > xInputStream ;
 
     if (g_bInputCallbacksEnabled && g_bInputCallbacksRegistered)
     {
@@ -75,7 +75,7 @@ static int xmlStreamMatch( const char* uri )
 
 static void* xmlStreamOpen( const char* uri )
 {
-    css::uno::Reference< css::io::XInputStream > xInputStream ;
+    cpo::uno::Reference< css::io::XInputStream > xInputStream ;
 
     if (g_bInputCallbacksEnabled && g_bInputCallbacksRegistered)
     {
@@ -111,7 +111,7 @@ static void* xmlStreamOpen( const char* uri )
 static int xmlStreamRead( void* context, char* buffer, int len )
 {
     int numbers ;
-    css::uno::Reference< css::io::XInputStream > xInputStream ;
+    cpo::uno::Reference< css::io::XInputStream > xInputStream ;
     cpo::uno::Sequence< sal_Int8 > outSeqs( len ) ;
 
     numbers = 0 ;
@@ -214,7 +214,7 @@ int xmlEnableStreamInputCallbacks()
 }
 
 int xmlRegisterStreamInputCallbacks(
-    css::uno::Reference< css::xml::crypto::XUriBinding > const & aUriBinding
+    cpo::uno::Reference< css::xml::crypto::XUriBinding > const & aUriBinding
 ) {
     if (!g_bInputCallbacksEnabled)
     {

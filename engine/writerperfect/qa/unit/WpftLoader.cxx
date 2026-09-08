@@ -34,17 +34,17 @@ namespace document = css::document;
 namespace frame = css::frame;
 namespace lang = css::lang;
 namespace ucb = css::ucb;
-namespace uno = css::uno;
+namespace uno = cpo::uno;
 namespace util = css::util;
 
 namespace writerperfect::test
 {
 WpftLoader::WpftLoader(const OUString& rURL,
-                       const css::uno::Reference<css::document::XFilter>& rxFilter,
+                       const cpo::uno::Reference<css::document::XFilter>& rxFilter,
                        const OUString& rFactoryURL,
-                       const css::uno::Reference<css::frame::XDesktop2>& rxDesktop,
-                       const css::uno::Reference<css::container::XNameAccess>& rxTypeMap,
-                       const css::uno::Reference<cpo::uno::XComponentContext>& rxContext)
+                       const cpo::uno::Reference<css::frame::XDesktop2>& rxDesktop,
+                       const cpo::uno::Reference<css::container::XNameAccess>& rxTypeMap,
+                       const cpo::uno::Reference<cpo::uno::XComponentContext>& rxContext)
     : m_aURL(rURL)
     , m_aFactoryURL(rFactoryURL)
     , m_xFilter(rxFilter)
@@ -56,11 +56,11 @@ WpftLoader::WpftLoader(const OUString& rURL,
         impl_dispose();
 }
 
-WpftLoader::WpftLoader(const css::uno::Reference<css::io::XInputStream>& rxInputStream,
-                       const css::uno::Reference<css::document::XFilter>& rxFilter,
+WpftLoader::WpftLoader(const cpo::uno::Reference<css::io::XInputStream>& rxInputStream,
+                       const cpo::uno::Reference<css::document::XFilter>& rxFilter,
                        const OUString& rFactoryURL,
-                       const css::uno::Reference<css::frame::XDesktop2>& rxDesktop,
-                       const css::uno::Reference<cpo::uno::XComponentContext>& rxContext)
+                       const cpo::uno::Reference<css::frame::XDesktop2>& rxDesktop,
+                       const cpo::uno::Reference<cpo::uno::XComponentContext>& rxContext)
     : m_xInputStream(rxInputStream)
     , m_aFactoryURL(rFactoryURL)
     , m_xFilter(rxFilter)
@@ -82,7 +82,7 @@ WpftLoader::~WpftLoader()
     }
 }
 
-const css::uno::Reference<css::lang::XComponent>& WpftLoader::getDocument() const { return m_xDoc; }
+const cpo::uno::Reference<css::lang::XComponent>& WpftLoader::getDocument() const { return m_xDoc; }
 
 bool WpftLoader::impl_load()
 {

@@ -106,6 +106,7 @@
 #include <names.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 constexpr OUString WATERMARK_NAME = u"PowerPlusWaterMarkObject"_ustr;
 #define WATERMARK_AUTO_SIZE sal_uInt32(1)
@@ -281,7 +282,7 @@ std::map<OUString, OUString> lcl_getRDFStatements(const rtl::Reference<SwXTextDo
 {
     try
     {
-        const css::uno::Reference<css::rdf::XResource> xSubject(xRef, uno::UNO_QUERY);
+        const cpo::uno::Reference<css::rdf::XResource> xSubject(xRef, uno::UNO_QUERY);
         return SwRDFHelper::getStatements(xModel, MetaNS, xSubject);
     }
     catch (const ::cpo::uno::Exception&)
@@ -464,7 +465,7 @@ uno::Reference<text::XTextField> lcl_InsertParagraphSignature(const rtl::Referen
 
     const OUString sId = lcl_getNextSignatureId(xModel, xParagraph);
 
-    const css::uno::Reference<css::rdf::XResource> xSubject(xField, uno::UNO_QUERY);
+    const cpo::uno::Reference<css::rdf::XResource> xSubject(xField, uno::UNO_QUERY);
     SwRDFHelper::addStatement(xModel, MetaNS, MetaFilename, xSubject, ParagraphSignatureIdRDFName, sId);
 
     // First convert the UTC UNIX timestamp to a tools::DateTime then to local time.
@@ -482,7 +483,7 @@ uno::Reference<text::XTextField> lcl_InsertParagraphSignature(const rtl::Referen
     rBuffer.append(static_cast<sal_Int32>(aDateTime.GetDay()));
 
     // Now set the RDF on the paragraph, since that's what is preserved in .doc(x).
-    const css::uno::Reference<css::rdf::XResource> xParaSubject(xParagraph, uno::UNO_QUERY);
+    const cpo::uno::Reference<css::rdf::XResource> xParaSubject(xParagraph, uno::UNO_QUERY);
     const OUString prefix = ParagraphSignatureRDFNamespace + sId;
     SwRDFHelper::addStatement(xModel, MetaNS, MetaFilename, xParaSubject, ParagraphSignatureLastIdRDFName, sId);
     SwRDFHelper::addStatement(xModel, MetaNS, MetaFilename, xParaSubject, prefix + ParagraphSignatureDigestRDFName, signature);
@@ -614,12 +615,12 @@ bool lcl_UpdateParagraphClassificationField(SwDoc* pDoc,
 
     uno::Reference<text::XTextField> xField = lcl_InsertParagraphClassification(xModel, xTextNode);
 
-    css::uno::Reference<css::rdf::XResource> xFieldSubject(xField, uno::UNO_QUERY);
+    cpo::uno::Reference<css::rdf::XResource> xFieldSubject(xField, uno::UNO_QUERY);
     SwRDFHelper::addStatement(xModel, MetaNS, MetaFilename, xFieldSubject, sKey, sValue);
     SwRDFHelper::addStatement(xModel, MetaNS, MetaFilename, xFieldSubject, ParagraphClassificationNameRDFName, sKey);
     SwRDFHelper::addStatement(xModel, MetaNS, MetaFilename, xFieldSubject, ParagraphClassificationValueRDFName, sValue);
 
-    css::uno::Reference<css::rdf::XResource> xNodeSubject(xTextNode, uno::UNO_QUERY);
+    cpo::uno::Reference<css::rdf::XResource> xNodeSubject(xTextNode, uno::UNO_QUERY);
     SwRDFHelper::addStatement(xModel, MetaNS, MetaFilename, xNodeSubject, sKey, sValue);
 
     return lcl_DoUpdateParagraphSignatureField(*pDoc, xField, sDisplayText);
@@ -636,7 +637,7 @@ void lcl_ValidateParagraphSignatures(SwDoc& rDoc, const uno::Reference<text::XTe
     // Check if the paragraph is signed.
     try
     {
-        const css::uno::Reference<css::rdf::XResource> xSubject(xParagraph, uno::UNO_QUERY);
+        const cpo::uno::Reference<css::rdf::XResource> xSubject(xParagraph, uno::UNO_QUERY);
         std::map<OUString, OUString> aStatements = SwRDFHelper::getStatements(xModel, rGraphNames, xSubject);
         const auto it = aStatements.find(ParagraphSignatureLastIdRDFName);
         if (it == aStatements.end() || it->second.isEmpty())
@@ -1169,7 +1170,7 @@ void SwEditShell::SetClassification(const OUString& rName, SfxClassificationPoli
 static void lcl_ApplyParagraphClassification(SwDoc* pDoc,
                                       const rtl::Reference<SwXTextDocument>& xModel,
                                       const rtl::Reference<SwXParagraph>& xParent,
-                                      const css::uno::Reference<css::rdf::XResource>& xNodeSubject,
+                                      const cpo::uno::Reference<css::rdf::XResource>& xNodeSubject,
                                       std::vector<svx::ClassificationResult> aResults)
 {
     if (!xNodeSubject.is())
@@ -1286,7 +1287,7 @@ void SwEditShell::ApplyParagraphClassification(std::vector<svx::ClassificationRe
 
     rtl::Reference<SwXTextDocument> xModel = pDocShell->GetBaseModel();
     rtl::Reference<SwXParagraph> xParent = SwXParagraph::CreateXParagraph(pNode->GetDoc(), pNode, nullptr);
-    lcl_ApplyParagraphClassification(GetDoc(), xModel, xParent, css::uno::Reference<css::rdf::XResource>(xParent), std::move(aResults));
+    lcl_ApplyParagraphClassification(GetDoc(), xModel, xParent, cpo::uno::Reference<css::rdf::XResource>(xParent), std::move(aResults));
 }
 
 static std::vector<svx::ClassificationResult> lcl_CollectParagraphClassification(const rtl::Reference<SwXTextDocument>& xModel, const uno::Reference<text::XTextContent>& xParagraph)
@@ -1913,7 +1914,7 @@ static uno::Reference<text::XTextField> lcl_GetParagraphMetadataFieldAtIndex(con
             SwFormatMeta& rFormatMeta(static_cast<SwFormatMeta&>(pTextMeta->GetAttr()));
             if (::sw::Meta* pMeta = rFormatMeta.GetMeta())
             {
-                const css::uno::Reference<css::rdf::XResource> xSubject = pMeta->MakeUnoObject();
+                const cpo::uno::Reference<css::rdf::XResource> xSubject = pMeta->MakeUnoObject();
                 rtl::Reference<SwXTextDocument> xModel = pDocSh->GetBaseModel();
                 const std::map<OUString, OUString> aStatements = lcl_getRDFStatements(xModel, xSubject);
                 if (aStatements.find(ParagraphSignatureIdRDFName) != aStatements.end() ||
@@ -2045,7 +2046,7 @@ void SwEditShell::RestoreMetadataFieldsAndValidateParagraphSignatures()
                     // Add the signature at the end.
                     xField->attach(xParagraph->getAnchor()->getEnd());
 
-                    const css::uno::Reference<css::rdf::XResource> xFieldSubject(xField, uno::UNO_QUERY);
+                    const cpo::uno::Reference<css::rdf::XResource> xFieldSubject(xField, uno::UNO_QUERY);
                     SwRDFHelper::addStatement(xModel, MetaNS, MetaFilename, xFieldSubject, ParagraphSignatureIdRDFName, pair.first);
 
                     const OString utf8Text = lcl_getParagraphBodyText(xParagraph);

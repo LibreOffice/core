@@ -47,20 +47,20 @@ private:
     ::std::unordered_map<SwTableNode const*, ::std::pair<FormatMap, FormatMap>> m_TableFormats;
 
     static SwNoTextNode *GetNoTextNode(
-        const css::uno::Reference < css::beans::XPropertySet >& rPropSet );
+        const cpo::uno::Reference < css::beans::XPropertySet >& rPropSet );
 
     void CollectTableLinesAutoStyles(const SwTableLines& rLines, SwFrameFormat& rFormat,
                                      bool bProgress);
 
 protected:
     virtual void _collectTextEmbeddedAutoStyles(
-        const css::uno::Reference< css::beans::XPropertySet > & rPropSet ) override;
+        const cpo::uno::Reference< css::beans::XPropertySet > & rPropSet ) override;
     virtual void _exportTextEmbedded(
-        const css::uno::Reference< css::beans::XPropertySet > & rPropSet,
-        const css::uno::Reference< css::beans::XPropertySetInfo > & rPropSetInfo ) override;
+        const cpo::uno::Reference< css::beans::XPropertySet > & rPropSet,
+        const cpo::uno::Reference< css::beans::XPropertySetInfo > & rPropSetInfo ) override;
 
     virtual void exportTable(
-        const css::uno::Reference< css::text::XTextContent > & rTextContent,
+        const cpo::uno::Reference< css::text::XTextContent > & rTextContent,
         bool bAutoStyles, bool bProgress ) override;
 
     virtual void exportTableAutoStyles() override;

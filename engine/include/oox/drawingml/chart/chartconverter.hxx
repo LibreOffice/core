@@ -22,7 +22,7 @@
 
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/drawingml/chart/modelbase.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <oox/dllapi.h>
 #include <rtl/ustring.hxx>
 
@@ -76,22 +76,22 @@ public:
     void                convertFromModel(
                             ::oox::core::XmlFilterBase& rFilter,
                             ChartSpaceModel& rChartModel,
-                            const css::uno::Reference< css::chart2::XChartDocument >& rxChartDoc,
-                            const css::uno::Reference< css::drawing::XShapes >& rxExternalPage,
+                            const cpo::uno::Reference< css::chart2::XChartDocument >& rxChartDoc,
+                            const cpo::uno::Reference< css::drawing::XShapes >& rxExternalPage,
                             const css::awt::Point& rChartPos,
                             const css::awt::Size& rChartSize ) const;
 
     /** Creates an internal data provider. Derived classes may override this
         function to create an external data provider. */
     virtual void        createDataProvider(
-                            const css::uno::Reference<
+                            const cpo::uno::Reference<
                             css::chart2::XChartDocument >& rxChartDoc ) const;
 
     /** Creates a data sequence from a formula. Dummy implementation. Derived
         classes have to override this function to actually parse the formula. */
-    virtual css::uno::Reference<css::chart2::data::XDataSequence>
+    virtual cpo::uno::Reference<css::chart2::data::XDataSequence>
         createDataSequence(
-            const css::uno::Reference<css::chart2::data::XDataProvider>& rxDataProvider,
+            const cpo::uno::Reference<css::chart2::data::XDataProvider>& rxDataProvider,
             const DataSequenceModel& rDataSeq, const OUString& rRole,
             const OUString& aRoleQualifier ) const;
 
@@ -115,7 +115,7 @@ public:
     static void convertFromModel(
                     const oox::core::XmlFilterBase& rFilter,
                     const StyleModel& rChartStyleModel,
-                    const css::uno::Reference< css::chart2::XChartStyle >& rxChartStyle);
+                    const cpo::uno::Reference< css::chart2::XChartStyle >& rxChartStyle);
 
 private:
     ChartStyleConverter( const ChartStyleConverter& ) = delete;
@@ -138,7 +138,7 @@ public:
     static void convertFromModel(
                     oox::core::XmlFilterBase& rFilter,
                     ColorStyleModel& rChartColorStyleModel,
-                    const css::uno::Reference< css::chart2::XChartColorStyle >& rxChartColorStyle);
+                    const cpo::uno::Reference< css::chart2::XChartColorStyle >& rxChartColorStyle);
 private:
     ChartColorStyleConverter( const ChartColorStyleConverter& ) = delete;
     ChartColorStyleConverter&     operator=( const ChartColorStyleConverter& ) = delete;

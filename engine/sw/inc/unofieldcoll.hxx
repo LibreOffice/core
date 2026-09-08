@@ -102,17 +102,17 @@ public:
     virtual bool SAL_CALL hasElements() override;
 
     // XEnumerationAccess
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
             css::container::XEnumeration >  SAL_CALL
         createEnumeration() override;
 
     // XRefreshable
     virtual void SAL_CALL refresh() override;
     virtual void SAL_CALL addRefreshListener(
-            const css::uno::Reference<
+            const cpo::uno::Reference<
                 css::util::XRefreshListener>& xListener) override;
     virtual void SAL_CALL removeRefreshListener(
-            const css::uno::Reference<
+            const cpo::uno::Reference<
                 css::util::XRefreshListener>& xListener) override;
 
     // container::XUniqueIDAccess

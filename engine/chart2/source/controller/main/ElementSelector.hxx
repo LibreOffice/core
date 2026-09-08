@@ -88,7 +88,7 @@ public:
      // XStatusListener
      virtual void statusChanged( const css::frame::FeatureStateEvent& Event ) override;
      // XToolbarController
-     virtual css::uno::Reference< css::awt::XWindow > createItemWindow( const css::uno::Reference< css::awt::XWindow >& Parent ) override;
+     virtual cpo::uno::Reference< css::awt::XWindow > createItemWindow( const cpo::uno::Reference< css::awt::XWindow >& Parent ) override;
 
 private:
     VclPtr< SelectorListBox > m_apSelectorListBox;

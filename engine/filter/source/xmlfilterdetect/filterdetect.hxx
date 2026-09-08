@@ -34,10 +34,10 @@ class FilterDetect final : public cppu::WeakImplHelper <
 >
 {
 
-    css::uno::Reference< cpo::uno::XComponentContext > mxCtx;
+    cpo::uno::Reference< cpo::uno::XComponentContext > mxCtx;
 
 public:
-    explicit FilterDetect( css::uno::Reference< cpo::uno::XComponentContext > xCtx)
+    explicit FilterDetect( cpo::uno::Reference< cpo::uno::XComponentContext > xCtx)
         : mxCtx(std::move( xCtx )) {}
 
     //XExtendedFilterDetection

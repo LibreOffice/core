@@ -39,7 +39,7 @@ namespace basprov
               BasicMethodNodeImpl>
     {
     private:
-        css::uno::Reference< cpo::uno::XComponentContext >    m_xContext;
+        cpo::uno::Reference< cpo::uno::XComponentContext >    m_xContext;
         OUString m_sScriptingContext;
         SbMethod* m_pMethod;
         bool m_bIsAppScript;
@@ -53,19 +53,19 @@ namespace basprov
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper(  ) const override;
 
     public:
-        BasicMethodNodeImpl( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+        BasicMethodNodeImpl( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
             OUString sScriptingContext,
             SbMethod* pMethod, bool isAppScript );
         virtual ~BasicMethodNodeImpl() override;
 
         // XBrowseNode
         virtual OUString SAL_CALL getName(  ) override;
-        virtual cpo::uno::Sequence< css::uno::Reference< css::script::browse::XBrowseNode > > SAL_CALL getChildNodes(  ) override;
+        virtual cpo::uno::Sequence< cpo::uno::Reference< css::script::browse::XBrowseNode > > SAL_CALL getChildNodes(  ) override;
         virtual bool SAL_CALL hasChildNodes(  ) override;
         virtual sal_Int16 SAL_CALL getType(  ) override;
 
         // XInvocation
-        virtual css::uno::Reference< css::beans::XIntrospectionAccess > SAL_CALL getIntrospection(  ) override;
+        virtual cpo::uno::Reference< css::beans::XIntrospectionAccess > SAL_CALL getIntrospection(  ) override;
         virtual cpo::uno::Any SAL_CALL invoke(
             const OUString& aFunctionName,
             const cpo::uno::Sequence< cpo::uno::Any >& aParams,

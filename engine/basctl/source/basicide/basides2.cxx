@@ -38,7 +38,8 @@ namespace basctl
 {
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 Reference< view::XRenderable > Shell::GetRenderable()
 {
@@ -122,8 +123,8 @@ void Shell::SetMDITitle()
         pShell->SetModified(false);
     }
 
-    css::uno::Reference< css::frame::XController > xController = GetController ();
-    css::uno::Reference< css::frame::XTitle >      xTitle      (xController, css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::frame::XController > xController = GetController ();
+    cpo::uno::Reference< css::frame::XTitle >      xTitle      (xController, cpo::uno::UNO_QUERY);
     if (xTitle.is ())
         xTitle->setTitle (aTitle);
 }

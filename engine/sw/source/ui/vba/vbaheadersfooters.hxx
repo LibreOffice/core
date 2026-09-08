@@ -31,21 +31,21 @@ class SwVbaHeadersFooters : public SwVbaHeadersFooters_BASE
 {
 private:
     rtl::Reference< SwXTextDocument > mxModel;
-    css::uno::Reference< css::beans::XPropertySet > mxPageStyleProps;
+    cpo::uno::Reference< css::beans::XPropertySet > mxPageStyleProps;
     bool mbHeader;
 
 public:
-    SwVbaHeadersFooters( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent,
-                         const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
+    SwVbaHeadersFooters( const cpo::uno::Reference< ooo::vba::XHelperInterface >& rParent,
+                         const cpo::uno::Reference< cpo::uno::XComponentContext >& rContext,
                          const rtl::Reference< SwXTextDocument >& xModel,
-                         const css::uno::Reference< css::beans::XPropertySet >& xProps,
+                         const cpo::uno::Reference< css::beans::XPropertySet >& xProps,
                          bool isHeader );
 
     virtual ::sal_Int32 SAL_CALL getCount() override;
     virtual cpo::uno::Any SAL_CALL Item( const cpo::uno::Any& Index1, const cpo::uno::Any& ) override;
     // XEnumerationAccess
     virtual cpo::uno::Type SAL_CALL getElementType() override;
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
+    virtual cpo::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
 
     // SwVbaHeadersFooters_BASE
     virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) override;

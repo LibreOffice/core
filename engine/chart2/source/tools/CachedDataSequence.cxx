@@ -27,7 +27,7 @@
 using namespace ::com::sun::star;
 
 using ::cpo::uno::Sequence;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::cpo::uno::Any;
 
 namespace

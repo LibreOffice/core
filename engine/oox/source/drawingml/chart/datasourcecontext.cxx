@@ -36,6 +36,7 @@ using ::oox::core::ContextHandler2Helper;
 using ::oox::core::ContextHandlerRef;
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 DoubleSequenceContext::DoubleSequenceContext( ContextHandler2Helper& rParent, DataSequenceModel& rModel ) :
     DataSequenceContextBase( rParent, rModel ),

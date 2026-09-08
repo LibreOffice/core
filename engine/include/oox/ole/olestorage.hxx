@@ -20,7 +20,7 @@
 #ifndef INCLUDED_OOX_OLE_OLESTORAGE_HXX
 #define INCLUDED_OOX_OLE_OLESTORAGE_HXX
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <oox/dllapi.h>
 #include <oox/helper/storagebase.hxx>
 #include <rtl/ustring.hxx>
@@ -40,13 +40,13 @@ class OOX_DLLPUBLIC OleStorage final : public StorageBase
 {
 public:
     explicit            OleStorage(
-                            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
-                            const css::uno::Reference< css::io::XInputStream >& rxInStream,
+                            const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+                            const cpo::uno::Reference< css::io::XInputStream >& rxInStream,
                             bool bBaseStreamAccess );
 
     explicit            OleStorage(
-                            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
-                            const css::uno::Reference< css::io::XStream >& rxOutStream,
+                            const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+                            const cpo::uno::Reference< css::io::XStream >& rxOutStream,
                             bool bBaseStreamAccess );
 
     virtual             ~OleStorage() override;
@@ -54,18 +54,18 @@ public:
 private:
     explicit            OleStorage(
                             const OleStorage& rParentStorage,
-                            const css::uno::Reference< css::container::XNameContainer >& rxStorage,
+                            const cpo::uno::Reference< css::container::XNameContainer >& rxStorage,
                             const OUString& rElementName,
                             bool bReadOnly );
     explicit            OleStorage(
                             const OleStorage& rParentStorage,
-                            const css::uno::Reference< css::io::XStream >& rxOutStream,
+                            const cpo::uno::Reference< css::io::XStream >& rxOutStream,
                             const OUString& rElementName );
 
     /** Initializes the API storage object for input. */
-    void                initStorage( const css::uno::Reference< css::io::XInputStream >& rxInStream );
+    void                initStorage( const cpo::uno::Reference< css::io::XInputStream >& rxInStream );
     /** Initializes the API storage object for input/output. */
-    void                initStorage( const css::uno::Reference< css::io::XStream >& rxOutStream );
+    void                initStorage( const cpo::uno::Reference< css::io::XStream >& rxOutStream );
 
     /** Returns true, if the object represents a valid storage. */
     virtual bool        implIsStorage() const override;
@@ -75,7 +75,7 @@ private:
         @attention
             This function is not implemented for binary OLE storages.
      */
-    virtual css::uno::Reference< css::embed::XStorage >
+    virtual cpo::uno::Reference< css::embed::XStorage >
                         implGetXStorage() const override;
 
     /** Returns the names of all elements of this storage. */
@@ -85,20 +85,20 @@ private:
     virtual StorageRef  implOpenSubStorage( const OUString& rElementName, bool bCreateMissing ) override;
 
     /** Opens and returns the specified input stream from the storage. */
-    virtual css::uno::Reference< css::io::XInputStream >
+    virtual cpo::uno::Reference< css::io::XInputStream >
                         implOpenInputStream( const OUString& rElementName ) override;
 
     /** Opens and returns the specified output stream from the storage. */
-    virtual css::uno::Reference< css::io::XOutputStream >
+    virtual cpo::uno::Reference< css::io::XOutputStream >
                         implOpenOutputStream( const OUString& rElementName ) override;
 
     /** Commits the current storage. */
     virtual void        implCommit() const override;
 
 private:
-    css::uno::Reference< cpo::uno::XComponentContext >
+    cpo::uno::Reference< cpo::uno::XComponentContext >
                         mxContext;          ///< Component context with service manager.
-    css::uno::Reference< css::container::XNameContainer >
+    cpo::uno::Reference< css::container::XNameContainer >
                         mxStorage;          ///< Access to elements of this sub storage.
     const OleStorage*   mpParentStorage;    ///< Parent OLE storage that contains this storage.
 };

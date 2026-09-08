@@ -21,8 +21,8 @@ class OOO_DLLPUBLIC_TEST XText
 public:
     virtual ~XText();
 
-    virtual css::uno::Reference<cpo::uno::XInterface> init() = 0;
-    virtual css::uno::Reference<css::text::XTextContent> getTextContent() = 0;
+    virtual cpo::uno::Reference<cpo::uno::XInterface> init() = 0;
+    virtual cpo::uno::Reference<css::text::XTextContent> getTextContent() = 0;
 
     void testInsertRemoveTextContent();
 };

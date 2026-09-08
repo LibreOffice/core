@@ -84,23 +84,23 @@ public:
     setColumns(const cpo::uno::Sequence<css::text::TextColumn>& Columns) override;
 
     // XPropertySet
-    virtual css::uno::Reference<css::beans::XPropertySetInfo>
+    virtual cpo::uno::Reference<css::beans::XPropertySetInfo>
         getPropertySetInfo() override;
     virtual void setPropertyValue(const OUString& aPropertyName,
                                            const cpo::uno::Any& aValue) override;
     virtual cpo::uno::Any getPropertyValue(const OUString& PropertyName) override;
     virtual void addPropertyChangeListener(
         const OUString& aPropertyName,
-        const css::uno::Reference<css::beans::XPropertyChangeListener>& xListener) override;
+        const cpo::uno::Reference<css::beans::XPropertyChangeListener>& xListener) override;
     virtual void removePropertyChangeListener(
         const OUString& aPropertyName,
-        const css::uno::Reference<css::beans::XPropertyChangeListener>& aListener) override;
+        const cpo::uno::Reference<css::beans::XPropertyChangeListener>& aListener) override;
     virtual void addVetoableChangeListener(
         const OUString& PropertyName,
-        const css::uno::Reference<css::beans::XVetoableChangeListener>& aListener) override;
+        const cpo::uno::Reference<css::beans::XVetoableChangeListener>& aListener) override;
     virtual void removeVetoableChangeListener(
         const OUString& PropertyName,
-        const css::uno::Reference<css::beans::XVetoableChangeListener>& aListener) override;
+        const cpo::uno::Reference<css::beans::XVetoableChangeListener>& aListener) override;
 
     // XServiceInfo
     virtual OUString getImplementationName() override;
@@ -189,7 +189,7 @@ void SvxXTextColumns::setColumns(const cpo::uno::Sequence<css::text::TextColumn>
     m_aTextColumns = rColumns;
 }
 
-css::uno::Reference<css::beans::XPropertySetInfo> SvxXTextColumns::getPropertySetInfo()
+cpo::uno::Reference<css::beans::XPropertySetInfo> SvxXTextColumns::getPropertySetInfo()
 {
     return m_aPropSet.getPropertySetInfo();
 }
@@ -301,30 +301,30 @@ cpo::uno::Any SvxXTextColumns::getPropertyValue(const OUString& rPropertyName)
 
 void SvxXTextColumns::addPropertyChangeListener(
     const OUString& /*rPropertyName*/,
-    const css::uno::Reference<css::beans::XPropertyChangeListener>& /*xListener*/)
+    const cpo::uno::Reference<css::beans::XPropertyChangeListener>& /*xListener*/)
 {
 }
 
 void SvxXTextColumns::removePropertyChangeListener(
     const OUString& /*rPropertyName*/,
-    const css::uno::Reference<css::beans::XPropertyChangeListener>& /*xListener*/)
+    const cpo::uno::Reference<css::beans::XPropertyChangeListener>& /*xListener*/)
 {
 }
 
 void SvxXTextColumns::addVetoableChangeListener(
     const OUString& /*rPropertyName*/,
-    const css::uno::Reference<css::beans::XVetoableChangeListener>& /*xListener*/)
+    const cpo::uno::Reference<css::beans::XVetoableChangeListener>& /*xListener*/)
 {
 }
 
 void SvxXTextColumns::removeVetoableChangeListener(
     const OUString& /*rPropertyName*/,
-    const css::uno::Reference<css::beans::XVetoableChangeListener>& /*xListener*/)
+    const cpo::uno::Reference<css::beans::XVetoableChangeListener>& /*xListener*/)
 {
 }
 }
 
-css::uno::Reference<cpo::uno::XInterface> SvxXTextColumns_createInstance() noexcept
+cpo::uno::Reference<cpo::uno::XInterface> SvxXTextColumns_createInstance() noexcept
 {
     return getXWeak(new SvxXTextColumns);
 }

@@ -69,12 +69,12 @@ namespace dbaui
         class FormControllerImpl;
         friend class FormControllerImpl;
 
-        css::uno::Reference< css::sdbc::XRowSet >             m_xRowSet;      // our rowset
-        css::uno::Reference< css::sdbcx::XColumnsSupplier >   m_xColumnsSupplier; // queried from the rowset member
-        css::uno::Reference< css::form::XLoadable >           m_xLoadable;        // queried from the rowset member as well
-        css::uno::Reference< css::form::XFormComponent >      m_xGridModel;   // the model of our grid
-        css::uno::Reference< css::util::XNumberFormatter >    m_xFormatter;   // a number formatter working with the connection's NumberFormatsSupplier
-        mutable css::uno::Reference< css::sdb::XSingleSelectQueryComposer >
+        cpo::uno::Reference< css::sdbc::XRowSet >             m_xRowSet;      // our rowset
+        cpo::uno::Reference< css::sdbcx::XColumnsSupplier >   m_xColumnsSupplier; // queried from the rowset member
+        cpo::uno::Reference< css::form::XLoadable >           m_xLoadable;        // queried from the rowset member as well
+        cpo::uno::Reference< css::form::XFormComponent >      m_xGridModel;   // the model of our grid
+        cpo::uno::Reference< css::util::XNumberFormatter >    m_xFormatter;   // a number formatter working with the connection's NumberFormatsSupplier
+        mutable cpo::uno::Reference< css::sdb::XSingleSelectQueryComposer >
                                                               m_xParser;      // for sorting 'n filtering
 
         sal_Int32               m_nRowSetPrivileges;    // cached Privileges property of m_xRowSet
@@ -113,22 +113,22 @@ namespace dbaui
 
     // attribute access
     protected:
-        const css::uno::Reference< css::sdbc::XRowSet >&             getRowSet()         const   { return m_xRowSet; }
-        const css::uno::Reference< css::form::XLoadable >&           getLoadable()       const   { return m_xLoadable; }
+        const cpo::uno::Reference< css::sdbc::XRowSet >&             getRowSet()         const   { return m_xRowSet; }
+        const cpo::uno::Reference< css::form::XLoadable >&           getLoadable()       const   { return m_xLoadable; }
 
-        const css::uno::Reference< css::form::XFormComponent >&      getFormComponent()  const   { return m_xGridModel; }
-        css::uno::Reference< css::awt::XControlModel >               getControlModel()   const   { return css::uno::Reference< css::awt::XControlModel > (m_xGridModel, css::uno::UNO_QUERY); }
-        const css::uno::Reference< css::util::XNumberFormatter >&    getNumberFormatter()const   { return m_xFormatter; }
+        const cpo::uno::Reference< css::form::XFormComponent >&      getFormComponent()  const   { return m_xGridModel; }
+        cpo::uno::Reference< css::awt::XControlModel >               getControlModel()   const   { return cpo::uno::Reference< css::awt::XControlModel > (m_xGridModel, cpo::uno::UNO_QUERY); }
+        const cpo::uno::Reference< css::util::XNumberFormatter >&    getNumberFormatter()const   { return m_xFormatter; }
 
         bool    isValid() const         { return m_xRowSet.is() && m_xGridModel.is(); }
         bool    isValidCursor() const;  // checks the css::data::XDatabaseCursor-interface of m_xRowSet
         bool    isLoaded() const;
         bool    loadingCancelled() const { return m_bLoadCanceled; }
-        void    onStartLoading( const css::uno::Reference< css::form::XLoadable >& _rxLoadable );
+        void    onStartLoading( const cpo::uno::Reference< css::form::XLoadable >& _rxLoadable );
         void    setLoadingCancelled()   { m_bLoadCanceled = true; }
 
     public:
-        SbaXDataBrowserController(const css::uno::Reference< cpo::uno::XComponentContext >& _rM);
+        SbaXDataBrowserController(const cpo::uno::Reference< cpo::uno::XComponentContext >& _rM);
 
         UnoDataBrowserView* getBrowserView() const { return static_cast< UnoDataBrowserView*>(getView()); }
         // late construction
@@ -213,21 +213,21 @@ namespace dbaui
         // execute a feature
         virtual void            Execute(sal_uInt16 nId, const cpo::uno::Sequence< css::beans::PropertyValue>& aArgs) override;
 
-        virtual void    startFrameListening( const css::uno::Reference< css::frame::XFrame >& _rxFrame ) override;
-        virtual void    stopFrameListening( const css::uno::Reference< css::frame::XFrame >& _rxFrame ) override;
+        virtual void    startFrameListening( const cpo::uno::Reference< css::frame::XFrame >& _rxFrame ) override;
+        virtual void    stopFrameListening( const cpo::uno::Reference< css::frame::XFrame >& _rxFrame ) override;
 
-        css::uno::Reference< css::sdbc::XRowSet >  CreateForm();
+        cpo::uno::Reference< css::sdbc::XRowSet >  CreateForm();
             // our default implementation simply instantiates a stardiv.one.form.component.Form service
             // (probably this needs not to be overridden, but you may return anything you want as long as it
             // supports the css::form::DatabaseForm service. For instance you may want to create an adapter here which
             // is synchronized with a foreign css::form::DatabaseForm you got elsewhere)
         virtual bool InitializeForm(
-            const css::uno::Reference< css::beans::XPropertySet >& i_formProperties ) = 0;
+            const cpo::uno::Reference< css::beans::XPropertySet >& i_formProperties ) = 0;
             // called immediately after a successful CreateForm
             // do any initialization (data source etc.) here. the form should be fully functional after that.
             // return false if you didn't succeed (don't throw exceptions, they won't be caught)
 
-        css::uno::Reference< css::form::XFormComponent >  CreateGridModel();
+        cpo::uno::Reference< css::form::XFormComponent >  CreateGridModel();
             // our default implementation simply instantiates a stardiv.one.form.component.Grid service
             // you most probably don't want to override this behavior
 
@@ -236,16 +236,16 @@ namespace dbaui
         void disposingColumnModel(const css::lang::EventObject& Source);
 
         // want to be a listener to the grid control ? use this !
-        void addControlListeners(const css::uno::Reference< css::awt::XControl > & _xGridControl);
-        void removeControlListeners(const css::uno::Reference< css::awt::XControl > & _xGridControl);
+        void addControlListeners(const cpo::uno::Reference< css::awt::XControl > & _xGridControl);
+        void removeControlListeners(const cpo::uno::Reference< css::awt::XControl > & _xGridControl);
 
         // want to be a listener to the grid model ? use this !
-        virtual void addModelListeners(const css::uno::Reference< css::awt::XControlModel > & _xGridControlModel);
-        virtual void removeModelListeners(const css::uno::Reference< css::awt::XControlModel > & _xGridControlModel);
+        virtual void addModelListeners(const cpo::uno::Reference< css::awt::XControlModel > & _xGridControlModel);
+        virtual void removeModelListeners(const cpo::uno::Reference< css::awt::XControlModel > & _xGridControlModel);
 
         // want to be a listener grid columns ? use this !
-        virtual void AddColumnListener(const css::uno::Reference< css::beans::XPropertySet > & xCol);
-        virtual void RemoveColumnListener(const css::uno::Reference< css::beans::XPropertySet > & xCol);
+        virtual void AddColumnListener(const cpo::uno::Reference< css::beans::XPropertySet > & xCol);
+        virtual void RemoveColumnListener(const cpo::uno::Reference< css::beans::XPropertySet > & xCol);
 
             // call after "major changes" (e.g. the completion of the async load).
             // invalidates all toolbox slots and all supported features.
@@ -272,7 +272,7 @@ namespace dbaui
         bool SaveModified(bool bAskFor = true);
             // save the modified record
 
-        css::uno::Reference< css::beans::XPropertySet >   getBoundField() const;
+        cpo::uno::Reference< css::beans::XPropertySet >   getBoundField() const;
             // a PropertySet corresponding to the cursor field a column is bound to.
             // The field for the current column will be retrieved.
 
@@ -283,12 +283,12 @@ namespace dbaui
         void initFormatter();
 
         /// loads or reloads the form
-        bool reloadForm(const css::uno::Reference< css::form::XLoadable >& _rxLoadable);
+        bool reloadForm(const cpo::uno::Reference< css::form::XLoadable >& _rxLoadable);
 
         virtual bool    preReloadForm(){ return false; }
         virtual void        postReloadForm(){}
 
-        css::uno::Reference< css::sdb::XSingleSelectQueryComposer >
+        cpo::uno::Reference< css::sdb::XSingleSelectQueryComposer >
                             createParser_nothrow();
 
     private:
@@ -301,12 +301,12 @@ namespace dbaui
         void        ExecuteSearch();
 
         void        initializeParser() const; // changes the mutable member m_xParser
-        void        applyParserFilter(const OUString& _rOldFilter, bool _bOldFilterApplied,const ::OUString& _sOldHaving,const css::uno::Reference< css::sdb::XSingleSelectQueryComposer >& _xParser);
-        void        applyParserOrder(const OUString& _rOldOrder,const css::uno::Reference< css::sdb::XSingleSelectQueryComposer >& _xParser);
+        void        applyParserFilter(const OUString& _rOldFilter, bool _bOldFilterApplied,const ::OUString& _sOldHaving,const cpo::uno::Reference< css::sdb::XSingleSelectQueryComposer >& _xParser);
+        void        applyParserOrder(const OUString& _rOldOrder,const cpo::uno::Reference< css::sdb::XSingleSelectQueryComposer >& _xParser);
 
         sal_Int16   getCurrentColumnPosition() const;
         void        setCurrentColumnPosition( sal_Int16 _nPos );
-        void        addColumnListeners(const css::uno::Reference< css::awt::XControlModel > & _xGridControlModel);
+        void        addColumnListeners(const cpo::uno::Reference< css::awt::XControlModel > & _xGridControlModel);
 
         void        impl_checkForCannotSelectUnfiltered( const ::dbtools::SQLExceptionInfo& _rError );
 

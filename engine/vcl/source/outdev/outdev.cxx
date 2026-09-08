@@ -49,7 +49,7 @@ namespace {
 }
 #endif
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 // Begin initializer and accessor public functions
@@ -317,10 +317,10 @@ void OutputDevice::SetOutOffYPixel(tools::Long nOutOffY)
     mnOutOffY = nOutOffY;
 }
 
-css::uno::Reference< css::awt::XGraphics > OutputDevice::CreateUnoGraphics()
+cpo::uno::Reference< css::awt::XGraphics > OutputDevice::CreateUnoGraphics()
 {
     UnoWrapperBase* pWrapper = UnoWrapperBase::GetUnoWrapper();
-    return pWrapper ? pWrapper->CreateGraphics( this ) : css::uno::Reference< css::awt::XGraphics >();
+    return pWrapper ? pWrapper->CreateGraphics( this ) : cpo::uno::Reference< css::awt::XGraphics >();
 }
 
 std::vector< VCLXGraphics* > *OutputDevice::CreateUnoGraphicsList()

@@ -25,6 +25,7 @@
 #include <utility>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace ::ooo::vba;
 
 template< typename... Ifc >
@@ -112,9 +113,9 @@ ScVbaHPageBreak::getServiceNames()
 template class ScVbaPageBreak< excel::XVPageBreak >;
 
 /* class ScVbaVPageBreak */
-ScVbaVPageBreak::ScVbaVPageBreak( const css::uno::Reference< ov::XHelperInterface >& xParent,
-                                  const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
-                                  const css::uno::Reference< css::beans::XPropertySet >& xProps,
+ScVbaVPageBreak::ScVbaVPageBreak( const cpo::uno::Reference< ov::XHelperInterface >& xParent,
+                                  const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
+                                  const cpo::uno::Reference< css::beans::XPropertySet >& xProps,
                                   css::sheet::TablePageBreakData aTablePageBreakData )
 :   ScVbaVPageBreak_BASE( xParent, xContext, xProps, aTablePageBreakData )
 {

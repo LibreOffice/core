@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 #pragma once
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <sal/config.h>
 #include <sal/types.h>
 #include <string>
@@ -47,7 +47,7 @@ template <typename T> [[nodiscard]] inline T NormAngle360(T angle)
 // get hash from interface
 // TODO: UNIT TEST
 [[nodiscard]] inline
-std::string GetInterfaceHash(const ::css::uno::Reference<::cpo::uno::XInterface>& xIf)
+std::string GetInterfaceHash(const ::cpo::uno::Reference<::cpo::uno::XInterface>& xIf)
 {
     if (xIf.is())
     {

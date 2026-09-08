@@ -53,6 +53,7 @@
 #include <vcl/TypeSerializer.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 namespace
 {
@@ -73,7 +74,7 @@ Bitmap BitmapFromDIB(const cpo::uno::Sequence<sal_Int8>& dib)
 
 namespace vcl
 {
-Bitmap GetBitmap(const css::uno::Reference<css::awt::XBitmap>& xBitmap)
+Bitmap GetBitmap(const cpo::uno::Reference<css::awt::XBitmap>& xBitmap)
 {
     if (!xBitmap)
         return {};
@@ -93,7 +94,7 @@ Bitmap GetBitmap(const css::uno::Reference<css::awt::XBitmap>& xBitmap)
     return aBmp;
 }
 
-css::uno::Reference<css::graphic::XGraphic> GetGraphic(const cpo::uno::Any& any)
+cpo::uno::Reference<css::graphic::XGraphic> GetGraphic(const cpo::uno::Any& any)
 {
     if (auto xRet = any.query<css::graphic::XGraphic>())
         return xRet;
@@ -128,18 +129,18 @@ protected:
     virtual cpo::uno::Sequence< sal_Int8 > getImplementationId(  ) override;
 
     // XGraphicProvider
-    virtual css::uno::Reference< css::beans::XPropertySet > queryGraphicDescriptor( const cpo::uno::Sequence< css::beans::PropertyValue >& MediaProperties ) override;
-    virtual css::uno::Reference< css::graphic::XGraphic > queryGraphic( const cpo::uno::Sequence< css::beans::PropertyValue >& MediaProperties ) override;
-    virtual void storeGraphic( const css::uno::Reference< css::graphic::XGraphic >& Graphic, const cpo::uno::Sequence< css::beans::PropertyValue >& MediaProperties ) override;
+    virtual cpo::uno::Reference< css::beans::XPropertySet > queryGraphicDescriptor( const cpo::uno::Sequence< css::beans::PropertyValue >& MediaProperties ) override;
+    virtual cpo::uno::Reference< css::graphic::XGraphic > queryGraphic( const cpo::uno::Sequence< css::beans::PropertyValue >& MediaProperties ) override;
+    virtual void storeGraphic( const cpo::uno::Reference< css::graphic::XGraphic >& Graphic, const cpo::uno::Sequence< css::beans::PropertyValue >& MediaProperties ) override;
 
     // XGraphicProvider2
     cpo::uno::Sequence< uno::Reference<graphic::XGraphic> > queryGraphics(const cpo::uno::Sequence< cpo::uno::Sequence<beans::PropertyValue> >& MediaPropertiesSeq ) override;
 
 private:
 
-    static css::uno::Reference< css::graphic::XGraphic > implLoadMemory( std::u16string_view rResourceURL );
-    static css::uno::Reference< css::graphic::XGraphic > implLoadRepositoryImage( std::u16string_view rResourceURL );
-    static css::uno::Reference< css::graphic::XGraphic > implLoadStandardImage( std::u16string_view rResourceURL );
+    static cpo::uno::Reference< css::graphic::XGraphic > implLoadMemory( std::u16string_view rResourceURL );
+    static cpo::uno::Reference< css::graphic::XGraphic > implLoadRepositoryImage( std::u16string_view rResourceURL );
+    static cpo::uno::Reference< css::graphic::XGraphic > implLoadStandardImage( std::u16string_view rResourceURL );
 };
 
 GraphicProvider::GraphicProvider()

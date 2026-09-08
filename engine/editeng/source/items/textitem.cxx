@@ -1204,7 +1204,7 @@ bool SvxTextLineItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
     break;
     case MID_TL_COMPLEX_COLOR:
     {
-        css::uno::Reference<css::util::XComplexColor> xComplexColor;
+        cpo::uno::Reference<css::util::XComplexColor> xComplexColor;
         if (!(rVal >>= xComplexColor))
             return false;
 
@@ -1739,7 +1739,7 @@ bool SvxColorItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
         break;
         case MID_COMPLEX_COLOR:
         {
-            css::uno::Reference<css::util::XComplexColor> xComplexColor;
+            cpo::uno::Reference<css::util::XComplexColor> xComplexColor;
             if (!(rVal >>= xComplexColor))
                 return false;
 

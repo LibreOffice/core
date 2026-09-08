@@ -31,7 +31,7 @@
 #include "uno/data.h"
 #include "uno/sequence2.h"
 #include "cpo/uno/Type.hxx"
-#include "com/sun/star/uno/Reference.h"
+#include "cpo/uno/Reference.h"
 #include "cpo/uno/genfunc.hxx"
 #include "cpo/uno/RuntimeException.hpp"
 #include "cppu/cppudllapi.h"
@@ -547,11 +547,11 @@ template<> bool operator >>=(Any const &, Any &) = delete;
 // interface
 
 template<>
-inline bool operator == ( const Any & rAny, const css::uno::BaseReference & value )
+inline bool operator == ( const Any & rAny, const cpo::uno::BaseReference & value )
 {
     if (typelib_TypeClass_INTERFACE == rAny.pType->eTypeClass)
     {
-        return static_cast< const css::uno::BaseReference * >( rAny.pData )->operator == ( value );
+        return static_cast< const cpo::uno::BaseReference * >( rAny.pData )->operator == ( value );
     }
     return false;
 }

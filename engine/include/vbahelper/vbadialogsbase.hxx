@@ -40,7 +40,7 @@ typedef InheritedHelperInterfaceWeakImpl< ov::XDialogsBase > VbaDialogsBase_BASE
 class VBAHELPER_DLLPUBLIC VbaDialogsBase : public VbaDialogsBase_BASE
 {
 public:
-    VbaDialogsBase( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext > &xContext ): VbaDialogsBase_BASE( xParent, xContext ) {}
+    VbaDialogsBase( const cpo::uno::Reference< ov::XHelperInterface >& xParent, const cpo::uno::Reference< cpo::uno::XComponentContext > &xContext ): VbaDialogsBase_BASE( xParent, xContext ) {}
 
     // XCollection
     virtual ::sal_Int32 getCount() override;

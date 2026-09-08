@@ -24,6 +24,7 @@
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace {
 
@@ -65,7 +66,7 @@ private:
 
 public:
     /// @throws cpo::uno::RuntimeException
-    CellCollectionHelper( css::uno::Reference< ov::XHelperInterface > xParent, css::uno::Reference< cpo::uno::XComponentContext > xContext, css::uno::Reference< css::text::XTextTable >  xTextTable, sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom ): mxParent(std::move( xParent )), mxContext(std::move( xContext )), mxTextTable(std::move( xTextTable )), mnLeft( nLeft ), mnTop( nTop ), mnRight( nRight ), mnBottom( nBottom )
+    CellCollectionHelper( cpo::uno::Reference< ov::XHelperInterface > xParent, cpo::uno::Reference< cpo::uno::XComponentContext > xContext, cpo::uno::Reference< css::text::XTextTable >  xTextTable, sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom ): mxParent(std::move( xParent )), mxContext(std::move( xContext )), mxTextTable(std::move( xTextTable )), mnLeft( nLeft ), mnTop( nTop ), mnRight( nRight ), mnBottom( nBottom )
     {
     }
 

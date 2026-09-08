@@ -25,7 +25,7 @@
 #include <com/sun/star/xforms/XFormsUIHelper1.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <rtl/ref.hxx>
 #include "mip.hxx"
 #include <map>
@@ -70,8 +70,8 @@ typedef cppu::ImplInheritanceHelper<
 class Model : public Model_t
 {
     // a number of local typedefs, to make the remaining header readable
-    typedef css::uno::Reference<css::xml::dom::XNode> XNode_t;
-    typedef css::uno::Reference<css::beans::XPropertySet> XPropertySet_t;
+    typedef cpo::uno::Reference<css::xml::dom::XNode> XNode_t;
+    typedef cpo::uno::Reference<css::beans::XPropertySet> XPropertySet_t;
 
     typedef std::multimap<XNode_t,std::pair<void*,MIP> > MIPs_t;
 
@@ -84,11 +84,11 @@ private:
     rtl::Reference<InstanceCollection>   mxInstances;    /// the instance(s)
 
     rtl::Reference<ODataTypeRepository> mxDataTypes;      /// the XSD data-types used
-    css::uno::Reference<css::xml::dom::XDocument> mxForeignSchema;            /// the XSD-schema part we cannot
+    cpo::uno::Reference<css::xml::dom::XDocument> mxForeignSchema;            /// the XSD-schema part we cannot
                                             /// map onto data types
     OUString msSchemaRef;              /// xforms:model/@schema attribute
 
-    css::uno::Reference<css::container::XNameContainer> mxNamespaces;          /// namespaces for entire model
+    cpo::uno::Reference<css::container::XNameContainer> mxNamespaces;          /// namespaces for entire model
 
     MIPs_t maMIPs;                          /// map nodes to their MIPs
 
@@ -109,16 +109,16 @@ public:
     xforms::EvaluationContext getEvaluationContext();
 
     // get/set that part of the schema, that we can't interpret as data types
-    css::uno::Reference<css::xml::dom::XDocument> getForeignSchema() const { return mxForeignSchema;}
-    void setForeignSchema( const css::uno::Reference<css::xml::dom::XDocument>& );
+    cpo::uno::Reference<css::xml::dom::XDocument> getForeignSchema() const { return mxForeignSchema;}
+    void setForeignSchema( const cpo::uno::Reference<css::xml::dom::XDocument>& );
 
     // get/set the xforms:model/@schema attribute
     OUString getSchemaRef() const { return msSchemaRef;}
     void setSchemaRef( const OUString& );
 
     // get/set namespaces for entire model
-    css::uno::Reference<css::container::XNameContainer> getNamespaces() const { return mxNamespaces;}
-    void setNamespaces( const css::uno::Reference<css::container::XNameContainer>& );
+    cpo::uno::Reference<css::container::XNameContainer> getNamespaces() const { return mxNamespaces;}
+    void setNamespaces( const cpo::uno::Reference<css::container::XNameContainer>& );
 
     // get/set the ExternalData property
     bool getExternalData() const { return mbExternalData;}
@@ -184,59 +184,59 @@ public:
 
     virtual void submit( const OUString& sID ) override;
 
-    virtual void submitWithInteraction( const OUString& id, const css::uno::Reference<css::task::XInteractionHandler>& _rxHandler ) override;
+    virtual void submitWithInteraction( const OUString& id, const cpo::uno::Reference<css::task::XInteractionHandler>& _rxHandler ) override;
 
-    virtual css::uno::Reference<css::xforms::XDataTypeRepository> getDataTypeRepository(  ) override;
+    virtual cpo::uno::Reference<css::xforms::XDataTypeRepository> getDataTypeRepository(  ) override;
 
 
     // XModel: instance management
 
-    virtual css::uno::Reference<css::container::XSet> getInstances() override;
+    virtual cpo::uno::Reference<css::container::XSet> getInstances() override;
 
-    virtual css::uno::Reference<css::xml::dom::XDocument> getInstanceDocument( const OUString& ) override;
+    virtual cpo::uno::Reference<css::xml::dom::XDocument> getInstanceDocument( const OUString& ) override;
 
-    virtual css::uno::Reference<css::xml::dom::XDocument> getDefaultInstance() override;
+    virtual cpo::uno::Reference<css::xml::dom::XDocument> getDefaultInstance() override;
 
 
     // XModel: binding management
 
-    virtual css::uno::Reference<css::beans::XPropertySet> createBinding() override;
+    virtual cpo::uno::Reference<css::beans::XPropertySet> createBinding() override;
 
-    virtual css::uno::Reference<css::beans::XPropertySet> cloneBinding( const css::uno::Reference<css::beans::XPropertySet>& ) override;
+    virtual cpo::uno::Reference<css::beans::XPropertySet> cloneBinding( const cpo::uno::Reference<css::beans::XPropertySet>& ) override;
 
-    virtual css::uno::Reference<css::beans::XPropertySet> getBinding( const OUString& ) override;
+    virtual cpo::uno::Reference<css::beans::XPropertySet> getBinding( const OUString& ) override;
 
-    virtual css::uno::Reference<css::container::XSet> getBindings() override;
+    virtual cpo::uno::Reference<css::container::XSet> getBindings() override;
 
 
     // XModel: submission management
 
-    virtual css::uno::Reference<css::xforms::XSubmission> createSubmission() override;
+    virtual cpo::uno::Reference<css::xforms::XSubmission> createSubmission() override;
 
-    virtual css::uno::Reference<css::xforms::XSubmission> cloneSubmission( const css::uno::Reference<css::beans::XPropertySet>& ) override;
+    virtual cpo::uno::Reference<css::xforms::XSubmission> cloneSubmission( const cpo::uno::Reference<css::beans::XPropertySet>& ) override;
 
-    virtual css::uno::Reference<css::xforms::XSubmission> getSubmission( const OUString& ) override;
+    virtual cpo::uno::Reference<css::xforms::XSubmission> getSubmission( const OUString& ) override;
 
-    virtual css::uno::Reference<css::container::XSet> getSubmissions() override;
+    virtual cpo::uno::Reference<css::container::XSet> getSubmissions() override;
 
     // XPropertySet
 
     virtual cpo::uno::Any getPropertyValue(const OUString& p) override
         { return PropertySetBase::getPropertyValue(p); }
 
-    virtual void addPropertyChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XPropertyChangeListener>& p2) override
+    virtual void addPropertyChangeListener(const OUString& p1, const cpo::uno::Reference<css::beans::XPropertyChangeListener>& p2) override
         { PropertySetBase::addPropertyChangeListener(p1, p2); }
 
-    virtual void removePropertyChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XPropertyChangeListener>& p2) override
+    virtual void removePropertyChangeListener(const OUString& p1, const cpo::uno::Reference<css::beans::XPropertyChangeListener>& p2) override
         { PropertySetBase::removePropertyChangeListener(p1, p2); }
 
-    virtual void addVetoableChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2) override
+    virtual void addVetoableChangeListener(const OUString& p1, const cpo::uno::Reference<css::beans::XVetoableChangeListener>& p2) override
         { PropertySetBase::addVetoableChangeListener(p1, p2); }
 
-    virtual void removeVetoableChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2) override
+    virtual void removeVetoableChangeListener(const OUString& p1, const cpo::uno::Reference<css::beans::XVetoableChangeListener>& p2) override
         { PropertySetBase::removeVetoableChangeListener(p1, p2); }
 
-    virtual css::uno::Reference<css::beans::XPropertySetInfo> getPropertySetInfo() override
+    virtual cpo::uno::Reference<css::beans::XPropertySetInfo> getPropertySetInfo() override
         { return PropertySetBase::getPropertySetInfo(); }
 
    virtual void setPropertyValue(const OUString& p1, const cpo::uno::Any& p2) override
@@ -249,10 +249,10 @@ public:
 
     /// determine a reasonable control service for a given node
     /// (based on data type MIP assigned to the node)
-    virtual OUString getDefaultServiceNameForNode( const css::uno::Reference<css::xml::dom::XNode>& xNode ) override;
+    virtual OUString getDefaultServiceNameForNode( const cpo::uno::Reference<css::xml::dom::XNode>& xNode ) override;
 
     /// call getDefaultBindingExpressionForNode with default evaluation context
-    virtual OUString getDefaultBindingExpressionForNode( const css::uno::Reference<css::xml::dom::XNode>& xNode ) override;
+    virtual OUString getDefaultBindingExpressionForNode( const cpo::uno::Reference<css::xml::dom::XNode>& xNode ) override;
 
     /// determine a reasonable default binding expression for a given node
     /// and a given evaluation context
@@ -261,22 +261,22 @@ public:
         const XNode_t&,
         const EvaluationContext& );
 
-    virtual OUString getNodeDisplayName( const css::uno::Reference<css::xml::dom::XNode>&,
+    virtual OUString getNodeDisplayName( const cpo::uno::Reference<css::xml::dom::XNode>&,
                                                        bool bDetail ) override;
 
-    virtual OUString getNodeName( const css::uno::Reference<css::xml::dom::XNode>& ) override;
+    virtual OUString getNodeName( const cpo::uno::Reference<css::xml::dom::XNode>& ) override;
 
-    virtual OUString getBindingName( const css::uno::Reference< ::css::beans::XPropertySet >&,
+    virtual OUString getBindingName( const cpo::uno::Reference< ::css::beans::XPropertySet >&,
                                                    bool bDetail ) override;
 
-    virtual OUString getSubmissionName( const css::uno::Reference< ::css::beans::XPropertySet >&,
+    virtual OUString getSubmissionName( const cpo::uno::Reference< ::css::beans::XPropertySet >&,
                                                       bool bDetail ) override;
 
-    virtual css::uno::Reference< ::css::beans::XPropertySet > cloneBindingAsGhost( const css::uno::Reference< ::css::beans::XPropertySet >& ) override;
+    virtual cpo::uno::Reference< ::css::beans::XPropertySet > cloneBindingAsGhost( const cpo::uno::Reference< ::css::beans::XPropertySet >& ) override;
 
-    virtual void removeBindingIfUseless( const css::uno::Reference< ::css::beans::XPropertySet >& ) override;
+    virtual void removeBindingIfUseless( const cpo::uno::Reference< ::css::beans::XPropertySet >& ) override;
 
-    virtual css::uno::Reference<css::xml::dom::XDocument> newInstance( const OUString& sName,
+    virtual cpo::uno::Reference<css::xml::dom::XDocument> newInstance( const OUString& sName,
                                               const OUString& sURL,
                                               bool bURLOnce ) override;
 
@@ -288,36 +288,36 @@ public:
     virtual void removeInstance( const OUString& sName ) override;
 
 
-    virtual css::uno::Reference<css::xforms::XModel> newModel( const css::uno::Reference<css::frame::XModel>& xComponent,
+    virtual cpo::uno::Reference<css::xforms::XModel> newModel( const cpo::uno::Reference<css::frame::XModel>& xComponent,
                                         const OUString& sName ) override;
-    virtual void renameModel( const css::uno::Reference<css::frame::XModel>& xComponent,
+    virtual void renameModel( const cpo::uno::Reference<css::frame::XModel>& xComponent,
                                        const OUString& sFrom,
                                        const OUString& sTo ) override;
 
-    virtual void removeModel( const css::uno::Reference<css::frame::XModel>& xComponent,
+    virtual void removeModel( const cpo::uno::Reference<css::frame::XModel>& xComponent,
                                        const OUString& sName ) override;
 
 
-    virtual css::uno::Reference< css::xml::dom::XNode > createElement(
-                                            const css::uno::Reference< ::css::xml::dom::XNode >& xParent,
+    virtual cpo::uno::Reference< css::xml::dom::XNode > createElement(
+                                            const cpo::uno::Reference< ::css::xml::dom::XNode >& xParent,
                                             const OUString& sName ) override;
 
-    virtual css::uno::Reference< css::xml::dom::XNode > createAttribute(
-                                              const css::uno::Reference< ::css::xml::dom::XNode >& xParent,
+    virtual cpo::uno::Reference< css::xml::dom::XNode > createAttribute(
+                                              const cpo::uno::Reference< ::css::xml::dom::XNode >& xParent,
                                               const OUString& sName ) override;
 
-    virtual css::uno::Reference< css::xml::dom::XNode > renameNode(
-                                         const css::uno::Reference< ::css::xml::dom::XNode >& xNode,
+    virtual cpo::uno::Reference< css::xml::dom::XNode > renameNode(
+                                         const cpo::uno::Reference< ::css::xml::dom::XNode >& xNode,
                                          const OUString& sName ) override;
 
-    virtual css::uno::Reference< css::beans::XPropertySet > getBindingForNode( const
-                                         css::uno::Reference<css::xml::dom::XNode>&,
+    virtual cpo::uno::Reference< css::beans::XPropertySet > getBindingForNode( const
+                                         cpo::uno::Reference<css::xml::dom::XNode>&,
                                          bool bCreate ) override;
 
-    virtual void removeBindingForNode( const css::uno::Reference< ::css::xml::dom::XNode >& ) override;
+    virtual void removeBindingForNode( const cpo::uno::Reference< ::css::xml::dom::XNode >& ) override;
 
     virtual OUString getResultForExpression(
-        const css::uno::Reference< css::beans::XPropertySet >& xBinding,
+        const cpo::uno::Reference< css::beans::XPropertySet >& xBinding,
         bool bIsBindingExpression,
         const OUString& sExpression ) override;
 
@@ -326,7 +326,7 @@ public:
     virtual bool isValidPrefixName( const OUString& sName ) override;
 
     virtual void setNodeValue(
-        const css::uno::Reference< ::css::xml::dom::XNode >& xNode,
+        const cpo::uno::Reference< ::css::xml::dom::XNode >& xNode,
         const OUString& sValue ) override;
 
 

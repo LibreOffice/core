@@ -76,7 +76,7 @@ class DocumentEventExecutor;
 class DocumentGuard;
 class OCommandContainer;
 
-typedef std::vector< css::uno::Reference< css::frame::XController > >   Controllers;
+typedef std::vector< cpo::uno::Reference< css::frame::XController > >   Controllers;
 
 // ViewMonitor
 /** helper class monitoring the views of a document, and firing appropriate events
@@ -109,7 +109,7 @@ public:
             <TRUE/> if and only if this was the first-ever controller connected to the document
     */
     bool    onControllerConnected(
-                const css::uno::Reference< css::frame::XController >& _rxController
+                const cpo::uno::Reference< css::frame::XController >& _rxController
              );
 
     /**  to be called when a controller is set as current controller
@@ -119,7 +119,7 @@ public:
             ever for which this happened.
     */
     bool    onSetCurrentController(
-                const css::uno::Reference< css::frame::XController >& _rxController
+                const cpo::uno::Reference< css::frame::XController >& _rxController
              );
 
     void    onLoadedDocument() { m_bIsNewDocument = false; }
@@ -129,7 +129,7 @@ private:
     bool                    m_bIsNewDocument;
     bool                    m_bEverHadController;
     bool                    m_bLastIsFirstEverController;
-    css::uno::Reference< css::frame::XController >
+    cpo::uno::Reference< css::frame::XController >
                             m_xLastConnectedController;
 };
 
@@ -166,8 +166,8 @@ class ODatabaseDocument :public ModelDependentComponent             // ModelDepe
         Initialized
     };
 
-    typedef std::map< OUString, css::uno::Reference< css::frame::XUntitledNumbers > > TNumberedController;
-    css::uno::Reference< css::ui::XUIConfigurationManager2>                                     m_xUIConfigurationManager;
+    typedef std::map< OUString, cpo::uno::Reference< css::frame::XUntitledNumbers > > TNumberedController;
+    cpo::uno::Reference< css::ui::XUIConfigurationManager2>                                     m_xUIConfigurationManager;
 
     ::comphelper::OInterfaceContainerHelper3<css::util::XModifyListener>                        m_aModifyListeners;
     ::comphelper::OInterfaceContainerHelper3<css::util::XCloseListener>                         m_aCloseListener;
@@ -177,7 +177,7 @@ class ODatabaseDocument :public ModelDependentComponent             // ModelDepe
     ::rtl::Reference< DocumentEventExecutor >                                                   m_pEventExecutor;
     DocumentEventNotifier                                                                       m_aEventNotifier;
 
-    css::uno::Reference< css::frame::XController >                                              m_xCurrentController;
+    cpo::uno::Reference< css::frame::XController >                                              m_xCurrentController;
     Controllers                                                                                 m_aControllers;
     ViewMonitor                                                                                 m_aViewMonitor;
 
@@ -186,7 +186,7 @@ class ODatabaseDocument :public ModelDependentComponent             // ModelDepe
     cpo::uno::WeakReference< css::script::provider::XScriptProvider >                           m_xScriptProvider;
 
     /** @short  such module manager is used to classify new opened documents. */
-    css::uno::Reference< css::frame::XModuleManager2 >                                          m_xModuleManager;
+    cpo::uno::Reference< css::frame::XModuleManager2 >                                          m_xModuleManager;
     rtl::Reference< ::framework::TitleHelper >                                                  m_xTitleHelper;
     TNumberedController                                                                         m_aNumberedControllers;
 
@@ -231,24 +231,24 @@ class ODatabaseDocument :public ModelDependentComponent             // ModelDepe
             happened, and the listeners are not notified.
     */
     void    impl_notifyStorageChange_nolck_nothrow(
-                const css::uno::Reference< css::embed::XStorage >& _rxNewRootStorage
+                const cpo::uno::Reference< css::embed::XStorage >& _rxNewRootStorage
             );
 
     /// write a single XML stream into the package
     void WriteThroughComponent(
-        const css::uno::Reference< css::lang::XComponent > & xComponent,  /// the component we export
+        const cpo::uno::Reference< css::lang::XComponent > & xComponent,  /// the component we export
         const OUString& rStreamName,                                                                /// the stream name
         const OUString& rServiceName,                                                               /// service name of the component
         const cpo::uno::Sequence< cpo::uno::Any> & rArguments,            /// the argument (XInitialization)
         const cpo::uno::Sequence< css::beans::PropertyValue> & rMediaDesc,/// output descriptor
-        const css::uno::Reference< css::embed::XStorage >& _xStorageToSaveTo
+        const cpo::uno::Reference< css::embed::XStorage >& _xStorageToSaveTo
     ) const;
 
     /// write a single output stream
     /// (to be called either directly or by WriteThroughComponent(...))
     void WriteThroughComponent(
-        const css::uno::Reference< css::io::XOutputStream >& xOutputStream,
-        const css::uno::Reference< css::lang::XComponent >& xComponent,
+        const cpo::uno::Reference< css::io::XOutputStream >& xOutputStream,
+        const cpo::uno::Reference< css::lang::XComponent >& xComponent,
         const OUString& rServiceName,
         const cpo::uno::Sequence< cpo::uno::Any >& rArguments,
         const cpo::uno::Sequence< css::beans::PropertyValue> & rMediaDesc
@@ -263,16 +263,16 @@ class ODatabaseDocument :public ModelDependentComponent             // ModelDepe
             The storage which should be used for saving
     */
     void impl_writeStorage_throw(
-        const css::uno::Reference< css::embed::XStorage >& _rxTargetStorage,
+        const cpo::uno::Reference< css::embed::XStorage >& _rxTargetStorage,
         const ::comphelper::NamedValueCollection& _rMediaDescriptor
     ) const;
 
     // ModelDependentComponent overridables
-    virtual css::uno::Reference< cpo::uno::XInterface > getThis() const override;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > getThis() const override;
 
     rtl::Reference< ::framework::TitleHelper> const &     impl_getTitleHelper_throw();
-    css::uno::Reference< css::frame::XUntitledNumbers >   impl_getUntitledHelper_throw(
-        const css::uno::Reference< cpo::uno::XInterface >& _xComponent = css::uno::Reference< cpo::uno::XInterface >());
+    cpo::uno::Reference< css::frame::XUntitledNumbers >   impl_getUntitledHelper_throw(
+        const cpo::uno::Reference< cpo::uno::XInterface >& _xComponent = cpo::uno::Reference< cpo::uno::XInterface >());
 
 private:
     explicit ODatabaseDocument(const ::rtl::Reference<ODatabaseModelImpl>& _pImpl);
@@ -307,27 +307,27 @@ public:
 
     // XComponent
     virtual void dispose(  ) override;
-    virtual void addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-    virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+    virtual void addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& xListener ) override;
+    virtual void removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
     // XModel
     virtual bool attachResource( const OUString& URL, const cpo::uno::Sequence< css::beans::PropertyValue >& Arguments ) override ;
     virtual OUString getURL(  ) override ;
     virtual cpo::uno::Sequence< css::beans::PropertyValue > getArgs(  ) override ;
-    virtual void connectController( const css::uno::Reference< css::frame::XController >& Controller ) override ;
-    virtual void disconnectController( const css::uno::Reference< css::frame::XController >& Controller ) override ;
+    virtual void connectController( const cpo::uno::Reference< css::frame::XController >& Controller ) override ;
+    virtual void disconnectController( const cpo::uno::Reference< css::frame::XController >& Controller ) override ;
     virtual void lockControllers(  ) override ;
     virtual void unlockControllers(  ) override ;
     virtual bool hasControllersLocked(  ) override ;
-    virtual css::uno::Reference< css::frame::XController > getCurrentController(  ) override ;
-    virtual void setCurrentController( const css::uno::Reference< css::frame::XController >& Controller ) override ;
-    virtual css::uno::Reference< cpo::uno::XInterface > getCurrentSelection(  ) override ;
+    virtual cpo::uno::Reference< css::frame::XController > getCurrentController(  ) override ;
+    virtual void setCurrentController( const cpo::uno::Reference< css::frame::XController >& Controller ) override ;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > getCurrentSelection(  ) override ;
 
     // XModel2
-    virtual css::uno::Reference< css::container::XEnumeration > getControllers(  ) override ;
+    virtual cpo::uno::Reference< css::container::XEnumeration > getControllers(  ) override ;
     virtual cpo::uno::Sequence< OUString > getAvailableViewControllerNames(  ) override ;
-    virtual css::uno::Reference< css::frame::XController2 > createDefaultViewController( const css::uno::Reference< css::frame::XFrame >& Frame ) override ;
-    virtual css::uno::Reference< css::frame::XController2 > createViewController( const OUString& ViewName, const cpo::uno::Sequence< css::beans::PropertyValue >& Arguments, const css::uno::Reference< css::frame::XFrame >& Frame ) override ;
+    virtual cpo::uno::Reference< css::frame::XController2 > createDefaultViewController( const cpo::uno::Reference< css::frame::XFrame >& Frame ) override ;
+    virtual cpo::uno::Reference< css::frame::XController2 > createViewController( const OUString& ViewName, const cpo::uno::Sequence< css::beans::PropertyValue >& Arguments, const cpo::uno::Reference< css::frame::XFrame >& Frame ) override ;
     virtual void setArgs(const cpo::uno::Sequence<css::beans::PropertyValue>& aArgs) override;
 
     // XModel3
@@ -342,21 +342,21 @@ public:
     virtual void storeToURL( const OUString& sURL, const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments ) override ;
 
     // XModifyBroadcaster
-    virtual void addModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
-    virtual void removeModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+    virtual void addModifyListener( const cpo::uno::Reference< css::util::XModifyListener >& aListener ) override;
+    virtual void removeModifyListener( const cpo::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
     // css::util::XModifiable
     virtual bool isModified(  ) override ;
     virtual void setModified( bool bModified ) override ;
 
     // XEventBroadcaster
-    virtual void addEventListener( const css::uno::Reference< css::document::XEventListener >& aListener ) override;
-    virtual void removeEventListener( const css::uno::Reference< css::document::XEventListener >& aListener ) override;
+    virtual void addEventListener( const cpo::uno::Reference< css::document::XEventListener >& aListener ) override;
+    virtual void removeEventListener( const cpo::uno::Reference< css::document::XEventListener >& aListener ) override;
 
     // XDocumentEventBroadcaster
-    virtual void addDocumentEventListener( const css::uno::Reference< css::document::XDocumentEventListener >& Listener ) override;
-    virtual void removeDocumentEventListener( const css::uno::Reference< css::document::XDocumentEventListener >& Listener ) override;
-    virtual void notifyDocumentEvent( const OUString& EventName, const css::uno::Reference< css::frame::XController2 >& ViewController, const cpo::uno::Any& Supplement ) override;
+    virtual void addDocumentEventListener( const cpo::uno::Reference< css::document::XDocumentEventListener >& Listener ) override;
+    virtual void removeDocumentEventListener( const cpo::uno::Reference< css::document::XDocumentEventListener >& Listener ) override;
+    virtual void notifyDocumentEvent( const OUString& EventName, const cpo::uno::Reference< css::frame::XController2 >& ViewController, const cpo::uno::Any& Supplement ) override;
 
     // XPrintable
     virtual cpo::uno::Sequence< css::beans::PropertyValue > getPrinter(  ) override ;
@@ -364,47 +364,47 @@ public:
     virtual void print( const cpo::uno::Sequence< css::beans::PropertyValue >& xOptions ) override ;
 
     // XFormDocumentsSupplier
-    virtual css::uno::Reference< css::container::XNameAccess > getFormDocuments(  ) override;
+    virtual cpo::uno::Reference< css::container::XNameAccess > getFormDocuments(  ) override;
 
     // XReportDocumentsSupplier
-    virtual css::uno::Reference< css::container::XNameAccess > getReportDocuments(  ) override;
+    virtual cpo::uno::Reference< css::container::XNameAccess > getReportDocuments(  ) override;
 
     // XCloseable
     virtual void close( bool DeliverOwnership ) override;
-    virtual void addCloseListener( const css::uno::Reference< css::util::XCloseListener >& Listener ) override;
-    virtual void removeCloseListener( const css::uno::Reference< css::util::XCloseListener >& Listener ) override;
+    virtual void addCloseListener( const cpo::uno::Reference< css::util::XCloseListener >& Listener ) override;
+    virtual void removeCloseListener( const cpo::uno::Reference< css::util::XCloseListener >& Listener ) override;
 
     // XUIConfigurationManagerSupplier
-    virtual css::uno::Reference< css::ui::XUIConfigurationManager > getUIConfigurationManager(  ) override;
+    virtual cpo::uno::Reference< css::ui::XUIConfigurationManager > getUIConfigurationManager(  ) override;
 
     // XDocumentSubStorageSupplier
-    virtual css::uno::Reference< css::embed::XStorage > getDocumentSubStorage( const OUString& aStorageName, sal_Int32 nMode ) override;
+    virtual cpo::uno::Reference< css::embed::XStorage > getDocumentSubStorage( const OUString& aStorageName, sal_Int32 nMode ) override;
     virtual cpo::uno::Sequence< OUString > getDocumentSubStoragesNames(  ) override;
 
     // XOfficeDatabaseDocument
-    virtual css::uno::Reference< css::sdbc::XDataSource > getDataSource() override;
+    virtual cpo::uno::Reference< css::sdbc::XDataSource > getDataSource() override;
 
     // XStorageBasedDocument
-    virtual void loadFromStorage( const css::uno::Reference< css::embed::XStorage >& xStorage, const cpo::uno::Sequence< css::beans::PropertyValue >& aMediaDescriptor ) override;
-    virtual void storeToStorage( const css::uno::Reference< css::embed::XStorage >& xStorage, const cpo::uno::Sequence< css::beans::PropertyValue >& aMediaDescriptor ) override;
-    virtual void switchToStorage( const css::uno::Reference< css::embed::XStorage >& xStorage ) override;
-    virtual css::uno::Reference< css::embed::XStorage > getDocumentStorage(  ) override;
-    virtual void addStorageChangeListener( const css::uno::Reference< css::document::XStorageChangeListener >& xListener ) override;
-    virtual void removeStorageChangeListener( const css::uno::Reference< css::document::XStorageChangeListener >& xListener ) override;
+    virtual void loadFromStorage( const cpo::uno::Reference< css::embed::XStorage >& xStorage, const cpo::uno::Sequence< css::beans::PropertyValue >& aMediaDescriptor ) override;
+    virtual void storeToStorage( const cpo::uno::Reference< css::embed::XStorage >& xStorage, const cpo::uno::Sequence< css::beans::PropertyValue >& aMediaDescriptor ) override;
+    virtual void switchToStorage( const cpo::uno::Reference< css::embed::XStorage >& xStorage ) override;
+    virtual cpo::uno::Reference< css::embed::XStorage > getDocumentStorage(  ) override;
+    virtual void addStorageChangeListener( const cpo::uno::Reference< css::document::XStorageChangeListener >& xListener ) override;
+    virtual void removeStorageChangeListener( const cpo::uno::Reference< css::document::XStorageChangeListener >& xListener ) override;
 
     // XEmbeddedScripts
-    virtual css::uno::Reference< css::script::XStorageBasedLibraryContainer > getBasicLibraries() override;
-    virtual css::uno::Reference< css::script::XStorageBasedLibraryContainer > getDialogLibraries() override;
+    virtual cpo::uno::Reference< css::script::XStorageBasedLibraryContainer > getBasicLibraries() override;
+    virtual cpo::uno::Reference< css::script::XStorageBasedLibraryContainer > getDialogLibraries() override;
     virtual bool getAllowMacroExecution() override;
 
     // XScriptInvocationContext
-    virtual css::uno::Reference< css::document::XEmbeddedScripts > getScriptContainer() override;
+    virtual cpo::uno::Reference< css::document::XEmbeddedScripts > getScriptContainer() override;
 
     // XScriptProviderSupplier
-    virtual css::uno::Reference< css::script::provider::XScriptProvider > getScriptProvider(  ) override;
+    virtual cpo::uno::Reference< css::script::provider::XScriptProvider > getScriptProvider(  ) override;
 
     // XEventsSupplier
-    virtual css::uno::Reference< css::container::XNameReplace > getEvents(  ) override;
+    virtual cpo::uno::Reference< css::container::XNameReplace > getEvents(  ) override;
 
     // XLoadable
     virtual void initNew(  ) override;
@@ -420,13 +420,13 @@ public:
     virtual void setTitle( const OUString& sTitle ) override;
 
     // XTitleChangeBroadcaster
-    virtual void addTitleChangeListener( const css::uno::Reference< css::frame::XTitleChangeListener >& xListener ) override;
-    virtual void removeTitleChangeListener( const css::uno::Reference< css::frame::XTitleChangeListener >& xListener ) override;
+    virtual void addTitleChangeListener( const cpo::uno::Reference< css::frame::XTitleChangeListener >& xListener ) override;
+    virtual void removeTitleChangeListener( const cpo::uno::Reference< css::frame::XTitleChangeListener >& xListener ) override;
 
     // XUntitledNumbers
-    virtual ::sal_Int32 leaseNumber( const css::uno::Reference< cpo::uno::XInterface >& xComponent ) override;
+    virtual ::sal_Int32 leaseNumber( const cpo::uno::Reference< cpo::uno::XInterface >& xComponent ) override;
     virtual void releaseNumber( ::sal_Int32 nNumber ) override;
-    virtual void releaseNumberForComponent( const css::uno::Reference< cpo::uno::XInterface >& xComponent ) override;
+    virtual void releaseNumberForComponent( const cpo::uno::Reference< cpo::uno::XInterface >& xComponent ) override;
     virtual OUString getUntitledPrefix(  ) override;
 
     /** clears the given object container
@@ -474,7 +474,7 @@ public:
 
 private:
     /// @throws cpo::uno::RuntimeException
-    css::uno::Reference< css::ui::XUIConfigurationManager2 > const & getUIConfigurationManager2();
+    cpo::uno::Reference< css::ui::XUIConfigurationManager2 > const & getUIConfigurationManager2();
 
     /** returns whether the model is currently being initialized
     */
@@ -519,7 +519,7 @@ private:
         @throws IllegalArgumentException
             if <arg>_eType</arg> is not ODatabaseModelImpl::E_FORM and not ODatabaseModelImpl::E_REPORT
     */
-    css::uno::Reference< css::container::XNameAccess >
+    cpo::uno::Reference< css::container::XNameAccess >
             impl_getDocumentContainer_throw( ODatabaseModelImpl::ObjectType _eType );
 
     /** resets everything
@@ -534,8 +534,8 @@ private:
     */
     static void
             impl_import_nolck_throw(
-                const css::uno::Reference< cpo::uno::XComponentContext >& _rContext,
-                const css::uno::Reference< cpo::uno::XInterface >& _rxTargetComponent,
+                const cpo::uno::Reference< cpo::uno::XComponentContext >& _rContext,
+                const cpo::uno::Reference< cpo::uno::XInterface >& _rxTargetComponent,
                 const ::comphelper::NamedValueCollection& _rResource
             );
 
@@ -547,7 +547,7 @@ private:
         @return
             the newly created storage for the file at the given URL
     */
-    css::uno::Reference< css::embed::XStorage >
+    cpo::uno::Reference< css::embed::XStorage >
             impl_createStorageFor_throw(
                 const OUString& _rURL
             ) const;
@@ -562,7 +562,7 @@ private:
             the storage that is either extracted from arguments, or newly created for the file at
             the given URL
     */
-    css::uno::Reference<css::embed::XStorage> impl_GetStorageOrCreateFor_throw(
+    cpo::uno::Reference<css::embed::XStorage> impl_GetStorageOrCreateFor_throw(
         const ::comphelper::NamedValueCollection& _rArguments, const OUString& _rURL) const;
 
     /** sets our "modified" flag
@@ -594,7 +594,7 @@ private:
             a guard which holds the (only) lock to the document, and which will be temporarily
             released where necessary (e.g. for notifications, or calling into other components)
 
-        @throws css::uno::IllegalArgumentException
+        @throws cpo::uno::IllegalArgumentException
             if the given storage is <NULL/>.
 
         @throws cpo::uno::RuntimeException
@@ -605,7 +605,7 @@ private:
             RuntimeException and no IOException
     */
     void    impl_storeToStorage_throw(
-                const css::uno::Reference< css::embed::XStorage >& _rxTargetStorage,
+                const cpo::uno::Reference< css::embed::XStorage >& _rxTargetStorage,
                 const cpo::uno::Sequence< css::beans::PropertyValue >& _rMediaDescriptor,
                 DocumentGuard& _rDocGuard
             ) const;

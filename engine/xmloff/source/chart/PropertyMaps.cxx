@@ -66,6 +66,7 @@
 #define SCH_XML_UNSETFLAG( status, flag )   (status) = ((status) | (flag)) - (flag)
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace ::xmloff::token;
 using namespace css::chart2;
 

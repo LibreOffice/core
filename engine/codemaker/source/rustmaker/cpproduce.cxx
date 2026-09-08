@@ -527,14 +527,14 @@ void CppProducer::generateStructHeader(std::string_view name,
 
     // Generate includes following the pattern used in generateStructSource
     file.beginLine().append("#include <sal/types.h>").endLine();
-    file.beginLine().append("#include <com/sun/star/uno/Reference.hxx>").endLine();
+    file.beginLine().append("#include <cpo/uno/Reference.hxx>").endLine();
     file.beginLine().append("#include <cpo/uno/Any.hxx>").endLine();
     // Include the struct definition
     std::string headerName(name);
     std::replace(headerName.begin(), headerName.end(), '.', '/');
     file.beginLine().append("#include <").append(headerName).append(".hpp>").endLine();
     file.beginLine().append("").endLine();
-    file.beginLine().append("using namespace com::sun::star::uno;").endLine();
+    file.beginLine().append("using namespace ::cpo::uno;").endLine();
     file.beginLine().append("using namespace cpo::uno;").endLine();
 
     file.beginLine().append("extern \"C\"").endLine().beginBlock();
@@ -669,7 +669,7 @@ void CppProducer::generateCommonIncludes(CppFile& file, std::string_view name, b
     // Include UNO types if needed
     if (needsUnoTypes)
     {
-        file.beginLine().append("#include <com/sun/star/uno/Reference.hxx>").endLine();
+        file.beginLine().append("#include <cpo/uno/Reference.hxx>").endLine();
         file.beginLine().append("#include <cpo/uno/Any.hxx>").endLine();
     }
 
@@ -804,7 +804,7 @@ void CppProducer::generateEnumSource(std::string_view name,
 // Unified namespace generation function to eliminate duplication
 void CppProducer::generateSourceNamespaces(CppFile& file, std::string_view name)
 {
-    file.beginLine().append("using namespace com::sun::star::uno;").endLine();
+    file.beginLine().append("using namespace ::cpo::uno;").endLine();
     file.beginLine().append("using namespace cpo::uno;").endLine();
 
     // Add type-specific namespace
@@ -2570,7 +2570,7 @@ void CppProducer::generateServiceHeader(
     std::replace(includePath.begin(), includePath.end(), '.', '/');
     file.beginLine().append("#include <").append(includePath).append(".hpp>").endLine();
     file.beginLine().append("#include <cpo/uno/XComponentContext.hpp>").endLine();
-    file.beginLine().append("#include <com/sun/star/uno/Reference.hxx>").endLine();
+    file.beginLine().append("#include <cpo/uno/Reference.hxx>").endLine();
     file.endLine();
 
     // Generate extern "C" declarations for service creation

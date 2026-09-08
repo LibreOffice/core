@@ -22,6 +22,7 @@
 using namespace com::sun::star;
 using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::datatransfer::dnd;
+using namespace ::cpo;
 
 DropTarget::DropTarget()
     : ::cppu::WeakComponentImplHelper<XDropTarget>(m_aMutex)

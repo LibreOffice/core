@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SAX_FSHELPER_HXX
 #define INCLUDED_SAX_FSHELPER_HXX
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ref.hxx>
@@ -45,7 +45,7 @@ class SAX_DLLPUBLIC FastSerializerHelper
 {
 public:
 
-    FastSerializerHelper( const css::uno::Reference< css::io::XOutputStream >& xOutputStream, bool bWriteHeader );
+    FastSerializerHelper( const cpo::uno::Reference< css::io::XOutputStream >& xOutputStream, bool bWriteHeader );
 
     ~FastSerializerHelper();
 
@@ -139,7 +139,7 @@ public:
 
     FastSerializerHelper* writeId(sal_Int32 tokenId);
 
-    css::uno::Reference< css::io::XOutputStream > const & getOutputStream() const;
+    cpo::uno::Reference< css::io::XOutputStream > const & getOutputStream() const;
 
     static rtl::Reference<FastAttributeList> createAttrList();
 

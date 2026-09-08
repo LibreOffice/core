@@ -31,10 +31,10 @@ namespace connectivity
     {
         OTableHelper*       m_pTable;
     protected:
-        virtual css::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
+        virtual cpo::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
         virtual void impl_refresh() override;
-        virtual css::uno::Reference< css::beans::XPropertySet > createDescriptor() override;
-        virtual css::uno::Reference< css::beans::XPropertySet > appendObject( const OUString& _rForName, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
+        virtual cpo::uno::Reference< css::beans::XPropertySet > createDescriptor() override;
+        virtual cpo::uno::Reference< css::beans::XPropertySet > appendObject( const OUString& _rForName, const cpo::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
         virtual void dropObject(sal_Int32 _nPos, const OUString& _sElementName) override;
 
         static OUString getDropForeignKey();
@@ -46,8 +46,8 @@ namespace connectivity
                 );
 
         static void cloneDescriptorColumns(
-            const css::uno::Reference< css::beans::XPropertySet >& _rSourceDescriptor,
-            const css::uno::Reference< css::beans::XPropertySet >& _rDestDescriptor
+            const cpo::uno::Reference< css::beans::XPropertySet >& _rSourceDescriptor,
+            const cpo::uno::Reference< css::beans::XPropertySet >& _rDestDescriptor
         );
     };
 }

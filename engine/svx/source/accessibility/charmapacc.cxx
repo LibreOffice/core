@@ -35,10 +35,10 @@ namespace svx
 {
     using namespace comphelper;
     using namespace ::com::sun::star;
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo;
+    using namespace ::cpo::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::accessibility;
-    using namespace ::cpo::uno;
 
 SvxShowCharSetItem::SvxShowCharSetItem( SvxShowCharSet& rParent,SvxShowCharSetAcc*  _pParent,sal_uInt16 _nPos ) :
     mrParent( rParent )

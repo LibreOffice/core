@@ -34,7 +34,7 @@
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/util/URL.hpp>
@@ -94,10 +94,10 @@ void Listener::dispatchFinished(css::frame::DispatchResultEvent const & Result)
 class Callback: public cppu::WeakImplHelper< css::awt::XCallback > {
 public:
     Callback(
-        css::uno::Reference< css::frame::XNotifyingDispatch > const & dispatch,
+        cpo::uno::Reference< css::frame::XNotifyingDispatch > const & dispatch,
         css::util::URL url,
         cpo::uno::Sequence< css::beans::PropertyValue > const & arguments,
-        css::uno::Reference< css::frame::XDispatchResultListener > listener):
+        cpo::uno::Reference< css::frame::XDispatchResultListener > listener):
         dispatch_(dispatch), url_(std::move(url)), arguments_(arguments),
         listener_(std::move(listener))
     { OSL_ASSERT(dispatch.is()); }
@@ -106,10 +106,10 @@ private:
     virtual void SAL_CALL notify(cpo::uno::Any const &) override
     { dispatch_->dispatchWithNotification(url_, arguments_, listener_); }
 
-    css::uno::Reference< css::frame::XNotifyingDispatch > dispatch_;
+    cpo::uno::Reference< css::frame::XNotifyingDispatch > dispatch_;
     css::util::URL url_;
     cpo::uno::Sequence< css::beans::PropertyValue > arguments_;
-    css::uno::Reference< css::frame::XDispatchResultListener > listener_;
+    cpo::uno::Reference< css::frame::XDispatchResultListener > listener_;
 };
 
 class Test: public CppUnit::TestFixture {
@@ -162,21 +162,21 @@ void Test::test() {
     url.Complete = u"vnd.sun.star.script:Standard.Global.StartTestWithDefaultOptions?"_ustr
             "language=Basic&location=document";
 
-    css::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create(connection_.getComponentContext());
+    cpo::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create(connection_.getComponentContext());
 
-    css::uno::Reference< css::frame::XNotifyingDispatch > disp(
-        css::uno::Reference< css::frame::XDispatchProvider >(
-            css::uno::Reference< css::frame::XController >(
-                css::uno::Reference< css::frame::XModel >(
+    cpo::uno::Reference< css::frame::XNotifyingDispatch > disp(
+        cpo::uno::Reference< css::frame::XDispatchProvider >(
+            cpo::uno::Reference< css::frame::XController >(
+                cpo::uno::Reference< css::frame::XModel >(
                     xDesktop->loadComponentFromURL(
                             test::toAbsoluteFileUrl(doc),
                             u"_default"_ustr,
                             0, args),
-                    css::uno::UNO_QUERY_THROW)->getCurrentController(),
-                css::uno::UNO_SET_THROW)->getFrame(),
-            css::uno::UNO_QUERY_THROW)->queryDispatch(
+                    cpo::uno::UNO_QUERY_THROW)->getCurrentController(),
+                cpo::uno::UNO_SET_THROW)->getFrame(),
+            cpo::uno::UNO_QUERY_THROW)->queryDispatch(
                 url, u"_self"_ustr, 0),
-        css::uno::UNO_QUERY_THROW);
+        cpo::uno::UNO_QUERY_THROW);
     Result result;
     // Shifted to main thread to work around potential deadlocks (i112867):
     css::awt::AsyncCallback::create(

@@ -62,16 +62,16 @@ public:
 class SAL_DLLPUBLIC_TEMPLATE ConfigurationListener_Base : public cppu::WeakImplHelper< css::beans::XPropertyChangeListener > {};
 class COMPHELPER_DLLPUBLIC ConfigurationListener final : public ConfigurationListener_Base
 {
-    css::uno::Reference< css::beans::XPropertySet > mxConfig;
+    cpo::uno::Reference< css::beans::XPropertySet > mxConfig;
     std::vector< ConfigurationListenerPropertyBase * > maListeners;
     bool mbDisposed;
 public:
     /// Public health warning, you -must- dispose this if you use it.
     ConfigurationListener(const OUString &rPath,
-                          css::uno::Reference< cpo::uno::XComponentContext >
+                          cpo::uno::Reference< cpo::uno::XComponentContext >
                           const & xContext = comphelper::getProcessComponentContext())
         : mxConfig( ConfigurationHelper::openConfig( xContext, rPath, EConfigurationModes::ReadOnly ),
-                    css::uno::UNO_QUERY_THROW )
+                    cpo::uno::UNO_QUERY_THROW )
         , mbDisposed(false)
     { }
 

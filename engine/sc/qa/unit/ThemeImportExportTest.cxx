@@ -20,6 +20,7 @@
 #include <docmodel/theme/Theme.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 namespace
 {

@@ -30,7 +30,7 @@
 
 using namespace cppu;
 
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace css::lang;
 using namespace css::registry;
@@ -56,8 +56,8 @@ public:
     virtual bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
-    virtual css::uno::Reference< cpo::uno::XInterface > SAL_CALL getRegisteredObject( const OUString& Name ) override;
-    virtual void SAL_CALL registerObject( const OUString& Name, const css::uno::Reference< cpo::uno::XInterface >& Object ) override;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > SAL_CALL getRegisteredObject( const OUString& Name ) override;
+    virtual void SAL_CALL registerObject( const OUString& Name, const cpo::uno::Reference< cpo::uno::XInterface >& Object ) override;
     virtual void SAL_CALL revokeObject( const OUString& Name ) override;
 };
 

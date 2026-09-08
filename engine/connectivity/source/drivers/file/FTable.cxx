@@ -26,7 +26,7 @@
 
 using namespace connectivity;
 using namespace connectivity::file;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbcx;
@@ -126,7 +126,7 @@ void OFileTable::FileClose()
     m_pBuffer.reset();
 }
 
-bool OFileTable::InsertRow(OValueRefVector& /*rRow*/, const css::uno::Reference< css::container::XIndexAccess>& /*_xCols*/)
+bool OFileTable::InsertRow(OValueRefVector& /*rRow*/, const cpo::uno::Reference< css::container::XIndexAccess>& /*_xCols*/)
 {
     return false;
 }
@@ -136,12 +136,12 @@ bool OFileTable::DeleteRow(const OSQLColumns& /*_rCols*/)
     return false;
 }
 
-bool OFileTable::UpdateRow(OValueRefVector& /*rRow*/, OValueRefRow& /*pOrgRow*/,const css::uno::Reference< css::container::XIndexAccess>& /*_xCols*/)
+bool OFileTable::UpdateRow(OValueRefVector& /*rRow*/, OValueRefRow& /*pOrgRow*/,const cpo::uno::Reference< css::container::XIndexAccess>& /*_xCols*/)
 {
     return false;
 }
 
-void OFileTable::addColumn(const css::uno::Reference< css::beans::XPropertySet>& /*descriptor*/)
+void OFileTable::addColumn(const cpo::uno::Reference< css::beans::XPropertySet>& /*descriptor*/)
 {
     OSL_FAIL( "OFileTable::addColumn: not implemented!" );
 }

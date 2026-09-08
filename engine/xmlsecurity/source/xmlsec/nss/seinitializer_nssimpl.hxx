@@ -32,14 +32,14 @@ class SEInitializer_NssImpl : public cppu::ImplInheritanceHelper
 >
 {
 public:
-    explicit SEInitializer_NssImpl(const css::uno::Reference<cpo::uno::XComponentContext > &rxContext);
+    explicit SEInitializer_NssImpl(const cpo::uno::Reference<cpo::uno::XComponentContext > &rxContext);
     virtual ~SEInitializer_NssImpl() override;
 
     /* XSEInitializer */
-    virtual css::uno::Reference< css::xml::crypto::XXMLSecurityContext >
+    virtual cpo::uno::Reference< css::xml::crypto::XXMLSecurityContext >
         SAL_CALL createSecurityContext( const OUString& ) override;
 
-    virtual void SAL_CALL freeSecurityContext( const css::uno::Reference<
+    virtual void SAL_CALL freeSecurityContext( const cpo::uno::Reference<
         css::xml::crypto::XXMLSecurityContext >& securityContext ) override;
 
     /* XServiceInfo */

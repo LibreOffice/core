@@ -47,6 +47,7 @@
 #include <utility>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 
 struct SfxObjectFactory_Impl
@@ -305,9 +306,9 @@ OUString SfxObjectFactory::GetModuleName() const
 {
     try
     {
-        const css::uno::Reference< cpo::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
 
-        css::uno::Reference< css::frame::XModuleManager2 > xModuleManager(
+        cpo::uno::Reference< css::frame::XModuleManager2 > xModuleManager(
             css::frame::ModuleManager::create(xContext));
 
         ::comphelper::SequenceAsHashMap aPropSet( xModuleManager->getByName(GetDocumentServiceName()) );

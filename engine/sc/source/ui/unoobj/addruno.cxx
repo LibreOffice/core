@@ -31,6 +31,7 @@
 #include <addruno.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 ScAddressConversionObj::ScAddressConversionObj(ScDocShell* pDocSh, bool _bIsRange) :
     pDocShell( pDocSh ),

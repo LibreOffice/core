@@ -98,6 +98,7 @@
 #include <drwlayer.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace sfx2::sidebar;
 
 namespace {

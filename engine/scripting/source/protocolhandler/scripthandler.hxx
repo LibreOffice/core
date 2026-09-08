@@ -48,16 +48,16 @@ public ::cppu::WeakImplHelper< css::frame::XDispatchProvider,
 {
 private:
     bool m_bInitialised;
-    css::uno::Reference < cpo::uno::XComponentContext >             m_xContext;
-    css::uno::Reference < css::frame::XFrame >                      m_xFrame;
-    css::uno::Reference < css::script::provider::XScriptProvider >  m_xScriptProvider;
-    css::uno::Reference< css::document::XScriptInvocationContext >  m_xScriptInvocation;
+    cpo::uno::Reference < cpo::uno::XComponentContext >             m_xContext;
+    cpo::uno::Reference < css::frame::XFrame >                      m_xFrame;
+    cpo::uno::Reference < css::script::provider::XScriptProvider >  m_xScriptProvider;
+    cpo::uno::Reference< css::document::XScriptInvocationContext >  m_xScriptInvocation;
 
     void createScriptProvider();
     bool getScriptInvocation();
 
 public:
-    explicit ScriptProtocolHandler( const css::uno::Reference < cpo::uno::XComponentContext >& xContext );
+    explicit ScriptProtocolHandler( const cpo::uno::Reference < cpo::uno::XComponentContext >& xContext );
     virtual ~ScriptProtocolHandler() override;
 
     /* XServiceInfo */
@@ -66,10 +66,10 @@ public:
     virtual cpo::uno::Sequence < OUString > SAL_CALL getSupportedServiceNames() override;
 
     /* Implementation for XDispatchProvider */
-    virtual css::uno::Reference < css::frame::XDispatch > SAL_CALL
+    virtual cpo::uno::Reference < css::frame::XDispatch > SAL_CALL
     queryDispatch( const css::util::URL& aURL, const OUString& sTargetFrameName,
                    sal_Int32 eSearchFlags ) override ;
-    virtual cpo::uno::Sequence< css::uno::Reference < css::frame::XDispatch > > SAL_CALL
+    virtual cpo::uno::Sequence< cpo::uno::Reference < css::frame::XDispatch > > SAL_CALL
     queryDispatches(
         const cpo::uno::Sequence < css::frame::DispatchDescriptor >& seqDescriptor ) override;
 
@@ -77,15 +77,15 @@ public:
     virtual void SAL_CALL dispatchWithNotification(
         const css::util::URL& aURL,
         const cpo::uno::Sequence< css::beans::PropertyValue >& lArgs,
-        const css::uno::Reference< css::frame::XDispatchResultListener >& Listener ) override;
+        const cpo::uno::Reference< css::frame::XDispatchResultListener >& Listener ) override;
     virtual void SAL_CALL dispatch(
         const css::util::URL& aURL,
         const cpo::uno::Sequence< css::beans::PropertyValue >& lArgs ) override;
     virtual void SAL_CALL addStatusListener(
-        const css::uno::Reference< css::frame::XStatusListener >& xControl,
+        const cpo::uno::Reference< css::frame::XStatusListener >& xControl,
         const css::util::URL& aURL ) override;
     virtual void SAL_CALL removeStatusListener(
-        const css::uno::Reference< css::frame::XStatusListener >& xControl,
+        const cpo::uno::Reference< css::frame::XStatusListener >& xControl,
         const css::util::URL& aURL ) override;
 
     /* Implementation for XInitialization */

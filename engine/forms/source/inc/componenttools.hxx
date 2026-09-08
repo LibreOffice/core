@@ -38,7 +38,7 @@ namespace frm
         }
     };
 
-    /** a helper class which merges sequences of <type scope="css::uno">Type</type>s,
+    /** a helper class which merges sequences of <type scope="cpo::uno">Type</type>s,
         so that the resulting sequence contains every type at most once
     */
     class TypeBag
@@ -74,8 +74,8 @@ namespace frm
         TypeSequence    getTypes() const;
     };
 
-    css::uno::Reference< css::frame::XModel >  getXModel(
-        const css::uno::Reference< cpo::uno::XInterface >& _rxComponent );
+    cpo::uno::Reference< css::frame::XModel >  getXModel(
+        const cpo::uno::Reference< cpo::uno::XInterface >& _rxComponent );
 
 
 } // namespace frm

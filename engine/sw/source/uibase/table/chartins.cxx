@@ -50,8 +50,8 @@
 #include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 Point SwGetChartDialogPos( const vcl::Window *pParentWin, const Size& rDialogSize, const tools::Rectangle& rLogicChart )
 {
@@ -176,7 +176,7 @@ SwInsertChart::SwInsertChart( const Link<css::ui::dialogs::DialogClosedEvent*, v
     uno::Reference< lang::XInitialization > xInit( xDialog, uno::UNO_QUERY );
     if( xInit.is() )
     {
-        css::uno::Reference< css::awt::XWindow > xParent;
+        cpo::uno::Reference< css::awt::XWindow > xParent;
         vcl::Window* pWin = rWrtShell.GetWin();
         if (pWin)
         {

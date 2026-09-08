@@ -50,8 +50,8 @@ class SbUserFormModule : public SbObjModule
 {
     css::script::ModuleInfo m_mInfo;
     ::rtl::Reference< FormObjEventListenerImpl > m_DialogListener;
-    css::uno::Reference<css::awt::XDialog> m_xDialog;
-    css::uno::Reference<css::frame::XModel> m_xModel;
+    cpo::uno::Reference<css::awt::XDialog> m_xDialog;
+    cpo::uno::Reference<css::frame::XModel> m_xModel;
     bool mbInit;
 
 //protected:

@@ -27,7 +27,7 @@
 #include <sal/log.hxx>
 
 using ::cpo::uno::Sequence;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using namespace com::sun::star;
 using namespace ::xmloff::token;
 
@@ -38,9 +38,9 @@ class SchXMLListItemContext : public SvXMLImportContext
 public:
     SchXMLListItemContext( SvXMLImport& rImport, OUString& rText );
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
 private:
     OUString& m_rText;
@@ -56,9 +56,9 @@ SchXMLListItemContext::SchXMLListItemContext(
 {
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLListItemContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLListItemContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
     SvXMLImportContext* pContext = nullptr;
     if( nElement == XML_ELEMENT(TEXT, XML_P) ||
@@ -90,9 +90,9 @@ void SchXMLTextListContext::endFastElement(sal_Int32 )
         pTextList[nN]=m_aTextVector[nN];
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLTextListContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLTextListContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
     SvXMLImportContext* pContext = nullptr;
     if( nElement == XML_ELEMENT(TEXT, XML_LIST_ITEM) )

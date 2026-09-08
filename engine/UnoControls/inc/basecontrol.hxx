@@ -44,7 +44,7 @@ class BaseControl : public cppu::BaseMutex,
                                                          css::awt::XControl>
 {
 public:
-    BaseControl( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+    BaseControl( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
     virtual ~BaseControl() override;
 
@@ -63,37 +63,37 @@ public:
     virtual void dispose() override;
 
     virtual void addEventListener(
-        const css::uno::Reference< css::lang::XEventListener >& xListener
+        const cpo::uno::Reference< css::lang::XEventListener >& xListener
     ) override;
 
     virtual void removeEventListener(
-        const css::uno::Reference< css::lang::XEventListener >& xListener
+        const cpo::uno::Reference< css::lang::XEventListener >& xListener
     ) override;
 
     //  XControl
 
     virtual void createPeer(
-        const css::uno::Reference< css::awt::XToolkit >& xToolkit,
-        const css::uno::Reference< css::awt::XWindowPeer >& xParent
+        const cpo::uno::Reference< css::awt::XToolkit >& xToolkit,
+        const cpo::uno::Reference< css::awt::XWindowPeer >& xParent
     ) override;
 
     virtual void setContext(
-        const css::uno::Reference< cpo::uno::XInterface >& xContext
+        const cpo::uno::Reference< cpo::uno::XInterface >& xContext
     ) override;
 
     virtual bool setModel(
-        const css::uno::Reference< css::awt::XControlModel >& xModel
+        const cpo::uno::Reference< css::awt::XControlModel >& xModel
     ) override = 0;
 
     virtual void setDesignMode( bool bOn ) override;
 
-    virtual css::uno::Reference< cpo::uno::XInterface > getContext() override;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > getContext() override;
 
-    virtual css::uno::Reference< css::awt::XControlModel > getModel() override = 0;
+    virtual cpo::uno::Reference< css::awt::XControlModel > getModel() override = 0;
 
-    virtual css::uno::Reference< css::awt::XWindowPeer > getPeer() override;
+    virtual cpo::uno::Reference< css::awt::XWindowPeer > getPeer() override;
 
-    virtual css::uno::Reference< css::awt::XView > getView() override;
+    virtual cpo::uno::Reference< css::awt::XView > getView() override;
 
     virtual bool isDesignMode() override;
 
@@ -116,50 +116,50 @@ public:
     virtual css::awt::Rectangle getPosSize() override;
 
     virtual void addWindowListener(
-        const css::uno::Reference< css::awt::XWindowListener >& xListener
+        const cpo::uno::Reference< css::awt::XWindowListener >& xListener
     ) override;
 
     virtual void addFocusListener(
-        const css::uno::Reference< css::awt::XFocusListener >& xListener
+        const cpo::uno::Reference< css::awt::XFocusListener >& xListener
     ) override;
 
     virtual void addKeyListener(
-        const css::uno::Reference< css::awt::XKeyListener >& xListener ) override;
+        const cpo::uno::Reference< css::awt::XKeyListener >& xListener ) override;
 
     virtual void addMouseListener(
-        const css::uno::Reference< css::awt::XMouseListener >& xListener
+        const cpo::uno::Reference< css::awt::XMouseListener >& xListener
     ) override;
 
     virtual void addMouseMotionListener(
-        const css::uno::Reference< css::awt::XMouseMotionListener >& xListener
+        const cpo::uno::Reference< css::awt::XMouseMotionListener >& xListener
     ) override;
 
     virtual void addPaintListener(
-        const css::uno::Reference< css::awt::XPaintListener >& xListener
+        const cpo::uno::Reference< css::awt::XPaintListener >& xListener
     ) override;
 
     virtual void removeWindowListener(
-        const css::uno::Reference< css::awt::XWindowListener >& xListener
+        const cpo::uno::Reference< css::awt::XWindowListener >& xListener
     ) override;
 
     virtual void removeFocusListener(
-        const css::uno::Reference< css::awt::XFocusListener >& xListener
+        const cpo::uno::Reference< css::awt::XFocusListener >& xListener
     ) override;
 
     virtual void removeKeyListener(
-        const css::uno::Reference< css::awt::XKeyListener >& xListener
+        const cpo::uno::Reference< css::awt::XKeyListener >& xListener
     ) override;
 
     virtual void removeMouseListener(
-        const css::uno::Reference< css::awt::XMouseListener >& xListener
+        const cpo::uno::Reference< css::awt::XMouseListener >& xListener
     ) override;
 
     virtual void removeMouseMotionListener(
-        const css::uno::Reference< css::awt::XMouseMotionListener >& xListener
+        const cpo::uno::Reference< css::awt::XMouseMotionListener >& xListener
     ) override;
 
     virtual void removePaintListener(
-        const css::uno::Reference< css::awt::XPaintListener >& xListener
+        const cpo::uno::Reference< css::awt::XPaintListener >& xListener
     ) override;
 
     //  XView
@@ -168,13 +168,13 @@ public:
                                 sal_Int32   nY  ) override;
 
     virtual bool setGraphics(
-        const css::uno::Reference< css::awt::XGraphics >& xDevice
+        const cpo::uno::Reference< css::awt::XGraphics >& xDevice
     ) override;
 
     virtual void setZoom(  float   fZoomX  ,
                                     float   fZoomY  ) override;
 
-    virtual css::uno::Reference< css::awt::XGraphics > getGraphics() override;
+    virtual cpo::uno::Reference< css::awt::XGraphics > getGraphics() override;
 
     virtual css::awt::Size getSize() override;
 
@@ -200,36 +200,36 @@ public:
 protected:
     using WeakComponentImplHelperBase::disposing;
 
-    const css::uno::Reference< cpo::uno::XComponentContext >& impl_getComponentContext() const { return m_xComponentContext;}
+    const cpo::uno::Reference< cpo::uno::XComponentContext >& impl_getComponentContext() const { return m_xComponentContext;}
 
-    const css::uno::Reference< css::awt::XWindow >& impl_getPeerWindow() const { return m_xPeerWindow;}
+    const cpo::uno::Reference< css::awt::XWindow >& impl_getPeerWindow() const { return m_xPeerWindow;}
 
-    const css::uno::Reference< css::awt::XGraphics >& impl_getGraphicsPeer() const { return m_xGraphicsPeer;}
+    const cpo::uno::Reference< css::awt::XGraphics >& impl_getGraphicsPeer() const { return m_xGraphicsPeer;}
 
     sal_Int32 impl_getWidth() const { return m_nWidth;}
 
     sal_Int32 impl_getHeight() const { return m_nHeight;}
 
     virtual css::awt::WindowDescriptor impl_getWindowDescriptor(
-        const css::uno::Reference< css::awt::XWindowPeer >& xParentPeer
+        const cpo::uno::Reference< css::awt::XWindowPeer >& xParentPeer
     );
 
     virtual void impl_paint(        sal_Int32               nX          ,
                                     sal_Int32               nY          ,
-                            const   css::uno::Reference< css::awt::XGraphics >&   xGraphics   );
+                            const   cpo::uno::Reference< css::awt::XGraphics >&   xGraphics   );
 
     virtual void impl_recalcLayout( const css::awt::WindowEvent& aEvent );
 
 private:
     OMRCListenerMultiplexerHelper* impl_getMultiplexer();
 
-    css::uno::Reference< cpo::uno::XComponentContext >        m_xComponentContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext >        m_xComponentContext;
     rtl::Reference<OMRCListenerMultiplexerHelper>             m_xMultiplexer;   // multiplex events
-    css::uno::Reference< cpo::uno::XInterface >               m_xContext;
-    css::uno::Reference< css::awt::XWindowPeer >              m_xPeer;
-    css::uno::Reference< css::awt::XWindow >                  m_xPeerWindow;
-    css::uno::Reference< css::awt::XGraphics >                m_xGraphicsView;   // graphics for css::awt::XView-operations
-    css::uno::Reference< css::awt::XGraphics >                m_xGraphicsPeer;   // graphics for painting on a peer
+    cpo::uno::Reference< cpo::uno::XInterface >               m_xContext;
+    cpo::uno::Reference< css::awt::XWindowPeer >              m_xPeer;
+    cpo::uno::Reference< css::awt::XWindow >                  m_xPeerWindow;
+    cpo::uno::Reference< css::awt::XGraphics >                m_xGraphicsView;   // graphics for css::awt::XView-operations
+    cpo::uno::Reference< css::awt::XGraphics >                m_xGraphicsPeer;   // graphics for painting on a peer
     sal_Int32                                       m_nX;   // Position ...
     sal_Int32                                       m_nY;
     sal_Int32                                       m_nWidth;   // ... and size of window

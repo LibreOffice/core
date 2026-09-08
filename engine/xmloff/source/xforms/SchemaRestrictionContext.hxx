@@ -20,7 +20,7 @@
 #pragma once
 
 #include "TokenContext.hxx"
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 namespace com::sun::star {
     namespace beans { class XPropertySet; }
@@ -32,14 +32,14 @@ class SvXMLImport;
 /** import the xsd:restriction element */
 class SchemaRestrictionContext : public TokenContext
 {
-    css::uno::Reference<css::xforms::XDataTypeRepository> mxRepository;
-    css::uno::Reference<css::beans::XPropertySet> mxDataType;
+    cpo::uno::Reference<css::xforms::XDataTypeRepository> mxRepository;
+    cpo::uno::Reference<css::beans::XPropertySet> mxDataType;
     OUString const msTypeName;
     OUString msBaseName;
 
 public:
     SchemaRestrictionContext( SvXMLImport& rImport,
-                              css::uno::Reference<css::xforms::XDataTypeRepository> const & rRepository,
+                              cpo::uno::Reference<css::xforms::XDataTypeRepository> const & rRepository,
                               OUString sTypeName );
 
 private:
@@ -52,7 +52,7 @@ private:
 
     virtual SvXMLImportContext* HandleChild(
         sal_Int32 nElementToken,
-        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList ) override;
+        const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

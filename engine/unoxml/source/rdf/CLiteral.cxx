@@ -53,7 +53,7 @@ public:
     // css::rdf::XLiteral:
     virtual OUString SAL_CALL getValue() override;
     virtual OUString SAL_CALL getLanguage() override;
-    virtual css::uno::Reference< css::rdf::XURI > SAL_CALL getDatatype() override;
+    virtual cpo::uno::Reference< css::rdf::XURI > SAL_CALL getDatatype() override;
 
 private:
     CLiteral(CLiteral const&) = delete;
@@ -61,7 +61,7 @@ private:
 
     OUString m_Value;
     OUString m_Language;
-    css::uno::Reference< css::rdf::XURI > m_xDatatype;
+    cpo::uno::Reference< css::rdf::XURI > m_xDatatype;
 };
 
 CLiteral::CLiteral()
@@ -108,7 +108,7 @@ void SAL_CALL CLiteral::initialize(const cpo::uno::Sequence< cpo::uno::Any > & a
         return;
 
     OUString arg1;
-    css::uno::Reference< css::rdf::XURI > xURI;
+    cpo::uno::Reference< css::rdf::XURI > xURI;
     if (aArguments[1] >>= arg1) {
         if (arg1.isEmpty()) {
             throw css::lang::IllegalArgumentException(
@@ -150,7 +150,7 @@ OUString SAL_CALL CLiteral::getLanguage()
     return m_Language;
 }
 
-css::uno::Reference< css::rdf::XURI > SAL_CALL CLiteral::getDatatype()
+cpo::uno::Reference< css::rdf::XURI > SAL_CALL CLiteral::getDatatype()
 {
     return m_xDatatype;
 }

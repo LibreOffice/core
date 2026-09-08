@@ -78,7 +78,7 @@ public:
     // constructor/destructor
     AreaPropertyPanelBase(
         weld::Widget* pParent,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame);
+        const cpo::uno::Reference<css::frame::XFrame>& rxFrame);
 
     virtual ~AreaPropertyPanelBase() override;
 
@@ -104,7 +104,7 @@ private:
     void Initialize();
 
 protected:
-    const css::uno::Reference<css::frame::XFrame>&      mxFrame;
+    const cpo::uno::Reference<css::frame::XFrame>&      mxFrame;
     vcl::EnumContext                                    maContext;
 
     sal_uInt16                                          meLastXFS;

@@ -83,10 +83,10 @@ namespace dbaui
     */
     ::dbtools::SQLExceptionInfo createConnection(
                                     const OUString& _rsDataSourceName,
-                                    const css::uno::Reference< css::container::XNameAccess >& _xDatabaseContext,
-                                    const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
-                                    css::uno::Reference< css::lang::XEventListener> const & _rEvtLst,
-                                    css::uno::Reference< css::sdbc::XConnection>& _rOUTConnection );
+                                    const cpo::uno::Reference< css::container::XNameAccess >& _xDatabaseContext,
+                                    const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
+                                    cpo::uno::Reference< css::lang::XEventListener> const & _rEvtLst,
+                                    cpo::uno::Reference< css::sdbc::XConnection>& _rOUTConnection );
     /** creates a new connection and appends the eventlistener
         @param  _xDataSource            the datasource
         @param  _rxContext              the UNO component context
@@ -95,10 +95,10 @@ namespace dbaui
         @return SQLExceptionInfo        contains a SQLException, SQLContext or a SQLWarning when they araised else .isValid() will return false
     */
     ::dbtools::SQLExceptionInfo createConnection(
-                                    const css::uno::Reference< css::beans::XPropertySet >& _xDataSource,
-                                    const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
-                                    css::uno::Reference< css::lang::XEventListener> const & _rEvtLst,
-                                    css::uno::Reference< css::sdbc::XConnection>& _rOUTConnection );
+                                    const cpo::uno::Reference< css::beans::XPropertySet >& _xDataSource,
+                                    const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
+                                    cpo::uno::Reference< css::lang::XEventListener> const & _rEvtLst,
+                                    cpo::uno::Reference< css::sdbc::XConnection>& _rOUTConnection );
 
     /** fills a map and a vector with localized type names
         @param  _rxConnection   the connection to access the metadata
@@ -106,7 +106,7 @@ namespace dbaui
         @param  _rTypeInfoMap   the filled map with the type names
         @param  _rTypeInfoIters the vector filled with map iterators
     */
-    void fillTypeInfo(  const css::uno::Reference< css::sdbc::XConnection>& _rxConnection,
+    void fillTypeInfo(  const cpo::uno::Reference< css::sdbc::XConnection>& _rxConnection,
                         std::u16string_view _rsTypeNames,
                         OTypeInfoMap& _rTypeInfoMap,
                         std::vector<OTypeInfoMap::iterator>& _rTypeInfoIters);
@@ -116,13 +116,13 @@ namespace dbaui
         @param  _pFieldDesc the source of the data
     */
     class OFieldDescription;
-    void setColumnProperties(   const css::uno::Reference< css::beans::XPropertySet>& _rxColumn,
+    void setColumnProperties(   const cpo::uno::Reference< css::beans::XPropertySet>& _rxColumn,
                                 const OFieldDescription* _pFieldDesc);
 
     /** checks if the given name exists in the database context
     */
     bool checkDataSourceAvailable(  const OUString& _sDataSourceName,
-                                    const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext);
+                                    const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxContext);
 
     /** maps SvxCellHorJustify to css::awt::TextAlign
         @param SvxCellHorJustify& _eAlignment
@@ -146,11 +146,11 @@ namespace dbaui
         @param _pErrorInfo
             takes the error info in case of failure. If <NULL/>, the error is displayed to the user.
     */
-    css::uno::Reference< css::sdbc::XDataSource >
+    cpo::uno::Reference< css::sdbc::XDataSource >
         getDataSourceByName(
                 const OUString& _rDataSourceName,
                 weld::Window* _pErrorMessageParent,
-                const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
+                const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
                 ::dbtools::SQLExceptionInfo* _pErrorInfo
             );
 
@@ -158,7 +158,7 @@ namespace dbaui
         or returns a data source when a model is given.
         @param _xObject Either a data source or a model.
     */
-    css::uno::Reference< cpo::uno::XInterface > getDataSourceOrModel(const css::uno::Reference< cpo::uno::XInterface >& _xObject);
+    cpo::uno::Reference< cpo::uno::XInterface > getDataSourceOrModel(const cpo::uno::Reference< cpo::uno::XInterface >& _xObject);
 
     /** maps css::awt::TextAlign to SvxCellHorJustify
         @param css::awt::TextAlign& _nAlignment
@@ -170,8 +170,8 @@ namespace dbaui
         @param  _xAffectedCol   Font to be converted
         @param  _xField         Font to be converted
     */
-    void callColumnFormatDialog(const css::uno::Reference< css::beans::XPropertySet>& _xAffectedCol,
-                                const css::uno::Reference< css::beans::XPropertySet>& _xField,
+    void callColumnFormatDialog(const cpo::uno::Reference< css::beans::XPropertySet>& _xAffectedCol,
+                                const cpo::uno::Reference< css::beans::XPropertySet>& _xField,
                                 SvNumberFormatter* _pFormatter,
                                 weld::Widget* _pParent);
 
@@ -190,9 +190,9 @@ namespace dbaui
         @param  pParent        needed when an error must be shown
         @return false when datsource is not available otherwise true
     */
-    bool appendToFilter(const css::uno::Reference< css::sdbc::XConnection>& xConnection,
+    bool appendToFilter(const cpo::uno::Reference< css::sdbc::XConnection>& xConnection,
                         const OUString& rName,
-                        const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+                        const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                         weld::Window* pParent);
 
     /** check if SQL92 name checking is enabled
@@ -201,7 +201,7 @@ namespace dbaui
         @return
             <TRUE/> if so otherwise <FALSE/>
     */
-    bool isSQL92CheckEnabled(const css::uno::Reference< css::sdbc::XConnection>& _xConnection);
+    bool isSQL92CheckEnabled(const cpo::uno::Reference< css::sdbc::XConnection>& _xConnection);
 
     /** fills the bool and string value with information out of the datasource info property
         @param  _xDatasource
@@ -211,7 +211,7 @@ namespace dbaui
         @param  _rsAutoIncrementValue
             <OUT/> Set to the value when the property was set in the datasource.
     */
-    void fillAutoIncrementValue(const css::uno::Reference< css::beans::XPropertySet>& _xDatasource
+    void fillAutoIncrementValue(const cpo::uno::Reference< css::beans::XPropertySet>& _xDatasource
                                 ,bool& _rAutoIncrementValueEnabled
                                 ,OUString& _rsAutoIncrementValue);
 
@@ -223,14 +223,14 @@ namespace dbaui
         @param  _rsAutoIncrementValue
             <OUT/> Set to the value when the property was set in the datasource.
     */
-    void fillAutoIncrementValue(const css::uno::Reference< css::sdbc::XConnection>& _xConnection
+    void fillAutoIncrementValue(const cpo::uno::Reference< css::sdbc::XConnection>& _xConnection
                                 ,bool& _rAutoIncrementValueEnabled
                                 ,OUString& _rsAutoIncrementValue);
 
     /** set the evaluation flag at the number formatter
         @param  _rxFormatter
     */
-    void setEvalDateFormatForFormatter(css::uno::Reference< css::util::XNumberFormatter > const & _rxFormatter);
+    void setEvalDateFormatForFormatter(cpo::uno::Reference< css::util::XNumberFormatter > const & _rxFormatter);
 
     /** query for a type info which can be used to create a primary key column
         @param  _rTypeInfo
@@ -257,9 +257,9 @@ namespace dbaui
 
     /** creates a view with the given command
     */
-    css::uno::Reference< css::beans::XPropertySet> createView(
+    cpo::uno::Reference< css::beans::XPropertySet> createView(
         const OUString& _rName,
-        const css::uno::Reference< css::sdbc::XConnection >& _xConnection,
+        const cpo::uno::Reference< css::sdbc::XConnection >& _xConnection,
         const OUString& _rCommand
     );
 
@@ -271,7 +271,7 @@ namespace dbaui
         @return
             The stripped database name either the registered name or if it is a file url the last segment.
     */
-    OUString getStrippedDatabaseName(const css::uno::Reference< css::beans::XPropertySet>& _xDataSource
+    OUString getStrippedDatabaseName(const cpo::uno::Reference< css::beans::XPropertySet>& _xDataSource
                                             ,OUString& _rsDatabaseName);
 
     /** opens a save dialog to store a form or report folder in the current hierarchy.
@@ -288,8 +288,8 @@ namespace dbaui
     */
     bool insertHierarchyElement(
                 weld::Window* pParent,
-                const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
-                const css::uno::Reference< css::container::XHierarchicalNameContainer>& _xNames,
+                const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
+                const cpo::uno::Reference< css::container::XHierarchicalNameContainer>& _xNames,
                 bool _bForm
             );
 
@@ -299,7 +299,7 @@ namespace dbaui
         @param  _rxContext
             The multi service factory
     */
-    css::uno::Reference< css::util::XNumberFormatter > getNumberFormatter(const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext );
+    cpo::uno::Reference< css::util::XNumberFormatter > getNumberFormatter(const cpo::uno::Reference< css::sdbc::XConnection >& _rxConnection,const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxContext );
 
 }
 

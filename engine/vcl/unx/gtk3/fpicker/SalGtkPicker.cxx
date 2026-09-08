@@ -36,7 +36,8 @@
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 OUString SalGtkPicker::uritounicode(const gchar* pIn) const
 {
@@ -121,7 +122,7 @@ void RunDialog::windowOpened(const css::lang::EventObject& e)
 
     //Don't popdown dialogs if a tooltip appears elsewhere, that's ok, but do pop down
     //if another dialog/frame is launched.
-    css::uno::Reference<css::awt::XWindow> xWindow(e.Source, css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::awt::XWindow> xWindow(e.Source, cpo::uno::UNO_QUERY);
     if (xWindow.is())
     {
         UnoWrapperBase* pWrapper = UnoWrapperBase::GetUnoWrapper();
@@ -160,9 +161,9 @@ namespace
     class ExecuteInfo
     {
     private:
-        css::uno::Reference<css::frame::XDesktop> mxDesktop;
+        cpo::uno::Reference<css::frame::XDesktop> mxDesktop;
     public:
-        ExecuteInfo(css::uno::Reference<css::frame::XDesktop> xDesktop)
+        ExecuteInfo(cpo::uno::Reference<css::frame::XDesktop> xDesktop)
             : mxDesktop(std::move(xDesktop))
         {
         }

@@ -258,7 +258,7 @@ cpo::uno::Sequence< sal_Int8 > VCLXMenu::getImplementationId()
 }
 
 void VCLXMenu::addMenuListener(
-    const css::uno::Reference< css::awt::XMenuListener >& rxListener )
+    const cpo::uno::Reference< css::awt::XMenuListener >& rxListener )
 {
     std::unique_lock aGuard( maMutex );
 
@@ -266,7 +266,7 @@ void VCLXMenu::addMenuListener(
 }
 
 void VCLXMenu::removeMenuListener(
-    const css::uno::Reference< css::awt::XMenuListener >& rxListener )
+    const cpo::uno::Reference< css::awt::XMenuListener >& rxListener )
 {
     std::unique_lock aGuard( maMutex );
 
@@ -377,7 +377,7 @@ OUString VCLXMenu::getItemText(
 
 void VCLXMenu::setPopupMenu(
     sal_Int16 nItemId,
-    const css::uno::Reference< css::awt::XPopupMenu >& rxPopupMenu )
+    const cpo::uno::Reference< css::awt::XPopupMenu >& rxPopupMenu )
 {
     SolarMutexGuard aSolarGuard;
     std::unique_lock aGuard( maMutex );
@@ -393,7 +393,7 @@ void VCLXMenu::setPopupMenu(
     }
 }
 
-css::uno::Reference< css::awt::XPopupMenu > VCLXMenu::getPopupMenu(
+cpo::uno::Reference< css::awt::XPopupMenu > VCLXMenu::getPopupMenu(
     sal_Int16 nItemId )
 {
     SolarMutexGuard aSolarGuard;
@@ -407,7 +407,7 @@ css::uno::Reference< css::awt::XPopupMenu > VCLXMenu::getPopupMenu(
 
     for ( size_t n = maPopupMenuRefs.size(); n; )
     {
-        css::uno::Reference< css::awt::XPopupMenu >& rRef = maPopupMenuRefs[ --n ];
+        cpo::uno::Reference< css::awt::XPopupMenu >& rRef = maPopupMenuRefs[ --n ];
         Menu* pM = static_cast<VCLXMenu*>(rRef.get())->GetMenu();
         if ( pM == pMenu )
         {
@@ -487,7 +487,7 @@ bool VCLXMenu::isItemChecked(
 }
 
 sal_Int16 VCLXMenu::execute(
-    const css::uno::Reference< css::awt::XWindowPeer >& rxWindowPeer,
+    const cpo::uno::Reference< css::awt::XWindowPeer >& rxWindowPeer,
     const css::awt::Rectangle& rPos,
     sal_Int16 nFlags )
 {
@@ -560,7 +560,7 @@ OUString VCLXMenu::getHelpCommand(
 namespace
 {
     Image lcl_XGraphic2VCLImage(
-        const css::uno::Reference< css::graphic::XGraphic >& xGraphic,
+        const cpo::uno::Reference< css::graphic::XGraphic >& xGraphic,
         bool bResize )
     {
         Image aImage;
@@ -804,7 +804,7 @@ OUString VCLXMenu::getTipHelpText(
 
 void VCLXMenu::setItemImage(
     ::sal_Int16 nItemId,
-    const css::uno::Reference< css::graphic::XGraphic >& xGraphic,
+    const cpo::uno::Reference< css::graphic::XGraphic >& xGraphic,
     bool bScale )
 {
     SolarMutexGuard aSolarGuard;
@@ -818,14 +818,14 @@ void VCLXMenu::setItemImage(
 }
 
 
-css::uno::Reference< css::graphic::XGraphic >
+cpo::uno::Reference< css::graphic::XGraphic >
 VCLXMenu::getItemImage(
     ::sal_Int16 nItemId )
 {
     SolarMutexGuard aSolarGuard;
     std::unique_lock aGuard( maMutex );
 
-    css::uno::Reference< css::graphic::XGraphic > rxGraphic;
+    cpo::uno::Reference< css::graphic::XGraphic > rxGraphic;
 
     if ( mpMenu && IsPopupMenu() && MENU_ITEM_NOTFOUND != mpMenu->GetItemPos( nItemId ) )
     {

@@ -46,7 +46,7 @@ namespace framework{
     @param      rxContext
                     reference to the uno service manager
 */
-JobData::JobData( css::uno::Reference< cpo::uno::XComponentContext > xContext )
+JobData::JobData( cpo::uno::Reference< cpo::uno::XComponentContext > xContext )
     : m_xContext    (std::move(xContext                    ))
 {
     // share code for member initialization with defaults!
@@ -130,7 +130,7 @@ void JobData::setAlias( const OUString& sAlias )
         return;
     }
 
-    css::uno::Reference< css::beans::XPropertySet > xJobProperties(aConfig.cfg(), css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::beans::XPropertySet > xJobProperties(aConfig.cfg(), cpo::uno::UNO_QUERY);
     if (xJobProperties.is())
     {
         cpo::uno::Any aValue;
@@ -145,7 +145,7 @@ void JobData::setAlias( const OUString& sAlias )
 
         // read whole argument list
         aValue = xJobProperties->getPropertyValue(u"Arguments"_ustr);
-        css::uno::Reference< css::container::XNameAccess > xArgumentList;
+        cpo::uno::Reference< css::container::XNameAccess > xArgumentList;
         if (
             (aValue >>= xArgumentList)  &&
             (xArgumentList.is()      )
@@ -242,7 +242,7 @@ void JobData::setJobConfig( std::vector< css::beans::NamedValue >&& lArguments )
     if (aConfig.getMode()==ConfigAccess::E_CLOSED)
         return;
 
-    css::uno::Reference< css::beans::XMultiHierarchicalPropertySet > xArgumentList(aConfig.cfg(), css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::beans::XMultiHierarchicalPropertySet > xArgumentList(aConfig.cfg(), cpo::uno::UNO_QUERY);
     if (xArgumentList.is())
     {
         sal_Int32                             nCount = m_lArguments.size();
@@ -382,7 +382,7 @@ void JobData::disableJob()
     if (aConfig.getMode()==ConfigAccess::E_CLOSED)
         return;
 
-    css::uno::Reference< css::beans::XPropertySet > xPropSet(aConfig.cfg(), css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::beans::XPropertySet > xPropSet(aConfig.cfg(), cpo::uno::UNO_QUERY);
     if (xPropSet.is())
     {
         // Convert and write the user timestamp to the configuration.
@@ -416,7 +416,7 @@ static bool isEnabled( std::u16string_view sAdminTime ,
            );
 }
 
-void JobData::appendEnabledJobsForEvent( const css::uno::Reference< cpo::uno::XComponentContext >&              rxContext,
+void JobData::appendEnabledJobsForEvent( const cpo::uno::Reference< cpo::uno::XComponentContext >&              rxContext,
                                          const OUString&                                                 sEvent ,
                                                ::std::vector< JobData::TJob2DocEventBinding >& lJobs  )
 {
@@ -452,7 +452,7 @@ bool JobData::hasCorrectContext(std::u16string_view rModuleIdent) const
     return false;
 }
 
-std::vector< OUString > JobData::getEnabledJobsForEvent( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+std::vector< OUString > JobData::getEnabledJobsForEvent( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                                                                        std::u16string_view                                sEvent )
 {
     // create a config access to "/org.openoffice.Office.Jobs/Events"
@@ -461,7 +461,7 @@ std::vector< OUString > JobData::getEnabledJobsForEvent( const css::uno::Referen
     if (aConfig.getMode()==ConfigAccess::E_CLOSED)
         return std::vector< OUString >();
 
-    css::uno::Reference< css::container::XHierarchicalNameAccess > xEventRegistry(aConfig.cfg(), css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::container::XHierarchicalNameAccess > xEventRegistry(aConfig.cfg(), cpo::uno::UNO_QUERY);
     if (!xEventRegistry.is())
         return std::vector< OUString >();
 
@@ -473,7 +473,7 @@ std::vector< OUString > JobData::getEnabledJobsForEvent( const css::uno::Referen
     // step to the job list, which is a child of the event node inside cfg
     // e.g. "/org.openoffice.Office.Jobs/Events/<event name>/JobList"
     cpo::uno::Any aJobList = xEventRegistry->getByHierarchicalName(sPath);
-    css::uno::Reference< css::container::XNameAccess > xJobList;
+    cpo::uno::Reference< css::container::XNameAccess > xJobList;
     if (!(aJobList >>= xJobList) || !xJobList.is())
         return std::vector< OUString >();
 
@@ -490,7 +490,7 @@ std::vector< OUString > JobData::getEnabledJobsForEvent( const css::uno::Referen
 
     for (OUString const & jobName : lAllJobs)
     {
-        css::uno::Reference< css::beans::XPropertySet > xJob;
+        cpo::uno::Reference< css::beans::XPropertySet > xJob;
         if (
             !(xJobList->getByName(jobName) >>= xJob) ||
             !(xJob.is()     )

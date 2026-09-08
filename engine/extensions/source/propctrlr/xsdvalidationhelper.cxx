@@ -37,7 +37,7 @@ namespace pcr
 
 
     using namespace ::com::sun::star;
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
 using namespace cpo::uno;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::xsd;
@@ -353,7 +353,7 @@ using namespace cpo::uno;
                 Reference< XNumberFormatTypes > xFormatTypes;
                 OSL_VERIFY( m_xControlModel->getPropertyValue( PROPERTY_FORMATSSUPPLIER ) >>= xSupplier );
                 if ( xSupplier.is() )
-                    xFormatTypes.set(xSupplier->getNumberFormats(), css::uno::UNO_QUERY);
+                    xFormatTypes.set(xSupplier->getNumberFormats(), cpo::uno::UNO_QUERY);
                 OSL_ENSURE( xFormatTypes.is(), "XSDValidationHelper::findDefaultFormatForIntrospectee: no number formats for the introspectee!" );
                 if ( !xFormatTypes.is() )
                     return;

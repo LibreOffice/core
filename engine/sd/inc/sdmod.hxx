@@ -60,7 +60,7 @@ struct SdExtPropertySetInfoCacheCompare
 };
 typedef std::map<
             std::span<SfxItemPropertyMapEntry const>,
-            css::uno::Reference<css::beans::XPropertySetInfo>,
+            cpo::uno::Reference<css::beans::XPropertySetInfo>,
             SdExtPropertySetInfoCacheCompare > SdExtPropertySetInfoCache;
 typedef std::map< SdrObjKind, cpo::uno::Sequence< cpo::uno::Type> > SdTypesCache;
 
@@ -144,9 +144,9 @@ private:
 
     SfxFrame* ExecuteNewDocument( SfxRequest const & rReq );
 
-    static SfxFrame* CreateEmptyDocument( const css::uno::Reference< css::frame::XFrame >& i_rFrame );
+    static SfxFrame* CreateEmptyDocument( const cpo::uno::Reference< css::frame::XFrame >& i_rFrame );
     static SfxFrame* CreateFromTemplate(const OUString& rTemplatePath,
-                                        const css::uno::Reference<css::frame::XFrame>& i_rFrame,
+                                        const cpo::uno::Reference<css::frame::XFrame>& i_rFrame,
                                         const bool bReplaceable);
 
     bool mbEventListenerAdded;

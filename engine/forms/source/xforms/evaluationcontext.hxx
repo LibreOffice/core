@@ -39,17 +39,17 @@ public:
     { }
 
     EvaluationContext(
-        css::uno::Reference<css::xml::dom::XNode> xContextNode,
-        css::uno::Reference<css::xforms::XModel> xModel,
-        css::uno::Reference<css::container::XNameContainer> xNamespaces )
+        cpo::uno::Reference<css::xml::dom::XNode> xContextNode,
+        cpo::uno::Reference<css::xforms::XModel> xModel,
+        cpo::uno::Reference<css::container::XNameContainer> xNamespaces )
         : mxContextNode(std::move( xContextNode )),
           mxModel(std::move( xModel )),
           mxNamespaces(std::move( xNamespaces ))
     { }
 
-    css::uno::Reference<css::xml::dom::XNode> mxContextNode;
-    css::uno::Reference<css::xforms::XModel> mxModel;
-    css::uno::Reference<css::container::XNameContainer> mxNamespaces;
+    cpo::uno::Reference<css::xml::dom::XNode> mxContextNode;
+    cpo::uno::Reference<css::xforms::XModel> mxModel;
+    cpo::uno::Reference<css::container::XNameContainer> mxNamespaces;
 };
 
 

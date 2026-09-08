@@ -11,12 +11,13 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 
 #include <cppunit/TestAssert.h>
 
 using namespace css;
+using namespace ::cpo;
 
 namespace apitest
 {

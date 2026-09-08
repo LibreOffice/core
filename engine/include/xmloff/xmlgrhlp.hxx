@@ -40,8 +40,8 @@ enum class SvXMLGraphicHelperMode
 
 struct SvxGraphicHelperStream_Impl
 {
-    css::uno::Reference < css::embed::XStorage > xStorage;
-    css::uno::Reference < css::io::XStream > xStream;
+    cpo::uno::Reference < css::embed::XStorage > xStorage;
+    cpo::uno::Reference < css::io::XStream > xStream;
 };
 
 class XMLOFF_DLLPUBLIC SvXMLGraphicHelper final :
@@ -50,12 +50,12 @@ class XMLOFF_DLLPUBLIC SvXMLGraphicHelper final :
                                             css::document::XBinaryStreamResolver>
 {
 private:
-    css::uno::Reference < css::embed::XStorage > mxRootStorage;
+    cpo::uno::Reference < css::embed::XStorage > mxRootStorage;
     OUString             maCurStorageName;
-    std::vector< css::uno::Reference< css::io::XOutputStream > >
+    std::vector< cpo::uno::Reference< css::io::XOutputStream > >
                                 maGrfStms;
 
-    std::unordered_map<OUString, std::vector<css::uno::Reference<css::graphic::XGraphic>>>
+    std::unordered_map<OUString, std::vector<cpo::uno::Reference<css::graphic::XGraphic>>>
         maGraphicObjects;
     std::unordered_map<Graphic, std::pair<OUString, OUString>> maExportGraphics;
 
@@ -65,7 +65,7 @@ private:
     SAL_DLLPRIVATE static bool          ImplGetStreamNames( const OUString& rURLStr,
                                                     OUString& rPictureStorageName,
                                                     OUString& rPictureStreamName );
-    SAL_DLLPRIVATE css::uno::Reference < css::embed::XStorage >
+    SAL_DLLPRIVATE cpo::uno::Reference < css::embed::XStorage >
                                             ImplGetGraphicStorage( const OUString& rPictureStorageName );
     SAL_DLLPRIVATE SvxGraphicHelperStream_Impl
                                             ImplGetGraphicStream( const OUString& rPictureStorageName,
@@ -77,18 +77,18 @@ private:
 
                                 SvXMLGraphicHelper();
                                 virtual ~SvXMLGraphicHelper() override;
-    void                        Init( const css::uno::Reference < css::embed::XStorage >& xXMLStorage,
+    void                        Init( const cpo::uno::Reference < css::embed::XStorage >& xXMLStorage,
                                       SvXMLGraphicHelperMode eCreateMode,
                                       const OUString& rGraphicMimeType = OUString() );
 
-    SAL_DLLPRIVATE OUString implSaveGraphic(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic,
+    SAL_DLLPRIVATE OUString implSaveGraphic(cpo::uno::Reference<css::graphic::XGraphic> const & rxGraphic,
                                             OUString & rOutMimeType,
                                             std::u16string_view rRequestName);
 
 public:
                                 SvXMLGraphicHelper( SvXMLGraphicHelperMode eCreateMode );
 
-    static rtl::Reference<SvXMLGraphicHelper> Create( const css::uno::Reference < css::embed::XStorage >& rXMLStorage,
+    static rtl::Reference<SvXMLGraphicHelper> Create( const cpo::uno::Reference < css::embed::XStorage >& rXMLStorage,
                                         SvXMLGraphicHelperMode eCreateMode );
     static rtl::Reference<SvXMLGraphicHelper>  Create( SvXMLGraphicHelperMode eCreateMode,
                                         const OUString& rMimeType = OUString() );
@@ -99,31 +99,31 @@ public:
     virtual OUString resolveGraphicObjectURL( const OUString& aURL ) override;
 
     // XGraphicStorageHandler
-    virtual css::uno::Reference<css::graphic::XGraphic>
+    virtual cpo::uno::Reference<css::graphic::XGraphic>
         loadGraphic(OUString const & aURL) override;
 
-    virtual css::uno::Reference<css::graphic::XGraphic>
-        loadGraphicFromOutputStream(css::uno::Reference<css::io::XOutputStream> const & rxOutputStream) override;
+    virtual cpo::uno::Reference<css::graphic::XGraphic>
+        loadGraphicFromOutputStream(cpo::uno::Reference<css::io::XOutputStream> const & rxOutputStream) override;
 
     virtual OUString
-        saveGraphic(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic) override;
+        saveGraphic(cpo::uno::Reference<css::graphic::XGraphic> const & rxGraphic) override;
 
     virtual OUString
-        saveGraphicByName(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic, OUString & rOutSavedMimeType, OUString const & rRequestName) override;
+        saveGraphicByName(cpo::uno::Reference<css::graphic::XGraphic> const & rxGraphic, OUString & rOutSavedMimeType, OUString const & rRequestName) override;
 
-    virtual css::uno::Reference<css::io::XInputStream>
-        createInputStream(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic) override;
+    virtual cpo::uno::Reference<css::io::XInputStream>
+        createInputStream(cpo::uno::Reference<css::graphic::XGraphic> const & rxGraphic) override;
 
     // XBinaryStreamResolver
-    virtual css::uno::Reference< css::io::XInputStream > getInputStream( const OUString& rURL ) override;
-    virtual css::uno::Reference< css::io::XOutputStream > createOutputStream(  ) override;
-    virtual OUString resolveOutputStream( const css::uno::Reference< css::io::XOutputStream >& rxBinaryStream ) override;
+    virtual cpo::uno::Reference< css::io::XInputStream > getInputStream( const OUString& rURL ) override;
+    virtual cpo::uno::Reference< css::io::XOutputStream > createOutputStream(  ) override;
+    virtual OUString resolveOutputStream( const cpo::uno::Reference< css::io::XOutputStream >& rxBinaryStream ) override;
 
-    css::uno::Reference<css::graphic::XGraphic>
+    cpo::uno::Reference<css::graphic::XGraphic>
         loadGraphicAtPage(OUString const& aURL, sal_Int32 nPage);
 
-    css::uno::Reference<css::graphic::XGraphic>
-        loadGraphicFromOutputStreamAtPage(css::uno::Reference<css::io::XOutputStream> const & rxOutputStream, sal_Int32 nPage);
+    cpo::uno::Reference<css::graphic::XGraphic>
+        loadGraphicFromOutputStreamAtPage(cpo::uno::Reference<css::io::XOutputStream> const & rxOutputStream, sal_Int32 nPage);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

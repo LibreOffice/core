@@ -27,7 +27,7 @@
 #include <vector>
 
 #include <com/sun/star/drawing/PolygonFlags.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <oox/dllapi.h>
 #include <oox/helper/helper.hxx>
 #include <rtl/ustring.hxx>
@@ -274,7 +274,7 @@ struct TextpathModel
     TextpathModel();
 
     /** Writes the properties to the passed property map. */
-    void pushToPropMap(oox::drawingml::ShapePropertyMap& rPropMap, const css::uno::Reference<css::drawing::XShape>& xShape,
+    void pushToPropMap(oox::drawingml::ShapePropertyMap& rPropMap, const cpo::uno::Reference<css::drawing::XShape>& xShape,
                        const GraphicHelper& rGraphicHelper) const;
 };
 

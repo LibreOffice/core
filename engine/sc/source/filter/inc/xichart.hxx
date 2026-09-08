@@ -107,17 +107,17 @@ public:
 
     /** Starts the API chart document conversion. Must be called once before all API conversion. */
     void                InitConversion(
-                            const css::uno::Reference< css::chart2::XChartDocument>& xChartDoc,
+                            const cpo::uno::Reference< css::chart2::XChartDocument>& xChartDoc,
                             const tools::Rectangle& rChartRect ) const;
 
     /** Finishes the API chart document conversion. Must be called once after all API conversion. */
     void                FinishConversion( XclImpDffConverter& rDffConv ) const;
 
     /** Returns the data provider for the chart document. */
-    css::uno::Reference< css::chart2::data::XDataProvider >
+    cpo::uno::Reference< css::chart2::data::XDataProvider >
                         GetDataProvider() const;
     /** Returns the drawing shape interface of the specified title object. */
-    css::uno::Reference< css::drawing::XShape >
+    cpo::uno::Reference< css::drawing::XShape >
                         GetTitleShape( const XclChTextKey& rTitleKey ) const;
 
     /** Converts the passed horizontal coordinate from Excel chart units into 1/100 mm. */
@@ -422,10 +422,10 @@ public:
     void                ConvertNumFmt( ScfPropertySet& rPropSet, bool bPercent ) const;
 
     /** Creates a data sequence containing the link into the Calc document. */
-    css::uno::Reference< css::chart2::data::XDataSequence >
+    cpo::uno::Reference< css::chart2::data::XDataSequence >
                         CreateDataSequence( const OUString& rRole ) const;
     /** Creates a sequence of formatted string objects. */
-    cpo::uno::Sequence< css::uno::Reference< css::chart2::XFormattedString > >
+    cpo::uno::Sequence< cpo::uno::Reference< css::chart2::XFormattedString > >
                         CreateStringSequence( const XclImpChRoot& rRoot,
                             sal_uInt16 nLeadFontIdx, const Color& rLeadFontColor ) const;
 
@@ -532,7 +532,7 @@ public:
     /** Converts and writes all contained data to the passed data point label property set. */
     void                ConvertDataLabel( ScfPropertySet& rPropSet, const XclChTypeInfo& rTypeInfo, const ScfPropertySet* pGlobalPropSet ) const;
     /** Creates a title text object. */
-    css::uno::Reference< css::chart2::XTitle >
+    cpo::uno::Reference< css::chart2::XTitle >
                         CreateTitle() const;
     /** Converts the manual position of the specified title */
     void                ConvertTitlePosition( const XclChTextKey& rTitleKey ) const;
@@ -726,7 +726,7 @@ public:
     void         SetTrendlineName( const OUString& aTrendlineName) { maTrendLineName = aTrendlineName; }
 
     /** Creates an API object representing this trend line. */
-    css::uno::Reference< css::chart2::XRegressionCurve >
+    cpo::uno::Reference< css::chart2::XRegressionCurve >
                         CreateRegressionCurve() const;
 
 private:
@@ -753,11 +753,11 @@ public:
     /** Returns the type of this error bar (X/Y, plus/minus). */
     sal_uInt8    GetBarType() const { return maData.mnBarType; }
     /** Creates a labeled data sequence object from value data link. */
-    css::uno::Reference< css::chart2::data::XLabeledDataSequence >
+    cpo::uno::Reference< css::chart2::data::XLabeledDataSequence >
                         CreateValueSequence() const;
 
     /** Tries to create an error bar API object from the specified Excel error bars. */
-    static css::uno::Reference< css::beans::XPropertySet >
+    static cpo::uno::Reference< css::beans::XPropertySet >
                         CreateErrorBar(
                             const XclImpChSerErrorBar* pPosBar,
                             const XclImpChSerErrorBar* pNegBar );
@@ -809,13 +809,13 @@ public:
     bool         HasSpline() const { return mxSeriesFmt && mxSeriesFmt->HasSpline(); }
 
     /** Creates a labeled data sequence object from value data link. */
-    css::uno::Reference< css::chart2::data::XLabeledDataSequence >
+    cpo::uno::Reference< css::chart2::data::XLabeledDataSequence >
                         CreateValueSequence( const OUString& rValueRole ) const;
     /** Creates a labeled data sequence object from category data link. */
-    css::uno::Reference< css::chart2::data::XLabeledDataSequence >
+    cpo::uno::Reference< css::chart2::data::XLabeledDataSequence >
                         CreateCategSequence( const OUString& rCategRole ) const;
     /** Creates a data series object with initialized source links. */
-    css::uno::Reference< css::chart2::XDataSeries >
+    cpo::uno::Reference< css::chart2::XDataSeries >
                         CreateDataSeries() const;
 
     void                FillAllSourceLinks(::std::vector<ScTokenRef>& rTokens) const;
@@ -837,9 +837,9 @@ private:
     XclImpChDataFormatRef CreateDataFormat( sal_uInt16 nPointIdx, sal_uInt16 nFormatIdx );
 
     /** Converts all trend lines and inserts them into the passed API data series object. */
-    void                ConvertTrendLines( css::uno::Reference< css::chart2::XDataSeries > const & xDataSeries ) const;
+    void                ConvertTrendLines( cpo::uno::Reference< css::chart2::XDataSeries > const & xDataSeries ) const;
     /** Tries to create an error bar API object from the specified Excel error bars. */
-    css::uno::Reference< css::beans::XPropertySet >
+    cpo::uno::Reference< css::beans::XPropertySet >
                         CreateErrorBar( sal_uInt8 nPosBarId, sal_uInt8 nNegBarId ) const;
 
 private:
@@ -889,11 +889,11 @@ public:
     bool                HasCategoryLabels() const;
 
     /** Creates a coordinate system according to the contained chart type. */
-    css::uno::Reference< css::chart2::XCoordinateSystem >
+    cpo::uno::Reference< css::chart2::XCoordinateSystem >
                         CreateCoordSystem( bool b3dChart ) const;
     /** Creates and returns an object that represents the contained chart type. */
-    css::uno::Reference< css::chart2::XChartType >
-                        CreateChartType( css::uno::Reference< css::chart2::XDiagram > const & xDiagram, bool b3dChart ) const;
+    cpo::uno::Reference< css::chart2::XChartType >
+                        CreateChartType( cpo::uno::Reference< css::chart2::XDiagram > const & xDiagram, bool b3dChart ) const;
 
 private:
     XclChType           maData;             /// Contents of the chart type record.
@@ -936,7 +936,7 @@ public:
     void                Finalize();
 
     /** Creates a new legend object. */
-    css::uno::Reference< css::chart2::XLegend >
+    cpo::uno::Reference< css::chart2::XLegend >
                         CreateLegend() const;
 
 private:
@@ -1028,13 +1028,13 @@ public:
     /** Converts and writes all 3D settings to the passed diagram. */
     void                ConvertChart3d( ScfPropertySet& rPropSet ) const;
     /** Creates a coordinate system according to the contained chart type. */
-    css::uno::Reference< css::chart2::XCoordinateSystem >
+    cpo::uno::Reference< css::chart2::XCoordinateSystem >
                         CreateCoordSystem() const;
     /** Creates and returns an object that represents the contained chart type. */
-    css::uno::Reference< css::chart2::XChartType >
-                        CreateChartType( css::uno::Reference< css::chart2::XDiagram > const & xDiagram, sal_Int32 nApiAxesSetIdx ) const;
+    cpo::uno::Reference< css::chart2::XChartType >
+                        CreateChartType( cpo::uno::Reference< css::chart2::XDiagram > const & xDiagram, sal_Int32 nApiAxesSetIdx ) const;
     /** Creates a labeled data sequence object for axis categories. */
-    css::uno::Reference< css::chart2::data::XLabeledDataSequence >
+    cpo::uno::Reference< css::chart2::data::XLabeledDataSequence >
                         CreateCategSequence() const;
 
 private:
@@ -1049,14 +1049,14 @@ private:
     bool         HasDropBars() const { return !m_DropBars.empty(); }
 
     /** Inserts the passed series into the chart type. Adds additional properties to the series. */
-    void                InsertDataSeries( css::uno::Reference< css::chart2::XChartType > const & xChartType,
-                                          css::uno::Reference< css::chart2::XDataSeries > const & xSeries,
+    void                InsertDataSeries( cpo::uno::Reference< css::chart2::XChartType > const & xChartType,
+                                          cpo::uno::Reference< css::chart2::XDataSeries > const & xSeries,
                                           sal_Int32 nApiAxesSetIdx ) const;
     /** Creates all data series of any chart type except stock charts. */
-    void                CreateDataSeries( css::uno::Reference< css::chart2::XChartType > const & xChartType,
+    void                CreateDataSeries( cpo::uno::Reference< css::chart2::XChartType > const & xChartType,
                                           sal_Int32 nApiAxesSetIdx ) const;
     /** Creates all data series of a stock chart. */
-    void                CreateStockSeries( css::uno::Reference< css::chart2::XChartType > const & xChartType,
+    void                CreateStockSeries( cpo::uno::Reference< css::chart2::XChartType > const & xChartType,
                                            sal_Int32 nApiAxesSetIdx ) const;
 
 private:
@@ -1173,7 +1173,7 @@ public:
     sal_Int32    GetApiAxisDimension() const { return maData.GetApiAxisDimension(); }
 
     /** Creates an API axis object. */
-    css::uno::Reference< css::chart2::XAxis >
+    cpo::uno::Reference< css::chart2::XAxis >
                         CreateAxis( const XclImpChTypeGroup& rTypeGroup, const XclImpChAxis* pCrossingAxis ) const;
     /** Converts and writes 3D wall/floor properties to the passed property set. */
     void                ConvertWall( ScfPropertySet& rPropSet ) const;
@@ -1238,7 +1238,7 @@ public:
     OUString            GetSingleSeriesTitle() const;
 
     /** Creates a coordinate system and converts all series and axis settings. */
-    void                Convert( css::uno::Reference< css::chart2::XDiagram > const & xDiagram ) const;
+    void                Convert( cpo::uno::Reference< css::chart2::XDiagram > const & xDiagram ) const;
     /** Converts the manual positions of all axis titles. */
     void                ConvertTitlePositions() const;
 
@@ -1253,17 +1253,17 @@ private:
     void                ReadChTypeGroup( XclImpStream& rStrm );
 
     /** Creates a coordinate system that contains all chart types for this axes set. */
-    css::uno::Reference< css::chart2::XCoordinateSystem >
-                        CreateCoordSystem( css::uno::Reference< css::chart2::XDiagram > const & xDiagram ) const;
+    cpo::uno::Reference< css::chart2::XCoordinateSystem >
+                        CreateCoordSystem( cpo::uno::Reference< css::chart2::XDiagram > const & xDiagram ) const;
     /** Creates and inserts an axis into the container and registers the coordinate system. */
     void                ConvertAxis( XclImpChAxisRef const & xChAxis, XclImpChTextRef const & xChAxisTitle,
-                                     css::uno::Reference< css::chart2::XCoordinateSystem > const & xCoordSystem,
+                                     cpo::uno::Reference< css::chart2::XCoordinateSystem > const & xCoordSystem,
                                      const XclImpChAxis* pCrossingAxis ) const;
     /** Creates and returns an API axis object. */
-    css::uno::Reference< css::chart2::XAxis >
+    cpo::uno::Reference< css::chart2::XAxis >
                         CreateAxis( const XclImpChAxis& rChAxis, const XclImpChAxis* pCrossingAxis ) const;
     /** Writes all properties of the background area to the passed diagram. */
-    void                ConvertBackground( css::uno::Reference< css::chart2::XDiagram > const & xDiagram ) const;
+    void                ConvertBackground( cpo::uno::Reference< css::chart2::XDiagram > const & xDiagram ) const;
 
 private:
     typedef ::std::map<sal_uInt16, XclImpChTypeGroupRef> XclImpChTypeGroupMap;
@@ -1319,7 +1319,7 @@ public:
 
     /** Converts and writes all properties to the passed chart. */
     void                Convert(
-        const css::uno::Reference< css::chart2::XChartDocument>& xChartDoc,
+        const cpo::uno::Reference< css::chart2::XChartDocument>& xChartDoc,
         XclImpDffConverter& rDffConv,
         const OUString& rObjName,
         const tools::Rectangle& rChartRect ) const;
@@ -1344,7 +1344,7 @@ private:
     void                FinalizeTitle();
 
     /** Creates and returns a new diagram object and converts global chart settings. */
-    css::uno::Reference<css::chart2::XDiagram>
+    cpo::uno::Reference<css::chart2::XDiagram>
         CreateDiagram() const;
 
 private:
@@ -1375,7 +1375,7 @@ public:
     /** Converts all objects and inserts them into the chart drawing page. */
     void                ConvertObjects(
                             XclImpDffConverter& rDffConv,
-                            const css::uno::Reference< css::frame::XModel >& rxModel,
+                            const cpo::uno::Reference< css::frame::XModel >& rxModel,
                             const tools::Rectangle& rChartRect );
 
     /** Calculate the resulting rectangle of the passed anchor. */
@@ -1410,7 +1410,7 @@ public:
     bool         IsPivotChart() const { return mbIsPivotChart; }
 
     /** Creates the chart object in the passed component. */
-    void                Convert( css::uno::Reference< css::frame::XModel > const & xModel,
+    void                Convert( cpo::uno::Reference< css::frame::XModel > const & xModel,
                             XclImpDffConverter& rDffConv,
                             const OUString& rObjName,
                             const tools::Rectangle& rChartRect ) const;

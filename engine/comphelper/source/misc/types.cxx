@@ -29,7 +29,7 @@
 
 namespace comphelper
 {
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::lang;
@@ -97,7 +97,7 @@ sal_Int32 getEnumAsINT32(const Any& _rAny)
     sal_Int32 nReturn = 0;
     if (!::cppu::enum2int(nReturn, _rAny))
         throw IllegalArgumentException(u"enum2int failed"_ustr,
-                                       css::uno::Reference<cpo::uno::XInterface>(), -1);
+                                       cpo::uno::Reference<cpo::uno::XInterface>(), -1);
     return nReturn;
 }
 

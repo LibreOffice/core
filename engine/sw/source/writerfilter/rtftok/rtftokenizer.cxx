@@ -27,6 +27,7 @@
 #include <frozen/unordered_map.h>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 namespace writerfilter::rtftok
 {

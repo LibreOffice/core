@@ -46,7 +46,7 @@ bool UITest::executeCommandWithParameters(const OUString& rCommand,
 
 bool UITest::executeCommandForProvider(
     const OUString& rCommand,
-    const css::uno::Reference< css::frame::XDispatchProvider >& xProvider)
+    const cpo::uno::Reference< css::frame::XDispatchProvider >& xProvider)
 {
     return comphelper::dispatchCommand(
         rCommand,

@@ -42,7 +42,7 @@
 using namespace comphelper;
 using namespace cppu;
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace css::lang;
 using namespace css::system::windows;

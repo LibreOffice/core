@@ -51,9 +51,9 @@ public:
     static OOXMLValue createString(const OUString&);
     static OOXMLValue createPropertySet(const tools::SvRef<OOXMLPropertySet>&);
     static OOXMLValue createBinary(const tools::SvRef<writerfilter::Reference<BinaryObj>>&);
-    static OOXMLValue createInputStream(const css::uno::Reference<css::io::XInputStream>&);
-    static OOXMLValue createShape(const css::uno::Reference<css::drawing::XShape>&);
-    static OOXMLValue createStarMath(const css::uno::Reference<css::embed::XEmbeddedObject>&);
+    static OOXMLValue createInputStream(const cpo::uno::Reference<css::io::XInputStream>&);
+    static OOXMLValue createShape(const cpo::uno::Reference<css::drawing::XShape>&);
+    static OOXMLValue createStarMath(const cpo::uno::Reference<css::embed::XEmbeddedObject>&);
 
     OOXMLValue(OOXMLValue const&) = default;
     OOXMLValue(OOXMLValue&&) = default;
@@ -81,9 +81,9 @@ private:
                          OUString,
                          tools::SvRef<OOXMLPropertySet>, // aka OOXMLPropertySet::Pointer_t
                          tools::SvRef<writerfilter::Reference<BinaryObj>>,
-                         css::uno::Reference<css::io::XInputStream>,
-                         css::uno::Reference<css::drawing::XShape>,
-                         css::uno::Reference<css::embed::XEmbeddedObject> // StarMath
+                         cpo::uno::Reference<css::io::XInputStream>,
+                         cpo::uno::Reference<css::drawing::XShape>,
+                         cpo::uno::Reference<css::embed::XEmbeddedObject> // StarMath
                          >
         VariantType;
 

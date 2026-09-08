@@ -136,6 +136,7 @@
 
 using editeng::SvxBorderLine;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 // <P ALIGN=xxx>, <Hn ALIGN=xxx>, <TD ALIGN=xxx> etc.
 HTMLOptionEnum<SvxAdjust> const aHTMLPAlignTable[] =

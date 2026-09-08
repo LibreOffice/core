@@ -39,7 +39,7 @@
 #include <algorithm>
 
 using namespace utl;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
@@ -820,7 +820,7 @@ const enum_convert pWidthNames[] =
     { "ultraexpanded", WIDTH_ULTRA_EXPANDED }
 };
 
-void FontSubstConfiguration::fillSubstVector( const css::uno::Reference< XNameAccess >& rFont,
+void FontSubstConfiguration::fillSubstVector( const cpo::uno::Reference< XNameAccess >& rFont,
                                               const OUString& rType,
                                               std::vector< OUString >& rSubstVector ) const
 {
@@ -867,7 +867,7 @@ void FontSubstConfiguration::fillSubstVector( const css::uno::Reference< XNameAc
 }
 
 // static
-FontWeight FontSubstConfiguration::getSubstWeight( const css::uno::Reference< XNameAccess >& rFont,
+FontWeight FontSubstConfiguration::getSubstWeight( const cpo::uno::Reference< XNameAccess >& rFont,
                                                    const OUString& rType )
 {
     int weight = -1;
@@ -895,7 +895,7 @@ FontWeight FontSubstConfiguration::getSubstWeight( const css::uno::Reference< XN
 }
 
 // static
-FontWidth FontSubstConfiguration::getSubstWidth( const css::uno::Reference< XNameAccess >& rFont,
+FontWidth FontSubstConfiguration::getSubstWidth( const cpo::uno::Reference< XNameAccess >& rFont,
                                                  const OUString& rType )
 {
     int width = -1;
@@ -923,7 +923,7 @@ FontWidth FontSubstConfiguration::getSubstWidth( const css::uno::Reference< XNam
 }
 
 // static
-ImplFontAttrs FontSubstConfiguration::getSubstType( const css::uno::Reference< XNameAccess >& rFont,
+ImplFontAttrs FontSubstConfiguration::getSubstType( const cpo::uno::Reference< XNameAccess >& rFont,
                                                     const OUString& rType )
 {
     sal_uInt32 type = 0;

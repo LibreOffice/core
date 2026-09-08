@@ -168,10 +168,10 @@ public:
 
 protected:
     // reference to document component that we are testing
-    css::uno::Reference<css::lang::XComponent> mxComponent;
+    cpo::uno::Reference<css::lang::XComponent> mxComponent;
 
     // In case the test needs to work with two documents at the same time
-    css::uno::Reference<css::lang::XComponent> mxComponent2;
+    cpo::uno::Reference<css::lang::XComponent> mxComponent2;
 
     utl::TempFileNamed maTempFile;
 

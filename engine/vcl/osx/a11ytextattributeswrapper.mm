@@ -38,7 +38,7 @@ namespace css_awt = ::com::sun::star::awt;
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 // cannot use NSFontDescriptor as it has no notion of explicit NSUn{bold,italic}FontMask
 @interface AquaA11yFontDescriptor : NSObject

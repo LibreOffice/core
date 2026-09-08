@@ -22,7 +22,7 @@
 
 #include <unotools/unotoolsdllapi.h>
 #include <unotools/collatorwrapper.hxx>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 
 #include <i18nlangtag/languagetag.hxx>
 #include <optional>
@@ -51,7 +51,7 @@ class UNOTOOLS_DLLPUBLIC IntlWrapper
 {
 private:
     LanguageTag         maLanguageTag;
-    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
     const LocaleDataWrapper*  pLocaleData { nullptr };
     std::optional<CollatorWrapper>    moCollator;

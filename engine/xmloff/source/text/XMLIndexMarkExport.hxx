@@ -20,7 +20,7 @@
 #pragma once
 
 #include <rtl/ustrbuf.hxx>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 
 class SvXMLExport;
 namespace com::sun::star {
@@ -64,28 +64,28 @@ public:
      * collapsed.
      */
     void ExportIndexMark(
-        const css::uno::Reference<css::beans::XPropertySet> & rPropSet,
+        const cpo::uno::Reference<css::beans::XPropertySet> & rPropSet,
         bool bAutoStyles);
 
 private:
 
     /// export attributes of table-of-content index marks
     void ExportTOCMarkAttributes(
-        const css::uno::Reference<css::beans::XPropertySet> & rPropSet);
+        const cpo::uno::Reference<css::beans::XPropertySet> & rPropSet);
 
     /// export attributes of user index marks
     void ExportUserIndexMarkAttributes(
-        const css::uno::Reference<css::beans::XPropertySet> & rPropSet);
+        const cpo::uno::Reference<css::beans::XPropertySet> & rPropSet);
 
     /// export attributes of alphabetical  index marks
     void ExportAlphabeticalIndexMarkAttributes(
-        const css::uno::Reference<css::beans::XPropertySet> & rPropSet);
+        const cpo::uno::Reference<css::beans::XPropertySet> & rPropSet);
 
     /// create a numerical ID for this index mark
     /// (represented by its properties)
     static void GetID(
         OUStringBuffer& sBuffer,
-        const css::uno::Reference<css::beans::XPropertySet> & rPropSet);
+        const cpo::uno::Reference<css::beans::XPropertySet> & rPropSet);
 
 };
 

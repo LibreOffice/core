@@ -36,7 +36,7 @@ class OptimizationStats
         void SetStatusValue( const PPPOptimizerTokenEnum eStat, const cpo::uno::Any& rStatValue );
         const cpo::uno::Any* GetStatusValue( const PPPOptimizerTokenEnum eStat ) const;
 
-        void InitializeStatusValuesFromDocument( const css::uno::Reference< css::frame::XModel >& rxModel );
+        void InitializeStatusValuesFromDocument( const cpo::uno::Reference< css::frame::XModel >& rxModel );
         void InitializeStatusValues( const cpo::uno::Sequence< css::beans::PropertyValue >& rOptimizationStats );
 
         css::beans::PropertyValues GetStatusSequence();

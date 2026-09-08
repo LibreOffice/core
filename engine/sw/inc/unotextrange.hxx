@@ -69,10 +69,10 @@ namespace sw {
     void DeepCopyPaM(SwPaM const & rSource, SwPaM & rTarget);
 
     SW_DLLPUBLIC bool XTextRangeToSwPaM(SwUnoInternalPaM& rToFill,
-            const css::uno::Reference<css::text::XTextRange> & xTextRange,
+            const cpo::uno::Reference<css::text::XTextRange> & xTextRange,
             TextRangeMode eMode = TextRangeMode::RequireTextNode);
 
-    css::uno::Reference< SwXText >
+    cpo::uno::Reference< SwXText >
         CreateParentXText(SwDoc & rDoc, const SwPosition& rPos);
 
     bool GetDefaultTextContentValue(cpo::uno::Any& rAny,
@@ -121,7 +121,7 @@ public:
     };
 
     SwXTextRange(SwPaM const & rPam,
-            const css::uno::Reference< css::text::XText > & xParent,
+            const cpo::uno::Reference< css::text::XText > & xParent,
             const enum RangePosition eRange = RANGE_IN_TEXT,
             bool isInCell = false);
     // only for RANGE_IS_TABLE
@@ -149,7 +149,7 @@ public:
         getSupportedServiceNames() override;
 
     // XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
         getPropertySetInfo() override;
     virtual void SAL_CALL setPropertyValue(
             const OUString& rPropertyName,
@@ -158,16 +158,16 @@ public:
             const OUString& rPropertyName) override;
     virtual void SAL_CALL addPropertyChangeListener(
             const OUString& rPropertyName,
-            const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener) override;
+            const cpo::uno::Reference< css::beans::XPropertyChangeListener >& xListener) override;
     virtual void SAL_CALL removePropertyChangeListener(
             const OUString& rPropertyName,
-            const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener) override;
+            const cpo::uno::Reference< css::beans::XPropertyChangeListener >& xListener) override;
     virtual void SAL_CALL addVetoableChangeListener(
             const OUString& rPropertyName,
-            const css::uno::Reference< css::beans::XVetoableChangeListener >& xListener) override;
+            const cpo::uno::Reference< css::beans::XVetoableChangeListener >& xListener) override;
     virtual void SAL_CALL removeVetoableChangeListener(
             const OUString& rPropertyName,
-            const css::uno::Reference< css::beans::XVetoableChangeListener >& xListener) override;
+            const cpo::uno::Reference< css::beans::XVetoableChangeListener >& xListener) override;
 
     // XPropertyState
     virtual css::beans::PropertyState SAL_CALL
@@ -185,21 +185,21 @@ public:
     virtual bool SAL_CALL hasElements() override;
 
     // XEnumerationAccess
-    virtual css::uno::Reference< css::container::XEnumeration >  SAL_CALL
+    virtual cpo::uno::Reference< css::container::XEnumeration >  SAL_CALL
         createEnumeration() override;
 
     // XContentEnumerationAccess
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL
+    virtual cpo::uno::Reference< css::container::XEnumeration > SAL_CALL
         createContentEnumeration(const OUString& rServiceName) override;
     virtual cpo::uno::Sequence< OUString > SAL_CALL
         getAvailableServiceNames() override;
 
     // XTextRange
-    virtual css::uno::Reference< css::text::XText >
+    virtual cpo::uno::Reference< css::text::XText >
         SAL_CALL getText() override;
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
                 css::text::XTextRange > SAL_CALL getStart() override;
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
                 css::text::XTextRange > SAL_CALL getEnd() override;
     virtual OUString SAL_CALL getString() override;
     virtual void SAL_CALL setString(const OUString& rString) override;
@@ -214,7 +214,7 @@ private:
     const enum RangePosition m_eRangePosition;
     bool const m_isRangeInCell; //< position created with a cell that has no uno object
     SwDoc& m_rDoc;
-    css::uno::Reference<css::text::XText> m_xParentText;
+    cpo::uno::Reference<css::text::XText> m_xParentText;
     const SwFrameFormat* m_pTableOrSectionFormat;
     const ::sw::mark::MarkBase* m_pMark;
     struct MySvtListener : public SvtListener

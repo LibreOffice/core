@@ -23,7 +23,7 @@
 #include <sfx2/basedlgs.hxx>
 
 #include <cpo/uno/Sequence.h>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 
 #include <dbmgr.hxx>
 
@@ -51,7 +51,7 @@ class SwMailMergeDlg final : public SfxDialogController
 
     DBManagerOptions m_nMergeType;
     cpo::uno::Sequence< cpo::uno::Any >        m_aSelection;
-    css::uno::Reference< css::frame::XFrame2 > m_xFrame;
+    cpo::uno::Reference< css::frame::XFrame2 > m_xFrame;
 
     OUString m_sSaveFilter;
     OUString m_sFilename;
@@ -116,7 +116,7 @@ public:
         const OUString& rSourceName,
         const OUString& rTableName,
         sal_Int32 nCommandType,
-        const css::uno::Reference< css::sdbc::XConnection>& xConnection,
+        const cpo::uno::Reference< css::sdbc::XConnection>& xConnection,
         cpo::uno::Sequence< cpo::uno::Any > const * pSelection);
     virtual ~SwMailMergeDlg() override;
 
@@ -131,7 +131,7 @@ public:
 
     const OUString& GetSaveFilter() const {return m_sSaveFilter;}
     const cpo::uno::Sequence< cpo::uno::Any >& GetSelection() const { return m_aSelection; }
-    css::uno::Reference< css::sdbc::XResultSet> GetResultSet() const;
+    cpo::uno::Reference< css::sdbc::XResultSet> GetResultSet() const;
 
 };
 

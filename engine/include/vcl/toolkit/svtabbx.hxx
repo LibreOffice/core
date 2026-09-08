@@ -205,8 +205,8 @@ public:
 
     rtl::Reference<comphelper::OAccessible> CreateAccessibleCell(sal_Int32 _nRow,
                                                                  sal_uInt16 _nColumn) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleRowHeader( sal_Int32 _nRow ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleColumnHeader( sal_uInt16 _nColumnPos ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > CreateAccessibleRowHeader( sal_Int32 _nRow ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > CreateAccessibleColumnHeader( sal_uInt16 _nColumnPos ) override;
 
     virtual sal_Int32               GetAccessibleControlCount() const override;
     rtl::Reference<comphelper::OAccessible> CreateAccessibleControl(sal_Int32 _nIndex) override;

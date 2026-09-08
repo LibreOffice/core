@@ -30,6 +30,7 @@
 #include <utility>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace ::ooo::vba;
 using namespace ::ooo::vba::excel::XlAxisType;
 using namespace ::ooo::vba::excel::XlAxisGroup;

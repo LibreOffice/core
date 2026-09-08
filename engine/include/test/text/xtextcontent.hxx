@@ -10,7 +10,7 @@
 #ifndef INCLUDED_TEST_TEXT_XTEXTCONTENT_HXX
 #define INCLUDED_TEST_TEXT_XTEXTCONTENT_HXX
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
 
@@ -23,9 +23,9 @@ class OOO_DLLPUBLIC_TEST XTextContent
 public:
     virtual ~XTextContent() {}
 
-    virtual css::uno::Reference< cpo::uno::XInterface > init() = 0;
-    virtual css::uno::Reference< css::text::XTextRange > getTextRange() = 0;
-    virtual css::uno::Reference< css::text::XTextContent > getTextContent() = 0;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > init() = 0;
+    virtual cpo::uno::Reference< css::text::XTextRange > getTextRange() = 0;
+    virtual cpo::uno::Reference< css::text::XTextContent > getTextContent() = 0;
     virtual bool isAttachSupported() = 0;
 
     void testGetAnchor();

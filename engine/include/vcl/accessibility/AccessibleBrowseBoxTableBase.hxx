@@ -41,7 +41,7 @@ public:
         @param rBrowseBox       The BrowseBox control.
         @param eObjType         Type of BrowseBox object. */
     AccessibleBrowseBoxTableBase(
-        const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
+        const cpo::uno::Reference< css::accessibility::XAccessible >& rxParent,
         ::vcl::IAccessibleTableProvider& rBrowseBox,
         AccessibleBrowseBoxObjType eObjType );
 
@@ -84,12 +84,12 @@ public:
     getAccessibleColumnExtentAt( sal_Int32 nRow, sal_Int32 nColumn ) override;
 
     /** @return  The caption cell of the table (not supported). */
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
         css::accessibility::XAccessible >
     getAccessibleCaption() override;
 
     /** @return  The summary object of the table (not supported). */
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
         css::accessibility::XAccessible >
     getAccessibleSummary() override;
 

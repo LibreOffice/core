@@ -36,10 +36,10 @@ namespace svt::table
 {
 
 
-    using css::uno::Reference;
+    using cpo::uno::Reference;
     using cpo::uno::Sequence;
-    using css::uno::UNO_QUERY_THROW;
-    using css::uno::UNO_QUERY;
+    using cpo::uno::UNO_QUERY_THROW;
+    using cpo::uno::UNO_QUERY;
     using css::awt::grid::XGridColumn;
     using cpo::uno::Exception;
     using css::awt::grid::XGridDataModel;

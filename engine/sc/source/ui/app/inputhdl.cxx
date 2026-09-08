@@ -1130,13 +1130,13 @@ void ScInputHandler::UpdateSpellSettings( bool bFromStartTab )
 
     //  Language is set separately, so the speller is needed only if online spelling is active
     if ( bOnlineSpell ) {
-        css::uno::Reference<css::linguistic2::XSpellChecker> xXSpellChecker1( LinguMgr::GetSpellChecker() );
+        cpo::uno::Reference<css::linguistic2::XSpellChecker> xXSpellChecker1( LinguMgr::GetSpellChecker() );
         mpEditEngine->SetSpeller( xXSpellChecker1 );
     }
 
     bool bHyphen = maLastPattern && maLastPattern.getScPatternAttr()->GetItem(ATTR_HYPHENATE).GetValue();
     if ( bHyphen ) {
-        css::uno::Reference<css::linguistic2::XHyphenator> xXHyphenator( LinguMgr::GetHyphenator() );
+        cpo::uno::Reference<css::linguistic2::XHyphenator> xXHyphenator( LinguMgr::GetHyphenator() );
         mpEditEngine->SetHyphenator( xXHyphenator );
     }
 }

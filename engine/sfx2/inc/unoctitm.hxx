@@ -53,10 +53,10 @@ public:
     // XDispatch
     virtual void dispatchWithNotification( const css::util::URL& aURL,
                 const cpo::uno::Sequence< css::beans::PropertyValue >& aArgs,
-                const css::uno::Reference< css::frame::XDispatchResultListener >& rListener ) override;
+                const cpo::uno::Reference< css::frame::XDispatchResultListener >& rListener ) override;
     virtual void dispatch( const css::util::URL& aURL, const cpo::uno::Sequence< css::beans::PropertyValue >& aArgs ) override;
-    virtual void addStatusListener(const css::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) override;
-    virtual void removeStatusListener(const css::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) override;
+    virtual void addStatusListener(const cpo::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) override;
+    virtual void removeStatusListener(const cpo::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) override;
 
     // Something else
     void                ReleaseAll();
@@ -82,16 +82,16 @@ public:
 
     virtual void       dispatchWithNotification( const css::util::URL& aURL,
                                                           const cpo::uno::Sequence< css::beans::PropertyValue >& aArgs,
-                                                          const css::uno::Reference< css::frame::XDispatchResultListener >& rListener ) override;
+                                                          const cpo::uno::Reference< css::frame::XDispatchResultListener >& rListener ) override;
     virtual void       dispatch( const css::util::URL& aURL,
                                           const cpo::uno::Sequence< css::beans::PropertyValue >& aArgs ) override;
-    virtual void       addStatusListener( const css::uno::Reference< css::frame::XStatusListener > & xControl,
+    virtual void       addStatusListener( const cpo::uno::Reference< css::frame::XStatusListener > & xControl,
                                                    const css::util::URL& aURL) override;
 
     static bool             IsMasterUnoCommand( const css::util::URL& aURL );
     static OUString         GetMasterUnoCommand( const css::util::URL& aURL );
 
-    void                    SetFrame(const css::uno::Reference< css::frame::XFrame >& xFrame);
+    void                    SetFrame(const cpo::uno::Reference< css::frame::XFrame >& xFrame);
 
     void                    SetMasterUnoCommand( bool bSet );
 
@@ -137,13 +137,13 @@ public:
     /// @throws cpo::uno::RuntimeException
     void       dispatch( const css::util::URL& aURL,
                                   const cpo::uno::Sequence< css::beans::PropertyValue >& aArgs,
-                                  const css::uno::Reference< css::frame::XDispatchResultListener >& rListener );
+                                  const cpo::uno::Reference< css::frame::XDispatchResultListener >& rListener );
 
     /// @throws cpo::uno::RuntimeException
-    void       addStatusListener(const css::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL);
+    void       addStatusListener(const cpo::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL);
     void                UnBindController();
     SfxDispatcher*      GetDispatcher();
-    void                SetFrame(const css::uno::Reference< css::frame::XFrame >& xFrame);
+    void                SetFrame(const cpo::uno::Reference< css::frame::XFrame >& xFrame);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

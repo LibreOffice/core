@@ -44,10 +44,10 @@ SlideTransitionsToolBoxControl::statusChanged(const css::frame::FeatureStateEven
     // Handle status changes if needed
 }
 
-css::uno::Reference<css::awt::XWindow> SlideTransitionsToolBoxControl::createItemWindow(
-    const css::uno::Reference<css::awt::XWindow>& rParent)
+cpo::uno::Reference<css::awt::XWindow> SlideTransitionsToolBoxControl::createItemWindow(
+    const cpo::uno::Reference<css::awt::XWindow>& rParent)
 {
-    css::uno::Reference<css::awt::XWindow> xItemWindow;
+    cpo::uno::Reference<css::awt::XWindow> xItemWindow;
     SAL_INFO("sd", "createItemWindow called for SlideTransitionsToolBoxControl");
 
     VclPtr<vcl::Window> pParent = VCLUnoHelper::GetWindow(rParent);

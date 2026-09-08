@@ -50,7 +50,7 @@ public:
     virtual cpo::uno::Any SAL_CALL getByIndex(sal_Int32 nIndex) override;
 
     //XEnumerationAccess - was: XParagraphEnumerationAccess
-    virtual css::uno::Reference< css::container::XEnumeration >  SAL_CALL createEnumeration() override;
+    virtual cpo::uno::Reference< css::container::XEnumeration >  SAL_CALL createEnumeration() override;
 
     //XElementAccess
     virtual cpo::uno::Type SAL_CALL getElementType(  ) override;
@@ -61,7 +61,7 @@ public:
     virtual bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
-    static css::uno::Reference<css::beans::XPropertySet> GetObject(SwRangeRedline& rRedline);
+    static cpo::uno::Reference<css::beans::XPropertySet> GetObject(SwRangeRedline& rRedline);
 };
 
 class SwXRedlineEnumeration final

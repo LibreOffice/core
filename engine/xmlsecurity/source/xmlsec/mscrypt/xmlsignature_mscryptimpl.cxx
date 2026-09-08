@@ -37,7 +37,7 @@
 #include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno ;
+using namespace ::cpo::uno ;
 using namespace ::com::sun::star::lang ;
 using namespace ::cpo::uno;
 
@@ -58,14 +58,14 @@ class XMLSignature_MSCryptImpl : public ::cppu::WeakImplHelper<
         explicit XMLSignature_MSCryptImpl();
 
         //Methods from XXMLSignature
-        virtual css::uno::Reference< css::xml::crypto::XXMLSignatureTemplate > SAL_CALL generate(
-            const css::uno::Reference< css::xml::crypto::XXMLSignatureTemplate >& aTemplate ,
-            const css::uno::Reference< css::xml::crypto::XSecurityEnvironment >& aEnvironment
+        virtual cpo::uno::Reference< css::xml::crypto::XXMLSignatureTemplate > SAL_CALL generate(
+            const cpo::uno::Reference< css::xml::crypto::XXMLSignatureTemplate >& aTemplate ,
+            const cpo::uno::Reference< css::xml::crypto::XSecurityEnvironment >& aEnvironment
         ) override;
 
-        virtual css::uno::Reference< css::xml::crypto::XXMLSignatureTemplate > SAL_CALL validate(
-            const css::uno::Reference< css::xml::crypto::XXMLSignatureTemplate >& aTemplate ,
-            const css::uno::Reference< css::xml::crypto::XXMLSecurityContext >& aContext
+        virtual cpo::uno::Reference< css::xml::crypto::XXMLSignatureTemplate > SAL_CALL validate(
+            const cpo::uno::Reference< css::xml::crypto::XXMLSignatureTemplate >& aTemplate ,
+            const cpo::uno::Reference< css::xml::crypto::XXMLSecurityContext >& aContext
         ) override;
 
         //Methods from XServiceInfo

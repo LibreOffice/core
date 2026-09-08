@@ -85,14 +85,14 @@ namespace treeview {
 
         virtual void SAL_CALL
         addChangesListener(
-            const css::uno::Reference< css::util::XChangesListener >& ) override
+            const cpo::uno::Reference< css::util::XChangesListener >& ) override
         {
             // read only
         }
 
         virtual void SAL_CALL
         removeChangesListener(
-            const css::uno::Reference< css::util::XChangesListener >& ) override
+            const cpo::uno::Reference< css::util::XChangesListener >& ) override
         {
             // read only
         }
@@ -104,12 +104,12 @@ namespace treeview {
         }
 
         virtual void SAL_CALL addEventListener(
-            const css::uno::Reference< css::lang::XEventListener >& ) override
+            const cpo::uno::Reference< css::lang::XEventListener >& ) override
         {}
 
         virtual void SAL_CALL
         removeEventListener(
-            const css::uno::Reference< css::lang::XEventListener >& ) override
+            const cpo::uno::Reference< css::lang::XEventListener >& ) override
         {}
 
         // Abstract functions
@@ -227,36 +227,36 @@ namespace treeview {
         OUString nextTreeFile( sal_Int32& rnFileSize );
 
     private:
-        static css::uno::Reference< css::deployment::XPackage > implGetHelpPackageFromPackage
-            ( const css::uno::Reference< css::deployment::XPackage >& xPackage,
-              css::uno::Reference< css::deployment::XPackage >& o_xParentPackageBundle );
+        static cpo::uno::Reference< css::deployment::XPackage > implGetHelpPackageFromPackage
+            ( const cpo::uno::Reference< css::deployment::XPackage >& xPackage,
+              cpo::uno::Reference< css::deployment::XPackage >& o_xParentPackageBundle );
 
-        css::uno::Reference< css::deployment::XPackage > implGetNextUserHelpPackage
-            ( css::uno::Reference< css::deployment::XPackage >& o_xParentPackageBundle );
-        css::uno::Reference< css::deployment::XPackage > implGetNextSharedHelpPackage
-            ( css::uno::Reference< css::deployment::XPackage >& o_xParentPackageBundle );
-        css::uno::Reference< css::deployment::XPackage > implGetNextBundledHelpPackage
-            ( css::uno::Reference< css::deployment::XPackage >& o_xParentPackageBundle );
+        cpo::uno::Reference< css::deployment::XPackage > implGetNextUserHelpPackage
+            ( cpo::uno::Reference< css::deployment::XPackage >& o_xParentPackageBundle );
+        cpo::uno::Reference< css::deployment::XPackage > implGetNextSharedHelpPackage
+            ( cpo::uno::Reference< css::deployment::XPackage >& o_xParentPackageBundle );
+        cpo::uno::Reference< css::deployment::XPackage > implGetNextBundledHelpPackage
+            ( cpo::uno::Reference< css::deployment::XPackage >& o_xParentPackageBundle );
 
         void implGetLanguageVectorFromPackage( ::std::vector< OUString > &rv,
-            const css::uno::Reference< css::deployment::XPackage >& xPackage );
+            const cpo::uno::Reference< css::deployment::XPackage >& xPackage );
 
         std::mutex                                                                  m_aMutex;
-        css::uno::Reference< cpo::uno::XComponentContext >    m_xContext;
-        css::uno::Reference< css::ucb::XSimpleFileAccess3 >   m_xSFA;
+        cpo::uno::Reference< cpo::uno::XComponentContext >    m_xContext;
+        cpo::uno::Reference< css::ucb::XSimpleFileAccess3 >   m_xSFA;
 
         IteratorState                                                               m_eState;
         OUString                                                               m_aLanguage;
 
-        cpo::uno::Sequence< css::uno::Reference
+        cpo::uno::Sequence< cpo::uno::Reference
             < css::deployment::XPackage > >                              m_aUserPackagesSeq;
         bool                                                                        m_bUserPackagesLoaded;
 
-        cpo::uno::Sequence< css::uno::Reference
+        cpo::uno::Sequence< cpo::uno::Reference
             < css::deployment::XPackage > >                              m_aSharedPackagesSeq;
         bool                                                                        m_bSharedPackagesLoaded;
 
-        cpo::uno::Sequence< css::uno::Reference
+        cpo::uno::Sequence< cpo::uno::Reference
             < css::deployment::XPackage > >                              m_aBundledPackagesSeq;
         bool                                                                        m_bBundledPackagesLoaded;
 
@@ -266,7 +266,7 @@ namespace treeview {
 
         OUString expandURL( const OUString& aURL );
         OUString implGetTreeFileFromPackage( sal_Int32& rnFileSize,
-            const css::uno::Reference< css::deployment::XPackage >& xPackage );
+            const cpo::uno::Reference< css::deployment::XPackage >& xPackage );
 
     }; // end class TreeFileIterator
 

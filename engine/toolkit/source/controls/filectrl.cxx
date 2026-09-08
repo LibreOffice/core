@@ -29,7 +29,7 @@
 #include <tools/urlobj.hxx>
 #include <vcl/toolkit/edit.hxx>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::ui;
 using namespace ::cpo::uno;
 

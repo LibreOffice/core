@@ -154,7 +154,7 @@ def getFastParser():
     {
         mxFastParser = css::xml::sax::FastParser::create(mxContext);
         // the threaded parser is about 20% slower loading writer documents
-        css::uno::Reference< css::lang::XInitialization > xInit( mxFastParser, css::uno::UNO_QUERY_THROW );
+        cpo::uno::Reference< css::lang::XInitialization > xInit( mxFastParser, cpo::uno::UNO_QUERY_THROW );
         cpo::uno::Sequence< cpo::uno::Any > args{ cpo::uno::Any(OUString("DisableThreadedParser")) };
         xInit->initialize(args);
 """)
@@ -185,6 +185,7 @@ def createImpl(model):
 namespace ooxml {
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 /// @cond GENERATED
 """)

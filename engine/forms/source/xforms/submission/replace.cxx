@@ -27,7 +27,7 @@
 #include <o3tl/string_view.hxx>
 
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
@@ -36,7 +36,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
 
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::frame;

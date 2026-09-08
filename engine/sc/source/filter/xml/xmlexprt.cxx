@@ -187,8 +187,9 @@ constexpr OUString SC_LAYERID = u"LayerID"_ustr;
 
 using namespace formula;
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace xmloff::token;
-using ::com::sun::star::uno::UNO_QUERY;
+using ::cpo::uno::UNO_QUERY;
 
 namespace
 {
@@ -334,14 +335,14 @@ void ScXMLShapeExport::onExport( const uno::Reference < drawing::XShape >& xShap
 
 sal_Int16 ScXMLExport::GetMeasureUnit()
 {
-    css::uno::Reference<css::sheet::XGlobalSheetSettings> xProperties =
+    cpo::uno::Reference<css::sheet::XGlobalSheetSettings> xProperties =
                 css::sheet::GlobalSheetSettings::create( comphelper::getProcessComponentContext() );
     const FieldUnit eFieldUnit = static_cast<FieldUnit>(xProperties->getMetric());
     return SvXMLUnitConverter::GetMeasureUnit(eFieldUnit);
 }
 
 ScXMLExport::ScXMLExport(
-    const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
+    const cpo::uno::Reference< cpo::uno::XComponentContext >& rContext,
     OUString const & implementationName, SvXMLExportFlags nExportFlag)
 :   SvXMLExport(
         rContext, implementationName, GetMeasureUnit(), XML_SPREADSHEET, nExportFlag ),

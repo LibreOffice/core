@@ -36,13 +36,13 @@ namespace toolkit
         ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
     public:
-                            UnoControlScrollBarModel( const css::uno::Reference< cpo::uno::XComponentContext >& i_factory );
+                            UnoControlScrollBarModel( const cpo::uno::Reference< cpo::uno::XComponentContext >& i_factory );
                             UnoControlScrollBarModel( const UnoControlScrollBarModel& rModel ) : UnoControlModel( rModel ) {}
 
         rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlScrollBarModel( *this ); }
 
         // css::beans::XMultiPropertySet
-        css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+        cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
 
         // css::io::XPersistObject
         OUString getServiceName() override;
@@ -71,7 +71,7 @@ namespace toolkit
         cpo::uno::Any  queryAggregation( const cpo::uno::Type & rType ) override;
         void                        acquire() noexcept override  { OWeakAggObject::acquire(); }
         void                        release() noexcept override  { OWeakAggObject::release(); }
-        void createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
+        void createPeer( const cpo::uno::Reference< css::awt::XToolkit >& Toolkit, const cpo::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
         void disposing( const css::lang::EventObject& Source ) override { UnoControlBase::disposing( Source ); }
         void dispose(  ) override;
 
@@ -83,8 +83,8 @@ namespace toolkit
         void adjustmentValueChanged( const css::awt::AdjustmentEvent& rEvent ) override;
 
         // css::awt::XScrollBar
-        void addAdjustmentListener( const css::uno::Reference< css::awt::XAdjustmentListener >& l ) override;
-        void removeAdjustmentListener( const css::uno::Reference< css::awt::XAdjustmentListener >& l ) override;
+        void addAdjustmentListener( const cpo::uno::Reference< css::awt::XAdjustmentListener >& l ) override;
+        void removeAdjustmentListener( const cpo::uno::Reference< css::awt::XAdjustmentListener >& l ) override;
         void setValue( sal_Int32 n ) override;
         void setValues( sal_Int32 nValue, sal_Int32 nVisible, sal_Int32 nMax ) override;
         sal_Int32 getValue(  ) override;

@@ -7,17 +7,17 @@ basic/qa/cppunit/test_global_array.cxx:26
 basic/qa/cppunit/test_global_as_new.cxx:26
     (anonymous namespace)::GlobalAsNewTest lib BasicDLL
 canvas/source/vcl/canvasbitmap.hxx:113
-    vclcanvas::CanvasBitmap mxDevice css::uno::Reference<css::vclcanvas::XGraphicDevice>
+    vclcanvas::CanvasBitmap mxDevice cpo::uno::Reference<css::vclcanvas::XGraphicDevice>
 canvas/source/vcl/impltools.hxx:93
     vclcanvastools::LocalGuard aSolarGuard SolarMutexGuard
 chart2/source/controller/inc/dlg_DataEditor.hxx:48
-    chart::DataEditor m_xContext css::uno::Reference<cpo::uno::XComponentContext>
+    chart::DataEditor m_xContext cpo::uno::Reference<cpo::uno::XComponentContext>
 chart2/source/inc/ChartColorPalettes.hxx:29
     chart::ChartColorPalettes mxWindow std::unique_ptr<weld::ScrolledWindow>
 chart2/source/inc/ChartGradientPalettes.hxx:25
     chart::ChartGradientPalettes mxWindow std::unique_ptr<weld::ScrolledWindow>
 chart2/source/inc/ModifyListenerCallBack.hxx:49
-    chart::ModifyListenerCallBack m_xModifyListener css::uno::Reference<css::util::XModifyListener>
+    chart::ModifyListenerCallBack m_xModifyListener cpo::uno::Reference<css::util::XModifyListener>
 chart2/source/inc/RangeSelectionListener.hxx:70
     chart::RangeSelectionListener m_aControllerLockGuard ControllerLockGuardUNO
 comphelper/source/container/enumerablemap.cxx:297
@@ -103,7 +103,7 @@ embeddedobj/source/msole/olecomponent.hxx:59
 embeddedobj/source/msole/olecomponent.hxx:60
     OleComponent m_aDataFlavors cpo::uno::Sequence<css::datatransfer::DataFlavor>
 embeddedobj/source/msole/olecomponent.hxx:62
-    OleComponent m_xContext css::uno::Reference<cpo::uno::XComponentContext>
+    OleComponent m_xContext cpo::uno::Reference<cpo::uno::XComponentContext>
 embeddedobj/source/msole/olecomponent.hxx:64
     OleComponent m_bOleInitialized _Bool
 emfio/source/emfuno/xemfparser.cxx:49
@@ -179,7 +179,7 @@ include/docmodel/theme/FormatScheme.hxx:374
 include/drawinglayer/primitive2d/textlayoutdevice.hxx:77
     drawinglayer::primitive2d::TextLayouterDevice maSolarGuard SolarMutexGuard
 include/editeng/unotext.hxx:633
-    SvxUnoTextRangeEnumeration mxParentText css::uno::Reference<css::text::XText>
+    SvxUnoTextRangeEnumeration mxParentText cpo::uno::Reference<css::text::XText>
 include/filter/msfilter/svdfppt.hxx:538
     ProcessData aBackgroundColoredObjects ::std::vector<rtl::Reference<SdrObject> >
 include/oox/vml/vmlshapecontext.hxx:117
@@ -223,7 +223,7 @@ include/svtools/genericasyncunodialog.hxx:52
 include/svtools/genericunodialog.hxx:152
     svt::UnoDialogEntryGuard m_aGuard ::osl::MutexGuard
 include/svtools/unoevent.hxx:162
-    SvEventDescriptor xParentRef css::uno::Reference<cpo::uno::XInterface>
+    SvEventDescriptor xParentRef cpo::uno::Reference<cpo::uno::XInterface>
 include/svx/ChartThemeType.hxx:57
     chart::ChartThemeType m_aName OUString
 include/svx/ChartThemeType.hxx:58
@@ -259,9 +259,9 @@ include/vcl/commandevent.hxx:352
 include/vcl/commandevent.hxx:353
     CommandGestureRotateData mfAngleDelta const double
 include/vcl/filter/PngImageReader.hxx:51
-    vcl::PngImageReader mxStatusIndicator css::uno::Reference<css::task::XStatusIndicator>
+    vcl::PngImageReader mxStatusIndicator cpo::uno::Reference<css::task::XStatusIndicator>
 include/vcl/filter/PngImageWriter.hxx:32
-    vcl::PngImageWriter mxStatusIndicator css::uno::Reference<css::task::XStatusIndicator>
+    vcl::PngImageWriter mxStatusIndicator cpo::uno::Reference<css::task::XStatusIndicator>
 include/vcl/GestureEventRotate.hxx:25
     GestureEventRotate mnX sal_Int32
 include/vcl/GestureEventRotate.hxx:26
@@ -629,7 +629,7 @@ sw/source/uibase/sidebar/CommentsPanel.hxx:161
 sw/source/uibase/sidebar/ThemePanel.hxx:41
     sw::sidebar::ThemePanel mxListBoxFonts std::unique_ptr<weld::TreeView>
 sw/source/writerfilter/ooxml/OOXMLStreamImpl.hxx:41
-    writerfilter::ooxml::OOXMLStreamImpl mxFastParser css::uno::Reference<css::xml::sax::XFastParser>
+    writerfilter::ooxml::OOXMLStreamImpl mxFastParser cpo::uno::Reference<css::xml::sax::XFastParser>
 toolkit/source/awt/stylesettings.cxx:74
     toolkit::(anonymous namespace)::StyleMethodGuard m_aGuard SolarMutexGuard
 unoidl/source/unoidlprovider.cxx:668
@@ -783,4 +783,4 @@ xmloff/inc/XMLThemeContext.hxx:45
 xmlscript/source/xmldlg_imexp/imp_share.hxx:535
     xmlscript::BulletinBoardElement mxDialogImport rtl::Reference<DialogImport>
 xmlsecurity/inc/certificatechooser.hxx:62
-    CertificateChooser mxEncryptToSelf css::uno::Reference<css::security::XCertificate>
+    CertificateChooser mxEncryptToSelf cpo::uno::Reference<css::security::XCertificate>

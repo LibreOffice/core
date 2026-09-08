@@ -33,6 +33,7 @@
 #include <unotools/saveopt.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 /// Covers xmloff/source/text/ fixes.
 class XmloffStyleTest : public UnoApiXmlTest

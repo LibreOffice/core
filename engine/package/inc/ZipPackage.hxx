@@ -91,10 +91,10 @@ class ZipPackage final : public cppu::WeakImplHelper
     InitialisationMode m_eMode;
 
     rtl::Reference < ZipPackageFolder > m_xRootFolder;
-    css::uno::Reference < css::io::XStream > m_xStream;
-    css::uno::Reference < css::io::XInputStream > m_xContentStream;
-    css::uno::Reference < css::io::XSeekable > m_xContentSeek;
-    const css::uno::Reference < cpo::uno::XComponentContext > m_xContext;
+    cpo::uno::Reference < css::io::XStream > m_xStream;
+    cpo::uno::Reference < css::io::XInputStream > m_xContentStream;
+    cpo::uno::Reference < css::io::XSeekable > m_xContentSeek;
+    const cpo::uno::Reference < cpo::uno::XComponentContext > m_xContext;
 
     std::optional<ZipFile> m_pZipFile;
     bool m_bDisableFileSync = false;
@@ -110,13 +110,13 @@ class ZipPackage final : public cppu::WeakImplHelper
     void WriteManifest( ZipOutputStream& aZipOut, const ::std::vector< cpo::uno::Sequence< css::beans::PropertyValue > >& aManList );
     void WriteContentTypes( ZipOutputStream& aZipOut, const ::std::vector< cpo::uno::Sequence< css::beans::PropertyValue > >& aManList );
 
-    css::uno::Reference< css::io::XInputStream > writeTempFile();
-    css::uno::Reference < css::io::XActiveDataStreamer > openOriginalForOutput();
+    cpo::uno::Reference< css::io::XInputStream > writeTempFile();
+    cpo::uno::Reference < css::io::XActiveDataStreamer > openOriginalForOutput();
     void DisconnectFromTargetAndThrowException_Impl(
-            const css::uno::Reference< css::io::XInputStream >& xTempStream );
+            const cpo::uno::Reference< css::io::XInputStream >& xTempStream );
 
 public:
-    ZipPackage( css::uno::Reference < cpo::uno::XComponentContext > xContext );
+    ZipPackage( cpo::uno::Reference < cpo::uno::XComponentContext > xContext );
     virtual ~ZipPackage() override;
     ZipFile& getZipFile() { return *m_pZipFile;}
     sal_Int32 getFormat() const { return m_nFormat; }
@@ -130,7 +130,7 @@ public:
 
     rtl::Reference<comphelper::RefCountedMutex>& GetSharedMutexRef() { return m_aMutexHolder; }
 
-    void ConnectTo( const css::uno::Reference< css::io::XInputStream >& xInStream );
+    void ConnectTo( const cpo::uno::Reference< css::io::XInputStream >& xInStream );
     cpo::uno::Sequence< sal_Int8 > GetEncryptionKey();
 
     // XInitialization
@@ -139,20 +139,20 @@ public:
     virtual cpo::uno::Any getByHierarchicalName( const OUString& aName ) override;
     virtual bool hasByHierarchicalName( const OUString& aName ) override;
     // XSingleServiceFactory
-    virtual css::uno::Reference< cpo::uno::XInterface > createInstance(  ) override;
-    virtual css::uno::Reference< cpo::uno::XInterface > createInstanceWithArguments( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > createInstance(  ) override;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > createInstanceWithArguments( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
     // XChangesBatch
     virtual void commitChanges(  ) override;
     virtual bool hasPendingChanges(  ) override;
     virtual cpo::uno::Sequence< css::util::ElementChange > getPendingChanges(  ) override;
     // XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
     virtual void setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
     virtual cpo::uno::Any getPropertyValue( const OUString& PropertyName ) override;
-    virtual void addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
-    virtual void removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
-    virtual void addVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
-    virtual void removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+    virtual void addPropertyChangeListener( const OUString& aPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
+    virtual void removePropertyChangeListener( const OUString& aPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
+    virtual void addVetoableChangeListener( const OUString& PropertyName, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+    virtual void removeVetoableChangeListener( const OUString& PropertyName, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
     // XServiceInfo
     virtual OUString getImplementationName(  ) override;

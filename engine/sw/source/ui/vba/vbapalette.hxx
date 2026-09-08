@@ -24,12 +24,12 @@
 
 class VbaPalette
 {
-        css::uno::Reference< css::container::XIndexAccess > mxPalette;
+        cpo::uno::Reference< css::container::XIndexAccess > mxPalette;
 public:
         VbaPalette();
         // if no palette available e.g. because the document doesn't have a
         // palette defined then a default palette will be returned.
-        const css::uno::Reference< css::container::XIndexAccess >& getPalette() const { return mxPalette;}
+        const cpo::uno::Reference< css::container::XIndexAccess >& getPalette() const { return mxPalette;}
 };
 
 #endif

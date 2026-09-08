@@ -29,7 +29,7 @@
 #include <osl/mutex.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
 
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::frame;
@@ -41,7 +41,7 @@ class ObjectMenuController :  public svt::PopupMenuControllerBase
     using svt::PopupMenuControllerBase::disposing;
 
 public:
-    explicit ObjectMenuController( const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
+    explicit ObjectMenuController( const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext );
 
     // XServiceInfo
     virtual OUString getImplementationName() override
@@ -66,10 +66,10 @@ public:
     virtual void disposing( const css::lang::EventObject& Source ) override;
 
 private:
-    void fillPopupMenu( const cpo::uno::Sequence< css::embed::VerbDescriptor >& rVerbCommandSeq, css::uno::Reference< css::awt::XPopupMenu > const & rPopupMenu );
+    void fillPopupMenu( const cpo::uno::Sequence< css::embed::VerbDescriptor >& rVerbCommandSeq, cpo::uno::Reference< css::awt::XPopupMenu > const & rPopupMenu );
 };
 
-ObjectMenuController::ObjectMenuController( const css::uno::Reference< cpo::uno::XComponentContext >& xContext ) :
+ObjectMenuController::ObjectMenuController( const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext ) :
     svt::PopupMenuControllerBase( xContext )
 {
 }

@@ -77,7 +77,7 @@ public:
 std::unique_ptr<PanelLayout> AllMasterPagesSelector::Create (
     weld::Widget* pParent,
     ViewShellBase& rViewShellBase,
-    const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
+    const cpo::uno::Reference<css::ui::XSidebar>& rxSidebar)
 {
     SdDrawDocument* pDocument = rViewShellBase.GetDocument();
     if (pDocument == nullptr)
@@ -99,7 +99,7 @@ std::unique_ptr<PanelLayout> AllMasterPagesSelector::Create (
 AllMasterPagesSelector::AllMasterPagesSelector(
     weld::Widget* pParent, SdDrawDocument& rDocument, ViewShellBase& rBase,
     const std::shared_ptr<MasterPageContainer>& rpContainer,
-    const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
+    const cpo::uno::Reference<css::ui::XSidebar>& rxSidebar)
     : MasterPagesSelector(pParent, rDocument, rBase, rpContainer, rxSidebar,
                           u"modules/simpress/ui/masterpagepanelall.ui"_ustr,
                           u"masterpageall_icons"_ustr)

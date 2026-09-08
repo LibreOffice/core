@@ -59,10 +59,10 @@ namespace sfx2 {
 
     @return a base URI suitable for XDocumentMetadataAccess::loadFromStorage
  */
-css::uno::Reference< css::rdf::XURI> SFX2_DLLPUBLIC
+cpo::uno::Reference< css::rdf::XURI> SFX2_DLLPUBLIC
 createBaseURI(
-    css::uno::Reference<cpo::uno::XComponentContext> const & i_xContext,
-    css::uno::Reference<css::frame::XModel> const & i_xModel,
+    cpo::uno::Reference<cpo::uno::XComponentContext> const & i_xContext,
+    cpo::uno::Reference<css::frame::XModel> const & i_xModel,
     OUString const & i_rPkgURI,
     std::u16string_view i_rSubDocument = std::u16string_view());
 
@@ -75,12 +75,12 @@ class DocumentMetadataAccess final :
     DocumentMetadataAccess(const DocumentMetadataAccess&) = delete;
     DocumentMetadataAccess& operator=( const DocumentMetadataAccess& ) = delete;
 public:
-    explicit DocumentMetadataAccess(css::uno::Reference< cpo::uno::XComponentContext > const & i_xContext,
+    explicit DocumentMetadataAccess(cpo::uno::Reference< cpo::uno::XComponentContext > const & i_xContext,
                 SfxObjectShell const & i_rRegistrySupplier,
                 OUString const & i_rBaseURI);
     // N.B.: in contrast to previous, this constructor does _not_ initialize!
     //       caller must immediately call loadFromStorage/Medium!
-    explicit DocumentMetadataAccess(css::uno::Reference< cpo::uno::XComponentContext > const & i_xContext,
+    explicit DocumentMetadataAccess(cpo::uno::Reference< cpo::uno::XComponentContext > const & i_xContext,
                 SfxObjectShell const & i_rRegistrySupplier);
     virtual ~DocumentMetadataAccess() override;
 
@@ -92,29 +92,29 @@ public:
     virtual OUString getLocalName() override;
 
     // css::rdf::XRepositorySupplier:
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
         css::rdf::XRepository > getRDFRepository() override;
 
     // css::rdf::XDocumentMetadataAccess:
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
                 css::rdf::XMetadatable >
         getElementByMetadataReference(
             const css::beans::StringPair & i_rReference) override;
-    virtual css::uno::Reference< css::rdf::XMetadatable >
-        getElementByURI(const css::uno::Reference< css::rdf::XURI > & i_xURI) override;
-    virtual cpo::uno::Sequence< css::uno::Reference< css::rdf::XURI > > getMetadataGraphsWithType(
-            const css::uno::Reference< css::rdf::XURI > & i_xType) override;
-    virtual css::uno::Reference< css::rdf::XURI>
+    virtual cpo::uno::Reference< css::rdf::XMetadatable >
+        getElementByURI(const cpo::uno::Reference< css::rdf::XURI > & i_xURI) override;
+    virtual cpo::uno::Sequence< cpo::uno::Reference< css::rdf::XURI > > getMetadataGraphsWithType(
+            const cpo::uno::Reference< css::rdf::XURI > & i_xType) override;
+    virtual cpo::uno::Reference< css::rdf::XURI>
         addMetadataFile(const OUString & i_rFileName,
-            const cpo::uno::Sequence< css::uno::Reference< css::rdf::XURI > > & i_rTypes) override;
-    virtual css::uno::Reference< css::rdf::XURI>
+            const cpo::uno::Sequence< cpo::uno::Reference< css::rdf::XURI > > & i_rTypes) override;
+    virtual cpo::uno::Reference< css::rdf::XURI>
         importMetadataFile(::sal_Int16 i_Format,
-            const css::uno::Reference< css::io::XInputStream > & i_xInStream,
+            const cpo::uno::Reference< css::io::XInputStream > & i_xInStream,
             const OUString & i_rFileName,
-            const css::uno::Reference< css::rdf::XURI > & i_xBaseURI,
-            const cpo::uno::Sequence< css::uno::Reference< css::rdf::XURI > > & i_rTypes) override;
+            const cpo::uno::Reference< css::rdf::XURI > & i_xBaseURI,
+            const cpo::uno::Sequence< cpo::uno::Reference< css::rdf::XURI > > & i_rTypes) override;
     virtual void removeMetadataFile(
-            const css::uno::Reference<
+            const cpo::uno::Reference<
                 css::rdf::XURI > & i_xGraphName) override;
     virtual void addContentOrStylesFile(
             const OUString & i_rFileName) override;
@@ -122,14 +122,14 @@ public:
             const OUString & i_rFileName) override;
 
     virtual void loadMetadataFromStorage(
-            const css::uno::Reference<
+            const cpo::uno::Reference<
                 css::embed::XStorage > & i_xStorage,
-            const css::uno::Reference<
+            const cpo::uno::Reference<
                 css::rdf::XURI > & i_xBaseURI,
-            const css::uno::Reference<
+            const cpo::uno::Reference<
                 css::task::XInteractionHandler> & i_xHandler) override;
     virtual void storeMetadataToStorage(
-            const css::uno::Reference<
+            const cpo::uno::Reference<
                 css::embed::XStorage > & i_xStorage) override;
     virtual void loadMetadataFromMedium(
             const cpo::uno::Sequence<

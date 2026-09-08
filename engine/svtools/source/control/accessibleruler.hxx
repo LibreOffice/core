@@ -23,7 +23,7 @@
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <comphelper/OAccessible.hxx>
 #include <comphelper/compbase.hxx>
@@ -36,11 +36,11 @@ class SvtRulerAccessible final : public comphelper::OAccessible
 {
 public:
     SvtRulerAccessible(
-        css::uno::Reference< css::accessibility::XAccessible> xParent, Ruler& rRepresentation, OUString aName );
+        cpo::uno::Reference< css::accessibility::XAccessible> xParent, Ruler& rRepresentation, OUString aName );
 
     //=====  XAccessibleComponent  ============================================
 
-    virtual css::uno::Reference< css::accessibility::XAccessible >
+    virtual cpo::uno::Reference< css::accessibility::XAccessible >
         getAccessibleAtPoint( const css::awt::Point& rPoint ) override;
 
     virtual void
@@ -56,10 +56,10 @@ public:
     virtual sal_Int64
         getAccessibleChildCount() override;
 
-    virtual css::uno::Reference< css::accessibility::XAccessible>
+    virtual cpo::uno::Reference< css::accessibility::XAccessible>
         getAccessibleChild( sal_Int64 nIndex ) override;
 
-    virtual css::uno::Reference< css::accessibility::XAccessible>
+    virtual cpo::uno::Reference< css::accessibility::XAccessible>
         getAccessibleParent() override;
 
     virtual sal_Int16
@@ -71,7 +71,7 @@ public:
     virtual OUString
         getAccessibleName() override;
 
-    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet >
+    virtual cpo::uno::Reference< css::accessibility::XAccessibleRelationSet >
         getAccessibleRelationSet() override;
 
     virtual sal_Int64
@@ -87,7 +87,7 @@ private:
     OUString                            msName;
 
     /// Reference to the parent object.
-    css::uno::Reference< css::accessibility::XAccessible >
+    cpo::uno::Reference< css::accessibility::XAccessible >
                                         mxParent;
 
     /// pointer to internal representation

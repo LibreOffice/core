@@ -115,7 +115,7 @@ public:
         @return
                 the new count of elements in the container
     */
-    inline sal_Int32 addInterface(const key& rKey, const css::uno::Reference<listener>& rListener)
+    inline sal_Int32 addInterface(const key& rKey, const cpo::uno::Reference<listener>& rListener)
     {
         ::osl::MutexGuard aGuard(rMutex);
         auto iter = find(rKey);
@@ -140,7 +140,7 @@ public:
                 the new count of elements in the container
     */
     inline sal_Int32 removeInterface(const key& rKey,
-                                     const css::uno::Reference<listener>& rListener)
+                                     const cpo::uno::Reference<listener>& rListener)
     {
         ::osl::MutexGuard aGuard(rMutex);
 

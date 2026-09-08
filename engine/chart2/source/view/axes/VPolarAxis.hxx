@@ -29,7 +29,7 @@ class VPolarAxis : public VAxisBase
 {
 public:
     static std::shared_ptr<VPolarAxis> createAxis( const AxisProperties& rAxisProperties
-           , const css::uno::Reference< css::util::XNumberFormatsSupplier >& xNumberFormatsSupplier
+           , const cpo::uno::Reference< css::util::XNumberFormatsSupplier >& xNumberFormatsSupplier
            , sal_Int32 nDimensionIndex, sal_Int32 nDimensionCount );
 
     void setIncrements( std::vector< ExplicitIncrementData >&& rIncrements );
@@ -40,7 +40,7 @@ public:
 
 protected:
     VPolarAxis( const AxisProperties& rAxisProperties
-           , const css::uno::Reference< css::util::XNumberFormatsSupplier >& xNumberFormatsSupplier
+           , const cpo::uno::Reference< css::util::XNumberFormatsSupplier >& xNumberFormatsSupplier
            , sal_Int32 nDimensionIndex, sal_Int32 nDimensionCount );
 
 protected: //member

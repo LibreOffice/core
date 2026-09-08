@@ -24,7 +24,7 @@
 #include <cpo/uno/Sequence.hxx>
 
 using namespace utl;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 // Ctor

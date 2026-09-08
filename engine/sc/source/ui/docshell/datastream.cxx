@@ -241,22 +241,22 @@ void DataStream::MakeToolbarVisible()
     if (!pViewData)
         return;
 
-    css::uno::Reference< css::frame::XFrame > xFrame =
+    cpo::uno::Reference< css::frame::XFrame > xFrame =
         pViewData->GetViewShell()->GetViewFrame().GetFrame().GetFrameInterface();
     if (!xFrame.is())
         return;
 
-    css::uno::Reference< css::beans::XPropertySet > xPropSet(xFrame, css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::beans::XPropertySet > xPropSet(xFrame, cpo::uno::UNO_QUERY);
     if (!xPropSet.is())
         return;
 
-    css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
+    cpo::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
     xPropSet->getPropertyValue(u"LayoutManager"_ustr) >>= xLayoutManager;
     if (!xLayoutManager.is())
         return;
 
     static constexpr OUString sResourceURL( u"private:resource/toolbar/datastreams"_ustr );
-    css::uno::Reference< css::ui::XUIElement > xUIElement = xLayoutManager->getElement(sResourceURL);
+    cpo::uno::Reference< css::ui::XUIElement > xUIElement = xLayoutManager->getElement(sResourceURL);
     if (!xUIElement.is())
     {
         xLayoutManager->createElement( sResourceURL );

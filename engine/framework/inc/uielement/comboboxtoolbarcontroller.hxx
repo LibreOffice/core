@@ -32,8 +32,8 @@ class ComboboxToolbarController final : public ComplexToolbarController
 
 {
     public:
-        ComboboxToolbarController( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
-                                   const css::uno::Reference< css::frame::XFrame >& rFrame,
+        ComboboxToolbarController( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+                                   const cpo::uno::Reference< css::frame::XFrame >& rFrame,
                                    ToolBox*     pToolBar,
                                    ToolBoxItemId nID,
                                    sal_Int32    nWidth,

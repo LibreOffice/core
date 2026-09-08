@@ -124,20 +124,20 @@ public:
     SVX_DLLPRIVATE virtual sal_Int32 getError() override;
 
     // css::beans::XPropertySet
-    SVX_DLLPRIVATE virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo() override;
+    SVX_DLLPRIVATE virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo() override;
     SVX_DLLPRIVATE virtual void setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
     SVX_DLLPRIVATE virtual cpo::uno::Any getPropertyValue( const OUString& PropertyName ) override;
-    SVX_DLLPRIVATE virtual void addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
-    SVX_DLLPRIVATE virtual void removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
-    SVX_DLLPRIVATE virtual void addVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
-    SVX_DLLPRIVATE virtual void removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+    SVX_DLLPRIVATE virtual void addPropertyChangeListener( const OUString& aPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
+    SVX_DLLPRIVATE virtual void removePropertyChangeListener( const OUString& aPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
+    SVX_DLLPRIVATE virtual void addVetoableChangeListener( const OUString& PropertyName, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+    SVX_DLLPRIVATE virtual void removeVetoableChangeListener( const OUString& PropertyName, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
     // XMultiPropertySet
     SVX_DLLPRIVATE virtual void setPropertyValues( const cpo::uno::Sequence< OUString >& aPropertyNames, const cpo::uno::Sequence< cpo::uno::Any >& aValues ) override;
     SVX_DLLPRIVATE virtual cpo::uno::Sequence< cpo::uno::Any > getPropertyValues( const cpo::uno::Sequence< OUString >& aPropertyNames ) override;
-    SVX_DLLPRIVATE virtual void addPropertiesChangeListener( const cpo::uno::Sequence< OUString >& aPropertyNames, const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
-    SVX_DLLPRIVATE virtual void removePropertiesChangeListener( const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
-    SVX_DLLPRIVATE virtual void firePropertiesChangeEvent( const cpo::uno::Sequence< OUString >& aPropertyNames, const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
+    SVX_DLLPRIVATE virtual void addPropertiesChangeListener( const cpo::uno::Sequence< OUString >& aPropertyNames, const cpo::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
+    SVX_DLLPRIVATE virtual void removePropertiesChangeListener( const cpo::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
+    SVX_DLLPRIVATE virtual void firePropertiesChangeEvent( const cpo::uno::Sequence< OUString >& aPropertyNames, const cpo::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
 
     // css::beans::XPropertyState
     SVX_DLLPRIVATE virtual css::beans::PropertyState getPropertyState( const OUString& PropertyName ) override;
@@ -151,12 +151,12 @@ public:
     SVX_DLLPRIVATE virtual cpo::uno::Sequence< cpo::uno::Any > getPropertyDefaults( const cpo::uno::Sequence< OUString >& aPropertyNames ) override;
 
     // XText
-    SVX_DLLPRIVATE virtual void insertTextContent( const css::uno::Reference< css::text::XTextRange >& xRange, const css::uno::Reference< css::text::XTextContent >& xContent, bool bAbsorb ) override;
-    SVX_DLLPRIVATE virtual void removeTextContent( const css::uno::Reference< css::text::XTextContent >& xContent ) override;
+    SVX_DLLPRIVATE virtual void insertTextContent( const cpo::uno::Reference< css::text::XTextRange >& xRange, const cpo::uno::Reference< css::text::XTextContent >& xContent, bool bAbsorb ) override;
+    SVX_DLLPRIVATE virtual void removeTextContent( const cpo::uno::Reference< css::text::XTextContent >& xContent ) override;
 
     // XSimpleText
-    SVX_DLLPRIVATE virtual void insertString( const css::uno::Reference< css::text::XTextRange >& xRange, const OUString& aString, bool bAbsorb ) override;
-    SVX_DLLPRIVATE virtual void insertControlCharacter( const css::uno::Reference< css::text::XTextRange >& xRange, ::sal_Int16 nControlCharacter, bool bAbsorb ) override;
+    SVX_DLLPRIVATE virtual void insertString( const cpo::uno::Reference< css::text::XTextRange >& xRange, const OUString& aString, bool bAbsorb ) override;
+    SVX_DLLPRIVATE virtual void insertControlCharacter( const cpo::uno::Reference< css::text::XTextRange >& xRange, ::sal_Int16 nControlCharacter, bool bAbsorb ) override;
 
     // XTextRange
     SVX_DLLPRIVATE virtual OUString getString(  ) override;
@@ -207,7 +207,7 @@ private:
 
     tools::Rectangle       maCellRect;
 
-    css::uno::Reference< css::table::XTable > mxTable;
+    cpo::uno::Reference< css::table::XTable > mxTable;
 
     std::unique_ptr<SfxGrabBagItem> mpGrabBagItem = {};
 };

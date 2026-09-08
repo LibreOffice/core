@@ -29,7 +29,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <unotools/weakref.hxx>
 
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/XAttr.hpp>
@@ -76,9 +76,9 @@ namespace DOM
         xmlDocPtr const m_aDocPtr;
 
         // datacontrol/source state
-        typedef o3tl::sorted_vector< css::uno::Reference< css::io::XStreamListener > > listenerlist_t;
+        typedef o3tl::sorted_vector< cpo::uno::Reference< css::io::XStreamListener > > listenerlist_t;
         listenerlist_t m_streamListeners;
-        css::uno::Reference< css::io::XOutputStream > m_rOutputStream;
+        cpo::uno::Reference< css::io::XOutputStream > m_rOutputStream;
 
         typedef std::unordered_map< xmlNodePtr,
                     ::std::pair< unotools::WeakReference<CNode>, CNode* > > nodemap_t;
@@ -110,7 +110,7 @@ namespace DOM
 
         virtual CDocument & GetOwnerDocument() override;
 
-        virtual void saxify(const css::uno::Reference< css::xml::sax::XDocumentHandler >& i_xHandler) override;
+        virtual void saxify(const cpo::uno::Reference< css::xml::sax::XDocumentHandler >& i_xHandler) override;
 
         virtual void fastSaxify( Context& rContext ) override;
 
@@ -120,134 +120,134 @@ namespace DOM
         /**
         Creates an Attr of the given name.
         */
-        virtual css::uno::Reference< css::xml::dom::XAttr > SAL_CALL createAttribute(const OUString& name) override;
+        virtual cpo::uno::Reference< css::xml::dom::XAttr > SAL_CALL createAttribute(const OUString& name) override;
 
         /**
         Creates an attribute of the given qualified name and namespace URI.
         */
-        virtual css::uno::Reference< css::xml::dom::XAttr > SAL_CALL createAttributeNS(const OUString& namespaceURI, const OUString& qualifiedName) override;
+        virtual cpo::uno::Reference< css::xml::dom::XAttr > SAL_CALL createAttributeNS(const OUString& namespaceURI, const OUString& qualifiedName) override;
 
         /**
         Creates a CDATASection node whose value is the specified string.
         */
-        virtual css::uno::Reference< css::xml::dom::XCDATASection > SAL_CALL createCDATASection(const OUString& data) override;
+        virtual cpo::uno::Reference< css::xml::dom::XCDATASection > SAL_CALL createCDATASection(const OUString& data) override;
 
         /**
         Creates a Comment node given the specified string.
         */
-        virtual css::uno::Reference< css::xml::dom::XComment > SAL_CALL createComment(const OUString& data) override;
+        virtual cpo::uno::Reference< css::xml::dom::XComment > SAL_CALL createComment(const OUString& data) override;
 
         /**
         Creates an empty DocumentFragment object.
         */
-        virtual css::uno::Reference< css::xml::dom::XDocumentFragment > SAL_CALL createDocumentFragment() override;
+        virtual cpo::uno::Reference< css::xml::dom::XDocumentFragment > SAL_CALL createDocumentFragment() override;
 
         /**
         Creates an element of the type specified.
         */
-        virtual css::uno::Reference< css::xml::dom::XElement > SAL_CALL createElement(const OUString& tagName) override;
+        virtual cpo::uno::Reference< css::xml::dom::XElement > SAL_CALL createElement(const OUString& tagName) override;
 
         /**
         Creates an element of the given qualified name and namespace URI.
         */
-        virtual css::uno::Reference< css::xml::dom::XElement > SAL_CALL createElementNS(const OUString& namespaceURI, const OUString& qualifiedName) override;
+        virtual cpo::uno::Reference< css::xml::dom::XElement > SAL_CALL createElementNS(const OUString& namespaceURI, const OUString& qualifiedName) override;
 
         /**
         Creates an EntityReference object.
         */
-        virtual css::uno::Reference< css::xml::dom::XEntityReference > SAL_CALL createEntityReference(const OUString& name) override;
+        virtual cpo::uno::Reference< css::xml::dom::XEntityReference > SAL_CALL createEntityReference(const OUString& name) override;
 
         /**
         Creates a ProcessingInstruction node given the specified name and
         data strings.
         */
-        virtual css::uno::Reference< css::xml::dom::XProcessingInstruction > SAL_CALL createProcessingInstruction(
+        virtual cpo::uno::Reference< css::xml::dom::XProcessingInstruction > SAL_CALL createProcessingInstruction(
                 const OUString& target, const OUString& data) override;
 
         /**
         Creates a Text node given the specified string.
         */
-        virtual css::uno::Reference< css::xml::dom::XText > SAL_CALL createTextNode(const OUString& data) override;
+        virtual cpo::uno::Reference< css::xml::dom::XText > SAL_CALL createTextNode(const OUString& data) override;
 
         /**
         The Document Type Declaration (see DocumentType) associated with this
         document.
         */
-        virtual css::uno::Reference< css::xml::dom::XDocumentType > SAL_CALL getDoctype() override;
+        virtual cpo::uno::Reference< css::xml::dom::XDocumentType > SAL_CALL getDoctype() override;
 
         /**
         This is a convenience attribute that allows direct access to the child
         node that is the root element of the document.
         */
-        virtual css::uno::Reference< css::xml::dom::XElement > SAL_CALL getDocumentElement() override;
+        virtual cpo::uno::Reference< css::xml::dom::XElement > SAL_CALL getDocumentElement() override;
 
         /**
         Returns the Element whose ID is given by elementId.
         */
-        virtual css::uno::Reference< css::xml::dom::XElement > SAL_CALL getElementById(const OUString& elementId) override;
+        virtual cpo::uno::Reference< css::xml::dom::XElement > SAL_CALL getElementById(const OUString& elementId) override;
 
         /**
         Returns a NodeList of all the Elements with a given tag name in the
         order in which they are encountered in a preorder traversal of the
         Document tree.
         */
-        virtual css::uno::Reference< css::xml::dom::XNodeList > SAL_CALL getElementsByTagName(const OUString& tagname) override;
+        virtual cpo::uno::Reference< css::xml::dom::XNodeList > SAL_CALL getElementsByTagName(const OUString& tagname) override;
 
         /**
         Returns a NodeList of all the Elements with a given local name and
         namespace URI in the order in which they are encountered in a preorder
         traversal of the Document tree.
         */
-        virtual css::uno::Reference< css::xml::dom::XNodeList > SAL_CALL getElementsByTagNameNS(const OUString& namespaceURI, const OUString& localName) override;
+        virtual cpo::uno::Reference< css::xml::dom::XNodeList > SAL_CALL getElementsByTagNameNS(const OUString& namespaceURI, const OUString& localName) override;
 
         /**
         The DOMImplementation object that handles this document.
         */
-        virtual css::uno::Reference< css::xml::dom::XDOMImplementation > SAL_CALL getImplementation() override;
+        virtual cpo::uno::Reference< css::xml::dom::XDOMImplementation > SAL_CALL getImplementation() override;
 
         /**
         Imports a node from another document to this document.
         */
-        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL importNode(const css::uno::Reference< css::xml::dom::XNode >& importedNode, bool deep) override;
+        virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL importNode(const cpo::uno::Reference< css::xml::dom::XNode >& importedNode, bool deep) override;
 
         // XDocumentEvent
-        virtual css::uno::Reference< css::xml::dom::events::XEvent > SAL_CALL createEvent(const OUString& eventType) override;
+        virtual cpo::uno::Reference< css::xml::dom::events::XEvent > SAL_CALL createEvent(const OUString& eventType) override;
 
         // XActiveDataControl,
         // see https://api.libreoffice.org/docs/common/ref/com/sun/star/io/XActiveDataControl.html
-        virtual void SAL_CALL addListener(const css::uno::Reference< css::io::XStreamListener >& aListener ) override;
-        virtual void SAL_CALL removeListener(const css::uno::Reference< css::io::XStreamListener >& aListener ) override;
+        virtual void SAL_CALL addListener(const cpo::uno::Reference< css::io::XStreamListener >& aListener ) override;
+        virtual void SAL_CALL removeListener(const cpo::uno::Reference< css::io::XStreamListener >& aListener ) override;
         virtual void SAL_CALL start() override;
         virtual void SAL_CALL terminate() override;
 
         // XActiveDataSource
         // see https://api.libreoffice.org/docs/common/ref/com/sun/star/io/XActiveDataSource.html
-        virtual void SAL_CALL setOutputStream(  const css::uno::Reference< css::io::XOutputStream >& aStream ) override;
-        virtual css::uno::Reference< css::io::XOutputStream > SAL_CALL getOutputStream() override;
+        virtual void SAL_CALL setOutputStream(  const cpo::uno::Reference< css::io::XOutputStream >& aStream ) override;
+        virtual cpo::uno::Reference< css::io::XOutputStream > SAL_CALL getOutputStream() override;
 
         // ---- resolve uno inheritance problems...
         // overrides for XNode base
         virtual OUString SAL_CALL getNodeName() override;
         virtual OUString SAL_CALL getNodeValue() override;
-        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL cloneNode(bool deep) override;
+        virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL cloneNode(bool deep) override;
         // --- delegation for XNode base.
-        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL appendChild(const css::uno::Reference< css::xml::dom::XNode >& newChild) override
+        virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL appendChild(const cpo::uno::Reference< css::xml::dom::XNode >& newChild) override
         {
             return CNode::appendChild(newChild);
         }
-        virtual css::uno::Reference< css::xml::dom::XNamedNodeMap > SAL_CALL getAttributes() override
+        virtual cpo::uno::Reference< css::xml::dom::XNamedNodeMap > SAL_CALL getAttributes() override
         {
             return CNode::getAttributes();
         }
-        virtual css::uno::Reference< css::xml::dom::XNodeList > SAL_CALL getChildNodes() override
+        virtual cpo::uno::Reference< css::xml::dom::XNodeList > SAL_CALL getChildNodes() override
         {
             return CNode::getChildNodes();
         }
-        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL getFirstChild() override
+        virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL getFirstChild() override
         {
             return CNode::getFirstChild();
         }
-        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL getLastChild() override
+        virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL getLastChild() override
         {
             return CNode::getLastChild();
         }
@@ -259,7 +259,7 @@ namespace DOM
         {
             return CNode::getNamespaceURI();
         }
-        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL getNextSibling() override
+        virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL getNextSibling() override
         {
             return CNode::getNextSibling();
         }
@@ -267,11 +267,11 @@ namespace DOM
         {
             return CNode::getNodeType();
         }
-        virtual css::uno::Reference< css::xml::dom::XDocument > SAL_CALL getOwnerDocument() override
+        virtual cpo::uno::Reference< css::xml::dom::XDocument > SAL_CALL getOwnerDocument() override
         {
             return CNode::getOwnerDocument();
         }
-        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL getParentNode() override
+        virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL getParentNode() override
         {
             return CNode::getParentNode();
         }
@@ -279,7 +279,7 @@ namespace DOM
         {
            return CNode::getPrefix();
         }
-        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL getPreviousSibling() override
+        virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL getPreviousSibling() override
         {
             return CNode::getPreviousSibling();
         }
@@ -291,8 +291,8 @@ namespace DOM
         {
             return CNode::hasChildNodes();
         }
-        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL insertBefore(
-                const css::uno::Reference< css::xml::dom::XNode >& newChild, const css::uno::Reference< css::xml::dom::XNode >& refChild) override
+        virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL insertBefore(
+                const cpo::uno::Reference< css::xml::dom::XNode >& newChild, const cpo::uno::Reference< css::xml::dom::XNode >& refChild) override
         {
             return CNode::insertBefore(newChild, refChild);
         }
@@ -304,12 +304,12 @@ namespace DOM
         {
             CNode::normalize();
         }
-        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL removeChild(const css::uno::Reference< css::xml::dom::XNode >& oldChild) override
+        virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL removeChild(const cpo::uno::Reference< css::xml::dom::XNode >& oldChild) override
         {
             return CNode::removeChild(oldChild);
         }
-        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL replaceChild(
-                const css::uno::Reference< css::xml::dom::XNode >& newChild, const css::uno::Reference< css::xml::dom::XNode >& oldChild) override
+        virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL replaceChild(
+                const cpo::uno::Reference< css::xml::dom::XNode >& newChild, const cpo::uno::Reference< css::xml::dom::XNode >& oldChild) override
         {
             return CNode::replaceChild(newChild, oldChild);
         }
@@ -324,12 +324,12 @@ namespace DOM
 
         // css::xml::sax::XSAXSerializable
         virtual void SAL_CALL serialize(
-            const css::uno::Reference< css::xml::sax::XDocumentHandler >& i_xHandler,
+            const cpo::uno::Reference< css::xml::sax::XDocumentHandler >& i_xHandler,
             const cpo::uno::Sequence< css::beans::StringPair >& i_rNamespaces) override;
 
         // css::xml::sax::XFastSAXSerializable
-        virtual void SAL_CALL fastSerialize( const css::uno::Reference< css::xml::sax::XFastDocumentHandler >& handler,
-                                             const css::uno::Reference< css::xml::sax::XFastTokenHandler >& tokenHandler,
+        virtual void SAL_CALL fastSerialize( const cpo::uno::Reference< css::xml::sax::XFastDocumentHandler >& handler,
+                                             const cpo::uno::Reference< css::xml::sax::XFastTokenHandler >& tokenHandler,
                                              const cpo::uno::Sequence< css::beans::StringPair >& i_rNamespaces,
                                              const cpo::uno::Sequence< css::beans::Pair< OUString, sal_Int32 > >& namespaces ) override;
     };

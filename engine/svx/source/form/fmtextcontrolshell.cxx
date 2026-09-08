@@ -68,7 +68,7 @@ namespace svx
 
 
     using namespace ::com::sun::star;
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
 using namespace cpo::uno;
     using namespace ::com::sun::star::form;
     using namespace ::com::sun::star::form::runtime;
@@ -445,7 +445,7 @@ using namespace cpo::uno;
             {
                 Reference< XPropertySet > xModelProps;
                 if ( _rxControl.is() )
-                    xModelProps.set(_rxControl->getModel(), css::uno::UNO_QUERY);
+                    xModelProps.set(_rxControl->getModel(), cpo::uno::UNO_QUERY);
                 Reference< XPropertySetInfo > xModelPropInfo;
                 if ( xModelProps.is() )
                     xModelPropInfo = xModelProps->getPropertySetInfo();
@@ -1162,7 +1162,7 @@ using namespace cpo::uno;
 
         // remember this control
         m_xActiveControl = _rxControl;
-        m_xActiveTextComponent.set(_rxControl, css::uno::UNO_QUERY);
+        m_xActiveTextComponent.set(_rxControl, cpo::uno::UNO_QUERY);
         m_bActiveControlIsReadOnly = lcl_determineReadOnly( m_xActiveControl );
         m_bActiveControlIsRichText = lcl_isRichText( m_xActiveControl );
 

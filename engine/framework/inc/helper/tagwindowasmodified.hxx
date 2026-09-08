@@ -52,13 +52,13 @@ class TagWindowAsModified final : public  ::cppu::WeakImplHelper<
     private:
 
         /// reference to the frame, where we listen for new loaded documents for updating our own xModel reference
-        css::uno::Reference< css::frame::XFrame > m_xFrame;
+        cpo::uno::Reference< css::frame::XFrame > m_xFrame;
 
         /// reference to the frame container window, where we must set the tag
         VclPtr<vcl::Window> m_xWindow;
 
         /// we list on the model for modify events
-        css::uno::Reference< css::util::XModifiable > m_xModel;
+        cpo::uno::Reference< css::util::XModifiable > m_xModel;
 
     // interface
 
@@ -85,7 +85,7 @@ class TagWindowAsModified final : public  ::cppu::WeakImplHelper<
     private:
 
         // @todo document me
-        void impl_update(const css::uno::Reference< css::frame::XFrame >& xFrame);
+        void impl_update(const cpo::uno::Reference< css::frame::XFrame >& xFrame);
 
 }; // class TagWindowAsModified
 

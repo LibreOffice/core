@@ -42,7 +42,7 @@ namespace framework{
 const ::sal_Int32 INVALID_ICON_ID = -1;
 const ::sal_Int32 DEFAULT_ICON_ID =  0;
 
-TitleBarUpdate::TitleBarUpdate(css::uno::Reference< cpo::uno::XComponentContext >  xContext)
+TitleBarUpdate::TitleBarUpdate(cpo::uno::Reference< cpo::uno::XComponentContext >  xContext)
     : m_xContext              (std::move(xContext                     ))
 {
 }
@@ -54,7 +54,7 @@ TitleBarUpdate::~TitleBarUpdate()
 void TitleBarUpdate::initialize(const cpo::uno::Sequence< cpo::uno::Any >& lArguments)
 {
     // check arguments
-    css::uno::Reference< css::frame::XFrame > xFrame;
+    cpo::uno::Reference< css::frame::XFrame > xFrame;
     if (!lArguments.hasElements())
         throw css::lang::IllegalArgumentException(
                 u"Empty argument list!"_ustr,
@@ -77,7 +77,7 @@ void TitleBarUpdate::initialize(const cpo::uno::Sequence< cpo::uno::Any >& lArgu
     // start listening
     xFrame->addFrameActionListener(this);
 
-    css::uno::Reference< css::frame::XTitleChangeBroadcaster > xBroadcaster(xFrame, css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::frame::XTitleChangeBroadcaster > xBroadcaster(xFrame, cpo::uno::UNO_QUERY);
     if (xBroadcaster.is ())
         xBroadcaster->addTitleChangeListener (this);
 }
@@ -103,7 +103,7 @@ void TitleBarUpdate::titleChanged(const css::frame::TitleChangedEvent& /* aEvent
 
 void TitleBarUpdate::disposing(const css::lang::EventObject&)
 {
-    css::uno::Reference< css::frame::XFrame > xFrame(m_xFrame.get(), css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::frame::XFrame > xFrame(m_xFrame.get(), cpo::uno::UNO_QUERY);
     if (xFrame.is())
         xFrame->removeFrameActionListener(this);
 
@@ -112,9 +112,9 @@ void TitleBarUpdate::disposing(const css::lang::EventObject&)
 
 //http://live.gnome.org/GnomeShell/ApplicationBased
 //http://msdn.microsoft.com/en-us/library/dd378459(v=VS.85).aspx
-void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::frame::XFrame >& xFrame)
+void TitleBarUpdate::impl_updateApplicationID(const cpo::uno::Reference< css::frame::XFrame >& xFrame)
 {
-    css::uno::Reference< css::awt::XWindow > xWindow = xFrame->getContainerWindow ();
+    cpo::uno::Reference< css::awt::XWindow > xWindow = xFrame->getContainerWindow ();
     if ( ! xWindow.is() )
         return;
 
@@ -122,7 +122,7 @@ void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::fr
     OUString sApplicationID;
     try
     {
-        css::uno::Reference< css::frame::XModuleManager2 > xModuleManager =
+        cpo::uno::Reference< css::frame::XModuleManager2 > xModuleManager =
             css::frame::ModuleManager::create( m_xContext );
 
         OUString sDesktopName;
@@ -167,7 +167,7 @@ void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::fr
     // <- VCL SYNCHRONIZED
 }
 
-bool TitleBarUpdate::implst_getModuleInfo(const css::uno::Reference< css::frame::XFrame >& xFrame,
+bool TitleBarUpdate::implst_getModuleInfo(const cpo::uno::Reference< css::frame::XFrame >& xFrame,
                                                 TModuleInfo&                               rInfo )
 {
     if ( ! xFrame.is ())
@@ -175,7 +175,7 @@ bool TitleBarUpdate::implst_getModuleInfo(const css::uno::Reference< css::frame:
 
     try
     {
-        css::uno::Reference< css::frame::XModuleManager2 > xModuleManager =
+        cpo::uno::Reference< css::frame::XModuleManager2 > xModuleManager =
             css::frame::ModuleManager::create( m_xContext );
 
         rInfo.sID = xModuleManager->identify(xFrame);
@@ -196,10 +196,10 @@ bool TitleBarUpdate::implst_getModuleInfo(const css::uno::Reference< css::frame:
 
 void TitleBarUpdate::impl_forceUpdate()
 {
-    css::uno::Reference< css::frame::XFrame > xFrame;
+    cpo::uno::Reference< css::frame::XFrame > xFrame;
     {
         SolarMutexGuard g;
-        xFrame.set(m_xFrame.get(), css::uno::UNO_QUERY);
+        xFrame.set(m_xFrame.get(), cpo::uno::UNO_QUERY);
     }
 
     // frame already gone ? We hold it weak only ...
@@ -207,7 +207,7 @@ void TitleBarUpdate::impl_forceUpdate()
         return;
 
     // no window -> no chance to set/update title and icon
-    css::uno::Reference< css::awt::XWindow > xWindow = xFrame->getContainerWindow();
+    cpo::uno::Reference< css::awt::XWindow > xWindow = xFrame->getContainerWindow();
     if ( ! xWindow.is())
         return;
 
@@ -218,10 +218,10 @@ void TitleBarUpdate::impl_forceUpdate()
 #endif
 }
 
-void TitleBarUpdate::impl_updateIcon(const css::uno::Reference< css::frame::XFrame >& xFrame)
+void TitleBarUpdate::impl_updateIcon(const cpo::uno::Reference< css::frame::XFrame >& xFrame)
 {
-    css::uno::Reference< css::frame::XController > xController = xFrame->getController      ();
-    css::uno::Reference< css::awt::XWindow >       xWindow     = xFrame->getContainerWindow ();
+    cpo::uno::Reference< css::frame::XController > xController = xFrame->getController      ();
+    cpo::uno::Reference< css::awt::XWindow >       xWindow     = xFrame->getContainerWindow ();
 
     if (
         ( ! xController.is() ) ||
@@ -235,12 +235,12 @@ void TitleBarUpdate::impl_updateIcon(const css::uno::Reference< css::frame::XFra
 
     // b) try to find information on controller property set directly
     //    Don't forget to catch possible exceptions - because these property is an optional one!
-    css::uno::Reference< css::beans::XPropertySet > xSet( xController, css::uno::UNO_QUERY );
+    cpo::uno::Reference< css::beans::XPropertySet > xSet( xController, cpo::uno::UNO_QUERY );
     if ( xSet.is() )
     {
         try
         {
-            css::uno::Reference< css::beans::XPropertySetInfo > const xPSI( xSet->getPropertySetInfo(), css::uno::UNO_SET_THROW );
+            cpo::uno::Reference< css::beans::XPropertySetInfo > const xPSI( xSet->getPropertySetInfo(), cpo::uno::UNO_SET_THROW );
             if ( xPSI->hasPropertyByName( u"IconId"_ustr ) )
                 xSet->getPropertyValue( u"IconId"_ustr ) >>= nIcon;
         }
@@ -277,7 +277,7 @@ void TitleBarUpdate::impl_updateIcon(const css::uno::Reference< css::frame::XFra
         WorkWindow* pWorkWindow = static_cast<WorkWindow*>(pWindow.get());
         pWorkWindow->SetIcon( static_cast<sal_uInt16>(nIcon) );
 
-        css::uno::Reference< css::frame::XModel > xModel = xController->getModel();
+        cpo::uno::Reference< css::frame::XModel > xModel = xController->getModel();
         OUString aURL;
         if( xModel.is() )
             aURL = xModel->getURL();
@@ -287,14 +287,14 @@ void TitleBarUpdate::impl_updateIcon(const css::uno::Reference< css::frame::XFra
 }
 
 // static
-void TitleBarUpdate::impl_updateTitle(const css::uno::Reference< css::frame::XFrame >& xFrame)
+void TitleBarUpdate::impl_updateTitle(const cpo::uno::Reference< css::frame::XFrame >& xFrame)
 {
     // no window ... no chance to set any title -> return
-    css::uno::Reference< css::awt::XWindow > xWindow = xFrame->getContainerWindow ();
+    cpo::uno::Reference< css::awt::XWindow > xWindow = xFrame->getContainerWindow ();
     if ( ! xWindow.is() )
         return;
 
-    css::uno::Reference< css::frame::XTitle > xTitle(xFrame, css::uno::UNO_QUERY);
+    cpo::uno::Reference< css::frame::XTitle > xTitle(xFrame, cpo::uno::UNO_QUERY);
     if ( ! xTitle.is() )
         return;
 

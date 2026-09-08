@@ -39,33 +39,33 @@
 class CancelJobsThread : public osl::Thread
 {
     public:
-        explicit CancelJobsThread( std::list< css::uno::Reference< css::util::XCancellable > >&& rJobs )
+        explicit CancelJobsThread( std::list< cpo::uno::Reference< css::util::XCancellable > >&& rJobs )
             : maJobs( std::move(rJobs) ),
               mbAllJobsCancelled( false ),
               mbStopped( false )
         {
         }
 
-        void addJobs( std::list< css::uno::Reference< css::util::XCancellable > >& rJobs );
+        void addJobs( std::list< cpo::uno::Reference< css::util::XCancellable > >& rJobs );
         bool allJobsCancelled() const;
         void stopWhenAllJobsCancelled();
 
     private:
         bool existJobs() const;
 
-        css::uno::Reference< css::util::XCancellable > getNextJob();
+        cpo::uno::Reference< css::util::XCancellable > getNextJob();
 
         bool stopped() const;
         virtual void SAL_CALL run() override;
         mutable std::mutex maMutex;
 
-        std::list< css::uno::Reference< css::util::XCancellable > > maJobs;
+        std::list< cpo::uno::Reference< css::util::XCancellable > > maJobs;
 
         bool mbAllJobsCancelled;
         bool mbStopped;
 };
 
-void CancelJobsThread::addJobs( std::list< css::uno::Reference< css::util::XCancellable > >& rJobs )
+void CancelJobsThread::addJobs( std::list< cpo::uno::Reference< css::util::XCancellable > >& rJobs )
 {
     std::scoped_lock aGuard(maMutex);
 
@@ -94,9 +94,9 @@ void CancelJobsThread::stopWhenAllJobsCancelled()
     mbStopped = true;
 }
 
-css::uno::Reference< css::util::XCancellable > CancelJobsThread::getNextJob()
+cpo::uno::Reference< css::util::XCancellable > CancelJobsThread::getNextJob()
 {
-    css::uno::Reference< css::util::XCancellable > xRet;
+    cpo::uno::Reference< css::util::XCancellable > xRet;
 
     {
         std::scoped_lock aGuard(maMutex);
@@ -126,7 +126,7 @@ void SAL_CALL CancelJobsThread::run()
     {
         while ( existJobs() )
         {
-            css::uno::Reference< css::util::XCancellable > aJob( getNextJob() );
+            cpo::uno::Reference< css::util::XCancellable > aJob( getNextJob() );
             if ( aJob.is() )
                 aJob->cancel();
         }
@@ -147,7 +147,7 @@ class TerminateOfficeThread : public osl::Thread
 {
     public:
         TerminateOfficeThread( CancelJobsThread const & rCancelJobsThread,
-                               css::uno::Reference< cpo::uno::XComponentContext >  xContext )
+                               cpo::uno::Reference< cpo::uno::XComponentContext >  xContext )
             : mrCancelJobsThread( rCancelJobsThread ),
               mbStopOfficeTermination( false ),
               mxContext(std::move( xContext ))
@@ -167,7 +167,7 @@ class TerminateOfficeThread : public osl::Thread
         const CancelJobsThread& mrCancelJobsThread;
         bool mbStopOfficeTermination;
 
-        css::uno::Reference< cpo::uno::XComponentContext > mxContext;
+        cpo::uno::Reference< cpo::uno::XComponentContext > mxContext;
 };
 
 void TerminateOfficeThread::StopOfficeTermination()
@@ -202,9 +202,9 @@ void SAL_CALL TerminateOfficeThread::run()
 
 void TerminateOfficeThread::PerformOfficeTermination()
 {
-    css::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create(mxContext);
+    cpo::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create(mxContext);
 
-    css::uno::Reference< css::container::XElementAccess > xList = xDesktop->getFrames();
+    cpo::uno::Reference< css::container::XElementAccess > xList = xDesktop->getFrames();
     if ( !xList.is() )
     {
         OSL_FAIL( "<TerminateOfficeThread::PerformOfficeTermination()> - no XElementAccess!" );
@@ -224,7 +224,7 @@ void SAL_CALL TerminateOfficeThread::onTerminated()
         delete this;
 }
 
-FinalThreadManager::FinalThreadManager(css::uno::Reference< cpo::uno::XComponentContext > context)
+FinalThreadManager::FinalThreadManager(cpo::uno::Reference< cpo::uno::XComponentContext > context)
     : m_xContext(std::move(context)),
       mpTerminateOfficeThread( nullptr ),
       mbRegisteredAtDesktop( false )
@@ -234,8 +234,8 @@ FinalThreadManager::FinalThreadManager(css::uno::Reference< cpo::uno::XComponent
 
 void FinalThreadManager::registerAsListenerAtDesktop()
 {
-    css::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create(m_xContext);
-    xDesktop->addTerminateListener( css::uno::Reference< css::frame::XTerminateListener >( this ) );
+    cpo::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create(m_xContext);
+    xDesktop->addTerminateListener( cpo::uno::Reference< css::frame::XTerminateListener >( this ) );
 }
 
 FinalThreadManager::~FinalThreadManager()
@@ -285,7 +285,7 @@ cpo::uno::Sequence< OUString > SAL_CALL FinalThreadManager::getSupportedServiceN
 }
 
 // css::util::XJobManager:
-void SAL_CALL FinalThreadManager::registerJob(const css::uno::Reference< css::util::XCancellable > & Job)
+void SAL_CALL FinalThreadManager::registerJob(const cpo::uno::Reference< css::util::XCancellable > & Job)
 {
     osl::MutexGuard aGuard(maMutex);
 
@@ -298,7 +298,7 @@ void SAL_CALL FinalThreadManager::registerJob(const css::uno::Reference< css::ut
     }
 }
 
-void SAL_CALL FinalThreadManager::releaseJob(const css::uno::Reference< css::util::XCancellable > & Job)
+void SAL_CALL FinalThreadManager::releaseJob(const cpo::uno::Reference< css::util::XCancellable > & Job)
 {
     osl::MutexGuard aGuard(maMutex);
 
@@ -307,7 +307,7 @@ void SAL_CALL FinalThreadManager::releaseJob(const css::uno::Reference< css::uti
 
 void SAL_CALL FinalThreadManager::cancelAllJobs()
 {
-    std::list< css::uno::Reference< css::util::XCancellable > > aThreads;
+    std::list< cpo::uno::Reference< css::util::XCancellable > > aThreads;
     {
         osl::MutexGuard aGuard(maMutex);
 
@@ -405,7 +405,7 @@ void SAL_CALL FinalThreadManager::notifyTermination( const css::lang::EventObjec
     }
 
     // get reference of this
-    css::uno::Reference< cpo::uno::XInterface > aOwnRef( getXWeak());
+    cpo::uno::Reference< cpo::uno::XInterface > aOwnRef( getXWeak());
     // notify <SwThreadJoiner> to release its reference
     SwThreadJoiner::ReleaseThreadJoiner();
 }

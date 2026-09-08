@@ -140,7 +140,7 @@ protected:
     using               StorageObjectBase::construct;
 
     virtual void        implDumpStream(
-                            const css::uno::Reference< css::io::XInputStream >& rxStrm,
+                            const cpo::uno::Reference< css::io::XInputStream >& rxStrm,
                             const OUString& rStrgPath,
                             const OUString& rStrmName,
                             const OUString& rSysFileName ) override;
@@ -679,7 +679,7 @@ public:
 
 protected:
     virtual void        implDumpStream(
-                            const css::uno::Reference< css::io::XInputStream >& rxStrm,
+                            const cpo::uno::Reference< css::io::XInputStream >& rxStrm,
                             const OUString& rStrgPath,
                             const OUString& rStrmName,
                             const OUString& rSysFileName ) override;
@@ -768,7 +768,7 @@ public:
 
 protected:
     virtual void        implDumpStream(
-                            const css::uno::Reference< css::io::XInputStream >& rxStrm,
+                            const cpo::uno::Reference< css::io::XInputStream >& rxStrm,
                             const OUString& rStrgPath,
                             const OUString& rStrmName,
                             const OUString& rSysFileName ) override;
@@ -789,7 +789,7 @@ public:
 
 protected:
     virtual void        implDumpStream(
-                            const css::uno::Reference< css::io::XInputStream >& rxStrm,
+                            const cpo::uno::Reference< css::io::XInputStream >& rxStrm,
                             const OUString& rStrgPath,
                             const OUString& rStrmName,
                             const OUString& rSysFileName ) override;
@@ -806,7 +806,7 @@ public:
 
 protected:
     virtual void        implDumpStream(
-                            const css::uno::Reference< css::io::XInputStream >& rxStrm,
+                            const cpo::uno::Reference< css::io::XInputStream >& rxStrm,
                             const OUString& rStrgPath,
                             const OUString& rStrmName,
                             const OUString& rSysFileName ) override;

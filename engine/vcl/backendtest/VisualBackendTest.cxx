@@ -31,6 +31,7 @@
 #include <test/outputdevice.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 static void drawBitmapCentered(tools::Rectangle const& rRect, const Bitmap& aBitmap,
                         vcl::RenderContext& rRenderContext)

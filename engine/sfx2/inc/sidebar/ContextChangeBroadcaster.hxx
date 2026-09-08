@@ -35,8 +35,8 @@ public:
 
     void Initialize (const OUString& rsContextName);
 
-    void Activate (const css::uno::Reference<css::frame::XFrame>& rxFrame);
-    void Deactivate (const css::uno::Reference<css::frame::XFrame>& rxFrame);
+    void Activate (const cpo::uno::Reference<css::frame::XFrame>& rxFrame);
+    void Deactivate (const cpo::uno::Reference<css::frame::XFrame>& rxFrame);
 
     /** Enable or disable the broadcaster.
         @param bIsEnabled
@@ -51,11 +51,11 @@ private:
     bool mbIsBroadcasterEnabled;
 
     void BroadcastContextChange (
-        const css::uno::Reference<css::frame::XFrame>& rxFrame,
+        const cpo::uno::Reference<css::frame::XFrame>& rxFrame,
         const OUString& rsModuleName,
         const OUString& rsContextName);
     static OUString GetModuleName (
-        const css::uno::Reference<css::frame::XFrame>& rxFrame);
+        const cpo::uno::Reference<css::frame::XFrame>& rxFrame);
 };
 
 

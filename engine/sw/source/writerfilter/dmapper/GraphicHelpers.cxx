@@ -39,6 +39,7 @@
 namespace writerfilter::dmapper {
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 PositionHandler::PositionHandler( std::pair<OUString, OUString>& rPositionOffsets, std::pair<OUString, OUString>& rAligns ) :
 LoggedProperties("PositionHandler"),

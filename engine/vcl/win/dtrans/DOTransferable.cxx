@@ -42,7 +42,7 @@
 
 using namespace osl;
 using namespace cppu;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::io;
@@ -220,7 +220,7 @@ CDOTransferable::CDOTransferable(const Reference<XComponentContext>& rxContext,
 
 CDOTransferable::CDOTransferable(
     const Reference<XComponentContext>& rxContext,
-    const css::uno::Reference<css::datatransfer::clipboard::XClipboard>& xClipboard,
+    const cpo::uno::Reference<css::datatransfer::clipboard::XClipboard>& xClipboard,
     const std::vector<sal_uInt32>& rFormats)
     : m_xClipboard(xClipboard)
     , m_xContext(rxContext)

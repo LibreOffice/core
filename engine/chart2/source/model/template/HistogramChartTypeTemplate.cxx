@@ -25,6 +25,7 @@
 #include <cpo/uno/XComponentContext.hpp>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace
 {

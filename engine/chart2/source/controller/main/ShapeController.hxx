@@ -36,7 +36,7 @@ class ShapeController: public FeatureCommandDispatchBase
     friend class ControllerCommandDispatch;
 
 public:
-    ShapeController( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext, ChartController* pController );
+    ShapeController( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext, ChartController* pController );
     virtual ~ShapeController() override;
 
 protected:

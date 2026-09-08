@@ -142,7 +142,7 @@ void vcl::unohelper::DragAndDropWrapper::dropActionChanged( const css::datatrans
 }
 
 void
-vcl::OleDnDHelper(const css::uno::Reference<css::lang::XInitialization>& xDnD, const sal_IntPtr pWin, DragOrDrop eDoD)
+vcl::OleDnDHelper(const cpo::uno::Reference<css::lang::XInitialization>& xDnD, const sal_IntPtr pWin, DragOrDrop eDoD)
 {
     if (pWin && xDnD)
     {

@@ -24,7 +24,7 @@
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/awt/Point.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <tools/color.hxx>
 #include <vcl/unohelp.hxx>
@@ -33,6 +33,7 @@
 #include <test/a11y/XAccessibleComponentTester.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 /**
  * @brief Checks the component's bounds
@@ -199,8 +200,8 @@ void XAccessibleComponentTester::testAccessibleAtPoint()
                                    "parent",
                                    bDirectChild);
 
-            css::uno::Reference<css::accessibility::XAccessibleComponent> xComponentAtPoint(
-                xAccAtPoint->getAccessibleContext(), css::uno::UNO_QUERY_THROW);
+            cpo::uno::Reference<css::accessibility::XAccessibleComponent> xComponentAtPoint(
+                xAccAtPoint->getAccessibleContext(), cpo::uno::UNO_QUERY_THROW);
             const bool bContainsPoint
                 = vcl::unohelper::ConvertToVCLRect(xComponentAtPoint->getBounds())
                       .Contains(Point(childBounds.X, childBounds.Y));

@@ -61,7 +61,7 @@ using namespace ::dbaccess;
 using namespace ::dbtools;
 using namespace ::comphelper;
 using namespace ::connectivity;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
@@ -306,7 +306,7 @@ cpo::uno::Sequence< cpo::uno::Type > OSingleSelectQueryComposer::getTypes()
     );
 }
 
-css::uno::Reference< css::beans::XPropertySetInfo >  OSingleSelectQueryComposer::getPropertySetInfo()
+cpo::uno::Reference< css::beans::XPropertySetInfo >  OSingleSelectQueryComposer::getPropertySetInfo()
 {
     Reference< XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;

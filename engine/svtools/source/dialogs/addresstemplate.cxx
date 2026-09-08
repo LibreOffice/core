@@ -58,7 +58,7 @@
 
 namespace svt
 {
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
 using namespace cpo::uno;
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::ui::dialogs;
@@ -759,7 +759,7 @@ void AssignmentPersistentData::ImplCommit()
             }
             else
             {
-                xDS.set(m_pImpl->m_xTransientDataSource, css::uno::UNO_QUERY);
+                xDS.set(m_pImpl->m_xTransientDataSource, cpo::uno::UNO_QUERY);
             }
 
             // build the connection
@@ -830,7 +830,7 @@ void AssignmentPersistentData::ImplCommit()
                 if (m_xCurrentDatasourceTables->hasByName(sSelectedTable))
                     xSuppTableCols.set(
                         m_xCurrentDatasourceTables->getByName(sSelectedTable),
-                        css::uno::UNO_QUERY);
+                        cpo::uno::UNO_QUERY);
                 Reference< XNameAccess > xColumns;
                 if (xSuppTableCols.is())
                     xColumns = xSuppTableCols->getColumns();

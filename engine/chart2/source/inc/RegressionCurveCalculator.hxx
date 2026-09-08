@@ -36,10 +36,10 @@ public:
     virtual ~RegressionCurveCalculator() override;
 
     static bool isLinearScaling(
-        const css::uno::Reference< css::chart2::XScaling >& xScaling );
+        const cpo::uno::Reference< css::chart2::XScaling >& xScaling );
 
     static bool isLogarithmicScaling(
-        const css::uno::Reference< css::chart2::XScaling >& xScaling );
+        const cpo::uno::Reference< css::chart2::XScaling >& xScaling );
 
     // ____ XRegressionCurveCalculator ____
     virtual void setRegressionProperties(
@@ -59,8 +59,8 @@ public:
         double min,
         double max,
         sal_Int32 nPointCount,
-        const css::uno::Reference< css::chart2::XScaling >& xScalingX,
-        const css::uno::Reference< css::chart2::XScaling >& xScalingY,
+        const cpo::uno::Reference< css::chart2::XScaling >& xScalingX,
+        const cpo::uno::Reference< css::chart2::XScaling >& xScalingY,
         bool bMaySkipPointsInCalculation ) override;
 
     virtual double getCorrelationCoefficient() override;
@@ -68,7 +68,7 @@ public:
     virtual OUString getRepresentation() override;
 
     virtual OUString getFormattedRepresentation(
-        const css::uno::Reference< css::util::XNumberFormatsSupplier >& xNumFmtSupplier,
+        const cpo::uno::Reference< css::util::XNumberFormatsSupplier >& xNumFmtSupplier,
         sal_Int32 nNumberFormatKey, sal_Int32 nFormulaLength ) override;
 
     virtual void setXYNames(
@@ -76,11 +76,11 @@ public:
 
 protected:
     virtual OUString ImplGetRepresentation(
-        const css::uno::Reference< css::util::XNumberFormatter >& xNumFormatter,
+        const cpo::uno::Reference< css::util::XNumberFormatter >& xNumFormatter,
         sal_Int32 nNumberFormatKey, sal_Int32* pFormulaLength = nullptr ) const = 0;
 
     static OUString getFormattedString(
-        const css::uno::Reference< css::util::XNumberFormatter >& xNumFormatter,
+        const cpo::uno::Reference< css::util::XNumberFormatter >& xNumFormatter,
         sal_Int32 nNumberFormatKey,
         double fNumber,
         const sal_Int32* pStringLength );

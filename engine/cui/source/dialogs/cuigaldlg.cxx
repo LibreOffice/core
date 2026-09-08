@@ -40,7 +40,7 @@
 #include <bitmaps.hlst>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/syslocale.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/sdbc/XResultSet.hpp>
@@ -63,7 +63,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::ui::dialogs;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::cpo::uno;
 
 
@@ -121,19 +121,19 @@ void SearchThread::ImplSearch( const INetURLObject& rStartURL,
 
     try
     {
-        css::uno::Reference< XCommandEnvironment > xEnv;
+        cpo::uno::Reference< XCommandEnvironment > xEnv;
         Content aCnt( rStartURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), xEnv, comphelper::getProcessComponentContext() );
         Sequence< OUString > aProps( 2 );
 
         aProps.getArray()[ 0 ] = u"IsFolder"_ustr;
         aProps.getArray()[ 1 ] = u"IsDocument"_ustr;
-        css::uno::Reference< XResultSet > xResultSet(
+        cpo::uno::Reference< XResultSet > xResultSet(
             aCnt.createCursor( aProps ) );
 
         if( xResultSet.is() )
         {
-            css::uno::Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY_THROW );
-            css::uno::Reference< XRow > xRow( xResultSet, UNO_QUERY_THROW );
+            cpo::uno::Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY_THROW );
+            cpo::uno::Reference< XRow > xRow( xResultSet, UNO_QUERY_THROW );
 
             while( xResultSet->next() && schedule() )
             {
@@ -807,7 +807,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickSearchHdl, weld::Button&, void)
     try
     {
         // setup folder picker
-        const css::uno::Reference< XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
+        const cpo::uno::Reference< XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
         xFolderPicker = sfx2::createFolderPicker(xContext, GetFrameWeld());
 
         OUString  aDlgPathName( SvtPathOptions().GetGraphicPath() );
@@ -815,7 +815,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickSearchHdl, weld::Button&, void)
 
         aPreviewTimer.Stop();
 
-        css::uno::Reference< XAsynchronousExecutableDialog > xAsyncDlg( xFolderPicker, UNO_QUERY );
+        cpo::uno::Reference< XAsynchronousExecutableDialog > xAsyncDlg( xFolderPicker, UNO_QUERY );
         if ( xAsyncDlg.is() )
             xAsyncDlg->startExecuteModal( xDialogListener );
         else

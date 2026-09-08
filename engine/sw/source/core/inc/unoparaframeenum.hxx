@@ -70,6 +70,6 @@ struct SwXParaFrameEnumeration
     static rtl::Reference<SwXParaFrameEnumeration> Create(const SwPaM& rPaM, const enum ParaFrameMode eParaFrameMode, SwFrameFormat* const pFormat = nullptr);
 };
 
-css::uno::Reference<css::text::XTextContent> FrameClientToXTextContent(sw::FrameClient* pClient);
+cpo::uno::Reference<css::text::XTextContent> FrameClientToXTextContent(sw::FrameClient* pClient);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

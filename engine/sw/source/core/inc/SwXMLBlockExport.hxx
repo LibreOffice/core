@@ -30,10 +30,10 @@ private:
 
 public:
     SwXMLBlockListExport(
-        const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& rContext,
         SwXMLTextBlocks & rBlocks,
         const OUString &rFileName,
-        css::uno::Reference< css::xml::sax::XDocumentHandler> const &rHandler);
+        cpo::uno::Reference< css::xml::sax::XDocumentHandler> const &rHandler);
 
     ErrCode exportDoc( enum ::xmloff::token::XMLTokenEnum eClass = ::xmloff::token::XML_TOKEN_INVALID ) override;
     void ExportAutoStyles_() override {}
@@ -48,10 +48,10 @@ private:
 
 public:
     SwXMLTextBlockExport(
-        const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& rContext,
         SwXMLTextBlocks & rBlocks,
         const OUString &rFileName,
-        css::uno::Reference< css::xml::sax::XDocumentHandler> const &rHandler);
+        cpo::uno::Reference< css::xml::sax::XDocumentHandler> const &rHandler);
 
     ErrCode exportDoc(enum ::xmloff::token::XMLTokenEnum /*eClass*/) override { return ERRCODE_NONE; }
     void exportDoc(std::u16string_view rText);

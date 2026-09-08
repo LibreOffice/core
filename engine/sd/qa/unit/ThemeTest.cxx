@@ -28,6 +28,7 @@
 #include <theme/ThemeColorChanger.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 class ThemeTest : public SdModelTestBase
 {
@@ -148,7 +149,7 @@ CPPUNIT_TEST_FIXTURE(ThemeTest, testThemeChange)
     uno::Reference<beans::XPropertySet> xMasterPage(xDrawPage->getMasterPage(), uno::UNO_QUERY);
     xMasterPage->setPropertyValue(u"Theme"_ustr, aTheme);
 
-    css::uno::Reference<css::drawing::XDrawPage> xDrawPageMaster(xMasterPage, uno::UNO_QUERY);
+    cpo::uno::Reference<css::drawing::XDrawPage> xDrawPageMaster(xMasterPage, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDrawPageMaster.is());
     auto* pMasterPage = GetSdrPageFromXDrawPage(xDrawPageMaster);
     auto pTheme = pMasterPage->getSdrPageProperties().getTheme();

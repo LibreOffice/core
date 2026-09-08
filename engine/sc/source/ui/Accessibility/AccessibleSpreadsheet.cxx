@@ -46,6 +46,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
+using namespace ::cpo;
 
 static bool CompMinCol(const std::pair<sal_uInt16,sal_uInt16> & pc1,const std::pair<sal_uInt16,sal_uInt16>  &pc2)
 {

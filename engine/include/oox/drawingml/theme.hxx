@@ -20,7 +20,7 @@
 #ifndef INCLUDED_OOX_DRAWINGML_THEME_HXX
 #define INCLUDED_OOX_DRAWINGML_THEME_HXX
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <oox/drawingml/clrscheme.hxx>
 #include <oox/drawingml/shape.hxx>
 #include <oox/dllapi.h>
@@ -103,10 +103,10 @@ public:
     Shape&                   getTxDef() { return maTxDef; }
     const Shape&             getTxDef() const { return maTxDef; }
 
-    const css::uno::Reference<css::xml::dom::XDocument>& getFragment() const { return mxFragment; }
-    void                     setFragment( const css::uno::Reference< css::xml::dom::XDocument>& xRef ) { mxFragment=xRef; }
+    const cpo::uno::Reference<css::xml::dom::XDocument>& getFragment() const { return mxFragment; }
+    void                     setFragment( const cpo::uno::Reference< css::xml::dom::XDocument>& xRef ) { mxFragment=xRef; }
 
-    void addTheme(const css::uno::Reference<css::drawing::XDrawPage>& xDrawPage) const;
+    void addTheme(const cpo::uno::Reference<css::drawing::XDrawPage>& xDrawPage) const;
 
     void setTheme(std::shared_ptr<model::Theme> const& pTheme)
     {
@@ -131,7 +131,7 @@ private:
     Shape               maSpDef;
     Shape               maLnDef;
     Shape               maTxDef;
-    css::uno::Reference< css::xml::dom::XDocument> mxFragment;
+    cpo::uno::Reference< css::xml::dom::XDocument> mxFragment;
 
     std::shared_ptr<model::Theme> mpTheme;
 };

@@ -27,6 +27,7 @@
 typedef rtl::Reference<SwDocShell> SwDocShellRef;
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 /* Implementation of Filters test */
 

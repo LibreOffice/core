@@ -29,13 +29,13 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo::uno;
 
 namespace sc::sidebar {
 
 NumberFormatPropertyPanel::NumberFormatPropertyPanel(
     weld::Widget* pParent,
-    const css::uno::Reference<css::frame::XFrame>& rxFrame,
+    const cpo::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
     : PanelLayout(pParent,u"NumberFormatPropertyPanel"_ustr, u"modules/scalc/ui/sidebarnumberformat.ui"_ustr)
     , mxLbCategory(m_xBuilder->weld_combo_box(u"numberformatcombobox"_ustr))
@@ -147,7 +147,7 @@ IMPL_LINK_NOARG( NumberFormatPropertyPanel, NumFormatValueHdl, weld::SpinButton&
 
 std::unique_ptr<PanelLayout> NumberFormatPropertyPanel::Create (
     weld::Widget* pParent,
-    const css::uno::Reference<css::frame::XFrame>& rxFrame,
+    const cpo::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
 {
     if (pParent == nullptr)

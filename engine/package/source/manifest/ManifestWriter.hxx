@@ -33,13 +33,13 @@ class ManifestWriter: public ::cppu::WeakImplHelper
 >
 {
 private:
-    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 public:
-    ManifestWriter( const css::uno::Reference< cpo::uno::XComponentContext > & xContext );
+    ManifestWriter( const cpo::uno::Reference< cpo::uno::XComponentContext > & xContext );
     virtual ~ManifestWriter() override;
 
     // XManifestWriter
-    virtual void writeManifestSequence( const css::uno::Reference< css::io::XOutputStream >& rStream, const cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > >& rSequence ) override;
+    virtual void writeManifestSequence( const cpo::uno::Reference< css::io::XOutputStream >& rStream, const cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > >& rSequence ) override;
 
     // XServiceInfo
     virtual OUString getImplementationName(  ) override;

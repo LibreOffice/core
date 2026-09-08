@@ -34,9 +34,9 @@ public:
     virtual ~XMLTextShapeImportHelper() override;
 
     virtual void addShape(
-        css::uno::Reference< css::drawing::XShape >& rShape,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
-        css::uno::Reference< css::drawing::XShapes >& rShapes ) override final;
+        cpo::uno::Reference< css::drawing::XShape >& rShape,
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+        cpo::uno::Reference< css::drawing::XShapes >& rShapes ) override final;
 };
 
 #endif

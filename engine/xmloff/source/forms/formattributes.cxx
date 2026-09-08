@@ -28,7 +28,7 @@ using namespace xmloff::token;
 namespace xmloff
 {
 
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
 
     //= OAttributeMetaData
     OUString OAttributeMetaData::getCommonControlAttributeName(CCAFlags _nId)

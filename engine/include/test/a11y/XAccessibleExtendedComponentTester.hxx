@@ -21,17 +21,17 @@
 
 #include <test/testdllapi.hxx>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/accessibility/XAccessibleExtendedComponent.hpp>
 
 class OOO_DLLPUBLIC_TEST XAccessibleExtendedComponentTester
 {
 protected:
-    const css::uno::Reference<css::accessibility::XAccessibleExtendedComponent> mxExtendedComponent;
+    const cpo::uno::Reference<css::accessibility::XAccessibleExtendedComponent> mxExtendedComponent;
 
 public:
     XAccessibleExtendedComponentTester(
-        const css::uno::Reference<css::accessibility::XAccessibleExtendedComponent>&
+        const cpo::uno::Reference<css::accessibility::XAccessibleExtendedComponent>&
             extendedComponent)
         : mxExtendedComponent(extendedComponent)
     {

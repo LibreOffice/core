@@ -21,7 +21,7 @@
 class MSWorksImportFilter : public writerperfect::ImportFilter<OdtGenerator>
 {
 public:
-    explicit MSWorksImportFilter(const css::uno::Reference<cpo::uno::XComponentContext>& rxContext)
+    explicit MSWorksImportFilter(const cpo::uno::Reference<cpo::uno::XComponentContext>& rxContext)
         : writerperfect::ImportFilter<OdtGenerator>(rxContext)
     {
     }

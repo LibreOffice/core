@@ -25,7 +25,7 @@
 #include <oox/token/namespaces.hxx>
 
 using namespace ::oox::core;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 namespace oox::drawingml {
 

@@ -24,7 +24,7 @@
 
 #include <com/sun/star/io/BufferSizeExceededException.hpp>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::cpo::uno;
 
 

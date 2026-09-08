@@ -19,7 +19,7 @@
 #pragma once
 
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 namespace com::sun::star::beans { struct PropertyValue; }
@@ -60,10 +60,10 @@ public:
 
     OUString            HierarchicalDocumentName;
 
-    css::uno::Reference< css::io::XOutputStream >
+    cpo::uno::Reference< css::io::XOutputStream >
                         OutputStream; //a stream to receive the document data for saving
     bool                ISSET_OutputStream;
-    css::uno::Reference< css::io::XInputStream >
+    cpo::uno::Reference< css::io::XInputStream >
                         InputStream; //content of document.
     bool                ISSET_InputStream;
 
@@ -73,10 +73,10 @@ public:
     bool                ISSET_URL;
 
     // new framework objects
-    css::uno::Reference< css::embed::XStorage >
+    cpo::uno::Reference< css::embed::XStorage >
                         Storage;
     bool                ISSET_Storage;
-    css::uno::Reference< css::io::XStream >
+    cpo::uno::Reference< css::io::XStream >
                         Stream;
     bool                ISSET_Stream;
 

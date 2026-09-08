@@ -20,7 +20,7 @@
 #include "XMLSectionFootnoteConfigImport.hxx"
 
 #include <rtl/ustring.hxx>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <sal/log.hxx>
 #include <sax/tools/converter.hxx>
@@ -39,7 +39,7 @@ using namespace ::com::sun::star::style;
 
 using ::std::vector;
 using ::cpo::uno::Any;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 
 
 XMLSectionFootnoteConfigImport::XMLSectionFootnoteConfigImport(

@@ -22,10 +22,11 @@
 #include <xmloff/xmlnamespace.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace ::xmloff::token;
 
 SdXMLNotesContext::SdXMLNotesContext(
-    SdXMLImport& rImport, const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+    SdXMLImport& rImport, const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
     uno::Reference<drawing::XShapes> const& rShapes, bool ignorePageNumberInThumbnail)
     : SdXMLGenericPageContext(rImport, xAttrList, rShapes)
     , mbIgnorePageNumberInThumbnail(ignorePageNumberInThumbnail)

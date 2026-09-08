@@ -60,7 +60,7 @@ public:
     bool hasListStyleOnImport() const { return mbHasListStyleOnImport; }
 
     /// Set properties on xNumRules based on maListStyle, for all levels except nIgnoreLevel.
-    void pushToNumberingRules(const css::uno::Reference<css::container::XIndexReplace>& xNumRules,
+    void pushToNumberingRules(const cpo::uno::Reference<css::container::XIndexReplace>& xNumRules,
                               std::optional<size_t> nIgnoreLevel);
 
 #ifdef DBG_UTIL

@@ -46,23 +46,23 @@ public:
     virtual void setVisible( bool Visible ) override;
     virtual void setEnable( bool Enable ) override;
     virtual void setFocus(  ) override;
-    virtual void addWindowListener( const css::uno::Reference< css::awt::XWindowListener >& xListener ) override;
-    virtual void removeWindowListener( const css::uno::Reference< css::awt::XWindowListener >& xListener ) override;
-    virtual void addFocusListener( const css::uno::Reference< css::awt::XFocusListener >& xListener ) override;
-    virtual void removeFocusListener( const css::uno::Reference< css::awt::XFocusListener >& xListener ) override;
-    virtual void addKeyListener( const css::uno::Reference< css::awt::XKeyListener >& xListener ) override;
-    virtual void removeKeyListener( const css::uno::Reference< css::awt::XKeyListener >& xListener ) override;
-    virtual void addMouseListener( const css::uno::Reference< css::awt::XMouseListener >& xListener ) override;
-    virtual void removeMouseListener( const css::uno::Reference< css::awt::XMouseListener >& xListener ) override;
-    virtual void addMouseMotionListener( const css::uno::Reference< css::awt::XMouseMotionListener >& xListener ) override;
-    virtual void removeMouseMotionListener( const css::uno::Reference< css::awt::XMouseMotionListener >& xListener ) override;
-    virtual void addPaintListener( const css::uno::Reference< css::awt::XPaintListener >& xListener ) override;
-    virtual void removePaintListener( const css::uno::Reference< css::awt::XPaintListener >& xListener ) override;
+    virtual void addWindowListener( const cpo::uno::Reference< css::awt::XWindowListener >& xListener ) override;
+    virtual void removeWindowListener( const cpo::uno::Reference< css::awt::XWindowListener >& xListener ) override;
+    virtual void addFocusListener( const cpo::uno::Reference< css::awt::XFocusListener >& xListener ) override;
+    virtual void removeFocusListener( const cpo::uno::Reference< css::awt::XFocusListener >& xListener ) override;
+    virtual void addKeyListener( const cpo::uno::Reference< css::awt::XKeyListener >& xListener ) override;
+    virtual void removeKeyListener( const cpo::uno::Reference< css::awt::XKeyListener >& xListener ) override;
+    virtual void addMouseListener( const cpo::uno::Reference< css::awt::XMouseListener >& xListener ) override;
+    virtual void removeMouseListener( const cpo::uno::Reference< css::awt::XMouseListener >& xListener ) override;
+    virtual void addMouseMotionListener( const cpo::uno::Reference< css::awt::XMouseMotionListener >& xListener ) override;
+    virtual void removeMouseMotionListener( const cpo::uno::Reference< css::awt::XMouseMotionListener >& xListener ) override;
+    virtual void addPaintListener( const cpo::uno::Reference< css::awt::XPaintListener >& xListener ) override;
+    virtual void removePaintListener( const cpo::uno::Reference< css::awt::XPaintListener >& xListener ) override;
 
     // XComponent
     virtual void dispose(  ) override;
-    virtual void addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-    virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+    virtual void addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& xListener ) override;
+    virtual void removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
     // XServiceInfo
     virtual OUString getImplementationName(  ) override;

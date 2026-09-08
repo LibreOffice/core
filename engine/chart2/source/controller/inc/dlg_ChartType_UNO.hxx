@@ -31,14 +31,14 @@ class ChartTypeUnoDlg final : public ChartTypeUnoDlg_BASE
                         ,public ::comphelper::OPropertyArrayUsageHelper< ChartTypeUnoDlg >
 {
 public:
-    ChartTypeUnoDlg( const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
+    ChartTypeUnoDlg( const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext );
 
 private:
     virtual ~ChartTypeUnoDlg() override;
 
     // OGenericUnoDialog overridables
     virtual void implInitialize(const cpo::uno::Any& _rValue) override;
-    virtual std::unique_ptr<weld::DialogController> createDialog(const css::uno::Reference<css::awt::XWindow>& rParent) override;
+    virtual std::unique_ptr<weld::DialogController> createDialog(const cpo::uno::Reference<css::awt::XWindow>& rParent) override;
 
     // XTypeProvider
     virtual cpo::uno::Sequence<sal_Int8> getImplementationId(  ) override;
@@ -47,7 +47,7 @@ private:
     virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
     // XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo>  getPropertySetInfo() override;
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo>  getPropertySetInfo() override;
     virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
     // OPropertyArrayUsageHelper

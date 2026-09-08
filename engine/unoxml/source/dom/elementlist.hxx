@@ -28,7 +28,7 @@
 #include <sal/types.h>
 #include <rtl/ref.hxx>
 
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/XNodeList.hpp>
 #include <com/sun/star/xml/dom/events/XEvent.hpp>
@@ -76,10 +76,10 @@ namespace DOM
         /**
         Returns the indexth item in the collection.
         */
-        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL item(sal_Int32 index) override;
+        virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL item(sal_Int32 index) override;
 
         // XEventListener
-        virtual void SAL_CALL handleEvent(const css::uno::Reference< css::xml::dom::events::XEvent >& evt) override;
+        virtual void SAL_CALL handleEvent(const cpo::uno::Reference< css::xml::dom::events::XEvent >& evt) override;
     };
 
     class CElementList
@@ -103,13 +103,13 @@ namespace DOM
         /**
         Returns the indexth item in the collection.
         */
-        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL item(sal_Int32 index) override
+        virtual cpo::uno::Reference< css::xml::dom::XNode > SAL_CALL item(sal_Int32 index) override
         {
             return m_xImpl->item(index);
         }
 
         // XEventListener
-        virtual void SAL_CALL handleEvent(const css::uno::Reference< css::xml::dom::events::XEvent >& evt) override
+        virtual void SAL_CALL handleEvent(const cpo::uno::Reference< css::xml::dom::events::XEvent >& evt) override
         {
             m_xImpl->handleEvent(evt);
         }

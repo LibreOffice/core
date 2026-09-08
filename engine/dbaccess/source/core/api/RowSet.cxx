@@ -75,7 +75,7 @@ using namespace connectivity;
 using namespace comphelper;
 using namespace dbtools;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
@@ -332,7 +332,7 @@ void ORowSet::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rVal
             m_bOwnConnection = true;
             break;
         case PROPERTY_ID_TYPEMAP:
-            m_xTypeMap.set(m_aTypeMap, css::uno::UNO_QUERY);
+            m_xTypeMap.set(m_aTypeMap, cpo::uno::UNO_QUERY);
             break;
         case PROPERTY_ID_PROPCHANGE_NOTIFY:
             m_bPropChangeNotifyEnabled = ::cppu::any2bool(rValue);

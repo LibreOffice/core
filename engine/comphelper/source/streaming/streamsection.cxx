@@ -27,8 +27,8 @@ namespace comphelper
 {
 
 
-OStreamSection::OStreamSection(const css::uno::Reference< css::io::XDataInputStream >& _rxInput)
-    :m_xMarkStream(_rxInput, css::uno::UNO_QUERY)
+OStreamSection::OStreamSection(const cpo::uno::Reference< css::io::XDataInputStream >& _rxInput)
+    :m_xMarkStream(_rxInput, cpo::uno::UNO_QUERY)
     ,m_xInStream(_rxInput)
     ,m_nBlockStart(-1)
     ,m_nBlockLen(-1)
@@ -42,8 +42,8 @@ OStreamSection::OStreamSection(const css::uno::Reference< css::io::XDataInputStr
 }
 
 
-OStreamSection::OStreamSection(const css::uno::Reference< css::io::XDataOutputStream >& _rxOutput)
-    :m_xMarkStream(_rxOutput, css::uno::UNO_QUERY)
+OStreamSection::OStreamSection(const cpo::uno::Reference< css::io::XDataOutputStream >& _rxOutput)
+    :m_xMarkStream(_rxOutput, cpo::uno::UNO_QUERY)
     ,m_xOutStream(_rxOutput)
     ,m_nBlockStart(-1)
     ,m_nBlockLen(-1)

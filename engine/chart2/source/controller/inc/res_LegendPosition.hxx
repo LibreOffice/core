@@ -39,7 +39,7 @@ public:
     //constructor without Display checkbox
     LegendPositionResources(weld::Builder& rBuilder);
     //constructor inclusive Display checkbox
-    LegendPositionResources(weld::Builder& rBuilder, css::uno::Reference<
+    LegendPositionResources(weld::Builder& rBuilder, cpo::uno::Reference<
                        cpo::uno::XComponentContext> xCC );
     ~LegendPositionResources();
 
@@ -59,7 +59,7 @@ private:
     void PositionEnable();
 
 private:
-    css::uno::Reference< cpo::uno::XComponentContext>    m_xCC;
+    cpo::uno::Reference< cpo::uno::XComponentContext>    m_xCC;
     Link<LinkParamNone*,void> m_aChangeLink;
 
     std::unique_ptr<weld::CheckButton> m_xCbxShow;

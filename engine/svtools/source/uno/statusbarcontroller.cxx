@@ -35,7 +35,7 @@
 
 using namespace ::cppu;
 using namespace css::awt;
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace css::util;
 using namespace css::beans;
@@ -309,7 +309,7 @@ void StatusbarController::command(
 }
 
 void StatusbarController::paint(
-    const css::uno::Reference< css::awt::XGraphics >&,
+    const cpo::uno::Reference< css::awt::XGraphics >&,
     const css::awt::Rectangle&,
     ::sal_Int32 )
 {

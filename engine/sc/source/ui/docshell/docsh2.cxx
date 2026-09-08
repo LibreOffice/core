@@ -37,6 +37,7 @@
 #include <functional>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 bool ScDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
 {

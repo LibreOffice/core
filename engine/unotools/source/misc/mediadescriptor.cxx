@@ -51,7 +51,7 @@ namespace utl::MediaDescriptor {
 namespace {
 
 OUString removeFragment(OUString const & uri) {
-    css::uno::Reference< css::uri::XUriReference > ref(
+    cpo::uno::Reference< css::uri::XUriReference > ref(
         css::uri::UriReferenceFactory::create(
             comphelper::getProcessComponentContext())->
         parse(uri));
@@ -102,22 +102,22 @@ bool impl_openStreamWithURL(comphelper::SequenceAsHashMap& rMediaDescriptor, con
 
     // prepare the environment
     auto xOrgInteraction = rMediaDescriptor.getUnpackedValueOrDefault(
-        PROP_INTERACTIONHANDLER, css::uno::Reference<css::task::XInteractionHandler>());
+        PROP_INTERACTIONHANDLER, cpo::uno::Reference<css::task::XInteractionHandler>());
 
     auto xAuthenticationInteraction = rMediaDescriptor.getUnpackedValueOrDefault(
-        PROP_AUTHENTICATIONHANDLER, css::uno::Reference<css::task::XInteractionHandler>());
+        PROP_AUTHENTICATIONHANDLER, cpo::uno::Reference<css::task::XInteractionHandler>());
 
     rtl::Reference<comphelper::StillReadWriteInteraction> xInteraction
         = new comphelper::StillReadWriteInteraction(xOrgInteraction, xAuthenticationInteraction);
 
-    css::uno::Reference<css::ucb::XProgressHandler> xProgress;
+    cpo::uno::Reference<css::ucb::XProgressHandler> xProgress;
     rtl::Reference<ucbhelper::CommandEnvironment> xCommandEnv
         = new ucbhelper::CommandEnvironment(xInteraction, xProgress);
 
     // try to create the content
     // no content -> no stream => return immediately with FALSE
     ucbhelper::Content aContent;
-    css::uno::Reference<css::ucb::XContent> xContent;
+    cpo::uno::Reference<css::ucb::XContent> xContent;
     try
     {
         aContent = ucbhelper::Content(sURL, xCommandEnv, comphelper::getProcessComponentContext());
@@ -142,8 +142,8 @@ bool impl_openStreamWithURL(comphelper::SequenceAsHashMap& rMediaDescriptor, con
     // (if it's allowed to do so).
     // But handle errors in a "hidden mode". Because
     // we try it readonly later - if read/write is not an option.
-    css::uno::Reference<css::io::XStream> xStream;
-    css::uno::Reference<css::io::XInputStream> xInputStream;
+    cpo::uno::Reference<css::io::XStream> xStream;
+    cpo::uno::Reference<css::io::XInputStream> xInputStream;
 
     bool bReadOnly = false;
     bool bModeRequestedExplicitly = false;
@@ -197,7 +197,7 @@ bool impl_openStreamWithURL(comphelper::SequenceAsHashMap& rMediaDescriptor, con
 
         try
         {
-            css::uno::Reference<css::ucb::XContentIdentifier> xContId(
+            cpo::uno::Reference<css::ucb::XContentIdentifier> xContId(
                 aContent.get().is() ? aContent.get()->getIdentifier() : nullptr);
 
             if (xContId.is())
@@ -280,19 +280,19 @@ bool impl_openStreamWithURL(comphelper::SequenceAsHashMap& rMediaDescriptor, con
             if the given PostData stream is <NULL/>.
  */
 bool impl_openStreamWithPostData(comphelper::SequenceAsHashMap& rMediaDescriptor,
-                                 const css::uno::Reference<css::io::XInputStream>& _rxPostData)
+                                 const cpo::uno::Reference<css::io::XInputStream>& _rxPostData)
 {
     if (!_rxPostData.is())
         throw css::lang::IllegalArgumentException(u"Found invalid PostData."_ustr,
-                                                  css::uno::Reference<cpo::uno::XInterface>(), 1);
+                                                  cpo::uno::Reference<cpo::uno::XInterface>(), 1);
 
     // PostData can't be used in read/write mode!
     rMediaDescriptor[PROP_READONLY] <<= true;
 
     // prepare the environment
     auto xInteraction = rMediaDescriptor.getUnpackedValueOrDefault(
-        PROP_INTERACTIONHANDLER, css::uno::Reference<css::task::XInteractionHandler>());
-    css::uno::Reference<css::ucb::XProgressHandler> xProgress;
+        PROP_INTERACTIONHANDLER, cpo::uno::Reference<css::task::XInteractionHandler>());
+    cpo::uno::Reference<css::ucb::XProgressHandler> xProgress;
     rtl::Reference<::ucbhelper::CommandEnvironment> xCommandEnv
         = new ::ucbhelper::CommandEnvironment(xInteraction, xProgress);
 
@@ -307,11 +307,11 @@ bool impl_openStreamWithPostData(comphelper::SequenceAsHashMap& rMediaDescriptor
     // url
     OUString sURL(rMediaDescriptor.getUnpackedValueOrDefault(PROP_URL, OUString()));
 
-    css::uno::Reference<css::io::XInputStream> xResultStream;
+    cpo::uno::Reference<css::io::XInputStream> xResultStream;
     try
     {
         // seek PostData stream to the beginning
-        css::uno::Reference<css::io::XSeekable> xSeek(_rxPostData, css::uno::UNO_QUERY);
+        cpo::uno::Reference<css::io::XSeekable> xSeek(_rxPostData, cpo::uno::UNO_QUERY);
         if (xSeek.is())
             xSeek->seek(0);
 
@@ -321,7 +321,7 @@ bool impl_openStreamWithPostData(comphelper::SequenceAsHashMap& rMediaDescriptor
         // use post command
         css::ucb::PostCommandArgument2 aPostArgument;
         aPostArgument.Source = _rxPostData;
-        css::uno::Reference<css::io::XActiveDataSink> xSink(new ucbhelper::ActiveDataSink);
+        cpo::uno::Reference<css::io::XActiveDataSink> xSink(new ucbhelper::ActiveDataSink);
         aPostArgument.Sink = xSink;
         aPostArgument.MediaType = sMediaType;
         aPostArgument.Referer
@@ -378,7 +378,7 @@ bool impl_addInputStream(comphelper::SequenceAsHashMap& rMediaDescriptor, bool b
         if (pIt != rMediaDescriptor.end())
         {
             const cpo::uno::Any& rPostData = pIt->second;
-            css::uno::Reference<css::io::XInputStream> xPostData;
+            cpo::uno::Reference<css::io::XInputStream> xPostData;
             rPostData >>= xPostData;
 
             return impl_openStreamWithPostData(rMediaDescriptor, xPostData);
@@ -388,7 +388,7 @@ bool impl_addInputStream(comphelper::SequenceAsHashMap& rMediaDescriptor, bool b
         OUString sURL = rMediaDescriptor.getUnpackedValueOrDefault(PROP_URL, OUString());
         if (sURL.isEmpty())
             throw cpo::uno::Exception(u"Found no URL."_ustr,
-                                      css::uno::Reference<cpo::uno::XInterface>());
+                                      cpo::uno::Reference<cpo::uno::XInterface>());
 
         return impl_openStreamWithURL(rMediaDescriptor, removeFragment(sURL), bLockFile);
     }
@@ -429,10 +429,10 @@ bool isStreamReadOnly(const comphelper::SequenceAsHashMap& rMediaDescriptor)
     // switch to readonly mode.
     try
     {
-        auto xContent = rMediaDescriptor.getUnpackedValueOrDefault(PROP_UCBCONTENT, css::uno::Reference< css::ucb::XContent >());
+        auto xContent = rMediaDescriptor.getUnpackedValueOrDefault(PROP_UCBCONTENT, cpo::uno::Reference< css::ucb::XContent >());
         if (xContent.is())
         {
-            css::uno::Reference< css::ucb::XContentIdentifier > xId = xContent->getIdentifier();
+            cpo::uno::Reference< css::ucb::XContentIdentifier > xId = xContent->getIdentifier();
             OUString aScheme;
             if (xId.is())
                 aScheme = xId->getContentProviderScheme();
@@ -527,7 +527,7 @@ cpo::uno::Sequence< css::beans::NamedValue > requestAndVerifyDocPassword(
     OUString aMediaPassword = rMediaDescriptor.getUnpackedValueOrDefault(
         PROP_PASSWORD, OUString() );
     auto xInteractHandler = rMediaDescriptor.getUnpackedValueOrDefault(
-        PROP_INTERACTIONHANDLER, css::uno::Reference< css::task::XInteractionHandler >() );
+        PROP_INTERACTIONHANDLER, cpo::uno::Reference< css::task::XInteractionHandler >() );
     OUString aDocumentName = rMediaDescriptor.getUnpackedValueOrDefault(
         PROP_URL, OUString() );
 

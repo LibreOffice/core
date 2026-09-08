@@ -55,7 +55,7 @@ namespace connectivity::parse
 
         virtual ~OParseColumn() override;
     public:
-        OParseColumn(const css::uno::Reference< css::beans::XPropertySet>& _xColumn, bool _bCase);
+        OParseColumn(const cpo::uno::Reference< css::beans::XPropertySet>& _xColumn, bool _bCase);
         OParseColumn(const OUString& Name,
                 const OUString& TypeName,
                 const OUString& DefaultValue,
@@ -85,9 +85,9 @@ namespace connectivity::parse
         */
         static ::rtl::Reference< OSQLColumns >
             createColumnsForResultSet(
-                const css::uno::Reference< css::sdbc::XResultSetMetaData >& _rxResMetaData,
-                const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _rxDBMetaData,
-                const css::uno::Reference< css::container::XNameAccess>& i_xQueryColumns
+                const cpo::uno::Reference< css::sdbc::XResultSetMetaData >& _rxResMetaData,
+                const cpo::uno::Reference< css::sdbc::XDatabaseMetaData >& _rxDBMetaData,
+                const cpo::uno::Reference< css::container::XNameAccess>& i_xQueryColumns
             );
 
         typedef std::map<OUString, int> StringMap;
@@ -96,8 +96,8 @@ namespace connectivity::parse
         */
         static rtl::Reference<OParseColumn>
             createColumnForResultSet(
-                const css::uno::Reference< css::sdbc::XResultSetMetaData >& _rxResMetaData,
-                const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _rxDBMetaData,
+                const cpo::uno::Reference< css::sdbc::XResultSetMetaData >& _rxResMetaData,
+                const cpo::uno::Reference< css::sdbc::XDatabaseMetaData >& _rxDBMetaData,
                 sal_Int32 _nColumnPos,
                 StringMap& _rColumns
             );
@@ -122,14 +122,14 @@ namespace connectivity::parse
         virtual ~OOrderColumn() override;
     public:
         OOrderColumn(
-            const css::uno::Reference< css::beans::XPropertySet>& _xColumn,
+            const cpo::uno::Reference< css::beans::XPropertySet>& _xColumn,
             const OUString& i_rOriginatingTableName,
             bool _bCase,
             bool _bAscending
         );
 
         OOrderColumn(
-            const css::uno::Reference< css::beans::XPropertySet>& _xColumn,
+            const cpo::uno::Reference< css::beans::XPropertySet>& _xColumn,
             bool _bCase,
             bool _bAscending
         );

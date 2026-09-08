@@ -23,7 +23,7 @@
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <basic/sbxvar.hxx>
 #include <rtl/ustring.hxx>
@@ -44,8 +44,8 @@ namespace com::sun::star {
     namespace drawing { class XShape; }
     namespace frame { class XModel; }
     namespace script { class XTypeConverter; }
-    namespace uno { class Exception; }
 }
+namespace cpo::uno { class Exception; }
 namespace cpo::uno { class XComponentContext; }
 
 class SfxObjectShell;
@@ -56,11 +56,11 @@ namespace ooo::vba
     {
         /// @throws css::lang::IllegalArgumentException
         template < class T >
-        css::uno::Reference< T > getXSomethingFromArgs( cpo::uno::Sequence< cpo::uno::Any > const & args, sal_Int32 nPos, bool bCanBeNull = true )
+        cpo::uno::Reference< T > getXSomethingFromArgs( cpo::uno::Sequence< cpo::uno::Any > const & args, sal_Int32 nPos, bool bCanBeNull = true )
         {
             if ( args.getLength() < ( nPos + 1) )
                 throw css::lang::IllegalArgumentException();
-            css::uno::Reference< T > aSomething( args[ nPos ], css::uno::UNO_QUERY );
+            cpo::uno::Reference< T > aSomething( args[ nPos ], cpo::uno::UNO_QUERY );
             if ( !bCanBeNull && !aSomething.is() )
                 throw css::lang::IllegalArgumentException();
             return aSomething;
@@ -69,28 +69,28 @@ namespace ooo::vba
         class XHelperInterface;
 
         /** Returns the VBA document implementation object representing the passed UNO document model. */
-        VBAHELPER_DLLPUBLIC css::uno::Reference< XHelperInterface > getVBADocument( const css::uno::Reference< css::frame::XModel >& xModel );
-        VBAHELPER_DLLPUBLIC css::uno::Reference< XHelperInterface > getUnoDocModule( std::u16string_view aModName, SfxObjectShell const * pShell );
+        VBAHELPER_DLLPUBLIC cpo::uno::Reference< XHelperInterface > getVBADocument( const cpo::uno::Reference< css::frame::XModel >& xModel );
+        VBAHELPER_DLLPUBLIC cpo::uno::Reference< XHelperInterface > getUnoDocModule( std::u16string_view aModName, SfxObjectShell const * pShell );
         /// @throws cpo::uno::RuntimeException
-        VBAHELPER_DLLPUBLIC SfxObjectShell* getSfxObjShell( const css::uno::Reference< css::frame::XModel >& xModel );
+        VBAHELPER_DLLPUBLIC SfxObjectShell* getSfxObjShell( const cpo::uno::Reference< css::frame::XModel >& xModel );
 
         /// @throws cpo::uno::RuntimeException
-        VBAHELPER_DLLPUBLIC css::uno::Reference< css::frame::XModel > getCurrentDoc( const OUString& sKey );
+        VBAHELPER_DLLPUBLIC cpo::uno::Reference< css::frame::XModel > getCurrentDoc( const OUString& sKey );
         /// @throws cpo::uno::RuntimeException
-        VBAHELPER_DLLPUBLIC css::uno::Reference< css::frame::XModel > getThisExcelDoc( const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
+        VBAHELPER_DLLPUBLIC cpo::uno::Reference< css::frame::XModel > getThisExcelDoc( const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext );
         /// @throws cpo::uno::RuntimeException
-        VBAHELPER_DLLPUBLIC css::uno::Reference< css::frame::XModel > getCurrentExcelDoc( const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
+        VBAHELPER_DLLPUBLIC cpo::uno::Reference< css::frame::XModel > getCurrentExcelDoc( const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext );
 
         /// @throws uno::RuntimeException
-        VBAHELPER_DLLPUBLIC css::uno::Reference< css::frame::XModel > getCurrentDocCtx( const OUString& ctxName, const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
+        VBAHELPER_DLLPUBLIC cpo::uno::Reference< css::frame::XModel > getCurrentDocCtx( const OUString& ctxName, const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext );
 
         /// @throws cpo::uno::RuntimeException
-        VBAHELPER_DLLPUBLIC css::uno::Reference< css::beans::XIntrospectionAccess > getIntrospectionAccess( const cpo::uno::Any& aObject );
+        VBAHELPER_DLLPUBLIC cpo::uno::Reference< css::beans::XIntrospectionAccess > getIntrospectionAccess( const cpo::uno::Any& aObject );
         /// @throws cpo::uno::RuntimeException
-        VBAHELPER_DLLPUBLIC css::uno::Reference< css::script::XTypeConverter > const & getTypeConverter( const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
+        VBAHELPER_DLLPUBLIC cpo::uno::Reference< css::script::XTypeConverter > const & getTypeConverter( const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext );
 
-        VBAHELPER_DLLPUBLIC void dispatchRequests( const css::uno::Reference< css::frame::XModel>& xModel, const OUString& aUrl );
-        VBAHELPER_DLLPUBLIC void dispatchRequests (const css::uno::Reference< css::frame::XModel>& xModel, const OUString & aUrl, const cpo::uno::Sequence< css::beans::PropertyValue >& sProps );
+        VBAHELPER_DLLPUBLIC void dispatchRequests( const cpo::uno::Reference< css::frame::XModel>& xModel, const OUString& aUrl );
+        VBAHELPER_DLLPUBLIC void dispatchRequests (const cpo::uno::Reference< css::frame::XModel>& xModel, const OUString & aUrl, const cpo::uno::Sequence< css::beans::PropertyValue >& sProps );
         VBAHELPER_DLLPUBLIC void dispatchExecute(SfxViewShell const * pView, sal_uInt16 nSlot );
         VBAHELPER_DLLPUBLIC sal_Int32 OORGBToXLRGB( sal_Int32 );
         inline sal_Int32 OORGBToXLRGB( ::Color n ) { return OORGBToXLRGB(sal_Int32(n)); }
@@ -120,10 +120,10 @@ namespace ooo::vba
         /// @throws cpo::uno::RuntimeException
         VBAHELPER_DLLPUBLIC OUString getAnyAsString( const cpo::uno::Any& pvargItem );
         VBAHELPER_DLLPUBLIC OUString VBAToRegexp(const OUString &rIn); // needs to be in a uno service ( already this code is duplicated in basic )
-        VBAHELPER_DLLPUBLIC double PointsToPixels( const css::uno::Reference< css::awt::XDevice >& xDevice, double fPoints, bool bVertical);
-        VBAHELPER_DLLPUBLIC double PixelsToPoints( const css::uno::Reference< css::awt::XDevice >& xDevice, double fPixels, bool bVertical);
-        VBAHELPER_DLLPUBLIC PointerStyle getPointerStyle( const css::uno::Reference< css::frame::XModel >& );
-        VBAHELPER_DLLPUBLIC void setCursorHelper( const css::uno::Reference< css::frame::XModel >& xModel, PointerStyle nPointer, bool bOverWrite );
+        VBAHELPER_DLLPUBLIC double PointsToPixels( const cpo::uno::Reference< css::awt::XDevice >& xDevice, double fPoints, bool bVertical);
+        VBAHELPER_DLLPUBLIC double PixelsToPoints( const cpo::uno::Reference< css::awt::XDevice >& xDevice, double fPixels, bool bVertical);
+        VBAHELPER_DLLPUBLIC PointerStyle getPointerStyle( const cpo::uno::Reference< css::frame::XModel >& );
+        VBAHELPER_DLLPUBLIC void setCursorHelper( const cpo::uno::Reference< css::frame::XModel >& xModel, PointerStyle nPointer, bool bOverWrite );
         /// @throws cpo::uno::RuntimeException
         VBAHELPER_DLLPUBLIC void setDefaultPropByIntrospection( const cpo::uno::Any& aObj, const cpo::uno::Any& aValue  );
         VBAHELPER_DLLPUBLIC cpo::uno::Any getPropertyValue( const cpo::uno::Sequence< css::beans::PropertyValue >& aProp, const OUString& aName );
@@ -173,11 +173,11 @@ public:
 
 class VBAHELPER_DLLPUBLIC ShapeHelper
 {
-    css::uno::Reference< css::drawing::XShape > xShape;
+    cpo::uno::Reference< css::drawing::XShape > xShape;
 public:
     /// @throws css::script::BasicErrorException
     /// @throws cpo::uno::RuntimeException
-    ShapeHelper( css::uno::Reference< css::drawing::XShape > _xShape);
+    ShapeHelper( cpo::uno::Reference< css::drawing::XShape > _xShape);
 
     double getHeight() const;
     void setHeight(double _fheight);
@@ -193,7 +193,7 @@ class VBAHELPER_DLLPUBLIC ConcreteXShapeGeometryAttributes final : public Abstra
 {
     ShapeHelper m_aShapeHelper;
 public:
-    ConcreteXShapeGeometryAttributes( const css::uno::Reference< css::drawing::XShape >& xShape );
+    ConcreteXShapeGeometryAttributes( const cpo::uno::Reference< css::drawing::XShape >& xShape );
     virtual double getLeft() const override;
     virtual void setLeft( double nLeft ) override;
     virtual double getTop() const override;
@@ -209,7 +209,7 @@ class VBAHELPER_DLLPUBLIC UserFormGeometryHelper final : public AbstractGeometry
 {
 public:
     UserFormGeometryHelper(
-        const css::uno::Reference< css::awt::XControl >& xControl,
+        const cpo::uno::Reference< css::awt::XControl >& xControl,
         double fOffsetX, double fOffsetY );
     virtual double getLeft() const override;
     virtual void setLeft( double fLeft ) override;
@@ -233,9 +233,9 @@ private:
     void implSetSize( double fSize, bool bHeight, bool bOuter );
 
 private:
-    css::uno::Reference< css::awt::XWindow > mxWindow;
-    css::uno::Reference< css::beans::XPropertySet > mxModelProps;
-    css::uno::Reference< css::awt::XUnitConversion > mxUnitConv;
+    cpo::uno::Reference< css::awt::XWindow > mxWindow;
+    cpo::uno::Reference< css::beans::XPropertySet > mxModelProps;
+    cpo::uno::Reference< css::awt::XUnitConversion > mxUnitConv;
     double mfOffsetX;
     double mfOffsetY;
     bool mbDialog;

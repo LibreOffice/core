@@ -33,21 +33,21 @@ class MSOLEDialogObjectCreator : public ::cppu::WeakImplHelper<
                                                 css::embed::XEmbedObjectClipboardCreator,
                                                 css::lang::XServiceInfo >
 {
-    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
 public:
     explicit MSOLEDialogObjectCreator(
-        const css::uno::Reference< cpo::uno::XComponentContext >& xContext )
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext )
     : m_xContext( xContext )
     {
         OSL_ENSURE( xContext.is(), "No service manager is provided!" );
     }
 
     // XInsertObjectDialog
-    virtual css::embed::InsertedObjectInfo createInstanceByDialog( const css::uno::Reference< css::embed::XStorage >& xStorage, const OUString& sEntName, const cpo::uno::Sequence< css::beans::PropertyValue >& lObjArgs ) override;
+    virtual css::embed::InsertedObjectInfo createInstanceByDialog( const cpo::uno::Reference< css::embed::XStorage >& xStorage, const OUString& sEntName, const cpo::uno::Sequence< css::beans::PropertyValue >& lObjArgs ) override;
 
     // XEmbedObjectClipboardCreator
-    virtual css::embed::InsertedObjectInfo createInstanceInitFromClipboard( const css::uno::Reference< css::embed::XStorage >& xStorage, const OUString& sEntryName, const cpo::uno::Sequence< css::beans::PropertyValue >& aObjectArgs ) override;
+    virtual css::embed::InsertedObjectInfo createInstanceInitFromClipboard( const cpo::uno::Reference< css::embed::XStorage >& xStorage, const OUString& sEntryName, const cpo::uno::Sequence< css::beans::PropertyValue >& aObjectArgs ) override;
 
     // XServiceInfo
     virtual OUString getImplementationName() override;

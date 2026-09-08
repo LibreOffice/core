@@ -31,6 +31,7 @@
 #include <mutex>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace tdoc_ucp;
 
 namespace tdoc_ucp

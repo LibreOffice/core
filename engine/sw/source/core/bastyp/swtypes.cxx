@@ -24,6 +24,7 @@
 #include <vcl/graph.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 Size GetGraphicSizeTwip(const Graphic& rGraphic, vcl::RenderContext* pOutDev)
 {

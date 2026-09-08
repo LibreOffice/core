@@ -37,7 +37,7 @@
 #include <cpo/uno/Any.hxx>
 #include <cpo/uno/DeploymentException.hpp>
 #include <cpo/uno/Exception.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Type.hxx>
@@ -65,7 +65,7 @@ class Service:
         css::util::XFlushable >
 {
 public:
-    explicit Service(css::uno::Reference< cpo::uno::XComponentContext > const & context);
+    explicit Service(cpo::uno::Reference< cpo::uno::XComponentContext > const & context);
 
 private:
     Service(const Service&) = delete;
@@ -94,7 +94,7 @@ private:
 
     virtual void destroy() override;
 
-    virtual css::uno::Reference< css::registry::XRegistryKey >
+    virtual cpo::uno::Reference< css::registry::XRegistryKey >
     getRootKey() override;
 
     virtual bool isReadOnly() override;
@@ -104,10 +104,10 @@ private:
     virtual void flush() override;
 
     virtual void addFlushListener(
-        css::uno::Reference< css::util::XFlushListener > const &) override;
+        cpo::uno::Reference< css::util::XFlushListener > const &) override;
 
     virtual void removeFlushListener(
-        css::uno::Reference< css::util::XFlushListener > const &) override;
+        cpo::uno::Reference< css::util::XFlushListener > const &) override;
 
     void checkValid();
 
@@ -115,9 +115,9 @@ private:
 
     void doClose();
 
-    css::uno::Reference< css::lang::XMultiServiceFactory > provider_;
+    cpo::uno::Reference< css::lang::XMultiServiceFactory > provider_;
     std::mutex mutex_;
-    css::uno::Reference< cpo::uno::XInterface > access_;
+    cpo::uno::Reference< cpo::uno::XInterface > access_;
     OUString url_;
     bool readOnly_;
 
@@ -179,10 +179,10 @@ private:
 
     virtual void setBinaryValue(cpo::uno::Sequence< sal_Int8 > const &) override;
 
-    virtual css::uno::Reference< css::registry::XRegistryKey > openKey(
+    virtual cpo::uno::Reference< css::registry::XRegistryKey > openKey(
         OUString const & aKeyName) override;
 
-    virtual css::uno::Reference< css::registry::XRegistryKey >
+    virtual cpo::uno::Reference< css::registry::XRegistryKey >
     createKey(OUString const &) override;
 
     virtual void closeKey() override;
@@ -190,7 +190,7 @@ private:
     virtual void deleteKey(OUString const &) override;
 
     virtual
-    cpo::uno::Sequence< css::uno::Reference< css::registry::XRegistryKey > >
+    cpo::uno::Sequence< cpo::uno::Reference< css::registry::XRegistryKey > >
     openKeys() override;
 
     virtual cpo::uno::Sequence< OUString > getKeyNames() override;
@@ -210,7 +210,7 @@ private:
 };
 
 Service::Service(
-    css::uno::Reference< cpo::uno::XComponentContext > const & context)
+    cpo::uno::Reference< cpo::uno::XComponentContext > const & context)
     : readOnly_(false)
 {
     assert(context.is());
@@ -218,7 +218,7 @@ Service::Service(
         provider_.set(
             context->getServiceManager()->createInstanceWithContext(
                 u"com.sun.star.configuration.DefaultProvider"_ustr, context),
-            css::uno::UNO_QUERY_THROW);
+            cpo::uno::UNO_QUERY_THROW);
     } catch (cpo::uno::RuntimeException &) {
         throw;
     } catch (cpo::uno::Exception & e) {
@@ -283,7 +283,7 @@ void Service::destroy()
         getXWeak());
 }
 
-css::uno::Reference< css::registry::XRegistryKey > Service::getRootKey()
+cpo::uno::Reference< css::registry::XRegistryKey > Service::getRootKey()
 {
     std::unique_lock g(mutex_);
     checkValid();
@@ -311,7 +311,7 @@ void Service::flush()
 }
 
 void Service::addFlushListener(
-    css::uno::Reference< css::util::XFlushListener > const &)
+    cpo::uno::Reference< css::util::XFlushListener > const &)
 {
     throw cpo::uno::RuntimeException(
         u"com.sun.star.configuration.ConfigurationRegistry: not implemented"_ustr,
@@ -319,7 +319,7 @@ void Service::addFlushListener(
 }
 
 void Service::removeFlushListener(
-    css::uno::Reference< css::util::XFlushListener > const &)
+    cpo::uno::Reference< css::util::XFlushListener > const &)
 {
     throw cpo::uno::RuntimeException(
         u"com.sun.star.configuration.ConfigurationRegistry: not implemented"_ustr,
@@ -349,7 +349,7 @@ void Service::doClose() {
 OUString RegistryKey::getKeyName() {
     std::unique_lock g(service_.mutex_);
     service_.checkValid_RuntimeException();
-    css::uno::Reference< css::container::XNamed > named;
+    cpo::uno::Reference< css::container::XNamed > named;
     if (value_ >>= named) {
         return named->getName();
     }
@@ -548,22 +548,22 @@ void RegistryKey::setBinaryValue(cpo::uno::Sequence< sal_Int8 > const &)
         getXWeak());
 }
 
-css::uno::Reference< css::registry::XRegistryKey > RegistryKey::openKey(
+cpo::uno::Reference< css::registry::XRegistryKey > RegistryKey::openKey(
     OUString const & aKeyName)
 {
     std::unique_lock g(service_.mutex_);
     service_.checkValid_RuntimeException();
-    css::uno::Reference< css::container::XHierarchicalNameAccess > access;
+    cpo::uno::Reference< css::container::XHierarchicalNameAccess > access;
     if (value_ >>= access) {
         try {
             return new RegistryKey(
                 service_, access->getByHierarchicalName(aKeyName));
         } catch (css::container::NoSuchElementException &) {}
     }
-    return css::uno::Reference< css::registry::XRegistryKey >();
+    return cpo::uno::Reference< css::registry::XRegistryKey >();
 }
 
-css::uno::Reference< css::registry::XRegistryKey > RegistryKey::createKey(
+cpo::uno::Reference< css::registry::XRegistryKey > RegistryKey::createKey(
     OUString const &)
 {
     throw cpo::uno::RuntimeException(
@@ -584,7 +584,7 @@ void RegistryKey::deleteKey(OUString const &)
         getXWeak());
 }
 
-cpo::uno::Sequence< css::uno::Reference< css::registry::XRegistryKey > >
+cpo::uno::Sequence< cpo::uno::Reference< css::registry::XRegistryKey > >
 RegistryKey::openKeys()
 {
     throw cpo::uno::RuntimeException(

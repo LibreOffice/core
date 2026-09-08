@@ -69,6 +69,7 @@
 #include "ndsect.hxx"
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace {
     class SwIntrnlSectRefLink : public SwBaseLink

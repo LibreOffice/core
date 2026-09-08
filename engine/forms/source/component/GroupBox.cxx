@@ -27,7 +27,7 @@
 namespace frm
 {
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
@@ -71,7 +71,7 @@ OGroupBoxModel::~OGroupBoxModel()
 }
 
 
-css::uno::Reference< css::util::XCloneable > OGroupBoxModel::createClone()
+cpo::uno::Reference< css::util::XCloneable > OGroupBoxModel::createClone()
 {
     rtl::Reference<OGroupBoxModel> pClone = new OGroupBoxModel(this, getContext());
     pClone->clonedFrom(this);

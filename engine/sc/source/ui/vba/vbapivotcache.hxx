@@ -27,9 +27,9 @@ typedef InheritedHelperInterfaceWeakImpl<ov::excel::XPivotCache > PivotCacheImpl
 
 class ScVbaPivotCache : public PivotCacheImpl_BASE
 {
-    css::uno::Reference< css::sheet::XDataPilotTable > m_xTable;
+    cpo::uno::Reference< css::sheet::XDataPilotTable > m_xTable;
 public:
-    ScVbaPivotCache( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext, css::uno::Reference< css::sheet::XDataPilotTable > xTable );
+    ScVbaPivotCache( const cpo::uno::Reference< ov::XHelperInterface >& xParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext, cpo::uno::Reference< css::sheet::XDataPilotTable > xTable );
 
     virtual void SAL_CALL Refresh() override;
     // XHelperInterface

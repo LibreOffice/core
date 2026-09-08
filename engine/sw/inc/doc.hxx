@@ -213,9 +213,9 @@ class SwDoc final
     SwDBData    maDBData;                //< database descriptor
     OUString    msTOIAutoMarkURL;        //< URL of table of index AutoMark file
     std::vector<OUString> m_PatternNames; //< Array for names of document-templates
-    css::uno::Reference<css::container::XNameContainer>
+    cpo::uno::Reference<css::container::XNameContainer>
         mxXForms;                        //< container with XForms models
-    mutable css::uno::Reference< css::linguistic2::XProofreadingIterator > m_xGCIterator;
+    mutable cpo::uno::Reference< css::linguistic2::XProofreadingIterator > m_xGCIterator;
 
     const std::unique_ptr< ::sw::mark::MarkManager> mpMarkManager;
     const std::unique_ptr< ::sw::MetaFieldManager > m_pMetaFieldManager;
@@ -293,9 +293,9 @@ class SwDoc final
     std::unique_ptr<sw::GrammarContact> mpGrammarContact; //< for grammar checking in paragraphs during editing
     std::unique_ptr<sw::OnlineAccessibilityCheck> mpOnlineAccessibilityCheck;
 
-    css::uno::Reference< css::script::vba::XVBAEventProcessor > mxVbaEvents;
-    css::uno::Reference< ooo::vba::word::XFind > mxVbaFind;
-    css::uno::Reference<css::container::XNameContainer> m_xTemplateToProjectCache;
+    cpo::uno::Reference< css::script::vba::XVBAEventProcessor > mxVbaEvents;
+    cpo::uno::Reference< ooo::vba::word::XFind > mxVbaFind;
+    cpo::uno::Reference<css::container::XNameContainer> m_xTemplateToProjectCache;
 
     /// Table styles (autoformats that are applied with table changes).
     std::unique_ptr<SwTableAutoFormatTable> m_pTableStyles;
@@ -675,12 +675,12 @@ public:
         spell-checking/hyphenating/word-counting
     */
     cpo::uno::Any
-            Spell( SwPaM&, css::uno::Reference< css::linguistic2::XSpellChecker > const &,
+            Spell( SwPaM&, cpo::uno::Reference< css::linguistic2::XSpellChecker > const &,
                    sal_uInt16* pPageCnt, sal_uInt16* pPageSt, bool bGrammarCheck,
                    SwRootFrame const* pLayout, // for grammar-check
                    SwConversionArgs *pConvArgs = nullptr ) const;
 
-    css::uno::Reference< css::linguistic2::XHyphenatedWord >
+    cpo::uno::Reference< css::linguistic2::XHyphenatedWord >
             Hyphenate( SwPaM *pPam, const Point &rCursorPos,
                          sal_uInt16* pPageCnt, sal_uInt16* pPageSt );
 
@@ -875,7 +875,7 @@ public:
     /** Replace all user defined document properties with xSourceDocProps.
         Convenience function used by ReplaceDocumentProperties to skip some UNO calls.
      */
-    void ReplaceUserDefinedDocumentProperties( const css::uno::Reference< css::document::XDocumentProperties >& xSourceDocProps );
+    void ReplaceUserDefinedDocumentProperties( const cpo::uno::Reference< css::document::XDocumentProperties >& xSourceDocProps );
 
     /** Replace document properties with those from rSource.
 
@@ -1429,7 +1429,7 @@ public:
     SW_DLLPUBLIC bool AllowAccessLink() const;
 
     // Pointer to storage of SfxDocShells. Can be 0!!!
-    SW_DLLPUBLIC css::uno::Reference< css::embed::XStorage > GetDocStorage();
+    SW_DLLPUBLIC cpo::uno::Reference< css::embed::XStorage > GetDocStorage();
 
     // Query / set flag indicating if document is loaded asynchronously at this moment.
     bool IsInLoadAsynchron() const             { return mbInLoadAsynchron; }
@@ -1732,10 +1732,10 @@ public:
     // access methods for XForms model(s)
 
     // access container for XForms model; will be NULL if !isXForms()
-    const css::uno::Reference<css::container::XNameContainer>&
+    const cpo::uno::Reference<css::container::XNameContainer>&
         getXForms() const { return mxXForms;}
 
-    css::uno::Reference< css::linguistic2::XProofreadingIterator > const & GetGCIterator() const;
+    cpo::uno::Reference< css::linguistic2::XProofreadingIterator > const & GetGCIterator() const;
 
     // #i31958# is this an XForms document?
     bool isXForms() const;
@@ -1750,12 +1750,12 @@ public:
     SW_DLLPUBLIC void SetDefaultPageMode(bool bSquaredPageMode);
     SW_DLLPUBLIC bool IsSquaredPageMode() const;
 
-    const css::uno::Reference< ooo::vba::word::XFind >& getVbaFind() const { return mxVbaFind; }
-    void setVbaFind( const css::uno::Reference< ooo::vba::word::XFind > &xFind) { mxVbaFind = xFind; }
-    css::uno::Reference< css::script::vba::XVBAEventProcessor > const & GetVbaEventProcessor();
+    const cpo::uno::Reference< ooo::vba::word::XFind >& getVbaFind() const { return mxVbaFind; }
+    void setVbaFind( const cpo::uno::Reference< ooo::vba::word::XFind > &xFind) { mxVbaFind = xFind; }
+    cpo::uno::Reference< css::script::vba::XVBAEventProcessor > const & GetVbaEventProcessor();
     SW_DLLPUBLIC void SetVbaEventProcessor();
-    void SetVBATemplateToProjectCache( css::uno::Reference< css::container::XNameContainer > const & xCache ) { m_xTemplateToProjectCache = xCache; };
-    const css::uno::Reference< css::container::XNameContainer >& GetVBATemplateToProjectCache() const { return m_xTemplateToProjectCache; };
+    void SetVBATemplateToProjectCache( cpo::uno::Reference< css::container::XNameContainer > const & xCache ) { m_xTemplateToProjectCache = xCache; };
+    const cpo::uno::Reference< css::container::XNameContainer >& GetVBATemplateToProjectCache() const { return m_xTemplateToProjectCache; };
     ::sfx2::IXmlIdRegistry& GetXmlIdRegistry();
     SW_DLLPUBLIC ::sw::MetaFieldManager & GetMetaFieldManager();
     SW_DLLPUBLIC ::SwContentControlManager& GetContentControlManager();

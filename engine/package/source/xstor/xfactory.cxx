@@ -39,6 +39,7 @@
 #include "xstorage.hxx"
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 static bool CheckPackageSignature_Impl( const uno::Reference< io::XInputStream >& xInputStream,
                                      const uno::Reference< io::XSeekable >& xSeekable )

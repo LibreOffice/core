@@ -53,6 +53,7 @@
 using ::com::sun::star::lang::IndexOutOfBoundsException;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
+using namespace ::cpo;
 
 ScAccessibleEditObject::ScAccessibleEditObject(const rtl::Reference<comphelper::OAccessible>& rpParent,
                                                EditView* pEditView, vcl::Window* pWin,

@@ -25,7 +25,7 @@
 #include <cppunit/plugin/TestPlugIn.h>
 #include <rtl/ustring.hxx>
 #include <cppuhelper/bootstrap.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
@@ -65,8 +65,8 @@ private:
 // Test Office URI Schemes support
 void Test::testTdf100837() {
     auto xContext = ::cppu::defaultBootstrap_InitialComponentContext();
-    ::css::uno::Reference<::css::lang::XMultiComponentFactory> xFactory(xContext->getServiceManager());
-    ::css::uno::Reference<::css::lang::XMultiServiceFactory> xSM(xFactory, ::css::uno::UNO_QUERY_THROW);
+    ::cpo::uno::Reference<::css::lang::XMultiComponentFactory> xFactory(xContext->getServiceManager());
+    ::cpo::uno::Reference<::css::lang::XMultiServiceFactory> xSM(xFactory, ::cpo::uno::UNO_QUERY_THROW);
     // Without this we're crashing because callees are using getProcessServiceFactory
     ::comphelper::setProcessServiceFactory(xSM);
 

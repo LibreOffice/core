@@ -22,7 +22,7 @@
 
 #include <comphelper/interfacecontainer3.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <cpo/uno/Sequence.h>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -73,7 +73,7 @@ class Thesaurus :
     std::vector<ThesInfo>                   mvThesInfo;
 
     // cache for the Thesaurus dialog
-    cpo::uno::Sequence < css::uno::Reference < css::linguistic2::XMeaning > > prevMeanings;
+    cpo::uno::Sequence < cpo::uno::Reference < css::linguistic2::XMeaning > > prevMeanings;
     OUString  prevTerm;
     LanguageType prevLocale;
 
@@ -95,7 +95,7 @@ public:
     virtual bool hasLocale( const css::lang::Locale& rLocale ) override;
 
     // XThesaurus
-    virtual cpo::uno::Sequence< css::uno::Reference < css::linguistic2::XMeaning > > queryMeanings( const OUString& rTerm, const css::lang::Locale& rLocale, const cpo::uno::Sequence< css::beans::PropertyValue >& rProperties ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Reference < css::linguistic2::XMeaning > > queryMeanings( const OUString& rTerm, const css::lang::Locale& rLocale, const cpo::uno::Sequence< css::beans::PropertyValue >& rProperties ) override;
 
     // XServiceDisplayName
     virtual OUString getServiceDisplayName( const css::lang::Locale& rLocale ) override;
@@ -105,8 +105,8 @@ public:
 
     // XComponent
     virtual void dispose() override;
-    virtual void addEventListener( const css::uno::Reference< css::lang::XEventListener >& rxListener ) override;
-    virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& rxListener ) override;
+    virtual void addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& rxListener ) override;
+    virtual void removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& rxListener ) override;
 
     // XServiceInfo
     virtual OUString getImplementationName() override;

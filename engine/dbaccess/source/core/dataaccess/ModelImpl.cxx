@@ -65,8 +65,8 @@ using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::embed;
 using namespace ::com::sun::star::container;
@@ -574,7 +574,7 @@ void ODatabaseModelImpl::disposing( const css::lang::EventObject& Source )
         bool bStore = false;
         for (OWeakConnectionArray::iterator i = m_aConnections.begin(); i != m_aConnections.end(); )
         {
-            css::uno::Reference< css::sdbc::XConnection > xIterConn ( *i );
+            cpo::uno::Reference< css::sdbc::XConnection > xIterConn ( *i );
             if ( !xIterConn.is())
             {
                 i = m_aConnections.erase(i);
@@ -1364,7 +1364,7 @@ SignatureState ODatabaseModelImpl::getScriptingSignatureState()
 }
 
 bool ODatabaseModelImpl::hasTrustedScriptingSignature(
-    const css::uno::Reference<css::task::XInteractionHandler>& _rxInteraction)
+    const cpo::uno::Reference<css::task::XInteractionHandler>& _rxInteraction)
 {
     bool bResult = false;
 

@@ -54,7 +54,7 @@ excludelist:
     vcl/source/image/ImageTree.cxx:
     # Actually these are used
     - com/sun/star/container/XNameAccess.hpp
-    - com/sun/star/uno/Reference.hxx
+    - cpo/uno/Reference.hxx
     vcl/source/treelist/headbar.cxx:
     # Actually these are used
     - com/sun/star/accessibility/XAccessible.hpp

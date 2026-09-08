@@ -37,13 +37,13 @@
 using namespace connectivity::ado;
 using namespace connectivity;
 using namespace comphelper;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::container;
 
-css::uno::Reference< css::beans::XPropertySet > OColumns::createObject(const OUString& _rName)
+cpo::uno::Reference< css::beans::XPropertySet > OColumns::createObject(const OUString& _rName)
 {
     return new OAdoColumn(isCaseSensitive(),m_pConnection,m_aCollection.GetItem(_rName));
 }
@@ -60,7 +60,7 @@ Reference< XPropertySet > OColumns::createDescriptor()
 }
 
 // XAppend
-css::uno::Reference< css::beans::XPropertySet > OColumns::appendObject( const OUString&, const Reference< XPropertySet >& descriptor )
+cpo::uno::Reference< css::beans::XPropertySet > OColumns::appendObject( const OUString&, const Reference< XPropertySet >& descriptor )
 {
     rtl::Reference<OAdoColumn> pColumn = dynamic_cast<OAdoColumn*>( descriptor.get() );
     Reference< XPropertySet > xColumn;

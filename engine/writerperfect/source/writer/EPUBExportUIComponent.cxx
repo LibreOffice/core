@@ -17,6 +17,7 @@
 #include "EPUBExportDialog.hxx"
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 namespace writerperfect
 {
@@ -85,7 +86,7 @@ sal_Int16 EPUBExportUIComponent::execute()
 }
 
 void SAL_CALL EPUBExportUIComponent::setSourceDocument(
-    const css::uno::Reference<css::lang::XComponent>& xDocument)
+    const cpo::uno::Reference<css::lang::XComponent>& xDocument)
 {
     mxSourceDocument = xDocument;
 }
@@ -93,7 +94,7 @@ void SAL_CALL EPUBExportUIComponent::setSourceDocument(
 void SAL_CALL EPUBExportUIComponent::setDialogTitle(const OUString& aTitle) { setTitle(aTitle); }
 
 void SAL_CALL EPUBExportUIComponent::startExecuteModal(
-    const css::uno::Reference<css::ui::dialogs::XDialogClosedListener>& xListener)
+    const cpo::uno::Reference<css::ui::dialogs::XDialogClosedListener>& xListener)
 {
     SolarMutexGuard aSolarGuard;
 

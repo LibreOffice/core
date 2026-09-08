@@ -50,6 +50,7 @@
 #include <comphelper/sequence.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 void SwXTextPortion::init(const SwUnoCursor* pPortionCursor)
 {
@@ -706,7 +707,7 @@ cpo::uno::Sequence< beans::GetDirectPropertyTolerantResult > SwXTextPortion::Get
         cpo::uno::Any a(cppu::getCaughtException());
         throw css::lang::WrappedTargetRuntimeException(
             "wrapped Exception " + e.Message,
-            css::uno::Reference<cpo::uno::XInterface>(), a);
+            cpo::uno::Reference<cpo::uno::XInterface>(), a);
     }
 
     return comphelper::containerToSequence(aResultVector);

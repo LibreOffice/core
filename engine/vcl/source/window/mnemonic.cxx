@@ -30,6 +30,7 @@
 #include <sal/log.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 MnemonicGenerator::MnemonicGenerator(sal_Unicode cMnemonic)
     : m_cMnemonic(cMnemonic)

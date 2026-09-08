@@ -41,7 +41,7 @@
 namespace pcr
 {
 
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
 using namespace cpo::uno;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::script;
@@ -249,11 +249,11 @@ using namespace cpo::uno;
         m_xComponentPropertyInfo.clear();
         m_xTypeConverter.clear();
     }
-    void PropertyHandler::addEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener )
+    void PropertyHandler::addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& Listener )
     {
         PropertyHandler_Base::WeakComponentImplHelperBase::addEventListener( Listener );
     }
-    void PropertyHandler::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener )
+    void PropertyHandler::removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& Listener )
     {
         PropertyHandler_Base::WeakComponentImplHelperBase::removeEventListener( Listener );
     }

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_UCBHELPER_CANCELCOMMANDEXECUTION_HXX
 #define INCLUDED_UCBHELPER_CANCELCOMMANDEXECUTION_HXX
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/ucb/IOErrorCode.hpp>
 #include <ucbhelper/ucbhelperdllapi.h>
 
@@ -53,7 +53,7 @@ namespace ucbhelper
     @throws cpo::uno::Exception
  */
 UCBHELPER_DLLPUBLIC void cancelCommandExecution( const cpo::uno::Any & rException,
-                             const css::uno::Reference<
+                             const cpo::uno::Reference<
                                 css::ucb::XCommandEnvironment > &
                                     xEnv );
 
@@ -90,9 +90,9 @@ UCBHELPER_DLLPUBLIC void cancelCommandExecution( const cpo::uno::Any & rExceptio
  */
 UCBHELPER_DLLPUBLIC void cancelCommandExecution( const css::ucb::IOErrorCode eError,
                              const cpo::uno::Sequence< cpo::uno::Any > & rArgs,
-                             const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv,
+                             const cpo::uno::Reference< css::ucb::XCommandEnvironment > & xEnv,
                              const OUString & rMessage = OUString(),
-                             const css::uno::Reference< css::ucb::XCommandProcessor > & xContext = nullptr );
+                             const cpo::uno::Reference< css::ucb::XCommandProcessor > & xContext = nullptr );
 }
 
 #endif // INCLUDED_UCBHELPER_CANCELCOMMANDEXECUTION_HXX

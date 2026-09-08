@@ -49,7 +49,7 @@ friend struct SfxRequest_Impl;
 
 public:
     SAL_DLLPRIVATE void Record_Impl( SfxShell &rSh, const SfxSlot &rSlot,
-                                     const css::uno::Reference< css::frame::XDispatchRecorder >& xRecorder,
+                                     const cpo::uno::Reference< css::frame::XDispatchRecorder >& xRecorder,
                                      SfxViewFrame* );
 private:
     SAL_DLLPRIVATE void Done_Impl( const SfxItemSet *pSet );
@@ -97,7 +97,7 @@ public:
     void                SetReturnValue(const SfxPoolItem &);
     const SfxPoolItemHolder& GetReturnValue() const;
 
-    static css::uno::Reference< css::frame::XDispatchRecorder > GetMacroRecorder(const SfxViewFrame& rFrame);
+    static cpo::uno::Reference< css::frame::XDispatchRecorder > GetMacroRecorder(const SfxViewFrame& rFrame);
     static bool         HasMacroRecorder(const SfxViewFrame& rFrame);
     SfxCallMode         GetCallMode() const;
     void                AllowRecording( bool );

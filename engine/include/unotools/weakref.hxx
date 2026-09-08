@@ -21,7 +21,7 @@
 
 #include <sal/config.h>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/XInterface.hpp>
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/weak.hxx>
@@ -58,7 +58,7 @@ public:
         @param rRef another hard ref
     */
     WeakReference(const rtl::Reference<interface_type>& rRef)
-        : WeakReferenceHelper(css::uno::Reference<cpo::uno::XWeak>(rRef))
+        : WeakReferenceHelper(cpo::uno::Reference<cpo::uno::XWeak>(rRef))
     {
     }
 
@@ -77,7 +77,7 @@ public:
     */
     WeakReference(interface_type* pRef)
         : WeakReferenceHelper(
-              css::uno::Reference<cpo::uno::XWeak>(static_cast<cppu::OWeakObject*>(pRef)))
+              cpo::uno::Reference<cpo::uno::XWeak>(static_cast<cppu::OWeakObject*>(pRef)))
     {
     }
 
@@ -102,7 +102,7 @@ public:
     WeakReference& operator=(interface_type* pInt)
     {
         WeakReferenceHelper::operator=(
-            css::uno::Reference<cpo::uno::XWeak>(static_cast<::cppu::OWeakObject*>(pInt)));
+            cpo::uno::Reference<cpo::uno::XWeak>(static_cast<::cppu::OWeakObject*>(pInt)));
         return *this;
     }
 
@@ -115,7 +115,7 @@ public:
         requires(!cppu::detail::isUnoInterfaceType<interface_type>)
 #endif
     {
-        css::uno::Reference<cpo::uno::XInterface> xInterface = WeakReferenceHelper::get();
+        cpo::uno::Reference<cpo::uno::XInterface> xInterface = WeakReferenceHelper::get();
         // If XInterface is an ambiguous base of interface_type, we have to use dynamic_cast,
         // otherwise we can use the faster static_cast.
         if constexpr (std::is_convertible_v<interface_type*, cpo::uno::XInterface*>)

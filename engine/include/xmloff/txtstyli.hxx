@@ -66,8 +66,8 @@ public:
     XMLTextStyleContext(const XMLTextStyleContext &) = delete;
     XMLTextStyleContext operator=(const XMLTextStyleContext &) = delete;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
     const OUString& GetListStyle() const { return m_sListStyleName; }
     // XML import: reconstruction of assignment of paragraph style to outline levels (#i69629#)
@@ -87,7 +87,7 @@ public:
 
     // override FillPropertySet, so we can get at the combined characters
     virtual void FillPropertySet(
-            const css::uno::Reference< css::beans::XPropertySet > & rPropSet ) override;
+            const cpo::uno::Reference< css::beans::XPropertySet > & rPropSet ) override;
 
     bool HasCombinedCharactersLetter() const
         { return m_bHasCombinedCharactersLetter; }

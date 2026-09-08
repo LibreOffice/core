@@ -95,7 +95,7 @@ namespace sd {
 
 #define PIPETTE_RANGE 0
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::drawing;
 
 void DrawViewShell::DeleteActualPage()

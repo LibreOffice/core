@@ -26,7 +26,7 @@
 #include <unotools/lingucfg.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>
 #include <dlelstnr.hxx>
@@ -38,7 +38,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::linguistic2::LinguServiceEventFlags;
 

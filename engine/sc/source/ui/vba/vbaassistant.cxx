@@ -22,6 +22,7 @@
 #include"vbaassistant.hxx"
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace ooo::vba;
 
 using namespace ooo::vba::office::MsoAnimationType;

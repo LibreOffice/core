@@ -20,7 +20,7 @@
 
 #include <sal/types.h>
 #include <cppuhelper/implbase.hxx>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <com/sun/star/xforms/XFormsEvent.hpp>
 #include <com/sun/star/xml/dom/events/XEventTarget.hpp>
 
@@ -37,8 +37,8 @@ class XFormsEventConcrete : public cppu::WeakImplHelper< XFormsEvent > {
         }
 
         virtual OUString getType() override;
-        virtual css::uno::Reference< css::xml::dom::events::XEventTarget > getTarget() override;
-        virtual css::uno::Reference< css::xml::dom::events::XEventTarget > getCurrentTarget() override;
+        virtual cpo::uno::Reference< css::xml::dom::events::XEventTarget > getTarget() override;
+        virtual cpo::uno::Reference< css::xml::dom::events::XEventTarget > getCurrentTarget() override;
         virtual css::xml::dom::events::PhaseType getEventPhase() override;
         virtual bool getBubbles() override;
         virtual bool getCancelable() override;

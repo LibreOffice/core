@@ -42,6 +42,7 @@
 #include <tools/XmlWriter.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 XOBitmap::XOBitmap( const Bitmap& rBmp ) :
     m_xGraphicObject  (new GraphicObject(rBmp)),
@@ -186,7 +187,7 @@ bool XFillBitmapItem::QueryValue(cpo::uno::Any& rVal, sal_uInt8 nMemberId) const
     // needed for complete item (MID 0)
     OUString aInternalName;
 
-    css::uno::Reference< css::awt::XBitmap > xBmp;
+    cpo::uno::Reference< css::awt::XBitmap > xBmp;
 
     if( nMemberId == MID_NAME )
     {
@@ -228,8 +229,8 @@ bool XFillBitmapItem::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
 
     OUString aName;
     OUString aURL;
-    css::uno::Reference< css::awt::XBitmap > xBmp;
-    css::uno::Reference< css::graphic::XGraphic > xGraphic;
+    cpo::uno::Reference< css::awt::XBitmap > xBmp;
+    cpo::uno::Reference< css::graphic::XGraphic > xGraphic;
 
     bool bSetURL    = false;
     bool bSetName   = false;

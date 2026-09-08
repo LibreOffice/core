@@ -54,8 +54,8 @@
 
 using namespace ::com::sun::star;
 using namespace ::oox::core;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::animations;
@@ -64,7 +64,7 @@ using namespace ::com::sun::star::animations;
 namespace oox::ppt {
 
 SlidePersist::SlidePersist( XmlFilterBase& rFilter, bool bMaster, bool bNotes,
-    const css::uno::Reference< css::drawing::XDrawPage >& rxPage,
+    const cpo::uno::Reference< css::drawing::XDrawPage >& rxPage,
         oox::drawingml::ShapePtr pShapesPtr, drawingml::TextListStylePtr pDefaultTextStyle )
 : mpDrawingPtr( std::make_shared<oox::vml::Drawing>( rFilter, rxPage, oox::vml::VMLDRAWING_POWERPOINT ) )
 , mxPage( rxPage )
@@ -98,7 +98,7 @@ void SlidePersist::releaseShapes()
         if (pShape
             && (pShape->getSubType() == XML_title || pShape->getSubType() == XML_ctrTitle))
         {
-            css::uno::Reference<css::text::XTextRange> xText(pShape->getXShape(), css::uno::UNO_QUERY);
+            cpo::uno::Reference<css::text::XTextRange> xText(pShape->getXShape(), cpo::uno::UNO_QUERY);
             if (xText.is())
                 maTitleText = xText->getString();
             if (!maTitleText.isEmpty())
@@ -558,7 +558,7 @@ void SlidePersist::createConnectorShapeConnection(const oox::drawingml::ShapePtr
             if (xShape.is())
             {
                 uno::Reference<drawing::XGluePointsSupplier> xSupplier(xShape, uno::UNO_QUERY);
-                css::uno::Reference<css::container::XIdentifierContainer> xGluePoints(
+                cpo::uno::Reference<css::container::XIdentifierContainer> xGluePoints(
                     xSupplier->getGluePoints(), uno::UNO_QUERY);
 
                 sal_Int32 nCountGluePoints = xGluePoints->getIdentifiers().getLength();

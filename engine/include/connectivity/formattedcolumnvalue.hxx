@@ -28,7 +28,7 @@ namespace com::sun::star::beans { class XPropertySet; }
 namespace com::sun::star::sdbc { class XRowSet; }
 namespace com::sun::star::sdb { class XColumn; }
 namespace cpo::uno { class XComponentContext; }
-namespace com::sun::star::uno { template <typename > class Reference; }
+namespace cpo::uno { template <typename > class Reference; }
 namespace com::sun::star::util { class XNumberFormatter; }
 
 namespace dbtools
@@ -55,9 +55,9 @@ namespace dbtools
             examining its <code>ActiveConnection</code>.
         */
         FormattedColumnValue(
-            const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
-            const css::uno::Reference< css::sdbc::XRowSet >& _rxRowSet,
-            const css::uno::Reference< css::beans::XPropertySet >& _rxColumn
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
+            const cpo::uno::Reference< css::sdbc::XRowSet >& _rxRowSet,
+            const cpo::uno::Reference< css::beans::XPropertySet >& _rxColumn
         );
 
         /** constructs an instance
@@ -69,15 +69,15 @@ namespace dbtools
             The locale of this fallback format is the current system locale.
         */
         FormattedColumnValue(
-            const css::uno::Reference< css::util::XNumberFormatter >& i_rNumberFormatter,
-            const css::uno::Reference< css::beans::XPropertySet >& i_rColumn
+            const cpo::uno::Reference< css::util::XNumberFormatter >& i_rNumberFormatter,
+            const cpo::uno::Reference< css::beans::XPropertySet >& i_rColumn
         );
 
         ~FormattedColumnValue();
 
         // access to the details of the formatting we determined
         sal_Int16   getKeyType() const;
-        const css::uno::Reference< css::sdb::XColumn >&
+        const cpo::uno::Reference< css::sdb::XColumn >&
                     getColumn() const;
 
         bool        setFormattedValue( const OUString& _rFormattedStringValue ) const;

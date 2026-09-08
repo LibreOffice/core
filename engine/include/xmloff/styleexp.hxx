@@ -25,7 +25,7 @@
 
 #include <salhelper/simplereferenceobject.hxx>
 
-namespace com::sun::star::uno { template <class interface_type> class Reference; }
+namespace cpo::uno { template <class interface_type> class Reference; }
 namespace rtl { template <class reference_type> class Reference; }
 
 namespace com::sun::star
@@ -60,17 +60,17 @@ protected:
     const SvXMLExport& GetExport() const  { return m_rExport; }
 
     bool exportStyle(
-        const css::uno::Reference< css::style::XStyle > & rStyle,
+        const cpo::uno::Reference< css::style::XStyle > & rStyle,
         const OUString& rXMLFamily,
         const rtl::Reference < SvXMLExportPropertyMapper >& rPropMapper,
-        const css::uno::Reference< css::container::XNameAccess > & xStyles,
+        const cpo::uno::Reference< css::container::XNameAccess > & xStyles,
         const OUString* pPrefix );
 
     virtual void exportStyleAttributes(
-        const css::uno::Reference< css::style::XStyle > & rStyle );
+        const cpo::uno::Reference< css::style::XStyle > & rStyle );
 
     virtual void exportStyleContent(
-        const css::uno::Reference< css::style::XStyle > & rStyle );
+        const cpo::uno::Reference< css::style::XStyle > & rStyle );
 public:
     XMLStyleExport(
         SvXMLExport& rExp,
@@ -90,7 +90,7 @@ public:
 //      const OUString* pPrefix = 0);
 
     void exportDefaultStyle(
-        const css::uno::Reference< css::beans::XPropertySet > & xPropSet,
+        const cpo::uno::Reference< css::beans::XPropertySet > & xPropSet,
         const OUString& rXMLFamily,
         const rtl::Reference < SvXMLExportPropertyMapper >& rPropMapper );
 

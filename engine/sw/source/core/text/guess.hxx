@@ -22,7 +22,7 @@
 
 #include "porrst.hxx"
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 namespace com::sun::star::linguistic2 { class XHyphenatedWord; }
 
@@ -30,7 +30,7 @@ class SwTextFormatInfo;
 
 class SwTextGuess
 {
-    css::uno::Reference< css::linguistic2::XHyphenatedWord >  m_xHyphWord;
+    cpo::uno::Reference< css::linguistic2::XHyphenatedWord >  m_xHyphWord;
     std::unique_ptr<SwHangingPortion> m_pHanging; // for hanging punctuation
     TextFrameIndex m_nCutPos{ 0 }; // this character doesn't fit
     TextFrameIndex m_nBreakStart{ 0 }; // start index of word containing line break
@@ -56,7 +56,7 @@ public:
     TextFrameIndex BreakStart() const { return m_nBreakStart; }
     TextFrameIndex BreakPos() const {return m_nBreakPos; }
     TextFrameIndex FieldDiff() const {return m_nFieldDiff; }
-    const css::uno::Reference< css::linguistic2::XHyphenatedWord >& HyphWord() const
+    const cpo::uno::Reference< css::linguistic2::XHyphenatedWord >& HyphWord() const
         { return m_xHyphWord; }
 private:
     bool maybeAdjustPositionsForBlockAdjust(tools::Long& rMaxSizeDiff,

@@ -32,7 +32,7 @@ class SvxShapeCollection final
 {
 private:
     mutable std::mutex m_aMutex;
-    std::vector<css::uno::Reference<css::drawing::XShape>> maShapeContainer;
+    std::vector<cpo::uno::Reference<css::drawing::XShape>> maShapeContainer;
     comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> maEventListeners;
     bool bDisposed = false;
     bool bInDispose = false;
@@ -46,9 +46,9 @@ public:
     // XComponent
     virtual void dispose() override;
     virtual void
-    addEventListener(const css::uno::Reference<css::lang::XEventListener>& aListener) override;
+    addEventListener(const cpo::uno::Reference<css::lang::XEventListener>& aListener) override;
     virtual void
-    removeEventListener(const css::uno::Reference<css::lang::XEventListener>& aListener) override;
+    removeEventListener(const cpo::uno::Reference<css::lang::XEventListener>& aListener) override;
 
     // XIndexAccess
     virtual sal_Int32 getCount() override;
@@ -59,15 +59,15 @@ public:
     virtual bool hasElements() override;
 
     // XShapes
-    virtual void add(const css::uno::Reference<css::drawing::XShape>& xShape) override;
-    virtual void remove(const css::uno::Reference<css::drawing::XShape>& xShape) override;
+    virtual void add(const cpo::uno::Reference<css::drawing::XShape>& xShape) override;
+    virtual void remove(const cpo::uno::Reference<css::drawing::XShape>& xShape) override;
 
     // XServiceInfo
     virtual OUString getImplementationName() override;
     virtual bool supportsService(const OUString& ServiceName) override;
     virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
-    std::vector<css::uno::Reference<css::drawing::XShape>> getAllShapes() const;
+    std::vector<cpo::uno::Reference<css::drawing::XShape>> getAllShapes() const;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

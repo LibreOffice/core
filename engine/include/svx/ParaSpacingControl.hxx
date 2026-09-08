@@ -85,7 +85,7 @@ public:
     virtual void release() noexcept override;
 
 private:
-    css::uno::Reference<css::ui::XContextChangeEventMultiplexer> m_xMultiplexer;
+    cpo::uno::Reference<css::ui::XContextChangeEventMultiplexer> m_xMultiplexer;
 };
 
 class SVX_DLLPUBLIC ParaLeftSpacingControl final : public ParaLRSpacingControl

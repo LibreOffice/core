@@ -24,12 +24,12 @@
 namespace utl
 {
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::ucb;
 
-ProgressHandlerWrap::ProgressHandlerWrap( css::uno::Reference< css::task::XStatusIndicator > xSI )
+ProgressHandlerWrap::ProgressHandlerWrap( cpo::uno::Reference< css::task::XStatusIndicator > xSI )
 : m_xStatusIndicator(std::move( xSI ))
 {
 }

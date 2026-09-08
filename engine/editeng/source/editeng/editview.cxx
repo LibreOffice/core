@@ -68,9 +68,9 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 using namespace com::sun::star;
-using namespace com::sun::star::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace com::sun::star::beans;
-using namespace cpo::uno;
 
 
 // static
@@ -760,7 +760,7 @@ Reference<css::datatransfer::clipboard::XClipboard> EditView::GetClipboard() con
     return getImpl().GetClipboard();
 }
 
-css::uno::Reference< css::datatransfer::XTransferable > EditView::GetTransferable() const
+cpo::uno::Reference< css::datatransfer::XTransferable > EditView::GetTransferable() const
 {
     uno::Reference< datatransfer::XTransferable > xData = getEditEngine().CreateTransferable( getImpl().GetEditSelection() );
     return xData;
@@ -869,7 +869,7 @@ void EditView::InsertText( const EditTextObject& rTextObject )
         getEditEngine().FormatAndLayout( this );
 }
 
-void EditView::InsertText( css::uno::Reference< css::datatransfer::XTransferable > const & xDataObj, const OUString& rBaseURL, bool bUseSpecial )
+void EditView::InsertText( cpo::uno::Reference< css::datatransfer::XTransferable > const & xDataObj, const OUString& rBaseURL, bool bUseSpecial )
 {
     getEditEngine().UndoActionStart( EDITUNDO_INSERT );
     getImpl().DeleteSelected();

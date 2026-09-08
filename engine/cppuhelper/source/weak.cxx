@@ -32,7 +32,7 @@
 #include <vector>
 #include <mutex>
 
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 namespace cppu
@@ -66,9 +66,9 @@ public:
     void       release() noexcept override;
 
     // XAdapter
-    css::uno::Reference< cpo::uno::XInterface > queryAdapted() override;
-    void addReference( const css::uno::Reference< cpo::uno::XReference >& xRef ) override;
-    void removeReference( const css::uno::Reference< cpo::uno::XReference >& xRef ) override;
+    cpo::uno::Reference< cpo::uno::XInterface > queryAdapted() override;
+    void addReference( const cpo::uno::Reference< cpo::uno::XReference >& xRef ) override;
+    void removeReference( const cpo::uno::Reference< cpo::uno::XReference >& xRef ) override;
 
     /// Called from the weak object if the reference count goes to zero.
     ///

@@ -37,7 +37,8 @@
 #include <rootfrm.hxx>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 /**
  * Maps database URIs to the registered database names for quick lookups
@@ -66,7 +67,7 @@ public:
         }
         if (mxCurResultSet.is())
         {
-            css::uno::Reference<css::lang::XComponent>(mxCurResultSet, css::uno::UNO_QUERY_THROW)
+            cpo::uno::Reference<css::lang::XComponent>(mxCurResultSet, cpo::uno::UNO_QUERY_THROW)
                 ->dispose();
         }
         SwModelTestBase::tearDown();

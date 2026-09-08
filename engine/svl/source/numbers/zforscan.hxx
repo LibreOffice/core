@@ -188,7 +188,7 @@ private: // Private section
     sal_uInt16 nStandardPrec;                   // Default Precision for Standardformat
     SvNFLanguageData& mrCurrentLanguageData;    // Reference to the Language Data
     const SvNumberFormatter& mrColorCallback;   // Reference to the Color Callback supplier
-    css::uno::Reference< css::i18n::XNumberFormatCode > xNFC;
+    cpo::uno::Reference< css::i18n::XNumberFormatCode > xNFC;
 
     OUString sStrArray[NF_MAX_FORMAT_SYMBOLS];  // Array of symbols
     short nTypeArray[NF_MAX_FORMAT_SYMBOLS];    // Array of infos

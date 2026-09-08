@@ -169,7 +169,7 @@ public:
     virtual bool IsInClipboard() const override;
     virtual bool IsInUndo() const override;
     virtual bool IsInContent() const override;
-    virtual css::uno::Reference< css::rdf::XMetadatable > MakeUnoObject() override;
+    virtual cpo::uno::Reference< css::rdf::XMetadatable > MakeUnoObject() override;
 };
 
 class MetaField final
@@ -205,7 +205,7 @@ private:
     typedef std::vector< std::weak_ptr<MetaField> > MetaFieldList_t;
     MetaFieldList_t m_MetaFields;
     /// Document properties of a clipboard document, empty for non-clipboard documents.
-    css::uno::Reference<css::document::XDocumentProperties> m_xDocumentProperties;
+    cpo::uno::Reference<css::document::XDocumentProperties> m_xDocumentProperties;
 
     MetaFieldManager(MetaFieldManager const&) = delete;
     MetaFieldManager& operator=(MetaFieldManager const&) = delete;
@@ -217,10 +217,10 @@ public:
                 const sal_uInt32 nNumberFormat = SAL_MAX_UINT32,
                 const bool bIsFixedLanguage = false );
     /// get all meta fields
-    std::vector< css::uno::Reference<css::text::XTextField> > getMetaFields();
+    std::vector< cpo::uno::Reference<css::text::XTextField> > getMetaFields();
     /// Copy document properties from rSource to m_xDocumentProperties.
     void copyDocumentProperties(const SwDoc& rSource);
-    const css::uno::Reference<css::document::XDocumentProperties>& getDocumentProperties() const;
+    const cpo::uno::Reference<css::document::XDocumentProperties>& getDocumentProperties() const;
 };
 
 } // namespace sw

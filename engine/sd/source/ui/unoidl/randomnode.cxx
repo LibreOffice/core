@@ -38,10 +38,10 @@
 #include <randomnode.hxx>
 #include <mutex>
 
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::cpo::uno::Sequence;
 using ::cpo::uno::Any;
-using ::com::sun::star::uno::UNO_QUERY;
+using ::cpo::uno::UNO_QUERY;
 using ::cpo::uno::XInterface;
 using ::cpo::uno::WeakReference;
 using ::com::sun::star::beans::NamedValue;

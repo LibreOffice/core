@@ -56,7 +56,8 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
-using ::com::sun::star::uno::Reference;
+using namespace ::cpo;
+using ::cpo::uno::Reference;
 using ::com::sun::star::lang::IndexOutOfBoundsException;
 using ::cpo::uno::RuntimeException;
 
@@ -395,10 +396,10 @@ sal_Int64
             mnStateSet &= ~AccessibleStateType::FOCUSED;
     }
     //Just when the document is not read-only,set states EDITABLE,RESIZABLE,MOVEABLE
-    css::uno::Reference<XAccessible> xTempAcc = getAccessibleParent();
+    cpo::uno::Reference<XAccessible> xTempAcc = getAccessibleParent();
     if( xTempAcc.is() )
     {
-        css::uno::Reference<XAccessibleContext>
+        cpo::uno::Reference<XAccessibleContext>
                                 xTempAccContext = xTempAcc->getAccessibleContext();
         if( xTempAccContext.is() )
         {
@@ -1060,7 +1061,7 @@ AccessibleShape::getGroupPosition( const cpo::uno::Any& )
     // [2] the position of the object in the group
     cpo::uno::Sequence< sal_Int32 > aRet{ 0, 0, 0 };
 
-    css::uno::Reference<XAccessible> xParent = getAccessibleParent();
+    cpo::uno::Reference<XAccessible> xParent = getAccessibleParent();
     if (!xParent.is())
     {
         return aRet;
@@ -1082,7 +1083,7 @@ AccessibleShape::getGroupPosition( const cpo::uno::Any& )
         pUper = pUper->getParentSdrObjectFromSdrObject();
     }
 
-    css::uno::Reference<XAccessibleContext> xParentContext = xParent->getAccessibleContext();
+    cpo::uno::Reference<XAccessibleContext> xParentContext = xParent->getAccessibleContext();
     if( xParentContext->getAccessibleRole()  == AccessibleRole::DOCUMENT ||
             xParentContext->getAccessibleRole()  == AccessibleRole::DOCUMENT_PRESENTATION ||
             xParentContext->getAccessibleRole()  == AccessibleRole::DOCUMENT_SPREADSHEET ||

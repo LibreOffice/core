@@ -29,13 +29,13 @@
 #include <xmloff/xmltoken.hxx>
 
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
 SchXMLCalculationSettingsContext::SchXMLCalculationSettingsContext( SvXMLImport& rImport,
-                                    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+                                    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 : SvXMLImportContext ( rImport )
 {
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
@@ -53,9 +53,9 @@ SchXMLCalculationSettingsContext::SchXMLCalculationSettingsContext( SvXMLImport&
     }
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLCalculationSettingsContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLCalculationSettingsContext::createFastChildContext(
     sal_Int32 /*nElement*/,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     return new SchXMLCalculationSettingsContext(GetImport(),xAttrList);
 }

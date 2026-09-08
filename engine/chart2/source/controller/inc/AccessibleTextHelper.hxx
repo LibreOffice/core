@@ -62,14 +62,14 @@ public:
 
     // ____ XAccessibleContext ____
     virtual sal_Int64 getAccessibleChildCount() override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleChild(
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > getAccessibleChild(
         sal_Int64 i ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleParent() override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > getAccessibleParent() override;
     virtual sal_Int64 getAccessibleIndexInParent() override;
     virtual ::sal_Int16 getAccessibleRole() override;
     virtual OUString getAccessibleDescription() override;
     virtual OUString getAccessibleName() override;
-    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > getAccessibleRelationSet() override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessibleRelationSet > getAccessibleRelationSet() override;
     virtual sal_Int64 getAccessibleStateSet() override;
     virtual css::lang::Locale getLocale() override;
 

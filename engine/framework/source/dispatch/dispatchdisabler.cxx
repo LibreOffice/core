@@ -15,6 +15,7 @@
 #include <com/sun/star/frame/DispatchDescriptor.hpp>
 #include <cppuhelper/supportsservice.hxx>
 
+using namespace ::cpo;
 using namespace css;
 using namespace framework;
 

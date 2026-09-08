@@ -159,7 +159,7 @@ protected:
 class SVT_DLLPUBLIC SvEventDescriptor : public SvBaseEventDescriptor
 {
     /// keep reference to parent to prevent it from being destroyed
-    css::uno::Reference< cpo::uno::XInterface > xParentRef;
+    cpo::uno::Reference< cpo::uno::XInterface > xParentRef;
 
 public:
 

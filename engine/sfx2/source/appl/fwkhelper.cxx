@@ -19,7 +19,7 @@
 
 #include <sal/config.h>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 
 #include <vcl/svapp.hxx>
@@ -28,7 +28,7 @@
 #include <workwin.hxx>
 #include <sfx2/frame.hxx>
 
-void RefreshToolbars( css::uno::Reference< css::frame::XFrame > const & xFrame )
+void RefreshToolbars( cpo::uno::Reference< css::frame::XFrame > const & xFrame )
 {
     SolarMutexGuard aGuard;
     if ( !xFrame.is() )

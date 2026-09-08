@@ -32,7 +32,7 @@
 #include <svl/svl.hrc>
 #include <utility>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 SvtFileDialogFilter_Impl::SvtFileDialogFilter_Impl( OUString aName, OUString aType )
     : m_aName(std::move( aName ))

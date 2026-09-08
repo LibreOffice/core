@@ -48,7 +48,7 @@ using namespace comphelper;
 
 namespace frm
 {
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
@@ -145,7 +145,7 @@ OComboBoxModel::~OComboBoxModel()
 
 // XCloneable
 
-css::uno::Reference< css::util::XCloneable > OComboBoxModel::createClone()
+cpo::uno::Reference< css::util::XCloneable > OComboBoxModel::createClone()
 {
     rtl::Reference<OComboBoxModel> pClone = new OComboBoxModel(this, getContext());
     pClone->clonedFrom(this);

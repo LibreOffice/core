@@ -37,6 +37,7 @@ namespace chart
 {
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
+using namespace ::cpo;
 
 VDiagram::VDiagram(
     const rtl::Reference<Diagram> & xDiagram, const drawing::Direction3D& rPreferredAspectRatio,

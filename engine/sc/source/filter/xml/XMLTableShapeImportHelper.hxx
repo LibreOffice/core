@@ -37,10 +37,10 @@ public:
     explicit XMLTableShapeImportHelper( ScXMLImport& rImp );
     virtual ~XMLTableShapeImportHelper() override;
 
-    static void SetLayer(const css::uno::Reference<css::drawing::XShape>& rShape, SdrLayerID nLayerID, std::u16string_view sType);
-    virtual void finishShape(css::uno::Reference< css::drawing::XShape >& rShape,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
-            css::uno::Reference< css::drawing::XShapes >& rShapes) override;
+    static void SetLayer(const cpo::uno::Reference<css::drawing::XShape>& rShape, SdrLayerID nLayerID, std::u16string_view sType);
+    virtual void finishShape(cpo::uno::Reference< css::drawing::XShape >& rShape,
+            const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+            cpo::uno::Reference< css::drawing::XShapes >& rShapes) override;
 
     void SetCell (const ScAddress& rAddress) { aStartCell = rAddress; }
     void SetOnTable (const bool bTempOnTable) { bOnTable = bTempOnTable; }

@@ -30,7 +30,7 @@ namespace dbaccess {
 class DynamicResultSet : public ::ucbhelper::ResultSetImplHelper
 {
     rtl::Reference< ODocumentContainer >                 m_xContent;
-    css::uno::Reference< css::ucb::XCommandEnvironment > m_xEnv;
+    cpo::uno::Reference< css::ucb::XCommandEnvironment > m_xEnv;
 
 private:
     virtual void initStatic() override;
@@ -38,10 +38,10 @@ private:
 
 public:
     DynamicResultSet(
-            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
             rtl::Reference< ODocumentContainer > xContent,
             const css::ucb::OpenCommandArgument2& rCommand,
-            const css::uno::Reference< css::ucb::XCommandEnvironment >& rxEnv );
+            const cpo::uno::Reference< css::ucb::XCommandEnvironment >& rxEnv );
 };
 
 }

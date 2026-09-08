@@ -49,9 +49,9 @@ public:
     XMLTableImport( SvXMLImport& rImport, const rtl::Reference< XMLPropertySetMapper >& xCellPropertySetMapper, const rtl::Reference< XMLPropertyHandlerFactory >& xFactoryRef );
     virtual ~XMLTableImport() override;
 
-    SvXMLImportContext* CreateTableContext( css::uno::Reference< css::table::XColumnRowRange > const & xColumnRowRange );
+    SvXMLImportContext* CreateTableContext( cpo::uno::Reference< css::table::XColumnRowRange > const & xColumnRowRange );
 
-    SvXMLStyleContext* CreateTableTemplateContext( sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
+    SvXMLStyleContext* CreateTableTemplateContext( sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
 
     SvXMLImportPropertyMapper* GetCellImportPropertySetMapper() const { return mxCellImportPropertySetMapper.get(); }
     SvXMLImportPropertyMapper* GetRowImportPropertySetMapper() const { return mxRowImportPropertySetMapper.get(); }

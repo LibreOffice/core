@@ -65,6 +65,7 @@
 #include <memory>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 #define SC_CALLERPOS_NONE   (-1)
 

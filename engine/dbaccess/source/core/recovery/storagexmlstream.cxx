@@ -30,8 +30,8 @@
 namespace dbaccess
 {
 
-    using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::UNO_QUERY_THROW;
+    using ::cpo::uno::Reference;
+    using ::cpo::uno::UNO_QUERY_THROW;
     using ::cpo::uno::XComponentContext;
     using ::com::sun::star::embed::XStorage;
     using ::com::sun::star::xml::sax::XDocumentHandler;
@@ -113,8 +113,8 @@ namespace dbaccess
         ENSURE_OR_THROW( i_rParentStorage.is(), "illegal stream" );
 
         const Reference< css::io::XStream > xStream(
-            i_rParentStorage->openStreamElement( i_rStreamName, css::embed::ElementModes::READ ), css::uno::UNO_SET_THROW );
-        m_xInputStream.set( xStream->getInputStream(), css::uno::UNO_SET_THROW );
+            i_rParentStorage->openStreamElement( i_rStreamName, css::embed::ElementModes::READ ), cpo::uno::UNO_SET_THROW );
+        m_xInputStream.set( xStream->getInputStream(), cpo::uno::UNO_SET_THROW );
 
         m_xParser.set( Parser::create(i_rContext) );
     }

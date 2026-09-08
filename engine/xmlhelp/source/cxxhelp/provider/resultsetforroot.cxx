@@ -27,6 +27,7 @@
 using namespace chelp;
 using namespace com::sun::star;
 using namespace com::sun::star::ucb;
+using namespace ::cpo;
 
 
 ResultSetForRoot::ResultSetForRoot( const uno::Reference< cpo::uno::XComponentContext >&  rxContext,

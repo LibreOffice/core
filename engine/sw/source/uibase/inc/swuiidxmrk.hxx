@@ -50,7 +50,7 @@ class SwIndexMarkPane
     bool            m_bPhoneticED2_ChangedByUser;
     LanguageType    m_nLangForPhoneticReading; //Language of current text used for phonetic reading proposal
     bool            m_bIsPhoneticReadingEnabled; //this value states whether phonetic reading is enabled in principle dependent of global cjk settings and language of current entry
-    css::uno::Reference< css::i18n::XExtendedIndexEntrySupplier >
+    cpo::uno::Reference< css::i18n::XExtendedIndexEntrySupplier >
                     m_xExtendedIndexEntrySupplier;
 
     std::unique_ptr<SwTOXMgr>
@@ -181,7 +181,7 @@ class SwAuthorMarkPane
 
     OUString        m_sCreatedEntry[AUTH_FIELD_END];
 
-    css::uno::Reference< css::container::XNameAccess >    m_xBibAccess;
+    cpo::uno::Reference< css::container::XNameAccess >    m_xBibAccess;
 
     std::unique_ptr<weld::RadioButton> m_xFromComponentRB;
     std::unique_ptr<weld::RadioButton> m_xFromDocContentRB;

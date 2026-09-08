@@ -35,37 +35,37 @@ namespace impl
 template< class InterfaceRef >
 struct addListenerFunctor
 {
-    explicit addListenerFunctor( css::uno::Reference< css::lang::XEventListener > xListener ) :
+    explicit addListenerFunctor( cpo::uno::Reference< css::lang::XEventListener > xListener ) :
             m_xListener(std::move( xListener ))
     {}
 
     void operator() ( const InterfaceRef & xObject )
     {
-        css::uno::Reference< css::lang::XComponent >
-              xBroadcaster( xObject, css::uno::UNO_QUERY );
+        cpo::uno::Reference< css::lang::XComponent >
+              xBroadcaster( xObject, cpo::uno::UNO_QUERY );
         if( xBroadcaster.is() && m_xListener.is())
             xBroadcaster->addEventListener( m_xListener );
     }
 private:
-    css::uno::Reference< css::lang::XEventListener > m_xListener;
+    cpo::uno::Reference< css::lang::XEventListener > m_xListener;
 };
 
 template< class InterfaceRef >
 struct removeListenerFunctor
 {
-    explicit removeListenerFunctor( css::uno::Reference<  css::lang::XEventListener > xListener ) :
+    explicit removeListenerFunctor( cpo::uno::Reference<  css::lang::XEventListener > xListener ) :
             m_xListener(std::move( xListener ))
     {}
 
     void operator() ( const InterfaceRef & xObject )
     {
-        css::uno::Reference< css::lang::XComponent >
-              xBroadcaster( xObject, css::uno::UNO_QUERY );
+        cpo::uno::Reference< css::lang::XComponent >
+              xBroadcaster( xObject, cpo::uno::UNO_QUERY );
         if( xBroadcaster.is() && m_xListener.is())
             xBroadcaster->removeEventListener( m_xListener );
     }
 private:
-    css::uno::Reference< css::lang::XEventListener > m_xListener;
+    cpo::uno::Reference< css::lang::XEventListener > m_xListener;
 };
 
 } //  namespace impl
@@ -73,7 +73,7 @@ private:
 template< class InterfaceRef >
 void addListener(
     const InterfaceRef & xObject,
-    const css::uno::Reference< css::lang::XEventListener > & xListener )
+    const cpo::uno::Reference< css::lang::XEventListener > & xListener )
 {
     if( xListener.is())
     {
@@ -85,7 +85,7 @@ void addListener(
 template< class Container >
 void addListenerToAllElements(
     const Container & rContainer,
-    const css::uno::Reference< css::lang::XEventListener > & xListener )
+    const cpo::uno::Reference< css::lang::XEventListener > & xListener )
 {
     if( xListener.is())
         std::for_each( rContainer.begin(), rContainer.end(),
@@ -95,7 +95,7 @@ void addListenerToAllElements(
 template< class InterfaceRef >
 void removeListener(
     const InterfaceRef & xObject,
-    const css::uno::Reference< css::lang::XEventListener > & xListener )
+    const cpo::uno::Reference< css::lang::XEventListener > & xListener )
 {
     if( xListener.is())
     {
@@ -107,7 +107,7 @@ void removeListener(
 template< class Container >
 void removeListenerFromAllElements(
     const Container & rContainer,
-    const css::uno::Reference< css::lang::XEventListener > & xListener )
+    const cpo::uno::Reference< css::lang::XEventListener > & xListener )
 {
     if( xListener.is())
         std::for_each( rContainer.begin(), rContainer.end(),

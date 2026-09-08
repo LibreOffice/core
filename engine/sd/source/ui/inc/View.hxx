@@ -128,12 +128,12 @@ public:
         sal_uInt16 nPage,
         SdrLayerID nLayer);
 
-    css::uno::Reference<css::datatransfer::XTransferable>
+    cpo::uno::Reference<css::datatransfer::XTransferable>
         CreateClipboardDataObject ();
-    css::uno::Reference<css::datatransfer::XTransferable>
+    cpo::uno::Reference<css::datatransfer::XTransferable>
         CreateDragDataObject (::sd::View*, vcl::Window& rWindow,
             const Point& rDragPos);
-    css::uno::Reference<css::datatransfer::XTransferable>
+    cpo::uno::Reference<css::datatransfer::XTransferable>
         CreateSelectionDataObject (::sd::View*);
 
     // update clipboard to what is selected

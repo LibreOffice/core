@@ -17,7 +17,7 @@
         <Action>NoStepInto</Action>
     </Function>
     <Function>
-        <Name>com::sun::star::uno::Reference&lt;.*&gt;::operator-&gt;</Name>
+        <Name>cpo::uno::Reference&lt;.*&gt;::operator-&gt;</Name>
         <Action>NoStepInto</Action>
     </Function>
     <Function>

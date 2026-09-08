@@ -53,7 +53,7 @@ private:
     ScDocument* mpDocument;
     sc::FormatOutput maFormatOutput;
     std::unique_ptr<sc::pivot::StyleOutput> mpStyleOutput;
-    css::uno::Reference<css::sheet::XDimensionsSupplier> mxSource;
+    cpo::uno::Reference<css::sheet::XDimensionsSupplier> mxSource;
     ScAddress maStartPos;
     std::vector<ScDPOutLevelData> mpColFields;
     std::vector<ScDPOutLevelData> mpRowFields;
@@ -121,7 +121,7 @@ private:
 
 public:
     ScDPOutput(ScDocument* pDocument,
-               css::uno::Reference<css::sheet::XDimensionsSupplier> xSource,
+               cpo::uno::Reference<css::sheet::XDimensionsSupplier> xSource,
                const ScAddress& rPosition, bool bFilter, bool bExpandCollapse,
                ScDPObject& rObject, bool bHideHeader);
     ~ScDPOutput();
@@ -159,7 +159,7 @@ public:
 
     static void GetDataDimensionNames(
         OUString& rSourceName, OUString& rGivenName,
-        const css::uno::Reference< cpo::uno::XInterface>& xDim );
+        const cpo::uno::Reference< cpo::uno::XInterface>& xDim );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

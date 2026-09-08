@@ -42,6 +42,7 @@
 #include <cellsuno.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 //  an AutoFormat has always 16 entries
 #define SC_AF_FIELD_COUNT 16

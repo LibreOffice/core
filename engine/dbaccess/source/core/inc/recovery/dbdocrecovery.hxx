@@ -33,7 +33,7 @@ namespace dbaccess
     {
     public:
         DatabaseDocumentRecovery(
-            const css::uno::Reference< cpo::uno::XComponentContext >& i_rContext
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& i_rContext
         );
         ~DatabaseDocumentRecovery();
 
@@ -44,8 +44,8 @@ namespace dbaccess
                 in case of an error.
         */
         void saveModifiedSubComponents(
-                const css::uno::Reference< css::embed::XStorage >& i_rTargetStorage,
-                const std::vector< css::uno::Reference< css::frame::XController > >& i_rControllers
+                const cpo::uno::Reference< css::embed::XStorage >& i_rTargetStorage,
+                const std::vector< cpo::uno::Reference< css::frame::XController > >& i_rControllers
             );
 
         /** recovery sub components from the given document storage, if applicable
@@ -56,12 +56,12 @@ namespace dbaccess
                 in case of an error.
         */
         void recoverSubDocuments(
-                const css::uno::Reference< css::embed::XStorage >& i_rDocumentStorage,
-                const css::uno::Reference< css::frame::XController >& i_rTargetController
+                const cpo::uno::Reference< css::embed::XStorage >& i_rDocumentStorage,
+                const cpo::uno::Reference< css::frame::XController >& i_rTargetController
             );
 
     private:
-        css::uno::Reference<cpo::uno::XComponentContext> mxContext;
+        cpo::uno::Reference<cpo::uno::XComponentContext> mxContext;
     };
 
 } // namespace dbaccess

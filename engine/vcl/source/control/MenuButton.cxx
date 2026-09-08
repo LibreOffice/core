@@ -81,7 +81,7 @@ OString lclImageToDataUrl(const Image& rImage)
 // already an SVG, such as a gallery bullet icon, has its original bytes written
 // unchanged; a drawn graphic such as a metafile symbol is exported to SVG.
 // The client renders the result crisply at any size instead of a fixed bitmap.
-OString lclGraphicToSvgDataUrl(const css::uno::Reference<css::graphic::XGraphic>& rGraphic)
+OString lclGraphicToSvgDataUrl(const cpo::uno::Reference<css::graphic::XGraphic>& rGraphic)
 {
     if (!rGraphic.is())
         return OString();

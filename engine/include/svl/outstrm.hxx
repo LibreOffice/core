@@ -21,7 +21,7 @@
 #define INCLUDED_SVL_OUTSTRM_HXX
 
 #include <svl/svldllapi.h>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <tools/stream.hxx>
 
 namespace com::sun::star::io
@@ -31,7 +31,7 @@ class XOutputStream;
 
 class SVL_DLLPUBLIC SvOutputStream final : public SvStream
 {
-    css::uno::Reference<css::io::XOutputStream> m_xStream;
+    cpo::uno::Reference<css::io::XOutputStream> m_xStream;
 
     SVL_DLLPRIVATE virtual std::size_t GetData(void*, std::size_t) override;
 
@@ -44,7 +44,7 @@ class SVL_DLLPUBLIC SvOutputStream final : public SvStream
     SVL_DLLPRIVATE virtual void SetSize(sal_uInt64) override;
 
 public:
-    SvOutputStream(css::uno::Reference<css::io::XOutputStream> xTheStream);
+    SvOutputStream(cpo::uno::Reference<css::io::XOutputStream> xTheStream);
 
     virtual ~SvOutputStream() override;
 };

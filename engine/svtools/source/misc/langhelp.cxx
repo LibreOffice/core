@@ -90,7 +90,7 @@ public:
         try
         {
             using namespace org::freedesktop::PackageKit;
-            css::uno::Reference<XSyncDbusSessionHelper> xSyncDbusSessionHelper(SyncDbusSessionHelper::create(comphelper::getProcessComponentContext()));
+            cpo::uno::Reference<XSyncDbusSessionHelper> xSyncDbusSessionHelper(SyncDbusSessionHelper::create(comphelper::getProcessComponentContext()));
             xSyncDbusSessionHelper->InstallPackageNames(comphelper::containerToSequence(m_aPackages), OUString());
         }
         catch (const cpo::uno::Exception&)

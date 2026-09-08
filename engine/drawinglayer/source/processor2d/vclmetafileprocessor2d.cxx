@@ -74,6 +74,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 // #112245# definition for maximum allowed point count due to Metafile target.
 // To be on the safe side with the old tools polygon, use slightly less than
@@ -1656,7 +1657,7 @@ void VclMetafileProcessor2D::processTextSimplePortionPrimitive2D(
             constructed VclMetafileProcessor2D. It's still incarnated on demand,
             but exists for OOo runtime now by purpose.
          */
-        static tools::DeleteOnDeinit<css::uno::Reference<css::i18n::XBreakIterator>>
+        static tools::DeleteOnDeinit<cpo::uno::Reference<css::i18n::XBreakIterator>>
             gxBreakIterator;
 
         // support for TEXT_ MetaFile actions only for decorated texts

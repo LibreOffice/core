@@ -22,7 +22,7 @@
 
 #include <sal/config.h>
 #include <xmloff/dllapi.h>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <xmloff/xmlictxt.hxx>
 
 #include <vector>
@@ -50,7 +50,7 @@ typedef ::std::pair<
 class XMLOFF_DLLPUBLIC XMLEventsImportContext : public SvXMLImportContext
 {
     // the event XNameReplace; may be empty
-    css::uno::Reference<css::container::XNameReplace> m_xEvents;
+    cpo::uno::Reference<css::container::XNameReplace> m_xEvents;
 
 protected:
     // if no XNameReplace is given, use this vector to collect events
@@ -62,11 +62,11 @@ public:
 
     XMLEventsImportContext(
         SvXMLImport& rImport,
-        const css::uno::Reference<css::document::XEventsSupplier> & xEventsSupplier);
+        const cpo::uno::Reference<css::document::XEventsSupplier> & xEventsSupplier);
 
     XMLEventsImportContext(
         SvXMLImport& rImport,
-        const css::uno::Reference<css::container::XNameReplace> & xNameRepl);
+        const cpo::uno::Reference<css::container::XNameReplace> & xNameRepl);
 
     virtual ~XMLEventsImportContext() override;
 
@@ -77,12 +77,12 @@ public:
     /// if the import operates in delayed mode, you can use this method
     /// to set all events that have been read on the XEventsSupplier
     void SetEvents(
-        const css::uno::Reference<css::document::XEventsSupplier> & xEventsSupplier);
+        const cpo::uno::Reference<css::document::XEventsSupplier> & xEventsSupplier);
 
     /// if the import operates in delayed mode, you can use this method
     /// to set all events that have been read on the XNameReplace
     void SetEvents(
-        const css::uno::Reference<css::container::XNameReplace> & xNameRepl);
+        const cpo::uno::Reference<css::container::XNameReplace> & xNameRepl);
 
     /// if the import operates in delayed mode, you can use this method
     /// to obtain the value sequence for a specific event
@@ -92,8 +92,8 @@ public:
 
 protected:
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
-            sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override final;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+            sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override final;
 };
 
 #endif

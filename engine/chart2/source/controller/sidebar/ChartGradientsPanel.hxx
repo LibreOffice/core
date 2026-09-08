@@ -41,7 +41,7 @@ public:
     static const std::vector<ObjectType> maAcceptedTypes;
 
     static std::unique_ptr<PanelLayout>
-    Create(weld::Widget* pParent, const css::uno::Reference<css::frame::XFrame>& rxFrame,
+    Create(weld::Widget* pParent, const cpo::uno::Reference<css::frame::XFrame>& rxFrame,
            ChartController* pController);
 
     void DataChanged(const DataChangedEvent& rEvent) override;
@@ -57,7 +57,7 @@ public:
 
     // constructor/destructor
     ChartGradientsPanel(weld::Widget* pParent,
-                        const css::uno::Reference<css::frame::XFrame>& rxFrame,
+                        const cpo::uno::Reference<css::frame::XFrame>& rxFrame,
                         ChartController* pController);
     ~ChartGradientsPanel() override;
 
@@ -66,11 +66,11 @@ public:
 
     void selectionChanged(bool bCorrectType) override;
 
-    void updateModel(css::uno::Reference<css::frame::XModel> xModel) override;
+    void updateModel(cpo::uno::Reference<css::frame::XModel> xModel) override;
 
 private:
     rtl::Reference<ChartModel> mxModel;
-    css::uno::Reference<css::util::XModifyListener> mxModifyListener;
+    cpo::uno::Reference<css::util::XModifyListener> mxModifyListener;
     rtl::Reference<ChartSidebarSelectionListener> mxSelectionListener;
 
     bool mbModelValid;

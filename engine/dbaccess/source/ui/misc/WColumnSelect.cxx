@@ -24,7 +24,7 @@
 #include <core_resource.hxx>
 #include <com/sun/star/sdb/application/CopyTableOperation.hpp>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::sdbc;
 using namespace dbaui;
 

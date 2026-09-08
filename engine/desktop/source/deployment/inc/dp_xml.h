@@ -33,9 +33,9 @@ namespace dp_misc
 
 
 void xml_parse(
-    css::uno::Reference< css::xml::sax::XDocumentHandler > const & xDocHandler,
+    cpo::uno::Reference< css::xml::sax::XDocumentHandler > const & xDocHandler,
     ::ucbhelper::Content & ucb_content,
-    css::uno::Reference< cpo::uno::XComponentContext > const & xContext );
+    cpo::uno::Reference< cpo::uno::XComponentContext > const & xContext );
 
 }
 

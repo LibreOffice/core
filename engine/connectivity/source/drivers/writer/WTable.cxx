@@ -37,6 +37,7 @@ class XTextDocument;
 }
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 static void lcl_GetDataArea(const uno::Reference<text::XTextTable>& xTable, sal_Int32& rColumnCount,
                             sal_Int32& rRowCount)

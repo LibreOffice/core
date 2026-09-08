@@ -44,8 +44,8 @@ public:
 
     virtual sal_Int32    insertAt(
                         const ::oox::core::XmlFilterBase& rFilterBase,
-                        const css::uno::Reference < css::text::XText > & xText,
-                        const css::uno::Reference < css::text::XTextCursor > &xAt,
+                        const cpo::uno::Reference < css::text::XText > & xText,
+                        const cpo::uno::Reference < css::text::XTextCursor > &xAt,
                         const TextCharacterProperties& rTextCharacterStyle,
                         float nDefaultCharHeight) const override;
 

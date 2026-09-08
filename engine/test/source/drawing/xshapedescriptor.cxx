@@ -11,11 +11,12 @@
 
 #include <com/sun/star/drawing/XShapeDescriptor.hpp>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <cppunit/TestAssert.h>
 
 using namespace css;
+using namespace ::cpo;
 
 namespace apitest
 {

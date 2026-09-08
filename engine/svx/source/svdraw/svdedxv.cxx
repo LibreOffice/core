@@ -908,14 +908,14 @@ Point SdrObjEditView::EditViewPointerPosPixel() const
     return mpTextEditWin->GetPointerPosPixel();
 }
 
-css::uno::Reference<css::datatransfer::clipboard::XClipboard> SdrObjEditView::GetClipboard() const
+cpo::uno::Reference<css::datatransfer::clipboard::XClipboard> SdrObjEditView::GetClipboard() const
 {
     if (!mpTextEditWin)
         return nullptr;
     return mpTextEditWin->GetClipboard();
 }
 
-css::uno::Reference<css::datatransfer::dnd::XDropTarget> SdrObjEditView::GetDropTarget()
+cpo::uno::Reference<css::datatransfer::dnd::XDropTarget> SdrObjEditView::GetDropTarget()
 {
     if (!mpTextEditWin)
         return nullptr;
@@ -2784,7 +2784,7 @@ void SdrObjEditView::getTextSelection(cpo::uno::Any& rSelection)
     if (!pObj)
         return;
 
-    css::uno::Reference<css::text::XText> xText(pObj->getUnoShape(), css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::text::XText> xText(pObj->getUnoShape(), cpo::uno::UNO_QUERY);
     if (xText.is())
     {
         SvxUnoTextBase* pRange = comphelper::getFromUnoTunnel<SvxUnoTextBase>(xText);

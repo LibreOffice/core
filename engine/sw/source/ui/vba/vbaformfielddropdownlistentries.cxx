@@ -13,6 +13,7 @@
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 static cpo::uno::Sequence<OUString> lcl_getListEntries(sw::mark::DropDownFieldmark& rDropDown)
 {

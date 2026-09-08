@@ -25,7 +25,8 @@
 #include <xmloff/xmlnamespace.hxx>
 #include <o3tl/string_view.hxx>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 

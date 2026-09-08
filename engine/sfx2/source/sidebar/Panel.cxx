@@ -40,7 +40,7 @@
 #include <vcl/weldutils.hxx>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo::uno;
 
 namespace sfx2::sidebar {
 
@@ -49,7 +49,7 @@ Panel::Panel(const PanelDescriptor& rPanelDescriptor,
              const bool bIsInitiallyExpanded,
              Deck* pDeck,
              std::function<Context()> aContextAccess,
-             const css::uno::Reference<css::frame::XFrame>& rxFrame)
+             const cpo::uno::Reference<css::frame::XFrame>& rxFrame)
     : mxBuilder(Application::CreateBuilder(pParentWindow, u"sfx/ui/panel.ui"_ustr, false, reinterpret_cast<sal_uInt64>(SfxViewShell::Current())))
     , msPanelId(rPanelDescriptor.msId)
     , msTitle(rPanelDescriptor.msTitle)

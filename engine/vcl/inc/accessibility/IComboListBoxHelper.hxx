@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <rtl/ustring.hxx>
 #include <vcl/wintypes.hxx>
@@ -56,7 +56,7 @@ public:
     virtual bool            IsInDropDown() const = 0;
     virtual tools::Rectangle       GetEntryCharacterBounds( const sal_Int32 _nEntryPos, const sal_Int32 _nCharacterIndex ) const = 0;
     virtual tools::Long            GetIndexForPoint( const Point& rPoint, sal_Int32 & nPos ) const = 0;
-    virtual css::uno::Reference< css::datatransfer::clipboard::XClipboard >
+    virtual cpo::uno::Reference< css::datatransfer::clipboard::XClipboard >
                             GetClipboard() = 0;
 };
 

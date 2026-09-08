@@ -31,6 +31,7 @@
 
 using namespace ::xmloff::token;
 using namespace css;
+using namespace ::cpo;
 
 SchXMLDataTableContext::SchXMLDataTableContext(SchXMLImportHelper& rImpHelper, SvXMLImport& rImport)
     : SvXMLImportContext(rImport)

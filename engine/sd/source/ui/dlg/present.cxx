@@ -29,7 +29,7 @@
 #include <cusshow.hxx>
 #include <customshowlist.hxx>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 SdStartPresentationDlg::SdStartPresentationDlg(weld::Window* pWindow, const SfxItemSet& rInAttrs,
                                   const std::vector<OUString> &rPageNames, SdCustomShowList* pCSList)

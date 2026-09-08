@@ -39,8 +39,8 @@ class FrameStatusListener : public css::frame::XStatusListener,
                             public ::cppu::OWeakObject
 {
     public:
-        FrameStatusListener( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
-                             const css::uno::Reference< css::frame::XFrame >& xFrame );
+        FrameStatusListener( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+                             const cpo::uno::Reference< css::frame::XFrame >& xFrame );
         virtual ~FrameStatusListener() override;
 
         // methods to support status forwarder, known by the old sfx2 toolbox controller implementation
@@ -54,8 +54,8 @@ class FrameStatusListener : public css::frame::XStatusListener,
 
         // XComponent
         virtual void dispose() override;
-        virtual void addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-        virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+        virtual void addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& xListener ) override;
+        virtual void removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
         // XEventListener
         virtual void disposing( const css::lang::EventObject& Source ) override;
@@ -69,19 +69,19 @@ class FrameStatusListener : public css::frame::XStatusListener,
     private:
         struct Listener
         {
-            Listener( css::util::URL _aURL, css::uno::Reference< css::frame::XDispatch > _xDispatch ) :
+            Listener( css::util::URL _aURL, cpo::uno::Reference< css::frame::XDispatch > _xDispatch ) :
                 aURL(std::move( _aURL )), xDispatch(std::move( _xDispatch )) {}
 
             css::util::URL aURL;
-            css::uno::Reference< css::frame::XDispatch > xDispatch;
+            cpo::uno::Reference< css::frame::XDispatch > xDispatch;
         };
 
         typedef std::unordered_map< OUString,
-                                    css::uno::Reference< css::frame::XDispatch > > URLToDispatchMap;
+                                    cpo::uno::Reference< css::frame::XDispatch > > URLToDispatchMap;
 
         bool                                                      m_bDisposed : 1;
-        css::uno::Reference< css::frame::XFrame >                 m_xFrame;
-        css::uno::Reference< cpo::uno::XComponentContext >        m_xContext;
+        cpo::uno::Reference< css::frame::XFrame >                 m_xFrame;
+        cpo::uno::Reference< cpo::uno::XComponentContext >        m_xContext;
         URLToDispatchMap                                          m_aListenerMap;
 };
 

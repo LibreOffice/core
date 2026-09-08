@@ -25,7 +25,7 @@ namespace com::sun::star::sdbc { class XConnection; }
 
 class SwSelectDBTableDialog : public SfxDialogController
 {
-    css::uno::Reference<css::sdbc::XConnection> m_xConnection;
+    cpo::uno::Reference<css::sdbc::XConnection> m_xConnection;
 
     std::unique_ptr<weld::TreeView> m_xTable;
     std::unique_ptr<weld::Button> m_xPreviewPB;
@@ -33,7 +33,7 @@ class SwSelectDBTableDialog : public SfxDialogController
     DECL_LINK(PreviewHdl, weld::Button&, void);
 public:
     SwSelectDBTableDialog(weld::Window* pParent,
-        css::uno::Reference<css::sdbc::XConnection> xConnection);
+        cpo::uno::Reference<css::sdbc::XConnection> xConnection);
     virtual ~SwSelectDBTableDialog() override;
 
     OUString    GetSelectedTable(bool& bIsTable);

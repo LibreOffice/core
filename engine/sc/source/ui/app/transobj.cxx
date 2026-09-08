@@ -71,6 +71,7 @@
 #include <formulaiter.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 constexpr sal_uInt32 SCTRANS_TYPE_IMPEX              = 1;
 constexpr sal_uInt32 SCTRANS_TYPE_EDIT_RTF           = 2;

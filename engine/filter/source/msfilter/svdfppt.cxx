@@ -159,7 +159,7 @@
 #define VARIABLE_PITCH          0x02
 
 using namespace ::com::sun::star    ;
-using namespace uno                 ;
+using namespace ::cpo;
 using namespace ::cpo::uno;
 using namespace beans               ;
 using namespace drawing             ;
@@ -1669,7 +1669,7 @@ SdrPowerPointImport::~SdrPowerPointImport()
 }
 
 bool PPTConvertOCXControls::ReadOCXStream( rtl::Reference<SotStorage>& rSrc,
-        css::uno::Reference< css::drawing::XShape > *pShapeRef )
+        cpo::uno::Reference< css::drawing::XShape > *pShapeRef )
 {
     bool bRes = false;
     uno::Reference< form::XFormComponent > xFComp;
@@ -1685,40 +1685,40 @@ bool PPTConvertOCXControls::ReadOCXStream( rtl::Reference<SotStorage>& rSrc,
 }
 
 bool PPTConvertOCXControls::InsertControl(
-        const css::uno::Reference< css::form::XFormComponent > &rFComp,
+        const cpo::uno::Reference< css::form::XFormComponent > &rFComp,
         const css::awt::Size& rSize,
-        css::uno::Reference< css::drawing::XShape > *pShape,
+        cpo::uno::Reference< css::drawing::XShape > *pShape,
         bool /*bFloatingCtrl*/)
 {
     bool bRetValue = false;
     try
     {
-        css::uno::Reference< css::drawing::XShape >  xShape;
+        cpo::uno::Reference< css::drawing::XShape >  xShape;
 
-        const css::uno::Reference< css::container::XIndexContainer > & rFormComps =
+        const cpo::uno::Reference< css::container::XIndexContainer > & rFormComps =
             GetFormComps();
 
         cpo::uno::Any aTmp( &rFComp, cppu::UnoType<css::form::XFormComponent>::get() );
 
         rFormComps->insertByIndex( rFormComps->getCount(), aTmp );
 
-        const css::uno::Reference< css::lang::XMultiServiceFactory > & rServiceFactory =
+        const cpo::uno::Reference< css::lang::XMultiServiceFactory > & rServiceFactory =
             GetServiceFactory();
         if( rServiceFactory.is() )
         {
-            css::uno::Reference< cpo::uno::XInterface >  xCreate = rServiceFactory
+            cpo::uno::Reference< cpo::uno::XInterface >  xCreate = rServiceFactory
                 ->createInstance( u"com.sun.star.drawing.ControlShape"_ustr );
             if( xCreate.is() )
             {
-                xShape.set(xCreate, css::uno::UNO_QUERY);
+                xShape.set(xCreate, cpo::uno::UNO_QUERY);
                 if ( xShape.is() )
                 {
                     xShape->setSize(rSize);
                     // set the Control-Model at the Control-Shape
-                    css::uno::Reference< css::drawing::XControlShape >  xControlShape( xShape,
-                        css::uno::UNO_QUERY );
-                    css::uno::Reference< css::awt::XControlModel >  xControlModel( rFComp,
-                        css::uno::UNO_QUERY );
+                    cpo::uno::Reference< css::drawing::XControlShape >  xControlShape( xShape,
+                        cpo::uno::UNO_QUERY );
+                    cpo::uno::Reference< css::awt::XControlModel >  xControlModel( rFComp,
+                        cpo::uno::UNO_QUERY );
                     if ( xControlShape.is() && xControlModel.is() )
                     {
                         xControlShape->setControl( xControlModel );
@@ -1741,14 +1741,14 @@ void PPTConvertOCXControls::GetDrawPage()
     if( xDrawPage.is() || !mxModel.is() )
         return;
 
-    css::uno::Reference< css::drawing::XDrawPages > xDrawPages;
+    cpo::uno::Reference< css::drawing::XDrawPages > xDrawPages;
     switch( ePageKind )
     {
         case PPT_SLIDEPAGE :
         case PPT_NOTEPAGE :
         {
-            css::uno::Reference< css::drawing::XDrawPagesSupplier >
-                    xDrawPagesSupplier( mxModel, css::uno::UNO_QUERY);
+            cpo::uno::Reference< css::drawing::XDrawPagesSupplier >
+                    xDrawPagesSupplier( mxModel, cpo::uno::UNO_QUERY);
             if ( xDrawPagesSupplier.is() )
                 xDrawPages = xDrawPagesSupplier->getDrawPages();
         }
@@ -1756,8 +1756,8 @@ void PPTConvertOCXControls::GetDrawPage()
 
         case PPT_MASTERPAGE :
         {
-            css::uno::Reference< css::drawing::XMasterPagesSupplier >
-                    xMasterPagesSupplier( mxModel, css::uno::UNO_QUERY);
+            cpo::uno::Reference< css::drawing::XMasterPagesSupplier >
+                    xMasterPagesSupplier( mxModel, cpo::uno::UNO_QUERY);
             if ( xMasterPagesSupplier.is() )
                 xDrawPages = xMasterPagesSupplier->getMasterPages();
         }
@@ -1899,7 +1899,7 @@ rtl::Reference<SdrObject> SdrPowerPointImport::ImportOLE( sal_uInt32 nOLEId,
                             {
                                 uno::Reference< frame::XModel > xModel( rOe.pShell->GetModel() );
                                 PPTConvertOCXControls aPPTConvertOCXControls( this, xModel, m_eCurrentPageKind );
-                                css::uno::Reference< css::drawing::XShape > xShape;
+                                cpo::uno::Reference< css::drawing::XShape > xShape;
                                 if ( aPPTConvertOCXControls.ReadOCXStream( xObjStor, &xShape ) )
                                     pRet = SdrObject::getSdrObjectFromXShape(xShape);
 
@@ -1909,7 +1909,7 @@ rtl::Reference<SdrObject> SdrPowerPointImport::ImportOLE( sal_uInt32 nOLEId,
                                 aNm = rOe.pShell->getEmbeddedObjectContainer().CreateUniqueObjectName();
 
                                 // object is not an own object
-                                const css::uno::Reference < css::embed::XStorage >& rStorage = rOe.pShell->GetStorage();
+                                const cpo::uno::Reference < css::embed::XStorage >& rStorage = rOe.pShell->GetStorage();
                                 if (rStorage.is())
                                 {
                                     rtl::Reference<SotStorage> xTarget = SotStorage::OpenOLEStorage(rStorage, aNm, StreamMode::READWRITE);

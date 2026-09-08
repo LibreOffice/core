@@ -30,6 +30,7 @@ namespace chart
 {
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
+using namespace ::cpo;
 
 VTitle::VTitle( uno::Reference< XTitle > xTitle )
                 : m_xTitle(std::move(xTitle))

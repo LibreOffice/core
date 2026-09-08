@@ -35,6 +35,7 @@
 namespace writerfilter::dmapper {
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 
 ModelEventListener::ModelEventListener(bool bIndexes, bool bControls)

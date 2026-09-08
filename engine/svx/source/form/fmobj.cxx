@@ -39,7 +39,7 @@
 #include <tools/debug.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::lang;
@@ -397,7 +397,7 @@ namespace
             sReturn = sCurrentIndex;
 
             // travel up
-            xChild.set(xParent, css::uno::UNO_QUERY);
+            xChild.set(xParent, cpo::uno::UNO_QUERY);
             if (xChild.is())
                 xParent.set(xChild->getParent(), UNO_QUERY);
         }

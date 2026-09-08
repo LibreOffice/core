@@ -46,7 +46,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <utility>
 
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
@@ -349,7 +349,7 @@ class UIElementFactoryManager : public UIElementFactoryManager_BASE
 {
     virtual void disposing(std::unique_lock<std::mutex>&) override;
 public:
-    explicit UIElementFactoryManager( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+    explicit UIElementFactoryManager( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
     virtual OUString getImplementationName() override
     {
@@ -367,17 +367,17 @@ public:
     }
 
     // XUIElementFactory
-    virtual css::uno::Reference< css::ui::XUIElement > createUIElement( const OUString& ResourceURL, const cpo::uno::Sequence< css::beans::PropertyValue >& Args ) override;
+    virtual cpo::uno::Reference< css::ui::XUIElement > createUIElement( const OUString& ResourceURL, const cpo::uno::Sequence< css::beans::PropertyValue >& Args ) override;
 
     // XUIElementFactoryRegistration
     virtual cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > > getRegisteredFactories(  ) override;
-    virtual css::uno::Reference< css::ui::XUIElementFactory > getFactory( const OUString& ResourceURL, const OUString& ModuleIdentifier ) override;
+    virtual cpo::uno::Reference< css::ui::XUIElementFactory > getFactory( const OUString& ResourceURL, const OUString& ModuleIdentifier ) override;
     virtual void registerFactory( const OUString& aType, const OUString& aName, const OUString& aModuleIdentifier, const OUString& aFactoryImplementationName ) override;
     virtual void deregisterFactory( const OUString& aType, const OUString& aName, const OUString& aModuleIdentifier ) override;
 
 private:
     bool                                                  m_bConfigRead;
-    css::uno::Reference< cpo::uno::XComponentContext >        m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext >        m_xContext;
     rtl::Reference<ConfigurationAccess_FactoryManager> m_pConfigAccess;
 };
 

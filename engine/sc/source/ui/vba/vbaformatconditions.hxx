@@ -35,28 +35,28 @@ class ScVbaFormatCondition;
 
 class ScVbaFormatConditions: public CollTestImplHelper< ov::excel::XFormatConditions >
 {
-    css::uno::Reference< css::sheet::XSheetConditionalEntries > mxSheetConditionalEntries;
+    cpo::uno::Reference< css::sheet::XSheetConditionalEntries > mxSheetConditionalEntries;
     rtl::Reference< ScVbaStyles > mxStyles;
-    css::uno::Reference< ov::excel::XRange > mxRangeParent;
-    css::uno::Reference< css::beans::XPropertySet > mxParentRangePropertySet;
+    cpo::uno::Reference< ov::excel::XRange > mxRangeParent;
+    cpo::uno::Reference< css::beans::XPropertySet > mxParentRangePropertySet;
 public:
     /// @throws css::script::BasicErrorException
     void notifyRange();
     /// @throws css::script::BasicErrorException
     /// @throws cpo::uno::RuntimeException
-    rtl::Reference< ScVbaFormatCondition > Add( ::sal_Int32 Type, const cpo::uno::Any& Operator, const cpo::uno::Any& Formula1, const cpo::uno::Any& Formula2, const css::uno::Reference< ov::excel::XStyle >& _xCalcStyle );
+    rtl::Reference< ScVbaFormatCondition > Add( ::sal_Int32 Type, const cpo::uno::Any& Operator, const cpo::uno::Any& Formula1, const cpo::uno::Any& Formula2, const cpo::uno::Reference< ov::excel::XStyle >& _xCalcStyle );
     /// @throws css::script::BasicErrorException
     static OUString getA1Formula(const cpo::uno::Any& _aFormula);
     OUString getStyleName();
     /// @throws css::script::BasicErrorException
     void removeFormatCondition( const OUString& _sStyleName, bool _bRemoveStyle);
-    const css::uno::Reference< css::sheet::XSheetConditionalEntries >& getSheetConditionalEntries() const { return mxSheetConditionalEntries; }
+    const cpo::uno::Reference< css::sheet::XSheetConditionalEntries >& getSheetConditionalEntries() const { return mxSheetConditionalEntries; }
     // XFormatConditions
     virtual void SAL_CALL Delete(  ) override;
-    virtual css::uno::Reference< ov::excel::XFormatCondition > SAL_CALL Add( ::sal_Int32 Type, const cpo::uno::Any& Operator, const cpo::uno::Any& Formula1, const cpo::uno::Any& Formula2 ) override;
+    virtual cpo::uno::Reference< ov::excel::XFormatCondition > SAL_CALL Add( ::sal_Int32 Type, const cpo::uno::Any& Operator, const cpo::uno::Any& Formula1, const cpo::uno::Any& Formula2 ) override;
     // XEnumerationAccess
     virtual cpo::uno::Type SAL_CALL getElementType() override;
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
+    virtual cpo::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
     virtual cpo::uno::Any createCollectionObject(const cpo::uno::Any&) override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;

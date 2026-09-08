@@ -38,6 +38,7 @@
 
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace ::xmloff::token;
 
 namespace sw {
@@ -329,9 +330,9 @@ public:
         }
     }
 
-    virtual css::uno::Reference<XFastContextHandler> SAL_CALL createFastChildContext(
+    virtual cpo::uno::Reference<XFastContextHandler> SAL_CALL createFastChildContext(
                 sal_Int32 Element,
-                const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override
+                const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override
     {
         if (Element == XML_ELEMENT(STYLE, XML_STYLE))
         {
@@ -369,7 +370,7 @@ public:
     }
 
     virtual SvXMLImportContext *CreateFastContext( sal_Int32 Element,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList > & /*xAttrList*/ ) override
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & /*xAttrList*/ ) override
     {
         if (Element == XML_ELEMENT(OFFICE, XML_STYLES))
             return new StoredChapterNumberingRootContext(m_rNumRules, *this);

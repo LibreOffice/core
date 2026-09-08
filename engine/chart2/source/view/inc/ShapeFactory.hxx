@@ -93,7 +93,7 @@ public:
                         , const css::drawing::Position3D& rPosition
                         , const css::drawing::Direction3D& rSize
                         , sal_Int32 nRotateZAngleHundredthDegree
-                        , const css::uno::Reference< css::beans::XPropertySet >& xSourceProp
+                        , const cpo::uno::Reference< css::beans::XPropertySet >& xSourceProp
                         , const tPropertyNameMap& rPropertyNameMap
                         , bool bRounded = false);
 
@@ -109,7 +109,7 @@ public:
                         , const css::drawing::Direction3D& rSize
                         , double fTopHeight
                         , bool bRotateZ
-                        , const css::uno::Reference< css::beans::XPropertySet >& xSourceProp
+                        , const cpo::uno::Reference< css::beans::XPropertySet >& xSourceProp
                         , const tPropertyNameMap& rPropertyNameMap);
 
     static rtl::Reference<Svx3DLatheObject>
@@ -136,7 +136,7 @@ public:
     static rtl::Reference<Svx3DPolygonObject>
         createStripe( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
                     , const Stripe& rStripe
-                    , const css::uno::Reference< css::beans::XPropertySet >& xSourceProp
+                    , const cpo::uno::Reference< css::beans::XPropertySet >& xSourceProp
                     , const tPropertyNameMap& rPropertyNameMap
                     , bool bDoubleSided
                     , short nRotatedTexture = 0 //0 to 7 are the different possibilities
@@ -164,7 +164,7 @@ public:
         createGraphic2D( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
                     , const css::drawing::Position3D& rPos
                     , const css::drawing::Direction3D& rSize
-                    , const css::uno::Reference< css::graphic::XGraphic >& xGraphic );
+                    , const cpo::uno::Reference< css::graphic::XGraphic >& xGraphic );
 
     static rtl::Reference<SvxShapePolyPolygon>
         createLine2D( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
@@ -208,7 +208,7 @@ public:
 
     static rtl::Reference<SvxShapeText>
         createText(const rtl::Reference<SvxShapeGroupAnyD>& xTarget
-            , const cpo::uno::Sequence< css::uno::Reference< css::chart2::XFormattedString > >& xFormattedString
+            , const cpo::uno::Sequence< cpo::uno::Reference< css::chart2::XFormattedString > >& xFormattedString
             , const tNameSequence& rPropNames
             , const tAnySequence& rPropValues
             , const cpo::uno::Any& rATransformation);
@@ -217,8 +217,8 @@ public:
         createText( const rtl::Reference<SvxShapeGroupAnyD>& xTarget2D,
                 const css::awt::Size& rSize,
                 const css::awt::Point& rPosition,
-                cpo::uno::Sequence< css::uno::Reference< css::chart2::XFormattedString > >& xFormattedString,
-                const css::uno::Reference< css::beans::XPropertySet > & xTextProperties,
+                cpo::uno::Sequence< cpo::uno::Reference< css::chart2::XFormattedString > >& xFormattedString,
+                const cpo::uno::Reference< css::beans::XPropertySet > & xTextProperties,
                 double nRotation, const OUString& aName, sal_Int32 nTextMaxWidth );
 
     static rtl::Reference<SvxTableShape> createTable(rtl::Reference<SvxShapeGroupAnyD> const& xTarget, OUString const& rName = OUString());
@@ -255,7 +255,7 @@ public:
     static void setShapeName( const rtl::Reference< SvxShape >& xShape
             , const OUString& rName );
 
-    static OUString getShapeName( const css::uno::Reference< css::drawing::XShape >& xShape );
+    static OUString getShapeName( const cpo::uno::Reference< css::drawing::XShape >& xShape );
 
     static cpo::uno::Any makeTransformation( const css::awt::Point& rScreenPosition2D, double fRotationAnglePi=0.0 );
 

@@ -64,7 +64,7 @@ class GIFWriter
     void                WriteBitmap( const Bitmap& rBmp, const Point& rPoint, bool bExtended,
                                        tools::Long nTimer = 0, Disposal eDisposal = Disposal::Not );
 
-    css::uno::Reference< css::task::XStatusIndicator > xStatusIndicator;
+    cpo::uno::Reference< css::task::XStatusIndicator > xStatusIndicator;
 
 public:
 

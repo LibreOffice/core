@@ -112,8 +112,8 @@ constexpr OUString aImgIds[]
 };
 
 using namespace css;
-using namespace css::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace css::lang;
 using namespace css::frame;
 
@@ -175,7 +175,7 @@ private:
     UrlToDispatchMap    m_aURLToDispatchMap;
 };
 
-ControlMenuController::ControlMenuController(const css::uno::Reference< cpo::uno::XComponentContext >& xContext)
+ControlMenuController::ControlMenuController(const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext)
     : svt::PopupMenuControllerBase(xContext)
 {
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();

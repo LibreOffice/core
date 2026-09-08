@@ -265,7 +265,7 @@ public:
     FlipMode meTileFlipMode = FlipMode::None;
     RectangleAlignment meTileAlignment = RectangleAlignment::TopLeft;
 
-    css::uno::Reference<css::graphic::XGraphic> mxGraphic;
+    cpo::uno::Reference<css::graphic::XGraphic> mxGraphic;
     std::vector<BlipEffect> maBlipEffects;
 
     BlipFill()

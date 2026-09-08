@@ -68,9 +68,9 @@
 
 using namespace comphelper;
 using namespace css::security;
-using namespace css::uno;
-using namespace css;
+using namespace ::cpo;
 using namespace ::cpo::uno;
+using namespace css;
 
 namespace
 {
@@ -309,7 +309,7 @@ bool DigitalSignaturesDialog::Init()
     return bInit;
 }
 
-void DigitalSignaturesDialog::SetStorage( const css::uno::Reference < css::embed::XStorage >& rxStore )
+void DigitalSignaturesDialog::SetStorage( const cpo::uno::Reference < css::embed::XStorage >& rxStore )
 {
     if (!rxStore.is())
     {
@@ -326,12 +326,12 @@ void DigitalSignaturesDialog::SetStorage( const css::uno::Reference < css::embed
     maSignatureManager.getSignatureHelper().SetStorage( maSignatureManager.getStore(), m_sODFVersion, {});
 }
 
-void DigitalSignaturesDialog::SetSignatureStream( const css::uno::Reference < css::io::XStream >& rxStream )
+void DigitalSignaturesDialog::SetSignatureStream( const cpo::uno::Reference < css::io::XStream >& rxStream )
 {
     maSignatureManager.setSignatureStream(rxStream);
 }
 
-void DigitalSignaturesDialog::SetScriptingSignatureStream( const css::uno::Reference < css::io::XStream >& rxStream )
+void DigitalSignaturesDialog::SetScriptingSignatureStream( const cpo::uno::Reference < css::io::XStream >& rxStream )
 {
     if (!rxStream.is())
     {

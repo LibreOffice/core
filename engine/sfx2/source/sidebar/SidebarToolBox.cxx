@@ -34,7 +34,8 @@
 #include <com/sun/star/frame/XToolbarController.hpp>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 namespace {
     void lcl_RTLizeCommandURL( OUString& rCommandURL )
@@ -122,7 +123,7 @@ ToolBoxButtonSize SidebarToolBox::GetDefaultButtonSize() const
 }
 
 void SidebarToolBox::InsertItem(const OUString& rCommand,
-        const css::uno::Reference<css::frame::XFrame>& rFrame,
+        const cpo::uno::Reference<css::frame::XFrame>& rFrame,
         ToolBoxItemBits nBits, const Size& rRequestedSize, ImplToolItems::size_type nPos)
 {
     OUString aCommand( rCommand );
@@ -161,7 +162,7 @@ void SidebarToolBox::KeyInput(const KeyEvent& rKEvt)
 
 void SidebarToolBox::CreateController (
     const ToolBoxItemId nItemId,
-    const css::uno::Reference<css::frame::XFrame>& rxFrame,
+    const cpo::uno::Reference<css::frame::XFrame>& rxFrame,
     const sal_Int32 nItemWidth, bool bSideBar)
 {
     const OUString sCommandName (GetItemCommand(nItemId));
@@ -258,7 +259,7 @@ IMPL_LINK_NOARG(SidebarToolBox, ChangedIconHandler, LinkParamNone*, void)
         else if (SfxViewFrame* pViewFrm = SfxViewFrame::Current())
         {
             OUString aCommandURL = GetItemCommand(it.first);
-            css::uno::Reference<frame::XFrame> xFrame = pViewFrm->GetFrame().GetFrameInterface();
+            cpo::uno::Reference<frame::XFrame> xFrame = pViewFrm->GetFrame().GetFrameInterface();
             Image aImage = vcl::CommandInfoProvider::GetImageForCommand(aCommandURL, xFrame, GetImageSize());
             SetItemImage(it.first, aImage);
         }

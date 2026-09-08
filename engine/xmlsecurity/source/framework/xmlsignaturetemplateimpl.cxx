@@ -23,7 +23,7 @@
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-using namespace ::com::sun::star::uno ;
+using namespace ::cpo::uno ;
 using namespace ::cpo::uno;
 using ::com::sun::star::lang::XMultiServiceFactory ;
 
@@ -50,23 +50,23 @@ Reference< XXMLElementWrapper > SAL_CALL XMLSignatureTemplateImpl::getTemplate()
     return m_xTemplate ;
 }
 
-void SAL_CALL XMLSignatureTemplateImpl::setTarget( const css::uno::Reference< css::xml::wrapper::XXMLElementWrapper >& aXmlElement )
+void SAL_CALL XMLSignatureTemplateImpl::setTarget( const cpo::uno::Reference< css::xml::wrapper::XXMLElementWrapper >& aXmlElement )
 {
     targets.push_back( aXmlElement );
 }
 
-cpo::uno::Sequence< css::uno::Reference< css::xml::wrapper::XXMLElementWrapper > > SAL_CALL XMLSignatureTemplateImpl::getTargets()
+cpo::uno::Sequence< cpo::uno::Reference< css::xml::wrapper::XXMLElementWrapper > > SAL_CALL XMLSignatureTemplateImpl::getTargets()
 {
     return comphelper::containerToSequence(targets);
 }
 
 void SAL_CALL XMLSignatureTemplateImpl::setBinding(
-    const css::uno::Reference< css::xml::crypto::XUriBinding >& aUriBinding )
+    const cpo::uno::Reference< css::xml::crypto::XUriBinding >& aUriBinding )
 {
     m_xUriBinding = aUriBinding;
 }
 
-css::uno::Reference< css::xml::crypto::XUriBinding > SAL_CALL XMLSignatureTemplateImpl::getBinding()
+cpo::uno::Reference< css::xml::crypto::XUriBinding > SAL_CALL XMLSignatureTemplateImpl::getBinding()
 {
     return m_xUriBinding;
 }

@@ -29,6 +29,7 @@
 
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 
 class SvtScriptedTextHelper_Impl

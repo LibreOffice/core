@@ -27,7 +27,7 @@
 #include <sfx2/event.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo;
 using namespace ::cpo::uno;
 
 using ::com::sun::star::container::XNameReplace;

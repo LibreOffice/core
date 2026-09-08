@@ -17,7 +17,7 @@
 #include <string_view>
 
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/processfactory.hxx>
 #include <sal/types.h>
@@ -48,8 +48,8 @@ namespace detail { class ConfigurationWrapper; }
 class COMPHELPER_DLLPUBLIC ConfigurationChanges {
 public:
     static std::shared_ptr<ConfigurationChanges> create(
-        css::uno::Reference<cpo::uno::XComponentContext> const & context
-            = css::uno::Reference<cpo::uno::XComponentContext>());
+        cpo::uno::Reference<cpo::uno::XComponentContext> const & context
+            = cpo::uno::Reference<cpo::uno::XComponentContext>());
 
     ~ConfigurationChanges();
 
@@ -60,22 +60,22 @@ private:
     ConfigurationChanges& operator=(const ConfigurationChanges&) = delete;
 
     SAL_DLLPRIVATE ConfigurationChanges(
-        css::uno::Reference< cpo::uno::XComponentContext >
+        cpo::uno::Reference< cpo::uno::XComponentContext >
             const & context);
 
     SAL_DLLPRIVATE void setPropertyValue(
         OUString const & path, cpo::uno::Any const & value)
         const;
 
-    SAL_DLLPRIVATE css::uno::Reference<
+    SAL_DLLPRIVATE cpo::uno::Reference<
         css::container::XHierarchicalNameReplace >
     getGroup(OUString const & path) const;
 
     SAL_DLLPRIVATE
-    css::uno::Reference< css::container::XNameContainer >
+    cpo::uno::Reference< css::container::XNameContainer >
     getSet(OUString const & path) const;
 
-    css::uno::Reference<
+    cpo::uno::Reference<
         css::configuration::XReadWriteAccess > access_;
 
     friend class detail::ConfigurationWrapper;
@@ -87,7 +87,7 @@ namespace detail {
 class COMPHELPER_DLLPUBLIC ConfigurationWrapper {
 public:
     static ConfigurationWrapper const & get(
-        css::uno::Reference<cpo::uno::XComponentContext> const & context);
+        cpo::uno::Reference<cpo::uno::XComponentContext> const & context);
 
     bool isReadOnly(OUString const & path) const;
 
@@ -104,20 +104,20 @@ public:
         std::shared_ptr< ConfigurationChanges > const & batch,
         OUString const & path, cpo::uno::Any const & value);
 
-    css::uno::Reference<
+    cpo::uno::Reference<
         css::container::XHierarchicalNameAccess >
     getGroupReadOnly(OUString const & path) const;
 
-    static css::uno::Reference<
+    static cpo::uno::Reference<
         css::container::XHierarchicalNameReplace >
     getGroupReadWrite(
         std::shared_ptr< ConfigurationChanges > const & batch,
         OUString const & path);
 
-    css::uno::Reference< css::container::XNameAccess >
+    cpo::uno::Reference< css::container::XNameAccess >
     getSetReadOnly(OUString const & path) const;
 
-    static css::uno::Reference< css::container::XNameContainer >
+    static cpo::uno::Reference< css::container::XNameContainer >
     getSetReadWrite(
         std::shared_ptr< ConfigurationChanges > const & batch,
         OUString const & path);
@@ -126,16 +126,16 @@ public:
 
 private:
     SAL_DLLPRIVATE explicit ConfigurationWrapper(
-        css::uno::Reference<cpo::uno::XComponentContext> const & context);
+        cpo::uno::Reference<cpo::uno::XComponentContext> const & context);
 
     SAL_DLLPRIVATE ~ConfigurationWrapper();
 
     ConfigurationWrapper(const ConfigurationWrapper&) = delete;
     ConfigurationWrapper& operator=(const ConfigurationWrapper&) = delete;
 
-    css::uno::Reference< cpo::uno::XComponentContext >          context_;
+    cpo::uno::Reference< cpo::uno::XComponentContext >          context_;
 
-    css::uno::Reference< css::configuration::XReadWriteAccess > access_;
+    cpo::uno::Reference< css::configuration::XReadWriteAccess > access_;
         // should really be a css.configuration.ReadOnlyAccess (with added
         // css.beans.XHierarchicalPropertySetInfo), but then
         // configmgr::Access::asProperty() would report all properties as
@@ -203,8 +203,8 @@ template< typename T, typename U > struct ConfigurationProperty
     /// Get the read-only status of the given (non-localized) configuration
     /// property.
     static bool isReadOnly(
-        css::uno::Reference<cpo::uno::XComponentContext> const & context
-            = css::uno::Reference<cpo::uno::XComponentContext>())
+        cpo::uno::Reference<cpo::uno::XComponentContext> const & context
+            = cpo::uno::Reference<cpo::uno::XComponentContext>())
     {
         return detail::ConfigurationWrapper::get(context).isReadOnly(T::path());
     }
@@ -213,8 +213,8 @@ template< typename T, typename U > struct ConfigurationProperty
     ///
     /// For nillable properties, U is of type std::optional<U'>.
     static U get(
-        css::uno::Reference<cpo::uno::XComponentContext> const & context
-            = css::uno::Reference<cpo::uno::XComponentContext>())
+        cpo::uno::Reference<cpo::uno::XComponentContext> const & context
+            = cpo::uno::Reference<cpo::uno::XComponentContext>())
     {
         if (comphelper::IsFuzzing())
             return U();
@@ -256,8 +256,8 @@ template< typename T, typename U > struct ConfigurationLocalizedProperty
     /// Get the read-only status of the given (localized) configuration
     /// property.
     static bool isReadOnly(
-        css::uno::Reference<cpo::uno::XComponentContext> const & context
-            = css::uno::Reference<cpo::uno::XComponentContext>())
+        cpo::uno::Reference<cpo::uno::XComponentContext> const & context
+            = cpo::uno::Reference<cpo::uno::XComponentContext>())
     {
         return detail::ConfigurationWrapper::get(context).isReadOnly(T::path());
     }
@@ -268,8 +268,8 @@ template< typename T, typename U > struct ConfigurationLocalizedProperty
     ///
     /// For nillable properties, U is of type std::optional<U'>.
     static U get(
-        css::uno::Reference<cpo::uno::XComponentContext> const & context
-            = css::uno::Reference<cpo::uno::XComponentContext>())
+        cpo::uno::Reference<cpo::uno::XComponentContext> const & context
+            = cpo::uno::Reference<cpo::uno::XComponentContext>())
     {
         // Folding this into one statement causes a bogus error at least with
         // Red Hat GCC 4.6.2-1:
@@ -309,17 +309,17 @@ private:
 template< typename T > struct ConfigurationGroup {
     /// Get the read-only status of the given configuration group.
     static bool isReadOnly(
-        css::uno::Reference<cpo::uno::XComponentContext> const & context
-            = css::uno::Reference<cpo::uno::XComponentContext>())
+        cpo::uno::Reference<cpo::uno::XComponentContext> const & context
+            = cpo::uno::Reference<cpo::uno::XComponentContext>())
     {
         return detail::ConfigurationWrapper::get(context).isReadOnly(T::path());
     }
 
     /// Get read-only access to the given configuration group.
-    static css::uno::Reference<
+    static cpo::uno::Reference<
         css::container::XHierarchicalNameAccess >
-    get(css::uno::Reference<cpo::uno::XComponentContext> const & context
-            = css::uno::Reference<cpo::uno::XComponentContext>())
+    get(cpo::uno::Reference<cpo::uno::XComponentContext> const & context
+            = cpo::uno::Reference<cpo::uno::XComponentContext>())
     {
         return detail::ConfigurationWrapper::get(context).getGroupReadOnly(
             T::path());
@@ -327,7 +327,7 @@ template< typename T > struct ConfigurationGroup {
 
     /// Get read/write access to the given configuration group, storing any
     /// modifications via the given changes batch.
-    static css::uno::Reference<
+    static cpo::uno::Reference<
         css::container::XHierarchicalNameReplace >
     get(std::shared_ptr< ConfigurationChanges > const & batch)
     {
@@ -351,17 +351,17 @@ private:
 template< typename T > struct ConfigurationSet {
     /// Get the read-only status of the given configuration set.
     static bool isReadOnly(
-        css::uno::Reference<cpo::uno::XComponentContext> const & context
-            = css::uno::Reference<cpo::uno::XComponentContext>())
+        cpo::uno::Reference<cpo::uno::XComponentContext> const & context
+            = cpo::uno::Reference<cpo::uno::XComponentContext>())
     {
         return detail::ConfigurationWrapper::get(context).isReadOnly(T::path());
     }
 
     /// Get read-only access to the given configuration set.
     static
-    css::uno::Reference< css::container::XNameAccess >
-    get(css::uno::Reference<cpo::uno::XComponentContext> const & context
-            = css::uno::Reference<cpo::uno::XComponentContext>())
+    cpo::uno::Reference< css::container::XNameAccess >
+    get(cpo::uno::Reference<cpo::uno::XComponentContext> const & context
+            = cpo::uno::Reference<cpo::uno::XComponentContext>())
     {
         return detail::ConfigurationWrapper::get(context).getSetReadOnly(
             T::path());
@@ -370,7 +370,7 @@ template< typename T > struct ConfigurationSet {
     /// Get read/write access to the given configuration set, storing any
     /// modifications via the given changes batch.
     static
-    css::uno::Reference< css::container::XNameContainer >
+    cpo::uno::Reference< css::container::XNameContainer >
     get(std::shared_ptr< ConfigurationChanges > const & batch)
     {
         return comphelper::detail::ConfigurationWrapper::getSetReadWrite(

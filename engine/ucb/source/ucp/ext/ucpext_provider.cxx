@@ -31,7 +31,7 @@ namespace ucb::ucp::ext
 {
 
 
-    using ::com::sun::star::uno::Reference;
+    using ::cpo::uno::Reference;
     using ::cpo::uno::XInterface;
     using ::cpo::uno::Sequence;
     using ::com::sun::star::ucb::XContentIdentifier;

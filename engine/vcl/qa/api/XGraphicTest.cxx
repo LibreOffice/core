@@ -26,6 +26,7 @@
 namespace
 {
 using namespace css;
+using namespace ::cpo;
 
 class XGraphicTest : public test::BootstrapFixture
 {

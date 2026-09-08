@@ -32,10 +32,10 @@
 
 using namespace ::cppu;
 using namespace css;
-using namespace uno;
 using namespace lang;
 using namespace xml::sax;
 using namespace io;
+using namespace ::cpo;
 using namespace cpo::uno;
 
 namespace {

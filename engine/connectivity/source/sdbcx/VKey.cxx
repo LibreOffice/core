@@ -28,7 +28,7 @@
 using namespace connectivity;
 using namespace connectivity::sdbcx;
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::container;
@@ -173,7 +173,7 @@ Reference< XPropertySet > OKey::createDataDescriptor(  )
     return this;
 }
 
-css::uno::Reference< css::beans::XPropertySetInfo > OKey::getPropertySetInfo(  )
+cpo::uno::Reference< css::beans::XPropertySetInfo > OKey::getPropertySetInfo(  )
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }

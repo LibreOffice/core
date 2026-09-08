@@ -30,7 +30,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/wintypes.hxx>
 
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::lang;
@@ -42,7 +42,7 @@ namespace framework
 {
 
 StatusBarWrapper::StatusBarWrapper(
-    css::uno::Reference< cpo::uno::XComponentContext > xContext
+    cpo::uno::Reference< cpo::uno::XComponentContext > xContext
     )
  :  UIConfigElementWrapperBase( UIElementType::STATUSBAR ),
     m_xContext(std::move( xContext ))

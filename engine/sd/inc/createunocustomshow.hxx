@@ -19,12 +19,12 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 namespace cpo::uno { class XInterface; }
 class SdCustomShow;
 
-css::uno::Reference<cpo::uno::XInterface> createUnoCustomShow(
+cpo::uno::Reference<cpo::uno::XInterface> createUnoCustomShow(
     SdCustomShow * pShow);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

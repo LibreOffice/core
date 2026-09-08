@@ -19,7 +19,7 @@
 
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XDesktop2.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <comphelper/asyncquithandler.hxx>
 #include <comphelper/processfactory.hxx>
@@ -34,7 +34,7 @@ AsyncQuitHandler& AsyncQuitHandler::instance()
 
 void AsyncQuitHandler::QuitApplication()
 {
-    css::uno::Reference<css::frame::XDesktop2> xDesktop
+    cpo::uno::Reference<css::frame::XDesktop2> xDesktop
         = css::frame::Desktop::create(comphelper::getProcessComponentContext());
     xDesktop->terminate();
 }

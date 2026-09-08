@@ -76,11 +76,11 @@ private:
     std::optional<SvXMLNamespaceMap> m_pNamespaceMap;
 
     XSecController* m_pXSecController;
-    css::uno::Reference<css::xml::sax::XDocumentHandler> m_xNextHandler;
+    cpo::uno::Reference<css::xml::sax::XDocumentHandler> m_xNextHandler;
 
     XMLSignatureHelper& m_rXMLSignatureHelper;
 
-    OUString HandleIdAttr(css::uno::Reference<css::xml::sax::XAttributeList> const& xAttrs);
+    OUString HandleIdAttr(cpo::uno::Reference<css::xml::sax::XAttributeList> const& xAttrs);
 
 public:
     explicit OOXMLSecParser(XMLSignatureHelper& rXMLSignatureHelper, XSecController* pXSecController);
@@ -91,7 +91,7 @@ public:
 
     virtual void SAL_CALL endDocument() override;
 
-    virtual void SAL_CALL startElement(const OUString& aName, const css::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
+    virtual void SAL_CALL startElement(const OUString& aName, const cpo::uno::Reference<css::xml::sax::XAttributeList>& xAttribs) override;
 
     virtual void SAL_CALL endElement(const OUString& aName) override;
 
@@ -101,7 +101,7 @@ public:
 
     virtual void SAL_CALL processingInstruction(const OUString& aTarget, const OUString& aData) override;
 
-    virtual void SAL_CALL setDocumentLocator(const css::uno::Reference<css::xml::sax::XLocator>& xLocator) override;
+    virtual void SAL_CALL setDocumentLocator(const cpo::uno::Reference<css::xml::sax::XLocator>& xLocator) override;
 
     // XInitialization
     virtual void SAL_CALL initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments) override;

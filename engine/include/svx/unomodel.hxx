@@ -49,12 +49,12 @@ private:
 
     unotools::WeakReference< SvxUnoDrawPagesAccess > mxDrawPagesAccess;
 
-    css::uno::Reference< cpo::uno::XInterface > mxDashTable;
-    css::uno::Reference< cpo::uno::XInterface > mxGradientTable;
-    css::uno::Reference< cpo::uno::XInterface > mxHatchTable;
-    css::uno::Reference< cpo::uno::XInterface > mxBitmapTable;
-    css::uno::Reference< cpo::uno::XInterface > mxTransGradientTable;
-    css::uno::Reference< cpo::uno::XInterface > mxMarkerTable;
+    cpo::uno::Reference< cpo::uno::XInterface > mxDashTable;
+    cpo::uno::Reference< cpo::uno::XInterface > mxGradientTable;
+    cpo::uno::Reference< cpo::uno::XInterface > mxHatchTable;
+    cpo::uno::Reference< cpo::uno::XInterface > mxBitmapTable;
+    cpo::uno::Reference< cpo::uno::XInterface > mxTransGradientTable;
+    cpo::uno::Reference< cpo::uno::XInterface > mxMarkerTable;
 
     cpo::uno::Sequence< cpo::uno::Type > maTypeSequence;
 
@@ -85,10 +85,10 @@ public:
     virtual cpo::uno::Sequence< sal_Int8 > getImplementationId(  ) override;
 
     // XDrawPagesSupplier
-    virtual css::uno::Reference< css::drawing::XDrawPages > getDrawPages(  ) override;
+    virtual cpo::uno::Reference< css::drawing::XDrawPages > getDrawPages(  ) override;
 
     // XMultiServiceFactory ( SvxFmMSFactory )
-    virtual css::uno::Reference< cpo::uno::XInterface > createInstance( const OUString& aServiceSpecifier ) override;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > createInstance( const OUString& aServiceSpecifier ) override;
     virtual cpo::uno::Sequence< OUString > getAvailableServiceNames(  ) override;
 
     // XServiceInfo
@@ -97,15 +97,15 @@ public:
     virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // XAnyCompareFactory
-    virtual css::uno::Reference< css::ucb::XAnyCompare > createAnyCompareByName( const OUString& PropertyName ) override;
+    virtual cpo::uno::Reference< css::ucb::XAnyCompare > createAnyCompareByName( const OUString& PropertyName ) override;
 };
 
-SVXCORE_DLLPUBLIC extern bool SvxDrawingLayerExport( SdrModel* pModel, const css::uno::Reference<css::io::XOutputStream>& xOut );
-extern bool SvxDrawingLayerExport( SdrModel* pModel, const css::uno::Reference<css::io::XOutputStream>& xOut, const css::uno::Reference< css::lang::XComponent >& xComponent );
-SVXCORE_DLLPUBLIC extern bool SvxDrawingLayerExport( SdrModel* pModel, const css::uno::Reference<css::io::XOutputStream>& xOut, const css::uno::Reference< css::lang::XComponent >& xComponent, const char* pExportService  );
-SVXCORE_DLLPUBLIC extern bool SvxDrawingLayerImport( SdrModel* pModel, const css::uno::Reference<css::io::XInputStream>& xInputStream );
-extern bool SvxDrawingLayerImport( SdrModel* pModel, const css::uno::Reference<css::io::XInputStream>& xInputStream, const css::uno::Reference< css::lang::XComponent >& xComponent  );
-SVXCORE_DLLPUBLIC extern bool SvxDrawingLayerImport( SdrModel* pModel, const css::uno::Reference<css::io::XInputStream>& xInputStream, const css::uno::Reference< css::lang::XComponent >& xComponent, const char* pImportService );
+SVXCORE_DLLPUBLIC extern bool SvxDrawingLayerExport( SdrModel* pModel, const cpo::uno::Reference<css::io::XOutputStream>& xOut );
+extern bool SvxDrawingLayerExport( SdrModel* pModel, const cpo::uno::Reference<css::io::XOutputStream>& xOut, const cpo::uno::Reference< css::lang::XComponent >& xComponent );
+SVXCORE_DLLPUBLIC extern bool SvxDrawingLayerExport( SdrModel* pModel, const cpo::uno::Reference<css::io::XOutputStream>& xOut, const cpo::uno::Reference< css::lang::XComponent >& xComponent, const char* pExportService  );
+SVXCORE_DLLPUBLIC extern bool SvxDrawingLayerImport( SdrModel* pModel, const cpo::uno::Reference<css::io::XInputStream>& xInputStream );
+extern bool SvxDrawingLayerImport( SdrModel* pModel, const cpo::uno::Reference<css::io::XInputStream>& xInputStream, const cpo::uno::Reference< css::lang::XComponent >& xComponent  );
+SVXCORE_DLLPUBLIC extern bool SvxDrawingLayerImport( SdrModel* pModel, const cpo::uno::Reference<css::io::XInputStream>& xInputStream, const cpo::uno::Reference< css::lang::XComponent >& xComponent, const char* pImportService );
 
 #endif
 

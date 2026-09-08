@@ -24,7 +24,7 @@
 #include <i18nutil/transliteration.hxx>
 #include <span>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 namespace svxform
 {

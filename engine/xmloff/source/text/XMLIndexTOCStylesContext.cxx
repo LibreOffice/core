@@ -35,7 +35,7 @@
 using namespace ::xmloff::token;
 
 using ::com::sun::star::beans::XPropertySet;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::cpo::uno::Sequence;
 using ::cpo::uno::Any;
 using ::com::sun::star::container::XIndexReplace;
@@ -56,7 +56,7 @@ XMLIndexTOCStylesContext::~XMLIndexTOCStylesContext()
 
 void XMLIndexTOCStylesContext::startFastElement(
     sal_Int32 /*nElement*/,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     // find text:outline-level attribute
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
@@ -106,7 +106,7 @@ void XMLIndexTOCStylesContext::endFastElement(sal_Int32 )
 namespace xmloff {
 
 OUString GetIndexSourceStyleName(
-        css::uno::Reference<css::xml::sax::XFastAttributeList> const& xAttrList)
+        cpo::uno::Reference<css::xml::sax::XFastAttributeList> const& xAttrList)
 {
     for (auto& rIter : sax_fastparser::castToFastAttributeList(xAttrList))
     {
@@ -120,9 +120,9 @@ OUString GetIndexSourceStyleName(
 
 } // namespace xmloff
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLIndexTOCStylesContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLIndexTOCStylesContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     // check for index-source-style
     if ( nElement == XML_ELEMENT(TEXT, XML_INDEX_SOURCE_STYLE) )

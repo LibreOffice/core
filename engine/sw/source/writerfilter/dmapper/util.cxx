@@ -23,6 +23,7 @@
 namespace writerfilter::dmapper
 {
 using namespace com::sun::star;
+using namespace ::cpo;
 
 std::string XTextRangeToString(uno::Reference<text::XTextRange> const& textRange)
 {

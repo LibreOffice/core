@@ -21,7 +21,7 @@
 
 using namespace connectivity;
 
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace com::sun::star::sdbc;
 
 OConnectionWeakWrapper::OConnectionWeakWrapper(Reference< cpo::uno::XAggregation >& _xConnection)

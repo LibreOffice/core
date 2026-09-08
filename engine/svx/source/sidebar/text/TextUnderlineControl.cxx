@@ -141,8 +141,8 @@ IMPL_LINK(TextUnderlineControl, PBClickHdl, weld::Button&, rButton, void)
 
             pArgs[2].Name = u"Underline.Color"_ustr;
             pArgs[2].Value <<= aColor;
-            const css::uno::Reference<com::sun::star::frame::XDispatchProvider> xProvider(
-                m_xFrame, css::uno::UNO_QUERY);
+            const cpo::uno::Reference<com::sun::star::frame::XDispatchProvider> xProvider(
+                m_xFrame, cpo::uno::UNO_QUERY);
             SfxToolBoxControl::Dispatch(xProvider, u".uno:Underline"_ustr, aArgs);
         }
     }

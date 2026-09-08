@@ -46,8 +46,8 @@ namespace dbaccess
         std::map<sal_Int32,sal_Int32>                       m_aKeyColumns;
         //the set can be static, bookmarkable or keyset
         cpo::uno::WeakReference< css::sdbc::XResultSet>       m_xSet;
-        css::uno::Reference< css::sdbc::XResultSetMetaData >  m_xMetaData; // must be before m_aInsertRow
-        css::uno::Reference< cpo::uno::XComponentContext>     m_aContext;
+        cpo::uno::Reference< css::sdbc::XResultSetMetaData >  m_xMetaData; // must be before m_aInsertRow
+        cpo::uno::Reference< cpo::uno::XComponentContext>     m_aContext;
 
         rtl::Reference<OCacheSet>                             m_xCacheSet; // is a bookmarkable, keyset or static resultset
 
@@ -95,11 +95,11 @@ namespace dbaccess
         // checks and set the flags isAfterLast isLast and position when afterlast is true
         void checkPositionFlags();
         void checkUpdateConditions(sal_Int32 columnIndex);
-        bool checkJoin( const css::uno::Reference< css::sdbc::XConnection>& _xConnection,
-                            const css::uno::Reference< css::sdb::XSingleSelectQueryAnalyzer >& _xComposer,
+        bool checkJoin( const cpo::uno::Reference< css::sdbc::XConnection>& _xConnection,
+                            const cpo::uno::Reference< css::sdb::XSingleSelectQueryAnalyzer >& _xComposer,
                             const OUString& _sUpdateTableName);
         bool checkInnerJoin(const ::connectivity::OSQLParseNode *pNode
-                            ,const css::uno::Reference< css::sdbc::XConnection>& _xConnection
+                            ,const cpo::uno::Reference< css::sdbc::XConnection>& _xConnection
                             ,const OUString& _sUpdateTableName);
 
         // clears the insert row
@@ -111,9 +111,9 @@ namespace dbaccess
         // is called when after a moveToInsertRow a movement (next, etc) was called
         void cancelRowModification();
     public:
-        ORowSetCache(const css::uno::Reference< css::sdbc::XResultSet >& _xRs,
-                     const css::uno::Reference< css::sdb::XSingleSelectQueryAnalyzer >& _xAnalyzer,
-                     const css::uno::Reference< cpo::uno::XComponentContext >& _rContext,
+        ORowSetCache(const cpo::uno::Reference< css::sdbc::XResultSet >& _xRs,
+                     const cpo::uno::Reference< css::sdb::XSingleSelectQueryAnalyzer >& _xAnalyzer,
+                     const cpo::uno::Reference< cpo::uno::XComponentContext >& _rContext,
                      const OUString& _rUpdateTableName,
                      bool&  _bModified,
                      bool&  _bNew,
@@ -134,7 +134,7 @@ namespace dbaccess
         void deregisterOldRow(const TORowSetOldRowHelperRef& _rRow);
 
     // css::sdbc::XResultSetMetaDataSupplier
-        const css::uno::Reference< css::sdbc::XResultSetMetaData >& getMetaData(  ) const { return m_xMetaData;}
+        const cpo::uno::Reference< css::sdbc::XResultSetMetaData >& getMetaData(  ) const { return m_xMetaData;}
 
     // css::sdbcx::XRowLocate
         cpo::uno::Any getBookmark(  );
@@ -145,7 +145,7 @@ namespace dbaccess
         sal_Int32 hashBookmark( const cpo::uno::Any& bookmark );
 
     // css::sdbc::XRowUpdate
-        void updateCharacterStream( sal_Int32 columnIndex, const css::uno::Reference< css::io::XInputStream >& x, sal_Int32 length,ORowSetValueVector::Vector& io_aRow,std::vector<sal_Int32>& o_ChangedColumns
+        void updateCharacterStream( sal_Int32 columnIndex, const cpo::uno::Reference< css::io::XInputStream >& x, sal_Int32 length,ORowSetValueVector::Vector& io_aRow,std::vector<sal_Int32>& o_ChangedColumns
              );
         void updateObject( sal_Int32 columnIndex, const cpo::uno::Any& x,ORowSetValueVector::Vector& io_aRow ,std::vector<sal_Int32>& o_ChangedColumns);
         void updateNumericObject( sal_Int32 columnIndex, const cpo::uno::Any& x, ORowSetValueVector::Vector& io_aRow ,std::vector<sal_Int32>& o_ChangedColumns);
@@ -183,7 +183,7 @@ namespace dbaccess
 
         const std::map<sal_Int32,sal_Int32>& getKeyColumns() const { return m_aKeyColumns; }
         bool isResultSetChanged() const;
-        void reset(const css::uno::Reference< css::sdbc::XResultSet>& _xDriverSet);
+        void reset(const cpo::uno::Reference< css::sdbc::XResultSet>& _xDriverSet);
     };
 }
 

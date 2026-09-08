@@ -107,7 +107,7 @@ private:
     ExternalNameModel   maExtNameModel;     /// Additional name data.
     ResultMatrix        maResults;          /// DDE/OLE link results.
     ResultMatrix::iterator maCurrIt;        /// Current position in result matrix.
-    css::uno::Reference< css::sheet::XDDELink >
+    cpo::uno::Reference< css::sheet::XDDELink >
                         mxDdeLink;          /// Interface of a DDE link.
     bool                mbDdeLinkCreated;   /// True = already tried to create the DDE link.
 };
@@ -249,7 +249,7 @@ public:
     /** Returns the external sheet cache index or for the passed sheet. */
     sal_Int32           getSheetCacheIndex( sal_Int32 nTabId ) const;
     /** Returns the sheet cache of the external sheet with the passed index. */
-    css::uno::Reference< css::sheet::XExternalSheetCache >
+    cpo::uno::Reference< css::sheet::XExternalSheetCache >
                         getSheetCache( sal_Int32 nTabId ) const;
 
     /** Returns the internal sheet range or range of external sheet caches for the passed sheet range (BIFF only). */
@@ -274,7 +274,7 @@ private:
     OUString            maRelId;            /// Relation identifier for the external link fragment.
     OUString            maClassName;        /// DDE service, OLE class name.
     OUString            maTargetUrl;        /// Target link, DDE topic, OLE target.
-    css::uno::Reference< css::sheet::XExternalDocLink >
+    cpo::uno::Reference< css::sheet::XExternalDocLink >
                         mxDocLink;          /// Interface for an external document.
     std::vector< sal_Int32 > maSheetCaches; /// External sheet cache indexes.
     RefVector< ExternalName >  maExtNames;         /// Defined names in external document.

@@ -24,7 +24,7 @@
 #include <unotools/unotoolsdllapi.h>
 #include <rtl/ustring.hxx>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <memory>
 
@@ -49,8 +49,8 @@ public:
     bool get(const OUString& option) const;
 
 private:
-    css::uno::Reference<css::container::XNameAccess> root;
-    css::uno::Reference<css::beans::XPropertySet> item;
+    cpo::uno::Reference<css::container::XNameAccess> root;
+    cpo::uno::Reference<css::beans::XPropertySet> item;
 };
 
 class SvtCompatibilityDefault : public SvtCompatibility

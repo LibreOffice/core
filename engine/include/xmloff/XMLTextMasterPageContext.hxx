@@ -39,7 +39,7 @@ class XMLOFF_DLLPUBLIC XMLTextMasterPageContext : public SvXMLStyleContext
     OUString m_sIsFirstPageFooterEnabled;
     OUString m_sIsFirstPageHeaderEnabled;
 
-    css::uno::Reference < css::style::XStyle > m_xStyle;
+    cpo::uno::Reference < css::style::XStyle > m_xStyle;
 
     bool m_bInsertHeader;
     bool m_bInsertFooter;
@@ -50,24 +50,24 @@ class XMLOFF_DLLPUBLIC XMLTextMasterPageContext : public SvXMLStyleContext
     bool m_bHeaderInserted;
     bool m_bFooterInserted;
 
-    SAL_DLLPRIVATE css::uno::Reference< css::style::XStyle > Create();
+    SAL_DLLPRIVATE cpo::uno::Reference< css::style::XStyle > Create();
 protected:
-    const css::uno::Reference< css::style::XStyle >& GetStyle() const { return m_xStyle; }
+    const cpo::uno::Reference< css::style::XStyle >& GetStyle() const { return m_xStyle; }
 public:
 
 
     XMLTextMasterPageContext( SvXMLImport& rImport, sal_Int32 nElement,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
+            const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
             bool bOverwrite );
     virtual ~XMLTextMasterPageContext() override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override final;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override final;
 
     virtual SvXMLImportContext *CreateHeaderFooterContext(
             sal_Int32 nElement,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
+            const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
             const bool bFooter,
             const bool bLeft,
             const bool bFirst );

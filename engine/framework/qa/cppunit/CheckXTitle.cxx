@@ -21,6 +21,7 @@
 #include <vcl/scheduler.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace
 {
@@ -48,7 +49,7 @@ CPPUNIT_TEST_FIXTURE(Test, checkDefaultTitle)
     uno::Reference<frame::XController> xController(xModel->getCurrentController());
     uno::Reference<frame::XDispatchProvider> xFrame(xController->getFrame(), uno::UNO_QUERY);
 
-    uno::Reference<frame::XTitle> xTitle(xFrame, css::uno::UNO_QUERY);
+    uno::Reference<frame::XTitle> xTitle(xFrame, cpo::uno::UNO_QUERY);
     OUString defaultTitle = xTitle->getTitle();
 
     uno::Reference<util::XURLTransformer> xParser(util::URLTransformer::create(m_xContext));
@@ -60,7 +61,7 @@ CPPUNIT_TEST_FIXTURE(Test, checkDefaultTitle)
     uno::Reference<frame::XDispatchProvider> xDispatchProvider(xModel->getCurrentController(),
                                                                uno::UNO_QUERY);
     xDispatchProvider->queryDispatch(printPreviewURL, u""_ustr, 0);
-    uno::Reference<frame::XTitle> xTitle2(xFrame, css::uno::UNO_QUERY);
+    uno::Reference<frame::XTitle> xTitle2(xFrame, cpo::uno::UNO_QUERY);
     Scheduler::ProcessEventsToIdle();
 
     // Default window title and print preview window title should be the same.
@@ -73,7 +74,7 @@ CPPUNIT_TEST_FIXTURE(Test, checkDefaultTitle)
     uno::Reference<frame::XDispatchProvider> xDispatchProvider2(xModel->getCurrentController(),
                                                                 uno::UNO_QUERY);
     xDispatchProvider2->queryDispatch(closePreviewURL, u""_ustr, 0);
-    uno::Reference<frame::XTitle> xTitle3(xFrame, css::uno::UNO_QUERY);
+    uno::Reference<frame::XTitle> xTitle3(xFrame, cpo::uno::UNO_QUERY);
     Scheduler::ProcessEventsToIdle();
 
     // Default window title should be the same after closing print preview window.
@@ -90,7 +91,7 @@ CPPUNIT_TEST_FIXTURE(Test, checkTitleSuggestedFileName)
     uno::Reference<frame::XController> xController(xModel->getCurrentController());
     uno::Reference<frame::XDispatchProvider> xFrame(xController->getFrame(), uno::UNO_QUERY);
 
-    uno::Reference<frame::XTitle> xTitle(xFrame, css::uno::UNO_QUERY);
+    uno::Reference<frame::XTitle> xTitle(xFrame, cpo::uno::UNO_QUERY);
     OUString windowTitle = xTitle->getTitle();
 
     CPPUNIT_ASSERT(windowTitle.startsWith("suggestedname.odt"));
@@ -134,7 +135,7 @@ CPPUNIT_TEST_FIXTURE(Test, setTitleAndCheck)
     xParser->parseStrict(closeDocURL);
     uno::Reference<frame::XDispatchProvider> xDispatchProvider3(xModel->getCurrentController(),
                                                                 uno::UNO_QUERY);
-    uno::Reference<frame::XTitle> xTitle(xFrame, css::uno::UNO_QUERY);
+    uno::Reference<frame::XTitle> xTitle(xFrame, cpo::uno::UNO_QUERY);
     OUString windowTitle = xTitle->getTitle();
 
     CPPUNIT_ASSERT_EQUAL(windowTitle, u"documentTitle"_ustr);

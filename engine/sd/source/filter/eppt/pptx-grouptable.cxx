@@ -32,7 +32,7 @@ GroupTable::~GroupTable()
 {
 }
 
-bool GroupTable::EnterGroup( css::uno::Reference< css::container::XIndexAccess > const & rXIndexAccessRef )
+bool GroupTable::EnterGroup( cpo::uno::Reference< css::container::XIndexAccess > const & rXIndexAccessRef )
 {
     bool bRet = false;
     if ( rXIndexAccessRef.is() )

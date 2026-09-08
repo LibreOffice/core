@@ -107,8 +107,8 @@ public:
 
     // XFlushable
     virtual void flush(  ) override;
-    virtual void addFlushListener( const css::uno::Reference< css::util::XFlushListener >& l ) override;
-    virtual void removeFlushListener( const css::uno::Reference< css::util::XFlushListener >& l ) override;
+    virtual void addFlushListener( const cpo::uno::Reference< css::util::XFlushListener >& l ) override;
+    virtual void removeFlushListener( const cpo::uno::Reference< css::util::XFlushListener >& l ) override;
 
     // XServiceInfo
     virtual OUString getImplementationName(  ) override;

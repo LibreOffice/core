@@ -46,6 +46,7 @@
 #include <svx/unoapi.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace ::cppu;
 
 typedef std::vector<std::unique_ptr<SfxItemSet>> ItemPoolVector;

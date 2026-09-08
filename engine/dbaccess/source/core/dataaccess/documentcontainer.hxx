@@ -53,8 +53,8 @@ public:
     /** constructs the container.<BR>
     */
     ODocumentContainer(
-          const css::uno::Reference< cpo::uno::XComponentContext >& _xORB
-        , const css::uno::Reference< cpo::uno::XInterface >&  _xParentContainer
+          const cpo::uno::Reference< cpo::uno::XComponentContext >& _xORB
+        , const cpo::uno::Reference< cpo::uno::XInterface >&  _xParentContainer
         ,const TContentPtr& _pImpl
         , bool _bFormsContainer
         );
@@ -69,15 +69,15 @@ public:
     DECLARE_SERVICE_INFO();
 
     // XComponentLoader
-    virtual css::uno::Reference< css::lang::XComponent > loadComponentFromURL( const OUString& URL, const OUString& TargetFrameName, sal_Int32 SearchFlags, const cpo::uno::Sequence< css::beans::PropertyValue >& Arguments ) override;
+    virtual cpo::uno::Reference< css::lang::XComponent > loadComponentFromURL( const OUString& URL, const OUString& TargetFrameName, sal_Int32 SearchFlags, const cpo::uno::Sequence< css::beans::PropertyValue >& Arguments ) override;
 
     // css::lang::XMultiServiceFactory
-    virtual css::uno::Reference< cpo::uno::XInterface > createInstance( const OUString& aServiceSpecifier ) override;
-    virtual css::uno::Reference< cpo::uno::XInterface > createInstanceWithArguments( const OUString& ServiceSpecifier, const cpo::uno::Sequence< cpo::uno::Any >& Arguments ) override;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > createInstance( const OUString& aServiceSpecifier ) override;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > createInstanceWithArguments( const OUString& ServiceSpecifier, const cpo::uno::Sequence< cpo::uno::Any >& Arguments ) override;
     virtual cpo::uno::Sequence< OUString > getAvailableServiceNames(  ) override;
 
     // XCommandProcessor
-    virtual cpo::uno::Any execute( const css::ucb::Command& aCommand, sal_Int32 CommandId, const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment ) override ;
+    virtual cpo::uno::Any execute( const css::ucb::Command& aCommand, sal_Int32 CommandId, const cpo::uno::Reference< css::ucb::XCommandEnvironment >& Environment ) override ;
 
     // XHierarchicalNameAccess
     virtual cpo::uno::Any getByHierarchicalName( const OUString& _sName ) override;
@@ -98,7 +98,7 @@ public:
     virtual void replaceByHierarchicalName( const OUString& aName, const cpo::uno::Any& aElement ) override;
 
     // css::beans::XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
 
     // XTransactedObject
     virtual void commit(  ) override;
@@ -112,7 +112,7 @@ public:
 
     // helper
     ::rtl::Reference<OContentHelper> getContent(const OUString& _sName) const;
-    css::uno::Reference< css::embed::XStorage > getContainerStorage() const;
+    cpo::uno::Reference< css::embed::XStorage > getContainerStorage() const;
 
 protected:
     virtual ~ODocumentContainer() override;
@@ -122,7 +122,7 @@ protected:
     virtual OUString determineContentType() const override;
 
     // ODefinitionContainer
-    virtual css::uno::Reference< css::ucb::XContent > createObject(
+    virtual cpo::uno::Reference< css::ucb::XContent > createObject(
         const OUString& _rName
     ) override;
 

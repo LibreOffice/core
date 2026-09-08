@@ -18,7 +18,7 @@
 
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <comphelper/processfactory.hxx>
 #include <config_srcdir.h>
 #include <cool.hpp>
@@ -77,7 +77,7 @@ protected:
     void loadActiveDocument(std::u16string_view filename) {
         loadFromURL(createFileURL(filename));
         css::frame::Desktop::create(comphelper::getProcessComponentContext())->setActiveFrame(
-            css::uno::Reference<css::frame::XModel>(mxComponent, css::uno::UNO_QUERY_THROW)->
+            cpo::uno::Reference<css::frame::XModel>(mxComponent, cpo::uno::UNO_QUERY_THROW)->
             getCurrentController()->getFrame());
     }
 

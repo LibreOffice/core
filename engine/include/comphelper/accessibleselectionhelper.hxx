@@ -45,7 +45,7 @@ protected:
 protected:
     // access to context - still waiting to be overwritten
     /// @throws cpo::uno::RuntimeException
-    virtual css::uno::Reference<css::accessibility::XAccessibleContext> implGetAccessibleContext()
+    virtual cpo::uno::Reference<css::accessibility::XAccessibleContext> implGetAccessibleContext()
         = 0;
 
     // return if the specified child is visible => watch for special ChildIndexes (ACCESSIBLE_SELECTION_CHILD_xxx)
@@ -74,7 +74,7 @@ protected:
     sal_Int64 getSelectedAccessibleChildCount();
     /// @throws css::lang::IndexOutOfBoundsException
     /// @throws cpo::uno::RuntimeException
-    css::uno::Reference<css::accessibility::XAccessible>
+    cpo::uno::Reference<css::accessibility::XAccessible>
     getSelectedAccessibleChild(sal_Int64 nSelectedChildIndex);
     /// @throws css::lang::IndexOutOfBoundsException
     /// @throws cpo::uno::RuntimeException
@@ -100,7 +100,7 @@ protected:
     OAccessibleSelectionHelper();
 
     // return ourself here by default
-    virtual css::uno::Reference<css::accessibility::XAccessibleContext>
+    virtual cpo::uno::Reference<css::accessibility::XAccessibleContext>
     implGetAccessibleContext() override final;
 
 public:
@@ -110,7 +110,7 @@ public:
     virtual void clearAccessibleSelection() override final;
     virtual void selectAllAccessibleChildren() override final;
     virtual sal_Int64 getSelectedAccessibleChildCount() override final;
-    virtual css::uno::Reference<css::accessibility::XAccessible>
+    virtual cpo::uno::Reference<css::accessibility::XAccessible>
     getSelectedAccessibleChild(sal_Int64 nSelectedChildIndex) override final;
     virtual void deselectAccessibleChild(sal_Int64 nSelectedChildIndex) override final;
 };

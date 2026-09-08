@@ -34,9 +34,9 @@ namespace pcr
 
     class PropertyEventTranslation : public PropertyEventTranslation_Base
     {
-        css::uno::Reference< css::beans::XPropertyChangeListener >
+        cpo::uno::Reference< css::beans::XPropertyChangeListener >
                 m_xDelegator;
-        css::uno::Reference< cpo::uno::XInterface >
+        cpo::uno::Reference< cpo::uno::XInterface >
                 m_xTranslatedEventSource;
 
     public:
@@ -45,11 +45,11 @@ namespace pcr
                 if <arg>_rxDelegator</arg> is <NULL/>
         */
         PropertyEventTranslation(
-            const css::uno::Reference< css::beans::XPropertyChangeListener >& _rxDelegator,
-            const css::uno::Reference< cpo::uno::XInterface >& _rxTranslatedEventSource
+            const cpo::uno::Reference< css::beans::XPropertyChangeListener >& _rxDelegator,
+            const cpo::uno::Reference< cpo::uno::XInterface >& _rxTranslatedEventSource
         );
 
-        const css::uno::Reference< css::beans::XPropertyChangeListener >&
+        const cpo::uno::Reference< css::beans::XPropertyChangeListener >&
             getDelegator() const { return m_xDelegator; }
 
     protected:

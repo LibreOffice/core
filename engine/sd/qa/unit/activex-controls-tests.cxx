@@ -25,7 +25,8 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 class SdActiveXControlsTest: public SdModelTestBase
 {

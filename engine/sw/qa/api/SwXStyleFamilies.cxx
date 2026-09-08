@@ -23,7 +23,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo::uno;
 
 namespace
 {

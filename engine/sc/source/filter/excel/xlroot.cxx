@@ -66,14 +66,15 @@
 namespace ApiScriptType = ::com::sun::star::i18n::ScriptType;
 
 using ::cpo::uno::Exception;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::uno::UNO_SET_THROW;
+using ::cpo::uno::Reference;
+using ::cpo::uno::UNO_QUERY_THROW;
+using ::cpo::uno::UNO_SET_THROW;
 using ::com::sun::star::awt::XDevice;
 using ::com::sun::star::awt::DeviceInfo;
 using ::com::sun::star::frame::XFrame;
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 // Global data ================================================================
 

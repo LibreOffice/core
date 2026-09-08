@@ -82,6 +82,7 @@
 #include <stylehelper.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 static const SfxItemPropertySet* lcl_GetGraphicStyleSet()
 {

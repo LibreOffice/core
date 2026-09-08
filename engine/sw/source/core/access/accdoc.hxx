@@ -29,7 +29,7 @@
 // SwAccessiblePreview
 class SwAccessibleDocumentBase : public SwAccessibleContext
 {
-    css::uno::Reference< css::accessibility::XAccessible> mxParent;
+    cpo::uno::Reference< css::accessibility::XAccessible> mxParent;
 
     VclPtr<vcl::Window> mpChildWin; // protected by solar mutex
 
@@ -51,10 +51,10 @@ public:
     // Return the number of currently visible children.
     virtual sal_Int64 SAL_CALL getAccessibleChildCount() override;
 
-    virtual css::uno::Reference< css::accessibility::XAccessible> SAL_CALL
+    virtual cpo::uno::Reference< css::accessibility::XAccessible> SAL_CALL
         getAccessibleChild (sal_Int64 nIndex) override;
 
-    virtual css::uno::Reference< css::accessibility::XAccessible> SAL_CALL
+    virtual cpo::uno::Reference< css::accessibility::XAccessible> SAL_CALL
         getAccessibleParent() override;
 
     virtual sal_Int64 SAL_CALL
@@ -69,7 +69,7 @@ public:
     virtual css::awt::Rectangle implGetBounds() override;
 
     // XAccessibleComponent
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
         css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint(
                 const css::awt::Point& aPoint ) override;
 
@@ -109,7 +109,7 @@ public:
     virtual void SAL_CALL clearAccessibleSelection(  ) override;
     virtual void SAL_CALL selectAllAccessibleChildren(  ) override;
     virtual sal_Int64 SAL_CALL getSelectedAccessibleChildCount(  ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild(
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild(
         sal_Int64 nSelectedChildIndex ) override;
 
     // index has to be treated as global child index.

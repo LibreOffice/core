@@ -40,8 +40,8 @@ private:
     std::unique_ptr<weld::Button> mxEnableBtn;
     std::unique_ptr<weld::Button> mxDisableBtn;
 
-    css::uno::Reference< css::security::XCertificate >  mxCert;
-    css::uno::Reference< css::embed::XStorage >         mxStore;
+    cpo::uno::Reference< css::security::XCertificate >  mxCert;
+    cpo::uno::Reference< css::embed::XStorage >         mxStore;
     OUString                                 maODFVersion;
     const cpo::uno::Sequence< css::security::DocumentSignatureInformation >*    mpInfos;
 
@@ -62,10 +62,10 @@ public:
 
     void    SetDocumentURL( const OUString& rDocURL );
 
-    void    SetStorage( const css::uno::Reference < css::embed::XStorage >& rxStore,
+    void    SetStorage( const cpo::uno::Reference < css::embed::XStorage >& rxStore,
                         const OUString& aODFVersion,
                         const cpo::uno::Sequence< css::security::DocumentSignatureInformation >& _rInfos );
-    void    SetCertificate( const css::uno::Reference< css::security::XCertificate >& _rxCert );
+    void    SetCertificate( const cpo::uno::Reference< css::security::XCertificate >& _rxCert );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

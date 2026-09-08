@@ -81,9 +81,9 @@ public:
     // XComponent
     virtual void dispose() SAL_OVERRIDE;
     virtual void addEventListener(
-        const css::uno::Reference< css::lang::XEventListener >& aListener ) SAL_OVERRIDE;
+        const cpo::uno::Reference< css::lang::XEventListener >& aListener ) SAL_OVERRIDE;
     virtual void removeEventListener(
-        const css::uno::Reference< css::lang::XEventListener >& aListener ) SAL_OVERRIDE;
+        const cpo::uno::Reference< css::lang::XEventListener >& aListener ) SAL_OVERRIDE;
 
 protected:
     /** Called in dispose method after the listeners were notified.

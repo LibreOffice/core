@@ -178,7 +178,7 @@ public:
     static sal_uInt16   GetMinZoom() { return MIN_ZOOM_LEVEL; }
     static sal_uInt16   GetMaxZoom() { return MAX_ZOOM_LEVEL; }
 
-    virtual css::uno::Reference< css::view::XRenderable > GetRenderable() override;
+    virtual cpo::uno::Reference< css::view::XRenderable > GetRenderable() override;
 
     // virtual sal_uInt16           Print( SfxProgress &rProgress, bool bIsAPI, PrintDialog *pPrintDialog = 0 );
     virtual SfxPrinter*     GetPrinter( bool bCreate = false ) override;
@@ -210,13 +210,13 @@ public:
     // For Dialog Drag&Drop in Dialog Organizer:
     // (defined in moduldlg.cxx)
     static void CopyDialogResources(
-        css::uno::Reference< css::io::XInputStreamProvider >& io_xISP,
+        cpo::uno::Reference< css::io::XInputStreamProvider >& io_xISP,
         const ScriptDocument& rSourceDoc, const OUString& rSourceLibName, const ScriptDocument& rDestDoc,
         const OUString& rDestLibName, std::u16string_view rDlgName );
 
     static void InvalidateControlSlots();
 
-    virtual css::uno::Reference< css::frame::XModel >
+    virtual cpo::uno::Reference< css::frame::XModel >
                         GetCurrentDocument() const override;
 
     void UpdateObjectBrowser();

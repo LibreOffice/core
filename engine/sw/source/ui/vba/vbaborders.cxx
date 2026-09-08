@@ -29,6 +29,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
+using namespace ::cpo;
 
 typedef ::cppu::WeakImplHelper<container::XIndexAccess > RangeBorders_Base;
 typedef InheritedHelperInterfaceWeakImpl<word::XBorder > SwVbaBorder_Base;

@@ -30,18 +30,18 @@ namespace chart
 class NumberFormatterWrapper final
 {
 public:
-    NumberFormatterWrapper( const css::uno::Reference< css::util::XNumberFormatsSupplier >& xSupplier );
+    NumberFormatterWrapper( const cpo::uno::Reference< css::util::XNumberFormatsSupplier >& xSupplier );
     ~NumberFormatterWrapper();
 
     SvNumberFormatter* getSvNumberFormatter() const { return m_pNumberFormatter;}
-    const css::uno::Reference< css::util::XNumberFormatsSupplier >&
+    const cpo::uno::Reference< css::util::XNumberFormatsSupplier >&
                 getNumberFormatsSupplier() const { return m_xNumberFormatsSupplier; };
 
     OUString getFormattedString( sal_Int32 nNumberFormatKey, double fValue, Color& rLabelColor, bool& rbColorChanged ) const;
     Date    getNullDate() const;
 
 private: //private member
-    css::uno::Reference< css::util::XNumberFormatsSupplier >
+    cpo::uno::Reference< css::util::XNumberFormatsSupplier >
                         m_xNumberFormatsSupplier;
 
     SvNumberFormatter* m_pNumberFormatter;
@@ -51,7 +51,7 @@ private: //private member
 class FixedNumberFormatter final
 {
 public:
-    FixedNumberFormatter( const css::uno::Reference< css::util::XNumberFormatsSupplier >& xSupplier
+    FixedNumberFormatter( const cpo::uno::Reference< css::util::XNumberFormatsSupplier >& xSupplier
         , sal_Int32 nNumberFormatKey );
     ~FixedNumberFormatter();
 

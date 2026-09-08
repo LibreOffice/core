@@ -38,6 +38,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
+using namespace ::cpo;
 
 namespace ooo::vba::word
 {

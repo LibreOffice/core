@@ -77,6 +77,7 @@
 
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 // Based on the request, changes to the specific layouts will be made, to
 // fit to the format

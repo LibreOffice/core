@@ -20,7 +20,7 @@
 #include <com/sun/star/reflection/XDump.hpp>
 #include <cpo/uno/Any.hxx>
 #include <cpo/uno/DeploymentException.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Type.hxx>
 #include <cpo/uno/TypeClass.hpp>
@@ -62,7 +62,7 @@ cpo::uno::TypeDescription getTypeDescription(cpo::uno::Type const& type)
 }
 
 OUString
-getIdentifier(css::uno::Reference<css::reflection::XConstantTypeDescription> const& constant)
+getIdentifier(cpo::uno::Reference<css::reflection::XConstantTypeDescription> const& constant)
 {
     auto const n = constant->getName();
     auto const i = n.lastIndexOf('.');
@@ -74,7 +74,7 @@ getIdentifier(css::uno::Reference<css::reflection::XConstantTypeDescription> con
 }
 
 OUString
-dumpBitset(cpo::uno::Sequence<css::uno::Reference<css::reflection::XConstantTypeDescription>> const&
+dumpBitset(cpo::uno::Sequence<cpo::uno::Reference<css::reflection::XConstantTypeDescription>> const&
                constants,
            sal_uInt64 value)
 {
@@ -99,11 +99,11 @@ dumpBitset(cpo::uno::Sequence<css::uno::Reference<css::reflection::XConstantType
 class Dump : public cppu::BaseMutex, public cppu::WeakComponentImplHelper<css::reflection::XDump>
 {
 public:
-    explicit Dump(css::uno::Reference<cpo::uno::XComponentContext> const& context)
+    explicit Dump(cpo::uno::Reference<cpo::uno::XComponentContext> const& context)
         : WeakComponentImplHelper(m_aMutex)
         , manager_(context->getValueByName(
                        u"/singletons/com.sun.star.reflection.theTypeDescriptionManager"_ustr),
-                   css::uno::UNO_QUERY_THROW)
+                   cpo::uno::UNO_QUERY_THROW)
     {
     }
 
@@ -233,7 +233,7 @@ public:
     OUString SAL_CALL dumpConstant(OUString const& constantsGroup,
                                    cpo::uno::Any const& value) override
     {
-        css::uno::Reference<css::container::XHierarchicalNameAccess> manager;
+        cpo::uno::Reference<css::container::XHierarchicalNameAccess> manager;
         {
             osl::MutexGuard g(m_aMutex);
             if (rBHelper.bDisposed)
@@ -242,7 +242,7 @@ public:
             }
             manager = manager_;
         }
-        css::uno::Reference<css::reflection::XConstantsTypeDescription> g;
+        cpo::uno::Reference<css::reflection::XConstantsTypeDescription> g;
         try
         {
             manager_->getByHierarchicalName(constantsGroup) >>= g;
@@ -319,7 +319,7 @@ public:
     }
 
 private:
-    css::uno::Reference<css::container::XHierarchicalNameAccess> manager_;
+    cpo::uno::Reference<css::container::XHierarchicalNameAccess> manager_;
 
     void dumpCompoundType(typelib_CompoundTypeDescription const* description, void const* data,
                           OUStringBuffer* buffer)

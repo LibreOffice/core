@@ -29,13 +29,13 @@ namespace framework
 class UNLESS_MERGELIBS(FWK_DLLPUBLIC) GenericToolbarController final : public svt::ToolboxController
 {
     public:
-        GenericToolbarController( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
-                                  const css::uno::Reference< css::frame::XFrame >& rFrame,
+        GenericToolbarController( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+                                  const cpo::uno::Reference< css::frame::XFrame >& rFrame,
                                   ToolBox* pToolBar,
                                   ToolBoxItemId nID,
                                   const OUString& aCommand );
-        GenericToolbarController( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
-                                  const css::uno::Reference< css::frame::XFrame >& rFrame,
+        GenericToolbarController( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+                                  const cpo::uno::Reference< css::frame::XFrame >& rFrame,
                                   weld::Toolbar& rToolBar,
                                   const OUString& aCommand );
         virtual ~GenericToolbarController() override;
@@ -54,7 +54,7 @@ class UNLESS_MERGELIBS(FWK_DLLPUBLIC) GenericToolbarController final : public sv
 
         struct ExecuteInfo
         {
-            css::uno::Reference< css::frame::XDispatch >     xDispatch;
+            cpo::uno::Reference< css::frame::XDispatch >     xDispatch;
             css::util::URL                                   aTargetURL;
             cpo::uno::Sequence< css::beans::PropertyValue >  aArgs;
         };
@@ -71,9 +71,9 @@ class UNLESS_MERGELIBS(FWK_DLLPUBLIC) GenericToolbarController final : public sv
 class UNLESS_MERGELIBS(FWK_DLLPUBLIC) ImageOrientationController final : public svt::ToolboxController
 {
 public:
-    ImageOrientationController(const css::uno::Reference<cpo::uno::XComponentContext>& rContext,
-                               const css::uno::Reference<css::frame::XFrame>& rFrame,
-                               const css::uno::Reference<css::awt::XWindow>& rParentWindow,
+    ImageOrientationController(const cpo::uno::Reference<cpo::uno::XComponentContext>& rContext,
+                               const cpo::uno::Reference<css::frame::XFrame>& rFrame,
+                               const cpo::uno::Reference<css::awt::XWindow>& rParentWindow,
                                const OUString& rModuleName);
 
     // WeakComponentImplHelperBase

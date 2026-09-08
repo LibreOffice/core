@@ -14,7 +14,7 @@
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <cpo/uno/XInterface.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 
 #include <test/testdllapi.hxx>
@@ -24,7 +24,7 @@ namespace apitest
 class OOO_DLLPUBLIC_TEST XDocumentAuditing
 {
 public:
-    virtual css::uno::Reference<cpo::uno::XInterface> init() = 0;
+    virtual cpo::uno::Reference<cpo::uno::XInterface> init() = 0;
 
     void testRefreshArrows();
 
@@ -32,9 +32,9 @@ protected:
     ~XDocumentAuditing() {}
 
 private:
-    bool hasRightAmountOfShapes(const css::uno::Reference<css::drawing::XDrawPage>& xDrawPage,
+    bool hasRightAmountOfShapes(const cpo::uno::Reference<css::drawing::XDrawPage>& xDrawPage,
                                 sal_Int32 nElementCount, sal_Int32 nShapes);
-    static void dispatch(const css::uno::Reference<css::frame::XFrame>& xFrame,
+    static void dispatch(const cpo::uno::Reference<css::frame::XFrame>& xFrame,
                          const cpo::uno::Sequence<css::beans::PropertyValue>& rArguments);
     css::awt::Point m_Position;
 };

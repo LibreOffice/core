@@ -28,6 +28,7 @@
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 static cpo::uno::Any
 lcl_createAPIStyleToVBAObject( const cpo::uno::Any& aObject, const uno::Reference< XHelperInterface >& xParent, const uno::Reference< cpo::uno::XComponentContext >& xContext, const rtl::Reference<ScModelObj>& xModel )
@@ -114,7 +115,7 @@ public:
                 cpo::uno::Any a(cppu::getCaughtException());
                 throw css::lang::WrappedTargetException(
                     "wrapped Exception " + e.Message,
-                    css::uno::Reference<cpo::uno::XInterface>(), a);
+                    cpo::uno::Reference<cpo::uno::XInterface>(), a);
             }
             throw container::NoSuchElementException();
         }

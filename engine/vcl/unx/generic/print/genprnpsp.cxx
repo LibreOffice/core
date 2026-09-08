@@ -69,6 +69,7 @@
 
 using namespace psp;
 using namespace com::sun::star;
+using namespace ::cpo;
 
 static bool getPdfDir( const PrinterInfo& rInfo, OUString &rDir )
 {

@@ -24,7 +24,7 @@
 #endif
 
 #include <config_options.h>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <vcl/dllapi.h>
 #include <vcl/vclptr.hxx>
 
@@ -49,16 +49,16 @@ public:
     virtual void                Destroy() = 0;
 
     // Toolkit
-    virtual css::uno::Reference< css::awt::XToolkit > GetVCLToolkit() = 0;
+    virtual cpo::uno::Reference< css::awt::XToolkit > GetVCLToolkit() = 0;
 
     // Graphics
-    virtual css::uno::Reference< css::awt::XGraphics >    CreateGraphics( OutputDevice* pOutDev ) = 0;
+    virtual cpo::uno::Reference< css::awt::XGraphics >    CreateGraphics( OutputDevice* pOutDev ) = 0;
     virtual void                ReleaseAllGraphics( OutputDevice* pOutDev ) = 0;
 
     // Window
-    virtual css::uno::Reference<css::awt::XVclWindowPeer> GetWindowInterface( vcl::Window* pWindow ) = 0;
-    virtual void                SetWindowInterface( vcl::Window* pWindow, const css::uno::Reference< css::awt::XVclWindowPeer > & xIFace ) = 0;
-    virtual VclPtr<vcl::Window> GetWindow(const css::uno::Reference<css::awt::XWindow>& rxWindow) = 0;
+    virtual cpo::uno::Reference<css::awt::XVclWindowPeer> GetWindowInterface( vcl::Window* pWindow ) = 0;
+    virtual void                SetWindowInterface( vcl::Window* pWindow, const cpo::uno::Reference< css::awt::XVclWindowPeer > & xIFace ) = 0;
+    virtual VclPtr<vcl::Window> GetWindow(const cpo::uno::Reference<css::awt::XWindow>& rxWindow) = 0;
 
     virtual void                WindowDestroyed( vcl::Window* pWindow ) = 0;
 

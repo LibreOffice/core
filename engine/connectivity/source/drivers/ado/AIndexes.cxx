@@ -34,13 +34,13 @@ using namespace ::comphelper;
 
 using namespace connectivity;
 using namespace connectivity::ado;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::container;
 
-css::uno::Reference< css::beans::XPropertySet > OIndexes::createObject(const OUString& _rName)
+cpo::uno::Reference< css::beans::XPropertySet > OIndexes::createObject(const OUString& _rName)
 {
     return new OAdoIndex(isCaseSensitive(),m_pConnection,m_aCollection.GetItem(_rName));
 }
@@ -56,7 +56,7 @@ Reference< XPropertySet > OIndexes::createDescriptor()
 }
 
 // XAppend
-css::uno::Reference< css::beans::XPropertySet > OIndexes::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
+cpo::uno::Reference< css::beans::XPropertySet > OIndexes::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     OAdoIndex* pIndex = dynamic_cast<OAdoIndex*>(descriptor.get());
     if ( pIndex == nullptr )

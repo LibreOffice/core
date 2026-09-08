@@ -27,7 +27,7 @@
 #include <xmloff/xmltoken.hxx>
 
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 using ::xmloff::token::XML_INCREMENT;
 
@@ -46,7 +46,7 @@ XMLLineNumberingSeparatorImportContext::~XMLLineNumberingSeparatorImportContext(
 
 void XMLLineNumberingSeparatorImportContext::startFastElement(
     sal_Int32 /*nElement*/,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {

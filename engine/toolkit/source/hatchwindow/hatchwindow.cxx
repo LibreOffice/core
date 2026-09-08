@@ -30,6 +30,7 @@
 #include <vcl/unohelp.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 VCLXHatchWindow::VCLXHatchWindow()
 : pHatchWindow(nullptr)

@@ -32,7 +32,7 @@
 #include <FieldControls.hxx>
 
 using namespace ::dbaui;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::util;
@@ -182,12 +182,12 @@ const OTypeInfoMap* OWizTypeSelectControl::getTypeInfo() const
     return &m_pParentTabPage->m_pParent->getDestTypeInfo();
 }
 
-css::uno::Reference< css::sdbc::XDatabaseMetaData> OWizTypeSelectControl::getMetaData()
+cpo::uno::Reference< css::sdbc::XDatabaseMetaData> OWizTypeSelectControl::getMetaData()
 {
     return m_pParentTabPage->m_pParent->m_xDestConnection->getMetaData();
 }
 
-css::uno::Reference< css::sdbc::XConnection> OWizTypeSelectControl::getConnection()
+cpo::uno::Reference< css::sdbc::XConnection> OWizTypeSelectControl::getConnection()
 {
     return m_pParentTabPage->m_pParent->m_xDestConnection;
 }

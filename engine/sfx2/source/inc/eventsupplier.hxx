@@ -26,7 +26,7 @@
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/document/XDocumentEventListener.hpp>
 #include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Type.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <mutex>
@@ -45,13 +45,13 @@ class SfxEvents_Impl final : public ::cppu::WeakImplHelper< css::container::XNam
 {
     cpo::uno::Sequence< OUString >     maEventNames;
     std::vector< cpo::uno::Sequence < css::beans::PropertyValue > >  maEventData;
-    css::uno::Reference< css::document::XDocumentEventBroadcaster >  mxBroadcaster;
+    cpo::uno::Reference< css::document::XDocumentEventBroadcaster >  mxBroadcaster;
     std::mutex                     maMutex;
     SfxObjectShell                 *mpObjShell;
 
 public:
                                 SfxEvents_Impl( SfxObjectShell* pShell,
-                                                css::uno::Reference< css::document::XDocumentEventBroadcaster > const & xBroadcaster );
+                                                cpo::uno::Reference< css::document::XDocumentEventBroadcaster > const & xBroadcaster );
                                virtual ~SfxEvents_Impl() override;
 
     //  --- XNameReplace ---

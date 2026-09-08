@@ -51,7 +51,7 @@
 namespace xmloff
 {
 
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
 using namespace cpo::uno;
     using namespace ::com::sun::star::awt;
     using namespace ::com::sun::star::lang;

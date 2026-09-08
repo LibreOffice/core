@@ -50,7 +50,7 @@ namespace connectivity
     }
     // typedefs
     typedef std::vector< cpo::uno::WeakReferenceHelper >           OWeakRefArray;
-    typedef css::uno::Reference< css::sdbcx::XColumnsSupplier>     OSQLTable;
+    typedef cpo::uno::Reference< css::sdbcx::XColumnsSupplier>     OSQLTable;
 
     typedef std::map<OUString,OSQLTable,comphelper::UStringMixLess> OSQLTables;
 
@@ -91,7 +91,7 @@ namespace connectivity
             {}
     };
 
-    typedef ORefVector< css::uno::Reference< css::beans::XPropertySet> > OSQLColumns;
+    typedef ORefVector< cpo::uno::Reference< css::beans::XPropertySet> > OSQLColumns;
 
     // search from first to last the column with the name _rVal
     // when no such column exist last is returned
@@ -129,7 +129,7 @@ namespace connectivity
         @return
             The JavaVM.
     */
-    OOO_DLLPUBLIC_DBTOOLS ::rtl::Reference< jvmaccess::VirtualMachine > getJavaVM(const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext);
+    OOO_DLLPUBLIC_DBTOOLS ::rtl::Reference< jvmaccess::VirtualMachine > getJavaVM(const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxContext);
 
     /** return <TRUE/> if the java class exists, otherwise <FALSE/>.
         @param  _pJVM

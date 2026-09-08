@@ -18,20 +18,20 @@
 
 #include <emscripten/bind.h>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Type.hxx>
 #include <cppu/unotype.hxx>
 #include <sal/types.h>
 
-template <typename T> struct emscripten::smart_ptr_trait<css::uno::Reference<T>>
+template <typename T> struct emscripten::smart_ptr_trait<cpo::uno::Reference<T>>
 {
-    using PointerType = css::uno::Reference<T>;
+    using PointerType = cpo::uno::Reference<T>;
     using element_type = T;
-    static T* get(css::uno::Reference<T> const& ptr) { return ptr.get(); }
+    static T* get(cpo::uno::Reference<T> const& ptr) { return ptr.get(); }
     static sharing_policy get_sharing_policy() { return sharing_policy::INTRUSIVE; }
-    static css::uno::Reference<T>* share(T* v) { return new css::uno::Reference<T>(v); }
-    static css::uno::Reference<T>* construct_null() { return new css::uno::Reference<T>(); }
+    static cpo::uno::Reference<T>* share(T* v) { return new cpo::uno::Reference<T>(v); }
+    static cpo::uno::Reference<T>* construct_null() { return new cpo::uno::Reference<T>(); }
 };
 
 namespace unoembindhelpers

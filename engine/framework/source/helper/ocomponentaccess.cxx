@@ -30,13 +30,13 @@ namespace framework{
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::cpo::uno;
 using namespace ::cppu;
 
 //  constructor
 
-OComponentAccess::OComponentAccess( const css::uno::Reference< XDesktop >& xOwner )
+OComponentAccess::OComponentAccess( const cpo::uno::Reference< XDesktop >& xOwner )
         :   m_xOwner        ( xOwner                        )
 {
     // Safe impossible cases
@@ -50,7 +50,7 @@ OComponentAccess::~OComponentAccess()
 }
 
 //  XEnumerationAccess
-css::uno::Reference< XEnumeration > OComponentAccess::createEnumeration()
+cpo::uno::Reference< XEnumeration > OComponentAccess::createEnumeration()
 {
     SolarMutexGuard g;
 
@@ -59,15 +59,15 @@ css::uno::Reference< XEnumeration > OComponentAccess::createEnumeration()
     rtl::Reference< OComponentEnumeration > xReturn;
 
     // Try to "lock" the desktop for access to task container.
-    css::uno::Reference< XInterface > xLock = m_xOwner.get();
+    cpo::uno::Reference< XInterface > xLock = m_xOwner.get();
     if ( xLock.is() )
     {
         // Desktop exist => pointer to task container must be valid.
         // Initialize a new enumeration ... if some tasks and his components exist!
         // (OTasksEnumeration will make an assert, if we initialize the new instance without valid values!)
 
-        std::vector< css::uno::Reference< XComponent > > seqComponents;
-        impl_collectAllChildComponents( css::uno::Reference< XFramesSupplier >( xLock, UNO_QUERY ), seqComponents );
+        std::vector< cpo::uno::Reference< XComponent > > seqComponents;
+        impl_collectAllChildComponents( cpo::uno::Reference< XFramesSupplier >( xLock, UNO_QUERY ), seqComponents );
         xReturn = new OComponentEnumeration( std::move(seqComponents) );
     }
 
@@ -92,7 +92,7 @@ bool OComponentAccess::hasElements()
     bool bReturn = false;
 
     // Try to "lock" the desktop for access to task container.
-    css::uno::Reference< XFramesSupplier > xLock( m_xOwner.get(), UNO_QUERY );
+    cpo::uno::Reference< XFramesSupplier > xLock( m_xOwner.get(), UNO_QUERY );
     if ( xLock.is() )
     {
         // Ask container of owner for existing elements.
@@ -104,8 +104,8 @@ bool OComponentAccess::hasElements()
 }
 
 // static
-void OComponentAccess::impl_collectAllChildComponents(  const css::uno::Reference< XFramesSupplier >&         xNode           ,
-                                                               std::vector< css::uno::Reference< XComponent > >& seqComponents   )
+void OComponentAccess::impl_collectAllChildComponents(  const cpo::uno::Reference< XFramesSupplier >&         xNode           ,
+                                                               std::vector< cpo::uno::Reference< XComponent > >& seqComponents   )
 {
     // If valid node was given ...
     if( !xNode.is() )
@@ -116,13 +116,13 @@ void OComponentAccess::impl_collectAllChildComponents(  const css::uno::Referenc
     // Get the container of current node, collect the components of existing child frames
     // and go down to next level in tree (recursive!).
 
-    const css::uno::Reference< XFrames >                xContainer  = xNode->getFrames();
-    const Sequence< css::uno::Reference< XFrame > > seqFrames   = xContainer->queryFrames( FrameSearchFlag::CHILDREN );
+    const cpo::uno::Reference< XFrames >                xContainer  = xNode->getFrames();
+    const Sequence< cpo::uno::Reference< XFrame > > seqFrames   = xContainer->queryFrames( FrameSearchFlag::CHILDREN );
 
     const sal_Int32 nFrameCount = seqFrames.getLength();
     for( sal_Int32 nFrame=0; nFrame<nFrameCount; ++nFrame )
     {
-        css::uno::Reference< XComponent > xComponent = impl_getFrameComponent( seqFrames[nFrame] );
+        cpo::uno::Reference< XComponent > xComponent = impl_getFrameComponent( seqFrames[nFrame] );
         if( xComponent.is() )
         {
             seqComponents.push_back( xComponent );
@@ -132,12 +132,12 @@ void OComponentAccess::impl_collectAllChildComponents(  const css::uno::Referenc
 }
 
 // static
-css::uno::Reference< XComponent > OComponentAccess::impl_getFrameComponent( const css::uno::Reference< XFrame >& xFrame )
+cpo::uno::Reference< XComponent > OComponentAccess::impl_getFrameComponent( const cpo::uno::Reference< XFrame >& xFrame )
 {
     // Set default return value, if method failed.
-    css::uno::Reference< XComponent > xComponent;
+    cpo::uno::Reference< XComponent > xComponent;
     // Does no controller exists?
-    css::uno::Reference< XController > xController = xFrame->getController();
+    cpo::uno::Reference< XController > xController = xFrame->getController();
     if ( !xController.is() )
     {
         // Controller not exist - use the VCL-component.
@@ -146,7 +146,7 @@ css::uno::Reference< XComponent > OComponentAccess::impl_getFrameComponent( cons
     else
     {
         // Does no model exists?
-        css::uno::Reference< XModel > xModel = xController->getModel();
+        cpo::uno::Reference< XModel > xModel = xController->getModel();
         if ( xModel.is() )
         {
             // Model exist - use the model as component.

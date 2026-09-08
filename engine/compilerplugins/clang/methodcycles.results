@@ -39,17 +39,17 @@ found cycle
     void CGM::ImplDoClass0()
     filter/source/graphicfilter/icgm/cgm.hxx:117
 
-    unsigned int ImportCGM(SvStream &,const com::sun::star::uno::Reference<com::sun::star::frame::XModel> &,const com::sun::star::uno::Reference<com::sun::star::task::XStatusIndicator> &)
+    unsigned int ImportCGM(SvStream &,const cpo::uno::Reference<com::sun::star::frame::XModel> &,const cpo::uno::Reference<com::sun::star::task::XStatusIndicator> &)
     filter/source/graphicfilter/icgm/cgm.cxx:686
 
     bool CGM::Write(SvStream &)
     filter/source/graphicfilter/icgm/cgm.hxx:137
 
 found cycle
-    void sdext::presenter::PresenterToolBar::ProcessEntry(const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> &,const sdext::presenter::PresenterToolBar::Context &)
+    void sdext::presenter::PresenterToolBar::ProcessEntry(const cpo::uno::Reference<com::sun::star::beans::XPropertySet> &,const sdext::presenter::PresenterToolBar::Context &)
     sdext/source/presenter/PresenterToolBar.hxx:183
 
-    void ::operator()(const rtl::OUString &,const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> &) const
+    void ::operator()(const rtl::OUString &,const cpo::uno::Reference<com::sun::star::beans::XPropertySet> &) const
     sdext/source/presenter/PresenterToolBar.cxx:611
 
     void sdext::presenter::(anonymous namespace)::Element::SetModes(const std::shared_ptr<sdext::presenter::(anonymous namespace)::ElementMode> &,const std::shared_ptr<sdext::presenter::(anonymous namespace)::ElementMode> &,const std::shared_ptr<sdext::presenter::(anonymous namespace)::ElementMode> &,const std::shared_ptr<sdext::presenter::(anonymous namespace)::ElementMode> &,const std::shared_ptr<sdext::presenter::(anonymous namespace)::ElementMode> &)
@@ -90,7 +90,7 @@ found cycle
     include/svx/svdundo.hxx:562
 
 found cycle
-    void oox::PropertyMap::dumpCode(const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> &)
+    void oox::PropertyMap::dumpCode(const cpo::uno::Reference<com::sun::star::beans::XPropertySet> &)
     include/oox/helper/propertymap.hxx:113
 
     const char * oox::lclDumpAnyValueCode(const cpo::uno::Any &,int)

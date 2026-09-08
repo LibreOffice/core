@@ -20,7 +20,7 @@
 #ifndef INCLUDED_OOX_OLE_VBAMODULE_HXX
 #define INCLUDED_OOX_OLE_VBAMODULE_HXX
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <rtl/textenc.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -55,8 +55,8 @@ class VbaModule
 {
 public:
     explicit            VbaModule(
-                            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
-                            const css::uno::Reference< css::frame::XModel >& rxDocModel,
+                            const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+                            const cpo::uno::Reference< css::frame::XModel >& rxDocModel,
                             OUString aName,
                             rtl_TextEncoding eTextEnc,
                             bool bExecutable );
@@ -77,12 +77,12 @@ public:
     /** Imports the VBA source code into the passed Basic library. */
     void                createAndImportModule(
                             StorageBase& rVbaStrg,
-                            const css::uno::Reference< css::container::XNameContainer >& rxBasicLib,
-                            const css::uno::Reference< css::container::XNameAccess >& rxDocObjectNA );
+                            const cpo::uno::Reference< css::container::XNameContainer >& rxBasicLib,
+                            const cpo::uno::Reference< css::container::XNameAccess >& rxDocObjectNA );
     /** Creates an empty Basic module in the passed Basic library. */
     void                createEmptyModule(
-                            const css::uno::Reference< css::container::XNameContainer >& rxBasicLib,
-                            const css::uno::Reference< css::container::XNameAccess >& rxDocObjectNA ) const;
+                            const cpo::uno::Reference< css::container::XNameContainer >& rxBasicLib,
+                            const cpo::uno::Reference< css::container::XNameAccess >& rxDocObjectNA ) const;
 
     void registerShortcutKeys();
 
@@ -93,13 +93,13 @@ private:
     /** Creates a new Basic module and inserts it into the passed Basic library. */
     void                createModule(
                             std::u16string_view rVBASourceCode,
-                            const css::uno::Reference< css::container::XNameContainer >& rxBasicLib,
-                            const css::uno::Reference< css::container::XNameAccess >& rxDocObjectNA ) const;
+                            const cpo::uno::Reference< css::container::XNameContainer >& rxBasicLib,
+                            const cpo::uno::Reference< css::container::XNameAccess >& rxDocObjectNA ) const;
 
 private:
-    css::uno::Reference< cpo::uno::XComponentContext >
+    cpo::uno::Reference< cpo::uno::XComponentContext >
                         mxContext;          ///< Component context with service manager.
-    css::uno::Reference< css::frame::XModel >
+    cpo::uno::Reference< css::frame::XModel >
                         mxDocModel;         ///< Document model used to import/export the VBA project.
     OUString            maName;
     OUString            maStreamName;

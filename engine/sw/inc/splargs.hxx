@@ -81,13 +81,13 @@ struct SwConversionArgs : SwArgsBase
 
 struct SwSpellArgs : SwArgsBase
 {
-    css::uno::Reference< css::linguistic2::XSpellChecker >      xSpeller;
+    cpo::uno::Reference< css::linguistic2::XSpellChecker >      xSpeller;
 
-    css::uno::Reference< css::linguistic2::XSpellAlternatives > xSpellAlt;
+    cpo::uno::Reference< css::linguistic2::XSpellAlternatives > xSpellAlt;
 
     bool bIsGrammarCheck;
 
-    SwSpellArgs(css::uno::Reference< css::linguistic2::XSpellChecker > xSplChk,
+    SwSpellArgs(cpo::uno::Reference< css::linguistic2::XSpellChecker > xSplChk,
             SwPosition& rStart,
             SwPosition& rEnd,
             bool bGrammar )
@@ -105,7 +105,7 @@ struct SwSpellArgs : SwArgsBase
 class SwInterHyphInfo
 {
     /// output: hyphenated word
-    css::uno::Reference<css::linguistic2::XHyphenatedWord> m_xHyphWord;
+    cpo::uno::Reference<css::linguistic2::XHyphenatedWord> m_xHyphWord;
     /// input: cursor point to locate the frame
     const Point m_aCursorPos;
 public:
@@ -127,11 +127,11 @@ public:
     {
         return m_aCursorPos.X() || m_aCursorPos.Y() ? &m_aCursorPos : nullptr;
     }
-    void SetHyphWord(const css::uno::Reference< css::linguistic2::XHyphenatedWord >  &rxHW)
+    void SetHyphWord(const cpo::uno::Reference< css::linguistic2::XHyphenatedWord >  &rxHW)
     {
         m_xHyphWord = rxHW;
     }
-    const css::uno::Reference< css::linguistic2::XHyphenatedWord >& GetHyphWord() const
+    const cpo::uno::Reference< css::linguistic2::XHyphenatedWord >& GetHyphWord() const
     {
         return m_xHyphWord;
     }

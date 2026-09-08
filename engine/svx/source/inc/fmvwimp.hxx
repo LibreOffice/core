@@ -90,14 +90,14 @@ class FormViewPageWindowAdapter final : public FormViewPageWindowAdapter_Base
 {
     friend class FmXFormView;
 
-    ::std::vector< css::uno::Reference< css::form::runtime::XFormController > >   m_aControllerList;
-    css::uno::Reference< css::awt::XControlContainer >                            m_xControlContainer;
-    css::uno::Reference<cpo::uno::XComponentContext>                              m_xContext;
+    ::std::vector< cpo::uno::Reference< css::form::runtime::XFormController > >   m_aControllerList;
+    cpo::uno::Reference< css::awt::XControlContainer >                            m_xControlContainer;
+    cpo::uno::Reference<cpo::uno::XComponentContext>                              m_xContext;
     FmXFormView*                m_pViewImpl;
     VclPtr<vcl::Window>         m_pWindow;
 
 public:
-    FormViewPageWindowAdapter(  css::uno::Reference<cpo::uno::XComponentContext> _xContext,
+    FormViewPageWindowAdapter(  cpo::uno::Reference<cpo::uno::XComponentContext> _xContext,
         const SdrPageWindow&, FmXFormView* pView);
         //const SdrPageViewWinRec*, FmXFormView* pView);
 
@@ -110,19 +110,19 @@ public:
     virtual cpo::uno::Any getByIndex(sal_Int32 Index) override;
 
     // XFormControllerContext
-    virtual void makeVisible( const css::uno::Reference< css::awt::XControl >& Control ) override;
+    virtual void makeVisible( const cpo::uno::Reference< css::awt::XControl >& Control ) override;
 
-    const ::std::vector< css::uno::Reference< css::form::runtime::XFormController > >& GetList() const {return m_aControllerList;}
+    const ::std::vector< cpo::uno::Reference< css::form::runtime::XFormController > >& GetList() const {return m_aControllerList;}
 
 private:
     virtual ~FormViewPageWindowAdapter() override;
 
-    css::uno::Reference< css::form::runtime::XFormController >  getController( const css::uno::Reference< css::form::XForm >& xForm ) const;
+    cpo::uno::Reference< css::form::runtime::XFormController >  getController( const cpo::uno::Reference< css::form::XForm >& xForm ) const;
     void setController(
-            const css::uno::Reference< css::form::XForm >& xForm,
-            const css::uno::Reference< css::form::runtime::XFormController >& _rxParentController );
-    const css::uno::Reference< css::awt::XControlContainer >&  getControlContainer() const { return m_xControlContainer; }
-    void updateTabOrder( const css::uno::Reference< css::form::XForm >& _rxForm );
+            const cpo::uno::Reference< css::form::XForm >& xForm,
+            const cpo::uno::Reference< css::form::runtime::XFormController >& _rxParentController );
+    const cpo::uno::Reference< css::awt::XControlContainer >&  getControlContainer() const { return m_xControlContainer; }
+    void updateTabOrder( const cpo::uno::Reference< css::form::XForm >& _rxForm );
     void dispose();
     vcl::Window* getWindow() const {return m_pWindow;}
 };
@@ -141,8 +141,8 @@ class FmXFormView final : public ::cppu::WeakImplHelper<
     class ObjectRemoveListener;
     friend class ObjectRemoveListener;
 
-    css::uno::Reference< css::awt::XWindow>                   m_xWindow;
-    css::uno::Reference< css::beans::XPropertySet >           m_xLastCreatedControlModel;
+    cpo::uno::Reference< css::awt::XWindow>                   m_xWindow;
+    cpo::uno::Reference< css::beans::XPropertySet >           m_xLastCreatedControlModel;
 
     FmFormObj*      m_pMarkedGrid;
     FmFormView*     m_pView;
@@ -156,8 +156,8 @@ class FmXFormView final : public ::cppu::WeakImplHelper<
 
     std::vector< rtl::Reference< FormViewPageWindowAdapter > >
                     m_aPageWindowAdapters;  // to be filled in alive mode only
-    typedef ::std::set< css::uno::Reference< css::form::XForm > > SetOfForms;
-    std::map< css::uno::Reference< css::awt::XControlContainer >, SetOfForms >
+    typedef ::std::set< cpo::uno::Reference< css::form::XForm > > SetOfForms;
+    std::map< cpo::uno::Reference< css::awt::XControlContainer >, SetOfForms >
                     m_aNeedTabOrderUpdate; // map control container to set of forms
 
     // list of selected objects, used for restoration when switching from Alive to DesignMode
@@ -170,7 +170,7 @@ class FmXFormView final : public ::cppu::WeakImplHelper<
 
     FmFormShell* GetFormShell() const;
 
-    css::uno::Reference<css::awt::XWindow> GetParentWindow() const;
+    cpo::uno::Reference<css::awt::XWindow> GetParentWindow() const;
 
     FmXFormView( FmFormView* _pView );
     virtual ~FmXFormView() override;
@@ -203,10 +203,10 @@ public:
     virtual void focusLost( const css::awt::FocusEvent& e ) override;
 
     FmFormView* getView() const {return m_pView;}
-    rtl::Reference< FormViewPageWindowAdapter >  findWindow( const css::uno::Reference< css::awt::XControlContainer >& _rxCC ) const;
+    rtl::Reference< FormViewPageWindowAdapter >  findWindow( const cpo::uno::Reference< css::awt::XControlContainer >& _rxCC ) const;
 
-    css::uno::Reference< css::form::runtime::XFormController >
-            getFormController( const css::uno::Reference< css::form::XForm >& _rxForm, const OutputDevice& _rDevice ) const;
+    cpo::uno::Reference< css::form::runtime::XFormController >
+            getFormController( const cpo::uno::Reference< css::form::XForm >& _rxForm, const OutputDevice& _rDevice ) const;
 
     // activation handling
     bool        hasEverBeenActivated( ) const { return !m_bFirstActivation; }
@@ -230,12 +230,12 @@ public:
     void    breakCreateFormObject();
 
     static bool
-            isFocusable( const css::uno::Reference< css::awt::XControl >& i_rControl );
+            isFocusable( const cpo::uno::Reference< css::awt::XControl >& i_rControl );
 
 private:
     //void addWindow(const SdrPageViewWinRec*);
     void addWindow(const SdrPageWindow&);
-    void removeWindow( const css::uno::Reference< css::awt::XControlContainer >& _rxCC );
+    void removeWindow( const cpo::uno::Reference< css::awt::XControlContainer >& _rxCC );
     void Activate(bool bSync = false);
     void Deactivate(bool bDeactivateController = true);
 
@@ -246,8 +246,8 @@ private:
         OutputDevice const & _rOutDev,
         sal_Int32 _nXOffsetMM,
         sal_Int32 _nYOffsetMM,
-        const css::uno::Reference< css::beans::XPropertySet >& _rxField,
-        const css::uno::Reference< css::util::XNumberFormats >& _rxNumberFormats,
+        const cpo::uno::Reference< css::beans::XPropertySet >& _rxField,
+        const cpo::uno::Reference< css::util::XNumberFormats >& _rxNumberFormats,
         SdrObjKind _nControlObjectID,
         std::u16string_view _rFieldPostfix,
         SdrInventor _nInventor,
@@ -265,13 +265,13 @@ private:
         OutputDevice const & _rOutDev,
         sal_Int32 _nXOffsetMM,
         sal_Int32 _nYOffsetMM,
-        const css::uno::Reference< css::beans::XPropertySet >& _rxField,
-        const css::uno::Reference< css::util::XNumberFormats >& _rxNumberFormats,
+        const cpo::uno::Reference< css::beans::XPropertySet >& _rxField,
+        const cpo::uno::Reference< css::util::XNumberFormats >& _rxNumberFormats,
         SdrObjKind _nControlObjectID,
         std::u16string_view _rFieldPostfix,
         rtl::Reference<SdrUnoObj>& _rpLabel,
         rtl::Reference<SdrUnoObj>& _rpControl,
-        const css::uno::Reference< css::sdbc::XDataSource >& _rxDataSource,
+        const cpo::uno::Reference< css::sdbc::XDataSource >& _rxDataSource,
         const OUString& _rDataSourceName,
         const OUString& _rCommand,
         const sal_Int32 _nCommandType

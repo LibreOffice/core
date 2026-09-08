@@ -167,6 +167,7 @@ using namespace ::com::sun::star;
 using namespace com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace com::sun::star::style;
+using namespace ::cpo;
 using namespace svx::sidebar;
 
 static void sw_CharDialogResult(const SfxItemSet* pSet, SwWrtShell &rWrtSh, std::shared_ptr<SfxItemSet> const & pCoreSet, bool bSel,

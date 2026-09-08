@@ -35,11 +35,11 @@ namespace x11 {
         >,
         public SelectionAdaptor
     {
-        css::uno::Reference< css::datatransfer::XTransferable > m_aContents;
-        css::uno::Reference< css::datatransfer::clipboard::XClipboardOwner > m_aOwner;
+        cpo::uno::Reference< css::datatransfer::XTransferable > m_aContents;
+        cpo::uno::Reference< css::datatransfer::clipboard::XClipboardOwner > m_aOwner;
 
         rtl::Reference<SelectionManager>                        m_xSelectionManager;
-        ::std::vector< css::uno::Reference< css::datatransfer::clipboard::XClipboardListener > > m_aListeners;
+        ::std::vector< cpo::uno::Reference< css::datatransfer::clipboard::XClipboardListener > > m_aListeners;
         Atom                                                    m_aSelection;
 
         X11Clipboard( SelectionManager& rManager, Atom aSelection );
@@ -51,7 +51,7 @@ namespace x11 {
 
     public:
 
-        static css::uno::Reference<css::datatransfer::clipboard::XClipboard>
+        static cpo::uno::Reference<css::datatransfer::clipboard::XClipboard>
         create( SelectionManager& rManager, Atom aSelection );
 
         virtual ~X11Clipboard() override;
@@ -70,11 +70,11 @@ namespace x11 {
          * XClipboard
          */
 
-        virtual css::uno::Reference< css::datatransfer::XTransferable > getContents() override;
+        virtual cpo::uno::Reference< css::datatransfer::XTransferable > getContents() override;
 
         virtual void setContents(
-            const css::uno::Reference< css::datatransfer::XTransferable >& xTrans,
-            const css::uno::Reference< css::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner ) override;
+            const cpo::uno::Reference< css::datatransfer::XTransferable >& xTrans,
+            const cpo::uno::Reference< css::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner ) override;
 
         virtual OUString getName() override;
 
@@ -88,18 +88,18 @@ namespace x11 {
          * XClipboardNotifier
          */
         virtual void addClipboardListener(
-            const css::uno::Reference< css::datatransfer::clipboard::XClipboardListener >& listener ) override;
+            const cpo::uno::Reference< css::datatransfer::clipboard::XClipboardListener >& listener ) override;
 
         virtual void removeClipboardListener(
-            const css::uno::Reference< css::datatransfer::clipboard::XClipboardListener >& listener ) override;
+            const cpo::uno::Reference< css::datatransfer::clipboard::XClipboardListener >& listener ) override;
 
         /*
          *  SelectionAdaptor
          */
-        virtual css::uno::Reference< css::datatransfer::XTransferable > getTransferable() override;
+        virtual cpo::uno::Reference< css::datatransfer::XTransferable > getTransferable() override;
         virtual void clearTransferable() override;
         virtual void fireContentsChanged() override;
-        virtual css::uno::Reference< cpo::uno::XInterface > getReference() noexcept override;
+        virtual cpo::uno::Reference< cpo::uno::XInterface > getReference() noexcept override;
     };
 
     cpo::uno::Sequence< OUString > X11Clipboard_getSupportedServiceNames();

@@ -39,34 +39,34 @@ class SwVbaDocument : public SwVbaDocument_BASE
 private:
     rtl::Reference< SwXTextDocument > mxTextDocument;
 
-    std::vector<css::uno::Reference< ooo::vba::XSink >> mvSinks;
+    std::vector<cpo::uno::Reference< ooo::vba::XSink >> mvSinks;
 
     void Initialize();
     cpo::uno::Any getControlShape( std::u16string_view sName );
-    css::uno::Reference< css::container::XNameAccess > getFormControls() const;
+    cpo::uno::Reference< css::container::XNameAccess > getFormControls() const;
 
 protected:
     // this should be SwXTextDocument, but the inheritance hierarchy makes that impossible
     virtual SfxBaseModel* getModel() const override;
 
 public:
-    SwVbaDocument( const css::uno::Reference< ooo::vba::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& m_xContext, rtl::Reference< SwXTextDocument > const & xModel );
-    SwVbaDocument(  cpo::uno::Sequence< cpo::uno::Any > const& aArgs, css::uno::Reference< cpo::uno::XComponentContext >const& xContext );
+    SwVbaDocument( const cpo::uno::Reference< ooo::vba::XHelperInterface >& xParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& m_xContext, rtl::Reference< SwXTextDocument > const & xModel );
+    SwVbaDocument(  cpo::uno::Sequence< cpo::uno::Any > const& aArgs, cpo::uno::Reference< cpo::uno::XComponentContext >const& xContext );
     virtual ~SwVbaDocument() override;
 
-    sal_uInt32 AddSink( const css::uno::Reference< ooo::vba::XSink >& xSink );
+    sal_uInt32 AddSink( const cpo::uno::Reference< ooo::vba::XSink >& xSink );
     void RemoveSink( sal_uInt32 nNumber );
 
     // XDocument
-    virtual css::uno::Reference< ooo::vba::word::XRange > SAL_CALL getContent() override;
-    virtual css::uno::Reference< ooo::vba::word::XRange > SAL_CALL Range( const cpo::uno::Any& rStart, const cpo::uno::Any& rEnd ) override;
+    virtual cpo::uno::Reference< ooo::vba::word::XRange > SAL_CALL getContent() override;
+    virtual cpo::uno::Reference< ooo::vba::word::XRange > SAL_CALL Range( const cpo::uno::Any& rStart, const cpo::uno::Any& rEnd ) override;
     virtual cpo::uno::Any SAL_CALL BuiltInDocumentProperties( const cpo::uno::Any& index ) override;
     virtual cpo::uno::Any SAL_CALL CustomDocumentProperties( const cpo::uno::Any& index ) override;
     virtual cpo::uno::Any SAL_CALL Bookmarks( const cpo::uno::Any& rIndex ) override;
     cpo::uno::Any SAL_CALL ContentControls(const cpo::uno::Any& index) override;
     cpo::uno::Any SAL_CALL SelectContentControlsByTag(const cpo::uno::Any& index) override;
     cpo::uno::Any SAL_CALL SelectContentControlsByTitle(const cpo::uno::Any& index) override;
-    css::uno::Reference<ov::word::XWindow> SAL_CALL getActiveWindow() override;
+    cpo::uno::Reference<ov::word::XWindow> SAL_CALL getActiveWindow() override;
     virtual cpo::uno::Any SAL_CALL Variables( const cpo::uno::Any& rIndex ) override;
     virtual cpo::uno::Any SAL_CALL getAttachedTemplate() override;
     virtual void SAL_CALL setAttachedTemplate( const cpo::uno::Any& _attachedtemplate ) override;
@@ -91,7 +91,7 @@ public:
     virtual void SAL_CALL setHyphenationZone( ::sal_Int32 _hyphenationzone ) override;
     virtual ::sal_Int32 SAL_CALL getConsecutiveHyphensLimit() override;
     virtual void SAL_CALL setConsecutiveHyphensLimit( ::sal_Int32 _consecutivehyphenslimit ) override;
-    virtual css::uno::Reference< ooo::vba::word::XMailMerge > SAL_CALL getMailMerge() override;
+    virtual cpo::uno::Reference< ooo::vba::word::XMailMerge > SAL_CALL getMailMerge() override;
 
     using VbaDocumentBase::Protect;
     virtual void SAL_CALL Protect( ::sal_Int32 Type, const cpo::uno::Any& NOReset, const cpo::uno::Any& Password, const cpo::uno::Any& UseIRM, const cpo::uno::Any& EnforceStyleLock ) override;
@@ -106,7 +106,7 @@ public:
     virtual void SAL_CALL SavePreviewPngAs( const cpo::uno::Any& FileName ) override;
 
     // XInvocation
-    virtual css::uno::Reference< css::beans::XIntrospectionAccess > SAL_CALL getIntrospection(  ) override;
+    virtual cpo::uno::Reference< css::beans::XIntrospectionAccess > SAL_CALL getIntrospection(  ) override;
     virtual cpo::uno::Any SAL_CALL invoke( const OUString& aFunctionName, const cpo::uno::Sequence< cpo::uno::Any >& aParams, cpo::uno::Sequence< ::sal_Int16 >& aOutParamIndex, cpo::uno::Sequence< cpo::uno::Any >& aOutParam ) override;
     virtual void SAL_CALL setValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
     virtual cpo::uno::Any SAL_CALL getValue( const OUString& aPropertyName ) override;
@@ -119,7 +119,7 @@ public:
     // XConnectable
     virtual OUString SAL_CALL GetIIDForClassItselfNotCoclass() override;
     virtual ov::TypeAndIID SAL_CALL GetConnectionPoint() override;
-    virtual css::uno::Reference<ov::XConnectionPoint> SAL_CALL FindConnectionPoint() override;
+    virtual cpo::uno::Reference<ov::XConnectionPoint> SAL_CALL FindConnectionPoint() override;
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;

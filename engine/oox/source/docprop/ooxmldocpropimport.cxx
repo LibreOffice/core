@@ -43,7 +43,7 @@ using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::embed;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::xml::sax;
 
@@ -203,7 +203,7 @@ Reference < css::io::XInputStream > DocumentPropertiesImport::getExtendedPropert
     return aExtStreams[0].aInputStream;
 }
 
-cpo::uno::Sequence< css::uno::Reference< css::io::XInputStream > > DocumentPropertiesImport::getCustomPropertiesStreams(
+cpo::uno::Sequence< cpo::uno::Reference< css::io::XInputStream > > DocumentPropertiesImport::getCustomPropertiesStreams(
     const Reference< XStorage >& rxSource)
 {
     Sequence <InputSource> aExtStreams = lclGetCustomStreams(rxSource);

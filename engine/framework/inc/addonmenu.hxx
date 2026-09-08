@@ -24,7 +24,7 @@
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::frame { class XFrame; }
 namespace cpo::uno { template <class E> class Sequence; }
-namespace com::sun::star::uno { template <typename > class Reference; }
+namespace cpo::uno { template <typename > class Reference; }
 
 class MenuBar;
 class PopupMenu;
@@ -44,14 +44,14 @@ class AddonMenuManager
         static bool IsCorrectContext(std::u16string_view rModuleIdentifier, std::u16string_view rContext);
 
         // Create the Add-Ons menu
-        static VclPtr<PopupMenu> CreateAddonMenu( const css::uno::Reference< css::frame::XFrame >& rFrame );
+        static VclPtr<PopupMenu> CreateAddonMenu( const cpo::uno::Reference< css::frame::XFrame >& rFrame );
 
         // Merge the Add-Ons help menu items into the given menu bar at a defined pos
-        static void       MergeAddonHelpMenu( const css::uno::Reference< css::frame::XFrame >& rFrame,
+        static void       MergeAddonHelpMenu( const cpo::uno::Reference< css::frame::XFrame >& rFrame,
                                               MenuBar const * pMergeMenuBar );
 
         // Merge the addon popup menus into the given menu bar at the provided pos.
-        static void       MergeAddonPopupMenus( const css::uno::Reference< css::frame::XFrame >& rFrame,
+        static void       MergeAddonPopupMenus( const cpo::uno::Reference< css::frame::XFrame >& rFrame,
                                                 sal_uInt16   nMergeAtPos,
                                                 MenuBar* pMergeMenuBar );
 
@@ -63,7 +63,7 @@ class AddonMenuManager
                                      sal_uInt16      nInsPos,
                                      sal_uInt16&     nUniqueMenuId,
                                      const cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > >& aAddonMenuDefinition,
-                                     const css::uno::Reference< css::frame::XFrame >& rFrame,
+                                     const cpo::uno::Reference< css::frame::XFrame >& rFrame,
                                      const OUString& rModuleIdentifier );
 
         // Retrieve the menu entry property values from a sequence

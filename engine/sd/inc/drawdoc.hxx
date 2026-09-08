@@ -437,9 +437,9 @@ private:
                         DECL_DLLPRIVATE_LINK(OnlineSpellEventHdl, EditStatus&, void);
 
     std::vector< OUString > maAnnotationAuthors;
-    std::vector<css::uno::Reference< css::xml::dom::XNode> > maLayoutInfo;
+    std::vector<cpo::uno::Reference< css::xml::dom::XNode> > maLayoutInfo;
 
-    std::vector<css::uno::Reference< css::xml::dom::XNode> > maPresObjectInfo;
+    std::vector<cpo::uno::Reference< css::xml::dom::XNode> > maPresObjectInfo;
 
     bool mbEmbedFonts : 1;
     bool mbEmbedUsedFontsOnly : 1;
@@ -455,7 +455,7 @@ private:
 
     bool mbSkipCanvasPreviewUpdates = false;
 
-    SAL_DLLPRIVATE virtual css::uno::Reference< css::frame::XModel > createUnoModel() override;
+    SAL_DLLPRIVATE virtual cpo::uno::Reference< css::frame::XModel > createUnoModel() override;
 
 public:
 
@@ -708,13 +708,13 @@ public:
     /// load xml-based impress layout definitions into document
     SAL_DLLPRIVATE void InitLayoutVector();
     /// return reference to vector of Impress layout definitions
-    SAL_DLLPRIVATE const std::vector<css::uno::Reference< css::xml::dom::XNode> >& GetLayoutVector() const
+    SAL_DLLPRIVATE const std::vector<cpo::uno::Reference< css::xml::dom::XNode> >& GetLayoutVector() const
     { return maLayoutInfo; }
 
    /// load xml-based impress master presentation object definitions into document
     SAL_DLLPRIVATE void InitObjectVector();
     /// return reference to vector of master presentation object definitions
-    SAL_DLLPRIVATE const std::vector<css::uno::Reference<css::xml::dom::XNode> >& GetObjectVector() const { return maPresObjectInfo; }
+    SAL_DLLPRIVATE const std::vector<cpo::uno::Reference<css::xml::dom::XNode> >& GetObjectVector() const { return maPresObjectInfo; }
 
 
     /**

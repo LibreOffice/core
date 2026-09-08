@@ -42,10 +42,11 @@
 #include <drawingml/textbody.hxx>
 
 using namespace ::com::sun::star;
-using ::com::sun::star::uno::Reference;
+using namespace ::cpo;
+using ::cpo::uno::Reference;
 using ::cpo::uno::Exception;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
+using ::cpo::uno::UNO_QUERY;
+using ::cpo::uno::UNO_QUERY_THROW;
 using ::cpo::uno::Any;
 using ::com::sun::star::drawing::XDrawPageSupplier;
 using ::com::sun::star::drawing::XShapes;
@@ -58,7 +59,7 @@ using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::chart2;
 using namespace ::com::sun::star::chart2::data;
 using namespace ::com::sun::star::drawing;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 ChartSpaceConverter::ChartSpaceConverter( const ConverterRoot& rParent, ChartSpaceModel& rModel ) :

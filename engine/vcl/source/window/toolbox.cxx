@@ -1267,7 +1267,7 @@ ToolBox::ToolBox( vcl::Window* pParent, WinBits nStyle ) :
 }
 
 ToolBox::ToolBox(vcl::Window* pParent, const OUString& rID,
-    const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame> &rFrame)
+    const OUString& rUIXMLDescription, const cpo::uno::Reference<css::frame::XFrame> &rFrame)
     : DockingWindow(WindowType::TOOLBOX, "vcl::ToolBox maLayoutIdle")
 {
     ImplInitToolBoxData();

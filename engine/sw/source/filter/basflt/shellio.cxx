@@ -68,6 +68,7 @@
 #include <unotextrange.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 static bool sw_MergePortions(SwNode* pNode, void *)
 {

@@ -34,6 +34,7 @@
 
 using namespace css;
 using namespace css::animations;
+using namespace ::cpo;
 
 namespace
 {

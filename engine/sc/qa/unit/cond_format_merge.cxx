@@ -21,6 +21,7 @@ class XComponent;
 }
 
 using namespace css;
+using namespace ::cpo;
 
 class ScCondFormatMergeTest : public UnoApiTest
 {

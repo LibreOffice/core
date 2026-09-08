@@ -34,6 +34,7 @@
 #include <utility>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 namespace drawinglayer::geometry
 {
@@ -510,7 +511,7 @@ createViewInformation2D(const cpo::uno::Sequence<css::beans::PropertyValue>& rVi
         }
         else if (rPropertyValue.Name == u"VisualizedPage"_ustr)
         {
-            css::uno::Reference<css::drawing::XDrawPage> xVisualizedPage;
+            cpo::uno::Reference<css::drawing::XDrawPage> xVisualizedPage;
             rPropertyValue.Value >>= xVisualizedPage;
             aRetval.setVisualizedPage(xVisualizedPage);
         }

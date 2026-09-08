@@ -20,7 +20,7 @@
 #ifndef INCLUDED_UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #define INCLUDED_UNOTOOLS_LOCALEDATAWRAPPER_HXX
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/i18n/LocaleItem.hpp>
 #include <com/sun/star/i18n/LocaleDataItem2.hpp>
@@ -76,8 +76,8 @@ class UNOTOOLS_DLLPUBLIC LocaleDataWrapper
 {
     static  sal_uInt8                nLocaleDataChecking;    // 0:=dontknow, 1:=yes, 2:=no
 
-    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
-    css::uno::Reference< css::i18n::XLocaleData5 >     xLD;
+    cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+    cpo::uno::Reference< css::i18n::XLocaleData5 >     xLD;
     LanguageTag                                        maLanguageTag;
     std::shared_ptr< css::i18n::Calendar2 >            xDefaultCalendar;
     std::shared_ptr< css::i18n::Calendar2 >            xSecondaryCalendar;
@@ -119,7 +119,7 @@ class UNOTOOLS_DLLPUBLIC LocaleDataWrapper
     SAL_DLLPRIVATE void loadDigitGrouping();
 
     LocaleDataWrapper(
-        const css::uno::Reference< cpo::uno::XComponentContext > & rxContext,
+        const cpo::uno::Reference< cpo::uno::XComponentContext > & rxContext,
         LanguageTag aLanguageTag
         );
 
@@ -145,7 +145,7 @@ public:
         non-existent if this LocaleDataWrapper was created without one and
         lives "on the grassland". The CalendarWrapper ctor can handle that
         though. */
-    const css::uno::Reference<
+    const cpo::uno::Reference<
         cpo::uno::XComponentContext > & getComponentContext()
         const { return m_xContext; }
 

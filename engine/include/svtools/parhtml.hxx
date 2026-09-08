@@ -26,7 +26,7 @@
 #include <string_view>
 #include <vector>
 
-namespace com::sun::star::uno { template <class interface_type> class Reference; }
+namespace cpo::uno { template <class interface_type> class Reference; }
 
 namespace com::sun::star {
     namespace document {
@@ -252,14 +252,14 @@ protected:
 
 private:
     /// parse meta options into XDocumentProperties and encoding
-    bool ParseMetaOptionsImpl( const css::uno::Reference< css::document::XDocumentProperties>&,
+    bool ParseMetaOptionsImpl( const cpo::uno::Reference< css::document::XDocumentProperties>&,
             SvKeyValueIterator*,
             const HTMLOptions&,
             rtl_TextEncoding& rEnc );
 
 public:
     /// overriding method must call this implementation!
-    virtual bool ParseMetaOptions( const css::uno::Reference< css::document::XDocumentProperties>&,
+    virtual bool ParseMetaOptions( const cpo::uno::Reference< css::document::XDocumentProperties>&,
             SvKeyValueIterator* );
 
     void ParseScriptOptions( OUString& rLangString, std::u16string_view rBaseURL, HTMLScriptLanguage& rLang,

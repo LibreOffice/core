@@ -42,7 +42,7 @@ bool isCompatible(SvStream& rInStream)
 /// The conversion takes place if either the stream is encrypted, or 'bForce' is true
 bool convertToHighestSupported(
     SvStream& rInStream, SvStream& rOutStream,
-    const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler, bool bForce,
+    const cpo::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler, bool bForce,
     bool& bEncrypted, const OUString& rPassword)
 {
     sal_uInt64 nPos = STREAM_SEEK_TO_BEGIN;
@@ -129,7 +129,7 @@ bool convertToHighestSupported(
 /// case it's too new for our PDF export.
 bool getCompatibleStream(
     SvStream& rInStream, SvStream& rOutStream,
-    const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler,
+    const cpo::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler,
     bool& bEncrypted, const OUString& rPassword)
 {
     bool bCompatible = isCompatible(rInStream);
@@ -147,7 +147,7 @@ bool getCompatibleStream(
 
 BinaryDataContainer createBinaryDataContainer(
     SvStream& rStream, bool& bEncrypted,
-    const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler,
+    const cpo::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler,
     const OUString& rPassword)
 {
     // Save the original PDF stream for later use.

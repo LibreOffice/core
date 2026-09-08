@@ -55,16 +55,16 @@ class SFX2_DLLPUBLIC SfxClassificationHelper
 public:
     /// Does the document have any BAILS properties?
     static bool IsClassified(
-        const css::uno::Reference<css::document::XDocumentProperties>& xDocumentProperties);
+        const cpo::uno::Reference<css::document::XDocumentProperties>& xDocumentProperties);
     /// Checks if pasting from xSource to xDestination would leak information.
     static SfxClassificationCheckPasteResult
-    CheckPaste(const css::uno::Reference<css::document::XDocumentProperties>& xSource,
-               const css::uno::Reference<css::document::XDocumentProperties>& xDestination);
+    CheckPaste(const cpo::uno::Reference<css::document::XDocumentProperties>& xSource,
+               const cpo::uno::Reference<css::document::XDocumentProperties>& xDestination);
     /// Wrapper around CheckPaste(): informs the user if necessary and finds out if the paste can be continued or not.
     static bool ShowPasteInfo(SfxClassificationCheckPasteResult eResult);
 
     SfxClassificationHelper(
-        const css::uno::Reference<css::document::XDocumentProperties>& xDocumentProperties,
+        const cpo::uno::Reference<css::document::XDocumentProperties>& xDocumentProperties,
         bool bUseLocalizedPolicy = true);
     ~SfxClassificationHelper();
     /// Get the currently selected category for eType.
@@ -218,7 +218,7 @@ public:
 };
 
 SFX2_DLLPUBLIC sfx::ClassificationCreationOrigin getCreationOriginProperty(
-    css::uno::Reference<css::beans::XPropertyContainer> const& rxPropertyContainer,
+    cpo::uno::Reference<css::beans::XPropertyContainer> const& rxPropertyContainer,
     sfx::ClassificationKeyCreator const& rKeyCreator);
 }
 

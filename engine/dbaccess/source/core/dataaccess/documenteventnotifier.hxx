@@ -41,10 +41,10 @@ namespace dbaccess
         DocumentEventNotifier( ::cppu::OWeakObject& _rBroadcasterDocument, ::osl::Mutex& _rMutex );
         ~DocumentEventNotifier();
 
-        void addLegacyEventListener( const css::uno::Reference< css::document::XEventListener >& Listener );
-        void removeLegacyEventListener( const css::uno::Reference< css::document::XEventListener >& Listener );
-        void addDocumentEventListener( const css::uno::Reference< css::document::XDocumentEventListener >& Listener );
-        void removeDocumentEventListener( const css::uno::Reference< css::document::XDocumentEventListener >& Listener );
+        void addLegacyEventListener( const cpo::uno::Reference< css::document::XEventListener >& Listener );
+        void removeLegacyEventListener( const cpo::uno::Reference< css::document::XEventListener >& Listener );
+        void addDocumentEventListener( const cpo::uno::Reference< css::document::XDocumentEventListener >& Listener );
+        void removeDocumentEventListener( const cpo::uno::Reference< css::document::XDocumentEventListener >& Listener );
 
         /** disposes the instance
             @precond
@@ -70,7 +70,7 @@ namespace dbaccess
         */
         void    notifyDocumentEvent(
                     const OUString& EventName,
-                    const css::uno::Reference< css::frame::XController2 >& _rxViewController,
+                    const cpo::uno::Reference< css::frame::XController2 >& _rxViewController,
                     const cpo::uno::Any& Supplement
                 );
 
@@ -83,7 +83,7 @@ namespace dbaccess
         */
         void    notifyDocumentEventAsync(
                     const OUString& EventName,
-                    const css::uno::Reference< css::frame::XController2 >& ViewController,
+                    const cpo::uno::Reference< css::frame::XController2 >& ViewController,
                     const cpo::uno::Any& Supplement
                 );
 

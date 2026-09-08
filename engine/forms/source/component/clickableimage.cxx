@@ -55,7 +55,7 @@ namespace frm
 {
 
     using namespace comphelper;
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
 using namespace cpo::uno;
     using namespace ::com::sun::star::sdb;
     using namespace ::com::sun::star::sdbc;
@@ -213,7 +213,7 @@ using namespace cpo::uno;
                 return;
 
             // Which button type?
-            xSet.set(xComp, css::uno::UNO_QUERY);
+            xSet.set(xComp, cpo::uno::UNO_QUERY);
             if ( !xSet.is() )
                 return;
             xSet->getPropertyValue(PROPERTY_BUTTONTYPE) >>= eButtonType;
@@ -398,7 +398,7 @@ using namespace cpo::uno;
                 Reference< XChild > xChild( getModel(), UNO_QUERY );
                 Reference< XSubmit > xParentSubmission;
                 if ( xChild.is() )
-                    xParentSubmission.set(xChild->getParent(), css::uno::UNO_QUERY);
+                    xParentSubmission.set(xChild->getParent(), cpo::uno::UNO_QUERY);
                 if ( xParentSubmission.is() )
                     xParentSubmission->submit( this, _rEvent );
             }
@@ -687,12 +687,12 @@ using namespace cpo::uno;
         // changed in a document that is already loaded. There's no way
         // we can get to the Model during loading.
         Reference< XModel >  xModel;
-        css::uno::Reference<cpo::uno::XInterface>  xIfc( *this );
+        cpo::uno::Reference<cpo::uno::XInterface>  xIfc( *this );
         while( !xModel.is() && xIfc.is() )
         {
             Reference<XChild>  xChild( xIfc, UNO_QUERY );
             xIfc = xChild->getParent();
-            xModel.set(xIfc, css::uno::UNO_QUERY);
+            xModel.set(xIfc, cpo::uno::UNO_QUERY);
         }
 
         // Search for the Object shell by iterating over all Object shells

@@ -76,8 +76,8 @@ one go*/
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
@@ -387,7 +387,7 @@ ErrCode SmXMLImportWrapper::ReadThroughComponent(const uno::Reference<embed::XSt
     return ERRCODE_SFX_DOLOADFAILED;
 }
 
-SmXMLImport::SmXMLImport(const css::uno::Reference<cpo::uno::XComponentContext>& rContext,
+SmXMLImport::SmXMLImport(const cpo::uno::Reference<cpo::uno::XComponentContext>& rContext,
                          OUString const& implementationName, SvXMLImportFlags nImportFlags)
     : SvXMLImport(rContext, implementationName, nImportFlags)
     , bSuccess(false)
@@ -479,7 +479,7 @@ public:
     virtual void SAL_CALL characters(const OUString& rChars) override;
     virtual void SAL_CALL startFastElement(
         sal_Int32 /*nElement*/,
-        const css::uno::Reference<css::xml::sax::XFastAttributeList>& /*rAttrList*/) override
+        const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& /*rAttrList*/) override
     {
         if (GetSmImport().TooDeep())
             throw std::range_error("too deep");
@@ -1872,9 +1872,9 @@ public:
     {
     }
 
-    virtual css::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
+    virtual cpo::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList) override;
+        const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList) override;
 };
 }
 
@@ -1902,9 +1902,9 @@ public:
     SmXMLFlatDocContext_Impl(SmXMLImport& i_rImport,
                              const uno::Reference<document::XDocumentProperties>& i_xDocProps);
 
-    virtual css::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
+    virtual cpo::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList) override;
+        const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList) override;
 };
 }
 

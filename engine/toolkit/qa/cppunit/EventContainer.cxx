@@ -16,7 +16,7 @@
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
 #include <com/sun/star/script/XScriptEventsSupplier.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <comphelper/processfactory.hxx>
 
@@ -25,7 +25,7 @@ using namespace css::awt;
 using namespace css::container;
 using namespace css::lang;
 using namespace css::script;
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 namespace
@@ -67,7 +67,7 @@ CPPUNIT_TEST_FIXTURE(EventContainerTest, testInsertOrder)
     CPPUNIT_ASSERT_EQUAL(u"1"_ustr, aEventNames[2]);
     CPPUNIT_ASSERT_EQUAL(u"A"_ustr, aEventNames[3]);
 
-    css::uno::Reference<css::lang::XComponent>(xControlModel, css::uno::UNO_QUERY_THROW)->dispose();
+    cpo::uno::Reference<css::lang::XComponent>(xControlModel, cpo::uno::UNO_QUERY_THROW)->dispose();
 }
 }
 

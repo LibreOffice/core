@@ -57,8 +57,8 @@ namespace dbp
         const OControlWizard*           getDialog() const;
         const OControlWizardContext&    getContext() const;
         bool                        updateContext();
-        void                            setFormConnection(const css::uno::Reference< css::sdbc::XConnection >& _rxConn, bool _bAutoDispose = true );
-        css::uno::Reference< css::sdbc::XConnection >
+        void                            setFormConnection(const cpo::uno::Reference< css::sdbc::XConnection >& _rxConn, bool _bAutoDispose = true );
+        cpo::uno::Reference< css::sdbc::XConnection >
                                         getFormConnection() const;
     public:
         OControlWizardPage(weld::Container* pPage, OControlWizard* pWizard, const OUString& rUIXMLDescription, const OUString& rID);
@@ -87,14 +87,14 @@ namespace dbp
     {
     private:
         OControlWizardContext   m_aContext;
-        css::uno::Reference< cpo::uno::XComponentContext >
+        cpo::uno::Reference< cpo::uno::XComponentContext >
                                 m_xContext;
 
     public:
         OControlWizard(
             weld::Window* _pParent,
-            const css::uno::Reference< css::beans::XPropertySet >& _rxObjectModel,
-            const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext
+            const cpo::uno::Reference< css::beans::XPropertySet >& _rxObjectModel,
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxContext
         );
         virtual ~OControlWizard() override;
 
@@ -102,19 +102,19 @@ namespace dbp
         using OControlWizard_Base::travelNext;
 
     public:
-        const css::uno::Reference< cpo::uno::XComponentContext >&
+        const cpo::uno::Reference< cpo::uno::XComponentContext >&
             getComponentContext() const { return m_xContext; }
 
         const OControlWizardContext&    getContext() const { return m_aContext; }
         bool                        updateContext(const OAccessRegulator&);
-        void                            setFormConnection(const OAccessRegulator&, const css::uno::Reference< css::sdbc::XConnection >& _rxConn, bool _bAutoDispose );
-            css::uno::Reference< css::sdbc::XConnection >
+        void                            setFormConnection(const OAccessRegulator&, const cpo::uno::Reference< css::sdbc::XConnection >& _rxConn, bool _bAutoDispose );
+            cpo::uno::Reference< css::sdbc::XConnection >
                                         getFormConnection(const OAccessRegulator&) const;
 
         /** returns the com.sun.star.task.InteractionHandler
             @param  _pWindow    The window will be used when an error message has to be shown.
         */
-        css::uno::Reference< css::task::XInteractionHandler > getInteractionHandler(weld::Window* _pWindow) const;
+        cpo::uno::Reference< css::task::XInteractionHandler > getInteractionHandler(weld::Window* _pWindow) const;
 
     protected:
         // initialize the derivees settings (which have to be derived from OControlWizardSettings)
@@ -125,7 +125,7 @@ namespace dbp
 
         bool needDatasourceSelection();
 
-        css::uno::Reference< css::sdbc::XConnection >
+        cpo::uno::Reference< css::sdbc::XConnection >
                                         getFormConnection() const;
 
         virtual bool approveControl(sal_Int16 _nClassId) = 0;

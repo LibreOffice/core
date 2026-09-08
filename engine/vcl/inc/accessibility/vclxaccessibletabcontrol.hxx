@@ -40,7 +40,7 @@ private:
     AccessibleChildren      m_aAccessibleChildren;
     VclPtr<TabControl>      m_pTabControl;
 
-    css::uno::Reference< css::accessibility::XAccessible > implGetAccessibleChild( sal_Int64 i );
+    cpo::uno::Reference< css::accessibility::XAccessible > implGetAccessibleChild( sal_Int64 i );
     bool implIsAccessibleChildSelected( sal_Int32 nChildIndex );
 
 
@@ -68,7 +68,7 @@ public:
 
     // XAccessibleContext
     virtual sal_Int64 getAccessibleChildCount(  ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleChild( sal_Int64 i ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > getAccessibleChild( sal_Int64 i ) override;
     virtual sal_Int16 getAccessibleRole(  ) override;
     virtual OUString getAccessibleName(  ) override;
 
@@ -78,7 +78,7 @@ public:
     virtual void clearAccessibleSelection(  ) override;
     virtual void selectAllAccessibleChildren(  ) override;
     virtual sal_Int64 getSelectedAccessibleChildCount(  ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > getSelectedAccessibleChild( sal_Int64 nSelectedChildIndex ) override;
     virtual void deselectAccessibleChild( sal_Int64 nChildIndex ) override;
 };
 

@@ -77,7 +77,7 @@ public:
      */
     virtual bool filter(const cpo::uno::Sequence<css::beans::PropertyValue>& aDescriptor) override;
     virtual void cancel() override {}
-    void setDocumentHandler(css::uno::Reference<css::xml::sax::XDocumentHandler> const& xHandler)
+    void setDocumentHandler(cpo::uno::Reference<css::xml::sax::XDocumentHandler> const& xHandler)
     {
         m_rxDocumentHandler = xHandler;
     }
@@ -85,7 +85,7 @@ public:
     bool importHStream(std::unique_ptr<HStream> stream);
 
 private:
-    css::uno::Reference<css::xml::sax::XDocumentHandler> m_rxDocumentHandler;
+    cpo::uno::Reference<css::xml::sax::XDocumentHandler> m_rxDocumentHandler;
     rtl::Reference<AttributeListImpl> mxList;
     HWPFile hwpfile;
     std::unique_ptr<HwpReaderPrivate> d;

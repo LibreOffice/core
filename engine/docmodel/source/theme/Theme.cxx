@@ -100,7 +100,7 @@ std::shared_ptr<Theme> Theme::FromAny(const cpo::uno::Any& rVal)
     if (!rVal.hasValue())
         return {};
 
-    if (css::uno::Reference<css::util::XTheme> xTheme; rVal >>= xTheme)
+    if (cpo::uno::Reference<css::util::XTheme> xTheme; rVal >>= xTheme)
     {
         if (!xTheme)
             return {};

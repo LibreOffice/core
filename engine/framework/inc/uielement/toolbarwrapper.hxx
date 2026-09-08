@@ -44,7 +44,7 @@ class ToolBarWrapper final : public cppu::ImplInheritanceHelper<UIConfigElementW
                                                                 css::ui::XContextChangeEventListener>
 {
     public:
-        ToolBarWrapper( const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
+        ToolBarWrapper( const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext );
         virtual ~ToolBarWrapper() override;
 
         // XComponent
@@ -54,7 +54,7 @@ class ToolBarWrapper final : public cppu::ImplInheritanceHelper<UIConfigElementW
         virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
         // XUIElement
-        virtual css::uno::Reference< cpo::uno::XInterface > getRealInterface() override;
+        virtual cpo::uno::Reference< cpo::uno::XInterface > getRealInterface() override;
 
         // XUpdatable
         virtual void update() override;
@@ -77,8 +77,8 @@ class ToolBarWrapper final : public cppu::ImplInheritanceHelper<UIConfigElementW
         virtual void impl_fillNewData() override;
 
         rtl::Reference< ToolBarManager >                        m_xToolBarManager;
-        css::uno::Reference< cpo::uno::XComponentContext >      m_xContext;
-        css::uno::Reference< css::ui::XUIElement >              m_xSubElement;
+        cpo::uno::Reference< cpo::uno::XComponentContext >      m_xContext;
+        cpo::uno::Reference< css::ui::XUIElement >              m_xSubElement;
 
         std::unique_ptr<weld::Builder>                          m_xBuilder;
         std::unique_ptr<weld::Container>                        m_xTopLevel;

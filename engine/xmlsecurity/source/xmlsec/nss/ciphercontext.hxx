@@ -71,7 +71,7 @@ public:
         Dispose();
     }
 
-    static css::uno::Reference< css::xml::crypto::XCipherContext > Create( CK_MECHANISM_TYPE nNSSCipherID, const cpo::uno::Sequence< ::sal_Int8 >& aKey, const cpo::uno::Sequence< ::sal_Int8 >& aInitializationVector, bool bEncryption, bool bW3CPadding );
+    static cpo::uno::Reference< css::xml::crypto::XCipherContext > Create( CK_MECHANISM_TYPE nNSSCipherID, const cpo::uno::Sequence< ::sal_Int8 >& aKey, const cpo::uno::Sequence< ::sal_Int8 >& aInitializationVector, bool bEncryption, bool bW3CPadding );
 
     // XCipherContext
     virtual cpo::uno::Sequence< ::sal_Int8 > SAL_CALL convertWithCipherContext( const cpo::uno::Sequence< ::sal_Int8 >& aData ) override;

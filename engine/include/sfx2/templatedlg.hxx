@@ -40,7 +40,7 @@ public:
     virtual ~SfxTemplateManagerDlg() override;
     virtual short run() override;
 
-    SAL_DLLPRIVATE void setDocumentModel(const css::uno::Reference<css::frame::XModel>& rModel);
+    SAL_DLLPRIVATE void setDocumentModel(const cpo::uno::Reference<css::frame::XModel>& rModel);
     SAL_DLLPRIVATE void setTemplateViewMode(TemplateViewMode eViewMode);
     SAL_DLLPRIVATE TemplateViewMode getTemplateViewMode() const;
 
@@ -112,8 +112,8 @@ protected:
 
 protected:
     std::set<const ThumbnailViewItem*, selection_cmp_fn> maSelTemplates;
-    css::uno::Reference<css::frame::XModel> m_xModel;
-    css::uno::Reference<css::frame::XDesktop2> mxDesktop;
+    cpo::uno::Reference<css::frame::XModel> m_xModel;
+    cpo::uno::Reference<css::frame::XDesktop2> mxDesktop;
 
     Timer m_aUpdateDataTimer;
 

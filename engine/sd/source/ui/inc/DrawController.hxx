@@ -106,7 +106,7 @@ public:
             in the center pane.
     */
     void SetSubController (
-        const css::uno::Reference<css::drawing::XDrawSubController>& rxSubController);
+        const cpo::uno::Reference<css::drawing::XDrawSubController>& rxSubController);
 
     /** Call this method when the VisArea has changed.
     */
@@ -132,7 +132,7 @@ public:
         switch.
     */
     void BroadcastContextChange() const;
-    void fireChangeLayer( const css::uno::Reference< css::drawing::XLayer>& xNewLayer ) noexcept;
+    void fireChangeLayer( const cpo::uno::Reference< css::drawing::XLayer>& xNewLayer ) noexcept;
     // change the parameter to int
     //void fireSwitchCurrentPage( String pageName) throw();
     void fireSwitchCurrentPage( sal_Int32 pageIndex) noexcept;
@@ -161,8 +161,8 @@ public:
 
     // XComponent
     virtual void SAL_CALL dispose() override;
-    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+    virtual void SAL_CALL addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& xListener ) override;
+    virtual void SAL_CALL removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -172,27 +172,27 @@ public:
     // XSelectionSupplier
     virtual bool SAL_CALL select( const cpo::uno::Any& aSelection ) override;
     virtual cpo::uno::Any SAL_CALL getSelection(  ) override;
-    virtual void SAL_CALL addSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
-    virtual void SAL_CALL removeSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
+    virtual void SAL_CALL addSelectionChangeListener( const cpo::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
+    virtual void SAL_CALL removeSelectionChangeListener( const cpo::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
 
     // XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
 
     // XFormLayerAccess
-    virtual css::uno::Reference< css::form::runtime::XFormController > SAL_CALL getFormController( const css::uno::Reference< css::form::XForm >& Form ) override;
+    virtual cpo::uno::Reference< css::form::runtime::XFormController > SAL_CALL getFormController( const cpo::uno::Reference< css::form::XForm >& Form ) override;
     virtual bool SAL_CALL isFormDesignMode(  ) override;
     virtual void SAL_CALL setFormDesignMode( bool DesignMode ) override;
 
     // XControlAccess
-    virtual css::uno::Reference< css::awt::XControl > SAL_CALL getControl( const css::uno::Reference< css::awt::XControlModel >& xModel ) override;
+    virtual cpo::uno::Reference< css::awt::XControl > SAL_CALL getControl( const cpo::uno::Reference< css::awt::XControlModel >& xModel ) override;
 
     // XDrawView
     virtual void SAL_CALL
         setCurrentPage (
-            const css::uno::Reference<
+            const cpo::uno::Reference<
             css::drawing::XDrawPage >& xPage) override;
 
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
         css::drawing::XDrawPage > SAL_CALL
         getCurrentPage() override;
 
@@ -265,7 +265,7 @@ private:
     using cppu::OPropertySetHelper::disposing;
     using cppu::OPropertySetHelper::getFastPropertyValue;
 
-    css::uno::Reference< css::drawing::XLayer> mxCurrentLayer;
+    cpo::uno::Reference< css::drawing::XLayer> mxCurrentLayer;
 
     const cpo::uno::Type m_aSelectionTypeIdentifier;
 
@@ -288,7 +288,7 @@ private:
 
     /** The current sub controller.  May be NULL.
     */
-    css::uno::Reference<css::drawing::XDrawSubController> mxSubController;
+    cpo::uno::Reference<css::drawing::XDrawSubController> mxSubController;
 
     rtl::Reference<sd::framework::ConfigurationController> mxConfigurationController;
     rtl::Reference<sd::framework::ModuleController> mxModuleController;

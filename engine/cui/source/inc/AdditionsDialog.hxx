@@ -23,7 +23,7 @@
 // Extension Manager Connection
 #include <com/sun/star/deployment/XExtensionManager.hpp>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -65,7 +65,7 @@ private:
     DECL_LINK(ShowMoreHdl, weld::Button&, void);
 
 public:
-    css::uno::Reference<css::deployment::XExtensionManager> m_xExtensionManager;
+    cpo::uno::Reference<css::deployment::XExtensionManager> m_xExtensionManager;
     std::unique_ptr<weld::Entry> m_xEntrySearch;
     std::unique_ptr<weld::Button> m_xButtonClose;
     std::vector<std::unique_ptr<AdditionsItem>> m_aAdditionsItems; // UI components
@@ -88,7 +88,7 @@ public:
 
     AdditionsDialog(weld::Window* pParent, const OUString& sAdditionsTag);
     ~AdditionsDialog() override;
-    cpo::uno::Sequence<cpo::uno::Sequence<css::uno::Reference<css::deployment::XPackage>>>
+    cpo::uno::Sequence<cpo::uno::Sequence<cpo::uno::Reference<css::deployment::XPackage>>>
     getInstalledExtensions();
     void SetProgress(const OUString& rProgress);
     void ClearList();
@@ -160,12 +160,12 @@ public:
     TmpRepositoryCommandEnv();
 
     // XCommandEnvironment
-    virtual css::uno::Reference<css::task::XInteractionHandler> getInteractionHandler() override;
-    virtual css::uno::Reference<css::ucb::XProgressHandler> getProgressHandler() override;
+    virtual cpo::uno::Reference<css::task::XInteractionHandler> getInteractionHandler() override;
+    virtual cpo::uno::Reference<css::ucb::XProgressHandler> getProgressHandler() override;
 
     // XInteractionHandler
     virtual void
-    handle(css::uno::Reference<css::task::XInteractionRequest> const& xRequest) override;
+    handle(cpo::uno::Reference<css::task::XInteractionRequest> const& xRequest) override;
 
     // XProgressHandler
     virtual void push(cpo::uno::Any const& Status) override;

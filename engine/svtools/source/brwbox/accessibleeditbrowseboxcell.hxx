@@ -31,7 +31,7 @@ public:
     virtual OUString getImplementationName() override;
 
     // XAccessibleContext
-    virtual css::uno::Reference<css::accessibility::XAccessible>
+    virtual cpo::uno::Reference<css::accessibility::XAccessible>
         getAccessibleParent() override;
 
     EditBrowseBoxTableCell(const EditBrowseBoxTableCell&) = delete;

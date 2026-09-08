@@ -68,8 +68,8 @@ public:
     // associated XGraphicObject ( if url is valid for that ) and is set
     // appropriately ( e.g. NULL if non GraphicObject scheme ) or a valid
     // object if the rURL points to a valid object
-    static css::uno::Reference< css::graphic::XGraphic > getGraphicAndGraphicObjectFromURL_nothrow( css::uno::Reference< css::graphic::XGraphicObject >& xOutGraphicObject, const OUString& _rURL );
-    static css::uno::Reference< css::graphic::XGraphic > getGraphicFromURL_nothrow( const OUString& _rURL, OUString const & referer );
+    static cpo::uno::Reference< css::graphic::XGraphic > getGraphicAndGraphicObjectFromURL_nothrow( cpo::uno::Reference< css::graphic::XGraphicObject >& xOutGraphicObject, const OUString& _rURL );
+    static cpo::uno::Reference< css::graphic::XGraphic > getGraphicFromURL_nothrow( const OUString& _rURL, OUString const & referer );
 
 };
 
@@ -81,7 +81,7 @@ class UnoControlEditModel final : public UnoControlModel
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
-                        UnoControlEditModel( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+                        UnoControlEditModel( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
                         UnoControlEditModel( const UnoControlEditModel& rModel ) : UnoControlModel( rModel ) {}
 
     rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlEditModel( *this ); }
@@ -90,7 +90,7 @@ public:
     OUString getServiceName() override;
 
     // css::beans::XMultiPropertySet
-    css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+    cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
 
 
     // XServiceInfo
@@ -130,7 +130,7 @@ public:
 
     void                        ImplSetPeerProperty( const OUString& rPropName, const cpo::uno::Any& rVal ) override;
 
-    void createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
+    void createPeer( const cpo::uno::Reference< css::awt::XToolkit >& Toolkit, const cpo::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
     void disposing( const css::lang::EventObject& Source ) override { UnoControlBase::disposing( Source ); }
     void dispose(  ) override;
 
@@ -147,8 +147,8 @@ public:
     void textChanged( const css::awt::TextEvent& rEvent ) override;
 
     // XTextComponent
-    void addTextListener( const css::uno::Reference< css::awt::XTextListener >& l ) override;
-    void removeTextListener( const css::uno::Reference< css::awt::XTextListener >& l ) override;
+    void addTextListener( const cpo::uno::Reference< css::awt::XTextListener >& l ) override;
+    void removeTextListener( const cpo::uno::Reference< css::awt::XTextListener >& l ) override;
     void setText( const OUString& aText ) override;
     void insertText( const css::awt::Selection& Sel, const OUString& Text ) override;
     OUString getText(  ) override;
@@ -173,7 +173,7 @@ public:
     OUString getImplementationName(  ) override;
     cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
-    bool setModel(const css::uno::Reference< css::awt::XControlModel >& Model) override;
+    bool setModel(const cpo::uno::Reference< css::awt::XControlModel >& Model) override;
 };
 
 
@@ -184,7 +184,7 @@ class UnoControlFileControlModel final : public UnoControlModel
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
-                        UnoControlFileControlModel( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+                        UnoControlFileControlModel( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
                         UnoControlFileControlModel( const UnoControlFileControlModel& rModel ) : UnoControlModel( rModel ) {}
 
     rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlFileControlModel( *this ); }
@@ -193,7 +193,7 @@ public:
     OUString getServiceName() override;
 
     // css::beans::XMultiPropertySet
-    css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+    cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
 
     // css::lang::XServiceInfo
     OUString getImplementationName() override;
@@ -224,7 +224,7 @@ private:
     bool                                                                                    mbAdjustingGraphic;
 
 protected:
-    GraphicControlModel( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext )
+    GraphicControlModel( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext )
         :UnoControlModel( rxContext )
         ,mbAdjustingImagePosition( false )
         ,mbAdjustingGraphic( false )
@@ -250,13 +250,13 @@ class TOOLKIT_DLLPUBLIC UnoControlButtonModel final : public GraphicControlModel
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
-                        UnoControlButtonModel( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+                        UnoControlButtonModel( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
                         UnoControlButtonModel( const UnoControlButtonModel& rModel ) : GraphicControlModel( rModel ) {}
 
     rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlButtonModel( *this ); }
 
     // css::beans::XMultiPropertySet
-    css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+    cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
 
     // css::io::XPersistObject
     OUString getServiceName() override;
@@ -287,19 +287,19 @@ public:
                         UnoButtonControl();
     OUString     GetComponentServiceName() const override;
 
-    void createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
+    void createPeer( const cpo::uno::Reference< css::awt::XToolkit >& Toolkit, const cpo::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
     void dispose(  ) override;
 
     // css::awt::XButton
-    void addActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
-    void removeActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
+    void addActionListener( const cpo::uno::Reference< css::awt::XActionListener >& l ) override;
+    void removeActionListener( const cpo::uno::Reference< css::awt::XActionListener >& l ) override;
     void setLabel( const OUString& Label ) override;
     void setActionCommand( const OUString& Command ) override;
 
     // css::awt::XToggleButton
     // css::awt::XItemEventBroadcaster
-    void addItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
-    void removeItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
+    void addItemListener( const cpo::uno::Reference< css::awt::XItemListener >& l ) override;
+    void removeItemListener( const cpo::uno::Reference< css::awt::XItemListener >& l ) override;
 
     // css::lang::XEventListener
     virtual void disposing( const css::lang::EventObject& Source ) override;
@@ -329,13 +329,13 @@ private:
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
-                                    UnoControlImageControlModel( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+                                    UnoControlImageControlModel( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
                                     UnoControlImageControlModel( const UnoControlImageControlModel& rModel ) : GraphicControlModel( rModel ), mbAdjustingImageScaleMode( false ) { }
 
     rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlImageControlModel( *this ); }
 
     // css::beans::XMultiPropertySet
-    css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+    cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
 
     // css::io::XPersistObject
     OUString getServiceName() override;
@@ -388,7 +388,7 @@ class UnoControlRadioButtonModel final : public GraphicControlModel
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
-                        UnoControlRadioButtonModel( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+                        UnoControlRadioButtonModel( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
                         UnoControlRadioButtonModel( const UnoControlRadioButtonModel& rModel ) : GraphicControlModel( rModel ) {}
 
     rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlRadioButtonModel( *this ); }
@@ -397,7 +397,7 @@ public:
     OUString getServiceName() override;
 
     // css::beans::XMultiPropertySet
-    css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+    cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
 
     // css::lang::XServiceInfo
     OUString getImplementationName() override;
@@ -425,7 +425,7 @@ public:
                             UnoRadioButtonControl();
     OUString         GetComponentServiceName() const override;
 
-    void createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
+    void createPeer( const cpo::uno::Reference< css::awt::XToolkit >& Toolkit, const cpo::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
     void dispose(  ) override;
     void disposing( const css::lang::EventObject& Source ) override { UnoControlBase::disposing( Source ); }
 
@@ -433,13 +433,13 @@ public:
     bool isTransparent(  ) override;
 
     // css::awt::XButton
-    void addActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
-    void removeActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
+    void addActionListener( const cpo::uno::Reference< css::awt::XActionListener >& l ) override;
+    void removeActionListener( const cpo::uno::Reference< css::awt::XActionListener >& l ) override;
     void setActionCommand( const OUString& Command ) override;
 
     // css::awt::XRadioButton
-    void addItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
-    void removeItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
+    void addItemListener( const cpo::uno::Reference< css::awt::XItemListener >& l ) override;
+    void removeItemListener( const cpo::uno::Reference< css::awt::XItemListener >& l ) override;
     bool getState(  ) override;
     void setState( bool b ) override;
     void setLabel( const OUString& Label ) override;
@@ -466,7 +466,7 @@ class UnoControlCheckBoxModel final : public GraphicControlModel
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
-                        UnoControlCheckBoxModel( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+                        UnoControlCheckBoxModel( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
                         UnoControlCheckBoxModel( const UnoControlCheckBoxModel& rModel ) : GraphicControlModel( rModel ) {}
 
     rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlCheckBoxModel( *this ); }
@@ -475,7 +475,7 @@ public:
     OUString getServiceName() override;
 
     // css::beans::XMultiPropertySet
-    css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+    cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
 
     // css::lang::XServiceInfo
     OUString getImplementationName() override;
@@ -503,7 +503,7 @@ public:
                             UnoCheckBoxControl();
     OUString         GetComponentServiceName() const override;
 
-    void createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
+    void createPeer( const cpo::uno::Reference< css::awt::XToolkit >& Toolkit, const cpo::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
     void dispose(  ) override;
     void disposing( const css::lang::EventObject& Source ) override { UnoControlBase::disposing( Source ); }
 
@@ -511,12 +511,12 @@ public:
     bool isTransparent(  ) override;
 
     // css::awt::XButton
-    void addActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
-    void removeActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
+    void addActionListener( const cpo::uno::Reference< css::awt::XActionListener >& l ) override;
+    void removeActionListener( const cpo::uno::Reference< css::awt::XActionListener >& l ) override;
     void setActionCommand( const OUString& Command ) override;
 
-    virtual void addItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
-    virtual void removeItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
+    virtual void addItemListener( const cpo::uno::Reference< css::awt::XItemListener >& l ) override;
+    virtual void removeItemListener( const cpo::uno::Reference< css::awt::XItemListener >& l ) override;
 
 
     sal_Int16 getState(  ) override;
@@ -546,7 +546,7 @@ class UnoControlFixedHyperlinkModel final : public UnoControlModel
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
-    UnoControlFixedHyperlinkModel( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+    UnoControlFixedHyperlinkModel( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
     UnoControlFixedHyperlinkModel( const UnoControlFixedHyperlinkModel& rModel ) : UnoControlModel( rModel ) {}
 
     rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlFixedHyperlinkModel( *this ); }
@@ -555,7 +555,7 @@ public:
     OUString getServiceName() override;
 
     // css::beans::XMultiPropertySet
-    css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+    cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
 
     // css::lang::XServiceInfo
     DECLIMPL_SERVICEINFO_DERIVED( UnoControlFixedHyperlinkModel, UnoControlModel, u"com.sun.star.awt.UnoControlFixedHyperlinkModel"_ustr )
@@ -580,7 +580,7 @@ public:
     void                        acquire() noexcept override  { OWeakAggObject::acquire(); }
     void                        release() noexcept override  { OWeakAggObject::release(); }
 
-    void createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
+    void createPeer( const cpo::uno::Reference< css::awt::XToolkit >& Toolkit, const cpo::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
     void dispose(  ) override;
 
     // css::lang::XTypeProvider
@@ -597,8 +597,8 @@ public:
     OUString getURL(  ) override;
     void setAlignment( sal_Int16 nAlign ) override;
     sal_Int16 getAlignment(  ) override;
-    void addActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
-    void removeActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
+    void addActionListener( const cpo::uno::Reference< css::awt::XActionListener >& l ) override;
+    void removeActionListener( const cpo::uno::Reference< css::awt::XActionListener >& l ) override;
 
     // css::awt::XLayoutConstrains
     css::awt::Size getMinimumSize(  ) override;
@@ -617,7 +617,7 @@ class TOOLKIT_DLLPUBLIC UnoControlFixedTextModel final : public UnoControlModel
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
-                        UnoControlFixedTextModel( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+                        UnoControlFixedTextModel( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
                         UnoControlFixedTextModel( const UnoControlFixedTextModel& rModel ) : UnoControlModel( rModel ) {}
 
     rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlFixedTextModel( *this ); }
@@ -626,7 +626,7 @@ public:
     OUString getServiceName() override;
 
     // css::beans::XMultiPropertySet
-    css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+    cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
 
     // css::lang::XServiceInfo
     OUString getImplementationName() override;
@@ -681,7 +681,7 @@ class UnoControlGroupBoxModel final : public UnoControlModel
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
-                        UnoControlGroupBoxModel( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+                        UnoControlGroupBoxModel( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
                         UnoControlGroupBoxModel( const UnoControlGroupBoxModel& rModel ) : UnoControlModel( rModel ) {}
 
     rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlGroupBoxModel( *this ); }
@@ -690,7 +690,7 @@ public:
     OUString getServiceName() override;
 
     // css::beans::XMultiPropertySet
-    css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+    cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
 
     // css::lang::XServiceInfo
     OUString getImplementationName() override;
@@ -731,7 +731,7 @@ protected:
 
 public:
                         UnoControlListBoxModel(
-                            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+                            const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                             ConstructorMode const i_mode = ConstructDefault
                         );
                         UnoControlListBoxModel( const UnoControlListBoxModel& i_rSource );
@@ -747,7 +747,7 @@ public:
                         )   const override;
 
     // css::beans::XMultiPropertySet
-    css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+    cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
 
     // css::io::XPersistObject
     OUString getServiceName() override;
@@ -772,8 +772,8 @@ public:
     virtual css::beans::Pair< OUString, OUString > getItemTextAndImage( ::sal_Int32 Position ) override;
     virtual cpo::uno::Any getItemData( ::sal_Int32 Position ) override;
     virtual cpo::uno::Sequence< css::beans::Pair< OUString, OUString > > getAllItems(  ) override;
-    virtual void addItemListListener( const css::uno::Reference< css::awt::XItemListListener >& Listener ) override;
-    virtual void removeItemListListener( const css::uno::Reference< css::awt::XItemListListener >& Listener ) override;
+    virtual void addItemListListener( const cpo::uno::Reference< css::awt::XItemListListener >& Listener ) override;
+    virtual void removeItemListListener( const cpo::uno::Reference< css::awt::XItemListListener >& Listener ) override;
 
     // OPropertySetHelper
     void setFastPropertyValue_NoBroadcast( std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
@@ -833,15 +833,15 @@ public:
                         UnoListBoxControl();
     OUString     GetComponentServiceName() const override;
 
-    void createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
+    void createPeer( const cpo::uno::Reference< css::awt::XToolkit >& Toolkit, const cpo::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
     void dispose(  ) override;
     void disposing( const css::lang::EventObject& Source ) override { UnoControlBase::disposing( Source ); }
 
     // css::awt::XListBox
-    void addItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
-    void removeItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
-    void addActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
-    void removeActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
+    void addItemListener( const cpo::uno::Reference< css::awt::XItemListener >& l ) override;
+    void removeItemListener( const cpo::uno::Reference< css::awt::XItemListener >& l ) override;
+    void addActionListener( const cpo::uno::Reference< css::awt::XActionListener >& l ) override;
+    void removeActionListener( const cpo::uno::Reference< css::awt::XActionListener >& l ) override;
     void addItem( const OUString& aItem, sal_Int16 nPos ) override;
     void addItems( const cpo::uno::Sequence< OUString >& aItems, sal_Int16 nPos ) override;
     void removeItems( sal_Int16 nPos, sal_Int16 nCount ) override;
@@ -874,7 +874,7 @@ public:
     void getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines ) override;
 
     // XUnoControl
-    bool setModel(const css::uno::Reference< css::awt::XControlModel >& Model) override;
+    bool setModel(const cpo::uno::Reference< css::awt::XControlModel >& Model) override;
 
     // XItemListListener
     virtual void listItemInserted( const css::awt::ItemListEvent& Event ) override;
@@ -904,7 +904,7 @@ class UnoControlComboBoxModel final : public UnoControlListBoxModel
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
-                        UnoControlComboBoxModel( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+                        UnoControlComboBoxModel( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
                         UnoControlComboBoxModel( const UnoControlComboBoxModel& rModel ) : UnoControlListBoxModel( rModel ) {}
 
     rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlComboBoxModel( *this ); }
@@ -913,7 +913,7 @@ public:
     OUString getServiceName() override;
 
     // css::beans::XMultiPropertySet
-    css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+    cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
     // OPropertySetHelper
     void setFastPropertyValue_NoBroadcast( std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
 
@@ -939,7 +939,7 @@ public:
                         UnoComboBoxControl();
     OUString     GetComponentServiceName() const override;
 
-    void createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
+    void createPeer( const cpo::uno::Reference< css::awt::XToolkit >& Toolkit, const cpo::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
     void disposing( const css::lang::EventObject& Source ) override { UnoEditControl::disposing( Source ); }
     void dispose(  ) override;
 
@@ -954,10 +954,10 @@ public:
     cpo::uno::Sequence< sal_Int8 >                     getImplementationId() override;
 
     // css::awt::XComboBox
-    void addItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
-    void removeItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
-    void addActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
-    void removeActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
+    void addItemListener( const cpo::uno::Reference< css::awt::XItemListener >& l ) override;
+    void removeItemListener( const cpo::uno::Reference< css::awt::XItemListener >& l ) override;
+    void addActionListener( const cpo::uno::Reference< css::awt::XActionListener >& l ) override;
+    void removeActionListener( const cpo::uno::Reference< css::awt::XActionListener >& l ) override;
     void addItem( const OUString& aItem, sal_Int16 nPos ) override;
     void addItems( const cpo::uno::Sequence< OUString >& aItems, sal_Int16 nPos ) override;
     void removeItems( sal_Int16 nPos, sal_Int16 nCount ) override;
@@ -968,7 +968,7 @@ public:
     void setDropDownLineCount( sal_Int16 nLines ) override;
 
     // XUnoControl
-    virtual bool setModel(const css::uno::Reference< css::awt::XControlModel >& Model) override;
+    virtual bool setModel(const cpo::uno::Reference< css::awt::XControlModel >& Model) override;
 
     // XItemListListener
     virtual void listItemInserted( const css::awt::ItemListEvent& Event ) override;
@@ -1010,11 +1010,11 @@ public:
     cpo::uno::Sequence< cpo::uno::Type >  getTypes() override;
     cpo::uno::Sequence< sal_Int8 >                     getImplementationId() override;
 
-    void createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
+    void createPeer( const cpo::uno::Reference< css::awt::XToolkit >& Toolkit, const cpo::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
 
     // css::awt::XSpinField
-    void addSpinListener( const css::uno::Reference< css::awt::XSpinListener >& l ) override;
-    void removeSpinListener( const css::uno::Reference< css::awt::XSpinListener >& l ) override;
+    void addSpinListener( const cpo::uno::Reference< css::awt::XSpinListener >& l ) override;
+    void removeSpinListener( const cpo::uno::Reference< css::awt::XSpinListener >& l ) override;
     void up() override;
     void down() override;
     void first() override;
@@ -1034,7 +1034,7 @@ class UnoControlDateFieldModel final : public UnoControlModel
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
-                UnoControlDateFieldModel( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+                UnoControlDateFieldModel( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
                 UnoControlDateFieldModel( const UnoControlDateFieldModel& rModel ) : UnoControlModel( rModel ) {}
 
     rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlDateFieldModel( *this ); }
@@ -1043,7 +1043,7 @@ public:
     OUString getServiceName() override;
 
     // css::beans::XMultiPropertySet
-    css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+    cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
 
     // css::lang::XServiceInfo
     OUString getImplementationName() override;
@@ -1073,7 +1073,7 @@ public:
     cpo::uno::Sequence< cpo::uno::Type >  getTypes() override;
     cpo::uno::Sequence< sal_Int8 >                     getImplementationId() override;
 
-    void createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
+    void createPeer( const cpo::uno::Reference< css::awt::XToolkit >& Toolkit, const cpo::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
 
     // css::awt::XTextListener
     void textChanged( const css::awt::TextEvent& rEvent ) override;
@@ -1110,7 +1110,7 @@ class UnoControlTimeFieldModel final : public UnoControlModel
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
-                        UnoControlTimeFieldModel( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+                        UnoControlTimeFieldModel( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
                         UnoControlTimeFieldModel( const UnoControlTimeFieldModel& rModel ) : UnoControlModel( rModel ) {}
 
     rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlTimeFieldModel( *this ); }
@@ -1119,7 +1119,7 @@ public:
     OUString getServiceName() override;
 
     // css::beans::XMultiPropertySet
-    css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+    cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
 
     // css::lang::XServiceInfo
     OUString getImplementationName() override;
@@ -1149,7 +1149,7 @@ public:
     cpo::uno::Sequence< cpo::uno::Type >  getTypes() override;
     cpo::uno::Sequence< sal_Int8 >                     getImplementationId() override;
 
-    void createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
+    void createPeer( const cpo::uno::Reference< css::awt::XToolkit >& Toolkit, const cpo::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
 
     // css::awt::XTextListener
     void textChanged( const css::awt::TextEvent& rEvent ) override;
@@ -1184,7 +1184,7 @@ class UnoControlNumericFieldModel final : public UnoControlModel
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
-                UnoControlNumericFieldModel( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+                UnoControlNumericFieldModel( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
                 UnoControlNumericFieldModel( const UnoControlNumericFieldModel& rModel ) : UnoControlModel( rModel ) {}
 
     rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlNumericFieldModel( *this ); }
@@ -1193,7 +1193,7 @@ public:
     OUString getServiceName() override;
 
     // css::beans::XMultiPropertySet
-    css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+    cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
 
     // css::lang::XServiceInfo
     OUString getImplementationName() override;
@@ -1219,7 +1219,7 @@ public:
     void                        acquire() noexcept override  { OWeakAggObject::acquire(); }
     void                        release() noexcept override  { OWeakAggObject::release(); }
 
-    void createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
+    void createPeer( const cpo::uno::Reference< css::awt::XToolkit >& Toolkit, const cpo::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
 
     // css::lang::XTypeProvider
     cpo::uno::Sequence< cpo::uno::Type >  getTypes() override;
@@ -1260,7 +1260,7 @@ class UnoControlCurrencyFieldModel final : public UnoControlModel
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
-                        UnoControlCurrencyFieldModel( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+                        UnoControlCurrencyFieldModel( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
                         UnoControlCurrencyFieldModel( const UnoControlCurrencyFieldModel& rModel ) : UnoControlModel( rModel ) {}
 
     rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlCurrencyFieldModel( *this ); }
@@ -1269,7 +1269,7 @@ public:
     OUString getServiceName() override;
 
     // css::beans::XMultiPropertySet
-    css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+    cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
 
     // css::lang::XServiceInfo
     OUString getImplementationName() override;
@@ -1295,7 +1295,7 @@ public:
     void                        acquire() noexcept override  { OWeakAggObject::acquire(); }
     void                        release() noexcept override  { OWeakAggObject::release(); }
 
-    void createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
+    void createPeer( const cpo::uno::Reference< css::awt::XToolkit >& Toolkit, const cpo::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
 
     // css::lang::XTypeProvider
     cpo::uno::Sequence< cpo::uno::Type >  getTypes() override;
@@ -1336,7 +1336,7 @@ class UnoControlPatternFieldModel final : public UnoControlModel
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
-                        UnoControlPatternFieldModel( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+                        UnoControlPatternFieldModel( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
                         UnoControlPatternFieldModel( const UnoControlPatternFieldModel& rModel ) : UnoControlModel( rModel ) {}
 
     rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlPatternFieldModel( *this ); }
@@ -1345,7 +1345,7 @@ public:
     OUString getServiceName() override;
 
     // css::beans::XMultiPropertySet
-    css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+    cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
 
     // css::lang::XServiceInfo
     OUString getImplementationName() override;
@@ -1395,13 +1395,13 @@ class UnoControlProgressBarModel final : public UnoControlModel
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
-                        UnoControlProgressBarModel( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+                        UnoControlProgressBarModel( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
                         UnoControlProgressBarModel( const UnoControlProgressBarModel& rModel ) : UnoControlModel( rModel ) {}
 
     rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlProgressBarModel( *this ); }
 
     // css::beans::XMultiPropertySet
-    css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+    cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
 
     // css::io::XPersistObject
     OUString getServiceName() override;
@@ -1451,13 +1451,13 @@ class UnoControlFixedLineModel final : public UnoControlModel
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
 public:
-                        UnoControlFixedLineModel( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+                        UnoControlFixedLineModel( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
                         UnoControlFixedLineModel( const UnoControlFixedLineModel& rModel ) : UnoControlModel( rModel ) {}
 
     rtl::Reference<UnoControlModel> Clone() const override { return new UnoControlFixedLineModel( *this ); }
 
     // css::beans::XMultiPropertySet
-    css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+    cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
 
     // css::io::XPersistObject
     OUString getServiceName() override;

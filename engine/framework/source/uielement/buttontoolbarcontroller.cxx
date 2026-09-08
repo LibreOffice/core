@@ -34,8 +34,8 @@
 
 using namespace ::com::sun::star;
 using namespace css::awt;
-using namespace css::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace css::beans;
 using namespace css::lang;
 using namespace css::frame;
@@ -138,13 +138,13 @@ void ButtonToolbarController::dispose()
 }
 
 void ButtonToolbarController::addEventListener(
-    const css::uno::Reference< css::lang::XEventListener >& )
+    const cpo::uno::Reference< css::lang::XEventListener >& )
 {
     // do nothing
 }
 
 void ButtonToolbarController::removeEventListener(
-    const css::uno::Reference< css::lang::XEventListener >& )
+    const cpo::uno::Reference< css::lang::XEventListener >& )
 {
     // do nothing
 }
@@ -261,7 +261,7 @@ uno::Reference< awt::XWindow > ButtonToolbarController::createPopupWindow()
 }
 
 uno::Reference< awt::XWindow > ButtonToolbarController::createItemWindow(
-    const css::uno::Reference< css::awt::XWindow >& )
+    const cpo::uno::Reference< css::awt::XWindow >& )
 {
     if ( m_bDisposed )
         throw DisposedException();

@@ -45,12 +45,12 @@ cpo::uno::Sequence< OUString > UriAbbreviation::getSupportedServiceNames()
     return { u"com.sun.star.util.UriAbbreviation"_ustr };
 }
 
-UriAbbreviation::UriAbbreviation(css::uno::Reference< cpo::uno::XComponentContext > const & )
+UriAbbreviation::UriAbbreviation(cpo::uno::Reference< cpo::uno::XComponentContext > const & )
 {
 }
 
 // css::util::XStringAbbreviation:
-OUString UriAbbreviation::abbreviateString(const css::uno::Reference< css::util::XStringWidth > & xStringWidth, ::sal_Int32 nWidth, const OUString & aString)
+OUString UriAbbreviation::abbreviateString(const cpo::uno::Reference< css::util::XStringWidth > & xStringWidth, ::sal_Int32 nWidth, const OUString & aString)
 {
     OUString aResult( aString );
     if ( xStringWidth.is() )

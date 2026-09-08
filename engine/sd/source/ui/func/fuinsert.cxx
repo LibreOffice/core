@@ -86,6 +86,7 @@
 #include <comphelper/kit.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 namespace sd {
 
@@ -741,10 +742,10 @@ void FuInsertAVMedia::DoExecute( SfxRequest& rReq )
         if (!pFrame)
             return;
 
-        css::uno::Reference<css::frame::XDispatchProvider> xDispatchProvider(pFrame->GetFrame().GetFrameInterface(), css::uno::UNO_QUERY);
+        cpo::uno::Reference<css::frame::XDispatchProvider> xDispatchProvider(pFrame->GetFrame().GetFrameInterface(), cpo::uno::UNO_QUERY);
 
         rtl::Reference<avmedia::PlayerListener> xPlayerListener(new avmedia::PlayerListener(
-            [xDispatchProvider, aURL, bLink](const css::uno::Reference<css::media::XPlayer>& rPlayer){
+            [xDispatchProvider, aURL, bLink](const cpo::uno::Reference<css::media::XPlayer>& rPlayer){
                 css::awt::Size aSize = rPlayer->getPreferredPlayerWindowSize();
                 avmedia::MediaWindow::dispatchInsertAVMedia(xDispatchProvider, aSize, aURL, bLink);
             }));

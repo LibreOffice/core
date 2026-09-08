@@ -50,7 +50,7 @@
 using namespace ::svx;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 static void SetAlignmentState( SdrView const * pSdrView, SfxItemSet& rSet )

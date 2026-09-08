@@ -21,7 +21,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/XComponentContext.hpp>
 #include <cpo/uno/XInterface.hpp>
 #include <cppuhelper/supportsservice.hxx>
@@ -32,7 +32,7 @@ namespace {
 
 class Implementation:
     public cppu::ImplInheritanceHelper<
-        NameContainer<css::uno::Reference<css::beans::XPropertySet>>,
+        NameContainer<cpo::uno::Reference<css::beans::XPropertySet>>,
         css::lang::XServiceInfo>
 {
     OUString getImplementationName() override

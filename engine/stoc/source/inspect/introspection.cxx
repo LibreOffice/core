@@ -67,7 +67,7 @@
 #include <unordered_map>
 #include <utility>
 
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace css::lang;
 using namespace css::reflection;
@@ -396,7 +396,7 @@ void IntrospectionAccessStatic_Impl::setPropertyValueByIndex(const Any& obj, sal
             Any aRealValue;
 
             if( auto valInterface = o3tl::tryAccess<
-                    css::uno::Reference<cpo::uno::XInterface>>(aValue) )
+                    cpo::uno::Reference<cpo::uno::XInterface>>(aValue) )
             {
                 Type aPropType = rProp.Type;
                 OUString aTypeName( aPropType.getTypeName() );
@@ -1157,7 +1157,7 @@ void ImplIntrospectionAccess::set(Any& array, sal_Int32 index, const Any& value)
 // Methods from XUnoTunnel
 sal_Int64 ImplIntrospectionAccess::getSomething( const Sequence< sal_Int8 >& aIdentifier )
 {
-    if (Reference<XUnoTunnel> xUnoTunnel{ mxIface, css::uno::UNO_QUERY })
+    if (Reference<XUnoTunnel> xUnoTunnel{ mxIface, cpo::uno::UNO_QUERY })
         return xUnoTunnel->getSomething(aIdentifier);
     return 0;
 }
@@ -1398,7 +1398,7 @@ OUString ImplIntrospectionAccess::getExactName( const OUString& rApproximateName
 
 struct TypeKey {
     TypeKey(
-        css::uno::Reference<css::beans::XPropertySetInfo> theProperties,
+        cpo::uno::Reference<css::beans::XPropertySetInfo> theProperties,
         std::vector<cpo::uno::Type> const & theTypes):
         properties(std::move(theProperties))
     {
@@ -1414,7 +1414,7 @@ struct TypeKey {
         types = b.makeStringAndClear();
     }
 
-    css::uno::Reference<css::beans::XPropertySetInfo> properties;
+    cpo::uno::Reference<css::beans::XPropertySetInfo> properties;
     OUString types;
 };
 
@@ -1489,7 +1489,7 @@ typedef
 class Implementation: private cppu::BaseMutex, public Implementation_Base {
 public:
     explicit Implementation(
-        css::uno::Reference<cpo::uno::XComponentContext> const & context):
+        cpo::uno::Reference<cpo::uno::XComponentContext> const & context):
         Implementation_Base(m_aMutex),
         reflection_(css::reflection::theCoreReflection::get(context))
     {}
@@ -1514,17 +1514,17 @@ private:
         return s;
     }
 
-    virtual css::uno::Reference<css::beans::XIntrospectionAccess> SAL_CALL
+    virtual cpo::uno::Reference<css::beans::XIntrospectionAccess> SAL_CALL
     inspect(cpo::uno::Any const & aObject) override;
 
-    css::uno::Reference<css::reflection::XIdlReflection> reflection_;
+    cpo::uno::Reference<css::reflection::XIdlReflection> reflection_;
     Cache<TypeKey, TypeKeyLess> typeCache_;
 };
 
-css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
+cpo::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
     cpo::uno::Any const & aObject)
 {
-    css::uno::Reference<css::reflection::XIdlReflection> reflection;
+    cpo::uno::Reference<css::reflection::XIdlReflection> reflection;
     {
         osl::MutexGuard g(m_aMutex);
         if (rBHelper.bDisposed || rBHelper.bInDispose) {
@@ -1536,11 +1536,11 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
     cpo::uno::Any aToInspectObj;
     cpo::uno::Type t;
     if (aObject >>= t) {
-        css::uno::Reference<css::reflection::XIdlClass> c(
+        cpo::uno::Reference<css::reflection::XIdlClass> c(
             reflection->forName(t.getTypeName()));
         if (!c.is()) {
             SAL_WARN("stoc", "cannot reflect type " << t.getTypeName());
-            return css::uno::Reference<css::beans::XIntrospectionAccess>();
+            return cpo::uno::Reference<css::beans::XIntrospectionAccess>();
         }
         aToInspectObj <<= c;
     } else {
@@ -1550,12 +1550,12 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
     // Examine object
     TypeClass eType = aToInspectObj.getValueTypeClass();
     if( eType != TypeClass_INTERFACE && eType != TypeClass_STRUCT  && eType != TypeClass_EXCEPTION )
-        return css::uno::Reference<css::beans::XIntrospectionAccess>();
+        return cpo::uno::Reference<css::beans::XIntrospectionAccess>();
 
     if( auto x = o3tl::tryAccess<Reference<XInterface>>(aToInspectObj) )
     {
         if( !x->is() )
-            return css::uno::Reference<css::beans::XIntrospectionAccess>();
+            return cpo::uno::Reference<css::beans::XIntrospectionAccess>();
     }
 
     // Pointer to possibly needed new IntrospectionAccessStatic_Impl instance
@@ -2229,7 +2229,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                             const Reference<XIdlMethod>& rxMethod = methods[i];
 
                             // Enter void as default class
-                            css::uno::Reference<css::reflection::XIdlClass>
+                            cpo::uno::Reference<css::reflection::XIdlClass>
                                 xListenerClass(
                                     reflection->forName(
                                         cppu::UnoType<void>::get()
@@ -2240,7 +2240,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                             // Disadvantage: Superclasses should be searched recursively
                             const Sequence< Reference<XIdlClass> > aParams = rxMethod->getParameterTypes();
 
-                            css::uno::Reference<css::reflection::XIdlClass>
+                            cpo::uno::Reference<css::reflection::XIdlClass>
                                 xEventListenerClass(
                                     reflection->forName(
                                         cppu::UnoType<
@@ -2309,7 +2309,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
     {
         // Is it an interface or a struct?
         //Reference<XIdlClass> xClassRef = aToInspectObj.getReflection()->getIdlClass();
-        css::uno::Reference<css::reflection::XIdlClass> xClassRef(
+        cpo::uno::Reference<css::reflection::XIdlClass> xClassRef(
             reflection->forName(aToInspectObj.getValueTypeName()));
         if( !xClassRef.is() )
         {

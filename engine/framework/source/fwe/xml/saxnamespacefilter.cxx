@@ -29,7 +29,7 @@
 #include <rtl/ref.hxx>
 
 using namespace ::com::sun::star::xml::sax;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 namespace framework{
 

@@ -51,8 +51,8 @@
 #include <mutex>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
@@ -131,18 +131,18 @@ public:
 class UnoControlDialogModel :   public ControlModelContainerBase
 {
 protected:
-    css::uno::Reference< css::graphic::XGraphicObject > mxGrfObj;
+    cpo::uno::Reference< css::graphic::XGraphicObject > mxGrfObj;
     cpo::uno::Any          ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper& getInfoHelper() override;
     // ::comphelper::OPropertySetHelper
     void setFastPropertyValue_NoBroadcast( std::unique_lock<std::mutex>& rGuard, sal_Int32 nHandle, const cpo::uno::Any& rValue ) override;
 public:
-    explicit UnoControlDialogModel( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+    explicit UnoControlDialogModel( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
     UnoControlDialogModel( const UnoControlDialogModel& rModel );
 
     rtl::Reference<UnoControlModel> Clone() const override;
     // css::beans::XMultiPropertySet
-    css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+    cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
 
     // css::io::XPersistObject
     OUString getServiceName() override;

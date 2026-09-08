@@ -58,18 +58,18 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper< css::awt::XDockableW
             PREVIEWFRAME_YES
         };
 
-        ToolbarLayoutManager( css::uno::Reference< cpo::uno::XComponentContext > xContext,
-                              css::uno::Reference< css::ui::XUIElementFactory >  xUIElementFactory,
+        ToolbarLayoutManager( cpo::uno::Reference< cpo::uno::XComponentContext > xContext,
+                              cpo::uno::Reference< css::ui::XUIElementFactory >  xUIElementFactory,
                               LayoutManager* pParentLayouter );
         virtual ~ToolbarLayoutManager() override;
 
         void reset();
-        void attach( const css::uno::Reference< css::frame::XFrame >& xFrame,
-                     const css::uno::Reference< css::ui::XUIConfigurationManager >& xModuleCfgMgr,
-                     const css::uno::Reference< css::ui::XUIConfigurationManager >& xDocCfgMgr,
-                     const css::uno::Reference< css::container::XNameAccess >& xPersistentWindowState );
+        void attach( const cpo::uno::Reference< css::frame::XFrame >& xFrame,
+                     const cpo::uno::Reference< css::ui::XUIConfigurationManager >& xModuleCfgMgr,
+                     const cpo::uno::Reference< css::ui::XUIConfigurationManager >& xDocCfgMgr,
+                     const cpo::uno::Reference< css::container::XNameAccess >& xPersistentWindowState );
 
-        void setParentWindow( const css::uno::Reference< css::awt::XVclWindowPeer >& xParentWindow );
+        void setParentWindow( const cpo::uno::Reference< css::awt::XVclWindowPeer >& xParentWindow );
         void setDockingAreaOffsets(const ::tools::Rectangle& rOffsets);
 
         void resetDockingArea();
@@ -114,8 +114,8 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper< css::awt::XDockableW
         bool isToolbarLocked( std::u16string_view rResourceURL );
         css::awt::Point getToolbarPos( std::u16string_view rResourceURL );
         css::awt::Size getToolbarSize( std::u16string_view rResourceURL );
-        css::uno::Reference< css::ui::XUIElement > getToolbar( std::u16string_view aName );
-        cpo::uno::Sequence< css::uno::Reference< css::ui::XUIElement > > getToolbars();
+        cpo::uno::Reference< css::ui::XUIElement > getToolbar( std::u16string_view aName );
+        cpo::uno::Sequence< cpo::uno::Reference< css::ui::XUIElement > > getToolbars();
 
         void updateToolbarsTips();
 
@@ -170,7 +170,7 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper< css::awt::XDockableW
             {}
 
             std::vector< OUString >                                   aUIElementNames;
-            std::vector< css::uno::Reference< css::awt::XWindow > >   aRowColumnWindows;
+            std::vector< cpo::uno::Reference< css::awt::XWindow > >   aRowColumnWindows;
             std::vector< css::awt::Rectangle >                        aRowColumnWindowSizes;
             std::vector< sal_Int32 >                                  aRowColumnSpace;
             css::awt::Rectangle                                       aRowColumnRect;
@@ -187,7 +187,7 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper< css::awt::XDockableW
         void             implts_sortUIElements();
         void             implts_reparentToolbars();
         static OUString  implts_generateGenericAddonToolbarTitle( sal_Int32 nNumber );
-        void             implts_setElementData( UIElement& rUIElement, const css::uno::Reference< css::awt::XDockableWindow >& rDockWindow );
+        void             implts_setElementData( UIElement& rUIElement, const cpo::uno::Reference< css::awt::XDockableWindow >& rDockWindow );
         void             implts_destroyDockingAreaWindows();
 
         // layout methods
@@ -205,9 +205,9 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper< css::awt::XDockableW
         // lookup/container methods
 
         UIElement        implts_findToolbar( std::u16string_view aName );
-        UIElement        implts_findToolbar( const css::uno::Reference< cpo::uno::XInterface >& xToolbar );
+        UIElement        implts_findToolbar( const cpo::uno::Reference< cpo::uno::XInterface >& xToolbar );
         UIElement&       impl_findToolbar( std::u16string_view aName );
-        css::uno::Reference< css::awt::XWindow > implts_getXWindow( std::u16string_view aName );
+        cpo::uno::Reference< css::awt::XWindow > implts_getXWindow( std::u16string_view aName );
         vcl::Window*     implts_getWindow( std::u16string_view aName );
         bool             implts_insertToolbar( const UIElement& rUIElement );
         void             implts_setToolbar( const UIElement& rUIElement );
@@ -254,14 +254,14 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper< css::awt::XDockableW
 
         // members
 
-        css::uno::Reference< cpo::uno::XComponentContext >                   m_xContext;
-        css::uno::Reference< css::frame::XFrame >                            m_xFrame;
-        css::uno::Reference< css::awt::XWindow2 >                            m_xContainerWindow;
-        css::uno::Reference< css::awt::XWindow >                             m_xDockAreaWindows[DOCKINGAREAS_COUNT];
-        css::uno::Reference< css::ui::XUIElementFactory >                    m_xUIElementFactoryManager;
-        css::uno::Reference< css::ui::XUIConfigurationManager >              m_xModuleCfgMgr;
-        css::uno::Reference< css::ui::XUIConfigurationManager >              m_xDocCfgMgr;
-        css::uno::Reference< css::container::XNameAccess >                   m_xPersistentWindowState;
+        cpo::uno::Reference< cpo::uno::XComponentContext >                   m_xContext;
+        cpo::uno::Reference< css::frame::XFrame >                            m_xFrame;
+        cpo::uno::Reference< css::awt::XWindow2 >                            m_xContainerWindow;
+        cpo::uno::Reference< css::awt::XWindow >                             m_xDockAreaWindows[DOCKINGAREAS_COUNT];
+        cpo::uno::Reference< css::ui::XUIElementFactory >                    m_xUIElementFactoryManager;
+        cpo::uno::Reference< css::ui::XUIConfigurationManager >              m_xModuleCfgMgr;
+        cpo::uno::Reference< css::ui::XUIConfigurationManager >              m_xDocCfgMgr;
+        cpo::uno::Reference< css::container::XNameAccess >                   m_xPersistentWindowState;
         LayoutManager*                                                       m_pParentLayouter;
 
         UIElementVector                                                      m_aUIElements;

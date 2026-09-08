@@ -28,6 +28,7 @@
 #include <libxml/xpathInternals.h>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 /// SVG filter tests.
 class SvgFilterTest : public UnoApiXmlTest

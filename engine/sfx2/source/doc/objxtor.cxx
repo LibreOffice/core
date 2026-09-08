@@ -85,8 +85,8 @@
 #include <basic/basicmanagerrepository.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::document;
@@ -873,7 +873,7 @@ cpo::uno::Sequence< OUString > SfxObjectShell::GetEventNames()
 }
 
 
-css::uno::Reference< css::frame::XModel3 > SfxObjectShell::GetModel() const
+cpo::uno::Reference< css::frame::XModel3 > SfxObjectShell::GetModel() const
 {
     return GetBaseModel();
 }
@@ -889,7 +889,7 @@ void SfxObjectShell::SetBaseModel( SfxBaseModel* pModel )
 }
 
 
-css::uno::Reference< css::frame::XModel3 > SfxObjectShell::GetBaseModel() const
+cpo::uno::Reference< css::frame::XModel3 > SfxObjectShell::GetBaseModel() const
 {
     return pImpl->pBaseModel;
 }
@@ -1090,13 +1090,13 @@ SfxObjectShell* SfxObjectShell::GetShellFromComponent(const Reference<cpo::uno::
     return nullptr;
 }
 
-SfxObjectShell* SfxObjectShell::GetParentShell(const css::uno::Reference<cpo::uno::XInterface>& xChild)
+SfxObjectShell* SfxObjectShell::GetParentShell(const cpo::uno::Reference<cpo::uno::XInterface>& xChild)
 {
     SfxObjectShell* pResult = nullptr;
 
     try
     {
-        if (css::uno::Reference<css::container::XChild> xChildModel{ xChild, css::uno::UNO_QUERY })
+        if (cpo::uno::Reference<css::container::XChild> xChildModel{ xChild, cpo::uno::UNO_QUERY })
             pResult = GetShellFromComponent(xChildModel->getParent());
     }
     catch (const cpo::uno::Exception&)

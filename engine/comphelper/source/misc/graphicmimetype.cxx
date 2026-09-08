@@ -28,7 +28,7 @@
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
@@ -41,7 +41,7 @@ using namespace css;
 using namespace css::beans;
 using namespace css::graphic;
 using namespace css::io;
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 namespace comphelper

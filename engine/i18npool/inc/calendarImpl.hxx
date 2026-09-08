@@ -40,7 +40,7 @@ public:
 
     // Constructors
     CalendarImpl();
-    CalendarImpl(const css::uno::Reference < cpo::uno::XComponentContext >& rxContext);
+    CalendarImpl(const cpo::uno::Reference < cpo::uno::XComponentContext >& rxContext);
 
     /**
     * Destructor
@@ -93,14 +93,14 @@ public:
 
 private:
     struct lookupTableItem {
-        lookupTableItem(OUString aCacheID, css::uno::Reference < css::i18n::XCalendar4 > _xCalendar)
+        lookupTableItem(OUString aCacheID, cpo::uno::Reference < css::i18n::XCalendar4 > _xCalendar)
             : m_aCacheID(std::move(aCacheID)), xCalendar(std::move(_xCalendar)) {}
         OUString                                      m_aCacheID;
-        css::uno::Reference < css::i18n::XCalendar4 > xCalendar;
+        cpo::uno::Reference < css::i18n::XCalendar4 > xCalendar;
     };
     std::vector<lookupTableItem>                        lookupTable;
-    css::uno::Reference < cpo::uno::XComponentContext > m_xContext;
-    css::uno::Reference < css::i18n::XCalendar4 >       xCalendar;
+    cpo::uno::Reference < cpo::uno::XComponentContext > m_xContext;
+    cpo::uno::Reference < css::i18n::XCalendar4 >       xCalendar;
 };
 
 }

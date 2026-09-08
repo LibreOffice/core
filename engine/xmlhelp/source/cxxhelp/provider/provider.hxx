@@ -44,7 +44,7 @@ inline constexpr OUString MYUCP_CONTENT_TYPE = u"application/vnd.sun.star.xmlhel
     {
     public:
         explicit ContentProvider(
-            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
         virtual ~ContentProvider() override;
 
@@ -54,8 +54,8 @@ inline constexpr OUString MYUCP_CONTENT_TYPE = u"application/vnd.sun.star.xmlhel
         virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
         // XContentProvider
-        virtual css::uno::Reference< css::ucb::XContent > SAL_CALL queryContent(
-                const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier ) override;
+        virtual cpo::uno::Reference< css::ucb::XContent > SAL_CALL queryContent(
+                const cpo::uno::Reference< css::ucb::XContentIdentifier >& Identifier ) override;
 
         // Additional interfaces
 
@@ -65,10 +65,10 @@ inline constexpr OUString MYUCP_CONTENT_TYPE = u"application/vnd.sun.star.xmlhel
         dispose(  ) override;
 
         virtual void SAL_CALL
-        addEventListener( const css::uno::Reference< css::lang::XEventListener >& ) override {}
+        addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& ) override {}
 
         virtual void SAL_CALL
-        removeEventListener( const css::uno::Reference< css::lang::XEventListener >& ) override {}
+        removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& ) override {}
 
         // XContainerListener ( derive from XEventListener )
 
@@ -92,7 +92,7 @@ inline constexpr OUString MYUCP_CONTENT_TYPE = u"application/vnd.sun.star.xmlhel
     private:
         bool                           isInitialized;
         std::unique_ptr<Databases>     m_pDatabases;
-        css::uno::Reference<css::container::XContainer> m_xContainer;
+        cpo::uno::Reference<css::container::XContainer> m_xContainer;
 
         // private methods
 

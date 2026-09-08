@@ -123,7 +123,7 @@ public:
     SVT_DLLPUBLIC static const OUString & GetImageId( const INetURLObject& rURL, bool bBig = false );
     SVT_DLLPUBLIC static Image  GetImage(
         const INetURLObject& rURL, bool bBig = false,
-        css::uno::Reference<css::ucb::XCommandEnvironment> const & env
+        cpo::uno::Reference<css::ucb::XCommandEnvironment> const & env
             = utl::UCBContentHelper::getDefaultCommandEnvironment());
     SVT_DLLPUBLIC static const OUString & GetFileImageId( const INetURLObject& rURL );
     SVT_DLLPUBLIC static Image  GetImageNoDefault(const INetURLObject& rURL, vcl::ImageType eImageType = vcl::ImageType::Small);

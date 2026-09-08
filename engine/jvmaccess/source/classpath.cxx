@@ -26,7 +26,7 @@
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/XInterface.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/uri/XUriReference.hpp>
@@ -42,7 +42,7 @@
 namespace cpo::uno { class XComponentContext; }
 
 jobjectArray jvmaccess::ClassPath::translateToUrls(
-    css::uno::Reference< cpo::uno::XComponentContext > const & context,
+    cpo::uno::Reference< cpo::uno::XComponentContext > const & context,
     JNIEnv * environment, std::u16string_view classPath)
 {
     assert(context.is());
@@ -60,12 +60,12 @@ jobjectArray jvmaccess::ClassPath::translateToUrls(
     for (::sal_Int32 i = 0; i != -1;) {
         OUString url(o3tl::getToken(classPath, 0, ' ', i));
         if (!url.isEmpty()) {
-            css::uno::Reference< css::uri::XVndSunStarExpandUrlReference >
+            cpo::uno::Reference< css::uri::XVndSunStarExpandUrlReference >
                 expUrl(
                     css::uri::UriReferenceFactory::create(context)->parse(url),
-                    css::uno::UNO_QUERY);
+                    cpo::uno::UNO_QUERY);
             if (expUrl.is()) {
-                css::uno::Reference< css::util::XMacroExpander > expander =
+                cpo::uno::Reference< css::util::XMacroExpander > expander =
                     css::util::theMacroExpander::get(context);
                 try {
                     url = expUrl->expand( expander );
@@ -77,13 +77,13 @@ jobjectArray jvmaccess::ClassPath::translateToUrls(
                          nullptr, anyEx );
                 }
             }
-            css::uno::Reference< css::uri::XUriReference > uriRef(
+            cpo::uno::Reference< css::uri::XUriReference > uriRef(
                 css::uri::UriReferenceFactory::create(context)->parse(url));
             if (!uriRef.is() || !uriRef->getScheme().equalsIgnoreAsciiCase("file"))
             {
                 throw css::lang::IllegalArgumentException(
                     "non-local Java class path entry: " + url,
-                    css::uno::Reference< cpo::uno::XInterface >(), 0);
+                    cpo::uno::Reference< cpo::uno::XInterface >(), 0);
             }
             jvalue arg;
             arg.l = environment->NewString(

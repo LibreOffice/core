@@ -42,7 +42,7 @@ using namespace connectivity;
 using namespace connectivity::sdbcx;
 using namespace comphelper;
 using namespace dbtools;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
@@ -62,7 +62,7 @@ class OEmptyCollection : public sdbcx::OCollection
 {
 protected:
     virtual void impl_refresh() override;
-    virtual css::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
+    virtual cpo::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
 public:
     OEmptyCollection(::cppu::OWeakObject& _rParent,::osl::Mutex& _rMutex) : OCollection(_rParent, true, _rMutex, std::vector< OUString>()){}
 };
@@ -71,9 +71,9 @@ void OEmptyCollection::impl_refresh()
 {
 }
 
-css::uno::Reference< css::beans::XPropertySet > OEmptyCollection::createObject(const OUString& /*_rName*/)
+cpo::uno::Reference< css::beans::XPropertySet > OEmptyCollection::createObject(const OUString& /*_rName*/)
 {
-    return css::uno::Reference< css::beans::XPropertySet >();
+    return cpo::uno::Reference< css::beans::XPropertySet >();
 }
 
 // ORowSetBase

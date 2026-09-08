@@ -38,16 +38,16 @@ enum class XMLHintType
 
 class XMLHint_Impl
 {
-    css::uno::Reference < css::text::XTextRange > xStart;
-    css::uno::Reference < css::text::XTextRange > xEnd;
+    cpo::uno::Reference < css::text::XTextRange > xStart;
+    cpo::uno::Reference < css::text::XTextRange > xEnd;
 
     XMLHintType nType;
 
 public:
 
     XMLHint_Impl( XMLHintType nTyp,
-                  css::uno::Reference < css::text::XTextRange > xS,
-                  css::uno::Reference < css::text::XTextRange > xE ) :
+                  cpo::uno::Reference < css::text::XTextRange > xS,
+                  cpo::uno::Reference < css::text::XTextRange > xE ) :
         xStart(std::move( xS )),
         xEnd(std::move( xE )),
         nType( nTyp )
@@ -56,9 +56,9 @@ public:
 
     virtual ~XMLHint_Impl() {}
 
-    const css::uno::Reference < css::text::XTextRange > & GetStart() const { return xStart; }
-    const css::uno::Reference < css::text::XTextRange > & GetEnd() const { return xEnd; }
-    void SetEnd( const css::uno::Reference < css::text::XTextRange > & rPos ) { xEnd = rPos; }
+    const cpo::uno::Reference < css::text::XTextRange > & GetStart() const { return xStart; }
+    const cpo::uno::Reference < css::text::XTextRange > & GetEnd() const { return xEnd; }
+    void SetEnd( const cpo::uno::Reference < css::text::XTextRange > & rPos ) { xEnd = rPos; }
 
     // We don't use virtual methods to differ between the sub classes,
     // because this seems to be too expensive if compared to inline methods.
@@ -73,7 +73,7 @@ class XMLStyleHint_Impl : public XMLHint_Impl
 public:
 
     XMLStyleHint_Impl( OUString aStyleName,
-                         const css::uno::Reference < css::text::XTextRange > & rPos ) :
+                         const cpo::uno::Reference < css::text::XTextRange > & rPos ) :
         XMLHint_Impl( XMLHintType::XML_HINT_STYLE, rPos, rPos ),
         sStyleName(std::move( aStyleName ))
     {
@@ -89,7 +89,7 @@ class XMLReferenceHint_Impl : public XMLHint_Impl
 public:
 
     XMLReferenceHint_Impl( OUString aRefName,
-                             const css::uno::Reference < css::text::XTextRange > & rPos ) :
+                             const cpo::uno::Reference < css::text::XTextRange > & rPos ) :
         XMLHint_Impl( XMLHintType::XML_HINT_REFERENCE, rPos, rPos ),
         sRefName(std::move( aRefName ))
     {
@@ -109,7 +109,7 @@ class XMLHyperlinkHint_Impl : public XMLHint_Impl
 
 public:
 
-    XMLHyperlinkHint_Impl( const css::uno::Reference < css::text::XTextRange > & rPos ) :
+    XMLHyperlinkHint_Impl( const cpo::uno::Reference < css::text::XTextRange > & rPos ) :
         XMLHint_Impl( XMLHintType::XML_HINT_HYPERLINK, rPos, rPos )
     {
     }
@@ -136,22 +136,22 @@ public:
 
 class XMLIndexMarkHint_Impl : public XMLHint_Impl
 {
-    const css::uno::Reference<css::beans::XPropertySet> xIndexMarkPropSet;
+    const cpo::uno::Reference<css::beans::XPropertySet> xIndexMarkPropSet;
 
     const OUString sID;
 
 public:
 
-    XMLIndexMarkHint_Impl( css::uno::Reference < css::beans::XPropertySet > xPropSet,
-                           const css::uno::Reference < css::text::XTextRange > & rPos ) :
+    XMLIndexMarkHint_Impl( cpo::uno::Reference < css::beans::XPropertySet > xPropSet,
+                           const cpo::uno::Reference < css::text::XTextRange > & rPos ) :
         XMLHint_Impl( XMLHintType::XML_HINT_INDEX_MARK, rPos, rPos ),
         xIndexMarkPropSet(std::move( xPropSet )),
         sID()
     {
     }
 
-    XMLIndexMarkHint_Impl( css::uno::Reference < css::beans::XPropertySet > xPropSet,
-                           const css::uno::Reference < css::text::XTextRange > & rPos,
+    XMLIndexMarkHint_Impl( cpo::uno::Reference < css::beans::XPropertySet > xPropSet,
+                           const cpo::uno::Reference < css::text::XTextRange > & rPos,
                            OUString sIDString) :
         XMLHint_Impl( XMLHintType::XML_HINT_INDEX_MARK, rPos, rPos ),
         xIndexMarkPropSet(std::move( xPropSet )),
@@ -159,7 +159,7 @@ public:
     {
     }
 
-    const css::uno::Reference<css::beans::XPropertySet> & GetMark() const
+    const cpo::uno::Reference<css::beans::XPropertySet> & GetMark() const
         { return xIndexMarkPropSet; }
     const OUString& GetID() const { return sID; }
 };
@@ -172,15 +172,15 @@ class XMLTextFrameHint_Impl : public XMLHint_Impl
 public:
 
     XMLTextFrameHint_Impl( SvXMLImportContext* pContext,
-                           const css::uno::Reference < css::text::XTextRange > & rPos ) :
+                           const cpo::uno::Reference < css::text::XTextRange > & rPos ) :
         XMLHint_Impl( XMLHintType::XML_HINT_TEXT_FRAME, rPos, rPos ),
         xContext( pContext )
     {
     }
 
-    css::uno::Reference < css::text::XTextContent > GetTextContent() const
+    cpo::uno::Reference < css::text::XTextContent > GetTextContent() const
     {
-        css::uno::Reference < css::text::XTextContent > xTxt;
+        cpo::uno::Reference < css::text::XTextContent > xTxt;
         SvXMLImportContext *pContext = xContext.get();
         if (XMLTextFrameContext *pFrameContext =  dynamic_cast<XMLTextFrameContext*>(pContext))
             xTxt = pFrameContext->GetTextContent();
@@ -191,9 +191,9 @@ public:
     }
 
     // Frame "to character": anchor moves from first to last char after saving (#i33242#)
-    css::uno::Reference < css::drawing::XShape > GetShape() const
+    cpo::uno::Reference < css::drawing::XShape > GetShape() const
     {
-        css::uno::Reference < css::drawing::XShape > xShape;
+        cpo::uno::Reference < css::drawing::XShape > xShape;
         SvXMLImportContext *pContext = xContext.get();
         if (XMLTextFrameContext *pFrameContext = dynamic_cast<XMLTextFrameContext*>(pContext))
             xShape = pFrameContext->GetShape();
@@ -225,14 +225,14 @@ class XMLDrawHint_Impl : public XMLHint_Impl
 public:
 
     XMLDrawHint_Impl( SvXMLShapeContext* pContext,
-                      const css::uno::Reference < css::text::XTextRange > & rPos ) :
+                      const cpo::uno::Reference < css::text::XTextRange > & rPos ) :
         XMLHint_Impl( XMLHintType::XML_HINT_DRAW, rPos, rPos ),
         xContext( pContext )
     {
     }
 
     // Frame "to character": anchor moves from first to last char after saving (#i33242#)
-    css::uno::Reference < css::drawing::XShape > const & GetShape() const
+    cpo::uno::Reference < css::drawing::XShape > const & GetShape() const
     {
         return xContext->getShape();
     }

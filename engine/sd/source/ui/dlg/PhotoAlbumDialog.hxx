@@ -64,14 +64,14 @@ private:
     DECL_LINK(SelectHdl, weld::TreeView&, void);
     DECL_LINK(TypeSelectHdl, weld::ComboBox&, void);
 
-    css::uno::Reference< css::drawing::XDrawPage > appendNewSlide(AutoLayout aLayout,
-        const css::uno::Reference< css::drawing::XDrawPages >& xDrawPages);
+    cpo::uno::Reference< css::drawing::XDrawPage > appendNewSlide(AutoLayout aLayout,
+        const cpo::uno::Reference< css::drawing::XDrawPages >& xDrawPages);
 
     static css::awt::Size createASRSize(const css::awt::Size& aPicSize, const css::awt::Size& aMaxSize);
     static css::awt::Size createASRSizeCrop(const css::awt::Size& aPicSize, const css::awt::Size& aMaxSize);
     void createCaption(const css::awt::Size& aPageSize);
-    static css::uno::Reference< css::graphic::XGraphic> createXGraphicFromUrl(const OUString& sUrl,
-        const css::uno::Reference< css::graphic::XGraphicProvider>& xProvider);
+    static cpo::uno::Reference< css::graphic::XGraphic> createXGraphicFromUrl(const OUString& sUrl,
+        const cpo::uno::Reference< css::graphic::XGraphicProvider>& xProvider);
 
     void EnableDisableButtons();
 

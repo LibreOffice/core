@@ -16,7 +16,7 @@
 #include <com/sun/star/table/TableSortField.hpp>
 #include <com/sun/star/sheet/SortNumberBehavior.hpp>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 
 #include <cppunit/TestAssert.h>
@@ -24,7 +24,8 @@
 #include <vector>
 
 using namespace com::sun::star;
-using namespace com::sun::star::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 namespace apitest
 {

@@ -27,7 +27,7 @@
 
 #include <sal/log.hxx>
 
-using com::sun::star::uno::Reference;
+using cpo::uno::Reference;
 using com::sun::star::xml::sax::XFastAttributeList;
 using com::sun::star::xforms::XDataTypeRepository;
 using namespace xmloff::token;

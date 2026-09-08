@@ -51,7 +51,7 @@
 #include <algorithm>
 #include <utility>
 
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::io;
 using namespace com::sun::star::lang;
@@ -326,7 +326,7 @@ Any AttacherAllListener_Impl::approveFiring( const AllEventObject& Event )
                     cpo::uno::Any anyEx = cppu::getCaughtException();
                     throw css::lang::WrappedTargetRuntimeException(
                         "wrapped CannotConvertException " + e.Message,
-                        css::uno::Reference<cpo::uno::XInterface>(), anyEx);
+                        cpo::uno::Reference<cpo::uno::XInterface>(), anyEx);
                 }
             }
         }

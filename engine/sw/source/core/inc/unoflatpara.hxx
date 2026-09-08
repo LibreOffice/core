@@ -48,7 +48,7 @@ public:
     virtual ~SwXFlatParagraph() override;
 
     // XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
         getPropertySetInfo() override;
     virtual void SAL_CALL setPropertyValue(
             const OUString& rPropertyName,
@@ -57,25 +57,25 @@ public:
             const OUString& rPropertyName) override;
     virtual void SAL_CALL addPropertyChangeListener(
             const OUString& rPropertyName,
-            const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener) override;
+            const cpo::uno::Reference< css::beans::XPropertyChangeListener >& xListener) override;
     virtual void SAL_CALL removePropertyChangeListener(
             const OUString& rPropertyName,
-            const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener) override;
+            const cpo::uno::Reference< css::beans::XPropertyChangeListener >& xListener) override;
     virtual void SAL_CALL addVetoableChangeListener(
             const OUString& rPropertyName,
-            const css::uno::Reference< css::beans::XVetoableChangeListener >& xListener) override;
+            const cpo::uno::Reference< css::beans::XVetoableChangeListener >& xListener) override;
     virtual void SAL_CALL removeVetoableChangeListener(
             const OUString& rPropertyName,
-            const css::uno::Reference< css::beans::XVetoableChangeListener >& xListener) override;
+            const cpo::uno::Reference< css::beans::XVetoableChangeListener >& xListener) override;
 
     // text::XTextMarkup:
-    virtual css::uno::Reference< css::container::XStringKeyMap > SAL_CALL getMarkupInfoContainer() override;
+    virtual cpo::uno::Reference< css::container::XStringKeyMap > SAL_CALL getMarkupInfoContainer() override;
 
     virtual void SAL_CALL commitStringMarkup(::sal_Int32 nType, const OUString & aIdentifier, ::sal_Int32 nStart, ::sal_Int32 nLength,
-                                   const css::uno::Reference< css::container::XStringKeyMap > & xMarkupInfoContainer) override;
+                                   const cpo::uno::Reference< css::container::XStringKeyMap > & xMarkupInfoContainer) override;
 
-    virtual void SAL_CALL commitTextRangeMarkup(::sal_Int32 nType, const OUString & aIdentifier, const css::uno::Reference< css::text::XTextRange> & xRange,
-                                                const css::uno::Reference< css::container::XStringKeyMap > & xMarkupInfoContainer) override;
+    virtual void SAL_CALL commitTextRangeMarkup(::sal_Int32 nType, const OUString & aIdentifier, const cpo::uno::Reference< css::text::XTextRange> & xRange,
+                                                const cpo::uno::Reference< css::container::XStringKeyMap > & xMarkupInfoContainer) override;
 
     // text::XFlatParagraph:
     virtual OUString SAL_CALL getText() override;
@@ -110,11 +110,11 @@ public:
     virtual ~SwXFlatParagraphIterator() override;
 
     // text::XFlatParagraphIterator:
-    virtual css::uno::Reference< css::text::XFlatParagraph > SAL_CALL getFirstPara() override;
-    virtual css::uno::Reference< css::text::XFlatParagraph > SAL_CALL getNextPara() override;
-    virtual css::uno::Reference< css::text::XFlatParagraph > SAL_CALL getLastPara() override;
-    virtual css::uno::Reference< css::text::XFlatParagraph > SAL_CALL getParaBefore(const css::uno::Reference< css::text::XFlatParagraph > & xPara) override;
-    virtual css::uno::Reference< css::text::XFlatParagraph > SAL_CALL getParaAfter(const css::uno::Reference< css::text::XFlatParagraph > & xPara) override;
+    virtual cpo::uno::Reference< css::text::XFlatParagraph > SAL_CALL getFirstPara() override;
+    virtual cpo::uno::Reference< css::text::XFlatParagraph > SAL_CALL getNextPara() override;
+    virtual cpo::uno::Reference< css::text::XFlatParagraph > SAL_CALL getLastPara() override;
+    virtual cpo::uno::Reference< css::text::XFlatParagraph > SAL_CALL getParaBefore(const cpo::uno::Reference< css::text::XFlatParagraph > & xPara) override;
+    virtual cpo::uno::Reference< css::text::XFlatParagraph > SAL_CALL getParaAfter(const cpo::uno::Reference< css::text::XFlatParagraph > & xPara) override;
 
     virtual void Notify( const SfxHint& ) override;
 

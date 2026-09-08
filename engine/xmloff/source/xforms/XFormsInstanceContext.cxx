@@ -24,7 +24,7 @@
 
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/xforms/XModel2.hpp>
 
@@ -33,7 +33,7 @@
 #include <xmloff/xmlerror.hxx>
 
 
-using com::sun::star::uno::Reference;
+using cpo::uno::Reference;
 using cpo::uno::Any;
 using cpo::uno::Sequence;
 using com::sun::star::xforms::XModel2;
@@ -51,8 +51,8 @@ XFormsInstanceContext::XFormsInstanceContext(
     SAL_WARN_IF( !mxModel.is(), "xmloff", "need model" );
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XFormsInstanceContext::createFastChildContext(
-    sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& )
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XFormsInstanceContext::createFastChildContext(
+    sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& )
 {
     SvXMLImportContext* pContext = nullptr;
 
@@ -77,8 +77,8 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XFormsInstanceContext:
 
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XFormsInstanceContext::createUnknownChildContext(
-    const OUString & rNamespace, const OUString &rName, const css::uno::Reference< css::xml::sax::XFastAttributeList > & /*Attribs*/)
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XFormsInstanceContext::createUnknownChildContext(
+    const OUString & rNamespace, const OUString &rName, const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & /*Attribs*/)
 {
     SvXMLImportContext* pContext = nullptr;
 

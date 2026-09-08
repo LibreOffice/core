@@ -47,11 +47,11 @@ class DispatchRecorder final
     private:
         ::std::vector < css::frame::DispatchStatement >        m_aStatements;
         sal_Int32                                              m_nRecordingID;
-        css::uno::Reference< css::script::XTypeConverter >     m_xConverter;
+        cpo::uno::Reference< css::script::XTypeConverter >     m_xConverter;
 
     // public interface
     public:
-        DispatchRecorder( const css::uno::Reference< cpo::uno::XComponentContext >& xSMGR );
+        DispatchRecorder( const cpo::uno::Reference< cpo::uno::XComponentContext >& xSMGR );
         virtual ~DispatchRecorder() override;
 
         /* interface XServiceInfo */
@@ -60,7 +60,7 @@ class DispatchRecorder final
         virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
         // XDispatchRecorder
-        virtual void            startRecording         ( const css::uno::Reference< css::frame::XFrame >& xFrame ) override;
+        virtual void            startRecording         ( const cpo::uno::Reference< css::frame::XFrame >& xFrame ) override;
         virtual void            recordDispatch         ( const css::util::URL& aURL, const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments ) override;
         virtual void            recordDispatchAsComment( const css::util::URL& aURL, const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments ) override;
         virtual void            endRecording           () override;

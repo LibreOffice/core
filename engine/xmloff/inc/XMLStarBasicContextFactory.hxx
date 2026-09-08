@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <xmloff/xmlevent.hxx>
 
 
@@ -31,7 +31,7 @@ public:
 
     virtual SvXMLImportContext* CreateContext(
         SvXMLImport& rImport,               /// import context
-        const css::uno::Reference<css::xml::sax::XFastAttributeList> & xAttrList,/// attribute list
+        const cpo::uno::Reference<css::xml::sax::XFastAttributeList> & xAttrList,/// attribute list
         /// the context for the enclosing <script:events> element
         XMLEventsImportContext* rEvents,
         /// the event name (as understood by the API)

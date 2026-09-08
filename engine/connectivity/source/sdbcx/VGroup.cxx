@@ -26,7 +26,7 @@
 using namespace ::connectivity::sdbcx;
 using namespace ::connectivity;
 using namespace ::dbtools;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
@@ -136,7 +136,7 @@ void OGroup::revokePrivileges( const OUString& /*objName*/, sal_Int32 /*objType*
     throwFeatureNotImplementedSQLException( u"XAuthorizable::revokePrivileges"_ustr, *this );
 }
 
-css::uno::Reference< css::beans::XPropertySetInfo > OGroup::getPropertySetInfo(  )
+cpo::uno::Reference< css::beans::XPropertySetInfo > OGroup::getPropertySetInfo(  )
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }

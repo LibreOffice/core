@@ -1283,15 +1283,15 @@ struct XclChTextKey : public ::std::pair< XclChTextType, ::std::pair< sal_uInt16
 };
 
 /** Function prototype receiving a chart document and returning a title shape. */
-typedef css::uno::Reference< css::drawing::XShape >
-    (*XclChGetShapeFunc)( const css::uno::Reference< css::chart::XChartDocument >& );
+typedef cpo::uno::Reference< css::drawing::XShape >
+    (*XclChGetShapeFunc)( const cpo::uno::Reference< css::chart::XChartDocument >& );
 
 // Property helpers ===========================================================
 
 class XclChObjectTable
 {
 public:
-    explicit            XclChObjectTable( css::uno::Reference< css::lang::XMultiServiceFactory > xFactory,
+    explicit            XclChObjectTable( cpo::uno::Reference< css::lang::XMultiServiceFactory > xFactory,
                             OUString aServiceName, OUString aObjNameBase );
 
     /** Returns a named formatting object from the chart document. */
@@ -1300,8 +1300,8 @@ public:
     OUString      InsertObject( const cpo::uno::Any& rObj );
 
 private:
-    css::uno::Reference< css::lang::XMultiServiceFactory > mxFactory;              /// Factory to create the container.
-    css::uno::Reference< css::container::XNameContainer >  mxContainer;            /// Container for the objects.
+    cpo::uno::Reference< css::lang::XMultiServiceFactory > mxFactory;              /// Factory to create the container.
+    cpo::uno::Reference< css::container::XNameContainer >  mxContainer;            /// Container for the objects.
     OUString            maServiceName;          /// Service name to create the container.
     OUString            maObjNameBase;          /// Base of names for inserted objects.
     sal_Int32           mnIndex;                /// Index to create unique identifiers.
@@ -1405,7 +1405,7 @@ struct XclChRootData
     typedef std::shared_ptr< XclChObjectTable >           XclChObjectTableRef;
     typedef std::map< XclChTextKey, XclChGetShapeFunc >   XclChGetShapeFuncMap;
 
-    css::uno::Reference< css::chart2::XChartDocument >
+    cpo::uno::Reference< css::chart2::XChartDocument >
                         mxChartDoc;             /// The chart document.
     tools::Rectangle           maChartRect;            /// Position and size of the chart shape.
     XclChTypeProvRef    mxTypeInfoProv;         /// Provides info about chart types.
@@ -1426,13 +1426,13 @@ struct XclChRootData
     /** Starts the API chart document conversion. Must be called once before any API access. */
     void                InitConversion(
                             const XclRoot& rRoot,
-                            const css::uno::Reference< css::chart2::XChartDocument >& rxChartDoc,
+                            const cpo::uno::Reference< css::chart2::XChartDocument >& rxChartDoc,
                             const tools::Rectangle& rChartRect );
     /** Finishes the API chart document conversion. Must be called once before any API access. */
     void                FinishConversion();
 
     /** Returns the drawing shape interface of the specified title object. */
-    css::uno::Reference< css::drawing::XShape >
+    cpo::uno::Reference< css::drawing::XShape >
                         GetTitleShape( const XclChTextKey& rTitleKey ) const;
 };
 

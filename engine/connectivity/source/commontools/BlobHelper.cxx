@@ -24,7 +24,7 @@
 using namespace connectivity;
 using namespace dbtools;
 using namespace ::com::sun::star::sdbc;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 BlobHelper::BlobHelper(const cpo::uno::Sequence< sal_Int8 >& _val) : m_aValue(_val)
 {
@@ -42,7 +42,7 @@ cpo::uno::Sequence< ::sal_Int8 > BlobHelper::getBytes( ::sal_Int64 pos, ::sal_In
     return cpo::uno::Sequence< ::sal_Int8 >(m_aValue.getConstArray() + sal_Int32(pos),_length);
 }
 
-css::uno::Reference< css::io::XInputStream > BlobHelper::getBinaryStream(  )
+cpo::uno::Reference< css::io::XInputStream > BlobHelper::getBinaryStream(  )
 {
     return new ::comphelper::SequenceInputStream(m_aValue);
 }
@@ -52,7 +52,7 @@ css::uno::Reference< css::io::XInputStream > BlobHelper::getBinaryStream(  )
     ::dbtools::throwFeatureNotImplementedSQLException( u"XBlob::position"_ustr, *this );
 }
 
-::sal_Int64 BlobHelper::positionOfBlob( const css::uno::Reference< css::sdbc::XBlob >& /*pattern*/, ::sal_Int64 /*start*/ )
+::sal_Int64 BlobHelper::positionOfBlob( const cpo::uno::Reference< css::sdbc::XBlob >& /*pattern*/, ::sal_Int64 /*start*/ )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( u"XBlob::positionOfBlob"_ustr, *this );
 }

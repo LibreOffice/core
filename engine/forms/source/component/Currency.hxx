@@ -32,11 +32,11 @@ class OCurrencyModel final
 
 public:
     OCurrencyModel(
-        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
+        const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     OCurrencyModel(
         const OCurrencyModel* _pOriginal,
-        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
+        const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     virtual ~OCurrencyModel() override;
 
@@ -63,7 +63,7 @@ private:
 
     virtual void            resetNoBroadcast() override;
 
-    virtual css::uno::Reference< css::util::XCloneable > createClone(  ) override;
+    virtual cpo::uno::Reference< css::util::XCloneable > createClone(  ) override;
 
     void implConstruct();
 };
@@ -71,7 +71,7 @@ private:
 class OCurrencyControl: public OBoundControl
 {
 public:
-    explicit OCurrencyControl(const css::uno::Reference< cpo::uno::XComponentContext>& _rxContext);
+    explicit OCurrencyControl(const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxContext);
     // css::lang::XServiceInfo
     OUString getImplementationName() override
     { return u"com.sun.star.form.OCurrencyControl"_ustr; }

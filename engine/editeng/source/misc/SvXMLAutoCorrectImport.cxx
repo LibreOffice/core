@@ -24,12 +24,13 @@
 
 using namespace css;
 using namespace css::xml::sax;
+using namespace ::cpo;
 
 SvXMLAutoCorrectImport::SvXMLAutoCorrectImport(
     const uno::Reference< cpo::uno::XComponentContext > & xContext,
     SvxAutocorrWordList *pNewAutocorr_List,
     SvxAutoCorrect &rNewAutoCorrect,
-    css::uno::Reference < css::embed::XStorage > xNewStorage)
+    cpo::uno::Reference < css::embed::XStorage > xNewStorage)
 :   SvXMLImport( xContext, u""_ustr ),
     pAutocorr_List (pNewAutocorr_List),
     rAutoCorrect ( rNewAutoCorrect ),
@@ -57,7 +58,7 @@ SvXMLWordListContext::SvXMLWordListContext(
     rLocalRef.rAutoCorrect.refreshBlockList( rLocalRef.xStorage );
 }
 
-css::uno::Reference<XFastContextHandler> SvXMLWordListContext::createFastChildContext(
+cpo::uno::Reference<XFastContextHandler> SvXMLWordListContext::createFastChildContext(
     sal_Int32 Element, const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
 {
     if ( Element == SvXMLAutoCorrectToken::BLOCK )
@@ -71,7 +72,7 @@ SvXMLWordListContext::~SvXMLWordListContext()
 
 SvXMLWordContext::SvXMLWordContext(
    SvXMLAutoCorrectImport& rImport,
-   const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) :
+   const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) :
    SvXMLImportContext ( rImport )
 {
     OUString sWrong, sRight;
@@ -129,7 +130,7 @@ SvXMLExceptionListContext::SvXMLExceptionListContext(
 {
 }
 
-css::uno::Reference<xml::sax::XFastContextHandler> SvXMLExceptionListContext::createFastChildContext(
+cpo::uno::Reference<xml::sax::XFastContextHandler> SvXMLExceptionListContext::createFastChildContext(
     sal_Int32 Element, const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
 {
     if ( Element == SvXMLAutoCorrectToken::BLOCK )
@@ -143,7 +144,7 @@ SvXMLExceptionListContext::~SvXMLExceptionListContext()
 
 SvXMLExceptionContext::SvXMLExceptionContext(
    SvXMLExceptionListImport& rImport,
-   const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) :
+   const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) :
    SvXMLImportContext ( rImport )
 {
     OUString sWord;

@@ -32,7 +32,7 @@
 
 namespace com::sun::star::animations { class XAnimationNode; }
 
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::cpo::uno::Exception;
 using namespace ::com::sun::star::animations;
 
@@ -118,7 +118,7 @@ struct UndoAnimationPathImpl
     OUString msUndoPath;
     OUString msRedoPath;
 
-    UndoAnimationPathImpl( SdPage* pThePage, const css::uno::Reference< css::animations::XAnimationNode >& xNode )
+    UndoAnimationPathImpl( SdPage* pThePage, const cpo::uno::Reference< css::animations::XAnimationNode >& xNode )
         : mpPage( pThePage )
         , mnEffectOffset( -1 )
     {
@@ -152,7 +152,7 @@ struct UndoAnimationPathImpl
     }
 };
 
-UndoAnimationPath::UndoAnimationPath( SdDrawDocument* pDoc, SdPage* pThePage, const css::uno::Reference< css::animations::XAnimationNode >& xNode )
+UndoAnimationPath::UndoAnimationPath( SdDrawDocument* pDoc, SdPage* pThePage, const cpo::uno::Reference< css::animations::XAnimationNode >& xNode )
 : SdrUndoAction( *pDoc )
 , mpImpl( new UndoAnimationPathImpl( pThePage, xNode ) )
 {

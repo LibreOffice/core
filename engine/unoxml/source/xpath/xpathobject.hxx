@@ -28,7 +28,7 @@
 
 #include <cppuhelper/implbase.hxx>
 
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <com/sun/star/xml/dom/XNodeList.hpp>
 #include <com/sun/star/xml/xpath/XXPathObject.hpp>
 
@@ -57,7 +57,7 @@ namespace XPath
     /**
         get the nodes from a nodelist type object
     */
-    virtual css::uno::Reference< css::xml::dom::XNodeList > SAL_CALL getNodeList() override;
+    virtual cpo::uno::Reference< css::xml::dom::XNodeList > SAL_CALL getNodeList() override;
 
      /**
         get value of a boolean object

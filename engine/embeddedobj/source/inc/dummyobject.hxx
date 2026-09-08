@@ -23,7 +23,7 @@
 
 #include <memory>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -51,10 +51,10 @@ class ODummyEmbeddedObject : public ::cppu::WeakImplHelper
     bool m_bDisposed;
 
     OUString m_aEntryName;
-    css::uno::Reference< css::embed::XStorage > m_xParentStorage;
+    cpo::uno::Reference< css::embed::XStorage > m_xParentStorage;
     sal_Int32 m_nObjectState;
 
-    css::uno::Reference< css::embed::XEmbeddedClient > m_xClientSite;
+    cpo::uno::Reference< css::embed::XEmbeddedClient > m_xClientSite;
 
     sal_Int64 m_nCachedAspect;
     css::awt::Size m_aCachedSize;
@@ -63,7 +63,7 @@ class ODummyEmbeddedObject : public ::cppu::WeakImplHelper
     // following information will be used between SaveAs and SaveCompleted
     bool m_bWaitSaveCompleted;
     OUString m_aNewEntryName;
-    css::uno::Reference< css::embed::XStorage > m_xNewParentStorage;
+    cpo::uno::Reference< css::embed::XStorage > m_xNewParentStorage;
 
 protected:
     void CheckInit_WrongState();    //throw WrongStateException on m_nObjectState == -1
@@ -95,9 +95,9 @@ public:
     virtual cpo::uno::Sequence< css::embed::VerbDescriptor > getSupportedVerbs() override;
 
     virtual void setClientSite(
-                const css::uno::Reference< css::embed::XEmbeddedClient >& xClient ) override;
+                const cpo::uno::Reference< css::embed::XEmbeddedClient >& xClient ) override;
 
-    virtual css::uno::Reference< css::embed::XEmbeddedClient > getClientSite() override;
+    virtual cpo::uno::Reference< css::embed::XEmbeddedClient > getClientSite() override;
 
     virtual void update() override;
 
@@ -121,16 +121,16 @@ public:
 // XEmbedPersist
 
     virtual void setPersistentEntry(
-                    const css::uno::Reference< css::embed::XStorage >& xStorage,
+                    const cpo::uno::Reference< css::embed::XStorage >& xStorage,
                     const OUString& sEntName,
                     sal_Int32 nEntryConnectionMode,
                     const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments,
                     const cpo::uno::Sequence< css::beans::PropertyValue >& lObjArgs ) override;
 
-    virtual void storeToEntry( const css::uno::Reference< css::embed::XStorage >& xStorage, const OUString& sEntName, const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments, const cpo::uno::Sequence< css::beans::PropertyValue >& lObjArgs ) override;
+    virtual void storeToEntry( const cpo::uno::Reference< css::embed::XStorage >& xStorage, const OUString& sEntName, const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments, const cpo::uno::Sequence< css::beans::PropertyValue >& lObjArgs ) override;
 
     virtual void storeAsEntry(
-                const css::uno::Reference< css::embed::XStorage >& xStorage,
+                const cpo::uno::Reference< css::embed::XStorage >& xStorage,
                 const OUString& sEntName,
                 const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments,
                 const cpo::uno::Sequence< css::beans::PropertyValue >& lObjArgs ) override;
@@ -165,28 +165,28 @@ public:
 
 // XComponentSupplier
 
-    virtual css::uno::Reference< css::util::XCloseable > getComponent() override;
+    virtual cpo::uno::Reference< css::util::XCloseable > getComponent() override;
 
 // XStateChangeBroadcaster
-    virtual void addStateChangeListener( const css::uno::Reference< css::embed::XStateChangeListener >& xListener ) override;
-    virtual void removeStateChangeListener( const css::uno::Reference< css::embed::XStateChangeListener >& xListener ) override;
+    virtual void addStateChangeListener( const cpo::uno::Reference< css::embed::XStateChangeListener >& xListener ) override;
+    virtual void removeStateChangeListener( const cpo::uno::Reference< css::embed::XStateChangeListener >& xListener ) override;
 
 // XCloseable
 
     virtual void close( bool DeliverOwnership ) override;
 
     virtual void addCloseListener(
-                const css::uno::Reference< css::util::XCloseListener >& Listener ) override;
+                const cpo::uno::Reference< css::util::XCloseListener >& Listener ) override;
 
     virtual void removeCloseListener(
-                const css::uno::Reference< css::util::XCloseListener >& Listener ) override;
+                const cpo::uno::Reference< css::util::XCloseListener >& Listener ) override;
 
 // XEventBroadcaster
     virtual void addEventListener(
-                const css::uno::Reference< css::document::XEventListener >& Listener ) override;
+                const cpo::uno::Reference< css::document::XEventListener >& Listener ) override;
 
     virtual void removeEventListener(
-                const css::uno::Reference< css::document::XEventListener >& Listener ) override;
+                const cpo::uno::Reference< css::document::XEventListener >& Listener ) override;
 
     // XServiceInfo
     OUString getImplementationName() override;

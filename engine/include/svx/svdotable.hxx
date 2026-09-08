@@ -112,7 +112,7 @@ public:
     void DistributeColumns( sal_Int32 nFirstColumn, sal_Int32 nLastColumn, const bool bOptimize, const bool bMinimize );
     void DistributeRows( sal_Int32 nFirstRow, sal_Int32 nLastRow, const bool bOptimize, const bool bMinimize );
 
-    css::uno::Reference< css::table::XTable > getTable() const;
+    cpo::uno::Reference< css::table::XTable > getTable() const;
     /// Get the concrete UNO class for the table
     const rtl::Reference< sdr::table::TableModel > & getUnoTable() const;
 
@@ -156,8 +156,8 @@ public:
     virtual std::optional<Color> GetActiveTextBackgroundColor(
         const SdrText* pSdrText, std::optional<Color> oBehind = std::nullopt) const override;
 
-     void setTableStyle( const css::uno::Reference< css::container::XIndexAccess >& xAutoFormatStyle );
-     const css::uno::Reference< css::container::XIndexAccess >& getTableStyle() const;
+     void setTableStyle( const cpo::uno::Reference< css::container::XIndexAccess >& xAutoFormatStyle );
+     const cpo::uno::Reference< css::container::XIndexAccess >& getTableStyle() const;
 
     // Text stuff
 

@@ -29,7 +29,7 @@ class AccessibleBrowseBoxTable : public AccessibleBrowseBoxTableBase
 {
 public:
     AccessibleBrowseBoxTable(
-        const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
+        const cpo::uno::Reference< css::accessibility::XAccessible >& rxParent,
         ::vcl::IAccessibleTableProvider& rBrowseBox );
 
 protected:
@@ -39,7 +39,7 @@ public:
     // XAccessibleContext
 
     /** @return  The XAccessible interface of the specified child. */
-    virtual css::uno::Reference< css::accessibility::XAccessible >
+    virtual cpo::uno::Reference< css::accessibility::XAccessible >
     getAccessibleChild( sal_Int64 nChildIndex ) override;
 
     /** @return  The index of this object among the parent's children. */
@@ -48,7 +48,7 @@ public:
     // XAccessibleComponent
 
     /** @return  The accessible child rendered under the given point. */
-    virtual css::uno::Reference< css::accessibility::XAccessible >
+    virtual cpo::uno::Reference< css::accessibility::XAccessible >
     getAccessibleAtPoint( const css::awt::Point& rPoint ) override;
 
     /** Grabs the focus to (the current cell of) the data table. */
@@ -63,11 +63,11 @@ public:
     virtual OUString getAccessibleColumnDescription( sal_Int32 nColumn ) override;
 
     /** @return  The XAccessibleTable interface of the row header bar. */
-    virtual css::uno::Reference< css::accessibility::XAccessibleTable >
+    virtual cpo::uno::Reference< css::accessibility::XAccessibleTable >
     getAccessibleRowHeaders() override;
 
     /** @return  The XAccessibleTable interface of the column header bar. */
-    virtual css::uno::Reference< css::accessibility::XAccessibleTable >
+    virtual cpo::uno::Reference< css::accessibility::XAccessibleTable >
     getAccessibleColumnHeaders() override;
 
     /** @return  An index list of completely selected rows. */
@@ -86,7 +86,7 @@ public:
 
     /** @return The XAccessible interface of the cell object at the specified
                 cell position. */
-    virtual css::uno::Reference< css::accessibility::XAccessible >
+    virtual cpo::uno::Reference< css::accessibility::XAccessible >
     getAccessibleCellAt( sal_Int32 nRow, sal_Int32 nColumn ) override;
 
     /** @return  TRUE, if the specified cell is selected. */
@@ -110,7 +110,7 @@ protected:
         @return  The XAccessibleTable interface of the specified header bar.
         @throws cpo::uno::RuntimeException
     */
-    css::uno::Reference< css::accessibility::XAccessibleTable >
+    cpo::uno::Reference< css::accessibility::XAccessibleTable >
     implGetHeaderBar( sal_Int32 nChildIndex );
 };
 

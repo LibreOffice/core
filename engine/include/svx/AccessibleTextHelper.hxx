@@ -23,7 +23,7 @@
 #include <memory>
 #include <vector>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <comphelper/OAccessible.hxx>
 #include <rtl/ref.hxx>
 #include <sal/types.h>
@@ -353,13 +353,13 @@ public:
         @attention Don't call with locked mutexes
     */
     void AddEventListener(
-        const css::uno::Reference<css::accessibility::XAccessibleEventListener>& xListener);
+        const cpo::uno::Reference<css::accessibility::XAccessibleEventListener>& xListener);
     /** Implements removeEventListener
 
         @attention Don't call with locked mutexes
     */
     void RemoveEventListener(
-        const css::uno::Reference<css::accessibility::XAccessibleEventListener>& xListener);
+        const cpo::uno::Reference<css::accessibility::XAccessibleEventListener>& xListener);
 
     // XAccessibleComponent child related methods
 

@@ -29,7 +29,7 @@
 #include <xmltabi.hxx>
 #include "txtdropi.hxx"
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star;
 
 XMLTextPropertySetContext::XMLTextPropertySetContext(
@@ -49,9 +49,9 @@ XMLTextPropertySetContext::~XMLTextPropertySetContext()
 {
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextPropertySetContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextPropertySetContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
     ::std::vector< XMLPropertyState > &rProperties,
     const XMLPropertyState& rProp )
 {

@@ -82,7 +82,7 @@ class IMapWindow final : public GraphCtrl
     TargetList          aTargetList;
     Link<IMapWindow&,void> aInfoLink;
     rtl::Reference<SfxItemPool> pIMapPool;
-    css::uno::Reference< css::frame::XFrame >
+    cpo::uno::Reference< css::frame::XFrame >
                         mxDocumentFrame;
     std::unique_ptr<IMapDropTargetHelper> mxDropTargetHelper;
     std::unique_ptr<weld::Menu> mxPopupMenu;
@@ -109,7 +109,7 @@ class IMapWindow final : public GraphCtrl
 
 public:
 
-    IMapWindow(const css::uno::Reference< css::frame::XFrame >& rxDocumentFrame,
+    IMapWindow(const cpo::uno::Reference< css::frame::XFrame >& rxDocumentFrame,
                weld::Dialog* pDialog);
     virtual ~IMapWindow() override;
 

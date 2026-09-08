@@ -63,7 +63,7 @@ class XMLBasedAcceleratorConfiguration : public    ::cppu::WeakImplHelper<
 
         /** the global uno service manager.
         Must be used to create own needed services. */
-        css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+        cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
         /** used to:
         i  ) copy configuration files from the share to the user layer
@@ -82,7 +82,7 @@ class XMLBasedAcceleratorConfiguration : public    ::cppu::WeakImplHelper<
 
     public:
 
-        XMLBasedAcceleratorConfiguration( const css::uno::Reference< cpo::uno::XComponentContext >& xContext);
+        XMLBasedAcceleratorConfiguration( const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext);
         virtual ~XMLBasedAcceleratorConfiguration(                                                                    ) override;
 
         // uno interface!
@@ -110,29 +110,29 @@ class XMLBasedAcceleratorConfiguration : public    ::cppu::WeakImplHelper<
 
         virtual void store() override;
 
-        virtual void storeToStorage(const css::uno::Reference< css::embed::XStorage >& xStorage) override;
+        virtual void storeToStorage(const cpo::uno::Reference< css::embed::XStorage >& xStorage) override;
 
         virtual bool isModified() override;
 
         virtual bool isReadOnly() override;
 
         // XUIConfigurationStorage
-        virtual void setStorage(const css::uno::Reference< css::embed::XStorage >& xStorage) override;
+        virtual void setStorage(const cpo::uno::Reference< css::embed::XStorage >& xStorage) override;
 
         virtual bool hasStorage() override;
 
         // XUIConfiguration
-        virtual void addConfigurationListener(const css::uno::Reference< css::ui::XUIConfigurationListener >& xListener) override;
+        virtual void addConfigurationListener(const cpo::uno::Reference< css::ui::XUIConfigurationListener >& xListener) override;
 
-        virtual void removeConfigurationListener(const css::uno::Reference< css::ui::XUIConfigurationListener >& xListener) override;
+        virtual void removeConfigurationListener(const cpo::uno::Reference< css::ui::XUIConfigurationListener >& xListener) override;
 
         // XReset
         // TODO use XPresetHandler instead if available
         virtual void reset() override;
 
-        virtual void addResetListener(const css::uno::Reference< css::form::XResetListener >& xListener) override;
+        virtual void addResetListener(const cpo::uno::Reference< css::form::XResetListener >& xListener) override;
 
-        virtual void removeResetListener(const css::uno::Reference< css::form::XResetListener >& xListener) override;
+        virtual void removeResetListener(const cpo::uno::Reference< css::form::XResetListener >& xListener) override;
 
         // called when changes occurred in the storage
         void changesOccurred();
@@ -160,14 +160,14 @@ class XMLBasedAcceleratorConfiguration : public    ::cppu::WeakImplHelper<
         @param  xStream
         provides the XML structure as stream.
         */
-        void impl_ts_load(const css::uno::Reference< css::io::XInputStream >& xStream);
+        void impl_ts_load(const cpo::uno::Reference< css::io::XInputStream >& xStream);
 
         /** @short  save a configuration set, using the given stream.
 
         @param  xStream
         the XML structure can be written there.
         */
-        void impl_ts_save(const css::uno::Reference< css::io::XOutputStream >& xStream);
+        void impl_ts_save(const cpo::uno::Reference< css::io::XOutputStream >& xStream);
 
         /** @short  returns a reference to one of our internal cache members.
 
@@ -205,9 +205,9 @@ class XCUBasedAcceleratorConfiguration : public  ::cppu::WeakImplHelper<
 
         /** the global uno service manager.
         Must be used to create own needed services. */
-        css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+        cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
-        css::uno::Reference< css::container::XNameAccess > m_xCfg;
+        cpo::uno::Reference< css::container::XNameAccess > m_xCfg;
         AcceleratorCache m_aPrimaryReadCache;
         AcceleratorCache m_aSecondaryReadCache;
         std::unique_ptr<AcceleratorCache> m_pPrimaryWriteCache;
@@ -220,7 +220,7 @@ class XCUBasedAcceleratorConfiguration : public  ::cppu::WeakImplHelper<
 
     public:
 
-        XCUBasedAcceleratorConfiguration( css::uno::Reference< cpo::uno::XComponentContext >  xContext );
+        XCUBasedAcceleratorConfiguration( cpo::uno::Reference< cpo::uno::XComponentContext >  xContext );
         virtual ~XCUBasedAcceleratorConfiguration(                                                           ) override;
 
         // uno interface!
@@ -248,29 +248,29 @@ class XCUBasedAcceleratorConfiguration : public  ::cppu::WeakImplHelper<
 
         virtual void store() override;
 
-        virtual void storeToStorage(const css::uno::Reference< css::embed::XStorage >& xStorage) override;
+        virtual void storeToStorage(const cpo::uno::Reference< css::embed::XStorage >& xStorage) override;
 
         virtual bool isModified() override;
 
         virtual bool isReadOnly() override;
 
         // XUIConfigurationStorage
-        virtual void setStorage(const css::uno::Reference< css::embed::XStorage >& xStorage) override;
+        virtual void setStorage(const cpo::uno::Reference< css::embed::XStorage >& xStorage) override;
 
         virtual bool hasStorage() override;
 
         // XUIConfiguration
-        virtual void addConfigurationListener(const css::uno::Reference< css::ui::XUIConfigurationListener >& xListener) override;
+        virtual void addConfigurationListener(const cpo::uno::Reference< css::ui::XUIConfigurationListener >& xListener) override;
 
-        virtual void removeConfigurationListener(const css::uno::Reference< css::ui::XUIConfigurationListener >& xListener) override;
+        virtual void removeConfigurationListener(const cpo::uno::Reference< css::ui::XUIConfigurationListener >& xListener) override;
 
         // XReset
         // TODO use XPresetHandler instead if available
         virtual void reset() override;
 
-        virtual void addResetListener(const css::uno::Reference< css::form::XResetListener >& xListener) override;
+        virtual void addResetListener(const cpo::uno::Reference< css::form::XResetListener >& xListener) override;
 
-        virtual void removeResetListener(const css::uno::Reference< css::form::XResetListener >& xListener) override;
+        virtual void removeResetListener(const cpo::uno::Reference< css::form::XResetListener >& xListener) override;
 
         // css.util.XChangesListener
         virtual void changesOccurred(const css::util::ChangesEvent& aEvent) override;
@@ -296,7 +296,7 @@ class XCUBasedAcceleratorConfiguration : public  ::cppu::WeakImplHelper<
 
     private:
 
-        void impl_ts_load(bool bPreferred, const css::uno::Reference< css::container::XNameAccess >& xCfg);
+        void impl_ts_load(bool bPreferred, const cpo::uno::Reference< css::container::XNameAccess >& xCfg);
         void impl_ts_save(bool bPreferred);
 
         void insertKeyToConfiguration(const css::awt::KeyEvent& aKeyEvent, const OUString& sCommand, const bool bPreferred);

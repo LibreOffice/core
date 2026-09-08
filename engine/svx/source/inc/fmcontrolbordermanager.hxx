@@ -77,11 +77,11 @@ namespace svxform
 
     struct ControlData : public BorderDescriptor, UnderlineDescriptor
     {
-        css::uno::Reference< css::awt::XControl > xControl;
+        cpo::uno::Reference< css::awt::XControl > xControl;
         OUString                                                     sOriginalHelpText;
 
         ControlData() : BorderDescriptor() { }
-        ControlData( css::uno::Reference< css::awt::XControl > _xControl )
+        ControlData( cpo::uno::Reference< css::awt::XControl > _xControl )
             :xControl(std::move( _xControl ))
         {
         }
@@ -109,7 +109,7 @@ namespace svxform
         };
 
         typedef ::std::set< ControlData, ControlDataCompare > ControlBag;
-        typedef ::std::set< css::uno::Reference< css::awt::XVclWindowPeer > >  PeerBag;
+        typedef ::std::set< cpo::uno::Reference< css::awt::XVclWindowPeer > >  PeerBag;
 
         PeerBag     m_aColorableControls;
         PeerBag     m_aNonColorableControls;
@@ -130,14 +130,14 @@ namespace svxform
         ~ControlBorderManager();
 
     public:
-        void    focusGained( const css::uno::Reference< cpo::uno::XInterface >& _rxControl );
-        void    focusLost( const css::uno::Reference< cpo::uno::XInterface >& _rxControl );
-        void    mouseEntered( const css::uno::Reference< cpo::uno::XInterface >& _rxControl );
-        void    mouseExited( const css::uno::Reference< cpo::uno::XInterface >& _rxControl );
+        void    focusGained( const cpo::uno::Reference< cpo::uno::XInterface >& _rxControl );
+        void    focusLost( const cpo::uno::Reference< cpo::uno::XInterface >& _rxControl );
+        void    mouseEntered( const cpo::uno::Reference< cpo::uno::XInterface >& _rxControl );
+        void    mouseExited( const cpo::uno::Reference< cpo::uno::XInterface >& _rxControl );
 
         void    validityChanged(
-                    const css::uno::Reference< css::awt::XControl >& _rxControl,
-                    const css::uno::Reference< css::form::validation::XValidatableFormComponent >& _rxValidatable
+                    const cpo::uno::Reference< css::awt::XControl >& _rxControl,
+                    const cpo::uno::Reference< css::form::validation::XValidatableFormComponent >& _rxValidatable
                 );
 
         /// enables dynamic border color for the controls
@@ -165,7 +165,7 @@ namespace svxform
                 the control's status data, as a reference to our respective member
         */
         void    controlStatusGained(
-                    const css::uno::Reference< cpo::uno::XInterface >& _rxControl,
+                    const cpo::uno::Reference< cpo::uno::XInterface >& _rxControl,
                     ControlData& _rControlData
                 );
 
@@ -175,17 +175,17 @@ namespace svxform
             @param _rControlData
                 the control's status data, as a reference to our respective member
         */
-        void    controlStatusLost( const css::uno::Reference< cpo::uno::XInterface >& _rxControl, ControlData& _rControlData );
+        void    controlStatusLost( const cpo::uno::Reference< cpo::uno::XInterface >& _rxControl, ControlData& _rControlData );
 
         /** determines whether the border of a given peer can be colored
             @param _rxPeer
                 the peer to examine. Must not be <NULL/>
         */
-        bool    canColorBorder( const css::uno::Reference< css::awt::XVclWindowPeer >& _rxPeer );
+        bool    canColorBorder( const cpo::uno::Reference< css::awt::XVclWindowPeer >& _rxPeer );
 
         /** determines the status of the given control
         */
-        ControlStatus   getControlStatus( const css::uno::Reference< css::awt::XControl >& _rxControl );
+        ControlStatus   getControlStatus( const cpo::uno::Reference< css::awt::XControl >& _rxControl );
 
         /** retrieves the color associated with a given ControlStatus
             @param _eStatus
@@ -203,8 +203,8 @@ namespace svxform
                 the color/type to use when the control has the status ControlStatus::NONE
         */
         void            updateBorderStyle(
-                            const css::uno::Reference< css::awt::XControl >& _rxControl,
-                            const css::uno::Reference< css::awt::XVclWindowPeer >& _rxPeer,
+                            const cpo::uno::Reference< css::awt::XControl >& _rxControl,
+                            const cpo::uno::Reference< css::awt::XVclWindowPeer >& _rxPeer,
                             const BorderDescriptor& _rFallback
                         );
 
@@ -217,7 +217,7 @@ namespace svxform
                 the control to examine. Must not be <NULL/>, and have a non-<NULL/> peer
         */
         void determineOriginalBorderStyle(
-                    const css::uno::Reference< css::awt::XControl >& _rxControl,
+                    const cpo::uno::Reference< css::awt::XControl >& _rxControl,
                     BorderDescriptor& _rData
                 ) const;
     };

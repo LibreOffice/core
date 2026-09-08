@@ -61,6 +61,7 @@
 #include <memory>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 namespace svt {
 
@@ -288,8 +289,8 @@ struct EmbeddedObjectRef_Impl
         (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mxObj"));
         (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("symbol"),
                                           BAD_CAST(typeid(*mxObj).name()));
-        css::uno::Reference<css::qa::XDumper> pComponent(
-            mxObj->getComponent(), css::uno::UNO_QUERY);
+        cpo::uno::Reference<css::qa::XDumper> pComponent(
+            mxObj->getComponent(), cpo::uno::UNO_QUERY);
         if (pComponent.is())
         {
             auto const s = pComponent->dump(u""_ustr);
@@ -888,7 +889,7 @@ uno::Reference< io::XInputStream > EmbeddedObjectRef::GetGraphicReplacementStrea
     return ::comphelper::EmbeddedObjectContainer::GetGraphicReplacementStream(nViewAspect,xObj,pMediaType);
 }
 
-bool EmbeddedObjectRef::IsChart(const css::uno::Reference < css::embed::XEmbeddedObject >& xObj)
+bool EmbeddedObjectRef::IsChart(const cpo::uno::Reference < css::embed::XEmbeddedObject >& xObj)
 {
     SvGlobalName aObjClsId(xObj->getClassID());
     return SvGlobalName(SO3_SCH_CLASSID_30) == aObjClsId

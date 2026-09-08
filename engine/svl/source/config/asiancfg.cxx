@@ -29,7 +29,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <comphelper/configuration.hxx>
 #include <comphelper/processfactory.hxx>
@@ -84,7 +84,7 @@ bool SvxAsianConfig::GetStartEndChars(
     css::lang::Locale const & locale, OUString & startChars,
     OUString & endChars)
 {
-    css::uno::Reference< css::container::XNameAccess > set(
+    cpo::uno::Reference< css::container::XNameAccess > set(
         officecfg::Office::Common::AsianLayout::StartEndCharacters::get());
     cpo::uno::Any v;
     try {
@@ -92,9 +92,9 @@ bool SvxAsianConfig::GetStartEndChars(
     } catch (css::container::NoSuchElementException &) {
         return false;
     }
-    css::uno::Reference< css::beans::XPropertySet > el(
-        v.get< css::uno::Reference< css::beans::XPropertySet > >(),
-        css::uno::UNO_SET_THROW);
+    cpo::uno::Reference< css::beans::XPropertySet > el(
+        v.get< cpo::uno::Reference< css::beans::XPropertySet > >(),
+        cpo::uno::UNO_SET_THROW);
     startChars = el->getPropertyValue(u"StartCharacters"_ustr).get< OUString >();
     endChars = el->getPropertyValue(u"EndCharacters"_ustr).get< OUString >();
     return true;

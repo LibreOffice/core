@@ -23,6 +23,7 @@
 namespace writerfilter::ooxml
 {
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace oox;
 using namespace ::com::sun::star::xml::sax;
 
@@ -38,7 +39,7 @@ ShadowContext::~ShadowContext() {}
 
 void ShadowContext::startFastElement(
     ::sal_Int32 nElement,
-    const ::css::uno::Reference<::css::xml::sax::XFastAttributeList>& rAttribs)
+    const ::cpo::uno::Reference<::css::xml::sax::XFastAttributeList>& rAttribs)
 {
     ++m_nElementLevel;
     CallData callData(m_nElementLevel, nElement, rAttribs, CallDataType::ElementAttr);
@@ -51,7 +52,7 @@ void ShadowContext::startFastElement(
 
 void ShadowContext::startUnknownElement(
     const ::rtl::OUString& rNamespace, const ::rtl::OUString& rElement,
-    const ::css::uno::Reference<::css::xml::sax::XFastAttributeList>& rAttribs)
+    const ::cpo::uno::Reference<::css::xml::sax::XFastAttributeList>& rAttribs)
 {
     ++m_nElementLevel;
     CallData callData(m_nElementLevel, rNamespace, rElement, rAttribs, CallDataType::Unknown);
@@ -70,18 +71,18 @@ void ShadowContext::endUnknownElement(const ::rtl::OUString& rNamespace,
     CallData callData(m_nElementLevel, rNamespace, rElement);
     m_aCallDataDeque.push_back(callData);
 }
-::css::uno::Reference<::css::xml::sax::XFastContextHandler> ShadowContext::createFastChildContext(
+::cpo::uno::Reference<::css::xml::sax::XFastContextHandler> ShadowContext::createFastChildContext(
     ::sal_Int32 nElement,
-    const ::css::uno::Reference<::css::xml::sax::XFastAttributeList>& rAttribs)
+    const ::cpo::uno::Reference<::css::xml::sax::XFastAttributeList>& rAttribs)
 {
     CallData callData(m_nElementLevel, nElement, rAttribs, CallDataType::ElementContext);
     m_aCallDataDeque.push_back(callData);
     return this;
 }
-::css::uno::Reference<::css::xml::sax::XFastContextHandler>
+::cpo::uno::Reference<::css::xml::sax::XFastContextHandler>
 ShadowContext::createUnknownChildContext(
     const ::rtl::OUString& rNamespace, const ::rtl::OUString& rElement,
-    const ::css::uno::Reference<::css::xml::sax::XFastAttributeList>& rAttribs)
+    const ::cpo::uno::Reference<::css::xml::sax::XFastAttributeList>& rAttribs)
 {
     CallData callData(m_nElementLevel, rNamespace, rElement, rAttribs,
                       CallDataType::UnknownContext);

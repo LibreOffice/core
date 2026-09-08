@@ -45,8 +45,8 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::embed;
@@ -609,7 +609,7 @@ void StringResourceImpl::implNotifyListeners(std::unique_lock<std::mutex>& rGuar
     EventObject aEvent;
     aEvent.Source = getXWeak();
     m_aListenerContainer.forEach(rGuard,
-        [&aEvent](const css::uno::Reference<XModifyListener>& xListener)
+        [&aEvent](const cpo::uno::Reference<XModifyListener>& xListener)
         {
             xListener->modified(aEvent);
         }
@@ -939,7 +939,7 @@ void StringResourcePersistenceImpl::implKillRemovedLocaleFiles
 (
     std::u16string_view Location,
     const OUString& aNameBase,
-    const css::uno::Reference< css::ucb::XSimpleFileAccess3 >& xFileAccess
+    const cpo::uno::Reference< css::ucb::XSimpleFileAccess3 >& xFileAccess
 )
 {
     // Delete files for deleted locales
@@ -962,7 +962,7 @@ void StringResourcePersistenceImpl::implKillChangedDefaultFiles
 (
     std::u16string_view Location,
     const OUString& aNameBase,
-    const css::uno::Reference< css::ucb::XSimpleFileAccess3 >& xFileAccess
+    const cpo::uno::Reference< css::ucb::XSimpleFileAccess3 >& xFileAccess
 )
 {
     // Delete files for changed defaults

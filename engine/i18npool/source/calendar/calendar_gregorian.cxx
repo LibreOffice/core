@@ -121,7 +121,7 @@ static void debug_i18n_cal_dump( const ::icu::Calendar & r )
 #endif  // erDUMP_ICU_CALENDAR || erDUMP_I18N_CALENDAR
 
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
 using namespace ::cpo::uno;

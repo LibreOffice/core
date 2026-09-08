@@ -34,15 +34,15 @@ private:
     rtl::Reference< SwXTextDocument > mxModel;
 
 public:
-    SwVbaRevisions( const css::uno::Reference< ov::XHelperInterface >& xParent,
-                    const css::uno::Reference< cpo::uno::XComponentContext > & xContext,
+    SwVbaRevisions( const cpo::uno::Reference< ov::XHelperInterface >& xParent,
+                    const cpo::uno::Reference< cpo::uno::XComponentContext > & xContext,
                     const rtl::Reference< SwXTextDocument >& xModel,
-                    const css::uno::Reference< css::text::XTextRange >& xTextRange );
+                    const cpo::uno::Reference< css::text::XTextRange >& xTextRange );
 
-    SwVbaRevisions( const css::uno::Reference< ov::XHelperInterface >& xParent,
-                    const css::uno::Reference< cpo::uno::XComponentContext > & xContext,
+    SwVbaRevisions( const cpo::uno::Reference< ov::XHelperInterface >& xParent,
+                    const cpo::uno::Reference< cpo::uno::XComponentContext > & xContext,
                     rtl::Reference< SwXTextDocument > xModel,
-                    const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess );
+                    const cpo::uno::Reference< css::container::XIndexAccess >& xIndexAccess );
 
     // Methods
     virtual void SAL_CALL AcceptAll(  ) override;
@@ -50,7 +50,7 @@ public:
 
     // XEnumerationAccess
     virtual cpo::uno::Type SAL_CALL getElementType() override;
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
+    virtual cpo::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
 
     // SwVbaRevisions_BASE
     virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) override;

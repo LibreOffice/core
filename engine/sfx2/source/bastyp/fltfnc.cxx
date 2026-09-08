@@ -43,7 +43,7 @@
 #include <comphelper/processfactory.hxx>
 
 #include <sal/types.h>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <tools/urlobj.hxx>
@@ -70,6 +70,7 @@ unsigned SfxStack::nLevel = 0;
 #endif
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 static SfxFilterList_Impl* pFilterArr = nullptr;
 static bool bFirstRead = true;

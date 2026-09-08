@@ -5,13 +5,13 @@ codemaker/source/javamaker/classfile.hxx:167
     void codemaker::javamaker::ClassFile::addField(enum codemaker::javamaker::ClassFile::AccessFlags,const class rtl::OString &,const class rtl::OString &,unsigned short,const class rtl::OString &)
     enum codemaker::javamaker::ClassFile::AccessFlags accessFlags setBits=0x1
 dbaccess/source/filter/xml/xmlExport.hxx:162
-    void dbaxml::ODBExport::ODBExport(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class rtl::OUString &,enum SvXMLExportFlags)
+    void dbaxml::ODBExport::ODBExport(const class cpo::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class rtl::OUString &,enum SvXMLExportFlags)
     enum SvXMLExportFlags nExportFlag setBits=0x400 clearBits=0x200
 include/basegfx/polygon/b2dpolygontools.hxx:145
     enum CutFlagValue findCut(const class basegfx::B2DPoint &,const class basegfx::B2DVector &,const class basegfx::B2DPoint &,const class basegfx::B2DVector &,enum CutFlagValue,double *,double *)
     enum CutFlagValue aCutFlags setBits=0x1
 include/framework/framelistanalyzer.hxx:184
-    void framework::FrameListAnalyzer::FrameListAnalyzer(const class com::sun::star::uno::Reference<class com::sun::star::frame::XFramesSupplier> &,const class com::sun::star::uno::Reference<class com::sun::star::frame::XFrame> &,enum FrameAnalyzerFlags)
+    void framework::FrameListAnalyzer::FrameListAnalyzer(const class cpo::uno::Reference<class com::sun::star::frame::XFramesSupplier> &,const class cpo::uno::Reference<class com::sun::star::frame::XFrame> &,enum FrameAnalyzerFlags)
     enum FrameAnalyzerFlags eDetectMode setBits=0x4
 include/sfx2/objsh.hxx:493
     void SfxObjectShell::FinishedLoading(enum SfxLoadedFlags)
@@ -35,7 +35,7 @@ sc/source/ui/view/cellsh1.cxx:131
     class rtl::OUString FlagsToString(enum InsertDeleteFlags,enum InsertDeleteFlags)
     enum InsertDeleteFlags nFlagsMask setBits=0x487f clearBits=0x3600
 starmath/inc/mathml/export.hxx:199
-    void SmMLExport::SmMLExport(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class rtl::OUString &,enum SvXMLExportFlags)
+    void SmMLExport::SmMLExport(const class cpo::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class rtl::OUString &,enum SvXMLExportFlags)
     enum SvXMLExportFlags nExportFlags setBits=0x8000 clearBits=0x7a00
 sw/source/core/view/viewsh.cxx:862
     void lcl_InvalidateAllContent(class SwViewShell &,enum SwInvalidateFlags)
@@ -47,8 +47,8 @@ sw/source/filter/ww8/wrtw8esh.cxx:1548
     enum ShapeFlag AddMirrorFlags(enum ShapeFlag,const class SwMirrorGrf &)
     enum ShapeFlag nFlags setBits=0xa00 clearBits=0x5ef
 xmloff/inc/MetaExportComponent.hxx:31
-    void XMLMetaExportComponent::XMLMetaExportComponent(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class rtl::OUString &,enum SvXMLExportFlags)
+    void XMLMetaExportComponent::XMLMetaExportComponent(const class cpo::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class rtl::OUString &,enum SvXMLExportFlags)
     enum SvXMLExportFlags nFlags setBits=0x1
 xmloff/source/text/XMLAutoTextEventExport.hxx:50
-    void XMLAutoTextEventExport::XMLAutoTextEventExport(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class rtl::OUString &,enum SvXMLExportFlags)
+    void XMLAutoTextEventExport::XMLAutoTextEventExport(const class cpo::uno::Reference<class com::sun::star::uno::XComponentContext> &,const class rtl::OUString &,enum SvXMLExportFlags)
     enum SvXMLExportFlags nFlags setBits=0x5ff clearBits=0x200

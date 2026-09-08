@@ -34,6 +34,7 @@
 #include <unoprnms.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 /// The inner part SwXLineBreak, which is deleted with a locked SolarMutex.
 class SwXLineBreak::Impl : public SvtListener

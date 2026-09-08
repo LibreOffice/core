@@ -58,6 +58,7 @@
 #include <tools/json_writer.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 KitInteractionHandler::KitInteractionHandler(
         OString command,
@@ -205,9 +206,9 @@ OUString getErrMessage(const uno::Reference<task::XInteractionRequest>& xRequest
 }
 
 bool KitInteractionHandler::handleIOException(
-    const css::uno::Reference<css::task::XInteractionRequest>& rRequest)
+    const cpo::uno::Reference<css::task::XInteractionRequest>& rRequest)
 {
-    const cpo::uno::Sequence<css::uno::Reference<css::task::XInteractionContinuation>>
+    const cpo::uno::Sequence<cpo::uno::Reference<css::task::XInteractionContinuation>>
         rContinuations = rRequest->getContinuations();
     const cpo::uno::Any aRequest = rRequest->getRequest();
 

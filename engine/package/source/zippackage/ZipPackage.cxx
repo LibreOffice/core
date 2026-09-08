@@ -88,8 +88,8 @@ using namespace cppu;
 using namespace ucbhelper;
 using namespace com::sun::star;
 using namespace com::sun::star::io;
-using namespace com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::util;
 using namespace com::sun::star::lang;
@@ -1902,7 +1902,7 @@ extern "C" bool TestImportZip(SvStream& rStream)
 {
     // explicitly tests the "RepairPackage" recovery mode
     rtl::Reference<ZipPackage> xPackage(new ZipPackage(comphelper::getProcessComponentContext()));
-    css::uno::Reference<css::io::XInputStream> xStream(new utl::OInputStreamWrapper(rStream));
+    cpo::uno::Reference<css::io::XInputStream> xStream(new utl::OInputStreamWrapper(rStream));
     cpo::uno::Sequence<Any> aArgs{ Any(xStream), Any(NamedValue(u"RepairPackage"_ustr, Any(true))) };
     xPackage->initialize(aArgs);
     return true;

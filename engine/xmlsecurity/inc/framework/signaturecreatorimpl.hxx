@@ -55,7 +55,7 @@ private:
      */
     sal_Int32 m_nIdOfBlocker;
 
-    css::uno::Reference< css::xml::crypto::XSecurityEnvironment > m_xSecurityEnvironment;
+    cpo::uno::Reference< css::xml::crypto::XSecurityEnvironment > m_xSecurityEnvironment;
 
     virtual void notifyResultListener() const override;
     virtual void clearUp( ) const override;
@@ -70,10 +70,10 @@ public:
 
     /* XSignatureCreationResultBroadcaster */
     void SAL_CALL addSignatureCreationResultListener(
-        const css::uno::Reference< css::xml::crypto::sax::XSignatureCreationResultListener >& listener ) override;
+        const cpo::uno::Reference< css::xml::crypto::sax::XSignatureCreationResultListener >& listener ) override;
 
     void SAL_CALL removeSignatureCreationResultListener(
-        const css::uno::Reference< css::xml::crypto::sax::XSignatureCreationResultListener >& listener ) override;
+        const cpo::uno::Reference< css::xml::crypto::sax::XSignatureCreationResultListener >& listener ) override;
 
     /* XInitialization */
     virtual void SAL_CALL initialize(

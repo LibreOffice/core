@@ -29,7 +29,7 @@ PDFWriter::AnyWidget::~AnyWidget()
 {
 }
 
-PDFWriter::PDFWriter( const PDFWriter::PDFWriterContext& rContext, const css::uno::Reference< css::beans::XMaterialHolder >& xEnc )
+PDFWriter::PDFWriter( const PDFWriter::PDFWriterContext& rContext, const cpo::uno::Reference< css::beans::XMaterialHolder >& xEnc )
         :
         xImplementation( VclPtr<PDFWriterImpl>::Create(rContext, xEnc, *this) )
 {

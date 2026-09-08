@@ -20,7 +20,7 @@
 #include "PageMarginControl.hxx"
 #include <vcl/toolbox.hxx>
 
-PageMarginPopup::PageMarginPopup(const css::uno::Reference<cpo::uno::XComponentContext>& rContext)
+PageMarginPopup::PageMarginPopup(const cpo::uno::Reference<cpo::uno::XComponentContext>& rContext)
     : PopupWindowController(rContext, nullptr, OUString())
 {
 }

@@ -367,7 +367,7 @@ public:
     /** modifies the given layer with the given values */
     void ModifyLayer( SdrLayer* pLayer, const OUString& rLayerName, const OUString& rLayerTitle, const OUString& rLayerDesc, bool bIsVisible, bool bIsLocked, bool bIsPrintable );
 
-    virtual css::uno::Reference<css::drawing::XDrawSubController> CreateSubController() override;
+    virtual cpo::uno::Reference<css::drawing::XDrawSubController> CreateSubController() override;
 
     DrawView*   GetDrawView() const { return mpDrawView.get(); }
 
@@ -497,8 +497,8 @@ private:
     /** Listen for selection changes and broadcast context changes for the sidebar.
     */
     ::rtl::Reference<svx::sidebar::SelectionChangeHandler> mpSelectionChangeHandler;
-    css::uno::Reference< css::scanner::XScannerManager2 > mxScannerManager;
-    css::uno::Reference< css::lang::XEventListener >      mxScannerListener;
+    cpo::uno::Reference< css::scanner::XScannerManager2 > mxScannerManager;
+    cpo::uno::Reference< css::lang::XEventListener >      mxScannerListener;
     rtl::Reference<TransferableClipboardListener>         mxClipEvtLstnr;
     bool                                                  mbPastePossible;
     bool                                                  mbMouseButtonDown;

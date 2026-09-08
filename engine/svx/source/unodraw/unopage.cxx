@@ -58,8 +58,8 @@
 
 using namespace ::cppu;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::drawing;
@@ -128,7 +128,7 @@ void SvxDrawPage::dispose()
     disposing();
 }
 
-void SvxDrawPage::addEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener )
+void SvxDrawPage::addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener )
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -138,7 +138,7 @@ void SvxDrawPage::addEventListener( const css::uno::Reference< css::lang::XEvent
     maEventListeners.addInterface( aGuard, aListener );
 }
 
-void SvxDrawPage::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener )
+void SvxDrawPage::removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener )
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -833,7 +833,7 @@ rtl::Reference<SvxShape> CreateSvxShapeByTypeAndInventor(SdrObjKind nType, SdrIn
 }
 
 /** returns a StarOffice API wrapper for the given SdrPage */
-css::uno::Reference< XDrawPage > GetXDrawPageForSdrPage( SdrPage* pPage ) noexcept
+cpo::uno::Reference< XDrawPage > GetXDrawPageForSdrPage( SdrPage* pPage ) noexcept
 {
     if(pPage)
     {
@@ -863,15 +863,15 @@ SdrPage* GetSdrPageFromXDrawPage( const uno::Reference< drawing::XDrawPage >& xD
 }
 
 // XFormsSupplier
-css::uno::Reference< css::container::XNameContainer > SvxDrawPage::getForms()
+cpo::uno::Reference< css::container::XNameContainer > SvxDrawPage::getForms()
 {
     SolarMutexGuard g;
 
-    css::uno::Reference< css::container::XNameContainer >  xForms;
+    cpo::uno::Reference< css::container::XNameContainer >  xForms;
 
     FmFormPage *pFmPage = dynamic_cast<FmFormPage*>( GetSdrPage()  );
     if( pFmPage )
-        xForms.set( pFmPage->GetForms(), css::uno::UNO_QUERY_THROW );
+        xForms.set( pFmPage->GetForms(), cpo::uno::UNO_QUERY_THROW );
 
     return xForms;
 }

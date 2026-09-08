@@ -12,7 +12,7 @@
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <com/sun/star/reflection/Dump.hpp>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/TypeClass.hpp>
 #include <cppuhelper/bootstrap.hxx>
 #include <cppunit/TestAssert.h>
@@ -141,7 +141,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    css::uno::Reference<css::reflection::XDump> dump_;
+    cpo::uno::Reference<css::reflection::XDump> dump_;
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Dump);

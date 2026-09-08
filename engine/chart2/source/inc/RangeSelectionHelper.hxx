@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <cpo/uno/Sequence.h>
 #include <rtl/ustring.hxx>
 #include <rtl/ref.hxx>
@@ -45,7 +45,7 @@ public:
     ~RangeSelectionHelper();
 
     bool hasRangeSelection();
-    css::uno::Reference< css::sheet::XRangeSelection > const & getRangeSelection();
+    cpo::uno::Reference< css::sheet::XRangeSelection > const & getRangeSelection();
     void raiseRangeSelectionDocument();
     bool chooseRange(
         const OUString & aCurrentRange,
@@ -56,12 +56,12 @@ public:
     bool verifyArguments( const cpo::uno::Sequence< css::beans::PropertyValue >& rArguments );
 
 private:
-    css::uno::Reference< css::sheet::XRangeSelection >
+    cpo::uno::Reference< css::sheet::XRangeSelection >
         m_xRangeSelection;
 
     rtl::Reference<::chart::ChartModel> m_xChartDocument;
 
-    css::uno::Reference< css::sheet::XRangeSelectionListener >
+    cpo::uno::Reference< css::sheet::XRangeSelectionListener >
         m_xRangeSelectionListener;
 };
 

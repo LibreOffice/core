@@ -27,7 +27,7 @@
 #include <mutex>
 #include <salhelper/simplereferenceobject.hxx>
 #include <rtl/ref.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <ucbhelper/proxydecider.hxx>
 
 namespace com::sun::star::beans
@@ -48,7 +48,7 @@ public:
     rtl::Reference<DAVSession>
     createDAVSession(const OUString& inUri,
                      const cpo::uno::Sequence<css::beans::NamedValue>& rFlags,
-                     const css::uno::Reference<cpo::uno::XComponentContext>& rxContext);
+                     const cpo::uno::Reference<cpo::uno::XComponentContext>& rxContext);
 
 private:
     typedef std::map<OUString, DAVSession*> Map;

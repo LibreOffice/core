@@ -127,6 +127,7 @@
 #include <comphelper/propertysequence.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace sw;
 
 namespace {
@@ -1700,7 +1701,7 @@ sal_uInt32 SwDBManager::GetColumnFormat( const OUString& rDBName,
             xConnection = m_pImpl->pMergeData->xConnection;
             xSource = SwDBManager::getDataSourceAsParent(xConnection,rDBName);
             bUseMergeData = true;
-            xColsSupp.set(m_pImpl->pMergeData->xResultSet, css::uno::UNO_QUERY);
+            xColsSupp.set(m_pImpl->pMergeData->xResultSet, cpo::uno::UNO_QUERY);
         }
         if(!xConnection.is())
         {
@@ -1712,7 +1713,7 @@ sal_uInt32 SwDBManager::GetColumnFormat( const OUString& rDBName,
             if(pParam && pParam->xConnection.is())
             {
                 xConnection = pParam->xConnection;
-                xColsSupp.set(pParam->xResultSet, css::uno::UNO_QUERY);
+                xColsSupp.set(pParam->xResultSet, cpo::uno::UNO_QUERY);
             }
             else
             {

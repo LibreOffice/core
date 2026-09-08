@@ -56,9 +56,9 @@ class UNLESS_MERGELIBS(LNG_DLLPUBLIC) PropertyChgHelper :
     public PropertyChgHelperBase
 {
     std::vector< OUString >                             aPropNames;
-    css::uno::Reference< cpo::uno::XInterface >         xMyEvtObj;
+    cpo::uno::Reference< cpo::uno::XInterface >         xMyEvtObj;
     ::comphelper::OInterfaceContainerHelper3<css::linguistic2::XLinguServiceEventListener> aLngSvcEvtListeners;
-    css::uno::Reference< css::beans::XPropertySet >     xPropSet;
+    cpo::uno::Reference< css::beans::XPropertySet >     xPropSet;
 
     int     nEvtFlags;  // flags for event types allowed to be launched
 
@@ -78,7 +78,7 @@ protected:
     virtual void    GetCurrentValues();
 
     std::vector< OUString > & GetPropNames()  { return aPropNames; }
-    css::uno::Reference<
+    cpo::uno::Reference<
         css::beans::XPropertySet > &
             GetPropSet()    { return xPropSet; }
 
@@ -86,8 +86,8 @@ protected:
 
 public:
     PropertyChgHelper(
-            const css::uno::Reference< cpo::uno::XInterface > &rxSource,
-            css::uno::Reference< css::linguistic2::XLinguProperties > const &rxPropSet,
+            const cpo::uno::Reference< cpo::uno::XInterface > &rxSource,
+            cpo::uno::Reference< css::linguistic2::XLinguProperties > const &rxPropSet,
             int nAllowedEvents );
     virtual ~PropertyChgHelper() override;
 
@@ -104,10 +104,10 @@ public:
     // XLinguServiceEventBroadcaster
     virtual bool
         addLinguServiceEventListener(
-                const css::uno::Reference< css::linguistic2::XLinguServiceEventListener >& rxListener ) override final;
+                const cpo::uno::Reference< css::linguistic2::XLinguServiceEventListener >& rxListener ) override final;
     virtual bool
         removeLinguServiceEventListener(
-                const css::uno::Reference< css::linguistic2::XLinguServiceEventListener >& rxListener ) override final;
+                const cpo::uno::Reference< css::linguistic2::XLinguServiceEventListener >& rxListener ) override final;
 
     // non-UNO functions
     void    AddAsPropListener();
@@ -116,9 +116,9 @@ public:
 
     const std::vector< OUString > &
             GetPropNames() const    { return aPropNames; }
-    const css::uno::Reference< css::beans::XPropertySet > &
+    const cpo::uno::Reference< css::beans::XPropertySet > &
             GetPropSet() const      { return xPropSet; }
-    const css::uno::Reference< cpo::uno::XInterface > &
+    const cpo::uno::Reference< cpo::uno::XInterface > &
             GetEvtObj() const       { return xMyEvtObj; }
 };
 
@@ -131,8 +131,8 @@ class PropertyHelper_Thes final :
 
 public:
     PropertyHelper_Thes(
-            const css::uno::Reference< cpo::uno::XInterface > &rxSource,
-            css::uno::Reference< css::linguistic2::XLinguProperties > const &rxPropSet );
+            const cpo::uno::Reference< cpo::uno::XInterface > &rxSource,
+            cpo::uno::Reference< css::linguistic2::XLinguProperties > const &rxPropSet );
     virtual ~PropertyHelper_Thes() override;
 
     // XPropertyChangeListener
@@ -150,8 +150,8 @@ class UNLESS_MERGELIBS(LNG_DLLPUBLIC) PropertyHelper_Thesaurus
 
 public:
     PropertyHelper_Thesaurus(
-            const css::uno::Reference< cpo::uno::XInterface > &rxSource,
-            css::uno::Reference< css::linguistic2::XLinguProperties > const &rxPropSet );
+            const cpo::uno::Reference< cpo::uno::XInterface > &rxSource,
+            cpo::uno::Reference< css::linguistic2::XLinguProperties > const &rxPropSet );
     ~PropertyHelper_Thesaurus();
     void    AddAsPropListener();
     void    RemoveAsPropListener();
@@ -185,8 +185,8 @@ class UNLESS_MERGELIBS(LNG_DLLPUBLIC) PropertyHelper_Spell final :
 
 public:
     PropertyHelper_Spell(
-            const css::uno::Reference< cpo::uno::XInterface > &rxSource,
-            css::uno::Reference< css::linguistic2::XLinguProperties > const &rxPropSet );
+            const cpo::uno::Reference< cpo::uno::XInterface > &rxSource,
+            cpo::uno::Reference< css::linguistic2::XLinguProperties > const &rxPropSet );
     virtual ~PropertyHelper_Spell() override;
 
     virtual void    SetTmpPropVals( const css::beans::PropertyValues &rPropVals ) override;
@@ -212,8 +212,8 @@ class UNLESS_MERGELIBS(LNG_DLLPUBLIC) PropertyHelper_Spelling
 
 public:
     PropertyHelper_Spelling(
-            const css::uno::Reference< cpo::uno::XInterface > &rxSource,
-            css::uno::Reference< css::linguistic2::XLinguProperties > const &rxPropSet );
+            const cpo::uno::Reference< cpo::uno::XInterface > &rxSource,
+            cpo::uno::Reference< css::linguistic2::XLinguProperties > const &rxPropSet );
     ~PropertyHelper_Spelling();
 
     void    AddAsPropListener();
@@ -225,10 +225,10 @@ public:
     bool    IsSpellHyphenatedCompound() const;
     /// @throws cpo::uno::RuntimeException
     bool addLinguServiceEventListener(
-                const css::uno::Reference< css::linguistic2::XLinguServiceEventListener >& rxListener );
+                const cpo::uno::Reference< css::linguistic2::XLinguServiceEventListener >& rxListener );
     /// @throws cpo::uno::RuntimeException
     bool removeLinguServiceEventListener(
-                const css::uno::Reference< css::linguistic2::XLinguServiceEventListener >& rxListener );
+                const cpo::uno::Reference< css::linguistic2::XLinguServiceEventListener >& rxListener );
 };
 
 
@@ -262,8 +262,8 @@ class PropertyHelper_Hyphen final :
 
 public:
     PropertyHelper_Hyphen(
-            const css::uno::Reference< cpo::uno::XInterface > &rxSource,
-            css::uno::Reference< css::linguistic2::XLinguProperties > const &rxPropSet);
+            const cpo::uno::Reference< cpo::uno::XInterface > &rxSource,
+            cpo::uno::Reference< css::linguistic2::XLinguProperties > const &rxPropSet);
     virtual ~PropertyHelper_Hyphen() override;
 
     virtual void    SetTmpPropVals( const css::beans::PropertyValues &rPropVals ) override;
@@ -289,8 +289,8 @@ class UNLESS_MERGELIBS(LNG_DLLPUBLIC) PropertyHelper_Hyphenation
 
 public:
     PropertyHelper_Hyphenation(
-            const css::uno::Reference< cpo::uno::XInterface > &rxSource,
-            css::uno::Reference< css::linguistic2::XLinguProperties > const &rxPropSet);
+            const cpo::uno::Reference< cpo::uno::XInterface > &rxSource,
+            cpo::uno::Reference< css::linguistic2::XLinguProperties > const &rxPropSet);
     ~PropertyHelper_Hyphenation();
 
     void    AddAsPropListener();
@@ -303,10 +303,10 @@ public:
     bool IsNoHyphenateCaps() const;
     /// @throws cpo::uno::RuntimeException
     bool addLinguServiceEventListener(
-                const css::uno::Reference< css::linguistic2::XLinguServiceEventListener >& rxListener );
+                const cpo::uno::Reference< css::linguistic2::XLinguServiceEventListener >& rxListener );
     /// @throws cpo::uno::RuntimeException
     bool removeLinguServiceEventListener(
-                const css::uno::Reference< css::linguistic2::XLinguServiceEventListener >& rxListener );
+                const cpo::uno::Reference< css::linguistic2::XLinguServiceEventListener >& rxListener );
 };
 
 }   // namespace linguistic

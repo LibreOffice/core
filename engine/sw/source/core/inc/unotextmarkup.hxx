@@ -46,13 +46,13 @@ public:
     virtual ~SwXTextMarkup() override;
 
     // css::text::XTextMarkup:
-    virtual css::uno::Reference< css::container::XStringKeyMap > SAL_CALL getMarkupInfoContainer() override;
+    virtual cpo::uno::Reference< css::container::XStringKeyMap > SAL_CALL getMarkupInfoContainer() override;
 
     virtual void SAL_CALL commitStringMarkup(::sal_Int32 nType, const OUString & aIdentifier, ::sal_Int32 nStart, ::sal_Int32 nLength,
-                                           const css::uno::Reference< css::container::XStringKeyMap > & xMarkupInfoContainer) override;
+                                           const cpo::uno::Reference< css::container::XStringKeyMap > & xMarkupInfoContainer) override;
 
-    virtual void SAL_CALL commitTextRangeMarkup(::sal_Int32 nType, const OUString & aIdentifier, const css::uno::Reference< css::text::XTextRange> & xRange,
-                                                const css::uno::Reference< css::container::XStringKeyMap > & xMarkupInfoContainer) override;
+    virtual void SAL_CALL commitTextRangeMarkup(::sal_Int32 nType, const OUString & aIdentifier, const cpo::uno::Reference< css::text::XTextRange> & xRange,
+                                                const cpo::uno::Reference< css::container::XStringKeyMap > & xMarkupInfoContainer) override;
 
     // css::text::XMultiTextMarkup:
     virtual void SAL_CALL commitMultiTextMarkup( const cpo::uno::Sequence< css::text::TextMarkupDescriptor >& aMarkups ) override;

@@ -282,7 +282,7 @@ SdPage* NotesPanelViewShell::getCurrentPage() const
     }
 }
 
-css::uno::Reference<css::drawing::XDrawSubController> NotesPanelViewShell::CreateSubController()
+cpo::uno::Reference<css::drawing::XDrawSubController> NotesPanelViewShell::CreateSubController()
 {
     // SubController appears is only relevant for MainViewShell
     // NotesPanel isn't meant as a MainViewShell

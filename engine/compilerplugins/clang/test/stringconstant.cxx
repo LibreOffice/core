@@ -11,7 +11,7 @@
 
 #include <cstring>
 
-#include "com/sun/star/uno/Reference.hxx"
+#include "cpo/uno/Reference.hxx"
 #include "rtl/strbuf.hxx"
 #include "rtl/ustrbuf.hxx"
 

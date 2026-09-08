@@ -26,7 +26,7 @@ namespace vcl
 {
 VCL_DLLPUBLIC bool
 ImportPDF(SvStream& rStream, Graphic& rGraphic, sal_Int32 nPageIndex,
-          const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler,
+          const cpo::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler,
           bool& bEncrypted);
 
 inline bool ImportPDF(SvStream& rStream, Graphic& rGraphic)
@@ -120,11 +120,11 @@ public:
 /// given, otherwise the handler is asked.
 VCL_DLLPUBLIC size_t ImportPDFUnloaded(
     const OUString& rURL, std::vector<PDFGraphicResult>& rGraphics,
-    const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler = nullptr,
+    const cpo::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler = nullptr,
     const OUString& rPassword = OUString());
 VCL_DLLPUBLIC size_t ImportPDFUnloaded(
     SvStream& rStream, std::vector<PDFGraphicResult>& rGraphics,
-    const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler = nullptr,
+    const cpo::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler = nullptr,
     const OUString& rPassword = OUString());
 }
 

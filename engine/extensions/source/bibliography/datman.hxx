@@ -47,27 +47,27 @@ class BibInterceptorHelper
     :public cppu::WeakImplHelper< css::frame::XDispatchProviderInterceptor >
 {
 private:
-    css::uno::Reference< css::frame::XDispatchProvider > xMasterDispatchProvider;
-    css::uno::Reference< css::frame::XDispatchProvider > xSlaveDispatchProvider;
-    css::uno::Reference< css::frame::XDispatch > xFormDispatch;
-    css::uno::Reference< css::frame::XDispatchProviderInterception > xInterception;
+    cpo::uno::Reference< css::frame::XDispatchProvider > xMasterDispatchProvider;
+    cpo::uno::Reference< css::frame::XDispatchProvider > xSlaveDispatchProvider;
+    cpo::uno::Reference< css::frame::XDispatch > xFormDispatch;
+    cpo::uno::Reference< css::frame::XDispatchProviderInterception > xInterception;
 
 protected:
     virtual ~BibInterceptorHelper( ) override;
 
 public:
-    BibInterceptorHelper( const ::bib::BibBeamer* pBibBeamer, css::uno::Reference< css::frame::XDispatch > const & xDispatch);
+    BibInterceptorHelper( const ::bib::BibBeamer* pBibBeamer, cpo::uno::Reference< css::frame::XDispatch > const & xDispatch);
 
     void ReleaseInterceptor();
 
     // XDispatchProvider
-    virtual css::uno::Reference< css::frame::XDispatch > queryDispatch( const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags ) override;
-    virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& aDescripts ) override;
+    virtual cpo::uno::Reference< css::frame::XDispatch > queryDispatch( const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Reference< css::frame::XDispatch > > queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& aDescripts ) override;
     // XDispatchProviderInterceptor
-    virtual css::uno::Reference< css::frame::XDispatchProvider > getSlaveDispatchProvider(  ) override;
-    virtual void setSlaveDispatchProvider( const css::uno::Reference< css::frame::XDispatchProvider >& xNewSlaveDispatchProvider ) override;
-    virtual css::uno::Reference< css::frame::XDispatchProvider > getMasterDispatchProvider(  ) override;
-    virtual void setMasterDispatchProvider( const css::uno::Reference< css::frame::XDispatchProvider >& xNewMasterDispatchProvider ) override;
+    virtual cpo::uno::Reference< css::frame::XDispatchProvider > getSlaveDispatchProvider(  ) override;
+    virtual void setSlaveDispatchProvider( const cpo::uno::Reference< css::frame::XDispatchProvider >& xNewSlaveDispatchProvider ) override;
+    virtual cpo::uno::Reference< css::frame::XDispatchProvider > getMasterDispatchProvider(  ) override;
+    virtual void setMasterDispatchProvider( const cpo::uno::Reference< css::frame::XDispatchProvider >& xNewMasterDispatchProvider ) override;
 };
 
 typedef comphelper::WeakComponentImplHelper  <   css::form::XLoadable
@@ -75,11 +75,11 @@ typedef comphelper::WeakComponentImplHelper  <   css::form::XLoadable
 class BibDataManager final : public BibDataManager_Base
 {
 private:
-        css::uno::Reference< css::form::XForm >                       m_xForm;
-        css::uno::Reference< css::awt::XControlModel >                m_xGridModel;
-        css::uno::Reference< css::sdb::XSingleSelectQueryComposer >   m_xParser;
-        css::uno::Reference< css::form::runtime::XFormController >    m_xFormCtrl;
-        css::uno::Reference< css::frame::XDispatch >                  m_xFormDispatch;
+        cpo::uno::Reference< css::form::XForm >                       m_xForm;
+        cpo::uno::Reference< css::awt::XControlModel >                m_xGridModel;
+        cpo::uno::Reference< css::sdb::XSingleSelectQueryComposer >   m_xParser;
+        cpo::uno::Reference< css::form::runtime::XFormController >    m_xFormCtrl;
+        cpo::uno::Reference< css::frame::XDispatch >                  m_xFormDispatch;
         rtl::Reference<BibInterceptorHelper>                          m_xInterceptorHelper;
 
         OUString                     aActiveDataTable;
@@ -93,11 +93,11 @@ private:
 
         OUString                     sIdentifierMapping;
 
-        void                        InsertFields(const css::uno::Reference< css::form::XFormComponent > & xGrid);
+        void                        InsertFields(const cpo::uno::Reference< css::form::XFormComponent > & xGrid);
 
-        css::uno::Reference< css::awt::XControlModel > const &
-                                    updateGridModel(const css::uno::Reference< css::form::XForm > & xDbForm);
-        static css::uno::Reference< css::awt::XControlModel >
+        cpo::uno::Reference< css::awt::XControlModel > const &
+                                    updateGridModel(const cpo::uno::Reference< css::form::XForm > & xDbForm);
+        static cpo::uno::Reference< css::awt::XControlModel >
                                     createGridModel( const OUString& rName );
 
         using WeakComponentImplHelperBase::disposing;
@@ -112,12 +112,12 @@ public:
         virtual void unload(  ) override;
         virtual void reload(  ) override;
         virtual bool isLoaded(  ) override;
-        virtual void addLoadListener( const css::uno::Reference< css::form::XLoadListener >& aListener ) override;
-        virtual void removeLoadListener( const css::uno::Reference< css::form::XLoadListener >& aListener ) override;
+        virtual void addLoadListener( const cpo::uno::Reference< css::form::XLoadListener >& aListener ) override;
+        virtual void removeLoadListener( const cpo::uno::Reference< css::form::XLoadListener >& aListener ) override;
 
-        css::uno::Reference< css::form::XForm >                   createDatabaseForm( BibDBDescriptor&    aDesc);
+        cpo::uno::Reference< css::form::XForm >                   createDatabaseForm( BibDBDescriptor&    aDesc);
 
-        css::uno::Reference< css::awt::XControlModel >            updateGridModel();
+        cpo::uno::Reference< css::awt::XControlModel >            updateGridModel();
 
         cpo::uno::Sequence< OUString>           getDataSources() const;
 
@@ -134,13 +134,13 @@ public:
         OUString                    getQueryField() const;
         void                        startQueryWith(const OUString& rQuery);
 
-        const css::uno::Reference< css::sdb::XSingleSelectQueryComposer >&    getParser() const { return m_xParser; }
-        const css::uno::Reference< css::form::XForm >&                        getForm() const   { return m_xForm; }
+        const cpo::uno::Reference< css::sdb::XSingleSelectQueryComposer >&    getParser() const { return m_xParser; }
+        const cpo::uno::Reference< css::form::XForm >&                        getForm() const   { return m_xForm; }
 
 
         static OUString             getControlName(sal_Int32 nFormatKey );
 
-        css::uno::Reference< css::awt::XControlModel > loadControlModel(const OUString& rName,
+        cpo::uno::Reference< css::awt::XControlModel > loadControlModel(const OUString& rName,
                                                         bool bForceListBox);
 
         void                        CreateMappingDialog(weld::Window* pParent);
@@ -155,7 +155,7 @@ public:
         const OUString&             GetIdentifierMapping();
         void                        ResetIdentifierMapping() {sIdentifierMapping.clear();}
 
-        css::uno::Reference< css::form::runtime::XFormController > const & GetFormController();
+        cpo::uno::Reference< css::form::runtime::XFormController > const & GetFormController();
         void                        RegisterInterceptor( const ::bib::BibBeamer* pBibBeamer);
 
         bool                        HasActiveConnection() const;

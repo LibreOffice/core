@@ -79,7 +79,7 @@ public:
     const rtl::Reference<::chart::ChartModel> &
         getChartModel() const;
 
-    css::uno::Reference< css::chart2::data::XDataProvider >
+    cpo::uno::Reference< css::chart2::data::XDataProvider >
         getDataProvider() const;
 
     std::vector< rtl::Reference< ::chart::ChartType > >
@@ -89,7 +89,7 @@ public:
         getAllDataSeriesWithLabel() const;
 
     static tRolesWithRanges getRolesWithRanges(
-        const css::uno::Reference< css::chart2::XDataSeries > & xSeries,
+        const cpo::uno::Reference< css::chart2::XDataSeries > & xSeries,
         const OUString & aRoleOfSequenceForLabel,
         const rtl::Reference< ::chart::ChartType > & xChartType );
 
@@ -104,7 +104,7 @@ public:
     /// @return the newly inserted series
     rtl::Reference<
             ::chart::DataSeries > insertSeriesAfter(
-                const css::uno::Reference< css::chart2::XDataSeries > & xSeries,
+                const cpo::uno::Reference< css::chart2::XDataSeries > & xSeries,
                 const rtl::Reference< ::chart::ChartType > & xChartType,
                 bool bCreateDataCachedSequences = false );
 
@@ -112,10 +112,10 @@ public:
         const rtl::Reference< ::chart::DataSeries > & xSeries,
         const rtl::Reference< ::chart::ChartType > & xChartType );
 
-    css::uno::Reference< css::chart2::data::XLabeledDataSequence >
+    cpo::uno::Reference< css::chart2::data::XLabeledDataSequence >
         getCategories() const;
 
-    void setCategories( const css::uno::Reference< css::chart2::data::XLabeledDataSequence > & xCategories );
+    void setCategories( const cpo::uno::Reference< css::chart2::data::XLabeledDataSequence > & xCategories );
 
     OUString getCategoriesRange() const;
 

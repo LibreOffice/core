@@ -51,11 +51,11 @@ class SwXDispatchProviderInterceptor final : public cppu::WeakImplHelper
 //    ::osl::Mutex                     m_aMutex;#102295# solar mutex has to be used currently
 
     // the component which's dispatches we're intercepting
-    css::uno::Reference< css::frame::XDispatchProviderInterception>   m_xIntercepted;
+    cpo::uno::Reference< css::frame::XDispatchProviderInterception>   m_xIntercepted;
 
     // chaining
-    css::uno::Reference< css::frame::XDispatchProvider>           m_xSlaveDispatcher;
-    css::uno::Reference< css::frame::XDispatchProvider>           m_xMasterDispatcher;
+    cpo::uno::Reference< css::frame::XDispatchProvider>           m_xSlaveDispatcher;
+    cpo::uno::Reference< css::frame::XDispatchProvider>           m_xMasterDispatcher;
 
     rtl::Reference<SwXDispatch>                                   m_xDispatch;
 
@@ -66,14 +66,14 @@ public:
     virtual ~SwXDispatchProviderInterceptor() override;
 
     //XDispatchProvider
-    virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch( const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags ) override;
-    virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& aDescripts ) override;
+    virtual cpo::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch( const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& aDescripts ) override;
 
     //XDispatchProviderInterceptor
-    virtual css::uno::Reference< css::frame::XDispatchProvider > SAL_CALL getSlaveDispatchProvider(  ) override;
-    virtual void SAL_CALL setSlaveDispatchProvider( const css::uno::Reference< css::frame::XDispatchProvider >& xNewDispatchProvider ) override;
-    virtual css::uno::Reference< css::frame::XDispatchProvider > SAL_CALL getMasterDispatchProvider(  ) override;
-    virtual void SAL_CALL setMasterDispatchProvider( const css::uno::Reference< css::frame::XDispatchProvider >& xNewSupplier ) override;
+    virtual cpo::uno::Reference< css::frame::XDispatchProvider > SAL_CALL getSlaveDispatchProvider(  ) override;
+    virtual void SAL_CALL setSlaveDispatchProvider( const cpo::uno::Reference< css::frame::XDispatchProvider >& xNewDispatchProvider ) override;
+    virtual cpo::uno::Reference< css::frame::XDispatchProvider > SAL_CALL getMasterDispatchProvider(  ) override;
+    virtual void SAL_CALL setMasterDispatchProvider( const cpo::uno::Reference< css::frame::XDispatchProvider >& xNewSupplier ) override;
 
     // XEventListener
     virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
@@ -87,7 +87,7 @@ public:
 
 struct StatusStruct_Impl
 {
-    css::uno::Reference< css::frame::XStatusListener> xListener;
+    cpo::uno::Reference< css::frame::XStatusListener> xListener;
     css::util::URL                                    aURL;
 };
 class SwXDispatch final : public cppu::WeakImplHelper
@@ -105,8 +105,8 @@ public:
     virtual ~SwXDispatch() override;
 
     virtual void SAL_CALL dispatch( const css::util::URL& aURL, const cpo::uno::Sequence< css::beans::PropertyValue >& aArgs ) override;
-    virtual void SAL_CALL addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xControl, const css::util::URL& aURL ) override;
-    virtual void SAL_CALL removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xControl, const css::util::URL& aURL ) override;
+    virtual void SAL_CALL addStatusListener( const cpo::uno::Reference< css::frame::XStatusListener >& xControl, const css::util::URL& aURL ) override;
+    virtual void SAL_CALL removeStatusListener( const cpo::uno::Reference< css::frame::XStatusListener >& xControl, const css::util::URL& aURL ) override;
 
     //XSelectionChangeListener
     virtual void SAL_CALL selectionChanged( const css::lang::EventObject& aEvent ) override;

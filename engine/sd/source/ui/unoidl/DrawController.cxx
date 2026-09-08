@@ -53,8 +53,8 @@
 
 using namespace ::cppu;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::drawing::framework;
 using vcl::EnumContext;
 
@@ -419,7 +419,7 @@ void DrawController::FireSwitchCurrentPage (SdPage* pNewCurrentPage) noexcept
     }
 }
 
-void DrawController::fireChangeLayer( const css::uno::Reference< css::drawing::XLayer>& xNewLayer ) noexcept
+void DrawController::fireChangeLayer( const cpo::uno::Reference< css::drawing::XLayer>& xNewLayer ) noexcept
 {
     if( xNewLayer != mxCurrentLayer )
     {

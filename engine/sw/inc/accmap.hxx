@@ -91,7 +91,7 @@ class SwAccessibleMap final : public ::accessibility::IAccessibleViewForwarder,
     // the XShape at the same time (indirectly by destroying the accessible
     // shape) leads to an assert, because a client of the Modify is destroyed
     // within a Modify call.
-    std::vector<css::uno::Reference<css::drawing::XShape>> mvShapes;
+    std::vector<cpo::uno::Reference<css::drawing::XShape>> mvShapes;
 
     std::unique_ptr<SwAccessibleEventList_Impl> mpEvents;
     std::unique_ptr<SwAccessibleEventMap_Impl> mpEventMap;
@@ -155,7 +155,7 @@ public:
     ::rtl::Reference < SwAccessibleContext > GetContextImpl(
                                                  const SwFrame *pFrame,
                                                 bool bCreate = true );
-    css::uno::Reference<css::accessibility::XAccessible> GetContext(
+    cpo::uno::Reference<css::accessibility::XAccessible> GetContext(
                                                  const SwFrame *pFrame,
                                                 bool bCreate = true );
 
@@ -163,7 +163,7 @@ public:
                                         const SdrObject *pObj,
                                         SwAccessibleContext *pParentImpl,
                                         bool bCreate = true );
-    css::uno::Reference<css::accessibility::XAccessible> GetContext(
+    cpo::uno::Reference<css::accessibility::XAccessible> GetContext(
                                         const SdrObject *pObj,
                                         SwAccessibleContext *pParentImpl,
                                         bool bCreate = true );
@@ -177,7 +177,7 @@ public:
                              rtl::Reference < ::accessibility::AccessibleShape > const & xAccShape);
 
     void AddGroupContext(const SdrObject *pParentObj,
-                    css::uno::Reference < css::accessibility::XAccessible > const & xAccParent);
+                    cpo::uno::Reference < css::accessibility::XAccessible > const & xAccParent);
     void RemoveGroupContext(const SdrObject *pParentObj);
 
     const SwRect& GetVisArea() const;
@@ -265,14 +265,14 @@ public:
     // IAccessibleParent
     virtual bool ReplaceChild (
         ::accessibility::AccessibleShape* pCurrentChild,
-        const css::uno::Reference< css::drawing::XShape >& _rxShape,
+        const cpo::uno::Reference< css::drawing::XShape >& _rxShape,
         const tools::Long _nIndex,
         const ::accessibility::AccessibleShapeTreeInfo& _rShapeTreeInfo
     ) override;
     virtual ::accessibility::AccessibleControlShape* GetAccControlShapeFromModel
         (css::beans::XPropertySet* pSet) override;
     virtual css::accessibility::XAccessible*   GetAccessibleCaption (
-        const css::uno::Reference< css::drawing::XShape > & xShape) override;
+        const cpo::uno::Reference< css::drawing::XShape > & xShape) override;
 
     // additional Core/Pixel conversions for internal use; also works
     // for preview

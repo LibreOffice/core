@@ -27,9 +27,9 @@ struct GroupEntry
 {
     sal_uInt32                  mnCurrentPos;
     sal_uInt32                  mnCount;
-    css::uno::Reference< css::container::XIndexAccess >           mXIndexAccess;
+    cpo::uno::Reference< css::container::XIndexAccess >           mXIndexAccess;
 
-    explicit GroupEntry( css::uno::Reference< css::container::XIndexAccess > const & rIndex )
+    explicit GroupEntry( cpo::uno::Reference< css::container::XIndexAccess > const & rIndex )
       : mnCurrentPos(0),
         mnCount(rIndex->getCount()),
         mXIndexAccess(rIndex)
@@ -53,12 +53,12 @@ class GroupTable
 
         sal_uInt32              GetCurrentGroupIndex() const { return mnIndex; };
         sal_Int32               GetCurrentGroupLevel() const { return mvGroupEntry.size() - 1; };
-        const css::uno::Reference< css::container::XIndexAccess > &
+        const cpo::uno::Reference< css::container::XIndexAccess > &
                                 GetCurrentGroupAccess() const { return mvGroupEntry.back().mXIndexAccess; };
         sal_uInt32              GetGroupsClosed();
         void                    ResetGroupTable( sal_uInt32 nCount );
         void                    ClearGroupTable();
-        bool                    EnterGroup( css::uno::Reference< css::container::XIndexAccess > const & rIndex );
+        bool                    EnterGroup( cpo::uno::Reference< css::container::XIndexAccess > const & rIndex );
         bool                    GetNextGroupEntry();
                                 GroupTable();
                                 ~GroupTable();

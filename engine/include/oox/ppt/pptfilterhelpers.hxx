@@ -20,7 +20,7 @@
 #ifndef INCLUDED_OOX_PPT_PPTFILTERHELPERS_HXX
 #define INCLUDED_OOX_PPT_PPTFILTERHELPERS_HXX
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <oox/dllapi.h>
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
@@ -80,9 +80,9 @@ namespace oox::ppt {
 
     OOX_DLLPUBLIC OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId, sal_Int32 nPresetSubType );
 
-    OOX_DLLPUBLIC void fixMainSequenceTiming( const css::uno::Reference< css::animations::XAnimationNode >& xNode );
+    OOX_DLLPUBLIC void fixMainSequenceTiming( const cpo::uno::Reference< css::animations::XAnimationNode >& xNode );
 
-    OOX_DLLPUBLIC void fixInteractiveSequenceTiming( const css::uno::Reference< css::animations::XAnimationNode >& xNode );
+    OOX_DLLPUBLIC void fixInteractiveSequenceTiming( const cpo::uno::Reference< css::animations::XAnimationNode >& xNode );
 
     /** convert attribute values of the animation target so that LibreOffice understand.
      */

@@ -29,6 +29,7 @@
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 /// @throws uno::RuntimeException
 static cpo::uno::Sequence< style::TabStop > lcl_getTabStops( const uno::Reference< beans::XPropertySet >& xParaProps )
@@ -80,7 +81,7 @@ private:
 
 public:
     /// @throws cpo::uno::RuntimeException
-    TabStopCollectionHelper( css::uno::Reference< ov::XHelperInterface > xParent, css::uno::Reference< cpo::uno::XComponentContext > xContext, const css::uno::Reference< css::beans::XPropertySet >& xParaProps ): mxParent(std::move( xParent )), mxContext(std::move( xContext )), mnTabStops(lcl_getTabStops( xParaProps ).getLength())
+    TabStopCollectionHelper( cpo::uno::Reference< ov::XHelperInterface > xParent, cpo::uno::Reference< cpo::uno::XComponentContext > xContext, const cpo::uno::Reference< css::beans::XPropertySet >& xParaProps ): mxParent(std::move( xParent )), mxContext(std::move( xContext )), mnTabStops(lcl_getTabStops( xParaProps ).getLength())
     {
     }
 

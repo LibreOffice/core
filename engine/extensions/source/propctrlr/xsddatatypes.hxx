@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <rtl/ref.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 
@@ -42,18 +42,18 @@ namespace pcr
     class XSDDataType : public salhelper::SimpleReferenceObject
     {
     private:
-        css::uno::Reference< css::xsd::XDataType >
+        cpo::uno::Reference< css::xsd::XDataType >
                             m_xDataType;
-        css::uno::Reference< css::beans::XPropertySetInfo >
+        cpo::uno::Reference< css::beans::XPropertySetInfo >
                             m_xFacetInfo;
 
     public:
         explicit XSDDataType(
-            const css::uno::Reference< css::xsd::XDataType >& _rxDataType
+            const cpo::uno::Reference< css::xsd::XDataType >& _rxDataType
         );
 
         /// retrieves the underlying UNO component
-        const css::uno::Reference< css::xsd::XDataType >&
+        const cpo::uno::Reference< css::xsd::XDataType >&
                 getUnoDataType() const { return m_xDataType; }
 
         /// classifies the data typ

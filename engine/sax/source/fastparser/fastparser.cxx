@@ -58,8 +58,8 @@
 
 using namespace ::osl;
 using namespace ::cppu;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::io;
@@ -125,10 +125,10 @@ struct SaxContext
 
 struct ParserData
 {
-    css::uno::Reference< css::xml::sax::XFastDocumentHandler > mxDocumentHandler;
+    cpo::uno::Reference< css::xml::sax::XFastDocumentHandler > mxDocumentHandler;
     rtl::Reference<FastTokenHandlerBase>                       mxTokenHandler;
-    css::uno::Reference< css::xml::sax::XErrorHandler >        mxErrorHandler;
-    css::uno::Reference< css::xml::sax::XFastNamespaceHandler >mxNamespaceHandler;
+    cpo::uno::Reference< css::xml::sax::XErrorHandler >        mxErrorHandler;
+    cpo::uno::Reference< css::xml::sax::XFastNamespaceHandler >mxNamespaceHandler;
 
     ParserData();
 };
@@ -242,9 +242,9 @@ public:
     /// @throws cpo::uno::RuntimeException
     void parseStream( const css::xml::sax::InputSource& aInputSource );
     /// @throws cpo::uno::RuntimeException
-    void setFastDocumentHandler( const css::uno::Reference< css::xml::sax::XFastDocumentHandler >& Handler );
+    void setFastDocumentHandler( const cpo::uno::Reference< css::xml::sax::XFastDocumentHandler >& Handler );
     /// @throws cpo::uno::RuntimeException
-    void setTokenHandler( const css::uno::Reference< css::xml::sax::XFastTokenHandler >& Handler );
+    void setTokenHandler( const cpo::uno::Reference< css::xml::sax::XFastTokenHandler >& Handler );
     /// @throws css::lang::IllegalArgumentException
     /// @throws cpo::uno::RuntimeException
     void registerNamespace( const OUString& NamespaceURL, sal_Int32 NamespaceToken );
@@ -252,9 +252,9 @@ public:
     /// @throws cpo::uno::RuntimeException
     OUString const & getNamespaceURL( std::u16string_view rPrefix );
     /// @throws cpo::uno::RuntimeException
-    void setErrorHandler( const css::uno::Reference< css::xml::sax::XErrorHandler >& Handler );
+    void setErrorHandler( const cpo::uno::Reference< css::xml::sax::XErrorHandler >& Handler );
     /// @throws cpo::uno::RuntimeException
-    void setNamespaceHandler( const css::uno::Reference< css::xml::sax::XFastNamespaceHandler >& Handler);
+    void setNamespaceHandler( const cpo::uno::Reference< css::xml::sax::XFastNamespaceHandler >& Handler);
     // Fake DTD file
     void setCustomEntityNames(
        const ::cpo::uno::Sequence<::css::beans::Pair<::rtl::OUString, ::rtl::OUString>>& replacements);
@@ -274,7 +274,7 @@ public:
     void produce( bool bForceFlush = false );
     bool m_bIgnoreMissingNSDecl;
     bool m_bDisableThreadedParser;
-    css::uno::Reference<css::container::XMap> mxMap; /// _ prefix string mapper for translation
+    cpo::uno::Reference<css::container::XMap> mxMap; /// _ prefix string mapper for translation
 
 private:
     bool consume(EventList&);
@@ -920,14 +920,14 @@ void FastSaxParserImpl::setTokenHandler( const Reference< XFastTokenHandler >& x
 void FastSaxParserImpl::registerNamespace( const OUString& NamespaceURL, sal_Int32 NamespaceToken )
 {
     if( NamespaceToken < FastToken::NAMESPACE )
-        throw IllegalArgumentException("Invalid namespace token " + OUString::number(NamespaceToken), css::uno::Reference<cpo::uno::XInterface >(), 0);
+        throw IllegalArgumentException("Invalid namespace token " + OUString::number(NamespaceToken), cpo::uno::Reference<cpo::uno::XInterface >(), 0);
 
     if( GetNamespaceToken( NamespaceURL ) == FastToken::DONTKNOW )
     {
         maNamespaceMap[ NamespaceURL ] = NamespaceToken;
         return;
     }
-    throw IllegalArgumentException("namespace URL is already registered: " + NamespaceURL, css::uno::Reference<cpo::uno::XInterface >(), 0);
+    throw IllegalArgumentException("namespace URL is already registered: " + NamespaceURL, cpo::uno::Reference<cpo::uno::XInterface >(), 0);
 }
 
 OUString const & FastSaxParserImpl::getNamespaceURL( std::u16string_view rPrefix )

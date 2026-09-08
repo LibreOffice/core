@@ -39,9 +39,9 @@ class ScVbaButtonCharacters : public ScVbaButtonCharacters_BASE
 public:
     /// @throws cpo::uno::RuntimeException
     explicit ScVbaButtonCharacters(
-        const css::uno::Reference< ov::XHelperInterface >& rxParent,
-        const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
-        const css::uno::Reference< css::beans::XPropertySet >& rxPropSet,
+        const cpo::uno::Reference< ov::XHelperInterface >& rxParent,
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+        const cpo::uno::Reference< css::beans::XPropertySet >& rxPropSet,
         const ScVbaPalette& rPalette,
         const cpo::uno::Any& rStart,
         const cpo::uno::Any& rLength );
@@ -53,8 +53,8 @@ public:
     virtual OUString SAL_CALL getText() override;
     virtual void SAL_CALL setText( const OUString& rText ) override;
     virtual sal_Int32 SAL_CALL getCount() override;
-    virtual css::uno::Reference< ov::excel::XFont > SAL_CALL getFont() override;
-    virtual void SAL_CALL setFont( const css::uno::Reference< ov::excel::XFont >& rxFont ) override;
+    virtual cpo::uno::Reference< ov::excel::XFont > SAL_CALL getFont() override;
+    virtual void SAL_CALL setFont( const cpo::uno::Reference< ov::excel::XFont >& rxFont ) override;
 
     // XCharacters methods
     virtual void SAL_CALL Insert( const OUString& rString ) override;
@@ -71,7 +71,7 @@ private:
 
 private:
     ScVbaPalette maPalette;
-    css::uno::Reference< css::beans::XPropertySet > mxPropSet;
+    cpo::uno::Reference< css::beans::XPropertySet > mxPropSet;
     sal_Int32 mnStart;
     sal_Int32 mnLength;
 };
@@ -84,10 +84,10 @@ class ScVbaSheetObjectBase : public ScVbaSheetObject_BASE
 public:
     /// @throws cpo::uno::RuntimeException
     explicit ScVbaSheetObjectBase(
-        const css::uno::Reference< ov::XHelperInterface >& rxParent,
-        const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
-        const css::uno::Reference< css::frame::XModel >& rxModel,
-        const css::uno::Reference< css::drawing::XShape >& rxShape );
+        const cpo::uno::Reference< ov::XHelperInterface >& rxParent,
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+        const cpo::uno::Reference< css::frame::XModel >& rxModel,
+        const cpo::uno::Reference< css::drawing::XShape >& rxShape );
 
     // XSheetObject attributes
     virtual double SAL_CALL getLeft() override;
@@ -122,9 +122,9 @@ protected:
 
 protected:
     ScVbaPalette maPalette;
-    css::uno::Reference< css::frame::XModel > mxModel;
-    css::uno::Reference< css::drawing::XShape > mxShape;
-    css::uno::Reference< css::beans::XPropertySet > mxShapeProps;
+    cpo::uno::Reference< css::frame::XModel > mxModel;
+    cpo::uno::Reference< css::drawing::XShape > mxShape;
+    cpo::uno::Reference< css::beans::XPropertySet > mxShapeProps;
 };
 
 typedef ::cppu::ImplInheritanceHelper< ScVbaSheetObjectBase, ov::excel::XControlObject > ScVbaControlObject_BASE;
@@ -134,11 +134,11 @@ class ScVbaControlObjectBase : public ScVbaControlObject_BASE
 public:
     /// @throws cpo::uno::RuntimeException
     explicit ScVbaControlObjectBase(
-        const css::uno::Reference< ov::XHelperInterface >& rxParent,
-        const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
-        const css::uno::Reference< css::frame::XModel >& rxModel,
-        const css::uno::Reference< css::container::XIndexContainer >& rxFormIC,
-        const css::uno::Reference< css::drawing::XControlShape >& rxControlShape );
+        const cpo::uno::Reference< ov::XHelperInterface >& rxParent,
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+        const cpo::uno::Reference< css::frame::XModel >& rxModel,
+        const cpo::uno::Reference< css::container::XIndexContainer >& rxFormIC,
+        const cpo::uno::Reference< css::drawing::XControlShape >& rxControlShape );
 
     // XSheetObject attributes
     virtual OUString SAL_CALL getName() override;
@@ -160,8 +160,8 @@ protected:
     sal_Int32 getModelIndexInForm() const;
 
 protected:
-    css::uno::Reference< css::container::XIndexContainer > mxFormIC;
-    css::uno::Reference< css::beans::XPropertySet > mxControlProps;
+    cpo::uno::Reference< css::container::XIndexContainer > mxFormIC;
+    cpo::uno::Reference< css::beans::XPropertySet > mxControlProps;
     bool mbNotifyMacroEventRead;
 };
 
@@ -172,17 +172,17 @@ class ScVbaButton : public ScVbaButton_BASE
 public:
     /// @throws cpo::uno::RuntimeException
     explicit ScVbaButton(
-        const css::uno::Reference< ov::XHelperInterface >& rxParent,
-        const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
-        const css::uno::Reference< css::frame::XModel >& rxModel,
-        const css::uno::Reference< css::container::XIndexContainer >& rxFormIC,
-        const css::uno::Reference< css::drawing::XControlShape >& rxControlShape );
+        const cpo::uno::Reference< ov::XHelperInterface >& rxParent,
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+        const cpo::uno::Reference< css::frame::XModel >& rxModel,
+        const cpo::uno::Reference< css::container::XIndexContainer >& rxFormIC,
+        const cpo::uno::Reference< css::drawing::XControlShape >& rxControlShape );
 
     // XButton attributes
     virtual OUString SAL_CALL getCaption() override;
     virtual void SAL_CALL setCaption( const OUString& rCaption ) override;
-    virtual css::uno::Reference< ov::excel::XFont > SAL_CALL getFont() override;
-    virtual void SAL_CALL setFont( const css::uno::Reference< ov::excel::XFont >& rxFont ) override;
+    virtual cpo::uno::Reference< ov::excel::XFont > SAL_CALL getFont() override;
+    virtual void SAL_CALL setFont( const cpo::uno::Reference< ov::excel::XFont >& rxFont ) override;
     virtual sal_Int32 SAL_CALL getHorizontalAlignment() override;
     virtual void SAL_CALL setHorizontalAlignment( sal_Int32 nAlign ) override;
     virtual sal_Int32 SAL_CALL getVerticalAlignment() override;
@@ -195,7 +195,7 @@ public:
     virtual void SAL_CALL setText( const OUString &aText ) override;
 
     // XButton methods
-    css::uno::Reference< ov::excel::XCharacters > SAL_CALL Characters(
+    cpo::uno::Reference< ov::excel::XCharacters > SAL_CALL Characters(
         const cpo::uno::Any& rStart, const cpo::uno::Any& rLength ) override;
 
     // XHelperInterface

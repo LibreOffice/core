@@ -185,11 +185,11 @@ namespace o3tl {
 struct HTMLControl
 {
     // the form to which the control belongs
-    css::uno::Reference<css::container::XIndexContainer> xFormComps;
+    cpo::uno::Reference<css::container::XIndexContainer> xFormComps;
     SwNodeOffset nNdIdx;           // the node in which it's anchored
     sal_Int32 nCount;              // how many controls are on the node
 
-    HTMLControl( css::uno::Reference<css::container::XIndexContainer> xForm, SwNodeOffset nIdx );
+    HTMLControl( cpo::uno::Reference<css::container::XIndexContainer> xForm, SwNodeOffset nIdx );
     ~HTMLControl();
 
     // operators for the sort array
@@ -316,7 +316,7 @@ public:
     OUString m_aCSS1Selector;           // style selector
     OUString m_aBulletGrfs[MAXLEVEL];   // list graphics
 
-    css::uno::Reference<css::container::XIndexContainer> mxFormComps; // current form
+    cpo::uno::Reference<css::container::XIndexContainer> mxFormComps; // current form
 
     rtl::Reference<SwDoc> m_xTemplate;               // HTML template
     std::optional<Color> m_xDfltColor;              // default colour
@@ -467,11 +467,11 @@ public:
 
     void OutForm( bool bTagOn=true, const SwStartNode *pStNd=nullptr );
     void OutHiddenForms();
-    void OutHiddenForm( const css::uno::Reference<css::form::XForm>& rForm );
+    void OutHiddenForm( const cpo::uno::Reference<css::form::XForm>& rForm );
 
-    void OutForm( bool bOn, const css::uno::Reference<css::container::XIndexContainer>& rFormComps );
-    void OutHiddenControls( const css::uno::Reference<css::container::XIndexContainer>& rFormComps,
-                            const css::uno::Reference<css::beans::XPropertySet>& rPropSet );
+    void OutForm( bool bOn, const cpo::uno::Reference<css::container::XIndexContainer>& rFormComps );
+    void OutHiddenControls( const cpo::uno::Reference<css::container::XIndexContainer>& rFormComps,
+                            const cpo::uno::Reference<css::beans::XPropertySet>& rPropSet );
     bool HasControls() const;
 
     void OutFootEndNoteInfo();

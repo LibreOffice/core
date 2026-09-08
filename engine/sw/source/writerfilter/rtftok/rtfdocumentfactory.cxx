@@ -14,11 +14,11 @@
 namespace writerfilter::rtftok
 {
 RTFDocument::Pointer_t RTFDocumentFactory::createDocument(
-    css::uno::Reference<cpo::uno::XComponentContext> const& xContext,
-    css::uno::Reference<css::io::XInputStream> const& xInputStream,
+    cpo::uno::Reference<cpo::uno::XComponentContext> const& xContext,
+    cpo::uno::Reference<css::io::XInputStream> const& xInputStream,
     rtl::Reference<SwXTextDocument> const& xDstDoc,
-    css::uno::Reference<css::frame::XFrame> const& xFrame,
-    css::uno::Reference<css::task::XStatusIndicator> const& xStatusIndicator,
+    cpo::uno::Reference<css::frame::XFrame> const& xFrame,
+    cpo::uno::Reference<css::task::XStatusIndicator> const& xStatusIndicator,
     const comphelper::SequenceAsHashMap& rMediaDescriptor)
 {
     return new RTFDocumentImpl(xContext, xInputStream, xDstDoc, xFrame, xStatusIndicator,

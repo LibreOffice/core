@@ -32,7 +32,7 @@
 #include "xmlexp.hxx"
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo;
 using namespace ::cpo::uno;
 
 uno::Reference<document::XDocumentProperties>

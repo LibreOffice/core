@@ -78,8 +78,8 @@
 #include "dp_extbackenddb.hxx"
 using namespace ::dp_misc;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 
 namespace dp_registry::backend::bundle {
@@ -534,7 +534,7 @@ BackendImpl::PackageImpl::isRegistered_(
 }
 
 OUString BackendImpl::PackageImpl::getTextFromURL(
-    const css::uno::Reference< css::ucb::XCommandEnvironment >& xCmdEnv,
+    const cpo::uno::Reference< css::ucb::XCommandEnvironment >& xCmdEnv,
     const OUString& licenseUrl)
 {
     try
@@ -560,7 +560,7 @@ DescriptionInfoset BackendImpl::PackageImpl::getDescriptionInfoset() const
 }
 
 bool BackendImpl::PackageImpl::checkPlatform(
-    css::uno::Reference< css::ucb::XCommandEnvironment > const &  environment)
+    cpo::uno::Reference< css::ucb::XCommandEnvironment > const &  environment)
 {
     bool ret = false;
     DescriptionInfoset info(getDescriptionInfoset());
@@ -590,10 +590,10 @@ bool BackendImpl::PackageImpl::checkPlatform(
 
 
 bool BackendImpl::PackageImpl::checkDependencies(
-    css::uno::Reference< css::ucb::XCommandEnvironment > const & environment,
+    cpo::uno::Reference< css::ucb::XCommandEnvironment > const & environment,
     DescriptionInfoset const & description)
 {
-    cpo::uno::Sequence< css::uno::Reference< css::xml::dom::XElement > >
+    cpo::uno::Sequence< cpo::uno::Reference< css::xml::dom::XElement > >
         unsatisfied(dp_misc::Dependencies::check(description));
 
     if (!unsatisfied.hasElements()) {
@@ -616,7 +616,7 @@ bool BackendImpl::PackageImpl::checkDependencies(
 }
 
 bool BackendImpl::PackageImpl::checkLicense(
-    css::uno::Reference< css::ucb::XCommandEnvironment > const & xCmdEnv,
+    cpo::uno::Reference< css::ucb::XCommandEnvironment > const & xCmdEnv,
     DescriptionInfoset const & info, bool alreadyInstalled)
 {
     try
@@ -680,8 +680,8 @@ bool BackendImpl::PackageImpl::checkLicense(
 }
 
 ::sal_Int32 BackendImpl::PackageImpl::checkPrerequisites(
-        const css::uno::Reference< css::task::XAbortChannel >&,
-        const css::uno::Reference< css::ucb::XCommandEnvironment >& xCmdEnv,
+        const cpo::uno::Reference< css::task::XAbortChannel >&,
+        const cpo::uno::Reference< css::ucb::XCommandEnvironment >& xCmdEnv,
         bool alreadyInstalled)
 {
     if (m_bRemoved)
@@ -706,7 +706,7 @@ bool BackendImpl::PackageImpl::checkLicense(
 }
 
 bool BackendImpl::PackageImpl::checkDependencies(
-        const css::uno::Reference< css::ucb::XCommandEnvironment >& xCmdEnv )
+        const cpo::uno::Reference< css::ucb::XCommandEnvironment >& xCmdEnv )
 {
     if (m_bRemoved)
         throw deployment::ExtensionRemovedException();
@@ -928,7 +928,7 @@ OUString BackendImpl::PackageImpl::getDescription()
 
         try
         {
-            sDescription = getTextFromURL( css::uno::Reference< css::ucb::XCommandEnvironment >(), sURL );
+            sDescription = getTextFromURL( cpo::uno::Reference< css::ucb::XCommandEnvironment >(), sURL );
         }
         catch ( const css::deployment::DeploymentException& )
         {

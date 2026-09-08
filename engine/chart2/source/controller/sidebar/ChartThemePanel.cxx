@@ -38,6 +38,7 @@
 #include <unotools/fcm.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 namespace chart::sidebar
 {

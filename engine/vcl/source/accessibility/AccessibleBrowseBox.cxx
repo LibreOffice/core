@@ -27,8 +27,8 @@
 #include <sal/types.h>
 
 
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::accessibility;
@@ -41,7 +41,7 @@ AccessibleBrowseBox::AccessibleBrowseBox(
     : AccessibleBrowseBoxBase(rpParent, _rBrowseBox, nullptr,
                               AccessibleBrowseBoxObjType::BrowseBox)
 {
-    m_xFocusWindow.set(mpBrowseBox->GetWindowInstance()->GetComponentInterface(), css::uno::UNO_QUERY);
+    m_xFocusWindow.set(mpBrowseBox->GetWindowInstance()->GetComponentInterface(), cpo::uno::UNO_QUERY);
 }
 
 AccessibleBrowseBox::~AccessibleBrowseBox()
@@ -83,7 +83,7 @@ sal_Int64 AccessibleBrowseBox::getAccessibleChildCount()
 }
 
 
-css::uno::Reference< css::accessibility::XAccessible >
+cpo::uno::Reference< css::accessibility::XAccessible >
 AccessibleBrowseBox::getAccessibleChild( sal_Int64 nChildIndex )
 {
     SolarMethodGuard aGuard(getMutex());
@@ -92,7 +92,7 @@ AccessibleBrowseBox::getAccessibleChild( sal_Int64 nChildIndex )
     if (nChildIndex < 0 || nChildIndex >= getAccessibleChildCount())
         throw lang::IndexOutOfBoundsException();
 
-    css::uno::Reference< css::accessibility::XAccessible > xRet;
+    cpo::uno::Reference< css::accessibility::XAccessible > xRet;
     if (nChildIndex < vcl::BBINDEX_FIRSTCONTROL)
         xRet = implGetFixedChild(nChildIndex);
     else
@@ -110,7 +110,7 @@ AccessibleBrowseBox::getAccessibleChild( sal_Int64 nChildIndex )
 
 // css::accessibility::XAccessibleComponent
 
-css::uno::Reference< css::accessibility::XAccessible >
+cpo::uno::Reference< css::accessibility::XAccessible >
 AccessibleBrowseBox::getAccessibleAtPoint( const awt::Point& rPoint )
 {
     SolarMethodGuard aGuard(getMutex());
@@ -125,8 +125,8 @@ AccessibleBrowseBox::getAccessibleAtPoint( const awt::Point& rPoint )
     Point aPoint(vcl::unohelper::ConvertToVCLPoint(rPoint));
     for (nIndex = 0; nIndex < vcl::BBINDEX_FIRSTCONTROL; ++nIndex)
     {
-        css::uno::Reference< css::accessibility::XAccessible > xCurrChild(implGetFixedChild(nIndex));
-        css::uno::Reference< css::accessibility::XAccessibleComponent >
+        cpo::uno::Reference< css::accessibility::XAccessible > xCurrChild(implGetFixedChild(nIndex));
+        cpo::uno::Reference< css::accessibility::XAccessibleComponent >
             xCurrChildComp( xCurrChild, uno::UNO_QUERY );
 
         if (xCurrChildComp.is()

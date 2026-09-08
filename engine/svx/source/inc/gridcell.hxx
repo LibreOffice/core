@@ -57,8 +57,8 @@ class DbGridColumn
 {
     friend class DbGridControl;
 
-    css::uno::Reference< css::beans::XPropertySet >       m_xModel;
-    css::uno::Reference< css::beans::XPropertySet >       m_xField;       // connection to the database field
+    cpo::uno::Reference< css::beans::XPropertySet >       m_xModel;
+    cpo::uno::Reference< css::beans::XPropertySet >       m_xField;       // connection to the database field
     ::svt::CellControllerRef m_xController; // structure for managing the controls for a column
                                         // this is positioned by the DbBrowseBox on the respective
                                         // cells of a column
@@ -103,8 +103,8 @@ public:
 
     ~DbGridColumn();
 
-    const css::uno::Reference< css::beans::XPropertySet >& getModel() const { return m_xModel; }
-    void  setModel(const css::uno::Reference< css::beans::XPropertySet >&  _xModel);
+    const cpo::uno::Reference< css::beans::XPropertySet >& getModel() const { return m_xModel; }
+    void  setModel(const cpo::uno::Reference< css::beans::XPropertySet >&  _xModel);
 
 
     sal_uInt16  GetId() const {return m_nId;}
@@ -116,38 +116,38 @@ public:
     bool    IsHidden() const {return m_bHidden;}
     sal_Int32   GetKey() const {return m_nFormatKey;}
     const   ::svt::CellControllerRef& GetController() const {return m_bLocked ? s_xEmptyController : m_xController;}
-    const   css::uno::Reference< css::beans::XPropertySet >& GetField() const {return m_xField;}
+    const   cpo::uno::Reference< css::beans::XPropertySet >& GetField() const {return m_xField;}
     DbGridControl& GetParent() const {return m_rParent;}
     FmXGridCell* GetCell() const {return m_pCell.get();}
 
-    css::uno::Reference< css::sdb::XColumn >  GetCurrentFieldValue() const;
+    cpo::uno::Reference< css::sdb::XColumn >  GetCurrentFieldValue() const;
 
     //      Drawing a field at a position. If a view is set, it takes over the drawing,
     //      e.g., for checkboxes.
     void    Paint(OutputDevice& rDev,
                   const tools::Rectangle& rRect,
                   const DbGridRow* pRow,
-                  const css::uno::Reference< css::util::XNumberFormatter >& xFormatter);
+                  const cpo::uno::Reference< css::util::XNumberFormatter >& xFormatter);
 
 
     //      Initializing in the alive mode.
     //      If no ColumnController is set, a default initialization is performed.
-    void    CreateControl(sal_Int32 _nFieldPos, const css::uno::Reference< css::beans::XPropertySet >& xField, sal_Int32 nTypeId);
+    void    CreateControl(sal_Int32 _nFieldPos, const cpo::uno::Reference< css::beans::XPropertySet >& xField, sal_Int32 nTypeId);
     void    UpdateControl()
             {
-                css::uno::Reference< css::beans::XPropertySet >  xField(m_xField);
+                cpo::uno::Reference< css::beans::XPropertySet >  xField(m_xField);
                 CreateControl(m_nFieldPos, xField, m_nTypeId);
             }
 
     //      Editing a Zelle
-    void    UpdateFromField(const DbGridRow* pRow, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter);
+    void    UpdateFromField(const DbGridRow* pRow, const cpo::uno::Reference< css::util::XNumberFormatter >& xFormatter);
     bool    Commit();
 
     //      releasing all the data required for the AliveMode
     void    Clear();
 
-    OUString  GetCellText(const DbGridRow* pRow, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter) const;
-    OUString  GetCellText(const css::uno::Reference< css::sdb::XColumn >& xField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter) const;
+    OUString  GetCellText(const DbGridRow* pRow, const cpo::uno::Reference< css::util::XNumberFormatter >& xFormatter) const;
+    OUString  GetCellText(const cpo::uno::Reference< css::sdb::XColumn >& xField, const cpo::uno::Reference< css::util::XNumberFormatter >& xFormatter) const;
 
     void    SetReadOnly(bool bRead){m_bReadOnly = bRead;}
     void    SetObject(sal_Int16 nPos) {m_bObject = m_bReadOnly = true; m_nFieldPos = nPos;}
@@ -190,7 +190,7 @@ private:
     bool                    m_bAlignedController : 1;
     bool                    m_bAccessingValueProperty : 1;
 
-    css::uno::Reference< css::sdbc::XRowSet >
+    cpo::uno::Reference< css::sdbc::XRowSet >
                                 m_xCursor;
 
 protected:
@@ -200,7 +200,7 @@ protected:
 
 protected:
     // attribute access
-    const css::uno::Reference< css::sdbc::XRowSet >& getCursor() const { return m_xCursor; }
+    const cpo::uno::Reference< css::sdbc::XRowSet >& getCursor() const { return m_xCursor; }
 
     // control transparency
     bool    isTransparent( ) const { return m_bTransparent; }
@@ -236,7 +236,7 @@ protected:
     // called whenever a property which affects field settings in general is called
     // you should overwrite this method for every property you add yourself as listener to
     // with doPropertyListening
-    virtual void    implAdjustGenericFieldSetting( const css::uno::Reference< css::beans::XPropertySet >& _rxModel );
+    virtual void    implAdjustGenericFieldSetting( const cpo::uno::Reference< css::beans::XPropertySet >& _rxModel );
 
     // called by _propertyChanged if a property which denotes the column value has changed
     void    implValuePropertyChanged( );
@@ -260,26 +260,26 @@ public:
     void SetTextLineColor(const Color& _rColor);
 
     // initializing before a control is displayed
-    virtual void Init( BrowserDataWin& rParent, const css::uno::Reference< css::sdbc::XRowSet >& xCursor );
+    virtual void Init( BrowserDataWin& rParent, const cpo::uno::Reference< css::sdbc::XRowSet >& xCursor );
     virtual ::svt::CellControllerRef CreateController() const = 0;
 
     // writing the value into the model
     bool Commit();
 
     // Formatting the field data to output text
-    virtual OUString GetFormatText(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter, const Color** ppColor = nullptr) = 0;
+    virtual OUString GetFormatText(const cpo::uno::Reference< css::sdb::XColumn >& _rxField, const cpo::uno::Reference< css::util::XNumberFormatter >& xFormatter, const Color** ppColor = nullptr) = 0;
 
     virtual void Update(){}
     // Refresh the control by the field data
-    virtual void UpdateFromField(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter) = 0;
+    virtual void UpdateFromField(const cpo::uno::Reference< css::sdb::XColumn >& _rxField, const cpo::uno::Reference< css::util::XNumberFormatter >& xFormatter) = 0;
 
     // painting a cell content in the specified rectangle
-    virtual void PaintFieldToCell( OutputDevice& rDev, const tools::Rectangle& rRect, const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter);
+    virtual void PaintFieldToCell( OutputDevice& rDev, const tools::Rectangle& rRect, const cpo::uno::Reference< css::sdb::XColumn >& _rxField, const cpo::uno::Reference< css::util::XNumberFormatter >& xFormatter);
     virtual void PaintCell( OutputDevice& _rDev, const tools::Rectangle& _rRect );
 
     void  ImplInitWindow( vcl::Window const & rParent, const InitWindowFacet _eInitWhat );
 
-    double GetValue(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter) const;
+    double GetValue(const cpo::uno::Reference< css::sdb::XColumn >& _rxField, const cpo::uno::Reference< css::util::XNumberFormatter >& xFormatter) const;
 
 protected:
     void    invalidatedController();
@@ -301,7 +301,7 @@ protected:
 
     @see commitControl
     */
-    virtual void    updateFromModel( css::uno::Reference< css::beans::XPropertySet > _rxModel ) = 0;
+    virtual void    updateFromModel( cpo::uno::Reference< css::beans::XPropertySet > _rxModel ) = 0;
 
 protected:
 // OPropertyChangeListener
@@ -311,10 +311,10 @@ private:
     void implDoPropertyListening( const OUString& _rPropertyName, bool _bWarnIfNotExistent );
 
     /// updates the "readonly" setting on m_pWindow, according to the respective property value in the given model
-    void implAdjustReadOnly( const css::uno::Reference< css::beans::XPropertySet >& _rxModel,bool i_bReadOnly );
+    void implAdjustReadOnly( const cpo::uno::Reference< css::beans::XPropertySet >& _rxModel,bool i_bReadOnly );
 
     /// updates the "enabled" setting on m_pWindow, according to the respective property value in the given model
-    void implAdjustEnabled( const css::uno::Reference< css::beans::XPropertySet >& _rxModel );
+    void implAdjustEnabled( const cpo::uno::Reference< css::beans::XPropertySet >& _rxModel );
 };
 
 
@@ -349,7 +349,7 @@ protected:
 
 protected:
     // DbCellControl
-    virtual void implAdjustGenericFieldSetting( const css::uno::Reference< css::beans::XPropertySet >& _rxModel ) override;
+    virtual void implAdjustGenericFieldSetting( const cpo::uno::Reference< css::beans::XPropertySet >& _rxModel ) override;
 
 protected:
     void implSetMaxTextLen( sal_Int16 _nMaxLen )
@@ -374,18 +374,18 @@ public:
     ::svt::IEditImplementation* GetEditImplementation() { return m_pEdit.get(); }
     bool IsMultiLineEdit() const { return m_bIsMultiLineEdit; }
 
-    virtual void Init( BrowserDataWin& rParent, const css::uno::Reference< css::sdbc::XRowSet >& xCursor ) override;
-    virtual OUString GetFormatText(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter, const Color** ppColor = nullptr) override;
-    virtual void UpdateFromField(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
+    virtual void Init( BrowserDataWin& rParent, const cpo::uno::Reference< css::sdbc::XRowSet >& xCursor ) override;
+    virtual OUString GetFormatText(const cpo::uno::Reference< css::sdb::XColumn >& _rxField, const cpo::uno::Reference< css::util::XNumberFormatter >& xFormatter, const Color** ppColor = nullptr) override;
+    virtual void UpdateFromField(const cpo::uno::Reference< css::sdb::XColumn >& _rxField, const cpo::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
     virtual ::svt::CellControllerRef CreateController() const override;
     virtual void PaintFieldToCell( OutputDevice& _rDev, const tools::Rectangle& _rRect,
-                        const css::uno::Reference< css::sdb::XColumn >& _rxField,
-                        const css::uno::Reference< css::util::XNumberFormatter >& _rxFormatter ) override;
+                        const cpo::uno::Reference< css::sdb::XColumn >& _rxField,
+                        const cpo::uno::Reference< css::util::XNumberFormatter >& _rxFormatter ) override;
 
 private:
     // DbCellControl
     virtual bool        commitControl( ) override;
-    virtual void        updateFromModel( css::uno::Reference< css::beans::XPropertySet > _rxModel ) override;
+    virtual void        updateFromModel( cpo::uno::Reference< css::beans::XPropertySet > _rxModel ) override;
     // DbLimitedLengthField
     virtual void        implSetEffectiveMaxTextLen( sal_Int32 _nMaxLen ) override;
 };
@@ -397,20 +397,20 @@ public:
     DbFormattedField(DbGridColumn& _rColumn);
     virtual ~DbFormattedField() override;
 
-    virtual void Init( BrowserDataWin& rParent, const css::uno::Reference< css::sdbc::XRowSet >& xCursor ) override;
-    virtual OUString GetFormatText(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter, const Color** ppColor = nullptr) override;
-    virtual void UpdateFromField(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
+    virtual void Init( BrowserDataWin& rParent, const cpo::uno::Reference< css::sdbc::XRowSet >& xCursor ) override;
+    virtual OUString GetFormatText(const cpo::uno::Reference< css::sdb::XColumn >& _rxField, const cpo::uno::Reference< css::util::XNumberFormatter >& xFormatter, const Color** ppColor = nullptr) override;
+    virtual void UpdateFromField(const cpo::uno::Reference< css::sdb::XColumn >& _rxField, const cpo::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
     virtual ::svt::CellControllerRef CreateController() const override;
 
 private:
     // DbCellControl
     virtual bool        commitControl( ) override;
-    virtual void        updateFromModel( css::uno::Reference< css::beans::XPropertySet > _rxModel ) override;
+    virtual void        updateFromModel( cpo::uno::Reference< css::beans::XPropertySet > _rxModel ) override;
 
     // OPropertyChangeListener
     virtual void _propertyChanged(const css::beans::PropertyChangeEvent& evt) override;
 
-    css::uno::Reference< css::util::XNumberFormatsSupplier >  m_xSupplier;
+    cpo::uno::Reference< css::util::XNumberFormatsSupplier >  m_xSupplier;
 };
 
 
@@ -419,19 +419,19 @@ class DbCheckBox final : public DbCellControl
 public:
     DbCheckBox(DbGridColumn& _rColumn);
 
-    virtual void Init( BrowserDataWin& rParent, const css::uno::Reference< css::sdbc::XRowSet >& xCursor ) override;
-    virtual void UpdateFromField(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
+    virtual void Init( BrowserDataWin& rParent, const cpo::uno::Reference< css::sdbc::XRowSet >& xCursor ) override;
+    virtual void UpdateFromField(const cpo::uno::Reference< css::sdb::XColumn >& _rxField, const cpo::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
     virtual ::svt::CellControllerRef CreateController() const override;
     virtual void PaintFieldToCell(OutputDevice& rDev, const tools::Rectangle& rRect,
-                          const css::uno::Reference< css::sdb::XColumn >& _rxField,
-                          const css::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
+                          const cpo::uno::Reference< css::sdb::XColumn >& _rxField,
+                          const cpo::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
     virtual void PaintCell(OutputDevice& rDev, const tools::Rectangle& rRect) override;
-    virtual OUString GetFormatText(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter, const Color** ppColor = nullptr) override;
+    virtual OUString GetFormatText(const cpo::uno::Reference< css::sdb::XColumn >& _rxField, const cpo::uno::Reference< css::util::XNumberFormatter >& xFormatter, const Color** ppColor = nullptr) override;
 
 private:
     // DbCellControl
     virtual bool        commitControl( ) override;
-    virtual void        updateFromModel( css::uno::Reference< css::beans::XPropertySet > _rxModel ) override;
+    virtual void        updateFromModel( cpo::uno::Reference< css::beans::XPropertySet > _rxModel ) override;
 };
 
 
@@ -441,9 +441,9 @@ class DbComboBox final : public DbCellControl
 public:
     DbComboBox(DbGridColumn& _rColumn);
 
-    virtual void Init( BrowserDataWin& rParent, const css::uno::Reference< css::sdbc::XRowSet >& xCursor ) override;
-    virtual OUString GetFormatText(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter, const Color** ppColor = nullptr) override;
-    virtual void UpdateFromField(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
+    virtual void Init( BrowserDataWin& rParent, const cpo::uno::Reference< css::sdbc::XRowSet >& xCursor ) override;
+    virtual OUString GetFormatText(const cpo::uno::Reference< css::sdb::XColumn >& _rxField, const cpo::uno::Reference< css::util::XNumberFormatter >& xFormatter, const Color** ppColor = nullptr) override;
+    virtual void UpdateFromField(const cpo::uno::Reference< css::sdb::XColumn >& _rxField, const cpo::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
     virtual ::svt::CellControllerRef CreateController() const override;
 
     void SetList(const cpo::uno::Any& rItems);
@@ -451,9 +451,9 @@ public:
 private:
     // DbCellControl
     virtual bool        commitControl( ) override;
-    virtual void        updateFromModel( css::uno::Reference< css::beans::XPropertySet > _rxModel ) override;
+    virtual void        updateFromModel( cpo::uno::Reference< css::beans::XPropertySet > _rxModel ) override;
 
-    virtual void        implAdjustGenericFieldSetting( const css::uno::Reference< css::beans::XPropertySet >& _rxModel ) override;
+    virtual void        implAdjustGenericFieldSetting( const cpo::uno::Reference< css::beans::XPropertySet >& _rxModel ) override;
 
     // OPropertyChangeListener
     virtual void _propertyChanged(const css::beans::PropertyChangeEvent& evt) override;
@@ -468,9 +468,9 @@ class DbListBox final : public DbCellControl
 public:
     DbListBox(DbGridColumn& _rColumn);
 
-    virtual void Init( BrowserDataWin& rParent, const css::uno::Reference< css::sdbc::XRowSet >& xCursor ) override;
-    virtual OUString GetFormatText(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter, const Color** ppColor = nullptr) override;
-    virtual void UpdateFromField(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
+    virtual void Init( BrowserDataWin& rParent, const cpo::uno::Reference< css::sdbc::XRowSet >& xCursor ) override;
+    virtual OUString GetFormatText(const cpo::uno::Reference< css::sdb::XColumn >& _rxField, const cpo::uno::Reference< css::util::XNumberFormatter >& xFormatter, const Color** ppColor = nullptr) override;
+    virtual void UpdateFromField(const cpo::uno::Reference< css::sdb::XColumn >& _rxField, const cpo::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
     virtual ::svt::CellControllerRef CreateController() const override;
 
     void SetList(const cpo::uno::Any& rItems);
@@ -478,9 +478,9 @@ public:
 private:
     // DbCellControl
     virtual bool        commitControl( ) override;
-    virtual void        updateFromModel( css::uno::Reference< css::beans::XPropertySet > _rxModel ) override;
+    virtual void        updateFromModel( cpo::uno::Reference< css::beans::XPropertySet > _rxModel ) override;
 
-    virtual void        implAdjustGenericFieldSetting( const css::uno::Reference< css::beans::XPropertySet >& _rxModel ) override;
+    virtual void        implAdjustGenericFieldSetting( const cpo::uno::Reference< css::beans::XPropertySet >& _rxModel ) override;
 
     // OPropertyChangeListener
     virtual void _propertyChanged(const css::beans::PropertyChangeEvent& evt) override;
@@ -490,24 +490,24 @@ private:
 class DbPatternField final : public DbCellControl
 {
 public:
-    DbPatternField( DbGridColumn& _rColumn, const css::uno::Reference<cpo::uno::XComponentContext>& _rContext );
-    virtual void Init( BrowserDataWin& rParent, const css::uno::Reference< css::sdbc::XRowSet >& xCursor ) override;
-    virtual OUString GetFormatText(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter, const Color** ppColor = nullptr) override;
-    virtual void UpdateFromField(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
+    DbPatternField( DbGridColumn& _rColumn, const cpo::uno::Reference<cpo::uno::XComponentContext>& _rContext );
+    virtual void Init( BrowserDataWin& rParent, const cpo::uno::Reference< css::sdbc::XRowSet >& xCursor ) override;
+    virtual OUString GetFormatText(const cpo::uno::Reference< css::sdb::XColumn >& _rxField, const cpo::uno::Reference< css::util::XNumberFormatter >& xFormatter, const Color** ppColor = nullptr) override;
+    virtual void UpdateFromField(const cpo::uno::Reference< css::sdb::XColumn >& _rxField, const cpo::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
     virtual ::svt::CellControllerRef CreateController() const override;
 
 private:
     /// DbCellControl
     virtual bool        commitControl( ) override;
-    virtual void        updateFromModel( css::uno::Reference< css::beans::XPropertySet > _rxModel ) override;
+    virtual void        updateFromModel( cpo::uno::Reference< css::beans::XPropertySet > _rxModel ) override;
 
-    virtual void        implAdjustGenericFieldSetting( const css::uno::Reference< css::beans::XPropertySet >& _rxModel ) override;
+    virtual void        implAdjustGenericFieldSetting( const cpo::uno::Reference< css::beans::XPropertySet >& _rxModel ) override;
 
     OUString  impl_formatText(const OUString& _rText);
 
     ::std::unique_ptr< ::dbtools::FormattedColumnValue >  m_pValueFormatter;
     ::std::unique_ptr< ::dbtools::FormattedColumnValue >  m_pPaintFormatter;
-    css::uno::Reference<cpo::uno::XComponentContext>    m_xContext;
+    cpo::uno::Reference<cpo::uno::XComponentContext>    m_xContext;
 };
 
 
@@ -522,14 +522,14 @@ protected:
     DbSpinField( DbGridColumn& _rColumn, sal_Int16 _nStandardAlign = css::awt::TextAlign::RIGHT );
 
 public:
-    virtual void                        Init( BrowserDataWin& rParent, const css::uno::Reference< css::sdbc::XRowSet >& _rxCursor ) override;
+    virtual void                        Init( BrowserDataWin& rParent, const cpo::uno::Reference< css::sdbc::XRowSet >& _rxCursor ) override;
     virtual ::svt::CellControllerRef    CreateController() const override;
 
 protected:
     virtual VclPtr<svt::ControlBase> createField(
                             BrowserDataWin* _pParent,
                             bool bSpinButton,
-                            const css::uno::Reference< css::beans::XPropertySet >& _rxModel
+                            const cpo::uno::Reference< css::beans::XPropertySet >& _rxModel
                         ) = 0;
 };
 
@@ -537,69 +537,69 @@ class DbDateField final : public DbSpinField
 {
 public:
     DbDateField(DbGridColumn& _rColumn);
-    virtual OUString GetFormatText(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter, const Color** ppColor = nullptr) override;
-    virtual void UpdateFromField(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
+    virtual OUString GetFormatText(const cpo::uno::Reference< css::sdb::XColumn >& _rxField, const cpo::uno::Reference< css::util::XNumberFormatter >& xFormatter, const Color** ppColor = nullptr) override;
+    virtual void UpdateFromField(const cpo::uno::Reference< css::sdb::XColumn >& _rxField, const cpo::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
 
 private:
     // DbCellControl
     virtual bool        commitControl( ) override;
-    virtual void        updateFromModel( css::uno::Reference< css::beans::XPropertySet > _rxModel ) override;
+    virtual void        updateFromModel( cpo::uno::Reference< css::beans::XPropertySet > _rxModel ) override;
 
     // DbSpinField
     virtual VclPtr<svt::ControlBase> createField(
                             BrowserDataWin* _pParent,
                             bool bSpinButton,
-                            const css::uno::Reference< css::beans::XPropertySet >& _rxModel
+                            const cpo::uno::Reference< css::beans::XPropertySet >& _rxModel
                         ) override;
 
     /// initializes everything which relates to the properties describing the numeric behaviour
-    virtual void    implAdjustGenericFieldSetting( const css::uno::Reference< css::beans::XPropertySet >& _rxModel ) override;
+    virtual void    implAdjustGenericFieldSetting( const cpo::uno::Reference< css::beans::XPropertySet >& _rxModel ) override;
 };
 
 class DbTimeField final : public DbSpinField
 {
 public:
     DbTimeField(DbGridColumn& _rColumn);
-    virtual OUString GetFormatText(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter, const Color** ppColor = nullptr) override;
-    virtual void UpdateFromField(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
+    virtual OUString GetFormatText(const cpo::uno::Reference< css::sdb::XColumn >& _rxField, const cpo::uno::Reference< css::util::XNumberFormatter >& xFormatter, const Color** ppColor = nullptr) override;
+    virtual void UpdateFromField(const cpo::uno::Reference< css::sdb::XColumn >& _rxField, const cpo::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
 
 private:
     // DbCellControl
     virtual bool        commitControl( ) override;
-    virtual void        updateFromModel( css::uno::Reference< css::beans::XPropertySet > _rxModel ) override;
+    virtual void        updateFromModel( cpo::uno::Reference< css::beans::XPropertySet > _rxModel ) override;
 
     // DbSpinField
     virtual VclPtr<svt::ControlBase> createField(
                             BrowserDataWin* _pParent,
                             bool bSpinButton,
-                            const css::uno::Reference< css::beans::XPropertySet >& _rxModel
+                            const cpo::uno::Reference< css::beans::XPropertySet >& _rxModel
                         ) override;
 
     /// initializes everything which relates to the properties describing the numeric behaviour
-    virtual void    implAdjustGenericFieldSetting( const css::uno::Reference< css::beans::XPropertySet >& _rxModel ) override;
+    virtual void    implAdjustGenericFieldSetting( const cpo::uno::Reference< css::beans::XPropertySet >& _rxModel ) override;
 };
 
 class DbCurrencyField final : public DbSpinField
 {
 public:
     DbCurrencyField(DbGridColumn& _rColumn);
-    virtual OUString GetFormatText(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter, const Color** ppColor = nullptr) override;
-    virtual void UpdateFromField(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
+    virtual OUString GetFormatText(const cpo::uno::Reference< css::sdb::XColumn >& _rxField, const cpo::uno::Reference< css::util::XNumberFormatter >& xFormatter, const Color** ppColor = nullptr) override;
+    virtual void UpdateFromField(const cpo::uno::Reference< css::sdb::XColumn >& _rxField, const cpo::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
 
 private:
     // DbCellControl
     virtual bool        commitControl( ) override;
-    virtual void        updateFromModel( css::uno::Reference< css::beans::XPropertySet > _rxModel ) override;
+    virtual void        updateFromModel( cpo::uno::Reference< css::beans::XPropertySet > _rxModel ) override;
 
     // DbSpinField
     virtual VclPtr<svt::ControlBase> createField(
                             BrowserDataWin* _pParent,
                             bool bSpinButton,
-                            const css::uno::Reference< css::beans::XPropertySet >& _rxModel
+                            const cpo::uno::Reference< css::beans::XPropertySet >& _rxModel
                         ) override;
 
     /// initializes everything which relates to the properties describing the numeric behaviour
-    virtual void    implAdjustGenericFieldSetting( const css::uno::Reference< css::beans::XPropertySet >& _rxModel ) override;
+    virtual void    implAdjustGenericFieldSetting( const cpo::uno::Reference< css::beans::XPropertySet >& _rxModel ) override;
 };
 
 class DbNumericField final : public DbSpinField
@@ -607,23 +607,23 @@ class DbNumericField final : public DbSpinField
 public:
     DbNumericField(DbGridColumn& _rColumn);
 
-    virtual OUString GetFormatText(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter, const Color** ppColor = nullptr) override;
-    virtual void UpdateFromField(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
+    virtual OUString GetFormatText(const cpo::uno::Reference< css::sdb::XColumn >& _rxField, const cpo::uno::Reference< css::util::XNumberFormatter >& xFormatter, const Color** ppColor = nullptr) override;
+    virtual void UpdateFromField(const cpo::uno::Reference< css::sdb::XColumn >& _rxField, const cpo::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
 
 private:
     // DbCellControl
     virtual bool        commitControl( ) override;
-    virtual void        updateFromModel( css::uno::Reference< css::beans::XPropertySet > _rxModel ) override;
+    virtual void        updateFromModel( cpo::uno::Reference< css::beans::XPropertySet > _rxModel ) override;
 
     // DbSpinField
     virtual VclPtr<svt::ControlBase> createField(
                             BrowserDataWin* _pParent,
                             bool bSpinButton,
-                            const css::uno::Reference< css::beans::XPropertySet >& _rxModel
+                            const cpo::uno::Reference< css::beans::XPropertySet >& _rxModel
                         ) override;
 
     /// initializes everything which relates to the properties describing the numeric behaviour
-    void    implAdjustGenericFieldSetting( const css::uno::Reference< css::beans::XPropertySet >& _rxModel ) override;
+    void    implAdjustGenericFieldSetting( const cpo::uno::Reference< css::beans::XPropertySet >& _rxModel ) override;
 };
 
 class DbFilterField final
@@ -631,15 +631,15 @@ class DbFilterField final
         ,public ::svxform::OSQLParserClient
 {
 public:
-    DbFilterField(const css::uno::Reference< cpo::uno::XComponentContext >& rxContext, DbGridColumn& _rColumn);
+    DbFilterField(const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext, DbGridColumn& _rColumn);
     virtual ~DbFilterField() override;
 
-    virtual void Init( BrowserDataWin& rParent, const css::uno::Reference< css::sdbc::XRowSet >& xCursor ) override;
+    virtual void Init( BrowserDataWin& rParent, const cpo::uno::Reference< css::sdbc::XRowSet >& xCursor ) override;
     virtual ::svt::CellControllerRef CreateController() const override;
     virtual void PaintCell(OutputDevice& rDev, const tools::Rectangle& rRect) override;
     virtual void Update() override;
-    virtual OUString GetFormatText(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter, const Color** ppColor = nullptr) override;
-    virtual void UpdateFromField(const css::uno::Reference< css::sdb::XColumn >& _rxField, const css::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
+    virtual OUString GetFormatText(const cpo::uno::Reference< css::sdb::XColumn >& _rxField, const cpo::uno::Reference< css::util::XNumberFormatter >& xFormatter, const Color** ppColor = nullptr) override;
+    virtual void UpdateFromField(const cpo::uno::Reference< css::sdb::XColumn >& _rxField, const cpo::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
 
     const OUString& GetText() const {return m_aText;}
     void SetText(const OUString& rText);
@@ -649,10 +649,10 @@ public:
 private:
     // DbCellControl
     virtual bool        commitControl( ) override;
-    virtual void        updateFromModel( css::uno::Reference< css::beans::XPropertySet > _rxModel ) override;
+    virtual void        updateFromModel( cpo::uno::Reference< css::beans::XPropertySet > _rxModel ) override;
 
     void SetList(const cpo::uno::Any& rItems, bool bComboBox);
-    void CreateControl(BrowserDataWin* pParent, const css::uno::Reference< css::beans::XPropertySet >& xModel);
+    void CreateControl(BrowserDataWin* pParent, const cpo::uno::Reference< css::beans::XPropertySet >& xModel);
     DECL_LINK(OnToggle, weld::CheckButton&, void);
 
     cpo::uno::Sequence< OUString >  m_aValueList;
@@ -709,18 +709,18 @@ public:
 
 // css::lang::XComponent
     virtual void dispose() override {OComponentHelper::dispose();}
-    virtual void addEventListener(const css::uno::Reference< css::lang::XEventListener >& aListener) override       { OComponentHelper::addEventListener(aListener);}
-    virtual void removeEventListener(const css::uno::Reference< css::lang::XEventListener >& aListener) override        { OComponentHelper::removeEventListener(aListener);}
+    virtual void addEventListener(const cpo::uno::Reference< css::lang::XEventListener >& aListener) override       { OComponentHelper::addEventListener(aListener);}
+    virtual void removeEventListener(const cpo::uno::Reference< css::lang::XEventListener >& aListener) override        { OComponentHelper::removeEventListener(aListener);}
 
 // css::awt::XControl
-    virtual void setContext(const css::uno::Reference< cpo::uno::XInterface >& /*Context*/) override {}
-    virtual css::uno::Reference< cpo::uno::XInterface >  getContext() override;
-    virtual void createPeer(const css::uno::Reference< css::awt::XToolkit >& /*Toolkit*/, const css::uno::Reference< css::awt::XWindowPeer >& /*Parent*/) override {}
+    virtual void setContext(const cpo::uno::Reference< cpo::uno::XInterface >& /*Context*/) override {}
+    virtual cpo::uno::Reference< cpo::uno::XInterface >  getContext() override;
+    virtual void createPeer(const cpo::uno::Reference< css::awt::XToolkit >& /*Toolkit*/, const cpo::uno::Reference< css::awt::XWindowPeer >& /*Parent*/) override {}
 
-    virtual css::uno::Reference< css::awt::XWindowPeer > getPeer() override {return css::uno::Reference< css::awt::XWindowPeer > ();}
-    virtual bool setModel(const css::uno::Reference< css::awt::XControlModel >& /*Model*/) override {return false;}
-    virtual css::uno::Reference< css::awt::XControlModel > getModel() override;
-    virtual css::uno::Reference< css::awt::XView > getView() override {return css::uno::Reference< css::awt::XView > ();}
+    virtual cpo::uno::Reference< css::awt::XWindowPeer > getPeer() override {return cpo::uno::Reference< css::awt::XWindowPeer > ();}
+    virtual bool setModel(const cpo::uno::Reference< css::awt::XControlModel >& /*Model*/) override {return false;}
+    virtual cpo::uno::Reference< css::awt::XControlModel > getModel() override;
+    virtual cpo::uno::Reference< css::awt::XView > getView() override {return cpo::uno::Reference< css::awt::XView > ();}
     virtual void setDesignMode(bool /*bOn*/) override {}
     virtual bool isDesignMode() override {return false;}
     virtual bool isTransparent() override {return false;}
@@ -735,18 +735,18 @@ public:
     virtual void setVisible( bool Visible ) override;
     virtual void setEnable( bool Enable ) override;
     virtual void setFocus(  ) override;
-    virtual void addWindowListener( const css::uno::Reference< css::awt::XWindowListener >& xListener ) override;
-    virtual void removeWindowListener( const css::uno::Reference< css::awt::XWindowListener >& xListener ) override;
-    virtual void addFocusListener( const css::uno::Reference< css::awt::XFocusListener >& xListener ) override;
-    virtual void removeFocusListener( const css::uno::Reference< css::awt::XFocusListener >& xListener ) override;
-    virtual void addKeyListener( const css::uno::Reference< css::awt::XKeyListener >& xListener ) override;
-    virtual void removeKeyListener( const css::uno::Reference< css::awt::XKeyListener >& xListener ) override;
-    virtual void addMouseListener( const css::uno::Reference< css::awt::XMouseListener >& xListener ) override;
-    virtual void removeMouseListener( const css::uno::Reference< css::awt::XMouseListener >& xListener ) override;
-    virtual void addMouseMotionListener( const css::uno::Reference< css::awt::XMouseMotionListener >& xListener ) override;
-    virtual void removeMouseMotionListener( const css::uno::Reference< css::awt::XMouseMotionListener >& xListener ) override;
-    virtual void addPaintListener( const css::uno::Reference< css::awt::XPaintListener >& xListener ) override;
-    virtual void removePaintListener( const css::uno::Reference< css::awt::XPaintListener >& xListener ) override;
+    virtual void addWindowListener( const cpo::uno::Reference< css::awt::XWindowListener >& xListener ) override;
+    virtual void removeWindowListener( const cpo::uno::Reference< css::awt::XWindowListener >& xListener ) override;
+    virtual void addFocusListener( const cpo::uno::Reference< css::awt::XFocusListener >& xListener ) override;
+    virtual void removeFocusListener( const cpo::uno::Reference< css::awt::XFocusListener >& xListener ) override;
+    virtual void addKeyListener( const cpo::uno::Reference< css::awt::XKeyListener >& xListener ) override;
+    virtual void removeKeyListener( const cpo::uno::Reference< css::awt::XKeyListener >& xListener ) override;
+    virtual void addMouseListener( const cpo::uno::Reference< css::awt::XMouseListener >& xListener ) override;
+    virtual void removeMouseListener( const cpo::uno::Reference< css::awt::XMouseListener >& xListener ) override;
+    virtual void addMouseMotionListener( const cpo::uno::Reference< css::awt::XMouseMotionListener >& xListener ) override;
+    virtual void removeMouseMotionListener( const cpo::uno::Reference< css::awt::XMouseMotionListener >& xListener ) override;
+    virtual void addPaintListener( const cpo::uno::Reference< css::awt::XPaintListener >& xListener ) override;
+    virtual void removePaintListener( const cpo::uno::Reference< css::awt::XPaintListener >& xListener ) override;
 
     bool Commit() {return m_pCellControl->Commit();}
     void ImplInitWindow( vcl::Window const & rParent, const InitWindowFacet _eInitWhat )
@@ -783,11 +783,11 @@ public:
 
     virtual void PaintFieldToCell(OutputDevice& rDev,
                const tools::Rectangle& rRect,
-               const css::uno::Reference< css::sdb::XColumn >& xField,
-               const css::uno::Reference< css::util::XNumberFormatter >& xFormatter);
+               const cpo::uno::Reference< css::sdb::XColumn >& xField,
+               const cpo::uno::Reference< css::util::XNumberFormatter >& xFormatter);
 
-    void UpdateFromField(const css::uno::Reference< css::sdb::XColumn >& xField,
-                         const css::uno::Reference< css::util::XNumberFormatter >& xFormatter)
+    void UpdateFromField(const cpo::uno::Reference< css::sdb::XColumn >& xField,
+                         const cpo::uno::Reference< css::util::XNumberFormatter >& xFormatter)
                 { m_pCellControl->UpdateFromField(xField, xFormatter); }
 
 protected:
@@ -805,11 +805,11 @@ public:
 
     virtual void PaintFieldToCell(OutputDevice& rDev,
                const tools::Rectangle& rRect,
-               const css::uno::Reference< css::sdb::XColumn >& xField,
-               const css::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
+               const cpo::uno::Reference< css::sdb::XColumn >& xField,
+               const cpo::uno::Reference< css::util::XNumberFormatter >& xFormatter) override;
 
-    OUString GetText(const css::uno::Reference< css::sdb::XColumn >& _rxField,
-                     const css::uno::Reference< css::util::XNumberFormatter >& xFormatter,
+    OUString GetText(const cpo::uno::Reference< css::sdb::XColumn >& _rxField,
+                     const cpo::uno::Reference< css::util::XNumberFormatter >& xFormatter,
                      const Color** ppColor = nullptr)
             {return m_pCellControl->GetFormatText(_rxField, xFormatter, ppColor);}
 };
@@ -835,8 +835,8 @@ public:
     virtual void disposing() override;
 
 // css::awt::XTextComponent
-    virtual void addTextListener(const css::uno::Reference< css::awt::XTextListener >& l) override;
-    virtual void removeTextListener(const css::uno::Reference< css::awt::XTextListener >& l) override;
+    virtual void addTextListener(const cpo::uno::Reference< css::awt::XTextListener >& l) override;
+    virtual void removeTextListener(const cpo::uno::Reference< css::awt::XTextListener >& l) override;
     virtual void setText(const OUString& aText) override;
     virtual void insertText(const css::awt::Selection& Sel, const OUString& Text) override;
     virtual OUString getText() override;
@@ -849,8 +849,8 @@ public:
     virtual sal_Int16 getMaxTextLen() override;
 
     // XChangeBroadcaster
-    virtual void addChangeListener( const css::uno::Reference< css::form::XChangeListener >& aListener ) override;
-    virtual void removeChangeListener( const css::uno::Reference< css::form::XChangeListener >& aListener ) override;
+    virtual void addChangeListener( const cpo::uno::Reference< css::form::XChangeListener >& aListener ) override;
+    virtual void removeChangeListener( const cpo::uno::Reference< css::form::XChangeListener >& aListener ) override;
 
 private:
     virtual ~FmXEditCell() override;
@@ -897,16 +897,16 @@ public:
     virtual void disposing() override;
 
 // css::awt::XCheckBox
-    virtual void addItemListener(const css::uno::Reference< css::awt::XItemListener >& l) override;
-    virtual void removeItemListener(const css::uno::Reference< css::awt::XItemListener >& l) override;
+    virtual void addItemListener(const cpo::uno::Reference< css::awt::XItemListener >& l) override;
+    virtual void removeItemListener(const cpo::uno::Reference< css::awt::XItemListener >& l) override;
     virtual sal_Int16 getState() override;
     virtual void setState(sal_Int16 n) override;
     virtual void setLabel(const OUString& Label) override;
     virtual void enableTriState(bool b) override;
 
     // XButton
-    virtual void addActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
-    virtual void removeActionListener( const css::uno::Reference< css::awt::XActionListener >& l ) override;
+    virtual void addActionListener( const cpo::uno::Reference< css::awt::XActionListener >& l ) override;
+    virtual void removeActionListener( const cpo::uno::Reference< css::awt::XActionListener >& l ) override;
     //virtual void setLabel( const OUString& Label ) throw (cpo::uno::RuntimeException);
     virtual void setActionCommand( const OUString& Command ) override;
 };
@@ -928,10 +928,10 @@ public:
     virtual void disposing() override;
 
 // css::awt::XListBox
-    virtual void addItemListener(const css::uno::Reference< css::awt::XItemListener >& l) override;
-    virtual void removeItemListener(const css::uno::Reference< css::awt::XItemListener >& l) override;
-    virtual void addActionListener(const css::uno::Reference< css::awt::XActionListener >& l) override;
-    virtual void removeActionListener(const css::uno::Reference< css::awt::XActionListener >& l) override;
+    virtual void addItemListener(const cpo::uno::Reference< css::awt::XItemListener >& l) override;
+    virtual void removeItemListener(const cpo::uno::Reference< css::awt::XItemListener >& l) override;
+    virtual void addActionListener(const cpo::uno::Reference< css::awt::XActionListener >& l) override;
+    virtual void removeActionListener(const cpo::uno::Reference< css::awt::XActionListener >& l) override;
     virtual void addItem(const OUString& aItem, sal_Int16 nPos) override;
     virtual void addItems(const cpo::uno::Sequence< OUString >& aItems, sal_Int16 nPos) override;
     virtual void removeItems(sal_Int16 nPos, sal_Int16 nCount) override;
@@ -993,10 +993,10 @@ public:
     virtual void disposing() override;
 
     // XComboBox
-    virtual void addItemListener( const css::uno::Reference< css::awt::XItemListener >& Listener ) override;
-    virtual void removeItemListener( const css::uno::Reference< css::awt::XItemListener >& Listener ) override;
-    virtual void addActionListener( const css::uno::Reference< css::awt::XActionListener >& Listener ) override;
-    virtual void removeActionListener( const css::uno::Reference< css::awt::XActionListener >& Listener ) override;
+    virtual void addItemListener( const cpo::uno::Reference< css::awt::XItemListener >& Listener ) override;
+    virtual void removeItemListener( const cpo::uno::Reference< css::awt::XItemListener >& Listener ) override;
+    virtual void addActionListener( const cpo::uno::Reference< css::awt::XActionListener >& Listener ) override;
+    virtual void removeActionListener( const cpo::uno::Reference< css::awt::XActionListener >& Listener ) override;
     virtual void addItem( const OUString& Item, ::sal_Int16 Pos ) override;
     virtual void addItems( const cpo::uno::Sequence< OUString >& Items, ::sal_Int16 Pos ) override;
     virtual void removeItems( ::sal_Int16 nPos, ::sal_Int16 nCount ) override;
@@ -1029,8 +1029,8 @@ public:
     virtual void disposing() override;
 
 // css::awt::XTextComponent
-    virtual void addTextListener(const css::uno::Reference< css::awt::XTextListener >& l) override;
-    virtual void removeTextListener(const css::uno::Reference< css::awt::XTextListener >& l) override;
+    virtual void addTextListener(const cpo::uno::Reference< css::awt::XTextListener >& l) override;
+    virtual void removeTextListener(const cpo::uno::Reference< css::awt::XTextListener >& l) override;
     virtual void setText(const OUString& aText) override;
     virtual void insertText(const css::awt::Selection& Sel, const OUString& Text) override;
     virtual OUString getText() override;

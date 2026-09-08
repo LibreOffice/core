@@ -26,7 +26,7 @@
 class SVXCORE_DLLPUBLIC SvxNumOptionsTabPageHelper
 {
 public:
-    static css::uno::Reference<css::text::XDefaultNumberingProvider> GetNumberingProvider();
+    static cpo::uno::Reference<css::text::XDefaultNumberingProvider> GetNumberingProvider();
 
     /** Get the numberings provided by the i18n framework (CTL, Asian, ...) and
         add them to the listbox. Extended numbering schemes present in the

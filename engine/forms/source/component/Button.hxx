@@ -46,11 +46,11 @@ class OButtonModel  :public OClickableImageBaseModel
 {
 public:
     OButtonModel(
-        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
+        const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     OButtonModel(
         const OButtonModel* _pOriginal,
-        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
+        const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
     virtual ~OButtonModel() override;
 
@@ -68,13 +68,13 @@ public:
 
 // css::io::XPersistObject
     virtual OUString getServiceName() override;
-    virtual void write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
-    virtual void read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
+    virtual void write(const cpo::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
+    virtual void read(const cpo::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
 
     // XReset
     virtual void reset(  ) override;
-    virtual void addResetListener( const css::uno::Reference< css::form::XResetListener >& aListener ) override;
-    virtual void removeResetListener( const css::uno::Reference< css::form::XResetListener >& aListener ) override;
+    virtual void addResetListener( const cpo::uno::Reference< css::form::XResetListener >& aListener ) override;
+    virtual void removeResetListener( const cpo::uno::Reference< css::form::XResetListener >& aListener ) override;
 
     // OControlModel's property handling
     virtual void describeFixedProperties(
@@ -92,7 +92,7 @@ public:
     virtual void disposing() override;
 
 protected:
-    virtual css::uno::Reference< css::util::XCloneable > createClone(  ) override;
+    virtual cpo::uno::Reference< css::util::XCloneable > createClone(  ) override;
 
 private:
     void    impl_resetNoBroadcast_nothrow();
@@ -133,7 +133,7 @@ protected:
     virtual cpo::uno::Sequence< cpo::uno::Type> _getTypes() override;
 
 public:
-    explicit OButtonControl(const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory);
+    explicit OButtonControl(const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory);
     virtual ~OButtonControl() override;
 
     // XServiceInfo
@@ -150,8 +150,8 @@ public:
     virtual void actionPerformed(const css::awt::ActionEvent& rEvent) override;
 
     // XButton
-    virtual void addActionListener(const css::uno::Reference< css::awt::XActionListener>& _rxListener) override;
-    virtual void removeActionListener(const css::uno::Reference< css::awt::XActionListener>& _rxListener) override;
+    virtual void addActionListener(const cpo::uno::Reference< css::awt::XActionListener>& _rxListener) override;
+    virtual void removeActionListener(const cpo::uno::Reference< css::awt::XActionListener>& _rxListener) override;
     virtual void setLabel(const OUString& Label) override;
     virtual void setActionCommand(const OUString& _rCommand) override;
 
@@ -165,7 +165,7 @@ public:
     virtual void disposing(const css::lang::EventObject& _rSource) override;
 
     // XControl
-    virtual bool setModel( const css::uno::Reference< css::awt::XControlModel >& _rxModel ) override;
+    virtual bool setModel( const cpo::uno::Reference< css::awt::XControlModel >& _rxModel ) override;
     void setDesignMode(bool bOn) override;
 
 protected:
@@ -176,8 +176,8 @@ protected:
     virtual bool    isEnabled( sal_Int16 _nFeatureId ) const override;
 
     // XDispatchProviderInterception disambiguation
-    virtual void registerDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& Interceptor ) override;
-    virtual void releaseDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& Interceptor ) override;
+    virtual void registerDispatchProviderInterceptor( const cpo::uno::Reference< css::frame::XDispatchProviderInterceptor >& Interceptor ) override;
+    virtual void releaseDispatchProviderInterceptor( const cpo::uno::Reference< css::frame::XDispatchProviderInterceptor >& Interceptor ) override;
 
     // OImageControl overridables
     virtual void    actionPerformed_Impl( bool bNotifyListener, const css::awt::MouseEvent& _rEvt ) override;

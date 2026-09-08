@@ -41,7 +41,7 @@
 #include <vcl/vclenum.hxx>
 #include <i18nlangtag/lang.h>
 #include <o3tl/typed_flags_set.hxx>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 
 
 class Bitmap;
@@ -1151,7 +1151,7 @@ public:
 
      @returns UNO reference to VCL toolkit
     */
-    static css::uno::Reference< css::awt::XToolkit > GetVCLToolkit();
+    static cpo::uno::Reference< css::awt::XToolkit > GetVCLToolkit();
 
     ///@}
 
@@ -1257,8 +1257,8 @@ public:
 
      @returns File picker if available, otherwise an empty reference.
     */
-    static css::uno::Reference< css::ui::dialogs::XFilePicker2 >
-        createFilePicker( const css::uno::Reference< cpo::uno::XComponentContext >& rServiceManager );
+    static cpo::uno::Reference< css::ui::dialogs::XFilePicker2 >
+        createFilePicker( const cpo::uno::Reference< cpo::uno::XComponentContext >& rServiceManager );
 
     /** Create a platform specific folder picker, if one is available, otherwise return an
      empty reference
@@ -1267,8 +1267,8 @@ public:
 
      @returns Folder picker if available, otherwise an empty reference.
     */
-    static css::uno::Reference< css::ui::dialogs::XFolderPicker2 >
-        createFolderPicker( const css::uno::Reference< cpo::uno::XComponentContext >& rServiceManager );
+    static cpo::uno::Reference< css::ui::dialogs::XFolderPicker2 >
+        createFolderPicker( const cpo::uno::Reference< cpo::uno::XComponentContext >& rServiceManager );
 
     /** Returns true, if the VCL plugin should run on the system event loop.
      *
@@ -1289,7 +1289,7 @@ public:
                                                     VclButtonsType eButtonType, const OUString& rPrimaryMessage,
                                                     const ICOKitNotifier* pNotifier = nullptr);
 
-    static weld::Window* GetFrameWeld(const css::uno::Reference<css::awt::XWindow>& rWindow);
+    static weld::Window* GetFrameWeld(const cpo::uno::Reference<css::awt::XWindow>& rWindow);
 
     // ICOKitNotifier
     void* m_pCallbackData;

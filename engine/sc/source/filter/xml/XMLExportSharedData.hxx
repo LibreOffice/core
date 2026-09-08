@@ -20,7 +20,7 @@
 #pragma once
 
 #include <address.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <vector>
 #include <list>
@@ -31,13 +31,13 @@ namespace com::sun::star::drawing { class XShape; }
 
 struct ScMyDrawPage
 {
-    css::uno::Reference<css::drawing::XDrawPage> xDrawPage;
+    cpo::uno::Reference<css::drawing::XDrawPage> xDrawPage;
     bool bHasForms;
 
     ScMyDrawPage() : bHasForms(false) {}
 };
 
-typedef std::list< css::uno::Reference<css::drawing::XShape> > ScMyTableXShapes;
+typedef std::list< cpo::uno::Reference<css::drawing::XShape> > ScMyTableXShapes;
 typedef std::vector<ScMyTableXShapes> ScMyTableShapes;
 typedef std::vector<ScMyDrawPage> ScMyDrawPages;
 
@@ -66,16 +66,16 @@ public:
     sal_Int32 GetLastRow(const sal_Int32 nTable) const;
     void AddDrawPage(const ScMyDrawPage& aDrawPage, const sal_Int32 nTable);
     void SetDrawPageHasForms(const sal_Int32 nTable, bool bHasForms);
-    css::uno::Reference<css::drawing::XDrawPage> GetDrawPage(const sal_Int32 nTable);
+    cpo::uno::Reference<css::drawing::XDrawPage> GetDrawPage(const sal_Int32 nTable);
     bool HasDrawPage() const { return pDrawPages != nullptr; }
-    bool HasForm(const sal_Int32 nTable, css::uno::Reference<css::drawing::XDrawPage>& xDrawPage);
+    bool HasForm(const sal_Int32 nTable, cpo::uno::Reference<css::drawing::XDrawPage>& xDrawPage);
     void AddNewShape(const ScMyShape& aMyShape);
     void SortShapesContainer();
     ScMyShapesContainer* GetShapesContainer() { return pShapesContainer.get(); }
-    void AddTableShape(const sal_Int32 nTable, const css::uno::Reference<css::drawing::XShape>& xShape);
+    void AddTableShape(const sal_Int32 nTable, const cpo::uno::Reference<css::drawing::XShape>& xShape);
     ScMyTableShapes* GetTableShapes() { return pTableShapes.get(); }
     ScMyDetectiveObjContainer* GetDetectiveObjContainer() { return pDetectiveObjContainer.get(); }
-    void AddNoteObj(const css::uno::Reference<css::drawing::XShape>& xShape, const ScAddress& rPos);
+    void AddNoteObj(const cpo::uno::Reference<css::drawing::XShape>& xShape, const ScAddress& rPos);
     void SortNoteShapes();
     ScMyNoteShapesContainer* GetNoteShapes() { return pNoteShapes.get(); }
 };

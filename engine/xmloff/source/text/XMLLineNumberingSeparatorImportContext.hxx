@@ -22,7 +22,7 @@
 #include <xmloff/xmlictxt.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 
 
 class XMLLineNumberingImportContext;
@@ -46,7 +46,7 @@ public:
 protected:
 
     virtual void startFastElement( sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& ) override;
 
     virtual void characters( const OUString& rChars ) override;
 

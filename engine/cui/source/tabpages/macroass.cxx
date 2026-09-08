@@ -31,7 +31,7 @@
 #include <sfx2/evntconf.hxx>
 #include <headertablistbox.hxx>
 
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::com::sun::star::frame::XFrame;
 
 class SfxMacroTabPage_Impl

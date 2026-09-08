@@ -40,7 +40,7 @@
 #include <string.h>
 
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::cpo::uno;
 
 void MapReturn(long r0, typelib_TypeClass eTypeClass, sal_uInt64* pRegisterReturn)
@@ -523,7 +523,7 @@ void unoInterfaceProxyDispatch(
     {
         ::cpo::uno::RuntimeException aExc(
             "illegal member type description!",
-            ::com::sun::star::uno::Reference< ::cpo::uno::XInterface >() );
+            ::cpo::uno::Reference< ::cpo::uno::XInterface >() );
 
         Type const & rExcType = cppu::UnoType<decltype(aExc)>::get();
         // binary identical null reference

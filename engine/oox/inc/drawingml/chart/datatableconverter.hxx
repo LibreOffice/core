@@ -41,7 +41,7 @@ public:
     virtual ~DataTableConverter() override;
 
     /** Converts the OOXML data table model to a chart2 diagram. */
-    void convertFromModel(css::uno::Reference<css::chart2::XDiagram> const& rxDiagram);
+    void convertFromModel(cpo::uno::Reference<css::chart2::XDiagram> const& rxDiagram);
 };
 
 } // namespace oox::drawingml::chart

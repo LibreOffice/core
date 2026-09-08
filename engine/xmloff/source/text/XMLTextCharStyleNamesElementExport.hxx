@@ -19,7 +19,7 @@
 #pragma once
 
 #include <rtl/ustring.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 
 namespace com::sun::star {
@@ -38,7 +38,7 @@ public:
 
     XMLTextCharStyleNamesElementExport(
                         SvXMLExport& rExp, bool bDoSomething, bool bAllStyles,
-                        const css::uno::Reference < css::beans::XPropertySet > & rPropSet,
+                        const cpo::uno::Reference < css::beans::XPropertySet > & rPropSet,
                         const OUString& rPropName );
     ~XMLTextCharStyleNamesElementExport();
 };

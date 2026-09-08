@@ -33,7 +33,7 @@
 #include <DrawDocShell.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::task;
 
 SdCGMFilter::SdCGMFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell ) :
@@ -96,7 +96,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportCGM(SvStream &rStream)
     ::sd::DrawDocShellRef xDocShRef = new ::sd::DrawDocShell(SfxObjectCreateMode::EMBEDDED, false, DocumentType::Impress);
 
     xDocShRef->GetDoc()->EnableUndo(false);
-    bool bRet = ImportCGM(rStream, xDocShRef->GetModel(), css::uno::Reference<css::task::XStatusIndicator>()) == 0;
+    bool bRet = ImportCGM(rStream, xDocShRef->GetModel(), cpo::uno::Reference<css::task::XStatusIndicator>()) == 0;
 
     xDocShRef->DoClose();
 

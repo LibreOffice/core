@@ -81,6 +81,7 @@
 #include <o3tl/string_view.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 typedef ::cppu::WeakImplHelper< container::XIndexAccess > XIndexAccess_BASE;
 typedef ::std::vector< Color > ColorVec;

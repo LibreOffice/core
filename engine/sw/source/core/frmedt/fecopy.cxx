@@ -73,6 +73,7 @@
 #include <svx/svdundo.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 // Copy for the internal clipboard. Copies all selections to the clipboard.
 void SwFEShell::Copy( SwDoc& rClpDoc, const OUString* pNewClpText, bool bDeleteRedlines )

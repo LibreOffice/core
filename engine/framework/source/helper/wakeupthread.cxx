@@ -19,7 +19,7 @@
 
 #include <sal/config.h>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <rtl/ref.hxx>
 #include <osl/thread.hxx>
@@ -74,7 +74,7 @@ public:
 
             for (auto& it : copyOfUpdatables)
             {
-                css::uno::Reference<css::util::XUpdatable> up(it);
+                cpo::uno::Reference<css::util::XUpdatable> up(it);
                 if (up.is()) // check weak
                     up->update();
             }
@@ -130,7 +130,7 @@ public:
         bool found = false;
         for (; it != updatables.end(); ++it)
         {
-            css::uno::Reference<css::util::XUpdatable> itValid(*it);
+            cpo::uno::Reference<css::util::XUpdatable> itValid(*it);
             if (!itValid || *it == up)
             {
                 it = updatables.erase(it);
@@ -158,7 +158,7 @@ namespace framework
 {
 /* static */ void WakeUpThread::startThread() { SharedWakeUpThread::startThread(); }
 
-WakeUpThread::WakeUpThread(css::uno::Reference<css::util::XUpdatable> const& up)
+WakeUpThread::WakeUpThread(cpo::uno::Reference<css::util::XUpdatable> const& up)
     : _updatable(up)
 {
     assert(_updatable);

@@ -48,10 +48,10 @@ typedef std::map<OUString, DateTimeDeclContextImpl> DateTimeDeclMap;
 
 class SdXMLImport: public SvXMLImport
 {
-    css::uno::Reference< css::container::XNameAccess > mxDocStyleFamilies;
-    css::uno::Reference< css::drawing::XDrawPages2 > mxDocMasterPages;
-    css::uno::Reference< css::container::XIndexAccess > mxDocDrawPages;
-    css::uno::Reference< css::container::XNameAccess > mxPageLayouts;
+    cpo::uno::Reference< css::container::XNameAccess > mxDocStyleFamilies;
+    cpo::uno::Reference< css::drawing::XDrawPages2 > mxDocMasterPages;
+    cpo::uno::Reference< css::container::XIndexAccess > mxDocDrawPages;
+    cpo::uno::Reference< css::container::XNameAccess > mxPageLayouts;
 
     // contexts for Style and AutoStyle import
     rtl::Reference<SdXMLMasterStylesContext> mxMasterStylesContext;
@@ -74,7 +74,7 @@ class SdXMLImport: public SvXMLImport
     // when all pages have been imported
     struct PageShapeRef
     {
-        css::uno::Reference<css::drawing::XShape> mxShape;
+        cpo::uno::Reference<css::drawing::XShape> mxShape;
         sal_Int32 mnPageNumber;
     };
     std::vector<PageShapeRef> maPageShapeRefs;
@@ -83,16 +83,16 @@ protected:
     // This method is called after the namespace map has been updated, but
     // before a context for the current element has been pushed.
     virtual SvXMLImportContext *CreateFastContext( sal_Int32 nElement,
-        const ::css::uno::Reference< ::css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const ::cpo::uno::Reference< ::css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
 public:
     SdXMLImport(
-        const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
         OUString const & implementationName,
         bool bIsDraw, SvXMLImportFlags nImportFlags );
 
     // XImporter
-    virtual void setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
+    virtual void setTargetDocument( const cpo::uno::Reference< css::lang::XComponent >& xDoc ) override;
 
     // XInitialization
     virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
@@ -105,23 +105,23 @@ public:
     // NB: in contrast to other CreateFooContexts, this particular one handles
     //     the root element (i.e. office:document-meta)
     SvXMLImportContext* CreateMetaContext(const sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList);
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList);
     SvXMLStylesContext* CreateStylesContext();
     SvXMLStylesContext* CreateAutoStylesContext();
     SvXMLImportContext* CreateMasterStylesContext();
     SvXMLImportContext *CreateFontDeclsContext();
 
     // export local parameters concerning page access and similar
-    const css::uno::Reference< css::container::XNameAccess >& GetLocalDocStyleFamilies() const { return mxDocStyleFamilies; }
-    const css::uno::Reference< css::drawing::XDrawPages2 >& GetLocalMasterPages() const { return mxDocMasterPages; }
-    const css::uno::Reference< css::container::XIndexAccess >& GetLocalDrawPages() const { return mxDocDrawPages; }
+    const cpo::uno::Reference< css::container::XNameAccess >& GetLocalDocStyleFamilies() const { return mxDocStyleFamilies; }
+    const cpo::uno::Reference< css::drawing::XDrawPages2 >& GetLocalMasterPages() const { return mxDocMasterPages; }
+    const cpo::uno::Reference< css::container::XIndexAccess >& GetLocalDrawPages() const { return mxDocDrawPages; }
 
     sal_Int32 GetNewPageCount() const { return mnNewPageCount; }
     void IncrementNewPageCount() { mnNewPageCount++; }
     sal_Int32 GetNewMasterPageCount() const { return mnNewMasterPageCount; }
     void IncrementNewMasterPageCount() { mnNewMasterPageCount++; }
 
-    const css::uno::Reference< css::container::XNameAccess >& getPageLayouts() const { return mxPageLayouts; }
+    const cpo::uno::Reference< css::container::XNameAccess >& getPageLayouts() const { return mxPageLayouts; }
 
     bool IsDraw() const { return mbIsDraw; }
     bool IsImpress() const { return !mbIsDraw; }
@@ -134,7 +134,7 @@ public:
     void AddHeaderDecl( const OUString& rName, const OUString& rText );
     void AddFooterDecl( const OUString& rName, const OUString& rText );
     void AddDateTimeDecl( const OUString& rName, const OUString& rText, bool bFixed, const OUString& rDateTimeFormat );
-    void AddPageShapePageNum(const css::uno::Reference<css::drawing::XShape>& rxShape,
+    void AddPageShapePageNum(const cpo::uno::Reference<css::drawing::XShape>& rxShape,
                          sal_Int32 nPageNumber);
 
     OUString GetHeaderDecl( const OUString& rName ) const;

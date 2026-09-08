@@ -19,7 +19,7 @@
 #pragma once
 
 #include <config_options.h>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <rtl/ustring.hxx>
 #include <sfx2/dllapi.h>
 #include <vector>
@@ -49,7 +49,7 @@ protected:
     };
     ::std::vector< OUString > maAttachedDocuments;
     static SaveResult   SaveDocumentAsFormat( const OUString& aSaveFileName,
-                                              const css::uno::Reference< cpo::uno::XInterface >& xFrameOrModel,
+                                              const cpo::uno::Reference< cpo::uno::XInterface >& xFrameOrModel,
                                               const OUString& rType,
                                               OUString& rFileNamePath );
 
@@ -57,8 +57,8 @@ private:
     std::unique_ptr<AddressList_Impl>   mpToList;
     OUString            maFromAddress;
 
-    static SaveResult   ShowFilterOptionsDialog( const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR,
-                                                 const css::uno::Reference< css::frame::XModel >& xModel,
+    static SaveResult   ShowFilterOptionsDialog( const cpo::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR,
+                                                 const cpo::uno::Reference< css::frame::XModel >& xModel,
                                                  const OUString& rFilterName,
                                                  std::u16string_view rType,
                                                  bool bModified,
@@ -78,9 +78,9 @@ public:
 
     void                AddToAddress( const OUString& rAddress );
 
-    SendMailResult      SaveAndSend( const css::uno::Reference< css::frame::XFrame >& xFrame,
+    SendMailResult      SaveAndSend( const cpo::uno::Reference< css::frame::XFrame >& xFrame,
                                      const OUString& rType );
-    SendMailResult      Send( const css::uno::Reference< css::frame::XFrame >& xFrame );
+    SendMailResult      Send( const cpo::uno::Reference< css::frame::XFrame >& xFrame );
 
 };
 

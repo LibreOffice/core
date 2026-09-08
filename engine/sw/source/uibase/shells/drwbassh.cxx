@@ -55,7 +55,7 @@
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <fmtfollowtextflow.hxx>
 #include <textboxhelper.hxx>
@@ -65,8 +65,8 @@
 
 using namespace ::com::sun::star;
 using namespace css::beans;
-using namespace css::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 SFX_IMPL_SUPERCLASS_INTERFACE(SwDrawBaseShell, SwBaseShell)
 

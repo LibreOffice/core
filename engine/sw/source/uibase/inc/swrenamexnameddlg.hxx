@@ -25,8 +25,8 @@
 
 class SwRenameXNamedDlg final : public weld::GenericDialogController
 {
-    css::uno::Reference< css::container::XNamed >        m_xNamed;
-    css::uno::Reference< css::container::XNameAccess >   m_xNameAccess;
+    cpo::uno::Reference< css::container::XNamed >        m_xNamed;
+    cpo::uno::Reference< css::container::XNameAccess >   m_xNameAccess;
 
     TextFilter m_aTextFilter;
 
@@ -39,8 +39,8 @@ class SwRenameXNamedDlg final : public weld::GenericDialogController
 
 public:
     SwRenameXNamedDlg(weld::Widget* pParent,
-                      const css::uno::Reference< css::container::XNamed > & xNamed,
-                      const css::uno::Reference< css::container::XNameAccess > & xNameAccess );
+                      const cpo::uno::Reference< css::container::XNamed > & xNamed,
+                      const cpo::uno::Reference< css::container::XNameAccess > & xNameAccess );
 
     void SetForbiddenChars(const OUString& rSet)
     {

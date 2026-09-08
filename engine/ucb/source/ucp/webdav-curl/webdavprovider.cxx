@@ -30,6 +30,7 @@
 #include <tools/urlobj.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace http_dav_ucp;
 
 

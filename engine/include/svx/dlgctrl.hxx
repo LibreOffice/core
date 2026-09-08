@@ -130,7 +130,7 @@ public:
     tools::Rectangle           CalculateFocusRectangle() const;
     tools::Rectangle           CalculateFocusRectangle( RectPoint eRectPoint ) const;
 
-    css::uno::Reference<css::accessibility::XAccessible> getAccessibleParent() const { return GetDrawingArea()->get_accessible_parent(); }
+    cpo::uno::Reference<css::accessibility::XAccessible> getAccessibleParent() const { return GetDrawingArea()->get_accessible_parent(); }
     virtual rtl::Reference<comphelper::OAccessible> CreateAccessible() override;
     a11yrelationset get_accessible_relation_set() const { return GetDrawingArea()->get_accessible_relation_set(); }
 
@@ -193,7 +193,7 @@ public:
     void    SetPaintable( bool bTmp ) { m_bPaintable = bTmp; }
     void    Reset();
 
-    css::uno::Reference<css::accessibility::XAccessible> getAccessibleParent() const { return GetDrawingArea()->get_accessible_parent(); }
+    cpo::uno::Reference<css::accessibility::XAccessible> getAccessibleParent() const { return GetDrawingArea()->get_accessible_parent(); }
     SAL_DLLPRIVATE virtual rtl::Reference<comphelper::OAccessible> CreateAccessible() override;
     a11yrelationset get_accessible_relation_set() const { return GetDrawingArea()->get_accessible_relation_set(); }
 
@@ -429,7 +429,7 @@ class SvxRelativeField;
 void limitWidthForSidebar(weld::SpinButton& rSpinButton);
 SVX_DLLPUBLIC void limitWidthForSidebar(SvxRelativeField& rMetricSpinButton);
 //tdf#130197 Give this toolbar a width as if it had 5 standard toolbutton entries
-SVX_DLLPUBLIC void padWidthForSidebar(weld::Toolbar& rToolbar, const css::uno::Reference<css::frame::XFrame>& rFrame);
+SVX_DLLPUBLIC void padWidthForSidebar(weld::Toolbar& rToolbar, const cpo::uno::Reference<css::frame::XFrame>& rFrame);
 
 #endif // INCLUDED_SVX_DLGCTRL_HXX
 

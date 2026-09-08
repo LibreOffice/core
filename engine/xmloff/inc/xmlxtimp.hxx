@@ -23,29 +23,29 @@
 #include <xmloff/xmlimp.hxx>
 
 namespace com::sun::star {
-    namespace uno { template<class X> class Reference; }
     namespace document { class XGraphicStorageHandler; }
     namespace container { class XNameContainer; }
 }
+namespace cpo::uno { template<class X> class Reference; }
 
 class SvxXMLXTableImport final : public SvXMLImport
 {
 public:
     SvxXMLXTableImport(
-        const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
-        const css::uno::Reference< css::container::XNameContainer > & rTable,
-        css::uno::Reference<css::document::XGraphicStorageHandler> const & rxGraphicStorageHandler);
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& rContext,
+        const cpo::uno::Reference< css::container::XNameContainer > & rTable,
+        cpo::uno::Reference<css::document::XGraphicStorageHandler> const & rxGraphicStorageHandler);
 
     virtual ~SvxXMLXTableImport() noexcept override;
 
     static bool load( const OUString &rPath, const OUString &rReferer,
-                      const css::uno::Reference < css::embed::XStorage > &xStorage,
-                      const css::uno::Reference< css::container::XNameContainer >& xTable ) noexcept;
+                      const cpo::uno::Reference < css::embed::XStorage > &xStorage,
+                      const cpo::uno::Reference< css::container::XNameContainer >& xTable ) noexcept;
 private:
     virtual SvXMLImportContext *CreateFastContext( sal_Int32 Element,
-        const ::css::uno::Reference< ::css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const ::cpo::uno::Reference< ::css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
-    const css::uno::Reference< css::container::XNameContainer > & mrTable;
+    const cpo::uno::Reference< css::container::XNameContainer > & mrTable;
 };
 
 #endif

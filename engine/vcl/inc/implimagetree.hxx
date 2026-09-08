@@ -26,7 +26,7 @@
 #include <utility>
 #include <vector>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <rtl/ustring.hxx>
 #include <vcl/bitmap.hxx>
 #include <i18nlangtag/languagetag.hxx>
@@ -74,7 +74,7 @@ public:
     OUString getImageUrl(
         OUString const & name, OUString const & style, OUString const & lang);
 
-    css::uno::Reference<css::io::XInputStream> getImageXInputStream(OUString const & rName,
+    cpo::uno::Reference<css::io::XInputStream> getImageXInputStream(OUString const & rName,
         OUString const & rStyle, OUString const & rLang);
 
     std::shared_ptr<SvMemoryStream> getImageStream(
@@ -91,7 +91,7 @@ public:
      *  be too late for the destructors of the bitmaps in maIconCache)*/
     void shutdown();
 
-    css::uno::Reference< css::container::XNameAccess > const & getNameAccess();
+    cpo::uno::Reference< css::container::XNameAccess > const & getNameAccess();
 
 private:
     ImplImageTree(const ImplImageTree&) = delete;
@@ -104,7 +104,7 @@ private:
     struct IconSet
     {
         OUString maURL;
-        css::uno::Reference<css::container::XNameAccess> maNameAccess;
+        cpo::uno::Reference<css::container::XNameAccess> maNameAccess;
         ScaledIconCache maScaledIconCaches;
         IconLinkHash maLinkHash;
 

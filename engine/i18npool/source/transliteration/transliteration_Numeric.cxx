@@ -26,7 +26,7 @@
 #include <rtl/ref.hxx>
 
 using namespace com::sun::star::i18n;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::cpo::uno;
 
 

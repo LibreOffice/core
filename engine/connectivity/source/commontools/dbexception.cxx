@@ -32,7 +32,7 @@
 
 namespace dbtools
 {
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
 using namespace cpo::uno;
     using namespace ::com::sun::star::sdb;
     using namespace ::com::sun::star::sdbc;
@@ -350,7 +350,7 @@ void throwFunctionSequenceException(const Reference< XInterface >& Context, cons
     );
 }
 
-void throwInvalidIndexException(const css::uno::Reference< cpo::uno::XInterface >& Context,
+void throwInvalidIndexException(const cpo::uno::Reference< cpo::uno::XInterface >& Context,
         const cpo::uno::Any& Next)
 {
     ::connectivity::SharedResources aResources;
@@ -364,7 +364,7 @@ void throwInvalidIndexException(const css::uno::Reference< cpo::uno::XInterface 
 }
 
 void throwFunctionNotSupportedSQLException(const OUString& _rFunctionName,
-    const css::uno::Reference<cpo::uno::XInterface>& _rxContext)
+    const cpo::uno::Reference<cpo::uno::XInterface>& _rxContext)
 {
     ::connectivity::SharedResources aResources;
     const OUString sError( aResources.getResourceStringWithSubstitution(
@@ -381,7 +381,7 @@ void throwFunctionNotSupportedSQLException(const OUString& _rFunctionName,
 }
 
 void throwFunctionNotSupportedRuntimeException(const OUString& _rFunctionName,
-    const css::uno::Reference<cpo::uno::XInterface>& _rxContext)
+    const cpo::uno::Reference<cpo::uno::XInterface>& _rxContext)
 {
     ::connectivity::SharedResources aResources;
     const OUString sError( aResources.getResourceStringWithSubstitution(
@@ -394,7 +394,7 @@ void throwFunctionNotSupportedRuntimeException(const OUString& _rFunctionName,
     );
 }
 
-void throwGenericSQLException(const OUString& _rMsg, const css::uno::Reference< cpo::uno::XInterface >& _rxSource)
+void throwGenericSQLException(const OUString& _rMsg, const cpo::uno::Reference< cpo::uno::XInterface >& _rxSource)
 {
     throwGenericSQLException(_rMsg, _rxSource, Any());
 }

@@ -33,8 +33,8 @@ class FixedTextControl;
 class FixedTextToolbarController final : public ComplexToolbarController
 {
 public:
-    FixedTextToolbarController(const css::uno::Reference<cpo::uno::XComponentContext>& rxContext,
-                               const css::uno::Reference<css::frame::XFrame>& rFrame,
+    FixedTextToolbarController(const cpo::uno::Reference<cpo::uno::XComponentContext>& rxContext,
+                               const cpo::uno::Reference<css::frame::XFrame>& rFrame,
                                ToolBox* pToolBar, ToolBoxItemId nID, const OUString& aCommand);
 
     // WeakComponentImplHelperBase

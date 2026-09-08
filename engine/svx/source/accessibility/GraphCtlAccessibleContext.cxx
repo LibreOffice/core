@@ -47,7 +47,7 @@ using namespace ::cppu;
 using namespace ::osl;
 using namespace ::accessibility;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::lang;
@@ -104,7 +104,7 @@ Reference< XAccessible > SvxGraphCtrlAccessibleContext::getAccessible( const Sdr
             // create a new one and remember in our internal map
             Reference< XShape > xShape( Reference< XShape >::query( const_cast<SdrObject*>(pObj)->getUnoShape() ) );
 
-            css::uno::Reference<css::accessibility::XAccessible> xParent(getAccessibleParent());
+            cpo::uno::Reference<css::accessibility::XAccessible> xParent(getAccessibleParent());
             AccessibleShapeInfo aShapeInfo (xShape,xParent);
             ::accessibility::AccessibleShapeTreeInfo aTreeInfo;
             aTreeInfo.SetSdrView(mpView);
@@ -269,7 +269,7 @@ lang::Locale SvxGraphCtrlAccessibleContext::getLocale()
 {
     ::SolarMutexGuard aGuard;
 
-    css::uno::Reference<css::accessibility::XAccessible> xParent(getAccessibleParent());
+    cpo::uno::Reference<css::accessibility::XAccessible> xParent(getAccessibleParent());
     if (xParent.is())
     {
         Reference< XAccessibleContext > xParentContext( xParent->getAccessibleContext() );

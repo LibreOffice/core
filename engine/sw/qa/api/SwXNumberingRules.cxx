@@ -29,7 +29,7 @@
 #include <com/sun/star/style/NumberingType.hpp>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 namespace

@@ -67,16 +67,16 @@ public:
     virtual void initialize(cpo::uno::Sequence<cpo::uno::Any> const & /*rArguments*/) override
     {}
 
-    virtual void handle(css::uno::Reference<css::task::XInteractionRequest> const & rRequest) override
+    virtual void handle(cpo::uno::Reference<css::task::XInteractionRequest> const & rRequest) override
     {
         handleInteractionRequest(rRequest);
     }
 
-    virtual bool handleInteractionRequest(const css::uno::Reference<css::task::XInteractionRequest>& rRequest) override
+    virtual bool handleInteractionRequest(const cpo::uno::Reference<css::task::XInteractionRequest>& rRequest) override
     {
         mbPasswordRequested = false;
 
-        cpo::uno::Sequence<css::uno::Reference<css::task::XInteractionContinuation>> const aContinuations = rRequest->getContinuations();
+        cpo::uno::Sequence<cpo::uno::Reference<css::task::XInteractionContinuation>> const aContinuations = rRequest->getContinuations();
         cpo::uno::Any const aRequest(rRequest->getRequest());
 
         if (handlePasswordRequest(aContinuations, aRequest))
@@ -84,7 +84,7 @@ public:
 
         for (auto const & cont : aContinuations)
         {
-            css::uno::Reference<css::task::XInteractionApprove> xApprove(cont, css::uno::UNO_QUERY);
+            cpo::uno::Reference<css::task::XInteractionApprove> xApprove(cont, cpo::uno::UNO_QUERY);
             if (xApprove.is())
                 xApprove->select();
         }
@@ -92,7 +92,7 @@ public:
         return true;
     }
 
-    bool handlePasswordRequest(const cpo::uno::Sequence<css::uno::Reference<css::task::XInteractionContinuation>> &rContinuations,
+    bool handlePasswordRequest(const cpo::uno::Sequence<cpo::uno::Reference<css::task::XInteractionContinuation>> &rContinuations,
                                const cpo::uno::Any& rRequest)
     {
         bool bPasswordRequestFound = false;
@@ -125,19 +125,19 @@ public:
         {
             if (mode == css::task::PasswordRequestMode_PASSWORD_REENTER)
             {   // cancel re-enter of wrong password, to avoid infinite loop
-                css::uno::Reference<css::task::XInteractionAbort> const xAbort(cont, css::uno::UNO_QUERY);
+                cpo::uno::Reference<css::task::XInteractionAbort> const xAbort(cont, cpo::uno::UNO_QUERY);
                 if (xAbort.is())
                     xAbort->select();
             }
             else if (bIsRequestPasswordToModify)
             {
-                css::uno::Reference<css::task::XInteractionPassword2> const xIPW2(cont, css::uno::UNO_QUERY);
+                cpo::uno::Reference<css::task::XInteractionPassword2> const xIPW2(cont, cpo::uno::UNO_QUERY);
                 xIPW2->setPasswordToModify(msPassword);
                 xIPW2->select();
             }
             else
             {
-                css::uno::Reference<css::task::XInteractionPassword> const xIPW(cont, css::uno::UNO_QUERY);
+                cpo::uno::Reference<css::task::XInteractionPassword> const xIPW(cont, cpo::uno::UNO_QUERY);
                 if (xIPW.is())
                 {
                     xIPW->setPassword(msPassword);

@@ -237,8 +237,8 @@ private:
     Link<DbGridControlNavigationBarState,int>    m_aMasterStateProvider;
     Link<DbGridControlNavigationBarState,bool>   m_aMasterSlotExecutor;
 
-    css::uno::Reference< css::util::XNumberFormatter >    m_xFormatter;
-    css::uno::Reference< cpo::uno::XComponentContext >    m_xContext;
+    cpo::uno::Reference< css::util::XNumberFormatter >    m_xFormatter;
+    cpo::uno::Reference< cpo::uno::XComponentContext >    m_xContext;
 
     std::vector< std::unique_ptr<DbGridColumn> > m_aColumns;         // Column description
     VclPtr<NavigationBar>   m_aBar;
@@ -378,7 +378,7 @@ protected:
 
 public:
     DbGridControl(
-        css::uno::Reference< cpo::uno::XComponentContext > const & _rxContext,
+        cpo::uno::Reference< cpo::uno::XComponentContext > const & _rxContext,
         vcl::Window* pParent,
         WinBits nBits);
 
@@ -386,7 +386,7 @@ public:
     virtual void dispose() override;
 
     virtual void Init() override;
-    virtual void InitColumnsByFields(const css::uno::Reference< css::container::XIndexAccess >& xFields) = 0;
+    virtual void InitColumnsByFields(const cpo::uno::Reference< css::container::XIndexAccess >& xFields) = 0;
     virtual void RemoveRows() override;
 
     /** GetCellText returns the text at the given position
@@ -401,11 +401,11 @@ public:
 
     void RemoveRows(bool bNewCursor);
 
-    const css::uno::Reference< css::util::XNumberFormatter >& getNumberFormatter() const {return m_xFormatter;}
+    const cpo::uno::Reference< css::util::XNumberFormatter >& getNumberFormatter() const {return m_xFormatter;}
 
     // the data source
     // the options can restrict but not extend the update abilities
-    void setDataSource(const css::uno::Reference< css::sdbc::XRowSet >& rCursor,
+    void setDataSource(const cpo::uno::Reference< css::sdbc::XRowSet >& rCursor,
         DbGridControlOptions nOpts = DbGridControlOptions::Insert | DbGridControlOptions::Update | DbGridControlOptions::Delete);
     virtual void Dispatch(BrowserDispatchId eId) override;
 
@@ -508,7 +508,7 @@ public:
     */
     void        ForceHideScrollbars();
 
-    const css::uno::Reference< cpo::uno::XComponentContext >&
+    const cpo::uno::Reference< cpo::uno::XComponentContext >&
         getContext() const { return m_xContext; }
 
     /// returns <TRUE/> if the text of the given cell can be copied into the clipboard

@@ -22,7 +22,7 @@
 
 #include <vector>
 #include <memory>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <cpo/uno/Sequence.h>
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -73,7 +73,7 @@ class ResultSetMetaData final :
                 public cppu::WeakImplHelper<css::sdbc::XResultSetMetaData>
 {
     std::unique_ptr<ucbhelper_impl::ResultSetMetaData_Impl> m_pImpl;
-    css::uno::Reference< cpo::uno::XComponentContext >    m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext >    m_xContext;
     cpo::uno::Sequence< css::beans::Property >            m_aProps;
 
 public:
@@ -86,7 +86,7 @@ public:
       *        columns of a resultset.
       */
     UCBHELPER_DLLPUBLIC ResultSetMetaData(
-            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
             const cpo::uno::Sequence< css::beans::Property >& rProps );
 
     /**
@@ -103,7 +103,7 @@ public:
       *        rColumnData[ 1 ] corresponds to data in rProps[ 1 ], ...
       */
     UCBHELPER_DLLPUBLIC ResultSetMetaData(
-            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
             const cpo::uno::Sequence< css::beans::Property >& rProps,
             std::vector< ResultSetColumnData >&& rColumnData );
 

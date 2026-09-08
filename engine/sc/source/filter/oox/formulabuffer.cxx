@@ -31,7 +31,7 @@
 #include <utility>
 #include <comphelper/string.hxx>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::sheet;
 using namespace ::cpo::uno;
 

@@ -26,7 +26,8 @@ namespace chart
 {
 
 using namespace ::com::sun::star;
-using ::com::sun::star::uno::Reference;
+using namespace ::cpo;
+using ::cpo::uno::Reference;
 
 rtl::Reference< ::chart::FormattedString >
             FormattedStringHelper::createFormattedString(

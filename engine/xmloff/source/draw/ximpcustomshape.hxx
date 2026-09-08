@@ -23,7 +23,7 @@
 #include <xmloff/xmluconv.hxx>
 #include <rtl/ustring.hxx>
 #include <vector>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
@@ -31,7 +31,7 @@
 class XMLEnhancedCustomShapeContext : public SvXMLImportContext
 {
     SvXMLUnitConverter& mrUnitConverter;
-    css::uno::Reference< css::drawing::XShape >& mrxShape;
+    cpo::uno::Reference< css::drawing::XShape >& mrxShape;
     std::vector< css::beans::PropertyValue >& mrCustomShapeGeometry;
 
     std::vector< css::beans::PropertyValue > maExtrusion;
@@ -44,17 +44,17 @@ class XMLEnhancedCustomShapeContext : public SvXMLImportContext
 public:
 
 
-    XMLEnhancedCustomShapeContext( SvXMLImport& rImport, css::uno::Reference< css::drawing::XShape > &,
+    XMLEnhancedCustomShapeContext( SvXMLImport& rImport, cpo::uno::Reference< css::drawing::XShape > &,
         std::vector< css::beans::PropertyValue >& rCustomShapeGeometry );
 
     virtual void startFastElement(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
     virtual void endFastElement(sal_Int32 nElement) override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

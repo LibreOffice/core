@@ -83,6 +83,7 @@
 #include <com/sun/star/text/XTextEmbeddedObjectsSupplier.hpp>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 // Migrate Marking of Objects, Points and GluePoints
 
@@ -1115,8 +1116,8 @@ void SdrMarkView::SetMarkHandlesForKit(tools::Rectangle const & rRect, const Sfx
             if (bIsChart)
             {
                 KitChartHelper aChartHelper(pViewShell);
-                css::uno::Reference<css::frame::XController>& xChartController = aChartHelper.GetXController();
-                css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier( xChartController, uno::UNO_QUERY);
+                cpo::uno::Reference<css::frame::XController>& xChartController = aChartHelper.GetXController();
+                cpo::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier( xChartController, uno::UNO_QUERY);
                 if (xSelectionSupplier.is())
                 {
                     cpo::uno::Any aSel = xSelectionSupplier->getSelection();

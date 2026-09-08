@@ -28,7 +28,7 @@
 
 namespace com::sun::star::ucb { class XProgressHandler; }
 namespace cpo::uno { class Any; }
-namespace com::sun::star::uno { template <typename > class Reference; }
+namespace cpo::uno { template <typename > class Reference; }
 
 class StgIo;
 class StgDirEntry;
@@ -209,7 +209,7 @@ friend class UCBStorage;
             pImp;
                                 virtual ~UCBStorageStream() override;
 public:
-                                UCBStorageStream( const OUString& rName, StreamMode nMode, bool bDirect, bool bRepair, css::uno::Reference< css::ucb::XProgressHandler > const & xProgress );
+                                UCBStorageStream( const OUString& rName, StreamMode nMode, bool bDirect, bool bRepair, cpo::uno::Reference< css::ucb::XProgressHandler > const & xProgress );
                                 UCBStorageStream( UCBStorageStream_Impl* );
 
     virtual sal_Int32           Read( void * pData, sal_Int32 nSize ) override;
@@ -260,7 +260,7 @@ public:
                                             bool bDirect,
                                             bool bIsRoot,
                                             bool bIsRepair,
-                                            css::uno::Reference< css::ucb::XProgressHandler > const &
+                                            cpo::uno::Reference< css::ucb::XProgressHandler > const &
                                             xProgressHandler );
 
                                 UCBStorage( UCBStorage_Impl* );

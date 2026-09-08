@@ -87,13 +87,13 @@ namespace xmloff
     public:
         OPropertyImport(OFormLayerXMLImport_Impl& _rImport);
 
-        virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+        virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
             sal_Int32 nElement,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+            const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
         virtual void startFastElement(
             sal_Int32 nElement,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList >& _rxAttrList) override;
+            const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& _rxAttrList) override;
         virtual void characters(const OUString& _rChars) override;
 
     protected:
@@ -154,13 +154,13 @@ namespace xmloff
         OPropertyElementsContext(SvXMLImport& _rImport,
                 OPropertyImportRef _xPropertyImporter);
 
-        virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
-            sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+        virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+            sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
 #if OSL_DEBUG_LEVEL > 0
         virtual void startFastElement(
             sal_Int32 nElement,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+            const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
         virtual void characters(const OUString& _rChars) override;
 #endif
     };
@@ -178,7 +178,7 @@ namespace xmloff
 
         virtual void startFastElement(
             sal_Int32 nElement,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+            const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
     };
 
     //= OListPropertyContext
@@ -195,12 +195,12 @@ namespace xmloff
 
         virtual void startFastElement(
             sal_Int32 nElement,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+            const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
         virtual void endFastElement(sal_Int32 nElement) override;
 
-        virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
-            sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+        virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+            sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
     };
 
     //= OListValueContext
@@ -213,7 +213,7 @@ namespace xmloff
 
         virtual void startFastElement(
             sal_Int32 nElement,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+            const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
     };
 
 }   // namespace xmloff

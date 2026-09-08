@@ -89,7 +89,8 @@
 #include <SlideSectionManager.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::linguistic2;
 
 /** Create a list of clipboard formats that are supported both from the

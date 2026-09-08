@@ -33,8 +33,8 @@ namespace dbaccess
     {
     public:
         StorageTextOutputStream(
-            const css::uno::Reference< cpo::uno::XComponentContext >& i_rContext,
-            const css::uno::Reference< css::embed::XStorage >& i_rParentStorage,
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& i_rContext,
+            const cpo::uno::Reference< css::embed::XStorage >& i_rParentStorage,
             const OUString& i_rStreamName
         );
         virtual ~StorageTextOutputStream() override;
@@ -43,7 +43,7 @@ namespace dbaccess
         void    writeLine();
 
     private:
-         css::uno::Reference< css::io::XTextOutputStream2 >  mxTextOutput;
+         cpo::uno::Reference< css::io::XTextOutputStream2 >  mxTextOutput;
    };
 
 } // namespace dbaccess

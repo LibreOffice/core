@@ -45,10 +45,10 @@ namespace
 }
 
 using namespace ::com::sun::star::accessibility;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star;
-using namespace ::cpo::uno;
 
 // Ctor() and Dtor()
 
@@ -407,7 +407,7 @@ bool AccessibleIconChoiceCtrlEntry::copyText( sal_Int32 nStartIndex, sal_Int32 n
         return false;
 
     sal_Int32 nLen = nEndIndex - nStartIndex + 1;
-    css::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipBoard = m_pIconCtrl->GetClipboard();
+    cpo::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipBoard = m_pIconCtrl->GetClipboard();
     vcl::unohelper::TextDataObject::CopyStringTo(sText.copy(nStartIndex, nLen), xClipBoard);
 
     return true;

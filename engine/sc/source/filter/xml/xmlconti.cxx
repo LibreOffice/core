@@ -36,8 +36,8 @@ ScXMLContentContext::~ScXMLContentContext()
 {
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > ScXMLContentContext::createFastChildContext(
-            sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > ScXMLContentContext::createFastChildContext(
+            sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     if (nElement == XML_ELEMENT(TEXT, XML_S))
     {

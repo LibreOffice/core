@@ -12,7 +12,7 @@
 #include <comphelper/propertyvalue.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo;
 using namespace ::cpo::uno;
 
 class Chart2UiChartTest : public ChartTest
@@ -528,7 +528,7 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf153706)
     // Paste; this must create a chart with own data source having a proper copy of the data
     dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 
-    css::uno::Reference xChartDoc(getChartDocFromSheet(0), css::uno::UNO_SET_THROW);
+    cpo::uno::Reference xChartDoc(getChartDocFromSheet(0), cpo::uno::UNO_SET_THROW);
     auto xDataArray(xChartDoc->getDataProvider().queryThrow<chart::XChartDataArray>());
 
     cpo::uno::Sequence<Sequence<double>> aData = xDataArray->getData();

@@ -74,7 +74,7 @@ class Diagram
     , public ::property::OPropertySet
 {
 public:
-    Diagram( css::uno::Reference< cpo::uno::XComponentContext > xContext );
+    Diagram( cpo::uno::Reference< cpo::uno::XComponentContext > xContext );
     virtual ~Diagram() override;
 
     /// XServiceInfo declarations
@@ -96,7 +96,7 @@ public:
     virtual ::cppu::IPropertyArrayHelper & getInfoHelper() override;
 
     // ____ XPropertySet ____
-    virtual css::uno::Reference< css::beans::XPropertySetInfo >
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo >
         getPropertySetInfo() override;
 
     // ____ XFastPropertySet ____
@@ -109,34 +109,34 @@ public:
         cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
 
     // ____ XDiagram ____
-    virtual css::uno::Reference< css::beans::XPropertySet > getWall() override;
-    virtual css::uno::Reference< css::beans::XPropertySet > getFloor() override;
-    virtual css::uno::Reference< css::chart2::XLegend > getLegend() override;
-    virtual void setLegend( const css::uno::Reference<
+    virtual cpo::uno::Reference< css::beans::XPropertySet > getWall() override;
+    virtual cpo::uno::Reference< css::beans::XPropertySet > getFloor() override;
+    virtual cpo::uno::Reference< css::chart2::XLegend > getLegend() override;
+    virtual void setLegend( const cpo::uno::Reference<
                                      css::chart2::XLegend >& xLegend ) override;
-    virtual css::uno::Reference< css::chart2::XColorScheme > getDefaultColorScheme() override;
+    virtual cpo::uno::Reference< css::chart2::XColorScheme > getDefaultColorScheme() override;
     virtual void setDefaultColorScheme(
-        const css::uno::Reference< css::chart2::XColorScheme >& xColorScheme ) override;
+        const cpo::uno::Reference< css::chart2::XColorScheme >& xColorScheme ) override;
     virtual void setDiagramData(
-        const css::uno::Reference< css::chart2::data::XDataSource >& xDataSource,
+        const cpo::uno::Reference< css::chart2::data::XDataSource >& xDataSource,
         const cpo::uno::Sequence< css::beans::PropertyValue >& aArguments ) override;
 
-    virtual css::uno::Reference<css::chart2::XDataTable> getDataTable() override;
-    virtual void setDataTable(const css::uno::Reference<css::chart2::XDataTable>& xDataTable) override;
+    virtual cpo::uno::Reference<css::chart2::XDataTable> getDataTable() override;
+    virtual void setDataTable(const cpo::uno::Reference<css::chart2::XDataTable>& xDataTable) override;
 
     // ____ XCoordinateSystemContainer ____
     virtual void addCoordinateSystem(
-        const css::uno::Reference< css::chart2::XCoordinateSystem >& aCoordSys ) override;
+        const cpo::uno::Reference< css::chart2::XCoordinateSystem >& aCoordSys ) override;
     virtual void removeCoordinateSystem(
-        const css::uno::Reference< css::chart2::XCoordinateSystem >& aCoordSys ) override;
-    virtual cpo::uno::Sequence< css::uno::Reference< css::chart2::XCoordinateSystem > > getCoordinateSystems() override;
+        const cpo::uno::Reference< css::chart2::XCoordinateSystem >& aCoordSys ) override;
+    virtual cpo::uno::Sequence< cpo::uno::Reference< css::chart2::XCoordinateSystem > > getCoordinateSystems() override;
     virtual void setCoordinateSystems(
-        const cpo::uno::Sequence< css::uno::Reference< css::chart2::XCoordinateSystem > >& aCoordinateSystems ) override;
+        const cpo::uno::Sequence< cpo::uno::Reference< css::chart2::XCoordinateSystem > >& aCoordinateSystems ) override;
 
     // ____ XTitled ____
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
         css::chart2::XTitle > getTitleObject() override;
-    virtual void setTitleObject( const css::uno::Reference<
+    virtual void setTitleObject( const cpo::uno::Reference<
                                           css::chart2::XTitle >& Title ) override;
 
     // ____ X3DDefaultSetter ____
@@ -145,13 +145,13 @@ public:
     virtual void setDefaultIllumination() override;
 
     // ____ XCloneable ____
-    virtual css::uno::Reference< css::util::XCloneable > createClone() override;
+    virtual cpo::uno::Reference< css::util::XCloneable > createClone() override;
 
     // ____ XModifyBroadcaster ____
     virtual void addModifyListener(
-        const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+        const cpo::uno::Reference< css::util::XModifyListener >& aListener ) override;
     virtual void removeModifyListener(
-        const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+        const cpo::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
     typedef
         std::vector< rtl::Reference< ::chart::BaseCoordinateSystem > >
@@ -225,11 +225,11 @@ public:
 
     bool isSupportingDateAxis();
 
-    css::uno::Reference< css::chart2::data::XLabeledDataSequence >
+    cpo::uno::Reference< css::chart2::data::XLabeledDataSequence >
         getCategories();
 
     void setCategories(
-            const css::uno::Reference< css::chart2::data::XLabeledDataSequence >& xCategories,
+            const cpo::uno::Reference< css::chart2::data::XLabeledDataSequence >& xCategories,
             bool bSetAxisType = false, // when this flag is true ...
             bool bCategoryAxis = true);// set the AxisType to CATEGORY or back to REALNUMBER
 
@@ -253,7 +253,7 @@ public:
 
     bool attachSeriesToAxis( bool bMainAxis,
         const rtl::Reference< DataSeries >& xSeries,
-        const css::uno::Reference< cpo::uno::XComponentContext > & xContext,
+        const cpo::uno::Reference< cpo::uno::XComponentContext > & xContext,
         bool bAdaptAxes=true );
 
     /** Replaces all occurrences of xCooSysToReplace in the tree with
@@ -357,17 +357,17 @@ private:
 
     void fireModifyEvent();
 
-    css::uno::Reference<cpo::uno::XComponentContext> m_xContext;
+    cpo::uno::Reference<cpo::uno::XComponentContext> m_xContext;
     tCoordinateSystemContainerType m_aCoordSystems;
 
     rtl::Reference<Wall> m_xWall;
     rtl::Reference<Wall> m_xFloor;
 
-    css::uno::Reference<css::chart2::XTitle> m_xTitle;
+    cpo::uno::Reference<css::chart2::XTitle> m_xTitle;
 
     rtl::Reference<::chart::Legend> m_xLegend;
     rtl::Reference<::chart::DataTable> m_xDataTable;
-    css::uno::Reference<css::chart2::XColorScheme> m_xColorScheme;
+    cpo::uno::Reference<css::chart2::XColorScheme> m_xColorScheme;
     rtl::Reference<ModifyEventForwarder> m_xModifyEventForwarder;
 
 };

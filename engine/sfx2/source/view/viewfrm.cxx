@@ -87,7 +87,7 @@
 #include <comphelper/docpasswordrequest.hxx>
 #include <comphelper/docpasswordhelper.hxx>
 
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 
 #include <basic/basmgr.hxx>
 #include <basic/sbmod.hxx>
@@ -136,8 +136,8 @@
 #include <sfxslots.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
@@ -1425,10 +1425,10 @@ void SfxViewFrame::AppendContainsMacrosInfobar()
 
 namespace
 {
-css::uno::Reference<css::frame::XLayoutManager> getLayoutManager(const SfxFrame& rFrame)
+cpo::uno::Reference<css::frame::XLayoutManager> getLayoutManager(const SfxFrame& rFrame)
 {
-    css::uno::Reference<css::frame::XLayoutManager> xLayoutManager;
-    css::uno::Reference<css::beans::XPropertySet> xPropSet(rFrame.GetFrameInterface(),
+    cpo::uno::Reference<css::frame::XLayoutManager> xLayoutManager;
+    cpo::uno::Reference<css::beans::XPropertySet> xPropSet(rFrame.GetFrameInterface(),
                                                  uno::UNO_QUERY);
     if (xPropSet.is())
     {
@@ -1750,8 +1750,8 @@ IMPL_LINK_NOARG(SfxViewFrame, RefreshMasterPasswordHdl, weld::Button&, void)
         Reference< task::XPasswordContainer2 > xMasterPasswd(
             task::PasswordContainer::create(comphelper::getProcessComponentContext()));
 
-        css::uno::Reference<css::frame::XFrame> xFrame = GetFrame().GetFrameInterface();
-        css::uno::Reference<css::awt::XWindow> xContainerWindow = xFrame->getContainerWindow();
+        cpo::uno::Reference<css::frame::XFrame> xFrame = GetFrame().GetFrameInterface();
+        cpo::uno::Reference<css::awt::XWindow> xContainerWindow = xFrame->getContainerWindow();
 
         uno::Reference<task::XInteractionHandler> xTmpHandler(task::InteractionHandler::createWithParent(comphelper::getProcessComponentContext(),
                                                               xContainerWindow));
@@ -2116,16 +2116,16 @@ void SfxViewFrame::MakeActive_Impl( bool bGrabFocus )
         bPreview = true;
     }
 
-    css::uno::Reference<css::frame::XFrame> xFrame = GetFrame().GetFrameInterface();
+    cpo::uno::Reference<css::frame::XFrame> xFrame = GetFrame().GetFrameInterface();
     if (!bPreview)
     {
         SetViewFrame(this);
-        GetBindings().SetActiveFrame(css::uno::Reference<css::frame::XFrame>());
+        GetBindings().SetActiveFrame(cpo::uno::Reference<css::frame::XFrame>());
         uno::Reference<frame::XFramesSupplier> xSupp(xFrame, uno::UNO_QUERY);
         if (xSupp.is())
             xSupp->setActiveFrame(uno::Reference<frame::XFrame>());
 
-        css::uno::Reference< css::awt::XWindow > xContainerWindow = xFrame->getContainerWindow();
+        cpo::uno::Reference< css::awt::XWindow > xContainerWindow = xFrame->getContainerWindow();
         VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(xContainerWindow);
         if (pWindow && pWindow->HasChildPathFocus() && bGrabFocus)
         {
@@ -2137,7 +2137,7 @@ void SfxViewFrame::MakeActive_Impl( bool bGrabFocus )
     else
     {
         GetBindings().SetDispatcher(GetDispatcher());
-        GetBindings().SetActiveFrame(css::uno::Reference<css::frame::XFrame>());
+        GetBindings().SetActiveFrame(cpo::uno::Reference<css::frame::XFrame>());
         GetDispatcher()->Update_Impl();
     }
 }
@@ -2582,7 +2582,7 @@ void SfxViewFrame::ExecView_Impl
 */
 static bool impl_maxOpenDocCountReached()
 {
-    const css::uno::Reference< cpo::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
+    const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
     std::optional<sal_Int32> x(officecfg::Office::Common::Misc::MaxOpenDocuments::get());
     // NIL means: count of allowed documents = infinite !
     if (!x)
@@ -2590,8 +2590,8 @@ static bool impl_maxOpenDocCountReached()
     sal_Int32 nMaxDocs(*x);
     sal_Int32 nOpenDocs = 0;
 
-    css::uno::Reference< css::frame::XDesktop2 >  xDesktop = css::frame::Desktop::create(xContext);
-    css::uno::Reference< css::container::XIndexAccess > xCont(xDesktop->getFrames(), css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference< css::frame::XDesktop2 >  xDesktop = css::frame::Desktop::create(xContext);
+    cpo::uno::Reference< css::container::XIndexAccess > xCont(xDesktop->getFrames(), cpo::uno::UNO_QUERY_THROW);
 
     sal_Int32 c = xCont->getCount();
     sal_Int32 i = 0;
@@ -2600,7 +2600,7 @@ static bool impl_maxOpenDocCountReached()
     {
         try
         {
-            css::uno::Reference< css::frame::XFrame > xFrame;
+            cpo::uno::Reference< css::frame::XFrame > xFrame;
             xCont->getByIndex(i) >>= xFrame;
             if ( ! xFrame.is())
                 continue;
@@ -2915,7 +2915,7 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const OUString& sMacro )
         }
 
         // open lib container and break operation if it couldn't be opened
-        css::uno::Reference< css::script::XLibraryContainer > xLibCont;
+        cpo::uno::Reference< css::script::XLibraryContainer > xLibCont;
         if ( aLocation == "application" )
         {
             xLibCont = SfxGetpApp()->GetBasicContainer();
@@ -2934,7 +2934,7 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const OUString& sMacro )
         // get LibraryContainer
         cpo::uno::Any aTemp;
 
-        css::uno::Reference< css::container::XNameAccess > xLib;
+        cpo::uno::Reference< css::container::XNameAccess > xLib;
         if(xLibCont->hasByName(aLibName))
         {
             // library must be loaded
@@ -2980,16 +2980,16 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const OUString& sMacro )
         aTemp <<= sRoutine.makeStringAndClear();
         if ( bReplace )
         {
-            css::uno::Reference< css::container::XNameContainer > xModulCont(
+            cpo::uno::Reference< css::container::XNameContainer > xModulCont(
                 xLib,
-                css::uno::UNO_QUERY);
+                cpo::uno::UNO_QUERY);
             xModulCont->replaceByName(aModuleName,aTemp);
         }
         else
         {
-            css::uno::Reference< css::container::XNameContainer > xModulCont(
+            cpo::uno::Reference< css::container::XNameContainer > xModulCont(
                 xLib,
-                css::uno::UNO_QUERY);
+                cpo::uno::UNO_QUERY);
             xModulCont->insertByName(aModuleName,aTemp);
         }
 
@@ -3025,14 +3025,14 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
         {
             // try to find any active recorder on this frame
             static constexpr OUString sProperty(u"DispatchRecorderSupplier"_ustr);
-            css::uno::Reference< css::frame::XFrame > xFrame =
+            cpo::uno::Reference< css::frame::XFrame > xFrame =
                     GetFrame().GetFrameInterface();
 
-            css::uno::Reference< css::beans::XPropertySet > xSet(xFrame,css::uno::UNO_QUERY);
+            cpo::uno::Reference< css::beans::XPropertySet > xSet(xFrame,cpo::uno::UNO_QUERY);
             cpo::uno::Any aProp = xSet->getPropertyValue(sProperty);
-            css::uno::Reference< css::frame::XDispatchRecorderSupplier > xSupplier;
+            cpo::uno::Reference< css::frame::XDispatchRecorderSupplier > xSupplier;
             aProp >>= xSupplier;
-            css::uno::Reference< css::frame::XDispatchRecorder > xRecorder;
+            cpo::uno::Reference< css::frame::XDispatchRecorder > xRecorder;
             if (xSupplier.is())
                 xRecorder = xSupplier->getDispatchRecorder();
 
@@ -3044,7 +3044,7 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
             if ( xRecorder.is() )
             {
                 // disable active recording
-                aProp <<= css::uno::Reference< css::frame::XDispatchRecorderSupplier >();
+                aProp <<= cpo::uno::Reference< css::frame::XDispatchRecorderSupplier >();
                 xSet->setPropertyValue(sProperty,aProp);
 
                 const SfxBoolItem* pRecordItem = rReq.GetArg<SfxBoolItem>(FN_PARAM_1);
@@ -3063,7 +3063,7 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
             else if ( rReq.GetSlot() == SID_RECORDMACRO )
             {
                 // enable recording
-                const css::uno::Reference< cpo::uno::XComponentContext >& xContext(
+                const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext(
                         ::comphelper::getProcessComponentContext());
 
                 xRecorder = css::frame::DispatchRecorder::create( xContext );
@@ -3192,12 +3192,12 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
                         break;
                     }
 
-                    css::uno::Reference< css::beans::XPropertySet > xSet(
+                    cpo::uno::Reference< css::beans::XPropertySet > xSet(
                             GetFrame().GetFrameInterface(),
-                            css::uno::UNO_QUERY);
+                            cpo::uno::UNO_QUERY);
 
                     cpo::uno::Any aProp = xSet->getPropertyValue(u"DispatchRecorderSupplier"_ustr);
-                    css::uno::Reference< css::frame::XDispatchRecorderSupplier > xSupplier;
+                    cpo::uno::Reference< css::frame::XDispatchRecorderSupplier > xSupplier;
                     if ( aProp >>= xSupplier )
                         rSet.Put( SfxBoolItem( nWhich, xSupplier.is() ) );
                     else
@@ -3215,12 +3215,12 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
                         break;
                     }
 
-                    css::uno::Reference< css::beans::XPropertySet > xSet(
+                    cpo::uno::Reference< css::beans::XPropertySet > xSet(
                             GetFrame().GetFrameInterface(),
-                            css::uno::UNO_QUERY);
+                            cpo::uno::UNO_QUERY);
 
                     cpo::uno::Any aProp = xSet->getPropertyValue(u"DispatchRecorderSupplier"_ustr);
-                    css::uno::Reference< css::frame::XDispatchRecorderSupplier > xSupplier;
+                    cpo::uno::Reference< css::frame::XDispatchRecorderSupplier > xSupplier;
                     if ( !(aProp >>= xSupplier) || !xSupplier.is() )
                         rSet.DisableItem( nWhich );
                     break;
@@ -3228,10 +3228,10 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
 
                 case SID_TOGGLESTATUSBAR:
                 {
-                    css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
-                    css::uno::Reference< css::beans::XPropertySet > xSet(
+                    cpo::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
+                    cpo::uno::Reference< css::beans::XPropertySet > xSet(
                             GetFrame().GetFrameInterface(),
-                            css::uno::UNO_QUERY);
+                            cpo::uno::UNO_QUERY);
                     cpo::uno::Any aProp = xSet->getPropertyValue( u"LayoutManager"_ustr );
 
                     if ( !( aProp >>= xLayoutManager ))

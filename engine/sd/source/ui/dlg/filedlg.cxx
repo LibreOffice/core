@@ -42,9 +42,9 @@ class SdFileDialog_Imp : public sfx2::FileDialogHelper
 private:
     friend class SdOpenSoundFileDialog;
 
-    css::uno::Reference< css::ui::dialogs::XFilePickerControlAccess >   mxControlAccess;
+    cpo::uno::Reference< css::ui::dialogs::XFilePickerControlAccess >   mxControlAccess;
 
-    css::uno::Reference< css::media::XPlayer > mxPlayer;
+    cpo::uno::Reference< css::media::XPlayer > mxPlayer;
     ImplSVEvent * mnPlaySoundEvent;
     bool mbLabelPlaying;
     Idle maUpdateIdle;
@@ -113,7 +113,7 @@ IMPL_LINK_NOARG(SdFileDialog_Imp, PlayMusicHdl, void*, void)
         {
             try
             {
-                mxPlayer.set( avmedia::MediaWindow::createPlayer( aUrl, u""_ustr ), css::uno::UNO_SET_THROW );
+                mxPlayer.set( avmedia::MediaWindow::createPlayer( aUrl, u""_ustr ), cpo::uno::UNO_SET_THROW );
                 mxPlayer->start();
                 maUpdateIdle.Start();
             }
@@ -178,10 +178,10 @@ SdFileDialog_Imp::SdFileDialog_Imp(weld::Window* pParent)
 {
     maUpdateIdle.SetInvokeHandler(LINK(this, SdFileDialog_Imp, IsMusicStoppedHdl));
 
-    css::uno::Reference < css::ui::dialogs::XFilePicker3 > xFileDlg = GetFilePicker();
+    cpo::uno::Reference < css::ui::dialogs::XFilePicker3 > xFileDlg = GetFilePicker();
 
     // get the control access
-    mxControlAccess.set( xFileDlg, css::uno::UNO_QUERY );
+    mxControlAccess.set( xFileDlg, cpo::uno::UNO_QUERY );
 
     if( !mxControlAccess.is() )
         return;
@@ -258,8 +258,8 @@ void SdOpenSoundFileDialog::SetPath( const OUString& rPath )
 bool SdOpenSoundFileDialog::IsInsertAsLinkSelected() const
 {
     bool bInsertAsLinkSelected = false;
-    css::uno::Reference<css::ui::dialogs::XFilePicker3> const xFilePicker(mpImpl->GetFilePicker());
-    css::uno::Reference<css::ui::dialogs::XFilePickerControlAccess> const xControlAccess(xFilePicker, css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::ui::dialogs::XFilePicker3> const xFilePicker(mpImpl->GetFilePicker());
+    cpo::uno::Reference<css::ui::dialogs::XFilePickerControlAccess> const xControlAccess(xFilePicker, cpo::uno::UNO_QUERY_THROW);
     xControlAccess->getValue(css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_LINK, 0) >>= bInsertAsLinkSelected;
     return bInsertAsLinkSelected;
 }

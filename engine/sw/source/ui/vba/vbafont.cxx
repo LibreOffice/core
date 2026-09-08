@@ -27,6 +27,7 @@
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 const cpo::uno::Any aLongAnyTrue( sal_Int16(-1) );
 const cpo::uno::Any aLongAnyFalse( sal_Int16( 0 ) );

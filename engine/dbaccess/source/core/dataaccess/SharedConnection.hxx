@@ -38,7 +38,7 @@ namespace dbaccess
     protected:
         virtual ~OSharedConnection() override;
     public:
-        explicit OSharedConnection(css::uno::Reference< cpo::uno::XAggregation >& _rxProxyConnection);
+        explicit OSharedConnection(cpo::uno::Reference< cpo::uno::XAggregation >& _rxProxyConnection);
 
         // XCloseable
         virtual void close(  ) override
@@ -67,24 +67,24 @@ namespace dbaccess
         {
             throw css::sdbc::SQLException(u"This call is not allowed when sharing connections."_ustr,*this,u"S10000"_ustr,0,cpo::uno::Any());
         }
-        virtual void setTypeMap( const css::uno::Reference< css::container::XNameAccess >& /*typeMap*/ ) override
+        virtual void setTypeMap( const cpo::uno::Reference< css::container::XNameAccess >& /*typeMap*/ ) override
         {
             throw css::sdbc::SQLException(u"This call is not allowed when sharing connections."_ustr,*this,u"S10000"_ustr,0,cpo::uno::Any());
         }
         // XConnection
-        virtual css::uno::Reference< css::sdbc::XStatement > createStatement(  ) override;
-        virtual css::uno::Reference< css::sdbc::XPreparedStatement > prepareStatement( const OUString& sql ) override;
-        virtual css::uno::Reference< css::sdbc::XPreparedStatement > prepareCall( const OUString& sql ) override;
+        virtual cpo::uno::Reference< css::sdbc::XStatement > createStatement(  ) override;
+        virtual cpo::uno::Reference< css::sdbc::XPreparedStatement > prepareStatement( const OUString& sql ) override;
+        virtual cpo::uno::Reference< css::sdbc::XPreparedStatement > prepareCall( const OUString& sql ) override;
         virtual OUString nativeSQL( const OUString& sql ) override;
         virtual bool getAutoCommit(  ) override;
         virtual void commit(  ) override;
         virtual void rollback(  ) override;
         virtual bool isClosed(  ) override;
-        virtual css::uno::Reference< css::sdbc::XDatabaseMetaData > getMetaData(  ) override;
+        virtual cpo::uno::Reference< css::sdbc::XDatabaseMetaData > getMetaData(  ) override;
         virtual bool isReadOnly(  ) override;
         virtual OUString getCatalog(  ) override;
         virtual sal_Int32 getTransactionIsolation(  ) override;
-        virtual css::uno::Reference< css::container::XNameAccess > getTypeMap(  ) override;
+        virtual cpo::uno::Reference< css::container::XNameAccess > getTypeMap(  ) override;
     };
 
 }   // namespace dbaccess

@@ -24,14 +24,14 @@
 
 class ZipPackageSink final : public ::cppu::WeakImplHelper<css::io::XActiveDataSink>
 {
-    css::uno::Reference<css::io::XInputStream> xStream;
+    cpo::uno::Reference<css::io::XInputStream> xStream;
 
 public:
     ZipPackageSink();
     virtual ~ZipPackageSink() override;
     virtual void
-    setInputStream(const css::uno::Reference<css::io::XInputStream>& aStream) override;
-    virtual css::uno::Reference<css::io::XInputStream> getInputStream() override;
+    setInputStream(const cpo::uno::Reference<css::io::XInputStream>& aStream) override;
+    virtual cpo::uno::Reference<css::io::XInputStream> getInputStream() override;
 };
 #endif
 

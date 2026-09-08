@@ -33,13 +33,13 @@
 using namespace comphelper;
 using namespace connectivity;
 using namespace connectivity::ado;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::container;
 
-css::uno::Reference< css::beans::XPropertySet > OUsers::createObject(const OUString& _rName)
+cpo::uno::Reference< css::beans::XPropertySet > OUsers::createObject(const OUString& _rName)
 {
     return new OAdoUser(m_pCatalog,isCaseSensitive(),_rName);
 }
@@ -55,7 +55,7 @@ Reference< XPropertySet > OUsers::createDescriptor()
 }
 
 // XAppend
-css::uno::Reference< css::beans::XPropertySet > OUsers::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
+cpo::uno::Reference< css::beans::XPropertySet > OUsers::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     OUserExtend* pUser = dynamic_cast<OUserExtend*>( descriptor.get() );
     if ( pUser == nullptr )

@@ -46,7 +46,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::ucb;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::unopkg;
 
@@ -280,7 +280,7 @@ void CommandEnvironmentImpl::handle(
     }
 
     // select:
-    const cpo::uno::Sequence<css::uno::Reference<css::task::XInteractionContinuation>> xIC = xRequest->getContinuations();
+    const cpo::uno::Sequence<cpo::uno::Reference<css::task::XInteractionContinuation>> xIC = xRequest->getContinuations();
     for ( auto const& rCont : xIC )
     {
         if (approve) {

@@ -27,6 +27,7 @@
 using namespace connectivity;
 using namespace utl;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace
 {

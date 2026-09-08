@@ -27,6 +27,7 @@
 #include "wrapstreamforshare.hxx"
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 WrapStreamForShare::WrapStreamForShare( uno::Reference< io::XInputStream > xInStream,
                                         rtl::Reference< comphelper::RefCountedMutex > xMutexRef )

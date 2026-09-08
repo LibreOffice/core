@@ -247,7 +247,7 @@ public:
         getLocale() override;
 
     // #i27138# - paragraphs are in relation CONTENT_FLOWS_FROM and/or CONTENT_FLOWS_TO
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
             css::accessibility::XAccessibleRelationSet> SAL_CALL
         getAccessibleRelationSet() override;
 
@@ -296,7 +296,7 @@ public:
     virtual void SAL_CALL clearAccessibleSelection(  ) override;
     virtual void SAL_CALL selectAllAccessibleChildren(  ) override;
     virtual sal_Int64 SAL_CALL getSelectedAccessibleChildCount(  ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild(
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild(
         sal_Int64 nSelectedChildIndex ) override;
 
     // index has to be treated as global child index.
@@ -305,7 +305,7 @@ public:
 
     // XAccessibleHypertext
     virtual sal_Int32 SAL_CALL getHyperLinkCount() override;
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
             css::accessibility::XAccessibleHyperlink >
         SAL_CALL getHyperLink( sal_Int32 nLinkIndex ) override;
     virtual sal_Int32 SAL_CALL getHyperLinkIndex( sal_Int32 nCharIndex ) override;

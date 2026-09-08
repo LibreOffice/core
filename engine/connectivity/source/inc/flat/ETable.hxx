@@ -44,7 +44,7 @@ namespace connectivity::flat
         std::vector<sal_Int32>        m_aPrecisions;  // same as aboth
         std::vector<sal_Int32>        m_aScales;
         QuotedTokenizedString           m_aCurrentLine;
-        css::uno::Reference< css::util::XNumberFormatter > m_xNumberFormatter;
+        cpo::uno::Reference< css::util::XNumberFormatter > m_xNumberFormatter;
         css::util::Date                 m_aNullDate;
         sal_Int32                       m_nRowPos;
         sal_Int32                       m_nMaxRowCount; // will be set if stream is once eof

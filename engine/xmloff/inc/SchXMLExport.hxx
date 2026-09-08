@@ -40,7 +40,7 @@ private:
 
 public:
     SchXMLExport(
-        const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
         OUString const & implementationName,
         SvXMLExportFlags nExportFlags );
     virtual ~SchXMLExport() override;

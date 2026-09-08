@@ -50,6 +50,7 @@
 
 using namespace css;
 using namespace css::animations;
+using namespace ::cpo;
 
 class SdExportTest3 : public SdModelTestBase
 {

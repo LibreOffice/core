@@ -53,8 +53,8 @@
 using namespace com::sun::star;
 using namespace com::sun::star::container;
 using namespace com::sun::star::document;
-using namespace com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace com::sun::star::awt;
 using namespace com::sun::star::xml::sax;
 using namespace ::xmloff::token;
@@ -70,9 +70,9 @@ public:
     SvxXMLTableImportContext( SvXMLImport& rImport, SvxXMLTableImportContextEnum eContext, uno::Reference< XNameContainer > xTable,
         bool bOOoFormat );
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler >
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler >
         createFastChildContext(sal_Int32 Element,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override;
+            const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override;
 
 protected:
     static void importColor( const uno::Reference< XFastAttributeList >& xAttrList, Any& rAny, OUString& rName );
@@ -111,12 +111,12 @@ namespace
     public:
         XMLGradientHelperContext(
             SvXMLImport& rImport,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
-            const css::uno::Reference< XNameContainer >& rxTable);
+            const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+            const cpo::uno::Reference< XNameContainer >& rxTable);
         virtual ~XMLGradientHelperContext() override;
-        virtual css::uno::Reference<css::xml::sax::XFastContextHandler> createFastChildContext(
+        virtual cpo::uno::Reference<css::xml::sax::XFastContextHandler> createFastChildContext(
             sal_Int32 nElement,
-            const css::uno::Reference<css::xml::sax::XFastAttributeList>& AttrList) override;
+            const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& AttrList) override;
         virtual void endFastElement(sal_Int32 nElement) override;
     };
 
@@ -155,9 +155,9 @@ namespace
         }
     }
 
-    css::uno::Reference<css::xml::sax::XFastContextHandler> XMLGradientHelperContext::createFastChildContext(
+    cpo::uno::Reference<css::xml::sax::XFastContextHandler> XMLGradientHelperContext::createFastChildContext(
             sal_Int32 nElement,
-            const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList)
+            const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList)
     {
         // be prepared & import GradientStop entries
         if (nElement == XML_ELEMENT(LO_EXT, xmloff::token::XML_GRADIENT_STOP))
@@ -182,9 +182,9 @@ namespace
     }
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler >
+cpo::uno::Reference< css::xml::sax::XFastContextHandler >
         SvxXMLTableImportContext::createFastChildContext(sal_Int32 nElement,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList > & rAttrList)
+            const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & rAttrList)
 {
     if( !(IsTokenInNamespace(nElement, XML_NAMESPACE_DRAW) ||
           IsTokenInNamespace(nElement, XML_NAMESPACE_DRAW_OOO) ))
@@ -374,7 +374,7 @@ void SvxXMLTableImportContext::importBitmap( const uno::Reference< XFastAttribut
 
 
 SvxXMLXTableImport::SvxXMLXTableImport(
-    const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
+    const cpo::uno::Reference< cpo::uno::XComponentContext >& rContext,
     const uno::Reference< XNameContainer > & rTable,
     uno::Reference<XGraphicStorageHandler> const & xGraphicStorageHandler)
 :   SvXMLImport(rContext, u""_ustr, SvXMLImportFlags::NONE),
@@ -463,7 +463,7 @@ bool SvxXMLXTableImport::load( const OUString &rPath, const OUString &rReferer,
                 openStorageStream( &aParserInput, xGraphicHelper, xSubStorage );
             else
             {
-                css::uno::Reference< css::io::XStream > xStream = comphelper::OStorageHelper::GetStreamAtPath(
+                cpo::uno::Reference< css::io::XStream > xStream = comphelper::OStorageHelper::GetStreamAtPath(
                         xStorage, rPath, embed::ElementModes::READ, aNasty );
                 if( !xStream.is() )
                     return false;
@@ -503,7 +503,7 @@ bool SvxXMLXTableImport::load( const OUString &rPath, const OUString &rReferer,
 }
 
 SvXMLImportContext *SvxXMLXTableImport::CreateFastContext( sal_Int32 nElement,
-        const ::css::uno::Reference< ::css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
+        const ::cpo::uno::Reference< ::css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
 {
     if( IsTokenInNamespace(nElement, XML_NAMESPACE_OOO) ||
         IsTokenInNamespace(nElement, XML_NAMESPACE_OFFICE) ||

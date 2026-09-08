@@ -21,7 +21,7 @@
 
 #include <sal/config.h>
 #include <cppuhelper/implbase.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <rtl/ref.hxx>
 #include <vcl/dllapi.h>
 #include <mutex>

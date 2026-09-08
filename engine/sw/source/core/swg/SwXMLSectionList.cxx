@@ -36,9 +36,9 @@ private:
 public:
     SvXMLSectionListContext(SwXMLSectionList& rImport);
 
-    virtual css::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
+    virtual cpo::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
         sal_Int32 Element,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
 };
 
 class SwXMLParentContext : public SvXMLImportContext
@@ -52,8 +52,8 @@ public:
     {
     }
 
-    virtual css::uno::Reference<XFastContextHandler> SAL_CALL createFastChildContext(
-        sal_Int32 Element, const css::uno::Reference< css::xml::sax::XFastAttributeList > & /*xAttrList*/ ) override
+    virtual cpo::uno::Reference<XFastContextHandler> SAL_CALL createFastChildContext(
+        sal_Int32 Element, const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & /*xAttrList*/ ) override
     {
         if (Element == XML_ELEMENT(OFFICE, XML_BODY) ||
             Element == XML_ELEMENT(OFFICE_OOO, XML_BODY))
@@ -81,7 +81,7 @@ public:
 
 }
 
-SwXMLSectionList::SwXMLSectionList(const css::uno::Reference< cpo::uno::XComponentContext >& rContext, std::vector<OUString> &rNewSectionList)
+SwXMLSectionList::SwXMLSectionList(const cpo::uno::Reference< cpo::uno::XComponentContext >& rContext, std::vector<OUString> &rNewSectionList)
 : SvXMLImport(rContext, u""_ustr)
 , m_rSectionList(rNewSectionList)
 {
@@ -94,7 +94,7 @@ SwXMLSectionList::~SwXMLSectionList()
 
 SvXMLImportContext * SwXMLSectionList::CreateFastContext(
         sal_Int32 /*Element*/,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList > & /*xAttrList*/ )
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & /*xAttrList*/ )
 {
     return new SwXMLParentContext(*this);
 }
@@ -104,9 +104,9 @@ SvXMLSectionListContext::SvXMLSectionListContext( SwXMLSectionList& rImport )
 {
 }
 
-css::uno::Reference<css::xml::sax::XFastContextHandler> SvXMLSectionListContext::createFastChildContext(
+cpo::uno::Reference<css::xml::sax::XFastContextHandler> SvXMLSectionListContext::createFastChildContext(
         sal_Int32 Element,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList )
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
 

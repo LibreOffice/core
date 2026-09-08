@@ -74,7 +74,7 @@ public:
     virtual cpo::uno::Any getMaterial() override { return cpo::uno::Any(sal_Int64(maID)); }
 
     static EncryptionHashTransporter*
-    getEncHashTransporter(const css::uno::Reference<css::beans::XMaterialHolder>& xReference);
+    getEncHashTransporter(const cpo::uno::Reference<css::beans::XMaterialHolder>& xReference);
 };
 }
 

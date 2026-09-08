@@ -40,7 +40,7 @@ SVX_DLLPUBLIC OUString getSignatureImage(const OUString& rType = OUString());
 /**
  * Choose a signature for signature line purposes.
  */
-SVX_DLLPUBLIC css::uno::Reference<css::security::XCertificate>
+SVX_DLLPUBLIC cpo::uno::Reference<css::security::XCertificate>
 getSignatureCertificate(SfxObjectShell* pShell, SfxViewShell* pViewShell, weld::Window* pParent);
 
 /**
@@ -56,7 +56,7 @@ SVX_DLLPUBLIC OUString getLocalizedDate();
 /**
  * Interprets rSVG as a graphic and gives back the resulting UNO wrapper.
  */
-SVX_DLLPUBLIC css::uno::Reference<css::graphic::XGraphic> importSVG(std::u16string_view rSVG);
+SVX_DLLPUBLIC cpo::uno::Reference<css::graphic::XGraphic> importSVG(std::u16string_view rSVG);
 
 /**
  * Sets xCertificate as the signing certificate of the selected shape on pView.

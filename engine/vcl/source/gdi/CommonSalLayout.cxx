@@ -870,7 +870,7 @@ void GenericSalLayout::GetCharWidths(std::vector<double>& rCharWidths, const OUS
     rCharWidths.clear();
     rCharWidths.resize(nCharCount, 0);
 
-    css::uno::Reference<css::i18n::XBreakIterator> xBreak;
+    cpo::uno::Reference<css::i18n::XBreakIterator> xBreak;
     const css::lang::Locale& rLocale(maLanguageTag.getLocale());
 
     for (auto const& aGlyphItem : m_GlyphItems)

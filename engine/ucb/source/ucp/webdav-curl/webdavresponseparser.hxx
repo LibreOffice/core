@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/ucb/Lock.hpp>
 #include "DAVResource.hxx"
@@ -28,11 +28,11 @@
 namespace http_dav_ucp
 {
 std::vector<css::ucb::Lock>
-parseWebDAVLockResponse(const css::uno::Reference<css::io::XInputStream>& xInputStream);
+parseWebDAVLockResponse(const cpo::uno::Reference<css::io::XInputStream>& xInputStream);
 std::vector<DAVResource>
-parseWebDAVPropFindResponse(const css::uno::Reference<css::io::XInputStream>& xInputStream);
+parseWebDAVPropFindResponse(const cpo::uno::Reference<css::io::XInputStream>& xInputStream);
 std::vector<DAVResourceInfo>
-parseWebDAVPropNameResponse(const css::uno::Reference<css::io::XInputStream>& xInputStream);
+parseWebDAVPropNameResponse(const cpo::uno::Reference<css::io::XInputStream>& xInputStream);
 } // namespace http_dav_ucp
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

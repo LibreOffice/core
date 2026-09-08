@@ -71,7 +71,7 @@ private:
 
     rtl::Reference< ChangesListener > m_xListener;
     std::mutex mutex_;
-    css::uno::Reference< css::beans::XMultiPropertySet >
+    cpo::uno::Reference< css::beans::XMultiPropertySet >
         m_xNotifier;
 
     tools::Long            m_nCurTextWidth;

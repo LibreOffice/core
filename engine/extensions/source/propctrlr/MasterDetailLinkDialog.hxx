@@ -33,7 +33,7 @@ namespace pcr
                                     ,public MasterDetailLinkDialog_PBase
     {
     public:
-        explicit MasterDetailLinkDialog(const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext);
+        explicit MasterDetailLinkDialog(const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxContext);
 
     private:
         // XTypeProvider
@@ -44,18 +44,18 @@ namespace pcr
         virtual cpo::uno::Sequence<OUString> getSupportedServiceNames() override;
 
         // XPropertySet
-        virtual css::uno::Reference< css::beans::XPropertySetInfo>  getPropertySetInfo() override;
+        virtual cpo::uno::Reference< css::beans::XPropertySetInfo>  getPropertySetInfo() override;
         virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
         // OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
 
         // OGenericUnoDialog overridables
-        virtual std::unique_ptr<weld::DialogController> createDialog(const css::uno::Reference<css::awt::XWindow>& rParent) override;
+        virtual std::unique_ptr<weld::DialogController> createDialog(const cpo::uno::Reference<css::awt::XWindow>& rParent) override;
         virtual void implInitialize(const cpo::uno::Any& _rValue) override;
 
-        css::uno::Reference< css::beans::XPropertySet> m_xDetail;
-        css::uno::Reference< css::beans::XPropertySet> m_xMaster;
+        cpo::uno::Reference< css::beans::XPropertySet> m_xDetail;
+        cpo::uno::Reference< css::beans::XPropertySet> m_xMaster;
         OUString m_sExplanation;
         OUString m_sDetailLabel;
         OUString m_sMasterLabel;

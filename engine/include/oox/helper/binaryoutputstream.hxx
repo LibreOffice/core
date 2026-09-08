@@ -23,7 +23,7 @@
 #include <cstddef>
 #include <memory>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <oox/dllapi.h>
 #include <oox/helper/binarystreambase.hxx>
 #include <oox/helper/helper.hxx>
@@ -137,7 +137,7 @@ public:
             of this wrapper or when close() is called.
      */
     explicit            BinaryXOutputStream(
-                            const css::uno::Reference< css::io::XOutputStream >& rxOutStrm,
+                            const cpo::uno::Reference< css::io::XOutputStream >& rxOutStrm,
                             bool bAutoClose );
 
     virtual             ~BinaryXOutputStream() override;
@@ -154,7 +154,7 @@ public:
 
 private:
     StreamDataSequence  maBuffer;       ///< Data buffer used in writeMemory() function.
-    css::uno::Reference< css::io::XOutputStream >
+    cpo::uno::Reference< css::io::XOutputStream >
                         mxOutStrm;      ///< Reference to the output stream.
     bool                mbAutoClose;    ///< True = automatically close stream on destruction.
 };

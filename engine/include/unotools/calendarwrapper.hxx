@@ -21,7 +21,7 @@
 #define INCLUDED_UNOTOOLS_CALENDARWRAPPER_HXX
 
 #include <tools/datetime.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/i18n/Calendar2.hpp>
 #include <unotools/unotoolsdllapi.h>
@@ -32,13 +32,13 @@ namespace com::sun::star::lang { struct Locale; }
 
 class UNOTOOLS_DLLPUBLIC CalendarWrapper
 {
-    css::uno::Reference< css::i18n::XCalendar4 >   xC;
+    cpo::uno::Reference< css::i18n::XCalendar4 >   xC;
 
     const DateTime aEpochStart;        // 1Jan1970
 
 public:
                                 CalendarWrapper(
-                                    const css::uno::Reference< cpo::uno::XComponentContext > & rxContext
+                                    const cpo::uno::Reference< cpo::uno::XComponentContext > & rxContext
                                     );
                                 ~CalendarWrapper();
 

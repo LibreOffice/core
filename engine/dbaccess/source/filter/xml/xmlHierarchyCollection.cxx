@@ -32,7 +32,7 @@
 
 namespace dbaxml
 {
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
 using namespace cpo::uno;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::container;
@@ -101,8 +101,8 @@ OXMLHierarchyCollection::~OXMLHierarchyCollection()
 
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > OXMLHierarchyCollection::createFastChildContext(
-            sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > OXMLHierarchyCollection::createFastChildContext(
+            sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = nullptr;
 

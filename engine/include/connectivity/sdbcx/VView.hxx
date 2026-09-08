@@ -50,7 +50,7 @@ namespace connectivity::sdbcx
         OUString m_Command;
         sal_Int32       m_CheckOption;
         // need for the getName method
-        css::uno::Reference< css::sdbc::XDatabaseMetaData >       m_xMetaData;
+        cpo::uno::Reference< css::sdbc::XDatabaseMetaData >       m_xMetaData;
 
         // OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( sal_Int32 _nId) const override;
@@ -60,10 +60,10 @@ namespace connectivity::sdbcx
     public:
         DECLARE_SERVICE_INFO();
 
-        OView(bool _bCase, css::uno::Reference< css::sdbc::XDatabaseMetaData > _xMetaData);
+        OView(bool _bCase, cpo::uno::Reference< css::sdbc::XDatabaseMetaData > _xMetaData);
         OView(  bool _bCase,
                 const OUString& _rName,
-                css::uno::Reference< css::sdbc::XDatabaseMetaData > _xMetaData,
+                cpo::uno::Reference< css::sdbc::XDatabaseMetaData > _xMetaData,
                 OUString _sCommand = OUString(),
                 OUString _sSchemaName = OUString(),
                 OUString _sCatalogName = OUString());
@@ -79,7 +79,7 @@ namespace connectivity::sdbcx
         //XTypeProvider
         virtual cpo::uno::Sequence< cpo::uno::Type > getTypes(  ) override;
         // XPropertySet
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+        virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
         // XNamed
         virtual OUString getName(  ) override;
         virtual void setName( const OUString& ) override;

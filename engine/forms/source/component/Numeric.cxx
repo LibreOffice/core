@@ -28,7 +28,7 @@
 namespace frm
 {
 using namespace comphelper;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
@@ -77,7 +77,7 @@ ONumericModel::~ONumericModel()
 
 // XCloneable
 
-css::uno::Reference< css::util::XCloneable > ONumericModel::createClone()
+cpo::uno::Reference< css::util::XCloneable > ONumericModel::createClone()
 {
     rtl::Reference<ONumericModel> pClone = new ONumericModel(this, getContext());
     pClone->clonedFrom(this);

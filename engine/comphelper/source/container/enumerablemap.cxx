@@ -46,9 +46,9 @@ namespace comphelper
 {
 
 
-    using ::com::sun::star::uno::Reference;
+    using ::cpo::uno::Reference;
     using ::cpo::uno::XInterface;
-    using ::com::sun::star::uno::UNO_QUERY;
+    using ::cpo::uno::UNO_QUERY;
     using ::cpo::uno::RuntimeException;
     using ::cpo::uno::Any;
     using ::cpo::uno::Sequence;
@@ -161,9 +161,9 @@ namespace comphelper
         virtual void initialize( const Sequence< Any >& aArguments ) override;
 
         // XEnumerableMap
-        virtual css::uno::Reference< css::container::XEnumeration > createKeyEnumeration( bool Isolated ) override;
-        virtual css::uno::Reference< css::container::XEnumeration > createValueEnumeration( bool Isolated ) override;
-        virtual css::uno::Reference< css::container::XEnumeration > createElementEnumeration( bool Isolated ) override;
+        virtual cpo::uno::Reference< css::container::XEnumeration > createKeyEnumeration( bool Isolated ) override;
+        virtual cpo::uno::Reference< css::container::XEnumeration > createValueEnumeration( bool Isolated ) override;
+        virtual cpo::uno::Reference< css::container::XEnumeration > createElementEnumeration( bool Isolated ) override;
 
         // XMap
         virtual Type getKeyType() override;

@@ -24,14 +24,14 @@
 class SbxErrObject final : public SbUnoObject
 {
     class ErrObject* m_pErrObject;
-    css::uno::Reference<ooo::vba::XErrObject> m_xErr;
+    cpo::uno::Reference<ooo::vba::XErrObject> m_xErr;
 
     SbxErrObject(const OUString& aName_, const cpo::uno::Any& aUnoObj_);
     virtual ~SbxErrObject() override;
 
 public:
     static SbxVariableRef const& getErrObject();
-    static css::uno::Reference<ooo::vba::XErrObject> const& getUnoErrObject();
+    static cpo::uno::Reference<ooo::vba::XErrObject> const& getUnoErrObject();
 
     /// @throws cpo::uno::RuntimeException
     void setNumberAndDescription(::sal_Int32 _number, const OUString& _description);

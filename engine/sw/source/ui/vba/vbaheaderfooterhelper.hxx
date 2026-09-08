@@ -31,7 +31,7 @@ public:
     /// @throws cpo::uno::RuntimeException
     static bool isHeaderFooter(const rtl::Reference<SwXTextDocument>& xModel);
     /// @throws cpo::uno::RuntimeException
-    static bool isHeaderFooter(const css::uno::Reference<css::text::XText>& xText);
+    static bool isHeaderFooter(const cpo::uno::Reference<css::text::XText>& xText);
     /// @throws cpo::uno::RuntimeException
     static bool isHeader(const rtl::Reference<SwXTextDocument>& xModel);
     /// @throws cpo::uno::RuntimeException

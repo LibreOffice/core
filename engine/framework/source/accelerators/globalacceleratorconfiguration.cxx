@@ -48,7 +48,7 @@ public:
         @param  xSMGR
                 reference to a uno service manager, which is used internally.
      */
-    explicit GlobalAcceleratorConfiguration(const css::uno::Reference< cpo::uno::XComponentContext >& xContext);
+    explicit GlobalAcceleratorConfiguration(const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext);
 
     virtual OUString getImplementationName() override
     {
@@ -74,7 +74,7 @@ private:
     rtl::Reference< WeakChangesListener > m_xCfgListener;
 };
 
-GlobalAcceleratorConfiguration::GlobalAcceleratorConfiguration(const css::uno::Reference< cpo::uno::XComponentContext >& xContext)
+GlobalAcceleratorConfiguration::GlobalAcceleratorConfiguration(const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext)
     : GlobalAcceleratorConfiguration_BASE(xContext)
 {
     // force keyboard string registration.
@@ -99,7 +99,7 @@ void GlobalAcceleratorConfiguration::fillCache()
         m_sGlobalOrModules = CFG_ENTRY_GLOBAL;
         XCUBasedAcceleratorConfiguration::reload();
 
-        css::uno::Reference< css::util::XChangesNotifier > xBroadcaster(m_xCfg, css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference< css::util::XChangesNotifier > xBroadcaster(m_xCfg, cpo::uno::UNO_QUERY_THROW);
         m_xCfgListener = new WeakChangesListener(this);
         xBroadcaster->addChangesListener(m_xCfgListener);
     }

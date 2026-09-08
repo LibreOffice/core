@@ -31,7 +31,7 @@
 #include <vcl/unohelp.hxx>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/accessibility/AccessibleTextType.hpp>
@@ -45,6 +45,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
+using namespace ::cpo;
 
 /* TODO:
    =====

@@ -29,7 +29,7 @@
 
 #include <rtl/ustring.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <cpo/uno/Sequence.hxx>
 
 namespace com::sun::star::beans { class XPropertySet; }
@@ -39,14 +39,14 @@ namespace cpo::uno { class XInterface; }
 
 class VCL_DLLPUBLIC FilterConfigItem
 {
-    css::uno::Reference< cpo::uno::XInterface > xUpdatableView;
-    css::uno::Reference< css::beans::XPropertySet > xPropSet;
+    cpo::uno::Reference< cpo::uno::XInterface > xUpdatableView;
+    cpo::uno::Reference< css::beans::XPropertySet > xPropSet;
     cpo::uno::Sequence< css::beans::PropertyValue > aFilterData;
 
     bool    bModified;
 
     static bool ImplGetPropertyValue( cpo::uno::Any& rAny,
-                            const css::uno::Reference< css::beans::XPropertySet >& rXPropSet,
+                            const cpo::uno::Reference< css::beans::XPropertySet >& rXPropSet,
                             const OUString& rPropName );
 
     void     ImpInitTree( std::u16string_view rTree );
@@ -88,7 +88,7 @@ public:
     const cpo::uno::Sequence< css::beans::PropertyValue >& GetFilterData() const { return aFilterData;}
 
     // GetStatusIndicator is returning the "StatusIndicator" property of the FilterData sequence
-    css::uno::Reference< css::task::XStatusIndicator > GetStatusIndicator() const;
+    cpo::uno::Reference< css::task::XStatusIndicator > GetStatusIndicator() const;
 };
 
 #endif // INCLUDED_VCL_FILTERCONFIGITEM_HXX

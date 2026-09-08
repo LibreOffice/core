@@ -26,6 +26,7 @@
 #include <xmloff/xmltoken.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace ::xmloff::token;
 
 SchXMLParagraphContext::SchXMLParagraphContext( SvXMLImport& rImport,
@@ -78,9 +79,9 @@ void SchXMLParagraphContext::endFastElement(sal_Int32 )
     mrText = maBuffer.makeStringAndClear();
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLParagraphContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLParagraphContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
     if( nElement == XML_ELEMENT(TEXT, XML_TAB_STOP) )
     {
@@ -122,9 +123,9 @@ void SchXMLTitleParaContext::characters(const OUString& rChars)
     maBuffer.append(rChars);
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLTitleParaContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLTitleParaContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     if( nElement == XML_ELEMENT(TEXT, XML_SPAN) )
     {
@@ -148,7 +149,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLTitleParaContext
 }
 
 SchXMLTitleSpanContext::SchXMLTitleSpanContext(SvXMLImport& rImport, std::vector<std::pair<OUString, OUString>>& rSpanTexts,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList) :
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList) :
     SvXMLImportContext(rImport),
     mrSpanTexts(rSpanTexts)
 {
@@ -170,9 +171,9 @@ void SchXMLTitleSpanContext::characters(const OUString& rChars)
     maCharBuffer.append(rChars);
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLTitleSpanContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLTitleSpanContext::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/)
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/)
 {
     if( nElement == XML_ELEMENT(TEXT, XML_TAB_STOP) )
     {

@@ -20,7 +20,7 @@
 #pragma once
 
 #include <deque>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <regexpmap.hxx>
 
 namespace com::sun::star::ucb {
@@ -30,25 +30,25 @@ namespace com::sun::star::ucb {
 
 class ProviderListEntry_Impl
 {
-    css::uno::Reference<
+    cpo::uno::Reference<
         css::ucb::XContentProvider > m_xProvider;
-    mutable css::uno::Reference<
+    mutable cpo::uno::Reference<
         css::ucb::XContentProvider > m_xResolvedProvider;
 
 private:
-    css::uno::Reference< css::ucb::XContentProvider > const & resolveProvider() const;
+    cpo::uno::Reference< css::ucb::XContentProvider > const & resolveProvider() const;
 
 public:
     explicit ProviderListEntry_Impl(
-        css::uno::Reference< css::ucb::XContentProvider > xProvider )
+        cpo::uno::Reference< css::ucb::XContentProvider > xProvider )
     : m_xProvider( std::move(xProvider) ) {}
 
-    const css::uno::Reference< css::ucb::XContentProvider >& getProvider() const
+    const cpo::uno::Reference< css::ucb::XContentProvider >& getProvider() const
     { return m_xProvider; }
-    inline css::uno::Reference< css::ucb::XContentProvider > const & getResolvedProvider() const;
+    inline cpo::uno::Reference< css::ucb::XContentProvider > const & getResolvedProvider() const;
 };
 
-inline css::uno::Reference< css::ucb::XContentProvider > const &
+inline cpo::uno::Reference< css::ucb::XContentProvider > const &
 ProviderListEntry_Impl::getResolvedProvider() const
 {
     return m_xResolvedProvider.is() ? m_xResolvedProvider : resolveProvider();

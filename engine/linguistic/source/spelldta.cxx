@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <com/sun/star/linguistic2/SpellFailure.hpp>
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 #include <osl/mutex.hxx>
@@ -35,7 +35,7 @@
 using namespace osl;
 using namespace com::sun::star;
 using namespace com::sun::star::lang;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace com::sun::star::linguistic2;
 using namespace ::cpo::uno;
 
@@ -99,7 +99,7 @@ void SearchSimilarText( const OUString &rText, LanguageType nLanguage,
 void SeqRemoveNegEntries( std::vector< OUString > &rSeq,
         Reference< XSearchableDictionaryList > const &rxDicList,
         LanguageType nLanguage,
-        std::map<LanguageType, std::vector<css::uno::Reference<css::linguistic2::XDictionary>>>& rDictionaryMap )
+        std::map<LanguageType, std::vector<cpo::uno::Reference<css::linguistic2::XDictionary>>>& rDictionaryMap )
 {
     bool bSthRemoved = false;
     sal_Int32 nLen = rSeq.size();
@@ -247,7 +247,7 @@ void SpellAlternatives::SetAlternatives( const Sequence< OUString > &rAlt )
 }
 
 
-css::uno::Reference < css::linguistic2::XSpellAlternatives > SpellAlternatives::CreateSpellAlternatives(
+cpo::uno::Reference < css::linguistic2::XSpellAlternatives > SpellAlternatives::CreateSpellAlternatives(
         const OUString &rWord, LanguageType nLang, sal_Int16 nTypeP, const cpo::uno::Sequence< OUString > &rAlt )
 {
     rtl::Reference<SpellAlternatives> pAlt = new SpellAlternatives;

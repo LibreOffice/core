@@ -24,7 +24,7 @@
 
 #include "com/sun/star/lang/XTypeProvider.hpp"
 #include "cpo/uno/Any.h"
-#include "com/sun/star/uno/Reference.h"
+#include "cpo/uno/Reference.h"
 #include "cpo/uno/Sequence.h"
 #include "cpo/uno/Type.h"
 #include "cppuhelper/compbase_ex.hxx"
@@ -114,11 +114,11 @@ public:
         PartialWeakComponentImplHelper<Ifc...>(mutex) {}
 
     void addEventListener(
-        css::uno::Reference<css::lang::XEventListener> const & xListener) SAL_OVERRIDE
+        cpo::uno::Reference<css::lang::XEventListener> const & xListener) SAL_OVERRIDE
     { WeakComponentImplHelperBase::addEventListener(xListener); }
 
     void removeEventListener(
-        css::uno::Reference<css::lang::XEventListener> const & aListener) SAL_OVERRIDE
+        cpo::uno::Reference<css::lang::XEventListener> const & aListener) SAL_OVERRIDE
     { WeakComponentImplHelperBase::removeEventListener(aListener); }
 };
 

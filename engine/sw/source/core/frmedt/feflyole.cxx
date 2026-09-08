@@ -35,6 +35,7 @@
 #include <sfx2/linkmgr.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 SwFlyFrame *SwFEShell::FindFlyFrame( const uno::Reference < embed::XEmbeddedObject >& xObj ) const
 {

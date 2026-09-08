@@ -148,7 +148,7 @@ private:
     void AppendLatentStyleProperty(const OUString& aName, Value const & rValue);
     /// Sets all properties of xStyle back to default.
     static void SetPropertiesToDefault(const rtl::Reference<SwXBaseStyle>& xStyle);
-    void ApplyClonedTOCStylesToXText(css::uno::Reference<css::text::XText> const& xText);
+    void ApplyClonedTOCStylesToXText(cpo::uno::Reference<css::text::XText> const& xText);
 
     DomainMapper&                           m_rDMapper;
     rtl::Reference<SwXTextDocument>         m_xTextDocument;

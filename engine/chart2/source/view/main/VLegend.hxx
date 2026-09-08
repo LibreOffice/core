@@ -20,7 +20,7 @@
 
 #include <Legend.hxx>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <rtl/ref.hxx>
 #include <svx/unoshape.hxx>
 #include <vector>
@@ -39,7 +39,7 @@ class VLegend
 {
 public:
     VLegend( rtl::Reference< ::chart::Legend > xLegend,
-             const css::uno::Reference< cpo::uno::XComponentContext > & xContext,
+             const cpo::uno::Reference< cpo::uno::XComponentContext > & xContext,
              std::vector< LegendEntryProvider* >&& rLegendEntryProviderList,
              rtl::Reference<SvxShapeGroupAnyD> xTargetPage,
              ChartModel& rModel  );
@@ -74,7 +74,7 @@ private:
 
     ChartModel& mrModel;
 
-    css::uno::Reference< cpo::uno::XComponentContext >      m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext >      m_xContext;
 
     std::vector< LegendEntryProvider* >         m_aLegendEntryProviderList;
 

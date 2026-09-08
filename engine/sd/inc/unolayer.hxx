@@ -57,29 +57,29 @@ public:
     virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // css::beans::XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
     virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
     virtual cpo::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
-    virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
-    virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
-    virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
-    virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+    virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
+    virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
+    virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+    virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
     // css::container::XChild
 
     /** Returns the layer manager that manages this layer.
     */
-    virtual css::uno::Reference< cpo::uno::XInterface > SAL_CALL getParent(  ) override;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > SAL_CALL getParent(  ) override;
 
     // XComponent
     virtual void SAL_CALL dispose(  ) override;
-    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+    virtual void SAL_CALL addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& xListener ) override;
+    virtual void SAL_CALL removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
     /** Not implemented.  Always throws an exception.
         @throws NoSupportException.
     */
-    virtual void SAL_CALL setParent( const css::uno::Reference< cpo::uno::XInterface >& Parent ) override;
+    virtual void SAL_CALL setParent( const cpo::uno::Reference< cpo::uno::XInterface >& Parent ) override;
 
 private:
     rtl::Reference<SdLayerManager>     mxLayerManager;
@@ -112,10 +112,10 @@ public:
     virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XLayerManager
-    virtual css::uno::Reference< css::drawing::XLayer > SAL_CALL insertNewByIndex( sal_Int32 nIndex ) override;
-    virtual void SAL_CALL remove( const css::uno::Reference< css::drawing::XLayer >& xLayer ) override;
-    virtual void SAL_CALL attachShapeToLayer( const css::uno::Reference< css::drawing::XShape >& xShape, const css::uno::Reference< css::drawing::XLayer >& xLayer ) override;
-    virtual css::uno::Reference< css::drawing::XLayer > SAL_CALL getLayerForShape( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
+    virtual cpo::uno::Reference< css::drawing::XLayer > SAL_CALL insertNewByIndex( sal_Int32 nIndex ) override;
+    virtual void SAL_CALL remove( const cpo::uno::Reference< css::drawing::XLayer >& xLayer ) override;
+    virtual void SAL_CALL attachShapeToLayer( const cpo::uno::Reference< css::drawing::XShape >& xShape, const cpo::uno::Reference< css::drawing::XLayer >& xLayer ) override;
+    virtual cpo::uno::Reference< css::drawing::XLayer > SAL_CALL getLayerForShape( const cpo::uno::Reference< css::drawing::XShape >& xShape ) override;
 
     // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override ;
@@ -146,8 +146,8 @@ public:
 
     // XComponent
     virtual void SAL_CALL dispose(  ) override;
-    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+    virtual void SAL_CALL addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& xListener ) override;
+    virtual void SAL_CALL removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
 private:
     SdXImpressDocument* mpModel;

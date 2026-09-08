@@ -34,7 +34,7 @@ namespace abp
 {
 
 
-    using namespace ::com::sun::star::uno;
+    using namespace ::cpo::uno;
 using namespace cpo::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
@@ -42,7 +42,7 @@ using namespace cpo::uno;
     using namespace ::com::sun::star::sdbc;
 
     OAdminDialogInvokation::OAdminDialogInvokation(const Reference< XComponentContext >& _rxContext,
-                    css::uno::Reference< css::beans::XPropertySet > _xDataSource,
+                    cpo::uno::Reference< css::beans::XPropertySet > _xDataSource,
                     weld::Window* _pMessageParent)
         :m_xContext(_rxContext)
         ,m_xDataSource(std::move(_xDataSource))

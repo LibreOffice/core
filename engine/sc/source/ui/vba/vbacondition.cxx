@@ -27,6 +27,7 @@
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 const sal_Int32 ISFORMULA = 98765432;
 

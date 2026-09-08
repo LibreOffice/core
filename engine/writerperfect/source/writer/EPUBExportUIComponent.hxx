@@ -37,7 +37,7 @@ class EPUBExportUIComponent
                                   css::document::XExporter>
 {
 public:
-    EPUBExportUIComponent(css::uno::Reference<cpo::uno::XComponentContext> xContext);
+    EPUBExportUIComponent(cpo::uno::Reference<cpo::uno::XComponentContext> xContext);
 
     // XPropertyAccess
     cpo::uno::Sequence<css::beans::PropertyValue> SAL_CALL getPropertyValues() override;
@@ -57,11 +57,11 @@ public:
     void SAL_CALL setDialogTitle(const OUString& aTitle) override;
 
     void SAL_CALL startExecuteModal(
-        const css::uno::Reference<css::ui::dialogs::XDialogClosedListener>& xListener) override;
+        const cpo::uno::Reference<css::ui::dialogs::XDialogClosedListener>& xListener) override;
 
     // XExporter
     void SAL_CALL
-    setSourceDocument(const css::uno::Reference<css::lang::XComponent>& xDocument) override;
+    setSourceDocument(const cpo::uno::Reference<css::lang::XComponent>& xDocument) override;
 
     // XInitialization
     void SAL_CALL initialize(const cpo::uno::Sequence<cpo::uno::Any>& rArguments) override;
@@ -72,9 +72,9 @@ private:
     /// The filter data key.
     comphelper::SequenceAsHashMap maFilterData;
     /// UNO context.
-    css::uno::Reference<cpo::uno::XComponentContext> mxContext;
-    css::uno::Reference<css::lang::XComponent> mxSourceDocument;
-    css::uno::Reference<css::awt::XWindow> mxDialogParent;
+    cpo::uno::Reference<cpo::uno::XComponentContext> mxContext;
+    cpo::uno::Reference<css::lang::XComponent> mxSourceDocument;
+    cpo::uno::Reference<css::awt::XWindow> mxDialogParent;
     std::shared_ptr<weld::DialogController> mxAsyncDialog;
 };
 

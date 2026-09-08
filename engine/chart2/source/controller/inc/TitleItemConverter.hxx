@@ -34,7 +34,7 @@ class TitleItemConverter final : public ItemConverter
 {
 public:
     TitleItemConverter(
-        const css::uno::Reference<css::beans::XPropertySet>& rPropertySet,
+        const cpo::uno::Reference<css::beans::XPropertySet>& rPropertySet,
         SfxItemPool& rItemPool, SdrModel& rDrawModel,
         const rtl::Reference<ChartModel>& xChartModel,
         const std::optional<css::awt::Size>& pRefSize );

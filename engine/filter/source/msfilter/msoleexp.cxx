@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XEmbedPersist.hpp>
@@ -42,6 +42,7 @@
 #include <filter/msfilter/msoleexp.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 static SvGlobalName GetEmbeddedVersion( const SvGlobalName& aAppName )
 {
@@ -78,7 +79,7 @@ static OUString GetStorageType( const SvGlobalName& aEmbName )
     return OUString();
 }
 
-void SvxMSExportOLEObjects::ExportOLEObject( const css::uno::Reference < css::embed::XEmbeddedObject>& rObj, SotStorage& rDestStg )
+void SvxMSExportOLEObjects::ExportOLEObject( const cpo::uno::Reference < css::embed::XEmbeddedObject>& rObj, SotStorage& rDestStg )
 {
     svt::EmbeddedObjectRef aObj( rObj, embed::Aspects::MSOLE_CONTENT );
     ExportOLEObject( aObj, rDestStg );

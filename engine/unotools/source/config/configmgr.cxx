@@ -24,7 +24,7 @@
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <officecfg/Setup.hxx>
@@ -61,7 +61,7 @@ private:
     RegisterConfigItemHelper& operator=(const RegisterConfigItemHelper&) = delete;
 };
 
-css::uno::Reference< css::lang::XMultiServiceFactory >
+cpo::uno::Reference< css::lang::XMultiServiceFactory >
 getConfigurationProvider() {
     return css::configuration::theDefaultProvider::get( comphelper::getProcessComponentContext() );
 }
@@ -113,7 +113,7 @@ utl::ConfigManager & utl::ConfigManager::getConfigManager() {
     return theConfigManager;
 }
 
-css::uno::Reference< css::container::XHierarchicalNameAccess >
+cpo::uno::Reference< css::container::XHierarchicalNameAccess >
 utl::ConfigManager::acquireTree(utl::ConfigItem const & item) {
     cpo::uno::Sequence< cpo::uno::Any > args{ cpo::uno::Any(css::beans::NamedValue(
         u"nodepath"_ustr,
@@ -122,23 +122,23 @@ utl::ConfigManager::acquireTree(utl::ConfigItem const & item) {
         args.realloc(2);
         args.getArray()[1] <<= css::beans::NamedValue(u"locale"_ustr, cpo::uno::Any(u"*"_ustr));
     }
-    return css::uno::Reference< css::container::XHierarchicalNameAccess >(
+    return cpo::uno::Reference< css::container::XHierarchicalNameAccess >(
         getConfigurationProvider()->createInstanceWithArguments(
             u"com.sun.star.configuration.ConfigurationUpdateAccess"_ustr,
             args),
-        css::uno::UNO_QUERY_THROW);
+        cpo::uno::UNO_QUERY_THROW);
 }
 
-css::uno::Reference< css::container::XHierarchicalNameAccess >
+cpo::uno::Reference< css::container::XHierarchicalNameAccess >
 utl::ConfigManager::acquireTree(std::u16string_view rSubTreeName) {
     cpo::uno::Sequence< cpo::uno::Any > args{ cpo::uno::Any(css::beans::NamedValue(
         u"nodepath"_ustr,
         cpo::uno::Any(OUString::Concat(u"/org.openoffice.") + rSubTreeName))) };
-    return css::uno::Reference< css::container::XHierarchicalNameAccess >(
+    return cpo::uno::Reference< css::container::XHierarchicalNameAccess >(
         getConfigurationProvider()->createInstanceWithArguments(
             u"com.sun.star.configuration.ConfigurationUpdateAccess"_ustr,
             args),
-        css::uno::UNO_QUERY_THROW);
+        cpo::uno::UNO_QUERY_THROW);
 }
 
 utl::ConfigManager::ConfigManager() {}
@@ -147,10 +147,10 @@ utl::ConfigManager::~ConfigManager() {
     SAL_WARN_IF(!items_.empty(), "unotools.config", "ConfigManager not empty");
 }
 
-css::uno::Reference< css::container::XHierarchicalNameAccess >
+cpo::uno::Reference< css::container::XHierarchicalNameAccess >
 utl::ConfigManager::addConfigItem(utl::ConfigItem & item) {
     RegisterConfigItemHelper reg(*this, item);
-    css::uno::Reference< css::container::XHierarchicalNameAccess > tree(
+    cpo::uno::Reference< css::container::XHierarchicalNameAccess > tree(
         acquireTree(item));
     reg.keep();
     return tree;

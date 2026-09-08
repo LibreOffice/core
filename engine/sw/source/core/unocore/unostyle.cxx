@@ -133,8 +133,8 @@
 using namespace css;
 using namespace css::io;
 using namespace css::lang;
-using namespace css::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 namespace {
 
@@ -865,7 +865,7 @@ static bool lcl_GetHeaderFooterItem(
     return o_rpItem;
 }
 
-css::uno::Reference<css::style::XStyle> SwXStyleFamilies::CreateStyle(SfxStyleFamily eFamily, SwDoc& rDoc)
+cpo::uno::Reference<css::style::XStyle> SwXStyleFamilies::CreateStyle(SfxStyleFamily eFamily, SwDoc& rDoc)
 {
     switch (eFamily)
     {
@@ -4653,7 +4653,7 @@ void SAL_CALL SwXTextTableStyle::setName(const OUString& rProgName)
 }
 
 //XPropertySet
-css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL SwXTextTableStyle::getPropertySetInfo()
+cpo::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL SwXTextTableStyle::getPropertySetInfo()
 {
     static uno::Reference<beans::XPropertySetInfo> xRef(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TABLE_STYLE)->getPropertySetInfo());
     return xRef;
@@ -4685,22 +4685,22 @@ cpo::uno::Any SAL_CALL SwXTextTableStyle::getPropertyValue(const OUString& rProp
     return cpo::uno::Any(bIsRow ? u"row"_ustr : u"column"_ustr);
 }
 
-void SAL_CALL SwXTextTableStyle::addPropertyChangeListener( const OUString& /*aPropertyName*/, const css::uno::Reference< css::beans::XPropertyChangeListener >& /*xListener*/ )
+void SAL_CALL SwXTextTableStyle::addPropertyChangeListener( const OUString& /*aPropertyName*/, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& /*xListener*/ )
 {
     SAL_WARN("sw.uno", "not implemented");
 }
 
-void SAL_CALL SwXTextTableStyle::removePropertyChangeListener( const OUString& /*aPropertyName*/, const css::uno::Reference< css::beans::XPropertyChangeListener >& /*aListener*/ )
+void SAL_CALL SwXTextTableStyle::removePropertyChangeListener( const OUString& /*aPropertyName*/, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& /*aListener*/ )
 {
     SAL_WARN("sw.uno", "not implemented");
 }
 
-void SAL_CALL SwXTextTableStyle::addVetoableChangeListener( const OUString& /*PropertyName*/, const css::uno::Reference< css::beans::XVetoableChangeListener >& /*aListener*/ )
+void SAL_CALL SwXTextTableStyle::addVetoableChangeListener( const OUString& /*PropertyName*/, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& /*aListener*/ )
 {
     SAL_WARN("sw.uno", "not implemented");
 }
 
-void SAL_CALL SwXTextTableStyle::removeVetoableChangeListener( const OUString& /*PropertyName*/, const css::uno::Reference< css::beans::XVetoableChangeListener >& /*aListener*/ )
+void SAL_CALL SwXTextTableStyle::removeVetoableChangeListener( const OUString& /*PropertyName*/, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& /*aListener*/ )
 {
     SAL_WARN("sw.uno", "not implemented");
 }
@@ -5011,7 +5011,7 @@ void SAL_CALL SwXTextCellStyle::setName(const OUString& sName)
 }
 
 //XPropertySet
-css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL SwXTextCellStyle::getPropertySetInfo()
+cpo::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL SwXTextCellStyle::getPropertySetInfo()
 {
     static uno::Reference<beans::XPropertySetInfo> xRef(aSwMapProvider.GetPropertySet(PROPERTY_MAP_CELL_STYLE)->getPropertySetInfo());
     return xRef;
@@ -5372,22 +5372,22 @@ cpo::uno::Any SAL_CALL SwXTextCellStyle::getPropertyValue(const OUString& rPrope
     throw css::beans::UnknownPropertyException(rPropertyName);
 }
 
-void SAL_CALL SwXTextCellStyle::addPropertyChangeListener( const OUString& /*aPropertyName*/, const css::uno::Reference< css::beans::XPropertyChangeListener >& /*xListener*/ )
+void SAL_CALL SwXTextCellStyle::addPropertyChangeListener( const OUString& /*aPropertyName*/, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& /*xListener*/ )
 {
     SAL_WARN("sw.uno", "not implemented");
 }
 
-void SAL_CALL SwXTextCellStyle::removePropertyChangeListener( const OUString& /*aPropertyName*/, const css::uno::Reference< css::beans::XPropertyChangeListener >& /*aListener*/ )
+void SAL_CALL SwXTextCellStyle::removePropertyChangeListener( const OUString& /*aPropertyName*/, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& /*aListener*/ )
 {
     SAL_WARN("sw.uno", "not implemented");
 }
 
-void SAL_CALL SwXTextCellStyle::addVetoableChangeListener( const OUString& /*PropertyName*/, const css::uno::Reference< css::beans::XVetoableChangeListener >& /*aListener*/ )
+void SAL_CALL SwXTextCellStyle::addVetoableChangeListener( const OUString& /*PropertyName*/, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& /*aListener*/ )
 {
     SAL_WARN("sw.uno", "not implemented");
 }
 
-void SAL_CALL SwXTextCellStyle::removeVetoableChangeListener( const OUString& /*PropertyName*/, const css::uno::Reference< css::beans::XVetoableChangeListener >& /*aListener*/ )
+void SAL_CALL SwXTextCellStyle::removeVetoableChangeListener( const OUString& /*PropertyName*/, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& /*aListener*/ )
 {
     SAL_WARN("sw.uno", "not implemented");
 }

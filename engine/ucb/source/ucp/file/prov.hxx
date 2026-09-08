@@ -52,7 +52,7 @@ namespace fileaccess {
         friend class BaseContent;
     public:
 
-        explicit FileProvider( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+        explicit FileProvider( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
         virtual ~FileProvider() override;
 
         // XServiceInfo
@@ -73,25 +73,25 @@ namespace fileaccess {
 
 
         // XContentProvider
-        virtual css::uno::Reference< css::ucb::XContent > SAL_CALL
+        virtual cpo::uno::Reference< css::ucb::XContent > SAL_CALL
         queryContent(
-            const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier ) override;
+            const cpo::uno::Reference< css::ucb::XContentIdentifier >& Identifier ) override;
 
         // XContentIdentifierFactory
 
-        virtual css::uno::Reference< css::ucb::XContentIdentifier > SAL_CALL
+        virtual cpo::uno::Reference< css::ucb::XContentIdentifier > SAL_CALL
         createContentIdentifier(
             const OUString& ContentId ) override;
 
 
         virtual sal_Int32 SAL_CALL
         compareContentIds(
-            const css::uno::Reference< css::ucb::XContentIdentifier >& Id1,
-            const css::uno::Reference< css::ucb::XContentIdentifier >& Id2 ) override;
+            const cpo::uno::Reference< css::ucb::XContentIdentifier >& Id1,
+            const cpo::uno::Reference< css::ucb::XContentIdentifier >& Id2 ) override;
 
         // XPropertySet
 
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
+        virtual cpo::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
         getPropertySetInfo(  ) override;
 
         virtual void SAL_CALL
@@ -106,22 +106,22 @@ namespace fileaccess {
         virtual void SAL_CALL
         addPropertyChangeListener(
             const OUString& aPropertyName,
-            const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
+            const cpo::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
 
         virtual void SAL_CALL
         removePropertyChangeListener(
             const OUString& aPropertyName,
-            const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
+            const cpo::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
 
         virtual void SAL_CALL
         addVetoableChangeListener(
             const OUString& PropertyName,
-            const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+            const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
         virtual void SAL_CALL
         removeVetoableChangeListener(
             const OUString& PropertyName,
-            const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+            const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
 
         // XFileIdentifierConverter
@@ -140,7 +140,7 @@ namespace fileaccess {
         void init();
 
         // Members
-        css::uno::Reference< cpo::uno::XComponentContext >      m_xContext;
+        cpo::uno::Reference< cpo::uno::XComponentContext >      m_xContext;
 
         void initProperties(std::unique_lock<std::mutex>& rGuard);
         std::mutex   m_aMutex;

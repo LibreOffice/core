@@ -136,11 +136,11 @@ public:
     virtual OUString        getOSVersion() override;
 
     // dtrans implementation
-    virtual css::uno::Reference<css::datatransfer::clipboard::XClipboard>
+    virtual cpo::uno::Reference<css::datatransfer::clipboard::XClipboard>
     CreateClipboard(const cpo::uno::Sequence<cpo::uno::Any>& i_rArguments) override;
-    virtual css::uno::Reference<css::datatransfer::dnd::XDragSource>
+    virtual cpo::uno::Reference<css::datatransfer::dnd::XDragSource>
     ImplCreateDragSource(const SystemEnvData& rSysEnv) override;
-    virtual css::uno::Reference<css::datatransfer::dnd::XDropTarget>
+    virtual cpo::uno::Reference<css::datatransfer::dnd::XDropTarget>
     ImplCreateDropTarget(const SystemEnvData& rSysEnv) override;
 
     static void handleAppDefinedEvent( NSEvent* pEvent );

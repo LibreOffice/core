@@ -92,6 +92,7 @@
 #include <editeng/ulspitem.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 static OutlinerView* lcl_GetPostItOutlinerView(SwWrtShell& rShell)
 {

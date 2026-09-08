@@ -29,9 +29,9 @@ class KitClipboard final
                                            css::lang::XServiceInfo>
 {
     osl::Mutex m_aMutex;
-    css::uno::Reference<css::datatransfer::XTransferable> m_xTransferable;
-    css::uno::Reference<css::datatransfer::clipboard::XClipboardOwner> m_aOwner;
-    std::vector<css::uno::Reference<css::datatransfer::clipboard::XClipboardListener>> m_aListeners;
+    cpo::uno::Reference<css::datatransfer::XTransferable> m_xTransferable;
+    cpo::uno::Reference<css::datatransfer::clipboard::XClipboardOwner> m_aOwner;
+    std::vector<cpo::uno::Reference<css::datatransfer::clipboard::XClipboardListener>> m_aListeners;
     int m_nViewId = -1;
     /// The document this view belongs to, cached so the clipboard can be
     /// released on document destroy even after the view shell is gone.
@@ -63,7 +63,7 @@ public:
     void flushContents();
 
     /// get an XInterface easily.
-    css::uno::Reference<cpo::uno::XInterface> getXI()
+    cpo::uno::Reference<cpo::uno::XInterface> getXI()
     {
         return { static_cast<cppu::OWeakObject*>(this) };
     }
@@ -75,9 +75,9 @@ public:
     static cpo::uno::Sequence<OUString> getSupportedServiceNames_static();
 
     // XClipboard
-    css::uno::Reference<css::datatransfer::XTransferable> getContents() override;
-    void setContents(const css::uno::Reference<css::datatransfer::XTransferable>& xTransferable,
-                     const css::uno::Reference<css::datatransfer::clipboard::XClipboardOwner>&
+    cpo::uno::Reference<css::datatransfer::XTransferable> getContents() override;
+    void setContents(const cpo::uno::Reference<css::datatransfer::XTransferable>& xTransferable,
+                     const cpo::uno::Reference<css::datatransfer::clipboard::XClipboardOwner>&
                          xClipboardOwner) override;
     OUString getName() override { return u"CLIPBOARD"_ustr; }
 
@@ -86,10 +86,10 @@ public:
 
     // XClipboardNotifier
     void addClipboardListener(
-        const css::uno::Reference<css::datatransfer::clipboard::XClipboardListener>& listener)
+        const cpo::uno::Reference<css::datatransfer::clipboard::XClipboardListener>& listener)
         override;
     void removeClipboardListener(
-        const css::uno::Reference<css::datatransfer::clipboard::XClipboardListener>& listener)
+        const cpo::uno::Reference<css::datatransfer::clipboard::XClipboardListener>& listener)
         override;
 };
 
@@ -167,11 +167,11 @@ public:
     {
     }
 
-    css::uno::Reference<cpo::uno::XInterface> createInstance() override
+    cpo::uno::Reference<cpo::uno::XInterface> createInstance() override
     {
         return createInstanceWithArguments(cpo::uno::Sequence<cpo::uno::Any>());
     }
-    css::uno::Reference<cpo::uno::XInterface>
+    cpo::uno::Reference<cpo::uno::XInterface>
     createInstanceWithArguments(const cpo::uno::Sequence<cpo::uno::Any>& /* rArgs */) override;
 
     /// Fetch clipboard from the global pool.

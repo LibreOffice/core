@@ -21,7 +21,7 @@
 
 #include <sal/types.h>
 
-namespace com::sun::star::uno { template <class interface_type> class Reference; }
+namespace cpo::uno { template <class interface_type> class Reference; }
 namespace com::sun::star::sheet { class XSpreadsheetDocument; }
 
 class ScXMLExport;
@@ -37,7 +37,7 @@ class ScXMLExportDDELinks
     void                WriteTable(const sal_Int32 nPos);
 public:
     explicit ScXMLExportDDELinks(ScDocument& rDoc, ScXMLExport& rExport);
-    void WriteDDELinks(const css::uno::Reference < css::sheet::XSpreadsheetDocument >& xSpreadDoc);
+    void WriteDDELinks(const cpo::uno::Reference < css::sheet::XSpreadsheetDocument >& xSpreadDoc);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

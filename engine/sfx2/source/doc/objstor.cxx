@@ -127,8 +127,8 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::task;
@@ -147,13 +147,13 @@ static cpo::uno::Any getODFVersionAny(SvtSaveOptions::ODFSaneDefaultVersion v)
 }
 
 
-void impl_addToModelCollection(const css::uno::Reference< css::frame::XModel >& xModel)
+void impl_addToModelCollection(const cpo::uno::Reference< css::frame::XModel >& xModel)
 {
     if (!xModel.is())
         return;
 
-    const css::uno::Reference< cpo::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
-    css::uno::Reference< css::frame::XGlobalEventBroadcaster > xModelCollection =
+    const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
+    cpo::uno::Reference< css::frame::XGlobalEventBroadcaster > xModelCollection =
         css::frame::theGlobalEventBroadcaster::get(xContext);
     try
     {
@@ -791,7 +791,7 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
         try
         {
             ::ucbhelper::Content aContent( pMedium->GetName(), utl::UCBContentHelper::getDefaultCommandEnvironment(), comphelper::getProcessComponentContext() );
-            css::uno::Reference < XPropertySetInfo > xProps = aContent.getProperties();
+            cpo::uno::Reference < XPropertySetInfo > xProps = aContent.getProperties();
             if ( xProps.is() )
             {
                 static constexpr OUString aAuthor( u"Author"_ustr );
@@ -1089,7 +1089,7 @@ void SfxObjectShell::DetectFilterOptions(SfxMedium* pMedium)
 
     if (pFilter->GetName() == "Text - txt - csv (StarCalc)")
     {
-        css::uno::Reference< css::io::XInputStream > xInputStream = pMedium->GetInputStream();
+        cpo::uno::Reference< css::io::XInputStream > xInputStream = pMedium->GetInputStream();
         if (!xInputStream.is())
             return;
         std::unique_ptr<SvStream> pInStream = utl::UcbStreamHelper::CreateStream(xInputStream);
@@ -1118,8 +1118,8 @@ ErrCode SfxObjectShell::HandleFilter( SfxMedium* pMedium, SfxObjectShell const *
 
     if ( !pData && (bTiledRendering || !pOptions) )
     {
-        css::uno::Reference< XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
-        css::uno::Reference< XNameAccess > xFilterCFG;
+        cpo::uno::Reference< XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
+        cpo::uno::Reference< XNameAccess > xFilterCFG;
         if( xServiceManager.is() )
         {
             xFilterCFG.set( xServiceManager->createInstance(u"com.sun.star.document.FilterFactory"_ustr),
@@ -1143,7 +1143,7 @@ ErrCode SfxObjectShell::HandleFilter( SfxMedium* pMedium, SfxObjectShell const *
                         pProp->Value >>= aServiceName;
                         if( !aServiceName.isEmpty() )
                         {
-                            css::uno::Reference< XInteractionHandler > rHandler = pMedium->GetInteractionHandler();
+                            cpo::uno::Reference< XInteractionHandler > rHandler = pMedium->GetInteractionHandler();
                             if( rHandler.is() )
                             {
                                 // we need some properties in the media descriptor, so we have to make sure that they are in
@@ -2075,7 +2075,7 @@ bool SfxObjectShell::SaveTo_Impl
         try
         {
             ::ucbhelper::Content aContent( rMedium.GetName(), utl::UCBContentHelper::getDefaultCommandEnvironment(), comphelper::getProcessComponentContext() );
-            css::uno::Reference < XPropertySetInfo > xProps = aContent.getProperties();
+            cpo::uno::Reference < XPropertySetInfo > xProps = aContent.getProperties();
             if ( xProps.is() )
             {
                 static constexpr OUString aAuthor( u"Author"_ustr );
@@ -2510,7 +2510,7 @@ bool SfxObjectShell::ConvertFrom
 }
 
 bool SfxObjectShell::ImportFrom(SfxMedium& rMedium,
-        css::uno::Reference<css::text::XTextRange> const& xInsertPosition)
+        cpo::uno::Reference<css::text::XTextRange> const& xInsertPosition)
 {
     const OUString aFilterName( rMedium.GetFilter()->GetFilterName() );
 
@@ -2559,7 +2559,7 @@ bool SfxObjectShell::ImportFrom(SfxMedium& rMedium,
             static constexpr OUString sInputStream ( u"InputStream"_ustr  );
 
             if (!aArgs.contains(sInputStream))
-                aArgs[sInputStream] <<= css::uno::Reference < css::io::XInputStream > ( new utl::OSeekableInputStreamWrapper ( *rMedium.GetInStream() ) );
+                aArgs[sInputStream] <<= cpo::uno::Reference < css::io::XInputStream > ( new utl::OSeekableInputStreamWrapper ( *rMedium.GetInStream() ) );
 
             if (!aArgs.contains(u"DocumentBaseURL"_ustr))
                 aArgs[u"DocumentBaseURL"_ustr] <<= rMedium.GetBaseURL();
@@ -2879,7 +2879,7 @@ bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
 
     // an interaction handler here can acquire only in case of GUI Saving
     // and should be removed after the saving is done
-    css::uno::Reference< XInteractionHandler > xInteract;
+    cpo::uno::Reference< XInteractionHandler > xInteract;
     const SfxUnoAnyItem* pxInteractionItem = pArgs->GetItem(SID_INTERACTIONHANDLER, false);
     if ( pxInteractionItem && ( pxInteractionItem->GetValue() >>= xInteract ) && xInteract.is() )
         pMediumTmp->GetItemSet().Put( SfxUnoAnyItem( SID_INTERACTIONHANDLER, Any( xInteract ) ) );
@@ -4049,7 +4049,7 @@ bool SfxObjectShell::GetMacroCallsSeenWhileLoading() const
 }
 
 void SfxObjectShell::AddDeferredFormControlImage(
-    const css::uno::Reference<css::beans::XPropertySet>& rxControl,
+    const cpo::uno::Reference<css::beans::XPropertySet>& rxControl,
     const OUString& rURL)
 {
     maDeferredFormControlImages.emplace_back(rxControl, rURL);

@@ -91,7 +91,7 @@ protected:
     void applyLocksToDiagramObjects(bool bActivate);
 
     // access associated SdrObjGroup/XShape/RootShape
-    virtual css::uno::Reference< css::drawing::XShape >& accessRootShape() = 0;
+    virtual cpo::uno::Reference< css::drawing::XShape >& accessRootShape() = 0;
 
     // Make constructor protected to signal that this anyway pure virtual class
     // shall not be incarnated - target to use is oox::drawingml::DiagramHelper_oox
@@ -140,7 +140,7 @@ public:
 
     // connect/disconnect to/from Group
     void connectToSdrObjGroup(
-        const css::uno::Reference< css::drawing::XShape >& rTarget,
+        const cpo::uno::Reference< css::drawing::XShape >& rTarget,
         std::shared_ptr< svx::diagram::DiagramHelper_svx >* mpDiagramHelperFromUndo);
     void disconnectFromSdrObjGroup(bool bEnableUndo);
 
@@ -153,7 +153,7 @@ public:
     virtual bool checkMinimalDataDoms() const = 0;
 
     // access to RootShape - the GroupObject used to host this Diagram
-    css::uno::Reference< css::drawing::XShape >& getRootShape() { return accessRootShape(); }
+    cpo::uno::Reference< css::drawing::XShape >& getRootShape() { return accessRootShape(); }
 
     // needed to create DiagramHelper_oox in svx' SdrObjGroup copy constructor
     virtual DiagramHelper_svx* clone() const = 0;

@@ -63,7 +63,7 @@ namespace dbaccess
     typedef std::map< OUString, SelectColumnDescription, ::comphelper::UStringMixLess >    SelectColumnsMetaData;
 
     // the elements of _rxQueryColumns must have the properties PROPERTY_REALNAME and PROPERTY_TABLENAME
-    void getColumnPositions(const css::uno::Reference< css::container::XNameAccess >& _rxQueryColumns,
+    void getColumnPositions(const cpo::uno::Reference< css::container::XNameAccess >& _rxQueryColumns,
                             const cpo::uno::Sequence< OUString >& _rColumnNames,
                             std::u16string_view _rsUpdateTableName,
                             SelectColumnsMetaData& o_rColumnNames /* out */,
@@ -98,13 +98,13 @@ namespace dbaccess
         // each subclause is either "colName = ?" or "colName IS NULL"
         // (we avoid the standard "colName IS NOT DISTINCT FROM ?" because it is not widely supported)
         typedef std::map< std::vector<bool>,
-                            css::uno::Reference< css::sdbc::XPreparedStatement > >
+                            cpo::uno::Reference< css::sdbc::XPreparedStatement > >
                 vStatements_t;
         vStatements_t                                           m_vStatements;
-        css::uno::Reference< css::sdbc::XPreparedStatement>     m_xStatement;
-        css::uno::Reference< css::sdbc::XResultSet>             m_xSet;
-        css::uno::Reference< css::sdbc::XRow>                   m_xRow;
-        css::uno::Reference< css::sdb::XSingleSelectQueryAnalyzer >   m_xComposer;
+        cpo::uno::Reference< css::sdbc::XPreparedStatement>     m_xStatement;
+        cpo::uno::Reference< css::sdbc::XResultSet>             m_xSet;
+        cpo::uno::Reference< css::sdbc::XRow>                   m_xRow;
+        cpo::uno::Reference< css::sdb::XSingleSelectQueryAnalyzer >   m_xComposer;
         const OUString                                          m_sUpdateTableName;
         std::vector< OUString >                               m_aFilterColumns;
         sal_Int32&                                              m_rRowCount;
@@ -128,13 +128,13 @@ namespace dbaccess
         void initColumns();
         void findTableColumnsMatching_throw( const cpo::uno::Any& i_aTable,
                                              const OUString& i_rUpdateTableName,
-                                             const css::uno::Reference< css::sdbc::XDatabaseMetaData>& i_xMeta,
-                                             const css::uno::Reference< css::container::XNameAccess>& i_xQueryColumns,
+                                             const cpo::uno::Reference< css::sdbc::XDatabaseMetaData>& i_xMeta,
+                                             const cpo::uno::Reference< css::container::XNameAccess>& i_xQueryColumns,
                                              std::unique_ptr<SelectColumnsMetaData> const & o_pKeyColumnNames);
         void ensureStatement( );
         virtual void makeNewStatement( );
         static void setOneKeyColumnParameter( sal_Int32 &nPos,
-                                       const css::uno::Reference<  css::sdbc::XParameters > &_xParameter,
+                                       const cpo::uno::Reference<  css::sdbc::XParameters > &_xParameter,
                                        const connectivity::ORowSetValue &_rValue,
                                        sal_Int32 _nType,
                                        sal_Int32 _nScale );
@@ -145,20 +145,20 @@ namespace dbaccess
         void tryRefetch(const ORowSetRow& _rInsertRow,bool bRefetch);
         void executeUpdate(const ORowSetRow& _rInsertRow, const ORowSetRow& _rOriginalRow, const OUString& i_sSQL, std::u16string_view i_sTableName,const std::vector<sal_Int32>& _aIndexColumnPositions = std::vector<sal_Int32>());
         void executeInsert( const ORowSetRow& _rInsertRow, const OUString& i_sSQL, std::u16string_view i_sTableName, bool bRefetch = false);
-        void executeStatement(OUStringBuffer& io_aFilter, css::uno::Reference< css::sdb::XSingleSelectQueryComposer>& io_xAnalyzer);
+        void executeStatement(OUStringBuffer& io_aFilter, cpo::uno::Reference< css::sdb::XSingleSelectQueryComposer>& io_xAnalyzer);
 
         virtual ~OKeySet() override;
     public:
         OKeySet(connectivity::OSQLTable _aTable,
                 OUString _sUpdateTableName,
-                const css::uno::Reference< css::sdb::XSingleSelectQueryAnalyzer >& _xComposer,
+                const cpo::uno::Reference< css::sdb::XSingleSelectQueryAnalyzer >& _xComposer,
                 const ORowSetValueVector& _aParameterValueForCache,
                 sal_Int32 i_nMaxRows,
                 sal_Int32& o_nRowCount);
 
         // late ctor which can throw exceptions
-        virtual void construct(const css::uno::Reference< css::sdbc::XResultSet>& _xDriverSet,const OUString& i_sRowSetFilter) override;
-        virtual void reset(const css::uno::Reference< css::sdbc::XResultSet>& _xDriverSet) override;
+        virtual void construct(const cpo::uno::Reference< css::sdbc::XResultSet>& _xDriverSet,const OUString& i_sRowSetFilter) override;
+        virtual void reset(const cpo::uno::Reference< css::sdbc::XResultSet>& _xDriverSet) override;
 
         // css::sdbc::XRow
         virtual bool wasNull(  ) override;
@@ -174,13 +174,13 @@ namespace dbaccess
         virtual css::util::Date getDate( sal_Int32 columnIndex ) override;
         virtual css::util::Time getTime( sal_Int32 columnIndex ) override;
         virtual css::util::DateTime getTimestamp( sal_Int32 columnIndex ) override;
-        virtual css::uno::Reference< css::io::XInputStream > getBinaryStream( sal_Int32 columnIndex ) override;
-        virtual css::uno::Reference< css::io::XInputStream > getCharacterStream( sal_Int32 columnIndex ) override;
-        virtual cpo::uno::Any getObject( sal_Int32 columnIndex, const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
-        virtual css::uno::Reference< css::sdbc::XRef > getRef( sal_Int32 columnIndex ) override;
-        virtual css::uno::Reference< css::sdbc::XBlob > getBlob( sal_Int32 columnIndex ) override;
-        virtual css::uno::Reference< css::sdbc::XClob > getClob( sal_Int32 columnIndex ) override;
-        virtual css::uno::Reference< css::sdbc::XArray > getArray( sal_Int32 columnIndex ) override;
+        virtual cpo::uno::Reference< css::io::XInputStream > getBinaryStream( sal_Int32 columnIndex ) override;
+        virtual cpo::uno::Reference< css::io::XInputStream > getCharacterStream( sal_Int32 columnIndex ) override;
+        virtual cpo::uno::Any getObject( sal_Int32 columnIndex, const cpo::uno::Reference< css::container::XNameAccess >& typeMap ) override;
+        virtual cpo::uno::Reference< css::sdbc::XRef > getRef( sal_Int32 columnIndex ) override;
+        virtual cpo::uno::Reference< css::sdbc::XBlob > getBlob( sal_Int32 columnIndex ) override;
+        virtual cpo::uno::Reference< css::sdbc::XClob > getClob( sal_Int32 columnIndex ) override;
+        virtual cpo::uno::Reference< css::sdbc::XArray > getArray( sal_Int32 columnIndex ) override;
 
 
         virtual bool rowUpdated(  ) override;

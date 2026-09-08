@@ -32,12 +32,12 @@ namespace dbp
 
     class OOptionGroupLayouter final
     {
-        css::uno::Reference< cpo::uno::XComponentContext >
+        cpo::uno::Reference< cpo::uno::XComponentContext >
                     mxContext;
 
     public:
         explicit OOptionGroupLayouter(
-            const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxContext
             );
 
         void    doLayout(
@@ -47,7 +47,7 @@ namespace dbp
 
     private:
         static void    implAnchorShape(
-            const css::uno::Reference< css::beans::XPropertySet >& _rxShapeProps
+            const cpo::uno::Reference< css::beans::XPropertySet >& _rxShapeProps
             );
     };
 

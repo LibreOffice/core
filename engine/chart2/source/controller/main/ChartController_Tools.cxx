@@ -84,8 +84,9 @@
 #include <memory>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::cpo::uno::Sequence;
 
 namespace chart
@@ -178,7 +179,7 @@ bool lcl_arePropertiesSame(const std::vector<Reference<beans::XPropertySet>>& xP
 }
 
 // Cf. ChartColorWrapper::operator()
-std::pair<css::uno::Reference<css::beans::XPropertySet>, ObjectType>
+std::pair<cpo::uno::Reference<css::beans::XPropertySet>, ObjectType>
 getSelectedGraphObject(const cpo::uno::Any& rSelection, const rtl::Reference<ChartModel>& pModel)
 {
     if (OUString sCID; rSelection >>= sCID)
@@ -197,13 +198,13 @@ getSelectedGraphObject(const cpo::uno::Any& rSelection, const rtl::Reference<Cha
         return { xPropSet, eType };
     }
 
-    if (css::uno::Reference<css::beans::XPropertySet> xSelection; rSelection >>= xSelection)
+    if (cpo::uno::Reference<css::beans::XPropertySet> xSelection; rSelection >>= xSelection)
         return { xSelection, ObjectType::OBJECTTYPE_SHAPE };
 
     return {};
 }
 
-css::uno::Reference<css::beans::XPropertySet> getSelectedGraphObject(ChartController& rController)
+cpo::uno::Reference<css::beans::XPropertySet> getSelectedGraphObject(ChartController& rController)
 {
     return getSelectedGraphObject(rController.getSelection(), rController.getChartModel()).first;
 }
@@ -298,7 +299,7 @@ void ChartController::executeDispatch_ScaleText()
 }
 
 void ChartController::executeDispatch_FontBold(
-    const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties)
+    const std::vector<cpo::uno::Reference<css::beans::XPropertySet>>& xProperties)
 {
     OUString aPropName = u"CharWeight"_ustr;
     float nFontWeight = awt::FontWeight::NORMAL;
@@ -313,7 +314,7 @@ void ChartController::executeDispatch_FontBold(
 }
 
 void ChartController::executeDispatch_FontName(
-    const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties,
+    const std::vector<cpo::uno::Reference<css::beans::XPropertySet>>& xProperties,
     const cpo::uno::Sequence<css::beans::PropertyValue>& rArgs)
 {
     // the sent font may have a lot of properties that we could set.
@@ -326,7 +327,7 @@ void ChartController::executeDispatch_FontName(
 }
 
 void ChartController::executeDispatch_FontHeight(
-    const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties,
+    const std::vector<cpo::uno::Reference<css::beans::XPropertySet>>& xProperties,
     const cpo::uno::Sequence<css::beans::PropertyValue>& rArgs)
 {
     for (const auto& xProperty : xProperties)
@@ -334,7 +335,7 @@ void ChartController::executeDispatch_FontHeight(
 }
 
 void ChartController::executeDispatch_FontItalic(
-    const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties)
+    const std::vector<cpo::uno::Reference<css::beans::XPropertySet>>& xProperties)
 {
     OUString aPropName = u"CharPosture"_ustr;
     awt::FontSlant nFontItalic = awt::FontSlant::FontSlant_NONE;
@@ -349,7 +350,7 @@ void ChartController::executeDispatch_FontItalic(
 }
 
 void ChartController::executeDispatch_FontUnderline(
-    const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties,
+    const std::vector<cpo::uno::Reference<css::beans::XPropertySet>>& xProperties,
     const cpo::uno::Sequence<css::beans::PropertyValue>& rArgs)
 {
     OUString aPropName = u"CharUnderline"_ustr;
@@ -373,7 +374,7 @@ void ChartController::executeDispatch_FontUnderline(
 }
 
 void ChartController::executeDispatch_FontStrikeout(
-    const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties)
+    const std::vector<cpo::uno::Reference<css::beans::XPropertySet>>& xProperties)
 {
     OUString aPropName = u"CharStrikeout"_ustr;
     sal_Int16 nFontStrikeout = 0;
@@ -387,7 +388,7 @@ void ChartController::executeDispatch_FontStrikeout(
 }
 
 void ChartController::executeDispatch_FontShadowed(
-    const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties)
+    const std::vector<cpo::uno::Reference<css::beans::XPropertySet>>& xProperties)
 {
     OUString aPropName = u"CharShadowed"_ustr;
     bool bFontShadowed = false;
@@ -400,7 +401,7 @@ void ChartController::executeDispatch_FontShadowed(
 }
 
 void ChartController::executeDispatch_FontColor(
-    const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties,
+    const std::vector<cpo::uno::Reference<css::beans::XPropertySet>>& xProperties,
     const cpo::uno::Sequence<css::beans::PropertyValue>& rArgs)
 {
     for (const auto& xProperty : xProperties)
@@ -408,7 +409,7 @@ void ChartController::executeDispatch_FontColor(
 }
 
 void ChartController::executeDispatch_FontGrow(
-    const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties)
+    const std::vector<cpo::uno::Reference<css::beans::XPropertySet>>& xProperties)
 {
     for (const auto& xProperty : xProperties)
     {
@@ -426,7 +427,7 @@ void ChartController::executeDispatch_FontGrow(
 }
 
 void ChartController::executeDispatch_FontShrink(
-    const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties)
+    const std::vector<cpo::uno::Reference<css::beans::XPropertySet>>& xProperties)
 {
     for (const auto& xProperty : xProperties)
     {
@@ -448,7 +449,7 @@ void ChartController::executeDispatch_FontShrink(
 }
 
 void ChartController::executeDispatch_FontReset(
-    const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties)
+    const std::vector<cpo::uno::Reference<css::beans::XPropertySet>>& xProperties)
 {
     for (const auto& xProperty: xProperties)
     {
@@ -471,7 +472,7 @@ void ChartController::executeDispatch_FontReset(
 }
 
 void ChartController::executeDispatch_FontSpacing(
-    const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties,
+    const std::vector<cpo::uno::Reference<css::beans::XPropertySet>>& xProperties,
     const cpo::uno::Sequence<css::beans::PropertyValue>& rArgs)
 {
     sal_Int16 nKerning = 0;
@@ -481,7 +482,7 @@ void ChartController::executeDispatch_FontSpacing(
 }
 
 void ChartController::executeDispatch_FontSuperScript(
-    const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties)
+    const std::vector<cpo::uno::Reference<css::beans::XPropertySet>>& xProperties)
 {
     sal_Int16 nCharEscapement = 0;
     xProperties[0]->getPropertyValue(u"CharEscapement"_ustr) >>= nCharEscapement;
@@ -504,7 +505,7 @@ void ChartController::executeDispatch_FontSuperScript(
 }
 
 void ChartController::executeDispatch_FontSubScript(
-    const std::vector<css::uno::Reference<css::beans::XPropertySet>>& xProperties)
+    const std::vector<cpo::uno::Reference<css::beans::XPropertySet>>& xProperties)
 {
     sal_Int16 nCharEscapement = 0;
     xProperties[0]->getPropertyValue(u"CharEscapement"_ustr) >>= nCharEscapement;
@@ -1275,7 +1276,7 @@ void ChartController::executeDispatch_LineColor(const cpo::uno::Any& rColor)
 {
     try
     {
-        if (css::uno::Reference<css::beans::XPropertySet> xPropSet = getSelectedGraphObject(*this))
+        if (cpo::uno::Reference<css::beans::XPropertySet> xPropSet = getSelectedGraphObject(*this))
             xPropSet->setPropertyValue(u"LineColor"_ustr, rColor);
     }
     catch( const cpo::uno::Exception& )
@@ -1288,7 +1289,7 @@ void ChartController::executeDispatch_LineWidth(const cpo::uno::Any& rWidth)
 {
     try
     {
-        if (css::uno::Reference<css::beans::XPropertySet> xPropSet = getSelectedGraphObject(*this))
+        if (cpo::uno::Reference<css::beans::XPropertySet> xPropSet = getSelectedGraphObject(*this))
             xPropSet->setPropertyValue(u"LineWidth"_ustr, rWidth);
     }
     catch( const cpo::uno::Exception& )

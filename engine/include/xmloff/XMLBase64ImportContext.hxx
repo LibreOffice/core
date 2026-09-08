@@ -29,13 +29,13 @@ namespace com::sun::star::io { class XOutputStream; }
 
 class XMLOFF_DLLPUBLIC XMLBase64ImportContext final : public SvXMLImportContext
 {
-    css::uno::Reference< css::io::XOutputStream > m_xOut;
+    cpo::uno::Reference< css::io::XOutputStream > m_xOut;
     OUStringBuffer maCharBuffer;
 
 public:
 
     XMLBase64ImportContext( SvXMLImport& rImport,
-        const css::uno::Reference< css::io::XOutputStream >& rOut );
+        const cpo::uno::Reference< css::io::XOutputStream >& rOut );
 
     virtual ~XMLBase64ImportContext() override;
 

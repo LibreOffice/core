@@ -21,8 +21,8 @@
 #include <oox/token/namespaces.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 namespace oox::ppt
 {
@@ -36,18 +36,18 @@ PresPropsFragmentHandler::~PresPropsFragmentHandler() = default;
 
 void PresPropsFragmentHandler::finalizeImport()
 {
-    css::uno::Reference<css::presentation::XPresentationSupplier> xPresentationSupplier(
-        getFilter().getModel(), css::uno::UNO_QUERY_THROW);
-    css::uno::Reference<css::beans::XPropertySet> xPresentationProps(
-        xPresentationSupplier->getPresentation(), css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::presentation::XPresentationSupplier> xPresentationSupplier(
+        getFilter().getModel(), cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::beans::XPropertySet> xPresentationProps(
+        xPresentationSupplier->getPresentation(), cpo::uno::UNO_QUERY_THROW);
     xPresentationProps->setPropertyValue(u"IsEndless"_ustr, cpo::uno::Any(m_bLoop));
     xPresentationProps->setPropertyValue(u"IsAutomatic"_ustr, cpo::uno::Any(!m_bTiming));
 
     if (!m_sId.isEmpty())
     {
-        css::uno::Reference<css::presentation::XCustomPresentationSupplier>
-            XCustPresentationSupplier(getFilter().getModel(), css::uno::UNO_QUERY_THROW);
-        css::uno::Reference<css::container::XNameContainer> mxCustShows;
+        cpo::uno::Reference<css::presentation::XCustomPresentationSupplier>
+            XCustPresentationSupplier(getFilter().getModel(), cpo::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::container::XNameContainer> mxCustShows;
         mxCustShows = XCustPresentationSupplier->getCustomPresentations();
         const cpo::uno::Sequence<OUString> aNameSeq(mxCustShows->getElementNames());
         xPresentationProps->setPropertyValue(u"CustomShow"_ustr,

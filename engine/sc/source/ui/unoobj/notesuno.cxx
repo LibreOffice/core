@@ -36,6 +36,7 @@
 #include <miscuno.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 static const SvxItemPropertySet* lcl_GetAnnotationPropertySet()
 {

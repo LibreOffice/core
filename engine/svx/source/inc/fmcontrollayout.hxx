@@ -30,7 +30,7 @@ namespace svxform::ControlLayouter
         /** initializes the layout of a newly created form control (model)
         */
         void initializeControlLayout(
-                        const css::uno::Reference< css::beans::XPropertySet >& _rxControlModel,
+                        const cpo::uno::Reference< css::beans::XPropertySet >& _rxControlModel,
                         DocumentType _eDocType
                     );
 
@@ -51,8 +51,8 @@ namespace svxform::ControlLayouter
             @param _rxModel
                 a form component.
         */
-        css::uno::Reference< css::beans::XPropertySet >
-                    getDefaultDocumentTextStyle( const css::uno::Reference< css::beans::XPropertySet >& _rxModel );
+        cpo::uno::Reference< css::beans::XPropertySet >
+                    getDefaultDocumentTextStyle( const cpo::uno::Reference< css::beans::XPropertySet >& _rxModel );
 
 }
 

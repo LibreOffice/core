@@ -37,11 +37,11 @@ typedef ::comphelper::WeakComponentImplHelper<
 class PDFDetector : public PDFDetectorBase
 {
 private:
-    css::uno::Reference<
+    cpo::uno::Reference<
         cpo::uno::XComponentContext > m_xContext;
 
 public:
-    explicit PDFDetector( css::uno::Reference<
+    explicit PDFDetector( cpo::uno::Reference<
                                 cpo::uno::XComponentContext > xContext );
 
     // XExtendedFilterDetection
@@ -83,11 +83,11 @@ public:
     When false, no dialog is opened to query user for alternate
     password
  */
-css::uno::Reference< css::io::XStream >
+cpo::uno::Reference< css::io::XStream >
    getAdditionalStream( const OUString&                                                            rPDFFile,
                         OUString&                                                                  o_rOutMimetype,
                         OUString&                                                                  io_rOutPwd,
-                        const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
+                        const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
                         const cpo::uno::Sequence< css::beans::PropertyValue >&    rFilterData,
                         bool                                                                            bMayUseUI );
 
@@ -118,11 +118,11 @@ css::uno::Reference< css::io::XStream >
     When false, no dialog is opened to query user for alternate
     password
  */
-css::uno::Reference< css::io::XStream >
+cpo::uno::Reference< css::io::XStream >
    getEmbeddedFile( const OUString&                                                            rPDFFile,
                     OUString&                                                                  o_rOutMimetype,
                     OUString&                                                                  io_rOutPwd,
-                    const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
+                    const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
                     const cpo::uno::Sequence< css::beans::PropertyValue >&    rFilterData,
                     bool                                                                            bMayUseUI );
 

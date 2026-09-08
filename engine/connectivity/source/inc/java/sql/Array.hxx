@@ -43,10 +43,10 @@ namespace connectivity
         // XArray
         virtual OUString getBaseTypeName(  ) override;
         virtual sal_Int32 getBaseType(  ) override;
-        virtual cpo::uno::Sequence< cpo::uno::Any > getArray( const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
-        virtual cpo::uno::Sequence< cpo::uno::Any > getArrayAtIndex( sal_Int32 index, sal_Int32 count, const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
-        virtual css::uno::Reference< css::sdbc::XResultSet > getResultSet( const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
-        virtual css::uno::Reference< css::sdbc::XResultSet > getResultSetAtIndex( sal_Int32 index, sal_Int32 count, const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
+        virtual cpo::uno::Sequence< cpo::uno::Any > getArray( const cpo::uno::Reference< css::container::XNameAccess >& typeMap ) override;
+        virtual cpo::uno::Sequence< cpo::uno::Any > getArrayAtIndex( sal_Int32 index, sal_Int32 count, const cpo::uno::Reference< css::container::XNameAccess >& typeMap ) override;
+        virtual cpo::uno::Reference< css::sdbc::XResultSet > getResultSet( const cpo::uno::Reference< css::container::XNameAccess >& typeMap ) override;
+        virtual cpo::uno::Reference< css::sdbc::XResultSet > getResultSetAtIndex( sal_Int32 index, sal_Int32 count, const cpo::uno::Reference< css::container::XNameAccess >& typeMap ) override;
 
     };
 }

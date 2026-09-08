@@ -104,6 +104,7 @@
 #include <sfx2/kit/helper.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 const sal_uInt16 ScDocument::nSrcVer = SC_CURRENT_VERSION;
 

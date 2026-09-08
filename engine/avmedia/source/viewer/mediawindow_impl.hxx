@@ -78,7 +78,7 @@ public:
 
     virtual void dispose() override;
 
-    static css::uno::Reference<css::media::XPlayer> createPlayer(const OUString& rURL, const OUString& rReferer, const OUString* pMimeType);
+    static cpo::uno::Reference<css::media::XPlayer> createPlayer(const OUString& rURL, const OUString& rReferer, const OUString* pMimeType);
 
     void setURL(const OUString& rURL, OUString const& rTempURL, OUString const& rReferer);
 
@@ -134,15 +134,15 @@ private:
 
     void onURLChanged();
 
-    static css::uno::Reference<css::media::XPlayer> createPlayer(const OUString& rURL, const OUString& rManagerServName);
+    static cpo::uno::Reference<css::media::XPlayer> createPlayer(const OUString& rURL, const OUString& rManagerServName);
 
     OUString maFileURL;
     OUString mTempFileURL;
     OUString maFallbackFileURL;
     OUString maReferer;
     OUString m_sMimeType;
-    css::uno::Reference<css::media::XPlayer> mxPlayer;
-    css::uno::Reference<css::media::XPlayerWindow> mxPlayerWindow;
+    cpo::uno::Reference<css::media::XPlayer> mxPlayer;
+    cpo::uno::Reference<css::media::XPlayerWindow> mxPlayerWindow;
     MediaWindow* mpMediaWindow;
 
     rtl::Reference<MediaEventListenersImpl> mxEvents;

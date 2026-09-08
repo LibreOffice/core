@@ -299,10 +299,10 @@ namespace
 // DataChanged sets ImageURL on the control to trigger the toolkit fetch.
 class FormImageLink final : public sfx2::SvBaseLink
 {
-    css::uno::Reference<css::beans::XPropertySet> m_xControl;
+    cpo::uno::Reference<css::beans::XPropertySet> m_xControl;
 
 public:
-    FormImageLink(css::uno::Reference<css::beans::XPropertySet> xControl)
+    FormImageLink(cpo::uno::Reference<css::beans::XPropertySet> xControl)
         : SvBaseLink(SfxLinkUpdateMode::ONCALL, SotClipboardFormatId::SVXB)
         , m_xControl(std::move(xControl))
     {
@@ -331,7 +331,7 @@ void registerDeferredFormImageLinks(
 {
     for (const auto & [ xWeak, aURL ] : rEntries)
     {
-        css::uno::Reference<css::beans::XPropertySet> xControl(xWeak);
+        cpo::uno::Reference<css::beans::XPropertySet> xControl(xWeak);
         if (!xControl.is() || aURL.isEmpty())
             continue;
         tools::SvRef<sfx2::SvBaseLink> xLink(new FormImageLink(xControl));

@@ -37,7 +37,7 @@
 namespace dlgprov
 {
     typedef std::unordered_map< OUString,
-        css::uno::Reference< css::script::XScriptListener > > ListenerHash;
+        cpo::uno::Reference< css::script::XScriptListener > > ListenerHash;
 
     typedef ::cppu::WeakImplHelper<
         css::script::XScriptEventsAttacher > DialogEventsAttacherImpl_BASE;
@@ -48,28 +48,28 @@ namespace dlgprov
     private:
         bool mbUseFakeVBAEvents;
         ListenerHash listenersForTypes;
-        css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
-        css::uno::Reference< css::script::XEventAttacher > m_xEventAttacher;
+        cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+        cpo::uno::Reference< css::script::XEventAttacher > m_xEventAttacher;
         /// @throws cpo::uno::RuntimeException
-        css::uno::Reference< css::script::XScriptListener > const & getScriptListenerForKey( const OUString& sScriptName );
-        css::uno::Reference< css::script::XScriptEventsSupplier > getFakeVbaEventsSupplier( const css::uno::Reference< css::awt::XControl>& xControl, OUString const & sCodeName );
-        void nestedAttachEvents( const cpo::uno::Sequence< css::uno::Reference< cpo::uno::XInterface > >& Objects, const cpo::uno::Any& Helper, OUString& sDialogCodeName );
-        void nestedAttachEvents( const css::uno::Reference< css::awt::XControl >& xControl, const cpo::uno::Any& Helper, OUString& sDialogCodeName );
-        void attachEventsToControl( const css::uno::Reference< css::awt::XControl>& xControl, const css::uno::Reference< css::script::XScriptEventsSupplier >& events, const cpo::uno::Any& Helper  );
+        cpo::uno::Reference< css::script::XScriptListener > const & getScriptListenerForKey( const OUString& sScriptName );
+        cpo::uno::Reference< css::script::XScriptEventsSupplier > getFakeVbaEventsSupplier( const cpo::uno::Reference< css::awt::XControl>& xControl, OUString const & sCodeName );
+        void nestedAttachEvents( const cpo::uno::Sequence< cpo::uno::Reference< cpo::uno::XInterface > >& Objects, const cpo::uno::Any& Helper, OUString& sDialogCodeName );
+        void nestedAttachEvents( const cpo::uno::Reference< css::awt::XControl >& xControl, const cpo::uno::Any& Helper, OUString& sDialogCodeName );
+        void attachEventsToControl( const cpo::uno::Reference< css::awt::XControl>& xControl, const cpo::uno::Reference< css::script::XScriptEventsSupplier >& events, const cpo::uno::Any& Helper  );
     public:
-        DialogEventsAttacherImpl( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
-             const css::uno::Reference< css::frame::XModel >& xModel,
-             const css::uno::Reference< css::awt::XControl >& xControl,
-             const css::uno::Reference< cpo::uno::XInterface >& xHandler,
-             const css::uno::Reference< css::beans::XIntrospectionAccess >& xIntrospect,
+        DialogEventsAttacherImpl( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+             const cpo::uno::Reference< css::frame::XModel >& xModel,
+             const cpo::uno::Reference< css::awt::XControl >& xControl,
+             const cpo::uno::Reference< cpo::uno::XInterface >& xHandler,
+             const cpo::uno::Reference< css::beans::XIntrospectionAccess >& xIntrospect,
              bool bProviderMode,
-             const css::uno::Reference< css::script::XScriptListener >& xRTLListener ,const OUString& sDialogLibName );
+             const cpo::uno::Reference< css::script::XScriptListener >& xRTLListener ,const OUString& sDialogLibName );
         virtual ~DialogEventsAttacherImpl() override;
 
         // XScriptEventsAttacher
         virtual void SAL_CALL attachEvents( const cpo::uno::Sequence<
-            css::uno::Reference< cpo::uno::XInterface > >& Objects,
-            const css::uno::Reference<css::script::XScriptListener>&,
+            cpo::uno::Reference< cpo::uno::XInterface > >& Objects,
+            const cpo::uno::Reference<css::script::XScriptListener>&,
             const cpo::uno::Any& Helper ) override;
     };
 
@@ -83,14 +83,14 @@ namespace dlgprov
     class DialogAllListenerImpl : public DialogAllListenerImpl_BASE
     {
     private:
-        css::uno::Reference< css::script::XScriptListener > m_xScriptListener;
+        cpo::uno::Reference< css::script::XScriptListener > m_xScriptListener;
         OUString m_sScriptType;
         OUString m_sScriptCode;
 
         void firing_impl( const css::script::AllEventObject& Event, cpo::uno::Any* pRet );
 
     public:
-        DialogAllListenerImpl( const css::uno::Reference< css::script::XScriptListener >& rxListener,
+        DialogAllListenerImpl( const cpo::uno::Reference< css::script::XScriptListener >& rxListener,
             OUString sScriptType, OUString sScriptCode );
         virtual ~DialogAllListenerImpl() override;
 
@@ -112,10 +112,10 @@ namespace dlgprov
     class DialogScriptListenerImpl : public DialogScriptListenerImpl_BASE
     {
     protected:
-        css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+        cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
         virtual void firing_impl( const css::script::ScriptEvent& aScriptEvent, cpo::uno::Any* pRet ) = 0;
     public:
-        explicit DialogScriptListenerImpl( css::uno::Reference< cpo::uno::XComponentContext > xContext ) : m_xContext(std::move( xContext )) {}
+        explicit DialogScriptListenerImpl( cpo::uno::Reference< cpo::uno::XComponentContext > xContext ) : m_xContext(std::move( xContext )) {}
         virtual ~DialogScriptListenerImpl() override;
 
         // XEventListener

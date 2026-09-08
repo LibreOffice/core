@@ -45,7 +45,6 @@ namespace svt
 
     using namespace     ::com::sun::star::lang;
     using namespace     ::com::sun::star::ui::dialogs;
-    using namespace     ::com::sun::star::uno;
     using namespace     ::cpo::uno;
     using namespace     ::com::sun::star::beans;
     using namespace     ::comphelper;

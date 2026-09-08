@@ -33,6 +33,7 @@
 #include <comphelper/diagnose_ex.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 constexpr OUString SCSOLVER_SERVICE = u"com.sun.star.sheet.Solver"_ustr;
 

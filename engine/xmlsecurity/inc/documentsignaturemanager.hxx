@@ -61,25 +61,25 @@ class Xmlsec;
 class XMLSECURITY_DLLPUBLIC DocumentSignatureManager
 {
 private:
-    css::uno::Reference<cpo::uno::XComponentContext> mxContext;
-    css::uno::Reference<css::embed::XStorage> mxStore;
+    cpo::uno::Reference<cpo::uno::XComponentContext> mxContext;
+    cpo::uno::Reference<css::embed::XStorage> mxStore;
     XMLSignatureHelper maSignatureHelper;
     std::unique_ptr<PDFSignatureHelper> mpPDFSignatureHelper;
     SignatureInformations maCurrentSignatureInformations;
     DocumentSignatureMode const meSignatureMode;
     cpo::uno::Sequence<cpo::uno::Sequence<css::beans::PropertyValue>> m_manifest;
-    css::uno::Reference<css::io::XStream> mxSignatureStream;
-    css::uno::Reference<css::io::XStream> mxScriptingSignatureStream;
-    css::uno::Reference<css::frame::XModel> mxModel;
+    cpo::uno::Reference<css::io::XStream> mxSignatureStream;
+    cpo::uno::Reference<css::io::XStream> mxScriptingSignatureStream;
+    cpo::uno::Reference<css::frame::XModel> mxModel;
     rtl::Reference<utl::TempFileFastService> mxTempSignatureStream;
     /// Storage containing all OOXML signatures, unused for ODF.
-    css::uno::Reference<css::embed::XStorage> mxTempSignatureStorage;
-    css::uno::Reference<css::xml::crypto::XSEInitializer> mxSEInitializer;
-    css::uno::Reference<css::xml::crypto::XXMLSecurityContext> mxSecurityContext;
+    cpo::uno::Reference<css::embed::XStorage> mxTempSignatureStorage;
+    cpo::uno::Reference<css::xml::crypto::XSEInitializer> mxSEInitializer;
+    cpo::uno::Reference<css::xml::crypto::XXMLSecurityContext> mxSecurityContext;
     std::shared_ptr<Xmlsec> mpXmlsecLibrary;
 
 public:
-    DocumentSignatureManager(const css::uno::Reference<cpo::uno::XComponentContext>& xContext,
+    DocumentSignatureManager(const cpo::uno::Reference<cpo::uno::XComponentContext>& xContext,
                              DocumentSignatureMode eMode);
     ~DocumentSignatureManager();
 
@@ -93,13 +93,13 @@ public:
     SignatureStreamHelper ImplOpenSignatureStream(sal_Int32 nStreamOpenMode, bool bTempStream);
     /// Add a new signature, using xCert as a signing certificate, and rDescription as description.
     bool add(svl::crypto::SigningContext& rSigningContext,
-             const css::uno::Reference<css::xml::crypto::XXMLSecurityContext>& xSecurityContext,
+             const cpo::uno::Reference<css::xml::crypto::XXMLSecurityContext>& xSecurityContext,
              const OUString& rDescription, sal_Int32& nSecurityId, bool bAdESCompliant,
              const OUString& rSignatureLineId = OUString(),
-             const css::uno::Reference<css::graphic::XGraphic>& xValidGraphic
-             = css::uno::Reference<css::graphic::XGraphic>(),
-             const css::uno::Reference<css::graphic::XGraphic>& xInvalidGraphic
-             = css::uno::Reference<css::graphic::XGraphic>());
+             const cpo::uno::Reference<css::graphic::XGraphic>& xValidGraphic
+             = cpo::uno::Reference<css::graphic::XGraphic>(),
+             const cpo::uno::Reference<css::graphic::XGraphic>& xInvalidGraphic
+             = cpo::uno::Reference<css::graphic::XGraphic>());
     /// Remove signature at nPosition.
     void remove(sal_uInt16 nPosition);
     /// Read signatures from either a temp stream or the real storage.
@@ -115,26 +115,26 @@ public:
     /// Attempts to initialize the platform-specific crypto.
     bool init();
     /// Get the security environment.
-    css::uno::Reference<css::xml::crypto::XSecurityEnvironment> getSecurityEnvironment();
-    css::uno::Reference<css::xml::crypto::XXMLSecurityContext> const& getSecurityContext() const;
-    void setStore(const css::uno::Reference<css::embed::XStorage>& xStore) { mxStore = xStore; }
+    cpo::uno::Reference<css::xml::crypto::XSecurityEnvironment> getSecurityEnvironment();
+    cpo::uno::Reference<css::xml::crypto::XXMLSecurityContext> const& getSecurityContext() const;
+    void setStore(const cpo::uno::Reference<css::embed::XStorage>& xStore) { mxStore = xStore; }
     XMLSignatureHelper& getSignatureHelper() { return maSignatureHelper; }
     bool hasPDFSignatureHelper() const { return bool(mpPDFSignatureHelper); }
-    void setSignatureStream(const css::uno::Reference<css::io::XStream>& xSignatureStream)
+    void setSignatureStream(const cpo::uno::Reference<css::io::XStream>& xSignatureStream)
     {
         mxSignatureStream = xSignatureStream;
     }
-    const css::uno::Reference<css::io::XStream>& getSignatureStream() const
+    const cpo::uno::Reference<css::io::XStream>& getSignatureStream() const
     {
         return mxSignatureStream;
     }
     void setScriptingSignatureStream(
-        const css::uno::Reference<css::io::XStream>& xScriptingSignatureStream)
+        const cpo::uno::Reference<css::io::XStream>& xScriptingSignatureStream)
     {
         mxScriptingSignatureStream = xScriptingSignatureStream;
     }
-    void setModel(const css::uno::Reference<css::frame::XModel>& xModel);
-    const css::uno::Reference<css::embed::XStorage>& getStore() const { return mxStore; }
+    void setModel(const cpo::uno::Reference<css::frame::XModel>& xModel);
+    const cpo::uno::Reference<css::embed::XStorage>& getStore() const { return mxStore; }
     DocumentSignatureMode getSignatureMode() const { return meSignatureMode; }
     SignatureInformations& getCurrentSignatureInformations()
     {

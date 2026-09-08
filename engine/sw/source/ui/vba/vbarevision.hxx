@@ -31,7 +31,7 @@ class SwVbaRevision : public SwVbaRevision_BASE
 {
 private:
     rtl::Reference< SwXTextDocument > mxModel;
-    css::uno::Reference< css::beans::XPropertySet > mxRedlineProps;
+    cpo::uno::Reference< css::beans::XPropertySet > mxRedlineProps;
 
 private:
     /// @throws cpo::uno::RuntimeException
@@ -39,10 +39,10 @@ private:
 
 public:
     /// @throws cpo::uno::RuntimeException
-    SwVbaRevision( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent,
-                   const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
+    SwVbaRevision( const cpo::uno::Reference< ooo::vba::XHelperInterface >& rParent,
+                   const cpo::uno::Reference< cpo::uno::XComponentContext >& rContext,
                    rtl::Reference< SwXTextDocument > xModel,
-                   css::uno::Reference< css::beans::XPropertySet >  xRedlineProps );
+                   cpo::uno::Reference< css::beans::XPropertySet >  xRedlineProps );
     virtual ~SwVbaRevision() override;
 
     // Methods

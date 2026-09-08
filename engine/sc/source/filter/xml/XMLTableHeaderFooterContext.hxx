@@ -29,10 +29,10 @@ namespace com::sun::star::sheet { class XHeaderFooterContent; }
 
 class XMLTableHeaderFooterContext: public SvXMLImportContext
 {
-    css::uno::Reference< css::text::XTextCursor > xTextCursor;
-    css::uno::Reference< css::text::XTextCursor > xOldTextCursor;
-    css::uno::Reference< css::beans::XPropertySet > xPropSet;
-    css::uno::Reference< css::sheet::XHeaderFooterContent > xHeaderFooterContent;
+    cpo::uno::Reference< css::text::XTextCursor > xTextCursor;
+    cpo::uno::Reference< css::text::XTextCursor > xOldTextCursor;
+    cpo::uno::Reference< css::beans::XPropertySet > xPropSet;
+    cpo::uno::Reference< css::sheet::XHeaderFooterContent > xHeaderFooterContent;
 
     OUString         sCont;
 
@@ -43,14 +43,14 @@ class XMLTableHeaderFooterContext: public SvXMLImportContext
 public:
 
     XMLTableHeaderFooterContext( SvXMLImport& rImport, sal_Int32 nElement,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
-            const css::uno::Reference< css::beans::XPropertySet > & rPageStylePropSet,
+            const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
+            const cpo::uno::Reference< css::beans::XPropertySet > & rPageStylePropSet,
                bool bFooter, bool bLft, bool bFirst );
 
     virtual ~XMLTableHeaderFooterContext() override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };
@@ -58,19 +58,19 @@ public:
 class XMLHeaderFooterRegionContext: public SvXMLImportContext
 {
 private:
-    css::uno::Reference< css::text::XTextCursor >& xTextCursor;
-    css::uno::Reference< css::text::XTextCursor > xOldTextCursor;
+    cpo::uno::Reference< css::text::XTextCursor >& xTextCursor;
+    cpo::uno::Reference< css::text::XTextCursor > xOldTextCursor;
 
 public:
 
     XMLHeaderFooterRegionContext( SvXMLImport& rImport,
-            css::uno::Reference< css::text::XTextCursor >& xCursor );
+            cpo::uno::Reference< css::text::XTextCursor >& xCursor );
 
     virtual ~XMLHeaderFooterRegionContext() override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& ) override;
 
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };

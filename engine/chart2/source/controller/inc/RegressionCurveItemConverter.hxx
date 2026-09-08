@@ -32,7 +32,7 @@ class RegressionCurveItemConverter final : public ItemConverter
 {
 public:
     RegressionCurveItemConverter(
-        const css::uno::Reference< css::beans::XPropertySet > & rPropertySet,
+        const cpo::uno::Reference< css::beans::XPropertySet > & rPropertySet,
         rtl::Reference< ::chart::DataSeries > xRegCurveCnt,
         SfxItemPool& rItemPool,
         SdrModel& rDrawModel,

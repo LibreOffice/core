@@ -30,7 +30,7 @@ const sal_Int32 HANDLE_CERTIFICATEREQUEST = 3;
 const sal_Int32 HANDLE_AUTHENTICATIONREQUEST = 4;
 
 SimpleFileAccessInteraction::SimpleFileAccessInteraction(
-    const css::uno::Reference<css::task::XInteractionHandler>& xHandler)
+    const cpo::uno::Reference<css::task::XInteractionHandler>& xHandler)
 {
     std::vector<::ucbhelper::InterceptedInteraction::InterceptedRequest> lInterceptions{
         { //intercept standard IO error exception (local file and WebDAV)
@@ -61,7 +61,7 @@ SimpleFileAccessInteraction::~SimpleFileAccessInteraction() {}
 
 ucbhelper::InterceptedInteraction::EInterceptionState SimpleFileAccessInteraction::intercepted(
     const ::ucbhelper::InterceptedInteraction::InterceptedRequest& aRequest,
-    const css::uno::Reference<css::task::XInteractionRequest>& xRequest)
+    const cpo::uno::Reference<css::task::XInteractionRequest>& xRequest)
 {
     bool bAbort = false;
     switch (aRequest.Handle)
@@ -105,7 +105,7 @@ ucbhelper::InterceptedInteraction::EInterceptionState SimpleFileAccessInteractio
     // any selection...
     if (bAbort)
     {
-        css::uno::Reference<css::task::XInteractionContinuation> xAbort
+        cpo::uno::Reference<css::task::XInteractionContinuation> xAbort
             = ::ucbhelper::InterceptedInteraction::extractContinuation(
                 xRequest->getContinuations(), cppu::UnoType<css::task::XInteractionAbort>::get());
         if (!xAbort.is())

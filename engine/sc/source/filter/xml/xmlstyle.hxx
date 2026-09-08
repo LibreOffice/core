@@ -106,7 +106,7 @@ protected:
     virtual void ContextFilter(
             bool bEnableFoFontFamily,
             ::std::vector< XMLPropertyState >& rProperties,
-            const css::uno::Reference<css::beans::XPropertySet >& rPropSet ) const override;
+            const cpo::uno::Reference<css::beans::XPropertySet >& rPropSet ) const override;
 public:
     explicit ScXMLCellExportPropertyMapper(
             const rtl::Reference< XMLPropertySetMapper >& rMapper );
@@ -135,7 +135,7 @@ protected:
     virtual void ContextFilter(
             bool bEnableFoFontFamily,
             ::std::vector< XMLPropertyState >& rProperties,
-            const css::uno::Reference<css::beans::XPropertySet >& rPropSet ) const override;
+            const cpo::uno::Reference<css::beans::XPropertySet >& rPropSet ) const override;
 public:
     explicit ScXMLRowExportPropertyMapper(
             const rtl::Reference< XMLPropertySetMapper >& rMapper );
@@ -191,7 +191,7 @@ class ScXMLAutoStylePoolP : public SvXMLAutoStylePoolP
             ) const override;
 
     virtual void exportStyleContent(
-            const css::uno::Reference< css::xml::sax::XDocumentHandler > & rHandler,
+            const cpo::uno::Reference< css::xml::sax::XDocumentHandler > & rHandler,
             XmlStyleFamily nFamily,
             const ::std::vector< XMLPropertyState >& rProperties,
             const SvXMLExportPropertyMapper& rPropExp

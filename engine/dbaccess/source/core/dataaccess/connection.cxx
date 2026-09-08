@@ -45,7 +45,7 @@
 #include <comphelper/types.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdb;
@@ -281,7 +281,7 @@ OConnection::OConnection(ODatabaseSource& _rDB
         DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
 
-    m_xTableUIProvider.set(m_xMasterConnection, css::uno::UNO_QUERY);
+    m_xTableUIProvider.set(m_xMasterConnection, cpo::uno::UNO_QUERY);
 
     try
     {
@@ -705,7 +705,7 @@ Reference< XDataSourceMetaData > OConnection::getDataSourceMetaData(  )
     return m_xConnectionTools->getDataSourceMetaData();
 }
 
-Reference< css::container::XNameAccess > OConnection::getFieldsByCommandDescriptor( ::sal_Int32 commandType, const OUString& command, css::uno::Reference< css::lang::XComponent >& keepFieldsAlive )
+Reference< css::container::XNameAccess > OConnection::getFieldsByCommandDescriptor( ::sal_Int32 commandType, const OUString& command, cpo::uno::Reference< css::lang::XComponent >& keepFieldsAlive )
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed();

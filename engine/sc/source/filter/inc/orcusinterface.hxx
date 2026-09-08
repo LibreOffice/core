@@ -805,7 +805,7 @@ class ScOrcusFactory : public orcus::spreadsheet::iface::import_factory
 
     int mnProgress;
 
-    css::uno::Reference<css::task::XStatusIndicator> mxStatusIndicator;
+    cpo::uno::Reference<css::task::XStatusIndicator> mxStatusIndicator;
 
 public:
     ScOrcusFactory(ScDocument& rDoc, bool bSkipDefaultStyles = false);
@@ -849,7 +849,7 @@ public:
 
     void incrementProgress();
 
-    void setStatusIndicator(const css::uno::Reference<css::task::XStatusIndicator>& rIndicator);
+    void setStatusIndicator(const cpo::uno::Reference<css::task::XStatusIndicator>& rIndicator);
 
     const ScOrcusGlobalSettings& getGlobalSettings() const;
 };

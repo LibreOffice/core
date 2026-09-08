@@ -38,6 +38,7 @@
 #include <viewsh.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 void SwModelTestBase::paste(std::u16string_view aFilename, const OUString& aInstance,
                             uno::Reference<text::XTextRange> const& xTextRange)

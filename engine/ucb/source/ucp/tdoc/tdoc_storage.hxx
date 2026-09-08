@@ -44,13 +44,13 @@ namespace tdoc_ucp {
     {
     public:
         StorageElementFactory(
-            css::uno::Reference< cpo::uno::XComponentContext > xContext,
+            cpo::uno::Reference< cpo::uno::XComponentContext > xContext,
             rtl::Reference< OfficeDocumentsManager > xDocsMgr );
         virtual ~StorageElementFactory() override;
 
         /// @throws cpo::uno::Exception
         /// @throws cpo::uno::RuntimeException
-        css::uno::Reference< css::embed::XStorage >
+        cpo::uno::Reference< css::embed::XStorage >
         createTemporaryStorage();
 
         /// @throws css::embed::InvalidStorageException
@@ -58,7 +58,7 @@ namespace tdoc_ucp {
         /// @throws css::io::IOException
         /// @throws css::embed::StorageWrappedTargetException
         /// @throws cpo::uno::RuntimeException
-        css::uno::Reference< css::embed::XStorage >
+        cpo::uno::Reference< css::embed::XStorage >
         createStorage( const OUString & rUri, StorageAccessMode eMode );
 
         /// @throws css::embed::InvalidStorageException
@@ -67,7 +67,7 @@ namespace tdoc_ucp {
         /// @throws css::embed::StorageWrappedTargetException
         /// @throws css::packages::WrongPasswordException
         /// @throws cpo::uno::RuntimeException
-        css::uno::Reference< css::io::XInputStream >
+        cpo::uno::Reference< css::io::XInputStream >
         createInputStream( const OUString & rUri,
                            const OUString & rPassword );
 
@@ -77,7 +77,7 @@ namespace tdoc_ucp {
         /// @throws css::embed::StorageWrappedTargetException
         /// @throws css::packages::WrongPasswordException
         /// @throws cpo::uno::RuntimeException
-        css::uno::Reference< css::io::XOutputStream >
+        cpo::uno::Reference< css::io::XOutputStream >
         createOutputStream( const OUString & rUri,
                             const OUString & rPassword,
                             bool bTruncate );
@@ -88,7 +88,7 @@ namespace tdoc_ucp {
         /// @throws css::embed::StorageWrappedTargetException
         /// @throws css::packages::WrongPasswordException
         /// @throws cpo::uno::RuntimeException
-        css::uno::Reference< css::io::XStream >
+        cpo::uno::Reference< css::io::XStream >
         createStream( const OUString & rUri,
                       const OUString & rPassword,
                       bool bTruncate );
@@ -103,7 +103,7 @@ namespace tdoc_ucp {
         /// @throws css::io::IOException
         /// @throws css::embed::StorageWrappedTargetException
         /// @throws cpo::uno::RuntimeException
-        css::uno::Reference< css::embed::XStorage >
+        cpo::uno::Reference< css::embed::XStorage >
         queryParentStorage( const OUString & rUri,
                             StorageAccessMode eMode );
 
@@ -112,8 +112,8 @@ namespace tdoc_ucp {
         /// @throws css::io::IOException
         /// @throws css::embed::StorageWrappedTargetException
         /// @throws cpo::uno::RuntimeException
-        css::uno::Reference< css::embed::XStorage >
-        queryStorage( const css::uno::Reference<
+        cpo::uno::Reference< css::embed::XStorage >
+        queryStorage( const cpo::uno::Reference<
                         css::embed::XStorage > & xParentStorage,
                       const OUString & rUri,
                       StorageAccessMode eMode );
@@ -124,8 +124,8 @@ namespace tdoc_ucp {
         /// @throws css::embed::StorageWrappedTargetException
         /// @throws css::packages::WrongPasswordException
         /// @throws cpo::uno::RuntimeException
-        css::uno::Reference< css::io::XStream >
-        queryStream( const css::uno::Reference<
+        cpo::uno::Reference< css::io::XStream >
+        queryStream( const cpo::uno::Reference<
                         css::embed::XStorage > & xParentStorage,
                      const OUString & rUri,
                      const OUString & rPassword,
@@ -154,7 +154,7 @@ namespace tdoc_ucp {
         StorageMap m_aMap;
         osl::Mutex m_aMutex;
         rtl::Reference< OfficeDocumentsManager > m_xDocsMgr;
-        css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+        cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
     };
 
 } // namespace tdoc_ucp

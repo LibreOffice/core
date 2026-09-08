@@ -42,6 +42,7 @@
 #include <officecfg/Office/Common.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 namespace drawinglayer::primitive2d
 {

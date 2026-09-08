@@ -34,7 +34,7 @@ namespace bib
     {
     private:
         rtl::Reference<OLoadListenerAdapter>         m_xFormAdapter;
-        css::uno::Reference< css::form::XLoadable >  m_xForm;
+        cpo::uno::Reference< css::form::XLoadable >  m_xForm;
     private:
         void    implSetDesignMode( bool _bDesign );
 
@@ -43,10 +43,10 @@ namespace bib
         virtual ~FormControlContainer( ) override;
 
         bool        isFormConnected() const { return m_xFormAdapter.is(); }
-        void        connectForm( const css::uno::Reference< css::form::XLoadable >& _rxForm );
+        void        connectForm( const cpo::uno::Reference< css::form::XLoadable >& _rxForm );
         void        disconnectForm();
 
-        virtual css::uno::Reference< css::awt::XControlContainer >
+        virtual cpo::uno::Reference< css::awt::XControlContainer >
                     getControlContainer() = 0;
 
     protected:

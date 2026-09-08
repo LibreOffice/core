@@ -65,15 +65,15 @@ public:
     virtual ~ConvDicList() override;
 
     // XConversionDictionaryList
-    virtual css::uno::Reference< css::container::XNameContainer > getDictionaryContainer(  ) override;
-    virtual css::uno::Reference< css::linguistic2::XConversionDictionary > addNewDictionary( const OUString& aName, const css::lang::Locale& aLocale, sal_Int16 nConversionDictionaryType ) override;
+    virtual cpo::uno::Reference< css::container::XNameContainer > getDictionaryContainer(  ) override;
+    virtual cpo::uno::Reference< css::linguistic2::XConversionDictionary > addNewDictionary( const OUString& aName, const css::lang::Locale& aLocale, sal_Int16 nConversionDictionaryType ) override;
     virtual cpo::uno::Sequence< OUString > queryConversions( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength, const css::lang::Locale& aLocale, sal_Int16 nConversionDictionaryType, css::linguistic2::ConversionDirection eDirection, sal_Int32 nTextConversionOptions ) override;
     virtual sal_Int16 queryMaxCharCount( const css::lang::Locale& aLocale, sal_Int16 nConversionDictionaryType, css::linguistic2::ConversionDirection eDirection ) override;
 
     // XComponent
     virtual void dispose(  ) override;
-    virtual void addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-    virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+    virtual void addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& xListener ) override;
+    virtual void removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
     // XServiceInfo
     virtual OUString getImplementationName(  ) override;

@@ -28,6 +28,7 @@
 #include <svx/svdobj.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 namespace oox::shape
 {

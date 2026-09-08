@@ -20,7 +20,7 @@
 
 namespace com::sun::star::awt { struct Size; }
 namespace com::sun::star::beans { class XPropertySet; }
-namespace com::sun::star::uno { template <class interface_type> class Reference; }
+namespace cpo::uno { template <class interface_type> class Reference; }
 namespace css = ::com::sun::star;
 class SvxShapeText;
 
@@ -36,7 +36,7 @@ public:
         const css::awt::Size & rNewReferenceSize );
 
     static void adaptFontSizes(
-        const css::uno::Reference<
+        const cpo::uno::Reference<
             css::beans::XPropertySet > & xTargetProperties,
         const css::awt::Size & rOldReferenceSize,
         const css::awt::Size & rNewReferenceSize );

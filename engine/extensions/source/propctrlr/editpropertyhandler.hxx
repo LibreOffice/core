@@ -33,7 +33,7 @@ namespace pcr
     {
     public:
         explicit EditPropertyHandler(
-            const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxContext
         );
 
     protected:
@@ -49,7 +49,7 @@ namespace pcr
         virtual void                            setPropertyValue( const OUString& _rPropertyName, const cpo::uno::Any& _rValue ) override;
         virtual cpo::uno::Sequence< OUString >  getSupersededProperties( ) override;
         virtual cpo::uno::Sequence< OUString >  getActuatingProperties( ) override;
-        virtual void                            actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const cpo::uno::Any& _rNewValue, const cpo::uno::Any& _rOldValue, const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI, bool ) override;
+        virtual void                            actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const cpo::uno::Any& _rNewValue, const cpo::uno::Any& _rOldValue, const cpo::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI, bool ) override;
 
         // PropertyHandler overridables
         virtual cpo::uno::Sequence< css::beans::Property >

@@ -51,7 +51,7 @@
 #endif
 
 using namespace ::oox::core;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::style;
@@ -80,7 +80,7 @@ void BulletList::setBulletChar( const OUString & sChar )
     msBulletChar <<= sChar;
 }
 
-void BulletList::setGraphic( css::uno::Reference< css::graphic::XGraphic > const & rXGraphic )
+void BulletList::setGraphic( cpo::uno::Reference< css::graphic::XGraphic > const & rXGraphic )
 {
     mnNumberingType <<= NumberingType::BITMAP;
     maGraphic <<= rXGraphic;

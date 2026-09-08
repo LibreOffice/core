@@ -65,6 +65,7 @@
 #include <unotxdoc.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 void SwTextBoxHelper::create(SwFrameFormat* pShape, SdrObject* pObject, bool bCopyText)
 {

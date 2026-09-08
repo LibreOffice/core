@@ -33,10 +33,10 @@ typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XField > SwVbaField_BA
 
 class SwVbaField : public SwVbaField_BASE
 {
-    css::uno::Reference< css::text::XTextField > mxTextField;
+    cpo::uno::Reference< css::text::XTextField > mxTextField;
 public:
     /// @throws cpo::uno::RuntimeException
-    SwVbaField( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< cpo::uno::XComponentContext >& rContext, const css::uno::Reference< css::text::XTextField >& xTextField);
+    SwVbaField( const cpo::uno::Reference< ooo::vba::XHelperInterface >& rParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& rContext, const cpo::uno::Reference< css::text::XTextField >& xTextField);
 
     virtual bool SAL_CALL Update() override;
     // XHelperInterface
@@ -52,20 +52,20 @@ class SwVbaFields : public SwVbaFields_BASE
 private:
     /// @throws cpo::uno::RuntimeException
     /// @throws css::script::BasicErrorException
-    css::uno::Reference< css::text::XTextField > Create_Field_FileName(const OUString& rText);
+    cpo::uno::Reference< css::text::XTextField > Create_Field_FileName(const OUString& rText);
     /// @throws cpo::uno::RuntimeException
-    css::uno::Reference< css::text::XTextField > Create_Field_DocProperty( const OUString& _text );
+    cpo::uno::Reference< css::text::XTextField > Create_Field_DocProperty( const OUString& _text );
 
 public:
-    SwVbaFields( const css::uno::Reference< ov::XHelperInterface >& xParent,
-                 const css::uno::Reference< cpo::uno::XComponentContext > & xContext,
+    SwVbaFields( const cpo::uno::Reference< ov::XHelperInterface >& xParent,
+                 const cpo::uno::Reference< cpo::uno::XComponentContext > & xContext,
                  const rtl::Reference< SwXTextDocument >& xModel );
     // XFields
-    virtual css::uno::Reference< ::ooo::vba::word::XField > SAL_CALL Add( const css::uno::Reference< ::ooo::vba::word::XRange >& Range, const cpo::uno::Any& Type, const cpo::uno::Any& Text, const cpo::uno::Any& PreserveFormatting ) override;
+    virtual cpo::uno::Reference< ::ooo::vba::word::XField > SAL_CALL Add( const cpo::uno::Reference< ::ooo::vba::word::XRange >& Range, const cpo::uno::Any& Type, const cpo::uno::Any& Text, const cpo::uno::Any& PreserveFormatting ) override;
     virtual sal_Int32 SAL_CALL Update() override;
     // XEnumerationAccess
     virtual cpo::uno::Type SAL_CALL getElementType() override;
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
+    virtual cpo::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
     // ScVbaCollectionBaseImpl
     virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) override;
 

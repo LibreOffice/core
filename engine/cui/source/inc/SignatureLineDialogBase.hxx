@@ -15,18 +15,18 @@
 #include <vcl/weld.hxx>
 
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 class SignatureLineDialogBase : public weld::GenericDialogController
 {
 public:
-    SignatureLineDialogBase(weld::Widget* pParent, css::uno::Reference<css::frame::XModel> xModel,
+    SignatureLineDialogBase(weld::Widget* pParent, cpo::uno::Reference<css::frame::XModel> xModel,
                             const OUString& rUIFile, const OUString& rDialogId);
 
     virtual short run() override;
 
 protected:
-    css::uno::Reference<css::frame::XModel> m_xModel;
+    cpo::uno::Reference<css::frame::XModel> m_xModel;
     static OUString getCDataString(std::u16string_view rString);
 };
 

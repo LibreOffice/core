@@ -58,7 +58,7 @@ class TitleBarUpdate final : public  ::cppu::WeakImplHelper<
     private:
 
         /// may we need a uno service manager to create own services
-        css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+        cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
         /// reference to the frame which was created by the office himself
         cpo::uno::WeakReference< css::frame::XFrame > m_xFrame;
@@ -68,7 +68,7 @@ class TitleBarUpdate final : public  ::cppu::WeakImplHelper<
     public:
 
         // ctor/dtor
-                 TitleBarUpdate(css::uno::Reference< cpo::uno::XComponentContext > xContext);
+                 TitleBarUpdate(cpo::uno::Reference< cpo::uno::XComponentContext > xContext);
         virtual ~TitleBarUpdate(                                                                   ) override;
 
         // XInterface, XTypeProvider
@@ -103,7 +103,7 @@ class TitleBarUpdate final : public  ::cppu::WeakImplHelper<
                     true in case module could be identified and all needed values could be read.
                     false otherwise.
          */
-        bool implst_getModuleInfo(const css::uno::Reference< css::frame::XFrame >& xFrame,
+        bool implst_getModuleInfo(const cpo::uno::Reference< css::frame::XFrame >& xFrame,
                                               TModuleInfo&                               rInfo );
 
         /** @short  set a new icon and title on the title bar of our connected frame window.
@@ -121,7 +121,7 @@ class TitleBarUpdate final : public  ::cppu::WeakImplHelper<
                     the frame which contains the component and where the icon must be set
                     on the window title bar.
          */
-        void impl_updateIcon(const css::uno::Reference< css::frame::XFrame >& xFrame);
+        void impl_updateIcon(const cpo::uno::Reference< css::frame::XFrame >& xFrame);
 
         /** @short  gets the current title from the frame and set it on the window.
 
@@ -129,12 +129,12 @@ class TitleBarUpdate final : public  ::cppu::WeakImplHelper<
                     the frame which contains the component and where the title must be set
                     on the window title bar.
          */
-        static void impl_updateTitle(const css::uno::Reference< css::frame::XFrame >& xFrame);
+        static void impl_updateTitle(const cpo::uno::Reference< css::frame::XFrame >& xFrame);
 
         //Hook to set GNOME3/Windows 7 applicationID for toplevel frames
         //http://msdn.microsoft.com/en-us/library/dd378459(v=VS.85).aspx
         //http://live.gnome.org/GnomeShell/ApplicationBased
-        void impl_updateApplicationID(const css::uno::Reference< css::frame::XFrame >& xFrame);
+        void impl_updateApplicationID(const cpo::uno::Reference< css::frame::XFrame >& xFrame);
 }; // class TitleBarUpdate
 
 } // namespace framework

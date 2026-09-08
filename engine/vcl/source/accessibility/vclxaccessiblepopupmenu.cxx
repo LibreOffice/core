@@ -25,7 +25,7 @@
 #include <vcl/settings.hxx>
 
 using namespace ::com::sun::star::accessibility;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::comphelper;
 using namespace ::cpo::uno;
 

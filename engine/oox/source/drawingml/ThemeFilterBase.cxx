@@ -11,6 +11,7 @@
 #include <oox/drawingml/theme.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 namespace oox::drawingml
 {

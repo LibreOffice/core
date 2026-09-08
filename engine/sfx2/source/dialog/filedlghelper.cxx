@@ -110,8 +110,8 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::ui::dialogs::TemplateDescription;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::cppu;
 
@@ -880,11 +880,11 @@ static open_or_save_t lcl_OpenOrSave(sal_Int16 const nDialogType)
 
 // FileDialogHelper_Impl
 
-css::uno::Reference<css::awt::XWindow> FileDialogHelper_Impl::GetFrameInterface()
+cpo::uno::Reference<css::awt::XWindow> FileDialogHelper_Impl::GetFrameInterface()
 {
     if (mpFrameWeld)
         return mpFrameWeld->GetXWindow();
-    return css::uno::Reference<css::awt::XWindow>();
+    return cpo::uno::Reference<css::awt::XWindow>();
 }
 
 FileDialogHelper_Impl::FileDialogHelper_Impl(
@@ -956,7 +956,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     mpGraphicFilter = nullptr;
 
     // create the picker component
-    mxFileDlg.set(xFactory->createInstance( aService ), css::uno::UNO_QUERY);
+    mxFileDlg.set(xFactory->createInstance( aService ), cpo::uno::UNO_QUERY);
     mbSystemPicker = lcl_isSystemFilePicker( mxFileDlg );
     mbAsyncPicker = lcl_isAsyncFilePicker(mxFileDlg);
 
@@ -1143,7 +1143,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     {
         mxFileDlg->setTitle( SfxResId( STR_SFX_EXPLORERFILE_EXPORT ) );
         try {
-                css::uno::Reference < XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY_THROW );
+                cpo::uno::Reference < XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY_THROW );
                 xCtrlAccess->enableControl( ExtendedFilePickerElementIds::LISTBOX_FILTER_SELECTOR, true );
         }
         catch( const Exception & ) { }
@@ -1186,7 +1186,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     mxFileDlg->addFilePickerListener( this );
 }
 
-css::uno::Reference<css::ui::dialogs::XFolderPicker2> createFolderPicker(const css::uno::Reference<cpo::uno::XComponentContext>& rContext, weld::Window* pPreferredParent)
+cpo::uno::Reference<css::ui::dialogs::XFolderPicker2> createFolderPicker(const cpo::uno::Reference<cpo::uno::XComponentContext>& rContext, weld::Window* pPreferredParent)
 {
     auto xRet = css::ui::dialogs::FolderPicker::create(rContext);
 
@@ -2868,7 +2868,7 @@ ErrCode SetPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter, SfxI
 
 
 
-ErrCode RequestPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter, OUString const & aURL, SfxItemSet* pSet, const css::uno::Reference<css::awt::XWindow>& rParent)
+ErrCode RequestPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter, OUString const & aURL, SfxItemSet* pSet, const cpo::uno::Reference<css::awt::XWindow>& rParent)
 {
     uno::Reference<task::XInteractionHandler2> xInteractionHandler = task::InteractionHandler::createWithParent(::comphelper::getProcessComponentContext(), rParent);
     const auto eType = IsMSType(pCurrentFilter) && !IsOOXML(pCurrentFilter) ?

@@ -22,7 +22,7 @@
 #include <editeng/svxenum.hxx>
 #include <rtl/ustring.hxx>
 #include <sfx2/sfxdlg.hxx>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <cpo/uno/Sequence.h>
 #include <optional>
 #include "dbmgr.hxx"
@@ -80,7 +80,7 @@ namespace com::sun::star{
 
 namespace sw::mark { class Fieldmark; class DateFieldmark; }
 
-typedef   void (*SwLabDlgMethod) (css::uno::Reference< css::frame::XModel> const & xModel, const SwLabItem& rItem);
+typedef   void (*SwLabDlgMethod) (cpo::uno::Reference< css::frame::XModel> const & xModel, const SwLabItem& rItem);
 
 typedef OUString    (*GlossaryGetCurrGroup)();
 typedef void        (*GlossarySetActGroup)(const OUString& rNewGroup);
@@ -149,7 +149,7 @@ public:
     virtual DBManagerOptions GetMergeType() = 0;
     virtual const OUString& GetSaveFilter() const = 0;
     virtual cpo::uno::Sequence< cpo::uno::Any > GetSelection() const = 0;
-    virtual css::uno::Reference< css::sdbc::XResultSet> GetResultSet() const = 0;
+    virtual cpo::uno::Reference< css::sdbc::XResultSet> GetResultSet() const = 0;
     virtual bool IsSaveSingleDoc() const = 0;
     virtual bool IsGenerateFromDataBase() const = 0;
     virtual bool IsFileEncryptedFromDataBase() const = 0;
@@ -287,9 +287,9 @@ protected:
     virtual ~AbstractSwInsertDBColAutoPilot() override = default;
 public:
     virtual void DataToDoc( const cpo::uno::Sequence< cpo::uno::Any >& rSelection,
-        css::uno::Reference< css::sdbc::XDataSource> rxSource,
-        css::uno::Reference< css::sdbc::XConnection> xConnection,
-        css::uno::Reference< css::sdbc::XResultSet > xResultSet) = 0;
+        cpo::uno::Reference< css::sdbc::XDataSource> rxSource,
+        cpo::uno::Reference< css::sdbc::XConnection> xConnection,
+        cpo::uno::Reference< css::sdbc::XResultSet > xResultSet) = 0;
 };
 
 class AbstractDropDownFieldDialog : public VclAbstractDialog
@@ -505,8 +505,8 @@ public:
     virtual VclPtr<VclAbstractDialog> CreateSwCaptionDialog(weld::Window *pParent, SwView &rV) = 0;
 
     virtual VclPtr<AbstractSwInsertDBColAutoPilot> CreateSwInsertDBColAutoPilot(SwView& rView,
-        css::uno::Reference< css::sdbc::XDataSource> rxSource,
-        css::uno::Reference<css::sdbcx::XColumnsSupplier> xColSupp,
+        cpo::uno::Reference< css::sdbc::XDataSource> rxSource,
+        cpo::uno::Reference<css::sdbcx::XColumnsSupplier> xColSupp,
         const SwDBData& rData) = 0;
     virtual VclPtr<SfxAbstractTabDialog> CreateSwFootNoteOptionDlg(weld::Window *pParent, SwWrtShell &rSh) = 0;
 
@@ -551,8 +551,8 @@ public:
     virtual VclPtr<AbstractSwFieldDlg> CreateSwFieldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, weld::Window *pParent) = 0;
     virtual VclPtr<SfxAbstractDialog>   CreateSwFieldEditDlg ( SwView& rVw ) = 0;
     virtual VclPtr<AbstractSwRenameXNamedDlg> CreateSwRenameXNamedDlg(weld::Widget* pParent,
-        css::uno::Reference< css::container::XNamed > & xNamed,
-        css::uno::Reference< css::container::XNameAccess > & xNameAccess) = 0;
+        cpo::uno::Reference< css::container::XNamed > & xNamed,
+        cpo::uno::Reference< css::container::XNameAccess > & xNameAccess) = 0;
 
     virtual VclPtr<AbstractCopyFieldDlg> CreateCopyFieldDlg(weld::Widget* pParent, const rtl::OUString& rFieldValue ) = 0;
 
@@ -591,7 +591,7 @@ public:
                                                 const OUString& rSourceName,
                                                 const OUString& rTableName,
                                                 sal_Int32 nCommandType,
-                                                const css::uno::Reference< css::sdbc::XConnection>& xConnection ) = 0;
+                                                const cpo::uno::Reference< css::sdbc::XConnection>& xConnection ) = 0;
     virtual VclPtr<AbstractMailMergeCreateFromDlg>   CreateMailMergeCreateFromDlg(weld::Window* pParent) = 0;
     virtual VclPtr<AbstractMailMergeFieldConnectionsDlg> CreateMailMergeFieldConnectionsDlg(weld::Window* pParent) = 0;
     virtual VclPtr<VclAbstractDialog>          CreateMultiTOXMarkDlg(weld::Window* pParent, SwTOXMgr &rTOXMgr) = 0;

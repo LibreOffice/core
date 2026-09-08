@@ -31,13 +31,13 @@
 using namespace ::svxform;
 
 
-::com::sun::star::uno::Reference< ::cpo::uno::XInterface >  SvxFmMSFactory::createInstance(const OUString& rServiceSpecifier)
+::cpo::uno::Reference< ::cpo::uno::XInterface >  SvxFmMSFactory::createInstance(const OUString& rServiceSpecifier)
 {
-    ::com::sun::star::uno::Reference< ::cpo::uno::XInterface >  xRet;
+    ::cpo::uno::Reference< ::cpo::uno::XInterface >  xRet;
 
     if ( rServiceSpecifier.startsWith( "com.sun.star.form.component." ) )
     {
-        const css::uno::Reference<cpo::uno::XComponentContext>& xContext = comphelper::getProcessComponentContext();
+        const cpo::uno::Reference<cpo::uno::XComponentContext>& xContext = comphelper::getProcessComponentContext();
         xRet = xContext->getServiceManager()->createInstanceWithContext(rServiceSpecifier, xContext);
     }
     else if ( rServiceSpecifier == "com.sun.star.drawing.ControlShape" )

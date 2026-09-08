@@ -26,7 +26,7 @@
 #include <o3tl/string_view.hxx>
 #include <utility>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 

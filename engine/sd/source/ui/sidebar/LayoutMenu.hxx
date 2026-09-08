@@ -60,7 +60,7 @@ public:
             the view shell of the task pane.
     */
     LayoutMenu(weld::Widget* pParent, ViewShellBase& rViewShellBase,
-               css::uno::Reference<css::ui::XSidebar> xSidebar);
+               cpo::uno::Reference<css::ui::XSidebar> xSidebar);
     virtual ~LayoutMenu() override;
 
     void Dispose();
@@ -97,7 +97,7 @@ private:
     */
     rtl::Reference<::sdtools::SlotStateListener> mxListener;
     bool mbIsMainViewChangePending;
-    css::uno::Reference<css::ui::XSidebar> mxSidebar;
+    cpo::uno::Reference<css::ui::XSidebar> mxSidebar;
     bool mbIsDisposed;
     std::map<AutoLayout, TranslateId> maLayoutToStringMap;
 

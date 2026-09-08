@@ -44,7 +44,7 @@
 
 constexpr OUString Windows_FormatName = u"windows_formatname"_ustr;
 
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::datatransfer;
 

@@ -19,7 +19,7 @@
 #pragma once
 
 #include "StackMode.hxx"
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <rtl/ustring.hxx>
 #include <rtl/ref.hxx>
 
@@ -39,7 +39,7 @@ namespace chart { class DataSeries; }
 namespace chart::DataSeriesHelper
 {
 
-OUString getRole( const css::uno::Reference<css::chart2::data::XLabeledDataSequence>& xLabeledDataSequence );
+OUString getRole( const cpo::uno::Reference<css::chart2::data::XLabeledDataSequence>& xLabeledDataSequence );
 
 /** Retrieves the data sequence in the given data source that matches the
     given role.  If more than one sequences match the role, the first match
@@ -51,8 +51,8 @@ OUString getRole( const css::uno::Reference<css::chart2::data::XLabeledDataSeque
     @param aRole
         The role that is to be filtered out.
 */
-css::uno::Reference< css::chart2::data::XLabeledDataSequence >
-    getDataSequenceByRole( const css::uno::Reference< css::chart2::data::XDataSource > & xSource,
+cpo::uno::Reference< css::chart2::data::XLabeledDataSequence >
+    getDataSequenceByRole( const cpo::uno::Reference< css::chart2::data::XDataSource > & xSource,
                            const OUString& aRole,
                            bool bMatchPrefix = false );
 
@@ -66,15 +66,15 @@ css::uno::Reference< css::chart2::data::XLabeledDataSequence >
         The role that is to be filtered out.
 */
 std::vector<
-  css::uno::Reference< css::chart2::data::XLabeledDataSequence > >
-    getAllDataSequencesByRole( const cpo::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > & aDataSequences,
+  cpo::uno::Reference< css::chart2::data::XLabeledDataSequence > >
+    getAllDataSequencesByRole( const cpo::uno::Sequence< cpo::uno::Reference< css::chart2::data::XLabeledDataSequence > > & aDataSequences,
                                const OUString& aRole );
 std::vector<
-  css::uno::Reference< css::chart2::data::XLabeledDataSequence > >
-    getAllDataSequencesByRole( const std::vector< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > & aDataSequences,
+  cpo::uno::Reference< css::chart2::data::XLabeledDataSequence > >
+    getAllDataSequencesByRole( const std::vector< cpo::uno::Reference< css::chart2::data::XLabeledDataSequence > > & aDataSequences,
                                const OUString& aRole );
 
-std::vector< css::uno::Reference< css::chart2::data::XLabeledDataSequence > >
+std::vector< cpo::uno::Reference< css::chart2::data::XLabeledDataSequence > >
 getAllDataSequences(
     const std::vector<rtl::Reference<::chart::DataSeries> >& aSeries );
 
@@ -107,12 +107,12 @@ rtl::Reference< ::chart::ChartType >
         const rtl::Reference< ::chart::DataSeries > & xSeries,
         const rtl::Reference< ::chart::Diagram > & xDiagram );
 
-sal_Int32 translateIndexFromHiddenToFullSequence( sal_Int32 nClippedIndex, const css::uno::Reference<
+sal_Int32 translateIndexFromHiddenToFullSequence( sal_Int32 nClippedIndex, const cpo::uno::Reference<
         css::chart2::data::XDataSequence >& xDataSequence, bool bTranslate );
 
-void insertDataLabelToPoint( const css::uno::Reference< css::beans::XPropertySet >& xPointPropertySet );
+void insertDataLabelToPoint( const cpo::uno::Reference< css::beans::XPropertySet >& xPointPropertySet );
 
-void deleteDataLabelsFromPoint( const css::uno::Reference< css::beans::XPropertySet >& xPointPropertySet );
+void deleteDataLabelsFromPoint( const cpo::uno::Reference< css::beans::XPropertySet >& xPointPropertySet );
 
 } //  namespace chart::DataSeriesHelper
 

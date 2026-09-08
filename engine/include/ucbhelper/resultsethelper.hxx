@@ -57,13 +57,13 @@ class UCBHELPER_DLLPUBLIC ResultSetImplHelper :
 protected:
     std::mutex                                                 m_aMutex;
     css::ucb::OpenCommandArgument2                             m_aCommand;
-    css::uno::Reference< cpo::uno::XComponentContext >         m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext >         m_xContext;
     // Resultset #1
-    css::uno::Reference< css::sdbc::XResultSet >               m_xResultSet1;
+    cpo::uno::Reference< css::sdbc::XResultSet >               m_xResultSet1;
     // Resultset #2
-    css::uno::Reference< css::sdbc::XResultSet >               m_xResultSet2;
+    cpo::uno::Reference< css::sdbc::XResultSet >               m_xResultSet2;
     // Resultset changes listener.
-    css::uno::Reference< css::ucb::XDynamicResultSetListener > m_xListener;
+    cpo::uno::Reference< css::ucb::XDynamicResultSetListener > m_xListener;
 
 private:
     UCBHELPER_DLLPRIVATE void init( bool bStatic );
@@ -113,7 +113,7 @@ public:
       *        this resultset.
       */
     ResultSetImplHelper(
-            css::uno::Reference<
+            cpo::uno::Reference<
                 cpo::uno::XComponentContext > xContext,
             css::ucb::OpenCommandArgument2 aCommand );
 
@@ -131,17 +131,17 @@ public:
     virtual void
     dispose() override;
     virtual void
-    addEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener ) override;
+    addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& Listener ) override;
     virtual void
-    removeEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener ) override;
+    removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& Listener ) override;
 
     // XDynamicResultSet
-    virtual css::uno::Reference< css::sdbc::XResultSet >
+    virtual cpo::uno::Reference< css::sdbc::XResultSet >
     getStaticResultSet() override;
     virtual void
-    setListener( const css::uno::Reference< css::ucb::XDynamicResultSetListener >& Listener ) override;
+    setListener( const cpo::uno::Reference< css::ucb::XDynamicResultSetListener >& Listener ) override;
     virtual void
-    connectToCache( const css::uno::Reference< css::ucb::XDynamicResultSet > & xCache ) override;
+    connectToCache( const cpo::uno::Reference< css::ucb::XDynamicResultSet > & xCache ) override;
 
     /**
       * The implementation of this method always returns 0. Override this

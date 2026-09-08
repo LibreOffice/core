@@ -19,7 +19,7 @@
 
 #include <event.hxx>
 
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace css::xml::dom::events;
 
 namespace DOM::events

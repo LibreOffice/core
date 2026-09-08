@@ -33,6 +33,7 @@ namespace chart
 {
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 ChartFrameLoader::ChartFrameLoader(
         uno::Reference<cpo::uno::XComponentContext> const & xContext)

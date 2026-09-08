@@ -24,7 +24,7 @@
 
 using namespace ::comphelper;
 using namespace ::com::sun::star::accessibility;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 
@@ -130,7 +130,7 @@ void OWrappedAccessibleChildrenManager::dispose()
         if( rChild.second.is() )
         {
             Reference<XComponent> xContextComponent(rChild.second->getContextNoCreate(),
-                                                    css::uno::UNO_QUERY);
+                                                    cpo::uno::UNO_QUERY);
             if (xContextComponent.is())
                 xContextComponent->dispose();
         }

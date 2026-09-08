@@ -51,7 +51,7 @@ protected:
 
 public:
     OEditBaseModel(
-        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory,
+        const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory,
         const OUString& _rUnoControlModelTypeName,
         const OUString& _rDefault,
         const bool _bSupportExternalBinding,
@@ -60,14 +60,14 @@ public:
 
     OEditBaseModel(
         const OEditBaseModel* _pOriginal,
-        const css::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
+        const cpo::uno::Reference< cpo::uno::XComponentContext>& _rxFactory
     );
 
     virtual ~OEditBaseModel() override;
 
     // XPersistObject
-    virtual void write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
-    virtual void read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
+    virtual void write(const cpo::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
+    virtual void read(const cpo::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
 
     // XPropertySet
     virtual void getFastPropertyValue(cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
@@ -81,8 +81,8 @@ public:
 
 protected:
     // new properties common to all edit models should be handled with the following two methods
-    void readCommonEditProperties(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream);
-    void writeCommonEditProperties(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream);
+    void readCommonEditProperties(const cpo::uno::Reference< css::io::XObjectInputStream>& _rxInStream);
+    void writeCommonEditProperties(const cpo::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream);
     void defaultCommonEditProperties();
 
     virtual sal_uInt16 getPersistenceFlags() const;

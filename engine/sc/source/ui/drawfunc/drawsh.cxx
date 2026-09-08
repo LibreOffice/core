@@ -61,6 +61,7 @@
 #include <vcl/unohelp2.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 SFX_IMPL_INTERFACE(ScDrawShell, SfxShell)
 
@@ -94,7 +95,7 @@ void ScDrawShell::setModified()
     const SfxObjectShell* pShell = GetObjectShell();
     if ( pShell )
     {
-        css::uno::Reference< css::util::XModifiable > xModif( pShell->GetModel(), css::uno::UNO_QUERY );
+        cpo::uno::Reference< css::util::XModifiable > xModif( pShell->GetModel(), cpo::uno::UNO_QUERY );
         if ( xModif.is() )
             xModif->setModified( true );
     }
@@ -435,7 +436,7 @@ void ScDrawShell::ExecuteMacroAssign(SdrObject* pObj, weld::Window* pWin)
     aNamesItem.AddEvent( ScResId(RID_SCSTR_ONCLICK), OUString(), SvMacroItemId::OnClick );
     xItemSet->Put( aNamesItem );
 
-    css::uno::Reference < css::frame::XFrame > xFrame;
+    cpo::uno::Reference < css::frame::XFrame > xFrame;
     if (GetViewShell())
         xFrame = GetViewShell()->GetViewFrame().GetFrame().GetFrameInterface();
 

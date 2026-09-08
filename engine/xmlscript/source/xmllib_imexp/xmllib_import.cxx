@@ -27,7 +27,7 @@
 #include <xmlscript/xmlns.h>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 namespace xmlscript
@@ -238,7 +238,7 @@ importLibraryContainer( LibDescriptorArray* pLibArray )
     return ::xmlscript::createDocumentHandler(new LibraryImport(pLibArray));
 }
 
-css::uno::Reference< css::xml::sax::XDocumentHandler >
+cpo::uno::Reference< css::xml::sax::XDocumentHandler >
 importLibrary( LibDescriptor& rLib )
 {
     return ::xmlscript::createDocumentHandler(new LibraryImport(&rLib));

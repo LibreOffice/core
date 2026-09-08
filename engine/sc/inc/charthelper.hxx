@@ -38,10 +38,10 @@ public:
     static sal_uInt16 DoUpdateAllCharts( ScDocument& rDoc );
     static void AdjustRangesOfChartsOnDestinationPage( const ScDocument& rSrcDoc, ScDocument& rDestDoc, const SCTAB nSrcTab, const SCTAB nDestTab );
     static void UpdateChartsOnDestinationPage( ScDocument& rDestDoc, const SCTAB nDestTab );
-    static css::uno::Reference< css::chart2::XChartDocument > GetChartFromSdrObject( const SdrObject* pObject );
-    static void GetChartRanges( const css::uno::Reference< css::chart2::XChartDocument >& xChartDoc,
+    static cpo::uno::Reference< css::chart2::XChartDocument > GetChartFromSdrObject( const SdrObject* pObject );
+    static void GetChartRanges( const cpo::uno::Reference< css::chart2::XChartDocument >& xChartDoc,
             std::vector< OUString >& rRanges );
-    static void SetChartRanges( const css::uno::Reference< css::chart2::XChartDocument >& xChartDoc,
+    static void SetChartRanges( const cpo::uno::Reference< css::chart2::XChartDocument >& xChartDoc,
             const cpo::uno::Sequence< OUString >& rRanges );
 
     static void AddRangesIfProtectedChart( ScRangeListVector& rRangesVector, const ScDocument& rDocument, SdrObject* pObject );

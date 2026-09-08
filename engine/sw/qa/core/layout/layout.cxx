@@ -42,7 +42,8 @@
 #include <cntfrm.hxx>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 /// Covers sw/source/core/layout/ fixes.
 class SwCoreLayoutTest : public SwModelTestBase

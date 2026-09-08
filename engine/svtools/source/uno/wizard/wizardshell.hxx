@@ -43,7 +43,7 @@ namespace svt::uno
     public:
         WizardShell(
             weld::Window* pParent,
-            const css::uno::Reference< css::ui::dialogs::XWizardController >& i_rController,
+            const cpo::uno::Reference< css::ui::dialogs::XWizardController >& i_rController,
             const cpo::uno::Sequence< cpo::uno::Sequence< sal_Int16 > >& i_rPaths
         );
 
@@ -78,7 +78,7 @@ namespace svt::uno
             WizardShell_Base::activatePath( vcl::RoadmapWizardTypes::PathId( i_nPathID ), i_bFinal );
         }
 
-        css::uno::Reference< css::ui::dialogs::XWizardPage >
+        cpo::uno::Reference< css::ui::dialogs::XWizardPage >
                     getCurrentWizardPage() const;
 
         sal_Int16   getCurrentPage() const
@@ -119,7 +119,7 @@ namespace svt::uno
     private:
         typedef std::map<BuilderPage*, PWizardPageController> Page2ControllerMap;
 
-        const css::uno::Reference< css::ui::dialogs::XWizardController >  m_xController;
+        const cpo::uno::Reference< css::ui::dialogs::XWizardController >  m_xController;
         const sal_Int16                                                                             m_nFirstPageID;
         Page2ControllerMap                                                                          m_aPageControllers;
     };

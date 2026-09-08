@@ -44,7 +44,7 @@ typedef ::comphelper::WeakComponentImplHelper<
 class CommandDispatch : public impl::CommandDispatch_Base
 {
 public:
-    explicit CommandDispatch( const css::uno::Reference< cpo::uno::XComponentContext > & xContext );
+    explicit CommandDispatch( const cpo::uno::Reference< cpo::uno::XComponentContext > & xContext );
     virtual ~CommandDispatch() override;
 
     // late initialisation, especially for adding as listener
@@ -69,12 +69,12 @@ protected:
      */
     virtual void fireStatusEvent(
         const OUString & rURL,
-        const css::uno::Reference< css::frame::XStatusListener > & xSingleListener ) = 0;
+        const cpo::uno::Reference< css::frame::XStatusListener > & xSingleListener ) = 0;
 
     /** calls fireStatusEvent( OUString, xSingleListener )
      */
     void fireAllStatusEvents(
-        const css::uno::Reference< css::frame::XStatusListener > & xSingleListener );
+        const cpo::uno::Reference< css::frame::XStatusListener > & xSingleListener );
 
     /** sends a status event for a specific command to all registered listeners
         or only the one given when set.
@@ -88,17 +88,17 @@ protected:
         const OUString & rURL,
         const cpo::uno::Any & rState,
         bool bEnabled,
-        const css::uno::Reference< css::frame::XStatusListener > & xSingleListener );
+        const cpo::uno::Reference< css::frame::XStatusListener > & xSingleListener );
 
     // ____ XDispatch ____
     virtual void dispatch(
         const css::util::URL& URL,
         const cpo::uno::Sequence< css::beans::PropertyValue >& Arguments ) override;
     virtual void addStatusListener(
-        const css::uno::Reference< css::frame::XStatusListener >& Control,
+        const cpo::uno::Reference< css::frame::XStatusListener >& Control,
         const css::util::URL& URL ) override;
     virtual void removeStatusListener(
-        const css::uno::Reference< css::frame::XStatusListener >& Control,
+        const cpo::uno::Reference< css::frame::XStatusListener >& Control,
         const css::util::URL& URL ) override;
 
     // ____ WeakComponentImplHelperBase ____
@@ -114,8 +114,8 @@ protected:
         const css::lang::EventObject& Source ) override;
 
 private:
-    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
-    css::uno::Reference< css::util::XURLTransformer >  m_xURLTransformer;
+    cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+    cpo::uno::Reference< css::util::XURLTransformer >  m_xURLTransformer;
 
     typedef std::map< OUString, ::comphelper::OInterfaceContainerHelper4<css::frame::XStatusListener> >
         tListenerMap;

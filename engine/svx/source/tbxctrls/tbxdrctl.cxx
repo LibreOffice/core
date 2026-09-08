@@ -27,7 +27,7 @@
 
 SFX_IMPL_TOOLBOX_CONTROL(SvxTbxCtlDraw, SfxBoolItem);
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::frame;
 

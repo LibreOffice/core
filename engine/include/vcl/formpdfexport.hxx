@@ -27,7 +27,7 @@
 #include <memory>
 
 namespace com::sun::star::awt { class XControl; }
-namespace com::sun::star::uno { template <class interface_type> class Reference; }
+namespace cpo::uno { template <class interface_type> class Reference; }
 
 namespace vcl
 {
@@ -42,7 +42,7 @@ namespace toolkitform
     /** creates a PDF compatible control descriptor for the given control
     */
     std::unique_ptr<vcl::pdf::PDFWriter::AnyWidget> VCL_DLLPUBLIC describePDFControl(
-            const css::uno::Reference< css::awt::XControl >& _rxControl,
+            const cpo::uno::Reference< css::awt::XControl >& _rxControl,
             vcl::PDFExtOutDevData& i_pdfExportData
         );
 

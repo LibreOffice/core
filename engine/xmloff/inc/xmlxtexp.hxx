@@ -23,27 +23,27 @@
 #include <xmloff/xmlexp.hxx>
 
 namespace com::sun::star {
-    namespace uno { template<class X> class Reference; }
     namespace container { class XNameContainer; }
     namespace document { class XGraphicStorageHandler; }
     namespace xml::sax { class XDocumentHandler; }
 }
+namespace cpo::uno { template<class X> class Reference; }
 
 class SvxXMLXTableExportComponent final : public SvXMLExport
 {
 public:
     SvxXMLXTableExportComponent(
-        const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
-        const css::uno::Reference< css::xml::sax::XDocumentHandler > & xHandler,
-        const css::uno::Reference< css::container::XNameContainer > & xTable,
-        css::uno::Reference<css::document::XGraphicStorageHandler> const & xGraphicStorageHandler);
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
+        const cpo::uno::Reference< css::xml::sax::XDocumentHandler > & xHandler,
+        const cpo::uno::Reference< css::container::XNameContainer > & xTable,
+        cpo::uno::Reference<css::document::XGraphicStorageHandler> const & xGraphicStorageHandler);
 
     virtual ~SvxXMLXTableExportComponent() override;
 
     /// @throws cpo::uno::RuntimeException
     static bool save( const OUString& rURL,
-                      const css::uno::Reference< css::container::XNameContainer >& xTable,
-                      const css::uno::Reference< css::embed::XStorage > &xStorage );
+                      const cpo::uno::Reference< css::container::XNameContainer >& xTable,
+                      const cpo::uno::Reference< css::embed::XStorage > &xStorage );
 
     // methods without content:
     virtual void ExportAutoStyles_() override;
@@ -52,7 +52,7 @@ public:
 
 private:
     bool exportTable() noexcept;
-    const css::uno::Reference< css::container::XNameContainer > & mxTable;
+    const cpo::uno::Reference< css::container::XNameContainer > & mxTable;
 };
 
 #endif

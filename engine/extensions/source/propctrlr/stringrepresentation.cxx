@@ -48,8 +48,8 @@
 namespace pcr{
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 namespace {
 
@@ -219,9 +219,9 @@ namespace {
 // unequal values that are all of UNO SHORT or LONG type:
 struct CompareConstants {
     bool operator ()(
-        css::uno::Reference< css::reflection::XConstantTypeDescription > const &
+        cpo::uno::Reference< css::reflection::XConstantTypeDescription > const &
             c1,
-        css::uno::Reference< css::reflection::XConstantTypeDescription > const &
+        cpo::uno::Reference< css::reflection::XConstantTypeDescription > const &
             c2) const
     {
         return c1->getConstantValue().get<sal_Int32>()

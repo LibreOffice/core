@@ -28,6 +28,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 std::unique_ptr<SfxTabPage> SfxDocumentFontsPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* set)
 {

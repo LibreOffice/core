@@ -57,8 +57,8 @@
 #include "controlmodelcontainerbase_internal.hxx"
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
@@ -874,7 +874,7 @@ void ControlModelContainerBase::implUpdateGroupStructure()
     for ( const Reference< XControlModel >& rControlModel : aControlModels )
     {
         // we'll need this in every state
-        xModelSI.set(rControlModel, css::uno::UNO_QUERY);
+        xModelSI.set(rControlModel, cpo::uno::UNO_QUERY);
         // is it a radio button?
         bool bIsRadioButton = xModelSI.is() && xModelSI->supportsService( u"com.sun.star.awt.UnoControlRadioButtonModel"_ustr );
 
@@ -1734,7 +1734,7 @@ OUString getPhysicalLocation( const cpo::uno::Any& rbase, const cpo::uno::Any& r
 }
 
 void
-ControlModelContainerBase::updateUserFormChildren( const Reference< XNameContainer >& xAllChildren, const OUString& aName, ChildOperation Operation, const css::uno::Reference< css::awt::XControlModel >& xTarget )
+ControlModelContainerBase::updateUserFormChildren( const Reference< XNameContainer >& xAllChildren, const OUString& aName, ChildOperation Operation, const cpo::uno::Reference< css::awt::XControlModel >& xTarget )
 {
     if ( Operation < Insert || Operation > Remove )
         throw IllegalArgumentException();

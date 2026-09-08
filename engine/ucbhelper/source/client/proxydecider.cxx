@@ -47,6 +47,7 @@
 #endif
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace ucbhelper;
 
 constexpr OUString CONFIG_ROOT_KEY = u"org.openoffice.Inet/Settings"_ustr;

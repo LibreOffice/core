@@ -13,7 +13,7 @@
 
 #include <svx/svxdllapi.h>
 #include <sfx2/lnkbase.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <tools/ref.hxx>
 #include <map>

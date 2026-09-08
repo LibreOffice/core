@@ -38,6 +38,7 @@
 
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 uno::Reference< cpo::uno::XInterface > UNOEmbeddedObjectCreator::createInstanceInitNew(
                                             const cpo::uno::Sequence< sal_Int8 >& aClassID,

@@ -61,8 +61,8 @@
 #include <vector>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::style;
 using namespace ::xmloff::token;
@@ -124,7 +124,7 @@ SvXMLStyleContext::~SvXMLStyleContext()
 
 void SvXMLStyleContext::startFastElement(
     sal_Int32 /*nElement*/,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     for( auto &it : sax_fastparser::castToFastAttributeList( xAttrList ) )
         SetAttribute( it.getToken(), it.toString() );
@@ -376,7 +376,7 @@ bool SvXMLStylesContext::IsAutomaticStyle() const
 
 SvXMLStyleContext *SvXMLStylesContext::CreateStyleChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
 {
     SvXMLStyleContext *pStyle = nullptr;
 
@@ -719,8 +719,8 @@ SvXMLStylesContext::~SvXMLStylesContext()
 {
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SvXMLStylesContext::createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SvXMLStylesContext::createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     if (nElement ==  XML_ELEMENT(LO_EXT, XML_THEME))
     {

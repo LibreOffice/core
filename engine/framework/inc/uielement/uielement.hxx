@@ -68,7 +68,7 @@ struct UIElement
 
     UIElement( OUString aName,
                OUString aType,
-               css::uno::Reference< css::ui::XUIElement > xUIElement
+               cpo::uno::Reference< css::ui::XUIElement > xUIElement
                ) : m_aType(std::move( aType )),
                    m_aName(std::move( aName )),
                    m_xUIElement(std::move( xUIElement )),
@@ -86,7 +86,7 @@ struct UIElement
     OUString                                                      m_aType;
     OUString                                                      m_aName;
     OUString                                                      m_aUIName;
-    css::uno::Reference< css::ui::XUIElement >                    m_xUIElement;
+    cpo::uno::Reference< css::ui::XUIElement >                    m_xUIElement;
     bool                                                               m_bFloating,
                                                                        m_bVisible,
                                                                        m_bUserActive,

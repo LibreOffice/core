@@ -50,10 +50,10 @@ public:
         {}
 
     // XSingleComponentFactory impl
-    virtual css::uno::Reference< cpo::uno::XInterface > createInstanceWithContext(
-        css::uno::Reference< cpo::uno::XComponentContext > const & xContext ) override;
-    virtual css::uno::Reference< cpo::uno::XInterface > createInstanceWithArgumentsAndContext(
-        cpo::uno::Sequence< cpo::uno::Any > const & args, css::uno::Reference< cpo::uno::XComponentContext > const & xContext ) override;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > createInstanceWithContext(
+        cpo::uno::Reference< cpo::uno::XComponentContext > const & xContext ) override;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > createInstanceWithArgumentsAndContext(
+        cpo::uno::Sequence< cpo::uno::Any > const & args, cpo::uno::Reference< cpo::uno::XComponentContext > const & xContext ) override;
 };
 
 void SingletonFactory::disposing()
@@ -61,8 +61,8 @@ void SingletonFactory::disposing()
     m_vm_access.clear();
 }
 
-css::uno::Reference< cpo::uno::XInterface > SingletonFactory::createInstanceWithContext(
-    css::uno::Reference< cpo::uno::XComponentContext > const & xContext )
+cpo::uno::Reference< cpo::uno::XInterface > SingletonFactory::createInstanceWithContext(
+    cpo::uno::Reference< cpo::uno::XComponentContext > const & xContext )
 {
     sal_Int64 handle = reinterpret_cast< sal_Int64 >( m_vm_access.get() );
     cpo::uno::Any arg( css::beans::NamedValue( u"UnoVirtualMachine"_ustr, cpo::uno::Any( handle ) ) );
@@ -71,8 +71,8 @@ css::uno::Reference< cpo::uno::XInterface > SingletonFactory::createInstanceWith
         cpo::uno::Sequence< cpo::uno::Any >( &arg, 1 ), xContext );
 }
 
-css::uno::Reference< cpo::uno::XInterface > SingletonFactory::createInstanceWithArgumentsAndContext(
-    cpo::uno::Sequence< cpo::uno::Any > const & args, css::uno::Reference< cpo::uno::XComponentContext > const & xContext )
+cpo::uno::Reference< cpo::uno::XInterface > SingletonFactory::createInstanceWithArgumentsAndContext(
+    cpo::uno::Sequence< cpo::uno::Any > const & args, cpo::uno::Reference< cpo::uno::XComponentContext > const & xContext )
 {
     return xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
         u"com.sun.star.java.JavaVirtualMachine"_ustr,
@@ -98,11 +98,11 @@ namespace javaunohelper {
     }
 }
 
-css::uno::Reference< cpo::uno::XComponentContext > install_vm_singleton(
-    css::uno::Reference< cpo::uno::XComponentContext > const & xContext,
+cpo::uno::Reference< cpo::uno::XComponentContext > install_vm_singleton(
+    cpo::uno::Reference< cpo::uno::XComponentContext > const & xContext,
     ::rtl::Reference< ::jvmaccess::UnoVirtualMachine > const & vm_access )
 {
-    css::uno::Reference< css::lang::XSingleComponentFactory > xFac( new SingletonFactory( vm_access ) );
+    cpo::uno::Reference< css::lang::XSingleComponentFactory > xFac( new SingletonFactory( vm_access ) );
     ::cppu::ContextEntry_Init entry(
         u"/singletons/com.sun.star.java.theJavaVirtualMachine"_ustr,
         cpo::uno::Any( xFac ), true );

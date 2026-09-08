@@ -69,7 +69,7 @@ public:
     virtual cpo::uno::Type getElementType(  ) override;
 
     // XCloneable
-    virtual css::uno::Reference< css::util::XCloneable > createClone() override;
+    virtual cpo::uno::Reference< css::util::XCloneable > createClone() override;
 
 private: //member
 

@@ -57,7 +57,7 @@
 //  Defines
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
@@ -141,7 +141,7 @@ cpo::uno::Sequence< OUString > ToolbarsMenuController::getSupportedServiceNames(
 constexpr OUString g_aPropUIName( u"UIName"_ustr );
 constexpr OUString g_aPropResourceURL( u"ResourceURL"_ustr );
 
-ToolbarsMenuController::ToolbarsMenuController( const css::uno::Reference< cpo::uno::XComponentContext >& xContext ) :
+ToolbarsMenuController::ToolbarsMenuController( const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext ) :
     svt::PopupMenuControllerBase( xContext ),
     m_xContext( xContext ),
     m_bResetActive( false ),
@@ -179,7 +179,7 @@ void ToolbarsMenuController::addCommand(
 
     SolarMutexGuard aSolarMutexGuard;
 
-    css::uno::Reference<css::graphic::XGraphic> xGraphic;
+    cpo::uno::Reference<css::graphic::XGraphic> xGraphic;
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
 
     if ( rSettings.GetUseImagesInMenus() )

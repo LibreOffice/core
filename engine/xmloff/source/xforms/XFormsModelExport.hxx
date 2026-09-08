@@ -28,6 +28,6 @@ namespace com::sun::star {
 }
 
 void exportXFormsModel( SvXMLExport&,
-                        const css::uno::Reference<css::beans::XPropertySet>& );
+                        const cpo::uno::Reference<css::beans::XPropertySet>& );
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

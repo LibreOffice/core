@@ -60,7 +60,7 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <cpo/uno/Any.h>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.h>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Type.h>

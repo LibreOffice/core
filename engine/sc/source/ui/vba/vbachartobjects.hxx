@@ -31,12 +31,12 @@ typedef CollTestImplHelper< ov::excel::XChartObjects > ChartObjects_BASE;
 class ScVbaChartObjects : public ChartObjects_BASE
 {
 
-    css::uno::Reference< css::table::XTableCharts > xTableCharts;
-    css::uno::Reference< css::drawing::XDrawPageSupplier > xDrawPageSupplier;
+    cpo::uno::Reference< css::table::XTableCharts > xTableCharts;
+    cpo::uno::Reference< css::drawing::XDrawPageSupplier > xDrawPageSupplier;
     // method associated with populating the hashmap ( I'm not convinced this is necessary )
-    //css::uno::Reference< ov::excel::XChartObject > putByPersistName( const rtl:::OUString& _sPersistChartName );
+    //cpo::uno::Reference< ov::excel::XChartObject > putByPersistName( const rtl:::OUString& _sPersistChartName );
 public:
-    ScVbaChartObjects( const css::uno::Reference< ov::XHelperInterface >& _xParent, const css::uno::Reference< cpo::uno::XComponentContext >& _xContext, const css::uno::Reference< css::table::XTableCharts >& _xTableCharts, css::uno::Reference< css::drawing::XDrawPageSupplier >   _xDrawPageSupplier );
+    ScVbaChartObjects( const cpo::uno::Reference< ov::XHelperInterface >& _xParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& _xContext, const cpo::uno::Reference< css::table::XTableCharts >& _xTableCharts, cpo::uno::Reference< css::drawing::XDrawPageSupplier >   _xDrawPageSupplier );
 
     /// @throws css::script::BasicErrorException
     cpo::uno::Sequence< OUString > getChartObjectNames() const;
@@ -46,7 +46,7 @@ public:
     virtual cpo::uno::Any SAL_CALL Add( double Left, double Top, double Width, double Height ) override;
     virtual void SAL_CALL Delete(  ) override;
     // XEnumerationAccess
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
+    virtual cpo::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
     // XElementAccess
     virtual cpo::uno::Type SAL_CALL getElementType() override;
     // ScVbaCollectionBaseImpl

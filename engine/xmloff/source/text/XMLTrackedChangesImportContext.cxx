@@ -19,7 +19,7 @@
 
 #include "XMLTrackedChangesImportContext.hxx"
 #include "XMLChangedRegionImportContext.hxx"
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <sal/log.hxx>
 #include <sax/tools/converter.hxx>
 #include <xmloff/xmlimp.hxx>
@@ -27,7 +27,7 @@
 #include <xmloff/xmltoken.hxx>
 
 
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using namespace ::xmloff::token;
 
 
@@ -42,7 +42,7 @@ XMLTrackedChangesImportContext::~XMLTrackedChangesImportContext()
 }
 
 void XMLTrackedChangesImportContext::startFastElement( sal_Int32 /*nElement*/,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     bool bTrackChanges = true;
 
@@ -67,8 +67,8 @@ void XMLTrackedChangesImportContext::startFastElement( sal_Int32 /*nElement*/,
 }
 
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTrackedChangesImportContext::createFastChildContext(
-    sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLTrackedChangesImportContext::createFastChildContext(
+    sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
     if ( nElement == XML_ELEMENT(TEXT, XML_CHANGED_REGION) )
     {

@@ -26,7 +26,7 @@ namespace cppu {
     This function is supposed to be called from implementations of
     css::lang::XServiceInfo::supportsService (and therefore, for
     easier coding takes the caller's this pointer by pointer rather than by
-    css::uno::Reference).
+    cpo::uno::Reference).
 
     @param implementation points to the service implementation whose
     getSupportedServices method is consulted; must be non-null

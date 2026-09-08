@@ -44,9 +44,10 @@
 #include <graphic/UnoBinaryDataContainer.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 Bitmap convertPrimitive2DSequenceToBitmap(
-    const std::deque< css::uno::Reference< css::graphic::XPrimitive2D > >& rSequence,
+    const std::deque< cpo::uno::Reference< css::graphic::XPrimitive2D > >& rSequence,
     const basegfx::B2DRange& rTargetRange,
     const sal_uInt32 nMaximumQuadraticPixels,
     const o3tl::Length eTargetUnit,
@@ -184,7 +185,7 @@ void VectorGraphicData::ensureSequenceAndRange()
             const uno::Reference< graphic::XSvgParser > xSvgParser = graphic::SvgTools::create(xContext);
 
             if (xInputStream.is())
-                maSequence = comphelper::sequenceToContainer<std::deque<css::uno::Reference< css::graphic::XPrimitive2D >>>(xSvgParser->getDecomposition(xInputStream, OUString()));
+                maSequence = comphelper::sequenceToContainer<std::deque<cpo::uno::Reference< css::graphic::XPrimitive2D >>>(xSvgParser->getDecomposition(xInputStream, OUString()));
 
             break;
         }
@@ -210,7 +211,7 @@ void VectorGraphicData::ensureSequenceAndRange()
                     aPropertySequence = { comphelper::makePropertyValue(u"EMFPlusEnable"_ustr, cpo::uno::Any(false)) };
                 }
 
-                maSequence = comphelper::sequenceToContainer<std::deque<css::uno::Reference< css::graphic::XPrimitive2D >>>(xEmfParser->getDecomposition(xInputStream, OUString(), aPropertySequence));
+                maSequence = comphelper::sequenceToContainer<std::deque<cpo::uno::Reference< css::graphic::XPrimitive2D >>>(xEmfParser->getDecomposition(xInputStream, OUString(), aPropertySequence));
             }
 
             break;
@@ -240,7 +241,7 @@ void VectorGraphicData::ensureSequenceAndRange()
         for(sal_Int32 a(0); a < nCount; a++)
         {
             // get reference
-            const css::uno::Reference< css::graphic::XPrimitive2D > xReference(maSequence[a]);
+            const cpo::uno::Reference< css::graphic::XPrimitive2D > xReference(maSequence[a]);
 
             if(xReference.is())
             {
@@ -306,7 +307,7 @@ const basegfx::B2DRange& VectorGraphicData::getRange() const
     return maRange;
 }
 
-const std::deque< css::uno::Reference< css::graphic::XPrimitive2D > >& VectorGraphicData::getPrimitive2DSequence() const
+const std::deque< cpo::uno::Reference< css::graphic::XPrimitive2D > >& VectorGraphicData::getPrimitive2DSequence() const
 {
     const_cast< VectorGraphicData* >(this)->ensureSequenceAndRange();
 

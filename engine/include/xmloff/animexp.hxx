@@ -27,7 +27,7 @@ namespace com::sun::star::drawing
 {
 class XShape;
 }
-namespace com::sun::star::uno
+namespace cpo::uno
 {
 template <typename> class Reference;
 }
@@ -43,8 +43,8 @@ public:
     XMLAnimationsExporter();
     virtual ~XMLAnimationsExporter() override;
 
-    static void prepare(const css::uno::Reference<css::drawing::XShape>& xShape);
-    void collect(const css::uno::Reference<css::drawing::XShape>& xShape, SvXMLExport& rExport);
+    static void prepare(const cpo::uno::Reference<css::drawing::XShape>& xShape);
+    void collect(const cpo::uno::Reference<css::drawing::XShape>& xShape, SvXMLExport& rExport);
     void exportAnimations(SvXMLExport& rExport);
 };
 

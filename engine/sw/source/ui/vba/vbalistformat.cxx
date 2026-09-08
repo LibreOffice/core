@@ -44,6 +44,7 @@
 using namespace ::ooo::vba;
 using namespace ::ooo::vba::word;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 SwVbaListFormat::SwVbaListFormat( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< cpo::uno::XComponentContext >& rContext, uno::Reference< text::XTextRange >  xTextRange ) : SwVbaListFormat_BASE( rParent, rContext ), mxTextRange(std::move( xTextRange ))
 {
@@ -53,7 +54,7 @@ SwVbaListFormat::~SwVbaListFormat()
 {
 }
 
-void SAL_CALL SwVbaListFormat::ApplyListTemplate( const css::uno::Reference< word::XListTemplate >& ListTemplate, const cpo::uno::Any& ContinuePreviousList, const cpo::uno::Any& ApplyTo, const cpo::uno::Any& DefaultListBehavior )
+void SAL_CALL SwVbaListFormat::ApplyListTemplate( const cpo::uno::Reference< word::XListTemplate >& ListTemplate, const cpo::uno::Any& ContinuePreviousList, const cpo::uno::Any& ApplyTo, const cpo::uno::Any& DefaultListBehavior )
 {
     bool bContinuePreviousList = true;
     if( ContinuePreviousList.hasValue() )
@@ -105,17 +106,17 @@ void SAL_CALL SwVbaListFormat::ApplyListTemplate( const css::uno::Reference< wor
 
 template <class Ref>
 static void addParagraphsToList(const Ref& a,
-                                std::vector<css::uno::Reference<css::beans::XPropertySet>>& rList)
+                                std::vector<cpo::uno::Reference<css::beans::XPropertySet>>& rList)
 {
-    if (css::uno::Reference<css::lang::XServiceInfo> xInfo{ a, css::uno::UNO_QUERY })
+    if (cpo::uno::Reference<css::lang::XServiceInfo> xInfo{ a, cpo::uno::UNO_QUERY })
     {
         if (xInfo->supportsService(u"com.sun.star.text.Paragraph"_ustr))
         {
-            rList.emplace_back(xInfo, css::uno::UNO_QUERY_THROW);
+            rList.emplace_back(xInfo, cpo::uno::UNO_QUERY_THROW);
         }
         else if (xInfo->supportsService(u"com.sun.star.text.TextTable"_ustr))
         {
-            css::uno::Reference<css::text::XTextTable> xTable(xInfo, css::uno::UNO_QUERY_THROW);
+            cpo::uno::Reference<css::text::XTextTable> xTable(xInfo, cpo::uno::UNO_QUERY_THROW);
             const auto aNames = xTable->getCellNames();
             for (const auto& rName : aNames)
             {
@@ -123,8 +124,8 @@ static void addParagraphsToList(const Ref& a,
             }
         }
     }
-    if (css::uno::Reference<css::container::XEnumerationAccess> xEnumAccess{ a,
-                                                                             css::uno::UNO_QUERY })
+    if (cpo::uno::Reference<css::container::XEnumerationAccess> xEnumAccess{ a,
+                                                                             cpo::uno::UNO_QUERY })
     {
         auto xEnum = xEnumAccess->createEnumeration();
         while (xEnum->hasMoreElements())
@@ -135,7 +136,7 @@ static void addParagraphsToList(const Ref& a,
 void SAL_CALL SwVbaListFormat::ConvertNumbersToText(  )
 {
     rtl::Reference<SwXTextDocument> xModel(getThisWordDoc(mxContext));
-    css::uno::Reference<css::document::XUndoManager> xUndoManager(xModel->getUndoManager());
+    cpo::uno::Reference<css::document::XUndoManager> xUndoManager(xModel->getUndoManager());
     xUndoManager->enterUndoContext(u"ConvertNumbersToText"_ustr);
     xModel->lockControllers();
     comphelper::ScopeGuard g([xModel, xUndoManager]() {
@@ -143,7 +144,7 @@ void SAL_CALL SwVbaListFormat::ConvertNumbersToText(  )
         xUndoManager->leaveUndoContext();
     });
 
-    std::vector<css::uno::Reference<css::beans::XPropertySet>> aParagraphs;
+    std::vector<cpo::uno::Reference<css::beans::XPropertySet>> aParagraphs;
     addParagraphsToList(mxTextRange, aParagraphs);
 
     // in reverse order, to get proper label strings
@@ -152,7 +153,7 @@ void SAL_CALL SwVbaListFormat::ConvertNumbersToText(  )
         auto& rPropertySet = *iter;
         if (bool bNumber; (rPropertySet->getPropertyValue(u"NumberingIsNumber"_ustr) >>= bNumber) && bNumber)
         {
-            css::uno::Reference<css::text::XTextRange> xRange(rPropertySet, css::uno::UNO_QUERY_THROW);
+            cpo::uno::Reference<css::text::XTextRange> xRange(rPropertySet, cpo::uno::UNO_QUERY_THROW);
             OUString sLabelString;
             rPropertySet->getPropertyValue(u"ListLabelString"_ustr) >>= sLabelString;
             // sal_Int16 nAdjust = SAL_MAX_INT16; // TODO?
@@ -174,7 +175,7 @@ void SAL_CALL SwVbaListFormat::ConvertNumbersToText(  )
             {
                 sal_uInt16 nLevel = SAL_MAX_UINT16;
                 rPropertySet->getPropertyValue(u"NumberingLevel"_ustr) >>= nLevel;
-                css::uno::Reference<css::container::XIndexAccess> xNumberingRules;
+                cpo::uno::Reference<css::container::XIndexAccess> xNumberingRules;
                 rPropertySet->getPropertyValue(u"NumberingRules"_ustr) >>= xNumberingRules;
                 comphelper::SequenceAsHashMap aLevelRule(xNumberingRules->getByIndex(nLevel));
 
@@ -224,16 +225,16 @@ void SAL_CALL SwVbaListFormat::ConvertNumbersToText(  )
                         break;
                 }
 
-                css::uno::Reference<css::text::XTextRange> xNumberText(xRange->getStart());
+                cpo::uno::Reference<css::text::XTextRange> xNumberText(xRange->getStart());
                 xNumberText->setString(sLabelString);
-                css::uno::Reference<css::beans::XPropertySet> xNumberProps(
-                    xNumberText, css::uno::UNO_QUERY_THROW);
+                cpo::uno::Reference<css::beans::XPropertySet> xNumberProps(
+                    xNumberText, cpo::uno::UNO_QUERY_THROW);
                 if (!sCharStyleName.isEmpty())
                     xNumberProps->setPropertyValue(u"CharStyleName"_ustr, cpo::uno::Any(sCharStyleName));
 
                 if (nNumberingType == css::style::NumberingType::CHAR_SPECIAL)
                 {
-                    css::uno::Reference<css::text::XTextRange> xBulletText(xNumberText->getStart());
+                    cpo::uno::Reference<css::text::XTextRange> xBulletText(xNumberText->getStart());
                     xBulletText->setString(sBulletChar);
 
                     std::unordered_map<OUString, cpo::uno::Any> aNameValues;
@@ -261,8 +262,8 @@ void SAL_CALL SwVbaListFormat::ConvertNumbersToText(  )
                         aNameValues[u"CharColor"_ustr] <<= aBulletColor;
                     }
 
-                    if (css::uno::Reference<css::beans::XMultiPropertySet> xBulletMultiProps{
-                            xBulletText, css::uno::UNO_QUERY })
+                    if (cpo::uno::Reference<css::beans::XMultiPropertySet> xBulletMultiProps{
+                            xBulletText, cpo::uno::UNO_QUERY })
                     {
                         xBulletMultiProps->setPropertyValues(
                             comphelper::mapKeysToSequence(aNameValues),
@@ -270,8 +271,8 @@ void SAL_CALL SwVbaListFormat::ConvertNumbersToText(  )
                     }
                     else
                     {
-                        css::uno::Reference<css::beans::XPropertySet> xBulletProps(
-                            xBulletText, css::uno::UNO_QUERY_THROW);
+                        cpo::uno::Reference<css::beans::XPropertySet> xBulletProps(
+                            xBulletText, cpo::uno::UNO_QUERY_THROW);
                         for (const auto& [rName, rVal] : aNameValues)
                             xBulletProps->setPropertyValue(rName, rVal);
                     }

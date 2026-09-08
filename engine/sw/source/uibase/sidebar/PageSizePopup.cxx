@@ -20,7 +20,7 @@
 #include "PageSizeControl.hxx"
 #include <vcl/toolbox.hxx>
 
-PageSizePopup::PageSizePopup(const css::uno::Reference<cpo::uno::XComponentContext>& rContext)
+PageSizePopup::PageSizePopup(const cpo::uno::Reference<cpo::uno::XComponentContext>& rContext)
     : PopupWindowController(rContext, nullptr, OUString())
 {
 }

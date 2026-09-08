@@ -34,8 +34,8 @@ namespace dbaui
 
         TOTypeInfoSP       m_pType;
 
-        css::uno::Reference< css::beans::XPropertySet >       m_xDest;
-        css::uno::Reference< css::beans::XPropertySetInfo >   m_xDestInfo;
+        cpo::uno::Reference< css::beans::XPropertySet >       m_xDest;
+        cpo::uno::Reference< css::beans::XPropertySetInfo >   m_xDestInfo;
 
         OUString     m_sName;
         OUString     m_sTypeName;
@@ -57,7 +57,7 @@ namespace dbaui
     public:
         OFieldDescription();
         OFieldDescription( const OFieldDescription& rDescr );
-        OFieldDescription(const css::uno::Reference< css::beans::XPropertySet >& _xAffectedCol
+        OFieldDescription(const cpo::uno::Reference< css::beans::XPropertySet >& _xAffectedCol
                          ,bool _bUseAsDest = false);
         ~OFieldDescription();
 
@@ -82,7 +82,7 @@ namespace dbaui
         /** copies the content of the field description into the column
             @param  _rxColumn the dest
         */
-        void copyColumnSettingsTo(const css::uno::Reference< css::beans::XPropertySet >& _rxColumn);
+        void copyColumnSettingsTo(const cpo::uno::Reference< css::beans::XPropertySet >& _rxColumn);
 
         void FillFromTypeInfo(const TOTypeInfoSP& _pType,bool _bForce,bool _bReset);
 

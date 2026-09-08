@@ -74,12 +74,12 @@ class Job final : public  ::cppu::WeakImplHelper<
         /**
             We need it to create own services on demand.
          */
-        css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+        cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
         /**
             Hold the (may asynchronous) job alive.
          */
-        css::uno::Reference< cpo::uno::XInterface > m_xJob;
+        cpo::uno::Reference< cpo::uno::XInterface > m_xJob;
 
         /**
             Used to wait for finishing of asynchronous started jobs.
@@ -94,7 +94,7 @@ class Job final : public  ::cppu::WeakImplHelper<
             Please note: If m_xFrame is set - m_xModel should be NULL.
             Only one environment can be supported really.
          */
-        css::uno::Reference< css::frame::XFrame > m_xFrame;
+        cpo::uno::Reference< css::frame::XFrame > m_xFrame;
 
         /**
             For some special cases we must know the environment, in which
@@ -104,20 +104,20 @@ class Job final : public  ::cppu::WeakImplHelper<
             Please note: If m_xModel is set - m_xFrame should be NULL.
             Only one environment can be supported really.
          */
-        css::uno::Reference< css::frame::XModel > m_xModel;
+        cpo::uno::Reference< css::frame::XModel > m_xModel;
 
         /**
             We are registered at this instance to listen for office shutdown events.
             It's necessary suppress it (if possible) or to react in the right way.
          */
-        css::uno::Reference< css::frame::XDesktop2 > m_xDesktop;
+        cpo::uno::Reference< css::frame::XDesktop2 > m_xDesktop;
 
         /**
             A job can return a dispatch result event after finishing its work.
             We have to transport it to any outside interested listener then.
             (see m_xResultSourceFake for further information too!)
          */
-        css::uno::Reference< css::frame::XDispatchResultListener > m_xResultListener;
+        cpo::uno::Reference< css::frame::XDispatchResultListener > m_xResultListener;
 
         /**
             We can't set ourself as source of a dispatch result event ... nor our job.
@@ -125,7 +125,7 @@ class Job final : public  ::cppu::WeakImplHelper<
             where it was registered. This original instance is the user of this class.
             It must be set explicitly and will be used to fake the source of the event!
          */
-        css::uno::Reference< cpo::uno::XInterface > m_xResultSourceFake;
+        cpo::uno::Reference< cpo::uno::XInterface > m_xResultSourceFake;
 
         /**
             Holds the state, if we are listen for desktop/frame or model closing events or not.
@@ -157,14 +157,14 @@ class Job final : public  ::cppu::WeakImplHelper<
 
     public:
 
-                 Job( const css::uno::Reference< cpo::uno::XComponentContext >& xContext  ,
-                      css::uno::Reference< css::frame::XFrame >               xFrame );
-                 Job( const css::uno::Reference< cpo::uno::XComponentContext >& xContext  ,
-                      css::uno::Reference< css::frame::XModel >               xModel );
+                 Job( const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext  ,
+                      cpo::uno::Reference< css::frame::XFrame >               xFrame );
+                 Job( const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext  ,
+                      cpo::uno::Reference< css::frame::XModel >               xModel );
         virtual ~Job(                                                                      ) override;
 
-        void     setDispatchResultFake( const css::uno::Reference< css::frame::XDispatchResultListener >& xListener    ,
-                                        const css::uno::Reference< cpo::uno::XInterface >&                xSourceFake  );
+        void     setDispatchResultFake( const cpo::uno::Reference< css::frame::XDispatchResultListener >& xListener    ,
+                                        const cpo::uno::Reference< cpo::uno::XInterface >&                xSourceFake  );
         void     setJobData           ( const JobData&                                                    aData        );
         void     execute              ( const cpo::uno::Sequence< css::beans::NamedValue >&               lDynamicArgs );
         void     die                  (                                                                                );
@@ -181,7 +181,7 @@ class Job final : public  ::cppu::WeakImplHelper<
     public:
 
         // XJobListener
-        virtual void jobFinished( const css::uno::Reference< css::task::XAsyncJob >& xJob,
+        virtual void jobFinished( const cpo::uno::Reference< css::task::XAsyncJob >& xJob,
                                            const cpo::uno::Any&                               aResult ) override;
 
         // XTerminateListener

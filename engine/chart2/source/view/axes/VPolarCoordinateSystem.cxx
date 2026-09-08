@@ -30,7 +30,8 @@
 namespace chart
 {
 using namespace ::com::sun::star;
-using ::com::sun::star::uno::Reference;
+using namespace ::cpo;
+using ::cpo::uno::Reference;
 
 VPolarCoordinateSystem::VPolarCoordinateSystem( const rtl::Reference< BaseCoordinateSystem >& xCooSys )
     : VCoordinateSystem(xCooSys)
@@ -71,7 +72,7 @@ void VPolarCoordinateSystem::createVAxisList(
             const awt::Rectangle& rMaximumSpaceForLabels,
             bool /*bLimitSpaceForLabels*/,
             std::vector<std::unique_ptr<VSeriesPlotter>>& /*rSeriesPlotterList*/,
-            css::uno::Reference<cpo::uno::XComponentContext> const& /*rComponentContext*/)
+            cpo::uno::Reference<cpo::uno::XComponentContext> const& /*rComponentContext*/)
 {
     // note: using xChartDoc itself as XNumberFormatsSupplier would cause
     // a leak from VPolarAxis due to cyclic reference

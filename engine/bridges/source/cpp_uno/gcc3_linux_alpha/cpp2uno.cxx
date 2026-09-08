@@ -37,7 +37,7 @@
 //     (Tru64 UNIX Version 5.1 or higher, August 2000)
 //http://www.tru64unix.compaq.com/docs/base_doc/DOCUMENTATION/V51_HTML/ARH9MBTE/TITLE.HTM
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 namespace

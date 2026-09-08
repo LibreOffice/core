@@ -11,10 +11,11 @@
 
 #include <com/sun/star/sheet/XScenarios.hpp>
 #include <com/sun/star/sheet/XScenariosSupplier.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 namespace apitest
 {

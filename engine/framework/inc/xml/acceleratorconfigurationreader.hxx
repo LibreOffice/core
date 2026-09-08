@@ -76,7 +76,7 @@ class AcceleratorConfigurationReader final : public ::cppu::WeakImplHelper< css:
             @descr  We use it to find out the line and column, where
                     an error occurred.
           */
-        css::uno::Reference< css::xml::sax::XLocator > m_xLocator;
+        cpo::uno::Reference< css::xml::sax::XLocator > m_xLocator;
 
     // interface
 
@@ -101,7 +101,7 @@ class AcceleratorConfigurationReader final : public ::cppu::WeakImplHelper< css:
         virtual void endDocument() override;
 
         virtual void startElement(const OUString&                                      sElement      ,
-                                           const css::uno::Reference< css::xml::sax::XAttributeList >& xAttributeList) override;
+                                           const cpo::uno::Reference< css::xml::sax::XAttributeList >& xAttributeList) override;
 
         virtual void endElement(const OUString& sElement) override;
 
@@ -112,7 +112,7 @@ class AcceleratorConfigurationReader final : public ::cppu::WeakImplHelper< css:
         virtual void processingInstruction(const OUString& sTarget,
                                                     const OUString& sData  ) override;
 
-        virtual void setDocumentLocator(const css::uno::Reference< css::xml::sax::XLocator >& xLocator) override;
+        virtual void setDocumentLocator(const cpo::uno::Reference< css::xml::sax::XLocator >& xLocator) override;
 
     // helper
 

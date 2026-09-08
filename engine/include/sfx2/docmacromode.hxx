@@ -24,7 +24,7 @@
 #include <sfx2/dllapi.h>
 #include <sfx2/signaturestate.hxx>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <memory>
 
@@ -129,7 +129,7 @@ namespace sfx2
                 can also be replaced with a call to the (to be introduced) getDocumentModel
                 method, and a queryInterface.
         */
-        virtual css::uno::Reference< css::document::XEmbeddedScripts >
+        virtual cpo::uno::Reference< css::document::XEmbeddedScripts >
                     getEmbeddedDocumentScripts() const = 0;
 
         /** returns the state of the signatures for the scripts embedded in the document
@@ -164,7 +164,7 @@ namespace sfx2
             @seealso <sfx2/signaturestate.hxx>
         */
         virtual bool
-                    hasTrustedScriptingSignature( const css::uno::Reference< css::task::XInteractionHandler >& _rxInteraction ) = 0;
+                    hasTrustedScriptingSignature( const cpo::uno::Reference< css::task::XInteractionHandler >& _rxInteraction ) = 0;
 
     protected:
         ~IMacroDocumentAccess() {}
@@ -232,7 +232,7 @@ namespace sfx2
                 <TRUE/> if and only if macro execution in this document is allowed.
         */
         bool    adjustMacroMode(
-                    const css::uno::Reference< css::task::XInteractionHandler >& _rxInteraction,
+                    const cpo::uno::Reference< css::task::XInteractionHandler >& _rxInteraction,
                     bool bHasValidContentSignature = false
                 );
 
@@ -274,11 +274,11 @@ namespace sfx2
             JavaScript-/Python-Scripts are stored, and a sub storage named "Basic" (where
             Basic scripts are stored).
         */
-        static bool storageHasMacros( const css::uno::Reference< css::embed::XStorage >& _rxStorage );
+        static bool storageHasMacros( const cpo::uno::Reference< css::embed::XStorage >& _rxStorage );
 
         bool hasMacros() const;
 
-        static bool containerHasBasicMacros( const css::uno::Reference< css::script::XLibraryContainer >& xContainer );
+        static bool containerHasBasicMacros( const cpo::uno::Reference< css::script::XLibraryContainer >& xContainer );
         /** checks the macro execution mode while loading the document.
 
             This must be called when the loading is effectively finished, but before any macro action
@@ -304,7 +304,7 @@ namespace sfx2
         */
         bool
                 checkMacrosOnLoading(
-                    const css::uno::Reference< css::task::XInteractionHandler >& _rxInteraction,
+                    const cpo::uno::Reference< css::task::XInteractionHandler >& _rxInteraction,
                     bool bHasValidContentSignature, bool bHasMacros
                 );
 

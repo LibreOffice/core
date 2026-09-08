@@ -27,7 +27,7 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <rtl/ustrbuf.hxx>
 #include <test/a11y/accessibletestbase.hxx>
@@ -41,6 +41,7 @@
 #include <test/a11y/XAccessibleEventBroadcasterTester.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 namespace
 {

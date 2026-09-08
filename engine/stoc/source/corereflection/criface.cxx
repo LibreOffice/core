@@ -41,7 +41,7 @@
 
 using namespace css::lang;
 using namespace css::reflection;
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 namespace {
@@ -455,7 +455,7 @@ MethodMode SAL_CALL IdlInterfaceMethodImpl::getMode()
 
 Any SAL_CALL IdlInterfaceMethodImpl::invoke( const Any & rObj, Sequence< Any > & rArgs )
 {
-    if (auto ifc = o3tl::tryAccess<css::uno::Reference<cpo::uno::XInterface>>(
+    if (auto ifc = o3tl::tryAccess<cpo::uno::Reference<cpo::uno::XInterface>>(
             rObj))
     {
         // acquire()/ release()

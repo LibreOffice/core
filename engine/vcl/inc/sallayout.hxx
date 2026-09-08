@@ -153,7 +153,7 @@ private:
 
     SAL_DLLPRIVATE void ParseFeatures(std::u16string_view name);
 
-    css::uno::Reference<css::i18n::XBreakIterator> mxBreak;
+    cpo::uno::Reference<css::i18n::XBreakIterator> mxBreak;
 
     SalLayoutGlyphsImpl m_GlyphItems;
 

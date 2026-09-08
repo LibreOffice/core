@@ -95,7 +95,7 @@ public:
                                 maStbCtrlFactories;
     std::vector<SfxViewFrame*>  maViewFrames;
     std::vector<SfxViewShell*>  maViewShells;
-    std::unordered_map<OUString, css::uno::Reference<css::ui::XAcceleratorConfiguration>> maAcceleratorConfs;
+    std::unordered_map<OUString, cpo::uno::Reference<css::ui::XAcceleratorConfiguration>> maAcceleratorConfs;
     std::vector<SfxObjectShell*>
                                 maObjShells;
     std::unique_ptr<SfxBasicManagerHolder>

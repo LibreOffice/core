@@ -29,6 +29,7 @@
 #include <xmlsec/xmltree.h>
 
 using namespace css;
+using namespace cpo;
 using css::xml::wrapper::XXMLElementWrapper;
 using css::xml::crypto::XSecurityEnvironment;
 using css::xml::crypto::XXMLSignatureTemplate;

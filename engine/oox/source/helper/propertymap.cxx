@@ -50,7 +50,7 @@ using ::com::sun::star::text::WritingMode;
 #include <oox/token/properties.hxx>
 #include <oox/token/propertynames.hxx>
 using ::cpo::uno::Any;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::cpo::uno::Sequence;
 using ::com::sun::star::beans::Property;
 using ::com::sun::star::beans::PropertyValue;
@@ -65,7 +65,7 @@ using ::com::sun::star::container::XIndexReplace;
 #define USS(x) OUStringToOString( x, RTL_TEXTENCODING_UTF8 ).getStr()
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::drawing;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using ::com::sun::star::style::LineSpacing;
 using ::com::sun::star::text::WritingMode;
@@ -78,7 +78,7 @@ namespace oox {
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::drawing;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 namespace {

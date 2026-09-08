@@ -126,8 +126,8 @@ bool     g_bNoInterrupt     = false;
 #include <navicfg.hxx>
 
 using namespace com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 SwModule::SwModule( SfxObjectFactory* pWebFact,
                     SfxObjectFactory* pFact,
@@ -396,7 +396,7 @@ SfxStyleFamilies SwModule::CreateStyleFamilies()
     return aStyleFamilies;
 }
 
-void SwModule::RegisterAutomationApplicationEventsCaller(css::uno::Reference< ooo::vba::XSinkCaller > const& xCaller)
+void SwModule::RegisterAutomationApplicationEventsCaller(cpo::uno::Reference< ooo::vba::XSinkCaller > const& xCaller)
 {
     mxAutomationApplicationEventsCaller = xCaller;
 }

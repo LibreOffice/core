@@ -39,7 +39,7 @@ class OSelfTerminateFileStream final : public cppu::WeakImplHelper< css::io::XIn
     rtl::Reference< utl::OSeekableInputStreamWrapper > m_xStreamWrapper;
 
 public:
-    OSelfTerminateFileStream( const css::uno::Reference< cpo::uno::XComponentContext >& xContext, utl::TempFileFast aTempFile );
+    OSelfTerminateFileStream( const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext, utl::TempFileFast aTempFile );
 
     virtual ~OSelfTerminateFileStream() override;
 

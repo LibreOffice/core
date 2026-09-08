@@ -38,9 +38,9 @@ namespace com::sun::star {
 class GraphicExportFilter :
     public cppu::WeakImplHelper < css::document::XFilter, css::document::XExporter, css::lang::XInitialization, css::lang::XServiceInfo >
 {
-    css::uno::Reference< cpo::uno::XComponentContext >  mxContext;
-    css::uno::Reference< css::lang::XComponent >        mxDocument;
-    css::uno::Reference< css::io::XOutputStream >       mxOutputStream;
+    cpo::uno::Reference< cpo::uno::XComponentContext >  mxContext;
+    cpo::uno::Reference< css::lang::XComponent >        mxDocument;
+    cpo::uno::Reference< css::io::XOutputStream >       mxOutputStream;
 
     cpo::uno::Sequence< css::beans::PropertyValue >     maFilterDataSequence;
 
@@ -54,11 +54,11 @@ class GraphicExportFilter :
     bool filterRenderDocument() const;
     bool filterExportShape(
             const cpo::uno::Sequence< css::beans::PropertyValue > & rDescriptor,
-            const css::uno::Reference< css::drawing::XShapes > & rxShapes,
-            const css::uno::Reference< css::drawing::XShape > & rxShape ) const;
+            const cpo::uno::Reference< css::drawing::XShapes > & rxShapes,
+            const cpo::uno::Reference< css::drawing::XShape > & rxShape ) const;
 
 public:
-    explicit GraphicExportFilter( css::uno::Reference< cpo::uno::XComponentContext > xContext );
+    explicit GraphicExportFilter( cpo::uno::Reference< cpo::uno::XComponentContext > xContext );
     virtual ~GraphicExportFilter() override;
 
     //  XServiceInfo
@@ -71,7 +71,7 @@ public:
     virtual void cancel( ) override;
 
     // XExporter
-    virtual void setSourceDocument( const css::uno::Reference< css::lang::XComponent > & xDocument ) override;
+    virtual void setSourceDocument( const cpo::uno::Reference< css::lang::XComponent > & xDocument ) override;
 
     // XInitialization
     virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any > & rArguments ) override;

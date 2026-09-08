@@ -44,7 +44,7 @@ namespace svx
 {
 
 
-    using ::com::sun::star::uno::Reference;
+    using ::cpo::uno::Reference;
     using ::com::sun::star::form::runtime::XFormController;
     using ::com::sun::star::form::runtime::FormOperations;
     using ::cpo::uno::Exception;
@@ -54,7 +54,7 @@ namespace svx
     using ::cpo::uno::Sequence;
     using ::com::sun::star::beans::NamedValue;
     using ::com::sun::star::beans::XPropertySet;
-    using ::com::sun::star::uno::UNO_QUERY_THROW;
+    using ::cpo::uno::UNO_QUERY_THROW;
     using ::com::sun::star::sdbc::SQLException;
     using ::com::sun::star::sdb::SQLErrorEvent;
     using ::com::sun::star::lang::EventObject;

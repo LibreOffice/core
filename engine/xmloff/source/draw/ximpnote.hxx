@@ -28,15 +28,15 @@ class SdXMLNotesContext : public SdXMLGenericPageContext
 {
 public:
     SdXMLNotesContext( SdXMLImport& rImport,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
-        css::uno::Reference< css::drawing::XShapes > const & rShapes,
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+        cpo::uno::Reference< css::drawing::XShapes > const & rShapes,
         bool ignorePageNumberInThumbnail = false);
     virtual ~SdXMLNotesContext() override;
 
     // XFastContextHandler
-    virtual css::uno::Reference<css::xml::sax::XFastContextHandler> createFastChildContext(
+    virtual cpo::uno::Reference<css::xml::sax::XFastContextHandler> createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList) override;
+        const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList) override;
 
 private:
     bool mbIgnorePageNumberInThumbnail;

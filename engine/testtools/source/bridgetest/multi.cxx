@@ -52,75 +52,75 @@ template< typename T > void checkEqual(T const & value, T const & argument) {
 
 namespace testtools::bridgetest {
 
-OUString testMulti(  css::uno::Reference< test::testtools::bridgetest::XMulti >  const & multi )
+OUString testMulti(  cpo::uno::Reference< test::testtools::bridgetest::XMulti >  const & multi )
 {
     try {
         checkEqual(
             0.0,
-            css::uno::Reference< test::testtools::bridgetest::XMultiBase1 >(
-                multi, css::uno::UNO_QUERY_THROW)->getatt1());
+            cpo::uno::Reference< test::testtools::bridgetest::XMultiBase1 >(
+                multi, cpo::uno::UNO_QUERY_THROW)->getatt1());
         checkEqual(
             0.0,
             static_cast< test::testtools::bridgetest::XMultiBase2 * >(
                 multi.get())->getatt1());
         checkEqual(
             0.0,
-            css::uno::Reference< test::testtools::bridgetest::XMultiBase2 >(
-                multi, css::uno::UNO_QUERY_THROW)->getatt1());
+            cpo::uno::Reference< test::testtools::bridgetest::XMultiBase2 >(
+                multi, cpo::uno::UNO_QUERY_THROW)->getatt1());
         checkEqual(
             0.0,
             static_cast< test::testtools::bridgetest::XMultiBase5 * >(
                 multi.get())->getatt1());
         checkEqual(
             0.0,
-            css::uno::Reference< test::testtools::bridgetest::XMultiBase5 >(
-                multi, css::uno::UNO_QUERY_THROW)->getatt1());
-        css::uno::Reference< test::testtools::bridgetest::XMultiBase5 >(
-            multi, css::uno::UNO_QUERY_THROW)->setatt1(0.1);
+            cpo::uno::Reference< test::testtools::bridgetest::XMultiBase5 >(
+                multi, cpo::uno::UNO_QUERY_THROW)->getatt1());
+        cpo::uno::Reference< test::testtools::bridgetest::XMultiBase5 >(
+            multi, cpo::uno::UNO_QUERY_THROW)->setatt1(0.1);
         checkEqual(
             0.1,
-            css::uno::Reference< test::testtools::bridgetest::XMultiBase1 >(
-                multi, css::uno::UNO_QUERY_THROW)->getatt1());
+            cpo::uno::Reference< test::testtools::bridgetest::XMultiBase1 >(
+                multi, cpo::uno::UNO_QUERY_THROW)->getatt1());
         checkEqual(
             0.1,
             static_cast< test::testtools::bridgetest::XMultiBase2 * >(
                 multi.get())->getatt1());
         checkEqual(
             0.1,
-            css::uno::Reference< test::testtools::bridgetest::XMultiBase2 >(
-                multi, css::uno::UNO_QUERY_THROW)->getatt1());
+            cpo::uno::Reference< test::testtools::bridgetest::XMultiBase2 >(
+                multi, cpo::uno::UNO_QUERY_THROW)->getatt1());
         checkEqual(
             0.1,
             static_cast< test::testtools::bridgetest::XMultiBase5 * >(
                 multi.get())->getatt1());
         checkEqual(
             0.1,
-            css::uno::Reference< test::testtools::bridgetest::XMultiBase5 >(
-                multi, css::uno::UNO_QUERY_THROW)->getatt1());
+            cpo::uno::Reference< test::testtools::bridgetest::XMultiBase5 >(
+                multi, cpo::uno::UNO_QUERY_THROW)->getatt1());
         checkEqual< sal_Int32 >(
             11 * 1,
-            css::uno::Reference< test::testtools::bridgetest::XMultiBase1 >(
-                multi, css::uno::UNO_QUERY_THROW)->fn11(1));
+            cpo::uno::Reference< test::testtools::bridgetest::XMultiBase1 >(
+                multi, cpo::uno::UNO_QUERY_THROW)->fn11(1));
         checkEqual< sal_Int32 >(
             11 * 1,
             static_cast< test::testtools::bridgetest::XMultiBase2 * >(
                 multi.get())->fn11(1));
         checkEqual< sal_Int32 >(
             11 * 2,
-            css::uno::Reference< test::testtools::bridgetest::XMultiBase2 >(
-                multi, css::uno::UNO_QUERY_THROW)->fn11(2));
+            cpo::uno::Reference< test::testtools::bridgetest::XMultiBase2 >(
+                multi, cpo::uno::UNO_QUERY_THROW)->fn11(2));
         checkEqual< sal_Int32 >(
             11 * 1,
             static_cast< test::testtools::bridgetest::XMultiBase5 * >(
                 multi.get())->fn11(1));
         checkEqual< sal_Int32 >(
             11 * 5,
-            css::uno::Reference< test::testtools::bridgetest::XMultiBase5 >(
-                multi, css::uno::UNO_QUERY_THROW)->fn11(5));
+            cpo::uno::Reference< test::testtools::bridgetest::XMultiBase5 >(
+                multi, cpo::uno::UNO_QUERY_THROW)->fn11(5));
         checkEqual(
             u"12" "abc"_ustr,
-            css::uno::Reference< test::testtools::bridgetest::XMultiBase1 >(
-                multi, css::uno::UNO_QUERY_THROW)->fn12(
+            cpo::uno::Reference< test::testtools::bridgetest::XMultiBase1 >(
+                multi, cpo::uno::UNO_QUERY_THROW)->fn12(
                     u"abc"_ustr));
         checkEqual(
             u"12" "abc-2"_ustr,
@@ -128,82 +128,82 @@ OUString testMulti(  css::uno::Reference< test::testtools::bridgetest::XMulti > 
                 multi.get())->fn12(u"abc-2"_ustr));
         checkEqual(
             u"12" "abc-2"_ustr,
-            css::uno::Reference< test::testtools::bridgetest::XMultiBase2 >(
-                multi, css::uno::UNO_QUERY_THROW)->fn12(u"abc-2"_ustr));
+            cpo::uno::Reference< test::testtools::bridgetest::XMultiBase2 >(
+                multi, cpo::uno::UNO_QUERY_THROW)->fn12(u"abc-2"_ustr));
         checkEqual(
             u"12" "abc-5"_ustr,
             static_cast< test::testtools::bridgetest::XMultiBase5 * >(
                 multi.get())->fn12(u"abc-5"_ustr));
         checkEqual(
             u"12" "abc-5"_ustr,
-            css::uno::Reference< test::testtools::bridgetest::XMultiBase5 >(
-                multi, css::uno::UNO_QUERY_THROW)->fn12(u"abc-5"_ustr));
+            cpo::uno::Reference< test::testtools::bridgetest::XMultiBase5 >(
+                multi, cpo::uno::UNO_QUERY_THROW)->fn12(u"abc-5"_ustr));
         checkEqual< sal_Int32 >(21 * 2, multi->fn21(2));
         checkEqual(
             u"22" "de"_ustr,
             multi->fn22(u"de"_ustr));
         checkEqual< sal_Int32 >(
             31 * 3,
-            css::uno::Reference< test::testtools::bridgetest::XMultiBase3 >(
-                multi, css::uno::UNO_QUERY_THROW)->fn31(3));
+            cpo::uno::Reference< test::testtools::bridgetest::XMultiBase3 >(
+                multi, cpo::uno::UNO_QUERY_THROW)->fn31(3));
         checkEqual< sal_Int32 >(
             31 * 5,
             static_cast< test::testtools::bridgetest::XMultiBase5 * >(
                 multi.get())->fn31(5));
         checkEqual< sal_Int32 >(
             31 * 5,
-            css::uno::Reference< test::testtools::bridgetest::XMultiBase5 >(
-                multi, css::uno::UNO_QUERY_THROW)->fn31(5));
+            cpo::uno::Reference< test::testtools::bridgetest::XMultiBase5 >(
+                multi, cpo::uno::UNO_QUERY_THROW)->fn31(5));
         checkEqual(
             0.0,
-            css::uno::Reference< test::testtools::bridgetest::XMultiBase3 >(
-                multi, css::uno::UNO_QUERY_THROW)->getatt3());
+            cpo::uno::Reference< test::testtools::bridgetest::XMultiBase3 >(
+                multi, cpo::uno::UNO_QUERY_THROW)->getatt3());
         checkEqual(
             0.0,
             static_cast< test::testtools::bridgetest::XMultiBase5 * >(
                 multi.get())->getatt3());
         checkEqual(
             0.0,
-            css::uno::Reference< test::testtools::bridgetest::XMultiBase5 >(
-                multi, css::uno::UNO_QUERY_THROW)->getatt3());
-        css::uno::Reference< test::testtools::bridgetest::XMultiBase3 >(
-            multi, css::uno::UNO_QUERY_THROW)->setatt3(0.3);
+            cpo::uno::Reference< test::testtools::bridgetest::XMultiBase5 >(
+                multi, cpo::uno::UNO_QUERY_THROW)->getatt3());
+        cpo::uno::Reference< test::testtools::bridgetest::XMultiBase3 >(
+            multi, cpo::uno::UNO_QUERY_THROW)->setatt3(0.3);
         checkEqual(
             0.3,
-            css::uno::Reference< test::testtools::bridgetest::XMultiBase3 >(
-                multi, css::uno::UNO_QUERY_THROW)->getatt3());
+            cpo::uno::Reference< test::testtools::bridgetest::XMultiBase3 >(
+                multi, cpo::uno::UNO_QUERY_THROW)->getatt3());
         checkEqual(
             0.3,
             static_cast< test::testtools::bridgetest::XMultiBase5 * >(
                 multi.get())->getatt3());
         checkEqual(
             0.3,
-            css::uno::Reference< test::testtools::bridgetest::XMultiBase5 >(
-                multi, css::uno::UNO_QUERY_THROW)->getatt3());
+            cpo::uno::Reference< test::testtools::bridgetest::XMultiBase5 >(
+                multi, cpo::uno::UNO_QUERY_THROW)->getatt3());
         checkEqual(
             u"32" "f"_ustr,
-            css::uno::Reference< test::testtools::bridgetest::XMultiBase3 >(
-                multi, css::uno::UNO_QUERY_THROW)->fn32(u"f"_ustr));
+            cpo::uno::Reference< test::testtools::bridgetest::XMultiBase3 >(
+                multi, cpo::uno::UNO_QUERY_THROW)->fn32(u"f"_ustr));
         checkEqual(
             u"32" "f-5"_ustr,
             static_cast< test::testtools::bridgetest::XMultiBase5 * >(
                 multi.get())->fn32(u"f-5"_ustr));
         checkEqual(
             u"32" "f-5"_ustr,
-            css::uno::Reference< test::testtools::bridgetest::XMultiBase5 >(
-                multi, css::uno::UNO_QUERY_THROW)->fn32(u"f-5"_ustr));
+            cpo::uno::Reference< test::testtools::bridgetest::XMultiBase5 >(
+                multi, cpo::uno::UNO_QUERY_THROW)->fn32(u"f-5"_ustr));
         checkEqual< sal_Int32 >(
             33,
-            css::uno::Reference< test::testtools::bridgetest::XMultiBase3 >(
-                multi, css::uno::UNO_QUERY_THROW)->fn33());
+            cpo::uno::Reference< test::testtools::bridgetest::XMultiBase3 >(
+                multi, cpo::uno::UNO_QUERY_THROW)->fn33());
         checkEqual< sal_Int32 >(
             33,
             static_cast< test::testtools::bridgetest::XMultiBase5 * >(
                 multi.get())->fn33());
         checkEqual< sal_Int32 >(
             33,
-            css::uno::Reference< test::testtools::bridgetest::XMultiBase5 >(
-                multi, css::uno::UNO_QUERY_THROW)->fn33());
+            cpo::uno::Reference< test::testtools::bridgetest::XMultiBase5 >(
+                multi, cpo::uno::UNO_QUERY_THROW)->fn33());
         checkEqual< sal_Int32 >(41 * 4, multi->fn41(4));
         checkEqual< sal_Int32 >(61 * 6, multi->fn61(6));
         checkEqual(

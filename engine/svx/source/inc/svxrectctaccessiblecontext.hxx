@@ -25,7 +25,7 @@
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/accessibleselectionhelper.hxx>
 #include <rtl/ref.hxx>
@@ -45,16 +45,16 @@ public:
 
     // XAccessibleComponent
     virtual void grabFocus() override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleAtPoint(const css::awt::Point& rPoint) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > getAccessibleAtPoint(const css::awt::Point& rPoint) override;
 
     // XAccessibleContext
     virtual sal_Int64 getAccessibleChildCount() override;
-    virtual css::uno::Reference< css::accessibility::XAccessible> getAccessibleChild(sal_Int64 nIndex) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible> getAccessibleParent() override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible> getAccessibleChild(sal_Int64 nIndex) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible> getAccessibleParent() override;
     virtual sal_Int16 getAccessibleRole() override;
     virtual OUString getAccessibleDescription() override;
     virtual OUString getAccessibleName() override;
-    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > getAccessibleRelationSet() override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessibleRelationSet > getAccessibleRelationSet() override;
     virtual sal_Int64 getAccessibleStateSet() override;
 
     virtual sal_Int32 getForeground() override;
@@ -124,23 +124,23 @@ class SvxRectCtlChildAccessibleContext final
 {
 public:
     SvxRectCtlChildAccessibleContext(
-        const css::uno::Reference< css::accessibility::XAccessible>& rxParent,
+        const cpo::uno::Reference< css::accessibility::XAccessible>& rxParent,
         OUString aName, OUString aDescription,
         const tools::Rectangle& rBoundingBox,
         tools::Long nIndexInParent );
 
     // XAccessibleComponent
     virtual void grabFocus() override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleAtPoint( const css::awt::Point& rPoint ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > getAccessibleAtPoint( const css::awt::Point& rPoint ) override;
 
     // XAccessibleContext
     virtual sal_Int64 getAccessibleChildCount() override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleChild( sal_Int64 nIndex ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleParent() override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > getAccessibleChild( sal_Int64 nIndex ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > getAccessibleParent() override;
     virtual sal_Int16 getAccessibleRole() override;
     virtual OUString getAccessibleDescription() override;
     virtual OUString getAccessibleName() override;
-    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > getAccessibleRelationSet() override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessibleRelationSet > getAccessibleRelationSet() override;
     virtual sal_Int64 getAccessibleStateSet() override;
 
     virtual sal_Int32 getForeground() override;
@@ -166,7 +166,7 @@ public:
     virtual sal_Int32 getAccessibleActionCount( ) override;
     virtual bool doAccessibleAction ( sal_Int32 nIndex ) override;
     virtual OUString getAccessibleActionDescription ( sal_Int32 nIndex ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessibleKeyBinding > getAccessibleActionKeyBinding( sal_Int32 nIndex ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessibleKeyBinding > getAccessibleActionKeyBinding( sal_Int32 nIndex ) override;
 
     // internal
     /// Sets the checked status
@@ -194,7 +194,7 @@ private:
     OUString                     msName;
 
     /// Reference to the parent object.
-    css::uno::Reference< css::accessibility::XAccessible >
+    cpo::uno::Reference< css::accessibility::XAccessible >
                                  mxParent;
 
     /// Bounding box

@@ -46,7 +46,7 @@
 #include <cppuhelper/supportsservice.hxx>
 
 using namespace ::xmloff::token;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::beans;
@@ -1080,7 +1080,7 @@ public:
     XMLTableTransformerContext_Impl( XMLTransformerBase& rTransformer,
                            const OUString& rQName );
 
-    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void StartElement( const cpo::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
     virtual void EndElement() override;
 };
 
@@ -1176,12 +1176,12 @@ public:
     XMLBodyOASISTransformerContext_Impl( XMLTransformerBase& rTransformer,
                            const OUString& rQName );
 
-    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void StartElement( const cpo::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 
     virtual rtl::Reference<XMLTransformerContext> CreateChildContext( sal_uInt16 nPrefix,
                                    const OUString& rLocalName,
                                    const OUString& rQName,
-                                   const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+                                   const cpo::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
     virtual void EndElement() override;
 };
 
@@ -1203,7 +1203,7 @@ void XMLBodyOASISTransformerContext_Impl::StartElement(
 rtl::Reference<XMLTransformerContext> XMLBodyOASISTransformerContext_Impl::CreateChildContext( sal_uInt16 nPrefix,
                                    const OUString& rLocalName,
                                    const OUString& rQName,
-                                   const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList )
+                                   const cpo::uno::Reference< css::xml::sax::XAttributeList >& xAttrList )
 {
     if (!m_bFirstChild)
     {
@@ -1230,7 +1230,7 @@ public:
     XMLTabStopOASISTContext_Impl( XMLTransformerBase& rTransformer,
                            const OUString& rQName );
 
-    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void StartElement( const cpo::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 };
 
 }
@@ -1358,7 +1358,7 @@ public:
     XMLConfigItemTContext_Impl( XMLTransformerBase& rTransformer,
                            const OUString& rQName );
 
-    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void StartElement( const cpo::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
     virtual void EndElement() override;
 
     virtual void Characters( const OUString& rChars ) override;
@@ -1463,7 +1463,7 @@ public:
                                sal_uInt16 nPrefix,
                             XMLTokenEnum eToken );
 
-    virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
+    virtual void StartElement( const cpo::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 };
 
 }

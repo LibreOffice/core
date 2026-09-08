@@ -64,8 +64,8 @@ class SfxObjectShell;
     // complete SfxObjectShell for SaveVBA under -fsanitize=function
 
 using namespace com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::presentation;
 
 using ::com::sun::star::beans::XPropertySet;
@@ -74,7 +74,7 @@ using ::com::sun::star::beans::XPropertySet;
 
 PPTWriter::PPTWriter( rtl::Reference<SotStorage> xSvStorage,
             rtl::Reference< SdXImpressDocument > const & rXModel,
-            css::uno::Reference< css::task::XStatusIndicator > const & rXStatInd,
+            cpo::uno::Reference< css::task::XStatusIndicator > const & rXStatInd,
             SvMemoryStream* pVBA, sal_uInt32 nCnvrtFlags ) :
     PPTWriterBase           ( rXModel, rXStatInd ),
     mnCnvrtFlags            ( nCnvrtFlags ),
@@ -205,7 +205,7 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
 
     if ( GetPropertyValue( aAny, mXPagePropSet, u"Sound"_ustr ) )
     {
-        css::uno::Reference<css::presentation::XSoundReference> xSound;
+        cpo::uno::Reference<css::presentation::XSoundReference> xSound;
         OUString aSoundURL;
         if ( aAny >>= xSound )
         {
@@ -566,7 +566,7 @@ void PPTWriter::ImplWriteExtParaHeader( SvMemoryStream& rSt, sal_uInt32 nRef, sa
     }
 }
 
-void PPTWriter::ImplCreateHeaderFooterStrings( SvStream& rStrm, css::uno::Reference< css::beans::XPropertySet > const & rXPagePropSet )
+void PPTWriter::ImplCreateHeaderFooterStrings( SvStream& rStrm, cpo::uno::Reference< css::beans::XPropertySet > const & rXPagePropSet )
 {
     if ( !rXPagePropSet.is() )
         return;
@@ -590,7 +590,7 @@ void PPTWriter::ImplCreateHeaderFooterStrings( SvStream& rStrm, css::uno::Refere
     }
 }
 
-void PPTWriter::ImplCreateHeaderFooters( css::uno::Reference< css::beans::XPropertySet > const & rXPagePropSet )
+void PPTWriter::ImplCreateHeaderFooters( cpo::uno::Reference< css::beans::XPropertySet > const & rXPagePropSet )
 {
     if ( !rXPagePropSet.is() )
         return;
@@ -740,8 +740,8 @@ bool PPTWriter::ImplCreateDocument()
             return false;
         SetCurrentStyleSheet( GetMasterIndex( NORMAL ) );
 
-        css::uno::Reference< css::container::XNamed >
-            aXName( mXDrawPage, css::uno::UNO_QUERY );
+        cpo::uno::Reference< css::container::XNamed >
+            aXName( mXDrawPage, cpo::uno::UNO_QUERY );
 
         if ( aXName.is() )
             maSlideNameList.push_back( aXName->getName() );
@@ -765,10 +765,10 @@ bool PPTWriter::ImplCreateDocument()
     }
     mpPptEscherEx->CloseContainer();        // EPP_SlideListWithText
 
-    css::uno::Reference< css::presentation::XPresentation > aXPresentation( mXModel->getPresentation() );
+    cpo::uno::Reference< css::presentation::XPresentation > aXPresentation( mXModel->getPresentation() );
     if ( aXPresentation.is() )
     {
-        mXPropSet.set( aXPresentation, css::uno::UNO_QUERY );
+        mXPropSet.set( aXPresentation, cpo::uno::UNO_QUERY );
         if ( mXPropSet.is() )
         {
             OUString aCustomShow;
@@ -852,7 +852,7 @@ bool PPTWriter::ImplCreateDocument()
             for ( i = nCustomShowNameLen; i < 32; i++, mpStrm->WriteUInt16( 0 ) ) ;
 
             mpStrm->WriteUInt32( nFlags );
-            css::uno::Reference< css::container::XNameContainer > aXCont( mXModel->getCustomPresentations() );
+            cpo::uno::Reference< css::container::XNameContainer > aXCont( mXModel->getCustomPresentations() );
             if ( aXCont.is() )
             {
                 const cpo::uno::Sequence< OUString> aNameSeq( aXCont->getElementNames() );
@@ -874,7 +874,7 @@ bool PPTWriter::ImplCreateDocument()
                             for ( sal_uInt32 k = 0; k < nNamedShowLen; ++k )
                                 mpStrm->WriteUInt16( pCustomShowName[ k ] );
                             mAny = aXCont->getByName( customShowName );
-                            css::uno::Reference< css::container::XIndexContainer > aXIC;
+                            cpo::uno::Reference< css::container::XIndexContainer > aXIC;
                             if ( mAny >>= aXIC )
                             {
                                 mpPptEscherEx->BeginAtom();
@@ -883,10 +883,10 @@ bool PPTWriter::ImplCreateDocument()
                                 for ( sal_Int32 j = 0; j < nSlideCount; j++ )   // number of slides
                                 {
                                     mAny = aXIC->getByIndex( j );
-                                    css::uno::Reference< css::drawing::XDrawPage > aXDrawPage;
+                                    cpo::uno::Reference< css::drawing::XDrawPage > aXDrawPage;
                                     if ( mAny >>= aXDrawPage )
                                     {
-                                        css::uno::Reference< css::container::XNamed > aXName( aXDrawPage, css::uno::UNO_QUERY );
+                                        cpo::uno::Reference< css::container::XNamed > aXName( aXDrawPage, cpo::uno::UNO_QUERY );
                                         if ( aXName.is() )
                                         {
                                             OUString aSlideName( aXName->getName() );
@@ -1145,7 +1145,7 @@ void PPTWriter::ImplWriteNotes( sal_uInt32 nPageNum )
     mpPptEscherEx->CloseContainer();    // EPP_Notes
 };
 
-void PPTWriter::ImplWriteBackground( css::uno::Reference< css::beans::XPropertySet > const & rXPropSet )
+void PPTWriter::ImplWriteBackground( cpo::uno::Reference< css::beans::XPropertySet > const & rXPropSet )
 {
     //************************ ******
     //** DEFAULT BACKGROUND SHAPE **
@@ -1420,8 +1420,8 @@ void PPTWriter::ImplWriteAtomEnding()
 
 SAL_DLLPUBLIC_EXPORT bool ExportPPT( const std::vector< css::beans::PropertyValue >& rMediaData,
                     rtl::Reference<SotStorage> const & rSvStorage,
-                    css::uno::Reference< css::frame::XModel > const & rXModel,
-                    css::uno::Reference< css::task::XStatusIndicator > const & rXStatInd,
+                    cpo::uno::Reference< css::frame::XModel > const & rXModel,
+                    cpo::uno::Reference< css::task::XStatusIndicator > const & rXStatInd,
                     SvMemoryStream* pVBA,
                     sal_uInt32 nCnvrtFlags )
 {

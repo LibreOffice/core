@@ -22,6 +22,7 @@
 #include <docmodel/uno/UnoComplexColor.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 class XOutdevTest : public UnoApiTest
 {

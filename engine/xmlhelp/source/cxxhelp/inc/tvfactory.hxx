@@ -52,11 +52,11 @@ class TVFactory final : public cppu::WeakImplHelper <
 
         // XMultiServiceFactory
 
-        virtual css::uno::Reference< cpo::uno::XInterface > SAL_CALL
+        virtual cpo::uno::Reference< cpo::uno::XInterface > SAL_CALL
         createInstance(
             const OUString& aServiceSpecifier ) override;
 
-        virtual css::uno::Reference< cpo::uno::XInterface > SAL_CALL
+        virtual cpo::uno::Reference< cpo::uno::XInterface > SAL_CALL
         createInstanceWithArguments(
             const OUString& ServiceSpecifier,
             const cpo::uno::Sequence< cpo::uno::Any >& Arguments ) override;
@@ -67,7 +67,7 @@ class TVFactory final : public cppu::WeakImplHelper <
     private:
 
         // Members
-        css::uno::Reference< cpo::uno::XInterface >             m_xHDS;
+        cpo::uno::Reference< cpo::uno::XInterface >             m_xHDS;
     };
 
 }

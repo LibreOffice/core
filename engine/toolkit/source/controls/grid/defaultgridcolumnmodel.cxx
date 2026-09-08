@@ -42,7 +42,7 @@ using namespace css::awt;
 using namespace css::awt::grid;
 using namespace css::container;
 using namespace css::lang;
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace toolkit;
 
@@ -60,11 +60,11 @@ public:
 
     // XGridColumnModel
     virtual ::sal_Int32 getColumnCount() override;
-    virtual css::uno::Reference< css::awt::grid::XGridColumn > createColumn(  ) override;
-    virtual ::sal_Int32 addColumn(const css::uno::Reference< css::awt::grid::XGridColumn > & column) override;
+    virtual cpo::uno::Reference< css::awt::grid::XGridColumn > createColumn(  ) override;
+    virtual ::sal_Int32 addColumn(const cpo::uno::Reference< css::awt::grid::XGridColumn > & column) override;
     virtual void removeColumn( ::sal_Int32 i_columnIndex ) override;
-    virtual cpo::uno::Sequence< css::uno::Reference< css::awt::grid::XGridColumn > > getColumns() override;
-    virtual css::uno::Reference< css::awt::grid::XGridColumn > getColumn(::sal_Int32 index) override;
+    virtual cpo::uno::Sequence< cpo::uno::Reference< css::awt::grid::XGridColumn > > getColumns() override;
+    virtual cpo::uno::Reference< css::awt::grid::XGridColumn > getColumn(::sal_Int32 index) override;
     virtual void setDefaultColumns(sal_Int32 rowElements) override;
 
     // XServiceInfo
@@ -73,11 +73,11 @@ public:
     virtual cpo::uno::Sequence< OUString > getSupportedServiceNames(  ) override;
 
     // XContainer
-    virtual void addContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) override;
-    virtual void removeContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) override;
+    virtual void addContainerListener( const cpo::uno::Reference< css::container::XContainerListener >& xListener ) override;
+    virtual void removeContainerListener( const cpo::uno::Reference< css::container::XContainerListener >& xListener ) override;
 
     // XCloneable
-    virtual css::uno::Reference< css::util::XCloneable > createClone(  ) override;
+    virtual cpo::uno::Reference< css::util::XCloneable > createClone(  ) override;
 
     // OComponentHelper
     virtual void disposing( std::unique_lock<std::mutex>& ) override;

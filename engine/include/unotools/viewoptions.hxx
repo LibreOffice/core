@@ -204,7 +204,7 @@ class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtViewOptions final
     private:
         enum State { STATE_NONE, STATE_FALSE, STATE_TRUE };
 
-        css::uno::Reference< cpo::uno::XInterface > impl_getSetNode( const OUString& sNode           ,
+        cpo::uno::Reference< cpo::uno::XInterface > impl_getSetNode( const OUString& sNode           ,
                                                                            bool         bCreateIfMissing) const;
         State GetVisible() const;
 
@@ -214,8 +214,8 @@ class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtViewOptions final
         OUString     m_sViewName;
 
         OUString                                           m_sListName;
-        css::uno::Reference< css::container::XNameAccess > m_xRoot;
-        css::uno::Reference< css::container::XNameAccess > m_xSet;
+        cpo::uno::Reference< css::container::XNameAccess > m_xRoot;
+        cpo::uno::Reference< css::container::XNameAccess > m_xSet;
 };      // class SvtViewOptions
 
 #endif // INCLUDED_UNOTOOLS_VIEWOPTIONS_HXX

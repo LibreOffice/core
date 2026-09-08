@@ -72,11 +72,11 @@ public:
         SAL_DLLPRIVATE void                        setMediaProperties( const ::avmedia::MediaItem& rState );
         const ::avmedia::MediaItem& getMediaProperties() const;
 
-        css::uno::Reference< css::graphic::XGraphic > const &
+        cpo::uno::Reference< css::graphic::XGraphic > const &
                                     getSnapshot() const;
-        css::uno::Reference< css::io::XInputStream>
+        cpo::uno::Reference< css::io::XInputStream>
                                     GetInputStream() const;
-        SAL_DLLPRIVATE void                        SetInputStream(css::uno::Reference<css::io::XInputStream> const&);
+        SAL_DLLPRIVATE void                        SetInputStream(cpo::uno::Reference<css::io::XInputStream> const&);
 
         virtual bool shouldKeepAspectRatio() const override { return true; }
 

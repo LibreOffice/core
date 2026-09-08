@@ -59,7 +59,7 @@ using com::sun::star::beans::PropertyValue;
 using com::sun::star::ucb::SimpleFileAccess;
 using com::sun::star::io::XInputStream;
 
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::xml::dom;
 using namespace xforms;
@@ -131,7 +131,7 @@ EvaluationContext Model::getEvaluationContext()
 }
 
 
-void Model::setForeignSchema( const css::uno::Reference<css::xml::dom::XDocument>& rDocument )
+void Model::setForeignSchema( const cpo::uno::Reference<css::xml::dom::XDocument>& rDocument )
 {
     mxForeignSchema = rDocument;
 }
@@ -143,7 +143,7 @@ void Model::setSchemaRef( const OUString& rSchemaRef )
 }
 
 
-void Model::setNamespaces( const css::uno::Reference<css::container::XNameContainer>& rNamespaces )
+void Model::setNamespaces( const cpo::uno::Reference<css::container::XNameContainer>& rNamespaces )
 {
     if( rNamespaces.is() )
         mxNamespaces = rNamespaces;
@@ -428,7 +428,7 @@ void Model::refresh()
 
 void Model::submitWithInteraction(
     const OUString& sID,
-    const css::uno::Reference<css::task::XInteractionHandler>& _rxHandler )
+    const cpo::uno::Reference<css::task::XInteractionHandler>& _rxHandler )
 {
     DBG_INVARIANT();
 
@@ -450,7 +450,7 @@ void Model::submit( const OUString& sID )
     submitWithInteraction( sID, nullptr );
 }
 
-css::uno::Reference<css::xforms::XDataTypeRepository> Model::getDataTypeRepository(  )
+cpo::uno::Reference<css::xforms::XDataTypeRepository> Model::getDataTypeRepository(  )
 {
     if ( !mxDataTypes.is() )
         mxDataTypes = new ODataTypeRepository;
@@ -462,12 +462,12 @@ css::uno::Reference<css::xforms::XDataTypeRepository> Model::getDataTypeReposito
 // instance management
 
 
-css::uno::Reference<css::container::XSet> Model::getInstances()
+cpo::uno::Reference<css::container::XSet> Model::getInstances()
 {
     return mxInstances;
 }
 
-css::uno::Reference<css::xml::dom::XDocument> Model::getInstanceDocument( const OUString& rName )
+cpo::uno::Reference<css::xml::dom::XDocument> Model::getInstanceDocument( const OUString& rName )
 {
     ensureAtLeastOneInstance();
     Reference<XDocument> aInstance;
@@ -478,7 +478,7 @@ css::uno::Reference<css::xml::dom::XDocument> Model::getInstanceDocument( const 
     return aInstance;
 }
 
-css::uno::Reference<css::xml::dom::XDocument> Model::getDefaultInstance()
+cpo::uno::Reference<css::xml::dom::XDocument> Model::getDefaultInstance()
 {
     ensureAtLeastOneInstance();
     DBG_ASSERT( mxInstances->countItems() > 0, "no instance?" );
@@ -491,13 +491,13 @@ css::uno::Reference<css::xml::dom::XDocument> Model::getDefaultInstance()
 // bindings management
 
 
-css::uno::Reference<css::beans::XPropertySet> Model::createBinding()
+cpo::uno::Reference<css::beans::XPropertySet> Model::createBinding()
 {
     DBG_INVARIANT();
     return new Binding();
 }
 
-css::uno::Reference<css::beans::XPropertySet> Model::cloneBinding( const css::uno::Reference<css::beans::XPropertySet>& xBinding )
+cpo::uno::Reference<css::beans::XPropertySet> Model::cloneBinding( const cpo::uno::Reference<css::beans::XPropertySet>& xBinding )
 {
     DBG_INVARIANT();
     XPropertySet_t xNewBinding = createBinding();
@@ -505,13 +505,13 @@ css::uno::Reference<css::beans::XPropertySet> Model::cloneBinding( const css::un
     return xNewBinding;
 }
 
-css::uno::Reference<css::beans::XPropertySet> Model::getBinding( const OUString& sId )
+cpo::uno::Reference<css::beans::XPropertySet> Model::getBinding( const OUString& sId )
 {
     DBG_INVARIANT();
     return mxBindings->hasItem( sId ) ? mxBindings->getItem( sId ) : nullptr;
 }
 
-css::uno::Reference<css::container::XSet> Model::getBindings()
+cpo::uno::Reference<css::container::XSet> Model::getBindings()
 {
     DBG_INVARIANT();
     return mxBindings;
@@ -521,31 +521,31 @@ css::uno::Reference<css::container::XSet> Model::getBindings()
 // submission management
 
 
-css::uno::Reference<css::xforms::XSubmission> Model::createSubmission()
+cpo::uno::Reference<css::xforms::XSubmission> Model::createSubmission()
 {
     DBG_INVARIANT();
     return new Submission();
 }
 
-css::uno::Reference<css::xforms::XSubmission> Model::cloneSubmission(const css::uno::Reference<css::beans::XPropertySet>& xSubmission)
+cpo::uno::Reference<css::xforms::XSubmission> Model::cloneSubmission(const cpo::uno::Reference<css::beans::XPropertySet>& xSubmission)
 {
     DBG_INVARIANT();
-    css::uno::Reference<css::xforms::XSubmission> xNewSubmission = createSubmission();
+    cpo::uno::Reference<css::xforms::XSubmission> xNewSubmission = createSubmission();
     XPropertySet_t xAsPropertySet( xNewSubmission );
     copy( xSubmission, xAsPropertySet );
     return xNewSubmission;
 }
 
-css::uno::Reference<css::xforms::XSubmission> Model::getSubmission( const OUString& sId )
+cpo::uno::Reference<css::xforms::XSubmission> Model::getSubmission( const OUString& sId )
 {
     DBG_INVARIANT();
-    css::uno::Reference<css::xforms::XSubmission> xSubmission;
+    cpo::uno::Reference<css::xforms::XSubmission> xSubmission;
     if ( mxSubmissions->hasItem( sId ) )
-        xSubmission.set(mxSubmissions->getItem( sId ), css::uno::UNO_QUERY);
+        xSubmission.set(mxSubmissions->getItem( sId ), cpo::uno::UNO_QUERY);
     return xSubmission;
 }
 
-css::uno::Reference<css::container::XSet> Model::getSubmissions()
+cpo::uno::Reference<css::container::XSet> Model::getSubmissions()
 {
     DBG_INVARIANT();
     return mxSubmissions;
@@ -565,14 +565,14 @@ void Model::initializePropertySet()
 {
     registerProperty( css::beans::Property(u"ID"_ustr, HANDLE_ID, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND ),
     new APIPropertyAccessor< Model, OUString >(this, &Model::setID, &Model::getID) );
-    registerProperty( css::beans::Property(u"ForeignSchema"_ustr, HANDLE_ForeignSchema, cppu::UnoType<css::uno::Reference<css::xml::dom::XDocument>>::get(), css::beans::PropertyAttribute::BOUND ),
-    new DirectPropertyAccessor< Model, css::uno::Reference<css::xml::dom::XDocument> >( this, &Model::setForeignSchema, &Model::getForeignSchema) );
+    registerProperty( css::beans::Property(u"ForeignSchema"_ustr, HANDLE_ForeignSchema, cppu::UnoType<cpo::uno::Reference<css::xml::dom::XDocument>>::get(), css::beans::PropertyAttribute::BOUND ),
+    new DirectPropertyAccessor< Model, cpo::uno::Reference<css::xml::dom::XDocument> >( this, &Model::setForeignSchema, &Model::getForeignSchema) );
 
     registerProperty( css::beans::Property(u"SchemaRef"_ustr, HANDLE_SchemaRef, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND ),
     new DirectPropertyAccessor< Model, OUString >( this, &Model::setSchemaRef, &Model::getSchemaRef) );
 
-    registerProperty( css::beans::Property(u"Namespaces"_ustr, HANDLE_Namespaces, cppu::UnoType<css::uno::Reference<css::container::XNameContainer>>::get(), css::beans::PropertyAttribute::BOUND ),
-    new DirectPropertyAccessor< Model, css::uno::Reference<css::container::XNameContainer> >( this, &Model::setNamespaces, &Model::getNamespaces) );
+    registerProperty( css::beans::Property(u"Namespaces"_ustr, HANDLE_Namespaces, cppu::UnoType<cpo::uno::Reference<css::container::XNameContainer>>::get(), css::beans::PropertyAttribute::BOUND ),
+    new DirectPropertyAccessor< Model, cpo::uno::Reference<css::container::XNameContainer> >( this, &Model::setNamespaces, &Model::getNamespaces) );
 
     registerProperty( css::beans::Property(u"ExternalData"_ustr, HANDLE_ExternalData, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::BOUND ),
     new BooleanPropertyAccessor< Model >( this, &Model::setExternalData, &Model::getExternalData ) );

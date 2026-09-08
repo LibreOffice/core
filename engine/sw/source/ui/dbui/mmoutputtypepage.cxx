@@ -38,6 +38,7 @@
 #include <mutex>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 SwMailMergeOutputTypePage::SwMailMergeOutputTypePage(weld::Container* pPage, SwMailMergeWizard* pWizard)
     : vcl::OWizardPage(pPage, pWizard, u"modules/swriter/ui/mmoutputtypepage.ui"_ustr, u"MMOutputTypePage"_ustr)

@@ -26,7 +26,7 @@
 #include <rtl/ustring.hxx>
 
 SvxCTLTextTbxCtrl::SvxCTLTextTbxCtrl(
-    const css::uno::Reference<cpo::uno::XComponentContext>& rContext)
+    const cpo::uno::Reference<cpo::uno::XComponentContext>& rContext)
     : SvxVertCTLTextTbxCtrl(rContext)
 {
     addStatusListener(u".uno:CTLFontState"_ustr);
@@ -45,7 +45,7 @@ com_sun_star_comp_svx_CTLToolBoxControl_get_implementation(cpo::uno::XComponentC
 }
 
 SvxVertTextTbxCtrl::SvxVertTextTbxCtrl(
-    const css::uno::Reference<cpo::uno::XComponentContext>& rContext)
+    const cpo::uno::Reference<cpo::uno::XComponentContext>& rContext)
     : SvxVertCTLTextTbxCtrl(rContext)
 {
     addStatusListener(u".uno:VerticalTextState"_ustr);
@@ -64,7 +64,7 @@ com_sun_star_comp_svx_VertTextToolBoxControl_get_implementation(
 }
 
 SvxVertCTLTextTbxCtrl::SvxVertCTLTextTbxCtrl(
-    const css::uno::Reference<cpo::uno::XComponentContext>& rContext)
+    const cpo::uno::Reference<cpo::uno::XComponentContext>& rContext)
     : SvxVertCTLTextTbxCtrl_Base(rContext, nullptr, OUString())
     , m_bVisible(false)
 {

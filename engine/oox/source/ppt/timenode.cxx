@@ -49,7 +49,7 @@
 using namespace ::oox::core;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::animations;
@@ -141,7 +141,7 @@ namespace oox::ppt {
     {
     }
 
-    void fixMainSequenceTiming( const css::uno::Reference< css::animations::XAnimationNode >& xNode )
+    void fixMainSequenceTiming( const cpo::uno::Reference< css::animations::XAnimationNode >& xNode )
     {
         try
         {
@@ -202,7 +202,7 @@ namespace oox::ppt {
         }
     }
 
-    void fixInteractiveSequenceTiming( const css::uno::Reference< css::animations::XAnimationNode >& xNode )
+    void fixInteractiveSequenceTiming( const cpo::uno::Reference< css::animations::XAnimationNode >& xNode )
     {
         try
         {

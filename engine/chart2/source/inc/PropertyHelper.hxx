@@ -42,7 +42,7 @@ namespace PropertyHelper
 */
 OUString addLineDashUniqueNameToTable(
     const cpo::uno::Any & rValue,
-    const css::uno::Reference< css::lang::XMultiServiceFactory > & xFact,
+    const cpo::uno::Reference< css::lang::XMultiServiceFactory > & xFact,
     const OUString & rPreferredName );
 
 /** adds a gradient with a unique name to the gradient obtained by the given
@@ -52,7 +52,7 @@ OUString addLineDashUniqueNameToTable(
 */
 OUString addGradientUniqueNameToTable(
     const cpo::uno::Any & rValue,
-    const css::uno::Reference< css::lang::XMultiServiceFactory > & xFact,
+    const cpo::uno::Reference< css::lang::XMultiServiceFactory > & xFact,
     const OUString & rPreferredName );
 
 /** adds a transparency gradient with a unique name to the gradient obtained
@@ -62,7 +62,7 @@ OUString addGradientUniqueNameToTable(
 */
 OUString addTransparencyGradientUniqueNameToTable(
     const cpo::uno::Any & rValue,
-    const css::uno::Reference< css::lang::XMultiServiceFactory > & xFact,
+    const cpo::uno::Reference< css::lang::XMultiServiceFactory > & xFact,
     const OUString & rPreferredName );
 
 /** adds a hatch with a unique name to the gradient obtained by the given
@@ -72,7 +72,7 @@ OUString addTransparencyGradientUniqueNameToTable(
 */
 OUString addHatchUniqueNameToTable(
     const cpo::uno::Any & rValue,
-    const css::uno::Reference< css::lang::XMultiServiceFactory > & xFact,
+    const cpo::uno::Reference< css::lang::XMultiServiceFactory > & xFact,
     const OUString & rPreferredName );
 
 /** adds a bitmap with a unique name to the gradient obtained by the given
@@ -82,7 +82,7 @@ OUString addHatchUniqueNameToTable(
 */
 OUString addBitmapUniqueNameToTable(
     const cpo::uno::Any & rValue,
-    const css::uno::Reference< css::lang::XMultiServiceFactory > & xFact,
+    const cpo::uno::Reference< css::lang::XMultiServiceFactory > & xFact,
     const OUString & rPreferredName );
 
 /** Set a property to a certain value in the given map.  This works for

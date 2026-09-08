@@ -44,8 +44,8 @@ public:
 
     AccessibleDrawDocumentView (::sd::Window* pSdWindow,
         ::sd::ViewShell* pViewShell,
-        const css::uno::Reference<css::frame::XController>& rxController,
-        const css::uno::Reference<css::accessibility::XAccessible>& rxParent);
+        const cpo::uno::Reference<css::frame::XController>& rxController,
+        const cpo::uno::Reference<css::accessibility::XAccessible>& rxParent);
 
     virtual ~AccessibleDrawDocumentView() override;
 
@@ -62,7 +62,7 @@ public:
     virtual sal_Int64 SAL_CALL
         getAccessibleChildCount() override;
 
-    virtual css::uno::Reference< css::accessibility::XAccessible> SAL_CALL
+    virtual cpo::uno::Reference< css::accessibility::XAccessible> SAL_CALL
         getAccessibleChild (sal_Int64 nIndex) override;
 
     virtual OUString SAL_CALL

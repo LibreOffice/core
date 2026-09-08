@@ -38,7 +38,7 @@ class ScVbaComboBox : public ComboBoxImpl_BASE
     OUString sSourceName;
 
 public:
-    ScVbaComboBox( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext, const css::uno::Reference< cpo::uno::XInterface >& xControl, const css::uno::Reference< css::frame::XModel >& xModel, std::unique_ptr<ov::AbstractGeometryAttributes> pGeomHelper );
+    ScVbaComboBox( const cpo::uno::Reference< ov::XHelperInterface >& xParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext, const cpo::uno::Reference< cpo::uno::XInterface >& xControl, const cpo::uno::Reference< css::frame::XModel >& xModel, std::unique_ptr<ov::AbstractGeometryAttributes> pGeomHelper );
 
     // Attributes
     virtual cpo::uno::Any getListIndex() override;
@@ -61,7 +61,7 @@ public:
     virtual sal_Int32 getTextAlign() override;
     virtual void setTextAlign( sal_Int32 nTextAlign ) override;
     virtual sal_Int32 getTextLength() override;
-    virtual css::uno::Reference< ov::msforms::XNewFont > getFont() override;
+    virtual cpo::uno::Reference< ov::msforms::XNewFont > getFont() override;
     virtual sal_Int32 getBackColor() override;
     virtual void setBackColor( sal_Int32 nBackColor ) override;
     virtual bool getAutoSize() override;

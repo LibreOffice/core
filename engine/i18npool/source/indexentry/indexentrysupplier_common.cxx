@@ -23,7 +23,7 @@
 #include <localedata.hxx>
 #include <o3tl/temporary.hxx>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star;
 using namespace ::cpo::uno;
 

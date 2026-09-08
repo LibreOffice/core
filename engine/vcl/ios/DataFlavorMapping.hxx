@@ -86,7 +86,7 @@ public:
    */
     DataProviderPtr_t getDataProvider(
         const NSString* systemFlavor,
-        const css::uno::Reference<css::datatransfer::XTransferable>& rTransferable) const;
+        const cpo::uno::Reference<css::datatransfer::XTransferable>& rTransferable) const;
 
     /* Get a data provider which is able to provide 'systemData' in the OOo expected format.
    */
@@ -116,7 +116,7 @@ private:
     bool isValidMimeContentType(const OUString& contentType) const;
 
 private:
-    css::uno::Reference<css::datatransfer::XMimeContentTypeFactory> mrXMimeCntFactory;
+    cpo::uno::Reference<css::datatransfer::XMimeContentTypeFactory> mrXMimeCntFactory;
     typedef std::unordered_map<OUString, NSString*> OfficeOnlyTypes;
     mutable OfficeOnlyTypes maOfficeOnlyTypes;
 };

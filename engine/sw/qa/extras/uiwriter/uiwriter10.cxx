@@ -39,7 +39,8 @@
 #include <test/commontesttools.hxx>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 /// Second set of tests asserting the behavior of Writer user interface shells.
 class SwUiWriterTest5 : public SwModelTestBase

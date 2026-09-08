@@ -27,7 +27,7 @@
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::container;
@@ -35,9 +35,9 @@ using namespace ::com::sun::star::container;
 namespace framework
 {
 bool ToolBoxConfiguration::LoadToolBox(
-    const css::uno::Reference<cpo::uno::XComponentContext>& rxContext,
-    const css::uno::Reference<css::io::XInputStream>& rInputStream,
-    const css::uno::Reference<css::container::XIndexContainer>& rToolbarConfiguration)
+    const cpo::uno::Reference<cpo::uno::XComponentContext>& rxContext,
+    const cpo::uno::Reference<css::io::XInputStream>& rInputStream,
+    const cpo::uno::Reference<css::container::XIndexContainer>& rToolbarConfiguration)
 {
     Reference<XParser> xParser = Parser::create(rxContext);
 
@@ -73,9 +73,9 @@ bool ToolBoxConfiguration::LoadToolBox(
 }
 
 bool ToolBoxConfiguration::StoreToolBox(
-    const css::uno::Reference<cpo::uno::XComponentContext>& rxContext,
-    const css::uno::Reference<css::io::XOutputStream>& rOutputStream,
-    const css::uno::Reference<css::container::XIndexAccess>& rToolbarConfiguration)
+    const cpo::uno::Reference<cpo::uno::XComponentContext>& rxContext,
+    const cpo::uno::Reference<css::io::XOutputStream>& rOutputStream,
+    const cpo::uno::Reference<css::container::XIndexAccess>& rToolbarConfiguration)
 {
     Reference<XWriter> xWriter = Writer::create(rxContext);
     xWriter->setOutputStream(rOutputStream);

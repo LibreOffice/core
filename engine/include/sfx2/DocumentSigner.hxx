@@ -20,7 +20,7 @@ namespace com::sun::star::security
 {
 class XCertificate;
 }
-namespace com::sun::star::uno
+namespace cpo::uno
 {
 template <typename> class Reference;
 }
@@ -38,7 +38,7 @@ public:
     {
     }
 
-    bool signDocument(css::uno::Reference<css::security::XCertificate> const& rxCertificate);
+    bool signDocument(cpo::uno::Reference<css::security::XCertificate> const& rxCertificate);
 };
 
 } // namespace sfx2

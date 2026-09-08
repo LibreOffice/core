@@ -31,7 +31,7 @@
 #include <editeng/unolingu.hxx>
 #include <com/sun/star/linguistic2/XDictionary.hpp>
 
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace com::sun::star::linguistic2;
 
 

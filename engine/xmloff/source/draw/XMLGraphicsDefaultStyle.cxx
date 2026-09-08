@@ -38,7 +38,7 @@
 #include <algorithm>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
@@ -58,9 +58,9 @@ XMLGraphicsDefaultStyle::~XMLGraphicsDefaultStyle()
 {
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLGraphicsDefaultStyle::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLGraphicsDefaultStyle::createFastChildContext(
     sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     if( IsTokenInNamespace(nElement, XML_NAMESPACE_STYLE) ||
         IsTokenInNamespace(nElement, XML_NAMESPACE_LO_EXT) )

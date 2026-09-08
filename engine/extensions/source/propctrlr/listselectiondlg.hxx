@@ -28,7 +28,7 @@ namespace pcr
     class ListSelectionDialog : public weld::GenericDialogController
     {
     private:
-        css::uno::Reference<css::beans::XPropertySet> m_xListBox;
+        cpo::uno::Reference<css::beans::XPropertySet> m_xListBox;
         OUString m_sPropertyName;
         std::unique_ptr<weld::Frame> m_xFrame;
         std::unique_ptr<weld::TreeView> m_xEntries;
@@ -36,7 +36,7 @@ namespace pcr
     public:
         ListSelectionDialog(
             weld::Window* _pParent,
-            const css::uno::Reference< css::beans::XPropertySet >& _rxListBox,
+            const cpo::uno::Reference< css::beans::XPropertySet >& _rxListBox,
             OUString _sPropertyName,
             const OUString& _rPropertyUIName
         );

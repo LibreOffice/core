@@ -45,7 +45,7 @@ namespace xmloff
 
     public:
         OElementExport(IFormsExportContext& _rContext,
-            const css::uno::Reference< css::beans::XPropertySet >& _rxProps,
+            const cpo::uno::Reference< css::beans::XPropertySet >& _rxProps,
             const cpo::uno::Sequence< css::script::ScriptEventDescriptor >& _rEvents);
         virtual ~OElementExport();
 
@@ -113,7 +113,7 @@ namespace xmloff
                 the comma-separated list of control-ids of all the controls referring to this one as LabelControl
         */
         OControlExport(IFormsExportContext& _rContext,
-            const css::uno::Reference< css::beans::XPropertySet >& _rxControl,
+            const cpo::uno::Reference< css::beans::XPropertySet >& _rxControl,
             OUString _sControlId,
             OUString _sReferringControls,
             const cpo::uno::Sequence< css::script::ScriptEventDescriptor >& _rxEvents);
@@ -264,7 +264,7 @@ namespace xmloff
             @see OColumnExport::OColumnExport
         */
         OColumnExport(IFormsExportContext& _rContext,
-            const css::uno::Reference< css::beans::XPropertySet >& _rxControl,
+            const cpo::uno::Reference< css::beans::XPropertySet >& _rxControl,
             const OUString& _rControlId,
             const cpo::uno::Sequence< css::script::ScriptEventDescriptor >& _rxEvents);
 
@@ -295,7 +295,7 @@ namespace xmloff
         /** constructs an object capable of exporting controls
         */
         OFormExport(IFormsExportContext& _rContext,
-            const css::uno::Reference< css::beans::XPropertySet >& _rxForm,
+            const cpo::uno::Reference< css::beans::XPropertySet >& _rxForm,
             const cpo::uno::Sequence< css::script::ScriptEventDescriptor >& _rxEvents
             );
 

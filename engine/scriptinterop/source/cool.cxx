@@ -14,7 +14,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/XComponentContext.hpp>
 #include <cpo/uno/XInterface.hpp>
@@ -38,7 +38,7 @@
 
 namespace
 {
-css::uno::Reference<css::frame::XModel> currentModel()
+cpo::uno::Reference<css::frame::XModel> currentModel()
 {
     auto const frame
         = css::frame::Desktop::create(comphelper::getProcessComponentContext())->getCurrentFrame();
@@ -46,11 +46,11 @@ css::uno::Reference<css::frame::XModel> currentModel()
     return controller.is() ? controller->getModel() : nullptr;
 }
 
-css::uno::Reference<css::frame::XModel> modelRequiring(OUString const& requiredService,
+cpo::uno::Reference<css::frame::XModel> modelRequiring(OUString const& requiredService,
                                                        OUString const& excludedService)
 {
     auto const model = currentModel();
-    css::uno::Reference<css::lang::XServiceInfo> const info(model, css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::lang::XServiceInfo> const info(model, cpo::uno::UNO_QUERY);
     if (!info.is() || !info->supportsService(requiredService)
         || (!excludedService.isEmpty() && info->supportsService(excludedService)))
     {
@@ -63,30 +63,30 @@ css::uno::Reference<css::frame::XModel> modelRequiring(OUString const& requiredS
 class FactoryImpl : public cppu::WeakImplHelper<scriptinterop::XFactory>
 {
 public:
-    css::uno::Reference<css::frame::XModel> SAL_CALL getActiveUnoModel() override
+    cpo::uno::Reference<css::frame::XModel> SAL_CALL getActiveUnoModel() override
     {
         return currentModel();
     }
 
-    css::uno::Reference<scriptinterop::XDocument> SAL_CALL getActiveDocument() override
+    cpo::uno::Reference<scriptinterop::XDocument> SAL_CALL getActiveDocument() override
     {
         return scriptinterop::detail::createDocument(
             modelRequiring(u"com.sun.star.text.TextDocument"_ustr, OUString()));
     }
 
-    css::uno::Reference<scriptinterop::XSpreadsheet> SAL_CALL getActiveSpreadsheet() override
+    cpo::uno::Reference<scriptinterop::XSpreadsheet> SAL_CALL getActiveSpreadsheet() override
     {
         return scriptinterop::detail::createSpreadsheet(
             modelRequiring(u"com.sun.star.sheet.SpreadsheetDocument"_ustr, OUString()));
     }
 
-    css::uno::Reference<scriptinterop::XPresentation> SAL_CALL getActivePresentation() override
+    cpo::uno::Reference<scriptinterop::XPresentation> SAL_CALL getActivePresentation() override
     {
         return scriptinterop::detail::createPresentation(
             modelRequiring(u"com.sun.star.presentation.PresentationDocument"_ustr, OUString()));
     }
 
-    css::uno::Reference<scriptinterop::XDrawing> SAL_CALL getActiveDrawing() override
+    cpo::uno::Reference<scriptinterop::XDrawing> SAL_CALL getActiveDrawing() override
     {
         return scriptinterop::detail::createDrawing(
             modelRequiring(u"com.sun.star.drawing.DrawingDocument"_ustr,

@@ -54,8 +54,8 @@ bool arePrimitive2DReferencesEqual(const Primitive2DReference& rxA, const Primit
     return rxA->operator==(*rxB);
 }
 
-bool arePrimitive2DReferencesEqual(const css::uno::Reference<css::graphic::XPrimitive2D>& rxA,
-                                   const css::uno::Reference<css::graphic::XPrimitive2D>& rxB)
+bool arePrimitive2DReferencesEqual(const cpo::uno::Reference<css::graphic::XPrimitive2D>& rxA,
+                                   const cpo::uno::Reference<css::graphic::XPrimitive2D>& rxB)
 {
     const bool bAIs(rxA.is());
 

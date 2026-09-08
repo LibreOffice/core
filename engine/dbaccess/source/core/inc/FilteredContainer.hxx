@@ -42,9 +42,9 @@ namespace dbaccess
         std::atomic<std::size_t>&       m_nInAppend;
 
         // holds the original container which where set in construct but they can be null
-        css::uno::Reference< css::container::XNameAccess >    m_xMasterContainer;
+        cpo::uno::Reference< css::container::XNameAccess >    m_xMasterContainer;
         cpo::uno::WeakReference< css::sdbc::XConnection >     m_xConnection;
-        css::uno::Reference< css::sdbc::XDatabaseMetaData >   m_xMetaData;
+        cpo::uno::Reference< css::sdbc::XDatabaseMetaData >   m_xMetaData;
 
         /** returns a string denoting the only type of tables allowed in this container, or an empty string
             if there is no such restriction
@@ -57,7 +57,7 @@ namespace dbaccess
         // ::connectivity::sdbcx::OCollection
         virtual void impl_refresh() override;
 
-        virtual OUString getNameForObject(const ::css::uno::Reference< css::beans::XPropertySet >& _xObject) override;
+        virtual OUString getNameForObject(const ::cpo::uno::Reference< css::beans::XPropertySet >& _xObject) override;
 
         /** tell the container to free all elements and all additional resources.<BR>
             After using this method the object may be reconstructed by calling one of the <code>construct</code> methods.
@@ -99,7 +99,7 @@ namespace dbaccess
         */
         OFilteredContainer( ::cppu::OWeakObject& _rParent,
                             ::osl::Mutex& _rMutex,
-                            const css::uno::Reference< css::sdbc::XConnection >& _xCon,
+                            const cpo::uno::Reference< css::sdbc::XConnection >& _xCon,
                             bool _bCase,
                             IRefreshListener*   _pRefreshListener,
                             std::atomic<std::size_t>& _nInAppend
@@ -119,7 +119,7 @@ namespace dbaccess
             name container.
         */
         void construct(
-            const css::uno::Reference< css::container::XNameAccess >& _rxMasterContainer,
+            const cpo::uno::Reference< css::container::XNameAccess >& _rxMasterContainer,
             const cpo::uno::Sequence< OUString >& _rTableFilter,
             const cpo::uno::Sequence< OUString >& _rTableTypeFilter
             );

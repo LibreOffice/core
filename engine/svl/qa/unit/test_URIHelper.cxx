@@ -31,7 +31,7 @@
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #include <cpo/uno/Any.hxx>
 #include <cpo/uno/Exception.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/uri/XUriReference.hpp>
@@ -65,9 +65,9 @@ class Content:
 {
 public:
     explicit Content(
-        css::uno::Reference< css::ucb::XContentIdentifier > const & identifier);
+        cpo::uno::Reference< css::ucb::XContentIdentifier > const & identifier);
 
-    virtual css::uno::Reference< css::ucb::XContentIdentifier >
+    virtual cpo::uno::Reference< css::ucb::XContentIdentifier >
     getIdentifier() override {
         return m_identifier;
     }
@@ -78,11 +78,11 @@ public:
     }
 
     virtual void addContentEventListener(
-        css::uno::Reference< css::ucb::XContentEventListener > const &) override
+        cpo::uno::Reference< css::ucb::XContentEventListener > const &) override
     {}
 
     virtual void removeContentEventListener(
-        css::uno::Reference< css::ucb::XContentEventListener > const &) override
+        cpo::uno::Reference< css::ucb::XContentEventListener > const &) override
     {}
 
     virtual sal_Int32 createCommandIdentifier() override
@@ -92,20 +92,20 @@ public:
 
     virtual cpo::uno::Any execute(
         css::ucb::Command const & command, sal_Int32 commandId,
-        css::uno::Reference< css::ucb::XCommandEnvironment > const &) override;
+        cpo::uno::Reference< css::ucb::XCommandEnvironment > const &) override;
 
     virtual void abort(sal_Int32) override {}
 
 private:
     static char const m_prefix[];
 
-    css::uno::Reference< css::ucb::XContentIdentifier > m_identifier;
+    cpo::uno::Reference< css::ucb::XContentIdentifier > m_identifier;
 };
 
 char const Content::m_prefix[] = "test:";
 
 Content::Content(
-    css::uno::Reference< css::ucb::XContentIdentifier > const & identifier):
+    cpo::uno::Reference< css::ucb::XContentIdentifier > const & identifier):
     m_identifier(identifier)
 {
     assert(m_identifier.is());
@@ -119,7 +119,7 @@ Content::Content(
 
 cpo::uno::Any Content::execute(
     css::ucb::Command const & command, sal_Int32,
-    css::uno::Reference< css::ucb::XCommandEnvironment > const &)
+    cpo::uno::Reference< css::ucb::XCommandEnvironment > const &)
 {
     if ( command.Name != "getCasePreservingURL" )
     {
@@ -155,15 +155,15 @@ cpo::uno::Any Content::execute(
 
 class Provider: public cppu::WeakImplHelper< css::ucb::XContentProvider > {
 public:
-    virtual css::uno::Reference< css::ucb::XContent > queryContent(
-        css::uno::Reference< css::ucb::XContentIdentifier > const & identifier) override
+    virtual cpo::uno::Reference< css::ucb::XContent > queryContent(
+        cpo::uno::Reference< css::ucb::XContentIdentifier > const & identifier) override
     {
         return new Content(identifier);
     }
 
     virtual sal_Int32 compareContentIds(
-        css::uno::Reference< css::ucb::XContentIdentifier > const & id1,
-        css::uno::Reference< css::ucb::XContentIdentifier > const & id2) override
+        cpo::uno::Reference< css::ucb::XContentIdentifier > const & id1,
+        cpo::uno::Reference< css::ucb::XContentIdentifier > const & id2) override
     {
         assert(id1.is() && id2.is());
         return
@@ -194,7 +194,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    static css::uno::Reference< cpo::uno::XComponentContext > m_context;
+    static cpo::uno::Reference< cpo::uno::XComponentContext > m_context;
 };
 
 void Test::setUp() {
@@ -208,18 +208,18 @@ void Test::setUp() {
 }
 
 void Test::finish() {
-    css::uno::Reference< css::lang::XComponent >(
-        m_context, css::uno::UNO_QUERY_THROW)->dispose();
+    cpo::uno::Reference< css::lang::XComponent >(
+        m_context, cpo::uno::UNO_QUERY_THROW)->dispose();
 }
 
 void Test::testNormalizedMakeRelative() {
     auto ucb(css::ucb::UniversalContentBroker::create(m_context));
     ucb->registerContentProvider(new Provider, u"test"_ustr, true);
     ucb->registerContentProvider(
-        css::uno::Reference<css::ucb::XContentProvider>(
+        cpo::uno::Reference<css::ucb::XContentProvider>(
             m_context->getServiceManager()->createInstanceWithContext(
                 u"com.sun.star.comp.ucb.FileProvider"_ustr, m_context),
-            css::uno::UNO_QUERY_THROW),
+            cpo::uno::UNO_QUERY_THROW),
         u"file"_ustr, true);
     struct Data {
         char const * base;
@@ -249,7 +249,7 @@ void Test::testNormalizedMakeRelative() {
     };
     for (auto const[base, absolute, relative] : tests)
     {
-        css::uno::Reference< css::uri::XUriReference > ref(URIHelper::normalizedMakeRelative(
+        cpo::uno::Reference< css::uri::XUriReference > ref(URIHelper::normalizedMakeRelative(
                 m_context, OUString::createFromAscii(base), OUString::createFromAscii(absolute)));
         bool ok = relative == nullptr ? !ref.is()
                                       : ref.is() && ref->getUriReference().equalsAscii(relative);
@@ -517,7 +517,7 @@ void Test::testResolveIdnaHost() {
         URIHelper::resolveIdnaHost(u"foo://пример.рф:0"_ustr));
 }
 
-css::uno::Reference< cpo::uno::XComponentContext > Test::m_context;
+cpo::uno::Reference< cpo::uno::XComponentContext > Test::m_context;
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 

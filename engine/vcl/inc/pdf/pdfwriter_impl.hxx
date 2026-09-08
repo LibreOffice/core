@@ -778,7 +778,7 @@ private:
 
     /* makes correctly encoded for export to PDF URLS
     */
-    css::uno::Reference< css::util::XURLTransformer > m_xTrans;
+    cpo::uno::Reference< css::util::XURLTransformer > m_xTrans;
     /* maps arbitrary link ids for structure attributes to real link ids
        (for setLinkPropertyId)
     */
@@ -1155,7 +1155,7 @@ private:
     void appendStrokingColor( const Color& rColor, OStringBuffer& rBuffer );
     void appendNonStrokingColor( const Color& rColor, OStringBuffer& rBuffer );
 public:
-    PDFWriterImpl( const pdf::PDFWriter::PDFWriterContext& rContext, const css::uno::Reference< css::beans::XMaterialHolder >&, pdf::PDFWriter& );
+    PDFWriterImpl( const pdf::PDFWriter::PDFWriterContext& rContext, const cpo::uno::Reference< css::beans::XMaterialHolder >&, pdf::PDFWriter& );
     ~PDFWriterImpl() override;
     void dispose() override;
 

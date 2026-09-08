@@ -30,9 +30,9 @@
 class SfxURLRelocator_Impl
 {
     std::mutex maMutex;
-    css::uno::Reference< cpo::uno::XComponentContext >               mxContext;
-    css::uno::Reference< css::util::XOfficeInstallationDirectories > mxOfficeInstDirs;
-    css::uno::Reference< css::util::XMacroExpander >                 mxMacroExpander;
+    cpo::uno::Reference< cpo::uno::XComponentContext >               mxContext;
+    cpo::uno::Reference< css::util::XOfficeInstallationDirectories > mxOfficeInstDirs;
+    cpo::uno::Reference< css::util::XMacroExpander >                 mxMacroExpander;
 
 public:
     static bool                 propertyCanContainOfficeDir( std::u16string_view rPropName );
@@ -40,7 +40,7 @@ public:
     void                        makeRelocatableURL( OUString & rURL );
     void                        makeAbsoluteURL( OUString & rURL );
 
-    SfxURLRelocator_Impl( css::uno::Reference< cpo::uno::XComponentContext > xContext );
+    SfxURLRelocator_Impl( cpo::uno::Reference< cpo::uno::XComponentContext > xContext );
     ~SfxURLRelocator_Impl();
 
 private:

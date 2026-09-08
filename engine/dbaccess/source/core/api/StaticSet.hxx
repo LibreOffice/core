@@ -40,7 +40,7 @@ namespace dbaccess
             m_aSet.push_back(nullptr); // this is the beforefirst record
         }
 
-        virtual void reset(const css::uno::Reference< css::sdbc::XResultSet>& _xDriverSet) override;
+        virtual void reset(const cpo::uno::Reference< css::sdbc::XResultSet>& _xDriverSet) override;
 
         virtual void fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition) override;
         // css::sdbcx::XRowLocate

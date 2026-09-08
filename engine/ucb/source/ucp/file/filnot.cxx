@@ -29,6 +29,7 @@
 using namespace fileaccess;
 using namespace com::sun::star;
 using namespace com::sun::star::ucb;
+using namespace ::cpo;
 
 
 ContentEventNotifier::ContentEventNotifier( TaskManager* pMyShell,
@@ -163,7 +164,7 @@ PropertySetInfoChangeNotifier::notifyPropertyRemoved( const OUString & aProperty
 
 
 PropertyChangeNotifier::PropertyChangeNotifier(
-    const css::uno::Reference< XContent >& xCreatorContent,
+    const cpo::uno::Reference< XContent >& xCreatorContent,
     ListenerMap&& pListeners )
     : m_xCreatorContent( xCreatorContent ),
       m_aListeners( std::move(pListeners) )

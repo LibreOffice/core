@@ -60,7 +60,7 @@ public:
     ViewShellWrapper (
         const ::std::shared_ptr<ViewShell>& pViewShell,
         const rtl::Reference<sd::framework::ResourceId>& rxViewId,
-        const css::uno::Reference<css::awt::XWindow>& rxWindow);
+        const cpo::uno::Reference<css::awt::XWindow>& rxWindow);
     virtual ~ViewShellWrapper() override;
 
     virtual void disposing(std::unique_lock<std::mutex>&) override;
@@ -83,8 +83,8 @@ public:
 
     virtual bool SAL_CALL select( const cpo::uno::Any& aSelection ) override;
     virtual cpo::uno::Any SAL_CALL getSelection() override;
-    virtual void SAL_CALL addSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
-    virtual void SAL_CALL removeSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
+    virtual void SAL_CALL addSelectionChangeListener( const cpo::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
+    virtual void SAL_CALL removeSelectionChangeListener( const cpo::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
 
     // XRelocatableResource
 
@@ -121,7 +121,7 @@ private:
     ::std::shared_ptr< ViewShell >                                      mpViewShell;
     ::std::shared_ptr< ::sd::slidesorter::SlideSorterViewShell >        mpSlideSorterViewShell;
     const rtl::Reference< sd::framework::ResourceId >                   mxViewId;
-    css::uno::Reference<css::awt::XWindow >                             mxWindow;
+    cpo::uno::Reference<css::awt::XWindow >                             mxWindow;
 };
 
 } // end of namespace sd::framework

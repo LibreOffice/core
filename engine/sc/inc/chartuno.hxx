@@ -74,7 +74,7 @@ public:
     virtual cpo::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
 
                             // XEnumerationAccess
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL
+    virtual cpo::uno::Reference< css::container::XEnumeration > SAL_CALL
                             createEnumeration() override;
 
                             // XElementAccess
@@ -128,7 +128,7 @@ public:
     virtual void SAL_CALL   setRanges( const cpo::uno::Sequence< css::table::CellRangeAddress >& aRanges ) override;
 
                             // XEmbeddedObjectSupplier
-    virtual css::uno::Reference< css::lang::XComponent > SAL_CALL
+    virtual cpo::uno::Reference< css::lang::XComponent > SAL_CALL
                             getEmbeddedObject() override;
 
                             // XNamed

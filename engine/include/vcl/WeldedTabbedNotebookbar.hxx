@@ -44,7 +44,7 @@ public:
 
     WeldedTabbedNotebookbar(const VclPtr<vcl::Window>& pContainerWindow,
                             const OUString& rUIFilePath,
-                            const css::uno::Reference<css::frame::XFrame>& rFrame,
+                            const cpo::uno::Reference<css::frame::XFrame>& rFrame,
                             sal_uInt64 nWindowId,
                             const std::vector<ExtraPanel>& rExtraPanels = {});
 

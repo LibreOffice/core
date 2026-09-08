@@ -52,8 +52,8 @@
 #include <cppuhelper/implbase.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
@@ -313,9 +313,9 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
     }
 }
 
-css::uno::Reference< css::container::XNameContainer > implFindDialogLibForDialog( const Any& rDlgAny, SbxObject* pBasic )
+cpo::uno::Reference< css::container::XNameContainer > implFindDialogLibForDialog( const Any& rDlgAny, SbxObject* pBasic )
 {
-    css::uno::Reference< css::container::XNameContainer > aRetDlgLib;
+    cpo::uno::Reference< css::container::XNameContainer > aRetDlgLib;
 
     SbxVariable* pDlgLibContVar = pBasic->Find(u"DialogLibraries"_ustr, SbxClassType::Object);
     if( auto pDlgLibContUnoObj = dynamic_cast<SbUnoObject*>( pDlgLibContVar) )
@@ -355,9 +355,9 @@ css::uno::Reference< css::container::XNameContainer > implFindDialogLibForDialog
     return aRetDlgLib;
 }
 
-css::uno::Reference< css::container::XNameContainer > implFindDialogLibForDialogBasic( const Any& aAnyISP, SbxObject* pBasic, StarBASIC*& pFoundBasic )
+cpo::uno::Reference< css::container::XNameContainer > implFindDialogLibForDialogBasic( const Any& aAnyISP, SbxObject* pBasic, StarBASIC*& pFoundBasic )
 {
-    css::uno::Reference< css::container::XNameContainer > aDlgLib;
+    cpo::uno::Reference< css::container::XNameContainer > aDlgLib;
     // Find dialog library for dialog, direct access is not possible here
     StarBASIC* pStartedBasic = static_cast<StarBASIC*>(pBasic);
     SbxObject* pParentBasic = pStartedBasic ? pStartedBasic->GetParent() : nullptr;
@@ -459,7 +459,7 @@ void RTL_Impl_CreateUnoDialog( SbxArray& rPar )
         {}
     }
 
-    css::uno::Reference< css::container::XNameContainer > aDlgLib;
+    cpo::uno::Reference< css::container::XNameContainer > aDlgLib;
     bool bDocDialog = false;
     StarBASIC* pFoundBasic = nullptr;
     SAL_INFO("basic", "About to try get a hold of ThisComponent");

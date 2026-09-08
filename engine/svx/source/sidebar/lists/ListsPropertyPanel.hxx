@@ -31,10 +31,10 @@ public:
     virtual ~ListsPropertyPanel() override;
 
     static std::unique_ptr<PanelLayout>
-    Create(weld::Widget* pParent, const css::uno::Reference<css::frame::XFrame>& rxFrame);
+    Create(weld::Widget* pParent, const cpo::uno::Reference<css::frame::XFrame>& rxFrame);
 
     ListsPropertyPanel(weld::Widget* pParent,
-                       const css::uno::Reference<css::frame::XFrame>& rxFrame);
+                       const cpo::uno::Reference<css::frame::XFrame>& rxFrame);
 
 private:
     std::unique_ptr<weld::Toolbar> mxTBxNumBullet;

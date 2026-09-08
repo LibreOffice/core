@@ -104,7 +104,7 @@ SoundHandler::~SoundHandler()
 *//*-*************************************************************************************************************/
 void SoundHandler::dispatchWithNotification(const css::util::URL&                                             aURL      ,
                                                      const cpo::uno::Sequence< css::beans::PropertyValue >&            lDescriptor,
-                                                     const css::uno::Reference< css::frame::XDispatchResultListener >& xListener )
+                                                     const cpo::uno::Reference< css::frame::XDispatchResultListener >& xListener )
 {
     // SAFE {
     const std::unique_lock aLock(m_aMutex);
@@ -114,9 +114,9 @@ void SoundHandler::dispatchWithNotification(const css::util::URL&               
     {
     //close streams otherwise on windows we can't reopen the file in the
     //media player when we pass the url to directx as it'll already be open
-    css::uno::Reference< css::io::XInputStream > xInputStream =
+    cpo::uno::Reference< css::io::XInputStream > xInputStream =
         aDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_INPUTSTREAM,
-        css::uno::Reference< css::io::XInputStream >());
+        cpo::uno::Reference< css::io::XInputStream >());
     if (xInputStream.is()) xInputStream->closeInput();
     }
 
@@ -135,7 +135,7 @@ void SoundHandler::dispatchWithNotification(const css::util::URL&               
     try
     {
         m_bError = false;
-        m_xPlayer.set( avmedia::MediaWindow::createPlayer( aURL.Complete, aDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_REFERRER, OUString()) ), css::uno::UNO_SET_THROW );
+        m_xPlayer.set( avmedia::MediaWindow::createPlayer( aURL.Complete, aDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_REFERRER, OUString()) ), cpo::uno::UNO_SET_THROW );
         // OK- we can start async playing ...
         // Count this request and initialize self-holder against dying by uno ref count ...
         m_xSelfHold.set(getXWeak());
@@ -155,7 +155,7 @@ void SoundHandler::dispatchWithNotification(const css::util::URL&               
 void SoundHandler::dispatch( const css::util::URL&                                  aURL       ,
                                       const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments )
 {
-    dispatchWithNotification(aURL, lArguments, css::uno::Reference< css::frame::XDispatchResultListener >());
+    dispatchWithNotification(aURL, lArguments, cpo::uno::Reference< css::frame::XDispatchResultListener >());
 }
 
 /*-************************************************************************************************************
@@ -230,7 +230,7 @@ IMPL_LINK_NOARG(SoundHandler, implts_PlayerNotify, Timer *, void)
 
     // We use m_xSelfHold to let us die ... but we must live till real finishing of this method too!!!
     // So we SHOULD use another "self-holder" temp. to provide that ...
-    css::uno::Reference< cpo::uno::XInterface > xOperationHold = m_xSelfHold;
+    cpo::uno::Reference< cpo::uno::XInterface > xOperationHold = m_xSelfHold;
     m_xSelfHold.clear();
 
     // notify might existing listener

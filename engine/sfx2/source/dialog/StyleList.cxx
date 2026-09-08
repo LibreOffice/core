@@ -71,7 +71,8 @@
 using namespace css;
 using namespace css::beans;
 using namespace css::frame;
-using namespace css::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 class TreeViewDropTarget final : public DropTargetHelper
 {

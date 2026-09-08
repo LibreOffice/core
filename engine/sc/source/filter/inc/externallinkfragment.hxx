@@ -34,7 +34,7 @@ class ExternalSheetDataContext final : public WorkbookContextBase
 public:
     explicit            ExternalSheetDataContext(
                             WorkbookFragmentBase& rFragment,
-                            const css::uno::Reference< css::sheet::XExternalSheetCache >& rxSheetCache );
+                            const cpo::uno::Reference< css::sheet::XExternalSheetCache >& rxSheetCache );
 
 protected:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
@@ -61,7 +61,7 @@ private:
     void                setCellValue( const cpo::uno::Any& rValue );
 
 private:
-    css::uno::Reference< css::sheet::XExternalSheetCache >
+    cpo::uno::Reference< css::sheet::XExternalSheetCache >
                         mxSheetCache;               /// The sheet cache used to store external cell values.
     ScAddress           maCurrPos;                  /// Position of current cell.
     sal_Int32           mnCurrType;                 /// Data type of current cell.

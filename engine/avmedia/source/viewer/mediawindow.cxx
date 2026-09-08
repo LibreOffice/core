@@ -45,6 +45,7 @@
 constexpr double AVMEDIA_FRAMEGRABBER_DEFAULTFRAME_MEDIATIME = 3.0;
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace avmedia {
 
@@ -323,7 +324,7 @@ bool MediaWindow::isMediaURL(std::u16string_view rURL, const OUString& rReferer,
             {
                 if (xPreferredPixelSizeListener)
                 {
-                    uno::Reference<media::XPlayerNotifier> xPlayerNotifier(xPlayer, css::uno::UNO_QUERY);
+                    uno::Reference<media::XPlayerNotifier> xPlayerNotifier(xPlayer, cpo::uno::UNO_QUERY);
                     if (xPlayerNotifier)
                     {
                         // wait until it's possible to query this to get a sensible answer
@@ -423,7 +424,7 @@ uno::Reference< graphic::XGraphic > MediaWindow::grabFrame(const OUString& rURL,
 
     if (xPreferredPixelSizeListener)
     {
-        uno::Reference<media::XPlayerNotifier> xPlayerNotifier(xPlayer, css::uno::UNO_QUERY);
+        uno::Reference<media::XPlayerNotifier> xPlayerNotifier(xPlayer, cpo::uno::UNO_QUERY);
         if (xPlayerNotifier)
         {
             // set a callback to call when a more sensible result is available, which
@@ -442,16 +443,16 @@ uno::Reference< graphic::XGraphic > MediaWindow::grabFrame(const OUString& rURL,
     return grabFrame(xPlayer);
 }
 
-void MediaWindow::dispatchInsertAVMedia(const css::uno::Reference<css::frame::XDispatchProvider>& rDispatchProvider,
+void MediaWindow::dispatchInsertAVMedia(const cpo::uno::Reference<css::frame::XDispatchProvider>& rDispatchProvider,
                                         const css::awt::Size& rSize, const OUString& rURL, bool bLink)
 {
     util::URL aDispatchURL;
     aDispatchURL.Complete = u".uno:InsertAVMedia"_ustr;
 
-    css::uno::Reference<css::util::XURLTransformer> xTrans(css::util::URLTransformer::create(::comphelper::getProcessComponentContext()));
+    cpo::uno::Reference<css::util::XURLTransformer> xTrans(css::util::URLTransformer::create(::comphelper::getProcessComponentContext()));
     xTrans->parseStrict(aDispatchURL);
 
-    css::uno::Reference<css::frame::XDispatch> xDispatch = rDispatchProvider->queryDispatch(aDispatchURL, u""_ustr, 0);
+    cpo::uno::Reference<css::frame::XDispatch> xDispatch = rDispatchProvider->queryDispatch(aDispatchURL, u""_ustr, 0);
     cpo::uno::Sequence<css::beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
         { "URL", cpo::uno::Any(rURL) },
         { "Size.Width", cpo::uno::Any(rSize.Width)},
@@ -461,7 +462,7 @@ void MediaWindow::dispatchInsertAVMedia(const css::uno::Reference<css::frame::XD
     xDispatch->dispatch(aDispatchURL, aArgs);
 }
 
-PlayerListener::PlayerListener(std::function<void(const css::uno::Reference<css::media::XPlayer>&)> fn)
+PlayerListener::PlayerListener(std::function<void(const cpo::uno::Reference<css::media::XPlayer>&)> fn)
     : m_aFn(std::move(fn))
 {
 }
@@ -472,7 +473,7 @@ void PlayerListener::disposing(std::unique_lock<std::mutex>& rGuard)
     WeakComponentImplHelperBase::disposing(rGuard);
 }
 
-void PlayerListener::startListening(const css::uno::Reference<media::XPlayerNotifier>& rNotifier)
+void PlayerListener::startListening(const cpo::uno::Reference<media::XPlayerNotifier>& rNotifier)
 {
     std::unique_lock aGuard(m_aMutex);
 
@@ -492,7 +493,7 @@ void PlayerListener::preferredPlayerWindowSizeAvailable(const css::lang::EventOb
 {
     std::unique_lock aGuard(m_aMutex);
 
-    css::uno::Reference<media::XPlayer> xPlayer(m_xNotifier, css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<media::XPlayer> xPlayer(m_xNotifier, cpo::uno::UNO_QUERY_THROW);
     aGuard.unlock();
     callPlayerWindowSizeAvailable(xPlayer);
     aGuard.lock();

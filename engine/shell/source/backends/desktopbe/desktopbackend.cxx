@@ -31,7 +31,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cpo/uno/Any.hxx>
 #include <cpo/uno/Exception.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/XComponentContext.hpp>
@@ -72,9 +72,9 @@ private:
     getSupportedServiceNames() override
     { return { u"com.sun.star.configuration.backend.DesktopBackend"_ustr }; }
 
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
     getPropertySetInfo() override
-    { return css::uno::Reference< css::beans::XPropertySetInfo >(); }
+    { return cpo::uno::Reference< css::beans::XPropertySetInfo >(); }
 
     virtual void SAL_CALL setPropertyValue(
         OUString const &, cpo::uno::Any const &) override;
@@ -84,22 +84,22 @@ private:
 
     virtual void SAL_CALL addPropertyChangeListener(
         OUString const &,
-        css::uno::Reference< css::beans::XPropertyChangeListener > const &) override
+        cpo::uno::Reference< css::beans::XPropertyChangeListener > const &) override
     {}
 
     virtual void SAL_CALL removePropertyChangeListener(
         OUString const &,
-        css::uno::Reference< css::beans::XPropertyChangeListener > const &) override
+        cpo::uno::Reference< css::beans::XPropertyChangeListener > const &) override
     {}
 
     virtual void SAL_CALL addVetoableChangeListener(
         OUString const &,
-        css::uno::Reference< css::beans::XVetoableChangeListener > const &) override
+        cpo::uno::Reference< css::beans::XVetoableChangeListener > const &) override
     {}
 
     virtual void SAL_CALL removeVetoableChangeListener(
         OUString const &,
-        css::uno::Reference< css::beans::XVetoableChangeListener > const &) override
+        cpo::uno::Reference< css::beans::XVetoableChangeListener > const &) override
     {}
 };
 
@@ -253,13 +253,13 @@ cpo::uno::Any Default::getPropertyValue(OUString const & PropertyName)
         PropertyName, getXWeak());
 }
 
-css::uno::Reference< cpo::uno::XInterface > createBackend(
-    css::uno::Reference< cpo::uno::XComponentContext > const & context,
+cpo::uno::Reference< cpo::uno::XInterface > createBackend(
+    cpo::uno::Reference< cpo::uno::XComponentContext > const & context,
     OUString const & name)
 {
     try {
-        return css::uno::Reference< css::lang::XMultiComponentFactory >(
-            context->getServiceManager(), css::uno::UNO_SET_THROW)->
+        return cpo::uno::Reference< css::lang::XMultiComponentFactory >(
+            context->getServiceManager(), cpo::uno::UNO_SET_THROW)->
             createInstanceWithContext(name, context);
     } catch (cpo::uno::RuntimeException &) {
         // Assuming these exceptions are real errors:
@@ -267,7 +267,7 @@ css::uno::Reference< cpo::uno::XInterface > createBackend(
     } catch (const cpo::uno::Exception &) {
         // Assuming these exceptions indicate that the service is not installed:
         TOOLS_WARN_EXCEPTION("shell", "createInstance(" << name << ") failed");
-        return css::uno::Reference< cpo::uno::XInterface >();
+        return cpo::uno::Reference< cpo::uno::XInterface >();
     }
 }
 
@@ -276,7 +276,7 @@ shell_DesktopBackend_get_implementation(
     cpo::uno::XComponentContext* context , cpo::uno::Sequence<cpo::uno::Any> const&)
 {
     // Fall back to the default if the specific backend is not available:
-    css::uno::Reference< cpo::uno::XInterface > backend;
+    cpo::uno::Reference< cpo::uno::XInterface > backend;
     if (Application::GetDesktopEnvironment() == u"PLASMA5")
         backend = createBackend(context,
             u"com.sun.star.configuration.backend.KF5Backend"_ustr);

@@ -21,7 +21,7 @@
 #define INCLUDED_CPPUHELPER_COMPONENT_CONTEXT_HXX
 
 #include "cpo/uno/Any.hxx"
-#include "com/sun/star/uno/Reference.hxx"
+#include "cpo/uno/Reference.hxx"
 #include "cppuhelper/cppuhelperdllapi.h"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
@@ -81,11 +81,11 @@ struct SAL_WARN_UNUSED ContextEntry_Init
     @param xDelegate delegation to further context, if value was not found
     @return new context object
 */
-CPPUHELPER_DLLPUBLIC css::uno::Reference< cpo::uno::XComponentContext >
+CPPUHELPER_DLLPUBLIC cpo::uno::Reference< cpo::uno::XComponentContext >
 createComponentContext(
     ContextEntry_Init const * pEntries, sal_Int32 nEntries,
-    css::uno::Reference< cpo::uno::XComponentContext > const & xDelegate =
-    css::uno::Reference< cpo::uno::XComponentContext >() );
+    cpo::uno::Reference< cpo::uno::XComponentContext > const & xDelegate =
+    cpo::uno::Reference< cpo::uno::XComponentContext >() );
 
 }
 

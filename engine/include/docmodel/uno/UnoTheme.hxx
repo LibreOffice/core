@@ -40,7 +40,7 @@ public:
 
 namespace model::theme
 {
-DOCMODEL_DLLPUBLIC css::uno::Reference<css::util::XTheme>
+DOCMODEL_DLLPUBLIC cpo::uno::Reference<css::util::XTheme>
 createXTheme(std::shared_ptr<model::Theme> const& pTheme);
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

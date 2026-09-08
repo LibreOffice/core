@@ -87,7 +87,7 @@ cpo::uno::Any VCLXTopWindow::getWindowHandle( const cpo::uno::Sequence< sal_Int8
     return aRet;
 }
 
-void VCLXTopWindow::addTopWindowListener( const css::uno::Reference< css::awt::XTopWindowListener >& rxListener )
+void VCLXTopWindow::addTopWindowListener( const cpo::uno::Reference< css::awt::XTopWindowListener >& rxListener )
 {
     SolarMutexGuard aGuard;
 
@@ -95,7 +95,7 @@ void VCLXTopWindow::addTopWindowListener( const css::uno::Reference< css::awt::X
         GetTopWindowListeners().addInterface( rxListener );
 }
 
-void VCLXTopWindow::removeTopWindowListener( const css::uno::Reference< css::awt::XTopWindowListener >& rxListener )
+void VCLXTopWindow::removeTopWindowListener( const cpo::uno::Reference< css::awt::XTopWindowListener >& rxListener )
 {
     SolarMutexGuard aGuard;
 
@@ -116,7 +116,7 @@ void VCLXTopWindow::toBack(  )
 {
 }
 
-void VCLXTopWindow::setMenuBar( const css::uno::Reference< css::awt::XMenuBar >& rxMenu )
+void VCLXTopWindow::setMenuBar( const cpo::uno::Reference< css::awt::XMenuBar >& rxMenu )
 {
     SolarMutexGuard aGuard;
 

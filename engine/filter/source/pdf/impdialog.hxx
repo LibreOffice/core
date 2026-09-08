@@ -52,7 +52,7 @@ class ImpPDFTabSecurityPage;
 /// Class tabbed dialog
 class ImpPDFTabDialog final : public SfxTabDialogController
 {
-    css::uno::Reference<css::lang::XComponent> mrDoc;
+    cpo::uno::Reference<css::lang::XComponent> mrDoc;
 
     FilterConfigItem maConfigItem;
     FilterConfigItem maConfigI18N;
@@ -120,7 +120,7 @@ class ImpPDFTabDialog final : public SfxTabDialogController
     sal_Int32 mnChangesAllowed = 0;
     bool mbCanCopyOrExtract = false;
     bool mbCanExtractForAccessibility = true;
-    css::uno::Reference< css::beans::XMaterialHolder > mxPreparedPasswords;
+    cpo::uno::Reference< css::beans::XMaterialHolder > mxPreparedPasswords;
 
     bool mbIsPageRangeChecked = false;
     OUString msPageRange = OUString(' ');
@@ -138,7 +138,7 @@ class ImpPDFTabDialog final : public SfxTabDialogController
     OUString msSignLocation;
     OUString msSignContact;
     OUString msSignReason;
-    css::uno::Reference<css::security::XCertificate> maSignCertificate;
+    cpo::uno::Reference<css::security::XCertificate> maSignCertificate;
     OUString msSignTSA;
 
     OUString maWatermarkText;
@@ -153,7 +153,7 @@ public:
     friend class                ImpPDFTabSigningPage;
 
     ImpPDFTabDialog(weld::Window* pParent, const cpo::uno::Sequence< css::beans::PropertyValue >& rFilterData,
-                    const css::uno::Reference< css::lang::XComponent >& rDoc);
+                    const cpo::uno::Reference< css::lang::XComponent >& rDoc);
     virtual                     ~ImpPDFTabDialog() override;
 
     cpo::uno::Sequence< css::beans::PropertyValue >   GetFilterData();
@@ -335,7 +335,7 @@ class ImpPDFTabSecurityPage : public SfxTabPage
     cpo::uno::Sequence< css::beans::NamedValue > maPreparedOwnerPassword;
     OUString                    msOwnerPwdTitle;
 
-    css::uno::Reference< css::beans::XMaterialHolder > mxPreparedPasswords;
+    cpo::uno::Reference< css::beans::XMaterialHolder > mxPreparedPasswords;
 
     std::unique_ptr<weld::Button> mxPbSetPwd;
     std::unique_ptr<weld::Container> mxUserPwdSet;
@@ -412,7 +412,7 @@ public:
 //class to implement the digital signing
 class ImpPDFTabSigningPage : public SfxTabPage
 {
-    css::uno::Reference< css::security::XCertificate > maSignCertificate;
+    cpo::uno::Reference< css::security::XCertificate > maSignCertificate;
 
     std::unique_ptr<weld::Entry> mxEdSignCert;
     std::unique_ptr<weld::Button> mxPbSignCertSelect;

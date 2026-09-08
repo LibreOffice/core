@@ -36,7 +36,7 @@ class TextLabelItemConverter final : public ItemConverter
 public:
     TextLabelItemConverter(
         const rtl::Reference<::chart::ChartModel>& xChartModel,
-        const css::uno::Reference<css::beans::XPropertySet>& rPropertySet,
+        const cpo::uno::Reference<css::beans::XPropertySet>& rPropertySet,
         const rtl::Reference<::chart::DataSeries>& xSeries,
         SfxItemPool& rItemPool,
         const std::optional<css::awt::Size>& pRefSize,

@@ -67,7 +67,7 @@ constexpr OUString sAPI_current_presentation = u"CurrentPresentation"_ustr;
 
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::text;
@@ -640,9 +640,9 @@ XMLVariableDeclsImportContext::XMLVariableDeclsImportContext(
 {
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > XMLVariableDeclsImportContext::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > XMLVariableDeclsImportContext::createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     if( IsTokenInNamespace(nElement, XML_NAMESPACE_TEXT) )
     {

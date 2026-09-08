@@ -56,6 +56,7 @@
 #include "ostreamcontainer.hxx"
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 FSStorage::FSStorage( const ::ucbhelper::Content& aContent,
                     sal_Int32 nMode,

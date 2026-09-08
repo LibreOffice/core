@@ -38,7 +38,7 @@
 #include <com/sun/star/ui/dialogs/AddressBookSourcePilot.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/util/CloseVetoException.hpp>
 #include <org/freedesktop/PackageKit/SyncDbusSessionHelper.hpp>
@@ -113,8 +113,8 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::util;

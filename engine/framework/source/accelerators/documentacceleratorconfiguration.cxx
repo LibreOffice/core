@@ -47,7 +47,7 @@ private:
 
     /** points to the root storage of the outside document,
         where we can read/save our configuration data. */
-    css::uno::Reference< css::embed::XStorage > m_xDocumentRoot;
+    cpo::uno::Reference< css::embed::XStorage > m_xDocumentRoot;
 
 public:
 
@@ -57,7 +57,7 @@ public:
                 reference to a uno service manager, which is used internally.
      */
     DocumentAcceleratorConfiguration(
-            const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
             const cpo::uno::Sequence< cpo::uno::Any >& lArguments);
 
     virtual ~DocumentAcceleratorConfiguration() override;
@@ -78,7 +78,7 @@ public:
     }
 
     // XUIConfigurationStorage
-    virtual void setStorage(const css::uno::Reference< css::embed::XStorage >& xStorage) override;
+    virtual void setStorage(const cpo::uno::Reference< css::embed::XStorage >& xStorage) override;
 
     virtual bool hasStorage() override;
 
@@ -87,12 +87,12 @@ public:
 };
 
 DocumentAcceleratorConfiguration::DocumentAcceleratorConfiguration(
-        const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
         const cpo::uno::Sequence< cpo::uno::Any >& lArguments)
     : DocumentAcceleratorConfiguration_BASE(xContext)
 {
     SolarMutexGuard g;
-    css::uno::Reference<css::embed::XStorage> xRoot;
+    cpo::uno::Reference<css::embed::XStorage> xRoot;
     if (lArguments.getLength() == 1 && (lArguments[0] >>= xRoot))
     {
         m_xDocumentRoot = std::move(xRoot);
@@ -102,7 +102,7 @@ DocumentAcceleratorConfiguration::DocumentAcceleratorConfiguration(
         ::comphelper::SequenceAsHashMap lArgs(lArguments);
         m_xDocumentRoot = lArgs.getUnpackedValueOrDefault(
             u"DocumentRoot"_ustr,
-            css::uno::Reference< css::embed::XStorage >());
+            cpo::uno::Reference< css::embed::XStorage >());
     }
 }
 
@@ -111,7 +111,7 @@ DocumentAcceleratorConfiguration::~DocumentAcceleratorConfiguration()
     m_aPresetHandler.removeStorageListener(this);
 }
 
-void DocumentAcceleratorConfiguration::setStorage(const css::uno::Reference< css::embed::XStorage >& xStorage)
+void DocumentAcceleratorConfiguration::setStorage(const cpo::uno::Reference< css::embed::XStorage >& xStorage)
 {
     // Attention! xStorage must be accepted too, if it's NULL !
 
@@ -138,7 +138,7 @@ bool DocumentAcceleratorConfiguration::hasStorage()
 
 void DocumentAcceleratorConfiguration::fillCache()
 {
-    css::uno::Reference< css::embed::XStorage > xDocumentRoot;
+    cpo::uno::Reference< css::embed::XStorage > xDocumentRoot;
     {
         SolarMutexGuard g;
         xDocumentRoot = m_xDocumentRoot;

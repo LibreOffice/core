@@ -36,6 +36,7 @@
 #include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 SwRenderData::SwRenderData()
 {

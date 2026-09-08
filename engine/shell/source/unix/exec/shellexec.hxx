@@ -31,10 +31,10 @@
 
 class ShellExec : public ::cppu::WeakImplHelper< css::system::XSystemShellExecute, css::lang::XServiceInfo >
 {
-    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
 public:
-    explicit ShellExec(const css::uno::Reference< cpo::uno::XComponentContext >& xContext);
+    explicit ShellExec(const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext);
 
 
     // XSystemShellExecute

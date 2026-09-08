@@ -48,6 +48,7 @@
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 ScVbaShape::ScVbaShape( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< cpo::uno::XComponentContext >& xContext, uno::Reference< drawing::XShape > xShape, uno::Reference< drawing::XShapes > xShapes, uno::Reference< frame::XModel > xModel, sal_Int32 nType )
     : ScVbaShape_BASE( xParent, xContext )
@@ -118,7 +119,7 @@ ScVbaShape::removeShapesListener()
 }
 
 sal_Int32
-ScVbaShape::getType( const css::uno::Reference< drawing::XShape >& xShape )
+ScVbaShape::getType( const cpo::uno::Reference< drawing::XShape >& xShape )
 {
     OUString sShapeType;
     uno::Reference< drawing::XShapeDescriptor > xShapeDescriptor( xShape, uno::UNO_QUERY_THROW );
@@ -159,7 +160,7 @@ ScVbaShape::getType( const css::uno::Reference< drawing::XShape >& xShape )
         throw cpo::uno::RuntimeException("the shape type do not be supported: " + sShapeType );
 }
 
-sal_Int32 ScVbaShape::getAutoShapeType(const css::uno::Reference< drawing::XShape >& xShape)
+sal_Int32 ScVbaShape::getAutoShapeType(const cpo::uno::Reference< drawing::XShape >& xShape)
 {
     assert( ScVbaShape::getType( xShape ) == office::MsoShapeType::msoAutoShape );
 

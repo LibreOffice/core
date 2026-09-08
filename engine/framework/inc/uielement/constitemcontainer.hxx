@@ -46,7 +46,7 @@ class ConstItemContainer final : public ::cppu::WeakImplHelper<
     public:
         ConstItemContainer();
         ConstItemContainer( const ItemContainer& rtemContainer );
-        ConstItemContainer( const css::uno::Reference< css::container::XIndexAccess >& rSourceContainer, bool bFastCopy = false );
+        ConstItemContainer( const cpo::uno::Reference< css::container::XIndexAccess >& rSourceContainer, bool bFastCopy = false );
         virtual ~ConstItemContainer() override;
 
         // XIndexAccess
@@ -63,13 +63,13 @@ class ConstItemContainer final : public ::cppu::WeakImplHelper<
         virtual bool hasElements() override;
 
         // XPropertySet
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+        virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
         virtual void setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
         virtual cpo::uno::Any getPropertyValue( const OUString& PropertyName ) override;
-        virtual void addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
-        virtual void removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
-        virtual void addVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
-        virtual void removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+        virtual void addPropertyChangeListener( const OUString& aPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
+        virtual void removePropertyChangeListener( const OUString& aPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
+        virtual void addVetoableChangeListener( const OUString& PropertyName, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+        virtual void removeVetoableChangeListener( const OUString& PropertyName, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
         // XFastPropertySet
         virtual void setFastPropertyValue( sal_Int32 nHandle, const cpo::uno::Any& aValue ) override;
@@ -80,7 +80,7 @@ class ConstItemContainer final : public ::cppu::WeakImplHelper<
         static cpo::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescriptor();
 
         void copyItemContainer( const std::vector< cpo::uno::Sequence< css::beans::PropertyValue > >& rSourceVector );
-        static rtl::Reference< ConstItemContainer > deepCopyContainer( const css::uno::Reference< css::container::XIndexAccess >& rSubContainer );
+        static rtl::Reference< ConstItemContainer > deepCopyContainer( const cpo::uno::Reference< css::container::XIndexAccess >& rSubContainer );
 
         std::vector< cpo::uno::Sequence< css::beans::PropertyValue > >       m_aItemVector;
         OUString                                                             m_aUIName;

@@ -11,7 +11,7 @@
 #define INCLUDED_TEST_SHEET_XDDELINK_HXX
 
 #include <cpo/uno/XInterface.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <test/testdllapi.hxx>
 #include <utility>
@@ -21,7 +21,7 @@ namespace apitest
 class OOO_DLLPUBLIC_TEST XDDELink
 {
 public:
-    virtual css::uno::Reference<cpo::uno::XInterface> init() = 0;
+    virtual cpo::uno::Reference<cpo::uno::XInterface> init() = 0;
 
     void testGetApplication();
     void testGetItem();

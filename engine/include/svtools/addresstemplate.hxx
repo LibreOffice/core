@@ -41,7 +41,7 @@ namespace svt
     {
     public:
         AddressBookSourceDialog(weld::Window* _pParent,
-            const css::uno::Reference< cpo::uno::XComponentContext >& _rxORB );
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxORB );
 
         /** if you use this ctor, the dialog
             <ul><li>will not store it's data in the configuration (nor initially retrieve it from there)</li>
@@ -63,8 +63,8 @@ namespace svt
                 obtained from <arg>_rxTransientDS</arg>
         */
         AddressBookSourceDialog(weld::Window* _pParent,
-            const css::uno::Reference< cpo::uno::XComponentContext >& _rxORB,
-            const css::uno::Reference< css::sdbc::XDataSource >& _rxTransientDS,
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxORB,
+            const cpo::uno::Reference< css::sdbc::XDataSource >& _rxTransientDS,
             const OUString& _rDataSourceName,
             const OUString& _rTable,
             const cpo::uno::Sequence< css::util::AliasProgrammaticPair >& _rMapping
@@ -104,12 +104,12 @@ namespace svt
         const OUString         m_sNoFieldSelection;
 
         /// the DatabaseContext for selecting data sources
-        css::uno::Reference< css::sdb::XDatabaseContext >
+        cpo::uno::Reference< css::sdb::XDatabaseContext >
                                m_xDatabaseContext;
         // the ORB for creating objects
-        css::uno::Reference< cpo::uno::XComponentContext >
+        cpo::uno::Reference< cpo::uno::XComponentContext >
                                m_xORB;
-        css::uno::Reference< css::container::XNameAccess >
+        cpo::uno::Reference< css::container::XNameAccess >
                                m_xCurrentDatasourceTables;
 
         // Controls

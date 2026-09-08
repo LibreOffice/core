@@ -22,6 +22,7 @@
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 
 using namespace css;
+using namespace ::cpo;
 
 IMPL_LINK_NOARG(SSLWarnDialog, ViewCertHdl, weld::Button&, void)
 {
@@ -32,8 +33,8 @@ IMPL_LINK_NOARG(SSLWarnDialog, ViewCertHdl, weld::Button&, void)
 }
 
 SSLWarnDialog::SSLWarnDialog(weld::Window* pParent,
-    const css::uno::Reference< css::security::XCertificate >& rXCert,
-    const css::uno::Reference< cpo::uno::XComponentContext >& xContext)
+    const cpo::uno::Reference< css::security::XCertificate >& rXCert,
+    const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext)
     : MessageDialogController(pParent, u"uui/ui/sslwarndialog.ui"_ustr, u"SSLWarnDialog"_ustr)
     , m_xView(m_xBuilder->weld_button(u"view"_ustr))
     , m_xContext(xContext)

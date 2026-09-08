@@ -24,7 +24,7 @@
 #include <com/sun/star/lang/EventObject.hpp>
 #include <memory>
 
-namespace com::sun::star::uno { template <typename > class Reference; }
+namespace cpo::uno { template <typename > class Reference; }
 namespace com::sun::star::lang { class XComponent; }
 
 namespace utl
@@ -49,8 +49,8 @@ namespace utl
                 OEventListenerAdapter();
         virtual ~OEventListenerAdapter();
 
-        void startComponentListening( const css::uno::Reference< css::lang::XComponent >& _rxComp );
-        void stopComponentListening( const css::uno::Reference< css::lang::XComponent >& _rxComp );
+        void startComponentListening( const cpo::uno::Reference< css::lang::XComponent >& _rxComp );
+        void stopComponentListening( const cpo::uno::Reference< css::lang::XComponent >& _rxComp );
         void stopAllComponentListening(  );
 
         virtual void _disposing( const css::lang::EventObject& _rSource ) = 0;

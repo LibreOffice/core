@@ -18,7 +18,7 @@ namespace chart
 class WaterfallChartTypeTemplate : public ChartTypeTemplate, public ::property::OPropertySet
 {
 public:
-    WaterfallChartTypeTemplate(css::uno::Reference<cpo::uno::XComponentContext> const& xContext,
+    WaterfallChartTypeTemplate(cpo::uno::Reference<cpo::uno::XComponentContext> const& xContext,
                                const OUString& rServiceName, sal_Int32 nDim = 2);
     virtual ~WaterfallChartTypeTemplate() override;
 
@@ -33,7 +33,7 @@ protected:
     virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
     // ____ XPropertySet ____
-    virtual css::uno::Reference<css::beans::XPropertySetInfo> getPropertySetInfo() override;
+    virtual cpo::uno::Reference<css::beans::XPropertySetInfo> getPropertySetInfo() override;
 
     // ____ ChartTypeTemplate ____
     virtual bool matchesTemplate2(const rtl::Reference<::chart::Diagram>& xDiagram,

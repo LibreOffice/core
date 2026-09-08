@@ -25,7 +25,7 @@
 #include <com/sun/star/util/Date.hpp>
 #include "swdllapi.h"
 #include "swdbdata.hxx"
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -64,7 +64,7 @@ namespace svx {
 struct SwDBFormatData
 {
     css::util::Date aNullDate;
-    css::uno::Reference< css::util::XNumberFormatter> xFormatter;
+    cpo::uno::Reference< css::util::XNumberFormatter> xFormatter;
     css::lang::Locale aLocale;
 };
 
@@ -101,10 +101,10 @@ struct SwDSParam : public SwDBData
 {
     css::util::Date  aNullDate;
 
-    css::uno::Reference<css::util::XNumberFormatter>    xFormatter;
-    css::uno::Reference< css::sdbc::XConnection>       xConnection;
-    css::uno::Reference< css::sdbc::XStatement>        xStatement;
-    css::uno::Reference< css::sdbc::XResultSet>        xResultSet;
+    cpo::uno::Reference<css::util::XNumberFormatter>    xFormatter;
+    cpo::uno::Reference< css::sdbc::XConnection>       xConnection;
+    cpo::uno::Reference< css::sdbc::XStatement>        xStatement;
+    cpo::uno::Reference< css::sdbc::XResultSet>        xResultSet;
     cpo::uno::Sequence<  cpo::uno::Any >               aSelection;
     bool bScrollable;
     bool bEndOfDB;
@@ -118,7 +118,7 @@ struct SwDSParam : public SwDBData
         {}
 
     SwDSParam(const SwDBData& rData,
-        css::uno::Reference< css::sdbc::XResultSet> xResSet,
+        cpo::uno::Reference< css::sdbc::XResultSet> xResSet,
         const cpo::uno::Sequence<  cpo::uno::Any >&   rSelection) :
         SwDBData(rData),
         xResultSet(std::move(xResSet)),
@@ -189,7 +189,7 @@ struct SwMergeDescriptor
     OUString                                            sAttachmentName;
     cpo::uno::Sequence< OUString >                      aCopiesTo;
     cpo::uno::Sequence< OUString >                      aBlindCopiesTo;
-    css::uno::Reference< css::mail::XSmtpService >      xSmtpServer;
+    cpo::uno::Reference< css::mail::XSmtpService >      xSmtpServer;
     bool                                                bSendAsHTML;
     bool                                                bSendAsAttachment;
     /** @} */
@@ -320,12 +320,12 @@ public:
     SW_DLLPUBLIC void GetColumnNames(weld::ComboBox& rBox,
                             const OUString& rDBName, const OUString& rTableName);
     SW_DLLPUBLIC static void GetColumnNames(weld::ComboBox& rBox,
-                            css::uno::Reference< css::sdbc::XConnection> const & xConnection,
+                            cpo::uno::Reference< css::sdbc::XConnection> const & xConnection,
                             const OUString& rTableName);
 
-    static sal_uInt32 GetColumnFormat( css::uno::Reference< css::sdbc::XDataSource> const & xSource,
-                            css::uno::Reference< css::sdbc::XConnection> const & xConnection,
-                            css::uno::Reference< css::beans::XPropertySet> const & xColumn,
+    static sal_uInt32 GetColumnFormat( cpo::uno::Reference< css::sdbc::XDataSource> const & xSource,
+                            cpo::uno::Reference< css::sdbc::XConnection> const & xConnection,
+                            cpo::uno::Reference< css::beans::XPropertySet> const & xColumn,
                             SvNumberFormatter* pNFormatr,
                             LanguageType nLanguage );
 
@@ -358,7 +358,7 @@ public:
                             OUString& rResult, double* pNumber);
     /** create and store or find an already stored connection to a data source for use
     in SwFieldMgr and SwDBTreeList */
-    SW_DLLPUBLIC css::uno::Reference<css::sdbc::XConnection> const&
+    SW_DLLPUBLIC cpo::uno::Reference<css::sdbc::XConnection> const&
                     RegisterConnection(OUString const& rSource);
 
     void            CreateDSData(const SwDBData& rData)
@@ -380,17 +380,17 @@ public:
     static const SwDBData& GetAddressDBName();
 
     SW_DLLPUBLIC static OUString GetDBField(
-                    css::uno::Reference< css::beans::XPropertySet > const & xColumnProp,
+                    cpo::uno::Reference< css::beans::XPropertySet > const & xColumnProp,
                     const SwDBFormatData& rDBFormatData,
                     double *pNumber = nullptr);
 
-    static css::uno::Reference< css::sdbc::XConnection>
+    static cpo::uno::Reference< css::sdbc::XConnection>
             GetConnection(const OUString& rDataSource,
-                css::uno::Reference< css::sdbc::XDataSource>& rxSource,
+                cpo::uno::Reference< css::sdbc::XDataSource>& rxSource,
                 const SwView* pView);
 
-    SW_DLLPUBLIC static css::uno::Reference< css::sdbcx::XColumnsSupplier>
-            GetColumnSupplier(css::uno::Reference< css::sdbc::XConnection> const & xConnection,
+    SW_DLLPUBLIC static cpo::uno::Reference< css::sdbcx::XColumnsSupplier>
+            GetColumnSupplier(cpo::uno::Reference< css::sdbc::XConnection> const & xConnection,
                                     const OUString& rTableOrQuery,
                                     SwDBSelect eTableOrQuery = SwDBSelect::UNKNOWN);
 
@@ -428,8 +428,8 @@ public:
         @return
             The data source.
     */
-    static css::uno::Reference< css::sdbc::XDataSource>
-            getDataSourceAsParent(const css::uno::Reference< css::sdbc::XConnection>& _xConnection,const OUString& _sDataSourceName);
+    static cpo::uno::Reference< css::sdbc::XDataSource>
+            getDataSourceAsParent(const cpo::uno::Reference< css::sdbc::XConnection>& _xConnection,const OUString& _sDataSourceName);
 
     /** creates a RowSet, which must be disposed after use.
         @param  _sDataSourceName
@@ -444,19 +444,19 @@ public:
             The new created RowSet.
 
     */
-    SW_DLLPUBLIC static css::uno::Reference< css::sdbc::XResultSet>
+    SW_DLLPUBLIC static cpo::uno::Reference< css::sdbc::XResultSet>
             createCursor(const OUString& _sDataSourceName,
                          const OUString& _sCommand,
                          sal_Int32 _nCommandType,
-                         const css::uno::Reference< css::sdbc::XConnection>& _xConnection,
+                         const cpo::uno::Reference< css::sdbc::XConnection>& _xConnection,
                          const SwView* pView);
 
     void setEmbeddedName(const OUString& rEmbeddedName, SwDocShell& rDocShell);
     const OUString& getEmbeddedName() const;
 
     // rOwnURL should be taken using INetURLObject::GetMainURL(INetURLObject::DecodeMechanism::NONE)
-    static void StoreEmbeddedDataSource(const css::uno::Reference<css::frame::XStorable>& xStorable,
-                                        const css::uno::Reference<css::embed::XStorage>& xStorage,
+    static void StoreEmbeddedDataSource(const cpo::uno::Reference<css::frame::XStorable>& xStorable,
+                                        const cpo::uno::Reference<css::embed::XStorage>& xStorage,
                                         const OUString& rStreamRelPath,
                                         const OUString& rOwnURL, bool bCopyTo = false);
 

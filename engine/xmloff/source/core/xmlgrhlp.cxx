@@ -56,8 +56,8 @@
 #include <utility>
 
 using namespace com::sun::star;
-using namespace com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace com::sun::star::io;
 
 namespace cpo::uno { class XComponentContext; }
@@ -640,19 +640,19 @@ uno::Reference<graphic::XGraphic> SvXMLGraphicHelper::loadGraphicFromOutputStrea
     return loadGraphicFromOutputStreamAtPage(rxOutputStream, -1);
 }
 
-OUString SvXMLGraphicHelper::saveGraphicByName(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic,
+OUString SvXMLGraphicHelper::saveGraphicByName(cpo::uno::Reference<css::graphic::XGraphic> const & rxGraphic,
                                                         OUString & rOutSavedMimeType, OUString const & rRequestName)
 {
     return implSaveGraphic(rxGraphic, rOutSavedMimeType, rRequestName);
 }
 
-OUString SvXMLGraphicHelper::saveGraphic(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic)
+OUString SvXMLGraphicHelper::saveGraphic(cpo::uno::Reference<css::graphic::XGraphic> const & rxGraphic)
 {
     OUString aOutMimeType;
     return implSaveGraphic(rxGraphic, aOutMimeType, std::u16string_view());
 }
 
-OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic,
+OUString SvXMLGraphicHelper::implSaveGraphic(cpo::uno::Reference<css::graphic::XGraphic> const & rxGraphic,
                                              OUString & rOutSavedMimeType, std::u16string_view rRequestName)
 {
     Graphic aGraphic(rxGraphic);
@@ -996,21 +996,21 @@ protected:
     virtual OUString resolveGraphicObjectURL( const OUString& aURL ) override;
 
     // ____ XGraphicStorageHandler ____
-    virtual css::uno::Reference<css::graphic::XGraphic>
+    virtual cpo::uno::Reference<css::graphic::XGraphic>
         loadGraphic(const OUString& aURL) override;
 
     // ____ XGraphicStorageHandler ____
-    virtual css::uno::Reference<css::graphic::XGraphic>
-        loadGraphicFromOutputStream(css::uno::Reference<css::io::XOutputStream> const & rxOutputStream) override;
+    virtual cpo::uno::Reference<css::graphic::XGraphic>
+        loadGraphicFromOutputStream(cpo::uno::Reference<css::io::XOutputStream> const & rxOutputStream) override;
 
     virtual OUString
-        saveGraphic(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic) override;
+        saveGraphic(cpo::uno::Reference<css::graphic::XGraphic> const & rxGraphic) override;
 
     virtual OUString
-        saveGraphicByName(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic, OUString & rOutSavedMimeType, OUString const & rRequestName) override;
+        saveGraphicByName(cpo::uno::Reference<css::graphic::XGraphic> const & rxGraphic, OUString & rOutSavedMimeType, OUString const & rRequestName) override;
 
-    virtual css::uno::Reference<css::io::XInputStream>
-        createInputStream(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic) override;
+    virtual cpo::uno::Reference<css::io::XInputStream>
+        createInputStream(cpo::uno::Reference<css::graphic::XGraphic> const & rxGraphic) override;
 
     // ____ XBinaryStreamResolver ____
     virtual Reference< io::XInputStream > getInputStream( const OUString& aURL ) override;
@@ -1069,12 +1069,12 @@ uno::Reference<graphic::XGraphic> SvXMLGraphicImportExportHelper::loadGraphicFro
     return m_xXMLGraphicHelper->loadGraphicFromOutputStream(rxOutputStream);
 }
 
-OUString SvXMLGraphicImportExportHelper::saveGraphic(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic)
+OUString SvXMLGraphicImportExportHelper::saveGraphic(cpo::uno::Reference<css::graphic::XGraphic> const & rxGraphic)
 {
     return m_xXMLGraphicHelper->saveGraphic(rxGraphic);
 }
 
-OUString SvXMLGraphicImportExportHelper::saveGraphicByName(css::uno::Reference<css::graphic::XGraphic> const & rxGraphic,
+OUString SvXMLGraphicImportExportHelper::saveGraphicByName(cpo::uno::Reference<css::graphic::XGraphic> const & rxGraphic,
                                                                     OUString & rOutSavedMimeType, OUString const & rRequestName)
 {
     return m_xXMLGraphicHelper->saveGraphicByName(rxGraphic, rOutSavedMimeType, rRequestName);

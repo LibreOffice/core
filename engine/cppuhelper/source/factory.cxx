@@ -48,7 +48,7 @@
 
 using namespace osl;
 using namespace com::sun::star;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::loader;
@@ -111,9 +111,9 @@ public:
     void disposing() override;
 
 private:
-    css::uno::Reference<cpo::uno::XInterface> createInstanceWithArgumentsEveryTime(
+    cpo::uno::Reference<cpo::uno::XInterface> createInstanceWithArgumentsEveryTime(
         cpo::uno::Sequence<cpo::uno::Any> const & rArguments,
-        css::uno::Reference<cpo::uno::XComponentContext> const & xContext);
+        cpo::uno::Reference<cpo::uno::XComponentContext> const & xContext);
 
     Reference<XInterface >  m_xTheInstance;
     bool                m_bOneInstance;
@@ -248,10 +248,10 @@ Reference< XInterface > OFactoryComponentHelper::createInstanceWithArgumentsAndC
     return createInstanceWithArgumentsEveryTime( rArguments, xContext );
 }
 
-css::uno::Reference<cpo::uno::XInterface>
+cpo::uno::Reference<cpo::uno::XInterface>
 OFactoryComponentHelper::createInstanceWithArgumentsEveryTime(
     cpo::uno::Sequence<cpo::uno::Any> const & rArguments,
-    css::uno::Reference<cpo::uno::XComponentContext> const & xContext)
+    cpo::uno::Reference<cpo::uno::XComponentContext> const & xContext)
 {
     Reference< XInterface > xRet( createInstanceEveryTime( xContext ) );
 

@@ -165,7 +165,7 @@ public:
         return m_aComboListBox.GetIndexForPoint( rPoint, nPos );
     }
 
-    css::uno::Reference< css::datatransfer::clipboard::XClipboard >
+    cpo::uno::Reference< css::datatransfer::clipboard::XClipboard >
         GetClipboard() override
     {
         return m_aComboListBox.GetClipboard();

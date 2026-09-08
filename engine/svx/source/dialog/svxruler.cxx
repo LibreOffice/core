@@ -56,6 +56,7 @@
 #include <memory>
 
 using namespace css;
+using namespace ::cpo;
 
 #define CTRL_ITEM_COUNT 14
 #define GAP 10

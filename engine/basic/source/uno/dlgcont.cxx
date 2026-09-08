@@ -51,15 +51,15 @@ namespace basic
 using namespace com::sun::star::document;
 using namespace com::sun::star::container;
 using namespace com::sun::star::io;
-using namespace com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::xml::sax;
 using namespace com::sun::star;
 using namespace cppu;
 
-using com::sun::star::uno::Reference;
+using cpo::uno::Reference;
 
 
 // Implementation class SfxDialogLibraryContainer
@@ -547,7 +547,7 @@ void SfxDialogLibrary::storeResourcesToURL( const OUString& URL,
     }
 }
 
-void SfxDialogLibrary::storeResourcesToStorage( const css::uno::Reference< css::embed::XStorage >& xStorage )
+void SfxDialogLibrary::storeResourcesToStorage( const cpo::uno::Reference< css::embed::XStorage >& xStorage )
 {
     OUString aComment = aResourceFileCommentBase + m_aName;
 

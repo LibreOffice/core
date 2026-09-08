@@ -24,7 +24,7 @@
 #include <rtl/ustring.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/lang.h>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 namespace cpo::uno { template <typename > class Sequence; }
 namespace com::sun::star::i18n { class XExtendedTransliteration; }
@@ -36,7 +36,7 @@ namespace utl
 
 class UNOTOOLS_DLLPUBLIC TransliterationWrapper
 {
-    css::uno::Reference< css::i18n::XExtendedTransliteration > xTrans;
+    cpo::uno::Reference< css::i18n::XExtendedTransliteration > xTrans;
     LanguageTag aLanguageTag;
     TransliterationFlags nType;
     mutable bool bFirstCall;
@@ -48,7 +48,7 @@ class UNOTOOLS_DLLPUBLIC TransliterationWrapper
     void setLanguageLocaleImpl( LanguageType nLang );
 
 public:
-    TransliterationWrapper( const css::uno::Reference< cpo::uno::XComponentContext > & rxContext,
+    TransliterationWrapper( const cpo::uno::Reference< cpo::uno::XComponentContext > & rxContext,
                     TransliterationFlags nType );
 
     ~TransliterationWrapper();

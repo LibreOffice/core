@@ -126,14 +126,12 @@ bool containsXInterfaceSubclass(const clang::Type* pType0) {
         if (pTemplate) {
             // Probably good templates:
             loplugin::DeclCheck dc(pTemplate);
-            // need to this formatting to make css->cpo transition work nicely
-            // clang-format off
             if ((dc.Struct("FindUnoInstanceHint").AnonymousNamespace()
                  .GlobalNamespace())
                 || (dc.Class("OMultiInstanceAutoRegistration").Namespace("abp")
                     .GlobalNamespace())
                 || (dc.Class("Reference").Namespace("uno")
-                    .Namespace("star").Namespace("sun").Namespace("com").GlobalNamespace())
+                    .Namespace("cpo").GlobalNamespace())
                 || (dc.Class("WeakReference").Namespace("uno")
                     .Namespace("cpo").GlobalNamespace())
                 || (dc.Class("Sequence").Namespace("uno")
@@ -194,7 +192,6 @@ bool containsXInterfaceSubclass(const clang::Type* pType0) {
             {
                 return false;
             }
-            // clang-format on
         }
     }
     if (pType->isPointerType()) {
@@ -374,7 +371,7 @@ static bool containsStaticTypeMethod(const CXXRecordDecl* x)
 
 void RefCounting::checkUnoReference(QualType qt, const Decl* decl, const RecordDecl* parent, const std::string& rDeclName)
 {
-    if (!loplugin::TypeCheck(qt).Class("Reference").Namespace("uno").Namespace("star").Namespace("sun").Namespace("com").GlobalNamespace())
+    if (!loplugin::TypeCheck(qt).Class("Reference").Namespace("uno").Namespace("cpo").GlobalNamespace())
         return;
     const CXXRecordDecl* pRecordDecl = qt->getAsCXXRecordDecl();
     const ClassTemplateSpecializationDecl* pTemplate = dyn_cast<ClassTemplateSpecializationDecl>(pRecordDecl);
@@ -390,7 +387,7 @@ void RefCounting::checkUnoReference(QualType qt, const Decl* decl, const RecordD
         return;
     report(
         DiagnosticsEngine::Warning,
-        ("uno::Reference %0 with template parameter that does not"
+        ("cpo::uno::Reference %0 with template parameter that does not"
          " contain ::static_type() %1%select{|, parent is %3,}2 should"
          " probably be using rtl::Reference instead"),
         decl->getLocation())
@@ -425,7 +422,7 @@ bool RefCounting::visitTemporaryObjectExpr(Expr const * expr) {
             DiagnosticsEngine::Warning,
             ("Temporary object of cpo::uno::XInterface subclass %0 being"
              " directly stack managed, should be managed via"
-             " css::uno::Reference"),
+             " cpo::uno::Reference"),
             expr->getBeginLoc())
             << t.getUnqualifiedType() << expr->getSourceRange();
     } else if (containsOWeakObjectSubclass(t)) {
@@ -433,7 +430,7 @@ bool RefCounting::visitTemporaryObjectExpr(Expr const * expr) {
             DiagnosticsEngine::Warning,
             ("Temporary object of cppu::OWeakObject subclass %0 being"
              " directly stack managed, should be managed via"
-             " css::uno::Reference"),
+             " cpo::uno::Reference"),
             expr->getBeginLoc())
             << t.getUnqualifiedType() << expr->getSourceRange();
     }
@@ -482,7 +479,7 @@ bool RefCounting::VisitTypeLoc(clang::TypeLoc typeLoc)
     {
         report(
             DiagnosticsEngine::Warning,
-            "XInterface subclass %0 being managed via smart pointer, should be managed via uno::Reference",
+            "XInterface subclass %0 being managed via smart pointer, should be managed via cpo::uno::Reference",
             typeLoc.getBeginLoc())
             << firstTemplateParamType
             << typeLoc.getSourceRange();
@@ -588,7 +585,7 @@ bool RefCounting::VisitFieldDecl(const FieldDecl * fieldDecl) {
     if (containsXInterfaceSubclass(fieldDecl->getType())) {
         report(
             DiagnosticsEngine::Warning,
-            "XInterface subclass %0 being directly heap managed, should be managed via uno::Reference, "
+            "XInterface subclass %0 being directly heap managed, should be managed via cpo::uno::Reference, "
             "parent is %1",
             fieldDecl->getLocation())
             << fieldDecl->getType()
@@ -675,7 +672,7 @@ bool RefCounting::VisitVarDecl(const VarDecl * varDecl) {
     if (containsXInterfaceSubclass(varDecl->getType())) {
         report(
             DiagnosticsEngine::Warning,
-            "XInterface subclass being directly stack managed, should be managed via uno::Reference, "
+            "XInterface subclass being directly stack managed, should be managed via cpo::uno::Reference, "
             + varDecl->getType().getAsString(),
             varDecl->getLocation())
             << varDecl->getSourceRange();
@@ -683,7 +680,7 @@ bool RefCounting::VisitVarDecl(const VarDecl * varDecl) {
     if (containsOWeakObjectSubclass(varDecl->getType())) {
         report(
             DiagnosticsEngine::Warning,
-            "cppu::OWeakObject subclass being directly stack managed, should be managed via uno::Reference, "
+            "cppu::OWeakObject subclass being directly stack managed, should be managed via cpo::uno::Reference, "
             + varDecl->getType().getAsString(),
             varDecl->getLocation())
             << varDecl->getSourceRange();

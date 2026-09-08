@@ -14,6 +14,7 @@
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 /**
  * Unit test invoking sw/source/writerfilter/ only.

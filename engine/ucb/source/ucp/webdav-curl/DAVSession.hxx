@@ -96,17 +96,17 @@ public:
                        const DAVRequestEnvironment & rEnv ) = 0;
 
     /// @throws DAVException
-    virtual css::uno::Reference< css::io::XInputStream >
+    virtual cpo::uno::Reference< css::io::XInputStream >
     GET( const OUString & inPath,
          const DAVRequestEnvironment & rEnv ) = 0;
 
     /// @throws DAVException
     virtual void GET( const OUString & inPath,
-                      css::uno::Reference< css::io::XOutputStream >& o,
+                      cpo::uno::Reference< css::io::XOutputStream >& o,
                       const DAVRequestEnvironment & rEnv ) = 0;
 
     /// @throws DAVException
-    virtual css::uno::Reference< css::io::XInputStream >
+    virtual cpo::uno::Reference< css::io::XInputStream >
     GET( const OUString & inPath,
          const std::vector< OUString > & inHeaderNames,
          DAVResource & ioResource,
@@ -115,30 +115,30 @@ public:
     /// @throws DAVException
     virtual void
     GET( const OUString & inPath,
-         css::uno::Reference< css::io::XOutputStream >& o,
+         cpo::uno::Reference< css::io::XOutputStream >& o,
          const std::vector< OUString > & inHeaderNames,
          DAVResource & ioResource,
          const DAVRequestEnvironment & rEnv ) = 0;
 
     /// @throws DAVException
     virtual void PUT( const OUString & inPath,
-                      const css::uno::Reference< css::io::XInputStream >& s,
+                      const cpo::uno::Reference< css::io::XInputStream >& s,
                       const DAVRequestEnvironment & rEnv ) = 0;
 
     /// @throws DAVException
-    virtual css::uno::Reference< css::io::XInputStream >
+    virtual cpo::uno::Reference< css::io::XInputStream >
     POST( const OUString & inPath,
           const OUString & rContentType,
           const OUString & rReferer,
-          const css::uno::Reference< css::io::XInputStream > & inInputStream,
+          const cpo::uno::Reference< css::io::XInputStream > & inInputStream,
           const DAVRequestEnvironment & rEnv ) = 0;
 
     /// @throws DAVException
     virtual void POST( const OUString & inPath,
                        const OUString & rContentType,
                        const OUString & rReferer,
-                       const css::uno::Reference< css::io::XInputStream > & inInputStream,
-                       css::uno::Reference< css::io::XOutputStream > & oOutputStream,
+                       const cpo::uno::Reference< css::io::XInputStream > & inInputStream,
+                       cpo::uno::Reference< css::io::XOutputStream > & oOutputStream,
                        const DAVRequestEnvironment & rEnv ) = 0;
 
     /// @throws DAVException

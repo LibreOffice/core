@@ -70,7 +70,7 @@ public:
         important method of this class because the view is only interested
         in the window of the pane.
     */
-    virtual css::uno::Reference<css::awt::XWindow> getWindow() override;
+    virtual cpo::uno::Reference<css::awt::XWindow> getWindow() override;
 
     //----- XResource ---------------------------------------------------------
 
@@ -84,7 +84,7 @@ public:
 protected:
     rtl::Reference<sd::framework::ResourceId> mxPaneId;
     VclPtr<vcl::Window> mpWindow;
-    css::uno::Reference<css::awt::XWindow> mxWindow;
+    cpo::uno::Reference<css::awt::XWindow> mxWindow;
 };
 
 } // end of namespace sd::framework

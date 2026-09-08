@@ -45,8 +45,8 @@
 
 using namespace utl;
 using namespace com::sun::star;
-using namespace com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::task;
 using namespace com::sun::star::ucb;
@@ -469,7 +469,7 @@ std::vector< OUString > PasswordContainer::DecodePasswords( std::u16string_view 
     // problems with decoding
     OSL_FAIL( "Problem with decoding" );
     throw css::task::NoMasterException(
-        u"Can't decode!"_ustr, css::uno::Reference<cpo::uno::XInterface>(), mode);
+        u"Can't decode!"_ustr, cpo::uno::Reference<cpo::uno::XInterface>(), mode);
 }
 
 OUString PasswordContainer::EncodePasswords(const std::vector< OUString >& lines, std::u16string_view aIV, std::u16string_view aMasterPasswd)

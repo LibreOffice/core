@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <test/testdllapi.hxx>
 
 namespace apitest
@@ -17,7 +17,7 @@ namespace apitest
 class OOO_DLLPUBLIC_TEST XSheetPageBreak
 {
 public:
-    virtual css::uno::Reference<cpo::uno::XInterface> init() = 0;
+    virtual cpo::uno::Reference<cpo::uno::XInterface> init() = 0;
 
     void testGetColumnPageBreaks();
     void testGetRowPageBreaks();

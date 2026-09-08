@@ -38,21 +38,21 @@ public:
     void testImportCellStyle();
     void testLastAfterInsertCopy();
 
-    virtual css::uno::Reference< cpo::uno::XInterface > init() = 0;
-    virtual css::uno::Reference< css::lang::XComponent > loadFromDesktop(const OUString&) = 0;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > init() = 0;
+    virtual cpo::uno::Reference< css::lang::XComponent > loadFromDesktop(const OUString&) = 0;
 
 protected:
-    css::uno::Reference< css::sheet::XSpreadsheetDocument> xDocument;
+    cpo::uno::Reference< css::sheet::XSpreadsheetDocument> xDocument;
 
 private:
-    css::uno::Reference< css::sheet::XSpreadsheetDocument> getDoc(const OUString&);
-    static css::uno::Reference< css::sheet::XNamedRanges> getNamedRanges(css::uno::Reference< css::sheet::XSpreadsheetDocument > const &);
+    cpo::uno::Reference< css::sheet::XSpreadsheetDocument> getDoc(const OUString&);
+    static cpo::uno::Reference< css::sheet::XNamedRanges> getNamedRanges(cpo::uno::Reference< css::sheet::XSpreadsheetDocument > const &);
     void importSheetToCopy();
     static bool isExternalReference(std::u16string_view aDestContent, std::u16string_view aSrcContent );
 
-    css::uno::Reference< css::sheet::XSpreadsheetDocument> xDestDoc;
-    css::uno::Reference< css::sheet::XSpreadsheet > xDestSheet;
-    css::uno::Reference< css::sheet::XSpreadsheet > xSrcSheet;
+    cpo::uno::Reference< css::sheet::XSpreadsheetDocument> xDestDoc;
+    cpo::uno::Reference< css::sheet::XSpreadsheet > xDestSheet;
+    cpo::uno::Reference< css::sheet::XSpreadsheet > xSrcSheet;
 };
 
 }

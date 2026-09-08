@@ -23,7 +23,8 @@
 #include <docsh.hxx>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 namespace
 {
@@ -1179,8 +1180,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf158971)
     CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
     {
         auto para = getParagraph(2, u"text"_ustr);
-        css::uno::Reference<css::beans::XPropertyState> xRunState(getRun(para, 1, u""_ustr),
-                                                                  css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::beans::XPropertyState> xRunState(getRun(para, 1, u""_ustr),
+                                                                  cpo::uno::UNO_QUERY_THROW);
         // without the fix, this would fail with
         // - Expected: 1
         // - Actual  : 0
@@ -1203,8 +1204,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf158971)
     CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
     {
         auto para = getParagraph(2, u"text"_ustr);
-        css::uno::Reference<css::beans::XPropertyState> xRunState(getRun(para, 1, u""_ustr),
-                                                                  css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::beans::XPropertyState> xRunState(getRun(para, 1, u""_ustr),
+                                                                  cpo::uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT_EQUAL(css::beans::PropertyState_DEFAULT_VALUE,
                              xRunState->getPropertyState(u"RubyAdjust"_ustr));
         CPPUNIT_ASSERT_EQUAL(css::beans::PropertyState_DEFAULT_VALUE,

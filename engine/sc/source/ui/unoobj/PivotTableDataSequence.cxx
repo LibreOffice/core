@@ -21,6 +21,7 @@
 #include <unonames.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 namespace sc
 {

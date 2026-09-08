@@ -30,6 +30,7 @@
 #include <cpo/uno/XComponentContext.hpp>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace ooo::vba;
 
 // special key to return the Application

@@ -26,7 +26,7 @@
 
 using namespace comphelper;
 using namespace frm;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::util;
@@ -120,13 +120,13 @@ void OFormsCollection::disposing()
 
 //XChild
 
-void OFormsCollection::setParent(const css::uno::Reference<cpo::uno::XInterface>& Parent)
+void OFormsCollection::setParent(const cpo::uno::Reference<cpo::uno::XInterface>& Parent)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     m_xParent = Parent;
 }
 
-css::uno::Reference<cpo::uno::XInterface>  OFormsCollection::getParent()
+cpo::uno::Reference<cpo::uno::XInterface>  OFormsCollection::getParent()
 {
     return m_xParent;
 }

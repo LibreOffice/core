@@ -76,7 +76,7 @@
 #include <unotools/lingucfg.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/syslocale.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xml/dom/XNodeList.hpp>
@@ -114,12 +114,12 @@ namespace com::sun::star::linguistic2 { class XSpellChecker; }
 
 using namespace ::sd;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::linguistic2;
 
 using namespace com::sun::star::xml::dom;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 
 
 SdDrawDocument* SdDrawDocument::s_pDocLockedInsertingLinks = nullptr;
@@ -1134,16 +1134,16 @@ public:
 // state directly. The URL is kept; only the allowed state changes.
 class SdAnimationSoundLink final : public SdPageBoundSoundLink
 {
-    css::uno::Reference<css::animations::XAudio> m_xAudio;
+    cpo::uno::Reference<css::animations::XAudio> m_xAudio;
 
 public:
-    SdAnimationSoundLink(SdPage& rPage, css::uno::Reference<css::animations::XAudio> xAudio)
+    SdAnimationSoundLink(SdPage& rPage, cpo::uno::Reference<css::animations::XAudio> xAudio)
         : SdPageBoundSoundLink(rPage)
         , m_xAudio(std::move(xAudio))
     {
     }
 
-    const css::uno::Reference<css::animations::XAudio>& getAudio() const { return m_xAudio; }
+    const cpo::uno::Reference<css::animations::XAudio>& getAudio() const { return m_xAudio; }
 
     virtual UpdateResult DataChanged(const OUString&, const cpo::uno::Any&) override
     {
@@ -1186,7 +1186,7 @@ bool lcl_hasAnySoundLink(const sfx2::LinkManager& rLinkManager)
 // points outside the document package, binding each to rPage. Sets rbFound when
 // rNode holds any such sound.
 void lcl_registerAudioSoundLinks(
-    const css::uno::Reference<css::animations::XAnimationNode>& rNode,
+    const cpo::uno::Reference<css::animations::XAnimationNode>& rNode,
     SdPage& rPage, sfx2::LinkManager& rLinkManager, bool& rbFound)
 {
     if (!rNode.is())
@@ -1194,7 +1194,7 @@ void lcl_registerAudioSoundLinks(
 
     if (rNode->getType() == css::animations::AnimationNodeType::AUDIO)
     {
-        css::uno::Reference<css::animations::XAudio> xAudio(rNode, css::uno::UNO_QUERY);
+        cpo::uno::Reference<css::animations::XAudio> xAudio(rNode, cpo::uno::UNO_QUERY);
         const OUString aURL = xAudio.is() ? xmloff::getSoundURL(xAudio->getSource()) : OUString();
         if (SdSoundLink(aURL).isExternalLink())
         {
@@ -1209,14 +1209,14 @@ void lcl_registerAudioSoundLinks(
         }
     }
 
-    css::uno::Reference<css::container::XEnumerationAccess> xEnumAccess(rNode, css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::container::XEnumerationAccess> xEnumAccess(rNode, cpo::uno::UNO_QUERY);
     if (xEnumAccess.is())
     {
-        css::uno::Reference<css::container::XEnumeration> xEnum = xEnumAccess->createEnumeration();
+        cpo::uno::Reference<css::container::XEnumeration> xEnum = xEnumAccess->createEnumeration();
         while (xEnum.is() && xEnum->hasMoreElements())
         {
-            css::uno::Reference<css::animations::XAnimationNode> xChild(xEnum->nextElement(),
-                                                                       css::uno::UNO_QUERY);
+            cpo::uno::Reference<css::animations::XAnimationNode> xChild(xEnum->nextElement(),
+                                                                       cpo::uno::UNO_QUERY);
             lcl_registerAudioSoundLinks(xChild, rPage, rLinkManager, rbFound);
         }
     }

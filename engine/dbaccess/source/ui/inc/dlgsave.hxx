@@ -48,7 +48,7 @@ namespace dbaui
     class OSaveAsDlg : public weld::GenericDialogController
     {
     private:
-        css::uno::Reference< cpo::uno::XComponentContext >    m_xContext;
+        cpo::uno::Reference< cpo::uno::XComponentContext >    m_xContext;
         OUString                   m_aName;
         const IObjectNameCheck&    m_rObjectNameCheck;
         sal_Int32                  m_nType;
@@ -69,7 +69,7 @@ namespace dbaui
 
     public:
         OSaveAsDlg( weld::Window* _pParent,
-                    const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
+                    const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
                     const OUString& _rDefault,
                     const OUString& _sLabel,
                     const IObjectNameCheck& _rObjectNameCheck,

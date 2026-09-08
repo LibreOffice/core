@@ -46,7 +46,7 @@
 
 using namespace ::xmloff::token;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
@@ -384,7 +384,7 @@ void XMLTransformerBase::initialize( const Sequence< Any >& aArguments )
         // The Any shift operator can't be used to query the type because it
         // uses queryInterface, and the model also has a XPropertySet interface.
 
-        css::uno::Reference< XFastDocumentHandler > xFastHandler;
+        cpo::uno::Reference< XFastDocumentHandler > xFastHandler;
         if( (rArgument >>= xFastHandler) && xFastHandler )
         {
             SvXMLImport *pFastHandler = static_cast<SvXMLImport*>( xFastHandler.get() );

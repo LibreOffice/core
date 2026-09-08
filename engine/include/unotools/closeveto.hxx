@@ -21,7 +21,7 @@
 #define INCLUDED_UNOTOOLS_CLOSEVETO_HXX
 
 #include <unotools/unotoolsdllapi.h>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <memory>
 
 namespace cpo::uno { class XInterface; }
@@ -40,7 +40,7 @@ namespace utl
     class UNOTOOLS_DLLPUBLIC CloseVeto
     {
     public:
-        CloseVeto( const css::uno::Reference< cpo::uno::XInterface >& i_closeable,
+        CloseVeto( const cpo::uno::Reference< cpo::uno::XInterface >& i_closeable,
                 bool bHasOwnership = false);
         ~CloseVeto();
 

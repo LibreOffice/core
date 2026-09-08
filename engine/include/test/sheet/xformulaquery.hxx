@@ -13,7 +13,7 @@
 #include <com/sun/star/table/XCell.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <cpo/uno/XInterface.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <test/testdllapi.hxx>
 
@@ -32,10 +32,10 @@ public:
     {
     }
 
-    virtual css::uno::Reference<cpo::uno::XInterface> init() = 0;
-    virtual css::uno::Reference<cpo::uno::XInterface> getXSpreadsheet() = 0;
-    void setXCell(css::uno::Reference<css::table::XCell> xCell) { m_xCell = std::move(xCell); }
-    css::uno::Reference<css::table::XCell> const& getXCell() const { return m_xCell; }
+    virtual cpo::uno::Reference<cpo::uno::XInterface> init() = 0;
+    virtual cpo::uno::Reference<cpo::uno::XInterface> getXSpreadsheet() = 0;
+    void setXCell(cpo::uno::Reference<css::table::XCell> xCell) { m_xCell = std::move(xCell); }
+    cpo::uno::Reference<css::table::XCell> const& getXCell() const { return m_xCell; }
 
     void testQueryDependents();
     void testQueryPrecedents();
@@ -44,7 +44,7 @@ protected:
     ~XFormulaQuery() {}
 
 private:
-    css::uno::Reference<css::table::XCell> m_xCell;
+    cpo::uno::Reference<css::table::XCell> m_xCell;
     css::table::CellRangeAddress m_aCellRangeAddressDependents;
     css::table::CellRangeAddress m_aCellRangeAddressPrecedents;
     unsigned int m_nIdxDependents;

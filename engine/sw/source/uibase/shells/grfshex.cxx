@@ -35,7 +35,8 @@
 #include <com/sun/star/media/XPlayer.hpp>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 bool SwTextShell::InsertMediaDlg( SfxRequest const & rReq )
 {
@@ -75,10 +76,10 @@ bool SwTextShell::InsertMediaDlg( SfxRequest const & rReq )
         {
             rWindow.EnterWait();
 
-            css::uno::Reference<css::frame::XDispatchProvider> xDispatchProvider(GetView().GetViewFrame().GetFrame().GetFrameInterface(), css::uno::UNO_QUERY);
+            cpo::uno::Reference<css::frame::XDispatchProvider> xDispatchProvider(GetView().GetViewFrame().GetFrame().GetFrameInterface(), cpo::uno::UNO_QUERY);
 
             rtl::Reference<avmedia::PlayerListener> xPlayerListener(new avmedia::PlayerListener(
-                [xDispatchProvider=std::move(xDispatchProvider), aURL, bLink](const css::uno::Reference<css::media::XPlayer>& rPlayer){
+                [xDispatchProvider=std::move(xDispatchProvider), aURL, bLink](const cpo::uno::Reference<css::media::XPlayer>& rPlayer){
                     css::awt::Size aSize = rPlayer->getPreferredPlayerWindowSize();
                     avmedia::MediaWindow::dispatchInsertAVMedia(xDispatchProvider, aSize, aURL, bLink);
                 }));

@@ -43,7 +43,7 @@ public:
     DrawModelWrapper();
     virtual ~DrawModelWrapper() override;
 
-    css::uno::Reference< css::lang::XMultiServiceFactory > getShapeFactory();
+    cpo::uno::Reference< css::lang::XMultiServiceFactory > getShapeFactory();
 
     // the main page will contain the normal view objects
     const rtl::Reference<SvxDrawPage> & getMainDrawPage();
@@ -62,9 +62,9 @@ public:
 
     SfxItemPool&            GetItemPool();
 
-    virtual css::uno::Reference< css::frame::XModel >
+    virtual cpo::uno::Reference< css::frame::XModel >
         createUnoModel() override;
-    const css::uno::Reference< css::frame::XModel > &
+    const cpo::uno::Reference< css::frame::XModel > &
         getUnoModel();
     SdrModel& getSdrModel();
 

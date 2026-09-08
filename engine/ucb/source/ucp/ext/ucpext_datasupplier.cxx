@@ -42,9 +42,9 @@ namespace ucb::ucp::ext
 {
 
 
-    using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::UNO_QUERY_THROW;
-    using ::com::sun::star::uno::UNO_SET_THROW;
+    using ::cpo::uno::Reference;
+    using ::cpo::uno::UNO_QUERY_THROW;
+    using ::cpo::uno::UNO_SET_THROW;
     using ::cpo::uno::Exception;
     using ::cpo::uno::Sequence;
     using ::cpo::uno::XComponentContext;

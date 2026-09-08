@@ -24,13 +24,13 @@
 
 namespace connectivity
 {
-    using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+    using namespace ::cpo;
+    using namespace ::cpo::uno;
     using namespace ::com::sun::star::sdbc;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star;
 
-    ParameterSubstitution::ParameterSubstitution(css::uno::Reference< cpo::uno::XComponentContext > _xContext ) : m_xContext(std::move(_xContext))
+    ParameterSubstitution::ParameterSubstitution(cpo::uno::Reference< cpo::uno::XComponentContext > _xContext ) : m_xContext(std::move(_xContext))
     {
     }
     void ParameterSubstitution::initialize( const cpo::uno::Sequence< cpo::uno::Any >& _aArguments )

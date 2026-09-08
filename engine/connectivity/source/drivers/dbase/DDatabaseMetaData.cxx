@@ -35,7 +35,7 @@
 using namespace ::comphelper;
 using namespace connectivity::dbase;
 using namespace connectivity;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbcx;
@@ -170,7 +170,7 @@ Reference< XResultSet > ODbaseDatabaseMetaData::getColumns(
         {
             if (match(tableNamePattern, tabName, '\0'))
             {
-                Reference<XColumnsSupplier> xTable(xNames->getByName(tabName), css::uno::UNO_QUERY);
+                Reference<XColumnsSupplier> xTable(xNames->getByName(tabName), cpo::uno::UNO_QUERY);
                 OSL_ENSURE(xTable.is(),"Table not found! Normally an exception had to be thrown here!");
                 aRow[3] = new ORowSetValueDecorator(tabName);
 
@@ -187,7 +187,7 @@ Reference< XResultSet > ODbaseDatabaseMetaData::getColumns(
                     {
                         aRow[4] = new ORowSetValueDecorator(colName);
 
-                        xColumn.set(xColumns->getByName(colName), css::uno::UNO_QUERY);
+                        xColumn.set(xColumns->getByName(colName), cpo::uno::UNO_QUERY);
                         OSL_ENSURE(xColumn.is(),"Columns contains a column who isn't a fastpropertyset!");
                         aRow[5] = new ORowSetValueDecorator(getINT32(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))));
                         aRow[6] = new ORowSetValueDecorator(getString(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME))));
@@ -259,7 +259,7 @@ Reference< XResultSet > ODbaseDatabaseMetaData::getIndexInfo(
     aRow[10]    = new ORowSetValueDecorator(u"A"_ustr);
 
     Reference< XIndexesSupplier> xTable(
-        xNames->getByName(table), css::uno::UNO_QUERY);
+        xNames->getByName(table), cpo::uno::UNO_QUERY);
     aRow[3] = new ORowSetValueDecorator(table);
     aRow[7] = new ORowSetValueDecorator(sal_Int32(3));
 
@@ -270,7 +270,7 @@ Reference< XResultSet > ODbaseDatabaseMetaData::getIndexInfo(
     Reference< XPropertySet> xIndex;
     for (auto& idxName : xIndexes->getElementNames())
     {
-        xIndex.set(xIndexes->getByName(idxName), css::uno::UNO_QUERY);
+        xIndex.set(xIndexes->getByName(idxName), cpo::uno::UNO_QUERY);
         OSL_ENSURE(xIndex.is(),"Indexes contains a column who isn't a fastpropertyset!");
 
         if(unique && !getBOOL(xIndex->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISUNIQUE))))

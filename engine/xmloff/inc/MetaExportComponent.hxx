@@ -25,11 +25,11 @@
 
 class XMLMetaExportComponent final : public SvXMLExport
 {
-    css::uno::Reference< css::document::XDocumentProperties > mxDocProps;
+    cpo::uno::Reference< css::document::XDocumentProperties > mxDocProps;
 
 public:
     XMLMetaExportComponent(
-        const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
         OUString const & implementationName, SvXMLExportFlags nFlags
         );
 
@@ -41,7 +41,7 @@ private:
         enum ::xmloff::token::XMLTokenEnum eClass = xmloff::token::XML_TOKEN_INVALID ) override;
 
     // accept XDocumentProperties in addition to XModel
-    virtual void setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
+    virtual void setSourceDocument( const cpo::uno::Reference< css::lang::XComponent >& xDoc ) override;
 
     // override
     virtual void ExportMeta_() override;

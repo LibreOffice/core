@@ -31,15 +31,15 @@ public:
     WrappedIgnoreProperty( const OUString& rOuterName, const cpo::uno::Any& rDefaultValue );
     virtual ~WrappedIgnoreProperty() override;
 
-    virtual void setPropertyValue( const cpo::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual void setPropertyValue( const cpo::uno::Any& rOuterValue, const cpo::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual cpo::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual cpo::uno::Any getPropertyValue( const cpo::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-virtual void setPropertyToDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
+virtual void setPropertyToDefault( const cpo::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
 
-virtual cpo::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
+virtual cpo::uno::Any getPropertyDefault( const cpo::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
 
-virtual css::beans::PropertyState getPropertyState( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
+virtual css::beans::PropertyState getPropertyState( const cpo::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
 
 private:
     cpo::uno::Any          m_aDefaultValue;

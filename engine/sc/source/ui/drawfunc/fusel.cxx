@@ -57,6 +57,7 @@
 #define SC_MINDRAGMOVE 2
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 FuSelection::FuSelection(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pViewP,
                          SdrModel& rDoc, const SfxRequest& rReq)

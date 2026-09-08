@@ -53,7 +53,7 @@ public:
 
     // XAccessibleContext
     virtual sal_Int64 getAccessibleChildCount() override;
-    virtual css::uno::Reference< css::accessibility::XAccessible> getAccessibleChild(sal_Int64 nIndex) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible> getAccessibleChild(sal_Int64 nIndex) override;
     virtual sal_Int64 getAccessibleStateSet() override;
     virtual sal_Int64 getAccessibleIndexInParent() override;
     virtual OUString getAccessibleName() override;
@@ -65,13 +65,13 @@ public:
     virtual css::awt::Rectangle implGetBounds() override;
 
     // XAccessibleComponent
-    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleAtPoint(const css::awt::Point& aPoint) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > getAccessibleAtPoint(const css::awt::Point& aPoint) override;
     virtual sal_Int32 getForeground() override;
     virtual sal_Int32 getBackground() override;
 
     // XAccessibleEventBroadcaster
-    virtual void addAccessibleEventListener( const css::uno::Reference< css::accessibility::XAccessibleEventListener >& rxListener) override;
-    virtual void removeAccessibleEventListener( const css::uno::Reference< css::accessibility::XAccessibleEventListener >& rxListener) override;
+    virtual void addAccessibleEventListener( const cpo::uno::Reference< css::accessibility::XAccessibleEventListener >& rxListener) override;
+    virtual void removeAccessibleEventListener( const cpo::uno::Reference< css::accessibility::XAccessibleEventListener >& rxListener) override;
 
     // XServiceInfo
     virtual OUString getImplementationName() override;

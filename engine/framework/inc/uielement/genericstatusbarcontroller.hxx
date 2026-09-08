@@ -30,9 +30,9 @@ struct AddonStatusbarItemData;
 class GenericStatusbarController final : public svt::StatusbarController
 {
     public:
-        GenericStatusbarController( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
-                                    const css::uno::Reference< css::frame::XFrame >& rFrame,
-                                    const css::uno::Reference< css::ui::XStatusbarItem >& rxItem,
+        GenericStatusbarController( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+                                    const cpo::uno::Reference< css::frame::XFrame >& rFrame,
+                                    const cpo::uno::Reference< css::ui::XStatusbarItem >& rxItem,
                                     AddonStatusbarItemData *pItemData );
         virtual ~GenericStatusbarController() override;
 
@@ -41,7 +41,7 @@ class GenericStatusbarController final : public svt::StatusbarController
         // XStatusListener
         virtual void statusChanged( const css::frame::FeatureStateEvent& Event ) override;
 
-        virtual void paint( const css::uno::Reference< css::awt::XGraphics >& xGraphics,
+        virtual void paint( const cpo::uno::Reference< css::awt::XGraphics >& xGraphics,
                                      const css::awt::Rectangle& rOutputRectangle,
                                      ::sal_Int32 nStyle ) override;
 
@@ -49,7 +49,7 @@ class GenericStatusbarController final : public svt::StatusbarController
         bool                                              m_bEnabled;
         bool                                              m_bOwnerDraw;
         AddonStatusbarItemData*                           m_pItemData;
-        css::uno::Reference< css::graphic::XGraphic >     m_xGraphic;
+        cpo::uno::Reference< css::graphic::XGraphic >     m_xGraphic;
 };
 
 }

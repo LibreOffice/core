@@ -23,7 +23,7 @@
 #include <basic/basicdllapi.h>
 
 namespace com::sun::star::frame { class XModel; }
-namespace com::sun::star::uno { template <typename > class Reference; }
+namespace cpo::uno { template <typename > class Reference; }
 
 namespace basic::vba {
 
@@ -47,7 +47,7 @@ namespace basic::vba {
         Passing true will lock all controllers, passing false will unlock them.
  */
 BASIC_DLLPUBLIC void lockControllersOfAllDocuments(
-    const css::uno::Reference< css::frame::XModel >& rxModel,
+    const cpo::uno::Reference< css::frame::XModel >& rxModel,
     bool bLockControllers );
 
 
@@ -67,7 +67,7 @@ BASIC_DLLPUBLIC void lockControllersOfAllDocuments(
         passing false will disable them.
  */
 BASIC_DLLPUBLIC void enableContainerWindowsOfAllDocuments(
-    const css::uno::Reference< css::frame::XModel >& rxModel,
+    const cpo::uno::Reference< css::frame::XModel >& rxModel,
     bool bEnableWindows );
 
 
@@ -82,7 +82,7 @@ BASIC_DLLPUBLIC void enableContainerWindowsOfAllDocuments(
         The new working directory.
  */
 BASIC_DLLPUBLIC void registerCurrentDirectory(
-    const css::uno::Reference< css::frame::XModel >& rxModel,
+    const cpo::uno::Reference< css::frame::XModel >& rxModel,
     const OUString& rPath );
 
 

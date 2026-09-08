@@ -121,7 +121,7 @@ namespace connectivity
             @return
                 the desired column object, or <NULL/> if no such column could be found
         */
-        static css::uno::Reference< css::beans::XPropertySet > findColumn(
+        static cpo::uno::Reference< css::beans::XPropertySet > findColumn(
             const OSQLTables& _rTables, const OUString & rColumnName, OUString & rTableRange );
 
         /** finds a column with a given name, belonging to a given table
@@ -134,7 +134,7 @@ namespace connectivity
                 should be searched
             @return
         */
-        css::uno::Reference< css::beans::XPropertySet > findColumn(
+        cpo::uno::Reference< css::beans::XPropertySet > findColumn(
             const OUString & rColumnName, OUString & rTableRange, bool _bLookInSubTables );
 
         /** finds a column with a given name among the select columns
@@ -142,7 +142,7 @@ namespace connectivity
                 the column name to look for
             @return
         */
-        css::uno::Reference< css::beans::XPropertySet > findSelectColumn(
+        cpo::uno::Reference< css::beans::XPropertySet > findSelectColumn(
             std::u16string_view rColumnName );
 
         void setSelectColumnName(const OUString& rColumnName, const OUString& rColumnAlias, const OUString& rTableRange, bool bFkt = false, sal_Int32 _nType = css::sdbc::DataType::VARCHAR, bool bAggFkt = false);
@@ -156,8 +156,8 @@ namespace connectivity
 
       public:
         OOO_DLLPUBLIC_DBTOOLS OSQLParseTreeIterator(
-            const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
-            const css::uno::Reference< css::container::XNameAccess >& _rxTables,
+            const cpo::uno::Reference< css::sdbc::XConnection >& _rxConnection,
+            const cpo::uno::Reference< css::container::XNameAccess >& _rxTables,
             const OSQLParser& _rParser );
         OOO_DLLPUBLIC_DBTOOLS ~OSQLParseTreeIterator();
 
@@ -254,7 +254,7 @@ namespace connectivity
                 The table range to be set.
         */
         OOO_DLLPUBLIC_DBTOOLS static void getColumnRange( const OSQLParseNode* _pColumnRef,
-                                    const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
+                                    const cpo::uno::Reference< css::sdbc::XConnection >& _rxConnection,
                                     OUString &_rColumnName,
                                     OUString& _rTableRange);
 

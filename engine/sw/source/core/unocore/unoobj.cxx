@@ -82,6 +82,7 @@
 #include <names.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 // Helper classes
 SwUnoInternalPaM::SwUnoInternalPaM(SwDoc& rDoc) :

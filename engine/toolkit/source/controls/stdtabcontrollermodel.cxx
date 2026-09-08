@@ -108,7 +108,7 @@ sal_uInt32 StdTabControllerModel::ImplGetControlCount( const UnoControlModelEntr
     return nCount;
 }
 
-void StdTabControllerModel::ImplGetControlModels( css::uno::Reference< css::awt::XControlModel > ** ppRefs, const UnoControlModelEntryList& rList ) const
+void StdTabControllerModel::ImplGetControlModels( cpo::uno::Reference< css::awt::XControlModel > ** ppRefs, const UnoControlModelEntryList& rList ) const
 {
     size_t nEntries = rList.size();
     for ( size_t n = 0; n < nEntries; n++ )
@@ -124,19 +124,19 @@ void StdTabControllerModel::ImplGetControlModels( css::uno::Reference< css::awt:
     }
 }
 
-void StdTabControllerModel::ImplSetControlModels( UnoControlModelEntryList& rList, const cpo::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& Controls )
+void StdTabControllerModel::ImplSetControlModels( UnoControlModelEntryList& rList, const cpo::uno::Sequence< cpo::uno::Reference< css::awt::XControlModel > >& Controls )
 {
-    for ( const css::uno::Reference< css::awt::XControlModel >& rRef : Controls )
+    for ( const cpo::uno::Reference< css::awt::XControlModel >& rRef : Controls )
     {
         UnoControlModelEntry* pNewEntry = new UnoControlModelEntry;
         pNewEntry->bGroup = false;
-        pNewEntry->pxControl = new css::uno::Reference< css::awt::XControlModel > ;
+        pNewEntry->pxControl = new cpo::uno::Reference< css::awt::XControlModel > ;
         *pNewEntry->pxControl = rRef;
         rList.push_back( pNewEntry );
     }
 }
 
-sal_uInt32 StdTabControllerModel::ImplGetControlPos( const css::uno::Reference< css::awt::XControlModel >& rCtrl, const UnoControlModelEntryList& rList )
+sal_uInt32 StdTabControllerModel::ImplGetControlPos( const cpo::uno::Reference< css::awt::XControlModel >& rCtrl, const UnoControlModelEntryList& rList )
 {
     for ( size_t n = rList.size(); n; )
     {
@@ -147,9 +147,9 @@ sal_uInt32 StdTabControllerModel::ImplGetControlPos( const css::uno::Reference< 
     return CONTROLPOS_NOTFOUND;
 }
 
-static void ImplWriteControls( const css::uno::Reference< css::io::XObjectOutputStream > & OutStream, const cpo::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& rCtrls )
+static void ImplWriteControls( const cpo::uno::Reference< css::io::XObjectOutputStream > & OutStream, const cpo::uno::Sequence< cpo::uno::Reference< css::awt::XControlModel > >& rCtrls )
 {
-    css::uno::Reference< css::io::XMarkableStream >  xMark( OutStream, css::uno::UNO_QUERY );
+    cpo::uno::Reference< css::io::XMarkableStream >  xMark( OutStream, cpo::uno::UNO_QUERY );
     DBG_ASSERT( xMark.is(), "write: no XMarkableStream!" );
 
     sal_uInt32 nStoredControls = 0;
@@ -158,9 +158,9 @@ static void ImplWriteControls( const css::uno::Reference< css::io::XObjectOutput
     OutStream->writeLong( 0 ); // DataLen
     OutStream->writeLong( 0 ); // nStoredControls
 
-    for ( const css::uno::Reference< css::awt::XControlModel >& xI : rCtrls )
+    for ( const cpo::uno::Reference< css::awt::XControlModel >& xI : rCtrls )
     {
-        css::uno::Reference< css::io::XPersistObject >  xPO( xI, css::uno::UNO_QUERY );
+        cpo::uno::Reference< css::io::XPersistObject >  xPO( xI, cpo::uno::UNO_QUERY );
         DBG_ASSERT( xPO.is(), "write: Control doesn't support XPersistObject" );
         if ( xPO.is() )
         {
@@ -176,9 +176,9 @@ static void ImplWriteControls( const css::uno::Reference< css::io::XObjectOutput
     xMark->deleteMark(nDataBeginMark);
 }
 
-static cpo::uno::Sequence< css::uno::Reference< css::awt::XControlModel > > ImplReadControls( const css::uno::Reference< css::io::XObjectInputStream > & InStream )
+static cpo::uno::Sequence< cpo::uno::Reference< css::awt::XControlModel > > ImplReadControls( const cpo::uno::Reference< css::io::XObjectInputStream > & InStream )
 {
-    css::uno::Reference< css::io::XMarkableStream >  xMark( InStream, css::uno::UNO_QUERY );
+    cpo::uno::Reference< css::io::XMarkableStream >  xMark( InStream, cpo::uno::UNO_QUERY );
     DBG_ASSERT( xMark.is(), "write: no XMarkableStream!" );
 
     sal_Int32 nDataBeginMark = xMark->createMark();
@@ -186,11 +186,11 @@ static cpo::uno::Sequence< css::uno::Reference< css::awt::XControlModel > > Impl
     sal_Int32 nDataLen = InStream->readLong();
     sal_uInt32 nCtrls = InStream->readLong();
 
-    cpo::uno::Sequence< css::uno::Reference< css::awt::XControlModel > > aSeq( nCtrls );
+    cpo::uno::Sequence< cpo::uno::Reference< css::awt::XControlModel > > aSeq( nCtrls );
     for ( sal_uInt32 n = 0; n < nCtrls; n++ )
     {
-        css::uno::Reference<css::io::XPersistObject> xObj = InStream->readObject();
-        aSeq.getArray()[n].set(xObj, css::uno::UNO_QUERY);
+        cpo::uno::Reference<css::io::XPersistObject> xObj = InStream->readObject();
+        aSeq.getArray()[n].set(xObj, cpo::uno::UNO_QUERY);
     }
 
     // Skip remainder if more data exists than this version recognizes
@@ -240,7 +240,7 @@ void StdTabControllerModel::setGroupControl( bool GroupControl )
     mbGroupControl = GroupControl;
 }
 
-void StdTabControllerModel::setControlModels( const cpo::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& Controls )
+void StdTabControllerModel::setControlModels( const cpo::uno::Sequence< cpo::uno::Reference< css::awt::XControlModel > >& Controls )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -248,17 +248,17 @@ void StdTabControllerModel::setControlModels( const cpo::uno::Sequence< css::uno
     ImplSetControlModels( maControls, Controls );
 }
 
-cpo::uno::Sequence< css::uno::Reference< css::awt::XControlModel > > StdTabControllerModel::getControlModels(  )
+cpo::uno::Sequence< cpo::uno::Reference< css::awt::XControlModel > > StdTabControllerModel::getControlModels(  )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    cpo::uno::Sequence< css::uno::Reference< css::awt::XControlModel > > aSeq( ImplGetControlCount( maControls ) );
-    css::uno::Reference< css::awt::XControlModel > * pRefs = aSeq.getArray();
+    cpo::uno::Sequence< cpo::uno::Reference< css::awt::XControlModel > > aSeq( ImplGetControlCount( maControls ) );
+    cpo::uno::Reference< css::awt::XControlModel > * pRefs = aSeq.getArray();
     ImplGetControlModels( &pRefs, maControls );
     return aSeq;
 }
 
-void StdTabControllerModel::setGroup( const cpo::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& Group, const OUString& GroupName )
+void StdTabControllerModel::setGroup( const cpo::uno::Sequence< cpo::uno::Reference< css::awt::XControlModel > >& Group, const OUString& GroupName )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -314,11 +314,11 @@ sal_Int32 StdTabControllerModel::getGroupCount(  )
     return nGroups;
 }
 
-void StdTabControllerModel::getGroup( sal_Int32 nGroup, cpo::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& rGroup, OUString& rName )
+void StdTabControllerModel::getGroup( sal_Int32 nGroup, cpo::uno::Sequence< cpo::uno::Reference< css::awt::XControlModel > >& rGroup, OUString& rName )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    cpo::uno::Sequence< css::uno::Reference< css::awt::XControlModel > > aSeq;
+    cpo::uno::Sequence< cpo::uno::Reference< css::awt::XControlModel > > aSeq;
     sal_uInt32 nG = 0;
     size_t nEntries = maControls.size();
     for ( size_t n = 0; n < nEntries; n++ )
@@ -329,8 +329,8 @@ void StdTabControllerModel::getGroup( sal_Int32 nGroup, cpo::uno::Sequence< css:
             if ( nG == static_cast<sal_uInt32>(nGroup) )
             {
                 sal_uInt32 nCount = ImplGetControlCount( *pEntry->pGroup );
-                aSeq = cpo::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >( nCount );
-                css::uno::Reference< css::awt::XControlModel > * pRefs = aSeq.getArray();
+                aSeq = cpo::uno::Sequence< cpo::uno::Reference< css::awt::XControlModel > >( nCount );
+                cpo::uno::Reference< css::awt::XControlModel > * pRefs = aSeq.getArray();
                 ImplGetControlModels( &pRefs, *pEntry->pGroup );
                 rName = pEntry->pGroup->GetName();
                 break;
@@ -341,7 +341,7 @@ void StdTabControllerModel::getGroup( sal_Int32 nGroup, cpo::uno::Sequence< css:
     rGroup = std::move(aSeq);
 }
 
-void StdTabControllerModel::getGroupByName( const OUString& rName, cpo::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& rGroup )
+void StdTabControllerModel::getGroupByName( const OUString& rName, cpo::uno::Sequence< cpo::uno::Reference< css::awt::XControlModel > >& rGroup )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -370,23 +370,23 @@ OUString StdTabControllerModel::getServiceName(  )
     return u"stardiv.vcl.controlmodel.TabController"_ustr;
 }
 
-void StdTabControllerModel::write( const css::uno::Reference< css::io::XObjectOutputStream >& OutStream )
+void StdTabControllerModel::write( const cpo::uno::Reference< css::io::XObjectOutputStream >& OutStream )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    css::uno::Reference< css::io::XMarkableStream >  xMark( OutStream, css::uno::UNO_QUERY );
+    cpo::uno::Reference< css::io::XMarkableStream >  xMark( OutStream, cpo::uno::UNO_QUERY );
     DBG_ASSERT( xMark.is(), "write: no XMarkableStream!" );
 
     OutStream->writeShort( UNOCONTROL_STREAMVERSION );
 
-    cpo::uno::Sequence< css::uno::Reference< css::awt::XControlModel > > aCtrls = getControlModels();
+    cpo::uno::Sequence< cpo::uno::Reference< css::awt::XControlModel > > aCtrls = getControlModels();
     ImplWriteControls( OutStream, aCtrls );
 
     sal_uInt32 nGroups = getGroupCount();
     OutStream->writeLong( nGroups );
     for ( sal_uInt32 n = 0; n < nGroups; n++ )
     {
-        cpo::uno::Sequence< css::uno::Reference< css::awt::XControlModel > > aGroupCtrls;
+        cpo::uno::Sequence< cpo::uno::Reference< css::awt::XControlModel > > aGroupCtrls;
         OUString aGroupName;
         getGroup( n, aGroupCtrls, aGroupName );
         OutStream->writeUTF( aGroupName );
@@ -394,18 +394,18 @@ void StdTabControllerModel::write( const css::uno::Reference< css::io::XObjectOu
     }
 }
 
-void StdTabControllerModel::read( const css::uno::Reference< css::io::XObjectInputStream >& InStream )
+void StdTabControllerModel::read( const cpo::uno::Reference< css::io::XObjectInputStream >& InStream )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    cpo::uno::Sequence< css::uno::Reference< css::awt::XControlModel > > aSeq = ImplReadControls( InStream );
+    cpo::uno::Sequence< cpo::uno::Reference< css::awt::XControlModel > > aSeq = ImplReadControls( InStream );
     setControlModels( aSeq );
 
     sal_uInt32 nGroups = InStream->readLong();
     for ( sal_uInt32 n = 0; n < nGroups; n++ )
     {
         OUString aGroupName = InStream->readUTF();
-        cpo::uno::Sequence< css::uno::Reference< css::awt::XControlModel > > aCtrlSeq = ImplReadControls( InStream );
+        cpo::uno::Sequence< cpo::uno::Reference< css::awt::XControlModel > > aCtrlSeq = ImplReadControls( InStream );
         setGroup( aCtrlSeq, aGroupName );
     }
 }

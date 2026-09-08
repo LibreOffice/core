@@ -21,7 +21,7 @@
 
 #include <memory>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <dbaccess/dbaccessdllapi.h>
 #include <rtl/ref.hxx>
 #include <vcl/wintypes.hxx>
@@ -44,7 +44,7 @@ namespace dbaui
     class IController;
     class UNLESS_MERGELIBS(DBACCESS_DLLPUBLIC) ODataView :    public vcl::Window
     {
-        css::uno::Reference< cpo::uno::XComponentContext >    m_xContext;  // the service factory to work with
+        cpo::uno::Reference< cpo::uno::XComponentContext >    m_xContext;  // the service factory to work with
 
     protected:
         rtl::Reference<IController> m_xController;  // the controller where we reside in
@@ -53,7 +53,7 @@ namespace dbaui
     public:
         ODataView(  vcl::Window* pParent,
                     IController& _rController,
-                    const css::uno::Reference< cpo::uno::XComponentContext >& ,
+                    const cpo::uno::Reference< cpo::uno::XComponentContext >& ,
                     WinBits nStyle = 0 );
         virtual ~ODataView() override;
         virtual void dispose() override;
@@ -63,12 +63,12 @@ namespace dbaui
         virtual bool PreNotify( NotifyEvent& rNEvt ) override;
         virtual void StateChanged( StateChangedType nStateChange ) override;
 
-        const css::uno::Reference< cpo::uno::XComponentContext >& getORB() const { return m_xContext;}
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& getORB() const { return m_xContext;}
 
         // the default implementation simply calls resizeAll( GetSizePixel() )
         virtual void Resize() override;
 
-        void attachFrame(const css::uno::Reference< css::frame::XFrame >& _xFrame);
+        void attachFrame(const cpo::uno::Reference< css::frame::XFrame >& _xFrame);
     protected:
         // window overridables
         virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& _rRect ) override;

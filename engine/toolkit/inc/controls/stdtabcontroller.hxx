@@ -38,11 +38,11 @@ class StdTabController final : public css::awt::XTabController,
 {
 private:
     ::osl::Mutex            maMutex;
-    css::uno::Reference< css::awt::XTabControllerModel >  mxModel;
-    css::uno::Reference< css::awt::XControlContainer >    mxControlContainer;
+    cpo::uno::Reference< css::awt::XTabControllerModel >  mxModel;
+    cpo::uno::Reference< css::awt::XControlContainer >    mxControlContainer;
 
     ::osl::Mutex&               GetMutex() { return maMutex; }
-    static bool                 ImplCreateComponentSequence( cpo::uno::Sequence< css::uno::Reference< css::awt::XControl > >& rControls, const cpo::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& rModels, cpo::uno::Sequence< css::uno::Reference< css::awt::XWindow > >& rComponents, cpo::uno::Sequence< cpo::uno::Any>* pTabStops, bool bPeerComponent );
+    static bool                 ImplCreateComponentSequence( cpo::uno::Sequence< cpo::uno::Reference< css::awt::XControl > >& rControls, const cpo::uno::Sequence< cpo::uno::Reference< css::awt::XControlModel > >& rModels, cpo::uno::Sequence< cpo::uno::Reference< css::awt::XWindow > >& rComponents, cpo::uno::Sequence< cpo::uno::Any>* pTabStops, bool bPeerComponent );
     // if sequence length of rModels is less than rControls, return only the matching elements in rModels sequence and remove corresponding elements from rControls
     void                        ImplActivateControl( bool bFirst ) const;
 
@@ -50,7 +50,7 @@ public:
                             StdTabController();
                             virtual ~StdTabController() override;
 
-    static css::uno::Reference< css::awt::XControl >  FindControl( cpo::uno::Sequence< css::uno::Reference< css::awt::XControl > >& rCtrls, const css::uno::Reference< css::awt::XControlModel > & rxCtrlModel );
+    static cpo::uno::Reference< css::awt::XControl >  FindControl( cpo::uno::Sequence< cpo::uno::Reference< css::awt::XControl > >& rCtrls, const cpo::uno::Reference< css::awt::XControlModel > & rxCtrlModel );
 
     // cpo::uno::XInterface
     cpo::uno::Any  queryInterface( const cpo::uno::Type & rType ) override { return OWeakAggObject::queryInterface(rType); }
@@ -64,11 +64,11 @@ public:
     cpo::uno::Sequence< sal_Int8 >                     getImplementationId() override;
 
     // XTabController
-    void setModel( const css::uno::Reference< css::awt::XTabControllerModel >& Model ) override;
-    css::uno::Reference< css::awt::XTabControllerModel > getModel(  ) override;
-    void setContainer( const css::uno::Reference< css::awt::XControlContainer >& Container ) override;
-    css::uno::Reference< css::awt::XControlContainer > getContainer(  ) override;
-    cpo::uno::Sequence< css::uno::Reference< css::awt::XControl > > getControls(  ) override;
+    void setModel( const cpo::uno::Reference< css::awt::XTabControllerModel >& Model ) override;
+    cpo::uno::Reference< css::awt::XTabControllerModel > getModel(  ) override;
+    void setContainer( const cpo::uno::Reference< css::awt::XControlContainer >& Container ) override;
+    cpo::uno::Reference< css::awt::XControlContainer > getContainer(  ) override;
+    cpo::uno::Sequence< cpo::uno::Reference< css::awt::XControl > > getControls(  ) override;
     void autoTabOrder(  ) override;
     void activateTabOrder(  ) override;
     void activateFirst(  ) override;

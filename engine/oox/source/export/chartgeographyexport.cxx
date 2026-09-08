@@ -17,6 +17,7 @@
 // regionMap chart type.
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace oox::drawingml::chart
 {

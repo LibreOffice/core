@@ -31,7 +31,7 @@
 #include <com/sun/star/registry/RegistryKeyType.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/RuntimeException.hpp>
 #include <cpo/uno/XInterface.hpp>
 #include <cpo/uno/Sequence.hxx>
@@ -80,7 +80,7 @@ private:
 
     virtual void SAL_CALL destroy() override;
 
-    virtual css::uno::Reference< css::registry::XRegistryKey > SAL_CALL
+    virtual cpo::uno::Reference< css::registry::XRegistryKey > SAL_CALL
     getRootKey() override;
 
     virtual bool SAL_CALL isReadOnly() override;
@@ -160,10 +160,10 @@ private:
     virtual void SAL_CALL setBinaryValue(
         cpo::uno::Sequence< sal_Int8 > const & value) override;
 
-    virtual css::uno::Reference< css::registry::XRegistryKey > SAL_CALL openKey(
+    virtual cpo::uno::Reference< css::registry::XRegistryKey > SAL_CALL openKey(
         OUString const & aKeyName) override;
 
-    virtual css::uno::Reference< css::registry::XRegistryKey > SAL_CALL
+    virtual cpo::uno::Reference< css::registry::XRegistryKey > SAL_CALL
     createKey(OUString const & aKeyName) override;
 
     virtual void SAL_CALL closeKey() override;
@@ -171,7 +171,7 @@ private:
     virtual void SAL_CALL deleteKey(OUString const & rKeyName) override;
 
     virtual
-    cpo::uno::Sequence< css::uno::Reference< css::registry::XRegistryKey > >
+    cpo::uno::Sequence< cpo::uno::Reference< css::registry::XRegistryKey > >
     SAL_CALL openKeys() override;
 
     virtual cpo::uno::Sequence< OUString > SAL_CALL getKeyNames() override;
@@ -688,7 +688,7 @@ void Key::setBinaryValue(cpo::uno::Sequence< sal_Int8 > const & value)
     }
 }
 
-css::uno::Reference< css::registry::XRegistryKey > Key::openKey(
+cpo::uno::Reference< css::registry::XRegistryKey > Key::openKey(
     OUString const & aKeyName)
 {
     std::scoped_lock guard(registry_->mutex_);
@@ -698,7 +698,7 @@ css::uno::Reference< css::registry::XRegistryKey > Key::openKey(
     case RegError::NO_ERROR:
         return new Key(registry_, key);
     case RegError::KEY_NOT_EXISTS:
-        return css::uno::Reference< css::registry::XRegistryKey >();
+        return cpo::uno::Reference< css::registry::XRegistryKey >();
     default:
         throw css::registry::InvalidRegistryException(
             "com.sun.star.registry.SimpleRegistry key openKey:"
@@ -707,7 +707,7 @@ css::uno::Reference< css::registry::XRegistryKey > Key::openKey(
     }
 }
 
-css::uno::Reference< css::registry::XRegistryKey > Key::createKey(
+cpo::uno::Reference< css::registry::XRegistryKey > Key::createKey(
     OUString const & aKeyName)
 {
     std::scoped_lock guard(registry_->mutex_);
@@ -717,7 +717,7 @@ css::uno::Reference< css::registry::XRegistryKey > Key::createKey(
     case RegError::NO_ERROR:
         return new Key(registry_, key);
     case RegError::INVALID_KEYNAME:
-        return css::uno::Reference< css::registry::XRegistryKey >();
+        return cpo::uno::Reference< css::registry::XRegistryKey >();
     default:
         throw css::registry::InvalidRegistryException(
             "com.sun.star.registry.SimpleRegistry key createKey:"
@@ -750,7 +750,7 @@ void Key::deleteKey(OUString const & rKeyName)
     }
 }
 
-cpo::uno::Sequence< css::uno::Reference< css::registry::XRegistryKey > >
+cpo::uno::Sequence< cpo::uno::Reference< css::registry::XRegistryKey > >
 Key::openKeys()
 {
     std::scoped_lock guard(registry_->mutex_);
@@ -769,7 +769,7 @@ Key::openKeys()
             " underlying RegistryKey::getKeyNames() too large"_ustr,
             getXWeak());
     }
-    cpo::uno::Sequence< css::uno::Reference< css::registry::XRegistryKey > >
+    cpo::uno::Sequence< cpo::uno::Reference< css::registry::XRegistryKey > >
         keys(static_cast< sal_Int32 >(n));
     auto aKeysRange = asNonConstRange(keys);
     for (sal_uInt32 i = 0; i < n; ++i) {
@@ -893,7 +893,7 @@ void SimpleRegistry::destroy()
     }
 }
 
-css::uno::Reference< css::registry::XRegistryKey > SimpleRegistry::getRootKey()
+cpo::uno::Reference< css::registry::XRegistryKey > SimpleRegistry::getRootKey()
 {
     std::scoped_lock guard(mutex_);
     RegistryKey root;

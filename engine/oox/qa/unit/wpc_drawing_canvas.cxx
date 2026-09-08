@@ -28,7 +28,9 @@
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/util/XComplexColor.hpp>
+
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace
 {

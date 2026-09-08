@@ -30,13 +30,13 @@ class ScVbaOLEObject final : public OLEObjectImpl_BASE
 {
     virtual OUString getServiceImplName() override;
     virtual cpo::uno::Sequence<OUString> getServiceNames() override;
-    css::uno::Reference< ov::msforms::XControl> m_xControl;
+    cpo::uno::Reference< ov::msforms::XControl> m_xControl;
 public:
-    ScVbaOLEObject( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
-            css::uno::Reference< css::drawing::XControlShape > const & xControlShape );
+    ScVbaOLEObject( const cpo::uno::Reference< ov::XHelperInterface >& xParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
+            cpo::uno::Reference< css::drawing::XControlShape > const & xControlShape );
 
     // XOLEObject Attributes
-    virtual css::uno::Reference< cpo::uno::XInterface > SAL_CALL getObject() override;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > SAL_CALL getObject() override;
     virtual bool SAL_CALL getEnabled() override;
     virtual void SAL_CALL setEnabled( bool _enabled ) override;
     virtual bool SAL_CALL getVisible() override;

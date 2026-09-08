@@ -60,8 +60,8 @@ namespace xmloff
 
     using namespace ::xmloff::token;
     using namespace ::com::sun::star;
-    using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+    using namespace ::cpo;
+    using namespace ::cpo::uno;
     using namespace ::com::sun::star::awt;
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::beans;
@@ -167,9 +167,9 @@ using namespace cpo::uno;
         OPropertyImport::startFastElement( nElement, _rxAttrList );
     }
 
-    css::uno::Reference< css::xml::sax::XFastContextHandler > OElementImport::createFastChildContext(
+    cpo::uno::Reference< css::xml::sax::XFastContextHandler > OElementImport::createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& _rxAttrList )
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& _rxAttrList )
     {
         if( nElement == XML_ELEMENT(OFFICE, XML_EVENT_LISTENERS) )
             return new OFormEventsImportContext(m_rFormImport.getGlobalContext(), *this);
@@ -589,7 +589,7 @@ using namespace cpo::uno;
                             OUStringToOString(m_sServiceName, RTL_TEXTENCODING_ASCII_US) +
                             ")!").getStr());
             xReturn.set(xPure, UNO_QUERY);
-            if (auto const props = Reference<css::beans::XPropertySet>(xPure, css::uno::UNO_QUERY))
+            if (auto const props = Reference<css::beans::XPropertySet>(xPure, cpo::uno::UNO_QUERY))
             {
                 try {
                     props->setPropertyValue(
@@ -772,7 +772,7 @@ using namespace cpo::uno;
 
     void OControlImport::startFastElement(sal_Int32 nElement, const Reference< css::xml::sax::XFastAttributeList >& _rxAttrList)
     {
-        css::uno::Reference< css::xml::sax::XFastAttributeList > xMergedAttributes;
+        cpo::uno::Reference< css::xml::sax::XFastAttributeList > xMergedAttributes;
         if( m_xOuterAttributes.is() )
         {
             // merge the attribute lists, our own one
@@ -1334,9 +1334,9 @@ using namespace cpo::uno;
         enableTrackAttributes();
     }
 
-    css::uno::Reference< css::xml::sax::XFastContextHandler > OTextLikeImport::createFastChildContext(
+    cpo::uno::Reference< css::xml::sax::XFastContextHandler > OTextLikeImport::createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
     {
         if ( nElement == XML_ELEMENT(TEXT, XML_P) )
         {
@@ -1518,9 +1518,9 @@ using namespace cpo::uno;
             enableTrackAttributes();
     }
 
-    css::uno::Reference< css::xml::sax::XFastContextHandler > OListAndComboImport::createFastChildContext(
+    cpo::uno::Reference< css::xml::sax::XFastContextHandler > OListAndComboImport::createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& _rxAttrList )
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& _rxAttrList )
     {
         // is it the "option" sub tag of a listbox ?
         if ((nElement & TOKEN_MASK) == XML_OPTION)
@@ -1785,9 +1785,9 @@ using namespace cpo::uno;
         ,m_rEventManager(_rEventManager)
     {
     }
-    css::uno::Reference< css::xml::sax::XFastContextHandler > OColumnWrapperImport::createFastChildContext(
+    cpo::uno::Reference< css::xml::sax::XFastContextHandler > OColumnWrapperImport::createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >&  )
     {
         OControlImport* pReturn = implCreateChildContext(nElement, OElementNameMap::getElementType(nElement & TOKEN_MASK));
         if (pReturn)
@@ -1848,9 +1848,9 @@ using namespace cpo::uno;
         setElementType(_eType);
     }
 
-    css::uno::Reference< css::xml::sax::XFastContextHandler > OGridImport::createFastChildContext(
+    cpo::uno::Reference< css::xml::sax::XFastContextHandler > OGridImport::createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
     {
         // maybe it's a sub control
         if ((nElement & TOKEN_MASK) == XML_COLUMN)
@@ -1872,20 +1872,20 @@ using namespace cpo::uno;
         OControlImport::endFastElement(nElement);
 
         // now that we have all children, attach the events
-        css::uno::Reference< css::container::XIndexAccess > xIndexContainer(m_xMeAsContainer, css::uno::UNO_QUERY);
+        cpo::uno::Reference< css::container::XIndexAccess > xIndexContainer(m_xMeAsContainer, cpo::uno::UNO_QUERY);
         if (xIndexContainer.is())
             ODefaultEventAttacherManager::setEvents(xIndexContainer);
     }
 
-    css::uno::Reference< css::beans::XPropertySet > OGridImport::createElement()
+    cpo::uno::Reference< css::beans::XPropertySet > OGridImport::createElement()
     {
         // let the base class create the object
-        css::uno::Reference< css::beans::XPropertySet > xReturn = OControlImport::createElement();
+        cpo::uno::Reference< css::beans::XPropertySet > xReturn = OControlImport::createElement();
         if (!xReturn.is())
             return xReturn;
 
         // ensure that the object is a XNameContainer (we strongly need this for inserting child elements)
-        m_xMeAsContainer.set(xReturn, css::uno::UNO_QUERY);
+        m_xMeAsContainer.set(xReturn, cpo::uno::UNO_QUERY);
         if (!m_xMeAsContainer.is())
         {
             OSL_FAIL("OContainerImport::createElement: invalid element (no XNameContainer) created!");
@@ -1903,7 +1903,7 @@ using namespace cpo::uno;
         enableTrackAttributes();
     }
 
-    css::uno::Reference< css::xml::sax::XFastContextHandler > OFormImport::createFastChildContext(
+    cpo::uno::Reference< css::xml::sax::XFastContextHandler > OFormImport::createFastChildContext(
         sal_Int32 nElement,
         const uno::Reference< xml::sax::XFastAttributeList>& _rxAttrList )
     {
@@ -1964,22 +1964,22 @@ using namespace cpo::uno;
         OElementImport::endFastElement(nElement);
 
         // now that we have all children, attach the events
-        css::uno::Reference< css::container::XIndexAccess > xIndexContainer(m_xMeAsContainer, css::uno::UNO_QUERY);
+        cpo::uno::Reference< css::container::XIndexAccess > xIndexContainer(m_xMeAsContainer, cpo::uno::UNO_QUERY);
         if (xIndexContainer.is())
             ODefaultEventAttacherManager::setEvents(xIndexContainer);
 
         m_rFormImport.leaveEventContext();
     }
 
-    css::uno::Reference< css::beans::XPropertySet > OFormImport::createElement()
+    cpo::uno::Reference< css::beans::XPropertySet > OFormImport::createElement()
     {
         // let the base class create the object
-        css::uno::Reference< css::beans::XPropertySet > xReturn = OElementImport::createElement();
+        cpo::uno::Reference< css::beans::XPropertySet > xReturn = OElementImport::createElement();
         if (!xReturn.is())
             return xReturn;
 
         // ensure that the object is a XNameContainer (we strongly need this for inserting child elements)
-        m_xMeAsContainer.set(xReturn, css::uno::UNO_QUERY);
+        m_xMeAsContainer.set(xReturn, cpo::uno::UNO_QUERY);
         if (!m_xMeAsContainer.is())
         {
             OSL_FAIL("OContainerImport::createElement: invalid element (no XNameContainer) created!");
@@ -2072,7 +2072,7 @@ using namespace cpo::uno;
     OXMLDataSourceImport::OXMLDataSourceImport(
                     SvXMLImport& _rImport
                     ,const Reference< css::xml::sax::XFastAttributeList > & _xAttrList
-                    ,const css::uno::Reference< css::beans::XPropertySet >& _xElement) :
+                    ,const cpo::uno::Reference< css::beans::XPropertySet >& _xElement) :
         SvXMLImportContext( _rImport)
     {
         for( auto& aIter : sax_fastparser::castToFastAttributeList(_xAttrList) )

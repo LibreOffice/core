@@ -95,7 +95,7 @@ public:
     static constexpr sal_Int32 AIBodyTextMaxChars = 60 * 1024;
 
     /// Gets the short cut accelerators.
-    static std::unordered_map<OUString, css::uno::Reference<css::ui::XAcceleratorConfiguration>>& getAcceleratorConfs();
+    static std::unordered_map<OUString, cpo::uno::Reference<css::ui::XAcceleratorConfiguration>>& getAcceleratorConfs();
     /// Create a new view shell from the current view frame.
     /// This assumes a single document is ever loaded.
     static int createView();
@@ -289,12 +289,12 @@ public:
     /// Extracts base64 data inside begin/end markers.
     static std::string_view extractCertificate(std::string_view rCert);
     /// Takes a single CA certificate to add them to the list of trusted certificates.
-    static css::uno::Reference<css::security::XCertificate> addCertificate(const css::uno::Reference<css::xml::crypto::XCertificateCreator>& xCertificateCreator, const cpo::uno::Sequence<sal_Int8>& rCert);
+    static cpo::uno::Reference<css::security::XCertificate> addCertificate(const cpo::uno::Reference<css::xml::crypto::XCertificateCreator>& xCertificateCreator, const cpo::uno::Sequence<sal_Int8>& rCert);
     /// Takes a CA chain (multiple certificates in base64 from inside begin/end markers)
     /// to add them to the list of trusted certificates.
     static void addCertificates(std::string_view rCerts);
     /// Parses a private key + certificate pair.
-    static css::uno::Reference<css::security::XCertificate> getSigningCertificate(std::string_view rCert, std::string_view rKey);
+    static cpo::uno::Reference<css::security::XCertificate> getSigningCertificate(std::string_view rCert, std::string_view rKey);
     /// Ensure Author is that of pViewShell for a rCommand that need the current Author name
     static void ensureCommandAuthor(const SfxViewShell* pViewShell, std::u16string_view rCommand,
                                     std::vector<css::beans::PropertyValue>& rArguments);

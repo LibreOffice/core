@@ -51,8 +51,8 @@ using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::script;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::reflection;
 
 
@@ -287,7 +287,7 @@ namespace dlgprov
     }
 
     void DialogEventsAttacherImpl::nestedAttachEvents(
-        const css::uno::Reference<css::awt::XControl>& xControl, const cpo::uno::Any& Helper,
+        const cpo::uno::Reference<css::awt::XControl>& xControl, const cpo::uno::Any& Helper,
         OUString& sDialogCodeName)
     {
         if (!xControl.is())
@@ -317,7 +317,7 @@ namespace dlgprov
 
 
     void SAL_CALL DialogEventsAttacherImpl::attachEvents( const Sequence< Reference< XInterface > >& Objects,
-        const css::uno::Reference<css::script::XScriptListener>&,
+        const cpo::uno::Reference<css::script::XScriptListener>&,
         const Any& Helper )
     {
         // get EventAttacher

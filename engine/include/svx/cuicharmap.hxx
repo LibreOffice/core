@@ -66,7 +66,7 @@ class SVX_DLLPUBLIC SvxCharacterMap final : public SfxDialogController
 {
 public:
     SvxCharacterMap(weld::Widget* pParent, const SfxItemSet* pSet,
-                    css::uno::Reference<css::frame::XFrame> xFrame);
+                    cpo::uno::Reference<css::frame::XFrame> xFrame);
 
     virtual ~SvxCharacterMap() override;
 
@@ -192,7 +192,7 @@ private:
     vcl::Font m_aFont;
     std::unique_ptr<const SubsetMap> m_pSubsetMap;
     bool m_isSearchMode;
-    css::uno::Reference<css::frame::XFrame> m_xFrame;
+    cpo::uno::Reference<css::frame::XFrame> m_xFrame;
     SfxCharmapContainer m_aCharmapContents;
     SvxShowText m_aShowChar;
     std::unique_ptr<SfxAllItemSet> m_xOutputSet;

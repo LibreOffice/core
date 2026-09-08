@@ -28,7 +28,8 @@
 #include <comphelper/diagnose_ex.hxx>
 
 using namespace ::com::sun::star;
-using ::com::sun::star::uno::Reference;
+using namespace ::cpo;
+using ::cpo::uno::Reference;
 
 namespace chart
 {

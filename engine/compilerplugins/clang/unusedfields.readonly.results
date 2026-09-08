@@ -419,13 +419,13 @@ include/vcl/formatter.hxx:149
 include/vcl/toolkit/field.hxx:397
     DateFormatter maStaticFormatter Formatter::StaticFormatter
 include/xmloff/xmlstyle.hxx:127
-    SvXMLStylesContext mxParaStyles css::uno::Reference<css::container::XNameContainer>
+    SvXMLStylesContext mxParaStyles cpo::uno::Reference<css::container::XNameContainer>
 include/xmloff/xmlstyle.hxx:129
-    SvXMLStylesContext mxTextStyles css::uno::Reference<css::container::XNameContainer>
+    SvXMLStylesContext mxTextStyles cpo::uno::Reference<css::container::XNameContainer>
 include/xmloff/xmlstyle.hxx:131
-    SvXMLStylesContext mxParaAutoStyles css::uno::Reference<css::style::XAutoStyleFamily>
+    SvXMLStylesContext mxParaAutoStyles cpo::uno::Reference<css::style::XAutoStyleFamily>
 include/xmloff/xmlstyle.hxx:133
-    SvXMLStylesContext mxTextAutoStyles css::uno::Reference<css::style::XAutoStyleFamily>
+    SvXMLStylesContext mxTextAutoStyles cpo::uno::Reference<css::style::XAutoStyleFamily>
 io/source/stm/odata.cxx:234
     (unnamed union at /home/noel/online-plugin/engine/io/source/stm/odata.cxx:234:5) f float
 io/source/stm/odata.cxx:241
@@ -571,13 +571,13 @@ sc/source/ui/inc/inputhdl.hxx:70
 sc/source/ui/inc/tabcont.hxx:37
     ScTabControl bErrorShown _Bool
 sc/source/ui/vba/vbaformatconditions.hxx:38
-    ScVbaFormatConditions mxSheetConditionalEntries css::uno::Reference<css::sheet::XSheetConditionalEntries>
+    ScVbaFormatConditions mxSheetConditionalEntries cpo::uno::Reference<css::sheet::XSheetConditionalEntries>
 sc/source/ui/vba/vbaformatconditions.hxx:39
     ScVbaFormatConditions mxStyles rtl::Reference<ScVbaStyles>
 sc/source/ui/vba/vbaformatconditions.hxx:40
-    ScVbaFormatConditions mxRangeParent css::uno::Reference<ov::excel::XRange>
+    ScVbaFormatConditions mxRangeParent cpo::uno::Reference<ov::excel::XRange>
 sc/source/ui/vba/vbaformatconditions.hxx:41
-    ScVbaFormatConditions mxParentRangePropertySet css::uno::Reference<css::beans::XPropertySet>
+    ScVbaFormatConditions mxParentRangePropertySet cpo::uno::Reference<css::beans::XPropertySet>
 sc/source/ui/vba/vbaworksheet.hxx:47
     ScVbaWorksheet mxButtons ::rtl::Reference<ScVbaSheetObjectsBase>[2]
 sd/inc/LineSpacingMigrator.hxx:44
@@ -733,7 +733,7 @@ sw/source/writerfilter/ooxml/OOXMLFactory.hxx:61
 sw/source/writerfilter/ooxml/OOXMLFactory.hxx:62
     writerfilter::ooxml::AttributeInfo m_nRef Id
 toolkit/source/awt/vclxtoolkit.cxx:439
-    (anonymous namespace)::VCLXToolkit mxSelection css::uno::Reference<css::datatransfer::clipboard::XClipboard>
+    (anonymous namespace)::VCLXToolkit mxSelection cpo::uno::Reference<css::datatransfer::clipboard::XClipboard>
 toolkit/source/controls/table/gridtablerenderer.cxx:71
     svt::table::(anonymous namespace)::CachedSortIndicator m_sortAscending Bitmap
 toolkit/source/controls/table/gridtablerenderer.cxx:72
@@ -1009,6 +1009,6 @@ xmloff/source/chart/SchXMLChartContext.hxx:50
 xmloff/source/chart/SchXMLChartContext.hxx:51
     SeriesDefaultsAndStyles maErrorMarginDefault cpo::uno::Any
 xmlsecurity/inc/documentsignaturemanager.hxx:82
-    DocumentSignatureManager mxGpgSEInitializer css::uno::Reference<css::xml::crypto::XSEInitializer>
+    DocumentSignatureManager mxGpgSEInitializer cpo::uno::Reference<css::xml::crypto::XSEInitializer>
 xmlsecurity/inc/documentsignaturemanager.hxx:83
-    DocumentSignatureManager mxGpgSecurityContext css::uno::Reference<css::xml::crypto::XXMLSecurityContext>
+    DocumentSignatureManager mxGpgSecurityContext cpo::uno::Reference<css::xml::crypto::XXMLSecurityContext>

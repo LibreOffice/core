@@ -54,7 +54,7 @@ enum class SdtControlType
 class SdtHelper final : public virtual SvRefBase
 {
     DomainMapper_Impl& m_rDM_Impl;
-    css::uno::Reference<cpo::uno::XComponentContext> m_xComponentContext;
+    cpo::uno::Reference<cpo::uno::XComponentContext> m_xComponentContext;
 
     /// Items of the drop-down control: <w:listItem w:value="...">.
     std::vector<OUString> m_aDropDownItems;
@@ -78,7 +78,7 @@ class SdtHelper final : public virtual SvRefBase
     OUString m_sDataBindingStoreItemID;
 
     /// Start range of the date or plain text field
-    css::uno::Reference<css::text::XTextRange> m_xFieldStartRange;
+    cpo::uno::Reference<css::text::XTextRange> m_xFieldStartRange;
     /// Locale string as it comes from the ooxml document.
     OUStringBuffer m_sLocale;
     /// Grab bag to store unsupported SDTs, aiming to save them back on export.
@@ -91,7 +91,7 @@ class SdtHelper final : public virtual SvRefBase
     bool m_bOutsideAParagraph;
 
     /// Storage for all properties documents as xml::dom::XDocument for later querying xpath for data
-    std::unordered_map<OUString, css::uno::Reference<css::xml::dom::XDocument>> m_xPropertiesXMLs;
+    std::unordered_map<OUString, cpo::uno::Reference<css::xml::dom::XDocument>> m_xPropertiesXMLs;
 
     /// Check if m_xPropertiesXMLs is initialized and loaded (need extra flag to distinguish
     /// empty sequence from not yet initialized)
@@ -111,7 +111,7 @@ class SdtHelper final : public virtual SvRefBase
 
     /// Create and append the drawing::XControlShape, containing the various models.
     void createControlShape(css::awt::Size aSize,
-                            css::uno::Reference<css::awt::XControlModel> const& xControlModel,
+                            cpo::uno::Reference<css::awt::XControlModel> const& xControlModel,
                             const cpo::uno::Sequence<css::beans::PropertyValue>& rGrabBag);
 
     void loadPropertiesXMLs();
@@ -145,7 +145,7 @@ class SdtHelper final : public virtual SvRefBase
 
 public:
     explicit SdtHelper(DomainMapper_Impl& rDM_Impl,
-                       css::uno::Reference<cpo::uno::XComponentContext> xContext);
+                       cpo::uno::Reference<cpo::uno::XComponentContext> xContext);
     ~SdtHelper() override;
 
     std::vector<OUString>& getDropDownItems() { return m_aDropDownItems; }
@@ -169,7 +169,7 @@ public:
     const OUString& GetDataBindingStoreItemID() const { return m_sDataBindingStoreItemID; }
 
     bool isFieldStartRangeSet() const { return m_xFieldStartRange.is(); }
-    void setFieldStartRange(const css::uno::Reference<css::text::XTextRange>& xStartRange)
+    void setFieldStartRange(const cpo::uno::Reference<css::text::XTextRange>& xStartRange)
     {
         m_xFieldStartRange = xStartRange;
     }

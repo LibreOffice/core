@@ -39,7 +39,7 @@ class UNLESS_MERGELIBS(TOOLKIT_DLLPUBLIC) VCLXFont final :
                             css::awt::XFont2>
 {
     std::mutex    maMutex;
-    css::uno::Reference< css::awt::XDevice> mxDevice;
+    cpo::uno::Reference< css::awt::XDevice> mxDevice;
     vcl::Font       maFont;
     std::unique_ptr<FontMetric>
                     mpFontMetric;

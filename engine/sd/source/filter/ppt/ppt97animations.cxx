@@ -32,6 +32,7 @@
 #include <com/sun/star/presentation/ShapeAnimationSubType.hpp>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 void Ppt97AnimationInfoAtom::ReadStream( SvStream& rIn )
 {

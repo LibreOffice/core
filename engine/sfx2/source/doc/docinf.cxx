@@ -42,6 +42,7 @@ constexpr OUString STREAM_DOCSUMMARYINFO = u"\005DocumentSummaryInformation"_ust
 
 // usings
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 
 namespace sfx2 {

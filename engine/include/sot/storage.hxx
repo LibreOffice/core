@@ -30,7 +30,7 @@
 
 namespace com::sun::star::embed { class XStorage; }
 namespace cpo::uno { class Any; }
-namespace com::sun::star::uno { template <typename > class Reference; }
+namespace cpo::uno { template <typename > class Reference; }
 
 enum class SotClipboardFormatId : sal_uInt32;
 
@@ -156,10 +156,10 @@ public:
     static bool IsOLEStorage(const OUString & rFileName);
     static bool IsOLEStorage(SvStream* pStream);
 
-    static rtl::Reference<SotStorage> OpenOLEStorage(css::uno::Reference<css::embed::XStorage> const & xStorage,
+    static rtl::Reference<SotStorage> OpenOLEStorage(cpo::uno::Reference<css::embed::XStorage> const & xStorage,
                                       OUString const & rEleName, StreamMode = StreamMode::STD_READWRITE);
-    static SotClipboardFormatId GetFormatID(css::uno::Reference<css::embed::XStorage> const & xStorage);
-    static sal_Int32 GetVersion(css::uno::Reference<css::embed::XStorage> const & xStorage);
+    static SotClipboardFormatId GetFormatID(cpo::uno::Reference<css::embed::XStorage> const & xStorage);
+    static sal_Int32 GetVersion(cpo::uno::Reference<css::embed::XStorage> const & xStorage);
 };
 
 #endif // INCLUDED_SOT_STORAGE_HXX

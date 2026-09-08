@@ -102,12 +102,12 @@ class SwXTextPortion : public cppu::WeakImplHelper
 private:
 
     const SfxItemPropertySet *  m_pPropSet;
-    const css::uno::Reference< SwXText > m_xParentText;
+    const cpo::uno::Reference< SwXText > m_xParentText;
     rtl::Reference< SwXReferenceMark > m_xRefMark;
     rtl::Reference< SwXDocumentIndexMark > m_xTOXMark;
     rtl::Reference< SwXBookmark > m_xBookmark;
     rtl::Reference< SwXFootnote > m_xFootnote;
-    css::uno::Reference< css::text::XTextField >
+    cpo::uno::Reference< css::text::XTextField >
         m_xTextField;
     rtl::Reference< SwXMeta > m_xMeta;
     rtl::Reference<SwXLineBreak> m_xLineBreak;
@@ -157,19 +157,19 @@ protected:
     virtual void Notify(const SfxHint& rHint) override;
 
 public:
-    SwXTextPortion(const SwUnoCursor* pPortionCursor, css::uno::Reference< SwXText > xParent, SwTextPortionType   eType   );
-    SwXTextPortion(const SwUnoCursor* pPortionCursor, css::uno::Reference< SwXText > xParent, SwFrameFormat& rFormat );
+    SwXTextPortion(const SwUnoCursor* pPortionCursor, cpo::uno::Reference< SwXText > xParent, SwTextPortionType   eType   );
+    SwXTextPortion(const SwUnoCursor* pPortionCursor, cpo::uno::Reference< SwXText > xParent, SwFrameFormat& rFormat );
 
     // for Ruby
     SwXTextPortion(const SwUnoCursor* pPortionCursor,
         SwTextRuby const& rAttr,
-        css::uno::Reference< SwXText > xParent,
+        cpo::uno::Reference< SwXText > xParent,
         bool bIsEnd );
 
     //XTextRange
-    virtual css::uno::Reference< css::text::XText >  SAL_CALL getText() override;
-    virtual css::uno::Reference< css::text::XTextRange > SAL_CALL  getStart() override;
-    virtual css::uno::Reference< css::text::XTextRange > SAL_CALL   getEnd() override;
+    virtual cpo::uno::Reference< css::text::XText >  SAL_CALL getText() override;
+    virtual cpo::uno::Reference< css::text::XTextRange > SAL_CALL  getStart() override;
+    virtual cpo::uno::Reference< css::text::XTextRange > SAL_CALL   getEnd() override;
     virtual OUString SAL_CALL  getString() override;
     virtual void SAL_CALL  setString(const OUString& aString) override;
 
@@ -181,18 +181,18 @@ public:
     //XMultiPropertySet
     virtual void SAL_CALL setPropertyValues( const cpo::uno::Sequence< OUString >& aPropertyNames, const cpo::uno::Sequence< cpo::uno::Any >& aValues ) override;
     virtual cpo::uno::Sequence< cpo::uno::Any > SAL_CALL getPropertyValues( const cpo::uno::Sequence< OUString >& aPropertyNames ) override;
-    virtual void SAL_CALL addPropertiesChangeListener( const cpo::uno::Sequence< OUString >& aPropertyNames, const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
-    virtual void SAL_CALL removePropertiesChangeListener( const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
-    virtual void SAL_CALL firePropertiesChangeEvent( const cpo::uno::Sequence< OUString >& aPropertyNames, const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
+    virtual void SAL_CALL addPropertiesChangeListener( const cpo::uno::Sequence< OUString >& aPropertyNames, const cpo::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
+    virtual void SAL_CALL removePropertiesChangeListener( const cpo::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
+    virtual void SAL_CALL firePropertiesChangeEvent( const cpo::uno::Sequence< OUString >& aPropertyNames, const cpo::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
 
     //XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
     virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
     virtual cpo::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
-    virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
-    virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
-    virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
-    virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+    virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
+    virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const cpo::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
+    virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+    virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const cpo::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
     //XPropertyState
     virtual css::beans::PropertyState SAL_CALL getPropertyState( const OUString& PropertyName ) override;
@@ -206,7 +206,7 @@ public:
     virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     //XContentEnumerationAccess
-    virtual css::uno::Reference< css::container::XEnumeration >  SAL_CALL createContentEnumeration(const OUString& aServiceName) override;
+    virtual cpo::uno::Reference< css::container::XEnumeration >  SAL_CALL createContentEnumeration(const OUString& aServiceName) override;
     virtual cpo::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames() override;
 
     void SetRefMark( rtl::Reference< SwXReferenceMark > const & xMark)
@@ -221,7 +221,7 @@ public:
     void SetFootnote( rtl::Reference< SwXFootnote > const & xNote)
     { m_xFootnote = xNote; }
 
-    void SetTextField( css::uno::Reference< css::text::XTextField> const & xField)
+    void SetTextField( cpo::uno::Reference< css::text::XTextField> const & xField)
     { m_xTextField = xField; }
 
     void SetMeta( rtl::Reference< SwXMeta > const & xMeta)
@@ -259,7 +259,7 @@ class SwXTextPortionEnumeration final
 public:
     /// @param bOnlyTextFields tries to return less data, but may return more than just text fields
     SwXTextPortionEnumeration(SwPaM& rParaCursor,
-            css::uno::Reference< SwXText > const & xParent,
+            cpo::uno::Reference< SwXText > const & xParent,
             const sal_Int32 nStart, const sal_Int32 nEnd, bool bOnlyTextFields = false );
 
     SwXTextPortionEnumeration(SwPaM& rParaCursor,
@@ -291,7 +291,7 @@ public:
     SwXRedlinePortion(
         SwRangeRedline const& rRedline,
         SwUnoCursor const* pPortionCursor,
-        css::uno::Reference< SwXText > const& xParent,
+        cpo::uno::Reference< SwXText > const& xParent,
         bool const bIsStart);
 
     /// @throws std::exception

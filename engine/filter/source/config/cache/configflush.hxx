@@ -78,9 +78,9 @@ class ConfigFlush final : public ::cppu::WeakImplHelper<
 
         virtual void refresh() override;
 
-        virtual void addRefreshListener(const css::uno::Reference< css::util::XRefreshListener >& xListener) override;
+        virtual void addRefreshListener(const cpo::uno::Reference< css::util::XRefreshListener >& xListener) override;
 
-        virtual void removeRefreshListener(const css::uno::Reference< css::util::XRefreshListener >& xListener) override;
+        virtual void removeRefreshListener(const cpo::uno::Reference< css::util::XRefreshListener >& xListener) override;
 };
 
 } // namespace filter::config

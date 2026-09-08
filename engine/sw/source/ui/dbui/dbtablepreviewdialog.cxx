@@ -26,7 +26,8 @@
 #include <utility>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
@@ -36,7 +37,7 @@ class DBTablePreviewFrame
     : public cppu::WeakImplHelper<lang::XEventListener>
 {
 private:
-    css::uno::Reference<css::frame::XFrame2> m_xFrame;
+    cpo::uno::Reference<css::frame::XFrame2> m_xFrame;
 
     virtual void SAL_CALL disposing(const lang::EventObject& /*Source*/) override
     {
@@ -44,7 +45,7 @@ private:
     }
 
 public:
-    DBTablePreviewFrame(css::uno::Reference<css::frame::XFrame2> xFrame)
+    DBTablePreviewFrame(cpo::uno::Reference<css::frame::XFrame2> xFrame)
         : m_xFrame(std::move(xFrame))
     {
     }
@@ -79,7 +80,7 @@ SwDBTablePreviewDialog::SwDBTablePreviewDialog(weld::Window* pParent, cpo::uno::
         m_xDescriptionFI->set_label(sDescription.replaceFirst("%1", sTemp));
     }
 
-    css::uno::Reference<css::frame::XFrame2> xFrame;
+    cpo::uno::Reference<css::frame::XFrame2> xFrame;
     try
     {
         // create a frame wrapper for myself

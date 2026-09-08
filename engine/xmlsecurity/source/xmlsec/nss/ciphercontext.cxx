@@ -32,6 +32,7 @@ constexpr size_t nAESGCMIVSize = 12;
 constexpr size_t nAESGCMTagSize = 16;
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 uno::Reference< xml::crypto::XCipherContext > OCipherContext::Create( CK_MECHANISM_TYPE nNSSCipherID, const cpo::uno::Sequence< ::sal_Int8 >& aKey, const cpo::uno::Sequence< ::sal_Int8 >& aInitializationVector, bool bEncryption, bool bW3CPadding )
 {

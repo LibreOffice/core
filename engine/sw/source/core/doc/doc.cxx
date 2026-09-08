@@ -122,6 +122,7 @@
 #include <istyleaccess.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 sal_Int32 SwDoc::acquire()
 {

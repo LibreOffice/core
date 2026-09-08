@@ -444,7 +444,7 @@ void ToolBox::InsertItem( ToolBoxItemId nItemId, const OUString& rText, const OU
     CallEventListeners( VclEventId::ToolboxItemAdded, reinterpret_cast< void* >( nNewPos ) );
 }
 
-void ToolBox::InsertItem(const OUString& rCommand, const css::uno::Reference<css::frame::XFrame>& rFrame, ToolBoxItemBits nBits,
+void ToolBox::InsertItem(const OUString& rCommand, const cpo::uno::Reference<css::frame::XFrame>& rFrame, ToolBoxItemBits nBits,
                          const Size& rRequestedSize, ImplToolItems::size_type nPos)
 {
     OUString aModuleName(vcl::CommandInfoProvider::GetModuleIdentifier(rFrame));

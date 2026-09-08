@@ -22,7 +22,7 @@
 
 #include <rtl/ustring.hxx>
 
-namespace com::sun::star::uno { template <class interface_type> class Reference; }
+namespace cpo::uno { template <class interface_type> class Reference; }
 namespace cpo::uno { template <typename > class Sequence; }
 
 
@@ -124,7 +124,7 @@ public:
 
     virtual SvXMLImportContext* CreateContext(
         SvXMLImport& rImport,               /// import context
-        const css::uno::Reference<css::xml::sax::XFastAttributeList> & xAttrList, /// attribute list
+        const cpo::uno::Reference<css::xml::sax::XFastAttributeList> & xAttrList, /// attribute list
         /// the context for the enclosing <script:events> element
         XMLEventsImportContext* rEvents,
         /// the event name (as understood by the API)

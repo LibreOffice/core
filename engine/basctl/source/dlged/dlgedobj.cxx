@@ -54,8 +54,8 @@ namespace basctl
 {
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::script;
@@ -116,7 +116,7 @@ DlgEdObj::DlgEdObj(SdrModel& rSdrModel, DlgEdObj const & rSource)
 DlgEdObj::DlgEdObj(
     SdrModel& rSdrModel,
     const OUString& rModelName,
-    const css::uno::Reference< css::lang::XMultiServiceFactory >& rxSFac)
+    const cpo::uno::Reference< css::lang::XMultiServiceFactory >& rxSFac)
 :   SdrUnoObj(rSdrModel, rModelName, rxSFac)
     ,bIsListening(false)
 {

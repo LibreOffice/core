@@ -66,7 +66,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( ORoadmapEntry, ORoadmapEntry_Base, ::comphelpe
     //  whose XInterface and XTypeProvider implementations should be merged
 
 
-css::uno::Reference< css:: beans::XPropertySetInfo >
+cpo::uno::Reference< css:: beans::XPropertySetInfo >
     ORoadmapEntry::getPropertySetInfo()
 {
     return createPropertySetInfo( getInfoHelper() );

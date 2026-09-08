@@ -53,7 +53,7 @@
 #define SFX_PRINTABLESTATE_CANCELJOB    css::view::PrintableState(-2)
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 namespace {
 class SfxPrintJob_Impl;
@@ -155,7 +155,7 @@ void SfxPrintHelper::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArg
     if ( !aArguments.hasElements() )
         return;
 
-    css::uno::Reference < css::frame::XModel > xModel;
+    cpo::uno::Reference < css::frame::XModel > xModel;
     aArguments[0] >>= xModel;
     m_pData->m_pObjectShell = SfxObjectShell::GetShellFromComponent(xModel);
     if (m_pData->m_pObjectShell)
@@ -507,12 +507,12 @@ class ImplUCBPrintWatcher : public ::osl::Thread
                 {
                     ::ucbhelper::Content aSource(
                             (*ppTempFile)->GetURL(),
-                            css::uno::Reference< css::ucb::XCommandEnvironment >(),
+                            cpo::uno::Reference< css::ucb::XCommandEnvironment >(),
                             comphelper::getProcessComponentContext());
 
                     ::ucbhelper::Content aTarget(
                             aSplitter.GetMainURL(INetURLObject::DecodeMechanism::NONE),
-                            css::uno::Reference< css::ucb::XCommandEnvironment >(),
+                            cpo::uno::Reference< css::ucb::XCommandEnvironment >(),
                             comphelper::getProcessComponentContext());
 
                     aTarget.transferContent(
@@ -790,13 +790,13 @@ void IMPL_PrintListener_DataContainer::Notify( SfxBroadcaster& rBC, const SfxHin
         pIterator.next()->printJobEvent( aEvent );
 }
 
-void SfxPrintHelper::addPrintJobListener( const css::uno::Reference< css::view::XPrintJobListener >& xListener )
+void SfxPrintHelper::addPrintJobListener( const cpo::uno::Reference< css::view::XPrintJobListener >& xListener )
 {
     std::unique_lock aGuard(m_pData->m_aMutex);
     m_pData->m_aJobListeners.addInterface( aGuard, xListener );
 }
 
-void SfxPrintHelper::removePrintJobListener( const css::uno::Reference< css::view::XPrintJobListener >& xListener )
+void SfxPrintHelper::removePrintJobListener( const cpo::uno::Reference< css::view::XPrintJobListener >& xListener )
 {
     std::unique_lock aGuard(m_pData->m_aMutex);
     m_pData->m_aJobListeners.removeInterface( aGuard, xListener );

@@ -42,23 +42,23 @@ class XMLSecurityContext_MSCryptImpl : public ::cppu::WeakImplHelper<
 {
     private:
         //xmlSecKeysMngrPtr m_pKeysMngr ;
-        css::uno::Reference< css::xml::crypto::XSecurityEnvironment > m_xSecurityEnvironment ;
+        cpo::uno::Reference< css::xml::crypto::XSecurityEnvironment > m_xSecurityEnvironment ;
 
     public:
         XMLSecurityContext_MSCryptImpl();
 
         //Methods from XXMLSecurityContext
         virtual sal_Int32 SAL_CALL addSecurityEnvironment(
-            const css::uno::Reference< css::xml::crypto::XSecurityEnvironment >& aSecurityEnvironment
+            const cpo::uno::Reference< css::xml::crypto::XSecurityEnvironment >& aSecurityEnvironment
             ) override;
 
         virtual ::sal_Int32 SAL_CALL getSecurityEnvironmentNumber(  ) override;
 
-        virtual css::uno::Reference<
+        virtual cpo::uno::Reference<
             css::xml::crypto::XSecurityEnvironment > SAL_CALL
             getSecurityEnvironmentByIndex( ::sal_Int32 index ) override;
 
-        virtual css::uno::Reference<
+        virtual cpo::uno::Reference<
             css::xml::crypto::XSecurityEnvironment > SAL_CALL
             getSecurityEnvironment(  ) override;
 
@@ -84,7 +84,7 @@ XMLSecurityContext_MSCryptImpl::XMLSecurityContext_MSCryptImpl()
 }
 
 sal_Int32 SAL_CALL XMLSecurityContext_MSCryptImpl::addSecurityEnvironment(
-    const css::uno::Reference< css::xml::crypto::XSecurityEnvironment >& aSecurityEnvironment)
+    const cpo::uno::Reference< css::xml::crypto::XSecurityEnvironment >& aSecurityEnvironment)
 {
     if( !aSecurityEnvironment.is() )
     {
@@ -102,7 +102,7 @@ sal_Int32 SAL_CALL XMLSecurityContext_MSCryptImpl::getSecurityEnvironmentNumber(
     return 1;
 }
 
-css::uno::Reference< css::xml::crypto::XSecurityEnvironment > SAL_CALL
+cpo::uno::Reference< css::xml::crypto::XSecurityEnvironment > SAL_CALL
     XMLSecurityContext_MSCryptImpl::getSecurityEnvironmentByIndex( sal_Int32 index )
 {
     if (index != 0)
@@ -112,7 +112,7 @@ css::uno::Reference< css::xml::crypto::XSecurityEnvironment > SAL_CALL
     return m_xSecurityEnvironment;
 }
 
-css::uno::Reference< css::xml::crypto::XSecurityEnvironment > SAL_CALL
+cpo::uno::Reference< css::xml::crypto::XSecurityEnvironment > SAL_CALL
     XMLSecurityContext_MSCryptImpl::getSecurityEnvironment(  )
 {
     return m_xSecurityEnvironment;

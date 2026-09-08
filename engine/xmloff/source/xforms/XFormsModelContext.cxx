@@ -37,7 +37,7 @@
 
 
 using com::sun::star::util::XUpdatable;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace xmloff::token;
 

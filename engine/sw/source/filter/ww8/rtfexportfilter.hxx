@@ -40,12 +40,12 @@ class RtfExportFilter final
     : public cppu::WeakImplHelper<css::document::XFilter, css::document::XExporter,
                                   css::lang::XServiceInfo>
 {
-    css::uno::Reference<cpo::uno::XComponentContext> m_xCtx;
-    css::uno::Reference<css::lang::XComponent> m_xSrcDoc;
+    cpo::uno::Reference<cpo::uno::XComponentContext> m_xCtx;
+    cpo::uno::Reference<css::lang::XComponent> m_xSrcDoc;
     RtfWriter m_aWriter;
 
 public:
-    explicit RtfExportFilter(css::uno::Reference<cpo::uno::XComponentContext> xCtx);
+    explicit RtfExportFilter(cpo::uno::Reference<cpo::uno::XComponentContext> xCtx);
     ~RtfExportFilter() override;
 
     // XFilter
@@ -54,7 +54,7 @@ public:
 
     // XExporter
     void SAL_CALL
-    setSourceDocument(const css::uno::Reference<css::lang::XComponent>& xDoc) override;
+    setSourceDocument(const cpo::uno::Reference<css::lang::XComponent>& xDoc) override;
 
     OUString SAL_CALL getImplementationName() override;
     bool SAL_CALL supportsService(OUString const& ServiceName) override;

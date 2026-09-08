@@ -16,7 +16,7 @@ namespace oox
 {
 
 using namespace css::beans;
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 GrabBagStack::GrabBagStack(const OUString& aElementName)

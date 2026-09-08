@@ -59,6 +59,7 @@
 #endif
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace ::comphelper;
 
 

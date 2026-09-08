@@ -57,7 +57,7 @@ private:
 
     // XInteractionRequest
     virtual cpo::uno::Any getRequest() override;
-    virtual cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > getContinuations() override;
+    virtual cpo::uno::Sequence< cpo::uno::Reference< css::task::XInteractionContinuation > > getContinuations() override;
 
 private:
     cpo::uno::Any                         maRequest;
@@ -93,7 +93,7 @@ private:
 
     // XInteractionRequest
     virtual cpo::uno::Any getRequest() override;
-    virtual cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > getContinuations() override;
+    virtual cpo::uno::Sequence< cpo::uno::Reference< css::task::XInteractionContinuation > > getContinuations() override;
 
 private:
     cpo::uno::Any                         maRequest;

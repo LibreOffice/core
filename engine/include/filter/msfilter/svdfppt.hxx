@@ -25,7 +25,7 @@
 
 #include <optional>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
 #include <filter/msfilter/dffrecordheader.hxx>
@@ -647,7 +647,7 @@ public:
                                 const sal_uInt32* pTableArry,
                                 SvxMSDffSolverContainer* pSolverContainer
                             );
-    virtual bool ReadFormControl( rtl::Reference<SotStorage>& rSrc1, css::uno::Reference< css::form::XFormComponent > & rFormComp ) const = 0;
+    virtual bool ReadFormControl( rtl::Reference<SotStorage>& rSrc1, cpo::uno::Reference< css::form::XFormComponent > & rFormComp ) const = 0;
 };
 
 struct PPTTextParagraphStyleAtomInterpreter
@@ -1276,17 +1276,17 @@ class PPTConvertOCXControls final : public SvxMSConvertOCXControls
     const SdrPowerPointImport* mpPPTImporter;
 public:
 
-    PPTConvertOCXControls( const SdrPowerPointImport* pPPTImporter, const css::uno::Reference< css::frame::XModel >& rxModel, PptPageKind ePKind ) :
+    PPTConvertOCXControls( const SdrPowerPointImport* pPPTImporter, const cpo::uno::Reference< css::frame::XModel >& rxModel, PptPageKind ePKind ) :
         SvxMSConvertOCXControls ( rxModel ),
         ePageKind               ( ePKind ),
         mpPPTImporter           ( pPPTImporter )
     {};
     bool ReadOCXStream( rtl::Reference<SotStorage>& rSrc1,
-        css::uno::Reference<css::drawing::XShape > *pShapeRef );
+        cpo::uno::Reference<css::drawing::XShape > *pShapeRef );
     virtual bool InsertControl(
-        const css::uno::Reference< css::form::XFormComponent > &rFComp,
+        const cpo::uno::Reference< css::form::XFormComponent > &rFComp,
         const css::awt::Size& rSize,
-        css::uno::Reference< css::drawing::XShape > *pShape,
+        cpo::uno::Reference< css::drawing::XShape > *pShape,
         bool bFloatingCtrl
     ) override;
 };

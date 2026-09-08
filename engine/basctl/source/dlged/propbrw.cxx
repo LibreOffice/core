@@ -48,7 +48,7 @@ namespace basctl
 {
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
@@ -481,7 +481,7 @@ void PropBrw::ImplUpdate( const Reference< XModel >& _rxContextDocument, SdrView
                 if ( pDlgEdObj->IsGroupObject() ) // group object
                     aNewObjects = CreateMultiSelectionSequence( rMarkList );
                 else // single selection
-                    xNewObject.set(pDlgEdObj->GetUnoControlModel(), css::uno::UNO_QUERY);
+                    xNewObject.set(pDlgEdObj->GetUnoControlModel(), cpo::uno::UNO_QUERY);
             }
         }
         else if ( nMarkCount > 1 ) // multiple selection

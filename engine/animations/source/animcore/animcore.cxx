@@ -65,10 +65,10 @@ namespace com::sun::star::beans { struct NamedValue; }
 using ::comphelper::OInterfaceContainerHelper4;
 using ::comphelper::OInterfaceIteratorHelper4;
 using ::cpo::uno::Any;
-using ::com::sun::star::uno::UNO_QUERY;
+using ::cpo::uno::UNO_QUERY;
 using ::cpo::uno::XInterface;
 using ::cpo::uno::Sequence;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::cpo::uno::Exception;
 using ::cpo::uno::XWeak;
 using ::cpo::uno::Type;
@@ -2041,7 +2041,7 @@ void AnimationNode::fireChangeListener(std::unique_lock<std::mutex>& l)
     {
         Reference<XInterface> xSource(getXWeak(), UNO_QUERY);
         Sequence< ElementChange > aChanges;
-        const ChangesEvent aEvent( xSource, Any( css::uno::Reference<XInterface>(cppu::getXWeak(mxParent.get().get())) ), aChanges );
+        const ChangesEvent aEvent( xSource, Any( cpo::uno::Reference<XInterface>(cppu::getXWeak(mxParent.get().get())) ), aChanges );
         OInterfaceIteratorHelper4 aIterator( l, maChangeListener );
         l.unlock();
         while( aIterator.hasMoreElements() )

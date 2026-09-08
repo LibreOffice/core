@@ -140,7 +140,7 @@ void Desktop::constructorInit()
                 The value must be different from NULL!
     @onerror    We throw an ASSERT in debug version or do nothing in release version.
 *//*-*************************************************************************************************************/
-Desktop::Desktop( css::uno::Reference< cpo::uno::XComponentContext >  xContext )
+Desktop::Desktop( cpo::uno::Reference< cpo::uno::XComponentContext >  xContext )
         :   Desktop_BASE            ( m_aMutex )
         ,   cppu::OPropertySetHelper( cppu::WeakComponentImplHelperBase::rBHelper   )
         // Init member
@@ -190,10 +190,10 @@ bool Desktop::terminate()
     if (m_bIsTerminated)
         return true;
 
-    css::uno::Reference< css::frame::XTerminateListener > xPipeTerminator    = m_xPipeTerminator;
-    css::uno::Reference< css::frame::XTerminateListener > xQuickLauncher     = m_xQuickLauncher;
-    css::uno::Reference< css::frame::XTerminateListener > xSWThreadManager   = m_xSWThreadManager;
-    css::uno::Reference< css::frame::XTerminateListener > xSfxTerminator     = m_xSfxTerminator;
+    cpo::uno::Reference< css::frame::XTerminateListener > xPipeTerminator    = m_xPipeTerminator;
+    cpo::uno::Reference< css::frame::XTerminateListener > xQuickLauncher     = m_xQuickLauncher;
+    cpo::uno::Reference< css::frame::XTerminateListener > xSWThreadManager   = m_xSWThreadManager;
+    cpo::uno::Reference< css::frame::XTerminateListener > xSfxTerminator     = m_xSfxTerminator;
 
     css::lang::EventObject                                aEvent             ( static_cast< ::cppu::OWeakObject* >(this) );
     bool                                                  bAskQuickStart     = !m_bSuspendQuickstartVeto;
@@ -317,11 +317,11 @@ void Desktop::shutdown()
         return;
     m_bIsShutdown = true;
 
-    css::uno::Reference<css::frame::XTerminateListener> xSfxTerminator = m_xSfxTerminator;
+    cpo::uno::Reference<css::frame::XTerminateListener> xSfxTerminator = m_xSfxTerminator;
     css::lang::EventObject aEvent(static_cast<::cppu::OWeakObject* >(this));
 
     // we need a copy here as the notifyTermination call might cause a removeTerminateListener call
-    std::vector< css::uno::Reference<css::frame::XTerminateListener> > xComponentDllListeners;
+    std::vector< cpo::uno::Reference<css::frame::XTerminateListener> > xComponentDllListeners;
     xComponentDllListeners.swap(m_xComponentDllListeners);
     for (auto& xListener : xComponentDllListeners)
         xListener->notifyTermination(aEvent);
@@ -338,9 +338,9 @@ namespace
     class QuickstartSuppressor
     {
         Desktop* const m_pDesktop;
-        css::uno::Reference< css::frame::XTerminateListener > m_xQuickLauncher;
+        cpo::uno::Reference< css::frame::XTerminateListener > m_xQuickLauncher;
         public:
-            QuickstartSuppressor(Desktop* const pDesktop, css::uno::Reference< css::frame::XTerminateListener >  xQuickLauncher)
+            QuickstartSuppressor(Desktop* const pDesktop, cpo::uno::Reference< css::frame::XTerminateListener >  xQuickLauncher)
                 : m_pDesktop(pDesktop)
                 , m_xQuickLauncher(std::move(xQuickLauncher))
             {
@@ -364,11 +364,11 @@ bool Desktop::terminateQuickstarterToo()
     return terminate();
 }
 
-void Desktop::addTerminateListener( const css::uno::Reference< css::frame::XTerminateListener >& xListener )
+void Desktop::addTerminateListener( const cpo::uno::Reference< css::frame::XTerminateListener >& xListener )
 {
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
-    css::uno::Reference< css::lang::XServiceInfo > xInfo( xListener, css::uno::UNO_QUERY );
+    cpo::uno::Reference< css::lang::XServiceInfo > xInfo( xListener, cpo::uno::UNO_QUERY );
     if ( xInfo.is() )
     {
         OUString sImplementationName = xInfo->getImplementationName();
@@ -406,11 +406,11 @@ void Desktop::addTerminateListener( const css::uno::Reference< css::frame::XTerm
     m_aListenerContainer.addInterface( cppu::UnoType<css::frame::XTerminateListener>::get(), xListener );
 }
 
-void Desktop::removeTerminateListener( const css::uno::Reference< css::frame::XTerminateListener >& xListener )
+void Desktop::removeTerminateListener( const cpo::uno::Reference< css::frame::XTerminateListener >& xListener )
 {
     TransactionGuard aTransaction( m_aTransactionManager, E_SOFTEXCEPTIONS );
 
-    css::uno::Reference< css::lang::XServiceInfo > xInfo( xListener, css::uno::UNO_QUERY );
+    cpo::uno::Reference< css::lang::XServiceInfo > xInfo( xListener, cpo::uno::UNO_QUERY );
     if ( xInfo.is() )
     {
         OUString sImplementationName = xInfo->getImplementationName();
@@ -463,7 +463,7 @@ void Desktop::removeTerminateListener( const css::uno::Reference< css::frame::XT
     @onerror    We return a null-reference.
     @threadsafe yes
 *//*-*************************************************************************************************************/
-css::uno::Reference< css::container::XEnumerationAccess > Desktop::getComponents()
+cpo::uno::Reference< css::container::XEnumerationAccess > Desktop::getComponents()
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Register transaction and reject wrong calls.
@@ -486,19 +486,19 @@ css::uno::Reference< css::container::XEnumerationAccess > Desktop::getComponents
     @onerror    We return a null-reference.
     @threadsafe yes
 *//*-*************************************************************************************************************/
-css::uno::Reference< css::lang::XComponent > Desktop::getCurrentComponent()
+cpo::uno::Reference< css::lang::XComponent > Desktop::getCurrentComponent()
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Register transaction and reject wrong calls.
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
     // Set return value if method failed.
-    css::uno::Reference< css::lang::XComponent > xComponent;
+    cpo::uno::Reference< css::lang::XComponent > xComponent;
 
     // Get reference to current frame ...
     // ... get component of this frame ... (It can be the window, the model or the controller.)
     // ... and return the result.
-    css::uno::Reference< css::frame::XFrame > xCurrentFrame = getCurrentFrame();
+    cpo::uno::Reference< css::frame::XFrame > xCurrentFrame = getCurrentFrame();
     if( xCurrentFrame.is() )
     {
         xComponent = impl_getFrameComponent( xCurrentFrame );
@@ -521,7 +521,7 @@ css::uno::Reference< css::lang::XComponent > Desktop::getCurrentComponent()
     @onerror    We return a null reference.
     @threadsafe yes
 *//*-*************************************************************************************************************/
-css::uno::Reference< css::frame::XFrame > Desktop::getCurrentFrame()
+cpo::uno::Reference< css::frame::XFrame > Desktop::getCurrentFrame()
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Register transaction and reject wrong calls.
@@ -530,14 +530,14 @@ css::uno::Reference< css::frame::XFrame > Desktop::getCurrentFrame()
     // Start search with our direct active frame (if it exists!).
     // Search its children for other active frames too.
     // Stop if none could be found and return the last of the found ones.
-    css::uno::Reference< css::frame::XFramesSupplier > xLast( getActiveFrame(), css::uno::UNO_QUERY );
+    cpo::uno::Reference< css::frame::XFramesSupplier > xLast( getActiveFrame(), cpo::uno::UNO_QUERY );
     if( xLast.is() )
     {
-        css::uno::Reference< css::frame::XFramesSupplier > xNext( xLast->getActiveFrame(), css::uno::UNO_QUERY );
+        cpo::uno::Reference< css::frame::XFramesSupplier > xNext( xLast->getActiveFrame(), cpo::uno::UNO_QUERY );
         while( xNext.is() )
         {
             xLast = xNext;
-            xNext.set( xNext->getActiveFrame(), css::uno::UNO_QUERY );
+            xNext.set( xNext->getActiveFrame(), cpo::uno::UNO_QUERY );
         }
     }
     return xLast;
@@ -559,7 +559,7 @@ css::uno::Reference< css::frame::XFrame > Desktop::getCurrentFrame()
     @onerror    We return a null reference.
     @threadsafe yes
 *//*-*************************************************************************************************************/
-css::uno::Reference< css::lang::XComponent > Desktop::loadComponentFromURL( const OUString&                                 sURL            ,
+cpo::uno::Reference< css::lang::XComponent > Desktop::loadComponentFromURL( const OUString&                                 sURL            ,
                                                                                      const OUString&                                 sTargetFrameName,
                                                                                            sal_Int32                                        nSearchFlags    ,
                                                                                      const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments      )
@@ -569,7 +569,7 @@ css::uno::Reference< css::lang::XComponent > Desktop::loadComponentFromURL( cons
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
     SAL_INFO( "fwk.desktop", "loadComponentFromURL" );
 
-    css::uno::Reference< css::frame::XComponentLoader > xThis(this);
+    cpo::uno::Reference< css::frame::XComponentLoader > xThis(this);
 
     comphelper::SequenceAsHashMap aDescriptor(lArguments);
     bool bOnMainThread = aDescriptor.getUnpackedValueOrDefault(u"OnMainThread"_ustr, false);
@@ -612,7 +612,7 @@ css::uno::Reference< css::lang::XComponent > Desktop::loadComponentFromURL( cons
     @onerror    A null reference is returned.
     @threadsafe yes
 *//*-*************************************************************************************************************/
-css::uno::Reference< css::frame::XDispatch > Desktop::queryDispatch( const css::util::URL&  aURL             ,
+cpo::uno::Reference< css::frame::XDispatch > Desktop::queryDispatch( const css::util::URL&  aURL             ,
                                                                               const OUString& sTargetFrameName ,
                                                                                     sal_Int32        nSearchFlags     )
 {
@@ -631,7 +631,7 @@ css::uno::Reference< css::frame::XDispatch > Desktop::queryDispatch( const css::
 
     // Make std::unordered_map lookup if the current URL is in the disabled list
     if (m_xCommandOptions && m_xCommandOptions->LookupDisabled(aCommand))
-        return css::uno::Reference< css::frame::XDispatch >();
+        return cpo::uno::Reference< css::frame::XDispatch >();
     else
     {
         // We use a helper to support this interface and an interceptor mechanism.
@@ -640,7 +640,7 @@ css::uno::Reference< css::frame::XDispatch > Desktop::queryDispatch( const css::
     }
 }
 
-cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > Desktop::queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& lQueries )
+cpo::uno::Sequence< cpo::uno::Reference< css::frame::XDispatch > > Desktop::queryDispatches( const cpo::uno::Sequence< css::frame::DispatchDescriptor >& lQueries )
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Register transaction and reject wrong calls.
@@ -660,14 +660,14 @@ cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > Desktop::quer
 
     @threadsafe yes
 *//*-*************************************************************************************************************/
-void Desktop::registerDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor)
+void Desktop::registerDispatchProviderInterceptor( const cpo::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor)
 {
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
     m_xDispatchHelper->registerDispatchProviderInterceptor( xInterceptor );
 }
 
-void Desktop::releaseDispatchProviderInterceptor ( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor)
+void Desktop::releaseDispatchProviderInterceptor ( const cpo::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor)
 {
     TransactionGuard aTransaction( m_aTransactionManager, E_SOFTEXCEPTIONS );
 
@@ -689,7 +689,7 @@ void Desktop::releaseDispatchProviderInterceptor ( const css::uno::Reference< cs
     @onerror    A null reference is returned.
     @threadsafe yes
 *//*-*************************************************************************************************************/
-css::uno::Reference< css::frame::XFrames > Desktop::getFrames()
+cpo::uno::Reference< css::frame::XFrames > Desktop::getFrames()
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Register transaction and reject wrong calls.
@@ -715,7 +715,7 @@ css::uno::Reference< css::frame::XFrames > Desktop::getFrames()
     @onerror    A null reference is returned.
     @threadsafe yes
 *//*-*************************************************************************************************************/
-void Desktop::setActiveFrame( const css::uno::Reference< css::frame::XFrame >& xFrame )
+void Desktop::setActiveFrame( const cpo::uno::Reference< css::frame::XFrame >& xFrame )
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Register transaction and reject wrong calls.
@@ -726,7 +726,7 @@ void Desktop::setActiveFrame( const css::uno::Reference< css::frame::XFrame >& x
     // Otherwise set new active frame ...
     // and deactivate last frame.
     // It's necessary for our FrameActionEvent listener on a frame!
-    css::uno::Reference< css::frame::XFrame > xLastActiveChild = m_aChildTaskContainer.getActive();
+    cpo::uno::Reference< css::frame::XFrame > xLastActiveChild = m_aChildTaskContainer.getActive();
     if( xLastActiveChild != xFrame )
     {
         m_aChildTaskContainer.setActive( xFrame );
@@ -737,7 +737,7 @@ void Desktop::setActiveFrame( const css::uno::Reference< css::frame::XFrame >& x
     }
 }
 
-css::uno::Reference< css::frame::XFrame > Desktop::getActiveFrame()
+cpo::uno::Reference< css::frame::XFrame > Desktop::getActiveFrame()
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Register transaction and reject wrong calls.
@@ -752,22 +752,22 @@ css::uno::Reference< css::frame::XFrame > Desktop::getActiveFrame()
     @descr      Some methods make no sense for our desktop! It has no window or parent or ...
                 So we should have an empty implementation and warn the programmer, if it is used!
 */
-void Desktop::initialize( const css::uno::Reference< css::awt::XWindow >& )
+void Desktop::initialize( const cpo::uno::Reference< css::awt::XWindow >& )
 {
 }
 
-css::uno::Reference< css::awt::XWindow > Desktop::getContainerWindow()
+cpo::uno::Reference< css::awt::XWindow > Desktop::getContainerWindow()
 {
-    return css::uno::Reference< css::awt::XWindow >();
+    return cpo::uno::Reference< css::awt::XWindow >();
 }
 
-void Desktop::setCreator( const css::uno::Reference< css::frame::XFramesSupplier >& /*xCreator*/ )
+void Desktop::setCreator( const cpo::uno::Reference< css::frame::XFramesSupplier >& /*xCreator*/ )
 {
 }
 
-css::uno::Reference< css::frame::XFramesSupplier > Desktop::getCreator()
+cpo::uno::Reference< css::frame::XFramesSupplier > Desktop::getCreator()
 {
-    return css::uno::Reference< css::frame::XFramesSupplier >();
+    return cpo::uno::Reference< css::frame::XFramesSupplier >();
 }
 
 OUString Desktop::getName()
@@ -806,32 +806,32 @@ bool Desktop::isActive()
     return true;
 }
 
-bool Desktop::setComponent( const css::uno::Reference< css::awt::XWindow >&       /*xComponentWindow*/ ,
-                                         const css::uno::Reference< css::frame::XController >& /*xController*/      )
+bool Desktop::setComponent( const cpo::uno::Reference< css::awt::XWindow >&       /*xComponentWindow*/ ,
+                                         const cpo::uno::Reference< css::frame::XController >& /*xController*/      )
 {
     return false;
 }
 
-css::uno::Reference< css::awt::XWindow > Desktop::getComponentWindow()
+cpo::uno::Reference< css::awt::XWindow > Desktop::getComponentWindow()
 {
-    return css::uno::Reference< css::awt::XWindow >();
+    return cpo::uno::Reference< css::awt::XWindow >();
 }
 
-css::uno::Reference< css::frame::XController > Desktop::getController()
+cpo::uno::Reference< css::frame::XController > Desktop::getController()
 {
-    return css::uno::Reference< css::frame::XController >();
+    return cpo::uno::Reference< css::frame::XController >();
 }
 
 void Desktop::contextChanged()
 {
 }
 
-void Desktop::addFrameActionListener( const css::uno::Reference< css::frame::XFrameActionListener >& )
+void Desktop::addFrameActionListener( const cpo::uno::Reference< css::frame::XFrameActionListener >& )
 {
 }
 
 //   css::frame::XFrame
-void Desktop::removeFrameActionListener( const css::uno::Reference< css::frame::XFrameActionListener >& )
+void Desktop::removeFrameActionListener( const cpo::uno::Reference< css::frame::XFrameActionListener >& )
 {
 }
 
@@ -862,10 +862,10 @@ void Desktop::removeFrameActionListener( const css::uno::Reference< css::frame::
     @onerror    A null reference is returned.
     @threadsafe yes
 *//*-*************************************************************************************************************/
-css::uno::Reference< css::frame::XFrame > Desktop::findFrame( const OUString& sTargetFrameName ,
+cpo::uno::Reference< css::frame::XFrame > Desktop::findFrame( const OUString& sTargetFrameName ,
                                                                              sal_Int32        nSearchFlags     )
 {
-    css::uno::Reference< css::frame::XFrame > xTarget;
+    cpo::uno::Reference< css::frame::XFrame > xTarget;
 
     // 0) Ignore wrong parameters!
     //    We don't support searching for the following special targets.
@@ -1011,7 +1011,7 @@ void Desktop::disposing()
 
     // First we have to kill all listener connections.
     // They might rely on our member and can hinder us on releasing them.
-    css::uno::Reference< cpo::uno::XInterface > xThis ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
+    cpo::uno::Reference< cpo::uno::XInterface > xThis ( static_cast< ::cppu::OWeakObject* >(this), cpo::uno::UNO_QUERY );
     css::lang::EventObject                      aEvent( xThis );
     m_aListenerContainer.disposeAndClear( aEvent );
 
@@ -1030,7 +1030,7 @@ void Desktop::disposing()
     m_xSWThreadManager.clear();
 
     // we need a copy because the disposing might call the removeEventListener method
-    std::vector< css::uno::Reference<css::frame::XTerminateListener> > xComponentDllListeners;
+    std::vector< cpo::uno::Reference<css::frame::XTerminateListener> > xComponentDllListeners;
     xComponentDllListeners.swap(m_xComponentDllListeners);
     for (auto& xListener: xComponentDllListeners)
     {
@@ -1056,7 +1056,7 @@ void Desktop::disposing()
     @param      "xListener", reference to a valid listener. We don't accept invalid values!
     @threadsafe yes
 */
-void Desktop::addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener )
+void Desktop::addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& xListener )
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Safe impossible cases
@@ -1068,7 +1068,7 @@ void Desktop::addEventListener( const css::uno::Reference< css::lang::XEventList
     m_aListenerContainer.addInterface( cppu::UnoType<css::lang::XEventListener>::get(), xListener );
 }
 
-void Desktop::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener )
+void Desktop::removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& xListener )
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Safe impossible cases
@@ -1105,7 +1105,7 @@ void Desktop::dispatchFinished( const css::frame::DispatchResultEvent& aEvent )
         m_eLoadState = E_FAILED;
         if( aEvent.State == css::frame::DispatchResultState::SUCCESS )
         {
-            css::uno::Reference< css::frame::XFrame > xLastFrame; /// last target of "loadComponentFromURL()"!
+            cpo::uno::Reference< css::frame::XFrame > xLastFrame; /// last target of "loadComponentFromURL()"!
             if ( aEvent.Result >>= xLastFrame )
                 m_eLoadState = E_SUCCESSFUL;
         }
@@ -1145,7 +1145,7 @@ void Desktop::disposing( const css::lang::EventObject& )
     @param      "xRequest", request for interaction - normally a wrapped target exception from lower services
     @threadsafe yes
 *//*-*************************************************************************************************************/
-void Desktop::handle( const css::uno::Reference< css::task::XInteractionRequest >& xRequest )
+void Desktop::handle( const cpo::uno::Reference< css::task::XInteractionRequest >& xRequest )
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Register transaction and reject wrong calls.
@@ -1162,23 +1162,23 @@ void Desktop::handle( const css::uno::Reference< css::task::XInteractionRequest 
     cpo::uno::Any aRequest = xRequest->getRequest();
 
     // extract continuations from request
-    cpo::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > lContinuations = xRequest->getContinuations();
-    css::uno::Reference< css::task::XInteractionAbort >                              xAbort;
-    css::uno::Reference< css::task::XInteractionApprove >                            xApprove;
-    css::uno::Reference< css::document::XInteractionFilterSelect >                   xFilterSelect;
+    cpo::uno::Sequence< cpo::uno::Reference< css::task::XInteractionContinuation > > lContinuations = xRequest->getContinuations();
+    cpo::uno::Reference< css::task::XInteractionAbort >                              xAbort;
+    cpo::uno::Reference< css::task::XInteractionApprove >                            xApprove;
+    cpo::uno::Reference< css::document::XInteractionFilterSelect >                   xFilterSelect;
     bool                                                                             bAbort         = false;
 
     sal_Int32 nCount=lContinuations.getLength();
     for( sal_Int32 nStep=0; nStep<nCount; ++nStep )
     {
         if( ! xAbort.is() )
-            xAbort.set( lContinuations[nStep], css::uno::UNO_QUERY );
+            xAbort.set( lContinuations[nStep], cpo::uno::UNO_QUERY );
 
         if( ! xApprove.is() )
-            xApprove.set( lContinuations[nStep], css::uno::UNO_QUERY );
+            xApprove.set( lContinuations[nStep], cpo::uno::UNO_QUERY );
 
         if( ! xFilterSelect.is() )
-            xFilterSelect.set( lContinuations[nStep], css::uno::UNO_QUERY );
+            xFilterSelect.set( lContinuations[nStep], cpo::uno::UNO_QUERY );
     }
 
     // Differ between abortable interactions (error, unknown filter...)
@@ -1212,7 +1212,7 @@ void Desktop::handle( const css::uno::Reference< css::task::XInteractionRequest 
     }
 }
 
-::sal_Int32 Desktop::leaseNumber( const css::uno::Reference< cpo::uno::XInterface >& xComponent )
+::sal_Int32 Desktop::leaseNumber( const cpo::uno::Reference< cpo::uno::XInterface >& xComponent )
 {
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
     return m_xTitleNumberGenerator->leaseNumber (xComponent);
@@ -1224,7 +1224,7 @@ void Desktop::releaseNumber( ::sal_Int32 nNumber )
     m_xTitleNumberGenerator->releaseNumber (nNumber);
 }
 
-void Desktop::releaseNumberForComponent( const css::uno::Reference< cpo::uno::XInterface >& xComponent )
+void Desktop::releaseNumberForComponent( const cpo::uno::Reference< cpo::uno::XInterface >& xComponent )
 {
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
     m_xTitleNumberGenerator->releaseNumberForComponent (xComponent);
@@ -1411,7 +1411,7 @@ void Desktop::getFastPropertyValue( cpo::uno::Any& aValue  ,
     @return     reference to object with information [XPropertySetInfo]
     @threadsafe yes
 *//*-*************************************************************************************************************/
-css::uno::Reference< css::beans::XPropertySetInfo > Desktop::getPropertySetInfo()
+cpo::uno::Reference< css::beans::XPropertySetInfo > Desktop::getPropertySetInfo()
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Register transaction and reject wrong calls.
@@ -1419,7 +1419,7 @@ css::uno::Reference< css::beans::XPropertySetInfo > Desktop::getPropertySetInfo(
 
     // Create structure of propertysetinfo for base class "OPropertySetHelper".
     // (Use method "getInfoHelper()".)
-    static css::uno::Reference< css::beans::XPropertySetInfo > xInfo(
+    static cpo::uno::Reference< css::beans::XPropertySetInfo > xInfo(
                     cppu::OPropertySetHelper::createPropertySetInfo( getInfoHelper() ) );
 
     return xInfo;
@@ -1443,16 +1443,16 @@ css::uno::Reference< css::beans::XPropertySetInfo > Desktop::getPropertySetInfo(
     @onerror    A null reference is returned.
     @threadsafe yes
 *//*-*************************************************************************************************************/
-css::uno::Reference< css::lang::XComponent > Desktop::impl_getFrameComponent( const css::uno::Reference< css::frame::XFrame >& xFrame ) const
+cpo::uno::Reference< css::lang::XComponent > Desktop::impl_getFrameComponent( const cpo::uno::Reference< css::frame::XFrame >& xFrame ) const
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Register transaction and reject wrong calls.
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
     // Set default return value, if method failed.
-    css::uno::Reference< css::lang::XComponent > xComponent;
+    cpo::uno::Reference< css::lang::XComponent > xComponent;
     // Does no controller exist?
-    css::uno::Reference< css::frame::XController > xController = xFrame->getController();
+    cpo::uno::Reference< css::frame::XController > xController = xFrame->getController();
     if( !xController.is() )
     {
         // Controller does not exist - use the VCL-component.
@@ -1461,7 +1461,7 @@ css::uno::Reference< css::lang::XComponent > Desktop::impl_getFrameComponent( co
     else
     {
         // Does no model exist?
-        css::uno::Reference< css::frame::XModel > xModel = xController->getModel();
+        cpo::uno::Reference< css::frame::XModel > xModel = xController->getModel();
         if( xModel.is() )
         {
             // Model exists - use the model as component.
@@ -1492,7 +1492,7 @@ bool Desktop::impl_sendQueryTerminationEvent(Desktop::TTerminateListenerList& lC
     {
         try
         {
-            css::uno::Reference< css::frame::XTerminateListener > xListener(aIterator.next(), css::uno::UNO_QUERY);
+            cpo::uno::Reference< css::frame::XTerminateListener > xListener(aIterator.next(), cpo::uno::UNO_QUERY);
             if ( ! xListener.is() )
                 continue;
             xListener->queryTermination( aEvent );
@@ -1520,12 +1520,12 @@ void Desktop::impl_sendCancelTerminationEvent(const Desktop::TTerminateListenerL
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
     css::lang::EventObject                          aEvent( static_cast< ::cppu::OWeakObject* >(this) );
-    for (const css::uno::Reference<css::frame::XTerminateListener>& xListener : lCalledListener)
+    for (const cpo::uno::Reference<css::frame::XTerminateListener>& xListener : lCalledListener)
     {
         try
         {
             // Note: cancelTermination() is a new and optional interface method !
-            css::uno::Reference< css::frame::XTerminateListener2 > xListenerGeneration2(xListener, css::uno::UNO_QUERY);
+            cpo::uno::Reference< css::frame::XTerminateListener2 > xListenerGeneration2(xListener, cpo::uno::UNO_QUERY);
             if ( ! xListenerGeneration2.is() )
                 continue;
             xListenerGeneration2->cancelTermination( aEvent );
@@ -1550,7 +1550,7 @@ void Desktop::impl_sendTerminateToClipboard()
         {
             css::frame::XTerminateListener* pTerminateListener =
                 static_cast< css::frame::XTerminateListener* >(aIterator.next());
-            css::uno::Reference< css::lang::XServiceInfo > xInfo( pTerminateListener, css::uno::UNO_QUERY );
+            cpo::uno::Reference< css::lang::XServiceInfo > xInfo( pTerminateListener, cpo::uno::UNO_QUERY );
             if ( !xInfo.is() )
                 continue;
 
@@ -1603,7 +1603,7 @@ void Desktop::impl_sendNotifyTerminationEvent()
 bool Desktop::impl_closeFrames(bool bAllowUI)
 {
     SolarMutexClearableGuard aReadLock;
-    cpo::uno::Sequence< css::uno::Reference< css::frame::XFrame > > lFrames = m_aChildTaskContainer.getAllElements();
+    cpo::uno::Sequence< cpo::uno::Reference< css::frame::XFrame > > lFrames = m_aChildTaskContainer.getAllElements();
     aReadLock.clear();
 
     ::sal_Int32 c                = lFrames.getLength();
@@ -1614,12 +1614,12 @@ bool Desktop::impl_closeFrames(bool bAllowUI)
     {
         try
         {
-            const css::uno::Reference< css::frame::XFrame >& xFrame = lFrames[i];
+            const cpo::uno::Reference< css::frame::XFrame >& xFrame = lFrames[i];
 
             // XController.suspend() will show a UI.
             // Use it in case it was allowed from outside only.
             bool                                       bSuspended = false;
-            css::uno::Reference< css::frame::XController > xController = xFrame->getController();
+            cpo::uno::Reference< css::frame::XController > xController = xFrame->getController();
             if ( bAllowUI && xController.is() )
             {
                 bSuspended = xController->suspend( true );
@@ -1636,7 +1636,7 @@ bool Desktop::impl_closeFrames(bool bAllowUI)
             // Try to close frame (in case no UI was allowed without calling XController->suspend() before!)
             // But don't deliver ownership to any other one!
             // This method can be called again.
-            css::uno::Reference< css::util::XCloseable > xClose( xFrame, css::uno::UNO_QUERY );
+            cpo::uno::Reference< css::util::XCloseable > xClose( xFrame, cpo::uno::UNO_QUERY );
             if ( xClose.is() )
             {
                 try
@@ -1688,7 +1688,7 @@ bool Desktop::impl_closeFrames(bool bAllowUI)
 namespace {
 
 rtl::Reference<framework::Desktop> createDesktop(
-    css::uno::Reference<cpo::uno::XComponentContext> const & context)
+    cpo::uno::Reference<cpo::uno::XComponentContext> const & context)
 {
     SolarMutexGuard g; // tdf#114025 init with SolarMutex to avoid deadlock
     rtl::Reference<framework::Desktop> desktop(new framework::Desktop(context));
@@ -1699,7 +1699,7 @@ rtl::Reference<framework::Desktop> createDesktop(
 }
 
 const rtl::Reference<framework::Desktop> & framework::getDesktop(
-    css::uno::Reference<cpo::uno::XComponentContext> const & context)
+    cpo::uno::Reference<cpo::uno::XComponentContext> const & context)
 {
     static auto const instance = createDesktop(context);
     return instance;

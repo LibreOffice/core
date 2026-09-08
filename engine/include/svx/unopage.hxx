@@ -64,8 +64,8 @@ class SVXCORE_DLLPUBLIC SvxDrawPage :
     SdrModel*       mpModel;    // TTTT probably not needed -> use from SdrPage
     std::unique_ptr<SdrView> mpView;
 
-    void    SelectObjectsInView( const css::uno::Reference< css::drawing::XShapes >& aShapes, SdrPageView*   pPageView ) noexcept;
-    void    SelectObjectInView( const css::uno::Reference< css::drawing::XShape >& xShape, SdrPageView*  pPageView ) noexcept;
+    void    SelectObjectsInView( const cpo::uno::Reference< css::drawing::XShapes >& aShapes, SdrPageView*   pPageView ) noexcept;
+    void    SelectObjectInView( const cpo::uno::Reference< css::drawing::XShape >& xShape, SdrPageView*  pPageView ) noexcept;
 
     virtual void disposing() noexcept;
 
@@ -77,7 +77,7 @@ class SVXCORE_DLLPUBLIC SvxDrawPage :
     SdrPage* GetSdrPage() const { return mpPage; }
 
     // Creation of a SdrObject and insertion into the SdrPage
-    rtl::Reference<SdrObject> CreateSdrObject( const css::uno::Reference< css::drawing::XShape >& xShape, bool bBeginning = false ) noexcept;
+    rtl::Reference<SdrObject> CreateSdrObject( const cpo::uno::Reference< css::drawing::XShape >& xShape, bool bBeginning = false ) noexcept;
 
     // Determine Type and Inventor
     static void GetTypeAndInventor( SdrObjKind& rType, SdrInventor& rInventor, const OUString& aName ) noexcept;
@@ -85,7 +85,7 @@ class SVXCORE_DLLPUBLIC SvxDrawPage :
     // Creating a SdrObject using it's Description.
     // Can be used by derived classes to support their own Shapes (e.g. Controls).
     /// @throws cpo::uno::RuntimeException
-    virtual rtl::Reference<SdrObject> CreateSdrObject_( const css::uno::Reference< css::drawing::XShape >& xShape );
+    virtual rtl::Reference<SdrObject> CreateSdrObject_( const cpo::uno::Reference< css::drawing::XShape >& xShape );
 
     /// @throws cpo::uno::RuntimeException
     static rtl::Reference<SvxShape> CreateShapeByTypeAndInventor( SdrObjKind nType, SdrInventor nInventor, SdrObject *pObj, SvxDrawPage *pPage = nullptr, OUString const & referer = OUString() );
@@ -93,17 +93,17 @@ class SVXCORE_DLLPUBLIC SvxDrawPage :
     // The following method is called if a SvxShape object is to be created.
     // Derived classes can create a derivation or an SvxShape aggregating object.
     /// @throws cpo::uno::RuntimeException
-    virtual css::uno::Reference< css::drawing::XShape > CreateShape( SdrObject *pObj ) const;
+    virtual cpo::uno::Reference< css::drawing::XShape > CreateShape( SdrObject *pObj ) const;
 
     UNO3_GETIMPLEMENTATION_DECL( SvxDrawPage )
 
     // XShapes
-    virtual void add( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
-    virtual void remove( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
+    virtual void add( const cpo::uno::Reference< css::drawing::XShape >& xShape ) override;
+    virtual void remove( const cpo::uno::Reference< css::drawing::XShape >& xShape ) override;
 
     // XShapes2
-    virtual void addTop( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
-    virtual void addBottom( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
+    virtual void addTop( const cpo::uno::Reference< css::drawing::XShape >& xShape ) override;
+    virtual void addBottom( const cpo::uno::Reference< css::drawing::XShape >& xShape ) override;
 
     // XShapes3
     virtual void sort( const cpo::uno::Sequence< sal_Int32 >& sortOrder ) override;
@@ -117,8 +117,8 @@ class SVXCORE_DLLPUBLIC SvxDrawPage :
     virtual cpo::uno::Any getByIndex( sal_Int32 Index ) override;
 
     // XShapeGrouper
-    virtual css::uno::Reference< css::drawing::XShapeGroup > group( const css::uno::Reference< css::drawing::XShapes >& xShapes ) override;
-    virtual void ungroup( const css::uno::Reference< css::drawing::XShapeGroup >& aGroup ) override;
+    virtual cpo::uno::Reference< css::drawing::XShapeGroup > group( const cpo::uno::Reference< css::drawing::XShapes >& xShapes ) override;
+    virtual void ungroup( const cpo::uno::Reference< css::drawing::XShapeGroup >& aGroup ) override;
 
     // XServiceInfo
     virtual OUString getImplementationName() override;
@@ -127,11 +127,11 @@ class SVXCORE_DLLPUBLIC SvxDrawPage :
 
     // XComponent
     virtual void dispose() override;
-    virtual void addEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
-    virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+    virtual void addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener ) override;
+    virtual void removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
     // XFormsSupplier
-    virtual css::uno::Reference< css::container::XNameContainer > getForms() override;
+    virtual cpo::uno::Reference< css::container::XNameContainer > getForms() override;
 
     // XFormsSupplier2
     virtual bool hasForms() override;

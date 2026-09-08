@@ -73,8 +73,8 @@ class DomainMapper : public LoggedProperties, public LoggedTable,
     std::unique_ptr<DomainMapper_Impl, o3tl::default_delete<DomainMapper_Impl>> m_pImpl;
 
 public:
-    DomainMapper(const css::uno::Reference<cpo::uno::XComponentContext>& xContext,
-                 css::uno::Reference<css::io::XInputStream> const& xInputStream,
+    DomainMapper(const cpo::uno::Reference<cpo::uno::XComponentContext>& xContext,
+                 cpo::uno::Reference<css::io::XInputStream> const& xInputStream,
                  rtl::Reference<SwXTextDocument> const& xModel,
                  bool bRepairStorage,
                  SourceDocumentType eDocumentType,
@@ -104,7 +104,7 @@ public:
     bool IsOOXMLImport() const;
     bool IsRTFImport() const;
     rtl::Reference<SwXTextDocument> const & GetTextDocument() const;
-    css::uno::Reference<css::text::XTextRange> GetCurrentTextRange();
+    cpo::uno::Reference<css::text::XTextRange> GetCurrentTextRange();
 
     OUString getOrCreateCharStyle( const PropertyValueVector_t& rCharProperties, bool bAlwaysCreate );
     StyleSheetTablePtr const & GetStyleSheetTable( );
@@ -112,7 +112,7 @@ public:
     GraphicZOrderHelper& graphicZOrderHelper();
 
     /// Return the first from the pending (not inserted to the document) shapes, if there are any.
-    css::uno::Reference<css::drawing::XShape> PopPendingShape();
+    cpo::uno::Reference<css::drawing::XShape> PopPendingShape();
 
     bool IsInHeaderFooter() const;
     bool IsInTable() const;
@@ -155,7 +155,7 @@ private:
     virtual void lcl_endParagraphGroup() override;
     virtual void lcl_startCharacterGroup() override;
     virtual void lcl_endCharacterGroup() override;
-    virtual void lcl_startShape(css::uno::Reference<css::drawing::XShape> const& xShape) override;
+    virtual void lcl_startShape(cpo::uno::Reference<css::drawing::XShape> const& xShape) override;
     virtual void lcl_endShape( ) override;
     virtual void lcl_startTextBoxContent() override;
     virtual void lcl_endTextBoxContent() override;

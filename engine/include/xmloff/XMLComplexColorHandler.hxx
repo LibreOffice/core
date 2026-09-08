@@ -30,8 +30,8 @@ public:
 
     bool equals(const cpo::uno::Any& rAny1, const cpo::uno::Any& rAny2) const override final
     {
-        css::uno::Reference<css::util::XComplexColor> xComplexColor1;
-        css::uno::Reference<css::util::XComplexColor> xComplexColor2;
+        cpo::uno::Reference<css::util::XComplexColor> xComplexColor1;
+        cpo::uno::Reference<css::util::XComplexColor> xComplexColor2;
         rAny1 >>= xComplexColor1;
         rAny2 >>= xComplexColor2;
         model::ComplexColor aComplexColor1 = model::color::getFromXComplexColor(xComplexColor1);

@@ -59,8 +59,8 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 bool SfxRedactionHelper::isRedactMode(const SfxRequest& rReq)
 {
@@ -300,7 +300,7 @@ void SfxRedactionHelper::showRedactionToolbar(const SfxViewFrame* pViewFrame)
 }
 
 PageMargins
-SfxRedactionHelper::getPageMarginsForWriter(const css::uno::Reference<css::frame::XModel>& xModel)
+SfxRedactionHelper::getPageMarginsForWriter(const cpo::uno::Reference<css::frame::XModel>& xModel)
 {
     PageMargins aPageMargins = { -1, -1, -1, -1 };
 
@@ -357,12 +357,12 @@ SfxRedactionHelper::getPageMarginsForWriter(const css::uno::Reference<css::frame
 }
 
 PageMargins
-SfxRedactionHelper::getPageMarginsForCalc(const css::uno::Reference<css::frame::XModel>& xModel)
+SfxRedactionHelper::getPageMarginsForCalc(const cpo::uno::Reference<css::frame::XModel>& xModel)
 {
     PageMargins aPageMargins = { -1, -1, -1, -1 };
     OUString sPageStyleName(u"Default"_ustr);
 
-    css::uno::Reference<css::sheet::XSpreadsheetView> xSpreadsheetView(
+    cpo::uno::Reference<css::sheet::XSpreadsheetView> xSpreadsheetView(
         xModel->getCurrentController(), UNO_QUERY);
 
     if (!xSpreadsheetView.is())

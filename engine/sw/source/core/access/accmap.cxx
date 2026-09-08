@@ -81,6 +81,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
+using namespace ::cpo;
 using namespace ::sw::access;
 
 namespace {
@@ -90,7 +91,7 @@ class SwDrawModellListener_Impl : public SfxListener,
 {
     mutable std::mutex maListenerMutex;
     ::comphelper::OInterfaceContainerHelper4<css::document::XEventListener> maEventListeners;
-    std::unordered_multimap<css::uno::Reference< css::drawing::XShape >, css::uno::Reference< css::document::XShapeEventListener >> maShapeListeners;
+    std::unordered_multimap<cpo::uno::Reference< css::drawing::XShape >, cpo::uno::Reference< css::document::XShapeEventListener >> maShapeListeners;
     SdrModel *mpDrawModel;
 protected:
     virtual ~SwDrawModellListener_Impl() override;
@@ -102,8 +103,8 @@ public:
     virtual void SAL_CALL addEventListener( const uno::Reference< document::XEventListener >& xListener ) override;
     virtual void SAL_CALL removeEventListener( const uno::Reference< document::XEventListener >& xListener ) override;
     // css::document::XShapeEventBroadcaster
-    virtual void SAL_CALL addShapeEventListener( const css::uno::Reference< css::drawing::XShape >& xShape, const css::uno::Reference< css::document::XShapeEventListener >& xListener ) override;
-    virtual void SAL_CALL removeShapeEventListener( const css::uno::Reference< css::drawing::XShape >& xShape, const css::uno::Reference< css::document::XShapeEventListener >& xListener ) override;
+    virtual void SAL_CALL addShapeEventListener( const cpo::uno::Reference< css::drawing::XShape >& xShape, const cpo::uno::Reference< css::document::XShapeEventListener >& xListener ) override;
+    virtual void SAL_CALL removeShapeEventListener( const cpo::uno::Reference< css::drawing::XShape >& xShape, const cpo::uno::Reference< css::document::XShapeEventListener >& xListener ) override;
 
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
     void Dispose();
@@ -135,7 +136,7 @@ void SAL_CALL SwDrawModellListener_Impl::removeEventListener( const uno::Referen
 }
 
 void SAL_CALL SwDrawModellListener_Impl::addShapeEventListener(
-                const css::uno::Reference< css::drawing::XShape >& xShape,
+                const cpo::uno::Reference< css::drawing::XShape >& xShape,
                 const uno::Reference< document::XShapeEventListener >& xListener )
 {
     assert(xShape.is() && "no shape?");
@@ -144,7 +145,7 @@ void SAL_CALL SwDrawModellListener_Impl::addShapeEventListener(
 }
 
 void SAL_CALL SwDrawModellListener_Impl::removeShapeEventListener(
-                const css::uno::Reference< css::drawing::XShape >& xShape,
+                const cpo::uno::Reference< css::drawing::XShape >& xShape,
                 const uno::Reference< document::XShapeEventListener >& xListener )
 {
     std::unique_lock aGuard(maListenerMutex);
@@ -2847,7 +2848,7 @@ bool SwAccessibleMap::ReplaceChild (
 }
 
 XAccessible*
-    SwAccessibleMap::GetAccessibleCaption (const css::uno::Reference< css::drawing::XShape >&)
+    SwAccessibleMap::GetAccessibleCaption (const cpo::uno::Reference< css::drawing::XShape >&)
 {
     return nullptr;
 }

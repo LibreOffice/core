@@ -32,7 +32,7 @@
 #include <svtools/insdlg.hxx>
 #include <svx/svxids.hrc>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 

@@ -21,7 +21,7 @@
 #define INCLUDED_PACKAGE_SOURCE_MANIFEST_MANIFESTEXPORT_HXX
 
 #include <cpo/uno/Sequence.h>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 
 namespace com::sun::star {
     namespace beans { struct PropertyValue;}
@@ -30,7 +30,7 @@ namespace com::sun::star {
 class ManifestExport
 {
 public:
-    ManifestExport(css::uno::Reference < css::xml::sax::XDocumentHandler > const & xHandler, const cpo::uno::Sequence < cpo::uno::Sequence < css::beans::PropertyValue > > &rManList );
+    ManifestExport(cpo::uno::Reference < css::xml::sax::XDocumentHandler > const & xHandler, const cpo::uno::Sequence < cpo::uno::Sequence < css::beans::PropertyValue > > &rManList );
 };
 
 #endif

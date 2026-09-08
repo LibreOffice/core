@@ -250,14 +250,14 @@ struct SubstreamContext
     /// paragraph's content once it is finished: a formula that is the paragraph's
     /// only content is a display equation, otherwise it is inline.
     std::vector<std::pair<rtl::Reference<SwXTextEmbeddedObject>,
-                          css::uno::Reference<cpo::uno::XInterface>>>
+                          cpo::uno::Reference<cpo::uno::XInterface>>>
         aParagraphFormulas;
     /// This is a continuation of already finished paragraph - e.g., first in an index section
     bool bRemoveThisParagraph = false;
     bool bIsFirstParaInShape = false;
     /// If the current section has footnotes.
     bool bHasFtn = false;
-    css::uno::Reference<css::beans::XPropertySet> xPreviousParagraph;
+    cpo::uno::Reference<css::beans::XPropertySet> xPreviousParagraph;
     /// Current paragraph has automatic before spacing.
     bool bParaAutoBefore = false;
     /// Raw table cell depth.
@@ -271,7 +271,7 @@ struct SubstreamContext
     bool bParaSdtEndDeferred = false;
     /// If the current paragraph is inside a structured document element.
     bool bSdt = false;
-    css::uno::Reference<css::text::XTextRange> xSdtEntryStart;
+    cpo::uno::Reference<css::text::XTextRange> xSdtEntryStart;
     OUString sCurrentParaStyleName; ///< highly inaccurate. Overwritten by "overlapping" paragraphs like flys.
     bool bHasFootnoteStyle = false;
     bool bCheckFootnoteStyle = false;
@@ -286,7 +286,7 @@ struct SubstreamContext
     bool bIsInlineParagraph = false;
     bool bIsPreviousInlineParagraph = false;
 
-    css::uno::Reference< css::text::XTextCursor > xTOCMarkerCursor;
+    cpo::uno::Reference< css::text::XTextCursor > xTOCMarkerCursor;
     std::deque<FieldContextPtr> m_aFieldStack;
 };
 
@@ -299,7 +299,7 @@ struct FieldParagraph
 
 struct StoredRedline
 {
-   css::uno::Reference<css::text::XTextRange> mxRange;
+   cpo::uno::Reference<css::text::XTextRange> mxRange;
    OUString msType;
    css::beans::PropertyValues maRedlineProperties;
 };
@@ -308,7 +308,7 @@ struct StoredRedline
 class FieldContext : public virtual SvRefBase
 {
     bool m_bFieldCommandCompleted;
-    css::uno::Reference<css::text::XTextRange> m_xStartRange;
+    cpo::uno::Reference<css::text::XTextRange> m_xStartRange;
 
     // Two command string:
     // 0: Normal, inserted command line
@@ -333,7 +333,7 @@ private:
     rtl::Reference<SwXTextField> m_xTextField;
     rtl::Reference<SwXFieldmark> m_xFormField;
     rtl::Reference<SwXSection> m_xTOC;
-    css::uno::Reference<css::beans::XPropertySet> m_xTC; // TOX entry
+    cpo::uno::Reference<css::beans::XPropertySet> m_xTC; // TOX entry
     rtl::Reference<SwXTextField> m_xCustomField;
 
     OUString m_sHyperlinkURL;
@@ -350,10 +350,10 @@ private:
     std::vector<FieldParagraph> m_aParagraphsToFinish;
 
 public:
-    explicit FieldContext(css::uno::Reference<css::text::XTextRange> xStart, sal_Int32 nTableDepth);
+    explicit FieldContext(cpo::uno::Reference<css::text::XTextRange> xStart, sal_Int32 nTableDepth);
     ~FieldContext() override;
 
-    const css::uno::Reference<css::text::XTextRange>& GetStartRange() const { return m_xStartRange; }
+    const cpo::uno::Reference<css::text::XTextRange>& GetStartRange() const { return m_xStartRange; }
 
     void                    AppendCommand(std::u16string_view rPart);
     const OUString&  GetCommand() const {return m_sCommand[m_bCommandType]; }
@@ -385,8 +385,8 @@ public:
     void SetTOC(rtl::Reference<SwXSection> const& xTOC) { m_xTOC = xTOC; }
     const rtl::Reference<SwXSection>& GetTOC() const { return m_xTOC; }
 
-    void SetTC(css::uno::Reference<css::beans::XPropertySet> const& xTC) { m_xTC = xTC; }
-    const css::uno::Reference<css::beans::XPropertySet>& GetTC() const { return m_xTC; }
+    void SetTC(cpo::uno::Reference<css::beans::XPropertySet> const& xTC) { m_xTC = xTC; }
+    const cpo::uno::Reference<css::beans::XPropertySet>& GetTC() const { return m_xTC; }
 
     void  SetHyperlinkURL( const OUString& rURL ) { m_sHyperlinkURL = rURL; }
     const OUString& GetHyperlinkURL() const { return m_sHyperlinkURL; }
@@ -412,10 +412,10 @@ public:
 
 struct AnchoredContext
 {
-    css::uno::Reference<css::text::XTextContent> xTextContent;
+    cpo::uno::Reference<css::text::XTextContent> xTextContent;
     bool bToRemove;
 
-    explicit AnchoredContext(css::uno::Reference<css::text::XTextContent> xContent)
+    explicit AnchoredContext(cpo::uno::Reference<css::text::XTextContent> xContent)
         : xTextContent(std::move(xContent)), bToRemove(false)
     {
     }
@@ -443,8 +443,8 @@ struct BookmarkInsertPosition
 {
     bool                                                             m_bIsStartOfText;
     OUString                                                         m_sBookmarkName;
-    css::uno::Reference<css::text::XTextRange> m_xTextRange;
-    BookmarkInsertPosition(bool bIsStartOfText, OUString  rName, css::uno::Reference<css::text::XTextRange> xTextRange):
+    cpo::uno::Reference<css::text::XTextRange> m_xTextRange;
+    BookmarkInsertPosition(bool bIsStartOfText, OUString  rName, cpo::uno::Reference<css::text::XTextRange> xTextRange):
         m_bIsStartOfText( bIsStartOfText ),
         m_sBookmarkName(std::move( rName )),
         m_xTextRange(std::move( xTextRange ))
@@ -458,9 +458,9 @@ struct PermInsertPosition
     OUString    m_Ed;
     OUString    m_EdGrp;
 
-    css::uno::Reference<css::text::XTextRange> m_xTextRange;
+    cpo::uno::Reference<css::text::XTextRange> m_xTextRange;
 
-    PermInsertPosition(bool bIsStartOfText, sal_Int32 id, OUString  ed, OUString edGrp, css::uno::Reference<css::text::XTextRange> xTextRange)
+    PermInsertPosition(bool bIsStartOfText, sal_Int32 id, OUString  ed, OUString edGrp, cpo::uno::Reference<css::text::XTextRange> xTextRange)
         : m_bIsStartOfText(bIsStartOfText)
         , m_Id(id)
         , m_Ed(std::move(ed))
@@ -497,8 +497,8 @@ struct PermInsertPosition
 /// Stores the start/end positions of an annotation before its insertion.
 struct AnnotationPosition
 {
-    css::uno::Reference<css::text::XTextRange> m_xStart;
-    css::uno::Reference<css::text::XTextRange> m_xEnd;
+    cpo::uno::Reference<css::text::XTextRange> m_xStart;
+    cpo::uno::Reference<css::text::XTextRange> m_xEnd;
 };
 
 struct LineNumberSettings
@@ -517,7 +517,7 @@ struct LineNumberSettings
 /// Stores original/in-file-format info about a single anchored object.
 struct AnchoredObjectInfo
 {
-    css::uno::Reference<css::text::XTextContent> m_xAnchoredObject;
+    cpo::uno::Reference<css::text::XTextContent> m_xAnchoredObject;
     sal_Int32 m_nLeftMargin = 0;
     RedlineParamsPtr m_xRedlineForInline;
 };
@@ -525,13 +525,13 @@ struct AnchoredObjectInfo
 /// Stores info about objects anchored to a given paragraph.
 struct AnchoredObjectsInfo
 {
-    css::uno::Reference<css::text::XTextRange> m_xParagraph;
+    cpo::uno::Reference<css::text::XTextRange> m_xParagraph;
     std::vector<AnchoredObjectInfo> m_aAnchoredObjects;
 };
 
 struct TextAppendContext
 {
-    css::uno::Reference<css::text::XTextAppend> xTextAppend;
+    cpo::uno::Reference<css::text::XTextAppend> xTextAppend;
     rtl::Reference<SwXTextCursor> xCursor;
     ParagraphPropertiesPtr pLastParagraphProperties;
 
@@ -541,8 +541,8 @@ struct TextAppendContext
      */
     std::vector<AnchoredObjectInfo> m_aAnchoredObjects;
 
-    TextAppendContext(css::uno::Reference<css::text::XTextAppend> const& i_xAppend,
-                      css::uno::Reference<css::text::XTextCursor> const& i_xCursor)
+    TextAppendContext(cpo::uno::Reference<css::text::XTextAppend> const& i_xAppend,
+                      cpo::uno::Reference<css::text::XTextCursor> const& i_xCursor)
         : xTextAppend(i_xAppend)
         , xCursor(dynamic_cast<SwXTextCursor*>(i_xCursor.get()))
     {}
@@ -572,7 +572,7 @@ private:
     OUString m_aBaseUrl;
     rtl::Reference<SwXTextDocument> m_xTextDocument;
     rtl::Reference<SwXDocumentSettings> m_xDocumentSettings;
-    css::uno::Reference<cpo::uno::XComponentContext> m_xComponentContext;
+    cpo::uno::Reference<cpo::uno::XComponentContext> m_xComponentContext;
     rtl::Reference<SwXStyleFamily> m_xPageStyles;
     // cache next available number, expensive to repeatedly compute
     std::optional<int> m_xNextUnusedPageStyleNo;
@@ -635,7 +635,7 @@ private:
     bool                    m_bFrameDirectionSet;
     FontTablePtr            m_pFontTable;
     ListsManager::Pointer   m_pListTable;
-    std::deque< css::uno::Reference<css::drawing::XShape> > m_aPendingShapes;
+    std::deque< cpo::uno::Reference<css::drawing::XShape> > m_aPendingShapes;
     StyleSheetTablePtr      m_pStyleSheetTable;
     SettingsTablePtr        m_pSettingsTable;
     GraphicImportPtr        m_pGraphicImport;
@@ -667,8 +667,8 @@ private:
 
     //registered frame properties
     std::vector<css::beans::PropertyValue> m_aFrameProperties;
-    css::uno::Reference<css::text::XTextRange> m_xFrameStartRange;
-    css::uno::Reference<css::text::XTextRange> m_xFrameEndRange;
+    cpo::uno::Reference<css::text::XTextRange> m_xFrameStartRange;
+    cpo::uno::Reference<css::text::XTextRange> m_xFrameEndRange;
 
     // Redline stack
     std::stack< std::vector< RedlineParamsPtr > > m_aRedlines;
@@ -705,21 +705,21 @@ private:
     std::optional<css::util::DateTime> m_oAnnotationDateUtc;
     std::unordered_map< sal_Int32, AnnotationPosition > m_aAnnotationPositions;
 
-    void SetNumberFormat(const OUString& rCommand, css::uno::Reference<css::beans::XPropertySet> const& xPropertySet, bool bDetectFormat = false);
+    void SetNumberFormat(const OUString& rCommand, cpo::uno::Reference<css::beans::XPropertySet> const& xPropertySet, bool bDetectFormat = false);
     /// @throws cpo::uno::Exception
     rtl::Reference<SwXFieldMaster> FindOrCreateFieldMaster(const char* pFieldMasterService, const OUString& rFieldMasterName);
     rtl::Reference<SwXDocumentSettings> const & GetDocumentSettings();
 
     SmartTagHandler m_aSmartTagHandler;
 
-    css::uno::Reference<css::text::XTextRange> m_xGlossaryEntryStart;
+    cpo::uno::Reference<css::text::XTextRange> m_xGlossaryEntryStart;
     std::stack<BookmarkInsertPosition> m_xSdtStarts;
 
     std::queue< rtl::Reference< SwXTextFrame > > m_xPendingTextBoxFrames;
 
 public:
-    css::uno::Reference<css::text::XTextRange> m_xInsertTextRange;
-    css::uno::Reference<css::text::XTextRange> m_xAltChunkStartingRange;
+    cpo::uno::Reference<css::text::XTextRange> m_xInsertTextRange;
+    cpo::uno::Reference<css::text::XTextRange> m_xAltChunkStartingRange;
     std::deque<sal_Int32> m_aFootnoteIds;
     std::deque<sal_Int32> m_aEndnoteIds;
 
@@ -733,7 +733,7 @@ private:
 public:
     DomainMapper_Impl(
             DomainMapper& rDMapper,
-            css::uno::Reference < cpo::uno::XComponentContext > xContext,
+            cpo::uno::Reference < cpo::uno::XComponentContext > xContext,
             rtl::Reference< SwXTextDocument > const& xModel,
             SourceDocumentType eDocumentType,
             comphelper::SequenceAsHashMap const & rMediaDesc);
@@ -759,11 +759,11 @@ public:
     }
     void SetDocumentSettingsProperty( const OUString& rPropName, const cpo::uno::Any& rValue );
 
-    void CreateRedline(css::uno::Reference<css::text::XTextRange> const& xRange, const RedlineParamsPtr& pRedline);
+    void CreateRedline(cpo::uno::Reference<css::text::XTextRange> const& xRange, const RedlineParamsPtr& pRedline);
 
-    void CheckParaMarkerRedline(css::uno::Reference<css::text::XTextRange> const& xRange);
+    void CheckParaMarkerRedline(cpo::uno::Reference<css::text::XTextRange> const& xRange);
 
-    void CheckRedline(css::uno::Reference<css::text::XTextRange> const& xRange);
+    void CheckRedline(cpo::uno::Reference<css::text::XTextRange> const& xRange);
 
     void StartParaMarkerChange( );
     void EndParaMarkerChange( );
@@ -773,7 +773,7 @@ public:
 
     void PushTextBoxContent();
     void PopTextBoxContent();
-    void AttachTextBoxContentToShape(const css::uno::Reference<css::drawing::XShape> & xShape);
+    void AttachTextBoxContentToShape(const cpo::uno::Reference<css::drawing::XShape> & xShape);
 
     void RemoveDummyParaForTableInSection();
     void AddDummyParaForTableInSection();
@@ -844,21 +844,21 @@ public:
 
     void finishParagraph( const ParagraphPropertyMapPtr& pPropertyMap, const bool bRemove = false, const bool bNoNumbering = false);
     void applyToggleAttributes( const PropertyMapPtr& pPropertyMap );
-    void MergeAtContentImageRedlineWithNext(const css::uno::Reference<css::text::XTextAppend>& xTextAppend);
+    void MergeAtContentImageRedlineWithNext(const cpo::uno::Reference<css::text::XTextAppend>& xTextAppend);
     void appendTextPortion( const OUString& rString, const PropertyMapPtr& pPropertyMap );
-    void appendTextContent(const css::uno::Reference<css::text::XTextContent>&, const cpo::uno::Sequence<css::beans::PropertyValue>&);
+    void appendTextContent(const cpo::uno::Reference<css::text::XTextContent>&, const cpo::uno::Sequence<css::beans::PropertyValue>&);
     void appendOLE( const OUString& rStreamName, const std::shared_ptr<OLEHandler>& pOleHandler );
     void appendStarMath( const Value& v);
     /// Decides the text mode of the formulas collected for the paragraph being
     /// finished (see SubstreamContext::aParagraphFormulas).
     void finalizeParagraphFormulas();
     void adjustLastPara(sal_Int8 nAlign);
-    rtl::Reference<SwXTextSection> appendTextSectionAfter(css::uno::Reference<css::text::XTextRange> const & xBefore);
+    rtl::Reference<SwXTextSection> appendTextSectionAfter(cpo::uno::Reference<css::text::XTextRange> const & xBefore);
 
     /// AutoText import: each entry is placed in the separate section
     void appendGlossaryEntry();
     /// Remember where entry was started
-    void setGlossaryEntryStart( css::uno::Reference<css::text::XTextRange> const & xStart )
+    void setGlossaryEntryStart( cpo::uno::Reference<css::text::XTextRange> const & xStart )
     {
         m_xGlossaryEntryStart = xStart;
     }
@@ -877,7 +877,7 @@ public:
     PropertyMapPtr GetTopContextOfType(ContextType eId);
 
     bool HasTopText() const;
-    css::uno::Reference<css::text::XTextAppend> const & GetTopTextAppend();
+    cpo::uno::Reference<css::text::XTextAppend> const & GetTopTextAppend();
     FieldContextPtr const & GetTopFieldContext();
 
     bool HasTopAnchoredObjects() const;
@@ -947,13 +947,13 @@ public:
     bool        IsAnyTableImport()const { return m_bInAnyTableImport;}
     bool        IsInShape()const { return m_vAnchoredStack.size() > 0;}
 
-    void PushShapeContext(const css::uno::Reference<css::drawing::XShape>& xShape);
+    void PushShapeContext(const cpo::uno::Reference<css::drawing::XShape>& xShape);
     void PopShapeContext();
-    void UpdateEmbeddedShapeProps(const css::uno::Reference<css::drawing::XShape>& xShape);
+    void UpdateEmbeddedShapeProps(const cpo::uno::Reference<css::drawing::XShape>& xShape);
     /// Add a pending shape: it's currently inserted into the document, but it should be removed before the import finishes.
-    void PushPendingShape(const css::uno::Reference<css::drawing::XShape>& xShape);
+    void PushPendingShape(const cpo::uno::Reference<css::drawing::XShape>& xShape);
     /// Get the first pending shape, if there are any.
-    css::uno::Reference<css::drawing::XShape> PopPendingShape();
+    cpo::uno::Reference<css::drawing::XShape> PopPendingShape();
 
     void PopPageHeaderFooter(PagePartType ePagePartType, PageType eType);
     bool IsInHeaderFooter() const { auto const type(m_StreamStateStack.top().eSubstreamType); return type == SubstreamType::Header || type == SubstreamType::Footer; }
@@ -1010,13 +1010,13 @@ public:
     OUString convertFieldFormula(const OUString& input);
     void handleFieldFormula
         (const FieldContextPtr& pContext,
-        css::uno::Reference< css::beans::XPropertySet > const& xFieldProperties);
+        cpo::uno::Reference< css::beans::XPropertySet > const& xFieldProperties);
     void handleAutoNum
         (const FieldContextPtr& pContext,
         rtl::Reference< SwXTextField > const & xFieldInterface);
     static void handleAuthor
         (std::u16string_view rFirstParam,
-        css::uno::Reference< css::beans::XPropertySet > const& xFieldProperties,
+        cpo::uno::Reference< css::beans::XPropertySet > const& xFieldProperties,
         FieldId eFieldId);
     void handleDocProperty
         (const FieldContextPtr& pContext,
@@ -1047,8 +1047,8 @@ public:
     /// Returns title of the TOC placed in paragraph(s) before TOC field inside STD-frame
     OUString extractTocTitle();
     rtl::Reference<SwXSection> createSectionForRange(
-            const css::uno::Reference< css::text::XTextRange > & xStart,
-            const css::uno::Reference< css::text::XTextRange > & xEnd,
+            const cpo::uno::Reference< css::text::XTextRange > & xStart,
+            const cpo::uno::Reference< css::text::XTextRange > & xEnd,
             std::u16string_view sObjectType, bool stepLeft);
 
     void SetBookmarkName( const OUString& rBookmarkName );
@@ -1120,8 +1120,8 @@ public:
     std::vector<css::beans::PropertyValue> MakeFrameProperties(const ParagraphProperties& rProps);
     void CheckUnregisteredFrameConversion(bool bPreventOverlap = false);
 
-    void RegisterFrameConversion(css::uno::Reference<css::text::XTextRange> const& xFrameStartRange,
-                                 css::uno::Reference<css::text::XTextRange> const& xFrameEndRange,
+    void RegisterFrameConversion(cpo::uno::Reference<css::text::XTextRange> const& xFrameStartRange,
+                                 cpo::uno::Reference<css::text::XTextRange> const& xFrameEndRange,
                                  std::vector<css::beans::PropertyValue>&& aFrameProperties);
     void ExecuteFrameConversion();
 
@@ -1143,7 +1143,7 @@ public:
 
     void ApplySettingsTable();
 
-    css::uno::Reference<css::text::XTextAppend> GetCurrentXText() {
+    cpo::uno::Reference<css::text::XTextAppend> GetCurrentXText() {
         return m_aTextAppendStack.empty() ? nullptr : m_aTextAppendStack.top().xTextAppend;
     }
 
@@ -1274,7 +1274,7 @@ public:
 
     bool SeenHeaderFooter(PagePartType, PageType) const;
 
-    css::uno::Reference< css::embed::XStorage > m_xDocumentStorage;
+    cpo::uno::Reference< css::embed::XStorage > m_xDocumentStorage;
 
     /// Handles <w:altChunk>.
     void HandleAltChunk(const OUString& rStreamName);
@@ -1303,7 +1303,7 @@ private:
     void PushPageHeaderFooter(PagePartType ePagePartType, PageType eType);
     // Start a new index section; if needed, finish current paragraph
     rtl::Reference<SwXSection> StartIndexSectionChecked(std::u16string_view sServiceName);
-    std::vector<css::uno::Reference< css::drawing::XShape > > m_vTextFramesForChaining ;
+    std::vector<cpo::uno::Reference< css::drawing::XShape > > m_vTextFramesForChaining ;
     /// SAXException was seen so document will be abandoned
     bool m_bSaxError;
 

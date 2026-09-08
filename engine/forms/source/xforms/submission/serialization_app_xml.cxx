@@ -33,12 +33,12 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/processfactory.hxx>
 
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::cpo::uno::Exception;
 using ::cpo::uno::Sequence;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::uno::UNO_SET_THROW;
+using ::cpo::uno::UNO_QUERY;
+using ::cpo::uno::UNO_QUERY_THROW;
+using ::cpo::uno::UNO_SET_THROW;
 using ::com::sun::star::xml::dom::DocumentBuilder;
 using ::com::sun::star::xml::dom::XNode;
 using ::com::sun::star::xml::dom::XDocument;

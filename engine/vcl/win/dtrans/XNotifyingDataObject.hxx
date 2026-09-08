@@ -44,8 +44,8 @@ class CXNotifyingDataObject final : public IDataObject
 public:
     CXNotifyingDataObject(
         const sal::systools::COMReference<IDataObject>& aIDataObject,
-        const css::uno::Reference< css::datatransfer::XTransferable >& aXTransferable,
-        const css::uno::Reference< css::datatransfer::clipboard::XClipboardOwner >& aXClipOwner,
+        const cpo::uno::Reference< css::datatransfer::XTransferable >& aXTransferable,
+        const cpo::uno::Reference< css::datatransfer::clipboard::XClipboardOwner >& aXClipOwner,
         CWinClipboard* const theWinClipoard);
 
     virtual ~CXNotifyingDataObject();
@@ -75,8 +75,8 @@ private:
 
     sal_Int32                                                                     m_nRefCnt;
     sal::systools::COMReference<IDataObject>                                      m_aIDataObject;
-    const css::uno::Reference< css::datatransfer::XTransferable >                 m_XTransferable;
-    const css::uno::Reference< css::datatransfer::clipboard::XClipboardOwner >    m_XClipboardOwner;
+    const cpo::uno::Reference< css::datatransfer::XTransferable >                 m_XTransferable;
+    const cpo::uno::Reference< css::datatransfer::clipboard::XClipboardOwner >    m_XClipboardOwner;
     unotools::WeakReference<CWinClipboard> m_pWinClipImpl;
 
     friend class CWinClipboard;

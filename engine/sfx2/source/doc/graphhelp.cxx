@@ -54,6 +54,7 @@
 #endif
 
 using namespace css;
+using namespace ::cpo;
 
 std::unique_ptr<SvMemoryStream> GraphicHelper::getFormatStrFromGDI_Impl( const GDIMetaFile* pGDIMeta, ConvertDataFormat nFormat )
 {

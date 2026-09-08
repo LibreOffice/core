@@ -25,7 +25,8 @@
 #include <algorithm>
 
 using namespace ::com::sun::star;
-using css::uno::Reference;
+using namespace ::cpo;
+using cpo::uno::Reference;
 using cpo::uno::XInterface;
 
 namespace comphelper
@@ -163,7 +164,7 @@ bool UnoInterfaceToUniqueIdentifierMapper::reserveIdentifier( const OUString& rI
 
 bool UnoInterfaceToUniqueIdentifierMapper::registerReservedReference(
         const OUString& rIdentifier,
-        const css::uno::Reference< cpo::uno::XInterface >& rInterface )
+        const cpo::uno::Reference< cpo::uno::XInterface >& rInterface )
 {
     Reserved_t::const_iterator aIt;
     if ( !findReserved( rIdentifier, aIt ) )

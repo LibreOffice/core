@@ -23,7 +23,7 @@
 #include <com/sun/star/linguistic2/ConversionDictionaryType.hpp>
 #include <com/sun/star/linguistic2/ConversionPropertyType.hpp>
 #include <com/sun/star/lang/Locale.hpp>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <xmloff/namespacemap.hxx>
@@ -35,7 +35,8 @@
 #include <linguistic/misc.hxx>
 
 using namespace com::sun::star;
-using namespace com::sun::star::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace com::sun::star::linguistic2;
 using namespace com::sun::star::xml::sax;
 using namespace xmloff::token;
@@ -82,8 +83,8 @@ public:
     }
 
     // SvXMLImportContext
-    virtual css::uno::Reference<XFastContextHandler> createFastChildContext(
-        sal_Int32 Element, const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
+    virtual cpo::uno::Reference<XFastContextHandler> createFastChildContext(
+        sal_Int32 Element, const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
 };
 
 
@@ -101,9 +102,9 @@ public:
     }
 
     // SvXMLImportContext
-    virtual void startFastElement( sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
-    virtual css::uno::Reference<XFastContextHandler> createFastChildContext(
-        sal_Int32 Element, const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
+    virtual void startFastElement( sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
+    virtual cpo::uno::Reference<XFastContextHandler> createFastChildContext(
+        sal_Int32 Element, const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
 };
 
 
@@ -119,9 +120,9 @@ public:
     }
 
     // SvXMLImportContext
-    virtual void startFastElement( sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
-    virtual css::uno::Reference<XFastContextHandler> createFastChildContext(
-        sal_Int32 Element, const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
+    virtual void startFastElement( sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs ) override;
+    virtual cpo::uno::Reference<XFastContextHandler> createFastChildContext(
+        sal_Int32 Element, const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
 
     const OUString &    GetLeftText() const { return aLeftText; }
 };
@@ -161,9 +162,9 @@ public:
 
 //}
 
-css::uno::Reference<XFastContextHandler> ConvDicXMLImportContext::createFastChildContext(
+cpo::uno::Reference<XFastContextHandler> ConvDicXMLImportContext::createFastChildContext(
         sal_Int32 Element,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList > & /*xAttrList*/ )
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & /*xAttrList*/ )
 {
     if ( Element == ConvDicXMLToken::TEXT_CONVERSION_DICTIONARY )
         return new ConvDicXMLDictionaryContext_Impl( GetConvDicImport() );
@@ -172,7 +173,7 @@ css::uno::Reference<XFastContextHandler> ConvDicXMLImportContext::createFastChil
 
 
 void ConvDicXMLDictionaryContext_Impl::startFastElement( sal_Int32 /*nElement*/,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& rxAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& rxAttrList )
 {
     for (auto &aIter : sax_fastparser::castToFastAttributeList( rxAttrList ))
     {
@@ -193,18 +194,18 @@ void ConvDicXMLDictionaryContext_Impl::startFastElement( sal_Int32 /*nElement*/,
 
 }
 
-css::uno::Reference<XFastContextHandler> ConvDicXMLDictionaryContext_Impl::createFastChildContext(
+cpo::uno::Reference<XFastContextHandler> ConvDicXMLDictionaryContext_Impl::createFastChildContext(
         sal_Int32 Element,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList > & /*xAttrList*/ )
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & /*xAttrList*/ )
 {
     if ( Element == ConvDicXMLToken::ENTRY )
         return new ConvDicXMLEntryTextContext_Impl( GetConvDicImport() );
     return nullptr;
 }
 
-css::uno::Reference<XFastContextHandler> ConvDicXMLEntryTextContext_Impl::createFastChildContext(
+cpo::uno::Reference<XFastContextHandler> ConvDicXMLEntryTextContext_Impl::createFastChildContext(
         sal_Int32 Element,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList > & /*xAttrList*/ )
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & /*xAttrList*/ )
 {
     if ( Element == ConvDicXMLToken::RIGHT_TEXT )
         return new ConvDicXMLRightTextContext_Impl( GetConvDicImport(), *this );
@@ -213,7 +214,7 @@ css::uno::Reference<XFastContextHandler> ConvDicXMLEntryTextContext_Impl::create
 
 void ConvDicXMLEntryTextContext_Impl::startFastElement(
     sal_Int32 /*Element*/,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >& rxAttrList )
+    const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& rxAttrList )
 {
     for (auto &aIter : sax_fastparser::castToFastAttributeList( rxAttrList ))
     {
@@ -330,7 +331,7 @@ ConvDicXMLImport::ConvDicXMLImport( ConvDic *pConvDic ) :
 
 SvXMLImportContext * ConvDicXMLImport::CreateFastContext(
         sal_Int32 Element,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList > & /*xAttrList*/ )
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList > & /*xAttrList*/ )
 {
     if( Element == ConvDicXMLToken::TEXT_CONVERSION_DICTIONARY )
         return new ConvDicXMLDictionaryContext_Impl( *this );

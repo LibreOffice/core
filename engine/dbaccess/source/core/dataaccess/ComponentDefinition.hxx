@@ -44,7 +44,7 @@ namespace dbaccess
     {
     public:
         typedef std::map  <   OUString
-                            ,   css::uno::Reference< css::beans::XPropertySet >
+                            ,   cpo::uno::Reference< css::beans::XPropertySet >
                             >   Columns;
     typedef Columns::iterator           iterator;
     typedef Columns::const_iterator     const_iterator;
@@ -69,7 +69,7 @@ namespace dbaccess
 
         void erase( const OUString& _rName ) { m_aColumns.erase( _rName ); }
 
-        void insert( const OUString& _rName, const css::uno::Reference< css::beans::XPropertySet >& _rxColumn )
+        void insert( const OUString& _rName, const cpo::uno::Reference< css::beans::XPropertySet >& _rxColumn )
         {
             OSL_PRECOND( m_aColumns.find( _rName ) == m_aColumns.end(), "OComponentDefinition_Impl::insert: there's already an element with this name!" );
             m_aColumns.emplace(  _rName, _rxColumn );
@@ -97,15 +97,15 @@ protected:
             OComponentDefinition_Impl& getDefinition()       { return dynamic_cast<       OComponentDefinition_Impl& >( *m_pImpl ); }
 public:
     OComponentDefinition(
-        const css::uno::Reference< cpo::uno::XComponentContext >&,
-        const css::uno::Reference< cpo::uno::XInterface >& _xParentContainer,
+        const cpo::uno::Reference< cpo::uno::XComponentContext >&,
+        const cpo::uno::Reference< cpo::uno::XInterface >& _xParentContainer,
         const TContentPtr& _pImpl,
         bool _bTable = true);
 
     OComponentDefinition(
-             const css::uno::Reference< cpo::uno::XInterface >& _rxContainer
+             const cpo::uno::Reference< cpo::uno::XInterface >& _rxContainer
             ,const OUString& _rElementName
-            ,const css::uno::Reference< cpo::uno::XComponentContext >&
+            ,const cpo::uno::Reference< cpo::uno::XComponentContext >&
             ,const TContentPtr& _pImpl
             ,bool _bTable = true
         );
@@ -124,18 +124,18 @@ public:
     virtual void initialize( cpo::uno::Sequence< cpo::uno::Any > const & rArguments) override;
 
     // css::beans::XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
 
     // XColumnsSupplier
-    virtual css::uno::Reference< css::container::XNameAccess > getColumns(  ) override;
+    virtual cpo::uno::Reference< css::container::XNameAccess > getColumns(  ) override;
 
     // OPropertySetHelper
     virtual ::cppu::IPropertyArrayHelper& getInfoHelper() override;
 
     // IColumnFactory
     virtual rtl::Reference<OColumn> createColumn(const OUString& _rName) const override;
-    virtual css::uno::Reference< css::beans::XPropertySet > createColumnDescriptor() override;
-    virtual void columnAppended( const css::uno::Reference< css::beans::XPropertySet >& _rxSourceDescriptor ) override;
+    virtual cpo::uno::Reference< css::beans::XPropertySet > createColumnDescriptor() override;
+    virtual void columnAppended( const cpo::uno::Reference< css::beans::XPropertySet >& _rxSourceDescriptor ) override;
     virtual void columnDropped(const OUString& _sName) override;
     using OContentHelper::notifyDataSourceModified;
 

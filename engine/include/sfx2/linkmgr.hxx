@@ -52,7 +52,7 @@ typedef o3tl::sorted_vector<SvLinkSource*> SvLinkSources;
 
 class SFX2_DLLPUBLIC LinkManager
 {
-    typedef ::std::vector< css::uno::Reference< css::lang::XComponent > >
+    typedef ::std::vector< cpo::uno::Reference< css::lang::XComponent > >
         CompVector;
     CompVector maCachedComps;
 
@@ -81,7 +81,7 @@ public:
      *
      * @param xComp component loaded during link update.
      */
-    void        InsertCachedComp(const css::uno::Reference< css::lang::XComponent >& xComp);
+    void        InsertCachedComp(const cpo::uno::Reference< css::lang::XComponent >& xComp);
 
     void        CloseCachedComps();
 

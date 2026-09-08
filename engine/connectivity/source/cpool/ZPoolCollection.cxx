@@ -33,7 +33,7 @@
 #include <sal/log.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
@@ -294,7 +294,7 @@ Reference<XInterface> OPoolCollection::openNode(const OUString& _rPath,const Ref
     {
         if (xDirectAccess.is() && xDirectAccess->hasByName(_rPath))
         {
-            xNode.set(xDirectAccess->getByName(_rPath), css::uno::UNO_QUERY);
+            xNode.set(xDirectAccess->getByName(_rPath), cpo::uno::UNO_QUERY);
             SAL_WARN_IF(
                 !xNode.is(), "connectivity.cpool",
                 "OConfigurationNode::openNode: could not open the node!");
@@ -303,7 +303,7 @@ Reference<XInterface> OPoolCollection::openNode(const OUString& _rPath,const Ref
         {
             xNode.set(
                 xHierarchyAccess->getByHierarchicalName(_rPath),
-                css::uno::UNO_QUERY);
+                cpo::uno::UNO_QUERY);
             SAL_WARN_IF(
                 !xNode.is(), "connectivity.cpool",
                 "OConfigurationNode::openNode: could not open the node!");

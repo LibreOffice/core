@@ -29,7 +29,7 @@ namespace pcr
     using ::com::sun::star::beans::PropertyChangeEvent;
     using ::cpo::uno::RuntimeException;
     using ::com::sun::star::lang::EventObject;
-    using ::com::sun::star::uno::Reference;
+    using ::cpo::uno::Reference;
     using ::com::sun::star::beans::XPropertyChangeListener;
     using ::cpo::uno::XInterface;
     using ::com::sun::star::lang::DisposedException;

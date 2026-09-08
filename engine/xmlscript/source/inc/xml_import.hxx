@@ -37,8 +37,8 @@ namespace xmlscript
     @return
             document handler for parser
 */
-css::uno::Reference<css::xml::sax::XDocumentHandler>
-createDocumentHandler(css::uno::Reference<css::xml::input::XRoot> const& xRoot);
+cpo::uno::Reference<css::xml::sax::XDocumentHandler>
+createDocumentHandler(cpo::uno::Reference<css::xml::input::XRoot> const& xRoot);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

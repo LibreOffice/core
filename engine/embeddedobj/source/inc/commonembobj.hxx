@@ -20,7 +20,7 @@
 #pragma once
 
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
@@ -97,7 +97,7 @@ protected:
     sal_Int32 m_nTargetState; // should be -1 except during state changing
     sal_Int32 m_nUpdateMode;
 
-    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
     cpo::uno::Sequence< css::beans::PropertyValue > m_aDocMediaDescriptor;
 
@@ -113,7 +113,7 @@ protected:
 
     std::map< sal_Int32, sal_Int32 > m_aVerbTable;
 
-    css::uno::Reference< css::embed::XEmbeddedClient > m_xClientSite;
+    cpo::uno::Reference< css::embed::XEmbeddedClient > m_xClientSite;
 
     OUString m_aContainerName;
     OUString m_aDefaultParentBaseURL;
@@ -124,11 +124,11 @@ protected:
     // following information will be used between SaveAs and SaveCompleted
     bool m_bWaitSaveCompleted;
     OUString m_aNewEntryName;
-    css::uno::Reference< css::embed::XStorage > m_xNewParentStorage;
-    css::uno::Reference< css::embed::XStorage > m_xNewObjectStorage;
+    cpo::uno::Reference< css::embed::XStorage > m_xNewParentStorage;
+    cpo::uno::Reference< css::embed::XStorage > m_xNewObjectStorage;
     cpo::uno::Sequence< css::beans::PropertyValue > m_aNewDocMediaDescriptor;
 
-    css::uno::Reference< css::awt::XWindow > m_xClientWindow; // ???
+    cpo::uno::Reference< css::awt::XWindow > m_xClientWindow; // ???
     css::awt::Rectangle m_aOwnRectangle;
     css::awt::Rectangle m_aClipRectangle;
 
@@ -140,9 +140,9 @@ protected:
 
     // embedded object related stuff
     OUString m_aEntryName;
-    css::uno::Reference< css::embed::XStorage > m_xParentStorage;
-    css::uno::Reference< css::embed::XStorage > m_xObjectStorage;
-    css::uno::Reference< css::embed::XStorage > m_xRecoveryStorage;
+    cpo::uno::Reference< css::embed::XStorage > m_xParentStorage;
+    cpo::uno::Reference< css::embed::XStorage > m_xObjectStorage;
+    cpo::uno::Reference< css::embed::XStorage > m_xRecoveryStorage;
 
     // link related stuff
     OUString m_aLinkURL;
@@ -151,9 +151,9 @@ protected:
     OUString m_aLinkPassword;
 
     // tdf#141529 hold a cc of a linked OLE
-    css::uno::Reference < css::io::XTempFile > m_aLinkTempFile;
+    cpo::uno::Reference < css::io::XTempFile > m_aLinkTempFile;
 
-    css::uno::Reference< cpo::uno::XInterface > m_xParent;
+    cpo::uno::Reference< cpo::uno::XInterface > m_xParent;
 
     bool m_bHasClonedSize; // the object has cached size
     css::awt::Size m_aClonedSize;
@@ -169,18 +169,18 @@ private:
 
 
     void SwitchOwnPersistence(
-                const css::uno::Reference< css::embed::XStorage >& xNewParentStorage,
-                const css::uno::Reference< css::embed::XStorage >& xNewObjectStorage,
+                const cpo::uno::Reference< css::embed::XStorage >& xNewParentStorage,
+                const cpo::uno::Reference< css::embed::XStorage >& xNewObjectStorage,
                 const OUString& aNewName );
 
     void SwitchOwnPersistence(
-                const css::uno::Reference< css::embed::XStorage >& xNewParentStorage,
+                const cpo::uno::Reference< css::embed::XStorage >& xNewParentStorage,
                 const OUString& aNewName );
 
     const OUString& GetDocumentServiceName() const { return m_aDocServiceName; }
     const OUString& GetPresetFilterName() const { return m_aPresetFilterName; }
 
-    css::uno::Reference< css::io::XInputStream >
+    cpo::uno::Reference< css::io::XInputStream >
         StoreDocumentToTempStream_Impl( sal_Int32 nStorageFormat,
                                         const OUString& aBaseURL,
                                         const OUString& aHierarchName );
@@ -206,14 +206,14 @@ private:
     cpo::uno::Sequence< sal_Int32 > const & GetIntermediateStatesSequence_Impl( sal_Int32 nNewState );
 
     OUString GetFilterName( sal_Int32 nVersion ) const;
-    css::uno::Reference< css::util::XCloseable > LoadDocumentFromStorage_Impl();
+    cpo::uno::Reference< css::util::XCloseable > LoadDocumentFromStorage_Impl();
 
-    css::uno::Reference< css::util::XCloseable > LoadLink_Impl();
+    cpo::uno::Reference< css::util::XCloseable > LoadLink_Impl();
 
-    css::uno::Reference< css::util::XCloseable > InitNewDocument_Impl();
+    cpo::uno::Reference< css::util::XCloseable > InitNewDocument_Impl();
 
     void StoreDocToStorage_Impl(
-        const css::uno::Reference<css::embed::XStorage>& xStorage,
+        const cpo::uno::Reference<css::embed::XStorage>& xStorage,
         const cpo::uno::Sequence<css::beans::PropertyValue>& rMediaArgs,
         const cpo::uno::Sequence<css::beans::PropertyValue>& rObjArgs,
         sal_Int32 nStorageVersion,
@@ -221,22 +221,22 @@ private:
         bool bAttachToStorage );
 
     void SwitchDocToStorage_Impl(
-            const css::uno::Reference< css::document::XStorageBasedDocument >& xDoc,
-            const css::uno::Reference< css::embed::XStorage >& xStorage );
+            const cpo::uno::Reference< css::document::XStorageBasedDocument >& xDoc,
+            const cpo::uno::Reference< css::embed::XStorage >& xStorage );
 
     void FillDefaultLoadArgs_Impl(
-            const css::uno::Reference< css::embed::XStorage >& i_rxStorage,
+            const cpo::uno::Reference< css::embed::XStorage >& i_rxStorage,
                   ::comphelper::NamedValueCollection& o_rLoadArgs
         ) const;
 
     void EmbedAndReparentDoc_Impl(
-            const css::uno::Reference< css::util::XCloseable >& i_rxDocument
+            const cpo::uno::Reference< css::util::XCloseable >& i_rxDocument
         ) const;
 
-    css::uno::Reference< css::util::XCloseable > CreateDocFromMediaDescr_Impl(
+    cpo::uno::Reference< css::util::XCloseable > CreateDocFromMediaDescr_Impl(
                         const cpo::uno::Sequence< css::beans::PropertyValue >& aMedDescr );
 
-    css::uno::Reference< css::util::XCloseable > CreateTempDocFromLink_Impl();
+    cpo::uno::Reference< css::util::XCloseable > CreateTempDocFromLink_Impl();
 
     OUString GetBaseURL_Impl() const;
     static OUString GetBaseURLFrom_Impl(
@@ -252,12 +252,12 @@ protected:
 
 public:
     OCommonEmbeddedObject(
-        css::uno::Reference< cpo::uno::XComponentContext > xContext,
+        cpo::uno::Reference< cpo::uno::XComponentContext > xContext,
         const cpo::uno::Sequence< css::beans::NamedValue >& aObjectProps );
 
     // no persistence for linked objects, so the descriptors are provided in constructor
     OCommonEmbeddedObject(
-        css::uno::Reference< cpo::uno::XComponentContext > xContext,
+        cpo::uno::Reference< cpo::uno::XComponentContext > xContext,
         const cpo::uno::Sequence< css::beans::NamedValue >& aObjectProps,
         const cpo::uno::Sequence< css::beans::PropertyValue >& aMediaDescr,
         const cpo::uno::Sequence< css::beans::PropertyValue >& aObjectDescr );
@@ -295,9 +295,9 @@ public:
     virtual cpo::uno::Sequence< css::embed::VerbDescriptor > getSupportedVerbs() override;
 
     virtual void setClientSite(
-                const css::uno::Reference< css::embed::XEmbeddedClient >& xClient ) override;
+                const cpo::uno::Reference< css::embed::XEmbeddedClient >& xClient ) override;
 
-    virtual css::uno::Reference< css::embed::XEmbeddedClient > getClientSite() override;
+    virtual cpo::uno::Reference< css::embed::XEmbeddedClient > getClientSite() override;
 
     virtual void update() override;
 
@@ -325,16 +325,16 @@ public:
 // XEmbedPersist
 
     virtual void setPersistentEntry(
-                    const css::uno::Reference< css::embed::XStorage >& xStorage,
+                    const cpo::uno::Reference< css::embed::XStorage >& xStorage,
                     const OUString& sEntName,
                     sal_Int32 nEntryConnectionMode,
                     const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments,
                     const cpo::uno::Sequence< css::beans::PropertyValue >& lObjArgs ) override;
 
-    virtual void storeToEntry( const css::uno::Reference< css::embed::XStorage >& xStorage, const OUString& sEntName, const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments, const cpo::uno::Sequence< css::beans::PropertyValue >& lObjArgs ) override;
+    virtual void storeToEntry( const cpo::uno::Reference< css::embed::XStorage >& xStorage, const OUString& sEntName, const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments, const cpo::uno::Sequence< css::beans::PropertyValue >& lObjArgs ) override;
 
     virtual void storeAsEntry(
-                const css::uno::Reference< css::embed::XStorage >& xStorage,
+                const cpo::uno::Reference< css::embed::XStorage >& xStorage,
                 const OUString& sEntName,
                 const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments,
                 const cpo::uno::Sequence< css::beans::PropertyValue >& lObjArgs ) override;
@@ -347,7 +347,7 @@ public:
 
 // XLinkageSupport
 
-    virtual void breakLink( const css::uno::Reference< css::embed::XStorage >& xStorage,
+    virtual void breakLink( const cpo::uno::Reference< css::embed::XStorage >& xStorage,
                                      const OUString& sEntName ) override;
 
     virtual bool isLink() override;
@@ -391,32 +391,32 @@ public:
 
 // XComponentSupplier
 
-    virtual css::uno::Reference< css::util::XCloseable > getComponent() override;
+    virtual cpo::uno::Reference< css::util::XCloseable > getComponent() override;
 
 // XStateChangeBroadcaster
-    virtual void addStateChangeListener( const css::uno::Reference< css::embed::XStateChangeListener >& xListener ) override;
-    virtual void removeStateChangeListener( const css::uno::Reference< css::embed::XStateChangeListener >& xListener ) override;
+    virtual void addStateChangeListener( const cpo::uno::Reference< css::embed::XStateChangeListener >& xListener ) override;
+    virtual void removeStateChangeListener( const cpo::uno::Reference< css::embed::XStateChangeListener >& xListener ) override;
 
 // XCloseable
 
     virtual void close( bool DeliverOwnership ) override;
 
     virtual void addCloseListener(
-                const css::uno::Reference< css::util::XCloseListener >& Listener ) override;
+                const cpo::uno::Reference< css::util::XCloseListener >& Listener ) override;
 
     virtual void removeCloseListener(
-                const css::uno::Reference< css::util::XCloseListener >& Listener ) override;
+                const cpo::uno::Reference< css::util::XCloseListener >& Listener ) override;
 
 // XEventBroadcaster
     virtual void addEventListener(
-                const css::uno::Reference< css::document::XEventListener >& Listener ) override;
+                const cpo::uno::Reference< css::document::XEventListener >& Listener ) override;
 
     virtual void removeEventListener(
-                const css::uno::Reference< css::document::XEventListener >& Listener ) override;
+                const cpo::uno::Reference< css::document::XEventListener >& Listener ) override;
 
     // XChild
-    virtual css::uno::Reference< cpo::uno::XInterface > getParent(  ) override;
-    virtual void setParent( const css::uno::Reference< cpo::uno::XInterface >& Parent ) override;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > getParent(  ) override;
+    virtual void setParent( const cpo::uno::Reference< cpo::uno::XInterface >& Parent ) override;
 
     // XDefaultSizeTransmitter
     //#i103460# charts do not necessarily have an own size within ODF files, in this case they need to use the size settings from the surrounding frame, which is made available with this method

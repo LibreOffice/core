@@ -19,7 +19,7 @@
 #pragma once
 
 #include <editeng/svxenum.hxx>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <cpo/uno/Sequence.hxx>
 #include <editeng/hangulhanja.hxx>
 #include <editeng/ESelection.hxx>
@@ -91,7 +91,7 @@ class TextConvWrapper final : public editeng::HangulHanjaConversion
 
 public:
     TextConvWrapper(weld::Widget* pWindow,
-            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
             const css::lang::Locale& rSourceLocale,
             const css::lang::Locale& rTargetLocale,
             const vcl::Font* pTargetFont,

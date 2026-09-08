@@ -33,9 +33,9 @@ class OOXMLSecExporter
     std::unique_ptr<Impl> m_pImpl;
 
 public:
-    OOXMLSecExporter(const css::uno::Reference<cpo::uno::XComponentContext>& xComponentContext,
-                     const css::uno::Reference<css::embed::XStorage>& xRootStorage,
-                     const css::uno::Reference<css::xml::sax::XDocumentHandler>& xDocumentHandler,
+    OOXMLSecExporter(const cpo::uno::Reference<cpo::uno::XComponentContext>& xComponentContext,
+                     const cpo::uno::Reference<css::embed::XStorage>& xRootStorage,
+                     const cpo::uno::Reference<css::xml::sax::XDocumentHandler>& xDocumentHandler,
                      const SignatureInformation& rInformation);
     ~OOXMLSecExporter();
     void writeSignature();

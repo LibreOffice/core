@@ -27,6 +27,7 @@
 #include <unordered_map>
 
 using namespace css;
+using namespace ::cpo;
 
 using sc::SpellCheckContext;
 

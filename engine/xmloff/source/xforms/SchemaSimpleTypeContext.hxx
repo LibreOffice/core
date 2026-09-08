@@ -20,7 +20,7 @@
 #pragma once
 
 #include "TokenContext.hxx"
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 namespace com::sun::star {
     namespace xforms { class XDataTypeRepository; }
@@ -31,12 +31,12 @@ class SvXMLImport;
 /** import the xsd:simpleType element */
 class SchemaSimpleTypeContext : public TokenContext
 {
-    css::uno::Reference<css::xforms::XDataTypeRepository> mxRepository;
+    cpo::uno::Reference<css::xforms::XDataTypeRepository> mxRepository;
     OUString msTypeName;
 
 public:
     SchemaSimpleTypeContext( SvXMLImport& rImport,
-                             const css::uno::Reference<css::xforms::XDataTypeRepository>& rRepository );
+                             const cpo::uno::Reference<css::xforms::XDataTypeRepository>& rRepository );
 
     // implement TokenContext methods:
 
@@ -45,7 +45,7 @@ protected:
 
     virtual SvXMLImportContext* HandleChild(
         sal_Int32 nElementToken,
-        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList ) override;
+        const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

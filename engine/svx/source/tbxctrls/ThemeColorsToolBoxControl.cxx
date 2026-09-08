@@ -40,10 +40,10 @@ ThemeColorsToolBoxControl::statusChanged(const css::frame::FeatureStateEvent& /*
 {
 }
 
-css::uno::Reference<css::awt::XWindow>
-ThemeColorsToolBoxControl::createItemWindow(const css::uno::Reference<css::awt::XWindow>& rParent)
+cpo::uno::Reference<css::awt::XWindow>
+ThemeColorsToolBoxControl::createItemWindow(const cpo::uno::Reference<css::awt::XWindow>& rParent)
 {
-    css::uno::Reference<css::awt::XWindow> xItemWindow;
+    cpo::uno::Reference<css::awt::XWindow> xItemWindow;
 
     VclPtr<vcl::Window> pParent = VCLUnoHelper::GetWindow(rParent);
     if (pParent)
@@ -82,7 +82,7 @@ com_sun_star_comp_svx_ThemeColorsToolBoxControl_get_implementation(
 }
 
 ThemeColorsPaneWrapper::ThemeColorsPaneWrapper(
-    vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame>& rxFrame)
+    vcl::Window* pParent, const cpo::uno::Reference<css::frame::XFrame>& rxFrame)
     : InterimItemWindow(pParent, u"svx/ui/themeselectorpanel.ui"_ustr, u"ThemeSelectorPanel"_ustr,
                         true, reinterpret_cast<sal_uInt64>(SfxViewShell::Current()))
     , svx::ThemeColorsPaneBase(m_xBuilder->weld_icon_view(u"iconview_theme_colors"_ustr))

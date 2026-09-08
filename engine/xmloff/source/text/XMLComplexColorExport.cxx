@@ -17,6 +17,7 @@
 #include <array>
 
 using namespace css;
+using namespace ::cpo;
 using namespace ::xmloff::token;
 
 XMLComplexColorExport::XMLComplexColorExport(SvXMLExport& rExport)

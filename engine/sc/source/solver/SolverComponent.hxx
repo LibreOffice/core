@@ -64,7 +64,7 @@ class SolverComponent
 {
 protected:
     // settings
-    css::uno::Reference< css::sheet::XSpreadsheetDocument > mxDoc;
+    cpo::uno::Reference< css::sheet::XSpreadsheetDocument > mxDoc;
     // The ScDocument behind mxDoc, recovered through the UNO tunnel. Null until
     // setDocument runs.
     ScDocument* mpDocument = nullptr;
@@ -99,8 +99,8 @@ public:
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;    // from OPropertyArrayUsageHelper
 
                             // XSolver
-    virtual css::uno::Reference< css::sheet::XSpreadsheetDocument > SAL_CALL getDocument() override;
-    virtual void SAL_CALL   setDocument( const css::uno::Reference<
+    virtual cpo::uno::Reference< css::sheet::XSpreadsheetDocument > SAL_CALL getDocument() override;
+    virtual void SAL_CALL   setDocument( const cpo::uno::Reference<
                                     css::sheet::XSpreadsheetDocument >& _document ) override;
     virtual css::table::CellAddress SAL_CALL getObjective() override;
     virtual void SAL_CALL   setObjective( const css::table::CellAddress& _objective ) override;

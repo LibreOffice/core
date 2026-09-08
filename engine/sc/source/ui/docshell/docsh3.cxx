@@ -74,6 +74,8 @@
 #include <comphelper/kit.hxx>
 #include <sfx2/kit/helper.hxx>
 
+using namespace ::cpo;
+
 //          Redraw - Notifications
 
 void ScDocShell::PostEditView( ScEditEngineDefaulter& rEditEngine, const ScAddress& rCursorPos )

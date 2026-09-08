@@ -49,7 +49,8 @@
 #include <UndoRedline.hxx>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 /// Covers sw/source/core/doc/ fixes.
 class SwCoreDocTest : public SwModelTestBase

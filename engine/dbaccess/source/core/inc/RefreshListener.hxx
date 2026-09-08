@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 
 namespace com::sun::star::container { class XNameAccess; }
 
@@ -31,7 +31,7 @@ namespace dbaccess
     class SAL_NO_VTABLE IRefreshListener
     {
     public:
-        virtual void refresh(const css::uno::Reference< css::container::XNameAccess >& _rToBeRefreshed) = 0;
+        virtual void refresh(const cpo::uno::Reference< css::container::XNameAccess >& _rToBeRefreshed) = 0;
 
     protected:
         ~IRefreshListener() {}

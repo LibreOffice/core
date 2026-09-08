@@ -39,7 +39,7 @@ class AxisItemConverter final : public ItemConverter
 {
 public:
     AxisItemConverter(
-        const css::uno::Reference<css::beans::XPropertySet>& rPropertySet,
+        const cpo::uno::Reference<css::beans::XPropertySet>& rPropertySet,
         SfxItemPool& rItemPool, SdrModel& rDrawModel,
         const rtl::Reference<::chart::ChartModel> & xChartDoc,
         ExplicitScaleData const * pScale,

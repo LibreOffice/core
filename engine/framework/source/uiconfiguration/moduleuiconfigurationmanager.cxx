@@ -65,7 +65,7 @@
 #include <string_view>
 
 using namespace css;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::io;
 using namespace com::sun::star::embed;
@@ -83,7 +83,7 @@ class ModuleUIConfigurationManager : public cppu::WeakImplHelper<
 {
 public:
     ModuleUIConfigurationManager(
-            const css::uno::Reference< cpo::uno::XComponentContext >& xServiceManager,
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& xServiceManager,
             const cpo::uno::Sequence< cpo::uno::Any >& aArguments);
 
     virtual OUString getImplementationName() override
@@ -103,35 +103,35 @@ public:
 
     // XComponent
     virtual void dispose() override;
-    virtual void addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-    virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+    virtual void addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& xListener ) override;
+    virtual void removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
     // XUIConfiguration
-    virtual void addConfigurationListener( const css::uno::Reference< css::ui::XUIConfigurationListener >& Listener ) override;
-    virtual void removeConfigurationListener( const css::uno::Reference< css::ui::XUIConfigurationListener >& Listener ) override;
+    virtual void addConfigurationListener( const cpo::uno::Reference< css::ui::XUIConfigurationListener >& Listener ) override;
+    virtual void removeConfigurationListener( const cpo::uno::Reference< css::ui::XUIConfigurationListener >& Listener ) override;
 
     // XUIConfigurationManager
     virtual void reset() override;
     virtual cpo::uno::Sequence< cpo::uno::Sequence< css::beans::PropertyValue > > getUIElementsInfo( sal_Int16 ElementType ) override;
-    virtual css::uno::Reference< css::container::XIndexContainer > createSettings(  ) override;
+    virtual cpo::uno::Reference< css::container::XIndexContainer > createSettings(  ) override;
     virtual bool hasSettings( const OUString& ResourceURL ) override;
-    virtual css::uno::Reference< css::container::XIndexAccess > getSettings( const OUString& ResourceURL, bool bWriteable ) override;
-    virtual void replaceSettings( const OUString& ResourceURL, const css::uno::Reference< css::container::XIndexAccess >& aNewData ) override;
+    virtual cpo::uno::Reference< css::container::XIndexAccess > getSettings( const OUString& ResourceURL, bool bWriteable ) override;
+    virtual void replaceSettings( const OUString& ResourceURL, const cpo::uno::Reference< css::container::XIndexAccess >& aNewData ) override;
     virtual void removeSettings( const OUString& ResourceURL ) override;
-    virtual void insertSettings( const OUString& NewResourceURL, const css::uno::Reference< css::container::XIndexAccess >& aNewData ) override;
-    virtual css::uno::Reference< cpo::uno::XInterface > getImageManager() override;
-    virtual css::uno::Reference< css::ui::XAcceleratorConfiguration > getShortCutManager() override;
-    virtual css::uno::Reference< css::ui::XAcceleratorConfiguration > createShortCutManager() override;
-    virtual css::uno::Reference< cpo::uno::XInterface > getEventsManager() override;
+    virtual void insertSettings( const OUString& NewResourceURL, const cpo::uno::Reference< css::container::XIndexAccess >& aNewData ) override;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > getImageManager() override;
+    virtual cpo::uno::Reference< css::ui::XAcceleratorConfiguration > getShortCutManager() override;
+    virtual cpo::uno::Reference< css::ui::XAcceleratorConfiguration > createShortCutManager() override;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > getEventsManager() override;
 
     // XModuleUIConfigurationManager
     virtual bool isDefaultSettings( const OUString& ResourceURL ) override;
-    virtual css::uno::Reference< css::container::XIndexAccess > getDefaultSettings( const OUString& ResourceURL ) override;
+    virtual cpo::uno::Reference< css::container::XIndexAccess > getDefaultSettings( const OUString& ResourceURL ) override;
 
     // XUIConfigurationPersistence
     virtual void reload() override;
     virtual void store() override;
-    virtual void storeToStorage( const css::uno::Reference< css::embed::XStorage >& Storage ) override;
+    virtual void storeToStorage( const cpo::uno::Reference< css::embed::XStorage >& Storage ) override;
     virtual bool isModified() override;
     virtual bool isReadOnly() override;
 
@@ -168,7 +168,7 @@ private:
         bool          bModified;        // has been changed since last storing
         bool          bDefault;         // default settings
         bool          bDefaultNode;     // this is a default layer element data
-        css::uno::Reference< css::container::XIndexAccess > xSettings;
+        cpo::uno::Reference< css::container::XIndexAccess > xSettings;
     };
 
     typedef std::unordered_map< OUString, UIElementData > UIElementDataHashMap;
@@ -183,7 +183,7 @@ private:
         bool                                                              bLoaded;
         sal_Int16                                                         nElementType;
         UIElementDataHashMap                                              aElementsHashMap;
-        css::uno::Reference< css::embed::XStorage > xStorage;
+        cpo::uno::Reference< css::embed::XStorage > xStorage;
     };
 
     typedef std::vector< UIElementType > UIElementTypesVector;
@@ -196,27 +196,27 @@ private:
     void            impl_preloadUIElementTypeList( Layer eLayer, sal_Int16 nElementType );
     UIElementData*  impl_findUIElementData( const OUString& aResourceURL, sal_Int16 nElementType, bool bLoad = true );
     void            impl_requestUIElementData( sal_Int16 nElementType, Layer eLayer, UIElementData& aUIElementData );
-    void            impl_storeElementTypeData( const css::uno::Reference< css::embed::XStorage >& xStorage, UIElementType& rElementType, bool bResetModifyState = true );
+    void            impl_storeElementTypeData( const cpo::uno::Reference< css::embed::XStorage >& xStorage, UIElementType& rElementType, bool bResetModifyState = true );
     void            impl_resetElementTypeData( UIElementType& rUserElementType, UIElementType const & rDefaultElementType, ConfigEventNotifyContainer& rRemoveNotifyContainer, ConfigEventNotifyContainer& rReplaceNotifyContainer );
     void            impl_reloadElementTypeData( UIElementType& rUserElementType, UIElementType const & rDefaultElementType, ConfigEventNotifyContainer& rRemoveNotifyContainer, ConfigEventNotifyContainer& rReplaceNotifyContainer );
 
     UIElementTypesVector                                      m_aUIElements[LAYER_COUNT];
     std::unique_ptr<PresetHandler>                            m_pStorageHandler[css::ui::UIElementType::COUNT];
-    css::uno::Reference< css::embed::XStorage >               m_xDefaultConfigStorage;
-    css::uno::Reference< css::embed::XStorage >               m_xUserConfigStorage;
+    cpo::uno::Reference< css::embed::XStorage >               m_xDefaultConfigStorage;
+    cpo::uno::Reference< css::embed::XStorage >               m_xUserConfigStorage;
     bool                                                      m_bReadOnly;
     bool                                                      m_bModified;
     bool                                                      m_bDisposed;
     OUString                                                  m_aXMLPostfix;
     OUString                                                  m_aPropUIName;
     OUString                                                  m_aModuleIdentifier;
-    css::uno::Reference< css::embed::XTransactedObject >      m_xUserRootCommit;
-    css::uno::Reference< cpo::uno::XComponentContext >        m_xContext;
+    cpo::uno::Reference< css::embed::XTransactedObject >      m_xUserRootCommit;
+    cpo::uno::Reference< cpo::uno::XComponentContext >        m_xContext;
     std::mutex                                                m_mutex;
     comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_aEventListeners;
     comphelper::OInterfaceContainerHelper4<css::ui::XUIConfigurationListener> m_aConfigListeners;
     rtl::Reference< ImageManager >                            m_xModuleImageManager;
-    css::uno::Reference< css::ui::XAcceleratorConfiguration > m_xModuleAcceleratorManager;
+    cpo::uno::Reference< css::ui::XAcceleratorConfiguration > m_xModuleAcceleratorManager;
 };
 
 // important: The order and position of the elements must match the constant
@@ -867,12 +867,12 @@ ModuleUIConfigurationManager::ModuleUIConfigurationManager(
             m_pStorageHandler[i]->connectToResource( PresetHandler::E_MODULES,
                                                      aResourceType, // this path won't be used later... see next lines!
                                                      aModuleShortName,
-                                                     css::uno::Reference< css::embed::XStorage >()); // no document root used here!
+                                                     cpo::uno::Reference< css::embed::XStorage >()); // no document root used here!
         }
     }
 
     // initialize root storages for all resource types
-    m_xUserRootCommit.set( m_pStorageHandler[css::ui::UIElementType::MENUBAR]->getOrCreateRootStorageUser(), css::uno::UNO_QUERY); // can be empty
+    m_xUserRootCommit.set( m_pStorageHandler[css::ui::UIElementType::MENUBAR]->getOrCreateRootStorageUser(), cpo::uno::UNO_QUERY); // can be empty
     m_xDefaultConfigStorage = m_pStorageHandler[css::ui::UIElementType::MENUBAR]->getParentStorageShare();
     m_xUserConfigStorage    = m_pStorageHandler[css::ui::UIElementType::MENUBAR]->getParentStorageUser();
 
@@ -1030,7 +1030,7 @@ void ModuleUIConfigurationManager::reset()
                 cpo::uno::Any anyEx = cppu::getCaughtException();
                 throw css::lang::WrappedTargetRuntimeException(
                         u"ModuleUIConfigurationManager::reset exception"_ustr,
-                        css::uno::Reference<cpo::uno::XInterface>(*this), anyEx);
+                        cpo::uno::Reference<cpo::uno::XInterface>(*this), anyEx);
             }
         }
 

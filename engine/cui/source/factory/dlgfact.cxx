@@ -99,7 +99,7 @@
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::container;
 
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 
 using namespace svx;
 using namespace css;
@@ -298,7 +298,7 @@ public:
 }
 
 VclPtr<AbstractThesaurusDialog> AbstractDialogFactory_Impl::CreateThesaurusDialog(weld::Widget* pParent,
-                                css::uno::Reference<css::linguistic2::XThesaurus> xThesaurus,
+                                cpo::uno::Reference<css::linguistic2::XThesaurus> xThesaurus,
                                 const OUString &rWord, LanguageType nLanguage)
 {
     return VclPtr<AbstractThesaurusDialog_Impl>::Create(pParent, xThesaurus, rWord, nLanguage);
@@ -321,7 +321,7 @@ public:
 
 VclPtr<AbstractHyphenWordDialog> AbstractDialogFactory_Impl::CreateHyphenWordDialog(weld::Widget* pParent,
                                                 const OUString &rWord, LanguageType nLang,
-                                                css::uno::Reference< css::linguistic2::XHyphenator >  &xHyphen,
+                                                cpo::uno::Reference< css::linguistic2::XHyphenator >  &xHyphen,
                                                 SvxSpellWrapper* pWrapper)
 {
 #if !ENABLE_WASM_STRIP_EXTRA

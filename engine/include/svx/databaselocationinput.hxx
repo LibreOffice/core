@@ -28,7 +28,7 @@
 class SvtURLBox;
 namespace weld { class Button; class Window; }
 namespace cpo::uno { class XComponentContext; }
-namespace com::sun::star::uno { template <typename > class Reference; }
+namespace cpo::uno { template <typename > class Reference; }
 
 namespace svx
 {
@@ -46,7 +46,7 @@ namespace svx
     {
     public:
         DatabaseLocationInputController(
-            const css::uno::Reference<cpo::uno::XComponentContext>& _rContext,
+            const cpo::uno::Reference<cpo::uno::XComponentContext>& _rContext,
             SvtURLBox& _rLocationInput,
             weld::Button& _rBrowseButton,
             weld::Window& _rDialog

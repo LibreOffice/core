@@ -33,6 +33,7 @@
 namespace {
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 //cppunit calls instantiates a new TextFixture for each test and calls setUp
 //and tearDown on that for every test in a fixture

@@ -52,7 +52,7 @@ class MasterScriptProvider :
 public:
     /// @throws cpo::uno::RuntimeException
     explicit MasterScriptProvider(
-        const css::uno::Reference< cpo::uno::XComponentContext >
+        const cpo::uno::Reference< cpo::uno::XComponentContext >
         & xContext );
     virtual ~MasterScriptProvider() override;
 
@@ -61,7 +61,7 @@ public:
 
     // XBrowseNode implementation
     virtual OUString SAL_CALL getName() override;
-    virtual cpo::uno::Sequence< css::uno::Reference< css::script::browse::XBrowseNode > > SAL_CALL getChildNodes() override;
+    virtual cpo::uno::Sequence< cpo::uno::Reference< css::script::browse::XBrowseNode > > SAL_CALL getChildNodes() override;
     virtual bool SAL_CALL hasChildNodes() override;
     virtual sal_Int16 SAL_CALL getType() override;
     // XNameContainer
@@ -82,7 +82,7 @@ public:
     virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames( ) override;
 
     // XScriptProvider implementation
-    virtual css::uno::Reference < css::script::provider::XScript > SAL_CALL
+    virtual cpo::uno::Reference < css::script::provider::XScript > SAL_CALL
         getScript( const OUString& scriptURI ) override;
 
     /**
@@ -102,10 +102,10 @@ private:
 
     ProviderCache* providerCache();
     /* to obtain other services if needed */
-    css::uno::Reference< cpo::uno::XComponentContext >              m_xContext;
-    css::uno::Reference< css::lang::XMultiComponentFactory >        m_xMgr;
-    css::uno::Reference< css::frame::XModel >                       m_xModel;
-    css::uno::Reference< css::document::XScriptInvocationContext >  m_xInvocationContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext >              m_xContext;
+    cpo::uno::Reference< css::lang::XMultiComponentFactory >        m_xMgr;
+    cpo::uno::Reference< css::frame::XModel >                       m_xModel;
+    cpo::uno::Reference< css::document::XScriptInvocationContext >  m_xInvocationContext;
     cpo::uno::Sequence< cpo::uno::Any >                             m_sAargs;
     OUString                                                 m_sNodeName;
 
@@ -120,7 +120,7 @@ private:
     // m_bInitialised ensure initialisation only takes place once.
     bool m_bInitialised;
     bool m_bIsPkgMSP;
-    css::uno::Reference< css::script::provider::XScriptProvider > m_xMSPPkg;
+    cpo::uno::Reference< css::script::provider::XScriptProvider > m_xMSPPkg;
     std::unique_ptr<ProviderCache> m_pPCache;
     std::mutex m_mutex;
     OUString m_sCtxString;

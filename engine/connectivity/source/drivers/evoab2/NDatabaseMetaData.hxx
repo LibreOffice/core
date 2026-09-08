@@ -66,7 +66,7 @@ namespace connectivity::evoab
         OEvoabConnection*                      m_pConnection;
 
     protected:
-        virtual css::uno::Reference< css::sdbc::XResultSet > impl_getTypeInfo_throw() override;
+        virtual cpo::uno::Reference< css::sdbc::XResultSet > impl_getTypeInfo_throw() override;
         // cached database information
         virtual OUString    impl_getIdentifierQuoteString_throw(  ) override;
         virtual bool        impl_isCatalogAtStart_throw(  ) override;
@@ -195,9 +195,9 @@ namespace connectivity::evoab
         virtual bool supportsDataManipulationTransactionsOnly(  ) override;
         virtual bool dataDefinitionCausesTransactionCommit(  ) override;
         virtual bool dataDefinitionIgnoredInTransactions(  ) override;
-        virtual css::uno::Reference< css::sdbc::XResultSet > getTables( const cpo::uno::Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern, const cpo::uno::Sequence< OUString >& types ) override;
-        virtual css::uno::Reference< css::sdbc::XResultSet > getTableTypes(  ) override;
-        virtual css::uno::Reference< css::sdbc::XResultSet > getColumns( const cpo::uno::Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern, const OUString& columnNamePattern ) override;
+        virtual cpo::uno::Reference< css::sdbc::XResultSet > getTables( const cpo::uno::Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern, const cpo::uno::Sequence< OUString >& types ) override;
+        virtual cpo::uno::Reference< css::sdbc::XResultSet > getTableTypes(  ) override;
+        virtual cpo::uno::Reference< css::sdbc::XResultSet > getColumns( const cpo::uno::Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern, const OUString& columnNamePattern ) override;
         virtual bool supportsResultSetType( sal_Int32 setType ) override;
         virtual bool supportsResultSetConcurrency( sal_Int32 setType, sal_Int32 concurrency ) override;
         virtual bool ownUpdatesAreVisible( sal_Int32 setType ) override;
@@ -210,7 +210,7 @@ namespace connectivity::evoab
         virtual bool deletesAreDetected( sal_Int32 setType ) override;
         virtual bool insertsAreDetected( sal_Int32 setType ) override;
         virtual bool supportsBatchUpdates(  ) override;
-        virtual css::uno::Reference< css::sdbc::XResultSet > getUDTs( const cpo::uno::Any& catalog, const OUString& schemaPattern, const OUString& typeNamePattern, const cpo::uno::Sequence< sal_Int32 >& types ) override;
+        virtual cpo::uno::Reference< css::sdbc::XResultSet > getUDTs( const cpo::uno::Any& catalog, const OUString& schemaPattern, const OUString& typeNamePattern, const cpo::uno::Sequence< sal_Int32 >& types ) override;
     };
 }
 

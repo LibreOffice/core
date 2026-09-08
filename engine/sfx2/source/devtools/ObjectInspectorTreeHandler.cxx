@@ -49,6 +49,7 @@
 #include <i18nlangtag/languagetag.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 namespace
 {

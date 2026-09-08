@@ -41,18 +41,18 @@ public:
 
     bool executeCommandForProvider(
         const OUString& rCommand,
-        const css::uno::Reference<css::frame::XDispatchProvider>& xProvider) override;
+        const cpo::uno::Reference<css::frame::XDispatchProvider>& xProvider) override;
 
     bool executeDialog(const OUString& rCommand) override;
 
-    css::uno::Reference<css::ui::test::XUIObject> getTopFocusWindow() override;
+    cpo::uno::Reference<css::ui::test::XUIObject> getTopFocusWindow() override;
 
-    css::uno::Reference<css::ui::test::XUIObject> getFocusWindow() override;
+    cpo::uno::Reference<css::ui::test::XUIObject> getFocusWindow() override;
 
-    css::uno::Reference<css::ui::test::XUIObject> getFloatWindow() override;
+    cpo::uno::Reference<css::ui::test::XUIObject> getFloatWindow() override;
 
-    css::uno::Reference<css::ui::test::XUIObject>
-        getWindow(const css::uno::Reference<css::awt::XWindow>& xWindow) override;
+    cpo::uno::Reference<css::ui::test::XUIObject>
+        getWindow(const cpo::uno::Reference<css::awt::XWindow>& xWindow) override;
 
     OUString getImplementationName() override;
 
@@ -82,7 +82,7 @@ bool UITestUnoObj::executeCommandWithParameters(const OUString& rCommand,
 
 bool UITestUnoObj::executeCommandForProvider(
     const OUString& rCommand,
-    const css::uno::Reference<css::frame::XDispatchProvider>& xProvider)
+    const cpo::uno::Reference<css::frame::XDispatchProvider>& xProvider)
 {
     SolarMutexGuard aGuard;
     return UITest::executeCommandForProvider(rCommand, xProvider);
@@ -94,7 +94,7 @@ bool UITestUnoObj::executeDialog(const OUString& rCommand)
     return UITest::executeDialog(rCommand);
 }
 
-css::uno::Reference<css::ui::test::XUIObject> UITestUnoObj::getTopFocusWindow()
+cpo::uno::Reference<css::ui::test::XUIObject> UITestUnoObj::getTopFocusWindow()
 {
     SolarMutexGuard aGuard;
     std::unique_ptr<UIObject> pObj = UITest::getFocusTopWindow();
@@ -103,7 +103,7 @@ css::uno::Reference<css::ui::test::XUIObject> UITestUnoObj::getTopFocusWindow()
     return new UIObjectUnoObj(std::move(pObj));
 }
 
-css::uno::Reference<css::ui::test::XUIObject> UITestUnoObj::getFocusWindow()
+cpo::uno::Reference<css::ui::test::XUIObject> UITestUnoObj::getFocusWindow()
 {
     SolarMutexGuard aGuard;
     std::unique_ptr<UIObject> pObj = UITest::getFocusWindow();
@@ -112,7 +112,7 @@ css::uno::Reference<css::ui::test::XUIObject> UITestUnoObj::getFocusWindow()
     return new UIObjectUnoObj(std::move(pObj));
 }
 
-css::uno::Reference<css::ui::test::XUIObject> UITestUnoObj::getFloatWindow()
+cpo::uno::Reference<css::ui::test::XUIObject> UITestUnoObj::getFloatWindow()
 {
     SolarMutexGuard aGuard;
     std::unique_ptr<UIObject> pObj = UITest::getFloatWindow();
@@ -121,8 +121,8 @@ css::uno::Reference<css::ui::test::XUIObject> UITestUnoObj::getFloatWindow()
     return new UIObjectUnoObj(std::move(pObj));
 }
 
-css::uno::Reference<css::ui::test::XUIObject>
-    UITestUnoObj::getWindow(const css::uno::Reference<::css::awt::XWindow>& xWindow)
+cpo::uno::Reference<css::ui::test::XUIObject>
+    UITestUnoObj::getWindow(const cpo::uno::Reference<::css::awt::XWindow>& xWindow)
 {
     if (!xWindow.is())
         return {};

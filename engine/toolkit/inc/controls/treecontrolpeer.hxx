@@ -39,7 +39,7 @@ class UnoTreeListBoxImpl;
 
 class TreeControlPeer final : public ::cppu::ImplInheritanceHelper< VCLXWindow, css::awt::tree::XTreeControl, css::awt::tree::XTreeDataModelListener >
 {
-    typedef std::map<css::uno::Reference<css::awt::tree::XTreeNode>, UnoTreeListEntry*> TreeNodeMap;
+    typedef std::map<cpo::uno::Reference<css::awt::tree::XTreeNode>, UnoTreeListEntry*> TreeNodeMap;
 
     friend class UnoTreeListBoxImpl;
     friend class UnoTreeListEntry;
@@ -52,39 +52,39 @@ public:
     // css::view::XSelectionSupplier
     virtual bool select( const cpo::uno::Any& xSelection ) override;
     virtual cpo::uno::Any getSelection(  ) override;
-    virtual void addSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
-    virtual void removeSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
+    virtual void addSelectionChangeListener( const cpo::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
+    virtual void removeSelectionChangeListener( const cpo::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
 
     // css::view::XMultiSelectionSupplier
     virtual bool addSelection( const cpo::uno::Any& Selection ) override;
     virtual void removeSelection( const cpo::uno::Any& Selection ) override;
     virtual void clearSelection(  ) override;
     virtual ::sal_Int32 getSelectionCount(  ) override;
-    virtual css::uno::Reference< css::container::XEnumeration > createSelectionEnumeration(  ) override;
-    virtual css::uno::Reference< css::container::XEnumeration > createReverseSelectionEnumeration(  ) override;
+    virtual cpo::uno::Reference< css::container::XEnumeration > createSelectionEnumeration(  ) override;
+    virtual cpo::uno::Reference< css::container::XEnumeration > createReverseSelectionEnumeration(  ) override;
 
     // css::awt::XTreeControl
     virtual OUString getDefaultExpandedGraphicURL() override;
     virtual void setDefaultExpandedGraphicURL( const OUString& _defaultexpandedgraphicurl ) override;
     virtual OUString getDefaultCollapsedGraphicURL() override;
     virtual void setDefaultCollapsedGraphicURL( const OUString& _defaultcollapsedgraphicurl ) override;
-    virtual bool isNodeExpanded( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
-    virtual bool isNodeCollapsed( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
-    virtual void makeNodeVisible( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
-    virtual bool isNodeVisible( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
-    virtual void expandNode( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
-    virtual void collapseNode( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
-    virtual void addTreeExpansionListener( const css::uno::Reference< css::awt::tree::XTreeExpansionListener >& Listener ) override;
-    virtual void removeTreeExpansionListener( const css::uno::Reference< css::awt::tree::XTreeExpansionListener >& Listener ) override;
-    virtual css::uno::Reference< css::awt::tree::XTreeNode > getNodeForLocation( ::sal_Int32 x, ::sal_Int32 y ) override;
-    virtual css::uno::Reference< css::awt::tree::XTreeNode > getClosestNodeForLocation( ::sal_Int32 x, ::sal_Int32 y ) override;
-    virtual css::awt::Rectangle getNodeRect( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
+    virtual bool isNodeExpanded( const cpo::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
+    virtual bool isNodeCollapsed( const cpo::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
+    virtual void makeNodeVisible( const cpo::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
+    virtual bool isNodeVisible( const cpo::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
+    virtual void expandNode( const cpo::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
+    virtual void collapseNode( const cpo::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
+    virtual void addTreeExpansionListener( const cpo::uno::Reference< css::awt::tree::XTreeExpansionListener >& Listener ) override;
+    virtual void removeTreeExpansionListener( const cpo::uno::Reference< css::awt::tree::XTreeExpansionListener >& Listener ) override;
+    virtual cpo::uno::Reference< css::awt::tree::XTreeNode > getNodeForLocation( ::sal_Int32 x, ::sal_Int32 y ) override;
+    virtual cpo::uno::Reference< css::awt::tree::XTreeNode > getClosestNodeForLocation( ::sal_Int32 x, ::sal_Int32 y ) override;
+    virtual css::awt::Rectangle getNodeRect( const cpo::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
     virtual bool isEditing(  ) override;
     virtual bool stopEditing(  ) override;
     virtual void cancelEditing(  ) override;
-    virtual void startEditingAtNode( const css::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
-    virtual void addTreeEditListener( const css::uno::Reference< css::awt::tree::XTreeEditListener >& Listener ) override;
-    virtual void removeTreeEditListener( const css::uno::Reference< css::awt::tree::XTreeEditListener >& Listener ) override;
+    virtual void startEditingAtNode( const cpo::uno::Reference< css::awt::tree::XTreeNode >& Node ) override;
+    virtual void addTreeEditListener( const cpo::uno::Reference< css::awt::tree::XTreeEditListener >& Listener ) override;
+    virtual void removeTreeEditListener( const cpo::uno::Reference< css::awt::tree::XTreeEditListener >& Listener ) override;
 
     // css::awt::tree::TreeDataModelListener
     virtual void treeNodesChanged( const css::awt::tree::TreeDataModelEvent& aEvent ) override;
@@ -106,22 +106,22 @@ public:
 
 private:
     /// @throws css::lang::IllegalArgumentException
-    UnoTreeListEntry* getEntry( const css::uno::Reference< css::awt::tree::XTreeNode >& xNode, bool bThrow = true );
+    UnoTreeListEntry* getEntry( const cpo::uno::Reference< css::awt::tree::XTreeNode >& xNode, bool bThrow = true );
 
     void disposeControl();
 
     bool onEditingEntry( UnoTreeListEntry const * pEntry );
     bool onEditedEntry( UnoTreeListEntry const * pEntry, const OUString& rNewText );
 
-    void fillTree( UnoTreeListBoxImpl& rTree, const css::uno::Reference< css::awt::tree::XTreeDataModel >& xDataModel );
-    void addNode( UnoTreeListBoxImpl& rTree, const css::uno::Reference< css::awt::tree::XTreeNode >& xNode, UnoTreeListEntry* pParentEntry );
+    void fillTree( UnoTreeListBoxImpl& rTree, const cpo::uno::Reference< css::awt::tree::XTreeDataModel >& xDataModel );
+    void addNode( UnoTreeListBoxImpl& rTree, const cpo::uno::Reference< css::awt::tree::XTreeNode >& xNode, UnoTreeListEntry* pParentEntry );
 
-    UnoTreeListEntry* createEntry( const css::uno::Reference< css::awt::tree::XTreeNode >& xNode, UnoTreeListEntry* pParent, sal_uInt32 nPos );
+    UnoTreeListEntry* createEntry( const cpo::uno::Reference< css::awt::tree::XTreeNode >& xNode, UnoTreeListEntry* pParent, sal_uInt32 nPos );
     void updateEntry( UnoTreeListEntry* pEntry );
 
     void updateTree( const css::awt::tree::TreeDataModelEvent& rEvent );
-    void updateNode( UnoTreeListBoxImpl const & rTree, const css::uno::Reference< css::awt::tree::XTreeNode >& xNode );
-    void updateChildNodes( UnoTreeListBoxImpl const & rTree, const css::uno::Reference< css::awt::tree::XTreeNode >& xParentNode, UnoTreeListEntry* pParentEntry );
+    void updateNode( UnoTreeListBoxImpl const & rTree, const cpo::uno::Reference< css::awt::tree::XTreeNode >& xNode );
+    void updateChildNodes( UnoTreeListBoxImpl const & rTree, const cpo::uno::Reference< css::awt::tree::XTreeNode >& xParentNode, UnoTreeListEntry* pParentEntry );
 
     static OUString getEntryString( const cpo::uno::Any& rValue );
 
@@ -131,12 +131,12 @@ private:
     /// @throws css::lang::IllegalArgumentException
     void ChangeNodesSelection( const cpo::uno::Any& rSelection, bool bSelect, bool bSetSelection );
 
-    void onChangeDataModel( UnoTreeListBoxImpl& rTree, const css::uno::Reference< css::awt::tree::XTreeDataModel >& xDataModel );
+    void onChangeDataModel( UnoTreeListBoxImpl& rTree, const cpo::uno::Reference< css::awt::tree::XTreeDataModel >& xDataModel );
 
     void onSelectionChanged();
-    void onRequestChildNodes( const css::uno::Reference< css::awt::tree::XTreeNode >& xNode );
-    bool onExpanding( const css::uno::Reference< css::awt::tree::XTreeNode >& xNode, bool bExpanding );
-    void onExpanded( const css::uno::Reference< css::awt::tree::XTreeNode >& xNode, bool bExpanding );
+    void onRequestChildNodes( const cpo::uno::Reference< css::awt::tree::XTreeNode >& xNode );
+    bool onExpanding( const cpo::uno::Reference< css::awt::tree::XTreeNode >& xNode, bool bExpanding );
+    void onExpanded( const cpo::uno::Reference< css::awt::tree::XTreeNode >& xNode, bool bExpanding );
 
     void onChangeRootDisplayed( bool bIsRootDisplayed );
 
@@ -146,7 +146,7 @@ private:
     bool loadImage( const OUString& rURL, Image& rImage );
 
 private:
-    css::uno::Reference< css::awt::tree::XTreeDataModel >mxDataModel;
+    cpo::uno::Reference< css::awt::tree::XTreeDataModel >mxDataModel;
     TreeSelectionListenerMultiplexer maSelectionListeners;
     TreeExpansionListenerMultiplexer maTreeExpansionListeners;
     TreeEditListenerMultiplexer maTreeEditListeners;
@@ -158,7 +158,7 @@ private:
     Image maDefaultExpandedImage;
     Image maDefaultCollapsedImage;
     std::unique_ptr<TreeNodeMap> mpTreeNodeMap;
-    css::uno::Reference< css::graphic::XGraphicProvider > mxGraphicProvider;
+    cpo::uno::Reference< css::graphic::XGraphicProvider > mxGraphicProvider;
 };
 
 

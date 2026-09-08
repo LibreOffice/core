@@ -31,7 +31,7 @@
 #include <o3tl/string_view.hxx>
 
 using namespace connectivity::odbc;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::sdbc;
 

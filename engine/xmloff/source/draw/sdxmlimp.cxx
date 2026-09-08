@@ -46,6 +46,7 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace ::xmloff::token;
 
 namespace {
@@ -58,8 +59,8 @@ public:
 
     SdXMLBodyContext_Impl( SdXMLImport& rImport );
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
-                sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+                sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 };
 
 }
@@ -69,7 +70,7 @@ SdXMLBodyContext_Impl::SdXMLBodyContext_Impl( SdXMLImport& rImport ) :
 {
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLBodyContext_Impl::createFastChildContext(
+cpo::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLBodyContext_Impl::createFastChildContext(
         sal_Int32 /*nElement*/,
         const uno::Reference< xml::sax::XFastAttributeList > & /*xAttrList*/ )
 {
@@ -88,8 +89,8 @@ protected:
 public:
     SdXMLDocContext_Impl( SdXMLImport& rImport );
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
 }
@@ -181,8 +182,8 @@ public:
     SdXMLFlatDocContext_Impl( SdXMLImport& i_rImport,
         const uno::Reference<document::XDocumentProperties>& i_xDocProps );
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 };
 
 }
@@ -294,7 +295,7 @@ com_sun_star_comp_Impress_XMLOasisSettingsImporter_get_implementation(
 }
 
 SdXMLImport::SdXMLImport(
-    const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
+    const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
     OUString const & implementationName,
     bool bIsDraw, SvXMLImportFlags nImportFlags )
 :   SvXMLImport( xContext, implementationName, nImportFlags ),
@@ -658,7 +659,7 @@ void SdXMLImport::AddDateTimeDecl( const OUString& rName, const OUString& rText,
     }
 }
 
-void SdXMLImport::AddPageShapePageNum(const css::uno::Reference<css::drawing::XShape>& rxShape, sal_Int32 nPageNumber)
+void SdXMLImport::AddPageShapePageNum(const cpo::uno::Reference<css::drawing::XShape>& rxShape, sal_Int32 nPageNumber)
 {
     maPageShapeRefs.push_back({rxShape, nPageNumber});
 }

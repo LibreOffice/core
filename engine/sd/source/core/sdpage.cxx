@@ -94,9 +94,10 @@
 
 using namespace ::sd;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace com::sun::star::xml::dom;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 
 
 sal_uInt16 SdPage::mnLastPageId = 1;
@@ -144,21 +145,21 @@ SdPage::SdPage(SdDrawDocument& rNewDoc, bool bMasterPage)
 
 namespace
 {
-    void clearChildNodes(css::uno::Reference<css::animations::XAnimationNode> const & rAnimationNode)
+    void clearChildNodes(cpo::uno::Reference<css::animations::XAnimationNode> const & rAnimationNode)
     {
-        css::uno::Reference<css::container::XEnumerationAccess > xEnumerationAccess(rAnimationNode, UNO_QUERY);
+        cpo::uno::Reference<css::container::XEnumerationAccess > xEnumerationAccess(rAnimationNode, UNO_QUERY);
         if (!xEnumerationAccess.is())
             return;
-        css::uno::Reference<css::container::XEnumeration> xEnumeration = xEnumerationAccess->createEnumeration();
+        cpo::uno::Reference<css::container::XEnumeration> xEnumeration = xEnumerationAccess->createEnumeration();
         if (!xEnumeration.is())
             return;
         while (xEnumeration->hasMoreElements())
         {
-            css::uno::Reference<css::animations::XAnimationNode> xChildNode(xEnumeration->nextElement(), UNO_QUERY);
+            cpo::uno::Reference<css::animations::XAnimationNode> xChildNode(xEnumeration->nextElement(), UNO_QUERY);
             if (!xChildNode.is())
                 continue;
             clearChildNodes(xChildNode);
-            css::uno::Reference<css::animations::XTimeContainer> xAnimationNode(rAnimationNode, UNO_QUERY);
+            cpo::uno::Reference<css::animations::XTimeContainer> xAnimationNode(rAnimationNode, UNO_QUERY);
             if (!xAnimationNode.is())
             {
                 SAL_WARN("sd.core", "can't remove node child, possible leak");
@@ -3005,7 +3006,7 @@ rtl::Reference< SvxDrawPage > SdPage::createUnoPage()
 }
 
 /** returns the SdPage implementation for the given XDrawPage or 0 if not available */
-SdPage* SdPage::getImplementation( const css::uno::Reference< css::drawing::XDrawPage >& xPage )
+SdPage* SdPage::getImplementation( const cpo::uno::Reference< css::drawing::XDrawPage >& xPage )
 {
     try
     {

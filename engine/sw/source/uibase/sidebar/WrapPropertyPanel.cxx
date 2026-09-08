@@ -36,7 +36,7 @@ namespace sw::sidebar {
 
 std::unique_ptr<PanelLayout> WrapPropertyPanel::Create (
     weld::Widget* pParent,
-    const css::uno::Reference< css::frame::XFrame >& rxFrame,
+    const cpo::uno::Reference< css::frame::XFrame >& rxFrame,
     SfxBindings* pBindings)
 {
     if (pParent == nullptr)
@@ -51,7 +51,7 @@ std::unique_ptr<PanelLayout> WrapPropertyPanel::Create (
 
 WrapPropertyPanel::WrapPropertyPanel(
     weld::Widget* pParent,
-    const css::uno::Reference< css::frame::XFrame >& rxFrame,
+    const cpo::uno::Reference< css::frame::XFrame >& rxFrame,
     SfxBindings* pBindings )
     : PanelLayout(pParent, u"WrapPropertyPanel"_ustr, u"modules/swriter/ui/sidebarwrap.ui"_ustr)
     , mpBindings(pBindings)

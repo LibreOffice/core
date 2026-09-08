@@ -30,7 +30,7 @@
 #include "cpo/uno/TypeClass.hdl"
 #include "rtl/alloc.h"
 
-namespace com::sun::star::uno
+namespace cpo::uno
 {
     class BaseReference;
     template<class interface_type> class Reference;
@@ -264,8 +264,8 @@ public:
     // Similar to Reference::query/queryThrow, these allow to simplify calling constructors of
     // Reference taking Any. queryThrow is functionally similar to get(), but doesn't require
     // to specify the full Reference type explicitly, only the interface type.
-    template<class interface_type> inline css::uno::Reference<interface_type> query() const;
-    template<class interface_type> inline css::uno::Reference<interface_type> queryThrow() const;
+    template<class interface_type> inline cpo::uno::Reference<interface_type> query() const;
+    template<class interface_type> inline cpo::uno::Reference<interface_type> queryThrow() const;
 };
 
 /** Wrap a value in an Any, if necessary.
@@ -386,7 +386,7 @@ template<>
 inline bool operator == ( const Any & rAny, const cpo::uno::Type & value );
 // interface
 template<>
-inline bool operator == ( const Any & rAny, const css::uno::BaseReference & value );
+inline bool operator == ( const Any & rAny, const cpo::uno::BaseReference & value );
 
 }
 

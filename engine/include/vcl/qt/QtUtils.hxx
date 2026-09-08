@@ -51,7 +51,7 @@ inline QPixmap toQPixmap(const Bitmap& rBitmap)
 
 inline QPixmap toQPixmap(const Image& rImage) { return toQPixmap(rImage.GetBitmap()); }
 
-inline QPixmap toQPixmap(const css::uno::Reference<css::graphic::XGraphic>& rImage)
+inline QPixmap toQPixmap(const cpo::uno::Reference<css::graphic::XGraphic>& rImage)
 {
     if (!rImage.is())
         return QPixmap();

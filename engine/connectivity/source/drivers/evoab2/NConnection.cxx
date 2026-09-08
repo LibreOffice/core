@@ -32,7 +32,7 @@ using namespace connectivity::evoab;
 using namespace dbtools;
 
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbcx;
@@ -112,7 +112,7 @@ Reference< XDatabaseMetaData > OEvoabConnection::getMetaData(  )
     return xMetaData;
 }
 
-css::uno::Reference< XTablesSupplier > OEvoabConnection::createCatalog()
+cpo::uno::Reference< XTablesSupplier > OEvoabConnection::createCatalog()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     Reference< XTablesSupplier > xTab = m_xCatalog;

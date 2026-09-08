@@ -70,6 +70,7 @@ SC_SIMPLE_SERVICE_INFO( ScChart2DataSequence, u"ScChart2DataSequence"_ustr,
         u"com.sun.star.chart2.data.DataSequence"_ustr)
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace ::formula;
 
 namespace

@@ -33,6 +33,7 @@
 #include "lookupcolorname.hxx"
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace accessibility
 {

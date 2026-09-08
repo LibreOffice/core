@@ -36,8 +36,8 @@ class ScFormulaDlg final : public formula::FormulaDlg,
                      public IAnyRefDialog
 {
     ScFormulaReferenceHelper m_aHelper;
-    css::uno::Reference< css::sheet::XFormulaParser>          m_xParser;
-    css::uno::Reference< css::sheet::XFormulaOpCodeMapper>    m_xOpCodeMapper;
+    cpo::uno::Reference< css::sheet::XFormulaParser>          m_xParser;
+    cpo::uno::Reference< css::sheet::XFormulaOpCodeMapper>    m_xOpCodeMapper;
 
             ScDocument*                 m_pDoc;
             ScAddress                   m_CursorPos;
@@ -72,8 +72,8 @@ public:
 
     virtual formula::IFunctionManager* getFunctionManager() override;
     virtual ::std::unique_ptr<formula::FormulaTokenArray> convertToTokenArray(const cpo::uno::Sequence< css::sheet::FormulaToken >& _aTokenList) override;
-    virtual css::uno::Reference< css::sheet::XFormulaParser> getFormulaParser() const override;
-    virtual css::uno::Reference< css::sheet::XFormulaOpCodeMapper> getFormulaOpCodeMapper() const override;
+    virtual cpo::uno::Reference< css::sheet::XFormulaParser> getFormulaParser() const override;
+    virtual cpo::uno::Reference< css::sheet::XFormulaOpCodeMapper> getFormulaOpCodeMapper() const override;
     virtual css::table::CellAddress getReferencePosition() const override;
 
     virtual void Close() override;

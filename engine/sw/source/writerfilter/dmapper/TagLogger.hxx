@@ -48,7 +48,7 @@ namespace writerfilter
         void endDocument();
 
         void element(const std::string & name);
-        void unoPropertySet(const css::uno::Reference<css::beans::XPropertySet>& rPropSet);
+        void unoPropertySet(const cpo::uno::Reference<css::beans::XPropertySet>& rPropSet);
         void startElement(const std::string & name);
 #endif
         void attribute(const std::string & name, const std::string & value);

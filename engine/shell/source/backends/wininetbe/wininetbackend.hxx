@@ -25,7 +25,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase.hxx>
 
-namespace uno = css::uno ;
+namespace uno = cpo::uno ;
 namespace lang = css::lang ;
 
 class WinInetBackend : public ::cppu::WeakImplHelper <
@@ -45,9 +45,9 @@ class WinInetBackend : public ::cppu::WeakImplHelper <
             getSupportedServiceNames(  ) override;
 
         // XPropertySet
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
+        virtual cpo::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
         getPropertySetInfo() override
-        { return css::uno::Reference< css::beans::XPropertySetInfo >(); }
+        { return cpo::uno::Reference< css::beans::XPropertySetInfo >(); }
 
         virtual void SAL_CALL setPropertyValue(
             OUString const &, cpo::uno::Any const &) override;
@@ -57,22 +57,22 @@ class WinInetBackend : public ::cppu::WeakImplHelper <
 
         virtual void SAL_CALL addPropertyChangeListener(
             OUString const &,
-            css::uno::Reference< css::beans::XPropertyChangeListener > const &) override
+            cpo::uno::Reference< css::beans::XPropertyChangeListener > const &) override
         {}
 
         virtual void SAL_CALL removePropertyChangeListener(
             OUString const &,
-            css::uno::Reference< css::beans::XPropertyChangeListener > const &) override
+            cpo::uno::Reference< css::beans::XPropertyChangeListener > const &) override
         {}
 
         virtual void SAL_CALL addVetoableChangeListener(
             OUString const &,
-            css::uno::Reference< css::beans::XVetoableChangeListener > const &) override
+            cpo::uno::Reference< css::beans::XVetoableChangeListener > const &) override
         {}
 
         virtual void SAL_CALL removeVetoableChangeListener(
             OUString const &,
-            css::uno::Reference< css::beans::XVetoableChangeListener > const &) override
+            cpo::uno::Reference< css::beans::XVetoableChangeListener > const &) override
         {}
 
         /**

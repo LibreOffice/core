@@ -43,7 +43,7 @@ namespace oox::drawingml::chart {
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::cpo::uno;
 
 namespace {

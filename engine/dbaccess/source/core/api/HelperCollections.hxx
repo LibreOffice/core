@@ -29,9 +29,9 @@ namespace dbaccess
     {
         ::rtl::Reference< ::connectivity::OSQLColumns>  m_aColumns;
     protected:
-        virtual css::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
+        virtual cpo::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
         virtual void impl_refresh() override {}
-        virtual css::uno::Reference< css::beans::XPropertySet > createDescriptor() override
+        virtual cpo::uno::Reference< css::beans::XPropertySet > createDescriptor() override
         {
             return nullptr;
         }
@@ -62,9 +62,9 @@ namespace dbaccess
     {
         connectivity::OSQLTables  m_aTables;
     protected:
-        virtual css::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
+        virtual cpo::uno::Reference< css::beans::XPropertySet > createObject(const OUString& _rName) override;
         virtual void impl_refresh() override {}
-        virtual css::uno::Reference< css::beans::XPropertySet > createDescriptor() override
+        virtual cpo::uno::Reference< css::beans::XPropertySet > createDescriptor() override
         {
             return nullptr;
         }

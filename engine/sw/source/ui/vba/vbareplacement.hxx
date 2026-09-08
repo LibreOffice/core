@@ -28,11 +28,11 @@ typedef InheritedHelperInterfaceWeakImpl< ooo::vba::word::XReplacement > SwVbaRe
 class SwVbaReplacement : public SwVbaReplacement_BASE
 {
 private:
-    css::uno::Reference< css::util::XPropertyReplace> mxPropertyReplace;
+    cpo::uno::Reference< css::util::XPropertyReplace> mxPropertyReplace;
 
 public:
     /// @throws cpo::uno::RuntimeException
-    SwVbaReplacement( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< cpo::uno::XComponentContext >& rContext, css::uno::Reference< css::util::XPropertyReplace >  xPropertyReplace );
+    SwVbaReplacement( const cpo::uno::Reference< ooo::vba::XHelperInterface >& rParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& rContext, cpo::uno::Reference< css::util::XPropertyReplace >  xPropertyReplace );
     virtual ~SwVbaReplacement() override;
 
     // Attributes

@@ -18,7 +18,7 @@
 
 StylePropertiesContext::StylePropertiesContext(
     SvXMLImport& rImport, sal_Int32 nElement,
-    const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList, sal_uInt32 nFamily,
+    const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList, sal_uInt32 nFamily,
     std::vector<XMLPropertyState>& rProps, SvXMLImportPropertyMapper* pMap)
     : SvXMLPropertySetContext(rImport, nElement, xAttrList, nFamily, rProps, pMap)
 {
@@ -26,9 +26,9 @@ StylePropertiesContext::StylePropertiesContext(
 
 StylePropertiesContext::~StylePropertiesContext() {}
 
-css::uno::Reference<css::xml::sax::XFastContextHandler>
+cpo::uno::Reference<css::xml::sax::XFastContextHandler>
 StylePropertiesContext::createFastChildContext(
-    sal_Int32 nElement, const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+    sal_Int32 nElement, const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
     std::vector<XMLPropertyState>& rProperties, const XMLPropertyState& rProperty)
 {
     // Character, fill and stroke complex colors all share this context id.

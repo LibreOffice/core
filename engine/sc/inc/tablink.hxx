@@ -79,8 +79,8 @@ private:
 public:
     ScDocumentLoader(const OUString& rFileName, OUString& rFilterName, OUString& rOptions,
                      sal_uInt32 nRekCnt = 0, weld::Window* pInteractionParent = nullptr,
-                     const css::uno::Reference<css::io::XInputStream>& xInputStream
-                     = css::uno::Reference<css::io::XInputStream>());
+                     const cpo::uno::Reference<css::io::XInputStream>& xInputStream
+                     = cpo::uno::Reference<css::io::XInputStream>());
     ~ScDocumentLoader();
     ScDocument*         GetDocument();
     ScDocShell*         GetDocShell()       { return pDocShell.get(); }

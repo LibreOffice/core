@@ -20,7 +20,7 @@
 class NumbersImportFilter : public writerperfect::ImportFilter<OdsGenerator>
 {
 public:
-    explicit NumbersImportFilter(const css::uno::Reference<cpo::uno::XComponentContext>& rxContext)
+    explicit NumbersImportFilter(const cpo::uno::Reference<cpo::uno::XComponentContext>& rxContext)
         : writerperfect::ImportFilter<OdsGenerator>(rxContext)
     {
     }

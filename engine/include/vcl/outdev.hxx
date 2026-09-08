@@ -64,7 +64,7 @@
 #include <cppuhelper/weakref.hxx>
 
 #include <com/sun/star/drawing/LineCap.hpp>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <com/sun/star/awt/DeviceInfo.hpp>
 
 #include <memory>
@@ -300,7 +300,7 @@ public:
     Size                        GetOutputSize() const
                                     { return PixelToLogic( GetOutputSizePixel() ); }
 
-    css::uno::Reference< css::awt::XGraphics >
+    cpo::uno::Reference< css::awt::XGraphics >
                                 CreateUnoGraphics();
     std::vector< VCLXGraphics* > *GetUnoGraphicsList() const  { return mpUnoGraphicsList; }
     std::vector< VCLXGraphics* > *CreateUnoGraphicsList();

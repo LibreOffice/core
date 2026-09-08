@@ -46,7 +46,7 @@ namespace accessibility {
     virtual sal_Int64 getAccessibleChildCount() override;
 
     /** @return  The XAccessible interface of the specified child. */
-    virtual css::uno::Reference< css::accessibility::XAccessible >
+    virtual cpo::uno::Reference< css::accessibility::XAccessible >
     getAccessibleChild( sal_Int64 nChildIndex ) override;
 
     virtual sal_Int16 getAccessibleRole() override;
@@ -56,7 +56,7 @@ namespace accessibility {
     /** @return
             The accessible child rendered under the given point.
     */
-    virtual css::uno::Reference< css::accessibility::XAccessible >
+    virtual cpo::uno::Reference< css::accessibility::XAccessible >
     getAccessibleAtPoint( const css::awt::Point& rPoint ) override;
 
     /** Grabs the focus to the Grid Control. */
@@ -71,7 +71,7 @@ namespace accessibility {
 
 public:
     AccessibleGridControl(
-        const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
+        const cpo::uno::Reference< css::accessibility::XAccessible >& _rxParent,
         svt::table::TableControl& _rTable);
 
     // helper functions

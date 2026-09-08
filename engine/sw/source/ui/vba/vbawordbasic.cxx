@@ -37,6 +37,7 @@
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 SwWordBasic::SwWordBasic(SwVbaApplication* pApp)
     : mpApp(pApp)

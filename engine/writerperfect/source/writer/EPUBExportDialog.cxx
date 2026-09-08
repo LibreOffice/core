@@ -24,6 +24,7 @@
 #include "EPUBExportFilter.hxx"
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 namespace
 {
@@ -75,7 +76,7 @@ namespace writerperfect
 EPUBExportDialog::EPUBExportDialog(weld::Window* pParent,
                                    comphelper::SequenceAsHashMap& rFilterData,
                                    uno::Reference<cpo::uno::XComponentContext> xContext,
-                                   css::uno::Reference<css::lang::XComponent> xDocument)
+                                   cpo::uno::Reference<css::lang::XComponent> xDocument)
     : GenericDialogController(pParent, u"writerperfect/ui/exportepub.ui"_ustr, u"EpubDialog"_ustr)
     , m_xContext(std::move(xContext))
     , m_rFilterData(rFilterData)

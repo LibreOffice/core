@@ -59,7 +59,7 @@ namespace dbaccess
                 specifies which type of objects is to be approved with this instance
         */
         ObjectNameApproval(
-            const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
+            const cpo::uno::Reference< css::sdbc::XConnection >& _rxConnection,
             ObjectType _eType
         );
         virtual ~ObjectNameApproval() override;

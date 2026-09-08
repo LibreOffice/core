@@ -322,7 +322,7 @@ class EDITENG_DLLPUBLIC SvxAutoCorrect
 protected:
     //  - Text with attribution (only the SWG - SWG format!)
     //      rShort is the stream name - encrypted!
-    virtual bool PutText( const css::uno::Reference < css::embed::XStorage >& rStg,
+    virtual bool PutText( const cpo::uno::Reference < css::embed::XStorage >& rStg,
                               const OUString& rFileName, const OUString& rShort, SfxObjectShell&, OUString& );
 
     // required language in the table add if possible only when the file exists
@@ -336,7 +336,7 @@ public:
                             LanguageType eLang ) const;
     virtual bool GetLongText( const OUString& rShort, OUString& rLong );
 
-    virtual void refreshBlockList( const css::uno::Reference < css::embed::XStorage >& rStg);
+    virtual void refreshBlockList( const cpo::uno::Reference < css::embed::XStorage >& rStg);
 
     SvxAutoCorrect( OUString aShareAutocorrFile,
                     OUString aUserAutocorrFile );

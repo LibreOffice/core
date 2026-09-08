@@ -23,7 +23,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <xmloff/xmlnamespace.hxx>
 
 #include <rtl/ustring.hxx>
@@ -154,7 +154,7 @@ class XMLTextFieldExport final
 
     /// store used text field master names (NULL means: don't collect)
     std::optional< ::std::map<
-            css::uno::Reference< css::text::XText >,
+            cpo::uno::Reference< css::text::XText >,
             ::std::set< OUString > > >
         moUsedMasters;
 
@@ -167,14 +167,14 @@ public:
 
     /// Export this field and the surrounding span element with the formatting.
     /// To be called for every field in the document body.
-    void ExportField(const css::uno::Reference < css::text::XTextField > & rTextField,
+    void ExportField(const cpo::uno::Reference < css::text::XTextField > & rTextField,
                      bool bProgress, bool & rPrevCharIsSpace);
 
     /// collect styles (character styles, data styles, ...) for this field
     /// (if appropriate).
     /// Also collect used field masters (if pUsedMasters is set)
     /// to be called for every field during style export.
-    void ExportFieldAutoStyle(const css::uno::Reference < css::text::XTextField > & rTextField,
+    void ExportFieldAutoStyle(const cpo::uno::Reference < css::text::XTextField > & rTextField,
                  const bool bProgress );
 
     /// export field declarations.
@@ -185,7 +185,7 @@ public:
     /// (Requires that a list of used field declarations has previously been
     ///  built-up in ExportFieldAutoStyle() )
     void ExportFieldDeclarations(
-        const css::uno::Reference < css::text::XText > & rText);
+        const cpo::uno::Reference < css::text::XText > & rText);
 
     /// export all field declarations, or only those that have been used?
     /// Calling this method will reset the list of used field declarations.
@@ -204,10 +204,10 @@ public:
     static enum ::xmloff::token::XMLTokenEnum MapCountFieldName(FieldIdEnum nToken);
     static enum ::xmloff::token::XMLTokenEnum MapBibliographyFieldName(std::u16string_view sName);
     static enum ::xmloff::token::XMLTokenEnum MapMeasureKind(sal_Int16 nKind);
-    static enum ::xmloff::token::XMLTokenEnum MapPageNumberName(const css::uno::Reference< css::beans::XPropertySet> & xPropSet,
+    static enum ::xmloff::token::XMLTokenEnum MapPageNumberName(const cpo::uno::Reference< css::beans::XPropertySet> & xPropSet,
                       sal_Int32& nOffset);  /// also adjust page offset
-    static enum ::xmloff::token::XMLTokenEnum MapAuthorFieldName(const css::uno::Reference< css::beans::XPropertySet > & xPropSet);
-    static enum ::xmloff::token::XMLTokenEnum MapSenderFieldName(const css::uno::Reference< css::beans::XPropertySet > & xPropSet);
+    static enum ::xmloff::token::XMLTokenEnum MapAuthorFieldName(const cpo::uno::Reference< css::beans::XPropertySet > & xPropSet);
+    static enum ::xmloff::token::XMLTokenEnum MapSenderFieldName(const cpo::uno::Reference< css::beans::XPropertySet > & xPropSet);
 
 private:
 
@@ -215,9 +215,9 @@ private:
 
     /// export a field after <text:span> is already written
     void ExportFieldHelper(
-        const css::uno::Reference< css::text::XTextField> & rTextField,
-        const css::uno::Reference< css::beans::XPropertySet> & rPropSet,
-        const css::uno::Reference< css::beans::XPropertySet> & rRangePropSet,
+        const cpo::uno::Reference< css::text::XTextField> & rTextField,
+        const cpo::uno::Reference< css::beans::XPropertySet> & rPropSet,
+        const cpo::uno::Reference< css::beans::XPropertySet> & rRangePropSet,
         enum FieldIdEnum nToken,
         bool bProgress,
         bool & rPrevCharIsSpace);
@@ -233,11 +233,11 @@ private:
                        sal_uInt16 nNamespace = XML_NAMESPACE_TEXT); /// element content
 
     /// export a macro (as used in the macro field)
-    void ExportMacro( const css::uno::Reference< css::beans::XPropertySet> & rPropSet,
+    void ExportMacro( const cpo::uno::Reference< css::beans::XPropertySet> & rPropSet,
                       const OUString& rContent);
 
     /// export text:meta-field (RDF metadata)
-    void ExportMetaField( const css::uno::Reference< css::beans::XPropertySet> & i_xMeta,
+    void ExportMetaField( const cpo::uno::Reference< css::beans::XPropertySet> & i_xMeta,
                           bool i_bAutoStyles, bool i_bProgress,
                           bool & rPrevCharIsSpace);
 
@@ -358,7 +358,7 @@ private:
 
     /// export all attributes for bibliography data fields
     void ProcessBibliographyData(
-        const css::uno::Reference <
+        const cpo::uno::Reference <
             css::beans::XPropertySet > & rPropertySet);
 
     /// export CommandTypeAttribute
@@ -377,30 +377,30 @@ private:
     void ExportDataBaseElement(
         enum ::xmloff::token::XMLTokenEnum eElement,
         const OUString& sContent,
-        const css::uno::Reference < css::beans::XPropertySet > & rPropertySet,
-        const css::uno::Reference < css::beans::XPropertySetInfo > & rPropertySetInfo );
+        const cpo::uno::Reference < css::beans::XPropertySet > & rPropertySet,
+        const cpo::uno::Reference < css::beans::XPropertySetInfo > & rPropertySetInfo );
 
     /// for XDependentTextFields, get PropertySet of FieldMaster
-    static css::uno::Reference < css::beans::XPropertySet >
-    GetMasterPropertySet(const css::uno::Reference < css::text::XTextField > & rTextField);
+    static cpo::uno::Reference < css::beans::XPropertySet >
+    GetMasterPropertySet(const cpo::uno::Reference < css::text::XTextField > & rTextField);
 
     /// get PropertySet of (any) DependentTextField for this FieldMaster
     static bool GetDependentFieldPropertySet(
-        const css::uno::Reference< css::beans::XPropertySet> & xmaster,
-        css::uno::Reference< css::beans::XPropertySet> & xField);
+        const cpo::uno::Reference< css::beans::XPropertySet> & xmaster,
+        cpo::uno::Reference< css::beans::XPropertySet> & xField);
 
 
     /// get field ID from XTextField (and it's Property-Set)
-    static enum FieldIdEnum GetFieldID(const css::uno::Reference < css::text::XTextField > & rTextField,
-                          const css::uno::Reference < css::beans::XPropertySet > & xPropSet);
+    static enum FieldIdEnum GetFieldID(const cpo::uno::Reference < css::text::XTextField > & rTextField,
+                          const cpo::uno::Reference < css::beans::XPropertySet > & xPropSet);
 
     /// get field ID from XTextField service name (and it's PropertySet)
     static enum FieldIdEnum MapFieldName(std::u16string_view sFieldName,
-                            const css::uno::Reference < css::beans::XPropertySet> & xPropSet);
+                            const cpo::uno::Reference < css::beans::XPropertySet> & xPropSet);
 
     /// determine, whether field has string or numeric content
     static bool IsStringField(FieldIdEnum nFieldType,  /// field ID
-                           const css::uno::Reference < css::beans::XPropertySet > & xPropSet);
+                           const cpo::uno::Reference < css::beans::XPropertySet > & xPropSet);
 
 
     /// explode a field master name into field type and field name

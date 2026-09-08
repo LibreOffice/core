@@ -95,10 +95,10 @@ public:
 
     virtual void disposing(std::unique_lock<std::mutex>&) override;
 
-    static css::uno::Reference<css::beans::XPropertySet> GetPropertySet();
+    static cpo::uno::Reference<css::beans::XPropertySet> GetPropertySet();
 
     // beans::XPropertySet
-    virtual css::uno::Reference<css::beans::XPropertySetInfo> getPropertySetInfo() override;
+    virtual cpo::uno::Reference<css::beans::XPropertySetInfo> getPropertySetInfo() override;
     virtual void setPropertyValue (
         const OUString& rsPropertyName,
         const cpo::uno::Any& rValue) override;
@@ -106,16 +106,16 @@ public:
         const OUString& rsPropertyName) override;
     virtual void addPropertyChangeListener(
         const OUString& rsPropertyName,
-        const css::uno::Reference<css::beans::XPropertyChangeListener>& rxListener) override;
+        const cpo::uno::Reference<css::beans::XPropertyChangeListener>& rxListener) override;
     virtual void removePropertyChangeListener(
         const OUString& rsPropertyName,
-        const css::uno::Reference<css::beans::XPropertyChangeListener>& rxListener) override;
+        const cpo::uno::Reference<css::beans::XPropertyChangeListener>& rxListener) override;
     virtual void addVetoableChangeListener(
         const OUString& rsPropertyName,
-        const css::uno::Reference<css::beans::XVetoableChangeListener>& rxListener) override;
+        const cpo::uno::Reference<css::beans::XVetoableChangeListener>& rxListener) override;
     virtual void removeVetoableChangeListener(
         const OUString& rsPropertyName,
-        const css::uno::Reference<css::beans::XVetoableChangeListener>& rxListener) override;
+        const cpo::uno::Reference<css::beans::XVetoableChangeListener>& rxListener) override;
 
     // beans::XPropertySetInfo
     virtual cpo::uno::Sequence<css::beans::Property> getProperties() override;
@@ -138,10 +138,10 @@ private:
     typedef ::std::vector<cpo::uno::Any> RawValueContainer;
     RawValueContainer maRawValues;
 
-    typedef std::vector<css::uno::Reference<css::beans::XPropertyChangeListener> > ChangeListenerContainer;
+    typedef std::vector<cpo::uno::Reference<css::beans::XPropertyChangeListener> > ChangeListenerContainer;
     typedef std::map<ThemeItem,ChangeListenerContainer> ChangeListeners;
     ChangeListeners maChangeListeners;
-    typedef std::vector<css::uno::Reference<css::beans::XVetoableChangeListener> > VetoableListenerContainer;
+    typedef std::vector<cpo::uno::Reference<css::beans::XVetoableChangeListener> > VetoableListenerContainer;
     typedef std::map<ThemeItem,VetoableListenerContainer> VetoableListeners;
     VetoableListeners maVetoableListeners;
 

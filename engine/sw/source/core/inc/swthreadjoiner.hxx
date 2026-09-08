@@ -21,7 +21,7 @@
 
 #include <sal/types.h>
 
-namespace com::sun::star::uno
+namespace cpo::uno
 {
 template <class interface_type> class Reference;
 }
@@ -33,7 +33,7 @@ class XJobManager;
 /** Testing */
 namespace SwThreadJoiner
 {
-css::uno::Reference<css::util::XJobManager>& GetThreadJoiner();
+cpo::uno::Reference<css::util::XJobManager>& GetThreadJoiner();
 
 void ReleaseThreadJoiner();
 }

@@ -42,6 +42,7 @@ static std::ostream& operator<<(std::ostream& rStream, const std::set<rtl::OStri
 #include <test/unoapi_test.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 #if defined MACOSX || defined _WIN32
 namespace rtl

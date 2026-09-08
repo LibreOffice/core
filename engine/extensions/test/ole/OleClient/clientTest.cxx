@@ -36,7 +36,7 @@ CComModule _Module;
 #include <com/sun/star/bridge/oleautomation/PropertyPutArgument.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <cppuhelper/servicefactory.hxx>
 #include <rtl/string.h>
 
@@ -44,7 +44,7 @@ BEGIN_OBJECT_MAP(ObjectMap)
 END_OBJECT_MAP()
 
 using namespace com::sun::star::lang;
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::script;
 using namespace com::sun::star::bridge::oleautomation;

@@ -44,6 +44,7 @@
 #include <comphelper/kit.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 // Determine the width
 SwTwips SwTableFUNC::GetColWidth(sal_uInt16 nNum) const

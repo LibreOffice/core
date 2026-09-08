@@ -21,8 +21,8 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-extern css::uno::Reference<css::beans::XPropertySet> PropertySetMerger_CreateInstance(
-    const css::uno::Reference<css::beans::XPropertySet>& rPropSet1,
-    const css::uno::Reference<css::beans::XPropertySet>& rPropSet2) noexcept;
+extern cpo::uno::Reference<css::beans::XPropertySet> PropertySetMerger_CreateInstance(
+    const cpo::uno::Reference<css::beans::XPropertySet>& rPropSet1,
+    const cpo::uno::Reference<css::beans::XPropertySet>& rPropSet2) noexcept;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

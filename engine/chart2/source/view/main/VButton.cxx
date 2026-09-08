@@ -22,6 +22,7 @@
 namespace chart
 {
 using namespace css;
+using namespace ::cpo;
 
 VButton::VButton()
     : m_bShowArrow(true)

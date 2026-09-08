@@ -95,7 +95,7 @@ class SpellChecker :
     }
 
     sal_Int16   GetSpellFailure( const OUString &rWord, const css::lang::Locale &rLocale, int& rInfo );
-    css::uno::Reference< css::linguistic2::XSpellAlternatives > GetProposals( const OUString &rWord, const css::lang::Locale &rLocale );
+    cpo::uno::Reference< css::linguistic2::XSpellAlternatives > GetProposals( const OUString &rWord, const css::lang::Locale &rLocale );
 
 public:
     SpellChecker();
@@ -107,11 +107,11 @@ public:
 
     // XSpellChecker
     virtual bool isValid( const OUString& rWord, const css::lang::Locale& rLocale, const cpo::uno::Sequence< css::beans::PropertyValue >& rProperties ) override;
-    virtual css::uno::Reference< css::linguistic2::XSpellAlternatives > spell( const OUString& rWord, const css::lang::Locale& rLocale, const cpo::uno::Sequence< css::beans::PropertyValue >& rProperties ) override;
+    virtual cpo::uno::Reference< css::linguistic2::XSpellAlternatives > spell( const OUString& rWord, const css::lang::Locale& rLocale, const cpo::uno::Sequence< css::beans::PropertyValue >& rProperties ) override;
 
     // XLinguServiceEventBroadcaster
-    virtual bool addLinguServiceEventListener( const css::uno::Reference< css::linguistic2::XLinguServiceEventListener >& rxLstnr ) override;
-    virtual bool removeLinguServiceEventListener( const css::uno::Reference< css::linguistic2::XLinguServiceEventListener >& rxLstnr ) override;
+    virtual bool addLinguServiceEventListener( const cpo::uno::Reference< css::linguistic2::XLinguServiceEventListener >& rxLstnr ) override;
+    virtual bool removeLinguServiceEventListener( const cpo::uno::Reference< css::linguistic2::XLinguServiceEventListener >& rxLstnr ) override;
 
     // XServiceDisplayName
     virtual OUString getServiceDisplayName( const css::lang::Locale& rLocale ) override;
@@ -121,8 +121,8 @@ public:
 
     // XComponent
     virtual void dispose() override;
-    virtual void addEventListener( const css::uno::Reference< css::lang::XEventListener >& rxListener ) override;
-    virtual void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& rxListener ) override;
+    virtual void addEventListener( const cpo::uno::Reference< css::lang::XEventListener >& rxListener ) override;
+    virtual void removeEventListener( const cpo::uno::Reference< css::lang::XEventListener >& rxListener ) override;
 
     // XServiceInfo
     virtual OUString getImplementationName() override;

@@ -58,8 +58,8 @@
 using namespace com::sun::star;
 using namespace com::sun::star::container;
 using namespace com::sun::star::document;
-using namespace com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace com::sun::star::awt;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::xml::sax;
@@ -142,7 +142,7 @@ public:
 }
 
 SvxXMLXTableExportComponent::SvxXMLXTableExportComponent(
-    const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
+    const cpo::uno::Reference< cpo::uno::XComponentContext >& rContext,
     const uno::Reference<xml::sax::XDocumentHandler> & rHandler,
     const uno::Reference<container::XNameContainer >& xTable,
     uno::Reference<document::XGraphicStorageHandler> const & xGraphicStorageHandler)

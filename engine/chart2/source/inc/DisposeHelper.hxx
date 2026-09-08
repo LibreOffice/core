@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <rtl/ref.hxx>
 
@@ -26,14 +26,14 @@ namespace chart::DisposeHelper
 {
 template <class T> void Dispose(const T& xInterface)
 {
-    css::uno::Reference<css::lang::XComponent> xComponent(xInterface, css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::lang::XComponent> xComponent(xInterface, cpo::uno::UNO_QUERY);
     if (xComponent.is())
         xComponent->dispose();
 }
 
-template <class T> void DisposeAndClear(css::uno::Reference<T>& rInterface)
+template <class T> void DisposeAndClear(cpo::uno::Reference<T>& rInterface)
 {
-    Dispose<css::uno::Reference<T>>(rInterface);
+    Dispose<cpo::uno::Reference<T>>(rInterface);
     rInterface.clear();
 }
 

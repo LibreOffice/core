@@ -61,8 +61,8 @@
 namespace csss = ::com::sun::star::security;
 using namespace ::com::sun::star::security;
 using namespace com::sun::star;
-using namespace ::com::sun::star::uno ;
 using namespace ::com::sun::star::lang ;
+using namespace ::cpo;
 using namespace ::cpo::uno;
 
 using ::com::sun::star::security::XCertificate ;
@@ -704,7 +704,7 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
 }
 
 sal_Int32 SecurityEnvironment_NssImpl::getCertificateCharacters(
-    const css::uno::Reference< css::security::XCertificate >& aCert ) {
+    const cpo::uno::Reference< css::security::XCertificate >& aCert ) {
     sal_Int32 characters ;
     const CERTCertificate* cert ;
 

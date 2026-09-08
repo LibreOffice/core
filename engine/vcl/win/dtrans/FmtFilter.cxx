@@ -39,7 +39,7 @@
 #include <systools/win32/comtools.hxx>
 #include <systools/win32/extended_max_path.hxx>
 
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 
 namespace {
 

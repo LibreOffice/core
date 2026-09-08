@@ -30,14 +30,14 @@ namespace frm
     class UrlTransformer
     {
     private:
-        css::uno::Reference< cpo::uno::XComponentContext >
+        cpo::uno::Reference< cpo::uno::XComponentContext >
                         m_xORB;
-        mutable css::uno::Reference< css::util::XURLTransformer >
+        mutable cpo::uno::Reference< css::util::XURLTransformer >
                         m_xTransformer;
         mutable bool    m_bTriedToCreateTransformer;
 
     public:
-        UrlTransformer( const css::uno::Reference< cpo::uno::XComponentContext >& _rxORB );
+        UrlTransformer( const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxORB );
 
         /** returns a URL object for the given URL string
         */

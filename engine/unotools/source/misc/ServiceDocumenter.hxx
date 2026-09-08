@@ -21,7 +21,7 @@ class ServiceDocumenter : public ::cppu::WeakImplHelper<
     css::script::XServiceDocumenter, css::lang::XServiceInfo>
 {
     public:
-        ServiceDocumenter(css::uno::Reference< cpo::uno::XComponentContext> xContext)
+        ServiceDocumenter(cpo::uno::Reference< cpo::uno::XComponentContext> xContext)
             : m_xContext(std::move(xContext))
             , m_sCoreBaseUrl(u"http://example.com"_ustr)
             , m_sServiceBaseUrl(u"https://api.libreoffice.org/docs/idl/ref"_ustr)
@@ -41,14 +41,14 @@ class ServiceDocumenter : public ::cppu::WeakImplHelper<
             { return m_sServiceBaseUrl; };
         virtual void setServiceBaseUrl( const OUString& sServiceBaseUrl ) override
             { m_sServiceBaseUrl = sServiceBaseUrl; };
-        virtual void showServiceDocs( const ::css::uno::Reference< ::css::lang::XServiceInfo >& xService) override;
-        virtual void showInterfaceDocs( const ::css::uno::Reference< ::css::lang::XTypeProvider >& xTypeProvider ) override;
-        virtual void showCoreDocs( const ::css::uno::Reference< ::css::lang::XServiceInfo >& xService) override;
+        virtual void showServiceDocs( const ::cpo::uno::Reference< ::css::lang::XServiceInfo >& xService) override;
+        virtual void showInterfaceDocs( const ::cpo::uno::Reference< ::css::lang::XTypeProvider >& xTypeProvider ) override;
+        virtual void showCoreDocs( const ::cpo::uno::Reference< ::css::lang::XServiceInfo >& xService) override;
     protected:
         virtual ~ServiceDocumenter() override
             {};
     private:
-        css::uno::Reference< cpo::uno::XComponentContext> m_xContext;
+        cpo::uno::Reference< cpo::uno::XComponentContext> m_xContext;
         OUString m_sCoreBaseUrl;
         OUString m_sServiceBaseUrl;
 };

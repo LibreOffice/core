@@ -25,12 +25,13 @@
 #include <svx/unoapi.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
-cpo::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > PrimitiveFactory2D::createPrimitivesFromXShape(
+cpo::uno::Sequence< cpo::uno::Reference< css::graphic::XPrimitive2D > > PrimitiveFactory2D::createPrimitivesFromXShape(
     const uno::Reference< drawing::XShape >& xShape,
     const cpo::uno::Sequence< beans::PropertyValue >& /*aParms*/ )
 {
-    cpo::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > aRetval;
+    cpo::uno::Sequence< cpo::uno::Reference< css::graphic::XPrimitive2D > > aRetval;
 
     if(xShape.is())
     {
@@ -65,11 +66,11 @@ void PrimitiveFactory2D::createPrimitivesFromXShape(
     }
 }
 
-cpo::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > PrimitiveFactory2D::createPrimitivesFromXDrawPage(
+cpo::uno::Sequence< cpo::uno::Reference< css::graphic::XPrimitive2D > > PrimitiveFactory2D::createPrimitivesFromXDrawPage(
     const uno::Reference< drawing::XDrawPage >& xDrawPage,
     const cpo::uno::Sequence< beans::PropertyValue >& /*aParms*/ )
 {
-    cpo::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > aRetval;
+    cpo::uno::Sequence< cpo::uno::Reference< css::graphic::XPrimitive2D > > aRetval;
 
     if(xDrawPage.is())
     {

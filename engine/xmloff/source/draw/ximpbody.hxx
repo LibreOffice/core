@@ -31,12 +31,12 @@ class SdXMLDrawPageContext : public SdXMLGenericPageContext
 
 public:
     SdXMLDrawPageContext( SdXMLImport& rImport,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
-        css::uno::Reference< css::drawing::XShapes > const & rShapes);
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+        cpo::uno::Reference< css::drawing::XShapes > const & rShapes);
     virtual ~SdXMLDrawPageContext() override;
 
-    virtual css::uno::Reference< XFastContextHandler >  createFastChildContext(sal_Int32 Element,
-        const css::uno::Reference<css::xml::sax::XFastAttributeList>& Attribs) override;
+    virtual cpo::uno::Reference< XFastContextHandler >  createFastChildContext(sal_Int32 Element,
+        const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& Attribs) override;
     virtual void endFastElement(sal_Int32 nElement) override;
 
 };
@@ -52,8 +52,8 @@ public:
     SdXMLBodyContext( SdXMLImport& rImport );
     virtual ~SdXMLBodyContext() override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
-                sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+                sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

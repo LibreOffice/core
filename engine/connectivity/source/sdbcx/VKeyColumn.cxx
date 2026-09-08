@@ -26,7 +26,7 @@
 using namespace connectivity;
 using namespace connectivity::sdbcx;
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cppu;
 
 OUString OKeyColumn::getImplementationName(  )

@@ -145,6 +145,7 @@
 #include <memory>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 //  The names in the maps must be sorted according to strcmp!
 //! Instead of Which-ID 0 use special IDs and do not compare via names!

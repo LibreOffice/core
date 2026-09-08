@@ -31,9 +31,9 @@ public:
 
     virtual ~XMLGraphicsDefaultStyle() override;
 
-    virtual css::uno::Reference<css::xml::sax::XFastContextHandler> createFastChildContext(
+    virtual cpo::uno::Reference<css::xml::sax::XFastContextHandler> createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference<css::xml::sax::XFastAttributeList>& AttrList) override;
+        const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& AttrList) override;
 
     // This method is called for every default style
     virtual void SetDefaults() override;

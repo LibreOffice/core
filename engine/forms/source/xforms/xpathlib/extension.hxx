@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Any.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -33,14 +33,14 @@ class CLibxml2XFormsExtension
     : public cppu::WeakImplHelper<css::xml::xpath::XXPathExtension, css::lang::XInitialization>
 {
 private:
-    css::uno::Reference<css::xforms::XModel> m_aModel;
-    css::uno::Reference<css::xml::dom::XNode> m_aContextNode;
+    cpo::uno::Reference<css::xforms::XModel> m_aModel;
+    cpo::uno::Reference<css::xml::dom::XNode> m_aContextNode;
 
 public:
     CLibxml2XFormsExtension() {}
 
-    const css::uno::Reference<css::xforms::XModel>& getModel() const { return m_aModel; }
-    const css::uno::Reference<css::xml::dom::XNode>& getContextNode() const
+    const cpo::uno::Reference<css::xforms::XModel>& getModel() const { return m_aModel; }
+    const cpo::uno::Reference<css::xml::dom::XNode>& getContextNode() const
     {
         return m_aContextNode;
     }

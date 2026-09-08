@@ -82,8 +82,8 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::smarttags;
 
@@ -1623,7 +1623,7 @@ SwRect SwTextFrame::SmartTagScan(SwTextNode & rNode)
         uno::Reference<text::XTextMarkup> const xTextMarkup =
              new SwXTextMarkup(pNode, aConversionMap);
 
-        css::uno::Reference< css::frame::XController > xController = pNode->GetDoc().GetDocShell()->GetController();
+        cpo::uno::Reference< css::frame::XController > xController = pNode->GetDoc().GetDocShell()->GetController();
 
         SwPosition start(*pNode, nBegin);
         SwPosition end  (*pNode, nEnd);

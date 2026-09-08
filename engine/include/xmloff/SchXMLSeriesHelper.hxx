@@ -20,7 +20,7 @@
 #ifndef INCLUDED_XMLOFF_SCHXMLSERIESHELPER_HXX
 #define INCLUDED_XMLOFF_SCHXMLSERIESHELPER_HXX
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <xmloff/dllapi.h>
 
@@ -35,25 +35,25 @@ namespace com::sun::star::frame { class XModel; }
 class XMLOFF_DLLPUBLIC SchXMLSeriesHelper
 {
 public:
-    static ::std::vector< css::uno::Reference< css::chart2::XDataSeries > >
+    static ::std::vector< cpo::uno::Reference< css::chart2::XDataSeries > >
             getDataSeriesFromDiagram(
-                const css::uno::Reference< css::chart2::XDiagram > & xDiagram );
-    static ::std::map< css::uno::Reference< css::chart2::XDataSeries >, sal_Int32 >
+                const cpo::uno::Reference< css::chart2::XDiagram > & xDiagram );
+    static ::std::map< cpo::uno::Reference< css::chart2::XDataSeries >, sal_Int32 >
             getDataSeriesIndexMapFromDiagram(
-                const css::uno::Reference< css::chart2::XDiagram > & xDiagram );
+                const cpo::uno::Reference< css::chart2::XDiagram > & xDiagram );
 
     static bool isCandleStickSeries(
-                  const css::uno::Reference< css::chart2::XDataSeries >& xSeries
-                , const css::uno::Reference< css::frame::XModel >& xChartModel  );
+                  const cpo::uno::Reference< css::chart2::XDataSeries >& xSeries
+                , const cpo::uno::Reference< css::frame::XModel >& xChartModel  );
 
-    static css::uno::Reference< css::beans::XPropertySet > createOldAPISeriesPropertySet(
-                    const css::uno::Reference< css::chart2::XDataSeries >& xSeries
-                    , const css::uno::Reference< css::frame::XModel >& xChartModel );
+    static cpo::uno::Reference< css::beans::XPropertySet > createOldAPISeriesPropertySet(
+                    const cpo::uno::Reference< css::chart2::XDataSeries >& xSeries
+                    , const cpo::uno::Reference< css::frame::XModel >& xChartModel );
 
-    static css::uno::Reference< css::beans::XPropertySet > createOldAPIDataPointPropertySet(
-                    const css::uno::Reference< css::chart2::XDataSeries >& xSeries
+    static cpo::uno::Reference< css::beans::XPropertySet > createOldAPIDataPointPropertySet(
+                    const cpo::uno::Reference< css::chart2::XDataSeries >& xSeries
                     , sal_Int32 nPointIndex
-                    , const css::uno::Reference< css::frame::XModel >& xChartModel );
+                    , const cpo::uno::Reference< css::frame::XModel >& xChartModel );
 };
 
 // INCLUDED_XMLOFF_SCHXMLSERIESHELPER_HXX

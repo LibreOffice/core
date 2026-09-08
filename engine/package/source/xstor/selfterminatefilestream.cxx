@@ -24,6 +24,7 @@
 #include <unotools/streamwrap.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 OSelfTerminateFileStream::OSelfTerminateFileStream( const uno::Reference< cpo::uno::XComponentContext >& xContext, utl::TempFileFast aTempFile )
 : m_oTempFile( std::move(aTempFile) )

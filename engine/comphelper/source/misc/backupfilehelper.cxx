@@ -29,7 +29,7 @@
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/ucb/CommandFailedException.hpp>
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/deployment/DeploymentException.hpp>
 #include <com/sun/star/deployment/ExtensionManager.hpp>
 #include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
@@ -47,6 +47,7 @@
 using namespace comphelper;
 using namespace css;
 using namespace css::xml::dom;
+using namespace ::cpo;
 
 const sal_uInt32 BACKUP_FILE_HELPER_BLOCK_SIZE = 16384;
 

@@ -48,7 +48,7 @@ class StyleStatusListener final : public SfxStatusListener
 public:
     StyleStatusListener(
         StylesPreviewWindow_Base* pPreviewControl,
-        const css::uno::Reference<css::frame::XDispatchProvider>& xDispatchProvider);
+        const cpo::uno::Reference<css::frame::XDispatchProvider>& xDispatchProvider);
 
     void StateChangedAtStatusListener(SfxItemState eState, const SfxPoolItem* pState) override;
 };
@@ -108,7 +108,7 @@ class StylesPreviewWindow_Base
 protected:
     static constexpr unsigned STYLES_COUNT = 6;
 
-    css::uno::Reference<css::frame::XFrame> m_xFrame;
+    cpo::uno::Reference<css::frame::XFrame> m_xFrame;
 
     std::unique_ptr<weld::IconView> m_xStylesView;
 
@@ -130,7 +130,7 @@ protected:
 
 public:
     StylesPreviewWindow_Base(weld::Builder& xBuilder, const StylePreviewList& rDefaultStyles,
-                             const css::uno::Reference<css::frame::XFrame>& xFrame);
+                             const cpo::uno::Reference<css::frame::XFrame>& xFrame);
     ~StylesPreviewWindow_Base();
 
     void Select(const OUString& rStyleName);
@@ -154,7 +154,7 @@ class StylesPreviewWindow_Impl final : public InterimItemWindow, public StylesPr
 {
 public:
     StylesPreviewWindow_Impl(vcl::Window* pParent, const StylePreviewList& rDefaultStyles,
-                             const css::uno::Reference<css::frame::XFrame>& xFrame);
+                             const cpo::uno::Reference<css::frame::XFrame>& xFrame);
     ~StylesPreviewWindow_Impl();
 
     void dispose();

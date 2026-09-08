@@ -38,11 +38,11 @@ public:
 
     virtual rtl::Reference<SdrPage> AllocPage(bool bMasterPage) override;
 
-    virtual css::uno::Reference<css::embed::XStorage> GetDocumentStorage() const override;
+    virtual cpo::uno::Reference<css::embed::XStorage> GetDocumentStorage() const override;
 
 private:
     /// override of <SdrModel::createUnoModel()> is needed to provide corresponding uno model.
-    virtual css::uno::Reference<css::frame::XModel> createUnoModel() override;
+    virtual cpo::uno::Reference<css::frame::XModel> createUnoModel() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

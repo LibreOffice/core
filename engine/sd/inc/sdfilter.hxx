@@ -46,8 +46,8 @@ public:
     virtual bool            Export() = 0;
 
 protected:
-    css::uno::Reference< css::frame::XModel >             mxModel;
-    css::uno::Reference< css::task::XStatusIndicator >    mxStatusIndicator;
+    cpo::uno::Reference< css::frame::XModel >             mxModel;
+    cpo::uno::Reference< css::task::XStatusIndicator >    mxStatusIndicator;
 
     SfxMedium&                  mrMedium;
     ::sd::DrawDocShell&         mrDocShell;
@@ -58,8 +58,8 @@ protected:
 
 SD_DLLPUBLIC bool ExportPPT( const std::vector< css::beans::PropertyValue >& rMediaData,
                     rtl::Reference<SotStorage> const & rSvStorage,
-                    css::uno::Reference< css::frame::XModel > const & rXModel,
-                    css::uno::Reference< css::task::XStatusIndicator > const & rXStatInd,
+                    cpo::uno::Reference< css::frame::XModel > const & rXModel,
+                    cpo::uno::Reference< css::task::XStatusIndicator > const & rXStatInd,
                     SvMemoryStream* pVBA,
                     sal_uInt32 nCnvrtFlags );
 

@@ -72,7 +72,7 @@ private:
 #if ENABLE_YRS
     friend class YrsThread;
     ::rtl::Reference<YrsThread> m_pYrsReader;
-    css::uno::Reference<css::connection::XAcceptor> m_xAcceptor;
+    cpo::uno::Reference<css::connection::XAcceptor> m_xAcceptor;
     ::std::unique_ptr<YrsTransactionSupplier> m_pYrsSupplier;
 
 public:

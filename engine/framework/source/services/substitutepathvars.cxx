@@ -49,7 +49,7 @@
 
 #include <unordered_map>
 
-using namespace com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace com::sun::star::container;
 
@@ -267,7 +267,7 @@ OUString SubstitutePathVariables::getSubstituteVariableValue( const OUString& aV
 OUString SubstitutePathVariables::GetWorkPath()
 {
     OUString aWorkPath;
-    css::uno::Reference< css::container::XHierarchicalNameAccess > xPaths(officecfg::Office::Paths::Paths::get(), css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference< css::container::XHierarchicalNameAccess > xPaths(officecfg::Office::Paths::Paths::get(), cpo::uno::UNO_QUERY_THROW);
     if (!(xPaths->getByHierarchicalName(u"['Work']/WritePath"_ustr) >>= aWorkPath))
         // fallback in case config layer does not return a usable work dir value.
         aWorkPath = GetWorkVariableValue();

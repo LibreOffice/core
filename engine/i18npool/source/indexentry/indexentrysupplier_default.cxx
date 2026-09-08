@@ -25,7 +25,7 @@
 #include <o3tl/temporary.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
 using namespace ::cpo::uno;
@@ -33,7 +33,7 @@ using namespace ::cpo::uno;
 namespace i18npool {
 
 IndexEntrySupplier_Unicode::IndexEntrySupplier_Unicode(
-    const css::uno::Reference < cpo::uno::XComponentContext >& rxContext ) :
+    const cpo::uno::Reference < cpo::uno::XComponentContext >& rxContext ) :
     IndexEntrySupplier_Common(rxContext)
 {
     implementationName = "com.sun.star.i18n.IndexEntrySupplier_Unicode";
@@ -111,7 +111,7 @@ void IndexTable::init(sal_Unicode start_, sal_Unicode end_, IndexKey const *keys
     }
 }
 
-Index::Index(const css::uno::Reference < cpo::uno::XComponentContext >& rxContext)
+Index::Index(const cpo::uno::Reference < cpo::uno::XComponentContext >& rxContext)
     : table_count(0)
     , key_count(0)
     , mkey_count(0)

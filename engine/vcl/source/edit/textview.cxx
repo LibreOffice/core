@@ -416,7 +416,7 @@ bool TextView::KeyInput( const KeyEvent& rKeyEvent )
                 {
                     aCurSel = ImpMoveCursor( rKeyEvent );
                     if ( aCurSel.HasRange() ) {
-                        css::uno::Reference<css::datatransfer::clipboard::XClipboard> aSelection(GetSystemPrimarySelection());
+                        cpo::uno::Reference<css::datatransfer::clipboard::XClipboard> aSelection(GetSystemPrimarySelection());
                         Copy( aSelection );
                     }
                     bMoved = true;
@@ -574,14 +574,14 @@ void TextView::MouseButtonUp( const MouseEvent& rMouseEvent )
     if ( rMouseEvent.IsMiddle() && !IsReadOnly() &&
          ( GetWindow()->GetSettings().GetMouseSettings().GetMiddleButtonAction() == MouseMiddleButtonAction::PasteSelection ) )
     {
-        css::uno::Reference<css::datatransfer::clipboard::XClipboard> aSelection(GetSystemPrimarySelection());
+        cpo::uno::Reference<css::datatransfer::clipboard::XClipboard> aSelection(GetSystemPrimarySelection());
         Paste( aSelection );
         if (mpTextEngine->IsModified())
             mpTextEngine->Broadcast(TextHint(SfxHintId::TextModified));
     }
     else if ( rMouseEvent.IsLeft() && GetSelection().HasRange() )
     {
-        css::uno::Reference<css::datatransfer::clipboard::XClipboard> aSelection(GetSystemPrimarySelection());
+        cpo::uno::Reference<css::datatransfer::clipboard::XClipboard> aSelection(GetSystemPrimarySelection());
         Copy( aSelection );
     }
 }
@@ -864,7 +864,7 @@ void TextView::Cut()
     mpTextEngine->UndoActionEnd();
 }
 
-void TextView::Copy( css::uno::Reference< css::datatransfer::clipboard::XClipboard > const & rxClipboard )
+void TextView::Copy( cpo::uno::Reference< css::datatransfer::clipboard::XClipboard > const & rxClipboard )
 {
     if ( !rxClipboard.is() )
         return;
@@ -877,7 +877,7 @@ void TextView::Copy( css::uno::Reference< css::datatransfer::clipboard::XClipboa
     {
         rxClipboard->setContents( pDataObj, nullptr );
 
-        css::uno::Reference< css::datatransfer::clipboard::XFlushableClipboard > xFlushableClipboard( rxClipboard, css::uno::UNO_QUERY );
+        cpo::uno::Reference< css::datatransfer::clipboard::XFlushableClipboard > xFlushableClipboard( rxClipboard, cpo::uno::UNO_QUERY );
         if( xFlushableClipboard.is() )
             xFlushableClipboard->flushClipboard();
     }
@@ -888,16 +888,16 @@ void TextView::Copy( css::uno::Reference< css::datatransfer::clipboard::XClipboa
 
 void TextView::Copy()
 {
-    css::uno::Reference<css::datatransfer::clipboard::XClipboard> aClipboard(GetWindow()->GetClipboard());
+    cpo::uno::Reference<css::datatransfer::clipboard::XClipboard> aClipboard(GetWindow()->GetClipboard());
     Copy( aClipboard );
 }
 
-void TextView::Paste( css::uno::Reference< css::datatransfer::clipboard::XClipboard > const & rxClipboard )
+void TextView::Paste( cpo::uno::Reference< css::datatransfer::clipboard::XClipboard > const & rxClipboard )
 {
     if ( !rxClipboard.is() )
         return;
 
-    css::uno::Reference< css::datatransfer::XTransferable > xDataObj;
+    cpo::uno::Reference< css::datatransfer::XTransferable > xDataObj;
 
     try
         {
@@ -937,7 +937,7 @@ void TextView::Paste( css::uno::Reference< css::datatransfer::clipboard::XClipbo
 
 void TextView::Paste()
 {
-    css::uno::Reference<css::datatransfer::clipboard::XClipboard> aClipboard(GetWindow()->GetClipboard());
+    cpo::uno::Reference<css::datatransfer::clipboard::XClipboard> aClipboard(GetWindow()->GetClipboard());
     Paste( aClipboard );
 }
 
@@ -1118,7 +1118,7 @@ TextPaM TextView::CursorLeft( const TextPaM& rPaM, sal_uInt16 nCharacterIterator
     if ( aPaM.GetIndex() )
     {
         TextNode* pNode = mpTextEngine->mpDoc->GetNodes()[aPaM.GetPara()].get();
-        css::uno::Reference<css::i18n::XBreakIterator> xBI = mpTextEngine->GetBreakIterator();
+        cpo::uno::Reference<css::i18n::XBreakIterator> xBI = mpTextEngine->GetBreakIterator();
         sal_Int32 nCount = 1;
         aPaM.GetIndex()
             = xBI->previousCharacters(pNode->GetText(), aPaM.GetIndex(), mpTextEngine->GetLocale(),
@@ -1140,7 +1140,7 @@ TextPaM TextView::CursorRight( const TextPaM& rPaM, sal_uInt16 nCharacterIterato
     TextNode* pNode = mpTextEngine->mpDoc->GetNodes()[aPaM.GetPara()].get();
     if ( aPaM.GetIndex() < pNode->GetText().getLength() )
     {
-        css::uno::Reference<css::i18n::XBreakIterator> xBI = mpTextEngine->GetBreakIterator();
+        cpo::uno::Reference<css::i18n::XBreakIterator> xBI = mpTextEngine->GetBreakIterator();
         sal_Int32 nCount = 1;
         aPaM.GetIndex()
             = xBI->nextCharacters(pNode->GetText(), aPaM.GetIndex(), mpTextEngine->GetLocale(),
@@ -1160,7 +1160,7 @@ TextPaM TextView::CursorFirstWord( const TextPaM& rPaM )
     TextPaM aPaM(rPaM);
     TextNode* pNode = mpTextEngine->mpDoc->GetNodes()[aPaM.GetPara()].get();
 
-    css::uno::Reference<css::i18n::XBreakIterator> xBI = mpTextEngine->GetBreakIterator();
+    cpo::uno::Reference<css::i18n::XBreakIterator> xBI = mpTextEngine->GetBreakIterator();
     aPaM.GetIndex() = xBI->beginOfSentence(pNode->GetText(), 0, mpTextEngine->GetLocale());
 
     return aPaM;
@@ -1177,7 +1177,7 @@ TextPaM TextView::CursorWordLeft( const TextPaM& rPaM )
         if ( aPaM.GetIndex() >= rPaM.GetIndex() )
         {
             TextNode* pNode = mpTextEngine->mpDoc->GetNodes()[aPaM.GetPara()].get();
-            css::uno::Reference<css::i18n::XBreakIterator> xBI = mpTextEngine->GetBreakIterator();
+            cpo::uno::Reference<css::i18n::XBreakIterator> xBI = mpTextEngine->GetBreakIterator();
             aPaM.GetIndex()
                 = xBI->previousWord(pNode->GetText(), rPaM.GetIndex(), mpTextEngine->GetLocale(),
                                     css::i18n::WordType::ANYWORD_IGNOREWHITESPACES).startPos;
@@ -1203,7 +1203,7 @@ TextPaM TextView::CursorWordRight( const TextPaM& rPaM )
     TextNode* pNode = mpTextEngine->mpDoc->GetNodes()[aPaM.GetPara()].get();
     if ( aPaM.GetIndex() < pNode->GetText().getLength() )
     {
-        css::uno::Reference<css::i18n::XBreakIterator> xBI = mpTextEngine->GetBreakIterator();
+        cpo::uno::Reference<css::i18n::XBreakIterator> xBI = mpTextEngine->GetBreakIterator();
         // tdf#160202 - NextWord unexpectedly skips two words at the start of any word
         const auto aWordBoundary
             = xBI->getWordBoundary(pNode->GetText(), aPaM.GetIndex(), mpTextEngine->GetLocale(),
@@ -1244,7 +1244,7 @@ TextPaM TextView::ImpDelete( sal_uInt8 nMode, sal_uInt8 nDelMode )
         else if ( nDelMode == DELMODE_RESTOFWORD )
         {
             TextNode* pNode = mpTextEngine->mpDoc->GetNodes()[aEndPaM.GetPara()].get();
-            css::uno::Reference<css::i18n::XBreakIterator> xBI = mpTextEngine->GetBreakIterator();
+            cpo::uno::Reference<css::i18n::XBreakIterator> xBI = mpTextEngine->GetBreakIterator();
             css::i18n::Boundary aBoundary = xBI->getWordBoundary(
                 pNode->GetText(), maSelection.GetEnd().GetIndex(), mpTextEngine->GetLocale(),
                 css::i18n::WordType::ANYWORD_IGNOREWHITESPACES, true);
@@ -1276,7 +1276,7 @@ TextPaM TextView::ImpDelete( sal_uInt8 nMode, sal_uInt8 nDelMode )
         else if ( nDelMode == DELMODE_RESTOFWORD )
         {
             TextNode* pNode = mpTextEngine->mpDoc->GetNodes()[aEndPaM.GetPara()].get();
-            css::uno::Reference<css::i18n::XBreakIterator> xBI = mpTextEngine->GetBreakIterator();
+            cpo::uno::Reference<css::i18n::XBreakIterator> xBI = mpTextEngine->GetBreakIterator();
             css::i18n::Boundary aBoundary = xBI->nextWord(
                 pNode->GetText(), maSelection.GetEnd().GetIndex(), mpTextEngine->GetLocale(),
                 css::i18n::WordType::ANYWORD_IGNOREWHITESPACES);
@@ -1800,7 +1800,7 @@ void TextView::drop( const css::datatransfer::dnd::DropTargetDropEvent& rDTDE )
         mpTextEngine->UndoActionStart();
 
         OUString aText;
-        css::uno::Reference< css::datatransfer::XTransferable > xDataObj = rDTDE.Transferable;
+        cpo::uno::Reference< css::datatransfer::XTransferable > xDataObj = rDTDE.Transferable;
         if ( xDataObj.is() )
         {
             css::datatransfer::DataFlavor aFlavor;

@@ -43,7 +43,7 @@ class ShellJob final : public ::cppu::WeakImplHelper< css::lang::XServiceInfo,cs
     private:
 
         /** @short  reference to a uno service manager. */
-        css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+        cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
     // native interface
     public:
@@ -54,7 +54,7 @@ class ShellJob final : public ::cppu::WeakImplHelper< css::lang::XServiceInfo,cs
                     reference to the uno service manager, which created this instance.
                     Can be used later to create own needed uno resources on demand.
          */
-        ShellJob(css::uno::Reference< cpo::uno::XComponentContext > xContext);
+        ShellJob(cpo::uno::Reference< cpo::uno::XComponentContext > xContext);
 
         /** @short  does nothing real ...
 

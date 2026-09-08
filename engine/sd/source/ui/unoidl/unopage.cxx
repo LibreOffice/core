@@ -88,8 +88,8 @@ using ::com::sun::star::animations::XAnimationNode;
 using ::com::sun::star::animations::XAnimationNodeSupplier;
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::drawing;
@@ -743,7 +743,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
         case WID_PAGE_SOUNDFILE :
         {
             OUString aURL;
-            css::uno::Reference<css::presentation::XSoundReference> xSound;
+            cpo::uno::Reference<css::presentation::XSoundReference> xSound;
             if( aValue >>= xSound )
             {
                 if( xSound.is() )
@@ -1267,7 +1267,7 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
         else if( GetPage()->IsSoundOn() && !GetPage()->GetSoundFile().isEmpty() )
         {
             const SdSoundLink& rSound = GetPage()->GetSoundLink();
-            aAny <<= css::uno::Reference<css::presentation::XSoundReference>(
+            aAny <<= cpo::uno::Reference<css::presentation::XSoundReference>(
                 new xmloff::SoundReference(rSound.getURL(), rSound.isAllowed()));
         }
         else

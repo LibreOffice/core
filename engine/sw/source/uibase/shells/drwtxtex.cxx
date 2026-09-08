@@ -82,6 +82,7 @@
 #include <swabstdlg.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 void SwDrawTextShell::Execute( SfxRequest &rReq )
 {

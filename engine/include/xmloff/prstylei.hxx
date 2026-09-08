@@ -41,7 +41,7 @@ class XMLOFF_DLLPUBLIC XMLPropStyleContext : public SvXMLStyleContext
 {
 private:
     ::std::vector< XMLPropertyState >          maProperties;
-    css::uno::Reference < css::style::XStyle > mxStyle;
+    cpo::uno::Reference < css::style::XStyle > mxStyle;
     rtl::Reference<SvXMLStylesContext>         mxStyles;
 
     XMLPropStyleContext(XMLPropStyleContext const &) = delete;
@@ -81,7 +81,7 @@ protected:
     // Override this method to create a new style. It's called by
     // CreateInsert to create a style if a style with the requested family and
     // name couldn't be found.
-    virtual css::uno::Reference< css::style::XStyle > Create();
+    virtual cpo::uno::Reference< css::style::XStyle > Create();
 
 public:
 
@@ -91,21 +91,21 @@ public:
             bool bDefaultStyle=false );
     virtual ~XMLPropStyleContext() override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
     virtual void FillPropertySet(
-            const css::uno::Reference< css::beans::XPropertySet > & rPropSet );
+            const cpo::uno::Reference< css::beans::XPropertySet > & rPropSet );
 
     virtual bool isEmptyDataStyleName() { return false; };
 
     const SvXMLStylesContext *GetStyles() const { return static_cast<const SvXMLStylesContext *>(mxStyles.get()); }
     const ::std::vector< XMLPropertyState > & GetProperties() const { return maProperties; }
 
-    const css::uno::Reference< css::style::XStyle >&
+    const cpo::uno::Reference< css::style::XStyle >&
                GetStyle() const { return mxStyle; }
     void SetStyle(
-            const css::uno::Reference< css::style::XStyle >& xStl) { mxStyle = xStl; }
+            const cpo::uno::Reference< css::style::XStyle >& xStl) { mxStyle = xStl; }
 
     virtual void SetDefaults() override;
 

@@ -38,7 +38,7 @@ namespace svx
     class FmTextControlFeature final : public FmTextControlFeature_Base
     {
     private:
-        css::uno::Reference< css::frame::XDispatch >
+        cpo::uno::Reference< css::frame::XDispatch >
                                         m_xDispatcher;
         css::util::URL                  m_aFeatureURL;
         cpo::uno::Any                   m_aFeatureState;
@@ -54,7 +54,7 @@ namespace svx
             the URL which the instance should be responsible for
         */
         FmTextControlFeature(
-            const css::uno::Reference< css::frame::XDispatch >& _rxDispatcher,
+            const cpo::uno::Reference< css::frame::XDispatch >& _rxDispatcher,
             css::util::URL _aFeatureURL,
             SfxSlotId _nId,
             FmTextControlShell* _pInvalidator

@@ -96,10 +96,10 @@ namespace svx
                 supported formats. Must be a combination of the CTF_XXX flags
         */
         OColumnTransferable(
-            const css::uno::Reference< css::beans::XPropertySet >& _rxForm,
+            const cpo::uno::Reference< css::beans::XPropertySet >& _rxForm,
             const OUString& _rFieldName,
-            const css::uno::Reference< css::beans::XPropertySet >& _rxColumn,
-            const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
+            const cpo::uno::Reference< css::beans::XPropertySet >& _rxColumn,
+            const cpo::uno::Reference< css::sdbc::XConnection >& _rxConnection,
             ColumnTransferFormatFlags  _nFormats
         );
 
@@ -172,7 +172,7 @@ namespace svx
             const OUString& _rDatasource,
             const sal_Int32 _nCommandType,
             const OUString& _rCommand,
-            const css::uno::Reference< css::sdbc::XConnection >& _rxConnection
+            const cpo::uno::Reference< css::sdbc::XConnection >& _rxConnection
         );
 
         /** should be used when copying a query object and no connection is available.
@@ -192,7 +192,7 @@ namespace svx
         /** with this ctor, only the object descriptor format will be provided
         */
         ODataAccessObjectTransferable(
-            const css::uno::Reference< css::beans::XPropertySet >& _rxLivingForm
+            const cpo::uno::Reference< css::beans::XPropertySet >& _rxLivingForm
         );
 
         ODataAccessObjectTransferable();
@@ -231,7 +231,7 @@ namespace svx
                         ,const OUString& _rConnectionResource
                         ,const sal_Int32        _nCommandType
                         ,const OUString& _rCommand
-                        ,const css::uno::Reference< css::sdbc::XConnection >& _rxConnection
+                        ,const cpo::uno::Reference< css::sdbc::XConnection >& _rxConnection
                         ,bool _bAddCommand
                         ,const OUString& _sActiveCommand);
     };

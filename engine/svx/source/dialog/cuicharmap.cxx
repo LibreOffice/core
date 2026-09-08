@@ -62,7 +62,7 @@ using namespace css;
 sal_UCS4 SvxCharacterMap::m_cSelectedChar = ' ';  // Initialize with space
 
 SvxCharacterMap::SvxCharacterMap(weld::Widget* pParent, const SfxItemSet* pSet,
-                                 css::uno::Reference<css::frame::XFrame> xFrame)
+                                 cpo::uno::Reference<css::frame::XFrame> xFrame)
     : SfxDialogController(pParent, u"cui/ui/specialcharacters.ui"_ustr, u"SpecialCharactersDialog"_ustr)
     , m_xVirDev(VclPtr<VirtualDevice>::Create())
     , m_isSearchMode(true)
@@ -1151,7 +1151,7 @@ void SvxCharacterMap::contextMenuSelect(std::u16string_view rIdent)
 
 void SvxCharacterMap::copyToClipboard(const OUString& rText)
 {
-    css::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipboard =
+    cpo::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipboard =
         css::datatransfer::clipboard::SystemClipboard::create(
             comphelper::getProcessComponentContext());
 

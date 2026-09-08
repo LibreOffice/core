@@ -54,8 +54,9 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
+using namespace ::cpo;
 
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::cpo::uno::Sequence;
 using ::cpo::uno::Any;
 using ::com::sun::star::chart2::XAnyDescriptionAccess;
@@ -316,7 +317,7 @@ void DiagramHelper::switchToTextCategories( const rtl::Reference<::chart::ChartM
     }
 }
 
-bool DiagramHelper::isDateNumberFormat( sal_Int32 nNumberFormat, const css::uno::Reference< css::util::XNumberFormats >& xNumberFormats )
+bool DiagramHelper::isDateNumberFormat( sal_Int32 nNumberFormat, const cpo::uno::Reference< css::util::XNumberFormats >& xNumberFormats )
 {
     bool bIsDate = false;
     if( !xNumberFormats.is() )

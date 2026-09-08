@@ -63,24 +63,24 @@ public:
     /// @throws css::ucb::ContentCreationException
     static ErrCode loadMacro( const OUString& aURL, cpo::uno::Any& rRetval, SfxObjectShell* pDoc );
 
-    virtual css::uno::Reference < css::frame::XDispatch > queryDispatch(
+    virtual cpo::uno::Reference < css::frame::XDispatch > queryDispatch(
             const css::util::URL& aURL, const OUString& sTargetFrameName,
             sal_Int32 eSearchFlags ) override;
 
-    virtual cpo::uno::Sequence< css::uno::Reference < css::frame::XDispatch > > queryDispatches(
+    virtual cpo::uno::Sequence< cpo::uno::Reference < css::frame::XDispatch > > queryDispatches(
             const cpo::uno::Sequence < css::frame::DispatchDescriptor >& seqDescriptor ) override;
 
-    virtual void dispatchWithNotification( const css::util::URL& aURL, const cpo::uno::Sequence< css::beans::PropertyValue >& lArgs, const css::uno::Reference< css::frame::XDispatchResultListener >& Listener ) override;
+    virtual void dispatchWithNotification( const css::util::URL& aURL, const cpo::uno::Sequence< css::beans::PropertyValue >& lArgs, const cpo::uno::Reference< css::frame::XDispatchResultListener >& Listener ) override;
 
     virtual void dispatch( const css::util::URL& aURL, const cpo::uno::Sequence< css::beans::PropertyValue >& lArgs ) override;
 
     virtual cpo::uno::Any dispatchWithReturnValue( const css::util::URL& aURL, const cpo::uno::Sequence< css::beans::PropertyValue >& lArgs ) override;
 
-    virtual void addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xControl, const css::util::URL& aURL ) override;
+    virtual void addStatusListener( const cpo::uno::Reference< css::frame::XStatusListener >& xControl, const css::util::URL& aURL ) override;
 
-    virtual void removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xControl, const css::util::URL& aURL ) override;
+    virtual void removeStatusListener( const cpo::uno::Reference< css::frame::XStatusListener >& xControl, const css::util::URL& aURL ) override;
 
-    static SfxObjectShell* GetObjectShell(const css::uno::Reference<css::frame::XFrame>& xFrame);
+    static SfxObjectShell* GetObjectShell(const cpo::uno::Reference<css::frame::XFrame>& xFrame);
 };
 
 #endif

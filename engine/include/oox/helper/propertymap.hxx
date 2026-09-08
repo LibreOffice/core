@@ -25,7 +25,7 @@
 #include <vector>
 
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <oox/dllapi.h>
 #include <rtl/ustring.hxx>
@@ -105,15 +105,15 @@ public:
     void                fillPropertyNameMap(PropertyNameMap& rMap) const;
 
     /** Creates a property set supporting the XPropertySet interface and inserts all properties. */
-    css::uno::Reference< css::beans::XPropertySet >
+    cpo::uno::Reference< css::beans::XPropertySet >
                         makePropertySet() const;
 
 #if OSL_DEBUG_LEVEL > 0
 #ifdef DBG_UTIL
-  static void dump( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet);
+  static void dump( const cpo::uno::Reference< css::beans::XPropertySet >& rXPropSet);
 #endif
-  static void dumpCode( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet);
-  static void dumpData( const css::uno::Reference<css::beans::XPropertySet>& rXPropSet);
+  static void dumpCode( const cpo::uno::Reference< css::beans::XPropertySet >& rXPropSet);
+  static void dumpData( const cpo::uno::Reference<css::beans::XPropertySet>& rXPropSet);
 #endif
 private:
     const std::vector<OUString>* mpPropNames;

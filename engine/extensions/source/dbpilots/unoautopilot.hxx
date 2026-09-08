@@ -38,7 +38,7 @@ namespace dbp
             ,public ::comphelper::OPropertyArrayUsageHelper< OUnoAutoPilot< TYPE > >
     {
     public:
-        explicit OUnoAutoPilot(const css::uno::Reference< cpo::uno::XComponentContext >& _rxORB,
+        explicit OUnoAutoPilot(const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxORB,
                 OUString aImplementationName,
                 const cpo::uno::Sequence<OUString>& aSupportedServices)
             : OUnoAutoPilot_Base(_rxORB),
@@ -66,9 +66,9 @@ namespace dbp
         }
 
         // XPropertySet
-        virtual css::uno::Reference< css::beans::XPropertySetInfo>  getPropertySetInfo() override
+        virtual cpo::uno::Reference< css::beans::XPropertySetInfo>  getPropertySetInfo() override
         {
-            css::uno::Reference< css::beans::XPropertySetInfo >  xInfo( createPropertySetInfo( getInfoHelper() ) );
+            cpo::uno::Reference< css::beans::XPropertySetInfo >  xInfo( createPropertySetInfo( getInfoHelper() ) );
             return xInfo;
         }
 
@@ -87,7 +87,7 @@ namespace dbp
 
     private:
         // OGenericUnoDialog overridables
-        virtual std::unique_ptr<weld::DialogController> createDialog(const css::uno::Reference<css::awt::XWindow>& rParent) override
+        virtual std::unique_ptr<weld::DialogController> createDialog(const cpo::uno::Reference<css::awt::XWindow>& rParent) override
         {
             return std::make_unique<TYPE>(Application::GetFrameWeld(rParent), m_xObjectModel, m_aContext);
         }
@@ -105,7 +105,7 @@ namespace dbp
             OUnoAutoPilot_Base::implInitialize(_rValue);
         }
 
-        css::uno::Reference< css::beans::XPropertySet >   m_xObjectModel;
+        cpo::uno::Reference< css::beans::XPropertySet >   m_xObjectModel;
         OUString m_ImplementationName;
         cpo::uno::Sequence<OUString> m_SupportedServices;
 

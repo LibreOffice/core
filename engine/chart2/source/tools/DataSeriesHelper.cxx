@@ -42,8 +42,9 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
+using namespace ::cpo;
 
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::cpo::uno::Sequence;
 
 namespace
@@ -161,11 +162,11 @@ std::vector< uno::Reference< chart2::data::XLabeledDataSequence > >
     return aResultVec;
 }
 
-std::vector< css::uno::Reference< css::chart2::data::XLabeledDataSequence > >
+std::vector< cpo::uno::Reference< css::chart2::data::XLabeledDataSequence > >
     getAllDataSequencesByRole( const std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > & aDataSequences,
                                const OUString& aRole )
 {
-    std::vector< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > aResultVec;
+    std::vector< cpo::uno::Reference< css::chart2::data::XLabeledDataSequence > > aResultVec;
     std::copy_if( aDataSequences.begin(), aDataSequences.end(),
                            std::back_inserter( aResultVec ),
                            lcl_MatchesRole(aRole, /*bMatchPrefix*/true) );

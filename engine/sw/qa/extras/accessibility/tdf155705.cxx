@@ -20,6 +20,7 @@
 #include <test/a11y/AccessibilityTools.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 /* This test only works if spell checking is available for en_US */
 CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, tdf155705)

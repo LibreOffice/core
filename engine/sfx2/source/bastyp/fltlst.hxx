@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SFX2_SOURCE_BASTYP_FLTLST_HXX
 #define INCLUDED_SFX2_SOURCE_BASTYP_FLTLST_HXX
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/util/XRefreshListener.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
@@ -28,8 +28,8 @@
 class SfxFilterListener final
 {
     private:
-        css::uno::Reference< css::util::XRefreshable >  m_xFilterCache;
-        css::uno::Reference< css::util::XRefreshListener >  m_xFilterCacheListener;
+        cpo::uno::Reference< css::util::XRefreshable >  m_xFilterCache;
+        cpo::uno::Reference< css::util::XRefreshListener >  m_xFilterCacheListener;
 
     public:
         SfxFilterListener();

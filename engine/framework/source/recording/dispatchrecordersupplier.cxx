@@ -76,7 +76,7 @@ DispatchRecorderSupplier::~DispatchRecorderSupplier()
 
     @change     09.04.2002 by Andreas Schluens
  */
-void DispatchRecorderSupplier::setDispatchRecorder( const css::uno::Reference< css::frame::XDispatchRecorder >& xRecorder )
+void DispatchRecorderSupplier::setDispatchRecorder( const cpo::uno::Reference< css::frame::XDispatchRecorder >& xRecorder )
 {
     SolarMutexGuard g;
     m_xDispatchRecorder=xRecorder;
@@ -96,7 +96,7 @@ void DispatchRecorderSupplier::setDispatchRecorder( const css::uno::Reference< c
 
     @change     09.04.2002 by Andreas Schluens
  */
-css::uno::Reference< css::frame::XDispatchRecorder > DispatchRecorderSupplier::getDispatchRecorder()
+cpo::uno::Reference< css::frame::XDispatchRecorder > DispatchRecorderSupplier::getDispatchRecorder()
 {
     SolarMutexGuard g;
     return m_xDispatchRecorder;
@@ -117,10 +117,10 @@ css::uno::Reference< css::frame::XDispatchRecorder > DispatchRecorderSupplier::g
  */
 void DispatchRecorderSupplier::dispatchAndRecord( const css::util::URL&                                  aURL        ,
                                                            const cpo::uno::Sequence< css::beans::PropertyValue >& lArguments  ,
-                                                           const css::uno::Reference< css::frame::XDispatch >&    xDispatcher )
+                                                           const cpo::uno::Reference< css::frame::XDispatch >&    xDispatcher )
 {
     SolarMutexClearableGuard aReadLock;
-    css::uno::Reference< css::frame::XDispatchRecorder > xRecorder = m_xDispatchRecorder;
+    cpo::uno::Reference< css::frame::XDispatchRecorder > xRecorder = m_xDispatchRecorder;
     aReadLock.clear();
 
     // clear unspecific situations
@@ -132,9 +132,9 @@ void DispatchRecorderSupplier::dispatchAndRecord( const css::util::URL&         
 
     // check, if given dispatch supports record functionality by itself ...
     // or must be wrapped.
-    css::uno::Reference< css::frame::XRecordableDispatch > xRecordable(
+    cpo::uno::Reference< css::frame::XRecordableDispatch > xRecordable(
         xDispatcher,
-        css::uno::UNO_QUERY);
+        cpo::uno::UNO_QUERY);
 
     if (xRecordable.is())
         xRecordable->dispatchAndRecord(aURL,lArguments,xRecorder);

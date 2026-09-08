@@ -30,6 +30,7 @@
 #include <sfx2/objsh.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 namespace {
 

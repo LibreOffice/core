@@ -105,7 +105,7 @@ public:
     virtual cpo::uno::Sequence<OUString> SAL_CALL getTextualData() override;
 
     // XPropertySet
-    virtual css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL
+    virtual cpo::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL
         getPropertySetInfo() override;
 
     virtual void SAL_CALL setPropertyValue(const OUString& rPropertyName,
@@ -115,29 +115,29 @@ public:
 
     virtual void SAL_CALL addPropertyChangeListener(
             const OUString& rPropertyName,
-            const css::uno::Reference< css::beans::XPropertyChangeListener>& xListener) override;
+            const cpo::uno::Reference< css::beans::XPropertyChangeListener>& xListener) override;
 
     virtual void SAL_CALL removePropertyChangeListener(
             const OUString& rPropertyName,
-            const css::uno::Reference< css::beans::XPropertyChangeListener>& rListener) override;
+            const cpo::uno::Reference< css::beans::XPropertyChangeListener>& rListener) override;
 
     virtual void SAL_CALL addVetoableChangeListener(
             const OUString& rPropertyName,
-            const css::uno::Reference< css::beans::XVetoableChangeListener>& rListener) override;
+            const cpo::uno::Reference< css::beans::XVetoableChangeListener>& rListener) override;
 
     virtual void SAL_CALL removeVetoableChangeListener(
             const OUString& rPropertyName,
-            const css::uno::Reference<  css::beans::XVetoableChangeListener>& rListener) override;
+            const cpo::uno::Reference<  css::beans::XVetoableChangeListener>& rListener) override;
 
     // XCloneable
-    virtual css::uno::Reference<css::util::XCloneable> SAL_CALL createClone() override;
+    virtual cpo::uno::Reference<css::util::XCloneable> SAL_CALL createClone() override;
 
     // XModifyBroadcaster
     virtual void SAL_CALL addModifyListener(
-        const css::uno::Reference<css::util::XModifyListener>& aListener) override;
+        const cpo::uno::Reference<css::util::XModifyListener>& aListener) override;
 
     virtual void SAL_CALL removeModifyListener(
-        const css::uno::Reference<css::util::XModifyListener>& aListener) override;
+        const cpo::uno::Reference<css::util::XModifyListener>& aListener) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -159,7 +159,7 @@ private:
     std::vector<ValueAndFormat> m_aData;
     SfxItemPropertySet m_aPropSet;
     css::chart2::data::DataSequenceRole m_aRole;
-    std::vector<css::uno::Reference<css::util::XModifyListener>> m_aValueListeners;
+    std::vector<cpo::uno::Reference<css::util::XModifyListener>> m_aValueListeners;
 };
 
 }

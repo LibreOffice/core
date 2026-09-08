@@ -25,7 +25,7 @@
 
 #include <rtl/ustring.hxx>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 
 #include <memory>
 #include <utility>
@@ -46,11 +46,11 @@ namespace ppt
 
     struct AfterEffectNode
     {
-        css::uno::Reference< css::animations::XAnimationNode > mxNode;
-        css::uno::Reference< css::animations::XAnimationNode > mxMaster;
+        cpo::uno::Reference< css::animations::XAnimationNode > mxNode;
+        cpo::uno::Reference< css::animations::XAnimationNode > mxMaster;
 
-        AfterEffectNode( css::uno::Reference< css::animations::XAnimationNode > xNode,
-                         css::uno::Reference< css::animations::XAnimationNode > xMaster )
+        AfterEffectNode( cpo::uno::Reference< css::animations::XAnimationNode > xNode,
+                         cpo::uno::Reference< css::animations::XAnimationNode > xMaster )
                          : mxNode(std::move( xNode )), mxMaster(std::move( xMaster )) {}
     };
 
@@ -85,50 +85,50 @@ class AnimationExporter
 
     /** if available exportAnimPropertySet
        @return the css::presentation::EffectNodeType*/
-    static sal_Int16 exportAnimPropertySet( SvStream& rStrm, const css::uno::Reference< css::animations::XAnimationNode >& xNode );
-    static void exportAnimNode( SvStream& rStrm, const css::uno::Reference< css::animations::XAnimationNode >& xNode,
+    static sal_Int16 exportAnimPropertySet( SvStream& rStrm, const cpo::uno::Reference< css::animations::XAnimationNode >& xNode );
+    static void exportAnimNode( SvStream& rStrm, const cpo::uno::Reference< css::animations::XAnimationNode >& xNode,
                         const sal_Int16 nFillDefault );
-    void exportAnimate( SvStream& rStrm, const css::uno::Reference< css::animations::XAnimationNode >& xNode );
-    void exportAnimateTarget( SvStream& rStrm, const css::uno::Reference< css::animations::XAnimationNode >& xNode, const sal_uInt32 nForceAttributeName = 0, int nAfterEffectType = AFTEREFFECT_NONE );
-    void exportAnimateSet( SvStream& rStrm, const css::uno::Reference< css::animations::XAnimationNode >&  xNode, int nAfterEffectType );
-    static void exportAnimAction( SvStream& rStrm, const css::uno::Reference< css::animations::XAnimationNode >& xNode );
-    void exportAnimEvent( SvStream& rStrm, const css::uno::Reference< css::animations::XAnimationNode >& xNode, const sal_Int32 nFlags = 0 );
-    void exportNode( SvStream& rStrm, css::uno::Reference< css::animations::XAnimationNode > const & xNode,
+    void exportAnimate( SvStream& rStrm, const cpo::uno::Reference< css::animations::XAnimationNode >& xNode );
+    void exportAnimateTarget( SvStream& rStrm, const cpo::uno::Reference< css::animations::XAnimationNode >& xNode, const sal_uInt32 nForceAttributeName = 0, int nAfterEffectType = AFTEREFFECT_NONE );
+    void exportAnimateSet( SvStream& rStrm, const cpo::uno::Reference< css::animations::XAnimationNode >&  xNode, int nAfterEffectType );
+    static void exportAnimAction( SvStream& rStrm, const cpo::uno::Reference< css::animations::XAnimationNode >& xNode );
+    void exportAnimEvent( SvStream& rStrm, const cpo::uno::Reference< css::animations::XAnimationNode >& xNode, const sal_Int32 nFlags = 0 );
+    void exportNode( SvStream& rStrm, cpo::uno::Reference< css::animations::XAnimationNode > const & xNode,
                      const sal_uInt16 nContainerRecType, const sal_uInt16 nInstance, const sal_Int32 nGroupLevel, const bool bTakeBackInteractiveSequenceTiming,
                      const sal_Int16 nFillDefault );
     void exportAnimateTargetElement( SvStream& rStrm, const cpo::uno::Any& rAny, const bool bCreate2b01Atom );
-    static void exportAnimateKeyPoints( SvStream& rStrm, const css::uno::Reference< css::animations::XAnimate >& xAnimate );
-    static void exportAnimValue( SvStream& rStrm, const css::uno::Reference< css::animations::XAnimationNode >& xNode, const bool bExportAlways );
-    void exportTransitionFilter( SvStream& rStrm, const css::uno::Reference< css::animations::XAnimationNode >& xNode );
-    void exportAnimateMotion( SvStream& rStrm, const css::uno::Reference< css::animations::XAnimationNode >& xNode );
-    void exportAnimateTransform( SvStream& rStrm, const css::uno::Reference< css::animations::XAnimationNode >& xNode );
-    void exportAnimateColor( SvStream& rStrm, const css::uno::Reference< css::animations::XAnimationNode >& xNode, int nAfterEffectType );
-    void exportIterate( SvStream& rStrm, const css::uno::Reference< css::animations::XAnimationNode >& xNode );
+    static void exportAnimateKeyPoints( SvStream& rStrm, const cpo::uno::Reference< css::animations::XAnimate >& xAnimate );
+    static void exportAnimValue( SvStream& rStrm, const cpo::uno::Reference< css::animations::XAnimationNode >& xNode, const bool bExportAlways );
+    void exportTransitionFilter( SvStream& rStrm, const cpo::uno::Reference< css::animations::XAnimationNode >& xNode );
+    void exportAnimateMotion( SvStream& rStrm, const cpo::uno::Reference< css::animations::XAnimationNode >& xNode );
+    void exportAnimateTransform( SvStream& rStrm, const cpo::uno::Reference< css::animations::XAnimationNode >& xNode );
+    void exportAnimateColor( SvStream& rStrm, const cpo::uno::Reference< css::animations::XAnimationNode >& xNode, int nAfterEffectType );
+    void exportIterate( SvStream& rStrm, const cpo::uno::Reference< css::animations::XAnimationNode >& xNode );
 
-    void processAfterEffectNodes( const css::uno::Reference< css::animations::XAnimationNode >& xNode );
+    void processAfterEffectNodes( const cpo::uno::Reference< css::animations::XAnimationNode >& xNode );
 
-    bool isAfterEffectNode( const css::uno::Reference< css::animations::XAnimationNode >& xNode ) const;
-    bool hasAfterEffectNode( const css::uno::Reference< css::animations::XAnimationNode >& xNode, css::uno::Reference< css::animations::XAnimationNode >& xAfterEffectNode ) const;
-    bool isEmptyNode( const css::uno::Reference< css::animations::XAnimationNode >& xNode ) const;
+    bool isAfterEffectNode( const cpo::uno::Reference< css::animations::XAnimationNode >& xNode ) const;
+    bool hasAfterEffectNode( const cpo::uno::Reference< css::animations::XAnimationNode >& xNode, cpo::uno::Reference< css::animations::XAnimationNode >& xAfterEffectNode ) const;
+    bool isEmptyNode( const cpo::uno::Reference< css::animations::XAnimationNode >& xNode ) const;
 
-    static css::uno::Reference< css::animations::XAnimationNode > createAfterEffectNodeClone( const css::uno::Reference< css::animations::XAnimationNode >& xNode );
+    static cpo::uno::Reference< css::animations::XAnimationNode > createAfterEffectNodeClone( const cpo::uno::Reference< css::animations::XAnimationNode >& xNode );
 
 public:
     AnimationExporter( const EscherSolverContainer& rSolverContainer, ppt::ExSoundCollection& rExSoundCollection );
 
-    void doexport( const css::uno::Reference< css::drawing::XDrawPage >& xPage, SvStream& rStrm );
+    void doexport( const cpo::uno::Reference< css::drawing::XDrawPage >& xPage, SvStream& rStrm );
 
         // helper methods also used in ooxml export
     static cpo::uno::Any convertAnimateValue( const cpo::uno::Any& rSource, std::u16string_view rAttributeName );
-        static bool GetNodeType( const css::uno::Reference< css::animations::XAnimationNode >& xNode, sal_Int16& nType );
-        static sal_Int16 GetFillMode( const css::uno::Reference< css::animations::XAnimationNode >& xNode, const sal_Int16 nFillDefault );
+        static bool GetNodeType( const cpo::uno::Reference< css::animations::XAnimationNode >& xNode, sal_Int16& nType );
+        static sal_Int16 GetFillMode( const cpo::uno::Reference< css::animations::XAnimationNode >& xNode, const sal_Int16 nFillDefault );
         static void GetUserData( const cpo::uno::Sequence< css::beans::NamedValue >& rUserData, const cpo::uno::Any ** pAny, std::size_t nLen );
         static sal_uInt32 TranslatePresetSubType( const sal_uInt32 nPresetClass, const sal_uInt32 nPresetId, std::u16string_view rPresetSubType );
         static sal_uInt32 GetPresetID( std::u16string_view aPreset, sal_uInt32 nAPIPresetClass, bool& bPresetId );
         static sal_uInt32 GetValueTypeForAttributeName( std::u16string_view rAttributeName );
 
     static const char* FindTransitionName( const sal_Int16 nType, const sal_Int16 nSubType, const bool bDirection );
-    static css::uno::Reference< css::drawing::XShape > getTargetElementShape( const cpo::uno::Any& rAny, sal_Int32& rBegin, sal_Int32& rEnd, bool& rParagraphTarget );
+    static cpo::uno::Reference< css::drawing::XShape > getTargetElementShape( const cpo::uno::Any& rAny, sal_Int32& rBegin, sal_Int32& rEnd, bool& rParagraphTarget );
 };
 } // namespace ppt
 

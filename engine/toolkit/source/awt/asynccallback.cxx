@@ -46,16 +46,16 @@ public:
     virtual cpo::uno::Sequence< OUString > getSupportedServiceNames() override;
 
     // css::awt::XRequestCallback:
-    virtual void addCallback(const css::uno::Reference< css::awt::XCallback > & xCallback, const cpo::uno::Any & aData) override;
+    virtual void addCallback(const cpo::uno::Reference< css::awt::XCallback > & xCallback, const cpo::uno::Any & aData) override;
 
 private:
 
     struct CallbackData
     {
-        CallbackData( css::uno::Reference< css::awt::XCallback > _xCallback, cpo::uno::Any aAny ) :
+        CallbackData( cpo::uno::Reference< css::awt::XCallback > _xCallback, cpo::uno::Any aAny ) :
             xCallback(std::move( _xCallback )), aData(std::move( aAny )) {}
 
-        css::uno::Reference< css::awt::XCallback > xCallback;
+        cpo::uno::Reference< css::awt::XCallback > xCallback;
         cpo::uno::Any                              aData;
     };
 
@@ -81,7 +81,7 @@ cpo::uno::Sequence< OUString > AsyncCallback::getSupportedServiceNames()
 }
 
 // css::awt::XRequestCallback:
-void AsyncCallback::addCallback(const css::uno::Reference< css::awt::XCallback > & xCallback, const cpo::uno::Any & aData)
+void AsyncCallback::addCallback(const cpo::uno::Reference< css::awt::XCallback > & xCallback, const cpo::uno::Any & aData)
 {
     if ( Application::IsInMain() )
     {

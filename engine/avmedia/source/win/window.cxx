@@ -31,6 +31,7 @@ constexpr OUStringLiteral AVMEDIA_WIN_WINDOW_IMPLEMENTATIONNAME = u"com.sun.star
 constexpr OUString AVMEDIA_WIN_WINDOW_SERVICENAME = u"com.sun.star.media.Window_DirectX"_ustr;
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace avmedia::win {
 

@@ -39,7 +39,7 @@ class ItemContainer final : public ::cppu::WeakImplHelper< css::container::XInde
     public:
         ItemContainer( const ShareableMutex& );
         ItemContainer( const ConstItemContainer& rConstItemContainer, const ShareableMutex& rMutex );
-        ItemContainer( const css::uno::Reference< css::container::XIndexAccess >& rItemAccessContainer, const ShareableMutex& rMutex );
+        ItemContainer( const cpo::uno::Reference< css::container::XIndexAccess >& rItemAccessContainer, const ShareableMutex& rMutex );
         virtual ~ItemContainer() override;
 
         //  XInterface, XTypeProvider
@@ -67,7 +67,7 @@ class ItemContainer final : public ::cppu::WeakImplHelper< css::container::XInde
 
     private:
         void copyItemContainer( const std::vector< cpo::uno::Sequence< css::beans::PropertyValue > >& rSourceVector, const ShareableMutex& rMutex );
-        static rtl::Reference< ItemContainer > deepCopyContainer( const css::uno::Reference< css::container::XIndexAccess >& rSubContainer, const ShareableMutex& rMutex );
+        static rtl::Reference< ItemContainer > deepCopyContainer( const cpo::uno::Reference< css::container::XIndexAccess >& rSubContainer, const ShareableMutex& rMutex );
 
         mutable ShareableMutex                                                               m_aShareMutex;
         std::vector< cpo::uno::Sequence< css::beans::PropertyValue > > m_aItemVector;

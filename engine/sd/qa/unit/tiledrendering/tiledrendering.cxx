@@ -92,6 +92,7 @@
 #include <string_view>
 
 using namespace css;
+using namespace ::cpo;
 
 static std::ostream& operator<<(std::ostream& os, ViewShellId id)
 {
@@ -1293,7 +1294,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testKeepTextSelectionAcrossTransientP
 
     // Copying targets the selected text, not an empty object copy.
     dispatchCommand(mxComponent, u".uno:Copy"_ustr, cpo::uno::Sequence<beans::PropertyValue>());
-    css::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipboard
+    cpo::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipboard
         = pOutlinerViewAfter->GetEditView().GetClipboard();
     CPPUNIT_ASSERT_EQUAL("First slide"_ostr,
                          apitest::helper::transferable::getTextSelection(
@@ -2333,7 +2334,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testGetViewRenderState)
 }
 
 // Helper function to send a theme command with a named theme to the current view
-static void dispatchThemeCommand(const css::uno::Reference<css::lang::XComponent>& xComponent,
+static void dispatchThemeCommand(const cpo::uno::Reference<css::lang::XComponent>& xComponent,
                                  const OUString& rCommand, const OUString& rThemeName)
 {
     cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
@@ -2542,7 +2543,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testShapeTextEditAutoColorUnfilledSha
 // Leaves the first view on a light theme while a second view switches to a dark one. The color
 // configuration of the process belongs to whichever view switched its theme last, so it now
 // disagrees with the theme of the first view, which is current again on return.
-static void switchSecondViewToDarkTheme(const css::uno::Reference<css::lang::XComponent>& xComponent)
+static void switchSecondViewToDarkTheme(const cpo::uno::Reference<css::lang::XComponent>& xComponent)
 {
     const int nFirstViewId = KitHelper::getCurrentView();
     dispatchThemeCommand(xComponent, u".uno:ChangeTheme"_ustr, u"Light"_ustr);
@@ -5239,10 +5240,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPasteMarkdownInEditMode)
     rEditView.SetSelection(ESelection(0, 0, EE_PARA_MAX, EE_TEXTPOS_MAX));
 
     // Set markdown content on the clipboard:
-    css::uno::Reference<css::datatransfer::clipboard::XClipboard> xClip = rEditView.GetClipboard();
+    cpo::uno::Reference<css::datatransfer::clipboard::XClipboard> xClip = rEditView.GetClipboard();
     CPPUNIT_ASSERT(xClip.is());
     xClip->setContents(new MarkdownTransferable("**bold** text"),
-                       css::uno::Reference<css::datatransfer::clipboard::XClipboardOwner>());
+                       cpo::uno::Reference<css::datatransfer::clipboard::XClipboardOwner>());
 
     // When pasting:
     dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});

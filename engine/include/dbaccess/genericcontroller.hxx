@@ -43,7 +43,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cpo/uno/Any.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
@@ -148,7 +148,7 @@ namespace dbaui
 
     struct FeatureListener
     {
-        css::uno::Reference< css::frame::XStatusListener >
+        cpo::uno::Reference< css::frame::XStatusListener >
                     xListener;
         sal_Int32   nId;
         bool        bForceBroadcast;
@@ -157,9 +157,9 @@ namespace dbaui
 
     class FindFeatureListener
     {
-        const css::uno::Reference< css::frame::XStatusListener >& m_xListener;
+        const cpo::uno::Reference< css::frame::XStatusListener >& m_xListener;
     public:
-        FindFeatureListener(const css::uno::Reference< css::frame::XStatusListener >& _xListener)
+        FindFeatureListener(const cpo::uno::Reference< css::frame::XStatusListener >& _xListener)
             : m_xListener(_xListener)
         {}
 
@@ -205,9 +205,9 @@ namespace dbaui
         struct DispatchTarget
         {
             css::util::URL                                        aURL;
-            css::uno::Reference< css::frame::XStatusListener >    xListener;
+            cpo::uno::Reference< css::frame::XStatusListener >    xListener;
 
-            DispatchTarget(css::util::URL _aURL, css::uno::Reference< css::frame::XStatusListener > xRef) : aURL(std::move(_aURL)), xListener(std::move(xRef)) { }
+            DispatchTarget(css::util::URL _aURL, cpo::uno::Reference< css::frame::XStatusListener > xRef) : aURL(std::move(_aURL)), xListener(std::move(xRef)) { }
         };
 
         ::std::deque< FeatureListener >
@@ -219,12 +219,12 @@ namespace dbaui
         OAsynchronousLink       m_aAsyncInvalidateAll;
         OAsynchronousLink       m_aAsyncCloseTask;      // called when a task should be closed
 
-        css::uno::Reference< css::util::XURLTransformer >         m_xUrlTransformer;      // needed sometimes
-        css::uno::Reference< cpo::uno::XComponentContext >        m_xContext;
+        cpo::uno::Reference< css::util::XURLTransformer >         m_xUrlTransformer;      // needed sometimes
+        cpo::uno::Reference< cpo::uno::XComponentContext >        m_xContext;
         ControllerFrame                                                                     m_aCurrentFrame;
-        css::uno::Reference< css::frame::XDispatchProvider >      m_xSlaveDispatcher;     // for intercepting dispatches
-        css::uno::Reference< css::frame::XDispatchProvider >      m_xMasterDispatcher;    // ditto
-        css::uno::Reference< css::sdb::XDatabaseContext >         m_xDatabaseContext;
+        cpo::uno::Reference< css::frame::XDispatchProvider >      m_xSlaveDispatcher;     // for intercepting dispatches
+        cpo::uno::Reference< css::frame::XDispatchProvider >      m_xMasterDispatcher;    // ditto
+        cpo::uno::Reference< css::sdb::XDatabaseContext >         m_xDatabaseContext;
         rtl::Reference<::framework::TitleHelper >                 m_xTitleHelper;
 
         bool                    m_bPreview;
@@ -238,14 +238,14 @@ namespace dbaui
         using OGenericUnoController_MBASE::getMutex;
 
         // methods
-        OGenericUnoController( const css::uno::Reference< cpo::uno::XComponentContext >& _rM );
+        OGenericUnoController( const cpo::uno::Reference< cpo::uno::XComponentContext >& _rM );
         OGenericUnoController() = delete;
 
         // closes the task when possible
         void closeTask();
 
         // if getMenu returns a non empty string than this will be dispatched at the frame
-        virtual void            loadMenu(const css::uno::Reference< css::frame::XFrame >& _xFrame);
+        virtual void            loadMenu(const cpo::uno::Reference< css::frame::XFrame >& _xFrame);
 
         // all the features which should be handled by this class
         virtual void            describeSupportedFeatures();
@@ -290,22 +290,22 @@ namespace dbaui
         bool    isUserDefinedFeature( const OUString& _rFeatureURL ) const;
 
         // connect to a datasource
-        css::uno::Reference< css::sdbc::XConnection > connect(
+        cpo::uno::Reference< css::sdbc::XConnection > connect(
             const OUString& _rsDataSourceName,
             const OUString& _rContextInformation
         );
 
-        void startConnectionListening(const css::uno::Reference< css::sdbc::XConnection >& _rxConnection);
+        void startConnectionListening(const cpo::uno::Reference< css::sdbc::XConnection >& _rxConnection);
 
         // XInitialize will be called inside initialize
         virtual void impl_initialize(const ::comphelper::NamedValueCollection& rArguments);
 
         virtual OUString getPrivateTitle() const { return OUString(); }
 
-        css::uno::Reference< css::frame::XTitle > impl_getTitleHelper_throw(bool bCreateIfNecessary = true);
+        cpo::uno::Reference< css::frame::XTitle > impl_getTitleHelper_throw(bool bCreateIfNecessary = true);
 
-        virtual void    startFrameListening( const css::uno::Reference< css::frame::XFrame >& _rxFrame );
-        virtual void    stopFrameListening( const css::uno::Reference< css::frame::XFrame >& _rxFrame );
+        virtual void    startFrameListening( const cpo::uno::Reference< css::frame::XFrame >& _rxFrame );
+        virtual void    stopFrameListening( const cpo::uno::Reference< css::frame::XFrame >& _rxFrame );
 
         virtual ~OGenericUnoController() override;
 
@@ -315,9 +315,9 @@ namespace dbaui
         void InvalidateAll_Impl();
         void InvalidateFeature_Impl();
 
-        void ImplInvalidateFeature( sal_Int32 _nId, const css::uno::Reference< css::frame::XStatusListener >& _xListener, bool _bForceBroadcast );
+        void ImplInvalidateFeature( sal_Int32 _nId, const cpo::uno::Reference< css::frame::XStatusListener >& _xListener, bool _bForceBroadcast );
 
-        void ImplBroadcastFeatureState(const OUString& _rFeature, const css::uno::Reference< css::frame::XStatusListener > & xListener, bool _bIgnoreCache);
+        void ImplBroadcastFeatureState(const OUString& _rFeature, const cpo::uno::Reference< css::frame::XStatusListener > & xListener, bool _bIgnoreCache);
 
         void executeUserDefinedFeatures( const css::util::URL& _rFeatureURL, const cpo::uno::Sequence< css::beans::PropertyValue>& _rArgs );
 
@@ -326,7 +326,7 @@ namespace dbaui
         DECL_DLLPRIVATE_LINK(OnAsyncCloseTask, void*, void);
 
     public:
-        const css::uno::Reference< cpo::uno::XComponentContext >& getORB() const { return m_xContext; }
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& getORB() const { return m_xContext; }
         ODataView*  getView() const { return m_pView; }
         weld::Window* getFrameWeld() const;
         void        setView( const VclPtr<ODataView>& i_rView );
@@ -339,7 +339,7 @@ namespace dbaui
         // to all listeners to the given css::util::URL
         // if there is a toolbar slot with the given id it is updated (the new state is determined via GetState)
         // if _bForceBroadcast is true, the current feature state is broadcasted no matter if it is the same as the cached state
-        void InvalidateFeature(sal_uInt16 nId, const css::uno::Reference< css::frame::XStatusListener > & xListener = nullptr, bool _bForceBroadcast = false);
+        void InvalidateFeature(sal_uInt16 nId, const cpo::uno::Reference< css::frame::XStatusListener > & xListener = nullptr, bool _bForceBroadcast = false);
 
         /** InvalidateAll invalidates all features currently known
         */
@@ -353,11 +353,11 @@ namespace dbaui
             @return
                 The layout manager of the frame, can be <NULL/> if the frame isn't initialized.
         */
-        static css::uno::Reference< css::frame::XLayoutManager > getLayoutManager(const css::uno::Reference< css::frame::XFrame >& _xFrame);
+        static cpo::uno::Reference< css::frame::XLayoutManager > getLayoutManager(const cpo::uno::Reference< css::frame::XFrame >& _xFrame);
 
         // IController
         virtual void executeChecked(const css::util::URL& _rCommand, const cpo::uno::Sequence< css::beans::PropertyValue>& aArgs) override;
-        virtual css::uno::Reference< css::frame::XController > getXController() override;
+        virtual cpo::uno::Reference< css::frame::XController > getXController() override;
         virtual bool interceptUserInput( const NotifyEvent& _rEvent ) override;
 
         // css::lang::XEventListener
@@ -371,42 +371,42 @@ namespace dbaui
         virtual void release(  ) noexcept override;
 
         // css::frame::XController2
-        virtual css::uno::Reference< css::awt::XWindow > getComponentWindow() override;
+        virtual cpo::uno::Reference< css::awt::XWindow > getComponentWindow() override;
         virtual OUString getViewControllerName() override;
         virtual cpo::uno::Sequence< css::beans::PropertyValue > getCreationArguments() override;
 
-        virtual css::uno::Reference< css::ui::XSidebarProvider > getSidebar() override;
+        virtual cpo::uno::Reference< css::ui::XSidebarProvider > getSidebar() override;
 
 
         // css::frame::XController
-        virtual void attachFrame(const css::uno::Reference< css::frame::XFrame > & xFrame) override;
-        virtual bool attachModel(const css::uno::Reference< css::frame::XModel > & xModel) override;
+        virtual void attachFrame(const cpo::uno::Reference< css::frame::XFrame > & xFrame) override;
+        virtual bool attachModel(const cpo::uno::Reference< css::frame::XModel > & xModel) override;
         virtual bool suspend(bool bSuspend) override = 0;
         virtual cpo::uno::Any getViewData() override;
         virtual void restoreViewData(const cpo::uno::Any& Data) override;
-        virtual css::uno::Reference< css::frame::XModel >  getModel() override;
-        virtual css::uno::Reference< css::frame::XFrame >  getFrame() override;
+        virtual cpo::uno::Reference< css::frame::XModel >  getModel() override;
+        virtual cpo::uno::Reference< css::frame::XFrame >  getFrame() override;
 
         // css::frame::XDispatch
         virtual void        dispatch(const css::util::URL& aURL, const cpo::uno::Sequence< css::beans::PropertyValue>& aArgs) override;
-        virtual void        addStatusListener(const css::uno::Reference< css::frame::XStatusListener > & aListener, const css::util::URL& aURL) override;
-        virtual void        removeStatusListener(const css::uno::Reference< css::frame::XStatusListener > & aListener, const css::util::URL& aURL) override;
+        virtual void        addStatusListener(const cpo::uno::Reference< css::frame::XStatusListener > & aListener, const css::util::URL& aURL) override;
+        virtual void        removeStatusListener(const cpo::uno::Reference< css::frame::XStatusListener > & aListener, const css::util::URL& aURL) override;
 
         // css::frame::XDispatchProviderInterceptor
-        virtual css::uno::Reference< css::frame::XDispatchProvider >  getSlaveDispatchProvider() override;
-        virtual void setSlaveDispatchProvider(const css::uno::Reference< css::frame::XDispatchProvider > & _xNewProvider) override;
-        virtual css::uno::Reference< css::frame::XDispatchProvider >  getMasterDispatchProvider() override;
-        virtual void setMasterDispatchProvider(const css::uno::Reference< css::frame::XDispatchProvider > & _xNewProvider) override;
+        virtual cpo::uno::Reference< css::frame::XDispatchProvider >  getSlaveDispatchProvider() override;
+        virtual void setSlaveDispatchProvider(const cpo::uno::Reference< css::frame::XDispatchProvider > & _xNewProvider) override;
+        virtual cpo::uno::Reference< css::frame::XDispatchProvider >  getMasterDispatchProvider() override;
+        virtual void setMasterDispatchProvider(const cpo::uno::Reference< css::frame::XDispatchProvider > & _xNewProvider) override;
 
         // css::frame::XDispatchProvider
-        virtual css::uno::Reference< css::frame::XDispatch >  queryDispatch(const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags) override;
-        virtual cpo::uno::Sequence< css::uno::Reference< css::frame::XDispatch >  > queryDispatches(const cpo::uno::Sequence< css::frame::DispatchDescriptor >& aDescripts) override;
+        virtual cpo::uno::Reference< css::frame::XDispatch >  queryDispatch(const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags) override;
+        virtual cpo::uno::Sequence< cpo::uno::Reference< css::frame::XDispatch >  > queryDispatches(const cpo::uno::Sequence< css::frame::DispatchDescriptor >& aDescripts) override;
 
         // css::lang::XComponent
         virtual void dispose() override; //LLA: need solar mutex {OGenericUnoController_COMPBASE::dispose(); }
         virtual void disposing() override;
-        virtual void addEventListener(const css::uno::Reference< css::lang::XEventListener > & aListener) override;
-        virtual void removeEventListener(const css::uno::Reference< css::lang::XEventListener > & aListener) override;
+        virtual void addEventListener(const cpo::uno::Reference< css::lang::XEventListener > & aListener) override;
+        virtual void removeEventListener(const cpo::uno::Reference< css::lang::XEventListener > & aListener) override;
 
         // css::frame::XFrameActionListener
         virtual void frameAction(const css::frame::FrameActionEvent& aEvent) override;
@@ -427,14 +427,14 @@ namespace dbaui
         virtual void setTitle( const OUString& sTitle ) override;
 
         // XTitleChangeBroadcaster
-        virtual void addTitleChangeListener( const css::uno::Reference< css::frame::XTitleChangeListener >& xListener ) override;
-        virtual void removeTitleChangeListener( const css::uno::Reference< css::frame::XTitleChangeListener >& xListener ) override;
+        virtual void addTitleChangeListener( const cpo::uno::Reference< css::frame::XTitleChangeListener >& xListener ) override;
+        virtual void removeTitleChangeListener( const cpo::uno::Reference< css::frame::XTitleChangeListener >& xListener ) override;
 
         // XUserInputInterception
-        virtual void addKeyHandler( const css::uno::Reference< css::awt::XKeyHandler >& xHandler ) override;
-        virtual void removeKeyHandler( const css::uno::Reference< css::awt::XKeyHandler >& xHandler ) override;
-        virtual void addMouseClickHandler( const css::uno::Reference< css::awt::XMouseClickHandler >& xHandler ) override;
-        virtual void removeMouseClickHandler( const css::uno::Reference< css::awt::XMouseClickHandler >& xHandler ) override;
+        virtual void addKeyHandler( const cpo::uno::Reference< css::awt::XKeyHandler >& xHandler ) override;
+        virtual void removeKeyHandler( const cpo::uno::Reference< css::awt::XKeyHandler >& xHandler ) override;
+        virtual void addMouseClickHandler( const cpo::uno::Reference< css::awt::XMouseClickHandler >& xHandler ) override;
+        virtual void removeMouseClickHandler( const cpo::uno::Reference< css::awt::XMouseClickHandler >& xHandler ) override;
     };
 }
 

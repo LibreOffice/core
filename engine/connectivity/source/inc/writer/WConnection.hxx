@@ -37,7 +37,7 @@ class ODriver;
 class OWriterConnection : public file::OConnection
 {
     // the text document:
-    css::uno::Reference<css::text::XTextDocument> m_xDoc;
+    cpo::uno::Reference<css::text::XTextDocument> m_xDoc;
     OUString m_sPassword;
     OUString m_aFileName;
     oslInterlockedCount m_nDocCount = 0;
@@ -50,7 +50,7 @@ class OWriterConnection : public file::OConnection
         std::unique_ptr<utl::CloseVeto> m_pCloseListener;
         /// but also listen to XDesktop and if app is terminating anyway, dispose m_xDoc while
         /// its still possible to do so properly
-        css::uno::Reference<css::frame::XDesktop2> m_xDesktop;
+        cpo::uno::Reference<css::frame::XDesktop2> m_xDesktop;
         osl::Mutex m_aMutex;
 
     public:
@@ -59,8 +59,8 @@ class OWriterConnection : public file::OConnection
         {
         }
 
-        void start(const css::uno::Reference<cpo::uno::XInterface>& rCloseable,
-                   const css::uno::Reference<css::frame::XDesktop2>& rDesktop)
+        void start(const cpo::uno::Reference<cpo::uno::XInterface>& rCloseable,
+                   const cpo::uno::Reference<css::frame::XDesktop2>& rDesktop)
         {
             m_xDesktop = rDesktop;
             m_xDesktop->addTerminateListener(this);
@@ -111,21 +111,21 @@ public:
     void disposing() override;
 
     // XConnection
-    css::uno::Reference<css::sdbc::XDatabaseMetaData> getMetaData() override;
-    css::uno::Reference<css::sdbcx::XTablesSupplier> createCatalog() override;
-    css::uno::Reference<css::sdbc::XStatement> createStatement() override;
-    css::uno::Reference<css::sdbc::XPreparedStatement>
+    cpo::uno::Reference<css::sdbc::XDatabaseMetaData> getMetaData() override;
+    cpo::uno::Reference<css::sdbcx::XTablesSupplier> createCatalog() override;
+    cpo::uno::Reference<css::sdbc::XStatement> createStatement() override;
+    cpo::uno::Reference<css::sdbc::XPreparedStatement>
     prepareStatement(const OUString& sql) override;
-    css::uno::Reference<css::sdbc::XPreparedStatement> prepareCall(const OUString& sql) override;
+    cpo::uno::Reference<css::sdbc::XPreparedStatement> prepareCall(const OUString& sql) override;
 
     // no interface methods
-    css::uno::Reference<css::text::XTextDocument> const& acquireDoc();
+    cpo::uno::Reference<css::text::XTextDocument> const& acquireDoc();
     void releaseDoc();
 
     class ODocHolder
     {
         OWriterConnection* m_pConnection;
-        css::uno::Reference<css::text::XTextDocument> m_xDoc;
+        cpo::uno::Reference<css::text::XTextDocument> m_xDoc;
 
     public:
         ODocHolder(OWriterConnection* _pConnection)
@@ -138,7 +138,7 @@ public:
             m_xDoc.clear();
             m_pConnection->releaseDoc();
         }
-        const css::uno::Reference<css::text::XTextDocument>& getDoc() const { return m_xDoc; }
+        const cpo::uno::Reference<css::text::XTextDocument>& getDoc() const { return m_xDoc; }
     };
 };
 }

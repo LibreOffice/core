@@ -147,7 +147,7 @@ namespace svgio::svgreader
             void readLocalCssStyle(std::u16string_view aContent);
 
             /// style helpers
-            void parseAttributes(const css::uno::Reference< css::xml::sax::XAttributeList >& xAttribs);
+            void parseAttributes(const cpo::uno::Reference< css::xml::sax::XAttributeList >& xAttribs);
             virtual const SvgStyleAttributes* getSvgStyleAttributes() const;
             virtual void parseAttribute(SVGToken aSVGToken, const OUString& aContent);
             virtual void decomposeSvgNode(drawinglayer::primitive2d::Primitive2DContainer& rTarget, bool bReferenced) const;

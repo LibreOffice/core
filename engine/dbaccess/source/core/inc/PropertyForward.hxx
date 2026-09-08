@@ -36,10 +36,10 @@ namespace dbaccess
     class OPropertyForward  :public ::cppu::BaseMutex
                             ,public OPropertyForward_Base
     {
-        css::uno::Reference< css::beans::XPropertySet >       m_xSource;
-        css::uno::Reference< css::beans::XPropertySet >       m_xDest;
-        css::uno::Reference< css::beans::XPropertySetInfo >   m_xDestInfo;
-        css::uno::Reference< css::container::XNameAccess >    m_xDestContainer;
+        cpo::uno::Reference< css::beans::XPropertySet >       m_xSource;
+        cpo::uno::Reference< css::beans::XPropertySet >       m_xDest;
+        cpo::uno::Reference< css::beans::XPropertySetInfo >   m_xDestInfo;
+        cpo::uno::Reference< css::container::XNameAccess >    m_xDestContainer;
         OUString        m_sName;
         bool            m_bInInsert;
 
@@ -47,8 +47,8 @@ namespace dbaccess
         virtual ~OPropertyForward() override;
 
     public:
-        OPropertyForward( const css::uno::Reference< css::beans::XPropertySet>& _xSource,
-                          const css::uno::Reference< css::container::XNameAccess>& _xDestContainer,
+        OPropertyForward( const cpo::uno::Reference< css::beans::XPropertySet>& _xSource,
+                          const cpo::uno::Reference< css::container::XNameAccess>& _xDestContainer,
                           OUString _sName,
                           const std::vector< OUString >& _aPropertyList
                          );
@@ -60,8 +60,8 @@ namespace dbaccess
         virtual void disposing( const css::lang::EventObject& _rSource ) override;
 
         void setName( const OUString& _sName ) { m_sName = _sName; }
-        void setDefinition( const css::uno::Reference< css::beans::XPropertySet >& _xDest);
-        const css::uno::Reference< css::beans::XPropertySet >& getDefinition() const { return m_xDest; }
+        void setDefinition( const cpo::uno::Reference< css::beans::XPropertySet >& _xDest);
+        const cpo::uno::Reference< css::beans::XPropertySet >& getDefinition() const { return m_xDest; }
     };
 
 }   // namespace dbaccess

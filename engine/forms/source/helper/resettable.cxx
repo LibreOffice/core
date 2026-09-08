@@ -26,7 +26,7 @@ namespace frm
 {
 
 
-    using ::com::sun::star::uno::Reference;
+    using ::cpo::uno::Reference;
     using ::com::sun::star::form::XResetListener;
     using ::com::sun::star::lang::EventObject;
 

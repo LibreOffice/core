@@ -37,12 +37,12 @@ class CellData final : public virtual SvRefBase
     /**
        Handle to start of cell.
     */
-    css::uno::Reference<css::text::XTextRange> mStart;
+    cpo::uno::Reference<css::text::XTextRange> mStart;
 
     /**
        Handle to end of cell.
     */
-    css::uno::Reference<css::text::XTextRange> mEnd;
+    cpo::uno::Reference<css::text::XTextRange> mEnd;
 
     /**
        Pointer to properties of cell.
@@ -56,7 +56,7 @@ class CellData final : public virtual SvRefBase
 public:
     typedef tools::SvRef<CellData> Pointer_t;
 
-    CellData(css::uno::Reference<css::text::XTextRange> const & start, TablePropertyMapPtr pProps)
+    CellData(cpo::uno::Reference<css::text::XTextRange> const & start, TablePropertyMapPtr pProps)
     : mStart(start), mEnd(start), mpProps(std::move(pProps)), mbOpen(true)
         , m_nGridSpan(1)
     {
@@ -67,7 +67,7 @@ public:
 
        @param end     the end handle of the cell
     */
-    void setEnd(css::uno::Reference<css::text::XTextRange> const & end) { mEnd = end; mbOpen = false; }
+    void setEnd(cpo::uno::Reference<css::text::XTextRange> const & end) { mEnd = end; mbOpen = false; }
 
     /**
        Adds properties to the cell.
@@ -85,12 +85,12 @@ public:
     /**
        Return start handle of the cell.
      */
-    const css::uno::Reference<css::text::XTextRange>& getStart() const { return mStart; }
+    const cpo::uno::Reference<css::text::XTextRange>& getStart() const { return mStart; }
 
     /**
        Return end handle of the cell.
     */
-    const css::uno::Reference<css::text::XTextRange>& getEnd() const { return mEnd; }
+    const cpo::uno::Reference<css::text::XTextRange>& getEnd() const { return mEnd; }
 
     /**
        Return properties of the cell.
@@ -102,7 +102,7 @@ public:
     sal_uInt32 getGridSpan() const { return m_nGridSpan; }
     void setGridSpan( sal_uInt32 nSpan ) { m_nGridSpan = nSpan; }
 
-    void SetStart(const css::uno::Reference<css::text::XTextRange>& xStart) { mStart = xStart; }
+    void SetStart(const cpo::uno::Reference<css::text::XTextRange>& xStart) { mStart = xStart; }
 
     bool IsValid() const;
 };
@@ -151,7 +151,7 @@ public:
        @param pProps    the properties of the cell
        @param bAddBefore true: add an empty cell at beginning of the row for gridBefore
      */
-    void addCell(const css::uno::Reference<css::text::XTextRange>& start, const TablePropertyMapPtr& pProps, bool bAddBefore = false)
+    void addCell(const cpo::uno::Reference<css::text::XTextRange>& start, const TablePropertyMapPtr& pProps, bool bAddBefore = false)
     {
         CellData::Pointer_t pCellData(new CellData(start, pProps));
         if (bAddBefore)
@@ -163,7 +163,7 @@ public:
             mCells.push_back(pCellData);
     }
 
-    void endCell(const css::uno::Reference<css::text::XTextRange>& end)
+    void endCell(const cpo::uno::Reference<css::text::XTextRange>& end)
     {
         if (mCells.size() > 0)
             mCells.back()->setEnd(end);
@@ -174,7 +174,7 @@ public:
         return mCells.size() > 0 && mCells.back()->isOpen();
     }
 
-    void SetCellStart(const css::uno::Reference<css::text::XTextRange>& xStart)
+    void SetCellStart(const cpo::uno::Reference<css::text::XTextRange>& xStart)
     {
         if (mCells.empty())
         {
@@ -227,7 +227,7 @@ public:
 
        @param i      index of the cell
      */
-    const css::uno::Reference<css::text::XTextRange>& getCellStart(unsigned int i) const
+    const cpo::uno::Reference<css::text::XTextRange>& getCellStart(unsigned int i) const
     {
         return mCells[i]->getStart();
     }
@@ -237,7 +237,7 @@ public:
 
         @param i     index of the cell
     */
-    const css::uno::Reference<css::text::XTextRange>& getCellEnd(unsigned int i) const
+    const cpo::uno::Reference<css::text::XTextRange>& getCellEnd(unsigned int i) const
     {
         return mCells[i]->getEnd();
     }
@@ -338,7 +338,7 @@ public:
        @param end     end handle of the cell
        @param pProps  properties of the cell
      */
-    void addCell(const css::uno::Reference<css::text::XTextRange>& start, const TablePropertyMapPtr& pProps)
+    void addCell(const cpo::uno::Reference<css::text::XTextRange>& start, const TablePropertyMapPtr& pProps)
     {
         mpRow->addCell(start, pProps);
     }
@@ -348,7 +348,7 @@ public:
 
         @parm end    end handle of the cell
      */
-    void endCell(const css::uno::Reference<css::text::XTextRange>& end)
+    void endCell(const cpo::uno::Reference<css::text::XTextRange>& end)
     {
         mpRow->endCell(end);
     }
@@ -361,7 +361,7 @@ public:
         return mpRow->isCellOpen();
     }
 
-    void SetCellStart(const css::uno::Reference<css::text::XTextRange>& xStart)
+    void SetCellStart(const cpo::uno::Reference<css::text::XTextRange>& xStart)
     {
         mpRow->SetCellStart(xStart);
     }

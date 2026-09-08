@@ -31,15 +31,15 @@
 namespace accessibility
 {
 
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::accessibility;
 using namespace ::vcl;
 
 AccessibleGridControl::AccessibleGridControl(
-            const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
+            const cpo::uno::Reference< css::accessibility::XAccessible >& _rxParent,
             svt::table::TableControl& _rTable)
     : AccessibleGridControlBase(_rxParent, _rTable, AccessibleTableControlObjType::GRIDCONTROL)
 {
@@ -84,7 +84,7 @@ sal_Int64 AccessibleGridControl::getAccessibleChildCount()
 }
 
 
-css::uno::Reference< css::accessibility::XAccessible >
+cpo::uno::Reference< css::accessibility::XAccessible >
 AccessibleGridControl::getAccessibleChild( sal_Int64 nChildIndex )
 {
     SolarMutexGuard aSolarGuard;
@@ -92,7 +92,7 @@ AccessibleGridControl::getAccessibleChild( sal_Int64 nChildIndex )
     if (nChildIndex<0 || nChildIndex>=implGetAccessibleChildCount())
         throw IndexOutOfBoundsException();
 
-    css::uno::Reference< css::accessibility::XAccessible > xChild;
+    cpo::uno::Reference< css::accessibility::XAccessible > xChild;
     if (isAlive())
     {
         if(nChildIndex == 0 && m_aTable.HasColHeader())
@@ -137,7 +137,7 @@ sal_Int16 AccessibleGridControl::getAccessibleRole()
 
 // css::accessibility::XAccessibleComponent -------------------------------------------------------
 
-css::uno::Reference< css::accessibility::XAccessible >
+cpo::uno::Reference< css::accessibility::XAccessible >
 AccessibleGridControl::getAccessibleAtPoint( const awt::Point& rPoint )
 {
     SolarMutexGuard aSolarGuard;
@@ -149,8 +149,8 @@ AccessibleGridControl::getAccessibleAtPoint( const awt::Point& rPoint )
     const sal_Int64 nChildCount = implGetAccessibleChildCount();
     for (sal_Int64 nIndex = 0; nIndex < nChildCount; ++nIndex)
     {
-        css::uno::Reference<css::accessibility::XAccessible> xCurrChild = getAccessibleChild(nIndex);
-        css::uno::Reference<css::accessibility::XAccessibleComponent> xCurrChildComp(
+        cpo::uno::Reference<css::accessibility::XAccessible> xCurrChild = getAccessibleChild(nIndex);
+        cpo::uno::Reference<css::accessibility::XAccessibleComponent> xCurrChildComp(
             xCurrChild, uno::UNO_QUERY);
 
         if (xCurrChildComp.is()
@@ -189,8 +189,8 @@ void AccessibleGridControl::commitCellEvent(sal_Int16 _nEventId,const Any& _rNew
     assert(nChildCount != 0);
     for (sal_Int64 i = 0; i < nChildCount; i++)
     {
-        css::uno::Reference<css::accessibility::XAccessible> xAccessible = getAccessibleChild(i);
-        if (css::uno::Reference<css::accessibility::XAccessible>(m_xTable) == xAccessible)
+        cpo::uno::Reference<css::accessibility::XAccessible> xAccessible = getAccessibleChild(i);
+        if (cpo::uno::Reference<css::accessibility::XAccessible>(m_xTable) == xAccessible)
         {
             Reference<XAccessible> xCell = m_xTable->getAccessibleCellAt(
                 m_aTable.GetCurrentRow(), m_aTable.GetCurrentColumn());
@@ -210,7 +210,7 @@ void AccessibleGridControl::commitTableEvent(sal_Int16 _nEventId,const Any& _rNe
     {
         const sal_Int32 nCurrentRow = m_aTable.GetCurrentRow();
         const sal_Int32 nCurrentCol = m_aTable.GetCurrentColumn();
-        css::uno::Reference< css::accessibility::XAccessible > xChild;
+        cpo::uno::Reference< css::accessibility::XAccessible > xChild;
         if (nCurrentRow > -1 && nCurrentCol > -1)
             xChild = m_xTable->getAccessibleCellAt(nCurrentRow, nCurrentCol);
 

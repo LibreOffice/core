@@ -36,20 +36,20 @@ class OOfficeRestartManager : public ::cppu::WeakImplHelper< css::task::XRestart
                                                            , css::lang::XServiceInfo >
 {
     std::mutex m_aMutex;
-    css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext > m_xContext;
 
     bool m_bOfficeInitialized;
     bool m_bRestartRequested;
 
 public:
-    explicit OOfficeRestartManager( css::uno::Reference< cpo::uno::XComponentContext > xContext )
+    explicit OOfficeRestartManager( cpo::uno::Reference< cpo::uno::XComponentContext > xContext )
     : m_xContext(std::move( xContext ))
     , m_bOfficeInitialized( false )
     , m_bRestartRequested( false )
     {}
 
 // XRestartManager
-    virtual void requestRestart( const css::uno::Reference< css::task::XInteractionHandler >& xInteractionHandler ) override;
+    virtual void requestRestart( const cpo::uno::Reference< css::task::XInteractionHandler >& xInteractionHandler ) override;
     virtual bool isRestartRequested( bool bInitialized ) override;
 
 // XCallback

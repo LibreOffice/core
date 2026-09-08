@@ -58,7 +58,7 @@ namespace pcr
     {
     private:
         std::unique_ptr< MapHandlerToUI >     m_pCollectedUIs;
-        css::uno::Reference< css::inspection::XObjectInspectorUI >
+        cpo::uno::Reference< css::inspection::XObjectInspectorUI >
                                                 m_xDelegatorUI;
         oslInterlockedCount                     m_nSuspendCounter;
         IPropertyExistenceCheck*                m_pPropertyCheck;
@@ -78,14 +78,14 @@ namespace pcr
                 if ->_rxDelegatorUI is <NULL/>
         */
         ComposedPropertyUIUpdate(
-            const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxDelegatorUI,
+            const cpo::uno::Reference< css::inspection::XObjectInspectorUI >& _rxDelegatorUI,
             IPropertyExistenceCheck* _pPropertyCheck );
         ~ComposedPropertyUIUpdate();
 
         /** returns the delegator UI
             @throw css::lang::DisposedException
         */
-        css::uno::Reference< css::inspection::XObjectInspectorUI > const & getDelegatorUI() const;
+        cpo::uno::Reference< css::inspection::XObjectInspectorUI > const & getDelegatorUI() const;
 
         /** returns a ->XObjectInspectorUI instance belonging to a given property handler
 
@@ -94,8 +94,8 @@ namespace pcr
             to it, and ->ComposedPropertyUIUpdate::fire will use the combination of all
             cached UI states of all handlers to update the delegator UI.
         */
-        css::uno::Reference< css::inspection::XObjectInspectorUI >
-            getUIForPropertyHandler( const css::uno::Reference< css::inspection::XPropertyHandler >& _rxHandler );
+        cpo::uno::Reference< css::inspection::XObjectInspectorUI >
+            getUIForPropertyHandler( const cpo::uno::Reference< css::inspection::XPropertyHandler >& _rxHandler );
 
         /** Suspends automatic firing of UI changes
 

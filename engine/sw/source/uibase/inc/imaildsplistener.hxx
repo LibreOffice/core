@@ -47,13 +47,13 @@ public:
         Called for every mail message that has been
         successfully delivered.
     */
-    virtual void mailDelivered(css::uno::Reference< css::mail::XMailMessage> xMailMessage) = 0;
+    virtual void mailDelivered(cpo::uno::Reference< css::mail::XMailMessage> xMailMessage) = 0;
 
     /**
         Called for every mail message whose delivery
         failed.
     */
-    virtual void mailDeliveryError(::rtl::Reference<MailDispatcher> xMailDispatcher, css::uno::Reference< css::mail::XMailMessage> xMailMessage, const OUString& sErrorMessage) = 0;
+    virtual void mailDeliveryError(::rtl::Reference<MailDispatcher> xMailDispatcher, cpo::uno::Reference< css::mail::XMailMessage> xMailMessage, const OUString& sErrorMessage) = 0;
 };
 
 #endif // INCLUDED_IMAILDISPATCHERLISTENER_HXX

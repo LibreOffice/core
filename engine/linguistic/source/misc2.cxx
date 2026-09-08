@@ -26,13 +26,14 @@
 #include <tools/debug.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <com/sun/star/util/thePathSettings.hpp>
 #include <o3tl/typed_flags_set.hxx>
 
 #include <linguistic/misc.hxx>
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 namespace {
 

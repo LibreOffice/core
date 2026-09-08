@@ -101,12 +101,12 @@ namespace connectivity::sdbcx
         // ::cppu::OComponentHelper
         virtual void disposing() override;
         // XPropertySet
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+        virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
         // XNamed
         virtual OUString getName(  ) override;
         virtual void setName( const OUString& aName ) override;
         // XDataDescriptorFactory
-        virtual css::uno::Reference< css::beans::XPropertySet > createDataDescriptor(  ) override;
+        virtual cpo::uno::Reference< css::beans::XPropertySet > createDataDescriptor(  ) override;
     };
 
 }

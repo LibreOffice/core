@@ -66,11 +66,11 @@
 
 using namespace com::sun::star;
 using namespace com::sun::star::io;
-using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::packages;
 using namespace com::sun::star::packages::zip;
 using namespace com::sun::star::packages::zip::ZipConstants;
+using namespace ::cpo;
 using namespace ::cpo::uno;
 
 using ZipUtils::Inflater;
@@ -562,7 +562,7 @@ uno::Reference<io::XInputStream> ZipFile::checkValidPassword(
     {
         ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 
-        css::uno::Reference < css::io::XSeekable > xSeek(xStream, UNO_QUERY_THROW);
+        cpo::uno::Reference < css::io::XSeekable > xSeek(xStream, UNO_QUERY_THROW);
         xSeek->seek( rEntry.nOffset );
         sal_Int64 nSize = rEntry.nMethod == DEFLATED ? rEntry.nCompressedSize : rEntry.nSize;
 

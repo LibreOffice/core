@@ -105,7 +105,7 @@ public:
         the new registration name.
     */
     static void setName(
-            const css::uno::Reference< css::sdb::XDocumentDataSource >& _rxDocument,
+            const cpo::uno::Reference< css::sdb::XDocumentDataSource >& _rxDocument,
             const OUString& _rNewName,
             DBContextAccess
         );
@@ -115,7 +115,7 @@ public:
     virtual void elementRemoved( const css::container::ContainerEvent& Event ) override;
     virtual void elementReplaced( const css::container::ContainerEvent& Event ) override;
     // css::sdbcx::XTablesSupplier
-    virtual css::uno::Reference< css::container::XNameAccess > getTables(  ) override;
+    virtual cpo::uno::Reference< css::container::XNameAccess > getTables(  ) override;
 
 // css::lang::XTypeProvider
     virtual cpo::uno::Sequence< cpo::uno::Type > getTypes() override;
@@ -135,7 +135,7 @@ public:
     virtual void disposing() override;
 
 // css::beans::XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
     // XEventListener
     virtual void disposing( const css::lang::EventObject& Source ) override;
 
@@ -157,47 +157,47 @@ public:
     virtual void getFastPropertyValue( cpo::uno::Any& rValue, sal_Int32 nHandle ) const override;
 
 // css::sdb::XCompletedConnection
-    virtual css::uno::Reference< css::sdbc::XConnection > connectWithCompletion( const css::uno::Reference< css::task::XInteractionHandler >& handler ) override;
+    virtual cpo::uno::Reference< css::sdbc::XConnection > connectWithCompletion( const cpo::uno::Reference< css::task::XInteractionHandler >& handler ) override;
 
 // css::sdbc::XDataSource
-    virtual css::uno::Reference< css::sdbc::XConnection > getConnection( const OUString& user, const OUString& password ) override;
+    virtual cpo::uno::Reference< css::sdbc::XConnection > getConnection( const OUString& user, const OUString& password ) override;
     virtual void setLoginTimeout( sal_Int32 seconds ) override;
     virtual sal_Int32 getLoginTimeout(  ) override;
 
 //::css::sdb::XBookmarksSupplier
-    virtual css::uno::Reference< css::container::XNameAccess > getBookmarks(  ) override;
+    virtual cpo::uno::Reference< css::container::XNameAccess > getBookmarks(  ) override;
 
 //::css::sdb::XQueryDefinitionsSupplier
-    virtual css::uno::Reference< css::container::XNameAccess > getQueryDefinitions(  ) override;
+    virtual cpo::uno::Reference< css::container::XNameAccess > getQueryDefinitions(  ) override;
 
 // css::sdbc::XIsolatedConnection
-    virtual css::uno::Reference< css::sdbc::XConnection > getIsolatedConnection( const OUString& user, const OUString& password ) override;
-    virtual css::uno::Reference< css::sdbc::XConnection > getIsolatedConnectionWithCompletion( const css::uno::Reference< css::task::XInteractionHandler >& handler ) override;
+    virtual cpo::uno::Reference< css::sdbc::XConnection > getIsolatedConnection( const OUString& user, const OUString& password ) override;
+    virtual cpo::uno::Reference< css::sdbc::XConnection > getIsolatedConnectionWithCompletion( const cpo::uno::Reference< css::task::XInteractionHandler >& handler ) override;
 
 // XFlushable
     virtual void flush(  ) override;
-    virtual void addFlushListener( const css::uno::Reference< css::util::XFlushListener >& l ) override;
-    virtual void removeFlushListener( const css::uno::Reference< css::util::XFlushListener >& l ) override;
+    virtual void addFlushListener( const cpo::uno::Reference< css::util::XFlushListener >& l ) override;
+    virtual void removeFlushListener( const cpo::uno::Reference< css::util::XFlushListener >& l ) override;
 
     // XFlushListener
     virtual void flushed( const css::lang::EventObject& rEvent ) override;
 
     // XDocumentDataSource
-    virtual css::uno::Reference< css::sdb::XOfficeDatabaseDocument > getDatabaseDocument() override;
+    virtual cpo::uno::Reference< css::sdb::XOfficeDatabaseDocument > getDatabaseDocument() override;
 
     // XInitialization
     virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
 protected:
     // ModelDependentComponent overridables
-    virtual css::uno::Reference< cpo::uno::XInterface > getThis() const override;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > getThis() const override;
 
 private:
 // helper
     /** open a connection for the current settings. this is the simple connection we get from the driver
         manager, so it can be used as a master for a "high level" sdb connection.
     */
-    css::uno::Reference< css::sdbc::XConnection > buildLowLevelConnection(
+    cpo::uno::Reference< css::sdbc::XConnection > buildLowLevelConnection(
         const OUString& _rUid, const OUString& _rPwd
         );
 
@@ -207,10 +207,10 @@ private:
 
     /// @throws css::sdbc::SQLException
     /// @throws cpo::uno::RuntimeException
-    css::uno::Reference< css::sdbc::XConnection > getConnection( const OUString& user, const OUString& password , bool _bIsolated);
+    cpo::uno::Reference< css::sdbc::XConnection > getConnection( const OUString& user, const OUString& password , bool _bIsolated);
     /// @throws css::sdbc::SQLException
     /// @throws cpo::uno::RuntimeException
-    css::uno::Reference< css::sdbc::XConnection > connectWithCompletion( const css::uno::Reference< css::task::XInteractionHandler >& handler , bool _bIsolated);
+    cpo::uno::Reference< css::sdbc::XConnection > connectWithCompletion( const cpo::uno::Reference< css::task::XInteractionHandler >& handler , bool _bIsolated);
 
 protected:
     using ::cppu::OPropertySetHelper::getFastPropertyValue;

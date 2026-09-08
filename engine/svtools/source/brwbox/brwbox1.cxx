@@ -45,7 +45,7 @@
 using namespace com::sun::star::accessibility::AccessibleTableModelChangeType;
 using com::sun::star::accessibility::AccessibleTableModelChange;
 using namespace com::sun::star::accessibility;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace svt;
 
@@ -58,7 +58,7 @@ void disposeAndClearHeaderCell(BrowseBox::THeaderCellMap& _rHeaderCell)
         _rHeaderCell.begin(), _rHeaderCell.end(),
         [](const BrowseBox::THeaderCellMap::value_type& rType)
         {
-            css::uno::Reference<css::lang::XComponent> xComp(rType.second, css::uno::UNO_QUERY);
+            cpo::uno::Reference<css::lang::XComponent> xComp(rType.second, cpo::uno::UNO_QUERY);
             OSL_ENSURE(xComp.is() || !rType.second.is(),
                        "THeaderCellMapFunctorDispose: invalid accessible cell (no XComponent)!");
             if (xComp.is())
@@ -2339,7 +2339,7 @@ void BrowseBox::CursorMoved()
 
     if ( isAccessibleAlive() && HasFocus() )
         commitTableEvent(AccessibleEventId::ACTIVE_DESCENDANT_CHANGED,
-                         Any(css::uno::Reference<css::accessibility::XAccessible>(
+                         Any(cpo::uno::Reference<css::accessibility::XAccessible>(
                              CreateAccessibleCell(GetCurRow(), GetColumnPos(GetCurColumnId())))),
                          Any());
 }

@@ -91,9 +91,9 @@ public:
   virtual void initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArguments ) override;
 
   // XDropTarget
-  virtual void addDropTargetListener( const css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >& dtl ) override;
+  virtual void addDropTargetListener( const cpo::uno::Reference< css::datatransfer::dnd::XDropTargetListener >& dtl ) override;
 
-  virtual void removeDropTargetListener( const css::uno::Reference<  css::datatransfer::dnd::XDropTargetListener >& dtl ) override;
+  virtual void removeDropTargetListener( const cpo::uno::Reference<  css::datatransfer::dnd::XDropTargetListener >& dtl ) override;
 
   // Default is not active
   virtual bool isActive() override;
@@ -138,9 +138,9 @@ private:
   void fire_dropActionChanged(const css::datatransfer::dnd::DropTargetDragEvent& dtde);
 
 private:
-  css::uno::Reference< css::datatransfer::dnd::XDropTargetDragContext > mXCurrentDragContext;
-  css::uno::Reference< css::datatransfer::dnd::XDropTargetDropContext > mXCurrentDropContext;
-  css::uno::Reference< css::datatransfer::clipboard::XClipboard > mXCurrentDragClipboard;
+  cpo::uno::Reference< css::datatransfer::dnd::XDropTargetDragContext > mXCurrentDragContext;
+  cpo::uno::Reference< css::datatransfer::dnd::XDropTargetDropContext > mXCurrentDropContext;
+  cpo::uno::Reference< css::datatransfer::clipboard::XClipboard > mXCurrentDragClipboard;
   DataFlavorMapperPtr_t mDataFlavorMapper;
   id  mView;
   AquaSalFrame* mpFrame;

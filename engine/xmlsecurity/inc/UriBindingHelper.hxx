@@ -38,18 +38,18 @@ namespace com::sun::star {
 class UriBindingHelper final : public cppu::WeakImplHelper< css::xml::crypto::XUriBinding >
 {
 private:
-    css::uno::Reference < css::embed::XStorage > mxStorage;
-    css::uno::Reference<css::io::XStream> mxScriptingSignatureStream;
+    cpo::uno::Reference < css::embed::XStorage > mxStorage;
+    cpo::uno::Reference<css::io::XStream> mxScriptingSignatureStream;
 
 public:
     UriBindingHelper();
-    explicit UriBindingHelper( const css::uno::Reference < css::embed::XStorage >& rxStorage, const css::uno::Reference<css::io::XStream>& xScriptingSignatureStream );
+    explicit UriBindingHelper( const cpo::uno::Reference < css::embed::XStorage >& rxStorage, const cpo::uno::Reference<css::io::XStream>& xScriptingSignatureStream );
 
-    void SAL_CALL setUriBinding( const OUString& uri, const css::uno::Reference< css::io::XInputStream >& aInputStream ) override;
+    void SAL_CALL setUriBinding( const OUString& uri, const cpo::uno::Reference< css::io::XInputStream >& aInputStream ) override;
 
-    css::uno::Reference< css::io::XInputStream > SAL_CALL getUriBinding( const OUString& uri ) override;
+    cpo::uno::Reference< css::io::XInputStream > SAL_CALL getUriBinding( const OUString& uri ) override;
 
-    static css::uno::Reference < css::io::XInputStream > OpenInputStream( const css::uno::Reference < css::embed::XStorage >& rxStore, const OUString& rURI, const css::uno::Reference<css::io::XStream>& xScriptingSignatureStream );
+    static cpo::uno::Reference < css::io::XInputStream > OpenInputStream( const cpo::uno::Reference < css::embed::XStorage >& rxStore, const OUString& rURI, const cpo::uno::Reference<css::io::XStream>& xScriptingSignatureStream );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

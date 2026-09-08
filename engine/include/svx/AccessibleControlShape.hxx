@@ -24,7 +24,7 @@
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/util/XModeChangeListener.hpp>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase4.hxx>
@@ -71,7 +71,7 @@ public:
         const AccessibleShapeTreeInfo& rShapeTreeInfo);
     virtual ~AccessibleControlShape( ) override;
 
-    const css::uno::Reference< css::beans::XPropertySet >&  GetControlModel( ) const { return m_xControlModel;}
+    const cpo::uno::Reference< css::beans::XPropertySet >&  GetControlModel( ) const { return m_xControlModel;}
     AccessibleControlShape* GetLabeledByControlShape();
 
 private:
@@ -81,8 +81,8 @@ private:
 
     //---  XAccessibleContext  ---------------------------------
     virtual sal_Int64 getAccessibleChildCount( ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > getAccessibleChild( sal_Int64 i ) override;
-    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > getAccessibleRelationSet(  ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessible > getAccessibleChild( sal_Int64 i ) override;
+    virtual cpo::uno::Reference< css::accessibility::XAccessibleRelationSet > getAccessibleRelationSet(  ) override;
 
     //---  XServiceInfo  ---------------------------------------
     virtual OUString getImplementationName( ) override;
@@ -171,20 +171,20 @@ private:
     AccessibleControlShape(const AccessibleControlShape&) = delete;
     AccessibleControlShape& operator= (const AccessibleControlShape&) = delete;
 
-    css::uno::Reference< css::beans::XPropertySet >
+    cpo::uno::Reference< css::beans::XPropertySet >
                     m_xControlModel;
-    css::uno::Reference< css::beans::XPropertySetInfo >
+    cpo::uno::Reference< css::beans::XPropertySetInfo >
                     m_xModelPropsMeta;          // cache this for performance reasons
-    css::uno::Reference< css::awt::XControl >
+    cpo::uno::Reference< css::awt::XControl >
                     m_xUnoControl;              // our UNO control
 
     cpo::uno::WeakReference< css::accessibility::XAccessibleContext >
                     m_aControlContext;      // the AccessibleContext of the control
-    css::uno::Reference< cpo::uno::XAggregation >
+    cpo::uno::Reference< cpo::uno::XAggregation >
                     m_xControlContextProxy; // the proxy for "aggregating" the AccessibleContext of the control
-    css::uno::Reference< css::lang::XTypeProvider >
+    cpo::uno::Reference< css::lang::XTypeProvider >
                     m_xControlContextTypeAccess;    // cached interface of our aggregate
-    css::uno::Reference< css::lang::XComponent >
+    cpo::uno::Reference< css::lang::XComponent >
                     m_xControlContextComponent;     // cached interface of our aggregate
 
     rtl::Reference<::accessibility::OWrappedAccessibleChildrenManager>

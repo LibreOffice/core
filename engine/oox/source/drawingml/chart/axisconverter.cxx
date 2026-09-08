@@ -54,7 +54,7 @@ namespace oox::drawingml::chart {
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::chart2;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 namespace {
@@ -542,7 +542,7 @@ void AxisConverter::convertFromModel(const Reference<XCoordinateSystem>& rxCoord
             {
                 sal_Int32 nGapWidth = static_cast< sal_Int32 >( mrModel.mofGapWidth.value() * 100.0 + 0.5 );
                 Sequence< sal_Int32 > aGapSeq{ nGapWidth, nGapWidth };
-                for( const com::sun::star::uno::Reference<com::sun::star::chart2::XChartType> & rChartType : xCTCnt->getChartTypes() )
+                for( const cpo::uno::Reference<com::sun::star::chart2::XChartType> & rChartType : xCTCnt->getChartTypes() )
                 {
                     PropertySet aTypeProp( rChartType );
                     aTypeProp.setProperty( PROP_GapwidthSequence, aGapSeq );

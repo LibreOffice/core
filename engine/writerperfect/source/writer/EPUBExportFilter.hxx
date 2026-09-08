@@ -32,12 +32,12 @@ class EPUBExportFilter
     : public cppu::WeakImplHelper<css::document::XFilter, css::document::XExporter,
                                   css::lang::XServiceInfo>
 {
-    css::uno::Reference<cpo::uno::XComponentContext> mxContext;
-    css::uno::Reference<css::lang::XComponent> mxSourceDocument;
-    css::uno::Reference<css::task::XStatusIndicator> mxStatusIndicator;
+    cpo::uno::Reference<cpo::uno::XComponentContext> mxContext;
+    cpo::uno::Reference<css::lang::XComponent> mxSourceDocument;
+    cpo::uno::Reference<css::task::XStatusIndicator> mxStatusIndicator;
 
 public:
-    EPUBExportFilter(css::uno::Reference<cpo::uno::XComponentContext> xContext);
+    EPUBExportFilter(cpo::uno::Reference<cpo::uno::XComponentContext> xContext);
 
     // XFilter
     bool SAL_CALL filter(const cpo::uno::Sequence<css::beans::PropertyValue>& rDescriptor) override;
@@ -45,7 +45,7 @@ public:
 
     // XExporter
     void SAL_CALL
-    setSourceDocument(const css::uno::Reference<css::lang::XComponent>& xDocument) override;
+    setSourceDocument(const cpo::uno::Reference<css::lang::XComponent>& xDocument) override;
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override;

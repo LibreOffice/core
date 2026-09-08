@@ -22,7 +22,7 @@
 #include <sal/config.h>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <com/sun/star/connection/XAcceptor.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/bridge/XInstanceProvider.hpp>
@@ -50,9 +50,9 @@ private:
 
     ::osl::Condition m_cEnable;
 
-    css::uno::Reference< cpo::uno::XComponentContext >     m_rContext;
-    css::uno::Reference< css::connection::XAcceptor >      m_rAcceptor;
-    css::uno::Reference< css::bridge::XBridgeFactory2 >    m_rBridgeFactory;
+    cpo::uno::Reference< cpo::uno::XComponentContext >     m_rContext;
+    cpo::uno::Reference< css::connection::XAcceptor >      m_rAcceptor;
+    cpo::uno::Reference< css::bridge::XBridgeFactory2 >    m_rBridgeFactory;
 
     OUString m_aAcceptString;
     OUString m_aConnectString;
@@ -62,7 +62,7 @@ private:
     bool m_bDying;
 
 public:
-    explicit Acceptor( const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+    explicit Acceptor( const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
     virtual ~Acceptor() override;
 
     void run();
@@ -79,14 +79,14 @@ public:
 class AccInstanceProvider : public ::cppu::WeakImplHelper<css::bridge::XInstanceProvider>
 {
 private:
-    css::uno::Reference<cpo::uno::XComponentContext> m_rContext;
+    cpo::uno::Reference<cpo::uno::XComponentContext> m_rContext;
 
 public:
-    AccInstanceProvider(const css::uno::Reference< cpo::uno::XComponentContext >& rxContext);
+    AccInstanceProvider(const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext);
     virtual ~AccInstanceProvider() override;
 
     // XInstanceProvider
-    virtual css::uno::Reference<cpo::uno::XInterface> getInstance (const OUString& aName ) override;
+    virtual cpo::uno::Reference<cpo::uno::XInterface> getInstance (const OUString& aName ) override;
 };
 
 

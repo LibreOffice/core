@@ -267,7 +267,7 @@ public:
         Graphic& rGraphic, const INetURLObject& rPath,
         sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW, sal_uInt16 * pDeterminedFormat = nullptr,
         GraphicFilterImportFlags nImportFlags = GraphicFilterImportFlags::NONE,
-        const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler = nullptr);
+        const cpo::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler = nullptr);
 
     ErrCode             CanImportGraphic( std::u16string_view rPath, SvStream& rStream,
                                       sal_uInt16 nFormat,
@@ -278,7 +278,7 @@ public:
         sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW, sal_uInt16* pDeterminedFormat = nullptr,
         GraphicFilterImportFlags nImportFlags = GraphicFilterImportFlags::NONE,
         sal_Int32 nPageNum = -1,
-        const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler = nullptr);
+        const cpo::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler = nullptr);
 
     /// Imports multiple graphics.
     ///
@@ -304,7 +304,7 @@ public:
                      Graphic& rGraphic,
                      GraphicFilter* pFilter = nullptr,
                      sal_uInt16* pDeterminedFormat = nullptr,
-                     const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler = nullptr);
+                     const cpo::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler = nullptr);
 
     ErrCode         compressAsPNG(const Graphic& rGraphic, SvStream& rOutputStream);
 
@@ -324,7 +324,7 @@ public:
 
     SAL_DLLPRIVATE static ErrCode readPDF(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType,
                     sal_Int32 nPageIndex,
-                    const css::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler,
+                    const cpo::uno::Reference<css::task::XInteractionHandler>& xInteractionHandler,
                     BinaryDataContainer & rpGraphicContent);
     SAL_DLLPRIVATE static ErrCode readTIFF(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType);
     SAL_DLLPRIVATE static ErrCode readWithTypeSerializer(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType, std::u16string_view aFilterName);

@@ -23,7 +23,7 @@
 #include <rtl/ustring.hxx>
 #include <svx/svxdllapi.h>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <vector>
 
@@ -31,7 +31,7 @@ namespace com::sun::star::sdbc { class XResultSet; }
 
 // Helper methods
 
-SVXCORE_DLLPUBLIC bool IsSearchableControl( const css::uno::Reference< cpo::uno::XInterface>& _xControl,
+SVXCORE_DLLPUBLIC bool IsSearchableControl( const cpo::uno::Reference< cpo::uno::XInterface>& _xControl,
                                             OUString* pCurrentText = nullptr);
     // check if the control has one of the interfaces we can use for searching
     // *pCurrentText will be filled with the current text of the control (as used when searching this control)
@@ -53,10 +53,10 @@ struct FmSearchContext
     // [in]
     sal_Int16               nContext;       // the number of the context
     // [out]
-    css::uno::Reference< css::sdbc::XResultSet>
+    cpo::uno::Reference< css::sdbc::XResultSet>
                             xCursor;        // the iterator for the context
     OUString                strUsedFields;  // a list of field names separated by ';'
-    ::std::vector< css::uno::Reference< cpo::uno::XInterface > >
+    ::std::vector< cpo::uno::Reference< cpo::uno::XInterface > >
                             arrFields;      // the corresponding text interfaces for the fields in strUsedFields
     OUString                sFieldDisplayNames;     // if not empty: names to be displayed for the searchable fields (must have the same token count as strUsedFields!)
 };

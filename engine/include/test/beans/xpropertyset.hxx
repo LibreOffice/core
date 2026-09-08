@@ -13,7 +13,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <test/testdllapi.hxx>
 
@@ -31,7 +31,7 @@ public:
         : m_IgnoreValue(std::move(rIgnoreValue))
     {
     }
-    virtual css::uno::Reference<cpo::uno::XInterface> init() = 0;
+    virtual cpo::uno::Reference<cpo::uno::XInterface> init() = 0;
 
     void testGetPropertySetInfo();
     void testSetPropertyValue();
@@ -46,9 +46,9 @@ protected:
     virtual bool isPropertyIgnored(const OUString& rName);
 
 private:
-    void fillPropsToTest(const css::uno::Reference<css::beans::XPropertySetInfo>& xPropInfo);
+    void fillPropsToTest(const cpo::uno::Reference<css::beans::XPropertySetInfo>& xPropInfo);
     static bool
-    getSinglePropertyValue(const css::uno::Reference<css::beans::XPropertySet>& xPropSet,
+    getSinglePropertyValue(const cpo::uno::Reference<css::beans::XPropertySet>& xPropSet,
                            const OUString& rName);
 
     struct OOO_DLLPUBLIC_TEST PropsToTest

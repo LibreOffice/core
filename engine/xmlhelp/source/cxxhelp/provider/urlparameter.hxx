@@ -156,9 +156,9 @@ namespace chelp {
 
         OString getByName( const char* par );
 
-        void open( const css::uno::Reference< css::io::XActiveDataSink >& xDataSink );
+        void open( const cpo::uno::Reference< css::io::XActiveDataSink >& xDataSink );
 
-        void open( const css::uno::Reference< css::io::XOutputStream >& xDataSink );
+        void open( const cpo::uno::Reference< css::io::XOutputStream >& xDataSink );
 
     private:
 

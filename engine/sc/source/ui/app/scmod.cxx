@@ -167,7 +167,7 @@ ScModule::~ScModule()
     // Need to clear this early in the shutdown process, because it might hold references
     // to large complex things like ScDocument.
     try {
-        css::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipboard =
+        cpo::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipboard =
             css::datatransfer::clipboard::SystemClipboard::create(
                 comphelper::getProcessComponentContext());
         xClipboard->setContents( nullptr, nullptr );
@@ -528,7 +528,7 @@ void ScModule::Execute( SfxRequest& rReq )
         {
             try
             {
-                css::uno::Reference < css::ui::dialogs::XExecutableDialog > xDialog = css::ui::dialogs::XSLTFilterDialog::create( ::comphelper::getProcessComponentContext());
+                cpo::uno::Reference < css::ui::dialogs::XExecutableDialog > xDialog = css::ui::dialogs::XSLTFilterDialog::create( ::comphelper::getProcessComponentContext());
                 (void)xDialog->execute();
             }
             catch( cpo::uno::RuntimeException& )
@@ -696,7 +696,7 @@ ScDocument* ScModule::GetClipDoc()
     // called from document
     SfxViewFrame* pViewFrame = nullptr;
     ScTabViewShell* pViewShell = nullptr;
-    css::uno::Reference<css::datatransfer::XTransferable2> xTransferable;
+    cpo::uno::Reference<css::datatransfer::XTransferable2> xTransferable;
 
     if ((pViewShell = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current())))
         xTransferable.set(ScTabViewShell::GetClipData(pViewShell->GetViewData().GetActiveWin()));
@@ -704,9 +704,9 @@ ScDocument* ScModule::GetClipDoc()
         xTransferable.set(ScTabViewShell::GetClipData(pViewShell->GetViewData().GetActiveWin()));
     else if ((pViewFrame = SfxViewFrame::GetFirst()))
     {
-        css::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipboard =
+        cpo::uno::Reference<css::datatransfer::clipboard::XClipboard> xClipboard =
             pViewFrame->GetWindow().GetClipboard();
-        xTransferable.set(xClipboard.is() ? xClipboard->getContents() : nullptr, css::uno::UNO_QUERY);
+        xTransferable.set(xClipboard.is() ? xClipboard->getContents() : nullptr, cpo::uno::UNO_QUERY);
     }
 
     const ScTransferObj* pObj = ScTransferObj::GetOwnClipboard(xTransferable);
@@ -1916,6 +1916,7 @@ std::shared_ptr<SfxDialogController> ScModule::Find1RefWindow(sal_uInt16 nSlotId
 }
 
 using namespace com::sun::star;
+using namespace ::cpo;
 
 void ScModule::GetSpellSettings( LanguageType& rDefLang, LanguageType& rCjkLang, LanguageType& rCtlLang )
 {
@@ -1995,7 +1996,7 @@ SfxStyleFamilies ScModule::CreateStyleFamilies()
     return aStyleFamilies;
 }
 
-void ScModule::RegisterAutomationApplicationEventsCaller(css::uno::Reference< ooo::vba::XSinkCaller > const& xCaller)
+void ScModule::RegisterAutomationApplicationEventsCaller(cpo::uno::Reference< ooo::vba::XSinkCaller > const& xCaller)
 {
     mxAutomationApplicationEventsCaller = xCaller;
 }

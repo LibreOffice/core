@@ -20,7 +20,7 @@
 #pragma once
 
 #include "TokenContext.hxx"
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <com/sun/star/xforms/XModel2.hpp>
 
 class SvXMLImport;
@@ -28,7 +28,7 @@ class SvXMLImport;
 /** import the xforms:model element */
 class XFormsModelContext : public TokenContext
 {
-    css::uno::Reference<css::xforms::XModel2> mxModel;
+    cpo::uno::Reference<css::xforms::XModel2> mxModel;
 
 public:
     XFormsModelContext( SvXMLImport& rImport );
@@ -42,7 +42,7 @@ protected:
 
     virtual SvXMLImportContext* HandleChild(
         sal_Int32 nElementToken,
-        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList ) override;
+        const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

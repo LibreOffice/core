@@ -27,15 +27,15 @@ basic/source/runtime/methods.cxx:3122
     const short defaultValue
     0
 canvas/inc/parametricpolypolygon.hxx:138
-    void canvas::ParametricPolyPolygon::ParametricPolyPolygon(class com::sun::star::uno::Reference<class com::sun::star::vclcanvas::XGraphicDevice>,enum canvas::ParametricPolyPolygon::GradientType,const class cpo::uno::Sequence<class cpo::uno::Sequence<double> > &,const class cpo::uno::Sequence<double> &)
+    void canvas::ParametricPolyPolygon::ParametricPolyPolygon(class cpo::uno::Reference<class com::sun::star::vclcanvas::XGraphicDevice>,enum canvas::ParametricPolyPolygon::GradientType,const class cpo::uno::Sequence<class cpo::uno::Sequence<double> > &,const class cpo::uno::Sequence<double> &)
     enum canvas::ParametricPolyPolygon::GradientType eType
     0
 canvas/inc/verifyinput.hxx:147
-    void verifyInput(const struct com::sun::star::geometry::RealBezierSegment2D &,const char *,const class com::sun::star::uno::Reference<class cpo::uno::XInterface> &,short)
+    void verifyInput(const struct com::sun::star::geometry::RealBezierSegment2D &,const char *,const class cpo::uno::Reference<class cpo::uno::XInterface> &,short)
     short nArgPos
     0
 canvas/inc/verifyinput.hxx:279
-    void verifyInput(const struct com::sun::star::rendering::IntegerBitmapLayout &,const char *,const class com::sun::star::uno::Reference<class cpo::uno::XInterface> &,short)
+    void verifyInput(const struct com::sun::star::rendering::IntegerBitmapLayout &,const char *,const class cpo::uno::Reference<class cpo::uno::XInterface> &,short)
     short nArgPos
     0
 canvas/inc/verifyinput.hxx:518
@@ -59,51 +59,51 @@ chart2/qa/extras/chart2dump/chart2dump.cxx:90
     _Bool bDumpMode
     0
 chart2/qa/extras/charttest.hxx:74
-    class com::sun::star::uno::Reference<class com::sun::star::chart2::XChartDocument> ChartTest::getPivotChartDocFromSheet(int)
+    class cpo::uno::Reference<class com::sun::star::chart2::XChartDocument> ChartTest::getPivotChartDocFromSheet(int)
     int nSheet
     1
 chart2/qa/extras/charttest.hxx:76
-    class com::sun::star::uno::Reference<class com::sun::star::chart2::XChartDocument> ChartTest::getPivotChartDocFromSheet(const class com::sun::star::uno::Reference<class com::sun::star::table::XTablePivotCharts> &,int)
+    class cpo::uno::Reference<class com::sun::star::chart2::XChartDocument> ChartTest::getPivotChartDocFromSheet(const class cpo::uno::Reference<class com::sun::star::table::XTablePivotCharts> &,int)
     int nIndex
     0
 chart2/qa/extras/charttest.hxx:81
-    class com::sun::star::uno::Reference<class com::sun::star::chart2::XAxis> ChartTest::getAxisFromDoc(const class com::sun::star::uno::Reference<class com::sun::star::chart2::XChartDocument> &,int,int,int)
+    class cpo::uno::Reference<class com::sun::star::chart2::XAxis> ChartTest::getAxisFromDoc(const class cpo::uno::Reference<class com::sun::star::chart2::XChartDocument> &,int,int,int)
     int nCooSys
     0
 chart2/qa/extras/charttest.hxx:84
-    int ChartTest::getNumberOfDataSeries(const class com::sun::star::uno::Reference<class com::sun::star::chart2::XChartDocument> &,int,int)
+    int ChartTest::getNumberOfDataSeries(const class cpo::uno::Reference<class com::sun::star::chart2::XChartDocument> &,int,int)
     int nChartType
     0
 chart2/qa/extras/charttest.hxx:84
-    int ChartTest::getNumberOfDataSeries(const class com::sun::star::uno::Reference<class com::sun::star::chart2::XChartDocument> &,int,int)
+    int ChartTest::getNumberOfDataSeries(const class cpo::uno::Reference<class com::sun::star::chart2::XChartDocument> &,int,int)
     int nCooSys
     0
 chart2/qa/extras/charttest.hxx:87
-    class com::sun::star::uno::Reference<class com::sun::star::chart2::XDataSeries> ChartTest::getDataSeriesFromDoc(const class com::sun::star::uno::Reference<class com::sun::star::chart2::XChartDocument> &,int,int,int)
+    class cpo::uno::Reference<class com::sun::star::chart2::XDataSeries> ChartTest::getDataSeriesFromDoc(const class cpo::uno::Reference<class com::sun::star::chart2::XChartDocument> &,int,int,int)
     int nCooSys
     0
 chart2/qa/extras/charttest.hxx:90
-    class com::sun::star::uno::Reference<class com::sun::star::chart2::data::XDataSequence> ChartTest::getLabelDataSequenceFromDoc(const class com::sun::star::uno::Reference<class com::sun::star::chart2::XChartDocument> &,int,int)
+    class cpo::uno::Reference<class com::sun::star::chart2::data::XDataSequence> ChartTest::getLabelDataSequenceFromDoc(const class cpo::uno::Reference<class com::sun::star::chart2::XChartDocument> &,int,int)
     int nChartType
     0
 chart2/qa/extras/charttest.hxx:93
-    class com::sun::star::uno::Reference<class com::sun::star::chart2::data::XDataSequence> ChartTest::getDataSequenceFromDocByRole(const class com::sun::star::uno::Reference<class com::sun::star::chart2::XChartDocument> &,class std::basic_string_view<char16_t>,int,int)
+    class cpo::uno::Reference<class com::sun::star::chart2::data::XDataSequence> ChartTest::getDataSequenceFromDocByRole(const class cpo::uno::Reference<class com::sun::star::chart2::XChartDocument> &,class std::basic_string_view<char16_t>,int,int)
     int nChartType
     0
 chart2/qa/extras/PivotChartTest.cxx:60
-    class com::sun::star::uno::Reference<class com::sun::star::sheet::XDataPilotTable> PivotChartTest::getPivotTableByName(int,const class rtl::OUString &)
+    class cpo::uno::Reference<class com::sun::star::sheet::XDataPilotTable> PivotChartTest::getPivotTableByName(int,const class rtl::OUString &)
     int nIndex
     1
 chart2/qa/extras/PivotChartTest.cxx:138
-    void lclModifyColumnGrandTotal(const class com::sun::star::uno::Reference<class com::sun::star::sheet::XDataPilotDescriptor> &,_Bool)
+    void lclModifyColumnGrandTotal(const class cpo::uno::Reference<class com::sun::star::sheet::XDataPilotDescriptor> &,_Bool)
     _Bool bTotal
     1
 chart2/qa/extras/PivotChartTest.cxx:144
-    void lclModifyRowGrandTotal(const class com::sun::star::uno::Reference<class com::sun::star::sheet::XDataPilotDescriptor> &,_Bool)
+    void lclModifyRowGrandTotal(const class cpo::uno::Reference<class com::sun::star::sheet::XDataPilotDescriptor> &,_Bool)
     _Bool bTotal
     1
 chart2/qa/extras/PivotChartTest.cxx:204
-    class com::sun::star::uno::Reference<class com::sun::star::sheet::XDataPilotTables> lclGetDataPilotTables(int,const class com::sun::star::uno::Reference<class com::sun::star::sheet::XSpreadsheetDocument> &)
+    class cpo::uno::Reference<class com::sun::star::sheet::XDataPilotTables> lclGetDataPilotTables(int,const class cpo::uno::Reference<class com::sun::star::sheet::XSpreadsheetDocument> &)
     int nIndex
     0
 chart2/source/controller/dialogs/DialogModel.cxx:175
@@ -135,15 +135,15 @@ chart2/source/inc/CommonConverters.hxx:85
     int nSequenceIndex
     0
 chart2/source/inc/RegressionCurveHelper.hxx:121
-    class rtl::Reference<class chart::RegressionCurveModel> addRegressionCurve(enum SvxChartRegress,const class rtl::Reference<class chart::DataSeries> &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &)
+    class rtl::Reference<class chart::RegressionCurveModel> addRegressionCurve(enum SvxChartRegress,const class rtl::Reference<class chart::DataSeries> &,const class cpo::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class cpo::uno::Reference<class com::sun::star::beans::XPropertySet> &)
     enum SvxChartRegress eType
     1
 chart2/source/model/template/ColumnLineChartTypeTemplate.hxx:35
-    void chart::ColumnLineChartTypeTemplate::ColumnLineChartTypeTemplate(const class com::sun::star::uno::Reference<class cpo::uno::XComponentContext> &,const class rtl::OUString &,enum chart::StackMode,int)
+    void chart::ColumnLineChartTypeTemplate::ColumnLineChartTypeTemplate(const class cpo::uno::Reference<class cpo::uno::XComponentContext> &,const class rtl::OUString &,enum chart::StackMode,int)
     int nNumberOfLines
     1
 chart2/source/model/template/HistogramChartTypeTemplate.hxx:22
-    void chart::HistogramChartTypeTemplate::HistogramChartTypeTemplate(const class com::sun::star::uno::Reference<class cpo::uno::XComponentContext> &,const class rtl::OUString &,enum chart::StackMode)
+    void chart::HistogramChartTypeTemplate::HistogramChartTypeTemplate(const class cpo::uno::Reference<class cpo::uno::XComponentContext> &,const class rtl::OUString &,enum chart::StackMode)
     enum chart::StackMode eStackMode
     0
 chart2/source/tools/InternalDataProvider.cxx:228
@@ -155,7 +155,7 @@ chart2/source/view/axes/VAxisProperties.hxx:159
     int nTickStartDistanceToAxis
     0
 chart2/source/view/axes/VCartesianAxis.hxx:30
-    void chart::VCartesianAxis::VCartesianAxis(const struct chart::AxisProperties &,const class com::sun::star::uno::Reference<class com::sun::star::util::XNumberFormatsSupplier> &,int,int,class chart::PlottingPositionHelper *)
+    void chart::VCartesianAxis::VCartesianAxis(const struct chart::AxisProperties &,const class cpo::uno::Reference<class com::sun::star::util::XNumberFormatsSupplier> &,int,int,class chart::PlottingPositionHelper *)
     int nDimensionIndex
     1
 chart2/source/view/charttypes/CategoryPositionHelper.hxx:27
@@ -331,7 +331,7 @@ cui/source/inc/MacroManagerDialog.hxx:106
     int pos
     0
 cui/source/inc/MacroManagerDialog.hxx:162
-    void ScriptContainersListBox::Insert(const class com::sun::star::uno::Reference<class com::sun::star::script::browse::XBrowseNode> &,const class weld::TreeIter *,const class rtl::OUString &,const class rtl::OUString &,_Bool,int,class weld::TreeIter *)
+    void ScriptContainersListBox::Insert(const class cpo::uno::Reference<class com::sun::star::script::browse::XBrowseNode> &,const class weld::TreeIter *,const class rtl::OUString &,const class rtl::OUString &,_Bool,int,class weld::TreeIter *)
     class weld::TreeIter * pRet
     0
 cui/source/inc/scriptdlg.hxx:118
@@ -371,11 +371,11 @@ dbaccess/source/core/inc/column.hxx:167
     _Bool _bDropColumn
     0
 dbaccess/source/core/inc/column.hxx:178
-    void dbaccess::OColumns::OColumns(class cppu::OWeakObject &,class osl::Mutex &,class com::sun::star::uno::Reference<class com::sun::star::container::XNameAccess>,_Bool,const class std::vector<class rtl::OUString> &,class dbaccess::IColumnFactory *,class connectivity::sdbcx::IRefreshableColumns *,_Bool,_Bool,_Bool)
+    void dbaccess::OColumns::OColumns(class cppu::OWeakObject &,class osl::Mutex &,class cpo::uno::Reference<class com::sun::star::container::XNameAccess>,_Bool,const class std::vector<class rtl::OUString> &,class dbaccess::IColumnFactory *,class connectivity::sdbcx::IRefreshableColumns *,_Bool,_Bool,_Bool)
     _Bool _bUseHardRef
     1
 dbaccess/source/ui/control/tabletree.cxx:166
-    class std::vector<class rtl::OUString> lcl_getMetaDataStrings_throw(const class com::sun::star::uno::Reference<class com::sun::star::sdbc::XResultSet> &,int)
+    class std::vector<class rtl::OUString> lcl_getMetaDataStrings_throw(const class cpo::uno::Reference<class com::sun::star::sdbc::XResultSet> &,int)
     int _nColumnIndex
     1
 dbaccess/source/ui/inc/charsets.hxx:45
@@ -387,7 +387,7 @@ dbaccess/source/ui/inc/FieldDescControl.hxx:122
     _Bool _bAddChangeHandler
     1
 dbaccess/source/ui/inc/imageprovider.hxx:70
-    class com::sun::star::uno::Reference<class com::sun::star::graphic::XGraphic> dbaui::ImageProvider::getXGraphic(const class rtl::OUString &,const int)
+    class cpo::uno::Reference<class com::sun::star::graphic::XGraphic> dbaui::ImageProvider::getXGraphic(const class rtl::OUString &,const int)
     const int _nDatabaseObjectType
     0
 dbaccess/source/ui/inc/IUpdateHelper.hxx:32
@@ -395,7 +395,7 @@ dbaccess/source/ui/inc/IUpdateHelper.hxx:32
     int _nPos
     1
 dbaccess/source/ui/inc/WCopyTable.hxx:310
-    void dbaui::OCopyTableWizard::OCopyTableWizard(class weld::Window *,class rtl::OUString,short,class std::map<class rtl::OUString, class dbaui::OFieldDescription *, struct comphelper::UStringMixLess> &&,const class std::vector<class __gnu_debug::_Safe_iterator<struct std::_Rb_tree_const_iterator<struct std::pair<const class rtl::OUString, class dbaui::OFieldDescription *> >, class std::map<class rtl::OUString, class dbaui::OFieldDescription *, struct comphelper::UStringMixLess> > > &,const class com::sun::star::uno::Reference<class com::sun::star::sdbc::XConnection> &,const class com::sun::star::uno::Reference<class com::sun::star::util::XNumberFormatter> &,class std::unique_ptr<class dbaui::OWizTypeSelect> (*)(class weld::Container *, class dbaui::OCopyTableWizard *, class SvStream &),class SvStream &,const class com::sun::star::uno::Reference<class cpo::uno::XComponentContext> &)
+    void dbaui::OCopyTableWizard::OCopyTableWizard(class weld::Window *,class rtl::OUString,short,class std::map<class rtl::OUString, class dbaui::OFieldDescription *, struct comphelper::UStringMixLess> &&,const class std::vector<class __gnu_debug::_Safe_iterator<struct std::_Rb_tree_const_iterator<struct std::pair<const class rtl::OUString, class dbaui::OFieldDescription *> >, class std::map<class rtl::OUString, class dbaui::OFieldDescription *, struct comphelper::UStringMixLess> > > &,const class cpo::uno::Reference<class com::sun::star::sdbc::XConnection> &,const class cpo::uno::Reference<class com::sun::star::util::XNumberFormatter> &,class std::unique_ptr<class dbaui::OWizTypeSelect> (*)(class weld::Container *, class dbaui::OCopyTableWizard *, class SvStream &),class SvStream &,const class cpo::uno::Reference<class cpo::uno::XComponentContext> &)
     class weld::Window * pParent
     0
 dbaccess/source/ui/inc/WTypeSelect.hxx:121
@@ -495,11 +495,11 @@ filter/source/graphicfilter/icgm/cgm.hxx:90
     unsigned int nPrecision
     1
 filter/source/svg/svgfilter.hxx:255
-    _Bool SVGFilter::implExportMasterPages(const class std::vector<class com::sun::star::uno::Reference<class com::sun::star::drawing::XDrawPage> > &,int,int)
+    _Bool SVGFilter::implExportMasterPages(const class std::vector<class cpo::uno::Reference<class com::sun::star::drawing::XDrawPage> > &,int,int)
     int nFirstPage
     0
 filter/source/svg/svgfilter.hxx:257
-    void SVGFilter::implExportDrawPages(const class std::vector<class com::sun::star::uno::Reference<class com::sun::star::drawing::XDrawPage> > &,int,int)
+    void SVGFilter::implExportDrawPages(const class std::vector<class cpo::uno::Reference<class com::sun::star::drawing::XDrawPage> > &,int,int)
     int nFirstPage
     0
 filter/source/svg/svgwriter.hxx:247
@@ -515,7 +515,7 @@ forms/source/component/DatabaseForm.hxx:233
     int nCount
     1
 forms/source/component/GroupManager.hxx:143
-    const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> & frm::OGroup::GetObject(unsigned short) const
+    const class cpo::uno::Reference<class com::sun::star::beans::XPropertySet> & frm::OGroup::GetObject(unsigned short) const
     unsigned short nP
     0
 forms/source/inc/featuredispatcher.hxx:50
@@ -539,7 +539,7 @@ fpicker/source/office/fileview.hxx:162
     _Bool bEnable
     1
 framework/inc/uielement/uicommanddescription.hxx:81
-    void framework::UICommandDescription::UICommandDescription(const class com::sun::star::uno::Reference<class cpo::uno::XComponentContext> &,_Bool)
+    void framework::UICommandDescription::UICommandDescription(const class cpo::uno::Reference<class cpo::uno::XComponentContext> &,_Bool)
     _Bool 
     1
 helpcompiler/inc/HelpCompiler.hxx:57
@@ -675,11 +675,11 @@ include/basic/sbxobj.hxx:73
     enum SbxClassType 
     1
 include/comphelper/configurationhelper.hxx:211
-    class cpo::uno::Any comphelper::ConfigurationHelper::readDirectKey(const class com::sun::star::uno::Reference<class cpo::uno::XComponentContext> &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,enum comphelper::EConfigurationModes)
+    class cpo::uno::Any comphelper::ConfigurationHelper::readDirectKey(const class cpo::uno::Reference<class cpo::uno::XComponentContext> &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,enum comphelper::EConfigurationModes)
     enum comphelper::EConfigurationModes eMode
     1
 include/comphelper/configurationhelper.hxx:227
-    void comphelper::ConfigurationHelper::writeDirectKey(const class com::sun::star::uno::Reference<class cpo::uno::XComponentContext> &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class cpo::uno::Any &,enum comphelper::EConfigurationModes)
+    void comphelper::ConfigurationHelper::writeDirectKey(const class cpo::uno::Reference<class cpo::uno::XComponentContext> &,const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &,const class cpo::uno::Any &,enum comphelper::EConfigurationModes)
     enum comphelper::EConfigurationModes eMode
     0
 include/comphelper/errcode.hxx:73
@@ -687,7 +687,7 @@ include/comphelper/errcode.hxx:73
     enum WarningFlag 
     0
 include/comphelper/interfacecontainer2.hxx:174
-    class com::sun::star::uno::Reference<class cpo::uno::XInterface> comphelper::OInterfaceContainerHelper2::getInterface(int) const
+    class cpo::uno::Reference<class cpo::uno::XInterface> comphelper::OInterfaceContainerHelper2::getInterface(int) const
     int nIndex
     0
 include/comphelper/kit.hxx:70
@@ -711,7 +711,7 @@ include/comphelper/random.hxx:35
     unsigned long a
     0
 include/comphelper/storagehelper.hxx:187
-    class com::sun::star::uno::Reference<class com::sun::star::embed::XStorage> comphelper::OStorageHelper::GetStorageAtPath(const class com::sun::star::uno::Reference<class com::sun::star::embed::XStorage> &,class std::basic_string_view<char16_t>,unsigned int,const class comphelper::LifecycleProxy &)
+    class cpo::uno::Reference<class com::sun::star::embed::XStorage> comphelper::OStorageHelper::GetStorageAtPath(const class cpo::uno::Reference<class com::sun::star::embed::XStorage> &,class std::basic_string_view<char16_t>,unsigned int,const class comphelper::LifecycleProxy &)
     unsigned int nOpenMode
     1
 include/comphelper/string.hxx:236
@@ -719,7 +719,7 @@ include/comphelper/string.hxx:236
     int index
     0
 include/comphelper/unique_disposing_ptr.hxx:165
-    void comphelper::unique_disposing_solar_mutex_reset_ptr::unique_disposing_solar_mutex_reset_ptr<T>(const class com::sun::star::uno::Reference<class com::sun::star::lang::XComponent> &,type-parameter-?-? *,_Bool)
+    void comphelper::unique_disposing_solar_mutex_reset_ptr::unique_disposing_solar_mutex_reset_ptr<T>(const class cpo::uno::Reference<class com::sun::star::lang::XComponent> &,type-parameter-?-? *,_Bool)
     _Bool bComponent
     1
 include/comphelper/unique_disposing_ptr.hxx:170
@@ -727,15 +727,15 @@ include/comphelper/unique_disposing_ptr.hxx:170
     type-parameter-?-? * p
     0
 include/connectivity/dbexception.hxx:319
-    void throwSQLException(const class rtl::OUString &,enum dbtools::StandardSQLState,const class com::sun::star::uno::Reference<class cpo::uno::XInterface> &,const int)
+    void throwSQLException(const class rtl::OUString &,enum dbtools::StandardSQLState,const class cpo::uno::Reference<class cpo::uno::XInterface> &,const int)
     const int _nErrorCode
     0
 include/connectivity/dbtools.hxx:335
-    _Bool isDataSourcePropertyEnabled(const class com::sun::star::uno::Reference<class cpo::uno::XInterface> &,const class rtl::OUString &,_Bool)
+    _Bool isDataSourcePropertyEnabled(const class cpo::uno::Reference<class cpo::uno::XInterface> &,const class rtl::OUString &,_Bool)
     _Bool _bDefault
     1
 include/connectivity/dbtools.hxx:627
-    class rtl::OUString createStandardCreateStatement(const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class com::sun::star::uno::Reference<class com::sun::star::sdbc::XConnection> &,class dbtools::ISQLStatementHelper *,class std::basic_string_view<char16_t>)
+    class rtl::OUString createStandardCreateStatement(const class cpo::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class cpo::uno::Reference<class com::sun::star::sdbc::XConnection> &,class dbtools::ISQLStatementHelper *,class std::basic_string_view<char16_t>)
     class dbtools::ISQLStatementHelper * _pHelper
     0
 include/connectivity/sqlscan.hxx:49
@@ -771,11 +771,11 @@ include/drawinglayer/processor2d/processor2dtools.hxx:49
     _Bool bUseRGBA
     1
 include/drawinglayer/XShapeDumper.hxx:23
-    class rtl::OUString XShapeDumper::dump(const class com::sun::star::uno::Reference<class com::sun::star::drawing::XShapes> &,_Bool)
+    class rtl::OUString XShapeDumper::dump(const class cpo::uno::Reference<class com::sun::star::drawing::XShapes> &,_Bool)
     _Bool bDumpInteropProperties
     0
 include/drawinglayer/XShapeDumper.hxx:24
-    class rtl::OUString XShapeDumper::dump(const class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> &,_Bool)
+    class rtl::OUString XShapeDumper::dump(const class cpo::uno::Reference<class com::sun::star::drawing::XShape> &,_Bool)
     _Bool bDumpInteropProperties
     0
 include/editeng/borderline.hxx:188
@@ -859,7 +859,7 @@ include/filter/msfilter/escherex.hxx:587
     unsigned int nBlipId
     1
 include/filter/msfilter/escherex.hxx:797
-    void EscherPropertyContainer::CreateFillProperties(const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,_Bool,const class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> &)
+    void EscherPropertyContainer::CreateFillProperties(const class cpo::uno::Reference<class com::sun::star::beans::XPropertySet> &,_Bool,const class cpo::uno::Reference<class com::sun::star::drawing::XShape> &)
     _Bool bEdge
     1
 include/filter/msfilter/escherex.hxx:1141
@@ -967,7 +967,7 @@ include/oox/export/drawingml.hxx:366
     enum oox::drawingml::GraphicExport::TypeHint eHint
     0
 include/oox/export/drawingml.hxx:446
-    void oox::drawingml::DrawingML::WriteShapeTransformation(const class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> &,int,_Bool,_Bool,_Bool,_Bool,_Bool)
+    void oox::drawingml::DrawingML::WriteShapeTransformation(const class cpo::uno::Reference<class com::sun::star::drawing::XShape> &,int,_Bool,_Bool,_Bool,_Bool,_Bool)
     _Bool bSuppressFlipping
     0
 include/oox/export/vmlexport.hxx:144
@@ -995,15 +995,15 @@ include/oox/mathml/importutils.hxx:212
     _Bool silent
     0
 include/oox/ole/olestorage.hxx:44
-    void oox::ole::OleStorage::OleStorage(const class com::sun::star::uno::Reference<class cpo::uno::XComponentContext> &,const class com::sun::star::uno::Reference<class com::sun::star::io::XInputStream> &,_Bool)
+    void oox::ole::OleStorage::OleStorage(const class cpo::uno::Reference<class cpo::uno::XComponentContext> &,const class cpo::uno::Reference<class com::sun::star::io::XInputStream> &,_Bool)
     _Bool bBaseStreamAccess
     0
 include/oox/ole/olestorage.hxx:57
-    void oox::ole::OleStorage::OleStorage(const class oox::ole::OleStorage &,const class com::sun::star::uno::Reference<class com::sun::star::container::XNameContainer> &,const class rtl::OUString &,_Bool)
+    void oox::ole::OleStorage::OleStorage(const class oox::ole::OleStorage &,const class cpo::uno::Reference<class com::sun::star::container::XNameContainer> &,const class rtl::OUString &,_Bool)
     _Bool bReadOnly
     1
 include/oox/ole/vbacontrol.hxx:189
-    void oox::ole::VbaUserForm::VbaUserForm(const class com::sun::star::uno::Reference<class cpo::uno::XComponentContext> &,const class com::sun::star::uno::Reference<class com::sun::star::frame::XModel> &,const class oox::GraphicHelper &,_Bool)
+    void oox::ole::VbaUserForm::VbaUserForm(const class cpo::uno::Reference<class cpo::uno::XComponentContext> &,const class cpo::uno::Reference<class com::sun::star::frame::XModel> &,const class oox::GraphicHelper &,_Bool)
     _Bool bDefaultColorBgr
     1
 include/oox/ole/vbaexport.hxx:91
@@ -1015,7 +1015,7 @@ include/oox/vml/vmldrawing.hxx:69
     _Bool bDmlShape
     0
 include/oox/vml/vmldrawing.hxx:96
-    void oox::vml::Drawing::Drawing(class oox::core::XmlFilterBase &,const class com::sun::star::uno::Reference<class com::sun::star::drawing::XDrawPage> &,enum oox::vml::DrawingType)
+    void oox::vml::Drawing::Drawing(class oox::core::XmlFilterBase &,const class cpo::uno::Reference<class com::sun::star::drawing::XDrawPage> &,enum oox::vml::DrawingType)
     enum oox::vml::DrawingType eType
     1
 include/oox/vml/vmlformatting.hxx:126
@@ -1079,7 +1079,7 @@ include/sfx2/docfile.hxx:182
     _Bool bDisableFileSync
     1
 include/sfx2/event.hxx:241
-    void SfxPrintingHint::SfxPrintingHint(enum com::sun::star::view::PrintableState,const class cpo::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,class SfxObjectShell *,const class com::sun::star::uno::Reference<class com::sun::star::frame::XController2> &)
+    void SfxPrintingHint::SfxPrintingHint(enum com::sun::star::view::PrintableState,const class cpo::uno::Sequence<struct com::sun::star::beans::PropertyValue> &,class SfxObjectShell *,const class cpo::uno::Reference<class com::sun::star::frame::XController2> &)
     enum com::sun::star::view::PrintableState nState
     0
 include/sfx2/fcontnr.hxx:109
@@ -1143,7 +1143,7 @@ include/sfx2/request.hxx:103
     _Bool 
     1
 include/sfx2/sfxdlg.hxx:142
-    class VclPtr<class VclAbstractDialog> SfxAbstractDialogFactory::CreateEditObjectDialog(class weld::Window *,const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::embed::XEmbeddedObject> &)
+    class VclPtr<class VclAbstractDialog> SfxAbstractDialogFactory::CreateEditObjectDialog(class weld::Window *,const class rtl::OUString &,const class cpo::uno::Reference<class com::sun::star::embed::XEmbeddedObject> &)
     class weld::Window * pParent
     0
 include/sfx2/sfxdlg.hxx:158
@@ -1171,7 +1171,7 @@ include/sfx2/viewsh.hxx:444
     enum svtools::ColorConfigEntry nColorType
     0
 include/sfx2/weldutils.hxx:53
-    void ToolbarUnoDispatcher::ToolbarUnoDispatcher(class weld::Toolbar &,class weld::Builder &,const class com::sun::star::uno::Reference<class com::sun::star::frame::XFrame> &,_Bool)
+    void ToolbarUnoDispatcher::ToolbarUnoDispatcher(class weld::Toolbar &,class weld::Builder &,const class cpo::uno::Reference<class com::sun::star::frame::XFrame> &,_Bool)
     _Bool bSideBar
     1
 include/sot/stg.hxx:157
@@ -1199,7 +1199,7 @@ include/sot/stg.hxx:253
     _Bool bIsRoot
     1
 include/sot/stg.hxx:258
-    void UCBStorage::UCBStorage(const class rtl::OUString &,enum StreamMode,_Bool,_Bool,_Bool,const class com::sun::star::uno::Reference<class com::sun::star::ucb::XProgressHandler> &)
+    void UCBStorage::UCBStorage(const class rtl::OUString &,enum StreamMode,_Bool,_Bool,_Bool,const class cpo::uno::Reference<class com::sun::star::ucb::XProgressHandler> &)
     _Bool bIsRoot
     0
 include/sot/stg.hxx:268
@@ -1287,7 +1287,7 @@ include/svtools/ctrlbox.hxx:283
     _Bool bUseLabel
     1
 include/svtools/imagemgr.hxx:124
-    class Image SvFileInformationManager::GetImage(const class INetURLObject &,_Bool,const class com::sun::star::uno::Reference<class com::sun::star::ucb::XCommandEnvironment> &)
+    class Image SvFileInformationManager::GetImage(const class INetURLObject &,_Bool,const class cpo::uno::Reference<class com::sun::star::ucb::XCommandEnvironment> &)
     _Bool bBig
     1
 include/svtools/inettbc.hxx:80
@@ -1323,7 +1323,7 @@ include/svx/ctredlin.hxx:241
     _Bool bFlag
     0
 include/svx/cuicharmap.hxx:129
-    void SvxCharacterMap::SvxCharacterMap(class weld::Widget *,const class SfxItemSet *,class com::sun::star::uno::Reference<class com::sun::star::frame::XFrame>)
+    void SvxCharacterMap::SvxCharacterMap(class weld::Widget *,const class SfxItemSet *,class cpo::uno::Reference<class com::sun::star::frame::XFrame>)
     const class SfxItemSet * pSet
     0
 include/svx/dlgctrl.hxx:135
@@ -1339,7 +1339,7 @@ include/svx/fmshell.hxx:93
     const class SfxModule * pMod
     0
 include/svx/fmtools.hxx:77
-    void CursorWrapper::CursorWrapper(const class com::sun::star::uno::Reference<class com::sun::star::sdbc::XRowSet> &,_Bool)
+    void CursorWrapper::CursorWrapper(const class cpo::uno::Reference<class com::sun::star::sdbc::XRowSet> &,_Bool)
     _Bool bUseCloned
     0
 include/svx/fmtools.hxx:142
@@ -1347,7 +1347,7 @@ include/svx/fmtools.hxx:142
     short _nId
     0
 include/svx/fmview.hxx:90
-    void FmFormView::createControlLabelPair(const class OutputDevice *,int,int,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class com::sun::star::uno::Reference<class com::sun::star::util::XNumberFormats> &,enum SdrObjKind,enum SdrInventor,enum SdrObjKind,class SdrModel &,class rtl::Reference<class SdrUnoObj> &,class rtl::Reference<class SdrUnoObj> &)
+    void FmFormView::createControlLabelPair(const class OutputDevice *,int,int,const class cpo::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class cpo::uno::Reference<class com::sun::star::util::XNumberFormats> &,enum SdrObjKind,enum SdrInventor,enum SdrObjKind,class SdrModel &,class rtl::Reference<class SdrUnoObj> &,class rtl::Reference<class SdrUnoObj> &)
     int _nYOffsetMM
     0
 include/svx/fontworkbar.hxx:41
@@ -1363,7 +1363,7 @@ include/svx/gridctrl.hxx:402
     _Bool bNewCursor
     0
 include/svx/IAccessibleParent.hxx:81
-    _Bool accessibility::IAccessibleParent::ReplaceChild(class accessibility::AccessibleShape *,const class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> &,const long,const class accessibility::AccessibleShapeTreeInfo &)
+    _Bool accessibility::IAccessibleParent::ReplaceChild(class accessibility::AccessibleShape *,const class cpo::uno::Reference<class com::sun::star::drawing::XShape> &,const long,const class accessibility::AccessibleShapeTreeInfo &)
     const long _nIndex
     0
 include/svx/nbdtmg.hxx:131
@@ -1507,15 +1507,15 @@ include/test/a11y/eventposter.hxx:42
     int nCharCode
     0
 include/test/sheet/xactivationbroadcaster.hxx:24
-    class com::sun::star::uno::Reference<class cpo::uno::XInterface> apitest::XActivationBroadcaster::getXSpreadsheet(const short)
+    class cpo::uno::Reference<class cpo::uno::XInterface> apitest::XActivationBroadcaster::getXSpreadsheet(const short)
     const short nNumber
     1
 include/test/sheet/xdocumentauditing.hxx:35
-    _Bool apitest::XDocumentAuditing::hasRightAmountOfShapes(const class com::sun::star::uno::Reference<class com::sun::star::drawing::XDrawPage> &,int,int)
+    _Bool apitest::XDocumentAuditing::hasRightAmountOfShapes(const class cpo::uno::Reference<class com::sun::star::drawing::XDrawPage> &,int,int)
     int nShapes
     1
 include/test/sheet/xnamedranges.hxx:40
-    class com::sun::star::uno::Reference<class cpo::uno::XInterface> apitest::XNamedRanges::getXNamedRanges(int)
+    class cpo::uno::Reference<class cpo::uno::XInterface> apitest::XNamedRanges::getXNamedRanges(int)
     int nSheet
     1
 include/test/text/textcontent.hxx:25
@@ -1623,7 +1623,7 @@ include/unotools/charclass.hxx:129
     int nPos
     0
 include/unotools/confignode.hxx:239
-    class utl::OConfigurationTreeRoot utl::OConfigurationTreeRoot::tryCreateWithComponentContext(const class com::sun::star::uno::Reference<class cpo::uno::XComponentContext> &,const class rtl::OUString &,int,enum utl::OConfigurationTreeRoot::CREATION_MODE)
+    class utl::OConfigurationTreeRoot utl::OConfigurationTreeRoot::tryCreateWithComponentContext(const class cpo::uno::Reference<class cpo::uno::XComponentContext> &,const class rtl::OUString &,int,enum utl::OConfigurationTreeRoot::CREATION_MODE)
     enum utl::OConfigurationTreeRoot::CREATION_MODE _eMode
     1
 include/unotools/fontdefs.hxx:55
@@ -1675,7 +1675,7 @@ include/unotools/transliterationwrapper.hxx:98
     int nPos2
     0
 include/unotools/ucbstreamhelper.hxx:47
-    class std::unique_ptr<class SvStream> utl::UcbStreamHelper::CreateStream(const class rtl::OUString &,enum StreamMode,_Bool,const class com::sun::star::uno::Reference<class com::sun::star::awt::XWindow> &,_Bool)
+    class std::unique_ptr<class SvStream> utl::UcbStreamHelper::CreateStream(const class rtl::OUString &,enum StreamMode,_Bool,const class cpo::uno::Reference<class com::sun::star::awt::XWindow> &,_Bool)
     _Bool bUseSimpleFileAccessInteraction
     1
 include/vbahelper/vbaeventshelperbase.hxx:89
@@ -1939,7 +1939,7 @@ include/vcl/vclptr.hxx:389
     enum __sal_NoAcquire 
     0
 include/vcl/vectorgraphicdata.hxx:37
-    class BitmapEx convertPrimitive2DSequenceToBitmapEx(const class std::deque<class com::sun::star::uno::Reference<class com::sun::star::graphic::XPrimitive2D> > &,const class basegfx::B2DRange &,const unsigned int,const enum o3tl::Length,const class std::optional<class Size> &)
+    class BitmapEx convertPrimitive2DSequenceToBitmapEx(const class std::deque<class cpo::uno::Reference<class com::sun::star::graphic::XPrimitive2D> > &,const class basegfx::B2DRange &,const unsigned int,const enum o3tl::Length,const class std::optional<class Size> &)
     const enum o3tl::Length eTargetUnit
     0
 include/vcl/vectorgraphicdata.hxx:84
@@ -2003,19 +2003,19 @@ include/xmloff/numehelp.hxx:93
     _Bool bExportTypeAttribute
     1
 include/xmloff/ProgressBarHelper.hxx:47
-    void ProgressBarHelper::ProgressBarHelper(class com::sun::star::uno::Reference<class com::sun::star::task::XStatusIndicator>,const _Bool)
+    void ProgressBarHelper::ProgressBarHelper(class cpo::uno::Reference<class com::sun::star::task::XStatusIndicator>,const _Bool)
     const _Bool bStrict
     1
 include/xmloff/SchXMLImportHelper.hxx:95
-    class com::sun::star::uno::Reference<class com::sun::star::chart2::XDataSeries> SchXMLImportHelper::GetNewDataSeries(const class com::sun::star::uno::Reference<class com::sun::star::chart2::XChartDocument> &,int,const class rtl::OUString &,_Bool)
+    class cpo::uno::Reference<class com::sun::star::chart2::XDataSeries> SchXMLImportHelper::GetNewDataSeries(const class cpo::uno::Reference<class com::sun::star::chart2::XChartDocument> &,int,const class rtl::OUString &,_Bool)
     int nCoordinateSystemIndex
     0
 include/xmloff/txtparae.hxx:227
-    void XMLTextParagraphExport::exportText(const class com::sun::star::uno::Reference<class com::sun::star::text::XText> &,const class com::sun::star::uno::Reference<class com::sun::star::text::XTextSection> &,_Bool,_Bool,_Bool)
+    void XMLTextParagraphExport::exportText(const class cpo::uno::Reference<class com::sun::star::text::XText> &,const class cpo::uno::Reference<class com::sun::star::text::XTextSection> &,_Bool,_Bool,_Bool)
     _Bool bExportParagraph
     1
 include/xmloff/txtparae.hxx:269
-    void XMLTextParagraphExport::exportTextFrame(const class com::sun::star::uno::Reference<class com::sun::star::text::XTextContent> &,_Bool,_Bool,_Bool,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> *)
+    void XMLTextParagraphExport::exportTextFrame(const class cpo::uno::Reference<class com::sun::star::text::XTextContent> &,_Bool,_Bool,_Bool,const class cpo::uno::Reference<class com::sun::star::beans::XPropertySet> *)
     _Bool bExportContent
     1
 include/xmloff/xmlaustp.hxx:115
@@ -2023,11 +2023,11 @@ include/xmloff/xmlaustp.hxx:115
     _Bool bDontSeek
     0
 include/xmloff/XMLEventExport.hxx:89
-    void XMLEventExport::Export(const class com::sun::star::uno::Reference<class com::sun::star::document::XEventsSupplier> &,_Bool)
+    void XMLEventExport::Export(const class cpo::uno::Reference<class com::sun::star::document::XEventsSupplier> &,_Bool)
     _Bool bUseWhitespace
     1
 include/xmloff/xmlnumi.hxx:70
-    void SvxXMLListStyleContext::SetDefaultStyle(const class com::sun::star::uno::Reference<class com::sun::star::container::XIndexReplace> &,short,_Bool)
+    void SvxXMLListStyleContext::SetDefaultStyle(const class cpo::uno::Reference<class com::sun::star::container::XIndexReplace> &,short,_Bool)
     _Bool bOrdered
     0
 include/xmloff/XMLPageExport.hxx:87
@@ -2075,15 +2075,15 @@ oox/inc/drawingml/textspacing.hxx:42
     int nPoints
     0
 oox/qa/unit/drawingml.cxx:48
-    class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> getChildShape(const class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> &,int)
+    class cpo::uno::Reference<class com::sun::star::drawing::XShape> getChildShape(const class cpo::uno::Reference<class com::sun::star::drawing::XShape> &,int)
     int nIndex
     0
 oox/qa/unit/shape.cxx:49
-    class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> getChildShape(const class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> &,int)
+    class cpo::uno::Reference<class com::sun::star::drawing::XShape> getChildShape(const class cpo::uno::Reference<class com::sun::star::drawing::XShape> &,int)
     int nIndex
     0
 oox/qa/unit/testscene3d.cxx:43
-    class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> TestScene3d::getShape(unsigned char,unsigned char)
+    class cpo::uno::Reference<class com::sun::star::drawing::XShape> TestScene3d::getShape(unsigned char,unsigned char)
     unsigned char nPageIndex
     0
 oox/source/drawingml/lineproperties.cxx:48
@@ -2091,7 +2091,7 @@ oox/source/drawingml/lineproperties.cxx:48
     short nDots
     1
 oox/source/export/chartexport.cxx:269
-    int lcl_getCategoryAxisType(const class com::sun::star::uno::Reference<class com::sun::star::chart2::XDiagram> &,int,int)
+    int lcl_getCategoryAxisType(const class cpo::uno::Reference<class com::sun::star::chart2::XDiagram> &,int,int)
     int nDimensionIndex
     0
 oox/source/ppt/pptshape.cxx:708
@@ -2495,11 +2495,11 @@ sc/inc/markarr.hxx:55
     unsigned long nNeeded
     1
 sc/inc/miscuno.hxx:142
-    short ScUnoHelpFunctions::GetShortProperty(const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class rtl::OUString &,short)
+    short ScUnoHelpFunctions::GetShortProperty(const class cpo::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class rtl::OUString &,short)
     short nDefault
     0
 sc/inc/miscuno.hxx:147
-    type-parameter-?-? ScUnoHelpFunctions::GetEnumProperty(const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class rtl::OUString &,type-parameter-?-?)
+    type-parameter-?-? ScUnoHelpFunctions::GetEnumProperty(const class cpo::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class rtl::OUString &,type-parameter-?-?)
     type-parameter-?-? nDefault
     0
 sc/inc/patattr.hxx:207
@@ -2687,7 +2687,7 @@ sc/inc/types.hxx:106
     enum sc::MultiDataCellState::StateType eState
     1
 sc/qa/extras/new_cond_format.cxx:173
-    void testShowValue(const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,_Bool)
+    void testShowValue(const class cpo::uno::Reference<class com::sun::star::beans::XPropertySet> &,_Bool)
     _Bool bShowVal
     1
 sc/qa/extras/scpdfexport.cxx:55
@@ -2907,11 +2907,11 @@ sc/source/filter/inc/tool.h:37
     short nTab
     0
 sc/source/filter/inc/workbookhelper.hxx:211
-    class com::sun::star::uno::Reference<class com::sun::star::style::XStyle> oox::xls::WorkbookHelper::getStyleObject(const class rtl::OUString &,_Bool) const
+    class cpo::uno::Reference<class com::sun::star::style::XStyle> oox::xls::WorkbookHelper::getStyleObject(const class rtl::OUString &,_Bool) const
     _Bool bPageStyle
     1
 sc/source/filter/inc/workbookhelper.hxx:251
-    class com::sun::star::uno::Reference<class com::sun::star::style::XStyle> oox::xls::WorkbookHelper::createStyleObject(class rtl::OUString &,_Bool) const
+    class cpo::uno::Reference<class com::sun::star::style::XStyle> oox::xls::WorkbookHelper::createStyleObject(class rtl::OUString &,_Bool) const
     _Bool bPageStyle
     1
 sc/source/filter/inc/xechart.hxx:196
@@ -3071,11 +3071,11 @@ sc/source/ui/dbgui/csvgrid.cxx:68
     _Bool bSelect
     0
 sc/source/ui/inc/AccessibleDocument.hxx:246
-    void ScAccessibleDocument::RemoveChild(const class com::sun::star::uno::Reference<class com::sun::star::accessibility::XAccessible> &,_Bool)
+    void ScAccessibleDocument::RemoveChild(const class cpo::uno::Reference<class com::sun::star::accessibility::XAccessible> &,_Bool)
     _Bool bFireEvent
     1
 sc/source/ui/inc/AccessibleEditObject.hxx:55
-    void ScAccessibleEditObject::ScAccessibleEditObject(const class com::sun::star::uno::Reference<class com::sun::star::accessibility::XAccessible> &,class EditView *,class vcl::Window *,const class rtl::OUString &,const class rtl::OUString &,enum ScAccessibleEditObject::EditObjectType)
+    void ScAccessibleEditObject::ScAccessibleEditObject(const class cpo::uno::Reference<class com::sun::star::accessibility::XAccessible> &,class EditView *,class vcl::Window *,const class rtl::OUString &,const class rtl::OUString &,enum ScAccessibleEditObject::EditObjectType)
     enum ScAccessibleEditObject::EditObjectType eObjectType
     0
 sc/source/ui/inc/acredlin.hxx:119
@@ -3287,7 +3287,7 @@ sc/source/ui/vba/vbaeventshelper.hxx:74
     int nIndex
     0
 sc/source/ui/vba/vbarange.hxx:112
-    class com::sun::star::uno::Reference<class ooo::vba::excel::XRange> ScVbaRange::getArea(int)
+    class cpo::uno::Reference<class ooo::vba::excel::XRange> ScVbaRange::getArea(int)
     int nIndex
     0
 sc/source/ui/view/olinewin.cxx:729
@@ -3303,7 +3303,7 @@ sc/source/ui/view/tabview.cxx:2715
     _Bool bInPixels
     0
 scaddins/source/analysis/analysishelper.hxx:67
-    int GetDiffDate360(const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,int,int,_Bool)
+    int GetDiffDate360(const class cpo::uno::Reference<class com::sun::star::beans::XPropertySet> &,int,int,_Bool)
     _Bool bUSAMethod
     1
 scaddins/source/analysis/analysishelper.hxx:81
@@ -3319,7 +3319,7 @@ scaddins/source/analysis/analysishelper.hxx:260
     _Bool bInsertOnWeekend
     0
 scaddins/source/analysis/analysishelper.hxx:881
-    int sca::analysis::ScaAnyConverter::getInt32(const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class cpo::uno::Any &,int)
+    int sca::analysis::ScaAnyConverter::getInt32(const class cpo::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class cpo::uno::Any &,int)
     int nDefault
     0
 sd/inc/CustomAnimationEffect.hxx:130
@@ -3351,11 +3351,11 @@ sd/qa/unit/sdmodeltestbase.hxx:63
     const char * pPassword
     0
 sd/qa/unit/sdmodeltestbase.hxx:155
-    class com::sun::star::uno::Reference<class com::sun::star::text::XTextField> SdModelTestBase::getTextFieldFromPage(int,int,int,int)
+    class cpo::uno::Reference<class com::sun::star::text::XTextField> SdModelTestBase::getTextFieldFromPage(int,int,int,int)
     int nRun
     0
 sd/qa/unit/sdmodeltestbase.hxx:155
-    class com::sun::star::uno::Reference<class com::sun::star::text::XTextField> SdModelTestBase::getTextFieldFromPage(int,int,int,int)
+    class cpo::uno::Reference<class com::sun::star::text::XTextField> SdModelTestBase::getTextFieldFromPage(int,int,int,int)
     int nPara
     0
 sd/qa/unit/tiledrendering/KitSearchTest.cxx:756
@@ -3375,7 +3375,7 @@ sd/source/filter/eppt/epptooxml.hxx:186
     int nLastIndex_
     0
 sd/source/filter/eppt/pptexanimations.hxx:96
-    void ppt::AnimationExporter::exportNode(class SvStream &,const class com::sun::star::uno::Reference<class com::sun::star::animations::XAnimationNode> &,const unsigned short,const unsigned short,const int,const _Bool,const short)
+    void ppt::AnimationExporter::exportNode(class SvStream &,const class cpo::uno::Reference<class com::sun::star::animations::XAnimationNode> &,const unsigned short,const unsigned short,const int,const _Bool,const short)
     const unsigned short nInstance
     1
 sd/source/filter/eppt/text.hxx:106
@@ -3483,7 +3483,7 @@ slideshow/source/inc/animationfactory.hxx:136
     int nFlags
     0
 slideshow/source/inc/box2dtools.hxx:228
-    void box2d::utils::box2DWorld::queueAngularVelocityUpdate(const class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> &,const double,const int)
+    void box2d::utils::box2DWorld::queueAngularVelocityUpdate(const class cpo::uno::Reference<class com::sun::star::drawing::XShape> &,const double,const int)
     const int nDelayForSteps
     1
 starmath/inc/cfgitem.hxx:88
@@ -3567,7 +3567,7 @@ svx/inc/sxmtaitm.hxx:31
     _Bool bOn
     1
 svx/inc/verttexttbxctrl.hxx:30
-    void SvxVertCTLTextTbxCtrl_Base::ImplInheritanceHelper(const class com::sun::star::uno::Reference<class cpo::uno::XComponentContext> &,nullptr_t &&,class rtl::OUString &&)
+    void SvxVertCTLTextTbxCtrl_Base::ImplInheritanceHelper(const class cpo::uno::Reference<class cpo::uno::XComponentContext> &,nullptr_t &&,class rtl::OUString &&)
     nullptr_t && 
     0
 svx/inc/xftshtit.hxx:34
@@ -3575,7 +3575,7 @@ svx/inc/xftshtit.hxx:34
     unsigned short nShdwTransparence
     0
 svx/qa/unit/gluepointTest.cxx:37
-    class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> (anonymous namespace)::GluePointTest::getShape(unsigned char)
+    class cpo::uno::Reference<class com::sun::star::drawing::XShape> (anonymous namespace)::GluePointTest::getShape(unsigned char)
     unsigned char nShapeIndex
     0
 svx/source/customshapes/EnhancedCustomShape3d.cxx:139
@@ -3603,7 +3603,7 @@ svx/source/inc/fmshimp.hxx:257
     _Bool bDid
     1
 svx/source/inc/fmvwimp.hxx:264
-    _Bool FmXFormView::createControlLabelPair(const class OutputDevice &,int,int,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class com::sun::star::uno::Reference<class com::sun::star::util::XNumberFormats> &,enum SdrObjKind,class std::basic_string_view<char16_t>,class rtl::Reference<class SdrUnoObj> &,class rtl::Reference<class SdrUnoObj> &,const class com::sun::star::uno::Reference<class com::sun::star::sdbc::XDataSource> &,const class rtl::OUString &,const class rtl::OUString &,const int)
+    _Bool FmXFormView::createControlLabelPair(const class OutputDevice &,int,int,const class cpo::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class cpo::uno::Reference<class com::sun::star::util::XNumberFormats> &,enum SdrObjKind,class std::basic_string_view<char16_t>,class rtl::Reference<class SdrUnoObj> &,class rtl::Reference<class SdrUnoObj> &,const class cpo::uno::Reference<class com::sun::star::sdbc::XDataSource> &,const class rtl::OUString &,const class rtl::OUString &,const int)
     int _nXOffsetMM
     0
 svx/source/inc/galbrws1.hxx:184
@@ -3855,7 +3855,7 @@ sw/inc/undobj.hxx:350
     _Bool bNew
     0
 sw/qa/extras/ooxmlimport/ooxmlimport.cxx:772
-    void lcl_countTextFrames(const class com::sun::star::uno::Reference<class com::sun::star::lang::XComponent> &,int)
+    void lcl_countTextFrames(const class cpo::uno::Reference<class com::sun::star::lang::XComponent> &,int)
     int nExpected
     1
 sw/qa/inc/swmodeltestbase.hxx:92
@@ -4063,7 +4063,7 @@ sw/source/ui/misc/impfnote.hxx:62
     _Bool bEndNote
     0
 sw/source/ui/vba/vbarangehelper.hxx:32
-    void SwVbaRangeHelper::insertString(const class com::sun::star::uno::Reference<class com::sun::star::text::XTextRange> &,const class com::sun::star::uno::Reference<class com::sun::star::text::XText> &,class std::basic_string_view<char16_t>,_Bool)
+    void SwVbaRangeHelper::insertString(const class cpo::uno::Reference<class com::sun::star::text::XTextRange> &,const class cpo::uno::Reference<class com::sun::star::text::XText> &,class std::basic_string_view<char16_t>,_Bool)
     _Bool _bAbsorb
     1
 sw/source/uibase/inc/conttree.hxx:196
@@ -4175,15 +4175,15 @@ sw/source/writerfilter/ooxml/OOXMLPropertySet.hxx:46
     unsigned int 
     0
 sw/source/writerfilter/ooxml/OOXMLStreamImpl.hxx:62
-    void writerfilter::ooxml::OOXMLStreamImpl::OOXMLStreamImpl(const class com::sun::star::uno::Reference<class cpo::uno::XComponentContext> &,class com::sun::star::uno::Reference<class com::sun::star::io::XInputStream>,enum writerfilter::ooxml::OOXMLStream::StreamType_t,_Bool)
+    void writerfilter::ooxml::OOXMLStreamImpl::OOXMLStreamImpl(const class cpo::uno::Reference<class cpo::uno::XComponentContext> &,class cpo::uno::Reference<class com::sun::star::io::XInputStream>,enum writerfilter::ooxml::OOXMLStream::StreamType_t,_Bool)
     enum writerfilter::ooxml::OOXMLStream::StreamType_t nType
     1
 test/source/sheet/xdatapilottable2.cxx:237
-    struct com::sun::star::table::CellAddress getLastUsedCellAddress(const class com::sun::star::uno::Reference<class com::sun::star::sheet::XSpreadsheet> &,int,int)
+    struct com::sun::star::table::CellAddress getLastUsedCellAddress(const class cpo::uno::Reference<class com::sun::star::sheet::XSpreadsheet> &,int,int)
     int nCol
     0
 test/source/sheet/xdatapilottable2.cxx:237
-    struct com::sun::star::table::CellAddress getLastUsedCellAddress(const class com::sun::star::uno::Reference<class com::sun::star::sheet::XSpreadsheet> &,int,int)
+    struct com::sun::star::table::CellAddress getLastUsedCellAddress(const class cpo::uno::Reference<class com::sun::star::sheet::XSpreadsheet> &,int,int)
     int nRow
     0
 ucb/source/core/ucbcmds.cxx:70
@@ -4191,11 +4191,11 @@ ucb/source/core/ucbcmds.cxx:70
     short a
     0
 ucb/source/ucp/tdoc/tdoc_provider.hxx:106
-    class com::sun::star::uno::Reference<class com::sun::star::io::XOutputStream> tdoc_ucp::ContentProvider::queryOutputStream(const class rtl::OUString &,const class rtl::OUString &,_Bool) const
+    class cpo::uno::Reference<class com::sun::star::io::XOutputStream> tdoc_ucp::ContentProvider::queryOutputStream(const class rtl::OUString &,const class rtl::OUString &,_Bool) const
     _Bool bTruncate
     1
 ucb/source/ucp/tdoc/tdoc_provider.hxx:113
-    class com::sun::star::uno::Reference<class com::sun::star::io::XStream> tdoc_ucp::ContentProvider::queryStream(const class rtl::OUString &,const class rtl::OUString &,_Bool) const
+    class cpo::uno::Reference<class com::sun::star::io::XStream> tdoc_ucp::ContentProvider::queryStream(const class rtl::OUString &,const class rtl::OUString &,_Bool) const
     _Bool bTruncate
     0
 ucb/source/ucp/webdav-curl/CurlSession.cxx:219
@@ -4203,7 +4203,7 @@ ucb/source/ucp/webdav-curl/CurlSession.cxx:219
     const char *const i_pExceptionString
     0
 ucb/source/ucp/webdav-curl/DAVResourceAccess.hxx:97
-    void http_dav_ucp::DAVResourceAccess::PROPFIND(const enum http_dav_ucp::Depth,class std::vector<struct http_dav_ucp::DAVResourceInfo> &,const class com::sun::star::uno::Reference<class com::sun::star::ucb::XCommandEnvironment> &)
+    void http_dav_ucp::DAVResourceAccess::PROPFIND(const enum http_dav_ucp::Depth,class std::vector<struct http_dav_ucp::DAVResourceInfo> &,const class cpo::uno::Reference<class com::sun::star::ucb::XCommandEnvironment> &)
     const enum http_dav_ucp::Depth nDepth
     0
 ucb/source/ucp/webdav-curl/DAVTypes.hxx:171
@@ -4279,7 +4279,7 @@ vcl/inc/impgraph.hxx:169
     _Bool bDefault
     0
 vcl/inc/jsdialog/jsdialogbuilder.hxx:286
-    void JSWidget::JSWidget<BaseInstanceClass, VclClass>(class JSDialogSender *,type-parameter-?-? *,class SalInstanceBuilder *,const class com::sun::star::uno::Reference<class com::sun::star::accessibility::XAccessible> &,class std::function<class std::unique_ptr<class UIObject> (class vcl::Window *)>,void *,_Bool)
+    void JSWidget::JSWidget<BaseInstanceClass, VclClass>(class JSDialogSender *,type-parameter-?-? *,class SalInstanceBuilder *,const class cpo::uno::Reference<class com::sun::star::accessibility::XAccessible> &,class std::function<class std::unique_ptr<class UIObject> (class vcl::Window *)>,void *,_Bool)
     _Bool bTakeOwnership
     0
 vcl/inc/jsdialog/jsdialogbuilder.hxx:413
@@ -4439,7 +4439,7 @@ vcl/qa/cppunit/PDFDocumentTest.cxx:179
     int nGenerationNumber
     0
 vcl/source/accessibility/vclxaccessibletoolbox.cxx:87
-    void (anonymous namespace)::OToolBoxWindowItem::OToolBoxWindowItem(int,const class com::sun::star::uno::Reference<class cpo::uno::XComponentContext> &,const class com::sun::star::uno::Reference<class com::sun::star::accessibility::XAccessible> &,const class com::sun::star::uno::Reference<class com::sun::star::accessibility::XAccessible> &)
+    void (anonymous namespace)::OToolBoxWindowItem::OToolBoxWindowItem(int,const class cpo::uno::Reference<class cpo::uno::XComponentContext> &,const class cpo::uno::Reference<class com::sun::star::accessibility::XAccessible> &,const class cpo::uno::Reference<class com::sun::star::accessibility::XAccessible> &)
     int _nIndexInParent
     0
 vcl/source/bitmap/BitmapBasicMorphologyFilter.cxx:225
@@ -4539,7 +4539,7 @@ vcl/unx/gtk3/gtkinst.cxx:22206
     _Bool bSearchMRU
     0
 xmlhelp/source/cxxhelp/provider/databases.hxx:372
-    void chelp::DataBaseIterator::DataBaseIterator(const class com::sun::star::uno::Reference<class cpo::uno::XComponentContext> &,class chelp::Databases &,const class rtl::OUString &,const class rtl::OUString &,_Bool)
+    void chelp::DataBaseIterator::DataBaseIterator(const class cpo::uno::Reference<class cpo::uno::XComponentContext> &,class chelp::Databases &,const class rtl::OUString &,const class rtl::OUString &,_Bool)
     _Bool bHelpText
     1
 xmlhelp/source/cxxhelp/provider/databases.hxx:377
@@ -4547,7 +4547,7 @@ xmlhelp/source/cxxhelp/provider/databases.hxx:377
     _Bool bHelpText
     0
 xmloff/inc/txtflde.hxx:175
-    void XMLTextFieldExport::ExportFieldAutoStyle(const class com::sun::star::uno::Reference<class com::sun::star::text::XTextField> &,const _Bool,const _Bool)
+    void XMLTextFieldExport::ExportFieldAutoStyle(const class cpo::uno::Reference<class com::sun::star::text::XTextField> &,const _Bool,const _Bool)
     const _Bool bRecursive
     1
 xmloff/inc/txtflde.hxx:260
@@ -4563,19 +4563,19 @@ xmloff/inc/txtflde.hxx:340
     _Bool bIsDuration
     1
 xmloff/qa/unit/draw.cxx:49
-    class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> XmloffDrawTest::getShapeTextPortion(unsigned int,const class com::sun::star::uno::Reference<class com::sun::star::drawing::XShape> &)
+    class cpo::uno::Reference<class com::sun::star::beans::XPropertySet> XmloffDrawTest::getShapeTextPortion(unsigned int,const class cpo::uno::Reference<class com::sun::star::drawing::XShape> &)
     unsigned int nIndex
     0
 xmloff/source/chart/SchXMLTools.hxx:91
-    void CreateCategories(const class com::sun::star::uno::Reference<class com::sun::star::chart2::data::XDataProvider> &,const class com::sun::star::uno::Reference<class com::sun::star::chart2::XChartDocument> &,const class rtl::OUString &,int,int,class std::multimap<struct std::pair<int, enum SchXMLLabeledSequencePart>, class com::sun::star::uno::Reference<class com::sun::star::chart2::data::XLabeledDataSequence> > *)
+    void CreateCategories(const class cpo::uno::Reference<class com::sun::star::chart2::data::XDataProvider> &,const class cpo::uno::Reference<class com::sun::star::chart2::XChartDocument> &,const class rtl::OUString &,int,int,class std::multimap<struct std::pair<int, enum SchXMLLabeledSequencePart>, class cpo::uno::Reference<class com::sun::star::chart2::data::XLabeledDataSequence> > *)
     int nCooSysIndex
     0
 xmloff/source/chart/SchXMLTools.hxx:125
-    _Bool getXMLRangePropertyFromDataSequence(const class com::sun::star::uno::Reference<class com::sun::star::chart2::data::XDataSequence> &,class rtl::OUString &,_Bool)
+    _Bool getXMLRangePropertyFromDataSequence(const class cpo::uno::Reference<class com::sun::star::chart2::data::XDataSequence> &,class rtl::OUString &,_Bool)
     _Bool bClearProp
     1
 xmloff/source/chart/transporttypes.hxx:202
-    void DataRowPointStyle::DataRowPointStyle(enum DataRowPointStyle::StyleType,class com::sun::star::uno::Reference<class com::sun::star::chart2::XDataSeries>,int,int,class rtl::OUString,int)
+    void DataRowPointStyle::DataRowPointStyle(enum DataRowPointStyle::StyleType,class cpo::uno::Reference<class com::sun::star::chart2::XDataSeries>,int,int,class rtl::OUString,int)
     int nPointRepeat
     1
 xmloff/source/chart/transporttypes.hxx:218
@@ -4583,15 +4583,15 @@ xmloff/source/chart/transporttypes.hxx:218
     int nAttachedAxis
     0
 xmloff/source/text/txtflde.cxx:288
-    _Bool GetOptionalBoolProperty(const class rtl::OUString &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySetInfo> &,_Bool)
+    _Bool GetOptionalBoolProperty(const class rtl::OUString &,const class cpo::uno::Reference<class com::sun::star::beans::XPropertySet> &,const class cpo::uno::Reference<class com::sun::star::beans::XPropertySetInfo> &,_Bool)
     _Bool bDefault
     0
 xmloff/source/text/XMLIndexTemplateContext.hxx:87
-    void XMLIndexTemplateContext::XMLIndexTemplateContext(class SvXMLImport &,class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &,const SvXMLEnumMapEntry<type-parameter-?-?> *,enum xmloff::token::XMLTokenEnum,class std::span<const class rtl::OUString>,const _Bool *,_Bool)
+    void XMLIndexTemplateContext::XMLIndexTemplateContext(class SvXMLImport &,class cpo::uno::Reference<class com::sun::star::beans::XPropertySet> &,const SvXMLEnumMapEntry<type-parameter-?-?> *,enum xmloff::token::XMLTokenEnum,class std::span<const class rtl::OUString>,const _Bool *,_Bool)
     _Bool bTOC_
     0
 xmloff/source/text/XMLSectionExport.hxx:104
-    _Bool XMLSectionExport::IsMuteSection(const class com::sun::star::uno::Reference<class com::sun::star::text::XTextContent> &,_Bool) const
+    _Bool XMLSectionExport::IsMuteSection(const class cpo::uno::Reference<class com::sun::star::text::XTextContent> &,_Bool) const
     _Bool bDefault
     0
 xmloff/source/transform/TransformerBase.hxx:175
@@ -4603,14 +4603,14 @@ xmlscript/source/xmldlg_imexp/exp_share.hxx:224
     _Bool forceAttribute
     0
 xmlsecurity/inc/certificateviewer.hxx:58
-    void CertificateViewer::CertificateViewer(class weld::Window *,const class com::sun::star::uno::Reference<class com::sun::star::xml::crypto::XSecurityEnvironment> &,const class com::sun::star::uno::Reference<class com::sun::star::security::XCertificate> &,_Bool,class CertificateChooser *)
+    void CertificateViewer::CertificateViewer(class weld::Window *,const class cpo::uno::Reference<class com::sun::star::xml::crypto::XSecurityEnvironment> &,const class cpo::uno::Reference<class com::sun::star::security::XCertificate> &,_Bool,class CertificateChooser *)
     _Bool bCheckForPrivateKey
     0
 xmlsecurity/inc/certificateviewer.hxx:58
-    void CertificateViewer::CertificateViewer(class weld::Window *,const class com::sun::star::uno::Reference<class com::sun::star::xml::crypto::XSecurityEnvironment> &,const class com::sun::star::uno::Reference<class com::sun::star::security::XCertificate> &,_Bool,class CertificateChooser *)
+    void CertificateViewer::CertificateViewer(class weld::Window *,const class cpo::uno::Reference<class com::sun::star::xml::crypto::XSecurityEnvironment> &,const class cpo::uno::Reference<class com::sun::star::security::XCertificate> &,_Bool,class CertificateChooser *)
     class CertificateChooser * pParentChooser
     0
 xmlsecurity/source/component/documentdigitalsignatures.cxx:92
-    void (anonymous namespace)::DocumentDigitalSignatures::ImplViewSignatures(const class com::sun::star::uno::Reference<class com::sun::star::embed::XStorage> &,const class com::sun::star::uno::Reference<class com::sun::star::io::XInputStream> &,enum DocumentSignatureMode,_Bool)
+    void (anonymous namespace)::DocumentDigitalSignatures::ImplViewSignatures(const class cpo::uno::Reference<class com::sun::star::embed::XStorage> &,const class cpo::uno::Reference<class com::sun::star::io::XInputStream> &,enum DocumentSignatureMode,_Bool)
     _Bool bReadOnly
     1

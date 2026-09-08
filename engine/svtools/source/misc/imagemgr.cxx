@@ -230,13 +230,13 @@ static OUString GetImageExtensionByFactory_Impl( const OUString& rURL )
     try
     {
         // get the TypeDetection service to access all registered types
-        const css::uno::Reference < cpo::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
-        css::uno::Reference < css::document::XTypeDetection > xTypeDetector(
+        const cpo::uno::Reference < cpo::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
+        cpo::uno::Reference < css::document::XTypeDetection > xTypeDetector(
             xContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.document.TypeDetection"_ustr, xContext),
-            css::uno::UNO_QUERY );
+            cpo::uno::UNO_QUERY );
 
         OUString aInternalType = xTypeDetector->queryTypeByURL( rURL );
-        css::uno::Reference < css::container::XNameAccess > xAccess( xTypeDetector, css::uno::UNO_QUERY );
+        cpo::uno::Reference < css::container::XNameAccess > xAccess( xTypeDetector, cpo::uno::UNO_QUERY );
         cpo::uno::Sequence < css::beans::PropertyValue > aTypeProps;
         if ( !aInternalType.isEmpty() && xAccess->hasByName( aInternalType ) )
         {
@@ -333,7 +333,7 @@ static SvImageId GetFolderImageId_Impl( const OUString& rURL )
     try
     {
         ::svtools::VolumeInfo aVolumeInfo;
-        ::ucbhelper::Content aCnt( rURL, css::uno::Reference< css::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
+        ::ucbhelper::Content aCnt( rURL, cpo::uno::Reference< css::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
         if ( GetVolumeProperties_Impl( aCnt, aVolumeInfo ) )
         {
             if ( aVolumeInfo.m_bIsRemote )
@@ -358,7 +358,7 @@ static SvImageId GetFolderImageId_Impl( const OUString& rURL )
 }
 
 static bool isFolder(
-    OUString const & url, css::uno::Reference<css::ucb::XCommandEnvironment> const & env)
+    OUString const & url, cpo::uno::Reference<css::ucb::XCommandEnvironment> const & env)
 {
     try {
         return ucbhelper::Content(url, env, comphelper::getProcessComponentContext()).isFolder();
@@ -375,7 +375,7 @@ static bool isFolder(
 
 static SvImageId GetImageId_Impl(
     const INetURLObject& rObject, bool bDetectFolder,
-    css::uno::Reference<css::ucb::XCommandEnvironment> const & env )
+    cpo::uno::Reference<css::ucb::XCommandEnvironment> const & env )
 {
     OUString aExt, sURL = rObject.GetMainURL( INetURLObject::DecodeMechanism::NONE );
     SvImageId nImage = SvImageId::File;
@@ -482,7 +482,7 @@ static TranslateId GetFolderDescriptionId_Impl( const OUString& rURL )
     TranslateId pRet = STR_DESCRIPTION_FOLDER;
     try
     {
-        ::ucbhelper::Content aCnt( rURL, css::uno::Reference< css::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
+        ::ucbhelper::Content aCnt( rURL, cpo::uno::Reference< css::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
         svtools::VolumeInfo aVolumeInfo;
         if ( GetVolumeProperties_Impl( aCnt, aVolumeInfo ) )
         {
@@ -820,7 +820,7 @@ const OUString & SvFileInformationManager::GetImageId(const INetURLObject& rObje
 
 Image SvFileInformationManager::GetImage(
     const INetURLObject& rObject, bool bBig,
-    css::uno::Reference<css::ucb::XCommandEnvironment> const & env)
+    cpo::uno::Reference<css::ucb::XCommandEnvironment> const & env)
 {
     SvImageId nImage = GetImageId_Impl( rObject, true, env );
     DBG_ASSERT( nImage != SvImageId::NONE, "invalid ImageId" );

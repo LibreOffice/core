@@ -27,7 +27,7 @@
 
 namespace
 {
-namespace uno = css::uno;
+namespace uno = cpo::uno;
 
 class PresentationImportFilter : public writerperfect::ImportFilter<OdpGenerator>
 {

@@ -22,6 +22,7 @@
 #include <com/sun/star/accessibility/XAccessibleHypertext.hpp>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 // ---------------------- AtkHyperlink ----------------------
 
@@ -188,7 +189,7 @@ hyper_link_get_type()
 // ---------------------- AtkHyperText ----------------------
 
 /// @throws uno::RuntimeException
-static css::uno::Reference<css::accessibility::XAccessibleHypertext>
+static cpo::uno::Reference<css::accessibility::XAccessibleHypertext>
     getHypertext( AtkHypertext *pHypertext )
 {
     AtkObjectWrapper *pWrap = ATK_OBJECT_WRAPPER( pHypertext );
@@ -196,13 +197,13 @@ static css::uno::Reference<css::accessibility::XAccessibleHypertext>
     {
         if( !pWrap->mpHypertext.is() )
         {
-            pWrap->mpHypertext.set(pWrap->mpContext, css::uno::UNO_QUERY);
+            pWrap->mpHypertext.set(pWrap->mpContext, cpo::uno::UNO_QUERY);
         }
 
         return pWrap->mpHypertext;
     }
 
-    return css::uno::Reference<css::accessibility::XAccessibleHypertext>();
+    return cpo::uno::Reference<css::accessibility::XAccessibleHypertext>();
 }
 
 static AtkHyperlink *
@@ -210,7 +211,7 @@ hypertext_get_link( AtkHypertext *hypertext,
                     gint          link_index)
 {
     try {
-        css::uno::Reference<css::accessibility::XAccessibleHypertext> pHypertext
+        cpo::uno::Reference<css::accessibility::XAccessibleHypertext> pHypertext
             = getHypertext( hypertext );
         if( pHypertext.is() )
         {
@@ -234,7 +235,7 @@ static gint
 hypertext_get_n_links( AtkHypertext *hypertext )
 {
     try {
-        css::uno::Reference<css::accessibility::XAccessibleHypertext> pHypertext
+        cpo::uno::Reference<css::accessibility::XAccessibleHypertext> pHypertext
             = getHypertext( hypertext );
         if( pHypertext.is() )
             return pHypertext->getHyperLinkCount();
@@ -251,7 +252,7 @@ hypertext_get_link_index( AtkHypertext *hypertext,
                           gint          index)
 {
     try {
-        css::uno::Reference<css::accessibility::XAccessibleHypertext> pHypertext
+        cpo::uno::Reference<css::accessibility::XAccessibleHypertext> pHypertext
             = getHypertext( hypertext );
         if( pHypertext.is() )
             return pHypertext->getHyperLinkIndex( index );

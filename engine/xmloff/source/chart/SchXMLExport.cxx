@@ -107,10 +107,11 @@
 #include "PropertyMap.hxx"
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace ::xmloff::token;
 
 using ::cpo::uno::Sequence;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::cpo::uno::Any;
 using ::std::vector;
 
@@ -158,8 +159,8 @@ class SchXMLExportHelper_Impl
 {
 public:
     // first: data sequence for label, second: data sequence for values.
-    typedef ::std::pair< css::uno::Reference< css::chart2::data::XDataSequence >,
-            css::uno::Reference< css::chart2::data::XDataSequence > > tLabelValuesDataPair;
+    typedef ::std::pair< cpo::uno::Reference< css::chart2::data::XDataSequence >,
+            cpo::uno::Reference< css::chart2::data::XDataSequence > > tLabelValuesDataPair;
     typedef ::std::vector< tLabelValuesDataPair > tDataSequenceCont;
 
 public:
@@ -171,7 +172,7 @@ public:
 
     // auto-styles
     /// parse chart and collect all auto-styles used in current pool
-    void collectAutoStyles( css::uno::Reference< css::chart::XChartDocument > const & rChartDoc );
+    void collectAutoStyles( cpo::uno::Reference< css::chart::XChartDocument > const & rChartDoc );
 
     /// write the styles collected into the current pool as <style:style> elements
     void exportAutoStyles();
@@ -187,7 +188,7 @@ public:
         which is the outer element of a chart. So these attributes can easily
         be parsed again by the container
      */
-    void exportChart( css::uno::Reference< css::chart::XChartDocument > const & rChartDoc,
+    void exportChart( cpo::uno::Reference< css::chart::XChartDocument > const & rChartDoc,
                       bool bIncludeTable );
 
     const rtl::Reference<XMLPropertySetMapper>& GetPropertySetMapper() const;
@@ -196,10 +197,10 @@ public:
         { msChartAddress = rAddress; }
 
     void InitRangeSegmentationProperties(
-        const css::uno::Reference< css::chart2::XChartDocument > & xChartDoc );
+        const cpo::uno::Reference< css::chart2::XChartDocument > & xChartDoc );
 
     static css::awt::Size getPageSize(
-        const css::uno::Reference< css::chart2::XChartDocument > & xChartDoc );
+        const cpo::uno::Reference< css::chart2::XChartDocument > & xChartDoc );
 
     /** first parseDocument: collect autostyles and store names in this queue
         second parseDocument: export content and use names from this queue
@@ -208,24 +209,24 @@ public:
     void CollectAutoStyle(
         std::vector< XMLPropertyState >&& aStates );
     void CollectAutoTextStyle(
-        const css::uno::Reference< css::beans::XPropertySet >& xTitlePropSet );
+        const cpo::uno::Reference< css::beans::XPropertySet >& xTitlePropSet );
     void AddAutoStyleAttribute(
         const std::vector< XMLPropertyState >& aStates );
 
     /// if bExportContent is false the auto-styles are collected
-    void parseDocument( css::uno::Reference< css::chart::XChartDocument > const & rChartDoc,
+    void parseDocument( cpo::uno::Reference< css::chart::XChartDocument > const & rChartDoc,
                         bool bExportContent,
                         bool bIncludeTable = false );
     void exportTable();
     void exportPlotArea(
-        const css::uno::Reference< css::chart::XDiagram >& xDiagram,
-        const css::uno::Reference< css::chart2::XDiagram >& xNewDiagram,
+        const cpo::uno::Reference< css::chart::XDiagram >& xDiagram,
+        const cpo::uno::Reference< css::chart2::XDiagram >& xNewDiagram,
         const css::awt::Size & rPageSize,
         bool bExportContent,
         bool bIncludeTable );
-    void exportCoordinateRegion( const css::uno::Reference< css::chart::XDiagram >& xDiagram );
-    void exportAxes( const css::uno::Reference< css::chart::XDiagram > & xDiagram,
-                                    const css::uno::Reference< css::chart2::XDiagram > & xNewDiagram,
+    void exportCoordinateRegion( const cpo::uno::Reference< css::chart::XDiagram >& xDiagram );
+    void exportAxes( const cpo::uno::Reference< css::chart::XDiagram > & xDiagram,
+                                    const cpo::uno::Reference< css::chart2::XDiagram > & xNewDiagram,
                                     bool bExportContent );
     void exportAxis( enum XMLTokenEnum eDimension, enum XMLTokenEnum eAxisName,
                     const Reference< beans::XPropertySet >& rAxisProps, const Reference< chart2::XAxis >& rChart2Axis,
@@ -236,48 +237,48 @@ public:
     void exportAxisTitle( const Reference< beans::XPropertySet >& rTitleProps, bool bExportContent );
 
     void exportSeries(
-        const css::uno::Reference< css::chart2::XDiagram > & xNewDiagram,
+        const cpo::uno::Reference< css::chart2::XDiagram > & xNewDiagram,
         const css::awt::Size & rPageSize,
         bool bExportContent,
         bool bHasTwoYAxes );
 
     void exportPropertyMapping(
-        const css::uno::Reference< css::chart2::data::XDataSource > & xSource,
+        const cpo::uno::Reference< css::chart2::data::XDataSource > & xSource,
         const Sequence< OUString >& rSupportedMappings );
 
     void exportCandleStickSeries(
         const cpo::uno::Sequence<
-            css::uno::Reference< css::chart2::XDataSeries > > & aSeriesSeq,
-        const css::uno::Reference< css::chart2::XDiagram > & xDiagram,
+            cpo::uno::Reference< css::chart2::XDataSeries > > & aSeriesSeq,
+        const cpo::uno::Reference< css::chart2::XDiagram > & xDiagram,
         bool bJapaneseCandleSticks,
         bool bExportContent );
     void exportDataPoints(
-        const css::uno::Reference< css::beans::XPropertySet > & xSeriesProperties,
+        const cpo::uno::Reference< css::beans::XPropertySet > & xSeriesProperties,
         sal_Int32 nSeriesLength,
-        const css::uno::Reference< css::chart2::XDiagram > & xDiagram,
+        const cpo::uno::Reference< css::chart2::XDiagram > & xDiagram,
         bool bExportContent );
 
     void exportCustomLabel(const SchXMLDataPointStruct& rPoint);
     void exportCustomLabelPosition(const chart2::RelativePosition& xCustomLabelPosition);
 
     void exportRegressionCurve(
-        const css::uno::Reference<css::chart2::XDataSeries>& xSeries,
+        const cpo::uno::Reference<css::chart2::XDataSeries>& xSeries,
         const css::awt::Size& rPageSize,
         bool bExportContent );
 
     void exportErrorBar (
-        const css::uno::Reference<beans::XPropertySet> &xSeriesProp, bool bYError,
+        const cpo::uno::Reference<beans::XPropertySet> &xSeriesProp, bool bYError,
             bool bExportContent );
 
     /// add svg position as attribute for current element
     void addPosition( const css::awt::Point & rPosition );
-    void addPosition( const css::uno::Reference< css::drawing::XShape >& xShape );
+    void addPosition( const cpo::uno::Reference< css::drawing::XShape >& xShape );
     /// add svg size as attribute for current element
     void addSize( const css::awt::Size & rSize, bool bIsOOoNamespace = false );
-    void addSize( const css::uno::Reference< css::drawing::XShape >& xShape );
+    void addSize( const cpo::uno::Reference< css::drawing::XShape >& xShape );
     /// exports a string as a paragraph element
     void exportText( const OUString& rText );
-    void exportFormattedText( const css::uno::Reference< beans::XPropertySet >& xTitleProps );
+    void exportFormattedText( const cpo::uno::Reference< beans::XPropertySet >& xTitleProps );
 
 public:
     SvXMLExport& mrExport;
@@ -300,7 +301,7 @@ public:
     OUString maSrcShellID;
     OUString maDestShellID;
 
-    css::uno::Reference< css::drawing::XShapes > mxAdditionalShapes;
+    cpo::uno::Reference< css::drawing::XShapes > mxAdditionalShapes;
 
     tDataSequenceCont m_aDataSequencesToExport;
     OUString maCategoriesRange;
@@ -3914,7 +3915,7 @@ void SchXMLExportHelper_Impl::CollectAutoStyle( std::vector< XMLPropertyState >&
         maAutoStyleNameQueue.push( mrAutoStylePool.Add( XmlStyleFamily::SCH_CHART_ID, std::move(aStates) ));
 }
 
-void SchXMLExportHelper_Impl::CollectAutoTextStyle( const css::uno::Reference< beans::XPropertySet >& xTitlePropSet )
+void SchXMLExportHelper_Impl::CollectAutoTextStyle( const cpo::uno::Reference< beans::XPropertySet >& xTitlePropSet )
 {
     if (xTitlePropSet.is())
     {
@@ -3951,7 +3952,7 @@ void SchXMLExportHelper_Impl::exportText( const OUString& rText )
     SchXMLTools::exportText( mrExport, rText, false/*bConvertTabsLFs*/ );
 }
 
-void SchXMLExportHelper_Impl::exportFormattedText( const css::uno::Reference< beans::XPropertySet >& xTitleProps )
+void SchXMLExportHelper_Impl::exportFormattedText( const cpo::uno::Reference< beans::XPropertySet >& xTitleProps )
 {
     SchXMLTools::exportFormattedText( mrExport, xTitleProps );
 }

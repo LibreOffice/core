@@ -35,6 +35,7 @@
 #include <dbmgr.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 const char cURLFormLetter[] = ".uno:DataSourceBrowser/FormLetter";
 const char cURLInsertContent[] = ".uno:DataSourceBrowser/InsertContent";//data into fields

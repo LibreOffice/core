@@ -23,6 +23,7 @@
 
 using namespace css;
 using namespace css::accessibility;
+using namespace ::cpo;
 
 // FIXME: dialog API doesn't work on macos yet
 #if !defined(MACOSX)

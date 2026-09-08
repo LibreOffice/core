@@ -20,7 +20,7 @@
 #ifndef INCLUDED_OOX_HELPER_TEXTINPUTSTREAM_HXX
 #define INCLUDED_OOX_HELPER_TEXTINPUTSTREAM_HXX
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <rtl/textenc.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -40,12 +40,12 @@ class TextInputStream
 {
 public:
     explicit            TextInputStream(
-                            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
-                            const css::uno::Reference< css::io::XInputStream >& rxInStrm,
+                            const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+                            const cpo::uno::Reference< css::io::XInputStream >& rxInStrm,
                             rtl_TextEncoding eTextEnc );
 
     explicit            TextInputStream(
-                            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+                            const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
                             BinaryInputStream& rInStrm,
                             rtl_TextEncoding eTextEnc );
 
@@ -91,24 +91,24 @@ public:
 
     /** Creates a UNO text input stream object from the passed UNO input stream.
      */
-    static css::uno::Reference< css::io::XTextInputStream2 >
+    static cpo::uno::Reference< css::io::XTextInputStream2 >
                         createXTextInputStream(
-                            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
-                            const css::uno::Reference< css::io::XInputStream >& rxInStrm,
+                            const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+                            const cpo::uno::Reference< css::io::XInputStream >& rxInStrm,
                             rtl_TextEncoding eTextEnc );
 
 
 private:
     void                init(
-                            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext,
-                            const css::uno::Reference< css::io::XInputStream >& rxInStrm,
+                            const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext,
+                            const cpo::uno::Reference< css::io::XInputStream >& rxInStrm,
                             rtl_TextEncoding eTextEnc );
 
     /** Adds the pending character in front of the passed string, if existing. */
     OUString     createFinalString( const OUString& rString );
 
 private:
-    css::uno::Reference< css::io::XTextInputStream2 >
+    cpo::uno::Reference< css::io::XTextInputStream2 >
                         mxTextStrm;
     sal_Unicode         mcPendingChar;
 };

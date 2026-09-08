@@ -38,12 +38,13 @@
 #include <utility>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 const sal_Int32 nBytesCount = 32000;
 
 
 OLESimpleStorage::OLESimpleStorage(
-        css::uno::Reference<cpo::uno::XComponentContext> xContext,
+        cpo::uno::Reference<cpo::uno::XComponentContext> xContext,
         cpo::uno::Sequence<cpo::uno::Any> const &aArguments)
 : m_bDisposed( false )
 , m_xContext(std::move( xContext ))

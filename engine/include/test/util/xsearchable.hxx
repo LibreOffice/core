@@ -12,7 +12,7 @@
 
 #include <test/testdllapi.hxx>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include <utility>
 
 namespace apitest {
@@ -28,7 +28,7 @@ public:
     void testFindNext();
     void testFindAll();
 
-    virtual css::uno::Reference< cpo::uno::XInterface > init() = 0;
+    virtual cpo::uno::Reference< cpo::uno::XInterface > init() = 0;
 
 private:
     OUString maSearchString;

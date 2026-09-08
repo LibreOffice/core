@@ -39,6 +39,7 @@
 #include <o3tl/string_view.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 // note: pAttrSet may be null if the dialog is restored on startup
 SwFieldPage::SwFieldPage(weld::Container* pPage, weld::DialogController* pController, const OUString& rUIXMLDescription,

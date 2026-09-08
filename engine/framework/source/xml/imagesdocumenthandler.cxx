@@ -25,7 +25,7 @@
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::xml::sax;
 

@@ -64,6 +64,7 @@
 #include <strings.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace
 {
@@ -394,8 +395,8 @@ lcl_removeUnusedStyles(SfxStyleSheetBasePool* const pStyleSheetPool, StyleSheetC
 void
 lcl_removeUnusedTableStyles(SdStyleSheetPool* const pStyleSheetPool, XStyleVector const & rStyles)
 {
-    css::uno::Reference<css::container::XNameContainer> xTableFamily(
-        pStyleSheetPool->getByName(u"table"_ustr), css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::container::XNameContainer> xTableFamily(
+        pStyleSheetPool->getByName(u"table"_ustr), cpo::uno::UNO_QUERY);
     if (!xTableFamily)
         return;
 

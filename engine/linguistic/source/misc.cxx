@@ -34,7 +34,7 @@
 #include <com/sun/star/linguistic2/LinguProperties.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <cpo/uno/Sequence.hxx>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <comphelper/kit.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
@@ -52,8 +52,8 @@ using namespace osl;
 using namespace com::sun::star;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
-using namespace com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 using namespace com::sun::star::i18n;
 using namespace com::sun::star::linguistic2;
 
@@ -253,7 +253,7 @@ uno::Reference< XDictionaryEntry > SearchDicList(
         const uno::Reference< XSearchableDictionaryList > &xDicList,
         const OUString &rWord, LanguageType nLanguage,
         bool bSearchPosDics, bool bSearchSpellEntry,
-        std::map<LanguageType, std::vector<css::uno::Reference<css::linguistic2::XDictionary>>>& rDictionaryMap )
+        std::map<LanguageType, std::vector<cpo::uno::Reference<css::linguistic2::XDictionary>>>& rDictionaryMap )
 {
     MutexGuard  aGuard( GetLinguMutex() );
 

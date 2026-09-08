@@ -39,6 +39,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 
 namespace com::sun::star::document { class XDocumentProperties; }
+using namespace ::cpo;
 
 namespace {
 

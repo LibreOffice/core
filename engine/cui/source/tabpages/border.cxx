@@ -49,9 +49,9 @@
 #include <vcl/image.hxx>
 
 using namespace ::editeng;
-using ::com::sun::star::uno::Reference;
+using ::cpo::uno::Reference;
 using ::com::sun::star::lang::XServiceInfo;
-using ::com::sun::star::uno::UNO_QUERY;
+using ::cpo::uno::UNO_QUERY;
 
 
 /*

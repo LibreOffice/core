@@ -14,7 +14,7 @@
 namespace vcl
 {
 BinaryDataContainer convertUnoBinaryDataContainer(
-    const css::uno::Reference<css::util::XBinaryDataContainer>& rxBinaryDataContainer)
+    const cpo::uno::Reference<css::util::XBinaryDataContainer>& rxBinaryDataContainer)
 {
     BinaryDataContainer aBinaryDataContainer;
     UnoBinaryDataContainer* pUnoBinaryDataContainer

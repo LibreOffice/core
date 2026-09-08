@@ -83,7 +83,7 @@ public:
     virtual cpo::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     //XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
+    virtual cpo::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
     virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const cpo::uno::Any& aValue ) override;
     virtual cpo::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
 
@@ -96,7 +96,7 @@ public:
     virtual cpo::uno::Sequence< cpo::uno::Type > SAL_CALL getTypes(  ) override;
 
     // XEventsSupplier
-    virtual css::uno::Reference< css::container::XNameReplace > SAL_CALL getEvents(  ) override;
+    virtual cpo::uno::Reference< css::container::XNameReplace > SAL_CALL getEvents(  ) override;
 };
 
 struct SvEventDescription;

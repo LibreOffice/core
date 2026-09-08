@@ -25,7 +25,7 @@
 #include <comphelper/diagnose_ex.hxx>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 
 namespace sfx2::sidebar {
@@ -244,7 +244,7 @@ Any Theme::getPropertyValue (
 
 void Theme::addPropertyChangeListener(
     const OUString& rsPropertyName,
-    const css::uno::Reference<css::beans::XPropertyChangeListener>& rxListener)
+    const cpo::uno::Reference<css::beans::XPropertyChangeListener>& rxListener)
 {
     SolarMutexGuard aGuard;
 
@@ -268,7 +268,7 @@ void Theme::addPropertyChangeListener(
 
 void Theme::removePropertyChangeListener(
     const OUString& rsPropertyName,
-    const css::uno::Reference<css::beans::XPropertyChangeListener>& rxListener)
+    const cpo::uno::Reference<css::beans::XPropertyChangeListener>& rxListener)
 {
     SolarMutexGuard aGuard;
 
@@ -302,7 +302,7 @@ void Theme::removePropertyChangeListener(
 
 void Theme::addVetoableChangeListener(
     const OUString& rsPropertyName,
-    const css::uno::Reference<css::beans::XVetoableChangeListener>& rxListener)
+    const cpo::uno::Reference<css::beans::XVetoableChangeListener>& rxListener)
 {
     SolarMutexGuard aGuard;
 
@@ -326,7 +326,7 @@ void Theme::addVetoableChangeListener(
 
 void Theme::removeVetoableChangeListener(
     const OUString& rsPropertyName,
-    const css::uno::Reference<css::beans::XVetoableChangeListener>& rxListener)
+    const cpo::uno::Reference<css::beans::XVetoableChangeListener>& rxListener)
 {
     SolarMutexGuard aGuard;
 

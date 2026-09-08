@@ -14,7 +14,7 @@
 #include <string_view>
 #include <unordered_map>
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <rtl/ustring.hxx>
 
@@ -53,7 +53,7 @@ private:
 
 private:
     const OUString m_aFactoryURL;
-    css::uno::Reference<css::document::XFilter> m_xFilter;
+    cpo::uno::Reference<css::document::XFilter> m_xFilter;
     const WpftOptionalMap_t* m_pOptionalMap;
 };
 }

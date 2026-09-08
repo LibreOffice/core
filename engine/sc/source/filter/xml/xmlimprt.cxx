@@ -112,6 +112,7 @@
 constexpr OUString SC_LOCALE = u"Locale"_ustr;
 
 using namespace com::sun::star;
+using namespace ::cpo;
 using namespace ::xmloff::token;
 using namespace ::formula;
 
@@ -187,9 +188,9 @@ protected:
 public:
     ScXMLDocContext_Impl( ScXMLImport& rImport );
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
         createFastChildContext( sal_Int32 nElement,
-        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList ) override;
+        const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList ) override;
 };
 
 }
@@ -210,9 +211,9 @@ public:
     ScXMLFlatDocContext_Impl( ScXMLImport& i_rImport,
         const uno::Reference<document::XDocumentProperties>& i_xDocProps);
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
         createFastChildContext( sal_Int32 nElement,
-        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList ) override;
+        const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList ) override;
 };
 
 }
@@ -242,9 +243,9 @@ class ScXMLBodyContext_Impl : public ScXMLImportContext
 public:
     ScXMLBodyContext_Impl( ScXMLImport& rImport );
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
         createFastChildContext( sal_Int32 nElement,
-        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList ) override;
+        const cpo::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList ) override;
 };
 
 }
@@ -351,7 +352,7 @@ SvXMLImportContext *ScXMLImport::CreateFastContext( sal_Int32 nElement,
 }
 
 ScXMLImport::ScXMLImport(
-    const css::uno::Reference< cpo::uno::XComponentContext >& rContext,
+    const cpo::uno::Reference< cpo::uno::XComponentContext >& rContext,
     OUString const & implementationName, SvXMLImportFlags nImportFlag,
     const cpo::uno::Sequence< OUString > & sSupportedServiceNames)
 :   SvXMLImport( rContext, implementationName, nImportFlag, sSupportedServiceNames ),
@@ -1106,7 +1107,7 @@ void ScXMLImport::SetStylesToRangesFinished()
 }
 
 // XImporter
-void SAL_CALL ScXMLImport::setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc )
+void SAL_CALL ScXMLImport::setTargetDocument( const cpo::uno::Reference< css::lang::XComponent >& xDoc )
 {
     ScXMLImport::MutexGuard aGuard(*this);
     SvXMLImport::setTargetDocument( xDoc );

@@ -49,7 +49,7 @@ namespace pcr
                             ,public IPropertyExistenceCheck
     {
     public:
-        typedef std::vector< css::uno::Reference< css::inspection::XPropertyHandler > >
+        typedef std::vector< cpo::uno::Reference< css::inspection::XPropertyHandler > >
                                                             HandlerArray;
 
     private:
@@ -66,19 +66,19 @@ namespace pcr
             @param _rSlaveHandlers
                 the set of slave handlers to invoke. Must not be <NULL/>
         */
-        explicit PropertyComposer( std::vector< css::uno::Reference< css::inspection::XPropertyHandler > >&& _rSlaveHandlers );
+        explicit PropertyComposer( std::vector< cpo::uno::Reference< css::inspection::XPropertyHandler > >&& _rSlaveHandlers );
 
     public:
         // XPropertyHandler overridables
-        virtual void                                inspect( const css::uno::Reference< cpo::uno::XInterface >& _rxIntrospectee ) override;
+        virtual void                                inspect( const cpo::uno::Reference< cpo::uno::XInterface >& _rxIntrospectee ) override;
         virtual cpo::uno::Any                       getPropertyValue( const OUString& _rPropertyName ) override;
         virtual void                                setPropertyValue( const OUString& _rPropertyName, const cpo::uno::Any& _rValue ) override;
         virtual cpo::uno::Any convertToPropertyValue( const OUString& _rPropertyName, const cpo::uno::Any& _rControlValue ) override;
         virtual cpo::uno::Any convertToControlValue( const OUString& _rPropertyName, const cpo::uno::Any& _rPropertyValue, const cpo::uno::Type& _rControlValueType ) override;
         virtual css::beans::PropertyState
                                                     getPropertyState( const OUString& _rPropertyName ) override;
-        virtual void                                addPropertyChangeListener( const css::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener ) override;
-        virtual void                                removePropertyChangeListener( const css::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener ) override;
+        virtual void                                addPropertyChangeListener( const cpo::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener ) override;
+        virtual void                                removePropertyChangeListener( const cpo::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener ) override;
         virtual cpo::uno::Sequence< css::beans::Property >
                                                     getSupportedProperties() override;
         virtual cpo::uno::Sequence< OUString >
@@ -86,11 +86,11 @@ namespace pcr
         virtual cpo::uno::Sequence< OUString >
                                                     getActuatingProperties( ) override;
         virtual css::inspection::LineDescriptor
-                                                    describePropertyLine( const OUString& _rPropertyName, const css::uno::Reference< css::inspection::XPropertyControlFactory >& _rxControlFactory ) override;
+                                                    describePropertyLine( const OUString& _rPropertyName, const cpo::uno::Reference< css::inspection::XPropertyControlFactory >& _rxControlFactory ) override;
         virtual bool                            isComposable( const OUString& _rPropertyName ) override;
         virtual css::inspection::InteractiveSelectionResult
-                                                    onInteractivePropertySelection( const OUString& _rPropertyName, bool _bPrimary, cpo::uno::Any& _rData, const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI ) override;
-        virtual void                                actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const cpo::uno::Any& _rNewValue, const cpo::uno::Any& _rOldValue, const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI, bool _bFirstTimeInit ) override;
+                                                    onInteractivePropertySelection( const OUString& _rPropertyName, bool _bPrimary, cpo::uno::Any& _rData, const cpo::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI ) override;
+        virtual void                                actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const cpo::uno::Any& _rNewValue, const cpo::uno::Any& _rOldValue, const cpo::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI, bool _bFirstTimeInit ) override;
         virtual bool                            suspend( bool _bSuspend ) override;
 
         // XComponent
@@ -109,7 +109,7 @@ namespace pcr
     private:
         /** ensures that m_pUIRequestComposer exists
         */
-        void    impl_ensureUIRequestComposer( const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI );
+        void    impl_ensureUIRequestComposer( const cpo::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI );
 
         /** checks whether a given property exists in <member>m_aSupportedProperties</member>
         */

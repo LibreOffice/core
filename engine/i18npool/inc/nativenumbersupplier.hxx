@@ -77,7 +77,7 @@ private:
         static bool isValidNatNumImpl( const css::lang::Locale& aLocale,
                 sal_Int16 nNativeNumberMode );
         css::lang::Locale aLocale;
-        mutable css::uno::Reference< css::i18n::XCharacterClassification > xCharClass;
+        mutable cpo::uno::Reference< css::i18n::XCharacterClassification > xCharClass;
 };
 
 }

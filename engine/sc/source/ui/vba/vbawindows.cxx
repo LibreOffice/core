@@ -36,6 +36,7 @@
 #include <ooo/vba/excel/XApplication.hpp>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using namespace ::ooo::vba;
 
 typedef  std::unordered_map< OUString,
@@ -133,8 +134,8 @@ class WindowsAccessImpl : public WindowsAccessImpl_BASE
 public:
     explicit WindowsAccessImpl( uno::Reference< cpo::uno::XComponentContext > xContext ):m_xContext(std::move( xContext ))
     {
-        css::uno::Reference<css::container::XNameAccess> xNameAccess(m_xContext,
-                                                                     css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::container::XNameAccess> xNameAccess(m_xContext,
+                                                                     cpo::uno::UNO_QUERY_THROW);
         const auto aAppplication = xNameAccess->getByName(u"Application"_ustr);
 
         uno::Reference< container::XEnumeration > xEnum = new WindowComponentEnumImpl( m_xContext );
@@ -230,7 +231,7 @@ public:
 
 }
 
-ScVbaWindows::ScVbaWindows( const uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext >& xContext ) : ScVbaWindows_BASE( xParent, xContext, uno::Reference< container::XIndexAccess > ( new WindowsAccessImpl( xContext ) ) )
+ScVbaWindows::ScVbaWindows( const uno::Reference< ov::XHelperInterface >& xParent, const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext ) : ScVbaWindows_BASE( xParent, xContext, uno::Reference< container::XIndexAccess > ( new WindowsAccessImpl( xContext ) ) )
 {
 }
 uno::Reference< container::XEnumeration >

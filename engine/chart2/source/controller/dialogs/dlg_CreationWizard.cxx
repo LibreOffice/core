@@ -33,6 +33,7 @@
 #include "DialogModel.hxx"
 
 using namespace css;
+using namespace ::cpo;
 
 using vcl::RoadmapWizardTypes::WizardPath;
 using vcl::RoadmapWizardTypes::PathId;

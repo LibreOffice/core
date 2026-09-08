@@ -21,6 +21,7 @@
 #include <svl/outstrm.hxx>
 
 using namespace css;
+using namespace ::cpo;
 
 namespace sw
 {

@@ -71,7 +71,7 @@ namespace connectivity::skeleton
         std::vector< ORowSetValue>                m_aRow; // only used when SQLGetData can't be called in any order
         OStatement_Base*                            m_pStatement;
         cpo::uno::WeakReferenceHelper               m_aStatement;
-        css::uno::Reference< css::sdbc::XResultSetMetaData>        m_xMetaData;
+        cpo::uno::Reference< css::sdbc::XResultSetMetaData>        m_xMetaData;
         rtl_TextEncoding                            m_nTextEncoding;
         sal_Int32                                   m_nRowPos;
         sal_Int32                                   m_nLastColumnPos;       // used for m_aRow just to know where we are
@@ -128,9 +128,9 @@ namespace connectivity::skeleton
         OResultSet( OStatement_Base* pStmt);
 
 
-        css::uno::Reference< cpo::uno::XInterface > operator *()
+        cpo::uno::Reference< cpo::uno::XInterface > operator *()
         {
-            return css::uno::Reference< cpo::uno::XInterface >(*(OResultSet_BASE*)this);
+            return cpo::uno::Reference< cpo::uno::XInterface >(*(OResultSet_BASE*)this);
         }
 
         // ::cppu::OComponentHelper
@@ -142,7 +142,7 @@ namespace connectivity::skeleton
         //XTypeProvider
         virtual cpo::uno::Sequence< cpo::uno::Type > getTypes(  ) throw(cpo::uno::RuntimeException);
         // XPropertySet
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) throw(cpo::uno::RuntimeException);
+        virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) throw(cpo::uno::RuntimeException);
         // XResultSet
         virtual bool next(  ) throw(css::sdbc::SQLException, cpo::uno::RuntimeException);
         virtual bool isBeforeFirst(  ) throw(css::sdbc::SQLException, cpo::uno::RuntimeException);
@@ -161,7 +161,7 @@ namespace connectivity::skeleton
         virtual bool rowUpdated(  ) throw(css::sdbc::SQLException, cpo::uno::RuntimeException);
         virtual bool rowInserted(  ) throw(css::sdbc::SQLException, cpo::uno::RuntimeException);
         virtual bool rowDeleted(  ) throw(css::sdbc::SQLException, cpo::uno::RuntimeException);
-        virtual css::uno::Reference< cpo::uno::XInterface > getStatement(  ) throw(css::sdbc::SQLException, cpo::uno::RuntimeException);
+        virtual cpo::uno::Reference< cpo::uno::XInterface > getStatement(  ) throw(css::sdbc::SQLException, cpo::uno::RuntimeException);
         // XRow
         virtual bool wasNull(  ) throw(css::sdbc::SQLException, cpo::uno::RuntimeException);
         virtual OUString getString( sal_Int32 columnIndex ) throw(css::sdbc::SQLException, cpo::uno::RuntimeException);
@@ -176,15 +176,15 @@ namespace connectivity::skeleton
         virtual css::util::Date getDate( sal_Int32 columnIndex ) throw(css::sdbc::SQLException, cpo::uno::RuntimeException);
         virtual css::util::Time getTime( sal_Int32 columnIndex ) throw(css::sdbc::SQLException, cpo::uno::RuntimeException);
         virtual css::util::DateTime getTimestamp( sal_Int32 columnIndex ) throw(css::sdbc::SQLException, cpo::uno::RuntimeException);
-        virtual css::uno::Reference< css::io::XInputStream > getBinaryStream( sal_Int32 columnIndex ) throw(css::sdbc::SQLException, cpo::uno::RuntimeException);
-        virtual css::uno::Reference< css::io::XInputStream > getCharacterStream( sal_Int32 columnIndex ) throw(css::sdbc::SQLException, cpo::uno::RuntimeException);
-        virtual cpo::uno::Any getObject( sal_Int32 columnIndex, const css::uno::Reference< css::container::XNameAccess >& typeMap ) throw(css::sdbc::SQLException, cpo::uno::RuntimeException);
-        virtual css::uno::Reference< css::sdbc::XRef > getRef( sal_Int32 columnIndex ) throw(css::sdbc::SQLException, cpo::uno::RuntimeException);
-        virtual css::uno::Reference< css::sdbc::XBlob > getBlob( sal_Int32 columnIndex ) throw(css::sdbc::SQLException, cpo::uno::RuntimeException);
-        virtual css::uno::Reference< css::sdbc::XClob > getClob( sal_Int32 columnIndex ) throw(css::sdbc::SQLException, cpo::uno::RuntimeException);
-        virtual css::uno::Reference< css::sdbc::XArray > getArray( sal_Int32 columnIndex ) throw(css::sdbc::SQLException, cpo::uno::RuntimeException);
+        virtual cpo::uno::Reference< css::io::XInputStream > getBinaryStream( sal_Int32 columnIndex ) throw(css::sdbc::SQLException, cpo::uno::RuntimeException);
+        virtual cpo::uno::Reference< css::io::XInputStream > getCharacterStream( sal_Int32 columnIndex ) throw(css::sdbc::SQLException, cpo::uno::RuntimeException);
+        virtual cpo::uno::Any getObject( sal_Int32 columnIndex, const cpo::uno::Reference< css::container::XNameAccess >& typeMap ) throw(css::sdbc::SQLException, cpo::uno::RuntimeException);
+        virtual cpo::uno::Reference< css::sdbc::XRef > getRef( sal_Int32 columnIndex ) throw(css::sdbc::SQLException, cpo::uno::RuntimeException);
+        virtual cpo::uno::Reference< css::sdbc::XBlob > getBlob( sal_Int32 columnIndex ) throw(css::sdbc::SQLException, cpo::uno::RuntimeException);
+        virtual cpo::uno::Reference< css::sdbc::XClob > getClob( sal_Int32 columnIndex ) throw(css::sdbc::SQLException, cpo::uno::RuntimeException);
+        virtual cpo::uno::Reference< css::sdbc::XArray > getArray( sal_Int32 columnIndex ) throw(css::sdbc::SQLException, cpo::uno::RuntimeException);
         // XResultSetMetaDataSupplier
-        virtual css::uno::Reference< css::sdbc::XResultSetMetaData > getMetaData(  ) throw(css::sdbc::SQLException, cpo::uno::RuntimeException);
+        virtual cpo::uno::Reference< css::sdbc::XResultSetMetaData > getMetaData(  ) throw(css::sdbc::SQLException, cpo::uno::RuntimeException);
         // XCancellable
         virtual void cancel(  ) throw(cpo::uno::RuntimeException);
         // XCloseable
@@ -213,8 +213,8 @@ namespace connectivity::skeleton
         virtual void updateDate( sal_Int32 columnIndex, const css::util::Date& x ) throw(css::sdbc::SQLException, cpo::uno::RuntimeException);
         virtual void updateTime( sal_Int32 columnIndex, const css::util::Time& x ) throw(css::sdbc::SQLException, cpo::uno::RuntimeException);
         virtual void updateTimestamp( sal_Int32 columnIndex, const css::util::DateTime& x ) throw(css::sdbc::SQLException, cpo::uno::RuntimeException);
-        virtual void updateBinaryStream( sal_Int32 columnIndex, const css::uno::Reference< css::io::XInputStream >& x, sal_Int32 length ) throw(css::sdbc::SQLException, cpo::uno::RuntimeException);
-        virtual void updateCharacterStream( sal_Int32 columnIndex, const css::uno::Reference< css::io::XInputStream >& x, sal_Int32 length ) throw(css::sdbc::SQLException, cpo::uno::RuntimeException);
+        virtual void updateBinaryStream( sal_Int32 columnIndex, const cpo::uno::Reference< css::io::XInputStream >& x, sal_Int32 length ) throw(css::sdbc::SQLException, cpo::uno::RuntimeException);
+        virtual void updateCharacterStream( sal_Int32 columnIndex, const cpo::uno::Reference< css::io::XInputStream >& x, sal_Int32 length ) throw(css::sdbc::SQLException, cpo::uno::RuntimeException);
         virtual void updateObject( sal_Int32 columnIndex, const cpo::uno::Any& x ) throw(css::sdbc::SQLException, cpo::uno::RuntimeException);
         virtual void updateNumericObject( sal_Int32 columnIndex, const cpo::uno::Any& x, sal_Int32 scale ) throw(css::sdbc::SQLException, cpo::uno::RuntimeException);
         // XColumnLocate

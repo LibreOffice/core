@@ -32,7 +32,7 @@ using com::sun::star::container::XIndexAccess;
 using com::sun::star::lang::IndexOutOfBoundsException;
 using com::sun::star::lang::WrappedTargetException;
 using cpo::uno::Any;
-using com::sun::star::uno::Reference;
+using cpo::uno::Reference;
 using cpo::uno::RuntimeException;
 
 

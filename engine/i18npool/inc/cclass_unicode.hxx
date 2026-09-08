@@ -64,7 +64,7 @@ namespace i18npool {
 class cclass_Unicode final : public cppu::WeakImplHelper < css::i18n::XCharacterClassification, css::lang::XServiceInfo >
 {
 public:
-    cclass_Unicode(css::uno::Reference < cpo::uno::XComponentContext > xContext );
+    cclass_Unicode(cpo::uno::Reference < cpo::uno::XComponentContext > xContext );
     virtual ~cclass_Unicode() override;
 
     virtual OUString toUpper( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount,
@@ -125,12 +125,12 @@ private:
     static  const sal_Unicode*  StrChr( const sal_Unicode* pStr, sal_uInt32 c );
 
 
-    css::uno::Reference < cpo::uno::XComponentContext > m_xContext;
+    cpo::uno::Reference < cpo::uno::XComponentContext > m_xContext;
 
     /// used for parser only
     css::lang::Locale    aParserLocale;
-    css::uno::Reference < css::i18n::XLocaleData5 > mxLocaleData;
-    css::uno::Reference < css::i18n::XNativeNumberSupplier > xNatNumSup;
+    cpo::uno::Reference < css::i18n::XLocaleData5 > mxLocaleData;
+    cpo::uno::Reference < css::i18n::XNativeNumberSupplier > xNatNumSup;
     OUString             aStartChars;
     OUString             aContChars;
     std::unique_ptr<ParserFlags[]> pTable;

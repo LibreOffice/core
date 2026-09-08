@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 #include "importfilterdata.hxx"
 
 #include <comphelper/errcode.hxx>
@@ -28,12 +28,12 @@ namespace com::sun::star {
     namespace beans { struct PropertyValue; }
     namespace frame { class XModel; }
     namespace task { class XStatusIndicator; }
-    namespace uno { template <class E> class Sequence; }
     namespace embed { class XStorage; }
     namespace xml {
         namespace sax { struct InputSource; class XWriter; }
     }
 }
+namespace cpo::uno { template <class E> class Sequence; }
 namespace cpo::uno { class XComponentContext; }
 
 class ScDocument;
@@ -61,22 +61,22 @@ class ScXMLImportWrapper
     ScDocShell& mrDocShell;
     ScDocument&     rDoc;
     SfxMedium*      pMedium;
-    css::uno::Reference< css::embed::XStorage > xStorage;
+    cpo::uno::Reference< css::embed::XStorage > xStorage;
 
     std::unordered_map<OString, OUString> maEmbeddedFontFiles;
 
-    css::uno::Reference< css::task::XStatusIndicator> GetStatusIndicator() const;
+    cpo::uno::Reference< css::task::XStatusIndicator> GetStatusIndicator() const;
 
-    ErrCodeMsg ImportFromComponent(const css::uno::Reference<cpo::uno::XComponentContext>& xContext,
-        const css::uno::Reference<css::frame::XModel>& xModel,
+    ErrCodeMsg ImportFromComponent(const cpo::uno::Reference<cpo::uno::XComponentContext>& xContext,
+        const cpo::uno::Reference<css::frame::XModel>& xModel,
         css::xml::sax::InputSource& aParserInput,
         const OUString& sComponentName, const OUString& sDocName,
         const cpo::uno::Sequence<cpo::uno::Any>& aArgs,
         bool bMustBeSuccessful);
 
-    bool ExportToComponent(const css::uno::Reference<cpo::uno::XComponentContext>& xContext,
-        const css::uno::Reference<css::frame::XModel>& xModel,
-        const css::uno::Reference<css::xml::sax::XWriter>& xWriter,
+    bool ExportToComponent(const cpo::uno::Reference<cpo::uno::XComponentContext>& xContext,
+        const cpo::uno::Reference<css::frame::XModel>& xModel,
+        const cpo::uno::Reference<css::xml::sax::XWriter>& xWriter,
         const cpo::uno::Sequence<css::beans::PropertyValue>& aDescriptor,
         const OUString& sName, const OUString& sMediaType, const OUString& sComponentName,
         const cpo::uno::Sequence<cpo::uno::Any>& aArgs,
@@ -85,7 +85,7 @@ class ScXMLImportWrapper
 public:
 
     ScXMLImportWrapper(
-        ScDocShell& rDocSh, SfxMedium* pM, css::uno::Reference<css::embed::XStorage> xStor );
+        ScDocShell& rDocSh, SfxMedium* pM, cpo::uno::Reference<css::embed::XStorage> xStor );
 
     bool Import( ImportFlags nMode, ErrCodeMsg& rError );
     bool Export(bool bStylesOnly);

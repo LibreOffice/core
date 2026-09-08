@@ -57,7 +57,7 @@ public:
                 reference to a uno service manager, which is used internally.
      */
     ModuleAcceleratorConfiguration(
-            const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
             const cpo::uno::Sequence< cpo::uno::Any >& lArguments);
 
     virtual OUString getImplementationName() override
@@ -84,7 +84,7 @@ private:
 };
 
 ModuleAcceleratorConfiguration::ModuleAcceleratorConfiguration(
-        const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
+        const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext,
         const cpo::uno::Sequence< cpo::uno::Any >& lArguments)
     : ModuleAcceleratorConfiguration_BASE(xContext)
 {
@@ -129,7 +129,7 @@ void ModuleAcceleratorConfiguration::fillCache()
         m_sGlobalOrModules = CFG_ENTRY_MODULES;
         XCUBasedAcceleratorConfiguration::reload();
 
-        css::uno::Reference< css::util::XChangesNotifier > xBroadcaster(m_xCfg, css::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference< css::util::XChangesNotifier > xBroadcaster(m_xCfg, cpo::uno::UNO_QUERY_THROW);
         m_xCfgListener = new WeakChangesListener(this);
         xBroadcaster->addChangesListener(m_xCfgListener);
     }

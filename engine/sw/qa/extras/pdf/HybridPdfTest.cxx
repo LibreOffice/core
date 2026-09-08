@@ -13,7 +13,8 @@
 #include <config_pdfimport.h>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 namespace
 {

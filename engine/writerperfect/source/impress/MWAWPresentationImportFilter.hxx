@@ -22,7 +22,7 @@ class MWAWPresentationImportFilter : public writerperfect::ImportFilter<OdpGener
 {
 public:
     explicit MWAWPresentationImportFilter(
-        const css::uno::Reference<cpo::uno::XComponentContext>& rxContext)
+        const cpo::uno::Reference<cpo::uno::XComponentContext>& rxContext)
         : writerperfect::ImportFilter<OdpGenerator>(rxContext)
     {
     }

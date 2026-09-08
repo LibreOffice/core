@@ -38,7 +38,7 @@ constexpr OUString SERVICE_NAME_A = u"com.sun.star.lang.MacroExpander"_ustr;
 constexpr OUString SERVICE_NAME_B = u"com.sun.star.lang.BootstrapMacroExpander"_ustr;
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::cpo::uno;
 
 using rtl::Bootstrap;

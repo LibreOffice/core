@@ -33,16 +33,16 @@ class ScVbaBorders : public ScVbaBorders_BASE
     // XEnumerationAccess
     virtual cpo::uno::Any getItemByIntIndex( const sal_Int32 nIndex ) override;
     bool bRangeIsSingleCell;
-    css::uno::Reference< css::beans::XPropertySet > m_xProps;
+    cpo::uno::Reference< css::beans::XPropertySet > m_xProps;
 public:
-    ScVbaBorders( const css::uno::Reference< ov::XHelperInterface >& xParent,
-                  const css::uno::Reference< cpo::uno::XComponentContext > & xContext,
-                  const css::uno::Reference< css::table::XCellRange >& xRange,
+    ScVbaBorders( const cpo::uno::Reference< ov::XHelperInterface >& xParent,
+                  const cpo::uno::Reference< cpo::uno::XComponentContext > & xContext,
+                  const cpo::uno::Reference< css::table::XCellRange >& xRange,
                   const ScVbaPalette& rPalette );
 
     // XEnumerationAccess
     virtual cpo::uno::Type SAL_CALL getElementType() override;
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
+    virtual cpo::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
 
     // XBorders
 

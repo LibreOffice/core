@@ -104,8 +104,8 @@
 
 using namespace css;
 using namespace css::accessibility;
-using namespace css::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 static OUString GetScrollUIName(const SmViewShell& rShell)
 {
@@ -1993,20 +1993,20 @@ void SmViewShell::GetState(SfxItemSet &rSet)
 
 namespace
 {
-css::uno::Reference<css::ui::XSidebar>
-getSidebarFromModel(const css::uno::Reference<css::frame::XModel>& xModel)
+cpo::uno::Reference<css::ui::XSidebar>
+getSidebarFromModel(const cpo::uno::Reference<css::frame::XModel>& xModel)
 {
-    css::uno::Reference<css::container::XChild> xChild(xModel, css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::container::XChild> xChild(xModel, cpo::uno::UNO_QUERY);
     if (!xChild.is())
         return nullptr;
-    css::uno::Reference<css::frame::XModel> xParent(xChild->getParent(), css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::frame::XModel> xParent(xChild->getParent(), cpo::uno::UNO_QUERY);
     if (!xParent.is())
         return nullptr;
-    css::uno::Reference<css::frame::XController2> xController(xParent->getCurrentController(),
-                                                              css::uno::UNO_QUERY);
+    cpo::uno::Reference<css::frame::XController2> xController(xParent->getCurrentController(),
+                                                              cpo::uno::UNO_QUERY);
     if (!xController.is())
         return nullptr;
-    css::uno::Reference<css::ui::XSidebarProvider> xSidebarProvider = xController->getSidebar();
+    cpo::uno::Reference<css::ui::XSidebarProvider> xSidebarProvider = xController->getSidebar();
     if (!xSidebarProvider.is())
         return nullptr;
     return xSidebarProvider->getSidebar();
@@ -2025,7 +2025,7 @@ public:
     // ~SmController() { mpSelectionChangeHandler->Disconnect(); }
 
     // css::frame::XController
-    void SAL_CALL attachFrame(const css::uno::Reference<css::frame::XFrame>& xFrame) override
+    void SAL_CALL attachFrame(const cpo::uno::Reference<css::frame::XFrame>& xFrame) override
     {
         SfxBaseController::attachFrame(xFrame);
 

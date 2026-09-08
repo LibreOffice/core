@@ -253,7 +253,7 @@ class SwXServiceProvider
 public:
     static OUString             GetProviderName(SwServiceType nObjectType);
     static SwServiceType        GetProviderType(std::u16string_view rServiceName);
-    static css::uno::Reference< cpo::uno::XInterface >  MakeInstance(SwServiceType nObjectType, SwDoc & rDoc);
+    static cpo::uno::Reference< cpo::uno::XInterface >  MakeInstance(SwServiceType nObjectType, SwDoc & rDoc);
     static cpo::uno::Sequence<OUString>   GetAllServiceNames();
 
 };
@@ -314,7 +314,7 @@ public:
     SwXFrames(SwDoc* pDoc, FlyCntType eSet);
 
     //XEnumerationAccess
-    virtual SW_DLLPUBLIC css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
+    virtual SW_DLLPUBLIC cpo::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
 
     //XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override;

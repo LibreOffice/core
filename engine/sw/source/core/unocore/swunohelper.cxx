@@ -62,7 +62,7 @@ bool UCB_DeleteFile( const OUString& rURL )
     try
     {
         ucbhelper::Content aTempContent( rURL,
-                                css::uno::Reference< css::ucb::XCommandEnvironment >(),
+                                cpo::uno::Reference< css::ucb::XCommandEnvironment >(),
                                 comphelper::getProcessComponentContext() );
         aTempContent.executeCommand(u"delete"_ustr, cpo::uno::Any( true ) );
         bRemoved = true;
@@ -86,7 +86,7 @@ bool UCB_MoveFile( const OUString& rURL, std::u16string_view rNewURL )
         const OUString sMainURL( aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE) );
 
         ucbhelper::Content aTempContent( sMainURL,
-                                css::uno::Reference< css::ucb::XCommandEnvironment >(),
+                                cpo::uno::Reference< css::ucb::XCommandEnvironment >(),
                                 comphelper::getProcessComponentContext() );
 
         css::ucb::TransferInfo aInfo;
@@ -111,14 +111,14 @@ bool UCB_IsCaseSensitiveFileName( std::u16string_view rURL )
     {
         INetURLObject aTempObj( rURL );
         aTempObj.SetBase( aTempObj.GetBase().toAsciiLowerCase() );
-        css::uno::Reference< css::ucb::XContentIdentifier > xRef1 = new
+        cpo::uno::Reference< css::ucb::XContentIdentifier > xRef1 = new
                 ucbhelper::ContentIdentifier( aTempObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ));
 
         aTempObj.SetBase(aTempObj.GetBase().toAsciiUpperCase());
-        css::uno::Reference< css::ucb::XContentIdentifier > xRef2 = new
+        cpo::uno::Reference< css::ucb::XContentIdentifier > xRef2 = new
                 ucbhelper::ContentIdentifier( aTempObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ));
 
-        css::uno::Reference< css::ucb::XUniversalContentBroker > xUcb =
+        cpo::uno::Reference< css::ucb::XUniversalContentBroker > xUcb =
               css::ucb::UniversalContentBroker::create(comphelper::getProcessComponentContext());
 
         sal_Int32 nCompare = xUcb->compareContentIds( xRef1, xRef2 );
@@ -137,7 +137,7 @@ bool UCB_IsReadOnlyFileName( const OUString& rURL )
     bool bIsReadOnly = false;
     try
     {
-        ucbhelper::Content aCnt( rURL, css::uno::Reference< css::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
+        ucbhelper::Content aCnt( rURL, cpo::uno::Reference< css::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
         cpo::uno::Any aAny = aCnt.getPropertyValue(u"IsReadOnly"_ustr);
         if(aAny.hasValue())
             bIsReadOnly = *o3tl::doAccess<bool>(aAny);
@@ -154,7 +154,7 @@ bool UCB_IsFile( const OUString& rURL )
     bool bExists = false;
     try
     {
-        ::ucbhelper::Content aContent( rURL, css::uno::Reference< css::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
+        ::ucbhelper::Content aContent( rURL, cpo::uno::Reference< css::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
         bExists = aContent.isDocument();
     }
     catch (cpo::uno::Exception &)
@@ -168,7 +168,7 @@ bool UCB_IsDirectory( const OUString& rURL )
     bool bExists = false;
     try
     {
-        ::ucbhelper::Content aContent( rURL, css::uno::Reference< css::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
+        ::ucbhelper::Content aContent( rURL, cpo::uno::Reference< css::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
         bExists = aContent.isFolder();
     }
     catch (cpo::uno::Exception &)
@@ -190,8 +190,8 @@ bool UCB_GetFileListOfFolder( const OUString& rURL,
     bool bOk = false;
     try
     {
-        ucbhelper::Content aCnt( rURL, css::uno::Reference< css::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
-        css::uno::Reference< css::sdbc::XResultSet > xResultSet;
+        ucbhelper::Content aCnt( rURL, cpo::uno::Reference< css::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
+        cpo::uno::Reference< css::sdbc::XResultSet > xResultSet;
 
         const sal_Int32 nSeqSize = pDateTimeList ? 2 : 1;
         cpo::uno::Sequence < OUString > aProps( nSeqSize );
@@ -211,7 +211,7 @@ bool UCB_GetFileListOfFolder( const OUString& rURL,
 
         if( xResultSet.is() )
         {
-            css::uno::Reference< css::sdbc::XRow > xRow( xResultSet, css::uno::UNO_QUERY );
+            cpo::uno::Reference< css::sdbc::XRow > xRow( xResultSet, cpo::uno::UNO_QUERY );
             const sal_Int32 nExtLen = pExtension ? pExtension->getLength() : 0;
             try
             {

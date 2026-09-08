@@ -30,19 +30,19 @@ typedef CollTestImplHelper< ooo::vba::word::XColumns > SwVbaColumns_BASE;
 class SwVbaColumns : public SwVbaColumns_BASE
 {
 private:
-    css::uno::Reference< css::text::XTextTable > mxTextTable;
+    cpo::uno::Reference< css::text::XTextTable > mxTextTable;
     sal_Int32 mnStartColumnIndex;
     sal_Int32 mnEndColumnIndex;
 
 private:
     /// @throws cpo::uno::RuntimeException
-    css::uno::Reference< ooo::vba::word::XColumn > getColumnAtIndex( sal_Int32 index );
+    cpo::uno::Reference< ooo::vba::word::XColumn > getColumnAtIndex( sal_Int32 index );
 
 public:
     /// @throws cpo::uno::RuntimeException
-    SwVbaColumns( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext > & xContext, css::uno::Reference< css::text::XTextTable >  xTextTable, const css::uno::Reference< css::table::XTableColumns >& xTableColumns );
+    SwVbaColumns( const cpo::uno::Reference< ov::XHelperInterface >& xParent, const cpo::uno::Reference< cpo::uno::XComponentContext > & xContext, cpo::uno::Reference< css::text::XTextTable >  xTextTable, const cpo::uno::Reference< css::table::XTableColumns >& xTableColumns );
     /// @throws cpo::uno::RuntimeException
-    SwVbaColumns( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< cpo::uno::XComponentContext > & xContext, css::uno::Reference< css::text::XTextTable >  xTextTable, const css::uno::Reference< css::table::XTableColumns >& xTableColumns, sal_Int32 nStartCol, sal_Int32 nEndCol );
+    SwVbaColumns( const cpo::uno::Reference< ov::XHelperInterface >& xParent, const cpo::uno::Reference< cpo::uno::XComponentContext > & xContext, cpo::uno::Reference< css::text::XTextTable >  xTextTable, const cpo::uno::Reference< css::table::XTableColumns >& xTableColumns, sal_Int32 nStartCol, sal_Int32 nEndCol );
 
     virtual sal_Int32 SAL_CALL getWidth(  ) override;
     virtual void SAL_CALL setWidth( sal_Int32 _width ) override;
@@ -53,7 +53,7 @@ public:
     virtual cpo::uno::Any SAL_CALL Item( const cpo::uno::Any& Index1, const cpo::uno::Any& /*not processed in this base class*/ ) override;
     // XEnumerationAccess
     virtual cpo::uno::Type SAL_CALL getElementType() override;
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
+    virtual cpo::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
 
     // SwVbaColumns_BASE
     virtual cpo::uno::Any createCollectionObject( const cpo::uno::Any& aSource ) override;

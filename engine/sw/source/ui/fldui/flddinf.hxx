@@ -29,7 +29,7 @@ enum class SwDocInfoSubType : sal_uInt16;
 class SwFieldDokInfPage : public SwFieldPage
 {
     std::unique_ptr<weld::TreeIter> m_xSelEntry;
-    css::uno::Reference < css::beans::XPropertySet > m_xCustomPropertySet;
+    cpo::uno::Reference < css::beans::XPropertySet > m_xCustomPropertySet;
 
     sal_Int32               m_nOldSel;
     sal_uInt32               m_nOldFormat;

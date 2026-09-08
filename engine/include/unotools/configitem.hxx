@@ -24,7 +24,7 @@
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <cpo/uno/Sequence.h>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <unotools/unotoolsdllapi.h>
 #include <unotools/options.hxx>
 #include <o3tl/typed_flags_set.hxx>
@@ -67,7 +67,7 @@ class ConfigChangeListener_Impl;
             friend class ConfigManager;
 
             const OUString              sSubTree;
-            css::uno::Reference< css::container::XHierarchicalNameAccess>
+            cpo::uno::Reference< css::container::XHierarchicalNameAccess>
                                         m_xHierarchyAccess;
             rtl::Reference< ConfigChangeListener_Impl >
                                         xChangeLstnr;
@@ -80,7 +80,7 @@ class ConfigChangeListener_Impl;
             void                    CallNotify(
                                 const cpo::uno::Sequence<OUString>& aPropertyNames);
 
-            css::uno::Reference< css::container::XHierarchicalNameAccess>
+            cpo::uno::Reference< css::container::XHierarchicalNameAccess>
                                         GetTree();
             /** writes the changed values into the sub tree.
                 Private and only called from non-virtual public Commit().  */
@@ -160,30 +160,30 @@ class ConfigChangeListener_Impl;
 
             //returns all members of a node in a specific format
             static cpo::uno::Sequence< OUString > GetNodeNames(
-                    css::uno::Reference<css::container::XHierarchicalNameAccess> const & xHierarchyAccess,
+                    cpo::uno::Reference<css::container::XHierarchicalNameAccess> const & xHierarchyAccess,
                     const OUString& rNode, ConfigNameFormat eFormat);
             static cpo::uno::Sequence< cpo::uno::Any> GetProperties(
-                    css::uno::Reference<css::container::XHierarchicalNameAccess> const & xHierarchyAccess,
+                    cpo::uno::Reference<css::container::XHierarchicalNameAccess> const & xHierarchyAccess,
                     const cpo::uno::Sequence< OUString >& rNames,
                     bool bAllLocales);
             static bool PutProperties(
-                    css::uno::Reference<css::container::XHierarchicalNameAccess> const & xHierarchyAccess,
+                    cpo::uno::Reference<css::container::XHierarchicalNameAccess> const & xHierarchyAccess,
                     const cpo::uno::Sequence< OUString >& rNames,
                     const cpo::uno::Sequence< cpo::uno::Any>& rValues,
                     bool bAllLocales);
             // remove all members of a set
             static bool ClearNodeSet(
-                    css::uno::Reference<css::container::XHierarchicalNameAccess> const & xHierarchyAccess,
+                    cpo::uno::Reference<css::container::XHierarchicalNameAccess> const & xHierarchyAccess,
                     const OUString& rNode);
             // remove, change or add members of a set
             static bool ReplaceSetProperties(
-                    css::uno::Reference<css::container::XHierarchicalNameAccess> const & xHierarchyAccess,
+                    cpo::uno::Reference<css::container::XHierarchicalNameAccess> const & xHierarchyAccess,
                     const OUString& rNode,
                     const cpo::uno::Sequence< css::beans::PropertyValue >& rValues,
                     bool bAllLocales);
             // change or add members to a set
             static bool SetSetProperties(
-                    css::uno::Reference<css::container::XHierarchicalNameAccess> const & xHierarchyAccess,
+                    cpo::uno::Reference<css::container::XHierarchicalNameAccess> const & xHierarchyAccess,
                     const OUString& rNode,
                     const cpo::uno::Sequence< css::beans::PropertyValue >& rValues);
     };

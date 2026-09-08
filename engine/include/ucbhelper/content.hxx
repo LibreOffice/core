@@ -20,7 +20,7 @@
 #define INCLUDED_UCBHELPER_CONTENT_HXX
 
 #include <rtl/ref.hxx>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 #include <cpo/uno/Sequence.h>
 #include <ucbhelper/ucbhelperdllapi.h>
 
@@ -122,8 +122,8 @@ public:
       * @throws css::ucb::ContentCreationException
       * @throws cpo::uno::RuntimeException
       */
-    Content(const OUString& rURL, const css::uno::Reference<css::ucb::XCommandEnvironment>& rEnv,
-            const css::uno::Reference<cpo::uno::XComponentContext>& rCtx);
+    Content(const OUString& rURL, const cpo::uno::Reference<css::ucb::XCommandEnvironment>& rEnv,
+            const cpo::uno::Reference<cpo::uno::XComponentContext>& rCtx);
     /**
       * Constructor.
       *
@@ -135,9 +135,9 @@ public:
       * @throws css::ucb::ContentCreationException
       * @throws cpo::uno::RuntimeException
       */
-    Content(const css::uno::Reference<css::ucb::XContent>& rContent,
-            const css::uno::Reference<css::ucb::XCommandEnvironment>& rEnv,
-            const css::uno::Reference<cpo::uno::XComponentContext>& rCtx);
+    Content(const cpo::uno::Reference<css::ucb::XContent>& rContent,
+            const cpo::uno::Reference<css::ucb::XCommandEnvironment>& rEnv,
+            const cpo::uno::Reference<cpo::uno::XComponentContext>& rCtx);
     /**
       * Copy Constructor.
       *
@@ -181,8 +181,8 @@ public:
       * @return true, if the operation was successful - false, otherwise.
       */
     static bool create(const OUString& rURL,
-                       const css::uno::Reference<css::ucb::XCommandEnvironment>& rEnv,
-                       const css::uno::Reference<cpo::uno::XComponentContext>& rCtx,
+                       const cpo::uno::Reference<css::ucb::XCommandEnvironment>& rEnv,
+                       const cpo::uno::Reference<cpo::uno::XComponentContext>& rCtx,
                        Content& rContent);
 
     // Direct access to UCB content.
@@ -196,7 +196,7 @@ public:
       *
       * @return the XContent interface of the underlying UCB content.
       */
-    css::uno::Reference<css::ucb::XContent> get() const;
+    cpo::uno::Reference<css::ucb::XContent> get() const;
 
     // Object identity.
 
@@ -214,14 +214,14 @@ public:
       *
       * @return the command environment.
       */
-    const css::uno::Reference<css::ucb::XCommandEnvironment>& getCommandEnvironment() const;
+    const cpo::uno::Reference<css::ucb::XCommandEnvironment>& getCommandEnvironment() const;
 
     /**
       * This method sets a new command environment.
       *
       * @param xNewEnv is the new command environment.
       */
-    void setCommandEnvironment(const css::uno::Reference<css::ucb::XCommandEnvironment>& xNewEnv);
+    void setCommandEnvironment(const cpo::uno::Reference<css::ucb::XCommandEnvironment>& xNewEnv);
 
     // Access to supported commands/properties.
 
@@ -235,7 +235,7 @@ public:
       * @throws cpo::uno::RuntimeException
       * @throws cpo::uno::Exception
       */
-    css::uno::Reference<css::ucb::XCommandInfo> getCommands();
+    cpo::uno::Reference<css::ucb::XCommandInfo> getCommands();
     /**
       * This methods provides access to meta data of the properties supported
       * by this content.
@@ -246,7 +246,7 @@ public:
       * @throws cpo::uno::RuntimeException
       * @throws cpo::uno::Exception
       */
-    css::uno::Reference<css::beans::XPropertySetInfo> getProperties();
+    cpo::uno::Reference<css::beans::XPropertySetInfo> getProperties();
 
     // Access to property value(s).
 
@@ -311,7 +311,7 @@ public:
       * @throws cpo::uno::RuntimeException
       * @throws cpo::uno::Exception
       */
-    css::uno::Reference<css::sdbc::XRow>
+    cpo::uno::Reference<css::sdbc::XRow>
     getPropertyValuesInterface(const cpo::uno::Sequence<OUString>& rPropertyNames);
 
     /**
@@ -389,7 +389,7 @@ public:
       * @throws cpo::uno::RuntimeException
       * @throws cpo::uno::Exception
       */
-    css::uno::Reference<css::sdbc::XResultSet>
+    cpo::uno::Reference<css::sdbc::XResultSet>
     createCursor(const cpo::uno::Sequence<OUString>& rPropertyNames,
                  ResultSetInclude eMode = INCLUDE_FOLDERS_AND_DOCUMENTS);
     /**
@@ -410,17 +410,17 @@ public:
       * @throws cpo::uno::RuntimeException
       * @throws cpo::uno::Exception
       */
-    css::uno::Reference<css::ucb::XDynamicResultSet>
+    cpo::uno::Reference<css::ucb::XDynamicResultSet>
     createDynamicCursor(const cpo::uno::Sequence<OUString>& rPropertyNames,
                         ResultSetInclude eMode = INCLUDE_FOLDERS_AND_DOCUMENTS);
 
     /// @throws css::ucb::CommandAbortedException
     /// @throws cpo::uno::RuntimeException
     /// @throws cpo::uno::Exception
-    css::uno::Reference<css::sdbc::XResultSet>
+    cpo::uno::Reference<css::sdbc::XResultSet>
     createSortedCursor(const cpo::uno::Sequence<OUString>& rPropertyNames,
                        const cpo::uno::Sequence<css::ucb::NumberedSortingInfo>& rSortInfo,
-                       const css::uno::Reference<css::ucb::XAnyCompareFactory>& rAnyCompareFactory,
+                       const cpo::uno::Reference<css::ucb::XAnyCompareFactory>& rAnyCompareFactory,
                        ResultSetInclude eMode = INCLUDE_FOLDERS_AND_DOCUMENTS);
 
     /**
@@ -434,7 +434,7 @@ public:
       * @throws cpo::uno::RuntimeException
       * @throws cpo::uno::Exception
       */
-    css::uno::Reference<css::io::XInputStream> openStream();
+    cpo::uno::Reference<css::io::XInputStream> openStream();
     /**
       * This methods gives read access to the content stream of a content (i.e
       * the content of a file located at the local file system).
@@ -447,7 +447,7 @@ public:
       * @throws cpo::uno::RuntimeException
       * @throws cpo::uno::Exception
       */
-    css::uno::Reference<css::io::XInputStream> openStreamNoLock();
+    cpo::uno::Reference<css::io::XInputStream> openStreamNoLock();
 
     /**
       * This methods gives read/write access to the content stream of a content (i.e
@@ -460,7 +460,7 @@ public:
       * @throws cpo::uno::RuntimeException
       * @throws cpo::uno::Exception
       */
-    css::uno::Reference<css::io::XStream> openWriteableStream();
+    cpo::uno::Reference<css::io::XStream> openWriteableStream();
     /**
       * This methods gives read/write access to the content stream of a content (i.e
       * the content of a file located at the local file system).
@@ -473,7 +473,7 @@ public:
       * @throws cpo::uno::RuntimeException
       * @throws cpo::uno::Exception
       */
-    css::uno::Reference<css::io::XStream> openWriteableStreamNoLock();
+    cpo::uno::Reference<css::io::XStream> openWriteableStreamNoLock();
 
     /**
       * This methods gives read access to the content stream of a content (i.e
@@ -486,7 +486,7 @@ public:
       * @throws cpo::uno::RuntimeException
       * @throws cpo::uno::Exception
       */
-    bool openStream(const css::uno::Reference<css::io::XActiveDataSink>& rSink);
+    bool openStream(const cpo::uno::Reference<css::io::XActiveDataSink>& rSink);
     /**
       * This methods gives read access to the content stream of a content (i.e
       * the content of a file located at the local file system).
@@ -498,7 +498,7 @@ public:
       * @throws cpo::uno::RuntimeException
       * @throws cpo::uno::Exception
       */
-    bool openStream(const css::uno::Reference<css::io::XOutputStream>& rStream);
+    bool openStream(const cpo::uno::Reference<css::io::XOutputStream>& rStream);
     /**
       * This methods gives write access to the content stream of a content (i.e
       * the content of a file located at the local file system).
@@ -512,7 +512,7 @@ public:
       * @throws cpo::uno::RuntimeException
       * @throws cpo::uno::Exception
       */
-    void writeStream(const css::uno::Reference<css::io::XInputStream>& rStream,
+    void writeStream(const cpo::uno::Reference<css::io::XInputStream>& rStream,
                      bool bReplaceExisting);
 
     /**
@@ -589,7 +589,7 @@ public:
     bool insertNewContent(const OUString& rContentType,
                           const cpo::uno::Sequence<OUString>& rPropertyNames,
                           const cpo::uno::Sequence<cpo::uno::Any>& rPropertyValues,
-                          const css::uno::Reference<css::io::XInputStream>& rStream,
+                          const cpo::uno::Reference<css::io::XInputStream>& rStream,
                           Content& rNewContent);
 
     /**

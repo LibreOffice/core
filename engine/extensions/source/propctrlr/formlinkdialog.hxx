@@ -37,11 +37,11 @@ namespace pcr
     class FormLinkDialog : public weld::GenericDialogController
     {
     private:
-        css::uno::Reference< cpo::uno::XComponentContext >
+        cpo::uno::Reference< cpo::uno::XComponentContext >
                                         m_xContext;
-        css::uno::Reference< css::beans::XPropertySet >
+        cpo::uno::Reference< css::beans::XPropertySet >
                                         m_xDetailForm;
-        css::uno::Reference< css::beans::XPropertySet >
+        cpo::uno::Reference< css::beans::XPropertySet >
                                         m_xMasterForm;
 
         std::vector< OUString >         m_aRelationDetailColumns;
@@ -63,9 +63,9 @@ namespace pcr
     public:
         FormLinkDialog(
             weld::Window* _pParent,
-            const css::uno::Reference< css::beans::XPropertySet >& _rxDetailForm,
-            const css::uno::Reference< css::beans::XPropertySet >& _rxMasterForm,
-            const css::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
+            const cpo::uno::Reference< css::beans::XPropertySet >& _rxDetailForm,
+            const cpo::uno::Reference< css::beans::XPropertySet >& _rxMasterForm,
+            const cpo::uno::Reference< cpo::uno::XComponentContext >& _rxContext,
             const OUString& _sExplanation = OUString(),
             OUString _sDetailLabel = OUString(),
             OUString _sMasterLabel = OUString()
@@ -94,29 +94,29 @@ namespace pcr
                     );
 
         static OUString getFormDataSourceType(
-                        const css::uno::Reference< css::beans::XPropertySet >& _rxForm
+                        const cpo::uno::Reference< css::beans::XPropertySet >& _rxForm
                     );
 
         void        getFormFields(
-                        const css::uno::Reference< css::beans::XPropertySet >& _rxForm,
+                        const cpo::uno::Reference< css::beans::XPropertySet >& _rxForm,
                             cpo::uno::Sequence< OUString >& /* [out] */ _rNames
                     ) const;
 
         void        ensureFormConnection(
-                        const css::uno::Reference< css::beans::XPropertySet >& _rxFormProps,
-                            css::uno::Reference< css::sdbc::XConnection >& /* [out] */ _rxConnection
+                        const cpo::uno::Reference< css::beans::XPropertySet >& _rxFormProps,
+                            cpo::uno::Reference< css::sdbc::XConnection >& /* [out] */ _rxConnection
                     ) const;
 
         static void getConnectionMetaData(
-                        const css::uno::Reference< css::beans::XPropertySet >& _rxFormProps,
-                            css::uno::Reference< css::sdbc::XDatabaseMetaData >& /* [out] */ _rxMeta
+                        const cpo::uno::Reference< css::beans::XPropertySet >& _rxFormProps,
+                            cpo::uno::Reference< css::sdbc::XDatabaseMetaData >& /* [out] */ _rxMeta
                     );
 
-        css::uno::Reference< css::beans::XPropertySet >
-                    getCanonicUnderlyingTable( const css::uno::Reference< css::beans::XPropertySet >& _rxFormProps ) const;
+        cpo::uno::Reference< css::beans::XPropertySet >
+                    getCanonicUnderlyingTable( const cpo::uno::Reference< css::beans::XPropertySet >& _rxFormProps ) const;
         static bool getExistingRelation(
-                        const css::uno::Reference< css::beans::XPropertySet >& _rxLHS,
-                        const css::uno::Reference< css::beans::XPropertySet >& _rxRHS,
+                        const cpo::uno::Reference< css::beans::XPropertySet >& _rxLHS,
+                        const cpo::uno::Reference< css::beans::XPropertySet >& _rxRHS,
                         std::vector< OUString >& /* [out] */ _rLeftFields,
                         std::vector< OUString >& /* [out] */ _rRightFields
                     );

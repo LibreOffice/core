@@ -41,7 +41,7 @@ namespace framework{
     @param      xContext
                     points to the valid uno service manager
 *//*-*****************************************************************************************************/
-TaskCreator::TaskCreator( css::uno::Reference< cpo::uno::XComponentContext > xContext )
+TaskCreator::TaskCreator( cpo::uno::Reference< cpo::uno::XComponentContext > xContext )
     : m_xContext    (std::move( xContext ))
 {
 }
@@ -57,20 +57,20 @@ TaskCreator::~TaskCreator()
 /*-****************************************************************************************************
     TODO document me
 *//*-*****************************************************************************************************/
-css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const OUString& sName, const comphelper::SequenceAsHashMap& rDescriptor )
+cpo::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const OUString& sName, const comphelper::SequenceAsHashMap& rDescriptor )
 {
     rtl::Reference< TaskCreatorService > xCreator = new TaskCreatorService(m_xContext);
 
     cpo::uno::Sequence< cpo::uno::Any > lArgs
     {
-        cpo::uno::Any(css::beans::NamedValue(ARGUMENT_PARENTFRAME, cpo::uno::Any(css::uno::Reference< css::frame::XFrame >( css::frame::Desktop::create( m_xContext ), css::uno::UNO_QUERY_THROW)))) ,
+        cpo::uno::Any(css::beans::NamedValue(ARGUMENT_PARENTFRAME, cpo::uno::Any(cpo::uno::Reference< css::frame::XFrame >( css::frame::Desktop::create( m_xContext ), cpo::uno::UNO_QUERY_THROW)))) ,
         cpo::uno::Any(css::beans::NamedValue(ARGUMENT_CREATETOPWINDOW, cpo::uno::Any(true))),
         cpo::uno::Any(css::beans::NamedValue(ARGUMENT_MAKEVISIBLE, cpo::uno::Any(false))),
         cpo::uno::Any(css::beans::NamedValue(ARGUMENT_SUPPORTPERSISTENTWINDOWSTATE, cpo::uno::Any(true))),
         cpo::uno::Any(css::beans::NamedValue(ARGUMENT_FRAMENAME, cpo::uno::Any(sName))),
         cpo::uno::Any(css::beans::NamedValue(ARGUMENT_HIDDENFORCONVERSION, cpo::uno::Any(rDescriptor.getUnpackedValueOrDefault(ARGUMENT_HIDDENFORCONVERSION, false))))
     };
-    css::uno::Reference< css::frame::XFrame > xTask(xCreator->createInstanceWithArguments(lArgs), css::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference< css::frame::XFrame > xTask(xCreator->createInstanceWithArguments(lArgs), cpo::uno::UNO_QUERY_THROW);
     return xTask;
 }
 

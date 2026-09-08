@@ -23,7 +23,7 @@
 #include <sidebar/ControllerFactory.hxx>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo::uno;
 
 namespace sfx2::sidebar {
 
@@ -76,8 +76,8 @@ PanelTitleBar::~PanelTitleBar()
 }
 
 void PanelTitleBar::SetMoreOptionsCommand(const OUString& rsCommandName,
-                                          const css::uno::Reference<css::frame::XFrame>& rxFrame,
-                                          const css::uno::Reference<css::frame::XController>& rxController)
+                                          const cpo::uno::Reference<css::frame::XFrame>& rxFrame,
+                                          const cpo::uno::Reference<css::frame::XController>& rxController)
 {
     if (rsCommandName == msMoreOptionsCommand)
         return;

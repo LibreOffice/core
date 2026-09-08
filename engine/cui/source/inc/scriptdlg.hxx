@@ -56,14 +56,14 @@ class SFEntry final
 {
 private:
     bool            loaded;
-    css::uno::Reference< css::script::browse::XBrowseNode > nodes;
-    css::uno::Reference< css::frame::XModel > model;
+    cpo::uno::Reference< css::script::browse::XBrowseNode > nodes;
+    cpo::uno::Reference< css::frame::XModel > model;
 public:
-                    SFEntry( const css::uno::Reference< css::script::browse::XBrowseNode >& entryNodes ,
-                             const css::uno::Reference< css::frame::XModel >& entryModel) { nodes = entryNodes; loaded=false; model = entryModel; }
+                    SFEntry( const cpo::uno::Reference< css::script::browse::XBrowseNode >& entryNodes ,
+                             const cpo::uno::Reference< css::frame::XModel >& entryModel) { nodes = entryNodes; loaded=false; model = entryModel; }
                     SFEntry( const SFEntry& r ) { nodes = r.nodes; loaded = r.loaded; }
-    const css::uno::Reference< css::script::browse::XBrowseNode >& GetNode() const { return nodes ;}
-    const css::uno::Reference< css::frame::XModel >& GetModel() const { return model ;};
+    const cpo::uno::Reference< css::script::browse::XBrowseNode >& GetNode() const { return nodes ;}
+    const cpo::uno::Reference< css::frame::XModel >& GetModel() const { return model ;};
     bool            isLoaded() const                    { return loaded; }
     void            setLoaded()                         { loaded=true; }
 };
@@ -97,15 +97,15 @@ class SvxScriptOrgDialog : public SfxDialogController
     DECL_LINK( ScriptSelectHdl, weld::TreeView&, void );
     DECL_LINK( ExpandingHdl, const weld::TreeIter&, bool );
     DECL_LINK( ButtonHdl, weld::Button&, void );
-    static bool         getBoolProperty( css::uno::Reference< css::beans::XPropertySet > const & xProps, OUString const & propName );
-    void                CheckButtons(  css::uno::Reference< css::script::browse::XBrowseNode > const & node );
+    static bool         getBoolProperty( cpo::uno::Reference< css::beans::XPropertySet > const & xProps, OUString const & propName );
+    void                CheckButtons(  cpo::uno::Reference< css::script::browse::XBrowseNode > const & node );
 
     void        createEntry(const weld::TreeIter& rEntry);
     void        renameEntry(const weld::TreeIter& rEntry);
     void        deleteEntry(const weld::TreeIter& rEntry);
-    css::uno::Reference<css::script::browse::XBrowseNode> getBrowseNode(const weld::TreeIter& rEntry);
-    css::uno::Reference<css::frame::XModel> getModel(const weld::TreeIter& rEntry);
-    OUString    getListOfChildren( const css::uno::Reference< css::script::browse::XBrowseNode >& node, int depth );
+    cpo::uno::Reference<css::script::browse::XBrowseNode> getBrowseNode(const weld::TreeIter& rEntry);
+    cpo::uno::Reference<css::frame::XModel> getModel(const weld::TreeIter& rEntry);
+    OUString    getListOfChildren( const cpo::uno::Reference< css::script::browse::XBrowseNode >& node, int depth );
     void        StoreCurrentSelection();
     void        RestorePreviousSelection();
 
@@ -125,13 +125,13 @@ class SvxScriptOrgDialog : public SfxDialogController
                               bool bSelect);
 
     void        RequestSubEntries(const weld::TreeIter& rRootEntry,
-                                  css::uno::Reference< css::script::browse::XBrowseNode > const & node,
-                                  css::uno::Reference< css::frame::XModel>& model);
+                                  cpo::uno::Reference< css::script::browse::XBrowseNode > const & node,
+                                  cpo::uno::Reference< css::frame::XModel>& model);
 
-    static css::uno::Reference< css::script::browse::XBrowseNode >
-        getLangNodeFromRootNode( css::uno::Reference< css::script::browse::XBrowseNode > const & root, std::u16string_view language );
+    static cpo::uno::Reference< css::script::browse::XBrowseNode >
+        getLangNodeFromRootNode( cpo::uno::Reference< css::script::browse::XBrowseNode > const & root, std::u16string_view language );
 
-    static css::uno::Reference< cpo::uno::XInterface  > getDocumentModel( css::uno::Reference< cpo::uno::XComponentContext > const & xCtx, std::u16string_view docName );
+    static cpo::uno::Reference< cpo::uno::XInterface  > getDocumentModel( cpo::uno::Reference< cpo::uno::XComponentContext > const & xCtx, std::u16string_view docName );
 
 public:
     // prob need another arg in the ctor

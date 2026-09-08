@@ -44,12 +44,12 @@ class SdXMLShapeContext : public SvXMLShapeContext
 {
 protected:
     // the shape group this object should be created inside
-    css::uno::Reference< css::drawing::XShapes >  mxShapes;
-    css::uno::Reference< css::text::XTextCursor > mxCursor;
-    css::uno::Reference< css::text::XTextCursor > mxOldCursor;
-    css::uno::Reference< css::xml::sax::XFastAttributeList> mxAttrList;
-    css::uno::Reference< css::container::XIdentifierContainer > mxGluePoints;
-    css::uno::Reference< css::document::XActionLockable > mxLockable;
+    cpo::uno::Reference< css::drawing::XShapes >  mxShapes;
+    cpo::uno::Reference< css::text::XTextCursor > mxCursor;
+    cpo::uno::Reference< css::text::XTextCursor > mxOldCursor;
+    cpo::uno::Reference< css::xml::sax::XFastAttributeList> mxAttrList;
+    cpo::uno::Reference< css::container::XIdentifierContainer > mxGluePoints;
+    cpo::uno::Reference< css::document::XActionLockable > mxLockable;
 
     OUString               maDrawStyleName;
     OUString               maTextStyleName;
@@ -87,30 +87,30 @@ protected:
     void SetLayer();
     void SetThumbnail();
 
-    void AddShape(css::uno::Reference< css::drawing::XShape >& xShape);
+    void AddShape(cpo::uno::Reference< css::drawing::XShape >& xShape);
     void AddShape(OUString const & serviceName);
     void SetTransformation();
 
     using SvXMLImportContext::GetImport;
 
-    void addGluePoint( const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList );
+    void addGluePoint( const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList );
 
     bool isPresentationShape() const;
 
 public:
 
     SdXMLShapeContext( SvXMLImport& rImport,
-        css::uno::Reference< css::xml::sax::XFastAttributeList> xAttrList,
-        css::uno::Reference< css::drawing::XShapes > xShapes,
+        cpo::uno::Reference< css::xml::sax::XFastAttributeList> xAttrList,
+        cpo::uno::Reference< css::drawing::XShapes > xShapes,
         bool bTemporaryShape);
     virtual ~SdXMLShapeContext() override;
 
     virtual void startFastElement(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
     virtual void endFastElement(sal_Int32 nElement) override;
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
     // this is called from the parent group for each unparsed attribute in the attribute list
     virtual bool processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & );
@@ -126,13 +126,13 @@ class SdXMLRectShapeContext : public SdXMLShapeContext
 public:
 
     SdXMLRectShapeContext( SvXMLImport& rImport,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
-        css::uno::Reference< css::drawing::XShapes > const & rShapes,
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+        cpo::uno::Reference< css::drawing::XShapes > const & rShapes,
         bool bTemporaryShape);
     virtual ~SdXMLRectShapeContext() override;
     virtual void startFastElement(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     // this is called from the parent group for each unparsed attribute in the attribute list
     virtual bool processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & ) override;
@@ -150,13 +150,13 @@ class SdXMLLineShapeContext : public SdXMLShapeContext
 public:
 
     SdXMLLineShapeContext( SvXMLImport& rImport,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
-        css::uno::Reference< css::drawing::XShapes > const & rShapes,
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+        cpo::uno::Reference< css::drawing::XShapes > const & rShapes,
         bool bTemporaryShape);
     virtual ~SdXMLLineShapeContext() override;
     virtual void startFastElement(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     // this is called from the parent group for each unparsed attribute in the attribute list
     virtual bool processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & ) override;
@@ -177,13 +177,13 @@ class SdXMLEllipseShapeContext : public SdXMLShapeContext
 public:
 
     SdXMLEllipseShapeContext( SvXMLImport& rImport,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
-        css::uno::Reference< css::drawing::XShapes > const & rShapes,
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+        cpo::uno::Reference< css::drawing::XShapes > const & rShapes,
         bool bTemporaryShape);
     virtual ~SdXMLEllipseShapeContext() override;
     virtual void startFastElement(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     // this is called from the parent group for each unparsed attribute in the attribute list
     virtual bool processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & ) override;
@@ -200,12 +200,12 @@ class SdXMLPolygonShapeContext : public SdXMLShapeContext
 public:
 
     SdXMLPolygonShapeContext( SvXMLImport& rImport,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
-        css::uno::Reference< css::drawing::XShapes > const & rShapes, bool bClosed, bool bTemporaryShape);
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+        cpo::uno::Reference< css::drawing::XShapes > const & rShapes, bool bClosed, bool bTemporaryShape);
     virtual ~SdXMLPolygonShapeContext() override;
     virtual void startFastElement(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     // this is called from the parent group for each unparsed attribute in the attribute list
     virtual bool processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & ) override;
@@ -221,13 +221,13 @@ class SdXMLPathShapeContext : public SdXMLShapeContext
 public:
 
     SdXMLPathShapeContext( SvXMLImport& rImport,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
-        css::uno::Reference< css::drawing::XShapes > const & rShapes,
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+        cpo::uno::Reference< css::drawing::XShapes > const & rShapes,
         bool bTemporaryShape);
     virtual ~SdXMLPathShapeContext() override;
     virtual void startFastElement(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     // this is called from the parent group for each unparsed attribute in the attribute list
     virtual bool processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & ) override;
@@ -243,12 +243,12 @@ class SdXMLTextBoxShapeContext : public SdXMLShapeContext
 public:
 
     SdXMLTextBoxShapeContext( SvXMLImport& rImport,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
-        css::uno::Reference< css::drawing::XShapes > const & rShapes);
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+        cpo::uno::Reference< css::drawing::XShapes > const & rShapes);
     virtual ~SdXMLTextBoxShapeContext() override;
     virtual void startFastElement(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     // this is called from the parent group for each unparsed attribute in the attribute list
     virtual bool processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & ) override;
@@ -264,13 +264,13 @@ private:
 public:
 
     SdXMLControlShapeContext( SvXMLImport& rImport,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
-        css::uno::Reference< css::drawing::XShapes > const & rShapes,
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+        cpo::uno::Reference< css::drawing::XShapes > const & rShapes,
         bool bTemporaryShape);
     virtual ~SdXMLControlShapeContext() override;
     virtual void startFastElement(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     // this is called from the parent group for each unparsed attribute in the attribute list
     virtual bool processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & ) override;
@@ -306,13 +306,13 @@ private:
 public:
 
     SdXMLConnectorShapeContext( SvXMLImport& rImport,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
-        css::uno::Reference< css::drawing::XShapes > const & rShapes,
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+        cpo::uno::Reference< css::drawing::XShapes > const & rShapes,
         bool bTemporaryShape);
     virtual ~SdXMLConnectorShapeContext() override;
     virtual void startFastElement(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     // this is called from the parent group for each unparsed attribute in the attribute list
     virtual bool processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & ) override;
@@ -329,13 +329,13 @@ private:
 public:
 
     SdXMLMeasureShapeContext( SvXMLImport& rImport,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
-        css::uno::Reference< css::drawing::XShapes > const & rShapes,
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+        cpo::uno::Reference< css::drawing::XShapes > const & rShapes,
         bool bTemporaryShape);
     virtual ~SdXMLMeasureShapeContext() override;
     virtual void startFastElement(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
     virtual void endFastElement(sal_Int32 nElement) override;
 
     // this is called from the parent group for each unparsed attribute in the attribute list
@@ -351,13 +351,13 @@ private:
 public:
 
     SdXMLPageShapeContext( SvXMLImport& rImport,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
-        css::uno::Reference< css::drawing::XShapes > const & rShapes,
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+        cpo::uno::Reference< css::drawing::XShapes > const & rShapes,
         bool bTemporaryShape);
     virtual ~SdXMLPageShapeContext() override;
     virtual void startFastElement(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     // this is called from the parent group for each unparsed attribute in the attribute list
     virtual bool processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & ) override;
@@ -377,13 +377,13 @@ private:
 public:
 
     SdXMLCaptionShapeContext( SvXMLImport& rImport,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
-        css::uno::Reference< css::drawing::XShapes > const & rShapes,
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+        cpo::uno::Reference< css::drawing::XShapes > const & rShapes,
         bool bTemporaryShape);
     virtual ~SdXMLCaptionShapeContext() override;
     virtual void startFastElement(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     // this is called from the parent group for each unparsed attribute in the attribute list
     virtual bool processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & ) override;
@@ -396,24 +396,24 @@ class SdXMLGraphicObjectShapeContext : public SdXMLShapeContext
 private:
     OUString maURL;
     OUString msMimeType;
-    css::uno::Reference < css::io::XOutputStream > mxBase64Stream;
+    cpo::uno::Reference < css::io::XOutputStream > mxBase64Stream;
     sal_Int32 mnPage;
 
 public:
     OUString const& getMimeType() const { return msMimeType; }
 
     SdXMLGraphicObjectShapeContext( SvXMLImport& rImport,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
-        css::uno::Reference< css::drawing::XShapes > const & rShapes);
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+        cpo::uno::Reference< css::drawing::XShapes > const & rShapes);
     virtual ~SdXMLGraphicObjectShapeContext() override;
 
     virtual void startFastElement(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
     virtual void endFastElement(sal_Int32 nElement) override;
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     // this is called from the parent group for each unparsed attribute in the attribute list
     virtual bool processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & ) override;
@@ -428,17 +428,17 @@ class SdXMLChartShapeContext : public SdXMLShapeContext
 public:
 
     SdXMLChartShapeContext( SvXMLImport& rImport,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
-        css::uno::Reference< css::drawing::XShapes > const & rShapes,
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+        cpo::uno::Reference< css::drawing::XShapes > const & rShapes,
         bool bTemporaryShape);
 
     virtual void startFastElement(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
     virtual void endFastElement(sal_Int32 nElement) override;
     virtual void characters( const OUString& rChars ) override;
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 };
 
 // draw:object and draw:object_ole context
@@ -449,22 +449,22 @@ private:
     OUString maCLSID;
     OUString maHref;
 
-    css::uno::Reference < css::io::XOutputStream > mxBase64Stream;
+    cpo::uno::Reference < css::io::XOutputStream > mxBase64Stream;
 
 public:
 
     SdXMLObjectShapeContext( SvXMLImport& rImport,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
-        css::uno::Reference< css::drawing::XShapes > const & rShapes);
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+        cpo::uno::Reference< css::drawing::XShapes > const & rShapes);
     virtual ~SdXMLObjectShapeContext() override;
 
     virtual void startFastElement(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
     virtual void endFastElement(sal_Int32 nElement) override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
     // this is called from the parent group for each unparsed attribute in the attribute list
     virtual bool processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & ) override;
@@ -484,17 +484,17 @@ private:
 public:
 
     SdXMLPluginShapeContext( SvXMLImport& rImport,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
-        css::uno::Reference< css::drawing::XShapes > const & rShapes);
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+        cpo::uno::Reference< css::drawing::XShapes > const & rShapes);
     virtual ~SdXMLPluginShapeContext() override;
 
     virtual void startFastElement(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
     virtual void endFastElement(sal_Int32 nElement) override;
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
     // this is called from the parent group for each unparsed attribute in the attribute list
     virtual bool processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & ) override;
@@ -510,18 +510,18 @@ private:
     OUString maFrameName;
     OUString maHref;
 
-    css::uno::Reference<css::drawing::XShape> CreateFloatingFrameShape() const;
+    cpo::uno::Reference<css::drawing::XShape> CreateFloatingFrameShape() const;
 
 public:
 
     SdXMLFloatingFrameShapeContext( SvXMLImport& rImport,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
-        css::uno::Reference< css::drawing::XShapes > const & rShapes);
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+        cpo::uno::Reference< css::drawing::XShapes > const & rShapes);
     virtual ~SdXMLFloatingFrameShapeContext() override;
 
     virtual void startFastElement(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
     virtual void endFastElement(sal_Int32 nElement) override;
 
     // this is called from the parent group for each unparsed attribute in the attribute list
@@ -544,22 +544,22 @@ protected:
     void removeGraphicFromImportContext(const SvXMLImportContext& rContext) override;
     OUString getGraphicPackageURLFromImportContext(const SvXMLImportContext& rContext) const override;
     OUString getMimeTypeFromImportContext(const SvXMLImportContext& rContext) const override;
-    css::uno::Reference<css::graphic::XGraphic> getGraphicFromImportContext(const SvXMLImportContext& rContext) const override;
+    cpo::uno::Reference<css::graphic::XGraphic> getGraphicFromImportContext(const SvXMLImportContext& rContext) const override;
 
 public:
 
     SdXMLFrameShapeContext( SvXMLImport& rImport,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
-        css::uno::Reference< css::drawing::XShapes > const & rShapes,
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+        cpo::uno::Reference< css::drawing::XShapes > const & rShapes,
         bool bTemporaryShape);
     virtual ~SdXMLFrameShapeContext() override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
     virtual void startFastElement(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
     virtual void endFastElement(sal_Int32 nElement) override;
 
     virtual bool processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & ) override;
@@ -576,16 +576,16 @@ public:
 
 
     SdXMLCustomShapeContext( SvXMLImport& rImport,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
-        css::uno::Reference< css::drawing::XShapes > const & rShapes);
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+        cpo::uno::Reference< css::drawing::XShapes > const & rShapes);
     virtual ~SdXMLCustomShapeContext() override;
 
     virtual void startFastElement(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
     virtual void endFastElement(sal_Int32 nElement) override;
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
     // this is called from the parent group for each unparsed attribute in the attribute list
     virtual bool processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & ) override;
@@ -598,17 +598,17 @@ class SdXMLTableShapeContext : public SdXMLShapeContext
 public:
 
     SdXMLTableShapeContext( SvXMLImport& rImport,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
-        css::uno::Reference< css::drawing::XShapes > const & rShapes );
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
+        cpo::uno::Reference< css::drawing::XShapes > const & rShapes );
     virtual ~SdXMLTableShapeContext() override;
 
     virtual void startFastElement(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
     virtual void endFastElement(sal_Int32 nElement) override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 
     // this is called from the parent group for each unparsed attribute in the attribute list
     virtual bool processAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & ) override;

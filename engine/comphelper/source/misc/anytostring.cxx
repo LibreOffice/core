@@ -26,6 +26,7 @@
 #include "typedescriptionref.hxx"
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 using ::cpo::uno::TypeDescription;
 using ::comphelper::detail::TypeDescriptionRef;
 

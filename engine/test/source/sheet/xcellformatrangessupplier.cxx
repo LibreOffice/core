@@ -11,12 +11,13 @@
 
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/sheet/XCellFormatRangesSupplier.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <cpo/uno/Reference.hxx>
 
 #include <cppunit/TestAssert.h>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 namespace apitest
 {

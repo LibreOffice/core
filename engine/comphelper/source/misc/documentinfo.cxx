@@ -35,9 +35,9 @@
 namespace comphelper {
 
 
-    using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::UNO_QUERY;
-    using ::com::sun::star::uno::UNO_QUERY_THROW;
+    using ::cpo::uno::Reference;
+    using ::cpo::uno::UNO_QUERY;
+    using ::cpo::uno::UNO_QUERY_THROW;
     using ::cpo::uno::Exception;
     using ::com::sun::star::frame::XModel;
     using ::com::sun::star::frame::XTitle;
@@ -100,7 +100,7 @@ namespace comphelper {
             if ( xDPS.is() )
             {
                 Reference< XDocumentProperties > xDocProps (
-                    xDPS->getDocumentProperties(), css::uno::UNO_SET_THROW );
+                    xDPS->getDocumentProperties(), cpo::uno::UNO_SET_THROW );
                 sTitle = xDocProps->getTitle();
                 if ( !sTitle.isEmpty() )
                     return sTitle;
@@ -156,7 +156,7 @@ namespace comphelper {
         return sTitle;
     }
 
-    void DocumentInfo::notifyMacroEventRead(const css::uno::Reference<css::frame::XModel>& rModel)
+    void DocumentInfo::notifyMacroEventRead(const cpo::uno::Reference<css::frame::XModel>& rModel)
     {
         if (!rModel.is())
             return;
@@ -173,8 +173,8 @@ namespace comphelper {
     }
 
     void DocumentInfo::notifyRemoteContentFound(
-        const css::uno::Reference<css::frame::XModel>& rModel,
-        const css::uno::Reference<css::beans::XPropertySet>& rxControl,
+        const cpo::uno::Reference<css::frame::XModel>& rModel,
+        const cpo::uno::Reference<css::beans::XPropertySet>& rxControl,
         const OUString& rURL)
     {
         if (!rModel.is())

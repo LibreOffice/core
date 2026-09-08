@@ -56,32 +56,32 @@ private:
 
     cpo::uno::Any getBadArgExcept();
 
-    css::uno::Reference< css::sdbc::XRow >
+    cpo::uno::Reference< css::sdbc::XRow >
         getPropertyValues(
             const cpo::uno::Sequence< css::beans::Property >& rProperties,
-            const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
+            const cpo::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
 
     /*
      * Call me to ensure the repositories have been fetched
      */
-    void getRepositories( const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
+    void getRepositories( const cpo::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
 
-    libcmis::RepositoryPtr getRepository( const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
+    libcmis::RepositoryPtr getRepository( const cpo::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
 
 public:
     /// @throws css::ucb::ContentCreationException
-    RepoContent( const css::uno::Reference<
+    RepoContent( const cpo::uno::Reference<
         cpo::uno::XComponentContext >& rxContext, ContentProvider *pProvider,
-        const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier,
+        const cpo::uno::Reference< css::ucb::XContentIdentifier >& Identifier,
         std::vector< libcmis::RepositoryPtr > && aRepos = std::vector< libcmis::RepositoryPtr > ( ) );
 
     virtual ~RepoContent() override;
 
     virtual cpo::uno::Sequence< css::beans::Property >
-        getProperties( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv ) override;
+        getProperties( const cpo::uno::Reference< css::ucb::XCommandEnvironment > & xEnv ) override;
 
     virtual cpo::uno::Sequence< css::ucb::CommandInfo >
-        getCommands( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv ) override;
+        getCommands( const cpo::uno::Reference< css::ucb::XCommandEnvironment > & xEnv ) override;
 
     virtual OUString getParentURL() override;
 
@@ -102,11 +102,11 @@ public:
     virtual cpo::uno::Any SAL_CALL
         execute( const css::ucb::Command& aCommand,
         sal_Int32 CommandId,
-        const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment ) override;
+        const cpo::uno::Reference< css::ucb::XCommandEnvironment >& Environment ) override;
 
     virtual void SAL_CALL abort( sal_Int32 CommandId ) override;
 
-    virtual std::vector< css::uno::Reference< css::ucb::XContent > > getChildren( ) override;
+    virtual std::vector< cpo::uno::Reference< css::ucb::XContent > > getChildren( ) override;
 };
 
 }

@@ -78,8 +78,8 @@
 #include <unotxdoc.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace cpo::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 #define MM_DOCTYPE_OOO              1
 #define MM_DOCTYPE_PDF              2

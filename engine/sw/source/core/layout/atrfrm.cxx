@@ -104,6 +104,7 @@
 #include <names.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::cpo;
 
 namespace sw {
 
@@ -1146,8 +1147,8 @@ bool SwFormatCol::QueryValue( cpo::uno::Any& rVal, sal_uInt8 nMemberId ) const
     else
     {
         uno::Reference<text::XTextColumns> xCols(SvxXTextColumns_createInstance(),
-                                                 css::uno::UNO_QUERY_THROW);
-        uno::Reference<beans::XPropertySet> xProps(xCols, css::uno::UNO_QUERY_THROW);
+                                                 cpo::uno::UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertySet> xProps(xCols, cpo::uno::UNO_QUERY_THROW);
 
         if (GetNumCols() > 0)
         {
@@ -1264,7 +1265,7 @@ bool SwFormatCol::PutValue( const cpo::uno::Any& rVal, sal_uInt8 nMemberId )
             m_nWidth = nWidthSum;
             m_bOrtho = false;
 
-            if (uno::Reference<beans::XPropertySet> xProps{ xCols, css::uno::UNO_QUERY })
+            if (uno::Reference<beans::XPropertySet> xProps{ xCols, cpo::uno::UNO_QUERY })
             {
                 xProps->getPropertyValue(UNO_NAME_IS_AUTOMATIC) >>= m_bOrtho;
                 xProps->getPropertyValue(UNO_NAME_SEPARATOR_LINE_WIDTH) >>= m_nLineWidth;

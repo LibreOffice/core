@@ -169,7 +169,7 @@ std::unique_ptr<SvStream> BinaryDataContainer::getAsStream() const
     return std::make_unique<ReferencedMemoryStream>(mpImpl->mpData);
 }
 
-css::uno::Reference<css::io::XInputStream> BinaryDataContainer::getAsXInputStream() const
+cpo::uno::Reference<css::io::XInputStream> BinaryDataContainer::getAsXInputStream() const
 {
     ensureSwappedIn(); // TODO: transfer in streamed chunks
     return new ReferencedXInputStream(mpImpl->mpData);

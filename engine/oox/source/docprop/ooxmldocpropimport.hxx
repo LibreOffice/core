@@ -34,7 +34,7 @@ class DocumentPropertiesImport :
 {
 public:
     explicit            DocumentPropertiesImport(
-                            const css::uno::Reference< cpo::uno::XComponentContext >& rxContext );
+                            const cpo::uno::Reference< cpo::uno::XComponentContext >& rxContext );
 
     // XServiceInfo
     virtual OUString getImplementationName() override;
@@ -43,17 +43,17 @@ public:
 
     // XOOXMLDocumentPropertiesImporter
     virtual void importProperties(
-                            const css::uno::Reference< css::embed::XStorage >& rxSource,
-                            const css::uno::Reference< css::document::XDocumentProperties >& rxDocumentProperties ) override;
-    virtual css::uno::Reference < css::io::XInputStream > getCorePropertiesStream(
-        const css::uno::Reference< css::embed::XStorage >& rxSource) override;
-    virtual css::uno::Reference < css::io::XInputStream > getExtendedPropertiesStream(
-        const css::uno::Reference< css::embed::XStorage >& rxSource) override;
-    virtual cpo::uno::Sequence< css::uno::Reference< css::io::XInputStream > > getCustomPropertiesStreams(
-        const css::uno::Reference< css::embed::XStorage >& rxSource) override;
+                            const cpo::uno::Reference< css::embed::XStorage >& rxSource,
+                            const cpo::uno::Reference< css::document::XDocumentProperties >& rxDocumentProperties ) override;
+    virtual cpo::uno::Reference < css::io::XInputStream > getCorePropertiesStream(
+        const cpo::uno::Reference< css::embed::XStorage >& rxSource) override;
+    virtual cpo::uno::Reference < css::io::XInputStream > getExtendedPropertiesStream(
+        const cpo::uno::Reference< css::embed::XStorage >& rxSource) override;
+    virtual cpo::uno::Sequence< cpo::uno::Reference< css::io::XInputStream > > getCustomPropertiesStreams(
+        const cpo::uno::Reference< css::embed::XStorage >& rxSource) override;
 
 private:
-    css::uno::Reference< cpo::uno::XComponentContext > mxContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext > mxContext;
 };
 
 } // namespace oox::docprop

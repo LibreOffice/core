@@ -48,10 +48,10 @@
 using namespace ::comphelper;
 using namespace ::linguistic;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::linguistic2;
+using namespace ::cpo;
 using namespace ::cpo::uno;
 
 static uno::Reference< XLinguServiceManager2 > GetLngSvcMgr_Impl()
@@ -88,7 +88,7 @@ public:
 
     // XThesaurus
     virtual cpo::uno::Sequence<
-            css::uno::Reference< css::linguistic2::XMeaning > >
+            cpo::uno::Reference< css::linguistic2::XMeaning > >
         queryMeanings( const OUString& rTerm,
                 const css::lang::Locale& rLocale,
                 const cpo::uno::Sequence< css::beans::PropertyValue >& rProperties ) override;
@@ -190,7 +190,7 @@ public:
     virtual bool
         isValid( const OUString& rWord, const css::lang::Locale& nLanguage,
                 const cpo::uno::Sequence< css::beans::PropertyValue >& rProperties ) override;
-    virtual css::uno::Reference< css::linguistic2::XSpellAlternatives >
+    virtual cpo::uno::Reference< css::linguistic2::XSpellAlternatives >
         spell( const OUString& rWord, const css::lang::Locale& nLanguage,
                 const cpo::uno::Sequence< css::beans::PropertyValue >& rProperties ) override;
 };
@@ -274,19 +274,19 @@ public:
         hasLocale( const css::lang::Locale& rLocale ) override;
 
     // XHyphenator
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
             css::linguistic2::XHyphenatedWord >
         hyphenate( const OUString& rWord,
                 const css::lang::Locale& rLocale,
                 sal_Int16 nMaxLeading,
                 const cpo::uno::Sequence< css::beans::PropertyValue >& rProperties ) override;
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
             css::linguistic2::XHyphenatedWord >
         queryAlternativeSpelling( const OUString& rWord,
                 const css::lang::Locale& rLocale,
                 sal_Int16 nIndex,
                 const cpo::uno::Sequence< css::beans::PropertyValue >& rProperties ) override;
-    virtual css::uno::Reference<
+    virtual cpo::uno::Reference<
             css::linguistic2::XPossibleHyphens >
         createPossibleHyphens(
                 const OUString& rWord,
@@ -663,7 +663,7 @@ uno::Reference< XDictionary > LinguMgr::GetStandard()
 }
 
 SvxAlternativeSpelling SvxGetAltSpelling(
-        const css::uno::Reference< css::linguistic2::XHyphenatedWord > & rHyphWord )
+        const cpo::uno::Reference< css::linguistic2::XHyphenatedWord > & rHyphWord )
 {
     SvxAlternativeSpelling aRes;
     if (rHyphWord.is() && rHyphWord->isAlternativeSpelling())

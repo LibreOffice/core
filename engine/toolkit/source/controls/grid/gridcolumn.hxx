@@ -62,14 +62,14 @@ public:
     virtual void setDataColumnIndex( ::sal_Int32 i_dataColumnIndex ) override;
     virtual css::style::HorizontalAlignment getHorizontalAlign() override;
     virtual void setHorizontalAlign(css::style::HorizontalAlignment align) override;
-    virtual void addGridColumnListener( const css::uno::Reference< css::awt::grid::XGridColumnListener >& xListener ) override;
-    virtual void removeGridColumnListener( const css::uno::Reference< css::awt::grid::XGridColumnListener >& xListener ) override;
+    virtual void addGridColumnListener( const cpo::uno::Reference< css::awt::grid::XGridColumnListener >& xListener ) override;
+    virtual void removeGridColumnListener( const cpo::uno::Reference< css::awt::grid::XGridColumnListener >& xListener ) override;
 
     // OComponentHelper
     virtual void disposing(std::unique_lock<std::mutex>&) override;
 
     // XCloneable (base of XGridColumn)
-    virtual css::uno::Reference< css::util::XCloneable > createClone(  ) override;
+    virtual cpo::uno::Reference< css::util::XCloneable > createClone(  ) override;
 
     // XServiceInfo
     virtual OUString getImplementationName(  ) override;

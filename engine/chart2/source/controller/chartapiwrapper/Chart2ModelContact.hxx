@@ -46,7 +46,7 @@ namespace wrapper
 class Chart2ModelContact final
 {
 public:
-    explicit Chart2ModelContact( const css::uno::Reference< cpo::uno::XComponentContext >& xContext );
+    explicit Chart2ModelContact( const cpo::uno::Reference< cpo::uno::XComponentContext >& xContext );
     ~Chart2ModelContact();
 
 public:
@@ -104,32 +104,32 @@ public:
 
     /** Returns the size of the object in logic coordinates.
      */
-    css::awt::Size GetTitleSize( const css::uno::Reference< css::chart2::XTitle > & xTitle ) const;
+    css::awt::Size GetTitleSize( const cpo::uno::Reference< css::chart2::XTitle > & xTitle ) const;
 
     /** Returns the position of the object in logic coordinates.
      */
-    css::awt::Point GetTitlePosition( const css::uno::Reference< css::chart2::XTitle > & xTitle ) const;
+    css::awt::Point GetTitlePosition( const cpo::uno::Reference< css::chart2::XTitle > & xTitle ) const;
 
     /** Returns the size of the object in logic coordinates.
      */
-    css::awt::Size GetAxisSize( const css::uno::Reference< css::chart2::XAxis > & xAxis ) const;
+    css::awt::Size GetAxisSize( const cpo::uno::Reference< css::chart2::XAxis > & xAxis ) const;
 
     /** Returns the position of the object in logic coordinates.
      */
-    css::awt::Point GetAxisPosition( const css::uno::Reference< css::chart2::XAxis > & xAxis ) const;
+    css::awt::Point GetAxisPosition( const cpo::uno::Reference< css::chart2::XAxis > & xAxis ) const;
 
 private: //methods
     rtl::Reference< ChartView > const & getChartView() const;
 
 public: //member
-    css::uno::Reference< cpo::uno::XComponentContext >  m_xContext;
+    cpo::uno::Reference< cpo::uno::XComponentContext >  m_xContext;
 
 private: //member
     unotools::WeakReference< ChartModel >   m_xChartModel;
 
     mutable rtl::Reference< ChartView > m_xChartView;
 
-    std::map< OUString, css::uno::Reference< css::container::XNameContainer > > m_aTableMap;
+    std::map< OUString, cpo::uno::Reference< css::container::XNameContainer > > m_aTableMap;
 };
 
 } //  namespace wrapper

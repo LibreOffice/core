@@ -61,7 +61,7 @@ namespace oox::xls {
 
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sheet;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 
 using ::oox::core::Relations;
 
@@ -721,7 +721,7 @@ const PivotCacheItemList& PivotCacheField::getCacheItems() const
 void PivotCacheField::convertNumericGrouping( const rtl::Reference< ScDataPilotFieldObj >& rxDPField ) const
 {
     OSL_ENSURE( hasGroupItems() && hasNumericGrouping(), "PivotCacheField::convertNumericGrouping - not a numeric group field" );
-    PropertySet aPropSet(( css::uno::Reference< css::beans::XPropertySet >(rxDPField) ));
+    PropertySet aPropSet(( cpo::uno::Reference< css::beans::XPropertySet >(rxDPField) ));
     if( hasGroupItems() && hasNumericGrouping() && aPropSet.is() )
     {
         DataPilotFieldGroupInfo aGroupInfo;
@@ -740,7 +740,7 @@ OUString PivotCacheField::createDateGroupField( const rtl::Reference< ScDataPilo
 {
     OSL_ENSURE( hasGroupItems() && hasDateGrouping(), "PivotCacheField::createDateGroupField - not a numeric group field" );
     rtl::Reference< ScDataPilotFieldObj > xDPGroupField;
-    PropertySet aPropSet(( css::uno::Reference< css::beans::XPropertySet >(rxBaseDPField) ));
+    PropertySet aPropSet(( cpo::uno::Reference< css::beans::XPropertySet >(rxBaseDPField) ));
     if( hasGroupItems() && hasDateGrouping() && aPropSet.is() )
     {
         bool bDayRanges = (maFieldGroupModel.mnGroupBy == XML_days) && (maFieldGroupModel.mfInterval >= 2.0);
@@ -836,7 +836,7 @@ OUString PivotCacheField::createParentGroupField( const rtl::Reference< ScDataPi
 
                 // get current grouping info
                 DataPilotFieldGroupInfo aGroupInfo;
-                PropertySet aPropSet(( css::uno::Reference< css::beans::XPropertySet >(xDPGroupField) ));
+                PropertySet aPropSet(( cpo::uno::Reference< css::beans::XPropertySet >(xDPGroupField) ));
                 aPropSet.getProperty( aGroupInfo, PROP_GroupInfo );
 
                 /*  Find the group object and the auto-generated group name.

@@ -110,7 +110,7 @@ sal_uInt16 const ControllerSlotMap[] =    // slots of the controller
     0
 };
 
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::sdbc;

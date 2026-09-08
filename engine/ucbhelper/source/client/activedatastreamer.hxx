@@ -32,12 +32,12 @@ namespace ucbhelper
 
 class ActiveDataStreamer final : public cppu::WeakImplHelper<css::io::XActiveDataStreamer>
 {
-    css::uno::Reference<css::io::XStream> m_xStream;
+    cpo::uno::Reference<css::io::XStream> m_xStream;
 
 public:
     // XActiveDataStreamer methods.
-    virtual void setStream(const css::uno::Reference<css::io::XStream>& xStream) override;
-    virtual css::uno::Reference<css::io::XStream> getStream() override;
+    virtual void setStream(const cpo::uno::Reference<css::io::XStream>& xStream) override;
+    virtual cpo::uno::Reference<css::io::XStream> getStream() override;
 };
 
 } /* namespace ucbhelper */

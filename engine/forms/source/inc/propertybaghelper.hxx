@@ -42,7 +42,7 @@ namespace frm
             cpo::uno::Sequence< css::beans::Property >& _out_rAggregateProperties
         ) const = 0;
 
-        virtual css::uno::Reference< css::beans::XMultiPropertySet >
+        virtual cpo::uno::Reference< css::beans::XMultiPropertySet >
                                 getPropertiesInterface() = 0;
 
     protected:

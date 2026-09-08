@@ -52,8 +52,8 @@ class SAL_DLLPUBLIC_TEMPLATE PopupWindowController_Base
 class SVT_DLLPUBLIC PopupWindowController : public PopupWindowController_Base
 {
 public:
-    PopupWindowController(const css::uno::Reference<cpo::uno::XComponentContext>& rxContext,
-                          const css::uno::Reference<css::frame::XFrame>& xFrame,
+    PopupWindowController(const cpo::uno::Reference<cpo::uno::XComponentContext>& rxContext,
+                          const cpo::uno::Reference<css::frame::XFrame>& xFrame,
                           const OUString& aCommandURL);
 
     virtual ~PopupWindowController() override;
@@ -76,7 +76,7 @@ public:
     virtual void statusChanged(const css::frame::FeatureStateEvent& Event) override;
 
     // XToolbarController
-    virtual css::uno::Reference<css::awt::XWindow> createPopupWindow() override;
+    virtual cpo::uno::Reference<css::awt::XWindow> createPopupWindow() override;
     virtual void click() override;
 
 protected:

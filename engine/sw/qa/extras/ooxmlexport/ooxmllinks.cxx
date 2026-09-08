@@ -15,7 +15,8 @@
 #include <test/commontesttools.hxx>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo;
+using namespace ::cpo::uno;
 
 // This file contains tests to check relative/absolute hyperlinks handling
 
@@ -52,7 +53,7 @@ public:
 
         /* Create & apply new URL */
         OUString sOriginalFileInTempDir = sTempDir + sFileName;
-        uno::Reference<beans::XPropertySet> xPropertySet(xText, css::uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xPropertySet(xText, cpo::uno::UNO_QUERY);
         xPropertySet->setPropertyValue(u"HyperLinkURL"_ustr, cpo::uno::Any(sOriginalFileInTempDir));
     }
 };

@@ -31,22 +31,22 @@ public:
         SchXMLImportHelper& rImportHelper,
         SvXMLImport& rImport,
         std::vector< RegressionStyle >& rRegressionStyleVector,
-        css::uno::Reference< css::chart2::XDataSeries > xSeries,
+        cpo::uno::Reference< css::chart2::XDataSeries > xSeries,
         const css::awt::Size & rChartSize );
 
     virtual ~SchXMLRegressionCurveObjectContext() override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
     virtual void startFastElement(
         sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;
 
 private:
 
     SchXMLImportHelper&                mrImportHelper;
-    css::uno::Reference<css::chart2::XDataSeries > mxSeries;
+    cpo::uno::Reference<css::chart2::XDataSeries > mxSeries;
     css::awt::Size                     maChartSize;
     std::vector< RegressionStyle >&    mrRegressionStyleVector;
 };
@@ -63,7 +63,7 @@ public:
     virtual ~SchXMLEquationContext() override;
 
     virtual void startFastElement (sal_Int32 Element,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs) override;
+        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& Attribs) override;
 
 private:
     SchXMLImportHelper&                           mrImportHelper;

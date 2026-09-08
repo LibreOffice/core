@@ -293,8 +293,8 @@ namespace vcl::graphic
 // Note: this implementation will cater for XNameContainer objects and deep inspect any containers
 // if they exist
 
-VCL_DLLPUBLIC void SearchForGraphics(css::uno::Reference<cpo::uno::XInterface> const & rxInterface,
-                                     std::vector<css::uno::Reference<css::graphic::XGraphic>> & raGraphicList);
+VCL_DLLPUBLIC void SearchForGraphics(cpo::uno::Reference<cpo::uno::XInterface> const & rxInterface,
+                                     std::vector<cpo::uno::Reference<css::graphic::XGraphic>> & raGraphicList);
 
 
 } // end namespace vcl::graphic

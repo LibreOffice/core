@@ -64,7 +64,7 @@ SfxIntegerListItem* SfxIntegerListItem::Clone( SfxItemPool * ) const
 
 bool SfxIntegerListItem::PutValue  ( const cpo::uno::Any& rVal, sal_uInt8 )
 {
-    css::uno::Reference < css::script::XTypeConverter > xConverter
+    cpo::uno::Reference < css::script::XTypeConverter > xConverter
             ( css::script::Converter::create(::comphelper::getProcessComponentContext()) );
     cpo::uno::Any aNew;
     try { aNew = xConverter->convertTo( rVal, cppu::UnoType<cpo::uno::Sequence < sal_Int32 >>::get() ); }

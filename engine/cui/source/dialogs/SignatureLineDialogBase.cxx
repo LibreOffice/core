@@ -14,7 +14,7 @@
 #include <vcl/weld.hxx>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace css::frame;
 
 SignatureLineDialogBase::SignatureLineDialogBase(weld::Widget* pParent, Reference<XModel> xModel,

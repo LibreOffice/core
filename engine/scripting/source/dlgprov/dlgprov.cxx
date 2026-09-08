@@ -54,7 +54,7 @@
 using namespace ::com::sun::star;
 using namespace awt;
 using namespace lang;
-using namespace uno;
+using namespace ::cpo;
 using namespace ::cpo::uno;
 using namespace script;
 using namespace beans;

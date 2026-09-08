@@ -69,7 +69,7 @@
 #include <com/sun/star/drawing/XDrawPage.hpp>
 
 using namespace css;
-using namespace css::uno;
+using namespace ::cpo::uno;
 using namespace cpo::uno;
 using namespace css::beans;
 using namespace css::container;

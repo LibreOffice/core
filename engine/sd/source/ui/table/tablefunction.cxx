@@ -49,7 +49,7 @@
 using namespace ::sd;
 using namespace sdr::table;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace ::cpo::uno;
 using namespace ::com::sun::star::container;
 
 namespace sd
@@ -61,7 +61,7 @@ static void apply_table_style( SdrTableObj* pObj, SdrModel const * pModel, const
         return;
 
     Reference< XNameAccess > xPool(
-        static_cast< cppu::OWeakObject* >( pModel->GetStyleSheetPool() ), css::uno::UNO_QUERY );
+        static_cast< cppu::OWeakObject* >( pModel->GetStyleSheetPool() ), cpo::uno::UNO_QUERY );
     if( !xPool.is() )
         return;
 

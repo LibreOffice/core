@@ -21,7 +21,7 @@
 
 #include <xmloff/xmlstyle.hxx>
 #include <rtl/ustring.hxx>
-#include <com/sun/star/uno/Reference.h>
+#include <cpo/uno/Reference.h>
 
 /** import <text:linenumbering-configuration> elements */
 class XMLLineNumberingImportContext final : public SvXMLStyleContext
@@ -56,8 +56,8 @@ private:
 
     virtual void CreateAndInsert(bool bOverwrite) override;
 
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+    virtual cpo::uno::Reference< css::xml::sax::XFastContextHandler > createFastChildContext(
+        sal_Int32 nElement, const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
