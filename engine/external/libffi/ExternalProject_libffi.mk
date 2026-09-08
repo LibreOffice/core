@@ -27,6 +27,8 @@ $(call gb_ExternalProject_get_state_target,libffi,build):
 	$(call gb_Trace_StartRange,libffi,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		export LIB="$(ILIB)" && \
+		$(if $(MSBUILD_CCACHE),\
+			export PATH="$(shell cygpath -u '$(MSBUILD_CCACHE)'):$$PATH" && ) \
 		MAKE=$(MAKE) $(gb_RUN_CONFIGURE) ./configure \
 			--enable-option-checking=fatal \
 			$(gb_CONFIGURE_PLATFORMS) \
