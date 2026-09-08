@@ -123,7 +123,7 @@ namespace PictReaderShape {
   }
 
   //--------------------  draws a rectangle --------------------
-  /* Note(checkme): contradictally with the QuickDraw's reference 3-23, it seems better to consider
+  /* Note(checkme): contrary to the QuickDraw's reference 3-23, it seems better to consider
      that the frame/content of a rectangle appears inside the given rectangle. Does a conversion
      appear between the pascal functions and the data stored in the file ? */
   void drawRectangle(VirtualDevice *dev, bool drawFrame, tools::Rectangle const &orig, Size const &pSize) {
