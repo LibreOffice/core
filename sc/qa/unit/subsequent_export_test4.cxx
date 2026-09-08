@@ -32,6 +32,7 @@
 #include <formula/grammar.hxx>
 #include <tools/fldunit.hxx>
 #include <svl/numformat.hxx>
+#include <svl/zformat.hxx>
 
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/FontStrikeout.hpp>
@@ -265,6 +266,40 @@ void ScExportTest4::testTdf151484(TestFilter eFilter)
     CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), size_t(4), aList.size());
     for (size_t j = 0; j < 4; ++j)
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), double(j + 1), aList[j].GetValue());
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf146404_COLOR_format_code)
+{
+    createScDoc();
+
+    {
+        ScDocument* pDoc = getScDoc();
+        OUString aCode = u"#.##0,00 €;[COLOR 10]-#.##0,00 €"_ustr;
+        sal_Int32 nCheckPos;
+        SvNumFormatType nType;
+        sal_uInt32 nFormat;
+        SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
+        pFormatter->PutEntry(aCode, nCheckPos, nType, nFormat);
+        ScPatternAttr aNewAttrs(pDoc->getCellAttributeHelper());
+        aNewAttrs.ItemSetPut(SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat));
+        pDoc->ApplyPattern(0, 0, 0, aNewAttrs);
+        pDoc->SetString(ScAddress(0, 0, 0), u"-400.02"_ustr);
+        CPPUNIT_ASSERT_EQUAL(u"-400.02000 €"_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
+    }
+
+    saveAndReload(TestFilter::ODS);
+
+    ScDocument* pDoc = getScDoc();
+    CPPUNIT_ASSERT_EQUAL(u"-400.02000 €"_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
+
+    sal_uInt32 nNumberFormat = pDoc->GetNumberFormat(0, 0, 0);
+    const SvNumberformat* pNumberFormat = pDoc->GetFormatTable()->GetEntry(nNumberFormat);
+    const OUString& rFormatStr = pNumberFormat->GetFormatstring();
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: #,###.00000" €";[COLOR10]-#,###.00000" €"
+    // - Actual  : #,###.00000" €";-#,###.00000" €"
+    CPPUNIT_ASSERT_EQUAL(u"#,###.00000\" €\";[COLOR10]-#,###.00000\" €\""_ustr, rFormatStr);
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf143979)
