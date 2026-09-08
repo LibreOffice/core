@@ -422,9 +422,9 @@ void AdminSocketHandler::handleMessage(const std::vector<char> &payload)
     }
     else if(tokens.equals(0, "verifyauth"))
     {
-        if (tokens.size() < 2)
+        if (tokens.size() < 3)
         {
-            LOG_DBG("Auth command without any token");
+            LOG_DBG("Auth command without a token or an id");
             sendTextFrame("InvalidAuthToken");
             return;
         }
@@ -1240,9 +1240,12 @@ void Admin::dumpState(std::ostream& os) const
     os << "Pending monitor connects: " << _pendingConnects.size() << ":\n";
     for (const auto& pending : _pendingConnects)
     {
-        os << pending.getUri() << ": due in "
-           << std::chrono::duration_cast<std::chrono::milliseconds>(pending.getWhen() - now)
-           << '\n';
+        const auto remaining =
+            std::chrono::duration_cast<std::chrono::milliseconds>(pending.getWhen() - now);
+        if (remaining >= std::chrono::milliseconds::zero())
+            os << pending.getUri() << ": due in " << remaining << '\n';
+        else
+            os << pending.getUri() << ": overdue by " << -remaining << '\n';
     }
 
     os << "Admin Metrics:\n";
