@@ -97,8 +97,8 @@ namespace frm
         virtual sal_Int32       getIntegerState( sal_Int16 _nFeatureId ) const override;
 
         // own overridables
-        /** is called when the interceptors have.
-            <p>The default implementations simply calls <member>updateDispatches</member>,
+        /** is called when the interceptors have changed.
+            <p>The default implementation simply calls <member>updateDispatches</member>,
             derived classes can prevent this in certain cases, or do additional handling.</p>
         */
         virtual void    interceptorsChanged( );
@@ -107,7 +107,7 @@ namespace frm
 
             <p>The default implementation does nothing.</p>
 
-            <p>If the feature in question does support more state information that just the
+            <p>If the feature in question does support more state information than just the
             enabled/disabled state, then this additional information is to be retrieved in
             a separate call.</p>
 
@@ -200,7 +200,7 @@ namespace frm
 
             @complexity O(n), with n being the number of all potentially known URLs
             @return
-                the id of the feature URL, or -1 if the URl is not known
+                the id of the feature URL, or -1 if the URL is not known
                 (which is a valid usage)
         */
         static sal_Int16 getFeatureId( std::u16string_view _rCompleteURL );
