@@ -2536,8 +2536,12 @@ class Socket {
 				this._map._fatal = true;
 				this._map.fire('error', { msg: errorMessages.docloadtimeout });
 			} else if (errorKind.startsWith('docunloading')) {
-				// The document is unloading. Have to wait a bit.
+				// The document is unloading. Have to wait a bit. User activity is
+				// held off while it unloads, so the timer below is the one thing
+				// that asks for the document again. The hold is dropped when the
+				// next socket opens.
 				app.idleHandler._active = false;
+				app.idleHandler._serverRecycling = true;
 
 				clearTimeout(this.timer);
 				if (this.ReconnectCount++ >= 10) {
@@ -2547,12 +2551,17 @@ class Socket {
 				}
 
 				this.timer = setInterval(
-					function () {
+					() => {
+						if (this.connected()) {
+							// We're connected: cancel timer and dialog.
+							clearTimeout(this.timer);
+							return;
+						}
+
 						try {
-							// Activate and cancel timer and dialogs.
-							app.idleHandler._activate();
+							this._map.loadDocument();
 						} catch (error) {
-							window.app.console.warn('Cannot activate map');
+							window.app.console.warn('Cannot load document.');
 						}
 						// .5, 2, 4.5, 8, 12.5, 18, 24.5, 32, 40.5 seconds
 					},
