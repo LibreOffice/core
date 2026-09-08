@@ -6,6 +6,7 @@
     "x86"
     "x86_64"
   ],
+  dev ? false,
   ...
 }:
 let
@@ -59,7 +60,9 @@ pkgs.mkShell.override { stdenv = pkgs.clangStdenv; } {
     python3Packages.polib
     unzip
     zip
-  ];
+  ] ++ (if dev then with pkgs; [
+    android-studio
+  ] else []);
 
   ANDROID_BUILD_TOOLS = "${sdkPath}/build-tools/${buildToolsVersion}";
   ANDROID_HOME = sdkPath;

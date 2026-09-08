@@ -19,6 +19,10 @@ in
       inherit pkgs;
       abis = [ "armeabi-v7a" ];
     };
+    android-dev = import shells/android.nix {
+      inherit pkgs;
+      dev = true;
+    };
     android-x86 = import shells/android.nix {
       inherit pkgs;
       abis = [ "x86" ];

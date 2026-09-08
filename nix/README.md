@@ -35,5 +35,6 @@ nix-shell . -A shells.online --pure
 | -------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
 | android        | Used for building the architecture-universal Collabora Office Android apps                                                            |
 | android-{arch} | Used for building the Collabora Office Android apps for a specific Android architecture (`arm64-v8a`, `armeabi-v7a`, `x86`, `x86_64`) |
+| android-dev    | Used for building the Collabora Office Android apps, along with installing common Android dev tools (e.g. Android Studio)             |
 | ios            | Used for building the Collabora Office iOS apps                                                                                       |
 | online         | Used for building the Collabora Online server (e.g. for use with an integrator or development purposes)                               |
