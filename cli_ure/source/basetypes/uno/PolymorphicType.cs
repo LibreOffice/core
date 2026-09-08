@@ -28,14 +28,14 @@ namespace uno {
 /** represents a polymorphic type.
 
     This class is used to carry type information for polymorphic struct types
-    and arrays of polymorphic struct types. These types would be easiest represented
+    and arrays of polymorphic struct types. These types would be most easily represented
     with type templates, which are not available in .NET 1.1. Therefore
     the System.Type cannot contain information about template parameters. To
     retain this information we use PolymorphicType which directly inherits from
     System.Type. The additional information about type parameters are passed
-    as simple string when creating an instance of PolymorphicType. Usually one
+    as a simple string when creating an instance of PolymorphicType. Usually one
     only needs a PolymorphicType when a polymorphic type is put into an
-    uno.Any. For example, let's assume there is a idl type PolyStruct:
+    uno.Any. For example, let's assume there is an idl type PolyStruct:
     
     module test {
     struct PolyStruct< T >
@@ -90,7 +90,7 @@ public class PolymorphicType: Type
 
     /** provides a unique instance of this class.
       
-       This function returns null if the specified type is no polymorphic struct.
+       This function returns null if the specified type is not a polymorphic struct.
        
        @param type
        the type of the polymorphic struct. For example, created by
@@ -98,7 +98,7 @@ public class PolymorphicType: Type
        @param name
        the full name of the struct (including the type list).
        @return
-       null - the argument type is no valid polymorphic struct or <br>
+       null - the argument type is not a valid polymorphic struct or <br>
        an instance of this class.
        @exception System.ArgumentNullException
        The argument was null.

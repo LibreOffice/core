@@ -458,7 +458,7 @@ static SharedConnection lcl_connectRowSet(const Reference< XRowSet>& _rxRowSet, 
             }
             catch(Exception&)
             {
-                TOOLS_WARN_EXCEPTION( "connectivity.commontools", "EXception when we set the new active connection!");
+                TOOLS_WARN_EXCEPTION( "connectivity.commontools", "Exception when we set the new active connection!");
             }
         }
     }

@@ -20,7 +20,7 @@
 
 #include <svx/svxdlg.hxx>
 
-//AbstractDialogFactory_Impl implementations
+// AbstractDialogFactory_Impl implementation
 class AbstractDialogFactory_Impl : public SvxAbstractDialogFactory
 {
 public:

@@ -39,11 +39,11 @@ namespace emfplushelper
 
         void Read(SvStream& s, sal_uInt32 pathFlags);
 
-        ::basegfx::B2DPolyPolygon& GetPolygon(EmfPlusHelperData const & rR, bool bMapIt = true, bool bAddLineToCloseShape = false);
+        ::basegfx::B2DPolyPolygon& GetPolygon(EmfPlusHelperData const& rR, bool bMapIt = true, bool bAddLineToCloseShape = false);
         ::basegfx::B2DPolyPolygon& GetCardinalSpline(EmfPlusHelperData const& rR, float fTension,
                                                      sal_uInt32 aOffset, sal_uInt32 aNumSegments);
         ::basegfx::B2DPolyPolygon& GetClosedCardinalSpline(EmfPlusHelperData const& rR, float fTension);
     };
-}
+} // namespace emfplushelper
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

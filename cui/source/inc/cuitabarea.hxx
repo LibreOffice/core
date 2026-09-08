@@ -714,7 +714,7 @@ private:
     std::unique_ptr<weld::CustomWeld> m_xCtlPreviewOld;
     std::unique_ptr<weld::CustomWeld> m_xCtlPreviewNew;
 
-    static void    ConvertColorValues (Color& rColor, ColorModel eModell);
+    static void    ConvertColorValues (Color& rColor, ColorModel eModel);
     static void    RgbToCmyk_Impl( Color& rColor, sal_uInt16& rK );
     static void    CmykToRgb_Impl( Color& rColor, const sal_uInt16 nKey );
     sal_uInt16  ColorToPercent_Impl( sal_uInt16 nColor );

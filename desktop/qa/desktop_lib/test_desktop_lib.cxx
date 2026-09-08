@@ -2531,7 +2531,7 @@ void DesktopLOKTest::testCommentsWriter()
     tools::Long nWidth, nHeight;
     pDocument->m_pDocumentClass->getDocumentSize(pDocument, &nWidth, &nHeight);
 
-    // Document width alongwith without sidebar comes to be < 13000
+    // Document width without sidebar comes to be < 13000
     CPPUNIT_ASSERT( nWidth < 13000 );
 
     // Can we get all the comments using .uno:ViewAnnotations command ?
@@ -2680,7 +2680,7 @@ void DesktopLOKTest::testCommentsImpress()
 
 void DesktopLOKTest::testCommentsCallbacksWriter()
 {
-    // Comments callback are emitted only if tiled annotations are off
+    // Comment callbacks are emitted only if tiled annotations are off
     comphelper::LibreOfficeKit::setTiledAnnotations(false);
     LibLODocument_Impl* pDocument = loadDoc("comments.odt");
     pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
@@ -2784,7 +2784,7 @@ void addParameter(tools::JsonWriter& rJson, const char* sName, std::string_view 
 
 void DesktopLOKTest::testCommentsAddEditDeleteDraw()
 {
-    // Comments callback are emitted only if tiled annotations are off
+    // Comment callbacks are emitted only if tiled annotations are off
     comphelper::LibreOfficeKit::setTiledAnnotations(false);
     LibLODocument_Impl* pDocument = loadDoc("BlankDrawDocument.odg");
     pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
@@ -3766,7 +3766,7 @@ void DesktopLOKTest::testABI()
     CPPUNIT_ASSERT_EQUAL(classOffset(24), offsetof(LibreOfficeKitClass, getDocsCount));
     CPPUNIT_ASSERT_EQUAL(classOffset(25), offsetof(LibreOfficeKitClass, registerFileSaveDialogCallback));
 
-    // When extending LibreOfficeKit with a new function pointer,  add new assert for the offsetof the
+    // When extending LibreOfficeKit with a new function pointer, add new assert for the offsetof the
     // new function pointer and bump this assert for the size of the class.
     CPPUNIT_ASSERT_EQUAL(classOffset(26), sizeof(LibreOfficeKitClass));
 

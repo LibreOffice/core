@@ -63,8 +63,8 @@ public:
     }
 
     /**
-        Signals that a command category has been selected.
-        And updates the functions list box to include
+        Signals that a command category has been selected,
+        and updates the functions list box to include
         the commands in the selected category.
     */
     void categorySelected(CuiConfigFunctionListBox* pFunctionListBox, const OUString& filterTerm,

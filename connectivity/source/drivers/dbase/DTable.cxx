@@ -361,7 +361,7 @@ void ODbaseTable::fillColumns()
                 aTypeName = "NUMERIC";
             eType = DataType::DECIMAL;
 
-            // for numeric fields two characters more are written, then the precision of the column description predescribes,
+            // for numeric fields two characters more are written, then the precision of the column description prescribes,
             // to keep room for the possible sign and the comma. This has to be considered...
             nPrecision = SvDbaseConverter::ConvertPrecisionToOdbc(nPrecision,aDBFColumn.db_dez);
             // This is not true for older versions...
@@ -1651,7 +1651,7 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, const OValueRefRow& pOrgRo
     ::comphelper::UStringMixEqual aCase(isCaseSensitive());
 
     Reference<XIndexAccess> xColumns(m_xColumns.get());
-    // first search a key that exist already in the table
+    // first search a key that exists already in the table
     for (sal_Int32 i = 0; i < nColumnCount; ++i)
     {
         sal_Int32 nPos = i;
@@ -2519,7 +2519,7 @@ void ODbaseTable::copyData(ODbaseTable* _pNewTable,sal_Int32 _nPos)
         {
             OSL_ASSERT(false);
         }
-    } // for(sal_uInt32 nRowPos = 0; nRowPos < m_aHeader.db_anz;++nRowPos)
+    } // for(sal_uInt32 nRowPos = 0; nRowPos < m_aHeader.nbRecords;++nRowPos)
 }
 
 void ODbaseTable::throwInvalidDbaseFormat()

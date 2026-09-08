@@ -242,7 +242,7 @@ VclPtr<SfxAbstractTabDialog> AbstractDialogFactory_Impl::CreateCustomizeTabDialo
     return VclPtr<CuiAbstractTabController_Impl<SvxConfigDialog>>::Create(std::move(xDlg1));
 }
 
-// TabDialog that use functionality of the drawing layer
+// TabDialog that uses functionality of the drawing layer
 VclPtr<SfxAbstractTabDialog> AbstractDialogFactory_Impl::CreateTextTabDialog(weld::Window* pParent,
                                             const SfxItemSet* pAttrSet,
                                             SdrView* pView)
@@ -252,7 +252,7 @@ VclPtr<SfxAbstractTabDialog> AbstractDialogFactory_Impl::CreateTextTabDialog(wel
 
 namespace
 {
-// AbstractSvxCaptionDialog implementations just forwards everything to the dialog
+// AbstractSvxCaptionDialog implementation just forwards everything to the dialog
 class AbstractSvxCaptionDialog_Impl final
     : public vcl::AbstractDialogImpl_Async<AbstractSvxCaptionDialog, SvxCaptionTabDialog>
 {
@@ -273,7 +273,7 @@ public:
 };
 }
 
-// TabDialog that use functionality of the drawing layer and add AnchorTypes -- for SvxCaptionTabDialog
+// TabDialog that uses functionality of the drawing layer and adds AnchorTypes -- for SvxCaptionTabDialog
 VclPtr<AbstractSvxCaptionDialog> AbstractDialogFactory_Impl::CreateCaptionDialog(weld::Window* pParent,
                                                                                  const SdrView* pView,
                                                                                  SvxAnchorIds nAnchorTypes)

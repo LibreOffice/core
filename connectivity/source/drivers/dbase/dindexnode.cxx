@@ -169,7 +169,7 @@ sal_uInt16 ONDXPage::FindPos(const ONDXKey& rKey) const
 bool ONDXPage::Find(const ONDXKey& rKey)
 {
     // searches the given key
-    // Speciality: At the end of the method
+    // Specialty: At the end of the method
     // the actual page and the position of the node, fulfilling the '<=' condition, are saved
     // This is considered at insert.
     sal_uInt16 i = 0;

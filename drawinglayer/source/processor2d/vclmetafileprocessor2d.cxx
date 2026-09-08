@@ -647,7 +647,7 @@ VclMetafileProcessor2D::~VclMetafileProcessor2D()
     XTEXT_EOW(i) end of word
     XTEXT_EOS(i) end of sentence
 
-    this three are with index and are created with the help of an i18n::XBreakIterator in
+    these three are with index and are created with the help of an i18n::XBreakIterator in
     ImplDrawWithComments. Simplifying, moving out text painting, reworking to create some
     data structure for holding those TEXT infos.
     Supported directly by TextSimplePortionPrimitive2D with adding a Locale to the basic text
@@ -2222,7 +2222,7 @@ void VclMetafileProcessor2D::processPolyPolygonGradientPrimitive2D(
             // These will need more space and time, but the result will be as if the Gradient
             // was rotated with the object.
             // This mechanism is used by all exporters still not using Primitives (e.g. Print,
-            // Slideshow, Export rto PDF, export to Picture, ...) but relying on Metafile
+            // Slideshow, Export to PDF, export to Picture, ...) but relying on Metafile
             // transfers. One more reason to *change* these to primitives.
             // BTW: One more example how useful the principles of primitives are; the decomposition
             // is by definition a simpler, maybe more expensive representation of the same content.

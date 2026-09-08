@@ -17,7 +17,7 @@
 // Find uses of OUString in conditional expressions that could be rewritten as std::u16string_view,
 // as in
 //
-//   s += (b ? OUString("xy") : OUString(z");
+//   s += (b ? OUString("xy") : OUString("z"));
 
 namespace
 {
@@ -215,9 +215,7 @@ public:
             check(expr->getArg(1));
             return true;
         }
-        if (dc.Operator(OO_LessEqual)
-                .Namespace("rtl")
-                .GlobalNamespace()) //TODO: more precise check
+        if (dc.Operator(OO_LessEqual).Namespace("rtl").GlobalNamespace()) //TODO: more precise check
         {
             assert(fn->getNumParams() == 2);
             assert(expr->getNumArgs() == 2);

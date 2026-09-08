@@ -554,7 +554,7 @@ void ODbaseIndex::CreateImpl()
     if(xSet->last())
     {
         ODbaseResultSet* pDbaseRes = dynamic_cast<ODbaseResultSet*>(xSet.getTyped().get());
-        assert(pDbaseRes); //"No dbase resultset found? What's going on here!
+        assert(pDbaseRes); // No dbase resultset found? What's going on here!
         nRowsLeft = xSet->getRow();
 
         xSet->beforeFirst();

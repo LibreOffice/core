@@ -35,7 +35,7 @@ static void lcl_unescape(OUString& rName)
         rName = rName.copy(1, rName.getLength() - 1);
     }
 
-    // Replace double ` by simple `
+    // Replace double ` with single `
     rName = rName.replaceAll("``", "`");
 }
 

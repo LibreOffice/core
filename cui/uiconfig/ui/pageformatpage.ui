@@ -54,7 +54,7 @@
                     <property name="can-focus">False</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="comboPageFormat-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="pageformatpage|extended-tip|comboPageFormat">Select a predefined paper size, or create a custom format by entering the dimensions for the paper in the Height  and Width boxes.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pageformatpage|extended-tip|comboPageFormat">Select a predefined paper size, or create a custom format by entering the dimensions for the paper in the Height and Width boxes.</property>
                       </object>
                     </child>
                   </object>

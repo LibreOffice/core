@@ -75,7 +75,7 @@ namespace connectivity::dbase
     class ONDXPage;
 
     // Index Page Pointer
-    // This is  ref-count pointer class
+    // This is a ref-counted pointer class
     class ONDXPagePtr
     {
         friend  SvStream& WriteONDXPagePtr(SvStream &rStream, const ONDXPagePtr&);

@@ -1914,7 +1914,7 @@ std::optional<NonOverflowingText> Outliner::GetNonOverflowingText() const
     if (nCount < 0)
     {
         SAL_INFO("editeng.chaining",
-                 "[Overflowing] No Overflowing text but GetNonOverflowinText called?!");
+                 "[Overflowing] No Overflowing text but GetNonOverflowingText called?!");
         return {};
     }
 

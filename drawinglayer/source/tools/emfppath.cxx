@@ -156,7 +156,7 @@ namespace emfplushelper
 
         for (sal_uInt32 i = 0; i < nPoints; i++)
         {
-            if (p && pPointTypes && (pPointTypes [i] == 0))
+            if (p && pPointTypes && (pPointTypes[i] == 0))
             {
                 aPolygon.append (polygon);
                 last_normal = i;
@@ -165,15 +165,15 @@ namespace emfplushelper
             }
 
             if (bMapIt)
-                mapped = rR.Map(xPoints[i], yPoints [i]);
+                mapped = rR.Map(xPoints[i], yPoints[i]);
             else
                 mapped = ::basegfx::B2DPoint(xPoints[i], yPoints[i]);
 
             if (pPointTypes)
             {
-                if ((pPointTypes [i] & 0x07) == 3)
+                if ((pPointTypes[i] & 0x07) == 3)
                 {
-                    if (((i - last_normal )% 3) == 1)
+                    if (((i - last_normal) % 3) == 1)
                     {
                         assert(p != 0);
                         polygon.setNextControlPoint (p - 1, mapped);
@@ -205,7 +205,7 @@ namespace emfplushelper
 
             p++;
 
-            if (pPointTypes && (pPointTypes [i] & 0x80)) // closed polygon
+            if (pPointTypes && (pPointTypes[i] & 0x80)) // closed polygon
             {
                 polygon.setClosed (true);
                 aPolygon.append (polygon);
@@ -339,6 +339,6 @@ namespace emfplushelper
             aPolygon.append(polygon);
         return aPolygon;
     }
-}
+} // namespace emfplushelper
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
