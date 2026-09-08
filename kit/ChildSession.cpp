@@ -1590,10 +1590,7 @@ bool ChildSession::downloadAs(const StringVector& tokens)
             tmpDir = FileUtil::createRandomTmpDir();
             if (tmpDir == FileUtil::getSysTempDirectoryPath())
             {
-                // A failed directory creation makes createRandomTmpDir fall back
-                // to returning the shared system temp root unchanged. Saving or
-                // removing anything there would touch files outside this
-                // download's own private directory, so refuse instead.
+                // A failed directory creation
                 sendTextFrameAndLogError("error: cmd=downloadas kind=saveasfailed id=" + id);
                 return false;
             }
@@ -2373,6 +2370,15 @@ bool ChildSession::exportSlides(const StringVector& tokens)
     // the answer, so that whoever asked for it reads no file of this jail and needs to be on
     // no particular machine to have it.
     const std::string directory = FileUtil::createRandomTmpDir();
+    if (directory == FileUtil::getSysTempDirectoryPath())
+    {
+        // A failed directory creation makes createRandomTmpDir fall back to returning the
+        // shared system temp root unchanged, and writing the presentation there and removing
+        // it again would reach every file this jail keeps in it.
+        LOG_ERR("exportslides: there is no directory of this document's own to write in");
+        return sendTextFrame("exportslides: {\"status\":\"failed\",\"kind\":\"failed\"}");
+    }
+
     const std::string path = directory + "/sourceslides.odp";
 
     SigUtil::addActivity(getId(), "exportslides");
