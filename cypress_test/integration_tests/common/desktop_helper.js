@@ -416,13 +416,17 @@ function toggleComments(resolved = false) {
 function switchUIToNotebookbar() {
 	cy.log('>> switchUIToNotebookbar - start');
 
+	// Helpers read this flag while the test body is still queueing commands, to
+	// pick the classic or the notebookbar path. The switch below runs before any
+	// of those queued commands, so notebookbar is the right value for them now.
+	Cypress.env('USER_INTERFACE', 'notebookbar');
+
 	cy.window().then(win => {
 		var userInterfaceMode = win['0'].userInterfaceMode;
 		if (userInterfaceMode !== 'notebookbar') {
 			cy.cGet('#menu-view').click();
 			cy.cGet('#menu-toggleuimode').click();
 		}
-		Cypress.env('USER_INTERFACE', 'notebookbar');
 	});
 
 	cy.log('<< switchUIToNotebookbar - end');
