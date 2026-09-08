@@ -31,12 +31,11 @@
  * bytes of the single format it chose; on a copy it hands over the list of
  * formats it offers so the app can advertise them to the platform clipboard.
  *
- * Every callback runs synchronously on the thread that runs the document's UNO
- * commands. In the in-process native apps that is the app's main thread, so the
- * callbacks may touch the platform clipboard directly. A callback must not
- * re-enter the engine.
+ * Every callback runs synchronously on the engine's main-loop thread, the one that runs
+ * the document's UNO commands. In the in-process desktop apps that thread is not the
+ * app's UI thread. A callback must not re-enter the engine.
  *
- * @see COKitDocument::installClipboardProvider().
+ * @see COKit::installClipboardProvider().
  */
 struct COKitClipboardProvider
 {
