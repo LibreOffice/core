@@ -33,6 +33,7 @@ export const T = {
 	EOF: 'eof',
 };
 
+// A lexing or parsing error carrying the source line it occurred on.
 export class LogoSyntaxError extends Error {
 	constructor(message, line, kind) {
 		super(message);
@@ -58,6 +59,7 @@ function isSpace(ch) {
 	return ch === ' ' || ch === '\t';
 }
 
+// Turns program text into a stream of tokens for the parser.
 export class Lexer {
 	constructor(source, locale) {
 		this.src = source.replace(/\r/g, '');

@@ -14,6 +14,7 @@
 // program meets: arithmetic, comparison, membership, indexing and slicing,
 // sequence repetition and set algebra, plus Python-style text formatting.
 
+// A runtime error carrying a localizable message key and its arguments.
 export class LogoError extends Error {
 	constructor(kind, args) {
 		super(kind);

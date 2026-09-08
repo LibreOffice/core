@@ -24,11 +24,14 @@ import {
 const STEPS_PER_YIELD = 2000;
 const MAX_DEPTH = 400;
 
+// Non-local control flow, thrown to unwind the interpreter's evaluation:
+// BREAK, CONTINUE, OUTPUT (return a value) and a hard halt (Stop).
 class BreakSignal {}
 class ContinueSignal {}
 class ReturnSignal { constructor(value) { this.value = value; } }
 export class HaltSignal {}
 
+// A lexical scope: a variable map with a link to its enclosing scope.
 class Scope {
 	constructor(parent, isGlobal) {
 		this.vars = new Map();
@@ -62,6 +65,8 @@ function pyReplacement(repl) {
 	return String(repl).replace(/\$/g, '$$$$').replace(/\\g<(\d+)>/g, '$$$1').replace(/\\(\d)/g, '$$$1');
 }
 
+// Walks the parsed AST and drives the turtle. run() is a generator so a program
+// can yield to the host for SLEEP, INPUT, PRINT and periodic redraws.
 export class Interpreter {
 	// turtle: a Turtle from turtle.js; io: { print(text), random() }
 	constructor(locale, turtle, io) {

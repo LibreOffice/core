@@ -63,6 +63,8 @@ export function languageCandidates(lang) {
 	return out;
 }
 
+// One language for the Logo program: its keyword names, error messages, colour
+// names, decimal separator and quotation marks, with English always accepted.
 export class LogoLocale {
 	constructor(table, lang) {
 		this.table = table;

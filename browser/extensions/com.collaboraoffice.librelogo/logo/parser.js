@@ -67,6 +67,7 @@ function assignOp(tok) {
 	return undefined;
 }
 
+// Builds the AST that interp.js walks from the lexer's tokens.
 export class Parser {
 	constructor(tokens, locale) {
 		this.toks = tokens;

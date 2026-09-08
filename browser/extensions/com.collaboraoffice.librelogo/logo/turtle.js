@@ -56,6 +56,8 @@ export function colorComponents(c) {
 	return a;
 }
 
+// The turtle: its position, heading, pen and fill state, and the list of
+// shapes it has drawn, with the drawing commands that add to them.
 export class Turtle {
 	constructor(locale, options) {
 		this.locale = locale;

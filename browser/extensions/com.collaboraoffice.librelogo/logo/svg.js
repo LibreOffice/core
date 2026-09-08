@@ -40,6 +40,7 @@ function opacity(c) {
 	return t >= INVISIBLE_ALPHA ? 0 : 1 - t / 255;
 }
 
+// Renders the turtle's shapes (and optionally the turtle) to an SVG string.
 export class SvgRenderer {
 	constructor(options) {
 		this.defs = [];
