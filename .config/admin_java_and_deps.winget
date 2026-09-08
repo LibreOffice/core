@@ -68,9 +68,9 @@ properties:
         securityContext: elevated
       settings:
         DestinationPath: C:/Users/Public/Downloads
-        Uri: https://dlcdn.apache.org/ant/binaries/apache-ant-1.10.17-bin.zip
+        Uri: https://archive.apache.org/dist/ant/binaries/apache-ant-1.10.18-bin.zip
         ChecksumType: SHA256
-        Checksum: 70608b7401dec8f51ce749b453eaf7d168e5eb2e00c8d541a64f247763567567
+        Checksum: d3d2009bc815e8fe4808e3af2f2aa7019cd666a26d112a3d9ea5a45345edf236
     - resource: xPSDesiredStateConfiguration/xRemoteFile
       id: junit
       directives:

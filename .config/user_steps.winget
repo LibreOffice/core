@@ -18,7 +18,7 @@ properties:
         # the empty string element is so that each file can be specified with trailing comma
         TestScript: |
           $files = @(
-              "apache-ant-1.10.17-bin.zip",
+              "apache-ant-1.10.18-bin.zip",
               "clang-format-5.0.0-win.exe",
               "jom_1_1_4.zip",
               "junit-4.10.jar",
@@ -112,9 +112,9 @@ properties:
       directives:
         description: extract ant to the ~/lo directory
       settings:
-        TestScript: Test-Path -Path "$env:USERPROFILE/lo/apache-ant-1.10.17/bin/ant"
-        GetScript:  Test-Path -Path "$env:USERPROFILE/lo/apache-ant-1.10.17/bin/ant"
-        SetScript: Expand-Archive -LiteralPath "$env:PUBLIC/Downloads/apache-ant-1.10.17-bin.zip" -Destination "$env:USERPROFILE/lo/"
+        TestScript: Test-Path -Path "$env:USERPROFILE/lo/apache-ant-1.10.18/bin/ant"
+        GetScript:  Test-Path -Path "$env:USERPROFILE/lo/apache-ant-1.10.18/bin/ant"
+        SetScript: Expand-Archive -LiteralPath "$env:PUBLIC/Downloads/apache-ant-1.10.18-bin.zip" -Destination "$env:USERPROFILE/lo/"
     - resource: xPSDesiredStateConfiguration/xScript
       id: spp-extract
       dependsOn:
@@ -181,7 +181,7 @@ properties:
           --disable-online-update
           --with-external-tar=$env:USERPROFILE\lo\lo-externaltar
           --with-strawberry-perl-portable=$env:USERPROFILE\lo\spp
-          --with-ant-home=$env:USERPROFILE\lo\apache-ant-1.10.17
+          --with-ant-home=$env:USERPROFILE\lo\apache-ant-1.10.18
           --with-junit=$env:USERPROFILE\lo\junit-4.10.jar
           --with-doxygen=$env:USERPROFILE\lo\spp\c\bin\doxygen.exe
           #--enable-odk
