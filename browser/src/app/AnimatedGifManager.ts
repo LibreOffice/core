@@ -69,9 +69,11 @@ class AnimatedGifManager {
 		for (const gif of gifs) {
 			wanted.add(gif.id);
 			const rectangle = [gif.x, gif.y, gif.width, gif.height];
+			const mirror = gif.mirror ?? 0;
 			const existing = this._sections.get(gif.id);
 
 			if (existing && existing.getUrl() === gif.url) {
+				existing.mirror = mirror;
 				existing.updateTwipRectangle(rectangle);
 			} else {
 				if (existing) {
@@ -83,6 +85,7 @@ class AnimatedGifManager {
 					rectangle,
 					gif.url,
 				);
+				section.mirror = mirror;
 				this._sections.set(gif.id, section);
 				app.sectionContainer.addSection(section);
 			}

@@ -21,6 +21,7 @@ class AnimatedGifSection extends CanvasSectionObject {
 	zIndex: number = app.CSections.DefaultForDocumentObjects.zIndex;
 	documentObject: boolean = true;
 	interactable: boolean = false;
+	mirror: number = 0;
 
 	constructor(sectionName: string, twipRectangle: number[], url: string) {
 		super(sectionName);
@@ -51,7 +52,15 @@ class AnimatedGifSection extends CanvasSectionObject {
 	onDraw(): void {
 		const frame = this.sectionProperties.source.getCurrentFrame();
 		if (!frame) return;
-		this.context.drawImage(frame, 0, 0, this.size[0], this.size[1]);
+
+		const [width, height] = this.size;
+
+		// Drawing about the centre keeps the flipped frame on the same area.
+		this.context.save();
+		this.context.translate(width / 2, height / 2);
+		this.context.scale(this.mirror & 1 ? -1 : 1, this.mirror & 2 ? -1 : 1);
+		this.context.drawImage(frame, -width / 2, -height / 2, width, height);
+		this.context.restore();
 	}
 
 	onRemove(): void {

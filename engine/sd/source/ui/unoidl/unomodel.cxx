@@ -195,6 +195,7 @@
 #include <drawinglayer/processor2d/Primitive2dJsonProcessor.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/gfxlink.hxx>
+#include <vcl/GraphicAttributes.hxx>
 #include <unordered_map>
 #include <unordered_set>
 
@@ -6256,7 +6257,7 @@ std::string SdXImpressDocument::getPresentationInfo(bool bAllyState) const
                             continue;
 
                         auto aGifNode = aJsonWriter.startStruct();
-                        auto const& rRectangle = pGraphicObject->GetLogicRect();
+                        auto const& rRectangle = pGraphicObject->GetSnapRect();
                         auto aRectangle = o3tl::convert(rRectangle, o3tl::Length::mm100, o3tl::Length::twip);
                         aJsonWriter.put("id", static_cast<sal_Int64>(pGraphicObject->GetUniqueID()));
                         aJsonWriter.put("url", aUrl);
@@ -6270,6 +6271,12 @@ std::string SdXImpressDocument::getPresentationInfo(bool bAllyState) const
                         aJsonWriter.put("y", aRectangle.Top());
                         aJsonWriter.put("width", aRectangle.GetWidth());
                         aJsonWriter.put("height", aRectangle.GetHeight());
+
+                        const GraphicAttr aGraphicAttr
+                            = pGraphicObject->GetGraphicAttr(SdrGrafObjTransformsAttrs::MIRROR);
+                        if (aGraphicAttr.IsMirrored())
+                            aJsonWriter.put("mirror",
+                                            static_cast<sal_Int32>(aGraphicAttr.GetMirrorFlags()));
                     }
                 }
 

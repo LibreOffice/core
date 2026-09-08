@@ -24,12 +24,14 @@ interface AnimatedContentInfo {
 	y: number;
 	width: number;
 	height: number;
+	mirror?: number;
 }
 
 abstract class AnimatedContentRenderInfo {
 	private texture: WebGLTexture | ImageBitmap | null = null;
 	private vao: WebGLVertexArrayObject | null = null;
 	public pos2d!: number[];
+	public mirror: number = 0;
 
 	public getTexture(): WebGLTexture {
 		return this.texture as WebGLTexture;
@@ -160,13 +162,18 @@ abstract class AnimatedContentRenderer2d extends AnimatedContentRenderer {
 		const height = ctx.canvas.height;
 		const pos2d = this.info.pos2d;
 
-		ctx.drawImage(
-			drawable,
-			pos2d[0] * width,
-			pos2d[2] * height,
-			pos2d[1] * width - pos2d[0] * width,
-			pos2d[3] * height - pos2d[2] * height,
-		);
+		const left = pos2d[0] * width;
+		const top = pos2d[2] * height;
+		const boxWidth = pos2d[1] * width - left;
+		const boxHeight = pos2d[3] * height - top;
+		const mirror = this.info.mirror;
+
+		// Drawing about the centre keeps the flipped frame on the same area.
+		ctx.save();
+		ctx.translate(left + boxWidth / 2, top + boxHeight / 2);
+		ctx.scale(mirror & 1 ? -1 : 1, mirror & 2 ? -1 : 1);
+		ctx.drawImage(drawable, -boxWidth / 2, -boxHeight / 2, boxWidth, boxHeight);
+		ctx.restore();
 	}
 }
 
@@ -267,19 +274,24 @@ abstract class AnimatedContentRendererGl extends AnimatedContentRenderer {
 		xMax: number,
 		yMin: number,
 		yMax: number,
+		mirror: number = 0,
 	): WebGLVertexArrayObject | null {
 		if (this.isDisposed()) return null;
 		if (this._context.is2dGl()) return null;
 
 		const gl = this._context.getGl();
 
+		// A flip swaps which edge of the image lands on which edge of the quad.
+		const [texLeft, texRight] = mirror & 1 ? [1.0, 0.0] : [0.0, 1.0];
+		const [texTop, texBottom] = mirror & 2 ? [0.0, 1.0] : [1.0, 0.0];
+
 		// 5 numbers -> 3 x vertex X,Y,Z and 2x texture X,Y
 		const positions = new Float32Array([
-			//    vX    vY   vZ   tX   tY
-			...[xMin, -yMin, 0.0, 0.0, 1.0],
-			...[xMax, -yMin, 0.0, 1.0, 1.0],
-			...[xMin, -yMax, 0.0, 0.0, 0.0],
-			...[xMax, -yMax, 0.0, 1.0, 0.0],
+			//    vX    vY   vZ   tX       tY
+			...[xMin, -yMin, 0.0, texLeft, texTop],
+			...[xMax, -yMin, 0.0, texRight, texTop],
+			...[xMin, -yMax, 0.0, texLeft, texBottom],
+			...[xMax, -yMax, 0.0, texRight, texBottom],
 		]);
 
 		const buffer = gl.createBuffer();
@@ -315,6 +327,7 @@ abstract class AnimatedContentRendererGl extends AnimatedContentRenderer {
 		height: number,
 		docWidth: number,
 		docHeight: number,
+		mirror: number = 0,
 	): WebGLVertexArrayObject | null {
 		const positions = this.getDocumentPositions(
 			x,
@@ -329,6 +342,7 @@ abstract class AnimatedContentRendererGl extends AnimatedContentRenderer {
 			positions[1] * 2.0 - 1.0,
 			positions[2] * 2.0 - 1.0,
 			positions[3] * 2.0 - 1.0,
+			mirror,
 		);
 	}
 

@@ -71,6 +71,7 @@ class GifRenderer2d extends AnimatedContentRenderer2d {
 			docWidth,
 			docHeight,
 		);
+		gif.mirror = gifInfo.mirror ?? 0;
 		this.info = gif;
 		this.infoId = gifInfo.id;
 	}
@@ -94,6 +95,7 @@ class GifRendererGl extends AnimatedContentRendererGl {
 				gifInfo.height,
 				docWidth,
 				docHeight,
+				gifInfo.mirror ?? 0,
 			),
 		);
 		this.info = gif;
