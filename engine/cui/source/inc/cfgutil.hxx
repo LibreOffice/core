@@ -24,55 +24,15 @@
 
 #include <rtl/ustring.hxx>
 
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/script/browse/XBrowseNode.hpp>
 #include <cpo/uno/XComponentContext.hpp>
 #include <vcl/weld.hxx>
 
-struct SfxStyleInfo_Impl
-{
-    OUString sFamily;
-    OUString sStyle;
-    OUString sCommand;
-    OUString sLabel;
-
-    SfxStyleInfo_Impl()
-    {}
-
-    SfxStyleInfo_Impl(const SfxStyleInfo_Impl& rCopy)
-    {
-        sFamily  = rCopy.sFamily;
-        sStyle   = rCopy.sStyle;
-        sCommand = rCopy.sCommand;
-        sLabel   = rCopy.sLabel;
-    }
-};
-
-struct SfxStylesInfo_Impl
-{
-private:
-        OUString m_aModuleName;
-        css::uno::Reference< css::frame::XModel > m_xDoc;
-
-public:
-
-        SfxStylesInfo_Impl();
-        void init(const OUString& rModuleName, const css::uno::Reference< css::frame::XModel >& xModel);
-
-        std::vector< SfxStyleInfo_Impl > getStyleFamilies() const;
-        std::vector< SfxStyleInfo_Impl > getStyles(const OUString& sFamily);
-
-        static OUString generateCommand(std::u16string_view sFamily, std::u16string_view sStyle);
-};
-
 enum class SfxCfgKind
 {
     GROUP_SCRIPTCONTAINER    = 3,
-    FUNCTION_SCRIPT          = 4,
-    GROUP_STYLES             = 5,
-    GROUP_SIDEBARDECKS       = 7
+    FUNCTION_SCRIPT          = 4
 };
 
 struct SfxGroupInfo_Impl
@@ -153,10 +113,8 @@ class CuiConfigGroupListBox
     std::unique_ptr<SvxConfigGroupBoxResource_Impl> xImp;
     CuiConfigFunctionListBox* m_pFunctionListBox;
     SfxGroupInfoArr_Impl aArr;
-    OUString m_sModuleLongName;
     css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
     css::uno::Reference< css::frame::XFrame > m_xFrame;
-    SfxStylesInfo_Impl* m_pStylesInfo;
     std::unique_ptr<weld::TreeView> m_xTreeView;
     std::unique_ptr<weld::TreeIter> m_xScratchIter;
 
@@ -185,7 +143,6 @@ public:
     void                SetFunctionListBox( CuiConfigFunctionListBox *pBox )
                         { m_pFunctionListBox = pBox; }
     void                GroupSelected();
-    void                SetStylesInfo(SfxStylesInfo_Impl* pStyles);
 
     static OUString GetImage(
         const css::uno::Reference< css::script::browse::XBrowseNode >& node,
@@ -196,7 +153,6 @@ public:
 class SvxScriptSelectorDialog : public weld::GenericDialogController
 {
     OUString                               m_sDefaultDesc;
-    SfxStylesInfo_Impl                     m_aStylesInfo;
 
     std::unique_ptr<weld::Label> m_xDialogDescription;
     std::unique_ptr<CuiConfigGroupListBox> m_xCategories;

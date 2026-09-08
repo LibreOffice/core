@@ -29,7 +29,6 @@
 #include <com/sun/star/script/browse/BrowseNodeTypes.hpp>
 #include <com/sun/star/script/browse/theBrowseNodeFactory.hpp>
 #include <com/sun/star/script/browse/BrowseNodeFactoryViewTypes.hpp>
-#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <cpo/uno/RuntimeException.hpp>
 
 #include <tools/urlobj.hxx>
@@ -45,11 +44,8 @@
 #include <dialmgr.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <vcl/commandevent.hxx>
-#include <vcl/commandinfoprovider.hxx>
 #include <vcl/svapp.hxx>
 
-#include <sfx2/sidebar/ResourceManager.hxx>
-#include <sfx2/sidebar/Context.hxx>
 #include <unotools/viewoptions.hxx>
 
 using namespace ::com::sun::star;
@@ -59,113 +55,8 @@ using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::document;
 
-SfxStylesInfo_Impl::SfxStylesInfo_Impl()
-{}
-
-void SfxStylesInfo_Impl::init(const OUString& rModuleName, const css::uno::Reference< css::frame::XModel >& xModel)
-{
-    m_aModuleName = rModuleName;
-    m_xDoc = xModel;
-}
-
-constexpr OUString STYLEPROP_UINAME = u"DisplayName"_ustr;
 constexpr OUString MACRO_SELECTOR_CONFIGNAME = u"MacroSelectorDialog"_ustr;
 constexpr OUString LAST_RUN_MACRO_INFO = u"LastRunMacro"_ustr;
-
-OUString SfxStylesInfo_Impl::generateCommand(
-    std::u16string_view sFamily, std::u16string_view sStyle)
-{
-    return OUString::Concat(".uno:StyleApply?Style:string=")
-           + sStyle
-           + "&FamilyName:string="
-           + sFamily;
-}
-
-std::vector< SfxStyleInfo_Impl > SfxStylesInfo_Impl::getStyleFamilies() const
-{
-    // It's an optional interface!
-    css::uno::Reference< css::style::XStyleFamiliesSupplier > xModel(m_xDoc, css::uno::UNO_QUERY);
-    if (!xModel.is())
-        return std::vector< SfxStyleInfo_Impl >();
-
-    css::uno::Reference< css::container::XNameAccess > xCont = xModel->getStyleFamilies();
-    const cpo::uno::Sequence< OUString > lFamilyNames = xCont->getElementNames();
-    std::vector< SfxStyleInfo_Impl > lFamilies;
-    for (const auto& aFamily : lFamilyNames)
-    {
-        if ((aFamily == "CellStyles" && m_aModuleName != "com.sun.star.sheet.SpreadsheetDocument") ||
-             aFamily == "cell" || aFamily == "table" || aFamily == "Default")
-            continue;
-
-        SfxStyleInfo_Impl aFamilyInfo;
-        aFamilyInfo.sFamily = aFamily;
-
-        try
-        {
-            css::uno::Reference< css::beans::XPropertySet > xFamilyInfo;
-            xCont->getByName(aFamilyInfo.sFamily) >>= xFamilyInfo;
-            if (!xFamilyInfo.is())
-            {
-                // TODO_AS currently there is no support for an UIName property .. use internal family name instead
-                aFamilyInfo.sLabel = aFamilyInfo.sFamily;
-            }
-            else
-                xFamilyInfo->getPropertyValue(STYLEPROP_UINAME) >>= aFamilyInfo.sLabel;
-        }
-        catch(const cpo::uno::RuntimeException&)
-            { throw; }
-        catch(const cpo::uno::Exception&)
-            { return std::vector< SfxStyleInfo_Impl >(); }
-
-        lFamilies.push_back(aFamilyInfo);
-    }
-
-    return lFamilies;
-}
-
-std::vector< SfxStyleInfo_Impl > SfxStylesInfo_Impl::getStyles(const OUString& sFamily)
-{
-    cpo::uno::Sequence< OUString > lStyleNames;
-    css::uno::Reference< css::style::XStyleFamiliesSupplier > xModel(m_xDoc, css::uno::UNO_QUERY_THROW);
-    css::uno::Reference< css::container::XNameAccess > xFamilies = xModel->getStyleFamilies();
-    css::uno::Reference< css::container::XNameAccess > xStyleSet;
-    try
-    {
-        xFamilies->getByName(sFamily) >>= xStyleSet;
-        lStyleNames = xStyleSet->getElementNames();
-    }
-    catch(const cpo::uno::RuntimeException&)
-        { throw; }
-    catch(const cpo::uno::Exception&)
-        { return std::vector< SfxStyleInfo_Impl >(); }
-
-    std::vector< SfxStyleInfo_Impl > lStyles;
-    sal_Int32                          c      = lStyleNames.getLength();
-    sal_Int32                          i      = 0;
-    for (i=0; i<c; ++i)
-    {
-        SfxStyleInfo_Impl aStyleInfo;
-        aStyleInfo.sFamily  = sFamily;
-        aStyleInfo.sStyle   = lStyleNames[i];
-        aStyleInfo.sCommand = SfxStylesInfo_Impl::generateCommand(aStyleInfo.sFamily, aStyleInfo.sStyle);
-
-        try
-        {
-            css::uno::Reference< css::beans::XPropertySet > xStyle;
-            xStyleSet->getByName(aStyleInfo.sStyle) >>= xStyle;
-            if (!xStyle.is())
-                continue;
-            xStyle->getPropertyValue(u"DisplayName"_ustr) >>= aStyleInfo.sLabel;
-        }
-        catch(const cpo::uno::RuntimeException&)
-            { throw; }
-        catch(const cpo::uno::Exception&)
-            { continue; }
-
-        lStyles.push_back(aStyleInfo);
-    }
-    return lStyles;
-}
 
 OUString CuiConfigFunctionListBox::GetCommandHelpText()
 {
@@ -243,25 +134,14 @@ struct SvxConfigGroupBoxResource_Impl
 {
     OUString m_sMyMacros;
     OUString m_sProdMacros;
-    OUString m_sDlgMacros;
-    OUString m_aStrGroupStyles;
-    OUString m_aStrGroupSidebarDecks;
 
     SvxConfigGroupBoxResource_Impl();
 };
 
 SvxConfigGroupBoxResource_Impl::SvxConfigGroupBoxResource_Impl() :
     m_sMyMacros(CuiResId(RID_CUISTR_MYMACROS)),
-    m_sProdMacros(CuiResId(RID_CUISTR_PRODMACROS)),
-    m_sDlgMacros(CuiResId(RID_CUISTR_PRODMACROS)),
-    m_aStrGroupStyles(CuiResId(RID_CUISTR_GROUP_STYLES)),
-    m_aStrGroupSidebarDecks(CuiResId(RID_CUISTR_GROUP_SIDEBARDECKS))
+    m_sProdMacros(CuiResId(RID_CUISTR_PRODMACROS))
 {
-}
-
-void CuiConfigGroupListBox::SetStylesInfo(SfxStylesInfo_Impl* pStyles)
-{
-    m_pStylesInfo = pStyles;
 }
 
 namespace
@@ -319,7 +199,6 @@ namespace
 CuiConfigGroupListBox::CuiConfigGroupListBox(std::unique_ptr<weld::TreeView> xTreeView)
     : xImp(new SvxConfigGroupBoxResource_Impl())
     , m_pFunctionListBox(nullptr)
-    , m_pStylesInfo(nullptr)
     , m_xTreeView(std::move(xTreeView))
     , m_xScratchIter(m_xTreeView->make_iterator())
 {
@@ -338,12 +217,7 @@ void CuiConfigGroupListBox::ClearAll()
     for ( sal_uInt16 i=0; i<nCount; ++i )
     {
         SfxGroupInfo_Impl *pData = aArr[i].get();
-        if (pData->nKind == SfxCfgKind::GROUP_STYLES && pData->pObject)
-        {
-            SfxStyleInfo_Impl* pStyle = static_cast<SfxStyleInfo_Impl*>(pData->pObject);
-            delete pStyle;
-        }
-        else if (pData->nKind == SfxCfgKind::FUNCTION_SCRIPT && pData->pObject )
+        if (pData->nKind == SfxCfgKind::FUNCTION_SCRIPT && pData->pObject )
         {
             OUString* pScriptURI = static_cast<OUString*>(pData->pObject);
             delete pScriptURI;
@@ -667,49 +541,6 @@ void CuiConfigGroupListBox::GroupSelected()
             break;
         }
 
-        case SfxCfgKind::GROUP_STYLES :
-        {
-            SfxStyleInfo_Impl* pFamily = static_cast<SfxStyleInfo_Impl*>(pInfo->pObject);
-            if (pFamily)
-            {
-                const std::vector< SfxStyleInfo_Impl > lStyles = m_pStylesInfo->getStyles(pFamily->sFamily);
-                for (auto const& lStyle : lStyles)
-                {
-                    SfxStyleInfo_Impl* pStyle = new SfxStyleInfo_Impl(lStyle);
-                    m_pFunctionListBox->aArr.push_back(std::make_unique<SfxGroupInfo_Impl>(SfxCfgKind::GROUP_STYLES, 0, pStyle));
-                    m_pFunctionListBox->aArr.back()->sCommand = pStyle->sCommand;
-                    m_pFunctionListBox->aArr.back()->sLabel = pStyle->sLabel;
-                    OUString sId(weld::toId(m_pFunctionListBox->aArr.back().get()));
-                    m_pFunctionListBox->append(sId, pStyle->sLabel);
-                }
-            }
-            break;
-        }
-
-        case SfxCfgKind::GROUP_SIDEBARDECKS:
-        {
-            sfx2::sidebar::ResourceManager aResourceManager;
-            sfx2::sidebar::Context aContext(m_sModuleLongName, OUString());
-            sfx2::sidebar::ResourceManager::DeckContextDescriptorContainer aDecks;
-            aResourceManager.GetMatchingDecks(aDecks, aContext, false, m_xFrame->getController());
-
-            for (auto const& rDeck : aDecks)
-            {
-                const OUString sCommand = ".uno:SidebarDeck." + rDeck.msId;
-                m_pFunctionListBox->aArr.push_back(std::make_unique<SfxGroupInfo_Impl>(
-                                                       SfxCfgKind::GROUP_SIDEBARDECKS, 0,
-                                                       nullptr));
-                m_pFunctionListBox->aArr.back()->sCommand = sCommand;
-                m_pFunctionListBox->aArr.back()->sLabel = rDeck.msId;
-                m_pFunctionListBox->aArr.back()->sTooltip =
-                        vcl::CommandInfoProvider::GetCommandShortcut(sCommand, m_xFrame);
-                m_pFunctionListBox->append(weld::toId(m_pFunctionListBox->aArr.back().get()),
-                                           rDeck.msId);
-            }
-
-            break;
-        }
-
         default:
             // Do nothing, the list box will stay empty
             SAL_INFO( "cui.customize", "Ignoring unexpected SfxCfgKind: " <<  static_cast<int>(pInfo->nKind) );
@@ -737,22 +568,6 @@ IMPL_LINK(CuiConfigGroupListBox, ExpandingHdl, const weld::TreeIter&, rIter, boo
                 Reference< browse::XBrowseNode > rootNode(
                     static_cast< browse::XBrowseNode* >( pInfo->pObject ) ) ;
                 FillScriptList(rootNode, &rIter);
-            }
-            break;
-        }
-
-        case SfxCfgKind::GROUP_STYLES:
-        {
-            if (!m_xTreeView->iter_has_child(rIter))
-            {
-                const std::vector<SfxStyleInfo_Impl> lStyleFamilies = m_pStylesInfo->getStyleFamilies();
-                for (auto const& lStyleFamily : lStyleFamilies)
-                {
-                    SfxStyleInfo_Impl* pFamily = new SfxStyleInfo_Impl(lStyleFamily);
-                    aArr.push_back( std::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_STYLES, 0, pFamily ));
-                    OUString sId(weld::toId(aArr.back().get()));
-                    m_xTreeView->insert(&rIter, -1, &pFamily->sLabel, &sId, nullptr, nullptr, false, nullptr);
-                }
             }
             break;
         }
@@ -791,7 +606,6 @@ SvxScriptSelectorDialog::SvxScriptSelectorDialog(
     m_xLibraryFT->set_visible(true);
     m_xMacronameFT->set_visible(true);
 
-    const OUString aModuleName(vcl::CommandInfoProvider::GetModuleIdentifier(xFrame));
     m_xCategories->SetFunctionListBox(m_xCommands.get());
     m_xCategories->Init(comphelper::getProcessComponentContext(), xFrame);
 
@@ -805,17 +619,6 @@ SvxScriptSelectorDialog::SvxScriptSelectorDialog(
     m_xCancelButton->connect_clicked( LINK( this, SvxScriptSelectorDialog, ClickHdl ) );
 
     m_sDefaultDesc = m_xDescriptionText->get_text();
-
-    // Support style commands
-    uno::Reference<frame::XController> xController;
-    uno::Reference<frame::XModel> xModel;
-    if (xFrame.is())
-        xController = xFrame->getController();
-    if (xController.is())
-        xModel = xController->getModel();
-
-    m_aStylesInfo.init(aModuleName, xModel);
-    m_xCategories->SetStylesInfo(&m_aStylesInfo);
 
     // The following call is a workaround to make scroll_to_row work as expected in x11
     m_xDialog->resize_to_request();
@@ -924,9 +727,7 @@ SvxScriptSelectorDialog::GetScriptURL() const
     if (m_xCommands->get_selected(xIter.get()))
     {
         SfxGroupInfo_Impl *pData = weld::fromId<SfxGroupInfo_Impl*>(m_xCommands->get_id(*xIter));
-        if  (   ( pData->nKind == SfxCfgKind::FUNCTION_SCRIPT )
-            ||  ( pData->nKind == SfxCfgKind::GROUP_STYLES )
-            )
+        if (pData->nKind == SfxCfgKind::FUNCTION_SCRIPT)
         {
             result = pData->sCommand;
         }
