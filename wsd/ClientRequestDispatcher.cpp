@@ -2258,6 +2258,17 @@ bool ClientRequestDispatcher::handleRelatedDocumentRequest(
         return true;
     }
 
+    if (request.getContentLength() > MaxInMemoryHttpRequestSize)
+    {
+        LOG_ERR_S("RelatedDocument request rejected: the body is "
+                  << request.getContentLength() << " bytes, over the " << MaxInMemoryHttpRequestSize
+                  << " a related document is named in: "
+                  << Anonymizer::anonymizeUrl(request.getURI()));
+        HttpHelper::sendErrorAndShutdown(http::StatusCode::PayloadTooLarge, socket,
+                                         "body too large");
+        return true;
+    }
+
     std::string wopiSrc;
     const Poco::URI requestUri(request.getURI());
     for (const auto& param : requestUri.getQueryParameters())

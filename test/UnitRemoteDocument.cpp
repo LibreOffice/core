@@ -352,6 +352,7 @@ public:
 
 /// Registers a related document over POST /cool/relateddocument: the request
 /// is authorized by the view's own one-time token, a wrong token is refused,
+/// a body over the size a registration takes is refused before it is read,
 /// the token is accepted only once, and the registered access token then
 /// serves that view's subscription.
 class UnitRelatedDocumentPost : public WopiTestServer
@@ -374,15 +375,16 @@ class UnitRelatedDocumentPost : public WopiTestServer
         return helpers::getTestServerURI() + "/wopi/files/2";
     }
 
-    /// POSTs the registration authorized by the given one-time token and
-    /// returns the response status.
-    unsigned postRelatedDocument(const std::string& oneTimeToken)
+    /// POSTs the registration authorized by the given one-time token, naming the given access
+    /// token, and returns the response status.
+    unsigned postRelatedDocument(const std::string& oneTimeToken,
+                                 const std::string& accessToken = "remotetoken")
     {
         http::Request request("/cool/relateddocument?WOPISrc=" + Uri::encode(documentWopiSrc()),
                               http::Request::VERB_POST);
         request.setBody("{\"Nonce\":\"" + oneTimeToken +
                             "\",\"RelatedDocument\":{\"WOPISrc\":\"" + remoteWopiSrc() +
-                            "\",\"AccessToken\":\"remotetoken\""
+                            "\",\"AccessToken\":\"" + accessToken + "\""
                             ",\"LastModifiedTime\":\"2026-09-01T12:00:00.000000Z\"}}",
                         "application/json");
 
@@ -407,7 +409,13 @@ class UnitRelatedDocumentPost : public WopiTestServer
                 LOK_ASSERT_EQUAL(static_cast<unsigned>(http::StatusCode::Unauthorized),
                                  postRelatedDocument("wrongtoken"));
 
-                // The view's own one-time token authorizes the registration.
+                // A body too large to name one document and one token is refused on its
+                // length alone, before the token in it is read.
+                LOK_ASSERT_EQUAL(static_cast<unsigned>(http::StatusCode::PayloadTooLarge),
+                                 postRelatedDocument(oneTimeToken, std::string(64 * 1024, 'x')));
+
+                // The view's own one-time token authorizes the registration, so the refused
+                // request above did not spend it.
                 LOK_ASSERT_EQUAL(static_cast<unsigned>(http::StatusCode::OK),
                                  postRelatedDocument(oneTimeToken));
 
