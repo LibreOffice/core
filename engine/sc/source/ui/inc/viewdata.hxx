@@ -618,6 +618,9 @@ public:
     /// The visible area in the client (set by setClientVisibleArea).
     const tools::Rectangle& getKitVisibleArea() const { return maKitVisibleArea; }
     void setKitVisibleArea(const tools::Rectangle& rArea) { maKitVisibleArea = rArea; }
+    /// The cell at the top left corner of that visible area. It is A1 while no visible area
+    /// has been set.
+    ScAddress GetKitVisibleTopLeftCell() const;
 
     void            KillEditView();
     void            ResetEditView();

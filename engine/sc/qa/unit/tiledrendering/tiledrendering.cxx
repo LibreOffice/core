@@ -2843,6 +2843,72 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testReferenceMarksClearedAfterEdit)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aView1.m_sReferenceMarks.indexOf("rectangle"));
 }
 
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSelectColumnCursorStaysInView)
+{
+    // Selecting a whole column the way a click on its header does put the cursor on row 1, so a
+    // client that was scrolled further down was dragged back to the top of the sheet.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
+
+    // Scroll the client down so that its visible area starts halfway into row 21, the topmost
+    // row it shows. That area is stated in tile twips, the pixel grid the tiles are drawn on
+    // scaled back to twips.
+    constexpr SCROW nTopRow = 20;
+    const tools::Long nRowStartPixel = pViewData->GetScrPos(0, nTopRow, SC_SPLIT_TOPLEFT, true).Y();
+    const tools::Long nRowEndPixel
+        = pViewData->GetScrPos(0, nTopRow + 1, SC_SPLIT_TOPLEFT, true).Y();
+    const tools::Long nTopTileTwips = (nRowStartPixel + nRowEndPixel) / 2 / pViewData->GetPPTY();
+    pModelObj->setClientVisibleArea(
+        tools::Rectangle(0, nTopTileTwips, 15360, nTopTileTwips + 7680));
+    Scheduler::ProcessEventsToIdle();
+
+    cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
+            { u"Col"_ustr, cpo::uno::Any(sal_Int32(4 - 1)) },
+            { u"Modifier"_ustr, cpo::uno::Any(sal_uInt16(0)) }
+        }));
+    dispatchCommand(mxComponent, u".uno:SelectColumn"_ustr, aArgs);
+
+    // The cursor sits on D21, the first cell of column D the client can see. Without the fix it
+    // sat on D1 instead.
+    constexpr SCCOL nColumn = 3;
+    CPPUNIT_ASSERT_EQUAL(nColumn, pViewData->GetCurX());
+    CPPUNIT_ASSERT_EQUAL(nTopRow, pViewData->GetCurY());
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testSelectRowCursorStaysInView)
+{
+    // The same for rows: selecting a whole row put the cursor in column A, pulling a client that
+    // was scrolled to the right back to the left edge of the sheet.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    CPPUNIT_ASSERT(pViewData);
+
+    // Scroll the client right so that its visible area starts halfway into column F, the
+    // leftmost column it shows.
+    constexpr SCCOL nLeftColumn = 5;
+    const tools::Long nColStartPixel
+        = pViewData->GetScrPos(nLeftColumn, 0, SC_SPLIT_TOPLEFT, true).X();
+    const tools::Long nColEndPixel
+        = pViewData->GetScrPos(nLeftColumn + 1, 0, SC_SPLIT_TOPLEFT, true).X();
+    const tools::Long nLeftTileTwips = (nColStartPixel + nColEndPixel) / 2 / pViewData->GetPPTX();
+    pModelObj->setClientVisibleArea(
+        tools::Rectangle(nLeftTileTwips, 0, nLeftTileTwips + 15360, 7680));
+    Scheduler::ProcessEventsToIdle();
+
+    cpo::uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
+            { u"Row"_ustr, cpo::uno::Any(sal_Int32(10 - 1)) },
+            { u"Modifier"_ustr, cpo::uno::Any(sal_uInt16(0)) }
+        }));
+    dispatchCommand(mxComponent, u".uno:SelectRow"_ustr, aArgs);
+
+    // The cursor sits on F10, the first cell of row 10 the client can see. Without the fix it sat
+    // on A10 instead.
+    constexpr SCROW nRow = 9;
+    CPPUNIT_ASSERT_EQUAL(nLeftColumn, pViewData->GetCurX());
+    CPPUNIT_ASSERT_EQUAL(nRow, pViewData->GetCurY());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

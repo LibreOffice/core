@@ -2725,6 +2725,25 @@ Point ScViewData::GetPrintTwipsPosFromTileTwips(const Point& rTileTwipsPos) cons
     return aPrintTwipsCellPos + (rTileTwipsPos - aTileTwipsCellPos);
 }
 
+ScAddress ScViewData::GetKitVisibleTopLeftCell() const
+{
+    SCCOL nPosX = 0;
+    SCROW nPosY = 0;
+    if (!maKitVisibleArea.IsEmpty())
+    {
+        // The client states its visible area in tile twips, so the pixel factors take it to the
+        // same pixel grid the tiles are drawn on.
+        const tools::Long nPixelX = static_cast<tools::Long>(maKitVisibleArea.Left() * nPPTX);
+        const tools::Long nPixelY = static_cast<tools::Long>(maKitVisibleArea.Top() * nPPTY);
+
+        // The following call (with bTestMerge = false) will not modify any members.
+        const_cast<ScViewData*>(this)->GetPosFromPixel(nPixelX, nPixelY, SC_SPLIT_TOPLEFT, nPosX,
+                                                       nPosY, false /* bTestMerge */);
+    }
+
+    return ScAddress(nPosX, nPosY, CurrentTabForData());
+}
+
 OString ScViewData::describeCellCursorAt(SCCOL nX, SCROW nY, bool bPixelAligned) const
 {
     const bool bPosSizeInPixels = bPixelAligned;

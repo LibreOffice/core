@@ -1724,7 +1724,9 @@ void ScTabView::MarkColumns(SCCOL nCol, sal_Int16 nModifier)
         InitBlockMode( nStartCol, 0, nTab, true, true);
         MarkCursor( nCol, rDoc.MaxRow(), nTab );
         bMoveIsShift = false;
-        SetCursor( nCol, 0 );
+        // The cursor goes on the topmost cell of the column the client has in view, the same
+        // cell a mouse click on the column header picks.
+        SetCursor( nCol, aViewData.GetKitVisibleTopLeftCell().Row() );
         SelectionChanged();
     }
 }
@@ -1751,7 +1753,9 @@ void ScTabView::MarkRows(SCROW nRow, sal_Int16 nModifier)
         InitBlockMode( 0, nStartRow, nTab, true, false, true );
         MarkCursor( rDoc.MaxCol(), nRow, nTab );
         bMoveIsShift = false;
-        SetCursor( 0, nRow );
+        // The cursor goes on the leftmost cell of the row the client has in view, the same cell
+        // a mouse click on the row header picks.
+        SetCursor( aViewData.GetKitVisibleTopLeftCell().Col(), nRow );
         SelectionChanged();
     }
 }
