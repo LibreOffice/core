@@ -41,8 +41,6 @@ describe('VectorManager', function () {
 		// Two objects with empty primitive lists.
 		manager.handleVectorPrimitivesResponse({
 			part: 0,
-			slideWidth: 1000,
-			slideHeight: 800,
 			objects: [
 				{ id: 11, primitives: [] },
 				{ id: 22, primitives: [] },
@@ -66,8 +64,6 @@ describe('VectorManager', function () {
 		manager.handleVectorPrimitivesResponse({
 			part: 0,
 			version: 7,
-			slideWidth: 1000,
-			slideHeight: 800,
 			objects: [],
 		});
 
@@ -84,8 +80,6 @@ describe('VectorManager', function () {
 		manager.handleVectorPrimitivesResponse({
 			part: 0,
 			version: 1,
-			slideWidth: 1000,
-			slideHeight: 800,
 			objects: [
 				{ id: 11, primitives: [] },
 				{ id: 22, primitives: [] },
@@ -119,8 +113,6 @@ describe('VectorManager', function () {
 		manager.handleVectorPrimitivesResponse({
 			part: 0,
 			version: 1,
-			slideWidth: 1000,
-			slideHeight: 800,
 			objects: [{ id: 11, primitives: [] }],
 		});
 
@@ -140,8 +132,6 @@ describe('VectorManager', function () {
 		manager.handleVectorPrimitivesResponse({
 			part: 0,
 			version: 5,
-			slideWidth: 1000,
-			slideHeight: 800,
 			objects: [
 				{ id: 11, primitives: [] },
 				{ id: 22, primitives: [] },
@@ -157,31 +147,67 @@ describe('VectorManager', function () {
 		nodeassert.strictEqual(data.objects.length, 2);
 	});
 
-	// A delta carries the master page only when it changed, and then the
-	// cached master page content is replaced.
-	it('replaces the cached master page when a delta carries one', function () {
+	// The page rectangle rides on the page entry rather than on a field of
+	// its own, so it arrives with a full response and a delta that carries
+	// that entry updates it, which is how a resized page reaches the client.
+	it('takes the page rectangle from the page entry', function () {
 		const manager = new VectorManager();
 		manager.handleVectorPrimitivesResponse({
 			part: 0,
 			version: 1,
-			slideWidth: 1000,
-			slideHeight: 800,
-			masterPage: { primitives: [] },
-			objects: [{ id: 11, primitives: [] }],
+			objects: [
+				{ id: 0, kind: 'page', width: 1000, height: 800, primitives: [] },
+				{ id: 11, primitives: [] },
+			],
+		});
+
+		let data: any = manager.requestPart(0);
+		nodeassert.strictEqual(data.slideWidth, 1000);
+		nodeassert.strictEqual(data.slideHeight, 800);
+
+		manager.handleVectorPrimitivesDelta({
+			part: 0,
+			version: 2,
+			order: [0, 11],
+			objects: [
+				{ id: 0, kind: 'page', width: 2000, height: 1600, primitives: [] },
+			],
+		});
+
+		data = manager.requestPart(0);
+		nodeassert.strictEqual(data.slideWidth, 2000);
+		nodeassert.strictEqual(data.slideHeight, 1600);
+	});
+
+	// The page is an object like the others, first in the order. A delta
+	// carries its entry only when the background or the master page
+	// changed, and then it replaces the cached one.
+	it('replaces the page entry when a delta carries it', function () {
+		const manager = new VectorManager();
+		manager.handleVectorPrimitivesResponse({
+			part: 0,
+			version: 1,
+			objects: [
+				{ id: 5, kind: 'page', primitives: [] },
+				{ id: 11, primitives: [] },
+			],
 		});
 
 		const delta: any = {
 			part: 0,
 			version: 2,
-			order: [11],
-			objects: [],
-			masterPage: { primitives: [{ type: 'polygonHairline' }] },
+			order: [5, 11],
+			objects: [
+				{ id: 5, kind: 'page', primitives: [{ type: 'polygonHairline' }] },
+			],
 		};
 		manager.handleVectorPrimitivesDelta(delta);
 
 		const data: any = manager.requestPart(0);
 		nodeassert.strictEqual(data.version, 2);
-		nodeassert.strictEqual(data.masterPage.length, 1);
+		nodeassert.strictEqual(data.objects[0].kind, 'page');
+		nodeassert.strictEqual(data.objects[0].primitives.length, 1);
+		nodeassert.strictEqual(data.objects[1].id, 11);
 	});
 
 	// Each object carries where it sits in the group tree, which layer it
@@ -191,8 +217,6 @@ describe('VectorManager', function () {
 		const manager = new VectorManager();
 		manager.handleVectorPrimitivesResponse({
 			part: 0,
-			slideWidth: 1000,
-			slideHeight: 800,
 			objects: [
 				{ id: 11, parent: 0, layer: 0, primitives: [] },
 				{
@@ -230,8 +254,6 @@ describe('VectorManager', function () {
 		const hairline = { type: 'polygonHairline', path: 'M0 0 L1 1' };
 		manager.handleVectorPrimitivesResponse({
 			part: 0,
-			slideWidth: 1000,
-			slideHeight: 800,
 			objects: [
 				{ id: 11, layer: 0, primitives: [hairline] },
 				{ id: 22, layer: 5, primitives: [hairline] },
@@ -270,8 +292,6 @@ describe('VectorManager', function () {
 		const manager = new VectorManager();
 		manager.handleVectorPrimitivesResponse({
 			part: 0,
-			slideWidth: 1000,
-			slideHeight: 800,
 			objects: [
 				{
 					id: 11,
@@ -302,8 +322,6 @@ describe('VectorManager', function () {
 		const manager = new VectorManager();
 		manager.handleVectorPrimitivesResponse({
 			part: 0,
-			slideWidth: 1000,
-			slideHeight: 800,
 			objects: [
 				{
 					id: 1,
@@ -333,8 +351,6 @@ describe('VectorManager', function () {
 		manager.handleVectorPrimitivesResponse({
 			part: 0,
 			version: 1,
-			slideWidth: 1000,
-			slideHeight: 800,
 			objects: [{ id: 11, primitives: [] }],
 		});
 		manager.discardAllCache();
@@ -356,8 +372,6 @@ describe('VectorManager', function () {
 		manager.handleVectorPrimitivesResponse({
 			part: 0,
 			version: 1,
-			slideWidth: 1000,
-			slideHeight: 800,
 			objects: [{ id: 11, primitives: [] }],
 		});
 

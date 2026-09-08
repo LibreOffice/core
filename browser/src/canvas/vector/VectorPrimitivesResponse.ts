@@ -14,13 +14,14 @@ namespace cool {
 	export interface VectorPrimitivesResponse {
 		part?: number;
 		version?: number;
-		slideWidth?: number;
-		slideHeight?: number;
-		masterPage?: SlideObject;
+		/// Every painted object in paint order in a full response, the
+		/// entry for the page itself first. In a delta only the changed
+		/// ones, the page entry among them when its content changed.
 		objects?: SlideObject[];
-		/// In a delta, the ids of every live object on the part in
-		/// z-order. Objects not listed in this array are gone. Objects
-		/// listed but absent from "objects" keep their cached content.
+		/// In a delta, the ids of every live object on the part in paint
+		/// order, the page entry first. Objects not listed in this array
+		/// are gone. Objects listed but absent from "objects" keep their
+		/// cached content.
 		order?: number[];
 	}
 }

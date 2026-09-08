@@ -16,9 +16,11 @@ namespace cool {
 		/// up each time the part changes, so two trees with the same
 		/// version describe the same content.
 		version?: number;
-		slideWidth: number; // twips
-		slideHeight: number; // twips
-		masterPage: Primitive[];
+		/// The page rectangle in twips, taken from the entry that stands
+		/// for the page.
+		slideWidth: number;
+		slideHeight: number;
+		/// Every painted object in paint order, the page entry first.
 		objects: SlideObject[];
 	}
 }

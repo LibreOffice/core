@@ -30,6 +30,24 @@ describe('VectorPrimitiveRenderer', function () {
 
 	// Each fixture is a single primitive built with the drawinglayer
 	// primitive constructor, so we can test the primitive in isolation.
+	// The page rectangle rides on the entry that stands for the page, which is
+	// the first object of a reply.
+	function pageBounds(primitiveTree: any): [number, number] {
+		for (const object of primitiveTree.objects) {
+			if (object.kind === 'page') return [object.width, object.height];
+		}
+		throw new Error('the reply carries no page entry');
+	}
+
+	// The first drawing object of a reply, the page entry aside. A fixture built
+	// from a document with one shape on it has exactly one.
+	function firstShape(primitiveTree: any): any {
+		for (const object of primitiveTree.objects) {
+			if (object.kind !== 'page') return object;
+		}
+		throw new Error('the reply carries no drawing object');
+	}
+
 	describe('Primitive references', function () {
 		it('fills the slide rectangle for backgroundcolor', function () {
 			const primitive = loadVectorRenderingReference('testBackgroundColor')
@@ -1145,25 +1163,24 @@ describe('VectorPrimitiveRenderer', function () {
 	// so the renderer is exercised against a realistic primitive
 	// tree rather than a single isolated primitive.
 	describe('Document references', function () {
+		// The page rectangle rides on the entry that stands for the page,
+		// which is the first object of a reply.
+		function pageBounds(primitiveTree: any): [number, number] {
+			for (const object of primitiveTree.objects) {
+				if (object.kind === 'page') return [object.width, object.height];
+			}
+			throw new Error('the reply carries no page entry');
+		}
 		it('renders the filled-rectangle slide from its document reference', function () {
 			const primitiveTree = loadVectorRenderingReference('testSingleRectangle');
 
 			nodeassert.strictEqual(primitiveTree.type, 'vectorprimitives');
-			nodeassert.strictEqual(typeof primitiveTree.slideWidth, 'number');
-			nodeassert.strictEqual(typeof primitiveTree.slideHeight, 'number');
+			nodeassert.strictEqual(typeof pageBounds(primitiveTree)[0], 'number');
 
-			const recorder = new CanvasRecorder(
-				primitiveTree.slideWidth,
-				primitiveTree.slideHeight,
-			);
+			const [pageWidth, pageHeight] = pageBounds(primitiveTree);
+			const recorder = new CanvasRecorder(pageWidth, pageHeight);
 			const renderer = new cool.VectorPrimitiveRenderer();
-			renderer.setSlideBounds(
-				primitiveTree.slideWidth,
-				primitiveTree.slideHeight,
-			);
-
-			for (const primitive of primitiveTree.masterPage.primitives)
-				renderer.renderPrimitive(recorder as any, primitive);
+			renderer.setSlideBounds(pageWidth, pageHeight);
 
 			for (const object of primitiveTree.objects)
 				for (const primitive of object.primitives)
@@ -1172,12 +1189,7 @@ describe('VectorPrimitiveRenderer', function () {
 			// backgroundcolor fills the whole canvas at the white page color
 			const fillRect = recorder.findCall('fillRect');
 			nodeassert.ok(fillRect, 'backgroundcolor primitive should fillRect');
-			nodeassert.deepStrictEqual(fillRect.args, [
-				0,
-				0,
-				primitiveTree.slideWidth,
-				primitiveTree.slideHeight,
-			]);
+			nodeassert.deepStrictEqual(fillRect.args, [0, 0, pageWidth, pageHeight]);
 
 			// 2x page-fill from polyPolygonColor
 			const fills = recorder.callsOf('fill');
@@ -1208,18 +1220,11 @@ describe('VectorPrimitiveRenderer', function () {
 				'testStrokedRectangle',
 			);
 
-			const recorder = new CanvasRecorder(
-				primitiveTree.slideWidth,
-				primitiveTree.slideHeight,
-			);
+			const [pageWidth, pageHeight] = pageBounds(primitiveTree);
+			const recorder = new CanvasRecorder(pageWidth, pageHeight);
 			const renderer = new cool.VectorPrimitiveRenderer();
-			renderer.setSlideBounds(
-				primitiveTree.slideWidth,
-				primitiveTree.slideHeight,
-			);
+			renderer.setSlideBounds(pageWidth, pageHeight);
 
-			for (const primitive of primitiveTree.masterPage.primitives)
-				renderer.renderPrimitive(recorder as any, primitive);
 			for (const object of primitiveTree.objects)
 				for (const primitive of object.primitives)
 					renderer.renderPrimitive(recorder as any, primitive);
@@ -1244,7 +1249,7 @@ describe('VectorPrimitiveRenderer', function () {
 
 			// The slide object wraps the rectangle in
 			// svx:N -> group -> [fill, stroke].
-			const group = primitiveTree.objects[0].primitives[0].children[0];
+			const group = firstShape(primitiveTree).primitives[0].children[0];
 			nodeassert.strictEqual(group.type, 'group');
 			nodeassert.strictEqual(group.children.length, 2);
 
@@ -1287,7 +1292,7 @@ describe('VectorPrimitiveRenderer', function () {
 			// object. The wire carries name, title and description
 			// alongside the rectangle's drawing primitives.
 			const primitiveTree = loadVectorRenderingReference('testObjectInfo');
-			const objectInfoNode = primitiveTree.objects[0].primitives[0];
+			const objectInfoNode = firstShape(primitiveTree).primitives[0];
 			nodeassert.strictEqual(objectInfoNode.type, 'objectInfo');
 			nodeassert.strictEqual(objectInfoNode.name, 'Rectangle 1');
 			nodeassert.strictEqual(objectInfoNode.title, 'My title');
@@ -1309,7 +1314,7 @@ describe('VectorPrimitiveRenderer', function () {
 			// group wrappers.
 			const primitiveTree = loadVectorRenderingReference('testPolyPolygonRGBA');
 			const rgbaNode =
-				primitiveTree.objects[0].primitives[0].children[0].children[0];
+				firstShape(primitiveTree).primitives[0].children[0].children[0];
 			nodeassert.strictEqual(rgbaNode.type, 'polyPolygonRGBA');
 			nodeassert.strictEqual(typeof rgbaNode.color, 'string');
 			const transparency: number = parseFloat(rgbaNode.transparency);
@@ -1337,7 +1342,7 @@ describe('VectorPrimitiveRenderer', function () {
 	it('renders polygonHairline from a document reference', function () {
 		// Fixture: a slide with a single polygonHairline outline.
 		const primitiveTree = loadVectorRenderingReference('testPolygonHairline');
-		const hairlineNode = primitiveTree.objects[0].primitives[0];
+		const hairlineNode = firstShape(primitiveTree).primitives[0];
 		nodeassert.strictEqual(hairlineNode.type, 'polygonHairline');
 		nodeassert.ok(hairlineNode.path, 'hairline must carry a path string');
 

@@ -1290,8 +1290,9 @@ enum class COKitCallbackType
      * Pushed to a vector-rendering view so it does not have to request the
      * delta after an invalidation. The payload is the same JSON the
      * .uno:VectorPrimitives command returns for a delta: a vectorprimitivesdelta
-     * with the part, the version, the object order, the changed objects and,
-     * when the master page changed, its content.
+     * with the part, the version, the object order and the changed objects.
+     * The page itself is the first object. Its entry comes along when
+     * the background or the master page content changed.
      */
     VECTOR_PRIMITIVES_DELTA = 76,
 

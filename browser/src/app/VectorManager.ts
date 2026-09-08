@@ -110,20 +110,26 @@ class VectorManager extends RenderManagerBase {
 		return !this._hiddenLayers.has(layer);
 	}
 
-	/// Render a part's primitive tree, master page first then the
-	/// objects on top. The caller sets up the context transform that
-	/// maps the part's twips to the target pixels. Objects on a hidden
-	/// layer are skipped. An edit view also frames the placeholders
-	/// that hold no content yet. A thumbnail or a slideshow does neither.
+	/// The page rectangle carried by the entry that stands for the page, or
+	/// zeroes when there is no such entry among the given objects.
+	static pageBoundsOf(objects: cool.SlideObject[]): [number, number] {
+		for (const object of objects) {
+			if (object.kind === 'page')
+				return [object.width ?? 0, object.height ?? 0];
+		}
+		return [0, 0];
+	}
+
+	/// Render a part's objects in paint order, the page entry first. The
+	/// caller sets up the context transform that maps the part's twips to
+	/// the target pixels. Objects on a hidden layer are skipped. An edit
+	/// view also frames the placeholders that hold no content yet.
 	renderInto(
 		context: CanvasRenderingContext2D,
 		data: cool.VectorPrimitivesData,
 		options?: cool.VectorRenderOptions,
 	): void {
 		this._renderer.setSlideBounds(data.slideWidth, data.slideHeight);
-		for (const primitive of data.masterPage) {
-			this._renderer.renderPrimitive(context, primitive);
-		}
 		for (const obj of data.objects) {
 			if (obj.layer !== undefined && this._hiddenLayers.has(obj.layer))
 				continue;
@@ -198,24 +204,19 @@ class VectorManager extends RenderManagerBase {
 
 		this._inFlightParts.delete(part);
 
-		const masterPage =
-			values.masterPage && values.masterPage.primitives
-				? values.masterPage.primitives
-				: [];
-		const objects = values.objects || [];
+		const received = values.objects || [];
 
+		const [nWidth, nHeight] = VectorManager.pageBoundsOf(received);
 		const data: cool.VectorPrimitivesData = {
 			version: values.version,
-			slideWidth: values.slideWidth || 0,
-			slideHeight: values.slideHeight || 0,
-			masterPage: masterPage,
-			objects: objects,
+			slideWidth: nWidth,
+			slideHeight: nHeight,
+			objects: received,
 		};
 		this._cache.set(part, data);
 
 		this._collectResources(part, (walker) => {
-			walker.walkPrimitives(masterPage);
-			walker.walkObjects(objects);
+			walker.walkObjects(received);
 		});
 
 		this._drainPending(part, data);
@@ -244,9 +245,18 @@ class VectorManager extends RenderManagerBase {
 		)
 			return;
 
+		const carried = values.objects || [];
 		const changedObjects = new Map<number, cool.SlideObject>();
-		for (const object of values.objects || []) {
+		for (const object of carried) {
 			if (object.id !== undefined) changedObjects.set(object.id, object);
+		}
+
+		// The page rectangle rides on the page entry, so a delta that carries
+		// that entry is also how a resized page reaches the client.
+		const [nWidth, nHeight] = VectorManager.pageBoundsOf(carried);
+		if (nWidth > 0 && nHeight > 0) {
+			cached.slideWidth = nWidth;
+			cached.slideHeight = nHeight;
 		}
 
 		const cachedObjects = new Map<number, cool.SlideObject>();
@@ -268,13 +278,8 @@ class VectorManager extends RenderManagerBase {
 		cached.objects = newObjects;
 		cached.version = values.version;
 
-		// A delta carries the master page only when it changed.
-		if (values.masterPage)
-			cached.masterPage = values.masterPage.primitives || [];
-
 		this._collectResources(part, (walker) => {
-			walker.walkObjects(values.objects || []);
-			if (values.masterPage) walker.walkPrimitives(cached.masterPage);
+			walker.walkObjects(carried);
 		});
 
 		this._redrawRenderedPreviews(part);

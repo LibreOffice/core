@@ -42,6 +42,7 @@
 #include <svx/svdopage.hxx>
 #include <editeng/pbinitem.hxx>
 #include <svx/svdundo.hxx>
+#include <svx/svdmodel.hxx>
 #include <svl/hint.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/editobj.hxx>
@@ -1952,6 +1953,10 @@ void SdPage::SetSize(const Size& aSize)
     if (aSize != aOldSize)
     {
         FmFormPage::SetSize(aSize);
+
+        // The size is a property of the page like its background, so it is announced with the
+        // same hint the page properties send when they change.
+        getSdrModelFromSdrPage().Broadcast(SdrHint(SdrHintKind::PageOrderChange, this));
 
         if (comphelper::COKit::isActive() && SfxViewShell::Current())
             NotifyPagePropertyChanges();

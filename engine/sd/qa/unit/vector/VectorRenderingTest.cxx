@@ -314,27 +314,30 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testSingleRectangle)
     assertJsonPath(aJson, "/type", "vectorprimitives");
     assertJsonPath(aJson, "/part", sal_Int64(0));
 
-    // The master page has been cleared, so it contributes only the
-    // page background fill and the page fill itself.
-    CPPUNIT_ASSERT_EQUAL(size_t(2), aJson.getSize("/masterPage/primitives").value_or(0));
-    assertJsonPath(aJson, "/masterPage/primitives/0/type", "backgroundcolor");
-    assertJsonPath(aJson, "/masterPage/primitives/1/type", "polyPolygonColor");
-    assertJsonPath(aJson, "/masterPage/primitives/1/color", "#ffffff");
+    // The page comes first. Its master page has been cleared, so it
+    // contributes only the page background fill and the page fill itself.
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aJson.getSize("/objects").value_or(0));
+    assertJsonPath(aJson, "/objects/0/kind", "page");
+    // The page is entry zero, the id an object never has.
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(0), aJson.getInt("/objects/0/id").value_or(-1));
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aJson.getSize("/objects/0/primitives").value_or(0));
+    assertJsonPath(aJson, "/objects/0/primitives/0/type", "backgroundcolor");
+    assertJsonPath(aJson, "/objects/0/primitives/1/type", "polyPolygonColor");
+    assertJsonPath(aJson, "/objects/0/primitives/1/color", "#ffffff");
 
-    // Exactly one slide object, our rectangle
-    CPPUNIT_ASSERT_EQUAL(size_t(1), aJson.getSize("/objects").value_or(0));
-    assertJsonPath(aJson, "/objects/0/primitives/0/type", "svx:9");
-    assertJsonPath(aJson, "/objects/0/primitives/0/children/0/type", "group");
+    // Then the one slide object, our rectangle.
+    assertJsonPath(aJson, "/objects/1/primitives/0/type", "svx:9");
+    assertJsonPath(aJson, "/objects/1/primitives/0/children/0/type", "group");
 
     // Fill primitive.
-    auto oFill = aJson.at("/objects/0/primitives/0/children/0/children/0");
+    auto oFill = aJson.at("/objects/1/primitives/0/children/0/children/0");
     CPPUNIT_ASSERT(oFill.has_value());
     assertJsonPath(*oFill, "type", "polyPolygonColor");
     assertJsonPath(*oFill, "color", "#4472c4");
     assertJsonPathExists(*oFill, "path");
 
     // Stroke primitive.
-    auto oStroke = aJson.at("/objects/0/primitives/0/children/0/children/1");
+    auto oStroke = aJson.at("/objects/1/primitives/0/children/0/children/1");
     CPPUNIT_ASSERT(oStroke.has_value());
     assertJsonPath(*oStroke, "type", "polygonStroke");
     assertJsonPath(*oStroke, "line/color", "#000000");
@@ -402,18 +405,22 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testMasterViewCarriesTheMasterObjects)
     auto aMaster = getVectorPrimitives(u"testMasterView", -1, 1);
     assertJsonPath(aMaster, "/type", "vectorprimitives");
     CPPUNIT_ASSERT_EQUAL(sal_Int64(1), aMaster.getInt("/mode").value_or(-1));
-    CPPUNIT_ASSERT_EQUAL(nPlaceholderCount + 1, aMaster.getSize("/objects").value_or(0));
-    CPPUNIT_ASSERT_EQUAL(
-        static_cast<sal_Int64>(pRect->GetUniqueID()),
-        aMaster
-            .getInt(rtl::Concat2View("/objects/" + OString::number(sal_Int32(nPlaceholderCount))
-                                     + "/id"))
-            .value_or(-1));
+    // The page entry, then the placeholders and the new rectangle.
+    CPPUNIT_ASSERT_EQUAL(nPlaceholderCount + 2, aMaster.getSize("/objects").value_or(0));
+    assertJsonPath(aMaster, "/objects/0/kind", "page");
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(pRect->GetUniqueID()),
+                         aMaster
+                             .getInt(rtl::Concat2View(
+                                 "/objects/" + OString::number(sal_Int32(nPlaceholderCount + 1))
+                                 + "/id"))
+                             .value_or(-1));
 
-    // The slide itself is still blank, and says so in the slide mode.
+    // The slide itself is still blank, and says so in the slide mode: only
+    // the page entry.
     auto aSlide = getVectorPrimitives(u"testMasterViewSlide");
     CPPUNIT_ASSERT_EQUAL(sal_Int64(0), aSlide.getInt("/mode").value_or(-1));
-    CPPUNIT_ASSERT_EQUAL(size_t(0), aSlide.getSize("/objects").value_or(0));
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aSlide.getSize("/objects").value_or(0));
+    assertJsonPath(aSlide, "/objects/0/kind", "page");
 }
 
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testMasterEditRaisesBothVersions)
@@ -500,6 +507,28 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testPartVersionRisesOnBackgroundChange
     CPPUNIT_ASSERT_GREATER(nBefore, nAfter);
 }
 
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testDeltaCarriesResizedPage)
+{
+    // The page rectangle rides on the page entry, so a page that was resized
+    // reaches a client that already holds the slide as a delta carrying that
+    // entry with its new box.
+    createBlankDoc();
+    auto aFull = getVectorPrimitives(u"testResizeFull");
+    const sal_Int64 nVersion = aFull.getInt("/version").value_or(-1);
+    const sal_Int64 nWidthBefore = aFull.getInt("/objects/0/width").value_or(-1);
+
+    // Through the drawing layer's page, which dispatches to the slide's own override.
+    SdrPage* pPage = page(1);
+    const Size aSize = pPage->GetSize();
+    pPage->SetSize(Size(aSize.Width() * 2, aSize.Height()));
+
+    auto aDelta = getVectorPrimitives(u"testResizeDelta", nVersion);
+    assertJsonPath(aDelta, "/type", "vectorprimitivesdelta");
+    // The page entry comes first whenever a response carries it.
+    assertJsonPath(aDelta, "/objects/0/kind", "page");
+    CPPUNIT_ASSERT_GREATER(nWidthBefore, aDelta.getInt("/objects/0/width").value_or(-1));
+}
+
 // A delta since a version carries full content only for objects that
 // changed after it, while the order array still lists every object.
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testDeltaCarriesOnlyChangedObjects)
@@ -516,16 +545,16 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testDeltaCarriesOnlyChangedObjects)
     auto aFull = getVectorPrimitives(u"testDeltaFull");
     assertJsonPath(aFull, "/type", "vectorprimitives");
     const sal_Int64 nVersion = aFull.getInt("/version").value_or(-1);
-    CPPUNIT_ASSERT_EQUAL(size_t(2), aFull.getSize("/objects").value_or(0));
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aFull.getSize("/objects").value_or(0));
 
     // Change only the first object after that version.
     pFirst->BroadcastObjectChange();
 
     auto aDelta = getVectorPrimitives(u"testDeltaSince", nVersion);
     assertJsonPath(aDelta, "/type", "vectorprimitivesdelta");
-    // The order still lists both objects, but only the changed one
-    // carries content.
-    CPPUNIT_ASSERT_EQUAL(size_t(2), aDelta.getSize("/order").value_or(0));
+    // The order still lists the page and both objects, but only the
+    // changed one carries content.
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aDelta.getSize("/order").value_or(0));
     CPPUNIT_ASSERT_EQUAL(size_t(1), aDelta.getSize("/objects").value_or(0));
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int64>(pFirst->GetUniqueID()),
                          aDelta.getInt("/objects/0/id").value_or(-1));
@@ -545,9 +574,9 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testEveryObjectKeepsItsEntry)
     pGroup->BroadcastObjectChange();
 
     auto aFull = getVectorPrimitives(u"testObjectEntryFull");
-    CPPUNIT_ASSERT_EQUAL(size_t(2), aFull.getSize("/objects").value_or(0));
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aFull.getSize("/objects").value_or(0));
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int64>(pGroup->GetUniqueID()),
-                         aFull.getInt("/objects/1/id").value_or(-1));
+                         aFull.getInt("/objects/2/id").value_or(-1));
     const sal_Int64 nVersion = aFull.getInt("/version").value_or(-1);
 
     // Change only the group after that version.
@@ -555,7 +584,7 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testEveryObjectKeepsItsEntry)
 
     auto aDelta = getVectorPrimitives(u"testObjectEntryDelta", nVersion);
     assertJsonPath(aDelta, "/type", "vectorprimitivesdelta");
-    CPPUNIT_ASSERT_EQUAL(size_t(2), aDelta.getSize("/order").value_or(0));
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aDelta.getSize("/order").value_or(0));
     CPPUNIT_ASSERT_EQUAL(size_t(1), aDelta.getSize("/objects").value_or(0));
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int64>(pGroup->GetUniqueID()),
                          aDelta.getInt("/objects/0/id").value_or(-1));
@@ -597,25 +626,25 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testGroupMembersAreOwnEntries)
     SdrObject* pGroup = page(1)->GetObj(0);
 
     auto aFull = getVectorPrimitives(u"testGroupMembers");
-    CPPUNIT_ASSERT_EQUAL(size_t(2), aFull.getSize("/objects").value_or(0));
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aFull.getSize("/objects").value_or(0));
     CPPUNIT_ASSERT_EQUAL(sal_Int64(pGroup->GetUniqueID()),
-                         aFull.getInt("/objects/0/id").value_or(-1));
-    CPPUNIT_ASSERT_EQUAL(sal_Int64(0), aFull.getInt("/objects/0/parent").value_or(-1));
-    CPPUNIT_ASSERT_EQUAL(size_t(0), aFull.getSize("/objects/0/primitives").value_or(SIZE_MAX));
-    CPPUNIT_ASSERT_EQUAL(sal_Int64(pMember->GetUniqueID()),
                          aFull.getInt("/objects/1/id").value_or(-1));
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(0), aFull.getInt("/objects/1/parent").value_or(-1));
+    CPPUNIT_ASSERT_EQUAL(size_t(0), aFull.getSize("/objects/1/primitives").value_or(SIZE_MAX));
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(pMember->GetUniqueID()),
+                         aFull.getInt("/objects/2/id").value_or(-1));
     CPPUNIT_ASSERT_EQUAL(sal_Int64(pGroup->GetUniqueID()),
-                         aFull.getInt("/objects/1/parent").value_or(-1));
-    CPPUNIT_ASSERT(aFull.getSize("/objects/1/primitives").value_or(0) > 0);
+                         aFull.getInt("/objects/2/parent").value_or(-1));
+    CPPUNIT_ASSERT(aFull.getSize("/objects/2/primitives").value_or(0) > 0);
 
-    // The order of a delta lists the member as well.
+    // The order of a delta lists the page first, then the group and the
+    // member.
     const sal_Int64 nVersion = aFull.getInt("/version").value_or(-1);
     auto aDelta = getVectorPrimitives(u"testGroupMembersDelta", nVersion);
-    CPPUNIT_ASSERT_EQUAL(size_t(2), aDelta.getSize("/order").value_or(0));
-    CPPUNIT_ASSERT_EQUAL(sal_Int64(pGroup->GetUniqueID()),
-                         aDelta.getInt("/order/0").value_or(-1));
-    CPPUNIT_ASSERT_EQUAL(sal_Int64(pMember->GetUniqueID()),
-                         aDelta.getInt("/order/1").value_or(-1));
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aDelta.getSize("/order").value_or(0));
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(0), aDelta.getInt("/order/0").value_or(-1));
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(pGroup->GetUniqueID()), aDelta.getInt("/order/1").value_or(-1));
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(pMember->GetUniqueID()), aDelta.getInt("/order/2").value_or(-1));
 }
 
 // Every entry carries where the object paints and how the unit rectangle
@@ -628,28 +657,28 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testObjectEntryCarriesGeometry)
                             Color(0x4472c4), 0);
 
     auto aJson = getVectorPrimitives(u"testObjectGeometry");
-    CPPUNIT_ASSERT_EQUAL(size_t(1), aJson.getSize("/objects").value_or(0));
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aJson.getSize("/objects").value_or(0));
 
     // 1/100 mm to twips is 1440 / 2540.
-    CPPUNIT_ASSERT_EQUAL(sal_Int64(567), aJson.getInt("/objects/0/x").value_or(-1));
-    CPPUNIT_ASSERT_EQUAL(sal_Int64(1134), aJson.getInt("/objects/0/y").value_or(-1));
-    CPPUNIT_ASSERT_EQUAL(sal_Int64(2268), aJson.getInt("/objects/0/width").value_or(-1));
-    CPPUNIT_ASSERT_EQUAL(sal_Int64(1701), aJson.getInt("/objects/0/height").value_or(-1));
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(567), aJson.getInt("/objects/1/x").value_or(-1));
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(1134), aJson.getInt("/objects/1/y").value_or(-1));
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(2268), aJson.getInt("/objects/1/width").value_or(-1));
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(1701), aJson.getInt("/objects/1/height").value_or(-1));
 
     // An unrotated rectangle scales the unit square to its size and moves it
     // to its top-left corner.
-    CPPUNIT_ASSERT_EQUAL(size_t(6), aJson.getSize("/objects/0/transform").value_or(0));
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(2267.7, aJson.getDouble("/objects/0/transform/0").value_or(0),
+    CPPUNIT_ASSERT_EQUAL(size_t(6), aJson.getSize("/objects/1/transform").value_or(0));
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2267.7, aJson.getDouble("/objects/1/transform/0").value_or(0),
                                  0.1);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, aJson.getDouble("/objects/0/transform/1").value_or(1),
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, aJson.getDouble("/objects/1/transform/1").value_or(1),
                                  0.001);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, aJson.getDouble("/objects/0/transform/2").value_or(1),
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, aJson.getDouble("/objects/1/transform/2").value_or(1),
                                  0.001);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(1700.8, aJson.getDouble("/objects/0/transform/3").value_or(0),
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1700.8, aJson.getDouble("/objects/1/transform/3").value_or(0),
                                  0.1);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(566.9, aJson.getDouble("/objects/0/transform/4").value_or(0),
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(566.9, aJson.getDouble("/objects/1/transform/4").value_or(0),
                                  0.1);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(1133.9, aJson.getDouble("/objects/0/transform/5").value_or(0),
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1133.9, aJson.getDouble("/objects/1/transform/5").value_or(0),
                                  0.1);
 }
 
@@ -662,27 +691,27 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testRotatedObjectTransform)
                         Degree100(9000));
 
     auto aJson = getVectorPrimitives(u"testRotatedTransform");
-    CPPUNIT_ASSERT_EQUAL(size_t(1), aJson.getSize("/objects").value_or(0));
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aJson.getSize("/objects").value_or(0));
 
     // A quarter turn puts the whole scale into the off-diagonal entries.
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, aJson.getDouble("/objects/0/transform/0").value_or(1),
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, aJson.getDouble("/objects/1/transform/0").value_or(1),
                                  0.5);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(2267.7,
-                                 std::abs(aJson.getDouble("/objects/0/transform/1").value_or(0)),
+                                 std::abs(aJson.getDouble("/objects/1/transform/1").value_or(0)),
                                  0.5);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(2267.7,
-                                 std::abs(aJson.getDouble("/objects/0/transform/2").value_or(0)),
+                                 std::abs(aJson.getDouble("/objects/1/transform/2").value_or(0)),
                                  0.5);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, aJson.getDouble("/objects/0/transform/3").value_or(1),
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, aJson.getDouble("/objects/1/transform/3").value_or(1),
                                  0.5);
 
     // A square turned by a quarter covers the same box. The box is rounded to
     // whole twips, so a twip either way is what the rounding leaves.
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(2835.0, double(aJson.getInt("/objects/0/x").value_or(-1)), 1.0);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(2835.0, double(aJson.getInt("/objects/0/y").value_or(-1)), 1.0);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(2268.0, double(aJson.getInt("/objects/0/width").value_or(-1)),
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2835.0, double(aJson.getInt("/objects/1/x").value_or(-1)), 1.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2835.0, double(aJson.getInt("/objects/1/y").value_or(-1)), 1.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2268.0, double(aJson.getInt("/objects/1/width").value_or(-1)),
                                  1.0);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(2268.0, double(aJson.getInt("/objects/0/height").value_or(-1)),
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2268.0, double(aJson.getInt("/objects/1/height").value_or(-1)),
                                  1.0);
 }
 
@@ -700,12 +729,12 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testObjectEntryCarriesLayerAndPlacehol
     pPlaceholder->SetEmptyPresObj(true);
 
     auto aJson = getVectorPrimitives(u"testLayerAndPlaceholder");
-    CPPUNIT_ASSERT_EQUAL(size_t(2), aJson.getSize("/objects").value_or(0));
-    CPPUNIT_ASSERT_EQUAL(sal_Int64(3), aJson.getInt("/objects/0/layer").value_or(-1));
-    CPPUNIT_ASSERT(!aJson.getBool("/objects/0/emptyPlaceholder").has_value());
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aJson.getSize("/objects").value_or(0));
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(3), aJson.getInt("/objects/1/layer").value_or(-1));
+    CPPUNIT_ASSERT(!aJson.getBool("/objects/1/emptyPlaceholder").has_value());
     CPPUNIT_ASSERT_EQUAL(sal_Int64(pPlaceholder->GetLayer().get()),
-                         aJson.getInt("/objects/1/layer").value_or(-1));
-    CPPUNIT_ASSERT_EQUAL(true, aJson.getBool("/objects/1/emptyPlaceholder").value_or(false));
+                         aJson.getInt("/objects/2/layer").value_or(-1));
+    CPPUNIT_ASSERT_EQUAL(true, aJson.getBool("/objects/2/emptyPlaceholder").value_or(false));
 }
 
 // Text in the automatic color resolves against the page background, so it
@@ -751,10 +780,10 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testDeltaCarriesChangedMasterPage)
 
     auto aDelta = getVectorPrimitives(u"testMasterDelta", nVersion);
     assertJsonPath(aDelta, "/type", "vectorprimitivesdelta");
-    // The slide object itself is unchanged, so no object content, but
-    // the changed master page comes along.
-    CPPUNIT_ASSERT_EQUAL(size_t(0), aDelta.getSize("/objects").value_or(SIZE_MAX));
-    assertJsonPathExists(aDelta, "/masterPage");
+    // The slide object itself is unchanged, so the only entry is the page,
+    // whose master page content changed.
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aDelta.getSize("/objects").value_or(SIZE_MAX));
+    assertJsonPath(aDelta, "/objects/0/kind", "page");
 }
 
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testDeltaCarriesChangedBackground)
@@ -777,10 +806,10 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testDeltaCarriesChangedBackground)
 
     auto aDelta = getVectorPrimitives(u"testBackgroundDelta", nVersion);
     assertJsonPath(aDelta, "/type", "vectorprimitivesdelta");
-    // The slide object itself is unchanged, so no object content, but
-    // the master page content with the new background comes along.
-    CPPUNIT_ASSERT_EQUAL(size_t(0), aDelta.getSize("/objects").value_or(SIZE_MAX));
-    assertJsonPathExists(aDelta, "/masterPage");
+    // The slide object itself is unchanged, so the only entry is the page,
+    // with the new background.
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aDelta.getSize("/objects").value_or(SIZE_MAX));
+    assertJsonPath(aDelta, "/objects/0/kind", "page");
 }
 
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testPullSetsPushBaseline)
@@ -795,9 +824,10 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testPullSetsPushBaseline)
     page(1)->GetObj(0)->BroadcastObjectChange();
     page(1)->GetObj(1)->BroadcastObjectChange();
 
-    // The full pull gives the view both objects and sets its baseline.
+    // The full pull gives the view the page and both objects and sets its
+    // baseline.
     auto aFull = getVectorPrimitives(u"testPullBaseline");
-    CPPUNIT_ASSERT_EQUAL(size_t(2), aFull.getSize("/objects").value_or(0));
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aFull.getSize("/objects").value_or(0));
 
     const SfxViewShell* pView = SfxViewShell::Current();
     CPPUNIT_ASSERT(pView);
@@ -815,9 +845,9 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testPullSetsPushBaseline)
     CPPUNIT_ASSERT(oDelta.has_value());
 
     assertJsonPath(*oDelta, "/type", "vectorprimitivesdelta");
-    // The order still lists both objects, but nothing changed since the
-    // pull, so the push carries no object content.
-    CPPUNIT_ASSERT_EQUAL(size_t(2), oDelta->getSize("/order").value_or(0));
+    // The order still lists the page and both objects, but nothing changed
+    // since the pull, so the push carries no object content.
+    CPPUNIT_ASSERT_EQUAL(size_t(3), oDelta->getSize("/order").value_or(0));
     CPPUNIT_ASSERT_EQUAL(size_t(0), oDelta->getSize("/objects").value_or(SIZE_MAX));
 }
 
@@ -970,8 +1000,8 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testBoldRunNamesADifferentFace)
     }
 
     auto aJson = getVectorPrimitives(u"testBoldRunFace");
-    const std::optional<tools::JsonPath> oPlainObject = aJson.at("/objects/0");
-    const std::optional<tools::JsonPath> oBoldObject = aJson.at("/objects/1");
+    const std::optional<tools::JsonPath> oPlainObject = aJson.at("/objects/1");
+    const std::optional<tools::JsonPath> oBoldObject = aJson.at("/objects/2");
     CPPUNIT_ASSERT(oPlainObject.has_value());
     CPPUNIT_ASSERT(oBoldObject.has_value());
     const std::optional<tools::JsonPath> oPlain = oPlainObject->findFirst("fontId");
@@ -1154,9 +1184,9 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testStrokedRectangle)
     auto aJson = getVectorPrimitives(u"testStrokedRectangle");
 
     assertJsonPath(aJson, "/type", "vectorprimitives");
-    CPPUNIT_ASSERT_EQUAL(size_t(1), aJson.getSize("/objects").value_or(0));
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aJson.getSize("/objects").value_or(0));
 
-    auto oStroke = aJson.at("/objects/0/primitives/0/children/0/children/0");
+    auto oStroke = aJson.at("/objects/1/primitives/0/children/0/children/0");
     CPPUNIT_ASSERT(oStroke.has_value());
     assertJsonPath(*oStroke, "type", "polygonStroke");
     assertJsonPath(*oStroke, "line/color", "#000000");
@@ -1174,7 +1204,7 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testRotatedRectangle)
     auto aJson = getVectorPrimitives(u"testRotatedRectangle");
 
     assertJsonPath(aJson, "/type", "vectorprimitives");
-    CPPUNIT_ASSERT_EQUAL(size_t(1), aJson.getSize("/objects").value_or(0));
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aJson.getSize("/objects").value_or(0));
 }
 
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testObjectInfo)
@@ -1189,12 +1219,12 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testObjectInfo)
     auto aJson = getVectorPrimitives(u"testObjectInfo");
 
     assertJsonPath(aJson, "/type", "vectorprimitives");
-    CPPUNIT_ASSERT_EQUAL(size_t(1), aJson.getSize("/objects").value_or(0));
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aJson.getSize("/objects").value_or(0));
 
     // The object info wraps the SdrObject's primitive sequence, so it
     // is the outermost node. The wrapping path is objectInfo -> svx:N
     // -> group -> [fill].
-    auto oObjectInfo = aJson.at("/objects/0/primitives/0");
+    auto oObjectInfo = aJson.at("/objects/1/primitives/0");
     CPPUNIT_ASSERT(oObjectInfo.has_value());
     assertJsonPath(*oObjectInfo, "type", "objectInfo");
     assertJsonPath(*oObjectInfo, "name", "Rectangle 1");
@@ -1217,10 +1247,10 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testPolyPolygonRGBA)
     auto aJson = getVectorPrimitives(u"testPolyPolygonRGBA");
 
     assertJsonPath(aJson, "/type", "vectorprimitives");
-    CPPUNIT_ASSERT_EQUAL(size_t(1), aJson.getSize("/objects").value_or(0));
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aJson.getSize("/objects").value_or(0));
 
     // The wrapping path is svx:N -> group -> polyPolygonRGBA.
-    auto oRGBA = aJson.at("/objects/0/primitives/0/children/0/children/0");
+    auto oRGBA = aJson.at("/objects/1/primitives/0/children/0/children/0");
     CPPUNIT_ASSERT(oRGBA.has_value());
     assertJsonPath(*oRGBA, "type", "polyPolygonRGBA");
     assertJsonPath(*oRGBA, "color", "#4472c4");
@@ -1239,9 +1269,9 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testPolygonHairline)
     auto aJson = getVectorPrimitives(u"testPolygonHairline");
 
     assertJsonPath(aJson, "/type", "vectorprimitives");
-    CPPUNIT_ASSERT_EQUAL(size_t(1), aJson.getSize("/objects").value_or(0));
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aJson.getSize("/objects").value_or(0));
 
-    auto oHairline = aJson.at("/objects/0/primitives/0");
+    auto oHairline = aJson.at("/objects/1/primitives/0");
     CPPUNIT_ASSERT(oHairline.has_value());
     assertJsonPath(*oHairline, "type", "polygonHairline");
     assertJsonPathExists(*oHairline, "color");

@@ -2253,6 +2253,11 @@ bool SdXImpressDocument::isVectorObjectChangedSince(sal_Int32 nPart, sal_Int32 n
 
 namespace
 {
+/// The id of the entry that stands for the page itself. The unique id of an object counts up
+/// from 1, so zero names no object, and an object that sits directly on the page already gives
+/// zero as its parent.
+constexpr sal_Int64 constPageEntryId = 0;
+
 /// The page list a vector-rendering part index addresses.
 constexpr sal_Int32 constVectorModeSlides = 0;
 constexpr sal_Int32 constVectorModeMasterPages = 1;
@@ -2533,20 +2538,19 @@ public:
         if (!pPage)
             return;
 
-        writeHeader(rWriter, pPage);
+        writeHeader(rWriter);
         setupProcessor(rWriter, pPage);
         if (isDelta())
-        {
             writeObjectOrder(rWriter, pPage);
-            // The master page is not an object on the slide, so a delta
-            // carries its content whenever it changed after the client's
-            // version.
-            if (mpModel->isVectorMasterChangedSince(mnResolvedPage, mnMode,
-                                                    sal_uInt64(mnSinceVersion)))
-                writeMasterPage(rWriter, pPage);
-        }
-        else
-            writeMasterPage(rWriter, pPage);
+
+        // The page is the first painted object: its entry carries the background, the page
+        // fill and the master page content, and the objects on the page follow it. A delta
+        // carries the page entry whenever that content changed after the client's version.
+        auto aObjectsArray = rWriter.startArray("objects");
+        if (!isDelta()
+            || mpModel->isVectorMasterChangedSince(mnResolvedPage, mnMode,
+                                                   sal_uInt64(mnSinceVersion)))
+            writePageEntry(rWriter, pPage);
         writePageObjects(rWriter, pPage);
     }
 
@@ -2595,20 +2599,12 @@ private:
         return mpDocument->GetSdPage(nCurrentPage, PageKind::Standard);
     }
 
-    void writeHeader(tools::JsonWriter& rWriter, SdPage* pPage)
+    void writeHeader(tools::JsonWriter& rWriter)
     {
         rWriter.put("type", isDelta() ? "vectorprimitivesdelta" : "vectorprimitives");
         rWriter.put("part", sal_Int32(mnResolvedPage));
         rWriter.put("mode", mnMode);
         rWriter.put("version", sal_Int64(mpModel->getVectorPartVersion(mnResolvedPage, mnMode)));
-
-        // A delta reuses the slide size the client already has, so only a
-        // full response carries it.
-        if (!isDelta())
-        {
-            rWriter.put("slideWidth", sal_Int64(pPage->GetWidth() * constTwipConversionFactor));
-            rWriter.put("slideHeight", sal_Int64(pPage->GetHeight() * constTwipConversionFactor));
-        }
     }
 
     void setupProcessor(tools::JsonWriter& rWriter, SdPage* pPage)
@@ -2632,9 +2628,33 @@ private:
         maProcessor->setViewInformation2D(aViewInfo);
     }
 
-    void writeMasterPage(tools::JsonWriter& rWriter, SdPage* pPage)
+    /// The entry that stands for the page itself. It is drawn first and holds what lies
+    /// behind the objects: the background, the page fill and the master page content. Its
+    /// id is zero, which no object takes, and its box is the page.
+    void writePageEntry(tools::JsonWriter& rWriter, SdPage* pPage)
     {
-        auto aMasterNode = rWriter.startNode("masterPage");
+        auto pPageNode = rWriter.startStruct();
+        rWriter.put("id", constPageEntryId);
+        rWriter.put("name", pPage->GetName());
+        // An object on the page gives zero as its parent, which is this entry, so it reads as
+        // a child of the page. The page sits under nothing, which leaves it its own parent.
+        rWriter.put("parent", sal_Int64(0));
+        rWriter.put("kind", "page");
+        const sal_Int64 nWidth = sal_Int64(pPage->GetWidth() * constTwipConversionFactor);
+        const sal_Int64 nHeight = sal_Int64(pPage->GetHeight() * constTwipConversionFactor);
+        rWriter.put("x", sal_Int64(0));
+        rWriter.put("y", sal_Int64(0));
+        rWriter.put("width", nWidth);
+        rWriter.put("height", nHeight);
+        {
+            auto aTransformArray = rWriter.startArray("transform");
+            rWriter.putSimpleValue(double(nWidth));
+            rWriter.putSimpleValue(0.0);
+            rWriter.putSimpleValue(0.0);
+            rWriter.putSimpleValue(double(nHeight));
+            rWriter.putSimpleValue(0.0);
+            rWriter.putSimpleValue(0.0);
+        }
         auto aPrimArray = rWriter.startArray("primitives");
 
         // ViewContactOfSdrPage fixed child order:
@@ -2725,15 +2745,16 @@ private:
         }
     }
 
-    /// The order array lists every live object id on the page in paint order, the objects
-    /// inside a group right after the group. It is the authoritative object set and ordering
-    /// for the part.
+    /// The order array lists every live object id on the page in paint order: the page entry
+    /// first, then each object with the objects inside a group right after the group. It is
+    /// the authoritative object set and ordering for the part.
     static void writeObjectOrder(tools::JsonWriter& rWriter, SdPage* pPage)
     {
         std::vector<SdrObject*> aObjects;
         collectPaintedObjects(*pPage, aObjects);
 
         auto aOrderArray = rWriter.startArray("order");
+        rWriter.putSimpleValue(constPageEntryId);
         for (const SdrObject* pObject : aObjects)
             rWriter.putSimpleValue(sal_Int64(pObject->GetUniqueID()));
     }
@@ -2757,10 +2778,9 @@ private:
         return false;
     }
 
+    /// One entry per object on the page, into the open objects array.
     void writePageObjects(tools::JsonWriter& rWriter, SdPage* pPage)
     {
-        auto aObjectsArray = rWriter.startArray("objects");
-
         for (size_t i = 0; i < pPage->GetObjCount(); ++i)
         {
             SdrObject* pObject = pPage->GetObj(i);

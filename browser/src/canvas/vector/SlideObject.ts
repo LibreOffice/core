@@ -15,6 +15,11 @@ namespace cool {
 		/// Stable identity of the object: the engine's SdrObject unique
 		/// id, unchanged across edits to the same object.
 		id?: number;
+		/// "page" for the entry that stands for the slide itself: it is
+		/// drawn first and holds the background, the page fill and the
+		/// master page content, and its box is the slide. Absent for a
+		/// drawing object.
+		kind?: 'page';
 		/// Id of the group the object sits in, 0 for an object directly
 		/// on the slide. A group's members follow it in the object list
 		/// and draw its content, so a group with members has no

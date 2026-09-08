@@ -5324,10 +5324,6 @@ void forEachPrimitive(const tools::JsonPath& rNode,
                 forEachPrimitive(rNode.sub(rChild.second), rVisitor);
         }
     }
-
-    // Recurse into sub-nodes
-    if (auto oMasterPage = rNode.at("masterPage"))
-        forEachPrimitive(*oMasterPage, rVisitor);
 }
 
 /// Collect all primitive types in the JSON tree
@@ -5373,14 +5369,15 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPaintVectorPrimitives)
     // Must have a "vectorprimitives"
     CPPUNIT_ASSERT_EQUAL("vectorprimitives"_ostr, aJson.getString("/type").value_or(OString()));
 
-    // Slide dimensions must be present
-    CPPUNIT_ASSERT(aJson.has("/slideWidth"));
-    CPPUNIT_ASSERT(aJson.has("/slideHeight"));
+    // The page is the first object, and it carries the page rectangle and
+    // everything that lies behind the objects on it.
+    CPPUNIT_ASSERT_EQUAL("page"_ostr, aJson.getString("/objects/0/kind").value_or(OString()));
+    CPPUNIT_ASSERT(aJson.getInt("/objects/0/width").value_or(0) > 0);
+    CPPUNIT_ASSERT(aJson.getInt("/objects/0/height").value_or(0) > 0);
 
-    // Check master page
-    auto oMasterPrimitives = aJson.at("/masterPage/primitives");
+    auto oMasterPrimitives = aJson.at("/objects/0/primitives");
     CPPUNIT_ASSERT(oMasterPrimitives.has_value());
-    // Master page: backgroundcolor + white fill + gradient background + 2 placeholder SdrRects.
+    // The page: backgroundcolor + white fill + gradient background + 2 placeholder SdrRects.
     size_t nNumberOfMasterPrimitives = 0;
     bool bHasBackgroundColor = false;
     bool bHasWhiteFill = false;
@@ -5423,8 +5420,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPaintVectorPrimitives)
         CPPUNIT_ASSERT(aObject.has("primitives"));
     }
 
-    // Check number of objects is what we expect.
-    CPPUNIT_ASSERT_EQUAL(size_t(10), aJson.getSize("/objects").value_or(0));
+    // Check number of objects is what we expect: the page and the ten it holds.
+    CPPUNIT_ASSERT_EQUAL(size_t(11), aJson.getSize("/objects").value_or(0));
 
     // Collect all primitive types in the JSON tree.
     std::set<OString> aTypes = collectPrimitiveTypes(aJson);
@@ -5469,8 +5466,9 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPaintVectorPrimitivesMasterPagePl
 
     // The master page of the test document has only two presentation
     // placeholders (title + outline) which must be filtered out.
-    auto oMasterPage = aJson.at("/masterPage");
+    auto oMasterPage = aJson.at("/objects/0");
     CPPUNIT_ASSERT(oMasterPage.has_value());
+    CPPUNIT_ASSERT_EQUAL("page"_ostr, oMasterPage->getString("kind").value_or(OString()));
 
     std::vector<OString> aMasterTexts;
     forEachPrimitive(*oMasterPage, [&aMasterTexts](const tools::JsonPath& rNode)
@@ -5482,8 +5480,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPaintVectorPrimitivesMasterPagePl
         "Master page title/outline placeholder text must be filtered out",
         size_t(0), aMasterTexts.size());
 
-    // The slide itself should still contain its rectangle.
-    CPPUNIT_ASSERT_EQUAL(size_t(1), aJson.getSize("/objects").value_or(0));
+    // The slide itself should still contain its rectangle, after the page.
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aJson.getSize("/objects").value_or(0));
 }
 
 #ifndef _WIN32 // osl_setTimezone has no effect on Windows
