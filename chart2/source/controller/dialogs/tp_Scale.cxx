@@ -515,7 +515,7 @@ DeactivateRC ScaleTabPage::DeactivatePage(SfxItemSet* pItemSet)
     sal_uInt32 nMinMaxOriginFmt = m_xFmtFldMax->GetFormatter().GetFormatKey();
     if (pNumFormatter->GetType(nMinMaxOriginFmt) == SvNumFormatType::TEXT)
         nMinMaxOriginFmt = 0;
-    // numberformat_text cause numbers to fail being numbers...  Shouldn't happen, but can.
+    // numberformat_text causes numbers to fail being numbers...  Shouldn't happen, but can.
     sal_uInt32 nStepFmt = m_xFmtFldStepMain->GetFormatter().GetFormatKey();
     if (pNumFormatter->GetType(nStepFmt) == SvNumFormatType::TEXT)
         nStepFmt = 0;
@@ -796,7 +796,7 @@ void ScaleTabPage::HideAllControls()
 {
     // We need to set these controls invisible when the class is instantiated
     // since some code in EnableControls() depends on that logic. The real
-    // visibility of these controls depend on axis data type, and are
+    // visibility of these controls depends on axis data type, and are
     // set in EnableControls().
 
     m_xBxType->hide();

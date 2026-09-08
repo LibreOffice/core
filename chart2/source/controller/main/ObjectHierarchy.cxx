@@ -392,7 +392,7 @@ void ObjectHierarchy::createDataSeriesTree(
                     }
 
                     // Data Points
-                    // iterate over child shapes of legend and search for matching CIDs
+                    // iterate over child shapes of series and search for matching CIDs
                     if( m_pExplicitValueProvider )
                     {
                         rtl::Reference< SvxShapeGroupAnyD > xSeriesShapeContainer =

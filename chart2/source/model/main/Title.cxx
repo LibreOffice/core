@@ -179,7 +179,7 @@ const ::chart::tPropertyValueMap& StaticTitleDefaults()
             return aTmp;
         }();
     return aStaticDefaults;
-};
+}
 
 ::cppu::OPropertyArrayHelper& StaticTitleInfoHelper()
 {
@@ -197,7 +197,7 @@ const ::chart::tPropertyValueMap& StaticTitleDefaults()
             return comphelper::containerToSequence( aProperties );
         }();
     return aPropHelper;
-};
+}
 
 } // anonymous namespace
 

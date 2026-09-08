@@ -174,7 +174,7 @@ void HistogramCalculator::computeBinFrequencyHistogram(
             fBinStart = fBinEnd;
         }
 
-        // With an overflow bin values above the overflow boundary belong to the overflow bin
+        // With an overflow bin, values above the overflow boundary belong to the overflow bin
         if (!maBinRanges.empty())
         {
             size_t nLastNormal = maBinRanges.size() - 1;

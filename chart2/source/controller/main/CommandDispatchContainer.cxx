@@ -126,9 +126,9 @@ Reference< frame::XDispatch > CommandDispatchContainer::getDispatchForURL(
         return cacheIt(m_xChartDispatcher);
 
     // #i12587# support for shapes in chart
-    // Note, that the chart dispatcher must be queried first, because
-    // the chart dispatcher is the default dispatcher for all contexts
-    // sensitive commands.
+    // Note that the chart dispatcher must be queried first, because
+    // the chart dispatcher is the default dispatcher for all
+    // context-sensitive commands.
     if (m_pDrawCommandDispatch && m_pDrawCommandDispatch->isFeatureSupported(rURL.Complete))
         return cacheIt(m_pDrawCommandDispatch);
 

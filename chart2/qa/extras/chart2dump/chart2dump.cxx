@@ -184,7 +184,7 @@ protected:
         aExpectedTransform.Line3.Column2 = o3tl::toDouble(o3tl::getToken(rExpectedTransform, 0, ';', nIdx));
         aExpectedTransform.Line3.Column3 = o3tl::toDouble(o3tl::getToken(rExpectedTransform, 0, ';', nIdx));
 
-        // Check the equality of the two transformation
+        // Check the equality of the two transformations
         return (std::abs(aExpectedTransform.Line1.Column1 - rTransform.Line1.Column1) < fEPS &&
             std::abs(aExpectedTransform.Line1.Column2 - rTransform.Line1.Column2) < fEPS &&
             std::abs(aExpectedTransform.Line1.Column3 - rTransform.Line1.Column3) < fEPS &&

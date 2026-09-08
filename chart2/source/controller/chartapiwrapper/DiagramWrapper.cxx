@@ -1553,7 +1553,7 @@ void WrappedNumberOfLinesProperty::setPropertyValue( const Any& rOuterValue, con
 {
     sal_Int32 nNewValue;
     if( ! (rOuterValue >>= nNewValue) )
-        throw lang::IllegalArgumentException( u"property NumberOfLines requires sal_Int32 value"_ustr, nullptr, 0 );
+        throw lang::IllegalArgumentException( u"Property NumberOfLines requires sal_Int32 value"_ustr, nullptr, 0 );
 
     m_aOuterValue = rOuterValue;
 

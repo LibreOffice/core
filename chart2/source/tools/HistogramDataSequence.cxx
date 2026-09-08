@@ -316,6 +316,6 @@ void HistogramDataSequence::ensureCalculated()
     m_bIsDirty = false;
 }
 
-} // namespace chart2
+} // namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

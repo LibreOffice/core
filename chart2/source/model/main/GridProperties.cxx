@@ -78,7 +78,7 @@ const ::chart::tPropertyValueMap & StaticGridDefaults()
             return aTmp;
         }();
     return aStaticDefaults;
-};
+}
 
 ::cppu::OPropertyArrayHelper& StaticGridInfoHelper()
 {
@@ -95,7 +95,7 @@ const ::chart::tPropertyValueMap & StaticGridDefaults()
             return comphelper::containerToSequence( aProperties );
         }();
     return aPropHelper;
-};
+}
 
 } // anonymous namespace
 

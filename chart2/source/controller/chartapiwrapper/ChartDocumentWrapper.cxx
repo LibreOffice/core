@@ -978,7 +978,7 @@ void ChartDocumentWrapper::impl_resetAddIn()
 
     try
     {
-        //make sure that the add-in does not hold a references to us anymore:
+        //make sure that the add-in does not hold a reference to us anymore:
         Reference< lang::XComponent > xComp( xAddIn, uno::UNO_QUERY );
         if( xComp.is())
             xComp->dispose();

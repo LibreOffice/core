@@ -200,7 +200,7 @@ private: //member
     rtl::Reference<::chart::DataSeries> m_xDataSeries;
     css::uno::Reference<css::beans::XPropertySet> m_xDataSeriesProps; // cached
 
-    //all points given by the model data (here are not only the visible points meant)
+    //all points given by the model data (not only the visible points)
     sal_Int32       m_nPointCount;
 
     VDataSequence   m_aValues_X;

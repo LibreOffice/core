@@ -397,7 +397,7 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
         case SCHATTR_AXIS_CROSSING_MAIN_AXIS_NUMBERFORMAT:
         {
             //read only item
-            //necessary tp display the crossing value with an appropriate format
+            //necessary to display the crossing value with an appropriate format
 
             rtl::Reference< BaseCoordinateSystem > xCooSys( AxisHelper::getCoordinateSystemOfAxis(
                 m_xAxis, m_xChartDoc->getFirstChartDiagram() ) );
@@ -558,7 +558,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
             break;
 
         case SCHATTR_AXIS_MAX:
-            // only if auto if false
+            // only if auto is false
             if( ! (rItemSet.Get( SCHATTR_AXIS_AUTO_MAX ).GetValue() ))
             {
                 rItemSet.Get( nWhichId ).QueryValue( aValue );
@@ -581,7 +581,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
             break;
 
         case SCHATTR_AXIS_MIN:
-            // only if auto if false
+            // only if auto is false
             if( ! (rItemSet.Get( SCHATTR_AXIS_AUTO_MIN ).GetValue() ))
             {
                 rItemSet.Get( nWhichId ).QueryValue( aValue );
@@ -657,7 +657,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
             break;
 
         case SCHATTR_AXIS_STEP_MAIN:
-            // only if auto if false
+            // only if auto is false
             if( !lcl_isAutoMajor(rItemSet) )
             {
                 rItemSet.Get( nWhichId ).QueryValue( aValue );
@@ -697,7 +697,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
                     bSetScale = true;
                 }
             }
-            // else SCHATTR_AXIS_STEP_MAIN must have some value
+            // else SCHATTR_AXIS_STEP_HELP must have some value
             break;
 
         case SCHATTR_AXIS_HELP_TIME_UNIT:

@@ -82,7 +82,7 @@ const ::chart::tPropertyValueMap& StaticPageBackgroundDefaults()
             return aTmp;
         }();
     return aStaticDefaults;
-};
+}
 
 ::cppu::OPropertyArrayHelper& StaticPageBackgroundInfoHelper()
 {
@@ -100,7 +100,7 @@ const ::chart::tPropertyValueMap& StaticPageBackgroundDefaults()
             return comphelper::containerToSequence( aProperties );
         }();
     return aPropHelper;
-};
+}
 
 } // anonymous namespace
 

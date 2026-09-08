@@ -67,9 +67,9 @@ void lcl_AddPropertiesToVector(
             return comphelper::containerToSequence( aProperties );
         }();
     return aPropHelper;
-};
+}
 
-} // anonymous namespace
+} // namespace
 
 namespace chart
 {

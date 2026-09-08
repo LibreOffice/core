@@ -309,7 +309,7 @@ const ::chart::tPropertyValueMap &  StaticAxisDefaults()
             return aMap;
         }();
     return aStaticDefaults;
-};
+}
 } // namespace chart
 
 namespace
@@ -330,7 +330,7 @@ namespace
             return comphelper::containerToSequence( aProperties );
         }();
     return aPropHelper;
-};
+}
 
 std::vector< rtl::Reference< ::chart::GridProperties > > lcl_CloneSubGrids(
     const std::vector< rtl::Reference< ::chart::GridProperties > > & rSource )

@@ -136,7 +136,7 @@ const ::chart::tPropertyValueMap& StaticLegendDefaults()
             return aTmp;
         }();
     return aStaticDefaults;
-};
+}
 } // namespace chart
 
 namespace
@@ -158,7 +158,7 @@ namespace
             return comphelper::containerToSequence( aProperties );
         }();
     return aPropHelper;
-};
+}
 
 } // anonymous namespace
 

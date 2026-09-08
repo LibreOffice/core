@@ -229,7 +229,7 @@ rtl::Reference<SfxItemPool> ChartItemPool::CreateChartItemPool()
     // UNO methods which may get called from out of process, this
     // happens on a thread that does not take the SolarMutex, which
     // causes trouble in ImplFontCache.
-    // Trying to take the SolarMutex when initialising these default
+    // Trying to take the SolarMutex when initialising these defaults
     // leads to ABBA deadlocks.
     // So rather just trigger the initialisation of these things here.
     StaticDataSeriesDefaults();

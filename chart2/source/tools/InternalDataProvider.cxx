@@ -911,7 +911,7 @@ Sequence< uno::Any > SAL_CALL InternalDataProvider::getDataByRangeRepresentation
         }
         else
         {
-            // Maybe this 'else' part and the functions is not necessary anymore.
+            // Maybe this 'else' part and the functions are not necessary anymore.
             const Sequence< OUString > aLabels = m_bDataInColumns ? getRowDescriptions() : getColumnDescriptions();
             aResult = CommonFunctors::convertToSequence(aLabels, CommonFunctors::makeAny());
         }
