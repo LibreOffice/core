@@ -783,21 +783,41 @@ void Admin::pollingThread()
     const std::string controllerUri =
         ConfigUtil::getString("indirection_endpoint.controller_monitor_url", "");
     bool controllerMonitorConnection = false;
+    bool controllerFoundNotConnected = false;
+    std::string openMonitors;
     for (const auto& pair : _monitorSockets)
     {
+        if (!openMonitors.empty())
+            openMonitors += ", ";
+        openMonitors += pair.first;
+
         const bool isController = controllerUri.empty()
                                       ? pair.first.find("controller") != std::string::npos
                                       : Util::iequal(pair.first, controllerUri);
-        if (isController)
+        if (!isController)
+            continue;
+
+        if (pair.second->isConnected())
         {
             controllerMonitorConnection = true;
             break;
         }
+
+        controllerFoundNotConnected = true;
     }
 
     if (!controllerMonitorConnection)
     {
-        LOG_WRN("Monitor connection to the controller doesn't exist, skipping shutdown migration");
+        LOG_ERR("Monitor connection to the controller doesn't exist, skipping shutdown migration. "
+                "The controller is "
+                << (controllerUri.empty()
+                        ? std::string("the monitor whose address carries the word controller, "
+                                      "since indirection_endpoint.controller_monitor_url is empty")
+                        : "indirection_endpoint.controller_monitor_url [" + controllerUri + ']')
+                << ". Monitors currently open: [" << openMonitors << "]. "
+                << (controllerFoundNotConnected
+                        ? "The controller was among them, but its socket is not connected."
+                        : "None of them is the controller."));
         COOLWSD::setAllMigrationMsgReceived();
         return;
     }
