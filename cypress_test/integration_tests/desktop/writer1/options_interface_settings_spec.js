@@ -24,7 +24,16 @@ describe(['tagdesktop'], 'Options view toggles persist across reload', function 
 	});
 
 	it('remembers Show Formatting Marks after reload', function () {
-		// Marks start off. Turn them on through the same command the menu uses.
+		// Core reports the marks as off once the load settles. Wait for that
+		// report, so the toggle below is the first change after it and the
+		// client keeps it as the state to persist.
+		cy.getFrameWindow().then(function (w) {
+			cy.wrap(w.app.map['stateChangeHandler'])
+				.invoke('getItemValue', '.uno:ControlCodes')
+				.should('eq', 'false');
+		});
+
+		// Turn the marks on through the same command the menu uses.
 		cy.then(function () {
 			win.app.map.sendUnoCommand('.uno:ControlCodes');
 		});
