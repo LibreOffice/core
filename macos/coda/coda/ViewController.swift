@@ -294,7 +294,9 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
     }
 
     /**
-     * Make the picking of images work in our webView (via the WKUIDelegate).
+     * Show an open panel for a file input element in our webView (the WKUIDelegate
+     * callback). The panel offers every file type: the public WKOpenPanelParameters
+     * does not carry the input element's accept attribute.
      */
     func webView(_ webView: WKWebView,
                  runOpenPanelWith parameters: WKOpenPanelParameters,
@@ -303,11 +305,8 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
 
         let panel = NSOpenPanel()
         panel.canChooseFiles = true
-        panel.canChooseDirectories = false
+        panel.canChooseDirectories = parameters.allowsDirectories
         panel.allowsMultipleSelection = parameters.allowsMultipleSelection
-
-        // Let the use pick just images
-        panel.allowedContentTypes = [UTType.image]
 
         panel.beginSheetModal(for: view.window!) { result in
             if result == .OK {
