@@ -25,15 +25,12 @@
 #include <com/sun/star/document/XScriptInvocationContext.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/theUICommandDescription.hpp>
-#include <com/sun/star/frame/XDispatchInformationProvider.hpp>
 #include <com/sun/star/script/browse/XBrowseNode.hpp>
 #include <com/sun/star/script/browse/BrowseNodeTypes.hpp>
 #include <com/sun/star/script/browse/theBrowseNodeFactory.hpp>
 #include <com/sun/star/script/browse/BrowseNodeFactoryViewTypes.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <cpo/uno/RuntimeException.hpp>
-#include <com/sun/star/ui/theUICategoryDescription.hpp>
 
 #include <tools/urlobj.hxx>
 #include <strings.hrc>
@@ -42,7 +39,6 @@
 #include <comphelper/documentinfo.hxx>
 #include <comphelper/kit.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/sequenceashashmap.hxx>
 #include <svtools/imagemgr.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
@@ -50,7 +46,6 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/commandinfoprovider.hxx>
-#include <vcl/help.hxx>
 #include <vcl/svapp.hxx>
 
 #include <sfx2/sidebar/ResourceManager.hxx>
@@ -175,17 +170,8 @@ std::vector< SfxStyleInfo_Impl > SfxStylesInfo_Impl::getStyles(const OUString& s
 OUString CuiConfigFunctionListBox::GetCommandHelpText()
 {
     SfxGroupInfo_Impl *pData = weld::fromId<SfxGroupInfo_Impl*>(get_selected_id());
-    if (pData)
-    {
-        if ( pData->nKind == SfxCfgKind::FUNCTION_SLOT )
-        {
-            return Application::GetHelp()->GetHelpText(pData->sCommand);
-        }
-        else if ( pData->nKind == SfxCfgKind::FUNCTION_SCRIPT )
-        {
-            return pData->sHelpText;
-        }
-    }
+    if (pData && pData->nKind == SfxCfgKind::FUNCTION_SCRIPT)
+        return pData->sHelpText;
     return OUString();
 }
 
@@ -376,45 +362,6 @@ void CuiConfigGroupListBox::ClearAll()
     m_xTreeView->clear();
 }
 
-sal_Int32 CuiConfigGroupListBox::InitModule()
-{
-    try
-    {
-        // return the number of added groups
-        css::uno::Reference< css::frame::XDispatchInformationProvider > xProvider(m_xFrame, css::uno::UNO_QUERY_THROW);
-        cpo::uno::Sequence< sal_Int16 > lGroups = xProvider->getSupportedCommandGroups();
-        sal_Int32                       c1      = lGroups.getLength();
-        sal_Int32                       i1      = 0;
-        sal_Int32                       nAddedGroups = 0;
-
-        for (i1=0; i1<c1; ++i1)
-        {
-            sal_Int16      nGroupID   = lGroups[i1];
-            OUString sGroupID   = OUString::number(nGroupID);
-            OUString sGroupName ;
-
-            try
-            {
-                m_xModuleCategoryInfo->getByName(sGroupID) >>= sGroupName;
-                if (sGroupName.isEmpty())
-                    continue;
-            }
-            catch(const css::container::NoSuchElementException&)
-                { continue; }
-
-            aArr.push_back( std::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_FUNCTION, nGroupID ) );
-            m_xTreeView->append(weld::toId(aArr.back().get()), sGroupName);
-            nAddedGroups++;
-        }
-        return nAddedGroups;
-    }
-    catch(const cpo::uno::RuntimeException&)
-        { throw; }
-    catch(const cpo::uno::Exception&)
-        {}
-    return 0;
-}
-
 void CuiConfigGroupListBox::FillScriptList(const css::uno::Reference< css::script::browse::XBrowseNode >& xRootNode,
                                            const weld::TreeIter* pParentEntry)
 {
@@ -517,24 +464,6 @@ void CuiConfigGroupListBox::FillScriptList(const css::uno::Reference< css::scrip
     }
 }
 
-void CuiConfigGroupListBox::FillFunctionsList(const cpo::uno::Sequence<DispatchInformation>& xCommands)
-{
-    m_pFunctionListBox->freeze();
-    for (const auto & rInfo : xCommands)
-    {
-        auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(rInfo.Command, m_sModuleLongName);
-
-        OUString sUIName = MapCommand2UIName(rInfo.Command);
-        aArr.push_back( std::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::FUNCTION_SLOT, 0 ) );
-        SfxGroupInfo_Impl* pGrpInfo = aArr.back().get();
-        pGrpInfo->sCommand = rInfo.Command;
-        pGrpInfo->sLabel   = sUIName;
-        pGrpInfo->sTooltip = vcl::CommandInfoProvider::GetTooltipForCommand(rInfo.Command, aProperties, m_xFrame);
-        m_pFunctionListBox->append(weld::toId(pGrpInfo), sUIName);
-    }
-    m_pFunctionListBox->thaw();
-}
-
 void CuiConfigGroupListBox::Init(const css::uno::Reference< cpo::uno::XComponentContext >& xContext,
     const css::uno::Reference< css::frame::XFrame >& xFrame)
 {
@@ -566,8 +495,8 @@ void CuiConfigGroupListBox::Init(const css::uno::Reference< cpo::uno::XComponent
     // add application macros to the end
     if ( rootNode.is() )
     {
-         //We are only showing scripts not slot APIs so skip
-         //Root node and show location nodes
+        //We are only showing scripts not slot APIs so skip
+        //Root node and show location nodes
         FillScriptList(rootNode, nullptr);
     }
 
@@ -663,33 +592,6 @@ CuiConfigGroupListBox::getDocumentModel( Reference< XComponentContext > const & 
     return xModel;
 }
 
-OUString CuiConfigGroupListBox::MapCommand2UIName(const OUString& sCommand)
-{
-    OUString sUIName;
-    try
-    {
-        css::uno::Reference< css::container::XNameAccess > xModuleConf;
-        m_xUICmdDescription->getByName(m_sModuleLongName) >>= xModuleConf;
-        if (xModuleConf.is())
-        {
-            ::comphelper::SequenceAsHashMap lProps(xModuleConf->getByName(sCommand));
-            sUIName = lProps.getUnpackedValueOrDefault(u"Name"_ustr, OUString());
-        }
-    }
-    catch(const cpo::uno::RuntimeException&)
-        { throw; }
-    catch(cpo::uno::Exception&)
-        { sUIName.clear(); }
-
-    // fallback for missing UINames !?
-    if (sUIName.isEmpty())
-    {
-        sUIName = sCommand;
-    }
-
-    return sUIName;
-}
-
 void CuiConfigGroupListBox::GroupSelected()
 /*  Description
     A function group or a basic module has been selected.
@@ -706,39 +608,6 @@ void CuiConfigGroupListBox::GroupSelected()
 
     switch ( pInfo->nKind )
     {
-        case SfxCfgKind::GROUP_ALLFUNCTIONS:
-        {
-            css::uno::Reference< css::frame::XDispatchInformationProvider > xProvider( m_xFrame, UNO_QUERY );
-            bool bValidIter = m_xTreeView->get_iter_first(*xIter);
-            while (bValidIter)
-            {
-                SfxGroupInfo_Impl *pCurrentInfo = weld::fromId<SfxGroupInfo_Impl*>(m_xTreeView->get_id(*xIter));
-                if (pCurrentInfo->nKind == SfxCfgKind::GROUP_FUNCTION)
-                {
-                    cpo::uno::Sequence< css::frame::DispatchInformation > lCommands;
-                    try
-                    {
-                        lCommands = xProvider->getConfigurableDispatchInformation( pCurrentInfo->nUniqueID );
-                        FillFunctionsList( lCommands );
-                    }
-                    catch ( container::NoSuchElementException& )
-                    {
-                    }
-                }
-                bValidIter = m_xTreeView->iter_next(*xIter);
-            }
-            break;
-        }
-
-        case SfxCfgKind::GROUP_FUNCTION :
-        {
-            sal_uInt16                                                          nGroup    = pInfo->nUniqueID;
-            css::uno::Reference< css::frame::XDispatchInformationProvider > xProvider (m_xFrame, css::uno::UNO_QUERY_THROW);
-            cpo::uno::Sequence< css::frame::DispatchInformation >           lCommands = xProvider->getConfigurableDispatchInformation(nGroup);
-            FillFunctionsList( lCommands );
-            break;
-        }
-
         case SfxCfgKind::GROUP_SCRIPTCONTAINER:
         {
             Reference< browse::XBrowseNode > rootNode(
@@ -1055,8 +924,7 @@ SvxScriptSelectorDialog::GetScriptURL() const
     if (m_xCommands->get_selected(xIter.get()))
     {
         SfxGroupInfo_Impl *pData = weld::fromId<SfxGroupInfo_Impl*>(m_xCommands->get_id(*xIter));
-        if  (   ( pData->nKind == SfxCfgKind::FUNCTION_SLOT )
-            ||  ( pData->nKind == SfxCfgKind::FUNCTION_SCRIPT )
+        if  (   ( pData->nKind == SfxCfgKind::FUNCTION_SCRIPT )
             ||  ( pData->nKind == SfxCfgKind::GROUP_STYLES )
             )
         {

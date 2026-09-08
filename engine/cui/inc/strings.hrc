@@ -31,7 +31,6 @@
 #define RID_CUISTR_HYPERDLG_QUERYOVERWRITE          NC_("RID_SVXSTR_HYPERDLG_QUERYOVERWRITE", "The file already exists. Overwrite?")
 
 #define RID_CUISTR_SELECT_FILE_IFRAME               NC_("RID_SVXSTR_SELECT_FILE_IFRAME", "Select File for Floating Frame")
-#define RID_CUISTR_ALLFUNCTIONS                     NC_("RID_SVXSTR_ALLFUNCTIONS", "All commands")
 #define RID_CUISTR_MYMACROS                         NC_("RID_SVXSTR_MYMACROS", "My Macros")
 #define RID_CUISTR_PRODMACROS                       NC_("RID_SVXSTR_PRODMACROS", "Application Macros")
 #define RID_CUISTR_SELECTOR_RUN                     NC_("RID_SVXSTR_SELECTOR_RUN", "Run")

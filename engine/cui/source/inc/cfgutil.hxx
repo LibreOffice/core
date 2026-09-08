@@ -24,7 +24,6 @@
 
 #include <rtl/ustring.hxx>
 
-#include <com/sun/star/frame/DispatchInformation.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -70,12 +69,9 @@ public:
 
 enum class SfxCfgKind
 {
-    GROUP_FUNCTION           = 1,
-    FUNCTION_SLOT            = 2,
     GROUP_SCRIPTCONTAINER    = 3,
     FUNCTION_SCRIPT          = 4,
     GROUP_STYLES             = 5,
-    GROUP_ALLFUNCTIONS       = 6,
     GROUP_SIDEBARDECKS       = 7
 };
 
@@ -160,9 +156,6 @@ class CuiConfigGroupListBox
     OUString m_sModuleLongName;
     css::uno::Reference< cpo::uno::XComponentContext > m_xContext;
     css::uno::Reference< css::frame::XFrame > m_xFrame;
-    css::uno::Reference< css::container::XNameAccess > m_xGlobalCategoryInfo;
-    css::uno::Reference< css::container::XNameAccess > m_xModuleCategoryInfo;
-    css::uno::Reference< css::container::XNameAccess > m_xUICmdDescription;
     SfxStylesInfo_Impl* m_pStylesInfo;
     std::unique_ptr<weld::TreeView> m_xTreeView;
     std::unique_ptr<weld::TreeIter> m_xScratchIter;
@@ -171,11 +164,8 @@ class CuiConfigGroupListBox
         css::uno::Reference< cpo::uno::XComponentContext > const & xCtx,
         std::u16string_view docName);
 
-    sal_Int32 InitModule();
     void FillScriptList(const css::uno::Reference< css::script::browse::XBrowseNode >& xRootNode,
                         const weld::TreeIter* pParentEntry);
-    void FillFunctionsList(const cpo::uno::Sequence< css::frame::DispatchInformation >& xCommands);
-    OUString MapCommand2UIName(const OUString& sCommand);
 
     DECL_LINK(ExpandingHdl, const weld::TreeIter&, bool);
 
