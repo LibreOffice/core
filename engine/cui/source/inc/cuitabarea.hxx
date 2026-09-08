@@ -222,7 +222,7 @@ private:
     DECL_LINK(SwitchPageHdl_Impl, const OUString&, void);
 
     std::unique_ptr<SfxTabPage> CreateFillStyleTabPage(FillType eFillType);
-    void SelectFillTypeByPage(FillType eFillType);
+    void createFillTabPage(FillType eFillType);
 
     OUString getPageId(FillType eFillType);
 

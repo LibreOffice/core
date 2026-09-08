@@ -408,16 +408,8 @@ std::unique_ptr<SfxTabPage> SvxAreaTabPage::CreateWithSlideBackground(
     return xRet;
 }
 
-void SvxAreaTabPage::SelectFillTypeByPage(FillType eFillType)
+void SvxAreaTabPage::createFillTabPage(FillType eFillType)
 {
-    OUString sPageId = getPageId(eFillType);
-    if (sPageId.isEmpty())
-        return;
-
-    weld::Container* pContainer = m_xNotebook->get_page(sPageId);
-    if (!pContainer)
-        return;
-
     m_xFillTabPage = CreateFillStyleTabPage(eFillType);
     if (m_xFillTabPage)
     {
@@ -432,8 +424,8 @@ IMPL_LINK(SvxAreaTabPage, SwitchPageHdl_Impl, const OUString&, rPageIdent, void)
     auto it = maFillTypeMap.find(rPageIdent);
     if (it != maFillTypeMap.end())
     {
-        FillType eFillType = it->second;
-        SelectFillTypeByPage(eFillType);
+        // the notebook is already on the page, so only its content is missing
+        createFillTabPage(it->second);
         m_bBtnClicked = true;
     }
 }
@@ -488,12 +480,7 @@ void SvxAreaTabPage::SelectFillType(FillType eFillType, const SfxItemSet* _pSet)
     if(!pageId.isEmpty())
         m_xNotebook->set_current_page(pageId);
 
-    m_xFillTabPage = CreateFillStyleTabPage(eFillType);
-    if (m_xFillTabPage)
-    {
-        m_xFillTabPage->SetDialogController(GetDialogController());
-        CreatePage(eFillType, *m_xFillTabPage);
-    }
+    createFillTabPage(eFillType);
 }
 
 void SvxAreaTabPage::PageCreated(const SfxAllItemSet& aSet)
