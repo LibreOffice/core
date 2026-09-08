@@ -547,6 +547,7 @@ COOL_JS_LST =\
 	src/layer/vector/CRectangle.ts \
 	src/layer/marker/Cursor.ts \
 	src/layer/vector/CanvasOverlay.ts \
+	src/canvas/sections/RenderGeometrySection.ts \
 	src/canvas/sections/ScrollSection.ts \
 	src/canvas/sections/MouseControl.ts \
 	src/app/LayerUtil.ts \

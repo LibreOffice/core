@@ -68,6 +68,7 @@ class DebugManager {
 	private _overlayData: OverlaysInterface;
 
 	private tileOverlaysOn: boolean;
+	public renderGeometryOn: boolean;
 
 	public tileInvalidationsOn: boolean;
 	private _tileInvalidationMessages: Map<number, string>;
@@ -335,6 +336,27 @@ class DebugManager {
 				self._painter.update();
 			},
 		});
+
+		// The geometry of each object is a Draw and Impress thing, and it is drawn from the
+		// vector rendering cache, so the tool is offered only where that cache exists.
+		const docType = self._docLayer._docType;
+		if (
+			(docType === 'presentation' || docType === 'drawing') &&
+			RenderManager.isVectorRendering()
+		)
+			this._addDebugTool({
+				name: 'Debug Overlays',
+				category: 'Display',
+				startsOn: false,
+				onAdd: function () {
+					self.renderGeometryOn = true;
+					RenderGeometrySection.update();
+				},
+				onRemove: function () {
+					self.renderGeometryOn = false;
+					RenderGeometrySection.remove();
+				},
+			});
 
 		this._addDebugTool({
 			name: 'Tile Invalidations',
