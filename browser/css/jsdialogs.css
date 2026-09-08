@@ -3379,6 +3379,10 @@ button.has-img img {
 
 .ui-custom-textarea.focused {
 	border: 1px solid var(--color-primary) !important;
+	/* currentColor is the only ring a brand cannot drop below 3:1: the text
+	   it takes is already held to 4.5:1 against this background. */
+	outline: 2px solid currentColor;
+	outline-offset: -2px;
 }
 
 .ui-custom-textarea,
@@ -3418,10 +3422,6 @@ button.has-img img {
 .ui-custom-textarea-cursor-layer span.selection:not(.hidden) {
 	background-color: var(--color-primary-darker);
 	color: var(--color-primary-text);
-}
-
-#sc_input_window.formulabar:focus {
-	outline-offset: -1px;
 }
 
 #sc_input_window.formulabar.expanded {
