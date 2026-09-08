@@ -258,7 +258,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaParseReference)
     m_pDoc->InsertTab(1, aTab1); // name with a single quote.
     m_pDoc->InsertTab(2, aTab2); // name with 2 single quotes.
     m_pDoc->InsertTab(3, aTab3); // name without single quotes.
-    m_pDoc->InsertTab(4, aTab4); // name that doesn't require to be quoted.
+    m_pDoc->InsertTab(4, aTab4); // name that doesn't require being quoted.
 
     OUString aTabName;
     m_pDoc->GetName(1, aTabName);

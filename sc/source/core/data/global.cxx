@@ -531,7 +531,7 @@ void ScGlobal::InitTextHeight(SfxItemPool& rPool)
 {
     // this gets handed over the m_pMessagePool in ScModule::ScModule, so
     // the previously used item ScPatternAttr is unchanged. This allows to
-    // just use an temporary incarnation of a CellAttributeHelper here
+    // just use a temporary incarnation of a CellAttributeHelper here
     const CellAttributeHelper aTempHelper(rPool);
     const ScPatternAttr& rDefaultCellAttribute(aTempHelper.getDefaultCellAttribute());
 

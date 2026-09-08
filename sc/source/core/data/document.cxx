@@ -747,10 +747,10 @@ bool ScDocument::DeleteTab( SCTAB nTab )
                 }
             }
 
-            // tdf#149502 make sure ScTable destructor called after the erase is finished, when
+            // tdf#149502 make sure ScTable destructor is called after the erase is finished, when
             // maTabs[x].nTab==x is true again, as it should be always true.
             // In the end of maTabs.erase, maTabs indexes change, but nTab updated before erase.
-            // ~ScTable expect that maTabs[x].nTab==x so it shouldn't be called during erase.
+            // ~ScTable expects that maTabs[x].nTab==x so it shouldn't be called during erase.
             ScTableUniquePtr pErasedTab = std::move(maTabs[nTab]);
             maTabs.erase(maTabs.begin() + nTab);
             delete pErasedTab.release();

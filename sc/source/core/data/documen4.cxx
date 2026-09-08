@@ -62,7 +62,7 @@ using namespace formula;
     Regula Falsi (aka false position) algorithm to find a root of f(x).  The
     start value and the target value are to be given by the user in the
     goal seek dialog.  The f(x) in this case is defined as the formula in the
-    formula cell minus target value.  This function may also perform additional
+    formula cell minus the target value.  This function may also perform additional
     search in the horizontal directions when the f(x) is discrete in order to
     ensure a non-zero slope necessary for deriving a subsequent x that is
     reasonably close to the root of interest.

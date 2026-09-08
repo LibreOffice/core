@@ -644,10 +644,10 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testRichTextContentODS)
                      && static_cast<const SvxUnderlineItem&>(*rAttrib.pAttr).GetLineStyle()
                             == LINESTYLE_SINGLE;
           });
-    CPPUNIT_ASSERT_MESSAGE("Second line should be underlined.", bHasUnderline);
+    CPPUNIT_ASSERT_MESSAGE("Third line should be underlined.", bHasUnderline);
 
     // URL with formats applied.  For now, we'll check whether or not the
-    // field objects gets imported.  Later we should add checks for the
+    // field objects get imported.  Later we should add checks for the
     // formats.
     aPos.IncRow();
     pEditText = pDoc->GetEditText(aPos);
@@ -673,7 +673,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testRichTextContentODS)
     aPos.IncRow();
     pEditText = pDoc->GetEditText(aPos);
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve edit text object.", pEditText);
-    CPPUNIT_ASSERT_MESSAGE("Date field item not found.",
+    CPPUNIT_ASSERT_MESSAGE("DocInfo title field item not found.",
                            pEditText->HasField(text::textfield::Type::DOCINFO_TITLE));
 
     // URL for a file in the same directory. It should be converted into an absolute URL on import.
@@ -952,7 +952,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testOrcusODSStyleInterface)
                            pStyleSheet->GetItemSet().HasItem(ATTR_FONT_CROSSEDOUT, &pItem));
 
     pCrossedOutItem = static_cast<const SvxCrossedOutItem*>(pItem);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Style Name7 :Error with Strikeout", STRIKEOUT_BOLD,
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Style Name8 :Error with Strikeout", STRIKEOUT_BOLD,
                                  pCrossedOutItem->GetStrikeout());
 
     /* Test for Style Name "9"
@@ -1230,7 +1230,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testSharedFormulaXLS)
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testSharedFormulaXLS2)
 {
-    // The following file contains shared formula whose range is inaccurate.
+    // The following file contains a shared formula whose range is inaccurate.
     // Excel can easily mess up shared formula ranges, so we need to be able
     // to handle these wrong ranges that Excel stores.
 

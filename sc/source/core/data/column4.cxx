@@ -1496,7 +1496,7 @@ public:
                 continue;
             }
 
-            // If This is the last group in the range, see if the group
+            // If this is the last group in the range, see if the group
             // extends beyond the range, in which case have the excess
             // formula cells stop listening.
             size_t nEndGroupPos = (pp - ppBeg) + pFC->GetSharedLength();

@@ -450,7 +450,7 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTable)
                            size_t(0), pDPs->GetSheetCaches().size());
 
     // Now, "refresh" the table.  This should still return a reference to self
-    // even with the absence of data cache.
+    // even in the absence of a data cache.
     aRefs.clear();
     pDPs->ReloadCache(pDPObj, aRefs);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("It should return the same object as a reference.",

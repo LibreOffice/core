@@ -119,7 +119,7 @@ bool ScDocument::CopyOneCellFromClip(
         ScAddress aTestPos = aSrcPos;
         aTestPos.SetCol(nCol);
         if (pClipDoc->IsMerged(aTestPos))
-            // We don't handle merged source cell for this.
+            // We don't handle merged source cells for this.
             return false;
     }
 

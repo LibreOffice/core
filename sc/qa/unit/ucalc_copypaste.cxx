@@ -9122,7 +9122,7 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testTdf142065)
     printRange(&aClipDoc, aSrcRange, "clip doc (&aClipDoc)");
     printFormula(&aClipDoc, 1, 0, nTab);
 
-    // To A3:A9
+    // To A3:A8
     ScRange aDestRange(0, 2, nTab, 0, 7, nTab);
     ScMarkData aDestMark(m_pDoc->GetSheetLimits());
 

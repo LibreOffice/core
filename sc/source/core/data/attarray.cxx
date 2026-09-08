@@ -1168,7 +1168,7 @@ bool ScAttrArray::ApplyFrame( const SvxBoxItem&     rBoxItem,
 
     SvxBoxItem aNewFrame( *pOldFrame );
     bool bRTL=rDocument.IsLayoutRTL(nTab);
-    // fdo#37464 check if the sheet are RTL then replace right <=> left
+    // fdo#37464 check if the sheet is RTL then replace right <=> left
     if (bRTL)
     {
         if( bLeft && nDistRight==0)
@@ -1717,7 +1717,7 @@ void ScAttrArray::ChangeIndent( SCROW nStartRow, SCROW nEndRow, bool bIncrement 
                                pItem->GetValue() != SvxCellHorJustify::Right );
         sal_uInt16 nOldValue = rOldSet.Get( ATTR_INDENT ).GetValue();
         sal_uInt16 nNewValue = nOldValue;
-        // To keep Increment indent from running outside the cell1659
+        // To keep Increment indent from running outside the cell
         tools::Long nColWidth = static_cast<tools::Long>(
             rDocument.GetColWidth(nCol == -1 ? rDocument.MaxCol() : nCol,nTab));
         if ( bIncrement )

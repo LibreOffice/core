@@ -1808,7 +1808,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest2, testTdf66377)
     CPPUNIT_ASSERT(pAttr);
     const SvxBrushItem* pExplicitBackground = pAttr->GetItemSet().GetItemIfSet(ATTR_BACKGROUND);
     CPPUNIT_ASSERT(!pExplicitBackground);
-    // Without the fix in place it would not have fail and
+    // Without the fix in place it would not have failed and
     // we would have a transparent white color set
     /*const Color& rColor = pExplicitBackground->GetColor();
     CPPUNIT_ASSERT_EQUAL(Color(COL_TRANSPARENT), rColor);*/

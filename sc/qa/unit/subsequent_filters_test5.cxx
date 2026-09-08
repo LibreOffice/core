@@ -697,7 +697,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testFullColumnRefs)
     ScDocument* pDoc = getScDoc();
 
     CPPUNIT_ASSERT_EQUAL(u"Total # Of Companies"_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
-    // For K2 cell cached value is 1
+    // For cell K2 the cached value is 1
     CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(ScAddress(10, 1, 0)));
 }
 

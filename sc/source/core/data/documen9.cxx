@@ -444,7 +444,7 @@ SdrObject* ScDocument::GetObjectAtPoint( SCTAB nTab, const Point& rPos )
                 if ( pObject->GetCurrentBoundRect().Contains(rPos) )
                 {
                     // Intern is of no interest
-                    // Only object form background layer, when no object form another layer is found
+                    // Only object from background layer, when no object from another layer is found
                     SdrLayerID nLayer = pObject->GetLayer();
                     if ( (nLayer != SC_LAYER_INTERN) && (nLayer != SC_LAYER_HIDDEN) )
                     {

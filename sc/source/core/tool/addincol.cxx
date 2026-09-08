@@ -319,7 +319,7 @@ void ScUnoAddInCollection::Initialize()
     }
 
     // ReadConfiguration is called after looking at the AddIn implementations.
-    // Duplicated are skipped (by using the service information, they don't have to be updated again
+    // Duplicates are skipped (by using the service information, they don't have to be updated again
     // when argument information is needed).
     ReadConfiguration();
 

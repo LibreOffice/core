@@ -522,7 +522,7 @@ void SolverSettings::SaveSolverSettings()
 /* Reads the current value of the parameter in the named range into rValue
  * If the value does not exist, the rValue is left unchanged
  * This is private because it is only used during initialization
- * Returns true if the value exits; returns false otherwise
+ * Returns true if the value exists; returns false otherwise
  */
 bool SolverSettings::ReadParamValue(SolverParameter eParam, OUString& rValue, bool bRemoveQuotes)
 {
@@ -757,7 +757,7 @@ void SolverSettings::DeleteAllNamedRanges()
         m_pRangeName->erase(*pItem);
 }
 
-/* Sets all solver parameters to their default values and clear all constraints.
+/* Sets all solver parameters to their default values and clears all constraints.
  * This method only resets the object properties, but does not save changes to the
  * document. To save changes, call SaveSolverSettings().
  */

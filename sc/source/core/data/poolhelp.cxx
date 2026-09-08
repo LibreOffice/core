@@ -48,7 +48,7 @@ SfxItemPool* ScPoolHelper::GetEditEnginePool() const
     {
         mpEditEnginePool = EditEngine::CreatePool();
         mpEditEnginePool->SetDefaultMetric( MapUnit::Map100thMM );
-    } // ifg ( pEnginePool )
+    } // if ( !mpEditEnginePool )
     return mpEditEnginePool.get();
 }
 SvNumberFormatter*  ScPoolHelper::GetFormTable() const

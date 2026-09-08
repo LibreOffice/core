@@ -141,13 +141,13 @@ inline std::basic_ostream<charT, traits> & operator <<(std::basic_ostream<charT,
     return stream;
 }
 
-}
+} // namespace sc
 
 namespace svl {
 
 class SharedStringPool;
 
-}
+} // namespace svl
 
 /// Arbitrary 256MB result string length limit.
 constexpr sal_Int32 kScInterpreterMaxStrLen = SAL_MAX_INT32 / 8;

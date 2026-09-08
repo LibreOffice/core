@@ -72,7 +72,7 @@ void sc::TableContentCopier::performCopy(const ScMarkData* pOnlyMarked, ScCloneF
     mpTargetTab->SetPageStyle(mpSourceTab->GetPageStyle());
     mpTargetTab->SetPendingRowHeights(mpSourceTab->IsPendingRowHeights());
 
-    // Copy the custom print range if exists.
+    // Copy the custom print range if it exists.
     mpTargetTab->CopyPrintRange(*mpSourceTab);
 
     // Copy the RTL settings

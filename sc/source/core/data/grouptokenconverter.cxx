@@ -131,7 +131,7 @@ bool ScGroupTokenConverter::convert( const ScTokenArray& rCode, sc::FormulaLogge
                     // Trim data array length to actual data range.
                     SCROW nTrimLen = trimLength(aRefPos.Tab(), aRefPos.Col(), aRefPos.Col(), aRefPos.Row(), nLen);
                     // Fetch double array guarantees that the length of the
-                    // returned array equals or greater than the requested
+                    // returned array is equal to or greater than the requested
                     // length.
 
                     formula::VectorRefArray aArray;

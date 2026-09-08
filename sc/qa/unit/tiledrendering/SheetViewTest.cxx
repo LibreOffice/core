@@ -508,7 +508,7 @@ CPPUNIT_TEST_FIXTURE(SheetViewTest, testSyncValuesBetweenMainSheetAndSheetView)
     Scheduler::ProcessEventsToIdle();
     createNewSheetViewInCurrentView();
 
-    // Change content in View1 with default view -> default view ro sheet view sync
+    // Change content in View1 with default view -> default view to sheet view sync
     SfxLokHelper::setView(aView1.getViewID());
     typeCharsInCell(std::string("XYZ"), aA1.Col(), aA1.Row(), pTabView1, pModelObj);
     typeCharsInCell(std::string("=UPPER(\"x\"&\"Y\"&\"z\""), aA2.Col(), aA2.Row(), pTabView1,
