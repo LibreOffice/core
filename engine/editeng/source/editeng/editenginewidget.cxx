@@ -416,10 +416,14 @@ bool EditEngineWidgetController::HandleSelection(std::u16string_view rData)
     if (!oTree)
         return true;
 
-    const sal_Int32 nStartPara = oTree->get<sal_Int32>("startPara", 0);
-    const sal_Int32 nStartIndex = oTree->get<sal_Int32>("startIndex", 0);
-    const sal_Int32 nEndPara = oTree->get<sal_Int32>("endPara", nStartPara);
-    const sal_Int32 nEndIndex = oTree->get<sal_Int32>("endIndex", nStartIndex);
+    // The selection comes from the client, and the edit engine clamps a position that reaches
+    // past the end of a paragraph but not one below its start, so a negative value would edit
+    // at an index of its own.
+    const sal_Int32 nStartPara = std::max<sal_Int32>(0, oTree->get<sal_Int32>("startPara", 0));
+    const sal_Int32 nStartIndex = std::max<sal_Int32>(0, oTree->get<sal_Int32>("startIndex", 0));
+    const sal_Int32 nEndPara = std::max<sal_Int32>(0, oTree->get<sal_Int32>("endPara", nStartPara));
+    const sal_Int32 nEndIndex
+        = std::max<sal_Int32>(0, oTree->get<sal_Int32>("endIndex", nStartIndex));
 
     ESelection aSelection(nStartPara, nStartIndex, nEndPara, nEndIndex);
     aSelection.Adjust();

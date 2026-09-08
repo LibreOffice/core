@@ -1,7 +1,6 @@
 /* global describe it cy beforeEach require expect */
 
 var helper = require('../../common/helper');
-var impressHelper = require('../../common/impress_helper');
 
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Connector endpoint drag preview.', function() {
 
@@ -23,13 +22,19 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Connector endpoint drag pr
 	// the line the connector would get on drop and that polyline is drawn
 	// as a preview following the mouse.
 	it('Dragging an endpoint shows the routed preview.', function() {
-		// The connector crosses the center of the slide.
-		impressHelper.clickCenterOfSlide({});
+		// The connector is the only object on the slide, so one Tab selects
+		// it. Its line is a hairline, so a click in the center of the view
+		// misses it whenever the view center is a few twips off the slide
+		// center.
+		helper.typeIntoDocument('{esc}');
+		cy.realPress('Tab');
 
 		// Let the selection settle so the handle geometry is final and the
 		// canvas sub-section that receives the drag is positioned before the
 		// mouse press reads the handle's screen position.
 		helper.processToIdle(this.win);
+		cy.getFrameWindow().its('app.definitions.graphicSelection.rectangle')
+			.should('not.be.null');
 
 		// The two endpoints of the connector are poly handles.
 		cy.cGet('#test-div-shape-handle-0').should('exist');
