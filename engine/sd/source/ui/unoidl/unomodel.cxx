@@ -2251,6 +2251,60 @@ bool SdXImpressDocument::isVectorObjectChangedSince(sal_Int32 nPart, sal_Int32 n
     return aObjectIterator != rObjectVersions.end() && aObjectIterator->second > nSince;
 }
 
+std::unordered_set<sal_uInt64> SdXImpressDocument::takeVectorDirtyObjects(sal_Int32 nPart,
+                                                                         sal_Int32 nMode)
+{
+    auto aIterator = maVectorParts.find({ nPart, nMode });
+    if (aIterator == maVectorParts.end())
+        return {};
+
+    std::unordered_set<sal_uInt64> aDirty;
+    aDirty.swap(aIterator->second.maDirtyObjects);
+    return aDirty;
+}
+
+bool SdXImpressDocument::recordVectorObjectContent(sal_Int32 nPart, sal_Int32 nMode,
+                                                   sal_uInt64 nObjectId,
+                                                   const VectorObjectContent& rContent)
+{
+    VectorPartState& rState = maVectorParts[{ nPart, nMode }];
+    auto aIterator = rState.maObjectContent.find(nObjectId);
+    if (aIterator != rState.maObjectContent.end() && aIterator->second == rContent)
+        return false;
+
+    rState.maObjectContent[nObjectId] = rContent;
+    rState.maObjectChangeVersions[nObjectId] = ++rState.mnVersion;
+    return true;
+}
+
+void SdXImpressDocument::noteVectorObjectWritten(sal_Int32 nPart, sal_Int32 nMode,
+                                                 sal_uInt64 nObjectId,
+                                                 const VectorObjectContent& rContent)
+{
+    maVectorParts[{ nPart, nMode }].maObjectContent[nObjectId] = rContent;
+}
+
+void SdXImpressDocument::forgetVectorObject(sal_Int32 nPart, sal_Int32 nMode, sal_uInt64 nObjectId)
+{
+    auto aIterator = maVectorParts.find({ nPart, nMode });
+    if (aIterator == maVectorParts.end())
+        return;
+
+    aIterator->second.maObjectContent.erase(nObjectId);
+    aIterator->second.maObjectChangeVersions.erase(nObjectId);
+}
+
+bool SdXImpressDocument::recordVectorPaintOrder(sal_Int32 nPart, sal_Int32 nMode,
+                                                const std::vector<sal_uInt64>& rOrder)
+{
+    VectorPartState& rState = maVectorParts[{ nPart, nMode }];
+    const bool bMoved = rState.maPaintOrder.has_value() && *rState.maPaintOrder != rOrder;
+    rState.maPaintOrder = rOrder;
+    if (bMoved)
+        ++rState.mnVersion;
+    return bMoved;
+}
+
 namespace
 {
 /// The id of the entry that stands for the page itself. The unique id of an object counts up
@@ -2289,27 +2343,60 @@ sal_Int32 findMasterPageIndex(SdDrawDocument& rDocument, const SdPage* pMasterPa
     return -1;
 }
 
-/// Count the part's version up and record the change under the top-level
-/// object the primitive tree carries.
+/// Marks the object and, when it is a group, everything inside it.
+void markSubtreeDirty(SdXImpressDocument::VectorPartState& rState, const SdrObject* pObject)
+{
+    rState.maDirtyObjects.insert(pObject->GetUniqueID());
+
+    if (const SdrObjList* pChildren = pObject->GetSubList())
+    {
+        for (size_t i = 0; i < pChildren->GetObjCount(); ++i)
+        {
+            if (const SdrObject* pChild = pChildren->GetObj(i))
+                markSubtreeDirty(rState, pChild);
+        }
+    }
+}
+
+/// Forgets what was recorded for the object and everything inside it.
+void forgetSubtree(SdXImpressDocument::VectorPartState& rState, const SdrObject* pObject)
+{
+    rState.maObjectContent.erase(pObject->GetUniqueID());
+    rState.maObjectChangeVersions.erase(pObject->GetUniqueID());
+    rState.maDirtyObjects.erase(pObject->GetUniqueID());
+
+    if (const SdrObjList* pChildren = pObject->GetSubList())
+    {
+        for (size_t i = 0; i < pChildren->GetObjCount(); ++i)
+        {
+            if (const SdrObject* pChild = pChildren->GetObj(i))
+                forgetSubtree(rState, pChild);
+        }
+    }
+}
+
+/// Marks the objects a change touched, so the next write looks at them again and counts the
+/// part's version up for those that differ. A hint for a group covers the objects inside it,
+/// and an object that moves marks the groups above it, whose boxes move with it. An insertion
+/// or a removal counts the version up at once, since no comparison of one object shows it.
 void recordObjectChange(SdXImpressDocument::VectorPartState& rState, const SdrObject* pObject,
                         SdrHintKind eKind)
 {
-    ++rState.mnVersion;
+    if (eKind == SdrHintKind::ObjectRemoved)
+    {
+        ++rState.mnVersion;
+        forgetSubtree(rState, pObject);
+        return;
+    }
 
-    // A change inside a group redraws the whole top-level object, so
-    // record it under the top-level ancestor's id, the id the primitive
-    // tree carries.
-    const SdrObject* pTopLevel = pObject;
-    while (const SdrObject* pParent = pTopLevel->getParentSdrObjectFromSdrObject())
-        pTopLevel = pParent;
-    const sal_uInt64 nObjectId = pTopLevel->GetUniqueID();
+    if (eKind == SdrHintKind::ObjectInserted)
+        ++rState.mnVersion;
 
-    // Removing an object inside a group changes the group, which stays
-    // alive, so only a removed top-level object drops its change record.
-    if (eKind == SdrHintKind::ObjectRemoved && pTopLevel == pObject)
-        rState.maObjectChangeVersions.erase(nObjectId);
-    else
-        rState.maObjectChangeVersions[nObjectId] = rState.mnVersion;
+    markSubtreeDirty(rState, pObject);
+
+    for (const SdrObject* pParent = pObject->getParentSdrObjectFromSdrObject(); pParent;
+         pParent = pParent->getParentSdrObjectFromSdrObject())
+        rState.maDirtyObjects.insert(pParent->GetUniqueID());
 }
 
 /// Count the part's version up and remember it as the version the master
@@ -2538,8 +2625,14 @@ public:
         if (!pPage)
             return;
 
-        writeHeader(rWriter);
         setupProcessor(rWriter, pPage);
+
+        // A change only asked for a fresh look at the objects it touched. Comparing them against
+        // what was written last is what decides whether the part's version moves at all, so it
+        // happens before the version is reported.
+        resolveDirtyObjects(pPage);
+
+        writeHeader(rWriter);
         if (isDelta())
             writeObjectOrder(rWriter, pPage);
 
@@ -2759,13 +2852,83 @@ private:
             rWriter.putSimpleValue(sal_Int64(pObject->GetUniqueID()));
     }
 
-    /// True when the object, or any object inside it when it is a
-    /// group, has an active text edit.
+    /// What is written for one object: its primitives, the box it paints and the mapping of the
+    /// unit rectangle onto it. The objects inside a group draw the group's content, so a group
+    /// with members has no primitives of its own.
+    SdXImpressDocument::VectorObjectContent contentOf(SdrObject& rObject)
+    {
+        SdXImpressDocument::VectorObjectContent aContent;
+
+        const SdrObjList* pChildren = rObject.GetSubList();
+        if (!pChildren || pChildren->GetObjCount() == 0)
+        {
+            rObject.GetViewContact().getViewIndependentPrimitive2DContainer(aContent.maPrimitives);
+
+            for (const auto& rPrimitive : aContent.maPrimitives)
+                rPrimitive->get2DDecomposition(aContent.maDrawn, maViewInformation);
+        }
+
+        aContent.maPaintedBox = paintedRectangleInTwips(rObject, aContent.maPrimitives);
+        aContent.maTransformation = transformationInTwips(rObject);
+        return aContent;
+    }
+
+    /// Looks again at the objects a change marked and counts the part's version up only for
+    /// those whose content really differs from what was written last. An object the page no
+    /// longer holds is forgotten.
+    void resolveDirtyObjects(SdPage* pPage)
+    {
+        std::unordered_set<sal_uInt64> aDirty
+            = mpModel->takeVectorDirtyObjects(mnResolvedPage, mnMode);
+
+        std::vector<SdrObject*> aObjects;
+        collectPaintedObjects(*pPage, aObjects);
+
+        // The paint order is compared as a whole. Raising an object above another announces a
+        // change on that object alone and its own content stands still, so the order is the
+        // only place the move shows. A group that lost or gained a member is looked at with it.
+        std::vector<sal_uInt64> aOrder;
+        aOrder.reserve(aObjects.size());
+        for (const SdrObject* pObject : aObjects)
+            aOrder.push_back(pObject->GetUniqueID());
+        if (mpModel->recordVectorPaintOrder(mnResolvedPage, mnMode, aOrder))
+        {
+            for (const SdrObject* pObject : aObjects)
+            {
+                const SdrObjList* pChildren = pObject->GetSubList();
+                if (pChildren && pChildren->GetObjCount() > 0)
+                    aDirty.insert(pObject->GetUniqueID());
+            }
+        }
+
+        std::unordered_map<sal_uInt64, SdrObject*> aObjectById;
+        for (SdrObject* pObject : aObjects)
+            aObjectById.emplace(pObject->GetUniqueID(), pObject);
+
+        for (const sal_uInt64 nObjectId : aDirty)
+        {
+            const auto aFound = aObjectById.find(nObjectId);
+            if (aFound == aObjectById.end())
+            {
+                mpModel->forgetVectorObject(mnResolvedPage, mnMode, nObjectId);
+                continue;
+            }
+
+            mpModel->recordVectorObjectContent(mnResolvedPage, mnMode, nObjectId,
+                                               contentOf(*aFound->second));
+        }
+    }
+
+    /// One entry per painted object on the page, into the open objects array, in the order the
+    /// paint visits them.
+    /// True when the object, or any object inside it when it is a group, has a text edit
+    /// running on it.
     static bool hasActiveTextEdit(SdrObject* pObject)
     {
-        SdrTextObj* pTextObj = DynCastSdrTextObj(pObject);
-        if (pTextObj && pTextObj->IsInEditMode())
+        SdrTextObj* pTextObject = DynCastSdrTextObj(pObject);
+        if (pTextObject && pTextObject->IsInEditMode())
             return true;
+
         if (SdrObjList* pChildren = pObject->GetSubList())
         {
             for (size_t i = 0; i < pChildren->GetObjCount(); ++i)
@@ -2778,57 +2941,33 @@ private:
         return false;
     }
 
-    /// One entry per object on the page, into the open objects array.
     void writePageObjects(tools::JsonWriter& rWriter, SdPage* pPage)
     {
-        for (size_t i = 0; i < pPage->GetObjCount(); ++i)
-        {
-            SdrObject* pObject = pPage->GetObj(i);
-            if (!pObject)
-                continue;
+        std::vector<SdrObject*> aObjects;
+        collectPaintedObjects(*pPage, aObjects);
 
-            // A delta carries full content only for objects that changed
-            // after the client's version. The rest stay in the order list.
-            // The object being text-edited is always carried: its live text
-            // is not version-tracked until the edit is committed.
-            if (isDelta())
+        for (SdrObject* pObject : aObjects)
+        {
+            // A delta carries full content only for the objects that changed after the client's
+            // version. The rest stay in the order list. An object with a text edit running on it
+            // is always carried, because what has been typed reaches the model only once the
+            // edit is committed, so no comparison can find it.
+            if (isDelta() && !hasActiveTextEdit(pObject)
+                && !mpModel->isVectorObjectChangedSince(mnResolvedPage, mnMode,
+                                                        pObject->GetUniqueID(),
+                                                        sal_uInt64(mnSinceVersion)))
             {
-                const bool bBeingEdited = hasActiveTextEdit(pObject);
-                if (!bBeingEdited
-                    && !mpModel->isVectorObjectChangedSince(mnResolvedPage, mnMode,
-                                                            pObject->GetUniqueID(),
-                                                            sal_uInt64(mnSinceVersion)))
-                {
-                    continue;
-                }
+                continue;
             }
 
-            // The change tracking records a change inside a group under the top-level object,
-            // so a changed top-level object is written together with everything inside it.
-            writeObjectTree(rWriter, *pObject, 0);
-        }
-    }
+            const SdXImpressDocument::VectorObjectContent aContent(contentOf(*pObject));
+            const SdrObject* pParent = pObject->getParentSdrObjectFromSdrObject();
+            writeObjectEntry(rWriter, *pObject, pParent ? pParent->GetUniqueID() : 0, aContent);
 
-    /// One entry for the object, then one for each object inside it when it is a group. The
-    /// members draw a group's content, so a group with members carries no primitives of its own.
-    void writeObjectTree(tools::JsonWriter& rWriter, SdrObject& rObject, sal_uInt64 nParentId)
-    {
-        SdrObjList* pChildren = rObject.GetSubList();
-        const bool bHasChildren = pChildren && pChildren->GetObjCount() > 0;
-
-        drawinglayer::primitive2d::Primitive2DContainer aPrimitives;
-        if (!bHasChildren)
-            rObject.GetViewContact().getViewIndependentPrimitive2DContainer(aPrimitives);
-
-        writeObjectEntry(rWriter, rObject, nParentId, aPrimitives);
-
-        if (!bHasChildren)
-            return;
-
-        for (size_t i = 0; i < pChildren->GetObjCount(); ++i)
-        {
-            if (SdrObject* pChild = pChildren->GetObj(i))
-                writeObjectTree(rWriter, *pChild, rObject.GetUniqueID());
+            // What was written is what the client holds from here on, so a later change to the
+            // object is compared against this.
+            mpModel->noteVectorObjectWritten(mnResolvedPage, mnMode, pObject->GetUniqueID(),
+                                             aContent);
         }
     }
 
@@ -2870,7 +3009,7 @@ private:
     /// that became empty replaces what a client has cached.
     void writeObjectEntry(tools::JsonWriter& rWriter, const SdrObject& rObject,
                           sal_uInt64 nParentId,
-                          const drawinglayer::primitive2d::Primitive2DContainer& rPrimitives)
+                          const SdXImpressDocument::VectorObjectContent& rContent)
     {
         auto pObjectNode = rWriter.startStruct();
         rWriter.put("id", sal_Int64(rObject.GetUniqueID()));
@@ -2882,15 +3021,15 @@ private:
         if (rObject.IsEmptyPresObj())
             rWriter.put("emptyPlaceholder", true);
 
-        const tools::Rectangle aPainted(paintedRectangleInTwips(rObject, rPrimitives));
-        rWriter.put("x", sal_Int64(aPainted.Left()));
-        rWriter.put("y", sal_Int64(aPainted.Top()));
-        rWriter.put("width", sal_Int64(aPainted.GetWidth()));
-        rWriter.put("height", sal_Int64(aPainted.GetHeight()));
+        const tools::Rectangle& rPainted = rContent.maPaintedBox;
+        rWriter.put("x", sal_Int64(rPainted.Left()));
+        rWriter.put("y", sal_Int64(rPainted.Top()));
+        rWriter.put("width", sal_Int64(rPainted.GetWidth()));
+        rWriter.put("height", sal_Int64(rPainted.GetHeight()));
 
         // In the order a canvas takes it: x' = a * x + c * y + e and y' = b * x + d * y + f.
         {
-            const basegfx::B2DHomMatrix aTransformation(transformationInTwips(rObject));
+            const basegfx::B2DHomMatrix& aTransformation = rContent.maTransformation;
             auto aTransformArray = rWriter.startArray("transform");
             rWriter.putSimpleValue(aTransformation.get(0, 0));
             rWriter.putSimpleValue(aTransformation.get(1, 0));
@@ -2901,7 +3040,7 @@ private:
         }
 
         auto aPrimitiveArray = rWriter.startArray("primitives");
-        maProcessor->decomposeAndWrite(rPrimitives);
+        maProcessor->decomposeAndWrite(rContent.maPrimitives);
     }
 
     SdDrawDocument* mpDocument;

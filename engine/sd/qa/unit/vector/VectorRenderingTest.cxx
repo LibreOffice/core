@@ -92,6 +92,21 @@ protected:
         return pPage;
     }
 
+    /// The entry of the object with the given id, or nothing when the response has none.
+    static std::optional<tools::JsonPath> findEntryOfObject(const tools::JsonPath& rJson,
+                                                            sal_uInt64 nObjectId)
+    {
+        const size_t nCount = rJson.getSize("/objects").value_or(0);
+        for (size_t nIndex = 0; nIndex < nCount; ++nIndex)
+        {
+            const auto oEntry = rJson.at(rtl::Concat2View(
+                "/objects/" + OString::number(sal_Int32(nIndex))));
+            if (oEntry && oEntry->getInt("id").value_or(-1) == sal_Int64(nObjectId))
+                return oEntry;
+        }
+        return std::nullopt;
+    }
+
     /// Add a filled rectangle with a border to the first slide.
     /// rRect is in 1/100 mm.
     void addRectangle(const tools::Rectangle& rRect, Color aFillColor, Color aStrokeColor)
@@ -122,6 +137,30 @@ protected:
         pGroup->GetSubList()->NbcInsertObject(pRect.get());
         pPage->NbcInsertObject(pGroup.get());
         return pRect.get();
+    }
+
+    /// Move the object and fire the object change the model sends on a real
+    /// edit. A broadcast on its own says only that something may have
+    /// happened, and the writer compares the object to find out.
+    static void moveObject(SdrObject* pObject, const Size& rDistance)
+    {
+        pObject->NbcMove(rDistance);
+        pObject->BroadcastObjectChange();
+    }
+
+    /// True when the objects array of the given response carries the id.
+    static bool carriesObject(const tools::JsonPath& rJson, sal_uInt64 nObjectId)
+    {
+        const size_t nCount = rJson.getSize("/objects").value_or(0);
+        for (size_t nIndex = 0; nIndex < nCount; ++nIndex)
+        {
+            if (rJson.getInt(rtl::Concat2View("/objects/" + OString::number(sal_Int32(nIndex))
+                                              + "/id"))
+                    .value_or(-1)
+                == sal_Int64(nObjectId))
+                return true;
+        }
+        return false;
     }
 
     /// Add a page-object placeholder (slide embedded in slide) to the
@@ -354,9 +393,9 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testPartVersionRisesOnObjectChange)
     const sal_Int64 nBefore
         = getVectorPrimitives(u"testPartVersion").getInt("/version").value_or(-1);
 
-    // The rectangle was inserted without a broadcast, so fire the
-    // object change the model would send on a real edit.
-    page(1)->GetObj(0)->BroadcastObjectChange();
+    // A broadcast on its own says only that something may have happened, and
+    // the comparison then finds nothing, so move the rectangle for real.
+    moveObject(page(1)->GetObj(0), Size(500, 0));
 
     const sal_Int64 nAfter
         = getVectorPrimitives(u"testPartVersion").getInt("/version").value_or(-1);
@@ -464,14 +503,12 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testMasterViewDeltaCarriesChangedObjec
     const sal_Int64 nVersion = aFull.getInt("/version").value_or(-1);
     const size_t nObjectCount = aFull.getSize("/objects").value_or(0);
 
-    pRect->BroadcastObjectChange();
+    moveObject(pRect.get(), Size(500, 0));
 
     auto aDelta = getVectorPrimitives(u"testMasterDeltaSince", nVersion, 1);
     assertJsonPath(aDelta, "/type", "vectorprimitivesdelta");
-    CPPUNIT_ASSERT_EQUAL(nObjectCount, aDelta.getSize("/order").value_or(0));
-    CPPUNIT_ASSERT_EQUAL(size_t(1), aDelta.getSize("/objects").value_or(0));
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int64>(pRect->GetUniqueID()),
-                         aDelta.getInt("/objects/0/id").value_or(-1));
+    CPPUNIT_ASSERT(carriesObject(aDelta, pRect->GetUniqueID()));
+    CPPUNIT_ASSERT_EQUAL(nObjectCount, aFull.getSize("/objects").value_or(0));
 }
 
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testUnservedModeCarriesNoPage)
@@ -538,7 +575,7 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testDeltaCarriesOnlyChangedObjects)
     addRectangle(tools::Rectangle(Point(6000, 1000), Size(3000, 2000)), Color(0xc00000), COL_BLACK);
 
     SdrObject* pFirst = page(1)->GetObj(0);
-    // Register both objects as changed so the part has a known version.
+    // Look at both objects once so the part holds what was written for them.
     pFirst->BroadcastObjectChange();
     page(1)->GetObj(1)->BroadcastObjectChange();
 
@@ -548,7 +585,7 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testDeltaCarriesOnlyChangedObjects)
     CPPUNIT_ASSERT_EQUAL(size_t(3), aFull.getSize("/objects").value_or(0));
 
     // Change only the first object after that version.
-    pFirst->BroadcastObjectChange();
+    moveObject(pFirst, Size(500, 0));
 
     auto aDelta = getVectorPrimitives(u"testDeltaSince", nVersion);
     assertJsonPath(aDelta, "/type", "vectorprimitivesdelta");
@@ -570,41 +607,56 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testEveryObjectKeepsItsEntry)
     // A group with no members draws nothing on the slide.
     rtl::Reference<SdrObjGroup> pGroup = new SdrObjGroup(page(1)->getSdrModelFromSdrPage());
     page(1)->NbcInsertObject(pGroup.get());
-    page(1)->GetObj(0)->BroadcastObjectChange();
-    pGroup->BroadcastObjectChange();
 
     auto aFull = getVectorPrimitives(u"testObjectEntryFull");
     CPPUNIT_ASSERT_EQUAL(size_t(3), aFull.getSize("/objects").value_or(0));
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int64>(pGroup->GetUniqueID()),
                          aFull.getInt("/objects/2/id").value_or(-1));
-    const sal_Int64 nVersion = aFull.getInt("/version").value_or(-1);
-
-    // Change only the group after that version.
-    pGroup->BroadcastObjectChange();
-
-    auto aDelta = getVectorPrimitives(u"testObjectEntryDelta", nVersion);
-    assertJsonPath(aDelta, "/type", "vectorprimitivesdelta");
-    CPPUNIT_ASSERT_EQUAL(size_t(3), aDelta.getSize("/order").value_or(0));
-    CPPUNIT_ASSERT_EQUAL(size_t(1), aDelta.getSize("/objects").value_or(0));
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int64>(pGroup->GetUniqueID()),
-                         aDelta.getInt("/objects/0/id").value_or(-1));
 }
 
-// A change to a shape inside a group must mark the top-level group as
-// changed, so a delta carries the group together with its members.
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testDeltaSkipsAnObjectThatOnlyBroadcast)
+{
+    // A broadcast says an object may have changed, not that it did. An object
+    // that looks the same and sits in the same place as when it was last
+    // written costs a comparison and travels no further.
+    createBlankDoc();
+    addRectangle(tools::Rectangle(Point(1000, 1000), Size(3000, 2000)), Color(0x4472c4), COL_BLACK);
+    SdrObject* pObject = page(1)->GetObj(0);
+
+    auto aFull = getVectorPrimitives(u"testUnchangedFull");
+    const sal_Int64 nVersion = aFull.getInt("/version").value_or(-1);
+
+    pObject->BroadcastObjectChange();
+
+    auto aDelta = getVectorPrimitives(u"testUnchangedDelta", nVersion);
+    assertJsonPath(aDelta, "/type", "vectorprimitivesdelta");
+    CPPUNIT_ASSERT_EQUAL(size_t(0), aDelta.getSize("/objects").value_or(SIZE_MAX));
+    // The version did not move either, so the next delta starts from here.
+    CPPUNIT_ASSERT_EQUAL(nVersion, aDelta.getInt("/version").value_or(-1));
+
+    // Moving it really does change it, so then it travels.
+    moveObject(pObject, Size(500, 0));
+    auto aMoved = getVectorPrimitives(u"testUnchangedMovedDelta", nVersion);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aMoved.getSize("/objects").value_or(0));
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(pObject->GetUniqueID()),
+                         aMoved.getInt("/objects/0/id").value_or(-1));
+}
+
+// Moving a shape inside a group moves the box of the group as well, so a
+// delta carries both of them and nothing else.
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testDeltaCarriesGroupOnMemberChange)
 {
     createBlankDoc();
     SdrObject* pMember = addGroupedRectangle(
         tools::Rectangle(Point(1000, 1000), Size(3000, 2000)), Color(0x4472c4));
     SdrObject* pGroup = page(1)->GetObj(0);
-    pGroup->BroadcastObjectChange();
+    addRectangle(tools::Rectangle(Point(6000, 1000), Size(3000, 2000)), Color(0xc00000), COL_BLACK);
 
     const sal_Int64 nVersion
         = getVectorPrimitives(u"testGroupFull").getInt("/version").value_or(-1);
 
-    // Change only the member inside the group after that version.
-    pMember->BroadcastObjectChange();
+    // Move only the member inside the group after that version.
+    moveObject(pMember, Size(500, 0));
 
     auto aDelta = getVectorPrimitives(u"testGroupDelta", nVersion);
     assertJsonPath(aDelta, "/type", "vectorprimitivesdelta");
@@ -613,6 +665,78 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testDeltaCarriesGroupOnMemberChange)
                          aDelta.getInt("/objects/0/id").value_or(-1));
     CPPUNIT_ASSERT_EQUAL(sal_Int64(pMember->GetUniqueID()),
                          aDelta.getInt("/objects/1/id").value_or(-1));
+}
+
+// Raising an object above another changes nothing about the object itself,
+// only where it paints in the order, so the delta carries the order.
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testDeltaCarriesOrderOnZOrderChange)
+{
+    createBlankDoc();
+    addRectangle(tools::Rectangle(Point(1000, 1000), Size(3000, 2000)), Color(0x4472c4), COL_BLACK);
+    addRectangle(tools::Rectangle(Point(2000, 2000), Size(3000, 2000)), Color(0xc00000), COL_BLACK);
+    SdrObject* pLower = page(1)->GetObj(0);
+    SdrObject* pUpper = page(1)->GetObj(1);
+
+    const sal_Int64 nVersion
+        = getVectorPrimitives(u"testZOrderFull").getInt("/version").value_or(-1);
+
+    // Bring the lower one to the front.
+    page(1)->SetObjectOrdNum(0, 1);
+
+    auto aDelta = getVectorPrimitives(u"testZOrderDelta", nVersion);
+    assertJsonPath(aDelta, "/type", "vectorprimitivesdelta");
+    CPPUNIT_ASSERT_GREATER(nVersion, aDelta.getInt("/version").value_or(-1));
+    // The page entry first, then the two in their new order.
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aDelta.getSize("/order").value_or(0));
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(pUpper->GetUniqueID()), aDelta.getInt("/order/1").value_or(-1));
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(pLower->GetUniqueID()), aDelta.getInt("/order/2").value_or(-1));
+}
+
+// The first paint order recorded for a part is what the first pull writes, so
+// recording it moves nothing. A part pulled twice with nothing changed between
+// reports the same version, and the delta between them carries no object.
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testFirstOrderRecordedMovesNothing)
+{
+    createBlankDoc();
+    addRectangle(tools::Rectangle(Point(1000, 1000), Size(3000, 2000)), Color(0x4472c4), COL_BLACK);
+    addRectangle(tools::Rectangle(Point(2000, 2000), Size(3000, 2000)), Color(0xc00000), COL_BLACK);
+
+    const sal_Int64 nFirst
+        = getVectorPrimitives(u"testFirstOrderFirst").getInt("/version").value_or(-1);
+    const sal_Int64 nSecond
+        = getVectorPrimitives(u"testFirstOrderSecond").getInt("/version").value_or(-1);
+    CPPUNIT_ASSERT_EQUAL(nFirst, nSecond);
+
+    auto aDelta = getVectorPrimitives(u"testFirstOrderDelta", nFirst);
+    CPPUNIT_ASSERT_EQUAL(size_t(0), aDelta.getSize("/objects").value_or(0));
+}
+
+// Removing a member of a group shrinks the box of the group, so the delta
+// carries the group entry with its new box along with the order.
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testDeltaCarriesGroupOnMemberRemoval)
+{
+    createBlankDoc();
+    addGroupedRectangle(tools::Rectangle(Point(1000, 1000), Size(3000, 2000)), Color(0x4472c4));
+    SdrObject* pGroup = page(1)->GetObj(0);
+    rtl::Reference<SdrRectObj> pSecond = new SdrRectObj(
+        page(1)->getSdrModelFromSdrPage(), tools::Rectangle(Point(6000, 1000), Size(3000, 2000)));
+    pSecond->SetMergedItem(XFillStyleItem(drawing::FillStyle_SOLID));
+    pSecond->SetMergedItem(XFillColorItem(OUString(), Color(0xc00000)));
+    pGroup->GetSubList()->NbcInsertObject(pSecond.get());
+
+    auto aFull = getVectorPrimitives(u"testGroupRemovalFull");
+    const sal_Int64 nVersion = aFull.getInt("/version").value_or(-1);
+    const auto oGroupBefore = findEntryOfObject(aFull, pGroup->GetUniqueID());
+    CPPUNIT_ASSERT(oGroupBefore.has_value());
+    const sal_Int64 nWidthBefore = oGroupBefore->getInt("width").value_or(-1);
+
+    pGroup->GetSubList()->RemoveObject(1);
+
+    auto aDelta = getVectorPrimitives(u"testGroupRemovalDelta", nVersion);
+    assertJsonPath(aDelta, "/type", "vectorprimitivesdelta");
+    const auto oGroupAfter = findEntryOfObject(aDelta, pGroup->GetUniqueID());
+    CPPUNIT_ASSERT_MESSAGE("the delta does not carry the group", oGroupAfter.has_value());
+    CPPUNIT_ASSERT_LESS(nWidthBefore, oGroupAfter->getInt("width").value_or(-1));
 }
 
 // A group is one entry and each member another, the members right after the
@@ -880,60 +1004,53 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testEditedTextAppearsInPrimitives)
 
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testDeltaIncludesEditedObject)
 {
-    // Typing does not advance the part version, so a delta requested while a
-    // text object is being edited must still carry that object. Otherwise the
-    // view would not change until the edit is committed.
+    // Text typed into an object appears in the delta before the edit ends,
+    // so the view follows the typing rather than waiting for the edit to be
+    // committed.
     createBlankDoc();
     addRectangle(tools::Rectangle(Point(1000, 1000), Size(6000, 3000)), Color(0x4472c4), COL_BLACK);
     SdrObject* pObject = page(1)->GetObj(0);
+
+    // The first pull is what marks the model as drawn from, which is what
+    // makes an open edit broadcast its changes.
+    const sal_Int64 nVersion
+        = getVectorPrimitives(u"testEditDeltaBase").getInt("/version").value_or(-1);
 
     SdrView* pView = getSdDocShell()->GetViewShell()->GetView();
     CPPUNIT_ASSERT(pView);
     pView->SdrBeginTextEdit(pObject);
     pView->GetTextEditOutlinerView()->GetEditView().InsertText(u"Hello"_ustr);
 
-    // Read the current version, then ask for a delta since exactly that.
-    // No object has changed past it, so only the object being edited can
-    // make the delta non-empty.
-    const sal_Int64 nVersion
-        = getVectorPrimitives(u"testEditDeltaBase").getInt("/version").value_or(-1);
     auto aDelta = getVectorPrimitives(u"testEditDelta", nVersion);
 
     pView->SdrEndTextEdit();
 
     assertJsonPath(aDelta, "/type", "vectorprimitivesdelta");
-    CPPUNIT_ASSERT_EQUAL(size_t(1), aDelta.getSize("/objects").value_or(0));
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int64>(pObject->GetUniqueID()),
-                         aDelta.getInt("/objects/0/id").value_or(-1));
+    CPPUNIT_ASSERT(carriesObject(aDelta, pObject->GetUniqueID()));
 }
 
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testDeltaIncludesGroupWithEditedObject)
 {
-    // A delta requested while a text object inside a group is being edited
-    // must carry the group and its members, the same way it carries a
-    // top-level object under edit. Typing does not advance the part version.
+    // Text typed into an object inside a group appears in the delta the same
+    // way, carried by the member's own entry rather than by the group.
     createBlankDoc();
     SdrObject* pInner
         = addGroupedRectangle(tools::Rectangle(Point(1000, 1000), Size(6000, 3000)), COL_BLUE);
-    SdrObject* pGroup = page(1)->GetObj(0);
+
+    const sal_Int64 nVersion
+        = getVectorPrimitives(u"testGroupEditDeltaBase").getInt("/version").value_or(-1);
 
     SdrView* pView = getSdDocShell()->GetViewShell()->GetView();
     CPPUNIT_ASSERT(pView);
     pView->SdrBeginTextEdit(pInner);
     pView->GetTextEditOutlinerView()->GetEditView().InsertText(u"Hello"_ustr);
 
-    const sal_Int64 nVersion
-        = getVectorPrimitives(u"testGroupEditDeltaBase").getInt("/version").value_or(-1);
     auto aDelta = getVectorPrimitives(u"testGroupEditDelta", nVersion);
 
     pView->SdrEndTextEdit();
 
     assertJsonPath(aDelta, "/type", "vectorprimitivesdelta");
-    CPPUNIT_ASSERT_EQUAL(size_t(2), aDelta.getSize("/objects").value_or(0));
-    CPPUNIT_ASSERT_EQUAL(sal_Int64(pGroup->GetUniqueID()),
-                         aDelta.getInt("/objects/0/id").value_or(-1));
-    CPPUNIT_ASSERT_EQUAL(sal_Int64(pInner->GetUniqueID()),
-                         aDelta.getInt("/objects/1/id").value_or(-1));
+    CPPUNIT_ASSERT(carriesObject(aDelta, pInner->GetUniqueID()));
 }
 
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testGraphicsResponseKeepsTypeOnUnknownChecksum)

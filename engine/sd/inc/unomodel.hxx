@@ -34,13 +34,18 @@
 #include <com/sun/star/view/XRenderable.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <drawinglayer/processor2d/Primitive2dJsonProcessor.hxx>
+#include <tools/gen.hxx>
 #include <o3tl/hash_combine.hxx>
 #include <rtl/ref.hxx>
 #include <unotools/weakref.hxx>
 
 #include <memory>
 #include <unordered_map>
+#include <optional>
+#include <unordered_set>
 #include <vector>
 
 #include <vcl/BinaryDataContainer.hxx>
@@ -145,6 +150,30 @@ public:
         };
     };
 
+    /// What was last written for one object. A change that leaves none of this different is a
+    /// change nobody can see, so it need not travel. The box and the transformation are held
+    /// alongside the primitives because an object can move without its primitives changing.
+    struct VectorObjectContent
+    {
+        /// What is written for the object.
+        drawinglayer::primitive2d::Primitive2DContainer maPrimitives;
+
+        /// What those primitives decompose to, which is what the writing walks and so what a
+        /// client receives. The two do not move together, so comparing the object's own
+        /// primitive would find changes a client never sees and miss ones it does.
+        drawinglayer::primitive2d::Primitive2DContainer maDrawn;
+
+        tools::Rectangle maPaintedBox;
+        basegfx::B2DHomMatrix maTransformation;
+
+        bool operator==(const VectorObjectContent& rOther) const
+        {
+            return maPaintedBox == rOther.maPaintedBox
+                   && maTransformation == rOther.maTransformation
+                   && maDrawn == rOther.maDrawn;
+        }
+    };
+
     /// Content version of a part, counted up on each object change. 0 when
     /// nothing changed since the document was opened.
     sal_uInt64 getVectorPartVersion(sal_Int32 nPart, sal_Int32 nMode) const;
@@ -154,6 +183,30 @@ public:
     bool isVectorObjectChangedSince(sal_Int32 nPart, sal_Int32 nMode, sal_uInt64 nObjectId,
                                     sal_uInt64 nSince) const;
 
+    /// The objects a change asked for a fresh look at, taken out of the part's state.
+    std::unordered_set<sal_uInt64> takeVectorDirtyObjects(sal_Int32 nPart, sal_Int32 nMode);
+
+    /// Records what is being written for one object. Counts the part's version up and returns
+    /// true when the content differs from what was recorded before, false when the object looks
+    /// the same and sits where it did.
+    bool recordVectorObjectContent(sal_Int32 nPart, sal_Int32 nMode, sal_uInt64 nObjectId,
+                                   const VectorObjectContent& rContent);
+
+    /// Records what is being written for one object without touching any version. Writing an
+    /// object is what makes it the content the client holds, whether the write was a full
+    /// response or a delta.
+    void noteVectorObjectWritten(sal_Int32 nPart, sal_Int32 nMode, sal_uInt64 nObjectId,
+                                 const VectorObjectContent& rContent);
+
+    /// Drops what was recorded for an object that is no longer on the part.
+    void forgetVectorObject(sal_Int32 nPart, sal_Int32 nMode, sal_uInt64 nObjectId);
+
+    /// Records the order the objects of the part paint in. Counts the part's version up when
+    /// the order differs from the one recorded before, and returns true then. The first order
+    /// recorded for a part moves nothing.
+    bool recordVectorPaintOrder(sal_Int32 nPart, sal_Int32 nMode,
+                                const std::vector<sal_uInt64>& rOrder);
+
     /// True when the part's master page last changed at a version later
     /// than nSince.
     bool isVectorMasterChangedSince(sal_Int32 nPart, sal_Int32 nMode, sal_uInt64 nSince) const;
@@ -161,11 +214,20 @@ public:
     /// Content state of one vector-rendering part: its current version,
     /// the version at which its master page last changed, and, per object
     /// unique id, the version at which that object last changed.
+    ///
+    /// maObjectContent holds what was last written per object, and maDirtyObjects the objects a
+    /// change asked for a fresh look at. An object stays in maDirtyObjects until a write
+    /// compares it against maObjectContent.
     struct VectorPartState
     {
         sal_uInt64 mnVersion = 0;
         sal_uInt64 mnMasterChangeVersion = 0;
         std::unordered_map<sal_uInt64, sal_uInt64> maObjectChangeVersions;
+        std::unordered_map<sal_uInt64, VectorObjectContent> maObjectContent;
+        std::unordered_set<sal_uInt64> maDirtyObjects;
+        /// The ids of the painted objects in the order they were last written, without the page
+        /// entry. Nothing before the part was first written.
+        std::optional<std::vector<sal_uInt64>> maPaintOrder;
     };
 
 private:
