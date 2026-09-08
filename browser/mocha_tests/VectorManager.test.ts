@@ -33,8 +33,8 @@ describe('VectorManager', function () {
 	}
 
 	// A primitive tree response carries a stable id per object. The
-	// manager has to keep those ids on the cached objects, in document
-	// order, so a later update can find an object by id.
+	// manager keys the cached objects by that id and keeps the paint order
+	// beside them, so a later update can reach one object by its id.
 	it('keeps each object id from a primitive tree response', function () {
 		const manager = new VectorManager();
 
@@ -49,10 +49,9 @@ describe('VectorManager', function () {
 
 		const data = manager.requestPart(0);
 		nodeassert.ok(data, 'part 0 is cached after its response');
-		nodeassert.deepStrictEqual(
-			data.objects.map((object) => object.id),
-			[11, 22],
-		);
+		nodeassert.deepStrictEqual(data.order, [11, 22]);
+		nodeassert.strictEqual(data.objects.get(11)?.id, 11);
+		nodeassert.strictEqual(data.objects.get(22)?.id, 22);
 	});
 
 	// The engine stamps each part with a content version. The manager
@@ -72,9 +71,9 @@ describe('VectorManager', function () {
 		nodeassert.strictEqual(data.version, 7);
 	});
 
-	// A delta rebuilds the part from its order: changed objects take the
-	// new content, unchanged ones keep what was cached, and the order
-	// list sets the result (here it also reorders the two objects).
+	// A delta replaces the objects it carries and leaves the rest alone.
+	// An order that comes with it sets the paint order, here reversing the
+	// two objects.
 	it('applies a delta, reusing cached content for unchanged objects', function () {
 		const manager = new VectorManager();
 		manager.handleVectorPrimitivesResponse({
@@ -98,12 +97,58 @@ describe('VectorManager', function () {
 
 		const data: any = manager.requestPart(0);
 		nodeassert.strictEqual(data.version, 2);
-		nodeassert.deepStrictEqual(
-			data.objects.map((object: cool.SlideObject) => object.id),
-			[22, 11],
-		);
-		nodeassert.strictEqual(data.objects[0].primitives.length, 1);
-		nodeassert.strictEqual(data.objects[1].primitives.length, 0);
+		nodeassert.deepStrictEqual(data.order, [22, 11]);
+		nodeassert.strictEqual(data.objects.get(22).primitives.length, 1);
+		nodeassert.strictEqual(data.objects.get(11).primitives.length, 0);
+	});
+
+	// The order travels only when the object set or its order moved, so a
+	// delta without one leaves the order alone and touches nothing but the
+	// object it names.
+	it('applies a delta that carries no order', function () {
+		const manager = new VectorManager();
+		manager.handleVectorPrimitivesResponse({
+			part: 0,
+			version: 1,
+			objects: [
+				{ id: 11, primitives: [] },
+				{ id: 22, primitives: [] },
+			],
+		});
+
+		const delta: any = {
+			part: 0,
+			version: 2,
+			objects: [{ id: 22, primitives: [{ type: 'polygonHairline' }] }],
+		};
+		manager.handleVectorPrimitivesDelta(delta);
+
+		const data: any = manager.requestPart(0);
+		nodeassert.deepStrictEqual(data.order, [11, 22]);
+		nodeassert.strictEqual(data.objects.get(22).primitives.length, 1);
+		nodeassert.strictEqual(data.objects.get(11).primitives.length, 0);
+	});
+
+	// An object the order no longer names is gone, so it is dropped from
+	// the cache rather than left behind holding its primitives.
+	it('drops an object the delta order no longer names', function () {
+		const manager = new VectorManager();
+		manager.handleVectorPrimitivesResponse({
+			part: 0,
+			version: 1,
+			objects: [
+				{ id: 11, primitives: [] },
+				{ id: 22, primitives: [] },
+			],
+		});
+
+		const delta: any = { part: 0, version: 2, order: [11], objects: [] };
+		manager.handleVectorPrimitivesDelta(delta);
+
+		const data: any = manager.requestPart(0);
+		nodeassert.strictEqual(data.objects.size, 1);
+		nodeassert.ok(!data.objects.has(22), 'the removed object is gone');
+		nodeassert.deepStrictEqual(data.order, [11]);
 	});
 
 	// When the order names an object the client never cached, the delta
@@ -144,7 +189,7 @@ describe('VectorManager', function () {
 
 		const data: any = manager.requestPart(0);
 		nodeassert.strictEqual(data.version, 5);
-		nodeassert.strictEqual(data.objects.length, 2);
+		nodeassert.strictEqual(data.objects.size, 2);
 	});
 
 	// The page rectangle rides on the page entry rather than on a field of
@@ -205,9 +250,9 @@ describe('VectorManager', function () {
 
 		const data: any = manager.requestPart(0);
 		nodeassert.strictEqual(data.version, 2);
-		nodeassert.strictEqual(data.objects[0].kind, 'page');
-		nodeassert.strictEqual(data.objects[0].primitives.length, 1);
-		nodeassert.strictEqual(data.objects[1].id, 11);
+		nodeassert.strictEqual(data.objects.get(5).kind, 'page');
+		nodeassert.strictEqual(data.objects.get(5).primitives.length, 1);
+		nodeassert.deepStrictEqual(data.order, [5, 11]);
 	});
 
 	// Each object carries where it sits in the group tree, which layer it
@@ -236,7 +281,8 @@ describe('VectorManager', function () {
 
 		const data = manager.requestPart(0);
 		nodeassert.ok(data, 'part 0 is cached after its response');
-		const member = data.objects[1];
+		const member = data.objects.get(22);
+		nodeassert.ok(member, 'the member is cached under its own id');
 		nodeassert.strictEqual(member.parent, 11);
 		nodeassert.strictEqual(member.layer, 2);
 		nodeassert.strictEqual(member.emptyPlaceholder, true);

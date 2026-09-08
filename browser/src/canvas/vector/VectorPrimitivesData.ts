@@ -20,7 +20,11 @@ namespace cool {
 		/// for the page.
 		slideWidth: number;
 		slideHeight: number;
-		/// Every painted object in paint order, the page entry first.
-		objects: SlideObject[];
+		/// Every painted object of the part, keyed by its id, so an update
+		/// can reach one object without touching the rest.
+		objects: Map<number, SlideObject>;
+		/// The ids in paint order, the page entry first and the members of
+		/// a group right after it.
+		order: number[];
 	}
 }

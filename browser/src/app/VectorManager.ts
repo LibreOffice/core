@@ -130,7 +130,9 @@ class VectorManager extends RenderManagerBase {
 		options?: cool.VectorRenderOptions,
 	): void {
 		this._renderer.setSlideBounds(data.slideWidth, data.slideHeight);
-		for (const obj of data.objects) {
+		for (const id of data.order) {
+			const obj = data.objects.get(id);
+			if (!obj) continue;
 			if (obj.layer !== undefined && this._hiddenLayers.has(obj.layer))
 				continue;
 			if (obj.primitives) {
@@ -205,13 +207,23 @@ class VectorManager extends RenderManagerBase {
 		this._inFlightParts.delete(part);
 
 		const received = values.objects || [];
+		const objects = new Map<number, cool.SlideObject>();
+		const arrived: number[] = [];
+		for (const object of received) {
+			if (object.id === undefined) continue;
+			objects.set(object.id, object);
+			arrived.push(object.id);
+		}
 
 		const [nWidth, nHeight] = VectorManager.pageBoundsOf(received);
 		const data: cool.VectorPrimitivesData = {
 			version: values.version,
 			slideWidth: nWidth,
 			slideHeight: nHeight,
-			objects: received,
+			objects: objects,
+			// A full response lists the objects in paint order, so the order
+			// they arrive in is the order they are drawn in.
+			order: values.order || arrived,
 		};
 		this._cache.set(part, data);
 
@@ -224,11 +236,10 @@ class VectorManager extends RenderManagerBase {
 		this.setVisualsReady();
 	}
 
-	/// Apply a delta to a cached part: rebuild its object list from the
-	/// delta's order, taking new content for changed objects and reusing
-	/// the cache for the rest. A delta not newer than the cache is
-	/// ignored. A part that is not cached, or an order that names
-	/// content the client never had, falls back to a full re-fetch.
+	/// Apply a delta to a cached part. The objects it carries replace
+	/// theirs and the rest keep what was cached. A delta not newer than
+	/// the cache is ignored. A part that is not cached, or an order that
+	/// names content the client never had, falls back to a full re-fetch.
 	handleVectorPrimitivesDelta(values: cool.VectorPrimitivesResponse): void {
 		const part = this._partFor(values);
 
@@ -246,9 +257,8 @@ class VectorManager extends RenderManagerBase {
 			return;
 
 		const carried = values.objects || [];
-		const changedObjects = new Map<number, cool.SlideObject>();
 		for (const object of carried) {
-			if (object.id !== undefined) changedObjects.set(object.id, object);
+			if (object.id !== undefined) cached.objects.set(object.id, object);
 		}
 
 		// The page rectangle rides on the page entry, so a delta that carries
@@ -259,23 +269,25 @@ class VectorManager extends RenderManagerBase {
 			cached.slideHeight = nHeight;
 		}
 
-		const cachedObjects = new Map<number, cool.SlideObject>();
-		for (const object of cached.objects) {
-			if (object.id !== undefined) cachedObjects.set(object.id, object);
-		}
-
-		const order = values.order || [];
-		const newObjects: cool.SlideObject[] = [];
-		for (const id of order) {
-			const object = changedObjects.get(id) || cachedObjects.get(id);
-			if (!object) {
-				this.clearCachedPart(part);
-				return;
+		// The order travels only when the object set or its order changed.
+		// When it does it names the whole live set, so anything missing from
+		// it is gone and is dropped from the cache.
+		if (values.order) {
+			for (const id of values.order) {
+				if (!cached.objects.has(id)) {
+					this.clearCachedPart(part);
+					return;
+				}
 			}
-			newObjects.push(object);
+			const live = new Set(values.order);
+			const gone: number[] = [];
+			for (const id of cached.objects.keys()) {
+				if (!live.has(id)) gone.push(id);
+			}
+			for (const id of gone) cached.objects.delete(id);
+			cached.order = values.order;
 		}
 
-		cached.objects = newObjects;
 		cached.version = values.version;
 
 		this._collectResources(part, (walker) => {
