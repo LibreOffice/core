@@ -21,6 +21,8 @@ import { EXAMPLES } from './logo/examples.js';
 
 const $ = (id) => document.getElementById(id);
 
+// The sidebar panel: wires the editor, command line, preview and options to the
+// Web Worker that runs programs and the KitBridge that draws into the document.
 class Panel {
 	constructor() {
 		this.bridge = new KitBridge();
@@ -353,13 +355,10 @@ class Panel {
 	async maybeInsert() {
 		if (!$('opt-insert').checked || !this.dirty || !this.lastFrame) return;
 		const frame = this.lastFrame;
-		let bounds = frame.bounds;
-		let svg = frame.svg;
-		if (!$('opt-turtle').checked) {
-			// re-render without the turtle: the frame already has it, so ask the worker
-			svg = svg.replace(/<path d="M0 -10[^>]*\/>/, '');
-			// (the turtle is the last path element)
-		}
+		const bounds = frame.bounds;
+		// The worker sends a turtle-less render of the final frame; use it when
+		// the turtle should not appear in the inserted drawing.
+		const svg = $('opt-turtle').checked ? frame.svg : (frame.svgNoTurtle || frame.svg);
 		if (!bounds) {
 			// nothing drawn: remove any previous drawing
 			try {

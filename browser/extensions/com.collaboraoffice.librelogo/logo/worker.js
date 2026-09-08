@@ -73,7 +73,11 @@ function frame(final) {
 		view = [minX, minY, maxX - minX, maxY - minY];
 	}
 	const svg = renderer.render(turtle.shapes, turtleState(), view, [pw, ph]);
-	postMessage({ type: 'frame', svg, view, bounds, page: turtle.page, state: turtle.snapshot(), final: !!final, position: turtle.getPosition(), heading: turtle.heading });
+	// The final frame is the one the panel may insert into the document. Render
+	// a turtle-less variant too, so the panel can honour "show the turtle in the
+	// inserted drawing" without editing the SVG string by hand.
+	const svgNoTurtle = final ? renderer.render(turtle.shapes, null, view, [pw, ph]) : undefined;
+	postMessage({ type: 'frame', svg, svgNoTurtle, view, bounds, page: turtle.page, state: turtle.snapshot(), final: !!final, position: turtle.getPosition(), heading: turtle.heading });
 }
 
 function errorMessage(e) {
