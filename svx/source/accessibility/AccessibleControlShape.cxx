@@ -121,7 +121,7 @@ AccessibleControlShape::~AccessibleControlShape()
     m_xControlContextProxy.clear();
     m_xControlContextTypeAccess.clear();
     m_xControlContextComponent.clear();
-        // this should remove the _only_ three "real" reference (means not delegated to
+        // this should remove the _only_ three "real" references (means not delegated to
         // ourself) to this proxy, and thus delete it
 }
 

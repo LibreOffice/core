@@ -119,8 +119,8 @@ struct Por_Info
     */
     int const m_Mode;
 
-    Por_Info(const SwLinePortion& rPor, const SwTextPainter& rTextPainer, int const nMode)
-        : mrPor(rPor), mrTextPainter(rTextPainer), m_Mode(nMode) {};
+    Por_Info(const SwLinePortion& rPor, const SwTextPainter& rTextPainter, int const nMode)
+        : mrPor(rPor), mrTextPainter(rTextPainter), m_Mode(nMode) {};
 };
 
 struct lt_TableColumn
@@ -185,14 +185,14 @@ class SwTaggedPDFHelper
 };
 
 /*
- * Analyses the document structure and export Notes, Hyperlinks, References,
+ * Analyses the document structure and exports Notes, Hyperlinks, References,
  * and Outline. Link ids created during pdf export are stored in
  * SwEnhancedPDFState, in order to use them during
  * tagged pdf output. Therefore the SwEnhancedPDFExportHelper is used
  * before painting. Unfortunately links from the EditEngine into the
  * Writer document require to be exported after they have been painted.
  * Therefore SwEnhancedPDFExportHelper also has to be used after the
- * painting process, the parameter bEditEngineOnly indicated that only
+ * painting process, the parameter bEditEngineOnly indicates that only
  * the bookmarks from the EditEngine have to be processed.
  */
 class SwEnhancedPDFExportHelper

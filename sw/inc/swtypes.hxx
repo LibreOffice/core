@@ -105,7 +105,7 @@ constexpr short lOutlineMinTextDistance = o3tl::toTwips(15, o3tl::Length::in100)
 // Count of SystemField-types of SwDoc.
 #define INIT_FLDTYPES   33
 
-// Count of predefined Seq-field types. It is always the last
+// Count of predefined Seq-field types. They are always the last
 // fields before INIT_FLDTYPES.
 #define INIT_SEQ_FLDTYPES   5
 
@@ -123,7 +123,7 @@ SW_DLLPUBLIC Size GetGraphicSizeTwip( const Graphic&, vcl::RenderContext* pOutDe
 
 // Separator for jumps to different content types in document.
 const sal_Unicode cMarkSeparator = '|';
-// Sequences names for jumps are <name of sequence>!<no>
+// Sequence names for jumps are <name of sequence>!<no>
 const char cSequenceMarkSeparator = '!';
 /// separator for toxmarks: #<no>%19<text>%19<type><typename>|toxmark
 sal_Unicode const toxMarkSeparator = '\u0019';
@@ -248,7 +248,7 @@ enum class PrepareHint
                                //     MoveBwd: pVoid == pOldPage
     Register,                  // Invalidate frames with registers.
     FootnoteInvalidationGone,  // A Follow loses its footnote, possibly its first line can move up.
-    FootnoteMove,              // A footnote changes its page. Its contents receives at first a
+    FootnoteMove,              // A footnote changes its page. Its contents receive at first a
                                // height of zero in order to avoid too much noise. At formatting
                                // it checks whether it fits and if necessary changes its page again.
     ErgoSum,                   // Needed because of movement in FootnoteFrames. Check QuoVadis/ErgoSum.

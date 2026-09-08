@@ -173,7 +173,7 @@ void SmMLImportContext::inheritStyle()
             break;
     }
 
-    // Parent inheritation
+    // Parent inheritance
     // Mathcolor, mathsize, dir and displaystyle are inherited from parent
     SmMlElement* pParent = *m_pParent;
     m_pElement->setAttribute(pParent->getAttribute(SmMlAttributeValueType::MlMathcolor));
@@ -212,7 +212,7 @@ void SmMLImportContext::inheritStyle()
 
         if (m_pElement->getMlElementType() == SmMlElementType::MlMo)
         {
-            // Set form based in position
+            // Set form based on position
             SmMlAttribute aAttribute(SmMlAttributeValueType::MlForm);
             SmMlForm aForm;
             if (m_pElement->getSubElementId() == 0)
@@ -236,7 +236,7 @@ void SmMLImportContext::inheritStyleEnd()
     {
         if ((*m_pParent)->getSubElementsCount() == m_pElement->getSubElementId())
         {
-            // Set form based in position
+            // Set form based on position
             SmMlAttribute aAttribute(SmMlAttributeValueType::MlForm);
             SmMlForm aForm = { SmMlAttributeValueForm::MlPosfix };
             aAttribute.setMlForm(&aForm);

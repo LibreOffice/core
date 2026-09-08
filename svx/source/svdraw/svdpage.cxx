@@ -1069,7 +1069,7 @@ void SdrObjList::ReplaceObjectInContainer (
     {
         // A user defined position of the object that is to be replaced is
         // not transferred to the new object so erase the former and append
-        // the later object from/to the navigation order.
+        // the latter object from/to the navigation order.
         OSL_ASSERT(nObjectPosition < maList.size());
         unotools::WeakReference<SdrObject> aReference (maList[nObjectPosition].get());
         auto iObject = ::std::find(
@@ -1395,7 +1395,7 @@ SdrPage::~SdrPage()
         pPageUser->PageInDestruction(*this);
     }
 
-    // Clear the vector. This means that user do not need to call RemovePageUser()
+    // Clear the vector. This means that users do not need to call RemovePageUser()
     // when they get called from PageInDestruction().
     maPageUsers.clear();
 

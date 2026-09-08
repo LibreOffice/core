@@ -1749,7 +1749,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                     Reference< XFrame > xTargetFrame( lcl_findStartModuleFrame( xContext ) );
                     if ( !xTargetFrame.is() )
                         xTargetFrame = SfxFrame::CreateBlankFrame();
-                    ENSURE_OR_THROW( xTargetFrame.is(), "could not obtain a frameto load the Basic IDE into!" );
+                    ENSURE_OR_THROW( xTargetFrame.is(), "could not obtain a frame to load the Basic IDE into!" );
 
                     xLoader->load( aLoadArgs.getPropertyValues(), xTargetFrame );
                 }

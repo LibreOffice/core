@@ -1598,7 +1598,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf168817)
     createSwDoc("ruby+hyperlink.fodt");
     saveAndReload(TestFilter::ODT);
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
-    // Check that only one instance of respective elements are produced
+    // Check that only one instance of respective elements is produced
     assertXPath(pXmlDoc, "//text:p", 1);
     assertXPath(pXmlDoc, "//text:ruby", 1);
     assertXPath(pXmlDoc, "//text:a", 1);

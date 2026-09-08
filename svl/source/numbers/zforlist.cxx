@@ -719,7 +719,7 @@ bool SvNFFormatData::PutEntry(SvNFLanguageData& rCurrentLanguage,
         sal_uInt32 CLOffset = ImpGenerateCL(rCurrentLanguage, rNatNum, eLge);  // create new standard formats if necessary
 
         nKey = ImpIsEntry(p_Entry->GetFormatstring(),CLOffset, eLge);
-        if (nKey == NUMBERFORMAT_ENTRY_NOT_FOUND) // only in not yet present
+        if (nKey == NUMBERFORMAT_ENTRY_NOT_FOUND) // only if not yet present
         {
             SvNumberformat* pStdFormat = GetFormatEntry(CLOffset + ZF_STANDARD);
             sal_uInt32 nPos = CLOffset + pStdFormat->GetLastInsertKey( SvNumberformat::FormatterPrivateAccess() );

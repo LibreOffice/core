@@ -273,7 +273,7 @@ DECLARE_SHELL_MAILMERGE_TEST(testTdf81750_shell, "tdf81750.odt", "10-testing-add
     // prepare unit test and run
     executeMailMerge();
 
-    // check several pages page
+    // check several pages
     OUString aExpected(u"Text: Foo "_ustr);
     xmlDocUniquePtr pXmlDoc = parseLayoutDump(static_cast<SfxBaseModel*>(mxSwTextDocument.get()));
     assertXPathContent(pXmlDoc, "/root/page[1]/body/txt[2]", aExpected);
@@ -442,7 +442,7 @@ DECLARE_SHELL_MAILMERGE_TEST(testTdf168252, "mm-single-date.fodt", "single-date.
     // Without the fix, this would fail with
     // - Expected: 2025-08-31
     // - Actual  : 2025-09-02
-    // because the DB filed code assumed obsolete null date.
+    // because the DB field code assumed obsolete null date.
     CPPUNIT_ASSERT_EQUAL(u"2025-08-31"_ustr, mxSwTextDocument->getText()->getString());
 }
 

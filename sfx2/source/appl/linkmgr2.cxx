@@ -616,7 +616,7 @@ bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
     LinkManager* pLinkMgr = pLink->GetLinkManager();
     if (pLinkMgr && sfx2::LinkManager::GetDisplayNames(pLink, nullptr, &sTopic, &sItem) && !sTopic.isEmpty())
     {
-        // first only loop over the DocumentShells the shells and find those
+        // first only loop over the DocumentShells and find those
         // with the name:
         CharClass aCC( LanguageTag( LANGUAGE_SYSTEM) );
 

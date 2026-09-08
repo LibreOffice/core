@@ -75,7 +75,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testMathInsertAnchorType)
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
 
-    // When inserting an a math object.
+    // When inserting a math object.
     SwWrtShell* pShell = getSwDocShell()->GetWrtShell();
     SvGlobalName aGlobalName(SO3_SM_CLASSID);
     pShell->InsertObject(svt::EmbeddedObjectRef(), &aGlobalName);

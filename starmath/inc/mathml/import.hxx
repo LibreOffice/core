@@ -65,7 +65,7 @@ public:
     virtual void
     SetViewSettings(const css::uno::Sequence<css::beans::PropertyValue>& aViewProps) override;
 
-    /** Imports configurations settings formula
+    /** Imports configuration settings formula
     */
     virtual void SetConfigurationSettings(
         const css::uno::Sequence<css::beans::PropertyValue>& aViewProps) override;

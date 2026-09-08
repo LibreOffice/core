@@ -3025,6 +3025,6 @@ OUString DecodeSpaces_Impl( const OUString& rSource )
     return sRet;
 }
 
-}   // end of namespace sfx2
+} // namespace sfx2
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

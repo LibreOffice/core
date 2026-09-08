@@ -1004,7 +1004,7 @@ void OServiceManager::insert( const Any & Element )
     if( Element.getValueTypeClass() != TypeClass_INTERFACE )
     {
         throw IllegalArgumentException(
-            "exception interface, got " + Element.getValueTypeName(),
+            "expected interface, got " + Element.getValueTypeName(),
             Reference< XInterface >(), 0 );
     }
     Reference<XInterface > xEle( Element, UNO_QUERY_THROW );
@@ -1279,7 +1279,7 @@ Reference<XInterface > ORegistryServiceManager::loadWithImplementationName(
 }
 
 /**
- * Return all implementation out of the registry.
+ * Return all implementations out of the registry.
  */
 Sequence<OUString> ORegistryServiceManager::getFromServiceName(
     std::u16string_view serviceName ) const

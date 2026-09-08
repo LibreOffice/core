@@ -567,7 +567,7 @@ public:
 
     virtual void UpdateData() override
     {
-        // would possibly only by needed if the XText interface is implemented
+        // would possibly only be needed if the XText interface is implemented
         // and its text needs to be updated.
     }
     virtual SfxBroadcaster& GetBroadcaster() const override
@@ -937,7 +937,7 @@ IMPL_LINK(WeldTextForwarder, NotifyHdl, EENotify&, rNotify, void)
         if (rNotify.eNotificationType == EE_NOTIFY_PROCESSNOTIFICATIONS
             && !pEditEngine->IsUpdateLayout())
         {
-            // tdf#143088 an UpdateMode of false will just to on to cause
+            // tdf#143088 an UpdateMode of false will just go on to cause
             // AccessibleTextHelper_Impl::GetTextForwarder to throw an
             // exception as a Frozen EditEngine is considered Invalid so return
             // early instead

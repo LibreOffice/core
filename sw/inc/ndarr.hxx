@@ -219,7 +219,7 @@ public:
     static SwContentNode* GoPrevSection( SwPosition *, bool bSkipHidden  = true,
                                            bool bSkipProtect = true, bool canCrossBoundary = false );
 
-    /** Create an empty section of Start- and EndNote. It may be called
+    /** Create an empty section of Start- and EndNode. It may be called
        only if a new section with content is to be created,
        e.g. at filters/Undo/... */
     static SwStartNode* MakeEmptySection( const SwNode& rWhere,
@@ -291,7 +291,7 @@ public:
     /// Create regular text from what was table.
     bool TableToText( const SwNodeRange& rRange, sal_Unicode cCh,
                         SwUndoTableToText* );
-    /// Is in untbl.cxx and may called only by Undo-object.
+    /// Is in untbl.cxx and may be called only by Undo-object.
     SwTableNode* UndoTableToText( SwNodeOffset nStt, SwNodeOffset nEnd,
                         const SwTableToTextSaves& rSavedData );
 
@@ -304,7 +304,7 @@ public:
                         sal_uInt16 nInsPos, sal_uInt16 nCnt = 1 );
     /** Splits a table at the base-line which contains the index.
        All base lines behind it are moved to a new table/ -node.
-       Is the flag bCalcNewSize set to TRUE, the new SSize for both
+       If the flag bCalcNewSize is set to TRUE, the new SSize for both
        tables is calculated from the Maximum of the boxes, provided
        SSize is set "absolute" (LONG_MAX).
      */

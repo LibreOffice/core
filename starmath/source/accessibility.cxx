@@ -431,7 +431,7 @@ OUString SAL_CALL SmGraphicAccessible::getTextRange(
         sal_Int32 nEndIndex )
 {
     //!! nEndIndex may be the string length per definition of the interface !!
-    //!! text should be copied exclusive that end index though. And arguments
+    //!! text should be copied exclusive of that end index though. And arguments
     //!! may be switched.
 
     SolarMutexGuard aGuard;
