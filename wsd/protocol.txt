@@ -238,6 +238,12 @@ exportslides [slides=<p0,p1,...>|guids=<g0,g1,...>]
         exportslides: {"status":"written"}\n<the file>
     so a document is reached the same way whichever node serves it.
 
+    One export carries at most 100 MB, as the file travels as one frame and is
+    held in memory whole. The pages are written before their size is known, so
+    a document whose chosen pages come to more than that is answered
+        exportslides: {"status":"failed","kind":"toolarge"}
+    and no file travels with it.
+
     A client of this document sends it through remotedoccommand, to a document
     this one is related to, and wsd takes the reply: it writes the file into the
     staging area of this document's jail and answers the client with the name it

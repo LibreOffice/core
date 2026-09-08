@@ -2390,17 +2390,35 @@ bool ChildSession::exportSlides(const StringVector& tokens)
         guids.empty() ? joinPartIdList(slides) : joinSlideGuidList(guids);
     const bool written = getLOKitDocument()->exportPages(pages.c_str(), url.c_str());
 
+    // Currently the presentation travels as one frame, limit the max size
+    constexpr std::size_t MaxExportSize = 100 * 1024 * 1024;
+
     std::vector<char> answer;
+    bool tooLarge = false;
     if (written)
     {
-        static constexpr std::string_view Header = "exportslides: {\"status\":\"written\"}\n";
-        answer.assign(Header.begin(), Header.end());
-        // A presentation that could not be read back, or that holds nothing, is no answer.
-        if (FileUtil::readFile(path, answer, INT_MAX) <= 0)
-            answer.clear();
+        const FileUtil::Stat exported(path);
+        tooLarge = exported.exists() && exported.size() > MaxExportSize;
+        if (tooLarge)
+        {
+            LOG_ERR("exportslides: the pages of this document come to "
+                    << exported.size() << " bytes, over the " << MaxExportSize
+                    << " one export carries");
+        }
+        else
+        {
+            static constexpr std::string_view Header = "exportslides: {\"status\":\"written\"}\n";
+            answer.assign(Header.begin(), Header.end());
+            // A presentation that could not be read back, or that holds nothing, is no answer.
+            if (FileUtil::readFile(path, answer, static_cast<int>(MaxExportSize)) <= 0)
+                answer.clear();
+        }
     }
 
     FileUtil::removeFile(directory, true);
+
+    if (tooLarge)
+        return sendTextFrame("exportslides: {\"status\":\"failed\",\"kind\":\"toolarge\"}");
 
     if (answer.empty())
     {
