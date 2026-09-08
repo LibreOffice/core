@@ -233,7 +233,7 @@ static tools::Long lcl_Undersize( const SwFrame* pFrame )
     {
         if( static_cast<const SwTextFrame*>(pFrame)->IsUndersized() )
         {
-            // Does this TextFrame would like to be a little bit bigger?
+            // Would this TextFrame like to be a little bit bigger?
             nRet = static_cast<const SwTextFrame*>(pFrame)->GetParHeight() -
                     aRectFnSet.GetHeight(pFrame->getFramePrintArea());
             if( nRet < 0 )

@@ -836,7 +836,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf135083)
 
     auto xLastPara = getParagraph(3);
     CPPUNIT_ASSERT_EQUAL(u"dolor"_ustr, xLastPara->getString());
-    // Without the fix in place, the last paragraph would loose its settings. ListId would be empty.
+    // Without the fix in place, the last paragraph would lose its settings. ListId would be empty.
     CPPUNIT_ASSERT(!getProperty<OUString>(xLastPara, u"ListId"_ustr).isEmpty());
 }
 
@@ -1342,7 +1342,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf158375_ole_object_disable)
 
     // it shouldn't switch because the current configuration
     // (DisableActiveContent) prohibits OLE objects changing to states other
-    // then LOADED
+    // than LOADED
     auto xShape = getShape(1);
     uno::Reference<document::XEmbeddedObjectSupplier2> xEmbedSupplier(xShape, uno::UNO_QUERY);
     auto xEmbeddedObj = xEmbedSupplier->getExtendedControlOverEmbeddedObject();

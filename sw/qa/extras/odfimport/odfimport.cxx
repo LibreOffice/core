@@ -220,7 +220,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDrawImageEmbeddedNotBlocked)
 CPPUNIT_TEST_FIXTURE(Test, testEmptySvgFamilyName)
 {
     createSwDoc("empty-svg-family-name.odt");
-    // .odt import did crash on the empty font list (which I think is valid according SVG spec)
+    // .odt import did crash on the empty font list (which I think is valid according to SVG spec)
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testHideAllSections)

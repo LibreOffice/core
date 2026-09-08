@@ -374,7 +374,7 @@ void DocumentLinksAdministrationManager::SetData( const OUString& rItem )
     return nullptr;
 }
 
-/// embedded all local links (Areas/Graphics)
+/// embeds all local links (Areas/Graphics)
 bool DocumentLinksAdministrationManager::EmbedAllLinks()
 {
     bool bRet = false;

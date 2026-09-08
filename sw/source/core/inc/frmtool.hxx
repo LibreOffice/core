@@ -118,7 +118,7 @@ void SwAlignGrfRect( SwRect *pGrfRect, const vcl::RenderContext &rOut );
 /**
  * Paint border around a run of characters using frame painting code.
  *
- * @param[in]   rFont            font object of actual text, which specify the border
+ * @param[in]   rFont            font object of actual text, which specifies the border
  * @param[in]   rPaintArea       rectangle area in which line portion takes place
  * @param[in]   bVerticalLayout  corresponding text frame verticality
  * @param[in]   bVerticalLayoutLRBT corresponding text frame verticality (LRBT subset)

@@ -527,7 +527,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testFormulaNumberWithGroupSeparator)
     pWrtShell->Down(false);
     pField = pWrtShell->GetCurField();
     CPPUNIT_ASSERT_EQUAL(u"5.000*10%"_ustr, pField->GetFormula());
-    // the problem was that this was
+    // the problem was that this was 0
     CPPUNIT_ASSERT_EQUAL(u"500"_ustr, pField->ExpandField(true, nullptr));
     pWrtShell->Down(false);
     pField = pWrtShell->GetCurField();

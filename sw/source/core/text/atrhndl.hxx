@@ -108,12 +108,12 @@ inline void SwAttrHandler::ResetFont( SwFont& rFnt ) const
     OSL_ENSURE(m_oFnt, "ResetFont without a font");
     if (m_oFnt)
         rFnt = *m_oFnt;
-};
+}
 
 inline const SwFont* SwAttrHandler::GetFont() const
 {
     return m_oFnt ? &*m_oFnt : nullptr;
-};
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

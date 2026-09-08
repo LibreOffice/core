@@ -80,7 +80,7 @@ static void lcl_AdjustPositioningAttr( SwDrawFrameFormat* _pFrameFormat,
                 "<lcl_AdjustPositioningAttr(..)> - anchor frame is a follow." );
         bool bVert = false;
         bool bR2L = false;
-        // #i45952# - use anchor position of anchor frame, if it exist.
+        // #i45952# - use anchor position of anchor frame, if it exists.
         Point aAnchorPos;
         if ( pAnchorFrame )
         {
@@ -93,7 +93,7 @@ static void lcl_AdjustPositioningAttr( SwDrawFrameFormat* _pFrameFormat,
         {
             // #i45952#
             aAnchorPos = _rSdrObj.GetAnchorPos();
-            // If no anchor frame exist - e.g. because no layout exists - the
+            // If no anchor frame exists - e.g. because no layout exists - the
             // default layout direction is taken.
             const SvxFrameDirectionItem& rDirItem =
                 _pFrameFormat->GetAttrSet().GetPool()->GetUserOrPoolDefaultItem( RES_FRAMEDIR );
@@ -166,7 +166,7 @@ static void lcl_AdjustPositioningAttr( SwDrawFrameFormat* _pFrameFormat,
     _pFrameFormat->SetFormatAttr( SwFormatVertOrient( nVertRelPos, text::VertOrientation::NONE, text::RelOrientation::FRAME ) );
     // #i44334#, #i44681# - positioning attributes already set
     _pFrameFormat->PosAttrSet();
-    // #i34750# - keep current object rectangle for  drawing
+    // #i34750# - keep current object rectangle for drawing
     // objects. The object rectangle is used on events from the drawing layer
     // to adjust the positioning attributes - see <SwDrawContact::Changed_(..)>.
     {
@@ -249,7 +249,7 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
                 DelFrameFormat( pFormat );
 
             // #i45952# - re-introduce position normalization of group member
-            // objects, because its anchor position is cleared, when they are
+            // objects, because their anchor position is cleared, when they are
             // grouped.
             Point aAnchorPos( pObj->GetAnchorPos() );
             pObj->NbcSetAnchorPos( Point( 0, 0 ) );
@@ -509,7 +509,7 @@ bool SwDoc::DeleteSelection( SwDrawView& rDrawView )
                     {
                         SwDrawFrameFormat *pFormat = static_cast<SwDrawFrameFormat*>(pContact->GetFormat());
                         // before delete of selection is performed, marked
-                        // <SwDrawVirtObj>-objects have to be replaced by its
+                        // <SwDrawVirtObj>-objects have to be replaced by their
                         // reference objects.  Thus, assert, if a
                         // <SwDrawVirt>-object is found in the mark list.
                         if ( dynamic_cast<const SwDrawVirtObj*>( pObj) !=  nullptr )
@@ -695,7 +695,7 @@ namespace docfunc
                     }
                     else
                     {
-                        // contact object of drawing object doesn't exists.
+                        // contact object of drawing object doesn't exist.
                         // Thus, the drawing object isn't yet positioned.
                         // Thus, it isn't known, if all drawing objects are on page.
                         bAllDrawObjsOnPage = false;

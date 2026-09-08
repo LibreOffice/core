@@ -72,7 +72,7 @@ namespace sw::mark
 
     enum class RestoreMode { Flys = 1, NonFlys = 2, All = 3 };
 
-    /// Takes care of storing relevant attributes of an SwTextNode before split, then restore them on the new node.
+    /// Takes care of storing relevant attributes of an SwTextNode before split, then restoring them on the new node.
     class ContentIdxStore
     {
     public:

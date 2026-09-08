@@ -170,7 +170,7 @@ bool HasNumberingWhichNeedsLayoutUpdate(const SwTextNode& rTextNode);
 } // namespace sw
 
 /// Represents the visualization of a paragraph. Typical upper is an
-/// SwBodyFrame. The first text portion of the first line is az SwParaPortion.
+/// SwBodyFrame. The first text portion of the first line is an SwParaPortion.
 class SW_DLLPUBLIC SwTextFrame final : public SwContentFrame
 {
     friend class SwTextIter;
@@ -271,7 +271,7 @@ class SW_DLLPUBLIC SwTextFrame final : public SwContentFrame
     void ParagraphComposer( SwTextFormatter &rLine, SwTextFormatInfo &rInf,
                   const SvxAdjustItem& rAdjust );
 
-    // In order to safe stack space, we split this method:
+    // In order to save stack space, we split this method:
     // Format_ calls Format_ with parameters
     void FormatImpl( vcl::RenderContext* pRenderContext, SwParaPortion *pPara,
             ::std::vector<SwAnchoredObject *> & rIntersectingObjs);
@@ -798,11 +798,11 @@ public:
     OUString GetCurWord(SwPosition const&) const;
     sal_uInt16 GetScalingOfSelectedText(TextFrameIndex nStt, TextFrameIndex nEnd);
 
-    /// This text frame may have a split fly frames anchored to it. Is any of them a frame that has
+    /// This text frame may have a split fly frame anchored to it. Is any of them a frame that has
     /// a follow, i.e. not the last in a master -> follow 1 -> ... -> last follow chain?
     SwFlyAtContentFrame* HasNonLastSplitFlyDrawObj() const;
 
-    /// This text frame has a follow and the text frame don't contain text. Additionally one split
+    /// This text frame has a follow and the text frame doesn't contain text. Additionally one split
     /// fly is anchored to the text frame.
     bool IsEmptyMasterWithSplitFly() const;
 

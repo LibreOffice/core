@@ -612,7 +612,7 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
     {
         // New: We should have a look into the last portion, if it was a
         // field portion. For this, we expand the text of the field portion
-        // into our string. If the line break position is inside of before
+        // into our string. If the line break position is inside or before
         // the field portion, we trigger an underflow.
 
         TextFrameIndex nOldIdx = rInf.GetIdx();

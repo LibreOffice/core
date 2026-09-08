@@ -674,7 +674,7 @@ bool SwPaM::HasReadonlySel(bool bFormView, bool const isReplace) const
             GetPoint(), &tmp);
     }
 
-    // Will be set if point are inside edit-in-readonly environment
+    // Will be set if point is inside edit-in-readonly environment
     const SwFrame* pPointEditInReadonlyFrame = nullptr;
     if ( pFrame != nullptr
          && ( pFrame->IsProtected()

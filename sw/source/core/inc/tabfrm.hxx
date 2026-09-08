@@ -140,7 +140,7 @@ public:
 
     void JoinAndDelFollows();   // for DelFrames of the TableNodes!
 
-    // calls thr RegistFlys of the rows
+    // calls the RegistFlys of the rows
     void RegistFlys();
 
     inline const SwTabFrame *GetFollow() const;

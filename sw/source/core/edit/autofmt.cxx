@@ -72,8 +72,8 @@
 using namespace ::com::sun::star;
 
 //JP 16.12.99: definition:
-//      from pos cPosEnDash to cPosEmDash all chars changed to em dashes,
-//      from pos cPosEmDash to cPosEnd    all chars changed to em dashes
+//      from pos cnPosEnDash to cnPosEmDash all chars changed to en dashes,
+//      from pos cnPosEmDash to cPosEnd    all chars changed to em dashes
 //      all other chars are changed to the user configuration
 
 const sal_Unicode pBulletChar[6] = { '+', '*', '-', 0x2013, 0x2014, 0 };
@@ -133,7 +133,7 @@ class SwAutoFormat
     }
 
     static bool IsSpace( const sal_Unicode c )
-        { return (' ' == c || '\t' == c || 0x0a == c|| 0x3000 == c /* Jap. space */); }
+        { return (' ' == c || '\t' == c || 0x0a == c || 0x3000 == c /* Jap. space */); }
 
     void SetColl( SwPoolFormatId nId, bool bHdLineOrText = false );
     void GoNextPara();

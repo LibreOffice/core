@@ -293,7 +293,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf159026)
 
     // undo tracked table deletion
 
-    // This resulted crashing
+    // This resulted in crashing
     dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
 }
 
@@ -606,7 +606,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf148791)
     dispatchCommand(mxComponent, u".uno:PasteRowsBefore"_ustr, {});
 
     pXmlDoc = parseLayoutDump();
-    // repeating table header (and its thead/tbody indentation) doesn't effect row number
+    // repeating table header (and its thead/tbody indentation) doesn't affect row number
     assertXPath(pXmlDoc, "/root/page[1]/body/tab/row", 32);
     // there are two nested tables after the paste
     assertXPath(pXmlDoc, "/root/page[1]/body/tab/row/cell/tab", 4);
@@ -1477,7 +1477,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf107893)
     pTxBxFrm = SwTextBoxHelper::getOtherTextBoxFormat(getShape(1));
 
     //This was nullptr because of unsuccessful re-adding
-    CPPUNIT_ASSERT_MESSAGE("Textbox cannot be readd after Undo!", pTxBxFrm);
+    CPPUNIT_ASSERT_MESSAGE("Textbox cannot be re-added after Undo!", pTxBxFrm);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf121031)
@@ -1671,7 +1671,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf139566)
     uno::Reference<frame::XFrames> xFrames = mxDesktop->getFrames();
     sal_Int32 nFrames = xFrames->getCount();
 
-    // Create a second window so the first window looses focus
+    // Create a second window so the first window loses focus
     dispatchCommand(mxComponent, u".uno:NewWindow"_ustr, {});
 
     CPPUNIT_ASSERT_EQUAL(nFrames + 1, xFrames->getCount());
@@ -2480,7 +2480,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, AtPageTextBoxCrash)
         u"AnchorType"_ustr, uno::Any(text::TextContentAnchorType::TextContentAnchorType_AT_PAGE));
 
     // The page anchored objects must not have content anchor
-    // unless this will lead to crash later, for example on
+    // otherwise this will lead to crash later, for example on
     // removing the paragraph where it is anchored to...
     CPPUNIT_ASSERT_EQUAL(RndStdIds::FLY_AT_PAGE, pTxBxFrm->GetAnchor().GetAnchorId());
     CPPUNIT_ASSERT(!pTxBxFrm->GetAnchor().GetAnchorNode());
@@ -3159,7 +3159,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testCursorPositionAfterUndo)
     // select the word
     dispatchCommand(mxComponent, u".uno:SelectWord"_ustr, {});
 
-    // check the word is select
+    // check the word is selected
     SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
     CPPUNIT_ASSERT_EQUAL(u"tincidunt"_ustr, pShellCursor->GetText());
 

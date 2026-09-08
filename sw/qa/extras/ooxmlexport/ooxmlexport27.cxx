@@ -95,7 +95,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf163178_columnbreakInTable)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf171527_flyInFramePr)
 {
-    // given a with a framePr'd image anchoring a drawing shape
+    // given a document with a framePr'd image anchoring a drawing shape
     createSwDoc("tdf171527_flyInFramePr.doc");
 
     save(TestFilter::DOCX);

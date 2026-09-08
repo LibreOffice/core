@@ -540,7 +540,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest11, testTdf163194)
 {
     // Test (1) that exporting comments in margin to PDF produces expected layout of the comments,
     // that have limited and reasonable width and position, inside the page bounds (and close to
-    // its right side), independent on the manually set comment sidebar width; and (2) that the
+    // its right side), independent of the manually set comment sidebar width; and (2) that the
     // export doesn't change the annotation sizes in the document.
 
     // Annotation size depends on DisplayWidthFactor. Set it to a fixed value for testing.

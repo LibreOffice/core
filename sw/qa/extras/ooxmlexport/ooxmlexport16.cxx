@@ -103,7 +103,7 @@ CPPUNIT_TEST_FIXTURE(Test, testWrapPolygonCustomShape)
     xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDocument);
     // Expected coordinates are 0|10800, 8936|8936, 10800|0, 12664|8936, 21600|10800, 12664|12664,
-    // 10800|21600, 8936|12664, 0|10800. Assert forth point, which comes from equations. Allow some
+    // 10800|21600, 8936|12664, 0|10800. Assert fourth point, which comes from equations. Allow some
     // tolerance.
     sal_Int32 nXCoord = getXPath(pXmlDocument, "(//wp:lineTo)[3]", "x").toInt32();
     // Without fix it would fail with expected 12664, actual 3
