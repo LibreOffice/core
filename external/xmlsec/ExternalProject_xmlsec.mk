@@ -9,9 +9,10 @@
 
 $(eval $(call gb_ExternalProject_ExternalProject,xmlsec))
 
+# On Windows xmlsec builds against the platform's own cryptography library.
 $(eval $(call gb_ExternalProject_use_externals,xmlsec,\
     libxml2 \
-    $(if $(ENABLE_NSS),nss3,$(if $(ENABLE_OPENSSL),openssl)) \
+    $(if $(filter WNT,$(OS)),,$(if $(ENABLE_NSS),nss3,$(if $(ENABLE_OPENSSL),openssl))) \
 ))
 
 $(eval $(call gb_ExternalProject_register_targets,xmlsec,\
