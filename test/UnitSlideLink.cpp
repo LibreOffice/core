@@ -396,6 +396,14 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkErrors()
         helpers::assertErrorReply(socket, insertCommand("slides=0 link=1", /*named=*/false),
                                   "slideimport", "nosource", testname);
 
+        // A file is staged for one insert, and an insert the document cannot make sense of
+        // takes it all the same, so the insert that follows reaches nothing.
+        stageSource(socket, documentURL, "source.odp");
+        helpers::assertErrorReply(socket, insertCommand("slides=0 bogus=1"),
+                                  "slideimport", "syntax", testname);
+        helpers::assertErrorReply(socket, insertCommand("slides=0"),
+                                  "slideimport", "cantload", testname);
+
         // An update names a file the server staged, so one naming a file that was never
         // staged reaches nothing.
         helpers::assertErrorReply(socket,
@@ -421,6 +429,15 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkErrors()
                                      " file=nosuchfile.odp",
                          "failed", std::string(" source=") + EncodedSourceName);
         assertErrorAsWsd(socket, "slidelink update source=deck.odp", "syntax");
+
+        // A source is the name of a document, so one holding a path is refused, and the file
+        // staged for that refresh goes with it: the refresh that follows reaches nothing.
+        stageSource(socket, documentURL, "staged.odp");
+        assertErrorAsWsd(socket, "slidelink update source=deck%2Fsales.odp file=staged.odp",
+                         "syntax", " source=deck%2Fsales.odp");
+        assertErrorAsWsd(socket, std::string("slidelink update source=") + EncodedSourceName +
+                                     " file=staged.odp",
+                         "failed", std::string(" source=") + EncodedSourceName);
 
         // None of the failures changed the document, which still holds one
         // slide and no link at all.

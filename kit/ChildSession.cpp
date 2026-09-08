@@ -2484,6 +2484,37 @@ bool ChildSession::slideImportInsert(const StringVector& tokens)
         }
     }
 
+    // The name of the staged file is read on its own and before the rest of the command, so
+    // that the file it names is owned from here on and goes whatever the rest comes to.
+    std::string name;
+    if (haveName)
+    {
+        try
+        {
+            URI::decode(encodedName, name);
+        }
+        catch (const Poco::Exception& exc)
+        {
+            LOG_ERR("slideimport insert: cannot decode the staged name: " << exc.displayText());
+            name.clear();
+        }
+    }
+
+    // The pages come from a file staged in the jail, picked out of the staging area by name,
+    // so the name is a plain file name: no path separator and not a directory reference. A
+    // name of any other shape names nothing in the staging area.
+    if (!Util::isPlainFileName(name))
+    {
+        sendTextFrameAndLogError("error: cmd=slideimport kind=syntax");
+        return false;
+    }
+
+    // The file was staged for this one insert, so it leaves the staging area when this call
+    // returns, whether the insert runs or not.
+    const FileUtil::OwnedFile stagedFile(getJailDocRoot() + "insertfile/" + name,
+                                         /*recursive=*/true);
+    const std::string& sharedStagedPath = stagedFile._file;
+
     std::vector<int> slides;
     if (!slideList.empty() && !parseSlideIndexList(slideList, slides))
         malformed = true;
@@ -2492,14 +2523,12 @@ bool ChildSession::slideImportInsert(const StringVector& tokens)
     if (!sourcePositionList.empty() && !parseSlideIndexList(sourcePositionList, sourcePositions))
         malformed = true;
 
-    std::string name;
     std::string source;
     std::string lastModifiedTime;
-    if (!malformed && haveName)
+    if (!malformed)
     {
         try
         {
-            URI::decode(encodedName, name);
             URI::decode(encodedSource, source);
             URI::decode(encodedTime, lastModifiedTime);
         }
@@ -2510,9 +2539,7 @@ bool ChildSession::slideImportInsert(const StringVector& tokens)
         }
     }
 
-    // The pages come from a file staged in the jail, picked out of the staging area by name,
-    // so the name is a plain file name: no path separator and not a directory reference.
-    if (malformed || !haveName || !Util::isPlainFileName(name))
+    if (malformed)
     {
         sendTextFrameAndLogError("error: cmd=slideimport kind=syntax");
         return false;
@@ -2533,14 +2560,9 @@ bool ChildSession::slideImportInsert(const StringVector& tokens)
         return false;
     }
 
-    // The file was staged for this one insert, so it leaves the staging area now, whether the
-    // insert runs or not.
-    const std::string sharedStagedPath = getJailDocRoot() + "insertfile/" + name;
-
     // An insert adds pages to the document, which a view that cannot edit does not do.
     if (isReadOnly())
     {
-        FileUtil::removeFile(sharedStagedPath, true);
         LOG_ERR("slideimport insert: a read-only view does not insert slides");
         sendTextFrameAndLogError("error: cmd=slideimport kind=failure");
         return false;
@@ -2565,13 +2587,11 @@ bool ChildSession::slideImportInsert(const StringVector& tokens)
             << JsonUtil::escapeJSONValue(source) << "\",\"lastModifiedTime\":\""
             << JsonUtil::escapeJSONValue(lastModifiedTime) << "\"}";
 
-    // The document reads the staged file within this call, so the file goes as soon as it
-    // returns: the pages of it belong to the document from then on.
+    // The document reads the staged file within this call, so the pages of it belong to the
+    // document from here on and the file itself is wanted no longer.
     const std::string url = Poco::URI(Poco::Path(sharedStagedPath)).toString();
     const bool inserted =
         getLOKitDocument()->insertPagesFromFile(url.c_str(), options.str().c_str());
-
-    FileUtil::removeFile(sharedStagedPath, true);
 
     if (!inserted)
     {
@@ -2645,32 +2665,7 @@ bool ChildSession::slideLinkUpdate(const StringVector& tokens)
     std::string encodedTime;
     if ((tokens.size() != 4 && tokens.size() != 5) ||
         !getTokenString(tokens[2], "source", encodedSource) ||
-        !getTokenString(tokens[3], "file", encodedFile) ||
-        (tokens.size() == 5 && !getTokenString(tokens[4], "time", encodedTime)))
-    {
-        sendTextFrameAndLogError("error: cmd=slidelink kind=syntax");
-        return false;
-    }
-
-    std::string source;
-    std::string file;
-    std::string lastModifiedTime;
-    try
-    {
-        URI::decode(encodedSource, source);
-        URI::decode(encodedFile, file);
-        URI::decode(encodedTime, lastModifiedTime);
-    }
-    catch (const Poco::Exception& exc)
-    {
-        LOG_ERR("slidelink update: cannot decode the source or the file: " << exc.displayText());
-        sendTextFrameAndLogError("error: cmd=slidelink kind=syntax");
-        return false;
-    }
-
-    // A refresh covers the pages of one source document, named by the document
-    // name the pages record.
-    if (!Util::isPlainFileName(source) || Util::holdsControlCharacter(source))
+        !getTokenString(tokens[3], "file", encodedFile))
     {
         sendTextFrameAndLogError("error: cmd=slidelink kind=syntax");
         return false;
@@ -2681,9 +2676,24 @@ bool ChildSession::slideLinkUpdate(const StringVector& tokens)
     // from those of another.
     const std::string named = " source=" + encodedSource;
 
+    // The name of the staged file is read on its own and before the rest of the command, so
+    // that the file it names is owned from here on and goes whatever the rest comes to.
+    std::string file;
+    try
+    {
+        URI::decode(encodedFile, file);
+    }
+    catch (const Poco::Exception& exc)
+    {
+        LOG_ERR("slidelink update: cannot decode the file: " << exc.displayText());
+        sendTextFrameAndLogError("error: cmd=slidelink kind=syntax" + named);
+        return false;
+    }
+
     // The pages are read from a file staged in the jail, picked out of the
     // staging area by name, so the name is a plain file name: no path separator
-    // and not a directory reference.
+    // and not a directory reference. A name of any other shape names nothing in
+    // the staging area.
     if (!Util::isPlainFileName(file))
     {
         sendTextFrameAndLogError("error: cmd=slidelink kind=syntax" + named);
@@ -2691,13 +2701,42 @@ bool ChildSession::slideLinkUpdate(const StringVector& tokens)
     }
 
     // The file was staged for this one refresh, so it leaves the staging area
-    // now, whether the refresh runs or not.
-    const std::string sharedStagedPath = getJailDocRoot() + "insertfile/" + file;
+    // when this call returns, whether the refresh runs or not.
+    const FileUtil::OwnedFile stagedFile(getJailDocRoot() + "insertfile/" + file,
+                                         /*recursive=*/true);
+    const std::string& sharedStagedPath = stagedFile._file;
+
+    if (tokens.size() == 5 && !getTokenString(tokens[4], "time", encodedTime))
+    {
+        sendTextFrameAndLogError("error: cmd=slidelink kind=syntax" + named);
+        return false;
+    }
+
+    std::string source;
+    std::string lastModifiedTime;
+    try
+    {
+        URI::decode(encodedSource, source);
+        URI::decode(encodedTime, lastModifiedTime);
+    }
+    catch (const Poco::Exception& exc)
+    {
+        LOG_ERR("slidelink update: cannot decode the source or the time: " << exc.displayText());
+        sendTextFrameAndLogError("error: cmd=slidelink kind=syntax" + named);
+        return false;
+    }
+
+    // A refresh covers the pages of one source document, named by the document
+    // name the pages record.
+    if (!Util::isPlainFileName(source) || Util::holdsControlCharacter(source))
+    {
+        sendTextFrameAndLogError("error: cmd=slidelink kind=syntax" + named);
+        return false;
+    }
 
     // A refresh replaces pages of the document, which is an edit.
     if (isReadOnly())
     {
-        FileUtil::removeFile(sharedStagedPath, true);
         LOG_ERR("slidelink update: a read-only view does not refresh links");
         sendTextFrameAndLogError("error: cmd=slidelink kind=failed" + named);
         return false;
@@ -2714,15 +2753,13 @@ bool ChildSession::slideLinkUpdate(const StringVector& tokens)
 
     getLOKitDocument()->setView(_viewId);
 
-    // The document reads the staged file within this call, so the file goes as soon as it
-    // returns. Each page records the source document it belongs to, and a later refresh of
+    // The document reads the staged file within this call, so the file itself is wanted no
+    // longer. Each page records the source document it belongs to, and a later refresh of
     // that source reads the file it is given then.
     const std::string url = Poco::URI(Poco::Path(sharedStagedPath)).toString();
     std::string notUpdated;
     const int count = getLOKitDocument()->refreshSlideLinks(
         source.c_str(), url.c_str(), lastModifiedTime.c_str(), &notUpdated);
-
-    FileUtil::removeFile(sharedStagedPath, true);
 
     if (count < 0)
     {
