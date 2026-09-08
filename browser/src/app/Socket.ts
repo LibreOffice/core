@@ -294,6 +294,13 @@ class Socket {
 
 	public connect(socket: SockInterface): void {
 		const map = this._map;
+		// Keep the connection that is still opening. It reports itself as not connected
+		// until it settles, so a caller that asks again in that window gets the one that
+		// is already in flight.
+		if (!socket && this.socket && this.socket.readyState === 0) {
+			window.app.console.debug('connect: a connection is already opening');
+			return;
+		}
 		map._docHasPasswordToModify = false;
 		map._modifyPasswordProvided = false;
 		map.options.docParams['permission'] = app.getPermission();
