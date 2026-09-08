@@ -479,33 +479,40 @@ class Dispatcher {
 			focus: () => focusFirstIn(document.getElementById('toolbar-up')),
 		};
 
+		const formulaBarRow = () => document.getElementById('formulabar-row');
+
+		const formulaBarWidgets = () => {
+			const row = formulaBarRow();
+			if (!row) return [];
+			return Array.from(
+				row.querySelectorAll<HTMLElement>(
+					'input:not([disabled]), button:not([disabled]), [tabindex="0"]',
+				),
+			).filter((element) => element.offsetParent !== null);
+		};
+
 		const formulaBar = {
 			name: 'formulaBar',
 			available: () =>
 				!app.isReadOnly() &&
 				isVisible(document.getElementById('sc_input_window')),
 			hasFocus: () =>
-				contains(document.getElementById('formulabar-row')) ||
-				app.map.calcInputBarHasFocus(),
-			focus: () => {
-				const row = document.getElementById('formulabar-row');
-				const focusables = row
-					? Array.from(
-							row.querySelectorAll<HTMLElement>(
-								'input:not([disabled]), button:not([disabled]), [tabindex="0"]',
-							),
-						)
-					: [];
-				for (const element of focusables) {
-					if (element.offsetParent !== null) {
-						element.focus();
-						return true;
-					}
-				}
-				return false;
-			},
+				app.map.calcInputBarHasFocus() && !contains(formulaBarRow()),
+			focus: () => !!(app.map.formulabar && app.map.formulabar.focus()),
 			blur: () => {
 				if (app.map.formulabar) app.map.onFormulaBarBlur();
+			},
+		};
+
+		const formulaBarToolbar = {
+			name: 'formulaBarToolbar',
+			available: () => formulaBarWidgets().length > 0,
+			hasFocus: () => contains(formulaBarRow()),
+			focus: () => {
+				const widgets = formulaBarWidgets();
+				if (!widgets.length) return false;
+				widgets[0].focus();
+				return true;
 			},
 		};
 
@@ -590,7 +597,10 @@ class Dispatcher {
 
 		const regions = [topBar];
 		regions.push(topToolbar);
-		if (docType === 'spreadsheet') regions.push(formulaBar);
+		if (docType === 'spreadsheet') {
+			regions.push(formulaBar);
+			regions.push(formulaBarToolbar);
+		}
 		regions.push(navigationSidebar);
 		regions.push(documentArea);
 		regions.push(sidebar);

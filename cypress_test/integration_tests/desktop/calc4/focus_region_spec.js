@@ -1,4 +1,4 @@
-/* global describe it cy beforeEach require */
+/* global describe it cy beforeEach expect require */
 
 var helper = require('../../common/helper');
 var desktopHelper = require('../../common/desktop_helper');
@@ -6,9 +6,12 @@ var calcHelper = require('../../common/calc_helper');
 var a11yHelper = require('../../common/a11y_helper');
 
 // F6 cycles keyboard focus through the spreadsheet regions in this order:
-// notebookbar -> formula bar -> sheet grid -> sidebar -> sheet-name tabs ->
-// status bar, wrapping around. Shift+F6 goes the other way.
+// notebookbar -> formula bar -> the widgets beside it -> sheet grid ->
+// sidebar -> sheet-name tabs -> status bar, wrapping around. Shift+F6 goes
+// the other way.
 describe(['tagdesktop'], 'Calc F6 region navigation', function () {
+	let win;
+
 	beforeEach(function () {
 		helper.setupAndLoadDocument('calc/focus.ods');
 		desktopHelper.switchUIToNotebookbar();
@@ -21,7 +24,8 @@ describe(['tagdesktop'], 'Calc F6 region navigation', function () {
 
 		// let the sidebar's own focus-grab settle before we anchor focus
 		// elsewhere, so it cannot steal it back mid-test
-		cy.getFrameWindow().then(function (win) {
+		cy.getFrameWindow().then(function (frameWindow) {
+			win = frameWindow;
 			helper.waitUntilLayoutingIsIdle(win);
 			helper.waitForTimers(win, 'sidebarstealfocus');
 		});
@@ -33,10 +37,21 @@ describe(['tagdesktop'], 'Calc F6 region navigation', function () {
 
 	function assertGridFocused() {
 		helper.assertFocus('className', 'clipboard');
+		cy.wrap(null, { timeout: 4000 }).should(function () {
+			expect(win.app.map.calcInputBarHasFocus(),
+				'the grid, not the formula bar').to.be.false;
+		});
 	}
 
-	// F6 lands on the first control of the formula bar row, the Name Box.
 	function assertFormulaBarFocused() {
+		cy.wrap(null, { timeout: 4000 }).should(function () {
+			expect(win.app.map.calcInputBarHasFocus(),
+				'the formula bar holds the focus').to.be.true;
+		});
+		cy.cGet('#formulabar-row .ui-custom-textarea.focused').should('exist');
+	}
+
+	function assertFormulaBarWidgetsFocused() {
 		a11yHelper.assertFocusWithin('#formulabar-row');
 	}
 
@@ -62,10 +77,16 @@ describe(['tagdesktop'], 'Calc F6 region navigation', function () {
 		assertFormulaBarFocused();
 
 		cy.realPress('F6');
+		assertFormulaBarWidgetsFocused();
+
+		cy.realPress('F6');
 		assertGridFocused();
 	});
 
 	it('Shift+F6 walks the regions in reverse', function () {
+		cy.realPress(['Shift', 'F6']);
+		assertFormulaBarWidgetsFocused();
+
 		cy.realPress(['Shift', 'F6']);
 		assertFormulaBarFocused();
 
