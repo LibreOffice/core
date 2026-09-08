@@ -16,6 +16,15 @@
 
 // Runs in the kit (QuickJS with UNO): apply a batch of operations to the
 // active Writer document. Must stay self-contained - only its source is sent.
+//
+// TODO: this uses the legacy com.sun.star UNO API directly. Port each use to
+// the cool/cpo facade, or better to the GAS-compatible replacement, once those
+// cover what LibreLogo needs. Touchpoints to migrate:
+//   - createInstance('com.sun.star.text.TextGraphicObject') (replaceCanvas, insertAtCursor)
+//   - css.io.TempFile, css.graphic.GraphicProvider (loadGraphic)
+//   - css.beans.PropertyValue / PropertyState (loadGraphic)
+//   - css.text.* enums: TextContentAnchorType, HoriOrientation, VertOrientation,
+//     RelOrientation, WrapTextMode (replaceCanvas, insertAtCursor)
 function kitApply(ops) {
 	const PT_TO_MM100 = 2540 / 72;
 	function utf8(str) {
@@ -166,6 +175,8 @@ function kitProgramText() {
 	return { text: doc.getBody().getText(), selection: false };
 }
 
+// Queues document operations from the panel and ships them to the kit in
+// batches, one flush at a time.
 export class KitBridge {
 	constructor(options) {
 		this.maxOpsPerCall = (options && options.maxOpsPerCall) || 100;
@@ -177,22 +188,29 @@ export class KitBridge {
 		this.queue.push(op);
 	}
 
-	// Send the queued operations, at most maxOpsPerCall per round trip, in order.
+	// Send the queued operations, at most maxOpsPerCall per round trip, in
+	// order. Concurrent callers are serialized: each flush claims the ops that
+	// are queued when it is called (so results map to the caller's own ops) and
+	// waits for the previous flush to finish before sending, so batches from
+	// overlapping flush() calls never interleave or race on this.flushing.
 	async flush() {
-		if (this.flushing) await this.flushing;
-		this.flushing = (async () => {
+		// Claim the current queue synchronously; a later flush() gets a fresh one.
+		const mine = this.queue;
+		this.queue = [];
+		const prev = this.flushing;
+		let done;
+		this.flushing = new Promise((resolve) => { done = resolve; });
+		try {
+			if (prev) await prev;
 			const results = [];
-			while (this.queue.length) {
-				const batch = this.queue.splice(0, this.maxOpsPerCall);
+			for (let i = 0; i < mine.length; i += this.maxOpsPerCall) {
+				const batch = mine.slice(i, i + this.maxOpsPerCall);
 				const r = await window.cool.callRemote(kitApply, batch);
 				if (Array.isArray(r)) results.push(...r);
 			}
 			return results;
-		})();
-		try {
-			return await this.flushing;
 		} finally {
-			this.flushing = null;
+			done();
 		}
 	}
 
