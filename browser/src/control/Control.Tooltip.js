@@ -48,15 +48,16 @@ class Tooltip {
 		);
 	}
 
-	beginHide(elem) {
+	beginHide() {
 		if (this._cancel || this._disabled || this._locked) return;
 
 		app.timerRegistry.clearTimeout(this._showTimeout);
 		app.timerRegistry.clearTimeout(this._hideTimeout);
+		// Armed for what is on screen, not for what the pointer left.
 		if (this._current)
 			this._hideTimeout = app.timerRegistry.setTimeout(
 				'tooltip',
-				window.L.bind(this.hide, this, elem),
+				window.L.bind(this.hide, this, this._current),
 				this._options.timeout / 2,
 			);
 	}
@@ -211,8 +212,16 @@ class Tooltip {
 		this._current = elem;
 	}
 
-	hide() {
+	hide(elem) {
 		if (this._cancel || this._locked) return;
+		// Stale for another live widget; a rebuilt widget leaves a detached node.
+		if (
+			elem &&
+			elem !== this._current &&
+			this._current &&
+			this._current.isConnected
+		)
+			return;
 
 		this._container.style.visibility = 'hidden';
 		this._current = null;
@@ -257,7 +266,7 @@ class Tooltip {
 			map.tooltip.beginShow(elem);
 		});
 		elem.addEventListener('mouseleave', function () {
-			map.tooltip.beginHide(elem);
+			map.tooltip.beginHide();
 		});
 		elem.addEventListener('click', function () {
 			map.tooltip.mouseLeave();
