@@ -52,7 +52,7 @@ class WindowController: NSWindowController {
     /// Track menu states here, to be able to show the state in the menu
     var commandState: [String: String] = [:]
 
-    /// Remember the new command state value as provided by JS.
+    /// Remember the new command state value as reported by the engine.
     func handleCommandStateChange(_ stateChange: CommandStateChange) {
         // extract the command name from the ".uno:CommandName" form
         let unoCommmandName = stateChange.commandName

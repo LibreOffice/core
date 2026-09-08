@@ -631,6 +631,10 @@ class Document: NSDocument {
         return msgStr.prefix(100) + (msgStr.count > 100 ? "..." : "")
     }
 
+    /// The prefixes of the engine messages the save handling reads for itself.
+    private static let stateChangedPrefix = "statechanged: "
+    private static let unoCommandResultPrefix = "unocommandresult:"
+
     /// Whether the message in the buffer starts with the given prefix.
     private func message(_ buffer: UnsafePointer<CChar>, length: Int,
                          hasPrefix prefix: String) -> Bool {
@@ -638,20 +642,30 @@ class Document: NSDocument {
         return length > prefixLength && strncmp(buffer, prefix, prefixLength) == 0
     }
 
-    /**
-     * Reads a statechanged message. The engine sends the state as "<command>=<value>".
-     * A JSON form carrying the same members is in use elsewhere, so accept that too.
-     */
-    private func stateChange(from message: String) -> CommandStateChange? {
-        let prefix = "statechanged: "
-        guard message.hasPrefix(prefix) else {
-            return nil
-        }
-        let payload = message.dropFirst(prefix.count)
-            .trimmingCharacters(in: .whitespacesAndNewlines)
+    /// The message in the buffer as a string.
+    private func message(_ buffer: UnsafePointer<CChar>, length: Int) -> String {
+        return String(
+            decoding: UnsafeRawBufferPointer(start: UnsafeRawPointer(buffer), count: length),
+            as: UTF8.self)
+    }
 
-        if payload.hasPrefix("{") {
-            return try? JSONDecoder().decode(CommandStateChange.self, from: Data(payload.utf8))
+    /**
+     * Reads a statechanged message's payload, that is, the message with its prefix
+     * dropped. The engine sends the state as "<command>=<value>", and as a JSON
+     * object carrying the same members for the commands whose state does not fit
+     * that form.
+     *
+     * The page reads the same payload in _onStateChangedMsg(), and this follows it:
+     * the whitespace trimming only decides whether to read the payload as JSON and
+     * is not carried into the state, and a payload that looks like JSON but does not
+     * decode still gets split on the "=".
+     */
+    private func stateChange(fromPayload payload: String) -> CommandStateChange? {
+        let trimmed = payload.trimmingCharacters(in: .whitespacesAndNewlines)
+        if trimmed.hasPrefix("{"), trimmed.hasSuffix("}"),
+           let change = try? JSONDecoder().decode(CommandStateChange.self,
+                                                  from: Data(trimmed.utf8)) {
+            return change
         }
         guard let equals = payload.firstIndex(of: "=") else {
             return nil
@@ -675,10 +689,9 @@ class Document: NSDocument {
      * state of menu items.
      */
     private func handleStateChanged(buffer: UnsafePointer<CChar>, length: Int) {
-        let message = String(
-            decoding: UnsafeRawBufferPointer(start: UnsafeRawPointer(buffer), count: length),
-            as: UTF8.self)
-        guard let change = stateChange(from: message) else {
+        let payload = String(message(buffer, length: length)
+            .dropFirst(Document.stateChangedPrefix.count))
+        guard let change = stateChange(fromPayload: payload) else {
             return
         }
 
@@ -699,12 +712,10 @@ class Document: NSDocument {
      * then. Only the .uno:Save result is handled so far.
      */
     private func handleUnoCommandResult(buffer: UnsafePointer<CChar>, length: Int) {
-        let message = String(
-            decoding: UnsafeRawBufferPointer(start: UnsafeRawPointer(buffer), count: length),
-            as: UTF8.self)
-        guard let brace = message.firstIndex(of: "{"),
+        let text = message(buffer, length: length)
+        guard let brace = text.firstIndex(of: "{"),
               let result = try? JSONDecoder().decode(
-                  CommandResult.self, from: Data(message[brace...].utf8)) else {
+                  CommandResult.self, from: Data(text[brace...].utf8)) else {
             return
         }
 
@@ -733,10 +744,10 @@ class Document: NSDocument {
         // order the engine sent them, which is what lets the state a save result is
         // judged against be the state that came with it.
         if !binaryMessage {
-            if message(buffer, length: length, hasPrefix: "unocommandresult:") {
+            if message(buffer, length: length, hasPrefix: Document.unoCommandResultPrefix) {
                 handleUnoCommandResult(buffer: buffer, length: length)
             }
-            else if message(buffer, length: length, hasPrefix: "statechanged:") {
+            else if message(buffer, length: length, hasPrefix: Document.stateChangedPrefix) {
                 handleStateChanged(buffer: buffer, length: length)
             }
         }
