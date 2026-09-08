@@ -561,7 +561,7 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testEveryObjectKeepsItsEntry)
 }
 
 // A change to a shape inside a group must mark the top-level group as
-// changed, so a delta carries the group's new content.
+// changed, so a delta carries the group together with its members.
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testDeltaCarriesGroupOnMemberChange)
 {
     createBlankDoc();
@@ -578,9 +578,155 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testDeltaCarriesGroupOnMemberChange)
 
     auto aDelta = getVectorPrimitives(u"testGroupDelta", nVersion);
     assertJsonPath(aDelta, "/type", "vectorprimitivesdelta");
-    CPPUNIT_ASSERT_EQUAL(size_t(1), aDelta.getSize("/objects").value_or(0));
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int64>(pGroup->GetUniqueID()),
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aDelta.getSize("/objects").value_or(0));
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(pGroup->GetUniqueID()),
                          aDelta.getInt("/objects/0/id").value_or(-1));
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(pMember->GetUniqueID()),
+                         aDelta.getInt("/objects/1/id").value_or(-1));
+}
+
+// A group is one entry and each member another, the members right after the
+// group in the order, each naming the group as its parent. The members draw
+// the group's content, so the group entry paints nothing itself.
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testGroupMembersAreOwnEntries)
+{
+    createBlankDoc();
+    SdrObject* pMember = addGroupedRectangle(
+        tools::Rectangle(Point(1000, 1000), Size(3000, 2000)), Color(0x4472c4));
+    SdrObject* pGroup = page(1)->GetObj(0);
+
+    auto aFull = getVectorPrimitives(u"testGroupMembers");
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aFull.getSize("/objects").value_or(0));
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(pGroup->GetUniqueID()),
+                         aFull.getInt("/objects/0/id").value_or(-1));
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(0), aFull.getInt("/objects/0/parent").value_or(-1));
+    CPPUNIT_ASSERT_EQUAL(size_t(0), aFull.getSize("/objects/0/primitives").value_or(SIZE_MAX));
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(pMember->GetUniqueID()),
+                         aFull.getInt("/objects/1/id").value_or(-1));
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(pGroup->GetUniqueID()),
+                         aFull.getInt("/objects/1/parent").value_or(-1));
+    CPPUNIT_ASSERT(aFull.getSize("/objects/1/primitives").value_or(0) > 0);
+
+    // The order of a delta lists the member as well.
+    const sal_Int64 nVersion = aFull.getInt("/version").value_or(-1);
+    auto aDelta = getVectorPrimitives(u"testGroupMembersDelta", nVersion);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aDelta.getSize("/order").value_or(0));
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(pGroup->GetUniqueID()),
+                         aDelta.getInt("/order/0").value_or(-1));
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(pMember->GetUniqueID()),
+                         aDelta.getInt("/order/1").value_or(-1));
+}
+
+// Every entry carries where the object paints and how the unit rectangle
+// maps onto it, both in twips.
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testObjectEntryCarriesGeometry)
+{
+    createBlankDoc();
+    // No border, so the painted rectangle is the fill alone.
+    addTransparentRectangle(tools::Rectangle(Point(1000, 2000), Size(4000, 3000)),
+                            Color(0x4472c4), 0);
+
+    auto aJson = getVectorPrimitives(u"testObjectGeometry");
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aJson.getSize("/objects").value_or(0));
+
+    // 1/100 mm to twips is 1440 / 2540.
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(567), aJson.getInt("/objects/0/x").value_or(-1));
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(1134), aJson.getInt("/objects/0/y").value_or(-1));
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(2268), aJson.getInt("/objects/0/width").value_or(-1));
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(1701), aJson.getInt("/objects/0/height").value_or(-1));
+
+    // An unrotated rectangle scales the unit square to its size and moves it
+    // to its top-left corner.
+    CPPUNIT_ASSERT_EQUAL(size_t(6), aJson.getSize("/objects/0/transform").value_or(0));
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2267.7, aJson.getDouble("/objects/0/transform/0").value_or(0),
+                                 0.1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, aJson.getDouble("/objects/0/transform/1").value_or(1),
+                                 0.001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, aJson.getDouble("/objects/0/transform/2").value_or(1),
+                                 0.001);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1700.8, aJson.getDouble("/objects/0/transform/3").value_or(0),
+                                 0.1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(566.9, aJson.getDouble("/objects/0/transform/4").value_or(0),
+                                 0.1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1133.9, aJson.getDouble("/objects/0/transform/5").value_or(0),
+                                 0.1);
+}
+
+// A rotation shows up in the transform, while the painted rectangle stays
+// the axis-aligned box around the rotated shape.
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testRotatedObjectTransform)
+{
+    createBlankDoc();
+    addRotatedRectangle(tools::Rectangle(Point(5000, 5000), Size(4000, 4000)), Color(0x4472c4),
+                        Degree100(9000));
+
+    auto aJson = getVectorPrimitives(u"testRotatedTransform");
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aJson.getSize("/objects").value_or(0));
+
+    // A quarter turn puts the whole scale into the off-diagonal entries.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, aJson.getDouble("/objects/0/transform/0").value_or(1),
+                                 0.5);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2267.7,
+                                 std::abs(aJson.getDouble("/objects/0/transform/1").value_or(0)),
+                                 0.5);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2267.7,
+                                 std::abs(aJson.getDouble("/objects/0/transform/2").value_or(0)),
+                                 0.5);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, aJson.getDouble("/objects/0/transform/3").value_or(1),
+                                 0.5);
+
+    // A square turned by a quarter covers the same box. The box is rounded to
+    // whole twips, so a twip either way is what the rounding leaves.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2835.0, double(aJson.getInt("/objects/0/x").value_or(-1)), 1.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2835.0, double(aJson.getInt("/objects/0/y").value_or(-1)), 1.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2268.0, double(aJson.getInt("/objects/0/width").value_or(-1)),
+                                 1.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(2268.0, double(aJson.getInt("/objects/0/height").value_or(-1)),
+                                 1.0);
+}
+
+// Each entry names the layer the object is on, and a placeholder that holds
+// no content yet is flagged as such.
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testObjectEntryCarriesLayerAndPlaceholderFlag)
+{
+    createBlankDoc();
+    addRectangle(tools::Rectangle(Point(1000, 1000), Size(3000, 2000)), Color(0x4472c4), COL_BLACK);
+    addRectangle(tools::Rectangle(Point(5000, 1000), Size(3000, 2000)), Color(0x4472c4), COL_BLACK);
+
+    SdrObject* pOnOtherLayer = page(1)->GetObj(0);
+    pOnOtherLayer->NbcSetLayer(SdrLayerID(3));
+    SdrObject* pPlaceholder = page(1)->GetObj(1);
+    pPlaceholder->SetEmptyPresObj(true);
+
+    auto aJson = getVectorPrimitives(u"testLayerAndPlaceholder");
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aJson.getSize("/objects").value_or(0));
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(3), aJson.getInt("/objects/0/layer").value_or(-1));
+    CPPUNIT_ASSERT(!aJson.getBool("/objects/0/emptyPlaceholder").has_value());
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(pPlaceholder->GetLayer().get()),
+                         aJson.getInt("/objects/1/layer").value_or(-1));
+    CPPUNIT_ASSERT_EQUAL(true, aJson.getBool("/objects/1/emptyPlaceholder").value_or(false));
+}
+
+// Text in the automatic color resolves against the page background, so it
+// comes out light on a dark page and dark on a light one.
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testAutoColorFollowsPageBackground)
+{
+    createBlankDoc();
+    addTextBox(tools::Rectangle(Point(1000, 1000), Size(8000, 2000)), u"Hello"_ustr);
+
+    getVectorPrimitives(u"testAutoColorLight");
+    auto oLight = findTextPortion("Hello"_ostr);
+    CPPUNIT_ASSERT(oLight.has_value());
+    assertJsonPath(*oLight, "fontcolor", "#000000");
+
+    SdrPageProperties& rProperties = page(1)->getSdrPageProperties();
+    rProperties.PutItem(XFillStyleItem(drawing::FillStyle_SOLID));
+    rProperties.PutItem(XFillColorItem(OUString(), COL_BLACK));
+
+    getVectorPrimitives(u"testAutoColorDark");
+    auto oDark = findTextPortion("Hello"_ostr);
+    CPPUNIT_ASSERT(oDark.has_value());
+    assertJsonPath(*oDark, "fontcolor", "#ffffff");
 }
 
 // A master-page change is not an object on the slide, so a delta whose
@@ -733,8 +879,8 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testDeltaIncludesEditedObject)
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testDeltaIncludesGroupWithEditedObject)
 {
     // A delta requested while a text object inside a group is being edited
-    // must carry the group, the same way it carries a top-level object under
-    // edit. Typing does not advance the part version.
+    // must carry the group and its members, the same way it carries a
+    // top-level object under edit. Typing does not advance the part version.
     createBlankDoc();
     SdrObject* pInner
         = addGroupedRectangle(tools::Rectangle(Point(1000, 1000), Size(6000, 3000)), COL_BLUE);
@@ -752,9 +898,11 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testDeltaIncludesGroupWithEditedObject
     pView->SdrEndTextEdit();
 
     assertJsonPath(aDelta, "/type", "vectorprimitivesdelta");
-    CPPUNIT_ASSERT_EQUAL(size_t(1), aDelta.getSize("/objects").value_or(0));
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aDelta.getSize("/objects").value_or(0));
     CPPUNIT_ASSERT_EQUAL(sal_Int64(pGroup->GetUniqueID()),
                          aDelta.getInt("/objects/0/id").value_or(-1));
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(pInner->GetUniqueID()),
+                         aDelta.getInt("/objects/1/id").value_or(-1));
 }
 
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testGraphicsResponseKeepsTypeOnUnknownChecksum)

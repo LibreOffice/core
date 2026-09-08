@@ -113,7 +113,9 @@ namespace cool {
 				this._offscreenCtx.save();
 				this._offscreenCtx.translate(offsetX, offsetY);
 				this._offscreenCtx.scale(scale, scale);
-				RenderManager.renderInto(this._offscreenCtx, cached);
+				RenderManager.renderInto(this._offscreenCtx, cached, {
+					editView: true,
+				});
 				this._offscreenCtx.restore();
 				this._lastRenderKey = renderKey;
 				this._offscreenPart = part;
@@ -149,7 +151,7 @@ namespace cool {
 				this.context.save();
 				this.context.translate(offsetX, offsetY);
 				this.context.scale(scale, scale);
-				RenderManager.renderInto(this.context, cached);
+				RenderManager.renderInto(this.context, cached, { editView: true });
 				this.context.restore();
 			}
 		}

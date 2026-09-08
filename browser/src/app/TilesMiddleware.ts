@@ -239,8 +239,17 @@ class RenderManager {
 	static renderInto(
 		context: CanvasRenderingContext2D,
 		data: cool.VectorPrimitivesData,
+		options?: cool.VectorRenderOptions,
 	): void {
-		RenderManager.ensureInstance().renderInto(context, data);
+		RenderManager.ensureInstance().renderInto(context, data, options);
+	}
+
+	static setLayerVisible(layer: number, visible: boolean): void {
+		RenderManager.ensureInstance().setLayerVisible(layer, visible);
+	}
+
+	static isLayerVisible(layer: number): boolean {
+		return RenderManager.ensureInstance().isLayerVisible(layer);
 	}
 
 	static onVectorChanged(callback: () => void): void {

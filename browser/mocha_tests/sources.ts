@@ -122,6 +122,7 @@
 /// <reference path="../src/canvas/vector/VectorRenderingFontResponse.ts" />
 /// <reference path="../src/canvas/vector/VectorRenderingConfig.ts" />
 /// <reference path="../src/canvas/vector/SlideObject.ts" />
+/// <reference path="../src/canvas/vector/VectorRenderOptions.ts" />
 /// <reference path="../src/canvas/vector/PendingPreview.ts" />
 /// <reference path="../src/canvas/vector/RenderedPreview.ts" />
 /// <reference path="../src/canvas/vector/VectorResourceWalker.ts" />

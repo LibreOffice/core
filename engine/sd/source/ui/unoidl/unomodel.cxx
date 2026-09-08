@@ -198,6 +198,9 @@
 
 #include <drawinglayer/primitive2d/structuretagprimitive2d.hxx>
 #include <drawinglayer/processor2d/Primitive2dJsonProcessor.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <vcl/canvastools.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/gfxlink.hxx>
 #include <vcl/GraphicAttributes.hxx>
@@ -2619,6 +2622,12 @@ private:
         css::uno::Reference<css::drawing::XDrawPage> xDrawPage(pPage->getUnoPage());
         if (xDrawPage.is())
             aViewInfo.setVisualizedPage(xDrawPage);
+
+        // Text and lines with the automatic color resolve against what lies behind them. On a
+        // page that is the page background, the master page's when the page defines none.
+        aViewInfo.setAutoColor(pPage->GetPageBackgroundColor());
+
+        maViewInformation = aViewInfo;
         maProcessor->setViewInformation2D(aViewInfo);
     }
 
@@ -2700,17 +2709,32 @@ private:
         }
     }
 
-    /// The order array lists every live object id on the page in z-order.
-    /// It is the authoritative object set and ordering for the part.
+    /// Every object the list paints, in paint order: each object followed by the objects
+    /// inside it when it is a group, depth first.
+    static void collectPaintedObjects(const SdrObjList& rList, std::vector<SdrObject*>& rObjects)
+    {
+        for (size_t i = 0; i < rList.GetObjCount(); ++i)
+        {
+            SdrObject* pObject = rList.GetObj(i);
+            if (!pObject)
+                continue;
+            rObjects.push_back(pObject);
+            if (const SdrObjList* pChildren = pObject->GetSubList())
+                collectPaintedObjects(*pChildren, rObjects);
+        }
+    }
+
+    /// The order array lists every live object id on the page in paint order, the objects
+    /// inside a group right after the group. It is the authoritative object set and ordering
+    /// for the part.
     static void writeObjectOrder(tools::JsonWriter& rWriter, SdPage* pPage)
     {
+        std::vector<SdrObject*> aObjects;
+        collectPaintedObjects(*pPage, aObjects);
+
         auto aOrderArray = rWriter.startArray("order");
-        for (size_t i = 0; i < pPage->GetObjCount(); ++i)
-        {
-            SdrObject* pObject = pPage->GetObj(i);
-            if (pObject)
-                rWriter.putSimpleValue(sal_Int64(pObject->GetUniqueID()));
-        }
+        for (const SdrObject* pObject : aObjects)
+            rWriter.putSimpleValue(sal_Int64(pObject->GetUniqueID()));
     }
 
     /// True when the object, or any object inside it when it is a
@@ -2758,22 +2782,105 @@ private:
                 }
             }
 
-            // Get view-independent primitives
-            drawinglayer::primitive2d::Primitive2DContainer aPrimitives;
-            pObject->GetViewContact().getViewIndependentPrimitive2DContainer(aPrimitives);
-
-            // An object with an empty decomposition still gets an entry,
-            // with an empty primitive list. The object set then always
-            // matches the ids the order array carries, and content that
-            // became empty replaces what a client has cached.
-            auto pObjectNode = rWriter.startStruct();
-            rWriter.put("id", static_cast<sal_Int64>(pObject->GetUniqueID()));
-            rWriter.put("name", pObject->GetName());
-            {
-                auto aPrimitiveArray = rWriter.startArray("primitives");
-                maProcessor->decomposeAndWrite(aPrimitives);
-            }
+            // The change tracking records a change inside a group under the top-level object,
+            // so a changed top-level object is written together with everything inside it.
+            writeObjectTree(rWriter, *pObject, 0);
         }
+    }
+
+    /// One entry for the object, then one for each object inside it when it is a group. The
+    /// members draw a group's content, so a group with members carries no primitives of its own.
+    void writeObjectTree(tools::JsonWriter& rWriter, SdrObject& rObject, sal_uInt64 nParentId)
+    {
+        SdrObjList* pChildren = rObject.GetSubList();
+        const bool bHasChildren = pChildren && pChildren->GetObjCount() > 0;
+
+        drawinglayer::primitive2d::Primitive2DContainer aPrimitives;
+        if (!bHasChildren)
+            rObject.GetViewContact().getViewIndependentPrimitive2DContainer(aPrimitives);
+
+        writeObjectEntry(rWriter, rObject, nParentId, aPrimitives);
+
+        if (!bHasChildren)
+            return;
+
+        for (size_t i = 0; i < pChildren->GetObjCount(); ++i)
+        {
+            if (SdrObject* pChild = pChildren->GetObj(i))
+                writeObjectTree(rWriter, *pChild, rObject.GetUniqueID());
+        }
+    }
+
+    /// The rectangle the object paints, in twips: the range of its primitives, which takes in
+    /// the line width and a shadow, or the object's bound rectangle when it paints nothing.
+    tools::Rectangle
+    paintedRectangleInTwips(const SdrObject& rObject,
+                            const drawinglayer::primitive2d::Primitive2DContainer& rPrimitives)
+    {
+        basegfx::B2DRange aRange(rPrimitives.getB2DRange(maViewInformation));
+        if (aRange.isEmpty())
+            aRange = vcl::unotools::b2DRectangleFromRectangle(rObject.GetCurrentBoundRect());
+        if (aRange.isEmpty())
+            return tools::Rectangle();
+
+        return tools::Rectangle(
+            basegfx::fround<tools::Long>(aRange.getMinX() * constTwipConversionFactor),
+            basegfx::fround<tools::Long>(aRange.getMinY() * constTwipConversionFactor),
+            basegfx::fround<tools::Long>(aRange.getMaxX() * constTwipConversionFactor),
+            basegfx::fround<tools::Long>(aRange.getMaxY() * constTwipConversionFactor));
+    }
+
+    /// The mapping of the unit rectangle onto the object, in twips. The object reports it in
+    /// the model unit, and scaling from the left scales the mapped result, not the unit
+    /// rectangle it starts from.
+    static basegfx::B2DHomMatrix transformationInTwips(const SdrObject& rObject)
+    {
+        basegfx::B2DHomMatrix aTransformation;
+        basegfx::B2DPolyPolygon aPolyPolygon;
+        rObject.TRGetBaseGeometry(aTransformation, aPolyPolygon);
+
+        return basegfx::utils::createScaleB2DHomMatrix(constTwipConversionFactor,
+                                                       constTwipConversionFactor)
+               * aTransformation;
+    }
+
+    /// An object with an empty decomposition still gets an entry, with an empty primitive
+    /// list. The object set then always matches the ids the order array carries, and content
+    /// that became empty replaces what a client has cached.
+    void writeObjectEntry(tools::JsonWriter& rWriter, const SdrObject& rObject,
+                          sal_uInt64 nParentId,
+                          const drawinglayer::primitive2d::Primitive2DContainer& rPrimitives)
+    {
+        auto pObjectNode = rWriter.startStruct();
+        rWriter.put("id", sal_Int64(rObject.GetUniqueID()));
+        rWriter.put("name", rObject.GetName());
+        // The group the object sits in, 0 for an object directly on the page.
+        rWriter.put("parent", sal_Int64(nParentId));
+        rWriter.put("layer", sal_Int32(rObject.GetLayer().get()));
+        // A placeholder that holds no content of its own yet.
+        if (rObject.IsEmptyPresObj())
+            rWriter.put("emptyPlaceholder", true);
+
+        const tools::Rectangle aPainted(paintedRectangleInTwips(rObject, rPrimitives));
+        rWriter.put("x", sal_Int64(aPainted.Left()));
+        rWriter.put("y", sal_Int64(aPainted.Top()));
+        rWriter.put("width", sal_Int64(aPainted.GetWidth()));
+        rWriter.put("height", sal_Int64(aPainted.GetHeight()));
+
+        // In the order a canvas takes it: x' = a * x + c * y + e and y' = b * x + d * y + f.
+        {
+            const basegfx::B2DHomMatrix aTransformation(transformationInTwips(rObject));
+            auto aTransformArray = rWriter.startArray("transform");
+            rWriter.putSimpleValue(aTransformation.get(0, 0));
+            rWriter.putSimpleValue(aTransformation.get(1, 0));
+            rWriter.putSimpleValue(aTransformation.get(0, 1));
+            rWriter.putSimpleValue(aTransformation.get(1, 1));
+            rWriter.putSimpleValue(aTransformation.get(0, 2));
+            rWriter.putSimpleValue(aTransformation.get(1, 2));
+        }
+
+        auto aPrimitiveArray = rWriter.startArray("primitives");
+        maProcessor->decomposeAndWrite(rPrimitives);
     }
 
     SdDrawDocument* mpDocument;
@@ -2782,6 +2889,7 @@ private:
     sal_Int32 mnMode;
     sal_Int64 mnSinceVersion;
     sal_uInt16 mnResolvedPage = 0;
+    drawinglayer::geometry::ViewInformation2D maViewInformation;
     std::optional<drawinglayer::Primitive2dJsonProcessor> maProcessor;
 };
 

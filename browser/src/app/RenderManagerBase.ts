@@ -194,8 +194,16 @@ class RenderManagerBase {
 	renderInto(
 		_context: CanvasRenderingContext2D,
 		_data: cool.VectorPrimitivesData,
+		_options?: cool.VectorRenderOptions,
 		// eslint-disable-next-line @typescript-eslint/no-empty-function
 	): void {}
+
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
+	setLayerVisible(_layer: number, _visible: boolean): void {}
+
+	isLayerVisible(_layer: number): boolean {
+		return true;
+	}
 
 	// eslint-disable-next-line @typescript-eslint/no-empty-function
 	onVectorChanged(_callback: () => void): void {}

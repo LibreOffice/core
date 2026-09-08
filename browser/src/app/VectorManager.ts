@@ -60,6 +60,10 @@ class VectorManager extends RenderManagerBase {
 	// was cleared.
 	private _changeListeners: (() => void)[] = [];
 
+	// Ids of the layers this view does not show. Objects on them are
+	// kept in the cache and skipped when drawing.
+	private _hiddenLayers: Set<number> = new Set();
+
 	// The Impress or Draw doc layer, read lazily so the manager can be
 	// created before the layer is registered on the map.
 	private get _docLayer(): cool.CanvasTileLayerInterface {
@@ -93,22 +97,43 @@ class VectorManager extends RenderManagerBase {
 		return undefined;
 	}
 
+	/// Show or hide a layer in this view. Objects on a hidden layer stay
+	/// cached and are skipped when drawing.
+	setLayerVisible(layer: number, visible: boolean): void {
+		const changed = visible
+			? this._hiddenLayers.delete(layer)
+			: !this._hiddenLayers.has(layer) && !!this._hiddenLayers.add(layer);
+		if (changed) this._fireChanged();
+	}
+
+	isLayerVisible(layer: number): boolean {
+		return !this._hiddenLayers.has(layer);
+	}
+
 	/// Render a part's primitive tree, master page first then the
 	/// objects on top. The caller sets up the context transform that
-	/// maps the part's twips to the target pixels.
+	/// maps the part's twips to the target pixels. Objects on a hidden
+	/// layer are skipped. An edit view also frames the placeholders
+	/// that hold no content yet. A thumbnail or a slideshow does neither.
 	renderInto(
 		context: CanvasRenderingContext2D,
 		data: cool.VectorPrimitivesData,
+		options?: cool.VectorRenderOptions,
 	): void {
 		this._renderer.setSlideBounds(data.slideWidth, data.slideHeight);
 		for (const primitive of data.masterPage) {
 			this._renderer.renderPrimitive(context, primitive);
 		}
 		for (const obj of data.objects) {
-			if (!obj.primitives) continue;
-			for (const primitive of obj.primitives) {
-				this._renderer.renderPrimitive(context, primitive);
+			if (obj.layer !== undefined && this._hiddenLayers.has(obj.layer))
+				continue;
+			if (obj.primitives) {
+				for (const primitive of obj.primitives) {
+					this._renderer.renderPrimitive(context, primitive);
+				}
 			}
+			if (options?.editView && obj.emptyPlaceholder && obj.transform)
+				this._renderer.renderPlaceholderFrame(context, obj.transform);
 		}
 	}
 

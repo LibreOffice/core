@@ -17,6 +17,21 @@ describe('VectorManager', function () {
 		socket.sendMessage = function () {};
 	});
 
+	// Drawing builds Path2D objects, which node does not have. A stand-in
+	// records the path so the drawing calls can be checked.
+	let originalPath2D: any;
+	before(function () {
+		originalPath2D = (globalThis as any).Path2D;
+		(globalThis as any).Path2D = Path2DRecorder;
+	});
+	after(function () {
+		(globalThis as any).Path2D = originalPath2D;
+	});
+
+	function countCalls(recorder: CanvasRecorder, method: string): number {
+		return recorder.calls.filter((call) => call.method === method).length;
+	}
+
 	// A primitive tree response carries a stable id per object. The
 	// manager has to keep those ids on the cached objects, in document
 	// order, so a later update can find an object by id.
@@ -167,6 +182,115 @@ describe('VectorManager', function () {
 		const data: any = manager.requestPart(0);
 		nodeassert.strictEqual(data.version, 2);
 		nodeassert.strictEqual(data.masterPage.length, 1);
+	});
+
+	// Each object carries where it sits in the group tree, which layer it
+	// is on, whether it is an empty placeholder and where it paints. The
+	// manager keeps all of that so the view can hit-test and frame objects.
+	it('keeps the geometry and grouping of each object', function () {
+		const manager = new VectorManager();
+		manager.handleVectorPrimitivesResponse({
+			part: 0,
+			slideWidth: 1000,
+			slideHeight: 800,
+			objects: [
+				{ id: 11, parent: 0, layer: 0, primitives: [] },
+				{
+					id: 22,
+					parent: 11,
+					layer: 2,
+					emptyPlaceholder: true,
+					x: 10,
+					y: 20,
+					width: 300,
+					height: 200,
+					transform: [300, 0, 0, 200, 10, 20],
+					primitives: [],
+				},
+			],
+		});
+
+		const data = manager.requestPart(0);
+		nodeassert.ok(data, 'part 0 is cached after its response');
+		const member = data.objects[1];
+		nodeassert.strictEqual(member.parent, 11);
+		nodeassert.strictEqual(member.layer, 2);
+		nodeassert.strictEqual(member.emptyPlaceholder, true);
+		nodeassert.deepStrictEqual(
+			[member.x, member.y, member.width, member.height],
+			[10, 20, 300, 200],
+		);
+		nodeassert.deepStrictEqual(member.transform, [300, 0, 0, 200, 10, 20]);
+	});
+
+	// Hiding a layer leaves the objects on it out of the drawing while the
+	// rest of the slide still paints, and showing it again brings them back.
+	it('skips the objects on a hidden layer when drawing', function () {
+		const manager = new VectorManager();
+		const hairline = { type: 'polygonHairline', path: 'M0 0 L1 1' };
+		manager.handleVectorPrimitivesResponse({
+			part: 0,
+			slideWidth: 1000,
+			slideHeight: 800,
+			objects: [
+				{ id: 11, layer: 0, primitives: [hairline] },
+				{ id: 22, layer: 5, primitives: [hairline] },
+			],
+		});
+		const data: any = manager.requestPart(0);
+
+		manager.setLayerVisible(5, false);
+		let recorder = new CanvasRecorder();
+		manager.renderInto(recorder as any, data);
+		nodeassert.strictEqual(countCalls(recorder, 'stroke'), 1);
+
+		manager.setLayerVisible(5, true);
+		recorder = new CanvasRecorder();
+		manager.renderInto(recorder as any, data);
+		nodeassert.strictEqual(countCalls(recorder, 'stroke'), 2);
+	});
+
+	// Hiding a layer changes what the slide shows, so the views draw again.
+	it('redraws the views when a layer is hidden', function () {
+		const manager = new VectorManager();
+		let notified = 0;
+		manager.onVectorChanged(() => notified++);
+
+		manager.setLayerVisible(3, false);
+		nodeassert.strictEqual(notified, 1);
+
+		// Hiding a layer that is already hidden changes nothing.
+		manager.setLayerVisible(3, false);
+		nodeassert.strictEqual(notified, 1);
+	});
+
+	// An empty placeholder shows a dashed frame in the edit view only. A
+	// thumbnail or a slideshow renders the same data without the frame.
+	it('frames an empty placeholder in the edit view only', function () {
+		const manager = new VectorManager();
+		manager.handleVectorPrimitivesResponse({
+			part: 0,
+			slideWidth: 1000,
+			slideHeight: 800,
+			objects: [
+				{
+					id: 11,
+					emptyPlaceholder: true,
+					transform: [300, 0, 0, 200, 10, 20],
+					primitives: [],
+				},
+			],
+		});
+		const data: any = manager.requestPart(0);
+
+		let recorder = new CanvasRecorder();
+		manager.renderInto(recorder as any, data);
+		nodeassert.strictEqual(countCalls(recorder, 'setLineDash'), 0);
+
+		recorder = new CanvasRecorder();
+		manager.renderInto(recorder as any, data, { editView: true });
+		nodeassert.strictEqual(countCalls(recorder, 'setLineDash'), 1);
+		nodeassert.ok(recorder.findCall('stroke'), 'the frame is stroked');
 	});
 
 	// A text portion names its font face by id. The manager asks the
