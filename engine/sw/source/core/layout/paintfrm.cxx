@@ -2558,13 +2558,13 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
             {
                 pTmpColor = pHCColor;
 
-                // keep this border legible against the current on-screen page background,
-                // the way automatic text color already does, instead of always showing
-                // the line's own stored color:
-                if (!pTmpColor && gProp.pSGlobalShell->GetWin() &&
-                    !HasColorContrast(aStyles[0].GetColorPrim(), rDocColor))
+                // keep this border legible against the current on-screen dark page
+                // background, the way automatic text color already does, instead of
+                // always showing the line's own stored color:
+                if (rDocColor.IsDark() && !pTmpColor && gProp.pSGlobalShell->GetWin()
+                    && !HasColorContrast(aStyles[0].GetColorPrim(), rDocColor))
                 {
-                    aContrastColor = rDocColor.IsDark() ? COL_WHITE : COL_BLACK;
+                    aContrastColor = COL_WHITE;
                     pTmpColor = &aContrastColor;
                 }
             }
