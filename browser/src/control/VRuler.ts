@@ -53,6 +53,7 @@ class VRuler extends Ruler {
 	onAdd() {
 		this._map.on('vrulerupdate', this._updateOptions, this);
 		this._map.on('scrolllimits', this._updatePaintTimer, this);
+		this._map.on('zoomend', this._updateBreakPoints, this);
 		this._map.on('moveend', this.fixOffset, this);
 		app.events.on('updatepermission', this._changeInteractions.bind(this));
 		this._map.on(
@@ -83,6 +84,7 @@ class VRuler extends Ruler {
 	onRemove() {
 		this._map.off('vrulerupdate', this._updateOptions, this);
 		this._map.off('scrolllimits', this._updatePaintTimer, this);
+		this._map.off('zoomend', this._updateBreakPoints, this);
 		this._map.off('moveend', this.fixOffset, this);
 		app.events.off('updatepermission', this._changeInteractions.bind(this));
 		this._map.off(
@@ -349,7 +351,6 @@ class VRuler extends Ruler {
 		if (this.options.margin1 == null || this.options.margin2 == null) return;
 
 		const topMargin: number = this.options.leftOffset;
-		const docLayer = this._map._docLayer;
 
 		// This is surely bogus. We take pageWidth, which is in mm100, and subtract a value
 		// that is in "arbitrary pixelish units". But the only thing bottomMargin is used for is
@@ -361,13 +362,7 @@ class VRuler extends Ruler {
 			this.options.pageWidth - (this.options.leftOffset + this.options.margin2);
 		this.options.pageBottomMargin = bottomMargin;
 
-		const scale: number = app.activeDocument.getZoomScale(
-			this._map.getZoom(),
-			10,
-		);
-		const wPixel: number =
-			docLayer._docPixelSize.y / docLayer._pages -
-			this.options.tileMargin * 2 * scale;
+		const wPixel: number = this.options.pageWidth * this._pixelsPerMm100();
 
 		this.fixOffset();
 
@@ -464,35 +459,47 @@ class VRuler extends Ruler {
 	}
 
 	protected _fixOffsetImpl(): void {
-		// in case of disabled ruler at docload or event like 'moveend' calculation of offset can be ignored
+		// The offset needs the document size and, to tell which page it is measured
+		// from, the page width and page offset that arrive together in the ruler update
+		// the engine sends. A hidden ruler has no position to keep.
 		if (
 			!app.activeDocument ||
 			app.activeDocument.fileSize.x === 0 ||
-			!this.options.showruler
+			!this.options.showruler ||
+			!this.options.pageWidth
 		)
 			return;
 
-		// we need to also consider  if there is more then 1 page then pageoffset is crucial to consider
-		// i have calculated current page using pageoffset and pageWidth coming from CORE
-		// based on that calculate the page offset
-		// so if cursor moves to other page we will see how many pages before current page are there
-		// and then add totalHeight of all those pages to our final calculation of rulerOffset
-		const currentPage: number = Math.floor(
-			this.options.pageOffset / this.options.pageWidth,
-		);
-		let pageoffset: number = 0;
-		if (this._map._docLayer._docPixelSize)
-			pageoffset =
-				currentPage *
-				(this._map._docLayer._docPixelSize.y / this._map._docLayer._pages);
+		const layout = app.activeDocument.activeLayout;
+		let rulerOffset: number;
 
-		const rulerOffset: number =
-			-app.activeDocument.activeLayout.viewedRectangle.cY1 +
-			this.options.tileMargin * app.getScale() +
-			pageoffset;
+		if (layout.type === 'ViewLayoutMultiPage') {
+			// The pages sit in a grid of screen slots, so the ruler starts at the top
+			// of the slot holding the page the cursor is on.
+			const pageScreenPosition = this._cursorPageScreenPosition();
+			if (!pageScreenPosition) return;
 
-		this._rFace.style.marginInlineStart = rulerOffset + 'px';
+			rulerOffset = pageScreenPosition.y;
+		} else {
+			// The pages form one continuous column, and pageOffset is the top of the
+			// page the cursor is on, measured from the top of the document. The
+			// layout turns that document point into its place on screen, which is
+			// where the face starts.
+			const pageTop = new cool.SimplePoint(
+				0,
+				this._twipsFromMm100(this.options.pageOffset),
+			);
 
+			rulerOffset = layout.documentToViewY(pageTop) / app.dpiScale;
+		}
+
+		const newValue: string = rulerOffset + 'px';
+		// The margin markers are placed from the face's own screen position, so they
+		// move only when the face does. A horizontal scroll leaves the vertical
+		// offset where it was, and then there is nothing to place.
+		if (this._rFace.style.marginInlineStart === newValue) return;
+
+		this._rFace.style.marginInlineStart = newValue;
 		this._updateParagraphIndentations();
 	}
 

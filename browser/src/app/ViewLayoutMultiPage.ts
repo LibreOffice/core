@@ -245,9 +245,6 @@ class ViewLayoutMultiPage extends ViewLayoutBase {
 		if (!app.file.writer.pageRectangleList.length) return;
 
 		this.commitVisibleAreaAndRequestTiles();
-
-		// We most likely scrolled the view. We also need to check ruler position.
-		if (app.UI.horizontalRuler) app.UI.horizontalRuler.fixOffset();
 	}
 
 	// Map a document point to its on-screen position using an explicitly

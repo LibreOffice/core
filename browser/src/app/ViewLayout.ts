@@ -824,6 +824,9 @@ class ViewLayoutBase {
 		if (app.map._docLayer?._cursorMarker)
 			app.map._docLayer._cursorMarker.update();
 
+		if (app.UI.horizontalRuler) app.UI.horizontalRuler.fixOffset();
+		if (app.UI.verticalRuler) app.UI.verticalRuler.fixOffset();
+
 		app.map._docLayer._sendClientZoom();
 		this.sendClientVisibleArea();
 

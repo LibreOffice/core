@@ -78,6 +78,7 @@ class HRuler extends Ruler {
 		this._map.on('rulerupdate', this._updateOptions, this);
 		this._map.on('tabstoplistupdate', this._updateTabStops, this);
 		this._map.on('scrolllimits', this._updatePaintTimer, this);
+		this._map.on('zoomend', this._updateBreakPoints, this);
 		this._map.on('moveend fixruleroffset', this.fixOffset, this);
 		this._map.on('updatepermission', this._changeInteractions, this);
 		window.L.DomUtil.addClass(
@@ -102,6 +103,7 @@ class HRuler extends Ruler {
 		this._map.off('rulerupdate', this._updateOptions, this);
 		this._map.off('tabstoplistupdate', this._updateTabStops, this);
 		this._map.off('scrolllimits', this._updatePaintTimer, this);
+		this._map.off('zoomend', this._updateBreakPoints, this);
 		this._map.off('moveend fixruleroffset', this.fixOffset, this);
 		this._map.off('updatepermission', this._changeInteractions, this);
 
@@ -516,9 +518,7 @@ class HRuler extends Ruler {
 			'lo-pend-marker': toMm100(state.right),
 		};
 
-		var pxPerMm100 =
-			app.map._docLayer._docPixelSize.x /
-			((app.activeDocument.fileSize.x * 2540) / 1440);
+		const pxPerMm100 = this._pixelsPerMm100();
 
 		// Conversion to mm100.
 		if (this.options.unit === 'inch') {
@@ -609,9 +609,7 @@ class HRuler extends Ruler {
 		const container = this._rTSContainer;
 		if (!container || !container.tabStops) return;
 
-		const pxPerMm100 =
-			app.map._docLayer._docPixelSize.x /
-			((app.activeDocument.fileSize.x * 2540) / 1440);
+		const pxPerMm100 = this._pixelsPerMm100();
 		const indentPixel = this._tabStopIndentPixel();
 
 		for (let i = 0; i < container.tabStops.length; i++) {
@@ -829,7 +827,7 @@ class HRuler extends Ruler {
 			return;
 		}
 
-		var lMargin, rMargin, wPixel, scale;
+		var lMargin, rMargin, wPixel;
 
 		lMargin = this.options.leftOffset;
 
@@ -842,9 +840,7 @@ class HRuler extends Ruler {
 		rMargin =
 			this.options.pageWidth - (this.options.leftOffset + this.options.margin2);
 
-		scale = app.activeDocument.getZoomScale(this._map.getZoom(), 10);
-		wPixel =
-			this._map._docLayer._docPixelSize.x - this.options.tileMargin * 2 * scale;
+		wPixel = this.options.pageWidth * this._pixelsPerMm100();
 
 		this.fixOffset();
 
@@ -992,46 +988,32 @@ class HRuler extends Ruler {
 		if (!app.activeDocument || app.activeDocument.fileSize.x === 0) return;
 
 		const layout = app.activeDocument.activeLayout;
+		let rulerOffset: number;
 
 		if (layout.type === 'ViewLayoutMultiPage') {
-			const multiPageLayout = layout as ViewLayoutMultiPage;
-			const pageRectList = app.file.writer.pageRectangleList;
-			if (pageRectList.length === 0) return;
+			const pageScreenPosition = this._cursorPageScreenPosition();
+			if (!pageScreenPosition) return;
 
-			// Find which page the cursor is on.
-			let pageIndex = 0;
-			const cursorRect = app.file.textCursor.rectangle;
-			if (cursorRect) {
-				const cursorPoint = new cool.SimplePoint(cursorRect.x1, cursorRect.y1);
-				pageIndex = multiPageLayout.getClosestRectangleIndex(cursorPoint);
-			}
-
-			// Get the page's top-left corner in document coordinates.
-			const pageRect = pageRectList[pageIndex];
-			const pageTopLeft = new cool.SimplePoint(pageRect[0], pageRect[1]);
-
-			// Convert to screen position (core pixels -> CSS pixels).
-			const screenXCorePixels = layout.documentToViewX(pageTopLeft);
-			const rulerOffset = screenXCorePixels / app.dpiScale;
-
-			const newValue = rulerOffset + 'px';
-			if (this._rFace.style.marginInlineStart !== newValue)
-				this._rFace.style.marginInlineStart = newValue;
-		} else if (layout.type === 'ViewLayoutCompareChanges') {
-			let rulerOffset =
+			rulerOffset = pageScreenPosition.x;
+		} else {
+			rulerOffset =
 				-layout.viewedRectangle.cX1 + this.options.tileMargin * app.getScale();
+
+			// Side by side deflects its panes horizontally; the ruler follows that
+			// deflection.
 			if (layout.type === 'ViewLayoutCompareChanges')
 				rulerOffset += Math.round(
 					layout.documentToViewX(new cool.SimplePoint(0, 0)) / app.dpiScale,
 				);
-			this._rFace.style.marginInlineStart = rulerOffset + 'px';
-		} else {
-			const rulerOffset =
-				-layout.viewedRectangle.cX1 + this.options.tileMargin * app.getScale();
-
-			this._rFace.style.marginInlineStart = rulerOffset + 'px';
 		}
 
+		const newValue = rulerOffset + 'px';
+		// The indent markers and the tab stops are placed from the face's own screen
+		// position, so they move only when the face does. A vertical scroll leaves
+		// the horizontal offset where it was, and then there is nothing to place.
+		if (this._rFace.style.marginInlineStart === newValue) return;
+
+		this._rFace.style.marginInlineStart = newValue;
 		this._updateParagraphIndentations();
 	}
 

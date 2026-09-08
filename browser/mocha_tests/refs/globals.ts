@@ -109,6 +109,18 @@ noopClass.addInitHook = () => {};
 		mode: 'none',
 		viewId: -1,
 	},
+	// The ruler slots are read on every scroll. In the browser docstate.ts
+	// creates them and HRuler / VRuler put themselves in; no ruler is built
+	// in these tests, so both stay empty.
+	UI: {
+		language: {
+			fromURL: null,
+			fromBrowser: 'en-US',
+			notebookbarAccessibility: null,
+		},
+		horizontalRuler: null,
+		verticalRuler: null,
+	},
 };
 
 globalThis.window = (function () {

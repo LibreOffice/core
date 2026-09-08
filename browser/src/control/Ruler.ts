@@ -97,6 +97,7 @@ abstract class Ruler {
 	_map: ReturnType<typeof window.L.map>;
 
 	_updateTask: TaskId | null = null;
+	_offsetTask: TaskId | null = null;
 
 	// One value tooltip per indent marker, shown together on hover/drag.
 	private _indentTooltips: IndentTooltip[] = [];
@@ -137,6 +138,17 @@ abstract class Ruler {
 
 	// Abstract method: Must be implemented by subclasses
 	protected abstract _updateBreakPoints(): void;
+
+	// Engine reports the page geometry and the indents in mm100, so both scales
+	// below start there: 2540 mm100 and 1440 twips make up an inch.
+	_twipsFromMm100(mm100: number): number {
+		return (mm100 * 1440) / 2540;
+	}
+
+	// CSS pixels per mm100 at the current zoom, through the live zoom factor.
+	_pixelsPerMm100(): number {
+		return (this._twipsFromMm100(1) * app.twipsToPixels) / app.dpiScale;
+	}
 
 	_updatePaintTimer() {
 		clearTimeout(this.options.timer);
@@ -373,8 +385,48 @@ abstract class Ruler {
 		if (showRuler) map.uiManager.showRuler();
 	}
 
+	// The screen position of the top-left corner of the page the text cursor is
+	// on, in CSS pixels. The stacked page grid gives every page its own screen
+	// slot, so a ruler that belongs to one page starts here. Null while the page
+	// geometry has not arrived yet.
+	protected _cursorPageScreenPosition(): { x: number; y: number } | null {
+		const layout = app.activeDocument.activeLayout as ViewLayoutMultiPage;
+		const pageRectangleList = app.file.writer.pageRectangleList;
+		if (pageRectangleList.length === 0) return null;
+
+		let pageIndex = 0;
+		const cursorRectangle = app.file.textCursor.rectangle;
+		if (cursorRectangle) {
+			const cursorPoint = new cool.SimplePoint(
+				cursorRectangle.x1,
+				cursorRectangle.y1,
+			);
+			pageIndex = layout.getClosestRectangleIndex(cursorPoint);
+		}
+
+		const pageRectangle = pageRectangleList[pageIndex];
+		const pageTopLeft = new cool.SimplePoint(
+			pageRectangle[0],
+			pageRectangle[1],
+		);
+		// Both corners are mapped through the one page index resolved above, so
+		// the two coordinates always describe the same page.
+		const screenPosition = layout.documentPointToScreenWithIndex(
+			pageTopLeft,
+			pageIndex,
+		);
+
+		return {
+			x: screenPosition.x / app.dpiScale,
+			y: screenPosition.y / app.dpiScale,
+		};
+	}
+
 	public fixOffset() {
-		app.layoutingService.appendLayoutingTask(() => {
+		if (this._offsetTask)
+			app.layoutingService.cancelLayoutingTask(this._offsetTask);
+		this._offsetTask = app.layoutingService.appendLayoutingTask(() => {
+			this._offsetTask = null;
 			this._fixOffsetImpl();
 		});
 	}
