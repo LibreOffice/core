@@ -17,19 +17,20 @@
 
 class Tooltip {
 	constructor(options) {
-		this._options = window.L.extend({ timeout: 150 }, options);
+		// hoverGrace: how long the tooltip outlives the pointer leaving the
+		// widget, so the pointer can cross the gap and reach it.
+		this._options = window.L.extend({ timeout: 150, hoverGrace: 600 }, options);
 		let win = this._options.window ? this._options.window : window;
 		this._container = this._options.container
 			? this._options.container
 			: window.L.DomUtil.create('div', 'cooltip-text', win.document.body);
 		this._container.id = 'cooltip';
-		this._container.addEventListener(
-			'mouseenter',
-			window.L.bind(this.mouseEnter, this),
-		);
-		this._container.addEventListener(
-			'mouseleave',
-			window.L.bind(this.mouseLeave, this),
+		// The container does not take pointer events, so whether the pointer is
+		// on it is answered by its rectangle rather than by enter and leave.
+		win.document.addEventListener(
+			'mousemove',
+			window.L.bind(this.pointerMoved, this),
+			{ capture: true, passive: true },
 		);
 
 		win.addEventListener('keydown', window.L.bind(this.keyDown, this), {
@@ -58,7 +59,7 @@ class Tooltip {
 			this._hideTimeout = app.timerRegistry.setTimeout(
 				'tooltip',
 				window.L.bind(this.hide, this, this._current),
-				this._options.timeout / 2,
+				this._options.hoverGrace,
 			);
 	}
 
@@ -227,6 +228,20 @@ class Tooltip {
 		this._current = null;
 	}
 
+	pointerMoved(e) {
+		if (this._disabled || !this._current) return;
+
+		const box = this._container.getBoundingClientRect();
+		const on =
+			e.clientX >= box.left &&
+			e.clientX <= box.right &&
+			e.clientY >= box.top &&
+			e.clientY <= box.bottom;
+
+		if (on) this.mouseEnter();
+		else if (this._cancel) this.mouseLeave();
+	}
+
 	mouseEnter() {
 		if (this._disabled) return;
 		if (this._current) {
@@ -243,18 +258,22 @@ class Tooltip {
 	}
 
 	keyDown(e) {
-		let key = e.key.toUpperCase();
-		if (
-			key === 'ESCAPE' &&
-			this._current &&
-			!this._disabled &&
-			this._container.style.visibility === 'visible'
-		) {
+		if (this._disabled || !this._current) return;
+		if (this._container.style.visibility !== 'visible') return;
+
+		if (e.key.toUpperCase() === 'ESCAPE') {
 			this._cancel = false;
 			this.hide();
 			e.stopPropagation();
 			if (e.cancelable) e.preventDefault();
+			return;
 		}
+
+		// The grace period can leave a tooltip up after the pointer has gone, and
+		// by then the keyboard is elsewhere. Typing is not aimed at it, so drop it
+		// and leave the key to whatever holds the focus.
+		this._cancel = false;
+		this.hide();
 	}
 
 	static attachEventListener(elem, map) {

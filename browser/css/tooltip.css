@@ -1,5 +1,6 @@
 .cooltip-text {
 	visibility: hidden;
+	pointer-events: none;
 	position: absolute;
 	z-index: 2147483647;
 	color: var(--color-main-text);
