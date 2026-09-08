@@ -1278,15 +1278,14 @@ static bool scheduleMonitorRetry(const std::string& uri, const std::string_view 
     return false;
 }
 
+/// Takes the socket out of the map, so the next attempt at this monitor starts a new connection,
+/// and schedules that attempt while the configuration still names the monitor.
 void MonitorSocketHandler::onDisconnect()
 {
-    if (!scheduleMonitorRetry(_uri, "dis-connected"))
-    {
-        LOG_TRC("Remove monitor " << _uri);
-        return;
-    }
-
     Admin::instance().deleteMonitorSocket(_uri.substr(0, _uri.find('?')));
+
+    if (!scheduleMonitorRetry(_uri, "dis-connected"))
+        LOG_TRC("Remove monitor " << _uri);
 }
 
 void Admin::connectToMonitorSync(const std::string &uri)
