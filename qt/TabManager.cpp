@@ -74,6 +74,8 @@ constexpr qint64 kReleaseUnwindGraceMs = 250;
 // How long the live-view limit waits before it runs. A tab switch is one of a run of
 // them as often as not, and the tab the user stops on is the one that matters.
 constexpr int kLiveViewLimitDelayMilliseconds = 1000;
+// How long a tab has to stay the active one before its view is built again.
+constexpr int kViewRestoreDelayMilliseconds = 250;
 
 // The strip page only makes tabs draggable, so the source view identifies a
 // tab drag. The text/x-coda-tab type is invisible to QMimeData: Chromium
@@ -102,9 +104,12 @@ TabManager::TabManager(TabbedWindow* window, QWebEngineProfile* profile)
     , _shellView(new QWebEngineView(window))
     , _shellBridge(new TabShellBridge(this))
     , _liveViewLimitTimer(new QTimer(this))
+    , _viewRestoreTimer(new QTimer(this))
 {
     _liveViewLimitTimer->setSingleShot(true);
     connect(_liveViewLimitTimer, &QTimer::timeout, this, &TabManager::enforceLiveViewLimit);
+    _viewRestoreTimer->setSingleShot(true);
+    connect(_viewRestoreTimer, &QTimer::timeout, this, &TabManager::restoreActiveTabView);
 
     _shellView->setFixedHeight(kShellHeight);
     // setPage() destroys the default page, so install ours before wiring the channel.
@@ -603,11 +608,27 @@ void TabManager::activateTab(int tabId)
     // save still refuses a second request on its own.
     it->dropSaveAsked = false;
     it->dropWaitsForSave = false;
-    restoreTabView(it);
+    // A tab the user passes through keeps its placeholder until they stay on it.
+    if (it->webView->isViewDiscarded())
+        _viewRestoreTimer->start(kViewRestoreDelayMilliseconds);
+    else
+        _viewRestoreTimer->stop();
     WebView* wv = it->webView.get();
-    _stack->setCurrentWidget(wv->webEngineView());
+    _stack->setCurrentWidget(stackWidgetFor(*it));
     _window->setWindowTitle(wv->composedWindowTitle());
     emitTabsChangedNow();
+    focusActiveDocument();
+    scheduleLiveViewLimit(kLiveViewLimitDelayMilliseconds);
+}
+
+void TabManager::restoreActiveTabView()
+{
+    auto it = findTab(_activeTabId);
+    if (it == _tabs.end() || !it->webView->isViewDiscarded())
+        return;
+
+    restoreTabView(it);
+    _stack->setCurrentWidget(it->webView->webEngineView());
     focusActiveDocument();
     scheduleLiveViewLimit(kLiveViewLimitDelayMilliseconds);
 }

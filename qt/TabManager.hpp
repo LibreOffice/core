@@ -130,6 +130,9 @@ private:
     // Build the view of a discarded tab again and put it back in the stack.
     void restoreTabView(std::vector<Entry>::iterator it);
 
+    // Build the view of the active tab, once the user has stayed on it.
+    void restoreActiveTabView();
+
     // Discard the views of every tab beyond the live-view limit, least recently used
     // first, so the number of web engine processes stays bounded as tabs are opened.
     void enforceLiveViewLimit();
@@ -172,6 +175,8 @@ private:
     bool _closingAll = false;
     // Single-shot, and holds the pending run of the live-view limit.
     QTimer* _liveViewLimitTimer;
+    // Single-shot, and holds the pending view build for the active tab.
+    QTimer* _viewRestoreTimer;
 
     // One drag at a time, so process-wide; the QPointers self-null if a
     // window dies mid-drag. s_lastHover* hold the strip a DragLeave demoted
