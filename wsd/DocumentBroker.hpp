@@ -1536,7 +1536,6 @@ private:
     public:
         StorageManager(std::chrono::milliseconds minTimeBetweenUploads)
             : _request(minTimeBetweenUploads)
-            , _sizeOnServer(0)
             , _sizeAsUploaded(0)
         {
             if (Log::traceEnabled())
@@ -1619,18 +1618,11 @@ private:
                              time) != _earlierModifiedServerTimeStrings.end();
         }
 
-        /// Set size of the document as we've downloaded it, or after a successful upload.
-        void setSizeOnServer(std::size_t size) { _sizeOnServer = size; }
-
-        /// Get size of the document as we've downloaded it, or after a successful upload.
-        std::size_t getSizeOnServer() const { return _sizeOnServer; }
-
         /// Set size of the document as we've uploaded.
-        /// Used to resynchronize after an upload failure that break reliance on the LastModifiedTime.
         void setSizeAsUploaded(std::size_t size) { _sizeAsUploaded = size; }
 
-        /// Get size of the document as we've set in our PutFile header.
-        /// Used to resynchronize after an upload failure that break reliance on the LastModifiedTime.
+        /// Get size of the document as we've set in our PutFile header. Used to
+        /// guess whether an upload that got no response nevertheless landed.
         std::size_t getSizeAsUploaded() const { return _sizeAsUploaded; }
 
         /// Returns how long the last upload took.
@@ -1672,7 +1664,6 @@ private:
                << Util::getTimeForLog(now, _lastUploadedFileModifiedLocalTime);
             os << indent << "last upload was successful: " << lastUploadSuccessful();
             os << indent << "upload failure count: " << uploadFailureCount();
-            os << indent << "size on server: " << _sizeOnServer;
             os << indent << "last upload size: " << _sizeAsUploaded;
         }
 
@@ -1693,13 +1684,7 @@ private:
         /// Recent earlier modified times, oldest first.
         std::vector<std::string> _earlierModifiedServerTimeStrings;
 
-        /// The size of the document, as we downloaded from the server,
-        /// and after successfully uploading.
-        /// Used to help resynchronize the LastModifiedTime after an upload failure.
-        std::size_t _sizeOnServer;
-
         /// The size of the document as we uploaded to the server.
-        /// Used to help resynchronize the LastModifiedTime after an upload failure.
         std::size_t _sizeAsUploaded;
     };
 
@@ -2104,6 +2089,11 @@ private:
     /// Set to true when document changed in storage and we are waiting
     /// for user's command to act.
     bool _documentChangedInStorage;
+
+    /// Whether we know that our last upload did not reach storage. When we do,
+    /// any change in storage is somebody else's. When we don't, our own upload
+    /// may have landed and we have to work out which version storage holds.
+    bool _lastUploadDefinitelyFailed;
 
     /// True for file that COOLWSD::IsViewFileExtension return true.
     /// These files, such as PDF, don't have a reliable ModifiedStatus.

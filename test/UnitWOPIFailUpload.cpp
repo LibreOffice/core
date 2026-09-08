@@ -59,6 +59,7 @@ class UnitWOPIFailUpload : public WOPIUploadConflictCommon
         setExpectedGetFile(1); // All the tests GetFile once.
         setExpectedPutRelative(0); // No renaming in these tests.
 
+        // One CheckFileInfo on load, plus one to reconcile after each failed upload.
         switch (_scenario)
         {
             case Scenario::Disconnect:
@@ -67,25 +68,25 @@ class UnitWOPIFailUpload : public WOPIUploadConflictCommon
                 // to decide how to resolve the conflict externally.
                 // So we quarantine and let it be.
                 setExpectedPutFile(1);
-                setExpectedCheckFileInfo(2); // Conflict recovery requires second CFI.
+                setExpectedCheckFileInfo(2);
             }
             break;
             case Scenario::SaveDiscard:
                 setExpectedPutFile(1); // The client discards their changes; don't upload.
-                setExpectedCheckFileInfo(2); // Conflict recovery requires second CFI.
+                setExpectedCheckFileInfo(2);
                 break;
             case Scenario::CloseDiscard:
                 setExpectedPutFile(1); // The client discards their changes; don't upload.
-                setExpectedCheckFileInfo(2); // Conflict recovery requires second CFI.
+                setExpectedCheckFileInfo(2);
                 break;
             case Scenario::SaveOverwrite:
                 setExpectedPutFile(2); // Upload a second time to force client's changes.
-                setExpectedCheckFileInfo(2); // Conflict recovery requires second CFI.
+                setExpectedCheckFileInfo(3);
                 break;
             case Scenario::VerifyOverwrite:
                 // By default, we don't upload when verifying (unless always_save_on_exit is set).
                 setExpectedPutFile(0);
-                setExpectedCheckFileInfo(1); // No conflict to recover from.
+                setExpectedCheckFileInfo(1); // Nothing to reconcile.
                 break;
         }
     }
@@ -121,6 +122,10 @@ public:
             // we expect exactly two PutFile requests per document.
             setExpectedPutFile(LimitStoreFailures);
         }
+
+        // Every failed upload is followed by a CheckFileInfo to reconcile with
+        // storage, on top of the one we do when loading.
+        setExpectedCheckFileInfo(getExpectedPutFile() + 1);
     }
 
     std::unique_ptr<http::Response>
@@ -197,19 +202,11 @@ public:
         TST_LOG("Testing " << name(_scenario) << ": [" << message << ']');
         LOK_ASSERT_STATE(_phase, Phase::WaitDocClose);
 
-        if (getCountCheckFileInfo() == 1)
-        {
-            LOK_ASSERT_MESSAGE("Expect only savefailed errors on first upload",
-                               message.starts_with("error: cmd=storage kind=savefailed"));
-        }
-        else
-        {
-            // Once the first upload fails, we issue CheckFileInfo, which detects the conflict.
-            // The conflict error may carry a trailing " errordetail=" token.
-            LOK_ASSERT_MESSAGE(
-                "Expect only documentconflict errors after the second CheckFileInfo",
-                message.starts_with("error: cmd=storage kind=documentconflict"));
-        }
+        // Uploading fails permanently here, but nothing ever writes to storage,
+        // so the timestamp there never moves and there is nothing to conflict with.
+        // Every error must be a plain savefailed.
+        LOK_ASSERT_MESSAGE("Expect only savefailed errors",
+                           message.starts_with("error: cmd=storage kind=savefailed"));
 
         // Close the document.
         TST_LOG("Closing the document");
@@ -573,7 +570,8 @@ public:
         }
 
         LOK_ASSERT_MESSAGE("Unexpected phase", _phase == Phase::WaitModifiedStatus ||
-                                                   _phase == Phase::WaitUnmodifiedStatus);
+                                                   _phase == Phase::WaitUnmodifiedStatus ||
+                                                   _phase == Phase::WaitDestroy);
 
         // We save twice. First right after loading, unmodified.
         if (getCountPutFile() == 1)
@@ -602,7 +600,11 @@ public:
             return std::make_unique<http::Response>(http::StatusCode::InternalServerError);
         }
 
-        failTest("Unexpected Phase in PutFile: " + std::to_string(static_cast<int>(_phase)));
+        // Nothing has written to storage, so the failures above are not conflicts
+        // and the modified document is uploaded while closing, as it should be.
+        TST_LOG("Third PutFile, on closing, which will succeed");
+        LOK_ASSERT_STATE(_phase, Phase::WaitDestroy);
+
         return nullptr;
     }
 

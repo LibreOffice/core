@@ -267,6 +267,7 @@ DocumentBroker::DocumentBroker(ChildType type, const std::string& uri, const Poc
     , _isModified(false)
     , _stop(false)
     , _documentChangedInStorage(false)
+    , _lastUploadDefinitelyFailed(false)
     , _isViewFileExtension(false)
     , _isViewSettingsUpdated(false)
     , _alwaysSaveOnExit(ConfigUtil::getConfigValue<bool>("per_document.always_save_on_exit", false))
@@ -3821,9 +3822,9 @@ void DocumentBroker::handleUploadToStorageFailed(const StorageBase::UploadResult
                                             << _storageManager.getSizeAsUploaded()
                                             << " bytes with reason: " << uploadResult.getReason());
 
-        // Since we've failed to get a response, we cannot know if the
-        // Storage has been updated. As such, we need to re-sync the
-        // document's last modified timestamp.
+        // We may not know whether the Storage has been updated, so we need to
+        // re-sync the document's last modified timestamp.
+        _lastUploadDefinitelyFailed = uploadResult.isDefiniteFailure();
         endActivity(); // Probably in Activity::Upload.
         startActivity(DocumentState::Activity::SyncFileTimestamp);
 
@@ -6675,36 +6676,84 @@ void DocumentBroker::checkFileInfo(const std::shared_ptr<ClientSession>& session
 
             std::string lastModifiedTime;
             JsonUtil::findJSONValue(object, "LastModifiedTime", lastModifiedTime);
-            std::size_t size = 0;
-            JsonUtil::findJSONValue(object, "Size", size);
 
-            // It's highly unlikely that the document has been clobbered externally,
-            // yet the size matches exactly. Still, if we are paranoid, we can download
-            // and compare the SHA256 with the one we uploaded. For now, this is an improvement.
-            if (_storageManager.getSizeAsUploaded() == size || _storageManager.getSizeOnServer())
+            const std::string& lastKnownTime = _storageManager.getLastModifiedServerTimeString();
+            if (lastKnownTime.empty())
             {
+                // We have no timestamp to compare against, because the response
+                // to an earlier upload carried none and we marked ours unsafe;
+                // SharePoint does this. Nothing can be inferred from a timestamp
+                // we never had, so take what storage reports as the new baseline
+                // rather than read a change into it. This also puts uploads back
+                // under the timestamp guard, which an unsafe time disables.
                 LOG_INF("After failing to upload ["
-                        << _docKey << "], the size on WOPI host matches "
-                        << (_storageManager.getSizeAsUploaded() == size ? "our uploaded"
-                                                                        : "the old size before our")
-                        << " last uploaded size: " << size
-                        << " bytes. We will assume this is our last uploaded version and "
-                           "synchronize the timestamp to: "
-                        << lastModifiedTime
-                        << "(from: " << _storageManager.getLastModifiedServerTimeString() << ')');
+                        << _docKey
+                        << "], we have no last-known timestamp to compare against. Taking the one "
+                           "in storage ["
+                        << lastModifiedTime << "] as our baseline");
 
                 _storage->setLastModifiedTime(lastModifiedTime);
                 _storageManager.setLastModifiedServerTimeString(lastModifiedTime);
             }
+            else if (lastModifiedTime == lastKnownTime)
+            {
+                // Storage still carries the timestamp we last saw, so nothing has
+                // been written since. Our upload didn't land and nobody else has
+                // touched the file. There is nothing to reconcile and no conflict;
+                // the pending upload can simply be retried.
+                LOG_INF("After failing to upload ["
+                        << _docKey << "], the timestamp in storage is unchanged at ["
+                        << lastModifiedTime
+                        << "]. The document in storage is intact; will retry uploading");
+            }
+            else if (_lastUploadDefinitelyFailed)
+            {
+                // Our upload did not reach storage, so the new timestamp is
+                // somebody else's doing. The user has to decide whether to keep
+                // their version or the one in storage.
+                LOG_WRN("After our upload definitely failed, the timestamp in storage ["
+                        << lastModifiedTime << "] no longer matches our last known ["
+                        << lastKnownTime << "]. The document was changed in storage");
+
+                handleDocumentConflict("Document changed in storage (timestamp changed after a "
+                                       "rejected upload).\nLast known timestamp: " +
+                                       lastKnownTime + "\nTimestamp in storage: " +
+                                       lastModifiedTime);
+            }
             else
             {
-                LOG_WRN("After failing to upload, the document size neither matches the original, "
-                        "nor our last uploaded. The document is in conflict.");
+                // We never got an answer, so our upload may well have landed and
+                // the timeout happened after the host had written the file. Size
+                // is all we have to tell our own version apart from someone else's;
+                // it's weak, but the alternative is to bother the user with a
+                // conflict on every upload that times out.
+                std::size_t size = 0;
+                JsonUtil::findJSONValue(object, "Size", size);
 
-                handleDocumentConflict("Document changed in storage (size mismatch after a failed "
-                                       "upload).\nLast known timestamp: " +
-                                       _storageManager.getLastModifiedServerTimeString() +
-                                       "\nTimestamp in storage: " + lastModifiedTime);
+                if (size == _storageManager.getSizeAsUploaded())
+                {
+                    LOG_INF("After failing to get a response to our upload of ["
+                            << _docKey << "], storage holds " << size
+                            << " bytes, the size we uploaded. Assuming our upload did land and "
+                               "synchronizing the timestamp to ["
+                            << lastModifiedTime << "] (from [" << lastKnownTime << "])");
+
+                    _storage->setLastModifiedTime(lastModifiedTime);
+                    _storageManager.setLastModifiedServerTimeString(lastModifiedTime);
+                }
+                else
+                {
+                    LOG_WRN("After failing to get a response to our upload, storage holds "
+                            << size << " bytes, not the " << _storageManager.getSizeAsUploaded()
+                            << " we uploaded, and the timestamp [" << lastModifiedTime
+                            << "] no longer matches our last known [" << lastKnownTime
+                            << "]. The document was changed in storage");
+
+                    handleDocumentConflict("Document changed in storage (timestamp changed after "
+                                           "an upload with no response).\nLast known timestamp: " +
+                                           lastKnownTime + "\nTimestamp in storage: " +
+                                           lastModifiedTime);
+                }
             }
         }
         else

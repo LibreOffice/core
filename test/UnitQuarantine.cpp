@@ -58,7 +58,6 @@ class UnitQuarantineConflict : public WOPIUploadConflictCommon
 
     std::string _quarantinePath;
     bool _unloadingModifiedDocDetected;
-    bool _putFailed;
 
     static constexpr std::size_t LimitStoreFailures = 2;
     static constexpr bool SaveOnExit = true;
@@ -67,7 +66,6 @@ public:
     UnitQuarantineConflict()
         : Base("UnitQuarantineConflict", OriginalDocContent)
         , _unloadingModifiedDocDetected(true)
-        , _putFailed(false)
     {
     }
 
@@ -101,9 +99,6 @@ public:
 
     void onDocBrokerCreate(const std::string& docKey) override
     {
-        // reset for the next document
-        _putFailed = false;
-
         Base::onDocBrokerCreate(docKey);
 
         if (_scenario == Scenario::VerifyOverwrite)
@@ -116,8 +111,11 @@ public:
             // With always_save_on_exit=true and limit_store_failures=LimitStoreFailures,
             // we expect exactly two PutFile requests per document.
             setExpectedPutFile(LimitStoreFailures);
-            setExpectedCheckFileInfo(2); // Conflict recovery requires second CFI.
         }
+
+        // Every failed upload is followed by a CheckFileInfo to reconcile with
+        // storage, on top of the one we do when loading.
+        setExpectedCheckFileInfo(getExpectedPutFile() + 1);
     }
 
     std::unique_ptr<http::Response>
@@ -147,10 +145,10 @@ public:
         const std::string wopiTimestamp = request.get("X-COOL-WOPI-Timestamp", std::string());
         const bool force = wopiTimestamp.empty(); // Without a timestamp we force to always store.
 
-        // We don't expect overwriting by forced uploading.
-        LOK_ASSERT_EQUAL_MESSAGE("Unexpected overwritting the document in storage", _putFailed, force);
-
-        _putFailed = true;
+        // We don't expect overwriting by forced uploading. Nothing writes to
+        // storage here, so there is no conflict and every upload, the retry and
+        // the always_save_on_exit one included, keeps its timestamp guard.
+        LOK_ASSERT_EQUAL_MESSAGE("Unexpected overwritting the document in storage", false, force);
 
         // Internal Server Error.
         return std::make_unique<http::Response>(http::StatusCode::InternalServerError);
@@ -194,23 +192,14 @@ public:
         TST_LOG("Testing " << name(_scenario) << ": [" << message << ']');
         LOK_ASSERT_STATE(_phase, Phase::WaitDocClose);
 
-        if (getCountCheckFileInfo() == 1)
-        {
-            LOK_ASSERT_MESSAGE("Expect only savefailed errors on first upload",
-                               message.starts_with("error: cmd=storage kind=savefailed"));
-        }
-        else
-        {
-            // Once the first upload fails, we issue CheckFileInfo, which detects the conflict.
-            // The conflict error may carry a trailing " errordetail=" token.
-            LOK_ASSERT_MESSAGE(
-                "Expect only documentconflict errors after the second CheckFileInfo",
-                message.starts_with("error: cmd=storage kind=documentconflict"));
+        // Uploading fails permanently, but nothing ever writes to storage, so the
+        // timestamp there never moves and there is nothing to conflict with.
+        LOK_ASSERT_MESSAGE("Expect only savefailed errors",
+                           message.starts_with("error: cmd=storage kind=savefailed"));
 
-            // Close the document.
-            TST_LOG("Closing the document");
-            WSD_CMD("closedocument");
-        }
+        // Close the document.
+        TST_LOG("Closing the document");
+        WSD_CMD("closedocument");
 
         return true;
     }

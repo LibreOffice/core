@@ -241,11 +241,21 @@ public:
 
         const std::string& getReason() const { return _reason; }
 
+        /// Records that we know the host did not write the file: it answered
+        /// with an error, or we never managed to send the request. Left false
+        /// when we cannot tell, as when the request times out in flight and the
+        /// host may have written the file before we gave up on it.
+        void setDefiniteFailure(bool definite) { _definiteFailure = definite; }
+
+        bool isDefiniteFailure() const { return _definiteFailure; }
+
     private:
         std::string _saveAsName;
         std::string _saveAsUrl;
         std::string _reason;
         Result _result;
+        /// Whether we know for certain that the upload did not reach storage.
+        bool _definiteFailure = false;
     };
 
     /// The state of an asynchronous request.

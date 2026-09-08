@@ -922,9 +922,10 @@ std::size_t WopiStorage::uploadLocalFileToStorageAsync(
                 LOG_ERR("Cannot connect to [" << uri << "] for uploading to wopi storage");
                 // Retire.
                 _uploadHttpSession.reset();
-                asyncUploadCallback(
-                    AsyncUpload(AsyncUpload::State::Error,
-                                UploadResult(UploadResult::Result::FAILED, "Connection failed.")));
+                // We never connected, so storage cannot have been written.
+                UploadResult res(UploadResult::Result::FAILED, "Connection failed.");
+                res.setDefiniteFailure(true);
+                asyncUploadCallback(AsyncUpload(AsyncUpload::State::Error, std::move(res)));
             });
 
         // Notify client via callback that the request is in progress...
@@ -950,8 +951,10 @@ std::size_t WopiStorage::uploadLocalFileToStorageAsync(
         _uploadHttpSession.reset();
     }
 
-    asyncUploadCallback(AsyncUpload(
-        AsyncUpload::State::Error, UploadResult(UploadResult::Result::FAILED, "Internal error.")));
+    // We never made the request, so storage cannot have been written.
+    UploadResult res(UploadResult::Result::FAILED, "Internal error.");
+    res.setDefiniteFailure(true);
+    asyncUploadCallback(AsyncUpload(AsyncUpload::State::Error, std::move(res)));
 
     return 0;
 }
@@ -962,6 +965,13 @@ WopiStorage::handleUploadToStorageResponse(const WopiUploadDetails& details,
 {
     // Assume we failed, unless we have confirmation of success.
     StorageBase::UploadResult result(UploadResult::Result::FAILED, responseString);
+
+    // An Invalid status category means we never got a response: the request
+    // timed out or the connection was dropped, and the host may or may not have
+    // written the file. Any other status is an answer from the host, and an
+    // answer that isn't success means it did not write the file.
+    result.setDefiniteFailure(http::StatusLine(details.httpResponseCode).statusCategory() !=
+                              http::StatusLine::StatusCodeClass::Invalid);
     try
     {
         // Save a copy of the response because we might need to anonymize.

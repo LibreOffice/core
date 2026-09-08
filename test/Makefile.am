@@ -50,6 +50,7 @@ all_la_unit_tests = \
 	unit-wopi-documentconflict.la \
 	unit-wopi-stuck-save.la \
 	unit-wopi-fail-upload.la \
+	unit-wopi-fail-upload-no-conflict.la \
 	unit-wopi-async-slow.la \
 	unit-perf.la \
 	unit-wopi-lock.la \
@@ -396,6 +397,8 @@ unit_wopi_transient_connect_fault_la_SOURCES = UnitWOPITransientConnectFault.cpp
 unit_wopi_transient_connect_fault_la_LIBADD = $(CPPUNIT_LIBS)
 unit_wopi_fail_upload_la_SOURCES = UnitWOPIFailUpload.cpp
 unit_wopi_fail_upload_la_LIBADD = $(CPPUNIT_LIBS)
+unit_wopi_fail_upload_no_conflict_la_SOURCES = UnitWOPIFailUploadNoConflict.cpp
+unit_wopi_fail_upload_no_conflict_la_LIBADD = $(CPPUNIT_LIBS)
 unit_wopi_renamefile_la_SOURCES = UnitWOPIRenameFile.cpp
 unit_wopi_renamefile_la_LIBADD = $(CPPUNIT_LIBS)
 unit_wopi_languages_la_SOURCES = UnitWOPILanguages.cpp
