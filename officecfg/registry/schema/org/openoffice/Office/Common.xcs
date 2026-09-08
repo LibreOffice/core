@@ -638,7 +638,7 @@
       <prop oor:name="SelectionMaximumLuminancePercent" oor:type="xs:short" oor:nillable="false">
         <info>
           <desc>Specifies the maximum allowed luminance the system's selection
-          color may have. When the colorfetched from the system is brighter
+          color may have. When the color fetched from the system is brighter
           (luminance is bigger), it will be scaled to a luminance of exactly
           this given value.</desc>
           <label>Specifies the maximum allowed luminance for the system's

@@ -259,7 +259,7 @@ void LegendConverter::convertFromModel( const Reference< XDiagram >& rxDiagram, 
         cssc2::LegendPosition eLegendPos = cssc2::LegendPosition_LINE_END;
         cssc::ChartLegendExpansion eLegendExpand = cssc::ChartLegendExpansion_CUSTOM;
         RelativePosition eRelPos;
-        bool bTopRight=false;
+        bool bTopRight = false;
         switch( mrModel.mnPosition )
         {
             case XML_l:
@@ -272,9 +272,9 @@ void LegendConverter::convertFromModel( const Reference< XDiagram >& rxDiagram, 
             break;
             case XML_tr:    // top-right not supported
                 eRelPos.Primary = 1;
-                eRelPos.Secondary =0;
+                eRelPos.Secondary = 0;
                 eRelPos.Anchor = Alignment_TOP_RIGHT;
-                bTopRight=true;
+                bTopRight = true;
             break;
             case XML_t:
                 eLegendPos = cssc2::LegendPosition_PAGE_START;
@@ -285,7 +285,7 @@ void LegendConverter::convertFromModel( const Reference< XDiagram >& rxDiagram, 
                 eLegendExpand = cssc::ChartLegendExpansion_WIDE;
             break;
         }
-        bool bManualLayout=false;
+        bool bManualLayout = false;
         // manual positioning and size
         if( mrModel.mxLayout )
         {
@@ -303,7 +303,7 @@ void LegendConverter::convertFromModel( const Reference< XDiagram >& rxDiagram, 
         aPropSet.setProperty( PROP_Expansion, eLegendExpand );
 
         if (bTopRight && !bManualLayout)
-            aPropSet.setProperty( PROP_RelativePosition , Any(eRelPos));
+            aPropSet.setProperty( PROP_RelativePosition, Any(eRelPos));
 
         aPropSet.setProperty(PROP_Overlay, mrModel.mbOverlay);
 

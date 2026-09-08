@@ -100,7 +100,7 @@ packimages_icon_themes := $(filter %/,$(wildcard $(SRCDIR)/icon-themes/*/))
 # on the full list, and similarly the recursive filtering call from the initial
 # version of the patch also fails on windows for some reason
 # so don't try to be clever and do it in this awkward/tedious way.
-# all this does is filtering everything for png/svg files that have /cmd/ as
+# all this does is filter everything for png/svg files that have /cmd/ as
 # part of their path and then replacing the path to the theme-directory with
 # %MODULE% - the surrounding sort not only sorts the lists, but gets rid of
 # duplicate filenames that are left after the %MODULE% replacement

@@ -59,7 +59,7 @@
       </prop>
       <prop oor:name="MaskFileName" oor:type="xs:string">
         <info>
-          <desc>The file name of the mask bitmap. Use red for pixel outside of
+          <desc>The file name of the mask bitmap. Use red for pixels outside of
             the border and blue for inside pixels.</desc>
         </info>
         <value/>
@@ -90,8 +90,8 @@
       </prop>
       <prop oor:name="ReplacementColor" oor:type="xs:hexBinary">
         <info>
-          <desc>Color that is used as replacement for the bitmap when the later
-            can for some reason not be used.</desc>
+          <desc>Color that is used as replacement for the bitmap when the latter
+            cannot be used for some reason.</desc>
         </info>
       </prop>
       <prop oor:name="HorizontalTexturingMode" oor:type="xs:string">

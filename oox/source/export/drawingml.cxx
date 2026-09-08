@@ -517,7 +517,7 @@ void DrawingML::WriteSolidFill( const Reference< XPropertySet >& rXPropSet )
         bNeedGradientFill = !aTransparenceGradient.GetColorStops().isSingleColor(aSingleColor);
 
         // we no longer need to 'guess' if FillTransparenceGradient is used by
-        // comparing it's 1st color to COL_BLACK after having tested that the
+        // comparing its 1st color to COL_BLACK after having tested that the
         // FillTransparenceGradientName is set
         if (!bNeedGradientFill)
         {
@@ -662,7 +662,7 @@ void DrawingML::WriteGradientFill( const Reference< XPropertySet >& rXPropSet )
     // only for DOCX.
     if (aOriginalGradient == aGradient && GetDocumentType() == DOCUMENT_DOCX)
     {
-        // If we have no gradient stops that means original gradient were defined by a theme.
+        // If we have no gradient stops that means original gradient was defined by a theme.
         if( aGradientStops.hasElements() )
         {
             mpFS->startElementNS(XML_a, XML_gradFill, XML_rotWithShape, "0");
@@ -1136,7 +1136,7 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
 
         bool bIsRelative(aLineDash.Style == DashStyle_RECTRELATIVE || aLineDash.Style == DashStyle_ROUNDRELATIVE);
         if ( bIsRelative && aLineDash.Dots == 1)
-        {   // The length were tweaked on import in case of prstDash. Revert it here.
+        {   // The lengths were tweaked on import in case of prstDash. Revert it here.
             sal_uInt32 nDotLen = aLineDash.DotLen;
             sal_uInt32 nDashLen = aLineDash.DashLen;
             sal_uInt32 nDistance = aLineDash.Distance;
@@ -1148,7 +1148,7 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
                     nDashLen += 99;
             }
             // LO uses length 0 for 100%, if the attribute is missing in ODF.
-            // Other applications might write 100%. Make is unique for the conditions.
+            // Other applications might write 100%. Make it unique for the conditions.
             if (nDotLen == 0)
                 nDotLen = 100;
             if (nDashLen == 0 && aLineDash.Dashes > 0)

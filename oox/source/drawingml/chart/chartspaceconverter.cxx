@@ -318,23 +318,23 @@ void ChartSpaceConverter::convertFromModel( const Reference< XShapes >& rxExtern
     if ( mrModel.mbPivotChart )
     {
         PropertySet aProps( getChartDocument() );
-        aProps.setProperty( PROP_DisableDataTableDialog , true );
-        aProps.setProperty( PROP_DisableComplexChartTypes , true );
+        aProps.setProperty( PROP_DisableDataTableDialog, true );
+        aProps.setProperty( PROP_DisableComplexChartTypes, true );
     }
 
-    if(!mrModel.maSheetPath.isEmpty() )
+    if (!mrModel.maSheetPath.isEmpty())
     {
         Reference< css::chart::XChartDocument > xChartDoc( getChartDocument(), UNO_QUERY );
         PropertySet aProps( xChartDoc->getDiagram() );
-        aProps.setProperty( PROP_ExternalData , uno::Any(mrModel.maSheetPath) );
+        aProps.setProperty( PROP_ExternalData, uno::Any(mrModel.maSheetPath) );
     }
 
     if (mrModel.mbDate1904) {
-        util::DateTime aNullDate(0,0,0,0,1,1,1904, false);
+        util::DateTime aNullDate(0, 0, 0, 0, 1, 1, 1904, false);
         Any aAny;
         aAny <<= aNullDate;
         Reference< css::chart::XChartDocument > xChartDoc( getChartDocument(), UNO_QUERY );
-        Reference< beans::XPropertySet > xDocPropSet(xChartDoc, UNO_QUERY );
+        Reference< beans::XPropertySet > xDocPropSet(xChartDoc, UNO_QUERY);
         xDocPropSet->setPropertyValue(u"NullDate"_ustr, aAny);
     }
 }

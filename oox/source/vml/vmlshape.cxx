@@ -1616,6 +1616,6 @@ Reference< XShape > GroupShape::implConvertAndInsert( const Reference< XShapes >
     return xGroupShape;
 }
 
-} // namespace oox
+} // namespace oox::vml
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

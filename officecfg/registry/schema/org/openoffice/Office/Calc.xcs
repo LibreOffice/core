@@ -1172,7 +1172,7 @@
         </prop>
         <prop oor:name="SkipEmptyCells" oor:type="xs:boolean" oor:nillable="false">
           <info>
-            <desc>If true, Calc preserves previous content of cells when pasting empty ones. If false, Calc delete content of previous cells.</desc>
+            <desc>If true, Calc preserves previous content of cells when pasting empty ones. If false, Calc deletes content of previous cells.</desc>
             <label>SkipEmptyCells</label>
           </info>
           <value>true</value>
@@ -1286,7 +1286,7 @@
         </prop>
         <prop oor:name="SkipEmptyCells" oor:type="xs:boolean" oor:nillable="false">
           <info>
-            <desc>If true, Calc preserves previous content of cells when pasting empty ones. If false, Calc delete content of previous cells.</desc>
+            <desc>If true, Calc preserves previous content of cells when pasting empty ones. If false, Calc deletes content of previous cells.</desc>
             <label>SkipEmptyCells</label>
           </info>
           <value>false</value>
@@ -1959,7 +1959,7 @@
       </group>
       <prop oor:name="Links" oor:type="xs:boolean" oor:nillable="false">
         <info>
-          <desc>Insert link for the cell, instead of text fields in a cell.(Excel interopability options)</desc>
+          <desc>Insert link for the cell, instead of text fields in a cell.(Excel interoperability options)</desc>
           <label>Links like Excel</label>
         </info>
         <value>false</value>

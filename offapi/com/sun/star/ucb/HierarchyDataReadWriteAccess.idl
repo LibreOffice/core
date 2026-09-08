@@ -39,7 +39,7 @@ published service HierarchyDataReadWriteAccess
         must remove data members. However, the mandatory data members (Title,
         TargetURL, Children) must never be removable.
 
-        <p>Replacing and getting values must be supported be every data node.
+        <p>Replacing and getting values must be supported by every data node.
      */
     interface com::sun::star::container::XNameContainer;
 

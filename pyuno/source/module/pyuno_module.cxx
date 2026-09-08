@@ -202,7 +202,7 @@ OUString getLibDirImpl()
 {
     OUString libDir;
 
-    // workarounds the $(ORIGIN) until it is available
+    // workaround the $(ORIGIN) until it is available
     if (Module::getUrlFromAddress(reinterpret_cast<oslGenericFunction>(getLibDir), libDir))
     {
         libDir = libDir.copy(0, libDir.lastIndexOf('/'));
@@ -592,7 +592,7 @@ static PyObject *getConstantByName(
                       typeName)
                   >>= td))
             {
-                throw RuntimeException( "pyuno.getConstantByName: " + typeName + "is not a constant" );
+                throw RuntimeException( "pyuno.getConstantByName: " + typeName + " is not a constant" );
             }
             PyRef constant = runtime.any2PyObject( td->getConstantValue() );
             ret = constant.getAcquired();

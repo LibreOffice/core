@@ -54,8 +54,8 @@ TextField::TextField()
 
 namespace {
 
-/** instantiate the textfields. Because of semantics difference between
- * OpenXML and OpenOffice, some OpenXML field might cause two fields to be created.
+/** instantiate the textfields. Because of semantic differences between
+ * OpenXML and OpenOffice, some OpenXML fields might cause two fields to be created.
  * @param aFields the created fields. The list is empty if no field has been created.
  * @param xModel the model
  * @param sType the OpenXML field type.

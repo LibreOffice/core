@@ -313,7 +313,7 @@ void SmartArtDiagram::writeDiagramOOXData(DrawingML& rOriginalDrawingML, uno::Re
     getData()->writeDiagramData(rOriginalDrawingML, aFS, rDrawingRelId);
 
     // this call is *important*, without it xDocBuilder->parse below fails and some strange
-    // and wrong assertion gets thrown in ~FastSerializerHelper that  shall get called
+    // and wrong assertion gets thrown in ~FastSerializerHelper that shall get called
     xOutputStream->closeOutput();
 
 #ifdef DBG_UTIL
@@ -353,7 +353,7 @@ void SmartArtDiagram::writeDiagramOOXDrawing(DrawingML& rOriginalDrawingML, uno:
     getData()->writeDiagramReplacement(rOriginalDrawingML, aFS);
 
     // this call is *important*, without it xDocBuilder->parse below fails and some strange
-    // and wrong assertion gets thrown in ~FastSerializerHelper that  shall get called
+    // and wrong assertion gets thrown in ~FastSerializerHelper that shall get called
     xOutputStream->closeOutput();
 
 #ifdef DBG_UTIL
@@ -419,7 +419,7 @@ void SmartArtDiagram::addDiagramModelData(boost::property_tree::ptree& rTarget) 
     // needs to be created.
     // Similar with OOXDrawing: This contains parts of ModelData, e.g. Text and
     // Attributes represented by the XShapes/Sdrobjects, so for internal formats
-    // this is not needed to be saved. This also true for OOXDrawingImageRels
+    // this is not needed to be saved. This is also true for OOXDrawingImageRels
     // and OOXDrawingHlinkRels.
     // We *do* import OOXLayoutDomTree/ModelInfo and this is used in the layouting
     // mechanism (reLayout), but it is not changed. We could add an export of that

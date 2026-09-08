@@ -141,7 +141,7 @@ interface XReportComponent
     the corresponding master field.<br/>
     Alternatively, you could simply base your report on the table <code>invoices</code>,
     and add the column name <code>cust_ref</code> to the DetailFields. In this case,
-    and implicit filter clause <code>WHERE cust_ref = :&lt;new_param_name&gt;</code> will
+    an implicit filter clause <code>WHERE cust_ref = :&lt;new_param_name&gt;</code> will
     be created, and the artificial parameter will be filled from the corresponding
     master field.<br/>
     If a string in this property denotes both a column name and a parameter name, it

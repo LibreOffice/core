@@ -69,7 +69,7 @@ published service DataForm
 
         <p>One main difference between XLoadable::load() and com::sun::star::sdbc::XRowSet::execute()
         is that if you use the former, the row set is positioned on the first record, while in the latter case
-        it is position <em>before</em> the it.</p>
+        it is positioned <em>before</em> it.</p>
     */
     interface com::sun::star::form::XLoadable;
 
@@ -126,7 +126,7 @@ published service DataForm
         the corresponding master field.<br/>
         Alternatively, you could simply base your form on the table <code>invoices</code>,
         and add the column name <code>cust_ref</code> to the DetailFields. In this case,
-        and implicit filter clause <code>WHERE cust_ref = :&lt;new_param_name&gt;</code> will
+        an implicit filter clause <code>WHERE cust_ref = :&lt;new_param_name&gt;</code> will
         be created, and the artificial parameter will be filled from the corresponding
         master field.<br/>
         If a string in this property denotes both a column name and a parameter name, it

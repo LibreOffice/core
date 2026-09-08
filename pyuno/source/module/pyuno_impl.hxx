@@ -265,7 +265,6 @@ private:
     css::uno::Sequence< sal_Int16 > getOutIndexes( const OUString & functionName );
 
 public:
-public:
     Adapter( PyRef obj,
              const css::uno::Sequence< css::uno::Type > & types );
 

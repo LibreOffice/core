@@ -217,7 +217,7 @@ void AxesSetConverter::convertFromModel( const Reference< XDiagram >& rxDiagram,
             // convert all chart type groups, this converts all series data and formatting
             for (auto const& typeGroup : aTypeGroups)
                 typeGroup->convertFromModel( rxDiagram, xCoordSystem,
-                        nAxesSetIdx,bSupportsVaryColorsByPoint );
+                        nAxesSetIdx, bSupportsVaryColorsByPoint );
 
             // convert all axes (create missing axis models)
             ModelRef< AxisModel > xXAxis = lclGetOrCreateAxis( mrModel.maAxes,
@@ -653,6 +653,6 @@ void PlotAreaConverter::convertPositionFromModel()
     }
 }
 
-} // namespace oox
+} // namespace oox::drawingml::chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
