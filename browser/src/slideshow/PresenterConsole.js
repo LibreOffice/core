@@ -335,7 +335,7 @@ class PresenterConsole {
 
 		this._proxyPresenter.document.body.style.display = 'flex';
 		this._proxyPresenter.document.body.style.flexDirection = 'column';
-		this._proxyPresenter.document.body.style.minHeight = '100vh';
+		this._proxyPresenter.document.body.style.height = '100vh';
 		this._proxyPresenter.document.body.style.minWidth = '100vw';
 
 		let elem;
@@ -366,7 +366,10 @@ class PresenterConsole {
 		mainContentContainer.style.display = 'flex';
 		mainContentContainer.style.flexDirection = 'column';
 		mainContentContainer.style.minWidth = '100vw';
-		mainContentContainer.style.minHeight = '100vh';
+		// This container fills the body, so it and the toolbar above it together stay one
+		// viewport tall.
+		mainContentContainer.style.flex = '1';
+		mainContentContainer.style.minHeight = '0';
 
 		// Disable text selection
 		mainContentContainer.style.userSelect = 'none'; //Firefox, Chrome etc.
@@ -375,9 +378,11 @@ class PresenterConsole {
 
 		elem = this._proxyPresenter.document.querySelector('#presentation-content');
 		elem.style.display = 'flex';
-		elem.style.flexWrap = 'wrap';
 		elem.style.gap = '3vw';
 		elem.style.marginBottom = '10px';
+		// The row takes the height under the toolbar and holds its columns on one line.
+		elem.style.flex = '1';
+		elem.style.minHeight = '0';
 
 		this._first = elem = this._proxyPresenter.document.querySelector(
 			'#first-presentation',
@@ -416,9 +421,15 @@ class PresenterConsole {
 		elem = this._proxyPresenter.document.querySelector(
 			'#current-slide-container',
 		);
+		// The slide canvas is a block, so the height it is given is all the room it takes.
+		// The control row then sits right under the slide.
+		this._currentSlideCanvas.style.display = 'block';
 		// this will handle the responsiveness on resize for current-presentation window
 		elem.style.width = '56vw';
-		elem.style.height = '67vh';
+		// This box takes the height left in the column under the timer and its buttons. The
+		// slide and the control row below it then fit on screen at any window size.
+		elem.style.flex = '1';
+		elem.style.minHeight = '0';
 
 		// slideshow-control-container
 		let slideshowControlContainer = this._proxyPresenter.document.querySelector(
@@ -470,7 +481,7 @@ class PresenterConsole {
 		notesSeparator.style.color = 'transparent';
 		notesSeparator.style.border = '1px solid';
 		notesSeparator.style.margin = '2vh 0vw';
-		notesSeparator.style.height = '85vh';
+		notesSeparator.style.alignSelf = 'stretch';
 
 		this._second = elem = this._proxyPresenter.document.querySelector(
 			'#second-presentation',
@@ -495,7 +506,9 @@ class PresenterConsole {
 			'#next-slide-container',
 		);
 		nextSlideContainer.style.width = '25vw';
-		nextSlideContainer.style.height = '80vh';
+		// This box takes the height left in the column under its label.
+		nextSlideContainer.style.flex = '1';
+		nextSlideContainer.style.minHeight = '0';
 		nextSlideContainer.style.display = 'flex';
 		nextSlideContainer.style.flexDirection = 'column';
 		nextSlideContainer.style.gap = '2vw';
@@ -510,6 +523,8 @@ class PresenterConsole {
 		this._notes.style.borderTop = '2px solid transparent';
 		this._notes.style.fontSize = '24px';
 		this._notes.style.overflowX = 'hidden';
+		// Notes longer than the pane scroll inside it.
+		this._notes.style.overflowY = 'auto';
 
 		elem = this._proxyPresenter.document.createElement('div');
 		elem.id = 'notes';
@@ -533,7 +548,8 @@ class PresenterConsole {
 		elem = this._proxyPresenter.document.createElement('div');
 		elem.id = 'slides-preview';
 		elem.style.overflow = 'auto';
-		elem.style.height = '90vh';
+		elem.style.flex = '1';
+		elem.style.minHeight = '0';
 		elem.style.width = '100%';
 		elem.style.display = 'flex';
 		elem.style.flexWrap = 'wrap';
@@ -589,6 +605,7 @@ class PresenterConsole {
 		elem.style.alignItems = 'center';
 		elem.style.justifyContent = 'space-between';
 		elem.style.width = '100%';
+		elem.style.minWidth = 'max-content';
 		elem.style.marginBottom = '1vh';
 
 		elem = this._proxyPresenter.document.querySelector('#timer');
@@ -597,6 +614,7 @@ class PresenterConsole {
 		// a small window. The browser recomputes the viewport unit on resize.
 		elem.style.fontSize = 'clamp(24px, 5vw, 80px)';
 		elem.style.fontWeight = '600';
+		elem.style.whiteSpace = 'nowrap';
 		elem.style.color = window
 			.getComputedStyle(document.documentElement)
 			.getPropertyValue('--color-text-light');
@@ -666,6 +684,7 @@ class PresenterConsole {
 		elem.style.textAlign = 'right';
 		elem.style.fontSize = 'clamp(24px, 5vw, 80px)';
 		elem.style.fontWeight = '600';
+		elem.style.whiteSpace = 'nowrap';
 		elem.style.marginLeft = 'auto';
 		elem.style.color = window
 			.getComputedStyle(document.documentElement)
@@ -1433,6 +1452,31 @@ class PresenterConsole {
 		this._map.off('tilepreview', this._onTilePreview, this);
 	}
 
+	// A slide preview shares its container with the control row, and beside the next slide with
+	// the notes pane. Those keep their own height, so the preview gets what is left.
+	_heightLeftForPreview(container, preview) {
+		const rowGap =
+			parseFloat(this._proxyPresenter.getComputedStyle(container).rowGap) || 0;
+		let height = container.getBoundingClientRect().height;
+		let shownCount = 0;
+		for (const sibling of container.children) {
+			const style = this._proxyPresenter.getComputedStyle(sibling);
+			if (style.display === 'none') {
+				continue;
+			}
+			++shownCount;
+			if (sibling === preview) {
+				continue;
+			}
+			height -=
+				sibling.getBoundingClientRect().height +
+				parseFloat(style.marginTop) +
+				parseFloat(style.marginBottom);
+		}
+		height -= rowGap * Math.max(shownCount - 1, 0);
+		return Math.max(height, 0);
+	}
+
 	_resizeSlideView(viewContainerId, slideViewId) {
 		let container = this._proxyPresenter.document.querySelector(
 			'#' + viewContainerId,
@@ -1440,13 +1484,19 @@ class PresenterConsole {
 		if (!container) {
 			return;
 		}
-		let rect = container.getBoundingClientRect();
-		let size = this._map.getPreview(2000, 0, rect.width, rect.height, {
-			fetchThumbnail: false,
-			autoUpdate: false,
-		});
 		let slideView = this._proxyPresenter.document.querySelector(
 			'#' + slideViewId,
+		);
+		let rect = container.getBoundingClientRect();
+		let size = this._map.getPreview(
+			2000,
+			0,
+			rect.width,
+			this._heightLeftForPreview(container, slideView),
+			{
+				fetchThumbnail: false,
+				autoUpdate: false,
+			},
 		);
 		if (slideView) {
 			slideView.style.width = size.width + 'px';
