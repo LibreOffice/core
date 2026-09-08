@@ -96,7 +96,7 @@ using namespace ::com::sun::star::office;
 
 namespace {
 
-// this are the ids for page properties
+// these are the ids for page properties
 enum WID_PAGE
 {
     WID_PAGE_LEFT, WID_PAGE_RIGHT, WID_PAGE_TOP, WID_PAGE_BOTTOM, WID_PAGE_WIDTH,
@@ -494,7 +494,7 @@ rtl::Reference<SdrObject> SdGenericDrawPage::CreateSdrObject_( const Reference< 
 
     ::tools::Rectangle aRect( eObjKind == PresObjKind::Title ? GetPage()->GetTitleRect() : GetPage()->GetLayoutRect()  );
 
-    // OOXML placeholder with "TextAutoGrowHeight" use the height set on the slide
+    // OOXML placeholder with "TextAutoGrowHeight" uses the height set on the slide
     sal_Int32 nHeight = xShape->getSize().Height;
     if (nHeight != 0)
         aRect.setHeight(nHeight);

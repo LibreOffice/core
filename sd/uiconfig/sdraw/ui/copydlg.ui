@@ -554,7 +554,7 @@
                             <property name="draw-indicator">True</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="rgb-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="copydlg|extended_tip|rgb">Creates intermediate colors by linear interpolation in each of red, green, blue component</property>
+                                <property name="AtkObject::accessible-description" translatable="yes" context="copydlg|extended_tip|rgb">Creates intermediate colors by linear interpolation of each red, green, and blue component.</property>
                               </object>
                             </child>
                           </object>
@@ -575,7 +575,7 @@
                             <property name="group">rgb</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="hslinc-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="copydlg|extended_tip|hslinc">Creates intermediate colors in a clockwise direction using the HSL color wheel</property>
+                                <property name="AtkObject::accessible-description" translatable="yes" context="copydlg|extended_tip|hslinc">Creates intermediate colors in a clockwise direction using the HSL color wheel.</property>
                               </object>
                             </child>
                           </object>
@@ -596,7 +596,7 @@
                             <property name="group">rgb</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="hsldec-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="copydlg|extended_tip|hsldec">Creates intermediate colors counter-clockwise using the HSL color wheel</property>
+                                <property name="AtkObject::accessible-description" translatable="yes" context="copydlg|extended_tip|hsldec">Creates intermediate colors counter-clockwise using the HSL color wheel.</property>
                               </object>
                             </child>
                           </object>

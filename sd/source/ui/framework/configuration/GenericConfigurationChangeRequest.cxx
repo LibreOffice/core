@@ -66,7 +66,7 @@ void GenericConfigurationChangeRequest::execute (
 OUString SAL_CALL GenericConfigurationChangeRequest::getName()
 {
     return OUString::Concat("GenericConfigurationChangeRequest ")
-        + (meMode==Activation
+        + (meMode == Activation
            ? std::u16string_view(u"activate ") : std::u16string_view(u"deactivate "))
         + FrameworkHelper::ResourceIdToString(mxResourceId);
 }

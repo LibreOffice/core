@@ -46,12 +46,12 @@ class PresentationView : public AbstractView
 {
 public:
     explicit PresentationView (const rtl::Reference<ResourceId>& rxViewId)
-        : mxResourceId(rxViewId) {};
+        : mxResourceId(rxViewId) {}
 
     // XView
 
     virtual rtl::Reference<ResourceId> getResourceId() override
-    { return mxResourceId; };
+    { return mxResourceId; }
 
     virtual bool isAnchorOnly() override
     { return false; }
@@ -60,7 +60,7 @@ private:
     rtl::Reference<ResourceId> mxResourceId;
 };
 
-} // end of anonymous namespace.
+} // end of anonymous namespace
 
 //===== PresentationFactory ===================================================
 

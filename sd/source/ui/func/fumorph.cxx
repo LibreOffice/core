@@ -560,6 +560,6 @@ void FuMorph::ImpMorphPolygons(
     }
 }
 
-} // end of namespace sd
+} // namespace sd
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

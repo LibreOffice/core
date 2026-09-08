@@ -525,8 +525,7 @@ void EventMultiplexer::Implementation::notifyConfigurationChange (
                     CallListeners (EventMultiplexerEventId::MainViewRemoved);
                 }
 
-                // Remove selection change listener from slide sorter.  Add
-                // selection change listener at slide sorter.
+                // Remove selection change listener from slide sorter.
                 if (rEvent.ResourceId->getResourceURL() == FrameworkHelper::msSlideSorterURL)
                 {
                     auto pView = dynamic_cast<sd::framework::AbstractView*>(rEvent.ResourceObject.get());
@@ -548,7 +547,6 @@ void EventMultiplexer::Implementation::notifyConfigurationChange (
 
         default: break;
     }
-
 }
 
 void EventMultiplexer::Implementation::disposing(std::unique_lock<std::mutex>& rGuard)

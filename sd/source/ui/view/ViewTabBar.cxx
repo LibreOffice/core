@@ -333,7 +333,7 @@ void ViewTabBar::AddTabBarButton (
     }
     else
     {
-        for (nIndex=0; nIndex<maTabBarButtons.size(); ++nIndex)
+        for (nIndex = 0; nIndex < maTabBarButtons.size(); ++nIndex)
         {
             if (IsEqual(maTabBarButtons[nIndex], rAnchor))
             {

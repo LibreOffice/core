@@ -194,7 +194,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
     {
         Size aSizePixel = rGraphic.GetSizePixel();
 
-        // create  new object
+        // create new object
         Size aSize;
 
         if ( rGraphic.GetPrefMapMode().GetMapUnit() == MapUnit::MapPixel )
@@ -655,7 +655,7 @@ IMPL_LINK_NOARG(View, DropInsertFileHdl, Timer *, void)
 }
 
 /**
- * Timer handler for Errorhandling at Drop()
+ * Timer handler for error handling at Drop()
  */
 IMPL_LINK_NOARG(View, DropErrorHdl, Timer *, void)
 {

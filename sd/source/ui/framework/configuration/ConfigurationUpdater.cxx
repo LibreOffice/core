@@ -294,7 +294,7 @@ void ConfigurationUpdater::CheckPureAnchors (
         const rtl::Reference<ResourceId>& xResourceId (aResources[nIndex]);
         const rtl::Reference<AbstractResource> xResource (
             mpResourceManager->GetResource(xResourceId).mxResource);
-        bool bDeactiveCurrentResource (false);
+        bool bDeactivateCurrentResource (false);
 
         // Skip all resources that are no pure anchors.
         if (xResource.is() && xResource->isAnchorOnly())
@@ -305,7 +305,7 @@ void ConfigurationUpdater::CheckPureAnchors (
             {
                 // No following anchors, deactivate this one, then remove it
                 // from the list.
-                bDeactiveCurrentResource = true;
+                bDeactivateCurrentResource = true;
             }
             else
             {
@@ -315,16 +315,16 @@ void ConfigurationUpdater::CheckPureAnchors (
                 {
                     // The previous resource (id) does not exist or is not bound to
                     // the current anchor.
-                    bDeactiveCurrentResource = true;
+                    bDeactivateCurrentResource = true;
                 }
             }
         }
 
-        if (bDeactiveCurrentResource)
+        if (bDeactivateCurrentResource)
         {
             SAL_INFO("sd.fwk", __func__ << ": deactivating pure anchor " <<
                     FrameworkHelper::ResourceIdToString(xResourceId) <<
-                    "because it has no children");
+                    " because it has no children");
             rResourcesToDeactivate.push_back(xResourceId);
             // Erase element from current configuration.
             for (sal_Int32 nI=nIndex; nI<nCount-2; ++nI)

@@ -650,7 +650,7 @@ SfxViewShell* View::GetSfxViewShell() const
     return pRet;
 }
 
-// Create a new view-local UndoManager manager for Impress/Draw
+// Create a new view-local UndoManager for Impress/Draw
 std::unique_ptr<SdrUndoManager> View::createLocalTextUndoManager()
 {
     std::unique_ptr<SdrUndoManager> pUndoManager(new sd::UndoManager);

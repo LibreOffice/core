@@ -385,7 +385,7 @@ public class UndoManager
         final XControlModel controlModel = UnoRuntime.queryInterface( XControlModel.class,
             getORB().createInstance( sQualifiedComponentName ) );
 
-        // knitt both
+        // knit both
         xShape.setControl( controlModel );
 
         // add the shape to the shapes collection of the document
@@ -1176,7 +1176,7 @@ public class UndoManager
         final CustomUndoAction action3 = new CustomUndoAction( "action 3" );
         i_undoManager.addUndoAction( action3 );
         i_undoManager.enterHiddenUndoContext();
-        assertEquals( "mixed hidden/normal context do are not properly notified", 4, m_undoListener.getCurrentUndoContextDepth() );
+        assertEquals( "mixed hidden/normal contexts are not properly notified", 4, m_undoListener.getCurrentUndoContextDepth() );
         i_undoManager.leaveUndoContext();
         assertTrue( "the left context was empty - why wasn't 'cancelled' notified?", m_undoListener.hasContextBeenCancelled() );
         assertFalse( m_undoListener.wasContextLeft() );

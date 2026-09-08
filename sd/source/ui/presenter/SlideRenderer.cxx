@@ -118,7 +118,7 @@ Bitmap SlideRenderer::CreatePreview (
 
     // Create the preview.  When the super sample factor n is greater than 1
     // then a preview is created in size (n*width, n*height) and then scaled
-    // down to (width, height).  This is a poor mans antialiasing for the
+    // down to (width, height).  This is a poor man's antialiasing for the
     // time being.  When we have true antialiasing support this workaround
     // can be removed.
     const Image aPreview = maPreviewRenderer.RenderPage (

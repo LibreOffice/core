@@ -401,7 +401,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                 }
 
                 // #i123468# we need to end text edit before replacing the object. There cannot yet
-                // being text typed (else it would not be an EmptyPresObj anymore), but it may be
+                // be text typed (else it would not be an EmptyPresObj anymore), but it may be
                 // in text edit mode
                 if (mpView->IsTextEdit())
                 {
@@ -733,7 +733,7 @@ void FuInsertAVMedia::DoExecute( SfxRequest& rReq )
     }
     else
     {
-        // If we don't have a size then try and find that out, the resulted might be deliver async, so dispatch a follow up
+        // If we don't have a size then try and find that out, the result might be delivered async, so dispatch a follow up
         // effort to insert the video, this time with a size.
         if( mpWindow )
             mpWindow->EnterWait();

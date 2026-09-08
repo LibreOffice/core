@@ -50,7 +50,7 @@ private:
     /// @throws css::beans::UnknownPropertyException
     css::uno::Any GetStyleSheet() const;
 
-    // Intern
+    // Internal
     /// @throws std::exception
     SdAnimationInfo* GetAnimationInfo( bool bCreate = false ) const;
     /// @throws std::exception
@@ -84,12 +84,12 @@ public:
     // XServiceInfo
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
-    //XPropertySet
+    // XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
     virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) override;
     virtual css::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
 
-    //XPropertyState
+    // XPropertyState
     virtual css::beans::PropertyState SAL_CALL getPropertyState( const OUString& PropertyName ) override;
     virtual void SAL_CALL setPropertyToDefault( const OUString& PropertyName ) override;
     virtual css::uno::Any SAL_CALL getPropertyDefault( const OUString& aPropertyName ) override;

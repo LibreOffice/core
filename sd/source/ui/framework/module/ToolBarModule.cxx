@@ -195,7 +195,7 @@ void ToolBarModule::HandleUpdateEnd()
             UpdateToolbars(pViewShell.get());
         }
     }
-    // Releasing the update lock of the ToolBarManager  will let the
+    // Releasing the update lock of the ToolBarManager will let the
     // ToolBarManager with the help of the ViewShellManager take care of
     // updating tool bars and view shell with the minimal amount of
     // shell stack modifications and tool bar updates.

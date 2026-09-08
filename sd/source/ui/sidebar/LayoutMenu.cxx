@@ -573,7 +573,7 @@ void LayoutMenu::HandleMenuSelect(std::u16string_view rIdent)
 // Selects an appropriate layout of the slide inside control.
 //
 // Method may be called several times with the same item-id to be selected -
-// only once the actually state of the control will be changed.
+// only once the actual state of the control will be changed.
 //
 void LayoutMenu::UpdateSelection()
 {
@@ -595,9 +595,9 @@ void LayoutMenu::UpdateSelection()
         if (aLayout<AUTOLAYOUT_START || aLayout>AUTOLAYOUT_END)
             break;
 
-        // Find the entry of the menu for to the layout.
+        // Find the entry of the menu for the layout.
         const sal_uInt16 nItemCount = mxLayoutIconView->n_children();
-        for (sal_uInt16 nId=0; nId<nItemCount; nId++)
+        for (sal_uInt16 nId = 0; nId < nItemCount; nId++)
         {
             OUString sItemId = mxLayoutIconView->get_id(nId);
             if (!sItemId.isEmpty() && static_cast<AutoLayout>(sItemId.toInt32()) == aLayout)
@@ -659,6 +659,6 @@ void LayoutMenu::DataChanged(const DataChangedEvent& rEvent)
     Fill();
 }
 
-} // end of namespace ::sd::sidebar
+} // end of namespace sd::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
