@@ -1026,7 +1026,8 @@ OUString SwDoc::SetNumRule( const SwPaM& rPam,
     {
         if (eMode & SetNumRuleMode::DontSetIfAlreadyApplied)
         {
-            for (SwNodeIndex i = aPam.Start()->nNode; i <= aPam.End()->nNode; ++i)
+            const auto [pStart, pEnd] = aPam.StartEnd();
+            for (SwNodeIndex i = pStart->nNode; i <= pEnd->nNode; ++i)
             {
                 if (SwTextNode const*const pNode = i.GetNode().GetTextNode())
                 {
@@ -2477,7 +2478,7 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, SwNodeOffset const nOffset,
     SwNodeOffset nRedlSttNd(0), nRedlEndNd(0);
     if( pOwnRedl )
     {
-        const SwPosition *pRStt = pOwnRedl->Start(), *pREnd = pOwnRedl->End();
+        auto [pRStt, pREnd] = pOwnRedl->StartEnd();
         nRedlSttNd = pRStt->GetNodeIndex();
         nRedlEndNd = pREnd->GetNodeIndex();
     }
@@ -2487,7 +2488,8 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, SwNodeOffset const nOffset,
     if (GetIDocumentUndoRedo().DoesUndo())
     {
         pUndo.reset(new SwUndoMoveNum( rPam, nOffset, bIsOutlMv ));
-        nMoved = rPam.End()->GetNodeIndex() - rPam.Start()->GetNodeIndex() + 1;
+        const auto [pMoveStart, pMoveEnd] = rPam.StartEnd();
+        nMoved = pMoveEnd->GetNodeIndex() - pMoveStart->GetNodeIndex() + 1;
     }
 
     (void) pLayout; // note: move will insert between aIdx-1 and aIdx

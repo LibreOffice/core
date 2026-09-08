@@ -3084,8 +3084,7 @@ OUString SwCursorShell::GetSelText() const
         if (pFrame && FrameContainsNode(*pFrame, m_pCurrentCursor->GetMark()->GetNodeIndex()))
         {
             OUStringBuffer buf;
-            SwPosition const*const pStart(m_pCurrentCursor->Start());
-            SwPosition const*const pEnd(m_pCurrentCursor->End());
+            auto const [pStart, pEnd] = m_pCurrentCursor->StartEnd();
             for (SwNodeOffset i = pStart->GetNodeIndex(); i <= pEnd->GetNodeIndex(); ++i)
             {
                 SwNode const& rNode(*pStart->GetNodes()[i]);

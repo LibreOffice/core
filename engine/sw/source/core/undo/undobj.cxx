@@ -796,7 +796,7 @@ void SwUndoSaveContent::MoveToUndoNds( SwPaM& rPaM, SwNodeIndex* pNodeIdx,
     SwPosition aPos( pEndNdIdx ? rNds.GetEndOfPostIts()
                                : rNds.GetEndOfExtras() );
 
-    const SwPosition* pStart = rPaM.Start(), *pEnd = rPaM.End();
+    auto [pStart, pEnd] = rPaM.StartEnd();
 
     SwNodeOffset nTmpMvNode = aPos.GetNodeIndex();
 
@@ -1523,7 +1523,7 @@ bool SwUndo::FillSaveDataForFormat(
 {
     rSData.clear();
 
-    const SwPosition *pStart = rRange.Start(), *pEnd = rRange.End();
+    auto [pStart, pEnd] = rRange.StartEnd();
     const SwRedlineTable& rTable = rRange.GetDoc().getIDocumentRedlineAccess().GetRedlineTable();
     SwRedlineTable::size_type n = 0;
     rRange.GetDoc().getIDocumentRedlineAccess().GetRedline( *pStart, &n );

@@ -1163,9 +1163,8 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                             {
                                 bMarked = true;
                                 // check whether nHere is 'inside' pCursor
-                                SwPosition* pStart = rTmpCursor.Start();
+                                auto [pStart, pEnd] = rTmpCursor.StartEnd();
                                 SwNodeOffset nStartIndex = pStart->GetNodeIndex();
-                                SwPosition* pEnd = rTmpCursor.End();
                                 SwNodeOffset nEndIndex = pEnd->GetNodeIndex();
                                 if ((nStartIndex <= nLastNode) && (nFirstNode <= nEndIndex))
                                 {
@@ -1296,8 +1295,9 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
         {
             if( rTmpCursor.HasMark() )
             {
-                SwNodeIndex nStartIndex( rTmpCursor.Start()->GetNode() );
-                SwNodeIndex nEndIndex( rTmpCursor.End()->GetNode() );
+                auto [pStart, pEnd] = rTmpCursor.StartEnd();
+                SwNodeIndex nStartIndex(pStart->GetNode());
+                SwNodeIndex nEndIndex(pEnd->GetNode());
                 for (; nStartIndex <= nEndIndex; ++nStartIndex)
                 {
                     SwFrame *pFrame = nullptr;

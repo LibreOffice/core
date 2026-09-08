@@ -3902,7 +3902,7 @@ OUString SwTextNode::GetRedlineText() const
             const SwRangeRedline* pTmp = rDoc.getIDocumentRedlineAccess().GetRedlineTable()[ nRedlPos ];
             if( RedlineType::Delete == pTmp->GetType() )
             {
-                const SwPosition *pRStt = pTmp->Start(), *pREnd = pTmp->End();
+                auto [pRStt, pREnd] = pTmp->StartEnd();
                 if( pRStt->GetNodeIndex() < nNdIdx )
                 {
                     if( pREnd->GetNodeIndex() > nNdIdx )

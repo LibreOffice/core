@@ -1983,8 +1983,7 @@ sal_uInt16 SaveMergeRedline::InsertRedline(SwPaM* pLastDestRedline)
         for( ; n < rRedlineTable.size(); ++n )
         {
             SwRangeRedline* pRedl = rRedlineTable[ n ];
-            SwPosition* pRStt = pRedl->Start(),
-                      * pREnd = pRedl->End();
+            auto [pRStt, pREnd] = pRedl->StartEnd();
             if( RedlineType::Delete == pRedl->GetType() ||
                 RedlineType::Insert == pRedl->GetType() )
             {

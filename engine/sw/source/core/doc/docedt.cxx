@@ -523,8 +523,7 @@ cpo::uno::Any SwDoc::Spell( SwPaM& rPaM,
                     SwRootFrame const*const pLayout,
                     SwConversionArgs *pConvArgs  ) const
 {
-    SwPosition* const pSttPos = rPaM.Start();
-    SwPosition* const pEndPos = rPaM.End();
+    auto const [pSttPos, pEndPos] = rPaM.StartEnd();
 
     std::unique_ptr<SwSpellArgs> pSpellArgs;
     if (pConvArgs)

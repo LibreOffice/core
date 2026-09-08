@@ -228,8 +228,9 @@ public:
             && (!m_oNextFieldmarkHide || *pNextRedlineHide < *m_oNextFieldmarkHide))
         {
             SwRangeRedline const*const pRed(m_rIDRA.GetRedlineTable()[m_RedlineIndex]);
-            m_pStartPos = pRed->Start();
-            m_pEndPos = pRed->End();
+            auto [pStart, pEnd] = pRed->StartEnd();
+            m_pStartPos = pStart;
+            m_pEndPos = pEnd;
             ++m_RedlineIndex;
             m_oParagraphBreak.reset();
             return true;

@@ -2769,9 +2769,8 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getSelectedPortionCount(  )
             if( rTmpCursor.HasMark() )
             {
                 // check whether frame's node(s) are 'inside' pCursor
-                SwPosition* pStart = rTmpCursor.Start();
+                auto [pStart, pEnd] = rTmpCursor.StartEnd();
                 SwNodeOffset nStartIndex = pStart->GetNodeIndex();
-                SwPosition* pEnd = rTmpCursor.End();
                 SwNodeOffset nEndIndex = pEnd->GetNodeIndex();
                 if ((nStartIndex <= nLastNode) && (nFirstNode <= nEndIndex))
                 {
@@ -2844,9 +2843,8 @@ bool SAL_CALL SwAccessibleParagraph::removeSelection( sal_Int32 selectionIndex )
             if( pCursor->HasMark() )
             {
                 // check whether frame's node(s) are 'inside' pCursor
-                SwPosition* pStart = pCursor->Start();
+                auto [pStart, pEnd] = pCursor->StartEnd();
                 SwNodeOffset nStartIndex = pStart->GetNodeIndex();
-                SwPosition* pEnd = pCursor->End();
                 SwNodeOffset nEndIndex = pEnd->GetNodeIndex();
                 if ((nStartIndex <= nLastNode) && (nFirstNode <= nEndIndex))
                 {
@@ -3146,9 +3144,8 @@ bool SwAccessibleParagraph::GetSelectionAtIndex(
         if( rTmpCursor.HasMark() )
         {
             // check whether frame's node(s) are 'inside' pCursor
-            SwPosition* pStart = rTmpCursor.Start();
+            auto [pStart, pEnd] = rTmpCursor.StartEnd();
             SwNodeOffset nStartIndex = pStart->GetNodeIndex();
-            SwPosition* pEnd = rTmpCursor.End();
             SwNodeOffset nEndIndex = pEnd->GetNodeIndex();
             if ((nStartIndex <= nLastNode) && (nFirstNode <= nEndIndex))
             {

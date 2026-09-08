@@ -127,9 +127,10 @@ void SwEditShell::ReinstatePaM(const SwRangeRedline& rRedline, SwPaM& rPaM)
         KillPams();
         assert(!GetTableCursor() && "coverity#1645529");
         SwShellCursor* pCursor = getShellCursor(/*bBlock=*/true);
-        *pCursor->GetPoint() = *rPaM.End();
+        const auto [pStart, pEnd] = rPaM.StartEnd();
+        *pCursor->GetPoint() = *pEnd;
         SetMark();
-        *pCursor->GetMark() = *rPaM.Start();
+        *pCursor->GetMark() = *pStart;
         rtl::Reference<SwTransferable> pTransfer(new SwTransferable(*pWrtShell));
         // Copy rich text, but don't strip out text inside delete redlines.
         pTransfer->Copy(/*bIsCut=*/false, /*bDeleteRedlines=*/false);
@@ -288,12 +289,11 @@ void SwEditShell::ReinstateRedlinesInSelection()
         }
 
         // Check if the redline is only partially selected.
-        const SwPosition* pStart = rRedline.Start();
+        auto [pStart, pEnd] = rRedline.StartEnd();
         if (*pStart < aCursorStart)
         {
             pStart = &aCursorStart;
         }
-        const SwPosition* pEnd = rRedline.End();
         if (*pEnd > aCursorEnd)
         {
             pEnd = &aCursorEnd;

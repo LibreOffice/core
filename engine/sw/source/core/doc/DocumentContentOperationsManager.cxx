@@ -374,7 +374,7 @@ namespace
             return;
 
         SwDoc& rDestDoc = rCpyPam.GetDoc();
-        SwPosition* pCpyStt = rCpyPam.Start(), *pCpyEnd = rCpyPam.End();
+        auto [pCpyStt, pCpyEnd] = rCpyPam.StartEnd();
         std::unique_ptr<SwPaM> pDelPam;
         auto [pStart, pEnd] = rPam.StartEnd(); // SwPosition*
         // We have to count the "non-copied" nodes
@@ -1494,7 +1494,7 @@ namespace //local functions originally from docfmt.cxx
 
         SwHistory* pHistory = pUndo ? &pUndo->GetHistory() : nullptr;
         bool bRet = false;
-        const SwPosition *pStart = rRg.Start(), *pEnd = rRg.End();
+        auto [pStart, pEnd] = rRg.StartEnd();
         SwContentNode* pNode = pStart->GetNode().GetContentNode();
 
         if( pNode && pNode->IsTextNode() )
@@ -2056,7 +2056,7 @@ bool DocumentContentOperationsManager::CopyRange(SwPaM& rPam, SwPosition& rPos,
                                                  SwCopyFlags const flags,
                                                  sal_uInt32 nMovedID) const
 {
-    const SwPosition *pStart = rPam.Start(), *pEnd = rPam.End();
+    auto [pStart, pEnd] = rPam.StartEnd();
 
     SwDoc& rDoc = rPos.GetNode().GetDoc();
     bool bColumnSel = rDoc.IsClipBoard() && rDoc.IsColumnSelection();
@@ -2420,7 +2420,7 @@ bool DocumentContentOperationsManager::DeleteAndJoin(SwPaM & rPam, SwDeleteFlags
 bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
 {
     // nothing moved: return
-    const SwPosition *pStart = rPaM.Start(), *pEnd = rPaM.End();
+    auto [pStart, pEnd] = rPaM.StartEnd();
     if( !rPaM.HasMark() || *pStart >= *pEnd || (*pStart <= rPos && rPos < *pEnd))
         return false;
 

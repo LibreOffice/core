@@ -596,7 +596,7 @@ OUString SwEditShell::Calculate()
         SwTextNode* pTextNd = rCurrentPaM.GetPointNode().GetTextNode();
         if(pTextNd)
         {
-            const SwPosition *pStart = rCurrentPaM.Start(), *pEnd = rCurrentPaM.End();
+            auto [pStart, pEnd] = rCurrentPaM.StartEnd();
             const sal_Int32 nStt = pStart->GetContentIndex();
             OUString aStr = pTextNd->GetExpandText(GetLayout(),
                                 nStt, pEnd->GetContentIndex() - nStt);
@@ -836,7 +836,7 @@ void SwEditShell::SetNumberingRestart()
             MakeFindRange(SwDocPositions::Start, SwDocPositions::End, pCursor); // body content
         else
             MakeFindRange(SwDocPositions::OtherStart, SwDocPositions::OtherEnd, pCursor); // extra content
-        SwPosition* pSttPos = pCursor->Start(), *pEndPos = pCursor->End();
+        auto [pSttPos, pEndPos] = pCursor->StartEnd();
         SwNodeOffset nCurrNd = pSttPos->GetNodeIndex();
         SwNodeOffset nEndNd = pEndPos->GetNodeIndex();
         if( nCurrNd <= nEndNd )
