@@ -2221,10 +2221,11 @@ class Socket {
 
 	// The controller is handing the document to another server. window.migrating keeps the
 	// client off the controller for the reconnect that follows, because the new route is
-	// already in hand. Nothing guarantees the rest of the exchange arrives, so the flag is
-	// dropped again after this long and the next reconnect asks the controller for a fresh
-	// route. The server gives the handover indirection_endpoint.migration_timeout_secs, 180 by
-	// default, so this is comfortably longer.
+	// already in hand. Nothing guarantees the rest of the exchange arrives, so after this long
+	// the timer puts the permission back and makes the connection again, which asks the
+	// controller for a fresh route. The server gives the handover
+	// indirection_endpoint.migration_timeout_secs, 180 by default, so this is comfortably
+	// longer.
 	private static readonly MigrationTimeoutMs: number = 240000;
 
 	private beginMigration(): void {
@@ -2235,6 +2236,8 @@ class Socket {
 				'Migration did not complete, asking the controller again',
 			);
 			this.endMigration();
+			this._map.setPermission(app.file.permission);
+			this.manualReconnect(2000);
 		}, Socket.MigrationTimeoutMs);
 	}
 
