@@ -101,7 +101,7 @@ bool XMLCrossedOutTypePropHdl::importXML( const OUString& rStrImpValue, uno::Any
             case awt::FontStrikeout::DOUBLE:
                 // A double line style has priority over a solid or a bold
                 // line style,
-                // but not about any other line style
+                // but not above any other line style
                 switch( eStrikeout )
                 {
                 case awt::FontStrikeout::SINGLE:
@@ -165,7 +165,7 @@ bool XMLCrossedOutStylePropHdl::importXML( const OUString& rStrImpValue, uno::An
         sal_Int16 eStrikeout = sal_Int16();
         if( (rValue >>= eStrikeout) && awt::FontStrikeout::NONE!=eStrikeout )
         {
-            // one NONE a SINGLE are possible new values. For both, the
+            // a NONE or a SINGLE are possible new values. For both, the
             // existing value is kept.
         }
         else

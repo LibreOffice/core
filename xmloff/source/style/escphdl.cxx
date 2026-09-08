@@ -126,7 +126,7 @@ bool XMLEscapementHeightPropHdl::importXML( const OUString& rStrImpValue, uno::A
         if (::sax::Converter::convertPercent( nEscapementPosition, aToken )
             && (nEscapementPosition == 0))
         {
-            nProp = 100; //if escapement position is zero and no escapement height is given the default height should be 100percent and not something smaller (#i91800#)
+            nProp = 100; //if escapement position is zero and no escapement height is given the default height should be 100 percent and not something smaller (#i91800#)
         }
         else
             nProp = sal_Int8(DFLT_ESC_PROP);

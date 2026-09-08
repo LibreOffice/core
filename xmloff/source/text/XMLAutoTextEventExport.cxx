@@ -146,7 +146,7 @@ ErrCode XMLAutoTextEventExport::exportDoc( enum XMLTokenEnum )
 
 bool XMLAutoTextEventExport::hasEvents() const
 {
-    // TODO: provide full implementation that check for presence of events
+    // TODO: provide full implementation that checks for presence of events
     return xEvents.is();
 }
 
