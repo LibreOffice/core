@@ -1977,13 +1977,13 @@ function showWelcomeSVG() {
 
 		// Drops the request for a route and any repeat of it that is still scheduled.
 		this.stopRouteTokenRequest = function () {
-			if (this.retryTimer !== undefined) {
-				clearTimeout(this.retryTimer);
-				this.retryTimer = undefined;
+			if (that.retryTimer !== undefined) {
+				clearTimeout(that.retryTimer);
+				that.retryTimer = undefined;
 			}
-			if (this.tokenRequest !== undefined) {
-				const request = this.tokenRequest;
-				this.tokenRequest = undefined;
+			if (that.tokenRequest !== undefined) {
+				const request = that.tokenRequest;
+				that.tokenRequest = undefined;
 				request.abort();
 			}
 		};

@@ -700,7 +700,7 @@ class Socket {
 		app.idleHandler._activate();
 	}
 
-	private _onSocketError(evt: Event): void {
+	private _onSocketError(evt?: Event): void {
 		window.app.console.warn('_onSocketError:', evt);
 		this._map.hideBusy();
 		// Let onclose (_onSocketClose) report errors.
