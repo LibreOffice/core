@@ -44,9 +44,9 @@ SW_DLLPUBLIC void applyBodyMarkings(const css::uno::Reference<css::frame::XModel
 SW_DLLPUBLIC void removeBodyMarkings(const css::uno::Reference<css::frame::XModel>& xModel);
 
 /// Prefix the portion (the paragraph holding the view cursor) with the marking in
-/// parentheses, formatted. Idempotent: a portion already carrying this prefix is
-/// left unchanged. Unlike the document-level placements this acts on one portion,
-/// so it is not undone by removeLabel.
+/// parentheses, formatted with the "Security Label" character style. Idempotent: a
+/// portion already carrying this prefix is left unchanged. removeLabel (and a re-label
+/// that drops the portion placement) removes it, found by that style.
 SW_DLLPUBLIC void applyPortionMarking(const css::uno::Reference<css::frame::XModel>& xModel,
                                       std::u16string_view rMarking, sal_Int32 nColor);
 

@@ -449,9 +449,19 @@ CPPUNIT_TEST_FIXTURE(Test, testSecurityLabelPortionMarking)
     CPPUNIT_ASSERT_EQUAL(u"FIRST"_ustr, getParagraph(1)->getString());
     CPPUNIT_ASSERT_EQUAL(u"(SECRET//X) SECOND"_ustr, getParagraph(2)->getString());
 
+    // The prefix is a character run: it must not re-align the user's paragraph (centring is
+    // paragraph-level and would otherwise centre the whole line the marking shares).
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(style::ParagraphAdjust_LEFT),
+                         getProperty<sal_Int16>(getParagraph(2), u"ParaAdjust"_ustr));
+
     // Re-applying the same portion marking does not stack a second prefix.
     sw::seclabel::applyPortionMarking(xModel, u"SECRET//X"_ustr, 0xC00000);
     CPPUNIT_ASSERT_EQUAL(u"(SECRET//X) SECOND"_ustr, getParagraph(2)->getString());
+
+    // Removing sweeps the prefix (found by its character style), leaving the user's text.
+    sw::seclabel::removeBodyMarkings(xModel);
+    CPPUNIT_ASSERT_EQUAL(u"FIRST"_ustr, getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"SECOND"_ustr, getParagraph(2)->getString());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testA4AndBorders, "a4andborders.docx")

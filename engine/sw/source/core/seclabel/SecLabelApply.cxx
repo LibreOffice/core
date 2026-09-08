@@ -30,6 +30,8 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 
+#include <vector>
+
 using namespace css;
 
 namespace sw::seclabel
@@ -83,9 +85,12 @@ void ensureMarkingStyle(const uno::Reference<frame::XModel>& xModel)
         xCharStyles->insertByName(MARKING_STYLE, cpo::uno::Any(xStyle));
 }
 
-// Format a cursor selection as a marking run: our marker char style plus direct bold,
-// colour and centring (the direct formatting overrides the empty style).
-void formatMarkingSelection(const uno::Reference<text::XTextCursor>& xCursor, sal_Int32 nColor)
+// Format a cursor selection as a marking run: our marker char style plus direct bold and
+// colour (the direct formatting overrides the empty style). Centring is paragraph-level, so
+// it is applied only for whole-paragraph markings (bCenterParagraph); a portion marking
+// shares its paragraph with the user's own text and must not re-align it.
+void formatMarkingSelection(const uno::Reference<text::XTextCursor>& xCursor, sal_Int32 nColor,
+                            bool bCenterParagraph)
 {
     uno::Reference<beans::XPropertySet> xProps(xCursor, uno::UNO_QUERY);
     if (!xProps.is())
@@ -93,7 +98,8 @@ void formatMarkingSelection(const uno::Reference<text::XTextCursor>& xCursor, sa
     xProps->setPropertyValue(u"CharStyleName"_ustr, cpo::uno::Any(MARKING_STYLE));
     xProps->setPropertyValue(u"CharWeight"_ustr, cpo::uno::Any(awt::FontWeight::BOLD));
     xProps->setPropertyValue(u"CharColor"_ustr, cpo::uno::Any(nColor));
-    xProps->setPropertyValue(u"ParaAdjust"_ustr, cpo::uno::Any(style::ParagraphAdjust_CENTER));
+    if (bCenterParagraph)
+        xProps->setPropertyValue(u"ParaAdjust"_ustr, cpo::uno::Any(style::ParagraphAdjust_CENTER));
 }
 
 // Whether a header/footer text holds no content of the user's own. getString() alone is not
@@ -166,7 +172,7 @@ void insertMarkingParagraph(const uno::Reference<frame::XModel>& xModel,
     uno::Reference<text::XParagraphCursor> xPara(xCursor, uno::UNO_QUERY);
     if (xPara.is())
         xPara->gotoStartOfParagraph(true);
-    formatMarkingSelection(xCursor, nColor);
+    formatMarkingSelection(xCursor, nColor, /*bCenterParagraph*/ true);
 
     if (rBookmark.isEmpty())
         return;
@@ -402,6 +408,60 @@ void removeBookmarkedMarking(const uno::Reference<frame::XModel>& xModel, const 
         && (bAtStart ? xCursor->goRight(1, true) : xCursor->goLeft(1, true)))
         xText->insertString(xCursor, OUString(), true);
 }
+
+// Remove portion markings from the body: char-styled runs inside a paragraph that also
+// holds the user's own (plain) text. A cover/end-page marking is a whole char-styled
+// paragraph (no plain text) removed via its bookmark, so such paragraphs are skipped.
+// Collects the runs first (deleting mutates the enumeration), then deletes them.
+void removePortionMarkings(const uno::Reference<frame::XModel>& xModel)
+{
+    uno::Reference<text::XTextDocument> xTextDoc(xModel, uno::UNO_QUERY);
+    if (!xTextDoc.is())
+        return;
+    uno::Reference<text::XText> xBody = xTextDoc->getText();
+    uno::Reference<container::XEnumerationAccess> xParaAccess(xBody, uno::UNO_QUERY);
+    if (!xParaAccess.is())
+        return;
+
+    std::vector<uno::Reference<text::XTextRange>> aToDelete;
+    uno::Reference<container::XEnumeration> xParas = xParaAccess->createEnumeration();
+    while (xParas->hasMoreElements())
+    {
+        uno::Reference<container::XEnumerationAccess> xPortAccess(xParas->nextElement(),
+                                                                 uno::UNO_QUERY);
+        if (!xPortAccess.is())
+            continue; // e.g. a table
+        std::vector<uno::Reference<text::XTextRange>> aStyled;
+        bool bHasPlain = false;
+        uno::Reference<container::XEnumeration> xPorts = xPortAccess->createEnumeration();
+        while (xPorts->hasMoreElements())
+        {
+            uno::Reference<beans::XPropertySet> xPortion(xPorts->nextElement(), uno::UNO_QUERY);
+            if (!xPortion.is())
+                continue;
+            OUString sStyle;
+            xPortion->getPropertyValue(u"CharStyleName"_ustr) >>= sStyle;
+            uno::Reference<text::XTextRange> xRange(xPortion, uno::UNO_QUERY);
+            if (sStyle == MARKING_STYLE)
+            {
+                if (xRange.is())
+                    aStyled.push_back(xRange);
+            }
+            else if (xRange.is() && !xRange->getString().isEmpty())
+            {
+                bHasPlain = true;
+            }
+        }
+        if (bHasPlain)
+            aToDelete.insert(aToDelete.end(), aStyled.begin(), aStyled.end());
+    }
+
+    for (const auto& xRange : aToDelete)
+    {
+        uno::Reference<text::XTextCursor> xCursor = xBody->createTextCursorByRange(xRange);
+        xBody->insertString(xCursor, OUString(), true);
+    }
+}
 }
 
 void applyBodyMarkings(const uno::Reference<frame::XModel>& xModel, const OUString& rMarking,
@@ -414,7 +474,9 @@ void applyBodyMarkings(const uno::Reference<frame::XModel>& xModel, const OUStri
     uno::Reference<text::XText> xBody = xTextDoc->getText();
 
     // Always clear first, so a re-label that drops a placement removes its stale body
-    // marking; then (re)insert the ones the selection asks for.
+    // marking; then (re)insert the ones the selection asks for. Also drop any prior
+    // portion marking, whose placement may not be requested this time.
+    removePortionMarkings(xModel);
     removeBookmarkedMarking(xModel, BOOKMARK_DOC_START, true);
     if (bStart)
         insertMarkingParagraph(xModel, xBody, rMarking, nColor, true, BOOKMARK_DOC_START);
@@ -426,6 +488,7 @@ void applyBodyMarkings(const uno::Reference<frame::XModel>& xModel, const OUStri
 
 void removeBodyMarkings(const uno::Reference<frame::XModel>& xModel)
 {
+    removePortionMarkings(xModel);
     removeBookmarkedMarking(xModel, BOOKMARK_DOC_START, true);
     removeBookmarkedMarking(xModel, BOOKMARK_DOC_END, false);
 }
@@ -464,7 +527,7 @@ void applyPortionMarking(const uno::Reference<frame::XModel>& xModel,
 
     xText->insertString(xCursor, aPrefix, false); // cursor ends after the prefix
     xCursor->goLeft(aPrefix.getLength(), true); // select the inserted prefix
-    formatMarkingSelection(xCursor, nColor);
+    formatMarkingSelection(xCursor, nColor, /*bCenterParagraph*/ false);
 }
 
 } // namespace sw::seclabel
