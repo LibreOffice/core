@@ -2896,6 +2896,11 @@ function showWelcomeSVG() {
 			// the local static file server:
 			global.host = coolWsScheme + coolHost;
 			global.webserver = ri.coolServer.replace(/\/*$/, ''); // Remove trailing slash.
+			// Static asset URLs, icons included, carry the server's version hash between
+			// /browser/ and the asset path, and the server only maps such a path onto its dist
+			// directory when that segment is present.
+			var versionMatch = (ri.coolPath || '').match(/\/browser\/([0-9a-f]+)\//);
+			global.versionPath = versionMatch ? versionMatch[1] : 'dist';
 		} else {
 			// COWASM: cool.html is hosted on the cool server, so a
 			// same-origin upgrade against location.host is fine.
