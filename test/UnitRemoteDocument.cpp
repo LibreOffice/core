@@ -35,15 +35,18 @@
 
 namespace
 {
-// Fills CheckFileInfo with one related document, split the way the production
+// Adds one related document to CheckFileInfo, split the way the production
 // code now expects a WOPI host to send it: the public part (WOPISrc and the
 // last-modified time) in the top-level RelatedDocuments, and this view's
-// private access token in UserPrivateInfo.RelatedDocuments.
+// private access token in UserPrivateInfo.RelatedDocuments. Calling this
+// again names a second document, so a test can list several.
 void setRelatedDocument(Poco::JSON::Object::Ptr& fileInfo, const std::string& wopiSrc,
                         const std::string& accessToken,
                         const std::string& lastModifiedTime = std::string())
 {
-    Poco::JSON::Array::Ptr relatedDocuments = new Poco::JSON::Array();
+    Poco::JSON::Array::Ptr relatedDocuments = fileInfo->getArray("RelatedDocuments");
+    if (!relatedDocuments)
+        relatedDocuments = new Poco::JSON::Array();
     Poco::JSON::Object::Ptr entry = new Poco::JSON::Object();
     entry->set("WOPISrc", wopiSrc);
     if (!lastModifiedTime.empty())
@@ -51,15 +54,16 @@ void setRelatedDocument(Poco::JSON::Object::Ptr& fileInfo, const std::string& wo
     relatedDocuments->add(entry);
     fileInfo->set("RelatedDocuments", relatedDocuments);
 
-    Poco::JSON::Array::Ptr tokens = new Poco::JSON::Array();
+    Poco::JSON::Object::Ptr userPrivateInfo = fileInfo->getObject("UserPrivateInfo");
+    if (!userPrivateInfo)
+        userPrivateInfo = new Poco::JSON::Object();
+    Poco::JSON::Array::Ptr tokens = userPrivateInfo->getArray("RelatedDocuments");
+    if (!tokens)
+        tokens = new Poco::JSON::Array();
     Poco::JSON::Object::Ptr tokenEntry = new Poco::JSON::Object();
     tokenEntry->set("WOPISrc", wopiSrc);
     tokenEntry->set("AccessToken", accessToken);
     tokens->add(tokenEntry);
-
-    Poco::JSON::Object::Ptr userPrivateInfo = fileInfo->getObject("UserPrivateInfo");
-    if (!userPrivateInfo)
-        userPrivateInfo = new Poco::JSON::Object();
     userPrivateInfo->set("RelatedDocuments", tokens);
     fileInfo->set("UserPrivateInfo", userPrivateInfo);
 }
@@ -766,14 +770,21 @@ public:
 
 /// A document subscribes to a related document whose file is gone from storage.
 /// The storage answers the remote load with 404, so the subscriber is told the
-/// source is missing rather than merely disconnected.
+/// source is missing rather than merely disconnected. A source that cannot be
+/// loaded then holds no connection of the process: with room for one remote
+/// document at a time, a second source still connects after the first failed.
 class UnitRemoteDocumentMissing : public WopiTestServer
 {
-    STATE_ENUM(Phase, Load, WaitLoadStatus, WaitMissing, Done) _phase;
+    STATE_ENUM(Phase, Load, WaitLoadStatus, WaitMissing, WaitReadableSource, Done) _phase;
 
     std::string remoteWopiSrc() const { return helpers::getTestServerURI() + "/wopi/files/2"; }
 
     std::string encodedRemoteWopiSrc() const { return Uri::encode(remoteWopiSrc()); }
+
+    /// A second source, whose file the storage serves normally.
+    std::string readableWopiSrc() const { return helpers::getTestServerURI() + "/wopi/files/3"; }
+
+    std::string encodedReadableWopiSrc() const { return Uri::encode(readableWopiSrc()); }
 
 public:
     UnitRemoteDocumentMissing()
@@ -786,15 +797,20 @@ public:
     {
         WopiTestServer::configure(config);
         config.setBool("remote_documents.enable", true);
+        // Room for one remote document at a time, so the second source connects
+        // only if the first one stopped holding its slot.
+        config.setInt("remote_documents.max_remote_docs", 1);
     }
 
     void configCheckFileInfo(const Poco::Net::HTTPRequest& request,
                              Poco::JSON::Object::Ptr& fileInfo) override
     {
-        // The subscribing document lists the missing file as a related document.
+        // The subscribing document lists both the missing file and the readable
+        // one as related documents.
         if (Poco::URI(request.getURI()).getPath().ends_with("/1"))
         {
             setRelatedDocument(fileInfo, remoteWopiSrc(), "remotetoken");
+            setRelatedDocument(fileInfo, readableWopiSrc(), "remotetoken");
         }
     }
 
@@ -835,8 +851,20 @@ public:
         if (_phase == Phase::WaitMissing &&
             message.find("\"state\":\"missing\"") != std::string_view::npos)
         {
+            TST_LOG("The source that is gone was reported missing, asking for the readable one");
+            TRANSITION_STATE(_phase, Phase::WaitReadableSource);
+            WSD_CMD("remotedocsubscribe wopisrc=" + encodedReadableWopiSrc());
+            return false;
+        }
+
+        // The source that is gone reports missing and never connects, so a
+        // connected state here is the readable source's own.
+        if (_phase == Phase::WaitReadableSource &&
+            message.find("\"state\":\"connected\"") != std::string_view::npos)
+        {
             TRANSITION_STATE(_phase, Phase::Done);
-            passTest("The subscriber was told the source is missing when its file is gone");
+            passTest("A source that could not be loaded stops holding a connection of the "
+                     "process, so the next source connects");
         }
 
         return false;
@@ -856,6 +884,7 @@ public:
             }
             case Phase::WaitLoadStatus:
             case Phase::WaitMissing:
+            case Phase::WaitReadableSource:
             case Phase::Done:
             {
                 break;

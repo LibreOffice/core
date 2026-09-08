@@ -173,6 +173,9 @@ public:
     /// Flushes coalesced invalidations and performs a due reconnect.
     void checkTimers(std::chrono::steady_clock::time_point now);
 
+    /// Whether the remote document could not be loaded, or the reconnect failed
+    bool hasFailed() const { return _failed; }
+
     // Notifications from the headless session, on the broker poll thread.
     void onLive();
     void onStructureChanged();
@@ -227,6 +230,9 @@ private:
     std::string _lastModifiedTime;
 
     bool _everConnected;
+
+    /// True once this connection is given up on: no session and no reconnect due.
+    bool _failed;
 };
 
 /// Manages the headless sessions of this coolwsd process on its own poll
@@ -317,6 +323,9 @@ private:
     void sendCommand(const std::string& wopiSrc, const std::string& accessToken,
                      const std::string& localDocKey, const std::string& tag,
                      const std::string& command);
+
+    /// Drops the connections that are done or failed
+    void dropFailedRemoteDocuments();
 
     /// Returns true when a subscription of the given consumer to the given
     /// target would close a loop through the links already in the registry.

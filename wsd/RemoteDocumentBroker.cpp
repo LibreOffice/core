@@ -294,6 +294,7 @@ RemoteDocument::RemoteDocument(std::string docKey, std::string wopiSrc, std::str
     , _reconnectAttempts(0)
     , _modified(false)
     , _everConnected(false)
+    , _failed(false)
 {
 }
 
@@ -469,6 +470,7 @@ void RemoteDocument::onLoadFailed(const std::string& kind)
     LOG_ERR("RemoteDoc: loading the remote document [" << _docKey << "] failed: " << kind);
     broadcastEvent("event=missing kind=" + kind);
     shutdown();
+    _failed = true;
 }
 
 void RemoteDocument::onSessionClosed()
@@ -484,6 +486,7 @@ void RemoteDocument::onSessionClosed()
         LOG_ERR("RemoteDoc: giving up on the remote document ["
                 << _docKey << "] after " << (_reconnectAttempts - 1) << " reconnect attempts");
         broadcastEvent("event=failed kind=disconnected");
+        _failed = true;
         return;
     }
 
@@ -568,6 +571,7 @@ void RemoteDocument::dumpState(std::ostream& os) const
     for (const auto& it : _commandSubscribers)
         os << "\n      " << it.first << " session: " << it.second;
     os << "\n    everConnected: " << _everConnected
+       << "\n    failed: " << _failed
        << "\n    reconnectAttempts: " << _reconnectAttempts
        << "\n    modified: " << _modified
        << "\n    lastModifiedTime: " << _lastModifiedTime
@@ -706,9 +710,29 @@ void RemoteDocumentBroker::pollingThread()
         now = std::chrono::steady_clock::now();
         for (const auto& it : _remoteDocuments)
             it.second->checkTimers(now);
+
+        dropFailedRemoteDocuments();
     }
 
     LOG_INF("RemoteDoc: the RemoteDocumentBroker poll finished");
+}
+
+void RemoteDocumentBroker::dropFailedRemoteDocuments()
+{
+    ASSERT_CORRECT_THREAD();
+
+    for (auto it = _remoteDocuments.begin(); it != _remoteDocuments.end();)
+    {
+        if (!it->second->hasFailed())
+        {
+            ++it;
+            continue;
+        }
+
+        LOG_INF("RemoteDoc: dropping the connection to the remote document ["
+                << it->second->getDocKey() << "], which is done for");
+        it = _remoteDocuments.erase(it);
+    }
 }
 
 bool RemoteDocumentBroker::formsSubscriptionCycle(const std::string& targetDocKey,
@@ -783,6 +807,8 @@ void RemoteDocumentBroker::subscribe(const RemoteDocumentRequest& request)
         reject(request, "cycledetected");
         return;
     }
+
+    dropFailedRemoteDocuments();
 
     const Key key = makeKey(docKey, request.accessToken, request.localDocKey, request.tag);
     auto it = _remoteDocuments.find(key);
