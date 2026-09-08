@@ -792,7 +792,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRemoveBookmarkText)
             lcl_selectCharacters(aPaM, 0, 3);
             pDoc->getIDocumentContentOperations().DeleteRange(aPaM);
 
-            // verify: bookmark is still exist
+            // verify: bookmark still exists
             IDocumentMarkAccess& rIDMA = *pDoc->getIDocumentMarkAccess();
             CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rIDMA.getBookmarksCount());
         }
@@ -870,7 +870,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRemoveBookmarkTextAndAddNew)
             lcl_selectCharacters(aPaM, 0, 3);
             pDoc->getIDocumentContentOperations().DeleteRange(aPaM);
 
-            // verify: bookmark is still exist
+            // verify: bookmark still exists
             IDocumentMarkAccess& rIDMA = *pDoc->getIDocumentMarkAccess();
             CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rIDMA.getBookmarksCount());
         }
@@ -891,7 +891,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRemoveBookmarkTextAndAddNew)
             // write "abc"
             xRange->setString(u"abc"_ustr);
 
-            // verify: bookmark is still exist
+            // verify: bookmark still exists
             IDocumentMarkAccess& rIDMA = *pDoc->getIDocumentMarkAccess();
             CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rIDMA.getBookmarksCount());
         }
@@ -956,7 +956,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRemoveBookmarkTextAndAddNewAfterReload
         // write "abc"
         xRange->setString(u"abc"_ustr);
 
-        // verify: bookmark is still exist
+        // verify: bookmark still exists
         IDocumentMarkAccess& rIDMA = *pDoc->getIDocumentMarkAccess();
         CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rIDMA.getBookmarksCount());
     }
@@ -1616,7 +1616,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf151548_tabNavigation)
         Scheduler::ProcessEventsToIdle();
     }
 
-    // Tab 4 more times, verifying beforehand that the checkbox had been toggle on, then toggles off
+    // Tab 4 more times, verifying beforehand that the checkbox had been toggled on, then toggles off
     // meaning that looping is working, and no other controls are reacting to the tab key.
     for (auto it = pMarkAccess->getFieldmarksBegin(); it != pMarkAccess->getFieldmarksEnd(); ++it)
     {
@@ -2435,7 +2435,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf113877NoMerge)
 }
 
 // Related test to testTdf113877(): Inserting into empty document a new document with list.
-// Insert position has NO its own paragraph style ("Standard" will be used).
+// Insert position has no paragraph style of its own ("Standard" will be used).
 //
 // Resulting document should be the same for following tests:
 // - testTdf113877_default_style()

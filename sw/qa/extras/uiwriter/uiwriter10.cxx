@@ -55,7 +55,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableRowDeletionWithExport)
 {
     // load a 1-row table, and delete the row with enabled change tracking:
     // now the row is not deleted silently, but keeps the deleted cell contents,
-    // and only accepting all of them will result the deletion of the table row.
+    // and only accepting all of them will result in the deletion of the table row.
     createSwDoc("tdf118311.fodt");
     SwDoc* pDoc = getSwDoc();
 
@@ -239,8 +239,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf157662_AcceptInsertRedlineCutWithDe
     pEditShell->RejectRedline(6);
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(6), pEditShell->GetRedlineCount());
 
-    // Accept insert that split into 4 parts, but separated to 2-2 parts, with another insert.
-    // It will accept only 2 parts, that is not separated. It leave the deletion.
+    // Accept insert that split into 4 parts, but separated into 2-2 parts, with another insert.
+    // It will accept only 2 parts that are not separated. It leaves the deletion.
     pEditShell->AcceptRedline(0);
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(5), pEditShell->GetRedlineCount());
     // Accepting the delete will remove that redline.
@@ -267,13 +267,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf157662_RejectInsertRedlineCutWithDe
     CPPUNIT_ASSERT(pEditShell);
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(9), pEditShell->GetRedlineCount());
 
-    // Reject the insert that split into 3 parts. reject all 3 of them
-    // it even remove the deletion, that was on the 2. insert...
+    // Reject the insert that split into 3 parts: reject all 3 of them.
+    // It even removes the deletion that was on the second insert.
     pEditShell->RejectRedline(6);
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(6), pEditShell->GetRedlineCount());
 
-    // Reject insert that split into 4 parts, but separated to 2-2 parts, with another insert.
-    // It will reject only 2 parts, that is not separated. It remove the deletion.
+    // Reject insert that split into 4 parts, but separated into 2-2 parts, with another insert.
+    // It will reject only 2 parts that are not separated. It removes the deletion.
     pEditShell->RejectRedline(0);
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(4), pEditShell->GetRedlineCount());
 }
@@ -304,8 +304,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf157663_RedlineMoveRecognition)
             true,  false, true, false, true, false, false, false, false, false, false };
     // 20. and 22. redline is a delete/insert redline with the same text "three".
     // they are not recognised as a move, because 22. redline is not a whole paragraph.
-    // Note: delete/insert redlines that are just a part of a paragraph decided to be part of
-    // a move, only if it is at least 6 character long and contain a space "" character.
+    // Note: delete/insert redlines that are just a part of a paragraph are decided to be part of
+    // a move, only if they are at least 6 characters long and contain a space character.
     for (SwRedlineTable::size_type i = 0; i < rTable.size(); i++)
     {
         CPPUNIT_ASSERT_EQUAL(vMovedRedlines[i], rTable[i]->GetMoved() > 0);

@@ -632,7 +632,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf99689TableOfTables)
 
 // tdf#112448: Fix: take correct line height
 //
-// When line metrics is not calculated we need to call CalcRealHeight()
+// When line metrics are not calculated we need to call CalcRealHeight()
 // before usage of the Height() and GetRealHeight().
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf112448)
 {
@@ -688,7 +688,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf157937)
     dispatchCommand(mxComponent, u".uno:ChangeCaseRotateCase"_ustr, {});
     dispatchCommand(mxComponent, u".uno:ChangeCaseRotateCase"_ustr, {});
 
-    // This resulted freezing
+    // This resulted in freezing
     dispatchCommand(mxComponent, u".uno:ChangeCaseRotateCase"_ustr, {});
 }
 
@@ -2303,7 +2303,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf51223)
     CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
 }
 
-// Unit test for fix inconsistent bookmark behavior around at-char/as-char anchored frames
+// Unit test to fix inconsistent bookmark behavior around at-char/as-char anchored frames
 //
 // We have a placeholder character in the sw doc model for as-char anchored frames,
 // so it's possible to have a bookmark before/after the frame or a non-collapsed bookmark
