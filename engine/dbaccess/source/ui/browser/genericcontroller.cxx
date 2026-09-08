@@ -256,13 +256,13 @@ void OGenericUnoController::disposing(const EventObject& Source)
 void OGenericUnoController::modified(const EventObject& aEvent)
 {
     ::osl::MutexGuard aGuard( getMutex() );
-    {
-        Reference<XModifiable> xModi(aEvent.Source,UNO_QUERY);
-        if ( xModi.is() )
-            m_bCurrentlyModified = xModi->isModified(); // can only be reset by save
-        else
-            m_bCurrentlyModified = true;
-    }
+
+    Reference<XModifiable> xModi(aEvent.Source,UNO_QUERY);
+    if ( xModi.is() )
+        m_bCurrentlyModified = xModi->isModified(); // can only be reset by save
+    else
+        m_bCurrentlyModified = true;
+
     InvalidateFeature(ID_BROWSER_SAVEDOC);
     InvalidateFeature(ID_BROWSER_UNDO);
 }
