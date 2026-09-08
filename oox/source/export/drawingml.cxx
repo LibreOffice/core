@@ -4216,15 +4216,8 @@ void DrawingML::WriteBodyProps(const css::uno::Reference< css::uno::XInterface >
             sWritingMode = "vert270";
         else if (nTextPreRotateAngle == -180 || nTextPreRotateAngle == 180)
         {
-#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 12
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
-#endif
             nTextRotateAngleDeg100
                 = NormAngle18000(nTextRotateAngleDeg100.value_or(0_deg100) + 18000_deg100);
-#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 12
-#pragma GCC diagnostic pop
-#endif
             // ToDo: Examine insets. They might need rotation too. Check diagrams (SmartArt).
         }
         else
@@ -4265,15 +4258,8 @@ void DrawingML::WriteBodyProps(const css::uno::Reference< css::uno::XInterface >
 
     std::optional<OString> sTextRotateAngleMSUnit;
     if (nTextRotateAngleDeg100.has_value())
-#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 12
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
-#endif
         sTextRotateAngleMSUnit
             = oox::drawingml::calcRotationValue(nTextRotateAngleDeg100.value().get());
-#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 12
-#pragma GCC diagnostic pop
-#endif
 
     // Prepare attributes 'anchor' and 'anchorCtr'
     // LibreOffice has 12 value sets, MS Office only 6. We map them so, that it reverses the
