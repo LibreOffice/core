@@ -537,69 +537,90 @@ window.L.Map.include({
 	},
 
 	showPage: function () {
-		if (this.getDocType() === 'spreadsheet' && app.calc.isAnyPartHidden()) {
-			const dialogId = 'show-sheets-modal';
-
-			const buttonCallback = function() {
-				var checkboxList = document.querySelectorAll('input[id^="hidden-part-checkbox"]');
-				for (var i = 0; i < checkboxList.length; i++) {
-					if (checkboxList[i].checked === true) {
-						var partName_ = checkboxList[i].id.replace('hidden-part-checkbox-', '');
-						var argument = {aTableName: {type: 'string', value: partName_}};
-						app.socket.sendMessage('uno .uno:Show ' + JSON.stringify(argument));
-					}
-				}
-			};
-
-			this.uiManager.showInfoModal(dialogId, _('Show sheets'), ' ', ' ', _('OK'), buttonCallback, true, dialogId + '-response');
-			this.showPageModalImpl(dialogId);
-		}
-	},
-
-	showPageModalImpl: function(dialogId) {
-		const modal = document.getElementById(dialogId);
-
-		if (!modal) {
-			setTimeout(() => { this.showPageModalImpl(dialogId) }, 10);
+		if (this.getDocType() !== 'spreadsheet' || !app.calc.isAnyPartHidden())
 			return;
-		}
 
-		var hiddenParts = app.calc.getHiddenPartNameArray();
+		const id = 'show-sheets-modal';
+		const dialogId = this.uiManager.generateModalId(id);
+		const responseButtonId = id + '-response';
+		const cancelButtonId = id + '-cancel';
+		const checkboxIdPrefix = 'hidden-part-checkbox-';
 
-		if (app.calc.isAnyPartHidden()) {
-			var container = document.createElement('div');
-			container.style.maxHeight = '300px';
-			container.style.overflowY = 'auto';
-			for (var i = 0; i < hiddenParts.length; i++) {
-				var checkbox = document.createElement('input');
-				checkbox.type = 'checkbox';
-				checkbox.id = 'hidden-part-checkbox-' + hiddenParts[i];
-				var label = document.createElement('label');
-				label.htmlFor = 'hidden-part-checkbox-' + hiddenParts[i];
-				label.innerText = hiddenParts[i];
-				var newLine = document.createElement('br');
-				container.appendChild(checkbox);
-				container.appendChild(label);
-				container.appendChild(newLine);
-			}
-		}
+		const hiddenParts = app.calc.getHiddenPartNameArray();
+		const checkedParts = new Set();
 
-		modal.insertBefore(container, modal.children[0]);
+		// One checkbox widget per hidden sheet. The builder renders them, so
+		// each platform applies its own checkbox layout.
+		const checkboxes = hiddenParts.map((partName, index) => ({
+			id: checkboxIdPrefix + index,
+			type: 'checkbox',
+			text: partName,
+		}));
 
-		JSDialog.enableButtonInModal(dialogId, dialogId + '-response', false);
+		const json = this.uiManager._modalDialogJSON(id, _('Show sheets'), true, [
+			{
+				id: 'info-modal-tile-m',
+				type: 'fixedtext',
+				text: _('Show sheets'),
+				hidden: !window.mode.isSmallScreenDevice(),
+			},
+			{
+				id: 'hidden-parts-container',
+				type: 'container',
+				vertical: true,
+				children: checkboxes,
+			},
+			{
+				id: '',
+				type: 'buttonbox',
+				text: '',
+				enabled: true,
+				children: [
+					{
+						id: cancelButtonId,
+						type: 'pushbutton',
+						text: _('Cancel'),
+					},
+					{
+						id: responseButtonId,
+						type: 'pushbutton',
+						text: _('OK'),
+						has_default: true,
+						// OK stays disabled until at least one sheet is ticked.
+						enabled: false,
+					},
+				],
+				vertical: false,
+				layoutstyle: 'end',
+			},
+		]);
 
-		var checkboxes = document.querySelectorAll('#show-sheets-modal input[type="checkbox"]');
-		checkboxes.forEach(function(checkbox) {
-			checkbox.addEventListener('change', function() {
-				var anyChecked = false;
-				checkboxes.forEach(function(checkbox) {
-					if (checkbox.checked) {
-						anyChecked = true;
-					}
+		const callbacks = hiddenParts.map((partName, index) => ({
+			id: checkboxIdPrefix + index,
+			type: 'change',
+			func: (objectType, eventType, object, checked) => {
+				if (checked) checkedParts.add(partName);
+				else checkedParts.delete(partName);
+				JSDialog.enableButtonInModal(
+					id,
+					responseButtonId,
+					checkedParts.size > 0,
+				);
+			},
+		}));
+
+		callbacks.push({
+			id: responseButtonId,
+			func: () => {
+				checkedParts.forEach((partName) => {
+					const argument = { aTableName: { type: 'string', value: partName } };
+					app.socket.sendMessage('uno .uno:Show ' + JSON.stringify(argument));
 				});
-				JSDialog.enableButtonInModal(dialogId, dialogId + '-response', anyChecked);
-			});
+				this.uiManager.closeModal(dialogId);
+			},
 		});
+
+		this.uiManager.showModal(json, callbacks, cancelButtonId);
 	},
 
 	hidePage: function (tabNumber) {

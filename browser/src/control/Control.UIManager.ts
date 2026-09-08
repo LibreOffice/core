@@ -2366,7 +2366,7 @@ class UIManager extends window.L.Control {
 	 * @param focusId - Optional focus element ID.
 	 * @param clickToDismiss - Optional flag for click-to-dismiss behavior.
 	 */
-	private _modalDialogJSON(
+	_modalDialogJSON(
 		id: string,
 		title: string | undefined,
 		cancellable: boolean,

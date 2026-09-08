@@ -1528,8 +1528,10 @@ img.context-menu-icon {
 	padding-inline-start: 0;
 }
 
-.jsdialog.ui-grid-cell input[type='checkbox'] + label[for^='hidden-part-checkbox'] {
-	vertical-align: super;
+/* The Show Sheets list in the desktop dialog scrolls on its own, so the buttons stay in view. */
+#hidden-parts-container.jsdialog {
+	max-height: 300px;
+	overflow-y: auto;
 }
 
 .jsdialog.ui-text {
