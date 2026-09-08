@@ -216,6 +216,14 @@ void Components::WriteThread::execute() {
         if (!delayOrTerminate_.check()) {
             continue;
         }
+        {
+            std::scoped_lock l(triggerMutex_);
+            if (triggered_) {
+                // A change committed while the file was being written is still waiting, so
+                // write the file once more. The delay is over, so this writes right away.
+                continue;
+            }
+        }
         reference_->clear();
         break;
     }

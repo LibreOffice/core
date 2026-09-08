@@ -31,6 +31,7 @@
 #include <oox/token/tokens.hxx>
 #include <sal/log.hxx>
 #include <utility>
+#include <algorithm>
 
 using namespace oox::core;
 using namespace ::com::sun::star;
@@ -45,7 +46,17 @@ ShapeGroupContext::ShapeGroupContext( FragmentHandler2 const & rParent, ShapePtr
     if( pMasterShapePtr )
         mpGroupShapePtr->setWps(pMasterShapePtr->getWps());
     if( pMasterShapePtr && mpGroupShapePtr )
-        pMasterShapePtr->addChild( mpGroupShapePtr );
+    {
+        // A Diagram is read twice, once for itself and once for the fallback drawing that comes
+        // with it, and both rounds arrive here with the same master and the same group. The
+        // master keeps one entry for that group, so the tree below it is built and formatted
+        // once. A group the master does not hold yet is always added, so a single round works
+        // as well.
+        std::vector<ShapePtr>& rChildren(pMasterShapePtr->getChildren());
+
+        if (std::find(rChildren.begin(), rChildren.end(), mpGroupShapePtr) == rChildren.end())
+            pMasterShapePtr->addChild( mpGroupShapePtr );
+    }
 }
 
 ShapeGroupContext::~ShapeGroupContext()

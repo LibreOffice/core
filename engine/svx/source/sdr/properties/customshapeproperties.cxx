@@ -23,6 +23,7 @@
 #include <svl/itemset.hxx>
 #include <svl/style.hxx>
 #include <svx/svdoashp.hxx>
+#include <svx/sdasitm.hxx>
 #include <svx/sdooitm.hxx>
 #include <editeng/eeitem.hxx>
 #include <svl/whiter.hxx>
@@ -137,6 +138,13 @@ namespace sdr::properties
         {
             switch(nWhich)
             {
+                case SDRATTR_CUSTOMSHAPE_GEOMETRY:
+                {
+                    // The minimum text frame size is derived from where this geometry says the
+                    // text goes, so it is derived again whenever the geometry arrives or changes.
+                    static_cast<SdrObjCustomShape&>(GetSdrObject()).AdaptTextMinSize();
+                    break;
+                }
                 case SDRATTR_TEXT_AUTOGROWHEIGHT:
                 {
                     // #115391#  update bTextFrame and RenderGeometry using AdaptTextMinSize()

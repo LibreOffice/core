@@ -1990,10 +1990,10 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf96708)
 
     rSSController.GetClipboard().DoPaste();
 
+    // tdf#151802: pasting the pages back brought a master page along that was the same as one
+    // already there, so the count grew by one
     const sal_uInt16 nMasterPageCnt2 = pDoc->GetMasterSdPageCount(PageKind::Standard);
-    //FIXME: tdf#151802: Number of master pages should be 4, it's 5 instead
-    // CPPUNIT_ASSERT_EQUAL(nMasterPageCnt1, nMasterPageCnt2);
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(5), nMasterPageCnt2);
+    CPPUNIT_ASSERT_EQUAL(nMasterPageCnt1, nMasterPageCnt2);
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf45617_default_master)
