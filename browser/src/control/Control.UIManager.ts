@@ -113,6 +113,7 @@ class UIManager extends window.L.Control {
 				this.map.fire('editorgotfocus');}
 		});
 		const mainNav = document.querySelector('.main-nav') as HTMLElement;
+		mainNav.setAttribute('aria-label', _('Main'));
 		mainNav.addEventListener('wheel', function(e: WheelEvent) {
 			const el = this as HTMLElement;
 

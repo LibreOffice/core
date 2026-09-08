@@ -44,7 +44,7 @@ class NavigatorPanel extends SidebarBase {
 		this.map.on('focussearch', this.focusSearch, this);
 		this.map.on('editorgotfocus', this.markSearchResultsStale, this);
 		this.navigationPanel = document.getElementById(`navigation-sidebar`);
-		this.navigationPanel.setAttribute('aria-label', _('Navigation Panel'));
+		this.navigationPanel.setAttribute('aria-label', _('Navigator'));
 		this.navigationPanel.setAttribute('tabindex', '-1');
 
 		this.floatingNavIcon = document.getElementById(`navigator-floating-icon`);
