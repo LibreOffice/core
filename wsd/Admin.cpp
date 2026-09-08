@@ -382,17 +382,16 @@ void AdminSocketHandler::handleMessage(const std::vector<char> &payload)
             return;
         }
 
-        // The controller names the state it expects the document to be in. The document is
-        // handed over only when its state still agrees, since a client told to migrate a
-        // document that has since changed has nothing it can do with the new route.
-        const bool needsSave = docStatus == "unsaved" && !model.isDocSaved(dockey);
-        const bool alreadySaved = (docStatus == "readonly" && model.isDocReadOnly(dockey)) ||
-                                  (docStatus == "saved" && model.isDocSaved(dockey));
+        // A document that is saved or read-only is handed over straight away. The state the
+        // controller names only decides whether a save is asked for first, so a document that
+        // has been saved since the controller looked at it still migrates.
+        const bool alreadySaved = model.isDocSaved(dockey) || model.isDocReadOnly(dockey);
+        const bool needsSave = !alreadySaved && docStatus == "unsaved";
         if (!needsSave && !alreadySaved)
         {
-            LOG_WRN("Not migrating docKey [" << dockey << "], the controller expects it to be ["
-                                             << docStatus
-                                             << "] which no longer matches its state");
+            LOG_WRN("Not migrating docKey [" << dockey << "], it is modified and the controller "
+                                                "expects it to be ["
+                                             << docStatus << "], so no save was asked for");
         }
         else
         {
