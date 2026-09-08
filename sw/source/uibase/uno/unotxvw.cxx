@@ -1435,7 +1435,7 @@ OUString SwXTextViewCursor::getString()
             //! since setString for SEL_TABLE_TEXT (with possible
             //! multi selection of cells) would not work properly we
             //! will ignore this case for both
-            //! functions (setString AND getString) because of symmetrie.
+            //! functions (setString AND getString) because of symmetry.
 
             case ShellMode::ListText       :
             case ShellMode::TableListText:
@@ -1468,7 +1468,7 @@ void SwXTextViewCursor::setString(const OUString& aString)
         //! since setString for SEL_TABLE_TEXT (with possible
         //! multi selection of cells) would not work properly we
         //! will ignore this case for both
-        //! functions (setString AND getString) because of symmetrie.
+        //! functions (setString AND getString) because of symmetry.
 
         case ShellMode::ListText       :
         case ShellMode::TableListText :

@@ -3440,7 +3440,7 @@ const SwAttrFnTab aHTMLAttrFnTab = {
 /* RES_GRFATR_GAMMA */              nullptr,
 /* RES_GRFATR_INVERT */             nullptr,
 /* RES_GRFATR_TRANSPARENCY */       nullptr,
-/* RES_GRFATR_DRWAMODE */           nullptr,
+/* RES_GRFATR_DRAWMODE */           nullptr,
 /* RES_GRFATR_DUMMY3 */             nullptr,
 /* RES_GRFATR_VISIBLE */            nullptr,
 /* RES_GRFATR_DUMMY5 */             nullptr,

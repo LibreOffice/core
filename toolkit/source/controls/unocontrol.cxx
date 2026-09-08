@@ -156,7 +156,7 @@ Reference< XVclWindowPeer >    UnoControl::ImplGetCompatiblePeer()
 
     if ( !xCompatiblePeer.is() )
     {
-        // Create the pair as invisible
+        // Create the peer as invisible
         bool bVis = maComponentInfos.bVisible;
         if( bVis )
             maComponentInfos.bVisible = false;

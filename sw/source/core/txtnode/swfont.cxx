@@ -1523,7 +1523,7 @@ void SwDrawTextInfo::Shift( Degree10 nDir )
 SwUnderlineFont::SwUnderlineFont(SwFont& rFnt, TextFrameIndex const nEnd, const Point& rPoint)
         : m_aPos( rPoint ), m_nEnd( nEnd ), m_pFont( &rFnt )
 {
-};
+}
 
 SwUnderlineFont::~SwUnderlineFont()
 {

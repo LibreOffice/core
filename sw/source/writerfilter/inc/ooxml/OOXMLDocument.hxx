@@ -250,7 +250,7 @@ public:
        Resolves a comment to a stream handler.
 
        @param rStream       stream handler to resolve to
-       @param rComment      id of the comment to resolve
+       @param nId           id of the comment to resolve
      */
     void resolveComment(Stream & rStream, const sal_Int32 nId);
 

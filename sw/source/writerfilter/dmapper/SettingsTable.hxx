@@ -46,7 +46,7 @@ public:
     SettingsTable(const DomainMapper& rDomainMapper);
     virtual ~SettingsTable() override;
 
-    //returns default TabStop in 1/100th mm
+    /// Returns default TabStop in 1/100th mm.
     int GetDefaultTabStop() const;
 
     /// Automatically update styles from document template?

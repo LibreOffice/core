@@ -83,7 +83,7 @@ namespace {
     //! Determine if we need to build hidden portions
     bool lcl_BuildHiddenPortion(const SwTextSizeInfo& rInf, TextFrameIndex &rPos);
 
-    // Check whether the two font has the same border
+    // Check whether the two fonts have the same border
     bool lcl_HasSameBorder(const SwFont& rFirst, const SwFont& rSecond);
 }
 
@@ -1435,7 +1435,7 @@ SwTextPortion *SwTextFormatter::WhichTextPor( SwTextFormatInfo &rInf ) const
                     {
                         pPor = new SwFieldFormDropDownPortion(pBM, sw::mark::ExpandFieldmark(pBM));
                     }
-                    /* we need to check for ODF_FORMTEXT for scenario having FormFields inside FORMTEXT.
+                    /* We need to check for ODF_FORMTEXT for scenarios having FormFields inside FORMTEXT.
                      * Otherwise file will crash on open.
                      */
                     else if (pBM->GetFieldname( ) == ODF_FORMTEXT)

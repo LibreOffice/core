@@ -57,10 +57,6 @@ public:
     }
 };
 
-}
-
-namespace {
-
 struct block
 {
     sal_Int32 m_nStart;

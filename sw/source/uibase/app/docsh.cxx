@@ -1278,7 +1278,7 @@ void SwDocShell::RemoveOLEObjects()
 // size change takes place later, while calculating the layout in the
 // idle handler. If this document is saved now, it is saved with invalid
 // sizes. For this reason, the layout has to be calculated before a document is
-// saved, but of course only id there are OLE objects with bOLESizeInvalid set.
+// saved, but of course only if there are OLE objects with bOLESizeInvalid set.
 void SwDocShell::CalcLayoutForOLEObjects()
 {
     if (!m_pWrtShell)

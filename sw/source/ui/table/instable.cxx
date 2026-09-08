@@ -174,7 +174,7 @@ IMPL_LINK(SwInsTableDlg, ModifyName, weld::TextWidget&, rEdit, void)
 }
 
 // We use weld::Entry's "changed" notification here, not weld::SpinButton's "value_changed", because
-// the latter only fires after the control looses focus; so the notification would not fire during
+// the latter only fires after the control loses focus; so the notification would not fire during
 // typing a big number, so that user typing it and immediately clicking "Insert" would not see the
 // warning.
 // Since the notification is called in weld::Entry context, we can only rely on what's available for

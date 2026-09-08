@@ -245,7 +245,7 @@ void RTFSdrImport::applyProperty(uno::Reference<drawing::XShape> const& xShape,
     else if (aKey == u"rotation")
     {
         // See DffPropertyReader::Fix16ToAngle(): in RTF, positive rotation angles are clockwise, we have them as counter-clockwise.
-        // Additionally, RTF type is 0..360*2^16, our is 0..360*100.
+        // Additionally, RTF type is 0..360*2^16, ours is 0..360*100.
         sal_Int32 nRotation = o3tl::toInt32(aValue) * 100 / RTF_MULTIPLIER;
         uno::Reference<lang::XServiceInfo> xServiceInfo(xShape, uno::UNO_QUERY);
         if (!xServiceInfo->supportsService(u"com.sun.star.text.TextFrame"_ustr))

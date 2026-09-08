@@ -188,7 +188,7 @@ void UnoApiTest::validate(TestFilter eFilter)
     }
 
 #if !defined _WIN32
-    // For now, this is only needed by some Linux ASan builds, so keep it simply and disable it on
+    // For now, this is only needed by some Linux ASan builds, so keep it simple and disable it on
     // Windows (which doesn't support the relevant shell syntax for (un-)setting environment
     // variables).
     OUString env;

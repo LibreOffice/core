@@ -10245,7 +10245,7 @@ void DomainMapper_Impl::deferCharacterProperty(sal_Int32 id, const css::uno::Any
 
 void DomainMapper_Impl::processDeferredCharacterProperties(bool bCharContext)
 {
-    // Actually process in DomainMapper, so that it's the same source file like normal processing.
+    // Actually process in DomainMapper, so that it's the same source file as normal processing.
     if (!m_StreamStateStack.top().deferredCharacterProperties.empty())
     {
         m_rDMapper.processDeferredCharacterProperties(m_StreamStateStack.top().deferredCharacterProperties, bCharContext);

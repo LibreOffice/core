@@ -184,7 +184,7 @@ static SwMacroInfo* GetMacroInfo( SdrObject* pObj )
     }
 
     return nullptr;
-};
+}
 
 static void lclGetAbsPath(OUString& rPath, sal_uInt16 nLevel, SwDocShell const * pDocShell)
 {

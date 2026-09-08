@@ -1700,7 +1700,7 @@ bool SwViewShell::SmoothScroll( tools::Long lXDiff, tools::Long lYDiff, const to
                             rTargetDevice.EnableMapMode(bMapModeWasEnabledDest);
                             pVout->EnableMapMode(bMapModeWasEnabledSource);
 
-                            // end paint on logoc base
+                            // end paint on logic base
                             DLPostPaint2(true);
                     }
                     else
