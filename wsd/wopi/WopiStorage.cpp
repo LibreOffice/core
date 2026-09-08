@@ -30,6 +30,7 @@
 #include <wsd/Exceptions.hpp>
 #include <wsd/HostUtil.hpp>
 #include <wsd/ProofKey.hpp>
+#include <wsd/RemoteDocumentBroker.hpp>
 
 #include <Poco/Exception.h>
 #include <Poco/Net/AcceptCertificateHandler.h>
@@ -170,7 +171,9 @@ WopiStorage::WOPIFileInfo::WOPIFileInfo(const FileInfo& fileInfo, Poco::JSON::Ob
     }
 
     // The public part of the remote documents this document may subscribe to.
-    if (auto relatedDocuments = object->getArray("RelatedDocuments"))
+    // A server that reads no remote documents keeps none of them.
+    auto relatedDocuments = object->getArray("RelatedDocuments");
+    if (RemoteDocumentBroker::isEnabled() && relatedDocuments)
     {
         for (std::size_t i = 0; i < relatedDocuments->size(); ++i)
         {
@@ -192,21 +195,26 @@ WopiStorage::WOPIFileInfo::WOPIFileInfo(const FileInfo& fileInfo, Poco::JSON::Ob
     {
         if (auto relatedTokens = userPrivateInfo->getArray("RelatedDocuments"))
         {
-            for (std::size_t i = 0; i < relatedTokens->size(); ++i)
+            if (RemoteDocumentBroker::isEnabled())
             {
-                auto entry = relatedTokens->getObject(i);
-                if (!entry)
-                    continue;
+                for (std::size_t i = 0; i < relatedTokens->size(); ++i)
+                {
+                    auto entry = relatedTokens->getObject(i);
+                    if (!entry)
+                        continue;
 
-                std::string wopiSrc;
-                std::string accessToken;
-                JsonUtil::findJSONValue(entry, "WOPISrc", wopiSrc);
-                JsonUtil::findJSONValue(entry, "AccessToken", accessToken);
-                if (!wopiSrc.empty() && !accessToken.empty())
-                    _relatedDocumentTokens.push_back(
-                        { std::move(wopiSrc), std::move(accessToken) });
+                    std::string wopiSrc;
+                    std::string accessToken;
+                    JsonUtil::findJSONValue(entry, "WOPISrc", wopiSrc);
+                    JsonUtil::findJSONValue(entry, "AccessToken", accessToken);
+                    if (!wopiSrc.empty() && !accessToken.empty())
+                        _relatedDocumentTokens.push_back(
+                            { std::move(wopiSrc), std::move(accessToken) });
+                }
             }
 
+            // A token is private to its view whether or not a document reads it, so it leaves
+            // the info that is stored and logged either way.
             userPrivateInfo->remove("RelatedDocuments");
         }
     }
