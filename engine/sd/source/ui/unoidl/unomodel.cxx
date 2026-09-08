@@ -2251,6 +2251,14 @@ bool SdXImpressDocument::isVectorObjectChangedSince(sal_Int32 nPart, sal_Int32 n
     return aObjectIterator != rObjectVersions.end() && aObjectIterator->second > nSince;
 }
 
+bool SdXImpressDocument::isVectorOrderChangedSince(sal_Int32 nPart, sal_Int32 nMode,
+                                                   sal_uInt64 nSince) const
+{
+    auto aIterator = maVectorParts.find({ nPart, nMode });
+    return aIterator != maVectorParts.end()
+           && aIterator->second.mnOrderChangeVersion > nSince;
+}
+
 std::unordered_set<sal_uInt64> SdXImpressDocument::takeVectorDirtyObjects(sal_Int32 nPart,
                                                                          sal_Int32 nMode)
 {
@@ -2301,7 +2309,10 @@ bool SdXImpressDocument::recordVectorPaintOrder(sal_Int32 nPart, sal_Int32 nMode
     const bool bMoved = rState.maPaintOrder.has_value() && *rState.maPaintOrder != rOrder;
     rState.maPaintOrder = rOrder;
     if (bMoved)
+    {
         ++rState.mnVersion;
+        rState.mnOrderChangeVersion = rState.mnVersion;
+    }
     return bMoved;
 }
 
@@ -2341,6 +2352,14 @@ sal_Int32 findMasterPageIndex(SdDrawDocument& rDocument, const SdPage* pMasterPa
             return nIndex;
     }
     return -1;
+}
+
+/// Count the part's version up and remember it as the version the object set, or the order it
+/// paints in, last changed at.
+void recordOrderChange(SdXImpressDocument::VectorPartState& rState)
+{
+    ++rState.mnVersion;
+    rState.mnOrderChangeVersion = rState.mnVersion;
 }
 
 /// Marks the object and, when it is a group, everything inside it.
@@ -2384,13 +2403,13 @@ void recordObjectChange(SdXImpressDocument::VectorPartState& rState, const SdrOb
 {
     if (eKind == SdrHintKind::ObjectRemoved)
     {
-        ++rState.mnVersion;
+        recordOrderChange(rState);
         forgetSubtree(rState, pObject);
         return;
     }
 
     if (eKind == SdrHintKind::ObjectInserted)
-        ++rState.mnVersion;
+        recordOrderChange(rState);
 
     markSubtreeDirty(rState, pObject);
 
@@ -2405,6 +2424,9 @@ void recordMasterChange(SdXImpressDocument::VectorPartState& rState)
 {
     ++rState.mnVersion;
     rState.mnMasterChangeVersion = rState.mnVersion;
+    // A page whose place in the document moved also carries a different set of objects, so the
+    // client is given the order again.
+    rState.mnOrderChangeVersion = rState.mnVersion;
 }
 
 // A slide's presentation info changed, so tell every view of the document.
@@ -2633,7 +2655,12 @@ public:
         resolveDirtyObjects(pPage);
 
         writeHeader(rWriter);
-        if (isDelta())
+
+        // The order names every live object on the part, so it travels only when that set or the
+        // order it paints in moved. A client that already holds the order keeps it.
+        if (isDelta()
+            && mpModel->isVectorOrderChangedSince(mnResolvedPage, mnMode,
+                                                  sal_uInt64(mnSinceVersion)))
             writeObjectOrder(rWriter, pPage);
 
         // The page is the first painted object: its entry carries the background, the page

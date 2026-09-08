@@ -183,6 +183,10 @@ public:
     bool isVectorObjectChangedSince(sal_Int32 nPart, sal_Int32 nMode, sal_uInt64 nObjectId,
                                     sal_uInt64 nSince) const;
 
+    /// True when the set of objects on the part, or the order they paint in, changed after the
+    /// given version.
+    bool isVectorOrderChangedSince(sal_Int32 nPart, sal_Int32 nMode, sal_uInt64 nSince) const;
+
     /// The objects a change asked for a fresh look at, taken out of the part's state.
     std::unordered_set<sal_uInt64> takeVectorDirtyObjects(sal_Int32 nPart, sal_Int32 nMode);
 
@@ -201,9 +205,9 @@ public:
     /// Drops what was recorded for an object that is no longer on the part.
     void forgetVectorObject(sal_Int32 nPart, sal_Int32 nMode, sal_uInt64 nObjectId);
 
-    /// Records the order the objects of the part paint in. Counts the part's version up when
-    /// the order differs from the one recorded before, and returns true then. The first order
-    /// recorded for a part moves nothing.
+    /// Records the order the objects of the part paint in. When it differs from the order
+    /// recorded before, counts the part's version up, remembers that version as the one the
+    /// order last moved at, and returns true. The first order recorded moves nothing.
     bool recordVectorPaintOrder(sal_Int32 nPart, sal_Int32 nMode,
                                 const std::vector<sal_uInt64>& rOrder);
 
@@ -222,6 +226,9 @@ public:
     {
         sal_uInt64 mnVersion = 0;
         sal_uInt64 mnMasterChangeVersion = 0;
+        /// The version at which the set of objects on the part, or the order they paint in,
+        /// last changed. A client whose content is newer than this already holds the order.
+        sal_uInt64 mnOrderChangeVersion = 0;
         std::unordered_map<sal_uInt64, sal_uInt64> maObjectChangeVersions;
         std::unordered_map<sal_uInt64, VectorObjectContent> maObjectContent;
         std::unordered_set<sal_uInt64> maDirtyObjects;

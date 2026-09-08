@@ -589,9 +589,9 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testDeltaCarriesOnlyChangedObjects)
 
     auto aDelta = getVectorPrimitives(u"testDeltaSince", nVersion);
     assertJsonPath(aDelta, "/type", "vectorprimitivesdelta");
-    // The order still lists the page and both objects, but only the
-    // changed one carries content.
-    CPPUNIT_ASSERT_EQUAL(size_t(3), aDelta.getSize("/order").value_or(0));
+    // The object set did not move, so the client keeps the order it has and
+    // only the changed object travels.
+    CPPUNIT_ASSERT(!aDelta.has("/order"));
     CPPUNIT_ASSERT_EQUAL(size_t(1), aDelta.getSize("/objects").value_or(0));
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int64>(pFirst->GetUniqueID()),
                          aDelta.getInt("/objects/0/id").value_or(-1));
@@ -761,14 +761,21 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testGroupMembersAreOwnEntries)
                          aFull.getInt("/objects/2/parent").value_or(-1));
     CPPUNIT_ASSERT(aFull.getSize("/objects/2/primitives").value_or(0) > 0);
 
-    // The order of a delta lists the page first, then the group and the
-    // member.
+    // Adding an object moves the set, so the next delta hands the client the
+    // whole order: the page first, then the group and the member, then the
+    // new object.
     const sal_Int64 nVersion = aFull.getInt("/version").value_or(-1);
+    rtl::Reference<SdrRectObj> pAdded = new SdrRectObj(
+        page(1)->getSdrModelFromSdrPage(), tools::Rectangle(Point(6000, 1000), Size(1000, 1000)));
+    // Inserting through InsertObject is what tells the model a new object is there.
+    page(1)->InsertObject(pAdded.get());
+
     auto aDelta = getVectorPrimitives(u"testGroupMembersDelta", nVersion);
-    CPPUNIT_ASSERT_EQUAL(size_t(3), aDelta.getSize("/order").value_or(0));
+    CPPUNIT_ASSERT_EQUAL(size_t(4), aDelta.getSize("/order").value_or(0));
     CPPUNIT_ASSERT_EQUAL(sal_Int64(0), aDelta.getInt("/order/0").value_or(-1));
     CPPUNIT_ASSERT_EQUAL(sal_Int64(pGroup->GetUniqueID()), aDelta.getInt("/order/1").value_or(-1));
     CPPUNIT_ASSERT_EQUAL(sal_Int64(pMember->GetUniqueID()), aDelta.getInt("/order/2").value_or(-1));
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(pAdded->GetUniqueID()), aDelta.getInt("/order/3").value_or(-1));
 }
 
 // Every entry carries where the object paints and how the unit rectangle
@@ -969,9 +976,9 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testPullSetsPushBaseline)
     CPPUNIT_ASSERT(oDelta.has_value());
 
     assertJsonPath(*oDelta, "/type", "vectorprimitivesdelta");
-    // The order still lists the page and both objects, but nothing changed
-    // since the pull, so the push carries no object content.
-    CPPUNIT_ASSERT_EQUAL(size_t(3), oDelta->getSize("/order").value_or(0));
+    // Nothing changed since the pull, so the push carries neither an order
+    // nor any object content.
+    CPPUNIT_ASSERT(!oDelta->has("/order"));
     CPPUNIT_ASSERT_EQUAL(size_t(0), oDelta->getSize("/objects").value_or(SIZE_MAX));
 }
 
