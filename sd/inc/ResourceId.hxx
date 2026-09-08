@@ -131,8 +131,8 @@ public:
         defined on the URLS.  So when there are two resource ids A1.A2
         (A1 being the anchor of A2) and B1.B2 then A1.A2<B1.B2 when A1<B1 or
         A1==B1 and A2<B2.  Resource ids may have different lengths: A1 <
-        B1.B2 when A1<B1 or A1==B1 (anchors first then resources linked to them.</p>
-        @param xId
+        B1.B2 when A1<B1 or A1==B1 (anchors first then resources linked to them).</p>
+        @param rxResourceId
             The resource id to which the called resource id is compared.
         @return
             Returns 0 when the called resource id is
@@ -170,7 +170,7 @@ public:
             The resource URL of the anchor.
         @param eMode
             This mode specifies how the called resource has to be bound to
-            the given anchor in order to have this function return. See the
+            the given anchor in order to have this function return `TRUE`. See the
             description of isBoundTo() for more
             information.
     */

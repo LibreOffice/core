@@ -133,7 +133,7 @@ bool ScUndoInsertCells::Merge( SfxUndoAction* pNextAction )
                 //  Store paste action if this is part of paste with inserting cells.
                 //  A list action isn't used because Repeat wouldn't work (insert wrong cells).
 
-                // Pass ownership of the wrapped SfxUndoAction* to pPasteUndO
+                // Pass ownership of the wrapped SfxUndoAction* to pPasteUndo
                 pPasteUndo = pWrapper->ReleaseWrappedUndo();
                 return true;
             }

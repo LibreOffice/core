@@ -425,7 +425,7 @@ void ScFormulaReferenceHelper::DoClose( sal_uInt16 nId )
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();
     if ( pViewFrm && pViewFrm->HasChildWindow(FID_INPUTLINE_STATUS) )
     {
-        //  The input row is disabled with ToolBox::Disable disabled, thus it must be
+        //  The input row is disabled with ToolBox::Disable, thus it must be
         //  reenabled with ToolBox::Enable (before the AppWindow is enabled)
         //  for the buttons to be drawn as enabled.
         SfxChildWindow* pChild = pViewFrm->GetChildWindow(FID_INPUTLINE_STATUS);
@@ -735,7 +735,7 @@ void ScRefHandler::AddRefEntry()
 
 bool ScRefHandler::IsTableLocked() const
 {
-    // the default is that the sheet can be switched during while the reference is edited
+    // the default is that the sheet can be switched while the reference is edited
 
     return false;
 }

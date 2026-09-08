@@ -214,10 +214,10 @@ void ScNameDlg::SetActive()
 void ScNameDlg::UpdateChecks(const ScRangeData* pData)
 {
     // remove handlers, we only want the handlers to process
-    // user input and not when we are syncing the controls  with our internal
-    // model ( also UpdateChecks is called already from some other event
+    // user input and not when we are syncing the controls with our internal
+    // model (also UpdateChecks is called already from some other event
     // handlers, triggering handlers while already processing a handler can
-    // ( and does in this case ) corrupt the internal data
+    // (and does in this case) corrupt the internal data)
 
     m_xBtnCriteria->connect_toggled( Link<weld::Toggleable&,void>() );
     m_xBtnPrintArea->connect_toggled( Link<weld::Toggleable&,void>() );

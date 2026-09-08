@@ -145,7 +145,7 @@ SCTAB ScNamedRangeObj::GetTab_Impl()
         return nTab;
     }
     else
-        return -1;//global range name
+        return -1; // global range name
 }
 
 // sheet::XNamedRange

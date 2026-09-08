@@ -322,7 +322,7 @@
 #define STR_POOLSHEET_A0_HEADLINE                       NC_("STR_POOLSHEET_A0_HEADLINE", "Heading A0" )
 #define STR_POOLSHEET_A0_TEXT                           NC_("STR_POOLSHEET_A0_TEXT", "Text A0" )
 #define STR_POOLSHEET_GRAPHIC                           NC_("STR_POOLSHEET_GRAPHIC", "Graphic" )
-#define STR_POOLSHEET_SHAPES                            NC_("STR_POOLSHEET_GRAPHIC", "Shapes" )
+#define STR_POOLSHEET_SHAPES                            NC_("STR_POOLSHEET_SHAPES", "Shapes" )
 #define STR_POOLSHEET_LINES                             NC_("STR_POOLSHEET_LINES", "Lines" )
 #define STR_POOLSHEET_MEASURE                           NC_("STR_POOLSHEET_MEASURE", "Arrow Line" )
 #define STR_POOLSHEET_LINES_DASHED                      NC_("STR_POOLSHEET_LINES_DASHED", "Dashed Line" )
@@ -464,7 +464,7 @@
 #define RID_SVXSTR_EDIT_GRAPHIC                         NC_("RID_SVXSTR_EDIT_GRAPHIC", "Link")
 
 #define RID_SVXSTR_MENU_NEXT                            NC_("RID_SVXSTR_MENU_NEXT", "~Next")
-#define RID_SVXSTR_MENU_PREV                            NC_("RID_SVXSTR_MENU_NEXT", "~Previous")
+#define RID_SVXSTR_MENU_PREV                            NC_("RID_SVXSTR_MENU_PREV", "~Previous")
 #define RID_SVXSTR_MENU_FIRST                           NC_("RID_SVXSTR_MENU_FIRST", "~First Slide")
 #define RID_SVXSTR_MENU_LAST                            NC_("RID_SVXSTR_MENU_LAST", "~Last Slide")
 

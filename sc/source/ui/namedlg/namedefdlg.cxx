@@ -341,7 +341,7 @@ IMPL_LINK_NOARG(ScNameDefDlg, CancelBtnHdl, weld::Button&, void)
 IMPL_LINK_NOARG(ScNameDefDlg, AddBtnHdl, weld::Button&, void)
 {
     AddPushed();
-};
+}
 
 IMPL_LINK_NOARG(ScNameDefDlg, NameModifyHdl, weld::TextWidget&, void) { IsNameValid(); }
 

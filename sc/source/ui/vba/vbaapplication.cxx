@@ -886,7 +886,7 @@ ScVbaApplication::getDisplayScrollBars()
 void SAL_CALL
 ScVbaApplication::setDisplayScrollBars( sal_Bool bSet )
 {
-    // use uno here as it does all he repainting etc. magic
+    // use uno here as it does all the repainting etc. magic
     uno::Reference< sheet::XSpreadsheetView > xView( getCurrentDocument()->getCurrentController(), uno::UNO_QUERY_THROW );
     uno::Reference< beans::XPropertySet > xProps( xView, uno::UNO_QUERY );
     xProps->setPropertyValue(u"HasVerticalScrollBar"_ustr, uno::Any( bSet ) );

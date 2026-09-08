@@ -147,7 +147,7 @@ Sequence<Any> lcl_filterAndOrderScriptArgs(const Sequence<PropertyValue>& rArgs)
 
     return aValues;
 }
-}
+} // namespace
 
 Reference< XDispatch > SAL_CALL ScriptProtocolHandler::queryDispatch(
     const URL& aURL, const OUString&, sal_Int32 )

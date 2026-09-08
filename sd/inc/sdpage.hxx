@@ -125,7 +125,7 @@ friend class sd::UndoAttrObject;
     sal_uInt16  mnPaperBin;               ///< PaperBin
     SdPageLink* mpPageLink;               ///< Page link (at left sides only)
     bool    mbIsCanvasPage;               ///< whether the page is a canvas page
-    bool    mbIsCanvasMasterPage;         ///< whether it is the master page of canvas page
+    bool    mbIsCanvasMasterPage;         ///< whether it is the master page of the canvas page
 
     // PDF link annotations for read-only pdfium
     std::vector<std::pair<basegfx::B2DRectangle, OUString>> maLinkAnnotations;
@@ -222,7 +222,7 @@ public:
     virtual rtl::Reference<SdrObject> RemoveObject(size_t nObjNum) override;
 
     /** Also override ReplaceObject methods to realize when
-    objects are removed with this mechanism instead of RemoveObject*/
+    objects are removed with this mechanism instead of RemoveObject */
     virtual rtl::Reference<SdrObject> ReplaceObject(SdrObject* pNewObj, size_t nObjNum) override;
 
     void        SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner, PresObjKind eObjKind, std::u16string_view rStr );
@@ -339,7 +339,7 @@ public:
     /** removes all custom animations for the given shape */
     void removeAnimations( const SdrObject* pObj );
 
-    /** Notify that the object has been renamed and the animation effects has to update. */
+    /** Notify that the object has been renamed and the animation effects have to be updated. */
     void notifyObjectRenamed(const SdrObject* pObj);
 
     /** Set the name of the page and broadcast a model change.
@@ -371,7 +371,7 @@ public:
     void onEndTextEdit( SdrObject* pObj );
 
     /** @return the presentation style with the given helpid from this masterpage or this
-        slides masterpage */
+        slide's masterpage */
     SD_DLLPUBLIC SdStyleSheet* getPresentationStyle( sal_uInt32 nHelpId ) const;
 
     /** removes all empty presentation objects from this slide */

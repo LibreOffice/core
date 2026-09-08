@@ -677,7 +677,7 @@ sal_Bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
             pDrawView->ScEndTextEdit();
             pDrawView->UnmarkAll();
         }
-        else //#102232#; if there is  no DrawView remove range selection
+        else //#102232#; if there is no DrawView remove range selection
             pViewSh->Unmark();
         bRet = true;
     }
@@ -1872,7 +1872,7 @@ void SAL_CALL ScTabViewObj::setPropertyValue(
 
     //  Options are set on the view and document (for new views),
     //  so that they remain during saving.
-    //! In the app (module) we need an extra options to tune that
+    //! In the app (module) we need extra options to tune that
     //! (for new documents)
 
     if ( aNewOpt == rOldOpt )

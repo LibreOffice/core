@@ -2,7 +2,7 @@
 /*
  * This file is part of the LibreOffice project.
  *
- * This Source eCode Form is subject to the terms of the Mozilla Public
+ * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
@@ -2551,11 +2551,11 @@ bool ScViewFunc::DeleteTables(const std::vector<SCTAB>& rTabs, bool bRecord)
         {
             if (isFirstTab)
             {
-                pUndoDoc->InitUndo( rDoc, nTab,nTab, true,true );   // incl. column/fow flags
+                pUndoDoc->InitUndo( rDoc, nTab,nTab, true,true );   // incl. column/row flags
                 isFirstTab = false;
             }
             else
-                pUndoDoc->AddUndoTab( nTab,nTab, true,true );       // incl. column/fow flags
+                pUndoDoc->AddUndoTab( nTab,nTab, true,true );       // incl. column/row flags
 
             rDoc.CopyToDocument(0,0,nTab, rDoc.MaxCol(), rDoc.MaxRow(), nTab, InsertDeleteFlags::ALL,false, *pUndoDoc );
             rDoc.GetName( nTab, aOldName );

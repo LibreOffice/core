@@ -40,7 +40,7 @@ bool InsertNameListOperation::runImplementation()
     const bool bRecord = rDoc.IsUndoEnabled();
     SCTAB nTab = aStartPos.Tab();
 
-    //local names have higher priority than global names
+    // local names have higher priority than global names
     ScRangeName* pLocalList = rDoc.GetRangeName(nTab);
     sal_uInt16 nValidCount = 0;
     for (const auto& rEntry : *pLocalList)

@@ -144,7 +144,7 @@ void ScPrintAreasDlg::Close()
 
 bool ScPrintAreasDlg::IsTableLocked() const
 {
-    //  Printing areas are per table, therefore it makes no sense,
+    //  Printing areas are per table, therefore it makes no sense
     //  to switch the table during input
 
     return true;

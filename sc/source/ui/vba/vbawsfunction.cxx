@@ -135,7 +135,7 @@ ScVbaWSFunction::invoke(const OUString& FunctionName, const uno::Sequence< uno::
     uno::Any aRet;
     bool bAsArray = true;
 
-    // special handing for some functions that don't work correctly in FunctionAccess
+    // special handling for some functions that don't work correctly in FunctionAccess
     formula::FormulaCompiler aCompiler;
     OpCode eOpCode = aCompiler.GetEnglishOpCode( FunctionName.toAsciiUpperCase() );
     switch( eOpCode )

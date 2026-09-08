@@ -302,7 +302,7 @@
                         </items>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="type-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="datafielddialog|extended_tip|type">Select the type of calculating of the displayed value for the data field.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="datafielddialog|extended_tip|type">Select the type of calculation for the displayed value for the data field.</property>
                           </object>
                         </child>
                       </object>

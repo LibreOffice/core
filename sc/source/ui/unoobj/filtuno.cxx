@@ -119,7 +119,7 @@ namespace
 
         aItem.PutProperties(aNames, aValues);
     }
-}
+} // namespace
 
 ScFilterOptionsObj::ScFilterOptionsObj() :
     bExport( false )

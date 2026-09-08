@@ -620,7 +620,7 @@ public:
     SAL_DLLPRIVATE virtual bool        IsCreatingDataObj() const override { return mpCreatingTransferable != nullptr; }
 
     /** if the document does not contain at least one handout, one slide and one notes page with
-        at least one master each this methods creates them.
+        at least one master each this method creates them.
         If a reference document is given, the sizes and border settings of that document are used
         for newly created slides.
     */
@@ -940,7 +940,7 @@ public:
     css::text::WritingMode GetDefaultWritingMode() const;
     SAL_DLLPRIVATE void SetDefaultWritingMode( css::text::WritingMode eMode );
 
-    /** replacespOldPage from all custom shows with pNewPage or removes pOldPage from
+    /** replaces pOldPage from all custom shows with pNewPage or removes pOldPage from
         all custom shows if pNewPage is 0.
     */
     SAL_DLLPRIVATE void ReplacePageInCustomShows( const SdPage* pOldPage, const SdPage* pNewPage );
