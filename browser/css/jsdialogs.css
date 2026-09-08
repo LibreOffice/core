@@ -2209,14 +2209,17 @@ img.ui-combobox-value-preview {
 	grid-template-columns: 25px 1fr 25px;
 }
 
-/* Arrow/chevron */
+/* Arrow/chevron. Masked rather than drawn, so it takes the text colour: the
+   asset's own #bbb is under 3:1 on white and vanishes on a focused entry. */
 .ui-combobox-entry.ui-has-menu::after {
 	content: '';
 	display: inline-block;
 	width: 9px;
-	background: url('images/lc_menu_chevron.svg') no-repeat;
 	height: 9px;
 	margin-inline-start: -9px;
+	background-color: currentColor;
+	-webkit-mask: url('images/lc_menu_chevron.svg') no-repeat;
+	mask: url('images/lc_menu_chevron.svg') no-repeat;
 }
 
 .ui-combobox-entry.ui-has-menu > span {
