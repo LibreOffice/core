@@ -131,7 +131,7 @@ protected:
                     continue;
                 }
 
-                const std::string& partId(tokens[1]);
+                const std::string partId(tokens[1]);
                 int canvasWidth(NumUtil::stoi(tokens[2]));
                 int canvasHeight(NumUtil::stoi(tokens[3]));
                 int tilePosX(NumUtil::stoi(tokens[4]));
