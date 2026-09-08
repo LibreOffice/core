@@ -55,7 +55,7 @@ PresenterFrameworkObserver::~PresenterFrameworkObserver()
 }
 
 void PresenterFrameworkObserver::RunOnUpdateEnd (
-    const rtl::Reference<sd::framework::ConfigurationController>&rxController,
+    const rtl::Reference<sd::framework::ConfigurationController>& rxController,
     const Action& rAction)
 {
     new PresenterFrameworkObserver(

@@ -35,7 +35,7 @@ namespace sdext::presenter {
 
 /** Factory of the presenter screen specific views.  The supported set of
     views includes:
-        a life view of the current slide,
+        a live view of the current slide,
         a static preview of the next slide,
         the notes of the current slide,
         a tool bar

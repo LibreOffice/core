@@ -154,7 +154,7 @@ void ChangeRequestQueueProcessor::ProcessOneEvent()
         ConfigurationTracer::TraceConfiguration (
             mxConfiguration, "updating to configuration");
 #endif
-        // RequestUpdate may eventually call a code that needs to lock a solar mutex, owned by
+        // RequestUpdate may eventually call code that needs to lock a solar mutex, owned by
         // another thread, that waits for maMutex; release it here, to avoid deadlocks
         auto pConfigurationUpdater = mpConfigurationUpdater;
         auto xConfiguration = mxConfiguration;

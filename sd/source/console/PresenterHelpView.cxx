@@ -722,6 +722,6 @@ void Block::Update (
 
 } // end of anonymous namespace
 
-} // end of namespace ::sdext::presenter
+} // end of namespace sdext::presenter
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

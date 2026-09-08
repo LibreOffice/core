@@ -418,8 +418,8 @@ bool DrawDocShell::ImportFrom(SfxMedium &rMedium,
         // mode for spacing before and after paragraphs.
 
         // This is copied from what is done for .ppt import in
-        // ImplSdPPTImport::Import() in sd/source/filter/ppt/pptin.cxx
-        // in. We need to tell both the edit engine of the draw outliner,
+        // ImplSdPPTImport::Import() in sd/source/filter/ppt/pptin.cxx.
+        // We need to tell both the edit engine of the draw outliner,
         // and the document, to do "summation of paragraphs".
         SdrOutliner& rOutl = mpDoc->GetDrawOutliner();
         EEControlBits nControlWord = rOutl.GetEditEngine().GetControlWord();
@@ -430,8 +430,8 @@ bool DrawDocShell::ImportFrom(SfxMedium &rMedium,
 
         // tdf#149756 tdf#152545
         // This is a "MS Compact" mode for connectors.
-        // The Libreoffice uses bounding rectangle of connected shapes but
-        // MSO uses snap rectangle when calculate the edge track.
+        // LibreOffice uses bounding rectangle of connected shapes but
+        // MSO uses snap rectangle when calculating the edge track.
         mpDoc->SetCompatibilityFlag(SdrCompatibilityFlag::ConnectorUseSnapRect, true);
 
         // compatibility flag for tdf#148966
@@ -737,7 +737,7 @@ bool DrawDocShell::ConvertTo( SfxMedium& rMedium )
 }
 
 /**
- * Reopen own streams to ensure that nobody else can prevent use from opening
+ * Reopen own streams to ensure that nobody else can prevent us from opening
  * them.
  */
 bool DrawDocShell::SaveCompleted( const css::uno::Reference< css::embed::XStorage >& xStorage )

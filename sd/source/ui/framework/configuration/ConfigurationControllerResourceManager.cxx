@@ -168,7 +168,7 @@ void ConfigurationControllerResourceManager::ActivateResource (
     2. Notify listeners that deactivation has started.
     3. Remove the resource id from the current configuration.
     4. Release the resource.
-    5. Notify listeners about that deactivation is completed.
+    5. Notify listeners that deactivation is completed.
 */
 void ConfigurationControllerResourceManager::DeactivateResource (
     const rtl::Reference<ResourceId>& rxResourceId,

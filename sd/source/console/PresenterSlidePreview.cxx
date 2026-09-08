@@ -30,7 +30,7 @@ using namespace ::com::sun::star::uno;
 
 namespace
 {
-    // Use a super sample factor greater than 1 to achieve a poor mans
+    // Use a super sample factor greater than 1 to achieve a poor man's
     // antialiasing effect for slide previews.
     const sal_Int16 gnSuperSampleFactor = 2;
 }

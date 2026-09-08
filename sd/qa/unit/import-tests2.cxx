@@ -392,7 +392,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf103567)
 
 CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf103792)
 {
-    // Title text shape on the actual slide contained no text neither a placeholder text.
+    // Title text shape on the actual slide contained no text nor a placeholder text.
 
     createSdImpressDoc("pptx/tdf103792.pptx");
 

@@ -650,7 +650,7 @@ void SdMiscTest::testTdf101242_ODF_add_settings()
 void SdMiscTest::testTdf101242_ODF_no_settings()
 {
     // Loads a document, which has the visible/printable/locked information for layers
-    // only in the ODF attributes draw:display and draw:protected. The resave document
+    // only in the ODF attributes draw:display and draw:protected. The resaved document
     // should have only the ODF attributes and no config items in settings.xml.
     createSdDrawDoc("tdf101242_ODF.odg");
 
@@ -823,7 +823,7 @@ void SdMiscTest::testTdf119392_VerifyLayerProperties()
 void SdMiscTest::testTdf67248_LayerNamesIndependentFromLocalization()
 {
     // The document tdf67248.odg has been created with a German UI. It has a user layer named "Background".
-    // On opening the user layer must still exists. The error was, that it was merged into the standard
+    // On opening the user layer must still exist. The error was, that it was merged into the standard
     // layer "background".
     createSdDrawDoc("tdf67248.odg");
     SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
@@ -919,7 +919,7 @@ void SdMiscTest::testTdf130988()
         = dynamic_cast<E3dScene*>(pView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj());
     CPPUNIT_ASSERT(pObj);
 
-    // Error was, that the created 3D object had a wrong path. Instead examining
+    // Error was, that the created 3D object had a wrong path. Instead of examining
     // the path directly, I use the scene distance, because that is easier. The
     // scene distance is calculated from the object while creating.
     const double fDistance = pObj->GetDistance();

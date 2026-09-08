@@ -303,6 +303,6 @@ void SAL_CALL PresenterAccessible::disposing (const css::lang::EventObject& rEve
         mxMainWindow = nullptr;
 }
 
-} // end of namespace ::sd::presenter
+} // end of namespace sdext::presenter
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

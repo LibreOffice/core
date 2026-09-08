@@ -276,6 +276,6 @@ void PresenterPaneBase::LayoutContextWindow()
         awt::PosSize::POSSIZE);
 }
 
-} // end of namespace ::sdext::presenter
+} // end of namespace sdext::presenter
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

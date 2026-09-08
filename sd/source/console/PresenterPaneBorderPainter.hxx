@@ -53,8 +53,8 @@ typedef ::cppu::WeakComponentImplHelper<> PresenterPaneBorderPainterInterfaceBas
     bounding box which the paint methods may paint over.  The center box is
     the third rectangle.  This is the actual border between outer and inner
     background color or bitmap and it is used for placing the bitmaps that are used
-    paint the border.  The inner sides and corners are places relative to
-    this center box, i.e. when not further offsets are given then the upper
+    to paint the border.  The inner sides and corners are placed relative to
+    this center box, i.e. when no further offsets are given then the upper
     left corner bitmap is painted with its lower right at the upper left of
     the center box.</p>
 */

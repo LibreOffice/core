@@ -191,7 +191,7 @@ DrawDocShell::~DrawDocShell()
     if( mbOwnDocument )
         delete mpDoc;
 
-    // that the navigator get informed about the disappearance of the document
+    // so that the navigator gets informed about the disappearance of the document
     SfxBoolItem     aItem(SID_NAVIGATOR_INIT, true);
     SfxViewFrame*   pFrame = mpViewShell ? mpViewShell->GetFrame() : GetFrame();
 

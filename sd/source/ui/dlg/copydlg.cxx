@@ -97,7 +97,7 @@ CopyDlg::~CopyDlg()
 }
 
 /**
- * reads provided item set or evaluate ini string
+ * reads provided item set or evaluates ini string
  */
 void CopyDlg::Reset()
 {

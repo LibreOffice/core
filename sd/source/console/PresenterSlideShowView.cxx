@@ -132,7 +132,7 @@ void PresenterSlideShowView::LateInit()
             xPeer->setBackground(util::Color(0xff000000));
     }
 
-    // Create a window for the actual slide show view.  It is places
+    // Create a window for the actual slide show view.  It is placed
     // centered and with maximal size inside the pane.
     mxViewWindow = CreateViewWindow(mxWindow);
 

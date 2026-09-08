@@ -38,7 +38,7 @@ public:
     }
 };
 
-// Load the PDF in Draw, which will load the PDF as an Graphic, then
+// Load the PDF in Draw, which will load the PDF as a Graphic, then
 // mark the graphic object and trigger "break" function. This should
 // convert the PDF content into objects/shapes.
 CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testImportSimpleText)

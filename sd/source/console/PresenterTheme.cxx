@@ -61,7 +61,7 @@ public:
             mnRight == mnInvalidValue ? 0 : mnRight,
             mnBottom == mnInvalidValue ? 0 : mnBottom
         };
-    };
+    }
 
     void Merge (const BorderSize& rBorderSize)
     {
