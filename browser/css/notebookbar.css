@@ -447,7 +447,10 @@ label.notebookbar.ui-checkbox-label {
 
 .ui-combobox[disabled],
 .unotoolbutton.notebookbar.disabled:not(.unospan-shortcutstoolbox),
-.unotoolbutton[disabled]:not(.unospan-shortcutstoolbox),
+.unotoolbutton[disabled]:not(.unospan-shortcutstoolbox) {
+	cursor: not-allowed;
+}
+
 .mobile-wizard-widebutton.disabled,
 .locking-disabled {
 	opacity: var(--opacity-icon-disabled);
@@ -466,6 +469,18 @@ label.notebookbar.ui-checkbox-label {
 .mobile-wizard-widebutton.disabled img,
 .unotoolbutton[disabled] img {
 	filter: grayscale(100%) brightness(100%);
+}
+
+.unotoolbutton.notebookbar.disabled img,
+.unotoolbutton.notebookbar.disabled .unoarrow,
+.unotoolbutton[disabled] img,
+.unotoolbutton[disabled] .unoarrow {
+	opacity: var(--opacity-icon-disabled);
+}
+
+.unotoolbutton.notebookbar.disabled .unolabel,
+.unotoolbutton[disabled] .unolabel {
+	opacity: var(--opacity-text-disabled);
 }
 
 .ui-combobox:not([disabled]) *,

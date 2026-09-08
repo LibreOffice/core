@@ -110,6 +110,7 @@
 	/* --opacity-icon-hover: 1; */
 	/* --opacity-icon-active: 1; */
 	--opacity-icon-disabled: 0.65;
+	--opacity-text-disabled: 0.8; /* a label has to stay readable while it is dimmed */
 }
 
 html[data-bg-theme='light'] {
