@@ -279,7 +279,7 @@ IMPL_LINK(ScSpecialFilterDlg, EndDlgHdl, weld::Button&, rBtn, void)
         {
             /*
              * All edit fields contain valid areas. Now try to create
-             * a ScQueryParam from the filter area:
+             * an ScQueryParam from the filter area:
              */
 
             ScRefFlags nResult = theFilterArea.Parse(theAreaStr, m_rDoc, eConv);

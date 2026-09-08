@@ -118,7 +118,7 @@ ScImportExport::ScImportExport( ScDocument& r )
     pExtOptions = nullptr;
 }
 
-// Insert am current cell without range(es)
+// Insert at current cell without range(es)
 ScImportExport::ScImportExport( ScDocument& r, const ScAddress& rPt )
     : pDocSh( r.GetDocumentShell() ), rDoc( r ),
       aRange( rPt ),

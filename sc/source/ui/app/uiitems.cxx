@@ -106,7 +106,7 @@ ScIndexHint::~ScIndexHint()
 }
 
 /**
- * Create new EditView for Cursorposition
+ * Create new EditView for cursor position
  */
 ScEditViewHint::ScEditViewHint( ScEditEngineDefaulter& rEngine, const ScAddress& rCurPos ) :
     SfxHint(SfxHintId::ScEditView),
@@ -252,7 +252,7 @@ bool ScSubTotalItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /* nMemberUd */ 
 }
 
 /**
- * Transporter for the UserLIst dialog
+ * Transporter for the UserList dialog
  */
 ScUserListItem::ScUserListItem( sal_uInt16 nWhichP )
     :   SfxPoolItem ( nWhichP )

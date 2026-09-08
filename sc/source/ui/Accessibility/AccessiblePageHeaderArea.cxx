@@ -81,7 +81,7 @@ void SAL_CALL ScAccessiblePageHeaderArea::disposing()
 
 void ScAccessiblePageHeaderArea::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    // only notify if child exist, otherwise it is not necessary
+    // only notify if children exist, otherwise it is not necessary
     if (rHint.GetId() == SfxHintId::ScAccVisAreaChanged)
     {
         if (mpTextHelper)

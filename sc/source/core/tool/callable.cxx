@@ -108,7 +108,7 @@ ScMacroFunction::ScMacroFunction(const ScInterpreter& rInterpreter, const OUStri
     maMacroStr = pObject->GetName() + "." + mpModule->GetName() + "." + mpMethod->GetName();
     if (pRoot && bUseVBAObjects)
     {
-        // just here to make sure the VBA objects when we run the macro during ODF import
+        // just here to make sure the VBA objects are initialized when we run the macro during ODF import
         pRoot->getVBAGlobals();
     }
     if (pObject->GetParent())

@@ -210,7 +210,7 @@ void ScServerObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             //  don't access DocShell anymore for EndListening etc.
         }
     }
-    else if (dynamic_cast<const SfxApplication*>( &rBC) !=  nullptr)
+    else if (dynamic_cast<const SfxApplication*>(&rBC) != nullptr)
     {
         if ( !aItemStr.isEmpty() && rHint.GetId() == SfxHintId::ScAreasChanged )
         {

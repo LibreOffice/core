@@ -605,7 +605,7 @@ void ScOrcusFactory::pushMatrixFormulaToken(const ScAddress& rPos, const OUStrin
 void ScOrcusFactory::pushFormulaResult(const ScAddress& rPos, double fValue)
 {
     // Formula result is expected to be pushed immediately following the
-    // formula token it belongs.
+    // formula token it belongs to.
     if (maCellStoreTokens.empty())
         return;
 
@@ -631,7 +631,7 @@ void ScOrcusFactory::pushFormulaResult(const ScAddress& rPos, double fValue)
 void ScOrcusFactory::pushFormulaResult(const ScAddress& rPos, const OUString& rValue)
 {
     // Formula result is expected to be pushed immediately following the
-    // formula token it belongs.
+    // formula token it belongs to.
     if (maCellStoreTokens.empty())
         return;
 

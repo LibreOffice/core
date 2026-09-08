@@ -2127,7 +2127,7 @@ void Xf::importXf( const AttributeList& rAttribs, bool bCellXf )
 {
     maModel.mbCellXf = bCellXf;
     // tdf#70565 Set proper default value to "0" of xfId attribute
-    // When xfId is not exist during .xlsx import
+    // When xfId does not exist during .xlsx import
     // it must have values set to "0".
     // This doesn't impact spreadsheets created with MS Excel,
     // as xfId attribute is always created during export to .xlsx

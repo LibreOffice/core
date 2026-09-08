@@ -159,7 +159,7 @@ public:
     Reference< XStyle > getStyleObject( const OUString& rStyleName, bool bPageStyle ) const;
     /** Creates and returns a defined name on-the-fly in the Calc document. */
     WorkbookHelper::RangeDataRet createNamedRangeObject(OUString& orName, sal_Int32 nIndex, sal_Int32 nNameFlags);
-    /** Creates and returns a defined name on the-fly in the correct Calc sheet. */
+    /** Creates and returns a defined name on-the-fly in the correct Calc sheet. */
     WorkbookHelper::RangeDataRet createLocalNamedRangeObject(OUString& orName, sal_Int32 nIndex, sal_Int32 nNameFlags, sal_Int32 nTab);
     /** Creates and returns a database range on-the-fly in the Calc document. */
     rtl::Reference<ScDatabaseRangeObj> createDatabaseRangeObject( OUString& orName, const ScRange& rRangeAddr );

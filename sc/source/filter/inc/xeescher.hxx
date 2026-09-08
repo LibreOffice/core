@@ -161,7 +161,7 @@ private:
     sal_uInt16          mnRecId;        /// Record identifier for the IMGDATA record.
 };
 
-/** Helper class for form controls to manage spreadsheet links . */
+/** Helper class for form controls to manage spreadsheet links. */
 class XclExpControlHelper : protected XclExpRoot
 {
 public:
@@ -276,7 +276,7 @@ private:
     void                WriteCellLinkSubRec( XclExpStream& rStrm, sal_uInt16 nSubRecId );
     /** Writes the ftSbs sub structure containing scrollbar data. */
     void                WriteSbs( XclExpStream& rStrm );
-    /** Writes an anchor, if empty calculates one form XShape */
+    /** Writes an anchor, if empty calculates one from XShape */
     void                WriteAnchor( const sax_fastparser::FSHelperPtr& rTarget, bool bIsDrawing ) const;
     /** Writes the label's run properties, the DrawingML half of the label font. */
     void WriteLabelFont(const sax_fastparser::FSHelperPtr& rTarget) const;
@@ -422,7 +422,7 @@ public:
     virtual             ~XclExpObjectManager() override;
 
     /** Creates a new DFF client anchor object. Caller takes ownership! May be
-        overwritten in derived  classes. */
+        overwritten in derived classes. */
     virtual XclExpDffAnchorBase* CreateDffAnchor() const;
 
     /** Creates and returns the MSODRAWINGGROUP record containing global DFF

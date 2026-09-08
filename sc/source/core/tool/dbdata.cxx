@@ -1511,7 +1511,7 @@ void ScDBData::RefreshTableColumnNames( ScDocument* pDoc )
     }
 
     // Never leave us with empty names, try to remember previous name that
-    // might had been used to compile formulas, but only if same number of
+    // might have been used to compile formulas, but only if same number of
     // columns and no duplicates.
     if (bHaveEmpty && aNewNames.size() == maTableColumnNames.size())
     {
@@ -1703,11 +1703,11 @@ OUString ScDBData::GetStringFromSubTotalFunc(ScSubTotalFunc eFunc)
     else if (eFunc == SUBTOTAL_FUNC_CNT2)
         return u"count"_ustr;
     else if (eFunc == SUBTOTAL_FUNC_PROD)
-        return u"custom"_ustr; // ooxml not support in Total row
+        return u"custom"_ustr; // ooxml not supported in Total row
     else if (eFunc == SUBTOTAL_FUNC_AVE)
         return u"average"_ustr;
     else if (eFunc == SUBTOTAL_FUNC_MED)
-        return u"custom"_ustr; // ooxml not support in Total row
+        return u"custom"_ustr; // ooxml not supported in Total row
     else if (eFunc == SUBTOTAL_FUNC_MAX)
         return u"max"_ustr;
     else if (eFunc == SUBTOTAL_FUNC_MIN)
@@ -1715,7 +1715,7 @@ OUString ScDBData::GetStringFromSubTotalFunc(ScSubTotalFunc eFunc)
     else if (eFunc == SUBTOTAL_FUNC_STD)
         return u"stdDev"_ustr;
     else if (eFunc == SUBTOTAL_FUNC_STDP)
-        return u"custom"_ustr; // ooxml not support in Total row
+        return u"custom"_ustr; // ooxml not supported in Total row
     else if (eFunc == SUBTOTAL_FUNC_VAR)
         return u"var"_ustr;
     else
@@ -1929,7 +1929,7 @@ void ScDBCollection::NamedDBs::initInserted( ScDBData* p )
     if (mrDoc.IsClipOrUndo())
         return;
 
-    p->StartTableColumnNamesListener(); // needs the container be set already
+    p->StartTableColumnNamesListener(); // needs the container to be set already
     if (!p->AreTableColumnNamesDirty())
         return;
 

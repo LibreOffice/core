@@ -216,7 +216,7 @@ void XclExpTables::SaveTableXml( XclExpXmlStream& rStrm, const Entry& rEntry )
         });
     bool bExportTotals = rData.HasHeader() && rData.HasTotals() && !bAnyColumnHasUndescribedContent;
 
-    // if the Total row have ever been showed it will be true
+    // if the Total row has ever been shown it will be true
     bool hasAnySetValue = bExportTotals;
 
     pTableStrm->startElement( XML_table,
@@ -264,7 +264,7 @@ void XclExpTables::SaveTableXml( XclExpXmlStream& rStrm, const Entry& rEntry )
     const std::vector< TableColumnModel >& rTableColumnModel = rData.GetTableColumnModel();
     if (!rColNames.empty())
     {
-        // rColNames and aTotalValues size should always be equal
+        // rColNames and aTotalValues sizes should always be equal
         assert((rColNames.size() == aTotalValues.size()) &&
                "XclExpTables::SaveTableXml - mismatch between column names and total values");
 

@@ -177,7 +177,7 @@ public:
 
         if (pCell->IsValue())
         {
-            // Turn this into value cell.
+            // Turn this into a value cell.
             mpDoc->SetValue(aPos, pCell->GetValue());
         }
         else

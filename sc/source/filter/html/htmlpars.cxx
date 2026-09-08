@@ -1230,7 +1230,7 @@ void ScHTMLLayoutParser::TableOn( HtmlImportInfo* pInfo )
             NextRow( pInfo );
         }
         else
-        {   // It start's in this cell or next to each other
+        {   // It starts in this cell or next to each other
             bTabInTabCell = false;
             nColCntStart = nColCnt;
             nColOffset = nTmpColOffset;

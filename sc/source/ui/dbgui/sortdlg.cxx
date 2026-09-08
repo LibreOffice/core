@@ -75,7 +75,7 @@ IMPL_LINK(ScSortWarningDlg, BtnHdl, weld::Button&, rBtn, void)
     {
         m_xDialog->response(BTN_EXTEND_RANGE);
     }
-    else if(&rBtn == m_xBtnCurSort.get())
+    else if (&rBtn == m_xBtnCurSort.get())
     {
         m_xDialog->response(BTN_CURRENT_SELECTION);
     }

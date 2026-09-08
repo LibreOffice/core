@@ -864,7 +864,7 @@ namespace
             /*
              * in case marked members are to be included, we include
              * them at the end because we can see in the functions which call
-             * this function that the marked members will be disabled anyways
+             * this function that the marked members will be disabled anyway
              * if lock is checked.
              */
             if (!bIncludeMarkedMembers || (!rMembers[i].mbMarked && !rMembers[i].mbHiddenByOtherFilter))
