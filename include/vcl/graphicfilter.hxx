@@ -227,7 +227,7 @@ public:
     /** @return whether image supports alpha values for translucent colours */
     bool IsAlpha() const { return aMetadata.mbIsAlpha; }
 
-    /** @return filter number that is needed by the GraphFilter to read this format */
+    /** @return filter short name that is needed by GraphicFilter to read this format */
     static OUString GetImportFormatShortName( GraphicFileFormat nFormat );
 };
 

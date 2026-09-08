@@ -77,7 +77,7 @@ private:
 
 public:
     GfxLink();
-    explicit GfxLink(BinaryDataContainer aDataConainer, GfxLinkType nType);
+    explicit GfxLink(BinaryDataContainer aDataContainer, GfxLinkType nType);
 
     bool                operator==( const GfxLink& ) const;
 

@@ -56,8 +56,8 @@
 /*************************************************************************
  * @file
  * Styles for paragraph.
- * Styles for paragraph may include many style,include font,indent,margin,
- * shadow,line height,and so on.
+ * Styles for paragraph may include many styles, including font, indent, margin,
+ * shadow, line height, and so on.
  ************************************************************************/
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFPARASTYLE_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFPARASTYLE_HXX
@@ -114,7 +114,7 @@ public:
     /**
      * @descr   set the paragraph default font.
      * @param   font object to be set. Font object is deleted by font-factory, so
-     *          don't delete it in the destructure function of para style.
+     *          don't delete it in the destructor function of para style.
      */
     void    SetFont(rtl::Reference<XFFont> const & font);
 
@@ -125,14 +125,14 @@ public:
 
     /**
      * @descr   Set the indent of the paragraph. This is the indent for
-                the first line.
+     *          the first line.
      * @param   indent value of the first-line indent.
      */
     void    SetIndent(double indent );
 
     /**
      * @descr   Set the padding of the paragraph. This is the distance
-                between the border and the top of the text.
+     *          between the border and the top of the text.
      * @param   indent value of the padding.
      */
     void    SetPadding(double left, double right, double top, double bottom);
@@ -140,7 +140,7 @@ public:
     /**
      * @descr   Set the Margins of the paragraph.
      * @param   -1:     don't change.
-                other:  set value.
+     *          other:  set value.
      */
     void    SetMargins(double left, double right,double top=-1, double bottom=-1);
 
@@ -152,7 +152,7 @@ public:
 
     /**
      * @descr   Set the shadow of the paragraph. There are 4 positions, you
-                can find it in the definition of enumShadowPos.
+     *          can find it in the definition of enumShadowPos.
      * @param   pos
      * @param   offset the distance between the paragraph border and the shadow.
      * @param   color color to fill the shadow.
@@ -161,8 +161,8 @@ public:
 
     /**
      * @descr   The borders is complex, so you have to create one before use.
-                Very few paragraphs will already have borders property, this way
-                we can save much memory.
+     *          Very few paragraphs will already have borders property, this way
+     *          we can save much memory.
      * @param   pBorders borders of the paragraph, please reference the XFBorders.
      */
     void    SetBorders(XFBorders *pBorders);
@@ -189,12 +189,12 @@ public:
 
     /**
      * @descr   Set background image of the paragraph.
-     * @param   image the background image to set.
+     * @param   rImage the background image to set.
      */
     void    SetBackImage(std::unique_ptr<XFBGImage>& rImage);
 
     /**
-     * descr    You can only set one break property for every para style object.
+     * @descr   You can only set one break property for every para style object.
      */
     void    SetBreaks(enumXFBreaks breaks);
 
