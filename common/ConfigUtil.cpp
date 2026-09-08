@@ -309,9 +309,9 @@ const Util::UnorderedStringMap<std::string> DefAppConfig = {
     { "trace_event.path", COOLWSD_TRACEEVENTFILE },
     { "trace_event[@enable]", "false" },
 #endif
-    { "user_interface.default_zoom", "" },
+    { "user_interface.default_zoom", "100" },
     { "user_interface.mode", "default" },
-    { "user_interface.smart_zoom", "" },
+    { "user_interface.smart_zoom", "true" },
     { "user_interface.statusbar_save_indicator", "true" },
     { "user_interface.use_integration_theme", "true" },
     { "user_interface.brandProductName", "" },
