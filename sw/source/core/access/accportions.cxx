@@ -284,7 +284,7 @@ void SwAccessiblePortionData::GetLineBoundary(
 sal_Int32 SwAccessiblePortionData::GetLineCount() const
 {
     size_t nBreaks = m_aLineBreaks.size();
-    // A non-empty paragraph has at least 4 breaks: one for each line3 and
+    // A non-empty paragraph has at least 4 breaks: one for each line and
     // 3 additional ones.
     // An empty paragraph has 3 breaks.
     // Less than 3 breaks is an error case.

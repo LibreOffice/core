@@ -139,8 +139,8 @@ void SwAccessibleContext::ChildrenScrolled( const SwFrame *pFrame,
             else if( !bVisibleChildrenOnly ||
                      rLower.AlwaysIncludeAsChild() )
             {
-                // This wouldn't be required if the SwAccessibleFrame,
-                // wouldn't know about the visible area.
+                // This wouldn't be required if the SwAccessibleFrame
+                // didn't know about the visible area.
                 eAction = Action::SCROLLED;
             }
             if( Action::NONE != eAction )
@@ -1067,7 +1067,7 @@ void SwAccessibleContext::InvalidateChildPosOrSize(
         {
             if( rChildFrameOrObj.GetSwFrame() )
             {
-                // The frame becomes visible. A child event must be send.
+                // The frame becomes visible. A child event must be sent.
                 ::rtl::Reference< SwAccessibleContext > xAccImpl =
                     GetMap()->GetContextImpl( rChildFrameOrObj.GetSwFrame() );
                 xAccImpl->ScrolledIn();
@@ -1098,9 +1098,9 @@ void SwAccessibleContext::InvalidateChildPosOrSize(
     else
     {
         // If the frame was visible before, then a child event for the parent
-        // needs to be send. However, there is no wrapper existing, and so
-        // no notifications for grandchildren are required. If the are
-        // grandgrandchildren, they would be notified by the layout.
+        // needs to be sent. However, there is no wrapper existing, and so
+        // no notifications for grandchildren are required. If there are
+        // great-grandchildren, they would be notified by the layout.
         if( bVisibleChildrenOnly &&
             !bNew && IsShowing( rOldFrame ) )
         {

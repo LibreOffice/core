@@ -120,7 +120,7 @@ public:
 
     const SwViewOption* GetViewOptions() const { return m_pViewOptions; }
 
-    /// get the start & end positions of the sentence
+    /// get the start & end positions of the line
     void GetLineBoundary( css::i18n::Boundary& rBound,
                           sal_Int32 nPos ) const;
 
