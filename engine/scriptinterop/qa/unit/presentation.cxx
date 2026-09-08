@@ -112,6 +112,20 @@ CPPUNIT_TEST_FIXTURE(Test, testAppendSlideWithPredefinedLayout)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xPresentation->getSlides().getLength());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testInsertTextBoxDefaultGeometry)
+{
+    auto const xPresentation = loadPresentation();
+    auto const xSlide = xPresentation->appendSlide();
+    // A text box inserted without geometry lands at the page's top left corner with the default
+    // square size of 236.22 points.
+    auto const xShape = xSlide->insertTextBox(u"Hello"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"Hello"_ustr, xShape->getText()->asString());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, xShape->getLeft(), 0.05);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, xShape->getTop(), 0.05);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(236.22, getValue(xShape->getWidth()), 0.05);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(236.22, getValue(xShape->getHeight()), 0.05);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testInsertTextBoxGeometryRoundTrip)
 {
     auto const xPresentation = loadPresentation();

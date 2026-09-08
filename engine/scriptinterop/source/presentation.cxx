@@ -1260,10 +1260,14 @@ public:
                                                                               shapes.size());
     }
 
-    cpo::uno::Reference<scriptinterop::XShape> SAL_CALL insertTextBox(OUString const&) override
+    cpo::uno::Reference<scriptinterop::XShape> SAL_CALL
+    insertTextBox(OUString const& text) override
     {
-        // No default placement is implemented yet, so a text box needs its geometry for now.
-        throw cpo::uno::RuntimeException(u"insertTextBox without geometry: not implemented"_ustr);
+        // A text box inserted without geometry lands at the page's top left corner with the GAS
+        // API's default square size: 3000000 English Metric Units, at 12700 to the point, or
+        // 236.22 points.
+        double const defaultExtent = 3000000.0 / 12700.0;
+        return insertTextBoxAt(text, 0.0, 0.0, defaultExtent, defaultExtent);
     }
 
     // The geometry is converted up front, so a bad value fails before the slide is touched.
