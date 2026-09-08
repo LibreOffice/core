@@ -717,7 +717,7 @@ void exportRangeToSomewhere( SvXMLExport& rExport, const OUString& rValue )
     //with issue #i366# and CWS chart20 ranges for error bars were introduced
     //to keep them during copy paste from calc to impress for example it
     //was necessary to introduce a mapping between the used ranges within calc and the data written to the local table
-    //this is why we write this ranges here
+    //this is why we write these ranges here
 
     //#i113950# first the range was exported to attribute text:id, but that attribute does not allow arbitrary strings anymore within ODF 1.2
     //as an alternative the range info is now saved into the description at an empty group element (not very nice, but ODF conform)

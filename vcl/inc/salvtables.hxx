@@ -516,7 +516,7 @@ protected:
     VclPtr<::Dialog> m_xDialog;
 
 private:
-    // for calc ref dialog that shrink to range selection widgets and resize back
+    // for calc ref dialog that shrinks to range selection widgets and resize back
     VclPtr<vcl::Window> m_xRefEdit;
     std::vector<VclPtr<vcl::Window>> m_aHiddenWidgets; // vector of hidden Controls
     tools::Long m_nOldEditWidthReq; // Original width request of the input field
@@ -1541,7 +1541,7 @@ protected:
     SvLBoxButtonData m_aCheckButtonData;
     SvLBoxButtonData m_aRadioButtonData;
     // currently expanding parent that logically, but not currently physically,
-    // contain placeholders
+    // contains placeholders
     o3tl::sorted_vector<SvTreeListEntry*> m_aExpandingPlaceHolderParents;
     // which columns should be custom rendered
     o3tl::sorted_vector<int> m_aCustomRenders;

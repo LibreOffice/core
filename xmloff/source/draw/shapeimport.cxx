@@ -67,7 +67,7 @@ struct ConnectionHint
 
 }
 
-/** this map store all gluepoint id mappings for shapes that had user defined gluepoints. This
+/** this map stores all gluepoint id mappings for shapes that had user defined gluepoints. This
     is needed because on insertion the gluepoints will get a new and unique id */
 typedef std::unordered_map<sal_Int32,sal_Int32> GluePointIdMap;
 typedef std::unordered_map< css::uno::Reference < css::drawing::XShape >, GluePointIdMap > ShapeGluePointsMap;
@@ -584,8 +584,8 @@ void ShapeGroupContext::popGroupAndPostProcess()
         return;
 
     // check if there are more shapes than inserted with ::shapeWithZIndexAdded()
-    // This can happen if there where already shapes on the page before import
-    // Since the writer may delete some of this shapes during import, we need
+    // This can happen if there were already shapes on the page before import
+    // Since the writer may delete some of these shapes during import, we need
     // to do this here and not in our c'tor anymore
 
     // check if we have more shapes than we know of
@@ -899,7 +899,7 @@ sal_Int32 XMLShapeImportHelper::getGluePointId( const css::uno::Reference< css::
     return -1;
 }
 
-/** this method must be calling before the first shape is imported for the given page */
+/** this method must be called before the first shape is imported for the given page */
 void XMLShapeImportHelper::startPage( css::uno::Reference< css::drawing::XShapes > const & rShapes )
 {
     std::shared_ptr<XMLShapeImportPageContextImpl> pOldContext = mpPageContext;
@@ -908,7 +908,7 @@ void XMLShapeImportHelper::startPage( css::uno::Reference< css::drawing::XShapes
     mpPageContext->mxShapes = rShapes;
 }
 
-/** this method must be calling after the last shape is imported for the given page */
+/** this method must be called after the last shape is imported for the given page */
 void XMLShapeImportHelper::endPage( css::uno::Reference< css::drawing::XShapes > const & rShapes )
 {
     SAL_WARN_IF( !mpPageContext || (mpPageContext->mxShapes != rShapes), "xmloff", "wrong call to endPage(), no startPage called or wrong page" );

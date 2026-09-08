@@ -108,7 +108,7 @@ namespace cairo
         cairo_surface_flush(mpSurface.get());
         //Wonder if there is any benefit in using cairo_fill/stroke extents on
         //every canvas call and only redrawing the union of those in a
-        //poor-mans-damage tracking
+        //poor-man's-damage tracking
         if (mpGraphics)
             mpGraphics->WidgetQueueDraw();
     }

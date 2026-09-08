@@ -257,7 +257,7 @@ End Function	&apos;	ScriptForge.SF_Root._AddToPythonStorage
 
 REM ------------------------------------------------------------------------------
 Public Function _GetLocalizedInterface() As Object
-&apos;&apos;&apos;	Returns the LN object instance related to the ScriptForge internal localization
+&apos;&apos;&apos;	Returns the L10N object instance related to the ScriptForge internal localization
 &apos;&apos;&apos;	If not yet done, load it from the shipped po files
 &apos;&apos;&apos;	Makes that the localized user interface is loaded only when needed
 

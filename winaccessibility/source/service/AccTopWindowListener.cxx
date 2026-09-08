@@ -34,9 +34,9 @@
 using namespace com::sun::star::uno;
 
 /**
- *  For the new opened window, generate all the UNO accessible's object, COM object and add
+ *  For the newly opened window, generate all the UNO accessible objects, COM object and add
  *  accessible listener to monitor all these objects.
- *  @param pWindow      the new opened window
+ *  @param pWindow      the newly opened window
  */
 void AccTopWindowListener::HandleWindowOpened(vcl::Window* pWindow)
 {
@@ -56,7 +56,7 @@ void AccTopWindowListener::HandleWindowOpened(vcl::Window* pWindow)
     AddAllListeners(pAccessible.get(), nullptr, pSystemData->hWnd);
 
     if (pWindow->GetStyle() & WB_MOVEABLE)
-        m_aAccObjectManager.IncreaseState(pAccessible.get(), static_cast<unsigned short>(-1) /* U_MOVEBLE */ );
+        m_aAccObjectManager.IncreaseState(pAccessible.get(), static_cast<unsigned short>(-1) /* U_MOVEABLE */ );
 
     short role = pAccessible->getAccessibleRole();
 
@@ -104,10 +104,10 @@ void AccTopWindowListener::windowOpened( const css::lang::EventObject& e )
 }
 
 /**
- *  Add the accessible event listener to object and all its children objects.
+ *  Add the accessible event listener to object and all its child objects.
  *  @param  pAccessible     the accessible object
  *  @param  pParentXAcc     the parent of current accessible object
- *  @param  pWND            the handle of top window which current object resides
+ *  @param  pWND            the handle of top window in which current object resides
  */
 void AccTopWindowListener::AddAllListeners(css::accessibility::XAccessible* pAccessible, css::accessibility::XAccessible* pParentXAcc, HWND pWND)
 {
@@ -154,7 +154,7 @@ void AccTopWindowListener::windowClosing( const css::lang::EventObject& )
 }
 
 /**
- *  Invoke this method when the top window is closed, remove all the objects and its children
+ *  Invoke this method when the top window is closed, remove all the objects and their children
  *  from current manager's cache, and remove the COM object and the accessible event listener
  *  assigned to the accessible objects.
  */

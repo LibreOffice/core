@@ -877,7 +877,7 @@ IMPL_LINK_NOARG(SalInstanceMenu, SelectMenuHdl, ::Menu*, bool)
 {
     signal_activate(m_xMenu->GetCurItemIdent());
     /* tdf#131333 Menu::Select depends on a false here to allow
-       propagating a submens's selected id to its parent menu to become its
+       propagating a submenu's selected id to its parent menu to become its
        selected id.
 
        without this, while gen menus already have propagated this to its parent

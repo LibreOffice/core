@@ -120,7 +120,7 @@ namespace
 {
     /**
      * Used to store a data point custom-label's fields and also the helper members that
-     * indicates whether this label's contents are sourced from a cell[range] and
+     * indicate whether this label's contents are sourced from a cell[range] and
      * the address of the cell[range] with guid of the CELLRANGE field.
      */
     struct CustomLabelData
@@ -147,7 +147,7 @@ namespace
         chart2::RelativePosition mCustomLabelPos; // loext:custom-label-pos-x and -y
 
         // There is no internal equivalent for <chart:data-label>. It will be generated on the fly
-        // on export. All about data label is hold in the data point.
+        // on export. All about data label is held in the data point.
         CustomLabelData   mCustomLabel; // <text:p> child element in <chart:data-label>
         OUString msDataLabelStyleName; // chart:style-name attribute in <chart:data-label>
 
