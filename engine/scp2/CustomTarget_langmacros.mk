@@ -17,6 +17,7 @@ $(gb_CustomTarget_workdir)/scp2/macros/langmacros.inc : $(SRCDIR)/scp2/macros/ma
 	$(call gb_Helper_abbreviate_dirs,\
 		export COMPLETELANGISO_VAR='$(ALL_LANGS)' && \
 		export HELP_LANGS='$(gb_HELP_LANGS)' && \
+		export LOCALEDIR_MAP='$(foreach lang,$(ALL_LANGS),$(lang):$(call gb_Helper_get_localedir,$(lang)))' && \
 		$(PERL) $< -verbose -o $@ -c $(BUILDDIR)/config_host.mk.stamp \
 	)
 

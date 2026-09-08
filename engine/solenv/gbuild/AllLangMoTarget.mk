@@ -88,7 +88,7 @@ $(foreach lang,$(gb_AllLangMoTarget_LANGS),\
 
 $(foreach lang,$(gb_AllLangMoTarget_LANGS),\
 $(call gb_Helper_install,$(call gb_AllLangMoTarget_get_target,$(1)), \
-	$(call gb_MoTarget_get_install_target,$(shell $(SRCDIR)/solenv/bin/localestr $(lang))/LC_MESSAGES/$(1)), \
+	$(call gb_MoTarget_get_install_target,$(call gb_Helper_get_localedir,$(lang))/LC_MESSAGES/$(1)), \
 	$(call gb_MoTarget_get_target,$(1)$(lang))))
 
 $$(eval $$(call gb_Module_register_target,$(call gb_AllLangMoTarget_get_target,$(1)),$(call gb_AllLangMoTarget_get_clean_target,$(1))))

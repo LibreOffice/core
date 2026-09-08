@@ -426,6 +426,14 @@ $(if $(gb_QUIET_EXTERNAL), \
     ( $(1) ))
 endef
 
+gb_Helper_LOCALEDIRS := ca-valencia:ca@valencia kmr-Latn:kmr@latin \
+                        sr-Latn:sr@latin hu-Hung:hu@hung
+
+# call gb_Helper_get_localedir,language
+define gb_Helper_get_localedir
+$(or $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Helper_LOCALEDIRS))),$(subst -,_,$(1)))
+endef
+
 # call gb_pkgconfig_file,name,version,cflags,libs[,additional-lines]
 define gb_pkgconfig_file
 Name: $(1)
