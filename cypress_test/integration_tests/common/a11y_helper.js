@@ -1087,9 +1087,49 @@ module.exports.describeFocusable = describeFocusable;
 module.exports.openSidebarPropertyDeck = openSidebarPropertyDeck;
 module.exports.sidebarKeyboard = sidebarKeyboard;
 module.exports.axTreeAvailable = axTreeAvailable;
+/// The relative luminance WCAG defines, from a computed color string.
+function relativeLuminance(color) {
+	const parts = String(color).match(/[\d.]+/g);
+
+	expect(parts, 'a color with channels in ' + color).to.not.equal(null);
+
+	const channels = parts.slice(0, 3).map(function (channel) {
+		const value = parseFloat(channel) / 255;
+		return value <= 0.03928
+			? value / 12.92
+			: Math.pow((value + 0.055) / 1.055, 2.4);
+	});
+
+	return 0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2];
+}
+
+/// The colour actually behind an element: a transparent background shows the
+/// nearest painted ancestor, and that is the colour a contrast check compares.
+function effectiveBackground(win, element) {
+	for (let node = element; node; node = node.parentElement) {
+		const color = win.getComputedStyle(node).backgroundColor;
+		const parts = String(color).match(/[\d.]+/g);
+
+		if (parts && (parts.length < 4 || parseFloat(parts[3]) > 0)) return color;
+	}
+
+	expect.fail('nothing paints a background behind ' + element.tagName);
+}
+
+/// The contrast ratio WCAG's 3:1 and 4.5:1 are written against. Opaque colors.
+function contrastRatio(one, other) {
+	const first = relativeLuminance(one);
+	const second = relativeLuminance(other);
+
+	return (Math.max(first, second) + 0.05) / (Math.min(first, second) + 0.05);
+}
+
 module.exports.getFocusedAXNode = getFocusedAXNode;
 module.exports.assertToggleStatesAgree = assertToggleStatesAgree;
 module.exports.getAXNodes = getAXNodes;
 module.exports.getAXNodesWithin = getAXNodesWithin;
 module.exports.describeAXNode = describeAXNode;
 module.exports.assertDropdownButtonNamesItsList = assertDropdownButtonNamesItsList;
+module.exports.contrastRatio = contrastRatio;
+module.exports.relativeLuminance = relativeLuminance;
+module.exports.effectiveBackground = effectiveBackground;
