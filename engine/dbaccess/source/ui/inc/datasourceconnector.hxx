@@ -23,11 +23,6 @@
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
 
-namespace dbtools
-{
-    class SQLExceptionInfo;
-}
-
 namespace weld { class Window; }
 namespace dbaui
 {
@@ -50,14 +45,14 @@ namespace dbaui
         /// returns <TRUE/> if the object is able to create data source connections
         bool    isValid() const { return m_xContext.is(); }
 
-        /** creates a connection to the data source, displays the possible error to the user, or returns it
+        /** creates a connection to the data source, displaying a possible error to the user
         */
         css::uno::Reference< css::sdbc::XConnection >
                     connect(
                         const OUString& _rDataSourceName
                     ) const;
 
-        /** creates a connection to the data source, displays the possible error to the user, or returns it
+        /** creates a connection to the data source, displaying a possible error to the user
         */
         css::uno::Reference< css::sdbc::XConnection >
                     connect(
