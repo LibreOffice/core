@@ -101,22 +101,19 @@ static bool lcl_getSelectedState(const SwAccessibleChild& aChild,
                                      SwAccessibleContext* pContext,
                                      SwAccessibleMap* pMap)
 {
-    Reference< XAccessible > xAcc;
+    rtl::Reference<comphelper::OAccessible> pAcc;
     if ( aChild.GetSwFrame() )
     {
-        xAcc = pMap->GetContext( aChild.GetSwFrame(), false );
+        pAcc = pMap->GetContextImpl(aChild.GetSwFrame(), false);
     }
     else if ( aChild.GetDrawObject() )
     {
-        xAcc = pMap->GetContext( aChild.GetDrawObject(), pContext, false );
+        pAcc = pMap->GetContextImpl(aChild.GetDrawObject(), pContext, false);
     }
 
-    if( xAcc.is() )
+    if (pAcc.is())
     {
-        Reference< XAccessibleContext > pRContext = xAcc->getAccessibleContext();
-        if(!pRContext.is())
-            return false;
-        sal_Int64 nRStateSet = pRContext->getAccessibleStateSet();
+        sal_Int64 nRStateSet = pAcc->getAccessibleStateSet();
         if(nRStateSet & AccessibleStateType::SELECTED)
             return true;
     }
