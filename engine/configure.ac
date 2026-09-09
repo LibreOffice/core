@@ -1124,7 +1124,6 @@ ios*) # iOS
     build_crypto=no
     test_libcmis=no
     test_webdav=no
-    with_gssapi=no
     if test -n "$LODE_HOME" ; then
         mac_sanitize_path
         AC_MSG_NOTICE([sanitized the PATH to $PATH])
@@ -1227,7 +1226,6 @@ linux-android*)
     build_crypto=no
     test_system_freetype=no
     test_webdav=no
-    with_gssapi=no
     disable_database_connectivity_dependencies
     enable_mpl_subset=yes
     enable_coinmp=yes
@@ -2608,10 +2606,10 @@ libo_FUZZ_ARG_WITH(krb5,
 
 libo_FUZZ_ARG_WITH(gssapi,
     AS_HELP_STRING([--with-gssapi],
-        [Enable GSSAPI support in modules that support it.
-         By default automatically enabled on platforms
-         where a good system GSSAPI is available.]),
-,)
+        [Enable GSSAPI support in modules that support it. Disabled by default.]),
+,
+    [with_gssapi=no]
+)
 
 libo_FUZZ_ARG_WITH(lxml,
     AS_HELP_STRING([--without-lxml],
@@ -2996,7 +2994,6 @@ if test "$enable_wasm_strip" = "yes"; then
     test_libepubgen=no
     test_libcmis=no
     with_galleries=no
-    with_gssapi=no
     with_templates=no
     with_x=no
 
@@ -6066,7 +6063,6 @@ if test "$cross_compiling" = "yes"; then
         --disable-xmlhelp \
         --enable-dynamic-loading \
         --enable-icecream="$enable_icecream" \
-        --without-gssapi \
         --without-tls \
         --without-webdav \
         --without-x \
