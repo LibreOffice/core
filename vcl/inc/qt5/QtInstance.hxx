@@ -237,7 +237,7 @@ public:
 
     void* CreateGStreamerSink(const SystemChildWindow*) override;
 
-    bool DoExecute(int& nExitCode) override;
+    bool DoExecute() override;
     void DoQuit() override;
 
     static QWidget* GetQWidget(weld::Widget* pWidget);

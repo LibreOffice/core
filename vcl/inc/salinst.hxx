@@ -234,7 +234,7 @@ public:
     virtual void BeforeAbort(const OUString& /* rErrorText */, bool /* bDumpCore */) {}
 
     // both must be implemented, if the VCL plugin needs to run via system event loop
-    virtual bool DoExecute(int &nExitCode);
+    virtual bool DoExecute();
     virtual void DoQuit();
 };
 

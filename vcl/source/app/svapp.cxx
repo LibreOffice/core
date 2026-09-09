@@ -351,8 +351,7 @@ void Application::Execute()
     pSVData->maAppData.mbInAppExecute = true;
     pSVData->maAppData.mbAppQuit = false;
 
-    int nExitCode = 0;
-    if (!pSVData->mpDefInst->DoExecute(nExitCode))
+    if (!pSVData->mpDefInst->DoExecute())
     {
         if (Application::IsUseSystemEventLoop())
         {
