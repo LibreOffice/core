@@ -58,7 +58,6 @@
 #include <comphelper/legacyunoapinotice.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cool.hpp>
-#include <cppuhelper/annotations.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <jsuno/detail/dllapi.hxx>
@@ -510,14 +509,12 @@ void collectOverloadMembers(
                 OUString::Concat("findOverloads: no description for member of ") + interfaceName);
         }
         if (memberTd->eTypeClass == typelib_TypeClass_INTERFACE_METHOD) {
-            auto const methodName = OUString::unacquired(
-                &reinterpret_cast<typelib_InterfaceMethodTypeDescription *>(memberTd)
-                    ->aBase.pMemberName);
-            for (auto const & a: cppuhelper::getInterfaceMethodAnnotations(
-                     comphelper::getProcessComponentContext(), interfaceName, methodName))
-            {
-                if (a == ann) {
-                    members.push_back(methodName);
+            for (sal_Int32 j = 0; j != memberTd->nAnnotations; ++j) {
+                if (OUString::unacquired(&memberTd->ppAnnotations[j]) == ann) {
+                    members.push_back(
+                        OUString::unacquired(
+                            &reinterpret_cast<typelib_InterfaceMethodTypeDescription *>(memberTd)
+                                ->aBase.pMemberName));
                     break;
                 }
             }
