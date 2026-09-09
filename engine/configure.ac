@@ -9475,7 +9475,7 @@ if test "$enable_epm" = "yes"; then
 else
     for i in $PKGFORMAT; do
         case "$i" in
-        bsd | deb | rpm | native | portable)
+        deb | rpm)
             AC_MSG_ERROR(
                 [--with-package-format='$PKGFORMAT' requires --enable-epm])
             ;;
