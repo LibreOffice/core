@@ -862,11 +862,24 @@ function axNode(node) {
 /// getAXNodesWithin sweeps one container; getFocusedAXNode is a single widget.
 function getAXNodes() {
 	return coolFrameId().then(function (frameId) {
-		return cdp('Accessibility.enable').then(function () {
+		return enableAX().then(function () {
 			return cdp('Accessibility.getFullAXTree', { depth: -1, frameId: frameId });
 		});
 	}).then(function (res) {
 		return ((res && res.nodes) || []).map(axNode);
+	});
+}
+
+let axEnabled = false;
+
+/// Enabling the domain makes Chrome compute the page's whole accessibility
+/// tree, so it is paid once and not per widget. A cy chain would not do: a
+/// chainable awaited inside cdp's promise resolves to itself.
+function enableAX() {
+	if (axEnabled) return Cypress.Promise.resolve(null);
+
+	return cdp('Accessibility.enable').then(function () {
+		axEnabled = true;
 	});
 }
 
@@ -934,7 +947,7 @@ function axNodesWithin(documentNodeId, selector) {
 	}).then(function (result) {
 		expect(result.nodeId, 'a node matching ' + selector).to.not.equal(0);
 
-		return cdp('Accessibility.enable').then(function () {
+		return enableAX().then(function () {
 			return cdp('Accessibility.queryAXTree', { nodeId: result.nodeId });
 		});
 	}).then(function (result) {
@@ -998,7 +1011,7 @@ function assertDropdownButtonNamesItsList(id) {
 /// The document root reports itself as focused too, so take the deepest one.
 function getFocusedAXNode() {
 	return coolFrameId().then(function (frameId) {
-		return cdp('Accessibility.enable').then(function () {
+		return enableAX().then(function () {
 			return cdp('Accessibility.getFullAXTree', { depth: -1, frameId: frameId });
 		});
 	}).then(function (res) {
@@ -1124,15 +1137,58 @@ function relativeLuminance(color) {
 
 /// The colour actually behind an element: a transparent background shows the
 /// nearest painted ancestor, and that is the colour a contrast check compares.
-function effectiveBackground(win, element) {
-	for (let node = element; node; node = node.parentElement) {
-		const color = win.getComputedStyle(node).backgroundColor;
-		const parts = String(color).match(/[\d.]+/g);
+function channels(color) {
+	const parts = String(color).match(/[\d.]+/g);
 
-		if (parts && (parts.length < 4 || parseFloat(parts[3]) > 0)) return color;
+	// A plain throw, not an assertion: this runs once per ancestor of every
+	// widget swept, and each chai assertion is one more entry in cypress's
+	// command log, which a hook never releases.
+	if (parts === null) throw new Error('a color with channels in ' + color);
+
+	const values = parts.slice(0, 3).map(parseFloat);
+	return values.concat(parts.length > 3 ? parseFloat(parts[3]) : 1);
+}
+
+function over(top, bottom) {
+	const alpha = top[3];
+	const mixed = [0, 1, 2].map(function (i) {
+		return top[i] * alpha + bottom[i] * (1 - alpha);
+	});
+
+	return mixed.concat(Math.min(1, alpha + bottom[3] * (1 - alpha)));
+}
+
+function rgb(color) {
+	return 'rgb(' + color.slice(0, 3).map(Math.round).join(', ') + ')';
+}
+
+function effectiveBackground(win, element) {
+	let seat = null;
+
+	for (let node = element; node; node = node.parentElement) {
+		const color = channels(win.getComputedStyle(node).backgroundColor);
+
+		if (color[3] === 0) continue;
+
+		seat = seat === null ? color : over(seat, color);
+		if (seat[3] >= 1) return rgb(seat);
 	}
 
-	expect.fail('nothing paints a background behind ' + element.tagName);
+	throw new Error('nothing paints a background behind ' + element.tagName);
+}
+
+function renderedTextColor(win, element) {
+	const seat = channels(effectiveBackground(win, element));
+	let opacity = 1;
+
+	for (let node = element; node; node = node.parentElement) {
+		opacity *= parseFloat(win.getComputedStyle(node).opacity);
+	}
+
+	const color = channels(win.getComputedStyle(element).color);
+	color[3] *= opacity;
+
+	return rgb(over(color, seat));
 }
 
 /// The contrast ratio WCAG's 3:1 and 4.5:1 are written against. Opaque colors.
@@ -1152,3 +1208,4 @@ module.exports.assertDropdownButtonNamesItsList = assertDropdownButtonNamesItsLi
 module.exports.contrastRatio = contrastRatio;
 module.exports.relativeLuminance = relativeLuminance;
 module.exports.effectiveBackground = effectiveBackground;
+module.exports.renderedTextColor = renderedTextColor;
