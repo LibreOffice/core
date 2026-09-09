@@ -12,6 +12,7 @@
 #include <osl/process.h>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <config_fonts.h>
 #include <vcl/scheduler.hxx>
 #include <svx/svddef.hxx>
 
@@ -3625,7 +3626,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint91) { createSwWebDoc("forcepo
 //just care it doesn't crash/assert
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint92)
 {
-#if defined(HAVE_MORE_FONTS) && HAVE_MORE_FONTS != 0
+#if HAVE_MORE_FONTS
     // This file doesn't open in Word, and seems to be corrupt.
     // The fix for tdf#129808 caused this test to start aborting on font fallback
     // due to empty font names. It's unclear what should be done to repair this
