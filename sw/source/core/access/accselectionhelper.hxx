@@ -20,7 +20,10 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_ACCESS_ACCSELECTIONHELPER_HXX
 #define INCLUDED_SW_SOURCE_CORE_ACCESS_ACCSELECTIONHELPER_HXX
 
+#include <comphelper/OAccessible.hxx>
+#include <rtl/ref.hxx>
 #include <sal/types.h>
+
 #include <com/sun/star/uno/Reference.h>
 
 namespace com::sun::star::accessibility { class XAccessible; }
@@ -59,8 +62,8 @@ public:
     sal_Int64 getSelectedAccessibleChildCount(  );
     /// @throws css::lang::IndexOutOfBoundsException
     /// @throws css::uno::RuntimeException
-    css::uno::Reference< css::accessibility::XAccessible > getSelectedAccessibleChild(
-        sal_Int64 nSelectedChildIndex );
+    rtl::Reference<comphelper::OAccessible>
+    getSelectedAccessibleChild(sal_Int64 nSelectedChildIndex);
     // index has to be treated as global child index.
     /// @throws css::lang::IndexOutOfBoundsException
     /// @throws css::uno::RuntimeException
