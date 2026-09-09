@@ -86,8 +86,8 @@ bool HeadlessClientSession::connect(const std::string& uri, SocketPoll& poll)
     std::string pathAndQuery;
     if (!net::parseUri(uri, scheme, host, port, pathAndQuery))
     {
-        LOG_ERR("RemoteDoc: cannot parse the remote document URI ["
-                << Anonymizer::anonymizeUrl(uri) << ']');
+        // The URI carries the access token of the source, so it is not logged.
+        LOG_ERR("RemoteDoc: cannot parse the remote document URI");
         return false;
     }
 
@@ -95,8 +95,7 @@ bool HeadlessClientSession::connect(const std::string& uri, SocketPoll& poll)
     if (port.empty())
         port = secure ? "443" : "80";
 
-    LOG_DBG("RemoteDoc: connecting to " << host << ':' << port << " for ["
-                                        << Anonymizer::anonymizeUrl(pathAndQuery) << ']');
+    LOG_DBG("RemoteDoc: connecting to " << host << ':' << port);
 
     http::Request request(pathAndQuery);
 
@@ -378,9 +377,10 @@ bool RemoteDocument::connect()
     const std::string target =
         _serverUrl + "/cool/" + encodedDocumentUri + "/ws?WOPISrc=" + Uri::encode(_wopiSrc);
 
+    // The target carries the access token of the source, which anonymizing a URL leaves in
+    // the query it keeps, so the server dialed is named instead.
     LOG_INF("RemoteDoc: opening a headless session to ["
-            << Anonymizer::anonymizeUrl(_wopiSrc) << "] as [" << Anonymizer::anonymizeUrl(target)
-            << ']');
+            << Anonymizer::anonymizeUrl(_wopiSrc) << "] through [" << _serverUrl << ']');
 
     _session = std::make_shared<HeadlessClientSession>(weak_from_this(), encodedDocumentUri,
                                                        joinDocKeyChain(getDocKeyChains()));
