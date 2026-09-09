@@ -1,13 +1,14 @@
 name: collabora-office
+title: Collabora Office
 adopt-info: collabora-office
 summary: Collabora Office — create, edit and present with a modern UI
 description: |
   Collabora Office brings the familiar Collabora Online experience
   to your computer — so you can create, edit, and present with a beautiful,
-  modern UI. Based on LibreOffice, it delivers excellent interoperability
-  with ODF and Microsoft Office formats (DOCX/XLSX/PPTX), and exports to
-  PDF with ease. Your documents stay on your device unless you choose to
-  share them — privacy by design.
+  modern UI. It delivers excellent interoperability with ODF and Microsoft
+  Office formats (DOCX/XLSX/PPTX), and exports to PDF with ease. Your
+  documents stay on your device unless you choose to share them — privacy
+  by design.
 
   Why you'll love it:
   * Instantly familiar: Same interface as Collabora Online — no relearning
@@ -24,6 +25,10 @@ description: |
   * No cloud required
 
 icon: qt/hicolor/scalable/apps/com.collaboraoffice.Office.startcenter.svg
+contact: hello@collaboraoffice.com
+website: https://www.collaboraoffice.com
+source-code: https://gerrit.collaboraoffice.com/online
+issues: https://github.com/CollaboraOnline/online/issues
 license: MPL-2.0
 base: core24
 platforms:

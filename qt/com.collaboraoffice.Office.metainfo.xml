@@ -6,7 +6,7 @@
   <name>Collabora Office</name>
   <summary>The Collabora Office productivity suite</summary>
   <description>
-    <p>Collabora Office brings the familiar Collabora Online experience to your computer - so you can create, edit, and present with a beautiful, modern UI. Built on LibreOffice, it delivers excellent interoperability with ODF and Microsoft Office formats (DOCX/XLSX/PPTX), and exports to PDF with ease. Your documents stay on your device unless you choose to share them - privacy by design.</p>
+    <p>Collabora Office brings the familiar Collabora Online experience to your computer - so you can create, edit, and present with a beautiful, modern UI. It delivers excellent interoperability with ODF and Microsoft Office formats (DOCX/XLSX/PPTX), and exports to PDF with ease. Your documents stay on your device unless you choose to share them - privacy by design.</p>
   </description>
   <launchable type="desktop-id">com.collaboraoffice.Office.desktop</launchable>
   <url type="homepage">https://collaboraoffice.com</url>
