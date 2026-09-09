@@ -36,6 +36,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_uicalc2, \
     svx \
     svxcore \
     test \
+    tk \
     tl \
     unotest \
     utl \

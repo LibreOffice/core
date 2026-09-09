@@ -2928,19 +2928,6 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
 
     (void)pPrintFunc->DoPrint( aPage, nTabStart, nDisplayStart, true, nullptr );
 
-    if (pPrinter)
-    {
-        // reset the print area created by the Print Dialog to the page style's print area
-        if (pPrinter->IsUsePrintDialogSetting())
-        {
-            bUsePrintDialogSetting = false;
-            if (m_pPrintState && m_pPrintState->nPrintTab == nTab && !pSelRange)
-                pPrintFunc.reset(new ScPrintFunc(pDev, *pDocShell, *m_pPrintState,
-                                                 &aStatus.GetOptions(), aPrintPageSize,
-                                                 bPrintPageLandscape, bUsePrintDialogSetting));
-        }
-    }
-
     vcl::PDFExtOutDevData* pPDFData = dynamic_cast<vcl::PDFExtOutDevData*>(pDev->GetExtOutDevData());
     const bool bFinishTagging(pPDFData && pPDFData->GetIsExportTaggedPDF() && bIsLastPage);
     if (bFinishTagging)
@@ -2956,6 +2943,12 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
 
     if (bFinishTagging)
         lcl_PDFExportFinishTagging(*pPDFData);
+
+    // The document carried the Print Dialog's paper size and orientation for the length of the
+    // job. A last count after the final page puts back the page size and the page breaks that
+    // the page style describes.
+    if (pPrinter && pPrinter->IsUsePrintDialogSetting() && bIsLastPage)
+        pPrintFuncCache.reset(new ScPrintFuncCache(*pDocShell, aMark, aStatus));
 }
 
 // XLinkTargetSupplier

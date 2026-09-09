@@ -174,7 +174,9 @@ public:
     size_t m_nPagesY;
     size_t m_nTotalY;
 
-    PrintPageRangesInput m_aInput;
+    // The ranges above were calculated for this input. Every copy shares both, so the input
+    // always matches the result.
+    std::shared_ptr<PrintPageRangesInput> m_pInput;
 
     void calculate(ScDocument& rDoc, PrintPageRangesInput const& rInput);
 };

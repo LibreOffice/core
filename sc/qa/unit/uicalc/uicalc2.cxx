@@ -14,23 +14,33 @@
 #include <editeng/editobj.hxx>
 #include <editeng/flditem.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <sfx2/printer.hxx>
+#include <sfx2/viewsh.hxx>
 #include <sot/exchange.hxx>
 #include <svx/svdpage.hxx>
+#include <toolkit/awt/vclxdevice.hxx>
 #include <tools/stream.hxx>
+#include <vcl/gdimtf.hxx>
 #include <vcl/keycodes.hxx>
+#include <vcl/metaact.hxx>
+#include <vcl/print.hxx>
 #include <vcl/scheduler.hxx>
 #include <stlsheet.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <com/sun/star/awt/Key.hpp>
+#include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/sheet/GlobalSheetSettings.hpp>
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
+#include <com/sun/star/view/XRenderable.hpp>
 #include <dbdata.hxx>
 #include <document.hxx>
 #include <docsh.hxx>
@@ -2593,6 +2603,120 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testSetHyperlinkKeepSelection)
     // - Actual  : mytext
     // i.e. the cell content was lost, the provided text hint was used.
     CPPUNIT_ASSERT_EQUAL(u"foo"_ustr, pURLField->GetRepresentation());
+}
+
+namespace
+{
+// Prints the document once and collects the cell text of each page, in drawing order. The
+// printer records into a metafile, so this is the text that would have reached the paper.
+std::vector<std::vector<OUString>>
+lcl_getPrintedPages(const uno::Reference<lang::XComponent>& xComponent, Printer* pPrinter)
+{
+    rtl::Reference<VCLXDevice> pVclDevice = new VCLXDevice();
+    pVclDevice->SetOutputDevice(pPrinter);
+
+    uno::Reference<view::XRenderable> xRenderable(xComponent, uno::UNO_QUERY_THROW);
+    css::uno::Any aSelection(xComponent);
+
+    std::vector<beans::PropertyValue> aOptions{
+        comphelper::makePropertyValue(u"RenderDevice"_ustr,
+                                      uno::Reference<awt::XDevice>(pVclDevice)),
+        comphelper::makePropertyValue(u"IsPrinter"_ustr, true),
+        comphelper::makePropertyValue(u"IsLastPage"_ustr, false),
+    };
+
+    sal_Int32 nPages
+        = xRenderable->getRendererCount(aSelection, comphelper::containerToSequence(aOptions));
+
+    std::vector<std::vector<OUString>> aPages;
+    for (sal_Int32 nPage = 0; nPage < nPages; ++nPage)
+    {
+        aOptions.back().Value <<= (nPage + 1 == nPages);
+        css::uno::Sequence<beans::PropertyValue> aSequence
+            = comphelper::containerToSequence(aOptions);
+
+        GDIMetaFile aMetaFile;
+        pPrinter->SetConnectMetaFile(&aMetaFile);
+        xRenderable->getRenderer(nPage, aSelection, aSequence);
+        xRenderable->render(nPage, aSelection, aSequence);
+        pPrinter->SetConnectMetaFile(nullptr);
+
+        std::vector<OUString> aTexts;
+        for (size_t nAction = 0; nAction < aMetaFile.GetActionSize(); ++nAction)
+        {
+            MetaAction* pAction = aMetaFile.GetAction(nAction);
+            OUString aText;
+            if (pAction->GetType() == MetaActionType::TEXTARRAY)
+                aText = static_cast<MetaTextArrayAction*>(pAction)->GetText();
+            else if (pAction->GetType() == MetaActionType::TEXT)
+                aText = static_cast<MetaTextAction*>(pAction)->GetText();
+            else if (pAction->GetType() == MetaActionType::STRETCHTEXT)
+                aText = static_cast<MetaStretchTextAction*>(pAction)->GetText();
+            if (aText.startsWith(u"row"))
+                aTexts.push_back(aText);
+        }
+        aPages.push_back(std::move(aTexts));
+    }
+    return aPages;
+}
+
+// Names the first and the last cell of every page on one line. A failure then shows which rows
+// each page carried.
+OUString lcl_describePages(const std::vector<std::vector<OUString>>& rPages)
+{
+    OUStringBuffer aBuffer;
+    for (const auto& rPage : rPages)
+    {
+        if (!aBuffer.isEmpty())
+            aBuffer.append(" ");
+        if (rPage.empty())
+            aBuffer.append("empty");
+        else
+            aBuffer.append(rPage.front() + ".." + rPage.back());
+    }
+    return aBuffer.makeStringAndClear();
+}
+}
+
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf171366)
+{
+    // The sheet holds 100 rows on A4 portrait paper. That is few enough per landscape page that
+    // the two orientations break the sheet at different rows.
+    createScDoc("tdf171366.fods");
+
+    // The view shell hands back the document's own printer, which is the one a print job uses.
+    SfxViewShell* pViewShell = getViewShell();
+    SfxPrinter* pPrinter = pViewShell->GetPrinter(true);
+    CPPUNIT_ASSERT(pPrinter);
+
+    // The Print Dialog turns the paper size itself and hands it on in 1/100 mm.
+    const Size aTurnedPaper(29700, 21001);
+
+    // The user chooses Landscape in the Print Dialog. The dialog gives the printer the turned
+    // size and marks the printer as carrying a setting of its own.
+    pPrinter->SetPrintPageSize(aTurnedPaper);
+    pPrinter->SetOrientation(Orientation::Landscape);
+    pPrinter->SetUsePrintDialogSetting(true);
+    const OUString aFromDialog = lcl_describePages(lcl_getPrintedPages(mxComponent, pPrinter));
+
+    // The user makes the same turn in Format - Page Style instead. That path always worked.
+    pPrinter->SetUsePrintDialogSetting(false);
+    uno::Reference<style::XStyleFamiliesSupplier> xSupplier(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<container::XNameAccess> xPageStyles(
+        xSupplier->getStyleFamilies()->getByName(u"PageStyles"_ustr), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xPageStyle(xPageStyles->getByName(u"Default"_ustr),
+                                                   uno::UNO_QUERY_THROW);
+    xPageStyle->setPropertyValue(u"IsLandscape"_ustr, css::uno::Any(true));
+    xPageStyle->setPropertyValue(
+        u"Size"_ustr, css::uno::Any(awt::Size(aTurnedPaper.Width(), aTurnedPaper.Height())));
+    const OUString aFromPageStyle = lcl_describePages(lcl_getPrintedPages(mxComponent, pPrinter));
+
+    // Turning the paper in the Print Dialog splits the sheet the same way as turning it in the
+    // page style. Without the accompanying fix, only the first page was laid out for landscape
+    // paper and the rest kept the portrait splits, so this test failed with:
+    // - Expected: row1..row37 row38..row74 row75..row100
+    // - Actual  : row1..row37 row57..row100 empty
+    CPPUNIT_ASSERT_EQUAL(aFromPageStyle, aFromDialog);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
