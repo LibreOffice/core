@@ -3825,6 +3825,15 @@ void DocumentBroker::handleUploadToStorageFailed(const StorageBase::UploadResult
         // We may not know whether the Storage has been updated, so we need to
         // re-sync the document's last modified timestamp.
         _lastUploadDefinitelyFailed = uploadResult.isDefiniteFailure();
+        _lastUploadedFileHash.clear();
+        if (!_lastUploadDefinitelyFailed)
+        {
+            // Our upload may have landed. Hash what we sent now, while the file
+            // we sent it from is still on disk, so that we can tell our own
+            // version from somebody else's when we ask storage what it holds.
+            _lastUploadedFileHash = FileUtil::sha256Base64(_storage->getRootFilePathUploading());
+        }
+
         endActivity(); // Probably in Activity::Upload.
         startActivity(DocumentState::Activity::SyncFileTimestamp);
 
@@ -6723,19 +6732,34 @@ void DocumentBroker::checkFileInfo(const std::shared_ptr<ClientSession>& session
             else
             {
                 // We never got an answer, so our upload may well have landed and
-                // the timeout happened after the host had written the file. Size
-                // is all we have to tell our own version apart from someone else's;
-                // it's weak, but the alternative is to bother the user with a
-                // conflict on every upload that times out.
+                // the timeout happened after the host had written the file. Work
+                // out whether the document in storage is the one we sent.
+                std::string storageHash;
+                JsonUtil::findJSONValue(object, "SHA256", storageHash);
+
                 std::size_t size = 0;
                 JsonUtil::findJSONValue(object, "Size", size);
 
-                if (size == _storageManager.getSizeAsUploaded())
+                // A hash settles it. Only fall back on the size when the host
+                // reports no hash, or we could not take one of our own: a byte
+                // count is weak evidence of identity, but it beats asking the
+                // user to resolve a conflict on every upload that times out.
+                const bool haveHashes = !storageHash.empty() && !_lastUploadedFileHash.empty();
+                const bool isOurs = haveHashes ? storageHash == _lastUploadedFileHash
+                                               : size == _storageManager.getSizeAsUploaded();
+
+                const std::string evidence =
+                    haveHashes ? "the SHA-256 in storage [" + storageHash + "] and ours [" +
+                                     _lastUploadedFileHash + ']'
+                               : "the size in storage " + std::to_string(size) + " and ours " +
+                                     std::to_string(_storageManager.getSizeAsUploaded());
+
+                if (isOurs)
                 {
                     LOG_INF("After failing to get a response to our upload of ["
-                            << _docKey << "], storage holds " << size
-                            << " bytes, the size we uploaded. Assuming our upload did land and "
-                               "synchronizing the timestamp to ["
+                            << _docKey << "], " << evidence
+                            << " agree. Assuming our upload did land and synchronizing the "
+                               "timestamp to ["
                             << lastModifiedTime << "] (from [" << lastKnownTime << "])");
 
                     _storage->setLastModifiedTime(lastModifiedTime);
@@ -6743,9 +6767,8 @@ void DocumentBroker::checkFileInfo(const std::shared_ptr<ClientSession>& session
                 }
                 else
                 {
-                    LOG_WRN("After failing to get a response to our upload, storage holds "
-                            << size << " bytes, not the " << _storageManager.getSizeAsUploaded()
-                            << " we uploaded, and the timestamp [" << lastModifiedTime
+                    LOG_WRN("After failing to get a response to our upload, "
+                            << evidence << " differ, and the timestamp [" << lastModifiedTime
                             << "] no longer matches our last known [" << lastKnownTime
                             << "]. The document was changed in storage");
 

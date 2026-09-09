@@ -25,6 +25,7 @@
 
 #include <Poco/File.h>
 #include <Poco/Path.h>
+#include <Poco/SHA2Engine.h>
 
 #include <o3tl/safeint.hxx>
 
@@ -486,6 +487,32 @@ namespace FileUtil
     std::string extractFileExtension(const std::string& path)
     {
         return Util::splitLast(path, '.', true).second;
+    }
+
+    std::string sha256Base64(const std::string& path)
+    {
+        std::ifstream file(path, std::ios::binary);
+        if (!file.is_open())
+        {
+            LOG_WRN("Cannot open [" << path << "] to hash it");
+            return std::string();
+        }
+
+        Poco::SHA2Engine engine(Poco::SHA2Engine::SHA_256);
+
+        std::vector<char> buffer(64 * 1024);
+        while (file.read(buffer.data(), buffer.size()) || file.gcount() > 0)
+        {
+            engine.update(buffer.data(), file.gcount());
+        }
+
+        if (file.bad())
+        {
+            LOG_WRN("Failed to read [" << path << "] to hash it");
+            return std::string();
+        }
+
+        return Util::base64Encode(engine.digest());
     }
 
 } // namespace FileUtil

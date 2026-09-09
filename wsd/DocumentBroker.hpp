@@ -2095,6 +2095,10 @@ private:
     /// may have landed and we have to work out which version storage holds.
     bool _lastUploadDefinitelyFailed;
 
+    /// Base64 SHA-256 of the bytes of our last upload, taken only when its fate
+    /// is unknown and we may have to recognise them in storage. Empty otherwise.
+    std::string _lastUploadedFileHash;
+
     /// True for file that COOLWSD::IsViewFileExtension return true.
     /// These files, such as PDF, don't have a reliable ModifiedStatus.
     bool _isViewFileExtension;

@@ -452,6 +452,11 @@ namespace FileUtil
 
     std::vector<std::string> getDirEntries(const std::string& dirPath);
 
+    /// The SHA-256 of a file's contents, Base64-encoded, as the WOPI SHA256
+    /// field carries it. Empty when the file cannot be read.
+    /// Reads the whole file, so keep it off hot paths.
+    std::string sha256Base64(const std::string& path);
+
 } // end namespace FileUtil
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -790,6 +790,308 @@ public:
     }
 };
 
+/// An upload gets no answer, but it did land: storage ends up holding exactly
+/// the bytes we sent. The host reports a SHA256, which matches ours, so we can
+/// claim that version as our own and carry on rather than raise a conflict.
+class UnitWOPITimeoutHashMatches : public WopiTestServer
+{
+    STATE_ENUM(Phase, Load, WaitLoadStatus, WaitModifiedStatus, WaitFailedUpload,
+               WaitSuccessfulUpload, Done)
+    _phase;
+
+    static constexpr int ConnectionTimeoutSeconds = 1;
+
+    static constexpr auto OriginalDocContent = "Original contents";
+    static constexpr auto ModifiedDocContent = "aOriginal contents\n";
+
+public:
+    UnitWOPITimeoutHashMatches()
+        : WopiTestServer("UnitWOPITimeoutHashMatches", OriginalDocContent)
+        , _phase(Phase::Load)
+    {
+    }
+
+    void configure(Poco::Util::LayeredConfiguration& config) override
+    {
+        WopiTestServer::configure(config);
+
+        config.setUInt("per_document.min_time_between_saves_ms", 100);
+        config.setUInt("per_document.min_time_between_uploads_ms", 100);
+        config.setUInt("per_document.limit_store_failures", 3);
+        config.setUInt("net.connection_timeout_secs", ConnectionTimeoutSeconds);
+        config.setBool("per_document.always_save_on_exit", false);
+    }
+
+    void configCheckFileInfo(const Poco::Net::HTTPRequest& /*request*/,
+                             Poco::JSON::Object::Ptr& fileInfo) override
+    {
+        fileInfo->set("SHA256", getFileContentSha256Base64());
+    }
+
+    std::unique_ptr<http::Response>
+    assertPutFileRequest(const Poco::Net::HTTPRequest& /*request*/) override
+    {
+        if (getCountPutFile() == 1)
+        {
+            // Stall past the timeout and then accept, so the write lands but we
+            // never hear about it.
+            TST_LOG("PutFile #1: stalling past the connection timeout, then accepting");
+            sleep(ConnectionTimeoutSeconds);
+            usleep(300'000);
+
+            return nullptr; // Success, recorded after we have given up.
+        }
+
+        TST_LOG("PutFile #" << getCountPutFile() << ": accepting");
+        return nullptr;
+    }
+
+    bool onDocumentLoaded(const std::string& message) override
+    {
+        TST_LOG("onDocumentLoaded: [" << message << ']');
+        LOK_ASSERT_STATE(_phase, Phase::WaitLoadStatus);
+
+        TRANSITION_STATE(_phase, Phase::WaitModifiedStatus);
+
+        WSD_CMD("key type=input char=97 key=0");
+        WSD_CMD("key type=up char=0 key=512");
+
+        return true;
+    }
+
+    bool onDocumentModified(const std::string& message) override
+    {
+        TST_LOG("onDocumentModified: [" << message << ']');
+        LOK_ASSERT_STATE(_phase, Phase::WaitModifiedStatus);
+
+        TRANSITION_STATE(_phase, Phase::WaitFailedUpload);
+
+        WSD_CMD("save dontTerminateEdit=0 dontSaveIfUnmodified=0");
+
+        return true;
+    }
+
+    bool onDocumentError(const std::string& message) override
+    {
+        TST_LOG("onDocumentError: [" << message << ']');
+
+        // The upload we gave up on is what storage holds, so nothing is in
+        // conflict; only the failure we saw should be reported.
+        LOK_ASSERT_MESSAGE("Unexpected documentconflict when our own upload landed: " + message,
+                           !message.starts_with("error: cmd=storage kind=documentconflict"));
+        LOK_ASSERT_MESSAGE("Expected only savefailed errors: " + message,
+                           message.starts_with("error: cmd=storage kind=savefailed"));
+
+        return true;
+    }
+
+    void onDocumentUploaded(bool success) override
+    {
+        TST_LOG("onDocumentUploaded: " << (success ? "success" : "failure") << ", PutFile count "
+                                       << getCountPutFile());
+
+        if (!success)
+        {
+            LOK_ASSERT_STATE(_phase, Phase::WaitFailedUpload);
+            TRANSITION_STATE(_phase, Phase::WaitSuccessfulUpload);
+            return;
+        }
+
+        LOK_ASSERT_STATE(_phase, Phase::WaitSuccessfulUpload);
+        TRANSITION_STATE(_phase, Phase::Done);
+
+        // The retry could only be accepted because we adopted the timestamp of
+        // the version we recognised as ours; otherwise the host would have
+        // rejected it on the stale timestamp we would still be carrying.
+        LOK_ASSERT_EQUAL_MESSAGE("Expected our content in storage",
+                                 std::string(ModifiedDocContent), getFileContent());
+
+        passTest("Our own landed upload was recognised by its hash");
+    }
+
+    void invokeWSDTest() override
+    {
+        switch (_phase)
+        {
+            case Phase::Load:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitLoadStatus);
+
+                TST_LOG("Load: initWebsocket");
+                initWebsocket("/wopi/files/0?access_token=anything");
+
+                WSD_CMD("load url=" + getWopiSrc());
+                break;
+            }
+            case Phase::WaitLoadStatus:
+            case Phase::WaitModifiedStatus:
+            case Phase::WaitFailedUpload:
+            case Phase::WaitSuccessfulUpload:
+            case Phase::Done:
+                break;
+        }
+    }
+};
+
+/// An upload gets no answer and another writer replaces the file with contents
+/// of exactly the same length. The size cannot tell the two apart and would
+/// have us adopt, and then overwrite, someone else's document. The hash can.
+class UnitWOPITimeoutHashDiffersSameSize : public WopiTestServer
+{
+    STATE_ENUM(Phase, Load, WaitLoadStatus, WaitModifiedStatus, WaitFailedUpload, WaitConflict,
+               Done)
+    _phase;
+
+    static constexpr int ConnectionTimeoutSeconds = 1;
+
+    static constexpr auto OriginalDocContent = "Original contents";
+
+    /// What we upload after typing an 'a' at the start.
+    static constexpr auto ModifiedDocContent = "aOriginal contents\n";
+
+    /// Somebody else's document, the same length as ours to the byte.
+    static constexpr auto ConflictingDocContent = "bDifferent stuff!!\n";
+
+public:
+    UnitWOPITimeoutHashDiffersSameSize()
+        : WopiTestServer("UnitWOPITimeoutHashDiffersSameSize", OriginalDocContent)
+        , _phase(Phase::Load)
+    {
+        static_assert(sizeof(ModifiedDocContent) == sizeof(ConflictingDocContent),
+                      "The point of this test is that the sizes match");
+    }
+
+    void configure(Poco::Util::LayeredConfiguration& config) override
+    {
+        WopiTestServer::configure(config);
+
+        config.setUInt("per_document.min_time_between_saves_ms", 100);
+        config.setUInt("per_document.min_time_between_uploads_ms", 100);
+        config.setUInt("net.connection_timeout_secs", ConnectionTimeoutSeconds);
+        config.setBool("per_document.always_save_on_exit", false);
+    }
+
+    void configCheckFileInfo(const Poco::Net::HTTPRequest& /*request*/,
+                             Poco::JSON::Object::Ptr& fileInfo) override
+    {
+        fileInfo->set("SHA256", getFileContentSha256Base64());
+    }
+
+    std::unique_ptr<http::Response>
+    assertPutFileRequest(const Poco::Net::HTTPRequest& /*request*/) override
+    {
+        LOK_ASSERT_STATE(_phase, Phase::WaitFailedUpload);
+        LOK_ASSERT_EQUAL_MESSAGE("Expected a single upload attempt", std::size_t(1),
+                                 getCountPutFile());
+
+        TST_LOG("Another writer replaces the document with same-sized contents");
+        setFileContent(ConflictingDocContent);
+
+        LOK_ASSERT_EQUAL_MESSAGE("The sizes must collide for this test to mean anything",
+                                 std::string(ModifiedDocContent).size(), getFileContent().size());
+
+        // Stall past the timeout, then refuse. We are left not knowing whether
+        // our upload landed, and the size in storage says it did.
+        TST_LOG("PutFile: stalling past the connection timeout");
+        sleep(ConnectionTimeoutSeconds);
+        usleep(300'000);
+
+        TRANSITION_STATE(_phase, Phase::WaitConflict);
+
+        return std::make_unique<http::Response>(http::StatusCode::InternalServerError);
+    }
+
+    bool onDocumentLoaded(const std::string& message) override
+    {
+        TST_LOG("onDocumentLoaded: [" << message << ']');
+        LOK_ASSERT_STATE(_phase, Phase::WaitLoadStatus);
+
+        TRANSITION_STATE(_phase, Phase::WaitModifiedStatus);
+
+        WSD_CMD("key type=input char=97 key=0");
+        WSD_CMD("key type=up char=0 key=512");
+
+        return true;
+    }
+
+    bool onDocumentModified(const std::string& message) override
+    {
+        TST_LOG("onDocumentModified: [" << message << ']');
+        LOK_ASSERT_STATE(_phase, Phase::WaitModifiedStatus);
+
+        TRANSITION_STATE(_phase, Phase::WaitFailedUpload);
+
+        WSD_CMD("save dontTerminateEdit=0 dontSaveIfUnmodified=0");
+
+        return true;
+    }
+
+    bool onDocumentError(const std::string& message) override
+    {
+        TST_LOG("onDocumentError: [" << message << ']');
+
+        if (message.starts_with("error: cmd=storage kind=savefailed"))
+        {
+            return true;
+        }
+
+        LOK_ASSERT_STATE(_phase, Phase::WaitConflict);
+        LOK_ASSERT_MESSAGE("Expected a documentconflict error: " + message,
+                           message.starts_with("error: cmd=storage kind=documentconflict"));
+
+        TRANSITION_STATE(_phase, Phase::Done);
+
+        TST_LOG("Discarding own changes via closedocument");
+        WSD_CMD("closedocument");
+
+        return true;
+    }
+
+    bool onDataLoss(const std::string& reason) override
+    {
+        TST_LOG("Modified document being unloaded: " << reason);
+
+        LOK_ASSERT_MESSAGE("Expected reason to be 'Data-loss detected'",
+                           reason.starts_with("Data-loss detected"));
+
+        return failed();
+    }
+
+    void onDocBrokerDestroy(const std::string& docKey) override
+    {
+        TST_LOG("Destroyed dockey [" << docKey << ']');
+        LOK_ASSERT_STATE(_phase, Phase::Done);
+
+        LOK_ASSERT_EQUAL_MESSAGE("Expected storage to keep the other writer's contents",
+                                 std::string(ConflictingDocContent), getFileContent());
+
+        passTest("A same-sized document from another writer was caught by its hash");
+    }
+
+    void invokeWSDTest() override
+    {
+        switch (_phase)
+        {
+            case Phase::Load:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitLoadStatus);
+
+                TST_LOG("Load: initWebsocket");
+                initWebsocket("/wopi/files/0?access_token=anything");
+
+                WSD_CMD("load url=" + getWopiSrc());
+                break;
+            }
+            case Phase::WaitLoadStatus:
+            case Phase::WaitModifiedStatus:
+            case Phase::WaitFailedUpload:
+            case Phase::WaitConflict:
+            case Phase::Done:
+                break;
+        }
+    }
+};
+
 /// A host that answers PutFile without a timestamp, as SharePoint does, leaves
 /// us with no last-known time at all. A later failed upload then has no
 /// baseline to compare against, and a timestamp we never had cannot be evidence
@@ -961,13 +1263,14 @@ public:
 
 UnitBase** unit_create_wsd_multi(void)
 {
-    return new UnitBase* [8]
+    return new UnitBase* [10]
     {
         new UnitWOPIFailUploadIntactStorage(http::StatusCode::Locked),
             new UnitWOPIFailUploadIntactStorage(http::StatusCode::InternalServerError),
             new UnitWOPIFailUploadLockMismatch(), new UnitWOPIFailUploadBare409(),
             new UnitWOPIFailUploadChangedStorage(),
-            new UnitWOPIFailUploadTimeoutChangedStorage(),
+            new UnitWOPIFailUploadTimeoutChangedStorage(), new UnitWOPITimeoutHashMatches(),
+            new UnitWOPITimeoutHashDiffersSameSize(),
             new UnitWOPINoLastKnownTimestamp(), nullptr
     };
 }

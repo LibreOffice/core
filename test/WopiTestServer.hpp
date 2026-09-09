@@ -28,6 +28,7 @@
 #include <test/lokassert.hpp>
 
 #include <Poco/Net/HTTPRequest.h>
+#include <Poco/SHA2Engine.h>
 #include <Poco/URI.h>
 #include <Poco/Util/LayeredConfiguration.h>
 
@@ -85,6 +86,17 @@ protected:
                                      << ": [" << COOLProtocol::getAbbreviatedMessage(_fileContent)
                                      << "], previous version was at "
                                      << Util::getIso8601FracformatTime(oldTime));
+    }
+
+    /// The SHA-256 of the current file content, Base64-encoded, as the WOPI
+    /// SHA256 field carries it. Tests that report a hash opt in via
+    /// configCheckFileInfo(); the default payload has no SHA256, so hosts that
+    /// report none stay covered too.
+    std::string getFileContentSha256Base64() const
+    {
+        Poco::SHA2Engine engine(Poco::SHA2Engine::SHA_256);
+        engine.update(_fileContent.data(), _fileContent.size());
+        return Util::base64Encode(engine.digest());
     }
 
     const std::chrono::system_clock::time_point& getFileLastModifiedTime() const
