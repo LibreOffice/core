@@ -240,6 +240,14 @@ namespace cool {
 			context.lineWidth = this._hairlineWidth(context);
 			// Dash lengths in twips: the desktop's 160 and 80 in 1/100 mm.
 			context.setLineDash([91, 45]);
+			context.stroke(this._transformedUnitSquare(transform));
+			context.restore();
+		}
+
+		/// The unit square mapped through the transform, as a path in twips.
+		/// Mapping the corners here rather than on the canvas keeps a stroke's
+		/// width and dashes whatever the object's scale.
+		private _transformedUnitSquare(transform: number[]): Path2D {
 			const [a, b, c, d, e, f] = transform;
 			const path = new Path2D();
 			path.moveTo(e, f);
@@ -247,8 +255,7 @@ namespace cool {
 			path.lineTo(a + c + e, b + d + f);
 			path.lineTo(c + e, d + f);
 			path.closePath();
-			context.stroke(path);
-			context.restore();
+			return path;
 		}
 
 		/// Width that draws as one device pixel under the current transform.

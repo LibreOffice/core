@@ -131,6 +131,7 @@
 #include <toolkit/awt/vclxdevice.hxx>
 #include <svx/svdpool.hxx>
 #include <svx/svdpagv.hxx>
+#include <svx/svdedxv.hxx>
 #include <svtools/unoimap.hxx>
 #include <svx/unoshape.hxx>
 #include <editeng/unonrule.hxx>
@@ -182,6 +183,7 @@
 #include <ClientView.hxx>
 #include <DrawViewShell.hxx>
 #include <ViewShell.hxx>
+#include <View.hxx>
 #include <Window.hxx>
 #include <optsitem.hxx>
 #include <SlideLink.hxx>
@@ -2328,6 +2330,10 @@ namespace
 /// zero as its parent.
 constexpr sal_Int64 constPageEntryId = 0;
 
+/// The id of the entry that carries the text of a running text edit. An object's unique id
+/// counts up from 1 and the page is zero, so a negative id can collide with neither.
+constexpr sal_Int64 constTextEditEntryId = -1;
+
 /// The page list a vector-rendering part index addresses.
 constexpr sal_Int32 constVectorModeSlides = 0;
 constexpr sal_Int32 constVectorModeMasterPages = 1;
@@ -2649,6 +2655,23 @@ void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     }
                 }
             }
+            else if (eKind == SdrHintKind::BeginEdit || eKind == SdrHintKind::EndEdit)
+            {
+                // The entry carrying the text comes and goes with the edit, so the set of
+                // entries moved, and the object it runs on starts and stops hiding its own
+                // text. An edit that changes no text says nothing else, so both are noted here.
+                if (const SdrObject* pObject = pSdrHint->GetObject())
+                {
+                    if (const auto oPart = partAndModeOfPage(
+                            static_cast<const SdPage*>(pObject->getSdrPageFromSdrObject())))
+                    {
+                        SdXImpressDocument::VectorPartState& rState = maVectorParts[*oPart];
+                        recordOrderChange(rState);
+                        recordObjectChange(rState, pObject, SdrHintKind::ObjectChange);
+                        notifyViewsVectorPartChanged(mpDocShell, oPart->mnPart, oPart->mnMode);
+                    }
+                }
+            }
             else if (eKind == SdrHintKind::PageOrderChange)
             {
                 // This hint also announces a change to the page's own
@@ -2779,6 +2802,10 @@ public:
                                                    sal_uInt64(mnSinceVersion)))
             writePageEntry(rWriter, pPage);
         writePageObjects(rWriter, pPage);
+
+        // The text of a running edit is the last entry, so it draws over the object it runs on.
+        // It changes with every keystroke, so a delta always carries it while an edit runs.
+        writeTextEditEntry(rWriter, pPage);
     }
 
 private:
@@ -2860,6 +2887,11 @@ private:
         // holding it unless the output says it is such a view, and the payload serves one, so
         // the content travels.
         aViewInfo.setEditViewActive(true);
+
+        // While a text edit runs, the object it runs on hides its own text and the entry for the
+        // edit carries what has been typed so far. Saying the edit is active is what makes the
+        // object hide it, so the text is not drawn twice.
+        aViewInfo.setTextEditActive(editingView(pPage) != nullptr);
 
         maViewInformation = aViewInfo;
         maProcessor->setViewInformation2D(aViewInfo);
@@ -3020,7 +3052,7 @@ private:
     /// The order array lists every live object id on the page in paint order: the page entry
     /// first, then each object with the objects inside a group right after the group. It is
     /// the authoritative object set and ordering for the part.
-    static void writeObjectOrder(tools::JsonWriter& rWriter, SdPage* pPage)
+    void writeObjectOrder(tools::JsonWriter& rWriter, SdPage* pPage)
     {
         std::vector<SdrObject*> aObjects;
         collectPaintedObjects(*pPage, aObjects);
@@ -3029,6 +3061,46 @@ private:
         rWriter.putSimpleValue(constPageEntryId);
         for (const SdrObject* pObject : aObjects)
             rWriter.putSimpleValue(sal_Int64(pObject->GetUniqueID()));
+
+        // The text of a running edit is last, so it draws over the object it runs on.
+        if (editingView(pPage))
+            rWriter.putSimpleValue(constTextEditEntryId);
+    }
+
+    /// The view running a text edit on an object of the page, or nothing when none is. An edit
+    /// belongs to one view while the payload is shared, so its text travels to every view of
+    /// the part, as the object it runs on does.
+    SdrObjEditView* editingView(SdPage* pPage) const
+    {
+        ::sd::ViewShell* pViewShell
+            = mpModel->GetDocShell() ? mpModel->GetDocShell()->GetViewShell() : nullptr;
+        SdrObjEditView* pView = pViewShell ? pViewShell->GetView() : nullptr;
+        if (!pView || !pView->IsTextEdit())
+            return nullptr;
+
+        const SdrObject* pEdited = pView->GetTextEditObject();
+        return pEdited && pEdited->getSdrPageFromSdrObject() == pPage ? pView : nullptr;
+    }
+
+    /// True when the object, or any object inside it when it is a group, has a text edit
+    /// running on it.
+    static bool hasActiveTextEdit(SdrObject* pObject)
+    {
+        SdrTextObj* pTextObject = DynCastSdrTextObj(pObject);
+        if (pTextObject && pTextObject->IsInEditMode())
+            return true;
+
+        if (SdrObjList* pChildren = pObject->GetSubList())
+        {
+            for (size_t i = 0; i < pChildren->GetObjCount(); ++i)
+            {
+                SdrObject* pChild = pChildren->GetObj(i);
+                if (pChild && hasActiveTextEdit(pChild))
+                    return true;
+            }
+        }
+
+        return false;
     }
 
     /// What is written for one object: its primitives, the box it paints and the mapping of the
@@ -3055,6 +3127,12 @@ private:
 
         aContent.maPaintedBox = paintedRectangleInTwips(rObject, aContent.maPrimitives);
         aContent.maTransformation = transformationInTwips(rObject);
+        aContent.mbTextEdit = hasActiveTextEdit(&rObject);
+        // The text primitive resolves the automatic color when it is drawn, so the
+        // decomposition above reads the same on a light and on a dark page. An object with
+        // text is compared against the background it was drawn on, and travels when it moves.
+        if (rObject.HasText())
+            aContent.maAutoColor = maViewInformation.getAutoColor();
         return aContent;
     }
 
@@ -3090,6 +3168,8 @@ private:
         for (SdrObject* pObject : aObjects)
             aObjectById.emplace(pObject->GetUniqueID(), pObject);
 
+        // An object under edit is compared like any other, because what is typed rides on the
+        // entry for the edit and the object's own look stands still until something moves it.
         for (const sal_uInt64 nObjectId : aDirty)
         {
             const auto aFound = aObjectById.find(nObjectId);
@@ -3116,17 +3196,18 @@ private:
             return true;
         }
 
+        // The text of a running edit changes with every keystroke.
+        if (editingView(pPage))
+            return true;
+
         std::vector<SdrObject*> aObjects;
         collectPaintedObjects(*pPage, aObjects);
 
-        for (SdrObject* pObject : aObjects)
+        for (const SdrObject* pObject : aObjects)
         {
-            // The text of a running edit changes with every keystroke, and none of it reaches
-            // the model until the edit is committed, so no comparison can find it.
-            if (hasActiveTextEdit(pObject)
-                || mpModel->isVectorObjectChangedSince(mnResolvedPage, mnMode,
-                                                       pObject->GetUniqueID(),
-                                                       sal_uInt64(mnSinceVersion)))
+            if (mpModel->isVectorObjectChangedSince(mnResolvedPage, mnMode,
+                                                    pObject->GetUniqueID(),
+                                                    sal_uInt64(mnSinceVersion)))
             {
                 return true;
             }
@@ -3135,28 +3216,44 @@ private:
         return false;
     }
 
-    /// One entry per painted object on the page, into the open objects array, in the order the
-    /// paint visits them.
-    /// True when the object, or any object inside it when it is a group, has a text edit
-    /// running on it.
-    static bool hasActiveTextEdit(SdrObject* pObject)
+    /// The entry that carries the text of a running text edit, into the open objects array.
+    /// The object it runs on hides its own text, so this is what shows what has been typed.
+    void writeTextEditEntry(tools::JsonWriter& rWriter, SdPage* pPage)
     {
-        SdrTextObj* pTextObject = DynCastSdrTextObj(pObject);
-        if (pTextObject && pTextObject->IsInEditMode())
-            return true;
+        SdrObjEditView* pView = editingView(pPage);
+        if (!pView)
+            return;
 
-        if (SdrObjList* pChildren = pObject->GetSubList())
-        {
-            for (size_t i = 0; i < pChildren->GetObjCount(); ++i)
-            {
-                SdrObject* pChild = pChildren->GetObj(i);
-                if (pChild && hasActiveTextEdit(pChild))
-                    return true;
-            }
-        }
-        return false;
+        drawinglayer::primitive2d::Primitive2DContainer aPrimitives(
+            pView->getTextEditPrimitives());
+        if (aPrimitives.empty())
+            return;
+
+        const SdrObject* pEdited = pView->GetTextEditObject();
+
+        SdXImpressDocument::VectorObjectContent aContent;
+        aContent.maPrimitives = std::move(aPrimitives);
+        aContent.maPaintedBox = rangeInTwips(aContent.maPrimitives.getB2DRange(maViewInformation));
+        aContent.maTransformation = boxTransformation(aContent.maPaintedBox);
+
+        writeEntry(rWriter, constTextEditEntryId, pEdited ? pEdited->GetUniqueID() : 0,
+                   "texteditoverlay", aContent);
     }
 
+    /// The mapping of the unit rectangle onto an upright box, for an entry that has no
+    /// transformation of its own.
+    static basegfx::B2DHomMatrix boxTransformation(const tools::Rectangle& rBox)
+    {
+        basegfx::B2DHomMatrix aTransformation;
+        aTransformation.set(0, 0, double(rBox.GetWidth()));
+        aTransformation.set(1, 1, double(rBox.GetHeight()));
+        aTransformation.set(0, 2, double(rBox.Left()));
+        aTransformation.set(1, 2, double(rBox.Top()));
+        return aTransformation;
+    }
+
+    /// One entry per painted object on the page, into the open objects array, in the order the
+    /// paint visits them.
     void writePageObjects(tools::JsonWriter& rWriter, SdPage* pPage)
     {
         std::vector<SdrObject*> aObjects;
@@ -3165,10 +3262,9 @@ private:
         for (SdrObject* pObject : aObjects)
         {
             // A delta carries full content only for the objects that changed after the client's
-            // version. The rest stay in the order list. An object with a text edit running on it
-            // is always carried, because what has been typed reaches the model only once the
-            // edit is committed, so no comparison can find it.
-            if (isDelta() && !hasActiveTextEdit(pObject)
+            // version. The rest stay in the order list. An object a text edit runs on says so in
+            // the content compared, so beginning and ending an edit carries it.
+            if (isDelta()
                 && !mpModel->isVectorObjectChangedSince(mnResolvedPage, mnMode,
                                                         pObject->GetUniqueID(),
                                                         sal_uInt64(mnSinceVersion)))
@@ -3187,6 +3283,19 @@ private:
         }
     }
 
+    /// The range as an upright box in twips, empty for an empty range.
+    static tools::Rectangle rangeInTwips(const basegfx::B2DRange& rRange)
+    {
+        if (rRange.isEmpty())
+            return tools::Rectangle();
+
+        return tools::Rectangle(
+            basegfx::fround<tools::Long>(rRange.getMinX() * constTwipConversionFactor),
+            basegfx::fround<tools::Long>(rRange.getMinY() * constTwipConversionFactor),
+            basegfx::fround<tools::Long>(rRange.getMaxX() * constTwipConversionFactor),
+            basegfx::fround<tools::Long>(rRange.getMaxY() * constTwipConversionFactor));
+    }
+
     /// The rectangle the object paints, in twips: the range of its primitives, which takes in
     /// the line width and a shadow, or the object's bound rectangle when it paints nothing.
     tools::Rectangle
@@ -3196,14 +3305,8 @@ private:
         basegfx::B2DRange aRange(rPrimitives.getB2DRange(maViewInformation));
         if (aRange.isEmpty())
             aRange = vcl::unotools::b2DRectangleFromRectangle(rObject.GetCurrentBoundRect());
-        if (aRange.isEmpty())
-            return tools::Rectangle();
 
-        return tools::Rectangle(
-            basegfx::fround<tools::Long>(aRange.getMinX() * constTwipConversionFactor),
-            basegfx::fround<tools::Long>(aRange.getMinY() * constTwipConversionFactor),
-            basegfx::fround<tools::Long>(aRange.getMaxX() * constTwipConversionFactor),
-            basegfx::fround<tools::Long>(aRange.getMaxY() * constTwipConversionFactor));
+        return rangeInTwips(aRange);
     }
 
     /// The mapping of the unit rectangle onto the object, in twips. The object reports it in
@@ -3236,7 +3339,32 @@ private:
         // A placeholder that holds no content of its own yet.
         if (rObject.IsEmptyPresObj())
             rWriter.put("emptyPlaceholder", true);
+        // A text edit is running on the object, so it is showing none of its own text and the
+        // entry for the edit carries what has been typed.
+        if (rContent.mbTextEdit)
+            rWriter.put("textEdit", true);
 
+        writeEntryGeometry(rWriter, rContent);
+    }
+
+    /// An entry that stands for something other than an object on the page, named by a kind
+    /// rather than by a layer and a name of its own.
+    void writeEntry(tools::JsonWriter& rWriter, sal_Int64 nId, sal_uInt64 nParentId,
+                    const char* pKind,
+                    const SdXImpressDocument::VectorObjectContent& rContent)
+    {
+        auto pEntryNode = rWriter.startStruct();
+        rWriter.put("id", nId);
+        rWriter.put("parent", sal_Int64(nParentId));
+        rWriter.put("kind", pKind);
+
+        writeEntryGeometry(rWriter, rContent);
+    }
+
+    /// Where an entry paints, how the unit rectangle maps onto it, and how it looks.
+    void writeEntryGeometry(tools::JsonWriter& rWriter,
+                            const SdXImpressDocument::VectorObjectContent& rContent)
+    {
         const tools::Rectangle& rPainted = rContent.maPaintedBox;
         rWriter.put("x", sal_Int64(rPainted.Left()));
         rWriter.put("y", sal_Int64(rPainted.Top()));
@@ -3562,8 +3690,9 @@ void SdXImpressDocument::getCommandValues(::tools::JsonWriter& rJsonWriter,
             // This reader draws from the model, so an open edit has to broadcast.
             mpDoc->SetDrawnFromModel(true);
 
-            // Keep the text being edited in the decomposition: vector
-            // rendering has no edit-view overlay to draw it otherwise.
+            // This render is not the view's own. The text edit measures a selection while it is
+            // decomposed, and the flag keeps that measurement from reaching the client as the
+            // view's selection.
             comphelper::COKit::setVectorRendering(true);
             comphelper::ScopeGuard aVectorRenderingGuard(
                 [] { comphelper::COKit::setVectorRendering(false); });

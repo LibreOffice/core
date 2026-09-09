@@ -159,17 +159,27 @@ public:
         drawinglayer::primitive2d::Primitive2DContainer maPrimitives;
 
         /// What those primitives decompose to, which is what the writing walks and so what a
-        /// client receives. The two do not move together, so comparing the object's own
-        /// primitive would find changes a client never sees and miss ones it does.
+        /// client receives. The two do not move together: an object shows none of its own text
+        /// while an edit runs on it, so its model text can change while what it draws does not.
+        /// The decomposition is what is compared, so the object travels when what it draws
+        /// changes.
         drawinglayer::primitive2d::Primitive2DContainer maDrawn;
 
         tools::Rectangle maPaintedBox;
         basegfx::B2DHomMatrix maTransformation;
+        /// True while a text edit runs on the object. It is compared along with the rest so
+        /// that an edit which ends without changing the text still reaches the client.
+        bool mbTextEdit = false;
+        /// The page background the automatic color of the object's text resolved against when
+        /// it was written, COL_TRANSPARENT when it has no text. The decomposition stops above
+        /// the text and resolves the color only when drawn, so the background is compared too.
+        Color maAutoColor = COL_TRANSPARENT;
 
         bool operator==(const VectorObjectContent& rOther) const
         {
             return maPaintedBox == rOther.maPaintedBox
                    && maTransformation == rOther.maTransformation
+                   && mbTextEdit == rOther.mbTextEdit && maAutoColor == rOther.maAutoColor
                    && maDrawn == rOther.maDrawn;
         }
     };

@@ -17,9 +17,12 @@ namespace cool {
 		id?: number;
 		/// "page" for the entry that stands for the slide itself: it is
 		/// drawn first and holds the background, the page fill and the
-		/// master page content, and its box is the slide. Absent for a
+		/// master page content, and its box is the slide.
+		/// "texteditoverlay" for the entry that carries the text of a
+		/// running text edit: it is drawn last, over the object it runs
+		/// on, which hides its own text while the edit runs. Absent for a
 		/// drawing object.
-		kind?: 'page';
+		kind?: 'page' | 'texteditoverlay';
 		/// Id of the group the object sits in, 0 for an object directly
 		/// on the slide. A group's members follow it in the object list
 		/// and draw its content, so a group with members has no
@@ -29,6 +32,10 @@ namespace cool {
 		layer?: number;
 		/// True for a placeholder that holds no content of its own yet.
 		emptyPlaceholder?: boolean;
+		/// True while a text edit is running on the object. It shows none of
+		/// its own text then, and the entry of kind "texteditoverlay"
+		/// carries what has been typed.
+		textEdit?: boolean;
 		/// Rectangle the object paints, in twips: the primitives' range,
 		/// so it takes in the line width and a shadow.
 		x?: number;

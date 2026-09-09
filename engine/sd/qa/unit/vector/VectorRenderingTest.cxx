@@ -206,6 +206,23 @@ protected:
         return true;
     }
 
+    /// The entry of the given kind in the objects array, or nothing when the response carries
+    /// none. An entry is named by its kind, while a primitive inside one is named by its type.
+    static std::optional<tools::JsonPath> findEntryOfKind(const tools::JsonPath& rJson,
+                                                          std::string_view sKind)
+    {
+        const OString aWanted(sKind);
+        const size_t nCount = rJson.getSize("/objects").value_or(0);
+        for (size_t nIndex = 0; nIndex < nCount; ++nIndex)
+        {
+            const auto oEntry = rJson.at(rtl::Concat2View(
+                "/objects/" + OString::number(sal_Int32(nIndex))));
+            if (oEntry && oEntry->getString("kind").value_or(OString()) == aWanted)
+                return oEntry;
+        }
+        return std::nullopt;
+    }
+
     /// True when the objects array of the given response carries the id.
     static bool carriesObject(const tools::JsonPath& rJson, sal_uInt64 nObjectId)
     {
@@ -618,6 +635,40 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testMasterViewDeltaCarriesChangedObjec
     assertJsonPath(aDelta, "/type", "vectorprimitivesdelta");
     CPPUNIT_ASSERT(carriesObject(aDelta, pRect->GetUniqueID()));
     CPPUNIT_ASSERT_EQUAL(nObjectCount, aFull.getSize("/objects").value_or(0));
+}
+
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testObjectUnderTextEditSaysSo)
+{
+    // The object a text edit runs on hides its own text and says the edit is
+    // running. An edit that ends having changed no text says nothing else, so
+    // the object has to come again or it keeps the look it had while hidden.
+    createBlankDoc();
+    addTextBox(tools::Rectangle(Point(1000, 1000), Size(6000, 3000)), u"Framed"_ustr);
+    SdrObject* pObject = page(1)->GetObj(0);
+
+    CPPUNIT_ASSERT(!getVectorPrimitives(u"testTextEditFlagBefore")
+                        .getBool("/objects/1/textEdit")
+                        .has_value());
+
+    SdrView* pView = getSdDocShell()->GetViewShell()->GetView();
+    CPPUNIT_ASSERT(pView);
+    pView->SdrBeginTextEdit(pObject);
+
+    CPPUNIT_ASSERT_EQUAL(true, getVectorPrimitives(u"testTextEditFlagDuring")
+                                   .getBool("/objects/1/textEdit")
+                                   .value_or(false));
+
+    // Nothing was typed, so ending the edit changes no text. The object still
+    // has to come back with the text it had.
+    pView->SdrEndTextEdit();
+
+    auto aAfter = getVectorPrimitives(u"testTextEditFlagAfter");
+    CPPUNIT_ASSERT(!aAfter.getBool("/objects/1/textEdit").has_value());
+
+    const auto oObject = aAfter.at("/objects/1");
+    CPPUNIT_ASSERT(oObject.has_value());
+    CPPUNIT_ASSERT_MESSAGE("the object came back without its text",
+                           findTextPortionUnder(*oObject, "Framed"_ostr).has_value());
 }
 
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testEditViewOnlyContentTravels)
@@ -1189,9 +1240,9 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testPullSetsPushBaseline)
 
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testEditedTextAppearsInPrimitives)
 {
-    // While a text object is being edited, its in-progress text must appear in
-    // the vector primitives. Vector rendering has no edit-view overlay to draw
-    // it, unlike tile rendering.
+    // While a text object is being edited, what has been typed so far must
+    // appear in the payload, on the entry that carries the running edit rather
+    // than on the object, which hides its own text while the edit runs.
     createBlankDoc();
     addRectangle(tools::Rectangle(Point(1000, 1000), Size(6000, 3000)), Color(0x4472c4), COL_BLACK);
 
@@ -1212,6 +1263,27 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testEditedTextAppearsInPrimitives)
     pView->SdrEndTextEdit();
 
     CPPUNIT_ASSERT_MESSAGE(aResult.getStr(), aResult.indexOf("Hello") >= 0);
+
+    auto oJson = tools::JsonPath::parse(std::string_view(aResult.getStr(), aResult.getLength()));
+    CPPUNIT_ASSERT(oJson.has_value());
+
+    // The running edit is the last entry, named by the object it runs on.
+    const size_t nCount = oJson->getSize("/objects").value_or(0);
+    assertJsonPath(*oJson,
+                   rtl::Concat2View("/objects/" + OString::number(sal_Int32(nCount - 1))
+                                    + "/kind"),
+                   "texteditoverlay");
+
+    const auto oEntry = findEntryOfKind(*oJson, "texteditoverlay");
+    CPPUNIT_ASSERT(oEntry.has_value());
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(page(1)->GetObj(0)->GetUniqueID()),
+                         oEntry->getInt("parent").value_or(-1));
+
+    // The object it runs on no longer carries the text, so the only "Hello"
+    // in the payload is the one on that entry.
+    const auto oEdited = oJson->at("/objects/1");
+    CPPUNIT_ASSERT(oEdited.has_value());
+    CPPUNIT_ASSERT(!findTextPortionUnder(*oEdited, "Hello"_ostr).has_value());
 }
 
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testDeltaIncludesEditedObject)
@@ -1238,13 +1310,18 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testDeltaIncludesEditedObject)
     pView->SdrEndTextEdit();
 
     assertJsonPath(aDelta, "/type", "vectorprimitivesdelta");
-    CPPUNIT_ASSERT(carriesObject(aDelta, pObject->GetUniqueID()));
+    // The typed text rides on the entry for the running edit, which names the
+    // object it runs on.
+    const auto oEntry = findEntryOfKind(aDelta, "texteditoverlay");
+    CPPUNIT_ASSERT(oEntry.has_value());
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(pObject->GetUniqueID()), oEntry->getInt("parent").value_or(-1));
 }
 
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testDeltaIncludesGroupWithEditedObject)
 {
-    // Text typed into an object inside a group appears in the delta the same
-    // way, carried by the member's own entry rather than by the group.
+    // An edit on an object inside a group changes that member the same way as
+    // one on the page: it hides its own text while the edit runs, so the delta
+    // carries the member.
     createBlankDoc();
     SdrObject* pInner
         = addGroupedRectangle(tools::Rectangle(Point(1000, 1000), Size(6000, 3000)), COL_BLUE);
