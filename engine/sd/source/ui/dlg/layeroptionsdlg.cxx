@@ -31,7 +31,7 @@ SdInsertLayerDlg::SdInsertLayerDlg(weld::Window* pWindow, const SfxItemSet& rInA
     , m_xCbxVisible(m_xBuilder->weld_check_button(u"visible"_ustr))
     , m_xCbxPrintable(m_xBuilder->weld_check_button(u"printable"_ustr))
     , m_xCbxLocked(m_xBuilder->weld_check_button(u"locked"_ustr))
-    , m_xNameFrame(m_xBuilder->weld_widget(u"nameframe"_ustr))
+    , m_xNameFrame(m_xBuilder->weld_frame(u"nameframe"_ustr))
 {
     m_xDialog->set_title(rStr);
 

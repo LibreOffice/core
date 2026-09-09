@@ -34,7 +34,7 @@ private:
     std::unique_ptr<weld::CheckButton> m_xCbxVisible;
     std::unique_ptr<weld::CheckButton> m_xCbxPrintable;
     std::unique_ptr<weld::CheckButton> m_xCbxLocked;
-    std::unique_ptr<weld::Widget> m_xNameFrame;
+    std::unique_ptr<weld::Frame> m_xNameFrame;
 
 public:
 

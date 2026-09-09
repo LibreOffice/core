@@ -43,7 +43,7 @@ private:
     std::unique_ptr<weld::MetricSpinButton> m_xMtrFldX;
     std::unique_ptr<weld::Label> m_xFtY;
     std::unique_ptr<weld::MetricSpinButton> m_xMtrFldY;
-    std::unique_ptr<weld::Widget> m_xRadioGroup;
+    std::unique_ptr<weld::Frame> m_xRadioGroup;
     std::unique_ptr<weld::RadioButton> m_xRbPoint;
     std::unique_ptr<weld::RadioButton> m_xRbVert;
     std::unique_ptr<weld::RadioButton> m_xRbHorz;
