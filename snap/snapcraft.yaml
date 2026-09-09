@@ -65,6 +65,21 @@ apps:
       # derives its UserInstallation from XDG_CONFIG_HOME.
       XDG_CONFIG_HOME: $SNAP_USER_COMMON/.config
       XDG_DATA_HOME: $SNAP_USER_COMMON/.local/share
+      # Make Qt skip Chromium's sandbox-host and zygote setup entirely.
+      # Passing --no-sandbox is not enough: Chromium still probes whether
+      # unprivileged user namespaces are available, and the probe in
+      # sandbox/linux/services/credentials.cc PCHECKs that a failed
+      # CLONE_NEWUSER left errno in {EPERM, EUSERS, EINVAL, ENOSPC}.
+      # Under strict confinement on a host with
+      # kernel.apparmor_restrict_unprivileged_userns=1 the clone fails
+      # with EACCES instead, which is outside that set, so a path meant
+      # to degrade gracefully aborts the process. It hits about half of
+      # all launches. Not a security change: the command-chain wrapper
+      # has always disabled the Chromium sandbox, because the plain
+      # browser-support plug grants neither the AppArmor userns rule nor
+      # the seccomp unshare needed to run it. Making the sandbox genuinely
+      # usable needs browser-support with allow-sandbox: true.
+      QTWEBENGINE_DISABLE_SANDBOX: "1"
     plugs:
       - home
       - network
