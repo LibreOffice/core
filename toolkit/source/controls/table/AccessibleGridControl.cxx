@@ -38,9 +38,8 @@ using namespace ::com::sun::star::accessibility;
 using namespace ::vcl;
 
 AccessibleGridControl::AccessibleGridControl(
-            const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
-            svt::table::TableControl& _rTable)
-    : AccessibleGridControlBase(_rxParent, _rTable, AccessibleTableControlObjType::GRIDCONTROL)
+    const rtl::Reference<comphelper::OAccessible>& rpParent, svt::table::TableControl& _rTable)
+    : AccessibleGridControlBase(rpParent, _rTable, AccessibleTableControlObjType::GRIDCONTROL)
 {
 }
 

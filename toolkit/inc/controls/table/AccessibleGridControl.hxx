@@ -64,9 +64,8 @@ namespace accessibility {
     virtual void SAL_CALL grabFocus() override;
 
 public:
-    AccessibleGridControl(
-        const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
-        svt::table::TableControl& _rTable);
+    AccessibleGridControl(const rtl::Reference<comphelper::OAccessible>& rpParent,
+                          svt::table::TableControl& _rTable);
 
     // helper functions
 
