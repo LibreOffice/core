@@ -306,8 +306,11 @@ bool remountReadonly(const std::string& source, const std::string& target)
     return false;
 }
 
+namespace
+{
+
 /// Unmount a bind-mounted jail directory.
-bool unmount(const std::string& target, bool silent)
+bool unmount(const std::string& target, bool silent = false)
 {
     LOG_DBG("Unmounting [" << target << ']');
     const bool res = coolmount("-u", "", target, silent);
@@ -327,6 +330,7 @@ bool unmount(const std::string& target, bool silent)
 
     return res;
 }
+} // namespace
 
 // This file signifies that we copied instead of mounted.
 // NOTE: jail cleanup helpers are called from forkit and

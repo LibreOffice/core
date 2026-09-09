@@ -681,15 +681,16 @@ void SpifPolicySet::loadFromDir(const OUString& rDirUrl)
 void SpifPolicySet::loadProvisioned()
 {
     // Both provisioned sets, in increasing precedence (a repeated OID replaces, see
-    // loadFile). The system set first: every *.xml the host's administrator published
-    // org-wide, which the client made readable inside the sandbox (in COOL the kit
-    // mounts the WOPI host's shared presets there; the group dir is <system>/spif).
-    OUString aSystemDir = comphelper::COKit::getSystemConfigDir();
-    if (!aSystemDir.isEmpty())
+    // loadFile). The shared set first: every *.xml the host's administrator published
+    // org-wide, which the client made readable inside the sandbox and told us about
+    // through the shared presets root (in COOL the kit's read-only presets mount; the
+    // group dir is <presets>/spif, as for every other group).
+    OUString aSharedDir = comphelper::COKit::getSharedPresetsDir();
+    if (!aSharedDir.isEmpty())
     {
-        if (!aSystemDir.endsWith("/"))
-            aSystemDir += "/";
-        loadFromDir(aSystemDir + "spif");
+        if (!aSharedDir.endsWith("/"))
+            aSharedDir += "/";
+        loadFromDir(aSharedDir + "spif");
     }
 
     // Then this user's own set, from the jail's user config dir under spif/.

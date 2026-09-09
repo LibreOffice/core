@@ -47,8 +47,8 @@ static std::atomic<bool> g_bUserSettingsPersistenceAvailable(true);
 static std::mutex g_aUserConfigDirMutex;
 static OUString g_aUserConfigDir;
 
-static std::mutex g_aSystemConfigDirMutex;
-static OUString g_aSystemConfigDir;
+static std::mutex g_aSharedPresetsDirMutex;
+static OUString g_aSharedPresetsDir;
 
 static ViewShellDocId g_nTiledPaintingDocId(NoDocId);
 
@@ -196,16 +196,16 @@ OUString getUserConfigDir()
     return g_aUserConfigDir;
 }
 
-void setSystemConfigDir(const OUString& rUrl)
+void setSharedPresetsDir(const OUString& rUrl)
 {
-    std::lock_guard<std::mutex> aGuard(g_aSystemConfigDirMutex);
-    g_aSystemConfigDir = rUrl;
+    std::lock_guard<std::mutex> aGuard(g_aSharedPresetsDirMutex);
+    g_aSharedPresetsDir = rUrl;
 }
 
-OUString getSystemConfigDir()
+OUString getSharedPresetsDir()
 {
-    std::lock_guard<std::mutex> aGuard(g_aSystemConfigDirMutex);
-    return g_aSystemConfigDir;
+    std::lock_guard<std::mutex> aGuard(g_aSharedPresetsDirMutex);
+    return g_aSharedPresetsDir;
 }
 
 bool isTiledPainting()

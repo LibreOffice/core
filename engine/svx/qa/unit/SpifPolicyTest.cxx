@@ -398,8 +398,8 @@ void SpifPolicyTest::testPolicySet()
 
     // A later file declaring an already-loaded OID replaces that policy in place
     // instead of listing it twice. loadProvisioned relies on this: it scans the
-    // system tree and then the user tree, so the user's copy of an org policy wins
-    // while the listing order stays put.
+    // shared presets tree and then the user tree, so the user's copy of an org policy
+    // wins while the listing order stays put.
     writeFile(u"c.xml"_ustr, makeSpif("Policy A (user)", "1.2.3"));
     svx::seclabel::SpifPolicySet aReloaded;
     aReloaded.loadFromDir(sDir);

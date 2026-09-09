@@ -199,7 +199,7 @@ public:
     void loadFromDir(const OUString& rDirUrl);
 
     /// Load the policies provisioned for this session: every *.xml the WOPI host synced
-    /// into the system config tree the client mounted for us (COKit::getSystemConfigDir()
+    /// into the shared presets tree the client mounted for us (COKit::getSharedPresetsDir()
     /// + /spif, the administrator's org-wide set) and into the jail's user config dir
     /// under spif/ ($(userurl)/spif, this user's own set), the latter winning on a
     /// repeated policy OID. Falls back to the dev stopgap policy shipped in the

@@ -6227,6 +6227,10 @@ static void addOrganizationPath(const OUString& rPathName, const OUString& rDire
 /// one the presets are readable at now, which is not always where they are staged.
 static void addSharedPresetPaths(std::u16string_view rPresetsUrl)
 {
+    // Not every group is a configured path: the ones whose consumers dir-scan the group
+    // themselves (SPIF security-label policies) need the root, so record it.
+    comphelper::COKit::setSharedPresetsDir(OUString(rPresetsUrl));
+
     addOrganizationPath(u"AutoText"_ustr, OUString::Concat(rPresetsUrl) + "/autotext");
     addOrganizationPath(u"Dictionary"_ustr, OUString::Concat(rPresetsUrl) + "/wordbook");
     // The templates sit in a group subdirectory of this directory, so this is the root.
@@ -6362,16 +6366,6 @@ static void lo_setOption(COKit* /*pThis*/, const char *pOption, const char* pVal
     {
         const OUString aPresetsUrl(pValue, strlen(pValue), RTL_TEXTENCODING_UTF8);
         addSharedPresetPaths(aPresetsUrl);
-    }
-    else if (strcmp(pOption, "addsystemconfig") == 0)
-    {
-        // The read-only, admin-provisioned counterpart of "addconfig": the client
-        // (COOL: the kit, from the WOPI host's shared presets) has made this tree
-        // readable inside the sandbox. Nothing to apply eagerly - unlike the xcu
-        // layers above, its consumers dir-scan the group they care about - so just
-        // record where it is. An empty value clears it.
-        comphelper::COKit::setSystemConfigDir(
-            pValue ? OUString(pValue, strlen(pValue), RTL_TEXTENCODING_UTF8) : OUString());
     }
     else if (strcmp(pOption, "userpersistence") == 0)
     {
