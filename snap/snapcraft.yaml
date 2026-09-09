@@ -509,6 +509,51 @@ parts:
       # branding part overrides these with branded versions (after: collabora-office)
       - -usr/share/coolwsd/browser/dist/welcome/welcome-slideshow.odp
       - -usr/share/coolwsd/browser/dist/welcome/welcome.svg
+    prime:
+      # Nothing here is needed at runtime. Filtered at prime rather than
+      # stage so the build environment is left exactly as it was.
+
+      # Chromium's binary spellcheck dictionaries, shipped by Ubuntu's
+      # hunspell-* packages: 62 files, about 90 MB. Nothing reads them.
+      # Spell checking is the engine's job and it uses the .dic/.aff pairs
+      # in /usr/share/hunspell (DICT_SYSTEM_DIR in the engine's configure).
+      # coda-qt never turns on QtWebEngine's spell checker, and Qt looks for
+      # .bdic files under qtwebengine_dictionaries, not here.
+      - -usr/share/hunspell-bdic
+
+      # POCO is linked statically into coda-qt, so the archives and headers
+      # left behind by its install are build output, not runtime files.
+      - -usr/include
+      - -usr/lib/libPoco*.a
+
+      # Maintainer scripts, perl and debconf machinery that came along as
+      # dependencies of the dictionary packages.
+      - -usr/bin/debconf*
+      - -usr/bin/ispell-wrapper
+      - -usr/bin/perl
+      - -usr/bin/perl5.*
+      - -usr/bin/select-default-iwrap
+      - -usr/lib/emacsen-common
+      - -usr/lib/ispell
+      - -usr/sbin
+      - -usr/share/bash-completion
+      - -usr/share/debconf
+      - -usr/share/dict
+      - -usr/share/dictionaries-common
+      - -usr/share/doc-base
+      - -usr/share/emacsen-common
+      - -usr/share/lintian
+      - -usr/share/man
+      - -usr/share/perl5
+      - -usr/share/pixmaps
+
+      # usr/share/doc/*/copyright stays: those are the licence texts of the
+      # dictionaries we redistribute. Only the rest of the directory goes.
+      - -usr/share/doc/*/AUTHORS*
+      - -usr/share/doc/*/NEWS*
+      - -usr/share/doc/*/README*
+      - -usr/share/doc/*/TODO*
+      - -usr/share/doc/*/changelog*
   branding:
     plugin: nil
     source: https://www.collaboraoffice.com/downloads/collabora-office-brand/collabora-office-brand-26.04.2.3.tar.gz
