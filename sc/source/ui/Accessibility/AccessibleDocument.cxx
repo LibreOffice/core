@@ -1734,8 +1734,9 @@ void SAL_CALL
     if (nChildIndex < 0 || nChildIndex >= nCount)
         throw lang::IndexOutOfBoundsException();
 
-    uno::Reference < XAccessible > xAccessible = mpChildrenShapes->Get(nChildIndex);
-    if (xAccessible.is())
+    rtl::Reference<::accessibility::AccessibleShape> pAccessible
+        = mpChildrenShapes->Get(nChildIndex);
+    if (pAccessible.is())
     {
         bool bWasTableSelected(IsTableSelected());
         mpChildrenShapes->Select(nChildIndex); // throws no lang::IndexOutOfBoundsException if Index is too high
