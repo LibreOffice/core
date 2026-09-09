@@ -41,10 +41,13 @@ class CellSelectionHandle extends CanvasSectionObject {
 	}
 
 	private onDrag(point: cool.SimplePoint) {
+		// The pointer's position on screen, relative to the canvas. The point is shifted into
+		// document coordinates afterwards.
+		const viewportPoint = cool.SimplePoint.fromCorePixels([this.myTopLeft[0] + point.pX, this.myTopLeft[1] + point.pY]);
+		app.map.fire('handleautoscroll', { pos: { x: viewportPoint.cX, y: viewportPoint.cY }, map: app.map });
+
 		point.pX += this.position[0];
 		point.pY += this.position[1];
-
-		app.map.fire('handleautoscroll', { pos: { x: point.cX, y: point.cY }, map: app.map });
 
 		this.sharedOnDragAndEnd(point);
 	}
