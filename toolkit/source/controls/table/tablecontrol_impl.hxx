@@ -291,7 +291,7 @@ public:
 
     // A11Y
     const rtl::Reference<accessibility::AccessibleGridControl>&
-    getAccessible(const css::uno::Reference<css::accessibility::XAccessible>& rxParent);
+    getAccessible(const rtl::Reference<comphelper::OAccessible>& rpParent);
     void disposeAccessible();
 
     // ITableModelListener

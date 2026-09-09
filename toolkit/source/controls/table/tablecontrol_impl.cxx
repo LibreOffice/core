@@ -2211,16 +2211,16 @@ IMPL_LINK(TableControl_Impl, OnScroll, ScrollBar*, _pScrollbar, void)
         impl_ni_ScrollColumns(_pScrollbar->GetDelta());
 }
 
-const rtl::Reference<accessibility::AccessibleGridControl>& TableControl_Impl::getAccessible(
-    const css::uno::Reference<css::accessibility::XAccessible>& rxParent)
+const rtl::Reference<accessibility::AccessibleGridControl>&
+TableControl_Impl::getAccessible(const rtl::Reference<comphelper::OAccessible>& rpParent)
 {
     if (m_xAccessibleTable.is())
         return m_xAccessibleTable;
 
     DBG_TESTSOLARMUTEX();
-    if (rxParent.is())
+    if (rpParent.is())
     {
-        m_xAccessibleTable = new accessibility::AccessibleGridControl(rxParent, m_rAntiImpl);
+        m_xAccessibleTable = new accessibility::AccessibleGridControl(rpParent, m_rAntiImpl);
     }
 
     return m_xAccessibleTable;
