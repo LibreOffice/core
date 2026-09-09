@@ -549,8 +549,8 @@ public:
     SAL_DLLPRIVATE void ReadXRef(SvStream& rStream);
     SAL_DLLPRIVATE void ReadXRefStream(SvStream& rStream);
     SAL_DLLPRIVATE static void SkipWhitespace(SvStream& rStream);
-    /// Instead of all whitespace, just skip CR and NL characters.
-    SAL_DLLPRIVATE static void SkipLineBreaks(SvStream& rStream);
+    /// Skip one end of line, which is CR, or NL, or CR followed by NL.
+    SAL_DLLPRIVATE static void SkipEndOfLine(SvStream& rStream);
     SAL_DLLPRIVATE size_t GetObjectOffset(size_t nIndex) const;
     const std::vector<std::unique_ptr<PDFElement>>& GetElements() const;
     std::vector<PDFObjectElement*> GetPages();
