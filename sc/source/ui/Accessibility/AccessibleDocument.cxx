@@ -1990,8 +1990,7 @@ SCTAB ScAccessibleDocument::getVisibleTable() const
     return nVisibleTable;
 }
 
-uno::Reference < XAccessible >
-    ScAccessibleDocument::GetAccessibleSpreadsheet()
+rtl::Reference<ScAccessibleSpreadsheet> ScAccessibleDocument::GetAccessibleSpreadsheet()
 {
     if (!mpAccessibleSpreadsheet.is() && mpViewShell)
     {

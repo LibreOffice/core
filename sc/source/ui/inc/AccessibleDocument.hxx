@@ -160,8 +160,7 @@ public:
 
     rtl::Reference<utl::AccessibleRelationSetHelper> GetRelationSet(const ScAddress* pAddress) const;
 
-    css::uno::Reference< css::accessibility::XAccessible >
-        GetAccessibleSpreadsheet();
+    rtl::Reference<ScAccessibleSpreadsheet> GetAccessibleSpreadsheet();
 
 protected:
     virtual std::unordered_map<OUString, OUString> implGetExtendedAttributes() override;
