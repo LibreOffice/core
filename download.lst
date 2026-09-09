@@ -549,8 +549,8 @@ ONLINEUPDATE_TARBALL := onlineupdate-c003be8b9727672e7d30972983b375f4c200233f-2.
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-OPENLDAP_SHA256SUM := d693b49517a42efb85a1a364a310aed16a53d428d1b46c0d31ef3fba78fcb656
-OPENLDAP_TARBALL := openldap-2.6.13.tgz
+OPENLDAP_SHA256SUM := bc91225dbfc50354033b1303bc91d1a7f6ddd1dc32fac950d79c28fe66d6bca8
+OPENLDAP_TARBALL := openldap-2.6.15.tgz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
