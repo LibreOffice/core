@@ -20,9 +20,9 @@
 // mobileAppDocId. True for iOS and the CODA desktop apps.
 // The plain server and Android instead run one document per process.
 #if defined(IOS) || defined(QTAPP) || defined(MACOS) || defined(_WIN32)
-#define DOCS_SHARE_PROCESS 1
+#define DOCS_SHARE_PROCESS true
 #else
-#define DOCS_SHARE_PROCESS 0
+#define DOCS_SHARE_PROCESS false
 #endif
 
 constexpr int DEFAULT_CLIENT_PORT_NUMBER = 9980;
