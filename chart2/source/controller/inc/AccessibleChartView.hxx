@@ -21,7 +21,7 @@
 #include "AccessibleBase.hxx"
 #include "ChartWindow.hxx"
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/weakref.hxx>
+#include <unotools/weakref.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
 
@@ -52,14 +52,14 @@ public:
     // 0: view::XSelectionSupplier offers notifications for selection changes and access to the selection itself
     // 1: frame::XModel representing the chart model - offers access to object data
     // 2: lang::XInterface representing the normal chart view - offers access to some extra object data
-    // 3: accessibility::XAccessible representing the parent accessible
+    // 3: OAccessible representing the parent accessible
     // 4: ChartWindow representing the view's window
     // all arguments are only valid until next initialization - don't keep them longer
-    void initialize( ChartController& rChartController,
-                     const rtl::Reference<::chart::ChartModel>& xChartModel,
-                     const rtl::Reference<::chart::ChartView>& xChartView,
-                     const css::uno::Reference< css::accessibility::XAccessible >& xParent,
-                     ChartWindow* pNewChartWindow);
+    void initialize(ChartController& rChartController,
+                    const rtl::Reference<::chart::ChartModel>& xChartModel,
+                    const rtl::Reference<::chart::ChartView>& xChartView,
+                    const rtl::Reference<comphelper::OAccessible>& rpNewParent,
+                    ChartWindow* pNewChartWindow);
     // used to disconnect from view
     void initialize();
 
@@ -97,7 +97,7 @@ private: // members
     unotools::WeakReference< ::chart::ChartModel >                  m_xChartModel;
     unotools::WeakReference< ChartView >                            m_xChartView;
     VclPtr<ChartWindow>                                             m_pChartWindow;
-    css::uno::WeakReference< css::accessibility::XAccessible >      m_xParent;
+    unotools::WeakReference<comphelper::OAccessible> m_pParent;
 
     std::shared_ptr< ObjectHierarchy >                              m_spObjectHierarchy;
     AccessibleUniqueId                                              m_aCurrentSelectionOID;
