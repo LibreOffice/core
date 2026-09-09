@@ -1,8 +1,10 @@
 PORTNAME=	collabora-office
+# The version of the release source tarball this port builds, which
+# scripts/make-source-tarball.sh makes from the release tag of the same
+# version and which is published at the first of the MASTER_SITES below. Bump
+# it for every release, together with distinfo; see qt/freebsd/RELEASE.md.
 DISTVERSION=	26.04.4.1-1
 CATEGORIES=	editors
-# The source tarball is made by scripts/make-source-tarball.sh from the
-# release tag and published next to the branding tarball.
 MASTER_SITES=	https://www.collaboraoffice.com/downloads/collabora-office/src/ \
 		https://www.collaboraoffice.com/downloads/collabora-office-brand/:brand \
 		https://gerrit.collaboraoffice.com/src/:src \
