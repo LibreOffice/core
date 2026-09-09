@@ -9802,19 +9802,17 @@ To get one please:
 _EOS
             if test "$build_os" = "cygwin"; then
 cat << _EOS
-install a pre-compiled binary for Win32
+install it from your Unix environment's package manager:
 
-mkdir -p /opt/lo/bin
-cd /opt/lo/bin
-wget https://dev-www.libreoffice.org/bin/cygwin/nasm.exe
-chmod +x nasm
+  MSYS2:  pacman -S nasm
+  Cygwin: re-run setup and pick nasm from the Devel category
 
 or get and install one from https://www.nasm.us/
 
 Then re-run autogen.sh
 
 Note: autogen.sh will try to use /opt/lo/bin/nasm if the environment variable NASM is not already defined.
-Alternatively, you can install the 'new' nasm where ever you want and make sure that \`command -v nasm\` finds it.
+Alternatively, you can install nasm wherever you want and make sure that \`command -v nasm\` finds it.
 
 _EOS
             else
@@ -14199,7 +14197,7 @@ to install a pre-compiled binary make for Win32
 
  mkdir -p /opt/lo/bin
  cd /opt/lo/bin
- wget https://dev-www.libreoffice.org/extern/make-4.4.1-msvc.exe
+ wget https://gerrit.collaboraoffice.com/extern/make-4.4.1-msvc.exe
  cp make-4.4.1-msvc.exe make
  chmod +x make
 

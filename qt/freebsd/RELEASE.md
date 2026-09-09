@@ -28,7 +28,7 @@ The port builds two things from one source tarball: the engine, configured with 
 
 The distro-config takes every library the ports tree carries from packages and builds only the few externals the engine needs in its own form: the patched cairo and pixman, libjpeg-turbo, pdfium, POCO, argon2, dragonbox, libfixmath, zxcvbn, quickjs, afdko with antlr4, meson, and the OpenSymbol font. Fonts are not bundled; the port declares fourteen font packages as run-time dependencies instead. The engine's externals are listed as additional distfiles so the build needs no network access, which poudriere enforces. The browser build installs its npm packages from the shrinkpack committed in `browser/node_shrinkpack`, so npm needs no network either.
 
-The port fetches three kinds of files: the release source tarball from the Collabora download site, the branding tarball from the Collabora download site, and the engine externals from the document foundation's source mirror and, for POCO, from pocoproject.org.
+The port fetches three kinds of files: the release source tarball from the Collabora download site, the branding tarball from the Collabora download site, and the engine externals, POCO included, from our own mirror at gerrit.collaboraoffice.com.
 
 ## 3. Deliverables of a release, in one list
 

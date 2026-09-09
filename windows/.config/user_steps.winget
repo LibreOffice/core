@@ -20,7 +20,7 @@ properties:
           $files = @(
               "clang-format-5.0.0-win.exe",
               "jom_1_1_4.zip",
-              "make-4.2.1-msvc.exe",
+              "make-4.4.1-msvc.exe",
               "pkgconf-2.4.3.exe",
               "strawberry-perl-5.40.0.1-64bit-portable.zip",
           "")
@@ -59,7 +59,7 @@ properties:
       settings:
         TestScript: Test-Path -Path "$env:USERPROFILE/bin/make.exe"
         GetScript:  Test-Path -Path "$env:USERPROFILE/bin/make.exe"
-        SetScript: Copy-Item -Path "$env:PUBLIC/Downloads/make-4.2.1-msvc.exe" -Destination "$env:USERPROFILE/bin/make.exe"
+        SetScript: Copy-Item -Path "$env:PUBLIC/Downloads/make-4.4.1-msvc.exe" -Destination "$env:USERPROFILE/bin/make.exe"
     - resource: xPSDesiredStateConfiguration/xScript
       id: clang-format
       dependsOn:

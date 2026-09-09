@@ -97,9 +97,8 @@ release. Two more things worth knowing for local tests outside poudriere:
 - **Externals.** After a change to `engine/download.lst`, regenerate the
   tarball list from a configured engine tree with
   `gmake -f Makefile.fetch fetch-names` and update `ENGINE_SRC_TARBALLS` and
-  the other `DISTFILES` entries, then run `makesum`. The opens___.ttf font and
-  POCO come from their own sites; everything else is on the document
-  foundation's source mirror.
+  the other `DISTFILES` entries, then run `makesum`. Every external comes from
+  our own mirror now, the opens___.ttf font and POCO included.
 - **Ports libraries.** The `LIB_DEPENDS` entries use the versioned library
   names the ports packages install, so a major bump of a port such as
   liborcus needs the entry updated.

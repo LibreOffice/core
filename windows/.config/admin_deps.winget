@@ -26,9 +26,9 @@ properties:
         securityContext: elevated
       settings:
         DestinationPath: C:/Users/Public/Downloads
-        Uri: https://dev-www.libreoffice.org/bin/cygwin/make-4.2.1-msvc.exe
+        Uri: https://gerrit.collaboraoffice.com/extern/make-4.4.1-msvc.exe
         ChecksumType: SHA256
-        Checksum: 146d6f2b0ea57647b11b506a95048a7be73232e1feeeccbc1013651f992423d8
+        Checksum: 3cbf585a213001fbdedc5269621a3617d5067aba8f9dc8947054b76f30035e3d
     - resource: xPSDesiredStateConfiguration/xRemoteFile
       id: clang-format
       directives:
@@ -36,7 +36,7 @@ properties:
         securityContext: elevated
       settings:
         DestinationPath: C:/Users/Public/Downloads
-        Uri: https://dev-www.libreoffice.org/bin/clang-format-5.0.0-win.exe
+        Uri: https://gerrit.collaboraoffice.com/extern/clang-format-5.0.0-win.exe
         ChecksumType: SHA256
         Checksum: a25d5c4b451ec4fba466807e9239d0bcbafcfeb7f35834f2db87448968a73ccb
     - resource: xPSDesiredStateConfiguration/xRemoteFile
@@ -46,7 +46,7 @@ properties:
         securityContext: elevated
       settings:
         DestinationPath: C:/Users/Public/Downloads
-        Uri: https://dev-www.libreoffice.org/extern/pkgconf-2.4.3.exe
+        Uri: https://gerrit.collaboraoffice.com/extern/pkgconf-2.4.3.exe
         ChecksumType: SHA256
         Checksum: 791cd6dbc56f7268fbf9c4652d6634b0f5c59687ab4e504565e58245952edd41
     - resource: xPSDesiredStateConfiguration/xRemoteFile

@@ -791,10 +791,11 @@ def main():
     for name, entry in sorted(annotations["engine_externals"].items()):
         tarball, sha256 = tarballs[entry["tarball_var"]]
         version = extract_version_from_filename(tarball)
-        # most tarballs come from the LibreOffice mirror; the exceptions
-        # (poco, see engine/Makefile.fetch) carry their own source_url
+        # the build fetches every external from our own mirror, so that is
+        # the download location; an entry can still override it with its
+        # own source_url
         locator = entry.get(
-            "source_url", "https://dev-www.libreoffice.org/src/{tarball}"
+            "source_url", "https://gerrit.collaboraoffice.com/src/{tarball}"
         ).format(tarball=tarball, version=version)
         external_ids[name] = make_component(
             graph, f"SPDXRef-{name}", name, entry["vendor"],

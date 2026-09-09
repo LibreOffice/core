@@ -5,9 +5,9 @@ CATEGORIES=	editors
 # release tag and published next to the branding tarball.
 MASTER_SITES=	https://www.collaboraoffice.com/downloads/collabora-office/src/ \
 		https://www.collaboraoffice.com/downloads/collabora-office-brand/:brand \
-		https://dev-www.libreoffice.org/src/:src \
-		https://dev-www.libreoffice.org/extern/:extern \
-		https://pocoproject.org/releases/poco-1.15.3/:poco
+		https://gerrit.collaboraoffice.com/src/:src \
+		https://gerrit.collaboraoffice.com/extern/:extern \
+		https://gerrit.collaboraoffice.com/src/:poco
 # The engine builds these externals itself; everything else the CPFreeBSDQt
 # distro-config takes from ports. Regenerate the list from a configured
 # engine tree with "gmake -f Makefile.fetch fetch-names" after a bump of
