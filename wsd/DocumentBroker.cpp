@@ -3073,7 +3073,7 @@ void DocumentBroker::handleSaveResponse(const std::shared_ptr<ClientSession>& se
     {
         // The engine writes the user's own file here, so the file's new modified time is the
         // document's new time in storage.
-        if (success)
+        if (wroteNewVersion)
         {
             const std::string modifiedTime = Util::getIso8601FracformatTime(
                 FileUtil::Stat(_storage->getRootFilePath()).modifiedTimepoint());
