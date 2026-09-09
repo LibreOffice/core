@@ -123,13 +123,9 @@ awt::Rectangle AccessibleChartView::implGetBounds()
     rtl::Reference<comphelper::OAccessible> pParent(m_pParent);
     if (pParent.is())
     {
-        Reference<XAccessibleComponent> xContext(pParent->getAccessibleContext(), uno::UNO_QUERY);
-        if( xContext.is())
-        {
-            awt::Point aParentPosition = xContext->getLocationOnScreen();
-            aResult.X -= aParentPosition.X;
-            aResult.Y -= aParentPosition.Y;
-        }
+        awt::Point aParentPosition = pParent->getLocationOnScreen();
+        aResult.X -= aParentPosition.X;
+        aResult.Y -= aParentPosition.Y;
     }
     return aResult;
 }
