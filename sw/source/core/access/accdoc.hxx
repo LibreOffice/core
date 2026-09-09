@@ -28,7 +28,7 @@
 // SwAccessiblePreview
 class SwAccessibleDocumentBase : public SwAccessibleContext
 {
-    css::uno::Reference< css::accessibility::XAccessible> mxParent;
+    rtl::Reference<comphelper::OAccessible> mpParent;
 
     VclPtr<vcl::Window> mpChildWin; // protected by solar mutex
 

@@ -65,7 +65,7 @@ SwAccessibleDocumentBase::SwAccessibleDocumentBase(
         std::shared_ptr<SwAccessibleMap> const& pMap)
     : SwAccessibleContext(pMap, AccessibleRole::DOCUMENT_TEXT,
                           pMap->GetShell().GetLayout())
-    , mxParent(pMap->GetShell().GetWin()->GetAccessibleParent())
+    , mpParent(pMap->GetShell().GetWin()->GetAccessibleParent())
     , mpChildWin(nullptr)
 {
 }
@@ -155,14 +155,14 @@ uno::Reference< XAccessible> SAL_CALL
 
 uno::Reference< XAccessible> SAL_CALL SwAccessibleDocumentBase::getAccessibleParent()
 {
-    return mxParent;
+    return mpParent;
 }
 
 sal_Int64 SAL_CALL SwAccessibleDocumentBase::getAccessibleIndexInParent()
 {
     SolarMutexGuard aGuard;
 
-    uno::Reference < XAccessibleContext > xAcc( mxParent->getAccessibleContext() );
+    uno::Reference<XAccessibleContext> xAcc(mpParent->getAccessibleContext());
     uno::Reference < XAccessible > xThis( this );
     sal_Int64 nCount = xAcc->getAccessibleChildCount();
 
