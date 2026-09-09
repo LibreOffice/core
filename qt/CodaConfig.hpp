@@ -33,13 +33,13 @@ public:
 
     // How many document views may hold a web engine renderer at once. A window keeps
     // the most recently used views and drops the renderers of the others, which stays
-    // within one process's memory as more documents are opened. Zero means no limit and
-    // is the default. CODA_LIVE_VIEWS sets a limit when it holds a whole number.
+    // within one process's memory as more documents are opened. Zero means no limit.
+    // CODA_LIVE_VIEWS overrides the default when it holds a whole number.
     int liveViewLimit() const
     {
         static const int limit = []
         {
-            constexpr int defaultLimit = 0;
+            constexpr int defaultLimit = 5;
             const char* env = std::getenv("CODA_LIVE_VIEWS");
             if (!env || !*env)
                 return defaultLimit;

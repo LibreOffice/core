@@ -363,10 +363,9 @@ final class LiveViewLimit {
     /// them as often as not, and the one the user stops on is the one that matters.
     private static let defaultDelayMilliseconds = 1000
 
-    /// How many document views keep a web content process. Zero or less turns the limit
-    /// off, which is what it is by default. CODA_LIVE_VIEWS sets it, in the environment or
-    /// as a defaults key, which is what reaches an app the user launched rather than one
-    /// started from a shell.
+    /// How many document views keep a web content process. Zero or less turns the limit off.
+    /// CODA_LIVE_VIEWS sets it, in the environment or as a defaults key, which is what
+    /// reaches an app the user launched rather than one started from a shell.
     private lazy var limit: Int = {
         if let text = ProcessInfo.processInfo.environment["CODA_LIVE_VIEWS"],
            let value = Int(text) {
@@ -375,7 +374,7 @@ final class LiveViewLimit {
         if UserDefaults.standard.object(forKey: "CODA_LIVE_VIEWS") != nil {
             return UserDefaults.standard.integer(forKey: "CODA_LIVE_VIEWS")
         }
-        return 0
+        return 5
     }()
 
     /// Counts activations. Each view records the value it saw when it was last activated.
