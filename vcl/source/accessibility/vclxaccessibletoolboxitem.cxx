@@ -179,10 +179,11 @@ void VCLXAccessibleToolBoxItem::SetChild(const rtl::Reference<comphelper::OAcces
     m_pChild = rpChild;
 }
 
-void VCLXAccessibleToolBoxItem::NotifyChildEvent( const Reference< XAccessible >& _xChild, bool _bShow )
+void VCLXAccessibleToolBoxItem::NotifyChildEvent(
+    const rtl::Reference<comphelper::OAccessible>& rpChild, bool _bShow)
 {
-    Any aOld = _bShow ? Any() : Any( _xChild );
-    Any aNew = _bShow ? Any( _xChild ) : Any();
+    Any aOld = _bShow ? Any() : Any(uno::Reference<XAccessible>(rpChild));
+    Any aNew = _bShow ? Any(uno::Reference<XAccessible>(rpChild)) : Any();
     NotifyAccessibleEvent( AccessibleEventId::CHILD, aOld, aNew );
 }
 

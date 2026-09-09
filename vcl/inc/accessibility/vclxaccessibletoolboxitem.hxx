@@ -73,7 +73,7 @@ public:
     void                NameChanged();
     void SetChild(const rtl::Reference<comphelper::OAccessible>& rpChild);
     const rtl::Reference<comphelper::OAccessible>& GetChild() const { return m_pChild; }
-    void                NotifyChildEvent( const css::uno::Reference< css::accessibility::XAccessible >& _xChild, bool _bShow );
+    void NotifyChildEvent(const rtl::Reference<comphelper::OAccessible>& rpChild, bool _bShow);
 
     void                ToggleEnableState();
 
