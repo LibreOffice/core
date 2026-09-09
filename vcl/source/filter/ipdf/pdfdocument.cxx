@@ -1258,7 +1258,7 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode,
                             return false;
                         }
 
-                        PDFDocument::SkipLineBreaks(rStream);
+                        PDFDocument::SkipEndOfLine(rStream);
                         auto pStreamElement = new PDFStreamElement(nLength);
                         if (pObject)
                             pObject->SetStream(pStreamElement);
@@ -1913,22 +1913,26 @@ void PDFDocument::SkipWhitespace(SvStream& rStream)
     }
 }
 
-void PDFDocument::SkipLineBreaks(SvStream& rStream)
+void PDFDocument::SkipEndOfLine(SvStream& rStream)
 {
     char ch = 0;
 
-    while (true)
+    rStream.ReadChar(ch);
+    if (rStream.eof())
+        return;
+
+    if (ch == '\r')
     {
         rStream.ReadChar(ch);
         if (rStream.eof())
-            break;
-
-        if (ch != '\n' && ch != '\r')
-        {
-            rStream.SeekRel(-1);
             return;
-        }
+        if (ch != '\n')
+            rStream.SeekRel(-1);
+        return;
     }
+
+    if (ch != '\n')
+        rStream.SeekRel(-1);
 }
 
 size_t PDFDocument::GetObjectOffset(size_t nIndex) const
