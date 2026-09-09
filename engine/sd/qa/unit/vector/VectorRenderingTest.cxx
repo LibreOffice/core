@@ -1262,6 +1262,39 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testTextParagraphAlign)
     CPPUNIT_ASSERT_EQUAL("center"_ostr, oPortion->getString("align").value_or(OString()));
 }
 
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testTextAdvancesAreRelative)
+{
+    // Each advance is the step from the glyph before it, not the distance
+    // from the start of the run, so the numbers stay small however long the
+    // run is.
+    createBlankDoc();
+    addTextBox(tools::Rectangle(Point(2000, 2000), Size(8000, 4000)), u"Advances"_ustr);
+
+    getVectorPrimitives(u"testTextAdvances");
+
+    const auto oPortion = findTextPortion("Advances"_ostr);
+    CPPUNIT_ASSERT_MESSAGE("text portion missing", oPortion.has_value());
+
+    const size_t nCount = oPortion->getSize("advances").value_or(0);
+    CPPUNIT_ASSERT_EQUAL(size_t(8), nCount);
+
+    sal_Int64 nTotal = 0;
+    sal_Int64 nLast = 0;
+    for (size_t nIndex = 0; nIndex < nCount; ++nIndex)
+    {
+        nLast = oPortion
+                    ->getInt(rtl::Concat2View("advances/" + OString::number(sal_Int32(nIndex))))
+                    .value_or(0);
+        CPPUNIT_ASSERT_MESSAGE("an advance is not a forward step", nLast > 0);
+        nTotal += nLast;
+    }
+
+    // Measured from the start of the run the last value would be the whole
+    // width. As a step it is one glyph's worth of it.
+    CPPUNIT_ASSERT_MESSAGE("the advances read as distances from the start",
+                           nLast < nTotal / 2);
+}
+
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testTextLineMetrics)
 {
     // Laid-out text reports the height and ascent of its line on the

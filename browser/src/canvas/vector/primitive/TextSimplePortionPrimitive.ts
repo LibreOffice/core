@@ -43,7 +43,10 @@ namespace cool {
 		outline?: boolean;
 		rtl?: boolean;
 		monospaced?: boolean;
-		dxarray?: number[];
+		/// How far each glyph advances from the one before it, in twips.
+		/// Adding them up from zero gives each glyph's distance from the
+		/// start of the run.
+		advances?: number[];
 		fontId?: string;
 		/// Set when the face is not itself bold or italic, so the reader adds it.
 		syntheticBold?: boolean;

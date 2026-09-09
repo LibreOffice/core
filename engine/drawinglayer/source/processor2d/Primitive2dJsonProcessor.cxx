@@ -492,14 +492,22 @@ void Primitive2dJsonProcessor::writeTextPortionScaled(
         }
     }
 
-    // Character advance widths. Round each to a whole twip: that step is
-    // finer than a screen pixel, and it keeps the advance list compact
-    // instead of carrying full double precision per glyph.
+    // How far each glyph advances from the one before it, in whole twips. A whole twip is finer
+    // than a screen pixel, so rounding to it loses nothing a reader can see. The drawing layer
+    // measures from the start of the run instead, where the numbers reach four or five digits by
+    // the end of a line and a step stays at two or three, and the steps of one face repeat,
+    // which compresses better. Each value is the difference of the rounded distances, so adding
+    // them up gives the measured distances back in whole twips.
     if (!rPrimitive.getDXArray().empty())
     {
-        auto aDxArray = mrWriter.startArray("dxarray");
+        auto aAdvanceArray = mrWriter.startArray("advances");
+        sal_Int64 nPreviousDistance = 0;
         for (double fValue : rPrimitive.getDXArray())
-            mrWriter.putSimpleValue(sal_Int64(std::llround(fValue * mfScaleFactor)));
+        {
+            const sal_Int64 nDistance = std::llround(fValue * mfScaleFactor);
+            mrWriter.putSimpleValue(nDistance - nPreviousDistance);
+            nPreviousDistance = nDistance;
+        }
     }
 
     // The zero-based index of the paragraph this portion belongs to.
