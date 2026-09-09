@@ -1643,13 +1643,13 @@ void ChartController::impl_initializeAccessible( AccessibleChartView& rAccChartV
 {
     SolarMutexGuard aGuard;
 
-    uno::Reference< XAccessible > xParent;
+    rtl::Reference<comphelper::OAccessible> pAccParent;
 
     ChartWindow* pChartWindow = GetChartWindow();
     if( pChartWindow )
-        xParent.set(pChartWindow->GetAccessibleParent());
+        pAccParent = pChartWindow->GetAccessibleParent();
 
-    rAccChartView.initialize(*this, getChartModel(), m_xChartView, xParent, pChartWindow);
+    rAccChartView.initialize(*this, getChartModel(), m_xChartView, pAccParent, pChartWindow);
 }
 #else
 void ChartController::impl_initializeAccessible( AccessibleChartView& /* rAccChartView */) {}
