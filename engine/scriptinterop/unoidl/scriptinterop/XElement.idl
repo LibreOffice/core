@@ -13,6 +13,14 @@ module scriptinterop {
 
 // Common base for the heterogeneous children of a body (paragraphs, tables, etc.):
 interface XElement: XBase {
+    XElement copy();
+
+    XElement getNextSibling();
+
+    XElement getParent();
+
+    XElement getPreviousSibling();
+
     string getText();
 
     ElementType getType();

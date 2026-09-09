@@ -11,12 +11,11 @@
 
 module scriptinterop {
 
-interface XTableCell: XContainerElement {
-    sequence<XElement> getChildren();
-
-    long getColSpan();
-
-    long getRowSpan();
+enum HorizontalAlignment {
+    LEFT,
+    CENTER,
+    RIGHT,
+    JUSTIFY
 };
 
 };

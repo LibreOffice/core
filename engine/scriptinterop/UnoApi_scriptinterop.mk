@@ -27,7 +27,10 @@ $(eval $(call gb_UnoApi_add_idlfiles,scriptinterop,,\
 
 $(eval $(call gb_UnoApi_add_idlfiles,scriptinterop,scriptinterop,\
     ElementType \
+    GlyphType \
+    HorizontalAlignment \
     ImageOptions \
+    ParagraphHeading \
     TextAlignment \
     XBase \
     XBody \

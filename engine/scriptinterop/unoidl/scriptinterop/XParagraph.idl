@@ -11,11 +11,23 @@
 
 module scriptinterop {
 
-interface XParagraph: XElement
+interface XParagraph: XContainerElement
 {
     XText asText();
 
     XText editAsText();
+
+    HorizontalAlignment getAlignment();
+
+    GlyphType getGlyphType();
+
+    ParagraphHeading getHeading();
+
+    double getIndentStart();
+
+    string getListId();
+
+    long getNestingLevel();
 
     boolean isLeftToRight();
 };

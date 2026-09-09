@@ -11,12 +11,15 @@
 
 module scriptinterop {
 
-interface XTableCell: XContainerElement {
-    sequence<XElement> getChildren();
-
-    long getColSpan();
-
-    long getRowSpan();
+enum GlyphType {
+    BULLET,
+    HOLLOW_BULLET,
+    SQUARE_BULLET,
+    NUMBER,
+    LATIN_UPPER,
+    LATIN_LOWER,
+    ROMAN_UPPER,
+    ROMAN_LOWER
 };
 
 };
