@@ -11,7 +11,6 @@
 
 #include <vcl/dllapi.h>
 #include <vcl/image.hxx>
-#include <vcl/EnumContext.hxx>
 
 #include <cpo/uno/Exception.hpp>
 
@@ -102,7 +101,7 @@ protected:
     void handleActionWidget(xmlreader::XmlReader& reader);
     void handleInterfaceDomain(xmlreader::XmlReader& rReader);
     static bool isToolbarItemClass(std::u16string_view sClass);
-    static std::vector<vcl::EnumContext::Context> handleStyle(xmlreader::XmlReader& reader);
+    static void handleStyle(xmlreader::XmlReader& reader);
     static OUString getStyleClass(xmlreader::XmlReader& reader);
     static bool hasOrientationVertical(stringmap& rMap);
 

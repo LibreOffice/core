@@ -2446,8 +2446,7 @@ VclPtr<vcl::Window> VclBuilder::insertObject(vcl::Window* pParent, const OUStrin
 }
 
 void VclBuilder::applyTabChildProperties(vcl::Window* pParent, const std::vector<OUString>& rIDs,
-                                         stringmap& rProperties,
-                                         stringmap& rAtkProperties)
+                                         stringmap& rProperties, stringmap& rAtkProperties)
 {
     TabControl* pTabControl = isHorizontalTabControl(pParent) ? static_cast<TabControl*>(pParent) : nullptr;
     VerticalTabControl *pVerticalTabControl = pParent->GetType() == WindowType::VERTICALTABCONTROL ?
@@ -3367,10 +3366,8 @@ void VclBuilder::applyPackingProperties(vcl::Window* pCurrent, vcl::Window* pPar
     }
 }
 
-std::vector<vcl::EnumContext::Context> BuilderBase::handleStyle(xmlreader::XmlReader &reader)
+void BuilderBase::handleStyle(xmlreader::XmlReader &reader)
 {
-    std::vector<vcl::EnumContext::Context> aContext;
-
     xmlreader::Span name;
     int nsId;
 
@@ -3390,14 +3387,9 @@ std::vector<vcl::EnumContext::Context> BuilderBase::handleStyle(xmlreader::XmlRe
             if (name == "class")
             {
                 OUString classStyle = getStyleClass(reader);
-                std::u16string_view rest;
 
-                if (classStyle.startsWith("context-", &rest))
-                {
-                    aContext.push_back(vcl::EnumContext::GetContextEnum(OUString(rest)));
-                }
-                else if (classStyle != "small-button" && classStyle != "destructive-action" &&
-                         classStyle != "suggested-action" && classStyle != "novertpad")
+                if (classStyle != "small-button" && classStyle != "destructive-action" &&
+                    classStyle != "suggested-action" && classStyle != "novertpad")
                 {
                     SAL_WARN("vcl.builder", "unknown class: " << classStyle);
                 }
@@ -3412,8 +3404,6 @@ std::vector<vcl::EnumContext::Context> BuilderBase::handleStyle(xmlreader::XmlRe
         if (!nLevel)
             break;
     }
-
-    return aContext;
 }
 
 OUString BuilderBase::getStyleClass(xmlreader::XmlReader &reader)

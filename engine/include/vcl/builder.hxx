@@ -19,7 +19,6 @@
 #include <vcl/vclptr.hxx>
 #include <vcl/toolboxid.hxx>
 #include <vcl/wintypes.hxx>
-#include <vcl/EnumContext.hxx>
 
 #include <memory>
 #include <map>

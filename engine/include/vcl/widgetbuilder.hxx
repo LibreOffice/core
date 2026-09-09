@@ -237,9 +237,7 @@ protected:
                 else if (name == "items")
                     aItems = handleItems(reader);
                 else if (name == "style")
-                {
                     handleStyle(reader);
-                }
                 else
                 {
                     ++nLevel;
@@ -295,7 +293,6 @@ protected:
         int nLevel = 1;
         stringmap aProperties;
         stringmap aAtkProperties;
-        std::vector<vcl::EnumContext::Context> context;
 
         while (true)
         {
@@ -328,7 +325,7 @@ protected:
                 }
                 else if (name == "style")
                 {
-                    context = handleStyle(reader);
+                    handleStyle(reader);
                     --nLevel;
                 }
                 else if (name == "property")
