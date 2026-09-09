@@ -1871,8 +1871,9 @@ void SAL_CALL
 
     bool bTabMarked(IsTableSelected());
 
-    uno::Reference < XAccessible > xAccessible = mpChildrenShapes->Get(nChildIndex);
-    if (xAccessible.is())
+    rtl::Reference<::accessibility::AccessibleShape> pAccessible
+        = mpChildrenShapes->Get(nChildIndex);
+    if (pAccessible.is())
     {
         mpChildrenShapes->Deselect(nChildIndex); // throws no lang::IndexOutOfBoundsException if Index is too high
         if (bTabMarked)
