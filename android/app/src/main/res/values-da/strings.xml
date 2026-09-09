@@ -81,7 +81,6 @@
     <string name="filter_presentations">Præsentationer</string>
     <string name="new_presentation">Ny præsentation</string>
     <string name="failed_to_load_file">Kunne ikke afgøre, hvilken fil der skal indlæses</string>
-    <string name="app_version_and_hash">Version: %1$s \nonline git-hash: %2$s \ncore git-hash: %3$s</string>
     <string name="loading">Indlæser…</string>
     <string name="current_dir">Aktuel mappe: %1$s</string>
     <string name="bad_directory">Ugyldig stil til mappe</string>

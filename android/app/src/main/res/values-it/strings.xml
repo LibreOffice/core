@@ -102,7 +102,6 @@
     <string name="pref_category_editor">Impostazioni dell\'editor</string>
     <string name="remove_from_list">Rimuovi dall\'elenco</string>
     <string name="file_actions_icon_desc">Azioni del file</string>
-    <string name="app_version_and_hash">Versione: %1$s \nonline git-hash: %2$s \ncore git-hash: %3$s</string>
     <string name="theme_light">Chiaro</string>
     <string name="theme_dark">Scuro</string>
     <string name="theme_system_default">Predefinito del sistema</string>

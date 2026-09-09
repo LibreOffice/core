@@ -12,7 +12,6 @@
     <string name="pref_category_explorer">Achustes d\'o chestor de fichers</string>
     <string name="pref_category_editor">Achustes d\'o editor</string>
     <string name="grid_view">Quadricula</string>
-    <string name="app_version_and_hash">Versión: %1$s \nRevisión d\'o reposte Git «online»: %2$s \nRevisión d\'o reposte Git «core»: %3$s</string>
     <string name="directory_not_saved">No s\'ha alzau o directorio.</string>
     <string name="no_items">No bi ha garra elemento</string>
     <string name="pref_show_hidden_files">Fichers/carpetas amagaus</string>

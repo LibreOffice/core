@@ -2,7 +2,6 @@
 <resources>
     <!--string name="app_name" definition is deliberately missing here, it is filled in in build.gradle.-->
     <string name="app_name_settings">Nastavení</string>
-    <string name="app_version_and_hash">Verze: %1$s \ngit-hash pro online: %2$s \ngit-hash pro core: %3$s</string>
     <string name="app_description">$APP_NAME je moderní, snadno použitelný, open source kancelářský balík pro zpracování textu, tabulek, prezentací a dalšího.</string>
     <string name="app_vendor">Toto vydání bylo dodáno společností $VENDOR.</string>
     <string name="no_recent_items">Otevřete soubor klepnutím na ikonu složky v nástrojové liště.</string>

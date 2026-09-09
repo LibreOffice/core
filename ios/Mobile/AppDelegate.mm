@@ -61,27 +61,19 @@ NSString *app_text_direction;
     NSString *userDirectory = [paths objectAtIndex:0];
     NSString *cacheDirectory = [userDirectory stringByAppendingPathComponent:@"cache"];
 
-    NSString *coreVersionHashFile = [cacheDirectory stringByAppendingPathComponent:@"core_version_hash"];
     NSString *coolwsdVersionHashFile = [cacheDirectory stringByAppendingPathComponent:@"coolwsd_version_hash"];
 
-    NSData *oldCoreVersionHash = [NSData dataWithContentsOfFile:coreVersionHashFile];
     NSData *oldCoolwsdVersionHash = [NSData dataWithContentsOfFile:coolwsdVersionHashFile];
 
-    NSData *coreVersionHash = [NSData dataWithBytes:CORE_VERSION_HASH length:strlen(CORE_VERSION_HASH)];
     NSData *coolwsdVersionHash = [NSData dataWithBytes:COOLWSD_VERSION_HASH length:strlen(COOLWSD_VERSION_HASH)];
 
-    if (oldCoreVersionHash == nil
-        || ![oldCoreVersionHash isEqualToData:coreVersionHash]
-        || oldCoolwsdVersionHash == nil
+    if (oldCoolwsdVersionHash == nil
         || ![oldCoolwsdVersionHash isEqualToData:coolwsdVersionHash]) {
 
         [[NSFileManager defaultManager] removeItemAtPath:cacheDirectory error:nil];
 
         if (![[NSFileManager defaultManager] createDirectoryAtPath:cacheDirectory withIntermediateDirectories:NO attributes:nil error:nil])
             NSLog(@"Could not create %@", cacheDirectory);
-
-        if (![[NSFileManager defaultManager] createFileAtPath:coreVersionHashFile contents:coreVersionHash attributes:nil])
-            NSLog(@"Could not create %@", coreVersionHashFile);
 
         if (![[NSFileManager defaultManager] createFileAtPath:coolwsdVersionHashFile contents:coolwsdVersionHash attributes:nil])
             NSLog(@"Could not create %@", coolwsdVersionHashFile);

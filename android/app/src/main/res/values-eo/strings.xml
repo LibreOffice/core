@@ -25,7 +25,6 @@
     <string name="no_recent_items">Bonvolu malfermi dosieron per la dosieruja bildsimbolo en la ilobreto.</string>
     <string name="app_vendor">Ĉi tiun eldonon liveris $VENDOR.</string>
     <string name="app_description">$APP_NAME estas moderna, facile uzebla, malfermitkoda, produktiva programaro por verkado, kalkultabeloj, prezentaĵoj kaj plu.</string>
-    <string name="app_version_and_hash">Versio: %1$s \nreta git-hash: %2$s \nkerna git-hash: %3$s</string>
     <string name="directory_not_saved">Ne konservis dosierujon.</string>
     <string name="bmp_null">BMP estas nevalida!</string>
     <string name="unable_to_go_further">Ne povas iri plu.</string>

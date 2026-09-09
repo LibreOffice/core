@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name_settings">ການຕັ້ງຄ່າ</string>
-    <string name="app_version_and_hash">ເວີຊັນ: %1$s\nonline git-hash: %2$s\ncore git-hash: %3$s</string>
     <string name="app_description">$APP_NAME ແມ່ນຊຸດເຄື່ອງມືສຳລັບການເຮັດວຽກທີ່ທັນສະໄໝ, ໃຊ້ງານງ່າຍ ແລະ ເປັນຊອບແວໂອເພັນຊອດ (open source) ສຳລັບການປະມວນຜົນຄຳສັບ, ສະເປຣດຊີດ, ງານນຳສະເໜີ ແລະ ອື່ນໆ.</string>
     <string name="app_vendor">ເວີຊັນນີ້ຖືກສະໜອງໃຫ້ໂດຍ $VENDOR.</string>
     <string name="no_recent_items">ກະລຸນາເປີດໄຟລ໌ໂດຍໃຊ້ໄອຄອນໂຟນເດີໃນແຖບເຄື່ອງມື.</string>

@@ -3,7 +3,6 @@
 
 "Template list URL" = "Sjabloonlijst URL";
 "Settings" = "Instellingen";
-"Core git hash" = "Kern git hash";
-"Online git hash" = "Online git hash";
+"Git hash" = "Git hash";
 "Version information" = "Versie informatie";
 "Version" = "Versie";

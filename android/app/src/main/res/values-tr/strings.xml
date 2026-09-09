@@ -117,7 +117,6 @@
     <string name="pref_category_editor">Editör Ayarları</string>
     <string name="remove_from_list">Listeden kaldır</string>
     <string name="file_actions_icon_desc">Dosya işlemleri</string>
-    <string name="app_version_and_hash">Sürüm: %1$s \nçevrimiçi git-hash: %2$s \nçekirdek git-hash: %3$s</string>
     <string name="theme_light">Açık</string>
     <string name="theme_dark">Koyu</string>
     <string name="theme_system_default">Sistem öntanımlı değeri</string>

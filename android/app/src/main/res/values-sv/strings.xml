@@ -98,7 +98,6 @@
     <string name="grid_view">Rutnät</string>
     <string name="no_recent_items">Öppna en fil genom att använda mapp-ikonen i verktygsfältet.</string>
     <string name="app_description">$APP_NAME är en användarvänlig och modern produktivitetssvit i öppen källkod för ordbehandling, kalkylark, presentationer med mera.</string>
-    <string name="app_version_and_hash">Version: %1$s \nonline git-hash: %2$s \ncore git-hash: %3$s</string>
     <string name="action_about">Om</string>
     <string name="title_activity_show_html">Om</string>
     <string name="app_name_settings">Inställningar</string>

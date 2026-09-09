@@ -4,6 +4,5 @@
 "Template list URL" = "Временный список URL";
 "Settings" = "Настройки";
 "Version information" = "Информация о версии";
-"Core git hash" = "Core git hash";
-"Online git hash" = "Online git hash";
+"Git hash" = "Git hash";
 "Version" = "Версия";

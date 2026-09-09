@@ -104,7 +104,6 @@
     <string name="remove_from_list">Van de lijst verwijderen</string>
     <string name="file_actions_icon_desc">Bestandsacties</string>
     <string name="pref_category_editor">Editor instellingen</string>
-    <string name="app_version_and_hash">Versie: %1$s \nonline git-hash: %2$s \ncore git-hash: %3$s</string>
     <string name="theme_light">Licht</string>
     <string name="theme_dark">Donker</string>
     <string name="theme_system_default">Systeem standaardinstelling</string>

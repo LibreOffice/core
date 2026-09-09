@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name_settings">تنظیمات</string>
-    <string name="app_version_and_hash">نسخه: %1$s \nبرخط git-hash: %2$s \nهسته git-hash: %3$s</string>
     <string name="app_description">$APP_NAME یک محصول کامل و مدرن و متن باز با کاربری آسان برای واژه پردازی، صفحات گسترده، ارائه ها و... است.</string>
     <string name="app_vendor">این انتشار توسط $VENDOR فراهم شده است.</string>
     <string name="no_recent_items">لطفا یک پرونده را با استفاده از آیکون پوشه از نوارابزار باز کنید.</string>

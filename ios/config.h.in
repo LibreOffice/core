@@ -3,9 +3,6 @@
 
 #define APP_NAME "@APP_NAME@"
 
-/* LibreOffice core git hash if present */
-#define CORE_VERSION_HASH "@CORE_VERSION_HASH@"
-
 /* Whether to disable SECCOMP */
 #define DISABLE_SECCOMP 1
 

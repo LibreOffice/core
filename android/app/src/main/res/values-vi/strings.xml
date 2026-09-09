@@ -13,7 +13,6 @@
     <string name="failed_to_load_file">Xác định tệp để tải thất bại</string>
     <string name="storage_permission_required">Yêu cầu quyền truy cập bộ nhớ</string>
     <string name="app_description">$APP_NAME là một bộ phần mềm năng suất hiện đại, dễ sử dụng, mã nguồn mở cho việc xử lý văn bản, bảng tính, thuyết trình và nhiều hơn.</string>
-    <string name="app_version_and_hash">Phiên bản: %1$s \nmã git kho online: %2$s \nmã git kho core: %3$s</string>
     <string name="theme_light">Sáng</string>
     <string name="theme_dark">Tối</string>
     <string name="theme_system_default">Mặc định hệ thống</string>

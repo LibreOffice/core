@@ -2,7 +2,6 @@
 <resources>
     <!--string name="app_name" definition is deliberately missing here, it is filled in in build.gradle.-->
     <string name="app_name_settings">Pengaturan</string>
-    <string name="app_version_and_hash">Versi: %1$s \ngit-hash daring: %2$s \ngit-hash core: %3$s</string>
     <string name="app_description">$APP_NAME adalah keluarga produktivitas sumber terbuka yang modern, mudah digunakan, untuk pemrosesan kata, lembar kerja, presentasi, dan lainnya.</string>
     <string name="app_vendor">Rilis ini dipasok oleh $VENDOR.</string>
     <string name="no_recent_items">Silakan buka sebuah berkas menggunakan ikon folder pada bilah alat.</string>

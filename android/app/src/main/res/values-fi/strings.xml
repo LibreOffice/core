@@ -7,7 +7,6 @@
     <string name="no_recent_items">Avaa tiedosto käyttämällä kansiokuvaketta työkalupalkista.</string>
     <string name="app_vendor">Tämän julkaisun tarjosi $VENDOR.</string>
     <string name="app_description">$APP_NAME on moderni, helppokäyttöinen, avoimen lähdekoodin tuottavuusohjelmisto tekstinhallintaan, taulukkolaskentaan, esityksiin ja moneen muuhun.</string>
-    <string name="app_version_and_hash">Versio: %1$s \nonline git-hash: %2$s \ncore git-hash: %3$s</string>
     <string name="app_name_settings">Asetukset</string>
     <string name="storage_permission_required">Tallennusoikeudet vaaditaan</string>
     <string name="failed_to_load_file">Ladattavan tiedoston valitseminen epäonnistui</string>

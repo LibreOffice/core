@@ -122,7 +122,6 @@
     <string name="pref_category_editor">Configuración del editor</string>
     <string name="file_actions_icon_desc">Acciones de archivo</string>
     <string name="remove_from_list">Quitar de la lista</string>
-    <string name="app_version_and_hash">Versión: %1$s \nRevisión del repositorio Git «online»: %2$s \nRevisión del repositorio Git «core»: %3$s</string>
     <string name="theme_light">Claro</string>
     <string name="theme_dark">Oscuro</string>
     <string name="theme_system_default">Predeterminado del sistema</string>

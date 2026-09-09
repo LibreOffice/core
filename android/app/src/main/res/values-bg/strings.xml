@@ -104,7 +104,6 @@
     <string name="pref_category_editor">Настройки на редактора</string>
     <string name="remove_from_list">Премахване от списъка</string>
     <string name="file_actions_icon_desc">Действия с файлове</string>
-    <string name="app_version_and_hash">Версия: %1$s \nonline git-hash: %2$s \ncore git-hash: %3$s</string>
     <string name="theme_light">Светла</string>
     <string name="theme_dark">Тъмна</string>
     <string name="theme_system_default">Подразбирана за системата</string>

@@ -876,7 +876,6 @@ ZSTDLIB_ARM64_V8A=
 ZSTDLIB_X86=
 ZSTDLIB_X86_64=
 
-CORE_VERSION_HASH=""
 if test \( "$enable_iosapp" = "yes" -a `uname -s` = "Darwin" \) -o \( "$enable_windowsapp" = "yes" \) -o \( "$enable_androidapp" = "yes" \) -o "$host_os" = "emscripten" ; then
    if test "$enable_androidapp" = "yes" ; then
       AC_MSG_CHECKING([for Android ABI to build for])
@@ -930,8 +929,7 @@ if test \( "$enable_iosapp" = "yes" -a `uname -s` = "Darwin" \) -o \( "$enable_w
 
    LOBUILDDIR=`readlink -f "$LOBUILDDIR"`
 
-   # Get the git hash of the core build.
-   # Also use the setuprc or setup.ini file existence as a sanity check.
+   # Use the setuprc or setup.ini file existence as a sanity check.
    if test "$enable_windowsapp" = "yes"; then
       setuprc=setup.ini
    else
@@ -943,8 +941,6 @@ if test \( "$enable_iosapp" = "yes" -a `uname -s` = "Darwin" \) -o \( "$enable_w
    else
       AC_MSG_ERROR([This is not a CollaboraOffice core build directory: $LOBUILDDIR])
    fi
-
-   CORE_VERSION_HASH=`grep buildid $LOBUILDDIR/instdir/program/$setuprc | sed -e 's/buildid=//' -e 's/............................$//'`
 
    if test -n "$LOBUILDDIR_ARM64_V8A" ; then
       if test -f "$LOBUILDDIR_ARM64_V8A/workdir/LinkTarget/StaticLibrary/liblibpng.a" ; then
@@ -1138,9 +1134,6 @@ AC_SUBST(ZSTDLIB)
 AC_SUBST(ZSTDLIB_ARM64_V8A)
 AC_SUBST(ZSTDLIB_X86)
 AC_SUBST(ZSTDLIB_X86_64)
-AC_SUBST([CORE_VERSION_HASH])
-
-AC_DEFINE_UNQUOTED([CORE_VERSION_HASH],[["$CORE_VERSION_HASH"]],[CollaboraOffice core git hash if present])
 
 # The native app builds take libpng from the engine (like zstd and POCO):
 # Windows links it via the vcxproj, and iOS/Android/WASM reference the engine

@@ -23,7 +23,6 @@
     <string name="app_vendor">このリリースは $VENDOR が提供しました。</string>
     <string name="loading">読み込み中...</string>
     <string name="sort_az">A-Z</string>
-    <string name="app_version_and_hash">Version: %1$s \nonline git-hash: %2$s \ncore git-hash: %3$s</string>
     <string name="pref_viewmode_summary">ファイルをグリッドまたはリストとして表示します。</string>
     <string name="grid_view">グリッド表示</string>
     <string name="pref_show_hidden_files_summary">隠しファイル/フォルダを表示する</string>

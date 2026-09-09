@@ -2,7 +2,6 @@
 <resources>
     <string name="app_vendor">$VENDOR এই সংস্করণ উৎপাদন করেছে।</string>
     <string name="app_description">$APP_NAME একটি শব্দ প্রক্রিয়াকারক, স্প্রেডশিট, বক্তৃতা ও অন্যান্য যা আধুনিক, সহজে ব্যবহারযোগ্য, মুক্ত উৎসবিশিষ্ট।</string>
-    <string name="app_version_and_hash">সংস্করণ: %1$s \nতারযোগে গিট-হ্যাশ: %2$s \nকেন্দ্রের গিট-হ্যাশ: %3$s</string>
     <string name="app_name_settings">পছন্দসমূহ</string>
     <string name="list_view">তালিকা</string>
     <string name="grid_view">গ্রিড</string>

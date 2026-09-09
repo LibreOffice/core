@@ -1,14 +1,13 @@
 ext {
-    liboAppName         = '@APP_NAME@'
-    liboSrcRoot         = '@LOBUILDDIR@'
-    liboInstdir         = '@LOBUILDDIR@/instdir'
-    liboExampleDocument = '@LOBUILDDIR@/android/default-document/example.odt'
-    liboVersionMajor    = '@COOLWSD_VERSION_MAJOR@'
-    liboVersionMinor    = '@COOLWSD_VERSION_MAJOR@'
-    liboOVersionHash    = '@COOLWSD_VERSION_HASH@'
-    liboCoreVersionHash = '@CORE_VERSION_HASH@'
-    liboApplicationId   = '@APP_PACKAGE_NAME@'
-    liboBrandingDir     = '@APP_BRANDING_DIR@'
-    liboGooglePlay      = '@APP_GOOGLE_PLAY@'
-    liboAbiSplit        = [@ANDROID_ABI_SPLIT@]
+    coAppName         = '@APP_NAME@'
+    coSrcRoot         = '@LOBUILDDIR@'
+    coInstdir         = '@LOBUILDDIR@/instdir'
+    coExampleDocument = '@LOBUILDDIR@/android/default-document/example.odt'
+    coVersionMajor    = '@COOLWSD_VERSION_MAJOR@'
+    coVersionMinor    = '@COOLWSD_VERSION_MINOR@'
+    coVersionHash     = '@COOLWSD_VERSION_HASH@'
+    coApplicationId   = '@APP_PACKAGE_NAME@'
+    coBrandingDir     = '@APP_BRANDING_DIR@'
+    coGooglePlay      = '@APP_GOOGLE_PLAY@'
+    coAbiSplit        = [@ANDROID_ABI_SPLIT@]
 }

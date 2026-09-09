@@ -8,7 +8,6 @@
     <string name="loading">Laadin...</string>
     <string name="failed_to_load_file">Ei õnnestunud tuvastada faili, mida peaks laadima</string>
     <string name="storage_permission_required">Vajalik on andmeruumi kasutamise õigus</string>
-    <string name="app_version_and_hash">Versioon: %1$s\nvõrgutoote (online) sissekande räsi gitis: %2$s\ntuuma (core) sissekande räsi gitis: %3$s</string>
     <string name="app_description">$APP_NAME on moodne, lihtsaltkasutatav ja avatud lähtekoodiga kontoritöö tarkvara, milles leidub tekstitöötlus, tabelarvutus ja paljugi muud.</string>
     <string name="app_vendor">Selle versiooni pani kokku $VENDOR.</string>
     <string name="no_recent_items">Palun ava fail tööriistaribal leiduvast kaustaikoonist.</string>

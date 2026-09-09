@@ -102,7 +102,6 @@
     <string name="app_name_settings">הגדרות</string>
     <string name="remove_from_list">הסרה מהרשימה</string>
     <string name="file_actions_icon_desc">פעולות קובץ</string>
-    <string name="app_version_and_hash">גרסה: %1$s \nגיבוב git מקוון: %2$s \nגיבוב git ליבה: %3$s</string>
     <string name="theme_light">בהיר</string>
     <string name="theme_dark">כהה</string>
     <string name="theme_system_default">ברירת מחדל של המערכת</string>

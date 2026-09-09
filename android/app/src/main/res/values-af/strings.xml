@@ -26,6 +26,5 @@
     <string name="no_recent_items">Maak \'n lêer oop via die vouer-simbool in die werkbalk.</string>
     <string name="app_vendor">Hierdie weergawe was voorsien deur $VENDOR.</string>
     <string name="app_description">$APP_NAME is \'n moderne, maklik--om-te-gebruik, oopbron produktiwiteits suite vir woordverwerking, spreiblaaie, aanbiedings en meer.</string>
-    <string name="app_version_and_hash">Weergawe: %1$s \naanlyn git-huts: %2$s \nkern git-huts: %3$s</string>
     <string name="app_name_settings">Instellings</string>
 </resources>

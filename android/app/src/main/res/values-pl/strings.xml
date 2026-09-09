@@ -104,7 +104,6 @@
     <string name="pref_category_editor">Ustawienia edytora</string>
     <string name="remove_from_list">Usuń z listy</string>
     <string name="file_actions_icon_desc">Akcje pliku</string>
-    <string name="app_version_and_hash">Wersja: %1$s \nOnline \'git-hash\': %2$s \nGłówny \'git-hash\': %3$s</string>
     <string name="theme_light">Jasny</string>
     <string name="theme_dark">Ciemny</string>
     <string name="theme_system_default">Domyślny systemowy</string>

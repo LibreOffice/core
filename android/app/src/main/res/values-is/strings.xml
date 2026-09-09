@@ -102,7 +102,6 @@
     <string name="pref_category_editor">Stillingar ritils</string>
     <string name="file_actions_icon_desc">Skráaaðgerðir</string>
     <string name="remove_from_list">Fjarlægja af listanum</string>
-    <string name="app_version_and_hash">Útgáfa: %1$s \nonline git-hash: %2$s \ncore git-hash: %3$s</string>
     <string name="theme_system_default">Sjálfgefið í kerfinu</string>
     <string name="theme_light">Ljóst</string>
     <string name="theme_dark">Dökkt</string>

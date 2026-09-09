@@ -108,6 +108,5 @@
     <string name="theme_system_default">கணினி இயல்புநிலை</string>
     <string name="theme_dark">இருண்ட</string>
     <string name="theme_light">ஒளி</string>
-    <string name="app_version_and_hash">பதிப்பு: %1$s\n நிகழ்நிலை கிட்-ஆச்: %2$s\n கோர் கிட்-ஆச்: %3$s</string>
     <string name="loading">ஏற்றுகிறது ...</string>
 </resources>

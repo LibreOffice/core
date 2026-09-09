@@ -104,7 +104,6 @@
     <string name="pref_category_editor">Editorearen ezarpenak</string>
     <string name="remove_from_list">Kendu zerrendatik</string>
     <string name="file_actions_icon_desc">Fitxategi-ekintzak</string>
-    <string name="app_version_and_hash">Bertsioa: %1$s \nLineako git-hasha: %2$s \nNukleoaren git-hasha: %3$s</string>
     <string name="theme_light">Argia</string>
     <string name="theme_dark">Iluna</string>
     <string name="theme_system_default">Sistemak lehenetsia</string>

@@ -24,22 +24,21 @@ android {
         minSdk 26
         targetSdk 37
 
-        resValue "string", "app_name", "${liboAppName}"
-        resValue "string", "vendor", "${liboVendor}"
-        resValue "string", "info_url", "${liboInfoURL}"
-        resValue "string", "online_version_hash", "${liboOVersionHash}"
-        resValue "string", "core_version_hash", "${liboCoreVersionHash}"
+        resValue "string", "app_name", "${coAppName}"
+        resValue "string", "vendor", "${coVendor}"
+        resValue "string", "info_url", "${coInfoURL}"
+        resValue "string", "version_hash", "${coVersionHash}"
         resValue "string", "image_draw_header", "@drawable/drawer_header"
-        manifestPlaceholders = [ appIcon: "${liboLauncherIcon}" ]
-        buildConfigField "boolean", "APP_HAS_BRANDING", "${liboHasBranding}"
+        manifestPlaceholders = [ appIcon: "${coLauncherIcon}" ]
+        buildConfigField "boolean", "APP_HAS_BRANDING", "${coHasBranding}"
     }
     splits {
         abi {
             enable true
 
             reset ()
-            for (abi in liboAbiSplit) {
-                //noinspection ChromeOsAbiSupport - we generate liboAbiSplit at configure time, so we won't include ChromeOS support if we're not trying to build for it...
+            for (abi in coAbiSplit) {
+                //noinspection ChromeOsAbiSupport - we generate coAbiSplit at configure time, so we won't include ChromeOS support if we're not trying to build for it...
                 include(abi)
             }
         }
@@ -51,7 +50,7 @@ android {
 
     buildTypes {
         debug {
-            resValue "string", "app_name", "${liboAppName} Debug"
+            resValue "string", "app_name", "${coAppName} Debug"
             applicationIdSuffix '.debug'
             versionNameSuffix '-debug'
             debuggable true
@@ -97,12 +96,12 @@ dependencies {
 }
 
 tasks.register('copyBrandFiles', Copy) {
-    from "${liboBrandingDir}/android"
+    from "${coBrandingDir}/android"
     into "src/main/res"
 }
 
 afterEvaluate {
-	if (project.ext.liboHasBranding != "true" || !file("${liboBrandingDir}").exists()) {
+	if (project.ext.coHasBranding != "true" || !file("${coBrandingDir}").exists()) {
 		copyBrandFiles.enabled = false
 	}
 

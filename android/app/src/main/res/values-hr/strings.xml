@@ -107,7 +107,6 @@
     <string name="remove_from_list">Ukloni s popisa</string>
     <string name="file_actions_icon_desc">Radnje datoteke</string>
     <string name="pref_category_editor">Postavke uređivača</string>
-    <string name="app_version_and_hash">Verzija: %1$s \nonline git-hash: %2$s \ncore git-hash: %3$s</string>
     <string name="pref_user_name_guest">Gost korisnik</string>
     <string name="pref_user_name_info">Koristi se prilikom dodavanja komentara</string>
     <string name="pref_user_name">Korisničko ime</string>

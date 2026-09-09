@@ -102,7 +102,6 @@
     <string name="remove_from_list">Odstrániť zo zoznamu</string>
     <string name="file_actions_icon_desc">Operácie so súbormi</string>
     <string name="pref_category_editor">Nastavenia editora</string>
-    <string name="app_version_and_hash">Verzia: %1$s\nonline git-hash: %2$s\ncore git-hash:%3$s</string>
     <string name="theme_light">Svetlá</string>
     <string name="theme_dark">Tmavá</string>
     <string name="theme_system_default">Východzie pre systém</string>

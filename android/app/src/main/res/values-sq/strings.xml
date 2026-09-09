@@ -109,5 +109,4 @@
     <string name="filter_presentations">Paraqitje</string>
     <string name="document_locations">Vendndodhje dokumentesh</string>
     <string name="password">Fjalëkalim</string>
-    <string name="app_version_and_hash">Version: %1$s \nonline git-hash: %2$s \ncore git-hash: %3$s</string>
 </resources>

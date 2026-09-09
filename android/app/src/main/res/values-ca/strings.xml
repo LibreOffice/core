@@ -104,7 +104,6 @@
     <string name="pref_category_editor">Paràmetres de l\'editor</string>
     <string name="remove_from_list">Treu de la llista</string>
     <string name="file_actions_icon_desc">Accions del fitxer</string>
-    <string name="app_version_and_hash">Versió: %1$s \nRevisió del dipòsit Git «online»: %2$s \nRevisió del dipòsit Git «core»: %3$s</string>
     <string name="theme_light">Clar</string>
     <string name="theme_dark">Fosc</string>
     <string name="theme_system_default">Per defecte del sistema</string>

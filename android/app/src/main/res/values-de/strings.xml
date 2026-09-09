@@ -2,7 +2,6 @@
 <resources>
     <!--string name="app_name" definition is deliberately missing here, it is filled in in build.gradle.-->
     <string name="app_name_settings">Einstellungen</string>
-    <string name="app_version_and_hash">Version: %1$s \nOnline git-Hash: %2$s \nKern git-Hash: %3$s</string>
     <string name="app_description">$APP_NAME ist eine moderne, benutzerfreundliche Open-Source-Office-Suite für Textverarbeitung, Tabellenkalkulationen, Präsentationen und mehr.</string>
     <string name="app_vendor">Dieses Release wurde bereitgestellt durch $VENDOR.</string>
     <string name="no_recent_items">Öffnen Sie bitte eine Datei über das Ordnersymbol in der Symbolleiste.</string>

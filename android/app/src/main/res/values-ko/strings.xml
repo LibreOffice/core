@@ -9,7 +9,6 @@
     <string name="temp_file_saving_disabled">이 파일은 읽기 전용이며, 저장이 비활성화됩니다.</string>
     <string name="no_items">항목 없음</string>
     <string name="no_recent_items">도구 모음의 폴더 아이콘을 사용하여 파일을 여십시오.</string>
-    <string name="app_version_and_hash">버전 : %1$s \n온라인 git-hash : %2$s \n핵심 git-hash : %3$s</string>
     <string name="pref_file_explorer_title">파일 관리자 레이아웃</string>
     <string name="pref_viewmode_summary">파일을 그리드 또는 리스트로 봅니다.</string>
     <string name="pref_sort_summary">파일 순서 지정 방법 선택하기: A-Z, 크기 또는 날짜순으로.</string>

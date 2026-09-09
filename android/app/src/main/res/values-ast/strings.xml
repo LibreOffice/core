@@ -76,7 +76,6 @@
     <string name="app_description">$APP_NAME ye un paquete modernu de productividá informática, fácil d\'utilizar y de códigu abiertu pa procesamientu de testos, fueyes de cálculu, presentaciones y más.</string>
     <string name="pref_category_editor">Axustes del editor</string>
     <string name="file_actions_icon_desc">Aiciones de ficheros</string>
-    <string name="app_version_and_hash">Versión: %1$s \nRevisión del depósitu Git «online»: %2$s \nRevisión del depósitu Git «core»: %3$s</string>
     <string name="unable_to_go_further">Nun se pue dir más allá.</string>
     <string name="theme">Tema</string>
     <string name="theme_system_default">Predetermináu del sistema</string>

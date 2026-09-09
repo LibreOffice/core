@@ -110,5 +110,4 @@
     <string name="theme_dark">Ubrik</string>
     <string name="theme_light">Asfaw</string>
     <string name="pref_user_name_guest">Aseqdac inebgi</string>
-    <string name="app_version_and_hash">Lqem %1$s\nonline git-hash: %2$s\ncore git-hash: %3$s</string>
 </resources>

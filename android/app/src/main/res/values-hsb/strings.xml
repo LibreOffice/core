@@ -102,7 +102,6 @@
     <string name="pref_category_editor">Editorowe nastajenja</string>
     <string name="remove_from_list">Z lisćiny wotstronić</string>
     <string name="file_actions_icon_desc">Datajowe akcije</string>
-    <string name="app_version_and_hash">Wersija: %1$s \nOnline git-hash: %2$s \nJadro git-hash: %3$s</string>
     <string name="theme_light">Swětły</string>
     <string name="theme_dark">Ćmowy</string>
     <string name="theme_system_default">Standard systema</string>

@@ -24,7 +24,6 @@
     <string name="default_document_name">fără titlu</string>
     <string name="enter_filename">Introduceți numele fișierului:</string>
     <string name="app_name_settings">Setări</string>
-    <string name="app_version_and_hash">Versiune: %1$s\nonline git-hash: %2$s\ncore git-hash: %3$s</string>
     <string name="app_description">$APP_NAME este o suită de productivitate modernă, ușor de utilizat, open source, pentru procesare de text, foi de calcul, prezentări și multe altele.</string>
     <string name="app_vendor">Această versiune a fost furnizată de $VENDOR.</string>
     <string name="no_items">Fără articole</string>

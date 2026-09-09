@@ -3,7 +3,6 @@
 
 "Template list URL" = "テンプレートリストURL";
 "Settings" = "設定";
-"Core git hash" = "Core git hash";
-"Online git hash" = "Online git hash";
+"Git hash" = "Git hash";
 "Version information" = "バージョン情報";
 "Version" = "バージョン";

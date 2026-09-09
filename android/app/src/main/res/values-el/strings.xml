@@ -104,7 +104,6 @@
     <string name="remove_from_list">Αφαίρεση από τον κατάλογο</string>
     <string name="file_actions_icon_desc">Ενέργειες αρχείου</string>
     <string name="pref_category_editor">Ρυθμίσεις επεξεργαστή</string>
-    <string name="app_version_and_hash">Έκδοση: %1$s \nΔιαδικτυακό git-hash: %2$s \nΠυρήνας git-hash: %3$s</string>
     <string name="theme_light">Φωτεινό</string>
     <string name="theme_dark">Σκοτεινό</string>
     <string name="theme_system_default">Προεπιλεγμένο σύστημα</string>

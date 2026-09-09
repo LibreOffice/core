@@ -1,13 +1,12 @@
 ext {
-    liboAppName         = '@APP_NAME@'
-    liboVendor          = '@VENDOR@'
-    liboInfoURL         = '@INFO_URL@'
-    liboLauncherIcon    = '@mipmap/@APP_IC_LAUNCHER@'
-    liboHasBranding     = '@APP_HAS_BRANDING@'
-    liboBrandingDir     = '@APP_BRANDING_DIR@'
-    liboOVersionHash    = '@COOLWSD_VERSION_HASH@'
-    liboCoreVersionHash = '@CORE_VERSION_HASH@'
-    liboAbiSplit        = [@ANDROID_ABI_SPLIT@]
+    coAppName         = '@APP_NAME@'
+    coVendor          = '@VENDOR@'
+    coInfoURL         = '@INFO_URL@'
+    coLauncherIcon    = '@mipmap/@APP_IC_LAUNCHER@'
+    coHasBranding     = '@APP_HAS_BRANDING@'
+    coBrandingDir     = '@APP_BRANDING_DIR@'
+    coVersionHash     = '@COOLWSD_VERSION_HASH@'
+    coAbiSplit        = [@ANDROID_ABI_SPLIT@]
 }
 android.defaultConfig {
     applicationId '@APP_PACKAGE_NAME@'

@@ -102,7 +102,6 @@
     <string name="pref_category_editor">Налаштування Редактора</string>
     <string name="remove_from_list">Видалити зі списку</string>
     <string name="file_actions_icon_desc">Дії з файлами</string>
-    <string name="app_version_and_hash">Версія: %1$s \nonline git-hash: %2$s \ncore git-hash: %3$s</string>
     <string name="theme_light">Світла</string>
     <string name="theme_dark">Темна</string>
     <string name="theme_system_default">Типова системна</string>

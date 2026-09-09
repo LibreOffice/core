@@ -102,7 +102,6 @@
     <string name="pref_category_editor">Gosodiadau\'r Golygydd</string>
     <string name="remove_from_list">Tynnu o\'r rhestr</string>
     <string name="file_actions_icon_desc">Gweithredoedd ffeiliau</string>
-    <string name="app_version_and_hash">Feriwn: %1$s \ngit-hash ar-lein: %2$s \ngit-hash craidd: %3$s</string>
     <string name="theme_light">Golau</string>
     <string name="theme_dark">Tywyll</string>
     <string name="theme_system_default">Rhagosodiad y system</string>

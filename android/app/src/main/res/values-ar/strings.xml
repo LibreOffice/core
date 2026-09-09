@@ -27,7 +27,6 @@
     <string name="loading">يحمّل...</string>
     <string name="pref_user_name">اسم المستخدم</string>
     <string name="pref_user_name_info">يُستخدَم عند إضافة تعليق</string>
-    <string name="app_version_and_hash">الإصدار: %1$s\nتشفير البعثرة على الخط من \"قِت\": %2$s\nتشفير البعثرة الأساسي من \"قِت\": %3$s</string>
     <string name="app_description">$APP_NAME هو حزمة إنتاجية حديثة سهلة الإستخدام لمعالجة الكلمات والأوراق الممتدة والعروض التقديمية والمزيد.</string>
     <string name="no_items">لا عناصر</string>
     <string name="pref_sort_summary">حدد كيفية تنظيم الملفات: أبجديا أو بالحجم أو بالتأريخ.</string>

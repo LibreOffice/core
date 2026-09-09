@@ -104,7 +104,6 @@
     <string name="pref_category_editor">A szerkesztő beállításai</string>
     <string name="remove_from_list">Eltávolítás a listáról</string>
     <string name="file_actions_icon_desc">Fájlműveletek</string>
-    <string name="app_version_and_hash">Verzió: %1$s \nonline git-hash: %2$s \ncore git-hash: %3$s</string>
     <string name="theme_light">Világos</string>
     <string name="theme_dark">Sötét</string>
     <string name="theme_system_default">Alapértelmezett</string>

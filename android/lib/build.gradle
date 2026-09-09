@@ -25,9 +25,9 @@ android {
         versionCode 1
         versionName "1.0"
 
-        resValue "string", "app_name", "${liboAppName}"
-        buildConfigField "String", "GIT_COMMIT", "\"${liboOVersionHash}\""
-        buildConfigField "boolean", "GOOGLE_PLAY_ENABLED", "${liboGooglePlay}"
+        resValue "string", "app_name", "${coAppName}"
+        buildConfigField "String", "GIT_COMMIT", "\"${coVersionHash}\""
+        buildConfigField "boolean", "GOOGLE_PLAY_ENABLED", "${coGooglePlay}"
 
         externalNativeBuild {
             cmake {
@@ -41,8 +41,8 @@ android {
             enable true
 
             reset ()
-            for (abi in liboAbiSplit) {
-                //noinspection ChromeOsAbiSupport - we generate liboAbiSplit at configure time, so we won't include ChromeOS support if we're not trying to build for it...
+            for (abi in coAbiSplit) {
+                //noinspection ChromeOsAbiSupport - we generate coAbiSplit at configure time, so we won't include ChromeOS support if we're not trying to build for it...
                 include(abi)
             }
         }
@@ -54,7 +54,7 @@ android {
 
     buildTypes {
         debug {
-            resValue "string", "app_name", "${liboAppName} Debug"
+            resValue "string", "app_name", "${coAppName} Debug"
             debuggable true
         }
         release {
@@ -101,19 +101,19 @@ tasks.register('copyUnpackAssets', Copy) {
     description "copies assets that need to be extracted on the device"
     into 'src/main/assets/unpack'
     into('program') {
-        from("${liboInstdir}/program/types") {
+        from("${coInstdir}/program/types") {
             includes = [
                     "offapi.rdb",
                     "oovbaapi.rdb"
             ]
         }
-        from("${liboInstdir}/program") {
+        from("${coInstdir}/program") {
             includes = ["types.rdb"]
             rename 'types.rdb', 'udkapi.rdb'
         }
 
         into('resource') {
-            from "${liboInstdir}/program/resource"
+            from "${coInstdir}/program/resource"
             includes = ['**']
         }
     }
@@ -122,7 +122,7 @@ tasks.register('copyUnpackAssets', Copy) {
         includes = ['coolkitconfig.xcu']
     }
     into('user/fonts') {
-        from "${liboInstdir}/share/fonts/truetype"
+        from "${coInstdir}/share/fonts/truetype"
         // Note: restrict list of fonts due to size considerations - no technical reason anymore
         // ToDo: fonts would be good candidate for using Expansion Files instead
         includes = [
@@ -145,18 +145,18 @@ tasks.register('copyUnpackAssets', Copy) {
         filter {
             String line ->
                 line.replaceAll(
-                        '@@APPLICATION_ID@@', new String("${liboApplicationId}")
+                        '@@APPLICATION_ID@@', new String("${coApplicationId}")
                 )
         }
     }
     into('share') {
-        from "${liboInstdir}/share"
+        from "${coInstdir}/share"
         // liblangtag data is needed for locales like en-CH
         include 'liblangtag/**'
     }
 
     into('share') {
-        from "${liboInstdir}/share"
+        from "${coInstdir}/share"
         // extensions - for the dictionaries for hunspell
         includes = ['extensions/dict-de/**', 'extensions/dict-en/**', 'extensions/dict-es/**', 'extensions/dict-fr/**', 'extensions/dict-pt-BR/**']
         exclude { FileTreeElement details ->
@@ -172,20 +172,20 @@ tasks.register('copyUnpackAssets', Copy) {
 tasks.register('copyAssets', Copy) {
     description "copies assets that can be accessed within the installed apk"
     into 'src/main/assets'
-    from("${liboSrcRoot}/instdir/") {
+    from("${coSrcRoot}/instdir/") {
         includes = ["LICENSE.html", "NOTICE"]
         rename "LICENSE.html", "license.html"
         rename "NOTICE", "notice.txt"
     }
-    from("${liboExampleDocument}") {
+    from("${coExampleDocument}") {
         rename ".*", "example.odt"
     }
     into('program') {
-        from "${liboInstdir}/program"
+        from "${coInstdir}/program"
         includes = ['services.rdb', 'services/services.rdb']
     }
     into('share') {
-        from "${liboInstdir}/share"
+        from "${coInstdir}/share"
         // Filter data is needed by e.g. the drawingML preset shape import.
         includes = ['registry/**', 'filter/**', 'gallery/**', 'palette/**']
     }
@@ -194,13 +194,13 @@ tasks.register('copyAssets', Copy) {
 tasks.register('createFullConfig', Copy) {
     description "copies various configuration bits into the apk"
     into('src/main/assets/share/config')
-    from("${liboInstdir}/share/config") {
+    from("${coInstdir}/share/config") {
         includes = ['soffice.cfg/**', 'images_colibre.zip']
     }
 }
 
 tasks.register('copyBrandTheme', Copy) {
-    from "${liboBrandingDir}/online-theme"
+    from "${coBrandingDir}/online-theme"
     into "src/main/assets/share/theme_definitions/online"
 }
 
@@ -273,7 +273,7 @@ UNO_USER_PACKAGES_CACHE=${$ORIGIN/lounorc:UNO_USER_PACKAGES_CACHE}
         bootstraprc.text = '''\
 [Bootstrap]
 InstallMode=<installmode>
-ProductKey=LibreOffice ''' + "${liboVersionMajor}.${liboVersionMinor}" + '''
+ProductKey=Collabora Office ''' + "${coVersionMajor}.${coVersionMinor}" + '''
 UserInstallation=file://$APP_DATA_DIR
 '''.stripIndent()
 
@@ -304,7 +304,7 @@ UNO_USER_PACKAGES_CACHE=$UNO_USER_PACKAGES/cache
 [Version]
 AllLanguages=en-US
 BuildVersion=
-buildid=''' + "${liboCoreVersionHash}" + '''
+buildid=''' + "${coVersionHash}" + '''
 ReferenceOOoMajorMinor=4.1
 '''.stripIndent()
     }
@@ -344,7 +344,7 @@ tasks.register('generateCoolReleaseAssets') {
 }
 
 afterEvaluate {
-	if (!file("${liboBrandingDir}").exists()) {
+	if (!file("${coBrandingDir}").exists()) {
 		copyBrandTheme.enabled = false
 	}
 	generateDebugAssets.dependsOn copyDocTemplates, copyKitConfig, generateCoolDebugAssets

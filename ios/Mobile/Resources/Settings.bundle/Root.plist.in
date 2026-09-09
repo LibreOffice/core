@@ -26,21 +26,11 @@
 			<key>Type</key>
 			<string>PSTitleValueSpecifier</string>
 			<key>Title</key>
-			<string>Online git hash</string>
+			<string>Git hash</string>
 			<key>Key</key>
-			<string>onlineVersion</string>
+			<string>versionHash</string>
 			<key>DefaultValue</key>
 			<string>@COOLWSD_VERSION_HASH@</string>
-		</dict>
-		<dict>
-			<key>Type</key>
-			<string>PSTitleValueSpecifier</string>
-			<key>Title</key>
-			<string>Core git hash</string>
-			<key>Key</key>
-			<string>coreVersion</string>
-			<key>DefaultValue</key>
-			<string>@CORE_VERSION_HASH@</string>
 		</dict>
 		<dict>
 			<key>Type</key>
