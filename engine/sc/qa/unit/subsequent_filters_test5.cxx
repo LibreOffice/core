@@ -12,6 +12,7 @@
 #include "helper/qahelper.hxx"
 
 #include <comphelper/propertyvalue.hxx>
+#include <conditio.hxx>
 #include <dbdata.hxx>
 #include <dbdocfun.hxx>
 #include <docfunc.hxx>
@@ -907,6 +908,79 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTableStyleDirectBorderEdge)
     CPPUNIT_ASSERT(pClearedBox);
     CPPUNIT_ASSERT_MESSAGE("an empty cell border must not clear the style's",
                            pClearedBox->GetLeft());
+}
+
+CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTableStyleCondFormatBorderEdge)
+{
+    createScDoc("xlsx/tablestyle-condformat-border.xlsx");
+    ScDocument* pDoc = getScDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    ScDBData* pDBData = pDoc->GetDBCollection()->getNamedDBs().findByUpperName(u"TABLE1"_ustr);
+    CPPUNIT_ASSERT(pDBData);
+    const ScTableStyleParam* pParam = pDBData->GetTableStyleInfo();
+    CPPUNIT_ASSERT(pParam);
+    CPPUNIT_ASSERT_EQUAL(u"TableStyleMedium2"_ustr, pParam->maStyleID);
+    CPPUNIT_ASSERT_EQUAL(size_t(3), pDoc->GetCondFormList(0)->size());
+
+    // C4's own border arrives on its own, so the cell holds a medium left and nothing else
+    const SvxBoxItem* pCellBox
+        = pDoc->GetPattern(2, 3, 0)->GetItemSet().GetItemIfSet(ATTR_BORDER);
+    CPPUNIT_ASSERT(pCellBox);
+    CPPUNIT_ASSERT(pCellBox->GetLeft());
+    CPPUNIT_ASSERT(!pCellBox->GetBottom());
+
+    ScTableInfo aTabInfo(0, 7, false);
+    pDoc->FillInfo(aTabInfo, 0, 0, 3, 7, 0, 1, 1, false, false);
+
+    // MSO writes only the edge the condition names and leaves the others out of the dxf, so the
+    // row keeps the style's outer edges either side of the red line.
+    RowInfo& rTopRow = aTabInfo.mpRowInfo[2 + 1];
+    const SvxBoxItem* pTopFirst
+        = static_cast<const SvxBoxItem*>(rTopRow.cellInfo(0).maLinesAttr.getItem());
+    CPPUNIT_ASSERT(pTopFirst);
+    const editeng::SvxBorderLine* pCondTop = pTopFirst->GetTop();
+    CPPUNIT_ASSERT(pCondTop);
+    const Color aTopColor = pCondTop->GetColor();
+    CPPUNIT_ASSERT(aTopColor.GetRed() > aTopColor.GetGreen());
+    CPPUNIT_ASSERT(aTopColor.GetRed() > aTopColor.GetBlue());
+    CPPUNIT_ASSERT_MESSAGE("the style's outer left edge must survive the condition's top border",
+                           pTopFirst->GetLeft());
+
+    const SvxBoxItem* pTopLast
+        = static_cast<const SvxBoxItem*>(rTopRow.cellInfo(3).maLinesAttr.getItem());
+    CPPUNIT_ASSERT(pTopLast);
+    CPPUNIT_ASSERT_MESSAGE("the style's outer right edge must survive the condition's top border",
+                           pTopLast->GetRight());
+
+    // "No Border" writes all four edges as empty elements, and that one does clear the style's
+    // lines - the opposite of the same empty border on the cell itself.
+    const SvxBoxItem* pClearedCondBox = static_cast<const SvxBoxItem*>(
+        aTabInfo.mpRowInfo[4 + 1].cellInfo(0).maLinesAttr.getItem());
+    CPPUNIT_ASSERT(pClearedCondBox);
+    CPPUNIT_ASSERT(!pClearedCondBox->GetLeft());
+    CPPUNIT_ASSERT(!pClearedCondBox->GetTop());
+
+    // C4 shows all three layers at once: its own left, the condition's bottom, and the style's
+    // line above it.
+    const SvxBoxItem* pStackBox = static_cast<const SvxBoxItem*>(
+        aTabInfo.mpRowInfo[3 + 1].cellInfo(2).maLinesAttr.getItem());
+    CPPUNIT_ASSERT(pStackBox);
+    const editeng::SvxBorderLine* pOwnLeft = pStackBox->GetLeft();
+    const editeng::SvxBorderLine* pCondBottom = pStackBox->GetBottom();
+    const editeng::SvxBorderLine* pStyleTop = pStackBox->GetTop();
+    CPPUNIT_ASSERT(pOwnLeft);
+    CPPUNIT_ASSERT(pCondBottom);
+    CPPUNIT_ASSERT(pStyleTop);
+
+    // the cell drew the medium one, and the two thin lines are the condition's green and the
+    // style's own
+    CPPUNIT_ASSERT(pOwnLeft->GetWidth() > pStyleTop->GetWidth());
+    const Color aBottomColor = pCondBottom->GetColor();
+    CPPUNIT_ASSERT(aBottomColor.GetGreen() > aBottomColor.GetRed());
+    CPPUNIT_ASSERT(aBottomColor.GetGreen() > aBottomColor.GetBlue());
+    const Color aStyleColor = pStyleTop->GetColor();
+    CPPUNIT_ASSERT(aStyleColor.GetBlue() > aStyleColor.GetRed());
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTotalRowToggle)

@@ -294,6 +294,8 @@ bool handleConditionalFormat(ScConditionalFormatList& rCondFormList, const ScCon
 
         ScCondFormatData aData = pCondForm->GetData(
                 pInfo->maCell, rAddr);
+        //TODO: MSO combines every rule that matches, each contributing what it sets; we take
+        //the first style and drop the rest, border, fill and font alike
         if (!bAnyCondition && !aData.aStyleName.isEmpty())
         {
             SfxStyleSheetBase* pStyleSheet =
@@ -771,11 +773,23 @@ void ScDocument::FillInfo(
                     }
 
                             // Border
-                    //TODO: replaces the table style's border, where a cell's own border above
-                    //only fills in the edges it leaves open; wants an MSO check first
                     if ( const SvxBoxItem* pItem = pCondSet->GetItemIfSet( ATTR_BORDER ) )
                     {
-                        pInfo->maLinesAttr = SfxPoolItemHolder(*pPool, pItem);
+                        // The condition adds the edges it defines and leaves the rest, as the
+                        // cell's own border above. A condition that defines no edge at all is
+                        // "No Border", and that one does clear what the style draws - the
+                        // opposite of an empty border on the cell itself.
+                        const bool bCondNonEmpty = pItem->GetTop() || pItem->GetBottom()
+                                                   || pItem->GetLeft() || pItem->GetRight();
+                        if (bCondNonEmpty && pInfo->maLinesAttr)
+                        {
+                            SvxBoxItem aBorder(*pItem);
+                            aBorder.FillUnsetLines(*static_cast<const SvxBoxItem*>(
+                                pInfo->maLinesAttr.getItem()));
+                            pInfo->maLinesAttr = SfxPoolItemHolder(*pPool, &aBorder);
+                        }
+                        else
+                            pInfo->maLinesAttr = SfxPoolItemHolder(*pPool, pItem);
                         pRowInfo[nArrRow].bEmptyBack = false;
                     }
 
