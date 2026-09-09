@@ -1044,7 +1044,7 @@ sbom-check:
 # database ('grype db update'), so this is a maintainer target, not part of
 # the build or 'make check'.
 sbom-audit: collabora-online-sbom.spdx.json
-	python3 $(abs_top_srcdir)/scripts/audit-sbom-cpes.py \
+	$(PYTHON) $(abs_top_srcdir)/scripts/audit-sbom-cpes.py \
 		$(ENGINE_BUILDDIR)/workdir/CustomTarget/instsetoo_native/sbom/*.json \
 		$(abs_top_builddir)/collabora-online-sbom.spdx.json
 
@@ -1053,7 +1053,7 @@ sbom-audit: collabora-online-sbom.spdx.json
 # with no CVEs yet scans clean. Queries release-monitoring.org, so it needs
 # network access.
 sbom-freshness: collabora-online-sbom.spdx.json
-	python3 $(abs_top_srcdir)/scripts/check-external-freshness.py \
+	$(PYTHON) $(abs_top_srcdir)/scripts/check-external-freshness.py \
 		$(ENGINE_BUILDDIR)/workdir/CustomTarget/instsetoo_native/sbom/collaboraofficebasis-core-sbom.spdx.json \
 		$(abs_top_builddir)/collabora-online-sbom.spdx.json
 

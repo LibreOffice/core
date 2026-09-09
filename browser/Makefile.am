@@ -1738,7 +1738,7 @@ pot:
 	html2po --pot --input=welcome/welcome.html --output=po/templates/welcome.pot --duplicates=merge
 	for dir in extensions/*/; do \
 		test -f "$$dir/manifest.json" || continue; \
-		python3 util/extension-pot.py "$$dir" || exit 1; \
+		$(PYTHON) util/extension-pot.py "$$dir" || exit 1; \
 	done
 	$(srcdir)/util/appendwelcome.py po/templates/welcome.pot po/templates/cool-ui.pot
 	rm po/templates/welcome.pot
