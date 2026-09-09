@@ -437,7 +437,7 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
             }
         }
     }
-    if ( ( nRow == 0 ) && ( nColumn == 0 ) )
+    if (rProperties.isFirstRow() && rProperties.isFirstCol() && nRow == 0 && nColumn == 0)
     {
         applyTableStylePart( rFilterBase, aFillProperties, aTextStyleProps,
             aLinePropertiesLeft,
@@ -450,7 +450,7 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
             aLinePropertiesBottomLeftToTopRight,
             rTable.getNwCell() );
     }
-    if ( ( nRow == nMaxRow ) && ( nColumn == 0 ) )
+    if (rProperties.isLastRow() && rProperties.isFirstCol() && nRow == nMaxRow && nColumn == 0)
     {
         applyTableStylePart( rFilterBase, aFillProperties, aTextStyleProps,
             aLinePropertiesLeft,
@@ -463,7 +463,7 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
             aLinePropertiesBottomLeftToTopRight,
             rTable.getSwCell() );
     }
-    if ( ( nRow == 0 ) && ( nColumn == nMaxColumn ) )
+    if (rProperties.isFirstRow() && rProperties.isLastCol() && nRow == 0 && nColumn == nMaxColumn)
     {
         applyTableStylePart( rFilterBase, aFillProperties, aTextStyleProps,
             aLinePropertiesLeft,
@@ -476,7 +476,8 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
             aLinePropertiesBottomLeftToTopRight,
             rTable.getNeCell() );
     }
-    if ( ( nRow == nMaxRow ) && ( nColumn == nMaxColumn ) )
+    if (rProperties.isLastRow() && rProperties.isLastCol() && nRow == nMaxRow
+        && nColumn == nMaxColumn)
     {
         applyTableStylePart( rFilterBase, aFillProperties, aTextStyleProps,
             aLinePropertiesLeft,
