@@ -830,20 +830,19 @@ std::unique_ptr<QApplication> QtInstance::CreateQApplication()
 
 bool QtInstance::DoExecute(int& nExitCode)
 {
-    const bool bIsUseSystemEventLoop = Application::IsUseSystemEventLoop();
-    if (bIsUseSystemEventLoop)
-    {
+    if (!Application::IsUseSystemEventLoop())
+        return false;
+
 #if defined __EMSCRIPTEN__
-        // For Emscripten, QApplication::exec() will unwind the stack by throwing a JavaScript
-        // exception, so we need to manually undo the call of AcquireYieldMutex() done in InitVCL:
-        ReleaseYieldMutex(false);
+    // For Emscripten, QApplication::exec() will unwind the stack by throwing a JavaScript
+    // exception, so we need to manually undo the call of AcquireYieldMutex() done in InitVCL:
+    ReleaseYieldMutex(false);
 #endif
-        nExitCode = QApplication::exec();
+    nExitCode = QApplication::exec();
 #if defined __EMSCRIPTEN__
-        O3TL_UNREACHABLE;
+    O3TL_UNREACHABLE;
 #endif
-    }
-    return bIsUseSystemEventLoop;
+    return true;
 }
 
 void QtInstance::DoQuit()
